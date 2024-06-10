@@ -1,217 +1,256 @@
-Return-Path: <linux-pm+bounces-8898-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8899-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B71990282F
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 20:01:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8693190285D
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 20:10:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EB361C21997
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 18:01:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18547287BBF
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 18:10:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2918E22EEF;
-	Mon, 10 Jun 2024 18:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 963DF14F9F5;
+	Mon, 10 Jun 2024 18:09:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uoTQSO4Y"
+	dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b="HzBsRp0p"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from prime.voidband.net (prime.voidband.net [199.247.17.104])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3C11869
-	for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 18:01:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E67814EC43;
+	Mon, 10 Jun 2024 18:08:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.247.17.104
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718042497; cv=none; b=PXERxTsQ2c+UzMTNN7HoqrpV7S0sN4ODkFepedEkbesgl0xBnjc6zd8x46bHBtrFVmzpcKL2cbDJvv+Rj/fPZ8fBpYDS9VQcjFCS5X17S/ijf3wVluufj1+NnM5NwCo6TyXDr41GJZoNXMKl15UwTG69ip9upKk/2cnihtTfi+I=
+	t=1718042942; cv=none; b=mEFnB5DyLV5kh5hQ1za3Q+UmBTf24alUSlHkQCJB1vZk2AYslqklWe+sik+JhXH2RxlIdc2csbRdmyRWkHDvyY7PyI1Y6kjjAtokUlz/3lPee07BvveY8ZbMn3td2/MfSPzqLt33jc+xLS7wEORKi+UNc69R4JEVqH6mGcpt05I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718042497; c=relaxed/simple;
-	bh=g2c7nnmBcEtmWKG2cdatzphUu9nwq1gexVv+zu2DXf4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=brFEhqEcTONU3t2aNC1povPHox91XMr5n/jp8J3Rjmbuzree5XEzp2L/2hcIrkWMGElxHrB6/9HLsDMg8rCxGJ4msQtxuiW9MnG/kegyZwIuVcfE6VExrrljphX1u1QLkQzPeR4w2aCpr9eC9w1okiTNnziXGHK5O4DG2DBi98g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uoTQSO4Y; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-52c7f7fdd24so272276e87.1
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 11:01:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718042493; x=1718647293; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=goT3FiiTHuDDxuZezrmRBAQweENaqO0vsQeYq6d8HbE=;
-        b=uoTQSO4YWzo6jb60hVqRPaIvDykgE6xj3X15sEX5SDM5y7idRfZeGLGMNHjxBtT7CW
-         FYe+gEmq5GxDVqpQ1j6bTVKQow7rJTtiTVA8BtafrxlnqBn4GftOPGU/zqEAOhNWfu7I
-         +NStxP/R/J0rI5lhd0D3AGWKG3JpYBmzyxmKf5VD6my8Xu1R3EpcF04jxdjGAFw6FoMb
-         nwon3kmwnh9bdCVcXI2Cpai6VRkb7WCZsvcc8KW//YK7DCRCD/X7QwDLG1YlGRgtTZoQ
-         DHgJ3skQsel6hVsxpCHy5B+dC+OltY3VH4JQSBN0mAVe9QCgL03Ynrib19C1/5UoIXw5
-         oFuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718042493; x=1718647293;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=goT3FiiTHuDDxuZezrmRBAQweENaqO0vsQeYq6d8HbE=;
-        b=kmvVS8/J0sI2/zWKExkQab+pYAcKKGGK89caKGCdhbbr52cm4Cj8QdaqpMVIbpjfa9
-         a3H0WfiMK08gnEW3Aa4g6U0kXPBN+SZQHsa5Vrhle8N/SaCnanSDFrEaVxRO4LoNPkFi
-         Q0zub3FGp31HxTU4HGwR1qno7MvNFeob24PgIFKwWEQQyx4R2tmt1VzRShX/trsx+KeI
-         UFv4MUIeimOKVbRBad8rpuVJGnsT5hquLoyahpNwX9GSklEBiDu8MyHtYZ6hcIJ5qui1
-         fewMUHr63aVeq/JPAouIlwsvfCcuWPsY/u4Kxs5KkiiSv6BA1NC8KI0MNMmJQQgzhoNW
-         sYxA==
-X-Forwarded-Encrypted: i=1; AJvYcCXaUlRtNS7MwVAB0xZ9uBBvrCM0ll7C1U8cKDxw9VjmTdBefPJQeKpc7hiSsjpenhLn5j6XTqrajTG5qsyTuNAdeeuYUXnGJ7w=
-X-Gm-Message-State: AOJu0Yz/Wl//P+RNCz5aTUhr5Gu7rECizhwPNKV1mSd1ivzH7PVpmYpF
-	PImT1Jx9Ra61W0+fTD7bZ5NdLK3erOYNOFvefM+khdfUzZWuPrSXX3Hsua9RvEQ=
-X-Google-Smtp-Source: AGHT+IFN2Eti8+gZyxEE3H8cpoOyZdBagWhMLrVC2RrY9w7xOb7/ljIQhtyFuW95vPKWpx4yq3PeQw==
-X-Received: by 2002:a05:6512:282:b0:52c:901f:e4 with SMTP id 2adb3069b0e04-52c901f022amr813795e87.0.1718042493358;
-        Mon, 10 Jun 2024 11:01:33 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:bb3:9a3a:605f:c4c3? ([2a05:6e02:1041:c10:bb3:9a3a:605f:c4c3])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4215c1aa1desm150904605e9.11.2024.06.10.11.01.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jun 2024 11:01:32 -0700 (PDT)
-Message-ID: <e0a9f173-1abf-4faa-9a2d-b8310e72ef28@linaro.org>
-Date: Mon, 10 Jun 2024 20:01:32 +0200
+	s=arc-20240116; t=1718042942; c=relaxed/simple;
+	bh=jIe9JeocBr7G6WT23O2lxLj34KMlvE4LnyGCyZrVp2I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XCVGMEnpRh/I2xhCAjyNGRAgbhktQ1ijUzN/wQCvl3pWXbMq8Ogv6+uAYuS8g2cprBKc8eHlo+sTDwoJ7944XMuA90+SQvIMJB6QpP3Jv2E+umSJY4C2nDk5KEZGzwCxEkwTdkw8EYMbUFzvIOjCEYMMnOUu4twgqQ0iNg1fV9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=natalenko.name; spf=pass smtp.mailfrom=natalenko.name; dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b=HzBsRp0p; arc=none smtp.client-ip=199.247.17.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=natalenko.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=natalenko.name
+Received: from spock.localnet (unknown [212.20.115.26])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by prime.voidband.net (Postfix) with ESMTPSA id 2873F635B055;
+	Mon, 10 Jun 2024 20:08:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+	s=dkim-20170712; t=1718042934;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VHBmuPzeQk6RrXH74wFJcj/vN52Uy+kCPKcbBOPsTrU=;
+	b=HzBsRp0p2xJRqImMu3onkIhg6CjljW8VZToRrXgpaQXBLvbdPuvPGBWdZbTWmczSPegHfF
+	BFEKKTFgQ2S5OC0aiWVpspiJKkRqCfqJMnKLnnASxjP8qCYhS9lZd3aOZE39Cl2ypmcQpW
+	wn78Rz/9Z/WRzRfCADQXJuudsuSj7ak=
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+To: peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+ namhyung@kernel.org, mark.rutland@arm.com,
+ alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
+ adrian.hunter@intel.com, kan.liang@linux.intel.com, tglx@linutronix.de,
+ bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, kees@kernel.org,
+ gustavoars@kernel.org, Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org, ananth.narayan@amd.com,
+ gautham.shenoy@amd.com, kprateek.nayak@amd.com, ravi.bangoria@amd.com,
+ sandipan.das@amd.com, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/6] Add per-core RAPL energy counter support for AMD CPUs
+Date: Mon, 10 Jun 2024 20:08:43 +0200
+Message-ID: <1887843.tdWV9SEqCh@natalenko.name>
+In-Reply-To: <cfd0a622-89bc-4303-a972-4b5c8380eb76@amd.com>
+References:
+ <20240610100751.4855-1-Dhananjay.Ugwekar@amd.com>
+ <2733323.mvXUDI8C0e@natalenko.name>
+ <cfd0a622-89bc-4303-a972-4b5c8380eb76@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/5] thermal: trip: Make thermal_zone_set_trips() use
- trip thresholds
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>
-References: <12458899.O9o76ZdvQC@kreacher> <2340783.ElGaqSPkdT@kreacher>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <2340783.ElGaqSPkdT@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="nextPart2184984.irdbgypaU6";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
 
-On 28/05/2024 18:51, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Modify thermal_zone_set_trips() to use trip thresholds instead of
-> computing the low temperature for each trip to avoid deriving both
-> the high and low temperature levels from the same trip (which may
-> happen if the zone temperature falls into the hysteresis range of
-> one trip).
-> 
-> Accordingly, make __thermal_zone_device_update() call
-> thermal_zone_set_trips() later, when threshold values have been
-> updated for all trips.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> v1 -> v2: Rebase.
-> 
-> ---
->   drivers/thermal/thermal_core.c |    4 ++--
->   drivers/thermal/thermal_trip.c |   14 ++++----------
->   2 files changed, 6 insertions(+), 12 deletions(-)
-> 
-> Index: linux-pm/drivers/thermal/thermal_core.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -513,13 +513,13 @@ void __thermal_zone_device_update(struct
->   	if (tz->temperature == THERMAL_TEMP_INVALID)
->   		return;
->   
-> -	thermal_zone_set_trips(tz);
-> -
->   	tz->notify_event = event;
->   
->   	for_each_trip_desc(tz, td)
->   		handle_thermal_trip(tz, td, &way_up_list, &way_down_list);
+--nextPart2184984.irdbgypaU6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Date: Mon, 10 Jun 2024 20:08:43 +0200
+Message-ID: <1887843.tdWV9SEqCh@natalenko.name>
+In-Reply-To: <cfd0a622-89bc-4303-a972-4b5c8380eb76@amd.com>
+MIME-Version: 1.0
 
-Would it make sense to use the for_each_trip_desc() loop here and update
-low and high on the fly in this loop ?
+On pond=C4=9Bl=C3=AD 10. =C4=8Dervna 2024 17:17:42, SEL=C4=8C Dhananjay Ugw=
+ekar wrote:
+> Hello Oleksandr,
+>=20
+> On 6/10/2024 7:58 PM, Oleksandr Natalenko wrote:
+> > Hello.
+> >=20
+> > On pond=C4=9Bl=C3=AD 10. =C4=8Dervna 2024 12:07:45, SEL=C4=8C Dhananjay=
+ Ugwekar wrote:
+> >> Currently the energy-cores event in the power PMU aggregates energy
+> >> consumption data at a package level. On the other hand the core energy
+> >> RAPL counter in AMD CPUs has a core scope (which means the energy=20
+> >> consumption is recorded separately for each core). Earlier efforts to =
+add
+> >> the core event in the power PMU had failed [1], due to the difference =
+in=20
+> >> the scope of these two events. Hence, there is a need for a new core s=
+cope
+> >> PMU.
+> >>
+> >> This patchset adds a new "power_per_core" PMU alongside the existing
+> >> "power" PMU, which will be responsible for collecting the new
+> >> "energy-per-core" event.
+> >>
+> >> Tested the package level and core level PMU counters with workloads
+> >> pinned to different CPUs.
+> >>
+> >> Results with workload pinned to CPU 1 in Core 1 on an AMD Zen4 Genoa=20
+> >> machine:
+> >>
+> >> $ perf stat -a --per-core -e power_per_core/energy-per-core/ sleep 1
+> >>
+> >>  Performance counter stats for 'system wide':
+> >>
+> >> S0-D0-C0         1          0.02 Joules power_per_core/energy-per-core/
+> >> S0-D0-C1         1          5.72 Joules power_per_core/energy-per-core/
+> >> S0-D0-C2         1          0.02 Joules power_per_core/energy-per-core/
+> >> S0-D0-C3         1          0.02 Joules power_per_core/energy-per-core/
+> >> S0-D0-C4         1          0.02 Joules power_per_core/energy-per-core/
+> >> S0-D0-C5         1          0.02 Joules power_per_core/energy-per-core/
+> >> S0-D0-C6         1          0.02 Joules power_per_core/energy-per-core/
+> >> S0-D0-C7         1          0.02 Joules power_per_core/energy-per-core/
+> >> S0-D0-C8         1          0.02 Joules power_per_core/energy-per-core/
+> >> S0-D0-C9         1          0.02 Joules power_per_core/energy-per-core/
+> >> S0-D0-C10        1          0.02 Joules power_per_core/energy-per-core/
+> >>
+> >> [1]: https://lore.kernel.org/lkml/3e766f0e-37d4-0f82-3868-31b14228868d=
+@linux.intel.com/
+> >>
+> >> This patchset applies cleanly on top of v6.10-rc3 as well as latest=20
+> >> tip/master.
+> >>
+> >> Dhananjay Ugwekar (6):
+> >>   perf/x86/rapl: Fix the energy-pkg event for AMD CPUs
+> >>   perf/x86/rapl: Rename rapl_pmu variables
+> >>   perf/x86/rapl: Make rapl_model struct global
+> >>   perf/x86/rapl: Move cpumask variable to rapl_pmus struct
+> >>   perf/x86/rapl: Add wrapper for online/offline functions
+> >>   perf/x86/rapl: Add per-core energy counter support for AMD CPUs
+> >>
+> >>  arch/x86/events/rapl.c | 311 ++++++++++++++++++++++++++++++-----------
+> >>  1 file changed, 233 insertions(+), 78 deletions(-)
+> >>
+> >>
+> >=20
+> > With my CPU:
+> >=20
+> >   Model name:             AMD Ryzen 9 5950X 16-Core Processor
+> >=20
+> > and this workload:
+> >=20
+> > $ taskset -c 1 dd if=3D/dev/zero of=3D/dev/null
+> >=20
+> > the following result is got:
+> >=20
+> > $ sudo perf stat -a --per-core -e power_per_core/energy-per-core/ sleep=
+ 1
+> >=20
+> >  Performance counter stats for 'system wide':
+> >=20
+> > S0-D0-C0              1               1,70 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C1              1               8,83 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C2              1               0,17 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C3              1               0,33 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C4              1               0,14 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C5              1               0,33 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C6              1               0,25 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C7              1               0,19 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C8              1               0,66 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C9              1               1,71 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C10             1               0,38 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C11             1               1,69 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C12             1               0,22 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C13             1               0,11 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C14             1               0,49 Joules power_per_core/energy=
+=2Dper-core/
+> > S0-D0-C15             1               0,37 Joules power_per_core/energy=
+=2Dper-core/
+> >=20
+> >        1,002409590 seconds time elapsed
+> >=20
+> > If it is as expected, please add my:
+> >=20
+> > Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+>=20
+> We can see that after you affined the workload to cpu 1, energy=20
+> consumption of core 1 is considerably higher than the other cores,=20
+> which is as expected, will add your tested-by in next version.
+>=20
+> P.S: I'm assuming here that cpu 1 is part of core 1 in your system,=20
+> please let me know if that assumption is wrong.
 
-If a trip point is crossed the way up or down, then 
-handle_thermal_trip() returns a value which in turn results in updating 
-low and high. If low and high are changed then the we call 
-thermal_zone_set_trips() after the loop.
+You assumption should be correct:
 
-The results for the thermal_zone_set_trips() will be the loop, the low, 
-high, prev_low_trip and prev_high_trip variables going away.
+$ cat /sys/devices/system/cpu/cpu1/topology/core_id
+1
 
-The resulting function should be:
-
-void thermal_zone_set_trips(struct thermal_zone_device *tz, int low, int 
-high)
-{
-         int ret;
-
-         lockdep_assert_held(&tz->lock);
-
-         if (!tz->ops.set_trips)
-                 return;
-
-         /* 
- 
-
-          * Set a temperature window. When this window is left the 
-driver 
-
-          * must inform the thermal core via thermal_zone_device_update. 
- 
-
-          */
-         ret = tz->ops.set_trips(tz, low, high);
-         if (ret)
-                 dev_err(&tz->device, "Failed to set trips: %d\n", ret);
-}
-
-But if you consider that is an additional change, then:
-
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Thanks for testing the patch!
+>=20
+> Regards,
+> Dhananjay
+>=20
+> >=20
+> > Thank you.
+> >=20
+>=20
 
 
-> +	thermal_zone_set_trips(tz);
-> +
->   	list_sort(&way_up_list, &way_up_list, thermal_trip_notify_cmp);
->   	list_for_each_entry(td, &way_up_list, notify_list_node)
->   		thermal_trip_crossed(tz, &td->trip, governor, true);
-> Index: linux-pm/drivers/thermal/thermal_trip.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_trip.c
-> +++ linux-pm/drivers/thermal/thermal_trip.c
-> @@ -88,17 +88,11 @@ void thermal_zone_set_trips(struct therm
->   		return;
->   
->   	for_each_trip_desc(tz, td) {
-> -		const struct thermal_trip *trip = &td->trip;
-> -		int trip_low;
-> +		if (td->threshold < tz->temperature && td->threshold > low)
-> +			low = td->threshold;
->   
-> -		trip_low = trip->temperature - trip->hysteresis;
-> -
-> -		if (trip_low < tz->temperature && trip_low > low)
-> -			low = trip_low;
-> -
-> -		if (trip->temperature > tz->temperature &&
-> -		    trip->temperature < high)
-> -			high = trip->temperature;
-> +		if (td->threshold > tz->temperature && td->threshold < high)
-> +			high = td->threshold;
->   	}
->   
->   	/* No need to change trip points */
-> 
-> 
-> 
+=2D-=20
+Oleksandr Natalenko (post-factum)
+--nextPart2184984.irdbgypaU6
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+-----BEGIN PGP SIGNATURE-----
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmZnQSsACgkQil/iNcg8
+M0t+SQ//cFOUD42pQ87oXU+DNh8dOLRaZgt5OVPnx9wVRuH5xs6JMksQQ0cCl4Mn
+sa2VdK5pMMUsd8e39+Sf3Y9qAi+y6hN9DJAy6D2PM3eIgVLrfyBx8cu8wwYPJYLj
+5hM6EYFI9pntlnfj+solUrTdA5gfuAzzHpBmq1aRsRjVyCVEQwVKaArBrHXbHR+J
+6mPxs2bcLoZGal+4rYNxUBwztUjJvJ4NLMaWumyZlRfBuXAwiUSPFRu8TaI2kxZN
+lDWnzlViyx0qPh86cD/QaD7j85QaPOFNfeou7g1vUhJ34oywko5UfqNjW8AcgDxD
+QQ3tTeja0+aQL1yLL1buOFL073fdtfICyjRhFsozEWDkvIBAel1P5LOFAPPfUHQD
+X736qZG7BSvERo62nlZz59XMh9W/8gGSXA8fXEvusK2jx9hhqW8NC1QSBGOZgFp1
+3vI/z/zPn3236s/oEd++tJa1drUBDPMc59zxIzU+CW8xGc22dyWe3bj7Rn0LZRBV
+NPdRpgrJyv60rWj07w1NR9KTkSWYWR47xoNIv6JlN7bpaJSlo9hwhg0SVF4ihL/N
+Z5rLGFmxqrpBHwMbehSQM1kr8faF8BvdLbskbqPFuhePnHPir8IjPpDA7+My5Sp6
+hNjQ0nAYSpmMiEwI9Grre1uhInW+CpVnsuw5zTjC0uW2A4ebI0g=
+=eAZx
+-----END PGP SIGNATURE-----
+
+--nextPart2184984.irdbgypaU6--
+
+
 
 
