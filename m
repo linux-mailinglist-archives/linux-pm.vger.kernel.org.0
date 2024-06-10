@@ -1,256 +1,153 @@
-Return-Path: <linux-pm+bounces-8899-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8900-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8693190285D
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 20:10:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5C09902C5C
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 01:14:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18547287BBF
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 18:10:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7414F28119B
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 23:14:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 963DF14F9F5;
-	Mon, 10 Jun 2024 18:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6817152176;
+	Mon, 10 Jun 2024 23:14:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b="HzBsRp0p"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fXUiwL9I"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from prime.voidband.net (prime.voidband.net [199.247.17.104])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E67814EC43;
-	Mon, 10 Jun 2024 18:08:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.247.17.104
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE3B4779E;
+	Mon, 10 Jun 2024 23:14:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718042942; cv=none; b=mEFnB5DyLV5kh5hQ1za3Q+UmBTf24alUSlHkQCJB1vZk2AYslqklWe+sik+JhXH2RxlIdc2csbRdmyRWkHDvyY7PyI1Y6kjjAtokUlz/3lPee07BvveY8ZbMn3td2/MfSPzqLt33jc+xLS7wEORKi+UNc69R4JEVqH6mGcpt05I=
+	t=1718061244; cv=none; b=RmMIKLzuENVx2/HxBjHoOHrkZSdJJYFCJRQunI/0YaaVFfCdxOUuj2YWZQ6r1Mf4kA0ewqttYEqtTemgEf0ceqRGOyg6rYxz9f37qtFSnFBv6KhabznvE01Sx9HoV/EAbUEErsku91HSbFJT1HFlZj/anvxNMSwYzvxZEDRLMbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718042942; c=relaxed/simple;
-	bh=jIe9JeocBr7G6WT23O2lxLj34KMlvE4LnyGCyZrVp2I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XCVGMEnpRh/I2xhCAjyNGRAgbhktQ1ijUzN/wQCvl3pWXbMq8Ogv6+uAYuS8g2cprBKc8eHlo+sTDwoJ7944XMuA90+SQvIMJB6QpP3Jv2E+umSJY4C2nDk5KEZGzwCxEkwTdkw8EYMbUFzvIOjCEYMMnOUu4twgqQ0iNg1fV9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=natalenko.name; spf=pass smtp.mailfrom=natalenko.name; dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b=HzBsRp0p; arc=none smtp.client-ip=199.247.17.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=natalenko.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=natalenko.name
-Received: from spock.localnet (unknown [212.20.115.26])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by prime.voidband.net (Postfix) with ESMTPSA id 2873F635B055;
-	Mon, 10 Jun 2024 20:08:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-	s=dkim-20170712; t=1718042934;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VHBmuPzeQk6RrXH74wFJcj/vN52Uy+kCPKcbBOPsTrU=;
-	b=HzBsRp0p2xJRqImMu3onkIhg6CjljW8VZToRrXgpaQXBLvbdPuvPGBWdZbTWmczSPegHfF
-	BFEKKTFgQ2S5OC0aiWVpspiJKkRqCfqJMnKLnnASxjP8qCYhS9lZd3aOZE39Cl2ypmcQpW
-	wn78Rz/9Z/WRzRfCADQXJuudsuSj7ak=
-From: Oleksandr Natalenko <oleksandr@natalenko.name>
-To: peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
- namhyung@kernel.org, mark.rutland@arm.com,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com, tglx@linutronix.de,
- bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, kees@kernel.org,
- gustavoars@kernel.org, Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
-Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, ananth.narayan@amd.com,
- gautham.shenoy@amd.com, kprateek.nayak@amd.com, ravi.bangoria@amd.com,
- sandipan.das@amd.com, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/6] Add per-core RAPL energy counter support for AMD CPUs
-Date: Mon, 10 Jun 2024 20:08:43 +0200
-Message-ID: <1887843.tdWV9SEqCh@natalenko.name>
-In-Reply-To: <cfd0a622-89bc-4303-a972-4b5c8380eb76@amd.com>
-References:
- <20240610100751.4855-1-Dhananjay.Ugwekar@amd.com>
- <2733323.mvXUDI8C0e@natalenko.name>
- <cfd0a622-89bc-4303-a972-4b5c8380eb76@amd.com>
+	s=arc-20240116; t=1718061244; c=relaxed/simple;
+	bh=XU6BOh2DEWLUvg1y8dXWq4FHicB8QmFWvgMoo960iAE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=Ygq0IPiep5AZMmDA+K6/QrCt/0Ptt+xgeoeS2GpEU2kkVyt0CB1bxL74cGMUajZJkGAUtH+b1eMyuvocESqtTuaU2pChW+cFzNlXOYL87sESbYxG4SLIyw6/xiMHi0ubNUDD5+Qj4EkiSvy6gjb7EhE2Xpe0Z8t66tS+LrjQgSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fXUiwL9I; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45ADUbXf029624;
+	Mon, 10 Jun 2024 23:13:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=098YuThUKLesrwkEfnSYpE
+	zw/0qjZqI3rNn+/RSq+G0=; b=fXUiwL9IkAt5DuJwKP3P2UpNW5ed2GtjmUFvVQ
+	djdDf1u0hVw0rDCla2CPT/jz06OsmrU++Fo9SDAEVQ3LRlzge49tetqQfe4/F53r
+	RegjwWo7jIeK7iSIk0nGdhh+konGlGLPNHY8e16nQZFyAUoz01KY94uqFPNa1Jnr
+	rne1HdwKNlMPjSReoAdrTxp6wl2QYaKDf08ojVjVDhfCE2rUM8rZY+znR77yuFTY
+	dZO9PcAjG97Fv3yghtdb+yMtPyCY3Tm30BYNmUfEMsvg8sCyCommMM3jGNnPzjQG
+	LeLjVxXC23Jq/K02b12tjwHhwNaHn6/4tnJBV6zn6ihJKa6w==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ymea6mv79-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 10 Jun 2024 23:13:57 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45ANDuux031529
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 10 Jun 2024 23:13:56 GMT
+Received: from [169.254.0.1] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 10 Jun
+ 2024 16:13:55 -0700
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Mon, 10 Jun 2024 16:13:55 -0700
+Subject: [PATCH] pmdomain: amlogic: add missing MODULE_DESCRIPTION() macros
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2184984.irdbgypaU6";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240610-md-drivers-pmdomain-amlogic-v1-1-b49ddb1a8bdf@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIALKIZ2YC/x3MwQqDMAwA0F+RnBdI3XBsvzJ2iG3UgG0ldSKI/
+ 75ux3d5BxQxlQLP5gCTTYvmVOEuDfiJ0yiooRpaam/UOcIYMJhuYgWXGHJkTchxzqN6HJy7P67
+ UEQlDHRaTQff//npX91wEe+Pkp985a/rsGLmsYnCeXyKdRE+MAAAA
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+        Neil Armstrong
+	<neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        "Jerome
+ Brunet" <jbrunet@baylibre.com>,
+        Martin Blumenstingl
+	<martin.blumenstingl@googlemail.com>
+CC: <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+X-Mailer: b4 0.13.0
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -3o1y20JkrcZJ8gLc3NK2SDvoJ6_HOJ6
+X-Proofpoint-ORIG-GUID: -3o1y20JkrcZJ8gLc3NK2SDvoJ6_HOJ6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-10_06,2024-06-10_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ spamscore=0 phishscore=0 mlxlogscore=999 clxscore=1015 lowpriorityscore=0
+ malwarescore=0 suspectscore=0 adultscore=0 bulkscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
+ definitions=main-2406100172
 
---nextPart2184984.irdbgypaU6
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Oleksandr Natalenko <oleksandr@natalenko.name>
-Date: Mon, 10 Jun 2024 20:08:43 +0200
-Message-ID: <1887843.tdWV9SEqCh@natalenko.name>
-In-Reply-To: <cfd0a622-89bc-4303-a972-4b5c8380eb76@amd.com>
-MIME-Version: 1.0
+On x86, make allmodconfig && make W=1 C=1 reports:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pmdomain/amlogic/meson-ee-pwrc.o
 
-On pond=C4=9Bl=C3=AD 10. =C4=8Dervna 2024 17:17:42, SEL=C4=8C Dhananjay Ugw=
-ekar wrote:
-> Hello Oleksandr,
->=20
-> On 6/10/2024 7:58 PM, Oleksandr Natalenko wrote:
-> > Hello.
-> >=20
-> > On pond=C4=9Bl=C3=AD 10. =C4=8Dervna 2024 12:07:45, SEL=C4=8C Dhananjay=
- Ugwekar wrote:
-> >> Currently the energy-cores event in the power PMU aggregates energy
-> >> consumption data at a package level. On the other hand the core energy
-> >> RAPL counter in AMD CPUs has a core scope (which means the energy=20
-> >> consumption is recorded separately for each core). Earlier efforts to =
-add
-> >> the core event in the power PMU had failed [1], due to the difference =
-in=20
-> >> the scope of these two events. Hence, there is a need for a new core s=
-cope
-> >> PMU.
-> >>
-> >> This patchset adds a new "power_per_core" PMU alongside the existing
-> >> "power" PMU, which will be responsible for collecting the new
-> >> "energy-per-core" event.
-> >>
-> >> Tested the package level and core level PMU counters with workloads
-> >> pinned to different CPUs.
-> >>
-> >> Results with workload pinned to CPU 1 in Core 1 on an AMD Zen4 Genoa=20
-> >> machine:
-> >>
-> >> $ perf stat -a --per-core -e power_per_core/energy-per-core/ sleep 1
-> >>
-> >>  Performance counter stats for 'system wide':
-> >>
-> >> S0-D0-C0         1          0.02 Joules power_per_core/energy-per-core/
-> >> S0-D0-C1         1          5.72 Joules power_per_core/energy-per-core/
-> >> S0-D0-C2         1          0.02 Joules power_per_core/energy-per-core/
-> >> S0-D0-C3         1          0.02 Joules power_per_core/energy-per-core/
-> >> S0-D0-C4         1          0.02 Joules power_per_core/energy-per-core/
-> >> S0-D0-C5         1          0.02 Joules power_per_core/energy-per-core/
-> >> S0-D0-C6         1          0.02 Joules power_per_core/energy-per-core/
-> >> S0-D0-C7         1          0.02 Joules power_per_core/energy-per-core/
-> >> S0-D0-C8         1          0.02 Joules power_per_core/energy-per-core/
-> >> S0-D0-C9         1          0.02 Joules power_per_core/energy-per-core/
-> >> S0-D0-C10        1          0.02 Joules power_per_core/energy-per-core/
-> >>
-> >> [1]: https://lore.kernel.org/lkml/3e766f0e-37d4-0f82-3868-31b14228868d=
-@linux.intel.com/
-> >>
-> >> This patchset applies cleanly on top of v6.10-rc3 as well as latest=20
-> >> tip/master.
-> >>
-> >> Dhananjay Ugwekar (6):
-> >>   perf/x86/rapl: Fix the energy-pkg event for AMD CPUs
-> >>   perf/x86/rapl: Rename rapl_pmu variables
-> >>   perf/x86/rapl: Make rapl_model struct global
-> >>   perf/x86/rapl: Move cpumask variable to rapl_pmus struct
-> >>   perf/x86/rapl: Add wrapper for online/offline functions
-> >>   perf/x86/rapl: Add per-core energy counter support for AMD CPUs
-> >>
-> >>  arch/x86/events/rapl.c | 311 ++++++++++++++++++++++++++++++-----------
-> >>  1 file changed, 233 insertions(+), 78 deletions(-)
-> >>
-> >>
-> >=20
-> > With my CPU:
-> >=20
-> >   Model name:             AMD Ryzen 9 5950X 16-Core Processor
-> >=20
-> > and this workload:
-> >=20
-> > $ taskset -c 1 dd if=3D/dev/zero of=3D/dev/null
-> >=20
-> > the following result is got:
-> >=20
-> > $ sudo perf stat -a --per-core -e power_per_core/energy-per-core/ sleep=
- 1
-> >=20
-> >  Performance counter stats for 'system wide':
-> >=20
-> > S0-D0-C0              1               1,70 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C1              1               8,83 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C2              1               0,17 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C3              1               0,33 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C4              1               0,14 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C5              1               0,33 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C6              1               0,25 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C7              1               0,19 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C8              1               0,66 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C9              1               1,71 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C10             1               0,38 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C11             1               1,69 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C12             1               0,22 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C13             1               0,11 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C14             1               0,49 Joules power_per_core/energy=
-=2Dper-core/
-> > S0-D0-C15             1               0,37 Joules power_per_core/energy=
-=2Dper-core/
-> >=20
-> >        1,002409590 seconds time elapsed
-> >=20
-> > If it is as expected, please add my:
-> >=20
-> > Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
->=20
-> We can see that after you affined the workload to cpu 1, energy=20
-> consumption of core 1 is considerably higher than the other cores,=20
-> which is as expected, will add your tested-by in next version.
->=20
-> P.S: I'm assuming here that cpu 1 is part of core 1 in your system,=20
-> please let me know if that assumption is wrong.
+Add the missing invocation of the MODULE_DESCRIPTION() macro to all
+files which have a MODULE_LICENSE().
 
-You assumption should be correct:
+This includes meson-secure-pwrc.c which, although it did not produce a
+warning with the x86 allmodconfig configuration, may cause this
+warning with other configurations where CONFIG_MESON_SM is enabled.
 
-$ cat /sys/devices/system/cpu/cpu1/topology/core_id
-1
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+ drivers/pmdomain/amlogic/meson-ee-pwrc.c     | 1 +
+ drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c | 1 +
+ drivers/pmdomain/amlogic/meson-secure-pwrc.c | 1 +
+ 3 files changed, 3 insertions(+)
 
-> Thanks for testing the patch!
->=20
-> Regards,
-> Dhananjay
->=20
-> >=20
-> > Thank you.
-> >=20
->=20
+diff --git a/drivers/pmdomain/amlogic/meson-ee-pwrc.c b/drivers/pmdomain/amlogic/meson-ee-pwrc.c
+index fcec6eb610e4..fbb2b4103930 100644
+--- a/drivers/pmdomain/amlogic/meson-ee-pwrc.c
++++ b/drivers/pmdomain/amlogic/meson-ee-pwrc.c
+@@ -648,4 +648,5 @@ static struct platform_driver meson_ee_pwrc_driver = {
+ 	},
+ };
+ module_platform_driver(meson_ee_pwrc_driver);
++MODULE_DESCRIPTION("Amlogic Meson Everything-Else Power Domains driver");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c b/drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c
+index 33df520eab95..6028e91664a4 100644
+--- a/drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c
++++ b/drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c
+@@ -376,4 +376,5 @@ static struct platform_driver meson_gx_pwrc_vpu_driver = {
+ 	},
+ };
+ module_platform_driver(meson_gx_pwrc_vpu_driver);
++MODULE_DESCRIPTION("Amlogic Meson GX Power Domains driver");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/pmdomain/amlogic/meson-secure-pwrc.c b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
+index 4d5bda0d60fc..b50e5678abe3 100644
+--- a/drivers/pmdomain/amlogic/meson-secure-pwrc.c
++++ b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
+@@ -355,4 +355,5 @@ static struct platform_driver meson_secure_pwrc_driver = {
+ 	},
+ };
+ module_platform_driver(meson_secure_pwrc_driver);
++MODULE_DESCRIPTION("Amlogic Meson Secure Power Domains driver");
+ MODULE_LICENSE("Dual MIT/GPL");
 
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
---nextPart2184984.irdbgypaU6
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmZnQSsACgkQil/iNcg8
-M0t+SQ//cFOUD42pQ87oXU+DNh8dOLRaZgt5OVPnx9wVRuH5xs6JMksQQ0cCl4Mn
-sa2VdK5pMMUsd8e39+Sf3Y9qAi+y6hN9DJAy6D2PM3eIgVLrfyBx8cu8wwYPJYLj
-5hM6EYFI9pntlnfj+solUrTdA5gfuAzzHpBmq1aRsRjVyCVEQwVKaArBrHXbHR+J
-6mPxs2bcLoZGal+4rYNxUBwztUjJvJ4NLMaWumyZlRfBuXAwiUSPFRu8TaI2kxZN
-lDWnzlViyx0qPh86cD/QaD7j85QaPOFNfeou7g1vUhJ34oywko5UfqNjW8AcgDxD
-QQ3tTeja0+aQL1yLL1buOFL073fdtfICyjRhFsozEWDkvIBAel1P5LOFAPPfUHQD
-X736qZG7BSvERo62nlZz59XMh9W/8gGSXA8fXEvusK2jx9hhqW8NC1QSBGOZgFp1
-3vI/z/zPn3236s/oEd++tJa1drUBDPMc59zxIzU+CW8xGc22dyWe3bj7Rn0LZRBV
-NPdRpgrJyv60rWj07w1NR9KTkSWYWR47xoNIv6JlN7bpaJSlo9hwhg0SVF4ihL/N
-Z5rLGFmxqrpBHwMbehSQM1kr8faF8BvdLbskbqPFuhePnHPir8IjPpDA7+My5Sp6
-hNjQ0nAYSpmMiEwI9Grre1uhInW+CpVnsuw5zTjC0uW2A4ebI0g=
-=eAZx
------END PGP SIGNATURE-----
-
---nextPart2184984.irdbgypaU6--
-
-
+---
+base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
+change-id: 20240610-md-drivers-pmdomain-amlogic-f117930600ea
 
 
