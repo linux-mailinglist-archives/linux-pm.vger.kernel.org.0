@@ -1,201 +1,290 @@
-Return-Path: <linux-pm+bounces-8890-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8891-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0336902501
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 17:08:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC05090257B
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 17:24:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DA09B2332F
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 15:07:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C1B51F21EAB
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 15:24:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36CE0139578;
-	Mon, 10 Jun 2024 15:07:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F0915531A;
+	Mon, 10 Jun 2024 15:18:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MeibQCtB"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ZaKaYaq1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2074.outbound.protection.outlook.com [40.107.220.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCA5137C35
-	for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 15:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718032032; cv=none; b=WPMxiOZLRb6gWASeeXQUTieRcAhEPiKG9O76qDDoRsBj+GFx/+/wQ1hCNSN7s0tAdv5VyIbQXUIwvvbrDLdrp3Hiv+xYNDm8eKcxoToKUv4dacQBNtNbJZI4OEGNyNUg4uGpbBBfxOT9fH+5UMFardmTDKURSEnVB+sQCOY9u9Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718032032; c=relaxed/simple;
-	bh=BHUKNWu9Gm7BFV2h2F+vtKAxK01wDm8l07XgvB9kSDE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=s2oD8Ff08lmS5WgAAkAYxWz6iCX2zEIMZ9Le7YLj1+zZZgFvsr7BZYV6vJelTJ+2I4EFItTqv0q5IQwsOjMINfKS0fpHXqJ4jFYame/Vlcukr1gVFqk6324VR7HviIAsuy4l3io5bqDeVLM02bAHvVnysWoLWiZ7sThSRCFR6Z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MeibQCtB; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-52961b77655so5018775e87.2
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 08:07:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718032028; x=1718636828; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=h9kWcRmGR8cLJ82ciTUgDAD6Cy9Z+U9GhZ0rBx9PYEE=;
-        b=MeibQCtBLodHNGDT+mVWFDX0U8tFDIL0Y9J6ps59vAkOuTzYNA6xazU9dVtXKf0oll
-         S3GC1AWid4FNNhqfOB+FjmUux9MGmt0Szs325YOTsdlodiGru6SdCvwEwaZMFgtJTtDi
-         NObeu5pVWqCJWaM5u4soYit0hgKeFmmcS9xBFfIpoY8pILyC77SJCRiuZb7Atllzs7wt
-         5AO64+5SmxcJlncjdHUhiqD4pIIXyLdWOzmx5/5f8adxMUQBCv/s/z7NG3EAJB38/Pq7
-         z3MJF7SdOwMxL04JDIKpLG33jSldVTj0rI7D0Izq8G9/saO6SbPVi5VgIQ2V/adSIL1y
-         0YYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718032028; x=1718636828;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h9kWcRmGR8cLJ82ciTUgDAD6Cy9Z+U9GhZ0rBx9PYEE=;
-        b=ob4kQJgilTmk1lRE0HT2cutrM27jWFl3ir5v7g8lRuc9nFkfENEy3C5ERsIK4+fXzL
-         +YltZft3UmuZls8yhpzxfb0HV7ujjm2R/tI6jMwxaC3dwSBa3vEa3ayvG3uwJRMeL27v
-         vxxTXBPg6joN5pOTAFsoxXooxdLRQhgc/hg/6et5EgodeeSBsdNvb/wMnSO4d7zEVcAH
-         s7Q/ZQYSt4kpmIXsq9/lk/uEhdgYx3ie46sHA3Ln3mQ5JlBspno8qHDxuaZB2M3eK3Hj
-         4K7LVJ1HIPYCSzY4u+n9rqHj8tzuRu8QaPJQyZZk4a+Jy9BTP30dV/NPF6AlbMrBhROH
-         59vg==
-X-Forwarded-Encrypted: i=1; AJvYcCUaAxNjz8NXhmQdBVV75Ab7a1v3zUu9v9CQ3GmzAmDpISJulD2ep59DkO2bry6/7olwiWUbIS0j7Ei92A3rdZGd+4P3wO7r2V8=
-X-Gm-Message-State: AOJu0YwtzKoeSRJfsJRgDWRXnHT/4i1khv+BpNAXio0jZ+wEfZtaYE54
-	WCrqmknBjPNIa3FcThf8Mk8TdM7Ref2uKXly/Ed2ALWNQP1VMRDyU1F4waBuwbw=
-X-Google-Smtp-Source: AGHT+IElQ/NmsD0/0eKD3JUYRHo+Iv+RmXxwHvybvSNVCfKdGJPsv5LDDbzVkR1JOditnQZBbQsPqg==
-X-Received: by 2002:a05:6512:3da3:b0:52c:86eb:a2e6 with SMTP id 2adb3069b0e04-52c86eba461mr2983156e87.4.1718032026006;
-        Mon, 10 Jun 2024 08:07:06 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.137])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42196386d13sm47420235e9.12.2024.06.10.08.07.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jun 2024 08:07:05 -0700 (PDT)
-Message-ID: <bc56ecb2-9940-48b5-afbc-1a447b1ff46f@linaro.org>
-Date: Mon, 10 Jun 2024 17:07:02 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16681422C4;
+	Mon, 10 Jun 2024 15:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.74
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718032681; cv=fail; b=h/Q5z4WiLHdijN3SJZ41cW/diitLDO2698srov6Uhn+MbdkZ9Z3QqedJG6zCvxQa53JTYe1JccXzfopXUSYlJ3XkZfSotxIHXGsJvaP2TtwYVomU3V8EYoZI1BR/TjPhLX8r70kDiwFb7Igytkc7LYBf0W8UY6EkX6LgXqKd5eI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718032681; c=relaxed/simple;
+	bh=rGUE6GcFvPEnqoL559RuFvcLoP4vJYQlIaOQKjoTFOo=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=hLfZ+nT6mRZXiVk5i1NrFNDg1O2cc+modPS6K/CJdumbSgJ+m2avdPUqnG9JdkQ90qSrLjhWCubrGvbSxsCSAVpscWQeMt9vU8QHxNkWAxbqj2e9RrcAV6LNNUJaQHgefc988PQF/NVgB0CbXbflJKX8CT1b9tJ2LDD/KiK7NR0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ZaKaYaq1; arc=fail smtp.client-ip=40.107.220.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bjb4hqK6y25d+yEQ856mP7o0s/UnzwZlKfXjDwt+CYMHel12qz0F0IKcQVA5pn7LwVv6wa5f6Z66cUmawvqNjs7EzpBZd6L9qw9+6dXSQzjlFjkiwiADNHoh0Q7KMq3NzdQjjm+WExYJP5OTb3DT/2Ez6gzXN58RBvvdVoq6Cj9RQEvb7Y71G4hqe1sy4yoI2sPHNx0SDS5jSlpvcZZEd5DfDbIzfp7pv1Dyc9Yx/ykDePSN3rew5RXu+HoOYJPj3muj8ZIUWpctlcQKC3rOSQXnYGdCwIlo6gizv9AOj4et1TvDH+ms6qWM+JTgc0nRuffR5fYsj9iOVcpn3/jQAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2uYKUfv1DVEpIwdbitrYJBrIs4pV+c/ATcMVAOLLSZ8=;
+ b=EuqJf0b+oCJGQrYSxeE7K3w6TmO+Uju3O6RNk8Qrd+JC/nU/pfLdcG3iZ24OoT6cOcPrgHEzO2rAngAwIe7ieZkrhbVJ2X9Ir9Ic8Rvq3tjO4bGfHMeGKofeif/rOKWwL7gRWfO2Czwof3ho2O+8UCSXejk1ZJaYmil3fKVVDT7njwah1raqn5BB32OZLSvPhsRyVWyQ9YGbbPfshfVJZIQ/hXEKc0cQp6fUGX9EnOaG8YSrWwnWZxLlu9CDj56WWGgfNgP4EowfaEFu3T4T56jY+lhFyG/NrZa0Jn0SBmEv893BW624kR7t8pyH2siQrOQlCJUfHG+zYGQl7u8qRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2uYKUfv1DVEpIwdbitrYJBrIs4pV+c/ATcMVAOLLSZ8=;
+ b=ZaKaYaq1/7JOGJgbbeZlUBXOmrG27QvL6tt5mgRY+wICylom98UG1G67Qt7a34JDYXsMnVPBDetAVFElYde7258zpoW3ANb7LkWeKs2nOo6v1L8z+2a5Dlm2//Zp3Nz9rXpah2I8hC7AePkQJWYDO2A/zmrEltf5EYBU7P23ndM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from LV8PR12MB9207.namprd12.prod.outlook.com (2603:10b6:408:187::15)
+ by SA0PR12MB4400.namprd12.prod.outlook.com (2603:10b6:806:95::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Mon, 10 Jun
+ 2024 15:17:56 +0000
+Received: from LV8PR12MB9207.namprd12.prod.outlook.com
+ ([fe80::3a37:4bf4:a21:87d9]) by LV8PR12MB9207.namprd12.prod.outlook.com
+ ([fe80::3a37:4bf4:a21:87d9%6]) with mapi id 15.20.7633.036; Mon, 10 Jun 2024
+ 15:17:56 +0000
+Message-ID: <cfd0a622-89bc-4303-a972-4b5c8380eb76@amd.com>
+Date: Mon, 10 Jun 2024 20:47:42 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/6] Add per-core RAPL energy counter support for AMD CPUs
+To: Oleksandr Natalenko <oleksandr@natalenko.name>, peterz@infradead.org,
+ mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
+ mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+ irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+ tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
+ x86@kernel.org, kees@kernel.org, gustavoars@kernel.org
+Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org, ananth.narayan@amd.com,
+ gautham.shenoy@amd.com, kprateek.nayak@amd.com, ravi.bangoria@amd.com,
+ sandipan.das@amd.com, linux-pm@vger.kernel.org
+References: <20240610100751.4855-1-Dhananjay.Ugwekar@amd.com>
+ <2733323.mvXUDI8C0e@natalenko.name>
+Content-Language: en-US
+From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+In-Reply-To: <2733323.mvXUDI8C0e@natalenko.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MA0PR01CA0107.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:af::15) To LV8PR12MB9207.namprd12.prod.outlook.com
+ (2603:10b6:408:187::15)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 2/2] power: pwrseq: add a driver for the PMU module on
- the QCom WCN chipsets
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>, Marcel Holtmann
- <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood
- <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Saravana Kannan <saravanak@google.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>, Arnd Bergmann <arnd@arndb.de>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>,
- Srini Kandagatla <srinivas.kandagatla@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Abel Vesa <abel.vesa@linaro.org>, Manivannan Sadhasivam <mani@kernel.org>,
- Lukas Wunner <lukas@wunner.de>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Amit Pundir <amit.pundir@linaro.org>, Xilin Wu <wuxilin123@gmail.com>
-Cc: linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-wireless@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- Caleb Connolly <caleb.connolly@linaro.org>
-References: <20240605123850.24857-1-brgl@bgdev.pl>
- <20240605123850.24857-3-brgl@bgdev.pl>
- <e7c997a3-8d68-410d-9f04-8637d76a0d61@linaro.org>
-Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <e7c997a3-8d68-410d-9f04-8637d76a0d61@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9207:EE_|SA0PR12MB4400:EE_
+X-MS-Office365-Filtering-Correlation-Id: 46497c75-56ae-4485-4790-08dc8960812b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|1800799015|366007|7416005|376005|921011;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?LzQ2N1g4ODIyVUZlUC82R1czczd0OEE1aHk0L05oMVdsVDlIQk9adDF2bEo0?=
+ =?utf-8?B?Y0QyYnZoU1NqZ3hySXBtYzRlaTYwS1JSY2NqTjZYVURod0tiR3NGNnZDWUI0?=
+ =?utf-8?B?R0JNa0RsSXFYYkRMbTBTdWNzRCswanRFemNOaTlOYlFuQ2pVUlo4djlpZmpQ?=
+ =?utf-8?B?WnVJNTNwdnV3YzVTQUVPUHlPMHBidm9XN05hRDdENG5Wazl4SXNIMjc3blJN?=
+ =?utf-8?B?VkZHbjIxRWxWNjJRdnVwM3JRTnVIVmxKZThRenpCTmIvNFMyWlJVdE4yZTFV?=
+ =?utf-8?B?NzBpR0VSN1BRNnRqczcwN01MWkRzMTV1UzUyenJJOTRQQld2Qm5HU2lRbnNO?=
+ =?utf-8?B?MHpadkRNTUZWcE04YzlrSjFqeUdJV0gvOWcvZnVEcUN4aTEyUlNwZis2NzBL?=
+ =?utf-8?B?aDBScUFweEdDUnZZS2laSTl0VVFycmxqaU4zS2tIdzVUYmlLS1gyR2FvTHpY?=
+ =?utf-8?B?N2FYQ0wzQWhGVUhJcXhrTHJDTUozaEh1WHZKY2QvYk9tWUgrcWdRVXhpZXhD?=
+ =?utf-8?B?TDJzUHNuYXBMZFBya1JFVnN3ZWJVcStFSnpXayt2WHNQRW5xYUxrV2g0Yzhk?=
+ =?utf-8?B?RDFXdHV4RWhnbmcwRHRWRzlaY2RscmJIeGFSRllVbXFxbk5sS1dZaklaWS9N?=
+ =?utf-8?B?a1BzM1plK3ljN2xXZWo1UEtuZUxISEFJSWFMdDRGN0VjVUpzbm9LZVVLZEdz?=
+ =?utf-8?B?cTlBZzA1cEJycS9NdXQ3RlN3QSs0V0tENEp3NVhwNTcxck9mbmY4UEZhaFph?=
+ =?utf-8?B?YTVvMFBoeFJuWGYydnZMY1IwR3p1cDk3anR4QlZpSnMrUDVTSnRMQU1FU1R6?=
+ =?utf-8?B?bk1qQ0NSTTF0NmpyVis5Uk5ZcmhMeTdwekppYXptakVrdTVrcHlmcjBqbmc5?=
+ =?utf-8?B?dXZVQVE3R0VFeEkwTkU3cXJEUFRDeEhPdGxIVm9BT3lER2tlLyt5dk5lQmdw?=
+ =?utf-8?B?N01qeTJkaWlKVGQzSm1GdFFuS0tLditPUG9JS3BSVk5UVGJYUG5yaiticndM?=
+ =?utf-8?B?R1MyT0ljanI4SExTeDN5SW5OQTR0NlUvKzNqUE9kZGdvS0Qvc0NDYjd5aGpR?=
+ =?utf-8?B?YURLNzRsT0tIRm1FWkw3cHVhQVpwK3d6Y1dmR09UK0JvZEdkYWRvbDg5QytR?=
+ =?utf-8?B?N200M2prUTdPeW1abkZOQkw2aUI2Ui9XdVFJYTlPTFVyV3FPVFdsVXJkNnZq?=
+ =?utf-8?B?cUU0NWFoakxra0tHN1RlVFcxelkwVGc2V2dUc2J4SEFzWVhnOUswcGVLcXlk?=
+ =?utf-8?B?UFFMYTFpZ0NiZngrQ1B6SU56T1lFTFVyNXcxQmhPem5aN2dGdXV2TUZTOEpO?=
+ =?utf-8?B?Y3J3MmhaNGxKUUNUZ2xNcHZYdXV6Ylc4OUJaejBjZkJaK0FJT3Jma2JwN0Nz?=
+ =?utf-8?B?N0VQamFBOVR3b3ZKTEhEdUpndjVobDR2eGpNZ2dIVFFKT2pkUlpCV1MyN3d3?=
+ =?utf-8?B?NTJnR0J4QWNIeGNpdGJJL2VBSmwzZ3c1bCs1SjNOc2Z3UWFoQXVVSERyVXdK?=
+ =?utf-8?B?Uk9BYjlwdHBrOXRvZk1mM252TnNCVnpuSjE0ZElGOWh4T1oyaldXTU5saysw?=
+ =?utf-8?B?OXAxYTdTTXhqdFhUK1BSRGhVNTlNNm50QjJHYlJEOE9wN3FkdHNQSzhjU2Ur?=
+ =?utf-8?B?UGVOOU9xWHRTUlhzM2JzcXFUNGpTcVJuRGd5a3l3azNiS1l6dnJ1QkhMTzhZ?=
+ =?utf-8?B?Y3luWnhtVlVtOVlZZ2NpN2ZLUFdnK2lVV1YyZkRCZHpNamxzRG9GNjNobnhX?=
+ =?utf-8?B?cE1oSXBJcEJVVnFKdUNXYmFmVUtnOVZqRU1GOVluT29lRjBXNDk1Nmk1c25q?=
+ =?utf-8?Q?hHbqF4iZDCYjEp1CGikqOauL9t50a2v5mk8aw=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9207.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(366007)(7416005)(376005)(921011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?emErU2hsRnBpd0RUSkRzMElHVWp5czV6T2pxMVQ5N1VSblIveWt6bGxrRGl5?=
+ =?utf-8?B?R0Q3aGp6elF0cm5JMnliNVlDbmRlK0xGUUk4WXVxcmdoTXhOekQycWt0L3ZP?=
+ =?utf-8?B?OEVaY3VMNTluM0c2L1B0b3ZyVTB6aU04aDY3ZDlRRklmUlg1MS9CaWtMc0xW?=
+ =?utf-8?B?L1lMTlNmNHArTUQ5WlY2RC9XeWZ3M3BCVGpOejMrcy9uUFJNam9kTTlsU29t?=
+ =?utf-8?B?RWxuS24rM1NXc3dtdWYzTVkvZk45UjlZZVVIRWRtbzlxNlRXWmdGSVgwS1Rt?=
+ =?utf-8?B?OEc3YzI0b3g1a3paeUVheS9hOW1mMi9jMHdBMkdiUFREVW9KRjBpQjRUWGQy?=
+ =?utf-8?B?eEZSV2xOUkZnVm9XUWZHSDR3V0pmYllHWkYzemFtdXc2TSs0ZmVEQW5NTWx1?=
+ =?utf-8?B?emh0bjZ0YkFCZmtCRTNFOFJBWkpjN2N3aFdnNUk4V0I3RUZZRGpKNUQ2QnM4?=
+ =?utf-8?B?eXFPcVVQL0xyTXJjY2N2TjhnU28vaTNVL1JLdERxSUEwcVd1VldJdENMR3Ew?=
+ =?utf-8?B?NmVvSDBBZVFZS2F4TWlQZXo1UVdOcTZ6UGF2SlczTE5nM3BlcHBma1Blc1hR?=
+ =?utf-8?B?aG9VOFUweXgrWHRrWVFzOTFGOWp1QytiY0VDQzFFUzM3b2p3eG9hL1BFV2pQ?=
+ =?utf-8?B?WkJCSHF2VmZYZG5XMzBUbnlzMU8xVU9EQjdnTGM5bWQ2OHRza21LQW14TU9F?=
+ =?utf-8?B?a2NhMjk4a0k5Zlp5NFJuOUw3MUsvTnEvTmlEZlRzVzd2cXlOc2FtSU5UZ0xS?=
+ =?utf-8?B?bUs3UFhiVDQ4SnZDTjNrRmtBM2g1eWpDREN2MTUwaGtqWGU1cFF4NFlKeG12?=
+ =?utf-8?B?bWx3V1JIZ0t2KzNHZmgwN2V4VWhRL0RmRUtHTk1KWjAySXlUMVVuK0dZWHhQ?=
+ =?utf-8?B?YkNEZzF6SDVwYjNrYzhESldRZ0hLd0FETjlaRzRiYUFQKzVQc2kwTlBRZXR5?=
+ =?utf-8?B?NmdNVnpoOWFiTUJ5Qk53Y0ZNTi8rWlNXcGI4TE5iSWdRRThDMFZKS0xFWnhT?=
+ =?utf-8?B?NFQxTEowOUVNeVB5blhtYUlRangrbmFDdTd6Wk5sc2NZQm14dSt5SXlHZXph?=
+ =?utf-8?B?c2IyVlRSNG9EN3laa3B1RGwvdFhRWXhGWWdFdytaS3RJRWhGZWZacENIMXhz?=
+ =?utf-8?B?YzZLaHdldEVBaHNqODExd2NHQ28zcCtaQTIxYmV5QnhnY1RDSm5NN1NLbTZS?=
+ =?utf-8?B?Z1YzT3UxZTk4eS9kNnIwL0N3SGl2aVBZcDNIWE54dUdSdllJdVdpVmtUK25s?=
+ =?utf-8?B?QXRnVWtQUWMvdFFlRWo0aWFJU0llWHVISnZqbUl3eUdmMk5qNmZ3US9YTnZy?=
+ =?utf-8?B?TU0yYklBTHNnVXBBL0ZGU2VSVGdjSXByWEd1c2liREhxS0pqaVhoVHNCR3Rj?=
+ =?utf-8?B?TzR3TDFjSzNsNlo2S0tjWndIbXNMTkxkVXVLS1BQWVhwZVZISUZtOHMvRzVG?=
+ =?utf-8?B?WE9CV2ZGQmxrT2JTelFmQ2RzUTZOSTk2SW5TeS9odmsrckQ2QjN5WnRDRWZr?=
+ =?utf-8?B?bEdINHhwN2dYSG9vbm5vaVd3MFh6cm54dXh1TFZUTDcvUnpnOTZVQlZyZmp6?=
+ =?utf-8?B?QmE3VHpWUTNHQnhwcVd5cmRRTThuNzVnMFpxMmx3aFBEeXJSUDB3SW5sa0FE?=
+ =?utf-8?B?K1JCNEx3WUNhUENsUHRGaWM4a2ZZTDlwR1Z2ZzhGR0hpQ2xUSHdSVm5aRGhz?=
+ =?utf-8?B?cjhhTjZWbFVMb1V5OWlhS0hiYmVCSXpNZy8vQ1p3NytDSGhqc295UTd4MHhk?=
+ =?utf-8?B?dE1SV3o1UkdraHhwSmlWY2pleWVHMjlqSUhWQmMrMVRWdVdiU05kbVlKb0hU?=
+ =?utf-8?B?ZGp2bzhrVHFFM3NzRXhUU0pSZDNnSTV3WmsxZ3FSVjBQdUtvVmpUbVdFV2c2?=
+ =?utf-8?B?UE15SjAxV0FmVXBjUFB2WDhLT3pZUm1WWnlqUGlmMlN2WTc2UE0zLzB3b0pm?=
+ =?utf-8?B?WWNpYzB1azdlbFVMci84bVNHanlKMUE1a05BQzRiQW1kL0tPd2pQNkpNcTNO?=
+ =?utf-8?B?MlN4TnoyRlRpSlRZVGRIUFZ0emp3QjdVTStWcVVuVGMyMW9yM3hBMWROVGZE?=
+ =?utf-8?B?cUZ2eXB6NmoxYXVXN0VMM3dhSWFIZ0NqVW45TzFsWk1yei90bCtlVmNJSTZX?=
+ =?utf-8?Q?OEOEs0yvyHSTICvWjm9VQ+rbz?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46497c75-56ae-4485-4790-08dc8960812b
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9207.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2024 15:17:56.0282
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: y+licGruIJjNcYR+3Qc5ETDO/Sn+jxy72X9WCeYZHq2iDiI/mwr4Pnxo7Bx8eXinhdbCz0OFZrH8SqnfVvGFsA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4400
 
-On 10/06/2024 17:05, Krzysztof Kozlowski wrote:
-> On 05/06/2024 14:38, Bartosz Golaszewski wrote:
->> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hello Oleksandr,
+
+On 6/10/2024 7:58 PM, Oleksandr Natalenko wrote:
+> Hello.
+> 
+> On pondělí 10. června 2024 12:07:45, SELČ Dhananjay Ugwekar wrote:
+>> Currently the energy-cores event in the power PMU aggregates energy
+>> consumption data at a package level. On the other hand the core energy
+>> RAPL counter in AMD CPUs has a core scope (which means the energy 
+>> consumption is recorded separately for each core). Earlier efforts to add
+>> the core event in the power PMU had failed [1], due to the difference in 
+>> the scope of these two events. Hence, there is a need for a new core scope
+>> PMU.
 >>
->> This adds the power sequencing driver for the PMU modules present on the
->> Qualcomm WCN Bluetooth and Wifi chipsets. It uses the pwrseq subsystem
->> and knows how to match the sequencer to the consumer device by verifying
->> the relevant properties and DT layout. Using this driver will allow the
->> BT and WLAN drivers to respect the required delays between enabling the
->> two modules.
+>> This patchset adds a new "power_per_core" PMU alongside the existing
+>> "power" PMU, which will be responsible for collecting the new
+>> "energy-per-core" event.
+>>
+>> Tested the package level and core level PMU counters with workloads
+>> pinned to different CPUs.
+>>
+>> Results with workload pinned to CPU 1 in Core 1 on an AMD Zen4 Genoa 
+>> machine:
+>>
+>> $ perf stat -a --per-core -e power_per_core/energy-per-core/ sleep 1
+>>
+>>  Performance counter stats for 'system wide':
+>>
+>> S0-D0-C0         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C1         1          5.72 Joules power_per_core/energy-per-core/
+>> S0-D0-C2         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C3         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C4         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C5         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C6         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C7         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C8         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C9         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C10        1          0.02 Joules power_per_core/energy-per-core/
+>>
+>> [1]: https://lore.kernel.org/lkml/3e766f0e-37d4-0f82-3868-31b14228868d@linux.intel.com/
+>>
+>> This patchset applies cleanly on top of v6.10-rc3 as well as latest 
+>> tip/master.
+>>
+>> Dhananjay Ugwekar (6):
+>>   perf/x86/rapl: Fix the energy-pkg event for AMD CPUs
+>>   perf/x86/rapl: Rename rapl_pmu variables
+>>   perf/x86/rapl: Make rapl_model struct global
+>>   perf/x86/rapl: Move cpumask variable to rapl_pmus struct
+>>   perf/x86/rapl: Add wrapper for online/offline functions
+>>   perf/x86/rapl: Add per-core energy counter support for AMD CPUs
+>>
+>>  arch/x86/events/rapl.c | 311 ++++++++++++++++++++++++++++++-----------
+>>  1 file changed, 233 insertions(+), 78 deletions(-)
+>>
 >>
 > 
-> ...
+> With my CPU:
 > 
+>   Model name:             AMD Ryzen 9 5950X 16-Core Processor
 > 
->> +
->> +	ctx->bt_gpio = devm_gpiod_get_optional(dev, "bt-enable", GPIOD_OUT_LOW);
->> +	if (IS_ERR(ctx->bt_gpio))
->> +		return dev_err_probe(dev, PTR_ERR(ctx->bt_gpio),
->> +				     "Failed to get the Bluetooth enable GPIO\n");
->> +
->> +	ctx->wlan_gpio = devm_gpiod_get_optional(dev, "wlan-enable",
->> +						 GPIOD_OUT_LOW);
->> +	if (IS_ERR(ctx->wlan_gpio))
->> +		return dev_err_probe(dev, PTR_ERR(ctx->wlan_gpio),
->> +				     "Failed to get the WLAN enable GPIO\n");
->> +
->> +	ctx->clk = devm_clk_get_optional(dev, NULL);
+> and this workload:
 > 
-> Your binding does not allow the clock. Do you need it for non-DT platforms?
+> $ taskset -c 1 dd if=/dev/zero of=/dev/null
+> 
+> the following result is got:
+> 
+> $ sudo perf stat -a --per-core -e power_per_core/energy-per-core/ sleep 1
+> 
+>  Performance counter stats for 'system wide':
+> 
+> S0-D0-C0              1               1,70 Joules power_per_core/energy-per-core/
+> S0-D0-C1              1               8,83 Joules power_per_core/energy-per-core/
+> S0-D0-C2              1               0,17 Joules power_per_core/energy-per-core/
+> S0-D0-C3              1               0,33 Joules power_per_core/energy-per-core/
+> S0-D0-C4              1               0,14 Joules power_per_core/energy-per-core/
+> S0-D0-C5              1               0,33 Joules power_per_core/energy-per-core/
+> S0-D0-C6              1               0,25 Joules power_per_core/energy-per-core/
+> S0-D0-C7              1               0,19 Joules power_per_core/energy-per-core/
+> S0-D0-C8              1               0,66 Joules power_per_core/energy-per-core/
+> S0-D0-C9              1               1,71 Joules power_per_core/energy-per-core/
+> S0-D0-C10             1               0,38 Joules power_per_core/energy-per-core/
+> S0-D0-C11             1               1,69 Joules power_per_core/energy-per-core/
+> S0-D0-C12             1               0,22 Joules power_per_core/energy-per-core/
+> S0-D0-C13             1               0,11 Joules power_per_core/energy-per-core/
+> S0-D0-C14             1               0,49 Joules power_per_core/energy-per-core/
+> S0-D0-C15             1               0,37 Joules power_per_core/energy-per-core/
+> 
+>        1,002409590 seconds time elapsed
+> 
+> If it is as expected, please add my:
+> 
+> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 
-Bah, damn covid, now I see second commit with clocks.
+We can see that after you affined the workload to cpu 1, energy 
+consumption of core 1 is considerably higher than the other cores, 
+which is as expected, will add your tested-by in next version.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+P.S: I'm assuming here that cpu 1 is part of core 1 in your system, 
+please let me know if that assumption is wrong.
 
-Best regards,
-Krzysztof
+Thanks for testing the patch!
 
+Regards,
+Dhananjay
+
+> 
+> Thank you.
+> 
 
