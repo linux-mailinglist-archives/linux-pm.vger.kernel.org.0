@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-8870-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8871-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DD96902219
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 14:54:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB992902224
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 14:57:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 723361C21EA4
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 12:54:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96A152846C1
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 12:57:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E3E581737;
-	Mon, 10 Jun 2024 12:54:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D37A81728;
+	Mon, 10 Jun 2024 12:57:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mFAjYa0U"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dJ9yMHim"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2C0811EB
-	for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 12:54:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4EC80C07
+	for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 12:57:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718024058; cv=none; b=btiCDeASn49mGNzmcK/KElx1EOLLSzk2TOwejHd+CLb55sBnvwEFTuh8U05+E9LEOTXhKpn9UagWKfiMuUBIasaoHwbAbqlPEKb2yJ+1dzEm2+CeAkfcTz5+KB+fZuiNthL+r8GXJYgN7g/JVgXtzotCA0T1EOzK3ss4YHVL/sY=
+	t=1718024244; cv=none; b=XtqB2WApYpT6iQJYKzHdw3a61IjGjblgKgaiMLS6RnTz1zJ8qBxNjbBrGy47HcQheoc4bDSgU/H+uBz77gRB38hOx4PzlKldnOZ26HtDensvO0JJ21DAo3nmjXeMMzPYaXmF4A0FXKA2tmZATzFchSMFbBFyjz5Ze+ayWQiFVc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718024058; c=relaxed/simple;
-	bh=0RYpUIHi/lWJPqYfn+EVJo/AFMDKmLO9yzrQBoD9bhk=;
+	s=arc-20240116; t=1718024244; c=relaxed/simple;
+	bh=yg1xPoHNtnIUumoATGu6LmkAR1aS+hHVXOLPzoPOgE0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GFBkItK5S09vuhQiJggbYthu9Dip0lEtfBrZWDbxJyoMb0ORxiN9LX5qqMEV/5wiO9n/lsmBlIh3Q7oy39+i67m0y1W8VSkMwJ3ZempF/sIdzmt61e1Qo9Xbt6lXxrK7srWJIyOG/tF7U2wjCUjlH2Phs1Khh3Jzi7XRpxwRetY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mFAjYa0U; arc=none smtp.client-ip=209.85.208.45
+	 In-Reply-To:Content-Type; b=r/Trv0RHLABELcU6ucv7D1L22iH7DIoCXVkJfI3QrYLTeWXDrCNDmZCy+3rJUhIPjI2hwFc/EaIjY97MDhnotSi1bbvbNTTX37v2f4INqzOEjr+YcGXAehm5FWDI3jNJut5Tzu+/6/t5wCCLhUp6X2FnSOMS5hTVQE0bQznTKrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dJ9yMHim; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-57c778b5742so1520609a12.2
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 05:54:16 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-57864327f6eso6447873a12.1
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 05:57:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718024055; x=1718628855; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1718024241; x=1718629041; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Quh4Nbk1kEHI53zwupEMB3nKQJRb/mz95i9IGWnyeDg=;
-        b=mFAjYa0UP7/jgecO0T7FMTE32HhXInDBfWTe0MS4EdcctYSBLRtQ0YyvZm5hcFqlqS
-         k3mVJavw7KBRy/2qLzQHhl5q3URIt5OyOB8TUMExW2aGFdMrzTLM8gUDTU8l3GQ0oI7i
-         k+8lyDYpekjsqHHr+kXyF41KeBBHpfjFW0ztu8YlaSeIxMRsgAGgH3Tfg3/cGNTNFBxU
-         cpwVTpY1nAVvHLOC9Zs0Lf2/bueWIEyYY9WMjANcjrXrUVl7lO/PffYlJewppEYrJ+qv
-         A/RQ/TSboAhJBINLWJbTdfFdjwBMvRhHxgBagWPAnt4viiNGhNM3fIzXKn4bLzy909jV
-         O+Dw==
+        bh=P4YW+LJlPWVCF1oCUQwCJYAu8LrhPqKFR1EwKZrTF2U=;
+        b=dJ9yMHimpc8YQQPWERTOEtoAoO84Fw2Qy1c+fN8TAZVg3dbFaws20GjVQ/6p4U2d8l
+         GsgueHSdLfP4HFNSVKcdkYpqdVwwjyAMPBiCCKoFt71lfhI3rSfnDUEWtP7J72dbpI+/
+         8SKZUOHa7JI6u6UDzyLDbBoJ0YvPcJhxi86XJm2ZXLM6QMVgZbsR/SS6XL6gRwxl82Pe
+         10coWBnbHn5Oy7WRXcMqxkDw/jpuAUVLf7dVEvV0afbGFAaRJiDx6WEnW7Eyhxi+7f6k
+         XCDIEZ5+rHZptr9VOE1RzrGi+GQnBDUGd+51KGFTHw6kPxtaFJM628tIGN8QnVMxvL7e
+         kDqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718024055; x=1718628855;
+        d=1e100.net; s=20230601; t=1718024241; x=1718629041;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Quh4Nbk1kEHI53zwupEMB3nKQJRb/mz95i9IGWnyeDg=;
-        b=FrJOGCYdQoz+N/Xc/xBcPYAI3XlqQUG8jKlhx0CIBCsaynfliOR3/mtBw11kWWb9Sd
-         Tc0hcpyuryF77rozOHCtkGZxPTpYZgukIu0qxnP91EEJYORw+oNDl6xYQSRumyf6moPB
-         WBG/a+tW/z1mgZr2T9rpLjLHgnlku1fgvgOp/eu3r9UqNuSX+J7OjZELeaOr6wZUhS4f
-         COHOHuiJHKYkA+UIJJ0GF7K9b5LcDu++LqflOin4hUhyXQamcXjj9NAeo1Yp4XYt7iHX
-         UL4CI2FjtJYr+hYnpDytlWexUL0KLnw0z8NIqWYhGQ5GrSDWD87Y+rEEdN7wouD1JXKV
-         7jmw==
-X-Forwarded-Encrypted: i=1; AJvYcCUCgizkFO6NNGFcP6hqIWizqlRUTyleOhs7OvdlDolT97TnSqh9WSoDlibUCvLNfXLXxWXLXIry2TQh2dC/mEDwPftqqujvdNQ=
-X-Gm-Message-State: AOJu0Yy7aXgUkJ/vHF0Wd3zRsJjOSQWK6shdQMDIIFKDFyikkDuzINjQ
-	3Vk9IFTQv4fN2zxlYWzXDa2XFpUk5KNTv4dJfvOlbf10sYDDVreIgdjMG21PHNU=
-X-Google-Smtp-Source: AGHT+IE4rlK1phdxQPptgOW1XywclS11oKbLRXLB7Ukr+BBse6daXKtM37oVNTROePOUZj3ha7Mfyg==
-X-Received: by 2002:a50:8d43:0:b0:57c:72ee:a869 with SMTP id 4fb4d7f45d1cf-57c72eea91bmr2894969a12.11.1718024055170;
-        Mon, 10 Jun 2024 05:54:15 -0700 (PDT)
+        bh=P4YW+LJlPWVCF1oCUQwCJYAu8LrhPqKFR1EwKZrTF2U=;
+        b=pGb5zGSQzZHETpSAGAPQM4Xc5Xyncyl+V1kA8gyll2HNBMOz1VpyjOhEQxFwnKTzkv
+         x8qOXQGwBYyg+0q5iqdFemGFBnP+sz+iPOaD5PPt+buqW53mF3DYh7/I2pgti5eyXBRS
+         rbCBMUebO9OGRF76qRR9+jTm3hXoNq0zikC+6qfx2LU9rfcqy0vtxdKES0ELH0HH60Kt
+         SUNzPqXW3ivHjw6+KvoHpBN7LoEJ9qAuHTnoslLieYnHsWaH+O1jO/DT409eeu0bS/sB
+         4nUtY4hG35edx/bFK4wncM9scUGy4rEqu4ZjgxEPS7UUOTc2WBCIgb8uaTuIZiNegNvE
+         SZvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXh0G5MTXSUhjs1y/YesxPmxQeSv0dJ8lGPiAyZLeadNc8sFwWs2eY5YwZMs3awqmc8ZL18U9p1jz/DvWDgw9jElCvcDAO2lV8=
+X-Gm-Message-State: AOJu0Yy5sTtziagIoG1iuK2QJEGMqeODDOYr582csBNIYYR8jp2ofmyw
+	2cKlAQRJOJvj2ZHEA4NnFUOBevzV1kCFSqkYRs+FqBbMPIPD2YNIBCSD2j65f/A=
+X-Google-Smtp-Source: AGHT+IG+FeCeTet+g006PrNx4Oxxdd0ygI0KsztkfpC9VYROLRJPSKBsn/ij3w2B7yqDBKHzj0cmyg==
+X-Received: by 2002:a05:6402:b7b:b0:57c:735f:3967 with SMTP id 4fb4d7f45d1cf-57c735f3978mr2686598a12.8.1718024240999;
+        Mon, 10 Jun 2024 05:57:20 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.137])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57c866a3d50sm1061880a12.77.2024.06.10.05.54.13
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57c8f3a0c33sm87824a12.82.2024.06.10.05.57.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jun 2024 05:54:14 -0700 (PDT)
-Message-ID: <9f5b9f75-528f-447b-9056-30c10f84fa98@linaro.org>
-Date: Mon, 10 Jun 2024 14:54:13 +0200
+        Mon, 10 Jun 2024 05:57:20 -0700 (PDT)
+Message-ID: <08822480-a909-4724-9250-e7286d5ce90a@linaro.org>
+Date: Mon, 10 Jun 2024 14:57:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,8 +77,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/7] interconnect: qcom: Add MSM8937 interconnect provider
- driver
+Subject: Re: [PATCH 7/7] dt-bindings: interconnect: qcom: msm8939: Fix example
 To: Adam Skladowski <a39.skl@gmail.com>
 Cc: phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
  Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
@@ -89,7 +88,7 @@ Cc: phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
  linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20240609182112.13032-1-a39.skl@gmail.com>
- <20240609182112.13032-5-a39.skl@gmail.com>
+ <20240609182112.13032-8-a39.skl@gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -136,31 +135,58 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240609182112.13032-5-a39.skl@gmail.com>
+In-Reply-To: <20240609182112.13032-8-a39.skl@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 09/06/2024 20:20, Adam Skladowski wrote:
-> Add driver for interconnect busses found in MSM8937 based platforms.
-> The topology consists of four NoCs that are partially controlled
-> by a RPM processor.
+On 09/06/2024 20:21, Adam Skladowski wrote:
+> For now example list snoc_mm as children of bimc which is obviously
+> not valid, change example and include rest of nocs in it.
 > 
+> Fixes: 462baaf4c628 ("dt-bindings: interconnect: qcom: Fix and separate out MSM8939")
 > Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 > ---
-
+>  .../bindings/interconnect/qcom,msm8939.yaml   | 22 ++++++++++++-------
+>  1 file changed, 14 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
+> index fd15ab5014fb..a77e6aa2fbee 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
+> @@ -56,19 +56,25 @@ examples:
+>    - |
+>      #include <dt-bindings/clock/qcom,rpmcc.h>
+>  
+> -    snoc: interconnect@580000 {
+> -        compatible = "qcom,msm8939-snoc";
+> -        reg = <0x00580000 0x14000>;
+> -        #interconnect-cells = <1>;
+> -    };
+> -
+>      bimc: interconnect@400000 {
+>          compatible = "qcom,msm8939-bimc";
+>          reg = <0x00400000 0x62000>;
+> -        #interconnect-cells = <1>;
+> +        #interconnect-cells = <2>;
+> +    };
 > +
-> +static const struct of_device_id msm8937_noc_of_match[] = {
-> +	{ .compatible = "qcom,msm8937-bimc", .data = &msm8937_bimc },
-> +	{ .compatible = "qcom,msm8937-pcnoc", .data = &msm8937_pcnoc },
-> +	{ .compatible = "qcom,msm8937-snoc", .data = &msm8937_snoc },
-> +	{ .compatible = "qcom,msm8937-snoc-mm", .data = &msm8937_snoc_mm },
+> +    pcnoc: interconnect@500000 {
+> +        compatible = "qcom,msm8939-pcnoc";
+> +        reg = <0x00500000 0x11000>;
+> +        #interconnect-cells = <2>;
+> +    };
 
-Please run scripts/checkpatch.pl and fix reported warnings. Then please
-run `scripts/checkpatch.pl --strict` and (probably) fix more warnings.
-Some warnings can be ignored, especially from --strict run, but the code
-here looks like it needs a fix. Feel free to get in touch if the warning
-is not clear.
+Don't grow the examples.
 
+It is enough to have one example to validate the schema and show how the
+binding is used. If schema covers multiple combinations of devices and
+their properties, then more than one example seems reasonable. This is
+not the case. All of this is redundant... and redundant information is
+not good because as this commit shows it leads to something which people
+think is not correct and they find bugs. So just drop the redundant
+information.
+
+Keep only one, correct example.
 
 Best regards,
 Krzysztof
