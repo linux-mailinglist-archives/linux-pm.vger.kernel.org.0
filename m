@@ -1,118 +1,186 @@
-Return-Path: <linux-pm+bounces-8955-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8958-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80E1A903F62
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 16:59:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FD8190401C
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 17:36:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31AF62840E9
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 14:59:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 556CF1C22828
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 15:36:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE70A12B89;
-	Tue, 11 Jun 2024 14:59:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F7D3770C;
+	Tue, 11 Jun 2024 15:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dlFpnu2r"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="kg7XpXrw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F7E20335;
-	Tue, 11 Jun 2024 14:59:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD573282FD;
+	Tue, 11 Jun 2024 15:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718117982; cv=none; b=Wc5eAqo8bCg3ztQLvmuNufnF0Sw3fyZe57PX3xUiVV0s7ZfXkiE4rJS7q0pR6OhkiCWgI7C1fCJxGESB8NKhudpvMmLizFUlILw4AhhsXS4P+huKUGgWKc2bta7TDPxfR+DvD0FYbBAAwhnSXkqzo6IJMkq4l0uIMXtnJd/2aI8=
+	t=1718120157; cv=none; b=MvJnF6OKVrx3Jjq3VPGndeAlhdW9qwf7s111dvIbPaeuC/pH7Azk+cewSoeZLGCGl2QHT97mgOtpmTYtI+rRIUz8WhZzC++tBxuD2hbEohUIoXcg4Eam2inUCBbvm75ZLoh8IcLTFFNwz7yDgxNqJAefxCbjGN+ifzBxmCYVitQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718117982; c=relaxed/simple;
-	bh=m0NwVcSBhPgY7nu5tONSPwoAExBx8ebvDHOrS84nijE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R4uVc5UUkLRj1fADLI3mDB3PCULqAq+S487CZLprE+LI6aWwyf3TjZVTYcHqq3REM1i5fwm7myzRPRQBpkJEsn7Z2rTCVvyA3zXVeDvjbhZAYKLAEpJ1KJnZNKrJ1zBR5WksE1oi9nikKffpsKNvL/dEssMxht6W7LDp5NG0QfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dlFpnu2r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B931C2BD10;
-	Tue, 11 Jun 2024 14:59:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718117982;
-	bh=m0NwVcSBhPgY7nu5tONSPwoAExBx8ebvDHOrS84nijE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dlFpnu2rYajLt2Ck8YFhygKxfdNGquAdAH78BbAIqEMS4SQT0fUEbZtR8dUY56Mji
-	 jzBXqMS8bmlXR8pELKQb5DUa7FUEBY+cp/xSc9RmRLFJVcPVlTVbBJMFewmmJPjcvF
-	 wfadvSt3GWQVLcuMU+PyKe9ZwNKoxCgZH1xS8FQJGky/i5HFtoQS1bLnUXzL5Ef5ef
-	 M+V1sAHAJDJC3bRy8oRQffzAXVfNMSiwX7r5mr8OlGYcBTqfQ7imL6JG+c7W7VY8Fk
-	 1GKD77XRbgXMCRp3JC18Te9U/6rjX+A/WGeFl9EePtVI+Q4SgveBbZKeQKmZqc/ouD
-	 fn9kBe6GiyP8Q==
-Date: Tue, 11 Jun 2024 15:59:38 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-	linux-pm@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>, devicetree@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v3 3/6] regulator: core: Add helper for allow access to
- enable register
-Message-ID: <ZmhmWrvyQiCzzeYi@finisterre.sirena.org.uk>
-References: <20240611110402.58104-1-biju.das.jz@bp.renesas.com>
- <20240611110402.58104-4-biju.das.jz@bp.renesas.com>
+	s=arc-20240116; t=1718120157; c=relaxed/simple;
+	bh=X4pQhHhc2wREphg/mg/Gg8FX0fb2OJLky1khSVECMZA=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=UE4qevc3ARED4qI24NxJ8zOVaqBh54cn3JWM6k7iR72EkRgBCt9zQ6Q+xToK9CRn4B8n2y6g1UViQ5lGNi9iCTqSHR2/LlIlQNtRGh21dhQV1bpgp5xeruI1jVl0aaLOvNUA9gqIo7kp1at0tc2mE/mKCa93aLTK1GzN0hiorDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=kg7XpXrw; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45B9fLM2025776;
+	Tue, 11 Jun 2024 15:35:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=NDXNkA2yULIeqsSdinq8WN
+	9E/uqd//orwPkFZqRx7NQ=; b=kg7XpXrwQ6fTA81aQgiEiKWg92c+CLvmDh2Ivt
+	sGcNxo7kZIhoLxkdGPOybFQvgOp/qHrQkh3ASnRXbGkOgxf4124DQBlwsDdJ3FO9
+	OcL1VooM9zgzLWAC3Um11+CXR+1Fnk4zYEQIUncNCtaBHAX1zRzECPD3Pli2Xnak
+	Foqw+LPXJ0FjxQE21XKJ6ir8SEQawt6fv5Oe1nhHK88RQ7Lb0jt0HqAHF0nWKX2l
+	DzmfYPZvebXqpoJXqQcCL+ORCasFVqnynoSy2BAJJgTtVR6uVhh3sRlh16Feg2XK
+	ZVAeOqI3A55+UMN2kFWD0St7DCUTStx5I2RsDdshv5MJ3zyg==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ymfp7ehp0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Jun 2024 15:35:31 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45BFZUIU009120
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Jun 2024 15:35:30 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 11 Jun 2024 08:35:29 -0700
+From: Elliot Berman <quic_eberman@quicinc.com>
+Subject: [PATCH v4 0/4] Implement vendor resets for PSCI SYSTEM_RESET2
+Date: Tue, 11 Jun 2024 08:35:12 -0700
+Message-ID: <20240611-arm-psci-system_reset2-vendor-reboots-v4-0-98f55aa74ae8@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="g6UtxWQIHkSaqfBe"
-Content-Disposition: inline
-In-Reply-To: <20240611110402.58104-4-biju.das.jz@bp.renesas.com>
-X-Cookie: Your love life will be... interesting.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALBuaGYC/5XQz07DMAwG8FeZcibIzr/SnXgPhFDquCyHNiMpE
+ dPUd6cdIDTBoTt+Pvw+22dROEcuYr87i8w1lpjGJZi7naCDH19ZxrBkoUBpBHTS50EeC0VZTmX
+ i4SVz4UnJymNIWWbuUpqKJNI+GOsIGhCLdczcx49Lz9Pzkg+xTCmfLrUV1+l3gzIbGypKkOCwa
+ xqCFg08vr1HiiPdUxrWyi9Pwy1eoBCc1lb5gP96iM1N+2kyDhVazerKW39Q1c/dBgxuvlute/r
+ Wg7XemYf+r6t/XYt2q6sXF10Ipm8JfGeu3XmePwGYYLSSLAIAAA==
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Andy Yan
+	<andy.yan@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Mark
+ Rutland" <mark.rutland@arm.com>,
+        Bartosz Golaszewski
+	<bartosz.golaszewski@linaro.org>
+CC: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Melody Olvera
+	<quic_molvera@quicinc.com>,
+        Shivendra Pratap <quic_spratap@quicinc.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Florian Fainelli
+	<florian.fainelli@broadcom.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        Elliot Berman <quic_eberman@quicinc.com>
+X-Mailer: b4 0.13.0
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Hz052umDGftNADFs-AycvXWcHJzVoWeL
+X-Proofpoint-ORIG-GUID: Hz052umDGftNADFs-AycvXWcHJzVoWeL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-11_09,2024-06-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=878 suspectscore=0 adultscore=0 spamscore=0 phishscore=0
+ priorityscore=1501 clxscore=1011 bulkscore=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406110110
 
+The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
+reset types which could be mapped to the reboot argument.
 
---g6UtxWQIHkSaqfBe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Setting up reboot on Qualcomm devices can be inconsistent from chipset
+to chipset. Generally, there is a PMIC register that gets written to
+decide the reboot type. There is also sometimes a cookie that can be
+written to indicate that the bootloader should behave differently than a
+regular boot. These knobs evolve over product generations and require 
+more drivers. Qualcomm firmwares are beginning to expose vendor
+SYSTEM_RESET2 types to simplify driver requirements from Linux.
 
-On Tue, Jun 11, 2024 at 12:03:59PM +0100, Biju Das wrote:
-> Add a helper function that allow regulator consumers to allow low-level
-> enable register access, in order to enable/disable regulator in atomic
-> context.
+Add support in PSCI to statically wire reboot mode commands from
+userspace to a vendor reset and cookie value using the device tree. The
+DT bindings are similar to reboot mode framework except that 2
+integers are accepted (the type and cookie). Also, reboot mode framework
+is intended to program the cookies, but not actually reboot the host.
+PSCI SYSTEM_RESET2 does both. I've not added support for reading ACPI
+tables since I don't have any device which provides them + firmware that
+supports vendor SYSTEM_RESET2 types.
 
-> +To access the hardware register for enabling/disabling the regulator, use::
-> +
-> +	int regulator_set_hardware_enable_register(struct regulator *regulator,
-> +						   bool enable);
+Previous discussions around SYSTEM_RESET2:
+- https://lore.kernel.org/lkml/20230724223057.1208122-2-quic_eberman@quicinc.com/T/
+- https://lore.kernel.org/all/4a679542-b48d-7e11-f33a-63535a5c68cb@quicinc.com/
 
-So, it'll doubtless not be a surprise that I'm not thrilled with this -
-it's basically just punching a hole straight through all the locking and
-reference counting in a way that's just begging for abuse.  At the very
-least we should have a check for exclusive access in there.
+Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+---
+Changes in v4:
+- Change mode- properties from uint32-matrix to uint32-array
+- Restructure the reset-types node so only the restriction is in the
+  if/then schemas and not the entire definition
+- Link to v3: https://lore.kernel.org/r/20240515-arm-psci-system_reset2-vendor-reboots-v3-0-16dd4f9c0ab4@quicinc.com
 
-Also it's not sure about that name, if we were doing this it should be
-more describing the effect on the regulator rather than this happening
-to be done via a register write (this should also work for GPIOs...).
+Changes in v3:
+- Limit outer number of items to 1 for mode-* properties
+- Move the reboot-mode for psci under a subnode "reset-types"
+- Fix the DT node in qcm6490-idp so it doesn't overwrite the one from
+  sc7820.dtsi
+- Link to v2: https://lore.kernel.org/r/20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com
 
---g6UtxWQIHkSaqfBe
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes in v2:
+- Fixes to schema as suggested by Rob and Krzysztof
+- Add qcm6490 idp as first Qualcomm device to support
+- Link to v1: https://lore.kernel.org/r/20231117-arm-psci-system_reset2-vendor-reboots-v1-0-03c4612153e2@quicinc.com
 
------BEGIN PGP SIGNATURE-----
+Changes in v1:
+- Reference reboot-mode bindings as suggeted by Rob.
+- Link to RFC: https://lore.kernel.org/r/20231030-arm-psci-system_reset2-vendor-reboots-v1-0-dcdd63352ad1@quicinc.com
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZoZloACgkQJNaLcl1U
-h9AqeAf/dfRZPoWwkY3VTRIlWmJTu1FCIotm556t2q1U7O9RKVVE8Rqr2vbiAgiJ
-L54w7no2cgj2rn/8O9eZeRJ7w7TbadF8YiguXjHhwF4tQfhrxUbtUyxzPxD2gHEU
-aXPyVcY8vbUO+XWNkJzYfHGNx1HBBpEp686nTfldsLUTlp9y565Eknwb5/h1G7Re
-5dznt8rOmJVjlMEjDt1Q42bHM4Fs6QQrMGyHWQne4fqBGmddNHD1Kyy3ic1MfMgb
-CmrD5vZ6KVU0Ihd3IwRfu9yrY3Een2l9W6jor2sMcmZqq0yrx8yVgdnT/V0adlnm
-Oe+gmNFp2sMfV0FotVRuPzVhNgXOoQ==
-=Xoc0
------END PGP SIGNATURE-----
+---
+Elliot Berman (4):
+      dt-bindings: power: reset: Convert mode-.* properties to array
+      dt-bindings: arm: Document reboot mode magic
+      firmware: psci: Read and use vendor reset types
+      arm64: dts: qcom: Add PSCI SYSTEM_RESET2 types for qcm6490-idp
 
---g6UtxWQIHkSaqfBe--
+ Documentation/devicetree/bindings/arm/psci.yaml    | 44 +++++++++++
+ .../bindings/power/reset/nvmem-reboot-mode.yaml    |  5 ++
+ .../devicetree/bindings/power/reset/qcom,pon.yaml  |  8 ++
+ .../bindings/power/reset/reboot-mode.yaml          |  4 +-
+ .../bindings/power/reset/syscon-reboot-mode.yaml   |  5 ++
+ arch/arm64/boot/dts/qcom/qcm6490-idp.dts           |  7 ++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  2 +-
+ drivers/firmware/psci/psci.c                       | 92 ++++++++++++++++++++++
+ 8 files changed, 164 insertions(+), 3 deletions(-)
+---
+base-commit: e92bee9f861b466c676f0200be3e46af7bc4ac6b
+change-id: 20231016-arm-psci-system_reset2-vendor-reboots-cc3ad456c070
+
+Best regards,
+-- 
+Elliot Berman <quic_eberman@quicinc.com>
+
 
