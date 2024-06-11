@@ -1,80 +1,80 @@
-Return-Path: <linux-pm+bounces-8970-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8971-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D01B9044B6
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 21:32:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FAF79044E4
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 21:35:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90309B245E5
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 19:32:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F25531F25043
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 19:35:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E8D143746;
-	Tue, 11 Jun 2024 19:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 253693A27B;
+	Tue, 11 Jun 2024 19:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="RY5zqXNk"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="QAvpsbX/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2060.outbound.protection.outlook.com [40.107.102.60])
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2078.outbound.protection.outlook.com [40.107.95.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FB62628D;
-	Tue, 11 Jun 2024 19:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.60
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5597979B7E;
+	Tue, 11 Jun 2024 19:35:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.78
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718134168; cv=fail; b=lSetSLJbi7fpSS39YrPiokOEK21nM3lWxqRGwdwMWTQwRGE1wyG8lSnydOii/VgUh3mjIP/BPzDRy6vUPfdFn1U/uSNfGXWD1lzeA+S2eued7WwANFzeDkQ/EHEWYhMwISLnVOTa3eWbWW1OB8YKsBvcodplQxIDAl1ZGOJU51c=
+	t=1718134535; cv=fail; b=EM0a5sx1XaAs7v2RDSCfQWfSXeSQbjxvisqIARTy4RDVchf74AfHhvMCbua+/9/TjnU3LA6zJgIujloiIbiKxgGzGQ5Z58hr2fxRlSjrJ/c0B2wVpevFEhXV/bAIh4qaJVHw8kh4FN9Ys11SyUYTOjoXq/W7KwigQMIR6dTC3ro=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718134168; c=relaxed/simple;
-	bh=UANXVU2IyBKFeNjjZcZQiiytgINm+iU45fNdHBNsHqY=;
+	s=arc-20240116; t=1718134535; c=relaxed/simple;
+	bh=9UdfIXoti6pN1hls3+eg5s4P66Poku61wTOzldUHHI8=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=MYG71xHH5kPR60wVjXIO/osfR5Fj538BnnnYynSJgiQvkO0vBMXzEqmubgo01IG3LfKidHZyqppyL0VWOnDM0TLYcFltTshYSgMEqTsu60/cwfMu9jMacSCC3n0KzZjsDtz8k+5Dq46Y2boWlF/46QQmP4E3gl593lIQlJMpH8w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=RY5zqXNk; arc=fail smtp.client-ip=40.107.102.60
+	 Content-Type:MIME-Version; b=V291tBFvcX6MxkoYbHATVFFQG4a8pWQjUmi4/ONshRZzsNychZOAbBx91shZQlQRzZMd7IP+KOLPWmX2oYR2uupZloNHglRv/0d7AHujC+HpWbd6H/VNdqco6u3FeOYQ1CUC7UneIkGLTFDXfB1LvHC+DYYExH7I5Kg6mJXf0Uc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=QAvpsbX/; arc=fail smtp.client-ip=40.107.95.78
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J0MOW/c5Q7UzKceVHrCx938clsEtm/vl0XIe1/4jiC5Lx1AuasXfhheUIHe29pBD3HapLr2HJgCooVl6Hcs3u9fM0PVU3LHxjldS/f+Gjs5vY8Pz3zI/+0zNaU54Qtz5hXZ8hNP+dGKACcRJIJ5mMd32C0d6SVPUbWzBB/xnugV90SWfgXxwnhlWzi+E4WQQfrzzQ+nDb79hxt0ZWRVla61b1EeD2B7ABwFzzKjPdHAqncEJpb7sfB+Q6EwAcxyK2/xHrs2s9Cv0NP4FYnUifW3VVxBBY/4ZoZOXdDWNFTFmF+JjcMWpNaq0irWvfTE4RQ5Rs6NR8h2EpYnJvwSQww==
+ b=LGzZNPRHHl6H9qkqH98ICLp1UY6U3YFxwme5MMljh3HzjKb71vFyd4Hnno7Ctbo3Pe4mebCiiO5HxtsoqhYQRP0dlJJ3u3S2Abqljsx5OmOks+1GfxuLvmv62lebH3xClJkxn4RShJkj5Qlk4Xx9RZTtGem4ShYl2FoPFgjrs9nNVjQh+FwimC2bVFJH4g1VuY4+5a6fDvyeBgvs7Kzx+cqnYjI5ctSXuA+4H5YpRvmoQvrAPRjl9ePRmUolxftHVuqw2HWG0jvUAiWj9yine7gViwQ5UT1zhaB8IN/YTwD790AXhKyN5ig0rStQ8VRZdzBs4HPtpEUAA8WDeBbEJA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZCpTT9gHwXvSk0B5eDFow+/qvTM5trNJsQPF673o+Ws=;
- b=kG83cUv+7Ox/QM7/IZL21H996Xjm/riyfKcmdiH4rq9OS8X/qis8CWbB1bQYP/GTj1MsWS2CJcLQx9mRZ718oebqMxR0wUPf6lNnpkSvH+Y7aGo3XbmTyByijj3YT4wRi45KcPXfrkoWmouKs6DpTLyWSOYUgEBH83vj+MQg+i5LQfIRotKanemvYZDYBDSQUbgLYJbRdo1HVLmN0y+QBgkVM+h2ZUpKv0DX6VLhLbRRmLdGkNE4LPX2zt4obxpqWxK96ThRFiPA0YsmQzGQIRhe1l4nOQG0Z1TglapAEUXOa4k4UQgxPNmGiQgMyxcyjEv5A4Hl23Jk0prUVxB9Fw==
+ bh=8iMSODi8bWHrBfz/rIXPz8zqsTuPdXWEH0MPJo4npL0=;
+ b=l3qfoGzNFjXexTAzC9SsXk1M0Re7AIfyVYJ75BQDL8fXom8v7kMupW29zgcug1CDLFNzTQ3W/qyHZdbNqp8TbgS5uHhGaa/+XkFN/mK/ZJXLaSaTuRv62YOL/wFBIZYfQg6h0rDNMrdMwAvXp5ztEjX9MeStOgWHOknaZ5exPzbRIy1IozbHOBYc981yXIKe3zCDMCa0gDtB6TXSrpRVhnf9f+TD/Hru/k84aT71zMWpDwhBnz3jG4yZBmut241W89n7Dpo8fF5UMiLMRCuocvnQOF1IPgnroYTslGdrVFcgX2GjGyHmkaQQWLwC0Qas7TQ/vIxm/pDpHrEJgNpnAQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZCpTT9gHwXvSk0B5eDFow+/qvTM5trNJsQPF673o+Ws=;
- b=RY5zqXNk5w3+cvXm59GitZ6tMzHF0vaBqWOinFRMbepyImUKU8GOq/Tej1H4g6+/7XEQdSd50Hsmw6tblOfj/lKL2lBazl543pgn0BRD/fQKucel9dDS/ZJY1P1KEm+qgZxLHJtBegaegnbFi+A/rr0nL6Hbae3qZ2ipV5wLqnQ=
+ bh=8iMSODi8bWHrBfz/rIXPz8zqsTuPdXWEH0MPJo4npL0=;
+ b=QAvpsbX/JUOFfZ0X6uaJTkzi3ytK8iobxkmde1xClOvAeJjKfhMo9wJiyEwut7+Xg0j1oGbhkYq3Ka/i6mWvLM92G5Fgi1GMz47t8E+YoLYGYIWsmb8hTYiuCY0Mk/hhAzkddnNU/NI430fTZaEURpjwGiuoZkvJqi90zZtFDzs=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DM4PR12MB6277.namprd12.prod.outlook.com (2603:10b6:8:a5::20) with
+ by DS7PR12MB6311.namprd12.prod.outlook.com (2603:10b6:8:94::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.37; Tue, 11 Jun
- 2024 19:29:22 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Tue, 11 Jun
+ 2024 19:35:27 +0000
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::37ee:a763:6d04:81ca%4]) with mapi id 15.20.7633.036; Tue, 11 Jun 2024
- 19:29:22 +0000
-Message-ID: <a6d6ccdb-93f3-40be-b02d-390cb70656ad@amd.com>
-Date: Tue, 11 Jun 2024 14:29:18 -0500
+ 19:35:27 +0000
+Message-ID: <aecb3986-aa2e-4725-b08b-473b35ca8221@amd.com>
+Date: Tue, 11 Jun 2024 14:35:23 -0500
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 09/10] cpufreq: amd-pstate: implement heterogeneous
- core topology for highest performance initialization
+Subject: Re: [PATCH v3 10/10] cpufreq: amd-pstate: automatically load pstate
+ driver by default
 To: Perry Yuan <perry.yuan@amd.com>, gautham.shenoy@amd.com
 Cc: rafael.j.wysocki@intel.com, viresh.kumar@linaro.org, Ray.Huang@amd.com,
  Borislav.Petkov@amd.com, Alexander.Deucher@amd.com, Xinmei.Huang@amd.com,
  Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <cover.1718095377.git.perry.yuan@amd.com>
- <97b65a2294154dd469377a7a76ee738de7bf7aef.1718095377.git.perry.yuan@amd.com>
+ <39b55abeb278d9ae1688c0b87cb7ec8a3e37932a.1718095377.git.perry.yuan@amd.com>
 Content-Language: en-US
 From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <97b65a2294154dd469377a7a76ee738de7bf7aef.1718095377.git.perry.yuan@amd.com>
+In-Reply-To: <39b55abeb278d9ae1688c0b87cb7ec8a3e37932a.1718095377.git.perry.yuan@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DM6PR03CA0026.namprd03.prod.outlook.com
- (2603:10b6:5:40::39) To MN0PR12MB6101.namprd12.prod.outlook.com
+X-ClientProxiedBy: DS7PR03CA0148.namprd03.prod.outlook.com
+ (2603:10b6:5:3b4::33) To MN0PR12MB6101.namprd12.prod.outlook.com
  (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -83,323 +83,200 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM4PR12MB6277:EE_
-X-MS-Office365-Filtering-Correlation-Id: 25e19335-0d5a-46f5-d816-08dc8a4ccc07
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS7PR12MB6311:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7cf86133-680f-4ad7-5b28-08dc8a4da55b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230032|376006|366008|1800799016;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?OUUwMnp6T3kwWU9sWUZqT3poRmIwbWRGQ3h3V09IRG5ZT2xPWksxMGx3M1ph?=
- =?utf-8?B?UnJuWWZjeHVHN2tyT2dMb0l6QVV2UU95N2h5TjZ0aGt0Y2VaUGhSOWlETjhL?=
- =?utf-8?B?S1VrU3ArVDU5ek15RjlzbE1keGxhc0pBVStPTGFObVZNbitaNno1SmY2YlN4?=
- =?utf-8?B?Z3dPaWtsYW4zNzZpUGVUZFpicWRlU2ppOEZaM29wUk5teFFrYmFLaW9Fa20x?=
- =?utf-8?B?S3U0Mk90cUV6Yjh0bUxZSHYzSUdDb21mS0tyL1hHMFpXNm9ma2JLRi8rLzRs?=
- =?utf-8?B?TXFsVU9xaVl2Wld0d0pJNHVMemdIb0NRSFNWMEg1aWRtbS92WG5PMTFsNlMw?=
- =?utf-8?B?dFNISDdSazdwSXN3UXNRdllraVcxRUhpN0FXcDA3czQ2WXFpemw3YUxGSThq?=
- =?utf-8?B?MU1aNGV5b3JtczRPN3dpcVUxNVFROU9hMnR4WmRlb2UwVHk3NlBnaGhBcEpW?=
- =?utf-8?B?dnpiSTVMb3FhaUVXYmo3bTFGUXhEUmVsUmlxby94SzljN0ErYzVIeWFiT085?=
- =?utf-8?B?UDVsMnJtQnpZS1JHM0NrOHpGZlk3aEZyQ3kzb1pWdjBtcXl5TkJpSXREQ21R?=
- =?utf-8?B?b1d2d3AxYzFKMWlzdGZvZGRXV1NQZmRFSVJ5UnlKMGtrL09MN1djNU5mL3B4?=
- =?utf-8?B?VEdHbkNGaklUYk9EME9xY3ErQUhSTDQrbnlWTjdiYzMzQis1dkhrZkUvcHJa?=
- =?utf-8?B?bGxaRWEvZkJ4eWRNeHR2KzZuaFR0dFBoU2g0U1BxZU4vbEpKT3loWE1pRHgv?=
- =?utf-8?B?YjhsbXErZW5nUGtUM1RSbnNDNjRjRWI0Y0tvVUVYSFlhV1JENXBBenZkM29K?=
- =?utf-8?B?Q1VZcW03Vk40OHVOM3VhNnhzVkRvbTVaODBQRzhaR0xHY3dNaG5xTys3eFA4?=
- =?utf-8?B?QkdXWm1VNmpJeXBkbVBBOTNiTkVxbzh0cDR6c015UmtaMFo5ZEJzWmVsOUEx?=
- =?utf-8?B?UGZ6TlpQQVJCaDV3RDU5M3N4eFlaSjBsRVBvSnZ1eVZ6M1VzQXJXMFRYQ1JI?=
- =?utf-8?B?M1A3NDlBa214bDRHc0Q4WWhHazI0T0JGWC9vUGRPMXNraFZSMXN5TjRJOVl0?=
- =?utf-8?B?eWUxY2kvVTZFUmdJUXBPNFNablJ3bkJhRXZjRGZYL0U5V29zMkhkZ3hsVS8w?=
- =?utf-8?B?Wjl4eFFuYTErWWVuMWk3WmdRTkdRcVNhQmQ1eDRCdEFrYVVFbHc3SkRuOEMw?=
- =?utf-8?B?U2VReHJwNVFDN09HUy8wSERaeW1nSXJFbDBDN3BtTHQ2NVozcXh0WlZCQURq?=
- =?utf-8?B?eUNyN25heUhtSzd2ZWRPNTlvanRhY29PMmlxZDMrTzdWbWpUWUVxNG9ydWpE?=
- =?utf-8?B?cG5nNjdvOGIxbTV2cyszcERpM3dUOStKN3BDb2ZtYmhIaU5oRU4reE5MNllU?=
- =?utf-8?B?TTdCOWN5WThXU3BUY2xNT2t0dHZhemdQOW1aR3Z3c2RWNVhvUEN4Szl4c094?=
- =?utf-8?B?U2tRbGlzVWlWWE5VVnFhTDQ4dEt3QzNHcm90T21Ta2djbFRWRzkrdXo5aGJE?=
- =?utf-8?B?cFdUSmhvaUYxcG1JdzZhNjJyWlZNZjdhNUZmMFY4MlY3M3A0MVFMZjZUelJE?=
- =?utf-8?B?U0pHaXBSTU4rUnIxWjhFSUxaYXdjSTNtaTlyUnVIQzhHM1dsNHJ6S1NCMDgw?=
- =?utf-8?B?TElDb1J5TEtZbXFBZkQwbW5jaVZEWjFDUEU5Ky9tRjR6eFFMSm5sOVZyU2V3?=
- =?utf-8?B?SUpHV2ZlRnNuTUFZNGJ4UkJqWWhCRHpoKzFPeUo0d3hhNTIrdEdLVnJzdmM1?=
- =?utf-8?Q?CLm5VL55u7hjpn2Mu34zw4ScSSAX8bhHgSBiAHT?=
+	=?utf-8?B?SzNHcW16SG0veXhzOEtGUXc4cW9UVTJhbDhyMkxPY1IrZnNGSi9HMGNpK0Ex?=
+ =?utf-8?B?VDRoZjllellsKzBOVWg4bTRBdng4TWphMHkzVmJla2hmaTlrSEJLSFNwcUdP?=
+ =?utf-8?B?SFRmaFF5K0xPekdZY3g4V2ZPN1pvOC9OcGk0L3BxR3N4VUlvZ0dkUzhCbU56?=
+ =?utf-8?B?L1hDK3E1SGMzWXZ6WXlxSEthVFFieVpWVDBOcWtOK0REZVp1SWhEQVZodGl2?=
+ =?utf-8?B?ek0yVVlIcUI1TG1tdDdqeFBqNmhMcGhaU0JQOC9abGh1MVM2QUlHUnNSS3J1?=
+ =?utf-8?B?eHVGUVNnb3VtVXBjcmpVWHZyU0FzU1lpRTJJTE1HZlUrODc3Z2JtVTRFZTdG?=
+ =?utf-8?B?WVRpNW5mY0xucVMxbjNoNkxGdmxJcFpheG56Qy9kRzVZQWFncVd6WnAyVVZI?=
+ =?utf-8?B?dWZEdnc2dll2VjRaVEJqbWo3QUZzMkdZcmpNM2cxa3J2NEdSVEFlZkZmci9B?=
+ =?utf-8?B?RWpjVm96My9zS2puVTd2V1NFOVBObzNuVXUzRS9aMGY2b1ZoNFdrRkpnZ2Vm?=
+ =?utf-8?B?NnEwTUdBTmpRcTdYMWVmOWlNTGIxYmlVY0IzNTFaTWE1UmlkSGcveWdyM2d4?=
+ =?utf-8?B?RHd3MFZPeFZmcVlPT3ZtZGRHMTRtN2lHb2syNkpOYlFvM3BMWTE1NkdyalNN?=
+ =?utf-8?B?TnB4MkQ3cU5pNTJpUTR6M2Y0bEtuaWZVZS9NUlJhaS9rYXN3bno2blh0Y3d1?=
+ =?utf-8?B?KzN3L01FNkxmeW9UZWt4RExQTG9NazAvYWVFRFBRVlJXUlhVcHRXV1A2bG5Y?=
+ =?utf-8?B?VWQ3YlFTTXdabm5HK1NUTGp1U0VFSHE4WUpMVHZzc0duak5ubndBRHJKWmxp?=
+ =?utf-8?B?Y092RGtQQkZMYzJMK3hEVjJMbDlaMnltL3JBc2ZnZ3dySzM5T2RlSENUeVZ0?=
+ =?utf-8?B?UjRyalh1MTRjcHBSam5IcnAxRDdTcHdMdGxFNmVkRnNOMUtqNGhpU3Q5VlN3?=
+ =?utf-8?B?VGtONmZZbHFJdzhwbTE0R1ZTWVpjRjdWWjJBeEtSdXc3bjdoUDRTZjN2Q2pX?=
+ =?utf-8?B?TEl6UVFBZ0t1S1lHMWUvZktJclBudngzdlU0ck5UcEFEQU44aWhSMWRCTTNj?=
+ =?utf-8?B?dkk0b1FwOTVJZlRBcmw1d2hXczUxNFlsL0FtL3pxaE83ZUFIM2FZQVl5Q0Iy?=
+ =?utf-8?B?alowUlZwM3RuZmE1Y1JpdVpJaVRWYzcyV1V6N0szNWJCK0kwazBGa3VESFVT?=
+ =?utf-8?B?dVFYVnIybTVuSUtoSmZLRHdRUHUwL1RlUzdhZ3gwTmxwWk1JVXE0MnAwSlJR?=
+ =?utf-8?B?Rk1YMndJSVpBWk1qV29uN2V5bjNZK1BhVzFrRUN1RFZOZU9sSHlsMFpjMmwy?=
+ =?utf-8?B?b3ZQZDZtWm0rNlpiM2U5bE5IZzZoVGh6bk5mMnYvK01HUlpWSUthOVJPQjhS?=
+ =?utf-8?B?eDE1MVc1Z0ErQmhGZ3NNWDdSMFJ1VFRPbXhGTWdQQTF2SlN1SWJmemNVNjlv?=
+ =?utf-8?B?cy9ZcUtXUVdNcU5JMmNma3d0bTBERzIwZGptRXIxakdZMk9kNEV0aHVJTU1s?=
+ =?utf-8?B?anNQU00wUlg1UlY0b1U3amRwUEdJWHFLVjhISWhsTTBXOFViVDAzWmowY205?=
+ =?utf-8?B?TG1pNEIzZzJIV2NNc0xDS0NDemhpVlhGdWFPWWtBUFVyYnZQSU5uWU1IUHIy?=
+ =?utf-8?B?aUs3V1RvWjZqTUFRMUE3b2g5ZDJUYmtrTmY3UE9GVkJLcFBWR0tONGdOVzFl?=
+ =?utf-8?Q?dMz3gc2YnMtKsmKW4ecT?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230032)(376006)(366008)(1800799016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cXdqdXlOdlFpeU80OURZUzNWRFBSRkpFaEpyZkhFai84VTVIcHV4OFRzRXBG?=
- =?utf-8?B?ZFRqbUxIS2Rxam9pcEhoYXJiVXhvSG9vb29LUEhWM0tEZEZTRnRqcDhheDFp?=
- =?utf-8?B?dmJMQVc2Qnk1RjBDcUVrajlIS2wvcXEwOHpPN3hZaEdMN2s0ZEZrSk9VVmF6?=
- =?utf-8?B?cUNUcERxYmFTWFMvODRMcVB2TXhReU4ycnk1Uzl4TUVDcitRaFgwYVFBNnh2?=
- =?utf-8?B?SFJXTk1aRUs5Zy81cW5OVnR6RHBXS0lDT0pCZnlQZjRMZkRJVGY1cXNtQUpo?=
- =?utf-8?B?Ny85N1dHa2pKRVdjTDZ6OVBTMWd1N2x6TDA4N21BZDM4dFhOYTJNOUJOWGhK?=
- =?utf-8?B?eVd6ekFQbVkrRWE2NUJmc1ZMbmZpU1dlZ00xeVJGNXdseVdsVTJFOHA3UkpO?=
- =?utf-8?B?TFFvVjV6aGRvNDhHRUhPYmxQMDJGODJVM2pXQjlIUkd6TkVnSjVsQWl2bW1Z?=
- =?utf-8?B?NEtDdndtR1Z2L0MvKzN6ckt6d1VkTmpsYkhjRElnVjMwSFZrQzNEL2JXSDFh?=
- =?utf-8?B?dklUWHRRVk90RHVndkhkY3dQaDdFRkZRTnE0RGZaUTNlSjlaQzlMNEdhYVNh?=
- =?utf-8?B?MlZmZUtCK2lqTVIvOHN6OGdKVTY1RU94OS92TzNKbzZpRGMzMjBFcU9qZUo3?=
- =?utf-8?B?cmZTWmpvdWFKTFJOVDQybHNRVG9hNFJ6aDg5Y0t0TUROai94V1BlZDVpUFVn?=
- =?utf-8?B?bjM2dFBabW9xYlR5NnE0aWp5YUhjWTJWbFNQaHFhMGdNRTRtWXhxL2lZdVF1?=
- =?utf-8?B?SllZWmQ0dTJXL1ZmS2RyNUc4MnhQaWR2N1FoN2tJM0U5aVg1Y0I4bnFDLzJG?=
- =?utf-8?B?WFlIa2lPZWkvNDNkRGwwcVc0dC9MNTdjZmRVc3V2WXViKzh3SzVxMVNMYk9q?=
- =?utf-8?B?TmVKSXg5OE5uWjA5S0VyKzZkMkRCUFJtbHZQUUVCN1NzT2M1ZVNKd1JPQ0Zn?=
- =?utf-8?B?NVhKaEc3N2FVVmZwYnorS2xFdGJSNmhYd3Q4cHQyRFJkT05RUkhQdmljYzll?=
- =?utf-8?B?VW8vYm13bVhKMzhBV0VaNWJWZDFKbHBRcExLWXA4Nm5UVTE0a1VqR2xGdStS?=
- =?utf-8?B?QUdmYmk1Tlp1eWw5b3d6aStlbGR0MVdNUy9XZWZWWERnbWE2Wm0yZ2VpTVBx?=
- =?utf-8?B?MjVQSVJaR1M3ZTd5M2ExTDlyRFk3RHBzSUpWZlA4V0dqclZWK2RtMHVGUTk2?=
- =?utf-8?B?NzQ0b3pPSGtWdVVBUDFlcFlCQ2lMSm9FVmpZdzRIc29YaDVsREhKcE5kRkVI?=
- =?utf-8?B?M3FkMlExTnEwOWU0aHNtQ29pZWNjeXlnR2lqN1pXeHJ6TGN3N1dhQnVsNlJJ?=
- =?utf-8?B?Tkdyb0lCbXV5VVhFcmduaEJaSjJRbFhMY1lVWWNyMWd6UGE4MkRua3IrZTNw?=
- =?utf-8?B?RGhZQmx6SXFJOGpscDVhQWpyUThUSVU4Y2NYRkZIVlErL3BKSDNIRXlrWXVC?=
- =?utf-8?B?bGNaTGNReHVYUXg4OW15YkxRQjlKR1VaUkxWWE9rWXJVVjRrT0pac1Q1SHJk?=
- =?utf-8?B?Q0JGbC9ra0hDV0tCYzNXSmR6OVVXVzZSYVd3WFR6QW5tdmcvNXdIZTNOT2xn?=
- =?utf-8?B?Mm4wTUtpVjMzOE16WlhYSU5qRFlYSVczN3VZNWNaZDRLWjE3NElnQjlBVUNT?=
- =?utf-8?B?S1cyemJtQktzS3lXTHpNMG9Sc3NTVVk0QnVoY3U3Q2cwMDdCSmZxTXdnbERo?=
- =?utf-8?B?c1NXaHEvR0FNQkdud2lrY2RBUEQ3ZVVoQ3B0OHRHV3JYWWduU1Bqbi9vOU05?=
- =?utf-8?B?bTFNRzA4b0c3UENMTjFId1JQU1FLL09YT1JqT3lyTmFFd0M1Zmg5SjF4c3A4?=
- =?utf-8?B?bTdZbVlFQytWUElUU0d4N080Q2N5QmdTL0w2ZUx1RGZwbmF0M1FzcmJOdGU2?=
- =?utf-8?B?ZFNPUzlkYml4L05RZXNkdThYbXEvYmxZUDYxb1lQak5RRGRpWk1IZzRmYkNz?=
- =?utf-8?B?V3BQRk1icXp2RktNWWFhZ2VqTUo4T25IRVNrOUc5bjdDMlNpU0lhTEZPVFpt?=
- =?utf-8?B?SEhFbHRwdnFrTkw4MUZOb1FqVVRVSFpCZkJiUW5OaTRTdTl6MzRoeXNtUTdK?=
- =?utf-8?B?dWo3dUdmWDFsUit6QmNmMWFyZ09HQnRzc2VlSG0vSkkzT0ZFWUp5VUVNblVx?=
- =?utf-8?Q?+t/hPRyqx8ewTDzvrOgx9BaNU?=
+	=?utf-8?B?L0tCWnhrUlRyVldEaGs4OHBLNU13a0QrVi9zWDltbzB6SW5ISUxFRms0ME50?=
+ =?utf-8?B?VzFOMUN5OG5heWpCSWRpMnpXRmE5aW4xbjlMNzBaSE9wMVZucnh4S29PR0Ey?=
+ =?utf-8?B?Njd3MDNtcWU5OXF1dW8zSUt3YUhGcUJNWk85NFpBYy9KRld2alo3ZGJDWmFK?=
+ =?utf-8?B?enNwZituclhaNEhGUm9mUE1zL1VoYkx2YkJTOVJRWWptUnltOVVWZVBSOFhB?=
+ =?utf-8?B?MEcxR2s0Snh4VlJpRHQxbVdyYmNqRmJqYUVKS0JSUlVrUXNsSkZETFhuSnF6?=
+ =?utf-8?B?U2ZWSmQ5ck9ueWFQM2Z1VmlVaEZCcTZFN1d4Q1d2OWsyWXVMUDlLVnM2bU9O?=
+ =?utf-8?B?dmM3NFVuaU9vK1UzYkxId3prU2pEQmZ4S3ZDOHdzZWc5TUlrWlAzV29ydyt1?=
+ =?utf-8?B?dHNocy9HU05sRWx2WGpEQkhKOUQvWkpQd0FsOVlqbnk5Z1JBTnpQTVVMZUtr?=
+ =?utf-8?B?d2x1U2dpek1MT1ZSRmRDbkY4WDdpWTEvSW5NbHJLNDk1dm9ZQ2c5aHZqOU1r?=
+ =?utf-8?B?blBqME5va2RScVhFK1FYYkFmVXowNU0ra2tpNnRBR2tQRmd1cU5BSlpvL2xo?=
+ =?utf-8?B?ZFFOR3c5b3FsbXFOY0xxVDVsZ3BWV2ZtaFpTbVJuelgrcmtPYmFHYU80ZkVk?=
+ =?utf-8?B?czB6Qk8yeHAyVFZRL2x6OHZIUmRHTXlaa1pEMlA0SVR2ZnQzWUpPVENJKzF3?=
+ =?utf-8?B?WmFlQ3pEd2Q2VjlRMWxzQ0Z1S0svcTU3U205UlZyaGgvcGxKdmFSb0R1N0VU?=
+ =?utf-8?B?bktBSUs3aGU0WWlwYjBic2JYM2NEYXErZWtuZWJ2RHlWTlc1RTJMWnNKeEJD?=
+ =?utf-8?B?N2FtWWlpeER2Umd6N1hMTC91NVdnR3hZTmdyWWxKbVdYeXZKb2JFOWJjSitp?=
+ =?utf-8?B?MUdxZmRvZGk5YmpLbWNheUlwYmpPalZnUDNXeGtLanhEN20vdnhySk02UU1l?=
+ =?utf-8?B?YlVmOWZsdFhiczJqNlN3MzdORzBwL2w0VXFEQTlZbThSWWwwNlZ1M2xFYzlX?=
+ =?utf-8?B?MW95SnVhOTZVTGlidmp1QkYwNy8zckl5emJYbWk1QzhHL2RSUEszRkppN3c1?=
+ =?utf-8?B?anY1azBtR0V4V3N1S0tKeUNmWWZvOGNGNnYrZVhBMVZ0dmlVYlBzVk16VzF5?=
+ =?utf-8?B?WE5WWUZqbFNJaWllMzZZbEt6ZUZ2cFJ5ZVhNbnVJNlRJZWExRERoOU1lbVJs?=
+ =?utf-8?B?Z3ZUUWNiUFZISXVCN3k1M21rSnRPSE4xZlZRbDhoVXF5ekNJUFE4MjB4eDRI?=
+ =?utf-8?B?b24yMWNqeHdZdi95YXV0aHFiTGppRHk4c0o2MHU3M3R1ZHhNNmdNV2NUMjd4?=
+ =?utf-8?B?eWFHMHFQeDJzdnNQOVQ2WlFoVi9veDFaRkhBSjF3UEl6NVhRNkF5UUlKaytL?=
+ =?utf-8?B?Q2cvRkhNLzF0bWhZd3RrRC9qY3UwajhvcmNLeTFCOGpOZlowamMrK2RvdXpq?=
+ =?utf-8?B?bDFTUDVPR2pZemJnaWY0UnNtNWduZk81VkYzRWUxZU15Q1pVUFA3b09ObHVB?=
+ =?utf-8?B?ZVNRTE1GdFNiaU5mY2owUTFyNzh3cStHOTlUVTRnZG5kbStVYnFDNWZ5Q0Jr?=
+ =?utf-8?B?WGxhWXZ4NDl6WXhUZjJQMDRCWEJIL29BOHI1SXVWdURVM21ZUGFmendmanBP?=
+ =?utf-8?B?anJhTDFSQWsvaXJpSUtKem8zQnFuK1cvRnRBanV3SndoMEFvbTF2anJwZWt4?=
+ =?utf-8?B?ZlBLZ2dZcUw2L2IzblFXNUFFdUQvOXB3MnIvcllLZzQveFF5U0hEK2xYeUF3?=
+ =?utf-8?B?SUZCSXRSdDdGS29HNExuamJ2QStnSzBEYXpiQzVhWmIrTVB3aFVOR20vL0Zl?=
+ =?utf-8?B?ZnlGamNicTI5UUFNRCs2US8rZkhsSWxxVmxsYndtRlpZcmVoUjMzUHpaUzZr?=
+ =?utf-8?B?byt5REkwT0hOcXgyZjFMY0dhbzk4cjFPVUJ3M09NK3FKbXR6dDFQcDZQSlBG?=
+ =?utf-8?B?cER4aDdGdUMxTFBJWlUrN2ZIeDFTbGdNN0swSm1aenhrUVk0TFhBbmtLdnR0?=
+ =?utf-8?B?MmQ3WVNWTGpWVkIxUDBNVzVCOFlFMGxaeXo4Wk9aajlHV1l3U3ZLbkJvMGQ5?=
+ =?utf-8?B?cm41dG9tVVErMWhjTS80TGY2bXdJSEtGRFMzaWpvZDhrQ09ZcGZiQW96dFUy?=
+ =?utf-8?Q?Auc+GU4FoAigPXK6NIdqBIjSI?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25e19335-0d5a-46f5-d816-08dc8a4ccc07
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7cf86133-680f-4ad7-5b28-08dc8a4da55b
 X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2024 19:29:22.6629
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2024 19:35:27.2558
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /U9WT6/A1fEIAA//cYQKc6vMuRa+Lu0Zgh493tmFq5GpawhwGQYXkUsUCxZrgL0G2HQu1qIQoaegvDDxg27p7g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6277
+X-MS-Exchange-CrossTenant-UserPrincipalName: /InDlVu+A+7vndS1LV65zu+2aEF5Tpy3oxAVCFePVWQJ3dIGGEr9MuW1pD2uc3rX4NeUkeKCazS/sOL668fktA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6311
 
 On 6/11/2024 03:52, Perry Yuan wrote:
-> Introduces an optimization to the AMD-Pstate driver by implementing
-> a heterogeneous core topology for the initialization of the highest
-> performance value while driver loading.
-> There are two type cores designed including performance core and
-> Efficiency Core.
-
-I would say:
-
-The two core types supported are "performance" and "efficiency".
-
-> Each core type has different highest performance and frequency values
-> configured by the platform.  The `amd_pstate` driver needs to identify
-> the type of core to correctly set an appropriate highest perf value.
+> If the `amd-pstate` driver is not loaded automatically by default,
+> it is because the kernel command line parameter has not been added.
+> To resolve this issue, it is necessary to call the `amd_pstate_set_driver()`
+> function to enable the desired mode (passive/active/guided) before registering
+> the driver instance.
+> This ensures that the driver is loaded correctly without relying on the kernel
+> command line parameter.
 > 
-> X86_FEATURE_HETERO_CORE_TOPOLOGY is used to identify whether the
-> processor support heterogeneous core type by reading CPUID leaf
-> Fn_0x80000026_EAX and bit 30. if the bit is set as one, then amd_pstate
-> driver will check EBX 30:28 bits to get the core type.
+> Meanwhle, user can add driver mode in command line which will override
+> the kernel config default option.
 > 
-> PDF p274
+> [    0.917789] usb usb6: Manufacturer: Linux 6.9.0-rc6-amd-pstate-new-fix-v1 xhci-hcd
+> [    0.982579] amd_pstate: failed to register with return -22
+
+This is currently "intended" behavior.  There is a comment remaining in 
+the driver at the moment not part of this patch:
+
+/*
+  * TODO: We need more time to fine tune processors with shared memory 
+solution
+  * with community together.
+  *
+  * There are some performance drops on the CPU benchmarks which reports 
+from
+  * Suse. We are co-working with them to fine tune the shared memory 
+solution. So
+  * we disable it by default to go acpi-cpufreq on these processors and 
+add a
+  * module parameter to be able to enable it manually for debugging.
+  */
+
+Would you say that the performance drops are worked out on the shared 
+memory designs?
+
+* If so; this comment should be dropped too in this patch.
+* If not; this patch really shouldn't be done as is.
+
 > 
-> Link: https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/programmer-references/24593.pdf
-
-As Boris suggested in the other patch, this URL won't be stable if the 
-CRM system changes again.
-
-I'd use his suggestion of the title, document number and page instead.
-
+> Reported-by: Andrei Amuraritei <andamu@posteo.net>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218705
 > Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-
-
-I checked and it fails to apply at this patch at the moment to:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/log/?h=bleeding-edge
-
-error: patch failed: arch/x86/include/asm/cpufeatures.h:470
-error: arch/x86/include/asm/cpufeatures.h: patch does not apply
-Patch failed at 0008 x86/cpufeatures: Add feature bits for AMD 
-heterogeneous processor
-
-Is it dependent upon refs in x86-tip?
-
 > ---
->   arch/x86/include/asm/processor.h |  2 +
->   arch/x86/kernel/cpu/amd.c        | 19 +++++++++
->   drivers/cpufreq/amd-pstate.c     | 67 ++++++++++++++++++++++++--------
->   3 files changed, 72 insertions(+), 16 deletions(-)
+>   drivers/cpufreq/amd-pstate.c | 27 ++++++++++++++++++---------
+>   1 file changed, 18 insertions(+), 9 deletions(-)
 > 
-> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-> index cb4f6c513c48..223aa58e2d5c 100644
-> --- a/arch/x86/include/asm/processor.h
-> +++ b/arch/x86/include/asm/processor.h
-> @@ -694,10 +694,12 @@ static inline u32 per_cpu_l2c_id(unsigned int cpu)
->   extern u32 amd_get_highest_perf(void);
->   extern void amd_clear_divider(void);
->   extern void amd_check_microcode(void);
-> +extern int amd_get_this_core_type(void);
->   #else
->   static inline u32 amd_get_highest_perf(void)		{ return 0; }
->   static inline void amd_clear_divider(void)		{ }
->   static inline void amd_check_microcode(void)		{ }
-> +static inline int amd_get_this_core_type(void)		{ return -1; }
->   #endif
->   
->   extern unsigned long arch_align_stack(unsigned long sp);
-> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-> index 44df3f11e731..62a4ef21ef79 100644
-> --- a/arch/x86/kernel/cpu/amd.c
-> +++ b/arch/x86/kernel/cpu/amd.c
-> @@ -1231,3 +1231,22 @@ void noinstr amd_clear_divider(void)
->   		     :: "a" (0), "d" (0), "r" (1));
->   }
->   EXPORT_SYMBOL_GPL(amd_clear_divider);
-> +
-> +#define X86_CPU_TYPE_ID_SHIFT	28
-> +
-> +/**
-> + * amd_get_this_core_type - Get the type of this heterogeneous CPU
-> + *
-> + * Returns the CPU type [31:28] (i.e., performance or efficient) of
-> + * a CPU in the processor.
-> + * If the processor has no core type support, returns -1.
-
-Is there any reason to use -1 specifically?  It seems like it should be
-CPU_CORE_TYPE_NO_HETERO_SUP.
-
-> + */
-> +
-> +int amd_get_this_core_type(void)
-
-Shouldn't the return be "enum amd_core_type"?
-
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_HETERO_CORE_TOPOLOGY))
-> +		return -1;
-
-return CPU_CORE_TYPE_NO_HETERO_SUP;
-
-> +
-> +	return cpuid_ebx(0x80000026) >> X86_CPU_TYPE_ID_SHIFT;
-> +}
-> +EXPORT_SYMBOL_GPL(amd_get_this_core_type);
 > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index cb59de71b6ee..fa486dfaa7e8 100644
+> index fa486dfaa7e8..6e5c398810bf 100644
 > --- a/drivers/cpufreq/amd-pstate.c
 > +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -51,8 +51,9 @@
+> @@ -1841,28 +1841,37 @@ static int __init amd_pstate_init(void)
+>   	/* check if this machine need CPPC quirks */
+>   	dmi_check_system(amd_pstate_quirks_table);
 >   
->   #define AMD_PSTATE_TRANSITION_LATENCY	20000
->   #define AMD_PSTATE_TRANSITION_DELAY	1000
-> -#define CPPC_HIGHEST_PERF_PERFORMANCE	196
-> -#define CPPC_HIGHEST_PERF_DEFAULT	166
-> +#define CPPC_HIGHEST_PERF_EFFICIENT		132
-> +#define CPPC_HIGHEST_PERF_PERFORMANCE		196
+> -	switch (cppc_state) {
+> -	case AMD_PSTATE_UNDEFINED:
+> +	/*
+> +	 * get driver mode for loading from command line choice or kernel config
+> +	 * cppc_state will be AMD_PSTATE_UNDEFINED if no command line input
+> +	 * command line choice will override the kconfig option
+> +	 */
+> +	if (cppc_state == AMD_PSTATE_UNDEFINED) {
+> +		pr_err("pyuan cppc_state == AMD_PSTATE_UNDEFINED \n");
 
-Why did you bump this to two tabs?  It can stay at one tab no?
+Looks like a debug line escaped into the patch.
 
-> +#define CPPC_HIGHEST_PERF_DEFAULT		166
->   
->   #define AMD_CPPC_EPP_PERFORMANCE		0x00
->   #define AMD_CPPC_EPP_BALANCE_PERFORMANCE	0x80
-> @@ -85,6 +86,14 @@ struct quirk_entry {
->   	u32 lowest_freq;
->   };
->   
-> +/* defined by CPUID_Fn80000026_EBX BIT [31:28] */
-> +enum amd_core_type {
-> +	CPU_CORE_TYPE_NO_HETERO_SUP = -1,
-> +	CPU_CORE_TYPE_PERFORMANCE = 0,
-> +	CPU_CORE_TYPE_EFFICIENCY = 1,
-> +	CPU_CORE_TYPE_UNDEFINED = 2,
-> +};
-> +
->   /*
->    * TODO: We need more time to fine tune processors with shared memory solution
->    * with community together.
-> @@ -359,9 +368,27 @@ static inline int amd_pstate_enable(bool enable)
->   	return static_call(amd_pstate_enable)(enable);
->   }
->   
-> +static void get_this_core_type(void *data)
-> +{
-> +	int *cpu_type = data;
-> +
-> +	*cpu_type = amd_get_this_core_type();
-> +}
-> +
-> +static int amd_pstate_get_cpu_type(int cpu)
-
-Shouldn't the return be "enum amd_core_type"?
-
-> +{
-> +	int cpu_type = 0;
-
-I think it's confusing to initialize this to CPU_CORE_TYPE_PERFORMANCE.
-It should be either not initialized or initialized to 
-CPU_CORE_TYPE_NO_HETERO_SUP.
-
-> +
-> +	smp_call_function_single(cpu, get_this_core_type, &cpu_type, 1);
-> +
-> +	return cpu_type;
-> +}
-> +
->   static u32 amd_pstate_highest_perf_set(struct amd_cpudata *cpudata)
->   {
->   	struct cpuinfo_x86 *c = &cpu_data(0);
-> +	u32 highest_perf;
-> +	int core_type;
->   
->   	/*
->   	 * For AMD CPUs with Family ID 19H and Model ID range 0x70 to 0x7f,
-> @@ -371,7 +398,26 @@ static u32 amd_pstate_highest_perf_set(struct amd_cpudata *cpudata)
->   	if (c->x86 == 0x19 && (c->x86_model >= 0x70 && c->x86_model <= 0x7f))
->   		return CPPC_HIGHEST_PERF_PERFORMANCE;
->   
-> -	return CPPC_HIGHEST_PERF_DEFAULT;
-> +	core_type = amd_pstate_get_cpu_type(cpudata->cpu);
-> +	pr_debug("core_type %d found\n", core_type);
-> +
-> +	switch (core_type) {
-> +	case CPU_CORE_TYPE_NO_HETERO_SUP:
-> +		highest_perf = CPPC_HIGHEST_PERF_DEFAULT;
-> +		break;
-> +	case CPU_CORE_TYPE_PERFORMANCE:
-> +		highest_perf = CPPC_HIGHEST_PERF_PERFORMANCE;
-> +		break;
-> +	case CPU_CORE_TYPE_EFFICIENCY:
-> +		highest_perf = CPPC_HIGHEST_PERF_EFFICIENT;
-> +		break;
-> +	default:
-> +		highest_perf = CPPC_HIGHEST_PERF_DEFAULT;
-> +		WARN_ONCE(true, "WARNING: Undefined core type found");
-> +		break;
+>   		/* Disable on the following configs by default:
+>   		 * 1. Undefined platforms
+>   		 * 2. Server platforms
+>   		 * 3. Shared memory designs
+>   		 */
+>   		if (amd_pstate_acpi_pm_profile_undefined() ||
+> -		    amd_pstate_acpi_pm_profile_server() ||
+> -		    !cpu_feature_enabled(X86_FEATURE_CPPC)) {
+> +		    amd_pstate_acpi_pm_profile_server()) {
+>   			pr_info("driver load is disabled, boot with specific mode to enable this\n");
+>   			return -ENODEV;
+>   		}
+> -		ret = amd_pstate_set_driver(CONFIG_X86_AMD_PSTATE_DEFAULT_MODE);
+> -		if (ret)
+> -			return ret;
+> -		break;
+> +		/* get driver mode from kernel config option [1:4] */
+> +		cppc_state = CONFIG_X86_AMD_PSTATE_DEFAULT_MODE;
 > +	}
 > +
-> +    return highest_perf;
->   }
->   
->   static int pstate_init_perf(struct amd_cpudata *cpudata)
-> @@ -384,15 +430,7 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
->   	if (ret)
+> +	switch (cppc_state) {
+>   	case AMD_PSTATE_DISABLE:
+> +		pr_info("driver load is disabled, boot with specific mode to enable this\n");
+>   		return -ENODEV;
+>   	case AMD_PSTATE_PASSIVE:
+>   	case AMD_PSTATE_ACTIVE:
+>   	case AMD_PSTATE_GUIDED:
+> +		ret = amd_pstate_set_driver(cppc_state);
+> +		if (ret)
+> +			return ret;
+>   		break;
+>   	default:
+>   		return -EINVAL;
+> @@ -1883,7 +1892,7 @@ static int __init amd_pstate_init(void)
+>   	/* enable amd pstate feature */
+>   	ret = amd_pstate_enable(true);
+>   	if (ret) {
+> -		pr_err("failed to enable with return %d\n", ret);
+> +		pr_err("failed to enable driver mode(%d)\n", cppc_state);
 >   		return ret;
+>   	}
 >   
-> -	/* For platforms that do not support the preferred core feature, the
-> -	 * highest_pef may be configured with 166 or 255, to avoid max frequency
-> -	 * calculated wrongly. we take the AMD_CPPC_HIGHEST_PERF(cap1) value as
-> -	 * the default max perf.
-> -	 */
-> -	if (cpudata->hw_prefcore)
-> -		highest_perf = amd_pstate_highest_perf_set(cpudata);
-> -	else
-> -		highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
-> +	highest_perf = amd_pstate_highest_perf_set(cpudata);
->   
->   	WRITE_ONCE(cpudata->highest_perf, highest_perf);
->   	WRITE_ONCE(cpudata->max_limit_perf, highest_perf);
-> @@ -413,10 +451,7 @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
->   	if (ret)
->   		return ret;
->   
-> -	if (cpudata->hw_prefcore)
-> -		highest_perf = amd_pstate_highest_perf_set(cpudata);
-> -	else
-> -		highest_perf = cppc_perf.highest_perf;
-> +	highest_perf = amd_pstate_highest_perf_set(cpudata);
->   
->   	WRITE_ONCE(cpudata->highest_perf, highest_perf);
->   	WRITE_ONCE(cpudata->max_limit_perf, highest_perf);
 
 
