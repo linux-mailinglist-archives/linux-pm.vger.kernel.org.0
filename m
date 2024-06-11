@@ -1,108 +1,105 @@
-Return-Path: <linux-pm+bounces-8933-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8934-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3650B90388F
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 12:15:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 156C79038D9
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 12:29:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBA042825A9
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 10:15:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A52E91F21E69
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 10:29:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3ABB17B404;
-	Tue, 11 Jun 2024 10:14:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gC2oyTXJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8060516F839;
+	Tue, 11 Jun 2024 10:29:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFAD317A92F;
-	Tue, 11 Jun 2024 10:14:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2607D54750;
+	Tue, 11 Jun 2024 10:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718100886; cv=none; b=nr+jM4/FhmmFO6KSYixKvbany9mz/fb1y/ga26xNX3RSoIpvGI8O9Zba8N1c/wIWqDH3y/JO7pWWf5cUVttCM5yZCgvKlBYucVn7g7hBmZvdgQXvATTdIV7+JuGi1UD6VIZOBC/NwPjzM8zflilbSvRuvh3zwW54eBLJR8zC0G8=
+	t=1718101754; cv=none; b=I9AUI5lWMT8zHWSJKKjVMLI+FMB+yyK/NBZgxlO5KlAVqOIHOQ8Img8QnYlWgY6YgXtC4rf1GgXCXs3y2e6cj4LTxVqMXbRLDQL5ml+1z2KSfQSUaMyponLzRUgn3v6KdZ101GnnkLI+92sy27N0edZSWOvFlEjaE2zzFZEO6qI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718100886; c=relaxed/simple;
-	bh=rFt4XS/CgSsXIcBXqKf+lWLQ7TFyTsJ3RIR+fC805gY=;
+	s=arc-20240116; t=1718101754; c=relaxed/simple;
+	bh=spQe+xwhZKKiF/RCCKP3Pjjjdr5YBWx9tejQ73rOtyc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ztr/z7z4+EvKPga3AffgxOtJMnpRbVFL8n1NfWXCLSH/6t61KRYkrYZCnvm8oe45lxVg8Hm/57BUrLsJiZo50DGWtCZi4jdygnEn3pOhPsDB7oJTyY7Sil24xbCYDL438ev5Bu5WSFqYLKr94SrUPpfHTo2a6O4w6EYDkb+Lgag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gC2oyTXJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 124C2C32786;
-	Tue, 11 Jun 2024 10:14:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718100885;
-	bh=rFt4XS/CgSsXIcBXqKf+lWLQ7TFyTsJ3RIR+fC805gY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gC2oyTXJJ93PfMa4I6COS1Yg9NWgvNdR2czNkZbCtykuuMziuG35k2lRQXsZ03s08
-	 KfIQQnswFEWvclKyGbEcLrzrEegkQC1BP5X/rsgCfh0aPrky0aCfZAPqBwj/vZBn+u
-	 0sXR4TwnyFy+c7pxsj6q0kaK7bD9Dq2m4f+C1nuBIkQDyDMxbrzwu8PnjYjYerRTMB
-	 jKX+myIF1qEgVrm5tO98eN+1f8g71nRoCz6TlDHkD05ySyflbHtT7Hv7HB5vohdD5a
-	 rYDqp6qB2JpPzxO4rj3wX1OIJSUa3+1hthCCqNWGiGHzM7mezIewYzWoKSnmBPzC+u
-	 EJAhgg5ScR99g==
-Date: Tue, 11 Jun 2024 10:14:41 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Robert Moore <robert.moore@intel.com>,
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Dustin Howett <dustin@howett.net>,
-	Stephen Horvath <s.horvath@outlook.com.au>,
-	Rajas Paranjpe <paranjperajas@gmail.com>,
-	linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
-	Matt Hartley <matt.hartley@gmail.com>
-Subject: Re: [PATCH v3 3/5] platform/chrome: cros_ec_proto: Introduce
- cros_ec_cmd_versions()
-Message-ID: <ZmgjkVXZEe6BkZzq@google.com>
-References: <20240610-cros_ec-charge-control-v3-0-135e37252094@weissschuh.net>
- <20240610-cros_ec-charge-control-v3-3-135e37252094@weissschuh.net>
- <ZmfvhvcjTbjOSp4f@google.com>
- <f2a361aa-a256-41a5-8100-703e40df975d@t-8ch.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=pgq19yUl97nkzmJJTe5LyC/6lCLYuKhwegV84mpTwjT73rNLkvHo7QV2fFC1kXjkwPxjIMjVbA9S+ztU43EWWNZuctSR6hhcgXm9m37kLxhZkwlRLhLgY3akTiclS3k9JXrSEM4+4gcOXlLQmG4xU+EwUb69Z83Vf4p4N/UUdQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 090BF1424;
+	Tue, 11 Jun 2024 03:29:36 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.80.58])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 275103F5A1;
+	Tue, 11 Jun 2024 03:29:11 -0700 (PDT)
+Date: Tue, 11 Jun 2024 11:29:09 +0100
+From: Ionela Voinescu <ionela.voinescu@arm.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "liwei (JK)" <liwei728@huawei.com>,
+	Beata Michalska <beata.michalska@arm.com>,
+	Vanshidhar Konda <vanshikonda@os.amperecomputing.com>,
+	rafael@kernel.org, al.stone@linaro.org, ashwin.chaugule@linaro.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	liwei391@huawei.com, liaoyu15@huawei.com
+Subject: Re: [PATCH] cpufreq/cppc: changing highest_perf to nominal_perf in
+ cppc_cpufreq_cpu_init()
+Message-ID: <Zmgm9Rf0piqFqnrI@arm.com>
+References: <20240428092852.1588188-1-liwei728@huawei.com>
+ <20240429104945.esdukn6ayudgyumc@vireshk-i7>
+ <ZjoBrF4bAK5ukm7H@arm.com>
+ <be312b75-eede-44f5-b7f3-b50f50c6fb56@huawei.com>
+ <ZmB1qKucR5fXk100@arm.com>
+ <20240606072031.lxr7tykl7sdgjwva@vireshk-i7>
+ <ZmgbRh+m9MmEaopK@arm.com>
+ <20240611094526.vcirawlsdefbkuhf@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f2a361aa-a256-41a5-8100-703e40df975d@t-8ch.de>
+In-Reply-To: <20240611094526.vcirawlsdefbkuhf@vireshk-i7>
 
-On Tue, Jun 11, 2024 at 09:23:24AM +0200, Thomas Weißschuh wrote:
-> On 2024-06-11 06:32:38+0000, Tzung-Bi Shih wrote:
-> > On Mon, Jun 10, 2024 at 05:51:08PM +0200, Thomas Weißschuh wrote:
-> > > If the command is not supported at all the EC returns
-> > > -EINVAL/EC_RES_INVALID_PARAMS.
-> > > 
-> > > This error is translated into an empty version mask as that is easier to
-> > > handle for callers and they don't need to know about the error details.
-> > 
-> > I'm not sure whether the behavior is what we want or not as existing
-> > EC_CMD_GET_CMD_VERSIONS usages don't have it.
+On Tuesday 11 Jun 2024 at 15:15:26 (+0530), Viresh Kumar wrote:
+> On 11-06-24, 10:39, Ionela Voinescu wrote:
+> > Makes sense! But maybe we should no longer update policy->cur to the
+> > current/hardware frequency once a request comes through from a
+> > governor, and we have a first actually requested value.
 > 
-> At least the caller of cros_ec_get_host_command_version_mask() expects
-> it:
-> 
-> ret = cros_ec_get_host_command_version_mask(..., &ver_mask);
-> if (ret < 0 || ver_mask == 0)
-> ...
-> 
-> ver_mask == 0 will never happen as in that case -EINVAL would have been
-> returned.
-> 
-> Others, like cros_ec_cec_get_write_cmd_version(), expect the current
-> semantic of ver_mask != 0 but log spurious errors in case of -EINVAL.
-> cros_pchg_cmd_ver_check(), works with both semantics, but currently also
-> logs a spurious error message.
-> 
-> To me the new semantic looks more obvious and much easier to handle.
-> For each command version a bit is set. no command versions -> no bits.
+> Hmm, not sure I understood that. When the request comes from governor,
+> we only update policy->cur to the requested frequency and not the
+> actual hardware frequency. And it is very much required. policy->cur
 
-Ack.
+Yes, I mean we should only update policy->cur to a requested frequency
+from a governor, after we start it (cpufreq_start_governor()).
+
+But currently policy->cur gets updated to the .get() returned value in
+multiple places, via cpufreq_verify_current_freq() (for example from 
+show_cpuinfo_cur_freq() or cpufreq_get().
+
+.get() is meant to return the current frequency of the hardware and that
+can opportunistically be different from the last request made.
+
+(+ we probably should force the first request from a governor to go
+through to the driver to make sure the policy->cur obtained before,
+via .get(), did not just happen to coincide with the governor request,
+therefore making the request no longer go through to the driver: see
+__cpufreq_driver_target)
+
+> needs to be up to date all the times, it is an important part of the
+> entire working of the cpufreq core..
+> 
+
+When you say that "policy->cur must be kept up to date at all times",
+I suppose you mean that it should be kept up to date with any frequency
+change requests not with any changes happening in hardware?
+
+Thanks,
+Ionela.
+
+> -- 
+> viresh
 
