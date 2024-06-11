@@ -1,168 +1,109 @@
-Return-Path: <linux-pm+bounces-8944-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8945-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82DBC903B52
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 14:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 26DA9903B59
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 14:04:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7192BB29868
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 12:01:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35086B262AB
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 12:02:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E4917C9EE;
-	Tue, 11 Jun 2024 11:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEC5017838A;
+	Tue, 11 Jun 2024 12:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="lExcCKRe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XJJ/zKWv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E120817B4F9;
-	Tue, 11 Jun 2024 11:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE2017623D;
+	Tue, 11 Jun 2024 12:02:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718107194; cv=none; b=PcVBoWZOw6WG8U5dkVi/MOP/8BqLah9M9pfiel5XliRqAci2Ei6yaz8kL2MZ7TRt3iM06XHD1J1mviHLXV/XiwR7QiEsEjA/hCgUvD4zYoW9TVqB1T5Viy4pySoWfUURfSJMt5y2heLVsd6IwPPICX5iDJrgDamww+Osd0CC898=
+	t=1718107341; cv=none; b=TYcmAWF7HlArEzlhTOKTzW7Qdy5GR7ryZodbnEdKvVsgGTl35j/Na1UnY2VuXF9TCKmFvGgZp+zvSrm24f6oVPTNavJ51Bt9sMut2RGx17/SiyCgdHYwwzwxipb457nCEd9IJowDyV4uSEiKkJaWErXZSm0A0Ie4j59sKQ493DM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718107194; c=relaxed/simple;
-	bh=bD1uQZQ6VtPXlxktaFO9REv2bZmj6NZhK+/8EWaPwIE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oZp25UyUfZ+//rfOUJ6YZMPWSYYQeFwOp34f8C42EtfYBIoXNZ9SZsnvrv9ShEUHeNM6fVa4cx1M1RS+j98i70QC6+ObSRdHvqhxHZ4ICMgtZ8pJNxV4j4c/b5DH8q7FLdNygpjdwEaYHZoAH8VliUGMNS0Q91sHePOk5lemtmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=lExcCKRe; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 1885960a27ea11efa54bbfbb386b949c-20240611
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=OQ8chaPOw4A6iAHKeGgGa/xCeVHWlZM1KN2sfBtT4YM=;
-	b=lExcCKReTdlfKb03kImMHS/DYm1whSH6LjMcXEvmgiy+YPltrNADawmpj3STAZ3/Zlb2n5bfPhVRCXA6uUY8D/e7uAHMOEqBpdneCtAkaosALwg2DyfSrsiaS85AqfIVun8ABH6g14pdVHaYE6O0JAPzSmmunoY8/ZD12JdVdI8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.39,REQID:556ab7fc-b7bd-4eb7-b1fd-cfd83c392a95,IP:0,U
-	RL:0,TC:0,Content:34,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:34
-X-CID-META: VersionHash:393d96e,CLOUDID:06de7144-4544-4d06-b2b2-d7e12813c598,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:4,EDM:-3,IP:nil,U
-	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
-	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 1885960a27ea11efa54bbfbb386b949c-20240611
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-	(envelope-from <poshao.chen@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1645407644; Tue, 11 Jun 2024 19:59:45 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 11 Jun 2024 19:59:43 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 11 Jun 2024 19:59:43 +0800
-From: PoShao Chen <poshao.chen@mediatek.com>
-To: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC: <clive.lin@mediatek.com>, <ccj.yeh@mediatek.com>,
-	<ching-hao.hsu@mediatek.com>, <poshao.chen@mediatek.com>
-Subject: [PATCH] cpufreq: Fix per-policy boost behavior after CPU hotplug
-Date: Tue, 11 Jun 2024 19:59:20 +0800
-Message-ID: <20240611115920.28665-1-poshao.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+	s=arc-20240116; t=1718107341; c=relaxed/simple;
+	bh=CVnXtj7dn7R4jP36tYffAg5QjTJwaLN8wgb/nx5uVVM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VhcCuMXijHDKG1B6fS9Lr4fMELpFuhA0snUbiF2Kh4CIsyN/Cz6BSpTbF6ES0LBK3MF1uAZo4J12qFHBnC3LVjKjVXGRoVyil38exOZVytVDK/axhZ0TWRGU03lKspssbhpfdpTzKvo9XPLVxIWEIcF/1VkRTt0fskLfZSZTN3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XJJ/zKWv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB0BC32789;
+	Tue, 11 Jun 2024 12:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718107341;
+	bh=CVnXtj7dn7R4jP36tYffAg5QjTJwaLN8wgb/nx5uVVM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XJJ/zKWvRiyqgeI+ApQhnRndzGu9PygAixIX0q/qDR8eRcwJG0wY1hW+Osb/iuqbq
+	 lDotrOT+lklfU6UGVcKy4bfqPhyXHW9tgEBi5QWPV8xeI/VTn3t34Ufmy0AoPzsoQ+
+	 c0g3rdr9IHuGozdVDEzk2Wbq/fgf4Ul7Y+1Q5tFZ4riDaH75fH8Cc/JQR2oNkaqmf/
+	 N4ysbZ5rBYb2OmBi38sB9tHrKVPW7+IHZ9QwaZiMdsPa/7P0ZaeeGz/N4JyuLbnzR1
+	 fM/Cji6L+TAX48aJqIKG9oDazxcNYO3bltbrn7U+y2428eiRmqjxVXfyUn1iZIQ5lS
+	 3aZ4x3x7gE2PQ==
+Received: from johan by theta with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1sH0Cd-000000008k4-1zj5;
+	Tue, 11 Jun 2024 14:02:15 +0200
+Date: Tue, 11 Jun 2024 14:02:15 +0200
+From: Johan Hovold <johan@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Steev Klimaszewski <steev@kali.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, regressions@lists.linux.dev
+Subject: Re: cpufreq/thermal regression in 6.10
+Message-ID: <Zmg8x6JXQW1dqOr4@hovoldconsulting.com>
+References: <ZmVfcEOxmjUHZTSX@hovoldconsulting.com>
+ <CAJZ5v0gVnjVyd_O6KgXy2sXr3b3M3vyTLyUCasyxP0GrAXro4Q@mail.gmail.com>
+ <CAJZ5v0iz7gwhpvT53CH0ZEA_q3U=dnn6XR8HdLk6LpP3ye4Zkg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--4.915700-8.000000
-X-TMASE-MatchedRID: angWuI+ZklD2aJrWQVCF0KEtILqFekmX7h2RrsKOiu27+NPPxj+R6px5
-	iJEn6aBLCrMpAjvWT1MRhs8ZJJXuwmNvKIW9g24oA9lly13c/gHt/okBLaEo+MUmcSma304T42W
-	Ouy++C8Pg7PmXyAh8kagjAnjVJgVlszLAY5oHhBCzLD5kmcW6ZFY5BBJri9sdmyiLZetSf8mfop
-	0ytGwvXiq2rl3dzGQ1GpeevGsoI5fZBtMWO+YKbXYGrvKGRAu9Q0lfOr+bFrzC5D54Rup5JQ2Gg
-	aVtth9BFEdlR3DDyofDpl0rUP4mccRofWagfcNVy7ksesgLCKAXRoPmWO3jekxwdkPqCq7vDEyN
-	+J8hd+jCS9WgDXVPCn7cGd19dSFd
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--4.915700-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: 67E9FD33A2FD7A6F82D0C102646374AC708AF05208AE82E3C5422A827FEE1CB92000:8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0iz7gwhpvT53CH0ZEA_q3U=dnn6XR8HdLk6LpP3ye4Zkg@mail.gmail.com>
 
-This patch fixes the behavior of the cpufreq boost when the
-global boost flag is toggled during CPU hotplug offline. This action
-previously led to incorrect scaling_max_freq values when the CPU was
-brought back online. The issue also manifested as incorrect
-scaling_cur_freq under the performance governor.
+On Tue, Jun 11, 2024 at 12:54:25PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Jun 10, 2024 at 1:17 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > On Sun, Jun 9, 2024 at 9:53 AM Johan Hovold <johan@kernel.org> wrote:
 
-For example, after the following operations, even if the global boost
-is disabled, the resulting scaling_max_freq and scaling_cur_freq
-will still reflect the settings of an enabled boost.
+> > > Steev reported to me off-list that the CPU frequency of the big cores on
+> > > the Lenovo ThinkPad X13s sometimes appears to get stuck at a low
+> > > frequency with 6.10-rc2.
+> > >
+> > > I just confirmed that once the cores are fully throttled (using the
+> > > stepwise thermal governor) due to the skin temperature reaching the
+> > > first trip point, scaling_max_freq gets stuck at the next OPP:
+> > >
+> > >         cpu4/cpufreq/scaling_max_freq:940800
+> > >         cpu5/cpufreq/scaling_max_freq:940800
+> > >         cpu6/cpufreq/scaling_max_freq:940800
+> > >         cpu7/cpufreq/scaling_max_freq:940800
+> > >
+> > > when the temperature drops again.
 
-$ echo performance > /sys/devices/system/cpu/cpufreq/policy7/scaling_governor
-$ cat /sys/devices/system/cpu/cpufreq/policy7/scaling_cur_freq
-3200000
-$ cat /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
-3200000
+> If this is the step-wise governor, the problem might have been
+> introduced by commit
+> 
+> 042a3d80f118 thermal: core: Move passive polling management to the core
+> 
+> which removed passive polling count updates from that governor, so if
+> the thermal zone in question has passive polling only and no regular
+> polling, temperature updates may stop coming before the governor drops
+> the cooling device states to the "no target" level.
+> 
+> So please test the attached partial revert of the above commit when you can.
 
-$ echo 1 > /sys/devices/system/cpu/cpufreq/boost
-$ cat /sys/devices/system/cpu/cpufreq/policy7/scaling_cur_freq
-3250000
-$ cat /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
-3250000
+Thanks for the quick fix. The partial revert seems to do the trick:
 
-$ echo 0 > /sys/devices/system/cpu/cpu7/online
-$ echo 0 > /sys/devices/system/cpu/cpufreq/boost
-$ echo 1 > /sys/devices/system/cpu/cpu7/online
-$ cat /sys/devices/system/cpu/cpufreq/policy7/scaling_cur_freq
-3250000
-$ cat /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
-3250000
+Tested-by: Johan Hovold <johan+linaro@kernel.org>
 
-Signed-off-by: PoShao Chen <poshao.chen@mediatek.com>
----
- drivers/cpufreq/cpufreq.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index a45aac17c20f..1f067d91a0b0 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1495,6 +1495,35 @@ static int cpufreq_online(unsigned int cpu)
- 
- 		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
- 				CPUFREQ_CREATE_POLICY, policy);
-+	} else {
-+		/*
-+		 * Call freq_qos_update_request() for the per-policy boost flag mirror
-+		 * the cpufreq_driver boost during hotplug online.
-+		 * Register an online callback if the default mirroring of the global
-+		 * boost setting is not intended.
-+		 */
-+		if (!cpufreq_driver->online) {
-+			ret = freq_qos_update_request(policy->max_freq_req, policy->max);
-+			if (ret)
-+				pr_err("%s: freq qos update failed\n", __func__);
-+		} else {
-+			/*
-+			 * Let the per-policy boost flag mirror the cpufreq_driver
-+			 * boost if an illegal state occurs after hotplug
-+			 */
-+			if (policy->boost_enabled && !cpufreq_driver->boost_enabled) {
-+				pr_info("%s: per-policy boost flag mirror the cpufreq_driver
-+					boost\n", __func__);
-+				policy->boost_enabled = cpufreq_driver->boost_enabled;
-+				ret = cpufreq_driver->set_boost(policy,
-+							cpufreq_driver->boost_enabled);
-+				if (ret) {
-+					policy->boost_enabled = !policy->boost_enabled;
-+					pr_err("%s: per-policy boost flag mirror the cpufreq_driver
-+						boost failed\n", __func__);
-+				}
-+			}
-+		}
- 	}
- 
- 	if (cpufreq_driver->get && has_target()) {
--- 
-2.18.0
-
+Johan
 
