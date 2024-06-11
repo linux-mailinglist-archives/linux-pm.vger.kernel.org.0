@@ -1,196 +1,234 @@
-Return-Path: <linux-pm+bounces-8974-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8975-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7DB690464B
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 23:36:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87A9790466A
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 23:51:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 766BA288F4E
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 21:36:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 051101F21881
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 21:51:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C108D15442C;
-	Tue, 11 Jun 2024 21:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D3D4152E05;
+	Tue, 11 Jun 2024 21:51:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="RG9rHs/1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j7A72MhG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2084.outbound.protection.outlook.com [40.107.96.84])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE2F153BE4
-	for <linux-pm@vger.kernel.org>; Tue, 11 Jun 2024 21:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.84
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718141758; cv=fail; b=Mj/9aO96MK9daCPIhnkSf1sBO919BHQYEgiksH2Qw5TOu5XfHfCO+f905HOoj2GKWopWGPcBN4mpCrYsosS/v8d4aEkCxMlQbCfKndMBTU0MxFT6599plA0SAckTFoh5iYNQT+q3iZM9Qaue0gqAjdWs6CqAzWm7VXOmoujRIzw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718141758; c=relaxed/simple;
-	bh=ji4ROo2rRBgTyloGWgeGmzEHtR8TSyu3dwij4zOz8UY=;
-	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=jHMYqiWXLaQF/9rxSK+KlKdbThxuDIicmWjqKvFy5uNsyV1qovWvuTNmBkrYxo5T1gZqfh9uRLhMtfQVC73J6SCOX9xiACh+bNG91fCp7aEtTDQ/TxsxwkV5mhJ3CGDwBQvHq3dNp1qrnaMaqAawn8ZpMTtE/lVr6AlzQ4MA06M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=RG9rHs/1; arc=fail smtp.client-ip=40.107.96.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MHTFS1eUrerodQhXUUPJGbN868kua0nhoaFwhdIUIXHSkWBrR/wpWamxjpD8glRZde04HVc2Qu7LwPvoijK5qd8RnvfApu/FTcqM8MukzzjYIJTUCFH/f+SOWlQx9ZXZ0CuyY9XdHUsxY21mG4ESOSw4lelkDY0uN5t4QG9QL1aQsVVszV9n6NATTvkLkpqCoN4O2thrpilaexxyq3NkH/03mUYPfpkT2rkfAwLzz4eRT6gWyn+v83gE+Lsqb9WYku5ceLl87OXd6+gn8dj+ZXBx4v8hC2VtrbnQ5WEEWBBf6JpstMgbIy8anVai6KfgWm7jqp5E2LSJIHtWhxMDBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V4s/ACuvjN8m/9Hy2SmBo1y+mYe3PmOTxdljeZTm/nQ=;
- b=jjHJW4d9Pd7PuPPgpgzI7E/JkdKPQ8h4zoCVM3klVnuFLTorupRnaGT+V/A00LqI3ndeaY59rtOizGH5+3EINmEyUwNkc3YXQ6MD14Ak82IWLeVbUsZ/8XOlGcNZ/l83Tfb/UwNlbfrIQWS8MFHr4AoSAlf2j87ya4eq8AfFE+SdRClHXumMFQybCfhwFo5FvNeORGMuO8wYEiceX7g4t4pe5HEvrxnLXDqwIo3BtvbiWuOV67Qe8XDpzKLn396sKQE3g0vOIC+QVsyefGA9TathwWRNlCVOQMdMEQn71Gm9XoBf6jiQcBrQ26iGMOJUBcaJErU/HIn4cTsFuT+I5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V4s/ACuvjN8m/9Hy2SmBo1y+mYe3PmOTxdljeZTm/nQ=;
- b=RG9rHs/1W9gqExpePrIrwC4TGlXrO37GWtkcls9jAjJeXUIgi2JC6dylxoxfveBmhbcLpcM2d3Iz17XzVEIFg1LbvlkuuM+8IDBsNe123m5FkVGp1Z1RFVpu7erjAmHxsgmS/nUfm67VBieoJ+4I9fRtTOFO7F5MWdUS4+hqPxk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DS7PR12MB5909.namprd12.prod.outlook.com (2603:10b6:8:7a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Tue, 11 Jun
- 2024 21:35:51 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%4]) with mapi id 15.20.7633.036; Tue, 11 Jun 2024
- 21:35:51 +0000
-Message-ID: <d8de3761-6fa1-477e-8ed8-71abf115eb60@amd.com>
-Date: Tue, 11 Jun 2024 16:35:49 -0500
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>
-From: Mario Limonciello <mario.limonciello@amd.com>
-Subject: AMD-Pstate new content for v6.11 (2024-06-11)
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0120.namprd04.prod.outlook.com
- (2603:10b6:806:122::35) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63514150991;
+	Tue, 11 Jun 2024 21:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718142674; cv=none; b=rLeJ/CjVOi1+SPjaCPwHTXDw3cROr431Tc0Blui9shUyL2Gg6M4rscnsUZJfZtrO2U0sAR8kRecC1eYsHV6fu+hTEdH3MHKX+BQopsy8C0FxPUaxIB2ahZ/7cJtq0R+Knq6ulw9ZOE+BSkNDjoKD5M91ZcDpKsJTSonNBefEBhs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718142674; c=relaxed/simple;
+	bh=42Iml4V95zjMoBT1V5V/Ymqx61gKN29WZ3TouJ7dEK8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cuH59xACuWyfx49KCGZZbvWCCR9NiyuXSjIiwkKMMzx9zxngvT8WMU8jvv6OtGZs3QJzfBx8U+vGc0dOHd3QsP7wtaKlrHiXxRfPR6lIVvxu+lj0mqu5/WKfUybgBkG7HZ85VKexHTHn9XD4b+3rR6A3G4dSKePpTx/Z+6HYnWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j7A72MhG; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718142673; x=1749678673;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=42Iml4V95zjMoBT1V5V/Ymqx61gKN29WZ3TouJ7dEK8=;
+  b=j7A72MhGYnbn0KHIsKWWgL307I7gBqPWsWum3/dvj1TL0UwGyO18wFl5
+   zs031GDn9rmLJhQ4nMDzfs3z0M8JHFqSfH88NDeM7N48e/vXHHHYHGsqz
+   gqg0kp7CLHEJ8PK1Of2sZIEZAVbHYgkrKPsTu50Sb5DACarvAtS8BwXFp
+   TNQkxdR2COs9T2xJXyAm1PB8pIAvy87QwQc496F0Udi8MLQGWJnLZrhVy
+   Adc+NAx3mB6IsI22SIK02sgVuUj2o659MiQaur3gO9uPwuobgcZ8AvI9A
+   S95rcyLD9kavf8CymAN661diVoqgiug09hjuiGPfE9q2szxQObIVJGjfR
+   A==;
+X-CSE-ConnectionGUID: Db5oPGMiR6aRAs7bheZEDQ==
+X-CSE-MsgGUID: 6U7/dh7RQuK5czC7NCndTQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11100"; a="18661307"
+X-IronPort-AV: E=Sophos;i="6.08,231,1712646000"; 
+   d="scan'208";a="18661307"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2024 14:51:12 -0700
+X-CSE-ConnectionGUID: XcExuu34Qe6iRxYnIi5l5w==
+X-CSE-MsgGUID: lmcuSoDFSzahsNTh2PtImw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,231,1712646000"; 
+   d="scan'208";a="40281895"
+Received: from lkp-server01.sh.intel.com (HELO 628d7d8b9fc6) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 11 Jun 2024 14:51:10 -0700
+Received: from kbuild by 628d7d8b9fc6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sH9OV-0000wG-0a;
+	Tue, 11 Jun 2024 21:51:07 +0000
+Date: Wed, 12 Jun 2024 05:50:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: PoShao Chen <poshao.chen@mediatek.com>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, rafael@kernel.org,
+	viresh.kumar@linaro.org
+Cc: oe-kbuild-all@lists.linux.dev, clive.lin@mediatek.com,
+	ccj.yeh@mediatek.com, ching-hao.hsu@mediatek.com,
+	poshao.chen@mediatek.com
+Subject: Re: [PATCH] cpufreq: Fix per-policy boost behavior after CPU hotplug
+Message-ID: <202406120519.mhrkBEkJ-lkp@intel.com>
+References: <20240611115920.28665-1-poshao.chen@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS7PR12MB5909:EE_
-X-MS-Office365-Filtering-Correlation-Id: b4e15c40-ae2d-467d-c274-08dc8a5e772a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230032|376006|366008|1800799016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?T0U4T0NwLyt5WDk2RnJxSVoyVkVvY25yWjdhc2R2Z2FwNW9pZkM3QkNlVW9a?=
- =?utf-8?B?Y0FMOEh5bzB2dXFLaHh6UXFSdTdWSWdyS0xZRjdlYktqMERqTGMzVjVwNE82?=
- =?utf-8?B?dThOZXZxdGlYNmdyVUMrVXgrbHdHaENpYm02MmUwTlJZR1BwcUFPakU4empL?=
- =?utf-8?B?YzF4cURZelZHL3VaVVJlNmJvaGpCVXc5KzkzSit1WXVkaWtaMEtHL042MlJq?=
- =?utf-8?B?OVBmeHl3anY1SVhUVXhLcmdJelY0ZXBJNnRGK2h5RlpBTkZTbjJ5aFdlSDVh?=
- =?utf-8?B?QkJ5OFZSeUMzTjI3N1VZWVVLZGUwck5WY2oxdWJvbU9IU3Z0dnMyUmF6dHdU?=
- =?utf-8?B?d1E0WVZoOGJ1M3E0QWRKamRSbEFWbUhnY1JId1FtblA5SlpBRFAxVngwSER2?=
- =?utf-8?B?U1dQVU1zMDZKdzZmT1NCOEt3YXk5aVFJbVdvL1BxTW51K0M2WE1JZVpCdk1V?=
- =?utf-8?B?TlJGNmJaVS93N1lubkF1b0dQbW1kUmhLTEVXNlRlbnQ4QUxQMCs0RG5CL0dp?=
- =?utf-8?B?Rk9Sb3BhUkwwN1ZXZGlUUGE5WUhrV3RLRkh4QUNRd3MrZndGZDF0N1Z4c3dS?=
- =?utf-8?B?Y0RrcjZzUENxR2ZvLzZjM2hwSEEwWWZQS1lyT0ZPcy9MZ1o5UHdlYURzMFpG?=
- =?utf-8?B?VnBLOVJGbDdza2NNQUg2czNoTW9TK0hadm14Yys4aHIwNGcxN2paVWVrZEJX?=
- =?utf-8?B?VzRUbk1XVXlIU1VndFdZSWVFWXdFVDAvN0RzekpPc3pmU1dCdHZPZ1YwUjZ3?=
- =?utf-8?B?UmlydjRqMERUdmhmUUdYVDVVWEtRUHdqSHRtczFBeTdZM0lCamVUNHkxQ1M4?=
- =?utf-8?B?U01HTVFDTUxIN2dlaHVVTHd4ZDJxQW90VVRhMU5JMlNnQktjV0JYbG9EWkxL?=
- =?utf-8?B?aC9BNjhJM3dJR01MSitsem1TdTFPb01UeTZ4UlBFYVdDTDM3RllVb0xybDA1?=
- =?utf-8?B?YUgwaENXb2JNcTJiWk9XVW9mUnRtT25uQmRXK09QWWNra2x3UTZFUGxxOU9X?=
- =?utf-8?B?d20yRStxWFBnTzU4ZWMyaXg3RlVkemFIVFkvYzV1UU5YenpOSTU0V016SGVR?=
- =?utf-8?B?OXBHdU1lZmVZeW5aS3V4cEE5WURYZmtuMzhQcloxWEhmVGdIVVM3MXhnbXNO?=
- =?utf-8?B?NVUrTTBzcktiRTAxVnM0VzJ1ejcvSTFwaXZEY2ZaUW5UL1VybVF1NWhvTEkw?=
- =?utf-8?B?R0UrNSsxYWRmUkxCbEFiQVRTMC90d1QrYW92ZHpPMTdGR0RqRlF2YUJuSDFt?=
- =?utf-8?B?V2RPNVdybHk4MHlJK2pXUTI5ditMLzdQUit5RlZFTnJocXJSVDN4VXdRbWVY?=
- =?utf-8?B?STY2SERvZzVwWjhpTzdOSkVMNWZ5MDZaVWliOHB1QVQ3aHoyT0VOVkdXYmFE?=
- =?utf-8?B?R2JpVytWSkl0YTIwRU53NmhjaXZnbEk2QzVQSkllUnJZaWpkcndXUkprZkVO?=
- =?utf-8?B?VFlKN0dQRkkwV0JsNWtIMjBIeVNxbEg4YWRjVklGcnFlMU1Ud3c1U2NBdnU5?=
- =?utf-8?B?S1NFdElDc1lVYlFXM3NYVS9qTGZzcjdjMmxZd25yVFVuNVFTZERpMG1CcEli?=
- =?utf-8?B?WjZ0bm5kbG92YXJxMnFFeVhVNFhMOHNsSEZ0M09WOWtZT2VvdzR3ZmpHMVAv?=
- =?utf-8?B?MWh4N1R2QjZncnBCVENrN1Ftd2FidzZLaEpOenV1LzgyWnd3aDF2VGgyblZU?=
- =?utf-8?B?aEZSbXdtenZteEVJSGhKYXVvcGhCMUxiVFp5SmNHUFBFdkFNWk9TbXZKWVpq?=
- =?utf-8?Q?6Z269RVJSwUQBzWjA84aS+Xg79cfQ5PJeIbI0ou?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230032)(376006)(366008)(1800799016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S1NJZzJOVGtQbk9OTXhnQWc0YWNVbm1oN1doMGxKYkdyQnJIY3dRRGVlWjZh?=
- =?utf-8?B?bEN6M0JmZGNXM0NBUHp2aEp3eFA4djJ6dVJ2bjh2bW9jZmI3M2EyVHJsYnNV?=
- =?utf-8?B?bUprL1E3Y2FOVkx2dlFKYjREc0lvSVhydC9lQnlaRWdUWHFRLzV2UW82S2N4?=
- =?utf-8?B?dGpCTlc0aVpHc1FSelIvdHBIbDBMQ01QdFJENHV2Yy9aMGIrV3ZLdjAxNmto?=
- =?utf-8?B?UG9KTHlac09PY3VoZ3FpMlBHU1dlQzFVSzE4ZE9idUtGeU5RZE1vNVY4bGY4?=
- =?utf-8?B?VlpBQWF4QU8vSzVCS0ZWK3RJeVZLdGwzR3g3eHVCSit6Zkc5cGRCTXpFTWh0?=
- =?utf-8?B?WFN1czVRZGhsZ3dMRDNVUlNKVkprM1A4dFZKd3c2S2FIWE1QVHlXa1lWTXlz?=
- =?utf-8?B?T0ZvNC8zZzlNTURRdTljMThGRk92Yjdha3BtQ3VqaGpJYlhrSzRzenpRTW9U?=
- =?utf-8?B?M0lPUlpIZTVONlBJUTh0bUJydzZCOUlmVy9rdHVxd1RaeVdrQzdCVEh1TGtO?=
- =?utf-8?B?SXd3QlBjZHpLUGdVTHcxWHRNaUd6ajlrYkprVzluMHBCSUVCS3BCMWREeTVJ?=
- =?utf-8?B?OEo4aU5MZGF6MGhJeHFUYkxoZmI5RXExK3dPdEJJVmJERzE4V01LOGs0Ykg3?=
- =?utf-8?B?UjVQK2JOMnQ5dGNJbGVSOE1MTUlxam85enJUc2Z0a2t4ZFMyYTJwd3VXclYy?=
- =?utf-8?B?cFl4ZVBuTDV1R3F1ZlBsOGpSTjJKZ0d0c1ZsQy9PYVJ4aC9qNm56aDQ2OFpi?=
- =?utf-8?B?Sk1HZGxJRW5STXBPVGd2c1FMZ0N6YVpwQVZublpDS3lFMVBzUDM3VGpJbnFo?=
- =?utf-8?B?eFdkQ0x0ZmFLaFVyS1R2RkRobUplc1QzSjFoTG5xM1hPREpHWlNia2o0TVNZ?=
- =?utf-8?B?MG1FaEMvVCsyRmdZWk54aXdGWWVEQXFkUjQwQ2ZZVFRKc0hsTHAxUTdEbEp6?=
- =?utf-8?B?VFcrejFvWHJILzJCNml6MW8yZnYvNTlJU1RqSmV1anFjd3FQdzh5S1VFamV3?=
- =?utf-8?B?enZtcTRlcG10MWJXdnlYRC8xN1NhcFBxalhBYXRpUm9rZzNPaWx0ZHpaRzlE?=
- =?utf-8?B?dlNIK0VZeWVZNTRZMlorT2RFeW5GREhmMlZldFludkwya0dHMjYwU2VKRjY2?=
- =?utf-8?B?YkxYRzM0bnZUcTdMNFEwcUppd3Rkb0RiWS83NFRNMGlwMmo3eHNOcEs2amdD?=
- =?utf-8?B?VVZKMW92aExlQTBlNHdXVzdTRURaNXpydTFCeGZmUWE5YzFIV3hHWHF4WHA3?=
- =?utf-8?B?ZG1ZMVFCOGZ6VFRPRXpwc3N6eFJqV1VUak9JbzAxVkVsNE4xZG1jSFNWcUY1?=
- =?utf-8?B?RDNHKzJaYVRwRndpZlcxUXhCZTc3SDRJcUlRRldXekZqRk0rakdmMGsreTRF?=
- =?utf-8?B?WWwyQ3pJOVdqZWMzOGtWQ21WcnRiTU4xRE02VU1OODRTbDExUmFObTR4ZGc4?=
- =?utf-8?B?V20wVzBCNkVucXVqaDBxOE9SZGF6VHg5d01LaTZsUFplb2JjT2F0emxwcHBF?=
- =?utf-8?B?Y3NWRytmdVFkeDlRV1RoK1lzb1h6WjNjK1ZUcGZoTFFCSzMwOHVnU3ZCeGND?=
- =?utf-8?B?Z3dJK3VpcGR6eGhEUFhrZGZtbTh6MXJydUliWmxhQnU5YlZoL0txcHdTL0tj?=
- =?utf-8?B?UUVzSE9kZlBBbC9ITTFNdXVrRDlyUEwrNFA1SU5nYWc0bFZjM1pVSFVTRTdp?=
- =?utf-8?B?VFY1MXFzUkxJQzJ1bXhSQzdiR0ErNko0clVJYjdVUjhlOWdYNHN0YVhYODRk?=
- =?utf-8?B?RFVGTlhzdnNrSHJsWUtvVXB3Q0U2aGhhdmo5akdQOVRXcmhGNElUMUd6clJG?=
- =?utf-8?B?ZHNCLy9EcjNKR2pKdnFzTVVFYzdTVExVN1JFODNTb1MwQ1h0Q0JybDJJNk1l?=
- =?utf-8?B?c0FHdTczdXlFTEE4TklVV3Q4UUZ0eEYrZW4wNDBadklxZWJCSlRHL2lEM2t1?=
- =?utf-8?B?SE5tNmlCVm4vVkZ2YmM2ZlJvTU5qQ3RGMUtKUVJJZ25NYjRLK21SWlFsbTZS?=
- =?utf-8?B?aGVDZk0yd1BtZ1VpMytIY09BMk05VGtOSEFSc2lhaWlNVjVJclNEQVJiWDNi?=
- =?utf-8?B?a29XRDlyS3E2OURtTnlnQ0xRRXk4aWxsc2RpOUorMnNTcEhIU0s3MXd3V21X?=
- =?utf-8?Q?CBgI/V3of7HlYmckkcQ8f1fp+?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4e15c40-ae2d-467d-c274-08dc8a5e772a
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2024 21:35:51.2170
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L61Gb7d5IaCXFPSEqKNGv0XODQQ5dpsHrffhANgnmpygKTcxpHYd5hf51XKSS0XZNzmZ6h/F3SzDLkLBjpVwNQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5909
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240611115920.28665-1-poshao.chen@mediatek.com>
 
-The following changes since commit 83a7eefedc9b56fe7bfeff13b6c7356688ffa670:
+Hi PoShao,
 
-   Linux 6.10-rc3 (2024-06-09 14:19:43 -0700)
+kernel test robot noticed the following build errors:
 
-are available in the Git repository at:
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.10-rc3 next-20240611]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- 
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git 
-tags/amd-pstate-v6.11-2024-06-11
+url:    https://github.com/intel-lab-lkp/linux/commits/PoShao-Chen/cpufreq-Fix-per-policy-boost-behavior-after-CPU-hotplug/20240611-200804
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20240611115920.28665-1-poshao.chen%40mediatek.com
+patch subject: [PATCH] cpufreq: Fix per-policy boost behavior after CPU hotplug
+config: sh-defconfig (https://download.01.org/0day-ci/archive/20240612/202406120519.mhrkBEkJ-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240612/202406120519.mhrkBEkJ-lkp@intel.com/reproduce)
 
-for you to fetch changes up to c00d476cbcef4cbcf0c7db8944df7e98a36bdbfa:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406120519.mhrkBEkJ-lkp@intel.com/
 
-   cpufreq: amd-pstate: change cpu freq transition delay for some models 
-(2024-06-11 16:12:12 -0500)
+All error/warnings (new ones prefixed by >>):
 
-----------------------------------------------------------------
-Add support for "Fast CPPC" which allows some CPUs to operate a tighter
-loop for passive mode.
+   drivers/cpufreq/cpufreq.c: In function 'cpufreq_online':
+   drivers/cpufreq/cpufreq.c:1515:41: warning: missing terminating " character
+    1515 |                                 pr_info("%s: per-policy boost flag mirror the cpufreq_driver
+         |                                         ^
+   drivers/cpufreq/cpufreq.c:1516:48: warning: missing terminating " character
+    1516 |                                         boost\n", __func__);
+         |                                                ^
+   drivers/cpufreq/cpufreq.c:1522:48: warning: missing terminating " character
+    1522 |                                         pr_err("%s: per-policy boost flag mirror the cpufreq_driver
+         |                                                ^
+   drivers/cpufreq/cpufreq.c:1523:63: warning: missing terminating " character
+    1523 |                                                 boost failed\n", __func__);
+         |                                                               ^
+>> drivers/cpufreq/cpufreq.c:3092:34: error: unterminated argument list invoking macro "pr_info"
+    3092 | core_initcall(cpufreq_core_init);
+         |                                  ^
+>> drivers/cpufreq/cpufreq.c:1515:33: error: 'pr_info' undeclared (first use in this function); did you mean 'qc_info'?
+    1515 |                                 pr_info("%s: per-policy boost flag mirror the cpufreq_driver
+         |                                 ^~~~~~~
+         |                                 qc_info
+   drivers/cpufreq/cpufreq.c:1515:33: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/cpufreq/cpufreq.c:1515:40: error: expected ';' at end of input
+    1515 |                                 pr_info("%s: per-policy boost flag mirror the cpufreq_driver
+         |                                        ^
+         |                                        ;
+   ......
+>> drivers/cpufreq/cpufreq.c:1515:33: error: expected declaration or statement at end of input
+    1515 |                                 pr_info("%s: per-policy boost flag mirror the cpufreq_driver
+         |                                 ^~~~~~~
+>> drivers/cpufreq/cpufreq.c:1515:33: error: expected declaration or statement at end of input
+>> drivers/cpufreq/cpufreq.c:1515:33: error: expected declaration or statement at end of input
+>> drivers/cpufreq/cpufreq.c:1515:33: error: expected declaration or statement at end of input
+>> drivers/cpufreq/cpufreq.c:1493:25: error: label 'out_destroy_policy' used but not defined
+    1493 |                         goto out_destroy_policy;
+         |                         ^~~~
+>> drivers/cpufreq/cpufreq.c:1443:25: error: label 'out_offline_policy' used but not defined
+    1443 |                         goto out_offline_policy;
+         |                         ^~~~
+>> drivers/cpufreq/cpufreq.c:1430:25: error: label 'out_free_policy' used but not defined
+    1430 |                         goto out_free_policy;
+         |                         ^~~~
+>> drivers/cpufreq/cpufreq.c:1417:25: error: label 'out_exit_policy' used but not defined
+    1417 |                         goto out_exit_policy;
+         |                         ^~~~
+>> drivers/cpufreq/cpufreq.c:1383:23: warning: unused variable 'flags' [-Wunused-variable]
+    1383 |         unsigned long flags;
+         |                       ^~~~~
+   drivers/cpufreq/cpufreq.c: At top level:
+>> drivers/cpufreq/cpufreq.c:82:21: warning: '__cpufreq_get' used but never defined
+      82 | static unsigned int __cpufreq_get(struct cpufreq_policy *policy);
+         |                     ^~~~~~~~~~~~~
+>> drivers/cpufreq/cpufreq.c:83:12: warning: 'cpufreq_init_governor' declared 'static' but never defined [-Wunused-function]
+      83 | static int cpufreq_init_governor(struct cpufreq_policy *policy);
+         |            ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/cpufreq/cpufreq.c:84:13: warning: 'cpufreq_exit_governor' declared 'static' but never defined [-Wunused-function]
+      84 | static void cpufreq_exit_governor(struct cpufreq_policy *policy);
+         |             ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/cpufreq/cpufreq.c:85:13: warning: 'cpufreq_governor_limits' declared 'static' but never defined [-Wunused-function]
+      85 | static void cpufreq_governor_limits(struct cpufreq_policy *policy);
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/cpufreq/cpufreq.c:86:12: warning: 'cpufreq_set_policy' used but never defined
+      86 | static int cpufreq_set_policy(struct cpufreq_policy *policy,
+         |            ^~~~~~~~~~~~~~~~~~
+>> drivers/cpufreq/cpufreq.c:89:13: warning: 'cpufreq_boost_supported' used but never defined
+      89 | static bool cpufreq_boost_supported(void);
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/cpufreq/cpufreq.c:1379:12: warning: 'cpufreq_online' defined but not used [-Wunused-function]
+    1379 | static int cpufreq_online(unsigned int cpu)
+         |            ^~~~~~~~~~~~~~
+>> drivers/cpufreq/cpufreq.c:1330:13: warning: 'cpufreq_policy_free' defined but not used [-Wunused-function]
+    1330 | static void cpufreq_policy_free(struct cpufreq_policy *policy)
+         |             ^~~~~~~~~~~~~~~~~~~
+   drivers/cpufreq/cpufreq.c:1115:12: warning: 'cpufreq_init_policy' defined but not used [-Wunused-function]
+    1115 | static int cpufreq_init_policy(struct cpufreq_policy *policy)
+         |            ^~~~~~~~~~~~~~~~~~~
+   drivers/cpufreq/cpufreq.c:1077:12: warning: 'cpufreq_add_dev_interface' defined but not used [-Wunused-function]
+    1077 | static int cpufreq_add_dev_interface(struct cpufreq_policy *policy)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/cpufreq/cpufreq.c:1069:13: warning: 'remove_cpu_dev_symlink' defined but not used [-Wunused-function]
+    1069 | static void remove_cpu_dev_symlink(struct cpufreq_policy *policy, int cpu,
+         |             ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/cpufreq/cpufreq.c:18:
+   drivers/cpufreq/cpufreq.c:634:22: warning: 'boost' defined but not used [-Wunused-variable]
+     634 | define_one_global_rw(boost);
+         |                      ^~~~~
+   include/linux/cpufreq.h:332:30: note: in definition of macro 'define_one_global_rw'
+     332 | static struct kobj_attribute _name =            \
+         |                              ^~~~~
+   drivers/cpufreq/cpufreq.c:69:13: warning: 'cpufreq_suspended' defined but not used [-Wunused-variable]
+      69 | static bool cpufreq_suspended;
+         |             ^~~~~~~~~~~~~~~~~
 
-----------------------------------------------------------------
-Perry Yuan (1):
-       x86/cpufeatures: Add AMD FAST CPPC feature flag
 
-Xiaojian Du (1):
-       cpufreq: amd-pstate: change cpu freq transition delay for some models
+vim +/pr_info +3092 drivers/cpufreq/cpufreq.c
 
-  arch/x86/include/asm/cpufeatures.h | 1 +
-  arch/x86/kernel/cpu/scattered.c    | 1 +
-  drivers/cpufreq/amd-pstate.c       | 9 +++++++--
-  3 files changed, 9 insertions(+), 2 deletions(-)
+5a01f2e8f3ac13 Venkatesh Pallipadi   2007-02-05  3069  
+5a01f2e8f3ac13 Venkatesh Pallipadi   2007-02-05  3070  static int __init cpufreq_core_init(void)
+5a01f2e8f3ac13 Venkatesh Pallipadi   2007-02-05  3071  {
+8412b4563e5910 Quentin Perret        2020-06-29  3072  	struct cpufreq_governor *gov = cpufreq_default_governor();
+2744a63c1aec32 Greg Kroah-Hartman    2023-03-13  3073  	struct device *dev_root;
+8412b4563e5910 Quentin Perret        2020-06-29  3074  
+a7b422cda5084d Konrad Rzeszutek Wilk 2012-03-13  3075  	if (cpufreq_disabled())
+a7b422cda5084d Konrad Rzeszutek Wilk 2012-03-13  3076  		return -ENODEV;
+a7b422cda5084d Konrad Rzeszutek Wilk 2012-03-13  3077  
+2744a63c1aec32 Greg Kroah-Hartman    2023-03-13  3078  	dev_root = bus_get_dev_root(&cpu_subsys);
+2744a63c1aec32 Greg Kroah-Hartman    2023-03-13  3079  	if (dev_root) {
+2744a63c1aec32 Greg Kroah-Hartman    2023-03-13  3080  		cpufreq_global_kobject = kobject_create_and_add("cpufreq", &dev_root->kobj);
+2744a63c1aec32 Greg Kroah-Hartman    2023-03-13  3081  		put_device(dev_root);
+2744a63c1aec32 Greg Kroah-Hartman    2023-03-13  3082  	}
+8aa84ad8d6c740 Thomas Renninger      2009-07-24  3083  	BUG_ON(!cpufreq_global_kobject);
+8aa84ad8d6c740 Thomas Renninger      2009-07-24  3084  
+8412b4563e5910 Quentin Perret        2020-06-29  3085  	if (!strlen(default_governor))
+0faf84caee63a5 Justin Stitt          2023-09-13  3086  		strscpy(default_governor, gov->name, CPUFREQ_NAME_LEN);
+8412b4563e5910 Quentin Perret        2020-06-29  3087  
+5a01f2e8f3ac13 Venkatesh Pallipadi   2007-02-05  3088  	return 0;
+5a01f2e8f3ac13 Venkatesh Pallipadi   2007-02-05  3089  }
+d82f26925599ca Len Brown             2017-02-28  3090  module_param(off, int, 0444);
+8412b4563e5910 Quentin Perret        2020-06-29  3091  module_param_string(default_governor, default_governor, CPUFREQ_NAME_LEN, 0444);
+5a01f2e8f3ac13 Venkatesh Pallipadi   2007-02-05 @3092  core_initcall(cpufreq_core_init);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
