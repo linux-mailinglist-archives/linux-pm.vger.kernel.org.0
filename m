@@ -1,112 +1,85 @@
-Return-Path: <linux-pm+bounces-8910-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8911-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F159D903264
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 08:21:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B1EA9032C1
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 08:34:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB1581F22A16
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 06:21:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2831BB234C1
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 06:33:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF6D6171E44;
-	Tue, 11 Jun 2024 06:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A0F171E40;
+	Tue, 11 Jun 2024 06:32:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="dUSA/8Oc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OT+LPql6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF644171671;
-	Tue, 11 Jun 2024 06:21:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B23B171647;
+	Tue, 11 Jun 2024 06:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718086891; cv=none; b=FL+X8yj+Thm3eMBRIIrHbR61uj0PbDFvWea4yqgoi9oLGhATbyCKGE5HNRwD6H7ptin+JN/3nu51Bb5F+cDxyAD5vR3a72xwkGTs9I7uejuduFi6Geyd20nm5/xrP4Z6BCKIkj5g1bc6VmuaOj7Dsukq1cXa2nG9vPjeF5KHlHE=
+	t=1718087563; cv=none; b=SCLos/GoGx1uufKcWmlqNC9pl+cLnP0K92HJugBxJdyF/KZgSc74pU0j3NP8tvReYbwr4HCYpv4MqvqghiL2g1h4ypyxfCm2w1NkOGC+YjyGIOfTZ1FhFrxYSaiXhEAm5ECh5FLpLRC/dglRWOB0jBqRcISu8dOv8FwP5pdMDzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718086891; c=relaxed/simple;
-	bh=7y3NYO7po3GNFMmc0kZoJTChSE95BDnqvwukper8rhg=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oUqjYzxt5qAFHPRtlje8vmwwKtX+6ZPqr+k7jTnDmtmr29f22mUwimWAhFsCV3kQUviSL8M5XNEIQafDOyGh7bll0HcylqBZhgEYhDCWMKm2UOwR2Urp1pJGcmRQpEdTFY37gC1+1K3hWprMgnacemx9UBTlj5L/fz8m07nEExI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=dUSA/8Oc; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45B6L4gX126284;
-	Tue, 11 Jun 2024 01:21:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1718086864;
-	bh=CP+LDdPyvvolLB5E7oanQuL7LYswwkSefkdI+mxK7sA=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=dUSA/8OcxlFnu1uvIxYLxrjjFdJspH3GiAkjgxm+/kKM93I9AnPU5/71ab8pqJnvy
-	 KLB6/bMkcskPcff+lhPDHYLqK2zNJ750UHRTHgXtogv6tMoF9JuiYPFX30/6Ob4w+e
-	 mPyIJl/H5DSmfd111XhCyNeNkPnBAoRWsi9xKhSc=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45B6L46g032093
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 11 Jun 2024 01:21:04 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 11
- Jun 2024 01:21:03 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 11 Jun 2024 01:21:04 -0500
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45B6L3Tj069287;
-	Tue, 11 Jun 2024 01:21:03 -0500
-Date: Tue, 11 Jun 2024 11:51:02 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Andrew Davis <afd@ti.com>
-CC: Sebastian Reichel <sre@kernel.org>,
-        Florian Fainelli
-	<florian.fainelli@broadcom.com>,
-        Broadcom internal kernel review list
-	<bcm-kernel-feedback-list@broadcom.com>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/5] power: reset: brcmstb: Do not go into infinite loop
- if reset fails
-Message-ID: <20240611062102.ez66rcvf4d464oqz@dhruva>
-References: <20240610142836.168603-1-afd@ti.com>
- <20240610142836.168603-5-afd@ti.com>
+	s=arc-20240116; t=1718087563; c=relaxed/simple;
+	bh=27itxGlfcgEv3PcvLTnBGYHx7ycnbMROORcs9t+26e8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ONoOcPqVy/KRxlenX+wcIzyaKtzJ9L9DwGeujdJd9sAS9TSZOqzmSdZ03kV63EkmJoKFYDiQ/ORaqVAGlV3jLwGK5EBFeFBVNX8xaV3FC8M/OpWo4T/NS0NB+IH0jl5t9OgnekBxcBViO3FJrqojTWTY/nbB6gFpywzCHHqnSAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OT+LPql6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC46C2BD10;
+	Tue, 11 Jun 2024 06:32:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718087563;
+	bh=27itxGlfcgEv3PcvLTnBGYHx7ycnbMROORcs9t+26e8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OT+LPql6ztvY/rQD/i6nhXnOBYdJBmRK1RgXYIRal1yV4AJA1fyxVQ3f9iqqu8JI+
+	 Ffsl1ygNdFWNixrIwhRLVe1exWzu9bW8A2L/BK8vjdnnw20E5C6Etl0LybemHp+9dF
+	 RIh3/4SnTbBuThPc5M6PsI0jOJQsyNRqgHMyE+eqrw6kiZINZ9aGu4g8/awUHKMBn1
+	 mCxMMA5mtC0+P6kfWKJkQt/NaaA+CQHhUkavWU0TvsL/QcjJefbH/NhYqCkWdeJe/I
+	 Ho7l9OIwaGPpm3PaV87BtbfVTTYMK0Z8mJiQhISOCU4K7kAlGBGTWvZ3D3WF1rGifR
+	 44n1MHb6l1qtQ==
+Date: Tue, 11 Jun 2024 06:32:38 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@weissschuh.net>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Robert Moore <robert.moore@intel.com>,
+	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Dustin Howett <dustin@howett.net>,
+	Stephen Horvath <s.horvath@outlook.com.au>,
+	Rajas Paranjpe <paranjperajas@gmail.com>,
+	linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
+	Matt Hartley <matt.hartley@gmail.com>
+Subject: Re: [PATCH v3 3/5] platform/chrome: cros_ec_proto: Introduce
+ cros_ec_cmd_versions()
+Message-ID: <ZmfvhvcjTbjOSp4f@google.com>
+References: <20240610-cros_ec-charge-control-v3-0-135e37252094@weissschuh.net>
+ <20240610-cros_ec-charge-control-v3-3-135e37252094@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240610142836.168603-5-afd@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240610-cros_ec-charge-control-v3-3-135e37252094@weissschuh.net>
 
-On Jun 10, 2024 at 09:28:36 -0500, Andrew Davis wrote:
-> There may be other backup reset methods available, do not halt
-> here so that other reset methods can be tried.
+On Mon, Jun 10, 2024 at 05:51:08PM +0200, Thomas Weißschuh wrote:
+> If the command is not supported at all the EC returns
+> -EINVAL/EC_RES_INVALID_PARAMS.
 > 
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
->  drivers/power/reset/brcmstb-reboot.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/power/reset/brcmstb-reboot.c b/drivers/power/reset/brcmstb-reboot.c
-> index 59ed1513cfb30..441b44e0a9f29 100644
-> --- a/drivers/power/reset/brcmstb-reboot.c
-> +++ b/drivers/power/reset/brcmstb-reboot.c
-> @@ -58,9 +58,6 @@ static int brcmstb_restart_handler(struct sys_off_data *data)
->  		return NOTIFY_DONE;
->  	}
->  
-> -	while (1)
-> -		;
-> -
+> This error is translated into an empty version mask as that is easier to
+> handle for callers and they don't need to know about the error details.
 
-I agree, while (1) may not be the best thing to do here.
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
--- 
-Best regards,
-Dhruva
+I'm not sure whether the behavior is what we want or not as existing
+EC_CMD_GET_CMD_VERSIONS usages don't have it.
 
