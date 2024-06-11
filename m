@@ -1,280 +1,203 @@
-Return-Path: <linux-pm+bounces-8947-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8948-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B600903D92
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 15:37:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52007903DC6
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 15:42:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7E04281170
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 13:37:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5639F1C20B89
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2024 13:42:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7B6717C7AC;
-	Tue, 11 Jun 2024 13:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B63E17D348;
+	Tue, 11 Jun 2024 13:41:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hdMk31pY"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WizT/dsh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outbound.mail.protection.outlook.com (mail-dm6nam11on2081.outbound.protection.outlook.com [40.107.223.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3727347F7A
-	for <linux-pm@vger.kernel.org>; Tue, 11 Jun 2024 13:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718113046; cv=none; b=IxdhHCuQMNpSSy/1In14PR3pEocWKPkwJzFt4L3/R8RNhWbDv11W7rCDnX4n+GhOR6qt2a8duUWhwjW8rPfRc5PZViLZa9cuoCUU7+RLDeHthtdZ1hSab1gWuUH+eIfN4NEsA/DnTFMspDTCgmpAkSaZUWAYY9oOZssz5hKfJVs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718113046; c=relaxed/simple;
-	bh=uClWVkm9RxsLs+EfbggJIY5JpBEtxoQIUWpWC/sz2K0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fgOvfuQTjaV/5JHT0DFqMW1qDD9F1+/Td0PsEc6oBPpGoonLdJIasyvbyvKrkoSo/M6eaQHONzj+ferQGaY71fbuvsXh5lVfwqx/FI69F8lx0baPw4bsAyfwYtPmsBmXFmM10R21k6dndiI692EELXDm43nIzaE4qOsaDYhsEJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hdMk31pY; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-6e40d54e4a3so2951970a12.0
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jun 2024 06:37:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718113044; x=1718717844; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MAcDNalbfcX/SooAz1XjppInJxW8mD6aEySBf2LPSno=;
-        b=hdMk31pYtLGSlgRi7MR3YBa6zWjH0WJRD7vPxC1b+83+jWvfGz0EaJsnRpjbUETTQS
-         rUYbzhVppsG7ZZfEarzZ+QyC5tqf+SZtRlqIOoJivYURivTH2knTHfaCEw5UU8VCDpNi
-         NRhtZUoe5bcCLoh0I+HzpLya63BuT118p3+rImAKQW+Q7h+DO/8aYGjWrI4nW9QoDTo9
-         CpL7eOTvkTx2X+ZnLGNwcYTyEzgj/sSJkGoS/sQslc05OUJfNwGvLnSk++tz7XNiQjvT
-         xycnwr3G3GuwTaU8KhRavJK3gkErjJcHP6GSphk9nVzk4w7lU+f/bmfGm5OwC8l9130d
-         cVHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718113044; x=1718717844;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MAcDNalbfcX/SooAz1XjppInJxW8mD6aEySBf2LPSno=;
-        b=Nuy9P/mbzFnNCm5MG6sXRXQaRQfuam7YR5y0Yx5qV5BKfbXz1oxEm5sGvDq+cRm5+K
-         y0+OTCwHREejlImUwgB6cWTd7yLq3PkleUo2WocNkXWCRxpC4Y6+qHAJU663knLWboJQ
-         qaDOZZDo9lBqoIizEhH24ZkUcWcY0YR+nP8TvbgE6rIyBkmVG37/EqN8T9WmuY9dJtl7
-         0llRM0hHuYJpahaejqJufZCnZmeNM58j6kdcQf7Y6+q6PqMd9JxmonTrno47e4SuCfqH
-         0L9jseVVoQK/4VHcw0YQzTsnLlpmWOz6Oa5kT3GzR+8YjnYMmpm/7YtASr2o4qS+5QLx
-         UP5Q==
-X-Gm-Message-State: AOJu0YybA9Js4i88lDU+bRthyOu7pzqasreainreypuAY430vqKdDAUa
-	BK5PLwI2j3pfMkWRbFpbxKKccnEb347ge/FrAvA4LUf8lxg6SaO3IJtTT6V16YZ/Z9VIKWXm5na
-	8PgG7YcHTxodA7E4TYO89PSXAeCD6XY1uDPulpw==
-X-Google-Smtp-Source: AGHT+IFs979EGmIWLmkusI/d7SBFQhTqweYDqCK3mffDdw6Ftoj9EB//VarfNSLmbqnD3uT08/vi0tbvTUuy9HnmxdI=
-X-Received: by 2002:a17:90a:d397:b0:2c2:bd1a:4f84 with SMTP id
- 98e67ed59e1d1-2c2bd1a4fb0mr11352008a91.10.1718113044480; Tue, 11 Jun 2024
- 06:37:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F96817D344;
+	Tue, 11 Jun 2024 13:41:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718113301; cv=fail; b=bo5C4H5t8Ryb7KA6cReiftGZDl+v7M9KCha8WjJXlPZn+0r1OPjGqaGwpYbNiNa8cJMf2fTmZH4xzqT3DZJZyHuTkNiFaWxBEoA3i+Erfl9MML84uPoYtXyiq9/AgJ9QZNu8MjsyC3mZ0qagIhmHxHTeVbOzH7N3t/PgFQdFPG4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718113301; c=relaxed/simple;
+	bh=YOqEXew9IU5NLHqJ0l1aB2ilEfBejK5cTtsNXnjal5w=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=q0HAUya9BbHf+QlAn0e+IAxra8ZdRorqtfDUPZ1kadYyonwyaaNo36wGwT/gDpE7csJ/HKmIjSHruEj/GxJeJ5wXuVmNnj68CMNHj8YmkknCNnwY5GH7qXBAlOmL041jRp9IQwbhuk0a/BAx+2+Kp+JYcuW3Cjk9kyIl4qMRMTw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=WizT/dsh; arc=fail smtp.client-ip=40.107.223.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QW3tDCyu7u9Wh2kD/4Cq9NE+LKZKBZBCC/GDToxZtvVYXmpsmzctiVauJC/+RIPleJ/NKBA+4cWwra25YUV5pHcPNXaukXK3Y7Gmiu2emIq1cJgkLGP5O/AlT4/pnd/VrBd4tb1fSHx5wkvVIlidxoAQepvvtpXHT8WH8RQJXcUGIRQRP5dsUwVPNrGBrL8YRbtheftQjrttHHXXo/XAA+zx1Zok/Tn1ouD1pyw1wSlDht+ej1iMrPNt/ru3TX+AkwoP5R/zGCfgKJoaET7k+Bmuc7Yr1H/y4zYuRG2OVL9iD/gobzc6Woarm2iwb5U3dVypWwBODxL99y8XkIOVtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YOqEXew9IU5NLHqJ0l1aB2ilEfBejK5cTtsNXnjal5w=;
+ b=h3ELEptDWGDcRvXpEiRjXxP+vF7ySJkiqpJEVw2rBdREwHyPmXsaHVD3Brc6IvibTzvbJcl922HnOuaww7QrCx6vHk6dAhqef1llBcqhfceyseLL9gOV0P6ahk5he7lEkwFD4wTFeNvHjYIJFhUDf+R2wYESpL4Qytg3PEeMCWiAsLdWTX660nRLfaVgGhR0ztlqK5lKn0RU9/IlsUkk7P7tAft5dd7aQ70C+igNzgpyfOuUUFkxordeVUeRuf3h+SGfcXN+6+K/zHezjRySp7V7TDSlXpax5OuSPKYei0HyQLezX1989muiFVVSaHDIDaDk5OM7dv59wfRERC/Uvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YOqEXew9IU5NLHqJ0l1aB2ilEfBejK5cTtsNXnjal5w=;
+ b=WizT/dshPAhUXeM7/NeIwm9brUMFuWe6TexyNMH2AYQugyGVbYjQU3fqxECGTpUaaSK1qZ8otpaCpAmyGM81V2wXttyh41nnBAnsOGT9tt/Hh6LEg+vd9LI9yJBByRZNRt7TVfytQVL+34hNvNKbFw3nNMyzviOyM1pbFcrgeiudWZdfw1Z+Y/rhbvGl6snAhURzG8yuLKaJ08vyu/fPQVZIf0VptVHyMNmGcAXOJYKvw/CqRHOUSeDaIU6Br7SJDXUh350xg40CqAhDJ5aPKt3ER1JbJZPcHY+hM2/9p08fBeUNKv/FH1uKNFPTIbOVlt95zJriBoYnPnCVf4JAqg==
+Received: from PH7PR12MB7282.namprd12.prod.outlook.com (2603:10b6:510:209::7)
+ by DS0PR12MB6581.namprd12.prod.outlook.com (2603:10b6:8:d3::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.37; Tue, 11 Jun
+ 2024 13:41:33 +0000
+Received: from PH7PR12MB7282.namprd12.prod.outlook.com
+ ([fe80::6f03:f851:7f6c:c68d]) by PH7PR12MB7282.namprd12.prod.outlook.com
+ ([fe80::6f03:f851:7f6c:c68d%6]) with mapi id 15.20.7633.036; Tue, 11 Jun 2024
+ 13:41:32 +0000
+From: Asmaa Mnebhi <asmaa@nvidia.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: RE: [PATCH v1 1/1] power: reset: pwr-mlxbf: support graceful shutdown
+Thread-Topic: [PATCH v1 1/1] power: reset: pwr-mlxbf: support graceful
+ shutdown
+Thread-Index: AQHamnYypS12Ry633E+vgoPCPytAfrG6FhwAgAi7v+A=
+Date: Tue, 11 Jun 2024 13:41:32 +0000
+Message-ID:
+ <PH7PR12MB728282B2D097CC45F8CCD88DD7C72@PH7PR12MB7282.namprd12.prod.outlook.com>
+References: <20240429204519.1618-1-asmaa@nvidia.com>
+ <j6nkeh6wyonjuwfznhanfx7i6tpxaxr2tlxami3punkukoslnx@l7w73vgebguw>
+In-Reply-To: <j6nkeh6wyonjuwfznhanfx7i6tpxaxr2tlxami3punkukoslnx@l7w73vgebguw>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR12MB7282:EE_|DS0PR12MB6581:EE_
+x-ms-office365-filtering-correlation-id: 9800d880-c0de-4a6e-d385-08dc8a1c34bc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230031|366007|376005|1800799015|38070700009;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?OnsHIOlyYyMnC3D0tkpBI5WNU8griHQmmrTlyLPopRnBWgIJAmSEC1UXFHNR?=
+ =?us-ascii?Q?8U5BeO/jI2GfiXz72ckEiD8IM+JbmP6zvBdhN+GH5o17coDfMe/ntWps7FoB?=
+ =?us-ascii?Q?+RFvKTnHfm+EZjZ7qX8OItRSdRbKF9FMaPxkMKNxf1d5kfU5tImPpXDl8tS7?=
+ =?us-ascii?Q?0BcZblXU8nAtqDeSFqka6bo4Qe/IGb9XXMFIpwsQzz3l8t81PvJ85YWRPANv?=
+ =?us-ascii?Q?UjbsFGBN5RieCQ09STyh1WAmskKGi4n2Rx21l23ACcUhpA9OCU996ln59Hg0?=
+ =?us-ascii?Q?KzhiKx/39jwOpBAefLpFCKJVl3IxqwpwhOlhlz07ewrb8i9hslVybLc9MRiz?=
+ =?us-ascii?Q?OYXFrEAJp6a0bS9/P2JDKw2rfxLp32zZ5MH4F7pjEXpLyKbPXnUXsx8E5mzj?=
+ =?us-ascii?Q?Rh+DmVTm0es8R/h5baoTuPNooWGkMfBbbdfSh18XJziF4coHkIc0zcIIPKBq?=
+ =?us-ascii?Q?Fjtud6jiOHkdKTgsEttT7KT4l9NtaoB4a7dX7C9BXEgXl7254R6OEii/5wKa?=
+ =?us-ascii?Q?LPW+4O3BdksAcqYR+Oo9YlbkWn3IEcjtEeqxuwD/gXIs10Vv5aABIsJGFO8w?=
+ =?us-ascii?Q?eS3W2VH0CcrSOZbp0tDEt/gBXikkpvNVqOYVgLjYltb6B9ArftHSQdFtQQen?=
+ =?us-ascii?Q?oY44MiB24roF2BVFMt3Rpw0VBX9tfi78l9RXZHcYgrlh3HismUTWcmpO/aXb?=
+ =?us-ascii?Q?to/t10ttn+A1IZW3cEgs213nhDqMHWVbQxL+ZTVaxDGpWEwIVVZPtsQhAu2S?=
+ =?us-ascii?Q?PtIDeKOOgvmKPRYBuHhT19O2jCFn2efgJyCnVmDgF5tYJ9FG7sJ4eFVV0omL?=
+ =?us-ascii?Q?SF6TsZkPxCYLBhjaqekbm29MA10gtMqczKNPZc9qXkVwRRMGod5ZESrXiH6O?=
+ =?us-ascii?Q?m4MY7GuA4YBmQW02i6F80hZ+Fm6sxjXedm9iy7CwNpC7wvpdNgQOfBZhQPqf?=
+ =?us-ascii?Q?yBxxPn3gtsFSgzlOtLQzuzqqSyVUrSfMe2zzN1ai7gxkDTj+0sjRPowrbQzN?=
+ =?us-ascii?Q?bW6lmBA1Ri6KGRAILwDcjW4NLEe4pqN7N6bvAgD8zKDFlUOkxGZSdISkMIvR?=
+ =?us-ascii?Q?VIRYLkrG62h9gd9GxY8TkgCpyckOYtaosyockTuiRhXNIlJY+ePZSn4h1/Am?=
+ =?us-ascii?Q?FsATjRzRE7cuJh8D42GbOSZXXbHqgocEBrm0DnrAZw6s5cqZW7xDXpvdiA22?=
+ =?us-ascii?Q?qrw/MvBxoJRWlQQsKc6KHzTpLtromvnFyeweJcpYuqWi90AGfLizL/GbINZ7?=
+ =?us-ascii?Q?GME1D8bHG0JWM4y8Yg8S5/UnYtsWdDyVPQZXnh08EMSwj89ItFZYPvW2oXVh?=
+ =?us-ascii?Q?eWSWpRy2lstr9tqkdt7fNiSNdj1/gAH/mOmWNF+hK9GhCs4WLxPCWxsQQALi?=
+ =?us-ascii?Q?2ASdSx8=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB7282.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?qPkzzetZ9WlHIGsLlKT04eMVxtlW8eZ8fBMNGlMdV6s+5PGG2UGU9KqjTyhQ?=
+ =?us-ascii?Q?dGrEA24I9wxvdjVnOFKvNVU/n7VOv4R2c/C0doQykkp6QkFGBQSE34Bbd7sY?=
+ =?us-ascii?Q?lQrRdqysfAHmxesk2QTU4vRd5P8Ir/pWeeJBr71+FXcAlF13t7jVq14tItb0?=
+ =?us-ascii?Q?V/dHaDvugqeLulZNHZdwelZ/c1i9z6YF0i3aHZS9rGb+DTKcOcydnJ2MrxYp?=
+ =?us-ascii?Q?kDZB2UwFCKF5g1HEdM2zgOy9AoiDzRFwF2kcMm/jIFvKrYwBJKmEldH+OT9J?=
+ =?us-ascii?Q?l3GhmAbFyiw2iqi5O+LROjFYuOkr4qCZLJrbzTKTe+H7UIU4DTMwF0lfJm4G?=
+ =?us-ascii?Q?884IIvgXmUW9QQBoCRX+oZakv//IcyWlEYcKQRAM2zDzhVQYkqJ41oKzikQ9?=
+ =?us-ascii?Q?h+jLKsbzBel+78qEWX/YS2gLf9qyeUmL5gJ2mxlydkWFVdhX+51HKmD1dIEm?=
+ =?us-ascii?Q?0XYr4pQg09g8m6sNnFv0AkcE57sQjLFUKZvpIBEHoJvpZScgOcSc8+h4Mgr8?=
+ =?us-ascii?Q?je2vaJ7mx1vPvfPua73dkB2YtWq7k821W6gcOg4Oo/WyJLSxUpXBFZfsI3fH?=
+ =?us-ascii?Q?c2y3rqPK42JItcoVEujVRwlVPAGyBiBoeN2b5U9d5iDboN+/h+xYzx1FMWLQ?=
+ =?us-ascii?Q?Vx2dKsFd1xVFi1TmScsj5fl/KPKbbRdqABaOPLNEob3eEhOVzX82J1t0L6ck?=
+ =?us-ascii?Q?2BAKbpBapGluSbqXcozPLSfVEzk905xPxyI6sU4vfiPUyY62cM6PQZIHN/pR?=
+ =?us-ascii?Q?ARou2z55KxhX1cgpLPXO2csoG8Q8tOlwxh2FNm7kCicyoTtdxasAXw5wUNOL?=
+ =?us-ascii?Q?dtbSCuVELZ1vgG/FUXlLRhInbUzxW6YD35/XaHUpSy7JhVnbvIxwDYxfjq+F?=
+ =?us-ascii?Q?+Bdic7FJ3HIzeH3PC5P/DRvojZ/tx8wTqbpMmhaBp8ppBisG96eJZUxmABvp?=
+ =?us-ascii?Q?MwcbsIwFp7J9P6Hp6Zv/nPFPSClfmHkLPnF3SCi+m0GuB0aT4hKSvu0XgdLX?=
+ =?us-ascii?Q?jjGJNNXklPXfbrm8q292MR0z0By3SBEb3hBYWg1NeUzOG5G6zTaPQTJzn1xI?=
+ =?us-ascii?Q?bBfYIqxqorSdOVCdkWFdZ7BIUg36T8Zs1JnBDt6hzD/6BjzE3zfSC9XmEwzO?=
+ =?us-ascii?Q?9Kvo4wKczLcxH9Z6IoHdUspbGsYmovI1vPuGvEcunaMuHvsK6Rp6nOeUe5ID?=
+ =?us-ascii?Q?ShelyKKhZodGhAqHfukg8UFA3Xy+WVXV1Fhqla+lFidTlh6d+wPWTBOOwAJf?=
+ =?us-ascii?Q?FxZjnWGgT5316Ni1TD0Kd7FMQG/1k3dwornPX4L49R/AClbMm6l0woZOXvqE?=
+ =?us-ascii?Q?PIlFfk8O8Wkne5LpxBjsnft1Wjuag77zqhBwgK4W85ptVUZ34dCozLeHisQo?=
+ =?us-ascii?Q?uA9OdfE0wukcPZXZZ6bAwb+yrDypuyqLv3yiVdo2I9Q8Javf55Zx/rwkL4iy?=
+ =?us-ascii?Q?vtM1ZjYgpPfR3pEt9/iuwB2IJ/uFFVQQkOH2ipxNpcfZ5RzWhZO/T+doBn8m?=
+ =?us-ascii?Q?eLyBp1UDKphGTL8g3N7cS4bwQHaM40kS6zbiiZWKEhjhsuD7s/omWDoK6w+D?=
+ =?us-ascii?Q?rABG54cAgR0tAsbGKeM=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240611112413.1241352-1-christian.loehle@arm.com> <20240611112413.1241352-2-christian.loehle@arm.com>
-In-Reply-To: <20240611112413.1241352-2-christian.loehle@arm.com>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Tue, 11 Jun 2024 15:37:12 +0200
-Message-ID: <CAKfTPtC4GZ1LJsGZJ7wie9tus=+hmg1Rg=RaBtwXZxKGL17N9A@mail.gmail.com>
-Subject: Re: [PATCHv2 1/3] Revert: "cpuidle: teo: Introduce util-awareness"
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, rafael@kernel.org, 
-	qyousef@layalina.io, peterz@infradead.org, daniel.lezcano@linaro.org, 
-	ulf.hansson@linaro.org, anna-maria@linutronix.de, kajetan.puchalski@arm.com, 
-	lukasz.luba@arm.com, dietmar.eggemann@arm.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB7282.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9800d880-c0de-4a6e-d385-08dc8a1c34bc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2024 13:41:32.8136
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8jVt9v1Wt/xgghFcJCvEoWGOKKD7yFtfxSsVkuEymSoF9ZCcGbBkIGvrhrvAM4aWpbQyLvX+EZnixx3hujLQXg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6581
 
-On Tue, 11 Jun 2024 at 13:24, Christian Loehle <christian.loehle@arm.com> wrote:
->
-> This reverts commit 9ce0f7c4bc64d820b02a1c53f7e8dba9539f942b.
->
-> Util-awareness was reported to be too aggressive in selecting shallower
-> states. Additionally a single threshold was found to not be suitable
-> for reasoning about sleep length as, for all practical purposes,
-> almost arbitrary sleep lengths are still possible for any load value.
->
-> Fixes: 9ce0f7c4bc64 ("cpuidle: teo: Introduce util-awareness")
-> Reported-by: Qais Yousef <qyousef@layalina.io>
-> Reported-by: Vincent Guittot <vincent.guittot@linaro.org>
+Just sent a new patch with a description.
 
-The spurious wakeups that I reported on my rb5, are gone with this patchset
+Thanks!
+Asmaa
 
-Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
-
-> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
-> ---
->  drivers/cpuidle/governors/teo.c | 100 --------------------------------
->  1 file changed, 100 deletions(-)
->
-> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-> index 7244f71c59c5..d8554c20cf10 100644
-> --- a/drivers/cpuidle/governors/teo.c
-> +++ b/drivers/cpuidle/governors/teo.c
-> @@ -104,56 +104,16 @@
->   *      select the given idle state instead of the candidate one.
->   *
->   * 3. By default, select the candidate state.
-> - *
-> - * Util-awareness mechanism:
-> - *
-> - * The idea behind the util-awareness extension is that there are two distinct
-> - * scenarios for the CPU which should result in two different approaches to idle
-> - * state selection - utilized and not utilized.
-> - *
-> - * In this case, 'utilized' means that the average runqueue util of the CPU is
-> - * above a certain threshold.
-> - *
-> - * When the CPU is utilized while going into idle, more likely than not it will
-> - * be woken up to do more work soon and so a shallower idle state should be
-> - * selected to minimise latency and maximise performance. When the CPU is not
-> - * being utilized, the usual metrics-based approach to selecting the deepest
-> - * available idle state should be preferred to take advantage of the power
-> - * saving.
-> - *
-> - * In order to achieve this, the governor uses a utilization threshold.
-> - * The threshold is computed per-CPU as a percentage of the CPU's capacity
-> - * by bit shifting the capacity value. Based on testing, the shift of 6 (~1.56%)
-> - * seems to be getting the best results.
-> - *
-> - * Before selecting the next idle state, the governor compares the current CPU
-> - * util to the precomputed util threshold. If it's below, it defaults to the
-> - * TEO metrics mechanism. If it's above, the closest shallower idle state will
-> - * be selected instead, as long as is not a polling state.
->   */
->
->  #include <linux/cpuidle.h>
->  #include <linux/jiffies.h>
->  #include <linux/kernel.h>
-> -#include <linux/sched.h>
->  #include <linux/sched/clock.h>
-> -#include <linux/sched/topology.h>
->  #include <linux/tick.h>
->
->  #include "gov.h"
->
-> -/*
-> - * The number of bits to shift the CPU's capacity by in order to determine
-> - * the utilized threshold.
-> - *
-> - * 6 was chosen based on testing as the number that achieved the best balance
-> - * of power and performance on average.
-> - *
-> - * The resulting threshold is high enough to not be triggered by background
-> - * noise and low enough to react quickly when activity starts to ramp up.
-> - */
-> -#define UTIL_THRESHOLD_SHIFT 6
-> -
->  /*
->   * The PULSE value is added to metrics when they grow and the DECAY_SHIFT value
->   * is used for decreasing metrics on a regular basis.
-> @@ -188,7 +148,6 @@ struct teo_bin {
->   * @next_recent_idx: Index of the next @recent_idx entry to update.
->   * @recent_idx: Indices of bins corresponding to recent "intercepts".
->   * @tick_hits: Number of "hits" after TICK_NSEC.
-> - * @util_threshold: Threshold above which the CPU is considered utilized
->   */
->  struct teo_cpu {
->         s64 time_span_ns;
-> @@ -198,28 +157,10 @@ struct teo_cpu {
->         int next_recent_idx;
->         int recent_idx[NR_RECENT];
->         unsigned int tick_hits;
-> -       unsigned long util_threshold;
->  };
->
->  static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
->
-> -/**
-> - * teo_cpu_is_utilized - Check if the CPU's util is above the threshold
-> - * @cpu: Target CPU
-> - * @cpu_data: Governor CPU data for the target CPU
-> - */
-> -#ifdef CONFIG_SMP
-> -static bool teo_cpu_is_utilized(int cpu, struct teo_cpu *cpu_data)
-> -{
-> -       return sched_cpu_util(cpu) > cpu_data->util_threshold;
-> -}
-> -#else
-> -static bool teo_cpu_is_utilized(int cpu, struct teo_cpu *cpu_data)
-> -{
-> -       return false;
-> -}
-> -#endif
-> -
->  /**
->   * teo_update - Update CPU metrics after wakeup.
->   * @drv: cpuidle driver containing state data.
-> @@ -386,7 +327,6 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->         int constraint_idx = 0;
->         int idx0 = 0, idx = -1;
->         bool alt_intercepts, alt_recent;
-> -       bool cpu_utilized;
->         s64 duration_ns;
->         int i;
->
-> @@ -411,32 +351,6 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->         if (!dev->states_usage[0].disable)
->                 idx = 0;
->
-> -       cpu_utilized = teo_cpu_is_utilized(dev->cpu, cpu_data);
-> -       /*
-> -        * If the CPU is being utilized over the threshold and there are only 2
-> -        * states to choose from, the metrics need not be considered, so choose
-> -        * the shallowest non-polling state and exit.
-> -        */
-> -       if (drv->state_count < 3 && cpu_utilized) {
-> -               /*
-> -                * If state 0 is enabled and it is not a polling one, select it
-> -                * right away unless the scheduler tick has been stopped, in
-> -                * which case care needs to be taken to leave the CPU in a deep
-> -                * enough state in case it is not woken up any time soon after
-> -                * all.  If state 1 is disabled, though, state 0 must be used
-> -                * anyway.
-> -                */
-> -               if ((!idx && !(drv->states[0].flags & CPUIDLE_FLAG_POLLING) &&
-> -                   teo_state_ok(0, drv)) || dev->states_usage[1].disable) {
-> -                       idx = 0;
-> -                       goto out_tick;
-> -               }
-> -               /* Assume that state 1 is not a polling one and use it. */
-> -               idx = 1;
-> -               duration_ns = drv->states[1].target_residency_ns;
-> -               goto end;
-> -       }
-> -
->         /* Compute the sums of metrics for early wakeup pattern detection. */
->         for (i = 1; i < drv->state_count; i++) {
->                 struct teo_bin *prev_bin = &cpu_data->state_bins[i-1];
-> @@ -560,18 +474,6 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->         if (idx > constraint_idx)
->                 idx = constraint_idx;
->
-> -       /*
-> -        * If the CPU is being utilized over the threshold, choose a shallower
-> -        * non-polling state to improve latency, unless the scheduler tick has
-> -        * been stopped already and the shallower state's target residency is
-> -        * not sufficiently large.
-> -        */
-> -       if (cpu_utilized) {
-> -               i = teo_find_shallower_state(drv, dev, idx, KTIME_MAX, true);
-> -               if (teo_state_ok(i, drv))
-> -                       idx = i;
-> -       }
-> -
->         /*
->          * Skip the timers check if state 0 is the current candidate one,
->          * because an immediate non-timer wakeup is expected in that case.
-> @@ -667,11 +569,9 @@ static int teo_enable_device(struct cpuidle_driver *drv,
->                              struct cpuidle_device *dev)
->  {
->         struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
-> -       unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
->         int i;
->
->         memset(cpu_data, 0, sizeof(*cpu_data));
-> -       cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
->
->         for (i = 0; i < NR_RECENT; i++)
->                 cpu_data->recent_idx[i] = -1;
-> --
-> 2.34.1
->
+> -----Original Message-----
+> From: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Sent: Wednesday, June 5, 2024 8:07 PM
+> To: Asmaa Mnebhi <asmaa@nvidia.com>
+> Cc: linux-pm@vger.kernel.org; linux-acpi@vger.kernel.org
+> Subject: Re: [PATCH v1 1/1] power: reset: pwr-mlxbf: support graceful
+> shutdown
+>=20
+> Hi,
+>=20
+> On Mon, Apr 29, 2024 at 04:45:19PM -0400, Asmaa Mnebhi wrote:
+> > Replace the low power mode with a graceful shutdown.
+>=20
+> That's a summary of what the code changes, but the commit description is
+> missing an important information. It's not obvious why this change is nee=
+ded.
+> Especially considering the past of this driver: It started with
+>=20
+> reset =3D> emergency reset
+> low power =3D> poweroff HID event
+>=20
+> Then got changed to
+>=20
+> reset =3D> reset HID event
+> low power =3D> poweroff HID event
+>=20
+> And now is further changed to
+>=20
+> reset =3D> reset HID event
+> low power =3D> emergency poweroff
+>=20
+> I don't think it's sensible to continue this ping pong, so please properl=
+y
+> describe what those IRQs are for and why further changes are needed.
+>=20
+> Greetings,
+>=20
+> -- Sebastian
 
