@@ -1,115 +1,144 @@
-Return-Path: <linux-pm+bounces-9023-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9027-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7008B9057A0
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 17:56:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53FE3905905
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 18:43:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B6F71F28B4F
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 15:56:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55C161C21CC8
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 16:43:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C0E9181BA0;
-	Wed, 12 Jun 2024 15:55:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB7F1181D15;
+	Wed, 12 Jun 2024 16:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kYWVzenO"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="nnvQb5/P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8729181312;
-	Wed, 12 Jun 2024 15:55:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45881181BAA;
+	Wed, 12 Jun 2024 16:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718207758; cv=none; b=TqXTeEeTAyXVbweCTjoWfBrrGZJUwDrCPyIDjVgVE3FZ26jyM9Z3RPxx6/LeAjEp3TsP95CT+n6UP0CUMsRsB8M3+YQyKDh1oR2OoF1wnWNVpe8KaS7+09BcaDD6vEo2GpIVOIzC3TiLZ1xqA9gNc9zEuyE5KGmvuf/A4EuNMZA=
+	t=1718210545; cv=none; b=AP4Jq7o3YIiVs4VOfiPU+ThEjKi2Koozb0CDp0lbnQnqiPep1TCBbj5pTCw3rtwjBKGNzW+HpiRyU4aYw6agfNM3wHYo/n8f1ZI9UjGOpy+kaNaLela9TPJF1Dh+Pznc/lJAP+2qnqXoxAaKyeZGFw0TusK6jSrpxDpUv7IalFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718207758; c=relaxed/simple;
-	bh=OGohKvk0MjWf9+Q8+mvrBX+1BAlKKRyUXLbfH75xyb4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=aVOTTwsJpcctQuUjdTM8dhm19LLOc1Dt6AuwIhKCXrejUHcYcJPE5H4DC9Fzyw6QCAdYqEK0nP0ui81Knrinl0W7LiaUbPTrmLHR1XPSyo1uTsFW2/6YtmNxiP9jkihUCMxy7nnZMPsyNeMQ5f1h0fnSNwiH7kbWlovFqnKdm34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kYWVzenO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7AEC7C4DDE4;
-	Wed, 12 Jun 2024 15:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718207757;
-	bh=OGohKvk0MjWf9+Q8+mvrBX+1BAlKKRyUXLbfH75xyb4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=kYWVzenO6v46dav7m+6VeeBQvWtkfZ2ijSROLzZNF2xhVox8NT4g6D7nEQ7Yr1CvD
-	 QbMqbzoNwKvtHxN4oOUSJGsdzFSOiqxLCA02gKqMCQ7TCsZzzusBONx5M/RWdCVpV3
-	 EiLccKqgRHfAnZUsG10WiKCsIr5ffuOoIqg1qhcsU6IhDG8FGsX5pkowWNVMy10FlC
-	 cn2EJB/8N7UtSBq02dCqRuSQs3PZ1MDiLAg7XtxdpzyjShLg11I47hWenlonizyvmL
-	 MeVPPNyid+I2VhiIZBpPj5WbK56sRWz78MH6UY8PKtaaCMSFrdgOOixPo+5vEX+bSG
-	 8/iqEXeUVgsUQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 61107C43618;
-	Wed, 12 Jun 2024 15:55:57 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1718210545; c=relaxed/simple;
+	bh=loz+yb0OobqkWSAdNdNFmwXBpbGuxDenjLdUFVUe7sc=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=rW02kqfoOuQGHl22KIhs8c+0+yfwEsnN8wfZRy5bHoRlr6K9UPO+Mykj4YtdZ3WxNR13d5jrFgSZ4p+35WD64/CywLHrECdT5eoh+M6kTsi5bnP5+EWNq+Jkmzc6o1YsycQ5bK3PazR1M4ovBtVMBGzV/oZY7iP2DfticiUICRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=nnvQb5/P; arc=none smtp.client-ip=198.47.23.248
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45CGgBB5127385;
+	Wed, 12 Jun 2024 11:42:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1718210531;
+	bh=rKB0v+FMA+1HwxPXsYfUmmAJSpVBosvWTgK2qlbK8xc=;
+	h=From:Subject:Date:To:CC;
+	b=nnvQb5/P8hPyRmnDbcgAiiOj5ft3vfl7E72xi39NIRT8FITiyRi7SKr+nUEyCbP5w
+	 xhhpZ4NzjRrcoy3zFaFcAMBh7Y2Ezv6BkaCweW9yCbmMQI09KNHXA0DMt185BmBX2k
+	 0mWCWis3KLXSCex5og0OXddUUTTqAA1wQOgNz58w=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45CGgBwI066238
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 12 Jun 2024 11:42:11 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 12
+ Jun 2024 11:42:10 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 12 Jun 2024 11:42:10 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45CGgAnN099377;
+	Wed, 12 Jun 2024 11:42:10 -0500
+From: Bryan Brattlof <bb@ti.com>
+Subject: [PATCH 0/5] Update OPP table and add entries for AM62Ax & AM62Px
+ SoCs
+Date: Wed, 12 Jun 2024 11:41:49 -0500
+Message-ID: <20240612-ti-opp-updates-v1-0-3551c31d9872@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [f2fs-dev] [PATCH] tracing/treewide: Remove second parameter of
- __assign_str()
-From: patchwork-bot+f2fs@kernel.org
-Message-Id: 
- <171820775738.32393.13116890369510221266.git-patchwork-notify@kernel.org>
-Date: Wed, 12 Jun 2024 15:55:57 +0000
-References: <20240516133454.681ba6a0@rorschach.local.home>
-In-Reply-To: <20240516133454.681ba6a0@rorschach.local.home>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, ath10k@lists.infradead.org,
- Julia.Lawall@inria.fr, linux-s390@vger.kernel.org, dev@openvswitch.org,
- linux-cifs@vger.kernel.org, linux-bcachefs@vger.kernel.org,
- linux-rdma@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- io-uring@vger.kernel.org, torvalds@linux-foundation.org,
- iommu@lists.linux.dev, ath11k@lists.infradead.org,
- linux-media@vger.kernel.org, linux-wpan@vger.kernel.org,
- linux-pm@vger.kernel.org, selinux@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- linux-erofs@lists.ozlabs.org, virtualization@lists.linux.dev,
- linux-sound@vger.kernel.org, linux-block@vger.kernel.org,
- ocfs2-devel@lists.linux.dev, mathieu.desnoyers@efficios.com,
- linux-cxl@vger.kernel.org, linux-tegra@vger.kernel.org,
- intel-xe@lists.freedesktop.org, linux-edac@vger.kernel.org,
- linux-hwmon@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
- linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org,
- linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
- linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
- ath12k@lists.infradead.org, tipc-discussion@lists.sourceforge.net,
- mhiramat@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
- freedreno@lists.freedesktop.org, linux-nfs@vger.kernel.org,
- linux-btrfs@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAM3PaWYC/x3MMQ6AIAxA0auYzjYBhAGvYhxQqnZRAmhMCHeXO
+ L7h/wKJIlOCsSsQ6eHE19kg+w7Ww507IftmUEJpYYTFzHiFgHfwLlNCaVcprFvkYDS0KETa+P2
+ H01zrByhQ/6JgAAAA
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar
+	<viresh.kumar@linaro.org>, Lee Jones <lee@kernel.org>,
+        Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra
+	<vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>
+CC: Vibhore Vardhan <vibhore@ti.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, Bryan Brattlof <bb@ti.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1507; i=bb@ti.com;
+ h=from:subject:message-id; bh=loz+yb0OobqkWSAdNdNFmwXBpbGuxDenjLdUFVUe7sc=;
+ b=owNCWmg5MUFZJlNZeTm+RgAAYX////bP/z0r2ev13o79f+vuO7T/9jbPDfvfW/2q05//+/+wA
+ Rs2g7SABoNBoaA0AANBpoAGj0gGgAAAaAA0GgNBoNA0A09QGmj1ANPTKep4KIA0GjIBoAZMjIND
+ QNNAMgMg0GmQ0AZGQ0GTAjRoNGg0ZMjIMmTIPU0aD0mgA7U09RkekABoAyDQA00NqGmgNAAaAAM
+ mIAaZHqaaMg0PUZGmgAPSGQ9TQaBoBoCCxCJ08QSROTwUs3qcZSRclLCLl8L9O68cq+EA6hExA5
+ cpckUDaJimCZgB50fTiw+sCLVcMhvz5FGbStI4FeumouoAOXQocGCdyEoZKNZlAjMqxKE9/aGWu
+ 0UF6OapDipTasPtlyGER/9WUPb7+mOsE70tBlc3ptNxgy8TwoO/r+idfCwJgBuBlIyVsjhIgbtZ
+ zA4Id50q3XwCHeVYsLAo9gMLssrYFf7Ju6kj1051iyg6VJq6kr0Ge8YXFKPwvlE0ghkmOP8zYLU
+ +dAvOLfMH07JQKpahVb2NHFePVhhfZnrifU0vezmmtXUW9cfofoKeGYfg/2eY551pMIUsU6VvNJ
+ AhETYADBAQbnTsikBAwhBorLAZNxeBiISvJUMYd4SBwiT7gQSbLK4kCY2wVJ7kf+Uny9kB4zah/
+ MLyFghmih/xdyRThQkHk5vkYA==
+X-Developer-Key: i=bb@ti.com; a=openpgp;
+ fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hello:
+Hello Everyone
 
-This patch was applied to jaegeuk/f2fs.git (dev)
-by Steven Rostedt (Google) <rostedt@goodmis.org>:
+This series starts off the process of updating the OPP decoding tables 
+to align with the new speed grade schemes for TI's AM62Ax and AM62Px SoC 
+families.
 
-On Thu, 16 May 2024 13:34:54 -0400 you wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> [
->    This is a treewide change. I will likely re-create this patch again in
->    the second week of the merge window of v6.10 and submit it then. Hoping
->    to keep the conflicts that it will cause to a minimum.
-> ]
-> 
-> [...]
+Following this update is the updated binding and the OPPv2 entries we 
+will be using for the SoC including the 1.4GHz frequency for our 
+reference boards when the VDD_CORE allows.
 
-Here is the summary with links:
-  - [f2fs-dev] tracing/treewide: Remove second parameter of __assign_str()
-    https://git.kernel.org/jaegeuk/f2fs/c/2c92ca849fcc
+Thanks for reviewing
+~Bryan
 
-You are awesome, thank you!
+Signed-off-by: Bryan Brattlof <bb@ti.com>
+---
+Bryan Brattlof (5):
+      cpufreq: ti: update OPP table for AM62Ax SoCs
+      cpufreq: ti: update OPP table for AM62Px SoCs
+      DONOTMERGE: dt-bindings: mfd: syscon: add TI's opp table compatible
+      DONOTMERGE: arm64: dts: ti: k3-am62p: add in opp tables
+      DONOTMERGE: arm64: dts: ti: k3-am62a: add in opp table
+
+ Documentation/devicetree/bindings/mfd/syscon.yaml |  1 +
+ arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi       |  5 ++
+ arch/arm64/boot/dts/ti/k3-am62a7-sk.dts           |  9 +++
+ arch/arm64/boot/dts/ti/k3-am62a7.dtsi             | 51 ++++++++++++
+ arch/arm64/boot/dts/ti/k3-am62p-wakeup.dtsi       |  6 ++
+ arch/arm64/boot/dts/ti/k3-am62p5-sk.dts           |  9 +++
+ arch/arm64/boot/dts/ti/k3-am62p5.dtsi             | 47 ++++++++++++
+ drivers/cpufreq/ti-cpufreq.c                      | 94 ++++++++++++++++++++++-
+ 8 files changed, 220 insertions(+), 2 deletions(-)
+---
+base-commit: 629b57597ab52cef2ac5dd16042183c298cc52ed
+change-id: 20240509-ti-opp-updates-19c109ab1354
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Bryan Brattlof <bb@ti.com>
 
 
