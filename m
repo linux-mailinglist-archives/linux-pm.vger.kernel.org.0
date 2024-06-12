@@ -1,149 +1,129 @@
-Return-Path: <linux-pm+bounces-9021-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9022-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E560905690
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 17:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E9EB5905763
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 17:50:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42C282861A9
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 15:13:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F010289E2C
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 15:50:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6575180A69;
-	Wed, 12 Jun 2024 15:12:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C2D917FAC0;
+	Wed, 12 Jun 2024 15:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AZAEus65"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o5Y3MI/H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E214A17F4F5
-	for <linux-pm@vger.kernel.org>; Wed, 12 Jun 2024 15:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FD71EB2A;
+	Wed, 12 Jun 2024 15:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718205158; cv=none; b=JZBWkjdxYLKIO3ATnAE2o62zholUvCrgPKs9pncyaO+R7s4G0qyJW0oezCjO3AgBVR86EKtDxKSzt07cPdJU7QOMtJE00GSTzsDSTLiUvEJNlatgWPp8NlbafLlr+ljzo5f2PbroQ5711hjikiwcY68qozoBZ6iXI5kYbP9W2rk=
+	t=1718207435; cv=none; b=XOHE2FnEBA/Y64Ezl26t45/hkMcLIlM4JN8tvAn/XA+gEWiiSB4GgFhRjrBkq+M7lzeEjS0D9JfYXIrcVmbp90QgjwmnppGn855EhrmVanW+tRNonJjK/ZcxLhQ7tsS2en+htIo4vtmOPQhfVBeU3nCblmSdq7FvEv4u8GqY5G8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718205158; c=relaxed/simple;
-	bh=UfKYU+FaEaDhlgVIlRO+d4NHVy0mPvtEYjAmluIP2c0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BBdQ553vNRmC+JcgtDQwrPuSk9IQIUwboEMvlOTmircq9IReFWhvS/Kr1ai62fxuEaAnvYlqly4lZxmhTxfjDMplnTIcrE4NYHxy3N1zKcVJp9Ex8mOzrbSvowvUlxNGIo5MK7yE+LcYVR6XoCeqFg/Ek+8QIx5O7sk9ac92sZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AZAEus65; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dfef7b13c98so397746276.0
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jun 2024 08:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718205156; x=1718809956; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ui0asLPnRQrSAoLGngUgtvhcpdpuHV+OvoZ2KNM3Fig=;
-        b=AZAEus65lFwXLSuDD7pvNBIR6lQmCU0QWOCq5Mb3lBOqD6hWB8qUxOKsp0Plc6YleJ
-         O1iA38wyo2Qit0rf/jPen7iLSbeMQnMbwEMYP6g/M16fRCqegSun+WBX4IeucxzUfYWk
-         CZ5qSfbLIKrLWSzVn9n6xf/NwGWELQJrWMQ5dG0E3DisOX0YkdXSPP0Pdzsc9hT5oREe
-         +72RdbxtYILqDqV0NLWuZi2yaqA4cJIulb43SP8nadcmtACHGQbnSkx3FsCzBzj7sPKX
-         PQt/VE3CXQpACCxgrfynk4GTzrY8NcfgufMPKvisClqJwmGPFBkM4fqXSMAjywazb0cN
-         pt7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718205156; x=1718809956;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ui0asLPnRQrSAoLGngUgtvhcpdpuHV+OvoZ2KNM3Fig=;
-        b=izxJNxc7/9TFmmmpClxbEDxadURHGbWQun0FOY+l7uN81r1eYjuqumNR+BxuDoqPIt
-         2+vNMJ4L74toIWsOnpy6O+YTZELXowO5CnR0NVxTC5dE7tRckK3sfY0kV7EbMviXARZL
-         p1F5zPelc9kVGcv7geKZjMQzhPPqbhbmJ7d4Q0rR2Mq3VFFtEN99GUBB8e9vOg+pxBlT
-         8ZAxVh4uVK3zBs+gTsV1pETRrM4WGcg5yIIt3joaUcy8+AM60N6S4H9s992CuhPFshEX
-         j7/dUTxMpBiXBUjhk2VsLCPlQbDqtm3Zxb110p5lX0EBxTsPRjt2wyFz61veWdGKi06l
-         xvpg==
-X-Forwarded-Encrypted: i=1; AJvYcCXqiTVVUJ0GCVL6Z5lB/nFXgfB1Ijov41/5KlacdNWqiX0OwVhIrKW27cBNk2xBtwzuMgtWpF1ZE7HnMAar49VHCEc7N7iSpxk=
-X-Gm-Message-State: AOJu0Ywl6tEZcCKt/RpldXN0lrGahj73zKDC5gkyDbFD+w6jtNyLr00a
-	bF2oZ9vGYSsTrpiD/ZJShxLsDQ/REctE48suqUgf5O0Uxq06a8A1vI2t3DoSlDNxGPxQSkfKspS
-	59tPwY9VzZNkpw6eXXi2lm/wqfmLT+olNMdFHlw==
-X-Google-Smtp-Source: AGHT+IFWoi12CdmKen6XCavHsYiaGeZ6uNOT7Y113dWDJBAN7YMJe+nUPHOOTDfX1o7vHsPrrRKwh1FWKxulzT69BGo=
-X-Received: by 2002:a25:6a45:0:b0:dfb:538:df1d with SMTP id
- 3f1490d57ef6-dfe6852d794mr1893187276.43.1718205155725; Wed, 12 Jun 2024
- 08:12:35 -0700 (PDT)
+	s=arc-20240116; t=1718207435; c=relaxed/simple;
+	bh=cKWhkSC1x8cZV8isG/jgbKgy/ctUabseIFqwF1XkN8w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fEJFpyhm9X+T4/mK/A38PRJY7CwPA5KQ8dcIOA8a77Df1Ze0FWOg91Tew4UdnlGUoPdRJ1X8R7zdUUGjjHj67gigByerxldREGRqI6wghxIKxRYldk6DWb22enid7HxMYVjGb03ogdMCmRmYCPMGkoulEpril5SauBU22KjDVUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o5Y3MI/H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 411AAC116B1;
+	Wed, 12 Jun 2024 15:50:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718207434;
+	bh=cKWhkSC1x8cZV8isG/jgbKgy/ctUabseIFqwF1XkN8w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o5Y3MI/HC7SzVrtHukUtWRDtUxhnHG8HARTOcOJiu2NtZA+/LoS+RnWQFs35D60zg
+	 KEUvBb49BscZODsl0eelcYB+Di1EN9ZwwEglhlYPhwmcJXxKl3UQO/mKp+5DMI/hPQ
+	 hVauIyHIg/irkZE92LiEutqknF/A3pbwxfdnT8w19cTYB6KZELFIRcV6+xy2ZykPO+
+	 /ur0JSfTto17hiKaYAT98XOf0ff/9FsdPUucMR8zfAgWojhyZYOJJeAzitSzAodaJW
+	 Nf7qI4c7Nhwj0JCi8eYatBXCRTI7tqgHCj1NL1NHuhOTJK+gtFUqKCokG2MTT9np+/
+	 LViHhlsErOKwA==
+Date: Wed, 12 Jun 2024 16:50:24 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	"biju.das.au" <biju.das.au@gmail.com>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v3 3/6] regulator: core: Add helper for allow access to
+ enable register
+Message-ID: <ZmnDwKUlXCWFJ8W0@finisterre.sirena.org.uk>
+References: <20240611110402.58104-1-biju.das.jz@bp.renesas.com>
+ <20240611110402.58104-4-biju.das.jz@bp.renesas.com>
+ <ZmhmWrvyQiCzzeYi@finisterre.sirena.org.uk>
+ <TY3PR01MB11346B807820F681E7EEF7A6786C72@TY3PR01MB11346.jpnprd01.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240610-md-drivers-pmdomain-amlogic-v1-1-b49ddb1a8bdf@quicinc.com>
-In-Reply-To: <20240610-md-drivers-pmdomain-amlogic-v1-1-b49ddb1a8bdf@quicinc.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 12 Jun 2024 17:11:59 +0200
-Message-ID: <CAPDyKFpJdOGq7VneJfaodo2Jc1jc8pfnoNxCdRW5+T0ofdabtg@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: amlogic: add missing MODULE_DESCRIPTION() macros
-To: Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, 
-	Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-
-On Tue, 11 Jun 2024 at 01:13, Jeff Johnson <quic_jjohnson@quicinc.com> wrote:
->
-> On x86, make allmodconfig && make W=1 C=1 reports:
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pmdomain/amlogic/meson-ee-pwrc.o
->
-> Add the missing invocation of the MODULE_DESCRIPTION() macro to all
-> files which have a MODULE_LICENSE().
->
-> This includes meson-secure-pwrc.c which, although it did not produce a
-> warning with the x86 allmodconfig configuration, may cause this
-> warning with other configurations where CONFIG_MESON_SM is enabled.
->
-> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-
-Applied for next, thanks!
-
-Kind regards
-Uffe
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="cQUPfIPcfzsmHwJv"
+Content-Disposition: inline
+In-Reply-To: <TY3PR01MB11346B807820F681E7EEF7A6786C72@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+X-Cookie: Your love life will be... interesting.
 
 
-> ---
->  drivers/pmdomain/amlogic/meson-ee-pwrc.c     | 1 +
->  drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c | 1 +
->  drivers/pmdomain/amlogic/meson-secure-pwrc.c | 1 +
->  3 files changed, 3 insertions(+)
->
-> diff --git a/drivers/pmdomain/amlogic/meson-ee-pwrc.c b/drivers/pmdomain/amlogic/meson-ee-pwrc.c
-> index fcec6eb610e4..fbb2b4103930 100644
-> --- a/drivers/pmdomain/amlogic/meson-ee-pwrc.c
-> +++ b/drivers/pmdomain/amlogic/meson-ee-pwrc.c
-> @@ -648,4 +648,5 @@ static struct platform_driver meson_ee_pwrc_driver = {
->         },
->  };
->  module_platform_driver(meson_ee_pwrc_driver);
-> +MODULE_DESCRIPTION("Amlogic Meson Everything-Else Power Domains driver");
->  MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c b/drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c
-> index 33df520eab95..6028e91664a4 100644
-> --- a/drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c
-> +++ b/drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c
-> @@ -376,4 +376,5 @@ static struct platform_driver meson_gx_pwrc_vpu_driver = {
->         },
->  };
->  module_platform_driver(meson_gx_pwrc_vpu_driver);
-> +MODULE_DESCRIPTION("Amlogic Meson GX Power Domains driver");
->  MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/pmdomain/amlogic/meson-secure-pwrc.c b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
-> index 4d5bda0d60fc..b50e5678abe3 100644
-> --- a/drivers/pmdomain/amlogic/meson-secure-pwrc.c
-> +++ b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
-> @@ -355,4 +355,5 @@ static struct platform_driver meson_secure_pwrc_driver = {
->         },
->  };
->  module_platform_driver(meson_secure_pwrc_driver);
-> +MODULE_DESCRIPTION("Amlogic Meson Secure Power Domains driver");
->  MODULE_LICENSE("Dual MIT/GPL");
->
-> ---
-> base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
-> change-id: 20240610-md-drivers-pmdomain-amlogic-f117930600ea
->
+--cQUPfIPcfzsmHwJv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Jun 11, 2024 at 04:28:37PM +0000, Biju Das wrote:
+
+> > So, it'll doubtless not be a surprise that I'm not thrilled with this - it's basically just
+> > punching a hole straight through all the locking and reference counting in a way that's just
+> > begging for abuse.  At the very least we should have a check for exclusive access in there.
+
+> Do you mean exclusive access by means of spinlock to avoid race between enable/disable()?
+> If that is the case
+
+No, I mean regulator_get_exclusive(), this clearly can't work if there's
+more than one consumer.
+
+> > Also it's not sure about that name, if we were doing this it should be more describing the effect
+
+> What about the name regulator_hardware_enable() to make it generic??
+
+Possibly.
+
+> > on the regulator rather than this happening to be done via a register write (this should also work
+> > for GPIOs...).
+
+> Do you mean to make it generic, so that it works for both regmap based enable/disable() as well as
+> gpio based enable()/disable()??
+
+That too, I was mainly thinking about the name here though.
+
+--cQUPfIPcfzsmHwJv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZpw78ACgkQJNaLcl1U
+h9BgqAf/VRo1z8HnprjKJzamhqdpLugyr1xSf2Gw8i7hZJlRo+UcEZBJ0FA9qwY6
+n1bmhPT7OL1n3j+NI8eEoQVnIRlz4yucjUrwSgqIfl8bIFrMrxFKSS+/eV2J0CxD
+SzY4u6DqQF4jLgZ1TURMz3GyiCZaOeL0o7bYbPLo75uGAPD5n23gfw5b+0akgMaN
+kQ8s9Udu6fXsn3bUrbEKn7ekxv7cyRSvfJp2/GsNXMi3jfWwwS5bwhJSBrU0p2N7
+0Rv+9m3KzZoq0SKRrQEQTWKMTm9jpGnILdPhEv4bpFeikEjvGEKL3hMNu7HaHy+j
+M4S6xFkbfUygjcUPcJg+LQJ0s0rcgA==
+=Fwf/
+-----END PGP SIGNATURE-----
+
+--cQUPfIPcfzsmHwJv--
 
