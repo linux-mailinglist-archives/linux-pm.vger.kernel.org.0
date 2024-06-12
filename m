@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-9043-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9040-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 169EF905F0C
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 01:18:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF4C5905F02
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 01:18:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 878CAB236EA
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 23:18:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C85C31C212BF
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 23:18:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D46212E1F6;
-	Wed, 12 Jun 2024 23:17:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 932A412D1FE;
+	Wed, 12 Jun 2024 23:17:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="xD4mbgFm"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="MJIYB5/Y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 916FB12CDB1;
-	Wed, 12 Jun 2024 23:17:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8EAC5464A;
+	Wed, 12 Jun 2024 23:17:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718234276; cv=none; b=SFHhRhxVKRBX/ficvoa8WTPHqzgejV5uWWQn2x+4N6+o9a/gtbW4dmwsL8Zz6ZJrS9f2GGBiPkE8R83QlTWgzHaNhQwLnmP2zjbLZA70cjYenKvtvCDBHIfFxIonL2i4yWVLuG47Yg4QxooOsYl6/bd18K/6z/7jVEOMLJ0CwUo=
+	t=1718234274; cv=none; b=S1Qs6bQh3L4PRiaATGktBHGIJmLM+R6qfZ50UeM2KwcsNspOf/+ux8z0+LmiBvkpmflk3P6Fo1GJKNiq/3GC0dgLZsIADqTrB6yQ2aurPHwCNJaOxLPr18DDkdhoo7we3NjgTnOMh95rEp/QLu91kE6sFesSFQNmRvWBqeVl+3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718234276; c=relaxed/simple;
-	bh=247OK9zNWZq/7rcJM9RO5Cm+DJpgqUplY1Dpd5HKDN0=;
+	s=arc-20240116; t=1718234274; c=relaxed/simple;
+	bh=dAnHTtpolYPt15rFjwpq32w6shRczb9Te9yZLBal7IQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=mnCIWNx6hAJOJjPEc/eX9HyN/8azfx73w19EEYpntT2jk5SLnuv9Iem6l4VfnLe9dPGHGsPyXIkU4oN7xuoR9EV3+JtJymTkJ8uY+jdmu/bX47UG1lgZ8r6G9AoXA5Td5kYSB4EJKI/Xvhg+f5VMl238YVF8EGYiT+ssxNJmFyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=xD4mbgFm; arc=none smtp.client-ip=198.47.23.249
+	 In-Reply-To:To:CC; b=DgPyV54X6VjwEPDelq4gIX9q8YRaXDlSMbhMLO/fzu658g56u+b9Z6CRrmSujzfuiSiyJb6qWh4bZjg8BKyPy0iUpgZt+lKtyy02vn3dlMC4b4WoMQRK0MnooIsBwZT5HF6wYQgiVOKGZ+yfuY0n5kux/C2onzAM6AALIq+Gamw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=MJIYB5/Y; arc=none smtp.client-ip=198.47.23.248
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45CNHhmv128877;
-	Wed, 12 Jun 2024 18:17:43 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45CNHeBt084781;
+	Wed, 12 Jun 2024 18:17:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1718234263;
-	bh=wHMo0gFYCsj9ZWMq+/FqNrzcoxxWNik6KZfcZeOTevA=;
+	s=ti-com-17Q1; t=1718234260;
+	bh=QygYFQ2htYur7OEp+8UrMIwDjqm0ddORmkB/GzNB+F8=;
 	h=From:Date:Subject:References:In-Reply-To:To:CC;
-	b=xD4mbgFmjTMyZ6gYZr+rNGust3+rM059FAk5zNwWqkI+vh5EqEAjQ/IP3wN4WdxAt
-	 OgoQXfo4LOmYOAJ/q7wLVWWyqwOTFwuWuotbbiYQF/Bbr4n0LireVEcr2/BAZHdmJ1
-	 UpgQvYCZb8HjFRyFneQlMa2u1sXoPbOcSkZh1Y9Y=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45CNHhD5017793
+	b=MJIYB5/YfGBvmjCCR1gqUgghEVISFD89/B4Vhrl1duMbRcqsPnhrjXkbtw5w6rlgL
+	 0eoyyTU6bUuPNzhdnF8N6cvXPIdQizB4eWBmmfz6cBJwG4X9nCOagczH4SxdKwW87+
+	 N3i61KvhmPYTVcbAgANB3QFK3nYp3SuXfbPUYmas=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45CNHeHZ008018
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 12 Jun 2024 18:17:43 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+	Wed, 12 Jun 2024 18:17:40 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 12
  Jun 2024 18:17:40 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Wed, 12 Jun 2024 18:17:40 -0500
 Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45CNHeNo023159;
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45CNHeYh023162;
 	Wed, 12 Jun 2024 18:17:40 -0500
 From: Bryan Brattlof <bb@ti.com>
-Date: Wed, 12 Jun 2024 18:17:34 -0500
-Subject: [PATCH v2 1/5] cpufreq: ti: update OPP table for AM62Ax SoCs
+Date: Wed, 12 Jun 2024 18:17:35 -0500
+Subject: [PATCH v2 2/5] cpufreq: ti: update OPP table for AM62Px SoCs
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240612-ti-opp-updates-v2-1-422b6747a254@ti.com>
+Message-ID: <20240612-ti-opp-updates-v2-2-422b6747a254@ti.com>
 References: <20240612-ti-opp-updates-v2-0-422b6747a254@ti.com>
 In-Reply-To: <20240612-ti-opp-updates-v2-0-422b6747a254@ti.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -85,104 +85,79 @@ CC: Vibhore Vardhan <vibhore@ti.com>, <linux-pm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, Bryan Brattlof <bb@ti.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3295; i=bb@ti.com;
- h=from:subject:message-id; bh=247OK9zNWZq/7rcJM9RO5Cm+DJpgqUplY1Dpd5HKDN0=;
- b=owNCWmg5MUFZJlNZgCEKrgAAbH////9b9jH3+2X5n9VJv7wf3f7++nX+Cdsp/X//+//Go1WwA
- Rmwx2oaABoGgNGQ9QaNAaMg0AAyDQGmgBoyaDINAAAMmQDRoaaZMnqZNNP0TKaIDQDTQDTEyGjR
- kA0ZDBNNGQZDEANGRk0wAaAIAyaDQBo00AA0A0YmgYiekHqNA00ekyAaaNGmhoYEyHpDQANBkGj
- T0hoGCGgaGjQNADQBoBo0AaZNAQWJC1JBZARAfBmxaaZNzqsuGIpcfjrjMw3ovjBiwgCQA/2AFu
- /fWBZK2VTVU3quwUewJtIJ5wKL8NLZaxkKQZL0WLqDjmhAkXc+uOAK97W8PNJcH5t8qfcq8KIB6
- HH4YhigH4hwblKjQVNg6OSm6oZVZNADvh+6NYSzuhTn8RK9meu5xlXPQOXq1GDFji99upQL/XTV
- kiFuiOOjAszE2Oq8HNk2bLueOYIkksD0GHWv/YaaJ8+u87EHujxKpYVeklKH4myHSidJWhksGCm
- 8kzVW1bzTtkX6xmUCIb/ODOXiTgVZlVYypvypWZoPD1jDhfErov+Qfe+7aghzuXyMxN5D8Irk4M
- UMmHBcWwFAfOjBAYlrNmudBJwEz6VpICvNUV3dDkBEUYfTpaCl9ETYVOoQuYMxkHyZQ4Vefb8wD
- /ZZhIS/xdyRThQkIAhCq4A=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2615; i=bb@ti.com;
+ h=from:subject:message-id; bh=dAnHTtpolYPt15rFjwpq32w6shRczb9Te9yZLBal7IQ=;
+ b=owNCWmg5MUFZJlNZiiqEegAAZ3///vZ9A7dve3efv6buvTQ+V/3q5z82/u7ffnub7Xt2/vcwA
+ RrEIeo0ZAAAHqDRo0DIPUAAANBoHqGgD0TQ0DTQABoGgAMjI9QyA9R6mntRHtUMoDRoAPU0eoGT
+ QAGQAGjQHpqAAADIB6hp5NQDGkYj1AbUAAHqDTT1GRoZB0HqaAMRoDQaYjTCDQGgBoGEDCYmmE0
+ aAAMgxANMAgwjQMmmjJggDAAE0tgyWXnATUuEG1AMQDXirVZczE4EBCXIIlH8T7t1KXbraRY8jp
+ tQPCjXrWIdGRzKBmx8I04yWSO3BVBadwZLuPvvr1aEdFPdLPiWVbZKlFX+uFXHVe6pFCmxb1fjG
+ IFyxOI6oxWSl/I0ZSSFGMXmE+DVC0ReLVvNkkT3xa840DCKghQfdiaSUPfaUwsewCgsw4LrFfZT
+ M2woT+a+scFmtsas08yruUMeK3FpZCJtvhpjvImEGBEbnd4A4u6/2kLLP3IFMqx7dHxGJRgel39
+ A22hwIcivHCdD0TqoGnrJvQDjViva9x7VR+ZBqC8PwMAoYN0ikBLQhchKKVe4Po8kJexU3wOYqw
+ ywGvOXLthFreiLEMYHxub7IdXyjkHf2EaEjIn0P6ndjACmm4OYPmhu4ZRy6PAJSbxRoVYUM1/i7
+ kinChIRRVCPQA==
 X-Developer-Key: i=bb@ti.com; a=openpgp;
  fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-As the AM62Ax SoC family matures more speed grades are being defined.
-These new grades unfortunately no longer align with the AM62x SoC
-family. Define a new table with new OPP speed grade limits for the
-AM62Ax
+More speed grades for the AM62Px SoC family have been defined which
+unfortunately no longer align with the AM62x table. So create a new
+table with these new speed grades defined for the AM62Px
 
 Signed-off-by: Bryan Brattlof <bb@ti.com>
 ---
- drivers/cpufreq/ti-cpufreq.c | 59 +++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 58 insertions(+), 1 deletion(-)
+ drivers/cpufreq/ti-cpufreq.c | 35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
-index 714ed53753fa5..a80698f3cfe65 100644
+index a80698f3cfe65..6c84562de5c6b 100644
 --- a/drivers/cpufreq/ti-cpufreq.c
 +++ b/drivers/cpufreq/ti-cpufreq.c
-@@ -47,6 +47,28 @@
- #define AM625_SUPPORT_S_MPU_OPP			BIT(1)
- #define AM625_SUPPORT_T_MPU_OPP			BIT(2)
+@@ -69,6 +69,13 @@ enum {
+ #define AM62A7_SUPPORT_R_MPU_OPP		BIT(1)
+ #define AM62A7_SUPPORT_V_MPU_OPP		BIT(2)
  
-+enum {
-+	AM62A7_EFUSE_M_MPU_OPP =		13,
-+	AM62A7_EFUSE_N_MPU_OPP,
-+	AM62A7_EFUSE_O_MPU_OPP,
-+	AM62A7_EFUSE_P_MPU_OPP,
-+	AM62A7_EFUSE_Q_MPU_OPP,
-+	AM62A7_EFUSE_R_MPU_OPP,
-+	AM62A7_EFUSE_S_MPU_OPP,
-+	/*
-+	 * The V, U, and T speed grade numbering is out of order
-+	 * to align with the AM625 more uniformly. I promise I know
-+	 * my ABCs ;)
-+	 */
-+	AM62A7_EFUSE_V_MPU_OPP,
-+	AM62A7_EFUSE_U_MPU_OPP,
-+	AM62A7_EFUSE_T_MPU_OPP,
-+};
++#define AM62P5_EFUSE_O_MPU_OPP			15
++#define AM62P5_EFUSE_S_MPU_OPP			19
++#define AM62P5_EFUSE_U_MPU_OPP			21
 +
-+#define AM62A7_SUPPORT_N_MPU_OPP		BIT(0)
-+#define AM62A7_SUPPORT_R_MPU_OPP		BIT(1)
-+#define AM62A7_SUPPORT_V_MPU_OPP		BIT(2)
++#define AM62P5_SUPPORT_O_MPU_OPP		BIT(0)
++#define AM62P5_SUPPORT_U_MPU_OPP		BIT(2)
 +
  #define VERSION_COUNT				2
  
  struct ti_cpufreq_data;
-@@ -112,6 +134,32 @@ static unsigned long omap3_efuse_xlate(struct ti_cpufreq_data *opp_data,
+@@ -134,6 +141,23 @@ static unsigned long omap3_efuse_xlate(struct ti_cpufreq_data *opp_data,
  	return BIT(efuse);
  }
  
-+static unsigned long am62a7_efuse_xlate(struct ti_cpufreq_data *opp_data,
++static unsigned long am62p5_efuse_xlate(struct ti_cpufreq_data *opp_data,
 +					unsigned long efuse)
 +{
-+	unsigned long calc_efuse = AM62A7_SUPPORT_N_MPU_OPP;
++	unsigned long calc_efuse = AM62P5_SUPPORT_O_MPU_OPP;
 +
 +	switch (efuse) {
-+	case AM62A7_EFUSE_V_MPU_OPP:
-+	case AM62A7_EFUSE_U_MPU_OPP:
-+	case AM62A7_EFUSE_T_MPU_OPP:
-+	case AM62A7_EFUSE_S_MPU_OPP:
-+		calc_efuse |= AM62A7_SUPPORT_V_MPU_OPP;
++	case AM62P5_EFUSE_U_MPU_OPP:
++	case AM62P5_EFUSE_S_MPU_OPP:
++		calc_efuse |= AM62P5_SUPPORT_U_MPU_OPP;
 +		fallthrough;
-+	case AM62A7_EFUSE_R_MPU_OPP:
-+	case AM62A7_EFUSE_Q_MPU_OPP:
-+	case AM62A7_EFUSE_P_MPU_OPP:
-+	case AM62A7_EFUSE_O_MPU_OPP:
-+		calc_efuse |= AM62A7_SUPPORT_R_MPU_OPP;
-+		fallthrough;
-+	case AM62A7_EFUSE_N_MPU_OPP:
-+	case AM62A7_EFUSE_M_MPU_OPP:
-+		calc_efuse |= AM62A7_SUPPORT_N_MPU_OPP;
++	case AM62P5_EFUSE_O_MPU_OPP:
++		calc_efuse |= AM62P5_SUPPORT_O_MPU_OPP;
 +	}
 +
 +	return calc_efuse;
 +}
 +
- static unsigned long am625_efuse_xlate(struct ti_cpufreq_data *opp_data,
- 				       unsigned long efuse)
+ static unsigned long am62a7_efuse_xlate(struct ti_cpufreq_data *opp_data,
+ 					unsigned long efuse)
  {
-@@ -234,6 +282,15 @@ static struct ti_cpufreq_soc_data am625_soc_data = {
+@@ -291,6 +315,15 @@ static struct ti_cpufreq_soc_data am62a7_soc_data = {
  	.multi_regulator = false,
  };
  
-+static struct ti_cpufreq_soc_data am62a7_soc_data = {
-+	.efuse_xlate = am62a7_efuse_xlate,
++static struct ti_cpufreq_soc_data am62p5_soc_data = {
++	.efuse_xlate = am62p5_efuse_xlate,
 +	.efuse_offset = 0x0,
 +	.efuse_mask = 0x07c0,
 +	.efuse_shift = 0x6,
@@ -193,15 +168,15 @@ index 714ed53753fa5..a80698f3cfe65 100644
  /**
   * ti_cpufreq_get_efuse() - Parse and return efuse value present on SoC
   * @opp_data: pointer to ti_cpufreq_data context
-@@ -337,7 +394,7 @@ static const struct of_device_id ti_cpufreq_of_match[] = {
- 	{ .compatible = "ti,omap34xx", .data = &omap34xx_soc_data, },
+@@ -395,7 +428,7 @@ static const struct of_device_id ti_cpufreq_of_match[] = {
  	{ .compatible = "ti,omap36xx", .data = &omap36xx_soc_data, },
  	{ .compatible = "ti,am625", .data = &am625_soc_data, },
--	{ .compatible = "ti,am62a7", .data = &am625_soc_data, },
-+	{ .compatible = "ti,am62a7", .data = &am62a7_soc_data, },
- 	{ .compatible = "ti,am62p5", .data = &am625_soc_data, },
+ 	{ .compatible = "ti,am62a7", .data = &am62a7_soc_data, },
+-	{ .compatible = "ti,am62p5", .data = &am625_soc_data, },
++	{ .compatible = "ti,am62p5", .data = &am62p5_soc_data, },
  	/* legacy */
  	{ .compatible = "ti,omap3430", .data = &omap34xx_soc_data, },
+ 	{ .compatible = "ti,omap3630", .data = &omap36xx_soc_data, },
 
 -- 
 2.45.2
