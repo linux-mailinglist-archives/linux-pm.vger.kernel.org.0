@@ -1,416 +1,188 @@
-Return-Path: <linux-pm+bounces-9013-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9014-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABABF90505E
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 12:28:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEDEB90518D
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 13:46:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3314A1F22CB9
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 10:28:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33A4AB218DC
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2024 11:46:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D7EE16EBE9;
-	Wed, 12 Jun 2024 10:28:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B099716F0C6;
+	Wed, 12 Jun 2024 11:46:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OOZo2BLi"
+	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="QgHqU6Gq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2045.outbound.protection.outlook.com [40.92.98.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA90016D9D7;
-	Wed, 12 Jun 2024 10:28:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718188120; cv=none; b=BFfYO7U7FmIOAaLP+xFJutnAuTksgg3FGIeIqfj2w3H7qha9/U3iGER4VDs3YmaocEYrt2EbfVilO7jYTIG4mWQv2kqOXAPnQD48Y2Q7lhmr1YIla8o7eY5hLHCQhJsR6jsiYDPyoJM4Afm3ywUlbzDqC9lVMCor0o6hnukkawk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718188120; c=relaxed/simple;
-	bh=DqDmBfyPccLDacPbh+TeEIUHPb11wuDh/LGPb58lvC8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hjhRH8gvmiSXQlVAFmcJWyTjx3NFBbbUXySFFYpl/d4UbLq+ZemmRRnXv41KuGN5JpN5QzRgp2jkKMYGDQnKBfVF/0zYfCa8DypIyd+ygRekhFvbomB+NSheWvwWI+3dadyi92P4/RwZY+sD0zaryAkB30FCfEfhH/S/+XsnfUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OOZo2BLi; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45C1ub3b009732;
-	Wed, 12 Jun 2024 10:28:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=madimlA9iBPfjtpX9TuxWdHY
-	1DKpi5ag8HsBR+wtnVY=; b=OOZo2BLiF9eeK4d6ZILTT9Mu0BgqvNGq86nkm32q
-	ONip/osxKpueMJD45jL/7FvbQ/HCWgGQ0CFg6p7rJOXooTi0yAE7+yM09ZIP+m94
-	tbL+AeFPmLUgHlRvbALIelclARi9wnhaS0U5bUJgVDed42ByGGx2T3Cs2LLVx2+p
-	ZqbYsKPeR/kAHqnIiUwECINF3aJeep7KWBDyUdE3nW182mtSRpWJM1gB9eM7247f
-	vT6xKKSnezaEoSS+X8Wy5VD6n7ITvGTPoDpU9cDZyjP2NsyEiok+aM8lvX30myA0
-	pOvkpU027Sesg88MLQdbEmGXJ9WqxjJwSWxGUk2OlCYcrA==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ype913y2y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 12 Jun 2024 10:28:32 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45CASUTf000347
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 12 Jun 2024 10:28:30 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 12 Jun 2024 03:28:25 -0700
-Date: Wed, 12 Jun 2024 15:58:21 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Georgi Djakov <djakov@kernel.org>
-CC: Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov
-	<dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <quic_anusha@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider
- ability to gcc
-Message-ID: <Zml4RQ5R5s3mVMnI@hu-varada-blr.qualcomm.com>
-References: <27f4f3dd-9375-40cf-8c8f-1c4edf66e31b@linaro.org>
- <ZjNdTmmXucjtRxJt@hu-varada-blr.qualcomm.com>
- <c015b3a5-2213-4ebd-b960-d97ed1fe7062@kernel.org>
- <ZjshR0ekcn0gxwOa@hu-varada-blr.qualcomm.com>
- <CAA8EJpqENsojPQmCbma_nQLEZq8nK1fz1K0JdtvLd=kPrH_DBw@mail.gmail.com>
- <1a08ef42-b52f-4c97-90d7-e7fdee7725b4@linaro.org>
- <Zmgb+OjdBNw71sC1@hu-varada-blr.qualcomm.com>
- <176137e5-6312-4d46-97b6-c4494bc1c61b@kernel.org>
- <ZmlAdETV0+6Md8HC@hu-varada-blr.qualcomm.com>
- <e24cfd23-6f77-46a0-b020-9cb3daef6930@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6582D1420B8;
+	Wed, 12 Jun 2024 11:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.98.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718192809; cv=fail; b=gKnQRo8uYsjDfi5+Isbs+vs/3qQxIVr/qHetqGQHITrTNt/Ck9W0stPlcHq/F6XYmF/fWhz+S1/F4tanUGhHNgNSecmtNsN7dv2WZNiWPg7ZmD6dj/cxfc3L70vJGxXPnti05jeCC34bFhgqjzfF7FjjTlAPIIVe5Ga3nO8vs90=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718192809; c=relaxed/simple;
+	bh=371w9SdY/LgERS9vsGZTB02Hyrt4G97gFhGKSPt+To8=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=p3QmHEptNgfPnzTf+ap8/I2yHMEnf2yMP88Srsgu50ZT67vvSztkr9eHh6wTEaswJLnpmZN9JkJkCjEP/Hjb0YKZnI+zK3t9ABKcNdVYEFVwkBPqMhCIM0l3iXGmNFZrJSQH+WlQ/SsrEd9kqOIc0BtvbVkR86QFsPg3If2Y8AM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=hotmail.com; dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b=QgHqU6Gq; arc=fail smtp.client-ip=40.92.98.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BXNi2CYlCMu6mZdeCfqa53Q4dXiddxwrqS3jD7nEjuXN1StCj8g1DJ5A2hPfscYugOJCNdwmkVDtS7C0KUGnMxi8JNJisk4Gk19iRm+Zm7wmREBA+Uzp2wtpBrq99vJTBMHeOC1ZRHeauS/bDNZ500MYLgOEeSUHXRm9YPV2bIRcB9Ew02RIxhZtmEHuqA5AQ4G/souNb14u0QEWNADZ9sNAyzN8QMm/HqjwuVK5YWG0ovJS2pC+ZGgPyHTPQO/xeyges0ik4paPUr0q6W+1qemPb6/L0wBi71VRFcdoDRW3gyUXvH3TrlODC5SehiKfnlmNbw0zu3ltlC8mc+g6QA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RC21JaJ2n6Pe/WYWNSmF6uK8gaerwNtBKyme4hE2AHc=;
+ b=hrn2nkkwcoU4eevW/YOlQItta3h4CeqDjpR3dT00DcAG6I1zDklSD6FgYelvtm9zkTzmazA6meGy9Cj1UyXwb+u8Mx2Uaq4MiwsBNhBVvo3YBs6VPe8SenDkMsm4v2I81m2NbZgrCwr1vWqYBzUqASmdauzzUzaKmu/eWMAwiBit6wFKcOaYdIDJNJNwOwsk3xeH028kd4iB6F4z7Tp14RxSIoSV+pofiehjj2jaeYWkOaEWP2K1z+NpdCV9rztzpqOi23BMohq3spC7tVGZHezpVvrvetvgOEMKYk73jty6GDgMgvENxdci9NYNYy0faZgx87At/kp9CHzGahm4Pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RC21JaJ2n6Pe/WYWNSmF6uK8gaerwNtBKyme4hE2AHc=;
+ b=QgHqU6GqkiimKiTpJArcwMWRzDTZhOWZJhuNho6tCo1vmmxGCnhCXHBFA3pf8joToUIjkbWDun7LiHFNBArmGl7HpyPu7h7BPLkohTBRJTzJXrgvEqKs615dtRrwGs42mPgKtVujXmxPRqv5JPoX6WyGvJz2U0Tzd1NhFPcdYymXuNfYRhsKNacemti7pEAEH+Phe04PFXMpPieNN64bvNZ8LMG+efVy93hDRxhjfS2NLcvDFJK0nsyAs1G4Zn/irJVo8QS0k/2QU6TRTbTx0uMeBEpbONXYqJsodGePYXb1l7UJNvnOU+kNmo8rZPc1oH76zw4XGkpSkp6A1vzG1Q==
+Received: from OS3P286MB2490.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:1f1::11)
+ by TYCP286MB2574.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:226::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.38; Wed, 12 Jun
+ 2024 11:46:43 +0000
+Received: from OS3P286MB2490.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::1167:655a:7fa5:5cef]) by OS3P286MB2490.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::1167:655a:7fa5:5cef%4]) with mapi id 15.20.7633.037; Wed, 12 Jun 2024
+ 11:46:43 +0000
+From: Riwen Lu <luriwen@hotmail.com>
+To: viresh.kumar@linaro.org,
+	ionela.voinescu@arm.com,
+	rafael@kernel.org
+Cc: pierre.gondois@arm.com,
+	beata.michalska@arm.com,
+	hotran@apm.com,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Riwen Lu <luriwen@kylinos.cn>
+Subject: [PATCH v4] cpufreq/cppc: Remove the desired_perf compare when set target
+Date: Wed, 12 Jun 2024 19:46:31 +0800
+Message-ID:
+ <OS3P286MB2490EB027398DDB852BE2169B1C02@OS3P286MB2490.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN: [fL/b5AnrMUO6x/EbJEbIzKsgFV+nQeau]
+X-ClientProxiedBy: SG2PR06CA0204.apcprd06.prod.outlook.com (2603:1096:4:1::36)
+ To OS3P286MB2490.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:1f1::11)
+X-Microsoft-Original-Message-ID:
+ <20240612114631.1055832-1-luriwen@hotmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <e24cfd23-6f77-46a0-b020-9cb3daef6930@kernel.org>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: UJjWuV05zfhtyUYc1s0wJoZwO7b2A1aH
-X-Proofpoint-ORIG-GUID: UJjWuV05zfhtyUYc1s0wJoZwO7b2A1aH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-12_06,2024-06-11_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- adultscore=0 priorityscore=1501 malwarescore=0 phishscore=0 bulkscore=0
- clxscore=1015 mlxlogscore=999 impostorscore=0 suspectscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
- definitions=main-2406120075
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OS3P286MB2490:EE_|TYCP286MB2574:EE_
+X-MS-Office365-Filtering-Correlation-Id: 55540659-f0c0-47a2-9070-08dc8ad554b2
+X-Microsoft-Antispam: BCL:0;ARA:14566002|461199020|440099020|3412199017;
+X-Microsoft-Antispam-Message-Info:
+	pob0l01bs8mi0MjViUqRksOqLGTs/7G5wLrTx2mP+eulTbF934fnEUGqDjExgIKxNEY3saQtKTwYXd8fWY/PdjKOgk5vOuSJcepEMFMZCq9zYyV5dKlkB2PucEWXA2jWjKwXpJF1fwo/Yxw72BynW5bKxAbExGXwYVdBLMRGX9N4MJl1JaZ6CyvROwqtBYY+WQ/rRerMdI53JOhPd4dl5s/OA3x4daGMjuR4u+87Xw9eUz64yelFiyjDvj7Gfw/+JpAiUHqsgUkIEgXWwz8yQ/dgCflXoHPGAHCtJtnNF4tPRqL5YQQ1cGb3nQCvubN4j4sXD1JHNYDYIWUIieMmZ1cfxlbuG+RjcM+KbLUxA4PzlIJQqp02pYeKzxfyy2btO03+0Y34SNtmSdP4x4TMUm4AVqoQSzU5QmGhVr6Rez+ycDwCmFnmqpmRzucEkqELuH4u8AM8KX3RuVszeoaf1QDTzu9HZv4WSJ5JU0kvBN4Kx+XhkSUlLBaqsFhL/Dqu8o30tam65tWLr1LskVXlaAr5X98FIrgkI3d+qcu3VScMhQjcrRNZKi9Z1rXX5uPH
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Gxs2jGkLvvXbNCFsarU4uQ1fomXH1HUy/8fmJDaN5SlR/lBRAqjEKFivpkZd?=
+ =?us-ascii?Q?CW/mqq1iL0uUaUjtm7SE5h+Luu66upmJ59OSqRId2Mzc44t7FvL0/+K9xykf?=
+ =?us-ascii?Q?miO3lntYuK4UqEnLiUEFDExZkpZwzBLTmFo9Def7KNWvM32mryjYELRMzBKe?=
+ =?us-ascii?Q?Grpipn8n86aUAVk/pyaH+FTrwIRDnxqgvxpRe1g+IrDZ1eJxHqmdnCAvt2PZ?=
+ =?us-ascii?Q?JDs/IuezECo7Lja4k3w4iO1hVcyeoaxZPX4ik/Bu2ck3iXXLT4hJw+UmZo5H?=
+ =?us-ascii?Q?GznNP29c1eqFBMCHtqG/lt6wpj0g8bNZDZPDcKebhGtRlZq+O4ipkXKAkipq?=
+ =?us-ascii?Q?UPBvP1/L89Fm9tztPYWBUXH1QBJjgLAI2hsyt+miBOayQBjtFegZLpp5acjB?=
+ =?us-ascii?Q?KZSPbEOb/OZ9gaju4m1g/CbIu+BozIZoyi0G3j7I1AGIahKqmk1M6tw3MaKj?=
+ =?us-ascii?Q?KSfIL5KxozPH9k3x6jvAxtfZk9LfYIHXG1jUUVjWRuN0OiuhXWUCxG2RUosg?=
+ =?us-ascii?Q?EiF4eIHh2DPMwbzMGXAM0QQxkT6Yc6Dy0HPoHfOp9VbPw825kErnm74DYqGt?=
+ =?us-ascii?Q?lhrrAhXzeqFomf5CpWw2rpuZbS6U8f75O2RwBY8orLW9E3SDrZ5BdryUIFd9?=
+ =?us-ascii?Q?f7dLUPeBWoGkGBU50jnQ66xjmPfBr/R7r8rC7xJmAa98IBW7gw1RimdMUmhq?=
+ =?us-ascii?Q?FsYdJET2wCgwxR3SFeEFijftBH/qqpMCbtzINodaC2+YaniEILYTeJtLoPtJ?=
+ =?us-ascii?Q?3xM6iLqTOCqu9Mse1Sfmwu/mYxq424BJ8q+Ie/LjSw8xFrrd8e42lZeCKxjz?=
+ =?us-ascii?Q?z2O73Ed0o5sE/dkURAzTxoHmCt1O9t+pIr4mVivZfTGQFgL7bABNWt31sL3i?=
+ =?us-ascii?Q?FEc5vKNFoY1dQL5RW3YzkLTVFBZl/wYDGAnJy+Hp4kSX+OQCYLU8eSjbRpot?=
+ =?us-ascii?Q?d5UgP05KUuj7erqFyATSeaH+oXy16lSkZBITsx0PRtmM4RNcdggvItmsi2zg?=
+ =?us-ascii?Q?hueAyeHNy+20BZ7r8G0zwlWGImwkPBDBLu/U+iSLVPs5sMI4CO9V6dhgIF0H?=
+ =?us-ascii?Q?2UmHWXrooEY3KiHlw4RasYFx2md8Cw+0M6USGhmp+I6HDsQ2m7wLoxkRxz3e?=
+ =?us-ascii?Q?cF1+UDrlR0nK0+RIiFuONGe+kkFPfalxk+moG+8QIKrCYDSn7jrfA3Jmj+Z3?=
+ =?us-ascii?Q?/kaax5jQylV3T7BIBJpts8dNlhWN9Z1c+03Pzw6utFHCe+9gH9hGyus96p8?=
+ =?us-ascii?Q?=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55540659-f0c0-47a2-9070-08dc8ad554b2
+X-MS-Exchange-CrossTenant-AuthSource: OS3P286MB2490.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2024 11:46:43.6238
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCP286MB2574
 
-On Wed, Jun 12, 2024 at 11:48:17AM +0300, Georgi Djakov wrote:
-> On 12.06.24 9:30, Varadarajan Narayanan wrote:
-> > On Tue, Jun 11, 2024 at 02:29:48PM +0300, Georgi Djakov wrote:
-> > > On 11.06.24 12:42, Varadarajan Narayanan wrote:
-> > > > On Thu, Jun 06, 2024 at 04:06:01PM +0200, Konrad Dybcio wrote:
-> > > > > On 8.05.2024 10:10 AM, Dmitry Baryshkov wrote:
-> > > > > > On Wed, 8 May 2024 at 09:53, Varadarajan Narayanan
-> > > > > > <quic_varada@quicinc.com> wrote:
-> > > > > > >
-> > > > > > > On Fri, May 03, 2024 at 04:51:04PM +0300, Georgi Djakov wrote:
-> > > > > > > > Hi Varada,
-> > > > > > > >
-> > > > > > > > Thank you for your work on this!
-> > > > > > > >
-> > > > > > > > On 2.05.24 12:30, Varadarajan Narayanan wrote:
-> > > > > > > > > On Tue, Apr 30, 2024 at 12:05:29PM +0200, Konrad Dybcio wrote:
-> > > > > > > > > > On 25.04.2024 12:26 PM, Varadarajan Narayanan wrote:
-> > > > > > > > > > > On Tue, Apr 23, 2024 at 02:58:41PM +0200, Konrad Dybcio wrote:
-> > > > > > > > > > > >
-> > > > > > > > > > > >
-> > > > > > > > > > > > On 4/18/24 11:23, Varadarajan Narayanan wrote:
-> > > > > > > > > > > > > IPQ SoCs dont involve RPM in managing NoC related clocks and
-> > > > > > > > > > > > > there is no NoC scaling. Linux itself handles these clocks.
-> > > > > > > > > > > > > However, these should not be exposed as just clocks and align
-> > > > > > > > > > > > > with other Qualcomm SoCs that handle these clocks from a
-> > > > > > > > > > > > > interconnect provider.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Hence include icc provider capability to the gcc node so that
-> > > > > > > > > > > > > peripherals can use the interconnect facility to enable these
-> > > > > > > > > > > > > clocks.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > > > > > > > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > > > > > > > > > > > ---
-> > > > > > > > > > > >
-> > > > > > > > > > > > If this is all you do to enable interconnect (which is not the case,
-> > > > > > > > > > > > as this patch only satisfies the bindings checker, the meaningful
-> > > > > > > > > > > > change happens in the previous patch) and nothing explodes, this is
-> > > > > > > > > > > > an apparent sign of your driver doing nothing.
-> > > > > > > > > > >
-> > > > > > > > > > > It appears to do nothing because, we are just enabling the clock
-> > > > > > > > > > > provider to also act as interconnect provider. Only when the
-> > > > > > > > > > > consumers are enabled with interconnect usage, this will create
-> > > > > > > > > > > paths and turn on the relevant NOC clocks.
-> > > > > > > > > >
-> > > > > > > > > > No, with sync_state it actually does "something" (sets the interconnect
-> > > > > > > > > > path bandwidths to zero). And *this* patch does nothing functionally,
-> > > > > > > > > > it only makes the dt checker happy.
-> > > > > > > > >
-> > > > > > > > > I understand.
-> > > > > > > > >
-> > > > > > > > > > > This interconnect will be used by the PCIe and NSS blocks. When
-> > > > > > > > > > > those patches were posted earlier, they were put on hold until
-> > > > > > > > > > > interconnect driver is available.
-> > > > > > > > > > >
-> > > > > > > > > > > Once this patch gets in, PCIe for example will make use of icc.
-> > > > > > > > > > > Please refer to https://lore.kernel.org/linux-arm-msm/20230519090219.15925-5-quic_devipriy@quicinc.com/.
-> > > > > > > > > > >
-> > > > > > > > > > > The 'pcieX' nodes will include the following entries.
-> > > > > > > > > > >
-> > > > > > > > > > >           interconnects = <&gcc MASTER_ANOC_PCIE0 &gcc SLAVE_ANOC_PCIE0>,
-> > > > > > > > > > >                           <&gcc MASTER_SNOC_PCIE0 &gcc SLAVE_SNOC_PCIE0>;
-> > > > > > > > > > >           interconnect-names = "pcie-mem", "cpu-pcie";
-> > > > > > > > > >
-> > > > > > > > > > Okay. What about USB that's already enabled? And BIMC/MEMNOC?
-> > > > > > > > >
-> > > > > > > > > For USB, the GCC_ANOC_USB_AXI_CLK is enabled as part of the iface
-> > > > > > > > > clock. Hence, interconnect is not specified there.
-> > > > > > > > >
-> > > > > > > > > MEMNOC to System NOC interfaces seem to be enabled automatically.
-> > > > > > > > > Software doesn't have to turn on or program specific clocks.
-> > > > > > > > >
-> > > > > > > > > > > > The expected reaction to "enabling interconnect" without defining the
-> > > > > > > > > > > > required paths for your hardware would be a crash-on-sync_state, as all
-> > > > > > > > > > > > unused (from Linux's POV) resources ought to be shut down.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Because you lack sync_state, the interconnects silently retain the state
-> > > > > > > > > > > > that they were left in (which is not deterministic), and that's precisely
-> > > > > > > > > > > > what we want to avoid.
-> > > > > > > > > > >
-> > > > > > > > > > > I tried to set 'sync_state' to icc_sync_state to be invoked and
-> > > > > > > > > > > didn't see any crash.
-> > > > > > > > > >
-> > > > > > > > > > Have you confirmed that the registers are actually written to, and with
-> > > > > > > > > > correct values?
-> > > > > > > > >
-> > > > > > > > > I tried the following combinations:-
-> > > > > > > > >
-> > > > > > > > > 1. Top of tree linux-next + This patch set
-> > > > > > > > >
-> > > > > > > > >       * icc_sync_state called
-> > > > > > > > >       * No crash or hang observed
-> > > > > > > > >       * From /sys/kernel/debug/clk/clk_summary can see the
-> > > > > > > > >         relevant clocks are set to the expected rates (compared
-> > > > > > > > >         with downstream kernel)
-> > > > > > > > >
-> > > > > > > > > 2. Top of tree linux-next + This patch set + PCIe enablement
-> > > > > > > > >
-> > > > > > > > >       * icc_sync_state NOT called
-> > > > > > > >
-> > > > > > > > If sync_state() is not being called, that usually means that there
-> > > > > > > > are interconnect consumers that haven't probed successfully (PCIe?)
-> > > > > > > > or their dependencies. That can be checked in /sys/class/devlink/.../status
-> > > > > > > > But i am not sure how this works for PCI devices however.
-> > > > > > > >
-> > > > > > > > You can also manually force a call to sync_state by writing "1" to
-> > > > > > > > the interconnect provider's /sys/devices/.../state_synced
-> > > > > > > >
-> > > > > > > > Anyway, the question is if PCIe and NSS work without this driver?
-> > > > > > >
-> > > > > > > No.
-> > > > > > >
-> > > > > > > > If they work, is this because the clocks are turned on by default
-> > > > > > > > or by the boot loader?
-> > > > > > >
-> > > > > > > Initially, the PCIe/NSS driver enabled these clocks directly
-> > > > > > > by having them in their DT nodes itself. Based on community
-> > > > > > > feedback this was removed and after that PCIe/NSS did not work.
-> > > > > > >
-> > > > > > > > Then if an interconnect path (clock) gets disabled either when we
-> > > > > > > > reach a sync_state (with no bandwidth requests) or we explicitly
-> > > > > > > > call icc_set_bw() with 0 bandwidth values, i would expect that
-> > > > > > > > these PCIe and NSS devices would not function anymore (it might
-> > > > > > > > save some power etc) and if this is unexpected we should see a
-> > > > > > > > a crash or hang...
-> > > > > > > >
-> > > > > > > > Can you confirm this?
-> > > > > > >
-> > > > > > > With ICC enabled, icc_set_bw (with non-zero values) is called by
-> > > > > > > PCIe and NSS drivers. Haven't checked with icc_set_bw with zero
-> > > > > > > values.
-> > > > > > >
-> > > > > > > PCIe:   qcom_pcie_probe -> qcom_pcie_icc_init -> icc_set_bw
-> > > > > > > NSS:    ppe_icc_init -> icc_set_bw
-> > > > > > >
-> > > > > > > I believe sync_state is not getting called since there is a
-> > > > > > > non-zero set bandwidth request. Which seems to be aligned with
-> > > > > > > your explanation.
-> > > > > >
-> > > > > > This doesn't look correct. sync_state is being called once all
-> > > > > > consumers are probed. It doesn't matter whether those consumers have
-> > > > > > non-zero bandwidth requests or no.
-> > > > >
-> > > > > /sys/kernel/debug/devices_deferred may have some useful info, too
-> > > >
-> > > > /sys/kernel/debug/devices_deferred seems to be empty
-> > > >
-> > > > 	# mount | grep -w debugfs
-> > > > 	none on /sys/kernel/debug type debugfs (rw,relatime)
-> > > >
-> > > > 	# cat /sys/kernel/debug/devices_deferred  | wc -l
-> > > > 	0
-> > > >
-> > > > Added the following print to icc_sync_state,
-> > > >
-> > > > 	@@ -1096,6 +1096,7 @@ void icc_sync_state(struct device *dev)
-> > > > 		struct icc_node *n;
-> > > > 		static int count;
-> > > >
-> > > > 	+	printk("--> %s: %d %d\n", __func__, providers_count, count);
-> > > > 		count++;
-> > > >
-> > > > 		if (count < providers_count)
-> > > > 			return;
-> > > >
-> > > > icc_sync_state seems to be called once,
-> > > >
-> > > > 	# dmesg | grep icc_sync_state
-> > > > 	[   12.260544] --> icc_sync_state: 2 0
-> > > >
-> > > > Since 'providers_count' is greated than 'count' icc_sync_state
-> > > > seems to return before doing anything.
-> > >
-> > > Is there also another interconnect provider on this platform, other
-> > > than the gcc? Check for DT nodes that have the #interconnect-cells
-> > > property.
-> >
-> > Yes there are two interconnect providers
-> >
-> > 	# find /proc/device-tree/ -name '#interconnect-cells'
-> > 	/proc/device-tree/soc@0/clock-controller@1800000/#interconnect-cells
-> > 	/proc/device-tree/soc@0/clock-controller@39b00000/#interconnect-cells
-> >
-> > 	Note:	gcc => clock-controller@1800000
-> > 		nsscc => clock-controller@39b00000
-> >
-> > > Are all providers probing successfully?
-> >
-> > Yes. I printed the return value of their probe functions...
-> >
-> > 	# dmesg | grep probe:
-> > 	[    0.037815] --> gcc_ipq9574_probe: return 0
-> > 	[    2.078215] --> nss_cc_ipq9574_probe: return 0
-> >
-> >
-> > > All providers must probe, as there might be paths that cross multiple
-> > > providers and we can't get into sync-state with a topology that is
-> > > only partially initialized.
-> >
-> > It does look like both the providers' probe has completed. And,
-> > there aren't any paths that cross providers
-> >
-> > 	interconnects = <&gcc MASTER_ANOC_PCIE1 &gcc SLAVE_ANOC_PCIE1>,
-> > 			<&gcc MASTER_SNOC_PCIE1 &gcc SLAVE_SNOC_PCIE1>;
-> >
-> > 	interconnects = <&gcc MASTER_ANOC_PCIE3 &gcc SLAVE_ANOC_PCIE3>,
-> > 			<&gcc MASTER_SNOC_PCIE3 &gcc SLAVE_SNOC_PCIE3>;
-> >
-> > 	interconnects = <&gcc MASTER_ANOC_PCIE2 &gcc SLAVE_ANOC_PCIE2>,
-> > 			<&gcc MASTER_SNOC_PCIE2 &gcc SLAVE_SNOC_PCIE2>;
-> >
-> > 	interconnects = <&gcc MASTER_ANOC_PCIE0 &gcc SLAVE_ANOC_PCIE0>,
-> > 			<&gcc MASTER_SNOC_PCIE0 &gcc SLAVE_SNOC_PCIE0>;
-> >
-> > 	interconnects = <&nsscc MASTER_NSSNOC_PPE &nsscc SLAVE_NSSNOC_PPE>,
-> > 			<&nsscc MASTER_NSSNOC_PPE_CFG &nsscc SLAVE_NSSNOC_PPE_CFG>,
-> > 			<&gcc MASTER_NSSNOC_QOSGEN_REF &gcc SLAVE_NSSNOC_QOSGEN_REF>,
-> > 			<&gcc MASTER_NSSNOC_TIMEOUT_REF &gcc SLAVE_NSSNOC_TIMEOUT_REF>,
-> > 			<&gcc MASTER_MEM_NOC_NSSNOC &gcc SLAVE_MEM_NOC_NSSNOC>,
-> > 			<&gcc MASTER_NSSNOC_MEMNOC &gcc SLAVE_NSSNOC_MEMNOC>,
-> > 			<&gcc MASTER_NSSNOC_MEM_NOC_1 &gcc SLAVE_NSSNOC_MEM_NOC_1>;
->
-> Are the above consumers also probing successfully? Especially the one with
-> the nsscc paths? Is nss_cc_ipq9574 also using icc_sync_state? Sync state
-> will be called when all consumers of the specific provider are probed.
+From: Riwen Lu <luriwen@kylinos.cn>
 
-nsscc_ipq9574 was not using icc_sync_state. After adding that, I
-can see the following messages printed from icc_sync_state. I
-also added a print to confirm if 'p->set(n, n);' is called.
+There is a case that desired_perf is exactly the same with the old perf,
+but the actual current freq is not.
 
-	[   12.260138] --> icc_sync_state: 2 2
---->	[   12.260166] qcom,gcc-ipq9574 1800000.clock-controller: interconnect provider is in synced state
-	[   12.262429] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_anoc_pcie0_1lane_m_clk_master)
-	[   12.271206] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_anoc_pcie0_1lane_m_clk_slave)
-	[   12.281225] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_snoc_pcie0_1lane_s_clk_master)
-	[   12.291118] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_snoc_pcie0_1lane_s_clk_slave)
-	[   12.300902] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_anoc_pcie1_1lane_m_clk_master)
-	[   12.310797] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_anoc_pcie1_1lane_m_clk_slave)
-	[   12.320596] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_snoc_pcie1_1lane_s_clk_master)
-	[   12.330494] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_snoc_pcie1_1lane_s_clk_slave)
-	[   12.340299] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_anoc_pcie2_2lane_m_clk_master)
-	[   12.350224] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_anoc_pcie2_2lane_m_clk_slave)
-	[   12.360013] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_snoc_pcie2_2lane_s_clk_master)
-	[   12.369904] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_snoc_pcie2_2lane_s_clk_slave)
-	[   12.379709] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_anoc_pcie3_2lane_m_clk_master)
-	[   12.389616] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_anoc_pcie3_2lane_m_clk_slave)
-	[   12.399415] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_snoc_pcie3_2lane_s_clk_master)
-	[   12.409312] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_snoc_pcie3_2lane_s_clk_slave)
-	[   12.419119] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_snoc_usb_clk_master)
-	[   12.429017] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_snoc_usb_clk_slave)
-	[   12.437781] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_anoc_usb_axi_clk_master)
-	[   12.446813] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_anoc_usb_axi_clk_slave)
-	[   12.456098] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_nsscc_clk_master)
-	[   12.465474] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_nsscc_clk_slave)
-	[   12.474767] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_snoc_clk_master)
-	[   12.484138] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_snoc_clk_slave)
-	[   12.493424] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_snoc_1_clk_master)
-	[   12.502713] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_snoc_1_clk_slave)
-	[   12.512261] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_pcnoc_1_clk_master)
-	[   12.521379] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_pcnoc_1_clk_slave)
-	[   12.531098] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_qosgen_ref_clk_master)
-	[   12.540651] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_qosgen_ref_clk_slave)
-	[   12.550456] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_timeout_ref_clk_master)
-	[   12.559922] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_timeout_ref_clk_slave)
-	[   12.569986] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_xo_dcd_clk_master)
-	[   12.579886] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_xo_dcd_clk_slave)
-	[   12.589344] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_atb_clk_master)
-	[   12.598466] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_atb_clk_slave)
-	[   12.607834] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_mem_noc_nssnoc_clk_master)
-	[   12.617039] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_mem_noc_nssnoc_clk_slave)
-	[   12.626497] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_memnoc_clk_master)
-	[   12.636049] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_memnoc_clk_slave)
-	[   12.645507] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_mem_noc_1_clk_master)
-	[   12.654668] qcom,gcc-ipq9574 1800000.clock-controller: Calling icc_clk_set(gcc_nssnoc_mem_noc_1_clk_slave)
---->	[   12.664354] qcom,nsscc-ipq9574 39b00000.clock-controller: interconnect provider is in synced state
-	[   12.674069] qcom,nsscc-ipq9574 39b00000.clock-controller: Calling icc_clk_set(nss_cc_nssnoc_ppe_clk_master)
-	[   12.683012] qcom,nsscc-ipq9574 39b00000.clock-controller: Calling icc_clk_set(nss_cc_nssnoc_ppe_clk_slave)
-	[   12.692646] qcom,nsscc-ipq9574 39b00000.clock-controller: Calling icc_clk_set(nss_cc_nssnoc_ppe_cfg_clk_master)
-	[   12.702369] qcom,nsscc-ipq9574 39b00000.clock-controller: Calling icc_clk_set(nss_cc_nssnoc_ppe_cfg_clk_slave)
-	[   12.712349] qcom,nsscc-ipq9574 39b00000.clock-controller: Calling icc_clk_set(nss_cc_nssnoc_nss_csr_clk_master)
-	[   12.722431] qcom,nsscc-ipq9574 39b00000.clock-controller: Calling icc_clk_set(nss_cc_nssnoc_nss_csr_clk_slave)
-	[   12.732404] qcom,nsscc-ipq9574 39b00000.clock-controller: Calling icc_clk_set(nss_cc_nssnoc_imem_qsb_clk_master)
-	[   12.742473] qcom,nsscc-ipq9574 39b00000.clock-controller: Calling icc_clk_set(nss_cc_nssnoc_imem_qsb_clk_slave)
-	[   12.752801] qcom,nsscc-ipq9574 39b00000.clock-controller: Calling icc_clk_set(nss_cc_nssnoc_imem_ahb_clk_master)
-	[   12.762611] qcom,nsscc-ipq9574 39b00000.clock-controller: Calling icc_clk_set(nss_cc_nssnoc_imem_ahb_clk_slave)
+This happened in S3 while the cpufreq governor is set to powersave.
+During cpufreq resume process, the booting CPU's new_freq obtained via
+.get() is the highest frequency, while the policy->cur and
+cpu->perf_ctrls.desired_perf are in the lowest level(powersave
+governor). Causing the warning: "CPU frequency out of sync:", and set
+policy->cur to new_freq.
 
-> The idea of sync state is to allow all consumers to probe and to request
-> their paths. Only after that, the framework will take into account the
-> bandwidth values that has been requested from consumers and disable unused
-> paths.
->
-> Sorry, but i am doing a bit of guessing here as i am missing the complete
-> picture. So you add interconnect-cells to nsscc, but what is this DT node
-> that requests the nss and gcc paths? I am failing to find these on the
-> mailing lists.
+Then the governor->limits() calls cppc_cpufreq_set_target() to
+configures the CPU frequency and returns directly because the
+desired_perf converted from target_freq is the same with
+cpu->perf_ctrls.desired_perf and both are the lowest_perf.
 
-The gcc based interconnect paths are referenced by PCIe controller
-nodes. Please refer to this patch
+Since target_freq and policy->cur have been compared in
+__cpufreq_driver_target(), there's no need to compare desired_perf and
+cpu->perf_ctrls.desired_perf again in cppc_cpufreq_set_target() to
+ensure that the CPU frequency is properly configured.
 
-	[PATCH V5 4/6] arm64: dts: qcom: ipq9574: Add PCIe PHYs and controller nodes
-	https://lore.kernel.org/linux-arm-msm/20240512082858.1806694-5-quic_devipriy@quicinc.com/
+Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
 
-Sorry, did not post the nsscc related patches since this base ICC
-patch hasn't reached closure. The nsscc patches are very similar
-to this gcc based series. Wanted to gather the issues raised in
-this and address them in nsscc so that it is in a more acceptable
-shape.
+---
+v1 -> v2:
+ - Update commit message and email.
+v2 -> v3:
+ - Update patch subject and commit message.
+ - Remove the desired_perf compare logic.
+v3 -> v4:
+ - Remove the desired_perf local variable.
+---
+ drivers/cpufreq/cppc_cpufreq.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-Thanks
-Varada
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 15f1d41920a3..9095fd5f8c2d 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -291,15 +291,10 @@ static int cppc_cpufreq_set_target(struct cpufreq_policy *policy,
+ 	struct cppc_cpudata *cpu_data = policy->driver_data;
+ 	unsigned int cpu = policy->cpu;
+ 	struct cpufreq_freqs freqs;
+-	u32 desired_perf;
+ 	int ret = 0;
+ 
+-	desired_perf = cppc_khz_to_perf(&cpu_data->perf_caps, target_freq);
+-	/* Return if it is exactly the same perf */
+-	if (desired_perf == cpu_data->perf_ctrls.desired_perf)
+-		return ret;
+-
+-	cpu_data->perf_ctrls.desired_perf = desired_perf;
++	cpu_data->perf_ctrls.desired_perf =
++			cppc_khz_to_perf(&cpu_data->perf_caps, target_freq);
+ 	freqs.old = policy->cur;
+ 	freqs.new = target_freq;
+ 
+-- 
+2.25.1
+
 
