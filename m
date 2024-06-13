@@ -1,130 +1,119 @@
-Return-Path: <linux-pm+bounces-9096-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9097-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9926E9079D3
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 19:28:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 206379079DF
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 19:30:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9933DB24BEB
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 17:28:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF842B21516
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 17:30:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6118914A098;
-	Thu, 13 Jun 2024 17:28:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 661A514A091;
+	Thu, 13 Jun 2024 17:30:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IW7+bqMx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fK4JEbLr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD26149E06;
-	Thu, 13 Jun 2024 17:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A40A12CD8F;
+	Thu, 13 Jun 2024 17:30:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718299694; cv=none; b=k6tuOgpc0EpM8NUMuxnf/fqTRER3dE/QPzMDgh2nfgBcgnUKUcxJA76KzIuIDKGceurU2BgXm7SqXveCDtLSHQ9ZlQEdb7bycdPlL8F9rnoVosV/cuYSYN5Xz+Bt9nG/57DL4vjx6s6rweDhbrin0l/GikHqRSL2UgYG8dp04Zw=
+	t=1718299822; cv=none; b=Xz7xx6ybGy8tWgsVa8HCH/0LTCBzlQc2Wq8qaN4HyBxZ5xHaO1LYK7T6fhBGJsL2y2bjN0TScg1zyJVDya1HP8bARFrY93YAZ5ZMazDHjx7R57w2IUCl3M/rCdGBpBxS8yF1JW5sfRK0Ro468ZMGtQX4YH/eZMsyvSFrGr6l184=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718299694; c=relaxed/simple;
-	bh=CNrPcqc8022Bt4QwcjS0SE8OmQ9gGgaggZXF2mwS7Sk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=aQ1yv/IzvVTTCNHlWFiCTrkkylP0dI/Qg/JXyzCRi7J5SE0s1CIMp5QQqOgyc9lB/zGbEz3mflK1zhcPAIXdvabGK19Da7v8SGzYIe3McnZdD0xKp31Ut18qgvnzslPJZuTVc4z9/MxM0P9fUYyp9/xvx6ztdXwiP+uwLQSXNV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=IW7+bqMx; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45DDhZB5018436;
-	Thu, 13 Jun 2024 17:28:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	aA7Z5zxsmTlozGn3Npa3uDeUxg+iQykh1R92quahMZ4=; b=IW7+bqMxXd9aIbTL
-	YszADtwGo7MbJN/pvNr+9ATdgZDipa6o+10/aKhV2y1/U6pFFuFVwWiaSrj+cmCH
-	d2Qx9mAiXj0nbXxvNy0w2jBbot99WWaJ4EAb3Xubk8DrRevyd5COVrG6AypYrhnq
-	zKz5oZfQCSgw4QV8earayidPNPyQMFHMe6xI9llsyuoxKl1mFgyZ9R4WWAufuzFB
-	qivFodtPq//GhBfGoq6wcxX3Nha2r2ZRpomxhMPf4RrkTGVCf5LNDEyvKX/xiKh8
-	EzyuvOPS/xLpMjf4aoHQ4u2s3EG7f3vxERLzkIEwUdA0fe1IBadJXeheTa4xPnbt
-	a49wvQ==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yr1wfgp7c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 13 Jun 2024 17:28:09 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45DHS7vb017418
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 13 Jun 2024 17:28:07 GMT
-Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 13 Jun
- 2024 10:28:02 -0700
-Message-ID: <24d2d3b3-d676-8e86-bae4-c3538b7b9981@quicinc.com>
-Date: Thu, 13 Jun 2024 22:57:59 +0530
+	s=arc-20240116; t=1718299822; c=relaxed/simple;
+	bh=iXGiyVzJlfGeMho5dKxLGMlk3iobepuYEEz+GbKvgAQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aytqwjeAEEUZKfxOR3vba/0XO6/tPOwEhfJotsAL41Mnjbmia82z5d+bujpCxHuQG0/e52LBEbDhe/AjOjvmhUP7Vhnpea8ctLBG+GFrMkeJtaXDOpceJv9QfcqV7DBkNPd0QWxnDlThs8CM8AEWAjoE/Kxvhr7fCOEB5JFNx1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fK4JEbLr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319FEC2BBFC;
+	Thu, 13 Jun 2024 17:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718299821;
+	bh=iXGiyVzJlfGeMho5dKxLGMlk3iobepuYEEz+GbKvgAQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fK4JEbLrhAoUmrErk5MsY+F9kwVDpQzUeeqNeppzFPkc80o50tLgRe1OBE3rgrQRW
+	 A3uRg9Ci3qmYMh/CN4MIhFpVgJHMj2ZBAbJRnhEd04Kz7tQnMseKzNMddMnz4bFcxf
+	 7Ph+/iGmeqnuoCcQ9VT7DsRVHU2NyOljVF5MyuXy9NdxABUZtMh+zVuDwBGq660lNL
+	 3Fkh11ySCKv7JgtUd+xiYcOmNZsKXN3eP0A15FH3cbf/jgLs5B+ldWjGgY1ZZx8Wfm
+	 1ZNUoeMxK+63FA4OZu3nQ8xkUopA8uC8qbyv2cz+aVIT0gHVLWCQGo//jncI2KpUiE
+	 hVnAzruEmOTCg==
+Date: Thu, 13 Jun 2024 18:30:15 +0100
+From: Lee Jones <lee@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Conor Dooley <conor.dooley@microchip.com>, Bryan Brattlof <bb@ti.com>,
+	Conor Dooley <conor@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>, Vibhore Vardhan <vibhore@ti.com>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 3/5] DONOTMERGE: dt-bindings: mfd: syscon: add TI's opp
+ table compatible
+Message-ID: <20240613173015.GT2561462@google.com>
+References: <20240612-ti-opp-updates-v1-0-3551c31d9872@ti.com>
+ <20240612-ti-opp-updates-v1-3-3551c31d9872@ti.com>
+ <20240612-unranked-unsalted-b32674a98d4a@spud>
+ <20240612175457.b6q37nm6x4vsdnks@bryanbrattlof.com>
+ <20240613120923.GP1504919@google.com>
+ <20240613-suspend-synapse-4c7596888198@wendy>
+ <56030532-fe5d-414c-b254-f6b39f58cde1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/4] arm64: dts: qcom: x1e80100: Enable bwmon and fastrpc
- support
-Content-Language: en-US
-To: Konrad Dybcio <konrad.dybcio@linaro.org>, <andersson@kernel.org>,
-        <djakov@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <srinivas.kandagatla@linaro.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <quic_rgottimu@quicinc.com>, <quic_kshivnan@quicinc.com>,
-        <conor+dt@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <abel.vesa@linaro.org>
-References: <20240604011157.2358019-1-quic_sibis@quicinc.com>
- <be2dc908-c8d3-4739-9f46-8f8daf0f328e@linaro.org>
-From: Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <be2dc908-c8d3-4739-9f46-8f8daf0f328e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: NyH2GTLbNEYNrJDtmz0cvT1ZdMXWEzf_
-X-Proofpoint-GUID: NyH2GTLbNEYNrJDtmz0cvT1ZdMXWEzf_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-13_11,2024-06-13_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 adultscore=0
- bulkscore=0 mlxscore=0 mlxlogscore=797 spamscore=0 clxscore=1015
- impostorscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2405170001 definitions=main-2406130125
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <56030532-fe5d-414c-b254-f6b39f58cde1@kernel.org>
 
+On Thu, 13 Jun 2024, Krzysztof Kozlowski wrote:
 
-
-On 6/6/24 16:00, Konrad Dybcio wrote:
-> On 4.06.2024 3:11 AM, Sibi Sankar wrote:
->> This patch series enables bwmon and fastrpc support on X1E80100 SoCs.
->>
->> This series applies on:
->> next-20240603 + https://lore.kernel.org/lkml/20240603205859.2212225-1-quic_sibis@quicinc.com/
->>
+> On 13/06/2024 14:20, Conor Dooley wrote:
+> > On Thu, Jun 13, 2024 at 01:09:23PM +0100, Lee Jones wrote:
+> >> On Wed, 12 Jun 2024, Bryan Brattlof wrote:
+> >>
+> >>> On June 12, 2024 thus sayeth Conor Dooley:
+> >>>> On Wed, Jun 12, 2024 at 11:41:52AM -0500, Bryan Brattlof wrote:
+> >>>>> The JTAG_USER_ID_USERCODE efuse address, which is located inside the
+> >>>>> WKUP_CTRL_MMR0 range holds information to identify the speed grades of
+> >>>>> various components on TI's K3 SoCs. Add a compatible to allow the
+> >>>>> cpufreq driver to obtain the data to limit the maximum frequency for the
+> >>>>> CPUs under Linux control.
+> >>>>>
+> >>>>> Signed-off-by: Bryan Brattlof <bb@ti.com>
+> >>>>
+> >>>> $subject: DONOTMERGE: dt-bindings: mfd: syscon: add TI's opp table compatible
+> >>>>
+> >>>> Okay, if this isn't for merging then I won't Ack it.
+> >>>
+> >>> Ha! Nice. If I don't hear anything from anyone else I'll send a v2 in a 
+> >>> few hours.
+> >>
+> >> What's the point of all the DONOTMERGE nonsense?
+> > 
+> > AFAICT, TI live in fear of subsystem maintainers merging the dts patches,
+> > so they do this.
 > 
-> Going back to [1], is memlat-over-scmi not enough to give us good numbers
-> without OS intervention? Does probing bwmon and making some decisions in
-> Linux actually help here?
-
-Memlat and bwmon are meant to cover to different use cases. Though
-they have a big overlap on when they get triggered bwmon is specifically
-meant to address cases where band-width aggregation is required (meaning
-if other peripherals already have a avg bw vote on active LLCC/DDR, the
-vote from bwmon would be an additional request on top of that). However
-to make use of this we should vote for avg-kbps in addition to peak from
-icc-bwmon driver which we don't currently do (Shiv was planning on
-sending a fix for it).
-
--Sibi
-
+> And want some strict timeframe of merging bindings (via subsystem) and
+> DTS (via SoC tree), which causes all weird submissions like this above
+> or sending bindings without users.
 > 
-> Konrad
-> 
-> [1] https://lore.kernel.org/all/20240117173458.2312669-1-quic_sibis@quicinc.com/
+> So far I can live with it but if more such peculiarities come up, then
+> sorry, fix your process/tools instead of putting burden on maintainers
+> and community.
+
+FWIW, if I see DONOTMERGE in the subject line, I tend to skip over them.
+
+-- 
+Lee Jones [李琼斯]
 
