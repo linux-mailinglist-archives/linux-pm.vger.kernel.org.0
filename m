@@ -1,523 +1,217 @@
-Return-Path: <linux-pm+bounces-9127-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9128-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F3B8907F3E
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 01:11:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ED21907FAB
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 01:43:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A57AFB20D1D
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 23:11:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 408BF1C2135A
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 23:43:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88E5814D2B9;
-	Thu, 13 Jun 2024 23:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1CDF152E0D;
+	Thu, 13 Jun 2024 23:43:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="XQpl9Jbh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xlgXfjm5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D8F13B797;
-	Thu, 13 Jun 2024 23:11:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E4D14BF8B
+	for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2024 23:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718320300; cv=none; b=i4/829xUCIM+TNrVj7ZFlvh12wM60kBKOT+f2tirBL33Giiid4aatoxTSiOh96E1/twFXA88x2pWDQfsuOV5yyqvQ4+7ezgPxjDCA3IeLIQP1O8Fs7HWkeXV6ib/saAZiRtoqRZzOgfNpc6HjKaicIrQ4PClzvexvZmM/DXibB4=
+	t=1718322226; cv=none; b=lQx0A52VBpjVdDVbh7BDiFKd+ts82eI8rBIUSIwAdOGcO25SRPF+1vhvsTP0JCPuzWrTm4GrcCmy8jItT30FzYcjXBjSm/XihTgpOOUBbfi/uRZvur4Wd2HMSNNfBwq8B4dGNz3N/uVl3MpF18yXcV3861meBVRTLxpTU+5qF+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718320300; c=relaxed/simple;
-	bh=+YldGtQj37QKKviAQA5kIXNW0aaOtSmZoGsS/yjcJ2A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uexpHGWwkI9KG7/WTW2zPPuGdI2m+t7y1J7703OJ0zqTSia6GZMYCLBnhiBI4JAL4yuqtfgrTLTi/9WFlRauW0y+/2Czb87Ro+wAKA1uTqYHJqRRUW/3+pgyMhkeQzpRtS92a46Z+N7uE7FS3T0Aadm3+V8/zPbzMSngKUx41nY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=XQpl9Jbh; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1718320290; x=1718925090; i=w_armin@gmx.de;
-	bh=JmSqbki9ZVxHtusgNP4SdXHx7bVIZ8Y8P/rsSR4sfP0=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=XQpl9JbhBIqkJyIx5wd1kIHlGgW7aqc/8pZDRePGwsRCq2Gg5EWK7hbWUreKvKL4
-	 3m+QLZGDn0cTBNa2Z+wCCCoAZV4VngccNKNzsa6UFpEnPN1uuW23S8Kejj6dT8RYI
-	 kRHfB3W6wt5uOJvxMEypAUDiK9ZDm/UdFc46yU9hlpmMwz1sAp8BAYtEMQZe4xLyd
-	 J182xAEXqy7uVfZaKScM9Vd+efCJwuiymebN/b+jpaNIz1bx0D+VBSdG29v1RMRO1
-	 l6y123e3NwfUg876pPlCvYogGSm3fQb257BtAUnS/tTsjZF7JOCt8DIHwiUIEnKCZ
-	 FuuqEfL/sFwVUMcsfA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M8ykg-1sMpHw1Xhm-00BA7A; Fri, 14
- Jun 2024 01:11:30 +0200
-Message-ID: <76dff03c-08f6-4edc-af57-c0b8dbf55293@gmx.de>
-Date: Fri, 14 Jun 2024 01:11:29 +0200
+	s=arc-20240116; t=1718322226; c=relaxed/simple;
+	bh=bvkmdVPRbAEAAQvqUF2QXsmCf2b50cjIdy/XyZ0RKyM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ZADl+SdDF2RF8UshF1eUhTnJvlrUDmzBBz9UgT9SYrAaoAk+uhtbM2pdPNpR/cvblPuhptIztcZUgLQCd8b0ZyZ9R6P9y8HGVnxIXUuCUtCbRXPo28WSr2KkQku/CyAdpto58VTjmdAcY/My6d6Y7ItDnVfyPjrpp2vYD5/J8DQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xlgXfjm5; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52bbdc237f0so1939446e87.0
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2024 16:43:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1718322223; x=1718927023; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jBGMHq9Wh3giz27rRFHu5Pt0hN+wKFfawhzCs9P8HwA=;
+        b=xlgXfjm5+8Agh/4ZocDUXDPT/hmAUNVUbFvp1ayLhY376KBVnSbjb/tYR/HAHWRy6P
+         uNwP4Hrn6j7LQFQ8UtzRYYYmhGffNuheQL1ytWyBXTr0EYW/GmHeYcs/5AQGvozKpAYT
+         +BHew7QqLn4qeGVk9h9BEI3ltZH2OIL/Ug8CoCV5lhSPcV8c1/MtIk57nrDXpeZQpkbO
+         9EOzPcNL8haUjO+Jtw3jGd3GdHaS+xuXMk88ClcuocZ2rRKf2rEjxD9bWziIHVNY7mKo
+         bY59lreCwD+FraEnN6Xymp3ehF3QxVPGkAjFqkQcwazWnwKy5V6RbOn8nR8gaglskz0g
+         5b/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718322223; x=1718927023;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jBGMHq9Wh3giz27rRFHu5Pt0hN+wKFfawhzCs9P8HwA=;
+        b=SQpug+uso20XHB/LtORHMnRW3ONwvGEaRgaEWuGniFTK/lgJiFVOgwlboSIzW5nD69
+         8iFWMkTfo1jBjsTVS7cii0x5nLYSx1aSh1PaK54qx/Lg2z0O1Xr440YeXFWc13qDjjYp
+         07iMfh23LuLZY+GVlj5qGvrHoQOPXnon2AUsbXmvY5iQp6x4x/J0wu8C0weZQ0QC7ZVt
+         0XKCMY9nWsQerAwUawX7maLM5ijQDP+kYaZiNemC0pnAmmF2sa17fu9jHWo0iWDnU7KM
+         JMnXEXp1iEWxVg57WQ/q0n5apPVMuHHXWrt2BEk+mkwWyIJYk5OIEd9eeNer8+z6fdnW
+         pm4w==
+X-Gm-Message-State: AOJu0Yyvs3l+f6XwqYdp1ynfcUHaBIqY7t9d4hdlBgBOgUQlQ9xsb+i3
+	FQUUCkdYZMZSDtPOW/7pki0xtF91KKbRM5AJ86eofeWz1avv1738Elx/MS6CvQE=
+X-Google-Smtp-Source: AGHT+IGDvZfiJ/4XvoDygCDHe+Yp8Wm6B3ueQaKPdSs47eimYuDVJK0r8MCo6ySHPBOaf2w9OYtiSw==
+X-Received: by 2002:a05:6512:2255:b0:52b:9c8a:734f with SMTP id 2adb3069b0e04-52ca6e91af8mr1010269e87.50.1718322222596;
+        Thu, 13 Jun 2024 16:43:42 -0700 (PDT)
+Received: from umbar.lan ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca2872260sm359298e87.142.2024.06.13.16.43.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jun 2024 16:43:42 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH v7 0/6] power: supply: Lenovo Yoga C630 EC
+Date: Fri, 14 Jun 2024 02:43:37 +0300
+Message-Id: <20240614-yoga-ec-driver-v7-0-9f0b9b40ae76@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 3/5] power: supply: core: implement extension API
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Sebastian Reichel <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240608-power-supply-extensions-v2-0-2dcd35b012ad@weissschuh.net>
- <20240608-power-supply-extensions-v2-3-2dcd35b012ad@weissschuh.net>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <20240608-power-supply-extensions-v2-3-2dcd35b012ad@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:3Lv72fYWQDF/nbYhUCEMNgXhkHdwt5fwyhWVfLLEZOFxHAy5Eri
- /sbJ3lhfD0Db3h4CtWd4zd2LqftjXUzOEQ/CT4X0SrPvCyT0Cz6oKBZj0/i62vPGs54al8z
- o6WshcmuY0Gk61IRsbZXdOP8Ifwv6xQ41Oh1fd3CsSNTB+wTNGJDWBfCswfv1YsToHSlEhV
- 1/dmaBfninrKl1lIl1t/A==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:4rd53bpqqSQ=;gz/XHxMSvjjxi7crjacU5wMO9+L
- Z6iVlxXqnh2vHbreaQBSDyATUlNtG3TiVlPFx8X5dmEZYPrzxH6O4FYPTXLhygY3mmLZS/1QP
- CYhJvK1fanhVQH/TMeFrO7UmSbq36u+Wbs3qex8ay7aBzOLtgOINLcOYjrQTpTRdIpiVZsAH8
- lq36IoiBfZaeih0/lf+feiTym6osWQGghHp7MuHH74EpHGdeqgXD8FR9W7mdlrlWPJ/9QqLb8
- BCgkjizWBOehd13uDddccZmCXJqtJcoWGOJYnEQR6i/bHSMJewvA7Lf1zooTQ6CgI9/zhTexb
- jHRb+k8LTe9Q0syl0mdJFXcpL9cjKW22h2C2eocZ8Hg2ju3WDohdvtEZOyMMrxUmoUufoM1h1
- JZez7AzqszM1+Is0+W5oYpJ2kHuYQ7yuJeuQx04g/FyKOfzyHO6vaHOgJUX5E4DSy3Fb5GN66
- tT53ATsrNvxZdqCoBngZc5nnju80Tpd7oeqLbYLLbJpaWhFC17l41AvRETzv239dc+6I6YWCv
- idlChsADCVybQpq72j2VFcnT+BZV7PvD1f//bqgn980w9tz6iD0rN7aWny4EH/OWhXBY1Fj2k
- 7GpOVghBNk8BEjnKCRAl7NecbYw6No8Sf8OZFcid1xFmfBuS9MvUfX+ms7KcnA+qFGamFqOIZ
- GXXGWcsjkDkuxxvRVDcVEs4bBwxOq7Y1IIZdqZ5fhQFwMUud7NpQOp5o3A/WpIajoB2/BuVfb
- Dm59uPZ5Od0uwLCbCxyPG6jhwzTBNqn4TKaLr+Hzy+PcTpqW1TF2LKBAH6cjpUvYDvtPZjxul
- C27yyfLwlpWaWDPHPensVCKuDqp/f3pJZLGw72/1toAPU=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACmEa2YC/3XOzWqEMBSG4VsZsm4k/4ld9T7KLI4m0dCOKUcJI
+ 4P33jhQapEuv8XznvMgc8AUZvJ6eRAMJc0pT3XYlwvpR5iGQJOvmwgmFNPC0jUPQENPPaYSkFo
+ TvY3aewiOVPSFIab7M/h+rTtivtFlxAA/GckE01wLx9pGCCmVNJRTf0sLrk0HuM7jRy5vn2kCz
+ E3GYc+OaV4yrs83i9zj/35UJGVUCgut09yD18fU/lJRR+9OXlWvIjgfAYLtzMnrX2/Y+b6unkP
+ fcmCdkuLszcFzcfKmehes6aDmlWz/+G3bvgFVTT2YtAEAAA==
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ Nikita Travkin <nikita@trvn.ru>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4957;
+ i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
+ bh=bvkmdVPRbAEAAQvqUF2QXsmCf2b50cjIdy/XyZ0RKyM=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBma4Qs5RMbLITSC+O7xOl953wV9GKtwwGeXPgL1
+ 9RzOwrUbheJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZmuELAAKCRCLPIo+Aiko
+ 1YJZB/4zXnq2+gUrpjMfLIv/0/TE1pv6cZzRt1WwPnySn+PC9r/CpDKFW5vsGvwZ+q4xjJAzjzo
+ bjuOiPemSMhWeupbFRnn3+0ECY4IeggWZP8iVdD73KGKh2aY0sN+cwxEC8Wrg+/CoakBBV+0DwZ
+ KmOm9b/W3qDqkt0SXBpGnlVuDU+/7OyeSPbfItAemtCkdJB62wRHX0nJO/vhyjLOePtmlvekEXm
+ IflaWi0uXWUSs2HVkxqGmZTMdTLgj7FjPbAlq5jtpxrc7fbEBgvazx5PV2jc98vU0Du9MOAPtz7
+ NczEesbhCFsTWcvqNRIqx5lBrJbEva5mEFyueKW814jZnNbo
+X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
+ fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
-Am 08.06.24 um 21:19 schrieb Thomas Wei=C3=9Fschuh:
+This adds binding, driver and the DT support for the Lenovo Yoga C630
+Embedded Controller, to provide battery information.
 
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> ---
->   drivers/power/supply/power_supply.h       |  13 ++-
->   drivers/power/supply/power_supply_core.c  | 128 ++++++++++++++++++++++=
-++++++--
->   drivers/power/supply/power_supply_hwmon.c |   2 +-
->   drivers/power/supply/power_supply_sysfs.c |  37 ++++++++-
->   include/linux/power_supply.h              |  26 ++++++
->   5 files changed, 192 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/power/supply/power_supply.h b/drivers/power/supply/=
-power_supply.h
-> index 622be1f0a180..686b66161900 100644
-> --- a/drivers/power/supply/power_supply.h
-> +++ b/drivers/power/supply/power_supply.h
-> @@ -13,8 +13,17 @@ struct device;
->   struct device_type;
->   struct power_supply;
->
-> -extern bool power_supply_has_property(const struct power_supply_desc *p=
-sy_desc,
-> -				      enum power_supply_property psp);
-> +struct psy_ext_registration {
-> +	struct list_head list_head;
-> +	const struct power_supply_ext *ext;
-> +};
-> +
-> +#define psy_for_each_extension(psy, pos) list_for_each_entry(pos, &(psy=
-)->extensions, list_head)
+Support for this EC was implemented by Bjorn, who later could not work
+on this driver. I've picked this patchset up and updated it following
+the pending review comments.
 
-Hi,
+DisplayPort support is still not a part of this patchset. It uses EC
+messages to provide AltMode information rather than implementing
+corresponding UCSI commands. However to have a cleaner uAPI story, the
+AltMode should be handled via the same Type-C port.
 
-sorry for taking so long to respond, the patch looks good to me except one=
- single thing:
+Merge strategy: the driver bits depend on the platform/arm64 patch,
+which adds interface for the subdrivers. I'd either ask to get that
+patch merged to the immutable branch, which then can be picked up by
+power/supply and USB trees or, to make life simpler, ack merging all
+driver bits e.g. through USB subsystem (I'm biased here since I plan to
+send more cleanups for the UCSI subsystem, which would otherwise result
+in cross-subsystem conflicts).
 
-when removing a power supply extension, the driver has to be sure that no =
-one is still using
-the removed extension. So you might want to add some sort of locking when =
-using a power supply
-extension.
+---
+Changes in v7:
+- In PSY driver use guard() instead of scoped_guard() (Ilpo)
+- Use switch/case rather than ifs in yoga_c630_ucsi_read() (Ilpo)
+- Link to v6: https://lore.kernel.org/r/20240612-yoga-ec-driver-v6-0-8e76ba060439@linaro.org
 
-Thanks,
-Armin Wolf
+Changes in v6:
+- Use guard() instead of scoped_guard() (Ilpo)
+- Add a define for UCSI version register (Ilpo)
+- Added a check to prevent overflowing the address in reg16 read (Ilpo)
+- Link to v5: https://lore.kernel.org/r/20240607-yoga-ec-driver-v5-0-1ac91a0b4326@linaro.org
 
-> +
-> +bool power_supply_has_property(const struct power_supply *psy,
-> +			       enum power_supply_property psp);
-> +bool power_supply_ext_has_property(const struct power_supply_ext *psy_e=
-xt,
-> +				   enum power_supply_property psp);
->
->   #ifdef CONFIG_SYSFS
->
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/su=
-pply/power_supply_core.c
-> index d57ecdd966e0..fcdfedf3df7c 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -1183,8 +1183,8 @@ bool power_supply_battery_bti_in_range(struct powe=
-r_supply_battery_info *info,
->   }
->   EXPORT_SYMBOL_GPL(power_supply_battery_bti_in_range);
->
-> -bool power_supply_has_property(const struct power_supply_desc *psy_desc=
-,
-> -			       enum power_supply_property psp)
-> +static bool psy_desc_has_property(const struct power_supply_desc *psy_d=
-esc,
-> +				  enum power_supply_property psp)
->   {
->   	bool found =3D false;
->   	int i;
-> @@ -1199,17 +1199,55 @@ bool power_supply_has_property(const struct powe=
-r_supply_desc *psy_desc,
->   	return found;
->   }
->
-> +bool power_supply_ext_has_property(const struct power_supply_ext *psy_e=
-xt,
-> +				   enum power_supply_property psp)
-> +{
-> +	bool found =3D false;
-> +	int i;
-> +
-> +	if (!psy_ext)
-> +		return false;
-> +
-> +	for (i =3D 0; i < psy_ext->num_properties; i++) {
-> +		if (psy_ext->properties[i] =3D=3D psp) {
-> +			found =3D true;
-> +			break;
-> +		}
-> +	}
-> +
-> +	return found;
-> +}
-> +
-> +bool power_supply_has_property(const struct power_supply *psy,
-> +			       enum power_supply_property psp)
-> +{
-> +	struct psy_ext_registration *reg;
-> +
-> +	psy_for_each_extension(psy, reg)
-> +		if (power_supply_ext_has_property(reg->ext, psp))
-> +			return true;
-> +
-> +	return psy_desc_has_property(psy->desc, psp);
-> +}
-> +
->   int power_supply_get_property(struct power_supply *psy,
->   			    enum power_supply_property psp,
->   			    union power_supply_propval *val)
->   {
-> +	struct psy_ext_registration *reg;
-> +
->   	if (atomic_read(&psy->use_cnt) <=3D 0) {
->   		if (!psy->initialized)
->   			return -EAGAIN;
->   		return -ENODEV;
->   	}
->
-> -	if (power_supply_has_property(psy->desc, psp))
-> +	psy_for_each_extension(psy, reg) {
-> +		if (power_supply_ext_has_property(reg->ext, psp))
-> +			return reg->ext->get_property(psy, reg->ext, psp, val);
-> +	}
-> +
-> +	if (psy_desc_has_property(psy->desc, psp))
->   		return psy->desc->get_property(psy, psp, val);
->   	else if (power_supply_battery_info_has_prop(psy->battery_info, psp))
->   		return power_supply_battery_info_get_prop(psy->battery_info, psp, va=
-l);
-> @@ -1222,7 +1260,21 @@ int power_supply_set_property(struct power_supply=
- *psy,
->   			    enum power_supply_property psp,
->   			    const union power_supply_propval *val)
->   {
-> -	if (atomic_read(&psy->use_cnt) <=3D 0 || !psy->desc->set_property)
-> +	struct psy_ext_registration *reg;
-> +
-> +	if (atomic_read(&psy->use_cnt) <=3D 0)
-> +		return -ENODEV;
-> +
-> +	psy_for_each_extension(psy, reg) {
-> +		if (power_supply_ext_has_property(reg->ext, psp)) {
-> +			if (reg->ext->set_property)
-> +				return reg->ext->set_property(psy, reg->ext, psp, val);
-> +			else
-> +				return -ENODEV;
-> +		}
-> +	}
-> +
-> +	if (!psy->desc->set_property)
->   		return -ENODEV;
->
->   	return psy->desc->set_property(psy, psp, val);
-> @@ -1232,8 +1284,21 @@ EXPORT_SYMBOL_GPL(power_supply_set_property);
->   int power_supply_property_is_writeable(struct power_supply *psy,
->   					enum power_supply_property psp)
->   {
-> -	if (atomic_read(&psy->use_cnt) <=3D 0 ||
-> -			!psy->desc->property_is_writeable)
-> +	struct psy_ext_registration *reg;
-> +
-> +	if (atomic_read(&psy->use_cnt) <=3D 0)
-> +		return -ENODEV;
-> +
-> +	psy_for_each_extension(psy, reg) {
-> +		if (power_supply_ext_has_property(reg->ext, psp)) {
-> +			if (reg->ext->property_is_writeable)
-> +				return reg->ext->property_is_writeable(psy, reg->ext, psp);
-> +			else
-> +				return -ENODEV;
-> +		}
-> +	}
-> +
-> +	if (!psy->desc->property_is_writeable)
->   		return -ENODEV;
->
->   	return psy->desc->property_is_writeable(psy, psp);
-> @@ -1256,6 +1321,52 @@ int power_supply_powers(struct power_supply *psy,=
- struct device *dev)
->   }
->   EXPORT_SYMBOL_GPL(power_supply_powers);
->
-> +static int power_supply_update_groups(struct power_supply *psy)
-> +{
-> +	int ret;
-> +
-> +	ret =3D sysfs_update_groups(&psy->dev.kobj, power_supply_dev_type.grou=
-ps);
-> +	power_supply_changed(psy);
-> +	return ret;
-> +}
-> +
-> +int power_supply_register_extension(struct power_supply *psy, const str=
-uct power_supply_ext *ext)
-> +{
-> +	struct psy_ext_registration *reg;
-> +	size_t i;
-> +
-> +	for (i =3D 0; i < ext->num_properties; i++) {
-> +		if (power_supply_has_property(psy, ext->properties[i]))
-> +			return -EEXIST;
-> +	}
-> +
-> +	reg =3D devm_kmalloc(&psy->dev, sizeof(*reg), GFP_KERNEL);
-> +	if (!reg)
-> +		return -ENOMEM;
-> +
-> +	reg->ext =3D ext;
-> +	list_add(&reg->list_head, &psy->extensions);
-> +
-> +	return power_supply_update_groups(psy);
-> +}
-> +EXPORT_SYMBOL_GPL(power_supply_register_extension);
-> +
-> +void power_supply_unregister_extension(struct power_supply *psy, const =
-struct power_supply_ext *ext)
-> +{
-> +	struct psy_ext_registration *reg;
-> +
-> +	psy_for_each_extension(psy, reg) {
-> +		if (reg->ext =3D=3D ext) {
-> +			list_del(&reg->list_head);
-> +			power_supply_update_groups(psy);
-> +			return;
-> +		}
-> +	}
-> +
-> +	dev_warn(&psy->dev, "Trying to unregister invalid extension");
-> +}
-> +EXPORT_SYMBOL_GPL(power_supply_unregister_extension);
-> +
->   static void power_supply_dev_release(struct device *dev)
->   {
->   	struct power_supply *psy =3D to_power_supply(dev);
-> @@ -1308,7 +1419,7 @@ static int psy_register_thermal(struct power_suppl=
-y *psy)
->   		return 0;
->
->   	/* Register battery zone device psy reports temperature */
-> -	if (power_supply_has_property(psy->desc, POWER_SUPPLY_PROP_TEMP)) {
-> +	if (power_supply_has_property(psy, POWER_SUPPLY_PROP_TEMP)) {
->   		/* Prefer our hwmon device and avoid duplicates */
->   		struct thermal_zone_params tzp =3D {
->   			.no_hwmon =3D IS_ENABLED(CONFIG_POWER_SUPPLY_HWMON)
-> @@ -1361,7 +1472,7 @@ __power_supply_register(struct device *parent,
->   		pr_warn("%s: Expected proper parent device for '%s'\n",
->   			__func__, desc->name);
->
-> -	if (power_supply_has_property(desc, POWER_SUPPLY_PROP_USB_TYPE) &&
-> +	if (psy_desc_has_property(desc, POWER_SUPPLY_PROP_USB_TYPE) &&
->   	    (!desc->usb_types || !desc->num_usb_types))
->   		return ERR_PTR(-EINVAL);
->
-> @@ -1415,6 +1526,7 @@ __power_supply_register(struct device *parent,
->   	}
->
->   	spin_lock_init(&psy->changed_lock);
-> +	INIT_LIST_HEAD(&psy->extensions);
->   	rc =3D device_add(dev);
->   	if (rc)
->   		goto device_add_failed;
-> diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/s=
-upply/power_supply_hwmon.c
-> index 2ecbe4a74c25..8cb852a734b1 100644
-> --- a/drivers/power/supply/power_supply_hwmon.c
-> +++ b/drivers/power/supply/power_supply_hwmon.c
-> @@ -374,7 +374,7 @@ int power_supply_add_hwmon_sysfs(struct power_supply=
- *psy)
->   	for (i =3D 0; i < ARRAY_SIZE(power_supply_hwmon_props); i++) {
->   		const enum power_supply_property prop =3D power_supply_hwmon_props[i=
-];
->
-> -		if (power_supply_has_property(psy->desc, prop))
-> +		if (power_supply_has_property(psy, prop))
->   			set_bit(prop, psyhw->props);
->   	}
->
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/s=
-upply/power_supply_sysfs.c
-> index abd44ebfe6fe..8f29ddea08d0 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -271,6 +271,23 @@ static ssize_t power_supply_show_usb_type(struct de=
-vice *dev,
->   	return count;
->   }
->
-> +static ssize_t power_supply_show_charge_behaviour(struct device *dev,
-> +						  struct power_supply *psy,
-> +						  union power_supply_propval *value,
-> +						  char *buf)
-> +{
-> +	struct psy_ext_registration *reg;
-> +
-> +	psy_for_each_extension(psy, reg) {
-> +		if (power_supply_ext_has_property(reg->ext, POWER_SUPPLY_PROP_CHARGE_=
-BEHAVIOUR))
-> +			return power_supply_charge_behaviour_show(dev, reg->ext->charge_beha=
-viours,
-> +								  value->intval, buf);
-> +	}
-> +
-> +	return power_supply_charge_behaviour_show(dev, psy->desc->charge_behav=
-iours,
-> +						  value->intval, buf);
-> +}
-> +
->   static ssize_t power_supply_show_property(struct device *dev,
->   					  struct device_attribute *attr,
->   					  char *buf) {
-> @@ -304,8 +321,7 @@ static ssize_t power_supply_show_property(struct dev=
-ice *dev,
->   						&value, buf);
->   		break;
->   	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-> -		ret =3D power_supply_charge_behaviour_show(dev, psy->desc->charge_beh=
-aviours,
-> -							 value.intval, buf);
-> +		ret =3D power_supply_show_charge_behaviour(dev, psy, &value, buf);
->   		break;
->   	case POWER_SUPPLY_PROP_MODEL_NAME ... POWER_SUPPLY_PROP_SERIAL_NUMBER=
-:
->   		ret =3D sysfs_emit(buf, "%s\n", value.strval);
-> @@ -374,7 +390,7 @@ static umode_t power_supply_attr_is_visible(struct k=
-object *kobj,
->   	if (attrno =3D=3D POWER_SUPPLY_PROP_TYPE)
->   		return mode;
->
-> -	if (power_supply_has_property(psy->desc, attrno)) {
-> +	if (power_supply_has_property(psy, attrno)) {
->   		if (power_supply_property_is_writeable(psy, attrno) > 0)
->   			mode |=3D S_IWUSR;
->   		return mode;
-> @@ -459,6 +475,7 @@ int power_supply_uevent(const struct device *dev, st=
-ruct kobj_uevent_env *env)
->   		power_supply_battery_info_properties;
->   	unsigned long psy_drv_properties[POWER_SUPPLY_ATTR_CNT /
->   					 sizeof(unsigned long) + 1] =3D {0};
-> +	struct psy_ext_registration *ext;
->   	int ret =3D 0, j;
->   	char *prop_buf;
->
-> @@ -486,7 +503,21 @@ int power_supply_uevent(const struct device *dev, s=
-truct kobj_uevent_env *env)
->   	if (ret)
->   		goto out;
->
-> +	psy_for_each_extension(psy, ext) {
-> +		for (j =3D 0; j < ext->ext->num_properties; j++) {
-> +			if (test_bit(ext->ext->properties[j], psy_drv_properties))
-> +				continue;
-> +			set_bit(ext->ext->properties[j], psy_drv_properties);
-> +			ret =3D add_prop_uevent(dev, env, ext->ext->properties[j],
-> +					      prop_buf);
-> +			if (ret)
-> +				goto out;
-> +		}
-> +	}
-> +
->   	for (j =3D 0; j < psy->desc->num_properties; j++) {
-> +		if (test_bit(psy->desc->properties[j], psy_drv_properties))
-> +			continue;
->   		set_bit(psy->desc->properties[j], psy_drv_properties);
->   		ret =3D add_prop_uevent(dev, env, psy->desc->properties[j],
->   				      prop_buf);
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index 8e5705a56b85..128e7a67f268 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -15,6 +15,7 @@
->   #include <linux/device.h>
->   #include <linux/workqueue.h>
->   #include <linux/leds.h>
-> +#include <linux/list.h>
->   #include <linux/spinlock.h>
->   #include <linux/notifier.h>
->
-> @@ -280,6 +281,25 @@ struct power_supply_desc {
->   	int use_for_apm;
->   };
->
-> +struct power_supply_ext {
-> +	u8 charge_behaviours;
-> +	const enum power_supply_property *properties;
-> +	size_t num_properties;
-> +
-> +	int (*get_property)(struct power_supply *psy,
-> +			    const struct power_supply_ext *ext,
-> +			    enum power_supply_property psp,
-> +			    union power_supply_propval *val);
-> +	int (*set_property)(struct power_supply *psy,
-> +			    const struct power_supply_ext *ext,
-> +			    enum power_supply_property psp,
-> +			    const union power_supply_propval *val);
-> +
-> +	int (*property_is_writeable)(struct power_supply *psy,
-> +				     const struct power_supply_ext *ext,
-> +				     enum power_supply_property psp);
-> +};
-> +
->   struct power_supply {
->   	const struct power_supply_desc *desc;
->
-> @@ -303,6 +323,7 @@ struct power_supply {
->   	bool removing;
->   	atomic_t use_cnt;
->   	struct power_supply_battery_info *battery_info;
-> +	struct list_head extensions;
->   #ifdef CONFIG_THERMAL
->   	struct thermal_zone_device *tzd;
->   	struct thermal_cooling_device *tcd;
-> @@ -892,6 +913,11 @@ devm_power_supply_register_no_ws(struct device *par=
-ent,
->   extern void power_supply_unregister(struct power_supply *psy);
->   extern int power_supply_powers(struct power_supply *psy, struct device=
- *dev);
->
-> +extern int power_supply_register_extension(struct power_supply *psy,
-> +					   const struct power_supply_ext *ext);
-> +extern void power_supply_unregister_extension(struct power_supply *psy,
-> +					      const struct power_supply_ext *ext);
-> +
->   #define to_power_supply(device) container_of(device, struct power_supp=
-ly, dev)
->
->   extern void *power_supply_get_drvdata(struct power_supply *psy);
->
+Changes in v5:
+- Added missing article in the commit message (Bryan)
+- Changed yoga_c630_ec_ucsi_get_version() to explicitly set the register
+  instead of just incrementing it (Bryan)
+- Dropped spurious debugging pr_info (Bryan)
+- Added missing includes all over the place (Ilpo)
+- Switched to scoped_guard() where it's suitable (Ilpo)
+- Defined register bits (Ilpo, Bryan)
+- Whitespace cleanup (Ilpo, Bryan)
+- Reworked yoga_c630_ucsi_notify() to use switch-case (Bryan)
+- Use ternary operators instead of if()s (Ilpo)
+- Switched power supply driver to use fwnode (Sebastian)
+- Fixed handling of the adapter's type vs usb_type (Sebastian)
+- Added SCOPE property to the battery (Sebastian)
+- Link to v4: https://lore.kernel.org/r/20240528-yoga-ec-driver-v4-0-4fa8dfaae7b6@linaro.org
+
+Changes in v4:
+- Moved bindings to platform/ to follow example of other Acer Aspire1 EC
+  (Nikita Travkin)
+- Fixed dt validation for EC interrupt pin (Rob Herring)
+- Dropped separate 'scale' property (Oliver Neukum)
+- Link to v3: https://lore.kernel.org/r/20240527-yoga-ec-driver-v3-0-327a9851dad5@linaro.org
+
+Changes in v3:
+- Split the driver into core and power supply drivers,
+- Added UCSI driver part, handling USB connections,
+- Fixed Bjorn's address in DT bindings (Brian Masney)
+- Changed power-role for both ports to be "dual" per UCSI
+- Link to v2: https://lore.kernel.org/linux-arm-msm/20230205152809.2233436-1-dmitry.baryshkov@linaro.org/
+
+Changes in v2:
+- Dropped DP support for now, as the bindings are in process of being
+  discussed separately,
+- Merged dt patch into the same patchseries,
+- Removed the fixed serial number battery property,
+- Fixed indentation of dt bindings example,
+- Added property: reg and unevaluatedProperties to the connector
+  bindings.
+- Link to v1: https://lore.kernel.org/linux-arm-msm/20220810035424.2796777-1-bjorn.andersson@linaro.org/
+
+---
+Bjorn Andersson (2):
+      dt-bindings: platform: Add Lenovo Yoga C630 EC
+      arm64: dts: qcom: c630: Add Embedded Controller node
+
+Dmitry Baryshkov (4):
+      platform: arm64: add Lenovo Yoga C630 WOS EC driver
+      usb: typec: ucsi: add Lenovo Yoga C630 glue driver
+      power: supply: lenovo_yoga_c630_battery: add Lenovo C630 driver
+      arm64: dts: qcom: sdm845: describe connections of USB/DP port
+
+ .../bindings/platform/lenovo,yoga-c630-ec.yaml     |  83 ++++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |  53 ++-
+ .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      |  75 ++++
+ drivers/platform/arm64/Kconfig                     |  14 +
+ drivers/platform/arm64/Makefile                    |   1 +
+ drivers/platform/arm64/lenovo-yoga-c630.c          | 290 ++++++++++++
+ drivers/power/supply/Kconfig                       |   9 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/lenovo_yoga_c630_battery.c    | 500 +++++++++++++++++++++
+ drivers/usb/typec/ucsi/Kconfig                     |   9 +
+ drivers/usb/typec/ucsi/Makefile                    |   1 +
+ drivers/usb/typec/ucsi/ucsi_yoga_c630.c            | 204 +++++++++
+ include/linux/platform_data/lenovo-yoga-c630.h     |  44 ++
+ 13 files changed, 1283 insertions(+), 1 deletion(-)
+---
+base-commit: 6906a84c482f098d31486df8dc98cead21cce2d0
+change-id: 20240527-yoga-ec-driver-76fd7f5ddae8
+
+Best regards,
+-- 
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
 
