@@ -1,175 +1,256 @@
-Return-Path: <linux-pm+bounces-9076-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9077-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8859990696D
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 11:55:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 373799069E9
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 12:25:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CC101C23166
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 09:55:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2934D1C222AE
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 10:25:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 761061411CC;
-	Thu, 13 Jun 2024 09:55:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0529C142627;
+	Thu, 13 Jun 2024 10:25:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5032414039A;
-	Thu, 13 Jun 2024 09:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FC51422D3;
+	Thu, 13 Jun 2024 10:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718272516; cv=none; b=kLg6EliKiAcVwhf/XKrmcs3qkMWQNYcW3TQq2SRK6McSMk02L9LR4zMuQhFU6Dj9zfKGuwN0qs8uOXjKh2fJL7FF0e2akDCQ4XBZI66jFQXzvlhAF3O/ATUzAkVyjveUO8MaAr1Xb8Zd//orH/ShXEi6au2y1PS9HZALESk2c4I=
+	t=1718274341; cv=none; b=S7On+OAqDm/94S4ESIJNoFul3xqs9IZhEbQ+yn9u9SUtSnCptxGW1wfvokcfhwqfuBwaCrZr50jiYzCggcXGNdmTejvPhqVqQbEXo9Yy/dK3HFsgOXZKufoBGs8JHF7ouCRCahQ5VIiRoYUxVEzFdtECd6MKc/Y4TEWunFg54XU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718272516; c=relaxed/simple;
-	bh=3e92B1eVt9vTMbGDST7vZ+wtr7b9AXBKBsq0dXvWRfI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oOZL9iXqQ9WeX9MMo+E6ViyH0Jhmmgh1cyqpd0aydDOvm1VaeC5fM1ZrXnjjNb1RdNuXzvn9xmXv+DgE0ljBf1MSjZV1LXaB+YXmiWGE4TZaSSmvfcaT56lFFFoQZ98T5I9/5esEk73mZVbs0/EMVEoDOj02MBPkY8LMZN+m6Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 449571063;
-	Thu, 13 Jun 2024 02:55:38 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 703353F5A1;
-	Thu, 13 Jun 2024 02:55:11 -0700 (PDT)
-Date: Thu, 13 Jun 2024 11:55:08 +0200
-From: Beata Michalska <beata.michalska@arm.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, ionela.voinescu@arm.com,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	len.brown@intel.com, vanshikonda@os.amperecomputing.com,
-	sumitg@nvidia.com, vincent.guittot@linaro.org
-Subject: Re: [PATCH 1/1] cpufreq: Rewire arch specific feedback for
- cpuinfo/scaling_cur_freq
-Message-ID: <ZmrB_DqtmVpvG30l@arm.com>
-References: <20240603081331.3829278-1-beata.michalska@arm.com>
- <20240603081331.3829278-2-beata.michalska@arm.com>
- <20240603114811.oio3uemniib5uaa2@vireshk-i7>
- <CAJZ5v0j1bqhmKrJirw+WgEVDdszZ9xQSgmfazVKMVa8H6_5TSw@mail.gmail.com>
- <20240606085513.pptx5dtjcvvg3zo4@vireshk-i7>
- <CAJZ5v0it5vZvzkbErkGOVruPbkxgr8VMTgQzsncpdQmvCOfBng@mail.gmail.com>
- <20240613082358.yq2lui6vc35xi53t@vireshk-i7>
- <CAJZ5v0iOvpx=YtPtbM9RPaVh2n4+T=r91bM7OZt5k8q0Tzmk+w@mail.gmail.com>
+	s=arc-20240116; t=1718274341; c=relaxed/simple;
+	bh=KtXAkkxHbXDmoA9cutCloZ9Q2FYGxfTpeV8PuyjnI28=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Cty0giMZS4QnDdWp+pAmK1hZO10ARtQsaB8GAZpge16C4uc8c5sF9lKDNbxiHABJuKcEj8gqLvAUrlyy1EaDnUKsixOoTh8rcQLU315hmj7GMrmcImI0TMXevt6xZHIx5EF9lqroX4hAwrMrQH6fdDTHDs0KdKAoPkx0Wl+UPRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4W0JMj1zwXz6JB2R;
+	Thu, 13 Jun 2024 18:20:49 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0736C140A70;
+	Thu, 13 Jun 2024 18:25:30 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 13 Jun
+ 2024 11:25:29 +0100
+Date: Thu, 13 Jun 2024 11:25:27 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>, "Catalin
+ Marinas" <catalin.marinas@arm.com>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<linuxarm@huawei.com>
+CC: Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>, <loongarch@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, "Miguel Luis" <miguel.luis@oracle.com>, James Morse
+	<james.morse@arm.com>, "Salil Mehta" <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Hanjun Guo <guohanjun@huawei.com>, Gavin
+ Shan <gshan@redhat.com>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+	<justin.he@arm.com>, <jianyong.wu@arm.com>, Karl Heubaum
+	<karl.heubaum@oracle.com>
+Subject: Re: [PATCH v10 00/19] ACPI/arm64: add support for virtual cpu
+ hotplug
+Message-ID: <20240613112511.00006331@huawei.com>
+In-Reply-To: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
+References: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iOvpx=YtPtbM9RPaVh2n4+T=r91bM7OZt5k8q0Tzmk+w@mail.gmail.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Thu, Jun 13, 2024 at 11:27:52AM +0200, Rafael J. Wysocki wrote:
-> On Thu, Jun 13, 2024 at 10:24 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > On 07-06-24, 16:21, Rafael J. Wysocki wrote:
-> > > On Thu, Jun 6, 2024 at 10:55 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > > What about this, hopefully this doesn't break any existing platforms
-> > > > and fix the problems for ARM (and others):
-> > > >
-> > > > - scaling_cur_freq:
-> > > >
-> > > >   Returns the frequency of the last P-state requested by the scaling
-> > > >   driver from the hardware.
-> > >
-> > > This would change the behavior for intel_pstate in the passive mode AFAICS.
-> > >
-> > > ATM it calls arch_freq_get_on_cpu(), after the change it would return
-> > > policy->cur which would not be the same value most of the time.  And
-> > > in the ->adjust_perf() case policy->cur is not updated by it even.
-> >
-> > Yeah, we would need to do the below part to make it work.
-> >
-> > > >  For set_policy() drivers, use the ->get()
-> > > >   callback to get a value that can provide the best estimate to user.
-> > > >
-> > > >   To make this work, we can add get() callback to intel and amd pstate
-> > > >   drivers, and use arch_freq_get_on_cpu().
-> > > >
-> > > >   This will keep the current behavior intact for such drivers.
-> > >
-> > > Well, the passive mode thing would need to be addressed then.
-> >
-> > Right. So this would keep the behavior of the file as is for all platforms and
-> > simplify the core.
-> >
-> > > > - cpuinfo_cur_freq:
-> > > >
-> > > >   Currently this file is available only if the get() callback is
-> > > >   available. Maybe we can keep this behavior as is, and expose this
-> > > >   now for both the pstate drivers (once above change is added). We
-> > > >   will be left with only one driver that doesn't provide the get()
-> > > >   callback: pasemi-cpufreq.c
-> > >
-> > > I would rather get rid of it completely.
-> >
-> > cpuinfo_cur_freq itself ? I thought such changes aren't allowed as they may end
-> > up breaking userspace tools.
-> 
-> cpuinfo_cur_freq is not always present anyway, so user space tools
-> need to be able to cope with the lack of it anyway.
->
-> > > >   Coming back to the implementation of the file read operation, I
-> > > >   think the whole purpose of arch_freq_get_on_cpu() was to get a
-> > > >   better estimate (which may not be perfect) of the frequency the
-> > > >   hardware is really running at (in the last window) and if a platform
-> > > >   provides this, then it can be given priority over the ->get()
-> > > >   callback in order to show the value to userspace.
-> > >
-> > > There was a reason to add it and it was related to policy->cur being
-> > > meaningless on x86 in general (even in the acpi-cpufreq case), but
-> > > let's not go there.
-> >
-> > Right.
-> >
-> > > Hooking this up to cpuinfo_cur_freq on x86 wouldn't make much sense
-> > > IMV because at times it is not even close to the frequency the
-> > > hardware is running at.  It comes from the previous tick period,
-> > > basically, and the hardware can adjust the frequency with a resolution
-> > > that is orders of magnitude higher than the tick rate.
-> >
-> > Hmm. If that is the concern (which looks valid), how come it makes sense to do
-> > the same on ARM ? Beata, Ionela ?
-> >
-> > I thought, just like X86, ARM also doesn't have a guaranteed way to know the
-> > exact frequency anymore and AMUs are providing a better picture, and so we are
-> > moving to the same.
-> >
-> > If we don't want it for X86, then it can be done with help of a new driver flag
-> > CPUFREQ_NO_CPUINFO_SCALING_FREQ, instead of the availability of the get()
-> > callback.
-> >
-> > > Well, this sounds nice, but the changes are a bit problematic.
-> > >
-> > > If you don't want 3 files, I'd drop cpuinfo_cur_freq and introduce
-> > > something else to replace it which will expose the
-> > > arch_freq_get_on_cpu() return value and will be documented
-> > > accordingly.
-> >
-> > Well it is still meaningful to show the return value of the ->get() callback
-> > where the hardware provides it.
-> 
-> But this is a valid point.
-> 
-> > > Then scaling_cur_freq can be (over time) switched over to returning
-> > > policy->cur in the cases when it is meaningful and -ENODATA otherwise.
-> > >
-> > > This would at least allow us to stop making up stuff.
-> >
-> > Maybe a third file, just for arch_freq_get_on_cpu() is not that bad of an idea
-> > :)
-> 
-> /me thinks so.
-I am starting to lean towards that option.
-Making both cpuinfo_cur_freq and scaling_cur_freq sane, might create even more
-confusion as per which is providing what. We are already in a rather tricky
-situation. The interface should be clean, leaving no room for various
-interpretations - as much as possible, of course.
+On Wed, 29 May 2024 14:34:27 +0100
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
 
----
-BR
-Beata
+> v10:
+> - Make acpi_processor_set_per_cpu() return 0 / error rather than bool
+>   to simplify error handling at the call sites.
+>   (Thanks to both Rafael and Gavin who commented on this)
+> - Gather tags.
+> - Rebase on v6.10-rc1
+> 
+> The approach to the GICv3 changes stablized very late in the 6.10 cycle.
+> Subject to Marc taking a final look at those, I think we are now
+> in a good state wrt to those and the ACPI parts. The remaining code
+> that hasn't received review tags from the relevant maintainers
+> is the arm64 specific arch_register_cpu().  Given I think this will go
+> through the arm64 tree, hopefully they have just been waiting for
+> everything else to be ready.
+
+Marc, Will, Catalin,
+
+Any comments on this series?  We definitely want to finally land this
+in 6.11!
+
+Marc, in practice I think you already gave feedback on the the GICv3
+changes in here as part of the discussions in the earlier version threads,
+but if you have time for a final glance through it would be much appreciated.
+Thanks for all your earlier help on this btw.
+
+Will, Catalin.  There is an arch part, however it's just avoiding (for now)
+earlier approach of making this common to all architectures after push back
+from Rafael on the ACPI part, so more of an architecture specific
+implementation choice than really anything to do with the architecture.
+I'm currently assuming this will go through your tree.
+
+Thanks,
+
+Jonathan
+
+> 
+> It is only arch specific to the extent that Rafael suggested we limit
+> the potential impacts of the deferred calling of these functions
+> to be isolated to ARM64 for now.  This is done by having them return
+> -EPROBE_DEFER, on ACPI systems, until the ACPI interpreter is
+> available and can be used to query _STA.
+> 
+> Thanks to everyone who has been involved in development, testing and
+> review of this series - the complex tag chains reflect some of that.
+> Fingers crossed we are approaching the end of this particular saga.
+> 
+> Updated version of James' original introduction.
+> 
+> This series adds what looks like cpuhotplug support to arm64 for use in
+> virtual machines. It does this by moving the cpu_register() calls for
+> architectures that support ACPI into an arch specific call made from
+> the ACPI processor driver.
+>  
+> The kubernetes folk really want to be able to add CPUs to an existing VM,
+> in exactly the same way they do on x86. The use-case is pre-booting guests
+> with one CPU, then adding the number that were actually needed when the
+> workload is provisioned.
+> 
+> Wait? Doesn't arm64 support cpuhotplug already!?
+> In the arm world, cpuhotplug gets used to mean removing the power from a CPU.
+> The CPU is offline, and remains present. For x86, and ACPI, cpuhotplug
+> has the additional step of physically removing the CPU, so that it isn't
+> present anymore.
+>  
+> Arm64 doesn't support this, and can't support it: CPUs are really a slice
+> of the SoC, and there is not enough information in the existing ACPI tables
+> to describe which bits of the slice also got removed. Without a reference
+> machine: adding this support to the spec is a wild goose chase.
+>  
+> Critically: everything described in the firmware tables must remain present.
+>  
+> For a virtual machine this is easy as all the other bits of 'virtual SoC'
+> are emulated, so they can (and do) remain present when a vCPU is 'removed'.
+> 
+> On a system that supports cpuhotplug the MADT has to describe every possible
+> CPU at boot. Under KVM, the vGIC needs to know about every possible vCPU before
+> the guest is started.
+> With these constraints, virtual-cpuhotplug is really just a hypervisor/firmware
+> policy about which CPUs can be brought online.
+>  
+> This series adds support for virtual-cpuhotplug as exactly that: firmware
+> policy. This may even work on a physical machine too; for a guest the part of
+> firmware is played by the VMM. (typically Qemu).
+>  
+> PSCI support is modified to return 'DENIED' if the CPU can't be brought
+> online/enabled yet. The CPU object's _STA method's enabled bit is used to
+> indicate firmware's current disposition. If the CPU has its enabled bit clear,
+> it will not be registered with sysfs, and attempts to bring it online will
+> fail. The notifications that _STA has changed its value then work in the same
+> way as physical hotplug, and firmware can cause the CPU to be registered some
+> time later, allowing it to be brought online.
+>  
+> This creates something that looks like cpuhotplug to user-space and the
+> kernel beyond arm64 architecture specific code, as the sysfs
+> files appear and disappear, and the udev notifications look the same.
+>  
+> One notable difference is the CPU present mask, which is exposed via sysfs.
+> Because the CPUs remain present throughout, they can still be seen in that mask.
+> This value does get used by webbrowsers to estimate the number of CPUs
+> as the CPU online mask is constantly changed on mobile phones.
+>  
+> Linux is tolerant of PSCI returning errors, as its always been allowed to do
+> that. To avoid confusing OS that can't tolerate this, we needed an additional
+> bit in the MADT GICC flags. This series copies ACPI_MADT_ONLINE_CAPABLE, which
+> appears to be for this purpose, but calls it ACPI_MADT_GICC_CPU_CAPABLE as it
+> has a different bit position in the GICC.
+>  
+> This code is unconditionally enabled for all ACPI architectures, though for
+> now only arm64 will have deferred the cpu_register() calls.
+> 
+> If folk want to play along at home, you'll need a copy of Qemu that supports this.
+> https://github.com/salil-mehta/qemu.git virt-cpuhp-armv8/rfc-v2
+> 
+> Replace your '-smp' argument with something like:
+>  | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
+>  
+>  then feed the following to the Qemu montior;
+>  | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+>  | (qemu) device_del cpu1
+> 
+> James Morse (7):
+>   ACPI: processor: Register deferred CPUs from acpi_processor_get_info()
+>   ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
+>   arm64: acpi: Move get_cpu_for_acpi_id() to a header
+>   irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
+>   irqchip/gic-v3: Add support for ACPI's disabled but 'online capable'
+>     CPUs
+>   arm64: document virtual CPU hotplug's expectations
+>   cpumask: Add enabled cpumask for present CPUs that can be brought
+>     online
+> 
+> Jean-Philippe Brucker (1):
+>   arm64: psci: Ignore DENIED CPUs
+> 
+> Jonathan Cameron (11):
+>   ACPI: processor: Simplify initial onlining to use same path for cold
+>     and hotplug
+>   cpu: Do not warn on arch_register_cpu() returning -EPROBE_DEFER
+>   ACPI: processor: Drop duplicated check on _STA (enabled + present)
+>   ACPI: processor: Return an error if acpi_processor_get_info() fails in
+>     processor_add()
+>   ACPI: processor: Fix memory leaks in error paths of processor_add()
+>   ACPI: processor: Move checks and availability of acpi_processor
+>     earlier
+>   ACPI: processor: Add acpi_get_processor_handle() helper
+>   ACPI: scan: switch to flags for acpi_scan_check_and_detach()
+>   arm64: acpi: Harden get_cpu_for_acpi_id() against missing CPU entry
+>   arm64: arch_register_cpu() variant to check if an ACPI handle is now
+>     available.
+>   arm64: Kconfig: Enable hotplug CPU on arm64 if ACPI_PROCESSOR is
+>     enabled.
+> 
+>  .../ABI/testing/sysfs-devices-system-cpu      |   6 +
+>  Documentation/arch/arm64/cpu-hotplug.rst      |  79 ++++++++++
+>  Documentation/arch/arm64/index.rst            |   1 +
+>  arch/arm64/Kconfig                            |   1 +
+>  arch/arm64/include/asm/acpi.h                 |  12 ++
+>  arch/arm64/kernel/acpi.c                      |  22 +++
+>  arch/arm64/kernel/acpi_numa.c                 |  11 --
+>  arch/arm64/kernel/psci.c                      |   2 +-
+>  arch/arm64/kernel/smp.c                       |  59 +++++++-
+>  drivers/acpi/acpi_processor.c                 | 141 ++++++++++--------
+>  drivers/acpi/processor_core.c                 |   3 +-
+>  drivers/acpi/processor_driver.c               |  43 ++----
+>  drivers/acpi/scan.c                           |  47 +++++-
+>  drivers/base/cpu.c                            |  12 +-
+>  drivers/irqchip/irq-gic-v3.c                  |  57 +++++--
+>  include/acpi/acpi_bus.h                       |   1 +
+>  include/acpi/processor.h                      |   2 +-
+>  include/linux/acpi.h                          |  12 +-
+>  include/linux/cpumask.h                       |  25 ++++
+>  kernel/cpu.c                                  |   3 +
+>  20 files changed, 404 insertions(+), 135 deletions(-)
+>  create mode 100644 Documentation/arch/arm64/cpu-hotplug.rst
+> 
+
 
