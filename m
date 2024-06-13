@@ -1,376 +1,224 @@
-Return-Path: <linux-pm+bounces-9125-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9126-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FE49907D9A
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 22:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EE12907F17
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 00:42:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54ABF1C20AD2
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 20:44:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1138E1C22303
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 22:42:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E55C13B592;
-	Thu, 13 Jun 2024 20:44:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03A6814D281;
+	Thu, 13 Jun 2024 22:42:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jlEiq2Gi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ol47/nWk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD5713A3F7;
-	Thu, 13 Jun 2024 20:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FB91411C3;
+	Thu, 13 Jun 2024 22:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718311459; cv=none; b=AVjzws/Kjx9N3B4w4j/aDvITFkq2obiw8KP6u2Rl+cj3/NoyAKvZOn+xKCfQBhSCn9tfaGDil1Hu7wZcqOxr7gf/0+i2YMiBZePUj6lAI7nOPL04nnt828Wj4mrei0jMV/FF232Za88vj4iWlVPlmA5Ey8bsvvj3RGDPADMKeFk=
+	t=1718318529; cv=none; b=eFn6cwq2ZMxQISue5Xi95q/+dBcObtpqyChzIQ+/OtU7VwSObZCdUHWNTDo+zgwNAt0vmxjirc30yxtGbQwwT/OfJ6DhHAsDr3ahVCBZr4NZ19W4RvJdsh0Dl+tGCn+7HR5wt5uTPpkeZvac5ZFZpDz0UVgNiBpbpFjAZJoGYPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718311459; c=relaxed/simple;
-	bh=ZMQKAiTTpNPcqkOMQfaPtk/alrNE490xzzeqLwEYsn8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=m5ldYVruwKzW+UVA765lU4fd4Isu4ZJeu3kjZLZsM5JC48h62PCtOkvZ3DWdURZjUFbrsZIPdnqck+whadxmNuTdkcN7NCU8EFLooDf1UCXluxfYQ392+Z74DgIrsp6Kb3R4nFiP8S8cNarZp/hD/2ej1aRKgXZ23zpPjwwaEqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jlEiq2Gi; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718311458; x=1749847458;
-  h=date:from:to:cc:subject:message-id;
-  bh=ZMQKAiTTpNPcqkOMQfaPtk/alrNE490xzzeqLwEYsn8=;
-  b=jlEiq2GiP+5Bmu7LykexDtOKDNRwfMf/fxOsYNbbHmNKXr3Ceol2CujV
-   fhF8ZxUtruyW4cw5eH0occkz4qv6bguUe/u0MbaKZVYHnyXcH2OLOb1Ce
-   37Te8ACqzK1NnkHD7KkIEuoEbZHcUhVWE1DyIEyc7LBoF+McBmeLn2Cbz
-   jnaGo6Cy9xJGsv0uZkFzgiF/pga/M9oW1pSCDrbLEIYsAn92a/dXJXtWG
-   7hoXYeXEzcsQ1uMVKhwlSP/4/X2as72waeKxUl0rbK0sx8nW4yeiCPPTb
-   VOm2QkAVMUt9lsrWEJwd3CPO+E0psv3RZaLaAgUxeV5+bGm1NShlcVSOi
-   g==;
-X-CSE-ConnectionGUID: TO40xztoTDuo7rcQIXSTDg==
-X-CSE-MsgGUID: YalWd+l9R76Ei5DRMdv95g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11102"; a="25806144"
-X-IronPort-AV: E=Sophos;i="6.08,236,1712646000"; 
-   d="scan'208";a="25806144"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 13:44:17 -0700
-X-CSE-ConnectionGUID: C2pUUIfnT3SOkXrCcqbbSA==
-X-CSE-MsgGUID: Wi5wMx8DRcWe/bW7266bKg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,236,1712646000"; 
-   d="scan'208";a="77737919"
-Received: from lkp-server01.sh.intel.com (HELO 9e3ee4e9e062) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 13 Jun 2024 13:44:14 -0700
-Received: from kbuild by 9e3ee4e9e062 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sHrIp-0000OC-15;
-	Thu, 13 Jun 2024 20:44:11 +0000
-Date: Fri, 14 Jun 2024 04:43:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linux Memory Management List <linux-mm@kvack.org>,
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org
-Subject: [linux-next:master] BUILD REGRESSION
- 6906a84c482f098d31486df8dc98cead21cce2d0
-Message-ID: <202406140411.4qyUCuPF-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1718318529; c=relaxed/simple;
+	bh=pKzimYJu+TJnM9P7Pi4ugxJsWmzS155PJzX5WrUuVZI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=USiTqHjoR4aDOk1Wz4Y/dJIxO2KLZkOMsBa+6yGnR2R6rMTHV8dXxFf7DjXkMUhek0bJmygCmW0Do1VYS67V3zR8qdYFssq9OJoXrWtP8G6h+BzoSGovUtWZdADmbUoASOcTQeWH74z6KBh1ca1jlTpAzpikTKlNq15fhiqgHok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ol47/nWk; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6b06bb80d7dso8638896d6.0;
+        Thu, 13 Jun 2024 15:42:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718318527; x=1718923327; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RADoyJ/UBTliEUUfZ92D6TpXqH7TNpUCBsNp/aY0Wgk=;
+        b=Ol47/nWkXLwkabnCh9m1lSXCBEoUuhtJ/HRGUpWgIvBXIJN3xrFfVoG1BYFddSO9Yx
+         tRtYlYceFzPS5AnCBgB5fZNsLlh9nf0cSLEVWPvW/0WFf4daPsO2nK0LXBvIum/3KIJ3
+         QKU4KqOujEEF1AT/8NGAhwhyOqnNFD2a9HiizNmj56E/wD3ofD60/rktsPfWoIyZ7q5m
+         MCF1oGgjmY1KoSF8cHDJgtXuWxLIkgDvYyUkfuDuc/Gt1ODpp4rwELZsIDzVn2ipkSCt
+         YlAownAY8x/ojv4OrWLtUXavYTyUn96XK9EOYi1HYmOPDmRxG3El3t6JiUG+ddfHR6Fq
+         JN9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718318527; x=1718923327;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RADoyJ/UBTliEUUfZ92D6TpXqH7TNpUCBsNp/aY0Wgk=;
+        b=XapcH9XO2QnLH5255wAXWeYtchEgwnNsg9/AWhVKgDuNekUkFofnc+4Gb038c4beow
+         7njsWd/VJsJaZTNroGVbYal/Q9kYz8F2eQLPgloq7Yzx1y9D5RRrYAA4efvo5xvQbRoq
+         iLvISfQ3SexOab5NQ+7l8rnXfvox4YhPdz9F1Q1Zj3ddOTCppV6pQDOlWHfVylvPH2Nx
+         aFprAX8LwqeEbeJR5LvvXBE3PIOflERODZJqSvcsIH4Gxx8jnaXL95vtbYiQHO1hhILj
+         8hrB6UEQkYqPnVbPeN9f9XGGiIUc8C2zAATiywEuALTFZQRtrGsirbVacrWLhrYTniBV
+         alUg==
+X-Forwarded-Encrypted: i=1; AJvYcCUEKlGSTiOM2wBp9lpeibv5W7yXWHS7ky0Zt5hyqhwhBBgQ7bUTMjMEnlTjS+kBaiyxgiO4yfrHdhOF4uzUaeuigs8MH/0E/5yGOutEKq39kropdAc32ZNu3AAkVXHJZfmh0c0Gd7Fd/CFIrcbtjVL0b5KPAmafrIIh7vpylxj9zyyR
+X-Gm-Message-State: AOJu0YysQnz6xHpZpPNcLQKoeMMyI/EYve8pfALLGnyEM5EcWojo8VZ3
+	pgWqM+0+rZ0RE8WFX780tSqSUvGoUEoVElDZE9vs54Q6eyG0iP2q
+X-Google-Smtp-Source: AGHT+IEvJUkiUU6NyCdMVTVPHtaHLCBaU2pS7oRvikAM5BVjCQa8Q1BlYvtY0VSCZbpQCjXJft2Kwg==
+X-Received: by 2002:ad4:580b:0:b0:6b0:86ab:feaf with SMTP id 6a1803df08f44-6b2afd5b8b3mr9686656d6.48.1718318527218;
+        Thu, 13 Jun 2024 15:42:07 -0700 (PDT)
+Received: from sheun-Legion-5-15IAH7H.phub.net.cable.rogers.com ([2607:fea8:bad7:5400:c491:4bd0:7cc:377d])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b2a5c1064dsm11488326d6.31.2024.06.13.15.42.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jun 2024 15:42:06 -0700 (PDT)
+From: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
+To: rafael@kernel.org,
+	daniel.lezcano@linaro.org,
+	rui.zhang@intel.com,
+	lukasz.luba@arm.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	javier.carrasco.cruz@gmail.com
+Subject: [PATCH] dt-bindings: thermal: convert hisilicon-thermal.txt to dt-schema
+Date: Thu, 13 Jun 2024 18:42:03 -0400
+Message-ID: <20240613224204.185844-1-abdulrasaqolawani@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 6906a84c482f098d31486df8dc98cead21cce2d0  Add linux-next specific files for 20240613
+Convert the hisilicon SoCs tsensor txt bindings to dt-schema
 
-Error/Warning reports:
+Signed-off-by: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
+---
+Validated with dtschema and tested against `hi3660-hikey960.dts`
 
-https://lore.kernel.org/oe-kbuild-all/202406131636.cCrcJztc-lkp@intel.com
+ .../bindings/thermal/hisilicon-thermal.txt    | 32 ---------
+ .../bindings/thermal/hisilicon-thermal.yaml   | 71 +++++++++++++++++++
+ 2 files changed, 71 insertions(+), 32 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/thermal/hisilicon-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/hisilicon-thermal.yaml
 
-Error/Warning: (recently discovered and may have been fixed)
-
-drivers/hwmon/pmbus/mp9941.c:60:33: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-drivers/hwmon/pmbus/mp9941.c:60:40: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-drivers/hwmon/pmbus/mp9941.c:84:13: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
-drivers/hwmon/pmbus/mp9941.c:84:6: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-security/integrity/ima/ima_policy.c:430:10: error: too many arguments to function call, expected 4, have 5
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- arc-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- arc-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- arm64-randconfig-001-20240613
-|   `-- drivers-pinctrl-pinctrl-keembay.c:error:struct-function_desc-has-no-member-named-name
-|-- csky-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- csky-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- loongarch-defconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-hubbub-dcn401-dcn401_hubbub.o:warning:objtool:unexpected-relocation-symbol-type-in-.rela.discard.reachable
-|   `-- drivers-thermal-thermal_trip.o:warning:objtool:unexpected-relocation-symbol-type-in-.rela.discard.reachable
-|-- m68k-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- m68k-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- microblaze-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- microblaze-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- nios2-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- nios2-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- openrisc-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- parisc-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- parisc-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- sh-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- sh-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- sparc-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- sparc64-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- sparc64-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- x86_64-buildonly-randconfig-002-20240613
-|   |-- drivers-input-touchscreen-wacom_w8001.c:warning:Finger-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   `-- drivers-input-touchscreen-wacom_w8001.c:warning:Pen-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|-- x86_64-randconfig-011-20240613
-|   |-- drivers-input-touchscreen-wacom_w8001.c:warning:Finger-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   `-- drivers-input-touchscreen-wacom_w8001.c:warning:Pen-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-`-- xtensa-allyesconfig
-    |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-    `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-clang_recent_errors
-|-- arm-randconfig-051-20240613
-|   |-- arch-arm-boot-dts-rockchip-rk3128-evb.dtb:dsi:failed-to-match-any-schema-with-compatible:rockchip-rk3128-mipi-dsi-snps-dw-mipi-dsi
-|   `-- arch-arm-boot-dts-rockchip-rk3128-xpi-.dtb:dsi:failed-to-match-any-schema-with-compatible:rockchip-rk3128-mipi-dsi-snps-dw-mipi-dsi
-|-- arm64-allmodconfig
-|   `-- drivers-pinctrl-pinctrl-keembay.c:error:no-member-named-name-in-struct-function_desc
-|-- arm64-randconfig-003-20240613
-|   `-- drivers-pinctrl-pinctrl-keembay.c:error:no-member-named-name-in-struct-function_desc
-|-- hexagon-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:call-to-undeclared-function-FIELD_GET-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:call-to-undeclared-function-FIELD_PREP-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- i386-buildonly-randconfig-004-20240613
-|   `-- security-integrity-ima-ima_policy.c:error:too-many-arguments-to-function-call-expected-have
-`-- powerpc64-randconfig-001-20240613
-    `-- drivers-gpu-drm-drm_mm.c:error:function-drm_mm_node_scanned_block-is-not-needed-and-will-not-be-emitted-Werror-Wunneeded-internal-declaration
-
-elapsed time: 940m
-
-configs tested: 179
-configs skipped: 4
-
-tested configs:
-alpha                             allnoconfig   gcc-13.2.0
-alpha                            allyesconfig   gcc-13.2.0
-alpha                               defconfig   gcc-13.2.0
-arc                              allmodconfig   gcc-13.2.0
-arc                               allnoconfig   gcc-13.2.0
-arc                              allyesconfig   gcc-13.2.0
-arc                                 defconfig   gcc-13.2.0
-arc                   randconfig-001-20240613   gcc-13.2.0
-arc                   randconfig-002-20240613   gcc-13.2.0
-arm                              allmodconfig   gcc-13.2.0
-arm                               allnoconfig   clang-19
-arm                              allyesconfig   gcc-13.2.0
-arm                                 defconfig   clang-14
-arm                   randconfig-001-20240613   gcc-13.2.0
-arm                   randconfig-002-20240613   clang-17
-arm                   randconfig-003-20240613   clang-19
-arm                   randconfig-004-20240613   clang-19
-arm                         s5pv210_defconfig   gcc-13.2.0
-arm64                            allmodconfig   clang-19
-arm64                             allnoconfig   gcc-13.2.0
-arm64                               defconfig   gcc-13.2.0
-arm64                 randconfig-001-20240613   gcc-13.2.0
-arm64                 randconfig-002-20240613   clang-19
-arm64                 randconfig-003-20240613   clang-19
-arm64                 randconfig-004-20240613   clang-19
-csky                             allmodconfig   gcc-13.2.0
-csky                              allnoconfig   gcc-13.2.0
-csky                             allyesconfig   gcc-13.2.0
-csky                                defconfig   gcc-13.2.0
-csky                  randconfig-001-20240613   gcc-13.2.0
-csky                  randconfig-002-20240613   gcc-13.2.0
-hexagon                          allmodconfig   clang-19
-hexagon                           allnoconfig   clang-19
-hexagon                          allyesconfig   clang-19
-hexagon                             defconfig   clang-19
-hexagon               randconfig-001-20240613   clang-19
-hexagon               randconfig-002-20240613   clang-15
-i386                              allnoconfig   gcc-13
-i386                             allyesconfig   gcc-13
-i386         buildonly-randconfig-001-20240613   gcc-9
-i386         buildonly-randconfig-002-20240613   clang-18
-i386         buildonly-randconfig-003-20240613   clang-18
-i386         buildonly-randconfig-004-20240613   clang-18
-i386         buildonly-randconfig-005-20240613   gcc-7
-i386         buildonly-randconfig-006-20240613   clang-18
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240613   gcc-7
-i386                  randconfig-002-20240613   gcc-11
-i386                  randconfig-003-20240613   gcc-13
-i386                  randconfig-004-20240613   clang-18
-i386                  randconfig-005-20240613   gcc-13
-i386                  randconfig-006-20240613   gcc-13
-i386                  randconfig-011-20240613   gcc-13
-i386                  randconfig-012-20240613   clang-18
-i386                  randconfig-013-20240613   clang-18
-i386                  randconfig-014-20240613   gcc-12
-i386                  randconfig-015-20240613   gcc-8
-i386                  randconfig-016-20240613   gcc-13
-loongarch                        allmodconfig   gcc-13.2.0
-loongarch                         allnoconfig   gcc-13.2.0
-loongarch                           defconfig   gcc-13.2.0
-loongarch             randconfig-001-20240613   gcc-13.2.0
-loongarch             randconfig-002-20240613   gcc-13.2.0
-m68k                             allmodconfig   gcc-13.2.0
-m68k                              allnoconfig   gcc-13.2.0
-m68k                             allyesconfig   gcc-13.2.0
-m68k                                defconfig   gcc-13.2.0
-microblaze                       allmodconfig   gcc-13.2.0
-microblaze                        allnoconfig   gcc-13.2.0
-microblaze                       allyesconfig   gcc-13.2.0
-microblaze                          defconfig   gcc-13.2.0
-microblaze                      mmu_defconfig   gcc-13.2.0
-mips                              allnoconfig   gcc-13.2.0
-mips                             allyesconfig   gcc-13.2.0
-mips                        bcm47xx_defconfig   clang-15
-mips                        bcm63xx_defconfig   clang-17
-mips                     decstation_defconfig   gcc-13.2.0
-mips                        vocore2_defconfig   clang-15
-nios2                            allmodconfig   gcc-13.2.0
-nios2                             allnoconfig   gcc-13.2.0
-nios2                            allyesconfig   gcc-13.2.0
-nios2                               defconfig   gcc-13.2.0
-nios2                 randconfig-001-20240613   gcc-13.2.0
-nios2                 randconfig-002-20240613   gcc-13.2.0
-openrisc                         alldefconfig   gcc-13.2.0
-openrisc                          allnoconfig   gcc-13.2.0
-openrisc                         allyesconfig   gcc-13.2.0
-openrisc                            defconfig   gcc-13.2.0
-openrisc                    or1ksim_defconfig   gcc-13.2.0
-parisc                           allmodconfig   gcc-13.2.0
-parisc                            allnoconfig   gcc-13.2.0
-parisc                           allyesconfig   gcc-13.2.0
-parisc                              defconfig   gcc-13.2.0
-parisc                randconfig-001-20240613   gcc-13.2.0
-parisc                randconfig-002-20240613   gcc-13.2.0
-parisc64                            defconfig   gcc-13.2.0
-powerpc                     akebono_defconfig   clang-19
-powerpc                          allmodconfig   gcc-13.2.0
-powerpc                           allnoconfig   gcc-13.2.0
-powerpc                          allyesconfig   clang-19
-powerpc                        fsp2_defconfig   gcc-13.2.0
-powerpc                    gamecube_defconfig   clang-19
-powerpc                    klondike_defconfig   gcc-13.2.0
-powerpc               randconfig-001-20240613   clang-19
-powerpc               randconfig-002-20240613   clang-19
-powerpc               randconfig-003-20240613   clang-19
-powerpc                     tqm8560_defconfig   gcc-13.2.0
-powerpc64             randconfig-001-20240613   clang-19
-powerpc64             randconfig-002-20240613   clang-19
-powerpc64             randconfig-003-20240613   gcc-13.2.0
-riscv                            allmodconfig   clang-19
-riscv                             allnoconfig   gcc-13.2.0
-riscv                            allyesconfig   clang-19
-riscv                               defconfig   clang-19
-riscv                 randconfig-001-20240613   clang-19
-riscv                 randconfig-002-20240613   clang-19
-s390                             allmodconfig   clang-19
-s390                              allnoconfig   clang-19
-s390                             allyesconfig   gcc-13.2.0
-s390                                defconfig   clang-19
-s390                  randconfig-001-20240613   gcc-13.2.0
-s390                  randconfig-002-20240613   gcc-13.2.0
-sh                               allmodconfig   gcc-13.2.0
-sh                                allnoconfig   gcc-13.2.0
-sh                               allyesconfig   gcc-13.2.0
-sh                                  defconfig   gcc-13.2.0
-sh                               j2_defconfig   gcc-13.2.0
-sh                    randconfig-001-20240613   gcc-13.2.0
-sh                    randconfig-002-20240613   gcc-13.2.0
-sh                   secureedge5410_defconfig   gcc-13.2.0
-sh                     sh7710voipgw_defconfig   gcc-13.2.0
-sh                             shx3_defconfig   gcc-13.2.0
-sparc                            allmodconfig   gcc-13.2.0
-sparc                             allnoconfig   gcc-13.2.0
-sparc                               defconfig   gcc-13.2.0
-sparc64                          allmodconfig   gcc-13.2.0
-sparc64                          allyesconfig   gcc-13.2.0
-sparc64                             defconfig   gcc-13.2.0
-sparc64               randconfig-001-20240613   gcc-13.2.0
-sparc64               randconfig-002-20240613   gcc-13.2.0
-um                               allmodconfig   clang-19
-um                                allnoconfig   clang-17
-um                               allyesconfig   gcc-13
-um                                  defconfig   clang-19
-um                             i386_defconfig   gcc-13
-um                    randconfig-001-20240613   gcc-9
-um                    randconfig-002-20240613   gcc-9
-um                           x86_64_defconfig   clang-15
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64       buildonly-randconfig-001-20240613   gcc-13
-x86_64       buildonly-randconfig-002-20240613   gcc-9
-x86_64       buildonly-randconfig-003-20240613   clang-18
-x86_64       buildonly-randconfig-004-20240613   clang-18
-x86_64       buildonly-randconfig-005-20240613   clang-18
-x86_64       buildonly-randconfig-006-20240613   clang-18
-x86_64                              defconfig   gcc-13
-x86_64                randconfig-001-20240613   gcc-13
-x86_64                randconfig-002-20240613   clang-18
-x86_64                randconfig-003-20240613   gcc-13
-x86_64                randconfig-004-20240613   clang-18
-x86_64                randconfig-005-20240613   clang-18
-x86_64                randconfig-006-20240613   clang-18
-x86_64                randconfig-011-20240613   gcc-9
-x86_64                randconfig-012-20240613   clang-18
-x86_64                randconfig-013-20240613   clang-18
-x86_64                randconfig-014-20240613   clang-18
-x86_64                randconfig-015-20240613   gcc-7
-x86_64                randconfig-016-20240613   clang-18
-x86_64                randconfig-071-20240613   clang-18
-x86_64                randconfig-072-20240613   clang-18
-x86_64                randconfig-073-20240613   gcc-9
-x86_64                randconfig-074-20240613   clang-18
-x86_64                randconfig-075-20240613   clang-18
-x86_64                randconfig-076-20240613   clang-18
-x86_64                          rhel-8.3-rust   clang-18
-xtensa                            allnoconfig   gcc-13.2.0
-xtensa                randconfig-001-20240613   gcc-13.2.0
-xtensa                randconfig-002-20240613   gcc-13.2.0
-
+diff --git a/Documentation/devicetree/bindings/thermal/hisilicon-thermal.txt b/Documentation/devicetree/bindings/thermal/hisilicon-thermal.txt
+deleted file mode 100644
+index 4b19d80e6558..000000000000
+--- a/Documentation/devicetree/bindings/thermal/hisilicon-thermal.txt
++++ /dev/null
+@@ -1,32 +0,0 @@
+-* Temperature Sensor on hisilicon SoCs
+-
+-** Required properties :
+-
+-- compatible: "hisilicon,tsensor".
+-- reg: physical base address of thermal sensor and length of memory mapped
+-  region.
+-- interrupt: The interrupt number to the cpu. Defines the interrupt used
+-  by /SOCTHERM/tsensor.
+-- clock-names: Input clock name, should be 'thermal_clk'.
+-- clocks: phandles for clock specified in "clock-names" property.
+-- #thermal-sensor-cells: Should be 1. See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for a description.
+-
+-Example :
+-
+-for Hi6220:
+-	tsensor: tsensor@0,f7030700 {
+-		compatible = "hisilicon,tsensor";
+-		reg = <0x0 0xf7030700 0x0 0x1000>;
+-		interrupts = <0 7 0x4>;
+-		clocks = <&sys_ctrl HI6220_TSENSOR_CLK>;
+-		clock-names = "thermal_clk";
+-		#thermal-sensor-cells = <1>;
+-	}
+-
+-for Hi3660:
+-	tsensor: tsensor@fff30000 {
+-		compatible = "hisilicon,hi3660-tsensor";
+-		reg = <0x0 0xfff30000 0x0 0x1000>;
+-		interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>;
+-		#thermal-sensor-cells = <1>;
+-	};
+diff --git a/Documentation/devicetree/bindings/thermal/hisilicon-thermal.yaml b/Documentation/devicetree/bindings/thermal/hisilicon-thermal.yaml
+new file mode 100644
+index 000000000000..56ded6ebe1b2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/hisilicon-thermal.yaml
+@@ -0,0 +1,71 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/hisilicon-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Temperature Sensor on hisilicon SoCs
++
++maintainers:
++  - Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - hisilicon,tsensor
++          - hisilicon,hi3660-tsensor
++
++  reg:
++    description: physical base address of thermal sensor and length of memory mapped region.
++    minItems: 1
++    maxItems: 2
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: thermal_clk
++
++  interrupts:
++    description:
++      The interrupt number to the cpu. Defines the interrupt used
++      by /SOCTHERM/tsensor.
++    maxItems: 1
++
++  # See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for details
++  '#thermal-sensor-cells':
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - '#thermal-sensor-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/hi6220-clock.h>
++
++     // for Hi6220:
++     tsensor: tsensor@0,f7030700 {
++     compatible = "hisilicon,tsensor";
++     reg = <0x0 0xf7030700 0x0 0x1000>;
++     interrupts = <0 7 0x4>;
++     clocks = <&sys_ctrl HI6220_TSENSOR_CLK>;
++     clock-names = "thermal_clk";
++     #thermal-sensor-cells = <1>;
++     };
++
++     // for Hi3660:
++     tsensor1: tsensor@fff30000 {
++     compatible = "hisilicon,hi3660-tsensor";
++     reg = <0x0 0xfff30000 0x0 0x1000>;
++     interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>;
++     #thermal-sensor-cells = <1>;
++     };
++
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
