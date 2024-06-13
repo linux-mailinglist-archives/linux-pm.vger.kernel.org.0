@@ -1,195 +1,141 @@
-Return-Path: <linux-pm+bounces-9045-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9046-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D99E9062D8
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 05:49:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E0269063FB
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 08:23:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25D651C22013
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 03:49:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 852DDB2168B
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 06:23:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97AB1311A7;
-	Thu, 13 Jun 2024 03:49:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1711369AD;
+	Thu, 13 Jun 2024 06:22:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="novo6Gl5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O5gAEH9d"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35DC1824A6;
-	Thu, 13 Jun 2024 03:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC83213698D;
+	Thu, 13 Jun 2024 06:22:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718250569; cv=none; b=FvAX6lc8SeTeuRB32CE68yVEWM4nZvcThDg2/Piq0nyYgP5cMG8+fSWNua8q2FyaJjhmltZBFYk8Tx5hiQGuJeR/7LxajI0PbLJyF+3XV/TA6+LtF8Q6bhuiZ8hXHSGo5S0n12DZOfloavq8XZ4IAhteAGelTdIzJel2Qk1l8DM=
+	t=1718259779; cv=none; b=dqH6wwfkUhlapjfBVY4WZBEa7ExJ8NSZFMEokT4NDYbADexMNy0MZpPtKIN0o1R7P3oYYGCU3aQyRpA4mJt4M4v2/KZOnOJMyOJ7WEJ9KJhye2fCknjmqsfczhyPya0HyoJUDFxhaSgZVjJGItW9VI2T2jWLOj9BuE+4+vtiIDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718250569; c=relaxed/simple;
-	bh=aTM+ZGKPc+0UXpkUyqCKqKBRBKgG0dNkkwyTtKDnnNs=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CL1lAF9PooTUWm4H/T5c2K841/I+Z+XYBzRK19+vu2f6+clASM4RCZRXAsnN3ENY3kaUNspHp2OqEw+QUHTJhiJjtUJrMKbM/0L42p0nRIHttiv+/DfVFA2h0tVfzRVlN9Ghv/QtXjqloDaMA0BGfZ9HRq6HVwLRPvTjswijomg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=novo6Gl5; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45CKnA51022989;
-	Thu, 13 Jun 2024 03:49:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=aC8FrLlkS7YLtoM7H04GSiYi
-	coAQ1XP4KZU2VFc6b2c=; b=novo6Gl5SCzwFjvYxQxFY33jiKlTxTt4atIXxV7j
-	lfL9nbVegBRyv3yn4AjexaRqJU41mFt8HgE6zDekaKUNoq+8rxU6ahqKH+IjR8om
-	/3Pl8GFUmzV75QJ1D9BY+rtb8HXfe6AcQ1rGVYdvLEbZzhfQFFMn0Rc8vY4mjXgy
-	wXBtg7cPNBxvo0xnKBSGDwwbH0U0ow7TsacKC8Zbrg16sXp642t/fAWC1Ek8EpcP
-	h6Y6PMo7K5lZ8KIUoE11fgxp6cyrx7P6qz+//IyLpB0lEGNsTUHT+WiWuP1gPlDe
-	lokwsIrnU6v1/1M7ayA+YYyUJaGh2glRblYTrpOkwYtSfg==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ypmjawgwj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 13 Jun 2024 03:49:22 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45D3nLW0009867
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 13 Jun 2024 03:49:21 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 12 Jun 2024 20:49:17 -0700
-Date: Thu, 13 Jun 2024 09:19:13 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Georgi Djakov <djakov@kernel.org>
-CC: Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov
-	<dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <quic_anusha@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider
- ability to gcc
-Message-ID: <ZmpsOdsl9AMTSH88@hu-varada-blr.qualcomm.com>
-References: <c015b3a5-2213-4ebd-b960-d97ed1fe7062@kernel.org>
- <ZjshR0ekcn0gxwOa@hu-varada-blr.qualcomm.com>
- <CAA8EJpqENsojPQmCbma_nQLEZq8nK1fz1K0JdtvLd=kPrH_DBw@mail.gmail.com>
- <1a08ef42-b52f-4c97-90d7-e7fdee7725b4@linaro.org>
- <Zmgb+OjdBNw71sC1@hu-varada-blr.qualcomm.com>
- <176137e5-6312-4d46-97b6-c4494bc1c61b@kernel.org>
- <ZmlAdETV0+6Md8HC@hu-varada-blr.qualcomm.com>
- <e24cfd23-6f77-46a0-b020-9cb3daef6930@kernel.org>
- <Zml4RQ5R5s3mVMnI@hu-varada-blr.qualcomm.com>
- <8e32a8be-dbbf-49ca-92a1-2fe3c8bfb571@kernel.org>
+	s=arc-20240116; t=1718259779; c=relaxed/simple;
+	bh=JkGe8kZMmca5h+FBcgBRtWTsFqXGZJhTPSR79h5pJsA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uYbutvDnwo+AF05lQKiLrq3pCQNz3W0SLOU291MqlYC0pKuTw8SdO0WIaGJPYnGGbS3KBTjDXutnyijRPfDJTy2O8CBSzPnEOUsoSIKHCyDfO//ayLdT1b9HMHglDY6slseHb5cWZm8gwWgx4dJTeI52KlT2LfFyQKFgghZwOXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O5gAEH9d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36956C2BBFC;
+	Thu, 13 Jun 2024 06:22:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718259779;
+	bh=JkGe8kZMmca5h+FBcgBRtWTsFqXGZJhTPSR79h5pJsA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=O5gAEH9d4YQHQtj8MTsMhG55SLGcOHhiMMlRiG7N3lATpZHbErMWj3swp1khWjOtY
+	 phaEEbdt/MkCcVcOV7hDo/yYGgJY48Vq5f7plHDw+kiTQt2Ce56HVQ/ThSNydy09cK
+	 rujyxGfyHqtzQGWGBYmPHhlU6BZkqsekj5Db6aGQ3O8f8TBalQCYBeVxyRoj9ytBOQ
+	 QZMqFHOZm+OzE/zzTEafd7V6X5Ouwcnznv3jLWK2dN8uRpFWUpcIGT3l3zK5N0MlCa
+	 xvl7BE7N7KDMWUC7zghN4JcW7BHL6NLh19HeB8eg5Y0L6OSVxMz0g1Rbi5jeKasnn1
+	 Tx7yDfwxCWH4w==
+Message-ID: <faf04961-f8ac-446c-a558-42ef6e98b3ac@kernel.org>
+Date: Thu, 13 Jun 2024 08:22:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <8e32a8be-dbbf-49ca-92a1-2fe3c8bfb571@kernel.org>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nS2B1HDPmkmi_KaZUDeK3HPSMD89fvdJ
-X-Proofpoint-ORIG-GUID: nS2B1HDPmkmi_KaZUDeK3HPSMD89fvdJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-12_12,2024-06-13_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
- clxscore=1015 mlxscore=0 impostorscore=0 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 phishscore=0 bulkscore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406130024
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/5] dt-bindings: mfd: syscon: add TI's opp table
+ compatible
+To: Bryan Brattlof <bb@ti.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Lee Jones <lee@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>
+Cc: Vibhore Vardhan <vibhore@ti.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20240612-ti-opp-updates-v2-0-422b6747a254@ti.com>
+ <20240612-ti-opp-updates-v2-3-422b6747a254@ti.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240612-ti-opp-updates-v2-3-422b6747a254@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 12, 2024 at 03:52:51PM +0300, Georgi Djakov wrote:
-> On 12.06.24 13:28, Varadarajan Narayanan wrote:
-> > On Wed, Jun 12, 2024 at 11:48:17AM +0300, Georgi Djakov wrote:
-> > > On 12.06.24 9:30, Varadarajan Narayanan wrote:
-> > > > On Tue, Jun 11, 2024 at 02:29:48PM +0300, Georgi Djakov wrote:
-> > > > > On 11.06.24 12:42, Varadarajan Narayanan wrote:
-> > > > > > On Thu, Jun 06, 2024 at 04:06:01PM +0200, Konrad Dybcio wrote:
-> > > > > > > On 8.05.2024 10:10 AM, Dmitry Baryshkov wrote:
-> > > > > > > > On Wed, 8 May 2024 at 09:53, Varadarajan Narayanan
-> > > > > > > > <quic_varada@quicinc.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On Fri, May 03, 2024 at 04:51:04PM +0300, Georgi Djakov wrote:
-> > > > > > > > > > Hi Varada,
-> > > > > > > > > >
-> > > > > > > > > > Thank you for your work on this!
-> > > > > > > > > >
-> > > > > > > > > > On 2.05.24 12:30, Varadarajan Narayanan wrote:
-> > > > > > > > > > > On Tue, Apr 30, 2024 at 12:05:29PM +0200, Konrad Dybcio wrote:
-> > > > > > > > > > > > On 25.04.2024 12:26 PM, Varadarajan Narayanan wrote:
-> > > > > > > > > > > > > On Tue, Apr 23, 2024 at 02:58:41PM +0200, Konrad Dybcio wrote:
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > On 4/18/24 11:23, Varadarajan Narayanan wrote:
-> > > > > > > > > > > > > > > IPQ SoCs dont involve RPM in managing NoC related clocks and
-> > > > > > > > > > > > > > > there is no NoC scaling. Linux itself handles these clocks.
-> > > > > > > > > > > > > > > However, these should not be exposed as just clocks and align
-> > > > > > > > > > > > > > > with other Qualcomm SoCs that handle these clocks from a
-> > > > > > > > > > > > > > > interconnect provider.
-> > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > Hence include icc provider capability to the gcc node so that
-> > > > > > > > > > > > > > > peripherals can use the interconnect facility to enable these
-> > > > > > > > > > > > > > > clocks.
-> > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > > > > > > > > > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > > > > > > > > > > > > > ---
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > If this is all you do to enable interconnect (which is not the case,
-> > > > > > > > > > > > > > as this patch only satisfies the bindings checker, the meaningful
-> > > > > > > > > > > > > > change happens in the previous patch) and nothing explodes, this is
-> > > > > > > > > > > > > > an apparent sign of your driver doing nothing.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > It appears to do nothing because, we are just enabling the clock
-> > > > > > > > > > > > > provider to also act as interconnect provider. Only when the
-> > > > > > > > > > > > > consumers are enabled with interconnect usage, this will create
-> > > > > > > > > > > > > paths and turn on the relevant NOC clocks.
-> > > > > > > > > > > >
-> > > > > > > > > > > > No, with sync_state it actually does "something" (sets the interconnect
-> > > > > > > > > > > > path bandwidths to zero). And *this* patch does nothing functionally,
-> > > > > > > > > > > > it only makes the dt checker happy.
-> > > > > > > > > > >
->
-> [..]
->
-> >
-> > nsscc_ipq9574 was not using icc_sync_state. After adding that, I
-> > can see the following messages printed from icc_sync_state. I
-> > also added a print to confirm if 'p->set(n, n);' is called.
->
-> Ok, that's good! So now when all providers are using sync_state, we
-> can go back to the initial comment from Konrad. I think you should
-> re-check the tests that you did, as the current results just lead to
-> more questions than answers. Maybe it was just the sync-state that
-> was missing, or there is some other issue.
+On 13/06/2024 01:17, Bryan Brattlof wrote:
+> The JTAG_USER_ID_USERCODE efuse address, which is located inside the
+> WKUP_CTRL_MMR0 range holds information to identify the speed grades of
+> various components on TI's K3 SoCs. Add a compatible to allow the
+> cpufreq driver to obtain the data to limit the maximum frequency for the
+> CPUs under Linux control.
+> 
+> Signed-off-by: Bryan Brattlof <bb@ti.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> index 7ed12a938baa3..ab1fcbe2148f7 100644
+> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> @@ -88,6 +88,7 @@ properties:
+>                - rockchip,rv1126-qos
+>                - starfive,jh7100-sysmain
+>                - ti,am62-usb-phy-ctrl
+> +              - ti,am62-opp-efuse-table
 
-Georgi,
+These are ordered alphabetically.
 
-Thanks very much for the clarifications. Will re-test the patches
-and update the thread.
+Best regards,
+Krzysztof
 
--Varada
-
-> [..]
-> >
-> > The gcc based interconnect paths are referenced by PCIe controller
-> > nodes. Please refer to this patch
-> >
-> > 	[PATCH V5 4/6] arm64: dts: qcom: ipq9574: Add PCIe PHYs and controller nodes
-> > 	https://lore.kernel.org/linux-arm-msm/20240512082858.1806694-5-quic_devipriy@quicinc.com/
-> >
-> > Sorry, did not post the nsscc related patches since this base ICC
-> > patch hasn't reached closure. The nsscc patches are very similar
-> > to this gcc based series. Wanted to gather the issues raised in
-> > this and address them in nsscc so that it is in a more acceptable
-> > shape.
-> >
-> > Thanks
-> > Varada
->
 
