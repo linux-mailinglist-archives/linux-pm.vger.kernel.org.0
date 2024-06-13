@@ -1,78 +1,80 @@
-Return-Path: <linux-pm+bounces-9103-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9104-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EB88907A4D
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 19:54:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60F2C907A51
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 19:55:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A39201C24DBB
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 17:54:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69FAE1C2313B
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 17:55:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F33314A4D0;
-	Thu, 13 Jun 2024 17:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA04614A0B5;
+	Thu, 13 Jun 2024 17:55:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="MRBQxif9"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="hYpoOW0d"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2087.outbound.protection.outlook.com [40.107.212.87])
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2056.outbound.protection.outlook.com [40.107.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D5F14A0B5;
-	Thu, 13 Jun 2024 17:54:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7538012CDB1;
+	Thu, 13 Jun 2024 17:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.56
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718301251; cv=fail; b=IqUK1N3vrU7KQnLI8mW5MhcN+5H/8Khl83IqSKS8YfRP7zrjpFdAlWaIs89LAk3WCoceYDv/KnMsUUmXSgSg/NsKPDLUzrNSvUJJQBe+5vYvRdvQHjjQNTN2JbE9+qpzW27kyYx6lM2BVg08yklHJGAGBZ8cprzXYgeYRP68JIM=
+	t=1718301320; cv=fail; b=Ll3JAxQmrR+fOTNYYldke8o2OFKsn5PWiJFbgUwavKb7Vi4HgAhJkf7NiybogJ+zPcWhIt97xG0jtKgoovx7H7TK3EWabDh8a4ovHdrE09NTL4PjqP6v5i7cXRpcysFAcigSDCq9bDBVc/WzfEovRUDV5M6u840rMZcMCZKpIFQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718301251; c=relaxed/simple;
-	bh=OrI6lwSYSjXbpDjCsQKPY7WzKh6Ww3Bw8JcMEUmDGPE=;
+	s=arc-20240116; t=1718301320; c=relaxed/simple;
+	bh=O26equOwoZN0bdryiHs/HUNmd8IV+PZpI5BU6D3PwCs=;
 	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=pPE1+PEyEKSQ0z6AObvUwDdBu16rG2amOy6vh1Fwwo9nuERdg29iQU9/6Zuwbz0qsXWBSm4efJxpFf/TxRyz02Kpvg6Jc8hsgM+2Q/sKmh2IQzZLOWxI+4uG0W7B5xd+TCx9qbG/u6KCO2kCJBl9lei5d3XhbLaAj13ZJYvZ5ME=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=MRBQxif9; arc=fail smtp.client-ip=40.107.212.87
+	 Content-Type:MIME-Version; b=avlgVmopOXeZ9EoKUMfBuKijInz8WrlwcxhxJL+erYfkKAU6iRNH8tZO/xIOmtbowYkLcDBB00WAePrkJyuRzcOyHhJf4pznCw5g7AjvLIU5F17vLOvSM7k+PaGNeqdagkv8xUvSXOeRF3SYak1NlJVvaSkNVAcYM3sdvo47/OY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=hYpoOW0d; arc=fail smtp.client-ip=40.107.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mf1+fmOX4pZyau8Nr69hyJvlmWT/agywh2DPjd3At5WLCe9l2yfUJ6wKzF3tP7QhTzYephh+L6y9hXJa0uzfL/5oab4zWANLaVjORhSRd0R6fQdHJ1hCihVyc+G54+MIiUR6QOSxdyGCrVNynRhfCJRhul5u3vB+opbiirNU9u0TdcVXedyHifRMdlLiktqB4YGEr9zO6l82kpSIzTehWuJpiA9W1iv+HqSZv9ZNvy6XsMsC0BhDloB7xEFjWzItDB9eMtHTjS7cqDsg06MkktAg1xdzl9dJs8+tOWpNmTma/nMQc5AD8CsX2CWYxBvMacdqlHhCwmmwWxEn3Fh8cQ==
+ b=b3m84GEg0khkiSuJgz4WrJxROrKhr/xYdnk1sli6hGXUNOgzMSddic4KFav0lc6laH8j5Yrd16D/qnyn8m2B3M/D7hcEiKIGuV37A/3sTrZk+I8v/L78u4drX0l1YoLhN7LEwe5cOVz5g2QetKvxz/QXL1GWy2VcQiRvbKodlCHZ3ah3Y2L50awlLiEqDbtfJul2DVEMje5/IEldye+9j+78e83AEHeBwqDcLql4Mfx1hWC/uV71q0jzXKTWqokRpfRdVxB/gOkRWC1UBvgGkAatPmCAmZfqJaw9c9tM9RODzjShk1o4ZsdiY4ONjt8XaxitPKKv47zGU6CFVHCLmg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GpYa65e3PtfegSoEht8HldHRWl1FPG5MCxqJXyI7yQE=;
- b=Iq8XP5z5XGdzyI2mRu/+GTVQLIkcsidLw3it0V0sWJzi23B8SlHUCGEjpKtXG0UnONkLIGgyNPijG0YyZUNg4XSKnSYr9YBzEoOdOEX2ZqzrAZFfA9Xo3Sqr0ZG0YmALYVb0mHgaO/xg9VWvznITXC8sW8lG4Rn2OjtcXy1AFHovRcq2+BbqpOvofImX/w1W7WTURHEvQGfYTAQwnvzBW5kJ07YI+aMLwevTkb/U/mh1rNa/dqCbd4KFVIgQfv70q4lKSqm0ZKHtlG+0armIwoDQFQDM7OJ+Ysrf2A+AtADNiKVevpHrI+wFywA2/FInE/xAug1SEeIX7w53KuwQpw==
+ bh=D5R8SvX+9vhiSTb4Kh5/7WIXapHZxbw5J025IRbozps=;
+ b=BGtXBaVZmpcosVIaMbLSaDwpDJiFOmdCo/1STcVLS39ut4qWs7l3NGUGSPM7rA3crpPJ61m2FsKUjWIGqN/g5XliHbR8f01Q+gMol0Uqx3sD7k1OQDsxIq4OhicJNVsI1tiAw/pQOe820gsS8i462/MljJLmb0Jqx8gTUD813KoWkJGsr2dQ7myABuUzlCgjWoPPFgmMKNXYAYX29Tr2wbma4yZalvQI1DDaX1yWablbrtzZDd+ec+DNBsouDiacFXvxcuqPu05/2VRlFoq5GHw2bMw6AD1nYhxjHfFmBC5wIwSNdt88yIPFm28Ot88aezaPEi6yNijTlqnVxUeGEQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GpYa65e3PtfegSoEht8HldHRWl1FPG5MCxqJXyI7yQE=;
- b=MRBQxif9wQdS/lur50+PXnrT5gwI1RxUUBfnQBFCIvo5QnzvPsYalOdFwrMsqKe6Stj5lGDF+y3rgKRCUNrswHdzn/hXlQiazdTvROlNxrloBbeNPUhEIchmLIiQ6zZeMbfpqemirNEFpJmqZIVqmf/yViKKcYxWLkBzzfV5Ofc=
+ bh=D5R8SvX+9vhiSTb4Kh5/7WIXapHZxbw5J025IRbozps=;
+ b=hYpoOW0dKNnAwdsNePrNx8uV3u8OQgpnCx/PIRyKjwDNmS3dzHxvhMDLfDH7RObIaFYhZVSFGH9EbPOOK9iCHn4grTAAivXd6Tmtty000W3g6Ubv/sWQhOQnMid57Y4/8+zTgEDik9FAjW8job+yEtgbIJPT/WzF9uxi49MDxSs=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
  by MW4PR12MB7262.namprd12.prod.outlook.com (2603:10b6:303:228::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.25; Thu, 13 Jun
- 2024 17:54:06 +0000
+ 2024 17:55:14 +0000
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::37ee:a763:6d04:81ca%4]) with mapi id 15.20.7677.024; Thu, 13 Jun 2024
- 17:54:06 +0000
-Message-ID: <36bca242-147a-4eb2-a47a-1b0b7f3bc665@amd.com>
-Date: Thu, 13 Jun 2024 12:54:03 -0500
+ 17:55:14 +0000
+Message-ID: <0a1cf7fb-5d2a-4737-bbda-cb866270a523@amd.com>
+Date: Thu, 13 Jun 2024 12:55:11 -0500
 User-Agent: Mozilla Thunderbird
 From: Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v11 0/9] AMD Pstate Driver Core Performance Boost
+Subject: Re: [PATCH v11 5/9] cpufreq: amd-pstate: implement cpb_boost sysfs
+ entry for boost control
 To: Perry Yuan <perry.yuan@amd.com>, gautham.shenoy@amd.com,
  Borislav.Petkov@amd.com
 Cc: rafael.j.wysocki@intel.com, viresh.kumar@linaro.org,
  Alexander.Deucher@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
  Li.Meng@amd.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <cover.1718262992.git.perry.yuan@amd.com>
+ <35464456ab468f389ff3816829647db77924a6b5.1718262992.git.perry.yuan@amd.com>
 Content-Language: en-US
-In-Reply-To: <cover.1718262992.git.perry.yuan@amd.com>
+In-Reply-To: <35464456ab468f389ff3816829647db77924a6b5.1718262992.git.perry.yuan@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DS7PR05CA0090.namprd05.prod.outlook.com
- (2603:10b6:8:56::13) To MN0PR12MB6101.namprd12.prod.outlook.com
+X-ClientProxiedBy: SA1P222CA0126.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:806:3c5::15) To MN0PR12MB6101.namprd12.prod.outlook.com
  (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -82,341 +84,323 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MW4PR12MB7262:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7c662460-429c-4956-c791-08dc8bd1d1a0
+X-MS-Office365-Filtering-Correlation-Id: d73721e5-26c9-4f1f-cc01-08dc8bd1fa6b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230035|376009|1800799019|366011;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YVlBVS92QW0vWjJqWWsrQ0kzYjI1RWpKbmVPTVJ6UStZb1h0YnVnNG9KY1Zz?=
- =?utf-8?B?dkZRN0JLc1FaYXp5Wm1lLzZXZTFUakpJaUJ0VzhkRUp3ZGVkV0pPZ2wrQnRU?=
- =?utf-8?B?aHFOV0ZHUk5ycDVjVzg4WDlSVkdaNlA3NHlNM1UyNVYvMmxpb1B3ek14Qktq?=
- =?utf-8?B?cHVGRk9qaTBmWFpYNFhqMGhoZlZ2MWp5R2VwQVNFM2dqNEh1RWp6UXhpdkxl?=
- =?utf-8?B?dUFRdWh2Ujg4NWhYZGtoczc0b2piRVdoeEZTRkhpc3VUOWhERXZtbmhjNzhW?=
- =?utf-8?B?WE5mZ1lEZUhIVDVWc3dXSk85R3ZXUklRMDNJdzRTUWV3N0l2eWhMSnNZbDdU?=
- =?utf-8?B?Mm5kZDFXWnJHOWhmWU5FK3c0QWVUdUR4cXNPOEpubVhzcENrcWd0cnYvNU9X?=
- =?utf-8?B?THVNbnMxVldZbWZFWk9Hd2xhbEhEdElIQVlYQjlGRWhKSnh6cnRvSlRRcWlm?=
- =?utf-8?B?L0dIV3ZKK0prVDJHTjd5L29WMU9JSEhmN0M0VXJCYkIrcjZHaklDaDhaNzZw?=
- =?utf-8?B?Zld4eWVTWXc5bFpiVCs3bVFaWFdsWjdmRlVxVnpKK1JJNHZ0YlkvU3hYRWxU?=
- =?utf-8?B?TUpoUDlBRTRZV0V2U2dsZWxEZ1pjMncrWGRoZGhFb3JpOEU0Y2xvM2VTbEVv?=
- =?utf-8?B?TDlvOHA0REs0NndidCs0Nlh0WU44RXlySVdWRmtRUlBaRG93aEk1WG02NmhF?=
- =?utf-8?B?R1p4ZkdjaFp4aXFxMmxzekhwREdzMnFTemxHLzhET2JSTjRYVnRuVDlNVHd1?=
- =?utf-8?B?SkVEbUM2Y2kyMXZEVXJsRzA4Nkt2OStGOE5ocW1JMUxhR2lFTVJPbjRsUThL?=
- =?utf-8?B?MWNzM09LckdoWkpTR3RjTVRCb0x3cG1iQjV4eWNvTytxWFZibVQwSWw2OGJV?=
- =?utf-8?B?WnlkdG1xa0x3dHJHNDBpNGxNZ0Y3TFU2UWhJV3V1WnEwSVltVVpVU21OelN0?=
- =?utf-8?B?WVE4cDliUFRTOXUxWHU0eG9GUWZZOWc5ekZTZXBLbkJmUGxPNDEzdksvZDNK?=
- =?utf-8?B?VFlVYWxtRGlvRXZJZm1BekFCbHJXR0hzaHVCVU9aZXdvdzZxOHZjNm10U1B1?=
- =?utf-8?B?bzhrVFM1N0dZVEpINnEySmpOMWY5OEdUd1RhVkNvaHNSQVViYlN6WE1kYmdV?=
- =?utf-8?B?TWJUa0p0VXRiOW0yT3cxbnNIaHdEK0Y5REtmckR5S0tOOWhYNWJMT0F6Wk5k?=
- =?utf-8?B?QyttMno5c3ZFNGFDZXp2VmdyRGV5YjRET1RhT29uMExFcW1tVUVXQkpHSGo4?=
- =?utf-8?B?L1VxMWw0R0ZrTnkzUUs1WEdvZUgxTDZldGtIQ2NwT3dNRDZyUDZ1UURqb09z?=
- =?utf-8?B?ZWdla3RBRjRBYWlOTFVxK0pIZ05UN1Q4QVZqSkhaZVd3cWZ3allTeDhrR2JV?=
- =?utf-8?B?dHVtQWR6YXEwUkIxRFAyMzU1Y0xmL0JtS3NPSG01SlU1bE8wNEdTT3BkRm9U?=
- =?utf-8?B?OHMxNFJsWDlYbG1qZTlLVWRjajVvV21yY3ZJN1JkYzNzSlFBaGoybGhpdCtu?=
- =?utf-8?B?aWZhWmorZVB5cmM0NzNiRDFRMnZMZElwZTVRV0hkU1lPc2drL2xsZXN0VzBO?=
- =?utf-8?B?NFBhdWJtWU5JN1BjTlY4LzVVY1JMQXVvMFpYQ09scFVQREk3SCtveFp4Qk9o?=
- =?utf-8?B?ZWkxM0FpRTJadzdlSm9LSlpjcE1zb1Jvd1dNOWpoa0dBUWdscHF5UklySTVF?=
- =?utf-8?B?L1JCeGVDK2I2aDlVVk9zT2Q5Y2dCZDJXZjZmUXg4TU03TVZKUDdEWGVRPT0=?=
+	=?utf-8?B?RGtVc0VwRkpRV09MNVc5am95NHFtb1RnOU9FVGQyQzkvMFUzSnFYYXluUHJ0?=
+ =?utf-8?B?aVRnUkhZSHJ2NDdJeHJ6dXBzZ2FzL0piUHY0aWw5MVE5TlNFeW85SndHSUpt?=
+ =?utf-8?B?RVlhK1M0SFlYTkxnVlM3NHRCL3VoSHg0bUQ4SVd2MlVhcDhlbWJibWk0cFRz?=
+ =?utf-8?B?L2NQUTFBZ280VjNxS1cyT2tpZ0xUUUFRSk5XaVE2T2Ntb3lBWEY3RU9RRjY4?=
+ =?utf-8?B?amg1aTJKVHBVUm1nWmhzenhXWHFBaU5uTXh5ZCtGbU5TcnFhR0VyajJkL1BG?=
+ =?utf-8?B?cERIazhyRWJlbFE0b1hlL0FHU3I5NUZiVkl2eTZ6RjJOSi9kUzM4ckZjR3lm?=
+ =?utf-8?B?RjZBQktUMTE3NkJkeWdod1B3TG1TQlJuQVd2L2VVSnR0Q216cWw3Y2hWRFp6?=
+ =?utf-8?B?U3prR1ZYcFMvclpUb3VreTB5NzhvL1B5N0U0VlB1VEkxVDBNNUhZQzZ2NHJw?=
+ =?utf-8?B?cGVRcjFrTE9MN2lDaW5rdEloY2FFVk0wSHE0MVE3bm1XWlZhMTZ0QVJZcmNp?=
+ =?utf-8?B?Z3M4QmpwR3NISm41UyswNXkvVVdZTXVDcjE4aGphaTdWand0Ky9rOE5SV2Nq?=
+ =?utf-8?B?UFhpekUzOU5kT2VkZXJuckRDV2sveDErRm4rUWNiNi8vTkVzNGk5WEhnSDdP?=
+ =?utf-8?B?QU8vYi96Q1FmcnhXellPaVlkRkJZU2RqWGpVZEpnckhEdlVsUFd2VFRPaFFH?=
+ =?utf-8?B?ajc0S2NTaHJvb3MwVjV6U3l6QmpwUjVLcUthbDBZbGVBejhJWU5kWHI1bEYw?=
+ =?utf-8?B?dTI0NXA0R1FoTEkxOUY0Tkl3ejNFWnEvQ3hIeW92OEZ2UUtFY2xheVRpaVhi?=
+ =?utf-8?B?cEhmbjl2anJwbml2R2JwL3R1eUF6K3IwTU5vc3BhazZBQUlnNFNWZkd0Mm1r?=
+ =?utf-8?B?YU0yeGRRT0p6VStFRzdKMVJBTTZxS1VWTmlBRW9mZmEzU2gyak55R1BKS1ly?=
+ =?utf-8?B?K3NaMXUzQmRFeWZEVm1LWWYvRFk0U0ZIbytwTXNjMDZiRlh3T1BpUENJSm9s?=
+ =?utf-8?B?bjFlcFBqZE1NU2pNTVc2Um1LTEdBa2t4dDNLMEhGWDJUR3FwWFdCUFBVczJH?=
+ =?utf-8?B?Y0pndVMrTVRVZERQeVZvVjd6aWMreFZoamFwSk15Wk02MVlOdzkyS21pbzhl?=
+ =?utf-8?B?QXZ2VEZRVitVajg2M0FYT2RPSU1uY3dPazZmN0JWVFM3cHFialFhVGtLcW44?=
+ =?utf-8?B?Y1NjQzhwOGJzUXZ2Yk94bFIrc04zUUZiRUpHTUVDSi9CY3VSY05zSHhoakh5?=
+ =?utf-8?B?WjI3Q0dFSjdrZSsvejVJV3lNTGtwakoyNFpyQnp6MDJpT3NPUnJ3cENscDJz?=
+ =?utf-8?B?ZzJSejZTWVI5dFpaZVZSS2FGeDBoeFJQSXJTRURrVWhuZHAwS1hmMnhEM2Iv?=
+ =?utf-8?B?NTcwQ0ZHZzg1blFURVFTd3hhYzBLQVQ4SUE0VFc1UzhRNitzMkIxTWJNYU83?=
+ =?utf-8?B?REJRU2liWmJFVjR0a3FubFdud0lZNUVDZEpJay8xS2xiL0ZEYnIzNTArUmov?=
+ =?utf-8?B?WlZTMkNNZ1pXRVpxdkx5NHJZSlVtVytBem1RWU1rWTRSbG9xV2d6WWM2U0JH?=
+ =?utf-8?B?d0xRRG9xcjZwK0lxTXcvbjJhQXppMERlUUE0MEM1WnovdFB3N2FuQzZsb3ZE?=
+ =?utf-8?B?MjY5aGFNSGVidzlpcFRkSGFUK2FtZGNINS9CU1Z6OHNrNWhES0ZpamtXcmpH?=
+ =?utf-8?B?SEVFZ2NuZnJvM21GcDVMbXpHbUU3a0xNemIrQlV0emwyeGRPYW1VZzZnPT0=?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230035)(376009)(1800799019)(366011);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eUxRcjlOZ0F0TGVVZCtGVC9kUTRRNmovWU9WTWp6OVQ3Y1BLSHZ6bEoyLyts?=
- =?utf-8?B?Sm42c1VCWEIrUjVVQlk1dmJXNTdVSkxyRko1SW9mQ0dOeStOTlVuU1JEOUV3?=
- =?utf-8?B?Znh0OXB6MVZmWWZhVHN2NXhyczVXd0Erd2VNeFZxK3dLaE9pRHpXdGpSUDhV?=
- =?utf-8?B?RWdwUWsyT0hScHJPOERpbTI1ZkJHc0R5UkV6bk5kWDF5UnBXSHRQd1RFYjFh?=
- =?utf-8?B?WVRocm84MzBWOGVOZ3lWZDQ2OURBYWxYZnN3RksrNllFM2ttWC9NNklvcnR2?=
- =?utf-8?B?T2xPY0kzanA4Z1ZGKzlYbVY3M0d4ME9xUGNsT0pQVTAybVRLUG4yUkJrVWZl?=
- =?utf-8?B?RnRMeURua0p2WVJ4VkxEVEtOZGwreldTU3FnUXZqYVo2a3NPczVybzl3MzlR?=
- =?utf-8?B?MnV1MFlBZUhxSFEyN0d3YkVaYVVJN3Z6ZmNpWnBQRUxUUkJ0MU9FTGt6S0F1?=
- =?utf-8?B?ZnNGR25YcmNFa3h3MitEaVhOMFhUQnNEZGJacTNCZ01aTElkb2ZHbFZlMnZ2?=
- =?utf-8?B?WFhNQ3dJTVRnQ1d6ZE54anZGMnV0UzYwYlVwYWJxcVlCQUJoSElHYkZEVkkr?=
- =?utf-8?B?OWVwR0kySnVSdm9CaFBoSjA1c0VPRVA5TDhwQm1SbXN4a3lJOTNUSy8yNGJI?=
- =?utf-8?B?cFdqeE5OL0tmU0JXZHV1czlIeHduSUxQeWM0UTh1RTk3alJBRmtFckhzQzVG?=
- =?utf-8?B?V2pqcGNxSy9kcG93bFFGZFhNY3BJY1J0YWVienNZdzJPVlZ6OEhkcFVPeEtG?=
- =?utf-8?B?ODBIVWFBMXNhTFVGWUh6OFdOcXk1NTVXTXZ2bzcyZWtXbm5yZVBXOEcvNFda?=
- =?utf-8?B?QXhab0VOcHMvb3NkbnBqM3IvVjZUVVZJWU55N1FzY25lTndVWDFMcUZjMWw4?=
- =?utf-8?B?bnlpdHlTUTNidCtBbWttRi9la3ViV3lITmF6Y1AxOVBXQkJMVEQxMjRZajI5?=
- =?utf-8?B?WVZ2RTN2Tzh6TkVxdDZmRDJycUlWdVc4MmhXc0tDc2JGZnB4UVJOQVFzOHZI?=
- =?utf-8?B?WFB5QjFFejdLRFoyYXgwR2pZakxmdXN2NVJ3bkVpbzN3ZUhhZ3BlQXpLZEhP?=
- =?utf-8?B?ZEpLbDdHNE9oMkUzU2tWRkRIWUx6V2NFQk04TmY3TU1TZ2hzcHZZQVBCdkZI?=
- =?utf-8?B?dXNvdGlGa3J1ZVJkVU12K0lDWDViaktXNHFhdmEyTFBrWGpSZXlyNUdBVWlw?=
- =?utf-8?B?MmpaTW1oL0VseVhqYkU3Sm1tR2puVnVHU3RLVDVoQUpybWpxWml6SEprUUkx?=
- =?utf-8?B?U3RzQjcyRG9tZXJGQ0dnU1pwbnNIWmpkTjBIeHNrNEtzNm5qVG5vbCtjYWNQ?=
- =?utf-8?B?YnFxdlVPSGxJUFg0WG14WU1WWFVLeExUbWdUb2tiLytJN1YrVlUxNEN6aXpp?=
- =?utf-8?B?NEhwaXY3Vlh4WW5aVnZtdHAwR0l6bVNmUW5pOUljT1FoUTlxZHNMSGlrUFJF?=
- =?utf-8?B?M2NZN3VLUUt5akFQakVUaStyZWRMZm1WUENjQXpNa3kvVWtjclFUc3Y3VVVp?=
- =?utf-8?B?VFdETXFLVlRzQ1V2WFVDOFNuZVZZejZJUEtSbGZWVFNGdWtHd1d3UEg0bkVS?=
- =?utf-8?B?ZnZyVjhtVGN0VW9oNzFseFpVNkVyNk54QmdQbk1xakx5Rzl4YlVGWWc2Yk0r?=
- =?utf-8?B?YkNuUGluaUJoUEd4d0wwMEdlSFZmSCtCaFc3Z0dhZzg5Z0F1UGdmenNIREJ4?=
- =?utf-8?B?YTZmUUtYYXM3RkI5dm1hUFZXTXlpQm5ITVQxQmVWOFNTWUZYVS9sQ2pNbU80?=
- =?utf-8?B?WUFCTkplQnBEalo2Q1VwS3BYNk9MeUpJUjIvbkZxOVlQQWxnWEQwb3N4ekJk?=
- =?utf-8?B?dGt4VGhLOGppTjVhL0pYK2JBZWt3c0loZ3JvS1lCOWpaRS9raTFqTHFEQWFj?=
- =?utf-8?B?UWRMaVEwd240NHF1bFgrWmExYUYvckxnV3ZtdnBBV2NzcDllOGhJcEhFbnE3?=
- =?utf-8?B?OExtbEdXMEQvU1h2Y3NyY3dzUkh5MjJ5N3hmY0J1VTUwdUFoSG12aTh5Vk5z?=
- =?utf-8?B?alYrOFlaVUllSVdDRjZPSnhHeHY0MzFyb3hCOU9Iam8wYTFIbDFWZGpQeDlN?=
- =?utf-8?B?TEQrVHQ3bnpuczllekFmenpQNnNyZnJMbmpIcFY0MzFvdlhnZWp6b3Izdm56?=
- =?utf-8?Q?0R50XELZBLiEX7ONcS6lOYOm3?=
+	=?utf-8?B?cUQwRGx2WmhBQWZFNHdKdkY3N1VuQ2oxNWwvaS9aTk9kUFhVWTdnc3liNG91?=
+ =?utf-8?B?Z2hNa1drN3RveVZoSkdkT2dldlordjVHUENYYWZZM3lKVWVCdml3Z1VsNFQ0?=
+ =?utf-8?B?OWZQelFCWDNadms3ZjAzTU5iVU01aEoxMzV6bm1VUDJnc3NTb3lJNmw4NEhG?=
+ =?utf-8?B?Y1pSU1V4a2MreVk4TS83NHRlY0VxVk9HTDllRlhxaW94NFlpNy9FTm04MTdQ?=
+ =?utf-8?B?VWZzM2V5MWwvSEZIU29xdnpuTnNjOURvcHoySzRqTGVYQWhycTFNMGlnOVBF?=
+ =?utf-8?B?Q1ZSRGpYODNHd0NTYlphYUlrS1c4bFpGazU1dUl2WnRZN3JGSlM3TVNtVytn?=
+ =?utf-8?B?OHpPZ3RmejRMVHhYbnIyRlRYdk5KUCtLbEs1UVc4aDZ1QlZGR3JQVGtkRGlC?=
+ =?utf-8?B?YmQySHgrUERtMUxKRlNmU0JvdytMSWZwS3dNdVoxZVFLU2p0Mk9yRzh6VVl0?=
+ =?utf-8?B?ellZN3dSUE9CMFFlcElmMXNGekcxTjFnNmRkRHpoRGhBa1gwYnU5Q2RrNWZU?=
+ =?utf-8?B?TE81Zm5lUTUxV3JFaWc1b29HMk8zN2Nsem5QcXFGcjN1UlA5YzRpWGJsdUEx?=
+ =?utf-8?B?YmVIUzdDV2Z3S1UwaFVqQWhFV2lWQ1VJa2dtYTR4YmhleUV3UGhhWkdvbTJI?=
+ =?utf-8?B?eHZzSENGK1YzaXVwQldrWmQydjljYmRJc21veVZJNzZzSkxIREVqUytNWFRl?=
+ =?utf-8?B?QXJscU1lMllFK0dsNWlnMWtCM1VmZXpwVzRGeTU0TXc0d3lpbzVaOXdwT1ZQ?=
+ =?utf-8?B?VWxjNTBPenBWTk9HM3NvUzdsME4rS0p4c2pxRGpmeTN5blF6dEEvTGx0VDhy?=
+ =?utf-8?B?RklXYWQ1dmgxU1JXNTlYU0dZQUVQckpkZ2crYkdDd2ExNVNkQTlXZVdFeEVH?=
+ =?utf-8?B?M1hvVmpOQVFDdE91OGJNaFJmY3lrbnNhd0o5MGdUSWVpK1h0QndBVFpWUjJz?=
+ =?utf-8?B?UjY4SzhuZVp1bmF2VkZLVVJGcENYckE1VUNwV2VoL1QyYnhhNWY3N0ZyOWFq?=
+ =?utf-8?B?Z2pkNXZuL0xSZS8zWUtNaUtaK21sd0RKWW8ySURwN1R1cEErRmt1QVNEVjRn?=
+ =?utf-8?B?dWJ3emk5RzFLcWNqV1RZNWEzTW8vY0xBdlp4SnpaVFJzWGpHRWl2LzcyRFNM?=
+ =?utf-8?B?T0ZNb1BNblc2a2tBbDV4UWpuVjdLazJMdldSL0RTdFZoRnJ4RytCdTk1b2hJ?=
+ =?utf-8?B?MVlZc0pvZ2xRMEN1UlZBMlhqaTQ2YVhyZ1RlM2xDVkVkTDNEbStteXMyZHNO?=
+ =?utf-8?B?alZiMXcxT0NaMnVXSC9JWFZ1VldpMW5aKzlvZmNXa2xsU29MWGczd2NlTklk?=
+ =?utf-8?B?SlVYaG5SZWZzSlRNZjFUUWZWV2pzS3pHMmVQZ3dQWW9sMzk1NlJ1aWtHT3BK?=
+ =?utf-8?B?UWMvODg2UE1oN2haeGh2dThuK1g0UUlOcURPeGY3RE5tcVhYN0tOVEIxeDNF?=
+ =?utf-8?B?TGF5aUFkZjc5aTUvenBRYTJzK0poZEc5ZDlwd1A0V1ZGVjdZNUVMdWRYQm1h?=
+ =?utf-8?B?eXh2YUxLTU1hY1NreFFZb1F1aVNZM0h6cytINWxoa2dacEd2YmhLdUF3Vm1o?=
+ =?utf-8?B?UGkxdDJTVlpnZHowQjFSQ21MMVc0eDdja1g4YytncUFuYW8wajZLNGNscFVM?=
+ =?utf-8?B?ekZyeEhRdFNYMVNiNWtCL1ZoNlZheE9IcGNIdC9yOCtrN2I1b2RoY1F5Uis3?=
+ =?utf-8?B?ZXlQK09GTUN0cnBld2Iya2hQVmZCaGxhM2psa1pkSmk4OGV1VkxvakVyeVho?=
+ =?utf-8?B?STVKT3k1YVJaY1hUc25UQUxZakw0YU5kT3BGcXNISW5FZnJyc0lMMjcvWS8r?=
+ =?utf-8?B?WWIzUWcydUY4ZHNPNUdsTjhwemJQOEkzUW5NS3dMUGdJTXFKOERCcXA2dUdM?=
+ =?utf-8?B?a1psM0kwYWxlM3JaZjB1alpLS0hYa25vYjlqVE94Q1BSQlA2ODFlM1g3aUxH?=
+ =?utf-8?B?UHAwR2Fzdkk0LzFtaFJxV3FvSDFpRXQ4V0tISUQrMjIySjB6NDhYd3pPQTVC?=
+ =?utf-8?B?LzQ0Q1pOazEwa0QybFNZMy9VZGhtS2JMZm9NWjRrRDN2bkNvTjFPWWtpdnZO?=
+ =?utf-8?B?YkZEUUJWTnBveTBFQy9aRkxRaXZFVUE2cDJZS1NSU1J6Qkk5QTdjdkZLb0tD?=
+ =?utf-8?Q?TN4FVoeGWPdU0Kl8+TTqxLWJv?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c662460-429c-4956-c791-08dc8bd1d1a0
+X-MS-Exchange-CrossTenant-Network-Message-Id: d73721e5-26c9-4f1f-cc01-08dc8bd1fa6b
 X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2024 17:54:06.2499
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2024 17:55:14.7268
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8mvpQGoXVLd3TSfqhwjWFSamalODNlk6fSVv3VOgbQmGi0gjEHF11By7vEhuBO/n51HpaibZaoWd4CNnsctJTw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: w2QuCKz3FV/aLQNauyBkH4/5i4kDD3EmNuOo0fw2i295f+sHvx0I/hPvj6MOSbkZDd9pfqeHa+9X9MG20UNIug==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7262
 
-This is the cover letter, so if no other feedback no need to fix up. But 
-if you need a v12 then typos below.
-
 On 6/13/2024 02:25, Perry Yuan wrote:
-> Hi all,
-> The patchset series implement CPB(core performance boost) feature for AMD pstate
-> driver including passisve ,guide and active mode support.
-
-passive
-guided
-
+> From: Perry Yuan <Perry.Yuan@amd.com>
 > 
-> User can change global core frequency boost control with a new sysfs entry:
+> With this new sysfs entry `cpb_boost`created, user can change CPU boost
+> state dynamically under `active`, `guided` and `passive` modes.
+> And the highest perf and frequency will also be updated as the boost
+> state changing.
 > 
-> "/sys/devices/system/cpu/amd_pstate/cpb_boost"
+> 0): check current boost state
+> cat /sys/devices/system/cpu/amd_pstate/cpb_boost
 > 
-> Now it also support to update indivial CPU boost state in sysfs boost file.
-
-individual
-
-> "/sys/devices/system/cpu/cpuX/cpufreq/boost"
-> 
-> And global control will override the indivial CPU boost state by default.
-
-individual
-
-> 
-> 1) globally disable core boost:
-> $ sudo bash -c "echo 0 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
-> $ lscpu -ae
-> CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ      MHZ
->    0    0      0    0 0:0:0:0          yes 4201.0000 400.0000 2983.578
->    1    0      0    1 1:1:1:0          yes 4201.0000 400.0000 2983.578
->    2    0      0    2 2:2:2:0          yes 4201.0000 400.0000 2583.855
->    3    0      0    3 3:3:3:0          yes 4201.0000 400.0000 2983.578
->    4    0      0    4 4:4:4:0          yes 4201.0000 400.0000 2983.578
-> 
-> 2) globally enable core boost:
-> $ sudo bash -c "echo 1 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
-> $ lscpu -ae
->     0    0      0    0 0:0:0:0          yes 5759.0000 400.0000 2983.578
->    1    0      0    1 1:1:1:0          yes 5759.0000 400.0000 2983.578
->    2    0      0    2 2:2:2:0          yes 5759.0000 400.0000 2983.578
->    3    0      0    3 3:3:3:0          yes 5759.0000 400.0000 2983.578
->    4    0      0    4 4:4:4:0          yes 5759.0000 400.0000 2983.578
-> 
-> 
-> ============================================================================
-> The V9 patches add per CPU boost control, user can enable/disable CPUs boost
-> as the below command tested on a laptop system.
-> # before
->    CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
->    0    0      0    0 0:0:0:0          yes 4208.0000 400.0000 1666.7740
->    1    0      0    0 0:0:0:0          yes 4208.0000 400.0000  400.0000
->    2    0      0    1 1:1:1:0          yes 4208.0000 400.0000 3386.1260
->    3    0      0    1 1:1:1:0          yes 4208.0000 400.0000  400.0000
-> $ sudo rdmsr 0xc00102b3 -p 0
-> 10a6
-> 
-> $ sudo bash -c "echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/boost"
-> # after
->    CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
->      0    0      0    0 0:0:0:0          yes 3501.0000 400.0000  400.0000
->      1    0      0    0 0:0:0:0          yes 4208.0000 400.0000 1391.0690
->      2    0      0    1 1:1:1:0          yes 4208.0000 400.0000 3654.4541
->      3    0      0    1 1:1:1:0          yes 4208.0000 400.0000  400.0000
-> $ sudo rdmsr 0xc00102b3 -p 0
-> 108a
-> 
-> rebasd to keep syncing to Mario kernel tree: bleeding-edge
-> https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
-> 
-> Tested result:
-> 
-> CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
->    0    0      0    0 0:0:0:0          yes 4354.0000 400.0000 1110.7140
->    1    0      0    0 0:0:0:0          yes 4354.0000 400.0000 1110.7140
->    2    0      0    1 1:1:1:0          yes 4354.0000 400.0000 1110.7140
->    3    0      0    1 1:1:1:0          yes 4354.0000 400.0000 3110.0000
->    4    0      0    2 2:2:2:0          yes 4354.0000 400.0000 2732.3569
->    5    0      0    2 2:2:2:0          yes 4354.0000 400.0000 1110.7140
->    6    0      0    3 3:3:3:0          yes 4354.0000 400.0000 1110.7140
->    7    0      0    3 3:3:3:0          yes 4354.0000 400.0000 1110.7140
->    8    0      0    4 4:4:4:0          yes 4354.0000 400.0000 2312.2109
->    9    0      0    4 4:4:4:0          yes 4354.0000 400.0000 1110.7140
->   10    0      0    5 5:5:5:0          yes 4354.0000 400.0000 2310.1011
->   11    0      0    5 5:5:5:0          yes 4354.0000 400.0000 1110.7140
-> 
-> sudo bash -c "echo 0 > /sys/devices/system/cpu/cpu11/cpufreq/boost"
-> sudo bash -c "echo 0 > /sys/devices/system/cpu/cpu10/cpufreq/boost"
-> sudo bash -c "echo 0 > /sys/devices/system/cpu/cpu9/cpufreq/boost"
-> 
-> CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
->    0    0      0    0 0:0:0:0          yes 4354.0000 400.0000 1242.7240
->    1    0      0    0 0:0:0:0          yes 4354.0000 400.0000 1110.7140
->    2    0      0    1 1:1:1:0          yes 4354.0000 400.0000 2754.5710
->    3    0      0    1 1:1:1:0          yes 4354.0000 400.0000 2659.8159
->    4    0      0    2 2:2:2:0          yes 4354.0000 400.0000 2308.9929
->    5    0      0    2 2:2:2:0          yes 4354.0000 400.0000 1110.7140
->    6    0      0    3 3:3:3:0          yes 4354.0000 400.0000 1110.7140
->    7    0      0    3 3:3:3:0          yes 4354.0000 400.0000 1110.7140
->    8    0      0    4 4:4:4:0          yes 4354.0000 400.0000 1110.7140
->    9    0      0    4 4:4:4:0          yes 2801.0000 400.0000 1110.7140
->   10    0      0    5 5:5:5:0          yes 2801.0000 400.0000 1110.7140
->   11    0      0    5 5:5:5:0          yes 2801.0000 400.0000 1110.7140
-> 
+> 1): disable CPU boost
 > sudo bash -c "echo 0 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
 > 
-> CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
->    0    0      0    0 0:0:0:0          yes 2801.0000 400.0000 1233.8630
->    1    0      0    0 0:0:0:0          yes 2801.0000 400.0000 1110.7140
->    2    0      0    1 1:1:1:0          yes 2801.0000 400.0000 2714.4851
->    3    0      0    1 1:1:1:0          yes 2801.0000 400.0000 2732.3569
->    4    0      0    2 2:2:2:0          yes 2801.0000 400.0000 2564.2639
->    5    0      0    2 2:2:2:0          yes 2801.0000 400.0000 1110.7140
->    6    0      0    3 3:3:3:0          yes 2801.0000 400.0000 2732.3569
->    7    0      0    3 3:3:3:0          yes 2801.0000 400.0000 1110.7140
->    8    0      0    4 4:4:4:0          yes 2801.0000 400.0000 1233.8660
->    9    0      0    4 4:4:4:0          yes 2801.0000 400.0000 1110.7140
->   10    0      0    5 5:5:5:0          yes 2801.0000 400.0000 1233.6630
->   11    0      0    5 5:5:5:0          yes 2801.0000 400.0000 1233.5050
-> 
+> 2): enable CPU boost
 > sudo bash -c "echo 1 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
 > 
-> CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
->    0    0      0    0 0:0:0:0          yes 4354.0000 400.0000 1234.0200
->    1    0      0    0 0:0:0:0          yes 4354.0000 400.0000 1110.7140
->    2    0      0    1 1:1:1:0          yes 4354.0000 400.0000 1110.7140
->    3    0      0    1 1:1:1:0          yes 4354.0000 400.0000 1110.7140
->    4    0      0    2 2:2:2:0          yes 4354.0000 400.0000 1110.7140
->    5    0      0    2 2:2:2:0          yes 4354.0000 400.0000 1110.7140
->    6    0      0    3 3:3:3:0          yes 4354.0000 400.0000 2278.8491
->    7    0      0    3 3:3:3:0          yes 4354.0000 400.0000 2732.3569
->    8    0      0    4 4:4:4:0          yes 4354.0000 400.0000 1110.7140
->    9    0      0    4 4:4:4:0          yes 4354.0000 400.0000 1110.7140
->   10    0      0    5 5:5:5:0          yes 4354.0000 400.0000 2353.0449
->   11    0      0    5 5:5:5:0          yes 4354.0000 400.0000 1110.7140
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217931
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217618
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> ---
+>   drivers/cpufreq/amd-pstate-ut.c |   2 +-
+>   drivers/cpufreq/amd-pstate.c    | 117 +++++++++++++++++++++++++++++++-
+>   drivers/cpufreq/amd-pstate.h    |   1 +
+>   3 files changed, 118 insertions(+), 2 deletions(-)
 > 
-> 
-> Perry.
-> 
-> Changes from v10:
->   * rework the boost interface with cpufreq core boost control, align the sysfs file
->    created from cpufreq.c and allow indivial CPU boost control (Mario)
->   * fix the pr_warn code format with %zd (Oleksandr Natalenko)
->   * replace sscanf with kstrtobool for cpufreq.c (new)
->   * drop the boost sysfs file creation from amd pstate patch #6
->   * add init_boost for cpufreq.c to unify the boost file creation(Mario)
->   * add set_boost callback for EPP driver mode
->   * fix syncronization issue for indivial boost control and global CPB control, now the
->     two control way will keep syncronization after anyone CPU boost state changed.
->   * rebased to Mario kernel tree: bleeding-edge
->   * run testing on local system, no regression issue found so far.
-> 
-> Changes from v9:
->   * change per CPU boost sysfs file name to `boost` (Mario)
->   * rebased to latest linux-pm/bleeding-edge
-> 
-> Changes from v8:
->   * pick RB flag for patch 4 (Mario)
->   * change boot_cpu_has to cpu_feature_enabled for patch 2 (Boris)
->   * merge patch 6 into patch 3 (Mario)
->   * add two patch for per CPU boost control patch 6 & 7(Mario)
->   * rebased to latest linux-pm/bleeding-edge
-> 
-> Changes from v7:
->   * fix the mutext locking issue in the sysfs file update(Ray, Mario)
->   * pick ack flag from Ray
->   * use X86_FEATURE_CPB to verify the CPB function in Patch #2(Ray)
->   * rerun the testing to check function works well
->   * rebased to linux-pm/bleeding-edge latest
-> 
-> Changes from v6:
->   * reword patch 2 commit log (Gautham)
->   * update cover letter description(Gautham)
->   * rebase to kernel v6.9-rc5
-> 
-> Changes from v4:
->   * drop the legacy boost remove patch, let us keep the legacy interface
->     in case some applications break.
->   * rebase to linux-pm/bleeding-edge branch
->   * rework the patchset base on [PATCH v8 0/8] AMD Pstate Fixes And
->     Enhancements which has some intial work done there.
-> 
-> Changes from v4:
->   * move MSR_K7_HWCR_CPB_DIS_BIT into msr-index.h
->   * pick RB flag from Gautham R. Shenoy
->   * add Cc Oleksandr Natalenko <oleksandr@natalenko.name>
->   * rebase to latest linux-pm/bleeding-edge branch
->   * rebase the patch set on top of [PATCH v7 0/6] AMD Pstate Fixes And Enhancements
->   * update  [PATCH v7 2/6] to use MSR_K7_HWCR_CPB_DIS_BIT
-> 
-> Changes from v3:
->   * rebased to linux-pm/bleeding-edge v6.8
->   * rename global to amd_pstate_global_params(Oleksandr Natalenko)
->   * remove comments for boot_supported in amd_pstate.h
->   * fix the compiler warning for amd-pstate-ut.ko
->   * use for_each_online_cpu in cpb_boost_store which fix the null pointer
->     error during testing
->   * fix the max frequency value to be KHz when cpb boost disabled(Gautham R. Shenoy)
-> 
-> Changes from v2:
->   * move global struct to amd-pstate.h
->   * fix the amd-pstate-ut with new cpb control interface
-> 
-> Changes from v1:
->   * drop suspend/resume fix patch 6/7 because of the fix should be in
->     another fix series instead of CPB feature
->   * move the set_boost remove patch to the last(Mario)
->   * Fix commit info with "Closes:" (Mario)
->   * simplified global.cpb_supported initialization(Mario)
->   * Add guide mode support for CPB control
->   * Fixed some Doc typos and add guide mode info to Doc as well.
-> 
-> v1: https://lore.kernel.org/all/cover.1706255676.git.perry.yuan@amd.com/
-> v2: https://lore.kernel.org/lkml/cover.1707047943.git.perry.yuan@amd.com/
-> v3: https://lore.kernel.org/lkml/cover.1707297581.git.perry.yuan@amd.com/
-> v4: https://lore.kernel.org/lkml/cover.1710322310.git.perry.yuan@amd.com/
-> v5: https://lore.kernel.org/lkml/cover.1710473712.git.perry.yuan@amd.com/
-> v6: https://lore.kernel.org/lkml/cover.1710754236.git.perry.yuan@amd.com/
-> v7: https://lore.kernel.org/lkml/cover.1713861200.git.perry.yuan@amd.com/
-> v8: https://lore.kernel.org/lkml/cover.1714112854.git.perry.yuan@amd.com/
-> v9: https://lore.kernel.org/lkml/cover.1714989803.git.perry.yuan@amd.com/
-> v10: https://lore.kernel.org/lkml/cover.1715152592.git.perry.yuan@amd.com/
-> 
-> Perry Yuan (9):
->    cpufreq: acpi: move MSR_K7_HWCR_CPB_DIS_BIT into msr-index.h
->    cpufreq: simplify boolean parsing with kstrtobool in store function
->    cpufreq: introduce init_boost callback to initialize boost state for
->      pstate drivers
->    cpufreq: amd-pstate: initialize new core precision boost state
->    cpufreq: amd-pstate: implement cpb_boost sysfs entry for boost control
->    cpufreq: amd-pstate: Add set_boost callback for active mode
->    cpufreq: amd-pstate: fix the MSR highest perf will be reset issue
->      while cpb boost off
->    Documentation: cpufreq: amd-pstate: introduce the new cpu boost
->      control method
->    Documentation: cpufreq: amd-pstate: update doc for Per CPU boost
->      control method
-> 
->   Documentation/admin-guide/pm/amd-pstate.rst |  30 +++
->   arch/x86/include/asm/msr-index.h            |   2 +
->   drivers/cpufreq/acpi-cpufreq.c              |   2 -
->   drivers/cpufreq/amd-pstate-ut.c             |   2 +-
->   drivers/cpufreq/amd-pstate.c                | 197 +++++++++++++++++---
->   drivers/cpufreq/amd-pstate.h                |  14 ++
->   drivers/cpufreq/cpufreq.c                   |  23 ++-
->   include/linux/cpufreq.h                     |   2 +
->   8 files changed, 237 insertions(+), 35 deletions(-)
-> 
+> diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
+> index fc275d41d51e..b528f198f4c3 100644
+> --- a/drivers/cpufreq/amd-pstate-ut.c
+> +++ b/drivers/cpufreq/amd-pstate-ut.c
+> @@ -227,7 +227,7 @@ static void amd_pstate_ut_check_freq(u32 index)
+>   			goto skip_test;
+>   		}
+>   
+> -		if (cpudata->boost_supported) {
+> +		if (amd_pstate_global_params.cpb_boost) {
+>   			if ((policy->max == cpudata->max_freq) ||
+>   					(policy->max == cpudata->nominal_freq))
+>   				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_PASS;
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 9f42524074a9..fe7c9d3562c5 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -104,6 +104,7 @@ static bool amd_pstate_prefcore = true;
+>   static struct quirk_entry *quirks;
+>   struct amd_pstate_global_params amd_pstate_global_params;
+>   EXPORT_SYMBOL_GPL(amd_pstate_global_params);
+> +static int amd_pstate_cpu_boost(int cpu, bool state);
+>   
+>   /*
+>    * AMD Energy Preference Performance (EPP)
+> @@ -738,6 +739,7 @@ static int amd_pstate_boost_set(struct amd_cpudata *cpudata)
+>   	if (amd_pstate_global_params.cpb_supported) {
+>   		current_pstate_driver->boost_enabled = true;
+>   		WRITE_ONCE(cpudata->boost_supported, true);
+> +		WRITE_ONCE(cpudata->boost_state, true);
+>   	}
+>   
+>   	amd_pstate_global_params.cpb_boost = amd_pstate_global_params.cpb_supported;
+> @@ -745,6 +747,7 @@ static int amd_pstate_boost_set(struct amd_cpudata *cpudata)
+>   
+>   exit_err:
+>   	WRITE_ONCE(cpudata->boost_supported, false);
+> +	WRITE_ONCE(cpudata->boost_state, false);
+>   	current_pstate_driver->boost_enabled = false;
+>   	amd_pstate_global_params.cpb_boost = false;
+>   	return ret;
+> @@ -1348,6 +1351,116 @@ static ssize_t prefcore_show(struct device *dev,
+>   	return sysfs_emit(buf, "%s\n", str_enabled_disabled(amd_pstate_prefcore));
+>   }
+>   
+> +static int amd_pstate_cpu_boost_update(struct cpufreq_policy *policy, bool on)
+> +{
+> +	struct amd_cpudata *cpudata = policy->driver_data;
+> +	struct cppc_perf_ctrls perf_ctrls;
+> +	u32 highest_perf, nominal_perf, nominal_freq, max_freq;
+> +	int ret;
+> +
+> +	if (!policy) {
+> +		pr_err("policy is null\n");
+> +		return -ENODATA;
+> +	}
+
+This is dead code that can't possibly be hit, because there would be a 
+NULL pointer dereference above for this line:
+
+	struct amd_cpudata *cpudata = policy->driver_data;
+
+Furthermore, the caller for this function, amd_pstate_cpu_boost() has
+the same check already.
+
+So drop the check here.
+
+> +
+> +	highest_perf = READ_ONCE(cpudata->highest_perf);
+> +	nominal_perf = READ_ONCE(cpudata->nominal_perf);
+> +	nominal_freq = READ_ONCE(cpudata->nominal_freq);
+> +	max_freq = READ_ONCE(cpudata->max_freq);
+> +
+> +	if (boot_cpu_has(X86_FEATURE_CPPC)) {
+> +		u64 value = READ_ONCE(cpudata->cppc_req_cached);
+> +
+> +		value &= ~GENMASK_ULL(7, 0);
+> +		value |= on ? highest_perf : nominal_perf;
+> +		WRITE_ONCE(cpudata->cppc_req_cached, value);
+> +
+> +		wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, value);
+> +	} else {
+> +		perf_ctrls.max_perf = on ? highest_perf : nominal_perf;
+> +		ret = cppc_set_epp_perf(cpudata->cpu, &perf_ctrls, 1);
+> +		if (ret) {
+> +			cpufreq_cpu_release(policy);
+> +			pr_debug("failed to set energy perf value (%d)\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	if (on)
+> +		policy->cpuinfo.max_freq = max_freq;
+> +	else
+> +		policy->cpuinfo.max_freq = nominal_freq * 1000;
+> +
+> +	policy->max = policy->cpuinfo.max_freq;
+> +
+> +	if (cppc_state == AMD_PSTATE_PASSIVE) {
+> +		ret = freq_qos_update_request(&cpudata->req[1], policy->cpuinfo.max_freq);
+> +		if (ret < 0)
+> +			pr_debug("Failed to update freq constraint: CPU%d\n", cpudata->cpu);
+> +	}
+> +
+> +	return ret < 0 ? ret : 0;
+> +}
+> +
+> +static int amd_pstate_cpu_boost(int cpu, bool state)
+> +{
+> +	int ret;
+> +	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> +	struct amd_cpudata *cpudata = policy->driver_data;
+> +
+> +	if (!policy) {
+> +		pr_err("policy is NULL\n");
+> +		ret = -ENODATA;
+> +		goto err_exit;
+> +	}
+> +
+> +	ret = amd_pstate_cpu_boost_update(policy, state);
+> +	refresh_frequency_limits(policy);
+> +	WRITE_ONCE(cpudata->boost_state, state);
+> +	policy->boost_enabled = state;
+> +
+> +err_exit:
+> +	cpufreq_cpu_put(policy);
+> +	return ret < 0 ? ret : 0;
+> +}
+> +
+> +static ssize_t cpb_boost_show(struct device *dev,
+> +			   struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%u\n", amd_pstate_global_params.cpb_boost);
+> +}
+> +
+> +static ssize_t cpb_boost_store(struct device *dev, struct device_attribute *b,
+> +			    const char *buf, size_t count)
+> +{
+> +	bool new_state;
+> +	ssize_t ret;
+> +	int cpu;
+> +
+> +	if (!amd_pstate_global_params.cpb_supported) {
+> +		pr_err("Boost mode is not supported by this processor or SBIOS\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = kstrtobool(buf, &new_state);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&amd_pstate_driver_lock);
+> +	for_each_present_cpu(cpu) {
+> +		ret = amd_pstate_cpu_boost(cpu, new_state);
+> +		if (ret < 0) {
+> +			pr_warn("failed to update cpu boost for CPU%d (%zd)\n", cpu, ret);
+> +			goto err_exit;
+> +		}
+> +	}
+> +	amd_pstate_global_params.cpb_boost = !!new_state;
+> +
+> +err_exit:
+> +	mutex_unlock(&amd_pstate_driver_lock);
+> +	return ret < 0 ? ret : count;
+> +}
+> +
+>   cpufreq_freq_attr_ro(amd_pstate_max_freq);
+>   cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
+>   
+> @@ -1358,6 +1471,7 @@ cpufreq_freq_attr_rw(energy_performance_preference);
+>   cpufreq_freq_attr_ro(energy_performance_available_preferences);
+>   static DEVICE_ATTR_RW(status);
+>   static DEVICE_ATTR_RO(prefcore);
+> +static DEVICE_ATTR_RW(cpb_boost);
+>   
+>   static struct freq_attr *amd_pstate_attr[] = {
+>   	&amd_pstate_max_freq,
+> @@ -1382,6 +1496,7 @@ static struct freq_attr *amd_pstate_epp_attr[] = {
+>   static struct attribute *pstate_global_attributes[] = {
+>   	&dev_attr_status.attr,
+>   	&dev_attr_prefcore.attr,
+> +	&dev_attr_cpb_boost.attr,
+>   	NULL
+>   };
+>   
+> @@ -1420,7 +1535,7 @@ static int amd_pstate_init_boost(struct cpufreq_policy *policy)
+>   	if (ret)
+>   		return ret;
+>   
+> -	policy->boost_enabled = READ_ONCE(cpudata->boost_supported);
+> +	policy->boost_enabled = READ_ONCE(cpudata->boost_state);
+>   
+>   	return 0;
+>   }
+> diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
+> index 0b75a6267fca..9eba854ab7d3 100644
+> --- a/drivers/cpufreq/amd-pstate.h
+> +++ b/drivers/cpufreq/amd-pstate.h
+> @@ -99,6 +99,7 @@ struct amd_cpudata {
+>   	u32	policy;
+>   	u64	cppc_cap1_cached;
+>   	bool	suspended;
+> +	bool	boost_state;
+>   };
+>   
+>   /**
 
 
