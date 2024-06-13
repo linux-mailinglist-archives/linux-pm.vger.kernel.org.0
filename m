@@ -1,157 +1,158 @@
-Return-Path: <linux-pm+bounces-9084-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9085-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7760B907337
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 15:13:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFC8B907398
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 15:26:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9041F1C2276D
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 13:13:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 800EA285B2C
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 13:26:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E88B6143C60;
-	Thu, 13 Jun 2024 13:13:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178B8145A04;
+	Thu, 13 Jun 2024 13:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQ4PFJSR"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ClYh467H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9EF5143C46;
-	Thu, 13 Jun 2024 13:13:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DDF144D1F
+	for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2024 13:24:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718284415; cv=none; b=TCd9AxtnXUwoe7KrLDMWFwzpUqqz0bLHAR9k3z2TAGhFaGhM/HNhyGoUpf6k2cjv81vitTe8vt+zYoWsHxHgR3U5U3ZwsOGskmbr6Oi7R6ja2GRyah/kmWmwPX4ZZeGM94sxyMgPYLxUjWLTl6g5ULH0VxVfa3C/7NNmTuGQhRY=
+	t=1718285059; cv=none; b=ucfOV+4LkwYC1mhaLBG3vx6y17jw1n8/eY2k1ObrfdLj5t582NlK8EYGmQpBCisv1r7C5GS2cK7mvkVD64ke0VD4+k1inNsrQKK7ClyMaLTSbMSYV0eRmux1Ku3z6Z4M1cqmYIoga7bOHMRRn9e9G88YZRKB0WbWHt6fnDiRnxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718284415; c=relaxed/simple;
-	bh=KsGR0s1bpnrhR66Qenc48T6r5LcBDO7RJCcU7p0OA2E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ppd9HANk2nzxIi46S/hCCt7eqaK784fJPx47NyXDNQa9AYDEofIVovjC3KV1n+ZbgEdnZ19uqF0gS4vLsxiy9XUT7XD26cTbei1a3GUufSTJJhlYwRr+EGSSds9Z1uYhiuHnMtCS0HSZ+JytAeAJX4PyXfXpms+/RLInVX3WhI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oQ4PFJSR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57620C2BBFC;
-	Thu, 13 Jun 2024 13:13:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718284415;
-	bh=KsGR0s1bpnrhR66Qenc48T6r5LcBDO7RJCcU7p0OA2E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oQ4PFJSRHuxn/ZDSHWVjnzONEXtNVkkzNRrB5Wc2+o5d4lBxjpfXLVPFi7j1x1+EO
-	 I4bqQcTsNYdE30mEGdkUMUOBWg/gggmXK8L7Y0IebpguhEcNrSeFnHH20yM4OG/NR+
-	 iN5EWx8AavHOmcHcOkQXc98QkVTeLtFTZIJqBRmjf8MAqW+nZH+it6c7nRkSZRMoLs
-	 Q/Uela0+whEM7mv5S11tfslYPsz2cox2dln2xiy8GLuD4w+lOnRxJzd5pIDdmXVncK
-	 FqL+Tetv44+hU4o+mAskS+kgAdCummJwzOnVAg/shSeGCB+Y1IvfYU9PlqhgnkLtW4
-	 ovVW8C3/+yBlg==
-Message-ID: <56030532-fe5d-414c-b254-f6b39f58cde1@kernel.org>
-Date: Thu, 13 Jun 2024 15:13:29 +0200
+	s=arc-20240116; t=1718285059; c=relaxed/simple;
+	bh=IzjMEluDdj9W5D1MbEZYeU4rwzK3qTksCGHXnGpVbHQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nokpdYyY7smwd9M5u6iIvIyaLSYC4ouwUfakfyZMe4LcnyPpprSZPv3DRlnCA/8vftJNvc09J85ID5b5Etsnkk2YVioZ75gR4DFbUA53zHD4MK6z6m1NFSaEDDo7TS8ZTILnFSm4UCKlU3N/ISr9Fl7Zw4Nf51IUhso9+BZp3n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ClYh467H; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-52c7f7fdd24so1469188e87.1
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2024 06:24:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1718285055; x=1718889855; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=R/cKWx14xpoqErwPaH2eaTi1rw2DF/KkbsM0RLotWgM=;
+        b=ClYh467HUncyqyqDJIfwCMnus5446SWCFmPS7uaF/QGkHmg3zdApZ+rxJcPn2npF/2
+         f5c2B/mAe3C6xMDB2syskx1G7OCfMg6w36vyLn9qWjVuh/oLhBh7UP3wx4/IIW05P1Ka
+         cvWtrZf1w/HbvLvqSjlacPEViTLlS5/JMVqd3ZNTuNscFFQr5EZdA4P/1pO+SukuwXjz
+         pMTcwYp0OcbnJm+FmfREzsRId7o+q2RMQ8uuSgdQFz8DTNi/lx7wz+oz9sYyUFKk8Qg5
+         f+sUnCVpWYI7Ak9QWWHved1GFjORFuUz1t6223Yq2toYWA33O6mBVVE0ybqkiVwPX4Bu
+         Pv9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718285055; x=1718889855;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R/cKWx14xpoqErwPaH2eaTi1rw2DF/KkbsM0RLotWgM=;
+        b=vwaSCQeiUiqRhsXsmkhjy/QCye5giq85MDNWD7V6dO5POCOlatOB0ZFxCfpkaliICO
+         GHK6afLRDhoXrfchpgTvar23xzou/XZhuWJ7zd8Dzl7xBCwIkYt8yMTWZ9d0+LCgYCMv
+         0V/dHnDNaFl6G+pAZF7oadUIomQSF/5U71UIER7J5UsmlSxscfLA7lxvxhe3ykOUSJJu
+         BqACGarC8nHTFeEh1kfLCFaaRiLjH36x0Rxyq+p1NDc9VhntYIekvCW2lRm7zylP1xHq
+         eJxPmamGe5X4aAB6IY47us1T3NPQ8OOJ5PZ8Xm6f5ffqZW+XchJQ+bIeQejgJoc/VhGy
+         9hdw==
+X-Forwarded-Encrypted: i=1; AJvYcCWcRxNbMc/UkwFKgGGXYK8qA3XvFo4s+GwCvN/blauCQDb0TlhIiCU/cv4z3POTjiZqguKbYajh8++rUQUJAbD7qq4J24uInCM=
+X-Gm-Message-State: AOJu0YwrCkrqvXakGCRMpFT/e4R6eaO24Y5ALKKBhqErJr/xH8wilyzO
+	oI4OeG2DZyN847s+fKmaHTZ4S4s8bS3PBjxx+ze2bvo/fNQw2/STLD7+anU+mlMJnzpBnIQ4Up8
+	Z3K4=
+X-Google-Smtp-Source: AGHT+IEW1DcyYr2GYnlaMVY4yuAlqPs3gS+XBOdOdHo9qdeEuBtnlVor/QNgoD89nj7+WVfOt1DO4w==
+X-Received: by 2002:ac2:5456:0:b0:52c:9a1f:52e7 with SMTP id 2adb3069b0e04-52c9a40587emr2960247e87.58.1718285054549;
+        Thu, 13 Jun 2024 06:24:14 -0700 (PDT)
+Received: from blaptop.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-422f5f33c6esm25086225e9.4.2024.06.13.06.24.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jun 2024 06:24:13 -0700 (PDT)
+From: Alexandre Bailon <abailon@baylibre.com>
+To: rafael@kernel.org,
+	daniel.lezcano@linaro.org,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org
+Cc: rui.zhang@intel.com,
+	lukasz.luba@arm.com,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexandre Bailon <abailon@baylibre.com>
+Subject: [PATCH v4 0/4] thermal: Add support of multiple sensors
+Date: Thu, 13 Jun 2024 15:24:06 +0200
+Message-ID: <20240613132410.161663-1-abailon@baylibre.com>
+X-Mailer: git-send-email 2.44.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] DONOTMERGE: dt-bindings: mfd: syscon: add TI's opp
- table compatible
-To: Conor Dooley <conor.dooley@microchip.com>, Lee Jones <lee@kernel.org>
-Cc: Bryan Brattlof <bb@ti.com>, Conor Dooley <conor@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
- Vibhore Vardhan <vibhore@ti.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-References: <20240612-ti-opp-updates-v1-0-3551c31d9872@ti.com>
- <20240612-ti-opp-updates-v1-3-3551c31d9872@ti.com>
- <20240612-unranked-unsalted-b32674a98d4a@spud>
- <20240612175457.b6q37nm6x4vsdnks@bryanbrattlof.com>
- <20240613120923.GP1504919@google.com>
- <20240613-suspend-synapse-4c7596888198@wendy>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240613-suspend-synapse-4c7596888198@wendy>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 13/06/2024 14:20, Conor Dooley wrote:
-> On Thu, Jun 13, 2024 at 01:09:23PM +0100, Lee Jones wrote:
->> On Wed, 12 Jun 2024, Bryan Brattlof wrote:
->>
->>> On June 12, 2024 thus sayeth Conor Dooley:
->>>> On Wed, Jun 12, 2024 at 11:41:52AM -0500, Bryan Brattlof wrote:
->>>>> The JTAG_USER_ID_USERCODE efuse address, which is located inside the
->>>>> WKUP_CTRL_MMR0 range holds information to identify the speed grades of
->>>>> various components on TI's K3 SoCs. Add a compatible to allow the
->>>>> cpufreq driver to obtain the data to limit the maximum frequency for the
->>>>> CPUs under Linux control.
->>>>>
->>>>> Signed-off-by: Bryan Brattlof <bb@ti.com>
->>>>
->>>> $subject: DONOTMERGE: dt-bindings: mfd: syscon: add TI's opp table compatible
->>>>
->>>> Okay, if this isn't for merging then I won't Ack it.
->>>
->>> Ha! Nice. If I don't hear anything from anyone else I'll send a v2 in a 
->>> few hours.
->>
->> What's the point of all the DONOTMERGE nonsense?
-> 
-> AFAICT, TI live in fear of subsystem maintainers merging the dts patches,
-> so they do this.
+Following this comment [1], this updates thermal_of to support multiple
+sensors.
 
-And want some strict timeframe of merging bindings (via subsystem) and
-DTS (via SoC tree), which causes all weird submissions like this above
-or sending bindings without users.
+This series intends to add support of thermal aggregation.
+One use case for it is using the IPA in the case we have
+multiple sensors for one performance domain.
 
-So far I can live with it but if more such peculiarities come up, then
-sorry, fix your process/tools instead of putting burden on maintainers
-and community.
+This has been tested on the mt8195 using s-tui.
+To test and validate, we heat up the CPU and the heat sink.
+At some point, we run benchmark tests with different configurations:
+- Mediatek kernel (IPA + their own thermal aggregation)
+- Mainline kernel
+- Mainline kernel with IPA and aggregation enabled
+With the IPA and the aggregation enabled, we get the best performances
+with the most stable CPU temperature.
 
-Best regards,
-Krzysztof
+The aggregation is configured and enabled using device tree.
+One thermal zone has to be created with a list of sensors.
+It will take care of registering a thermal zone for each sensors.
+The cooling device will only be registered with the aggregating thermal
+zone.
+
+There are still something important missing: a way to check that all
+aggregated sensors are part of the same performance domain.
+So far, I don't see how this should be done. Some recommendations would be
+appreciated.
+
+Changes in v2:
+- Rebased on 6.7
+- Separated generic multi sensor and dt specific code
+- Simplified the code
+- Drop min / max and only do weighted average (seems more adequate for IPA)
+
+Changes in v3:
+- Rebased on 6.9
+- Reworked the way to register a multi sensor thermal zone
+  - Only one thermal zone to define in device tree
+- Max has been re-added
+- Enabled it on mt8195
+
+Changes in v4:
+- Rebased on lastest master (fixed the build issue)
+- Dropped the average since I don't have any usecase for it
+
+[1]: https://patchwork.kernel.org/comment/24723927/
+
+Alexandre Bailon (4):
+  dt-bindings: thermal: Restore the thermal-sensors property
+  thermal: Add support of multi sensors to thermal_core
+  thermal: Add support of multi sensors to thermal_of
+  ARM64: mt8195: Use thermal aggregation for big and little cpu
+
+ .../bindings/thermal/thermal-zones.yaml       |   5 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 212 ++-----------
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/thermal_core.h                |  15 +
+ drivers/thermal/thermal_multi.c               | 288 ++++++++++++++++++
+ drivers/thermal/thermal_of.c                  | 250 ++++++++++++++-
+ include/uapi/linux/thermal.h                  |   5 +
+ 7 files changed, 579 insertions(+), 197 deletions(-)
+ create mode 100644 drivers/thermal/thermal_multi.c
+
+-- 
+2.44.1
 
 
