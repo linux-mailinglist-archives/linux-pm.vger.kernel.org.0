@@ -1,138 +1,90 @@
-Return-Path: <linux-pm+bounces-9081-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9082-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CCB9906FD8
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 14:23:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26B6E90719A
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 14:39:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D69B81F2156E
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 12:23:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83DAFB25D88
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 12:39:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 758E9146593;
-	Thu, 13 Jun 2024 12:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36EBB143C63;
+	Thu, 13 Jun 2024 12:38:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="1RW4gJcB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dWNBZiOK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B4F146012;
-	Thu, 13 Jun 2024 12:21:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C59814386B;
+	Thu, 13 Jun 2024 12:38:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718281291; cv=none; b=Iqi7MwIR8xpG0Z5FJkQZ+a/ITwklsOGsQkC72KUi9zAs5wLdITk/G+RGPQ+4ktmegIXI/xXYl4LZ3m+bzinC9aD7J3fB17RnLvI0IL+ao1cK0ye+gI8CecxJo3jbKNgy1lVQb7oPiY0HnFpsrEmwlm68CppNjEISz1NSI10q3Ls=
+	t=1718282297; cv=none; b=s9lase2b28BwhYL1vdEjNS2HyEPzosEB869vRhWtyuPkAYAdKXwuBQibqk0QKPoXuqiHzvw73FMNM1sCrV+sO9jV9rggh2vFNyRhy0qI6asf4DS5jfiRRLE74xoNGI3axnoNDxiQfAW6HhAqHRgbYiluwtc1KUEUisl63W5vXm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718281291; c=relaxed/simple;
-	bh=Zf2QVQHYtZG5xZ24nVmTxdSDgQEn6skWNU7CifTDirE=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c4vtrPeRQnT5cxGidXzCo1LY4InY5lrJhIZ4JnPl7OEArB0ARocqGsMtfEM2bY3jh7VVohmEAgTSYMOHL1nvtH+MQL/SG6/u2M7RwFkdmkBnBC5NdNMcAP9V3wZNs3jN7K08ZALxp6D3uVHhTnV0zimKgWxYZvhMDVAa/iF5BX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=1RW4gJcB; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1718281289; x=1749817289;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zf2QVQHYtZG5xZ24nVmTxdSDgQEn6skWNU7CifTDirE=;
-  b=1RW4gJcBdif/sLD30beWcWEooBbA5wCeYT55eLro3Puy+M2xA0SqhdZk
-   DYgv/OVumtwJAWFZBU3EuA92JEoGZAr0Pygdgk0GtGmsirH13e6SgYl/f
-   SGfc10JqqUjRKeJSquleLhKBnI7E3CIpdRrDs2Ev+KKsxUSvCAsaJ2ruT
-   fpptMvkwSrF8g70Qc+9+mM5k2G9PvIq+tAnmwT+nasjlorrZcVngCNMqV
-   wpK3DObmQoUIxgCZzjYPQp3bSHC5wHi/UJHJFM4y8ahNIhuWsixI+D+7V
-   xto4Wo21ZytYzSSR5a9TRCDm8dOuQK2CvknHWgA+WSBUMmPjYrq4JjRDI
-   g==;
-X-CSE-ConnectionGUID: 09xoRfvrQXi848V3FCW5zA==
-X-CSE-MsgGUID: 8vF5tNClTD+xXwD0werExw==
-X-IronPort-AV: E=Sophos;i="6.08,235,1712646000"; 
-   d="asc'?scan'208";a="27390180"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Jun 2024 05:21:23 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 13 Jun 2024 05:21:01 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex03.mchp-main.com (10.10.85.151)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Thu, 13 Jun 2024 05:20:58 -0700
-Date: Thu, 13 Jun 2024 13:20:41 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Lee Jones <lee@kernel.org>
-CC: Bryan Brattlof <bb@ti.com>, Conor Dooley <conor@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>, Vignesh Raghavendra
-	<vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, Vibhore Vardhan
-	<vibhore@ti.com>, <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 3/5] DONOTMERGE: dt-bindings: mfd: syscon: add TI's opp
- table compatible
-Message-ID: <20240613-suspend-synapse-4c7596888198@wendy>
-References: <20240612-ti-opp-updates-v1-0-3551c31d9872@ti.com>
- <20240612-ti-opp-updates-v1-3-3551c31d9872@ti.com>
- <20240612-unranked-unsalted-b32674a98d4a@spud>
- <20240612175457.b6q37nm6x4vsdnks@bryanbrattlof.com>
- <20240613120923.GP1504919@google.com>
+	s=arc-20240116; t=1718282297; c=relaxed/simple;
+	bh=+Ps/m5LPCrr12cKf+1TsG+NGfRkskSxaIu7J2ih4u9M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dMTlg8P+4+IN08D2dOJtkDQrDOKst6VCFpEMEzUrYsRaADz6COMqEQ1YaRZogljMge6TNBphe05XAekH9bLz+PrB/pJkhHcdXyJGjsKvnKCAnnUo73LMmmcOdNbTg+aJY6TlO2tHwkdM2YUN7V8f9Aj5DtjzDlRAzo/IHFuJrLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dWNBZiOK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ED15C4AF1A;
+	Thu, 13 Jun 2024 12:38:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718282296;
+	bh=+Ps/m5LPCrr12cKf+1TsG+NGfRkskSxaIu7J2ih4u9M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=dWNBZiOK0WNhGJx5cvEsKkOoqN3c89QhYzBrfgIaR8sqDH6md4bbGOMuXhxszIYcD
+	 yG3tnrBxi0Eat5n7E3yCGm/gqH2yVXKAVbFfSh6v021Yt4k5wJFsd45XqYbWX2U4Fr
+	 Pgt4r5bvQnojgSpjHvd09IFfRA8hZUPpB7jgfyJwPen1Wpzm5FpY+9Tz8rxsxaMywD
+	 9vHUeTXA6gMGerIiV+NSXUshO2uAmz8rH+nbrek8yYKZhbkk4qs5R0/0ZpU1EDlLOy
+	 RNIg8DXGeD4nK/zFj255Oxt7DrIK41x1415r46zWv3bQVDKC1HpOE9dHP7d8sql8QD
+	 Y3MtnY2fENwCw==
+Message-ID: <e0a5690a-2c88-4154-9bec-441d22197468@kernel.org>
+Date: Thu, 13 Jun 2024 15:38:09 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="4dSQxpXPdh66Ws15"
-Content-Disposition: inline
-In-Reply-To: <20240613120923.GP1504919@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/7] soc: mediatek: Add MediaTek DVFS Resource
+ Collector (DVFSRC) driver
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ matthias.bgg@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+ keescook@chromium.org, gustavoars@kernel.org, henryc.chen@mediatek.com,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, kernel@collabora.com,
+ wenst@chromium.org, amergnat@baylibre.com,
+ Dawei Chien <dawei.chien@mediatek.com>
+References: <20240610085735.147134-1-angelogioacchino.delregno@collabora.com>
+ <20240610085735.147134-5-angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+From: Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20240610085735.147134-5-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---4dSQxpXPdh66Ws15
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 10.06.24 11:57, AngeloGioacchino Del Regno wrote:
+> The Dynamic Voltage and Frequency Scaling Resource Collector (DVFSRC) is a
+> Hardware module used to collect all the requests from both software and the
+> various remote processors embedded into the SoC and decide about a minimum
+> operating voltage and a minimum DRAM frequency to fulfill those requests in
+> an effort to provide the best achievable performance per watt.
+> 
+> This hardware IP is capable of transparently performing direct register R/W
+> on all of the DVFSRC-controlled regulators and SoC bandwidth knobs.
+> 
+> This driver includes support for MT8183, MT8192 and MT8195.
+> 
+> Co-Developed-by: Dawei Chien <dawei.chien@mediatek.com>
+> [Angelo: Partial refactoring and cleanups]
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-On Thu, Jun 13, 2024 at 01:09:23PM +0100, Lee Jones wrote:
-> On Wed, 12 Jun 2024, Bryan Brattlof wrote:
->=20
-> > On June 12, 2024 thus sayeth Conor Dooley:
-> > > On Wed, Jun 12, 2024 at 11:41:52AM -0500, Bryan Brattlof wrote:
-> > > > The JTAG_USER_ID_USERCODE efuse address, which is located inside the
-> > > > WKUP_CTRL_MMR0 range holds information to identify the speed grades=
- of
-> > > > various components on TI's K3 SoCs. Add a compatible to allow the
-> > > > cpufreq driver to obtain the data to limit the maximum frequency fo=
-r the
-> > > > CPUs under Linux control.
-> > > >=20
-> > > > Signed-off-by: Bryan Brattlof <bb@ti.com>
-> > >=20
-> > > $subject: DONOTMERGE: dt-bindings: mfd: syscon: add TI's opp table co=
-mpatible
-> > >=20
-> > > Okay, if this isn't for merging then I won't Ack it.
-> >=20
-> > Ha! Nice. If I don't hear anything from anyone else I'll send a v2 in a=
-=20
-> > few hours.
->=20
-> What's the point of all the DONOTMERGE nonsense?
+Reviewed-by: Georgi Djakov <djakov@kerenl.org>
 
-AFAICT, TI live in fear of subsystem maintainers merging the dts patches,
-so they do this.
-
---4dSQxpXPdh66Ws15
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZmrkGQAKCRB4tDGHoIJi
-0p4nAP430IFUcjQwXnJpjpJNoZ23njiywSse6cUKT5szXvWGFgEA7QsOTBsgoK0z
-SbwDcjhRJ+ruyIk8Pub0q/56L5mPTQw=
-=Qv5H
------END PGP SIGNATURE-----
-
---4dSQxpXPdh66Ws15--
 
