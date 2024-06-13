@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-9113-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9114-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63459907B0B
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 20:19:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E53AE907B0F
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 20:20:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FA251C22880
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 18:19:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 52052B20C15
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2024 18:20:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A72D14A624;
-	Thu, 13 Jun 2024 18:19:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4609714A623;
+	Thu, 13 Jun 2024 18:20:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="JNPeXEKc"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="w32DuMEQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2071.outbound.protection.outlook.com [40.107.223.71])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2048.outbound.protection.outlook.com [40.107.236.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FCAB14A617;
-	Thu, 13 Jun 2024 18:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18FF31304AB;
+	Thu, 13 Jun 2024 18:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718302774; cv=fail; b=GAgwLFT5h79ftywInYsB0mIQ5qinZMU+kyBX0PmwfsRaIjvazdrCIcLaqQdjL4AyjEHGIFjX4ylZCWldM+jnlkMCIDVa0eAOIIxWY4qBrFbVgsWJQSR2MA3Cu8UGRlKiizz2Zo+hy7lMpYSb68UyvXQDjexlwPeZ/ANX5PoT07c=
+	t=1718302800; cv=fail; b=ZYrS31Ljdycnv2fCGyi70wt+kJLGd+dgeF51q6+WEFocNaGfX+9IZvFmIzKO5+LxR48ECAxjlFCRgQRg70zN6JTJte1MmTEQriaUQPdns3e7F+KhPXrIW71jyHsTHS5JyN9TqGdp5R0+OUMsKT7x1tWMhgfl7JQBg9e8rTemiVw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718302774; c=relaxed/simple;
-	bh=N5Xs1gHFtmRB7g78aJer3bDzIFfcfTiplMLpviSEwbc=;
+	s=arc-20240116; t=1718302800; c=relaxed/simple;
+	bh=eWXUvT6vKe4xd0Za0lJZERTKDaQICxuWyE147cyZAxM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gJanbrmLSvvfNKeuiHze4/joyrRKYTqQP30Apg5kj3ApKwlARjgN7qj1QkPQT8r4S6o+nx+qfjuQ/3zA3gSj0GsNa4ZDsrixJ2QWBLdSHs1lN5rjnIKoKaCEzs1DY2kro5L6jkRE+RyMT4jreuBexmpFn9gAUOrj628CeeRpAg4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=JNPeXEKc; arc=fail smtp.client-ip=40.107.223.71
+	 MIME-Version:Content-Type; b=u5knTWqHhV5WjvsaPPuZR7ktz/VwbITClsrjlXuHfdByuFN90SjjyAEiUk5jeXy5uiMz+Y+WbyDWcozIpIj1WRJdRae2rOiE1jR9FqPpFKBEwEXYeD03KIxZFpzqHJSe+0MPMpvCsogr8zAAMinAs9BhzIDjasJmldAlVYuqbkE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=w32DuMEQ; arc=fail smtp.client-ip=40.107.236.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HJGYjMM7eq3jcQSvLjD8JwilT4BLJSY73LwPGvOT2sRjPx8AyWl3zHvGGWlQ4/Fl9+8wgsIsx8GzkkGgsQxdsUqeXbb40NfWbS8WdfrfNqVkKryijt127SyoliHrc7UOFLnpOl+eYYp/CAtmz3Nw3lhZAF2A5cpoV6XlJOpGGqiVlf372U6s0JlRjnh+2H30lG+1d6roU4vbaHFbkC45bbvE6llmDcyzshi51lOaRrp48ERwWqVrUcTdDgdI8wHzRPPL0Me2BUffj6GwtvoKUIecrRj+MHoXQVT6hUbPXCxc1qIQvcVOZvsXibXk/JGRL248vJ4AMQF+8gxX9Us2wg==
+ b=fyTJQNQQMoGz+Nqmi58OEvVVAHyML6wHWhWhbopx/KkWFjzCA8PUFCt+MDJg5gQ8Rc2GJ8fFlXtRhpRII4ln3VvINLOF+SBAicqc738xRME4uehEVnaQVrt/FYvfAJZQaTu6IljvWgYEy+XynQaO5ulknp9aNpQmXhb3JFlhQDPFeufiLFJFkU7tnb6Kp77C3HAdTQtP9bkzT4JIzV5f7d1zsPx0WeDH+p4J85lwHBvPTKLzH++b2T1E57ZzLbA/ydE6C+6y8DKDqr7zTUo2YemfgTNGn5+2f/2cvQRu8Xjsz7KA2TnIWrzcCPUywf+WEFrlLn0H63WkyF+Kw9aT+w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y9SP91OYsN4ihnOgSl0XGZN6I6AzoKAxRQI+tR3d6Hs=;
- b=c9xwAg3FwSKdaIT9eqQ6NRhwq1Q4LOmU43uPgxyZG7ar6powrXDvWEbQ5UuWsARb0E7gVPvUB6upzpoJKRJD9pYUG6ksZz6Y6HvJJNv0IMKplWAet1XSHvZjgPB15GJ1oZ/UoPN8sC701o6jknPs21nlt+dSK1J6Aa37iw92GgZ7HRRl5jE6Xw2aUfH6cEk0jMpt3v0VZEHNZOUnfAbKAptJZGJ47kAD532PA/acMjfm4+ObMZSaEhP3Kw46aNlvN7WuBCQWc8WTFLSY1CR+xGHLuJqnlebIceYR7OPhm2w+GoLp2VJyIBnf4skPg/6/pkYGeaty0vdcuBEowMSIYQ==
+ bh=I9I9g5gYsnlhoA/IM+nU/HeTT4PLqMTpaOL8h1gEe90=;
+ b=KHpbLjGZXvzXHdSir0g8PrHGIGISZ+JE2iIMIlpA2l+MyMyOzkWerK9SCvqA6sFrMdcTVUGysXZmqUOmrJFppPuPDqpWfpI+L/Cc4ku187tuEw1IkdKOVw3hRGaDPiMlvzxxZ20oQ4XFpxXoDE3CGUBriiQvb3Bd+amA7s10lT3Mr6HpnW2ZodZy2giQeS6nmcdMTZSDE0blnZu6GtYuqmgYtGi4DcY2iAuODanrqMjDgjETovytqSg1HvdHv1DzFMMCr6X4OkTMIEKQR4dVzuuQU4SgCV5zfmyqk86tbAauINZwbokPPvPpIUMcdKMdIDR1s7tINr3AMXArWWLgwg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y9SP91OYsN4ihnOgSl0XGZN6I6AzoKAxRQI+tR3d6Hs=;
- b=JNPeXEKc8NKZzjLLfZoFr+HwwT04qggrDt65S0suHbCGHWKm7Op3xhA4fXldfVXnn91htAQtmWHbdXnAjbb+LIPrmEatVnLJPC+/dh6j+xCJ9fRoFYqt8Xet4VyZFDxm2HFM2rsS0yxjXcaA3zkr8sTZ+baWl0LraZ8w/+VhC2Y=
-Received: from BN0PR04CA0078.namprd04.prod.outlook.com (2603:10b6:408:ea::23)
- by LV3PR12MB9329.namprd12.prod.outlook.com (2603:10b6:408:21c::9) with
+ bh=I9I9g5gYsnlhoA/IM+nU/HeTT4PLqMTpaOL8h1gEe90=;
+ b=w32DuMEQQ9H+zGP/JPYHmYlSdv4ncOcOlaai7uTB4VoA128zdFPGPPYtQw3wpCcz7t9MAWDAr62ny+jf+A494lYkaWcnw52JFlwwCdIs0UU25ZcAZrmdrscl90vg9NhKRRnR11zc1NHd0XEWx3NDGCVZC7Fjw7bsXhZzNe5MFhg=
+Received: from BN0PR04CA0088.namprd04.prod.outlook.com (2603:10b6:408:ea::33)
+ by SJ0PR12MB6965.namprd12.prod.outlook.com (2603:10b6:a03:448::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.24; Thu, 13 Jun
- 2024 18:19:28 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.37; Thu, 13 Jun
+ 2024 18:19:52 +0000
 Received: from BL6PEPF00022573.namprd02.prod.outlook.com
- (2603:10b6:408:ea:cafe::ac) by BN0PR04CA0078.outlook.office365.com
- (2603:10b6:408:ea::23) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:408:ea:cafe::e2) by BN0PR04CA0088.outlook.office365.com
+ (2603:10b6:408:ea::33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.25 via Frontend
- Transport; Thu, 13 Jun 2024 18:19:28 +0000
+ Transport; Thu, 13 Jun 2024 18:19:52 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,26 +65,27 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  BL6PEPF00022573.mail.protection.outlook.com (10.167.249.41) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7677.15 via Frontend Transport; Thu, 13 Jun 2024 18:19:28 +0000
+ 15.20.7677.15 via Frontend Transport; Thu, 13 Jun 2024 18:19:52 +0000
 Received: from BLRKPRNAYAK.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 13 Jun
- 2024 13:19:21 -0500
+ 2024 13:19:44 -0500
 From: K Prateek Nayak <kprateek.nayak@amd.com>
 To: <linux-kernel@vger.kernel.org>
 CC: "Gautham R. Shenoy" <gautham.shenoy@amd.com>, K Prateek Nayak
-	<kprateek.nayak@amd.com>, Russell King <linux@armlinux.org.uk>, "Rafael J.
- Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, "Juri
- Lelli" <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt
-	<rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman
-	<mgorman@suse.de>, Daniel Bristot de Oliveira <bristot@redhat.com>, "Valentin
- Schneider" <vschneid@redhat.com>, Linus Walleij <linus.walleij@linaro.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
-Subject: [PATCH v2 05/14] arm/thread_info: Introduce TIF_NOTIFY_IPI flag
-Date: Thu, 13 Jun 2024 18:16:04 +0000
-Message-ID: <20240613181613.4329-6-kprateek.nayak@amd.com>
+	<kprateek.nayak@amd.com>, Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+	<daniel.lezcano@linaro.org>, Ingo Molnar <mingo@redhat.com>, Peter Zijlstra
+	<peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot
+	<vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, "Mel
+ Gorman" <mgorman@suse.de>, Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>, <linux-alpha@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>
+Subject: [PATCH v2 06/14] alpha/thread_info: Introduce TIF_NOTIFY_IPI flag
+Date: Thu, 13 Jun 2024 18:16:05 +0000
+Message-ID: <20240613181613.4329-7-kprateek.nayak@amd.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240613181613.4329-1-kprateek.nayak@amd.com>
 References: <20240613181613.4329-1-kprateek.nayak@amd.com>
@@ -100,59 +101,61 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF00022573:EE_|LV3PR12MB9329:EE_
-X-MS-Office365-Filtering-Correlation-Id: b58a1efa-cc9c-4400-5bdd-08dc8bd55d41
+X-MS-TrafficTypeDiagnostic: BL6PEPF00022573:EE_|SJ0PR12MB6965:EE_
+X-MS-Office365-Filtering-Correlation-Id: 619af86d-7f85-4719-0d5f-08dc8bd56b3c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230035|376009|7416009|1800799019|36860700008|82310400021;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?QSMgb8ovqqse5ZaPqQTz0yBg13jzsXXirtTTAwCByqjVrdbx8B4DXpyByYui?=
- =?us-ascii?Q?/PENqw9xk+Tmshrct8X2ufQjxA+pKfubOaEpwRybZGdlKoykr1dNLCAmuLP2?=
- =?us-ascii?Q?DCR+60GL/CuIzRfi4ntV1EyOQOrFpbOL2YRVJWs2NgQ+tDxPKIcc5pBxLWxf?=
- =?us-ascii?Q?qhwFU5VsuBF416NMH1NU6hhbmwitwh8fdlhNhXDo8rtCWBAz+scgA6ls2xnR?=
- =?us-ascii?Q?OIcpmfvymdxT/l8l5kpTWoay7KqOLMFQzZEhk2BF0b6AHkWLfmFsELzxTeYr?=
- =?us-ascii?Q?f3CERm8Ndp9DHepQqtiiV8ptxpN8HOLNWbBkJdtyR6XqZHlgtSgQurCE2/Vh?=
- =?us-ascii?Q?yglqH/fOneUL4tZukDKmO9H4MOegldjT9W3csUqXg6D4q5EQXFwwYW/T75ke?=
- =?us-ascii?Q?qhOxq5gpRVxNZQMDGmJgvzuTgtsZsrIuwzq2J9OvVd/hS96oDghFgU0lDben?=
- =?us-ascii?Q?ghlIE7RiWADkGy+w31rORyLzfnsxkJ0MeaaRw/EQ75hXK94wle973hhuLrtI?=
- =?us-ascii?Q?ovlpvYJfJExsgAp2Q0ONQzds52YFoQoEKV93RsWsd3PhbqCx4hpq4vXq5YYM?=
- =?us-ascii?Q?a+Zg3pH/zBp7fHZZc6vfF0KXZyEGIn7c2CB8f2h1MJCEy1lrZJJ5hUhrr4Ui?=
- =?us-ascii?Q?IkKHLuS1c9ioJ/qrKRAjrMkGfmkTBjGAnJU32zh5d3+v4NekF9b4Up17zO2S?=
- =?us-ascii?Q?vW1IQ3dhk37xXJY3ANiUaVi2CveOQwuzqM1v7g0r9nFJBSq820OMuNRGK7Hg?=
- =?us-ascii?Q?UFA+4lTf2Z/n/FxUIvlHxm6sj29/op23+oh8vuICBzd+neHvbNe7iD5h5qmj?=
- =?us-ascii?Q?JP8Ha1BIupPsdhcMwhgQ2Lpxur4WUzTIaSw/3z1ZblIUnKR9flt35j3dnWZn?=
- =?us-ascii?Q?Hkp/pSjIWrQb12GWQHi+0Q+ktrECda2TQCNrkiCssiyLb7LexLUukwCPft87?=
- =?us-ascii?Q?Ex5EBMyDXoofXBUNs7oXMavfWql6a4CZFobsM0A7T5HvL5L9BrciTGwjV9/w?=
- =?us-ascii?Q?0Z7PRJ0L+UQfJDUJDw+KssTAC5Vox6KiiIujs0kpyQJwgiBvK2LNv9YBCA/X?=
- =?us-ascii?Q?io2IpD3lwZyI2rgSFr5ri4KuEQ1HQ/vDP1OcI+JcPXdfmEGuNj0JNhtK2kGc?=
- =?us-ascii?Q?9luv3RprBQOsO2M4OMZir1o2+9CJUs/GfipW8vjdehRhvJICPqLSOzoQmXmF?=
- =?us-ascii?Q?/bCilkqdCh+UwgnjonvIFoLd52ZOTr2uAi3pwEzyzJESh5yihqDRDzIF8g7/?=
- =?us-ascii?Q?zQ+6BItpE50kshThI1BpsRt8vVnlz+Fh/BQt9Ag8lT2t8dZrXiTSFcrZm3ur?=
- =?us-ascii?Q?fqED7A9M5dx7UuI35MPsxvA7pHNR63qRjbm4bm+WjbbBxTdfYt/4w/R34top?=
- =?us-ascii?Q?mOvOtyv/kIvZ3ZK9+dkySkoyFCwK8S7xOIWk+fJEsUX8rhpNYg=3D=3D?=
+	=?us-ascii?Q?Z7jO8jP9Km2kAlC1/djKj9w4myZY0Ytn6OJ0na6rGWw0QmwkzFY3UrquI7j0?=
+ =?us-ascii?Q?78+fMrAVhm9c5S/FSB5K+DcdsHeCa71aHfk1ndFDJvjAdD1MjkAozH0IEgXY?=
+ =?us-ascii?Q?73e6zSvEHkgYNg0ZZ3iug5JMpe6vATa0cakQ7/kE+HcDRgLms6FUg0jnQECT?=
+ =?us-ascii?Q?w1m3bsbP3Sh+KIdnXx/2ANTc/0um41TNHsHTPeFNVhMfCeH7Qhq5RnJ0Q/iK?=
+ =?us-ascii?Q?prDxtSqnYwO8FSc2pLDLLxaCtS3lo9/mmfu2MxDk+UeM00vsLKbw4qDwgQaN?=
+ =?us-ascii?Q?qgTgrb9IQ2Cvv1ciVPBh/pCogzVzoFIaPwvFNw2GiCS2lNFnnkxkmLu76Ad+?=
+ =?us-ascii?Q?nfaG/W/n7WpF9Ef7sfe3tI6j17HiyGbxr++laYkc0FaOeNgJt1bl3QyKk7pS?=
+ =?us-ascii?Q?RLtzYZpWbP1wmIRTBsnvJztPNqacy7+Nl+543osgCsiAxpHaFrSFdRXdmezJ?=
+ =?us-ascii?Q?y58IfcShLopzh6b2XfuWTKmfZv52HXtBJHA930I4wliXNw2m2rCMHCk3AbkR?=
+ =?us-ascii?Q?y6jne80miu6mev2QjcmPYPMxoSfn58/7rq3mHKQTsTgD4y6bNtVpLzIS37Oi?=
+ =?us-ascii?Q?powQsiQRuyDiMChLeaCLDJmcUk+m+YOoGFI7EmRCIJHnsx4rIjB+0XBw/3rs?=
+ =?us-ascii?Q?QuREvIRsqExvY169EuPIzZBVgUgkDlIDLc6jY9h0mnZVqlV5aZAbtXsgCbJJ?=
+ =?us-ascii?Q?VXqljgw8OGq5zVYUnnEsD1tfL02AlMjbCasaUEoSO52Cd5snbSzOMQGrilC8?=
+ =?us-ascii?Q?KQJFJXxBz7uQ5B7jroBvPHAYsZQAOds+oGO5TpWoYkl86Wr30dpv4FZT5UQi?=
+ =?us-ascii?Q?3LPgYq2msJ7hHK6YlmcxjInZDLwjZVZbI+Cw1yL40PiLSawaYjDUUcHd3R5E?=
+ =?us-ascii?Q?kiXEGGwJMt8D7D/Vm8Ic8kXgx/HYRHiD3L3kZQvtlXcQNNgkjL7LBIzZ6gPT?=
+ =?us-ascii?Q?+8sgM3K6sIXmCgwuULASEppH9VfrhQ5ovJvZVK97P2oP4AcURjlKV3+1oX94?=
+ =?us-ascii?Q?M1JGsmjNa9wyEbD2gZJ1jgxnU1azrym9UEyJjBJoO9xuyZEQQXys4e4c5s0s?=
+ =?us-ascii?Q?4IFzfHG3+r6FOoG6xVkeDQ9MvO38vhgRYHCxxT2wslI5DxHlDkgYlojh98Ns?=
+ =?us-ascii?Q?qA1RF6QYelVUtJuS3RvljlsOLZW/1y6o+0U9muUkmaXwWxhkfuk2asOMFlbi?=
+ =?us-ascii?Q?DDMdenqYcbY95drJWdSl4z/8mrfqIdoJlimNdT+4v+EmfNU9C2Hgf5oxthmF?=
+ =?us-ascii?Q?e08twHeXVadJnwzNgWBzSW/DihQYlB4sgWht0GGq4ryyksW3t/GGfOF83nWj?=
+ =?us-ascii?Q?5hZPLMort01BrjQN9JnpoREJA1dL3ieRRhjP4YRwvdqqQL3xn2MW9tk93TTa?=
+ =?us-ascii?Q?FFZF6ybTp+l1cjrQlfm3fE03YZlqqQ+v/WyTaa0O2hAVdMKEGg=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230035)(376009)(7416009)(1800799019)(36860700008)(82310400021);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2024 18:19:28.6283
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2024 18:19:52.0504
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b58a1efa-cc9c-4400-5bdd-08dc8bd55d41
+X-MS-Exchange-CrossTenant-Network-Message-Id: 619af86d-7f85-4719-0d5f-08dc8bd56b3c
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	BL6PEPF00022573.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9329
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6965
 
-Add support for TIF_NOTIFY_IPI on ARM. With TIF_NOTIFY_IPI, a sender
+Add support for TIF_NOTIFY_IPI on Alpha. With TIF_NOTIFY_IPI, a sender
 sending an IPI to an idle CPU in TIF_POLLING mode will set the
 TIF_NOTIFY_IPI flag in the target's idle tasks's thread_info to pull the
 CPU out of idle, as opposed to setting TIF_NEED_RESCHED previously. This
 avoids spurious calls to schedule_idle() in cases where an IPI does not
 necessarily wake up a task on the idle CPU.
 
-Cc: Russell King <linux@armlinux.org.uk>
+Cc: Richard Henderson <richard.henderson@linaro.org>
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Matt Turner <mattst88@gmail.com>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc: Ingo Molnar <mingo@redhat.com>
@@ -165,52 +168,37 @@ Cc: Ben Segall <bsegall@google.com>
 Cc: Mel Gorman <mgorman@suse.de>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
 Cc: Valentin Schneider <vschneid@redhat.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-alpha@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Cc: linux-pm@vger.kernel.org
-Link: https://github.com/antonblanchard/ipistorm [1]
 Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
 ---
 v1..v2:
-o Dropped the ARM benchmark numbers since I could not get my hands on an
-  ARM64 server internally. I tested if the lack of TIF_NOTIFY_IPI
-  triggers any of the modified path or not on x86 by only applying till
-  Patch 3 and I did not see anything unexpected. I'll update the thread
-  with the results from the ARM server [if and] when I get my hands on
-  it again.
+o No changes.
 ---
- arch/arm/include/asm/thread_info.h | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/alpha/include/asm/thread_info.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/include/asm/thread_info.h b/arch/arm/include/asm/thread_info.h
-index 943ffcf069d2..324248d87c9e 100644
---- a/arch/arm/include/asm/thread_info.h
-+++ b/arch/arm/include/asm/thread_info.h
-@@ -136,6 +136,7 @@ extern int vfp_restore_user_hwstate(struct user_vfp *,
-  * thread information flags:
-  *  TIF_USEDFPU		- FPU was used by this task this quantum (SMP)
-  *  TIF_POLLING_NRFLAG	- true if poll_idle() is polling TIF_NEED_RESCHED
-+ *			  or TIF_NOTIFY_IPI
-  *
-  * Any bit in the range of 0..15 will cause do_work_pending() to be invoked.
-  */
-@@ -144,6 +145,7 @@ extern int vfp_restore_user_hwstate(struct user_vfp *,
- #define TIF_NOTIFY_RESUME	2	/* callback before returning to user */
- #define TIF_UPROBE		3	/* breakpointed or singlestepping */
- #define TIF_NOTIFY_SIGNAL	4	/* signal notifications exist */
-+#define TIF_NOTIFY_IPI		5	/* pending IPI on TIF_POLLLING idle CPU */
+diff --git a/arch/alpha/include/asm/thread_info.h b/arch/alpha/include/asm/thread_info.h
+index 4a4d00b37986..8c17855c85c7 100644
+--- a/arch/alpha/include/asm/thread_info.h
++++ b/arch/alpha/include/asm/thread_info.h
+@@ -64,6 +64,7 @@ register unsigned long *current_stack_pointer __asm__ ("$30");
+ #define TIF_NEED_RESCHED	3	/* rescheduling necessary */
+ #define TIF_SYSCALL_AUDIT	4	/* syscall audit active */
+ #define TIF_NOTIFY_SIGNAL	5	/* signal notifications exist */
++#define TIF_NOTIFY_IPI		6	/* Pending IPI on TIF_POLLLING idle CPU */
+ #define TIF_DIE_IF_KERNEL	9	/* dik recursion lock */
+ #define TIF_MEMDIE		13	/* is terminating due to OOM killer */
+ #define TIF_POLLING_NRFLAG	14	/* idle is polling for TIF_NEED_RESCHED */
+@@ -74,6 +75,7 @@ register unsigned long *current_stack_pointer __asm__ ("$30");
+ #define _TIF_NOTIFY_RESUME	(1<<TIF_NOTIFY_RESUME)
+ #define _TIF_SYSCALL_AUDIT	(1<<TIF_SYSCALL_AUDIT)
+ #define _TIF_NOTIFY_SIGNAL	(1<<TIF_NOTIFY_SIGNAL)
++#define _TIF_NOTIFY_IPI		(1<<TIF_NOTIFY_IPI)
+ #define _TIF_POLLING_NRFLAG	(1<<TIF_POLLING_NRFLAG)
  
- #define TIF_USING_IWMMXT	17
- #define TIF_MEMDIE		18	/* is terminating due to OOM killer */
-@@ -164,6 +166,7 @@ extern int vfp_restore_user_hwstate(struct user_vfp *,
- #define _TIF_SECCOMP		(1 << TIF_SECCOMP)
- #define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
- #define _TIF_USING_IWMMXT	(1 << TIF_USING_IWMMXT)
-+#define _TIF_NOTIFY_IPI		(1 << TIF_NOTIFY_IPI)
- 
- /* Checks for any syscall work in entry-common.S */
- #define _TIF_SYSCALL_WORK (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
+ /* Work to do on interrupt/exception return.  */
 -- 
 2.34.1
 
