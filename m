@@ -1,160 +1,202 @@
-Return-Path: <linux-pm+bounces-9220-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9222-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D9E69095A4
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 04:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C2B8A909654
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 08:38:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E528E2888DF
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 02:16:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6382B284B76
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 06:38:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE3366AA7;
-	Sat, 15 Jun 2024 02:15:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA42915AC4;
+	Sat, 15 Jun 2024 06:38:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CIxa/g/x"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ZqRx9WEW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF2BEADB;
-	Sat, 15 Jun 2024 02:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F1A3D60;
+	Sat, 15 Jun 2024 06:38:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718417755; cv=none; b=J+pT/sNMmkhbnJhyDIryCj2UtRo7bB7YeAACSWJjzG/p4RuwI982IKu32bvAd4/F+fgga8+BtRksTjuxMUh7U52C4lBGR8/lMIlbY3CtLa/uthxdbxzT8B4PcAQuWyZAxstWV5vgKCUUSaLhQyRTg4hZPSr7WrBEt/xJdQj8McE=
+	t=1718433489; cv=none; b=TIm32EBYSwS4i7xNjk7zcUuB4csIIXOL2vPoOtR5ILmqEDrUAjnNA0n3JgneaTf0OIGUMVLyGszkjXyQqictNrTeYl+Mm/vLwjXZnIrdEwfq2cIXW1gtL46h7ELSYVCvAgVs6na7MH3lqhJ+J8PpI3httV4gPvHDgbM3YhsuxrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718417755; c=relaxed/simple;
-	bh=z9HIddnvgvM3GUTbm86JIM7IUzNU9QDqAL1wIowUq1I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=E0t53zjGCTpeUaV9iH13JiIPEZe2/DxWf9MLybp+uaUxCZnlwZYULOqgavim3KbJ5/i17/ZPe03eKBa4FUdbZyySyyCfHZc/GI4vRTv16r4hY3TN+vd8oy5/FWwxatYBqX3y5MNdBLrx5W9MIdGMuL65J/cyJ4s0KDAPqeqEpXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=CIxa/g/x; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45F291A1026963;
-	Sat, 15 Jun 2024 02:15:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	XlFtXOpFi8BhNNqPGzzEzhPs+LCSPnDFOKquHAaF4Zw=; b=CIxa/g/xnztrZ6E0
-	Ow8bxfh0O9je+sP9xUxeyNZy2PcQClCXSMDVfw0XUVdm8pVm1YRQLyG33U+9uQ8N
-	+KjYzYuKt5a2cKtCJLa0C2D4xPYA/i+zlx+BLLOFaWjDL2gg04ozrXJ5rfru4Txy
-	Kmp6xx0FHJYEpvgdhHCGPHqTMlTEf14djZOss+uZiTTUIBIXC+aCnX0Ifpn567eP
-	9bDhJyiJ+3LdgrvGupB1Hsx0IvCeOl6V54DukNIzBn6GG1yktOWoB+Hkg2sGfiCa
-	Fw9OdDjOldmNVnPvZGkMTqeyjsknONkKbKEncK3rdZe/g6mSiw78oAfgpgF2IgOE
-	JRVQNw==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ys1wr007h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 15 Jun 2024 02:15:49 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45F2Fmq7027631
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 15 Jun 2024 02:15:48 GMT
-Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 14 Jun
- 2024 19:15:43 -0700
-Message-ID: <13bb3a32-a531-54d0-3dd9-7b6ea595f990@quicinc.com>
-Date: Sat, 15 Jun 2024 07:45:40 +0530
+	s=arc-20240116; t=1718433489; c=relaxed/simple;
+	bh=3KCfEoLSbRk49SE6hTMUSazt4vE30jZwifvmCko0MxI=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=J+HkJrq66N69ray4HfiFjLl1eJtCjoNJtPwN3JOZ7SP+LNH6RBI6OqCLY+Ink1JZHffHoKDStDSqDK/rIUyAm+ixGx3P0lxE/llgdAOHnhTRAU5BvjmC+OG+EXvfaXPfNavOiUPh/QCO3H+xbqsxK+/OMGuDDyjHOqA638Q4ZIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ZqRx9WEW; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240615063802epoutp03937665879767c7bb38a494fd9922b629~ZGiW7zCER1672516725epoutp03U;
+	Sat, 15 Jun 2024 06:38:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240615063802epoutp03937665879767c7bb38a494fd9922b629~ZGiW7zCER1672516725epoutp03U
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1718433482;
+	bh=vIwSYtTFXPS3sO38FNNQ6oJ71Y0bLvlrMHrlSuad46E=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=ZqRx9WEWTrFB0xPY+AKKfrl5bDsclQ3TWzUHUdAxvTY441omquggL+KXasoOMm0vb
+	 TT+Pz6KIgcBpV+kxr0393uI0VDMBX9ZwbarTNJXaWh2vxCh9xsvWvGFQaMHx8xlyGI
+	 iz4oghNbkk5GDaB2b8OoCpIX7Wn+XVPM7Cal+B2Q=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+	20240615063801epcas5p14a1910659716b444f56195a7b2ec983b~ZGiWWyQ_Y0633306333epcas5p1F;
+	Sat, 15 Jun 2024 06:38:01 +0000 (GMT)
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp4.localdomain
+	(Postfix) with ESMTP id 4W1RKj3gpKz4x9Px; Sat, 15 Jun 2024 06:38:01 +0000
+	(GMT)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20240614142920epcas5p15f5887136072ebf6c2e23275dd872861~Y5Uk66YwW0344703447epcas5p15;
+	Fri, 14 Jun 2024 14:29:20 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240614142920epsmtrp2e40951f54cedb283a63bd26a75890a5d~Y5Uk39wd62550925509epsmtrp2Y;
+	Fri, 14 Jun 2024 14:29:20 +0000 (GMT)
+X-AuditID: b6c32a2a-73fff70000004a71-de-666c53c04e95
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	FD.07.19057.0C35C666; Fri, 14 Jun 2024 23:29:20 +0900 (KST)
+Received: from INBRO002756 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20240614142913epsmtip17b1c18bda36c53de5d30099c1e4afd13~Y5UeC7Xu-3016230162epsmtip1U;
+	Fri, 14 Jun 2024 14:29:13 +0000 (GMT)
+From: "Alim Akhtar" <alim.akhtar@samsung.com>
+To: "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>, "'Daniel
+ Lezcano'" <daniel.lezcano@linaro.org>, "'Zhang Rui'" <rui.zhang@intel.com>,
+	"'Lukasz Luba'" <lukasz.luba@arm.com>, "'Rob Herring'" <robh@kernel.org>,
+	"'Conor Dooley'" <conor+dt@kernel.org>, "'Guillaume La Roque'"
+	<glaroque@baylibre.com>, "'Krzysztof Kozlowski'" <krzk+dt@kernel.org>,
+	"'Vasily Khoruzhick'" <anarsoul@gmail.com>, "'Chen-Yu Tsai'"
+	<wens@csie.org>, "'Jernej Skrabec'" <jernej.skrabec@gmail.com>, "'Samuel
+ Holland'" <samuel@sholland.org>, "'Shawn Guo'" <shawnguo@kernel.org>,
+	"'Sascha Hauer'" <s.hauer@pengutronix.de>, "'Pengutronix	Kernel Team'"
+	<kernel@pengutronix.de>, "'Fabio Estevam'" <festevam@gmail.com>, "'Anson
+ Huang'" <Anson.Huang@nxp.com>, "'Thierry Reding'"
+	<thierry.reding@gmail.com>, "'Jonathan Hunter'" <jonathanh@nvidia.com>,
+	"'Dmitry	Baryshkov'" <dmitry.baryshkov@linaro.org>, "'Amit Kucheria'"
+	<amitk@kernel.org>, =?utf-8?Q?'Niklas_S=C3=B6derlund'?=
+	<niklas.soderlund@ragnatech.se>, "'Heiko	Stuebner'" <heiko@sntech.de>,
+	"'Biju Das'" <biju.das.jz@bp.renesas.com>, "'Orson	Zhai'"
+	<orsonzhai@gmail.com>, "'Baolin Wang'" <baolin.wang@linux.alibaba.com>,
+	"'Chunyan Zhang'" <zhang.lyra@gmail.com>, "'Alexandre Torgue'"
+	<alexandre.torgue@foss.st.com>, "'Pascal Paillet'" <p.paillet@foss.st.com>,
+	"'Keerthy'" <j-keerthy@ti.com>, "'Broadcom internal kernel review list'"
+	<bcm-kernel-feedback-list@broadcom.com>, "'Florian Fainelli'"
+	<florian.fainelli@broadcom.com>, "'Scott Branden'" <sbranden@broadcom.com>,
+	"'zhanghongchen'" <zhanghongchen@loongson.cn>, "'Matthias Brugger'"
+	<matthias.bgg@gmail.com>, "'AngeloGioacchino Del Regno'"
+	<angelogioacchino.delregno@collabora.com>, "'Bjorn Andersson'"
+	<andersson@kernel.org>, "'Geert Uytterhoeven'" <geert+renesas@glider.be>
+Cc: <linux-pm@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
+	<linux-sunxi@lists.linux.dev>, <imx@lists.linux.dev>,
+	<linux-tegra@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+	<linux-renesas-soc@vger.kernel.org>, <linux-rockchip@lists.infradead.org>,
+	<linux-stm32@st-md-mailman.stormreply.com>, "'Florian Fainelli'"
+	<f.fainelli@gmail.com>, <linux-rpi-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <cpgs@samsung.com>
+In-Reply-To: <20240614-dt-bindings-thermal-allof-v1-1-30b25a6ae24e@linaro.org>
+Subject: RE: [PATCH 01/22] dt-bindings: thermal: samsung,exynos: specify
+ cells
+Date: Fri, 14 Jun 2024 19:59:11 +0530
+Message-ID: <1891546521.01718433481489.JavaMail.epsvc@epcpadp4>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/4] soc: qcom: icc-bwmon: Allow for interrupts to be
- shared across instances
-Content-Language: en-US
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <djakov@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <srinivas.kandagatla@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <quic_rgottimu@quicinc.com>, <quic_kshivnan@quicinc.com>,
-        <conor+dt@kernel.org>, <abel.vesa@linaro.org>
-References: <20240604011157.2358019-1-quic_sibis@quicinc.com>
- <20240604011157.2358019-3-quic_sibis@quicinc.com>
- <5e5f052b-df59-47fb-aed0-10b4f980f151@linaro.org>
- <5df5dc6b-872f-34c5-a6d2-a64f9c881193@quicinc.com>
- <672b6156-e425-4f3b-86f4-02a34cab2b67@linaro.org>
- <122b5418-ca2d-df7d-a1d5-d7682ce0ed5a@quicinc.com>
- <r6bwmhfa4csubsvetnjlj6gzgovewupxf6hkuygqdconldpk2v@otrs4lhd3baj>
-From: Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <r6bwmhfa4csubsvetnjlj6gzgovewupxf6hkuygqdconldpk2v@otrs4lhd3baj>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: PcxTvHBfwMgrfHC-DKSBncWbq_dS8xU2
-X-Proofpoint-ORIG-GUID: PcxTvHBfwMgrfHC-DKSBncWbq_dS8xU2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-14_19,2024-06-14_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- lowpriorityscore=0 mlxlogscore=845 adultscore=0 spamscore=0 suspectscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 phishscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
- definitions=main-2406150016
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGhCdcVAXQc0tvKk5x9QOKQ/J0WewGh/L0BAiWHCW6yHH4lsA==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTdxTG97+9vbfQ1ZSXyQUFTaPZgJXBNtlxGLLgy+6mEYxzyUwUGriC
+	jJbaikPjMuhaMmA4wAn2dhRQxgoUcDBoQd5Sist0QMTZzTgQkAJdE/BtaN2gA7otfPudc57n
+	OefD4XF89UQQ77jsJKOQSTJEhDfe3i8KEfcdzDgWWdPnAy5HGYL+ymzQXJtG0P7FDhipo8Ck
+	TQZ39zUEjUUDOOjNCxgYu4cwcFhCQf84GCqtQ1woGXYR8HzOSsLE7Xhoah/jQIWuFEH1+QoC
+	3JNOLmjHNARcN6kwmKlsQqBmL+FQf6EDBwc7RkC3s42EKh0fWu7bltN6B0m41fkNAbc+v4ng
+	cZEVQZtjDoNH424OlNy9QsLF4R4MCmxTXPi6p5OA/CcsAdUqNQkq9RvwY9k5LpQ/0CHos5/H
+	wd1lJmFq4hwBi6YWHGYm8wmYa5hCMPtDALg69Ti4LMMYfDfeScKCzcR55y3aqDciev43DUnX
+	zepImr03SNDm0RpEX5ls4NL2r9pIumRQTHewoyR9ucuB0S31+QT9u62LoDsmttOtNZ/Rs61a
+	ROeqLmEJQYe9d6QwGcdPMYrXYpO80yomj8ivCrK1PY2cHKTmFyAvHiV8kypW9RMr7Cu8iqie
+	waOe/gbq1++LSQ/7UXVLM8vsvayZRlRtccmqgRCKKfPlPGJl4C80rqOeOn9eLTjCP3Cqdc7A
+	9VgmEPW3NhdfsXgJ91P6R2pshf1WuHBqtY8Lt1JLzabVfQLhdupGo/Zf9qF+0no0HGE4Zb9j
+	/59rq50cz32bKZe9dnkZb/mMOCq3GfNIAijHgJUsRn7smiR2TRK7JoldY6lCeD0KZORKaapU
+	GSV/XcZ8EqGUSJVZstSI5ExpC1p94bAwM+qqfxBhQRgPWRDF44j8BWx1+jFfQYrk9BlGkZmo
+	yMpglBa0gYeLAgQLzqIUX2Gq5CTzMcPIGcV/U4znFZSDiQsTbvzlGnCM2y9aXnSx3dh6d7D6
+	thR921tqijm4N6r29FhDsnSbIeTILxttWXuHN/Gt9HO+7NShkS7/P63vvvrpfLugPjXOp9v8
+	5QvwbGuVMyx8PPSjs+u8AqufGD7Aoj8M7Y8/Ec8e2FnObrHmtRXMzHTwRfO2QEfMdHJ4+qH7
+	0YbBhUneotEwlLfNELm060xp2tMmjbJVoyPfbiu7uSt9T8zRVyLxu2HiskJL9Nl7vUEJUnq9
+	vfA6P1E8nXnBbizdnb14J5jYJHsWm4UnvfRQRJa35ry/f+dS/3ujMXHNcjIEP6yPzdVAxImR
+	Lfucs/LNOvW+AxUPX87anZS4MUOEK9MkUWEchVLyD7bfoqExBAAA
+X-CMS-MailID: 20240614142920epcas5p15f5887136072ebf6c2e23275dd872861
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20240614094638epcas5p115d52130f45e130652b6f1d946358d19
+References: <20240614-dt-bindings-thermal-allof-v1-0-30b25a6ae24e@linaro.org>
+	<CGME20240614094638epcas5p115d52130f45e130652b6f1d946358d19@epcas5p1.samsung.com>
+	<20240614-dt-bindings-thermal-allof-v1-1-30b25a6ae24e@linaro.org>
+
+Hi Krzysztof,
+
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Sent: Friday, June 14, 2024 3:16 PM
+> To: Daniel Lezcano <daniel.lezcano@linaro.org
+.stormreply.com;
+> Subject: [PATCH 01/22] dt-bindings: thermal: samsung,exynos: specify cell=
+s
+>=20
+> All Samsung Exynos SoCs Thermal Management Units have only one sensor, so
+> make '#thermal-sensor-cells' fixed at 0.
+>=20
+This is not entirely true, there are SoCs which have multiple temp sensors.
+It is true that currently only one sensor support is added though.
+
+So we can leave this as is or you suggest to make it to support only one se=
+nsor
+(to match the current DT support), and later (in near future) change it aga=
+in to
+match what HW actually support?
+
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml | =
+3
+> ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/thermal/samsung,exynos-
+> thermal.yaml b/Documentation/devicetree/bindings/thermal/samsung,exynos-
+> thermal.yaml
+> index 1344df708e2d..29a08b0729ee 100644
+> --- a/Documentation/devicetree/bindings/thermal/samsung,exynos-
+> thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.y
+> +++ aml
+> @@ -61,7 +61,8 @@ properties:
+>            TRIMINFO at 0x10068000 contains data for TMU channel 2
+>      minItems: 1
+>=20
+> -  '#thermal-sensor-cells': true
+> +  '#thermal-sensor-cells':
+> +    const: 0
+>=20
+>    vtmu-supply:
+>      description: The regulator node supplying voltage to TMU.
+>=20
+> --
+> 2.43.0
 
 
 
-On 6/15/24 03:12, Dmitry Baryshkov wrote:
-> On Sat, Jun 15, 2024 at 01:49:34AM GMT, Sibi Sankar wrote:
->>
->>
->> On 6/14/24 13:54, Krzysztof Kozlowski wrote:
->>> On 13/06/2024 19:02, Sibi Sankar wrote:
->>>>
->>>>
->>>> On 6/4/24 12:16, Krzysztof Kozlowski wrote:
->>>>> On 04/06/2024 03:11, Sibi Sankar wrote:
->>>>>> The multiple BWMONv4 instances available on the X1E80100 SoC use the
->>>>>> same interrupt number. Mark them are shared to allow for re-use across
->>>>>> instances.
->>>>
->>>> Hey Krzysztof,
->>>>
->>>> Thanks for taking time to review the series :)
->>>>
->>>>>
->>>>> Would be nice if you also mention you checked that it is safe to have
->>>>> both devm and shared interrupts (so you investigated possibility of race
->>>>> on exit path).
->>>>
->>>> I didn't see any problems with devm being used with SHARED when I posted
->>>> it out. After your review comments I went back again to vett the exit
->>>> path for races and ran into an pre-existing splat [1] but the bwmon
->>>> instances work as expected on module removal/re-insertion.
->>>
->>> Using devm and shared interrupts is in general sign of possible race
->>> issues and should be avoided. Just "not seeing problems" is not an
->>> argument for me, to be honest.
->>
->> Didn't I go further and say I got it tested though? Also can you
->> elaborate on what race do you think the bwmon will hit rather than
->> being too generic about it?
-> 
-> devm_request_threaded_irq means that the IRQ is freed after the
-> bwmon_remove() function returns. Having IRQF_SHARED means that the IRQ
-> can still be triggered even though IRQ for this device has been disabled
-> in bwmon_disable().
-> 
-> In this particular case such IRQ probably won't cause issues, but at
-> least it needs to be validated and probably commented in bwmon_remove().
-> Just stating that "you tested and had no problems" usually isn't enough
-> for the expected race condition issues.
-
-Cool, thanks for the info. I'll get this fixed in the next re-spin.
-
--Sibi
-
-> 
 
