@@ -1,119 +1,145 @@
-Return-Path: <linux-pm+bounces-9211-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9212-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 898B3909289
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 20:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BCE690934E
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 22:19:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 051BD1F2208A
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 18:52:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B58AC1F2484A
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 20:19:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79EB519FA96;
-	Fri, 14 Jun 2024 18:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA21B146D6D;
+	Fri, 14 Jun 2024 20:19:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IxQ+XCmd"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LTJGfLCc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF16C49638;
-	Fri, 14 Jun 2024 18:51:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19104393;
+	Fri, 14 Jun 2024 20:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718391118; cv=none; b=iREeMR9pjnlSYicy/HjajowWs0cA5YKOAtb3gWltbXeliEK+EH8AaXWpqiIQ9CKtgUbwHoa6fA7S9UMzfyO+Pfi23JUTWUz4Xq2xd8mNUEtLXGJJvDkZUNx1mgd1fjk2FrUmG5WM+lKzQkYhIPAA2GwbA3wVOiHky0yQTR8rIkI=
+	t=1718396389; cv=none; b=W+pHsZEv8xxRwGYbgJamKRI6U1pIfnml4sCX/QFmoe3VceI/Qr9/uRvceDjsze5RM/aivih/igjpfW1p3/hejDE/4P/R8AW5VPAkxrhfIoPeRGDHWI3+d57ESKFzKH1uR8xxnPKVK5rRVp79uV0KKX/TNSp8wWkl4NC+//PNXAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718391118; c=relaxed/simple;
-	bh=enWuKqXUz9GyFxoLZijvMKS2fI5yH9PvWddd77Gg2lg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NQ6uKkkcqOAaaBlhWCo6EVyugqEvSTNyC3/B3VQbTtvT9MTVnVzzlGDGsZMNbyq7FnYRjvzACCskNKGOrv+8SXny0bXjwzA/0V6HH6ApSRswgiqaW0aDCsxKeYT5gys90P38PDrjoSfAzv0J91C7wnW3TAGfXouFyH/voSDH1yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IxQ+XCmd; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a6ef8e62935so338902466b.3;
-        Fri, 14 Jun 2024 11:51:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718391115; x=1718995915; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5rprkihQjKE8Wxhdq2UGmvX5wHNUhwtUN5I71Y/SB64=;
-        b=IxQ+XCmdCnjp5J4su+sEK7wsCGD59lNDd/HL5jxxpoePqziA9XJStGHuHzn2sG9rAk
-         Cd9mCzVzE6Zq2I21rEtEk/LJ8KIpEW73k5B0QExASV9glTgtsECygicXjUyhKTpydT7E
-         YTXl4sVbT9mA1P6yj4OzGrF+/H3Z2y5NL/JtsgVX60SuTGgVkdasG0hQ/hN1wqy/8aOS
-         emTjfAiDS2T3FH8Y/YCiKPqaNVriQ3OHDl2UknWmmGur2tAxKstfevPvmH9Gw1Sc7C0A
-         M4/LRbV9//yqab7XFHINx6b1oXr951ROcaSAXwCFC39iloAj2Lf5ISlfwupRCFTt5hBz
-         3KTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718391115; x=1718995915;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5rprkihQjKE8Wxhdq2UGmvX5wHNUhwtUN5I71Y/SB64=;
-        b=ZFe1c34JfxF/ygh34tGD6nAC49isJmElt4GUuzsji6PvvXLWBR2aYKNkbqLJu/0ANT
-         WBRgNcy03aAgHUSuZfWMJMQW9t0NQXA44wZoI7r5Ocuw2yL/PGPsmk/lIUqx8aFR2D7T
-         0VJmo/yIT/Qa2EwqfFjeO+AzwCkH91NxZjq8xI4r2n8FtcH24HimtPbfndciN+wDnKaj
-         49CJgwtop6euXNWkdgAAMbeowcdTQz3D5IoNPpUvKhoNNQy8PuJm3XcZ3+n+GP9P9U8e
-         AemjXZNITQAjNtUEKpT5s5SreLQoPl9wp0kQTQlcPrgN9rUu1ijxkefBniobzQMK7bPc
-         +l9A==
-X-Forwarded-Encrypted: i=1; AJvYcCXo7H2YAuOOBPP9CkCCOIRhLbDwC1WpVYwWxJvjFYtGxf6BW8FnnVzF5W8h4Tlanvuu0cf8j0mLdKVNx9iR7yM+S03xX8XO12wXlq4vWOfJG/ybiu9Xhxe7xt8e2jdVU0gZKIjVn672Gw==
-X-Gm-Message-State: AOJu0YxYanOJNz+uD2TjC9qp+aus+y0XrF6nGpfKLp4ZHPEqXOWcsv/D
-	NK9UQs+R1KVfUayEh8x6WebK/iRvtENvx7mQ6gsQZSL34A2fttmh
-X-Google-Smtp-Source: AGHT+IEk36S7X2t8cMYmuX/ZpaUrMMUzSoVxsy05fs448iah9EFGdw++b7+nZbY9DlgFWQzzLo5QBg==
-X-Received: by 2002:a17:906:c34b:b0:a6f:14b8:a017 with SMTP id a640c23a62f3a-a6f60de601emr271162166b.74.1718391114401;
-        Fri, 14 Jun 2024 11:51:54 -0700 (PDT)
-Received: from [192.168.0.31] (84-115-213-103.cable.dynamic.surfer.at. [84.115.213.103])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f72e7e9f1sm393366b.147.2024.06.14.11.51.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jun 2024 11:51:53 -0700 (PDT)
-Message-ID: <ab09447d-45be-4af9-9bf9-1debc9e5943c@gmail.com>
-Date: Fri, 14 Jun 2024 20:51:51 +0200
+	s=arc-20240116; t=1718396389; c=relaxed/simple;
+	bh=MO7d+ilL3XZhUZBsmfpYq+oyqYrOIe1GkR5FSI2xQbg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Ak+c7a1uVxUQhGmBjRNjYMSuNIymlXDgPcpLvbmuUdHFA2GfhSTjuDIxN4XUG5HxI02N+Lj1zU8AgF4vCLxXQpxqIvcu2CKBxVi7NXetfs0oLWH1qTOo3f7L/ZdIgAwxJf2rnh0OC93xY1A5WlIRfmKXaX1Fvo84rDsK3Flzqxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=LTJGfLCc; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45EKChw7030498;
+	Fri, 14 Jun 2024 20:19:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	H+fhsOX2oM3LNxV6L2zysDTUgRq1q4HveG16XE7UwTI=; b=LTJGfLCchDbD5kA7
+	ivQXJFRY+n7gPsCUw0suYyhCJfNYGDXZBv8JK9+YaEogiix3rTgzjbfegw2zmJmb
+	GKveLIfDBB32nPSigJ1lZYjlls2i7CYUoeQwKapOdHqXFg1wKe159/N0i4YYhYUD
+	523bjlEmojznB6XRPKgQUBSfU2aVfkaqz4LBC8DWLmOS/JnP2/gJtAec3XOeRVCd
+	/GDa4c92+aUEVBitS9hdiCuOiJ/zxYOf8vF4vFuwVMKBtDrBHUo61VQsackNh3aE
+	V/r13yZFa5KrAhX31YVZhZfWEcdB6twMzRSHg3vcrZGep1ZqcfcakZeuZIGmt/Q2
+	jPXDKg==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yr6q42m48-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 14 Jun 2024 20:19:44 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45EKJhw5030496
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 14 Jun 2024 20:19:43 GMT
+Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 14 Jun
+ 2024 13:19:38 -0700
+Message-ID: <122b5418-ca2d-df7d-a1d5-d7682ce0ed5a@quicinc.com>
+Date: Sat, 15 Jun 2024 01:49:34 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: thermal: convert hisilicon-thermal.txt to
- dt-schema
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>, rafael@kernel.org,
- daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-References: <20240613224204.185844-1-abdulrasaqolawani@gmail.com>
- <afb7551e-404e-440b-92c5-6927c61417ab@kernel.org>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <afb7551e-404e-440b-92c5-6927c61417ab@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/4] soc: qcom: icc-bwmon: Allow for interrupts to be
+ shared across instances
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <djakov@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <srinivas.kandagatla@linaro.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <quic_rgottimu@quicinc.com>, <quic_kshivnan@quicinc.com>,
+        <conor+dt@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <abel.vesa@linaro.org>
+References: <20240604011157.2358019-1-quic_sibis@quicinc.com>
+ <20240604011157.2358019-3-quic_sibis@quicinc.com>
+ <5e5f052b-df59-47fb-aed0-10b4f980f151@linaro.org>
+ <5df5dc6b-872f-34c5-a6d2-a64f9c881193@quicinc.com>
+ <672b6156-e425-4f3b-86f4-02a34cab2b67@linaro.org>
+From: Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <672b6156-e425-4f3b-86f4-02a34cab2b67@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: kvdxFHK5rbyFNXzxYVdLiWOjYLBkeImc
+X-Proofpoint-ORIG-GUID: kvdxFHK5rbyFNXzxYVdLiWOjYLBkeImc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-14_17,2024-06-14_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 mlxlogscore=624 suspectscore=0 impostorscore=0
+ phishscore=0 spamscore=0 bulkscore=0 priorityscore=1501 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406140140
 
-On 14/06/2024 10:49, Krzysztof Kozlowski wrote:
-> On 14/06/2024 00:42, Abdulrasaq Lawani wrote:
->> Convert the hisilicon SoCs tsensor txt bindings to dt-schema
+
+
+On 6/14/24 13:54, Krzysztof Kozlowski wrote:
+> On 13/06/2024 19:02, Sibi Sankar wrote:
 >>
->> Signed-off-by: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
->> ---
->> Validated with dtschema and tested against `hi3660-hikey960.dts`
 >>
+>> On 6/4/24 12:16, Krzysztof Kozlowski wrote:
+>>> On 04/06/2024 03:11, Sibi Sankar wrote:
+>>>> The multiple BWMONv4 instances available on the X1E80100 SoC use the
+>>>> same interrupt number. Mark them are shared to allow for re-use across
+>>>> instances.
+>>
+>> Hey Krzysztof,
+>>
+>> Thanks for taking time to review the series :)
+>>
+>>>
+>>> Would be nice if you also mention you checked that it is safe to have
+>>> both devm and shared interrupts (so you investigated possibility of race
+>>> on exit path).
+>>
+>> I didn't see any problems with devm being used with SHARED when I posted
+>> it out. After your review comments I went back again to vett the exit
+>> path for races and ran into an pre-existing splat [1] but the bwmon
+>> instances work as expected on module removal/re-insertion.
 > 
->> +     compatible = "hisilicon,tsensor";
->> +     reg = <0x0 0xf7030700 0x0 0x1000>;
-> 
-> Oh man...  get this past your mentors first.
-> 
-> 1. Messed indentation.
-> 2. 0, unit address looks unnecessary.
-> 
+> Using devm and shared interrupts is in general sign of possible race
+> issues and should be avoided. Just "not seeing problems" is not an
+> argument for me, to be honest.
 
-Sorry Krzysztof, it seems that this conversion went "live" without a
-preliminary review by the mentors. We will make sure that the first step
-is not omitted for v2.
+Didn't I go further and say I got it tested though? Also can you
+elaborate on what race do you think the bwmon will hit rather than
+being too generic about it?
 
-Best regards,
-Javier Carrasco
+-Sibi
+
+> 
+> Best regards,
+> Krzysztof
+> 
 
