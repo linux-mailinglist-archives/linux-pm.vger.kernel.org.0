@@ -1,155 +1,173 @@
-Return-Path: <linux-pm+bounces-9144-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9145-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C032390856F
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 09:57:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAA8C90863B
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 10:25:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 751721F28E64
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 07:57:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5390828D2C0
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 08:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D82718307E;
-	Fri, 14 Jun 2024 07:56:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BD9118F2E2;
+	Fri, 14 Jun 2024 08:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f3EYExRU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RMtpL1ne"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CEA142E80;
-	Fri, 14 Jun 2024 07:56:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B367185086
+	for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2024 08:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718351818; cv=none; b=GU6CFap8srbIobZNTvLT0kyWM1DdUmyVGc6gTQy9F2ng6a1m2wmOxxxrxVd2QgyTmgsi1kh5lnJkRb3KPIshvRXbpBhG0RAoHQ0GEiGtPffmffh9+Qxl3feD0JLsO7Slzdl16DhSHWSc5ytjV/Dotjlug1u8ThvO6x0fRBiDBLk=
+	t=1718353460; cv=none; b=dwW/fCinrNO435NCnR5U/qfA/EODTYgjwUWUrKjbCkdOyN53Xkf60YnSWBg0IkTyqErWkL6kLybDwBqZeX90A3ovIv6lOfnYvRJlRSdPCwM4NTa13fFDAnJx31BvTdW8sPJeBYc0YI93ZIf7d7EvU0auymswYXrY6+gQJ/dEj7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718351818; c=relaxed/simple;
-	bh=nUFKyARcWy2uSMLzAzinGAPULSmGJh8N5IGQ7ihfZcA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NmazEpMNhtx+cFPnM/f9NdvboFrU67RE/LDKtOJ3IIGD3lsJu7hsU0dgFpcSQ7CFB6A+t/QZgQvfnc8W6QuMy16Z/wtFEP1YovdolIE4+jZShH6onfycNU8juVixVO4Ikv77lv5XDey8ECPpfZHrmKXslSvbLLkUPzYRPH+pWos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f3EYExRU; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a6f253a06caso232405666b.1;
-        Fri, 14 Jun 2024 00:56:56 -0700 (PDT)
+	s=arc-20240116; t=1718353460; c=relaxed/simple;
+	bh=fv0TaSfIqslUmjuOoZwpyiDbVyDeYNBKgbCqOA67DE4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CQQFkfC/1x86/8LG4mW1zYR40drXZBEAQ7fQ6oDhE78M2bYz33oP0Lc96ar/azo/mYn3X3rj8x8uz+oa22tky3KA2xnNFajpM9ZCO3rP0zyTd20YJmTMxttcm6UFcWCrWlP+M/7Jt3sv/fHYHti0S+VM8CyVWlvnEGZ0cyBCLCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RMtpL1ne; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-57cad4475e0so3997226a12.1
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2024 01:24:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718351815; x=1718956615; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JDOif5JyBV4rbSGZWH0kGnPLkS7eG7oH/YJ4mNYY/60=;
-        b=f3EYExRUjRG51RpjjG0EYTszh8felaoEALsEqzN9wXAPHBk/VzCHM/+IjHKpG2f7OI
-         l9bKYC10TY0I3IM1Cbsa+U2FOkhjFUTFCrkEk79oOGDRfCrG4Ac4EPliClICi6I+NizG
-         iR7M3qOR2/sFW1YZvncx8GfLdOjBs7z/o7g72B0NPzzasJPfOgtokyJqZAORloucdMTa
-         j7zSn0a7TvT6Xvr6BwD7O34Sj872bTrIaOnrnuxk0KyoVYD8X+fOQS9CqTZ+G2Q85IH+
-         YZth1EnaocgU7Go2Ca2Te9PdJjlRiGswkHX2exm28oImWfe2Nm1ey6lta1UQC8uWVQVW
-         w6iQ==
+        d=linaro.org; s=google; t=1718353457; x=1718958257; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=pCUM5zB/whIY+F5E3NPWVek5NaTuOm+4yywidCzp4Os=;
+        b=RMtpL1neE7BwaN2gMr0bfP+03xygkNktpJ74oOwxhR3ctp1gtpk4lwIdVjlIux2TW1
+         V/VF209iUNwt0zRUqyswJgmuThAuv2XlL0tGJVj3kFVLuCDOG5I5CELjuxDdWiigqULt
+         OpCfPQ12DWonGU00nKup6Ozy/aBxtmydix+z8NkwnbFvkRKiTcsbtrENo6G3VZJX2qu+
+         YdiL4q+5us0kyjy3ciABPuC6LoJTYijv6t8TUDXg1YjrGPnnScBZ+36D08FiDpBSu2h3
+         DecwZ8ftmXi78xzp0WD7scJA0Rcfg4+Ch0zhMKrzaGgd0/tBbIWV16LIYK1bKLtKIEAV
+         s7dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718351815; x=1718956615;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1718353457; x=1718958257;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JDOif5JyBV4rbSGZWH0kGnPLkS7eG7oH/YJ4mNYY/60=;
-        b=HXflvtjVolleauIx6arFagT/nLp3Fld8fECsnnjX7NUleiCGT3HpgSTW9doyiwFcpu
-         jdMNzIacRK76+Y9n91xyVSAXVeJBry11toWcUaWf855Isx518yv3gqRGuUnTLMrx3q/j
-         Z3vquG09EMNpRXBevzRwbjh4vEtUnH9P+Hlih+WbEtvN9NiRXqkYsy+xrUl+cIE3crs7
-         70LWPkX5c2sT1YLmkDV+oQKQAMb5RU+LqQqd0VmxvDFQcrwyVnPnCDHdHW54CVVdfxk2
-         k68dKpCAxSksjjlQsBJoOQQORcITunhISEVMtoQOO7hffruWONf8KY7s8HCLbbCxB7aO
-         5Lqw==
-X-Forwarded-Encrypted: i=1; AJvYcCXO8eLGTmtQa85/4OER6DsYZB3uNOo+8YL7qhuekgXSEpjwKeA0ibchnhC9LQ+D7PKx2JxsmMs6zhiIkJp8n9TzQLy0RhW03AJT9v/B
-X-Gm-Message-State: AOJu0Yw9uxp8zQWmP4RRBI5uV3R/68f8yepi9vssVCAIZhbMIWc+vSBn
-	cQu47zJu3r5HJUkLojW6KaWMljtZmQOC70X36ieZusUGhUeMHFAFeaaV3A==
-X-Google-Smtp-Source: AGHT+IEOT5FTpIwBSVj8zrDu1PDpjdLyrByHXc0nfoQfNORbQs1DrO3LCu46VApAbQhbYmh+arrlGA==
-X-Received: by 2002:a17:906:556:b0:a6f:5fe4:f78d with SMTP id a640c23a62f3a-a6f60d5f8ecmr175427366b.44.1718351814209;
-        Fri, 14 Jun 2024 00:56:54 -0700 (PDT)
-Received: from [127.0.1.1] (31-179-0-202.dynamic.chello.pl. [31.179.0.202])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56f427b0sm156398166b.156.2024.06.14.00.56.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jun 2024 00:56:53 -0700 (PDT)
-From: Roman Storozhenko <romeusmeister@gmail.com>
-Date: Fri, 14 Jun 2024 09:56:38 +0200
-Subject: [PATCH] cpupower: Add 'help' target to the main Makefile
+        bh=pCUM5zB/whIY+F5E3NPWVek5NaTuOm+4yywidCzp4Os=;
+        b=uNsmVXusQ84VtXyRY8iivegtem59zpWT12KtUB9EQUiItPK6NlifP5PbKFqaUVf3/e
+         0FMviaawTfCXH4RAw1y8xVFR5C9eRjX+O/Gf6PndsH7pJjwqEqyDeYf0GFjp84yMfRqP
+         PckbMQLL4bDeUIUg3ZHFOfGPYG4RrkCl1BedY42Jc835EiMz30Bo9hhe9xubCPlXBvRD
+         OOBuLDfg4e9vnzm+fRBrwhHdIEKduM/YsbNlG6VnAYEhEMNDdOfW/Q8JO0iEOqfjp7wZ
+         PlRYMDEFRYCszDkqqvqSqblvbsoPqhlGIvf/neOe2mwnDz/G9R6QAdPqSVkNB5Gy9nhL
+         9GrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUGOVCUsibkPrhQcxOtixqKnxcw1ErF6ggQ/Ye0gr+sHC0UaAmZJe7WDlYjNTa9Pu6UEO/Tq00fAADyZMRFIoVziyGaZ7inCAQ=
+X-Gm-Message-State: AOJu0YyQFb4ccjHHdimsl7Z0O/x5fmbx714QyeYmbAkx5k9SabNspFMS
+	D1bliUtspSarzyTRgpWLzI8IcvCTaIFvDobLloupOzoI+1Rv+uae30PFS7kq2y0=
+X-Google-Smtp-Source: AGHT+IG5dXFX4FQjxsHkE+bXQUT7iPYQo4HzyMTeAPhjpUybtl9Gh1ZYex+QjtwhNT1jEV3hOTI02g==
+X-Received: by 2002:a17:907:9805:b0:a68:e681:be2c with SMTP id a640c23a62f3a-a6f52414868mr385966266b.20.1718353456776;
+        Fri, 14 Jun 2024 01:24:16 -0700 (PDT)
+Received: from [192.168.0.18] ([78.10.206.163])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57cb743adacsm1946396a12.86.2024.06.14.01.24.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jun 2024 01:24:16 -0700 (PDT)
+Message-ID: <672b6156-e425-4f3b-86f4-02a34cab2b67@linaro.org>
+Date: Fri, 14 Jun 2024 10:24:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] soc: qcom: icc-bwmon: Allow for interrupts to be
+ shared across instances
+To: Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
+ konrad.dybcio@linaro.org, djakov@kernel.org, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, srinivas.kandagatla@linaro.org
+Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+ quic_rgottimu@quicinc.com, quic_kshivnan@quicinc.com, conor+dt@kernel.org,
+ dmitry.baryshkov@linaro.org, abel.vesa@linaro.org
+References: <20240604011157.2358019-1-quic_sibis@quicinc.com>
+ <20240604011157.2358019-3-quic_sibis@quicinc.com>
+ <5e5f052b-df59-47fb-aed0-10b4f980f151@linaro.org>
+ <5df5dc6b-872f-34c5-a6d2-a64f9c881193@quicinc.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
+ m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
+ HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
+ XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
+ mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
+ v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
+ cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
+ rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
+ qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
+ aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
+ gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
+ dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
+ NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
+ hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
+ oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
+ H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
+ yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
+ 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
+ 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
+ +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
+ FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
+ 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
+ DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
+ oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
+ 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
+ Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
+ qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
+ /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
+ qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
+ EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
+ KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
+ fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <5df5dc6b-872f-34c5-a6d2-a64f9c881193@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240614-make-help-v1-1-513118646b71@gmail.com>
-X-B4-Tracking: v=1; b=H4sIALX3a2YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDM0Nj3dzE7FTdjNScAl1DE2NTy0RLE+NU8yQloPqCotS0zAqwWdGxtbU
- AD9V16lsAAAA=
-To: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Roman Storozhenko <romeusmeister@gmail.com>
-X-Mailer: b4 0.13.0
 
-Add 'help' target descriding building and cleaning targets
-to the main Makefile
+On 13/06/2024 19:02, Sibi Sankar wrote:
+> 
+> 
+> On 6/4/24 12:16, Krzysztof Kozlowski wrote:
+>> On 04/06/2024 03:11, Sibi Sankar wrote:
+>>> The multiple BWMONv4 instances available on the X1E80100 SoC use the
+>>> same interrupt number. Mark them are shared to allow for re-use across
+>>> instances.
+> 
+> Hey Krzysztof,
+> 
+> Thanks for taking time to review the series :)
+> 
+>>
+>> Would be nice if you also mention you checked that it is safe to have
+>> both devm and shared interrupts (so you investigated possibility of race
+>> on exit path).
+> 
+> I didn't see any problems with devm being used with SHARED when I posted
+> it out. After your review comments I went back again to vett the exit
+> path for races and ran into an pre-existing splat [1] but the bwmon
+> instances work as expected on module removal/re-insertion.
 
-Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
----
-Make "cpupower" building process more user friendly by adding 'help'
-target to the main makefile. This target describes various build
-and cleaning options available to the user.
----
- tools/power/cpupower/Makefile | 37 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
-
-diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index b53753dee02f..cd0225a312b4 100644
---- a/tools/power/cpupower/Makefile
-+++ b/tools/power/cpupower/Makefile
-@@ -332,4 +332,39 @@ uninstall:
- 		rm -f $(DESTDIR)${localedir}/$$HLANG/LC_MESSAGES/cpupower.mo; \
- 	  done;
- 
--.PHONY: all utils libcpupower update-po create-gmo install-lib install-tools install-man install-gmo install uninstall clean
-+help:
-+	@echo  'Building targets:'
-+	@echo  '  all		  - Default target. Could be omitted. Put build artifacts'
-+	@echo  '                    to "O" cmdline option dir (default: current dir)'
-+	@echo  '  install	  - Install previously built project files from the output'
-+	@echo  '                    dir defined by "O" cmdline option (default: current dir)'
-+	@echo  '                    to the install dir  defined by "DESTDIR" cmdline or'
-+	@echo  '                    Makefile config block option (default: "")'
-+	@echo  '  install-lib	  - Install previously built library binary from the output'
-+	@echo  '                    dir defined by "O" cmdline option (default: current dir)'
-+	@echo  '                    and library headers from "lib/" for userspace to the install'
-+	@echo  '                    dir  defined by "DESTDIR" cmdline (default: "")'
-+	@echo  '  install-tools	  - Install previously built "cpupower" util from the output'
-+	@echo  '                    dir defined by "O" cmdline option (default: current dir) and'
-+	@echo  '                    "cpupower-completion.sh" script from the src dir to the'
-+	@echo  '                    install dir  defined by "DESTDIR" cmdline or Makefile'
-+	@echo  '                    config block option (default: "")'
-+	@echo  '  install-man	  - Install man pages from the "man" src subdir to the'
-+	@echo  '                    install dir  defined by "DESTDIR" cmdline or Makefile'
-+	@echo  '                    config block option (default: "")'
-+	@echo  '  install-gmo	  - Install previously built language files from the output'
-+	@echo  '                    dir defined by "O" cmdline option (default: current dir)'
-+	@echo  '                    to the install dir defined by "DESTDIR" cmdline or Makefile'
-+	@echo  '                    config block option (default: "")'
-+	@echo  '  install-bench	  - Install previously built "cpufreq-bench" util files from the'
-+	@echo  '                    output dir defined by "O" cmdline option (default: current dir)'
-+	@echo  '                    to the install dir  defined by "DESTDIR" cmdline or Makefile'
-+	@echo  '                    config block option (default: "")'
-+	@echo  ''
-+	@echo  'Cleaning targets:'
-+	@echo  '  clean		  - Clean build artifacts from the dir defined by "O" cmdline'
-+	@echo  '                    option (default: current dir)'
-+	@echo  '  uninstall	  - Remove previously installed files from the dir defined by "DESTDIR"'
-+	@echo  '                    cmdline or Makefile config block option (default: "")'
-+
-+.PHONY: all utils libcpupower update-po create-gmo install-lib install-tools install-man install-gmo install uninstall clean help
-
----
-base-commit: 6906a84c482f098d31486df8dc98cead21cce2d0
-change-id: 20240613-make-help-14359a943e7b
+Using devm and shared interrupts is in general sign of possible race
+issues and should be avoided. Just "not seeing problems" is not an
+argument for me, to be honest.
 
 Best regards,
--- 
-Roman Storozhenko <romeusmeister@gmail.com>
+Krzysztof
 
 
