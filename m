@@ -1,88 +1,105 @@
-Return-Path: <linux-pm+bounces-9180-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9181-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C95B29089B4
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 12:25:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 244D9908A0F
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 12:35:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8C461C26837
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 10:25:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97E3A28B8B5
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2024 10:35:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 848051946A7;
-	Fri, 14 Jun 2024 10:24:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A772A19414A;
+	Fri, 14 Jun 2024 10:35:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZVZqrN1b"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="teEWlvVU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02E919413D
-	for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2024 10:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51F1137C2E
+	for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2024 10:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718360695; cv=none; b=YkK3agGXHdUnHEe6F6UKA/xrbVGy5Hh+GSoyJE+mFDV1Kw+Ip5XirVAdyIyRuv5Tu9xkoSmytmI7/OvDIYnOyS9DHQMmuuQ/DaS40k+/3pWI2ffmpM1Kzo+PxVmEKHz3QkBq+eDev6wfBqKTMj2vQpxwEUaIlZNpSTTQk1fRb0I=
+	t=1718361327; cv=none; b=OjzNFi4/t3cwGbFRrFz2bCoqrOo/x6lBwxX2KO9uw/dJWb/jdb7JO1zm+L5OzAJvWZnnIW4aJIThX4/HotAoaYMqHef4sn6uu+Qe6D4Waof9cLtHqE3VpumfHJI1NLRJvnXDGq7iKAoPZluMTk4DCpgjKIeh1Da69+kOzlDd/b0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718360695; c=relaxed/simple;
-	bh=ZuwSgi9zLIoNZp877URK5FteNaoBqxpCKd2FeYdrG38=;
+	s=arc-20240116; t=1718361327; c=relaxed/simple;
+	bh=zQTF8f1f4E4offgF6AppLKOcBdlWwKz4eWbWjGZGOSc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qFfuDeE6JDJazSWw7E5uTABDXxkKJQiPscMmsEDPKJL3h3NDreeAU0acaVvGzZBpgH1yqYrHg5u8ofWVkwNKhaKHB4O0NBjtUOpNNVczz8UmfoEAM4QWXy7JeUkSGNQ36KKCDR32tuCGMRo5WxtZgkX/FJmBXTXj2BgfrxAWPsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZVZqrN1b; arc=none smtp.client-ip=209.85.167.46
+	 Content-Type:Content-Disposition:In-Reply-To; b=i7jyaAMK3MhQrrEXieVINhhqh2/msLKVeYGdIWHE+pw7D1cvQAaMIs2OIg3HYJll6V2Q+mkii84O+889HPt6gkulTM0/XaxT+jc9Fe5GQ/4Zsi+8OL6/FC8+VGKQN3bVKNGrqK5rGYOjhurQh66MOvGIjFo584JByimLgoQ/56s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=teEWlvVU; arc=none smtp.client-ip=209.85.167.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52c85a7f834so2618369e87.0
-        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2024 03:24:52 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-52b7e693b8aso2805137e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2024 03:35:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718360691; x=1718965491; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1718361324; x=1718966124; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=efnhjpqQgsmtdaUVLcqkEj44nSpt4V5RfvjPWerlFZk=;
-        b=ZVZqrN1bcVkscnqRfkObQYXi2bS6sEMRFe0GFJamipcs+6ukeqxE86Hgc/RVZfOKa/
-         ZCv4KAN3DAJwAH+Zigx4dimz5aDoBUIhFlkzXZWcZ1zCypnt10DmANYns33SxLm4omOg
-         eiCEMrgV1MHxZvbMcZ9li2buyyvPzmR+4NYXV0z+UVGCFK7hvImpwiSj0SCboHZ5wpTo
-         idF2fQyVdX4wiliiqvet9M+WVQX204+OcpE4EZW/hYEPnoUpwAd2wnJ5yNCjhVK5t8nj
-         V+x9FxyJDLpCvhEQ/iRZmKTYpU4S4ralN62CFSp6uZHs9olw4kfJvGfuZ098ZVF4D0ac
-         zm/g==
+        bh=gi0zKyxT3hCd9nb/MhrUUh7myaChKF1I5PdBUyc2GXs=;
+        b=teEWlvVUTdSj7i/zCVjz2AkzvoRghq+p6jDie657GiaKHfA5G2ESEp0cwqYDYvgxjq
+         6Am5IXyt85BaN35MFgVOxdOTJoJ2VmZfWBFFeIPeL7YBZRm4aRuIKrpKS+aoYYCUUHdP
+         Y2vHvW5sETuPwhJIzrQusKaEceMr1WfGFkqhrfqv3miZJEumFmj0oKScjz1jsTa8+pEM
+         FFYlZgS3DQH5XzcsGK4vpnI50gbD+K6BQ42ml2+4B9oiZRfHLWmKD1IIKPJr/tjwHyyf
+         6ubFH+QzWNqNbU7jhqwc/AYEInvFylWg6Fjf/H+4nZGtc7GX+0ZgUoAuURMZuiIkcUwj
+         HtrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718360691; x=1718965491;
+        d=1e100.net; s=20230601; t=1718361324; x=1718966124;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=efnhjpqQgsmtdaUVLcqkEj44nSpt4V5RfvjPWerlFZk=;
-        b=kok5j9HN5OSBE1UfUHG7ZlJE/GvBN0agmFSd6NbUHt24nwm20a5p8OtQcOVTp5WmYV
-         3j+fDCKrAb4MaPWPGkUtN0WRyUB7SR58NJQhAJNefmcxLMSoJWtOiVmjo9XI+JdKYtk+
-         aabZOq5rf6DPZKmDv7ACWP8A0xBU91GDnJz/xUDapzqHAqsdTAZdbWFNCh+zJGFlr7SG
-         oZtjWvWYPYAWx8ZgAWBx1EvcbsDDcxIZuZdrDtCEZjhtpy+5rEowovLxUDyxNnErYBrd
-         mfJhGnz5/cEHk4x8Rs0IVS+xEEFsbZXEVuhfXJjl4Bj9QyqaI0x3XBx4hJwz1LX8YZ5u
-         s3BA==
-X-Forwarded-Encrypted: i=1; AJvYcCU7xOpQ3jkhRTVYu0nTcREj+wZpGDrIisFnbVXHwvdCPYWVIAcDjEfLUeFlyJ5P2NZ7XhvGE6b9SC803VDCBJ+Jxdn79IzWQIc=
-X-Gm-Message-State: AOJu0Yy0jaIif8Y0EsFQgv45ATr8BKN40Y41rZupo2m+yZPU5xRW8F8f
-	DqI7pKaML1Kdj69kLx0uugXDERISGfSMZ0ZbKkUjZGGfFeH3DIJUrTMS9fY3lOk=
-X-Google-Smtp-Source: AGHT+IEWORdeTtr6fZukAQJ2f/JpYbjWtk3eAvDeBEJR863+Icr9nb85v00/m9s9du9B/uAO5LpWzA==
-X-Received: by 2002:a19:914d:0:b0:52c:8a4e:f4bf with SMTP id 2adb3069b0e04-52ca6e90db1mr1229088e87.51.1718360690961;
-        Fri, 14 Jun 2024 03:24:50 -0700 (PDT)
+        bh=gi0zKyxT3hCd9nb/MhrUUh7myaChKF1I5PdBUyc2GXs=;
+        b=jUUjHkc7TID45VWPdag+3HZFRLvNOZ5/iP/BUbxKYjYmz1xCl/Ue/hrWX86V5IrT0D
+         cSvbCyG2GD7pFFy/mOrhj+KEsMkNAKU+fl/xy5RQ3jFNPmV9Vb55Sj7mCaRXJozgnoi6
+         Y+vo+weIuHYSbj8yF+bn6cf9k+5eJgBhDNnJZ9sku0MOX5+moMzNQlDCwqiv+5qRyfV9
+         NiCibT36ESYwdi/hcosAC14Uo3ZdTA9eXjtZP8j0QQ+HOEB1J6LlcD4S4lvCUM5ahMB8
+         U+HSP47+a0/jUs25B8OqSF07m/5Rl9Sz+/Yj5GulN8IsToAkmedpKfLOdVaK1N9yciMh
+         Wm4g==
+X-Forwarded-Encrypted: i=1; AJvYcCVVC/Nufaf+3+/uBpnrbt9vCGG2vxj4rjwlznnV81eFhHxfyD/iLuC1hbc32hTu1L4cQnZ5gP9zE8SNxzWFoiiEY3e+jR4qbbQ=
+X-Gm-Message-State: AOJu0YwGlImkyumG/6JnLObVY++6nA9StpCsP7Q2b+U7QJdy5rYkFqzf
+	uxazys9zop4ihHw7VdHrWk7cTEQpPJMXo8joBCPpPYMiFZq7HdolMQVlVXneOHQ=
+X-Google-Smtp-Source: AGHT+IF21atwqR62ijL3XLbekBscy+usmTEKarUelgvxFuWKneWXxFSinPdGquI11kE+MEGG3syk0w==
+X-Received: by 2002:ac2:4649:0:b0:52c:94ad:9b26 with SMTP id 2adb3069b0e04-52ca0464493mr1605471e87.30.1718361324088;
+        Fri, 14 Jun 2024 03:35:24 -0700 (PDT)
 Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca886e23asm168540e87.270.2024.06.14.03.24.50
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca2872578sm468370e87.130.2024.06.14.03.35.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jun 2024 03:24:50 -0700 (PDT)
-Date: Fri, 14 Jun 2024 13:24:49 +0300
+        Fri, 14 Jun 2024 03:35:23 -0700 (PDT)
+Date: Fri, 14 Jun 2024 13:35:21 +0300
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
-Subject: Re: [PATCH v6 4/6] power: supply: lenovo_yoga_c630_battery: add
- Lenovo C630 driver
-Message-ID: <s5ykyyczxrn7pblzbiu7st6barn47zrtjr6yn5shbeo7lwqkfk@hdctgjwpqu55>
-References: <20240612-yoga-ec-driver-v6-0-8e76ba060439@linaro.org>
- <20240612-yoga-ec-driver-v6-4-8e76ba060439@linaro.org>
- <r5wjdxqdechzxbyqwbyz7ou6nbxqewb6bruvklvcek2dhspixf@ujavcd3ky7n7>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Guillaume La Roque <glaroque@baylibre.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Vasily Khoruzhick <anarsoul@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Anson Huang <Anson.Huang@nxp.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Amit Kucheria <amitk@kernel.org>, 
+	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>, Heiko Stuebner <heiko@sntech.de>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, Orson Zhai <orsonzhai@gmail.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Pascal Paillet <p.paillet@foss.st.com>, 
+	Keerthy <j-keerthy@ti.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, zhanghongchen <zhanghongchen@loongson.cn>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	imx@lists.linux.dev, linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-stm32@st-md-mailman.stormreply.com, Florian Fainelli <f.fainelli@gmail.com>, 
+	linux-rpi-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 09/22] dt-bindings: thermal: qcom-spmi-adc-tm-hc:
+ reference thermal-sensor schema
+Message-ID: <mobms3s3tibh6wljulwr3okof2msvewed55ukecj3bkdfbgech@blk6udpuy5ov>
+References: <20240614-dt-bindings-thermal-allof-v1-0-30b25a6ae24e@linaro.org>
+ <20240614-dt-bindings-thermal-allof-v1-9-30b25a6ae24e@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -91,40 +108,20 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <r5wjdxqdechzxbyqwbyz7ou6nbxqewb6bruvklvcek2dhspixf@ujavcd3ky7n7>
+In-Reply-To: <20240614-dt-bindings-thermal-allof-v1-9-30b25a6ae24e@linaro.org>
 
-On Fri, Jun 14, 2024 at 03:35:25AM GMT, Sebastian Reichel wrote:
-> Hi,
+On Fri, Jun 14, 2024 at 11:46:08AM GMT, Krzysztof Kozlowski wrote:
+> Device is a thermal sensor and it requires '#thermal-sensor-cells', so
+> reference the thermal-sensor.yaml to simplify it and bring the
+> common definition of '#thermal-sensor-cells' property.
 > 
-> On Wed, Jun 12, 2024 at 12:59:35PM GMT, Dmitry Baryshkov wrote:
-> > On the Lenovo Yoga C630 WOS laptop the EC provides access to the adapter
-> > and battery status. Add the driver to read power supply status on the
-> > laptop.
-> > 
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> >  drivers/power/supply/Kconfig                    |   9 +
-> >  drivers/power/supply/Makefile                   |   1 +
-> >  drivers/power/supply/lenovo_yoga_c630_battery.c | 500 ++++++++++++++++++++++++
-> >  3 files changed, 510 insertions(+)
-> > 
-> > diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> > index 3e31375491d5..55ab8e90747d 100644
-> > --- a/drivers/power/supply/Kconfig
-> > +++ b/drivers/power/supply/Kconfig
-> > @@ -167,6 +167,15 @@ config BATTERY_LEGO_EV3
-> >  	help
-> >  	  Say Y here to enable support for the LEGO MINDSTORMS EV3 battery.
-> >  
-> > +config BATTERY_LENOVO_YOGA_C630
-> > +	tristate "Lenovo Yoga C630 battery"
-> > +	depends on OF && EC_LENOVO_YOGA_C630
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml          | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
 > 
-> The driver should no longer depend on OF. Otherwise LGTM.
-> Thanks for reworking it.
 
-Ack, I'll post a fixed version once Ilpo announces an immutable branch.
-
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 
 -- 
