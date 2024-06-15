@@ -1,137 +1,160 @@
-Return-Path: <linux-pm+bounces-9219-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9220-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 587E4909551
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 03:45:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D9E69095A4
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 04:16:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEF3F2856DD
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 01:45:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E528E2888DF
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 02:16:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44CC13D60;
-	Sat, 15 Jun 2024 01:45:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE3366AA7;
+	Sat, 15 Jun 2024 02:15:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="PYbWvkuc"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CIxa/g/x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB761C2E;
-	Sat, 15 Jun 2024 01:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF2BEADB;
+	Sat, 15 Jun 2024 02:15:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718415927; cv=none; b=C2Pc4O2PytQ45JESGspuXf2SjWwRp0PpFjt58KMjbp6m1afuI66lDvABiottkPPGIezuksg75Zi0EE+NT6AAoGHdk62wcJjyYCuSOMtdF2cRTlp7TuHY1nfCEdi0cKdJrSe4QfBQvb5nr6BSlTbo4XAkS4GLsgE3h2shEoFt4v4=
+	t=1718417755; cv=none; b=J+pT/sNMmkhbnJhyDIryCj2UtRo7bB7YeAACSWJjzG/p4RuwI982IKu32bvAd4/F+fgga8+BtRksTjuxMUh7U52C4lBGR8/lMIlbY3CtLa/uthxdbxzT8B4PcAQuWyZAxstWV5vgKCUUSaLhQyRTg4hZPSr7WrBEt/xJdQj8McE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718415927; c=relaxed/simple;
-	bh=7dVfBiT/JJ48FsOEeTVREWgxZ1AuTVYFkWiXwbQLL/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J03OjpTt8iP8aCNc10zJuJa1Bm0w5ZRHK5XBvXeJSJR3nh4hIDtuBg2X6UKrrc8Y0CmJmEvbse0WxXHF0kb5EclH4l1d7jMNoYJpvYn8yQbTKsRoGKkM2Mm3N/NbLyGx6diyDIAgKTHm2+E+DeBrp1sB62A0kzqCG0je6p9tEHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=PYbWvkuc; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Cmiivs9+4WenC6OP/1ZCnI/gkKg1dnHA0OIU4ZJ3byg=; b=PYbWvkucSg2aBQezLwmo+Qcd5e
-	buXI3jXr9trafbVS5gAryDT/g51ZN2ZBHJAxUbhpaC2hB7zEs07wi7VegkBqFt449VYmSdHx7elSe
-	WogNyhroF0DK54iaxAW50jWdlZDahTiZV5+Ls5WFRE8mrzX+a1Gce1UfgRgk+LFUxWnqraMHJ82U+
-	fjuNuq9GYv6VpVV9TPpSg4O/DlYpC/xa6zQU7QS5onXdbc6AjTRUO7+Q+u9isTmIEj0KMnjFgqrDf
-	ebusEVDAofzzEFgSzUfwc/6aFrS74znvLxdtqTdMPASh9jObHTMaQX2D8eISlHn4iq1vMo6HzZ/MT
-	vTtCcWSw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sIITp-0000000HUbC-2ox1;
-	Sat, 15 Jun 2024 01:45:21 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 38AF1300886; Sat, 15 Jun 2024 03:45:21 +0200 (CEST)
-Date: Sat, 15 Jun 2024 03:45:21 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: K Prateek Nayak <kprateek.nayak@amd.com>, linux-kernel@vger.kernel.org,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
-	Michal Simek <monstr@monstr.eu>, Dinh Nguyen <dinguyen@kernel.org>,
-	Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Andrew Donnellan <ajd@linux.ibm.com>,
-	Benjamin Gray <bgray@linux.ibm.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Xin Li <xin3.li@intel.com>, Kees Cook <keescook@chromium.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Tony Battersby <tonyb@cybernetics.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Brian Gerst <brgerst@gmail.com>, Leonardo Bras <leobras@redhat.com>,
-	Imran Khan <imran.f.khan@oracle.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Rik van Riel <riel@surriel.com>,
-	Tim Chen <tim.c.chen@linux.intel.com>,
-	David Vernet <void@manifault.com>,
-	Julia Lawall <julia.lawall@inria.fr>, linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
-	x86@kernel.org
-Subject: Re: [PATCH v2 00/14] Introducing TIF_NOTIFY_IPI flag
-Message-ID: <20240615014521.GR8774@noisy.programming.kicks-ass.net>
-References: <20240613181613.4329-1-kprateek.nayak@amd.com>
- <20240614092801.GL8774@noisy.programming.kicks-ass.net>
- <CAKfTPtBTxhbmh=605TJ9sRw-nFu6w-KY7QpAxRUh5AjhQWa2ig@mail.gmail.com>
- <20240615012814.GP8774@noisy.programming.kicks-ass.net>
+	s=arc-20240116; t=1718417755; c=relaxed/simple;
+	bh=z9HIddnvgvM3GUTbm86JIM7IUzNU9QDqAL1wIowUq1I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=E0t53zjGCTpeUaV9iH13JiIPEZe2/DxWf9MLybp+uaUxCZnlwZYULOqgavim3KbJ5/i17/ZPe03eKBa4FUdbZyySyyCfHZc/GI4vRTv16r4hY3TN+vd8oy5/FWwxatYBqX3y5MNdBLrx5W9MIdGMuL65J/cyJ4s0KDAPqeqEpXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=CIxa/g/x; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45F291A1026963;
+	Sat, 15 Jun 2024 02:15:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	XlFtXOpFi8BhNNqPGzzEzhPs+LCSPnDFOKquHAaF4Zw=; b=CIxa/g/xnztrZ6E0
+	Ow8bxfh0O9je+sP9xUxeyNZy2PcQClCXSMDVfw0XUVdm8pVm1YRQLyG33U+9uQ8N
+	+KjYzYuKt5a2cKtCJLa0C2D4xPYA/i+zlx+BLLOFaWjDL2gg04ozrXJ5rfru4Txy
+	Kmp6xx0FHJYEpvgdhHCGPHqTMlTEf14djZOss+uZiTTUIBIXC+aCnX0Ifpn567eP
+	9bDhJyiJ+3LdgrvGupB1Hsx0IvCeOl6V54DukNIzBn6GG1yktOWoB+Hkg2sGfiCa
+	Fw9OdDjOldmNVnPvZGkMTqeyjsknONkKbKEncK3rdZe/g6mSiw78oAfgpgF2IgOE
+	JRVQNw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ys1wr007h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 15 Jun 2024 02:15:49 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45F2Fmq7027631
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 15 Jun 2024 02:15:48 GMT
+Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 14 Jun
+ 2024 19:15:43 -0700
+Message-ID: <13bb3a32-a531-54d0-3dd9-7b6ea595f990@quicinc.com>
+Date: Sat, 15 Jun 2024 07:45:40 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240615012814.GP8774@noisy.programming.kicks-ass.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/4] soc: qcom: icc-bwmon: Allow for interrupts to be
+ shared across instances
+Content-Language: en-US
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <djakov@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <srinivas.kandagatla@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <quic_rgottimu@quicinc.com>, <quic_kshivnan@quicinc.com>,
+        <conor+dt@kernel.org>, <abel.vesa@linaro.org>
+References: <20240604011157.2358019-1-quic_sibis@quicinc.com>
+ <20240604011157.2358019-3-quic_sibis@quicinc.com>
+ <5e5f052b-df59-47fb-aed0-10b4f980f151@linaro.org>
+ <5df5dc6b-872f-34c5-a6d2-a64f9c881193@quicinc.com>
+ <672b6156-e425-4f3b-86f4-02a34cab2b67@linaro.org>
+ <122b5418-ca2d-df7d-a1d5-d7682ce0ed5a@quicinc.com>
+ <r6bwmhfa4csubsvetnjlj6gzgovewupxf6hkuygqdconldpk2v@otrs4lhd3baj>
+From: Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <r6bwmhfa4csubsvetnjlj6gzgovewupxf6hkuygqdconldpk2v@otrs4lhd3baj>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PcxTvHBfwMgrfHC-DKSBncWbq_dS8xU2
+X-Proofpoint-ORIG-GUID: PcxTvHBfwMgrfHC-DKSBncWbq_dS8xU2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-14_19,2024-06-14_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ lowpriorityscore=0 mlxlogscore=845 adultscore=0 spamscore=0 suspectscore=0
+ priorityscore=1501 malwarescore=0 mlxscore=0 phishscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
+ definitions=main-2406150016
 
-On Sat, Jun 15, 2024 at 03:28:14AM +0200, Peter Zijlstra wrote:
-> On Fri, Jun 14, 2024 at 12:48:37PM +0200, Vincent Guittot wrote:
 
-> > The main problem is that need_resched becomes somewhat meaningless
-> > because it doesn't  only mean "I need to resched a task" and we have
-> > to add more tests around even for those not using polling
+
+On 6/15/24 03:12, Dmitry Baryshkov wrote:
+> On Sat, Jun 15, 2024 at 01:49:34AM GMT, Sibi Sankar wrote:
+>>
+>>
+>> On 6/14/24 13:54, Krzysztof Kozlowski wrote:
+>>> On 13/06/2024 19:02, Sibi Sankar wrote:
+>>>>
+>>>>
+>>>> On 6/4/24 12:16, Krzysztof Kozlowski wrote:
+>>>>> On 04/06/2024 03:11, Sibi Sankar wrote:
+>>>>>> The multiple BWMONv4 instances available on the X1E80100 SoC use the
+>>>>>> same interrupt number. Mark them are shared to allow for re-use across
+>>>>>> instances.
+>>>>
+>>>> Hey Krzysztof,
+>>>>
+>>>> Thanks for taking time to review the series :)
+>>>>
+>>>>>
+>>>>> Would be nice if you also mention you checked that it is safe to have
+>>>>> both devm and shared interrupts (so you investigated possibility of race
+>>>>> on exit path).
+>>>>
+>>>> I didn't see any problems with devm being used with SHARED when I posted
+>>>> it out. After your review comments I went back again to vett the exit
+>>>> path for races and ran into an pre-existing splat [1] but the bwmon
+>>>> instances work as expected on module removal/re-insertion.
+>>>
+>>> Using devm and shared interrupts is in general sign of possible race
+>>> issues and should be avoided. Just "not seeing problems" is not an
+>>> argument for me, to be honest.
+>>
+>> Didn't I go further and say I got it tested though? Also can you
+>> elaborate on what race do you think the bwmon will hit rather than
+>> being too generic about it?
 > 
-> True, however we already had some of that by having the wakeup list,
-> that made nr_running less 'reliable'.
+> devm_request_threaded_irq means that the IRQ is freed after the
+> bwmon_remove() function returns. Having IRQF_SHARED means that the IRQ
+> can still be triggered even though IRQ for this device has been disabled
+> in bwmon_disable().
+> 
+> In this particular case such IRQ probably won't cause issues, but at
+> least it needs to be validated and probably commented in bwmon_remove().
+> Just stating that "you tested and had no problems" usually isn't enough
+> for the expected race condition issues.
 
-Doesn't using !idle_cpu() instead of need_resched() in those balance
-paths already do the right thing?
+Cool, thanks for the info. I'll get this fixed in the next re-spin.
 
-Checking need_resched() as an indicator of it getting work is already a
-bit an assumption.
+-Sibi
 
-Also, Ingo, idle_cpu() and friends don't really belong in syscalls.c...
+> 
 
