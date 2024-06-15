@@ -1,202 +1,186 @@
-Return-Path: <linux-pm+bounces-9222-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9221-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2B8A909654
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 08:38:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D32A90963F
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 08:08:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6382B284B76
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 06:38:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CA441F22758
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 06:08:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA42915AC4;
-	Sat, 15 Jun 2024 06:38:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69BBC125BA;
+	Sat, 15 Jun 2024 06:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ZqRx9WEW"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="b/k/ydMj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F1A3D60;
-	Sat, 15 Jun 2024 06:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC33CA6F;
+	Sat, 15 Jun 2024 06:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718433489; cv=none; b=TIm32EBYSwS4i7xNjk7zcUuB4csIIXOL2vPoOtR5ILmqEDrUAjnNA0n3JgneaTf0OIGUMVLyGszkjXyQqictNrTeYl+Mm/vLwjXZnIrdEwfq2cIXW1gtL46h7ELSYVCvAgVs6na7MH3lqhJ+J8PpI3httV4gPvHDgbM3YhsuxrU=
+	t=1718431730; cv=none; b=LUE1kgHL2YRdwiso6hetXxF1JUeLoBBA87uhFeGK3TT3da1RDElrQX99B/G641BYPSd0nxn/0SSsSMMo22bB9Fs6GwNapn7YYvxo57jVmO0NkLilErIrBBa4LjaSWeG5zeGqwbxC5quYuTlnE65JBm02xKkTWKS7LiTcKQtwQpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718433489; c=relaxed/simple;
-	bh=3KCfEoLSbRk49SE6hTMUSazt4vE30jZwifvmCko0MxI=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=J+HkJrq66N69ray4HfiFjLl1eJtCjoNJtPwN3JOZ7SP+LNH6RBI6OqCLY+Ink1JZHffHoKDStDSqDK/rIUyAm+ixGx3P0lxE/llgdAOHnhTRAU5BvjmC+OG+EXvfaXPfNavOiUPh/QCO3H+xbqsxK+/OMGuDDyjHOqA638Q4ZIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ZqRx9WEW; arc=none smtp.client-ip=203.254.224.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240615063802epoutp03937665879767c7bb38a494fd9922b629~ZGiW7zCER1672516725epoutp03U;
-	Sat, 15 Jun 2024 06:38:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240615063802epoutp03937665879767c7bb38a494fd9922b629~ZGiW7zCER1672516725epoutp03U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1718433482;
-	bh=vIwSYtTFXPS3sO38FNNQ6oJ71Y0bLvlrMHrlSuad46E=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=ZqRx9WEWTrFB0xPY+AKKfrl5bDsclQ3TWzUHUdAxvTY441omquggL+KXasoOMm0vb
-	 TT+Pz6KIgcBpV+kxr0393uI0VDMBX9ZwbarTNJXaWh2vxCh9xsvWvGFQaMHx8xlyGI
-	 iz4oghNbkk5GDaB2b8OoCpIX7Wn+XVPM7Cal+B2Q=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-	20240615063801epcas5p14a1910659716b444f56195a7b2ec983b~ZGiWWyQ_Y0633306333epcas5p1F;
-	Sat, 15 Jun 2024 06:38:01 +0000 (GMT)
-Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp4.localdomain
-	(Postfix) with ESMTP id 4W1RKj3gpKz4x9Px; Sat, 15 Jun 2024 06:38:01 +0000
-	(GMT)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240614142920epcas5p15f5887136072ebf6c2e23275dd872861~Y5Uk66YwW0344703447epcas5p15;
-	Fri, 14 Jun 2024 14:29:20 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240614142920epsmtrp2e40951f54cedb283a63bd26a75890a5d~Y5Uk39wd62550925509epsmtrp2Y;
-	Fri, 14 Jun 2024 14:29:20 +0000 (GMT)
-X-AuditID: b6c32a2a-73fff70000004a71-de-666c53c04e95
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	FD.07.19057.0C35C666; Fri, 14 Jun 2024 23:29:20 +0900 (KST)
-Received: from INBRO002756 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20240614142913epsmtip17b1c18bda36c53de5d30099c1e4afd13~Y5UeC7Xu-3016230162epsmtip1U;
-	Fri, 14 Jun 2024 14:29:13 +0000 (GMT)
-From: "Alim Akhtar" <alim.akhtar@samsung.com>
-To: "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>, "'Daniel
- Lezcano'" <daniel.lezcano@linaro.org>, "'Zhang Rui'" <rui.zhang@intel.com>,
-	"'Lukasz Luba'" <lukasz.luba@arm.com>, "'Rob Herring'" <robh@kernel.org>,
-	"'Conor Dooley'" <conor+dt@kernel.org>, "'Guillaume La Roque'"
-	<glaroque@baylibre.com>, "'Krzysztof Kozlowski'" <krzk+dt@kernel.org>,
-	"'Vasily Khoruzhick'" <anarsoul@gmail.com>, "'Chen-Yu Tsai'"
-	<wens@csie.org>, "'Jernej Skrabec'" <jernej.skrabec@gmail.com>, "'Samuel
- Holland'" <samuel@sholland.org>, "'Shawn Guo'" <shawnguo@kernel.org>,
-	"'Sascha Hauer'" <s.hauer@pengutronix.de>, "'Pengutronix	Kernel Team'"
-	<kernel@pengutronix.de>, "'Fabio Estevam'" <festevam@gmail.com>, "'Anson
- Huang'" <Anson.Huang@nxp.com>, "'Thierry Reding'"
-	<thierry.reding@gmail.com>, "'Jonathan Hunter'" <jonathanh@nvidia.com>,
-	"'Dmitry	Baryshkov'" <dmitry.baryshkov@linaro.org>, "'Amit Kucheria'"
-	<amitk@kernel.org>, =?utf-8?Q?'Niklas_S=C3=B6derlund'?=
-	<niklas.soderlund@ragnatech.se>, "'Heiko	Stuebner'" <heiko@sntech.de>,
-	"'Biju Das'" <biju.das.jz@bp.renesas.com>, "'Orson	Zhai'"
-	<orsonzhai@gmail.com>, "'Baolin Wang'" <baolin.wang@linux.alibaba.com>,
-	"'Chunyan Zhang'" <zhang.lyra@gmail.com>, "'Alexandre Torgue'"
-	<alexandre.torgue@foss.st.com>, "'Pascal Paillet'" <p.paillet@foss.st.com>,
-	"'Keerthy'" <j-keerthy@ti.com>, "'Broadcom internal kernel review list'"
-	<bcm-kernel-feedback-list@broadcom.com>, "'Florian Fainelli'"
-	<florian.fainelli@broadcom.com>, "'Scott Branden'" <sbranden@broadcom.com>,
-	"'zhanghongchen'" <zhanghongchen@loongson.cn>, "'Matthias Brugger'"
-	<matthias.bgg@gmail.com>, "'AngeloGioacchino Del Regno'"
-	<angelogioacchino.delregno@collabora.com>, "'Bjorn Andersson'"
-	<andersson@kernel.org>, "'Geert Uytterhoeven'" <geert+renesas@glider.be>
-Cc: <linux-pm@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
-	<linux-sunxi@lists.linux.dev>, <imx@lists.linux.dev>,
-	<linux-tegra@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-	<linux-renesas-soc@vger.kernel.org>, <linux-rockchip@lists.infradead.org>,
-	<linux-stm32@st-md-mailman.stormreply.com>, "'Florian Fainelli'"
-	<f.fainelli@gmail.com>, <linux-rpi-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <cpgs@samsung.com>
-In-Reply-To: <20240614-dt-bindings-thermal-allof-v1-1-30b25a6ae24e@linaro.org>
-Subject: RE: [PATCH 01/22] dt-bindings: thermal: samsung,exynos: specify
- cells
-Date: Fri, 14 Jun 2024 19:59:11 +0530
-Message-ID: <1891546521.01718433481489.JavaMail.epsvc@epcpadp4>
+	s=arc-20240116; t=1718431730; c=relaxed/simple;
+	bh=Xcy1eQQvooP08Rt1AdTuE3S0NjnEw96JreLGuy2W+g4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=MzyviffYkA+HW1FQUXI6muSm9sy6wWwIPDS3RD2eV2Y2D4LzjR0DLE6U43VoEfcEotNSyvaWbGyGxmIG+LFvpRABzUF+JQdhlnen5S9mZQOVLXv6MINWY0FPQBb/1ZdropVW1V0gnaMKKQ6vYhizXgooLkds6qL+7ye6Mxqvt04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=b/k/ydMj; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45F4pb1k012051;
+	Sat, 15 Jun 2024 06:08:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=joR0DuSj5HluPWl2TjMOJ9
+	C6AXoNG2TEka1zEPsj3BI=; b=b/k/ydMjDWHsF5VZDMoe+SSO9UqqUfKnbbePi+
+	tl7NQJrQ2mPlHDokWjTE8ZJ2BWMhw6AV/h3iwlw2T70BeSiqco9Vn/qQheKOnKFS
+	wkwYP0NVV18gm/tyiNuauwWvoujAWJPEZC0ByG7L+0JJGdzlIECEzkqQNK4KnoYo
+	4Q13LZXyEEKE10ddyAgWc37xjITYFxszusZIG7PeHkLeHmdPruMYqp2X2kBOhcFk
+	GJD1dc825hjPGaAA1M8BdoC5RI8EHfGE4dyiYjWq8qcqF0GRrpe6rZPmZH7RD+kJ
+	9adh7m1vGYTWeSetOpZszprNGVK5gzUEtNypgWWk9frjvajQ==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ys0nf8bqp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 15 Jun 2024 06:08:25 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45F68O7S023345
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 15 Jun 2024 06:08:24 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 14 Jun
+ 2024 23:08:24 -0700
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Fri, 14 Jun 2024 23:08:21 -0700
+Subject: [PATCH] cpufreq: powerpc: add missing MODULE_DESCRIPTION() macros
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQGhCdcVAXQc0tvKk5x9QOKQ/J0WewGh/L0BAiWHCW6yHH4lsA==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTdxTG97+9vbfQ1ZSXyQUFTaPZgJXBNtlxGLLgy+6mEYxzyUwUGriC
-	jJbaikPjMuhaMmA4wAn2dhRQxgoUcDBoQd5Sist0QMTZzTgQkAJdE/BtaN2gA7otfPudc57n
-	OefD4XF89UQQ77jsJKOQSTJEhDfe3i8KEfcdzDgWWdPnAy5HGYL+ymzQXJtG0P7FDhipo8Ck
-	TQZ39zUEjUUDOOjNCxgYu4cwcFhCQf84GCqtQ1woGXYR8HzOSsLE7Xhoah/jQIWuFEH1+QoC
-	3JNOLmjHNARcN6kwmKlsQqBmL+FQf6EDBwc7RkC3s42EKh0fWu7bltN6B0m41fkNAbc+v4ng
-	cZEVQZtjDoNH424OlNy9QsLF4R4MCmxTXPi6p5OA/CcsAdUqNQkq9RvwY9k5LpQ/0CHos5/H
-	wd1lJmFq4hwBi6YWHGYm8wmYa5hCMPtDALg69Ti4LMMYfDfeScKCzcR55y3aqDciev43DUnX
-	zepImr03SNDm0RpEX5ls4NL2r9pIumRQTHewoyR9ucuB0S31+QT9u62LoDsmttOtNZ/Rs61a
-	ROeqLmEJQYe9d6QwGcdPMYrXYpO80yomj8ivCrK1PY2cHKTmFyAvHiV8kypW9RMr7Cu8iqie
-	waOe/gbq1++LSQ/7UXVLM8vsvayZRlRtccmqgRCKKfPlPGJl4C80rqOeOn9eLTjCP3Cqdc7A
-	9VgmEPW3NhdfsXgJ91P6R2pshf1WuHBqtY8Lt1JLzabVfQLhdupGo/Zf9qF+0no0HGE4Zb9j
-	/59rq50cz32bKZe9dnkZb/mMOCq3GfNIAijHgJUsRn7smiR2TRK7JoldY6lCeD0KZORKaapU
-	GSV/XcZ8EqGUSJVZstSI5ExpC1p94bAwM+qqfxBhQRgPWRDF44j8BWx1+jFfQYrk9BlGkZmo
-	yMpglBa0gYeLAgQLzqIUX2Gq5CTzMcPIGcV/U4znFZSDiQsTbvzlGnCM2y9aXnSx3dh6d7D6
-	thR921tqijm4N6r29FhDsnSbIeTILxttWXuHN/Gt9HO+7NShkS7/P63vvvrpfLugPjXOp9v8
-	5QvwbGuVMyx8PPSjs+u8AqufGD7Aoj8M7Y8/Ec8e2FnObrHmtRXMzHTwRfO2QEfMdHJ4+qH7
-	0YbBhUneotEwlLfNELm060xp2tMmjbJVoyPfbiu7uSt9T8zRVyLxu2HiskJL9Nl7vUEJUnq9
-	vfA6P1E8nXnBbizdnb14J5jYJHsWm4UnvfRQRJa35ry/f+dS/3ujMXHNcjIEP6yPzdVAxImR
-	Lfucs/LNOvW+AxUPX87anZS4MUOEK9MkUWEchVLyD7bfoqExBAAA
-X-CMS-MailID: 20240614142920epcas5p15f5887136072ebf6c2e23275dd872861
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20240614094638epcas5p115d52130f45e130652b6f1d946358d19
-References: <20240614-dt-bindings-thermal-allof-v1-0-30b25a6ae24e@linaro.org>
-	<CGME20240614094638epcas5p115d52130f45e130652b6f1d946358d19@epcas5p1.samsung.com>
-	<20240614-dt-bindings-thermal-allof-v1-1-30b25a6ae24e@linaro.org>
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240614-md-powerpc-drivers-cpufreq-v1-1-de4034d87fd2@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIANUvbWYC/x3MQQ6CMBAF0KuQWTsJYG2MVzEuSvuRSaTUKSAJ4
+ e5Wl2/zdspQQaZbtZNilSxTLGhOFfnBxSdYQjG1dWtq2xgeA6fpA02eg8oKzezT0ivebMPZXGC
+ ujTWgEiRFL9s/vz+KO5fBnbroh1/5krhsPLo8Q+k4voqZNMaLAAAA
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar
+	<viresh.kumar@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Nicholas
+ Piggin" <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <kernel-janitors@vger.kernel.org>,
+        "Jeff
+ Johnson" <quic_jjohnson@quicinc.com>
+X-Mailer: b4 0.13.0
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: _FUh_ZeRf1uIc4GeoD0tuD7_mU230y_I
+X-Proofpoint-ORIG-GUID: _FUh_ZeRf1uIc4GeoD0tuD7_mU230y_I
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-15_02,2024-06-14_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ adultscore=0 clxscore=1011 suspectscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 mlxlogscore=999 impostorscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406150045
 
-Hi Krzysztof,
+With ARCH=powerpc, make allmodconfig && make W=1 C=1 reports:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cpufreq/ppc-cbe-cpufreq.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cpufreq/powernv-cpufreq.o
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Sent: Friday, June 14, 2024 3:16 PM
-> To: Daniel Lezcano <daniel.lezcano@linaro.org
-.stormreply.com;
-> Subject: [PATCH 01/22] dt-bindings: thermal: samsung,exynos: specify cell=
-s
->=20
-> All Samsung Exynos SoCs Thermal Management Units have only one sensor, so
-> make '#thermal-sensor-cells' fixed at 0.
->=20
-This is not entirely true, there are SoCs which have multiple temp sensors.
-It is true that currently only one sensor support is added though.
+Add the missing invocation of the MODULE_DESCRIPTION() macro to all
+files which have a MODULE_LICENSE().
 
-So we can leave this as is or you suggest to make it to support only one se=
-nsor
-(to match the current DT support), and later (in near future) change it aga=
-in to
-match what HW actually support?
+This includes three additional files which, although they did not
+produce a warning with the powerpc allmodconfig configuration, may
+cause this warning with specific options enabled in the kernel
+configuration.
 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml | =
-3
-> ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/thermal/samsung,exynos-
-> thermal.yaml b/Documentation/devicetree/bindings/thermal/samsung,exynos-
-> thermal.yaml
-> index 1344df708e2d..29a08b0729ee 100644
-> --- a/Documentation/devicetree/bindings/thermal/samsung,exynos-
-> thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.y
-> +++ aml
-> @@ -61,7 +61,8 @@ properties:
->            TRIMINFO at 0x10068000 contains data for TMU channel 2
->      minItems: 1
->=20
-> -  '#thermal-sensor-cells': true
-> +  '#thermal-sensor-cells':
-> +    const: 0
->=20
->    vtmu-supply:
->      description: The regulator node supplying voltage to TMU.
->=20
-> --
-> 2.43.0
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+Corrections to these descriptions are welcomed. I'm not an expert in
+this code so in most cases I've taken these descriptions directly from
+code comments, Kconfig descriptions, or git logs.  History has shown
+that in some cases these are originally wrong due to cut-n-paste
+errors, and in other cases the drivers have evolved such that the
+original information is no longer accurate.
+---
+ drivers/cpufreq/maple-cpufreq.c   | 1 +
+ drivers/cpufreq/pasemi-cpufreq.c  | 1 +
+ drivers/cpufreq/pmac64-cpufreq.c  | 1 +
+ drivers/cpufreq/powernv-cpufreq.c | 1 +
+ drivers/cpufreq/ppc_cbe_cpufreq.c | 1 +
+ 5 files changed, 5 insertions(+)
 
+diff --git a/drivers/cpufreq/maple-cpufreq.c b/drivers/cpufreq/maple-cpufreq.c
+index f9306410a07f..19ca7f874d28 100644
+--- a/drivers/cpufreq/maple-cpufreq.c
++++ b/drivers/cpufreq/maple-cpufreq.c
+@@ -238,4 +238,5 @@ static int __init maple_cpufreq_init(void)
+ module_init(maple_cpufreq_init);
+ 
+ 
++MODULE_DESCRIPTION("cpufreq driver for Maple 970FX Evaluation Board");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/cpufreq/pasemi-cpufreq.c b/drivers/cpufreq/pasemi-cpufreq.c
+index 039a66bbe1be..92a99f09884a 100644
+--- a/drivers/cpufreq/pasemi-cpufreq.c
++++ b/drivers/cpufreq/pasemi-cpufreq.c
+@@ -271,5 +271,6 @@ static void __exit pas_cpufreq_exit(void)
+ module_init(pas_cpufreq_init);
+ module_exit(pas_cpufreq_exit);
+ 
++MODULE_DESCRIPTION("cpufreq driver for PA Semi PWRficient");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Egor Martovetsky <egor@pasemi.com>, Olof Johansson <olof@lixom.net>");
+diff --git a/drivers/cpufreq/pmac64-cpufreq.c b/drivers/cpufreq/pmac64-cpufreq.c
+index 2cd2b06849a2..9d3fe36075f8 100644
+--- a/drivers/cpufreq/pmac64-cpufreq.c
++++ b/drivers/cpufreq/pmac64-cpufreq.c
+@@ -671,4 +671,5 @@ static int __init g5_cpufreq_init(void)
+ module_init(g5_cpufreq_init);
+ 
+ 
++MODULE_DESCRIPTION("cpufreq driver for SMU & 970FX based G5 Macs");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
+index fddbd1ea1635..e923f717e1d7 100644
+--- a/drivers/cpufreq/powernv-cpufreq.c
++++ b/drivers/cpufreq/powernv-cpufreq.c
+@@ -1162,5 +1162,6 @@ static void __exit powernv_cpufreq_exit(void)
+ }
+ module_exit(powernv_cpufreq_exit);
+ 
++MODULE_DESCRIPTION("cpufreq driver for the IBM POWER processors");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Vaidyanathan Srinivasan <svaidy at linux.vnet.ibm.com>");
+diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.c b/drivers/cpufreq/ppc_cbe_cpufreq.c
+index 88afc49941b7..72f568d14f30 100644
+--- a/drivers/cpufreq/ppc_cbe_cpufreq.c
++++ b/drivers/cpufreq/ppc_cbe_cpufreq.c
+@@ -169,5 +169,6 @@ static void __exit cbe_cpufreq_exit(void)
+ module_init(cbe_cpufreq_init);
+ module_exit(cbe_cpufreq_exit);
+ 
++MODULE_DESCRIPTION("cpufreq driver for Cell BE processors");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Christian Krafft <krafft@de.ibm.com>");
 
+---
+base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
+change-id: 20240614-md-powerpc-drivers-cpufreq-6d345e48164e
 
 
