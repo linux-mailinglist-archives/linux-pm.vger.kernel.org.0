@@ -1,80 +1,88 @@
-Return-Path: <linux-pm+bounces-9233-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9234-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D5019099CA
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 22:09:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B52919099CD
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 22:10:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6518A282EC2
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 20:09:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8811C1C210DA
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 20:10:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83BA9179A7;
-	Sat, 15 Jun 2024 20:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF13061FE5;
+	Sat, 15 Jun 2024 20:09:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mob/YZsc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gUK7lec6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36A91DA22;
-	Sat, 15 Jun 2024 20:09:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD3161FC7;
+	Sat, 15 Jun 2024 20:09:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718482190; cv=none; b=GqnmUd4blnzBlrwPcbCm/JeVxoKFBNUyzM3TNS+aqfF+xxXh0wbugn46X5RBvpycVCEH9mnCdedkpeEGVJfD13AQDhEmv8/AS7c6QrBlMbTBlIe+XQWcdnTQ0KwTa6v/MuFpo1HcfA5UpgtmdR/Ch6CSSQON8KDgEERzBKUBJR4=
+	t=1718482193; cv=none; b=hRD1MOV68VS4rJbJMe9Nc6jbF/Kid8rr9hdbEhvLvlIH1uVbwUTSnLSagGZ8QJsi5Mlk2iVinYNSrzxZNQSqlENLj9xNFTIZygBrnMl4jdso2Bx4fQJU18Z7zsoqomzTQczXyG0hMmsGJy0ESsyIDMWQKhz7witQt62Zo6DbdoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718482190; c=relaxed/simple;
-	bh=102A/KOEpDDo/TLDjfeWsbMTt2xvPfW/81dCfzVuQXQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iBABZei+0m8jnHtMvUM2Xpd3kQO0V9d2+xbdJ+W2RMeZCLQWU5Z2N7YXCCJpqObzssgoyGVhKs2rw1JVx4E81crrRq/htoYTTA6j93+r6GizPfiUtj9klw0/WdpxSAIDW3Z96ift6MpjOWvqbhXbn+JNMiIO4F4CwFVJdIhDBfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mob/YZsc; arc=none smtp.client-ip=209.85.128.44
+	s=arc-20240116; t=1718482193; c=relaxed/simple;
+	bh=+ZCC1LjssyKOXgoyALPO/y5fpHApzr2s/7Sn8j4wp9s=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=mFqi2+jrWV7a83Oc1nB2HRNODWoJA3kKFWSmIdTpu/SF5FIfoWkIU4VA2gZt9zVcXZkUdj+JeHiJmmpj4sK336Czsl7x+n4tpKDy2JKpBVttCR7/hMkoREaUgFlVjF7qmKFiFUKRxPDyLfF4wAVdwyCGxv+zloJv9HBxiz7G9cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gUK7lec6; arc=none smtp.client-ip=209.85.208.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-421bb51d81aso25276665e9.3;
-        Sat, 15 Jun 2024 13:09:48 -0700 (PDT)
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2eaafda3b5cso39664571fa.3;
+        Sat, 15 Jun 2024 13:09:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718482187; x=1719086987; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qekzv1Pjxa21XjTH1rMq/F/4yoyBM4XQ1KDN2ub6Y3U=;
-        b=mob/YZscfoQYSP5M1Rwqluyrnghy1iwe891M+31lCdyxT1UNo0nMx7eYi5FvktvTX6
-         5mCNJ/amXCats0ZQ3hljSuaqnVjINzkMaoo3jueosl0tPDy1xyQpbZ82fTAQYBPh2K5E
-         dq5TyiVHk5isJQN0pOw40l3cvlNNbA+wIogwmph9oz1JaJQFnOzf0kIH/90up+Smalod
-         8meiCZeFd4dWahpH/QJ0w0wd65CjMyfXHf/G3jEgj2KILQDCRGxynOaqmwgOvX7K7fs7
-         SAYNHGubYfsQkuJ863QDUldDJ8bIh92pbuCBvMnV5cQd5dUqF8lAUiFmHgRUTimuS3Ix
-         9o9Q==
+        d=gmail.com; s=20230601; t=1718482190; x=1719086990; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YEsbeDNGK/vB8KJ4o8p9x15wpBpC+5Utf0VzUSNFjJE=;
+        b=gUK7lec6jc1itWIv/ciEhBBtNYvUuq+N8V4QrxWD5mErB5AF34rKhr1ZF+s5MdLc1W
+         XJ2pipiQRku7g7P3BBsvW5aanBlhBNmxGJqliVm98RGMWUTi5RRiqWdVB+WZD1lfp+R6
+         xsDPvVY+2mXUDDdUSixtSXf7DuYxBiU/i2Wox8c68Nk3fEN7PtfkZiqIsZWGqCP+cGCR
+         mTVVSYs5f85HJ+mSJJfAj53b2pan2B/qqcKYpfxuNjWMB44M/LZDqAE286/su2PWya5n
+         vInz2vlADZhA5Ebo18CJAd6dbcjDE+8MElKERKZisB9eNVU8JZmtVbAzombf3ziSj7ck
+         TMFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718482187; x=1719086987;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qekzv1Pjxa21XjTH1rMq/F/4yoyBM4XQ1KDN2ub6Y3U=;
-        b=U5ijr8xA1/FutBro1IhZuMykAJ6bv09e2kTaS4dM2whPk38VxJrj7LKQSJ2KO9r4DI
-         FkAgfZfFzL4DpquCQhoFN68RQwgpXfOWAM/tKF+x7UOOBVMkIrZz3c/8RJbInR2Y8QT8
-         eSZE2nDSBOph5Cb5BvqsNzS8j1oqaiufFYVeGHFCFEbrHTfcjBl4XQB8PAgVtWGeWncs
-         NNIoYE2p67efVOcHp7fL1xVq6FX9/CvhzQrYAxT3ayr76HhzoRdBodpy8kipxpukonCF
-         9scfpbESqXNPocrhVxcQgGDEptEvRncOnB+chQ9AQRmp7lMD/n7DcSKkktdngXlxCtWP
-         p43Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUtgm+8lR3LDqwDNFv1NrgE5Md0H4Xx0l/gzR6iNKELG9r6cgovEeZU1xOpIFxuvA7RZ85gaj/bYtxd8dh4LqUowAOkso2YSSvQH3ZLC+OnU+reQT+pd87C9d+enxZlVeCNRr+RbqQ=
-X-Gm-Message-State: AOJu0YxmVBb1WsV8oXxjf/o0r/8jjN5nCy8QAQcnQoBbWgEUhWvGaUXc
-	tgv3tHKVm6GL+eZE7jzZe9aKQ2fpZlv3HmhePEmPiFCue0+Q7h9p
-X-Google-Smtp-Source: AGHT+IF8AwdNHvMmXmn7ytfp7ciNbNtue8N3TYSErskeTv5MR7yIMNh2ZDOSZA+ono5j9A31KVZ/kQ==
-X-Received: by 2002:a05:600c:1e20:b0:421:dd8c:3588 with SMTP id 5b1f17b1804b1-4230482c204mr41595885e9.21.1718482186892;
-        Sat, 15 Jun 2024 13:09:46 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718482190; x=1719086990;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YEsbeDNGK/vB8KJ4o8p9x15wpBpC+5Utf0VzUSNFjJE=;
+        b=vbXXMDUC+Rp3vykYJ/s22NZmCR1TVKR7MdL5UTxxWhjpZ3m7e+Ep6PGinkNd07Q9DQ
+         1zSYxT1QRC/y0jpBsKn0p6FTjdaF3asQrBUZCbgRPxhjQ6Edire0uIq8sHrzaXy6IkJK
+         RM7HrxTbXJSDPVqMleFOB3KiBKzKBMxmtq9J7DDp44kf6TRItp+OA7XKZ2SmQFfgyFbE
+         brihzjpND0mj0339P0GSGLEYWxNEsJo4Hj97jyHvUWrsh2AoqIQ2oADtxjswEmof4kNX
+         3ivltl3CCEwTiau6mf/KayieEdYiWUjUipWW/bWBGMKtYzqOOukRgv/cd1tRjnlWE4w0
+         Awtw==
+X-Forwarded-Encrypted: i=1; AJvYcCWPNN6E4pdZheMHov5oaTget/jRFvuJEMAcJbv7lW8vB5mZjwhdyMMc8JxvviM+IozUM3EOZuoQu9SnPfnjo4kaPpZHkl8scw3vy/aj3ciU2ddCymP3RMBp56h7vFNDun/lZQaBHDdZJ+RKHtzOi1n2/UTqokKafiHu4SQ/5ihhEqw8
+X-Gm-Message-State: AOJu0YwlVHivSiidU81rTBSkg528Q5lVbd+jflfyZVlZmYxb1h78kskr
+	syy6ZkQmxWfnnkXCIa9CFAwxOfqf6qSrTvZfeF2Vz80f+rCoCOKL
+X-Google-Smtp-Source: AGHT+IFyduCJ9OWc4CE+0x8Xtm85FI0A4xvZ4Zf9gCMXQkDV74e2PZGm93JXo5dyn+L2kepz3fo6Hg==
+X-Received: by 2002:a2e:99c8:0:b0:2ec:1f9f:215a with SMTP id 38308e7fff4ca-2ec1f9f2405mr13768011fa.34.1718482189706;
+        Sat, 15 Jun 2024 13:09:49 -0700 (PDT)
 Received: from debian.fritz.box ([93.184.186.109])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-422f641a666sm108510915e9.45.2024.06.15.13.09.45
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-422f641a666sm108510915e9.45.2024.06.15.13.09.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Jun 2024 13:09:46 -0700 (PDT)
+        Sat, 15 Jun 2024 13:09:49 -0700 (PDT)
 From: Dimitri Fedrau <dima.fedrau@gmail.com>
 To: 
 Cc: Dimitri Fedrau <dima.fedrau@gmail.com>,
 	Sebastian Reichel <sre@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH 0/2] power: supply: add support for MAX1720x standalone fuel
-Date: Sat, 15 Jun 2024 22:09:30 +0200
-Message-Id: <20240615200933.162394-1-dima.fedrau@gmail.com>
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: power: supply: add support for MAX17201/MAX17205 fuel gauge
+Date: Sat, 15 Jun 2024 22:09:31 +0200
+Message-Id: <20240615200933.162394-2-dima.fedrau@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240615200933.162394-1-dima.fedrau@gmail.com>
+References: <20240615200933.162394-1-dima.fedrau@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -83,31 +91,71 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Changes to max1721x_battery.c:
-  - reading manufacturer, model name and serial number is only possible
-    when SBS functions of the IC are enabled.(nNVCfg0.enSBS) Factory
-    default is off. Manufacturer is "Maxim Integrated" and the model name
-    can be derived by register MAX172XX_DEV_NAME. Serial number is not
-    available anymore.
-  - According to the datasheet MAX172XX_BAT_PRESENT is at BIT(3) not
-    BIT(4). Furthermore the naming is misleading, when BIT(3) is set the
-    battery is not present.
-  - Removed DeviceName, ManufacturerName and SerialNumber from struct
-    max17211_device_info
+Adding documentation for MAXIMs MAX17201/MAX17205 fuel gauge.
 
-Dimitri Fedrau (2):
-  dt-bindings: power: supply: add support for MAX17201/MAX17205 fuel
-    gauge
-  power: supply: add support for MAX1720x standalone fuel gauge
-
- .../bindings/power/supply/maxim,max1720x.yaml |  51 +++
- drivers/power/supply/Kconfig                  |  12 +
- drivers/power/supply/Makefile                 |   1 +
- drivers/power/supply/max1720x_battery.c       | 324 ++++++++++++++++++
- 4 files changed, 388 insertions(+)
+Signed-off-by: Dimitri Fedrau <dima.fedrau@gmail.com>
+---
+ .../bindings/power/supply/maxim,max1720x.yaml | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max1720x.yaml
- create mode 100644 drivers/power/supply/max1720x_battery.c
 
+diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1720x.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max1720x.yaml
+new file mode 100644
+index 000000000000..4414bc6f214f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/maxim,max1720x.yaml
+@@ -0,0 +1,51 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/supply/maxim,max1720x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Maxim MAX1720x fuel gauge
++
++maintainers:
++  - Dimitri Fedrau <dima.fedrau@gmail.com>
++
++properties:
++  compatible:
++    const: maxim,max1720x
++
++  reg:
++    items:
++      - description: ModelGauge m5 registers
++      - description: Nonvolatile registers
++
++  reg-names:
++    items:
++      - const: m5
++      - const: nvmem
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      max17201@36 {
++        compatible = "maxim,max1720x";
++        reg = <0x36>, <0xb>;
++        reg-names = "m5", "nvmem";
++        interrupt-parent = <&gpio0>;
++        interrupts = <31 IRQ_TYPE_LEVEL_LOW>;
++        status = "okay";
++      };
++    };
 -- 
 2.39.2
 
