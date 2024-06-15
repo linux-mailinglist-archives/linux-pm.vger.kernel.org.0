@@ -1,141 +1,123 @@
-Return-Path: <linux-pm+bounces-9228-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9229-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C12C9098A2
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 16:27:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E3089098AF
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 16:43:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCD1F281EEA
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 14:27:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55E7F1C20D0B
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2024 14:43:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037A049624;
-	Sat, 15 Jun 2024 14:27:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B7231A8F;
+	Sat, 15 Jun 2024 14:43:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="MX4ei3uI"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="uoT0Ppcl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69051E511;
-	Sat, 15 Jun 2024 14:27:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1A01DFD2;
+	Sat, 15 Jun 2024 14:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718461646; cv=none; b=q3VmaNo+KbIg7aY99Ymw51D6bZjrYMQN/q10ooLGjGr+2NJKP0cQvmIOPc3GchlulFgeYIM+FT3bcszTZRRWHuDs/OXc2B0aTh6MxUg6vEbfVqSNhvQU/XuBfIWIBwqRuzguTcUOcqwQtMmPe9SOLEClRd+yTeg+U1tUZLtUbl8=
+	t=1718462630; cv=none; b=McVHNdpAzJFmFcELkyJRE3CneOgS84ReslC4kbr7WWAjF9pDfRTf3x+3TZdSbtdlPgooItBUwTGOvSl9NZCNjlZtlVf1rpvFhki7lqYjpnKJcP/CvgYLNy3AoYZXW96iSR+Xiy4V/0c3FOa2yCj3TzDEE29vWd7JedbRXfGRGJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718461646; c=relaxed/simple;
-	bh=o/SQd+brB2QkhekD2Nrpw7e1Fn3IUdRHYI44H3HScPI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XSVZPOKaC31DOEnrvHMMWoMnrFqgyqs1hyCEvAvaFsd3heT29vtj3WVJF3qy53o2hR9juUcNBxnGIWhGbCS3Ifk5ImVuHtI7GAdgxCoehSN2/F+w3ikCAcPWcxHtv4pU/cC07E6C4f6yhCfEf1rxyndOKk8uYyTtU3oWVPookkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=MX4ei3uI; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=WMV4XdfigA9k42kYaaxbDI3Cm/CZfKkOSa4d9FAnLBU=; b=MX4ei3uInKB1tI7JcTqP72OeAy
-	dAOfULdNDyKssbwffE64lKqDt1qPcRwnmYki7uISHpalFK3Sjz+iistgd0XgbiGLtzs89mevgmISM
-	ImrsPYaQpLvEw5Phh/i3yvlf7inlN3S0pzbU9GojESRqQ8uAeFXUZJUkow9Fm+H/1X8oBu/mLnmRq
-	9KaqOzmhz1xLB1XksP4LJz8QjpGXNQ/awK+/Fm/9fA5aTCEzGfHyVwaUPxr/l/qe+aq/QXFM3w+YG
-	EVkOwrIShH1qhBOmLK+G7AsdGnZ871aaaCCVzH2vqnFOpwV4pDOcfLcGzWTk+QUOVhhlilPvTeTZk
-	szS/VgLg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:40990)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1sIUMt-0003Oz-1J;
-	Sat, 15 Jun 2024 15:26:59 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1sIUMc-00039D-Bw; Sat, 15 Jun 2024 15:26:42 +0100
-Date: Sat, 15 Jun 2024 15:26:42 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: K Prateek Nayak <kprateek.nayak@amd.com>
-Cc: linux-kernel@vger.kernel.org,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Guo Ren <guoren@kernel.org>,
-	Michal Simek <monstr@monstr.eu>, Dinh Nguyen <dinguyen@kernel.org>,
-	Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Andrew Donnellan <ajd@linux.ibm.com>,
-	Benjamin Gray <bgray@linux.ibm.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Xin Li <xin3.li@intel.com>, Kees Cook <keescook@chromium.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Tony Battersby <tonyb@cybernetics.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Brian Gerst <brgerst@gmail.com>, Leonardo Bras <leobras@redhat.com>,
-	Imran Khan <imran.f.khan@oracle.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Rik van Riel <riel@surriel.com>,
-	Tim Chen <tim.c.chen@linux.intel.com>,
-	David Vernet <void@manifault.com>,
-	Julia Lawall <julia.lawall@inria.fr>, linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
-	x86@kernel.org
-Subject: Re: [PATCH v2 00/14] Introducing TIF_NOTIFY_IPI flag
-Message-ID: <Zm2kouKx/NSSrr6x@shell.armlinux.org.uk>
-References: <20240613181613.4329-1-kprateek.nayak@amd.com>
+	s=arc-20240116; t=1718462630; c=relaxed/simple;
+	bh=8RJiP7FCS0sZfvR0laSimR4Ji9IM/l5QeRHx0jchhYg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HyiiPKTq2AwDPKqJQRNKQ1ahxZE+ruWxciKdQ3tD3Cl9BtTNPAZcGxPh1Yo9Jr+Z72qfBPIw4PKAo4zVbClIDzvILdDB4HYL/XL7Ip1zS4QWRYDk0psskS9EIRUHRZXmje+oj9I1dehxQQLDIhOO7z+Lr6k5mkm73Vc7b9f5z7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=uoT0Ppcl; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45FEhhBR001041;
+	Sat, 15 Jun 2024 09:43:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1718462623;
+	bh=ZyID5zbcPnMF1p3meO7TvGheIaJkcI0vPW1j4oZrrTo=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=uoT0PpclgzKfRb3UTM6Iss229Y4eOow6uMDmwMgAYgFj/ILc5wbL1UC3OotfhsII7
+	 K+GBAhqJbfEay9OeNFvdlSQiHfQaq2nsRt7Z4jdF1MuoovWp7K/9MMoevQBpmiDOky
+	 PJUpRMVTqoT+ysyxe9PPHYYuMJNOjKohcomXOgC0=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45FEhheE128645
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Sat, 15 Jun 2024 09:43:43 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sat, 15
+ Jun 2024 09:43:42 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Sat, 15 Jun 2024 09:43:42 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45FEhgaZ022894;
+	Sat, 15 Jun 2024 09:43:42 -0500
+Date: Sat, 15 Jun 2024 09:43:42 -0500
+From: Bryan Brattlof <bb@ti.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar
+	<viresh.kumar@linaro.org>, Lee Jones <lee@kernel.org>,
+        Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra
+	<vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>, Vibhore Vardhan
+	<vibhore@ti.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 3/5] dt-bindings: mfd: syscon: add TI's opp table
+ compatible
+Message-ID: <20240615144342.5gjgp3rt3ewfbfu2@bryanbrattlof.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+References: <20240612-ti-opp-updates-v2-0-422b6747a254@ti.com>
+ <20240612-ti-opp-updates-v2-3-422b6747a254@ti.com>
+ <faf04961-f8ac-446c-a558-42ef6e98b3ac@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20240613181613.4329-1-kprateek.nayak@amd.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <faf04961-f8ac-446c-a558-42ef6e98b3ac@kernel.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Thu, Jun 13, 2024 at 06:15:59PM +0000, K Prateek Nayak wrote:
-> o Dropping the ARM results since I never got my hands on the ARM64
->   system I used in my last testing. If I do manage to get my hands on it
->   again, I'll rerun the experiments and share the results on the thread.
->   To test the case where TIF_NOTIFY_IPI is not enabled for a particular
->   architecture, I applied the series only until Patch 3 and tested the
->   same on my x86 machine with a WARN_ON_ONCE() in do_idle() to check if
->   tif_notify_ipi() ever return true and then repeated the same with
->   Patch 4 applied.
+On June 13, 2024 thus sayeth Krzysztof Kozlowski:
+> On 13/06/2024 01:17, Bryan Brattlof wrote:
+> > The JTAG_USER_ID_USERCODE efuse address, which is located inside the
+> > WKUP_CTRL_MMR0 range holds information to identify the speed grades of
+> > various components on TI's K3 SoCs. Add a compatible to allow the
+> > cpufreq driver to obtain the data to limit the maximum frequency for the
+> > CPUs under Linux control.
+> > 
+> > Signed-off-by: Bryan Brattlof <bb@ti.com>
+> > ---
+> >  Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> > index 7ed12a938baa3..ab1fcbe2148f7 100644
+> > --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
+> > +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> > @@ -88,6 +88,7 @@ properties:
+> >                - rockchip,rv1126-qos
+> >                - starfive,jh7100-sysmain
+> >                - ti,am62-usb-phy-ctrl
+> > +              - ti,am62-opp-efuse-table
+> 
+> These are ordered alphabetically.
+> 
 
-Confused. ARM (32-bit) or ARM64? You patch 32-bit ARM, but you don't
-touch 64-bit Arm. "ARM" on its own in the context above to me suggests
-32-bit, since you refer to ARM64 later.
+Ha! I guess I don't know how to spell after all :)
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+~Bryan
 
