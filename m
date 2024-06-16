@@ -1,193 +1,202 @@
-Return-Path: <linux-pm+bounces-9244-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9245-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0F27909BE2
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Jun 2024 08:19:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A100909C14
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Jun 2024 09:27:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF020285925
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Jun 2024 06:19:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F8FDB20FAB
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Jun 2024 07:27:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F4B4154C18;
-	Sun, 16 Jun 2024 06:19:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03DEC178388;
+	Sun, 16 Jun 2024 07:27:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LbQIclfW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nOOEEfm5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3253DA48;
-	Sun, 16 Jun 2024 06:19:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F1916DEB4;
+	Sun, 16 Jun 2024 07:27:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718518767; cv=none; b=lFv7VudRA60iv9LL6Ukt6Oex8WmaJ6doWgMqSXeaiTcfqwn8AiIpHQULUbYUt68PVGz4VJ381Zay5iRkrNQYKA8YyKADOj6XhkrC2netPisawkoGvRXAKqBPgRke3S0CcMh77qyMfvkFF62sg4LrxevtWE+SSHyxD9IxwGaipc8=
+	t=1718522846; cv=none; b=ZdWIpxekeP5vDzNUrlvrQUkEaFg0WEVFYd3HS3VWIvRLk8CoxJx/IQZ0/qjp44WudK8f5rQZxlJgoFaEZuv8BA9UGQmq2MCHoIPatQ/vGhVwOffR7shyfl5U8p/aKWUXnkbqZ3ppQ9TfSgAd6G5w+NWTZh2Y9edYQzCGPuswtRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718518767; c=relaxed/simple;
-	bh=eR334SinLzQ+m0ceSXxW/09Jr39c6Kunxp9mKOIQGDc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=e35tpPryHpdKVZd3N2IoD43XyR9WKTg/I9zc6sJPVRkbGcgjKzbduCycRpI6IJzKnHjvDMWL/Zh4gt9ZwoC7AdsBHoSUq973I+EnGMhYDX5PwShp2dVhrbPgZCPDNHQHDTqLNNjWVXF2c+58wiE20iub5x82oKdTh/Sq1cjXHHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LbQIclfW; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718518765; x=1750054765;
-  h=date:from:to:cc:subject:message-id;
-  bh=eR334SinLzQ+m0ceSXxW/09Jr39c6Kunxp9mKOIQGDc=;
-  b=LbQIclfW+BQPfTaqn1Kbrs+S0FmftVBFyYBsTaY+Wu3w7jxEvpZsAkXC
-   emOg+Hwtospx7romp1EM26Spe8QI/wNamr6C1EGd/6Y45uqbwnb0Jlahn
-   16A7OyOVPNa58IT/9TSXDTGy1gWn10KAXWmgvNyWv1bI4DiMcsvsOkZ3V
-   DzebwVk9wSlyVRJjrQgAgm8kVY7mEW2mHARC8dSN8paCB6bGauJq/Nkcl
-   hyuVfjHWGd4jUqXw/NcxQJvkdnu0/jPjUL66rLVRREEaCLpl/n7mwUuPQ
-   Z2SachYo7YA6CyGbFmgkXrBua87e/sIqftgdK9AmFdeTKE/Ezq+xeozQ8
-   Q==;
-X-CSE-ConnectionGUID: EanBU8BnQfql5rPNTQ2jfA==
-X-CSE-MsgGUID: C6iV6OGzTee8tqGxN0Vdyg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11104"; a="15244096"
-X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
-   d="scan'208";a="15244096"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2024 23:19:24 -0700
-X-CSE-ConnectionGUID: ymagtvh2Ruy91KT42bZOwg==
-X-CSE-MsgGUID: 174ftz48T4iRW8TjF775VQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
-   d="scan'208";a="40772400"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 15 Jun 2024 23:19:23 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sIjEX-00014H-0m;
-	Sun, 16 Jun 2024 06:19:21 +0000
-Date: Sun, 16 Jun 2024 14:18:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 77f816ac2ebc44cb23e4581d78933ee5dd2876b4
-Message-ID: <202406161435.TFgAvZdH-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1718522846; c=relaxed/simple;
+	bh=FjDsLsQwyUjZvEGR1oYiWuxX3oroRTwk3tBNVXECc14=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JQ0Y5CfkPK0IzWjfs1FGNY7xkjBrVtI6bqWDB2cFPP+hSVQm7hLn4+Ao2n0tUPDUzaOjldq5yOYEd6VDq2gfpSXwzrLw3wStBo4oEsK6cReJD2sEJxuefQfTG2K6FG4W76MGO3XIAmEnREqpLA6enkIS4i7tPb/32kbLkX15RXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nOOEEfm5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05D5FC2BBFC;
+	Sun, 16 Jun 2024 07:27:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718522846;
+	bh=FjDsLsQwyUjZvEGR1oYiWuxX3oroRTwk3tBNVXECc14=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=nOOEEfm54Md7UjVMe47LM2kZRyPLdnCmWXaYMGy+8Ymv3MIgNZO+NU6sGhM5aj4ri
+	 aFAkAr8eglJ4wcumSTAMun6PuJIf96E9aKCn+zcG03Uv0GLpOMEoMtoGkQ6l+KJIF2
+	 4bhGYhglKqdQMW3mapyBro0oCL2Uz/15mnVY8OzZoBpNxhvNH2L+8Wit1dLBUlzZn3
+	 z35bya0SxnBH2OnjPjN2sfbtfWBIFuKF13kqw0dp9Nono/Ssohvlbuua2gNGmZuGj8
+	 x/jFwMdXGuFarqGVAgujmHPkEir+tPUp4XEKg+1ymt+KNbNkZ4OgMHh5rOtFZlH6i2
+	 ZaKvppWmEThog==
+Message-ID: <ee0cd414-206c-48c9-aee2-06e24e0b981c@kernel.org>
+Date: Sun, 16 Jun 2024 09:27:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] dt-bindings: power: supply: add support for
+ MAX17201/MAX17205 fuel gauge
+To: Dimitri Fedrau <dima.fedrau@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240615203352.164234-1-dima.fedrau@gmail.com>
+ <20240615203352.164234-2-dima.fedrau@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240615203352.164234-2-dima.fedrau@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 77f816ac2ebc44cb23e4581d78933ee5dd2876b4  Merge branch 'thermal-core-fixes' into bleeding-edge
+On 15/06/2024 22:33, Dimitri Fedrau wrote:
+> Adding documentation for MAXIMs MAX17201/MAX17205 fuel gauge.
+> 
 
-elapsed time: 2161m
+Three patchsets within 30 minutes. No changelog et all.
 
-configs tested: 99
-configs skipped: 2
+Slow down (one posting per 24h) to give people chances to review. Then
+provide changelog under --- and describe what happened.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Signed-off-by: Dimitri Fedrau <dima.fedrau@gmail.com>
+> ---
+>  .../bindings/power/supply/maxim,max1720x.yaml | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max1720x.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1720x.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max1720x.yaml
+> new file mode 100644
+> index 000000000000..4414bc6f214f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max1720x.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/maxim,max1720x.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Maxim MAX1720x fuel gauge
+> +
+> +maintainers:
+> +  - Dimitri Fedrau <dima.fedrau@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: maxim,max1720x
 
-tested configs:
-arc                   randconfig-001-20240615   gcc-13.2.0
-arc                   randconfig-002-20240615   gcc-13.2.0
-arm                   randconfig-001-20240615   clang-19
-arm                   randconfig-002-20240615   clang-19
-arm                   randconfig-003-20240615   gcc-13.2.0
-arm                   randconfig-004-20240615   gcc-13.2.0
-arm64                 randconfig-001-20240615   clang-19
-arm64                 randconfig-002-20240615   gcc-13.2.0
-arm64                 randconfig-003-20240615   clang-17
-arm64                 randconfig-004-20240615   gcc-13.2.0
-csky                  randconfig-001-20240615   gcc-13.2.0
-csky                  randconfig-002-20240615   gcc-13.2.0
-hexagon               randconfig-001-20240615   clang-19
-hexagon               randconfig-002-20240615   clang-19
-i386         buildonly-randconfig-001-20240615   clang-18
-i386         buildonly-randconfig-002-20240615   gcc-9
-i386         buildonly-randconfig-003-20240615   gcc-7
-i386         buildonly-randconfig-004-20240615   clang-18
-i386         buildonly-randconfig-005-20240615   clang-18
-i386         buildonly-randconfig-006-20240615   gcc-13
-i386                  randconfig-001-20240615   clang-18
-i386                  randconfig-002-20240615   gcc-13
-i386                  randconfig-004-20240615   clang-18
-i386                  randconfig-005-20240615   clang-18
-i386                  randconfig-006-20240615   clang-18
-i386                  randconfig-011-20240615   clang-18
-i386                  randconfig-012-20240615   gcc-12
-i386                  randconfig-013-20240615   gcc-13
-i386                  randconfig-014-20240615   clang-18
-i386                  randconfig-015-20240615   clang-18
-i386                  randconfig-016-20240615   gcc-13
-loongarch             randconfig-001-20240615   gcc-13.2.0
-loongarch             randconfig-002-20240615   gcc-13.2.0
-nios2                 randconfig-001-20240615   gcc-13.2.0
-nios2                 randconfig-002-20240615   gcc-13.2.0
-openrisc                          allnoconfig   gcc-13.2.0
-openrisc                            defconfig   gcc-13.2.0
-parisc                            allnoconfig   gcc-13.2.0
-parisc                              defconfig   gcc-13.2.0
-parisc                randconfig-001-20240615   gcc-13.2.0
-parisc                randconfig-002-20240615   gcc-13.2.0
-parisc64                            defconfig   gcc-13.2.0
-powerpc                           allnoconfig   gcc-13.2.0
-powerpc               randconfig-001-20240615   clang-19
-powerpc               randconfig-002-20240615   clang-19
-powerpc               randconfig-003-20240615   clang-19
-powerpc64             randconfig-001-20240615   clang-19
-powerpc64             randconfig-002-20240615   clang-19
-powerpc64             randconfig-003-20240615   clang-19
-riscv                             allnoconfig   gcc-13.2.0
-riscv                               defconfig   clang-19
-riscv                 randconfig-001-20240615   clang-19
-riscv                 randconfig-002-20240615   gcc-13.2.0
-s390                              allnoconfig   clang-19
-s390                                defconfig   clang-19
-s390                  randconfig-001-20240615   clang-16
-s390                  randconfig-002-20240615   clang-19
-sh                                allnoconfig   gcc-13.2.0
-sh                                  defconfig   gcc-13.2.0
-sh                    randconfig-001-20240615   gcc-13.2.0
-sh                    randconfig-002-20240615   gcc-13.2.0
-sparc                             allnoconfig   gcc-13.2.0
-sparc                               defconfig   gcc-13.2.0
-sparc64                             defconfig   gcc-13.2.0
-sparc64               randconfig-001-20240615   gcc-13.2.0
-sparc64               randconfig-002-20240615   gcc-13.2.0
-um                                allnoconfig   clang-17
-um                                  defconfig   clang-19
-um                             i386_defconfig   gcc-13
-um                    randconfig-001-20240615   gcc-7
-um                    randconfig-002-20240615   gcc-11
-um                           x86_64_defconfig   clang-15
-x86_64       buildonly-randconfig-001-20240615   gcc-9
-x86_64       buildonly-randconfig-002-20240615   clang-18
-x86_64       buildonly-randconfig-003-20240615   clang-18
-x86_64       buildonly-randconfig-004-20240615   clang-18
-x86_64       buildonly-randconfig-005-20240615   gcc-9
-x86_64       buildonly-randconfig-006-20240615   clang-18
-x86_64                randconfig-001-20240615   gcc-13
-x86_64                randconfig-002-20240615   gcc-8
-x86_64                randconfig-003-20240615   gcc-13
-x86_64                randconfig-004-20240615   gcc-13
-x86_64                randconfig-005-20240615   gcc-13
-x86_64                randconfig-006-20240615   gcc-8
-x86_64                randconfig-011-20240615   clang-18
-x86_64                randconfig-012-20240615   gcc-13
-x86_64                randconfig-013-20240615   clang-18
-x86_64                randconfig-014-20240615   clang-18
-x86_64                randconfig-015-20240615   clang-18
-x86_64                randconfig-016-20240615   clang-18
-x86_64                randconfig-071-20240615   clang-18
-x86_64                randconfig-072-20240615   clang-18
-x86_64                randconfig-073-20240615   gcc-7
-x86_64                randconfig-074-20240615   gcc-13
-x86_64                randconfig-075-20240615   clang-18
-x86_64                randconfig-076-20240615   gcc-13
-xtensa                            allnoconfig   gcc-13.2.0
-xtensa                randconfig-001-20240615   gcc-13.2.0
-xtensa                randconfig-002-20240615   gcc-13.2.0
+Nope, this must be specific.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Filename follows compatible then.
+
+> +
+> +  reg:
+> +    items:
+> +      - description: ModelGauge m5 registers
+> +      - description: Nonvolatile registers
+> +
+> +  reg-names:
+> +    items:
+> +      - const: m5
+> +      - const: nvmem
+> +
+> +  interrupts:
+> +    maxItems: 1
+
+This is incomplete. Missing battery and probably more... Look how other
+bindings are written.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      max17201@36 {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+> +        compatible = "maxim,max1720x";
+> +        reg = <0x36>, <0xb>;
+> +        reg-names = "m5", "nvmem";
+> +        interrupt-parent = <&gpio0>;
+> +        interrupts = <31 IRQ_TYPE_LEVEL_LOW>;
+> +        status = "okay";
+
+Drop
+
+Best regards,
+Krzysztof
+
 
