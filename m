@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-9343-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9344-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AFAD90B3AE
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 17:15:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FDB190B41A
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 17:25:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 747821C20DCB
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 15:15:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A2261F273C2
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 15:25:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04516158A0C;
-	Mon, 17 Jun 2024 14:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BC68160883;
+	Mon, 17 Jun 2024 14:50:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lei0cceb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iJFvSGFt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544F6158A05;
-	Mon, 17 Jun 2024 14:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6515C16A949;
+	Mon, 17 Jun 2024 14:50:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718634865; cv=none; b=rDi7wo4Q6/z4GYIhcPah82l7j5+YFjiV/M2KFNH6KW+xzp4E9bSItQPWX/nbiIno2RZ8gsPi07G6xmuyW4Mv4/EA1OiCekCQFhut0NSa/chc7X49U3TUlzPzVdi8wh8d6hiuFueTmmK7WcE46dW4mhsYOlQLRN9hk3VCTWb/rCM=
+	t=1718635857; cv=none; b=VNReNHQUAqIEE4dslj09uX5OTJAbYogcAz/aI/acQlDFZdmRShl+wO5IJskah/ovy11t5IG4KKRlLN9RgvXtxoge7M3uC/JUzodCF+DnLegq5FZvQ9MYJBKKVQ+++6ZMmNbOQDBw+G9/1AQ8J78iOcL/fV/yeN4yl2Gvs3vyX6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718634865; c=relaxed/simple;
-	bh=ZKJwrIUAmTGAy/3mB7JoVGjUX5G4W0v5y/X/v0PChhU=;
+	s=arc-20240116; t=1718635857; c=relaxed/simple;
+	bh=ji2gr3OUItz8IUriY5KGessBCcc7eVzh5gqFGiSaWD0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jpA+VamP8UhhMt5j9vvpTgHHqfWd6INlMCFI1/cCZ1RSLw9a9mxBo9/dWy8PFzajiW3mibH5ZbtK7e1fR/8/+aJNaRWH89rha4wpyKm1simVqzXrNIGzVtm6EybgA61yU49KCQpafQN1ub0jUKWLOWpDcsAViFL8bf5mDMmwuRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lei0cceb; arc=none smtp.client-ip=198.175.65.9
+	 In-Reply-To:Content-Type; b=is5FIsCIqh1j7B+87NSyb+f4pvR8XUID3bTQ5DFvapi0ccJUgwwJe1my7zE4g053Je5hcmAnSVP5DdbLnuzlcGXbQmKrN5ribGkyvr+ZVRZsR/RncuzxAZR9U5jdS7fG6Q0h8UbVm47LTgRs7mDHLdmABFLZtOr/GQfAH530WWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iJFvSGFt; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718634865; x=1750170865;
+  t=1718635856; x=1750171856;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=ZKJwrIUAmTGAy/3mB7JoVGjUX5G4W0v5y/X/v0PChhU=;
-  b=Lei0ccebDtGN3on9kEr668xnJ8+wTfVVKmVIPoaMLFGMDjT2PQT7x94P
-   osDEYurt+iYWO5ip4edzfXQRQcOSlz3lTYKS4BgvEXtNDYBp0a6j2iNx1
-   RxSaTdx9xCVDatnCMFyX7Jalw9tAgEXx2pfJgJ4GyU/lSCsoT/hgNlNkF
-   /d/AJx3byGA71rMv4wqgstL5ssbLKFcf/oKpAqJb26JvRIUgVy2/JlLC+
-   PUx12W7JuzohebZUKyqjYSGpPm8XJ7SwUJeVqVlIjuFRuuf+O+Og+9tdh
-   Pw3beCRnFQcCNvEHQ5P9fAJjJvvrEF+LwfPagVaL5DN7mSimVBFn8dEdA
-   g==;
-X-CSE-ConnectionGUID: u8xsUioSQb65FG1maZkvpw==
-X-CSE-MsgGUID: f2+GpwkQT1+oUK0O1hvwKg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="37984591"
+  bh=ji2gr3OUItz8IUriY5KGessBCcc7eVzh5gqFGiSaWD0=;
+  b=iJFvSGFtJmOVlJg1bLTyQCTj+Zj7hjEag2eS1pcwFJj9dOV66ZVzJuTX
+   Va9XAsAAwZkybJo3pDn6VN+bmfJwDOPu+uAAnv20Q5l4mgmOQhQH4fahl
+   ikZkzh42kT3C7bzeaNav/ASOouY9GELYnEyMLbZukDexeF6cGdZnE8w5r
+   9BTxmQM2O573MoyFw4JFNUkygpIXXEnSY1knPojPhZ8P5l4j5EiNn9qw3
+   19qJi6nWVMi+AN0S2X1aAIjwC6QZzi/Vl9ne5gZ3RfvXdA1vg3kBKqD2T
+   9TzNlZpHymQWRSVa7YnudEuc16PVM79C2uvoGWQW0q+umXnbqcyKF5jRq
+   Q==;
+X-CSE-ConnectionGUID: clMEeHonStGtnPLwMxXcWA==
+X-CSE-MsgGUID: 2iR1OZgRQvqXyTSCLzqzVQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="15589475"
 X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
-   d="scan'208";a="37984591"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 07:34:24 -0700
-X-CSE-ConnectionGUID: RpvlZVImTSStEq7PjpiMag==
-X-CSE-MsgGUID: 8bol3vIoScW2A36f63cf3g==
+   d="scan'208";a="15589475"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 07:50:55 -0700
+X-CSE-ConnectionGUID: B/77jqxFTfG0jOBQO/EB7Q==
+X-CSE-MsgGUID: V84zeNX7RqCHglRue/rN+g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
-   d="scan'208";a="46141848"
+   d="scan'208";a="41314816"
 Received: from kinlongk-mobl1.amr.corp.intel.com (HELO [10.125.111.154]) ([10.125.111.154])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 07:34:24 -0700
-Message-ID: <805fa8d2-c920-415c-8db5-f073607f9e6a@intel.com>
-Date: Mon, 17 Jun 2024 07:34:22 -0700
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 07:50:54 -0700
+Message-ID: <7c4978b4-ac69-480e-b8cf-a473b64ed917@intel.com>
+Date: Mon, 17 Jun 2024 07:50:53 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,10 +67,9 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH PATCH 9/9] x86/rfds: Exclude P-only parts from the RFDS
- affected list
-To: Andrew Cooper <andrew.cooper3@citrix.com>,
- Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+Subject: Re: [PATCH PATCH 3/9] perf/x86/intel: Use topology_cpu_type() to get
+ cpu-type
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
  Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
  Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
  x86@kernel.org
@@ -80,10 +79,10 @@ Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
  "Rafael J. Wysocki" <rafael@kernel.org>,
  Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ Andrew Cooper <andrew.cooper3@citrix.com>
 References: <20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com>
- <20240617-add-cpu-type-v1-9-b88998c01e76@linux.intel.com>
- <d7c70d92-4d19-4c1e-81c9-d4c0cd34eda8@citrix.com>
+ <20240617-add-cpu-type-v1-3-b88998c01e76@linux.intel.com>
 From: Dave Hansen <dave.hansen@intel.com>
 Content-Language: en-US
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -129,25 +128,19 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <d7c70d92-4d19-4c1e-81c9-d4c0cd34eda8@citrix.com>
+In-Reply-To: <20240617-add-cpu-type-v1-3-b88998c01e76@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 6/17/24 02:43, Andrew Cooper wrote:
-> On 17/06/2024 10:12 am, Pawan Gupta wrote:
->> +	VULNBL_INTEL_CPU_TYPE (RAPTORLAKE,	X86_CPU_TYPE_INTEL_ATOM,	RFDS),
->> +	VULNBL_INTEL_CPU_TYPE (ALDERLAKE,	X86_CPU_TYPE_INTEL_ATOM,	RFDS),
-> 
-> How does this work?
-> 
-> Being __initconst, this is only evaluated on the BSP.
-> 
-> P-only and mixed P/E systems won't see X86_CPU_TYPE_INTEL_ATOM, even if
-> there are ATOM APs to bring up later.
+On 6/17/24 02:11, Pawan Gupta wrote:
+> find_hybrid_pmu_for_cpu() uses get_this_hybrid_cpu_type() to get the CPU
+> type, but it returns an invalid cpu-type when X86_FEATURE_HYBRID_CPU is not
+> set. Some hybrid variants do enumerate cpu-type regardless of
+> X86_FEATURE_HYBRID_CPU.
 
-The X86_CPU_TYPE_* is only used on the boot CPU on non-hybrids.  Hybrids
-(independent of the boot CPU type) should be considered vulnerable no
-matter what.
+I'm not fully sure what point this is trying to make.
 
+Is this trying to make the case that get_this_hybrid_cpu_type() and
+topology_cpu_type() are equivalent or pointing out a difference?
 
 
