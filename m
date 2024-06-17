@@ -1,189 +1,169 @@
-Return-Path: <linux-pm+bounces-9270-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9271-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 867A690A274
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 04:33:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E58F90A285
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 04:36:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79A971C20C1E
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 02:33:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E6C4282D3E
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 02:36:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB59176AAB;
-	Mon, 17 Jun 2024 02:33:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C42D17836E;
+	Mon, 17 Jun 2024 02:36:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="O4L23uCJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UI1bCvAX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66441D688;
-	Mon, 17 Jun 2024 02:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6419C176AC6;
+	Mon, 17 Jun 2024 02:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718591610; cv=none; b=BxFAlNb6EkFjgewt3BtqTnJs8tBSOYRAD75NLhYsE92glpltLHoQUAShpEvGUtbsA2Vg24aphRp0bcTR8zrZ8EbkBJovn8fERoicxei35n4oT9+dD4CkBr5GxNLL4x5Ul9IhiBIQ8YjwCd5dLPC8wYWuSPBI0QsxveVKpnL9L2w=
+	t=1718591796; cv=none; b=XpNBj8/BGiNmJQLTMG/7dVkXabJIQpu28YZFfUBrOBcCAb9SLYBfdMN86dHT/I36kGofcGJhRmW7eu0AORv2ctdgb+QhFYutHLp9UEaJ4a6mNjhiitKuRbXXw0Mn/xpLQBL/KzSmLm3Ch+cRII3iflXNvvmwyngZh+cvLTg6rrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718591610; c=relaxed/simple;
-	bh=qaFSTf4i2+sKzqy8gjlfepEibO50gXL5g34SjDmJK4Y=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=F3W2vZr6JV0WWEwGa6mgr9nM+h5O/0b7Va0zhnlUVgBcQ0arnuWbP9JuktNW7ZEzt2Zh1YeObBQxMevqfVJtmRn+K+8A6dR7/eUqk7tzb8C9fPsM6QgRm4MZQz+iKqpa3Wg0f1UHr9TAk+uWCzHmUaCsFqfxRd4Do9J1SI2Yj64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=O4L23uCJ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45H0gIgn006046;
-	Mon, 17 Jun 2024 02:33:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	BUxdAQ+4gkK2RsZVXrsfQ3prcjR0pCCbZg7YdNgHnZc=; b=O4L23uCJpN00qNnb
-	e8DBCv9tbawBzpwTroUfjXtZuHHngNPrZo3Jur9s/kUqPvgp+3ZwXto1c1tcTWvG
-	tT5MZVadMIJ1XTfPbyi40j8iVI1g8lPdF9APHGorKmGFYIAqa25xxt/SPPs+cVSi
-	STP01NHEdil1pQW8v0tChiKKbnB9IAV+neaSZQrabDDodilkywgnKfVpeKZOq0WT
-	O50u1an79w6d0br5NhzyKV5W4WQpGx1kmuzHe/J0m53WSE4yR7VNP5L1enfxAO1h
-	ntg3XbwXIeyszSw1fyIeoeu5BoRCg6aKZlaD/bDCgRK/SdbtDxQewhGnUEdP8G+R
-	08qd+g==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ys31u2hfa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 17 Jun 2024 02:33:18 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45H2XGIW014275
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 17 Jun 2024 02:33:16 GMT
-Received: from [10.216.59.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 16 Jun
- 2024 19:33:08 -0700
-Message-ID: <93a67151-02fa-4c53-8d6e-0ed1600128bf@quicinc.com>
-Date: Mon, 17 Jun 2024 08:01:51 +0530
+	s=arc-20240116; t=1718591796; c=relaxed/simple;
+	bh=lczObmd9t5CNOLsW1w8BAFRVJ0CtUEDoyScV7EOYG6w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kDvdOEQgCSp2S1RGhfRLVVNms+kfnku7e01XNzbvX6oi1SyTBMM2mAO45qh0BRGHPPApa23z6MbRq06n2gjE0XCqQ1v0O2bcvc9UBaFhpxARUbzTlnAfZgmnF46YCXOas1YWMilPAnZztJP2sWeQy/r+sBfwdXwCC2jrEeIf5Nk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UI1bCvAX; arc=none smtp.client-ip=209.85.160.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-25075f3f472so544980fac.2;
+        Sun, 16 Jun 2024 19:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718591794; x=1719196594; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3S2YurUrl5MC+fkMuKFY0ClzSCLEfz1Oc40ER8vtAUk=;
+        b=UI1bCvAXcT8oFawrgPKV7R7V1Y1l9hihWGu2H359gjJ86/mdhD10RbY13jKDplo6/f
+         j4V84YzGTTu7GMT1ujD373FYRNeHQFOHZf6QPKhEoMUGslm5dhXoJ1RwPb2xnhlnWk/p
+         z7z7jOtlxyWt8CfvBFI5/ee6EgGNfqXCkMghaEfY+P9clxdD+UnnSpP/jlgoz43VPB41
+         tVD5AekHv/QDHkxhhuTnNPW2SDN7DQGi56Gvvj84EWqKSmshZ6pThCJEmoa8GAhQG5dj
+         VIRiR66vbrNfsH5XyRNwcbjerF2JQDz4/TR9ZjWsLCKj425Tas+U9JkZmxEi+q8Z9N9V
+         qcPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718591794; x=1719196594;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3S2YurUrl5MC+fkMuKFY0ClzSCLEfz1Oc40ER8vtAUk=;
+        b=jvOUItlC6L/lAYZLl8KVUurp+pX1dgaDnDb4hQ9OEBaC0YMEQoC8HYQyuR3+APoRZ9
+         q6fQTLpFjWwVBPjgO8279WXaBtW0cdIHmA/PrPxHD6ZrlkP9YHdZr1qAakVy1qob4WLo
+         Ed1J7zZYBMlVTFtPGBkQHCYDet9cXi+rfKLld8iI1+iIgXPluYR80poYt6oBYod31NTu
+         kCoZwWH4P9S7KN/p/oTbo9XEZc+9SIGSSr44+WRZpKwVbXX3xYIlrQTZu8ZiTS14Mqu/
+         XD/5ci+pduOWSul41Ndt0iFZrRzh675LxcZDCB6sJdleojYsKRSig9rYpY9I29fjsFAD
+         EIeg==
+X-Forwarded-Encrypted: i=1; AJvYcCWhYVX2EiZOngemrWzn1b7b9JA3sbrM0CIxZHB6Pjcp3Kb2409O+2NqqdioOBYiS9oU2s1i/+8qo5+3VzeeD5r8Lm2PwJaQNfIlHDtMI13eMedKFn/grLLqTkxxDDWMQ3uKDkV2APKXQS4o5EEjyVQPomhsvucKYjHoWEWtCgn9HyE0BWkQzIcj7OJOmdgxzMZ3dm5J+RzpQcnvXWNvbmtFcwG0FQUxAS5R3Z6+xuAzc8OxRDqMWzt+kjo68y+OuMsUr/pLHDoj3mHcglckzvvezLvjCAZwaPTwFVp6xANeUPhFokzUyY9Vmj4PTfu+7Co8OjDeqnbGDEuz2QMJo9KaG2bOOg==
+X-Gm-Message-State: AOJu0Yxu0BgZ9ADF/gBgQT1lzljIvTuI4UwcS7fRtrRlT1g2f3MQUVde
+	WrKzWTuwJzMvhlIquQFDFOrZGa/Z0jFgnYm7zkjg5WT2uw2L0imnrBuUsfD2VgGF+rTUscD5s4v
+	PM3FCkJ27GqkA/N+D4+6Ch6sTIF0=
+X-Google-Smtp-Source: AGHT+IGltFa0bQ5GCz9R8Qfp8q4AWMyO+O31iG05ayKCR1g5p5BB0jiP/wIlvjmzI8GEc+sBuDPZkWfe/0K++X8dom4=
+X-Received: by 2002:a05:6870:469f:b0:254:d417:351f with SMTP id
+ 586e51a60fabf-258429511admr9266807fac.1.1718591794255; Sun, 16 Jun 2024
+ 19:36:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V5 RESEND 5/5] venus: pm_helpers: Use
- dev_pm_genpd_set_hwmode to switch GDSC mode on V6
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Michael
- Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia
-	<quic_vgarodia@quicinc.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Ulf
- Hansson" <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown
-	<len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Andy
- Gross" <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
-        "Satya Priya
- Kakitapalli" <quic_skakitap@quicinc.com>,
-        Imran Shaik
-	<quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20240413152013.22307-1-quic_jkona@quicinc.com>
- <20240413152013.22307-6-quic_jkona@quicinc.com>
- <5c78ad52-524b-4ad7-b149-0e7252abc2ee@linaro.org>
- <b96ef82c-4033-43e0-9c1e-347ffb500751@quicinc.com>
- <a522f25f-bb38-4ae1-8f13-8e56934e5ef5@linaro.org>
- <dbd1b86c-7b5f-4b92-ab1f-fecfe1486cfc@quicinc.com>
- <621dbaaa-6b86-45b5-988e-a6d9c39b13d7@linaro.org>
- <d36c1163-a3f0-4034-a430-91986e5bbce8@linaro.org>
- <ef194e5c-f136-4dba-bfe0-2c6439892e34@linaro.org>
- <d2e55523-f8fd-4cbe-909c-57de241107e8@linaro.org>
- <1df48a42-3b4e-4eb4-971b-cd4be001ba27@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <1df48a42-3b4e-4eb4-971b-cd4be001ba27@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: FMcKqOktAbRS_ElgO3EOAwi75ddJwXeZ
-X-Proofpoint-ORIG-GUID: FMcKqOktAbRS_ElgO3EOAwi75ddJwXeZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-17_02,2024-06-14_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 phishscore=0 adultscore=0 priorityscore=1501
- spamscore=0 mlxscore=0 malwarescore=0 mlxlogscore=935 bulkscore=0
- suspectscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2405170001 definitions=main-2406170018
+References: <20240614-dt-bindings-thermal-allof-v1-0-30b25a6ae24e@linaro.org> <20240614-dt-bindings-thermal-allof-v1-3-30b25a6ae24e@linaro.org>
+In-Reply-To: <20240614-dt-bindings-thermal-allof-v1-3-30b25a6ae24e@linaro.org>
+From: Vasily Khoruzhick <anarsoul@gmail.com>
+Date: Sun, 16 Jun 2024 19:36:08 -0700
+Message-ID: <CA+E=qVdpw5dMSdZiBkX5i6y18vHzfG2JnBSmd2Rq=y4kkgZLQw@mail.gmail.com>
+Subject: Re: [PATCH 03/22] dt-bindings: thermal: allwinner,sun8i-a83t-ths:
+ reference thermal-sensor schema
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Guillaume La Roque <glaroque@baylibre.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Anson Huang <Anson.Huang@nxp.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Amit Kucheria <amitk@kernel.org>, =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>, 
+	Heiko Stuebner <heiko@sntech.de>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Orson Zhai <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Chunyan Zhang <zhang.lyra@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Pascal Paillet <p.paillet@foss.st.com>, Keerthy <j-keerthy@ti.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
+	zhanghongchen <zhanghongchen@loongson.cn>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, linux-pm@vger.kernel.org, 
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-amlogic@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	imx@lists.linux.dev, linux-tegra@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-stm32@st-md-mailman.stormreply.com, 
+	Florian Fainelli <f.fainelli@gmail.com>, linux-rpi-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Jun 14, 2024 at 2:46=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Device is a thermal sensor and it requires '#thermal-sensor-cells', so
+> reference the thermal-sensor.yaml to simplify it and bring the
+> common definition of '#thermal-sensor-cells' property.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Vasily Khoruzhick <anarsoul@gmail.com>
 
-
-On 5/31/2024 5:26 PM, Jagadeesh Kona wrote:
-> 
-> 
-> On 5/10/2024 6:31 PM, Bryan O'Donoghue wrote:
->> On 01/05/2024 10:14, Bryan O'Donoghue wrote:
->>> On 30/04/2024 21:01, Konrad Dybcio wrote:
->>>> On 24.04.2024 11:50 AM, Bryan O'Donoghue wrote:
->>>>> On 24/04/2024 10:45, Jagadeesh Kona wrote:
->>>>>>
->>>>>> Thanks Bryan for testing this series. Can you please confirm if 
->>>>>> this issue is observed in every run or only seen during the first 
->>>>>> run? Also please let me know on which platform this issue is 
->>>>>> observed?
->>>>>>
->>>>>> Thanks,
->>>>>> Jagadeesh
->>>>>
->>>>> rb5/sm8250
->>>>>
->>>>> My observation was on a previous _boot_ the stuttering was worse. 
->>>>> There is in the video capture three times that I count where the 
->>>>> video halts briefly, I guess we need to vote or set an OPP so the 
->>>>> firmware knows not to power-collapse quite so aggressively.
->>>>
->>>> We seem to be having some qualcomm-wide variance on perf/pwr usage 
->>>> on some
->>>> odd boots.. Any chance you could try like 5 times and see if it was 
->>>> a fluke?
->>>>
->>>> Konrad
->>>
->>> Sure.
->>>
->>> The first time I tried it, it was much worse.
->>>
->>> The second time, captured in the video is only noticeable because I 
->>> was *looking* for this specific error i.e. I don't think I would have 
->>> noticed the error on the second run, had I not seen the first run.
->>>
->>> I'll find some time to do 5x with and 5x without.
->>>
->>> ---
->>> bod
->>
->> ping bod please remember to do this thanks
->>
-> 
-> Hi Bryan, Could you please let me know if you got a chance to check the 
-> above? Thank you!
-> 
-
-Hi Bryan, Kindly can you please help confirm if this is a real issue or 
-observed as a fluke? so we can go ahead and mainline these changes.
-
-Thanks,
-Jagadeesh
+> ---
+>  .../devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml       | 6 =
++++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a8=
+3t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83=
+t-ths.yaml
+> index 6b3aea6d73b0..dad8de900495 100644
+> --- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.=
+yaml
+> +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.=
+yaml
+> @@ -10,6 +10,8 @@ maintainers:
+>    - Vasily Khoruzhick <anarsoul@gmail.com>
+>    - Yangtao Li <tiny.windzz@gmail.com>
+>
+> +$ref: thermal-sensor.yaml#
+> +
+>  properties:
+>    compatible:
+>      enum:
+> @@ -55,7 +57,6 @@ properties:
+>      maxItems: 1
+>      description: phandle to device controlling temperate offset SYS_CFG =
+register
+>
+> -  # See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml fo=
+r details
+>    "#thermal-sensor-cells":
+>      enum:
+>        - 0
+> @@ -135,9 +136,8 @@ required:
+>    - compatible
+>    - reg
+>    - interrupts
+> -  - '#thermal-sensor-cells'
+>
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>
+>  examples:
+>    - |
+>
+> --
+> 2.43.0
+>
 
