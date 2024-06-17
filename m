@@ -1,81 +1,81 @@
-Return-Path: <linux-pm+bounces-9308-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9313-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 842CD90AAC7
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 12:08:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E04B090AAC1
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 12:07:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB49FB27DA0
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 09:23:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5EB0B3032F
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 09:32:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82AEC191481;
-	Mon, 17 Jun 2024 09:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57584192B83;
+	Mon, 17 Jun 2024 09:32:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QMmixxYJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NsA2sAEk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4ECF190691
-	for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 09:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77850190053
+	for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 09:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718616187; cv=none; b=DJlFKrBFcw2K7YudMBdt+rph6RuJynPe+7ppNzxkmKPlnRMV3ceyYh23b0UoM23vo28p9u/7LYa8d8l5UfrKHna0RFXc0xxSunD/99qGpORLF7pOJZRpR9yEQklqDYlOVB2FeN+f6/RPiVWsDj+SBsKFzEgnPAMS/WkxNYDKqbg=
+	t=1718616747; cv=none; b=BlOqnUzYLZ98tvqqMXV2YJM/mCI9xkOZ9EFoUNh32hOK6uW1RVt51BIEfBa2fCVRt5lg6YKrz0BVCWSE5drDZzxOuM8F4f3X8MRKkXfXEwH7uJDangKscbdkuQ7i0Fys4L58CXdPc0tFL1WkJwRTnzw1BRkHSPhYtdr2Ghea1cI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718616187; c=relaxed/simple;
-	bh=PJorj6pZybZCRAmgMBh4ooMcrMxupHMGQPqA/q11VUA=;
+	s=arc-20240116; t=1718616747; c=relaxed/simple;
+	bh=LNpuMpWjAfWkh2SBYhoHHVU/hSaGGKXWVCOL+iHaXFA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=qt12w4omfHM7kvqgTcm5Gl8qXB6mEXQiV6UxQtdRWbL/eVj0lbJb+1L5NdieBzzhRzGBLfSzE52TEnr0dHmIUYqifMbSXU0vB2PbO3d9t0Sw1apbxZ1KPtAQs1+zq/iJoC2fBP6lNJKbaaxBRRvjTFbZWr0vXm1VMaE76GHDj04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QMmixxYJ; arc=none smtp.client-ip=209.85.128.53
+	 MIME-Version:Content-Type; b=hyuzASzVN313rsq6BAE54X6hJP2XcFXZbmfsJHUtaRZKhsIIO725tLTKNfFBEb9DNARw7NPItEwCXOD54inVCYFkjw9rypJx0I1JXBnrQTPX7SkUsAQcGbwqOgYbzImj4wVCN5WHreqvDuQtiGlygwRLTn7Mi6PlEWP8QSa2EEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NsA2sAEk; arc=none smtp.client-ip=209.85.208.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-421cd1e5f93so29046545e9.0
-        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 02:23:05 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2ebd421a931so40408741fa.1
+        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 02:32:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718616184; x=1719220984; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1718616744; x=1719221544; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:in-reply-to
          :references:user-agent:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=PJorj6pZybZCRAmgMBh4ooMcrMxupHMGQPqA/q11VUA=;
-        b=QMmixxYJV02w5jGsjaYPK8uw8ATgnsghF9FuhA/pR5z6LSPx5Yp0VH+XA7Ectd+eWI
-         MYKVqZSeQwyHb9Oi64Tzm/kpOOg4wtky1ErU0NQXazVuquhtDbjgh2H3JqTfrWci6yMM
-         xCNYkvY4zV/kROI8cJ9fVSfB5Q08v0NaBPNH/ekl8hrHepZH8VxYw7qNhiOMRQ9MYIqP
-         z2VmWnV8bR5t07hU0AGVC13eCgbSD+ZFWmgKzHOcecE1Waw1chVScOiZBsaHxfqE3L/y
-         Nhib8sTqPx+K2SODDlpEtqjKO974pznUsspuKiixZLSZICSQWVBMKCG1SsUjt5mYXPVh
-         skgg==
+        bh=Vn7FXPTC3oDopyoLncz961C4PZuJpHX/UbBJ99RzoDs=;
+        b=NsA2sAEk71wuHm5WFsAbG7POHkdrQsEtiQrg1pd8RQ+gECuIZVHIL/zTDinJLfiC5k
+         62HmjDWpAR1qifJd3N45gIuRwuLxb+M6kk3y0Qvbs/1mSkMQ0TxEDf1fywIqfRVVKm2u
+         kCnM6tBYKAwhgpG/iorbYxQ26hDHwmBlRbx0QgYCRZy8xwX0Fi2LY2NojrE3XabJYPNm
+         WCQesg/Kv63+9JW36AWikHRc8ZcZaUSxAnXZ+PFlRlopzT5MZG6Lo0YiJJ9Ug58GeCnB
+         b2695PPR6qsCWQX4iMRm5kSxiDzvrLCD38TIut0GGLO5Yzg3MTHynbzcHKEZSbcUqi2w
+         /7Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718616184; x=1719220984;
+        d=1e100.net; s=20230601; t=1718616744; x=1719221544;
         h=content-transfer-encoding:mime-version:message-id:in-reply-to
          :references:user-agent:subject:cc:to:from:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PJorj6pZybZCRAmgMBh4ooMcrMxupHMGQPqA/q11VUA=;
-        b=DWhH9IN3GJElM7U5mPeiB8t7qT//QAdQh4TPfgRiQ+nH/dPR7rlf+o0h69BFRgGGHd
-         k5I05beAV9a7P3wdJImZ1+MZIHSO8F8NdqI7Ti8D9Y/Uw4T03jp3JzlmzIBRC8E/bS3D
-         kIDa+uoK1FI7sxDiTjQWmUb2ZnE0s7QXYoGFVff14wS/uNH3rr61hy02lTXUvLY3wbCG
-         kaBU10Suy5FnnSTokT+Odp3u7H+OOm41ctF+OHa0oVr3ugBS6WrMbxKRaNuyszRvUkLH
-         KeJkcPj7YQUCo9/0vKrsMMqXTL2A50XmaWGC/GW3pyz9m691zdQPENrQsjfytI3axZR6
-         tayg==
-X-Forwarded-Encrypted: i=1; AJvYcCX3KTyygcmzG116EQAZyvJ9sTAmu13h35zZTeW1WkAE/6FgR23GISveCtO3h0kd+qpaCKSQuuoLwL9LTAKeT/9mG/DoT86+ZQI=
-X-Gm-Message-State: AOJu0Yzt5sfmH6vKaxTKvVIwUiN1Af63lZKHhprE9A4YjtD06ZhDnJVJ
-	NC/cAGC2b4dRuA1r8AC7hXXXi6b0gxEp/MfmqJR6Ik/bKld7Yu6hS6nPt7RyLCs=
-X-Google-Smtp-Source: AGHT+IFfL3Bs1KrLYPlq1k0cwv3eyK8lsf0inS3DFHb4TVzuMMGvXRsZ3JYsj7XJdNFeaX26ROtE2A==
-X-Received: by 2002:a05:600c:1d1b:b0:421:65a4:2936 with SMTP id 5b1f17b1804b1-423048240b6mr85210755e9.12.1718616184294;
-        Mon, 17 Jun 2024 02:23:04 -0700 (PDT)
+        bh=Vn7FXPTC3oDopyoLncz961C4PZuJpHX/UbBJ99RzoDs=;
+        b=EAnHAZNXiMMv3qHbM/HlRWekfyYA9m6fFKAwfUUSLesO0J+/iCeIpkKA1A5HqdvqAx
+         CDPoR3QMeURkXg51CkYmTEsDD5o7ECOXmBbZu9G6iwcwK2h9Wbc8QtHUVtTO3foA1Uht
+         7kqIC0JrtmCCqHK4ZUck4Yg6CQsDCA2UN7m342yL+tGkttQ28arm/L3afNGBYMpYoCUg
+         jUQl4o87oEtlTghahKymFe3N8cGWaSGB/XCEN6ZGT8cVaQyDm/hstbReseUu9yDAwcY8
+         Ec3/W5+nN+DelVBCfHKFaVD5ApCIXHEQZbo1IxGjbwcV2PpxefDHXhDYKQbVPB9Xwoau
+         IXFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXvXnd6q4BTW98YdyBSDcAtucQdJRQig1zFA77UlBwU8rrIl2bWL5YTvNSe2c+pDq29AUe7tTRwKr/LxzWM+c03nBc42RoZHZk=
+X-Gm-Message-State: AOJu0Yx0VuY1HwRM467+moz+rsHDDlZewEFSnYADHlqSPJqdhaFrFLVW
+	Jp3h1mDPGnZDHlA1wylsVKGfoVmmJqaFiWml6Utm7uo1hqoJTTJAWdkvdfOm35w=
+X-Google-Smtp-Source: AGHT+IERhDJHkxzaQFPoFIV6vwAY64N/UErLLjS6cy8dGj9JTOjmTCXvGH8sSNVbXMq4F7qYoO+BSg==
+X-Received: by 2002:a2e:be05:0:b0:2ec:eee:f198 with SMTP id 38308e7fff4ca-2ec0eeef74emr70338751fa.1.1718616743544;
+        Mon, 17 Jun 2024 02:32:23 -0700 (PDT)
 Received: from meli-email.org (adsl-33.109.242.225.tellas.gr. [109.242.225.33])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-422869d4f2esm192148015e9.0.2024.06.17.02.23.03
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36075104b45sm11408120f8f.109.2024.06.17.02.32.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jun 2024 02:23:04 -0700 (PDT)
-Date: Mon, 17 Jun 2024 12:02:57 +0300
+        Mon, 17 Jun 2024 02:32:23 -0700 (PDT)
+Date: Mon, 17 Jun 2024 12:23:12 +0300
 From: Manos Pitsidianakis <manos.pitsidianakis@linaro.org>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, Alex Benn=?UTF-8?B?w6k=?= e <alex.bennee@linaro.org>, Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, Bj=?UTF-8?B?w7Y=?= rn Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>
-Subject: Re: [RFC PATCH V2 3/8] rust: Extend OPP bindings for the configuration options
+To: Viresh Kumar <viresh.kumar@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, Bj=?UTF-8?B?w7Y=?= rn Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, Alex Benn=?UTF-8?B?w6k=?= e <alex.bennee@linaro.org>, Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH V2 4/8] rust: Add initial bindings for cpufreq framework
 User-Agent: meli 0.8.6
-References: <cover.1717750631.git.viresh.kumar@linaro.org> <37bdd7ee7b74292830dd9977154b08ebcf08a138.1717750631.git.viresh.kumar@linaro.org>
-In-Reply-To: <37bdd7ee7b74292830dd9977154b08ebcf08a138.1717750631.git.viresh.kumar@linaro.org>
-Message-ID: <f7wqe.d5i9jcj6qgw@linaro.org>
+References: <cover.1717750631.git.viresh.kumar@linaro.org> <8a53d1e0bf52f02027ff4be2296bf59088bbd163.1717750631.git.viresh.kumar@linaro.org>
+In-Reply-To: <8a53d1e0bf52f02027ff4be2296bf59088bbd163.1717750631.git.viresh.kumar@linaro.org>
+Message-ID: <f7x5x.0h3ihwj957m@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,13 +86,17 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset=utf-8; format=flowed
 
 On Fri, 07 Jun 2024 12:12, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->This extends OPP bindings with the bindings for the OPP core
->configuration options.
+>This commit adds initial Rust bindings for the cpufreq core. This adds
+>basic bindings for cpufreq flags, relations and cpufreq table.
 >
 >Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 >---
-> rust/kernel/opp.rs | 305 ++++++++++++++++++++++++++++++++++++++++++++-
-> 1 file changed, 303 insertions(+), 2 deletions(-)
+> rust/bindings/bindings_helper.h |   1 +
+> rust/helpers.c                  |  15 ++
+> rust/kernel/cpufreq.rs          | 251 ++++++++++++++++++++++++++++++++
+> rust/kernel/lib.rs              |   2 +
+> 4 files changed, 269 insertions(+)
+> create mode 100644 rust/kernel/cpufreq.rs
 >
 
 Reviewed-by: Manos Pitsidianakis <manos.pitsidianakis@linaro.org>
