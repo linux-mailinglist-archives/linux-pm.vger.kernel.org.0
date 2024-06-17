@@ -1,234 +1,165 @@
-Return-Path: <linux-pm+bounces-9341-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9342-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42C2D90B365
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 17:07:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69D6690B3AA
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 17:14:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5AD771C238F8
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 15:07:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70A6A1C217C9
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 15:14:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C8F14D715;
-	Mon, 17 Jun 2024 14:20:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0191D1586C7;
+	Mon, 17 Jun 2024 14:33:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UaUHpI94"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NNhtZUjo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC3314D6E5;
-	Mon, 17 Jun 2024 14:20:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5AF51581F6;
+	Mon, 17 Jun 2024 14:33:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718634056; cv=none; b=cxMTVdn6EwK5wO7iu/8DuF61jhpb6Rgb+/E3RfRNlR5bh/lOVsVSePRpEOzxRIcz6AMN03vtXiXfWV3Zpppx/rsT7P2a70iwDW3R1Vk4CYoI+0qxGqLOgdMHXv86fcEfsznLc+WuJp+FQRj8WoOoYGtlH+Dv+ZB5NGW1S1cCFHo=
+	t=1718634808; cv=none; b=OCUyIeaSGjEZ60ojXWDFWQWVhC44Rxa0A1PzFTBkThKWxRc1WWs9OJrisz/kxrql/vgMBV1ePkEBfT8iBBjUyx01jYcr7S4tzjtad3yInlAwopFcdaVjMmjpeyuLQGkqxy88Qlp8i6MKVvGg34MDfZxNnmozTySUUxFkoHto1FU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718634056; c=relaxed/simple;
-	bh=unPUtePx4FTeKKBmH9jeU3M6vc1xY06k0mJbsHVvoRc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=dwop1LlkdDRPGhlkR9Bx8mSoky2KqtT4sGQOtUvudaV42Pg4gfWUijmMBIv11X/X8FOoEBkXyGkw4PwIiThXWRNMt6b27SQRksZN39U+V266lyjpc4KuIYtYfhnyKpNuALmKb0rMQ4FJ5q8gG1/pluTKBsh/2CsPX7vx6BHEiW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UaUHpI94; arc=none smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6b065d12e81so21700736d6.0;
-        Mon, 17 Jun 2024 07:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718634054; x=1719238854; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PaTJzZNQnKML5wOALCFr7UKAYUQ4uDtj0s8DKZQbERU=;
-        b=UaUHpI94jf3oSGoH7rCc//ZtSGHc/meBLsXzwgKo7T5gjnF1hkqmiVSw05YVgBgOx/
-         b3hBJb9Xd3w5G5iZSxybPbyhbZM572sEzYNZv+id8njWsc80Y4E+2mIIorDFM3wwFMsL
-         jadERNyUe58vi6JgblQwmzKjTT0Bg9imiIlUVRdSOpsuMiYJF6/2zKhQArHhAF9brgsx
-         hhq6HXId4EByT3UD1V3UC06yvafSvdcfkJZ0w5WLsxTn7ugEnVW8T973AX6F9B6S75NO
-         d9OrmTIe+ejQExdxzl/hqOLausbnTWif4GIgN0B4tfhmtB2ojqOnI2M7rhTDcnmizf2r
-         okcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718634054; x=1719238854;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PaTJzZNQnKML5wOALCFr7UKAYUQ4uDtj0s8DKZQbERU=;
-        b=xKOn1nwud13y9F+Hv/jkawaGmlmglmJZKAbTf7ki7V9MGmDnGl4a9iK7WaQY08DwxS
-         7PWS3zE9U4s4GIiQD8S18SmPkkhpzrt+MTN8VMqz+to9b+1gyTZWEJAHax6eybeHPpzC
-         Dq0tNuZrDbkn5AbjlVz49IHeWBhmoinG/8Cq1+LLbLbsKL1YiRvT7up8ul6lAHi1epD5
-         A6jrrARVgSZKi8SkSpv2WjkuPo2D5Ev9l10H2uLN8CXAXfKgC6HUELvlBF4AjspatVXP
-         7dk0YPeyoa2d/Xk/dEBdX+g5HcbeI7UAt990IItEzaLlxB5TVkK3BSC/OKGQzdfVlhdU
-         l2VA==
-X-Forwarded-Encrypted: i=1; AJvYcCUnRU9mRvVTHThcVdEjld+WqbAOFBUv68GOokfYpqNekUAEl8CagDU0DooqXJtYmVAoNuRN+uBjawPDcHMa6LE658d8xiuF2H/Ose3Rti3NCSbZlGF0nG1hy+3E0Ps2j7VgtLeLk913kZ61pY1GkKJgYee+qiM5Tb5bzbxDFrF+JJid
-X-Gm-Message-State: AOJu0Yz3fcYZIl+PQHBMg7MyChCAs393taFAVZ3Ucw6K1d5GfoGdWJBN
-	Uuc2RHgl/68H4vKgbXNI9edSpTdqnKLaYhAJXhJxk+JiOjdDFDLgOE1FYXf7
-X-Google-Smtp-Source: AGHT+IFDaQH3oE9wnnPykHX6d3ceULs7zIEDhV5rSBjBtx7IebGxMyd2ReuaF/wrLpBqk8ly6W7Vew==
-X-Received: by 2002:a0c:e58b:0:b0:6b0:7997:ee3b with SMTP id 6a1803df08f44-6b2afcd99a2mr97733156d6.35.1718634054139;
-        Mon, 17 Jun 2024 07:20:54 -0700 (PDT)
-Received: from [127.0.1.1] ([2607:fea8:bad7:5400:2557:2c70:d69f:574f])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-441ef4f5875sm46640001cf.28.2024.06.17.07.20.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jun 2024 07:20:53 -0700 (PDT)
-From: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
-Date: Mon, 17 Jun 2024 10:20:52 -0400
-Subject: [PATCH v2] dt-bindings: thermal: convert hisilicon-thermal.txt to
- dt-schema
+	s=arc-20240116; t=1718634808; c=relaxed/simple;
+	bh=PshLMy+s1hvHDP2l9+DVvDPOq/OZjAc/D/4evHSEKwA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LMYq38mNAgKPdC67yNoMK32PTOso58sLFQqnMpzRZGJjDrJDfPxOMTNbIml6y3UGg21IoESqtBMdlsXj0Jhf8m0n5G/NlQqFRUX2Fn3rKxD2I8msA08QI4dXXb21PfBYzgXTTyXtHZkNLNsPAcmg+eGcpyNjuZyCgmFbmUo7ioM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NNhtZUjo; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718634808; x=1750170808;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PshLMy+s1hvHDP2l9+DVvDPOq/OZjAc/D/4evHSEKwA=;
+  b=NNhtZUjo148HU/46FripCwYQN8Ly09f61+oqLRHlNc8CkBcJBkJOijEL
+   1OR4PBpEzjf47UF79maK6KpUQue2BxeQKdyhq3PJWIcycWgk83Kink/ja
+   FXCNz8MMNW7kK2hjbX6rKSBwyZG2PFOfiaNRN/8rC1nZvGMQewvbhqWRY
+   dnV+aAXs/GWodWajhlUMPR7U8RfBoccceISI+XE6xLQxn4fBlSbgaqlyQ
+   5rQisdyg3M52ullFQ4sRv6IsBZ1NC9SfS/unoPpkl/8TSUo3LGjjg+wa4
+   RskKd1zPkT+DCpvka8O8r6egH7qsjY1COtV5f5Onl0sWQIViYYMZpYxQv
+   A==;
+X-CSE-ConnectionGUID: BGM8UEEqSkyXxPOIik60/g==
+X-CSE-MsgGUID: +Zaiai28SGq8geb1j6XKoA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="37984456"
+X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
+   d="scan'208";a="37984456"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 07:33:16 -0700
+X-CSE-ConnectionGUID: KyzmEqehQaKzjLzKuyNlvA==
+X-CSE-MsgGUID: dyo9nvNYRQm+EQW/HYkLew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
+   d="scan'208";a="46141368"
+Received: from kinlongk-mobl1.amr.corp.intel.com (HELO [10.125.111.154]) ([10.125.111.154])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 07:33:15 -0700
+Message-ID: <b34d6b95-64ec-4647-9eab-374dbcc25f8a@intel.com>
+Date: Mon, 17 Jun 2024 07:33:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH PATCH 9/9] x86/rfds: Exclude P-only parts from the RFDS
+ affected list
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org
+Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ Andrew Cooper <andrew.cooper3@citrix.com>
+References: <20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com>
+ <20240617-add-cpu-type-v1-9-b88998c01e76@linux.intel.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20240617-add-cpu-type-v1-9-b88998c01e76@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240617-hisilicon-thermal-dt-bindings-conversion-v2-1-5eea9bc59c77@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAENGcGYC/63Qz2rDMAwG8FcpPk/Df1Sn66nvMXZwbDkxJE5xg
- tkoefcpZYMcW+jxE+L3Id3ETCXRLM6HmyhU05ymzEG/HYTvXe4IUuAstNQorTLQ88qQ/JRh6am
- MboCwQJtySLmbgeeVyoaAcUhGoYzSnQRz10Ixfd+rPr84M7RM5efeXPU2/S/Bx0uqBgVkrW8Dm
- qjx49KNLg3vfhq3zj+weRI8YnMkZSnY1r8GNFJ5Is0faXfg9oZq9qc/AxuGbTgFxChjaHAPr+v
- 6CwMPbXDbAQAA
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: skhan@linuxfoundation.org, javier.carrasco.cruz@gmail.com, 
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
-X-Mailer: b4 0.14-dev-0bd45
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718634053; l=3876;
- i=abdulrasaqolawani@gmail.com; s=20240613; h=from:subject:message-id;
- bh=unPUtePx4FTeKKBmH9jeU3M6vc1xY06k0mJbsHVvoRc=;
- b=Leg+7ppemKw7KR0Vj2wUHEQU2L6Ut0RFyUwj7sP7YHJqFB7qmnJtB+JS/FyATEfDV2aaVaJ59
- IvB53yo3rxwAYnWE2WpJkVkfSATG9xekvH7CKsX1Q001E0pYK/15Xuu
-X-Developer-Key: i=abdulrasaqolawani@gmail.com; a=ed25519;
- pk=cUqfinPW5pkopFB8ShBc0ZTNgYvSW5ZTa8aLIFPGp/w=
 
-Convert the hisilicon SoCs tsensor txt bindings to dt-schema
+On 6/17/24 02:12, Pawan Gupta wrote:
+> +#define VULNBL_INTEL_CPU_TYPE(vfm, cpu_type, issues)	\
+> +	X86_MATCH_VFM_CPU_TYPE(INTEL_##vfm, cpu_type, issues)
+> +
+...
+>  	/* Match more than Vendor/Family/Model */
+>  	VULNBL_INTEL_STEPPINGS(COMETLAKE_L,	X86_STEPPINGS(0x0, 0x0),	MMIO | RETBLEED),
+>  	VULNBL_INTEL	      (COMETLAKE_L,					MMIO | MMIO_SBDS | RETBLEED | GDS),
+> +	VULNBL_INTEL_CPU_TYPE (RAPTORLAKE,	X86_CPU_TYPE_INTEL_ATOM,	RFDS),
+> +	VULNBL_INTEL_CPU_TYPE (ALDERLAKE,	X86_CPU_TYPE_INTEL_ATOM,	RFDS),
 
-Signed-off-by: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
----
-Changes in v2:
-- Remove extra node in example.
-- Use standard node name in example.
-- Include additional defines from includes.
-- Add reference to thermal-sensor.yaml.
-- Remove redundant properties and comments.
+Could we tweak this a bit to make it more compact?  For instance, if we
+did this:
 
-- Link to v1: https://lore.kernel.org/all/20240613224204.185844-1-abdulrasaqolawani@gmail.com
----
+#define VULNBL_INTEL_TYPE(vfm, cpu_type, issues)	\
+		X86_MATCH_VFM_CPU_TYPE(INTEL_##vfm,	\
+		X86_CPU_TYPE_INTEL_##cpu_type,		\	
+		issues)
 
-Validated with dtschema and tested against `hi3660-hikey960.dts`.
----
- .../bindings/thermal/hisilicon,tsensor.yaml        | 57 ++++++++++++++++++++++
- .../bindings/thermal/hisilicon-thermal.txt         | 32 ------------
- 2 files changed, 57 insertions(+), 32 deletions(-)
+We'd end up with entries like this:
 
-diff --git a/Documentation/devicetree/bindings/thermal/hisilicon,tsensor.yaml b/Documentation/devicetree/bindings/thermal/hisilicon,tsensor.yaml
-new file mode 100644
-index 000000000000..8b898fbfb200
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/hisilicon,tsensor.yaml
-@@ -0,0 +1,57 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/hisilicon,tsensor.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Temperature Sensor on HiSilicon SoCs
-+
-+maintainers:
-+  - Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
-+
-+allOf:
-+  - $ref: thermal-sensor.yaml
-+
-+properties:
-+  compatible:
-+    enum:
-+      - hisilicon,tsensor
-+      - hisilicon,hi3660-tsensor
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: thermal_clk
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#thermal-sensor-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - '#thermal-sensor-cells'
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/hi6220-clock.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+     temperature-sensor@f7030700 {
-+        compatible = "hisilicon,tsensor";
-+        reg = <0xf7030700 0x1000>;
-+        interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&sys_ctrl HI6220_TSENSOR_CLK>;
-+        clock-names = "thermal_clk";
-+        #thermal-sensor-cells = <1>;
-+     };
-diff --git a/Documentation/devicetree/bindings/thermal/hisilicon-thermal.txt b/Documentation/devicetree/bindings/thermal/hisilicon-thermal.txt
-deleted file mode 100644
-index 4b19d80e6558..000000000000
---- a/Documentation/devicetree/bindings/thermal/hisilicon-thermal.txt
-+++ /dev/null
-@@ -1,32 +0,0 @@
--* Temperature Sensor on hisilicon SoCs
--
--** Required properties :
--
--- compatible: "hisilicon,tsensor".
--- reg: physical base address of thermal sensor and length of memory mapped
--  region.
--- interrupt: The interrupt number to the cpu. Defines the interrupt used
--  by /SOCTHERM/tsensor.
--- clock-names: Input clock name, should be 'thermal_clk'.
--- clocks: phandles for clock specified in "clock-names" property.
--- #thermal-sensor-cells: Should be 1. See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for a description.
--
--Example :
--
--for Hi6220:
--	tsensor: tsensor@0,f7030700 {
--		compatible = "hisilicon,tsensor";
--		reg = <0x0 0xf7030700 0x0 0x1000>;
--		interrupts = <0 7 0x4>;
--		clocks = <&sys_ctrl HI6220_TSENSOR_CLK>;
--		clock-names = "thermal_clk";
--		#thermal-sensor-cells = <1>;
--	}
--
--for Hi3660:
--	tsensor: tsensor@fff30000 {
--		compatible = "hisilicon,hi3660-tsensor";
--		reg = <0x0 0xfff30000 0x0 0x1000>;
--		interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>;
--		#thermal-sensor-cells = <1>;
--	};
+	VULNBL_INTEL_TYPE (ALDERLAKE,	ATOM,	RFDS),
 
----
-base-commit: 8d5ed3dd17c9c1bdb39ecb125f0e28dfb5111dd9
-change-id: 20240613-hisilicon-thermal-dt-bindings-conversion-3a4e3140f0a8
+I guess "TYPE" is a _bit_ ambiguous.  But it's also pretty patently
+obvious what's going on versus something like this:
 
-Best regards,
--- 
-Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
+	VULNBL_INTEL	  (COMETLAKE_L,	MMIO | MMIO_SBDS | RETBLEED...),
 
+Getting rid of the "X86_CPU_TYPE_INTEL_" string in the table is low
+hanging fruit.  I don't feel as strongly about changing the new macro name.
 
