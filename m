@@ -1,155 +1,155 @@
-Return-Path: <linux-pm+bounces-9324-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9325-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB09390AC6C
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 12:59:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D388790AC89
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 13:01:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B59A61C22AAC
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 10:59:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 056361C21559
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 11:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 660001946A9;
-	Mon, 17 Jun 2024 10:59:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12AEC1946DB;
+	Mon, 17 Jun 2024 11:01:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G3ddtES0"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="o+1WFjLe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5B75025E;
-	Mon, 17 Jun 2024 10:59:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202E5381A1
+	for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 11:01:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718621942; cv=none; b=PhyG4e9Chl10awX8ElTvOukSpto5d+MZqRORWtKBIcwnUIuxBPld6lmHRExnhwcwI+frz8ogbbMC2lVQXjtlQIT1BbPBB2rcVnXrTXhRNFpfkvOFbzQqeEZJSCaJPY+wMEGwAz3CjEuMIdtaH4c1fYHi2S0E8QiM22tavY1ilIg=
+	t=1718622066; cv=none; b=PDsrPFw3TZvzjGFDxEMD10U1kKgk8f/g2O7wqozbtGsaLjgytaXJ8KnHosBMbgUe7xJCwRisEYVgZ/qoR+8Y4Kklax5OF7TTxUOuohM/W42NXhdxYd9PTWQ1yr9CJMvp2yWQXgi5zqR1iy4pUx/BHvaeBUKu8VkPZ+gfimkd+nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718621942; c=relaxed/simple;
-	bh=8wB8dLUWtRHRl79UEIYwwpGcoRPP7LZqthPrT0xkjS0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tmSL8pHWP7tXChYqmQ4L9lut8TUNjQJA7qNleqICbF9gXTry/4g98x9EgrAmdRwXRZtVzNyNXgOGXh0UQuT/OLhcjz347ixgqKgfOrvQnmOPwB/Y7m7OMGrDufCbMgqHuk4O0JofMDXafhWZXcNpRtDTRtYgywjH/U1HmAJjI4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G3ddtES0; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a6efae34c83so526291566b.0;
-        Mon, 17 Jun 2024 03:59:00 -0700 (PDT)
+	s=arc-20240116; t=1718622066; c=relaxed/simple;
+	bh=cKofoxhoSF5ZQPhIVi4G0l+IsmRHCdzIQcUF+FD2XyE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kylpSx1EOqHde2IIZsp9FGLCXDFDXfA4fYtq6fmysJ1PtWTJmYyEESiEeUuml+ZhAv3KXW+QK5Vd3/vjtOmDP2cVYC/0Iz6NDu4cAZmryfy92SWCur8H+Jas7mWx/MAi24YNsW1FSbHrcbzZZpnTRiCrfXEH01wpPER3bg7+ypc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=o+1WFjLe; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2ebeefb9a7fso57785301fa.0
+        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 04:01:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718621939; x=1719226739; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8wB8dLUWtRHRl79UEIYwwpGcoRPP7LZqthPrT0xkjS0=;
-        b=G3ddtES05KBngq6UHWH+bLeDVjHVfJjrer71x1oClPjFqQBWo5q9UMK1VfJW6kJjJq
-         F4PZsQestdbLeUKH8unSqie5VDD7EagbCBXSZaSHuKvJxjTFA/00cMjlFbvezuyidolY
-         8IJb1AK6waFkrjIHxm7K2jDf6tFJR0iyUq90OZ/4DYyR6qbWKG66yZWTuedKtIqlm8W5
-         z4+SG4bxj3pYqXnzunZrkvLOprES3JCkbQ5t/523EXHIeWZN+QHdYZwKrt/L9C8QlQPV
-         PqKllIoFKQiOiLgDsIpjcCywPn+fn1M61OU6KA6imYIqeZ1vynt+cI/1YCXgPb1rWNm9
-         QYdg==
+        d=linaro.org; s=google; t=1718622061; x=1719226861; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/SjNe9vmU5byAvsAKJbghGk4V4PXep6SvlVxJjNPLCM=;
+        b=o+1WFjLe5iHMnIJFK6/5EHggVUxNKTkLC5bRpkyDnPnH4mFa9+xozoX8waK8199/JW
+         wJGUHx6s3Kih4j3glwb8ZjxrwL04nPOLGbObdjoUlunI8gdKtckGmgHxBkS5mygTnlIM
+         Ivi49dwortHOAfnXqMSMN0iWi/6qzz7viR0tnXgIKNvTcyOjrmCTESjzYPd8UGbOg6wB
+         VsHriqkSsoOPbLysJopShTYMlBt6lxsc8eUdUXvExM8bgMAfXDFTBVLWr6mGoSDisjL8
+         GfsvUrLQWVPc7SEhSy3KNGMmuEeXl9VNFPs5/JqOeDznd7jyAlGwfjkBMLbKv6NMtFaS
+         X8Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718621939; x=1719226739;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8wB8dLUWtRHRl79UEIYwwpGcoRPP7LZqthPrT0xkjS0=;
-        b=Cem9PGTanUq25o7phJ/RZGVY6Fpz35uWfNYKsGpdnXX0rElhFVmgGP6Rrbje9nyAtx
-         NE54dUSFZtoOAJa5sj9dDnNckeTkqQ8/kk6MQUeNvSPggSXKCRYVClQaZ7hk458B2v2b
-         GLOcjRAvV+53S8o1kDhSdBCs3m+FS23qVsf0umL7PczsUqqdK/Agg899XxTdVZr5un84
-         AoH5wT4ZNz6tOzfnptMPeISwSWBiphVQohjan6l0x7LDYKpIIZn0VvDYDCkHD6FuyRMe
-         YlfXnzfqlGgFUZZNP7aY4G/UvmOpnx4P6z0MqxjjyVcqS71crNSmCMU/7Z5RJTK8EMf9
-         cx1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXAoM7IbF4e2rcIclY5h762jyQSucTNkLrD1Euq0cJADoK/mEztSfuiQ78x0JeizEcchdTzju5NKh3G9SaF+VGrSV/rK7krkENH2e7qRK5DavQ4pVAevFe8x0Mn3jB7Hg2kiq43LmavSpsdjDh07LxqqNde3hqzi1dr3zeXkuBeZeH/2BZ9+0lRqvc3tQOzfU94er3VowrZ75uV8sr9HiYAOHJ4qDqQzyEtvEFaTb7DqC5WzsZv4IUfnuQHOdORpeTNxsKSynsSyEOyMg5Moxi9xMaXkXKDCw1r3C3S/gcbSQyBCU6J02FbV4/bRkDFvCOBPyOpM1xXnRbB03w5+O7BauI+6ZATcO6orxmdmRNVG5Q/7wrcDhuSFxlAdtv3w1Zr23MPqM2kCzjanP/BNourXGHl23JmDSvhdAIh4f208KUpeEosZ3LvPokFg9xO9A23MYBYQMtCvey1Hx/dqcAEiGbId9RB2JWBvaVgwzSkjgwOV8mJcwE8U+NwTETTrg9F7ilwpITU22TB4or+sYQJ17CnWqGdcw==
-X-Gm-Message-State: AOJu0YwDIXeuRJwaLI4H401MKf5j+cAUX/r4xUQja9OxSvnLuZ9M+2WY
-	dtJO0KPQnet/MhpGT+GXwov5CXnBDWDEF09Fcua+E1aLv53pVi3/mLPFrs35TGOr+BtRwrdybUu
-	xjNN4gi2Cdat2K5oceKxYGXHsoi0=
-X-Google-Smtp-Source: AGHT+IFLQNwGHlc2x1pJKtfDQbxygWK6Gf7QAcGKtHzYeiun/g/cbs2h4qNhFprWOgm/WKjClpcVLvXhnCvHBWIHCLQ=
-X-Received: by 2002:a17:906:f8c6:b0:a6f:d1d:b523 with SMTP id
- a640c23a62f3a-a6f60d430e6mr561654166b.36.1718621938822; Mon, 17 Jun 2024
- 03:58:58 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718622061; x=1719226861;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/SjNe9vmU5byAvsAKJbghGk4V4PXep6SvlVxJjNPLCM=;
+        b=pG2+ACAzFx4vRrR37tRxgNDfc/6Zm80h5yzLGCD9SsAyDv0bacQtc/Y9LVg9Y3CrcC
+         MW8QRWCwyUQQwBbLgcogXJpaluIb4l5duPSRcfzEtDC+My6YsCl7QTe89U+FHp7LftJ2
+         jafj12GQHbx9NPApD1IVPhKxiqrEPBO+y4WjLZHKXKCeNQHui9IPvdzlUF95jEyDcPj5
+         bBkZ65vTGkSEDnovOZyAccuxWpzkjnMjviMLskq8RXoa0LDjgQamiSDIX1owR/Zp6ocu
+         OXoybmNqI3gA9w/0LeNd6NWw0PxQiHK8apuTjdYFBT2og2eNjPPwDAh33O3I6VJmEei+
+         ub/A==
+X-Forwarded-Encrypted: i=1; AJvYcCWaX89ZeRN2YLL7FEFrvAKQ6IbkOS6k396sknhPWzEHizfPtgDQGD3+CbmF/ThxHhBYzKX39B/YN3dVfsNqIS8sqrFoq8vJ6W0=
+X-Gm-Message-State: AOJu0Yx52sIdcq7Wn3OJSxqI/EEl3KDFmdKr8howyOF2bfBUq6yGs0Iu
+	m+vps73IXvD3qzne3kUaREiIAowy+2r8i7ThwUKnKhcG/vKbxPhkyXtKIiBmlfE=
+X-Google-Smtp-Source: AGHT+IEXhLINf4w3Jt6vhMBeIEaqYtSUuf/UGyq0ougmpEhxyfRWYmFs/qW8gnDYQ7pYqWK6RaW5Ug==
+X-Received: by 2002:a05:6512:10ce:b0:52c:bd0a:dd32 with SMTP id 2adb3069b0e04-52cbd0add64mr1873804e87.46.1718622061319;
+        Mon, 17 Jun 2024 04:01:01 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca282de47sm1203069e87.66.2024.06.17.04.01.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jun 2024 04:01:00 -0700 (PDT)
+Date: Mon, 17 Jun 2024 14:00:59 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Tengfei Fan <quic_tengfan@quicinc.com>
+Cc: krzysztof.kozlowski@linaro.org, djakov@kernel.org, robh@kernel.org, 
+	conor+dt@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org, 
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel@quicinc.com
+Subject: Re: [RFC PATCH 0/2] arm64: qcom: Add BWMON support for SA8775p
+Message-ID: <3yrji5rrzrfj3j4bekvhos36mgafbdcufsslk5daqfn7y5k2qz@k3nrrlbnlsmb>
+References: <20240617092940.1724962-1-quic_tengfan@quicinc.com>
+ <yb3ni6o22zdm2lqodj7utdb2dlg3jkbwzutxhmljxle3syoe5y@op2prslmri4y>
+ <d997f42d-0616-4180-ae36-9d2ebd60d15f@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
-In-Reply-To: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Mon, 17 Jun 2024 12:58:22 +0200
-Message-ID: <CAHp75VfSC9gAD9ipeWRPdQOxUp4FXqYYei-cJTs38nbz0cHpkg@mail.gmail.com>
-Subject: Re: [PATCH v10 00/38] ep93xx device tree conversion
-To: nikita.shubin@maquefel.me
-Cc: Arnd Bergmann <arnd@arndb.de>, Hartley Sweeten <hsweeten@visionengravers.com>, 
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Vinod Koul <vkoul@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Thierry Reding <thierry.reding@gmail.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	Mark Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, 
-	Sergey Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Ralf Baechle <ralf@linux-mips.org>, "Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, 
-	Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-spi@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-sound@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d997f42d-0616-4180-ae36-9d2ebd60d15f@quicinc.com>
 
-On Mon, Jun 17, 2024 at 11:38=E2=80=AFAM Nikita Shubin via B4 Relay
-<devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
->
-> The goal is to recieve ACKs for all patches in series to merge it via Arn=
-d branch.
+On Mon, Jun 17, 2024 at 06:42:42PM GMT, Tengfei Fan wrote:
+> 
+> 
+> On 6/17/2024 5:43 PM, Dmitry Baryshkov wrote:
+> > On Mon, Jun 17, 2024 at 05:29:38PM GMT, Tengfei Fan wrote:
+> > > Add CPU and LLCC BWMON nodes and their corresponding OPP tables for
+> > > SA8775p SoC.
+> > 
+> > This series is marked as RFC, Request For Comments. What kind of
+> > comments are expected for the series?
+> > 
+> 
+> I found that the BWMON patch for x1e80100[1] is currently under review.
+> There are upstream comments suggesting that we reference the same shared OPP
+> table from all the BWMONs that share the same OPP table. However, there will
+> be some DTBS CHECK warnings[2] if we do reference the same shared OPP table.
+> 
+> Therefore, I pushed this patch series to collect some comments on whether we
+> can have separate OPP tables for each BWMON, as the OPP table of
+> "pmu@90b5400" and "pmu@90b6400" in this patch series.
 
-'receive'
+Thank you for the explanation. Now why wasn't this a part of the cover
+letter?
 
-> Unfortunately, CLK subsystem suddenly went silent on clk portion of serie=
-s V2 reroll,
-> tried to ping them for about a month but no luck.
->
-> Link: https://lore.kernel.org/r/20240408-ep93xx-clk-v2-1-adcd68c13753@maq=
-uefel.me
->
-> Some changes since last version (v9) - see "Changes in v10", mostly
-> cosmetic.
+> 
+> [1]
+> https://lore.kernel.org/lkml/4ef1d9a9-6a0e-4324-b6d5-2ae225855b03@linaro.org/
+> 
+> [2]
+> arch/arm64/boot/dts/qcom/sa8775p-ride.dtb: pmu@90b5400: 'opp-table' is a
+> required property from schema $id:
+> http://devicetree.org/schemas/interconnect/qcom,msm8998-bwmon.yaml#
+> 
+> > > 
+> > > Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
+> > > ---
+> > > 
+> > > This patch series depends on patch series:
+> > > "[PATCH 2/4] soc: qcom: icc-bwmon: Allow for interrupts to be shared across instances"
+> > > https://lore.kernel.org/lkml/20240604011157.2358019-3-quic_sibis@quicinc.com/
+> > > 
+> > > Tengfei Fan (2):
+> > >    dt-bindings: interconnect: qcom-bwmon: Document SA8775p bwmon
+> > >      compatibles
+> > >    arm64: dts: qcom: sa8775p: Add CPU and LLCC BWMON
+> > > 
+> > >   .../interconnect/qcom,msm8998-bwmon.yaml      |   2 +
+> > >   arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 115 ++++++++++++++++++
+> > >   2 files changed, 117 insertions(+)
+> > > 
+> > > 
+> > > base-commit: 6906a84c482f098d31486df8dc98cead21cce2d0
+> > > -- 
+> > > 2.25.1
+> > > 
+> > 
+> 
+> -- 
+> Thx and BRs,
+> Tengfei Fan
 
-...
-
-> Patches should be formated with '--histogram'
-
-'formatted'
-
-...
-
-> Changes in v10:
->
-> Reordered SoB tags to make sure they appear before Rb and Acked tags.
-
-This is not required. The importance is only the order of SoBs
-themselves. If they are interleaved with other tags, it's fine.
-
-...
-
-
-Hopefully to see this series being eventually applied soon.
-Arnd? (Do we have all necessary subsystem maintainers' tags, btw?)
-
-
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+With best wishes
+Dmitry
 
