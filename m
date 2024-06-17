@@ -1,254 +1,445 @@
-Return-Path: <linux-pm+bounces-9268-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9269-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E97AE90A0E7
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 02:20:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE29290A0F3
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 02:46:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03742B2136F
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 00:20:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71C091C20B02
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 00:46:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D6E71FB2;
-	Mon, 17 Jun 2024 00:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 778CA1FDA;
+	Mon, 17 Jun 2024 00:46:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="NCBSrSCF"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="Op1iDr1t"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043A717F5
-	for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 00:20:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320151FBB
+	for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 00:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718583643; cv=none; b=Iq4DTarvoK4xRE6c/jK076hAhDuAkvxzK/kJR1fz0XryB8EwhBPXqqlWjJk5x26dklJEvup5jIIhlTeZ735Q4KL7e0ATf3Nn5fNs/sgV+/WhqWHCa+FUKj3S2gIKmFdAHAe894lOjcnHtJaQSQBuqsCp9ffcgG89HFzQAbxRgMY=
+	t=1718585207; cv=none; b=qJG249Wnq8KjZSGBR1+e48GFsYNiYE8f5rn0S9E3v4IbU3jRN2mj8x179u5I6oYSJg4JVECBxDGXz9opzs5u7kAx08v6PZ427kHTKxl5haUCeBKZlxB3YK5kVMOgSTGEGSwaBi837IAzjBGa4lvhuTANLlskVfQwLBm22tCtji8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718583643; c=relaxed/simple;
-	bh=ElGcE93YPNO6+VXOMNHd+8lGckGOEQ+jLeA+6EHVD+U=;
-	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type; b=H6/aptPLJhEiBRiI6HYKQiwHxI6TtPmf+elhGgFgBl8KsNQMzfyLRASFbHdyCgjxdprsfLcVLze7qhcdEg42QEUW1l3q8/SfitSrp8PvWXkBLNV1/fmSuFeiEmmCMLgfGj5sopupaM4WumiZsRL2WN+J/T7rPLLUlMmyJ7gy3RM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=NCBSrSCF; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=telus.net
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-70413de08c7so2743743b3a.0
-        for <linux-pm@vger.kernel.org>; Sun, 16 Jun 2024 17:20:41 -0700 (PDT)
+	s=arc-20240116; t=1718585207; c=relaxed/simple;
+	bh=7QN60RNKsIIhY/B5ErYFRsLjYd4lNNAUB6t/uJbw5T0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=owLyLsok5nxDzi2bR+qRNfhb+AbgLomZRom0yZHu9ratUgtdf097hHD0uFnqPkkmZJfEHZpgfVRQF24UG3lUea0Z6mdbp6NzPzT5IPUNVPso+wv7qbyu9qZCuNf5EsMtrmOcBQyfBb52Tvbm9f4RpnsQQnz0bXZeUtEm0FpB0Ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=Op1iDr1t; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4230366ad7bso32854975e9.1
+        for <linux-pm@vger.kernel.org>; Sun, 16 Jun 2024 17:46:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1718583641; x=1719188441; darn=vger.kernel.org;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=91YtqfEB2yGHwH8Rhem+uFZ4ogM7NT/580ia4kMPl3E=;
-        b=NCBSrSCFvEYxmWGqQg1uo5AX+i5QcALYBk5CZ9w11fB1NdStWGGg1S09znbBihpXys
-         W0yByu+YJ9673Ihzoi2BfKh0lFd1O1ledcFD7H4ZmwnVnN4CiRlg6r9ddZns/K/mpmaC
-         n9s+aUABwQT8CaOR3qQ2x6GmW2lnuKCMQl/lPDwH+K1885ncRfkiEBnR3b4AlgMqk1Ct
-         MEAn5ljqc0VvIDGnBhtAgL26dFKmGLLEL4JDP+ucnwi30fns4t0Q48jjtUFbS/SOoDCO
-         t5Fe30Ap7HfoxTa+8Q2GForJKyf7PlF5agppjqx/Ah+GXXRPPDIbxzSBOFmaPYM5rgnO
-         eI0w==
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1718585203; x=1719190003; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=v0RNOGO5KT+trWShB2zRW0cWMjHECgoKnPIa9zOi8yA=;
+        b=Op1iDr1tN+QGiQZiu2+qflDo1X6jjIR98Mwej/KsPTaoXRQ5KTd8jt74KXHgHR0ys0
+         YEEkddSP6nusafuY9YkXpPElWg/Ty4aic1imww+fzUs0mmKWrMFz8CPymxmF73utfLM+
+         kIx9+K/R049g6I4V5wc0tQ5191j0ubEKYMswIc0JwahLIWwFuWHYN8TPqYT3OrQJOwBU
+         vhc2S3fLx4EywZqVl3Law5LQsj5+nwJD9IASIPRSJVCDeuXfrpffHZGuJOEmJEicoYN0
+         Xc9Ww+ZtPmmlyNPUkdnJ6TLNDKRUkjukIOqdGofywOApXF66+O8zPrhCxZgtO6flDrGj
+         guAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718583641; x=1719188441;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=91YtqfEB2yGHwH8Rhem+uFZ4ogM7NT/580ia4kMPl3E=;
-        b=iBUhF8i49XH1gdmBGPC3j60h6XKdbKrHkuDa0mZC+cdupNzNgoNHDyVkc9qnVr2t3z
-         zb3m88ZzUCrNSpldoOuOMiB2152ZEQWEU6RqLAdhLU7033912LuReKLQBD++vgdQLkX9
-         IlOcBLxWBjTphSIzGvpnXmZeQraUBYvIhQhl3czJMwjVAhQ1FH9agoakPt4uHc9JeEl8
-         3j7XudVmRBEz4AXX+ZPOmGsWGzxded8Qyms1Np+8Fcon1xbonEIJznGU8cCHDb+C+Mkf
-         EgeuaNY3EhdVgvOt8pJ/mi3bxVKd0HPSjF3819KdVh1xue9AenQuvrpfua8HUptCsSWv
-         mIug==
-X-Forwarded-Encrypted: i=1; AJvYcCXvPnoevjWsLrqRiP7sAo3OChQrWVJXkUiCvhToKOi4cDIdQvf1kQ42HPESIdiHoPiiDOlZ1SfHK0q1pSR+qUfNqdxSKO+GpDg=
-X-Gm-Message-State: AOJu0YwNNif0Ley6bMfe2LiTda6BEjsBkMiV7BVEZFhrOx5mfYHba3lv
-	xM2f/mkV3rYBeOJWSVFK+aqQ6pQHPhJWtpdf6JqQC5GMq/b2WMia+mLeKNRSsoA=
-X-Google-Smtp-Source: AGHT+IEWad3GVlaqCppoLGsu5NX/4C4FRSP893Bd6cawh9xwCIh7hhcKHHGuMcIDuYBcBPa68tgufw==
-X-Received: by 2002:a05:6a00:26cb:b0:705:d755:69b0 with SMTP id d2e1a72fcca58-70603623c99mr1253331b3a.6.1718583640993;
-        Sun, 16 Jun 2024 17:20:40 -0700 (PDT)
-Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ccb85490sm6427210b3a.183.2024.06.16.17.20.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 16 Jun 2024 17:20:40 -0700 (PDT)
-From: "Doug Smythies" <dsmythies@telus.net>
-To: "'Christian Loehle'" <christian.loehle@arm.com>,
-	<rafael@kernel.org>
-Cc: <vincent.guittot@linaro.org>,
-	<qyousef@layalina.io>,
-	<peterz@infradead.org>,
-	<daniel.lezcano@linaro.org>,
-	<ulf.hansson@linaro.org>,
-	<anna-maria@linutronix.de>,
-	<kajetan.puchalski@arm.com>,
-	<lukasz.luba@arm.com>,
-	<dietmar.eggemann@arm.com>,
-	<linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>,
-	"Doug Smythies" <dsmythies@telus.net>
-References: <20240611112413.1241352-1-christian.loehle@arm.com>
-In-Reply-To: <20240611112413.1241352-1-christian.loehle@arm.com>
-Subject: RE: [PATCHv2 0/3] cpuidle: teo: Fixing utilization and intercept logic
-Date: Sun, 16 Jun 2024 17:20:43 -0700
-Message-ID: <004a01dac04c$314c4360$93e4ca20$@telus.net>
+        d=1e100.net; s=20230601; t=1718585203; x=1719190003;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v0RNOGO5KT+trWShB2zRW0cWMjHECgoKnPIa9zOi8yA=;
+        b=IqLDf67hAYByyT/newRG0KKsaYCeBxetwDx1IBHJKxvq95xb9VASNnsmOA0H/YmKLR
+         n0hWG8TGKagE1C25/8hf2VA+ipaUZh7AmH99AZJxPlKbZ52yqvGEGmyFPlIkjMwW4y5h
+         8JAk7TQWIh5vMiwQbndNDcxl5zJ2LMtqe1UESLvyTheGUBhSu/oSgmEq71u8uc5ChKv6
+         ykguTTpTGfR3i2lMjk5rKSW1XDBcklufN4xe9Nvg0/Y+U+GzGG1Kw0PUNk+9TvzjOIyh
+         tVfZ9OySQQQl21DdC0NfLXfPlbLdxi+XgtwkCvNn78iBHAFfaGrqYnWwyMwbAsY2o9Q6
+         P4pQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWz7iSbhl4iOtJ9ynxxVQkD72nGbH5RZ5/PdyvLbiwO+CzOLZ5yyMAVBZoBlJGmxmrRMgxw7GGc0B12oVSG06gMT94i/j9auo0=
+X-Gm-Message-State: AOJu0Yy1EYMfg06I4HrNkU9UvWJdqCNuWWXTdY6eC3A2Uh1Mvan4GVAa
+	FpRee2slcwo0csQQSIlOfgUIPk8vN99l4a5d+o1Wzv8163eHosRzgAa5HQGH/yM=
+X-Google-Smtp-Source: AGHT+IEUB6m286fG/RcgXyOr765a76w6bxgaj5cXI0hEiOyrTrBA4ejXDOvno8cYoPhTjuO1BL3K8A==
+X-Received: by 2002:a05:600c:4650:b0:422:7ad4:be7c with SMTP id 5b1f17b1804b1-4230484c58dmr77780255e9.34.1718585203291;
+        Sun, 16 Jun 2024 17:46:43 -0700 (PDT)
+Received: from airbuntu (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-422874de62fsm181688125e9.38.2024.06.16.17.46.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jun 2024 17:46:42 -0700 (PDT)
+Date: Mon, 17 Jun 2024 01:46:41 +0100
+From: Qais Yousef <qyousef@layalina.io>
+To: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Hongyan Xia <hongyan.xia2@arm.com>,
+	John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] sched: Consolidate cpufreq updates
+Message-ID: <20240617004641.bzvuxosttbofajad@airbuntu>
+References: <20240530104653.1234004-1-qyousef@layalina.io>
+ <20240601224017.qku2mhbaz4vsh3a3@airbuntu>
+ <CAKfTPtCHfnDAD-p_ScqHh7cZ=7AXDTw3fE0+ynMHNvCjuG8ogw@mail.gmail.com>
+ <20240609222029.yebhborjptp3gr6a@airbuntu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQHzep4n7RUpOXZFjs7PHwMj2t6TVLGY73sg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240609222029.yebhborjptp3gr6a@airbuntu>
 
-On 2024.06.11 04:24 Christian Loehle wrote:
+On 06/09/24 23:20, Qais Yousef wrote:
+> On 06/05/24 14:22, Vincent Guittot wrote:
+> > Hi Qais,
+> > 
+> > On Sun, 2 Jun 2024 at 00:40, Qais Yousef <qyousef@layalina.io> wrote:
+> > >
+> > > On 05/30/24 11:46, Qais Yousef wrote:
+> > >
+> > > > +static __always_inline void
+> > > > +__update_cpufreq_ctx_switch(struct rq *rq, struct task_struct *prev)
+> > > > +{
+> > >
+> > > I found a problem here. We should check if prev was sugov task. I hit a
+> > > corner case where we were constantly switching between RT task and sugov.
+> > >
+> > >         if (prev && prev->dl.flags & SCHED_FLAG_SUGOV) {
+> > >                 /* Sugov just did an update, don't be too aggressive */
+> > >                 return;
+> > >         }
+> > >
+> > 
+> > I reran my test with this v5 and the fix above but the problem is
+> > still there, it waits for the next tick to update the frequency
+> > whereas the cpu was idle.
+> 
+> Hurmph. Sorry I forgot to rerun this test. I broke it again with this
+> optimization :( Maybe I can replace this with explicit check with util_avg ==
+> SCHED_CAPACITY_SCALE, though this is not generic enough..
+> 
+> 	diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> 	index 6d8d569cdb6a..d64d47b4471a 100644
+> 	--- a/kernel/sched/fair.c
+> 	+++ b/kernel/sched/fair.c
+> 	@@ -4702,7 +4702,6 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+> 	 static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+> 	 {
+> 		u64 now = cfs_rq_clock_pelt(cfs_rq);
+> 	-       unsigned long prev_util_avg = cfs_rq->avg.util_avg;
+> 
+> 		/*
+> 		 * Track task load average for carrying it to new CPU after migrated, and
+> 	@@ -4736,16 +4735,6 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+> 		} else if (cfs_rq->decayed && (flags & UPDATE_TG)) {
+> 			update_tg_load_avg(cfs_rq);
+> 		}
+> 	-
+> 	-       /*
+> 	-        * This field is used to indicate whether a trigger of cpufreq update
+> 	-        * is required. When the CPU is saturated, other load signals could
+> 	-        * still be changing, but util_avg would have settled down, so ensure
+> 	-        * that we don't trigger unnecessary updates as from fair policy point
+> 	-        * of view, nothing has changed to cause a cpufreq update.
+> 	-        */
+> 	-       if (cfs_rq->decayed && prev_util_avg == cfs_rq->avg.util_avg)
+> 	-               cfs_rq->decayed = false;
+> 	 }
+> 
+> 	 /*
 
-...
-> Happy for anyone to take a look and test as well.
-...
+Testing the overhead of context switch is hard.. Compilation differences can
+produce strange results. I was seeing a bit of an overhead without the above
+but after spending more time debugging the difference is not due to extra
+overhead from context switch. It seems some parasitic differences introducing
+weird caching effects. Results of perf diff
 
-I tested the patch set.
-I do a set of tests adopted over some years now.
-Readers may recall that some of the tests search over a wide range of =
-operating conditions looking for areas to focus on in more detail.
-One interesting observation is that everything seems to run much slower =
-than the last time I did this, last August, Kernel 6.5-rc4.
+# Event 'cycles'
+#
+# Baseline  Delta Abs  Shared Object         Symbol
+# ........  .........  ....................  ....................................
+#
+     1.84%     +0.76%  [kernel.kallsyms]     [k] update_load_avg
+     6.12%     +0.76%  [kernel.kallsyms]     [k] native_write_msr
+     1.32%     +0.70%  [kernel.kallsyms]     [k] native_sched_clock
+     7.13%     +0.61%  [kernel.kallsyms]     [k] native_read_msr
+    24.88%     +0.53%  [kernel.kallsyms]     [k] delay_halt_mwaitx
+     0.98%     -0.33%  [kernel.kallsyms]     [k] psi_task_change
+     1.83%     +0.33%  [kernel.kallsyms]     [k] x86_pmu_disable_all
+     0.79%     -0.31%  [kernel.kallsyms]     [k] enqueue_entity
+     0.77%     +0.30%  [kernel.kallsyms]     [k] sched_clock_cpu
+     0.75%     -0.22%  [kernel.kallsyms]     [k] pick_eevdf
+     2.83%     -0.21%  [kernel.kallsyms]     [k] srso_safe_ret
+     0.75%     -0.20%  [kernel.kallsyms]     [k] enqueue_task_fair
+     0.79%     -0.19%  [kernel.kallsyms]     [k] update_rq_clock
+     0.47%     -0.19%  [kernel.kallsyms]     [k] enqueue_task
+     1.44%     -0.16%  [kernel.kallsyms]     [k] pick_next_task_fair
+     1.08%     -0.16%  [kernel.kallsyms]     [k] apparmor_file_permission
+     1.74%     -0.16%  [kernel.kallsyms]     [k] update_curr
+     0.87%     -0.16%  [kernel.kallsyms]     [k] vfs_write
+     0.40%     +0.15%  [kernel.kallsyms]     [k] sched_clock
+     0.52%     -0.15%  [kernel.kallsyms]     [k] update_cfs_group
+     0.39%     -0.14%  [kernel.kallsyms]     [k] x64_sys_call
+     0.76%     +0.14%  [kernel.kallsyms]     [k] dequeue_task_fair
+     0.30%     -0.14%  [kernel.kallsyms]     [k] __enqueue_entity
+     1.30%     +0.13%  [kernel.kallsyms]     [k] psi_task_switch
+     0.65%     -0.12%  [kernel.kallsyms]     [k] entry_SYSCALL_64_after_hwframe
+     0.51%     -0.12%  [kernel.kallsyms]     [k] check_preempt_wakeup_fair
+     1.19%     +0.11%  [kernel.kallsyms]     [k] amd_pmu_test_overflow_topbit
 
-Test system:
-Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz (6 cores, 2 thread =
-per core, 12 CPUs)
-CPU Frequency scaling driver: intel_pstate
-HWP (HardWare Pstate) control: Disabled
-CPU frequency scaling governor: Performance
-Idle states: 4: name : description:
-   state0/name:POLL		desc:CPUIDLE CORE POLL IDLE
-   state1/name:C1_ACPI		desc:ACPI FFH MWAIT 0x0
-   state2/name:C2_ACPI		desc:ACPI FFH MWAIT 0x30
-   state3/name:C3_ACPI		desc:ACPI FFH MWAIT 0x60
-Ilde driver: intel_idle
-Idle governor: as per individual test
-Kernel: 6.10-rc2 and with V1 and V2 patch sets (1000 Hz tick rate)
-Legend:
-   teo: unmodified 6.10-rc2
-   menu:=20
-   ladder:
-   cl: Kernel 6.10-rc2 + Christian Loehle patch set V1
-   clv2: Kernel 6.10-rc2 + Christian Loehle patch set V2
-System is extremely idle, other than the test work.
+> 
+> > 
+> > Also continuing here the discussion started on v2:
+> > 
+> > I agree that in the current implementation we are probably calling way
+> > too much cpufreq_update, we can optimize some sequences and using the
+> > context switch is a good way to get a better sampling but this is not
+> > enough and we still need to call cpufreq_update in some other case
+> > involving enqueue. The delay of waiting for the next tick is not
+> 
+> Do you have any suggestions? I'm not sure how to classify different type of
+> enqueue events where some would need an update and others don't.
+> 
+> I think cases that involve wakeup preemption not causing a context switch AND
+> maybe a large change in util_avg?
+> 
+> > acceptable nor sustainable especially with 250 and lower HZ but I'm
+> 
+> I think it is fine for 250. I have been testing with this and didn't see
+> issues. But wider testing could yield different results.
+> 
+> > pretty sure it would be the same for some system using 1000HZ. IIUC
+> > new HW is becoming much more efficient at updating the frequency so it
+> > would not be a problem for this new system to update performance more
+> > frequently especially when it ends up being as simple as writing a
+> > value in a memory region without waiting for it to be applied (like
+> > cpufreq fast_switch methods). All this to say that always/only waiting
+> > for context switch or tick might be suitable for your case but it
+> > doesn't look like the right solution for all devices and systems
+> 
+> I just don't want us to end up with probabilistic approach. I am fine with more
+> updates, but we need to be more intentional/specific when it's truly needed.
 
-Test 1: 2 core ping pong sweep:
+This needs more testing still, but how about this approach? If a wakeup
+preemption check failed, we send a 'special' request to cpufreq governor to let
+it know there's a new task. schedutil will then do a special check to see if
+there was no update since sysctl_sched_base_slice (our expected worst case
+context switch point) and issue one if it was longer than that.
 
-Pass a token between 2 CPUs on 2 different cores.
-Do a variable amount of work at each stop.
-
-Purpose: To utilize the shallowest idle states
-and observe the transition from using more of 1
-idle state to another.
-
-Results relative to teo (negative is better):
-		menu		ladder		clv2		cl
-average		-2.09%		11.11%		2.88%		1.81%
-max		10.63%		33.83%		9.45%		10.13%
-min		-11.58%	6.25%		-3.61%		-3.34%
-
-While there are a few operating conditions where clv2 performs better =
-than teo, overall it is worse.
-
-Further details:
-http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/2-1/2-core-pp-r=
-elative.png
-http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/2-1/2-core-pp-d=
-ata.png
-http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/2-1/perf/
-
-Test 2: 6 core ping pong sweep:
-
-Pass a token between 6 CPUs on 6 different cores.
-Do a variable amount of work at each stop.
-
-Purpose: To utilize the midrange idle states
-and observe the transitions between use of
-idle states.
-
-Note: This test has uncertainty in an area where the performance is =
-bi-stable for all idle governors,
-transitioning between much less power and slower performance and much =
-more power and higher performance.
-On either side of this area, the differences between all idle governors =
-are negligible.
-Only data from before this area (from results 1 t0 95) was included in =
-the below results.
-
-Results relative to teo (negative is better):
-		menu	ladder	cl	clv2
-average		0.16%	4.32%	2.54%	2.64%
-max		0.92%	14.32%	8.78%	8.50%
-min		-0.44%	0.27%	0.09%	0.05%
-
-One large clv2 difference seems to be excessive use of the deepest idle =
-state,
-with corresponding 100% hit rate on the "Idle State 3 was to deep" =
-metric.
-Example (20 second sample time):
-
-teo: Idle state 3 entries: 600, 74.33% were to deep or 451. Processor =
-power was 38.0 watts.
-clv2: Idle state 3 entries: 4,375,243, 100.00% were to deep or =
-4,375,243. Processor power was 40.6 watts.
-clv2 loop times were about 8% worse than teo.
-
-Further details:
-http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/6-1/6-core-pp-d=
-ata-detail-a.png
-http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/6-1/6-core-pp-d=
-ata-detail-b.png
-http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/6-1/6-core-pp-d=
-ata.png
-http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/6-1/perf/
-
-Test 3: sleeping ebizzy - 128 threads.
-
-Purpose: This test has given interesting results in the past.
-The test varies the sleep interval between record lookups.
-The result is varying usage of idle states.
-
-Results: relative to teo (negative is better):
-		menu	clv2	ladder	cl
-average		0.06%	0.38%	0.81%	0.35%
-max		2.53%	3.20%	5.00%	2.87%
-min		-2.13%	-1.66%	-3.30%	-2.13%
-
-No strong conclusion here, from just the data.
-However, clv2 seems to use a bit more processor power, on average.
-
-Further details:
-
-Test4: adrestia wakeup latency tests. 500 threads.
-
-Purpose: The test was reported in 2023.09 by the kernel test robot and =
-looked
-both interesting and gave interesting results, so I added it to the =
-tests I run.
-
-Results:
-teo:wakeup cost (periodic, 20us): 3130nSec reference
-clv2:wakeup cost (periodic, 20us): 3179nSec +1.57%
-cl:wakeup cost (periodic, 20us): 3206nSec +2.43%
-menu:wakeup cost (periodic, 20us): 2933nSec -6.29%
-ladder:wakeup cost (periodic, 20us): 3530nSec +12.78%
-
-No strong conclusion here, from just the data.
-However, clv2 seems to use a bit more processor power, on average.
-teo: 69.72 watts
-clv2: 72.91 watts +4.6%
-Note 1: The first 5 minutes of the test powers were discarded to allow =
-for thermal stabilization.
-Note 2: More work is required for this test, because the teo one =
-actually took longer to execute, due to more outlier results than the =
-other tests.
-
-There were several other tests run but are not written up herein.
+If this looks agreeable I'll go ahead and do more testing and send a new
+version.
 
 
+From 4c0fcd54a9430164d259877051f6675002f0f5f6 Mon Sep 17 00:00:00 2001
+From: Qais Yousef <qyousef@layalina.io>
+Date: Sun, 16 Jun 2024 01:30:41 +0100
+Subject: [PATCH] fixup: handle long ticks
 
+Signed-off-by: Qais Yousef <qyousef@layalina.io>
+---
+ include/linux/sched/cpufreq.h    |  1 +
+ kernel/sched/cpufreq_schedutil.c | 64 +++++++++++++++++---------------
+ kernel/sched/fair.c              | 13 ++++---
+ 3 files changed, 44 insertions(+), 34 deletions(-)
+
+diff --git a/include/linux/sched/cpufreq.h b/include/linux/sched/cpufreq.h
+index 2d0a45aba16f..5409a9f79cc0 100644
+--- a/include/linux/sched/cpufreq.h
++++ b/include/linux/sched/cpufreq.h
+@@ -10,6 +10,7 @@
+ 
+ #define SCHED_CPUFREQ_IOWAIT		(1U << 0)
+ #define SCHED_CPUFREQ_FORCE_UPDATE	(1U << 1) /* ignore transition_delay_us */
++#define SCHED_CPUFREQ_TASK_ENQUEUED	(1U << 2) /* new fair task was enqueued */
+ 
+ #ifdef CONFIG_CPU_FREQ
+ struct cpufreq_policy;
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index e8b65b75e7f3..4cdaca0a984e 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -64,6 +64,27 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time,
+ {
+ 	s64 delta_ns;
+ 
++	delta_ns = time - sg_policy->last_freq_update_time;
++
++	/*
++	 * We want to update cpufreq at context switch, but on systems with
++	 * long TICK values, this can happen after a long time while more tasks
++	 * would have been added meanwhile leaving us potentially running at
++	 * inadequate frequency for extended period of time.
++	 *
++	 * This logic should only apply when new fair task was added to the
++	 * CPU, we'd want to defer to context switch as much as possible, but
++	 * to avoid the potential delays mentioned above, let's check if this
++	 * additional tasks warrants sending an update sooner.
++	 *
++	 * We want to ensure there's at least an update every
++	 * sysctl_sched_base_slice.
++	 */
++	if (likely(flags & SCHED_CPUFREQ_TASK_ENQUEUED)) {
++		if (delta_ns < sysctl_sched_base_slice)
++			return false;
++	}
++
+ 	/*
+ 	 * Since cpufreq_update_util() is called with rq->lock held for
+ 	 * the @target_cpu, our per-CPU data is fully serialized.
+@@ -91,8 +112,6 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time,
+ 	if (unlikely(flags & SCHED_CPUFREQ_FORCE_UPDATE))
+ 		return true;
+ 
+-	delta_ns = time - sg_policy->last_freq_update_time;
+-
+ 	return delta_ns >= sg_policy->freq_update_delay_ns;
+ }
+ 
+@@ -257,6 +276,8 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
+ 	bool set_iowait_boost = flags & SCHED_CPUFREQ_IOWAIT;
+ 	bool forced_update = flags & SCHED_CPUFREQ_FORCE_UPDATE;
+ 
++	sg_cpu->last_update = time;
++
+ 	/* Reset boost if the CPU appears to have been idle enough */
+ 	if (sg_cpu->iowait_boost && !forced_update &&
+ 	    sugov_iowait_reset(sg_cpu, time, set_iowait_boost))
+@@ -362,30 +383,17 @@ static bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu)
+ static inline bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu) { return false; }
+ #endif /* CONFIG_NO_HZ_COMMON */
+ 
+-/*
+- * Make sugov_should_update_freq() ignore the rate limit when DL
+- * has increased the utilization.
+- */
+-static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu)
+-{
+-	if (cpu_bw_dl(cpu_rq(sg_cpu->cpu)) > sg_cpu->bw_min)
+-		sg_cpu->sg_policy->limits_changed = true;
+-}
+-
+ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+ 					      u64 time, unsigned long max_cap,
+ 					      unsigned int flags)
+ {
+ 	unsigned long boost;
+ 
+-	sugov_iowait_boost(sg_cpu, time, flags);
+-	sg_cpu->last_update = time;
+-
+-	ignore_dl_rate_limit(sg_cpu);
+-
+ 	if (!sugov_should_update_freq(sg_cpu->sg_policy, time, flags))
+ 		return false;
+ 
++	sugov_iowait_boost(sg_cpu, time, flags);
++
+ 	boost = sugov_iowait_apply(sg_cpu, time, max_cap, flags);
+ 	sugov_get_util(sg_cpu, boost);
+ 
+@@ -510,22 +518,20 @@ sugov_update_shared(struct update_util_data *hook, u64 time, unsigned int flags)
+ 
+ 	raw_spin_lock(&sg_policy->update_lock);
+ 
+-	sugov_iowait_boost(sg_cpu, time, flags);
+-	sg_cpu->last_update = time;
++	if (!sugov_should_update_freq(sg_policy, time, flags))
++		goto unlock;
+ 
+-	ignore_dl_rate_limit(sg_cpu);
++	sugov_iowait_boost(sg_cpu, time, flags);
+ 
+-	if (sugov_should_update_freq(sg_policy, time, flags)) {
+-		next_f = sugov_next_freq_shared(sg_cpu, time, flags);
++	next_f = sugov_next_freq_shared(sg_cpu, time, flags);
+ 
+-		if (!sugov_update_next_freq(sg_policy, time, next_f, flags))
+-			goto unlock;
++	if (!sugov_update_next_freq(sg_policy, time, next_f, flags))
++		goto unlock;
+ 
+-		if (sg_policy->policy->fast_switch_enabled)
+-			cpufreq_driver_fast_switch(sg_policy->policy, next_f);
+-		else
+-			sugov_deferred_update(sg_policy);
+-	}
++	if (sg_policy->policy->fast_switch_enabled)
++		cpufreq_driver_fast_switch(sg_policy->policy, next_f);
++	else
++		sugov_deferred_update(sg_policy);
+ unlock:
+ 	raw_spin_unlock(&sg_policy->update_lock);
+ }
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 8b87640f386b..3945aa938436 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -8314,7 +8314,7 @@ static void check_preempt_wakeup_fair(struct rq *rq, struct task_struct *p, int
+ 	int cse_is_idle, pse_is_idle;
+ 
+ 	if (unlikely(se == pse))
+-		return;
++		goto nopreempt;
+ 
+ 	/*
+ 	 * This is possible from callers such as attach_tasks(), in which we
+@@ -8323,7 +8323,7 @@ static void check_preempt_wakeup_fair(struct rq *rq, struct task_struct *p, int
+ 	 * next-buddy nomination below.
+ 	 */
+ 	if (unlikely(throttled_hierarchy(cfs_rq_of(pse))))
+-		return;
++		goto nopreempt;
+ 
+ 	if (sched_feat(NEXT_BUDDY) && !(wake_flags & WF_FORK)) {
+ 		set_next_buddy(pse);
+@@ -8340,7 +8340,7 @@ static void check_preempt_wakeup_fair(struct rq *rq, struct task_struct *p, int
+ 	 * below.
+ 	 */
+ 	if (test_tsk_need_resched(curr))
+-		return;
++		goto nopreempt;
+ 
+ 	/* Idle tasks are by definition preempted by non-idle tasks. */
+ 	if (unlikely(task_has_idle_policy(curr)) &&
+@@ -8352,7 +8352,7 @@ static void check_preempt_wakeup_fair(struct rq *rq, struct task_struct *p, int
+ 	 * is driven by the tick):
+ 	 */
+ 	if (unlikely(p->policy != SCHED_NORMAL) || !sched_feat(WAKEUP_PREEMPTION))
+-		return;
++		goto nopreempt;
+ 
+ 	find_matching_se(&se, &pse);
+ 	WARN_ON_ONCE(!pse);
+@@ -8367,7 +8367,7 @@ static void check_preempt_wakeup_fair(struct rq *rq, struct task_struct *p, int
+ 	if (cse_is_idle && !pse_is_idle)
+ 		goto preempt;
+ 	if (cse_is_idle != pse_is_idle)
+-		return;
++		goto nopreempt;
+ 
+ 	cfs_rq = cfs_rq_of(se);
+ 	update_curr(cfs_rq);
+@@ -8378,6 +8378,9 @@ static void check_preempt_wakeup_fair(struct rq *rq, struct task_struct *p, int
+ 	if (pick_eevdf(cfs_rq) == pse)
+ 		goto preempt;
+ 
++nopreempt:
++	if (rq->cfs.decayed && rq->cfs.h_nr_running > 1)
++		cpufreq_update_util(rq, SCHED_CPUFREQ_TASK_ENQUEUED);
+ 	return;
+ 
+ preempt:
+-- 
+2.34.1
 
 
