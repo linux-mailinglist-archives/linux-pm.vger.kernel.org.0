@@ -1,67 +1,63 @@
-Return-Path: <linux-pm+bounces-9364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9360-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12EA990B94B
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 20:15:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4A3D90B942
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 20:14:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14B6F1C20A5F
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 18:15:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA5FE281988
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 18:14:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DB66199E92;
-	Mon, 17 Jun 2024 18:13:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1C7E1991B9;
+	Mon, 17 Jun 2024 18:13:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="lqe81IbW"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="KlgN9XOw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB0101990C9;
-	Mon, 17 Jun 2024 18:13:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7571990B7;
+	Mon, 17 Jun 2024 18:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718647998; cv=none; b=ECcy8S8daV2s0DKrMdNapTr4oRHh8o2xDHOl1sMZjioJOq8mgsS46EhIg9b2mIIb4cHvajFR6ZUMz+GZcmqpwXoCjOO9sRaLCZqD2vvE+kCqprd0o27Na58+wzEJ6AZ5X0HuLBTwGakBMFa4u759G4XtXRHN4iavni6EtbGqmBQ=
+	t=1718647996; cv=none; b=Cmj+U47PmF1fco6shXfsUj2czhvJJlqmMsjbgaQAa7V0iqE08ej4+E5JjPkyUfXHNSzHPAQ9UIc+WfK2wYIJQf7RSOjuOIhiteUrY/E8y52DX2lB3fQ7LQS8DSfKgrgvJuhJegGrGBx19XNddYWfK+fUjJMcsT8jW3hd+HSjCI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718647998; c=relaxed/simple;
-	bh=0EqbKRr78pKBR/LsZY0Hi8foVnymZgGel7l5EDAak44=;
+	s=arc-20240116; t=1718647996; c=relaxed/simple;
+	bh=KmMhyRmwryZmFf9UlhwvHifgNSUFDVU+PhT5RqTwK+k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WHtVjAAFOlURJtZeWMO4b7ZARq2XWekxcRVXzoVLfdF/Zg0v7PofvRiT1UIV0cHCAdPs3cpv/egkixMNqHAr2zg+fOLAAUZc3aYycUjfnQfR/kWKXUrVI4Ohx2FzAtTremhBNymcqLw0pM5wUGilKhi5d+a5z2VQzzmQbaNW74g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=lqe81IbW reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=krbhUBXgvfJ2CICxsHvArvV+n6SPOcEPkbXbSN11tk9z9jFzpvat+73Cal2riKEwrxT1UL9VWzDpd4ctSb7PXGwM0WUxrTIZ8Lm0ur7iGPk7t4m49kqZmluDYglI79kTXbM7ovGCdXgUeZbBPD14vfXQM7HeFTHLHVNyog/HC/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=KlgN9XOw; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id d8ebfcda6e69060f; Mon, 17 Jun 2024 20:13:08 +0200
+ id e54697b8cb00d04a; Mon, 17 Jun 2024 20:13:07 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 8F85B16606FD;
-	Mon, 17 Jun 2024 20:13:07 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id CBFA716606FD;
+	Mon, 17 Jun 2024 20:13:06 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1718647988;
-	bh=0EqbKRr78pKBR/LsZY0Hi8foVnymZgGel7l5EDAak44=;
+	s=dkim; t=1718647987;
+	bh=KmMhyRmwryZmFf9UlhwvHifgNSUFDVU+PhT5RqTwK+k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=lqe81IbWjlzayrmgEhUnh7AE8CfedTq5oO6luYYBVS6QCCDt6lCN44PeOQZbBNxQp
-	 gehJefYOuxaLnOY4fXtmoFwcsOR0xz1/rmfqPCuCXZSRodSRnOoG3kWUCiSCnDLRPp
-	 tE40JE7lDMiPD4ZGuXXbXj3oZ+bzxG30Be/xxu5LSb+D0Ox0AISw75GzWmy4q/M8RA
-	 6Mpfmtxl0vxS00KcBfhBh9MgFUCkBZBsDopgZFK8nQkY+MXtej2EHp9RaMFcssfX0C
-	 A8zwKI33hyfmQUNfqfzue7oC+oscbOMyggXhlcXpZPoZjZHY3bQYeiOl3VQ/C71Z/F
-	 68LNfNjMsTebQ==
+	b=KlgN9XOwrW5Yvm/4F3LF/DMlAFzv14BD6CEGAcxIZZijOpiQ/KTvdt7uP2NlJ+DI2
+	 IXX1QOVWQwOgoASSBMLtOTK804tpSf0DAskW+L1gi3jL1MReK/hc32m9gxPH5ZtL3s
+	 8hkj2Wag3iruCIqBtIz4Af9+tAdP29sEZUtfJoGkxah6NqC6QKvptEma22fv3tr83Z
+	 8SJFW9X6t2/ZSf3FJTc8EeNZ2/EWuHS7FFd39QMVNi9yi5Obw1B0guAwcpCd2w+euQ
+	 oIvBspVu2ot0IrubAuLkS5skIi+nCsf9Df33NzLYPm+qJu3nX05cEUi6UjgnSNjLA/
+	 i0UvbtpdlI1IA==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  "Rafael J. Wysocki" <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org
-Subject:
- [PATCH v1 10/14] thermal: tegra: Use thermal_zone_for_each_trip() for walking
- trip points
-Date: Mon, 17 Jun 2024 20:03:59 +0200
-Message-ID: <13999070.RDIVbhacDa@kreacher>
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH v1 11/14] thermal: helpers: Drop get_thermal_instance()
+Date: Mon, 17 Jun 2024 20:05:13 +0200
+Message-ID: <24232630.ouqheUzb2q@kreacher>
 In-Reply-To: <8409966.T7Z3S40VBb@kreacher>
 References: <8409966.T7Z3S40VBb@kreacher>
 Precedence: bulk
@@ -75,141 +71,104 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrfedvhedguddvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgii
- tggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehthhhivghrrhihrdhrvgguihhnghesghhmrghilhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrfedvhedguddvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgii
+ tggrnhhosehlihhnrghrohdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-It is generally inefficient to iterate over trip indices and call
-thermal_zone_get_trip() every time to get the struct thermal_trip
-corresponding to the given trip index, so modify the Tegra thermal
-drivers to use thermal_zone_for_each_trip() for walking trips.
+There are no more users of get_thermal_instance(), so drop it.
+
+While at it, replace get_instance() returning a pointer to struct
+thermal_instance with thermal_instance_present() returning a bool
+which is more straightforward.
+
+No functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/tegra/soctherm.c        |   38 ++++++++++++++++----------------
- drivers/thermal/tegra/tegra30-tsensor.c |   25 ++++++++++-----------
- 2 files changed, 33 insertions(+), 30 deletions(-)
+ drivers/thermal/thermal_core.h    |    5 -----
+ drivers/thermal/thermal_helpers.c |   30 ++++++------------------------
+ 2 files changed, 6 insertions(+), 29 deletions(-)
 
-Index: linux-pm/drivers/thermal/tegra/soctherm.c
+Index: linux-pm/drivers/thermal/thermal_core.h
 ===================================================================
---- linux-pm.orig/drivers/thermal/tegra/soctherm.c
-+++ linux-pm/drivers/thermal/tegra/soctherm.c
-@@ -683,24 +683,25 @@ static const struct thermal_zone_device_
- 	.set_trips = tegra_thermctl_set_trips,
- };
+--- linux-pm.orig/drivers/thermal/thermal_core.h
++++ linux-pm/drivers/thermal/thermal_core.h
+@@ -191,11 +191,6 @@ void __thermal_cdev_update(struct therma
  
--static int get_hot_temp(struct thermal_zone_device *tz, int *trip_id, int *temp)
-+static int get_hot_trip_cb(struct thermal_trip *trip, void *arg)
- {
--	int i, ret;
--	struct thermal_trip trip;
-+	const struct thermal_trip **trip_ret = arg;
+ int get_tz_trend(struct thermal_zone_device *tz, const struct thermal_trip *trip);
  
--	for (i = 0; i < thermal_zone_get_num_trips(tz); i++) {
-+	if (trip->type != THERMAL_TRIP_HOT)
-+		return 0;
- 
--		ret = thermal_zone_get_trip(tz, i, &trip);
--		if (ret)
--			return -EINVAL;
+-struct thermal_instance *
+-get_thermal_instance(struct thermal_zone_device *tz,
+-		     struct thermal_cooling_device *cdev,
+-		     int trip);
 -
--		if (trip.type == THERMAL_TRIP_HOT) {
--			*trip_id = i;
--			return 0;
--		}
--	}
-+	*trip_ret = trip;
-+	/* Return nonzero to terminate the search. */
-+	return 1;
-+}
- 
--	return -EINVAL;
-+static const struct thermal_trip *get_hot_trip(struct thermal_zone_device *tz)
-+{
-+	const struct thermal_trip *trip = NULL;
-+
-+	thermal_zone_for_each_trip(tz, get_hot_trip_cb, &trip);
-+
-+	return trip;
+ /*
+  * This structure is used to describe the behavior of
+  * a certain cooling device on a certain trip point
+Index: linux-pm/drivers/thermal/thermal_helpers.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_helpers.c
++++ linux-pm/drivers/thermal/thermal_helpers.c
+@@ -39,18 +39,18 @@ int get_tz_trend(struct thermal_zone_dev
+ 	return trend;
  }
  
+-static struct thermal_instance *get_instance(struct thermal_zone_device *tz,
+-					     struct thermal_cooling_device *cdev,
+-					     const struct thermal_trip *trip)
++static bool thermal_instance_present(struct thermal_zone_device *tz,
++				     struct thermal_cooling_device *cdev,
++				     const struct thermal_trip *trip)
+ {
+ 	struct thermal_instance *ti;
+ 
+ 	list_for_each_entry(ti, &tz->thermal_instances, tz_node) {
+ 		if (ti->trip == trip && ti->cdev == cdev)
+-			return ti;
++			return true;
+ 	}
+ 
+-	return NULL;
++	return false;
+ }
+ 
+ bool thermal_trip_is_bound_to_cdev(struct thermal_zone_device *tz,
+@@ -62,7 +62,7 @@ bool thermal_trip_is_bound_to_cdev(struc
+ 	mutex_lock(&tz->lock);
+ 	mutex_lock(&cdev->lock);
+ 
+-	ret = !!get_instance(tz, cdev, trip);
++	ret = thermal_instance_present(tz, cdev, trip);
+ 
+ 	mutex_unlock(&cdev->lock);
+ 	mutex_unlock(&tz->lock);
+@@ -71,24 +71,6 @@ bool thermal_trip_is_bound_to_cdev(struc
+ }
+ EXPORT_SYMBOL_GPL(thermal_trip_is_bound_to_cdev);
+ 
+-struct thermal_instance *
+-get_thermal_instance(struct thermal_zone_device *tz,
+-		     struct thermal_cooling_device *cdev, int trip_index)
+-{
+-	struct thermal_instance *ti;
+-
+-	mutex_lock(&tz->lock);
+-	mutex_lock(&cdev->lock);
+-
+-	ti = get_instance(tz, cdev, &tz->trips[trip_index].trip);
+-
+-	mutex_unlock(&cdev->lock);
+-	mutex_unlock(&tz->lock);
+-
+-	return ti;
+-}
+-EXPORT_SYMBOL(get_thermal_instance);
+-
  /**
-@@ -732,8 +733,9 @@ static int tegra_soctherm_set_hwtrips(st
- 				      struct thermal_zone_device *tz)
- {
- 	struct tegra_soctherm *ts = dev_get_drvdata(dev);
-+	const struct thermal_trip *hot_trip;
- 	struct soctherm_throt_cfg *stc;
--	int i, trip, temperature, ret;
-+	int i, temperature, ret;
- 
- 	/* Get thermtrips. If missing, try to get critical trips. */
- 	temperature = tsensor_group_thermtrip_get(ts, sg->id);
-@@ -750,8 +752,8 @@ static int tegra_soctherm_set_hwtrips(st
- 	dev_info(dev, "thermtrip: will shut down when %s reaches %d mC\n",
- 		 sg->name, temperature);
- 
--	ret = get_hot_temp(tz, &trip, &temperature);
--	if (ret) {
-+	hot_trip = get_hot_trip(tz);
-+	if (!hot_trip) {
- 		dev_info(dev, "throttrip: %s: missing hot temperature\n",
- 			 sg->name);
- 		return 0;
-@@ -764,7 +766,7 @@ static int tegra_soctherm_set_hwtrips(st
- 			continue;
- 
- 		cdev = ts->throt_cfgs[i].cdev;
--		if (get_thermal_instance(tz, cdev, trip))
-+		if (thermal_trip_is_bound_to_cdev(tz, hot_trip, cdev))
- 			stc = find_throttle_cfg_by_name(ts, cdev->type);
- 		else
- 			continue;
-Index: linux-pm/drivers/thermal/tegra/tegra30-tsensor.c
-===================================================================
---- linux-pm.orig/drivers/thermal/tegra/tegra30-tsensor.c
-+++ linux-pm/drivers/thermal/tegra/tegra30-tsensor.c
-@@ -308,6 +308,18 @@ struct trip_temps {
- 	int crit_trip;
- };
- 
-+static int tegra_tsensor_get_trips_cb(struct thermal_trip *trip, void *arg)
-+{
-+	struct trip_temps *temps = arg;
-+
-+	if (trip->type == THERMAL_TRIP_HOT)
-+		temps->hot_trip = trip->temperature;
-+	else if (trip->type == THERMAL_TRIP_CRITICAL)
-+		temps->crit_trip = trip->temperature;
-+
-+	return 0;
-+}
-+
- static void tegra_tsensor_get_hw_channel_trips(struct thermal_zone_device *tzd,
- 					       struct trip_temps *temps)
- {
-@@ -320,18 +332,7 @@ static void tegra_tsensor_get_hw_channel
- 	temps->hot_trip  = 85000;
- 	temps->crit_trip = 90000;
- 
--	for (i = 0; i < thermal_zone_get_num_trips(tzd); i++) {
--
--		struct thermal_trip trip;
--
--		thermal_zone_get_trip(tzd, i, &trip);
--
--		if (trip.type == THERMAL_TRIP_HOT)
--			temps->hot_trip = trip.temperature;
--
--		if (trip.type == THERMAL_TRIP_CRITICAL)
--			temps->crit_trip = trip.temperature;
--	}
-+	thermal_zone_for_each_trip(tzd, tegra_tsensor_get_trips_cb, temps);
- 
- 	/* clamp hardware trips to the calibration limits */
- 	temps->hot_trip = clamp(temps->hot_trip, 25000, 90000);
+  * __thermal_zone_get_temp() - returns the temperature of a thermal zone
+  * @tz: a valid pointer to a struct thermal_zone_device
 
 
 
