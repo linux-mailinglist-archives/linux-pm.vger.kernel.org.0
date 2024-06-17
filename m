@@ -1,72 +1,75 @@
-Return-Path: <linux-pm+bounces-9275-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9276-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BDD590A3A9
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 08:05:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D07E90A50F
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 08:16:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAF2B281CBC
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 06:05:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CAC51F2420C
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 06:16:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84A05181D1F;
-	Mon, 17 Jun 2024 06:05:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F394186E3C;
+	Mon, 17 Jun 2024 06:11:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iMHH8l/m"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iropJvpB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8C2181315
-	for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 06:05:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A2C176FD3
+	for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 06:11:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718604319; cv=none; b=LsX4GLB/TRM/K9jmUpKQZIEW3GueO+mKupN+Bj9pUyTuRCCebtd07ZWtxTY1lFyBSZsc9eZUGB1XZNqq1Nm8QoW3CaUtspB7igelZHcvhPeS6bxU8/fdpi0tybVNAjlbVX/2OVRJvmaTDIDTMvU0OYkLoBjrNWyfj4QsZgYZ7lQ=
+	t=1718604701; cv=none; b=lXaNFirDssyWaKAfRusxvf9c6uJmqE5YddbDQ8d1bx89U20rQoits72cen3ef5iWidDnBzVNm+4hJixO4SaAx0gn+/aUvFgJIZdMRtr6cdpHxhrR8nGbpAc10NhyUp0yHkYQW8MIA6ifgOmJVdI29A/CQti9eE5C79f9BRrNNYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718604319; c=relaxed/simple;
-	bh=PgB8PKxsUEKNt+HMslFfmvHOaixSE52IyADVaN7ur/A=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=dBCOvW1AzSd3K21l3D4WYOzXEwMwwHczfdajBbRk0bUIFicsejmTIeZfCSvgUMpnm/TyrOzvSmPTE+BBb0PgmWHLOCsmMME+Wt77uQ4xoIBm2+VhIVCe6rDQeMfQR3hyVVT4dLVVuLD2/69e4DvtW9rDXmpOl6Yyr2D34muYjNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iMHH8l/m; arc=none smtp.client-ip=209.85.128.47
+	s=arc-20240116; t=1718604701; c=relaxed/simple;
+	bh=vpGyn37HoKQU9ZCMZp6hhzA0NMH1CjBNZyXDjfo6eko=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qP393LzC0QwQjwztQrRdkBv3PFlroRpHhIWzZKmSd3ZK3esAw21mhhN8Cm5vuPnjSa9W9boPiNfTzvhph4ktxH7iISb9xA7MUUbN/KW4jG20ol06L0Xv3O8FFn7u2xvlFRxTbuS19RoWCNEzjjOzXIWjVbgxTFzNCio9wy8XWEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iropJvpB; arc=none smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4217a96de38so29337635e9.1
-        for <linux-pm@vger.kernel.org>; Sun, 16 Jun 2024 23:05:17 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-57ca578ce8dso4518368a12.2
+        for <linux-pm@vger.kernel.org>; Sun, 16 Jun 2024 23:11:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718604316; x=1719209116; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zS1aeYgKyINpCmSdi/HNQLP7zJXBRqIlSyG7kOUcoOw=;
-        b=iMHH8l/mlNR3WpAIm7z2x6tsPZAA+UOFAJP/n9PcacBn+gljoLb374jTzTEVEGLUdL
-         MVAqBmHjYnotsy4yFa+eqsuQaZLeZIfrZjRNsPCxA++HuOlHVKflkgZmtaozWhxhHhpT
-         AZ1PJ/8D1J9Kz6BWF8sIRZ+nAunVqs4HqS+VnZjxpggkKm8BBASF0kOrEP4UJM9ot1Po
-         w26Zs/c9DazUdgKPW6QTzcPxVL9o4BS1nvskqy7v995o3dWdgcjB5dF3POOgr/nSKECc
-         aW/jFJbMp91wdUCQPqF6+lokRoTDP8hYfP5/xDMkYPC2HFyl3R7rHRrpsY8b2QQMGnvB
-         qFaw==
+        d=linaro.org; s=google; t=1718604698; x=1719209498; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9kdEToaRtEtLTBxGmIJLoLouOnpDnXZ/+scsxAQ6PL4=;
+        b=iropJvpB80NHSkPQ+AK1Vck1hKZY+2H1OvP6BngXOAGFHZjzKjKL5FHs9LyReeCnGx
+         fAd5v++dzQkw6tqifub5aMpjA+TYKW3dhc8m4zFi4BCF+B8p288hzmXhlaYLjMv5D+tC
+         Jhb3P3tkzMOwR2rzyODk2gPJkGXd+a3+GS4IuXSTdpamJD93G8n6Fd8C/+DuaXdrg8fV
+         h3H88wbrl3b4CN/7/NO5TtH9fdDaS0FhbUHDM8/fVt1Xi/zn0g3lUXleiwvPcglyDiaE
+         YedlA0x6Pt//N/9jE7hDK4JRcv2s4CR48lfLJl/VwSfR7CaDZJnJqic1CAb/6NK7BrnB
+         A7Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718604316; x=1719209116;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zS1aeYgKyINpCmSdi/HNQLP7zJXBRqIlSyG7kOUcoOw=;
-        b=Tc/ZM4ji5gmEFK2xb782mvrUD1mGyCPQOM4kfm9nE7a0Qydlefp9ZhC1oHxln1QwsM
-         xqHs4nFa9123//D7bZkCOwXvhqZ/GWU678b5Iyb3R2fzi1TylD6NnJT67r2kM73Bpbs8
-         +97dpZ3CMA77ccNU7hjy7TRBIywan/wHiUWGXI+t4Pcms9DIxKmRlZsirLjK5uGvT+6T
-         kKNGRM6JIEeOke2UkshFvC+7ecnREMZ3scIf1BkX6hLjqzgFG8Suct7RVOPi8kKGTorh
-         M0VrRS7u3B7SG2W0cm2f/m4PG2QVrYo+AqMzn8SzS+zQPoCBHC0WeyfBU6xzgXp50Gr8
-         Powg==
-X-Gm-Message-State: AOJu0YzIxC5lsS/OJCVaTsh4VrZJGxrBc2HN0Du6vWTcypb3npMSimt/
-	o68Kt3zPO5eapoalb6JwGsAUa+TNCOWeVyr4SpjS7PZ2Hl9GIzILzG8IUiGCJ9E=
-X-Google-Smtp-Source: AGHT+IEEC9UP8MOlrevAVHI4nYGV9kvIzUOUfp5mXwsv6sR7/laYuBTI0iC3ozJcCUzvDqnyGDvMLQ==
-X-Received: by 2002:a7b:ce97:0:b0:423:b6cd:8ea5 with SMTP id 5b1f17b1804b1-423b6cd8fcemr38477465e9.4.1718604315680;
-        Sun, 16 Jun 2024 23:05:15 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:7a26:54f4:ac69:a55b? ([2a05:6e02:1041:c10:7a26:54f4:ac69:a55b])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-42286fe9263sm185486905e9.15.2024.06.16.23.05.15
+        d=1e100.net; s=20230601; t=1718604698; x=1719209498;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9kdEToaRtEtLTBxGmIJLoLouOnpDnXZ/+scsxAQ6PL4=;
+        b=F6aa5AYBvoTfSZpVrk9Dp7SOew0Da4aNNNAJZGyvWy2a334KtUK4b8jnVOUS3pkV5+
+         RUx+TY4gwIB+ZswSKzqfPW0HGy/9MWmg13Uu5tekniza8i0mg3paP6wMscVQvba+eSZA
+         yCMe4eRujPE946t437MJF9rM3so2azyRRKyn9zQ7k3RQ76EPjVGmwKfFXgag/cJnMA/X
+         V4Hu/sMK8C6r8MneOBtx2pn9nE7ekNWJm7enj8bLo+2j6MHhBv3mK/1fcANyxDBy6bbC
+         JJJIA/E1QIdiNrBWR7CdNTVRKHH+Wc2P//LGk3vQeedX5CpHeze3WjurMkLQeXsRTKFp
+         5Tuw==
+X-Forwarded-Encrypted: i=1; AJvYcCVXRuYm28MTRbsKhDABnUbdLlebjtL6Rc514Uf7wB2EOvBvgdza4K5QJpaB2J4RU/BjUaqEHa7L93boq/0m6BuwbLdBX8RmWB0=
+X-Gm-Message-State: AOJu0YxVkfAw5ZROgYCP5dxM8qK2jhvOFtE44CD4G1Xl4QBxqb3loU99
+	27bMgvb07Fony5nXhUY+iQwjrtB2xMO6U9t8rOgg/r9Q3qypYNP7Otjh+KenLoM=
+X-Google-Smtp-Source: AGHT+IFRvJX2rYvRV7Pzan0qIx7xvzoBrqprat8773thSOqIPo4ExMRRUq3jvVxaxcAt7mqtQO0Mkg==
+X-Received: by 2002:a17:906:c29a:b0:a6f:5957:7b8f with SMTP id a640c23a62f3a-a6f60cefc2bmr570704666b.11.1718604698066;
+        Sun, 16 Jun 2024 23:11:38 -0700 (PDT)
+Received: from [192.168.0.18] ([78.10.207.147])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56db67e5sm480498766b.66.2024.06.16.23.11.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jun 2024 23:05:15 -0700 (PDT)
-Message-ID: <8e082c01-d0b4-46e4-bae3-0e7ea89be800@linaro.org>
-Date: Mon, 17 Jun 2024 08:05:14 +0200
+        Sun, 16 Jun 2024 23:11:37 -0700 (PDT)
+Message-ID: <0fa211df-5786-4447-9c8e-1c57528e8582@linaro.org>
+Date: Mon, 17 Jun 2024 08:11:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,55 +77,87 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: drop stale Anson Huang from maintainers
+To: Abel Vesa <abel.vesa@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Abel Vesa <abelvesa@kernel.org>,
+ Peng Fan <peng.fan@nxp.com>, Frank Li <Frank.Li@nxp.com>,
+ devicetree@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20240614095927.88762-1-krzysztof.kozlowski@linaro.org>
+ <Zm9ZUWpievH+P8Yc@linaro.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM mailing list <linux-pm@vger.kernel.org>,
- Julien Panis <jpanis@baylibre.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal drivers fixes for v6.10-rc4
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <Zm9ZUWpievH+P8Yc@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 16/06/2024 23:29, Abel Vesa wrote:
+>>  
+>>  maintainers:
+>> -  - Anson Huang <Anson.Huang@nxp.com>
+>> +  - Shawn Guo <shawnguo@kernel.org>
+>> +  - Sascha Hauer <s.hauer@pengutronix.de>
+>> +  - Fabio Estevam <festevam@gmail.com>
+>>  
+> 
+> For the clocks, please add me as well. Don't mind having more help from
+> the others :-) . But i.MX clock bindings usually go through my tree.
 
-Hi Rafael,
+Sure, makes sense.
 
-please consider pulling the following changes since commit 
-c3f38fa61af77b49866b006939479069cd451173:
+Best regards,
+Krzysztof
 
-   Linux 6.10-rc2 (2024-06-02 15:44:56 -0700)
-
-are available in the Git repository at:
-
- 
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/thermal-v6.10-rc4
-
-for you to fetch changes up to 72cacd06e47d86d89b0e7179fbc9eb3a0f39cd93:
-
-   thermal/drivers/mediatek/lvts_thermal: Return error in case of 
-invalid efuse data (2024-06-12 19:07:34 +0200)
-
-----------------------------------------------------------------
-- Remove the filtered mode for mt8188 as it is not supported on this
-   platform (Julien Panis)
-
-- Fail in case the golden temperature is zero as that means the efuse
-   data is not correctly set (Julien Panis)
-
-----------------------------------------------------------------
-Julien Panis (2):
-       thermal/drivers/mediatek/lvts_thermal: Remove filtered mode for 
-mt8188
-       thermal/drivers/mediatek/lvts_thermal: Return error in case of 
-invalid efuse data
-
-  drivers/thermal/mediatek/lvts_thermal.c | 12 +++++-------
-  1 file changed, 5 insertions(+), 7 deletions(-)
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
