@@ -1,122 +1,129 @@
-Return-Path: <linux-pm+bounces-9328-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9329-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8AF490AD4E
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 13:50:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD14090AE7D
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 15:00:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 874081F22299
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 11:50:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D21828A5D8
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 13:00:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5DB3194AF9;
-	Mon, 17 Jun 2024 11:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C1A197A6D;
+	Mon, 17 Jun 2024 13:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HpA8sHn4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T6JZGuZL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846B4186E56;
-	Mon, 17 Jun 2024 11:50:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E096418FC6F;
+	Mon, 17 Jun 2024 12:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718625004; cv=none; b=Ig7/of5LBSQErcoSBAbSfFxKZYH1Ly1EmLI5JkgodDZx28VezLKmOhfnE49ak5H9Xt8ZqYtWfpGUX4/GpzOKBGbUJTkjCP559JNOrFycFyMJGYDQ7i3zy3tKib+tHdH80NDLLGUP1G1Ijqejfjzvc3+aOlX/kntmbIqg15h1HL8=
+	t=1718629201; cv=none; b=hGPYtDkxJ2rGtPYVdlR2flRCdbgFXYJnkqHQYwIjZEi7ISIXdwwfJd/2NQIfSRqADrMqYVVQBKnP6IiKX7ZlGwqfi1gX54ikFCYqx/t1xxbIqxhKtx/HKUtj5/syP8zFPTwN1s7iX3rh+ctJH2vDZSHaVZcFQRiOYVfaYirDbPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718625004; c=relaxed/simple;
-	bh=OqoQ6ZxH5cHIMs3+jLFrcIOTsDPqWQXiXFgsGcvQtmc=;
+	s=arc-20240116; t=1718629201; c=relaxed/simple;
+	bh=8G39HiKoa8xfyKHJf8Y1JNqnXPKRNwnOjDzcCynE99Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q+vmeHhTWobZGRqrmhNT6BADkBav8/Ug/KLosFKyINYMveYCmZ++9H5R5Qbw9ZyYD5CPf6Me3GLv0+NeXuMeHApPm4ZEI6V/Fs/34aXVpzY3rmePJVQkqHjWkwcU+gEQsnjw3Po/LCeTeeCuSX8blPvwxSbPhlHgkxBmuWtSDsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HpA8sHn4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 710F0C2BD10;
-	Mon, 17 Jun 2024 11:49:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718625004;
-	bh=OqoQ6ZxH5cHIMs3+jLFrcIOTsDPqWQXiXFgsGcvQtmc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HpA8sHn4I/uwMAoESG+goOFTmifzrpBQCu9dGkOqZXt8LYQqIz5QC28pY7Sf0V0im
-	 Rg3jeH3eikunEuigeTgUzbTZ+0Imva19O0s2muNxA4UevqUFDN3pgh2gkZqiPaumdk
-	 vcSLpVPa9akY/UIDqIsvq5tskgFgDB2P4D3sgld14Q56O303qkj5x6nQhfEvRRQi4M
-	 Gk0JUzOUemjLwycr4PfdBBZYJkpP7j747BOm1btJ2rnG35Qrq2fQkzKmtodhX7c5Fi
-	 Hx77E015tcScm9SmYjLY9TNQ7XuuFlhEtg/818x62PvlE5UBoaSBkrYLy4pAeurPpG
-	 nK8oyrEht/AUQ==
-Date: Mon, 17 Jun 2024 12:49:46 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Abel Vesa <abelvesa@kernel.org>,
-	Peng Fan <peng.fan@nxp.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Dong Aisheng <aisheng.dong@nxp.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Frank Li <Frank.Li@nxp.com>,
-	devicetree@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH v2] dt-bindings: drop stale Anson Huang from maintainers
-Message-ID: <440bb6fa-2e26-4a64-8c53-bebf706a1079@sirena.org.uk>
-References: <20240617065828.9531-1-krzysztof.kozlowski@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lUeNNlnkjQrtH5yh4eX2hORWVZ0ddww8ksz7H6ij9bbpvu03BkDcRYkTEtCpZmEcax/eCXvceM5qXGx62TJUnoM4KyQWtBj+/h47HwsKyyMULRcJwSWSVvdWRSQNHJJAdHw5jhc7mY/TTBfdKR0UpYWQfOvk1DflPsfEemXU6Cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T6JZGuZL; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52c32d934c2so4789413e87.2;
+        Mon, 17 Jun 2024 05:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718629198; x=1719233998; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=O6qxWw9hbNV8Y2lcwTy4Qgqg8Y0QqnwMXXkDD5Y6lno=;
+        b=T6JZGuZLrkwsnI89MrIlDx2nywMCN4eeBYsqICd4sqprwocs7m5mv5IiVINp2iajCh
+         j7dxQsdzBtpuWKEhBG4IHLQW3dAomG/B38ulkv/l0r/sqiP0UIseXKU0cGM2cqQ48d4J
+         2Y4wae/ga5ns8zU0j0AUfYjx0OXpvEUlj8fhbvL3HcIu532dmNFKideAQ5+11b0rYCRs
+         kQD9UHKVzcwnj9WtcL+MPYBMtsUasqMlhuo4B6AzXtKRzExOwh5HsUPwdkrCnxSBtEX7
+         rvKcWCJpaBmkq3v2/EeRR/1wE7XB9lzr/HK0l0PlD5Uu8Uc7n8K7Ni6irWzxscXWL2ou
+         IdWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718629198; x=1719233998;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O6qxWw9hbNV8Y2lcwTy4Qgqg8Y0QqnwMXXkDD5Y6lno=;
+        b=sweCL8sC4xoWEccISrcyziBRpzjnxei+beuSJkAeB62vEoPrl8xpwQHFlrPjZYiZeb
+         GRV3WC1PWX4LyjhRueSbDk8YNyMGKJNbGhuAwqbhRZUQWlF6YLwYrhWqe99XrE7BaSF/
+         r9UlQXAFxf7GmKAz2AFJ1NYic27xe8ZHpxzP4BZ2BAUN1m4e488qkI15BeS5vyBv1Of/
+         SPleLlZ/akAP8rIf3+5um1q5jKlWCQO6Btc3o9eGv0hnPJAXlCjYuzlBBbsqXGWOjU2a
+         HS7K5fR9q+rd7ow6zJj1ePjqOLaSNhF/5IYVq1rHZkeVn3uNXQBmHPjRw31RJSWYQFeB
+         yAeA==
+X-Forwarded-Encrypted: i=1; AJvYcCWWCDq6CZ6wEzhbOXrLefVGTNInnSBozO5Z6+1RKbPh/Ponm8SNh64YgqBQkJ8Uzn4/vEhYQ21zgqS4iljRLzIYugc/j0IV036R4WcrwOvGgfGhk+eyxw3+8DHcbqjss1cN+A/ZGc5hl1OHSuIjRWiMnH0YCB6LAtzT6o3TuxHoDqTS
+X-Gm-Message-State: AOJu0Yx2QacB8Hr+CL9oqI6jTP7TYy0gPKKuTvAZjt5nvhPaYjpb03vO
+	/JEbVDuGKg4Vhcp3cm61GPMpCU36NnEtW69L0RlBzWz6nq4+knWWYpwFNw==
+X-Google-Smtp-Source: AGHT+IEKJUepyEo0Qr4VnqJMJm4O3lMQ8RESf1ddP7d2P9ZeNTdN+t4VyV9gLe2htpTYYLBjpsX1Rw==
+X-Received: by 2002:a19:6904:0:b0:52c:7fe8:6489 with SMTP id 2adb3069b0e04-52ca6e98eb2mr5625129e87.63.1718629197730;
+        Mon, 17 Jun 2024 05:59:57 -0700 (PDT)
+Received: from debian ([93.184.186.109])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-422870e9145sm195678665e9.22.2024.06.17.05.59.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jun 2024 05:59:57 -0700 (PDT)
+Date: Mon, 17 Jun 2024 14:59:55 +0200
+From: Dimitri Fedrau <dima.fedrau@gmail.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: power: supply: add support for
+ MAX17201/MAX17205 fuel gauge
+Message-ID: <20240617125955.GA292946@debian>
+References: <20240615203352.164234-1-dima.fedrau@gmail.com>
+ <20240615203352.164234-2-dima.fedrau@gmail.com>
+ <ee0cd414-206c-48c9-aee2-06e24e0b981c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jfSjzlj0zX5Rl/R2"
-Content-Disposition: inline
-In-Reply-To: <20240617065828.9531-1-krzysztof.kozlowski@linaro.org>
-X-Cookie: Life is the urge to ecstasy.
-
-
---jfSjzlj0zX5Rl/R2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <ee0cd414-206c-48c9-aee2-06e24e0b981c@kernel.org>
 
-On Mon, Jun 17, 2024 at 08:58:28AM +0200, Krzysztof Kozlowski wrote:
-> Emails to Anson Huang bounce:
->=20
->   Diagnostic-Code: smtp; 550 5.4.1 Recipient address rejected: Access den=
-ied.
->=20
-> Add IMX platform maintainers for bindings which would become orphaned.
+Am Sun, Jun 16, 2024 at 09:27:21AM +0200 schrieb Krzysztof Kozlowski:
+> On 15/06/2024 22:33, Dimitri Fedrau wrote:
+> > Adding documentation for MAXIMs MAX17201/MAX17205 fuel gauge.
+> > 
+> 
+> Three patchsets within 30 minutes. No changelog et all.
+>
+Sorry, had to fix my mail address in the commit message. Changelog was
+in the cover letter. Anyway, could have fixed that in a later version.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+> Slow down (one posting per 24h) to give people chances to review. Then
+> provide changelog under --- and describe what happened.
+> 
+[...]
+> > +maintainers:
+> > +  - Dimitri Fedrau <dima.fedrau@gmail.com>
+> > +
+> > +properties:
+> > +      - description: ModelGauge m5 registers
+> > +      - description: Nonvolatile registers
+> > +
+> > +  reg-names:
+> > +    items:
+> > +      - const: m5
+> > +      - const: nvmem
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> 
+> This is incomplete. Missing battery and probably more... Look how other
+> bindings are written.
+> 
+Some fuel gauges used monitored-battery and/or power-supplies others none
+of them(mitsumi,mm8013.yaml). I'm not sure when to use them.
 
---jfSjzlj0zX5Rl/R2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZwItoACgkQJNaLcl1U
-h9D5Wwf/Q7ZtAKp5HRIsqeh8PBxnOEEF8ljY8bCew6Q7rvMXTsxiI2WXFX0ykufr
-bDY0Ho5rMIUGwQf/F1v+q6ZS6TEUbnawVgxkKBRJTDeK8Uxs9bXPSfCu8oZY888f
-YzPOYmhnDVtIWvoHZFUO6klplmBwPYQn3WqXYi4M2eap2IHsTxAUrrcyiL4uLVAG
-yqNRTuUyg4+YAkj/te942l7M/obYkf3Nxb/1HM3vZypXDeUhg+ubgr3TKF8LRpg3
-LBmfcA+m586XLOoQUPbLcilqogjAJuokkNwNMia0ny9IINWjZ6izZ/1Oe/fCnHSn
-vX0livBtYHzSS6lauBj/V6L4gSTz+w==
-=b38n
------END PGP SIGNATURE-----
-
---jfSjzlj0zX5Rl/R2--
+Best regards,
+Dimitri Fedrau
 
