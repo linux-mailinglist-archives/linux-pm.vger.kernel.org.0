@@ -1,117 +1,140 @@
-Return-Path: <linux-pm+bounces-9335-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9336-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B21F90B1AB
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 16:23:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 367E190B1FD
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 16:30:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B26B1C2261E
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 14:23:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8A4E1F24458
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 14:30:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A6251A2571;
-	Mon, 17 Jun 2024 13:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A376F1B29CD;
+	Mon, 17 Jun 2024 13:45:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lJGJUEyu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m4FWWIGl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472F61A256D
-	for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 13:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E03B197A77;
+	Mon, 17 Jun 2024 13:45:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718631043; cv=none; b=VNk8H6XWBU66u6CPpieeX+vBqj2B31ipMtBDfI2fK6krF5RRFvGntpISuDSBXA+42eHVn/CK3A7ucGTen/fhsJW0koQ5bvMcaWl18jSVC9FWOMAxBsYPUB1bbBHtCbc//9t8quMk8Rf4ifbTYCYt0ZpEDPhnnMl6yPif5Oulri8=
+	t=1718631957; cv=none; b=ImoalIA8YWRWhrdGEv+pmYFUMPH/QH2bPUx1s4Vt0ANf92SlGTHcz6EYHLDAhAuLPJnncJE2SD9DtAAE9hj/V+USGwAaeBn67btX6GUxW2Sp2hgzjJ5/aTrtTxk28ldRRuEAxQyYSS40CsGioK6l2j/ZyZogfSHCYjdY6niVR4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718631043; c=relaxed/simple;
-	bh=WqlLmqlvY4sp9jSatJLGgXPVRc8CV8G68GhhdU26S7w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gNSKYrgmGeB17+I5xC70QZLI2efBTy971ZsnGd52drrKzi0XBb26Ndr22MYXva031m4tpw37XOXFeEYId0XWhpFbeTpVa8F2LsSXsE274ec6H4yjxFsHvOf95O7tGtj0mA9SdtiwhrIccAALcd6KCWljYSXAaZqdqAL2uX5BhdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lJGJUEyu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C778C4AF64
-	for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 13:30:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718631043;
-	bh=WqlLmqlvY4sp9jSatJLGgXPVRc8CV8G68GhhdU26S7w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=lJGJUEyubI2oEm0av4OqlEX64M6yfTo+MOcieNIYcTrAayXe6CxCjmmmnbEU6J9Qk
-	 gAkvG4heATpGEAbFV2PxNPbP0ek9fZ6hSYxmqjchOuayDkE1EN04eQs17CrFUgW8eU
-	 N188SXbVe1Xi9EU+zh5atGX/IM7PaCFPbj3m0aJTnzVayJK8E//46J6kx/l6M9dnlA
-	 iE8Uiz7tITQ6600+f010ujC8vlEXDe6ru02VB3hOuUE4e8SVwIcBvhI8wAB/vovgi0
-	 GmdOm2K2LRsLtVPHBE2eHIBxCK6FZQGhdR7Gfl/xdRxWgUOQMuCtUhGrpndJAYHjAv
-	 7HczvuuoVvbXw==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-254925e6472so505563fac.0
-        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 06:30:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUCZCwEldp6ns6HS25LMWHFJclHs6cIrhjq9cPGvBrcIHC0jmB8UfQe2xXPFa7bgvSbCAcy9xZqdSpqrgtruN4ZJXfK2IbSpQA=
-X-Gm-Message-State: AOJu0Yy46hJ05cv/N9iYDI7JnRL4cv7XiqkpvKBvUWv5MGgQTIezgOJs
-	azqiHFd5NSoU1aDuYgT5rGZ+lguZQRLPiYRwd7/m8qK4E4DigqDsYSFTmKhFZgfTNDYs6K5EvHP
-	9hYdLmzmtG7gqHi0k2xpA+tQNNuc=
-X-Google-Smtp-Source: AGHT+IHgGg0kfy17G8mIubjVyUBysFyyNA8pG3LVK74AIylR/pUOOR4OHa5WDJ4CjfPPizByyUSEnFSnZ+ktrboWxVc=
-X-Received: by 2002:a05:6870:469f:b0:254:d417:351f with SMTP id
- 586e51a60fabf-258429511admr10424676fac.1.1718631042350; Mon, 17 Jun 2024
- 06:30:42 -0700 (PDT)
+	s=arc-20240116; t=1718631957; c=relaxed/simple;
+	bh=uxUyG9w3kzRRDkCmDR9ae5S/qbGPu4o5T0wPuhZOZm4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MScUIVKurqsJjTzGykrd2N6Xnn6RvTVF6EBgGvI1hrKJ3Y/t8eBVV0JdUM/eokcF1LzmVz4xJ0bKNQUPPiIRZrFc5/g8xcB+t9Zq15xXlP9WGHUmeUIelrIHOqZXBW0ugYgcsoqDCjpCUaCIn/8bGASRBI0IrAXVU7ez2uzMm+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m4FWWIGl; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718631954; x=1750167954;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uxUyG9w3kzRRDkCmDR9ae5S/qbGPu4o5T0wPuhZOZm4=;
+  b=m4FWWIGlGGVbWNWRZBG1ZnFWiEBVfpv64QJHDn0TX8ctBzyRAx7I+sZm
+   DExisWi1Jvv23UKvQ068BnxVXU//4D3F7L7mVhkPiHo71Oqn7yP2UpWOx
+   tFLJzzvbpai5XRCPgiWsJ6sMN1rgEuQ5blDJO63pR9+34+fcjZ2o+llOd
+   JhBAfl94jiMxwVoLj0iqNM7gF2+NdrEfLpN2stXrnIyh+luovVd88xtUm
+   RV2GNDjAuSzoMSWvEk0kwLR4geP5AVFJcpj78+0l5kAS639dqApwCK2iX
+   TT/BkyMxgIcaoIlSzaRyfwoUxVOcFkNismlmjxiaKzgMYYRaRsYlWQaEL
+   Q==;
+X-CSE-ConnectionGUID: iYXybY+xTI+IiWLZjdo0tg==
+X-CSE-MsgGUID: LxOHWzXiSW6RPI3tw7WW9A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11105"; a="15423009"
+X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
+   d="scan'208";a="15423009"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 06:45:54 -0700
+X-CSE-ConnectionGUID: yRDSuFj8TKGtE6IfgTep9g==
+X-CSE-MsgGUID: 3AxYSsRuSoWIkXxrMDqhRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
+   d="scan'208";a="64394193"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 17 Jun 2024 06:45:49 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sJCg7-0004LF-26;
+	Mon, 17 Jun 2024 13:45:47 +0000
+Date: Mon, 17 Jun 2024 21:45:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, daniel.sneddon@linux.intel.com,
+	tony.luck@intel.com, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Andrew Cooper <andrew.cooper3@citrix.com>
+Subject: Re: [PATCH PATCH 1/9] x86/cpu/topology: Add x86_cpu_type to struct
+ cpuinfo_topology
+Message-ID: <202406172100.6R91rhbf-lkp@intel.com>
+References: <20240617-add-cpu-type-v1-1-b88998c01e76@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <8e082c01-d0b4-46e4-bae3-0e7ea89be800@linaro.org>
-In-Reply-To: <8e082c01-d0b4-46e4-bae3-0e7ea89be800@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 17 Jun 2024 15:30:30 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iq=L6FpPeoemJ8NLL0w9wDPuZiFtO3doWiSEjs=z_w3w@mail.gmail.com>
-Message-ID: <CAJZ5v0iq=L6FpPeoemJ8NLL0w9wDPuZiFtO3doWiSEjs=z_w3w@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal drivers fixes for v6.10-rc4
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM mailing list <linux-pm@vger.kernel.org>, 
-	Julien Panis <jpanis@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240617-add-cpu-type-v1-1-b88998c01e76@linux.intel.com>
 
-Hi Daniel,
+Hi Pawan,
 
-On Mon, Jun 17, 2024 at 8:05=E2=80=AFAM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> please consider pulling the following changes since commit
-> c3f38fa61af77b49866b006939479069cd451173:
->
->    Linux 6.10-rc2 (2024-06-02 15:44:56 -0700)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v6.10-rc4
->
-> for you to fetch changes up to 72cacd06e47d86d89b0e7179fbc9eb3a0f39cd93:
->
->    thermal/drivers/mediatek/lvts_thermal: Return error in case of
-> invalid efuse data (2024-06-12 19:07:34 +0200)
->
-> ----------------------------------------------------------------
-> - Remove the filtered mode for mt8188 as it is not supported on this
->    platform (Julien Panis)
->
-> - Fail in case the golden temperature is zero as that means the efuse
->    data is not correctly set (Julien Panis)
->
-> ----------------------------------------------------------------
-> Julien Panis (2):
->        thermal/drivers/mediatek/lvts_thermal: Remove filtered mode for
-> mt8188
->        thermal/drivers/mediatek/lvts_thermal: Return error in case of
-> invalid efuse data
->
->   drivers/thermal/mediatek/lvts_thermal.c | 12 +++++-------
->   1 file changed, 5 insertions(+), 7 deletions(-)
->
-> --
+kernel test robot noticed the following build errors:
 
-Pulled and added to the linux-next branch in linux-pm.git, thanks!
+[auto build test ERROR on 83a7eefedc9b56fe7bfeff13b6c7356688ffa670]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pawan-Gupta/x86-cpu-topology-Add-x86_cpu_type-to-struct-cpuinfo_topology/20240617-172542
+base:   83a7eefedc9b56fe7bfeff13b6c7356688ffa670
+patch link:    https://lore.kernel.org/r/20240617-add-cpu-type-v1-1-b88998c01e76%40linux.intel.com
+patch subject: [PATCH PATCH 1/9] x86/cpu/topology: Add x86_cpu_type to struct cpuinfo_topology
+config: i386-buildonly-randconfig-003-20240617 (https://download.01.org/0day-ci/archive/20240617/202406172100.6R91rhbf-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.5.0-4ubuntu2) 9.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240617/202406172100.6R91rhbf-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406172100.6R91rhbf-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   arch/x86/kernel/cpu/topology_common.c: In function 'topo_set_cpu_type':
+>> arch/x86/kernel/cpu/topology_common.c:145:21: error: 'X86_CPU_TYPE_UNKNOWN' undeclared (first use in this function)
+     145 |  c->topo.cpu_type = X86_CPU_TYPE_UNKNOWN;
+         |                     ^~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/cpu/topology_common.c:145:21: note: each undeclared identifier is reported only once for each function it appears in
+>> arch/x86/kernel/cpu/topology_common.c:148:41: error: 'X86_CPU_TYPE_INTEL_SHIFT' undeclared (first use in this function)
+     148 |   c->topo.cpu_type = cpuid_eax(0x1a) >> X86_CPU_TYPE_INTEL_SHIFT;
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/X86_CPU_TYPE_UNKNOWN +145 arch/x86/kernel/cpu/topology_common.c
+
+   142	
+   143	static void topo_set_cpu_type(struct cpuinfo_x86 *c)
+   144	{
+ > 145		c->topo.cpu_type = X86_CPU_TYPE_UNKNOWN;
+   146	
+   147		if (c->x86_vendor == X86_VENDOR_INTEL && cpuid_eax(0) >= 0x1a)
+ > 148			c->topo.cpu_type = cpuid_eax(0x1a) >> X86_CPU_TYPE_INTEL_SHIFT;
+   149	}
+   150	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
