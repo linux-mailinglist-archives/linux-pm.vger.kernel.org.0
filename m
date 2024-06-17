@@ -1,162 +1,128 @@
-Return-Path: <linux-pm+bounces-9353-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9354-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9911A90B80E
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 19:29:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEA8990B879
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 19:52:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E2541F21659
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 17:29:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B730F1C239A8
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 17:52:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FDD916F0DD;
-	Mon, 17 Jun 2024 17:29:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6ADE18EFF2;
+	Mon, 17 Jun 2024 17:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WGCUiSVe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IUzpdER7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6488E16EB56;
-	Mon, 17 Jun 2024 17:29:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 498B018A94C;
+	Mon, 17 Jun 2024 17:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718645383; cv=none; b=uONDwdYsnEhmbHJeVnwG6gAYItish/PRWQN3UsbAL1a6qMcrm/r8VA49NVWWrHegepGnv6BOo9DHDpYK6oY3AsMpT7b+xWG16qcJlaEaEA7viDKOPaoUizGQFxZP5DMi+Cb7ht+UoGQDk4LsbF2IxLi8r5NAnH0+cyOrZlgtups=
+	t=1718646743; cv=none; b=YcuEBcrpCH7umiIr/H+L1IB8eMx2NnSEohAwWdwmu/HLm4XbTFvcqm9NwbQb15XYdcTBzG0oZ0LLsLdNLchx1tz1JDOpNI598iNszCzT4DUB+OAhmbLkKiP8l3/ZTdJUPDt6VrcuGiwBlQCj+xwJd9COWL/6kXkXia0yV2aOSoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718645383; c=relaxed/simple;
-	bh=kbW/gR+NRs7jHRgq3FS7wDstTPhoeqGbtN28unwmbg0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mwbmAp+uGPAe17NaR082qtYQX9qe8or+RRKoPPnmUP23sdzRtwg2EuqSq11C6sQ4FDSKjWIB3uneY3aKrpXbDQ5ZrMRqdZ8bcshiZiT1nvNKO2CDD2uMBvxI93NBpN2nssPELySIpwC4Xk0WO6RjB3Z0Zp93bDSwKBBu4JySWqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WGCUiSVe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA4D3C2BD10;
-	Mon, 17 Jun 2024 17:29:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718645382;
-	bh=kbW/gR+NRs7jHRgq3FS7wDstTPhoeqGbtN28unwmbg0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WGCUiSVehiciSz7Ww0nqIsyJsddAw+NFMrcR0rUTInw2TLrVUDQfXowSruEy+Rv0N
-	 phvU/pBbYQJfsKKOg2KDjmSEf3ID0/V8eYNxfquJ08XYOM4WJ4hwd9tTQibYuUTHXh
-	 iSAqVN3Gw/CNnlSBB/ERj/K9aKDzMFVvB2b3QN51MHkRbnVKtcC5cQJUgNw1uA9ueG
-	 6l31PRZp4T4eABb+8ql21aSnJ24bDgy0Oy25/U50fVIiYcPcr+3vlBxhAovn2Stwrp
-	 ksQrzUethG+Isvx4i5Y/z9a7dicg+yjvXzZd8lCRY1mPR6ozpLrzPZECoMjnGwKAji
-	 WGKlrerbS9/jw==
-Message-ID: <c9070805-3432-41f8-af1e-dc5e6f81df5c@kernel.org>
-Date: Mon, 17 Jun 2024 19:29:36 +0200
+	s=arc-20240116; t=1718646743; c=relaxed/simple;
+	bh=vk02w9S3tVvpEn7klolVsvvXbuaOMdfrZ5sxrW1smsM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P06P0XFCPvi9RwkbizpiAY+db9dOZOHyc3yBMrAft9dSsmAmc62qvQDULY9ck46tcg/duqx36DlMStXc7aIzwAzSuGI0hT6RfwIZ6OB9SAn3jWDDln1dKAaq2oAWImCd0h0QYW3GVWKWxxBS1RrdqjCR4sMEUW8Bndd2OmwqVcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IUzpdER7; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718646742; x=1750182742;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=vk02w9S3tVvpEn7klolVsvvXbuaOMdfrZ5sxrW1smsM=;
+  b=IUzpdER7Yk8D85T/l4qoL4raT40PNT9WfzE3z2bdU4cjKMWb2Ge9RLeD
+   OqZGhfowONo8kjAUiXPmFmlgyUbJ/yFenaFp1aoRCU+W28VtKFixczj4O
+   MJXiR0PolKayN9++9su/rPtFNsKO/OpCo+DgTRC+zLvo4ypT1tpMf1R3H
+   y3laRpYHIaVmIsmE6H+eOEuda0GOqyaoTzeOadRDiN9c/NcLzJdaWuew4
+   PRcWuZ5N4Hr8JGNLVpHpauJheFHrNzZgS/hRKyGznWyqyC1LyNJC0OZOa
+   B5mTm0XzJQF2zJvkA+Y6W5ZP1MljsO+Oo9kVAHKTjhaOXjYYSGv6O9fzU
+   g==;
+X-CSE-ConnectionGUID: E2nYtlNgQKKeZpzZMdlwcw==
+X-CSE-MsgGUID: 1E2IJ7OsTzGllEe+Txzqwg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="15327119"
+X-IronPort-AV: E=Sophos;i="6.08,245,1712646000"; 
+   d="scan'208";a="15327119"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 10:51:29 -0700
+X-CSE-ConnectionGUID: UnOBOO2LTdCE53ENRUeWRg==
+X-CSE-MsgGUID: tXxyaKh7TyqfvgGcwFNxYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,245,1712646000"; 
+   d="scan'208";a="41138954"
+Received: from mshehzad-mobl.amr.corp.intel.com (HELO desk) ([10.209.21.13])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 10:51:28 -0700
+Date: Mon, 17 Jun 2024 10:51:17 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	daniel.sneddon@linux.intel.com, tony.luck@intel.com,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>
+Subject: Re: [PATCH PATCH 1/9] x86/cpu/topology: Add x86_cpu_type to struct
+ cpuinfo_topology
+Message-ID: <20240617175117.wdldhu4qdf7gowl7@desk>
+References: <20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com>
+ <20240617-add-cpu-type-v1-1-b88998c01e76@linux.intel.com>
+ <f4242edf-6c78-421c-8e21-63627b13c35f@citrix.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: power: supply: add support for
- MAX17201/MAX17205 fuel gauge
-To: Dimitri Fedrau <dima.fedrau@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240615203352.164234-1-dima.fedrau@gmail.com>
- <20240615203352.164234-2-dima.fedrau@gmail.com>
- <ee0cd414-206c-48c9-aee2-06e24e0b981c@kernel.org>
- <20240617125955.GA292946@debian>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240617125955.GA292946@debian>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f4242edf-6c78-421c-8e21-63627b13c35f@citrix.com>
 
-On 17/06/2024 14:59, Dimitri Fedrau wrote:
-> Am Sun, Jun 16, 2024 at 09:27:21AM +0200 schrieb Krzysztof Kozlowski:
->> On 15/06/2024 22:33, Dimitri Fedrau wrote:
->>> Adding documentation for MAXIMs MAX17201/MAX17205 fuel gauge.
->>>
->>
->> Three patchsets within 30 minutes. No changelog et all.
->>
-> Sorry, had to fix my mail address in the commit message. Changelog was
-> in the cover letter. Anyway, could have fixed that in a later version.
-
-There was no cover letter attached to this patchset. If you do not send
-cover letter to interested parties, then it does not count.
-
+On Mon, Jun 17, 2024 at 10:35:15AM +0100, Andrew Cooper wrote:
+> On 17/06/2024 10:11 am, Pawan Gupta wrote:
+> > diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+> > index cb4f6c513c48..f310a7fb4e00 100644
+> > --- a/arch/x86/include/asm/processor.h
+> > +++ b/arch/x86/include/asm/processor.h
+> > @@ -95,6 +95,9 @@ struct cpuinfo_topology {
+> >  	// Core ID relative to the package
+> >  	u32			core_id;
+> >  
+> > +	// CPU-type e.g. performance, efficiency etc.
+> > +	u8			cpu_type;
+> > +
 > 
->> Slow down (one posting per 24h) to give people chances to review. Then
->> provide changelog under --- and describe what happened.
->>
-> [...]
->>> +maintainers:
->>> +  - Dimitri Fedrau <dima.fedrau@gmail.com>
->>> +
->>> +properties:
->>> +      - description: ModelGauge m5 registers
->>> +      - description: Nonvolatile registers
->>> +
->>> +  reg-names:
->>> +    items:
->>> +      - const: m5
->>> +      - const: nvmem
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>
->> This is incomplete. Missing battery and probably more... Look how other
->> bindings are written.
->>
-> Some fuel gauges used monitored-battery and/or power-supplies others none
-> of them(mitsumi,mm8013.yaml). I'm not sure when to use them.
+> End of the structure?  At least that way new additions are less likely
+> to add more padding.
 
-Look at your hardware, datasheet if it is available. Then look at
-monitored battery properties. If you see anything in common, then that's
-a sign.
+Right, I will move it to the end of the structure.
 
-I did not get your driver changes, so I cannot help here. Kind of your call.
+> > diff --git a/arch/x86/kernel/cpu/topology_common.c b/arch/x86/kernel/cpu/topology_common.c
+> > index 9a6069e7133c..be82c8769bb2 100644
+> > --- a/arch/x86/kernel/cpu/topology_common.c
+> > +++ b/arch/x86/kernel/cpu/topology_common.c
+> > @@ -140,6 +140,14 @@ static void parse_topology(struct topo_scan *tscan, bool early)
+> >  	}
+> >  }
+> >  
+> > +static void topo_set_cpu_type(struct cpuinfo_x86 *c)
+> > +{
+> > +	c->topo.cpu_type = X86_CPU_TYPE_UNKNOWN;
+> > +
+> > +	if (c->x86_vendor == X86_VENDOR_INTEL && cpuid_eax(0) >= 0x1a)
+> 
+> c->cpuid_level ?
 
-Best regards,
-Krzysztof
-
+Will do.
 
