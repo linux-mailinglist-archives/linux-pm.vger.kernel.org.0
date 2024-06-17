@@ -1,132 +1,131 @@
-Return-Path: <linux-pm+bounces-9361-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9372-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 776A690B944
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 20:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DDCE90B976
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 20:18:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 880891C21311
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 18:14:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB0421C212B1
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 18:18:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4A21991CC;
-	Mon, 17 Jun 2024 18:13:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B7671991A5;
+	Mon, 17 Jun 2024 18:13:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="LOjM8/m9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iA5WsBDv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568AB198E9A;
-	Mon, 17 Jun 2024 18:13:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B2319D076;
+	Mon, 17 Jun 2024 18:13:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718647996; cv=none; b=cmFhF0eXe7Udjtwv53udsudz5AhaFuHjXe8ihpcKJgErml/cnkVxDd3jGszad9PeWfgPMFbvqzI7bD68sFOFxTeu4Mkhdb5/SVpn6ni5fAMliqI3+Pnd5XySZ+g3+fUWbLhTk7NlnzO7yySXPbr+9QIQZca3BxPlv9L/nJ9DH/0=
+	t=1718648005; cv=none; b=rSSwsL9bQG8Icl56XIjsQC7wDFR2G38d2nn9sOghzNNQ+gOx5DWmVtf/CfWuDBfd17OAqhWhpvdVWndyFeVlWd9jbHD4gIH/yzTcmkpbE2T0C+jUO9ZrAg70FaLOShYlUPc9CmS3LrqO3E1hYBMxW94TW4Vofa2AsS8MhpJrW6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718647996; c=relaxed/simple;
-	bh=t3L9pZlb1ef35gxwiB6BgoFgkgtd/qn6lkvONqjIbpo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MKvt649rVT7QZfAfALfUcPUyX2p/RvaT9Drfl62e5MBeK/lXPJFsuY/8H5E4PNAzmS0lrae+J9SYt4JvHmNHQnltjL8alcR5g0AGHRsnlVqFqCZgCQ55gk54rLN9Y4WyIAkJNAoGc3U9pehMiNOwigfWxHJJwkR8GU5Ylelbsw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=LOjM8/m9; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id 5d05b64116b05cc2; Mon, 17 Jun 2024 20:13:05 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 77D3516606FD;
-	Mon, 17 Jun 2024 20:13:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1718647985;
-	bh=t3L9pZlb1ef35gxwiB6BgoFgkgtd/qn6lkvONqjIbpo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=LOjM8/m9DD9PABgboSa26GQeQXU5Bj1Bgg10zdBAQQ47FictLxjfZ3Ity6e8ihs8B
-	 pgIUEe06gd0HlAQopzMxMljNKTJo/Pv8Z7pT7zpjnUVs3J3Nnp65l2TE5EU/mYdHMv
-	 zLoXZbMJCDC3Du4jwisaqj0VxYtxjus7cxAWWWzLEc9ezdU3iYdeB9qx2IBq9tUPXh
-	 hquQnZR6r+Q/dynpAHdlTE72NAPpJqihnp7viPgo3TtKPrv95uHGNaaNu2sOjOjc+t
-	 nNoBEh/94NVVN387CTS/Iqu1FhxXWIJwNZDwWZTK5/DBGIOAmM9EqDWHDUokxdeca6
-	 pZoVntxKyDPvQ==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH v1 14/14] thermal: trip: Drop thermal_zone_get_trip()
-Date: Mon, 17 Jun 2024 20:12:50 +0200
-Message-ID: <6713673.4vTCxPXJkl@kreacher>
-In-Reply-To: <8409966.T7Z3S40VBb@kreacher>
-References: <8409966.T7Z3S40VBb@kreacher>
+	s=arc-20240116; t=1718648005; c=relaxed/simple;
+	bh=ojRbcXMAcD1hhCMCV6YEMc1FKR66O4C+wbO5n22upEU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pzfvEi1TvNmXWjmRj5o78rhZ3BHV81qzIdUM/pWK7YM8fgPfnsdr37NA+hAak4oDjqw3/9bl9ApyrG5Pgu8fqn2skjRkP1PLA0Qa8wMkHKc0aIsejfq2DmRX0FyTHzox9s0Vh5dP8FiUTzC4iVZ1jKkdNwJD4IzIxpbUmElyDVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iA5WsBDv; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718648003; x=1750184003;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ojRbcXMAcD1hhCMCV6YEMc1FKR66O4C+wbO5n22upEU=;
+  b=iA5WsBDvbCd0v6GHdpZJtgZPz6/aKbxzKwbRkjvrC8Zeezp/qYMOh3Zq
+   KoMb231+4xrPFwN9aJwsQS7ybwnz6t3emF0XC4O+1V+4FLz53ofjpRTnj
+   kkoiJBM6ZmRZi8DlU8LK9AG7ouW+3MjMm4foiGk1Mplx8HGNqk1i10WCR
+   HxT+Jq4ggpr06PYhFpaqfq7juAhbcmuDvXss3NLyOsOe5EuZLEEC7h+mb
+   2U5BxI59bfJR+Xg6cN5F5lhh+jTE2fBkEfTHkILMi8JVKJ1BkUnO6aPdo
+   +lS2ZDvhAIHFq4/97NwAyHBfzMkej/W2A0cNUJPmE9oxITFQL67f+8iB6
+   A==;
+X-CSE-ConnectionGUID: tX0XyucpRYKLWTtyNMicaw==
+X-CSE-MsgGUID: oSfoTl6DT2mgv+HTSOdxNQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="15259712"
+X-IronPort-AV: E=Sophos;i="6.08,245,1712646000"; 
+   d="scan'208";a="15259712"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 11:13:22 -0700
+X-CSE-ConnectionGUID: iJ6LKUecRfOwivxKplNFyg==
+X-CSE-MsgGUID: 6FEFvl53TWS0tVisgxPUog==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,245,1712646000"; 
+   d="scan'208";a="41145570"
+Received: from mshehzad-mobl.amr.corp.intel.com (HELO desk) ([10.209.21.13])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 11:13:22 -0700
+Date: Mon, 17 Jun 2024 11:13:15 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	daniel.sneddon@linux.intel.com, tony.luck@intel.com,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>
+Subject: Re: [PATCH PATCH 8/9] x86/bugs: Declutter vulnerable CPU list
+Message-ID: <20240617181315.z3mbmv6hv5frtu6a@desk>
+References: <20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com>
+ <20240617-add-cpu-type-v1-8-b88998c01e76@linux.intel.com>
+ <14d5ed1b-db72-4676-bce2-1ff3637a7e56@citrix.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrfedvhedguddvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgii
- tggrnhhosehlihhnrghrohdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <14d5ed1b-db72-4676-bce2-1ff3637a7e56@citrix.com>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Jun 17, 2024 at 10:38:32AM +0100, Andrew Cooper wrote:
+[...]
+> > +	VULNBL_INTEL(IVYBRIDGE,		SRBDS),
+> > +	VULNBL_INTEL(HASWELL,		SRBDS),
+> > +	VULNBL_INTEL(HASWELL_L,		SRBDS),
+> > +	VULNBL_INTEL(HASWELL_G,		SRBDS),
+> > +	VULNBL_INTEL(HASWELL_X,		MMIO),
+> > +	VULNBL_INTEL(BROADWELL_D,	MMIO),
+> > +	VULNBL_INTEL(BROADWELL_G,	SRBDS),
+> > +	VULNBL_INTEL(BROADWELL_X,	MMIO),
+> > +	VULNBL_INTEL(BROADWELL,		SRBDS),
+> > +	VULNBL_INTEL(SKYLAKE_X,		MMIO | RETBLEED | GDS),
+> > +	VULNBL_INTEL(SKYLAKE_L,		MMIO | RETBLEED | GDS | SRBDS),
+> > +	VULNBL_INTEL(SKYLAKE,		MMIO | RETBLEED | GDS | SRBDS),
+> > +	VULNBL_INTEL(KABYLAKE_L,	MMIO | RETBLEED | GDS | SRBDS),
+> > +	VULNBL_INTEL(KABYLAKE,		MMIO | RETBLEED | GDS | SRBDS),
+> > +	VULNBL_INTEL(CANNONLAKE_L,	RETBLEED),
+> > +	VULNBL_INTEL(ICELAKE_L,		MMIO | MMIO_SBDS | RETBLEED | GDS),
+> > +	VULNBL_INTEL(ICELAKE_D,		MMIO | GDS),
+> > +	VULNBL_INTEL(ICELAKE_X,		MMIO | GDS),
+> > +	VULNBL_INTEL(COMETLAKE,		MMIO | MMIO_SBDS | RETBLEED | GDS),
+> > +	VULNBL_INTEL(TIGERLAKE_L,	GDS),
+> > +	VULNBL_INTEL(TIGERLAKE,		GDS),
+> > +	VULNBL_INTEL(LAKEFIELD,		MMIO | MMIO_SBDS | RETBLEED),
+> > +	VULNBL_INTEL(ROCKETLAKE,	MMIO | RETBLEED | GDS),
+> > +	VULNBL_INTEL(ALDERLAKE,		RFDS),
+> > +	VULNBL_INTEL(ALDERLAKE_L,	RFDS),
+> > +	VULNBL_INTEL(RAPTORLAKE,	RFDS),
+> > +	VULNBL_INTEL(RAPTORLAKE_P,	RFDS),
+> > +	VULNBL_INTEL(RAPTORLAKE_S,	RFDS),
+> > +	VULNBL_INTEL(ATOM_GRACEMONT,	RFDS),
+> > +	VULNBL_INTEL(ATOM_TREMONT,	MMIO | MMIO_SBDS | RFDS),
+> > +	VULNBL_INTEL(ATOM_TREMONT_D,	MMIO | RFDS),
+> > +	VULNBL_INTEL(ATOM_TREMONT_L,	MMIO | MMIO_SBDS | RFDS),
+> > +	VULNBL_INTEL(ATOM_GOLDMONT,	RFDS),
+> > +	VULNBL_INTEL(ATOM_GOLDMONT_D,	RFDS),
+> > +	VULNBL_INTEL(ATOM_GOLDMONT_PLUS, RFDS),
+> 
+> Take the opportunity to realign and fix this ?
 
-There are no more callers of thermal_zone_get_trip() in the tree, so
-drop it.
-
-No functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_trip.c |   14 --------------
- include/linux/thermal.h        |    2 --
- 2 files changed, 16 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_trip.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_trip.c
-+++ linux-pm/drivers/thermal/thermal_trip.c
-@@ -114,20 +114,6 @@ void thermal_zone_set_trips(struct therm
- 		dev_err(&tz->device, "Failed to set trips: %d\n", ret);
- }
- 
--int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
--			  struct thermal_trip *trip)
--{
--	if (!tz || !trip || trip_id < 0 || trip_id >= tz->num_trips)
--		return -EINVAL;
--
--	mutex_lock(&tz->lock);
--	*trip = tz->trips[trip_id].trip;
--	mutex_unlock(&tz->lock);
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(thermal_zone_get_trip);
--
- int thermal_zone_trip_id(const struct thermal_zone_device *tz,
- 			 const struct thermal_trip *trip)
- {
-Index: linux-pm/include/linux/thermal.h
-===================================================================
---- linux-pm.orig/include/linux/thermal.h
-+++ linux-pm/include/linux/thermal.h
-@@ -202,8 +202,6 @@ static inline void devm_thermal_of_zone_
- }
- #endif
- 
--int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
--			  struct thermal_trip *trip);
- int for_each_thermal_trip(struct thermal_zone_device *tz,
- 			  int (*cb)(struct thermal_trip *, void *),
- 			  void *data);
-
-
-
+I assume by also adding a tab to all the other entries?
 
