@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-9330-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9331-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C3E390AF3C
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 15:28:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31CB690AFCD
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 15:44:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EA80285FBD
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 13:28:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB9E21F2161D
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 13:44:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B53B719EEB8;
-	Mon, 17 Jun 2024 13:21:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 070621BD4E3;
+	Mon, 17 Jun 2024 13:23:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S4RIZbgd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NHOH69tS"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2AA19EEAF;
-	Mon, 17 Jun 2024 13:21:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D154C1BD4E0;
+	Mon, 17 Jun 2024 13:23:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718630467; cv=none; b=pPi1p33cBAxsMuBztO4exO0h4Loy7wrlV1sIMZ87SYLIJfA8AI9lpmin0nlb+CFqSsgXHiMh3b+yBEWsoprZdSHxrpZoLIDe2ZV9z9iZiqiQJM2WIfdErjLUSV6h7+jaZBdmP6v9aT7ZzFoELbcx0beICI5MyDuSe8QBq0/s2sA=
+	t=1718630608; cv=none; b=guUT1o9af/imCOdBFcp4V4cZDqSp6nTaLXAJndw2KUqO1K7FV5TJXdDPZ5J8VfeXdQuqVU+AUEfRWukUP9Lcvg0V2/XK1aOIeuzh3RucUEkxO5Bromr8uZ04XJG+sLQ0olNriIzVA+SmDDI8Q4654RKmhSuPRrOkGia1f6rDimQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718630467; c=relaxed/simple;
+	s=arc-20240116; t=1718630608; c=relaxed/simple;
 	bh=Thyw0jk39ehSKVrWbpzk6z0cIctwuMcByciNbZ10WDs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GXGcTPxglTFtRBszgssm1wrNdNkbUyWITfh6VeOj7pyiMkBwCrNzYXu60ps6ol+9TLB26FoVjCoaBVujPE0w95PSb49xEq28nFwJ0n2sUHZvir3JKkJd9Wqd8DgEllk8+lHT+mekxkpia/4tr+ZsP0lqaJ6HB/dxegvaBgJxRpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S4RIZbgd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59867C2BD10;
-	Mon, 17 Jun 2024 13:21:06 +0000 (UTC)
+	 MIME-Version; b=p2wTR8kvkACvnToeaMqBKtwrh0eyAuE69MPby3aVYgYa/zePtExNWNP/PxRd8+4xJ08lL7K+mfNUdAiJRDGkU5f045x5cxC1222ofEGMqZqt/2k1hZlunehNAx8yOohqEws5IrbeFd38tWmPc8MZwx425DrS+GiX9RjEHbE7AZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NHOH69tS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E897C2BD10;
+	Mon, 17 Jun 2024 13:23:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718630467;
+	s=k20201202; t=1718630608;
 	bh=Thyw0jk39ehSKVrWbpzk6z0cIctwuMcByciNbZ10WDs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=S4RIZbgdmLkB4t/khb2m5lBr919k3pBd+oelijEhLLFqfp/caNMnG+9QE9SqLPeR0
-	 bnvsQyPR4bmykvvzWpwvT+ya+SxQa/vLOjewnWV3Cv3Tz66t0h9hNAOsSO85SLrDoX
-	 sd6plLPp0WQWpDbvgTjYF5Q1QDSKYuYeekrUP0Rbm/puoKRvyDzIHr/iRwfkdzCVra
-	 djIPw7iSYxwt4AAcL3flUGB6OpSb5/bbyMTb4h0BHB+L8MZd9t7Azbj43dNSMNL3z1
-	 7Pj6qpJgArG214D7tFztZgs7euLoZfQQ+EGyRIAD7roEwzko2IP36UeE8cFmcr0Oxf
-	 OYKr3gbInKccA==
+	b=NHOH69tS1eN//rqNx36ZQtX1cQw7A48CsFqLG2dtPTCbKa+dMVY/bK/P31veRF0Iy
+	 dSpJ2nQHEzAEOBWB/iBkYXTYNsEFoqA2M2/yGSqcvXKoYeIkOAiV7IQ20B2fm19ae1
+	 sj0ZKRyWP6/Wp+jI9YMPYJLmamh3GJydDsn1yaMoP3NLFxkwvC4q7iyf4uaX+2u9Tp
+	 QJT/nBnsSRwFrBm6q7/exIlKu/+WvJyEmG0C4UqAflUNOLsAEZbq06lHKtM9kQcXxO
+	 fDP4nxoamtFRHmFZj+jX/aqepE1VOgHvo7zZ7Iz9M22aWVWymdp+8Sj0xP2wn2SOzq
+	 cXo45IK6QLA0A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
 	trenn@suse.com,
 	shuah@kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.9 11/44] tools/power/cpupower: Fix Pstate frequency reporting on AMD Family 1Ah CPUs
-Date: Mon, 17 Jun 2024 09:19:24 -0400
-Message-ID: <20240617132046.2587008-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 10/35] tools/power/cpupower: Fix Pstate frequency reporting on AMD Family 1Ah CPUs
+Date: Mon, 17 Jun 2024 09:22:08 -0400
+Message-ID: <20240617132309.2588101-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240617132046.2587008-1-sashal@kernel.org>
-References: <20240617132046.2587008-1-sashal@kernel.org>
+In-Reply-To: <20240617132309.2588101-1-sashal@kernel.org>
+References: <20240617132309.2588101-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.9.5
+X-stable-base: Linux 6.6.34
 Content-Transfer-Encoding: 8bit
 
 From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
