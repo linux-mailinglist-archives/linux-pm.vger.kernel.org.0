@@ -1,65 +1,64 @@
-Return-Path: <linux-pm+bounces-9352-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9348-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A66B590B7B5
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 19:20:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 661E590B7A4
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 19:18:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E87B28493E
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 17:20:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D410D284985
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 17:18:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7524316CD17;
-	Mon, 17 Jun 2024 17:19:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8912416CD12;
+	Mon, 17 Jun 2024 17:18:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="kHDOISyx"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="RC2cXNXq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A8F16CD10;
-	Mon, 17 Jun 2024 17:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F0716CD07;
+	Mon, 17 Jun 2024 17:18:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718644742; cv=none; b=THqyhmFeVMPqRlKerNTPt9JWky5+46ZVEeVa/kzf7NETeumCCQBhobYKMdJ8bUhlyt5SNDCtbFYRp5rvsNAqMUmWlny8DwsOBH7kGxisj2TWFNE7N6rLS9ghMJIQmTuvw2zkOGz7iJLj/QLbRm9GzR5VLotQsRhSFEYEphsxxms=
+	t=1718644731; cv=none; b=UirBZMOyuyINH2MrcqnjeGBsivan/ZC6F6/9CoS0QQCBsFW3L7QLcAytSwIcuIzp6VF+4SlbRSomYia2Alngp9KXtDy1zFUHOeVjfA5peNxipKwX53fiutYtHwzXezyOCyFUdvXscAM0Q9j9fvbFpAe8ysRdlc1NrlJ0By23knk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718644742; c=relaxed/simple;
-	bh=V2VNcGF/ITh8lvOdDdWBKd9rCbC2loen37eN3HOFN6M=;
+	s=arc-20240116; t=1718644731; c=relaxed/simple;
+	bh=5C1xYIHKsAlAKUkIojjGmTEhpl0vcI5xcd8BqXUcoWc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=OnuPehRkR5rhQfZcfFyoyXpqs2qGU0EiX6uPJroZrZWhDMeeqBzTxi3OdiSZUrZIjEA8f7q1Al6Qk1akk6EGdKqKbpiRCL+E+taZoIJWGofMS+6XmU9ZR0P8ZEtX+B08jlEAHYwaQv693zq/mhRpDrpZHWChWop16sy6Jj5MxEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=kHDOISyx; arc=none smtp.client-ip=205.220.168.131
+	 In-Reply-To:To:CC; b=toJV8wynmUTZRSTC3hNRRiGknkvpNQevHL2MfpwuvcQYWcjNUM7Q7eDRqetGhBBrlI2TWwqbq6Ye+YLkZ4nbWC2PAmt0MJmJNX0oYCHz/pt7Uo3/j6mH945UBVC1dBmNYVzdw0/RlXfsLN0WYb4V9pqnfWXhjQMO3OL4xCOUoKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=RC2cXNXq; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45HEhuJu030652;
-	Mon, 17 Jun 2024 17:18:31 GMT
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45HAbr0j013021;
+	Mon, 17 Jun 2024 17:18:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	0NyaR8ZYRcTKsVa4WgtyTIpbWfaOxMlFbz4ZtR0JJZA=; b=kHDOISyxbWk0RqjY
-	96QQtqtKNv083NPT//6OMFl3zA/3wro3kqc2qAhfamwBzceoTojLf6raaTKyBqwo
-	O8qxxp8mNFySH56SqDoNU3H1h9/LkoVdINrRs/S4sKi9iopam3obBujOsmCLrjgk
-	+G3uf7FgYp7mMHUEjdaqe3Xwq2RLhvaAdgj886ud5jcJLDX7NhcO3/rsUa6C7l2S
-	ugixhxWvG73xjqTEyQQR9kz1BkpPMIv7LRW5toqVi1tvzB8TfC9MfhBwnTXXeyXY
-	lPufnE3klImBiLAjO9Adg6t2OP1rCbaCWBX0lMcTxgZ8g1W631MieL2cHRrkkKyV
-	P6aL4A==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ytfut1fpg-1
+	UvOlZQXgz+oxAIrLkcpZ9eXVVoHFgzpOVrNZbz6NYJw=; b=RC2cXNXqPkk8jktH
+	xRtBorpnGFmKoJTJjvEVfBycX5VHKyGrOV4VDkfPsfljEs4Ng0ZSwIbgku5HUlMp
+	VzWhWJeFFighi5Cb7uaHcf8CjFg75yuL1PhGoMnFpxUgDg3zmWgm8CzCFnvktean
+	3Hkzk9ehbAS+dJ/gIcum58yLMU1hCbHlkjZT0XhB5NvnUt1TgeDkjKrSH/OZ/m23
+	3f1hWjpQ7x1IVzGSTc61sewgCtpBZs4YDVdX8KZhsS8/LbxgMM9CApGshhXV7Bw9
+	qf9ATY7R8BtSu31mauaZwGMeT94SV1ZXrqlBtSNolNtMYefn/4oPaWJPhBoig/s0
+	S3b4/Q==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ys0nfckv3-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Mon, 17 Jun 2024 17:18:31 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45HHIUcl007979
+	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45HHIVfg026019
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 17 Jun 2024 17:18:30 GMT
+	Mon, 17 Jun 2024 17:18:31 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 17 Jun 2024 10:18:29 -0700
+ 15.2.1544.9; Mon, 17 Jun 2024 10:18:30 -0700
 From: Elliot Berman <quic_eberman@quicinc.com>
-Date: Mon, 17 Jun 2024 10:18:07 -0700
-Subject: [PATCH v5 1/4] dt-bindings: power: reset: Convert mode-.*
- properties to array
+Date: Mon, 17 Jun 2024 10:18:08 -0700
+Subject: [PATCH v5 2/4] dt-bindings: arm: Document reboot mode magic
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,7 +67,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240617-arm-psci-system_reset2-vendor-reboots-v5-1-086950f650c8@quicinc.com>
+Message-ID: <20240617-arm-psci-system_reset2-vendor-reboots-v5-2-086950f650c8@quicinc.com>
 References: <20240617-arm-psci-system_reset2-vendor-reboots-v5-0-086950f650c8@quicinc.com>
 In-Reply-To: <20240617-arm-psci-system_reset2-vendor-reboots-v5-0-086950f650c8@quicinc.com>
 To: Bjorn Andersson <andersson@kernel.org>,
@@ -100,105 +99,92 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 7RfhUrd-MRB1D75jGkZU693Rv7sBs_E7
-X-Proofpoint-GUID: 7RfhUrd-MRB1D75jGkZU693Rv7sBs_E7
+X-Proofpoint-GUID: 7mgkm_o2Qbbl8vLDdxgdthcza-GA7LTK
+X-Proofpoint-ORIG-GUID: 7mgkm_o2Qbbl8vLDdxgdthcza-GA7LTK
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-06-17_14,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- suspectscore=0 priorityscore=1501 impostorscore=0 phishscore=0 mlxscore=0
- adultscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
- definitions=main-2406170134
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ adultscore=0 clxscore=1015 suspectscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 mlxlogscore=999 impostorscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406170134
 
-PSCI reboot mode will map a mode name to multiple magic values instead
-of just one. Convert the mode-.* property to an array. Users of the
-reboot-mode schema will need to specify the maxItems of the mode-.*
-properties. Existing users will all be 1.
+Add bindings to describe vendor-specific reboot modes. Values here
+correspond to valid parameters to vendor-specific reset types in PSCI
+SYSTEM_RESET2 call.
 
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- .../devicetree/bindings/power/reset/nvmem-reboot-mode.yaml         | 4 ++++
- Documentation/devicetree/bindings/power/reset/qcom,pon.yaml        | 7 +++++++
- Documentation/devicetree/bindings/power/reset/reboot-mode.yaml     | 4 ++--
- .../devicetree/bindings/power/reset/syscon-reboot-mode.yaml        | 4 ++++
- 4 files changed, 17 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/arm/psci.yaml | 43 +++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
-index 627f8a6078c2..7f5f94673e9c 100644
---- a/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
-+++ b/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
-@@ -31,6 +31,10 @@ properties:
- allOf:
-   - $ref: reboot-mode.yaml#
+diff --git a/Documentation/devicetree/bindings/arm/psci.yaml b/Documentation/devicetree/bindings/arm/psci.yaml
+index cbb012e217ab..5e07c62fe5d7 100644
+--- a/Documentation/devicetree/bindings/arm/psci.yaml
++++ b/Documentation/devicetree/bindings/arm/psci.yaml
+@@ -98,6 +98,27 @@ properties:
+       [1] Kernel documentation - ARM idle states bindings
+         Documentation/devicetree/bindings/cpu/idle-states.yaml
  
-+patternProperties:
-+  "^mode-.*$":
-+    maxItems: 1
++  reset-types:
++    type: object
++    $ref: /schemas/power/reset/reboot-mode.yaml#
++    unevaluatedProperties: false
++    properties:
++      # "mode-normal" is just SYSTEM_RESET
++      mode-normal: false
++    patternProperties:
++      "^mode-.*$":
++        minItems: 1
++        maxItems: 2
++        description: |
++          Describes a vendor-specific reset type. The string after "mode-"
++          maps a reboot mode to the parameters in the PSCI SYSTEM_RESET2 call.
 +
- required:
-   - compatible
-   - nvmem-cells
-diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-index fc8105a7b9b2..3da3d02a6690 100644
---- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-+++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-@@ -54,6 +54,10 @@ required:
-   - compatible
-   - reg
- 
-+patternProperties:
-+  "^mode-.*$":
-+    maxItems: 1
++          Parameters are named mode-xxx = <type[, cookie]>, where xxx
++          is the name of the magic reboot mode, type is the lower 31 bits
++          of the reset_type, and, optionally, the cookie value. If the cookie
++          is not provided, it is defaulted to zero.
++          The 31st bit (vendor-resets) will be implicitly set by the driver.
 +
- unevaluatedProperties: false
- 
- allOf:
-@@ -75,6 +79,9 @@ allOf:
-         reg-names:
-           items:
-             - const: pon
-+    else:
-+      patternProperties:
-+        "^mode-.*$": false
- 
-     # Special case for pm8941, which doesn't store reset mode
-   - if:
-diff --git a/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
-index ad0a0b95cec1..3ddac06cec72 100644
---- a/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
-+++ b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
-@@ -28,13 +28,13 @@ description: |
- 
- properties:
-   mode-normal:
--    $ref: /schemas/types.yaml#/definitions/uint32
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-     description:
-       Default value to set on a reboot if no command was provided.
- 
  patternProperties:
-   "^mode-.*$":
--    $ref: /schemas/types.yaml#/definitions/uint32
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
+   "^power-domain-":
+     $ref: /schemas/power/power-domain.yaml#
+@@ -137,6 +158,15 @@ allOf:
+       required:
+         - cpu_off
+         - cpu_on
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              const: arm,psci-1.0
++    then:
++      properties:
++        reset-types: false
  
- additionalProperties: true
+ additionalProperties: false
  
-diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml
-index b6acff199cde..79ffc78b23ea 100644
---- a/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml
-+++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml
-@@ -32,6 +32,10 @@ properties:
- allOf:
-   - $ref: reboot-mode.yaml#
- 
-+patternProperties:
-+  "^mode-.*$":
-+    maxItems: 1
+@@ -261,4 +291,17 @@ examples:
+         domain-idle-states = <&CLUSTER_RET>, <&CLUSTER_PWRDN>;
+       };
+     };
 +
- unevaluatedProperties: false
- 
- required:
++  - |+
++
++    // Case 5: SYSTEM_RESET2 vendor resets
++    psci {
++      compatible = "arm,psci-1.0";
++      method = "smc";
++
++      reset-types {
++        mode-edl = <0>;
++        mode-bootloader = <1 2>;
++      };
++    };
+ ...
 
 -- 
 2.34.1
