@@ -1,169 +1,139 @@
-Return-Path: <linux-pm+bounces-9338-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9339-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E86D90B320
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 16:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7499F90B33C
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 17:02:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AFBA1C2263A
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 14:59:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A1DC1C22E68
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 15:02:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 848BB139D1C;
-	Mon, 17 Jun 2024 14:07:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1130E13D501;
+	Mon, 17 Jun 2024 14:13:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vSl1+QeL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V2URBSMe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E05139D0C
-	for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 14:07:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A74613D272;
+	Mon, 17 Jun 2024 14:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718633267; cv=none; b=JS0CBCiE9NeF/IQFwlugfu57dYE4M/dAW0HheQmZakmgtKvGUJ9LHzWvP3A7hMF2E4eDwQjoBm6aclXMKX0HKXy/+pvuD+mbkTwU6LII3eSEiaV5bK/A82Y5ZPeeK+6Jkhb86YLslwo1RMO9fIGm4hENavGtAf0iaxcsjWGj6ds=
+	t=1718633599; cv=none; b=IQfQsdWnGUNQLT8tKPiu/ouE0PsduzfCAHNCFZC3yagsFtALlU5ZmgiEjkSBY7IPJ1HMT4tHZVrI8S05feCetc1Xo2JbKt4ObU+nckAiWhBb6U8kPSFQD5OZRuK7G2wDVbCPDZ2j9sBVOJKAWR3Gi4OT+OKUT9wUT6Dp9dYNYM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718633267; c=relaxed/simple;
-	bh=gTaVRInUM5Dk+G0y4kJvxr34Ay3xC6qugD0PHbnJD6k=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=oU0C1h0fu3mFkVMYY8Ilr9oq8pkst0s0tLUtQACSq52NZPKeP7XnVFiQ9cNgwx3MJGrG7cxVE08EodW4OMcMCrNG0Lsqof8Sxxwiga2mCHqc14HfznFWDEEEbDX/6fme6IPYLYocDTuTxFv1hnIripb/GRsTfux/5TCwYTPsqEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vSl1+QeL; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2ebec2f11b7so43214731fa.2
-        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 07:07:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718633264; x=1719238064; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=exNmLeQ/1saUICwG+i10ZbiGFu61QQGdsTZZy7V7AmA=;
-        b=vSl1+QeLmXxICiZ68G/dl9zWRbYd3IPB+tKMulXcWTRZjyeUEMLitMUmTgzHT0IopK
-         rHdls6Ce/NOFUAd4kYB6dzn+bUgTWv5yNKxMQ3HozAjb5eZZ7y0+qWhWUQaika1E8BwA
-         V94LTzqPUJPEOz7OLMOyavta4angbxvn02h6CM/gM26J9UGV72em+KX1rOMjXYN9udL3
-         TDx5zjM3lImyPe3ZjmZJhS4HRcawTLJvguzQrYdT367EGneizMeHEa8zevhxaplFI6b2
-         d/VS8XjF5gYL5jngvT9WnAlbuGM4oHijEPmXI4pMHAMxORqAHPuZAaxgqGvoRTt7k97P
-         tKTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718633264; x=1719238064;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=exNmLeQ/1saUICwG+i10ZbiGFu61QQGdsTZZy7V7AmA=;
-        b=end43SkZ6sgMdu3Jg7E4UrHzi12m8VwA80c38HzQ/Y9j0NeSHW8npw+sIEAqkhOSl1
-         ifM1wgZHNwReNEpPEMcokydULuVk+8vN0F69CNE+n/DD76ZC3OY7o2HrnBo2LZCtbe/L
-         8JtxAJr3dQK9znG4XgSKqeAiW/aOeQgBfLQ80h+ti3PmCNIyafNXRvwNXFM8uYwn5FkE
-         xoE1vGmADZI0Y5UyF7QfbobJZMB8FX+43N1cdz1ozlnwSwkpSX3eKs7KKKcgYITrbROX
-         Y/HX4JptoObbnEpzSfNpz6vlJirg40nkuZfq2RtWNl61zdPQIgQiV038tpAdMXoqczpx
-         TN4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVWDf9NCKwbAnvPozz5jbfi6GfLCwBJHFM4kwmq8OzxUtNmHPfSaA4wVcQCGOGFyNylWSOo9OdHuuZuEpwhHMXqmpZlaIBjz1k=
-X-Gm-Message-State: AOJu0Yx8lMR2PJK2fDQ+P/vBO5zJHvtOUKT3LgM7HXdy2Yyt0gM1nyCx
-	OlcgZLDCnn9eGIPzs1d0U+05sH1vJslLB2mUWQ0eMK8NtlnEkseFZV0F04MZlKE5OGV3sAjgq22
-	Z
-X-Google-Smtp-Source: AGHT+IFQsaa8hu5ihcOpX77WzFDdvfqH0xHmzhwYvaZnRHLXsr04EN96LjycixPt/HX3eDQag2dJ6g==
-X-Received: by 2002:a05:651c:1a1e:b0:2ec:eee:f19e with SMTP id 38308e7fff4ca-2ec0eeef77fmr74104111fa.37.1718633263311;
-        Mon, 17 Jun 2024 07:07:43 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-422f6320c70sm159742255e9.30.2024.06.17.07.07.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jun 2024 07:07:43 -0700 (PDT)
-Date: Mon, 17 Jun 2024 17:07:39 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev, Dimitri Fedrau <dima.fedrau@gmail.com>
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-	Dimitri Fedrau <dima.fedrau@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] power: supply: add support for MAX1720x
- standalone fuel gauge
-Message-ID: <f37587e6-bed8-4d91-889f-983bef03cde8@moroto.mountain>
+	s=arc-20240116; t=1718633599; c=relaxed/simple;
+	bh=QRgG4WTuWok5ADhza6P3Gt/e72sg3po9JvzHqviNjtA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DFtq+Sb14ArWq2FvWYE14UKAwmkasgPBgTJikNCfOfqozfOFwEj9wDsRHK5PzfRTZ1u3ohX574yUlAiOF56kkuCjyZ9UE1cs2T1S93jeNmsoiAtrw+MkG5DeCURisckWUVfqLHweRQsS5J08CMQia8OzDJA0OSJu6TJYYg9n7fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V2URBSMe; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718633597; x=1750169597;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QRgG4WTuWok5ADhza6P3Gt/e72sg3po9JvzHqviNjtA=;
+  b=V2URBSMePZeqme8LOnBnTkuScbR6K+D7mcyzQcmO7czYz5FE0ddDp+xe
+   norFG9wA5dO83o9lHkxgo4IsMBfWEZwfvlgwqiIAJNZLZyNholuuzc7Yn
+   mTiOCCB2loF8fiicQkPPwTRXExPHQiEUNEDzrYd3FYStp9yqAjn9pZ02/
+   TjowT9uypkAe6hM/jhHGF+29iQTnk8qbWhf5Yc36yFykxseC1i+uS9Kwu
+   8ufDnMoaWCj/iTyRrDb/MrUcG13J2VKlcU2K/Ostmw3Uk5WFiNlYqf+3X
+   k2HhcIy3YapDNov7AD2JpDVWA8nRgHM6LdJcBups+mdVUtlFcightMjUf
+   w==;
+X-CSE-ConnectionGUID: ejyZ7tM2Skq8nSIKIpZa7g==
+X-CSE-MsgGUID: U/jNEdWGQCW48tK1qlsrvQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11105"; a="26579888"
+X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
+   d="scan'208";a="26579888"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 07:13:17 -0700
+X-CSE-ConnectionGUID: CO+6SsobSfaJnN8fPqjqlw==
+X-CSE-MsgGUID: tebfmINuRWuIWa2OHo+BwQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
+   d="scan'208";a="45743562"
+Received: from kinlongk-mobl1.amr.corp.intel.com (HELO [10.125.111.154]) ([10.125.111.154])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 07:13:16 -0700
+Message-ID: <fb789f0a-0c80-49f3-ab7e-d22fc2793a49@intel.com>
+Date: Mon, 17 Jun 2024 07:13:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240615203352.164234-3-dima.fedrau@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH PATCH 8/9] x86/bugs: Declutter vulnerable CPU list
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org
+Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ Andrew Cooper <andrew.cooper3@citrix.com>
+References: <20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com>
+ <20240617-add-cpu-type-v1-8-b88998c01e76@linux.intel.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20240617-add-cpu-type-v1-8-b88998c01e76@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Dimitri,
+On 6/17/24 02:12, Pawan Gupta wrote:
+> No functional change.
 
-kernel test robot noticed the following build warnings:
-
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dimitri-Fedrau/dt-bindings-power-supply-add-support-for-MAX17201-MAX17205-fuel-gauge/20240616-043602
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-patch link:    https://lore.kernel.org/r/20240615203352.164234-3-dima.fedrau%40gmail.com
-patch subject: [PATCH v3 2/2] power: supply: add support for MAX1720x standalone fuel gauge
-config: nios2-randconfig-r081-20240616 (https://download.01.org/0day-ci/archive/20240617/202406170040.gxB0dYxg-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 13.2.0
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202406170040.gxB0dYxg-lkp@intel.com/
-
-smatch warnings:
-drivers/power/supply/max1720x_battery.c:285 max1720x_probe() warn: passing zero to 'PTR_ERR'
-
-vim +/PTR_ERR +285 drivers/power/supply/max1720x_battery.c
-
-134a669e205435 Dimitri Fedrau 2024-06-15  251  static int max1720x_probe(struct i2c_client *client)
-134a669e205435 Dimitri Fedrau 2024-06-15  252  {
-134a669e205435 Dimitri Fedrau 2024-06-15  253  	struct power_supply_config psy_cfg = {};
-134a669e205435 Dimitri Fedrau 2024-06-15  254  	struct device *dev = &client->dev;
-134a669e205435 Dimitri Fedrau 2024-06-15  255  	struct max1720x_device_info *info;
-134a669e205435 Dimitri Fedrau 2024-06-15  256  	int ret;
-134a669e205435 Dimitri Fedrau 2024-06-15  257  
-134a669e205435 Dimitri Fedrau 2024-06-15  258  	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
-134a669e205435 Dimitri Fedrau 2024-06-15  259  	if (!info)
-134a669e205435 Dimitri Fedrau 2024-06-15  260  		return -ENOMEM;
-134a669e205435 Dimitri Fedrau 2024-06-15  261  
-134a669e205435 Dimitri Fedrau 2024-06-15  262  	i2c_set_clientdata(client, info);
-134a669e205435 Dimitri Fedrau 2024-06-15  263  	info->bat_desc.name = "max1720x";
-134a669e205435 Dimitri Fedrau 2024-06-15  264  	info->bat_desc.no_thermal = true;
-134a669e205435 Dimitri Fedrau 2024-06-15  265  	info->bat_desc.type = POWER_SUPPLY_TYPE_BATTERY;
-134a669e205435 Dimitri Fedrau 2024-06-15  266  	info->bat_desc.properties = max1720x_battery_props;
-134a669e205435 Dimitri Fedrau 2024-06-15  267  	info->bat_desc.num_properties = ARRAY_SIZE(max1720x_battery_props);
-134a669e205435 Dimitri Fedrau 2024-06-15  268  	info->bat_desc.get_property = max1720x_battery_get_property;
-134a669e205435 Dimitri Fedrau 2024-06-15  269  	psy_cfg.drv_data = info;
-134a669e205435 Dimitri Fedrau 2024-06-15  270  
-134a669e205435 Dimitri Fedrau 2024-06-15  271  	info->regmap = devm_regmap_init_i2c(client, &max1720x_regmap_cfg);
-134a669e205435 Dimitri Fedrau 2024-06-15  272  	if (IS_ERR(info->regmap))
-134a669e205435 Dimitri Fedrau 2024-06-15  273  		return dev_err_probe(dev, PTR_ERR(info->regmap),
-134a669e205435 Dimitri Fedrau 2024-06-15  274  				     "regmap initialization failed\n");
-134a669e205435 Dimitri Fedrau 2024-06-15  275  
-134a669e205435 Dimitri Fedrau 2024-06-15  276  	info->ancillary = i2c_new_ancillary_device(client, "nvmem", 0xb);
-134a669e205435 Dimitri Fedrau 2024-06-15  277  	if (IS_ERR(info->ancillary))
-134a669e205435 Dimitri Fedrau 2024-06-15  278  		return dev_err_probe(dev, PTR_ERR(info->ancillary),
-134a669e205435 Dimitri Fedrau 2024-06-15  279  				     "Failed to initialize ancillary i2c device\n");
-134a669e205435 Dimitri Fedrau 2024-06-15  280  
-134a669e205435 Dimitri Fedrau 2024-06-15  281  	i2c_set_clientdata(info->ancillary, info);
-134a669e205435 Dimitri Fedrau 2024-06-15  282  	ret = max1720x_probe_sense_resistor(info);
-134a669e205435 Dimitri Fedrau 2024-06-15  283  	if (ret) {
-134a669e205435 Dimitri Fedrau 2024-06-15  284  		i2c_unregister_device(info->ancillary);
-134a669e205435 Dimitri Fedrau 2024-06-15 @285  		return dev_err_probe(dev, PTR_ERR(info->bat),
-
-s/PTR_ERR(info->bat)/ret/
-
-134a669e205435 Dimitri Fedrau 2024-06-15  286  				     "Failed to read sense resistor value\n");
-134a669e205435 Dimitri Fedrau 2024-06-15  287  	}
-134a669e205435 Dimitri Fedrau 2024-06-15  288  
-134a669e205435 Dimitri Fedrau 2024-06-15  289  	info->bat = devm_power_supply_register(dev, &info->bat_desc, &psy_cfg);
-134a669e205435 Dimitri Fedrau 2024-06-15  290  	if (IS_ERR(info->bat)) {
-134a669e205435 Dimitri Fedrau 2024-06-15  291  		i2c_unregister_device(info->ancillary);
-134a669e205435 Dimitri Fedrau 2024-06-15  292  		return dev_err_probe(dev, PTR_ERR(info->bat),
-134a669e205435 Dimitri Fedrau 2024-06-15  293  				     "Failed to register power supply\n");
-134a669e205435 Dimitri Fedrau 2024-06-15  294  	}
-134a669e205435 Dimitri Fedrau 2024-06-15  295  
-134a669e205435 Dimitri Fedrau 2024-06-15  296  	return 0;
-134a669e205435 Dimitri Fedrau 2024-06-15  297  }
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+It would make me feel a *lot* better if you also dumped the before and
+after binaries and made sure they're identical.
 
