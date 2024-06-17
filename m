@@ -1,263 +1,137 @@
-Return-Path: <linux-pm+bounces-9385-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9386-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B41EC90BAC2
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 21:20:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D2E490BD3D
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 00:06:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4657282A9A
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 19:20:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F7821C20D87
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2024 22:06:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20B41198E84;
-	Mon, 17 Jun 2024 19:20:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 792FC1991AC;
+	Mon, 17 Jun 2024 22:06:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="sWjQvoWC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jeXignhI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f66.google.com (mail-oo1-f66.google.com [209.85.161.66])
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA9D1990BA
-	for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 19:20:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38797492;
+	Mon, 17 Jun 2024 22:06:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718652050; cv=none; b=JNWjGbj9xBgdhtT/wbXyg0LgvQIqiNLlr98i8FfBd0eO7qzf5WIU703YVr5+mUhjSCp9hIQHM59bFQSXr8UUJnZM52LaxU6RHtDXQFsRX+iQI8q4NUrsFX1EtInC5SoA3KwlaFUHHIeTmKTcOahIYbK3dZ9wTjjE23N1hnF7fec=
+	t=1718661963; cv=none; b=LF/PLNSSChYzCGBoYkL6KFP1+ND7DnEK51WlDSuohBT5MlPlDBxVFUthetHmDDUls6k4ZioIsSunRi2izy7Vk5dKmzAA93gkmzj0QXN/yRaLAn/mQF2XGNeSbvq/K63aiWE6CTDuaSDaDz4mCoFQ4P0m+w4hUqdsAMT3qEra9Qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718652050; c=relaxed/simple;
-	bh=0SQukJl06GZ+B0kUlQ3NjMBU7HdaYY7vBZGG4z7hpDA=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=DxUMJSW+cfogcXoTl0MvFbUuCk0z+x83Ltp3adrSWML0Av3UniNUqpom15OmqltPZDfB//K7Hj5MoDDdJ1szaveNw9yU/NnV2N3WfzPQrU4VWENxryZJscbkbZ0Xl4Vso7VQahqI7KXGAtelLRBG5gTtEHK+fmOpoG89ysmatvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=sWjQvoWC; arc=none smtp.client-ip=209.85.161.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-oo1-f66.google.com with SMTP id 006d021491bc7-5bafcb42d28so2607255eaf.0
-        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2024 12:20:47 -0700 (PDT)
+	s=arc-20240116; t=1718661963; c=relaxed/simple;
+	bh=/hWPDOnmI2yUJYDl5gQyCSpT+WA3huxuW9NK3NL7qIU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=G07agkY9YrrqI9s5jVayZZkH7t4qNy7Vd8+X69QoV8Vxw34aTIZ4E2Gonk/nlQK68vYDvSfg9IrPBWMJAYpW5Giwevh8H2u/gPQjthgZGDAOq95NkLo4YkZzLMJlubjS8K2eOZJ3fgyWeg4lMVilXw8WBc69KP4dxtnmUIPqcfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jeXignhI; arc=none smtp.client-ip=209.85.160.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-250ca14422aso2670408fac.0;
+        Mon, 17 Jun 2024 15:06:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1718652047; x=1719256847; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=OhrJIa1PCduTDc6cusbUUw778mvmnJCMJ0WZVZDf/VA=;
-        b=sWjQvoWCkYtlZkHkGa5n5fdqi1l24B4hRbzWX7QkHy7J3RjdjrP06AX+bqBl6yd0Qx
-         N6UI/jlvsXnp0Yd9HQcWNNyctj3p+ppl00tKnAV3xF8YUwsQcMy/j29pHNNk/KQ8deyT
-         buIfCqq0iipMMTrmjwR6WLEMF92OadJKSv4yzSCJthIxuy4RtVgTFjBAQp5W9n8Ed9Q/
-         xwlPuwaBxt4jj1ijRRPL0j4XD4y1sjU5EsQBhB9W5Nkf4evMCSY5dqznFl5BhtTAg7uG
-         ib0Wj3cx1rmnfQMK/VLMr4l4eN3cmFUBwDynasvTMA9BXKPoL3QP8/vAbyBTroaXSVx0
-         sARA==
+        d=gmail.com; s=20230601; t=1718661961; x=1719266761; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=r/Su6zOhJKHHuZVcMf95zxNGwUW/D3aqWfw+kVjdFyg=;
+        b=jeXignhI5iwKigMsJ0zWKjYKfdGVi5EU0fTlYToCpGD7GCv++CceVg+feHT/jdb/Wc
+         9/o3uAdvDkpwc8fD8mFqA42H1GI81oCK8LqVf5SuZPydFPzwK44CEu6g7+r+OXfSakif
+         6FUbv9C2w7vW2QTcwfglzSnuh3dA5FRSdVqJulGBRaeusPzOn5tGgq6WMgaZ6CiIgA/C
+         JPqQkESZlck+JA6G9JRA9cTSx7RRDb9sBZqgRJD30Qjt7qT2v6qstT5XtZL8M2mErTJk
+         bUUKq8BLf2mTx2dw5wvSs1kUKB7ae5wB2gnEZl/UcWAZPD+cM84IOEU5Oc6BOaM/LdNa
+         vQ7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718652047; x=1719256847;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1718661961; x=1719266761;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OhrJIa1PCduTDc6cusbUUw778mvmnJCMJ0WZVZDf/VA=;
-        b=Zf0sOA+6+D3mAQ8970lHzjqhYrhxHiEcy02ffGHMC90IcTykxdJm53/euMvbpFMOlI
-         wudbMm+iH8sgbte78t3q1iIpmVag7sZvntMlnmU9KSY91akC1VzffRC2TyGYZ6ukpFjg
-         QegmO9Bn5knj/eOXtQqNt5yvX8yjQKlsmEQupUFxKu/lETEXXkvQ6kxQTas+Wyaxq0/l
-         B165qMtxSIVwNKlHVBk0YA+v/V3BAv/MK1zWI8w74GMrd2vkyQPZNAfnJMQ/5Qb+5Mi8
-         aXS1tLGF/6DzDOFF/SImGtfko76Zzn7et1WsMh/iFnoy38SDYljUCQQA7NHwpTbxwgwc
-         EfdA==
-X-Forwarded-Encrypted: i=1; AJvYcCUzD+EErtyRKEqTSyQFSW41Z1+z0bVS3QkFYoCXsmPnNAr6PUhjMRd+cdcgHw4ubWappyfnrqn0NbcfDBebiQtItnxWQQ4QPf8=
-X-Gm-Message-State: AOJu0YxZclqRBankTYmbeWLeNK9Xi1H6Z0YjSC4y6XyCro0mHTNT5mle
-	ySDxuRCA4PAB9k7jChsXP/TxGiLJuQK4DUPmRnApW3VmHtP36fU+8pdNOMxY1Fo=
-X-Google-Smtp-Source: AGHT+IEMDpWXqiB3Rp6+lZt89PCexQPcTEvUyDYjRMUdEZmSVD/y/iwPOuqGN/Bl/QyA0l8eNAkbXw==
-X-Received: by 2002:a05:6358:6f83:b0:19f:5317:4984 with SMTP id e5c5f4694b2df-19fb501223cmr1421144355d.21.1718652046795;
-        Mon, 17 Jun 2024 12:20:46 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6fee2d366e0sm7027926a12.75.2024.06.17.12.20.45
+        bh=r/Su6zOhJKHHuZVcMf95zxNGwUW/D3aqWfw+kVjdFyg=;
+        b=nHxXRYRPHs6TF7Cpe74Bqh7zHR0Z430dgRG1GVxOYJKrHCjd5stFLT2hQBdg/133ap
+         9O/t/oyGU3wgLYxrR9UKo4jx/H0zE9vipGP047rpdDqstv8qqknbiw1WU0mHl8Wdo8m1
+         7z5vBDKm9XpV1qd1v8X164jmIDryawBBagpVcOwekUvdQAsW0HBAddy9PINpEf8eWWnK
+         EQLnP1gfDgj974ji2ITP/UGMBuFDeqhTMve0zeeScumiK9uKWELhY7/4kefjdWhoxJaj
+         58pRCCnkcuOG73sn0z9uMilTl6voMceI3aygcbwmLgnvHAY0EVWHh/UtxZAsS1hQ4BRV
+         IZeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWYOkptTrVhtTY+4OJrTk2JBlHhonSxTsKgmDAmGXbNj1H52y+ejf1esMtOqH1bPKN8MjAxpox/XEDSs6NFVMqSMG8HZBplusdINYm1FTpePlOpqvzXmFWVXpqCnL3MMu6cSpr1zg==
+X-Gm-Message-State: AOJu0YyjZI5Zjz3J2GJ5KKnifWuwpoHvYmWeCb8lFlkpBaQE27P9Dto3
+	toTgKY9FCe4MiVLwfsNGgjVIQLEHtR8mPp7bNahCyHMiP0a0gyzP
+X-Google-Smtp-Source: AGHT+IGTkEJLjAQsBDyPVepbzS96rgjLZUNQCfs/a/TVEyMYrXfJ/EQuJc6ranGmaMtM25H5ZoBEcw==
+X-Received: by 2002:a05:6871:5c9:b0:24f:ee90:4556 with SMTP id 586e51a60fabf-25842552a80mr12620848fac.0.1718661960812;
+        Mon, 17 Jun 2024 15:06:00 -0700 (PDT)
+Received: from localhost.localdomain ([75.28.21.198])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-6fb5b1b0fa8sm1664232a34.28.2024.06.17.15.06.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jun 2024 12:20:46 -0700 (PDT)
-Message-ID: <66708c8e.630a0220.12e1e.3258@mx.google.com>
-Date: Mon, 17 Jun 2024 12:20:46 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 17 Jun 2024 15:06:00 -0700 (PDT)
+From: Chris Morgan <macroalpha82@gmail.com>
+To: linux-sunxi@lists.linux.dev
+Cc: linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	broonie@kernel.org,
+	lee@kernel.org,
+	samuel@sholland.org,
+	jernej.skrabec@gmail.com,
+	sre@kernel.org,
+	wens@csie.org,
+	conor+dt@kernel.org,
+	krzk+dt@kernel.org,
+	robh@kernel.org,
+	lars@metafoo.de,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH 0/8] Add Battery and USB Supply for AXP717
+Date: Mon, 17 Jun 2024 17:05:27 -0500
+Message-Id: <20240617220535.359021-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.10-rc4-69-g4e83a55bb30ea
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 19 warnings (v6.10-rc4-69-g4e83a55bb30ea)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 19 warnings (v6.10-rc4-69-g=
-4e83a55bb30ea)
+From: Chris Morgan <macromorgan@hotmail.com>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-10-rc4-69-g4e83a55bb30ea/
+Add support for monitoring the USB charger and battery charger on the
+AXP717 PMIC. This required some driver refactoring of the axp20x USB
+and battery charger as the AXP717 is somewhat different but can still
+benefit from some common elements.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.10-rc4-69-g4e83a55bb30ea
-Git Commit: 4e83a55bb30ea336e599d4b02600066fb797fcf1
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Note that as of now the charging current now value may be incorrect as
+the scale and offsets were not documented in the datasheet. I suspect
+the scale is 1 and the offset is somewhere around 450mA though.
 
-Warnings Detected:
+Please note that this patch series relies on the following series being
+applied first [1].
 
-arc:
-    haps_hs_smp_defconfig (gcc-10): 2 warnings
+[1]: https://lore.kernel.org/linux-sunxi/20240418000736.24338-1-andre.przywara@arm.com/
 
-arm64:
+Chris Morgan (8):
+  dt-bindings: iio: adc: Add AXP717 compatible
+  power: supply: axp20x_usb_power: Add support for AXP717
+  power: supply: axp20x_battery: add support for AXP717
+  mfd: axp20x: Add ADC, BAT, and USB cells for AXP717
+  iio: adc: axp20x_adc: add support for AXP717 ADC
+  power: supply: axp20x_usb_power: Add support for AXP717
+  power: supply: axp20x_battery: add support for AXP717
+  arm64: dts: allwinner: h700: Add charger for Anbernic RG35XX
 
-arm:
+ .../bindings/iio/adc/x-powers,axp209-adc.yaml |  10 +
+ .../x-powers,axp20x-battery-power-supply.yaml |   7 +
+ .../x-powers,axp20x-usb-power-supply.yaml     |   6 +
+ .../sun50i-h700-anbernic-rg35xx-2024.dts      |  21 +
+ drivers/iio/adc/axp20x_adc.c                  | 167 ++++-
+ drivers/mfd/axp20x.c                          |  30 +-
+ drivers/power/supply/axp20x_battery.c         | 580 ++++++++++++++++--
+ drivers/power/supply/axp20x_usb_power.c       | 350 +++++++++--
+ drivers/regulator/axp20x-regulator.c          |   2 +-
+ include/linux/mfd/axp20x.h                    |  26 +-
+ 10 files changed, 1102 insertions(+), 97 deletions(-)
 
-i386:
+-- 
+2.34.1
 
-mips:
-    32r2el_defconfig (gcc-10): 3 warnings
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 14 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
-=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
-r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
-ls' found, but node is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
- is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
-rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
- provider
-    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
-ot an interrupt provider
-    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
-ound, but node is not an interrupt provider
-    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
-er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
-ider
-    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 14 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
 
