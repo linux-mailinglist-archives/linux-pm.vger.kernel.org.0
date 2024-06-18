@@ -1,145 +1,135 @@
-Return-Path: <linux-pm+bounces-9502-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9503-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EE7590DC3F
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 21:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 814DE90DC4C
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 21:21:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5848F1F22DDB
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 19:12:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F8A71F226AF
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 19:21:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1FF215EFCC;
-	Tue, 18 Jun 2024 19:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BC7C161337;
+	Tue, 18 Jun 2024 19:21:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oH0hcvFJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jfCpjrwO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92CF15EFA6
-	for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 19:12:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96628160873;
+	Tue, 18 Jun 2024 19:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718737927; cv=none; b=T5PA2jIREWQmIt8XnOxpxAPBnAaoDhv/QhPCCWOn+Iz9Zd8AUERmZSJgTX1ZjjxUlQm/A1Cp5Rwlh9BcHTR5h9EcoEsRU834OYvnFm1dm7wtxo4N2BCGRdvbhGdqcbVlWCdh+BU+Yp36rd40NuUsDdM9keepOD2z+JZx8edUPbw=
+	t=1718738488; cv=none; b=GCt7Y8vlPmuLnZoHu19FIwkOUL15sNixwF+CoXtoGNf/9aUfisQuXOqR8qUmcs4tUZaKWDpjZAADxy/U5OeqYGLPoNQKa+rXiWGDpYBUzdlNpMBEd2nXxCDXhO5AeGJvp1nHR1T15YaxMs10fHtRGYbEgRX8W2XoPlLxzTotwIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718737927; c=relaxed/simple;
-	bh=V6TUkHZXRl29GH5tB+9zD1O+XS7wyCwcd/6nrTmB+zo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AMZBug6UBb7GWW5qbQh69zXvwjPuJwEKxRPfYFc78HoikIAkDmkVr92aIvsNGz8D00jS/7ELN0u7nRn3/wQxV/lnXvQU74bZhbSfkbPcDhFAkHHKV/850o9t308PIeww3iIw2/pSlMl3/OrmDOT3ZQRJkaMUvdTp7SJut9JgNH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oH0hcvFJ; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-35f1bc2ab37so5160680f8f.1
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 12:12:05 -0700 (PDT)
+	s=arc-20240116; t=1718738488; c=relaxed/simple;
+	bh=qguTjeAy2Z/scLac/lyof9AClI7qTzDnSmloofIkUn4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YDzP1iOzlTcN5ZBS8ykE3kocKN/OjtkVrigOWnBAzAE7PiBDwr3LEqa1ZSL7GJqmmN1zDW59AYDfxolDrL9MCAWUD7+oSA67W667BtFCZ2K6o2bBggkv4k7xcjacQ8GtMDuGeLjbIBL9AuCzRE8gBFaL8yR+Q90W/USahei6Yp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jfCpjrwO; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-42138eadf64so47027475e9.3;
+        Tue, 18 Jun 2024 12:21:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718737924; x=1719342724; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f8+/cR8dmnRCIY8KO1c6EzfyrRTOkElOzLEANvqSOFw=;
-        b=oH0hcvFJ7FmVmxz8THavBoaaaDNUg/2g4Z6LQuingacqxNEXmPzSba9sw4TOfi492Q
-         ooW+qyu7XLOz22qJtfnr6/AwZa8qp6je324y00HxdtdPZebey5DLkLE2XUdSAgZntRq7
-         3ULheWyKCY99KmTO1ePsCu4PxnXk5M7s1jZcGlXhssPN5elk8ATtHOYNi0t+I5f6qvd+
-         TWe2H/5jBl+xtvh7NRA+yfKJWXBGFq7fVgRTq1xBECGXEvF2iXCxeq2jal3oJgtrDO4i
-         TC1F+3uLJu3LyNbchFfqH23CB1Xg9OeZsZvFWA0qVcA8y0cYcLSFg7DPyiKuyCGqdLre
-         5lLg==
+        d=gmail.com; s=20230601; t=1718738484; x=1719343284; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pchh2odHcmU3CdscbrO/Fnxv7MxpmGp5B4JKAi9AQjQ=;
+        b=jfCpjrwOe9C3w31A3lWd5bwrK2Ad+iY4Zuq/tLYs8HcnD4uoX6Nvk2iuw6+QK3Sh69
+         wwtkasSICfcNt8vaToG9iYWk8UZZmpqfIOs65VUS/yZU+rfa55JA+Mza2+DN+vhfWjlg
+         EolBa5Tf2Mw5L8kOox4OBAdwCURfYlZ8b9ySCfzfrPSuc+GEVd3P7KvVxf+T04580zey
+         QxvYnXELJclHjF139vuSFwaNASK/tO+otK76WBq7SmOEaV9qxr5+vriGqJeo43A+X9+I
+         yhfAclWOBtm2saMqncdvh5eUAezQCjQrVj/L43pMUHPgThxUt2Y6cNlWVJ0CyUNJNSNF
+         F/mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718737924; x=1719342724;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f8+/cR8dmnRCIY8KO1c6EzfyrRTOkElOzLEANvqSOFw=;
-        b=vLDrt+gNL0z92ppcJ/gC0pQdRUX04VuYp0ktR3FZWEw1k/nhIwx+GSzvXgcr6sENFU
-         YCvOltvzkhnewEmis1usNTINT+cIFnRYO0u7Aw9892SlqBTrqT16PZji9Ui+7b1ITsQb
-         uwePjlOWxaF3RIVN76WjR4muV98H4uKBraTqUlrv5Z+8SgQib/5LARuSaT/4yInyxic/
-         bxdIpPh1eGVKEKT12NPhQIZrMWCi/lCo9FgS9ijyCRxpQ1qeHmjqtAXE9ABCCpq55IrM
-         efuXrFW3BQN+nOldYgwc4LYMB0adMAwZEa7RqTBt6iOcP0HLXjynYFHa+aEC4KxhQZpj
-         9/KA==
-X-Forwarded-Encrypted: i=1; AJvYcCXkyAlq14IGIzw+jrjUf9sajW61XfSIdfm7+6GcdF17FDMy+dJxBkhbZ0H027rvg90FPNmYCEnJ09FKwpIFQ/Eppf0FUJZV2fs=
-X-Gm-Message-State: AOJu0Yw0MsMqBTEEsjk0Sn5rzonolseL2MW55APW8TVZ+5m9yapNe6pB
-	6IP2OkypqYu8EkXpS2A0btvehblA7g9FjXxX0oj4DCOLy1xKRFIXBhRpTMBMmpM=
-X-Google-Smtp-Source: AGHT+IHdn2YVcteO5gHaAZyTpV2RKc9NRMuQMnYAe8emYCZSQL9/iTeEcqYKL05YMuGAZiFOdSXtsQ==
-X-Received: by 2002:adf:fe11:0:b0:35e:5bf6:5432 with SMTP id ffacd0b85a97d-363175b8c65mr437516f8f.21.1718737923890;
-        Tue, 18 Jun 2024 12:12:03 -0700 (PDT)
-Received: from ?IPV6:2a00:f41:9028:9df3:5d11:7fa7:8997:f811? ([2a00:f41:9028:9df3:5d11:7fa7:8997:f811])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-361a85074a2sm2280828f8f.25.2024.06.18.12.11.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jun 2024 12:12:03 -0700 (PDT)
-Message-ID: <85e03d10-59a2-4f15-bb85-7b2c0354a5d1@linaro.org>
-Date: Tue, 18 Jun 2024 21:11:58 +0200
+        d=1e100.net; s=20230601; t=1718738484; x=1719343284;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pchh2odHcmU3CdscbrO/Fnxv7MxpmGp5B4JKAi9AQjQ=;
+        b=YsMdMD38EbAuJ+BY5aRZn54Oq7VD1I7g5wXMt8joRvpeJgUBC3cvt97HPRGMPW15LQ
+         A4633uMVMTFmnsCW7hXgDyqFC7th9xpV9e4aN3mD5sMubL16Fg/zKeUxPZ8ZitRLkjI2
+         0Fds/V1OhzzoF/AE0H7+xbnn2vhKWRCpOKQbCNwoPYlLkOq93+IlIl539vXj5g3Z3g76
+         Jn4r3Ff1USH7bKuUg0f487w2pvdZWXc6AaQv7X2kOFw70L30Ipa0Ln5YAXxZxk1ergII
+         R9pSB5GygBd6KOGRZLXMzMTly2jjG2I1bO7+GCo1lArpD1WOVYkck35KUi3Gd3gylW7Q
+         jeVg==
+X-Forwarded-Encrypted: i=1; AJvYcCVj1mCGeiZvZ+WrjItORyp8Slt0dL4tspZBYk7IckXZiPnVROstkn1zY8fkIUARrzXkT+gdYls4KxiefUUphjFsnJM840bJGw9qvlQlaFGaztdPIWzfyxFeQhFz4a4bQekEz4Yf7dI=
+X-Gm-Message-State: AOJu0YyT+B4lwX63xZzUNd4Cr6gxdS2EfXEOpLVMUnw65V76Dpz7R6UY
+	oud14BJL5qICmi9irvT/5MZb1kxdbynVZqJkrXbCeZcmlSFfX4XxiMYsfg==
+X-Google-Smtp-Source: AGHT+IFiit/oGOg9IzPavVOI8qAoio9GqNSaXKOEQvmRE54GqkfQvo1DOqhdp62aPfun+1X/1vKPKg==
+X-Received: by 2002:a05:600c:548f:b0:421:a575:99b1 with SMTP id 5b1f17b1804b1-42475293dacmr2579765e9.29.1718738483784;
+        Tue, 18 Jun 2024 12:21:23 -0700 (PDT)
+Received: from [127.0.1.1] (31-179-0-202.dynamic.chello.pl. [31.179.0.202])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3632d8562a1sm295757f8f.2.2024.06.18.12.21.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jun 2024 12:21:23 -0700 (PDT)
+From: Roman Storozhenko <romeusmeister@gmail.com>
+Date: Tue, 18 Jun 2024 21:21:12 +0200
+Subject: [PATCH] cpupower: Remove absent 'v' parameter from monitor man
+ page
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 02/23] gcc-sdm845: Add rates to the GP clocks
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Dzmitry Sankouski <dsankouski@gmail.com>,
- Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>,
- Jessica Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>,
- phone-devel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-input@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org
-References: <20240618-starqltechn_integration_upstream-v3-0-e3f6662017ac@gmail.com>
- <20240618-starqltechn_integration_upstream-v3-2-e3f6662017ac@gmail.com>
- <wnf3mfgdm4p4f5wrxdtlx4wccnizdvohc7iiyu5t22eeb67r57@xun3r73hksrg>
- <ad04e203-4244-4cd3-9c9a-fae002962990@linaro.org>
- <lwrz4rvn6ogseea5v6j7plc3yi3xnzo76dvrsl3muat3iswlkb@zmwa3xo3xgw4>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <lwrz4rvn6ogseea5v6j7plc3yi3xnzo76dvrsl3muat3iswlkb@zmwa3xo3xgw4>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20240618-change-mon-format-v1-1-efa263a8e286@gmail.com>
+X-B4-Tracking: v=1; b=H4sIACfecWYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDM0MLXahobn6eblp+UW5iia6xgYGhqbmZYbKpRaoSUF9BUWpaZgXYzOj
+ Y2loAtUVeZGMAAAA=
+To: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Roman Storozhenko <romeusmeister@gmail.com>
+X-Mailer: b4 0.14.0
 
+Remove not supported '-v' parameter from the cpupower's 'monitor'
+command description.
 
+Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
+---
+There is a '-v' parameter described in cpupower's 'monitor' command man
+page. It isn't supported at the moment, and perhaps has never been
+supported. When I run the monitor with this parameter I get the
+following:
 
-On 6/18/24 20:55, Dmitry Baryshkov wrote:
-> On Tue, Jun 18, 2024 at 08:50:52PM GMT, Konrad Dybcio wrote:
->>
->>
->> On 6/18/24 19:50, Dmitry Baryshkov wrote:
->>> On Tue, Jun 18, 2024 at 04:59:36PM GMT, Dzmitry Sankouski wrote:
->>>> sdm845 has "General Purpose" clocks that can be muxed to
->>>> SoC pins.
->>>>
->>>> Those clocks may be used as e.g. PWM sources for external peripherals.
->>>> Add more frequencies to the table for those clocks so it's possible
->>>> for arbitrary peripherals to make use of them.
->>>>
->>>> See also: bf8bb8eaccf(clk: qcom: gcc-msm8916: Add rates to the GP clocks)
->>>
->>> Each time I look at the table attached to the GP CLK, I feel that it's
->>> plain wrong. In the end the GPCLK can in theory have arbitrary value
->>> depending on the usecase.
->>>
->>> Bjorn, Konrad, maybe we should add special clk_ops for GP CLK which
->>> allow more flexibility than a default clk_rcg2_ops?
->>
->> If we can somehow get max m/n/d values for all possible parents, sure
-> 
-> Calculate them at runtime?
+$ sudo LD_LIBRARY_PATH=lib64/ bin/cpupower monitor -v
+monitor: invalid option -- 'v'
+invalid or unknown argument
+$ sudo LD_LIBRARY_PATH=lib64/ bin/cpupower monitor -V
+monitor: invalid option -- 'V'
+invalid or unknown argument
+---
+ tools/power/cpupower/man/cpupower-monitor.1 | 5 -----
+ 1 file changed, 5 deletions(-)
 
-We'd be calculating the mnd values for a frequency that's either equal or
-reasonably close to the one requested. My worry is that we somehow need
-to get the maximum values they can take (unless they're well-known)
+diff --git a/tools/power/cpupower/man/cpupower-monitor.1 b/tools/power/cpupower/man/cpupower-monitor.1
+index 8ee737eefa5c..991f931cfc38 100644
+--- a/tools/power/cpupower/man/cpupower-monitor.1
++++ b/tools/power/cpupower/man/cpupower-monitor.1
+@@ -81,11 +81,6 @@ Measure idle and frequency characteristics of an arbitrary command/workload.
+ The executable \fBcommand\fP is forked and upon its exit, statistics gathered since it was
+ forked are displayed.
+ .RE
+-.PP
+-\-v
+-.RS 4
+-Increase verbosity if the binary was compiled with the DEBUG option set.
+-.RE
+ 
+ .SH MONITOR DESCRIPTIONS
+ .SS "Idle_Stats"
 
-Konrad
+---
+base-commit: 0c52056d9f77508cb6d4d68d3fc91c6c08ec71af
+change-id: 20240618-change-mon-format-30015761c58e
+
+Best regards,
+-- 
+Roman Storozhenko <romeusmeister@gmail.com>
+
 
