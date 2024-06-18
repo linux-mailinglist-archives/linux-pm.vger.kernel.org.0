@@ -1,183 +1,112 @@
-Return-Path: <linux-pm+bounces-9482-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9483-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75A5B90D7CE
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 17:51:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D71990D7FC
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 18:02:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 769711C20DF0
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 15:51:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBA1B1F23808
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 16:02:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 590316F307;
-	Tue, 18 Jun 2024 15:50:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51B2446B83;
+	Tue, 18 Jun 2024 16:02:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zmsr+E2K"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NqgYgMbC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF2E43AC3
-	for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 15:50:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8826A45BE4
+	for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 16:02:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718725833; cv=none; b=YoC0EXM+5tYcyxwa7aOnU8uYe0LXUTnLi8lSmKb2nc8m1utFVLG+Iyk2914kTDzZA9cTPsXv+kv/vIs5XJZFJFd7D0s2AW4MFV8cE7oUe7iQ2JHZtOuHvI0+MnAPikKbsFSCMLlET2/mwEAzzwj9obikpBniHkRb/SYsx8/iYME=
+	t=1718726542; cv=none; b=dTheCHUoIsm+6wfPuFpelfTPvOxaQHVIU1ji+uyDrniO0tPr/hiw9eq05TIfGCy6lzA9bVw/JLAlReaF3g3LcK8hu8VUrFPtDE3weas6kH7eVHqGNX5CfDEdHGXm6xGDZ9V8MMFYocNh+fOQXoxUE6x8R7jjWTDu/YqJTB/BaI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718725833; c=relaxed/simple;
-	bh=O83FNAdgJkgnscldJT04vDrZcANIzWxDsUu1SHrFuVQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=A98ErXQ5Yf6CBkzEbH8WLDOEZdq5hUKPWIxllDpIQphJ3ssM9eivpYT8uEpTM/5PesrGltwzeZ8DRyqxSSgs/qmkrKGK34r7/evfQtwHQhoSZaNe9MMA0/G7FyP1iKaBhnaOqp8lAQFO46QGHi7pKth97Cj7nQo/4EOXPbBsfzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zmsr+E2K; arc=none smtp.client-ip=209.85.208.179
+	s=arc-20240116; t=1718726542; c=relaxed/simple;
+	bh=x2PiSU9LX7PP8SgWlE3EbW7kJbvIktv1zVvHYBCMABM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QqTUl5UaW4QkuLLrizgDGdWSnbBrGZQqKuOrHBrzbCJ0t1DaC83U5SLtFVEjV3CnKw+ZxTqi9TR/T/QeTIaHXZB+erHzwd4ZR0ZSGzSDUbpqJ8EWQSH+jg2x+/5mrPz6DXn6rXh27fdTh4HVcSxZdffHQmbE31bc9ZjgK+xAz9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NqgYgMbC; arc=none smtp.client-ip=209.85.167.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2ec002caf3eso94055471fa.1
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 08:50:29 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52bc121fb1eso6579638e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 09:02:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718725828; x=1719330628; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j0o2btwvxJuAvs23zoxm88cS8MnRzldpGlzftLOxRCk=;
-        b=zmsr+E2KfIvSDLv1hwZZ1RJlEQJ0yo37Ra82b0MjeNoEGbFl9XyM45wMHlrhO0UuVG
-         ZVPH+Kge0JYTpOUKMPAjoXXpwkzYK0Uratz4DCS8+DI6pc/wZ4N8oiGDEL/PqS48kDlW
-         iMdelv+bm05dQV4RhFmHzh47kJSXHZe8e0Y5kNcZgAj0e8wfJHkS+1pQB4Wgmci5JTK/
-         K71/pHY9BDbAzCmHInWLxRhFQjYds2u2tib0/GjwwLr/EYAqV6XYA+Dz9i3vDjrTOauC
-         u3Fm72G87Po1d9+r8hEJsveaoYD7DDPAHW0CGiYIAZXu9/7VHHLXane6n9LE2+HG8+eY
-         hn7w==
+        d=linaro.org; s=google; t=1718726538; x=1719331338; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=752RRs86IaRqV5X/Zk2O6e+xuNg1lXOleBt1pgXq+cM=;
+        b=NqgYgMbCmtl7nAdAV5xOv+RloRJ8xu0Jv3KAYLTBwD7Ci28rkjj80GIQouhYBp6iQE
+         CAt7I6aOC89MIaM9RcHSkOyll+KAnK003xvQjwCza3Fk0lQg6ttJztTH+2Wh5eoBNLDa
+         2gS3DzF78vv3xM3hxFRCN7MniXrbC9JEQHKVRxg7Ruc2NWooPtRh5eVW7zkgEP4Rh5oA
+         ajOSN6ZVPUlDvTrefivqFn0pWsD/RB0V0QegxGSGT1Km1+cYG7v1/ff7fsQ5fi5Ko4Q+
+         ppXEVGS7hbd9P3pxEULF5j5Xm+yEv1ZqKDIr0lRnjA8JeR92UuxuCDmXg/wEITa8QJrF
+         3Ybg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718725828; x=1719330628;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j0o2btwvxJuAvs23zoxm88cS8MnRzldpGlzftLOxRCk=;
-        b=Hx+u6KuoWWBlPGPhwmOv1mZzsWcp3V9s/QzLZ+qHT4IC2cLmZh4Lvy3SUWYbskWlpw
-         WPePtRRfAiiA0Caph6ICvtfPaUf7yqeYYacXIbX8toAQDgb0+e8jddOWBD+aZZ03rtGB
-         ns+NgykcWSB1wyanP+yfWTccqYAsaSMffCvyqpPqUDbXIno3bDKE2QZkbcsDA9eErlTT
-         FjbYia7//a0790xlsE3jJmsvA1z1nQ6BCZZ/y2moT732tKnM1C0eG3/peIDzLQjZrSZT
-         XhsDKe+FJYy24zx++C4bMcVTpLuWav+T36yo4VCFlR2HMtH0eeKGUJNohCAuZ1pGw7yQ
-         YOJw==
-X-Forwarded-Encrypted: i=1; AJvYcCVWkJM4cwmUlHfS7M747+CIk5rMnxKWB0XlFBrVXYStf9CW3rLyo0Rq53rRVErY16C82pux2cNEkW/n6UpcsuZNzOvcb9XhTkA=
-X-Gm-Message-State: AOJu0YzREBlrfi2XPp03HJFIaG0/NeHCkgGjGoX5ZlLmW3vPCmuOqZXj
-	w6FXzqWrbLMNe/pcBhqZ8HU+posQ6EW5eoBDu3LwjvXSdubfN6rw/aNQyeqfTls=
-X-Google-Smtp-Source: AGHT+IHHHBPht25n9Gly0ArxuEAcjB2htzP4JMhnxdb/RauObkjrKLdR6j/+3D8xHpgeQ7/4CkMWXg==
-X-Received: by 2002:a19:750c:0:b0:52c:76ac:329b with SMTP id 2adb3069b0e04-52ccaa369d8mr30796e87.35.1718725828111;
-        Tue, 18 Jun 2024 08:50:28 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca287241csm1544550e87.172.2024.06.18.08.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jun 2024 08:50:26 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: Nikunj Kela <nkela@quicinc.com>,
-	Prasad Sodagudi <psodagud@quicinc.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-tegra@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH] OPP: Fix support for required OPPs for multiple PM domains
-Date: Tue, 18 Jun 2024 17:50:13 +0200
-Message-Id: <20240618155013.323322-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1718726538; x=1719331338;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=752RRs86IaRqV5X/Zk2O6e+xuNg1lXOleBt1pgXq+cM=;
+        b=IfPvXxq3yGguLo6lHnYWp6sjdAzcA1YNxcVYzenVY509lpByhQYK0z8FYIfh2iphvX
+         zM4u6daeWTi+BdzQq786syjGQC2I12vx71tKnS8YgGsd7oWFLNCeqpFVyVy8ab5PtGnl
+         arfxCEmMNIyU32ri7aFZtj17HQ0T898tYiG81Oz9aTclcQs5D011NH9vQ/3C6vhx4fvN
+         Eks+RMB+wh8chXu203axPEnjVqITakmFFbK4TFgLfVbTAlwFvhIqr38YG0RG2UA3X6ft
+         tcCX3oDktNc3YzlofKUU9Ftj20yBA4gOW9xhGdjZeCg0Ryz8sQoWB//m0Chjet1A4/cW
+         f9jg==
+X-Forwarded-Encrypted: i=1; AJvYcCVx405P72bIlOiTJZ5PrKRYCGs5vhVgM6f0kv19aqdNO+zgtJ7HOPXxSpz2J1dVVjWUK5bJFdIXVtcvmkK+I4Z4vQTqAYYDOz0=
+X-Gm-Message-State: AOJu0YxFZWSsJqyPXizrZtZBgiem4os1rHgQhazLmwekaSw7Qp98OOH6
+	aA7Hr8kA0O0qC17MOT2FdeuA+0JUP8q7rmkHlYfWDmjtmujYRgHpFpXD7fLZfhk=
+X-Google-Smtp-Source: AGHT+IFI6pzMjgCbLBoQAWrp4XZXRVfgnVptha58SDpLfkJeq9xe2VdrhCoCQ5WsAeY36aPV7rhK5A==
+X-Received: by 2002:a05:6512:70:b0:52c:8932:27bd with SMTP id 2adb3069b0e04-52ccaa38052mr32213e87.41.1718726537649;
+        Tue, 18 Jun 2024 09:02:17 -0700 (PDT)
+Received: from ?IPV6:2a00:f41:9028:9df3:9346:6881:423d:1381? ([2a00:f41:9028:9df3:9346:6881:423d:1381])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca2888c2esm1551297e87.300.2024.06.18.09.02.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jun 2024 09:02:17 -0700 (PDT)
+Message-ID: <d09aa84c-dc75-48c6-b91e-c0dbe3d2e06f@linaro.org>
+Date: Tue, 18 Jun 2024 18:02:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 1/3] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
+ X1E80100 BWMON instances
+To: Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
+ djakov@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ srinivas.kandagatla@linaro.org
+Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+ quic_rgottimu@quicinc.com, quic_kshivnan@quicinc.com, conor+dt@kernel.org,
+ dmitry.baryshkov@linaro.org, abel.vesa@linaro.org
+References: <20240618154306.279637-1-quic_sibis@quicinc.com>
+ <20240618154306.279637-2-quic_sibis@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20240618154306.279637-2-quic_sibis@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-In _set_opp() we are normally bailing out when trying to set an OPP that is
-the current one. This make perfect sense, but becomes a problem when
-_set_required_opps() calls it recursively.
 
-More precisely, when a required OPP is being shared by multiple PM domains,
-we end up skipping to request the corresponding performance-state for all
-of the PM domains, but the first one. Let's fix the problem, by calling
-_set_opp_level() from _set_required_opps() instead.
 
-Fixes: e37440e7e2c2 ("OPP: Call dev_pm_opp_set_opp() for required OPPs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/opp/core.c | 47 +++++++++++++++++++++++-----------------------
- 1 file changed, 24 insertions(+), 23 deletions(-)
+On 6/18/24 17:43, Sibi Sankar wrote:
+> Document X1E80100 BWMONs, which has multiple (one per cluster) BWMONv4
+> instances for the CPU->LLCC path and one BWMONv5 instance for LLCC->DDR
+> path. Also make the opp-table optional for the X1E cpu-bwmon instances,
+> since they use the same opp-table between them.
+> 
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index cb4611fe1b5b..45eca65f27f9 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1061,6 +1061,28 @@ static int _set_opp_bw(const struct opp_table *opp_table,
- 	return 0;
- }
- 
-+static int _set_opp_level(struct device *dev, struct opp_table *opp_table,
-+			  struct dev_pm_opp *opp)
-+{
-+	unsigned int level = 0;
-+	int ret = 0;
-+
-+	if (opp) {
-+		if (opp->level == OPP_LEVEL_UNSET)
-+			return 0;
-+
-+		level = opp->level;
-+	}
-+
-+	/* Request a new performance state through the device's PM domain. */
-+	ret = dev_pm_domain_set_performance_state(dev, level);
-+	if (ret)
-+		dev_err(dev, "Failed to set performance state %u (%d)\n", level,
-+			ret);
-+
-+	return ret;
-+}
-+
- /* This is only called for PM domain for now */
- static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
- 			      struct dev_pm_opp *opp, bool up)
-@@ -1091,7 +1113,8 @@ static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
- 		if (devs[index]) {
- 			required_opp = opp ? opp->required_opps[index] : NULL;
- 
--			ret = dev_pm_opp_set_opp(devs[index], required_opp);
-+			ret = _set_opp_level(devs[index], opp_table,
-+					     required_opp);
- 			if (ret)
- 				return ret;
- 		}
-@@ -1102,28 +1125,6 @@ static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
- 	return 0;
- }
- 
--static int _set_opp_level(struct device *dev, struct opp_table *opp_table,
--			  struct dev_pm_opp *opp)
--{
--	unsigned int level = 0;
--	int ret = 0;
--
--	if (opp) {
--		if (opp->level == OPP_LEVEL_UNSET)
--			return 0;
--
--		level = opp->level;
--	}
--
--	/* Request a new performance state through the device's PM domain. */
--	ret = dev_pm_domain_set_performance_state(dev, level);
--	if (ret)
--		dev_err(dev, "Failed to set performance state %u (%d)\n", level,
--			ret);
--
--	return ret;
--}
--
- static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
- {
- 	struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
--- 
-2.34.1
+I think we can just drop the opp-table child node from required altogether,
+bindings shouldn't care about where the OPP table (which is referenced in
+the operating-points-v2 property) comes from
 
+Konrad
 
