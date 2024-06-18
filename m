@@ -1,76 +1,86 @@
-Return-Path: <linux-pm+bounces-9481-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9482-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26D3F90D79F
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 17:45:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75A5B90D7CE
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 17:51:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00EE4288CFF
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 15:45:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 769711C20DF0
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 15:51:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D70D130E4A;
-	Tue, 18 Jun 2024 15:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 590316F307;
+	Tue, 18 Jun 2024 15:50:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="R2TyZkR+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zmsr+E2K"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CD5D7D401;
-	Tue, 18 Jun 2024 15:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF2E43AC3
+	for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 15:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718725427; cv=none; b=ZOWFnGZqjr6PvWnL/KyrYMQfwwOUSl2oixh1hWFFzdjyFXnuc+vsfM3k8pml/k86cOTHSWONm03+CSgVSIIyMUlGiJZkVwWEqz97U9xKQJyp6Tqw9Lh0SuCAsRCPcjAhPj3txZERAkSY/egw+kRfif8QfHBIDNS9oKnMl/J5/04=
+	t=1718725833; cv=none; b=YoC0EXM+5tYcyxwa7aOnU8uYe0LXUTnLi8lSmKb2nc8m1utFVLG+Iyk2914kTDzZA9cTPsXv+kv/vIs5XJZFJFd7D0s2AW4MFV8cE7oUe7iQ2JHZtOuHvI0+MnAPikKbsFSCMLlET2/mwEAzzwj9obikpBniHkRb/SYsx8/iYME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718725427; c=relaxed/simple;
-	bh=1iyvyvdlNcpQgO68rGlstK2TPWgSviLBiSjlN5hjUcg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kSL3zp42qms3oz2ccyl3WqPtnldbhbC0GFr8iTpiqseGIu+38rjuEUdFLaYfTvxbWUf/KFjLtyiOhO3+Bml0maxnXLMa/nsKojCwIr9VwSerTNl0cAoYPV6hakNO/WGoUs9CtRcMTO7ZrincZ/LJonpkCsdwnp3lAp7K7CBRzP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=R2TyZkR+; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45IBuea3018642;
-	Tue, 18 Jun 2024 15:43:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	DmqfayM9s7xgTIVNPfY+wGeEaUtQTuZQkA9EwVbSZFo=; b=R2TyZkR+bEkdSxlD
-	4t0Le0sjQJ8AyE0qtNaHQge1ACltCkISaQnKC5W+76oPLhL8rxQCP5enbrgOlBRc
-	c3dTJFdWywZpcaRPXKKzr+ypAcEJFlWPLul4fBAfZ+HwC5ah3lF8/NK+p+k5csge
-	eufdKmi/maVneSEa9yE+STh4JmbJNoZuTlnoQ5Lm7F/koPWAKNYcVO5aJhhwteVr
-	Ha24B3pjodQcWclSHceTTCeJSTjH1NeUXRdlo2S8JCTT74wYI/eI1IN3rhaXzton
-	V3TTPP0pC7oHWK412GS7RYonakWxk4JvvfauO0Vculq3SrmNgg5P47ZdAuOIy1A1
-	qhJoLQ==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yu22gsq1m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Jun 2024 15:43:41 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45IFhelr016882
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Jun 2024 15:43:40 GMT
-Received: from hu-sibis-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 18 Jun 2024 08:43:35 -0700
-From: Sibi Sankar <quic_sibis@quicinc.com>
-To: <andersson@kernel.org>, <konrad.dybcio@linaro.org>, <djakov@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <srinivas.kandagatla@linaro.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <quic_rgottimu@quicinc.com>, <quic_kshivnan@quicinc.com>,
-        <quic_sibis@quicinc.com>, <conor+dt@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <abel.vesa@linaro.org>
-Subject: [PATCH V2 3/3] arm64: dts: qcom: x1e80100: Add BWMONs
-Date: Tue, 18 Jun 2024 21:13:06 +0530
-Message-ID: <20240618154306.279637-4-quic_sibis@quicinc.com>
+	s=arc-20240116; t=1718725833; c=relaxed/simple;
+	bh=O83FNAdgJkgnscldJT04vDrZcANIzWxDsUu1SHrFuVQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=A98ErXQ5Yf6CBkzEbH8WLDOEZdq5hUKPWIxllDpIQphJ3ssM9eivpYT8uEpTM/5PesrGltwzeZ8DRyqxSSgs/qmkrKGK34r7/evfQtwHQhoSZaNe9MMA0/G7FyP1iKaBhnaOqp8lAQFO46QGHi7pKth97Cj7nQo/4EOXPbBsfzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zmsr+E2K; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2ec002caf3eso94055471fa.1
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 08:50:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1718725828; x=1719330628; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=j0o2btwvxJuAvs23zoxm88cS8MnRzldpGlzftLOxRCk=;
+        b=zmsr+E2KfIvSDLv1hwZZ1RJlEQJ0yo37Ra82b0MjeNoEGbFl9XyM45wMHlrhO0UuVG
+         ZVPH+Kge0JYTpOUKMPAjoXXpwkzYK0Uratz4DCS8+DI6pc/wZ4N8oiGDEL/PqS48kDlW
+         iMdelv+bm05dQV4RhFmHzh47kJSXHZe8e0Y5kNcZgAj0e8wfJHkS+1pQB4Wgmci5JTK/
+         K71/pHY9BDbAzCmHInWLxRhFQjYds2u2tib0/GjwwLr/EYAqV6XYA+Dz9i3vDjrTOauC
+         u3Fm72G87Po1d9+r8hEJsveaoYD7DDPAHW0CGiYIAZXu9/7VHHLXane6n9LE2+HG8+eY
+         hn7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718725828; x=1719330628;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j0o2btwvxJuAvs23zoxm88cS8MnRzldpGlzftLOxRCk=;
+        b=Hx+u6KuoWWBlPGPhwmOv1mZzsWcp3V9s/QzLZ+qHT4IC2cLmZh4Lvy3SUWYbskWlpw
+         WPePtRRfAiiA0Caph6ICvtfPaUf7yqeYYacXIbX8toAQDgb0+e8jddOWBD+aZZ03rtGB
+         ns+NgykcWSB1wyanP+yfWTccqYAsaSMffCvyqpPqUDbXIno3bDKE2QZkbcsDA9eErlTT
+         FjbYia7//a0790xlsE3jJmsvA1z1nQ6BCZZ/y2moT732tKnM1C0eG3/peIDzLQjZrSZT
+         XhsDKe+FJYy24zx++C4bMcVTpLuWav+T36yo4VCFlR2HMtH0eeKGUJNohCAuZ1pGw7yQ
+         YOJw==
+X-Forwarded-Encrypted: i=1; AJvYcCVWkJM4cwmUlHfS7M747+CIk5rMnxKWB0XlFBrVXYStf9CW3rLyo0Rq53rRVErY16C82pux2cNEkW/n6UpcsuZNzOvcb9XhTkA=
+X-Gm-Message-State: AOJu0YzREBlrfi2XPp03HJFIaG0/NeHCkgGjGoX5ZlLmW3vPCmuOqZXj
+	w6FXzqWrbLMNe/pcBhqZ8HU+posQ6EW5eoBDu3LwjvXSdubfN6rw/aNQyeqfTls=
+X-Google-Smtp-Source: AGHT+IHHHBPht25n9Gly0ArxuEAcjB2htzP4JMhnxdb/RauObkjrKLdR6j/+3D8xHpgeQ7/4CkMWXg==
+X-Received: by 2002:a19:750c:0:b0:52c:76ac:329b with SMTP id 2adb3069b0e04-52ccaa369d8mr30796e87.35.1718725828111;
+        Tue, 18 Jun 2024 08:50:28 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca287241csm1544550e87.172.2024.06.18.08.50.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jun 2024 08:50:26 -0700 (PDT)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Viresh Kumar <vireshk@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Nikunj Kela <nkela@quicinc.com>,
+	Prasad Sodagudi <psodagud@quicinc.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] OPP: Fix support for required OPPs for multiple PM domains
+Date: Tue, 18 Jun 2024 17:50:13 +0200
+Message-Id: <20240618155013.323322-1-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240618154306.279637-1-quic_sibis@quicinc.com>
-References: <20240618154306.279637-1-quic_sibis@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,166 +88,95 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: -eGVITtBTPpmMSsNrRYd3YO9Eu9-W3WZ
-X-Proofpoint-GUID: -eGVITtBTPpmMSsNrRYd3YO9Eu9-W3WZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-18_02,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- clxscore=1015 malwarescore=0 priorityscore=1501 spamscore=0 suspectscore=0
- adultscore=0 impostorscore=0 phishscore=0 mlxlogscore=916 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
- definitions=main-2406180118
 
-Add the CPU and LLCC BWMONs on X1E80100 SoCs.
+In _set_opp() we are normally bailing out when trying to set an OPP that is
+the current one. This make perfect sense, but becomes a problem when
+_set_required_opps() calls it recursively.
 
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+More precisely, when a required OPP is being shared by multiple PM domains,
+we end up skipping to request the corresponding performance-state for all
+of the PM domains, but the first one. Let's fix the problem, by calling
+_set_opp_level() from _set_required_opps() instead.
+
+Fixes: e37440e7e2c2 ("OPP: Call dev_pm_opp_set_opp() for required OPPs")
+Cc: stable@vger.kernel.org
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
+ drivers/opp/core.c | 47 +++++++++++++++++++++++-----------------------
+ 1 file changed, 24 insertions(+), 23 deletions(-)
 
-v2:
-* Allow for opp-tables to be optional on X1E cpu-bwmon instances. [Konrad]
-* Use consistent numbering of the opps across instances. [Shiv]
-* Use ICC_TAG_ACTIVE_ONLY instead of magic numbers. [Konrad]
-
- arch/arm64/boot/dts/qcom/x1e80100.dtsi | 120 +++++++++++++++++++++++++
- 1 file changed, 120 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-index 9944c654851e..d8b972c2bc3e 100644
---- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-+++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-@@ -5299,6 +5299,126 @@ frame@1780d000 {
- 			};
- 		};
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index cb4611fe1b5b..45eca65f27f9 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1061,6 +1061,28 @@ static int _set_opp_bw(const struct opp_table *opp_table,
+ 	return 0;
+ }
  
-+		pmu@24091000 {
-+			compatible = "qcom,x1e80100-llcc-bwmon", "qcom,sc7280-llcc-bwmon";
-+			reg = <0 0x24091000 0 0x1000>;
++static int _set_opp_level(struct device *dev, struct opp_table *opp_table,
++			  struct dev_pm_opp *opp)
++{
++	unsigned int level = 0;
++	int ret = 0;
 +
-+			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
++	if (opp) {
++		if (opp->level == OPP_LEVEL_UNSET)
++			return 0;
 +
-+			interconnects = <&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>;
++		level = opp->level;
++	}
 +
-+			operating-points-v2 = <&llcc_bwmon_opp_table>;
++	/* Request a new performance state through the device's PM domain. */
++	ret = dev_pm_domain_set_performance_state(dev, level);
++	if (ret)
++		dev_err(dev, "Failed to set performance state %u (%d)\n", level,
++			ret);
 +
-+			llcc_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
++	return ret;
++}
 +
-+				opp-0 {
-+					opp-peak-kBps = <800000>;
-+				};
-+
-+				opp-1 {
-+					opp-peak-kBps = <2188000>;
-+				};
-+
-+				opp-2 {
-+					opp-peak-kBps = <3072000>;
-+				};
-+
-+				opp-3 {
-+					opp-peak-kBps = <6220800>;
-+				};
-+
-+				opp-4 {
-+					opp-peak-kBps = <6835200>;
-+				};
-+
-+				opp-5 {
-+					opp-peak-kBps = <8371200>;
-+				};
-+
-+				opp-6 {
-+					opp-peak-kBps = <10944000>;
-+				};
-+
-+				opp-7 {
-+					opp-peak-kBps = <12748800>;
-+				};
-+
-+				opp-8 {
-+					opp-peak-kBps = <14745600>;
-+				};
-+
-+				opp-9 {
-+					opp-peak-kBps = <16896000>;
-+				};
-+			};
-+		};
-+
-+		pmu@240b3400 {
-+			compatible = "qcom,x1e80100-cpu-bwmon", "qcom,sdm845-bwmon";
-+			reg = <0 0x240b3400 0 0x600>;
-+
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>;
-+
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+
-+			cpu_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <4800000>;
-+				};
-+
-+				opp-1 {
-+					opp-peak-kBps = <7464000>;
-+				};
-+
-+				opp-2 {
-+					opp-peak-kBps = <9600000>;
-+				};
-+
-+				opp-3 {
-+					opp-peak-kBps = <12896000>;
-+				};
-+
-+				opp-4 {
-+					opp-peak-kBps = <14928000>;
-+				};
-+
-+				opp-5 {
-+					opp-peak-kBps = <17064000>;
-+				};
-+			};
-+		};
-+
-+		pmu@240b5400 {
-+			compatible = "qcom,x1e80100-cpu-bwmon", "qcom,sdm845-bwmon";
-+			reg = <0 0x240b5400 0 0x600>;
-+
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>;
-+
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+		};
-+
-+		pmu@240b6400 {
-+			compatible = "qcom,x1e80100-cpu-bwmon", "qcom,sdm845-bwmon";
-+			reg = <0 0x240b6400 0 0x600>;
-+
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>;
-+
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+		};
-+
- 		system-cache-controller@25000000 {
- 			compatible = "qcom,x1e80100-llcc";
- 			reg = <0 0x25000000 0 0x200000>,
+ /* This is only called for PM domain for now */
+ static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
+ 			      struct dev_pm_opp *opp, bool up)
+@@ -1091,7 +1113,8 @@ static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
+ 		if (devs[index]) {
+ 			required_opp = opp ? opp->required_opps[index] : NULL;
+ 
+-			ret = dev_pm_opp_set_opp(devs[index], required_opp);
++			ret = _set_opp_level(devs[index], opp_table,
++					     required_opp);
+ 			if (ret)
+ 				return ret;
+ 		}
+@@ -1102,28 +1125,6 @@ static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
+ 	return 0;
+ }
+ 
+-static int _set_opp_level(struct device *dev, struct opp_table *opp_table,
+-			  struct dev_pm_opp *opp)
+-{
+-	unsigned int level = 0;
+-	int ret = 0;
+-
+-	if (opp) {
+-		if (opp->level == OPP_LEVEL_UNSET)
+-			return 0;
+-
+-		level = opp->level;
+-	}
+-
+-	/* Request a new performance state through the device's PM domain. */
+-	ret = dev_pm_domain_set_performance_state(dev, level);
+-	if (ret)
+-		dev_err(dev, "Failed to set performance state %u (%d)\n", level,
+-			ret);
+-
+-	return ret;
+-}
+-
+ static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
+ {
+ 	struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
 -- 
 2.34.1
 
