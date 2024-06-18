@@ -1,126 +1,119 @@
-Return-Path: <linux-pm+bounces-9468-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9469-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85D6490D549
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 16:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A3B1790D596
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 16:41:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A530286998
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 14:35:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE6AB28296D
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 14:41:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652C615356B;
-	Tue, 18 Jun 2024 14:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4A571891C4;
+	Tue, 18 Jun 2024 14:24:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bbxyrMmM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dkkkRR7x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4581514EE;
-	Tue, 18 Jun 2024 14:16:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F1E16D320
+	for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 14:24:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718720204; cv=none; b=spE5R/bsxJQUwP7nKqVvTFe5mic4yz+QKV4pbmzvzYt6ZY485RRWLjBzeVvuLIa4lYEbLoqOth3poExDH5LDrsQc/ld0q7pCmDX7XaDiRBgK3sq4Z35eCy7RxKMzRkKnoDBdof6J0jAR2apyuk+YK7eXC4gdwBPWrlJXhenTvkw=
+	t=1718720648; cv=none; b=dydB73FT2bKLTtHYfzaaoKsPz+Hjvt4m1ZLbcXlBltgcW9i8YbnQ6eKg32lYWz1546OWMDR6KwxKu27+kSUdRFKqpDpjW0kZ5pNKxKyqGrWHJXoRe5yfe3dGC8Od4nNxohv917gxdX2KSaWVtLDON7WJMR9j5ZUG5yJxQ7nQTOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718720204; c=relaxed/simple;
-	bh=Om4iC8WD2JaG4NL4a3+9I68t3tIKpeGHX/9WOTfeeHU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IpjIIjLzR1Mv87j8pV0/HOm0UPL4vXaukfGlM/jfenS8ONaiymMFHhptd1NaEWtak+Zx1t3sCDDq5Xq3xPLMD5XXUCeVi3SSZo5tDeL6t1oEVYjXwgrCfEjMyq4FesYJPwJNWLg51Y5Gpe9fQN3s5XIwQju12CVpkW43p7w1qwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bbxyrMmM; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5c1996a197fso689506eaf.0;
-        Tue, 18 Jun 2024 07:16:42 -0700 (PDT)
+	s=arc-20240116; t=1718720648; c=relaxed/simple;
+	bh=EKwts7PirqeXv8GCmsKD14CTWAvJ5DcMwJMZ4Q/8iFM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MdOqp/T99i5wUlopGbyf+tPukjZiaifxmCMibdw0hyPkVQ++Qb1QWKShdFnhXXSVfLm1gIIj6zwzHSu0frJLhTKhaMPTATPB4boV6jRrXt4yJu45T4I5MHAZQ9ESOdcFfRwk3A268YVsx9AjGj6ypzmPdaH1py+Bz9zHaqqFtYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dkkkRR7x; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2eaae2a6dc1so97059541fa.0
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 07:24:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718720202; x=1719325002; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Om4iC8WD2JaG4NL4a3+9I68t3tIKpeGHX/9WOTfeeHU=;
-        b=bbxyrMmMzubrCsARUdiK5w8f3pelzV8WXRbWKWyAF/woViyX9qOokkp9EgiTLmm8lZ
-         7p+c5WF5EXbmLc9SC7bLu56uXDU+b/Y3yv/6urya6pdcIX63fDmZz5yhNgs0FJk9czUd
-         dBhcZTJv3wqj82ppkaaRflOmOJ8Qi4MOvuGk6818Y/R6WaGsILDCPI+rgRZWDyIMrMDu
-         L25R9bFzJisFKQUbpebtQe4Fqy42O1SqOS6BslIoMXFob4/BLO3SWenlAg27Y2el2hBU
-         ZDm+ob8FeQUA1jOag0rPOwQp4Dy6lY9hBYjblFp/H9hP97B6/Ayiiiyo7sQ8JM+U81nn
-         E+Xg==
+        d=linaro.org; s=google; t=1718720645; x=1719325445; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u9L4PU16nfN2XQvEI7canBzFWJ5IZWFKBrB7QE7CDcc=;
+        b=dkkkRR7xzTTNmR8H1BsizA+7zIa4y+TpjDbozsqQ4xLCSI6kkYBvGdBV4W96BO8GQO
+         o/kpxQEKaK/G00YbhxQeWMlDxurcoSVyXt7aO9CGs/pLi6n2enj95vPVcjtDvL8mwQhU
+         7GSQEXIZy5WqR+DsiEWE8/MjyIQS97NNFHHjvreki35Ggw0Qb/lErW+6fVQTjY+ML7Ol
+         xdnQOfDlaspBRpwapK17MGujCAZWjGjuissVGQj/ovEAFFhzaE2bN8Uledl82qjTO97h
+         gXaSJsv2mOVWDUR0loqPYceamnXO/9hAo+b3SXa4CZTeymHkFkcFvDLqZTMDhVzrhr7u
+         LmvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718720202; x=1719325002;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Om4iC8WD2JaG4NL4a3+9I68t3tIKpeGHX/9WOTfeeHU=;
-        b=aBeOljCLbllDWfHOZdko6RW5F30NuwqpR+eTBc+OWvcDOObYQdFBcl3U4d3/nf8r7H
-         Qzds0zgYSy9AfznUmBHZF/FANnvGEp3qTjs08abrdBmmEM94PUmYnmnTtIOyneDxr5tO
-         yid/snpCG0Q/NEulW9A9C9/Q20uQqsO1v9cNnhlftus2pNHVn/qRRGzvFWZoL7N4b6is
-         c/XTgJN5KqNUTuUEOFYwL3ddGH4oNnEuZneF/Z90rG0/uO5d35OrbKR8FT95yLhnsSkJ
-         YdE6p/FAccKgom54iPmr48Fy3yXHlMizgXrUfcXrTsKvfnccsUV8vDx08TFM1d1fEIxh
-         vmbA==
-X-Forwarded-Encrypted: i=1; AJvYcCUUJMUwALnNHqCj8yh6Jj44A50K8Dh57dv8zFRNXFZ99k/ITXnldmTzcGdtA1Q3jOwVJBKCT+rdJsHDN5pB/s83F0G7rN1cXgRHllUUSMIWYE3H2LbPwURkE1gVlX9vuGzEc2vhZsBCfcfOkTO3EnIeij6/b2nptxadxHQcaSpZsptxulpY0VF8qD8KIO+Uv/ukWeSY7raWlv3mWbwJhy9MH7Y1Xu02Ghec9ysRGk73pIrRt4r31ydCTaBFY5IcxG7c4xdhHwQkXdjooiXpj+3zurAEAMbeRXsYVZ94lK3L9qQJtAiAX/JflNWGnCvEuQh8LzPBauWtYppoGOCxVzK99W26xgiexKetF2kka3H9VqtpVtsSfQpGyUIjUEFlR+ymsZpvmyf7yDd0Epp9EzvVqxMnvUI7qETfNK0r1fs03RiquQ1j1EwXO3CMdet4kqY=
-X-Gm-Message-State: AOJu0YzqNK+TlOlC5zg32m8jfK8ql0e1F5oKtcKxYFLUark15dJuP05l
-	2MT2E42xWkPA54RtIYrpbo7DKlJhQAl8tjBwEx3ni8DcQ86u+jBttRLKxuMMZ4ERfZNXxmdoW2W
-	Mzthbb8QaLHyacDRkyC9Axut5KzQ=
-X-Google-Smtp-Source: AGHT+IFVxJEPFbT79HYd7zoJLAxyrPm1gzxY90KGBgQZvvizvrURzGFMbP7julYl6JpqzUKt2q+uL/xgIcBmlrzc4oI=
-X-Received: by 2002:a05:6870:b525:b0:259:ae64:9231 with SMTP id
- 586e51a60fabf-259ae6493e7mr583749fac.15.1718720201642; Tue, 18 Jun 2024
- 07:16:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718720645; x=1719325445;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u9L4PU16nfN2XQvEI7canBzFWJ5IZWFKBrB7QE7CDcc=;
+        b=ZriYOCaZMjHFo44dP6OPygRcvSYePO59wPmHVubvWX/Ke5bgysV0VH9H0VqtrQ19ng
+         NLdqpyOoG20zeHr57hS1P2zZ6U3gZXkdN+QMQWjzyMqw/vzL8NeMTdhujfEYzloh0GbK
+         gSvY5jiWTrIOXRmKJw9ejuiWC9O1WpWLNvdDVauQIvbqgUX5E2Jo8+oyde4Qtbt3kQbP
+         b1WhxTq8vLmmwxTMSX5Q9OK2D62UqXhL3FX1DYCf0je48WQwWGq1ai7+MuNSQBbuv/CL
+         +jt5NsajkWKe5enZXC3zOVTmAgc6cKsZMdhhyfY9pJpm0ID6zm0vWx1AcKxW0kjXwpFB
+         c2xA==
+X-Forwarded-Encrypted: i=1; AJvYcCWQ/lPgm4pdPd46zDrgRH2Ph6VUYvl+b9PdYH/4isR7rvcSKm1538UZa+ru8dX0cMRtokal8KnQLh1aZMliHibYw4qreSsJ2+M=
+X-Gm-Message-State: AOJu0Yx1pH4HFMETBK48wtRVr7z9bIZUF8DbTTD+9qhvu2cOPXnpXGuX
+	ewpk0Wi0HPSkrS0zXgVSUXzMxAxOAHvQPeG+FEPzlFAoCTg8u3v9EiNQu6cA2qE=
+X-Google-Smtp-Source: AGHT+IGtvNk8n9VRov10JBLuOpddIlR0ZD+NTpYkW/xoyHqQ3CBv06dPLM664Q2AuPsGRorl4CI30A==
+X-Received: by 2002:a19:4317:0:b0:52b:e7ff:32b with SMTP id 2adb3069b0e04-52ca6e67557mr8965479e87.23.1718720645462;
+        Tue, 18 Jun 2024 07:24:05 -0700 (PDT)
+Received: from ?IPV6:2a00:f41:9028:9df3:4fb7:492b:2c94:7283? ([2a00:f41:9028:9df3:4fb7:492b:2c94:7283])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca287b34csm1510198e87.199.2024.06.18.07.23.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jun 2024 07:24:05 -0700 (PDT)
+Message-ID: <2dc3d7f4-1d7b-4aae-90c9-508cbe277a35@linaro.org>
+Date: Tue, 18 Jun 2024 16:23:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240618-starqltechn_integration_upstream-v3-0-e3f6662017ac@gmail.com>
- <20240618-starqltechn_integration_upstream-v3-22-e3f6662017ac@gmail.com> <e6a81932-0609-4476-82b6-43ee30b7de43@linaro.org>
-In-Reply-To: <e6a81932-0609-4476-82b6-43ee30b7de43@linaro.org>
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Tue, 18 Jun 2024 17:16:29 +0300
-Message-ID: <CABTCjFAKFMQJXdwELZitCKpZQn+irfrHW6uOpHzwvFv=T7zKDA@mail.gmail.com>
-Subject: Re: [PATCH v3 22/23] arm64: dts: qcom: starqltechn: fix usb regulator mistake
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <quic_jesszhan@quicinc.com>, 
-	Sam Ravnborg <sam@ravnborg.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, phone-devel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/4] arm64: dts: qcom: Add PSCI SYSTEM_RESET2 types for
+ qcm6490-idp
+To: Elliot Berman <quic_eberman@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Andy Yan <andy.yan@rock-chips.com>, Lorenzo Pieralisi
+ <lpieralisi@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+ Melody Olvera <quic_molvera@quicinc.com>,
+ Shivendra Pratap <quic_spratap@quicinc.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Florian Fainelli <florian.fainelli@broadcom.com>, linux-pm@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org
+References: <20240617-arm-psci-system_reset2-vendor-reboots-v5-0-086950f650c8@quicinc.com>
+ <20240617-arm-psci-system_reset2-vendor-reboots-v5-4-086950f650c8@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20240617-arm-psci-system_reset2-vendor-reboots-v5-4-086950f650c8@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-=D0=B2=D1=82, 18 =D0=B8=D1=8E=D0=BD. 2024=E2=80=AF=D0=B3. =D0=B2 17:08, Kon=
-rad Dybcio <konrad.dybcio@linaro.org>:
->
->
->
-> On 6/18/24 15:59, Dzmitry Sankouski wrote:
-> > Usb regulator was wrongly pointed to vreg_l1a_0p875.
-> > However, on starqltechn it's powered from vreg_l5a_0p8.
-> >
-> > Fixes: d711b22eee55 ("arm64: dts: qcom: starqltechn: add initial device=
- tree for starqltechn")
-> >
-> > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> > ---
->
-> How did you confirm that?
-Vendor kernel source code:
-https://github.com/klabit87/twrp_android_samsung_kernel_sdm845/blob/e8bb630=
-39008e1704a2f1bde68d39ded9c16ea88/arch/arm64/boot/dts/samsung/sdm845-sec-st=
-arqlte-chnhk-r14_v2.1.dts#L10242
-https://github.com/klabit87/twrp_android_samsung_kernel_sdm845/blob/e8bb630=
-39008e1704a2f1bde68d39ded9c16ea88/arch/arm64/boot/dts/samsung/sdm845-sec-st=
-arqlte-chnhk-r14_v2.1.dts#L23401
->
-> Konrad
+
+
+On 6/17/24 19:18, Elliot Berman wrote:
+> Add nodes for the vendor-defined system resets. "bootloader" will cause
+> device to reboot and stop in the bootloader's fastboot mode. "edl" will
+> cause device to reboot into "emergency download mode", which permits
+> loading images via the Firehose protocol.
+> 
+> Co-developed-by: Shivendra Pratap <quic_spratap@quicinc.com>
+> Signed-off-by: Shivendra Pratap <quic_spratap@quicinc.com>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
 
