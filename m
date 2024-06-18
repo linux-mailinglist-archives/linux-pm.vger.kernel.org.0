@@ -1,115 +1,118 @@
-Return-Path: <linux-pm+bounces-9401-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9402-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 636FB90C265
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 05:21:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E42590C291
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 05:51:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AD790B22AD2
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 03:21:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 516A11C219D7
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 03:51:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E33B19B5A7;
-	Tue, 18 Jun 2024 03:19:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5C7E1F945;
+	Tue, 18 Jun 2024 03:51:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U2L22yhI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eKhl6YT5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFDD719B5A1;
-	Tue, 18 Jun 2024 03:19:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2FF24C6D;
+	Tue, 18 Jun 2024 03:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718680778; cv=none; b=KW1vXDTvPVr6U/0Vc20o2YTLFAI/4XrpGHUtuc+nfHL7ybEXj/91lH+w+dfMSkILaYXcbzG8ahrDgCpkEur9HAyMU1RY215kUu6tMHGZeMby4TpRvqJY8iXFu8/8H4lcBKeQz0/YVOYdAHm9e0RkfnyBfpxx17KlRao4asEE/hM=
+	t=1718682687; cv=none; b=CMTtRPVlFqpZq5pOQnZWxjg5/qAkjYgEnPH36roeTD6atvmlnVzrp5SHiv4zVK/5vBzz3xLr3qiN3RwRp/8+DbXQ/4UVkRovpzVm4Ixg4AgYfm/IYr17Bz+gs54mtHB6v8U3ydDAMiZVxpT3D448jD+9JvLx5Hy+wfVU5fmGm0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718680778; c=relaxed/simple;
-	bh=99N3wYgXfmP8yLL2zt9y6M00HE8MEtz5oXGsxIcsNAY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NOSEesOtceyjhdFUJKH/pH/5Y4uPdTHAI4ATHC1ffd4I0vogLXgXQfUNVY+KvRXfBE0dEF2RfC5bXtkik4EJUqs1Te4cfr4b4ChviGLbfLObbiSryTxFsF+tI7RIzvhHj4Y3b9htNXEXq+FuNzAoIrTESARkaapyvDWTAKJZdpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U2L22yhI; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1718682687; c=relaxed/simple;
+	bh=JvPgI74SdVU6FuwH5VSMfmRpXFtZAyArAeCYZLvAMG4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QYrtONK659KH2jIKwJiIo83nVs5Ozx9JqoeGbL/LuhIL9onXSgFXN6B/TF9XLjNY8tr/aMo9ExRhFvU58Ei+saB+v2BRyCSjxiBrSrDK8Pu8rcnF6S2weGze6PioQaoN29twlCyjLfBJcrEK4W6Ze+9UkJgVF1qCLqLX58Pue3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eKhl6YT5; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718680777; x=1750216777;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=99N3wYgXfmP8yLL2zt9y6M00HE8MEtz5oXGsxIcsNAY=;
-  b=U2L22yhIs9G4LTakxLYv0a6rgtClfDmeOtWTGn96HQGlb8BR/iSS0JDT
-   90ZJxHgWusV1iFhSwPMZt0ky14uKc0GgmAcK1nITbDAQ6E+yx2wSLPqc9
-   z2c2gWk5hhbRg1DVWLHij2mvgQRET2QBupS+v7ZFpJBS7wZrt3FR59vi5
-   4BvIT5hdr29x18HIWGDE6kPhnvf+JKWDEdnOrW+gMQrbWkpnP5KUajR56
-   /77vewWiTRG/m6mA+5kKrCuifky+BWPN2mrTRe4Ao1TdMj27INxriLezs
-   ruNNdKNmoNcRKjopG5OSGksy4t1o+qiWbXVHrOu/qYrqkca4zmQBRKfIC
-   Q==;
-X-CSE-ConnectionGUID: mlXVFsAHQUSD+Jn4vJycHw==
-X-CSE-MsgGUID: LBxU4RPcQzOZD/CZnKi5SQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="26165737"
+  t=1718682685; x=1750218685;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JvPgI74SdVU6FuwH5VSMfmRpXFtZAyArAeCYZLvAMG4=;
+  b=eKhl6YT5jeSc7+p22Yiq5zI2395hSg5P/YMZwAveLtW3kMJzfHgwTbNO
+   PVOkOpSClhYsQzS0wnl7b4vzUfCPNAovfZJnGseht3WiJb5LjJh0aex6g
+   p9ubtBdGygY3vPtt//TGMcTUpLrogyB+E5beeu4k6j0sboGPK01S75vNk
+   8enshJD0/DAJxBx8GZdrzkoJrI9fDdGsLRckrz009dA9zDdWLfCJIxQt5
+   6nTKQpsFNE7PRa+mNTTDABqgSeQTOEgeIIKwRbR3YGUxNju03zw1YFLdJ
+   7Xj0BAdjIAIKCen0+7EbRtHX5BrKWld0rf/p/ocDjB7WRxji6rTCNhuFC
+   A==;
+X-CSE-ConnectionGUID: djTkORnWQI6GPVkTxZD7Qg==
+X-CSE-MsgGUID: xPxD/aKfTiWmsZJOYzGFxg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="18449831"
 X-IronPort-AV: E=Sophos;i="6.08,246,1712646000"; 
-   d="scan'208";a="26165737"
+   d="scan'208";a="18449831"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 20:19:36 -0700
-X-CSE-ConnectionGUID: TIYcuCUNSlK3O7/CnpfH8Q==
-X-CSE-MsgGUID: 5ANnw6iAS7uqRzdTDXiOiw==
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 20:51:24 -0700
+X-CSE-ConnectionGUID: PIZ+IaktSj+sNULCG/AwCA==
+X-CSE-MsgGUID: DVTWpzDvTkmlI9IrB+y2fg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,246,1712646000"; 
-   d="scan'208";a="41516482"
-Received: from jdoman-desk1.amr.corp.intel.com (HELO desk) ([10.124.220.84])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 20:19:35 -0700
-Date: Mon, 17 Jun 2024 20:19:24 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: "Luck, Tony" <tony.luck@intel.com>
-Cc: "Hansen, Dave" <dave.hansen@intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	"andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>
-Subject: Re: [PATCH PATCH 8/9] x86/bugs: Declutter vulnerable CPU list
-Message-ID: <20240618031924.be57xugsmcq4kmxh@desk>
-References: <20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com>
- <20240617-add-cpu-type-v1-8-b88998c01e76@linux.intel.com>
- <fb789f0a-0c80-49f3-ab7e-d22fc2793a49@intel.com>
- <20240617235216.qqvfh2nvffuh7oot@desk>
- <SJ1PR11MB6083ECEC27A376E2CA898F93FCCE2@SJ1PR11MB6083.namprd11.prod.outlook.com>
+   d="scan'208";a="41522550"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.19])
+  by orviesa009.jf.intel.com with ESMTP; 17 Jun 2024 20:51:24 -0700
+From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To: rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	hpa@zytor.com
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH 0/2] Update highest frequency of a CPU after boot
+Date: Mon, 17 Jun 2024 20:51:19 -0700
+Message-ID: <20240618035122.438822-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB6083ECEC27A376E2CA898F93FCCE2@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 18, 2024 at 12:08:18AM +0000, Luck, Tony wrote:
-> > $ size vmlinux.before vmlinux.after
-> > text		data		bss		dec		hex	filename
-> > 33128289        23039446        19767300        75935035        486ad3b vmlinux.before
-> > 33128289        23039446        19767300        75935035        486ad3b vmlinux.after
-> 
-> Same size != same contents.
+Intel Xeon servers, which are capable of dynamic performance changes,
+are unable to achieve the highest frequency when the performance profile
+is changed.
 
-Right. I did get that thought, but did not act on it :\
+The highest frequency at which a CPU can operate is not fixed and can
+vary after the system boots. These changes can be initiated by switching
+to different performance profiles using the Intel Speed Select Technology
+interface. Additionally, adjustments can be made remotely through a BMC
+(Baseboard Management Controller) interface. Administrators can select
+various performance profiles to align with specific performance
+requirements, as these choices will directly influence the total power
+consumption and cooling requirements.
 
-> What if you:
-> 
-> $ cmp -l arch/x86/kernel/cpu/before-common.o arch/x86/kernel/cpu/after-common.o
-> 
-> Or
-> 
-> $ diff <(objdump -d arch/x86/kernel/cpu/before-common.o) <(objdump -d arch/x86/kernel/cpu/after-common.o)
+Whenever an administrator switches to a different performance profile that
+alters the highest frequency, the hardware sends an interrupt and update
+the new highest frequency at which the system can operate. This interrupt
+can be enabled via the MSR_HWP_INTERRUPT register, and only if support is
+indicated by the CPUID[6].EAX[15] = 1.
 
-Thanks for pointers. I am not seeing any difference in the disassembly too.
+To enable changes to the highest frequency, add a CPU features flag and 
+enable the HWP (Hardware P-states) highest performance change interrupt
+when it is supported by the CPU.
+
+Srinivas Pandruvada (2):
+  x86/cpufeatures: Add HWP highest perf change feature flag
+  cpufreq: intel_pstate: Support highest performance change interrupt
+
+ arch/x86/include/asm/cpufeatures.h |  1 +
+ drivers/cpufreq/intel_pstate.c     | 23 +++++++++++++++++++----
+ 2 files changed, 20 insertions(+), 4 deletions(-)
+
+-- 
+2.44.0
+
 
