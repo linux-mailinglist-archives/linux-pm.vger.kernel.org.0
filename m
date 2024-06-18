@@ -1,131 +1,127 @@
-Return-Path: <linux-pm+bounces-9486-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9487-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E53EF90D9A1
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 18:43:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBAC690D9F4
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 18:54:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9420B1F22758
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 16:43:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEDCF1C21CEF
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 16:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D4B27F482;
-	Tue, 18 Jun 2024 16:43:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB4DA1386D1;
+	Tue, 18 Jun 2024 16:53:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f8amBQ+o"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rGn76P3i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01FC641C89;
-	Tue, 18 Jun 2024 16:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB6C45BE6;
+	Tue, 18 Jun 2024 16:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718728988; cv=none; b=ikFekrz/7u1+9wqUQ5QHob8856p5C1R8nswE2nPAc7y7iqYqJ9fz0jQH0FS/gTAHKjzJhAb9FcPqAmKxzsWJ4uS5dw5uepkSGR7ApRlBVok8Esstyu3Ot2EskWn2tQbEWwq+dCsbJzd8be6fRf+ctTpBFSQPCxYUh343TeA1nwY=
+	t=1718729638; cv=none; b=U5i+K4FVKC5FOBzlb4VXOwqcWLwLW9opvxwl/+MlaoucMC49Wk1+3TKCI+SUcg99RuM4JbplBPHf5coTDCXINP8XsIMetTZwIKMh2xFIaI0mMv8GlG+YzfSjEKc3px52Mr/GiiffF2OHFxKKxIOj5+wumrGfYeN9znyzobagNh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718728988; c=relaxed/simple;
-	bh=2KSiTL/3+Ms+mEx0KqDAhGC/hZWe9pewoXNHF83uG9s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GeHBKsSaHO0VMZSkBahiRLAy0LJJEl/DQh5UXJxQPo5Z1eG0gnOgVvCNHYn2A4o/rbXPiowEnS0f4XozGLFzU/XP8iuzJRV8EXaVcTnA60xGI7Ea4eE4YGXkRQniYMPPJX+NHorl90VnQ0OSy3cau0Qw/QdhQ2D4uFhID++hzd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f8amBQ+o; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-70435f4c330so4695016b3a.1;
-        Tue, 18 Jun 2024 09:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718728986; x=1719333786; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XvXhSojD9nxkcyZeCeKyHAlvRSq1UhDBytHKg5xTnCM=;
-        b=f8amBQ+o97tIhxLA5KF1+lwNCwXPvhckAAzNdyjL6MiIS6Zdm1yIhob6SHJe00/PJP
-         W/2n2gNf7iAJ9b+4zuOWseGDvcw0XiDB5H62weIQfIsXgvY0FFTFzFoyottIs67MBD/A
-         fpm0VbWMcPi/yygWEwasfrZarznhM+b3QAxK4BMisHtt2NZYmzxjDvDA+oE96o1I/r2z
-         2gcPQrvKeshlp+ngDOmQmFS/6n5zDufnKMC2dBZg507O7vtXVgJkMGmpD6eZvlvoFZKj
-         W26Yviz3NZk7PbqCUyreZPOT9dlRlhUB0+Vz6XuPY5k/HAadwf1e8ehJALqpe34GvgNe
-         3vzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718728986; x=1719333786;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XvXhSojD9nxkcyZeCeKyHAlvRSq1UhDBytHKg5xTnCM=;
-        b=jqqWnlr5sEsMLQkNPdCh1CUIv6FPvMU+8jXODcNuDw5aXUUtPoZFMskkCfRl+DYBHz
-         MFWBxx2B5GNA3Xlj1S2w1Ol2c/fvtMa31F/HVHXUJ5WCmvpdrQ2kO2axP1jZnTO0hK8Y
-         XMCkQEx3M8Difj68TWrY2hhfImrnWceLTliWrcmRmy9jnIjzprBbq3jhDNvW7uQAmhdO
-         pwErU6VK1JBUIokfk4i8jTyruw+eU5OGwcPDiNYYV2XzxsFsWwi09f34JM0MktUAGFw6
-         DJETFA9uuLO4u7MwLznRhkK8FULUljt2mHanOrV5KwmX7cSdVgeYbWzleK4Zm8rgoFNG
-         cr+w==
-X-Forwarded-Encrypted: i=1; AJvYcCXmB/ASqVIKqu8q5MuORLVYuqSRXB73BkOIR67VURZbEGzCYbUrBEpPvu0STu/HppwNh1M7sRhdW3ylcj/aD1z7mARyR3rqf+AsKnl1sKTf25WRq037TCUBU2k+jwaOVjCdGeAPQLY=
-X-Gm-Message-State: AOJu0YwKVT1txqYPM+WFUdwwg9UO92Qo6pQgDersIgbnw2zoGma4Vz6G
-	6rZHd5gIOPG/lHRwzNM0P0PNpphk5+7FXUDi34Prxpp0JpHxTHwU
-X-Google-Smtp-Source: AGHT+IFbMiwhc/wRKW0CBE3zZpglm8jK3Q2B1o7O/xsHqHyLxf+YslV9ODcnMWNxYAhfhPJtzS+xpg==
-X-Received: by 2002:a05:6a20:3c92:b0:1bc:af91:55a2 with SMTP id adf61e73a8af0-1bcbb5b5e8cmr72098637.36.1718728986112;
-        Tue, 18 Jun 2024 09:43:06 -0700 (PDT)
-Received: from localhost ([2a00:79e1:2e00:1301:e1c5:6354:b45d:8ffc])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9a0f736a0sm9417625ad.119.2024.06.18.09.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jun 2024 09:43:05 -0700 (PDT)
-From: Rob Clark <robdclark@gmail.com>
-To: dri-devel@lists.freedesktop.org
-Cc: linux-arm-msm@vger.kernel.org,
-	freedreno@lists.freedesktop.org,
-	Rob Clark <robdclark@chromium.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-pm@vger.kernel.org (open list:SUSPEND TO RAM),
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Sean Paul <sean@poorly.run>
-Subject: [PATCH v4 0/5] drm/msm/adreno: Introduce/rework device hw catalog
-Date: Tue, 18 Jun 2024 09:42:46 -0700
-Message-ID: <20240618164303.66615-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1718729638; c=relaxed/simple;
+	bh=gVRTf/IytGfnTahbvcX22LWVmgHV0CjJyuZCT03dLm8=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=TEToBIKCVDCTR2QBUSOgLbFiPp+UiQHWVE+35KxY7N1vxegv8b0wV/oIzA4E23YgLgbOaN+PZhI5DEHlqgh5J2ocSE0/j7iLunV93afWMmUlfLzqoHt9xlxzWPmvaanVDKsJLYq5IgaZqxznQd6egNnpnFSV1XFdcXjyrsOi7BE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rGn76P3i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C9AC3277B;
+	Tue, 18 Jun 2024 16:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718729637;
+	bh=gVRTf/IytGfnTahbvcX22LWVmgHV0CjJyuZCT03dLm8=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=rGn76P3inYALIrqOuHRyp3qYpyXdlDP1LcM8JfnRExzzdlHzNBsO7zK+jimOqoHxj
+	 l7OqtMzpIALi6Iw+RfB8UrV02NKx6DFHaG7o0E3rr6O1FwkcQTcaww9wUfkrNiBaCf
+	 Bdp97xroVof7T5P4o4PAzrN00GwtOOBDX9Q3a9rFKw+XhYgvb0OIyPaE9PFKPDkoDS
+	 rqOsRk4cxHy+pwtQuji0+mTqcOrWexRnDJuM2O9cfGerjwHXBgUMWjsWcLZYGRIeSZ
+	 pGKo/KKoTCZauyQHlh+5oLDCw/3WTnQ1F2GvNnzdQPykTCLfSvbcj39q2eV749C53d
+	 vhBPR5mRggmeA==
+Date: Tue, 18 Jun 2024 10:53:56 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Dzmitry Sankouski <dsankouski@gmail.com>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Sebastian Reichel <sre@kernel.org>, linux-pwm@vger.kernel.org, 
+ phone-devel@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>, 
+ Sam Ravnborg <sam@ravnborg.org>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+ linux-pm@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>, 
+ Mark Brown <broonie@kernel.org>, dri-devel@lists.freedesktop.org, 
+ Bjorn Andersson <andersson@kernel.org>, Maxime Ripard <mripard@kernel.org>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Conor Dooley <conor+dt@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Daniel Vetter <daniel@ffwll.ch>, Krzysztof Kozlowski <krzk@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-samsung-soc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>, 
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Thomas Zimmermann <tzimmermann@suse.de>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, linux-arm-msm@vger.kernel.org, 
+ Pavel Machek <pavel@ucw.cz>, David Airlie <airlied@gmail.com>, 
+ Jessica Zhang <quic_jesszhan@quicinc.com>, linux-leds@vger.kernel.org, 
+ linux-input@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>
+In-Reply-To: <20240618-starqltechn_integration_upstream-v3-4-e3f6662017ac@gmail.com>
+References: <20240618-starqltechn_integration_upstream-v3-0-e3f6662017ac@gmail.com>
+ <20240618-starqltechn_integration_upstream-v3-4-e3f6662017ac@gmail.com>
+Message-Id: <171872963372.3062561.18354991193259441972.robh@kernel.org>
+Subject: Re: [PATCH v3 04/23] dt-bindings: mfd: add maxim,max77705
 
-From: Rob Clark <robdclark@chromium.org>
 
-Split the single flat gpulist table into per-gen tables that exist in
-their own per-gen files, and start moving more info into the device
-table.  This at least gets all the big tables of register settings out
-of the heart of the a6xx_gpu code.  Probably more could be moved, to
-remove at least some of the per-gen if/else ladders, but this seemed
-like a reasonably good start.
+On Tue, 18 Jun 2024 16:59:38 +0300, Dzmitry Sankouski wrote:
+> maxim,max77705 is MAX77705 pmic binding part
+> 
+> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+> ---
+>  .../devicetree/bindings/mfd/maxim,max77705.yaml    | 112 +++++++++++++++++++++
+>  MAINTAINERS                                        |   1 +
+>  2 files changed, 113 insertions(+)
+> 
 
-v2: Drop sentinel table entries
-v3: Fix typo
-v4: More const, fix missing a702 protect regs
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Rob Clark (5):
-  drm/msm/adreno: Split up giant device table
-  drm/msm/adreno: Split catalog into separate files
-  drm/msm/adreno: Move hwcg regs to a6xx hw catalog
-  drm/msm/adreno: Move hwcg table into a6xx specific info
-  drm/msm/adreno: Move CP_PROTECT settings to hw catalog
+yamllint warnings/errors:
 
- drivers/gpu/drm/msm/Makefile               |    5 +
- drivers/gpu/drm/msm/adreno/a2xx_catalog.c  |   52 +
- drivers/gpu/drm/msm/adreno/a3xx_catalog.c  |   81 ++
- drivers/gpu/drm/msm/adreno/a4xx_catalog.c  |   50 +
- drivers/gpu/drm/msm/adreno/a5xx_catalog.c  |  148 +++
- drivers/gpu/drm/msm/adreno/a6xx_catalog.c  | 1240 ++++++++++++++++++++
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c      |  880 +-------------
- drivers/gpu/drm/msm/adreno/a6xx_gpu.h      |   11 +
- drivers/gpu/drm/msm/adreno/adreno_device.c |  624 +---------
- drivers/gpu/drm/msm/adreno/adreno_gpu.h    |   32 +-
- 10 files changed, 1649 insertions(+), 1474 deletions(-)
- create mode 100644 drivers/gpu/drm/msm/adreno/a2xx_catalog.c
- create mode 100644 drivers/gpu/drm/msm/adreno/a3xx_catalog.c
- create mode 100644 drivers/gpu/drm/msm/adreno/a4xx_catalog.c
- create mode 100644 drivers/gpu/drm/msm/adreno/a5xx_catalog.c
- create mode 100644 drivers/gpu/drm/msm/adreno/a6xx_catalog.c
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/maxim,max77705.example.dtb: pmic@66: charger: False schema does not allow {'compatible': ['maxim,max77705-charger'], 'monitored-battery': [[4294967295]], 'phandle': [[2]]}
+	from schema $id: http://devicetree.org/schemas/mfd/maxim,max77705.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/maxim,max77705.example.dtb: pmic@66: fuelgauge: False schema does not allow {'compatible': ['maxim,max77705-fg'], 'monitored-battery': [[4294967295]], 'power-supplies': [[2]], 'rsense': [[5]]}
+	from schema $id: http://devicetree.org/schemas/mfd/maxim,max77705.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/maxim,max77705.example.dtb: pmic@66: haptic: False schema does not allow {'compatible': ['maxim,max77705-haptic'], 'haptic-supply': [[4294967295]], 'pwms': [[4294967295, 0, 50000]]}
+	from schema $id: http://devicetree.org/schemas/mfd/maxim,max77705.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/maxim,max77705.example.dtb: pmic@66: leds: False schema does not allow {'compatible': ['maxim,max77705-led'], '#address-cells': [[1]], '#size-cells': [[0]], 'led@1': {'reg': [[1]], 'label': ['red:usr1']}, 'led@2': {'reg': [[2]], 'label': ['green:usr2']}, 'led@3': {'reg': [[3]], 'label': ['blue:usr3']}}
+	from schema $id: http://devicetree.org/schemas/mfd/maxim,max77705.yaml#
+Documentation/devicetree/bindings/mfd/maxim,max77705.example.dtb: /example-0/i2c14/pmic@66/leds: failed to match any schema with compatible: ['maxim,max77705-led']
+Documentation/devicetree/bindings/mfd/maxim,max77705.example.dtb: /example-0/i2c14/pmic@66/charger: failed to match any schema with compatible: ['maxim,max77705-charger']
+Documentation/devicetree/bindings/mfd/maxim,max77705.example.dtb: /example-0/i2c14/pmic@66/fuelgauge: failed to match any schema with compatible: ['maxim,max77705-fg']
+Documentation/devicetree/bindings/mfd/maxim,max77705.example.dtb: /example-0/i2c14/pmic@66/haptic: failed to match any schema with compatible: ['maxim,max77705-haptic']
 
--- 
-2.45.2
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240618-starqltechn_integration_upstream-v3-4-e3f6662017ac@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
