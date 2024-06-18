@@ -1,74 +1,74 @@
-Return-Path: <linux-pm+bounces-9470-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9471-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9EC490D5A0
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 16:42:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C030F90D5AD
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 16:42:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D10921C22F0E
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 14:42:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77EBF1F23A0D
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 14:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D7E418E76F;
-	Tue, 18 Jun 2024 14:26:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31E9316EB44;
+	Tue, 18 Jun 2024 14:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bq2T5lo8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OT+sZ6GX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829AD16D9CB
-	for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 14:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E91D16C69B
+	for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 14:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718720811; cv=none; b=GuP0y90xgzweuEnlulLE1w88vi1LhTpGNyCxqFPBfKU5eSHlKfbK+xSPD7bAil+X3plppNHIoDIUkqemRNxr+zui+KPES89korUT/Rq+NvieTD02seNs5cpcbfHb3GcfJ8Sg4+H/wNcKSPqMF9Jgb+9dSRxAw1yKiYYO8Z+vK5s=
+	t=1718720888; cv=none; b=ck6ICIdaeMUJutNLnq8C9QKZeWcDvbnwHtTqkVVNjboAfF332WW7v3KeK2ic2tJEt8lwir9kmD/ObO70ZbExsixrxWoLBLbPmaxfQlSuD+7VD04WnIgKUkI8wALjhTbzpKii7189mA9nJwNJ1wHwR60wrk9GB0VebraYmoNN5SE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718720811; c=relaxed/simple;
-	bh=6OODOhdNIVgojK0DD+bJ3xC5Pd0K2/xPp0YUVsVlCyo=;
+	s=arc-20240116; t=1718720888; c=relaxed/simple;
+	bh=NNNRuGLddPKeM9Yh5xEuTsi+jatuPGGFxwB3SSxir1g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eNSbJV3OI7qr0/D4TSQJdpsy3B8IeLQvgq7s/a436/tj2F3H3pm0nVfo88O7NvT+9Hrl50UTeNRk1modqlsXwKBiGJ1Meuim9rgOAKeOCQ1RSSkn7jJoOfMngrGzLNvBW4mf7O0vsU67BkAyVsZFfdf7/lM4eIcsOBHQ/HqvKHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bq2T5lo8; arc=none smtp.client-ip=209.85.167.50
+	 In-Reply-To:Content-Type; b=O0lQEeeskNusa4ej6PJBFL6jAP3dD9U2twH8Q4oshFWtW4At+Sq6SWNXB/OcGQVHCqLlqZ78nfzsJZUAftVFI7BeIpBH2aBkIlHEvpF01hoOrAFYbSOEYhc2+aw2D+UnSD+/M0UVBBVCj8ARvVqVvsInYP3FjZBSt/mm21cft9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OT+sZ6GX; arc=none smtp.client-ip=209.85.167.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52b7ffd9f6eso5474909e87.3
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 07:26:49 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52c8ddc2b29so5974833e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 07:28:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718720808; x=1719325608; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1718720885; x=1719325685; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=o4oltf+iDMEhrbAhAEQGa5uqGfEZG+Q9a3SV4m205oY=;
-        b=bq2T5lo8QNw+36MP39ZmaGDBuA5DcCGKbvgNA3hodWxR3LokbSz+50Gz/lqQXkF4eO
-         EOHrUSMV0PLAb/bVactpNPqIyUv6Yk8ZNrryyISKWNadAF4Dsr5uPZI/Fg7PF2AXJjTj
-         c6hCBuiHbBmBpWO/99mOJNWl8BM8Pd4Ry2D57AFLcP3cbW+zOO38YJv77DH8q0XPIfD7
-         +Th6hdEcD+WcJnXxaRU7doLac/IboZRFnpT2F5c8WhZqdOn3P0p/gldFmTC3XUGEpvBk
-         Jbl/VzRD7eCnKXP9TO1sACoau0TE0EsMuWWCYjApKga2Ti5tvVer0C5sxDquOmIDU6EW
-         xMQA==
+        bh=K1oD9cAlhoFUpaJXK/MI3nR3DbJ14JaglZi8r1oHsa4=;
+        b=OT+sZ6GXLh/YFfkUTPPlUwL3ecHLBl6M5/KK/e6H8qKr3rmBTRDf2S3oYfC+1wMK5U
+         vmzs87hybPTaYLZKe2YlsCw/ruxlpyckz4v5j+htU+9usoI8xWilLt1rCY59eXOwjLKY
+         id6kxEl3wcK18SLLPwiRyw8uGAs+6E0qI7loYtuW4A9UW72FF/o3kjYtP99y0/k14Rwl
+         Qrcufqf38qbZIEOcHNGr5Pzyvjo5gUgH0TitLJR0XUtErQH3frninaBvCPNTQhLGUbbb
+         uCdIf1hHVfvBKcHfm415V9swy1Wx2IHk1z/br8lIo3fIEIxKgpbDc5L7DirFK91LlaKV
+         i8hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718720808; x=1719325608;
+        d=1e100.net; s=20230601; t=1718720885; x=1719325685;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o4oltf+iDMEhrbAhAEQGa5uqGfEZG+Q9a3SV4m205oY=;
-        b=EzJQpDMJ53uEG9F+xVI8lWhKD/3pVXMQyGbQlAELGE1vt9cQ1PRLykBbIbPnzGYZ1B
-         gAg9fwt+npNJhKzwJ/rGI/AJP0UngxyBK5HpRWPABd9YorxXQuggc/BxVr3vS7POPct2
-         If/+Bb6ec8PZ2jb1S2DpvCeVNQNHyE+UWSpyMu2E6cs09wT8rG7V6M6M+x0KzGLVQC3B
-         eXDzfPe35QQCZ0Q4m3BCw2w6+IXaWh+T/Y+K+TngG3F+qimJUaiGcDNLvOpu65pyJwFP
-         8A+elcOvIzULY+alcwqKyx8Uli1yEZa42wkqvYjY9SjQWjJIcaXIdpzsPPFw3+Z6oL9S
-         nujA==
-X-Forwarded-Encrypted: i=1; AJvYcCUdo7ZkJJ+Xe6FbooHivNAvmMP7qZGGyU+3LIjdYIm8LM1tkHbafo+HisL8Br11wqV5aTEYMBaTqG4my//ALG+9HxAoa0lMuY4=
-X-Gm-Message-State: AOJu0Yyr8XEdWESZq4eCOtEn4XRzhYaJz5Fb1lMzWjhaRnx7Nd+eeOxh
-	3B6bL6tTpX8Us5kK2Lf8jXBRUJUa4zFQ2pHgkjN9/1TY4lHfxmRoHH9Jv0G54X0=
-X-Google-Smtp-Source: AGHT+IFHGjpAatLTh5i/TLtY4OH/tjLw1j7KJbR3WWjxHPOYuCrWDKwfD8gaK8LpcWJj2ajdG7CPng==
-X-Received: by 2002:a19:c519:0:b0:52b:c025:859a with SMTP id 2adb3069b0e04-52ca6e56796mr8617234e87.2.1718720807536;
-        Tue, 18 Jun 2024 07:26:47 -0700 (PDT)
+        bh=K1oD9cAlhoFUpaJXK/MI3nR3DbJ14JaglZi8r1oHsa4=;
+        b=rfQME3C3C8c/PoVlBLrJ/tMmM6JFpyQg/m8cvvpgjyTB7lP6LQf/sMYgnZ766NGIUT
+         hYkMhfm/+yrTWjJLzZCCGgqwbAKABAafe4z7ILDeD+cfdQ2HGgdoS1qEBfLVHUqgcic2
+         k5eYAiMW9SrHF6RKsnPeLGeBwsROEqpRa9ABh4k1SkRtGi384E7NGhOqO+71Xntk72Kd
+         hMi37WjRIgDTrwwi9M3DJnA1+QgSiu0KwgCiL7WczVdQyyOuTrXoRnNmmPluwvQvLkLj
+         5vcqUmc8GR6el+jESadbhhBtEBdlrs0lI00n4bpp01Jgiehnzl1mcdVQfSZpQM5aNxUc
+         Pc7g==
+X-Forwarded-Encrypted: i=1; AJvYcCVn8O0rOPNvfy+vAcQnaqMzs1xUYR1gQlTpaKLZVfmMgsHYG5ayqMR9tC0PKLExd4Vo8D4XtSZWTkQ7I2HuPFcBGJHTOeM1bYg=
+X-Gm-Message-State: AOJu0YxZVKRDTWBjnFMiAUBOnpFwsacTItmKfrsPeR6v3lleCtIVoXAN
+	1r3kakGG/6HEABLTtNrQeJveWe/ZOgrhqNTOF0B7N3FGT1GjaGSowrLX3obrBPU=
+X-Google-Smtp-Source: AGHT+IHBx3GtM/7wDLLkUt6Vmc/LNvxwypfkaJ/S6LtCJfYKvIG2fRy62ZT2KiZrAciOWnz/Niy0CA==
+X-Received: by 2002:a19:e041:0:b0:52c:842b:c276 with SMTP id 2adb3069b0e04-52ca6e9182fmr8918009e87.53.1718720884661;
+        Tue, 18 Jun 2024 07:28:04 -0700 (PDT)
 Received: from ?IPV6:2a00:f41:9028:9df3:4fb7:492b:2c94:7283? ([2a00:f41:9028:9df3:4fb7:492b:2c94:7283])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca2825bf0sm1511574e87.32.2024.06.18.07.26.42
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52cc0f0285esm384783e87.184.2024.06.18.07.27.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jun 2024 07:26:47 -0700 (PDT)
-Message-ID: <08533ee4-ac72-4d36-84ef-c44e8865d16d@linaro.org>
-Date: Tue, 18 Jun 2024 16:26:41 +0200
+        Tue, 18 Jun 2024 07:28:04 -0700 (PDT)
+Message-ID: <4a1b5ad3-56a9-4b83-97db-0781d68bf507@linaro.org>
+Date: Tue, 18 Jun 2024 16:27:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,123 +76,74 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/4] interconnect: qcom: icc-rpmh: Add QoS
- configuration support
-To: Odelu Kukatla <quic_okukatla@quicinc.com>,
- Mike Tipton <quic_mdtipton@quicinc.com>
+Subject: Re: [PATCH 4/4] interconnect: qcom: icc-rpm: Remodel how QoS settings
+ are stored
+To: Mike Tipton <quic_mdtipton@quicinc.com>
 Cc: Bjorn Andersson <andersson@kernel.org>, Georgi Djakov
- <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Kees Cook <keescook@chromium.org>,
- cros-qcom-dts-watchers@chromium.org,
- "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+ <djakov@kernel.org>, Shawn Guo <shawn.guo@linaro.org>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
  linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, quic_rlaggysh@quicinc.com
-References: <20240325181628.9407-1-quic_okukatla@quicinc.com>
- <20240325181628.9407-2-quic_okukatla@quicinc.com>
- <d59896bb-a559-4013-a615-37bb43278b2e@linaro.org>
- <91f59477-1799-4db6-bcc2-3f0c5225d1c8@quicinc.com>
- <0a58e05a-7bf5-459a-b202-66d88c095b45@linaro.org>
- <20240508023716.GD25316@hu-mdtipton-lv.qualcomm.com>
- <434c6cfa-cede-4e62-a785-35a81ae0d30d@quicinc.com>
+ linux-kernel@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
+ quic_okukatla@quicinc.com
+References: <20240326-topic-rpm_icc_qos_cleanup-v1-0-357e736792be@linaro.org>
+ <20240326-topic-rpm_icc_qos_cleanup-v1-4-357e736792be@linaro.org>
+ <20240508014530.GB25316@hu-mdtipton-lv.qualcomm.com>
 Content-Language: en-US
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <434c6cfa-cede-4e62-a785-35a81ae0d30d@quicinc.com>
+In-Reply-To: <20240508014530.GB25316@hu-mdtipton-lv.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 5/28/24 16:52, Odelu Kukatla wrote:
+On 5/8/24 03:45, Mike Tipton wrote:
 > Hi Konrad,
 > 
-> On 5/8/2024 8:07 AM, Mike Tipton wrote:
->> On Sat, Apr 13, 2024 at 09:31:47PM +0200, Konrad Dybcio wrote:
->>> On 3.04.2024 10:45 AM, Odelu Kukatla wrote:
->>>>
->>>>
->>>> On 3/27/2024 2:26 AM, Konrad Dybcio wrote:
->>>>> On 25.03.2024 7:16 PM, Odelu Kukatla wrote:
->>>>>> It adds QoS support for QNOC device and includes support for
->>>>>> configuring priority, priority forward disable, urgency forwarding.
->>>>>> This helps in priortizing the traffic originating from different
->>>>>> interconnect masters at NoC(Network On Chip).
->>>>>>
->>>>>> Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
->>>>>> ---
->>>
->>> [...]
->>>
->>>>>> @@ -70,6 +102,7 @@ struct qcom_icc_node {
->>>>>>   	u64 max_peak[QCOM_ICC_NUM_BUCKETS];
->>>>>>   	struct qcom_icc_bcm *bcms[MAX_BCM_PER_NODE];
->>>>>>   	size_t num_bcms;
->>>>>> +	const struct qcom_icc_qosbox *qosbox;
->>>>>
->>>>> I believe I came up with a better approach for storing this.. see [1]
->>>>>
->>>>> Konrad
->>>>>
->>>>> [1] https://lore.kernel.org/linux-arm-msm/20240326-topic-rpm_icc_qos_cleanup-v1-4-357e736792be@linaro.org/
->>
->> Note that I replied to this patch series as well. Similar comments here
->> for how that approach would apply to icc-rpmh.
->>
->>>>>
->>>>
->>>> I see in this series, QoS parameters are moved into struct qcom_icc_desc.
->>>> Even though we program QoS at Provider/Bus level, it is property of the node/master connected to a Bus/NoC.
->>>
->>> I don't see how it could be the case, we're obviously telling the controller which
->>> endpoints have priority over others, not telling nodes whether the data they
->>> transfer can omit the queue.
->>
->> The QoS settings tune the priority of data coming out of a specific port
->> on the NOC. The nodes are 1:1 with the ports. Yes, this does tell the
->> NOC which ports have priority over others. But that's done by
->> configuring each port's priority in their own port-specific QoS
->> registers.
->>
->>>
->>>> It will be easier later to know which master's QoS we are programming if we add in node data.
->>>> Readability point of view,  it might be good to keep QoS parameters in node data.
->>>
->>> I don't agree here either, with the current approach we've made countless mistakes
->>> when converting the downstream data (I have already submitted some fixes with more
->>> in flight), as there's tons of jumping around the code to find what goes where.
->>
->> I don't follow why keeping the port's own QoS settings in that port's
->> struct results in more jumping around. It should do the opposite, in
->> fact. If someone wants to know the QoS settings applied to the qhm_qup0
->> port, then they should be able to look directly in the qhm_qup0 struct.
->> Otherwise, if it's placed elsewhere then they'd have to jump elsewhere
->> to find what that logical qhm_qup0-related data is set to.
->>
->> If it *was* placed elsewhere, then we'd still need some logical way to
->> map between that separate location and the node it's associated with.
->> Which is a problem with your patch for cleaning up the icc-rpm QoS. In
->> its current form, it's impossible to identify which QoS settings apply
->> to which logical node (without detailed knowledge of the NOC register
->> layout).
->>
->> Keeping this data with the node struct reduces the need for extra layers
->> of mapping between the QoS settings and the node struct. It keeps all
->> the port-related information all together in one place.
->>
->> I did like your earlier suggestion of using a compound literal to
->> initialize the .qosbox pointers, such that we don't need a separate
->> top-level variable defined for them. They're only ever referenced by a
->> single node, so there's no need for them to be separate variables.
->>
->> But I don't see the logic in totally separating the QoS data from the
->> port it's associated with.
->>
->>>
-> I will update the patch as per your suggestion of keeping .qosbox initialization inside *qcom_icc_node* structure.
-> I will post next version with this update and addressing other comments from v4.
+> On Tue, Mar 26, 2024 at 08:42:35PM +0100, Konrad Dybcio wrote:
+>> Currently, the QoS settings are stored in the node data, even though
+>> they're a property of the bus/provider instead. Moreover, they are only
+>> needed during the probe step, so they can be easily moved into struct
+>> qcom_icc_desc.
+> 
+> The QoS settings *are* fundamentally a property of the node. The nodes
+> are 1:1 with the NOC ports. And the QoS settings tune the priority of
+> the data coming out of those ports. So, logically speaking, the QoS data
+> does belong in the node structs along with the rest of the data for that
+> node and port.
+> 
+> Only a subset of NOC ports support configurable QoS, but for those ports
+> that do it's a property of the port itself. Those settings impact just
+> that specific port and nothing else.
+> 
+> The current method of directly embedding the qcom_icc_qos_data struct
+> into qcom_icc_node isn't optimal, since that data is irrelevant for
+> ports that don't support it. So, the size could be optimized by
+> converting qcom_icc_node::qos into a pointer instead. But I don't think
+> we should separate the QoS settings from node struct entirely. It makes
+> it very difficult to understand which QoS settings are impacting which
+> port.
 
-Sorry for the late answer, but ack, let's go forward with this
+I think that would make more sense indeed
+
+[...]
+
+>>   
+>> +static const struct qcom_icc_qos_data a0noc_qos_data[] = {
+>> +	{
+>> +		.qos_port = 0,
+>> +		.qos_mode = NOC_QOS_MODE_FIXED,
+>> +		.areq_prio = 1,
+>> +		.prio_level = 1,
+>> +		.urg_fwd_en = false,
+>> +		.limit_commands = false,
+>> +	}, {
+> 
+> How can I tell that these a0noc_qos_data[0] settings are for the
+> mas_pcie_0 port? It's not possible from the code anymore. *We* could
+> figure it out internally by looking at the NOC SWI to determine the
+> qos_port index. But this should be obvious from the code itself.
+
+Right
 
 Konrad
 
