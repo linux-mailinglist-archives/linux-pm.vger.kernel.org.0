@@ -1,119 +1,91 @@
-Return-Path: <linux-pm+bounces-9429-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9430-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 939A090CAEC
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 14:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A4F490CB68
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 14:14:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02AE129343C
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 12:03:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C436128B248
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 12:14:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10A04153582;
-	Tue, 18 Jun 2024 11:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B4D13C66F;
+	Tue, 18 Jun 2024 12:13:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KW1i0k9q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NyD593e/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E435C14D2A5
-	for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 11:56:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B74A77F2D;
+	Tue, 18 Jun 2024 12:13:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718711773; cv=none; b=dFZYjusgaO1AGDOf/+5kltbbSX6s40sx3aI2IFUezd2Tn68XFDSen+XwMIsgXxPnFEnyNQ++F3+A5iXH2/ePnYy362fm2fkafDSQv7boOs/6X6lIly0FL9EghkvsBS2P3OrrHjhGlbBgWrE5rVjkBi0HEky3QKXd8/bP1TccPG4=
+	t=1718712826; cv=none; b=lLpQhnbBk1Xa++5LRK9QYc089pmQNqmmCVKcCaHp+KU4LiUBaXXqNXyjrGaIdYf7E3LmP5N115QAi5Agqyibw4cGzkxcJ2rf7/FKOUX8dbtN7BPVzzR2MRK9Rv9BbLUWXyPi1WmSDw/HQcPabHrmXAV3S13Jus1Jrtm4mosmIIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718711773; c=relaxed/simple;
-	bh=jpPEB/6YZTPYLy3RYj7LOJsKZCfOADwF3vloVsYeags=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ceQEoYLwn3Du/8mwdPpEsbgYNLUxJse4J/pM5R4ry8Zw2ekDIUaXeFTqXnBPSreSy1LynyJHSv02srlYyUb3qnEHbTWgxd99l4AUDFjcTOW/+PDbyeuKzjiykDNopi4By+HLyGJtmqePPcHya7aSd2BIr1bFxGhFtUa6Ll4fuHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KW1i0k9q; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52cc148159dso1274854e87.0
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 04:56:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718711768; x=1719316568; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mq75lZPvciVQwZ7mi6K5o2q0ASdayZBfX3qCcW8QAuE=;
-        b=KW1i0k9qj0DskKaCd1uV1Dlm3Ignkxrap9uKQr1wHBUc6iiPcmYL4bQAjj1qoJJmk0
-         c6F4rsmFO2rpCbPJimWUuw3b/2paE4eA1VjbNXnPDQtPl4UwRx8hltyorbVoKUQsJR0F
-         F5N3l6JCZdON/lrLnQnFxr0O+AuQGi8nW6B9hLXQ6JGfv+hcEBf2OZMcsrJEc17WwShE
-         VhQOy856Ii6Jj0/DukJJ1KLdp3cD2uqKrRQKt6tJwm9VfyxAihYjcScdd3RsBApNUT1Y
-         kEjNdXJ7LfXm4prHCAVvJRbmRTzOuEaRYWPLFINadyXml5OMfkCXffUwg0hqUf08wYw+
-         5Vig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718711768; x=1719316568;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mq75lZPvciVQwZ7mi6K5o2q0ASdayZBfX3qCcW8QAuE=;
-        b=aMwSzvvvFsdg4tipjr5ehl8FBVCfXh3BsOZLjLnnIw7PkpIjVA/rcNOlorW7vAPTQe
-         wfCfSWzTP9We3HKeadO3xpnS7RsQzW9dtvYFpZJTw30AllUF+BaOnpPURE4/QN8zX68o
-         SVq9e83ed++sil6x2MVF9OU3fRuU4Q1D3kc9KUXsg+n1vANc6bjW4yf0OQ5VNFvKwT/H
-         v9u1p/SXpVXkDQniSk9/7xqDO28QFwO5F4YIFVvyo8WBMrXvwb4SMJP1BtRh8Bzr5Q1x
-         oF1UN6Suws7I83l5mZbnOlfv183XSqT86fdQMrnJ0YcICy0yg3n8OU8euBGHaAmTOxo3
-         lSoA==
-X-Gm-Message-State: AOJu0YxNo7WWA60fexBV3HWm619iXSjZTmKKaDEpX0JjfQibr822e5zC
-	pNVjXpSui8II0HZJXlarJkq7nb2yc2U81LDHypGWj/BAL/BURruFPgdD9XbZB5U=
-X-Google-Smtp-Source: AGHT+IEYh8t5Lf/IT2gzYEj9aUFut5HJwk0C+UH8HgqmpV5pG3oPCZTtmSV1TDxS2pKMtIogxvp+lQ==
-X-Received: by 2002:a05:6512:3b93:b0:52c:8206:b986 with SMTP id 2adb3069b0e04-52cb621b577mr6055207e87.56.1718711767941;
-        Tue, 18 Jun 2024 04:56:07 -0700 (PDT)
-Received: from ?IPV6:2a00:f41:9028:9df3:4fb7:492b:2c94:7283? ([2a00:f41:9028:9df3:4fb7:492b:2c94:7283])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca28870f5sm1487968e87.249.2024.06.18.04.56.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jun 2024 04:56:07 -0700 (PDT)
-Message-ID: <c807a7c6-ac17-454d-9a99-1a221038774e@linaro.org>
-Date: Tue, 18 Jun 2024 13:56:04 +0200
+	s=arc-20240116; t=1718712826; c=relaxed/simple;
+	bh=yqMqjBqJNsTuMAiurXe6mhlX+bvAkmBH1VT50VqYzp8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rjXKTp2Q3mgvfYryNW+v8bA0mBKCEQ2A7e/G5ajb/kytj/Vsmnf8veFk1JuDIfsGMibzEV7Bky3HWVDMrzDUwnN9UOabkgk1a5xSwduuLstKj+bpzwjC01KjyY9C6uM/6aEUGjjcpgZdJH2Z9LY232AtG6Z3OVvuIO6+Fb9eUNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NyD593e/; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718712824; x=1750248824;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yqMqjBqJNsTuMAiurXe6mhlX+bvAkmBH1VT50VqYzp8=;
+  b=NyD593e/xKfIwOY2IcqbIbMRkp4EagNXKOy4UULMhrgNC25Sl9yiCnCo
+   i51k0Y6xqGAvLu/do4+ykVtJW1CyICufec6KIMM3mw2QveC+xlLisPMOp
+   FQFDXr8beOBwYf48OaccajVycPJ1j25Dr8MJ/iRg9E0ZL528ETexhugKi
+   swoNWjru1yunO6NjoaGwLkJ74qWa8H4SR0js4XlOgRr8e3Wr9LrxsH2Ib
+   Dd+G4AfMCor9uiC7LBfC69uT8hXsTcxDl+6KyzluTXy6qkaXclB1wSJj3
+   Gm51oH/w8eDXiaM2pZWepr2x5fb12ZW1lWeRd7HcD+8vWY46VzdIOEuvh
+   g==;
+X-CSE-ConnectionGUID: QUrzAvGBQ/uq4xXFrr/qUw==
+X-CSE-MsgGUID: hdDqqoRETOWoLjUM3Ub2uw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="26214651"
+X-IronPort-AV: E=Sophos;i="6.08,247,1712646000"; 
+   d="scan'208";a="26214651"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2024 05:13:44 -0700
+X-CSE-ConnectionGUID: WafMQi84SWCty/blZGokvg==
+X-CSE-MsgGUID: rxiZoslnQ6WKThW0ogBZ4A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,247,1712646000"; 
+   d="scan'208";a="46072092"
+Received: from leegavin-mobl.gar.corp.intel.com (HELO localhost.localdomain) ([10.246.105.197])
+  by fmviesa004.fm.intel.com with ESMTP; 18 Jun 2024 05:13:41 -0700
+From: Kaiyen Chang <kaiyen.chang@intel.com>
+To: rafael@kernel.org,
+	pavel@ucw.cz,
+	len.brown@intel.com,
+	gregkh@linuxfoundation.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: kaiyen.chang@intel.com
+Subject: [PATCH v2 0/1] PM: Start asynchronous suspend threads upfront
+Date: Tue, 18 Jun 2024 20:13:26 +0800
+Message-ID: <20240618121327.2177-1-kaiyen.chang@intel.com>
+X-Mailer: git-send-email 2.45.2.windows.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 6/6] arm64: dts: qcom: c630: Add Embedded Controller
- node
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Hans de Goede <hdegoede@redhat.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- Nikita Travkin <nikita@trvn.ru>
-References: <20240614-yoga-ec-driver-v7-0-9f0b9b40ae76@linaro.org>
- <20240614-yoga-ec-driver-v7-6-9f0b9b40ae76@linaro.org>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20240614-yoga-ec-driver-v7-6-9f0b9b40ae76@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+*** BLURB HERE ***
 
+Kaiyen Chang (1):
+  PM: Start asynchronous suspend threads upfront
 
-On 6/14/24 01:43, Dmitry Baryshkov wrote:
-> From: Bjorn Andersson <andersson@kernel.org>
-> 
-> The Embedded Controller in the Lenovo Yoga C630 is accessible on &i2c1
-> and provides battery and adapter status, as well as altmode
-> notifications for the second USB Type-C port.
-> 
-> Add a definition for the EC.
-> 
-> Signed-off-by: Bjorn Andersson <andersson@kernel.org>
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
+ drivers/base/power/main.c | 90 +++++++++++++++++++++++++--------------
+ 1 file changed, 57 insertions(+), 33 deletions(-)
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+-- 
+2.34.1
 
-Konrad
 
