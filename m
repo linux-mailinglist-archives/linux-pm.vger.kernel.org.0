@@ -1,148 +1,136 @@
-Return-Path: <linux-pm+bounces-9435-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9436-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F127790CD44
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 15:09:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCDB790CF89
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 15:27:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8F8C1F2248B
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 13:09:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 790E81F21448
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 13:27:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 212301ACE61;
-	Tue, 18 Jun 2024 12:41:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8350014EC51;
+	Tue, 18 Jun 2024 12:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OoAKmhwf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cWiZYPGY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91391AC79B;
-	Tue, 18 Jun 2024 12:41:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF4314C5B5;
+	Tue, 18 Jun 2024 12:49:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718714512; cv=none; b=C1OeD30Ed2aJqizGgW8mskN59TRpc+si4JRgdGQlF+aoQIopbv2IaWNtWxSplpQba45iGJZ89zjqAfGwgU9D4ANs876B/sVapCLhMXhpyMdHb8t7YBEJqhIpmm/TRw7PVUBb17zoYB7bZWqmOanAsrhjOW4NFeXxSFARA8w1zdU=
+	t=1718714958; cv=none; b=e+CaphvEyfYXnqXgD+cttOq73FsZdtZ1+uI9i0YVNHcc65cfA0J53+1kgSlBIHRazum6Ysr5Ovi1NqOzpki9NF63y66wAHPAguIcnS7tzwMeXJsbU1Pe1LJ9cb5+AEejiqMYRQp/DBcJz86VqM1H37PSf9cYtCIOgdhLlA4Ykv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718714512; c=relaxed/simple;
-	bh=+rqZQ+oKAPS0KRvvaDC+WjwddjWAq8wxDEjz1FU432c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JoH3VJr881ihDk+GGHN0IqqhDwARzJv2FF1cusGanKsNjECve9xT00TCMnxV0un5Gga8oomDScfUlQjA7Vz7YGMaVkP16L8RsZ/72cBsansobZKbdyHC8BFB73xcCYl0ujZYJ9HNpnrrGm0a/q1oSnwLi2mtcKY0kofVqsULlyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OoAKmhwf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B252DC32786;
-	Tue, 18 Jun 2024 12:41:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718714511;
-	bh=+rqZQ+oKAPS0KRvvaDC+WjwddjWAq8wxDEjz1FU432c=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OoAKmhwfKIOO7Lw3ungXugvnTxDaOF6WiB6iwSPeOKC+aroTWmbrHCWXoQf5hhjDD
-	 euDh3Qb5fqguTmLO2jOxeUKK6BV+ZDebedN2Iq6MgS7+V2AISFpJC/jo4Fwtw2koTE
-	 WVCfkSWKi0xIQt120RwrnydVwkT/1HsfRNabcJ66YgQ+/nkY80ojXeFqzke8zNfAFA
-	 3kNjOoBcROUPv8Xrs6L98vbxVkxQdMdGX5BK+xkLemhsBfCM+t3ZARIVjN7kWrsQj5
-	 B/d83wN7VipOSF7lxUpaWtEEU+VDWJZ5kK3BSUyucb15yMQxkj7/amJoU+yYIfcO/T
-	 u1MtFssksy+Tg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
-	Ananth Narayan <Ananth.Narayan@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	trenn@suse.com,
-	shuah@kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 07/21] tools/power/cpupower: Fix Pstate frequency reporting on AMD Family 1Ah CPUs
-Date: Tue, 18 Jun 2024 08:41:06 -0400
-Message-ID: <20240618124139.3303801-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240618124139.3303801-1-sashal@kernel.org>
-References: <20240618124139.3303801-1-sashal@kernel.org>
+	s=arc-20240116; t=1718714958; c=relaxed/simple;
+	bh=4VhvBr7Wg/7G3Jr6+g/s22i5535HMilESlb5EOVncww=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VCc0/c0Z/E954P/xDh233BRo3z1GbfXxUNSCYmj6vcLl9DClsoDUZay1JGuZrXV4BHG0ryCLvpW9xi9wSOZ7pc9HosjlK8vGy34EaPq94oV1iTO0F7LtdU/ec92qK5GfGo8p2r1pDT+vYYR5E4Ij1ueW2NtfSYioSWY9iv2iFNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cWiZYPGY; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5295e488248so5940400e87.2;
+        Tue, 18 Jun 2024 05:49:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718714955; x=1719319755; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2sXcETfbHlUWfisUUTj4CxNKCJIy4cebBQ7DHfUnh8U=;
+        b=cWiZYPGYotLQVdSV44h4iwtpvWBOEBBJ0iqcydKBRN0BUO5PIj/uenL6T24Z5+hlvy
+         u7r5JlJprgvqLuKcLOkhH3OhgarVGjdjmC6oAXdpOE7ltv454Z+THUQ6D+28aq6ZcJ4h
+         5/A2UnCa5jAlVakSTr7Arh8uId5YGsYNFf+FDNrtc3QbP7Ukco5VA5sxmuakAqtyTiZB
+         mL1EmS1yaiTj1YwEStkGf4j5y/PeH7mkio3kD4qjonbEBYQhpYG83qj/m1/JWF+5X8zz
+         DNpzuF3wBFwYA+XNMVWYeenDaETwcKiKVViWpBRr8/VS3jmcSm+jHmUp7nKiBflOqJPq
+         2IZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718714955; x=1719319755;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2sXcETfbHlUWfisUUTj4CxNKCJIy4cebBQ7DHfUnh8U=;
+        b=a2TqSq2ytBun82XvPFm80eKvK/8gRUXYmt4ps9mjVvVdu9Nw+wqTu0jQn5G3aeHJ24
+         j/jGtLZ4cg1bgBLLqV8tk8W34if/rHmeolFCH91pWCGJM/RWrVQ+lEgdiMGbRhy8/a8U
+         atBM70kgJItbOY35odmf35t4X/kCgn5MkMHXhkX/vPjFkRoZvf+TzUlKtNQatia94lCV
+         GrkxQZRwfz09DBkEh3voaGZyCMaYWEC9JcNrLufFstZlV1Fq3ET9Ay905CzIMCl7kv6G
+         4wiZZOIvRq5wxmHtYSQhyBEE2ufVYAvIIDHkj8Fh5ie3tSSwVhSPIq/MuSOwUIyf2KLf
+         gccA==
+X-Forwarded-Encrypted: i=1; AJvYcCXVwYRbAkD1s0BS7GMbBwPkV1fmY1KpWlj0vJjhrf/d/FYwYvFYhgnITKjrp++g/MA0LUvJbNDzyk1HSRBHwkb1g2Su4l6zOItJT/xW0xsDe7CrHj5UUIBUeLiqOldEoTRpu3JQ6znIOGJJZ+S2bClLyHXEHrY1GtvHNO+PHEDEucke5bn2NHo8
+X-Gm-Message-State: AOJu0YzADQ2fbqz8Ju36cXWn51K83mYsBLB54vG6BYCNGys3KRu2Bb+a
+	Wv1+iWkW+5+zCjWhiOw1twCaLGcDrcCNnyPObx4OKR40N2g+q5kG
+X-Google-Smtp-Source: AGHT+IE9w4ry/QbXHWhMJuXWgGLSRBogwWxoMLLzS2ARV8udDGzJ2qhBtUyqMZQvjogK7z5+J9SxIw==
+X-Received: by 2002:ac2:46e3:0:b0:52b:7d16:2c7a with SMTP id 2adb3069b0e04-52ca6e55d4bmr8257740e87.3.1718714954496;
+        Tue, 18 Jun 2024 05:49:14 -0700 (PDT)
+Received: from ?IPV6:2001:660:6102:320:d6c5:cc21:7a1a:7498? ([2001:660:6102:320:d6c5:cc21:7a1a:7498])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42471584306sm8662155e9.0.2024.06.18.05.49.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jun 2024 05:49:14 -0700 (PDT)
+Message-ID: <8d757ea3-87a3-4663-ac76-66b04e33e6b3@gmail.com>
+Date: Tue, 18 Jun 2024 14:49:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.161
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/9] Add CPU-type to topology
+Content-Language: en-US
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org
+Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ Andrew Cooper <andrew.cooper3@citrix.com>
+References: <20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com>
+From: Brice Goglin <brice.goglin@gmail.com>
+In-Reply-To: <20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+Le 17/06/2024 à 11:11, Pawan Gupta a écrit :
+> Hi,
+>
+> This series adds support for CPU-type (CPUID.1A.EAX[31-24] on Intel) to
+> differentiate between hybrid variants P+E, P-only, E-only that share the
+> same Family/Model/Stepping. One of the use case for CPU-type is the
+> affected CPU table for CPU vulnerabilities, which can now use the CPU-type
+> to filter the unaffected variants.
+>
+> * Patch 1 adds cpu-type to CPU topology structure and introduces
+>    topology_cpu_type() to get the CPU-type.
+>
+> * Patch 2-4 replaces usages of get_this_hybrid_cpu_type() with
+>    topology_cpu_type().
+>
+> * Patch 5-7 Updates CPU-matching infrastructure to use CPU-type.
+>
+> * Patch 8 cleans up the affected CPU list.
+>
+> * Patch 9 uses the CPU-type to exclude P-only parts from the RFDS affected
+>    list.
 
-[ Upstream commit 43cad521c6d228ea0c51e248f8e5b3a6295a2849 ]
 
-Update cpupower's P-State frequency calculation and reporting with AMD
-Family 1Ah+ processors, when using the acpi-cpufreq driver. This is due
-to a change in the PStateDef MSR layout in AMD Family 1Ah+.
+Hello
 
-Tested on 4th and 5th Gen AMD EPYC system
+Is there still a plan to expose this info in sysfs? Userspace currently 
+uses frequencies to guess which cores are E or P. Intel sent some 
+patches several years ago [1], but they got abandoned nowhere as far as 
+I know. There was also some discussion about using a "capacity" field 
+like ARM does, but IIRC Intel didn't like the idea in the end.
 
-Signed-off-by: Ananth Narayan <Ananth.Narayan@amd.com>
-Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/power/cpupower/utils/helpers/amd.c | 26 +++++++++++++++++++++---
- 1 file changed, 23 insertions(+), 3 deletions(-)
+Thanks
 
-diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
-index 97f2c857048e1..e0a7a9b1f6d69 100644
---- a/tools/power/cpupower/utils/helpers/amd.c
-+++ b/tools/power/cpupower/utils/helpers/amd.c
-@@ -38,6 +38,16 @@ union core_pstate {
- 		unsigned res1:31;
- 		unsigned en:1;
- 	} pstatedef;
-+	/* since fam 1Ah: */
-+	struct {
-+		unsigned fid:12;
-+		unsigned res1:2;
-+		unsigned vid:8;
-+		unsigned iddval:8;
-+		unsigned idddiv:2;
-+		unsigned res2:31;
-+		unsigned en:1;
-+	} pstatedef2;
- 	unsigned long long val;
- };
- 
-@@ -45,6 +55,10 @@ static int get_did(union core_pstate pstate)
- {
- 	int t;
- 
-+	/* Fam 1Ah onward do not use did */
-+	if (cpupower_cpu_info.family >= 0x1A)
-+		return 0;
-+
- 	if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATEDEF)
- 		t = pstate.pstatedef.did;
- 	else if (cpupower_cpu_info.family == 0x12)
-@@ -58,12 +72,18 @@ static int get_did(union core_pstate pstate)
- static int get_cof(union core_pstate pstate)
- {
- 	int t;
--	int fid, did, cof;
-+	int fid, did, cof = 0;
- 
- 	did = get_did(pstate);
- 	if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATEDEF) {
--		fid = pstate.pstatedef.fid;
--		cof = 200 * fid / did;
-+		if (cpupower_cpu_info.family >= 0x1A) {
-+			fid = pstate.pstatedef2.fid;
-+			if (fid > 0x0f)
-+				cof = (fid * 5);
-+		} else {
-+			fid = pstate.pstatedef.fid;
-+			cof = 200 * fid / did;
-+		}
- 	} else {
- 		t = 0x10;
- 		fid = pstate.pstate.fid;
--- 
-2.43.0
+Brice
+
+[1] https://lkml.org/lkml/2020/10/2/1208
 
 
