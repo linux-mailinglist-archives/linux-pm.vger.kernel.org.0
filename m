@@ -1,151 +1,154 @@
-Return-Path: <linux-pm+bounces-9567-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9568-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 494EB90EA7D
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 14:10:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C5D290EA83
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 14:11:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8CF2285989
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 12:10:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1CE51C23ED8
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 12:11:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0310142E88;
-	Wed, 19 Jun 2024 12:09:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 849D31422CB;
+	Wed, 19 Jun 2024 12:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="UBEEQmtD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BhWiNJ0+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6ED1422A2
-	for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2024 12:09:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509981419A6;
+	Wed, 19 Jun 2024 12:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718798991; cv=none; b=q8h1N/go7enT4Re4tmscCifHUL7t9zGsO8Z/DrZKGurW0Jyoww9OS2fQEA6+dNJMQnlXWfvE77XdioAR+EGTHbrEOgeqUvb8RIKMmekElWE/2DdopLXjB74ZFPTrQFKusnqdBYdRwS7wBuz8hrpxC6/s7h2yBfGTOwFvNGIa/4U=
+	t=1718799040; cv=none; b=c6p9Cxknv23kI1T9+V/MZtjNcqdjoqzyab3n7E9yADJ6ezhmg3oO+VPqKsnSL3CJnGzoJYClYOfUrlTpBHrRd2TUBZmPe2cD6D6yqfyVuXfBM4sqkPGCP48kMzcyRtprehw9pRbKLfs8QGxkv6jr1s38SHZ+QwL8QeZCdfDC4/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718798991; c=relaxed/simple;
-	bh=AWXmdY3rXYMSjyADn2ws2KVH0wuevnkDpCzm8/QmWWI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Qy2WV17QwNR1JaK1n/XGpH71I3kRQ5yrawqKv5ntyRTeQGuwTFFk6M9ee9BBuFkQ4DBaS/o8/EL13WXFWZLEQqd4IRBlqkNwDFUw1YbYo+I/ovv0Yy4wQxBLyUHpg4DThPPp5WRPJQOQlHiy6rj5B1YjVTlYWx0mu7++P/Ggvww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=UBEEQmtD; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a6269885572so123443166b.1
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2024 05:09:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1718798988; x=1719403788; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=54/0ynllrtFkceQQjV8JTld4EwzpadxoNpmSQm229aE=;
-        b=UBEEQmtDJEz3H4kkEHWMgnYqOJy1Y0hwFKSkHHuGnszABnC2KXCl2yKRBtYNgakOx8
-         IRCEV0ROopn28PL3LMEn9kST+OTL8SY3rV1PoYPMPIWycOR35AOFgwMyJr3+WmlwPUtp
-         doHR5W+6Ept3wPCFYDwdUNEFMwQQYNs+Os/t0ZRq/Bqp2zRnlE0ovlEjsYVCur3jZrBE
-         eILtbrX97ZNHByVoCU+VOPU6g6tDYqqWvbtH0OH0sGFqVwP8LECl/Tkw2QehKviLxAPn
-         AkC1SgCeBz0/aOSe8HO8n/SwpSOBcPeft2puJb/FJowjGux4fp//PbGgU8QyoNvQmmCD
-         j8gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718798988; x=1719403788;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=54/0ynllrtFkceQQjV8JTld4EwzpadxoNpmSQm229aE=;
-        b=Z7OHmFKQr1a950XCX/SmvhuQkYqEMlMszkP1lqM/UyPJRWIlbw+HBt9dTRNZGnl2mX
-         73zji+2kkPkUEny8UmxIS4/YPKAuPiJ9Z5PWHQhUOXJ/KbKI2C7ku5LrusAfp5agPA1v
-         BVYWnYX/yqWy6/iAZbvN94jD4F6i+sXFVTjfI3UhuBqvHbG7yM84gajYB95xWbYLo+8y
-         meB7mtS+DkNKMbGfZw0CJHzot/cgzAoWYEA3kmn6ml74hQ+zLqkLL/VBW/89N4CtByE5
-         sq8rYjJx/uQhzvGtSLEKENVHQcdoqX0lpUmxDONt9NMXV3QuU6CeXGMWcCRbdM4K5g5G
-         ShIg==
-X-Gm-Message-State: AOJu0YwPZAG3IKg7tUeTSgFyhZWpzJT58/utPquS1XgPq2/0iRplK+c0
-	sJNa6bCuIoB3zLM/tCqWXwMZTYtx0guuVIWUblJXMeKImEcahmSbcH3pg2HIhm4=
-X-Google-Smtp-Source: AGHT+IHJOKe6kBXUNHgR9qDl5dDG/jclLXow93dX2013HdXfIPrJid9GCPxLPrnwMA4R1Tfsu5wZ4Q==
-X-Received: by 2002:a17:906:bf45:b0:a6f:77bb:1703 with SMTP id a640c23a62f3a-a6fa4109c43mr154657966b.13.1718798988338;
-        Wed, 19 Jun 2024 05:09:48 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.70])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56da43fbsm659014066b.39.2024.06.19.05.09.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jun 2024 05:09:47 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: ulf.hansson@linaro.org,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	rafael@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	claudiu.beznea@tuxon.dev,
-	geert+renesas@glider.be,
-	linux-renesas-soc@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH RFC 3/3] watchdog: rzg2l_wdt: Power on the PM domain in rzg2l_wdt_restart()
-Date: Wed, 19 Jun 2024 15:09:20 +0300
-Message-Id: <20240619120920.2703605-4-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240619120920.2703605-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20240619120920.2703605-1-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1718799040; c=relaxed/simple;
+	bh=ALeYzxeS3iOY2rx4/Kx+ydsSavqKfiI2lPUx7xtO4Lo=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GfmPJG9SfFm7y9Os0iryauSWRjR7y3QFM9CcBHPVAehmMHX2gohYEKRYZtMjvIRV9VcJEFTNRoLzfBp8ekjMwXZjyeH3DoCy3D9J5jFvW/4YpzRVT3I+AbkWt4tV53gdfnxRor3hC8yff2nSgt1VwRtQCp1h/OIe+/I31q81qeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BhWiNJ0+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F498C2BBFC;
+	Wed, 19 Jun 2024 12:10:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718799040;
+	bh=ALeYzxeS3iOY2rx4/Kx+ydsSavqKfiI2lPUx7xtO4Lo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=BhWiNJ0+B3Q4eHQ1K7y8i+X17whuMCJeFlKi9b8MGlUccFDRcokvvQb6YrbkjfgTa
+	 cHVPfzP+fAWgVmJOujiYoRkbS5WAMR8WfGthqljGJsAP8CtGBeqKc0XZKG00yQLstP
+	 qbO5Wn5qV47nujprFxnzPCSMS4r546QuEP6PdYfDbWMX/BVe9X6QnwIskwq8R5cphm
+	 GzgQU60LmN52ts2ygjfjDKheMcc5LN95Tjj1vfumM80dJaqtrPovkDTOky1V+DwU2+
+	 SyveyxTMRowvWN3OMX1KUNfx/cluUsknBPyuiWq/ML8tHU7RO56XhRTTkmhfVF/o1C
+	 dGTsLLBemPaZg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1sJu97-005RVc-6I;
+	Wed, 19 Jun 2024 13:10:37 +0100
+Date: Wed, 19 Jun 2024 13:10:36 +0100
+Message-ID: <868qz1jfpf.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Will Deacon <will@kernel.org>,
+	Catalin
+ Marinas <catalin.marinas@arm.com>,
+	<linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>,
+	<linux-pm@vger.kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	<loongarch@lists.linux.dev>,
+	<x86@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	"Rafael J . Wysocki"
+	<rafael@kernel.org>,
+	Miguel Luis <miguel.luis@oracle.com>,
+	James Morse
+	<james.morse@arm.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe
+ Brucker <jean-philippe@linaro.org>,
+	Hanjun Guo <guohanjun@huawei.com>,
+	Gavin
+ Shan <gshan@redhat.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov
+	<bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	<linuxarm@huawei.com>,
+	<justin.he@arm.com>,
+	<jianyong.wu@arm.com>
+Subject: Re: [PATCH v10 14/19] irqchip/gic-v3: Add support for ACPI's disabled but 'online capable' CPUs
+In-Reply-To: <20240529133446.28446-15-Jonathan.Cameron@huawei.com>
+References: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
+	<20240529133446.28446-15-Jonathan.Cameron@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: Jonathan.Cameron@huawei.com, will@kernel.org, catalin.marinas@arm.com, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, mark.rutland@arm.com, tglx@linutronix.de, peterz@infradead.org, loongarch@lists.linux.dev, x86@kernel.org, linux@armlinux.org.uk, rafael@kernel.org, miguel.luis@oracle.com, james.morse@arm.com, salil.mehta@huawei.com, jean-philippe@linaro.org, guohanjun@huawei.com, gshan@redhat.com, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, linuxarm@huawei.com, justin.he@arm.com, jianyong.wu@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Wed, 29 May 2024 14:34:41 +0100,
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+> 
+> From: James Morse <james.morse@arm.com>
+> 
+> To support virtual CPU hotplug, ACPI has added an 'online capable' bit
+> to the MADT GICC entries. This indicates a disabled CPU entry may not
+> be possible to online via PSCI until firmware has set enabled bit in
+> _STA.
+> 
+> This means that a "usable" GIC redistributor is one that is marked as
+> either enabled, or online capable. The meaning of the
+> acpi_gicc_is_usable() would become less clear than just checking the
+> pair of flags at call sites. As such, drop that helper function.
+> The test in gic_acpi_match_gicc() remains as testing just the
+> enabled bit so the count of enabled distributors is correct.
+> 
+> What about the redistributor in the GICC entry? ACPI doesn't want to say.
+> Assume the worst: When a redistributor is described in the GICC entry,
+> but the entry is marked as disabled at boot, assume the redistributor
+> is inaccessible.
+> 
+> The GICv3 driver doesn't support late online of redistributors, so this
+> means the corresponding CPU can't be brought online either.
+> Rather than modifying cpu masks that may already have been used,
+> register a new cpuhp callback to fail this case. This must run earlier
+> than the main gic_starting_cpu() so that this case can be rejected
+> before the section of cpuhp that runs on the CPU that is coming up as
+> that is not allowed to fail. This solution keeps the handling of this
+> broken firmware corner case local to the GIC driver. As precise ordering
+> of this callback doesn't need to be controlled as long as it is
+> in that initial prepare phase, use CPUHP_BP_PREPARE_DYN.
+> 
+> Systems that want CPU hotplug in a VM can ensure their redistributors
+> are always-on, and describe them that way with a GICR entry in the MADT.
+> 
+> Suggested-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-The rzg2l_wdt_restart() is called in atomic context. Calling
-pm_runtime_{get_sync, resume_and_get}() or any other runtime PM resume
-APIs is not an option as it may lead to issues as described in commit
-e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait context'")
-that removed the pm_runtime_get_sync() and enabled directly the clocks.
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-Starting with RZ/G3S the watchdog could be part of its own
-software-controlled power domain. In case the watchdog is not used the
-power domain is off and accessing watchdog registers leads to aborts.
+	M.
 
-To solve this, the patch powers on the power domain using
-dev_pm_genpd_resume_restart_dev() API after enabling its clock. This is
-not sleeping or taking any other locks as the watchdog power domain is not
-registered with GENPD_FLAG_IRQ_SAFE flags.
-
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
- drivers/watchdog/rzg2l_wdt.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-index 6e3d7512f38c..bbdbbaa7b82b 100644
---- a/drivers/watchdog/rzg2l_wdt.c
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -12,6 +12,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- #include <linux/reset.h>
- #include <linux/units.h>
-@@ -169,6 +170,17 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
- 	clk_enable(priv->pclk);
- 	clk_enable(priv->osc_clk);
- 
-+	/*
-+	 * The device may be part of a power domain that is currently
-+	 * powered off. We need to power it on before accessing registers.
-+	 * We don't undo the dev_pm_genpd_resume_restart_dev() as the device
-+	 * need to be on for the reboot to happen. Also, as we are in atomic
-+	 * context here, there is no need to increment PM runtime usage counter
-+	 * (to make sure pm_runtime_active() doesn't return wrong code).
-+	 */
-+	if (!pm_runtime_active(wdev->parent))
-+		dev_pm_genpd_resume_restart_dev(wdev->parent);
-+
- 	if (priv->devtype == WDT_RZG2L) {
- 		ret = reset_control_deassert(priv->rstc);
- 		if (ret)
 -- 
-2.39.2
-
+Without deviation from the norm, progress is not possible.
 
