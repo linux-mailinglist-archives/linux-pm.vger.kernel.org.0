@@ -1,118 +1,127 @@
-Return-Path: <linux-pm+bounces-9537-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9539-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42F9E90E266
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 06:44:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54DF390E2F6
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 07:58:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99D70B226DC
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 04:44:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0A501F24A69
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 05:58:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88466381BD;
-	Wed, 19 Jun 2024 04:44:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF4B96A8D2;
+	Wed, 19 Jun 2024 05:58:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B880fJrT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XMPQI7gR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F895208A0;
-	Wed, 19 Jun 2024 04:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB0461FDD;
+	Wed, 19 Jun 2024 05:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718772269; cv=none; b=pk2dZYabQ7Eb7ONwyqdxnvNnmqp5WQeFH4avFiIYRiihWMPMHSWD1GPe8Ks5JlclkkgHpfHUw+KEtbH5Df2LrkZI5wtbbPWWOcWagDLYdwHHFn7qinE5IFi8D1Z+RJp1xu7BBV5kxhW5eCQA7W8/yGdG1gDvWyOdP9UQQARmaO8=
+	t=1718776694; cv=none; b=UgeB9TSj8oFAOOezS8raAYeK6jel/MRlw6A45OyobWBPnonT6Yp9JtrJ9kVb9kA3q+cDBGR0T+AAM2joMGbq3R8dtLOLr8NTK9JNv+glboNAwBiFx+tHPEN2c6lzEYwKzXZjPEJxIm+cczkb+5he6FQMzEj08mjId838My2Er0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718772269; c=relaxed/simple;
-	bh=pGqBZ94iK6V7CP40Pp3MipCFw43itk2w6Q4lEJg//+o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bILCxL5I7wBvPkdsT823lUM6blDOe4ApSHBYG447nhDI9lHMCUnYoh6fC51/JI8UUMVnI346wTXOHTTUHF9DG7gHho30//Yolp+ALW6T12bL4fisCsRN4iSdd2wHNubm3jkIhhOXdPo6nuujrDBcMucXadrYOhnUbA767505E7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B880fJrT; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718772268; x=1750308268;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pGqBZ94iK6V7CP40Pp3MipCFw43itk2w6Q4lEJg//+o=;
-  b=B880fJrTUvDmtn/mfjNLlZKSSKXPQnGEEx5/VgIIqIsvt6DGqLDjuGZk
-   CDiavjTmy1hjXOasuGbQCPMioAp2ykZrYwjpsAVOLCbaaZJseXC73RmPq
-   zZngWV3WTvpWAcwUF2xCDjfMotB7tJuBSoOVn+aqSE41k6XTLMEzUukD7
-   kKXa3UO/zAQDo8r9o6NP1+f1uRe5oCMWWwB+shmawzWL9UD8YqRB/C959
-   ug+rhOl+1QD+Ce3MEnbnRuFZ4fLG7mKAZgvK/AL5umy/0eEQFbhm4QZgW
-   irF7OkHPR2DPCGRA3j8bPOc40Tm4PkpVRFuu6Lup1uhhqmtKTLz+p+N86
-   w==;
-X-CSE-ConnectionGUID: gJCz7bqVTP2Q5qshZSU6BQ==
-X-CSE-MsgGUID: da5QOe+dROWT5EIw/o50Og==
-X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="15817635"
-X-IronPort-AV: E=Sophos;i="6.08,249,1712646000"; 
-   d="scan'208";a="15817635"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2024 21:44:28 -0700
-X-CSE-ConnectionGUID: W2p+cfZASme33qoWOap5hg==
-X-CSE-MsgGUID: TqbUp/k2RPqKOX+qTDgs4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,249,1712646000"; 
-   d="scan'208";a="41915896"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.19])
-  by fmviesa010.fm.intel.com with ESMTP; 18 Jun 2024 21:44:27 -0700
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To: rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	rui.zhang@intel.com,
-	lukasz.luba@arm.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] thermal: int340x: processor_thermal: Support shared interrupts
-Date: Tue, 18 Jun 2024 21:44:24 -0700
-Message-ID: <20240619044424.481239-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1718776694; c=relaxed/simple;
+	bh=a5vxgGfrOPyJE5Lw7K9sjW1/VAPz4y4qyKH6LAzXlU0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sQfLKNp6zqREGPr1YIpNASy6wp5/+glVw3MmO/72Ybvk8tVgT4NvtD7TXTzMWqtQ/eSx8FY6McBCixsTR2TWuCLScwPDc9ChJptDSPbGOhY84PNG1s9WTMFlhpu8cD4lpGSD6wyh6DlKW9BQejIKsUc9ZPdaNFqgLQcI4+fWEEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XMPQI7gR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0E16C2BBFC;
+	Wed, 19 Jun 2024 05:58:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718776694;
+	bh=a5vxgGfrOPyJE5Lw7K9sjW1/VAPz4y4qyKH6LAzXlU0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=XMPQI7gRWco4XkS2Ej95fCPDGB1oqpXbjiSK0fv9C1APYe6Jg8BvWHbLdAgnt1HYJ
+	 7+yPL8wq8985HlVG1ljRK+oKOKOCUq+wX7d/6kskXQWL1SGJ2tzUhHi/9r6VWGNgf+
+	 BRdQt6q1AL8MqHQs/arZP0IXVY+FX4iw7SFuRBsssuLDnDCEvPjVN2RvCAiykF5m/V
+	 jVPBNeHsQxb7wNnZZngblEaACXGN0gASlNog+Mr1ZE1CF9l2WlSoP6eBmlH9SNl3Jr
+	 6V+/l+NdDabaknP9XCOk19G9lXC9FeHrq39G4R2XH+dNHAoaJCUfg7dLMXoOeCpH8W
+	 ROR/aeV9/Un9Q==
+Message-ID: <466f4167-4763-4c31-b6d1-6e7ac136138e@kernel.org>
+Date: Wed, 19 Jun 2024 07:58:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] dt-bindings: thermal: convert hisilicon-thermal.txt to
+ dt-schema
+To: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: skhan@linuxfoundation.org, javier.carrasco.cruz@gmail.com,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240618-hisilicon-thermal-dt-bindings-conversion-v4-1-7eba97fbe6d0@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240618-hisilicon-thermal-dt-bindings-conversion-v4-1-7eba97fbe6d0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On some systems the processor thermal device interrupt is shared with
-other PCI devices. In this case return IRQ_NONE from the interrupt
-handler when the interrupt is not for the processor thermal device.
+On 19/06/2024 04:31, Abdulrasaq Lawani wrote:
+> Convert the hisilicon SoCs tsensor txt bindings to dt-schema
+> 
+> Signed-off-by: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
+> ---
+> Changes in v4:
+> - Update the indentation for 'examples'.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Fixes: f0658708e863 ("thermal: int340x: processor_thermal: Use non MSI interrupts by default")
-Cc: <stable@vger.kernel.org> # v6.7+
----
-This was only observed on a non production system. So not urgent.
 
- .../intel/int340x_thermal/processor_thermal_device_pci.c       | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-index 14e34eabc419..4a1bfebb1b8e 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-@@ -150,7 +150,7 @@ static irqreturn_t proc_thermal_irq_handler(int irq, void *devid)
- {
- 	struct proc_thermal_pci *pci_info = devid;
- 	struct proc_thermal_device *proc_priv;
--	int ret = IRQ_HANDLED;
-+	int ret = IRQ_NONE;
- 	u32 status;
- 
- 	proc_priv = pci_info->proc_priv;
-@@ -175,6 +175,7 @@ static irqreturn_t proc_thermal_irq_handler(int irq, void *devid)
- 		/* Disable enable interrupt flag */
- 		proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_INT_ENABLE_0, 0);
- 		pkg_thermal_schedule_work(&pci_info->work);
-+		ret = IRQ_HANDLED;
- 	}
- 
- 	pci_write_config_byte(pci_info->pdev, 0xdc, 0x01);
--- 
-2.44.0
+Best regards,
+Krzysztof
 
 
