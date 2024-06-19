@@ -1,147 +1,86 @@
-Return-Path: <linux-pm+bounces-9569-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9570-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 454E090EA8E
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 14:12:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C237990EAB6
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 14:18:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3CC41F24AC3
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 12:12:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79F241F24CFE
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 12:18:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317AE1411D5;
-	Wed, 19 Jun 2024 12:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sc38HwOX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1BCF143752;
+	Wed, 19 Jun 2024 12:17:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A82140395;
-	Wed, 19 Jun 2024 12:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C11A13FD84;
+	Wed, 19 Jun 2024 12:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718799111; cv=none; b=ZUqxiUsE96JXGymCuQJgMao4B1V8UXMfsYrZUcffuy9pbn0Bu3FVL3oxRdjcgE4bMaJ44kWU3Wu5t+Eco+TcIJF+aJbYraw3YB00LOWXOvCIZd8gW/pVXMKcp8d4dXML61YbyUgDXkS/w1XGhlCHR8JvaQwYaqHQYFVylZD39X0=
+	t=1718799441; cv=none; b=oLZkaT5I2VnDikuwdUxK/dewyI8dlfHnzEKVBpN0BdVoEaMO8fnzYhptBafy9yV/seUn+tRJknsUtu93lSyqv7CKP9/yIsZmMwj6efa/GRmNBU3GNhXM29nOrN3yJi+oaczWHGD3eDorpD1RDP+hhE/i0QhI70fAGvO9nhUcI7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718799111; c=relaxed/simple;
-	bh=8UC3dd/xs1eHvnpkbzMHjvpFYyuJFdFAOtxj21nX+eg=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qM27il8YBG3mV9MFQfqE8WilpmDWbuE1FfdchPlmcXOtpkfmBE2Le7+CgX1bESUddxdbUn/2R3tgqv2uStoeWApGvPldIzLxn13LLJNMTm0NcF8q9ioipaeiT0VtjY16U1q8ZHLXGDEK+Xx8QgUoU86HahA/0aqWFnA4scSZ6k4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sc38HwOX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 778F7C4AF1D;
-	Wed, 19 Jun 2024 12:11:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718799110;
-	bh=8UC3dd/xs1eHvnpkbzMHjvpFYyuJFdFAOtxj21nX+eg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=sc38HwOXXA8zwNu1EdxnZfwAfuSgOQAgHP98hrVE8/M1bYDhPzGiO2utokmcGPh1O
-	 tUL7KmeG5lBnM5WSk8yS/X47u3Dd3UmY2teYTP7QE3Vb8AptBUIXiCRPVRJ7AjS6Zr
-	 LNs4+n7wK0e8Id0QAB6MiwNXdtY0v7B/ymqcOPu6+hrsUidSmxxRKPEpwQB/vcNMr8
-	 Yb9jHJs98KH+8M5/8tRuph9lP666N3CpqYfCuiejh8sdyMsx5eQyh5hnnuVRaQHMOd
-	 JpcDIKnRshkSsCf6s4mO7+BYH6mXPLaKKeY3HVgG37cdfWuK0Yz4VLu2NXh2TS5d9F
-	 MKgqmi0zKCfdg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1sJuAG-005RXt-4M;
-	Wed, 19 Jun 2024 13:11:48 +0100
-Date: Wed, 19 Jun 2024 13:11:47 +0100
-Message-ID: <867celjfng.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc: Will Deacon <will@kernel.org>,
-	"Catalin\
- Marinas" <catalin.marinas@arm.com>,
-	<linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>,
-	<linux-pm@vger.kernel.org>,
-	<linuxarm@huawei.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	<loongarch@lists.linux.dev>,
-	<x86@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	"Rafael J . Wysocki"
-	<rafael@kernel.org>,
-	"Miguel Luis" <miguel.luis@oracle.com>,
-	James Morse
-	<james.morse@arm.com>,
-	"Salil Mehta" <salil.mehta@huawei.com>,
-	Jean-Philippe
- Brucker <jean-philippe@linaro.org>,
-	Hanjun Guo <guohanjun@huawei.com>,
-	Gavin
- Shan <gshan@redhat.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov
-	<bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	<justin.he@arm.com>,
-	<jianyong.wu@arm.com>,
-	Karl Heubaum
-	<karl.heubaum@oracle.com>
-Subject: Re: [PATCH v10 00/19] ACPI/arm64: add support for virtual cpu hotplug
-In-Reply-To: <20240613112511.00006331@huawei.com>
-References: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
-	<20240613112511.00006331@huawei.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1718799441; c=relaxed/simple;
+	bh=/UmQ/7T9QyLIP/83V0+8xsTLFB88h5IhU6qz1+7bvmo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rvcJM8e5yyP/EfVfn4/pvcFhytrwHZeiTqlipHTu7QVqQbo8+Gcy1SE/6RQ+1xBDlrkUsqkD5qGm3yDGU7DIUXq+sIGDkvW98yiRoSbHHCV9+g+5QosguhO+CeKwalb5oY0UNbLNsvbXa+3X0ytfEpvxMFybuEv6lB+NEFlTLb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4B3D1DA7;
+	Wed, 19 Jun 2024 05:17:42 -0700 (PDT)
+Received: from bogus (unknown [10.57.89.235])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D40A33F6A8;
+	Wed, 19 Jun 2024 05:17:12 -0700 (PDT)
+Date: Wed, 19 Jun 2024 13:17:11 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+	pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com,
+	rafael@kernel.org, daniel.lezcano@linaro.org, peterz@infradead.org,
+	arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com,
+	harisokn@amazon.com, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH 8/9] arm64: support cpuidle-haltpoll
+Message-ID: <20240619121711.jid3enfzak7vykyn@bogus>
+References: <20240430183730.561960-1-ankur.a.arora@oracle.com>
+ <20240430183730.561960-9-ankur.a.arora@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: Jonathan.Cameron@Huawei.com, will@kernel.org, catalin.marinas@arm.com, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, linuxarm@huawei.com, mark.rutland@arm.com, tglx@linutronix.de, peterz@infradead.org, loongarch@lists.linux.dev, x86@kernel.org, linux@armlinux.org.uk, rafael@kernel.org, miguel.luis@oracle.com, james.morse@arm.com, salil.mehta@huawei.com, jean-philippe@linaro.org, guohanjun@huawei.com, gshan@redhat.com, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, justin.he@arm.com, jianyong.wu@arm.com, karl.heubaum@oracle.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240430183730.561960-9-ankur.a.arora@oracle.com>
 
-On Thu, 13 Jun 2024 11:25:27 +0100,
-Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+On Tue, Apr 30, 2024 at 11:37:29AM -0700, Ankur Arora wrote:
+> Add architectural support for the cpuidle-haltpoll driver by defining
+> arch_haltpoll_*(). Also select ARCH_HAS_OPTIMIZED_POLL since we have
+> an optimized polling mechanism via smp_cond_load*().
 > 
-> On Wed, 29 May 2024 14:34:27 +0100
-> Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+> Add the configuration option, ARCH_CPUIDLE_HALTPOLL to allow
+> cpuidle-haltpoll to be selected.
 > 
-> > v10:
-> > - Make acpi_processor_set_per_cpu() return 0 / error rather than bool
-> >   to simplify error handling at the call sites.
-> >   (Thanks to both Rafael and Gavin who commented on this)
-> > - Gather tags.
-> > - Rebase on v6.10-rc1
-> > 
-> > The approach to the GICv3 changes stablized very late in the 6.10 cycle.
-> > Subject to Marc taking a final look at those, I think we are now
-> > in a good state wrt to those and the ACPI parts. The remaining code
-> > that hasn't received review tags from the relevant maintainers
-> > is the arm64 specific arch_register_cpu().  Given I think this will go
-> > through the arm64 tree, hopefully they have just been waiting for
-> > everything else to be ready.
-> 
-> Marc, Will, Catalin,
-> 
-> Any comments on this series?  We definitely want to finally land this
-> in 6.11!
-> 
-> Marc, in practice I think you already gave feedback on the the GICv3
-> changes in here as part of the discussions in the earlier version threads,
-> but if you have time for a final glance through it would be much appreciated.
-> Thanks for all your earlier help on this btw.
+> Note that we limit cpuidle-haltpoll support to when the event-stream is
+> available. This is necessary because polling via smp_cond_load_relaxed()
+> uses WFE to wait for a store which might not happen for an prolonged
+> period of time. So, ensure the event-stream is around to provide a
+> terminating condition.
+>
 
-I've had a quick look and the GICv3 parts look OK to me (you should
-now have by tags for both patches).
-
-Thanks,
-
-	M.
+Currently the event stream is configured 10kHz(1 signal per 100uS IIRC).
+But the information in the cpuidle states for exit latency and residency
+is set to 0(as per drivers/cpuidle/poll_state.c). Will this not cause any
+performance issues ?
 
 -- 
-Without deviation from the norm, progress is not possible.
+Regards,
+Sudeep
 
