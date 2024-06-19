@@ -1,161 +1,154 @@
-Return-Path: <linux-pm+bounces-9563-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9565-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46F9190E860
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 12:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EA90C90EA73
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 14:09:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A2AA1C21AB9
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 10:35:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DF041C21709
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 12:09:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6031B86255;
-	Wed, 19 Jun 2024 10:35:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F46413FD8D;
+	Wed, 19 Jun 2024 12:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LwmLBZ/H"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="YeWOtK4t"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3862D78C91;
-	Wed, 19 Jun 2024 10:35:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527D213E3F8
+	for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2024 12:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718793307; cv=none; b=ZfgfRLZ1E25/jWjReKG6RVwACb9VBXDqTeutwt8KwPJWDGfvO0aBndWXyRxSJN2yg7XgY61KOWMpsOMx1dYPyQSCq4kL30zfY7H2DY1bdAsC63kWuJVMqt+vBdfDb+Xnp0rDTRb9/MgpSSrCRfoC8E9s/bay+vvtc1diF43nK3k=
+	t=1718798988; cv=none; b=DiT06vYTwxM0F1zxPEQBrsYN0wLOgnD8nT4h3m4PuZo2YIF16H6cGjiCn+l5pNZZ1U0BWkJDSgeNSNyvNtnJ0XWOSknlZDt/e7HjvzmcUx4gqagG4xi4Z1JrPw8tJX5S5dph6on8lV1tNhrBJlr+0/MNBikg5e7Z6beHyMBBcTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718793307; c=relaxed/simple;
-	bh=rAkZoulyRqoWcGhfxv3cdCzwzCQF6KLQPe1hqhtmVBQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QG14v0lWeLtGBU0QwUAKsSKQ+WRvd3jggRebdRwD85ACGj05GWd/vfnO+oueinW8NWbH1MhCsHO7Z1vw48zgFvJMHdYGq1Dzxqardl+3at2lz9wGhbkMm8zNHB99FbPKScRhy++kW0pdjQ0qR6fZxxBII0acTIS37Em68Nxk+vI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LwmLBZ/H; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718793305; x=1750329305;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=rAkZoulyRqoWcGhfxv3cdCzwzCQF6KLQPe1hqhtmVBQ=;
-  b=LwmLBZ/HEG9lGlSclIZO8jMiiiWYz93rs4LcgDjNiryfzciSu8vq3Wl3
-   SuCtXbX/YwjyI8qQ8LFUPPVyQiCZFjxiIaivkkSpRa5mZImkGroNRkHux
-   RTEBRWeuygOxxcfjrc6UYYPwaV/hFzYN3HRkhFiYVsXdMvOpBE0eOo/3A
-   7L7g3mBnjxWjxvvlGZRsvkxPmbE/0644wnX798zBAkZU8dsfr1aTUpMO8
-   HSCPFMcGA/2a8SoF+Wx+c8R3IhODWsJ9aZyP7p4bp8Tf4ZHy4BkvilSdR
-   xGtaQ5HVYNdfRMdIOSBJNdr1Qt/ELLv0P0OGHUD0/Ntje7UfHrOGmTqOp
-   g==;
-X-CSE-ConnectionGUID: cK4+lQJPRzOFUFxuu7z+Zg==
-X-CSE-MsgGUID: 6EnvEt65QY6ERkurd+lspg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="19596813"
-X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
-   d="scan'208";a="19596813"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 03:35:04 -0700
-X-CSE-ConnectionGUID: UjQFZ2qzTJ6GiLj/nm1kiA==
-X-CSE-MsgGUID: oN9ZG3u6TViQwpUipDLVZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
-   d="scan'208";a="41987288"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.19])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 03:34:47 -0700
-Message-ID: <bc75ff55161671e4470849ed51baa547f619889d.camel@linux.intel.com>
-Subject: Re: [PATCH 0/9] Add CPU-type to topology
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, Brice Goglin
-	 <brice.goglin@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org,  daniel.sneddon@linux.intel.com, tony.luck@intel.com, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-perf-users@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Ricardo Neri
- <ricardo.neri-calderon@linux.intel.com>,  "Liang, Kan"
- <kan.liang@linux.intel.com>, Andrew Cooper <andrew.cooper3@citrix.com>
-Date: Wed, 19 Jun 2024 03:34:46 -0700
-In-Reply-To: <20240619015315.3ei5f6rovzdnxovo@desk>
-References: <20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com>
-	 <8d757ea3-87a3-4663-ac76-66b04e33e6b3@gmail.com>
-	 <20240619015315.3ei5f6rovzdnxovo@desk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+	s=arc-20240116; t=1718798988; c=relaxed/simple;
+	bh=xavlI80GPdWRZ0p8Wl6NBE6+ijBGicpCiFVCMvmOY+g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FeaqkDp9dHG+Qc1ddDMJcnFAsCqX8UqvtAqbdsRhD2PyWs1lEOTUtq8Wdg2ruUfUXLI+mQlSNCtvMZjup1EjUmoG97kmUjv8vuMFCS4O4RWYuiMgUhV2qsywo5MxKwFztJ6UL1hDRvKRSAWjokUqYJSJ1JzkhhqznJNIAveHNYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=YeWOtK4t; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a6e43dad8ecso137773166b.1
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2024 05:09:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1718798983; x=1719403783; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ojJGbarIJ49aCusK8TQyHNsUYXaxQGLSM1fTmDeigGc=;
+        b=YeWOtK4t9wJ4HQimSQcyJFVn/0FBR0b1wdNFrZ5KDOPD9zVXy7hqhhi1+5xFedewqo
+         n1uYYZ5PoI6grbN9Ei6kWAITL2xm2g41K/sOhrbbTXuPdP3F9zQdkO8iDCJiqOqGZvzP
+         UY2ZKIvX22ejx7AXrrCOoRCF9fNwVwGq1dl9K9JGzezP7MG4lxKGcYMegKd47RZd5ZSS
+         DY8JCqtEhUdXTJi16Vp6VeHzvG2BtJa6oL11NzmbqZx+xKpeOKWtOHewapNzU2o6OiE2
+         +G+SuizJ7DYYJQzRbG1pYUSEEb/jOfgnZxZDRq9OyAy3utZZXlIstniP3M202ul1X2uM
+         QrYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718798983; x=1719403783;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ojJGbarIJ49aCusK8TQyHNsUYXaxQGLSM1fTmDeigGc=;
+        b=SSYD6ABjbNfVijSg1sIUlGLMhAJDsY1nMGhZ+Bfw3zSb4FDcX9eQekwvUEfSKg7xie
+         WfEp6KJEgYO/bRmM3t3k5G8Lyb2jh5xYWjeWvo/7xkbS34iD2ug2asLhrVRrYu4rQE08
+         ML1vVflMLqGMSdFi3EyfoX2Zf66yBxin/eujLiXAX6ak0jzKtnDR4a4lt1q8ls1H0nC4
+         4MGAmxDtAbH8xIPlsID/XyHtj1fsupdowGJoe0/s+lDx/qc1VvWZCywciowvUrD1tMvH
+         GdQ6H74TBoaSiSiJSMQhH8OcZnF/1OY1TF1QOaGWyo3PBieSxo56vUOP7Uk3/87+AW3y
+         5Pvg==
+X-Gm-Message-State: AOJu0YymCfClIeIJXC0+sRU8db7E3P3YPPzF5iGvbneGvwKmDZHtebCM
+	iGIPgkj909L0G4dlsRUHliOfo3+YhUF3FsxCWGbz3hsnSRRympqjR3iPfGhDBbc=
+X-Google-Smtp-Source: AGHT+IGyCeoCaSQqPKYdImlCdqNYvFr+oYfnK+iUXuPolWmC0vzy/4o65nQ6QO9Pq29gB/da09bipg==
+X-Received: by 2002:a17:906:114d:b0:a6f:a2aa:a4c7 with SMTP id a640c23a62f3a-a6fa2aaa594mr159185566b.3.1718798983334;
+        Wed, 19 Jun 2024 05:09:43 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.70])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56da43fbsm659014066b.39.2024.06.19.05.09.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jun 2024 05:09:42 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: ulf.hansson@linaro.org,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	rafael@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	claudiu.beznea@tuxon.dev,
+	geert+renesas@glider.be,
+	linux-renesas-soc@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH RFC 0/3] watchdog: rzg2l_wdt: Enable properly the watchdog clocks and power domain
+Date: Wed, 19 Jun 2024 15:09:17 +0300
+Message-Id: <20240619120920.2703605-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2024-06-18 at 18:53 -0700, Pawan Gupta wrote:
-> On Tue, Jun 18, 2024 at 02:49:10PM +0200, Brice Goglin wrote:
-> > Le 17/06/2024 =C3=A0 11:11, Pawan Gupta a =C3=A9crit=C2=A0:
-> > > Hi,
-> > >=20
-> > > This series adds support for CPU-type (CPUID.1A.EAX[31-24] on
-> > > Intel) to
-> > > differentiate between hybrid variants P+E, P-only, E-only that
-> > > share the
-> > > same Family/Model/Stepping. One of the use case for CPU-type is
-> > > the
-> > > affected CPU table for CPU vulnerabilities, which can now use the
-> > > CPU-type
-> > > to filter the unaffected variants.
-> > >=20
-> > > * Patch 1 adds cpu-type to CPU topology structure and introduces
-> > > =C2=A0=C2=A0 topology_cpu_type() to get the CPU-type.
-> > >=20
-> > > * Patch 2-4 replaces usages of get_this_hybrid_cpu_type() with
-> > > =C2=A0=C2=A0 topology_cpu_type().
-> > >=20
-> > > * Patch 5-7 Updates CPU-matching infrastructure to use CPU-type.
-> > >=20
-> > > * Patch 8 cleans up the affected CPU list.
-> > >=20
-> > > * Patch 9 uses the CPU-type to exclude P-only parts from the RFDS
-> > > affected
-> > > =C2=A0=C2=A0 list.
-> >=20
-> >=20
-> > Hello
-> >=20
-> > Is there still a plan to expose this info in sysfs?
->=20
-> Sure, if it helps userspace.
->=20
-> > Userspace currently uses frequencies to guess which cores are E or
-> > P.
-> > Intel sent some patches several years ago [1], but they got
-> > abandoned
-> > nowhere as far as I know. There was also some discussion about
-> > using a
-> > "capacity" field like ARM does, but IIRC Intel didn't like the idea
-> > in
-> > the end.
->=20
-> There can be many ways to expose this information in sysfs. Like this
-> ...
->=20
-> > [1] https://lkml.org/lkml/2020/10/2/1208
->=20
-> ... exposes /sys/devices/system/cpu/types which, in hybrid parts,
-> creates a
-> subdirectory for each type of CPU. Each subdirectory contains a CPU
-> list
-> and a CPU map that user space can query.
->=20
-> The other way is to expose the CPU-type in a file:
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/sys/devices/system/cpu/c=
-puN/type
->=20
-> that could return the CPU-type of the CPU N. Is there a preference?
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-But you still have to look at frequency or caches as there are Low
-power E-cores which will have same type but different capabilities.
+Hi,
 
-Thanks,
-Srinivas
+Watchdog device available on RZ/G3S SoC is part of a software-controlled
+power domain. The watchdog driver implements struct
+watchdog_ops::restart() handler which is called in atomic context via
+this call chain:
 
+kernel_restart() ->
+  machine_restart() ->
+    do_kernel_restart() ->
+      atomic_notifier_call_chain() ->
+        watchdog_restart_notifier()
+	  rzg2l_wdt_restart()
 
+When the rzg2l_wdt_restart() is called it may happen that the watchdog
+clocks to be disabled and the associated power domain to be off.
+Accessing watchdog registers in this state leads to aborts and system
+blocks.
+
+To solve this issue the series proposes a new API called
+dev_pm_genpd_resume_restart_dev() that is intended to be called in
+scenarios like this. In this RFC series the
+dev_pm_genpd_resume_restart_dev() checks if the system is in
+SYSTEM_RESTART context and call dev_pm_genpd_resume(). I also wanted to
+mark the device as a restart device with a new member in struct dev_pm_info
+(similar to struct dev_pm_info::syscore) and check it in the newly
+introduced API but then I told myself maybe it would be better to keep it
+simpler for the moment.
+
+Please let me know how do you consider this.
+
+Along with it, series addresses the usage of clk_prepare_enable() in
+rzg2l_wdt_restart() reported by Ulf Hansson at [1] and use the
+dev_pm_genpd_resume_restart_dev() in rzg2l_wdt driver.
+
+Please note that series is built on top of [1].
+
+A similar approach (using directly the dev_pm_genpd_resume() function in
+rzg2l_wdt was proposed at [2]). This series was posted separatelly to
+avoid blocking the initial support for the RZ/G3S SoC.
+
+Thank you,
+Claudiu Beznea
+
+[1] https://lore.kernel.org/all/20240531065723.1085423-1-claudiu.beznea.uj@bp.renesas.com/
+[2] https://lore.kernel.org/all/20240410134044.2138310-10-claudiu.beznea.uj@bp.renesas.com/
+
+Claudiu Beznea (3):
+  pmdomain: core: Add a helper to power on the restart devices
+  watchdog: rzg2l_wdt: Keep the clocks prepared
+  watchdog: rzg2l_wdt: Power on the PM domain in rzg2l_wdt_restart()
+
+ drivers/pmdomain/core.c      | 18 +++++++++++++++
+ drivers/watchdog/rzg2l_wdt.c | 43 +++++++++++++++++++++++++++++++-----
+ include/linux/pm_domain.h    |  2 ++
+ 3 files changed, 58 insertions(+), 5 deletions(-)
+
+-- 
+2.39.2
 
 
