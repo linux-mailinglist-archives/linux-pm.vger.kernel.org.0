@@ -1,70 +1,72 @@
-Return-Path: <linux-pm+bounces-9528-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9529-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A5D990E1D9
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 05:13:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C206F90E1DB
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 05:13:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93C1D281A70
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 03:13:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47CC21F23640
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 03:13:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CE195381B;
-	Wed, 19 Jun 2024 03:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4484E558B6;
+	Wed, 19 Jun 2024 03:13:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kef1R7LX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XQWf6wcy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86FC652F7A;
-	Wed, 19 Jun 2024 03:12:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B09DE54784;
+	Wed, 19 Jun 2024 03:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718766778; cv=none; b=FO4c39N09ADx+N1GG5eh9Fc9I6UfgIPix5tfQS3egn2MnTwn4ngBnDSZIp4oIQNKkYJTz75FrDGhzqXw2JOZQ6MQGwg4yMYkkPDXXMmJcEej0OVQbNun6wmmHLgbl6srTiFVk24faA0WbaJbSSAiRLGSFDDHa0a4V/N1RysCkFY=
+	t=1718766781; cv=none; b=UOkj/0YtZQwkWaJrQoUnz4TrN5JF06yRmmC82kuklGQWv9hBeKjyOngeJ9O6g0TJ/3v0veJLIh3+1ik1A413/jCi/yFY2FuflZx4++j9UiYJ7ITVuWh+nSGuvdUE2yyBjeuXbvAfa7lf8r4EZ0VlE/lKwgZkix/KDd8pChehyW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718766778; c=relaxed/simple;
-	bh=5b3w2NPSh5iEXOcXIaes7wCdTigmUfw1L/MtSDp0Kn8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A9qWRSvJz7L5bkCFnm9w8MkpRbM0mtM6QKcZhgwAVu+J34wQGvZfspx1knTGb+rytEgPQGN0hc5g3Di1s2Bb+OmB6HxU0XLSfgdzo0CsbyG2KAsMO5Vhgtb/okUtPmnP5e6l62SZsF1u0k0McL7jz0PaBTpoAyVdONLGKRiy0TQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kef1R7LX; arc=none smtp.client-ip=209.85.216.46
+	s=arc-20240116; t=1718766781; c=relaxed/simple;
+	bh=Zq97RFD1NzD3tX8GsrLWGIfqfuyHmC1Lemr3mtU8B2I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sSQ9fCOEJ1uOXdDv6Y37RrVSjzKuu2XMmw0WP2da1VYtudw/4QfKfCa2+kSm3auBosD4XgGQWxybKgGWaSII47Nol/NqjkVQyN7wYDiJHHczxWyyO60Og90OsFhgdVd4HdKdtoJ3OIn6UfP6vTuO/vm8OOKiWieGzlTu7HA8Tjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XQWf6wcy; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2c2e31d319eso5067359a91.1;
-        Tue, 18 Jun 2024 20:12:57 -0700 (PDT)
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-681ad26f4a5so3820958a12.2;
+        Tue, 18 Jun 2024 20:12:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718766777; x=1719371577; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=PPsoxqySqMZr+7Ne3i+pedtNXjUhYm5TqfhrsG3xE/c=;
-        b=Kef1R7LXgMO96/Zx+fNIf+f+hOSIoM61feZ9h3rbdBpn0M4jCdjHpP0h5ihiH0eVs5
-         hVnXI5FhpMNkZw5f8U1eXAdhW8nGZE/aaIFxD6C9c+I1jUrmTEsU8iBuGnH6kyPQtuJM
-         1FezsqcZ69ogGXqOwEMKOjuIq0eF09o4uvbhqf/uN5syaBUTKyW14V0shTHaGUNAbk7F
-         XiOcANlUiulRidMO30W0CjUqsqPscKkJUGawF2maNk47jo8TKWtvVBTaaG2AQYbWs98v
-         U34Ansj02/rUOLAwjzFTiEzoQAzxqQNpyDtFGkJIr6Srqj+ZgFSvSu0wKqvnrIQPjjFZ
-         77LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718766777; x=1719371577;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1718766779; x=1719371579; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PPsoxqySqMZr+7Ne3i+pedtNXjUhYm5TqfhrsG3xE/c=;
-        b=TDylMgY2wg3MBHCpvehMSlbQmxKC75dhkFAywz4KvPfpSE3qQuGtXmSMC9vG9GqkR1
-         dR3eru3fu2AILozQhdykowcr6Y3Ru629IQGubLONvFqxdLPY015Z7x4RVhi11MqOANTC
-         8BCPVbfOzmTfJZKK3MRoxLHR0QepWvfiUYBSeGdBVclUlpkpGCXil9Fe5ePORVDkx+om
-         iO82lPHRlMznqdFLHXZYc6aUsvXcshtO/HXmyJEN5WoQ/m3kTP8SePf7HAjWmfg0g7la
-         uf8P/NN4loQK1X6ZMzDCH7E6f+tfUYpWKaQHEzM0eD3AnJbuqXWHHnkRFR0rMQwrJhgH
-         wG3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUOG9SicBae99xZ2KuUc0xdP2IVVMVcV70+AORPeI0H4tUEopi4FZ9CQQDAcfGvxekDyUQo/AuMdjc+mkZeTgLMDgOnSEvbaQhaqzZ3
-X-Gm-Message-State: AOJu0Yz8D8q8/UaSazP+6iHT3rpSgxqfGNnYRKwETODJMimuwrWImEi4
-	R/a32MHxEo9KjjO41gaa9J0zchMCV21I+YXw2xpSbcuPlUC+cXb8
-X-Google-Smtp-Source: AGHT+IHmz4itdOqrgumzg+a4N3BNtUk2I2Fp3b1SuO7NgdZNm1I+xvJel/jRADo/8gEgn16Jx1gu7g==
-X-Received: by 2002:a17:90a:fc92:b0:2c7:3e4c:e782 with SMTP id 98e67ed59e1d1-2c7b4e4f27cmr1759144a91.0.1718766776710;
-        Tue, 18 Jun 2024 20:12:56 -0700 (PDT)
+        bh=JosPq4a3t0Nvwb3xXfy9h1QN+lF3Y/D33Vjab98o6+4=;
+        b=XQWf6wcyw87KlfcA0mXkqkF+dP6jJwioQxmJlLVsaiGvl9WMi/bDl8Jbu3c/qzKMRl
+         q9oburpFrcJzBuDI6FQuXyRDqFlvp5ZBwjmvr7RzUanRajsQ1U4AR1o/s8QpVgxMme6G
+         8UzfLeFqqmAdnk+8Fp20EMfYYxbuCEq731IbBawgxaOnvzgUzaKc419dcagtOOfwrR4m
+         8YgUMYuz4V1MWjOjTEV5sFGyxSD8MiFXtVDGesylRoRxosPvukeS7lET+GQg5fizwZsQ
+         Dj3cW1wTzSzJLV8y5tODdVeB3o9v2BG6Co5TliYXAVp4voKsPps7+j+5d63D1dQyDpZV
+         87FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718766779; x=1719371579;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JosPq4a3t0Nvwb3xXfy9h1QN+lF3Y/D33Vjab98o6+4=;
+        b=nuAghi6d0BDsmsHoUrwzZMnTfvHciXdwLxJziE4jsO1fSTA0O6V7zJoLfDeW+Ks9P9
+         uFuPkXfdFpJ5QM9YbvUUfPM6w90Q21PPA1YYf1AAEOXSr4TwsiZHlD3x2fbScNAt0q49
+         zvvIh4Lf7Cvx9q4JufygB9LYUFp+KPQiaQJeqeHli44bOHUlbGWWUrz8qNFDZA8Xpg9V
+         zsy5FLQ358oziaXtgt+c8JpBafdsYR3UnhAV6qer/+yPDIvvlvfScaFKhdZlFll1Pj+7
+         SEr//FYs/p3GXfV/TO933vRg//XtWn4e0dhR34KlPgB9CgRtWAQAyR9+INaRfVtzMgln
+         NBUw==
+X-Forwarded-Encrypted: i=1; AJvYcCXy+/w1bPD5D46mGDNcwI2tvczpYZISSf5rppW0AfEppmqMtVLp/r7k/7YFijeH12ZndO4DM5HymNZF6aofhQXXuqErGyNykQV4oTk9
+X-Gm-Message-State: AOJu0Yw3JAH4wL3xH8awGM6EzU5M+n6ttRv8nam+hKyiJow6MAyguwDr
+	GXqXGWwhp0SfIRcp0pNfIU7CxE6E9WcqvXCvrHVSul9a9kXCzCzZ
+X-Google-Smtp-Source: AGHT+IG+fhRudi5HuFf6xkV00KsDluYeXerGoOKbcSfr4sooFI3Od7mBdTDnc6p8Qh1/V4+UQLiE1A==
+X-Received: by 2002:a05:6a21:78a3:b0:1b8:6ed5:a89 with SMTP id adf61e73a8af0-1bcbb640cb4mr1761896637.46.1718766778778;
+        Tue, 18 Jun 2024 20:12:58 -0700 (PDT)
 Received: from localhost (dhcp-141-239-159-203.hawaiiantel.net. [141.239.159.203])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c4ac192848sm13589606a91.56.2024.06.18.20.12.55
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855e72397sm104869915ad.95.2024.06.18.20.12.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jun 2024 20:12:56 -0700 (PDT)
+        Tue, 18 Jun 2024 20:12:58 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From: Tejun Heo <tj@kernel.org>
 To: rafael@kernel.org,
@@ -74,11 +76,16 @@ Cc: linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	mingo@redhat.com,
-	peterz@infradead.org
-Subject: [PATCHSET sched_ext/for-6.11] sched_ext: Integrate with schedutil
-Date: Tue, 18 Jun 2024 17:12:01 -1000
-Message-ID: <20240619031250.2936087-1-tj@kernel.org>
+	peterz@infradead.org,
+	Tejun Heo <tj@kernel.org>,
+	David Vernet <dvernet@meta.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 1/2] cpufreq_schedutil: Refactor sugov_cpu_is_busy()
+Date: Tue, 18 Jun 2024 17:12:02 -1000
+Message-ID: <20240619031250.2936087-2-tj@kernel.org>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240619031250.2936087-1-tj@kernel.org>
+References: <20240619031250.2936087-1-tj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -87,36 +94,94 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-sched_ext currently does not integrate with schedutil. When schedutil is the
-governor, frequencies are left unregulated and usually get stuck close to
-the highest performance level from running RT tasks.
+sugov_cpu_is_busy() is used to avoid decreasing performance level while the
+CPU is busy and called by sugov_update_single_freq() and
+sugov_update_single_perf(). Both callers repeat the same pattern to first
+test for uclamp and then the business. Let's refactor so that the tests
+aren't repeated.
 
-This patchset integrates sched_ext with schedutil so that the BPF scheduler
-can steer CPU frequencies when the schedutil governor is in use. The
-implementation is straightforward. sugov_get_util() is updated to add the
-BPF scheduler provided utilization metric when sched_ext is enabled.
+The new helper is named sugov_hold_freq() and tests both the uclamp
+exception and CPU business. No functional changes. This will make adding
+more exception conditions easier.
 
-This patchset is on top of sched_ext/for-6.11 (a5db7817af78 ("sched_ext: Add
-selftests")) and contains the following two patches:
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Reviewed-by: David Vernet <dvernet@meta.com>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ kernel/sched/cpufreq_schedutil.c | 38 +++++++++++++++-----------------
+ 1 file changed, 18 insertions(+), 20 deletions(-)
 
- 0001-cpufreq_schedutil-Refactor-sugov_cpu_is_busy.patch
- 0002-sched_ext-Add-cpuperf-support.patch
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index eece6244f9d2..972b7dd65af2 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -325,16 +325,27 @@ static unsigned long sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
+ }
+ 
+ #ifdef CONFIG_NO_HZ_COMMON
+-static bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu)
++static bool sugov_hold_freq(struct sugov_cpu *sg_cpu)
+ {
+-	unsigned long idle_calls = tick_nohz_get_idle_calls_cpu(sg_cpu->cpu);
+-	bool ret = idle_calls == sg_cpu->saved_idle_calls;
++	unsigned long idle_calls;
++	bool ret;
++
++	/* if capped by uclamp_max, always update to be in compliance */
++	if (uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)))
++		return false;
++
++	/*
++	 * Maintain the frequency if the CPU has not been idle recently, as
++	 * reduction is likely to be premature.
++	 */
++	idle_calls = tick_nohz_get_idle_calls_cpu(sg_cpu->cpu);
++	ret = idle_calls == sg_cpu->saved_idle_calls;
+ 
+ 	sg_cpu->saved_idle_calls = idle_calls;
+ 	return ret;
+ }
+ #else
+-static inline bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu) { return false; }
++static inline bool sugov_hold_freq(struct sugov_cpu *sg_cpu) { return false; }
+ #endif /* CONFIG_NO_HZ_COMMON */
+ 
+ /*
+@@ -382,14 +393,8 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+ 		return;
+ 
+ 	next_f = get_next_freq(sg_policy, sg_cpu->util, max_cap);
+-	/*
+-	 * Do not reduce the frequency if the CPU has not been idle
+-	 * recently, as the reduction is likely to be premature then.
+-	 *
+-	 * Except when the rq is capped by uclamp_max.
+-	 */
+-	if (!uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)) &&
+-	    sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq &&
++
++	if (sugov_hold_freq(sg_cpu) && next_f < sg_policy->next_freq &&
+ 	    !sg_policy->need_freq_update) {
+ 		next_f = sg_policy->next_freq;
+ 
+@@ -436,14 +441,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+ 	if (!sugov_update_single_common(sg_cpu, time, max_cap, flags))
+ 		return;
+ 
+-	/*
+-	 * Do not reduce the target performance level if the CPU has not been
+-	 * idle recently, as the reduction is likely to be premature then.
+-	 *
+-	 * Except when the rq is capped by uclamp_max.
+-	 */
+-	if (!uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)) &&
+-	    sugov_cpu_is_busy(sg_cpu) && sg_cpu->util < prev_util)
++	if (sugov_hold_freq(sg_cpu) && sg_cpu->util < prev_util)
+ 		sg_cpu->util = prev_util;
+ 
+ 	cpufreq_driver_adjust_perf(sg_cpu->cpu, sg_cpu->bw_min,
+-- 
+2.45.2
 
-and is also available in the following git branch:
-
- git://git.kernel.org/pub/scm/linux/kernel/git/tj/sched_ext.git scx-cpuperf
-
-diffstat follows. Thanks.
-
- kernel/sched/cpufreq_schedutil.c         |   50 +++++++++-------
- kernel/sched/ext.c                       |   83 ++++++++++++++++++++++++++
- kernel/sched/ext.h                       |    9 ++
- kernel/sched/sched.h                     |    1
- tools/sched_ext/include/scx/common.bpf.h |    3
- tools/sched_ext/scx_qmap.bpf.c           |  142 +++++++++++++++++++++++++++++++++++++++++++++-
- tools/sched_ext/scx_qmap.c               |    8 ++
- 7 files changed, 270 insertions(+), 26 deletions(-)
-
---
-tejun
 
