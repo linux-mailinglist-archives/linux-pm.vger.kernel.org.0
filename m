@@ -1,501 +1,394 @@
-Return-Path: <linux-pm+bounces-9549-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9550-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA36E90E62A
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 10:41:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 205BD90E6A9
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 11:17:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 475CE28303E
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 08:41:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F523282EF8
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 09:17:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F5987B3E5;
-	Wed, 19 Jun 2024 08:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD42380026;
+	Wed, 19 Jun 2024 09:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="C7P5+XFx"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="qBbaLOjV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2089.outbound.protection.outlook.com [40.107.96.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA61D770EF;
-	Wed, 19 Jun 2024 08:41:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718786471; cv=none; b=fGnBZbZgiFMZ4uoKTTCB9ulVRnDQoQspybY4xzl9S8z5iPOZllC8uRiiWTtNNLlbcPc2/AOS11Ult1sf/3hXrzbBz/bKCa+HOk597LeB5XA7fgyq29/5BFcBQ3/8ntgq68AqUrzd2OHuxg3ty2TGcF4NBd220Yn0ksTk6nuC580=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718786471; c=relaxed/simple;
-	bh=Tlc4o20O3Cf3fNPjxmSzEo7xyl3wYZlfqx6ME1Sq/u8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PNIQSeWhqMyIpFMIUlB6NEi8wqKmGiOA3DeIaPq2UE6DLQ/omh2azdKItE5BFIM+BiM64fpV/EJmfLfaThuleKLhnUDwjcowuM+LO0UD8QLSNRlVJhmfteiXKCE0vIgtmkZyrJ5dRJOzcYfqTDByazJ8Z3iTJLNijEcP6q4Sjs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=C7P5+XFx; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 63F8DFF808;
-	Wed, 19 Jun 2024 08:41:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1718786465;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6smco4//SLkqw6hV9ZxCBplt++bEV0FpjNrJ/tJ1nf8=;
-	b=C7P5+XFxDVwPxkDNEsUfr1h871Yj7fHVgWK1CNifSWsx9tF0D4yitNIa9o6VCW7PDIPzmZ
-	3tCc/T+weiLe8BbSBWrQBHFmH1bbBYUaH5jr8dcC5rawQbBYXPpO1UkJJ/NRceOnwBx3FV
-	38DyWclVdfrP5JXjmYuN1EE7sZFJw0VuP/bea/imnL1gMoOGWpOd0KhxmqqtDqL6ywSARl
-	8V12fQdEFO3d4i6RgIcmryAmppJqrUO3OYLjd6nTuswj/vQCVk+w/iqit3kRyRGLTINyJK
-	q2PbAjb7vGmptUeUwY2tnm5FDXxoGRRMDC8D8Z+ui6WBzH6wVLktrEQi113oqQ==
-Date: Wed, 19 Jun 2024 10:41:01 +0200
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Lucas Stach <l.stach@pengutronix.de>, Laurent Pinchart
- <laurent.pinchart@ideasonboard.com>, Marek Vasut <marex@denx.de>, Stephen
- Boyd <sboyd@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
- Chen-Yu Tsai <wens@csie.org>, linux-clk@vger.kernel.org, Ulf Hansson
- <ulf.hansson@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Kevin
- Hilman <khilman@kernel.org>, linux-pm@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, Fabio Estevam <festevam@denx.de>,
- Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>, Shawn Guo
- <shawnguo@kernel.org>, Shengjiu Wang <shengjiu.wang@nxp.com>,
- linux-imx@nxp.com, Ian Ray <ian.ray@gehealthcare.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, =?UTF-8?B?SGVydsOp?= Codina
- <herve.codina@bootlin.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>
-Subject: Re: Clocks vs. Power Domains circular dependency
-Message-ID: <20240619104101.3060b153@xps-13>
-In-Reply-To: <20240527181928.4fc6b5f0@xps-13>
-References: <20240527181928.4fc6b5f0@xps-13>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCF77F47F;
+	Wed, 19 Jun 2024 09:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.89
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718788631; cv=fail; b=LFFXnAHdTbvFK+nGDDymB87ODoDn38wnieIEiQLUtqmCtAMi+X/oAeEwLGCgnChPI0gwJUsHA+W61LK8bXnSOCanMPnRrnZNkszGkwkmP9sZv1Izg5kZpuWbpgC/0TbZG+/FTwh4/2cG5ZJ+qmmaKBO+aOkQOz8E7KZN2By0FCk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718788631; c=relaxed/simple;
+	bh=exishdh6QucRAfEMk/FHyCTpAxX8BzLTuVp6scuC5es=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JEg9Zkrd5gQodgBKh6cQea0/HN0Gce2DEtfXCn9zFvu2CwHJlOCHiuuxKX8Z5GnRP8hLfdgXBk9l9QGoqHTTSZbZrYw4M3556py5FP6TAq8ezrkTK9em4NE0vcx/xFezpHrfkPD3cooBCaOBingvmJF2fthbx5IwBi6FpY/JHHo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=qBbaLOjV; arc=fail smtp.client-ip=40.107.96.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mk90m21Mb2YZEkz6+hkcvsR8NCVGWaNL1eUHHnv2GybLyOWwH2oW2aV3gc9nzbpoF1OMGllwjC88EnBKP4uUDqyP8ehsdkKgOHur3sQR1pK4mxUaasEHlmGpTJlsuWHUnmeTNj/DZk+bOWWUFm9dLYQ2TcmpcZArWR3cxbw3/ZmEUyASjtkipC+tPgXZiIt8J4m1J+WBFyu+Q3nB2JfUvSoi3ClVlsgleO8SU+7URuilVTFiW1q6FwNFfeb/42qmFa/MgJWZMUpatjKqY2IKABn5IAEGjm5C/WKibjJBpvMf5djUg/15rAWvVdy6y+P/qJhMuOraihzYie3gfTfKUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=c7nuRVTFKKdZJNhhmQ30hbF2ocybAGwNOY5JCi63Gtw=;
+ b=AwAsz3n7i+8qvzLtlYUjMUiqNihZJcI/R0vuDe7o03ys3GrYh49rO7kLRie98mKGtwPjO3H0AVTYKe0OvfPFnyIWuauun4hDJqWmC8JZKKw9TQKDOzKfyAGmMV+fPYlWt5urZlvs2qi+Ex6voqKH/4JMg5OK77uYylPJWdvfypy+UO1BpIRiGM2nqw1MGEMvkUFaLOu5GkjDwYqnMHBDgVy3FQvz9kWuOJtug7TRQYWO1FNfYKDkwYZj+gPA7/pzl05Rcay3VUwBr8919HQC18xlh3j6VKItPbWIcKyYXodjMpsPzlqnpyCigvQDlNWSbG3N6sjB3NQY8uQ0a0poRA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c7nuRVTFKKdZJNhhmQ30hbF2ocybAGwNOY5JCi63Gtw=;
+ b=qBbaLOjVmnOzBQRHKS51hcEIpFWkSLO4WrRVNGFOVYS9bSicTXZ85Gyn3WhkEuHowri8WT7nvnn3X3hfEDWQ0wZMfJA3gugJasmMpjXYd4HNu1qv70SXyVWiOyVNoYhQogc9QwFt+goxKmKfTknUXbe9Xm1m+XHGj6UBV5pBB4c=
+Received: from MN2PR15CA0056.namprd15.prod.outlook.com (2603:10b6:208:237::25)
+ by SN7PR12MB7156.namprd12.prod.outlook.com (2603:10b6:806:2a7::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.30; Wed, 19 Jun
+ 2024 09:17:06 +0000
+Received: from BL6PEPF0001AB58.namprd02.prod.outlook.com
+ (2603:10b6:208:237:cafe::70) by MN2PR15CA0056.outlook.office365.com
+ (2603:10b6:208:237::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.32 via Frontend
+ Transport; Wed, 19 Jun 2024 09:17:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF0001AB58.mail.protection.outlook.com (10.167.241.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7677.15 via Frontend Transport; Wed, 19 Jun 2024 09:17:06 +0000
+Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Wed, 19 Jun 2024 04:16:58 -0500
+From: Perry Yuan <perry.yuan@amd.com>
+To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
+	<viresh.kumar@linaro.org>, <gautham.shenoy@amd.com>
+CC: <Xinmei.Huang@amd.com>, <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v12 0/9]  AMD Pstate Driver Core Performance Boost
+Date: Wed, 19 Jun 2024 17:16:33 +0800
+Message-ID: <cover.1718787627.git.perry.yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB58:EE_|SN7PR12MB7156:EE_
+X-MS-Office365-Filtering-Correlation-Id: f373f372-6922-4376-635a-08dc9040971a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230037|376011|36860700010|1800799021|82310400023;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?M2tmZnRtMmhMb3VLNE8xYmpjbkZHT29HTHNnZHFMS0lua1V2dlVLd1RlYmlp?=
+ =?utf-8?B?TEt0KzBrbnZROVhWNTNYc2JQTUYvL1l3OVdrNlZ2cEtlY1UwdnlhR2tlZjRp?=
+ =?utf-8?B?TkE4N0VUVmtyditQcmdtb2VORk93dUZFZ2pOY0R4bzZ1UExhQTB3c2J0N3Rj?=
+ =?utf-8?B?ajZVUWVFZEFqakorSnA1aW1sVzdjci9ySkk0WktRSWJtMXVuak1MT0xsQ25K?=
+ =?utf-8?B?YjRod1lGYVJUUXc4SVRMT0RlcUYxN1pJc21VU3ptcTBpQ3hVZ3BDbnMyVy9E?=
+ =?utf-8?B?MVU4MFh2azZWSjZVMHk1QjA2OWJybUJiWTZIS1V6WkxRUVduWGZPd05TZE1x?=
+ =?utf-8?B?S2RLOU0yZDZSUDRQZFlGMXJLR1VnQlJrSHhnTGc4MVB1aEJRZnArZUVsVnYz?=
+ =?utf-8?B?bDlMZVl4anFTNlVabFRoNi8rRUtMK2VkbytRNWQ3ekNrd3lRNnplS2VycXRK?=
+ =?utf-8?B?MGhQRGplcGVwNXRjd2tDZkJLS05EZisxcWlZdzFQK1VUdUZhU0FFdkxiSXRi?=
+ =?utf-8?B?dXhLMFRWVUt1ZzZlQ1ptYVVobW9WOU4vNjNxVXhYT0g4dFNFNXdvUkZlMnJ0?=
+ =?utf-8?B?NGRQTHRIalNKa1BCRC83NFFRZkdmc2g0czlrMnlBQmZFcnEvYXo1M1NGZFA0?=
+ =?utf-8?B?VEkwbW5aOE1mYlRXYkJSTjYwNnY0dnkxTndBYTM2NFc5dVZxTXJuTEtZcGVL?=
+ =?utf-8?B?SkQwbTVXZjc4UW5qZXZMVlRKNG1qb2twZHhGVmJsNjIycjM1TVByMmM3bHN6?=
+ =?utf-8?B?T0RPbFRkeW1XWVgwUFpCay92akRXcHBTbm4vc3c3Y014MjZiUEdlbjlSVWxI?=
+ =?utf-8?B?OGN0ODVhRk5qbThpOWxTZkVkekx3UVhHaEVMa3p6dHJkanZTcnEyKzhycm1M?=
+ =?utf-8?B?Z2RVTWw4WWVsRFNWN0MzZWNBLy9La1NnelN3RGFPK3ZvZ2NVZ1NHNjlXWlhr?=
+ =?utf-8?B?TmhZY3VRelNLdG1taEQ2U2ovTldZTUhIZ0tpMnB6cmQ5RmhySmdReFJpOEd5?=
+ =?utf-8?B?M3Y3Q2hWWUcxSVpNdnI1aGFaL2dEZWh5TjRyWXl4cWVWR0wxU3orODc4VVM4?=
+ =?utf-8?B?ZjNEeXlCUDFPYTc5VjlJK2ZrdGdKTGRZVVg5T3RTNVBSNEVYU0tvdytrbi9q?=
+ =?utf-8?B?YTU2eUQ5NHZITHJZM20wMjl2YW0vQlh1d0RFcXJoUjlrTVFKbksxay9IZENM?=
+ =?utf-8?B?bzJwbnN6Q091MFhtR2ZyUWJoTDA4MmhnMVEvZzhXZEVWYkNrYXJKT2pGTTBq?=
+ =?utf-8?B?RldIck54NzRYK3laRFhvZ2I1b2hncVhJV0VmT1cyZG1yZ3FXdU01TVJqa3lE?=
+ =?utf-8?B?bDVVUXBnK2hCRVkzLzB6QjVpd0tMS3JralJWQmJUcXloSkVvN2RRTXM3K0Fw?=
+ =?utf-8?B?TFI3ZXFYeTVqa3RhcU1HWTdMWldvUGx1OXd1L1JQVWtWR21iVW54b2htMmxZ?=
+ =?utf-8?B?RDFQbk1GcUJSM3RFRHo2K0lBTUNoZnQxSVluVHBMdnZZcXBhSVpSa2NJemZI?=
+ =?utf-8?B?Q0NUTjRXK09QTElHSXFmclZVRnhlVU85TXF4Z1NVMUsvZWJDQzFKaEdwdjg2?=
+ =?utf-8?B?dXovZy9FbjZvQlo4bGIzdUZhMzB4bE0vZmFPRDY0UmIwdkVlVmJ1WlM4TE5u?=
+ =?utf-8?B?b2w1cjlYd0l1NjdWcHo0S2NHSWYwdDBDV2k2TUcxRm9iVEdMV3ZTNDQ3YnRE?=
+ =?utf-8?B?eWwvcVhVd3VnNFBNR09jQUpyNmNVbDhuVUpFc2hSNmp3TFZQdVkrbUQ5KzQ3?=
+ =?utf-8?B?QmxMa0lUQXZUMFYrWElvSy9hUzc0ekhyVnZDV0h0RHFxY0tlVisrdHZTbk55?=
+ =?utf-8?Q?/XWHLnMzo1XZ9bQ/jLahkaOTsKWTun5N2Yblk=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230037)(376011)(36860700010)(1800799021)(82310400023);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2024 09:17:06.6069
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f373f372-6922-4376-635a-08dc9040971a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB58.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7156
 
-Hello,
+Hi all,
 
-miquel.raynal@bootlin.com wrote on Mon, 27 May 2024 18:19:28 +0200:
+This patch series implements the Core Performance Boost (CPB) feature for
+the AMD pstate driver, including support for passive, guided, and active modes.
 
-> Hello all,
->=20
-> I would like to re-open the clocks vs. runtime PM/power domains topic
-> that is currently still problematic on i.MX8. I am mentioning a
-> specific SoC here but the problem is hardware agnostic and any SoC with
-> a sufficiently advanced power scheme may suffer from the same issues.
-> When (mainline) Linux is running, we get lockdep warnings because of
-> circular dependencies between the clock and power domain subsystems, as
-> well as real deadlocks.
->=20
-> I don't have the full history but here is an interesting attempt at
-> fixing this by Marek end of 2022:
-> https://lore.kernel.org/all/Y1cs++TV2GCuh4tS@pendragon.ideasonboard.com/
-> And here is an interesting discussion that happened on the mailing list
-> following a second attempt from Marek as well:
-> https://patchwork.kernel.org/project/linux-pm/patch/20221108013517.749665=
--1-marex@denx.de
->=20
-> Looking more closely at this problem, there is indeed a software design
-> issue. Both the clock and power domain subsystems are recursive and
-> interdependent, the power domain subsystem being sometimes accessed
-> through runtime PM calls.
->=20
-> [TLDR: I'm drafting something, but issue #4 at the bottom is blocking]
+Users can change the global core frequency boost control with a new sysfs entry:
 
-I understand getting involved in this thread is a bit tiresome :-), I'd
-really like to get some feedback from the interested parties, even if
-the feedback is not on the technical part, if this issue could get a
-bit of support it would already be a plus.
+/sys/devices/system/cpu/amd_pstate/cpb_boost
 
-Also, I am really annoyed by the issue mentioned below, in case someone
-wants^W has the willingness to look into it. In any case I might try
-to go further myself.
+It also supports updating the individual CPU boost state in the sysfs boost file:
 
-Thanks!
-Miqu=C3=A8l
+/sys/devices/system/cpu/cpuX/cpufreq/boost
 
-(keeping the context below, just in case)
+By default, the global control will override the individual CPU boost state.
 
-> ** THE ISSUE: FROM A CLOCK PERSPECTIVE **
->=20
-> Clock changes (not only clk_prepare(), but getting/setting the rates as
-> well, re-parenting and so on) involve runtime resuming part of the clock
-> tree. Eg. registers for accessing/configuring a clock might be in a
-> power domain that must be resumed.
->=20
-> Also, the clk subsystem is mostly written using recursivity, so for
-> instance preparing a clock works like this:
->=20
-> /*
->  * Same applies to the other clk consumer calls, but instead of going
->  * through the parents, other parts of the clk tree are accessed (the
->  * children subtree, the new parent tree, or both). So the prepare
->  * situation is one of the simplest in this regard, but the following
->  * basically applies to most consumer operations.
->  */
-> clk_prepare(clk) {
-> 	clk_prepare(clk->parent);
-> 	runtime_resume(clk->domain);
-> 	clk->ops->prepare();
-> }
->=20
-> Now if we add another level of complexity, accesses to the clock tree
-> are serialized by the clk_prepare mutex, and runtime PM calls are also
-> protected by a global genpd lock:
->=20
-> clk_prepare(clk) {
-> 	mutex_lock(clk_prepare);
-> 	clk_prepare(clk->parent); /* clk_prepare is reentrant, so this is "fine"=
- */
-> 	runtime_resume(clk->domain);
-> 	clk->ops->prepare();
-> 	mutex_unlock(clk_prepare);
-> }
->=20
-> runtime_resume(domain) {
-> 	mutex_lock(genpd);
-> 	domain->ops->resume();
-> 	mutex_unlock(genpd);
-> }
->=20
-> If we list the locking events in order, we will:
-> - acquire the clk lock
-> - acquire the genPD lock
-> - release the genPD lock
-> - release the clk lock
->=20
-> ** THE ISSUE: FROM A POWER DOMAIN PERSPECTIVE **
->=20
-> Now let's see the other side, from the power domain perspective. We can
-> imagine several situations where these locks are acquired in the reverse
-> order. From a hardware standpoint there is a prerequisite (met in the
-> i.MX8 in several places): a power domain is fed by a clock, hence
-> enabling the power domain also implies enabling the feeding clock.
->=20
->     #1: Probing/enabling peripherals involve attaching and powering up
->     their power domain. If the power domain is fed by a clock the power
->     domain implementation will request clock changes.
->=20
->     #2: Suspending devices happens asynchronously in a
->     worker. Suspending a device implies turning off its power domain,
->     and hence possibly reaching some clock internals as well.
->=20
-> In these cases we will play with locks in this order:
-> - acquire the genPD lock
-> - acquire the clk lock
-> - release the clk lock
-> - release the genPD lock
->=20
-> Here are two typical examples: power domains playing with upstream
-> clocks:
-> https://elixir.bootlin.com/linux/latest/source/drivers/pmdomain/imx/imx8m=
-p-blk-ctrl.c#L538
-> https://elixir.bootlin.com/linux/latest/source/drivers/pmdomain/imx/gpcv2=
-.c#L340
->=20
-> ** CURRENT UNDERSTANDING **
->=20
-> Clock changes and runtime PM calls can happen at any moment and if your
-> hardware is in a bad mood a dead lock *will* occur. I myself only
-> experienced deadlocks involving the clock worker disabling unused clocks
-> at the end of the boot, but chances are way too high that systems will
-> lock up at some point in production environment because of this circular
-> dependency between the clock and power domain locks. It is possible to
-> avoid the deadlock I experienced by disabling the clk_disable_unused
-> worker and keeping all clocks enabled, but we will all agree that this
-> is a very sub-optimal and extremely unsatisfying solution for a SoC
-> explicitly designed for optimized power consumptions.
->=20
-> There is no magic, we must dismangle the situation and prevent either
-> one lock ordering or the other from happening. So we should ask
-> ourselves: what lock order seems the most legitimate?
->=20
->     #1: Do clocks really depend on power domains?
->=20
->     -> Clock controllers may be part of a power domain, hence the power =
-=20
->     domain must be enabled in order to access the clock controller
->     registers.
->=20
->     -> Same applies if a clock is generated by an external device =20
->     (eg. an audio codec) and this codec is accessible through a serial
->     bus: the bus controller must be resumed in order to configure the
->     code, and the bus controller may be in its own power domain.
->=20
->     #2: Do power domains really depend on clocks?
->=20
->     -> Somehow yes. Most power domains are not explicitly "driven" by =20
->     the upstream clocks described in device trees, ie: keeping these
->     clocks gated does not prevent the use nor the access to the power
->     domains per-se. However, the power domains may redistribute the
->     clocks to the peripherals inside and somehow becoe themselves clock
->     controllers (even though so far they are not flagged like that in
->     any DTS). Hence it appears legitimate that they might want to play
->     with the clock API.
->=20
->     DTSI example:
->     https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/fr=
-eescale/imx8mp.dtsi#L1799
->=20
->     TRM extract:
->=20
->       13.2.1 Overview
->       The MEDIAMIX domain contains control and status registers known as
->       Media Block Control (MEDIA BLK_CTRL). These registers have
->       miscellaneous top-level controls for peripherals within the MEDIAMIX
->       domain. Some of these controls includes clocking, [...]
->=20
->       13.2.2: Clocks and Resets
->       The Media BLK_CTRL contains clock distribution and gating controls,
->       as well as reset handling to several of the MEDIAMIX peripherals.
->=20
->     -> One specificity of the i.MX8 is that many power domains are =20
->     also described with a "clocks" property which list clocks that are
->     directly connected to the peripherals inside the power domain
->     instead. The reason for this inaccurate description is: toggling a
->     power domain on or off seems to involve propagating reset signals,
->     which only happens correctly if a few specific clocks feeding the
->     targeted peripherals are actually running. Then, as part of the
->     on/off sequence, it is required that these clocks get enabled (and
->     then disabled) earlier than in their respective probe functions,
->     see:
->     - ae1d2add26a4 ("soc: imx: gpcv2: handle reset clocks")
->     - https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/=
-freescale/imx8mp.dtsi#L795
->     - https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/=
-freescale/imx8mp.dtsi#L857
->=20
-> It is hard to tell, without more details from NXP, how difficult it
-> would be to switch from the #2 "wrong" power domain DTS description to
-> something more accurate and still get the proper init sequence. Although
-> maybe doing that would not be very relevant as there are anyway real
-> clock dependencies from some power domains, as expressed in the SoC
-> manual quoted above.
->=20
-> #1 however, despite being a physical constraint, seems also tightly
-> related to the software design: runtime PM calls were introduced in the
-> clock subsystem initially for two reasons:
-> - The clock is itself in an area of the SoC that needs to be powered on
->   before accessing its registers.
-> - The above situation also applies to all the possible parents of the
->   clock.
-> See: 9a34b45397e5 ("clk: Add support for runtime PM")
-> https://lore.kernel.org/all/1503302703-13801-2-git-send-email-m.szyprowsk=
-i@samsung.com
-> The clock core being highly recursive, it was way easier (and also
-> probably cleaner) to include nested runtime PM calls like this. But in
-> practice, we could imagine moving the resume path outside of the clock
-> lock and avoid "by software" the conditions under which the two locks
-> are taken.
->=20
-> Note: These suggestions have already been made by Ulf:
-> https://patchwork.kernel.org/project/linux-pm/patch/20221108013517.749665=
--1-marex@denx.de/#25092554
->=20
-> ** APPROACH UNDER EVALUATION **
->=20
-> As hinted above, maybe we should clarify the conditions under which RPM
-> calls can be made in the clock subsystem, and instead of including the
-> RPM calls within the clock sub-calls, we could consider, on a
-> case-by-case basis:
-> - listing what needs to be resumed for the whole clock operation to
->   succeed first,
-> - then runtime resume the needed domains outside of the main subsystem
->   lock
-> - before continuing with the clock operations and eventually acquiring
->   the main clk_prepare lock.
-> IOW, avoiding the runtime PM calls with the subsystem lock acquired.
->=20
-> Let's imagine the following situation: clkA (in power domain A) is
-> parent of clkB (in power domain B). Like above, let's try to picture the
-> call stack:
->=20
->  clk_prepare(clkB) {
->  	mutex_lock(clk_prepare);
->  	clkA =3D clkB->parent;
->  	clk_prepare(clkA) {
->  		mutex_lock(clk_prepare); /* fine, it's recursive */
->  		runtime_resume(clkA->domain); // BANG
->  		clkA->ops->prepare();
->  		mutex_unlock(clk_prepare); /* does nothing */
->  	}
->  	runtime_resume(clkB->domain); // BANG again
->  	clkB->ops->prepare();
->  	mutex_unlock(clk_prepare);
->  }
->=20
-> Now, let's imagine we know what clocks are going to be accessed and thus
-> need to be runtime resumed. Maybe we could do that in advance. The logic
-> could become:
->=20
->  clk_prepare(clkB) {
-> +	list =3D list_useful_clocks_for_prepare(clkB);
-> +	runtime_resume(list);
->  	mutex_lock(clk_prepare);
->  	clkA =3D clkB->parent;
->  	clk_prepare(clkA) {
->  		mutex_lock(clk_prepare); /* fine, it's recursive */
-> -		runtime_resume(clkA->domain);
->  		clkA->ops->prepare();
->  		mutex_unlock(clk_prepare); /* does nothing */
->  	}
-> -	runtime_resume(clkB->domain);
->  	clkB->ops->prepare();
->  	mutex_unlock(clk_prepare);
->  }
->=20
-> In the above example, the "list_useful_clocks_for_prepare()" is a bit
-> mysterious and has two aspects: first it needs to guess what clocks are
-> needed: this is addressed in the next paragraph. And second, we need to
-> make sure the tree does not change until the lock is acquired, this is
-> addressed in the "#1: Clock tree changes" chapter below.
->=20
-> So, regarding the list itself, any operation on any clock in the tree
-> involves the said clock plus one or several clock "lists" among the
-> following choices:
->=20
-> A- All its parents, through the clk_core->parent link.
->    =3D> Typically during prepare/unprepare operations. =20
->=20
-> B- All its children and sub children, through all the sub
->    clk_core->children hlist.
->    =3D> Typically during rate operations (get and set, see note below). =
-=20
->=20
-> C- Parents and children of the new parent.
->    =3D> In case of re-parenting, explicitly asked or as a result of a rat=
-e =20
->    change.
->=20
-> Side note: the clock core does not always remember the rate of the
-> clocks that were already configured. TBH I did not understand why,
-> because it seems trivial to do. Instead the core physically accesses the
-> clock controller which involves a lot of runtime PM handling. In
-> practice, this is not always the case but some clock controller drivers
-> request to be "asked" to read the actual rate each time. Problem is,
-> they re-calculate the rate and then also propagate the result across all
-> the children, which involves massive amounts of (IMHO) useless
-> wake-ups. This honestly feels a bit sub-optimal, without understanding
-> better why this is for.
->=20
-> ** DRAWBACKS OF THIS APPROACH **
->=20
-> #1: Clock tree changes
->=20
-> Of course there was a point in making the runtime resume calls inside
-> the clk_prepare lock: the lock protects against clk tree changes. But
-> somehow this is still manageable, we could:
-> - acquire the lock
-> - parse the list of relevant clocks/reference counting them and save
->   them in a list
-> - release the lock
-> - runtime resume the clocks in the list
-> - acquire the lock again
-> - compare the actual tree with the list and try again the whole
->   operation if something changed.
->=20
-> Estimated status: manageable.
->=20
-> #2: Re-Parenting
->=20
-> When performing almost any clock operation, we already know in advance
-> what clocks in the tree will be impacted and thus can precisely guess
-> what needs to be runtime resumed in advance. But this is not working
-> when re-parenting is involved, as the re-parenting opportunity is only
-> tried very deeply in the call stack far beyond acquiring the main lock.
->=20
-> One idea to workaround the situation was to somehow save the new parent
-> handle, propagate a specific error up through the call stack (typically,
-> -EAGAIN), up to the point where we can process this error, perform a new
-> round of runtime resume calls over the new parent tree and retry the
-> operation.
->=20
-> Estimated status: manageable.
->=20
-> #3: Debug dumps might slightly get out of sync
->=20
-> There are a couple of situations where all the clocks (or all the orphan
-> clocks, or the root clocks) will be "shown/dumped" by the user. Problem
-> is: it is fine to show all the parents/children of a single clock
-> (typically all the children of one root clock), but involve a lot of
-> code duplication to cover eg. all the root clocks at the same time. If
-> we decide that this is okay, we can iterate over these root clocks,
-> releasing the lock between them, which is obviously racy.
->=20
-> Estimated status: probably manageable, maybe not so important.
->=20
-> #4: Clock core recursivity and unrelated clocks
->=20
-> This is the main drawback with this approach, and that is what
-> motivated this letter in the first place.
->=20
-> The clock core is recursive. At first I thought it was useful to
-> simplify the locking mechanism inside the core itself, in particular
-> because the core is mainly built off recursive functions, but there are
-> two actual use cases that are much harder to solve. They are mentioned
-> in the commit introducing the reentrance mechanism:
-> 533ddeb1e86f ("clk: allow reentrant calls into the clk framework")
->=20
-> Basically, besides simplifying the locking mechanism in the core itself:
->=20
-> A: Enabling a clock may require enabling a "totally unrelated" peripheral
->    first. Typically, an I2C audio codec that would need to be configured
->    in order to produce a clock. In the ->prepare() hook implementation,
->    one can expect some kind of i2c_xfer() call, which in turns will
->    runtime resume the I2C controller used to access the codec. So we end
->    up acquiring again the power domain lock with the clk_prepare lock
->    taken.
->=20
-> B: There is one clock driver (tegra/clk-dfll.c) which performs pinctrl
->    changes inside clock operations. If the platform is runtime PM
->    enabled, the pin controller may require being runtime resumed and
->    once again we might fall into the same recursivity issue.
->=20
-> I don't see any positive outcome in trying to guess nor discover these
-> cases dynamically and if we want to address that I believe some kind of
-> static declarations must be done by the clock controller drivers (and
-> trying to do that now will inevitably lead to regressions if we miss
-> a single case).
->=20
-> Estimated status: problematic.
->=20
-> ** CONCLUSION AND QUESTIONS **
->=20
-> I've actually drafted the idea explained above. I need more work to get
-> it up to a working state, as the whole clock core must be converted
-> to this logic in order for it to work. I believe this approach is
-> relevant, but it still has blind spots we need to figure out (#4 above)
-> for which I would like to get some feedback.
->=20
-> Maybe however the approach will not be acknowledged and another
-> direction will be pointed. In this case I would be pleased to discuss it
-> and see what we can do. In all cases, the i.MX8 issue is real and must
-> be fixed. If we don't do it properly, soon another power-oriented SoC
-> will also show similar defects. Basically any Linux based operating
-> system running on hardware featuring similarities is subject to deadlock
-> at any moment.
->=20
-> I hope this report will be precise enough and raise ideas to help going
-> forward and finally address this issue that has been opened since
-> 2022 (at least) in a rather satisfying way.
->=20
-> Thanks,
-> Miqu=C3=A8l
->=20
-> PS: There are maybe other ways. Of course I had to pick the one that
-> felt the more promising, even though I initially considered a couple
-> other alternatives:
-> * Addressing the issue in the power domain subsystem ? Seemed less
->   relevant than in the clock core, because of the physical
->   dependencies. But please convince me :-)
-> * I saw comments about changing the clk_prepare lock semantics, but we
->   will always need to serialize accessed to the clock tree and after
->   digging a bit in the clock core I don't see any way out with this
->   solution.
-> * Preventing power domains from gathering clocks? Also a possible
->   approach maybe, even though the situation listed above are far from
->   straightforward to address in this case.
+1) disable core boost globally:
+$ sudo bash -c "echo 0 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
+$ lscpu -ae
+CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ      MHZ
+  0    0      0    0 0:0:0:0          yes 4201.0000 400.0000 2983.578
+  1    0      0    1 1:1:1:0          yes 4201.0000 400.0000 2983.578
+  2    0      0    2 2:2:2:0          yes 4201.0000 400.0000 2583.855
+  3    0      0    3 3:3:3:0          yes 4201.0000 400.0000 2983.578
+  4    0      0    4 4:4:4:0          yes 4201.0000 400.0000 2983.578
+
+2) enable core boost globally:
+$ sudo bash -c "echo 1 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
+$ lscpu -ae
+   0    0      0    0 0:0:0:0          yes 5759.0000 400.0000 2983.578
+  1    0      0    1 1:1:1:0          yes 5759.0000 400.0000 2983.578
+  2    0      0    2 2:2:2:0          yes 5759.0000 400.0000 2983.578
+  3    0      0    3 3:3:3:0          yes 5759.0000 400.0000 2983.578
+  4    0      0    4 4:4:4:0          yes 5759.0000 400.0000 2983.578
+
+
+============================================================================
+The V9 patches add per CPU boost control, user can enable/disable CPUs boost
+as the below command tested on a laptop system.
+# before
+  CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
+  0    0      0    0 0:0:0:0          yes 4208.0000 400.0000 1666.7740
+  1    0      0    0 0:0:0:0          yes 4208.0000 400.0000  400.0000
+  2    0      0    1 1:1:1:0          yes 4208.0000 400.0000 3386.1260
+  3    0      0    1 1:1:1:0          yes 4208.0000 400.0000  400.0000
+$ sudo rdmsr 0xc00102b3 -p 0
+10a6
+
+$ sudo bash -c "echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/boost"
+# after
+  CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
+    0    0      0    0 0:0:0:0          yes 3501.0000 400.0000  400.0000
+    1    0      0    0 0:0:0:0          yes 4208.0000 400.0000 1391.0690
+    2    0      0    1 1:1:1:0          yes 4208.0000 400.0000 3654.4541
+    3    0      0    1 1:1:1:0          yes 4208.0000 400.0000  400.0000
+$ sudo rdmsr 0xc00102b3 -p 0
+108a
+
+rebasd to keep syncing to Mario kernel tree: bleeding-edge
+https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git 
+
+Tested result:
+
+CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
+  0    0      0    0 0:0:0:0          yes 4354.0000 400.0000 1110.7140
+  1    0      0    0 0:0:0:0          yes 4354.0000 400.0000 1110.7140
+  2    0      0    1 1:1:1:0          yes 4354.0000 400.0000 1110.7140
+  3    0      0    1 1:1:1:0          yes 4354.0000 400.0000 3110.0000
+  4    0      0    2 2:2:2:0          yes 4354.0000 400.0000 2732.3569
+  5    0      0    2 2:2:2:0          yes 4354.0000 400.0000 1110.7140
+  6    0      0    3 3:3:3:0          yes 4354.0000 400.0000 1110.7140
+  7    0      0    3 3:3:3:0          yes 4354.0000 400.0000 1110.7140
+  8    0      0    4 4:4:4:0          yes 4354.0000 400.0000 2312.2109
+  9    0      0    4 4:4:4:0          yes 4354.0000 400.0000 1110.7140
+ 10    0      0    5 5:5:5:0          yes 4354.0000 400.0000 2310.1011
+ 11    0      0    5 5:5:5:0          yes 4354.0000 400.0000 1110.7140
+
+sudo bash -c "echo 0 > /sys/devices/system/cpu/cpu11/cpufreq/boost"
+sudo bash -c "echo 0 > /sys/devices/system/cpu/cpu10/cpufreq/boost"
+sudo bash -c "echo 0 > /sys/devices/system/cpu/cpu9/cpufreq/boost"
+
+CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
+  0    0      0    0 0:0:0:0          yes 4354.0000 400.0000 1242.7240
+  1    0      0    0 0:0:0:0          yes 4354.0000 400.0000 1110.7140
+  2    0      0    1 1:1:1:0          yes 4354.0000 400.0000 2754.5710
+  3    0      0    1 1:1:1:0          yes 4354.0000 400.0000 2659.8159
+  4    0      0    2 2:2:2:0          yes 4354.0000 400.0000 2308.9929
+  5    0      0    2 2:2:2:0          yes 4354.0000 400.0000 1110.7140
+  6    0      0    3 3:3:3:0          yes 4354.0000 400.0000 1110.7140
+  7    0      0    3 3:3:3:0          yes 4354.0000 400.0000 1110.7140
+  8    0      0    4 4:4:4:0          yes 4354.0000 400.0000 1110.7140
+  9    0      0    4 4:4:4:0          yes 2801.0000 400.0000 1110.7140
+ 10    0      0    5 5:5:5:0          yes 2801.0000 400.0000 1110.7140
+ 11    0      0    5 5:5:5:0          yes 2801.0000 400.0000 1110.7140
+
+sudo bash -c "echo 0 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
+
+CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
+  0    0      0    0 0:0:0:0          yes 2801.0000 400.0000 1233.8630
+  1    0      0    0 0:0:0:0          yes 2801.0000 400.0000 1110.7140
+  2    0      0    1 1:1:1:0          yes 2801.0000 400.0000 2714.4851
+  3    0      0    1 1:1:1:0          yes 2801.0000 400.0000 2732.3569
+  4    0      0    2 2:2:2:0          yes 2801.0000 400.0000 2564.2639
+  5    0      0    2 2:2:2:0          yes 2801.0000 400.0000 1110.7140
+  6    0      0    3 3:3:3:0          yes 2801.0000 400.0000 2732.3569
+  7    0      0    3 3:3:3:0          yes 2801.0000 400.0000 1110.7140
+  8    0      0    4 4:4:4:0          yes 2801.0000 400.0000 1233.8660
+  9    0      0    4 4:4:4:0          yes 2801.0000 400.0000 1110.7140
+ 10    0      0    5 5:5:5:0          yes 2801.0000 400.0000 1233.6630
+ 11    0      0    5 5:5:5:0          yes 2801.0000 400.0000 1233.5050
+
+sudo bash -c "echo 1 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
+
+CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
+  0    0      0    0 0:0:0:0          yes 4354.0000 400.0000 1234.0200
+  1    0      0    0 0:0:0:0          yes 4354.0000 400.0000 1110.7140
+  2    0      0    1 1:1:1:0          yes 4354.0000 400.0000 1110.7140
+  3    0      0    1 1:1:1:0          yes 4354.0000 400.0000 1110.7140
+  4    0      0    2 2:2:2:0          yes 4354.0000 400.0000 1110.7140
+  5    0      0    2 2:2:2:0          yes 4354.0000 400.0000 1110.7140
+  6    0      0    3 3:3:3:0          yes 4354.0000 400.0000 2278.8491
+  7    0      0    3 3:3:3:0          yes 4354.0000 400.0000 2732.3569
+  8    0      0    4 4:4:4:0          yes 4354.0000 400.0000 1110.7140
+  9    0      0    4 4:4:4:0          yes 4354.0000 400.0000 1110.7140
+ 10    0      0    5 5:5:5:0          yes 4354.0000 400.0000 2353.0449
+ 11    0      0    5 5:5:5:0          yes 4354.0000 400.0000 1110.7140
+
+
+Perry.
+
+Changes from v11:
+ * add “goto out_free_policy" for error handling and update error 
+   mesasge for init_boost in cpufreq.c (Mario)
+ * drop dead code policy check in amd_pstate_cpu_boost_update (Mario)
+ * pick RB flags and Ack flags from Mario
+ * rebased to Mario bleeding edge kerne branch
+
+Changes from v10:
+ * rework the boost interface with cpufreq core boost control, align the sysfs file 
+  created from cpufreq.c and allow indivial CPU boost control (Mario)
+ * fix the pr_warn code format with %zd (Oleksandr Natalenko)
+ * replace sscanf with kstrtobool for cpufreq.c (new)
+ * drop the boost sysfs file creation from amd pstate patch #6
+ * add init_boost for cpufreq.c to unify the boost file creation(Mario)
+ * add set_boost callback for EPP driver mode
+ * fix syncronization issue for indivial boost control and global CPB control, now the
+   two control way will keep syncronization after anyone CPU boost state changed.
+ * rebased to Mario kernel tree: bleeding-edge
+ * run testing on local system, no regression issue found so far.
+
+Changes from v9:
+ * change per CPU boost sysfs file name to `boost` (Mario)
+ * rebased to latest linux-pm/bleeding-edge
+
+Changes from v8:
+ * pick RB flag for patch 4 (Mario)
+ * change boot_cpu_has to cpu_feature_enabled for patch 2 (Boris)
+ * merge patch 6 into patch 3 (Mario)
+ * add two patch for per CPU boost control patch 6 & 7(Mario)
+ * rebased to latest linux-pm/bleeding-edge
+
+Changes from v7:
+ * fix the mutext locking issue in the sysfs file update(Ray, Mario)
+ * pick ack flag from Ray
+ * use X86_FEATURE_CPB to verify the CPB function in Patch #2(Ray)
+ * rerun the testing to check function works well
+ * rebased to linux-pm/bleeding-edge latest
+
+Changes from v6:
+ * reword patch 2 commit log (Gautham)
+ * update cover letter description(Gautham)
+ * rebase to kernel v6.9-rc5
+
+Changes from v4:
+ * drop the legacy boost remove patch, let us keep the legacy interface
+   in case some applications break.
+ * rebase to linux-pm/bleeding-edge branch
+ * rework the patchset base on [PATCH v8 0/8] AMD Pstate Fixes And
+   Enhancements which has some intial work done there.
+
+Changes from v4:
+ * move MSR_K7_HWCR_CPB_DIS_BIT into msr-index.h
+ * pick RB flag from Gautham R. Shenoy
+ * add Cc Oleksandr Natalenko <oleksandr@natalenko.name>
+ * rebase to latest linux-pm/bleeding-edge branch
+ * rebase the patch set on top of [PATCH v7 0/6] AMD Pstate Fixes And Enhancements
+ * update  [PATCH v7 2/6] to use MSR_K7_HWCR_CPB_DIS_BIT
+
+Changes from v3:
+ * rebased to linux-pm/bleeding-edge v6.8
+ * rename global to amd_pstate_global_params(Oleksandr Natalenko)
+ * remove comments for boot_supported in amd_pstate.h
+ * fix the compiler warning for amd-pstate-ut.ko
+ * use for_each_online_cpu in cpb_boost_store which fix the null pointer
+   error during testing
+ * fix the max frequency value to be KHz when cpb boost disabled(Gautham R. Shenoy)
+
+Changes from v2:
+ * move global struct to amd-pstate.h
+ * fix the amd-pstate-ut with new cpb control interface
+
+Changes from v1:
+ * drop suspend/resume fix patch 6/7 because of the fix should be in
+   another fix series instead of CPB feature
+ * move the set_boost remove patch to the last(Mario)
+ * Fix commit info with "Closes:" (Mario)
+ * simplified global.cpb_supported initialization(Mario)
+ * Add guide mode support for CPB control
+ * Fixed some Doc typos and add guide mode info to Doc as well.
+
+v1: https://lore.kernel.org/all/cover.1706255676.git.perry.yuan@amd.com/
+v2: https://lore.kernel.org/lkml/cover.1707047943.git.perry.yuan@amd.com/
+v3: https://lore.kernel.org/lkml/cover.1707297581.git.perry.yuan@amd.com/
+v4: https://lore.kernel.org/lkml/cover.1710322310.git.perry.yuan@amd.com/
+v5: https://lore.kernel.org/lkml/cover.1710473712.git.perry.yuan@amd.com/
+v6: https://lore.kernel.org/lkml/cover.1710754236.git.perry.yuan@amd.com/
+v7: https://lore.kernel.org/lkml/cover.1713861200.git.perry.yuan@amd.com/
+v8: https://lore.kernel.org/lkml/cover.1714112854.git.perry.yuan@amd.com/
+v9: https://lore.kernel.org/lkml/cover.1714989803.git.perry.yuan@amd.com/
+v10: https://lore.kernel.org/lkml/cover.1715152592.git.perry.yuan@amd.com/
+v11: https://lore.kernel.org/lkml/cover.1718262992.git.perry.yuan@amd.com/
+
+Perry Yuan (9):
+  cpufreq: acpi: move MSR_K7_HWCR_CPB_DIS_BIT into msr-index.h
+  cpufreq: simplify boolean parsing with kstrtobool in store function
+  cpufreq: introduce init_boost callback to initialize boost state for
+    pstate drivers
+  cpufreq: amd-pstate: initialize new core precision boost state
+  cpufreq: amd-pstate: implement cpb_boost sysfs entry for boost control
+  cpufreq: amd-pstate: Add set_boost callback for active mode
+  cpufreq: amd-pstate: fix the MSR highest perf will be reset issue
+    while cpb boost off
+  Documentation: cpufreq: amd-pstate: introduce the new cpu boost
+    control method
+  Documentation: cpufreq: amd-pstate: update doc for Per CPU boost
+    control method
+
+ Documentation/admin-guide/pm/amd-pstate.rst |  30 +++
+ arch/x86/include/asm/msr-index.h            |   2 +
+ drivers/cpufreq/acpi-cpufreq.c              |   2 -
+ drivers/cpufreq/amd-pstate-ut.c             |   2 +-
+ drivers/cpufreq/amd-pstate.c                | 192 +++++++++++++++++---
+ drivers/cpufreq/amd-pstate.h                |  14 ++
+ drivers/cpufreq/cpufreq.c                   |  24 ++-
+ include/linux/cpufreq.h                     |   2 +
+ 8 files changed, 233 insertions(+), 35 deletions(-)
+
+-- 
+2.34.1
 
 
