@@ -1,138 +1,144 @@
-Return-Path: <linux-pm+bounces-9543-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9544-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C63F390E3B3
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 08:47:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B42090E40D
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 09:10:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CD3A281A82
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 06:47:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14D5C285EB0
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 07:10:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6595B50280;
-	Wed, 19 Jun 2024 06:47:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9E474C08;
+	Wed, 19 Jun 2024 07:10:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iyyKF8IV"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KiuYjfU7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C8528EC;
-	Wed, 19 Jun 2024 06:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17D86139;
+	Wed, 19 Jun 2024 07:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718779636; cv=none; b=QJrWbdDP9mVrehPqZEjHLJrH6EXOchCczGgTnzclkwCC+5+1H7FyCz1i1oKEfkJHL4WWmyh9/55J5iarqqPbDkJDPGikPtVmgjb57UakR+Ta8xD/BztMPStpABziasIdd4bZGY9s5MfVUB1V2WtMcm71pw31rOMqlphVqIyJOe4=
+	t=1718781012; cv=none; b=UVDwrvW1jblPpgTgjWh+yLf+pXV5ss48LWUKZ9KHAEzyniZ1+Dv/ncSMx5R6VcGktippxbauten11MywGx9T0C6vgcodYarlBc+YDwhLlVlwV+1lBO4eWVaEBUL7adYs/VDLPNwf6Oq+YxKosJDYnaQtsDPEKuCuPnO8Fqhuyrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718779636; c=relaxed/simple;
-	bh=srGKh864x2DbhNTZC/7EyS4gUrjxJEbH7eiBgmhttPc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ptQnxuf7sZWIIFw4UGPFM+f3lbss4a42pGDt3Oiwu88U8+eb+6IAXSfErvxJyv9myoOwD5J5FaNByZWJzb5YndfdVxeRuqY1CdG+GWqyas0gMdnx3SoyIwhS/Rgk/jH+sIY3HN7p11pGAwNwYlaucJPuL84doHqNZ4jm3ex0C8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iyyKF8IV; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-42179dafd6bso3298025e9.0;
-        Tue, 18 Jun 2024 23:47:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718779633; x=1719384433; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8UU+lzhirtRVNhqfxK6sGBVX/W9FQtnxUGD6uQcT/9s=;
-        b=iyyKF8IVAgMiUhW8e8W+hpn1faJdTuslUAckUapDy1/u+Zx/yabSEpVQTfMVCbFCdL
-         Oe+kcn+kPyagJL6mjOAMFBc/ikCf41jG7pf41/Zv8drFxoFse58oZPwC/vuccqbC3uTC
-         O85Ip6h+y8FtaYjWHdH4c5ztk995sBOV5daz6KxU9GJuA+uKFrcVuVtKmX/lWQhOwORQ
-         r+RgJZrqpY8wYqrU8TV+Cys6I4wf7U5vk3aDA4p5zJP3iF6vC1VT2dV6kVOTtJEigpd1
-         b7U9GdOzUIRdmehx14Ni/9Epk3Q6i9jpebyN5gSsKePtsOuNkZv0OJvuRFrk0XZvi1O+
-         yhZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718779633; x=1719384433;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8UU+lzhirtRVNhqfxK6sGBVX/W9FQtnxUGD6uQcT/9s=;
-        b=bqi1+hyKpO2n6Tc52FiiNmVS8T1mNEZkAbhy/dJzwI70yYEtxTH2+Kc6G/Fe5ExVtN
-         Q5V7iWOmzLeYQoYbM3tRqTwhyT8LCGW2ncAnN5kLHS/QtgND99HmzL0OzxLbRAiVMJmI
-         y75mtMYqZqpKlbOaRbcJ40f95gN+fhB2gTdMga+N7d9Iic0l8QdVtrldreAmowQRmstP
-         nzndHsra/8Ajvvos+AtMcIEFTsYuvm4PXoauKuBR96BzA93npp8EmluiQ80nQFASLvXR
-         6zboTLfQPexXKFwFvq4vko154rP+Mt98yOVbvWdDlfaNSZqhDTVQtEtRXfEM/PGEh9yC
-         nFYA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+XrENSCAOP7/l0Dzv9FUVM4YvT1S1BHqHTBZLhMBbk4kedgx7ZrtptfmO+YoNt7QKMUadSYo9A3LYD9Sx0REnkwxK94E0aT3wpDq55kRNg9eM5+17dD2dYV5FF1XWiq5lNZvrYrY=
-X-Gm-Message-State: AOJu0YyKnDH28IDMV7Ur+T+C5DijGiuBZgHvjPDIpSz8ND9+TMTSmqEQ
-	SIh2gSu+2StrsrgcdTS6j6lVsofIk78l78u695kKl+HPnO3i9fzK
-X-Google-Smtp-Source: AGHT+IH+VnKs2niwZit6OxZnp1v8e/lBe5N8NdP4NcxFWpAthlMSTTyY3qw9gpuWOLrXZLWNFQW/jw==
-X-Received: by 2002:a5d:50ce:0:b0:360:866f:5083 with SMTP id ffacd0b85a97d-3630191cd24mr1743497f8f.32.1718779632852;
-        Tue, 18 Jun 2024 23:47:12 -0700 (PDT)
-Received: from [127.0.1.1] (31-179-0-202.dynamic.chello.pl. [31.179.0.202])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3609515e16dsm7480643f8f.44.2024.06.18.23.47.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jun 2024 23:47:12 -0700 (PDT)
-From: Roman Storozhenko <romeusmeister@gmail.com>
-Date: Wed, 19 Jun 2024 08:47:08 +0200
-Subject: [PATCH v2] cpupower: Remove absent 'v' parameter from monitor man
- page
+	s=arc-20240116; t=1718781012; c=relaxed/simple;
+	bh=M1GIqjd/Va7JmJ6t/tSwtO2lOn9qIFlIljq6R10ThiA=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jegwn1bFb9BMVkr1EEkYrY00LsoGp+ZFthttWOMyeh3Key5kKEkdxy/a3im5Icr5EmqBMks9U+21LQFSVkldZugH6bTbfhmR5rnurBDYCoEx5yQ36dd7MMh5xc5hm7ehDqwWBCdRYeKn4spzmXa74LEXkJ8ipuukuMqyG4ebkmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KiuYjfU7; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45ILb5pq000495;
+	Wed, 19 Jun 2024 07:09:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=M1GIqjd/Va7JmJ6t/tSwtO2l
+	On9qIFlIljq6R10ThiA=; b=KiuYjfU7YS/uT5L5ZzYH7c/ZjB8G/HI/rpwBdSVW
+	HFK0OtzGDuWMh01m7waf2eDDVNvAA/mqc+J+ZlW1iFSd2DOFp7kKJz1se6imykFc
+	TOfVX4+UWrJqXghzP6JU0uOBH5KiLUiM29WihsQvH4F1kmmUc9NtK/RwhV+aBJgR
+	3vtx/8n7UADAHzT0xxgfSV0/luTyOpEw+wTkKOTeAiPzBL4FDPNL764fYD5LGi19
+	wqgV2QM4niW7Yjom8rIxyN6aXz2jGLSL0fbJHo2LA1P/NbDZN+8ypq3+X/da+18t
+	nMukR51JxSqy5I7pWRlkbES6N7EfmEwxHx3ysJ67RXK9fA==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yujag0wtc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Jun 2024 07:09:56 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45J79sr8029269
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Jun 2024 07:09:54 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 19 Jun 2024 00:09:47 -0700
+Date: Wed, 19 Jun 2024 12:39:43 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+CC: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Niklas Cassel
+	<nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
+	<broonie@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rafael J. Wysocki"
+	<rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ulf Hansson
+	<ulf.hansson@linaro.org>,
+        Robert Marko <robimarko@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, Jeffrey Hugo
+	<quic_jhugo@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v14 0/9] Add support for Core Power Reduction v3, v4 and
+ Hardened
+Message-ID: <ZnKEN6vWBPwvILlB@hu-varada-blr.qualcomm.com>
+References: <20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org>
+ <ZmlUElvlOPBdfn61@hu-varada-blr.qualcomm.com>
+ <106cd2a2-42de-41ec-8d2b-f4cd6ff9165c@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240619-change-mon-format-v2-1-6bcffbad2c06@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAOt+cmYC/32NQQ7CIBBFr9LMWgxDLRJX3sN0QXBoJ5FioCGah
- ruLjWuX7yX//Q0yJaYMl26DRIUzx6WBOnTgZrtMJPjeGJRUJ6nRiJ8NcRE+pmBX0UuJw1mjGwx
- B2z0TeX7tzdvYeOa8xvTeLwp+7b9aQYGCvFW6t4aU0dcpWH4cXQww1lo/ZYxhl7IAAAA=
-To: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Roman Storozhenko <romeusmeister@gmail.com>
-X-Mailer: b4 0.14.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <106cd2a2-42de-41ec-8d2b-f4cd6ff9165c@linaro.org>
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: vtQoxNXYwPn6KnFa5Zxf4IXT8qZvW0TK
+X-Proofpoint-ORIG-GUID: vtQoxNXYwPn6KnFa5Zxf4IXT8qZvW0TK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-19_02,2024-06-17_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ clxscore=1015 impostorscore=0 suspectscore=0 adultscore=0 spamscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
+ definitions=main-2406190051
 
-Remove not supported '-v' parameter from the cpupower's 'monitor'
-command description.
-There is a '-v' parameter described in cpupower's 'monitor' command man
-page. It isn't supported at the moment, and perhaps has never been
-supported. When I run the monitor with this parameter I get the
-following:
+On Wed, Jun 19, 2024 at 01:58:04AM +0200, Konrad Dybcio wrote:
+>
+>
+> On 6/12/24 09:53, Varadarajan Narayanan wrote:
+> > Konrad,
+> >
+> > > Changes in v14:
+> > > - Rebase
+> > > - Drop cpufreq probing block (merged)
+> > > - Pick up tags
+> > > - Drop quotes from CPR3 bindings $id:
+> > > - Drop useless description: under compatible:
+> > > - Link to v13: https://lore.kernel.org/r/20230217-topic-cpr3h-v13-0-d01cff1c54cf@linaro.org
+> >
+> > This patch series is needed for IPQ9574 CPR support. Do you plan
+> > to post a new version or can I try to address the comments and
+> > post a new version?
+>
+> I'll resubmit it soon
 
-$ sudo LD_LIBRARY_PATH=lib64/ bin/cpupower monitor -v
-monitor: invalid option -- 'v'
-invalid or unknown argument
-$ sudo LD_LIBRARY_PATH=lib64/ bin/cpupower monitor -V
-monitor: invalid option -- 'V'
-invalid or unknown argument
+Thanks very much.
 
-Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
----
-Changes in v2:
-- Moved the detailed description from the cover letter to the commit
-- Link to v1: https://lore.kernel.org/r/20240618-change-mon-format-v1-1-efa263a8e286@gmail.com
----
- tools/power/cpupower/man/cpupower-monitor.1 | 5 -----
- 1 file changed, 5 deletions(-)
+Can you please refer to [1] for some minor changes that
+I have done on top of V9 to rebase to latest linux tree
+and CPR4 compliance.
 
-diff --git a/tools/power/cpupower/man/cpupower-monitor.1 b/tools/power/cpupower/man/cpupower-monitor.1
-index 8ee737eefa5c..991f931cfc38 100644
---- a/tools/power/cpupower/man/cpupower-monitor.1
-+++ b/tools/power/cpupower/man/cpupower-monitor.1
-@@ -81,11 +81,6 @@ Measure idle and frequency characteristics of an arbitrary command/workload.
- The executable \fBcommand\fP is forked and upon its exit, statistics gathered since it was
- forked are displayed.
- .RE
--.PP
--\-v
--.RS 4
--Increase verbosity if the binary was compiled with the DEBUG option set.
--.RE
- 
- .SH MONITOR DESCRIPTIONS
- .SS "Idle_Stats"
+[1] https://github.com/quic-varada/cpr/commits/konrad/
 
----
-base-commit: 0c52056d9f77508cb6d4d68d3fc91c6c08ec71af
-change-id: 20240618-change-mon-format-30015761c58e
-
-Best regards,
--- 
-Roman Storozhenko <romeusmeister@gmail.com>
-
+-Varada
 
