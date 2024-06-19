@@ -1,140 +1,244 @@
-Return-Path: <linux-pm+bounces-9523-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9524-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A23D90E16E
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 03:53:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2623F90E1A2
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 04:31:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 196671C21A54
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 01:53:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA541B20A6D
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 02:31:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14DD6208AD;
-	Wed, 19 Jun 2024 01:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4038127446;
+	Wed, 19 Jun 2024 02:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lDGSa2+B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHm9xAeZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D73818E20;
-	Wed, 19 Jun 2024 01:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3F22599;
+	Wed, 19 Jun 2024 02:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718762005; cv=none; b=tGz7cGeWO8v3Rg2EniQgJROLhMYc6JgVhaiVu4Y3oseA+UKg3//VKdvKLGWiLA+dauopblpqyJdEpyLTAVA1Q3863a7gzmkIJE+wMJnVkhY9WdStvjHe50AfabPtJ1ah1Y36i6pIO3tF6KlnhkXO6USZ/++UUTfUAz8u2rsupLM=
+	t=1718764300; cv=none; b=iO/eQtYb6wN/TgAge3cendE1+JQqVDdoyxOB93gYyJeY7Ty8Rfng/GYm6DRRhupAIIxSN2XMeZsmaoJgJIqRzYiv3Pa1PyEenjOBlpaKTldhK6nHuz8MyR0kWSJsf8ya4oDfRoxyCiOzCYyAS5lQNF3Im56qyE1mImxIWKFuM7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718762005; c=relaxed/simple;
-	bh=y4h/IiEH9QhlxPRAVfEhG72ug8DRAf2ofzXJM2sJ1qM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oeQyHsIH23PL4dW27TTjXWSbiBIibT1oQrJigz2YbMM7NsxR1McWtVQXo+rC636k2DzvzFH/uLpXfM28LT/9qmWUaH+C6STxwYZgQa70LFFvvINvsVC2+s1rsg/hMQjOHP6x6brQdZf5Wezw00itijcl2DzcqGXeZEbgfrz8dbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lDGSa2+B; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718762004; x=1750298004;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=y4h/IiEH9QhlxPRAVfEhG72ug8DRAf2ofzXJM2sJ1qM=;
-  b=lDGSa2+BTjeRlCO7QZBVk9jvT/m+L6mSOOx+kaMYYdzGKmmyCbg0WW4g
-   /op5LaQxaNl03nT974jJEJmbG8ieZLTKHIrTkcnmuw14/RQFYDGNYSHMH
-   nY5SC/xuTmaCH+cuD+SqCasdrEU43pJC5edlOv17ByAVf6OBqwebUbFDp
-   3Jdnx2p39OBF2HXmVj7bwXkv6BEWjf5s+SPf6C1Zyf95QEwR3vxEtFBS/
-   vTvuoFTXjQ17pRuyK0hnE3gLqh7Bcza7sfsYnf9xpatdBOSpO6OBxEiiU
-   K7yQff5vDm9FL6TnNVXCkTATlqmVFvHdi+x8MWRqMjN4WPffzp9pYP+pD
-   Q==;
-X-CSE-ConnectionGUID: G3UI+FqiQSKdITeppl7nxA==
-X-CSE-MsgGUID: t78bVsbRRNWZ5mWeeM5fSQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="19461672"
-X-IronPort-AV: E=Sophos;i="6.08,247,1712646000"; 
-   d="scan'208";a="19461672"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2024 18:53:23 -0700
-X-CSE-ConnectionGUID: 2/1oZ4ocRuGCLo1eL49vLg==
-X-CSE-MsgGUID: jtHcrt+CSm6csXi6+iqLjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,247,1712646000"; 
-   d="scan'208";a="41672159"
-Received: from cgroden-mobl.amr.corp.intel.com (HELO desk) ([10.209.70.214])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2024 18:53:22 -0700
-Date: Tue, 18 Jun 2024 18:53:15 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Brice Goglin <brice.goglin@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	daniel.sneddon@linux.intel.com, tony.luck@intel.com,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Andrew Cooper <andrew.cooper3@citrix.com>
-Subject: Re: [PATCH 0/9] Add CPU-type to topology
-Message-ID: <20240619015315.3ei5f6rovzdnxovo@desk>
-References: <20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com>
- <8d757ea3-87a3-4663-ac76-66b04e33e6b3@gmail.com>
+	s=arc-20240116; t=1718764300; c=relaxed/simple;
+	bh=tON+1ko1+L9sLXDmaPD3JWG8AGbdMBPXq8ldPeXQYsM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=SLf0FIujXxD6uRY8i/oMt8qjd99o1P+XlDirWzxC0HL8DrYQyEzSxf+AgVmlNHo1eiQ5z/PCkGKN0xT68lUeyf3fzLq3TfCMlRhYYnf07lnOKcPEKEmKsLhVpzd0Qm1xlp40DNwTGFg0fEOO0jFF7Z670lzBjKIJNn4hPDxmxOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHm9xAeZ; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4405743ac19so3946521cf.0;
+        Tue, 18 Jun 2024 19:31:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718764297; x=1719369097; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jJWducu000Gylf5XAOa8WIhgRCeIrgAnJZ+kHKrkDe0=;
+        b=aHm9xAeZhjpoEwvCZLdh7hTZks5R4eqrFLAT4vQYmyZ4Lagr5X8DD+KNT1nhXGzIDb
+         lCeukbuiABKa+ERIxOy+k9xOI3fhbUk/wn7/vtlQdY+6ILen4lmbytC6E6x/VeRV69JB
+         0276vhA8sNpygbC87eP/aZOttH9QqFyrJsVkywanrZKjbM6Y+0jp3vFVKrofPPujXdT3
+         CzZDqbROmpwU+NBGwCRkhdW8k/xOSFfwNLeAxPluG4zr3BCxX2cOGjMLhNdrnrSAvCxc
+         RijUefiWMoHowNqWNcRw1UYJuHSOKIECAUPRcL4qjBGfWDvJt5TKTFxBrAp9Tz/CWc5b
+         VUqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718764297; x=1719369097;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jJWducu000Gylf5XAOa8WIhgRCeIrgAnJZ+kHKrkDe0=;
+        b=v5f2BAoDJSgCJU0A20I3B+1X5APORLHrDROlJKc6jkOo1KgyurszQ0bqi16Blg3Sd7
+         soJ4MmrPp6AfEkfL9vD3QefdkbVn3qH/LWLgAWTdd+DMCiDOiFej36LJE/sSa+wmfTed
+         DN85ERwhzDGymTUSX8LkCJjZvXM7qzp0zY8Jw5sqvbXPwLM+7Cea8KoeDqz5+rm1Qq9/
+         J0DKg6rgvq8Q879Yee+fOvZUqHAdbCvPPOD4fOjcx4C5/EK/5yAM9vO+2Dk8M0a7kocu
+         XwQDCzjmKCPQ5zGNxnVelawgt6nIxKyhsmvYYvHm+QyJOOIzWYnYFNpKSW5FhouM24WX
+         KJ5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXPMDTvz2a+YQU2/3Ss0J768McAAQ/zOR8FX4ELdLK3rYw8VVYI7K4nNiqA8dU7vBEsOSMgZpGeERyfDEhyM6AMkR2F1bMFzskETFqbdOYUmKbUdC/mjQRIl1iY4QRtX0b3w+zT3ar0ImtCYneJmbd9lpgGkAOJKIBY3EghzDBdLH7U
+X-Gm-Message-State: AOJu0YwcHKw6J30hiIx9BxTItokRQOnGyPGrlD0oRlNqfqWXZpJm/JqX
+	2plb3dWUMS9YFBNu1BbyyqQo7ElPFCOd5WyX99F4aRenyVTSpzuy
+X-Google-Smtp-Source: AGHT+IE+HAIxr8nOrosxxzcdbM00QsPfxTRPEYuk5G+mgX2XurEoYtjncDIdow1JK4U189/2i89J0A==
+X-Received: by 2002:a05:622a:138b:b0:442:1204:5d72 with SMTP id d75a77b69052e-444a78dcc3fmr36077401cf.30.1718764297372;
+        Tue, 18 Jun 2024 19:31:37 -0700 (PDT)
+Received: from [127.0.1.1] ([2607:fea8:bad7:5400:f8a2:b06e:a96b:63dd])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-441f2fceea3sm61651211cf.78.2024.06.18.19.31.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jun 2024 19:31:36 -0700 (PDT)
+From: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
+Date: Tue, 18 Jun 2024 22:31:35 -0400
+Subject: [PATCH v4] dt-bindings: thermal: convert hisilicon-thermal.txt to
+ dt-schema
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8d757ea3-87a3-4663-ac76-66b04e33e6b3@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240618-hisilicon-thermal-dt-bindings-conversion-v4-1-7eba97fbe6d0@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAZDcmYC/63QS4rDMBAE0KsEraNBn7YUZ5V7DFno07IFthxkI
+ yYE333kMANeJpBlNc0rqAeZMUecyfnwIBlLnOOUaoDjgbjepA5p9DUTwQQwxSXt68sQ3ZTo0mM
+ ezUD9Qm1MPqZupvVeMG8IlQZQcmCBmROp3C1jiD/Pqu9rzRVapnx/NhexXf9L4PWSIiinqJSzH
+ mQQ0F660cThy03j1vkH6jfBBnSDXKFX1n0GlIw7RFEXsZ8BEU1rXdM6rXfgtmuR+y3fgWWFlT9
+ 5gMCC17CH13X9BZ4krxksAgAA
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: skhan@linuxfoundation.org, javier.carrasco.cruz@gmail.com, 
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
+X-Mailer: b4 0.14-dev-0bd45
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718764296; l=4182;
+ i=abdulrasaqolawani@gmail.com; s=20240613; h=from:subject:message-id;
+ bh=tON+1ko1+L9sLXDmaPD3JWG8AGbdMBPXq8ldPeXQYsM=;
+ b=XKaE+TM/hnfwscXjITuSt+j4OEluklmc8wyfhJyQ6cuz6y4k7Flwt5XmRW3CLyrQlxYyu2MWd
+ r2MWZcn91uDDcP706FFLsb4ecGT0mVgj+Lx8nqMkNm8AicLfjJqHlgu
+X-Developer-Key: i=abdulrasaqolawani@gmail.com; a=ed25519;
+ pk=cUqfinPW5pkopFB8ShBc0ZTNgYvSW5ZTa8aLIFPGp/w=
 
-On Tue, Jun 18, 2024 at 02:49:10PM +0200, Brice Goglin wrote:
-> Le 17/06/2024 à 11:11, Pawan Gupta a écrit :
-> > Hi,
-> > 
-> > This series adds support for CPU-type (CPUID.1A.EAX[31-24] on Intel) to
-> > differentiate between hybrid variants P+E, P-only, E-only that share the
-> > same Family/Model/Stepping. One of the use case for CPU-type is the
-> > affected CPU table for CPU vulnerabilities, which can now use the CPU-type
-> > to filter the unaffected variants.
-> > 
-> > * Patch 1 adds cpu-type to CPU topology structure and introduces
-> >    topology_cpu_type() to get the CPU-type.
-> > 
-> > * Patch 2-4 replaces usages of get_this_hybrid_cpu_type() with
-> >    topology_cpu_type().
-> > 
-> > * Patch 5-7 Updates CPU-matching infrastructure to use CPU-type.
-> > 
-> > * Patch 8 cleans up the affected CPU list.
-> > 
-> > * Patch 9 uses the CPU-type to exclude P-only parts from the RFDS affected
-> >    list.
-> 
-> 
-> Hello
-> 
-> Is there still a plan to expose this info in sysfs?
+Convert the hisilicon SoCs tsensor txt bindings to dt-schema
 
-Sure, if it helps userspace.
+Signed-off-by: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
+---
+Changes in v4:
+- Update the indentation for 'examples'.
 
-> Userspace currently uses frequencies to guess which cores are E or P.
-> Intel sent some patches several years ago [1], but they got abandoned
-> nowhere as far as I know. There was also some discussion about using a
-> "capacity" field like ARM does, but IIRC Intel didn't like the idea in
-> the end.
+- Link to v3: https://lore.kernel.org/all/71b58547-545e-4953-baa0-f3c6c8c3d2f9@kernel.org/
 
-There can be many ways to expose this information in sysfs. Like this ...
+Changes in v3:
+- Same as v2 
 
-> [1] https://lkml.org/lkml/2020/10/2/1208
+- Link to v2: https://lore.kernel.org/r/20240617-hisilicon-thermal-dt-bindings-conversion-v2-1-5eea9bc59c77@gmail.com
 
-... exposes /sys/devices/system/cpu/types which, in hybrid parts, creates a
-subdirectory for each type of CPU. Each subdirectory contains a CPU list
-and a CPU map that user space can query.
+Changes in v2:
+- Remove extra node in example.
+- Use standard node name in example.
+- Include additional defines from includes.
+- Add reference to thermal-sensor.yaml.
+- Remove redundant properties and comments.
 
-The other way is to expose the CPU-type in a file:
+- Link to v1: https://lore.kernel.org/all/20240613224204.185844-1-abdulrasaqolawani@gmail.com
+---
 
-	/sys/devices/system/cpu/cpuN/type
+Validated with dtschema and tested against `hi3660-hikey960.dts`.
+---
+ .../bindings/thermal/hisilicon,tsensor.yaml        | 57 ++++++++++++++++++++++
+ .../bindings/thermal/hisilicon-thermal.txt         | 32 ------------
+ 2 files changed, 57 insertions(+), 32 deletions(-)
 
-that could return the CPU-type of the CPU N. Is there a preference?
+diff --git a/Documentation/devicetree/bindings/thermal/hisilicon,tsensor.yaml b/Documentation/devicetree/bindings/thermal/hisilicon,tsensor.yaml
+new file mode 100644
+index 000000000000..11aca2b749d7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/hisilicon,tsensor.yaml
+@@ -0,0 +1,57 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/hisilicon,tsensor.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Temperature Sensor on HiSilicon SoCs
++
++maintainers:
++  - Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
++
++allOf:
++  - $ref: thermal-sensor.yaml
++
++properties:
++  compatible:
++    enum:
++      - hisilicon,tsensor
++      - hisilicon,hi3660-tsensor
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: thermal_clk
++
++  interrupts:
++    maxItems: 1
++
++  '#thermal-sensor-cells':
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - '#thermal-sensor-cells'
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/hi6220-clock.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    temperature-sensor@f7030700 {
++        compatible = "hisilicon,tsensor";
++        reg = <0xf7030700 0x1000>;
++        interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&sys_ctrl HI6220_TSENSOR_CLK>;
++        clock-names = "thermal_clk";
++        #thermal-sensor-cells = <1>;
++    };
+diff --git a/Documentation/devicetree/bindings/thermal/hisilicon-thermal.txt b/Documentation/devicetree/bindings/thermal/hisilicon-thermal.txt
+deleted file mode 100644
+index 4b19d80e6558..000000000000
+--- a/Documentation/devicetree/bindings/thermal/hisilicon-thermal.txt
++++ /dev/null
+@@ -1,32 +0,0 @@
+-* Temperature Sensor on hisilicon SoCs
+-
+-** Required properties :
+-
+-- compatible: "hisilicon,tsensor".
+-- reg: physical base address of thermal sensor and length of memory mapped
+-  region.
+-- interrupt: The interrupt number to the cpu. Defines the interrupt used
+-  by /SOCTHERM/tsensor.
+-- clock-names: Input clock name, should be 'thermal_clk'.
+-- clocks: phandles for clock specified in "clock-names" property.
+-- #thermal-sensor-cells: Should be 1. See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for a description.
+-
+-Example :
+-
+-for Hi6220:
+-	tsensor: tsensor@0,f7030700 {
+-		compatible = "hisilicon,tsensor";
+-		reg = <0x0 0xf7030700 0x0 0x1000>;
+-		interrupts = <0 7 0x4>;
+-		clocks = <&sys_ctrl HI6220_TSENSOR_CLK>;
+-		clock-names = "thermal_clk";
+-		#thermal-sensor-cells = <1>;
+-	}
+-
+-for Hi3660:
+-	tsensor: tsensor@fff30000 {
+-		compatible = "hisilicon,hi3660-tsensor";
+-		reg = <0x0 0xfff30000 0x0 0x1000>;
+-		interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>;
+-		#thermal-sensor-cells = <1>;
+-	};
+
+---
+base-commit: 8d5ed3dd17c9c1bdb39ecb125f0e28dfb5111dd9
+change-id: 20240613-hisilicon-thermal-dt-bindings-conversion-3a4e3140f0a8
+
+Best regards,
+-- 
+Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
+
 
