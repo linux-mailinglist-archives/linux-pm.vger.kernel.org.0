@@ -1,127 +1,108 @@
-Return-Path: <linux-pm+bounces-9519-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9520-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1FE390E048
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 01:58:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A54890E054
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 02:02:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E2582822D7
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2024 23:58:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FE991C21251
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2024 00:02:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 124F61849E1;
-	Tue, 18 Jun 2024 23:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bDkePBQJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11C94191;
+	Wed, 19 Jun 2024 00:01:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605A313A24F
-	for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 23:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 160F8A38
+	for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2024 00:01:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718755091; cv=none; b=H+uAnnRbcpgO+gm0NmDDJRL8NrEaps6i+rERqJHkxDPy6O9cleC4/BZCEzZ/MtmjL6zT4e/igd1pFCWncAi5rH751BEt3Tgr8uTz2aeRSDLLFEZtlwKoL+zltUiBy2ukj6ZZ9CeY2QzhGK6FIsrIFktvgHhCAYZHyF7yK5Jtl28=
+	t=1718755319; cv=none; b=qvvhoYE1NpF+fGoii8LrgLk4pV2aPb0CN8gc55131J5DAOjTm309rjAsMkDQ4dxKQKsx4hAoJpdm7uoLuluaVY2XO+Rxts1zP5XjDHsRh84zhqV4fhomEj+5R20KUw770HqPFWagksxUUG3Y4pMEvi4MAJ45iBnb/CLNgWrszpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718755091; c=relaxed/simple;
-	bh=Av3TTsyP97Equ1dgYMgOqRCJJMpER4XsO+kGCyXEsLU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nM+0ZtyfkKFjff92KfWXFzlldJHEA58L7uX5749kqkfJwAekuLqABogBVEA/RslAA3LyCdQGN4Zi0oaglTGwZlrnpNR+zaJRd9U+jVIbmgjQxJA19KbHlo/saZpq9joe5i8D7eb6ySWNRtcGViRAGiEwfM6K+3wQez6K1oayv6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bDkePBQJ; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-424720e73e1so9608805e9.1
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2024 16:58:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718755089; x=1719359889; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V1xf5EqnHZTHgrB035+MoUK5o/+Iy37BFkV8U6lWAsI=;
-        b=bDkePBQJb3YBj2V1K7quFxkU1gEXaBPeteG8Lpu5stsU3xvWx1OedEQCgMWfVTo2fR
-         Yd3Xk3YJKIHeH+HS/I+m75RA9Te3SxOHjjksHXmGaTdJr/uL6fc4XrYDMbisXxWXHRlQ
-         H3iKixNOGGJRQfPn/bxWNl+wnUpMZwG6hbnOi3d7gR4eA73VotTxjrx4b08mjyxYakCo
-         Mzw5tftvREx1y6V3t+xoEXslCEqk3KZihexvr7iMKQ+YPjvAOfjjYroZ5MfWdvFD+0L4
-         xPyQAvT3bNDGTHdgXovc02ULIzvBelWG4glsIDOlXLXDnf26D2+VcZT0+zko8ChyrEQZ
-         PSBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718755089; x=1719359889;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V1xf5EqnHZTHgrB035+MoUK5o/+Iy37BFkV8U6lWAsI=;
-        b=CBEEP8dCH1tfCd0f/BMK5KCGHnEZSxx0olbGLoxLxSijjnLgUDu5CHu+lgky85w1s0
-         p7VvcQUkWHR8zn2dXm24BqjlKJTEVE6udcRBVj8H5NahGjRfxHDrMsq1RdYRDy1s0zzM
-         aY1hkFNFAQalsnSDd9g1DWTao2mxOK40HqgyVlybrqhfiSOGIthFl3tAd+R/rIuxD2+j
-         uXkaHpwRTVXGmZfyuce6W5zQ7X+lwst8MAd6VOaI6dCRgRYhYmiv40UF3gH77w6nWe3Q
-         lDL15Vygn6gLLtA7k1Vo9n0PLa9//eUalmLq8yweiLy6UMvckv0MLW9sG0XWMdYhDABV
-         al/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV67h1vOSZo1WBNEfnMMwly/v0rgqxes4yr9nWCKiSE4Mm5XzcZyYOyFzpSK/ZzgmvBauq9kzK0cypvcdE+sdbMceZmkO9/Ahc=
-X-Gm-Message-State: AOJu0Yz0b/HZC7c18iODFvzQlVFLdNYCU4+K9VUjMkk5qd/FkN2l5ydW
-	u6wMXBDsqTrZJ7x+uTMKmWvXoeH+rD/SQ+uifntdJe1ROhYa4hv/fQ5WbLdGCYnhzTr4mCETw0H
-	v6Kg=
-X-Google-Smtp-Source: AGHT+IH3SthiBieRBagQGvya+fCbppYDWVdvuwD+iWbpivS/w5xvmwg3ky2tSRJqs4Shme1sR5VGBA==
-X-Received: by 2002:adf:ef48:0:b0:362:172a:b156 with SMTP id ffacd0b85a97d-363177a1d38mr821091f8f.28.1718755088764;
-        Tue, 18 Jun 2024 16:58:08 -0700 (PDT)
-Received: from ?IPV6:2a00:f41:9028:9df3:6f30:7340:4e06:bff7? ([2a00:f41:9028:9df3:6f30:7340:4e06:bff7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-362e3e1abd5sm1438994f8f.47.2024.06.18.16.58.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jun 2024 16:58:08 -0700 (PDT)
-Message-ID: <106cd2a2-42de-41ec-8d2b-f4cd6ff9165c@linaro.org>
-Date: Wed, 19 Jun 2024 01:58:04 +0200
+	s=arc-20240116; t=1718755319; c=relaxed/simple;
+	bh=jMeof6mQ4m9OsdFZSVhbZbBYZBSBZlEpy+R0gWz7uwo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mSeW9oh+WLbuDCIhVE4ESemMP/ZD6GhlNJeRXb1XWFlv2H9ktTTbNe+Fn7/wQZChZKP4RJG1IU98zljDbw7l2GuIaLIDwz6DDQnCELQEGYS096iwcJv5YlUiiY2D+feD7Z3hknstvtiuCnteOTknCqEMolnHVvsPylv5jQNv1tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 099A9DA7;
+	Tue, 18 Jun 2024 17:02:20 -0700 (PDT)
+Received: from minigeek.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 28F753F64C;
+	Tue, 18 Jun 2024 17:01:53 -0700 (PDT)
+Date: Wed, 19 Jun 2024 01:00:21 +0100
+From: Andre Przywara <andre.przywara@arm.com>
+To: Ryan Walklin <ryan@testtoast.com>
+Cc: Yangtao Li <tiny.windzz@gmail.com>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, Viresh Kumar <vireshk@kernel.org>, Chen-Yu Tsai
+ <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
+ <samuel@sholland.org>, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, Chris
+ Morgan <macroalpha82@gmail.com>, Sudeep Holla <sudeep.holla@arm.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+ <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/3] cpufreq: sun50i: add Allwinner H700 speed bin
+Message-ID: <20240619010021.5962e459@minigeek.lan>
+In-Reply-To: <20240607092140.33112-2-ryan@testtoast.com>
+References: <20240607092140.33112-1-ryan@testtoast.com>
+	<20240607092140.33112-2-ryan@testtoast.com>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 0/9] Add support for Core Power Reduction v3, v4 and
- Hardened
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
- Stephen Boyd <sboyd@kernel.org>, Niklas Cassel <nks@flawful.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Ulf Hansson
- <ulf.hansson@linaro.org>, Robert Marko <robimarko@gmail.com>,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
- Jeffrey Hugo <quic_jhugo@quicinc.com>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org>
- <ZmlUElvlOPBdfn61@hu-varada-blr.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZmlUElvlOPBdfn61@hu-varada-blr.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
+On Fri,  7 Jun 2024 21:20:33 +1200
+Ryan Walklin <ryan@testtoast.com> wrote:
 
-
-On 6/12/24 09:53, Varadarajan Narayanan wrote:
-> Konrad,
+> Support for the Allwinner H618, H618 and H700 was added to the sun50i
+> cpufreq-nvmem driver recently [1] however at the time some operating
+> points supported by the H700 (1.008, 1.032 and 1.512 GHz) and in use by
+> vendor BSPs were found to be unstable during testing, so the H700 speed
+> bin and  the 1.032 GHz OPP were not included in the mainline driver.
 > 
->> Changes in v14:
->> - Rebase
->> - Drop cpufreq probing block (merged)
->> - Pick up tags
->> - Drop quotes from CPR3 bindings $id:
->> - Drop useless description: under compatible:
->> - Link to v13: https://lore.kernel.org/r/20230217-topic-cpr3h-v13-0-d01cff1c54cf@linaro.org
+> Retesting with kernel 6.10rc2 (which carries additional fixes for the
+> driver) now shows stable operation with these points.
 > 
-> This patch series is needed for IPQ9574 CPR support. Do you plan
-> to post a new version or can I try to address the comments and
-> post a new version?
+> Add the H700 speed bin to the driver.
+> 
+> Signed-off-by: Ryan Walklin <ryan@testtoast.com>
 
-I'll resubmit it soon
+Yes, 0x6c00 is the value for the H700 SoCs in the devices we have seen:
 
-Konrad
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+
+Thanks,
+Andre
+
+> --
+> [1] https://lore.kernel.org/linux-sunxi/20240418154408.1740047-1-andre.przywara@arm.com
+> ---
+>  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> index 0b882765cd66f..969f22aadd950 100644
+> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> @@ -91,6 +91,9 @@ static u32 sun50i_h616_efuse_xlate(u32 speedbin)
+>  	case 0x5d00:
+>  		value = 0;
+>  		break;
+> +	case 0x6c00:
+> +		value = 5;
+> +		break;
+>  	default:
+>  		pr_warn("sun50i-cpufreq-nvmem: unknown speed bin 0x%x, using default bin 0\n",
+>  			speedbin & 0xffff);
+
 
