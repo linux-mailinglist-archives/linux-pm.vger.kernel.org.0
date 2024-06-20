@@ -1,143 +1,205 @@
-Return-Path: <linux-pm+bounces-9683-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9684-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 064BB9109B4
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 17:23:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5A8E9109E5
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 17:31:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 858B0285D9C
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 15:23:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57BEC1F25A6E
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 15:31:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA3E51AF6B1;
-	Thu, 20 Jun 2024 15:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E16211AE87C;
+	Thu, 20 Jun 2024 15:31:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XFfkYknu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HX1t4But"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092F91AD486;
-	Thu, 20 Jun 2024 15:23:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DADA1E52F;
+	Thu, 20 Jun 2024 15:31:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718896984; cv=none; b=dSKd1ZW1TA5HtO6t1ycE1vSbsIcUOT6BYv0IzMxncV03o5OFqOyt4s2lVBBosXABs0LjPBOxWaomrBTrB2Cs4OCT0wePMPoBchQGrPipGUljTqzHBUkD8cCX1atxkI/FhAoSVArMu5FBYMxqHi0QM7YODBeakKAZtUUC4LCJqDA=
+	t=1718897493; cv=none; b=ZEoKVCsrfnTT1jD0nDLZoI6dlemrY5OufPb+yEfOj+cUXkxdW/rYTjOomBqQ2twgm6YP9ES/bZMO302FlBc/nMEWGEGJs8JrUI9k3AP3D/6UBB8t9DJq4y84HKsTCqTgP4kSUp68oy/DR47Ns8ozaruqDr8qse814GH6mmvcyXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718896984; c=relaxed/simple;
-	bh=icVkyLRQtfBnDXDL5T2LXmtHl0A/8wSSZwGGLKNXhas=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X2GL2goGAGCQc69zI/R58h9gsJLDyGjrewXcThiWLtVmM3v+B38qu6bGcrziDMLdKK2Hut4bOCVJYINIgwmofNGN5uYxgn68AyUwTr6RWaKlmJ56abOsAdL4cw4Htysn9x9gBHHwP7zn68oS/vjHRHDTbfGhcZw/nhCIAtggNA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XFfkYknu; arc=none smtp.client-ip=209.85.208.174
+	s=arc-20240116; t=1718897493; c=relaxed/simple;
+	bh=ARSBC7yLTcnp/pqnpPOI57zF+ilkvpeQEb6s7WIO16g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H3ggRwU7UBudwHkbiAqIlnF8h1/Ugc5hEdAd75xNUD7BHAeS07z8yqYyicM2/leTPpC8hDJynMVYOPNsuxjDh5m+PYeZzd4QwxXJahkeFN4Y9QhVvIzzVAkPtdoTtCHniTgquSqFNozSjZMEPGY4JoM6QTHCBskScygGQgZqFKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HX1t4But; arc=none smtp.client-ip=209.85.161.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2ec4a35baddso4478711fa.0;
-        Thu, 20 Jun 2024 08:23:02 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5babfde1c04so440567eaf.2;
+        Thu, 20 Jun 2024 08:31:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718896981; x=1719501781; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6IFvd1gKY4Gen8SxIO8TYuBrF9aZdJ83hdWMC4Gaxh4=;
-        b=XFfkYknuOi0oOOBjBxCAgbGn35ajAJV2RhUrIap/cOgQiagpTVUUlPTswqCncTIMO6
-         4kI+x25iUW9MI/CVqDJl+YrjEwaAaatNYWBFbK3iQnFM2I7TRXx4/V/nBplxCHzyKSI5
-         6bbX/5XxMmPxmT9fI6vvJXLcZY4+74cQVhnFiJVFhWM8cVyR9FX2HEye8prj6bJCXA+q
-         M48xdNYa+XIc2BWqQLWKtnKPfTMBAH7WL2a3RAnHlnHLyKUVdsFq8pcZJsbIcBZCtK4l
-         PWoDBbqOHxcvh30Mf6IyXbbyplVbBEaPrGMaRgZ0aXZTLOXIKjoyuIavDbA5yuV729vs
-         /zEg==
+        d=gmail.com; s=20230601; t=1718897490; x=1719502290; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kt2+2PTw+WUyvoeIVUnfeBTtCiiz/yh/xagrQfb3Rno=;
+        b=HX1t4ButI6JR9gmf7UkzU8GxJWpsPbrvfEgCgKmsjlnJ/mXf7k4uPVDuRomjMw/xcw
+         KBDULv1SqZnMF2UzhPoUbNe8D2VOdhAuFOxtJWE/6U/7KGX3zz018nBlzlumzqVNev6s
+         DRfsf4NXLRCPAU58EvfprTkC4cBM0FORCVsitggFonTSZ79CxqCQYiU1i1AQcMWe14fo
+         a8CyoCcgeFHUM3L68bxTb1vO9KkhDmAMfSvCGWsG4WnXGJJjepO1xONn/8cazI1S17Hu
+         RQfNLu0TNJ5ctBTNMcEFjRdNjmybPwLlzFcRJkH1vzNpyjgqBokJ9pZhcWnaz0y3ccvj
+         uUSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718896981; x=1719501781;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6IFvd1gKY4Gen8SxIO8TYuBrF9aZdJ83hdWMC4Gaxh4=;
-        b=BMlpt0z6Bgj+5zfxwY9cK5CTPAcz3cnnNH2TJVvPxfdsGMHLoP+VPkJPo1jnNreQOz
-         kUpc4vGHNi6xZrvg67ZWxhQ2VArfWaiOqgGl/tkfNRRJS374LxA3v92xW/dZtl69f6CT
-         jZ2hGer971+WgfWExeB+YgiOw45YW/opgpZqg+7yymHnASPUfgdb5WwSgzkLTf+DpGMX
-         W+7V2+W0smDkTx++bAIhcJwlZyEqLAivoWoU6quZBk+FJHRFLv/LNKv9uWI+qYDNOd4S
-         iiSnTigKjDAX6Cav+F2flacIaiN+r0W0/r1WDlTvheOw56HrRHVyoV3li4BhHB8IvyZ/
-         XaWw==
-X-Forwarded-Encrypted: i=1; AJvYcCWGEZG8vBLAm6wRvDP30DEThRX8/BqYBGWiVY0/jhs5hfSeZQBHm2aORD0ALwg6g1149aJxlptYyGdLV6b2B/YWtNxKq4yj48KPTmx4V1tWp42fB55pwWUOlZYE6XXpsAHg3++qCwgtgbvRKxqd3/rSnLDEsnz/Ok8qDgjihd+Wx9hvatB7DnyU
-X-Gm-Message-State: AOJu0YzI20DgsucVi+DdF6Cx5ROHLVue6KIK1xIYj7mLfIrHBbTXy1Rg
-	sHh25bK9LUAqjx93B9Shx0y7azHk9xiTYgovOvlle5ZVDBhjYUOn
-X-Google-Smtp-Source: AGHT+IGikVgh8XgKRUtNVxnsSti1UHJwJALTtFYTQFJq7dc9FzLzcT/571ge3KDX9VdgIBKtjqeFjw==
-X-Received: by 2002:a2e:9915:0:b0:2eb:e25a:34e5 with SMTP id 38308e7fff4ca-2ec3cfe69eamr35766021fa.34.1718896980462;
-        Thu, 20 Jun 2024 08:23:00 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:1:6960:9f76:b012:ddc2:11de? ([2a01:e0a:1:6960:9f76:b012:ddc2:11de])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4247d0b63a9sm29408395e9.9.2024.06.20.08.22.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jun 2024 08:23:00 -0700 (PDT)
-Message-ID: <ec4eeab6-ce32-4a2f-a32c-dfd95cdd9ccd@gmail.com>
-Date: Thu, 20 Jun 2024 17:22:59 +0200
+        d=1e100.net; s=20230601; t=1718897490; x=1719502290;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Kt2+2PTw+WUyvoeIVUnfeBTtCiiz/yh/xagrQfb3Rno=;
+        b=HW0tu+lYcwfjrRzyp5LD8XZMzIX6dDyMry5DB1JeeT1g3WvW352r+Xn65L/ZxSQtPg
+         vMFvGG/x+1Y0QD7Ksyv6+Q/wKcdep86sxZk+KhUFQUxsQsWFt9WdTZRb1N32TYzxWvtn
+         PY2Sz8nkmcmYfrnj71nv+gfI4uqx4+ah1cINVBblBBP4m5C0aH+6Ln2z+4xN9JTiHm5t
+         rh2OU+DYfPV0w/3LFuwLl9W4Jlhtmj3saREB0G+jQmPs6HnZTaqEPOQFnChq447k3YkM
+         amPGlRm9rG3xiU7jMCWu3gueHgl9RgPUvLXcVFvemzhec14LjkC18K2tUqa1pwVPSfeO
+         CStQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVPFzLKGgjGMA8GN2acCfzirJ/Sh9EBR/w/YP8bhpr80VOcW6lK+ofQCmTHJ4HVTORuwRVWmzjCUVC1c+DxD9tHWnaMUbl0OLszPbZDwmEfM6DgAz3ZNDlr4JJFBs3sA3ujl8WBEYeRxSoo7ryw8tsTah8sK1ha1KBuVpLNE1aEExvjzBwek2wGxdtjNJRww9BHJyta6egsJpLPfXVM9j9n0V0bheCAgbHc
+X-Gm-Message-State: AOJu0YwXvuctCym64jliDpLf0L9Iuwt4EoDDevScBNOigBMI25dbo901
+	b1kmxvjWU4z84UiVfbXnL0hWjdsY4q9f/jIvLgFzXqifeq5FCr7cSzJLwvJjIxCc6srz6/ZNZT2
+	FNmZPBH8qdxI+KrwSffnXanaM1Hshau5eTqjVNQ==
+X-Google-Smtp-Source: AGHT+IFNpfr2jSnuExITl+ds5bqhiqdYJjyiZvjeYYXSNVzTjJWTZDJ+5te0gNBG31OjvyRJvbUPfq4HEb3xCfGvrH8=
+X-Received: by 2002:a05:6358:478e:b0:1a0:d4b4:5eb3 with SMTP id
+ e5c5f4694b2df-1a1fd52528fmr674606355d.23.1718897490357; Thu, 20 Jun 2024
+ 08:31:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/9] Add CPU-type to topology
-Content-Language: en-US
-To: Dave Hansen <dave.hansen@intel.com>,
- srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
- Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, daniel.sneddon@linux.intel.com, tony.luck@intel.com,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-perf-users@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- Andrew Cooper <andrew.cooper3@citrix.com>
-References: <20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com>
- <8d757ea3-87a3-4663-ac76-66b04e33e6b3@gmail.com>
- <20240619015315.3ei5f6rovzdnxovo@desk>
- <bc75ff55161671e4470849ed51baa547f619889d.camel@linux.intel.com>
- <0021f5f2-67c5-4b20-939d-48c9c1c60cdb@gmail.com>
- <1b99017a-6964-46de-ba3a-09552e7cf072@intel.com>
-From: Brice Goglin <brice.goglin@gmail.com>
-In-Reply-To: <1b99017a-6964-46de-ba3a-09552e7cf072@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240619120920.2703605-1-claudiu.beznea.uj@bp.renesas.com> <20240619120920.2703605-3-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240619120920.2703605-3-claudiu.beznea.uj@bp.renesas.com>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Thu, 20 Jun 2024 16:31:04 +0100
+Message-ID: <CA+V-a8v7hxhhiT4X28kKJ5yTuMahCuCUWX_nFKd4cWL9GAWxug@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/3] watchdog: rzg2l_wdt: Keep the clocks prepared
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: ulf.hansson@linaro.org, wim@linux-watchdog.org, linux@roeck-us.net, 
+	rafael@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, geert+renesas@glider.be, 
+	linux-renesas-soc@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Le 20/06/2024 à 17:06, Dave Hansen a écrit :
+Hi Claudiu,
 
-> On 6/19/24 14:25, Brice Goglin wrote:
->> Good point. From this patch series, I understand that the current kernel
->> side doesn't care about these different E-cores. However it might be
->> good to expose them as different cpu-types (or better name) to userspace ?
->>
->> Something like type 0 = P-core, 1 = normal E-core, 2 = low power E-core ?
-> The first priority here is getting the kernel to comprehend these types
-> for architectural purposes: when there are functional differences
-> between the cores.
+Thank you for the patch.
+
+On Thu, Jun 20, 2024 at 9:29=E2=80=AFAM Claudiu <claudiu.beznea@tuxon.dev> =
+wrote:
 >
-> Let's get that in place, first.  Then we can discuss the possibility of
-> new ABI in the area.
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> The watchdog restart handler is called with interrupts disabled. In
+> rzg2l_wdt_restart() we call clk_prepare_enable() to enable the watchdog
+> clocks. The prepare part of clk_prepare_enable() may sleep. Sleep in
+> atomic context should not happen. The clock drivers for all the
+> micro-architectures where the RZ/G2L watchdog driver is used are not
+> implementing struct clk_ops::prepare(). Even so, to be sure we are
+> not hitted by this at some point, keep the watchdog clocks prepared
+> and only enable them in restart handler. It is guaranteed that
+> clk_enable() can be called in atomic context.
+>
+> Reported-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Closes: https://lore.kernel.org/all/CAPDyKFq1+cL1M9qGY0P58ETHUZHGymxQL0w9=
+2emUJPMe7a_GxA@mail.gmail.com
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+>  drivers/watchdog/rzg2l_wdt.c | 31 ++++++++++++++++++++++++++-----
+>  1 file changed, 26 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+> index 2a35f890a288..6e3d7512f38c 100644
+> --- a/drivers/watchdog/rzg2l_wdt.c
+> +++ b/drivers/watchdog/rzg2l_wdt.c
+> @@ -166,8 +166,8 @@ static int rzg2l_wdt_restart(struct watchdog_device *=
+wdev,
+>         struct rzg2l_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
+>         int ret;
+>
+> -       clk_prepare_enable(priv->pclk);
+> -       clk_prepare_enable(priv->osc_clk);
+> +       clk_enable(priv->pclk);
+> +       clk_enable(priv->osc_clk);
+>
+I think we need to add a check before enabling the clocks:
 
-Agreed.
+if (!watchdog_active(wdev)) {
+         clk_enable(priv->pclk);
+         clk_enable(priv->osc_clk);
+}
 
-> Did the ARM folks ever do a sysfs ABI for big.LITTLE?  I don't see
-> anything obvious in Documentation/ABI/testing/sysfs-devices-system-cpu.
+>         if (priv->devtype =3D=3D WDT_RZG2L) {
+>                 ret =3D reset_control_deassert(priv->rstc);
+> @@ -226,11 +226,28 @@ static const struct watchdog_ops rzg2l_wdt_ops =3D =
+{
+>         .restart =3D rzg2l_wdt_restart,
+>  };
+>
+> +static int rzg2l_clks_prepare(struct rzg2l_wdt_priv *priv)
+> +{
+> +       int ret;
+> +
+> +       ret =3D clk_prepare(priv->pclk);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret =3D clk_prepare(priv->osc_clk);
+> +       if (ret)
+> +               clk_unprepare(priv->pclk);
+> +
+> +       return ret;
+> +}
+> +
+>  static void rzg2l_wdt_pm_disable(void *data)
+>  {
+> -       struct watchdog_device *wdev =3D data;
+> +       struct rzg2l_wdt_priv *priv =3D data;
+>
+> -       pm_runtime_disable(wdev->parent);
+> +       pm_runtime_disable(priv->wdev.parent);
+> +       clk_unprepare(priv->osc_clk);
+> +       clk_unprepare(priv->pclk);
+>  }
+>
+All the above chunk can go away if we use devm_clk_get_prepared()
+while requesting the clocks in the probe.
 
-As far as I know, they only have the "capacity" field in sysfs cpu files
-that reports a higher number for the equivalent of P-core:
+Cheers,
+Prabhakar
 
- From testing/sysfs-devices-system-cpu:
-
-What:           /sys/devices/system/cpu/cpuX/cpu_capacity
-Date:           December 2016
-Contact:        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Description:    information about CPUs heterogeneity.
-
-                 cpu_capacity: capacity of cpuX.
-
-I don't know how it's calculated but I've never seen it report something wrong.
-On Android/ARM phones, big cores usually have 1024 and small cores something
-between 400 and 500.
-Where there are 3 types of cores, they report 1024, 500-800 about ~250.
-
-Brice
-
+>  static int rzg2l_wdt_probe(struct platform_device *pdev)
+> @@ -275,6 +292,10 @@ static int rzg2l_wdt_probe(struct platform_device *p=
+dev)
+>
+>         priv->devtype =3D (uintptr_t)of_device_get_match_data(dev);
+>
+> +       ret =3D rzg2l_clks_prepare(priv);
+> +       if (ret)
+> +               return ret;
+> +
+>         pm_runtime_enable(&pdev->dev);
+>
+>         priv->wdev.info =3D &rzg2l_wdt_ident;
+> @@ -287,7 +308,7 @@ static int rzg2l_wdt_probe(struct platform_device *pd=
+ev)
+>
+>         watchdog_set_drvdata(&priv->wdev, priv);
+>         dev_set_drvdata(dev, priv);
+> -       ret =3D devm_add_action_or_reset(&pdev->dev, rzg2l_wdt_pm_disable=
+, &priv->wdev);
+> +       ret =3D devm_add_action_or_reset(&pdev->dev, rzg2l_wdt_pm_disable=
+, &priv);
+>         if (ret)
+>                 return ret;
+>
+> --
+> 2.39.2
+>
+>
 
