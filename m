@@ -1,111 +1,157 @@
-Return-Path: <linux-pm+bounces-9704-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9705-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFB8C910E63
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 19:23:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D443E910E6E
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 19:26:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C2652841FA
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 17:23:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90599285963
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 17:26:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F121D1B374E;
-	Thu, 20 Jun 2024 17:23:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8E0A1B3F20;
+	Thu, 20 Jun 2024 17:26:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fAJXyoxr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UhaQSAL5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A10A1B3737
-	for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2024 17:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EE91B3F11;
+	Thu, 20 Jun 2024 17:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718904203; cv=none; b=LqauD2FqYFCG0oLWlFUdFhU2xU6PxG6fNIBuEB6BOavG1Lz06+YRjNRrG5KKzdS3GY6i1TN3PYKpcnJd+pvU9PgVzZk6T0aU29Y8+5b+MVAKRV+p6fXqmUnkxSPamUH62Xg1xg6EQk09KW+VDWDkOKPnE5J2kqXRZgDAQFH2H3o=
+	t=1718904365; cv=none; b=SJ7ckFfJqOIZrSganmi2+tZnOcAVC5vwHIuIC7D+WURfaAKOeAuKYKlCuC7vg0VnuuTNgnVtDL1MnltOvJn018fAN9ihd0GW9k/2Cqbo0GqTXFAmZ1xELzyjijbd3z13+acOUnfLtZsCUbqugxqHx9H/yu6ivQ0+5N53+LfkLgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718904203; c=relaxed/simple;
-	bh=iR1hJtv87pNQjsUqNnTsI+mBP3fSI2lFXI8PtdSiVJQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fxT//TTZCFlfu7yKZjYjtG4KZ1/ell1llCoL92MGpohOArxkQnH8EWGVzLKZ0UrIYaHBX3jGo3D8a/Bm0MUJ0v6t/6WBn6G1bDQnZPbMmz/XTiSz8CYg4DPkxsxBWfBBQqHQJnGJu3dvbXzFgrqrifBpPJFpVNFcuOWuDyeN77o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fAJXyoxr; arc=none smtp.client-ip=209.85.166.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7ebac4d032bso2508139f.2
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2024 10:23:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1718904201; x=1719509001; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FlU6+y4BHLjXwtlM+MZtrekLVfSINHVJwdH6Sy90VoQ=;
-        b=fAJXyoxry3pFgtbr1sDUqIqeXGHrhh6sj37+c+kbMe6Wk0MpHI9hFovFUaOCOS7sLc
-         GcXvS0Bk8xykeTVjpW2qPk/o75fofYuOBhacNKHtqQnhcbJOveAkBcoiC1Dtn0Io+oPk
-         9C2lkWdvy0psLSIIpMcuFpfNCB9I9b41om45s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718904201; x=1719509001;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FlU6+y4BHLjXwtlM+MZtrekLVfSINHVJwdH6Sy90VoQ=;
-        b=QKOhPRxTUeznf5odNVK1kXZecbIciqTAw7URZSRo3ynp2zzFfITnRm6OMR3XMktw1Y
-         CSytFoCjQD+PeeQSH76zxkaVGjpMei9VDJXAT+f+H3MoHukJ2Gt+8yQoL1aQgyIXIlnd
-         BzvQWGk6uprHEyUqz84++aGxVaFq0CV/SyPNTeqrK9dxm/bC7/EJcBmp8ZEa7L+HKBmv
-         uzjwcGW6kSZwHxO7z3d647AHYOHCesZAuwpAaTMk/Jy18fJkhOca12fqBXPoc2dvlt+q
-         ULXX4ndVsg18iNPboxTzp9Q///zoYg/VqCABnc8/GWRWcWAz8XQt3wfnKVIs/QsWxsmJ
-         D0Og==
-X-Forwarded-Encrypted: i=1; AJvYcCV2lskUxWlGwWDqo6D3KzNlC27hkWEDx035WDMMyJTXvvaGJMQOcTq+8xzwuOVBcDtj34S1XzkE026LwA7oHpfNymwVVogBXe8=
-X-Gm-Message-State: AOJu0YxsDPdRwUeauySw7Mk7rP1VevP4Wdvl/S4tygO7vORe4hClhvkO
-	4qDvFNW9te40JThu+bU4TSpwYxAOeQWFeGKx0m8Wz6NpnMKQBN6qIo52ZMFHtYY=
-X-Google-Smtp-Source: AGHT+IGWet0XQ+vzyT13uHf4e001ipaSD/KmPeZaAUUCneyTN6bP+l80PqUd4Z+6PSqDwRdi++onag==
-X-Received: by 2002:a05:6602:3b84:b0:7eb:73f1:1357 with SMTP id ca18e2360f4ac-7f13eb9a591mr646959339f.0.1718904201518;
-        Thu, 20 Jun 2024 10:23:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4b9569ef046sm4644835173.105.2024.06.20.10.23.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jun 2024 10:23:21 -0700 (PDT)
-Message-ID: <78166e23-d3d8-4e20-a453-33af1689e6c4@linuxfoundation.org>
-Date: Thu, 20 Jun 2024 11:23:20 -0600
+	s=arc-20240116; t=1718904365; c=relaxed/simple;
+	bh=/R9ChJDF9sqWGPt6Eu8s/uknHOOVvufDfRsy7wCwPUc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QyLa01sD5F0MVAbTQyLUjsJ1ITJrlz9FtE6/jjFtzOgo8Cts9HDFCk2MTXMyLHTkBlyBPoaG1T2+v5lHEzIgTVFTi8EQULjWTO7q+7qQS6x8TabmW1Z8sMc5wHZ/rrt5LlLm8CbEpmyi0BVQyLw7yG5M66pTTdpEKyiBU8N7aQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UhaQSAL5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F6A1C4AF09;
+	Thu, 20 Jun 2024 17:26:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718904365;
+	bh=/R9ChJDF9sqWGPt6Eu8s/uknHOOVvufDfRsy7wCwPUc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UhaQSAL5s0wKyT6zkq/C9Df7HWSxsDSwe1JgssP5EFJ9k0QCX+Rt4GDnsQfC5urjc
+	 J6+eTfSV8OJOx5KmmTostZzvwhBcuuFpd9ddFDSoDnZ59wWkoyvT14FDAfhovbVcBf
+	 Z6DRHnSTIdnE6/hSRDi2bPTdgxre4v6+bzrhX6j4rf0FYoTjDh/euFCgRcs+GfSVga
+	 GvHDFw85qSDWpMIjtIs9Dc1lMPbjCscKFBg1pEyJpVLDfm6DT7wrJNOFVQ/bpuqYJA
+	 cYca+V9BBG8cZ5Fi3P0NpiGYzPp+SEYCRFNKPQ5cZ2QlCs+8WEArxQOti27UU2FgYn
+	 1vaEE/Y7gvWww==
+Date: Thu, 20 Jun 2024 18:25:59 +0100
+From: Lee Jones <lee@kernel.org>
+To: Chris Morgan <macroalpha82@gmail.com>
+Cc: linux-sunxi@lists.linux.dev, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+	broonie@kernel.org, samuel@sholland.org, jernej.skrabec@gmail.com,
+	sre@kernel.org, wens@csie.org, conor+dt@kernel.org,
+	krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH 4/8] mfd: axp20x: Add ADC, BAT, and USB cells for AXP717
+Message-ID: <20240620172559.GZ3029315@google.com>
+References: <20240617220535.359021-1-macroalpha82@gmail.com>
+ <20240617220535.359021-5-macroalpha82@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] cpupower: Change the var type of the 'monitor'
- subcommand display mode
-To: Roman Storozhenko <romeusmeister@gmail.com>,
- Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240620-change-mode-type-v2-1-8c3a499be64e@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240620-change-mode-type-v2-1-8c3a499be64e@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240617220535.359021-5-macroalpha82@gmail.com>
 
-On 6/20/24 09:57, Roman Storozhenko wrote:
-> There is a type 'enum operation_mode_e' contains the display modes of
-> the 'monitor' subcommand. This type isn't used though, instead the
-> variable 'mode' is of a simple 'int' type.
-> Change 'mode' variable type from 'int' to 'enum operation_mode_e' in
-> order to improve compiler type checking.
-> Built and tested this with different monitor cmdline params. Everything
-> works as expected, that is nothing changed and no regressions encountered.
+On Mon, 17 Jun 2024, Chris Morgan wrote:
+
+> From: Chris Morgan <macromorgan@hotmail.com>
 > 
-> Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
+> Add support for the AXP717 PMIC to utilize the ADC (for reading
+> voltage, current, and temperature information from the PMIC) as well
+> as the USB charger and battery.
+> 
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 > ---
-> Changes in v2:
-> - Moved cover letter content to the change log
-> - Link to v1: https://lore.kernel.org/r/20240619-change-mode-type-v1-1-31e7e45028f0@gmail.com
+>  drivers/mfd/axp20x.c                 | 30 +++++++++++++++++++++++++---
+>  drivers/regulator/axp20x-regulator.c |  2 +-
+>  include/linux/mfd/axp20x.h           | 26 +++++++++++++++++++++++-
+>  3 files changed, 53 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+> index 609e7e149681..07db4a11acbc 100644
+> --- a/drivers/mfd/axp20x.c
+> +++ b/drivers/mfd/axp20x.c
+> @@ -209,15 +209,23 @@ static const struct regmap_access_table axp313a_volatile_table = {
+>  };
+>  
+>  static const struct regmap_range axp717_writeable_ranges[] = {
+> -	regmap_reg_range(AXP717_MODULE_EN_CONTROL, AXP717_MODULE_EN_CONTROL),
+> -	regmap_reg_range(AXP717_BOOST_CONTROL, AXP717_BOOST_CONTROL),
+> +	regmap_reg_range(AXP717_PMU_FAULT, AXP717_MODULE_EN_CONTROL_1),
+> +	regmap_reg_range(AXP717_MIN_SYS_V_CONTROL, AXP717_BOOST_CONTROL),
+> +	regmap_reg_range(AXP717_VSYS_V_POWEROFF, AXP717_VSYS_V_POWEROFF),
+>  	regmap_reg_range(AXP717_IRQ0_EN, AXP717_IRQ4_EN),
+>  	regmap_reg_range(AXP717_IRQ0_STATE, AXP717_IRQ4_STATE),
+> +	regmap_reg_range(AXP717_ICC_CHG_SET, AXP717_CV_CHG_SET),
+>  	regmap_reg_range(AXP717_DCDC_OUTPUT_CONTROL, AXP717_CPUSLDO_CONTROL),
+> +	regmap_reg_range(AXP717_ADC_CH_EN_CONTROL, AXP717_ADC_CH_EN_CONTROL),
+> +	regmap_reg_range(AXP717_ADC_DATA_SEL, AXP717_ADC_DATA_SEL),
+>  };
+>  
+>  static const struct regmap_range axp717_volatile_ranges[] = {
+> +	regmap_reg_range(AXP717_ON_INDICATE, AXP717_PMU_FAULT),
+>  	regmap_reg_range(AXP717_IRQ0_STATE, AXP717_IRQ4_STATE),
+> +	regmap_reg_range(AXP717_BATT_PERCENT_DATA, AXP717_BATT_PERCENT_DATA),
+> +	regmap_reg_range(AXP717_BATT_V_H, AXP717_BATT_CHRG_I_L),
+> +	regmap_reg_range(AXP717_ADC_DATA_H, AXP717_ADC_DATA_L),
+>  };
+>  
+>  static const struct regmap_access_table axp717_writeable_table = {
+> @@ -310,6 +318,11 @@ static const struct resource axp22x_usb_power_supply_resources[] = {
+>  	DEFINE_RES_IRQ_NAMED(AXP22X_IRQ_VBUS_REMOVAL, "VBUS_REMOVAL"),
+>  };
+>  
+> +static const struct resource axp717_usb_power_supply_resources[] = {
+> +	DEFINE_RES_IRQ_NAMED(AXP717_IRQ_VBUS_PLUGIN, "VBUS_PLUGIN"),
+> +	DEFINE_RES_IRQ_NAMED(AXP717_IRQ_VBUS_REMOVAL, "VBUS_REMOVAL"),
+> +};
+> +
+>  /* AXP803 and AXP813/AXP818 share the same interrupts */
+>  static const struct resource axp803_usb_power_supply_resources[] = {
+>  	DEFINE_RES_IRQ_NAMED(AXP803_IRQ_VBUS_PLUGIN, "VBUS_PLUGIN"),
+> @@ -424,7 +437,7 @@ static const struct regmap_config axp717_regmap_config = {
+>  	.val_bits = 8,
+>  	.wr_table = &axp717_writeable_table,
+>  	.volatile_table = &axp717_volatile_table,
+> -	.max_register = AXP717_CPUSLDO_CONTROL,
+> +	.max_register = AXP717_ADC_DATA_L,
+>  	.cache_type = REGCACHE_MAPLE,
+>  };
+>  
+> @@ -1026,6 +1039,17 @@ static struct mfd_cell axp313a_cells[] = {
+>  static struct mfd_cell axp717_cells[] = {
+>  	MFD_CELL_NAME("axp20x-regulator"),
+>  	MFD_CELL_RES("axp20x-pek", axp717_pek_resources),
+> +	{
+> +		.name		= "axp717-adc",
+> +		.of_compatible	= "x-powers,axp717-adc",
+> +	},
+> +	MFD_CELL_OF("axp20x-usb-power-supply",
+> +		    axp717_usb_power_supply_resources, NULL, 0, 0,
+> +		    "x-powers,axp717-usb-power-supply"),
+> +	{
+> +		.name		= "axp20x-battery-power-supply",
+> +		.of_compatible	= "x-powers,axp717-battery-power-supply",
+> +	},
+>  };
 
-Applied for Linux 6.11-rc1
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/log/?h=cpupower
+Please refrain from mixing and matching:
 
-thanks,
--- Shuah
+MFD_CELL_OF() for both.
 
+-- 
+Lee Jones [李琼斯]
 
