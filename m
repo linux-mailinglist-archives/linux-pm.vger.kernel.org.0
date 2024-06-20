@@ -1,125 +1,92 @@
-Return-Path: <linux-pm+bounces-9657-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9658-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC01E91010F
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 12:05:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76F6A91015F
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 12:21:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85E081F225BE
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 10:05:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86C201C2132E
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 10:21:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ADA01A4F2B;
-	Thu, 20 Jun 2024 10:05:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 319F91A8C39;
+	Thu, 20 Jun 2024 10:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ArXWFJQJ"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="w1lp5TpY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FDB22BAE2;
-	Thu, 20 Jun 2024 10:05:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C633A1A8C2B;
+	Thu, 20 Jun 2024 10:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718877929; cv=none; b=iRisYDlxp/7TtHHAZELCYZU9al9zWKkWCcnsQE41owGMJnq0rbjJBJcAtTa6yKo/42sVHBq5izVbFViOFTVbxBWZftgxQyI+KLewAon8/YDPg6bqKUqMIHW2OF5OJOTw6B3ArjnKTh9sGcbkkl2Y5RBm6DZYdP0JJwaVnSPCf30=
+	t=1718878913; cv=none; b=MI8hb2a78ZcZE4XROPHe6yUofQ7Rk6+yWKi1Wz5cCvzRWISL1YJ/7gXMFY1WWjPmybxuIdYM4K7dnvfnB+c953BX+r3my9TMl8yAhSybvmI46b+M+YaPIT3VASfWAoxHsj8Mm1rVe/dMCYCtFjmlDa3mzDHtexmdvgW2c9MhyD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718877929; c=relaxed/simple;
-	bh=HDZk9HJppUsHiLTg26al0A+m7r+GdOYBJsYGlt7Qx7E=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=D4uwjFKXlwkT0DzPj727AbWwtI94mNA098zW7+r23yyqcnSoS75t37Spu45LRT/RhAJ/uFbzYssPQOUmh1OydXk66KMVqNnbygzgyWVCwybmNBOJdU6zVRol4abGeXNwELqMLTPxjRbWKDJ4ITblZWxkHBnxDOGklhWzgn5af4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ArXWFJQJ; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1f44b441b08so5315555ad.0;
-        Thu, 20 Jun 2024 03:05:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718877927; x=1719482727; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HDZk9HJppUsHiLTg26al0A+m7r+GdOYBJsYGlt7Qx7E=;
-        b=ArXWFJQJh37gmCLv2Wo20HdCZtzaoSMtV0fjcH/2WUfTGRhVOcl1JHzEvQM5M+WGx9
-         EVDZznNAQMS7uMtf8YJEjgmII+5OxgwuZlc3125lBjmet5CEI+VF7UgV0nMkfh+MySkQ
-         /yb3D/+2GpItJsatA2VcWn/fbgwaqENK8rE48zTOyTryyan4NAa5BR9SzmVge1KPwxdL
-         uKKRBKhIsFn01q5gfFdPbkDSGKIb6aiirsj4vPmkO3Hb8RS2MbhLkMvMnIBTUwAy6diW
-         EceK/E8maqv0Yxdufj2Ny2USdlViUVQoYABS0UXlOzCPcOzRHonSdN/q8DuIM/wUkQxd
-         xeFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718877927; x=1719482727;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HDZk9HJppUsHiLTg26al0A+m7r+GdOYBJsYGlt7Qx7E=;
-        b=i5qx31MclfmOkhBmB2HpVeQHKFph+dss92EcC7xGkjGMNSu8TbjNNhYvsuXPoHilBF
-         fM5mhEFZan8N1EybrsWAgB+N3NqLi3Hy59I1CH2FxR+p001YY2P+plHXqqJyYvI963gK
-         /0e1us/ZwbebQGSTxft2LjPs5uXN5/ex/EoQTHwpsc60k8vXMncq8xqo9nMRF1Ku3zxj
-         9O2ITt3whJxTzwhss9LYz8r4FXWFwESq2yft2q9b4euQrHQxd0aFKgkl+3bAPORCh58A
-         DG3x3XrQFd9wYWJFg4hNe+1KsMOHGdojhhtQ9PZtH/YXlUboZjXMYuZjBmUR/By+4Aig
-         FuUg==
-X-Forwarded-Encrypted: i=1; AJvYcCVp/TlDnV61CC015QtyKpSIuoFLIG7HZdNrw8t0+nzrZ40ZlHjCH9MhqtRXa+ZJg/5aEio/LuVlnePk3JCR7SebXTBhVp5waU8=
-X-Gm-Message-State: AOJu0Yw3uEM7dcSryYCiwf1AXc3xXAUGrZOzF4YpvVpp2WwiO2dRL98H
-	JLokIy4XvAiMVyXOqdCeZY45c8Y5Jig1reJXvXtEWSaHOQIht4f7
-X-Google-Smtp-Source: AGHT+IHKP0cjFNlKm9wf9h08SQSeHk8JMac7e/kdLm1Cay1idYN22fHCErHQ1so6NkdBrqsZNuoh7g==
-X-Received: by 2002:a17:903:230a:b0:1f9:ddb9:3ee5 with SMTP id d9443c01a7336-1f9ddb94098mr411145ad.26.1718877927301;
-        Thu, 20 Jun 2024 03:05:27 -0700 (PDT)
-Received: from [127.0.0.1] ([49.205.38.201])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9b17f9bcasm30533305ad.161.2024.06.20.03.05.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jun 2024 03:05:26 -0700 (PDT)
-Date: Thu, 20 Jun 2024 15:35:23 +0530
-From: Mathew George <mathewegeorge@gmail.com>
-To: Ping-Ke Shih <pkshih@realtek.com>
-CC: "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- Bernie Huang <phhuang@realtek.com>, "kvalo@kernel.org" <kvalo@kernel.org>,
- "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Subject: RE: [REGRESSION] Freeze on resume from S3 (bisected)
-User-Agent: K-9 Mail for Android
-In-Reply-To: <342b6b95d97a4bf09afee15c09481efc@realtek.com>
-References: <87tthpwkqf.fsf@gmail.com> <2ce41d4129234ba9a91d5b4dcd8a40ee@realtek.com> <87sex93s63.fsf@gmail.com> <6970398610c546b1b62e599902c67572@realtek.com> <E3FF7BC1-725B-40E2-AAF0-CA41A44B9DF9@gmail.com> <342b6b95d97a4bf09afee15c09481efc@realtek.com>
-Message-ID: <CFB0314C-AE45-4563-BF41-F5D635BFCF86@gmail.com>
+	s=arc-20240116; t=1718878913; c=relaxed/simple;
+	bh=nCk+s9gsu5b4yUK/EK+MBN5vgThELD1rn/D27UNOsIc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bIno8LvWVh1+w4INle+d3eSXiMsqx3fmSpZ3t2+2SvoE06LyMIaxQAf12aabizgCn+N/jO/Mq28AycnX0E1Tp7tBMoSE2lYWhQelUnu13IiJVGiCoLy9ga+gRWIIwdn+8XULEz9NIUI/qLCs9Us0f6rRVyGWCMukT+iJann0tKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=w1lp5TpY; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1718878909;
+	bh=nCk+s9gsu5b4yUK/EK+MBN5vgThELD1rn/D27UNOsIc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=w1lp5TpYcyof799ZyVr51hHtK12dhICJnFufQGfrbwCs/AS2yjmW7nW1FnEUtmrM4
+	 OYUY9WKujoNltnDBlrB0ZrizZijHjPtxkDHrzbiZUQTR/8HbbGFp2qT9rlapmfjqks
+	 D8yDrVjFxqGGDQxpwW3ZfGzJ6aEEENRs5ARM6OApuGtszpR/M/vM2lD+WQOK3OwO3h
+	 8a2o4xxEwjIjEP6mA9b3lR3IZriQLcSnbQz52zPclKWNTRxqD5AVYhA5i2/tP3XRNd
+	 AdJn3sqJwa+yhVrz67mycX3Po/Ove61XwWng5j6h7wGK6WNuWoa20JPV4DSASgRH/O
+	 1V6ccWMC5JgeQ==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id DE35E3780698;
+	Thu, 20 Jun 2024 10:21:48 +0000 (UTC)
+Message-ID: <8d83fa71-4230-404c-829a-8afca6db203e@collabora.com>
+Date: Thu, 20 Jun 2024 12:21:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal/drivers/mediatek/lvts_thermal: Provide default
+ calibration data
+To: Chen-Yu Tsai <wenst@chromium.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
+Cc: Nicolas Pitre <npitre@baylibre.com>,
+ Alexandre Mergnat <amergnat@baylibre.com>,
+ =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+ Julien Panis <jpanis@baylibre.com>, Balsam CHIHI <bchihi@baylibre.com>,
+ Frank Wunderlich <frank-w@public-files.de>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20240620092306.2352606-1-wenst@chromium.org>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20240620092306.2352606-1-wenst@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> I have seen that, but no clear idea for now, so I will install Arch Linux=
- as yours
-> in my side=2E=20
+Il 20/06/24 11:23, Chen-Yu Tsai ha scritto:
+> On some pre-production hardware, the SoCs do not contain calibration
+> data for the thermal sensors. The downstream drivers provide default
+> values that sort of work, instead of having the thermal sensors not
+> work at all.
+> 
+> Port the default values to the upstream driver. These values are from
+> the ChromeOS kernels, which sadly do not cover the MT7988.
+> 
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 
-I really appreciate your dedication here, but I'm not sure that this is re=
-lated to my OS=2E I
-feel it might be a corner case that manifests only on certain hardware con=
-figurations,
-otherwise it would probably have been encountered by other people by now=
-=2E
-I can't say this with any confidence, since this is my first kernel bug, a=
-nd I don't have
-any factual basis for this feeling; I just don't want you to burn yourself=
- out with the Arch
-installation process when it might not help in diagnosing the issue=2E
-Ultimately we'll go by whatever you think is best, though; you're the expe=
-rt here, not me=2E
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-> I feel this problem may be easier to reproduce on Arch Linux, so I would=
- like
-> to know Arch Linux iso file you installed=2E
 
-I don't remember the iso version that I used (it was years ago), and I don=
-'t know of any
-way to check, but it shouldn't matter=2E AFAIK the Arch iso is only used t=
-o bootstrap the
-system, so its version should not be of any consequence to my current conf=
-iguration=2E
-You might want to look at https://wiki=2Earchlinux=2Eorg/title/Installatio=
-n_guide
-to get an idea of what the process is like; as you'll see it's very manual=
- and takes a fair bit
-of effort=2E
 
