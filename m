@@ -1,106 +1,231 @@
-Return-Path: <linux-pm+bounces-9655-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9656-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0529491008C
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 11:40:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B9399100B5
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 11:46:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0370B1C21A6B
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 09:40:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8812B21135
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 09:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C711A4F1E;
-	Thu, 20 Jun 2024 09:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D26991A4F28;
+	Thu, 20 Jun 2024 09:46:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GF4+2Xno"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 137BE47772;
-	Thu, 20 Jun 2024 09:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF1A433BB
+	for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2024 09:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718876416; cv=none; b=MC8k4seIfH/ROiJPbvNudTOHILFIihhQey90Hn4CBijpLTIpwOQwcPWvdB7AdYSzcvT5MyFZSlAjwjIKuJsxoHtnfZYXsogsmAmebWClXfmqwaAOJV2b0wGesbxBqyAsoVP5NIXvcvfhk9QK2aJ/DzSezHMH68Exi9Ou2/G0SfU=
+	t=1718876801; cv=none; b=FdzK0ftbfUX7TdaPxxKEmQdEoeLiJ1oWKv2Q+CxZa/0EJI7qePeowzS9r86BxvV8LR0z1znMPMeBcrIRD0A1I7XwiReI3c49VjYF0p8sgOTLIxCdO37msqO/ryIAijxU36nkFRowAOOUs2RYEyswAvOCYpGnqRyTaRuEkfPqdtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718876416; c=relaxed/simple;
-	bh=9MNVSBWbW8OjiSSPD7at3rvyGG4z1twkKtzhezeu9I0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mz4bYnIMXFMBJBK82y4XcACz+yTQirtcfAq21IN8XypStsYE2Hp0ogE5QtvGAdEU6s/07hgLIgalSEpJ5VMcXnwruMAdpN9zZ53vfUZhhDc0jMWUpF6RpBdeQUX0iPc8KgdvQ692Jk4VLTXCP0rzsvHO50HUOcu3m4Vag9n36Ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0634CDA7;
-	Thu, 20 Jun 2024 02:40:39 -0700 (PDT)
-Received: from [10.1.27.54] (e127648.arm.com [10.1.27.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A9433F6A8;
-	Thu, 20 Jun 2024 02:40:12 -0700 (PDT)
-Message-ID: <8065165f-1c51-4444-ac9a-bc74101ac01a@arm.com>
-Date: Thu, 20 Jun 2024 10:40:10 +0100
+	s=arc-20240116; t=1718876801; c=relaxed/simple;
+	bh=PQeDvQdpV3xoa4EoS+6rRCcA8khvc+TkBodiCwJ0nPM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IKzQJa1y0wUpU3T2ra5hYRkE50huD27S2wR1Bfoct8sKLtExgRxITB5i0SXMCysF2IyD6nXrMAyx8ZIwI8nhOdeIWZ8zc7gRKXEbZghujcN9/cFB2A9x/79aTeZgABzGxzemOKw7aj5MMHBFiJeTqZ2SwfECsh+JcIU8x3PG/Es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=GF4+2Xno; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ec3f875e68so7555011fa.0
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2024 02:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1718876798; x=1719481598; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1C8Ju8XWmp5T/a5fTSJkVEbGY+u2Y8Oaw2wvJKVqwcw=;
+        b=GF4+2XnoU8Q3JXTCA7tHT80PNo1AoLZkOLZOSqkdPn95Y1lVZ9IXGU0IEGpnIIqaxn
+         YSrIPMBEFUxSn460HIBRvnmPccKJLDtd7ncMV3/fHTBE/KTPMDwHeoVk353yWgbGVu2p
+         mN5PxYyst7iWw0rqdC1K140hdORTEHcMyliMM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718876798; x=1719481598;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1C8Ju8XWmp5T/a5fTSJkVEbGY+u2Y8Oaw2wvJKVqwcw=;
+        b=IzhdKKKHlL2z4CD0wBEpdikzp/06uigzAAgBQ0Uq52w2DJAzfDmtuwOPDptU4pcsq+
+         pyxXqyo1fACQ1dLrC8nA+7WFUhV2Ngv+GlgHN42RHmQ/IMa0QJ7IC7n/a2SX4xdqrLvX
+         piWDUrlewFEoMfw+qVfUyYhX/IdcQdx83hb7FC9T6b3uAJ4mhNu1AGlemH9zoXfCN81C
+         INtm8wm/bGtIBhsMe1279NpxnObM7c3EhIKMRjV0Qb3su4CtvvlL+QrlYD0NqTt0Z1sH
+         g0w0bru/TTfXfVDhetAVxHqVpEG2bF2qfdYfrNl8v3B/4ktT7J/O23pzuDOSHoeYpzhS
+         90jQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV5i7Edg4ApujMe9nzhu+OA0xSxGrfkGTA7KCETUpaCFAaKxeb4uM6CKMbBP6YopbR+HtJ8+T+BoROByDDuCE+V4xbK5wkxtIQ=
+X-Gm-Message-State: AOJu0YwVd8g52D82xrQCjTfkvsKa42hTKCANy+8EcMmyfLUPS1kz2Sgm
+	wQH7iVlhjK8sx6CeTgrqCC/qvvDdwFCWmbrOU3b+VTuCU1VNL/64NJzfBt/NySMhHNg01ICjvys
+	ek1Xfm8lihLwEfcDVH/08sojdz9Q5KOyohMXf
+X-Google-Smtp-Source: AGHT+IEAch4d9DfYlt6svj7uQiDMS/kkFeiPt+x05ruz/JwQ3l7QJT/Zf3fr43/NzPnYxwZicSzj+aUa/F91bwpokys=
+X-Received: by 2002:a2e:2281:0:b0:2ec:3f29:a0fe with SMTP id
+ 38308e7fff4ca-2ec3f29a240mr23325101fa.38.1718876797983; Thu, 20 Jun 2024
+ 02:46:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] cpufreq_schedutil: Refactor sugov_cpu_is_busy()
-To: Tejun Heo <tj@kernel.org>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
- void@manifault.com, linux-kernel@vger.kernel.org, kernel-team@meta.com,
- mingo@redhat.com, peterz@infradead.org, David Vernet <dvernet@meta.com>,
- "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-References: <20240619031250.2936087-1-tj@kernel.org>
- <20240619031250.2936087-2-tj@kernel.org>
- <0c0073ef-3fe3-4c9f-9a86-5c42336b3da1@arm.com>
- <ZnMqNHzCaAmolxkK@slm.duckdns.org> <ZnMrVmutooN-YwL1@slm.duckdns.org>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <ZnMrVmutooN-YwL1@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240529-mtk-thermal-mt818x-dtsi-v6-0-0c71478a9c37@baylibre.com>
+ <20240529-mtk-thermal-mt818x-dtsi-v6-4-0c71478a9c37@baylibre.com>
+ <75826085-fd59-466a-b1de-b4c323c801c1@collabora.com> <CAGXv+5FPG4ob3mTU0Utm8Wgk0_ZLw=NLPbfFerWh4OUeAz7UHw@mail.gmail.com>
+ <808db317-4cee-426b-a840-013a5e03098d@baylibre.com> <ad047631-16b8-42ce-8a8d-1429e6af4517@collabora.com>
+ <940eec49-91d8-4d38-a3d8-e1b7e090b905@baylibre.com>
+In-Reply-To: <940eec49-91d8-4d38-a3d8-e1b7e090b905@baylibre.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Thu, 20 Jun 2024 17:46:26 +0800
+Message-ID: <CAGXv+5HpRvsYz3ZJ_hNM=RhDHbnEZA73Xwm1YgjuWWPXhymT9w@mail.gmail.com>
+Subject: Re: [PATCH v6 4/6] arm64: dts: mediatek: mt8186: add default thermal zones
+To: Julien Panis <jpanis@baylibre.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Nicolas Pitre <npitre@baylibre.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org, 
+	Krzysztof Kozlowski <krzk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/19/24 20:07, Tejun Heo wrote:
-> On Wed, Jun 19, 2024 at 08:57:56AM -1000, Tejun Heo wrote:
->> Hello, Christian.
->>
->> On Wed, Jun 19, 2024 at 03:07:32PM +0100, Christian Loehle wrote:
->>>> +	if (sugov_hold_freq(sg_cpu) && next_f < sg_policy->next_freq &&
->>>>  	    !sg_policy->need_freq_update) {
->>>>  		next_f = sg_policy->next_freq;
->>>>  
->>>
->>> Not necessarily related to your changes, but in case you're touching this
->>> again, maybe sugov_hold_freq() could be the last condition?
->>
->> I'll update the patch so that sugov_hold_freq() is the last condition.
-> 
-> Oh, looking at the code again, this would lead to behavior change, right? It
-> changes the period over which non-idleness is measured. Maybe that's okay
-> but seems out-of-scope for a refactoring patch. I'll leave it as-is.
+Hi,
 
-It does prevent idle_calls being updated in some cases, but see below I don't
-think they are that deliberate anyway.
+On Mon, Jun 3, 2024 at 3:58=E2=80=AFPM Julien Panis <jpanis@baylibre.com> w=
+rote:
+>
+> On 5/29/24 14:06, AngeloGioacchino Del Regno wrote:
+> > Il 29/05/24 11:12, Julien Panis ha scritto:
+> >> On 5/29/24 10:33, Chen-Yu Tsai wrote:
+> >>> On Wed, May 29, 2024 at 4:17=E2=80=AFPM AngeloGioacchino Del Regno
+> >>> <angelogioacchino.delregno@collabora.com> wrote:
+> >>>> Il 29/05/24 07:57, Julien Panis ha scritto:
+> >>>>> From: Nicolas Pitre <npitre@baylibre.com>
+> >>>>>
+> >>>>> Inspired by the vendor kernel but adapted to the upstream thermal
+> >>>>> driver version.
+> >>>>>
+> >>>>> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+> >>>>> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+> >>>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@c=
+ollabora.com>
+> >>> I'm getting some crazy readings which would cause the machine to
+> >>> immediately shutdown during boot. Anyone else see this? Or maybe
+> >>> my device has bad calibration data?
+> >>>
+> >>> gpu_thermal-virtual-0
+> >>> Adapter: Virtual device
+> >>> temp1:       +229.7 C
+> >>>
+> >>> nna_thermal-virtual-0
+> >>> Adapter: Virtual device
+> >>> temp1:       +229.7 C
+> >>>
+> >>> cpu_big0_thermal-virtual-0
+> >>> Adapter: Virtual device
+> >>> temp1:         -7.2 C
+> >>>
+> >>> cpu_little2_thermal-virtual-0
+> >>> Adapter: Virtual device
+> >>> temp1:       +157.2 C
+> >>>
+> >>> cpu_little0_thermal-virtual-0
+> >>> Adapter: Virtual device
+> >>> temp1:       -277.1 C
+> >>>
+> >>> adsp_thermal-virtual-0
+> >>> Adapter: Virtual device
+> >>> temp1:       +229.7 C
+> >>>
+> >>> cpu_big1_thermal-virtual-0
+> >>> Adapter: Virtual device
+> >>> temp1:       +229.7 C
+> >>>
+> >>> cam_thermal-virtual-0
+> >>> Adapter: Virtual device
+> >>> temp1:        +45.4 C
+> >>>
+> >>> cpu_little1_thermal-virtual-0
+> >>> Adapter: Virtual device
+> >>> temp1:       -241.8 C
+> >>
+> >> It's likely that your device has bad calibration data indeed. We obser=
+ved the same
+> >> behavior on the mt8186 device we used (a Corsola) and finally realized=
+ that the
+> >> golden temperature was 0 (device not properly calibrated).
+> >>
+> >> To make a comparison, we run chromiumos v5.15 and dmesg output was:
+> >> 'This sample is not calibrated, fake !!'
+> >> Additional debugging revealed that the golden temp was actually 0. As =
+a result,
+> >> chromiumos v5.15 does not use the calibration data. It uses some defau=
+lt values
+> >> instead. That's why you can observe good temperatures with chromiumos =
+v5.15
+> >> even with a device that is not calibrated.
+> >>
+> >> This feature is not implemented in the driver upstream, so you need a =
+device
+> >> properly calibrated to get good temperatures with it. When we forced t=
+his
+> >> driver using the default values used by chromiumos v5.15 instead of re=
+al calib
+> >> data (temporarily, just for testing), the temperatures were good.
+> >>
+> >> Please make sure your device is properly calibrated: 0 < golden temp <=
+ 62.
+> >>
+> >
+> > Wait wait wait wait.
+> >
+> > What's up with that calibration data stuff?
+> >
+> > If there's any device that cannot use the calibration data, we need a w=
+ay to
+> > recognize whether the provided data (read from efuse, of course) is val=
+id,
+> > otherwise we're creating an important regression here.
+> >
+> > "This device is unlucky" is not a good reason to have this kind of regr=
+ession.
+> >
+> > Since - as far as I understand - downstream can recognize that, upstrea=
+m should
+> > do the same.
+> > I'd be okay with refusing to even probe this driver on such devices for=
+ the
+> > moment being, as those are things that could be eventually handled on a=
+ second
+> > part series, even though I would prefer a kind of on-the-fly calibratio=
+n or
+> > anyway something that would still make the unlucky ones to actually hav=
+e good
+> > readings *right now*.
+> >
+> > Though, the fact that you assert that you observed this behavior on one=
+ of your
+> > devices and *still decided to send that upstream* is, in my opinion, un=
+acceptable.
+> >
+> > Regards,
+> > Angelo
+>
+> I've been trying to find some more information about the criteria
+> "device calibrated VS device not calibrated" because there's a
+> confusing comment in downstream code (the comment does not
+> match what I observe on my device). I'll send a separate patch
+> to add this feature over the next few days, when I get additional
+> information from MTK about this criteria.
 
-> 
->>> And do we want something like
->>> #ifdef CONFIG_NO_HZ_COMMON                                                      
->>> else
->>> 	sg_cpu->saved_idle_calls = tick_nohz_get_idle_calls_cpu(sg_cpu->cpu);
->>> #endif
->>> here?
->>
->> I have no idea but if something like the above is necessary, it'd probably
->> fit better in the #else definition of sugof_hold_freq() or just move the
->> #ifdef inside the function body so that the common part is outside?
-> 
-> and ->saved_idle_calls isn't even defined if !NO_HZ_COMMON and is only used
-> to determine whether to hold frequency, so the above doesn't seem necessary
-> either.
+I couldn't wait and sent a patch to provide default calibration data,
+based on the values and code from the ChromeOS kernels. It seems to
+work OK-ish. I get 4x degrees C on my MT8186 device.
 
-When reading that code again it seems like the right thing to do.
-Anyway feel free to ignore, I might pick it up myself.
-I'll think it through some more, the question mark was more like an open
-question to anyone reading this.
+Also, your previous patch blocking invalid efuse data has landed. So
+I think this series can be relanded. What do you think, Angelo?
 
-Kind Regards,
-Christian
+ChenYu
 
