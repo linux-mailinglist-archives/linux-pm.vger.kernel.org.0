@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-9674-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9675-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2471910622
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 15:34:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6198691062F
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 15:36:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B48C28BBDF
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 13:34:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15D0A28BC73
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 13:36:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49EBF1AD407;
-	Thu, 20 Jun 2024 13:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 510551AD4BD;
+	Thu, 20 Jun 2024 13:30:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ki4YnoFZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TUFnNODS"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139A11AD3E4;
-	Thu, 20 Jun 2024 13:28:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD7B1AD4B8;
+	Thu, 20 Jun 2024 13:30:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718890087; cv=none; b=bWQoLdN04W0qogbb/FLaRlJ2pX2jndOtwrvghUJxU1tT/9g43pU85lp5R0TO7kzb3ecphRFV+bdIEj0gZixhGD8sjp2FAe0J+pfjg8kRhP+vd301CJoy9vmc5R2tVRUDW1VJLRNxugLQsiy79lsz6Pd6UpVB28U/mzeOih8YMWw=
+	t=1718890207; cv=none; b=IM3iwHbsF0sIMz0oSjlUWZZWggQmNbRylmFcyF5twQif+ldV5IyW+ElltRPDGA55c1Nlj0NW9HSgFs3epEaRHkc1ZuH74lP0vLVROtJIJX6O102Ynw+LE55kNBEc/SqcbAc3Rsf5ISFi5roL9UMpFWE2w3Jbo0vhViFJz6ZzPQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718890087; c=relaxed/simple;
-	bh=GZBQpbSBy2z/SkBwnFnXAM/P0VYlgWJvnuHdFxzI358=;
+	s=arc-20240116; t=1718890207; c=relaxed/simple;
+	bh=IxmUyzEcJMOiOVQPDyxrSqnmY7FhcCTjFRxTX7XpCYs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=GJYCoP8wJMWn3zR2cgl8P/4GqJnkTUVtRorrmABM5F3chxgTfgjYoo8wr+Ndmh+fw3ltjzJIe+ULmc3lh4z0evMl8SdcTHis4RwkJL5jZVfHu2ST5iny8NWPYb7itZZKX4+NM6m8ippuTAhHnTtHKKts2wnW97f0lXP//CXNemg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ki4YnoFZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 388EFC4AF07;
-	Thu, 20 Jun 2024 13:28:02 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=erKmlS6jbGX+fCfyAMfpbR8T4gjyb0sDSsC3LfmB5Z8IPe1JTqGL+aae9Q4jIcYi54stKkBpiPjZM7+Rh1C9FQKqDvSAG+TX744oHqp82gDSP8RbgE4VIueUHhPgFwKRKwrwZ0gfJc6Kgu+ZZBQlyMBOAEYLhxskyRsYPJowB+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TUFnNODS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19455C2BD10;
+	Thu, 20 Jun 2024 13:30:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718890086;
-	bh=GZBQpbSBy2z/SkBwnFnXAM/P0VYlgWJvnuHdFxzI358=;
+	s=k20201202; t=1718890206;
+	bh=IxmUyzEcJMOiOVQPDyxrSqnmY7FhcCTjFRxTX7XpCYs=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=ki4YnoFZfGkKr/tuBlJ6ZGQZ3LNfqHB8h7l9y/ogHWfoFYxGKvUj8fl1qH7hOzdoT
-	 5XusHRVQ77F4zjZTys1QDzlV3/naFkVyOb/dAeFVqmyKV4YU2ZaQvDQwql2Qnf/YqM
-	 MSKzKsg3q382vrpNqisGC8sWRQQzL9KtTt8x7rT0Fv8zk84t7zRLwVSp6aiLGNzaTO
-	 aW3iJO1i3GIWmmkXKnKumY5mNZu6IY5o+AK1/UIHU7VOLN15BrItemsKq2k577D02X
-	 njWdoUFQW8KCUZHUqGK13tOGK/QWYFQOI/71XbkfETcHXjuTLX97+ypnaqU4vm4Y+8
-	 GsoasyoZTGOUA==
-Message-ID: <6d9ad411-c76c-4d06-b8b8-6ca6bc4916a6@kernel.org>
-Date: Thu, 20 Jun 2024 15:28:00 +0200
+	b=TUFnNODS7TBwqRxVVcUJxA36KOMRliWq2noSGIMMbvbXmg4zG3k66tJ2PFPlRoc2H
+	 FaIjUJGTUmwByQcb78KmfmIXOHpi0KKorMVOOGyJLthEU18I2YIs939/IVlUAPLS5b
+	 Yf7w3gqHQsEnMwCtFgTUQNdNUcRI8D812isM50aLIMfibLopKk6ZFeUe+EjEUZYx+4
+	 rJXQjcWBCxuxrMta6bp1kI0jcPLItc4oNhRktsKkXxDchtb0lxJgac01fX713E0sMY
+	 x8YnjDI+NFxfrObyJ9+PQAQIsUWcd8M0RBoMAXW6H96hZpxHKaY9Lf9hacLCOtjxOB
+	 U9A/cnare5T9A==
+Message-ID: <0fead9a9-1742-4468-a85b-fc3ff4b33f54@kernel.org>
+Date: Thu, 20 Jun 2024 15:30:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/7] dt-bindings: soc: qcom: cpr3: Add bindings for
+Subject: Re: [PATCH v1 4/7] dt-bindings: clock: Add CPR clock defines for
  IPQ9574
 To: Varadarajan Narayanan <quic_varada@quicinc.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org,
@@ -62,7 +62,7 @@ To: Varadarajan Narayanan <quic_varada@quicinc.com>, robh@kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20240620081427.2860066-1-quic_varada@quicinc.com>
- <20240620081427.2860066-3-quic_varada@quicinc.com>
+ <20240620081427.2860066-5-quic_varada@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,61 +108,16 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240620081427.2860066-3-quic_varada@quicinc.com>
+In-Reply-To: <20240620081427.2860066-5-quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 20/06/2024 10:14, Varadarajan Narayanan wrote:
-> Add the bindings for the IPQ9574 CPR3 driver to the documentation.
+> Add defines for the CPR block present in IPQ9574.
 > 
 > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  .../bindings/soc/qcom/qcom,cpr3.yaml          | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-> index acf2e294866b..d5e02505c863 100644
-> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-> @@ -24,6 +24,7 @@ properties:
->        - const: qcom,cpr4
->        - items:
->            - enum:
-> +              - qcom,ipq9574-cprh
->                - qcom,msm8998-cprh
->                - qcom,sdm630-cprh
->            - const: qcom,cprh
-> @@ -52,9 +53,11 @@ properties:
->  
->    nvmem-cells:
->      description: Cells containing the fuse corners and revision data
-> +    minItems: 17
->      maxItems: 32
->  
->    nvmem-cell-names:
-> +    minItems: 17
->      maxItems: 32
->  
->    operating-points-v2: true
-> @@ -74,6 +77,35 @@ required:
->  additionalProperties: false
->  
->  allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,ipq9574-cprh
-> +    then:
-> +      properties:
-> +
 
-No need for blank line.
-
-Constrain nvmem-cells. Also constrain the other variant.
-
-
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
