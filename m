@@ -1,96 +1,107 @@
-Return-Path: <linux-pm+bounces-9660-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9661-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5710791033D
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 13:42:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9925F910387
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 13:59:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0BF31F237D3
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 11:42:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36788281299
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 11:59:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A964A1AB91C;
-	Thu, 20 Jun 2024 11:42:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A06317624F;
+	Thu, 20 Jun 2024 11:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="r1qngEQ5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B211AAE2E;
-	Thu, 20 Jun 2024 11:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A62170826;
+	Thu, 20 Jun 2024 11:59:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718883726; cv=none; b=ZBAJaNTsytHNiIye2QVlBu6iImxI76LPEam8m2GFXdvyMVCw+mMdl0RhMoHtyxGJuuMtd3IkFocv0B1hqgzNGMqC/vDnhICIW5WQNH5DTjTH/PsWtmgH5Z5wgNoce2+2poH1LJ67Cx2iC75+uFiz6lostqV5TJQDEN9kLpvNyHI=
+	t=1718884753; cv=none; b=UD1D/c/F0fIU1GX+arTwudTrnf3bLecERbmnxnhvoxUtssaJ9kfbtYEWbSu2RsQB7E8u10NAoWZyfjWA//j0TNsKbSeSb+meUAHTDJMf53cavhsx9HmocNofongQDGAyMEsuuNiIqWDBPn2PmRBhTC5WAbnt4wSmQ9n11g1spmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718883726; c=relaxed/simple;
-	bh=e9thnruLT95MQXFVgB7en6nCs/OUxpcV01fJi/7bqhU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=WYutV4nfe7Y1w24O6VX4SA+vD25NkqfkK6DpSvQ6XfFO2NymIBAI/0qOKyyyZVRUmIE+KaytwA/wFUYe9yQXKYsr6jgWSPYNY6dYWJimxmMDxSM+vCAjwSjz9lFh2eDTNM/KihYLoazkWeBkacgp0n8esPGAzQYujhpYd2HCNes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; arc=none smtp.client-ip=211.75.126.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 45KBfrBoB2858893, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 45KBfrBoB2858893
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Jun 2024 19:41:53 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 20 Jun 2024 19:41:54 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 20 Jun 2024 19:41:53 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::1a1:9ae3:e313:52e7]) by
- RTEXMBS04.realtek.com.tw ([fe80::1a1:9ae3:e313:52e7%5]) with mapi id
- 15.01.2507.035; Thu, 20 Jun 2024 19:41:53 +0800
-From: Ping-Ke Shih <pkshih@realtek.com>
-To: "mathewegeorge@gmail.com" <mathewegeorge@gmail.com>
-CC: "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>,
-        Bernie Huang <phhuang@realtek.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+	s=arc-20240116; t=1718884753; c=relaxed/simple;
+	bh=hg742+mt6Zi5lRHVjabFitH50pLzUlqnvHo+zO8xSvY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=V9xKdqJNGJrAkkpc98w41tATCJ6sml1qL8tq95GZyPtMV4WLdy5OZQgbb//A4ZnHh+erd1LgT3axFCPtYjeB2Pt8gNUhHi+oX8/uvoDMEMpU+spT9NayzEAZ7uz9nYPZIKdJaclnc0eORhQvU9d/jLkMst8cmNjXgWMAIq3it1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=r1qngEQ5; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=cxEogzvsAiuPBeqtkh9eO0b3zL2yiJN0U5oh7Tmj944=;
+	t=1718884751; x=1720094351; b=r1qngEQ5QAck3Da8YkdwjeCniThKLlRm0kNKTy7Gu9R8qMh
+	9NB/g0LWkfRsaC8KWa10T9gfM31Xzkjo34sU6rqq9fdieXKcCzSyjYuoyQ2XAKrb8whc1RP1lEtmx
+	Rp8AOAQUc+K2DFMS4ZH1gWXE/CIeo/QcU6Hd0T1LhYO4IRt01fsb7z/fP8DQnNqeXoLUxa7+v2jnu
+	zyg8r2zQ4fivOgU1THWyEsx4IMV4e6W5kCaTSnBXgzs3S+gdJYoO5VWTYNMewXz+KVray1JaHKfL2
+	YXfXLHrqjI3IICDytWzsj9+zfMkgGOnpFy898tBpW3PN+66lc3CHfuMLvws7G1RQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.97)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1sKGRQ-00000009Fjq-0Y9N;
+	Thu, 20 Jun 2024 13:59:00 +0200
+Message-ID: <b008224f6e7691234e52f8fb9400bbca50160235.camel@sipsolutions.net>
 Subject: Re: [REGRESSION] Freeze on resume from S3 (bisected)
-Thread-Topic: [REGRESSION] Freeze on resume from S3 (bisected)
-Thread-Index: AQHawgusbA+C/SyMRES67Y/3y6K7kbHOmQDAgAALtgCAAakyAP//jZeAgACItrD//4RSgIAAGvGA
-Date: Thu, 20 Jun 2024 11:41:53 +0000
-Message-ID: <a60692b7a0ec4caa5db64d369bebf18910102656.camel@realtek.com>
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Ping-Ke Shih <pkshih@realtek.com>, "mathewegeorge@gmail.com"
+	 <mathewegeorge@gmail.com>
+Cc: "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>, 
+ "kvalo@kernel.org" <kvalo@kernel.org>, "linux-pm@vger.kernel.org"
+ <linux-pm@vger.kernel.org>,  Bernie Huang <phhuang@realtek.com>,
+ "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Date: Thu, 20 Jun 2024 13:58:59 +0200
+In-Reply-To: <a60692b7a0ec4caa5db64d369bebf18910102656.camel@realtek.com>
 References: <87tthpwkqf.fsf@gmail.com>
 	 <2ce41d4129234ba9a91d5b4dcd8a40ee@realtek.com> <87sex93s63.fsf@gmail.com>
 	 <6970398610c546b1b62e599902c67572@realtek.com>
 	 <E3FF7BC1-725B-40E2-AAF0-CA41A44B9DF9@gmail.com>
 	 <342b6b95d97a4bf09afee15c09481efc@realtek.com>
 	 <CFB0314C-AE45-4563-BF41-F5D635BFCF86@gmail.com>
-In-Reply-To: <CFB0314C-AE45-4563-BF41-F5D635BFCF86@gmail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-user-agent: Evolution 3.36.1-2 
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BBC4230D26467D4D81D759EAD94409E4@realtek.com>
-Content-Transfer-Encoding: base64
+	 <a60692b7a0ec4caa5db64d369bebf18910102656.camel@realtek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.2 (3.52.2-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-malware-bazaar: not-scanned
 
-T24gVGh1LCAyMDI0LTA2LTIwIGF0IDE1OjM1ICswNTMwLCBNYXRoZXcgR2VvcmdlIHdyb3RlOg0K
-PiANCj4gPiBJIGZlZWwgdGhpcyBwcm9ibGVtIG1heSBiZSBlYXNpZXIgdG8gcmVwcm9kdWNlIG9u
-IEFyY2ggTGludXgsIHNvIEkgd291bGQgbGlrZQ0KPiA+IHRvIGtub3cgQXJjaCBMaW51eCBpc28g
-ZmlsZSB5b3UgaW5zdGFsbGVkLg0KPiANCj4gSSBkb24ndCByZW1lbWJlciB0aGUgaXNvIHZlcnNp
-b24gdGhhdCBJIHVzZWQgKGl0IHdhcyB5ZWFycyBhZ28pLCBhbmQgSSBkb24ndCBrbm93IG9mIGFu
-eQ0KPiB3YXkgdG8gY2hlY2ssIGJ1dCBpdCBzaG91bGRuJ3QgbWF0dGVyLiBBRkFJSyB0aGUgQXJj
-aCBpc28gaXMgb25seSB1c2VkIHRvIGJvb3RzdHJhcCB0aGUNCj4gc3lzdGVtLCBzbyBpdHMgdmVy
-c2lvbiBzaG91bGQgbm90IGJlIG9mIGFueSBjb25zZXF1ZW5jZSB0byBteSBjdXJyZW50IGNvbmZp
-Z3VyYXRpb24uDQo+IFlvdSBtaWdodCB3YW50IHRvIGxvb2sgYXQgaHR0cHM6Ly93aWtpLmFyY2hs
-aW51eC5vcmcvdGl0bGUvSW5zdGFsbGF0aW9uX2d1aWRlDQo+IHRvIGdldCBhbiBpZGVhIG9mIHdo
-YXQgdGhlIHByb2Nlc3MgaXMgbGlrZTsgYXMgeW91J2xsIHNlZSBpdCdzIHZlcnkgbWFudWFsIGFu
-ZCB0YWtlcyBhIGZhaXIgYml0DQo+IG9mIGVmZm9ydC4NCg0KUGxlYXNlIHByb3ZpZGUgb3V0cHV0
-IG9mICdjYXQgL2V0Yy9sc2ItcmVsZWFzZScsIHdoaWNoIEFyY2ggTGludXggdmVyc2lvbg0Kc2hv
-dWxkIGJlIHRoZXJlLCB0byBtZS4gDQoNCkkgaG9wZSB1c2luZyB0aGUgc2FtZSB2ZXJzaW9uIGFz
-IHlvdXJzIG1ha2VzIHRoZSBzeW1wdG9tIHJlcHJvZHVjaWJsZS4gDQoNCg0K
+I don't really know any of this here, but ...
+
++       ret =3D rtw89_hw_scan_offload(rtwdev, vif, false);
++       if (ret)
++               rtw89_hw_scan_complete(rtwdev, vif, true);
+
+seems strange? You have to say that it was completed here, in the good
+case, so maybe that was meant to be !ret?
+
+It _looks_ like the crash is a use-after-free (the wiphy pointer in a
+scan request cannot become NULL in normal flows), so maybe try with
+KASAN rather than waiting for the crash. According to the logs, it
+doesn't happen every time even for the reporter.
+
+There possibly seems to be some issue between cfg80211 and mac80211 in
+this code, we see the WARN_ON() in cfg80211_netdev_notifier_call() in
+the NETDEV_DOWN case, which calls ___cfg80211_scan_done() which frees
+the scan request. But shortly after the HW crashes, and we have
+"ieee80211_restart_work called with hardware scan in progress", mac80211
+wants to cancel the HW scan but the HW is dead ("wlo1: Failed check-
+sdata-in-driver check, flags: 0x0"), and we see again "phy0: resume with
+hardware scan still in progress" ... but this time once tasks are
+restarted it crashes ...
+
+So I think KASAN, possibly rtw debugs, and perhaps something like
+https://p.sipsolutions.net/602684f34abfcf7c.txt will help debug it (yes
+it adds a leak)
+
+johannes
 
