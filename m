@@ -1,137 +1,118 @@
-Return-Path: <linux-pm+bounces-9702-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9703-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 610A0910BAD
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 18:15:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5B58910E61
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 19:23:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 926F21C220ED
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 16:15:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69EEB1F22642
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 17:23:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB351B29BD;
-	Thu, 20 Jun 2024 16:14:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 427511B3F07;
+	Thu, 20 Jun 2024 17:23:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="mUIFHveI"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Z+GDbqGB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26EB1B29A4;
-	Thu, 20 Jun 2024 16:14:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE901AF6A9
+	for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2024 17:22:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718900099; cv=none; b=KDo2Jdq5h0Cls97o77p3cBELcN+bnbxEIYLy+HnJALhji6qMKqsztIYCcWkd+N0fFYRsaOC7Du10VLmiOFQbjGQENFKdk6Td0OkW0AcpX6dYUj0CUaYqyuk/nqaLSsdYF7GICt2cf+MgrnjDd7GsnJ+yTSohkv0HwkaXpRanG9I=
+	t=1718904181; cv=none; b=jtzdbJyGA32CZCnyBwndVMjwpAI4gM+q+nJCvMvkw7ZmFUUssxB7PbjVa5DzouvlTDpqVKUKo9Mmw5RUffxPh/z9YoVIge0C8ZMmyQ+udepUbhK+2FyOvgumdQBCRDze3eqjpH1VlGBlEa6H16QrETUKMVZUyhCCnwc/p+CbY24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718900099; c=relaxed/simple;
-	bh=+EKV5AxHovF3V+5mH8rAZYNVsw/V8pR/PzLDsahGGlc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OvEkSnvlER3n5GnFnA6LKxMKwPtRQOk5YTm2jhzDbiHi/pUBvAxWI2AgbQR350Xs4bX20P1ieiX2h8B/xgE+q3VAIA/GahgkGoZpJRVhRYpDV0JDHG7dUZ0sGyNZN0pD2Ap62JWGbWSTPaXGsR5SwHO+VC2jT5BIZFeLHZrpkF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=mUIFHveI reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id 5242e261afb4306f; Thu, 20 Jun 2024 18:14:54 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id DCA3C6A7AE3;
-	Thu, 20 Jun 2024 18:14:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1718900094;
-	bh=+EKV5AxHovF3V+5mH8rAZYNVsw/V8pR/PzLDsahGGlc=;
-	h=From:To:Cc:Subject:Date;
-	b=mUIFHveIkUT6u7RajyME0O5sYywcrPsHEUaK+8ucCZ2Qa3/GMmozOXdNVWBneBZbU
-	 SZqiZnl7TKSk5K6thh6J/pGbMOxgEKYj590ectBdyI2zTyzoZcVePpsW+dpwoeF137
-	 YAbvjhW994Ana4yPDKOwRMmCFAORueMLP2H7dBI+vTvH/zUywcwqoBYXpcH2CdlSZw
-	 KjLKCH7hoz3CpX+SLLIKbT6EU11KDPyAcjCfsAGDpCRrs2oO6Ub9yL267cBcR6khhm
-	 pXGZTGE6OtMe95432TPNFDRbuhvWY9K8YNGeYXSRVBhD65/H8ikME92Al6wBpPsIsx
-	 RdU9Ncu1QQiZw==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Aaron Rainbolt <arainbolt@kfocus.org>,
- LKML <linux-kernel@vger.kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Mario Limonciello <mario.limonciello@amd.com>
-Subject:
- [PATCH v1] cpufreq: intel_pstate: Use HWP to initialize ITMT if CPPC is
- missing
-Date: Thu, 20 Jun 2024 18:14:53 +0200
-Message-ID: <12460110.O9o76ZdvQC@rjwysocki.net>
+	s=arc-20240116; t=1718904181; c=relaxed/simple;
+	bh=dGqdpgKnoFzxt/1JqRDSt2VOPFHQTnyo7UE9wp4/h3Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B/0Ek1/HVYySPHDpuQC/oA4KXcTFEKgJ5c491iDYj4XztOopHQJsgb/O35eudi7r2ntIbAQ8s44w0XuKWXabdBTsdk4C3xPpKrLSOfK6iT2D+R4fYB3SaS8sFcxCkMOpw9EkNYgA2uePMIZkAMHC0d9HSfHQ6eco5GVVo/rp274=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Z+GDbqGB; arc=none smtp.client-ip=209.85.166.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-375858224b8so438575ab.2
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2024 10:22:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1718904179; x=1719508979; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OUklhXc3nIP3mWF1NibOeapDL3PcfljHJQSn6gqwmNg=;
+        b=Z+GDbqGBJTIK9zHphaROWTx13etvPKYZUSt0DCsNcVr5dUsPQovgVE7ZIlFb/d92zh
+         KhIoT36t130dXHG8tGxjfMbDCXQHX27pykVuzAHtm5VefO8Y7dX77KKIyV6017WSd3YI
+         yW+1nXswt6OhZ0Fs888r6omrbfSf646IUAuoo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718904179; x=1719508979;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OUklhXc3nIP3mWF1NibOeapDL3PcfljHJQSn6gqwmNg=;
+        b=dniR6dT+v1MqNJhB3d+T0LWHkh1Q7OO+PUTZAFGYk5KFoJg7X6aAKYM/4M4F0HdmHT
+         3TaZfVNWt7bPVgvkN48a3N08MgiKxHSm8GMAW+Ke6iTfracgo5g9G8CdY9XQ/EolT68o
+         3/6V0o5SiGXpkHaaz3gLult8GJF/ScCF9wIduwu4+ATTcAPZd1KH+3cCtytoWS4kL+rB
+         HYeoBniON37UNSgnePepJM3ho28hELUOEUFRa1uMgtHLOo2TZFMud3BHurQ19Xy5apNN
+         4eumn8Q+U3tL+GgRFFjsSi0IQCziGz6VAapRb7mpd2VdImM4FQtRUzhBtJH4+6JR/o5K
+         5jtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7wJRx0lCMeifJ08A1d4nbEkrqHykvxwAykQGjelJgX+xMnox2F70GS6H80k3W3R2hLPlqol4sj2rufmupLeIXpwsC1HztoFI=
+X-Gm-Message-State: AOJu0YxRVSp+zcQTuL9y+Y2WWoaRz94W/9Y1EOe8TWw5Qe7xGQxm6xHU
+	yugLisy+0BWdD6A7aZlWCbaqHt1LKdk/0ckyeqm3EBZBCXaUrbMSHF/rXZFOVLB3v3IKEEg6yHt
+	W
+X-Google-Smtp-Source: AGHT+IF1m1PzyR/MAUEpQ+FiMKdfadVksbQS0fB5/E17/ZnXAhfGTjgSFUzr33BvLS2B1hydmymFmA==
+X-Received: by 2002:a92:d5d2:0:b0:375:a48d:fdad with SMTP id e9e14a558f8ab-3761d70ecc1mr54513105ab.3.1718904178676;
+        Thu, 20 Jun 2024 10:22:58 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-37620064c45sm9942825ab.4.2024.06.20.10.22.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jun 2024 10:22:58 -0700 (PDT)
+Message-ID: <fbb09ad6-9dca-46ea-9826-021adaca9cca@linuxfoundation.org>
+Date: Thu, 20 Jun 2024 11:22:57 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrfeefvddguddttdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrrhgrihhnsgholhhtsehkfhhotghushdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhk
- vghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepmhgrrhhiohdrlhhimhhonhgtihgvlhhlohesrghmugdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] cpupower: Remove absent 'v' parameter from monitor man
+ page
+To: Roman Storozhenko <romeusmeister@gmail.com>,
+ Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240619-change-mon-format-v2-1-6bcffbad2c06@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240619-change-mon-format-v2-1-6bcffbad2c06@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 6/19/24 00:47, Roman Storozhenko wrote:
+> Remove not supported '-v' parameter from the cpupower's 'monitor'
+> command description.
+> There is a '-v' parameter described in cpupower's 'monitor' command man
+> page. It isn't supported at the moment, and perhaps has never been
+> supported. When I run the monitor with this parameter I get the
+> following:
+> 
+> $ sudo LD_LIBRARY_PATH=lib64/ bin/cpupower monitor -v
+> monitor: invalid option -- 'v'
+> invalid or unknown argument
+> $ sudo LD_LIBRARY_PATH=lib64/ bin/cpupower monitor -V
+> monitor: invalid option -- 'V'
+> invalid or unknown argument
+> 
+> Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
+> ---
+> Changes in v2:
+> - Moved the detailed description from the cover letter to the commit
+> - Link to v1: https://lore.kernel.org/r/20240618-change-mon-format-v1-1-efa263a8e286@gmail.com
+> ---
 
-It is reported that single-thread performance on some hybrid systems
-dropped significantly after commit 7feec7430edd ("ACPI: CPPC: Only probe
-for _CPC if CPPC v2 is acked") which prevented _CPC from being used if
-the support for it had not been confirmed by the platform firmware.
+Applied for Linux 6.11-rc1
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/log/?h=cpupower
 
-The problem is that if the platform firmware does not confirm CPPC v2
-support, cppc_get_perf_caps() returns an error which prevents the
-intel_pstate driver from enabling ITMT.  Consequently, the scheduler
-does not get any hints on CPU performance differences, so in a hybrid
-system some tasks may run on CPUs with lower capacity even though they
-should be running on high-capacity CPUs.
-
-To address this, modify intel_pstate to use the information from
-MSR_HWP_CAPABILITIES to enable ITMT if CPPC is not available (which is
-done already if the highest performance number coming from CPPC is not
-realistic).
-
-Fixes: 7feec7430edd ("ACPI: CPPC: Only probe for _CPC if CPPC v2 is acked")
-Closes: https://lore.kernel.org/linux-acpi/d01b0a1f-bd33-47fe-ab41-43843d8a374f@kfocus.org
-Link: https://lore.kernel.org/linux-acpi/ZnD22b3Br1ng7alf@kf-XE
-Reported-by: Aaron Rainbolt <arainbolt@kfocus.org>
-Tested-by: Aaron Rainbolt <arainbolt@kfocus.org>
-Cc: 5.19+ <stable@vger.kernel.org> # 5.19+
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpufreq/intel_pstate.c |   13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
-
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -355,15 +355,14 @@ static void intel_pstate_set_itmt_prio(i
- 	int ret;
- 
- 	ret = cppc_get_perf_caps(cpu, &cppc_perf);
--	if (ret)
--		return;
--
- 	/*
--	 * On some systems with overclocking enabled, CPPC.highest_perf is hardcoded to 0xff.
--	 * In this case we can't use CPPC.highest_perf to enable ITMT.
--	 * In this case we can look at MSR_HWP_CAPABILITIES bits [8:0] to decide.
-+	 * If CPPC is not available, fall back to MSR_HWP_CAPABILITIES bits [8:0].
-+	 *
-+	 * Also, on some systems with overclocking enabled, CPPC.highest_perf is
-+	 * hardcoded to 0xff, so CPPC.highest_perf cannot be used to enable ITMT.
-+	 * Fall back to MSR_HWP_CAPABILITIES then too.
- 	 */
--	if (cppc_perf.highest_perf == CPPC_MAX_PERF)
-+	if (ret || cppc_perf.highest_perf == CPPC_MAX_PERF)
- 		cppc_perf.highest_perf = HWP_HIGHEST_PERF(READ_ONCE(all_cpu_data[cpu]->hwp_cap_cached));
- 
- 	/*
-
-
-
+thanks,
+-- Shuah
 
