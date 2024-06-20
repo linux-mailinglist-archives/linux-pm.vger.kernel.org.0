@@ -1,350 +1,96 @@
-Return-Path: <linux-pm+bounces-9659-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9660-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88F79910261
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 13:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5710791033D
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 13:42:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 128A31F2236B
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 11:19:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0BF31F237D3
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2024 11:42:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28B051AB52F;
-	Thu, 20 Jun 2024 11:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A964A1AB91C;
+	Thu, 20 Jun 2024 11:42:06 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A7891AB526;
-	Thu, 20 Jun 2024 11:19:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B211AAE2E;
+	Thu, 20 Jun 2024 11:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718882371; cv=none; b=m2QKpbGTx6UhCknDYn5ZqnNt2erUHacPsd6K0q+jw9CAarEbjibqv2otW/0/6Brny/JCsGUv+/j1hu14NHSl1pSn3G+9LXdM/y228am6g2GFWZM+WldEJOyO20oku+9KybxLGPDYVXYGUGGDISYEfgYfCXUcPzzLAXJ2cbtS6nQ=
+	t=1718883726; cv=none; b=ZBAJaNTsytHNiIye2QVlBu6iImxI76LPEam8m2GFXdvyMVCw+mMdl0RhMoHtyxGJuuMtd3IkFocv0B1hqgzNGMqC/vDnhICIW5WQNH5DTjTH/PsWtmgH5Z5wgNoce2+2poH1LJ67Cx2iC75+uFiz6lostqV5TJQDEN9kLpvNyHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718882371; c=relaxed/simple;
-	bh=f+CnU4MXZp1EmCmIKnSNwvu5mVRSW2WU5/dEUBkkfYU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o29pNYRf5i2mxBRAO4CV1/l/bzOFI48wwAVEPyKKtvDhVn0aNT27UeCAGo6ag+Ycc65IfXjWBj/vs9Bb7LwxWe6xktLBjK5q2k2+1GQnS6ICikf4KRTVCH6bO3EcKzItcrlqcvl7AwfUJH7TpSfcEe89AE1QQkLI0+jxy5KRusg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71948DA7;
-	Thu, 20 Jun 2024 04:19:50 -0700 (PDT)
-Received: from arm.com (e127648.arm.com [10.1.27.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D9993F6A8;
-	Thu, 20 Jun 2024 04:19:24 -0700 (PDT)
-Date: Thu, 20 Jun 2024 12:19:23 +0100
-From: Christian Loehle <christian.loehle@arm.com>
-To: Doug Smythies <dsmythies@telus.net>
-Cc: rafael@kernel.org, vincent.guittot@linaro.org, qyousef@layalina.io,
-	peterz@infradead.org, daniel.lezcano@linaro.org,
-	ulf.hansson@linaro.org, anna-maria@linutronix.de,
-	kajetan.puchalski@arm.com, lukasz.luba@arm.com,
-	dietmar.eggemann@arm.com, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 0/3] cpuidle: teo: Fixing utilization and intercept
- logic
-Message-ID: <20240620111923.wmse37qqtxi6ffzx@e127648.arm.com>
-References: <20240611112413.1241352-1-christian.loehle@arm.com>
- <004a01dac04c$314c4360$93e4ca20$@telus.net>
- <20240618111729.hqywobxh3gm7rfgq@e127648.arm.com>
- <005701dac1a4$6ae1c830$40a55890$@telus.net>
+	s=arc-20240116; t=1718883726; c=relaxed/simple;
+	bh=e9thnruLT95MQXFVgB7en6nCs/OUxpcV01fJi/7bqhU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=WYutV4nfe7Y1w24O6VX4SA+vD25NkqfkK6DpSvQ6XfFO2NymIBAI/0qOKyyyZVRUmIE+KaytwA/wFUYe9yQXKYsr6jgWSPYNY6dYWJimxmMDxSM+vCAjwSjz9lFh2eDTNM/KihYLoazkWeBkacgp0n8esPGAzQYujhpYd2HCNes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; arc=none smtp.client-ip=211.75.126.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 45KBfrBoB2858893, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 45KBfrBoB2858893
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 20 Jun 2024 19:41:53 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 20 Jun 2024 19:41:54 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Thu, 20 Jun 2024 19:41:53 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::1a1:9ae3:e313:52e7]) by
+ RTEXMBS04.realtek.com.tw ([fe80::1a1:9ae3:e313:52e7%5]) with mapi id
+ 15.01.2507.035; Thu, 20 Jun 2024 19:41:53 +0800
+From: Ping-Ke Shih <pkshih@realtek.com>
+To: "mathewegeorge@gmail.com" <mathewegeorge@gmail.com>
+CC: "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>,
+        Bernie Huang <phhuang@realtek.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: Re: [REGRESSION] Freeze on resume from S3 (bisected)
+Thread-Topic: [REGRESSION] Freeze on resume from S3 (bisected)
+Thread-Index: AQHawgusbA+C/SyMRES67Y/3y6K7kbHOmQDAgAALtgCAAakyAP//jZeAgACItrD//4RSgIAAGvGA
+Date: Thu, 20 Jun 2024 11:41:53 +0000
+Message-ID: <a60692b7a0ec4caa5db64d369bebf18910102656.camel@realtek.com>
+References: <87tthpwkqf.fsf@gmail.com>
+	 <2ce41d4129234ba9a91d5b4dcd8a40ee@realtek.com> <87sex93s63.fsf@gmail.com>
+	 <6970398610c546b1b62e599902c67572@realtek.com>
+	 <E3FF7BC1-725B-40E2-AAF0-CA41A44B9DF9@gmail.com>
+	 <342b6b95d97a4bf09afee15c09481efc@realtek.com>
+	 <CFB0314C-AE45-4563-BF41-F5D635BFCF86@gmail.com>
+In-Reply-To: <CFB0314C-AE45-4563-BF41-F5D635BFCF86@gmail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+user-agent: Evolution 3.36.1-2 
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BBC4230D26467D4D81D759EAD94409E4@realtek.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <005701dac1a4$6ae1c830$40a55890$@telus.net>
 
-On Tue, Jun 18, 2024 at 10:24:46AM -0700, Doug Smythies wrote:
-> Hi Christian,
->
-> Thank you for your reply.
-
-Thank you for taking the time!
-
->
-> On 2024.06.18 03:54 Christian Loehle wrote:
-> > On Sun, Jun 16, 2024 at 05:20:43PM -0700, Doug Smythies wrote:
-> >> On 2024.06.11 04:24 Christian Loehle wrote:
-> >>
-> >> ...
-> >> > Happy for anyone to take a look and test as well.
-> >> ...
-> >>
-> >> I tested the patch set.
-> >> I do a set of tests adopted over some years now.
-> >> Readers may recall that some of the tests search over a wide range of operating conditions looking for areas to focus on in more
-> detail.
-> >> One interesting observation is that everything seems to run much slower than the last time I did this, last August, Kernel
-> 6.5-rc4.
-> >>
-> >
-> > Thank you very much Doug, that is helpful indeed!
-> >
-> >> Test system:
-> >> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz (6 cores, 2 thread per core, 12 CPUs)
-> >> CPU Frequency scaling driver: intel_pstate
-> >> HWP (HardWare Pstate) control: Disabled
-> >> CPU frequency scaling governor: Performance
-> >> Idle states: 4: name : description:
-> >>    state0/name:POLL		desc:CPUIDLE CORE POLL IDLE
-> >>    state1/name:C1_ACPI		desc:ACPI FFH MWAIT 0x0
-> >>    state2/name:C2_ACPI		desc:ACPI FFH MWAIT 0x30
-> >>    state3/name:C3_ACPI		desc:ACPI FFH MWAIT 0x60
-> >
-> > What are target residencies and exit latencies?
->
-> Of course. Here:
->
-> /sys/devices/system/cpu/cpu1/cpuidle/state0/residency:0
-> /sys/devices/system/cpu/cpu1/cpuidle/state1/residency:1
-> /sys/devices/system/cpu/cpu1/cpuidle/state2/residency:360
-> /sys/devices/system/cpu/cpu1/cpuidle/state3/residency:3102
->
-> /sys/devices/system/cpu/cpu1/cpuidle/state0/latency:0
-> /sys/devices/system/cpu/cpu1/cpuidle/state1/latency:1
-> /sys/devices/system/cpu/cpu1/cpuidle/state2/latency:120
-> /sys/devices/system/cpu/cpu1/cpuidle/state3/latency:1034
-
-Thanks,
-what am I missing here that these are two different sets of states?
-
->
-> >> Ilde driver: intel_idle
-> >> Idle governor: as per individual test
-> >> Kernel: 6.10-rc2 and with V1 and V2 patch sets (1000 Hz tick rate)
-> >> Legend:
-> >>    teo: unmodified 6.10-rc2
-> >>    menu:
-> >>    ladder:
-> >>    cl: Kernel 6.10-rc2 + Christian Loehle patch set V1
-> >>    clv2: Kernel 6.10-rc2 + Christian Loehle patch set V2
-> >> System is extremely idle, other than the test work.
-> >
-> > If you don't mind spinning up another one, I'd be very curious about
-> > results from just the Util-awareness revert (i.e. v2 1/3).
-> > If not I'll try to reproduce your tests.
->
-> I will, but not today.
-
-Thank you.
-
-> I have never been a fan of Util-awareness.
-
-Well if you want to elaborate on that I guess now is the time and
-here is the place. ;)
-
->
-> >> Test 1: 2 core ping pong sweep:
-> >>
-> >> Pass a token between 2 CPUs on 2 different cores.
-> >> Do a variable amount of work at each stop.
-> >
-> > Hard to interpret the results here, as state residencies would be the
-> > most useful one, but from the results I assume that residencies are
-> > calculated over all possible CPUs, so 4/6 CPUs are pretty much idle
-> > the entire time, resulting in >75% state3 residency overall.
->
-> It would be 10 of 12 CPUs are idle and 4 of 6 cores.
-
-Of course, my bad.
-
-> But fair enough, the residency stats are being dominated by the idle CPUs.
-> I usually look at the usage in conjunction with the residency percentages.
-> At 10 minutes (20 second sample period):
-> teo entered idle state 3 517 times ; clv2 was 1,979,541 times
-> At 20 minutes:
-> teo entered idle state 3 525 times ; clv2 was 3,011,263 times
-> Anyway, I could hack something to just use data from the 2 CPUs involved.
-
-Your method works, just a bit awkward, I guess I'm spoiled in that
-regard :)
-(Shameless plug:
-https://tooling.sites.arm.com/lisa/latest/trace_analysis.html#lisa.analysis.idle.IdleAnalysis.plot_cpu_idle_state_residency
-)
->
-> >> Purpose: To utilize the shallowest idle states
-> >> and observe the transition from using more of 1
-> >> idle state to another.
-> >>
-> >> Results relative to teo (negative is better):
-> >>		menu		ladder		clv2		cl
-> >> average	-2.09%		11.11%		2.88%		1.81%
-> >> max		10.63%		33.83%		9.45%		10.13%
-> >> min		-11.58%		6.25%		-3.61%		-3.34%
-> >>
-> >> While there are a few operating conditions where clv2 performs better than teo, overall it is worse.
-> >>
-> >> Further details:
-> >> http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/2-1/2-core-pp-relative.png
-> >> http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/2-1/2-core-pp-data.png
-> >> http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/2-1/perf/
-> >>
-> >> Test 2: 6 core ping pong sweep:
-> >>
-> >> Pass a token between 6 CPUs on 6 different cores.
-> >> Do a variable amount of work at each stop.
-> >>
-> >
-> > My first guess would've been that this is the perfect workload for the
-> > very low utilization threshold, but even teo has >40% state3 residency
-> > consistently here.
->
-> There are still 6 idle CPUs.
-> I'll try a 12 CPUs using each core twice type sweep test,
-> but I think I settled on 6 because it focused on what I wanted for results.
-
-I see, again, my bad.
-
->
-> >> Purpose: To utilize the midrange idle states
-> >> and observe the transitions between use of
-> >> idle states.
-> >>
-> >> Note: This test has uncertainty in an area where the performance is bi-stable for all idle governors,
-> >> transitioning between much less power and slower performance and much more power and higher performance.
-> >> On either side of this area, the differences between all idle governors are negligible.
-> >> Only data from before this area (from results 1 t0 95) was included in the below results.
-> >
-> > I see and agree with your interpretation. Difference in power between
-> > all tested seems to be negligible during that window. Interestingly
-> > the residencies of idle states seem to be very different, like ladder
-> > being mostly in deepest state3. Maybe total package power is too coarse
-> > to show the differences for this test.
-> >
-> >> Results relative to teo (negative is better):
-> >>		menu	ladder	cl	clv2
-> >> average	0.16%	4.32%	2.54%	2.64%
-> >> max		0.92%	14.32%	8.78%	8.50%
-> >> min		-0.44%	0.27%	0.09%	0.05%
-> >>
-> >> One large clv2 difference seems to be excessive use of the deepest idle state,
-> >> with corresponding 100% hit rate on the "Idle State 3 was to deep" metric.
-> >> Example (20 second sample time):
-> >>
-> >> teo: Idle state 3 entries: 600, 74.33% were to deep or 451. Processor power was 38.0 watts.
-> >> clv2: Idle state 3 entries: 4,375,243, 100.00% were to deep or 4,375,243. Processor power was 40.6 watts.
-> >> clv2 loop times were about 8% worse than teo.
-> >
-> > Some of the idle state 3 residencies seem to be >100% at the end here,
-> > not sure what's up with that.
->
-> The test is over and the system is completely idle.
-> And yes, there are 4 calculations that come out > 100%, the worst being 100.71%,
-> with a total sum over all idle states of 100.79%.
-> I can look into it if you want but have never expected the numbers to be that accurate.
-
-Hopefully it's just some weird rounding thing, it just looks strange.
-
->
-> >> Further details:
-> >> http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/6-1/6-core-pp-data-detail-a.png
-> >> http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/6-1/6-core-pp-data-detail-b.png
-> >> http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/6-1/6-core-pp-data.png
-> >> http://smythies.com/~doug/linux/idle/teo-util3/ping-sweep/6-1/perf/
-> >>
-> >> Test 3: sleeping ebizzy - 128 threads.
-> >>
-> >> Purpose: This test has given interesting results in the past.
-> >> The test varies the sleep interval between record lookups.
-> >> The result is varying usage of idle states.
-> >>
-> >> Results: relative to teo (negative is better):
-> >>		menu	clv2	ladder	cl
-> >> average	0.06%	0.38%	0.81%	0.35%
-> >> max		2.53%	3.20%	5.00%	2.87%
-> >> min		-2.13%	-1.66%	-3.30%	-2.13%
-> >>
-> >> No strong conclusion here, from just the data.
-> >> However, clv2 seems to use a bit more processor power, on average.
-> >
-> > Not sure about that, from the residencies ladder and teo should be
-> > decisive losers in terms of power. While later in the test teo seems
-> > to be getting worse in power it doesn't quite reflect the difference
-> > in states.
-> > E.g. clv2 finishing with 65% state2 residency while teo has 40%, but
-> > I'll try to get per-CPU power measurements on this one.
-> > Interestingly ladder is a clear winner if anything, if that is reliable
-> > as a result that could indicate a too aggressive tick stop from the
-> > other governors, but cl isn't that much better than clv2 here, even
-> > though it stops the tick less aggressively.
->
-> I agree with what you are saying.
-> It is a shorter test at only 25 minutes.
-> It might be worth trying the test again with more strict attention to
-> stabilizing the system thermally before each test.
-> The processor power will vary by a few watts for the exact same load
-> as a function of processor package temperature and coolant (my system is
-> water cooled) temperature and can take 20 to 30 minutes to settle.
->
-> Reference:
-> http://smythies.com/~doug/linux/idle/teo-util3/temperature/thermal-stabalization-time.png
->
-> >>
-> >> Further details:
-> >
-> > Link is missing, but I found
-> > http://smythies.com/~doug/linux/idle/teo-util3/ebizzy/
-> > from browsing your page.
->
-> Yes, I accidently hit "Send" on my original email before it was actually finished.
-> But, then I was tired and thought "close enough".
->
-> >> Test4: adrestia wakeup latency tests. 500 threads.
-> >>
-> >> Purpose: The test was reported in 2023.09 by the kernel test robot and looked
-> >> both interesting and gave interesting results, so I added it to the tests I run.
-> >
-> > http://smythies.com/~doug/linux/idle/teo-util3/adrestia/periodic/perf/
-> > So interestingly we can see, what I would call, the misbehavior of teo
-> > here, with teo skipping state2 and state3 entirely. You would expect
-> > a power regression here, but it doesn't translate into package power
-> > anyway.
-> >
-> >>
-> >> Results:
-> >> teo:wakeup cost (periodic, 20us): 3130nSec reference
-> >> clv2:wakeup cost (periodic, 20us): 3179nSec +1.57%
-> >> cl:wakeup cost (periodic, 20us): 3206nSec +2.43%
-> >> menu:wakeup cost (periodic, 20us): 2933nSec -6.29%
-> >> ladder:wakeup cost (periodic, 20us): 3530nSec +12.78%
-> >
-> > Is this measured as wakeup latency?
-> > I can't find much info about the test setup here, do you mind sharing
-> > something on it?
->
-> I admit to being vague on this one, and I'll need some time to review.
-> The notes I left for myself last September are here:
-> http://smythies.com/~doug/linux/idle/teo-util2/adrestia/README.txt
-
-Thanks!
-
->
-> >> No strong conclusion here, from just the data.
-> >> However, clv2 seems to use a bit more processor power, on average.
-> >> teo: 69.72 watts
-> >> clv2: 72.91 watts +4.6%
-> >> Note 1: The first 5 minutes of the test powers were discarded to allow for thermal stabilization.
->
-> which might not have been long enough, see the thermal notes above.
->
-> >> Note 2: More work is required for this test, because the teo one actually took longer to execute, due to more outlier results
-> than the other tests.
->
-> >> There were several other tests run but are not written up herein.
-> >>
-> > Because results are on par for all? Or inconclusive / not reproducible?
->
-> Yes, because nothing of significance was observed or the test was more or less a repeat of an already covered test.
-> Initially, I had a mistake in my baseline teo tests, and a couple of the not written up tests have still not been re-run with the
-> proper baseline.
-
-Thank you for testing, that's what I hoped.
-
-Kind Regards,
-Christian
+T24gVGh1LCAyMDI0LTA2LTIwIGF0IDE1OjM1ICswNTMwLCBNYXRoZXcgR2VvcmdlIHdyb3RlOg0K
+PiANCj4gPiBJIGZlZWwgdGhpcyBwcm9ibGVtIG1heSBiZSBlYXNpZXIgdG8gcmVwcm9kdWNlIG9u
+IEFyY2ggTGludXgsIHNvIEkgd291bGQgbGlrZQ0KPiA+IHRvIGtub3cgQXJjaCBMaW51eCBpc28g
+ZmlsZSB5b3UgaW5zdGFsbGVkLg0KPiANCj4gSSBkb24ndCByZW1lbWJlciB0aGUgaXNvIHZlcnNp
+b24gdGhhdCBJIHVzZWQgKGl0IHdhcyB5ZWFycyBhZ28pLCBhbmQgSSBkb24ndCBrbm93IG9mIGFu
+eQ0KPiB3YXkgdG8gY2hlY2ssIGJ1dCBpdCBzaG91bGRuJ3QgbWF0dGVyLiBBRkFJSyB0aGUgQXJj
+aCBpc28gaXMgb25seSB1c2VkIHRvIGJvb3RzdHJhcCB0aGUNCj4gc3lzdGVtLCBzbyBpdHMgdmVy
+c2lvbiBzaG91bGQgbm90IGJlIG9mIGFueSBjb25zZXF1ZW5jZSB0byBteSBjdXJyZW50IGNvbmZp
+Z3VyYXRpb24uDQo+IFlvdSBtaWdodCB3YW50IHRvIGxvb2sgYXQgaHR0cHM6Ly93aWtpLmFyY2hs
+aW51eC5vcmcvdGl0bGUvSW5zdGFsbGF0aW9uX2d1aWRlDQo+IHRvIGdldCBhbiBpZGVhIG9mIHdo
+YXQgdGhlIHByb2Nlc3MgaXMgbGlrZTsgYXMgeW91J2xsIHNlZSBpdCdzIHZlcnkgbWFudWFsIGFu
+ZCB0YWtlcyBhIGZhaXIgYml0DQo+IG9mIGVmZm9ydC4NCg0KUGxlYXNlIHByb3ZpZGUgb3V0cHV0
+IG9mICdjYXQgL2V0Yy9sc2ItcmVsZWFzZScsIHdoaWNoIEFyY2ggTGludXggdmVyc2lvbg0Kc2hv
+dWxkIGJlIHRoZXJlLCB0byBtZS4gDQoNCkkgaG9wZSB1c2luZyB0aGUgc2FtZSB2ZXJzaW9uIGFz
+IHlvdXJzIG1ha2VzIHRoZSBzeW1wdG9tIHJlcHJvZHVjaWJsZS4gDQoNCg0K
 
