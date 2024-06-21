@@ -1,126 +1,181 @@
-Return-Path: <linux-pm+bounces-9791-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9792-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEA0D912E30
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 22:00:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D061912E9A
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 22:34:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21704B262CF
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 20:00:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 722882812D1
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 20:34:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D76316B750;
-	Fri, 21 Jun 2024 20:00:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C4E217B42D;
+	Fri, 21 Jun 2024 20:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b="o/bQAOwa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SD438gxj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53E212BE9E;
-	Fri, 21 Jun 2024 20:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED66374DD;
+	Fri, 21 Jun 2024 20:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719000018; cv=none; b=iu4JFuVHjALJeEiYpmQugTYMQyVr9ri4LGvyUK3U8OTW4ZSQAPMRSgnWsy547YWaEiT30AMAItOh6I6CV0PNlXbNX88we1MrNAH9lDNJ5mYcMcGmi15POhg14CXHH2iwfPpHQgUvRaNbVku/i5sDqiUAJpRkll7hy4Y2FmBYxLw=
+	t=1719002072; cv=none; b=BBHlsu0jM+YChzzUaavtuVJTh3upLdoUQgIp22Jaxwd5Wz6PaKsDQ3p47FLaA0jM1LBfzdZq/IC4q09/WdYGjzYkGn+FKA8tkAS2YhCN+kdMLBZdJiBkFHvxfIoihdnPOynNQGZfIZQWnvb4iRt8KakYVZ9lZXaRd7stzVVfQLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719000018; c=relaxed/simple;
-	bh=FI/0tEmc4OrzQICRAJDQmwB80W2DKE27iYV+3AqZ6ws=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vB5Q+yAVQFMw+ecHzM138ZsZss/117LK/qVpc4WVvIvkVlNaYqpLoUkUo+CWdfWDwwGXxOJ/WPm4tRB9ZnrI+Z/62s/4Qqhk+XaiJuS1HngZKLyNY+HZ9FG1iqJoYspJI3EQLqe/U4lSyK8YVTA49u64dKmbF+DBr5nJtnl4IXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz; spf=pass smtp.mailfrom=oldschoolsolutions.biz; dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b=o/bQAOwa; arc=none smtp.client-ip=212.227.17.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oldschoolsolutions.biz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=oldschoolsolutions.biz; s=s1-ionos; t=1718999993; x=1719604793;
-	i=jens.glathe@oldschoolsolutions.biz;
-	bh=w39pSbtwaT7fcka6jbgmU/6r3OCDP6+qZhZfAsB82t0=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=o/bQAOwaeV7wjwdmJYfFmOUz4Vn6WjJOvdpHUSKaMBhJNkt4tmszbrLG+AD8yH9A
-	 rFt14FAPymoaqYnEf4FHCuZco4TP3itvRz/tqlJCkWshElkM/aFH/oMx1t6Cj+pnw
-	 DLaY9LDmfJ1XkBATxijkAwwcIKMgD9vgoJSAs0mL03StCbprEoqaglto98WeWfgW3
-	 noiA4GLHuBtz47iZNF89WeyQB3KZJfWjA85fLvIBbMs9KWfk39mSG57ckfVllP8Hg
-	 208+/+liY9qEGlc/ybe8hvU2EzRvWOkm89n4A+UJ0DZSSiIVkuQk7E9FaPw6TWrHj
-	 L2zddy3QB3QW0pSjiQ==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from [192.168.0.78] ([62.226.32.41]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MQuLB-1rxq7K07c7-00YZXv; Fri, 21 Jun 2024 21:59:53 +0200
-Message-ID: <ebb02ff6-e0d3-45d0-b78e-7785d763e01b@oldschoolsolutions.biz>
-Date: Fri, 21 Jun 2024 21:59:51 +0200
+	s=arc-20240116; t=1719002072; c=relaxed/simple;
+	bh=g+pouUiiT7AeZC4HcBnx+iVl1hBdooJPKlXz8f+L6E4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lsjS2X85DUtmnvoWYWtmGJZ4y/2gicBuG3/nKMCwPbCW/u/W5HoUVVd6Q5fIWoWzCnfLBVYDTGYMjqSE7D7Jkonq0vxFC4rpoXccPBA+Us5XUKV8EFtNT0OIznZuWXGN4sH0QQ4P5ebgP0dvYUnO6QqGHhMGj0s2DZXAEQFlnkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SD438gxj; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719002069; x=1750538069;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g+pouUiiT7AeZC4HcBnx+iVl1hBdooJPKlXz8f+L6E4=;
+  b=SD438gxjfaW0H6Ot29Y7gVWTQfsjT7ugHgQL5YNXNfYpGc4GF5TqneXN
+   q+PV3Dubj5Ses4G05Iod2ROHaONSjMu/fuvcAjk6nWpVJ0ViXbhtEXViW
+   uSOZdRIJUkzodAC2Ezcqt9twg1Wk63Zy0IRVOWxa892rRi6beYh+p3u4i
+   zFYpTzhJgMl9eBzzZzuc4eg9nsf5t7dkwTE6g2hpf9jhgeNEomolpniip
+   quXHH/PlFiY4u6tZLM2TprIxymZxLaJogiS2FkOTl/J5kH3QHg2PNtVS9
+   Li5xAiJV7G0VS5gJIQJA8b7M5LZCbqe+FWAvmjGimrnS1YZoxiULTlX7p
+   g==;
+X-CSE-ConnectionGUID: 87oLkz+/Qy2juagB+ZP4yQ==
+X-CSE-MsgGUID: gCrQrSrTSlyTaZvLL3d9RQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11110"; a="16285626"
+X-IronPort-AV: E=Sophos;i="6.08,255,1712646000"; 
+   d="scan'208";a="16285626"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2024 13:34:28 -0700
+X-CSE-ConnectionGUID: vjURhEvVTDqAJ4kaNuOtEg==
+X-CSE-MsgGUID: LfHac5txTsiEbj3rI22Gnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,255,1712646000"; 
+   d="scan'208";a="73910113"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 21 Jun 2024 13:34:22 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sKkxf-0008za-1z;
+	Fri, 21 Jun 2024 20:34:19 +0000
+Date: Sat, 22 Jun 2024 04:33:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dzmitry Sankouski <dsankouski@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <quic_jesszhan@quicinc.com>,
+	Sam Ravnborg <sam@ravnborg.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Chanwoo Choi <cw00.choi@samsung.com>, phone-devel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 17/23] mfd: add s2dos series core driver
+Message-ID: <202406220455.UpxNyPhg-lkp@intel.com>
+References: <20240618-starqltechn_integration_upstream-v3-17-e3f6662017ac@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: cpufreq/thermal regression in 6.10
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Johan Hovold <johan@kernel.org>,
- "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Steev Klimaszewski <steev@kali.org>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- regressions@lists.linux.dev
-References: <ZmVfcEOxmjUHZTSX@hovoldconsulting.com>
- <CAJZ5v0gVnjVyd_O6KgXy2sXr3b3M3vyTLyUCasyxP0GrAXro4Q@mail.gmail.com>
- <CAJZ5v0iz7gwhpvT53CH0ZEA_q3U=dnn6XR8HdLk6LpP3ye4Zkg@mail.gmail.com>
- <6759ce9f-281d-4fcd-bb4c-b784a1cc5f6e@oldschoolsolutions.biz>
- <CAJZ5v0gueSnaci601OkVq9_Ui09k8EsByRL08tFkzDoDGJpp6g@mail.gmail.com>
-Content-Language: en-US
-From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-In-Reply-To: <CAJZ5v0gueSnaci601OkVq9_Ui09k8EsByRL08tFkzDoDGJpp6g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:seB3cm46O0wXLMy/GWgAZ4NghxwXbMYBfOyobMg2dbPB3R1I/Z5
- 7fI3/4HcSp3d1eldVUqhv6NpswMrsDh7ns8QmTTuwU8C0QUoAI/2roUFr6hGpdBPY+gG6XM
- A5pHDvXyGUqk8oTB41MYjiNOBHLwUkIa6/caikA0LdyfDKYFeY/7mcrZJF909Zev0ID35eD
- 01j4C3R5ShiRkqNh/qcgg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:ADKfqHl0ZVc=;QS4uLQ0fszDmH+IRyIqyycSIX5D
- AehWkLL6/hM5zKmPxXvUPbWGBQhtwtFEUbiIJeNVmnvfUQACO3k4Byf7ybcejkVr9Hkla5853
- NVwu0NjIlnc0oeXF+UipNeP/drU73oM+fNPmMGC9SOa54kR7BAR3qKcHj9AtHEslk1gNnMU6+
- olvtJWBxuVCEGujWbXnGFLo83xfUxmuFFXPU3mAtP7PEMqUZrcSNB3vZ3P1+qGtzaQVlNykxs
- wnU63rDsWe3U0AHNtK0m6mo5l4JQHzKG33Z2h2gxIY2PFPvfr7E4KC28zbemo4FBmaKehgH18
- Qib9JsRQ04owdGC5a0wDoKeW/ay9xK9eBHChXvSFskemxdk9DyBQlDA2si3iawPruB6OqhFyV
- ljlh2yYTCZ0HnwAnBAh/XGt4J/tr8CIUUj8QGju8i14Vt9g3E4ojjwTghhW9f+q0pN+SMzzFR
- Dn3djFoRYOuuQxFWTUHrQgo8pGJGrT6WsgAOGI1U8PJwjSaBb2HFnoYzGD5nvi0+IN601wsHo
- f2VSLBB0hu2leGNbw+2ijgUA9U/tSS/gLSVfIfGHETaqEXcE/nXAjRx8lfLKsVCKcwe/7D8Su
- 0ipUzu/m/qxnCAkLzE+AMG1dyVQWPRbWnw0gcSX8PdNm+y6jGlFKxri1qExrGoEX142/HdSIL
- 562oauKvcNrLIiMSzC1rYYMqAMsLQiSy/22mEhPopTUuyKtazzzIo2+u3F3+3Cd7d0pEWJny2
- 3jztBf2dKbBPJNVMd9XIlW+TB7scmQ7M2jnUmerjdgSohsuJrv8H/g=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240618-starqltechn_integration_upstream-v3-17-e3f6662017ac@gmail.com>
 
-Hi there,
+Hi Dzmitry,
 
-thank you for the fast fix. Applied, built, installed. Test is
-successful, performance core scaling up to 2995200 comes back when skin
-temp drops below 55=C2=B0C.
+kernel test robot noticed the following build warnings:
 
-Tested-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+[auto build test WARNING on 6906a84c482f098d31486df8dc98cead21cce2d0]
 
-Cheers
+url:    https://github.com/intel-lab-lkp/linux/commits/Dzmitry-Sankouski/power-supply-add-undervoltage-health-status-property/20240618-222456
+base:   6906a84c482f098d31486df8dc98cead21cce2d0
+patch link:    https://lore.kernel.org/r/20240618-starqltechn_integration_upstream-v3-17-e3f6662017ac%40gmail.com
+patch subject: [PATCH v3 17/23] mfd: add s2dos series core driver
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20240622/202406220455.UpxNyPhg-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240622/202406220455.UpxNyPhg-lkp@intel.com/reproduce)
 
-Jens
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406220455.UpxNyPhg-lkp@intel.com/
 
-On 6/21/24 18:41, Rafael J. Wysocki wrote:
-> Hi,
->
-> On Fri, Jun 21, 2024 at 5:53=E2=80=AFPM Jens Glathe
-> <jens.glathe@oldschoolsolutions.biz> wrote:
->> Hi there,
->>
->> unfortunately I experienced the issue with the fix applied. I had to
->> revert this and  the original commit to get back to normal behaviour. M=
-y
->> system (also Lenovo Thinkpad X13s) uses the schedutil governor, the
->> behaviour is as described from Steev and Johan. The full throttling
->> happened during a package build and left the performance cores at 94080=
-0.
-> So can you please test the attached patch, on top of the fix?
+All warnings (new ones prefixed by >>):
+
+   drivers/mfd/s2dos-core.c: In function 's2dos05_i2c_probe':
+>> drivers/mfd/s2dos-core.c:88:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+      88 |         int ret = 0;
+         |             ^~~
+
+
+vim +/ret +88 drivers/mfd/s2dos-core.c
+
+    79	
+    80	
+    81	static int s2dos05_i2c_probe(struct i2c_client *i2c)
+    82	{
+    83		struct s2dos_core *s2dos05;
+    84		struct regmap *regmap;
+    85		struct device *dev = &i2c->dev;
+    86	
+    87		unsigned int reg_data;
+  > 88		int ret = 0;
+    89	
+    90		s2dos05 = kzalloc(sizeof(struct s2dos_core), GFP_KERNEL);
+    91		if (!s2dos05)
+    92			return -ENOMEM;
+    93	
+    94		regmap = devm_regmap_init_i2c(i2c, &s2dos05_regmap_config);
+    95		if (IS_ERR(regmap)) {
+    96			dev_err(dev, "Unable to initialise I2C Regmap\n");
+    97			return PTR_ERR(regmap);
+    98		}
+    99		s2dos05->regmap = regmap;
+   100	
+   101		if (regmap_read(regmap, S2DOS05_REG_DEV_ID, &reg_data) < 0) {
+   102			dev_err(dev,
+   103				"device not found on this channel (this is not an error)\n");
+   104			ret = -ENODEV;
+   105		} else {
+   106			dev_info(dev, "%s device found with id: .0x%x\n",
+   107					__func__, reg_data);
+   108		}
+   109	
+   110		i2c_set_clientdata(i2c, s2dos05);
+   111	
+   112		debugfs_file = debugfs_create_file("s2dos05-regs",
+   113					0664, NULL, (void *)s2dos05,
+   114					  &s2dos05_debugfs_fops);
+   115		if (!debugfs_file)
+   116			dev_err(dev, "Failed to create debugfs file\n");
+   117	
+   118		return mfd_add_devices(dev, -1, s2dos05_devs,
+   119				ARRAY_SIZE(s2dos05_devs), NULL, 0, NULL);
+   120	}
+   121	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
