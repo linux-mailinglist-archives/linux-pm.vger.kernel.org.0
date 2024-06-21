@@ -1,167 +1,183 @@
-Return-Path: <linux-pm+bounces-9768-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9769-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC220912AAB
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 17:53:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3FB1912B1F
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 18:17:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57A441F27195
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 15:53:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5285B1F29711
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 16:17:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7FD315F3E8;
-	Fri, 21 Jun 2024 15:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6499F15FA65;
+	Fri, 21 Jun 2024 16:17:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b="21o2wWoH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R7ypmpXw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4239315F336;
-	Fri, 21 Jun 2024 15:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF80210A39;
+	Fri, 21 Jun 2024 16:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718985205; cv=none; b=NVmONKlAm2IgLzuTwPuk9EqzlvMcAe79H9ee3ZzKukXHTqQXFF8WiBRUpx34NL3dVrr3CZgO5Kk7blK24iQ2ZDM/2/2mfj3YPN5meYiJhQ/949xTNXBsVly0mwujwF0IoXjm6dJLc7cS4M8nMRTL/LZrVTwcwQb1rD5afDDW5vo=
+	t=1718986641; cv=none; b=FPHYBhw6hWtFeE2LKhfWhWp9y+fSXvzQIZmiJkYT/SQ1lrzX+Q4RSCDdGgA9c7CTWFIcRZH3LmkevxqYXQm0LbRF9DAimi9I27ZmBnJrB8YYVqSQMp7wBERd58rwnrBflBjBTc7Q635JMcBK90oLBIgu6XFD51K91LKvh/k2nM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718985205; c=relaxed/simple;
-	bh=GPgLEchZruVRitbipEYfYC0XmxVee3r1w12ag6nTYsY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tar49RZxaFYOj/EM0TgjQfUabQbPkRerS9hHbJ9Bjs3WLclx1wfrNnfGw5lJesJCElSgwwoVVhK/KgwsE2ZftqsFLcn4RAmuc4G70DtvB+bPDnxnYnO+wYe3+ctLjCbNAEzOFgQeQ6Pc/Hndhv98vVLRfDGDrvviLyLzGU7CEOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz; spf=pass smtp.mailfrom=oldschoolsolutions.biz; dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b=21o2wWoH; arc=none smtp.client-ip=212.227.126.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oldschoolsolutions.biz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=oldschoolsolutions.biz; s=s1-ionos; t=1718985186; x=1719589986;
-	i=jens.glathe@oldschoolsolutions.biz;
-	bh=sbGk7wulXzOIMg91aRqsVsZOGf+Ccg0ki+XG8mSiHiM=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=21o2wWoHTbCBn71ZbD1PVhN8L1TFZpuHhGK8MAw+UMIwKyfAVqPE1y6OtXnUdGgy
-	 Kk2P5pAlY3ZxCl8g5L3v+spScnLlYWsW5B5vArnfuvJr2JCQxCXkdGYkMPolrRGAG
-	 mV2LLzkXIIL5yM/9om+RO9ueBxZWG9NYyCdAunLqtOPLcfq9NUFgT8Sc7xXCV5rXB
-	 H2Idw6iAI8MMv2ZD5RoNmbqCiuIUqqI4wUb6hw/ltUAJSrRdB4xILcZ9kitPKO5Uz
-	 kikZSJ4Igj0m+6FeNQFSGg7IKCIwtqcx1BqmvCgU/UU8gxhybMT3I5VxpwL4BbCCq
-	 JO9yd8oo1Zns7HhutQ==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from [192.168.0.76] ([62.226.32.41]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MLiTI-1s39dL2GCe-00UbEH; Fri, 21 Jun 2024 17:47:31 +0200
-Message-ID: <6759ce9f-281d-4fcd-bb4c-b784a1cc5f6e@oldschoolsolutions.biz>
-Date: Fri, 21 Jun 2024 17:46:06 +0200
+	s=arc-20240116; t=1718986641; c=relaxed/simple;
+	bh=+Fxx6Sx301djtEaBC0yUcjU4BqsqCf6HkSgOkb8DcPk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=svshcKo8c+MxLPHCIOLnbRti5/LUfsoclwMfD9GEZ9ekOs5mAR5TUFD9Tf650KnUkHJkkEZgT8ORlGxJN6HPohMw++rPy9vsEueKY2DBoQ91ZTuTzAC8GC7iPX7un6QEE9LTUv5ds2h8iJN51e2cjPQVvBz0ZawdBo3zaX7cISw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R7ypmpXw; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718986640; x=1750522640;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+Fxx6Sx301djtEaBC0yUcjU4BqsqCf6HkSgOkb8DcPk=;
+  b=R7ypmpXwXDNF/p83FdyaLh/0g1cjCXj/G8OtzvvNbC1JSH38s4/ptFDa
+   7LPQKSni8OKTwdKlvj7UyqUrSOyz/TrXx0li2RftArLNumEVFuyUVrFqS
+   URcdzQlRDc2isPbEXgzHLFn6fcePTSPb5wuQpk/WzPA9bVf4tgDC2++sS
+   T0ElcqJ5mW5yuHDr/VLacLsaAioQylEidDui7AmZu3vnUrZTnmzU2NFXO
+   wk8JqMWVFmBaaGBs9oX1XOnuqwP1TozEIGW1/NzcQckpzo85/j2OmNFDl
+   31suEpE7tvQyCW3sWEQVJTJ4Zw4aJoUi/leRwM/jhRln4SPEXwroNiCLN
+   Q==;
+X-CSE-ConnectionGUID: VZtd603tSmKnAux4yErCcA==
+X-CSE-MsgGUID: QmJwelXgQBKrlOSc9xRAUw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11110"; a="16156307"
+X-IronPort-AV: E=Sophos;i="6.08,255,1712646000"; 
+   d="scan'208";a="16156307"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2024 09:17:19 -0700
+X-CSE-ConnectionGUID: GMnlQ7Z/R/acySIjDxt19w==
+X-CSE-MsgGUID: 1L4S/m1VTmS4FwAsgUW4jQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,255,1712646000"; 
+   d="scan'208";a="43077647"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 21 Jun 2024 09:17:12 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sKgwn-0008kC-2J;
+	Fri, 21 Jun 2024 16:17:09 +0000
+Date: Sat, 22 Jun 2024 00:16:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dzmitry Sankouski <dsankouski@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <quic_jesszhan@quicinc.com>,
+	Sam Ravnborg <sam@ravnborg.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Chanwoo Choi <cw00.choi@samsung.com>, phone-devel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 12/23] mfd: Add new driver for MAX77705 PMIC
+Message-ID: <202406220025.tZN8mAeW-lkp@intel.com>
+References: <20240618-starqltechn_integration_upstream-v3-12-e3f6662017ac@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: cpufreq/thermal regression in 6.10
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Johan Hovold <johan@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Steev Klimaszewski <steev@kali.org>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- regressions@lists.linux.dev
-References: <ZmVfcEOxmjUHZTSX@hovoldconsulting.com>
- <CAJZ5v0gVnjVyd_O6KgXy2sXr3b3M3vyTLyUCasyxP0GrAXro4Q@mail.gmail.com>
- <CAJZ5v0iz7gwhpvT53CH0ZEA_q3U=dnn6XR8HdLk6LpP3ye4Zkg@mail.gmail.com>
-Content-Language: en-US
-From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-In-Reply-To: <CAJZ5v0iz7gwhpvT53CH0ZEA_q3U=dnn6XR8HdLk6LpP3ye4Zkg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:5QkJm8WvoESZ4VDAwZ3Vd4f0aJM7/R/cNI3G49l1iNKwJnzz92R
- zGI9ZJxOTSbp/huwR50hBTqJHAi1kBaqlfjH4cOuyUfuZDONrB5NSUkJqeBSGoOtNV79ABn
- NLwXRxdLKVRzH9LRU87CGl8BEFheyudCrhVTV7RnOMbwPRV0Z755E67LIAGYwBGefixOmPL
- rZAIKfSqq4MV8DW0W3VMQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:puLx8lytgao=;OvbuLcUWqO2GqyGm9ZDod3pwNdv
- rvwC2srqJer9lAERjUa7/ZtCcrn7KWrdEt08msoVjDCk8/YeAxQEXk53mARk7IeVZpQIuArtO
- ni5gx7KJl9DnOemlck4YR4cwwYarAOtUhO7s9vVrqunIB4PGB6AddKIdFHAn4Qs8UEkXNgWoB
- SwiyYyX4Xl3BOD1ZYbombwCTHKumSWJn6xik0H2AGeYQ9gkZtAy8+exHRFKEIbiJW7K46sLhh
- vHlSwQMCCtY6a82kD80jbX6mnyT4771zEohuOyI7IbacT2jD06lKLJ5agZu7P3qPTgWx4Ezjf
- UBjOTSCGhQwjkPn1/SJREzKft4aWcpsjh3S7Fsb6D/6YAfTtszP76x9n+jQnxnqCoTvuiqiiH
- Dh6kJaxruwYVgyiUyi+KWyz6/dRjn0H1WYt6lSJiF3N1X/QiLgSMSLklLOJQ5LBB2gMvyzETN
- EzV8HKFdx7UXTKcGcRfMDT5Q8JYP4jE+N4pWEM7b0XuPdLXCBOXobcbPZcGU0zYMxpOcLOci1
- yBcLA9K3Ho9Fdbsln4801ES+JGvzpJsgH8bdzvdRVL+ypEZDB7/allajYJdHoiDen11AP8aqU
- 9W2IZIkSTaBjUxHtsHj/ms/WqlyucXHJV4FeQk90Tjx1oDcCpMxFKfZeqCTVvrRq6rgMY8bfX
- /ZIL8bYWK6OAY87ydtR6/AQdzwQ/uwgVjsx0yT3XcvZzu80MR89cKuHFSfPKLbePeGEQVu/7N
- xt3epvlh8ggcERgH8/kZ/iGN+E2mFskxuKboJpgvb+UvB4ARY3h3XI=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240618-starqltechn_integration_upstream-v3-12-e3f6662017ac@gmail.com>
 
-Hi there,
+Hi Dzmitry,
 
-unfortunately I experienced the issue with the fix applied. I had to
-revert this and=C2=A0 the original commit to get back to normal behaviour.=
- My
-system (also Lenovo Thinkpad X13s) uses the schedutil governor, the
-behaviour is as described from Steev and Johan. The full throttling
-happened during a package build and left the performance cores at 940800.
+kernel test robot noticed the following build errors:
 
-Cheers
+[auto build test ERROR on 6906a84c482f098d31486df8dc98cead21cce2d0]
 
-Jens
+url:    https://github.com/intel-lab-lkp/linux/commits/Dzmitry-Sankouski/power-supply-add-undervoltage-health-status-property/20240618-222456
+base:   6906a84c482f098d31486df8dc98cead21cce2d0
+patch link:    https://lore.kernel.org/r/20240618-starqltechn_integration_upstream-v3-12-e3f6662017ac%40gmail.com
+patch subject: [PATCH v3 12/23] mfd: Add new driver for MAX77705 PMIC
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20240622/202406220025.tZN8mAeW-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240622/202406220025.tZN8mAeW-lkp@intel.com/reproduce)
 
-On 6/11/24 12:54, Rafael J. Wysocki wrote:
-> On Mon, Jun 10, 2024 at 1:17=E2=80=AFPM Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
->> Hi,
->>
->> Thanks for the report.
->>
->> On Sun, Jun 9, 2024 at 9:53=E2=80=AFAM Johan Hovold <johan@kernel.org> =
-wrote:
->>> Hi,
->>>
->>> Steev reported to me off-list that the CPU frequency of the big cores =
-on
->>> the Lenovo ThinkPad X13s sometimes appears to get stuck at a low
->>> frequency with 6.10-rc2.
->>>
->>> I just confirmed that once the cores are fully throttled (using the
->>> stepwise thermal governor) due to the skin temperature reaching the
->>> first trip point, scaling_max_freq gets stuck at the next OPP:
->>>
->>>          cpu4/cpufreq/scaling_max_freq:940800
->>>          cpu5/cpufreq/scaling_max_freq:940800
->>>          cpu6/cpufreq/scaling_max_freq:940800
->>>          cpu7/cpufreq/scaling_max_freq:940800
->>>
->>> when the temperature drops again.
->> So apparently something fails to update its frequency QoS request.
->>
->> Would it be possible to provoke this with thermal debug enabled
->> (CONFIG_THERMAL_DEBUGFS set) and see what's there in
->> /sys/kernel/debug/thermal/?
->>
->>> This obviously leads to a massive performance drop and could possibly
->>> also be related to reports like this one:
->>>
->>>          https://lore.kernel.org/all/CAHk-=3DwjwFGQZcDinK=3DBkEaA8FSyV=
-g5NaUe0BobxowxeZ5PvetA@mail.gmail.com/
->>>
->>> I assume the regression may have been introduced by all the thermal wo=
-rk
->>> that went into 6.10-rc1, but I don't have time to try to track this do=
-wn
->>> myself right now (and will be away from keyboard most of next week).
->>>
->>> I've confirmed that 6.9 works as expected.
->> Well, I'd need to ask someone else affected by this, then.
-> If this is the step-wise governor, the problem might have been
-> introduced by commit
->
-> 042a3d80f118 thermal: core: Move passive polling management to the core
->
-> which removed passive polling count updates from that governor, so if
-> the thermal zone in question has passive polling only and no regular
-> polling, temperature updates may stop coming before the governor drops
-> the cooling device states to the "no target" level.
->
-> So please test the attached partial revert of the above commit when you =
-can.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406220025.tZN8mAeW-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/mfd/max77705-core.c:20:
+>> include/linux/mfd/max77705-private.h:243:26: error: 'MAX77705_USBC_REG_END' undeclared here (not in a function); did you mean 'MAX77705_PMIC_REG_END'?
+     243 |         u8 reg_muic_dump[MAX77705_USBC_REG_END];
+         |                          ^~~~~~~~~~~~~~~~~~~~~
+         |                          MAX77705_PMIC_REG_END
+
+
+vim +243 include/linux/mfd/max77705-private.h
+
+   216	
+   217	struct max77705_dev {
+   218		struct device *dev;
+   219		struct i2c_client *i2c; /* 0xCC; Haptic, PMIC */
+   220		struct i2c_client *charger; /* 0xD2; Charger */
+   221		struct i2c_client *fuelgauge; /* 0x6C; Fuelgauge */
+   222		struct i2c_client *muic; /* 0x4A; MUIC */
+   223		struct i2c_client *debug; /* 0xC4; Debug */
+   224		struct mutex i2c_lock;
+   225	
+   226		struct regmap *regmap;
+   227		struct regmap *regmap_fg;
+   228		struct regmap *regmap_charger;
+   229		struct regmap *regmap_leds;
+   230	
+   231		int type;
+   232	
+   233		int irq;
+   234		int irq_base;
+   235		int irq_masks_cur[MAX77705_IRQ_GROUP_NR];
+   236		int irq_masks_cache[MAX77705_IRQ_GROUP_NR];
+   237		bool wakeup;
+   238		struct mutex irqlock;
+   239	
+   240	#ifdef CONFIG_HIBERNATION
+   241		/* For hibernation */
+   242		u8 reg_pmic_dump[MAX77705_PMIC_REG_END];
+ > 243		u8 reg_muic_dump[MAX77705_USBC_REG_END];
+   244		u8 reg_led_dump[MAX77705_LED_REG_END];
+   245	#endif
+   246	
+   247		/* pmic VER/REV register */
+   248		u8 pmic_rev;	/* pmic Rev */
+   249		u8 pmic_ver;	/* pmic version */
+   250	
+   251		u8 cc_booting_complete;
+   252	
+   253		wait_queue_head_t queue_empty_wait_q;
+   254		int doing_irq;
+   255		int is_usbc_queue;
+   256	
+   257		struct max77705_platform_data *pdata;
+   258	};
+   259	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
