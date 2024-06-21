@@ -1,70 +1,72 @@
-Return-Path: <linux-pm+bounces-9755-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9756-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6572A91261C
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 14:57:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C91191261F
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 14:58:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D96941F27ED1
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 12:57:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD5601C258E4
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 12:58:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77E47153828;
-	Fri, 21 Jun 2024 12:57:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFA05154BFE;
+	Fri, 21 Jun 2024 12:57:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HLhHHUVK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M4CG7Atv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB371534E8;
-	Fri, 21 Jun 2024 12:57:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E74152E0A;
+	Fri, 21 Jun 2024 12:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718974673; cv=none; b=PzAy3vImS2VOTPbs9NWmJakYgZaSVymarPzizsrewrg5cEZAE3zcbMLz2/u9npuh8VeThk6JhzCdeBZe+L3oWlunoW/ZueBfAa3+9INBT1jZb7xwqasB87vfr05Z3ATUK2R/6G4TLKarAOM8xj2Vr+6R19kEKemxHcEAvZ5XHX0=
+	t=1718974674; cv=none; b=ixa04SWDsFTmtcEtHQ3ZRmVcuWOMTqmSaVborFujV3yFTP3+VDlpt6lNTngN8IL9qHfEJ4zCGOhjNNc+zDfAUvmXbbj0gjnVspD49V9l6mVqT+A66ZhW5gUKhLGAfHOknJ6OwX++qfg1ExXJ9foakbYYHYd5FrSTa8jfcrDKNNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718974673; c=relaxed/simple;
-	bh=YRpzhRZMd/owSYXAqsZC8ISCrInjHHfQAXcFXjpaQNA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KrJQPRqW+4ztkQIzqR/Kk2Dgh95BMZqIlhrz8cVJc1L/NfK80Eq0YfN/FWHzeQNVHUzDrkJZTFJSPOK9hqm6MM+MRbPo9IQiM5UEFuyy1oYW2C6ikG03aNDRdnTL6K7BZxbBZ+sQm6IjJ4yDF5H0jTB/KUlojsVd5PE8KyWE7/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HLhHHUVK; arc=none smtp.client-ip=209.85.208.41
+	s=arc-20240116; t=1718974674; c=relaxed/simple;
+	bh=7y2gis8NbFMigGag4TJQW2xENiLAF81rhNNPK51Yw8M=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ggI+4KSRJYQio0udD+mqC4t6YTcHmoWHvUBdQ8oIMQbRlWQzh9d3/eTXzpYc4KRtVIwYIN4OR5Il6EnOxF2TkFuYASEL8k6EN6sjoXoL24iAPck5BLVFUhSP+MwcirXxsA+F7hvykEpwZB+7SQgKkvcTI7IaQzX36W/5NyjqSSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M4CG7Atv; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-57d0eca877cso2330851a12.2;
-        Fri, 21 Jun 2024 05:57:51 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a6f13dddf7eso246722666b.0;
+        Fri, 21 Jun 2024 05:57:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718974670; x=1719579470; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NrnAU6mhz/kl2NrmklHMGMGU8HHSJk2j81Klofccxog=;
-        b=HLhHHUVKABWk9rGYOLC3A72dJB+B/ZCsZSF+AOvmHXEXiuQXX9dyLxsHiaY75iHI18
-         5r6L/zo1StwQJDdr6IJw2A1rwZV9PRNKx9P4lgIkVWssk26/B+7nQK9reSVkdeDVam7m
-         a2kmOCP2nEZjShkRmRpNoLrkl8mpfo1sczXiIStb0reDDf6jQI8o8OlWww23NquhGfH+
-         U68BucGqFY7ptRaHqfsaFoY/2ngCRwBByhN0AQmj+GO0Fx/h9UCZ3D8eK1Kyoi1MTtiZ
-         NQKhON223oe4Jh2mQkRvtu13Ja+T3lsnP9U6NmjL21yrVM7X9wBoUTFeWZDUZupd/F6E
-         jkFg==
+        d=gmail.com; s=20230601; t=1718974671; x=1719579471; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j9TZfUi3/Xsz1Ab9mlAU0VCjTlqiJeuJUUECFkI88cM=;
+        b=M4CG7Atvyg/7hHfgk85odsHqYhUBeEjM+YBIEW+cgOL6tPghcwgrXerK61LlQBC8pN
+         ez42+q2npMWvjX+FgLQN00IIxEIUpKG5WuBTSjNebFZcNDcscQylIGIOR5A5d7nsfZ1i
+         +FPaekVcErZ/+mCgubqji6n7ewx6iPHzom3lsh03fRvNDSvwT5imDbYWFjO9XM/0pgTD
+         K626NdV7ZTWeSAvV6SX8XZvAr86/hFsPIMmXe5H8Gegs0BOo30f0okZNlpdSBR8hFF2s
+         VdQ6faHdfhhFqz11CeDhYFsFSwVQKSTeLd0YsufHnWMaU5IRnVqslCkPsKSDxk21DW7O
+         H0AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718974670; x=1719579470;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NrnAU6mhz/kl2NrmklHMGMGU8HHSJk2j81Klofccxog=;
-        b=RIqus6pD/DtOKbTY1oiVIU+Oa321BNSYeNG9H5zSwRUoDsf1BKO7YY1CkLoG61xy3U
-         zfvHsd4QZNjUJ/o60SZXUJeA9xzDH3dUIcMoY7jl49XfsUk1hg3ZAUu+l7B/uLxFhTRJ
-         Bxizut0aDPqHfmtx01qCSPZEXzxthiJCsNrbTYp71jR3Dr5rD5VzoiROT8hqdRXYuWM0
-         gpIw6Mmx95wIHVYgAKElSQehG9OgHaicAlguA3QCSyXkrHUMKs4iwgyzlkCOHxd4qXLm
-         U5qEGb7W8sdrwgUwIIAtM495o5po4dVG09mCwZvswsBntXHNyUyB+0F0mFWm0yAWOR5T
-         0TmA==
-X-Forwarded-Encrypted: i=1; AJvYcCWRdER0Cq1lajT6QzfdkgiVK8jR4m8qhlyjkBr3NLlG7c407OMHoqX8x8CFgmirQClaT43sl7Ixe42FAVof0N+6rAGb7RcrEYAL/gCFyePanDzsV7dzHbdszw2TiooThuxw1SdeaMWR6SgwmEz27GsxHUBte+GMTF+B6IXF00+mQBwm
-X-Gm-Message-State: AOJu0YyXrduRzXOXKejSpvU1zsOxbie9MxIyjEL+NxysSWfa7bKPZbfb
-	rTmAYBI43m0cilXv5FJP8xc95nrUOjQCXJ4QsV4dbDuLNFBtOpQqaBRmFA==
-X-Google-Smtp-Source: AGHT+IGfUKvKjZVPnKDkHyB4Nk/l6sFqObU//QF8QzBy5wNgB42KOKkMNx5+RqrkuvumV2tbXjypJg==
-X-Received: by 2002:a17:906:fac2:b0:a5c:eafb:5288 with SMTP id a640c23a62f3a-a6fab62bca2mr575577666b.31.1718974669497;
-        Fri, 21 Jun 2024 05:57:49 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718974671; x=1719579471;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j9TZfUi3/Xsz1Ab9mlAU0VCjTlqiJeuJUUECFkI88cM=;
+        b=axzjHbGZahJqmeVuCJRFivFg1IKFAXa/G9l+GExdLQ08GIFIVtlxVHnl9HOr7W1Fwi
+         G5ZuTVpmXiEkgBmZmb5o+lqgyOhHviQ+CbIHcNfjkskxFSGzRJ8PF2wK1geTufY/8X56
+         zn+EUUniyBTN5KgoJCEchjPmA5ySYyiUnIXXOW8+i26Q2d8qF9i7rgEsD5QQfSiLJI/g
+         4KRIdE7yRrx0ymRj/xwfRLID/QD7oCZK7yIJ6JlWUhdgHDRrlaIjQFLVOwC8nVmUSbwt
+         qgZZ5QlzYoBo2gLuD8zznS5/KYo1z7jSaThGiIN+siO/MzY+8SM2b1XElrg57/vlMjbY
+         qRyw==
+X-Forwarded-Encrypted: i=1; AJvYcCW4v6i9P7TS2jUBW0H+Fc4rVE5rED4d7W+YeJAK1XEHnYa8wV6+XyQgOZIs5qJLmziYX6h1qWPanVrMK+BsK+3YGUawpHMUe5kqLC386MZ1Bls4x6HkoR+uJsn6AiJEkbx5zAKZoD0ESGwP9CydPMpdAM0e7J5T2/uR77KQHZzqwJ06
+X-Gm-Message-State: AOJu0YzwL5WSaBX4wFNE1n8wCWE4uvaBy6T035ykvDZvU6Zvmdv7H3GF
+	qTqblEtUpfh9/xlRB0DT77VzfrYqrFc0gaKiCd6iK3uzIoB+MQDR4A4Zww==
+X-Google-Smtp-Source: AGHT+IGyso/Aiq9WgvdVhu22V3UG19VODOc42g1ZSrrJGC2/iL9b1/z3uft8gAVqMs/OPOZOQ3qFpQ==
+X-Received: by 2002:a17:907:d383:b0:a6e:fad9:6dbb with SMTP id a640c23a62f3a-a6fab058a39mr633365066b.0.1718974670760;
+        Fri, 21 Jun 2024 05:57:50 -0700 (PDT)
 Received: from debian.fritz.box ([93.184.186.109])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fcf548eafsm81226266b.116.2024.06.21.05.57.47
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fcf548eafsm81226266b.116.2024.06.21.05.57.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jun 2024 05:57:49 -0700 (PDT)
+        Fri, 21 Jun 2024 05:57:50 -0700 (PDT)
 From: Dimitri Fedrau <dima.fedrau@gmail.com>
 To: 
 Cc: Sebastian Reichel <sre@kernel.org>,
@@ -76,10 +78,12 @@ Cc: Sebastian Reichel <sre@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
 	Dimitri Fedrau <dima.fedrau@gmail.com>
-Subject: [PATCH v5 0/2] power: supply: add support for MAX1720x standalone fuel
-Date: Fri, 21 Jun 2024 14:57:42 +0200
-Message-Id: <20240621125744.363564-1-dima.fedrau@gmail.com>
+Subject: [PATCH v5 1/2] dt-bindings: power: supply: add support for MAX17201/MAX17205 fuel gauge
+Date: Fri, 21 Jun 2024 14:57:43 +0200
+Message-Id: <20240621125744.363564-2-dima.fedrau@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240621125744.363564-1-dima.fedrau@gmail.com>
+References: <20240621125744.363564-1-dima.fedrau@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -88,71 +92,78 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Changes to max1721x_battery.c:
-  - reading manufacturer, model name and serial number is only possible
-    when SBS functions of the IC are enabled.(nNVCfg0.enSBS) Factory
-    default is off. Manufacturer is "Maxim Integrated" and the model name
-    can be derived by register MAX172XX_DEV_NAME. Serial number is not
-    available anymore.
-  - According to the datasheet MAX172XX_BAT_PRESENT is at BIT(3) not
-    BIT(4). Furthermore the naming is misleading, when BIT(3) is set the
-    battery is not present.
-  - Removed DeviceName, ManufacturerName and SerialNumber from struct
-    max17211_device_info
+Adding documentation for MAXIMs MAX17201/MAX17205 fuel gauge.
 
-Changes in V2:
-  - Changed E-Mail in Patch (2/2) Signed-Off
-
-Changes in V3:
-  - Changed E-Mail in Patch (2/2) Author
-
-Changes in V4:
-  - add compatibles "maxim,max17201, "maxim,max17205" in bindings
-  - use generic node name fuel-gauge@36 instead of max17201@36 in bindings
-  - remove status in bindings
-  - fix spelling mistakes in commit message
-  - fix indentation in Kconfig
-  - fix typos in max1720x_battery.c
-  - Drop bat and bat_desc from info struct.
-  - MAX172XX_DEV_NAME and MAX172XX_DESIGN_CAP aren't volatile, adjust regmap
-  - constify max1720x_manufacturer, max17201_model, max17205_model
-  - constify max1720x_battery_props
-  - Remove braces around reg in max172xx_current_to_voltage
-  - Skip initialization of reg_val in max1720x_battery_get_property
-  - Remove braces around FIELD_GET() in max1720x_battery_get_property
-  - In case POWER_SUPPLY_PROP_PRESENT there is an early return if ret < 0.
-    Return 0 if regmap_read fails, device is not responding in case
-    battery is not inserted
-  - Implement multi-byte readings instead of i2c_smbus_read_word_data
-  - Drop ancillary from info
-  - Drop both calls to i2c_set_clientdata in max1720x_probe
-  - Get rid of max1720x_remove
-  - Remove comma after sentinel in max1720x_of_match
-  - Fix alignment of max1720x_i2c_driver
-  - Fix return value of dev_err_probe after max1720x_probe_sense_resistor
-    to use ret instead of PTR_ERR(info->bat)
-
-Changes in V5:
-  - oneOf with list and fallback in bindings
-  - unevaluatedProperties: false in bindings
-  - switch back to i2c_smbus_read_word_data when reading from ancillary
-  - add psy_cfg.fwnode = dev_fwnode(dev) in max1720x_probe
-  - set max_register in max1720x_regmap_cfg to MAX172XX_ATAVCAP
-  - fix typo in define: MAX1720X_NRSENSE instead of MAX1720_NRSENSE
-
-Dimitri Fedrau (2):
-  dt-bindings: power: supply: add support for MAX17201/MAX17205 fuel
-    gauge
-  power: supply: add support for MAX1720x standalone fuel gauge
-
- .../bindings/power/supply/maxim,max1720x.yaml |  58 +++
- drivers/power/supply/Kconfig                  |  12 +
- drivers/power/supply/Makefile                 |   1 +
- drivers/power/supply/max1720x_battery.c       | 338 ++++++++++++++++++
- 4 files changed, 409 insertions(+)
+Signed-off-by: Dimitri Fedrau <dima.fedrau@gmail.com>
+---
+ .../bindings/power/supply/maxim,max1720x.yaml | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max1720x.yaml
- create mode 100644 drivers/power/supply/max1720x_battery.c
 
+diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1720x.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max1720x.yaml
+new file mode 100644
+index 000000000000..dc3e0e7cb2ce
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/maxim,max1720x.yaml
+@@ -0,0 +1,58 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/supply/maxim,max1720x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Maxim MAX1720x fuel gauge
++
++maintainers:
++  - Dimitri Fedrau <dima.fedrau@gmail.com>
++
++allOf:
++  - $ref: power-supply.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - const: maxim,max17201
++      - items:
++          - enum:
++              - maxim,max17205
++          - const: maxim,max17201
++
++  reg:
++    items:
++      - description: ModelGauge m5 registers
++      - description: Nonvolatile registers
++
++  reg-names:
++    items:
++      - const: m5
++      - const: nvmem
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      fuel-gauge@36 {
++        compatible = "maxim,max17201";
++        reg = <0x36>, <0xb>;
++        reg-names = "m5", "nvmem";
++        interrupt-parent = <&gpio0>;
++        interrupts = <31 IRQ_TYPE_LEVEL_LOW>;
++      };
++    };
 -- 
 2.39.2
 
