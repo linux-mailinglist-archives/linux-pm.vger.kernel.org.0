@@ -1,183 +1,157 @@
-Return-Path: <linux-pm+bounces-9769-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9773-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3FB1912B1F
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 18:17:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8B52912BAE
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 18:45:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5285B1F29711
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 16:17:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6DD46B2ABBD
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 16:40:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6499F15FA65;
-	Fri, 21 Jun 2024 16:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C12511684BD;
+	Fri, 21 Jun 2024 16:39:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R7ypmpXw"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="rsUUqWDy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF80210A39;
-	Fri, 21 Jun 2024 16:17:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2FB1662FE;
+	Fri, 21 Jun 2024 16:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718986641; cv=none; b=FPHYBhw6hWtFeE2LKhfWhWp9y+fSXvzQIZmiJkYT/SQ1lrzX+Q4RSCDdGgA9c7CTWFIcRZH3LmkevxqYXQm0LbRF9DAimi9I27ZmBnJrB8YYVqSQMp7wBERd58rwnrBflBjBTc7Q635JMcBK90oLBIgu6XFD51K91LKvh/k2nM8=
+	t=1718987998; cv=none; b=dvnJFqsLrtjw71Lzv/5i7uLgG1RlXKDu1fAHzusNQufr+wNzWb7Gfbh7QvK8i62eXn0Y+95yZyllBOl5HWmZWZYhr+EtsfBTNYCKQfElg9QB1HkYFIAulhmERbdrkWtTfXv9BeRNxdMxTzs6+WetSEimYMUVZd3/22lk/EAurDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718986641; c=relaxed/simple;
-	bh=+Fxx6Sx301djtEaBC0yUcjU4BqsqCf6HkSgOkb8DcPk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=svshcKo8c+MxLPHCIOLnbRti5/LUfsoclwMfD9GEZ9ekOs5mAR5TUFD9Tf650KnUkHJkkEZgT8ORlGxJN6HPohMw++rPy9vsEueKY2DBoQ91ZTuTzAC8GC7iPX7un6QEE9LTUv5ds2h8iJN51e2cjPQVvBz0ZawdBo3zaX7cISw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R7ypmpXw; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718986640; x=1750522640;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+Fxx6Sx301djtEaBC0yUcjU4BqsqCf6HkSgOkb8DcPk=;
-  b=R7ypmpXwXDNF/p83FdyaLh/0g1cjCXj/G8OtzvvNbC1JSH38s4/ptFDa
-   7LPQKSni8OKTwdKlvj7UyqUrSOyz/TrXx0li2RftArLNumEVFuyUVrFqS
-   URcdzQlRDc2isPbEXgzHLFn6fcePTSPb5wuQpk/WzPA9bVf4tgDC2++sS
-   T0ElcqJ5mW5yuHDr/VLacLsaAioQylEidDui7AmZu3vnUrZTnmzU2NFXO
-   wk8JqMWVFmBaaGBs9oX1XOnuqwP1TozEIGW1/NzcQckpzo85/j2OmNFDl
-   31suEpE7tvQyCW3sWEQVJTJ4Zw4aJoUi/leRwM/jhRln4SPEXwroNiCLN
-   Q==;
-X-CSE-ConnectionGUID: VZtd603tSmKnAux4yErCcA==
-X-CSE-MsgGUID: QmJwelXgQBKrlOSc9xRAUw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11110"; a="16156307"
-X-IronPort-AV: E=Sophos;i="6.08,255,1712646000"; 
-   d="scan'208";a="16156307"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2024 09:17:19 -0700
-X-CSE-ConnectionGUID: GMnlQ7Z/R/acySIjDxt19w==
-X-CSE-MsgGUID: 1L4S/m1VTmS4FwAsgUW4jQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,255,1712646000"; 
-   d="scan'208";a="43077647"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 21 Jun 2024 09:17:12 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sKgwn-0008kC-2J;
-	Fri, 21 Jun 2024 16:17:09 +0000
-Date: Sat, 22 Jun 2024 00:16:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dzmitry Sankouski <dsankouski@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jessica Zhang <quic_jesszhan@quicinc.com>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Pavel Machek <pavel@ucw.cz>, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Chanwoo Choi <cw00.choi@samsung.com>, phone-devel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 12/23] mfd: Add new driver for MAX77705 PMIC
-Message-ID: <202406220025.tZN8mAeW-lkp@intel.com>
-References: <20240618-starqltechn_integration_upstream-v3-12-e3f6662017ac@gmail.com>
+	s=arc-20240116; t=1718987998; c=relaxed/simple;
+	bh=kv/SqCRziBr1ZtYrROxs06B90ZZZEZZm9BgfjzEMULM=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=fMFDhYCMD5QjMzKRvffY6bgD66AZEVNU5YByjgaaA4zAsb3FKcn4XjgdyxlVlAzF3XLzm2qqJ1WGzyC2eIr3OjkPfhWrt78Yj2QqLfHZbSIilCkH0OPMRqDBQVthaEMfbXewR5UM/ZO1JUZR4u8KP+LgHHX8sPlsww6szrVregQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=rsUUqWDy; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45LGdkhl055949;
+	Fri, 21 Jun 2024 11:39:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1718987986;
+	bh=yU92LoPc1BMT03gRYZSwgvtMaWSu4XTIGEMAMGD2Rjc=;
+	h=From:Subject:Date:To:CC;
+	b=rsUUqWDyN7WKd2+B6K9tod+jF26Ehjc1FmyTAQpMS6EwEdcIRBKDxUfQ7m+RFLZ4/
+	 FhshMKXBTeS9MR/r6i89LwlP6eyn3CdYLgmtYmGz0W7vUdOGrwtuT0pFcd2z1jxxMl
+	 LwXt9/n9kkJa/Ok6rE2WU4bFaVmjC6FyP/hQStKI=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45LGdk49020991
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 21 Jun 2024 11:39:46 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 21
+ Jun 2024 11:39:45 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 21 Jun 2024 11:39:46 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45LGdkOo080071;
+	Fri, 21 Jun 2024 11:39:46 -0500
+From: Bryan Brattlof <bb@ti.com>
+Subject: [PATCH v3 0/5] Update OPP table and add entries for AM62Ax &
+ AM62Px SoCs
+Date: Fri, 21 Jun 2024 11:39:36 -0500
+Message-ID: <20240621-ti-opp-updates-v3-0-d857be6dac8b@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240618-starqltechn_integration_upstream-v3-12-e3f6662017ac@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMisdWYC/33MsQ7CIBSF4VdpmMXABVpx8j2MA6Vo72AhgETT9
+ N2lNXFwcDwn+b+ZJBfRJXJsZhJdwYR+qkPsGmJHM90cxaFuAgwkU0zTjNSHQB9hMNklyrXlTJu
+ eCyVJjUJ0V3xu4PlS94gp+/ja/MLX90O1HH6pwimjQiluBR/0oYNTxr31d7I6Bf63UFsJ0Led7
+ Awo+W2XZXkDiWgyheUAAAA=
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar
+	<viresh.kumar@linaro.org>, Lee Jones <lee@kernel.org>,
+        Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra
+	<vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>
+CC: Vibhore Vardhan <vibhore@ti.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, Bryan Brattlof <bb@ti.com>,
+        Dhruva
+ Gole <d-gole@ti.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1828; i=bb@ti.com;
+ h=from:subject:message-id; bh=kv/SqCRziBr1ZtYrROxs06B90ZZZEZZm9BgfjzEMULM=;
+ b=owNCWmg5MUFZJlNZKJ0zKQAAav/////9z/13W376jaf9c8u/e9v6Tn73/usL/p9+ml3j78+wA
+ RsYGKaAABoAAAAAANBoB6nqaABoGj1NGgBoNNGgABoBkZG0gNpA0xNGHooZQA0AA09TQAAeoAPU
+ aek0NAA0DQAGQAaNAGymT1GnqA0PUaaBo9RoGnqBo9QyAcmEDTQA00xAaaGQaNMBA0AaYgYRkGE
+ GjEMCGEAABpkGamgAAAaAAYMAIPiMVZB5ISBihMWTjh4dxmbtdrddXiIYiXkY0F/NOYFXwAQox5
+ DKmZAqAKw0waM2bSiiFCcBvlcjXutR62SWUgsy0VNkMV6LYmeMp5QkiDSisfnvF7ayqVTDXUeK0
+ rrUl6upTzBDHPTzVQP9Mg2ZAaV29AvMg7HW6AeiR2hwAFs7E58H1WLAhWatMhJD329c+4mFP6ZI
+ zWpMGBh0mCfACOqtlcZ3GeACQXyhCuk27qO2FRm7geVVLU/usxcfqYnSZ1FEnFSUt0kWXypIViZ
+ aYRYvMsBcTKLM0qd15wDBBPoTJugGfgUcrgfH4t6NdauTSJ3aRexc8k5V/C26YFx9JUOxcce3/s
+ AshJ2XBgbFD0lzNRSHxCA721UKzQzRkga4MP9fxDSlCLLRBR7JAES8drEADNC0p7oBQaMobPQLP
+ 8XckU4UJAonTMpA
+X-Developer-Key: i=bb@ti.com; a=openpgp;
+ fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi Dzmitry,
+Hello Everyone
 
-kernel test robot noticed the following build errors:
+This series starts off the process of updating the OPP decoding tables 
+to align with the new speed grade schemes for TI's AM62Ax and AM62Px SoC 
+families.
 
-[auto build test ERROR on 6906a84c482f098d31486df8dc98cead21cce2d0]
+Following this update is the updated binding and the OPPv2 entries we 
+will be using for the SoC including the 1.4GHz frequency for our 
+reference boards when the VDD_CORE allows.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dzmitry-Sankouski/power-supply-add-undervoltage-health-status-property/20240618-222456
-base:   6906a84c482f098d31486df8dc98cead21cce2d0
-patch link:    https://lore.kernel.org/r/20240618-starqltechn_integration_upstream-v3-12-e3f6662017ac%40gmail.com
-patch subject: [PATCH v3 12/23] mfd: Add new driver for MAX77705 PMIC
-config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20240622/202406220025.tZN8mAeW-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240622/202406220025.tZN8mAeW-lkp@intel.com/reproduce)
+Thanks for reviewing
+~Bryan
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406220025.tZN8mAeW-lkp@intel.com/
+Signed-off-by: Bryan Brattlof <bb@ti.com>
+---
+Changes in v3:
+- s/calc_efuse/calculated_efusse/ 
+- place compatible string alphabetically
+- Link to v2: https://lore.kernel.org/r/20240612-ti-opp-updates-v2-0-422b6747a254@ti.com
 
-All errors (new ones prefixed by >>):
+Changes in v2:
+- removed errant DONOTMERGE tag 
+- Link to v1: https://lore.kernel.org/r/20240612-ti-opp-updates-v1-0-3551c31d9872@ti.com
 
-   In file included from drivers/mfd/max77705-core.c:20:
->> include/linux/mfd/max77705-private.h:243:26: error: 'MAX77705_USBC_REG_END' undeclared here (not in a function); did you mean 'MAX77705_PMIC_REG_END'?
-     243 |         u8 reg_muic_dump[MAX77705_USBC_REG_END];
-         |                          ^~~~~~~~~~~~~~~~~~~~~
-         |                          MAX77705_PMIC_REG_END
+---
+Bryan Brattlof (5):
+      cpufreq: ti: update OPP table for AM62Ax SoCs
+      cpufreq: ti: update OPP table for AM62Px SoCs
+      dt-bindings: mfd: syscon: add TI's opp table compatible
+      DONOTMERGE: arm64: dts: ti: k3-am62p: add in opp tables
+      DONOTMERGE: arm64: dts: ti: k3-am62a: add in opp table
 
+ Documentation/devicetree/bindings/mfd/syscon.yaml |  1 +
+ arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi       |  5 ++
+ arch/arm64/boot/dts/ti/k3-am62a7-sk.dts           |  9 +++
+ arch/arm64/boot/dts/ti/k3-am62a7.dtsi             | 51 ++++++++++++
+ arch/arm64/boot/dts/ti/k3-am62p-wakeup.dtsi       |  6 ++
+ arch/arm64/boot/dts/ti/k3-am62p5-sk.dts           |  9 +++
+ arch/arm64/boot/dts/ti/k3-am62p5.dtsi             | 47 ++++++++++++
+ drivers/cpufreq/ti-cpufreq.c                      | 94 ++++++++++++++++++++++-
+ 8 files changed, 220 insertions(+), 2 deletions(-)
+---
+base-commit: eb9c77d3294d119197f6ad2ddbc2adb41922ee4f
+change-id: 20240509-ti-opp-updates-19c109ab1354
 
-vim +243 include/linux/mfd/max77705-private.h
-
-   216	
-   217	struct max77705_dev {
-   218		struct device *dev;
-   219		struct i2c_client *i2c; /* 0xCC; Haptic, PMIC */
-   220		struct i2c_client *charger; /* 0xD2; Charger */
-   221		struct i2c_client *fuelgauge; /* 0x6C; Fuelgauge */
-   222		struct i2c_client *muic; /* 0x4A; MUIC */
-   223		struct i2c_client *debug; /* 0xC4; Debug */
-   224		struct mutex i2c_lock;
-   225	
-   226		struct regmap *regmap;
-   227		struct regmap *regmap_fg;
-   228		struct regmap *regmap_charger;
-   229		struct regmap *regmap_leds;
-   230	
-   231		int type;
-   232	
-   233		int irq;
-   234		int irq_base;
-   235		int irq_masks_cur[MAX77705_IRQ_GROUP_NR];
-   236		int irq_masks_cache[MAX77705_IRQ_GROUP_NR];
-   237		bool wakeup;
-   238		struct mutex irqlock;
-   239	
-   240	#ifdef CONFIG_HIBERNATION
-   241		/* For hibernation */
-   242		u8 reg_pmic_dump[MAX77705_PMIC_REG_END];
- > 243		u8 reg_muic_dump[MAX77705_USBC_REG_END];
-   244		u8 reg_led_dump[MAX77705_LED_REG_END];
-   245	#endif
-   246	
-   247		/* pmic VER/REV register */
-   248		u8 pmic_rev;	/* pmic Rev */
-   249		u8 pmic_ver;	/* pmic version */
-   250	
-   251		u8 cc_booting_complete;
-   252	
-   253		wait_queue_head_t queue_empty_wait_q;
-   254		int doing_irq;
-   255		int is_usbc_queue;
-   256	
-   257		struct max77705_platform_data *pdata;
-   258	};
-   259	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Bryan Brattlof <bb@ti.com>
+
 
