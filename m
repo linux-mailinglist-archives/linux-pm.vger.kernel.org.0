@@ -1,303 +1,137 @@
-Return-Path: <linux-pm+bounces-9738-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9739-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36176911C68
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 09:07:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28595911CA3
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 09:16:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 56B3B1C21B38
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 07:07:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A6AE1C22814
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 07:16:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F6916B3AE;
-	Fri, 21 Jun 2024 07:07:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9090169AD5;
+	Fri, 21 Jun 2024 07:16:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kU8B+QFo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 045B716B39C;
-	Fri, 21 Jun 2024 07:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E9012D74E
+	for <linux-pm@vger.kernel.org>; Fri, 21 Jun 2024 07:16:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718953657; cv=none; b=ge0UTqNP2IyRlyXnIUk+LXh8P8uFF2Nn2WNFYUmqCRXxI9/TMF0Pf2rpoMNCx4NO5g6OWYQny0hNhbYDcqq5LKsSAA+MGVkYgzds9GCqcM1oMvgqAibR05cnX/CUy7YVmQkQndZ0dVMDaJ294soyx/9P9XpTYWglDA2zoOuc3QQ=
+	t=1718954205; cv=none; b=U0a8PGnm2aMBYTlkFJ8FkZ0MdmkkbwJ7xrtsAaGw+muMpyeEWeU1cRdMnyVeo8e1mo0wKyj9B9AxUBvKhCTVLpuO7BbZ+/q9yeoM3q7in+5Ag5VPmbRYcNL+Rv98YEiCzx7HIayriSwD6faU54l5f4tQqIEf2KrCpB8K1bEBKRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718953657; c=relaxed/simple;
-	bh=7tkF5DoG1mNyxCDvKqAsREysYynts5LZQaOGCf04ZBM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o/ETKFZhJrdWd0+yNqxdSZe9U4Y9aC/ik40cmSBhBegiYUK3Yeb2aHE9aO1I+unEx/HXuCEhCrjvEgQKVY/IiAmvETqhi7NfO8Kd+rQIwroBDUKFdzZPFrI9hAXctUF3WfLZXeJOwfG5t5ct5V9+0LLG1clG0Jngkw5GVxqx+K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e02b571b0f6so1755514276.0;
-        Fri, 21 Jun 2024 00:07:34 -0700 (PDT)
+	s=arc-20240116; t=1718954205; c=relaxed/simple;
+	bh=P+91xxFEluTaDI2TnVurqN4jrHncZCNMsZc7d2bCDqc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AwN/5drRX+lurxyZG/EZCPuox2av5+1CClCqlCSrduJsk0bCm/bonH2mh/N6UkWA1xFYBBfLSVCaj8XJo7bsMtSx/TlnEg+zoMJS4meu9tfmNUkupE/iozOHJ8EcV3ZvSmoLHXvaNU63iwSGixh0n4ZsrbYKag1VhivvC4h6nc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kU8B+QFo; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3632a6437d7so995386f8f.0
+        for <linux-pm@vger.kernel.org>; Fri, 21 Jun 2024 00:16:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1718954202; x=1719559002; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+DCVn1j55e5ajfxU4ywGKuZZgRbg1a8LJ+8x3Pif5bk=;
+        b=kU8B+QFocQAork16HiNMebKHc5yj3nhqYfosu+pR8T4wI3jjDHtxecsTAde6Y4yyQH
+         q7ezryMxRUboRj/V01liA67OkRrwpw4B/HQ+nrGsAiEW/UVJ5vWSpCJuM9EScL2hmdXQ
+         eqcDOoZmZu/oh+ieUpB2slzBKeuYRigaSpUupzMqbgZc2sTGnhTXhk13EG2HvGDHsYZj
+         GtB5+OaxKcBhWlujEMat80dcQV52raWZrF5va2glIWz32rUCRXWLAS36YRijmNKUaYZr
+         04W3/CSMg4E4dCpH8JgSTKh/7cOWpjauzjqmbNe1KJw0yB5I1aJoNnezVWmDmAlBnDgw
+         kWeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718953653; x=1719558453;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pCeBy6m9Ikgkd0V6AmZHrrVdN8+2k5wHMXK+JUn37Us=;
-        b=dwgkxqYlcbVunXfq1bmRBfQcrYpSyk7teLpDdkQz+8PcnGcblLl6UzxYjk9+ENlGBs
-         0rA9Dj7jwlfZDMW9l3jRmcqoX2NCiHPsK/l7n/YPVEKAT6fa1CahJeEci1xX1x29Tjg+
-         3JvM3ybTvuQK1bLA3dm1RRr9vBoXSbfVDqyDnDoLU2MD4SYTqgFhB1HDZsaBkXyhb7ZP
-         pcwDPR+KFPy4kZuXnMsBC4b6aSF3kuJErJVRseMjU5/ld4wK0ckqe6Y5K0mqqc3EZKaS
-         3ZyxLPK214L9/4KJIlKAx8tQv26Jy6Mdghc9TSa5pbZMrEa9PUWtA6lw3zQRP68k1RiB
-         zPxA==
-X-Forwarded-Encrypted: i=1; AJvYcCUtQXD0n7fQXBEuVFPNONTVYXqOpPpwJ7oJR/PREcR35NcYKCdvSbL6xicvOfjFgZmleCoCNR8vmy8o7R2StC12IQlUC0Kaj492eRJZ84dfcgcaDPuY1gVdSpanwTOPWpcmgzzfXlvnxXOlai+UkE+NVUfZCf+qa9nYRANgdAbspQMhSla3LTqKph/SwqYowrtKL8LzizTh9G3/AEtaVTpVEmr6cD1VECa2VIgUvAvF96p7JUQ/nqjU/ZqBHSAcaXkisqQ=
-X-Gm-Message-State: AOJu0Yys0VMIWxsfl2lRH+vzD66Kpf/tgn2kt0JM1ZN7L3mN00vusXji
-	CUnjTNwFE6bkIDmeZ7jjdfpjz6C0ivKTwE2N/gcDEHr9NQRAAXlICGhw3D3U
-X-Google-Smtp-Source: AGHT+IEwQSLVg32R6LnNxhCts3FFOjppOMNhjb1LPkVVaD61bLTb4+b5+eet7DNLk5aIWMUC9tWc0A==
-X-Received: by 2002:a25:bc8b:0:b0:e02:8d40:98ad with SMTP id 3f1490d57ef6-e02be10a9aamr8046578276.13.1718953653123;
-        Fri, 21 Jun 2024 00:07:33 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e02e61168b3sm243511276.6.2024.06.21.00.07.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jun 2024 00:07:32 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6327e303739so16311557b3.2;
-        Fri, 21 Jun 2024 00:07:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXbZh/NiVNtdZwRAy+L5NdysXpJBH3C1lM/y3uRIzgprhXG7AIUUjPZI1Ctx/EWOlYiqrJTm8BWhePFoG3lha6+MNvp19Siq4yJMMgN9kaKS+YISuzUGKeDOEFa9d6YgcSfm0UKx5xkrUsaxvEK+VEgofem8kmMZsqhicHOXmzYWWHIzdZuUOgNkYcre156pKZ3jA1c0vGz74Owx96Ih2y6DwGrOj7mKAoTOQR12E+aQcGSEXLEYkU2MnsJ+3LphxQ1R5c=
-X-Received: by 2002:a0d:d7d2:0:b0:62c:fcba:cfeb with SMTP id
- 00721157ae682-63a8f339693mr74571937b3.34.1718953651367; Fri, 21 Jun 2024
- 00:07:31 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718954202; x=1719559002;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+DCVn1j55e5ajfxU4ywGKuZZgRbg1a8LJ+8x3Pif5bk=;
+        b=Fx5KmXFZBq3UYNXBBJ1dXS1jjBMiDiL2k78BV45Gcp4FZBhb03UMPk3tnsAOcmSNv8
+         1TI/3EQZ/CAKARhWWSefOq+6VeOTyOVph80lHO+nsIwqTSyV8KW6I6evHtysJqnCSuhM
+         IjcRKx3g7ELvUddKT1JhiCSluUgbZF9TChFNijB+0DAt0PRyK9wSNOs8i84N0QHivEiS
+         812pXbAtQ+sQDqRyF+Js/+dwyQ+dSQESfEiE15z34XSDgsGL8OADeHEjnvzjuvs8FUsy
+         jsUN2mRN3lEjMqOviAB82jlpK5O5T65Gp2JVHwTMqNHPUwxVBLSOhAanYEnaI20fJUdO
+         7qkw==
+X-Forwarded-Encrypted: i=1; AJvYcCWVDmu3WMsuzvLoBhD89p3a9y/jQ630ohqk/QVLUqcDrXEnHTUk7zQ4gx45nhRpIV3XyBl5m9fSF27Y1WvQphAF++tAHMDOOyA=
+X-Gm-Message-State: AOJu0Yyv/A46RL5sgPd2SSVUZt7EY1Ohxsd+6lPDKqqj2f1jXHTCx5Yp
+	+ka+2mYYMtac1dCAmxmkDOgyY//tWL6lBhwqcuO9SWZlIxu0pzogQV+UiFdwpHsO0+znChCXskB
+	e
+X-Google-Smtp-Source: AGHT+IF5sFoAP29akLxvGK45M1UjSB9l7BLcx459eKNtxkohSNzhLG3IvD7TMpltf7VwV6NX+Ib5CA==
+X-Received: by 2002:a5d:6e8b:0:b0:35f:204e:bcf0 with SMTP id ffacd0b85a97d-3609ea612f5mr11099793f8f.13.1718954202105;
+        Fri, 21 Jun 2024 00:16:42 -0700 (PDT)
+Received: from [127.0.1.1] ([82.79.124.209])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3663a8c7befsm879041f8f.95.2024.06.21.00.16.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jun 2024 00:16:41 -0700 (PDT)
+From: Abel Vesa <abel.vesa@linaro.org>
+Date: Fri, 21 Jun 2024 10:16:35 +0300
+Subject: [PATCH] power: supply: qcom_battmgr: Enable battery support on
+ x1e80100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1716811405.git.geert+renesas@glider.be> <CAPDyKFpa4LZF3eN7x-NT+b9=dKB3Oe6RY8RAyetdRBSR1-LQoQ@mail.gmail.com>
- <0a025885-ed95-45d3-bf76-d2a043baaed7@ideasonboard.com> <CAPDyKFrxUDhnUUfz5wHpGVQfNYssxoWO5Eb2wtmZMTcMYhEjxQ@mail.gmail.com>
- <1bda8e8f-10df-4a10-a217-26cf50ef3577@ideasonboard.com> <CAGETcx-T54w=x=gv524dUJtnRGmOiXFA2CRYHE5Pawbux8_Tig@mail.gmail.com>
-In-Reply-To: <CAGETcx-T54w=x=gv524dUJtnRGmOiXFA2CRYHE5Pawbux8_Tig@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 21 Jun 2024 09:07:19 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUTGLSDv-zAun7tV2VnN0q08PibBT9B-MhxqdwmRTA_UQ@mail.gmail.com>
-Message-ID: <CAMuHMdUTGLSDv-zAun7tV2VnN0q08PibBT9B-MhxqdwmRTA_UQ@mail.gmail.com>
-Subject: Re: [PATCH/RFC 0/3] pmdomain: renesas: rmobile-sysc: Remove serial
- console handling
-To: Saravana Kannan <saravanak@google.com>
-Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, Peng Fan <peng.fan@nxp.com>, 
-	linux-pm@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240621-x1e80100-power-supply-qcom-battmgr-v1-1-40cb89a0c144@linaro.org>
+X-B4-Tracking: v=1; b=H4sIANIodWYC/x3NwQ6CMAyA4VchPdukq0OJr2I4wKzYRNjsUDGEd
+ 2fx+F3+f4UsppLhUq1g8tGscSpwhwrCo5sGQb0VAxN7qplxcdKQI8IUv2KY3yk9f/gKccS+m+d
+ xMGyO3nN/DkFOBCWUTO66/CfXdtt2W6frL3QAAAA=
+To: Sebastian Reichel <sre@kernel.org>
+Cc: Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Abel Vesa <abel.vesa@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1188; i=abel.vesa@linaro.org;
+ h=from:subject:message-id; bh=P+91xxFEluTaDI2TnVurqN4jrHncZCNMsZc7d2bCDqc=;
+ b=owEBbQKS/ZANAwAKARtfRMkAlRVWAcsmYgBmdSjUCQj16z/0jBkUuL9UkkjhId1kStmFNWoQR
+ VcONv+3jwKJAjMEAAEKAB0WIQRO8+4RTnqPKsqn0bgbX0TJAJUVVgUCZnUo1AAKCRAbX0TJAJUV
+ VshuEAC5YdNtaarfm70PNzm0+GVT0Or57gIpbGajLxKLbfBFNhFUGO6qDSNcM9BpHUtD4BDm2sF
+ Jy8643ACzREF10YNGJuBiC05IJIxZZXDexQHdIRdhYMexDsy3Ae3uaV1atSSdmd3qPB8cD7eR5Z
+ DcuEhVV2piO2/jKIDl24qoEQvc/3la26STJRV8nJfwSIHmpIQYKYuBJiNGsaH09GbxSRd3j+y6F
+ iFCQSwYYLVSV4Jlfbt9zDKE39SOp0ZLb16Wa/izO6VRSnOHj50G1NILPCj2p4foctSHVfbgYqb1
+ uSo7glDao46R23jeEDmDUYrCnnDXUCppaOn2mzq84FC6lAlDZA/m5CxYtK3pczxiVED8ezAn1/I
+ onUcVF2Xoob1HJ/PNk4j7xdNjOryjIhLw/305hUjfm+Aw8VTkQhkKIixAVXOvgyTKspPl4XtW5T
+ h52uoKf0flgSnlh2CTNGk7bS6QvQVhnjdx5o/Z5Y4XTq7B3tLlBcm5mXJnlRVleBRQqxmEWMSbx
+ fk0V46O4A2dkOV5XqsYN4OHWLnBQTemnFY7M4GBr2ZSBozkTI6orgEkcWbzeQbwF9rIzexi5N5Z
+ tgPS4hHojJwsmNewQc/5lumGH81KG5naR9UShKvF2JNVGeiHKTHM918cvlw99PRzdmtJhMO5sCa
+ 6crefepvl0LlhLA==
+X-Developer-Key: i=abel.vesa@linaro.org; a=openpgp;
+ fpr=6AFF162D57F4223A8770EF5AF7BF214136F41FAE
 
-Hi Saravana,
+The x1e80100, being a compute platform, provides functionality for the
+exact same power supplies as sc8280xp. Add the compatible and assign
+the sc8280xp match data.
 
-On Fri, Jun 21, 2024 at 3:08=E2=80=AFAM Saravana Kannan <saravanak@google.c=
-om> wrote:
-> On Wed, Jun 5, 2024 at 4:16=E2=80=AFAM Tomi Valkeinen
-> <tomi.valkeinen@ideasonboard.com> wrote:
-> > On 05/06/2024 13:53, Ulf Hansson wrote:
-> > > On Wed, 5 Jun 2024 at 12:41, Tomi Valkeinen
-> > > <tomi.valkeinen@ideasonboard.com> wrote:
-> > >> On 05/06/2024 12:34, Ulf Hansson wrote:
-> > >>> On Mon, 27 May 2024 at 14:41, Geert Uytterhoeven
-> > >>> <geert+renesas@glider.be> wrote:
-> > >>>> Since commit a47cf07f60dcb02d ("serial: core: Call
-> > >>>> device_set_awake_path() for console port"), the serial driver prop=
-erly
-> > >>>> handles the case where the serial console is part of the awake pat=
-h, and
-> > >>>> it looked like we could start removing special serial console hand=
-ling
-> > >>>> from PM Domain drivers like the R-Mobile SYSC PM Domain driver.
-> > >>>> Unfortunately the devil is in the details, as usual...
-> > >>>>
-> > >>>> Earlycon relies on the serial port to be initialized by the firmwa=
-re
-> > >>>> and/or bootloader.  Linux is not aware of any hardware dependencie=
-s that
-> > >>>> must be met to keep the port working, and thus cannot guarantee th=
-ey
-> > >>>> stay met, until the full serial driver takes over.
-> > >>>>
-> > >>>> E.g. all unused clocks and unused PM Domains are disabled in a lat=
-e
-> > >>>> initcall.  As this happens after the full serial driver has taken =
-over,
-> > >>>> the serial port's clock and/or PM Domain are no longer deemed unus=
-ed,
-> > >>>> and this is typically not a problem.
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
+ drivers/power/supply/qcom_battmgr.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Let's call this "Case A".
+diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+index ec163d1bcd18..46f36dcb185c 100644
+--- a/drivers/power/supply/qcom_battmgr.c
++++ b/drivers/power/supply/qcom_battmgr.c
+@@ -1308,6 +1308,7 @@ static void qcom_battmgr_pdr_notify(void *priv, int state)
+ static const struct of_device_id qcom_battmgr_of_variants[] = {
+ 	{ .compatible = "qcom,sc8180x-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
+ 	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
++	{ .compatible = "qcom,x1e80100-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
+ 	/* Unmatched devices falls back to QCOM_BATTMGR_SM8350 */
+ 	{}
+ };
 
-> > >>>>
-> > >>>> However, if the serial port's clock or PM Domain is shared with an=
-other
-> > >>>> device, and that other device is runtime-suspended before the full
-> > >>>> serial driver has probed, the serial port's clock and/or PM Domain=
- will
-> > >>>> be disabled inadvertently.  Any subsequent serial console output w=
-ill
-> > >>>> cause a crash or system lock-up.  E.g. on R/SH-Mobile SoCs, the se=
-rial
-> > >>>> ports share their PM Domain with several other I/O devices.  After=
- the
-> > >>>> use of pwm (Armadillo-800-EVA) or i2c (KZM-A9-GT) during early boo=
-t,
-> > >>>> before the full serial driver takes over, the PM Domain containing=
- the
-> > >>>> early serial port is powered down, causing a lock-up when booted w=
-ith
-> > >>>> "earlycon".
+---
+base-commit: 2102cb0d050d34d50b9642a3a50861787527e922
+change-id: 20240522-x1e80100-power-supply-qcom-battmgr-83442b7cce60
 
-Let's call this "Case B".
+Best regards,
+-- 
+Abel Vesa <abel.vesa@linaro.org>
 
-> > >>>
-> > >>> Thanks for the detailed description of the problem! As pointed out =
-in
-> > >>> regards to another similar recent patch [1], this is indeed a gener=
-ic
-> > >>> problem, not limited to the serial console handling.
-> > >>>
-> > >>> At Linaro Connect a few weeks ago I followed up with Saravana from =
-the
-> > >>> earlier discussions at LPC last fall. We now have a generic solutio=
-n
-> > >>> for genpd drafted on plain paper, based on fw_devlink and the
-> > >>> ->sync_state() callback. I am currently working on the genpd series=
-,
-> > >>> while Saravana will re-spin the series (can't find the link to the
-> > >>> last version) for the clock framework. Ideally, we want these thing=
-s
-> > >>> to work in a very similar way.
-> > >>>
-> > >>> That said, allow me to post the series for genpd in a week or two t=
-o
-> > >>> see if it can solve your problem too, for the serial console.
-> > >>
-> > >> Both the genpd and the clock solutions will make suppliers depend on=
- all
-> > >> their consumers to be probed, right?
-> > >>
-> > >> I think it is a solution, and should be worked on, but it has the
-> > >> drawback that suppliers that have consumers that will possibly never=
- be
-> > >> probed, will also never be able to turn off unused resources.
-> > >>
-> > >> This was specifically the case with the TI ti-sci pmdomain case I wa=
-s
-> > >> looking at: the genpd driver (ti_sci_pm_domains.c) provides a lot of
-> > >> genpds for totally unrelated devices, and so if, e.g., you don't hav=
-e or
-> > >> don't want to load a driver for the GPU, all PDs are affected.
-> > >>
-> > >> Even here the solutions you mention will help: instead of things get=
-ting
-> > >> broken because genpds get turned off while they are actually in use,=
- the
-> > >> genpds will be kept enabled, thus fixing the breakage. Unfortunately=
-,
-> > >> they'll be kept enabled forever.
-> > >>
-> > >> I've been ill for quite a while so I haven't had the chance to look =
-at
-> > >> this more, but before that I was hacking around a bit with something=
- I
-> > >> named .partial_sync_state(). .sync_state() gets called when all the
-> > >> consumers have probed, but .partial_sync_state() gets called when _a=
-_
-> > >> consumer has been probed.
-> > >>
-> > >> For the .sync_state() things are easy for the driver, as it knows
-> > >> everything related has been probed, but for .partial_sync_state() th=
-e
-> > >> driver needs to track resources internally. .partial_sync_state() wi=
-ll
-> > >> tell the driver that a consumer device has probed, the driver can th=
-en
-> > >> find out which specific resources (genpds in my case) that consumer
-> > >> refers to, and then... Well, that's how far I got with my hacks =3D)=
-.
-> > >>
-> > >> So, I don't know if this .partial_sync_state() can even work, but I
-> > >> think we do need something more on top of the .sync_state().
-> > >
-> > > Thanks for the update!
-> > >
-> > > You certainly have a point, but rather than implementing some platfor=
-m
-> > > specific method, I think we should be able enforce the call to
-> > > ->sync_state(), based upon some condition/timeout - and even if all
-> > > consumers haven't been probed.
-> >
-> > Hmm, I think that was already implemented in some of the serieses out
-> > there (or even in mainline already?), as I remember doing some
-> > experiments with it. I don't like it much, though.
-> >
-> > With a simple timeout, it'll always be just a bit too early for some
-> > user (nfs mount took a bit more time than expected -> board frozen).
-> >
-> > The only condition I can see that would somewhat work is a manual
-> > trigger from the userspace. The boot scripts could then signal the
-> > kernel when all the modules have been loaded and probably a suitable,
-> > platform/use case specific amount of time has passed to allow the
-> > drivers to probe.
->
-> This is also already supported in mainline.
->
-> Devices with sync_state() implementations (once Ulf adds it) will have
-> a state_synced file in sysfs. It shows where it has been called yet or
-> not. But you can also echo 1 into it to force the sync_state()
-> callback (only if it hasn't been called already). So, yeah, all
-> methods of handling this are available if you implement the
-> sync_state() callback.
->
-> By default it's all strict (wait till all consumers probe
-> successfully). But you can set it to timeout (fw_devlink.sync_state).
-> And you also have the option I mentioned above that you can use with
-> both cases.
-
-So the idea is to disable unused genpds and clocks from the genpd
-resp. clock's driver .sync_state() callback, instead of from a late
-initcall?  That would indeed solve issues related to "Case A".
-
-However, how to solve "Case B"? Ignore disabling genpds or clocks
-before .sync_state() callback() has been called?
-That would cause issues for cases where the clock must be disabled,
-cfr.
-    "[PATCH RFC 0/3] Add clk_disable_unprepare_sync()"
-    https://lore.kernel.org/all/20240131160947.96171-1-biju.das.jz@bp.renes=
-as.com/
-    "[PATCH v3 0/3] Add clk_poll_disable_unprepare()"
-    https://lore.kernel.org/linux-renesas-soc/20240318110842.41956-1-biju.d=
-as.jz@bp.renesas.com/
-
-> > It just feels a bit too much of a "let's hope this work" approach.
-> >
-> > That said, the timeout/condition is probably acceptable for many cases,
-> > where turning off a resource forcefully will just result in, say, a
-> > temporarily blanked display, or something else that gets fixed if and
-> > when the proper driver is probed.
-> >
-> > Unfortunately, here with the case I have, the whole board gets halted i=
-f
-> > the display subsystem genpd is turned off and the display driver is
-> > loaded after that.
-
-Tomi: Do you have more details? The genpd must be controlling something
-critical that must never be turned off, or perhaps the display driver
-lacks some initialization?
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
