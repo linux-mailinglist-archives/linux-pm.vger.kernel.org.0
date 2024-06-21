@@ -1,238 +1,129 @@
-Return-Path: <linux-pm+bounces-9774-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9776-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E0BC912B90
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 18:40:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4731A912B9B
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 18:42:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9E5E1F27069
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 16:40:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E50721F27169
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 16:42:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D53616B736;
-	Fri, 21 Jun 2024 16:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84FD616B395;
+	Fri, 21 Jun 2024 16:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="b+974Ov7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MFPqCkgI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974DB1684AD;
-	Fri, 21 Jun 2024 16:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B99B1607A4;
+	Fri, 21 Jun 2024 16:41:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718988000; cv=none; b=O2m0FGSQMNei9CUQ+5UAZwX2NjjL+TVN3H6I1G7d6nxGksend/a5qZbffRee9ED9egX6TPOCvNZNXwawdEIRrj0go+GNd1y9eW+NQb2K80/NfDOBa/eCQOOT8VCyj1pxoPjn3frZi8+nYTpmDPYPmHZinpbCwSgfe1NSp1e9V+4=
+	t=1718988093; cv=none; b=a9QB5RuhMAn7Vqi96FYO8X3QGU9l5Mn9WRQ+mRPyEDFJSHEO/p7W2G+djKZ042DyVlmRaZEKxG07xXzhcczQKDO7CBJbhn0EBWJLxStVY2rbtEkJW+UG912URWY20c+97I4c31X6IruRkCu7xq/4O53YyO0W5WEynZ442Hda6Fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718988000; c=relaxed/simple;
-	bh=hWo1gVxlWo8njHZbS2+ISUJ4MaU/Z08cT/W2pZCsCxE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=WHUlpg2E7bJujLPk36hH/JrP7pA7ujBxJbwdfSAlHGOyHLLsQmpNIksjEQvTu1SpuYW9FPVi3njlOQj3at4SaT3MQN0/JoAdc4C7JvDUwDcDdBrKHHpkUnfKz7SUVYI/H2g0SmsUC/B0JqfSVYq5KL77qOBPPuJe2Yoj0E3lstw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=b+974Ov7; arc=none smtp.client-ip=198.47.19.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45LGdknq091082;
-	Fri, 21 Jun 2024 11:39:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1718987986;
-	bh=D1lHDBEabw6iFa5eoXj6w/4O8h6lIdgdEQcuBn3HstE=;
-	h=From:Date:Subject:References:In-Reply-To:To:CC;
-	b=b+974Ov7Tplz+TfybU4x/oWH/5Qkn3xsa2QeiF4ALxQ7OhYww8pFjgSSS/bb22aL7
-	 jCaeV7jsS65c1NesFKAWeIZdyV2+omZRvUTuGVgGXpVLp9H3uYuOPqpej7tBFECD/t
-	 Na2n3Vof6rZrMiwRHpiktA9SGGyxDZ/UYIvc4p6Y=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45LGdkjk062054
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 21 Jun 2024 11:39:46 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 21
- Jun 2024 11:39:46 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 21 Jun 2024 11:39:46 -0500
-Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45LGdkLB057989;
-	Fri, 21 Jun 2024 11:39:46 -0500
-From: Bryan Brattlof <bb@ti.com>
-Date: Fri, 21 Jun 2024 11:39:41 -0500
-Subject: [PATCH v3 5/5] DONOTMERGE: arm64: dts: ti: k3-am62a: add in opp
- table
+	s=arc-20240116; t=1718988093; c=relaxed/simple;
+	bh=hYmWKI+FNyJcAuG9I3AJi5jO+DJ7u/F46dADwaI+gfI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rKSV19e4qLcPCHCyYqFFadYKjg+Ht2nZOw3/HCd78vi4XSz7qaWyz1rBzaS2L8ocn1tYxZF59KRU6lVLTwC1Io1X/b8HF3c7PsJh42cRUh1UJJ7kXeKBAQT9q7UBqRUj8tRVWPDQ+obnQDVsVajwVVtjNdGP2DZUc5aKkgOxzck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MFPqCkgI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFCE5C4AF08;
+	Fri, 21 Jun 2024 16:41:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718988093;
+	bh=hYmWKI+FNyJcAuG9I3AJi5jO+DJ7u/F46dADwaI+gfI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=MFPqCkgIiPane/B29DP24yhmu6Cqx1ig4QHoZu/CxkY/yMoJ3YILzBnO6bkjCzWg4
+	 BJgINfW1aYWwyYGosZMqzgu3PzGCmyZEpqoX8WJVZZvA5gYF6geUf237XZQirAljED
+	 HG22tgznF9DEGXh4L9IoSzukFhotkAx1inbKvc3jhBvAtNmOTdWnFTnIvlDutybNGW
+	 MK9WMuFMPhLXuhADiOdk4AAZQ4+aH5ATHDzqqZCJ3z3C5dfxEe4aqtSz6OZI3ku1B1
+	 N8p47W+jeFVuuqqKjL4tDdG1/Bwp8kGZO0FeIGx9litozVLjkKqkqNNdMTXaxH0kOa
+	 LX+MC6MAXaHlw==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-25cc44857a1so103814fac.3;
+        Fri, 21 Jun 2024 09:41:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU0PVnvpVdMujmMzyhdy49w28fhzFjCOoSr5Slu0H+HSEXJXkdr0bBRjYMngK+T2inN3zYVxk6H7qrD45s4i8vBBJ+hHHPsR5h1AS/YIDrxPqT3pnXlBdU3LJ2vert7u+4v4/SvSD4=
+X-Gm-Message-State: AOJu0YyxKeXmAsImLOf7v0UerexDiSLdYobpdtgC6mFBn0kF+ydDA61z
+	s/3JcCA34XxnQl4ahSMLtDJsfEqHjqahM5EKRsCuAtj7kQ+M+0WX7pSAWY7jv8gibTlptx5nMbY
+	5Hvrq70qr+3buutnucw4aaubB/Tk=
+X-Google-Smtp-Source: AGHT+IHUjl81JvxOmR4unSTWZ8kAGMURYVE7PROzd8jvdZRqjG9H4e1dW0SiTyIG4FNggeKiHvAbK3c+t8IQitwQT1g=
+X-Received: by 2002:a05:6870:148d:b0:258:476d:a781 with SMTP id
+ 586e51a60fabf-25c94d52e3emr9718943fac.3.1718988092229; Fri, 21 Jun 2024
+ 09:41:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240621-ti-opp-updates-v3-5-d857be6dac8b@ti.com>
-References: <20240621-ti-opp-updates-v3-0-d857be6dac8b@ti.com>
-In-Reply-To: <20240621-ti-opp-updates-v3-0-d857be6dac8b@ti.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar
-	<viresh.kumar@linaro.org>, Lee Jones <lee@kernel.org>,
-        Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra
-	<vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-CC: Vibhore Vardhan <vibhore@ti.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, Bryan Brattlof <bb@ti.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3806; i=bb@ti.com;
- h=from:subject:message-id; bh=hWo1gVxlWo8njHZbS2+ISUJ4MaU/Z08cT/W2pZCsCxE=;
- b=owNCWmg5MUFZJlNZePdFTQAAZn////9v/+fr/cz+zxG/l6san/7qz/X17+vLU0+89xNp//ewA
- Rs21kABiMgDTQ0aAAaA0wmmmjRpoDCaADQyAAyYQaZDCADQYjCAPUYjIyb1EHqaMIA0GhoAANDR
- owhoDQaGhoAA0aGmgyGho09IA9ENNBpoeiNHqYyIGQaNDNSPUMnqNGg0NPSMgHqDTQaaBo0ABoA
- DQAaAAAADQADQaeoNAaeoeoD1PU9TNQMMcTgTLHM7eN6CfPu7Dj3lCeHPLTtFdDxro+OwRa/5uy
- O0LQOZUMKp4WYy6t/fUZ98garnzMFFSG8Xes20ot2UoZ5oQDEXPVA8zjM6dGSVjiuA+DO9X4ZnE
- NkBUcl24TP0ACmUZXKu4M5Gd+hkrZXm0ut3BAOjMcsuhXbFZVxq3mQ9bEZz3lSa1997fHX5nQ0U
- B0+UK8+xQA787wRoOxgmsLz44DXTuv/F/7hYLJrRu+RbgMFPsnRZPMesSESUsdJZ4DE0haQjSki
- CazNMvijCgstlyslLaMwBZEeYiEI4rljzW+BeW8w9VebXLOWthRCiZDR0KEC3DuAnmmiEX+ECvV
- N+ODLE3BYkP3QLSQamAaye2ClXNLdigFMfnI+MBWUKTKJEYZf20tq4soonZ/v1DH4ppvEBYoiwA
- Upwj04DigC7kinChIPHuipo
-X-Developer-Key: i=bb@ti.com; a=openpgp;
- fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <ZmVfcEOxmjUHZTSX@hovoldconsulting.com> <CAJZ5v0gVnjVyd_O6KgXy2sXr3b3M3vyTLyUCasyxP0GrAXro4Q@mail.gmail.com>
+ <CAJZ5v0iz7gwhpvT53CH0ZEA_q3U=dnn6XR8HdLk6LpP3ye4Zkg@mail.gmail.com> <6759ce9f-281d-4fcd-bb4c-b784a1cc5f6e@oldschoolsolutions.biz>
+In-Reply-To: <6759ce9f-281d-4fcd-bb4c-b784a1cc5f6e@oldschoolsolutions.biz>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 21 Jun 2024 18:41:20 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gueSnaci601OkVq9_Ui09k8EsByRL08tFkzDoDGJpp6g@mail.gmail.com>
+Message-ID: <CAJZ5v0gueSnaci601OkVq9_Ui09k8EsByRL08tFkzDoDGJpp6g@mail.gmail.com>
+Subject: Re: cpufreq/thermal regression in 6.10
+To: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Johan Hovold <johan@kernel.org>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Steev Klimaszewski <steev@kali.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, regressions@lists.linux.dev
+Content-Type: multipart/mixed; boundary="0000000000009c96e1061b691a44"
 
-To help reduce power consumption, reduce the frequency of the CPU cores
-when they sit idle by specifying their supported OPP entries.
+--0000000000009c96e1061b691a44
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Bryan Brattlof <bb@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi |  5 +++
- arch/arm64/boot/dts/ti/k3-am62a7-sk.dts     |  9 +++++
- arch/arm64/boot/dts/ti/k3-am62a7.dtsi       | 51 +++++++++++++++++++++++++++++
- 3 files changed, 65 insertions(+)
+Hi,
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
-index 98043e9aa316b..bf16b29c3953b 100644
---- a/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
-@@ -13,6 +13,11 @@ wkup_conf: syscon@43000000 {
- 		#size-cells = <1>;
- 		ranges = <0x00 0x00 0x43000000 0x20000>;
- 
-+		opp_efuse_table: syscon@18 {
-+			compatible = "ti,am62-opp-efuse-table", "syscon";
-+			reg = <0x18 0x4>;
-+		};
-+
- 		chipid: chipid@14 {
- 			compatible = "ti,am654-chipid";
- 			reg = <0x14 0x4>;
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-index f241637a5642a..852a066585d6d 100644
---- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-@@ -59,6 +59,15 @@ wkup_r5fss0_core0_memory_region: r5f-dma-memory@9c900000 {
- 		};
- 	};
- 
-+	opp-table {
-+		/* Add 1.4GHz OPP for am62p5-sk board. Requires VDD_CORE at 0v85 */
-+		opp-1400000000 {
-+			opp-hz = /bits/ 64 <1400000000>;
-+			opp-supported-hw = <0x01 0x0004>;
-+			clock-latency-ns = <6000000>;
-+		};
-+	};
-+
- 	vmain_pd: regulator-0 {
- 		/* TPS25750 PD CONTROLLER OUTPUT */
- 		compatible = "regulator-fixed";
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a7.dtsi b/arch/arm64/boot/dts/ti/k3-am62a7.dtsi
-index f86a23404e6dd..6c99221beb6bd 100644
---- a/arch/arm64/boot/dts/ti/k3-am62a7.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62a7.dtsi
-@@ -48,6 +48,8 @@ cpu0: cpu@0 {
- 			d-cache-line-size = <64>;
- 			d-cache-sets = <128>;
- 			next-level-cache = <&L2_0>;
-+			operating-points-v2 = <&a53_opp_table>;
-+			clocks = <&k3_clks 135 0>;
- 		};
- 
- 		cpu1: cpu@1 {
-@@ -62,6 +64,8 @@ cpu1: cpu@1 {
- 			d-cache-line-size = <64>;
- 			d-cache-sets = <128>;
- 			next-level-cache = <&L2_0>;
-+			operating-points-v2 = <&a53_opp_table>;
-+			clocks = <&k3_clks 136 0>;
- 		};
- 
- 		cpu2: cpu@2 {
-@@ -76,6 +80,8 @@ cpu2: cpu@2 {
- 			d-cache-line-size = <64>;
- 			d-cache-sets = <128>;
- 			next-level-cache = <&L2_0>;
-+			operating-points-v2 = <&a53_opp_table>;
-+			clocks = <&k3_clks 137 0>;
- 		};
- 
- 		cpu3: cpu@3 {
-@@ -90,6 +96,51 @@ cpu3: cpu@3 {
- 			d-cache-line-size = <64>;
- 			d-cache-sets = <128>;
- 			next-level-cache = <&L2_0>;
-+			operating-points-v2 = <&a53_opp_table>;
-+			clocks = <&k3_clks 138 0>;
-+		};
-+	};
-+
-+	a53_opp_table: opp-table {
-+		compatible = "operating-points-v2-ti-cpu";
-+		opp-shared;
-+		syscon = <&opp_efuse_table>;
-+
-+		opp-200000000 {
-+			opp-hz = /bits/ 64 <200000000>;
-+			opp-supported-hw = <0x01 0x0007>;
-+			clock-latency-ns = <6000000>;
-+		};
-+
-+		opp-400000000 {
-+			opp-hz = /bits/ 64 <400000000>;
-+			opp-supported-hw = <0x01 0x0007>;
-+			clock-latency-ns = <6000000>;
-+		};
-+
-+		opp-600000000 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-supported-hw = <0x01 0x0007>;
-+			clock-latency-ns = <6000000>;
-+		};
-+
-+		opp-800000000 {
-+			opp-hz = /bits/ 64 <800000000>;
-+			opp-supported-hw = <0x01 0x0007>;
-+			clock-latency-ns = <6000000>;
-+		};
-+
-+		opp-1000000000 {
-+			opp-hz = /bits/ 64 <1000000000>;
-+			opp-supported-hw = <0x01 0x0006>;
-+			clock-latency-ns = <6000000>;
-+		};
-+
-+		opp-1250000000 {
-+			opp-hz = /bits/ 64 <1250000000>;
-+			opp-supported-hw = <0x01 0x0004>;
-+			clock-latency-ns = <6000000>;
-+			opp-suspend;
- 		};
- 	};
- 
+On Fri, Jun 21, 2024 at 5:53=E2=80=AFPM Jens Glathe
+<jens.glathe@oldschoolsolutions.biz> wrote:
+>
+> Hi there,
+>
+> unfortunately I experienced the issue with the fix applied. I had to
+> revert this and  the original commit to get back to normal behaviour. My
+> system (also Lenovo Thinkpad X13s) uses the schedutil governor, the
+> behaviour is as described from Steev and Johan. The full throttling
+> happened during a package build and left the performance cores at 940800.
 
--- 
-2.45.2
+So can you please test the attached patch, on top of the fix?
 
+--0000000000009c96e1061b691a44
+Content-Type: text/x-patch; charset="US-ASCII"; name="thermal-gov_step_wise-distangle.patch"
+Content-Disposition: attachment; 
+	filename="thermal-gov_step_wise-distangle.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lxox3nn60>
+X-Attachment-Id: f_lxox3nn60
+
+LS0tCiBkcml2ZXJzL3RoZXJtYWwvZ292X3N0ZXBfd2lzZS5jIHwgICAxOSArLS0tLS0tLS0tLS0t
+LS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDE4IGRlbGV0aW9ucygtKQoK
+SW5kZXg6IGxpbnV4LXBtL2RyaXZlcnMvdGhlcm1hbC9nb3Zfc3RlcF93aXNlLmMKPT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PQotLS0gbGludXgtcG0ub3JpZy9kcml2ZXJzL3RoZXJtYWwvZ292X3N0ZXBfd2lzZS5jCisrKyBs
+aW51eC1wbS9kcml2ZXJzL3RoZXJtYWwvZ292X3N0ZXBfd2lzZS5jCkBAIC01NSw3ICs1NSw3IEBA
+IHN0YXRpYyB1bnNpZ25lZCBsb25nIGdldF90YXJnZXRfc3RhdGUoc3QKIAkJaWYgKGN1cl9zdGF0
+ZSA8PSBpbnN0YW5jZS0+bG93ZXIpCiAJCQlyZXR1cm4gVEhFUk1BTF9OT19UQVJHRVQ7CiAKLQkJ
+cmV0dXJuIGNsYW1wKGN1cl9zdGF0ZSAtIDEsIGluc3RhbmNlLT5sb3dlciwgaW5zdGFuY2UtPnVw
+cGVyKTsKKwkJcmV0dXJuIGluc3RhbmNlLT5sb3dlcjsKIAl9CiAKIAlyZXR1cm4gaW5zdGFuY2Ut
+PnRhcmdldDsKQEAgLTkzLDIzICs5Myw2IEBAIHN0YXRpYyB2b2lkIHRoZXJtYWxfem9uZV90cmlw
+X3VwZGF0ZShzdHIKIAkJaWYgKGluc3RhbmNlLT5pbml0aWFsaXplZCAmJiBvbGRfdGFyZ2V0ID09
+IGluc3RhbmNlLT50YXJnZXQpCiAJCQljb250aW51ZTsKIAotCQlpZiAodHJpcC0+dHlwZSA9PSBU
+SEVSTUFMX1RSSVBfUEFTU0lWRSkgewotCQkJLyoKLQkJCSAqIElmIHRoZSB0YXJnZXQgc3RhdGUg
+Zm9yIHRoaXMgdGhlcm1hbCBpbnN0YW5jZQotCQkJICogY2hhbmdlcyBmcm9tIFRIRVJNQUxfTk9f
+VEFSR0VUIHRvIHNvbWV0aGluZyBlbHNlLAotCQkJICogZW5zdXJlIHRoYXQgdGhlIHpvbmUgdGVt
+cGVyYXR1cmUgd2lsbCBiZSB1cGRhdGVkCi0JCQkgKiAoYXNzdW1pbmcgZW5hYmxlZCBwYXNzaXZl
+IGNvb2xpbmcpIHVudGlsIGl0IGJlY29tZXMKLQkJCSAqIFRIRVJNQUxfTk9fVEFSR0VUIGFnYWlu
+LCBvciB0aGUgY29vbGluZyBkZXZpY2UgbWF5Ci0JCQkgKiBub3QgYmUgcmVzZXQgdG8gaXRzIGlu
+aXRpYWwgc3RhdGUuCi0JCQkgKi8KLQkJCWlmIChvbGRfdGFyZ2V0ID09IFRIRVJNQUxfTk9fVEFS
+R0VUICYmCi0JCQkgICAgaW5zdGFuY2UtPnRhcmdldCAhPSBUSEVSTUFMX05PX1RBUkdFVCkKLQkJ
+CQl0ei0+cGFzc2l2ZSsrOwotCQkJZWxzZSBpZiAob2xkX3RhcmdldCAhPSBUSEVSTUFMX05PX1RB
+UkdFVCAmJgotCQkJCSBpbnN0YW5jZS0+dGFyZ2V0ID09IFRIRVJNQUxfTk9fVEFSR0VUKQotCQkJ
+CXR6LT5wYXNzaXZlLS07Ci0JCX0KLQogCQlpbnN0YW5jZS0+aW5pdGlhbGl6ZWQgPSB0cnVlOwog
+CiAJCW11dGV4X2xvY2soJmluc3RhbmNlLT5jZGV2LT5sb2NrKTsK
+--0000000000009c96e1061b691a44--
 
