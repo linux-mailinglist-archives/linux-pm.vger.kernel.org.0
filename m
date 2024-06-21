@@ -1,243 +1,175 @@
-Return-Path: <linux-pm+bounces-9751-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9752-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF939912157
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 11:56:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11EEC912337
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 13:21:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96BDA28A6B7
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 09:56:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A1AD1C23044
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 11:21:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB2D416F84C;
-	Fri, 21 Jun 2024 09:55:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8250C172BC7;
+	Fri, 21 Jun 2024 11:20:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="EHIAoa68"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HknzW6uQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02A516E87B;
-	Fri, 21 Jun 2024 09:55:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA6312D771;
+	Fri, 21 Jun 2024 11:20:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718963756; cv=none; b=TkXjwfDnIH7Wl1ph5zTMOzfWUhhEeqtgTaKb8x1B+rZwILdrc9Rpv9Pv0WM6JKsGGRuUXbx72wSqaFkzYXeNTTWRFnMmtYXMXQn+2LUPcYdF9ee88f7c36lvGeNwldeiwluaL6QwYS4C9ICm/LogunNqL5u07VRtOjnHTARik9A=
+	t=1718968838; cv=none; b=JvSz3nNx8xDcON1kkmme98pPgFK2D2pchJevKs7erk4IPJ3iuMBpEGMcdeS797RW1pZ7bQNJlufmrlxxaJMQA9q0D3SHBYANGALmysasJzaFvcE09AJ5+nZh4Rq2kbzgyZQL46BYkAgzLVAIyu/BTms4A/bj3Me41TDoKZ8/7vM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718963756; c=relaxed/simple;
-	bh=2uvIOYm/6Txt3aNQXCJHHxUsOvqbKc3bO0kcqt5t4o0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=dQ9E/SoiRcW5i0q0Ljn4lkMtAdZ0MKJm3qw5dAomH5Ajbvn/CUtUtCvsdB/MoHtc1Czv2qOFI8zQzxgwojjPV55rfrP7sZ5hARFMlxph0gUE6i+3knVPtt8ak75WYnv+F0WrMfDemXXFI69Gbl2BnmquXYc0M6InSi0leAfZZJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=EHIAoa68; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1718968838; c=relaxed/simple;
+	bh=v2fSHKFeFk8kKjPt2+kyNGoSc76Neq1kp/GJIS7UsW8=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UY/6IYjKiXxD+98CQplsZlz0mN9iIUvi3j7Vp0yHTJ9N5TQc4tbtRrH+GclTNFBdZ6VpdMccVt8oVdiBKTbwkubRPd1r4X/mRvJwKdsz0eWgaPvXuAMh7+ynXJSp0VLC6da2aeiMg7ByNPhb6aiEdJqq4dVb+dQ0yugCZVeqtrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HknzW6uQ; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45L9oWQO006674;
-	Fri, 21 Jun 2024 09:55:44 GMT
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45L6Jkcp018169;
+	Fri, 21 Jun 2024 11:20:17 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	C7r0iU1QgDXiHzLeAODaeM49VGbxfg8Jjfz3e4wQM0g=; b=EHIAoa68lEPLqNCN
-	62sdCoH09X+OrSriYqZvh66c8566fiYsymgi5imHRKbs0Np+70f9GK/DLYrOqGgK
-	xCCaGszrShk+WPGRXAL5/5gzuZssVzER4yAsipQeItPQvNRQz+frp2yLBqapfutx
-	czFtCjo+sDfISAoRR69SPU1lr4tmS1xEMJLzbssJj/0boTPI5MLESfFZvTJH94aZ
-	dHT9jkJwbJjW/c49yKpbuqaco2UyeIcxXJy5OhNcv4EvcWLss2pcbPiSmuDxHpCT
-	nGW/dk4UkOV3BWBwMyiGieFU1wiffqkNQIWNT6Yz0La0oWz22tTQgCZ8Pya7KWv+
-	rT/lgA==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yvrkkj8p5-1
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=GvBt5EFx3bJUMUtNY16lmRX7
+	FxXV93kKPh2W99Or8Ao=; b=HknzW6uQ4ssxUXCNPkdclrrM5TAFo6euMpEM26BQ
+	MjaZEZFBZAGvhcsunJqxX6l80UNr3I87ipTyLD4NBrcZBI01Y3kl8KvsqNBkOTOy
+	K/jSc+1araKJ1UUiWp0OfY90ehXevcWQGoZr1Bpz/GRUNpJCnWoHBbmrEaIRYxDj
+	v83oGDwcIPfwyjnYkelBTviDk2zOOzLqhRV4+TjqZvevpZatW8vBH4s8lqb13z4H
+	ArM9oD44BpKKu8U0CXvqgLwzSA1Ul1LlXS5NYYQO1/zoMtufdoLx6WeUziRjA4/x
+	KM+Rp8nGU4RDUd0FJ0niNRjYK4SGG8UmvVQ/Aw+RZ++7tA==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yvrm0ad5f-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Jun 2024 09:55:43 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45L9tgRM002205
+	Fri, 21 Jun 2024 11:20:16 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45LBKFpL027039
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Jun 2024 09:55:42 GMT
-Received: from [10.217.216.47] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 21 Jun
- 2024 02:55:34 -0700
-Message-ID: <7c0ca78a-51ea-4421-af95-46f91d1fdbb9@quicinc.com>
-Date: Fri, 21 Jun 2024 15:24:21 +0530
+	Fri, 21 Jun 2024 11:20:15 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 21 Jun 2024 04:20:09 -0700
+Date: Fri, 21 Jun 2024 16:50:05 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <ulf.hansson@linaro.org>, <quic_sibis@quicinc.com>,
+        <quic_rjendra@quicinc.com>, <luca@z3ntu.xyz>, <abel.vesa@linaro.org>,
+        <quic_rohiagar@quicinc.com>, <danila@jiaxyga.com>,
+        <otto.pflueger@abscue.de>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v1 5/7] clk: qcom: gcc-ipq9574: Add CPR clock definition
+Message-ID: <ZnVh5d8RfPnMBvN8@hu-varada-blr.qualcomm.com>
+References: <20240620081427.2860066-1-quic_varada@quicinc.com>
+ <20240620081427.2860066-6-quic_varada@quicinc.com>
+ <wadru6axfhvws74vcd6umdhnm6gl5poegoljvb7fgbtuz2mccp@hrclt6qesp6e>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V6 3/5] clk: qcom: gdsc: Add set and get hwmode callbacks
- to switch GDSC mode
-To: Caleb Connolly <caleb.connolly@linaro.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Stephen
- Boyd" <sboyd@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue
-	<bryan.odonoghue@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Ulf Hansson" <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki"
-	<rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek
-	<pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy
- Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-CC: <linux-pm@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
-        "Satya
- Priya Kakitapalli" <quic_skakitap@quicinc.com>,
-        Imran Shaik
-	<quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20240619141413.7983-1-quic_jkona@quicinc.com>
- <20240619141413.7983-4-quic_jkona@quicinc.com>
- <18c0b683-97c8-4d53-9852-840a21c11d9a@linaro.org>
-Content-Language: en-US
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <18c0b683-97c8-4d53-9852-840a21c11d9a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <wadru6axfhvws74vcd6umdhnm6gl5poegoljvb7fgbtuz2mccp@hrclt6qesp6e>
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: lVY92_RC4gy1AddugClrJViwzS1DjiS4
-X-Proofpoint-ORIG-GUID: lVY92_RC4gy1AddugClrJViwzS1DjiS4
+X-Proofpoint-ORIG-GUID: PtMB4z0B8foTTy1Ntbh4XdDN-9b72SOY
+X-Proofpoint-GUID: PtMB4z0B8foTTy1Ntbh4XdDN-9b72SOY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-21_04,2024-06-20_04,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
- priorityscore=1501 lowpriorityscore=0 adultscore=0 mlxlogscore=999
- bulkscore=0 phishscore=0 spamscore=0 malwarescore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2406210073
+ definitions=2024-06-21_04,2024-06-21_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 adultscore=0 impostorscore=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 spamscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2406210083
 
+On Thu, Jun 20, 2024 at 06:11:32PM +0300, Dmitry Baryshkov wrote:
+> On Thu, Jun 20, 2024 at 01:44:25PM GMT, Varadarajan Narayanan wrote:
+> > Add the CPR clock definition needed for enabling access to
+> > CPR register space.
+> >
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  drivers/clk/qcom/gcc-ipq9574.c | 38 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 38 insertions(+)
+> >
+> > diff --git a/drivers/clk/qcom/gcc-ipq9574.c b/drivers/clk/qcom/gcc-ipq9574.c
+> > index e1dc74d04ed1..7c8eb94f654b 100644
+> > --- a/drivers/clk/qcom/gcc-ipq9574.c
+> > +++ b/drivers/clk/qcom/gcc-ipq9574.c
+> > @@ -3994,6 +3994,43 @@ static struct clk_branch gcc_xo_div4_clk = {
+> >  	},
+> >  };
+> >
+> > +static const struct freq_tbl ftbl_hmss_rbcpr_clk_src[] = {
+> > +	F(24000000, P_XO, 1, 0, 0),
+> > +	{ }
+> > +};
+> > +
+> > +static struct clk_rcg2 rbcpr_clk_src = {
+> > +	.cmd_rcgr = 0x48044,
+> > +	.mnd_width = 0,
+> > +	.hid_width = 5,
+> > +	.parent_map = gcc_xo_map,
+> > +	.freq_tbl = ftbl_gp1_clk_src,
+> > +	.clkr.hw.init = &(struct clk_init_data){
+> > +		.name = "rbcpr_clk_src",
+> > +		.parent_data = gcc_xo_gpll0_gpll4,
+> > +		.num_parents = ARRAY_SIZE(gcc_xo_map),
+> > +		.ops = &clk_rcg2_ops,
+> > +	},
+> > +};
+> > +
+> > +static struct clk_branch gcc_rbcpr_clk = {
+> > +	.halt_reg = 0x48008,
+> > +	.halt_check = BRANCH_HALT,
+> > +	.clkr = {
+> > +		.enable_reg = 0x48008,
+> > +		.enable_mask = BIT(0),
+> > +		.hw.init = &(struct clk_init_data){
+> > +			.name = "gcc_rbcpr_clk",
+> > +			.parent_hws = (const struct clk_hw *[]) {
+> > +				&rbcpr_clk_src.clkr.hw,
+>
+> Where is the &rbcpr_clk_src registered?
 
+Oops. Missed it. Will post a corrected patch.
 
-On 6/20/2024 3:40 AM, Caleb Connolly wrote:
-> Hi Jagadeesh,
-> 
-> Sorry, some grammar nitpicks.
-> 
-> On 19/06/2024 16:14, Jagadeesh Kona wrote:
->> Some GDSC client drivers require the GDSC mode to be switched dynamically
->> to HW mode at runtime to gain the power benefits. Typically such client
->> drivers require the GDSC to be brought up in SW mode initially to enable
->> the required dependent clocks and configure the hardware to proper state.
->> Once initial hardware set up is done, they switch the GDSC to HW mode to
->> save power. At the end of usecase, they switch the GDSC back to SW mode
->> and disable the GDSC.
->>
->> Introduce HW_CTRL_TRIGGER flag to register the set_hwmode_dev and
->> get_hwmode_dev callbacks for GDSC's whose respective client drivers
->> require the GDSC mode to be switched dynamically at runtime using
->> dev_pm_genpd_set_hwmode() API.
->>
->> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> ---
->>   drivers/clk/qcom/gdsc.c | 42 +++++++++++++++++++++++++++++++++++++++++
->>   drivers/clk/qcom/gdsc.h |  1 +
->>   2 files changed, 43 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
->> index df9618ab7eea..6acc7af82255 100644
->> --- a/drivers/clk/qcom/gdsc.c
->> +++ b/drivers/clk/qcom/gdsc.c
->> @@ -363,6 +363,44 @@ static int gdsc_disable(struct generic_pm_domain 
->> *domain)
->>       return 0;
->>   }
->> +static int gdsc_set_hwmode(struct generic_pm_domain *domain, struct 
->> device *dev, bool mode)
->> +{
->> +    struct gdsc *sc = domain_to_gdsc(domain);
->> +    int ret;
->> +
->> +    ret = gdsc_hwctrl(sc, mode);
->> +    if (ret)
->> +        return ret;
->> +
->> +    /*
->> +     * Wait for the GDSC to go through a power down and
->> +     * up cycle. In case SW/FW end up polling status
->> +     * bits for the gdsc before the power cycle is completed
->> +     * it might read the status wrongly.
-> 
-> If we poll the status register before the power cycle is finished we 
-> might read incorrect values.
+Thanks
+Varada
 
-Thanks Caleb for your review. Sure, will take care of these comments in
-next series.
-
-Thanks,
-Jagadeesh
-
->> +     */
->> +    udelay(1);
->> +
->> +    /*
->> +     * When GDSC is switched to HW mode, HW can disable the GDSC.
-> The GDSC
->> +     * When GDSC is switched back to SW mode, the GDSC will be enabled
-> The GDSC
->> +     * again, hence need to poll for GDSC to complete the power 
->> uphence we need to poll
-> 
-> Kind regards,
->> +     */
->> +    if (!mode)
->> +        return gdsc_poll_status(sc, GDSC_ON);
->> +
->> +    return 0;
->> +}
->> +
->> +static bool gdsc_get_hwmode(struct generic_pm_domain *domain, struct 
->> device *dev)
->> +{
->> +    struct gdsc *sc = domain_to_gdsc(domain);
->> +    u32 val;
->> +
->> +    regmap_read(sc->regmap, sc->gdscr, &val);
->> +
->> +    return !!(val & HW_CONTROL_MASK);
->> +}
->> +
->>   static int gdsc_init(struct gdsc *sc)
->>   {
->>       u32 mask, val;
->> @@ -451,6 +489,10 @@ static int gdsc_init(struct gdsc *sc)
->>           sc->pd.power_off = gdsc_disable;
->>       if (!sc->pd.power_on)
->>           sc->pd.power_on = gdsc_enable;
->> +    if (sc->flags & HW_CTRL_TRIGGER) {
->> +        sc->pd.set_hwmode_dev = gdsc_set_hwmode;
->> +        sc->pd.get_hwmode_dev = gdsc_get_hwmode;
->> +    }
->>       ret = pm_genpd_init(&sc->pd, NULL, !on);
->>       if (ret)
->> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
->> index 803512688336..1e2779b823d1 100644
->> --- a/drivers/clk/qcom/gdsc.h
->> +++ b/drivers/clk/qcom/gdsc.h
->> @@ -67,6 +67,7 @@ struct gdsc {
->>   #define ALWAYS_ON    BIT(6)
->>   #define RETAIN_FF_ENABLE    BIT(7)
->>   #define NO_RET_PERIPH    BIT(8)
->> +#define HW_CTRL_TRIGGER    BIT(9)
->>       struct reset_controller_dev    *rcdev;
->>       unsigned int            *resets;
->>       unsigned int            reset_count;
-> 
+> > +			},
+> > +			.num_parents = 1,
+> > +			.flags = CLK_SET_RATE_PARENT,
+> > +			.ops = &clk_branch2_ops,
+> > +		},
+> > +	},
+> > +};
+> > +
+> >  static struct clk_hw *gcc_ipq9574_hws[] = {
+> >  	&gpll0_out_main_div2.hw,
+> >  	&gcc_xo_div4_clk_src.hw,
+> > @@ -4219,6 +4256,7 @@ static struct clk_regmap *gcc_ipq9574_clks[] = {
+> >  	[GCC_PCIE1_PIPE_CLK] = &gcc_pcie1_pipe_clk.clkr,
+> >  	[GCC_PCIE2_PIPE_CLK] = &gcc_pcie2_pipe_clk.clkr,
+> >  	[GCC_PCIE3_PIPE_CLK] = &gcc_pcie3_pipe_clk.clkr,
+> > +	[GCC_RBCPR_CLK] = &gcc_rbcpr_clk.clkr,
+> >  };
+> >
+> >  static const struct qcom_reset_map gcc_ipq9574_resets[] = {
+> > --
+> > 2.34.1
 
