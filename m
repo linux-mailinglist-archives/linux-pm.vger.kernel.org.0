@@ -1,234 +1,115 @@
-Return-Path: <linux-pm+bounces-9795-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9796-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FE6C912F22
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 23:04:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B022E913061
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 00:38:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9D4128140B
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 21:04:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 636B128856B
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 22:38:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0001B16DEC6;
-	Fri, 21 Jun 2024 21:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C89316D4D8;
+	Fri, 21 Jun 2024 22:38:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Nx8JLK+a"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gmvzLRj/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B7E374C3
-	for <linux-pm@vger.kernel.org>; Fri, 21 Jun 2024 21:04:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47A8208C4;
+	Fri, 21 Jun 2024 22:38:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719003846; cv=none; b=nPdf//wMWhogtqd9kk/7N4aWYo5+Ij6zM72AgHcySDpuX6GL9chu0k/MK3KbxXKY0za72c8QajQHQYjxS9Vc5+emIHSij+nuSqidF4Bn9lHa/EF7DA5z1yRpsYoVrBfLTqY00b7vTG4o+bryU5bItyqeGsBGQRCtXUSy08SHoNA=
+	t=1719009534; cv=none; b=cOiuszUrZXGV9nJvLiHsFqKJhZxK3MpzZNd5FKM6e/BH5moiD2jEmulLUYr4N8ivqlSVpsivKFTquLG8M7tkttWntlrG0Hhum/hVECYE7sQAgNtuaoCHGFSHEJiqe9U3nvV/rWPdegGCRSU3ubY+NOuKsFtgDWvcG+3P+Q5GOp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719003846; c=relaxed/simple;
-	bh=3jhZ1Gbwn3MiZ8AUkdKoob7HZ66X+msUyMxS7MtivEo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nCOMkEF+xYrTlGfZplP75bjH/tVCkoHt+ovkLJ66tn0bvciYiuN351FAHVh1+z2GnBeAj275WEQcsO2nyjMwkFZlVW375hKU0G4RPyy+9pfkiBMGtgmQUG2DuZqXEFIiHI7M8IZ7vRvZoJSoXkR/BO4CUU9oDZv3YQtSNGGIgJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Nx8JLK+a; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7eb82f68af9so7854039f.0
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jun 2024 14:04:04 -0700 (PDT)
+	s=arc-20240116; t=1719009534; c=relaxed/simple;
+	bh=iuxCD6SXr+LIzZGYfpPXvUJ7nV8ibWRlt4gRpZUawzg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HHfjgB8Z/Zg40Sw4WhyDuRrxu7e0UD9PICjFtOTlru5rgklE8v8D9ZosNHNU2PeX0xP9NBD8f2g4YI/c5rUdrfSIrw9oatqLFo2IbsuksKRcL9lIoVXsMPyQEozyIFQ5miNU38EnvoEsOb80XJjYCdkf9LthikfsziEIQX6wqqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gmvzLRj/; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1f480624d10so20811365ad.1;
+        Fri, 21 Jun 2024 15:38:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1719003844; x=1719608644; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x0C9Ul1qlhDcm6cNBLklwjqBGPJxzhUtl4ux8QbvBLk=;
-        b=Nx8JLK+aCaXRFZ4jr9R0KTKPJg0eq5ISIpPg8LXmwg23f8gKpxcFTKKySxQvbjPYWW
-         475a1AzOP2uZ9q6dw1BtqRT8XUxf6ruualL8w53q/OCoGnvCTDPKoNoorCS7IU/h6r/9
-         1SwuWAL8PmiM5crgYry1eguhR8tBpYklspTQc=
+        d=gmail.com; s=20230601; t=1719009532; x=1719614332; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=abeU2GGQMEFPwQcngO4m8ohAO9d8OVamW3SQd0gTR/I=;
+        b=gmvzLRj/qyZ3wsu6eoWkxRC1bulv/8w4Xrb6cV0k10hxaw5qgRwlFU1nUdrkKcK117
+         fNJSCWfWoFeQlRuv6D7xdxtb82V7545MMzQmkiQPpxsadywlajkYL6dOkYQqyVDikyrm
+         6TlGe3hEr7CLIrTRWv0fnMMqxhyQYZma90KGr1005nQPsaJdLBzLlA0TkW2m/U4ftgdE
+         ahWYUvS1jhQa7Ujnbt5XUkwBnZImMEwMbxdNCEKX1hfiEfwVm4W//itkp6AQvepLzuZT
+         IKCDkzY3ORkHKOI8dI+wQYxtBJLMUPjqZAv8coExrN2/xDzQ2oE47ZCwsB512PoWCdK2
+         ukGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719003844; x=1719608644;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x0C9Ul1qlhDcm6cNBLklwjqBGPJxzhUtl4ux8QbvBLk=;
-        b=wD6SwOxPmplDlnjI5P6+JRENJWAdSrzI1Fzm6yHgfLGrVzER2NUaC1Vwe6byXOGuYQ
-         6XkPXEfSOUJE0N2prF0eZMDhetdzsCrD3duiB2FOaeaxtNzf1E84WTLX0kUuDsDOccPz
-         4oycWHNRLrXE7YMqcFMw1xtp6KJ0wVbWNo+yjVoZGzgvgpUxNgc2fJXaKPTxYRzHDBaR
-         xSteEW8mZSS271/ECBXp8ySI2p/leHQdqs753mTZjNrYcwN45GHA6GXGRnLCFBzVWDPV
-         9ZnjcaDRES50J7ZU8y5dpMMVCrVh9iR0riBjZGcRr05Nz5B9M10s0DAmPQP0+LrcjjQM
-         x5Cg==
-X-Forwarded-Encrypted: i=1; AJvYcCVartXWxoN7ee/pgKQGXHPIeHMMJzxAMxRFXQwqDzpIPVpWcW8iEKrIXEzCpBKxNGMlB464+Fwl8MSlAK0LPh9qb7sCvrAkI0U=
-X-Gm-Message-State: AOJu0YzgbBD3WEI8o5grrhHpDwbf1sQ7NSEMldNKreHoPICTRhERJZ7T
-	jpDc2RYjUOJImFjNShfw+DUYHzMQrDRd2xiZwDfKp7HYGiNngGUiXEjkc0DPvy5ap61MyjyKN8y
-	8
-X-Google-Smtp-Source: AGHT+IF8gVp35QAbssZYwQbkda1NSCFa/dlYGoWYArn7qZ6L6qxVOw+IPnq/Ln2R//5p8lOw8pFb+w==
-X-Received: by 2002:a05:6e02:1c4d:b0:36d:cb9d:cc9e with SMTP id e9e14a558f8ab-3761d72cc51mr112380695ab.2.1719003844208;
-        Fri, 21 Jun 2024 14:04:04 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3762f3222ebsm5096615ab.40.2024.06.21.14.04.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jun 2024 14:04:03 -0700 (PDT)
-Message-ID: <4962b96d-d2d8-429d-9794-120349741a58@linuxfoundation.org>
-Date: Fri, 21 Jun 2024 15:04:03 -0600
+        d=1e100.net; s=20230601; t=1719009532; x=1719614332;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=abeU2GGQMEFPwQcngO4m8ohAO9d8OVamW3SQd0gTR/I=;
+        b=jnPAhEEDvfmOTq3Oj44IgwcoivF7hups3xMjZxSb5H2+tiRzehQsrq8ZldHykD1+F4
+         Tv4C/K0wnTHrY3gHD/kf5FvIzSRB7ai2gaiTWwS6mxAQF2SSoDF5NeWot5jyHUOGB7GH
+         thiTym9Zw3IpPqaTXZ02ekMLnBsnrXJmmP/lEXKK8X+G9RV2s0OuoiicIyVg5U6Qz5oF
+         ePr3ln6bJM0j06eE3FMLMRqdlQso77T5YlHOSA+UFEzR7yDoCefDwlScpKe+YC57iYMq
+         DBEX3ryzutSoXDATfc0mFHCD/O6VbMGnlJk7wOnpkWZZaBk2UhryeILm2Y2JsRA8O9/Z
+         UP7A==
+X-Forwarded-Encrypted: i=1; AJvYcCWUr2xbh2m89S4T15rL2VGefQxLMBLkXWLOylOWLN5Vr8UWs40xIllMzQ7aTRj7tbs9ZnLQ46YDkiXTa8BNxaAHzgfYVzb2tkupcdNJ
+X-Gm-Message-State: AOJu0YwCoVZiDL6yQyzdyx9/RmbkR8xMLAcZYX4ewoa4kcWZhkfE9Q1f
+	R+hWhVaLqos9G8WX+mLXwVu9o2ZH534QSD43XBiwHtRRT9ehEjjx
+X-Google-Smtp-Source: AGHT+IHpSEg3XHl2cj+523T94EXl++q2aLaanr1Vrm1C8htxO3NPr4o3CPXRYbhssuHnegqyRjXmhg==
+X-Received: by 2002:a17:903:22ce:b0:1f9:fca9:7433 with SMTP id d9443c01a7336-1f9fca976efmr18690715ad.34.1719009531795;
+        Fri, 21 Jun 2024 15:38:51 -0700 (PDT)
+Received: from localhost (dhcp-141-239-159-203.hawaiiantel.net. [141.239.159.203])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9eb2f2a4bsm19255645ad.57.2024.06.21.15.38.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jun 2024 15:38:51 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Fri, 21 Jun 2024 12:38:50 -1000
+From: Tejun Heo <tj@kernel.org>
+To: rafael@kernel.org, viresh.kumar@linaro.org
+Cc: linux-pm@vger.kernel.org, void@manifault.com,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com,
+	mingo@redhat.com, peterz@infradead.org,
+	David Vernet <dvernet@meta.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH 1/2] cpufreq_schedutil: Refactor sugov_cpu_is_busy()
+Message-ID: <ZnYA-hrec6cVADtJ@slm.duckdns.org>
+References: <20240619031250.2936087-1-tj@kernel.org>
+ <20240619031250.2936087-2-tj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpupower: Make help command available for custom install
- dir
-To: Roman Storozhenko <romeusmeister@gmail.com>
-Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
- Javier Carrasco <javier.carrasco.cruz@gmail.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240621-fix-help-issue-v1-1-7906998d46eb@gmail.com>
- <6d745d8d-33b1-4aed-b9c5-095073bc8cde@linuxfoundation.org>
- <CALsPMBPd1O2zBxyvfTJiPvuWO+zaTxrYizmiKULr1A-77ME_Rw@mail.gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CALsPMBPd1O2zBxyvfTJiPvuWO+zaTxrYizmiKULr1A-77ME_Rw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240619031250.2936087-2-tj@kernel.org>
 
-On 6/21/24 12:18, Roman Storozhenko wrote:
-> On Fri, Jun 21, 2024 at 5:02 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 6/21/24 02:13, Roman Storozhenko wrote:
->>> When the 'cpupower' utility installed in the custom dir, it fails to
->>> render appopriate help info for a particular subcommand:
->>
->> appopriate -> appropriate
->> Spell check the commit message.
+On Tue, Jun 18, 2024 at 05:12:02PM -1000, Tejun Heo wrote:
+> sugov_cpu_is_busy() is used to avoid decreasing performance level while the
+> CPU is busy and called by sugov_update_single_freq() and
+> sugov_update_single_perf(). Both callers repeat the same pattern to first
+> test for uclamp and then the business. Let's refactor so that the tests
+> aren't repeated.
 > 
-> Thanks for highlighting this, will fix.
->>
->>> $ LD_LIBRARY_PATH=lib64/ bin/cpupower help monitor
->>> with error message like 'No manual entry for cpupower-monitor.1'
->>> The issue is that under the hood it calls 'exec' function with
->>> the following args: 'man cpupower-monitor.1'. In turn, 'man' search
->>> path is defined in '/etc/manpath.config'. Of course it contains only
->>> standard system man paths.
->>> Make subcommands man pages available for user using the following rule:
->>> Render a man page if it is installed in the custom install dir, otherwise
->>> allow man to search this page by name system-wide as a last resort.
->>>
->>
->> Good find.
->>
->>> Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
->>> ---
->>>    tools/power/cpupower/utils/cpupower.c | 54 ++++++++++++++++++++++++++++++-----
->>>    1 file changed, 47 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/tools/power/cpupower/utils/cpupower.c b/tools/power/cpupower/utils/cpupower.c
->>> index 9ec973165af1..da4bc6de7494 100644
->>> --- a/tools/power/cpupower/utils/cpupower.c
->>> +++ b/tools/power/cpupower/utils/cpupower.c
->>> @@ -12,6 +12,8 @@
->>>    #include <unistd.h>
->>>    #include <errno.h>
->>>    #include <sched.h>
->>> +#include <libgen.h>
->>> +#include <limits.h>
->>>    #include <sys/types.h>
->>>    #include <sys/stat.h>
->>>    #include <sys/utsname.h>
->>> @@ -21,6 +23,8 @@
->>>    #include "helpers/bitmask.h"
->>>
->>>    #define ARRAY_SIZE(x) (sizeof(x)/sizeof(x[0]))
->>> +#define MAN_REL_PATH "/../man/man1/"
->>> +#define MAN_SUFFIX ".1"
->>>
->>>    static int cmd_help(int argc, const char **argv);
->>>
->>> @@ -80,14 +84,17 @@ static void print_help(void)
->>>
->>>    static int print_man_page(const char *subpage)
->>>    {
->>> -     int len;
->>> -     char *page;
->>> +     char *page, *man_path, *exec_dir;
->>> +     char exec_path[PATH_MAX];
->>> +     int subpage_len;
->>>
->>> -     len = 10; /* enough for "cpupower-" */
->>> -     if (subpage != NULL)
->>> -             len += strlen(subpage);
->>> +     if (!subpage)
->>> +             return -EINVAL;
->>>
->>> -     page = malloc(len);
->>> +     subpage_len = 10; /* enough for "cpupower-" */
->>> +     subpage_len += strlen(subpage);
->>> +
->>> +     page = malloc(subpage_len);
->>>        if (!page)
->>>                return -ENOMEM;
->>>
->>> @@ -97,7 +104,40 @@ static int print_man_page(const char *subpage)
->>>                strcat(page, subpage);
->>>        }
->>>
->>> -     execlp("man", "man", page, NULL);
->>> +     /* Get current process image name full path */
->>> +     if (readlink("/proc/self/exe", exec_path, PATH_MAX) > 0) {
->>> +
->>> +             man_path = malloc(PATH_MAX);
->>> +             if (!man_path) {
->>> +                     free(page);
->>> +                     return -ENOMEM;
->>> +             }
->>> +
->>> +             exec_dir = strdup(exec_path);
->>> +             if (!exec_dir) {
->>> +                     free(page);
->>> +                     free(man_path);
->>> +                     return -ENOMEM;
->>> +             }
->>> +
->>> +             *man_path = '\0';
->>> +             strncat(man_path, dirname(exec_dir), strlen(exec_dir));
->>> +             strncat(man_path, MAN_REL_PATH, strlen(MAN_REL_PATH));
->>> +             strncat(man_path, page, strlen(page));
->>> +             strncat(man_path, MAN_SUFFIX, strlen(MAN_SUFFIX));
->>> +
->>> +             free(exec_dir);
->>> +
->>> +             /* Check if file exists */
->>> +             if (access(man_path, F_OK) == -1) {
->>> +                     free(man_path);
->>> +                     man_path = page;
->>> +             }
->>> +     } else {
->>> +             man_path = page;
->>> +     }
->>> +
->>> +     execlp("man", "man", man_path, NULL);
->>
->> You can simplify all of this by using getenv() to get the environment
->> variables for the program.
->>
->> Take a look getenv() usages in the kernel sources for reference.
+> The new helper is named sugov_hold_freq() and tests both the uclamp
+> exception and CPU business. No functional changes. This will make adding
+> more exception conditions easier.
 > 
-> If you mean that I can extract the current working directory and then add
-> relative path to man page to it then yes, I can. But the issue with
-> this approach
-> is that this will work only if I run the binary from its directory,
-> otherwise it fail,
-> because current_working_directory is not the image_path. And there is no
-> environment variable which defines the path to the process's binary.
-> Just in case, I looked to the kernel sources which use getenv() in userspace and
-> also examined the list of the POSIX environment variables:
-> https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html
-> And nothing came to my mind in terms of simplification.
-> So, please suggest me what I could change.
-> 
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+> Reviewed-by: David Vernet <dvernet@meta.com>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
 
-How about setting MANPATH before running the command?
+Applied to sched_ext/for-6.11.
 
-thanks,
--- Shuah
+Thanks.
 
-
-
+-- 
+tejun
 
