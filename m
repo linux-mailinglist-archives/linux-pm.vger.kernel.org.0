@@ -1,164 +1,303 @@
-Return-Path: <linux-pm+bounces-9737-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9738-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 400F1911C0D
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 08:44:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36176911C68
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 09:07:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76CA7B24FDB
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 06:44:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 56B3B1C21B38
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 07:07:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6550115A49F;
-	Fri, 21 Jun 2024 06:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nmxpHqj1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F6916B3AE;
+	Fri, 21 Jun 2024 07:07:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5C515665D
-	for <linux-pm@vger.kernel.org>; Fri, 21 Jun 2024 06:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 045B716B39C;
+	Fri, 21 Jun 2024 07:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718952270; cv=none; b=mQjoL035VBoUg+7ble4lJmQ79Bcl8suBwYcocd9z8AGxqH/OI5I9tCrD3qrBxBjjpoK5oAaDcFGASw1kJxYW/tTmVPT0qUQj8/k78KiRpILfm+hKaOfvuvdnFzaBUl7OdJjR0gC5vvQmaAmZppdbOy8vn/aOiJKlCoMdpuylrG0=
+	t=1718953657; cv=none; b=ge0UTqNP2IyRlyXnIUk+LXh8P8uFF2Nn2WNFYUmqCRXxI9/TMF0Pf2rpoMNCx4NO5g6OWYQny0hNhbYDcqq5LKsSAA+MGVkYgzds9GCqcM1oMvgqAibR05cnX/CUy7YVmQkQndZ0dVMDaJ294soyx/9P9XpTYWglDA2zoOuc3QQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718952270; c=relaxed/simple;
-	bh=/yxkQ34OZIgJLtm6k+/Jx5eQffI42lQD+HuqdNrmnYk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YN16hg6a+T7REZziIMK6RAN5XIt6l9AH5S4WIhCbod/FMjGsF9Mr2xgP/wexTxDAeVzn3cYi04z9Ane8yXoZNFvc2wFxKqV8Q1/YNxLcCamyYB9GqBdWQyl7BKWm0QS6yGGJeNZQneUwif7sD2w9bPe/1X8/d+WYUkV8aL1Rh1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nmxpHqj1; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-42189d3c7efso19443365e9.2
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2024 23:44:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718952267; x=1719557067; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1PfObMgRM9iWVHsZSbl2B9P1fV+BWqU1Qg+2Z3qw8Zg=;
-        b=nmxpHqj1erm9uCj2b0SqRwsKs6zl/M1JnOyzg6M73qsakcWdYTyKW5IwEk0shnljfW
-         3Sd0u6meVr4vhyimnDazXa9nGgR51MXAgqvQ8YDhySuhbJ/3CXqeWOZaQVzKA+aEa0HR
-         /wtLiOXitC9g1OodCgsRSu3d/AXmWwI2sGnHR/eLpfnrw+6tqUq65Z8GeHglF+qxb7FS
-         QpWnwwT7qSZGbCsSlryxdYmTCTVFJcKOHlAzZGJy0z2CfSCk8Y0tuVNLk+IFOKiywILo
-         AqNpwkIgQ8J3NhC73cQhFuAZ7xKjYnzAvmmiQIkbgyw59AEiRdUegkOvMFL8uUWsQn3E
-         Xcmg==
+	s=arc-20240116; t=1718953657; c=relaxed/simple;
+	bh=7tkF5DoG1mNyxCDvKqAsREysYynts5LZQaOGCf04ZBM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=o/ETKFZhJrdWd0+yNqxdSZe9U4Y9aC/ik40cmSBhBegiYUK3Yeb2aHE9aO1I+unEx/HXuCEhCrjvEgQKVY/IiAmvETqhi7NfO8Kd+rQIwroBDUKFdzZPFrI9hAXctUF3WfLZXeJOwfG5t5ct5V9+0LLG1clG0Jngkw5GVxqx+K0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e02b571b0f6so1755514276.0;
+        Fri, 21 Jun 2024 00:07:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718952267; x=1719557067;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1PfObMgRM9iWVHsZSbl2B9P1fV+BWqU1Qg+2Z3qw8Zg=;
-        b=rcXnOJDTNWuHPY+h2LWjkhAdNRj/osYGSQfn3aIWJywDKbq4IcyE20JnTGUoGOHisp
-         YYJIovEj8/oTrmWMKQH4c5f9uJohfjwhPJOMVRn/+Hq/LuoA79qq65l5CZUIjscjzeJo
-         a+cONjkRePl0fGAqXi9ZauOBgNbcw6ovBldkXOTlchNeMVkel2TTs5C3LLnrRn+h1yrO
-         wP8gZoLwoK6ffnAhglHr/Ph/L30NQlUIKLCx0DBpAOfwnmYbrXsx4d6mDFnmLIYpWGCt
-         p0vk+2tvgLCzgm7rrt11iFjjb0pAP3HzxIw2cwSZd4mfaEfYxHz0qVHyONQM/c03Cix2
-         NBvg==
-X-Forwarded-Encrypted: i=1; AJvYcCUXNWmVnVSqrXRsb6gR1l+vypBfWEcX14KjX+PoWsrq55GqUukb6G2qh7aV03FYnPZhSTcaKWJEMWRbwRFveDiIu8Rc6tQea6M=
-X-Gm-Message-State: AOJu0YzfUJp51EoBytSFO4wEcFJ4S51nR3GdGxqordVTSFhS7tHzlK7C
-	lYSAUKA/D096oUVCb+iQo9YcwJruLEWf80a0jmNW9Sv4amLte2GYzuFKFNgf810=
-X-Google-Smtp-Source: AGHT+IFIFkPNAqsU4kpceTCO5/VxjwkFxtTxPWOo7jibcO33gtxBKvlv2ksAEKUs7USMYXU4w0vOCw==
-X-Received: by 2002:a05:600c:15c5:b0:422:aca:f87e with SMTP id 5b1f17b1804b1-42475182567mr73513005e9.19.1718952267141;
-        Thu, 20 Jun 2024 23:44:27 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.137])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4247d0be836sm50290535e9.12.2024.06.20.23.44.25
+        d=1e100.net; s=20230601; t=1718953653; x=1719558453;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pCeBy6m9Ikgkd0V6AmZHrrVdN8+2k5wHMXK+JUn37Us=;
+        b=dwgkxqYlcbVunXfq1bmRBfQcrYpSyk7teLpDdkQz+8PcnGcblLl6UzxYjk9+ENlGBs
+         0rA9Dj7jwlfZDMW9l3jRmcqoX2NCiHPsK/l7n/YPVEKAT6fa1CahJeEci1xX1x29Tjg+
+         3JvM3ybTvuQK1bLA3dm1RRr9vBoXSbfVDqyDnDoLU2MD4SYTqgFhB1HDZsaBkXyhb7ZP
+         pcwDPR+KFPy4kZuXnMsBC4b6aSF3kuJErJVRseMjU5/ld4wK0ckqe6Y5K0mqqc3EZKaS
+         3ZyxLPK214L9/4KJIlKAx8tQv26Jy6Mdghc9TSa5pbZMrEa9PUWtA6lw3zQRP68k1RiB
+         zPxA==
+X-Forwarded-Encrypted: i=1; AJvYcCUtQXD0n7fQXBEuVFPNONTVYXqOpPpwJ7oJR/PREcR35NcYKCdvSbL6xicvOfjFgZmleCoCNR8vmy8o7R2StC12IQlUC0Kaj492eRJZ84dfcgcaDPuY1gVdSpanwTOPWpcmgzzfXlvnxXOlai+UkE+NVUfZCf+qa9nYRANgdAbspQMhSla3LTqKph/SwqYowrtKL8LzizTh9G3/AEtaVTpVEmr6cD1VECa2VIgUvAvF96p7JUQ/nqjU/ZqBHSAcaXkisqQ=
+X-Gm-Message-State: AOJu0Yys0VMIWxsfl2lRH+vzD66Kpf/tgn2kt0JM1ZN7L3mN00vusXji
+	CUnjTNwFE6bkIDmeZ7jjdfpjz6C0ivKTwE2N/gcDEHr9NQRAAXlICGhw3D3U
+X-Google-Smtp-Source: AGHT+IEwQSLVg32R6LnNxhCts3FFOjppOMNhjb1LPkVVaD61bLTb4+b5+eet7DNLk5aIWMUC9tWc0A==
+X-Received: by 2002:a25:bc8b:0:b0:e02:8d40:98ad with SMTP id 3f1490d57ef6-e02be10a9aamr8046578276.13.1718953653123;
+        Fri, 21 Jun 2024 00:07:33 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e02e61168b3sm243511276.6.2024.06.21.00.07.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jun 2024 23:44:26 -0700 (PDT)
-Message-ID: <eda0d218-aba0-4ade-8a9f-51b4591a32d2@linaro.org>
-Date: Fri, 21 Jun 2024 08:44:24 +0200
+        Fri, 21 Jun 2024 00:07:32 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6327e303739so16311557b3.2;
+        Fri, 21 Jun 2024 00:07:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXbZh/NiVNtdZwRAy+L5NdysXpJBH3C1lM/y3uRIzgprhXG7AIUUjPZI1Ctx/EWOlYiqrJTm8BWhePFoG3lha6+MNvp19Siq4yJMMgN9kaKS+YISuzUGKeDOEFa9d6YgcSfm0UKx5xkrUsaxvEK+VEgofem8kmMZsqhicHOXmzYWWHIzdZuUOgNkYcre156pKZ3jA1c0vGz74Owx96Ih2y6DwGrOj7mKAoTOQR12E+aQcGSEXLEYkU2MnsJ+3LphxQ1R5c=
+X-Received: by 2002:a0d:d7d2:0:b0:62c:fcba:cfeb with SMTP id
+ 00721157ae682-63a8f339693mr74571937b3.34.1718953651367; Fri, 21 Jun 2024
+ 00:07:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 1/3] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
- X1E80100 BWMON instances
-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
- Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
- djakov@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- srinivas.kandagatla@linaro.org
-Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
- quic_rgottimu@quicinc.com, quic_kshivnan@quicinc.com, conor+dt@kernel.org,
- dmitry.baryshkov@linaro.org, abel.vesa@linaro.org
-References: <20240618154306.279637-1-quic_sibis@quicinc.com>
- <20240618154306.279637-2-quic_sibis@quicinc.com>
- <d09aa84c-dc75-48c6-b91e-c0dbe3d2e06f@linaro.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <d09aa84c-dc75-48c6-b91e-c0dbe3d2e06f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <cover.1716811405.git.geert+renesas@glider.be> <CAPDyKFpa4LZF3eN7x-NT+b9=dKB3Oe6RY8RAyetdRBSR1-LQoQ@mail.gmail.com>
+ <0a025885-ed95-45d3-bf76-d2a043baaed7@ideasonboard.com> <CAPDyKFrxUDhnUUfz5wHpGVQfNYssxoWO5Eb2wtmZMTcMYhEjxQ@mail.gmail.com>
+ <1bda8e8f-10df-4a10-a217-26cf50ef3577@ideasonboard.com> <CAGETcx-T54w=x=gv524dUJtnRGmOiXFA2CRYHE5Pawbux8_Tig@mail.gmail.com>
+In-Reply-To: <CAGETcx-T54w=x=gv524dUJtnRGmOiXFA2CRYHE5Pawbux8_Tig@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 21 Jun 2024 09:07:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUTGLSDv-zAun7tV2VnN0q08PibBT9B-MhxqdwmRTA_UQ@mail.gmail.com>
+Message-ID: <CAMuHMdUTGLSDv-zAun7tV2VnN0q08PibBT9B-MhxqdwmRTA_UQ@mail.gmail.com>
+Subject: Re: [PATCH/RFC 0/3] pmdomain: renesas: rmobile-sysc: Remove serial
+ console handling
+To: Saravana Kannan <saravanak@google.com>
+Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, Peng Fan <peng.fan@nxp.com>, 
+	linux-pm@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 18/06/2024 18:02, Konrad Dybcio wrote:
-> 
-> 
-> On 6/18/24 17:43, Sibi Sankar wrote:
->> Document X1E80100 BWMONs, which has multiple (one per cluster) BWMONv4
->> instances for the CPU->LLCC path and one BWMONv5 instance for LLCC->DDR
->> path. Also make the opp-table optional for the X1E cpu-bwmon instances,
->> since they use the same opp-table between them.
->>
->> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
->> ---
-> 
-> I think we can just drop the opp-table child node from required altogether,
-> bindings shouldn't care about where the OPP table (which is referenced in
-> the operating-points-v2 property) comes from
+Hi Saravana,
 
-I agree.
+On Fri, Jun 21, 2024 at 3:08=E2=80=AFAM Saravana Kannan <saravanak@google.c=
+om> wrote:
+> On Wed, Jun 5, 2024 at 4:16=E2=80=AFAM Tomi Valkeinen
+> <tomi.valkeinen@ideasonboard.com> wrote:
+> > On 05/06/2024 13:53, Ulf Hansson wrote:
+> > > On Wed, 5 Jun 2024 at 12:41, Tomi Valkeinen
+> > > <tomi.valkeinen@ideasonboard.com> wrote:
+> > >> On 05/06/2024 12:34, Ulf Hansson wrote:
+> > >>> On Mon, 27 May 2024 at 14:41, Geert Uytterhoeven
+> > >>> <geert+renesas@glider.be> wrote:
+> > >>>> Since commit a47cf07f60dcb02d ("serial: core: Call
+> > >>>> device_set_awake_path() for console port"), the serial driver prop=
+erly
+> > >>>> handles the case where the serial console is part of the awake pat=
+h, and
+> > >>>> it looked like we could start removing special serial console hand=
+ling
+> > >>>> from PM Domain drivers like the R-Mobile SYSC PM Domain driver.
+> > >>>> Unfortunately the devil is in the details, as usual...
+> > >>>>
+> > >>>> Earlycon relies on the serial port to be initialized by the firmwa=
+re
+> > >>>> and/or bootloader.  Linux is not aware of any hardware dependencie=
+s that
+> > >>>> must be met to keep the port working, and thus cannot guarantee th=
+ey
+> > >>>> stay met, until the full serial driver takes over.
+> > >>>>
+> > >>>> E.g. all unused clocks and unused PM Domains are disabled in a lat=
+e
+> > >>>> initcall.  As this happens after the full serial driver has taken =
+over,
+> > >>>> the serial port's clock and/or PM Domain are no longer deemed unus=
+ed,
+> > >>>> and this is typically not a problem.
 
-Best regards,
-Krzysztof
+Let's call this "Case A".
 
+> > >>>>
+> > >>>> However, if the serial port's clock or PM Domain is shared with an=
+other
+> > >>>> device, and that other device is runtime-suspended before the full
+> > >>>> serial driver has probed, the serial port's clock and/or PM Domain=
+ will
+> > >>>> be disabled inadvertently.  Any subsequent serial console output w=
+ill
+> > >>>> cause a crash or system lock-up.  E.g. on R/SH-Mobile SoCs, the se=
+rial
+> > >>>> ports share their PM Domain with several other I/O devices.  After=
+ the
+> > >>>> use of pwm (Armadillo-800-EVA) or i2c (KZM-A9-GT) during early boo=
+t,
+> > >>>> before the full serial driver takes over, the PM Domain containing=
+ the
+> > >>>> early serial port is powered down, causing a lock-up when booted w=
+ith
+> > >>>> "earlycon".
+
+Let's call this "Case B".
+
+> > >>>
+> > >>> Thanks for the detailed description of the problem! As pointed out =
+in
+> > >>> regards to another similar recent patch [1], this is indeed a gener=
+ic
+> > >>> problem, not limited to the serial console handling.
+> > >>>
+> > >>> At Linaro Connect a few weeks ago I followed up with Saravana from =
+the
+> > >>> earlier discussions at LPC last fall. We now have a generic solutio=
+n
+> > >>> for genpd drafted on plain paper, based on fw_devlink and the
+> > >>> ->sync_state() callback. I am currently working on the genpd series=
+,
+> > >>> while Saravana will re-spin the series (can't find the link to the
+> > >>> last version) for the clock framework. Ideally, we want these thing=
+s
+> > >>> to work in a very similar way.
+> > >>>
+> > >>> That said, allow me to post the series for genpd in a week or two t=
+o
+> > >>> see if it can solve your problem too, for the serial console.
+> > >>
+> > >> Both the genpd and the clock solutions will make suppliers depend on=
+ all
+> > >> their consumers to be probed, right?
+> > >>
+> > >> I think it is a solution, and should be worked on, but it has the
+> > >> drawback that suppliers that have consumers that will possibly never=
+ be
+> > >> probed, will also never be able to turn off unused resources.
+> > >>
+> > >> This was specifically the case with the TI ti-sci pmdomain case I wa=
+s
+> > >> looking at: the genpd driver (ti_sci_pm_domains.c) provides a lot of
+> > >> genpds for totally unrelated devices, and so if, e.g., you don't hav=
+e or
+> > >> don't want to load a driver for the GPU, all PDs are affected.
+> > >>
+> > >> Even here the solutions you mention will help: instead of things get=
+ting
+> > >> broken because genpds get turned off while they are actually in use,=
+ the
+> > >> genpds will be kept enabled, thus fixing the breakage. Unfortunately=
+,
+> > >> they'll be kept enabled forever.
+> > >>
+> > >> I've been ill for quite a while so I haven't had the chance to look =
+at
+> > >> this more, but before that I was hacking around a bit with something=
+ I
+> > >> named .partial_sync_state(). .sync_state() gets called when all the
+> > >> consumers have probed, but .partial_sync_state() gets called when _a=
+_
+> > >> consumer has been probed.
+> > >>
+> > >> For the .sync_state() things are easy for the driver, as it knows
+> > >> everything related has been probed, but for .partial_sync_state() th=
+e
+> > >> driver needs to track resources internally. .partial_sync_state() wi=
+ll
+> > >> tell the driver that a consumer device has probed, the driver can th=
+en
+> > >> find out which specific resources (genpds in my case) that consumer
+> > >> refers to, and then... Well, that's how far I got with my hacks =3D)=
+.
+> > >>
+> > >> So, I don't know if this .partial_sync_state() can even work, but I
+> > >> think we do need something more on top of the .sync_state().
+> > >
+> > > Thanks for the update!
+> > >
+> > > You certainly have a point, but rather than implementing some platfor=
+m
+> > > specific method, I think we should be able enforce the call to
+> > > ->sync_state(), based upon some condition/timeout - and even if all
+> > > consumers haven't been probed.
+> >
+> > Hmm, I think that was already implemented in some of the serieses out
+> > there (or even in mainline already?), as I remember doing some
+> > experiments with it. I don't like it much, though.
+> >
+> > With a simple timeout, it'll always be just a bit too early for some
+> > user (nfs mount took a bit more time than expected -> board frozen).
+> >
+> > The only condition I can see that would somewhat work is a manual
+> > trigger from the userspace. The boot scripts could then signal the
+> > kernel when all the modules have been loaded and probably a suitable,
+> > platform/use case specific amount of time has passed to allow the
+> > drivers to probe.
+>
+> This is also already supported in mainline.
+>
+> Devices with sync_state() implementations (once Ulf adds it) will have
+> a state_synced file in sysfs. It shows where it has been called yet or
+> not. But you can also echo 1 into it to force the sync_state()
+> callback (only if it hasn't been called already). So, yeah, all
+> methods of handling this are available if you implement the
+> sync_state() callback.
+>
+> By default it's all strict (wait till all consumers probe
+> successfully). But you can set it to timeout (fw_devlink.sync_state).
+> And you also have the option I mentioned above that you can use with
+> both cases.
+
+So the idea is to disable unused genpds and clocks from the genpd
+resp. clock's driver .sync_state() callback, instead of from a late
+initcall?  That would indeed solve issues related to "Case A".
+
+However, how to solve "Case B"? Ignore disabling genpds or clocks
+before .sync_state() callback() has been called?
+That would cause issues for cases where the clock must be disabled,
+cfr.
+    "[PATCH RFC 0/3] Add clk_disable_unprepare_sync()"
+    https://lore.kernel.org/all/20240131160947.96171-1-biju.das.jz@bp.renes=
+as.com/
+    "[PATCH v3 0/3] Add clk_poll_disable_unprepare()"
+    https://lore.kernel.org/linux-renesas-soc/20240318110842.41956-1-biju.d=
+as.jz@bp.renesas.com/
+
+> > It just feels a bit too much of a "let's hope this work" approach.
+> >
+> > That said, the timeout/condition is probably acceptable for many cases,
+> > where turning off a resource forcefully will just result in, say, a
+> > temporarily blanked display, or something else that gets fixed if and
+> > when the proper driver is probed.
+> >
+> > Unfortunately, here with the case I have, the whole board gets halted i=
+f
+> > the display subsystem genpd is turned off and the display driver is
+> > loaded after that.
+
+Tomi: Do you have more details? The genpd must be controlling something
+critical that must never be turned off, or perhaps the display driver
+lacks some initialization?
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
