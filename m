@@ -1,200 +1,295 @@
-Return-Path: <linux-pm+bounces-9746-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9747-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 702A3911F0C
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 10:44:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6728E911F42
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 10:49:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F24141F258F4
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 08:44:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DB7328BBFC
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 08:49:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC4216D9C4;
-	Fri, 21 Jun 2024 08:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C175616D9A3;
+	Fri, 21 Jun 2024 08:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="33QBSiEg"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="QMWGJGCG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2047.outbound.protection.outlook.com [40.107.244.47])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76DB916D4C0
-	for <linux-pm@vger.kernel.org>; Fri, 21 Jun 2024 08:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718959426; cv=fail; b=JvypetP2NHZLJJMycLzykcHy/jLUq9t4hnf8tHM3qEPoeRzA1JruxfcMl6xA2gwrIZusU1+7MP2VOnGxPOoyUSd8e+XMYqYKpd5I/qNUU1+Iod5If6OfC6aKj8KUheHdd2M8YFU9KOvjKOPhutL3o+vjuE6ineOgsLZdX13Kxcc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718959426; c=relaxed/simple;
-	bh=dKthA8amsBesC3z6VtYREu7y+LWXbyMpk0gTJ9nMhkI=;
-	h=From:To:CC:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ijRxHZTlsKs40G9gsEkY7dyakvESkG3oOu/yJPa5Lgqle79pCn4WGdVQdGHgrjlBDPok1nCsEPEi+mj3axEO5Y6Ol8rMenabFu/JBBLUJ4DtoYDSz/LEzu+ueiLZ1V069F1f331IXtvfshqVlaZ9qv93/oWJFL5Ln1DPic7eXPY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=33QBSiEg; arc=fail smtp.client-ip=40.107.244.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZVX/EeKgf2Mdm+0bJhGpAI7kef8kSazvYXD6cRLa5jKzInUt0O6JjL8B6xEDI2H90HXrVyaMhNt5hhgUeJ68QFQM134yWXAS2HYkMsncIkK5E2p9ZHW1aifkrQvuTb+zqAf0CspsVWNFEUiH2nwhTCTHR9bXfORBxVsbGqwrKtL1RAERsHFBmXj7x5+OmlNUKMVin2PsFXrMhe5gK4LqWGwtOIQkdAHRm5SjUEkIpyMrjjHrDsOcD5xa1tZdDrkBwdsnkpNJ1T9vGzdC2IV3OdWPZ6nHGfLKTItEul4jVKNgVmpbDxho0rknUJf8ac6Vq3j+dsLkcdATb5QrxBRosw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hzILTWubIQjeboaUWx3a7EyJtca+HXYdBqdS4XiXguU=;
- b=NRsadn+hYjYfoUm7Ev1r2/qOGq/RLfFP8DK1KpgSRMQYNYuRVWt92zTPpEalL7QqTNWRpvIbqQ2r4otSGi5cRz0UClKAgOobEaL0hwH8N8ZOJszGxnibPQQ/x6XzvLFU5KNERVLlX6Ysw/mJgfYH5Oucoh34tjTc0NKjLbw9iQHRZQCb+aMun2J7y44fOdmjc0doiKHuvHD2bbEk8/yx8FWINKH6YDWmEPWWapiV9RCI2coEH2YdP/D5wZTRlfUFcLGNxT/q6YIKOnQiGTnLzpJ9xAOTmhW7eiNRlEIFtVx2ehkYgWNTlWYmvaGcZ/BDPye++v3hgyNqdrUn8KWZEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmx.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hzILTWubIQjeboaUWx3a7EyJtca+HXYdBqdS4XiXguU=;
- b=33QBSiEglLZw7/hOuLv1BXPT1l85uNAjrx3b8uq/aZHFpjkUfnX8+R39GyKpwSoO+ClbEVUIe3eeqzUKAlxSX3tpidgxnJhGXAhs5I1FJWWjMeCfVenAdW03TbL/lWOcWHbFnpCvJo44dgUBwaeNdYBleeDrB4tuwVsMKvqIAZM=
-Received: from MN2PR08CA0025.namprd08.prod.outlook.com (2603:10b6:208:239::30)
- by DS0PR12MB7656.namprd12.prod.outlook.com (2603:10b6:8:11f::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.21; Fri, 21 Jun
- 2024 08:43:43 +0000
-Received: from BL6PEPF00022571.namprd02.prod.outlook.com
- (2603:10b6:208:239:cafe::aa) by MN2PR08CA0025.outlook.office365.com
- (2603:10b6:208:239::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.33 via Frontend
- Transport; Fri, 21 Jun 2024 08:43:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL6PEPF00022571.mail.protection.outlook.com (10.167.249.39) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7677.15 via Frontend Transport; Fri, 21 Jun 2024 08:43:43 +0000
-Received: from BLRRASHENOY1 (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 21 Jun
- 2024 03:43:40 -0500
-From: Gautham R.Shenoy <gautham.shenoy@amd.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-CC: Perry Yuan <perry.yuan@amd.com>, <linux-pm@vger.kernel.org>, "Mario
- Limonciello" <mario.limonciello@amd.com>, "Artem S . Tashkinov"
-	<aros@gmx.com>
-Subject: Re: [PATCH] cpufreq: amd-pstate: Allow users to write 'default' EPP
- string
-In-Reply-To: <20240612145737.1618-1-mario.limonciello@amd.com>
-References: <20240612145737.1618-1-mario.limonciello@amd.com>
-Date: Fri, 21 Jun 2024 14:13:38 +0530
-Message-ID: <877ceivg79.fsf@BLR-5CG11610CF.amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E29416D4CB;
+	Fri, 21 Jun 2024 08:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718959761; cv=none; b=k2YGB4EjdZPT4uAKXLvgZcJlvY/lj1UDY6L6TPnwnYBeev8nTVqXDoqdSw/uUr53jtAbK6hwptO3YCq+FpGD9gsrjT3FEg1+YNkpwhIVqO45Uq9UYzCfjoofhZyGAUhsGl+SBDDIY1VGj87a9Yc4DVnK21jMZIzvg4K1dZUWGx4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718959761; c=relaxed/simple;
+	bh=8f6Gt/ccsHXbvPGmc0Nsw1hUGWPrG6A2wReAK1sxUOQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i8UJOnMnR/orQ3ZRWLeql7BPsSpm58maXEsEHBxYrwTHC5wcLDU8EOK+3XSCoaEZFA9IwZIXM2+16yefYWZRLktJXelKTmJETCuniL+F3V3SvF8zlX8GzPftdYZSnZxU41dcFxO0ZgdENkgWnAV1rnzYczQAZhgOTZ2w1ns6cF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=QMWGJGCG; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from [192.168.88.20] (91-158-144-210.elisa-laajakaista.fi [91.158.144.210])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D1B08524;
+	Fri, 21 Jun 2024 10:48:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1718959734;
+	bh=8f6Gt/ccsHXbvPGmc0Nsw1hUGWPrG6A2wReAK1sxUOQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=QMWGJGCGCqNae83SUzTD9qt5qsLgrbBdcJoVG9DwdEatTzkyifzCIk8qK2dpQDdh+
+	 EON/CZm7wOeMMooTN5UQKsZ+fgg9ICOzmIiusz5NibvCu0WBQPOoz2tUhJU+QGL+3I
+	 93yneWJqtphF26uLaf1sY6SATPNTQ8ufVICRjOUM=
+Message-ID: <269b5ca8-8cff-4ff1-b627-f262b190fc80@ideasonboard.com>
+Date: Fri, 21 Jun 2024 11:49:10 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF00022571:EE_|DS0PR12MB7656:EE_
-X-MS-Office365-Filtering-Correlation-Id: 660b9e0b-1b1d-41f4-696b-08dc91ce41c3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230037|1800799021|82310400023|376011|36860700010;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?I9jAJx5DQq3q0NNMzHpquTHmz3XoIc24nIBucbi33S3qq8Se7rBw3uNddrbB?=
- =?us-ascii?Q?H+ugwWNinPYLawYnOI397L/+PtVrMys3ncvVt44yoG6Rna3MZ1PFxdoaSgy5?=
- =?us-ascii?Q?dtmgaMpU3puyG8uj0CmLVt28XYS4XqdMhrTx9QO0FmD4kUcixa15I43UV1yv?=
- =?us-ascii?Q?a9DNkWLsVcuzKdcdBf4bRdOqyuwXAt8Wc/mo1dbVz66gfJln5bOV2mbhVyC+?=
- =?us-ascii?Q?v53dK/HXu/qOWD4NgmOEsvv2l/SLSoGp8CWn3tiqiWHIPpVnp+l4WtBEmNpX?=
- =?us-ascii?Q?3uftI5DUaxr/yRUkeR+4S7Y2oP6nduAw29II9tLYjdCNbO0TDAdfPrUmCfJm?=
- =?us-ascii?Q?V6NCmTOwCByajj8w5rWH0Tdx3eumPXTty9fTMZga5IC8mzrvHBUQN/1Nv4of?=
- =?us-ascii?Q?oh0TFy+K4X92DN4xE5uXa+bl96ucGSO/k23zmXSeki1LNPk7qW0C4dhzhtLK?=
- =?us-ascii?Q?q0Af/BvUVmf9lsLDBE08zGDgScG6ZcB16VTbEkLqAU1oIwwdzaiVeWg42M10?=
- =?us-ascii?Q?XKGrib/e0/nvOW/O33LMotpiDrgngy1CTs9JnAZzmFX9CI/Bqa6VYlH2qiCW?=
- =?us-ascii?Q?PfDtmMcwk9Po5GEn/HF9YUN6oz8TyflDnIN89TunUxhXDGoEwAmKp1E7r21S?=
- =?us-ascii?Q?PHvQm/iPHr77TsPvMj3HX4Vi9ScMwcBntOAvYj5DBhql/1GISqQfEAm6fn1J?=
- =?us-ascii?Q?m+cXCws6j5ijaQpz1/Px3+BpdiGdetP2v2rXeHC5fzDHJJtJcBxtfYQaInT+?=
- =?us-ascii?Q?ICwoRH1gSvr3gCx+pHZQ53dCJXj7fv4wsz6BbFtrABPURbcnUVHGSeboTXnE?=
- =?us-ascii?Q?+YtWrKUYtslS+efn9fup8aPfXRvYvDzKk7PYISfSOFcwbz13JuIBFyGy9/TZ?=
- =?us-ascii?Q?rApnzaAZv1VcAYOrxyS9mv6cyG0Lqcw5UpcaCDM+GYS9wALTTVEMdzMOPWbj?=
- =?us-ascii?Q?I06r6ufpYoZimazsfp4wi/y8kBoJm1HJFYuQHlNYrWdqxa3Eb0YCQSBctsOt?=
- =?us-ascii?Q?JyvXoNVodCPjIwBxHasmmSOJ47DjyHIjN2Ik2mGh4y3C3wVNQpfPSTINqaiV?=
- =?us-ascii?Q?516DdDHBy/9pL9VfAf/aoWZlzrRP5Uxu2kep4Jtc94fISagpVztaY9mgbFHr?=
- =?us-ascii?Q?FBlrnBAPEfSy1UFNaQqYozOuiapGQopWHQNnmlmgft7aTCFgU6/Rz/NmF9hd?=
- =?us-ascii?Q?Q3e8SSxdMdNCitRDrf7ruxsOIYiz3nGxtuGch6DCQ8j7F5zBdD/prPlsJdoD?=
- =?us-ascii?Q?rV40aj4s8PsL4bYLua4KD6q5JPiiqPcfA8K0CQ4lXPX7ZfiluWfbK0ITE1b1?=
- =?us-ascii?Q?a2+vcsEMgxVF9FqtSFusMMOvZwSW/f5dZ1jRX7/DZetwBFp0LTU/zxwVawyh?=
- =?us-ascii?Q?iX72aH4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230037)(1800799021)(82310400023)(376011)(36860700010);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2024 08:43:43.1758
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 660b9e0b-1b1d-41f4-696b-08dc91ce41c3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF00022571.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7656
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH/RFC 0/3] pmdomain: renesas: rmobile-sysc: Remove serial
+ console handling
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Saravana Kannan <saravanak@google.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Rob Herring <robh@kernel.org>,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Peng Fan <peng.fan@nxp.com>, linux-pm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Devarsh Thakkar <devarsht@ti.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <cover.1716811405.git.geert+renesas@glider.be>
+ <CAPDyKFpa4LZF3eN7x-NT+b9=dKB3Oe6RY8RAyetdRBSR1-LQoQ@mail.gmail.com>
+ <0a025885-ed95-45d3-bf76-d2a043baaed7@ideasonboard.com>
+ <CAPDyKFrxUDhnUUfz5wHpGVQfNYssxoWO5Eb2wtmZMTcMYhEjxQ@mail.gmail.com>
+ <1bda8e8f-10df-4a10-a217-26cf50ef3577@ideasonboard.com>
+ <CAGETcx-T54w=x=gv524dUJtnRGmOiXFA2CRYHE5Pawbux8_Tig@mail.gmail.com>
+ <CAMuHMdUTGLSDv-zAun7tV2VnN0q08PibBT9B-MhxqdwmRTA_UQ@mail.gmail.com>
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Content-Language: en-US
+Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
+ 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
+In-Reply-To: <CAMuHMdUTGLSDv-zAun7tV2VnN0q08PibBT9B-MhxqdwmRTA_UQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Mario Limonciello <mario.limonciello@amd.com> writes:
+On 21/06/2024 10:07, Geert Uytterhoeven wrote:
+> Hi Saravana,
+> 
+> On Fri, Jun 21, 2024 at 3:08 AM Saravana Kannan <saravanak@google.com> wrote:
+>> On Wed, Jun 5, 2024 at 4:16 AM Tomi Valkeinen
+>> <tomi.valkeinen@ideasonboard.com> wrote:
+>>> On 05/06/2024 13:53, Ulf Hansson wrote:
+>>>> On Wed, 5 Jun 2024 at 12:41, Tomi Valkeinen
+>>>> <tomi.valkeinen@ideasonboard.com> wrote:
+>>>>> On 05/06/2024 12:34, Ulf Hansson wrote:
+>>>>>> On Mon, 27 May 2024 at 14:41, Geert Uytterhoeven
+>>>>>> <geert+renesas@glider.be> wrote:
+>>>>>>> Since commit a47cf07f60dcb02d ("serial: core: Call
+>>>>>>> device_set_awake_path() for console port"), the serial driver properly
+>>>>>>> handles the case where the serial console is part of the awake path, and
+>>>>>>> it looked like we could start removing special serial console handling
+>>>>>>> from PM Domain drivers like the R-Mobile SYSC PM Domain driver.
+>>>>>>> Unfortunately the devil is in the details, as usual...
+>>>>>>>
+>>>>>>> Earlycon relies on the serial port to be initialized by the firmware
+>>>>>>> and/or bootloader.  Linux is not aware of any hardware dependencies that
+>>>>>>> must be met to keep the port working, and thus cannot guarantee they
+>>>>>>> stay met, until the full serial driver takes over.
+>>>>>>>
+>>>>>>> E.g. all unused clocks and unused PM Domains are disabled in a late
+>>>>>>> initcall.  As this happens after the full serial driver has taken over,
+>>>>>>> the serial port's clock and/or PM Domain are no longer deemed unused,
+>>>>>>> and this is typically not a problem.
+> 
+> Let's call this "Case A".
+> 
+>>>>>>>
+>>>>>>> However, if the serial port's clock or PM Domain is shared with another
+>>>>>>> device, and that other device is runtime-suspended before the full
+>>>>>>> serial driver has probed, the serial port's clock and/or PM Domain will
+>>>>>>> be disabled inadvertently.  Any subsequent serial console output will
+>>>>>>> cause a crash or system lock-up.  E.g. on R/SH-Mobile SoCs, the serial
+>>>>>>> ports share their PM Domain with several other I/O devices.  After the
+>>>>>>> use of pwm (Armadillo-800-EVA) or i2c (KZM-A9-GT) during early boot,
+>>>>>>> before the full serial driver takes over, the PM Domain containing the
+>>>>>>> early serial port is powered down, causing a lock-up when booted with
+>>>>>>> "earlycon".
+> 
+> Let's call this "Case B".
+> 
+>>>>>>
+>>>>>> Thanks for the detailed description of the problem! As pointed out in
+>>>>>> regards to another similar recent patch [1], this is indeed a generic
+>>>>>> problem, not limited to the serial console handling.
+>>>>>>
+>>>>>> At Linaro Connect a few weeks ago I followed up with Saravana from the
+>>>>>> earlier discussions at LPC last fall. We now have a generic solution
+>>>>>> for genpd drafted on plain paper, based on fw_devlink and the
+>>>>>> ->sync_state() callback. I am currently working on the genpd series,
+>>>>>> while Saravana will re-spin the series (can't find the link to the
+>>>>>> last version) for the clock framework. Ideally, we want these things
+>>>>>> to work in a very similar way.
+>>>>>>
+>>>>>> That said, allow me to post the series for genpd in a week or two to
+>>>>>> see if it can solve your problem too, for the serial console.
+>>>>>
+>>>>> Both the genpd and the clock solutions will make suppliers depend on all
+>>>>> their consumers to be probed, right?
+>>>>>
+>>>>> I think it is a solution, and should be worked on, but it has the
+>>>>> drawback that suppliers that have consumers that will possibly never be
+>>>>> probed, will also never be able to turn off unused resources.
+>>>>>
+>>>>> This was specifically the case with the TI ti-sci pmdomain case I was
+>>>>> looking at: the genpd driver (ti_sci_pm_domains.c) provides a lot of
+>>>>> genpds for totally unrelated devices, and so if, e.g., you don't have or
+>>>>> don't want to load a driver for the GPU, all PDs are affected.
+>>>>>
+>>>>> Even here the solutions you mention will help: instead of things getting
+>>>>> broken because genpds get turned off while they are actually in use, the
+>>>>> genpds will be kept enabled, thus fixing the breakage. Unfortunately,
+>>>>> they'll be kept enabled forever.
+>>>>>
+>>>>> I've been ill for quite a while so I haven't had the chance to look at
+>>>>> this more, but before that I was hacking around a bit with something I
+>>>>> named .partial_sync_state(). .sync_state() gets called when all the
+>>>>> consumers have probed, but .partial_sync_state() gets called when _a_
+>>>>> consumer has been probed.
+>>>>>
+>>>>> For the .sync_state() things are easy for the driver, as it knows
+>>>>> everything related has been probed, but for .partial_sync_state() the
+>>>>> driver needs to track resources internally. .partial_sync_state() will
+>>>>> tell the driver that a consumer device has probed, the driver can then
+>>>>> find out which specific resources (genpds in my case) that consumer
+>>>>> refers to, and then... Well, that's how far I got with my hacks =).
+>>>>>
+>>>>> So, I don't know if this .partial_sync_state() can even work, but I
+>>>>> think we do need something more on top of the .sync_state().
+>>>>
+>>>> Thanks for the update!
+>>>>
+>>>> You certainly have a point, but rather than implementing some platform
+>>>> specific method, I think we should be able enforce the call to
+>>>> ->sync_state(), based upon some condition/timeout - and even if all
+>>>> consumers haven't been probed.
+>>>
+>>> Hmm, I think that was already implemented in some of the serieses out
+>>> there (or even in mainline already?), as I remember doing some
+>>> experiments with it. I don't like it much, though.
+>>>
+>>> With a simple timeout, it'll always be just a bit too early for some
+>>> user (nfs mount took a bit more time than expected -> board frozen).
+>>>
+>>> The only condition I can see that would somewhat work is a manual
+>>> trigger from the userspace. The boot scripts could then signal the
+>>> kernel when all the modules have been loaded and probably a suitable,
+>>> platform/use case specific amount of time has passed to allow the
+>>> drivers to probe.
+>>
+>> This is also already supported in mainline.
+>>
+>> Devices with sync_state() implementations (once Ulf adds it) will have
+>> a state_synced file in sysfs. It shows where it has been called yet or
+>> not. But you can also echo 1 into it to force the sync_state()
+>> callback (only if it hasn't been called already). So, yeah, all
+>> methods of handling this are available if you implement the
+>> sync_state() callback.
+>>
+>> By default it's all strict (wait till all consumers probe
+>> successfully). But you can set it to timeout (fw_devlink.sync_state).
+>> And you also have the option I mentioned above that you can use with
+>> both cases.
+> 
+> So the idea is to disable unused genpds and clocks from the genpd
+> resp. clock's driver .sync_state() callback, instead of from a late
+> initcall?  That would indeed solve issues related to "Case A".
+> 
+> However, how to solve "Case B"? Ignore disabling genpds or clocks
+> before .sync_state() callback() has been called?
+> That would cause issues for cases where the clock must be disabled,
+> cfr.
+>      "[PATCH RFC 0/3] Add clk_disable_unprepare_sync()"
+>      https://lore.kernel.org/all/20240131160947.96171-1-biju.das.jz@bp.renesas.com/
+>      "[PATCH v3 0/3] Add clk_poll_disable_unprepare()"
+>      https://lore.kernel.org/linux-renesas-soc/20240318110842.41956-1-biju.das.jz@bp.renesas.com/
+> 
+>>> It just feels a bit too much of a "let's hope this work" approach.
+>>>
+>>> That said, the timeout/condition is probably acceptable for many cases,
+>>> where turning off a resource forcefully will just result in, say, a
+>>> temporarily blanked display, or something else that gets fixed if and
+>>> when the proper driver is probed.
+>>>
+>>> Unfortunately, here with the case I have, the whole board gets halted if
+>>> the display subsystem genpd is turned off and the display driver is
+>>> loaded after that.
+> 
+> Tomi: Do you have more details? The genpd must be controlling something
+> critical that must never be turned off, or perhaps the display driver
+> lacks some initialization?
 
-> The EPP string for 'default' represents what the firmware had configured
-> as the default EPP value but once a user changes EPP to another string
-> they can't reset it back to 'default'.
->
-> Cache the firmware EPP value and allow the user to write 'default' using
-> this value.
->
-> Reported-by: Artem S. Tashkinov <aros@gmx.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217931#c61
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+I don't know the exact HW level details. It may be a HW bug or possibly 
+a firmware issue. But what I see is simple:
 
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+If the display subsystem is powered and a video output is enabled, 
+turning off the PD causes the display subsystem to go to a bad state, 
+after which the next register access will halt the cpu.
 
-> ---
->  drivers/cpufreq/amd-pstate.c | 8 +++-----
->  drivers/cpufreq/amd-pstate.h | 1 +
->  2 files changed, 4 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index fda8f86c90e0..5bdcdd3ea163 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -282,10 +282,8 @@ static int amd_pstate_set_energy_pref_index(struct amd_cpudata *cpudata,
->  	int epp = -EINVAL;
->  	int ret;
->  
-> -	if (!pref_index) {
-> -		pr_debug("EPP pref_index is invalid\n");
-> -		return -EINVAL;
-> -	}
-> +	if (!pref_index)
-> +		epp = cpudata->epp_default;
->  
->  	if (epp == -EINVAL)
->  		epp = epp_values[pref_index];
-> @@ -1441,7 +1439,7 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
->  
->  	policy->driver_data = cpudata;
->  
-> -	cpudata->epp_cached = amd_pstate_get_epp(cpudata, 0);
-> +	cpudata->epp_cached = cpudata->epp_default = amd_pstate_get_epp(cpudata, 0);
->  
->  	policy->min = policy->cpuinfo.min_freq;
->  	policy->max = policy->cpuinfo.max_freq;
-> diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
-> index e6a28e7f4dbf..f80b33fa5d43 100644
-> --- a/drivers/cpufreq/amd-pstate.h
-> +++ b/drivers/cpufreq/amd-pstate.h
-> @@ -99,6 +99,7 @@ struct amd_cpudata {
->  	u32	policy;
->  	u64	cppc_cap1_cached;
->  	bool	suspended;
-> +	s16	epp_default;
->  };
->  
->  #endif /* _LINUX_AMD_PSTATE_H */
-> -- 
-> 2.43.0
+This happens quite easily if the bootloader has enabled a display: when 
+the kernel's tidss driver probes, the device framework will make sure 
+the PD is enabled (which is fine, it's basically a no-op). But if the 
+tidss returns an error, like EPROBE_DEFER, the device framework will 
+disable the PD. When the tidss driver probes again later, it will cause 
+a halt at a register access.
+
+  Tomi
+
 
