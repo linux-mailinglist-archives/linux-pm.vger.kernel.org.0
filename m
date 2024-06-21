@@ -1,295 +1,326 @@
-Return-Path: <linux-pm+bounces-9747-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9748-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6728E911F42
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 10:49:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64DB7911F46
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 10:49:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DB7328BBFC
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 08:49:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14D4B28B5A5
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 08:49:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C175616D9A3;
-	Fri, 21 Jun 2024 08:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E60716D9B3;
+	Fri, 21 Jun 2024 08:49:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="QMWGJGCG"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="p4RVrMHF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2076.outbound.protection.outlook.com [40.107.102.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E29416D4CB;
-	Fri, 21 Jun 2024 08:49:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718959761; cv=none; b=k2YGB4EjdZPT4uAKXLvgZcJlvY/lj1UDY6L6TPnwnYBeev8nTVqXDoqdSw/uUr53jtAbK6hwptO3YCq+FpGD9gsrjT3FEg1+YNkpwhIVqO45Uq9UYzCfjoofhZyGAUhsGl+SBDDIY1VGj87a9Yc4DVnK21jMZIzvg4K1dZUWGx4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718959761; c=relaxed/simple;
-	bh=8f6Gt/ccsHXbvPGmc0Nsw1hUGWPrG6A2wReAK1sxUOQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i8UJOnMnR/orQ3ZRWLeql7BPsSpm58maXEsEHBxYrwTHC5wcLDU8EOK+3XSCoaEZFA9IwZIXM2+16yefYWZRLktJXelKTmJETCuniL+F3V3SvF8zlX8GzPftdYZSnZxU41dcFxO0ZgdENkgWnAV1rnzYczQAZhgOTZ2w1ns6cF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=QMWGJGCG; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from [192.168.88.20] (91-158-144-210.elisa-laajakaista.fi [91.158.144.210])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D1B08524;
-	Fri, 21 Jun 2024 10:48:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1718959734;
-	bh=8f6Gt/ccsHXbvPGmc0Nsw1hUGWPrG6A2wReAK1sxUOQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QMWGJGCGCqNae83SUzTD9qt5qsLgrbBdcJoVG9DwdEatTzkyifzCIk8qK2dpQDdh+
-	 EON/CZm7wOeMMooTN5UQKsZ+fgg9ICOzmIiusz5NibvCu0WBQPOoz2tUhJU+QGL+3I
-	 93yneWJqtphF26uLaf1sY6SATPNTQ8ufVICRjOUM=
-Message-ID: <269b5ca8-8cff-4ff1-b627-f262b190fc80@ideasonboard.com>
-Date: Fri, 21 Jun 2024 11:49:10 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805F518E20;
+	Fri, 21 Jun 2024 08:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718959775; cv=fail; b=hBSBfUNB2akBiziloc8y8KkR6Kinna8wRsJeCRrygCputS6RIf68I7+xdZSXAQSAwdfasvdBxbNKNmzDXybYvwKdnOzR59SYU0dsuzvdUrmhmeKizDtyqaWGadNJBmUBEGqTpdyHthWDtxzAPY4BZClIms8m49BFIP6jzkijrJM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718959775; c=relaxed/simple;
+	bh=MmdH05nfOHg8jrqVZQ/8kylZ7y+AsywzZLlNYLm2JcY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=sI2dK2v4b1DT68V5O4RY53XCoB7MwSGthbGJ91xrrQsfbN8eRvMlVuR+xenU1qgnCuIWxeY5bByRgXkiaFl8eVC7I9RhZOB1Hq8+wN+2yDE54lEE/0iYWLfmXihLkx3Da8J8RQUevYQ+cs8HJwRV4kk14teWI9SNjduK9ulkK7Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=p4RVrMHF; arc=fail smtp.client-ip=40.107.102.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IWhLyZD4YrdX9thCsNMqCVzBXuBtiwjoiEU9SA8rPht2wmxZWroFPtF1VoAI7YkUE9lOI8jPJdCGtUw2W57i3H2uGURqidE+twKwgxKU14PRXTM+JGO/3ryHXAjdnsO67P9M0CaqTZ3cyp89DizFN8rWgsiBuPLs5iO3OfNoSZK6tQidnrGA8CuTySmd5kM9zfbrBy74cCEKN7n3421/QUUbzR9U8o5MJ42cfq0FJfTOG8uNw3zPA/4uirVEMbQQ+8Dulyqs6Fmpa/2oS42AQ80EpKUN7IyhiSTagvkqhLyVBL+lyQQhsHGBGl3L6vkJxztiJuYBCzUs3frE+JCd+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Sq7s3a/2x2czjTCy0TZa26wKrn/KS+jEwew+cP5hH6A=;
+ b=XOts1OunwbgL6Hr41fBbMQmZIxfh3C021rJcqBL7mputmVVCwp2DIpfg+pqyQRwIPYZua9m9cq2tKqyA1hTI5z9UPJ61Ry7JaFFOBmxMb1x/syAXCPQ0WZOtu9BmgZ97pkm4zhF5nqD1qQ9C4NTzHAZoriLSdLXeaUgsRTpYouEXuP0Wpfa4qaUthcrq5EK3HR7Rz9XHSYndSFNPMk46FbSHJ5bnYeSDwz9kNoqDKI04Fn5n4L1yILYbbFygzQvngzQMsKTKqrFirq95ekU0JyECVpQOglzamFAyN1ir8lcHmr4tyIiMdxfaMnFfWNM8PrnbuM2d9lMeH0KBU/Jkmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Sq7s3a/2x2czjTCy0TZa26wKrn/KS+jEwew+cP5hH6A=;
+ b=p4RVrMHFB07/7LQztLNRAVKPwXFQgdhVQHBHy0p5PQSDKYj5NELIBas8cYTqloi5dJiAAp8gYfZzC3TOi9ayfKKAFl6+4HO9F6wwCAKbkKZyb7YEsS+mspQxiO7trkOg6f6XgdFIsPswGzAYlkU38oSsCw2T4JyKlPH/siTL5vQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from LV8PR12MB9207.namprd12.prod.outlook.com (2603:10b6:408:187::15)
+ by IA0PR12MB8086.namprd12.prod.outlook.com (2603:10b6:208:403::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.19; Fri, 21 Jun
+ 2024 08:49:29 +0000
+Received: from LV8PR12MB9207.namprd12.prod.outlook.com
+ ([fe80::3a37:4bf4:a21:87d9]) by LV8PR12MB9207.namprd12.prod.outlook.com
+ ([fe80::3a37:4bf4:a21:87d9%7]) with mapi id 15.20.7698.017; Fri, 21 Jun 2024
+ 08:49:28 +0000
+Message-ID: <79fd7c1d-2d3a-46b4-8a0c-56bfda036a94@amd.com>
+Date: Fri, 21 Jun 2024 14:19:13 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/9] Add per-core RAPL energy counter support for AMD
+ CPUs
+To: K Prateek Nayak <kprateek.nayak@amd.com>
+Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org, ananth.narayan@amd.com,
+ gautham.shenoy@amd.com, ravi.bangoria@amd.com, sandipan.das@amd.com,
+ linux-pm@vger.kernel.org, rui.zhang@intel.com, oleksandr@natalenko.name,
+ peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+ namhyung@kernel.org, mark.rutland@arm.com,
+ alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
+ adrian.hunter@intel.com, kan.liang@linux.intel.com, tglx@linutronix.de,
+ bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, kees@kernel.org,
+ gustavoars@kernel.org
+References: <20240620125703.3297-1-Dhananjay.Ugwekar@amd.com>
+ <a26b9774-f9da-763e-aebf-5d66a6d44377@amd.com>
+Content-Language: en-US
+From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+In-Reply-To: <a26b9774-f9da-763e-aebf-5d66a6d44377@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN2PR01CA0217.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:ea::15) To LV8PR12MB9207.namprd12.prod.outlook.com
+ (2603:10b6:408:187::15)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH/RFC 0/3] pmdomain: renesas: rmobile-sysc: Remove serial
- console handling
-To: Geert Uytterhoeven <geert@linux-m68k.org>,
- Saravana Kannan <saravanak@google.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
- Rob Herring <robh@kernel.org>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Peng Fan <peng.fan@nxp.com>, linux-pm@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Devarsh Thakkar <devarsht@ti.com>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <cover.1716811405.git.geert+renesas@glider.be>
- <CAPDyKFpa4LZF3eN7x-NT+b9=dKB3Oe6RY8RAyetdRBSR1-LQoQ@mail.gmail.com>
- <0a025885-ed95-45d3-bf76-d2a043baaed7@ideasonboard.com>
- <CAPDyKFrxUDhnUUfz5wHpGVQfNYssxoWO5Eb2wtmZMTcMYhEjxQ@mail.gmail.com>
- <1bda8e8f-10df-4a10-a217-26cf50ef3577@ideasonboard.com>
- <CAGETcx-T54w=x=gv524dUJtnRGmOiXFA2CRYHE5Pawbux8_Tig@mail.gmail.com>
- <CAMuHMdUTGLSDv-zAun7tV2VnN0q08PibBT9B-MhxqdwmRTA_UQ@mail.gmail.com>
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Content-Language: en-US
-Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
- 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
-In-Reply-To: <CAMuHMdUTGLSDv-zAun7tV2VnN0q08PibBT9B-MhxqdwmRTA_UQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9207:EE_|IA0PR12MB8086:EE_
+X-MS-Office365-Filtering-Correlation-Id: ee05f329-03f6-4e31-8494-08dc91cf0f21
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230037|366013|376011|7416011|1800799021;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VFphT1pPbmFsZzBEcjJhVnFRU3pxWVd5UlhEdDhJZGtwY1JhS1ZDZUhUTjZN?=
+ =?utf-8?B?WjN1RFJFd2QrZ3VmMmFlaHJJRTlQRENXZFpMRFNVVFNSc1l3UjFyTmtEZUc3?=
+ =?utf-8?B?ZUUvcTByRENYcTRtRisvNEVYUUdROEEwRTAxZ2svK3lxYVVONHBTRnhYdFpF?=
+ =?utf-8?B?KzZvK0wraXh2UlZYRUtYdDRrYmRWQ2RuYnNVcGRONDlibE5jcnZ5aHdxTmVP?=
+ =?utf-8?B?MkF6VGYvRDFGSHdPNTNFcGtrWXZkY3RFZkZsSit5TVowWll6OHhtQTBSVGJU?=
+ =?utf-8?B?U3V1eFNkUXhsdjc0cXpPdUVLZGduK2xFaHc3L2pMdVlCLzRpSnVsYVBJdENI?=
+ =?utf-8?B?WlpmdW9Ja3J5U3BESllqMS9OaUZwUmxyZHFBcEVscm1SUGN1d0xDVUpQbzZR?=
+ =?utf-8?B?TWs4dVJDWEVXVUJJZllFc0l1VlRuQTk4VDFEOTU0YURFUVdCYlAwUG1meVBv?=
+ =?utf-8?B?Y0d2NGhnMm9ZajNxRllmczdMZzVWaWsxVW5oQnBMUHUrODVwTGtxc0ZVMVY3?=
+ =?utf-8?B?SFM1eWtMZ2VUNUM3VXB3bVBCbWlVcGtHUGo5YXJ1cWk5YVpVOGJIeit3MDRB?=
+ =?utf-8?B?YW1hNmhwR3RDdVJiaDROZW1BTWlRa24xRFhqb0RKQkVoekVDeDk3VjV0eERw?=
+ =?utf-8?B?K3hSYWEwbWZLMXQwaFFVRE1GU3lacmFpZStxSVFwVDZjd2xGY1BKOHhxZVc4?=
+ =?utf-8?B?WS9aWTZHc0liNEZXYTFDdVhDWVZDblE2eUtBWHZpUzNEZHZOcEM3dnNNcElK?=
+ =?utf-8?B?RVpJMnBvZHJSbDBURFRpaThna2VvZ0ZyVlZvWGt2MXJtL3IyT3Q4dElCK3Vm?=
+ =?utf-8?B?QlpOTXVzV09jTktrWGpKM0VPbFdqTWtDWitkZTgxK2ZBcmN1N3hCaE1DR21N?=
+ =?utf-8?B?SXZYNjdFWDh0a1U2dlNtYUNqMWZMcUNSNElYNmhMQk1IazJrL1VBelJ0ZHAw?=
+ =?utf-8?B?WkIzdDYvRjVDUHlSV1V3MVZXcWM1MGZSVkc2TFZ5OUp6MHoyeGFXYTVxS1JD?=
+ =?utf-8?B?VjY1cFpxY09vU1V4aXBLNlRLbHBGQXZHTEFoNVRNYStYQU5mTnI2ZWNWRzNi?=
+ =?utf-8?B?VC9uR3NkeUJzVWZXYXQ4ZTV4VlhqYnl0bmZSR1F6N3p5cnBFV3cwT3ZzanlK?=
+ =?utf-8?B?NFFXRTVDQjBrNjNkTW9yVFY1Wk91dTUwN3pVbjFlcVdkQ1JyUUVQN2dsMkRT?=
+ =?utf-8?B?N3VxUFlkaTJweVloZUNJZWdJTEtiQjdHTlZ0Y1JPR1VLODBiQUppS2h2d2Jw?=
+ =?utf-8?B?aFhmL3NBdGhwditiT3VZYWR4dnRSSm03aHhyU2xEbWZoNnJ3c1BNaG5QbWNa?=
+ =?utf-8?B?V3RqSWo0a2tRZ2Q3U1g5WDZLQ2FCV0c1QmVRanFobXRyVG9zN3NNMVY3RGlE?=
+ =?utf-8?B?M0Y2bllXYUw1b1c1NW1tS1hsMlp3U2IwNm5VdENFMUF6ZTFLa2xmMlZEUFJr?=
+ =?utf-8?B?VHlJMEVrMTJVaFBTVmZTZTFKeU9lVlNtQk92bjhyUmwzTFM5a3NSaisrRXRP?=
+ =?utf-8?B?SWtqWEh1RlAwZ0R2WmhXSHB0WDNLbjBKenhYYXMwOEVhQldDa0VWMEh1NGly?=
+ =?utf-8?B?QnMza1hWOHBlUjFpdVdkMlNubWhaSGJ1ZWp2UGE5UlN0OWVBZzZEQnBQekxr?=
+ =?utf-8?B?UW92THVENkw4RVljdWNtV2w5M1BicXZzREFaalpJM092Ky9BcDRqOGNpSW5o?=
+ =?utf-8?Q?87K4ddPliM/vCLN7mPE1?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9207.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(366013)(376011)(7416011)(1800799021);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?b2M5VVk4bW4wdFhtSVR4SGo3N0YrcVZEL2EzRHUvOG9xbEE3bHIxTUlWcGg1?=
+ =?utf-8?B?MEgxTXR3TjVHTkRwL3RnUTJmd2Zmc255TDVZWDlvQmhSSTJUOVRpWVJlZDFr?=
+ =?utf-8?B?alhtSndlVWFKS05JQ1NmbndZeFZtN0piVXhwRENpelNjcVdSWHJ3Rnp2b0Yw?=
+ =?utf-8?B?aFNkaWRDaGNLSzlwUEZCaHZxVGFCQmhUWnhoa054b2FmYnJrSktyS2o0NE1q?=
+ =?utf-8?B?eC83dXJvVldudlZmelhheWkyMGZvbFZIdStJTnNxQ1Y4Y3JMSHpyYnY0ZjhX?=
+ =?utf-8?B?ZFRhVUdINUNhMnpqcmNNY2RTa3VUM0pyL0VVOFdyWUVkVGxrbllMdFZ4d3Yz?=
+ =?utf-8?B?RndSaDlKaUpySFl0QUdTUzZrSjlqUkxyNTA1MlBsakovYWNKN0lQclQ0eEVp?=
+ =?utf-8?B?RFVubkhpOHJWTjVLUVpEd1czU0JEWFZsMjkwWFpyYVh4N1FDeGlBOVQza2pV?=
+ =?utf-8?B?dVl3emtOVENjVzgyNWVHdUVOcHN0Q3p5REpWZHpLNWRCT0hOTm40enZSaGZr?=
+ =?utf-8?B?QVN5MTNkRmpEdDN1Z1BWQWhEUHdzNHlIa3k5N0dtRGJXd2ZGYTdGU05UZkZ1?=
+ =?utf-8?B?UEdKK1JYQjVHVFNKT1ZHV2RWV2xoc3lwWmVLeWlGdVNuanJnUVlUSFlKdGpN?=
+ =?utf-8?B?Ny92WExIL1BSNE5hMGlDRmloUjYyNHhqYzZIYXMyc04wRW1mcy9EKy94VmJ3?=
+ =?utf-8?B?bDJkTEx0L3NqVWtqVzdRUHpRbEtqQkNSQmRKOS9jYlo5S0MwbHJ5WmdtSVd2?=
+ =?utf-8?B?ZldaVWp3MzNDYUhzODNXckhpdVFXNlJvSTlyekhFRGNmSmpOMU1RcEU1dmlE?=
+ =?utf-8?B?Z1h4TVM0NWZMRkZHK250dTJLbUwrKzR0cDRSZ1RBR2YvenFTZGpqK3FQWGRP?=
+ =?utf-8?B?dUdGNVZtaUZkZ3ZpUXdGUzJwVnhwaWpxajEzWmJNRDNFQ2J3KzB4ZXdVcWxK?=
+ =?utf-8?B?Q0pvcXpNSmxXbWplbnk4SmRCMnhnVjh3SUFxUVN0ZWdhbTBiMGtxL1Nnaldu?=
+ =?utf-8?B?OGhyTUZiUEFjaDNCQWR5c0hTODZCVkhvUXV1ZDduL0xzMjNHMGNZQUg4b0hj?=
+ =?utf-8?B?U1JXamFZMmJacjFmNU5DR1V0ZCtWbTJGbyt3Z2hVSzJBMXJqaGE1YkdFWXM2?=
+ =?utf-8?B?dFpscmxZbDhMZjhpcXRyY0gyQzY5T0pEclp6cWVpdGFlK0tOaDZpSlJMUTA4?=
+ =?utf-8?B?WXJFYXBQdUg5R3FmcUJyR3AzbWZja2dETDJmb0JHMUN0YzRXVGNxYUNhOTVl?=
+ =?utf-8?B?TXhZQ2lhSElZaCs2dnRWNGE4NEZaS29jbVo1OERmcWJ3TElEeU9GcTdOenV3?=
+ =?utf-8?B?Rmt3UWlaQ2lEcStLUzJWNnRJM0FCczdtRlh2T0lzdFp5dnBoeGM1VDVjeVZo?=
+ =?utf-8?B?UGxINGdiMWcraWVmQ3U1ZHloNjJHUUpGZ0ZZUVBSWU50NmM2N3ltYXVENzlB?=
+ =?utf-8?B?b2pKZjNZWGdvT3JRNEoyWkFMN2RJL2poWXY0Ym5OOUU4aHYvVEJaSlV1ZFcr?=
+ =?utf-8?B?VVVNU3BzeHFjY25tZ1JqMFJCMkFTNm81NGZSV1VzOWhnT3pDR3lUbitFKzM3?=
+ =?utf-8?B?cklRNHR5STB6ZWtuQzZJcUdWdzVBRW5xbVo2VmRPV1B1eHNFM0tTMnQ1a09i?=
+ =?utf-8?B?Zk9CQ21ISGtKbzZzTlEzVk1tQ2lwQ0dmODZmd0FqTDZRU25CUlFpNjlwN1py?=
+ =?utf-8?B?eGp6cFRTcFVJeE45UGo1TjdIUjJzY245VVcrcXFnL1g2aVhHT1ppZUpwNG9m?=
+ =?utf-8?B?RU1lZUVSYStULy9hT1lIaWVmZDJ5QmdPZTlId29uQWlnYjU1VUQwMUhLZVhD?=
+ =?utf-8?B?dlc2VmR4TXd3bW84R0xJWXJLMXc2aFZENXo3dVFKVjhmbDFFSXpTZ3VNbGxh?=
+ =?utf-8?B?UndLMmlMZjBib2Z2aDRIWmtCdFIvR1Q0ZXIwWmxWSk12d2xWL1QzcWRJckNP?=
+ =?utf-8?B?c0V6OUpKd2hva0hyd0MwUU1VbmdZZGpsdm9yVk5mTzlNM1RSNE9NZ2Yxb2Jt?=
+ =?utf-8?B?cEVMTDVVdkpMbXhNMVhMSG0rMm5teVRYdWEydmJIUjRTcTJKK2E4Tm9seHBm?=
+ =?utf-8?B?UWJ3TE9BRHhQNk9uL01vbmN3ZCtJbEJuY2U0OTZkZnBXS1QvUjIyRGUvTklD?=
+ =?utf-8?Q?+Kix9wZNd9Tk56AXkc09qGbvj?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee05f329-03f6-4e31-8494-08dc91cf0f21
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9207.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2024 08:49:28.1465
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kVVjgr5FEX/pZMoSUD3jWL3XhyJCdFj/Pvb2DViy9l92Qaxv4QCS5SYIO1L4OmUtq2v/ItyaV6RIKy49AVQC2A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8086
 
-On 21/06/2024 10:07, Geert Uytterhoeven wrote:
-> Hi Saravana,
+Hello Prateek,
+
+On 6/21/2024 1:54 PM, K Prateek Nayak wrote:
+> Hello Dhananjay,
 > 
-> On Fri, Jun 21, 2024 at 3:08 AM Saravana Kannan <saravanak@google.com> wrote:
->> On Wed, Jun 5, 2024 at 4:16 AM Tomi Valkeinen
->> <tomi.valkeinen@ideasonboard.com> wrote:
->>> On 05/06/2024 13:53, Ulf Hansson wrote:
->>>> On Wed, 5 Jun 2024 at 12:41, Tomi Valkeinen
->>>> <tomi.valkeinen@ideasonboard.com> wrote:
->>>>> On 05/06/2024 12:34, Ulf Hansson wrote:
->>>>>> On Mon, 27 May 2024 at 14:41, Geert Uytterhoeven
->>>>>> <geert+renesas@glider.be> wrote:
->>>>>>> Since commit a47cf07f60dcb02d ("serial: core: Call
->>>>>>> device_set_awake_path() for console port"), the serial driver properly
->>>>>>> handles the case where the serial console is part of the awake path, and
->>>>>>> it looked like we could start removing special serial console handling
->>>>>>> from PM Domain drivers like the R-Mobile SYSC PM Domain driver.
->>>>>>> Unfortunately the devil is in the details, as usual...
->>>>>>>
->>>>>>> Earlycon relies on the serial port to be initialized by the firmware
->>>>>>> and/or bootloader.  Linux is not aware of any hardware dependencies that
->>>>>>> must be met to keep the port working, and thus cannot guarantee they
->>>>>>> stay met, until the full serial driver takes over.
->>>>>>>
->>>>>>> E.g. all unused clocks and unused PM Domains are disabled in a late
->>>>>>> initcall.  As this happens after the full serial driver has taken over,
->>>>>>> the serial port's clock and/or PM Domain are no longer deemed unused,
->>>>>>> and this is typically not a problem.
-> 
-> Let's call this "Case A".
-> 
->>>>>>>
->>>>>>> However, if the serial port's clock or PM Domain is shared with another
->>>>>>> device, and that other device is runtime-suspended before the full
->>>>>>> serial driver has probed, the serial port's clock and/or PM Domain will
->>>>>>> be disabled inadvertently.  Any subsequent serial console output will
->>>>>>> cause a crash or system lock-up.  E.g. on R/SH-Mobile SoCs, the serial
->>>>>>> ports share their PM Domain with several other I/O devices.  After the
->>>>>>> use of pwm (Armadillo-800-EVA) or i2c (KZM-A9-GT) during early boot,
->>>>>>> before the full serial driver takes over, the PM Domain containing the
->>>>>>> early serial port is powered down, causing a lock-up when booted with
->>>>>>> "earlycon".
-> 
-> Let's call this "Case B".
-> 
->>>>>>
->>>>>> Thanks for the detailed description of the problem! As pointed out in
->>>>>> regards to another similar recent patch [1], this is indeed a generic
->>>>>> problem, not limited to the serial console handling.
->>>>>>
->>>>>> At Linaro Connect a few weeks ago I followed up with Saravana from the
->>>>>> earlier discussions at LPC last fall. We now have a generic solution
->>>>>> for genpd drafted on plain paper, based on fw_devlink and the
->>>>>> ->sync_state() callback. I am currently working on the genpd series,
->>>>>> while Saravana will re-spin the series (can't find the link to the
->>>>>> last version) for the clock framework. Ideally, we want these things
->>>>>> to work in a very similar way.
->>>>>>
->>>>>> That said, allow me to post the series for genpd in a week or two to
->>>>>> see if it can solve your problem too, for the serial console.
->>>>>
->>>>> Both the genpd and the clock solutions will make suppliers depend on all
->>>>> their consumers to be probed, right?
->>>>>
->>>>> I think it is a solution, and should be worked on, but it has the
->>>>> drawback that suppliers that have consumers that will possibly never be
->>>>> probed, will also never be able to turn off unused resources.
->>>>>
->>>>> This was specifically the case with the TI ti-sci pmdomain case I was
->>>>> looking at: the genpd driver (ti_sci_pm_domains.c) provides a lot of
->>>>> genpds for totally unrelated devices, and so if, e.g., you don't have or
->>>>> don't want to load a driver for the GPU, all PDs are affected.
->>>>>
->>>>> Even here the solutions you mention will help: instead of things getting
->>>>> broken because genpds get turned off while they are actually in use, the
->>>>> genpds will be kept enabled, thus fixing the breakage. Unfortunately,
->>>>> they'll be kept enabled forever.
->>>>>
->>>>> I've been ill for quite a while so I haven't had the chance to look at
->>>>> this more, but before that I was hacking around a bit with something I
->>>>> named .partial_sync_state(). .sync_state() gets called when all the
->>>>> consumers have probed, but .partial_sync_state() gets called when _a_
->>>>> consumer has been probed.
->>>>>
->>>>> For the .sync_state() things are easy for the driver, as it knows
->>>>> everything related has been probed, but for .partial_sync_state() the
->>>>> driver needs to track resources internally. .partial_sync_state() will
->>>>> tell the driver that a consumer device has probed, the driver can then
->>>>> find out which specific resources (genpds in my case) that consumer
->>>>> refers to, and then... Well, that's how far I got with my hacks =).
->>>>>
->>>>> So, I don't know if this .partial_sync_state() can even work, but I
->>>>> think we do need something more on top of the .sync_state().
->>>>
->>>> Thanks for the update!
->>>>
->>>> You certainly have a point, but rather than implementing some platform
->>>> specific method, I think we should be able enforce the call to
->>>> ->sync_state(), based upon some condition/timeout - and even if all
->>>> consumers haven't been probed.
->>>
->>> Hmm, I think that was already implemented in some of the serieses out
->>> there (or even in mainline already?), as I remember doing some
->>> experiments with it. I don't like it much, though.
->>>
->>> With a simple timeout, it'll always be just a bit too early for some
->>> user (nfs mount took a bit more time than expected -> board frozen).
->>>
->>> The only condition I can see that would somewhat work is a manual
->>> trigger from the userspace. The boot scripts could then signal the
->>> kernel when all the modules have been loaded and probably a suitable,
->>> platform/use case specific amount of time has passed to allow the
->>> drivers to probe.
+> On 6/20/2024 6:26 PM, Dhananjay Ugwekar wrote:
+>> Currently the energy-cores event in the power PMU aggregates energy
+>> consumption data at a package level. On the other hand the core energy
+>> RAPL counter in AMD CPUs has a core scope (which means the energy
+>> consumption is recorded separately for each core). Earlier efforts to add
+>> the core event in the power PMU had failed [1], due to the difference in
+>> the scope of these two events. Hence, there is a need for a new core scope
+>> PMU.
 >>
->> This is also already supported in mainline.
+>> This patchset adds a new "power_per_core" PMU alongside the existing
+>> "power" PMU, which will be responsible for collecting the new
+>> "energy-per-core" event.
 >>
->> Devices with sync_state() implementations (once Ulf adds it) will have
->> a state_synced file in sysfs. It shows where it has been called yet or
->> not. But you can also echo 1 into it to force the sync_state()
->> callback (only if it hasn't been called already). So, yeah, all
->> methods of handling this are available if you implement the
->> sync_state() callback.
+>> Tested the package level and core level PMU counters with workloads
+>> pinned to different CPUs.
 >>
->> By default it's all strict (wait till all consumers probe
->> successfully). But you can set it to timeout (fw_devlink.sync_state).
->> And you also have the option I mentioned above that you can use with
->> both cases.
+>> Results with workload pinned to CPU 1 in Core 1 on an AMD Zen4 Genoa
+>> machine:
+>>
+>> $ perf stat -a --per-core -e power_per_core/energy-per-core/ sleep 1
 > 
-> So the idea is to disable unused genpds and clocks from the genpd
-> resp. clock's driver .sync_state() callback, instead of from a late
-> initcall?  That would indeed solve issues related to "Case A".
+> When testing this on a 2P 3rd Generation EPYC System (2 x 64/128T), I
+> ran into an issue where it seems like the energy reporting for the
+> system is coming from the second socket. Following are the CPUs on each
+> socket of the system:
 > 
-> However, how to solve "Case B"? Ignore disabling genpds or clocks
-> before .sync_state() callback() has been called?
-> That would cause issues for cases where the clock must be disabled,
-> cfr.
->      "[PATCH RFC 0/3] Add clk_disable_unprepare_sync()"
->      https://lore.kernel.org/all/20240131160947.96171-1-biju.das.jz@bp.renesas.com/
->      "[PATCH v3 0/3] Add clk_poll_disable_unprepare()"
->      https://lore.kernel.org/linux-renesas-soc/20240318110842.41956-1-biju.das.jz@bp.renesas.com/
+>     Node 0: 0-63,   128-191
+>     Node 1: 64-127, 192-255
 > 
->>> It just feels a bit too much of a "let's hope this work" approach.
->>>
->>> That said, the timeout/condition is probably acceptable for many cases,
->>> where turning off a resource forcefully will just result in, say, a
->>> temporarily blanked display, or something else that gets fixed if and
->>> when the proper driver is probed.
->>>
->>> Unfortunately, here with the case I have, the whole board gets halted if
->>> the display subsystem genpd is turned off and the display driver is
->>> loaded after that.
+> Following are the experiments I ran:
 > 
-> Tomi: Do you have more details? The genpd must be controlling something
-> critical that must never be turned off, or perhaps the display driver
-> lacks some initialization?
+>   $ # Run a busy loop on each thread of the first socket
+>   $ for i in `seq 0 63` `seq 128 191`; do taskset -c $i ~/scripts/loop & done
+>   $ sudo perf stat -a --per-core -e power_per_core/energy-per-core/ -- sleep 5
+> 
+>   S0-D0-C0              1               0.00 Joules power_per_core/energy-per-core/
+>   S0-D0-C1              1               0.00 Joules power_per_core/energy-per-core/
+>   S0-D0-C2              1               0.00 Joules power_per_core/energy-per-core/
+>   S0-D0-C3              1               0.00 Joules power_per_core/energy-per-core/
+>   ...
+>   S0-D0-C63             1               0.00 Joules power_per_core/energy-per-core/
+>   S1-D1-C0              1               0.00 Joules power_per_core/energy-per-core/
+>   S1-D1-C1              1               0.00 Joules power_per_core/energy-per-core/
+>   S1-D1-C2              1               0.00 Joules power_per_core/energy-per-core/
+>   S1-D1-C3              1               0.00 Joules power_per_core/energy-per-core/
+>   ...
+>   S1-D1-C63             1               0.00 Joules power_per_core/energy-per-core/
+> 
+> From the energy data, it looks as if the system is entirely idle.
+> 
+> If I repeat the same, pinning the running busy loop on the threads of
+> second socket, I see the following:
+> 
+>   $ # Run a busy loop on each thread of the second socket
+>   $ for i in `seq 64 127` `seq 192 255`; do taskset -c $i ~/scripts/loop & done
+>   $ sudo perf stat -a --per-core -e power_per_core/energy-per-core/ -- sleep 5
+> 
+>   S0-D0-C0              1              11.79 Joules power_per_core/energy-per-core/
+>   S0-D0-C1              1              11.80 Joules power_per_core/energy-per-core/
+>   S0-D0-C2              1              11.90 Joules power_per_core/energy-per-core/
+>   S0-D0-C3              1              11.88 Joules power_per_core/energy-per-core/
+>   ...
+>   S0-D0-C63             1              11.76 Joules power_per_core/energy-per-core/
+>   S1-D1-C0              1              11.81 Joules power_per_core/energy-per-core/
+>   S1-D1-C1              1              11.80 Joules power_per_core/energy-per-core/
+>   S1-D1-C2              1              11.90 Joules power_per_core/energy-per-core/
+>   S1-D1-C3              1              11.88 Joules power_per_core/energy-per-core/
+>   ...
+>   S1-D1-C63             1              11.76 Joules power_per_core/energy-per-core/
+> 
+> The whole system seems to be busy this time around. I've verified that
+> only half the system is busy using htop in either case.
+> 
+> Running some more experiments, I see the following:
+> 
+>   $ taskset -c 1 ~/scripts/loop& # First thread from Core 1, Socket
+>   $ sudo perf stat -a --per-core -e power_per_core/energy-per-core/ -- sleep 5
+> 
+>   S0-D0-C0              1               0.02 Joules power_per_core/energy-per-core/
+>   S0-D0-C1              1               0.21 Joules power_per_core/energy-per-core/
+>   S0-D0-C2              1               0.20 Joules power_per_core/energy-per-core/
+>   S0-D0-C3              1               0.00 Joules power_per_core/energy-per-core/
+>   ...
+>   (Seemingly idle system)
+> 
+> 
+>   $ taskset -c 65 ~/scripts/loop&
+>   $ sudo perf stat -a --per-core -e power_per_core/energy-per-core/ -- sleep 5
+> 
+>   S0-D0-C0              1               0.01 Joules power_per_core/energy-per-core/
+>   S0-D0-C1              1              16.73 Joules power_per_core/energy-per-core/
+>   S0-D0-C2              1               0.00 Joules power_per_core/energy-per-core/
+>   S0-D0-C3              1               0.00 Joules power_per_core/energy-per-core/
+>   ...
+>   S0-D0-C63             1               0.00 Joules power_per_core/energy-per-core/
+>   S1-D1-C0              1               0.01 Joules power_per_core/energy-per-core/
+>   S1-D1-C1              1              16.73 Joules power_per_core/energy-per-core/
+>   S1-D1-C2              1               0.00 Joules power_per_core/energy-per-core/
+>   S1-D1-C3              1               0.00 Joules power_per_core/energy-per-core/
+>   ...
+>   S1-D1-C63             1               0.00 Joules power_per_core/energy-per-core/
+> 
+>   (Core 1 from both sockets look busy reporting identical energy
+>    values)
+> 
+> Hope it helps narrow down the issue.
 
-I don't know the exact HW level details. It may be a HW bug or possibly 
-a firmware issue. But what I see is simple:
+I think my assumption that topology_core_id() will return a unique core ID 
+across the system might not be correct. It seems the core ID is unique only
+within a package, will fix this in the next version.
 
-If the display subsystem is powered and a video output is enabled, 
-turning off the PD causes the display subsystem to go to a bad state, 
-after which the next register access will halt the cpu.
+Thanks a lot for testing and helping narrow down the issue!
 
-This happens quite easily if the bootloader has enabled a display: when 
-the kernel's tidss driver probes, the device framework will make sure 
-the PD is enabled (which is fine, it's basically a no-op). But if the 
-tidss returns an error, like EPROBE_DEFER, the device framework will 
-disable the PD. When the tidss driver probes again later, it will cause 
-a halt at a register access.
+Regards,
+Dhananjay
 
-  Tomi
-
+> >>
+>>   Performance counter stats for 'system wide':
+>>
+>> S0-D0-C0         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C1         1          5.72 Joules power_per_core/energy-per-core/
+>> S0-D0-C2         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C3         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C4         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C5         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C6         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C7         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C8         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C9         1          0.02 Joules power_per_core/energy-per-core/
+>> S0-D0-C10        1          0.02 Joules power_per_core/energy-per-core/
+>>
+>> [1]: https://lore.kernel.org/lkml/3e766f0e-37d4-0f82-3868-31b14228868d@linux.intel.com/
+>>
+>> This patchset applies cleanly on top of v6.10-rc4 as well as latest
+>> tip/master.
+> 
+> P.S. I tested these changes on top of tip:perf/core
+> 
+>>
+>> [..snip..]
+>>
+> 
 
