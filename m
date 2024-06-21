@@ -1,100 +1,215 @@
-Return-Path: <linux-pm+bounces-9731-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9732-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A871C911B04
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 08:12:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9578C911B56
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 08:19:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29534B23934
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 06:12:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B659283B1F
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 06:18:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4393A16727F;
-	Fri, 21 Jun 2024 06:11:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586F3155CAC;
+	Fri, 21 Jun 2024 06:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XGDULRak"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="dz96bK2r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C44C1649A8;
-	Fri, 21 Jun 2024 06:11:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E73912EBE7
+	for <linux-pm@vger.kernel.org>; Fri, 21 Jun 2024 06:16:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718950297; cv=none; b=rFaBth7bwJ2c+1Yb01eBLIYyLA0hcMYcaNW94N2EdCRMD+1galiMWel3Ntgoi6FQuAx4/tuOYCTriEi4RaZC9hE9y4I3YzU1EJMFPMtY2wuDLZJy5DtUlZDV7l/rlU8b/rAkvwvqhqTANPKvC9AFfB3UlyISCGOogQFQrMrWXH8=
+	t=1718950595; cv=none; b=UPvn5LmVt6vYVrxLrRi6gZsJwlY/0JZqk2rqvF72TF8/EKjNc4LkazhgzYudNyoBEdtFmbTawzn6keHq4JSdQ2lCp2MgAb8dvXdEhBXAu2BAcDv1Z1LyxxFLTtWv9VhqTYQOBv+bna2pglDWOLInrlTeUrGN3y+WesaQOMtS/AI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718950297; c=relaxed/simple;
-	bh=qfGcRqMiu9FQBxvn+pv49tvvllvHEGuZK1OY/bR0D4s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GT+/uu8yo09sO8lsFJ0KZrJjXlsVa1CKfMGt95eN+yLKHNrlu1fSCVkM/2QQgT0YhjkdiEJq4oenPN76aRJ0HN8WcxctnwVSbnfZqEINy4VHts3/FO0UWilABI/mN8kN0uEliDCda+gVKa0QvhcxKoieKOtN0BrawsKK4NzLZgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XGDULRak; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77582C4AF08;
-	Fri, 21 Jun 2024 06:11:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718950296;
-	bh=qfGcRqMiu9FQBxvn+pv49tvvllvHEGuZK1OY/bR0D4s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XGDULRakYf5AfYBT6ercKX47nyi1BiSYUHa8r6m0zZZ2xwKARmDUYXA7zuNjxi7bn
-	 unZVKSyNxKhvVq4f4Exo8FrYwk/hSd0pKQDz8OdvSLPevkd38fXWQ8Mpyu4yLqNytn
-	 811voikjZFsMZIPByOitlJZQ610UCWk++q7OFR35adGzQYT70wghd7ZW1HYZje8s7s
-	 Gx4vmZpXiU/rqjho8Tvjs/MCd+3AbB/sPJHKUV9HW9cQmcM11hw/el0kvU17y0FiWV
-	 mlSvKJcySZ+b/7ozSVCQrCrJ7cGpw1yeulvqwScrpIHZs4biggD+UQo8ivNYG2YB+7
-	 Zo9h4On62kNEw==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	Nikita Travkin <nikita@trvn.ru>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH v7 0/6] power: supply: Lenovo Yoga C630 EC
-Date: Fri, 21 Jun 2024 01:11:18 -0500
-Message-ID: <171895028796.12506.1483771807923414434.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240614-yoga-ec-driver-v7-0-9f0b9b40ae76@linaro.org>
-References: <20240614-yoga-ec-driver-v7-0-9f0b9b40ae76@linaro.org>
+	s=arc-20240116; t=1718950595; c=relaxed/simple;
+	bh=Cq/UPH00Rc+EV+zEnuZTT1juz30n/517vwf08ycuRi0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dHF++7mwgTnIsYTUCkRuqohHJeJ+V9dTW01OqpT0T6qoRwnKRdcb8fgmwPQaUERHehcz03ziTxd+tYUPKLAAtc59f4AgaDzN+kgI3FWA7ZzmeXmSN1yS01agXU0iZD7iYu539sNEh+zOE1QVdznTIeODd2QXjfQHvVos+RAN7gM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=dz96bK2r; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a6f85f82ffeso191735866b.0
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2024 23:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1718950591; x=1719555391; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BnZ7fy5EjAsmRc3C7nshYtXKIZAoTD46hBI3kMrPlkE=;
+        b=dz96bK2rLAZdlD18eTvZV2GoXFoPMFHIt0Hop6K0BG18qDiB3NqN+Ebix2iPrmejrQ
+         f7JXI4cBEhyGeVNp+VmVl9ffMWiVdFP5ra08dRo81Sr/2+aO5ChMROpxuo1TypJXIh4e
+         qoGVSyHwMfXB6atZQwpyVPn6VhMh0ZIy8R0tzryNmgCh7qA2+N0rzZ3tpREajs1mdnqk
+         fbiJa+scDeecteqznz9xQdr22HQbeb40dh/3lCXMnv22qfFTvebOsr7tlAN9/jbk2S01
+         WqMK+zmgOAS55PXrEdR35vxkbni1Xa+5HnPMghfM3Uov95OeeKrMkaBkwWK3/3G0TQQy
+         gbqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718950591; x=1719555391;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BnZ7fy5EjAsmRc3C7nshYtXKIZAoTD46hBI3kMrPlkE=;
+        b=EQkr9XXMHFwsVGhqKMJ4RIkEAvBpxARPMze7kPebUBPvt1Q73hd26U0fMgi4XOm2cn
+         CYQm4zGmJpddb6ZctXQYU62cCoeYznyns3SiskawHsZYqmQp0w8Qsa44um/+iFLAYP5a
+         MndeUc6AD4dabL9UT7dJCRtlUnfTd49tg2PMEOjsycDkmSIrdFHH+NcYUcUKjngKbxJY
+         EW+Bf+UGMkAmyJo3jXGegPVw+VkFxoiYEcJCuffinn36R/vYyxFE4PRpxu667gayDVQy
+         JwXj4Uy8EcrFy4aE7wq4gP0uLsfoP4VolxZxxXTSthrzGeV7WkPM7N+j4hRNXVmfsj6r
+         ZN9w==
+X-Forwarded-Encrypted: i=1; AJvYcCVuU0D77gmhWHS7e6VybCVNw/jAOgSX+8ZFpxVQProbyXaBVIVwS+TvkWG4DZm9ITlBlj09bCCwgFDUkE4OYcVpTS7+v84anKI=
+X-Gm-Message-State: AOJu0YzUEnUN+ammwtm25B+U0b4tHcsg5Ji5HSCdcKlUgo2deFmj5+i1
+	A396cb8Zpn2WGj0wjt+ePxMQlqxY8J3TBLA1/HVzI9V2M5JvZGq3MjnlNE6Uz+U=
+X-Google-Smtp-Source: AGHT+IFTFPJK35HIe1HrAGcCFLN/Hy20XkeKNFw3qyFwpGwn1f2DcRTFwd102/VZFLJOiyCPaJs9Mw==
+X-Received: by 2002:a17:906:f289:b0:a6f:1839:ed40 with SMTP id a640c23a62f3a-a6fab7d6bb1mr383374766b.73.1718950590331;
+        Thu, 20 Jun 2024 23:16:30 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.70])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fcf48a220sm46097066b.60.2024.06.20.23.16.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jun 2024 23:16:29 -0700 (PDT)
+Message-ID: <ea1d16bc-832f-4401-baa6-d4dd10f53612@tuxon.dev>
+Date: Fri, 21 Jun 2024 09:16:28 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/3] watchdog: rzg2l_wdt: Keep the clocks prepared
+Content-Language: en-US
+To: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc: ulf.hansson@linaro.org, wim@linux-watchdog.org, linux@roeck-us.net,
+ rafael@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, geert+renesas@glider.be,
+ linux-renesas-soc@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240619120920.2703605-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240619120920.2703605-3-claudiu.beznea.uj@bp.renesas.com>
+ <CA+V-a8v7hxhhiT4X28kKJ5yTuMahCuCUWX_nFKd4cWL9GAWxug@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CA+V-a8v7hxhhiT4X28kKJ5yTuMahCuCUWX_nFKd4cWL9GAWxug@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+Hi, Prabhakar,
 
-On Fri, 14 Jun 2024 02:43:37 +0300, Dmitry Baryshkov wrote:
-> This adds binding, driver and the DT support for the Lenovo Yoga C630
-> Embedded Controller, to provide battery information.
+On 20.06.2024 18:31, Lad, Prabhakar wrote:
+> Hi Claudiu,
 > 
-> Support for this EC was implemented by Bjorn, who later could not work
-> on this driver. I've picked this patchset up and updated it following
-> the pending review comments.
+> Thank you for the patch.
 > 
-> [...]
+> On Thu, Jun 20, 2024 at 9:29 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>>
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> The watchdog restart handler is called with interrupts disabled. In
+>> rzg2l_wdt_restart() we call clk_prepare_enable() to enable the watchdog
+>> clocks. The prepare part of clk_prepare_enable() may sleep. Sleep in
+>> atomic context should not happen. The clock drivers for all the
+>> micro-architectures where the RZ/G2L watchdog driver is used are not
+>> implementing struct clk_ops::prepare(). Even so, to be sure we are
+>> not hitted by this at some point, keep the watchdog clocks prepared
+>> and only enable them in restart handler. It is guaranteed that
+>> clk_enable() can be called in atomic context.
+>>
+>> Reported-by: Ulf Hansson <ulf.hansson@linaro.org>
+>> Closes: https://lore.kernel.org/all/CAPDyKFq1+cL1M9qGY0P58ETHUZHGymxQL0w92emUJPMe7a_GxA@mail.gmail.com
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>> ---
+>>  drivers/watchdog/rzg2l_wdt.c | 31 ++++++++++++++++++++++++++-----
+>>  1 file changed, 26 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+>> index 2a35f890a288..6e3d7512f38c 100644
+>> --- a/drivers/watchdog/rzg2l_wdt.c
+>> +++ b/drivers/watchdog/rzg2l_wdt.c
+>> @@ -166,8 +166,8 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
+>>         struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+>>         int ret;
+>>
+>> -       clk_prepare_enable(priv->pclk);
+>> -       clk_prepare_enable(priv->osc_clk);
+>> +       clk_enable(priv->pclk);
+>> +       clk_enable(priv->osc_clk);
+>>
+> I think we need to add a check before enabling the clocks:
+> 
+> if (!watchdog_active(wdev)) {
 
-Applied, thanks!
+Agree, this should be better.
 
-[5/6] arm64: dts: qcom: sdm845: describe connections of USB/DP port
-      commit: 1ef3a30f4dc953a8da7aa68ee4658dc7c3710aac
-[6/6] arm64: dts: qcom: c630: Add Embedded Controller node
-      commit: 060a1ebd91c1f1bdce8433d559f214204b835add
+>          clk_enable(priv->pclk);
+>          clk_enable(priv->osc_clk);
+> }
+> 
+>>         if (priv->devtype == WDT_RZG2L) {
+>>                 ret = reset_control_deassert(priv->rstc);
+>> @@ -226,11 +226,28 @@ static const struct watchdog_ops rzg2l_wdt_ops = {
+>>         .restart = rzg2l_wdt_restart,
+>>  };
+>>
+>> +static int rzg2l_clks_prepare(struct rzg2l_wdt_priv *priv)
+>> +{
+>> +       int ret;
+>> +
+>> +       ret = clk_prepare(priv->pclk);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       ret = clk_prepare(priv->osc_clk);
+>> +       if (ret)
+>> +               clk_unprepare(priv->pclk);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>>  static void rzg2l_wdt_pm_disable(void *data)
+>>  {
+>> -       struct watchdog_device *wdev = data;
+>> +       struct rzg2l_wdt_priv *priv = data;
+>>
+>> -       pm_runtime_disable(wdev->parent);
+>> +       pm_runtime_disable(priv->wdev.parent);
+>> +       clk_unprepare(priv->osc_clk);
+>> +       clk_unprepare(priv->pclk);
+>>  }
+>>
+> All the above chunk can go away if we use devm_clk_get_prepared()
+> while requesting the clocks in the probe.
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Indeed, I missed devm_clk_get_prepared().
+
+Thank you for your review,
+Claudiu Beznea
+
+> 
+> Cheers,
+> Prabhakar
+> 
+>>  static int rzg2l_wdt_probe(struct platform_device *pdev)
+>> @@ -275,6 +292,10 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
+>>
+>>         priv->devtype = (uintptr_t)of_device_get_match_data(dev);
+>>
+>> +       ret = rzg2l_clks_prepare(priv);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>>         pm_runtime_enable(&pdev->dev);
+>>
+>>         priv->wdev.info = &rzg2l_wdt_ident;
+>> @@ -287,7 +308,7 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
+>>
+>>         watchdog_set_drvdata(&priv->wdev, priv);
+>>         dev_set_drvdata(dev, priv);
+>> -       ret = devm_add_action_or_reset(&pdev->dev, rzg2l_wdt_pm_disable, &priv->wdev);
+>> +       ret = devm_add_action_or_reset(&pdev->dev, rzg2l_wdt_pm_disable, &priv);
+>>         if (ret)
+>>                 return ret;
+>>
+>> --
+>> 2.39.2
+>>
+>>
 
