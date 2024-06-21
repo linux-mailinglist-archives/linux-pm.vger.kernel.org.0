@@ -1,326 +1,171 @@
-Return-Path: <linux-pm+bounces-9748-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9749-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64DB7911F46
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 10:49:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEAF591200B
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 11:05:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14D4B28B5A5
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 08:49:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1B251C230C1
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2024 09:05:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E60716D9B3;
-	Fri, 21 Jun 2024 08:49:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C9816D9AE;
+	Fri, 21 Jun 2024 09:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="p4RVrMHF"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="XSVkVAVA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2076.outbound.protection.outlook.com [40.107.102.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805F518E20;
-	Fri, 21 Jun 2024 08:49:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718959775; cv=fail; b=hBSBfUNB2akBiziloc8y8KkR6Kinna8wRsJeCRrygCputS6RIf68I7+xdZSXAQSAwdfasvdBxbNKNmzDXybYvwKdnOzR59SYU0dsuzvdUrmhmeKizDtyqaWGadNJBmUBEGqTpdyHthWDtxzAPY4BZClIms8m49BFIP6jzkijrJM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718959775; c=relaxed/simple;
-	bh=MmdH05nfOHg8jrqVZQ/8kylZ7y+AsywzZLlNYLm2JcY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=sI2dK2v4b1DT68V5O4RY53XCoB7MwSGthbGJ91xrrQsfbN8eRvMlVuR+xenU1qgnCuIWxeY5bByRgXkiaFl8eVC7I9RhZOB1Hq8+wN+2yDE54lEE/0iYWLfmXihLkx3Da8J8RQUevYQ+cs8HJwRV4kk14teWI9SNjduK9ulkK7Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=p4RVrMHF; arc=fail smtp.client-ip=40.107.102.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IWhLyZD4YrdX9thCsNMqCVzBXuBtiwjoiEU9SA8rPht2wmxZWroFPtF1VoAI7YkUE9lOI8jPJdCGtUw2W57i3H2uGURqidE+twKwgxKU14PRXTM+JGO/3ryHXAjdnsO67P9M0CaqTZ3cyp89DizFN8rWgsiBuPLs5iO3OfNoSZK6tQidnrGA8CuTySmd5kM9zfbrBy74cCEKN7n3421/QUUbzR9U8o5MJ42cfq0FJfTOG8uNw3zPA/4uirVEMbQQ+8Dulyqs6Fmpa/2oS42AQ80EpKUN7IyhiSTagvkqhLyVBL+lyQQhsHGBGl3L6vkJxztiJuYBCzUs3frE+JCd+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Sq7s3a/2x2czjTCy0TZa26wKrn/KS+jEwew+cP5hH6A=;
- b=XOts1OunwbgL6Hr41fBbMQmZIxfh3C021rJcqBL7mputmVVCwp2DIpfg+pqyQRwIPYZua9m9cq2tKqyA1hTI5z9UPJ61Ry7JaFFOBmxMb1x/syAXCPQ0WZOtu9BmgZ97pkm4zhF5nqD1qQ9C4NTzHAZoriLSdLXeaUgsRTpYouEXuP0Wpfa4qaUthcrq5EK3HR7Rz9XHSYndSFNPMk46FbSHJ5bnYeSDwz9kNoqDKI04Fn5n4L1yILYbbFygzQvngzQMsKTKqrFirq95ekU0JyECVpQOglzamFAyN1ir8lcHmr4tyIiMdxfaMnFfWNM8PrnbuM2d9lMeH0KBU/Jkmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Sq7s3a/2x2czjTCy0TZa26wKrn/KS+jEwew+cP5hH6A=;
- b=p4RVrMHFB07/7LQztLNRAVKPwXFQgdhVQHBHy0p5PQSDKYj5NELIBas8cYTqloi5dJiAAp8gYfZzC3TOi9ayfKKAFl6+4HO9F6wwCAKbkKZyb7YEsS+mspQxiO7trkOg6f6XgdFIsPswGzAYlkU38oSsCw2T4JyKlPH/siTL5vQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from LV8PR12MB9207.namprd12.prod.outlook.com (2603:10b6:408:187::15)
- by IA0PR12MB8086.namprd12.prod.outlook.com (2603:10b6:208:403::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.19; Fri, 21 Jun
- 2024 08:49:29 +0000
-Received: from LV8PR12MB9207.namprd12.prod.outlook.com
- ([fe80::3a37:4bf4:a21:87d9]) by LV8PR12MB9207.namprd12.prod.outlook.com
- ([fe80::3a37:4bf4:a21:87d9%7]) with mapi id 15.20.7698.017; Fri, 21 Jun 2024
- 08:49:28 +0000
-Message-ID: <79fd7c1d-2d3a-46b4-8a0c-56bfda036a94@amd.com>
-Date: Fri, 21 Jun 2024 14:19:13 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/9] Add per-core RAPL energy counter support for AMD
- CPUs
-To: K Prateek Nayak <kprateek.nayak@amd.com>
-Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, ananth.narayan@amd.com,
- gautham.shenoy@amd.com, ravi.bangoria@amd.com, sandipan.das@amd.com,
- linux-pm@vger.kernel.org, rui.zhang@intel.com, oleksandr@natalenko.name,
- peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
- namhyung@kernel.org, mark.rutland@arm.com,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com, tglx@linutronix.de,
- bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, kees@kernel.org,
- gustavoars@kernel.org
-References: <20240620125703.3297-1-Dhananjay.Ugwekar@amd.com>
- <a26b9774-f9da-763e-aebf-5d66a6d44377@amd.com>
-Content-Language: en-US
-From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
-In-Reply-To: <a26b9774-f9da-763e-aebf-5d66a6d44377@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0217.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:ea::15) To LV8PR12MB9207.namprd12.prod.outlook.com
- (2603:10b6:408:187::15)
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA2181C02;
+	Fri, 21 Jun 2024 09:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718960739; cv=none; b=hXnh2d5+7WmW4K0azgH7LZicVIHJgbu3lscEna+ty0d3XO2kzvpr95rGeEPmMQAEBtN9iKey1zhj9LXoPmLGBL+d2FbfnvI3h/tXtMa5kOniOrjjFsEDSnk0KLyHazhGJ/5BmE3rY7yIR1idaXt15tkRWf0IKTeJVvF9YBJsZLQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718960739; c=relaxed/simple;
+	bh=u3vsruWw3m6yWhKiI6k/Bp6Kz8w7AjrzmFbFuOLhVYk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d3KcjybfRXq1d05YzNrV7oWNbkWgLEj/TuiodzasvSHGks1opNoISRV9RaUThRXTOCgksuTxzrOPFjBdcr4WemLoA1Rn9RPcVW9hwt8Ijanyl9nXzkeICY/fFraqxX7+2N2mOkHfeWMPiznIMFlEv5Xp4M9b4bIJEGyPM9O15yM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=XSVkVAVA; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
+	Content-Type; bh=+JO4ER5bv9lk/4SoTsJyJX99aDmjGIgbmbYr1Bo8tQk=;
+	b=XSVkVAVAsNqJ+96Z02pJ31GaBFNz9YN//CbiAY3xSDXlzW9DZRGpWkfLE6D4t6
+	dY01mCKPdLNTRImIVZmlHRr2T4mAsCiZU1wET095pPdbUMdnFIB4fzTj6ORn8he6
+	RwFAJ91fUibN1xiEzWdCOrk51MvJGOB/qS+XfaX2POMzY=
+Received: from [192.168.1.26] (unknown [183.195.6.47])
+	by gzga-smtp-mta-g3-4 (Coremail) with SMTP id _____wDn1xgVQnVmlNLkEg--.36559S2;
+	Fri, 21 Jun 2024 17:04:23 +0800 (CST)
+Message-ID: <33c7587b-83a4-4be7-b00a-d30874df8c22@163.com>
+Date: Fri, 21 Jun 2024 17:04:21 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9207:EE_|IA0PR12MB8086:EE_
-X-MS-Office365-Filtering-Correlation-Id: ee05f329-03f6-4e31-8494-08dc91cf0f21
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230037|366013|376011|7416011|1800799021;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VFphT1pPbmFsZzBEcjJhVnFRU3pxWVd5UlhEdDhJZGtwY1JhS1ZDZUhUTjZN?=
- =?utf-8?B?WjN1RFJFd2QrZ3VmMmFlaHJJRTlQRENXZFpMRFNVVFNSc1l3UjFyTmtEZUc3?=
- =?utf-8?B?ZUUvcTByRENYcTRtRisvNEVYUUdROEEwRTAxZ2svK3lxYVVONHBTRnhYdFpF?=
- =?utf-8?B?KzZvK0wraXh2UlZYRUtYdDRrYmRWQ2RuYnNVcGRONDlibE5jcnZ5aHdxTmVP?=
- =?utf-8?B?MkF6VGYvRDFGSHdPNTNFcGtrWXZkY3RFZkZsSit5TVowWll6OHhtQTBSVGJU?=
- =?utf-8?B?U3V1eFNkUXhsdjc0cXpPdUVLZGduK2xFaHc3L2pMdVlCLzRpSnVsYVBJdENI?=
- =?utf-8?B?WlpmdW9Ja3J5U3BESllqMS9OaUZwUmxyZHFBcEVscm1SUGN1d0xDVUpQbzZR?=
- =?utf-8?B?TWs4dVJDWEVXVUJJZllFc0l1VlRuQTk4VDFEOTU0YURFUVdCYlAwUG1meVBv?=
- =?utf-8?B?Y0d2NGhnMm9ZajNxRllmczdMZzVWaWsxVW5oQnBMUHUrODVwTGtxc0ZVMVY3?=
- =?utf-8?B?SFM1eWtMZ2VUNUM3VXB3bVBCbWlVcGtHUGo5YXJ1cWk5YVpVOGJIeit3MDRB?=
- =?utf-8?B?YW1hNmhwR3RDdVJiaDROZW1BTWlRa24xRFhqb0RKQkVoekVDeDk3VjV0eERw?=
- =?utf-8?B?K3hSYWEwbWZLMXQwaFFVRE1GU3lacmFpZStxSVFwVDZjd2xGY1BKOHhxZVc4?=
- =?utf-8?B?WS9aWTZHc0liNEZXYTFDdVhDWVZDblE2eUtBWHZpUzNEZHZOcEM3dnNNcElK?=
- =?utf-8?B?RVpJMnBvZHJSbDBURFRpaThna2VvZ0ZyVlZvWGt2MXJtL3IyT3Q4dElCK3Vm?=
- =?utf-8?B?QlpOTXVzV09jTktrWGpKM0VPbFdqTWtDWitkZTgxK2ZBcmN1N3hCaE1DR21N?=
- =?utf-8?B?SXZYNjdFWDh0a1U2dlNtYUNqMWZMcUNSNElYNmhMQk1IazJrL1VBelJ0ZHAw?=
- =?utf-8?B?WkIzdDYvRjVDUHlSV1V3MVZXcWM1MGZSVkc2TFZ5OUp6MHoyeGFXYTVxS1JD?=
- =?utf-8?B?VjY1cFpxY09vU1V4aXBLNlRLbHBGQXZHTEFoNVRNYStYQU5mTnI2ZWNWRzNi?=
- =?utf-8?B?VC9uR3NkeUJzVWZXYXQ4ZTV4VlhqYnl0bmZSR1F6N3p5cnBFV3cwT3ZzanlK?=
- =?utf-8?B?NFFXRTVDQjBrNjNkTW9yVFY1Wk91dTUwN3pVbjFlcVdkQ1JyUUVQN2dsMkRT?=
- =?utf-8?B?N3VxUFlkaTJweVloZUNJZWdJTEtiQjdHTlZ0Y1JPR1VLODBiQUppS2h2d2Jw?=
- =?utf-8?B?aFhmL3NBdGhwditiT3VZYWR4dnRSSm03aHhyU2xEbWZoNnJ3c1BNaG5QbWNa?=
- =?utf-8?B?V3RqSWo0a2tRZ2Q3U1g5WDZLQ2FCV0c1QmVRanFobXRyVG9zN3NNMVY3RGlE?=
- =?utf-8?B?M0Y2bllXYUw1b1c1NW1tS1hsMlp3U2IwNm5VdENFMUF6ZTFLa2xmMlZEUFJr?=
- =?utf-8?B?VHlJMEVrMTJVaFBTVmZTZTFKeU9lVlNtQk92bjhyUmwzTFM5a3NSaisrRXRP?=
- =?utf-8?B?SWtqWEh1RlAwZ0R2WmhXSHB0WDNLbjBKenhYYXMwOEVhQldDa0VWMEh1NGly?=
- =?utf-8?B?QnMza1hWOHBlUjFpdVdkMlNubWhaSGJ1ZWp2UGE5UlN0OWVBZzZEQnBQekxr?=
- =?utf-8?B?UW92THVENkw4RVljdWNtV2w5M1BicXZzREFaalpJM092Ky9BcDRqOGNpSW5o?=
- =?utf-8?Q?87K4ddPliM/vCLN7mPE1?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9207.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(366013)(376011)(7416011)(1800799021);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?b2M5VVk4bW4wdFhtSVR4SGo3N0YrcVZEL2EzRHUvOG9xbEE3bHIxTUlWcGg1?=
- =?utf-8?B?MEgxTXR3TjVHTkRwL3RnUTJmd2Zmc255TDVZWDlvQmhSSTJUOVRpWVJlZDFr?=
- =?utf-8?B?alhtSndlVWFKS05JQ1NmbndZeFZtN0piVXhwRENpelNjcVdSWHJ3Rnp2b0Yw?=
- =?utf-8?B?aFNkaWRDaGNLSzlwUEZCaHZxVGFCQmhUWnhoa054b2FmYnJrSktyS2o0NE1q?=
- =?utf-8?B?eC83dXJvVldudlZmelhheWkyMGZvbFZIdStJTnNxQ1Y4Y3JMSHpyYnY0ZjhX?=
- =?utf-8?B?ZFRhVUdINUNhMnpqcmNNY2RTa3VUM0pyL0VVOFdyWUVkVGxrbllMdFZ4d3Yz?=
- =?utf-8?B?RndSaDlKaUpySFl0QUdTUzZrSjlqUkxyNTA1MlBsakovYWNKN0lQclQ0eEVp?=
- =?utf-8?B?RFVubkhpOHJWTjVLUVpEd1czU0JEWFZsMjkwWFpyYVh4N1FDeGlBOVQza2pV?=
- =?utf-8?B?dVl3emtOVENjVzgyNWVHdUVOcHN0Q3p5REpWZHpLNWRCT0hOTm40enZSaGZr?=
- =?utf-8?B?QVN5MTNkRmpEdDN1Z1BWQWhEUHdzNHlIa3k5N0dtRGJXd2ZGYTdGU05UZkZ1?=
- =?utf-8?B?UEdKK1JYQjVHVFNKT1ZHV2RWV2xoc3lwWmVLeWlGdVNuanJnUVlUSFlKdGpN?=
- =?utf-8?B?Ny92WExIL1BSNE5hMGlDRmloUjYyNHhqYzZIYXMyc04wRW1mcy9EKy94VmJ3?=
- =?utf-8?B?bDJkTEx0L3NqVWtqVzdRUHpRbEtqQkNSQmRKOS9jYlo5S0MwbHJ5WmdtSVd2?=
- =?utf-8?B?ZldaVWp3MzNDYUhzODNXckhpdVFXNlJvSTlyekhFRGNmSmpOMU1RcEU1dmlE?=
- =?utf-8?B?Z1h4TVM0NWZMRkZHK250dTJLbUwrKzR0cDRSZ1RBR2YvenFTZGpqK3FQWGRP?=
- =?utf-8?B?dUdGNVZtaUZkZ3ZpUXdGUzJwVnhwaWpxajEzWmJNRDNFQ2J3KzB4ZXdVcWxK?=
- =?utf-8?B?Q0pvcXpNSmxXbWplbnk4SmRCMnhnVjh3SUFxUVN0ZWdhbTBiMGtxL1Nnaldu?=
- =?utf-8?B?OGhyTUZiUEFjaDNCQWR5c0hTODZCVkhvUXV1ZDduL0xzMjNHMGNZQUg4b0hj?=
- =?utf-8?B?U1JXamFZMmJacjFmNU5DR1V0ZCtWbTJGbyt3Z2hVSzJBMXJqaGE1YkdFWXM2?=
- =?utf-8?B?dFpscmxZbDhMZjhpcXRyY0gyQzY5T0pEclp6cWVpdGFlK0tOaDZpSlJMUTA4?=
- =?utf-8?B?WXJFYXBQdUg5R3FmcUJyR3AzbWZja2dETDJmb0JHMUN0YzRXVGNxYUNhOTVl?=
- =?utf-8?B?TXhZQ2lhSElZaCs2dnRWNGE4NEZaS29jbVo1OERmcWJ3TElEeU9GcTdOenV3?=
- =?utf-8?B?Rmt3UWlaQ2lEcStLUzJWNnRJM0FCczdtRlh2T0lzdFp5dnBoeGM1VDVjeVZo?=
- =?utf-8?B?UGxINGdiMWcraWVmQ3U1ZHloNjJHUUpGZ0ZZUVBSWU50NmM2N3ltYXVENzlB?=
- =?utf-8?B?b2pKZjNZWGdvT3JRNEoyWkFMN2RJL2poWXY0Ym5OOUU4aHYvVEJaSlV1ZFcr?=
- =?utf-8?B?VVVNU3BzeHFjY25tZ1JqMFJCMkFTNm81NGZSV1VzOWhnT3pDR3lUbitFKzM3?=
- =?utf-8?B?cklRNHR5STB6ZWtuQzZJcUdWdzVBRW5xbVo2VmRPV1B1eHNFM0tTMnQ1a09i?=
- =?utf-8?B?Zk9CQ21ISGtKbzZzTlEzVk1tQ2lwQ0dmODZmd0FqTDZRU25CUlFpNjlwN1py?=
- =?utf-8?B?eGp6cFRTcFVJeE45UGo1TjdIUjJzY245VVcrcXFnL1g2aVhHT1ppZUpwNG9m?=
- =?utf-8?B?RU1lZUVSYStULy9hT1lIaWVmZDJ5QmdPZTlId29uQWlnYjU1VUQwMUhLZVhD?=
- =?utf-8?B?dlc2VmR4TXd3bW84R0xJWXJLMXc2aFZENXo3dVFKVjhmbDFFSXpTZ3VNbGxh?=
- =?utf-8?B?UndLMmlMZjBib2Z2aDRIWmtCdFIvR1Q0ZXIwWmxWSk12d2xWL1QzcWRJckNP?=
- =?utf-8?B?c0V6OUpKd2hva0hyd0MwUU1VbmdZZGpsdm9yVk5mTzlNM1RSNE9NZ2Yxb2Jt?=
- =?utf-8?B?cEVMTDVVdkpMbXhNMVhMSG0rMm5teVRYdWEydmJIUjRTcTJKK2E4Tm9seHBm?=
- =?utf-8?B?UWJ3TE9BRHhQNk9uL01vbmN3ZCtJbEJuY2U0OTZkZnBXS1QvUjIyRGUvTklD?=
- =?utf-8?Q?+Kix9wZNd9Tk56AXkc09qGbvj?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee05f329-03f6-4e31-8494-08dc91cf0f21
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9207.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2024 08:49:28.1465
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kVVjgr5FEX/pZMoSUD3jWL3XhyJCdFj/Pvb2DViy9l92Qaxv4QCS5SYIO1L4OmUtq2v/ItyaV6RIKy49AVQC2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8086
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 0/2] pwrseq: introduce the subsystem and first driver
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: patchwork-bot+bluetooth@kernel.org, marcel@holtmann.org,
+ luiz.dentz@gmail.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, robh@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, kvalo@kernel.org,
+ andersson@kernel.org, konrad.dybcio@linaro.org, lgirdwood@gmail.com,
+ broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+ bhelgaas@google.com, saravanak@google.com, geert+renesas@glider.be,
+ arnd@arndb.de, neil.armstrong@linaro.org, m.szyprowski@samsung.com,
+ elder@linaro.org, srinivas.kandagatla@linaro.org,
+ gregkh@linuxfoundation.org, abel.vesa@linaro.org, mani@kernel.org,
+ lukas@wunner.de, dmitry.baryshkov@linaro.org, amit.pundir@linaro.org,
+ wuxilin123@gmail.com, linux-bluetooth@vger.kernel.org,
+ netdev@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+ bartosz.golaszewski@linaro.org
+References: <20240605123850.24857-1-brgl@bgdev.pl>
+ <171889385036.4585.6482250630135606154.git-patchwork-notify@kernel.org>
+ <0b144517-4cc5-4c23-be57-d6f5323690ec@163.com>
+ <CAMRc=Mf2C4ywa+wQ6pcq5RtehQD00dDhzvS6sDcD8tAn=UypUA@mail.gmail.com>
+Content-Language: en-US
+From: Lk Sii <lk_sii@163.com>
+In-Reply-To: <CAMRc=Mf2C4ywa+wQ6pcq5RtehQD00dDhzvS6sDcD8tAn=UypUA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDn1xgVQnVmlNLkEg--.36559S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXrW7tr1rWw15KrW8XFy3CFg_yoW5CFW5pF
+	W3G3Z0kF4UJr18AF1jgw1fZFy2qw47Xw1fur1Dt3s8ZF90gr18tr1Sy34F9ry7urWI9r18
+	tFWjyrySgw48urDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRWmhrUUUUU=
+X-CM-SenderInfo: 5onb2xrl6rljoofrz/1tbiExoFNWXAlu3dLwAAsV
 
-Hello Prateek,
+On 2024/6/21 14:36, Bartosz Golaszewski wrote:
+> On Fri, Jun 21, 2024 at 3:14 AM Lk Sii <lk_sii@163.com> wrote:
+>>
+>>
+>>
+>> On 2024/6/20 22:30, patchwork-bot+bluetooth@kernel.org wrote:
+>>> Hello:
+>>>
+>>> This series was applied to bluetooth/bluetooth-next.git (master)
+>>> by Bartosz Golaszewski <bartosz.golaszewski@linaro.org>:
+>>>
+>> Hi luiz,
+>>
+>> i am curious why Bartosz is able to merge his changes into bluetooth
+>> development tree bluetooth-next directly.
+>>
+> 
+> This conversation is getting progressively worse...
+> 
+>> 1)
+>> his changes should belong to *POWER* scope instead of *Bluetooth*
+>> obviously, however, there are *NOT* any SOB tag from either power and
+>> bluetooth maintainer. these changes currently only have below Acked-by
+>> and Signed-off-by tags:
+>>
+>> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>
+> 
+> It's a new subsystem that has been discussed and reviewed for months
+> and thoroughly tested. Please refer to the cover letter under v8
+> linked in this thread. It's not related to power-management or
+> power-supply, it's its own thing but IMO the best place to put it is
+> under drivers/power/. And I will maintain it.
+> 
+>> 2)
+>> his changes have not merged into linus mainline tree yet.
+>>
+> 
+> This is why they are in next! They are scheduled to go in during the
+> upcoming merge window. But since changes belong in multiple trees, we
+> need a cross-tree merge.
+> 
+>> 3)
+>> perhaps, it is safer to pull his changes from linus mainline tree when
+>> merged than to merge into bluetooth-next firstly.
+>>
+> 
+> It's not safer at all, why would spending less time in next be safer?
+> 
+it seems this patch serial(new subsystem) does not depend on bluetooth
+and also does not belong to bluetooth subsystem, but have been contained
+by tip of bluetooth tree.
 
-On 6/21/2024 1:54 PM, K Prateek Nayak wrote:
-> Hello Dhananjay,
-> 
-> On 6/20/2024 6:26 PM, Dhananjay Ugwekar wrote:
->> Currently the energy-cores event in the power PMU aggregates energy
->> consumption data at a package level. On the other hand the core energy
->> RAPL counter in AMD CPUs has a core scope (which means the energy
->> consumption is recorded separately for each core). Earlier efforts to add
->> the core event in the power PMU had failed [1], due to the difference in
->> the scope of these two events. Hence, there is a need for a new core scope
->> PMU.
->>
->> This patchset adds a new "power_per_core" PMU alongside the existing
->> "power" PMU, which will be responsible for collecting the new
->> "energy-per-core" event.
->>
->> Tested the package level and core level PMU counters with workloads
->> pinned to different CPUs.
->>
->> Results with workload pinned to CPU 1 in Core 1 on an AMD Zen4 Genoa
->> machine:
->>
->> $ perf stat -a --per-core -e power_per_core/energy-per-core/ sleep 1
-> 
-> When testing this on a 2P 3rd Generation EPYC System (2 x 64/128T), I
-> ran into an issue where it seems like the energy reporting for the
-> system is coming from the second socket. Following are the CPUs on each
-> socket of the system:
-> 
->     Node 0: 0-63,   128-191
->     Node 1: 64-127, 192-255
-> 
-> Following are the experiments I ran:
-> 
->   $ # Run a busy loop on each thread of the first socket
->   $ for i in `seq 0 63` `seq 128 191`; do taskset -c $i ~/scripts/loop & done
->   $ sudo perf stat -a --per-core -e power_per_core/energy-per-core/ -- sleep 5
-> 
->   S0-D0-C0              1               0.00 Joules power_per_core/energy-per-core/
->   S0-D0-C1              1               0.00 Joules power_per_core/energy-per-core/
->   S0-D0-C2              1               0.00 Joules power_per_core/energy-per-core/
->   S0-D0-C3              1               0.00 Joules power_per_core/energy-per-core/
->   ...
->   S0-D0-C63             1               0.00 Joules power_per_core/energy-per-core/
->   S1-D1-C0              1               0.00 Joules power_per_core/energy-per-core/
->   S1-D1-C1              1               0.00 Joules power_per_core/energy-per-core/
->   S1-D1-C2              1               0.00 Joules power_per_core/energy-per-core/
->   S1-D1-C3              1               0.00 Joules power_per_core/energy-per-core/
->   ...
->   S1-D1-C63             1               0.00 Joules power_per_core/energy-per-core/
-> 
-> From the energy data, it looks as if the system is entirely idle.
-> 
-> If I repeat the same, pinning the running busy loop on the threads of
-> second socket, I see the following:
-> 
->   $ # Run a busy loop on each thread of the second socket
->   $ for i in `seq 64 127` `seq 192 255`; do taskset -c $i ~/scripts/loop & done
->   $ sudo perf stat -a --per-core -e power_per_core/energy-per-core/ -- sleep 5
-> 
->   S0-D0-C0              1              11.79 Joules power_per_core/energy-per-core/
->   S0-D0-C1              1              11.80 Joules power_per_core/energy-per-core/
->   S0-D0-C2              1              11.90 Joules power_per_core/energy-per-core/
->   S0-D0-C3              1              11.88 Joules power_per_core/energy-per-core/
->   ...
->   S0-D0-C63             1              11.76 Joules power_per_core/energy-per-core/
->   S1-D1-C0              1              11.81 Joules power_per_core/energy-per-core/
->   S1-D1-C1              1              11.80 Joules power_per_core/energy-per-core/
->   S1-D1-C2              1              11.90 Joules power_per_core/energy-per-core/
->   S1-D1-C3              1              11.88 Joules power_per_core/energy-per-core/
->   ...
->   S1-D1-C63             1              11.76 Joules power_per_core/energy-per-core/
-> 
-> The whole system seems to be busy this time around. I've verified that
-> only half the system is busy using htop in either case.
-> 
-> Running some more experiments, I see the following:
-> 
->   $ taskset -c 1 ~/scripts/loop& # First thread from Core 1, Socket
->   $ sudo perf stat -a --per-core -e power_per_core/energy-per-core/ -- sleep 5
-> 
->   S0-D0-C0              1               0.02 Joules power_per_core/energy-per-core/
->   S0-D0-C1              1               0.21 Joules power_per_core/energy-per-core/
->   S0-D0-C2              1               0.20 Joules power_per_core/energy-per-core/
->   S0-D0-C3              1               0.00 Joules power_per_core/energy-per-core/
->   ...
->   (Seemingly idle system)
-> 
-> 
->   $ taskset -c 65 ~/scripts/loop&
->   $ sudo perf stat -a --per-core -e power_per_core/energy-per-core/ -- sleep 5
-> 
->   S0-D0-C0              1               0.01 Joules power_per_core/energy-per-core/
->   S0-D0-C1              1              16.73 Joules power_per_core/energy-per-core/
->   S0-D0-C2              1               0.00 Joules power_per_core/energy-per-core/
->   S0-D0-C3              1               0.00 Joules power_per_core/energy-per-core/
->   ...
->   S0-D0-C63             1               0.00 Joules power_per_core/energy-per-core/
->   S1-D1-C0              1               0.01 Joules power_per_core/energy-per-core/
->   S1-D1-C1              1              16.73 Joules power_per_core/energy-per-core/
->   S1-D1-C2              1               0.00 Joules power_per_core/energy-per-core/
->   S1-D1-C3              1               0.00 Joules power_per_core/energy-per-core/
->   ...
->   S1-D1-C63             1               0.00 Joules power_per_core/energy-per-core/
-> 
->   (Core 1 from both sockets look busy reporting identical energy
->    values)
-> 
-> Hope it helps narrow down the issue.
+why not follow below merging produce?
+1) you send this patch serials to Linus to merge within linus mainline tree
+2) luiz then pull your changes from linus mainline tree.
 
-I think my assumption that topology_core_id() will return a unique core ID 
-across the system might not be correct. It seems the core ID is unique only
-within a package, will fix this in the next version.
-
-Thanks a lot for testing and helping narrow down the issue!
-
-Regards,
-Dhananjay
-
-> >>
->>   Performance counter stats for 'system wide':
->>
->> S0-D0-C0         1          0.02 Joules power_per_core/energy-per-core/
->> S0-D0-C1         1          5.72 Joules power_per_core/energy-per-core/
->> S0-D0-C2         1          0.02 Joules power_per_core/energy-per-core/
->> S0-D0-C3         1          0.02 Joules power_per_core/energy-per-core/
->> S0-D0-C4         1          0.02 Joules power_per_core/energy-per-core/
->> S0-D0-C5         1          0.02 Joules power_per_core/energy-per-core/
->> S0-D0-C6         1          0.02 Joules power_per_core/energy-per-core/
->> S0-D0-C7         1          0.02 Joules power_per_core/energy-per-core/
->> S0-D0-C8         1          0.02 Joules power_per_core/energy-per-core/
->> S0-D0-C9         1          0.02 Joules power_per_core/energy-per-core/
->> S0-D0-C10        1          0.02 Joules power_per_core/energy-per-core/
->>
->> [1]: https://lore.kernel.org/lkml/3e766f0e-37d4-0f82-3868-31b14228868d@linux.intel.com/
->>
->> This patchset applies cleanly on top of v6.10-rc4 as well as latest
->> tip/master.
-> 
-> P.S. I tested these changes on top of tip:perf/core
-> 
->>
->> [..snip..]
+>>> On Wed,  5 Jun 2024 14:38:48 +0200 you wrote:
+>>>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>>>
+>>>> Hi!
+>>>>
+>>>> These are the power sequencing patches sent separately after some
+>>>> improvements suggested by Bjorn Helgaas. I intend to pick them up into a
+>>>> new branch and maintain the subsystem from now on. I then plan to
+>>>> provide an immutable tag to the Bluetooth and PCI subsystems so that the
+>>>> rest of the C changes can be applied. This new branch will then be
+>>>> directly sent to Linus Torvalds for the next merge window.
+>>>>
+>>>> [...]
+>>>
+>>> Here is the summary with links:
+>>>   - [v9,1/2] power: sequencing: implement the pwrseq core
+>>>     https://git.kernel.org/bluetooth/bluetooth-next/c/249ebf3f65f8
+>>>   - [v9,2/2] power: pwrseq: add a driver for the PMU module on the QCom WCN chipsets
+>>>     https://git.kernel.org/bluetooth/bluetooth-next/c/2f1630f437df
+>>>
+>>> You are awesome, thank you!
 >>
 > 
+> Why are you top-posting anyway?
+> 
+it is caused by my bad mail client settings. thanks for reminder.
+> Bart
+
 
