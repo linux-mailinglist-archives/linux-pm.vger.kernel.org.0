@@ -1,52 +1,52 @@
-Return-Path: <linux-pm+bounces-9802-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9803-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D0C791327B
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 09:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 24FFC91327E
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 09:14:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 804BCB24F27
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 07:14:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E9E2B252E5
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 07:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A31914B095;
-	Sat, 22 Jun 2024 07:14:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 780D914B09F;
+	Sat, 22 Jun 2024 07:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="l+xIVo97"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="smE3l+DU"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E93537F8;
-	Sat, 22 Jun 2024 07:14:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1990C537F8;
+	Sat, 22 Jun 2024 07:14:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719040456; cv=none; b=NQ9ajdEExcKIu7nEA3+8fHjVzmkG5N+VnCGpvSNeOUDDu/zTIHIMMt3ywsWdETdHjae8EtE/Cx4Zexx6t4Z544U/Gze1+ppeSHwWPSzzJA3YNJZZ9cZICARX3fXB54qP/m9ZKVwglGCTyfmMn+Cekz+iz8eNF6tNo1p61MhsNJo=
+	t=1719040464; cv=none; b=medlVd0BhsPYWQ9HfcbfxgIGxdE01hWrIjbZEPOwXv/QqEhVTgpcdk3CONu/YLrruyQknTrbrec/Ac8O7YNrd0rohc1gkw/hGr0OCCgziybTCNfqNhrU46vRwxs2JCHDwseGuBhT/y0GsxYwVlDTK3RzqaP9C4hXk+n/msXGg8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719040456; c=relaxed/simple;
-	bh=ROtwTlkG5cpabYHy2Yp6KPPdQ7Q5s4LOJtozgevhba8=;
+	s=arc-20240116; t=1719040464; c=relaxed/simple;
+	bh=o+9+J9YMKQ5edY0HHEWToSepgGfJ24sYi1botHS2wM0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BewuSJLjmCnQnKPH5zHk+LS0nOOMU8ag5YcnX5tbLe7JPGhYcY1GMUVoQoIngmAdRYSVu5QbeFWB9YxGihHxcySAXiW5rkJQ2DCd78J3YGCc5nQsyzLdHGkztZOIHZEBCzibzkWRwUDVLJa5lpIWfz9BOt4KdrfHPvlFmg78/Dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=l+xIVo97; arc=none smtp.client-ip=80.12.242.16
+	 MIME-Version; b=NxL5B3kwefSn2jmWh4/tzhMPu4N24r83RYlKBjDeHznZlI3+JUkNSDq/xft0rEb0ni2PBQeG/se/h8t3GxD5pNRxbMxW4PTycP5je87aGC04ZvAL+ocV30LWp1zF1IMQiuOlqjScSGrNuniuKfydpWqPWAmV8nZF5a2SIfTzz1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=smE3l+DU; arc=none smtp.client-ip=80.12.242.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Received: from fedora.home ([86.243.222.230])
 	by smtp.orange.fr with ESMTPA
-	id KuntsjGzHYBZjKuo3snU8T; Sat, 22 Jun 2024 09:05:03 +0200
+	id KuntsjGzHYBZjKuo5snU8l; Sat, 22 Jun 2024 09:05:05 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1719039903;
-	bh=hkwN7e4nEYE8MOWatiktMuM7kfiZknW69Gg487q2Y7g=;
+	s=t20230301; t=1719039905;
+	bh=iP+T2nUGdzwqIY61OldE2CGAadfgcHPDOk3hUvLcllw=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=l+xIVo97ZQwQ2Rzu9nZe38QJHneGV5De3NYCSnp/F/F2oUeuw11HKwjDvaThw1NlC
-	 oFPptBag12wwq7LTWgsG8SJlkiuwKdbkuF8neIO+qhdQ9IxiJJX0Km62j+zBqmEAVb
-	 VB7IaQAL+IcC1PYEBPiZOm9r5zDfGFXNJ1u5blyRfPthZnfzvOF5BNR3hH0wBEJp2s
-	 q6GtIMnOtleVKfQXOncQF4KyyuUQvbVXnUDmbSxkTySXiaYYxCB4bvBHB/W02YuO4U
-	 ha8t5U//cKUjIKtO7vkonfooaosuIzv4M3GgHIOhiG0elPAgL/BPqdHnPgYx/gqV7F
-	 NDNzFam6OWmMA==
+	b=smE3l+DU7iZemJAaglX1DgD6ScomIRoESFyU8l4n845t8kflqLlW7e9RORM8/JoYa
+	 /v+3RR1wQ0ZswYIIVSHJbICfVNnBxZn8/c1F8GeL2s5c8Ohn89unngG+Wj1drjYRBP
+	 sw7kzJfrqvU/QbNhXvvPh0KjgRZsUyIHGkaYdsj3e8rvWnLKBv3lD07lBHKrndFSAI
+	 6Q8cmevwXOFU3p8W9iY7xGsXXinmDmk4GkDzGqU+VIIeh+F6i86OJpL+cUyJHqipcF
+	 +0JUQW9/s4rdubJNb6qq2LFoT8CyXtYbfbzIhiTxQwmhYWL6fU0I3YYMX/ymeZSnxX
+	 KE2PfGoMXGCDg==
 X-ME-Helo: fedora.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 22 Jun 2024 09:05:03 +0200
+X-ME-Date: Sat, 22 Jun 2024 09:05:05 +0200
 X-ME-IP: 86.243.222.230
 From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To: linus.walleij@linaro.org,
@@ -56,9 +56,9 @@ Cc: linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-janitors@vger.kernel.org,
 	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 2/3] power: supply: ab8500: Use iio_read_channel_processed_scale()
-Date: Sat, 22 Jun 2024 09:04:25 +0200
-Message-ID: <5668d73b92eb6318c7f094a9a8fa914c909485ca.1719037737.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 3/3] power: supply: ab8500: Clean some error messages
+Date: Sat, 22 Jun 2024 09:04:26 +0200
+Message-ID: <e7ac0fa83c6100cbe4e0efa90cf99291c2423b10.1719037737.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <cover.1719037737.git.christophe.jaillet@wanadoo.fr>
 References: <cover.1719037737.git.christophe.jaillet@wanadoo.fr>
@@ -70,109 +70,54 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Instead of rescaling current or voltage channels after the fact, use the
-dedicated scaling API. This should reduce any inaccuracies resulting from
-the scaling.
-
-This is also slightly more efficient as it saves a function call and a
-multiplication.
+There is an useless extra comma at the end of some error messages, remove
+them.
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-It is inspired by:
-  https://lore.kernel.org/all/20240620212005.821805-1-sean.anderson@linux.dev/
----
- drivers/power/supply/ab8500_charger.c | 28 +++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
+ drivers/power/supply/ab8500_charger.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
-index 4b0ad1b4b4c9..2f06b93682ac 100644
+index 2f06b93682ac..93181ebfb324 100644
 --- a/drivers/power/supply/ab8500_charger.c
 +++ b/drivers/power/supply/ab8500_charger.c
-@@ -487,7 +487,9 @@ static int ab8500_charger_get_ac_voltage(struct ab8500_charger *di)
- 
- 	/* Only measure voltage if the charger is connected */
- 	if (di->ac.charger_connected) {
--		ret = iio_read_channel_processed(di->adc_main_charger_v, &vch);
-+		/* Convert to microvolt, IIO returns millivolt */
-+		ret = iio_read_channel_processed_scale(di->adc_main_charger_v,
-+						       &vch, 1000);
+@@ -491,7 +491,7 @@ static int ab8500_charger_get_ac_voltage(struct ab8500_charger *di)
+ 		ret = iio_read_channel_processed_scale(di->adc_main_charger_v,
+ 						       &vch, 1000);
  		if (ret < 0) {
- 			dev_err(di->dev, "%s ADC conv failed,\n", __func__);
+-			dev_err(di->dev, "%s ADC conv failed,\n", __func__);
++			dev_err(di->dev, "%s ADC conv failed\n", __func__);
  			return ret;
-@@ -495,8 +497,7 @@ static int ab8500_charger_get_ac_voltage(struct ab8500_charger *di)
+ 		}
  	} else {
- 		vch = 0;
- 	}
--	/* Convert to microvolt, IIO returns millivolt */
--	return vch * 1000;
-+	return vch;
- }
- 
- /**
-@@ -541,7 +542,9 @@ static int ab8500_charger_get_vbus_voltage(struct ab8500_charger *di)
- 
- 	/* Only measure voltage if the charger is connected */
- 	if (di->usb.charger_connected) {
--		ret = iio_read_channel_processed(di->adc_vbus_v, &vch);
-+		/* Convert to microvolt, IIO returns millivolt */
-+		ret = iio_read_channel_processed_scale(di->adc_vbus_v,
-+						       &vch, 1000);
+@@ -546,7 +546,7 @@ static int ab8500_charger_get_vbus_voltage(struct ab8500_charger *di)
+ 		ret = iio_read_channel_processed_scale(di->adc_vbus_v,
+ 						       &vch, 1000);
  		if (ret < 0) {
- 			dev_err(di->dev, "%s ADC conv failed,\n", __func__);
+-			dev_err(di->dev, "%s ADC conv failed,\n", __func__);
++			dev_err(di->dev, "%s ADC conv failed\n", __func__);
  			return ret;
-@@ -549,8 +552,7 @@ static int ab8500_charger_get_vbus_voltage(struct ab8500_charger *di)
+ 		}
  	} else {
- 		vch = 0;
- 	}
--	/* Convert to microvolt, IIO returns millivolt */
--	return vch * 1000;
-+	return vch;
- }
- 
- /**
-@@ -566,7 +568,9 @@ static int ab8500_charger_get_usb_current(struct ab8500_charger *di)
- 
- 	/* Only measure current if the charger is online */
- 	if (di->usb.charger_online) {
--		ret = iio_read_channel_processed(di->adc_usb_charger_c, &ich);
-+		/* Return microamperes */
-+		ret = iio_read_channel_processed_scale(di->adc_usb_charger_c,
-+						       &ich, 1000);
+@@ -572,7 +572,7 @@ static int ab8500_charger_get_usb_current(struct ab8500_charger *di)
+ 		ret = iio_read_channel_processed_scale(di->adc_usb_charger_c,
+ 						       &ich, 1000);
  		if (ret < 0) {
- 			dev_err(di->dev, "%s ADC conv failed,\n", __func__);
+-			dev_err(di->dev, "%s ADC conv failed,\n", __func__);
++			dev_err(di->dev, "%s ADC conv failed\n", __func__);
  			return ret;
-@@ -574,8 +578,7 @@ static int ab8500_charger_get_usb_current(struct ab8500_charger *di)
+ 		}
  	} else {
- 		ich = 0;
- 	}
--	/* Return microamperes */
--	return ich * 1000;
-+	return ich;
- }
- 
- /**
-@@ -591,7 +594,9 @@ static int ab8500_charger_get_ac_current(struct ab8500_charger *di)
- 
- 	/* Only measure current if the charger is online */
- 	if (di->ac.charger_online) {
--		ret = iio_read_channel_processed(di->adc_main_charger_c, &ich);
-+		/* Return microamperes */
-+		ret = iio_read_channel_processed_scale(di->adc_main_charger_c,
-+						       &ich, 1000);
+@@ -598,7 +598,7 @@ static int ab8500_charger_get_ac_current(struct ab8500_charger *di)
+ 		ret = iio_read_channel_processed_scale(di->adc_main_charger_c,
+ 						       &ich, 1000);
  		if (ret < 0) {
- 			dev_err(di->dev, "%s ADC conv failed,\n", __func__);
+-			dev_err(di->dev, "%s ADC conv failed,\n", __func__);
++			dev_err(di->dev, "%s ADC conv failed\n", __func__);
  			return ret;
-@@ -599,8 +604,7 @@ static int ab8500_charger_get_ac_current(struct ab8500_charger *di)
+ 		}
  	} else {
- 		ich = 0;
- 	}
--	/* Return microamperes */
--	return ich * 1000;
-+	return ich;
- }
- 
- /**
 -- 
 2.45.2
 
