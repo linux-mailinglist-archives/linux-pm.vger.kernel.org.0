@@ -1,200 +1,191 @@
-Return-Path: <linux-pm+bounces-9808-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9809-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B40FE9133FC
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 14:43:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3A8791340E
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 15:01:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C0721F21EB0
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 12:43:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 204E4B2295D
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 13:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 913C216EB6F;
-	Sat, 22 Jun 2024 12:43:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C37D14E2C2;
+	Sat, 22 Jun 2024 13:01:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fj1sRVGv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWjgqTvh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C2416DEBD
-	for <linux-pm@vger.kernel.org>; Sat, 22 Jun 2024 12:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8DCDB67D;
+	Sat, 22 Jun 2024 13:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719060231; cv=none; b=DbAXiQnAMOh4LmnKzyJBeilAx5rkhXXld1a3+gCnlIHmyPOcxOZFPX/6e1DakaZoMIbgCUcxqhUgKWZw0dlYJAh0E3vubPZCEn7q0edz5cdaPO1x2XuWOM4NfFe4z2duPbK9nWmn93xK41pV2YW/D/EFQRJUoYdICY6A+wZaCOw=
+	t=1719061283; cv=none; b=AdqQvJUGZLuAdRurgpZa+mU1v2ZXDsb8m43BW/exl0xrR2jadQjtyNjFm5LLAfvfc4bcVpl9iSkRBUszCFOdHlbAlnPujN+V745DojRxww8i/0ynkOMlb93MA4AfHUvzx0/AehrHMHg4CVofyi9MphNkCIpZ5STl4hefQjpQtG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719060231; c=relaxed/simple;
-	bh=nBGr49+ha37l9f1oL5OsNfoOXsf5/QzfOsU9QmpN+nU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DRYXITVDQ91hkItC9dLTik/jy/fOSQtuWWX7zXCd/yz1jC+Y9QlHHI3Bp2Eofa0/MELt6RYYPZwJrZ5rx8UM+sdFStg3heFEDEwOX7WymzaZEOhzcJJcAvdBT1dF8BmmcZ2n+09mou2QSEB2NXHpCiPoeOls0dTnVb1VWDpYSQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fj1sRVGv; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719060228; x=1750596228;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nBGr49+ha37l9f1oL5OsNfoOXsf5/QzfOsU9QmpN+nU=;
-  b=Fj1sRVGvxbuZ98pMM/Zxh9h3yQKa1+3gMFoe7drrd10BcPoz+VfnV+gL
-   Xynajt+t0Q6m4nTtmuTREfEcXYqhsidXGjR6UgsF/YVQTqDjqxXFXIVD8
-   eXG/acTZ5dP7hHKr3/iglm1WTydPbzJQ3H/r+6RwH0EY9XzjNJ7qWyWjO
-   mx3+gsgGZs02an4sPj5+ouF1wFbGrDY88ZnsWoUC2EZsLiyC6DfbvEC9o
-   0fhi03ylPX1DsIsFXo96UYZUTfUT7sf6N4pEEENceTBsPKuQGnxI6ODui
-   MHgdp6Ny9piPvu9qU6asIkIWGHTm0h2QjuMAkJ7qRHngyt6mmhBFjH3J0
-   w==;
-X-CSE-ConnectionGUID: uu7N6TGHRmOFui2WKCxZgA==
-X-CSE-MsgGUID: EVYfxNLfSEKGuyinuMy6TA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11111"; a="15918233"
-X-IronPort-AV: E=Sophos;i="6.08,257,1712646000"; 
-   d="scan'208";a="15918233"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2024 05:43:48 -0700
-X-CSE-ConnectionGUID: Bu0INN3aRUmqlqx2OPmTyg==
-X-CSE-MsgGUID: MYkJIr1bTGehm90JowUavA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,257,1712646000"; 
-   d="scan'208";a="47201783"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 22 Jun 2024 05:43:46 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sL05n-0009cs-2Y;
-	Sat, 22 Jun 2024 12:43:43 +0000
-Date: Sat, 22 Jun 2024 20:43:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Perry Yuan <Perry.Yuan@amd.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [amd-pstate:bleeding-edge 17/21] ERROR: modpost:
- "amd_pstate_global_params" [drivers/cpufreq/amd-pstate-ut.ko] undefined!
-Message-ID: <202406222016.R4A2TMs8-lkp@intel.com>
+	s=arc-20240116; t=1719061283; c=relaxed/simple;
+	bh=ol+zGZiWM1DKuT5zahghz+wU4aJwG4tjLHjAz8moIsM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oCTjmcyhT1bruBr3S5UUF/1KZLhrtVIAmsAP6k0B/PPPzHck3Wo9JfLP0a1huj708nruPztI7ksCzRvn+uzf0DKRtQlanJsjD+VDD8trrxbEWO69tpm/97Vn6+g1SNwYbxCN39buOIPamM7+VoYZ/5LVtQM4mDz89KYiMA2niRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QWjgqTvh; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a63359aaacaso427293866b.1;
+        Sat, 22 Jun 2024 06:01:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719061280; x=1719666080; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=71HCn4pM6lNH1TSuaduFc92zwHDPMLbUYJs68bSQmlY=;
+        b=QWjgqTvhUcTgApdIAU7E/mBUIAE8SpP2a+GNOjJr0NWUc/wldBbMCuN8ukE4XdCYKg
+         I1ZOj1o2ikOzpwzaQzqxF8iUUFx3mlHKLF79kIlOPCLu/kshsVza4FNTkhDwdeD8L3Mn
+         +TeaFZ4H0jHIJshKbNGTx9zlOlZmqapMA7BMjm3z48DABZwQAzxxwQzTNtrlcdUJBHV2
+         UwExl/lsdJy736pdezUpiL0/QK3+cnxBjPa0Udlp8xsZuqv272meg8C20nJyXE8pBic6
+         acIpU49kb437816KbvrB3xFKYZCYLeDjEd/z7D2Up/JyzNS5yjXvnD40Kyu8L0vtIJg7
+         28bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719061280; x=1719666080;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=71HCn4pM6lNH1TSuaduFc92zwHDPMLbUYJs68bSQmlY=;
+        b=GkUq7NdINrNXC6+BnZlM4Aw4VEpSYD5d7GH4kipusOVaSIXE22YS3TWYOcVmKAnHFn
+         aUBz4TEcLIz0wRZ7bFLcyV/tuBVkMlCn5Jziiq60kl4PTZFzGT4aCqRNqbvx9py+cnXr
+         MzCJwO2gnEtgy8lbBiuH+nqO6qhY6PaAGlaYVzLl9KlwkE65Zrh52m7pOvolKFa+epoM
+         WZWj19fCj9ulgQKiCgIWetOzPrWqaZN3/oVEmgbLwUC1ujH/AazzIf8zTLCAwCW1jLG3
+         57V/Aowpu3Z0AHJXN5pfM7qaoH5wCHSEkM9sTAlYZEZ7g6QJe7zm6H6dl/UemwMfBGcc
+         vLHg==
+X-Forwarded-Encrypted: i=1; AJvYcCVRlTnv9HjWnPtujLyEc1jtWDMEhg+b8VYTfNhJCPfACTJ8grW5ahvKUs9omX1YER0ziXMiWYvFabLu7Bujk4LC72ZjSBg4rznyiK+gcVcKDLvOtocb7Iq3BkNRsARwxWaTPZWoe48=
+X-Gm-Message-State: AOJu0YwG3xR0Z61w3pPiBBfroPjmI0/LkMPXy2tSXH9ElVByN8pSdqys
+	RLw4u4GG5gX2fpvUzd89IC9n/6PkfZOXELeoFk2qPtUHiFA7pGJO
+X-Google-Smtp-Source: AGHT+IGzCCmzYTaJI/Ajs079t6qeRBMAuK4TtFbQkCzQk/kxTFSgjkEOw+iHy0pz6A0nPfLdksSbmQ==
+X-Received: by 2002:a17:907:104a:b0:a6f:13fe:75d1 with SMTP id a640c23a62f3a-a6fab7cf96dmr655611666b.64.1719061279681;
+        Sat, 22 Jun 2024 06:01:19 -0700 (PDT)
+Received: from [127.0.1.1] (31-179-0-202.dynamic.chello.pl. [31.179.0.202])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fcf560526sm193940766b.152.2024.06.22.06.01.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Jun 2024 06:01:19 -0700 (PDT)
+From: Roman Storozhenko <romeusmeister@gmail.com>
+Date: Sat, 22 Jun 2024 15:01:07 +0200
+Subject: [PATCH v2] cpupower: Make help command available for custom
+ install dir
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240622-fix-help-issue-v2-1-6c19e28a4ec1@gmail.com>
+X-B4-Tracking: v=1; b=H4sIABLLdmYC/13MQQ6CMBCF4auQWTumrbVYVt7DsKAwwiRASatEQ
+ 3p3K3Hl8p/M+zaIFJgiVMUGgVaO7Occ6lBAOzRzT8hdblBCaWGkxTu/cKBxQY7xSXguT60Wzhm
+ tSsijJVD+2MFbnXvg+PDhvfur/F5/lJL/1CpRYmmFsfbSaUPu2k8Nj8fWT1CnlD7Ap4KMrAAAA
+ A==
+To: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Roman Storozhenko <romeusmeister@gmail.com>
+X-Mailer: b4 0.14.0
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
-head:   ca8cc4ec88d54d4b7c59fe82de0deae3fcefb711
-commit: 6c3b56339488b6cca212f68096519d3c009c31e1 [17/21] cpufreq: amd-pstate: implement cpb_boost sysfs entry for boost control
-config: i386-randconfig-004-20240622 (https://download.01.org/0day-ci/archive/20240622/202406222016.R4A2TMs8-lkp@intel.com/config)
-compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240622/202406222016.R4A2TMs8-lkp@intel.com/reproduce)
+When the 'cpupower' utility installed in the custom dir, it fails to
+render appropriate help info for a particular subcommand:
+$ LD_LIBRARY_PATH=lib64/ bin/cpupower help monitor
+with error message like 'No manual entry for cpupower-monitor.1'
+The issue is that under the hood it calls 'exec' function with
+the following args: 'man cpupower-monitor.1'. In turn, 'man' search
+path is defined in '/etc/manpath.config'. Of course it contains only
+standard system man paths.
+Make subcommands help available for a user by setting up 'MANPATH'
+environment variable to the custom installation man pages dir. That
+variable value will be prepended to the man pages standard search paths
+as described in 'SEARCH PATH' section of MANPATH(5).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406222016.R4A2TMs8-lkp@intel.com/
+Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
+---
+Changes in v2:
+- Fixed spelling errors
+- Simplified man pages search approach by the 'MANPATH' variable usage
+- Link to v1: https://lore.kernel.org/r/20240621-fix-help-issue-v1-1-7906998d46eb@gmail.com
+---
+ tools/power/cpupower/utils/cpupower.c | 41 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 35 insertions(+), 6 deletions(-)
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+diff --git a/tools/power/cpupower/utils/cpupower.c b/tools/power/cpupower/utils/cpupower.c
+index 9ec973165af1..1b1b79c572ad 100644
+--- a/tools/power/cpupower/utils/cpupower.c
++++ b/tools/power/cpupower/utils/cpupower.c
+@@ -12,6 +12,8 @@
+ #include <unistd.h>
+ #include <errno.h>
+ #include <sched.h>
++#include <libgen.h>
++#include <limits.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <sys/utsname.h>
+@@ -80,14 +82,17 @@ static void print_help(void)
+ 
+ static int print_man_page(const char *subpage)
+ {
+-	int len;
+-	char *page;
++	char *page, *man_path, *exec_dir;
++	char exec_path[PATH_MAX];
++	int subpage_len;
+ 
+-	len = 10; /* enough for "cpupower-" */
+-	if (subpage != NULL)
+-		len += strlen(subpage);
++	if (!subpage)
++		return -EINVAL;
+ 
+-	page = malloc(len);
++	subpage_len = 10; /* enough for "cpupower-" */
++	subpage_len += strlen(subpage);
++
++	page = malloc(subpage_len);
+ 	if (!page)
+ 		return -ENOMEM;
+ 
+@@ -97,6 +102,30 @@ static int print_man_page(const char *subpage)
+ 		strcat(page, subpage);
+ 	}
+ 
++	/* Get current process image name full path */
++	if (readlink("/proc/self/exe", exec_path, PATH_MAX) > 0) {
++		exec_dir = strdup(exec_path);
++		if (!exec_dir) {
++			free(page);
++			free(man_path);
++			return -ENOMEM;
++		}
++
++		/* Prepend standard search path for man pages with relative path
++		 * to custom install man directory
++		 */
++		if (asprintf(&man_path, "%s/../man:", dirname(exec_dir)) > 0) {
++			setenv("MANPATH", man_path, 1);
++			free(exec_dir);
++			free(man_path);
++		} else {
++			free(page);
++			free(exec_dir);
++			free(man_path);
++			return -ENOMEM;
++		}
++	}
++
+ 	execlp("man", "man", page, NULL);
+ 
+ 	/* should not be reached */
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-13.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-14.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-r.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-cyrillic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-romanian.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-turkish.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ucs2_utils.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/unicode/utf8data.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/isofs/isofs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/ufs/ufs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/efs/efs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/qnx4/qnx4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/autofs/autofs4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/adfs/adfs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/btrfs/btrfs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-keys/trusted.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/af_alg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-example-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libarc4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/string_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/string_helpers_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_hexdump.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_dhry.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_firmware.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/cpumask_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_hash.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_ida.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_list_sort.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_module.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_user_copy.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_static_keys.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_static_key_base.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_printf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_bitmap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_maple_tree.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_kmod.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_blackhole_dev.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_free_pages.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_kprobes.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_fpu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/atomic64_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/bitfield_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/checksum_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/list-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_linear_ranges.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/memcpy_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/stackinit_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/fortify_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08_i2c.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08_spi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/backlight/rt4831-backlight.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/clk-gate_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/rt4831-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/ppdev.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iommu/iova.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-i2c.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-spmi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-spi-avmm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/arizona.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/pcf50633-gpio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/rt4831.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dax/dax.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/scsi_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/ppa.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/imm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-altera-core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/line-display.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/class/usbtmc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/storage/uas.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/usb_debug.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/isight_firmware.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/yurex.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rtc/lib_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/menz69_wdt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/google/gsmi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/google/memconsole-x86-legacy.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-a4tech.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-elecom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-google-stadiaff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ite.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-keytouch.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lenovo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-microsoft.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-monterey.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-redragon.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-retrode.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-semitek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-gaff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-waltop.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_simpleondemand.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_userspace.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/maps/map_funcs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/hisi-spmi-controller.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vhost/vringh.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
->> ERROR: modpost: "amd_pstate_global_params" [drivers/cpufreq/amd-pstate-ut.ko] undefined!
+---
+base-commit: 2102cb0d050d34d50b9642a3a50861787527e922
+change-id: 20240619-fix-help-issue-573c40bb6427
 
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Roman Storozhenko <romeusmeister@gmail.com>
+
 
