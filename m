@@ -1,85 +1,87 @@
-Return-Path: <linux-pm+bounces-9810-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9811-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C17249134BD
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 17:17:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1409A9135DC
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 21:42:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 765191F21AA3
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 15:17:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F560284E94
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 19:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAB0C1E502;
-	Sat, 22 Jun 2024 15:17:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00D945014;
+	Sat, 22 Jun 2024 19:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YtEgjDXg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3CCB660;
-	Sat, 22 Jun 2024 15:17:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F90021373;
+	Sat, 22 Jun 2024 19:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719069437; cv=none; b=iU8oty+6Ltp+QRUP98s4EDK7FyAXcN0V3ZjK8ynJWhiZ+UjLDjvipiRCNHTBr7TuS93J/ivyX/z89FRzLQ74i1ssk9+ka/KpYPgf6MZc8x3QeMvBN1jTsb7iN8MuivzTlftYw/kQz321SuqXAqDLGVZ2+1TYlpiWjrVOvI/3FMQ=
+	t=1719085344; cv=none; b=ZJI/A5lettJ9PzY2fbBySP2vY/wfyTlaJGL9MDXw86FgkJ982vF8C63YwjbOaAyNnm72rwt17Ed95vJoawsGSXSedu8OzOOiRWqot3E+aLUoOI4J5IVjv+bv0viDs+bwJGpUwL00iX4Fd17DcdGEIkh6/pslbApJ21q7mPmmoLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719069437; c=relaxed/simple;
-	bh=rQ2/eH9yPvzW/PqT36AV4Sp0N9jPlNuuaT6FzvB26I8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=LGFebF2kUboIv3zWetw2hVr2WfO901Ds+T4D029RtwsBdO64NsSAUPFInRawQB3P93431Wmex0/9eH3jknzVVAu8/H+kQ7nK1+exXGNaKZlRA6JVkwElwcKGtLUHahwAtjxDSJ63a4Mct+HRXMjctEb0H1W8NUTrBwm51rcyKgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10428C3277B;
-	Sat, 22 Jun 2024 15:17:17 +0000 (UTC)
-Received: from wens.tw (localhost [127.0.0.1])
-	by wens.tw (Postfix) with ESMTP id 08D2C5F725;
-	Sat, 22 Jun 2024 23:17:15 +0800 (CST)
-From: Chen-Yu Tsai <wens@csie.org>
-To: Yangtao Li <tiny.windzz@gmail.com>, 
- "Rafael J . Wysocki" <rafael@kernel.org>, Viresh Kumar <vireshk@kernel.org>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>, 
- Andre Przywara <andre.przywara@arm.com>, Ryan Walklin <ryan@testtoast.com>
-Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-sunxi@lists.linux.dev, Chris Morgan <macroalpha82@gmail.com>, 
- Sudeep Holla <sudeep.holla@arm.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20240607092140.33112-1-ryan@testtoast.com>
-References: <20240607092140.33112-1-ryan@testtoast.com>
-Subject: Re: (subset) [PATCH 0/3] cpufreq: sun50i: add Allwinner H700 speed
- bin and additional OPPs
-Message-Id: <171906943501.1109052.11689701111557656569.b4-ty@csie.org>
-Date: Sat, 22 Jun 2024 23:17:15 +0800
+	s=arc-20240116; t=1719085344; c=relaxed/simple;
+	bh=fcJbsy2jm25GAUnNM9Xcuj1AU2NBoRKuw3UTI9/38rM=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ZwAbnok4ilpWpguMdUmJIjQr/WV6lsb/JVQwFcKd/+cOAzw+hmfD/4TPFCmTmF33KxdsLm3HUh3Djx6R/pRCfLGlx+UER6GzaDc3SwATo4V6JaydnnPniD2tD8zgCQc/DGfCmo/X5+4F+GD1na/uNmtBL6beptGsvRxGimY82HA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YtEgjDXg; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2ebe40673d8so33864161fa.3;
+        Sat, 22 Jun 2024 12:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719085341; x=1719690141; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fcJbsy2jm25GAUnNM9Xcuj1AU2NBoRKuw3UTI9/38rM=;
+        b=YtEgjDXgiJPKd4pDD6WwK3RizpTb+cdWAfSBUBYlYx7JlGih3jVO1UNj4EBfxIXQmt
+         GVXaX36jsGtUTP53jDuM9eQdW9CwOmGktIgzTrWTd3vjN2RLl9940gI7p063oAnEJJ30
+         RBSamPTpVumtQ/TF/G0RfZ3sEilmZsP7nYqGBKpOdIxcEocXVDOdkg0vQAaQc1N9xe+U
+         LrQtoiei0WDTM1AYTgY3+sd/dDk6+4yiT8FpGi1V3HBHkA9aihMxc4uun0KwtFjzAqrU
+         wqWT/Wy8kOYXmdf67BAAbtL0AC8LjX9XbGXBPSomWn9nF4I3pW7uaMaQlheY8AC/lD0G
+         b57w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719085341; x=1719690141;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fcJbsy2jm25GAUnNM9Xcuj1AU2NBoRKuw3UTI9/38rM=;
+        b=Hdy+45GT22Tydamsy+JUx3y3qW9ws1aX3zRmlMGVfwJjkg++v66sTMxEU2pozfDg+1
+         ahKWkKAieX1Qce9tQXG78RitZdjGtrmZ83QN+DYrkla8dOz15Y0SpMj+GVtPYy012Q+E
+         76QmZkaOFdkmR/9IAQKqrFmPdHIGpBO2EmCdcneWT9wufV/x4WCrE9EhQHNDymy6evbb
+         7qzTI1N66YOYr4dt7iotaaQwb4g8vndT3gNDjVzyM9DHlNL25B/vwpOuLm7xWTjNhjY2
+         VCVM3mNT6Iuk36tFC5muAod3X5rfx0Uvga1d7QwqBtnNTuOsYmJk3EMmqmWBVuClkfjo
+         L5Ng==
+X-Forwarded-Encrypted: i=1; AJvYcCV+lI0SMh1iKGiznvqxdlkAilycPIubSlECmiS0JQzwfKZ3pJDWRcw2qgsslx9x9zdA2c2DcvByLQCAzmGRu8iRDdbg+xPinFUVJYqafkexQXaAKulXV/coagZTr4A2JNWwLcu8EAloQseUbCGHSOidYPvnWbzXAeR/FOC16p0w
+X-Gm-Message-State: AOJu0Yy7IFWu7o6dGW+1juazMn9jMHxBvfhUx2f+wWb/tsg0FZD8RTSP
+	mjhiNkyAMZFvz4zngXSI2cCcM1R+gdItfzn8XjDBI5F44Zg8gb5jdMFBYxFOKpmlpzmqTvXtEPJ
+	QTz2n6PRl5B83JP4o2tRutkMD+Fo=
+X-Google-Smtp-Source: AGHT+IHzsJQQOfin1lQogznzEbzzUuyUAsOIZxSoPdvWF+xwgTub0+dgEi+j5N2GsC7SCJXZSGwdHtVAkmpj8apv+OE=
+X-Received: by 2002:a2e:8250:0:b0:2ec:eee:f19e with SMTP id
+ 38308e7fff4ca-2ec5b3888a8mr3097551fa.37.1719085340800; Sat, 22 Jun 2024
+ 12:42:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+From: Philippe Simons <simons.philippe@gmail.com>
+Date: Sat, 22 Jun 2024 21:42:09 +0200
+Message-ID: <CADomA4-TnSKthXDKA6f=o29he+Mt-ZxAcyTHkPRD3MVVkDBCKA@mail.gmail.com>
+Subject: Re: [PATCH 6/8] power: supply: axp20x_usb_power: Add support for AXP717
+To: macroalpha82@gmail.com
+Cc: broonie@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, 
+	jernej.skrabec@gmail.com, krzk+dt@kernel.org, lars@metafoo.de, lee@kernel.org, 
+	linux-iio@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-sunxi@lists.linux.dev, macromorgan@hotmail.com, robh@kernel.org, 
+	samuel@sholland.org, sre@kernel.org, wens@csie.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 07 Jun 2024 21:20:32 +1200, Ryan Walklin wrote:
-> Support for the Allwinner H618, H618 and H700 was added to the sun50i cpufreq-nvmem driver recently [1] however at the time some operating points supported by the H700 and in use in vendor BSPs were found to be unstable during testing, so the H700 speed bin was not included in the mainline driver.
-> 
-> Retesting with kernel 6.10rc2 (which carries subsequent fixes for the driver) shows stable operation with these additional OPPs.
-> 
-> This patchset adds the H700 speedbin index, enables the additional operating points for the H700 in the H616 OPP table, and enables DVFS support for the Anbernic REG35XX handheld devices, which are the only mainline-supported devices currently using the H700.
-> 
-> Regards,
-> 
-> [...]
+sysfs correctly reports presence of USB power and voltages, tested on
+RG35XX-H (H700)
 
-Applied to sunxi/dt-for-6.11 in sunxi/linux.git, thanks!
-
-[2/3] arm64: dts: allwinner: h616: add additional CPU OPPs for the H700
-      https://git.kernel.org/sunxi/linux/c/b05f15d0fc15
-[3/3] arm64: dts: allwinner: rg35xx: Enable DVFS CPU frequency scaling
-      https://git.kernel.org/sunxi/linux/c/e1e61fe3452d
-
-Best regards,
--- 
-Chen-Yu Tsai <wens@csie.org>
-
+Tested-by: Philippe Simons <simons.philippe@gmail.com>
 
