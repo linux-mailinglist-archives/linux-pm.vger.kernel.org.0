@@ -1,160 +1,200 @@
-Return-Path: <linux-pm+bounces-9807-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9808-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E998D9133F1
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 14:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B40FE9133FC
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 14:43:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6265C1F224D7
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 12:28:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C0721F21EB0
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2024 12:43:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C08F116D9B1;
-	Sat, 22 Jun 2024 12:28:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 913C216EB6F;
+	Sat, 22 Jun 2024 12:43:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="q7bqYF4y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fj1sRVGv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22B114C586;
-	Sat, 22 Jun 2024 12:28:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C2416DEBD
+	for <linux-pm@vger.kernel.org>; Sat, 22 Jun 2024 12:43:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719059297; cv=none; b=NWTyRMilF0vDntknkXdlEQSNaI4uYJEoZiIY2DvoyBlZ0f3giaTUNJLFsgY3SEPxsVRAAJ2idj5Va5lz8ZtcBRSXtt6EppvW/Wo1vEb38JAacqosfm5Kp9/Btr6+IKyN8ByYU1jdXQklVJ5dmFKnTgi6dAC2Lv+huqMxRv+46UY=
+	t=1719060231; cv=none; b=DbAXiQnAMOh4LmnKzyJBeilAx5rkhXXld1a3+gCnlIHmyPOcxOZFPX/6e1DakaZoMIbgCUcxqhUgKWZw0dlYJAh0E3vubPZCEn7q0edz5cdaPO1x2XuWOM4NfFe4z2duPbK9nWmn93xK41pV2YW/D/EFQRJUoYdICY6A+wZaCOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719059297; c=relaxed/simple;
-	bh=JCw0SeShyq5JuY+nLwC3mKit0gG9UnY3JT535OxbXbo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JgRx3wcBfk7Yf7AvR6ef8jWfO3ZMAwDgnQhLgC4cZiHpdH21oDVEQt70TGLxYSiyDfr3AG2LS17SMKZoaIwERGYbTSF9+pXoFhuu8GkQ4y/Q21sfYGYm0ETufNw7guRXntFhnDbI01flUSDIUokDiJ1NSwqPt3N9qflF3lUHGh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=q7bqYF4y reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id ec57d1a1ba72cd01; Sat, 22 Jun 2024 14:28:07 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id C8C176A7379;
-	Sat, 22 Jun 2024 14:28:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1719059287;
-	bh=JCw0SeShyq5JuY+nLwC3mKit0gG9UnY3JT535OxbXbo=;
-	h=From:To:Cc:Subject:Date;
-	b=q7bqYF4yHXFXd7bujkorWNo99xWgbn7Ykh9cJuIzGTvUuhatvCW9ppy+94+/ue7WT
-	 //tGyTCsoYNuql9AhVVRYpBtIvaoUqFFVjaj0fAVhTyCWK59w1Gls0Cj1N4RVYIuJd
-	 cFiiqyRketdxLuc8QZ8hmBoAo8eR6OyJsT0AUAHGGZpz1iDZ3sYlC7Nhyp92/lm+lI
-	 m2mlMrQHXB4cOpbrli644/RwkeCtLha+bFpk4KqDFv8XEXDQ0MkAZ9K6w5vvu1/0EA
-	 PKr4cBmajloOFwDNvcTf7hKr3nvhMmfxvzudHfupGVP5SpPjx2j9ARX5hRulYG0Pk6
-	 srO+OlhRHwMIw==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>,
- Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
- Steev Klimaszewski <steev@kali.org>, Johan Hovold <johan+linaro@kernel.org>
-Subject:
- [PATCH v1] thermal: gov_step_wise: Go straight to instance->lower when
- mitigation is over
-Date: Sat, 22 Jun 2024 14:26:33 +0200
-Message-ID: <12464461.O9o76ZdvQC@rjwysocki.net>
+	s=arc-20240116; t=1719060231; c=relaxed/simple;
+	bh=nBGr49+ha37l9f1oL5OsNfoOXsf5/QzfOsU9QmpN+nU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DRYXITVDQ91hkItC9dLTik/jy/fOSQtuWWX7zXCd/yz1jC+Y9QlHHI3Bp2Eofa0/MELt6RYYPZwJrZ5rx8UM+sdFStg3heFEDEwOX7WymzaZEOhzcJJcAvdBT1dF8BmmcZ2n+09mou2QSEB2NXHpCiPoeOls0dTnVb1VWDpYSQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fj1sRVGv; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719060228; x=1750596228;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nBGr49+ha37l9f1oL5OsNfoOXsf5/QzfOsU9QmpN+nU=;
+  b=Fj1sRVGvxbuZ98pMM/Zxh9h3yQKa1+3gMFoe7drrd10BcPoz+VfnV+gL
+   Xynajt+t0Q6m4nTtmuTREfEcXYqhsidXGjR6UgsF/YVQTqDjqxXFXIVD8
+   eXG/acTZ5dP7hHKr3/iglm1WTydPbzJQ3H/r+6RwH0EY9XzjNJ7qWyWjO
+   mx3+gsgGZs02an4sPj5+ouF1wFbGrDY88ZnsWoUC2EZsLiyC6DfbvEC9o
+   0fhi03ylPX1DsIsFXo96UYZUTfUT7sf6N4pEEENceTBsPKuQGnxI6ODui
+   MHgdp6Ny9piPvu9qU6asIkIWGHTm0h2QjuMAkJ7qRHngyt6mmhBFjH3J0
+   w==;
+X-CSE-ConnectionGUID: uu7N6TGHRmOFui2WKCxZgA==
+X-CSE-MsgGUID: EVYfxNLfSEKGuyinuMy6TA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11111"; a="15918233"
+X-IronPort-AV: E=Sophos;i="6.08,257,1712646000"; 
+   d="scan'208";a="15918233"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2024 05:43:48 -0700
+X-CSE-ConnectionGUID: Bu0INN3aRUmqlqx2OPmTyg==
+X-CSE-MsgGUID: MYkJIr1bTGehm90JowUavA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,257,1712646000"; 
+   d="scan'208";a="47201783"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 22 Jun 2024 05:43:46 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sL05n-0009cs-2Y;
+	Sat, 22 Jun 2024 12:43:43 +0000
+Date: Sat, 22 Jun 2024 20:43:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Perry Yuan <Perry.Yuan@amd.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: [amd-pstate:bleeding-edge 17/21] ERROR: modpost:
+ "amd_pstate_global_params" [drivers/cpufreq/amd-pstate-ut.ko] undefined!
+Message-ID: <202406222016.R4A2TMs8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrfeefiedgheefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegr
- rhhmrdgtohhmpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
+head:   ca8cc4ec88d54d4b7c59fe82de0deae3fcefb711
+commit: 6c3b56339488b6cca212f68096519d3c009c31e1 [17/21] cpufreq: amd-pstate: implement cpb_boost sysfs entry for boost control
+config: i386-randconfig-004-20240622 (https://download.01.org/0day-ci/archive/20240622/202406222016.R4A2TMs8-lkp@intel.com/config)
+compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240622/202406222016.R4A2TMs8-lkp@intel.com/reproduce)
 
-Commit b6846826982b ("thermal: gov_step_wise: Restore passive polling
-management") attempted to fix a Step-Wise thermal governor issue
-introduced by commit 042a3d80f118 ("thermal: core: Move passive polling
-management to the core"), which caused the governor to leave cooling
-devices in high states, by partially revering that commit.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406222016.R4A2TMs8-lkp@intel.com/
 
-However, this turns out to be insufficient on some systems due to
-interactions between the governor code restored by commit b6846826982b
-and the passive polling management in the thermal core.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-For this reason, revert commit b6846826982b and make the governor set
-the target cooling device state to the "lower" one as soon as the zone
-temperature falls below the threshold of the trip point corresponding
-to the given thermal instance, which means that thermal mitigation is
-not necessary any more.
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-13.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-14.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-r.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-cyrillic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-romanian.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-turkish.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ucs2_utils.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/unicode/utf8data.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/isofs/isofs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/ufs/ufs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/efs/efs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/qnx4/qnx4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/autofs/autofs4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/adfs/adfs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/btrfs/btrfs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-keys/trusted.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/af_alg.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-example-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libarc4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/string_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/string_helpers_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_hexdump.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_dhry.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_firmware.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/cpumask_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_hash.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_ida.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_list_sort.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_module.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_user_copy.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_static_keys.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_static_key_base.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_printf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_bitmap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_maple_tree.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_kmod.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_blackhole_dev.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_free_pages.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_kprobes.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_fpu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/atomic64_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/bitfield_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/checksum_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/list-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_linear_ranges.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/memcpy_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/stackinit_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/fortify_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08_i2c.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08_spi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/backlight/rt4831-backlight.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/clk-gate_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/rt4831-regulator.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/ppdev.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iommu/iova.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-i2c.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-spmi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-spi-avmm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/arizona.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/pcf50633-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/rt4831.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dax/dax.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/scsi_common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/ppa.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/imm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-altera-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/line-display.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/class/usbtmc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/storage/uas.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/usb_debug.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/isight_firmware.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/yurex.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rtc/lib_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/menz69_wdt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/google/gsmi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/google/memconsole-x86-legacy.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-a4tech.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-elecom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-google-stadiaff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ite.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-keytouch.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lenovo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-microsoft.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-monterey.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-redragon.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-retrode.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-semitek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-gaff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-waltop.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_simpleondemand.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_userspace.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/maps/map_funcs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/hisi-spmi-controller.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vhost/vringh.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
+>> ERROR: modpost: "amd_pstate_global_params" [drivers/cpufreq/amd-pstate-ut.ko] undefined!
 
-Before this change the "lower" cooling device state would be reached in
-steps through the passive polling mechanism which was questionable for
-three reasons: (1) cooling device were kept in high states when that was
-not necessary (and it could adversely impact performance), (2) it only
-worked for thermal zones with nonzero passive_delay_jiffies value, and
-(3) passive polling belongs to the core and should not be hijacked by
-governors for their internal purposes.
-
-Fixes: b6846826982b ("thermal: gov_step_wise: Restore passive polling management")
-Closes: https://lore.kernel.org/linux-pm/6759ce9f-281d-4fcd-bb4c-b784a1cc5f6e@oldschoolsolutions.biz
-Reported-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-Tested-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/gov_step_wise.c |   23 +++++------------------
- 1 file changed, 5 insertions(+), 18 deletions(-)
-
-Index: linux-pm/drivers/thermal/gov_step_wise.c
-===================================================================
---- linux-pm.orig/drivers/thermal/gov_step_wise.c
-+++ linux-pm/drivers/thermal/gov_step_wise.c
-@@ -55,7 +55,11 @@ static unsigned long get_target_state(st
- 		if (cur_state <= instance->lower)
- 			return THERMAL_NO_TARGET;
- 
--		return clamp(cur_state - 1, instance->lower, instance->upper);
-+		/*
-+		 * If 'throttle' is false, no mitigation is necessary, so
-+		 * request the lower state for this instance.
-+		 */
-+		return instance->lower;
- 	}
- 
- 	return instance->target;
-@@ -93,23 +97,6 @@ static void thermal_zone_trip_update(str
- 		if (instance->initialized && old_target == instance->target)
- 			continue;
- 
--		if (trip->type == THERMAL_TRIP_PASSIVE) {
--			/*
--			 * If the target state for this thermal instance
--			 * changes from THERMAL_NO_TARGET to something else,
--			 * ensure that the zone temperature will be updated
--			 * (assuming enabled passive cooling) until it becomes
--			 * THERMAL_NO_TARGET again, or the cooling device may
--			 * not be reset to its initial state.
--			 */
--			if (old_target == THERMAL_NO_TARGET &&
--			    instance->target != THERMAL_NO_TARGET)
--				tz->passive++;
--			else if (old_target != THERMAL_NO_TARGET &&
--				 instance->target == THERMAL_NO_TARGET)
--				tz->passive--;
--		}
--
- 		instance->initialized = true;
- 
- 		mutex_lock(&instance->cdev->lock);
-
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
