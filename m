@@ -1,59 +1,57 @@
-Return-Path: <linux-pm+bounces-9831-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9832-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D583E913CC4
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2024 18:30:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40B7B913D0E
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2024 19:17:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 72CE7B21AF4
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2024 16:30:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E43B11F23160
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2024 17:17:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 758E3183062;
-	Sun, 23 Jun 2024 16:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4C931822ED;
+	Sun, 23 Jun 2024 17:17:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JL2TyUEo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bHNqIeMQ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D6F8F5B;
-	Sun, 23 Jun 2024 16:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766913C38;
+	Sun, 23 Jun 2024 17:17:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719160226; cv=none; b=pKefvf2Ias5lf+3fPed3bdkGVFUA8DuzLRmx0jolMwewo1fvaIMoypKdTz92z/nFrM91PyJQ3BOxc6OMv/IT8ptcEQgaQCuFY+NdSBXF/IflyvzKsIumSOU1CFCCwGtC2kAjyHM6xIOEQ75N1SdZ+Vtzw+Lva0L8qNwYEqsbAGk=
+	t=1719163022; cv=none; b=Kokd7VjxV5cE12+GJ4+oftwMn1Cru74niWX8nXQ66OwTzBl5YhJNpvwol1uc7gQ5T1R718XTw+LtHBaogVadmUJkrHFRpN6eSQuBYXkeEQ7eMEFX++jLogoeX+She/TK8eJdY9hocAgpb/uPIc+juEqVQiix1hmYj9PclL2mBFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719160226; c=relaxed/simple;
-	bh=GpYFGPdZts7O9qMXftegdL5qHYUq/82DkYhv80PMtCE=;
+	s=arc-20240116; t=1719163022; c=relaxed/simple;
+	bh=9KtSfSaQPkCASSv8gVxlAxMqOeAiISu170quyMY6ijc=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u+x7SlCMFOdUbqW0k6M/1KEHmYlKQ7cv9b8QDBdT8xT1uUIBgl9+waqEfezKQtzEEnfesfdyMdDvP5fvbE2uDktLX0xeTNCbHFhIxsuNvCBuksmEUtHMjigCGU8Nza8xuaxHklzNamPBpVSQ0PnZO1ADqvDQp4VtZS4bf+E/H/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JL2TyUEo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A465CC2BD10;
-	Sun, 23 Jun 2024 16:30:20 +0000 (UTC)
+	 MIME-Version:Content-Type; b=eXFmBZnZycGBvxjNJRe+Yrqx1YTH5zQKhHv/JbzkQhXDSxmy2FuoYVaBLvHaY6uYKu7Yir99FGfsfN8Y1ixVuxGPiBQogYYtpKxiYC3EXoP1YBbR+G3Y2vt5ZoOf1pc9ZDulZdnFiaS/LtXM80SuIVM213z5x8+5q98rir2nwCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bHNqIeMQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14A0BC2BD10;
+	Sun, 23 Jun 2024 17:16:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719160225;
-	bh=GpYFGPdZts7O9qMXftegdL5qHYUq/82DkYhv80PMtCE=;
+	s=k20201202; t=1719163022;
+	bh=9KtSfSaQPkCASSv8gVxlAxMqOeAiISu170quyMY6ijc=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JL2TyUEoe125u3uwLbWL8FlcI+B/7LRJvn7jAWrFzQmlMFUzQ9ns8nlvV+pX7o5SF
-	 SBAVpblUx7oAOxOQAm+qUloArQCUjIkzANmInr6L0zSrqrWPkP/Pku3rmAVz3mij89
-	 g97ENTSdYZB6+KOcc9Q8x6nKq60ASR2IQGKR2nsaiMCPDDApyOJBeyugnd9shCC/yr
-	 MRy6l41ZrLKEYV0LPYprmZ6QljJMbafgT/ZP/JKvSCuQ2HKJs1nfQ/h2CAIwuyQj4P
-	 4EXSLEnnJZqR4mNgAXu/EeE5Mw+gJjfrjSt2PrErsCwzlECgO3F476eGpbn7N7r5Yo
-	 AFtfZXHC3IB3w==
-Date: Sun, 23 Jun 2024 17:30:15 +0100
+	b=bHNqIeMQff9bNPC4+QraF262KlfG5/t0BGXt3fq8Q6CUZbMJY/RuCf0YAV0LxHkwa
+	 QcOcFBZ3zXUsGhFPGhmu5OpnKpX+nr23kaEGt4bcOe6R18UFtctgdRU1eQN7Vcwpjj
+	 lZFPY/sShn0OqSBPayBgWSk2sdUM+GQorFefBLUOGmMV2uMVv1cSrymsAv3SMyiwqV
+	 qj/r3SHTICltsfnZ8emgvjCYRidMTDOItaQYd3/qssJepSJ3GIe3I/EinLI240N9EW
+	 wYQUzXLgJf72mMsjtsWzzSD+Cq+/7t8I7QZdxT58icl7TLnVhEOi2THs17HGGVuVI9
+	 3sQ4mm5g0/hOQ==
+Date: Sun, 23 Jun 2024 18:16:54 +0100
 From: Jonathan Cameron <jic23@kernel.org>
-To: Chris Morgan <macroalpha82@gmail.com>
-Cc: linux-sunxi@lists.linux.dev, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-iio@vger.kernel.org, broonie@kernel.org,
- lee@kernel.org, samuel@sholland.org, jernej.skrabec@gmail.com,
- sre@kernel.org, wens@csie.org, conor+dt@kernel.org, krzk+dt@kernel.org,
- robh@kernel.org, lars@metafoo.de, Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH 5/8] iio: adc: axp20x_adc: add support for AXP717 ADC
-Message-ID: <20240623173015.555584b6@jic23-huawei>
-In-Reply-To: <20240617220535.359021-6-macroalpha82@gmail.com>
-References: <20240617220535.359021-1-macroalpha82@gmail.com>
-	<20240617220535.359021-6-macroalpha82@gmail.com>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: linus.walleij@linaro.org, sre@kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 1/3] power: supply: ab8500: Fix error handling when
+ calling iio_read_channel_processed()
+Message-ID: <20240623181654.3fe94bbf@jic23-huawei>
+In-Reply-To: <f9f65642331c9e40aaebb888589db043db80b7eb.1719037737.git.christophe.jaillet@wanadoo.fr>
+References: <cover.1719037737.git.christophe.jaillet@wanadoo.fr>
+	<f9f65642331c9e40aaebb888589db043db80b7eb.1719037737.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -64,107 +62,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 17 Jun 2024 17:05:32 -0500
-Chris Morgan <macroalpha82@gmail.com> wrote:
+On Sat, 22 Jun 2024 09:04:24 +0200
+Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
 
-> From: Chris Morgan <macromorgan@hotmail.com>
+> The ab8500_charger_get_[ac|vbus]_[current|voltage]() functions should
+> return an error code on error.
 > 
-> Add support for the AXP717 ADC. The AXP717 differs from other ADCs
-> in this series by utilizing a 14 bit ADC for all channels (a full 16
-> bits with the first 2 digits reserved). It also differs by lacking a
-> battery discharge current channel.
+> Up to now, an un-initialized value is returned.
+> This makes the error handling of the callers un-reliable.
 > 
-> Note that while the current charge channel itself is included in this
-> driver for the AXP717 and listed in the datasheet, no scale or offset
-> was given for this channel. For now no scale or offset is provided in
-> this driver.
+> Return the error code instead, to fix the issue.
 > 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-Hi Chris
-
-A few minor comments inline,
-
-Thanks,
-
-Jonathan
-
-> ---
->  drivers/iio/adc/axp20x_adc.c | 167 +++++++++++++++++++++++++++++++++--
->  1 file changed, 160 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/iio/adc/axp20x_adc.c b/drivers/iio/adc/axp20x_adc.c
-> index d6c51b0f48e3..f35ba2c11e1b 100644
-> --- a/drivers/iio/adc/axp20x_adc.c
-> +++ b/drivers/iio/adc/axp20x_adc.c
-> @@ -5,6 +5,7 @@
->   *	Quentin Schulz <quentin.schulz@free-electrons.com>
->   */
->  
-> +#include <asm/unaligned.h>
->  #include <linux/bitfield.h>
->  #include <linux/completion.h>
->  #include <linux/interrupt.h>
-> @@ -27,6 +28,8 @@
->  
->  #define AXP22X_ADC_EN1_MASK			(GENMASK(7, 5) | BIT(0))
->  
-> +#define AXP717_ADC_EN1_MASK			GENMASK(5, 0)
-> +
->  #define AXP20X_GPIO10_IN_RANGE_GPIO0		BIT(0)
->  #define AXP20X_GPIO10_IN_RANGE_GPIO1		BIT(1)
->  
-> @@ -35,6 +38,11 @@
->  
->  #define AXP22X_ADC_RATE_HZ(x)			((ilog2((x) / 100) << 6) & AXP20X_ADC_RATE_MASK)
->  
-> +#define AXP717_ADC_DATA_TS			0x00
-> +#define AXP717_ADC_DATA_TEMP			0x01
-> +
-> +#define AXP717_ADC_DATA_MASK			0x3fff
-
-GENMASK()
-
-> +static int axp717_adc_raw(struct iio_dev *indio_dev,
-> +			  struct iio_chan_spec const *chan, int *val)
-> +{
-> +	struct axp20x_adc_iio *info = iio_priv(indio_dev);
-> +	u8 bulk_reg[2];
-> +	int ret;
-> +
-> +	/*
-> +	 * A generic "ADC data" channel is used for TS, tdie, vmid,
-> +	 * and vbackup. This channel must both first be enabled and
-> +	 * also selected before it can be read.
-> +	 */
-> +	switch (chan->channel) {
-> +	case AXP717_TS_IN:
-> +		regmap_write(info->regmap, AXP717_ADC_DATA_SEL,
-> +			     AXP717_ADC_DATA_TS);
-> +		break;
-> +	case AXP717_DIE_TEMP_V:
-> +		regmap_write(info->regmap, AXP717_ADC_DATA_SEL,
-> +			     AXP717_ADC_DATA_TEMP);
-> +		break;
-> +
-> +	default:
-> +		break;
-> +	}
-> +
-> +	/*
-> +	 * All channels are 14 bits, with the first 2 bits on the high
-> +	 * register reserved and the remaining bits as the ADC value.
-> +	 */
-> +	ret = regmap_bulk_read(info->regmap, chan->address, bulk_reg, 2);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*val = get_unaligned_be16(bulk_reg) & AXP717_ADC_DATA_MASK;
-
-FIELD_GET() preferred as then I don't have to check if DATA_MASK includes
-the 0th bit.
-
-> +	return IIO_VAL_INT;
-> +}
-> +
-
+> Fixes: 97ab78bac5d0 ("power: supply: ab8500_charger: Convert to IIO ADC")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Looks right to me.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
