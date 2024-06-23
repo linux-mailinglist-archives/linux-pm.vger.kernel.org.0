@@ -1,75 +1,76 @@
-Return-Path: <linux-pm+bounces-9835-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9836-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27AA2913DA9
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2024 21:20:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB66F913DA8
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2024 21:20:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1582FB21A4B
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C98301C21669
 	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2024 19:19:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64C7518307E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9016A1836F2;
 	Sun, 23 Jun 2024 19:19:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XMhugZUl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P/G/weMA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12192AEE9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8638146008;
 	Sun, 23 Jun 2024 19:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719170394; cv=none; b=CxOocRj+GYQB94fIi2OUCtCYE0L6kO3NQ+W2m1g6mwqx12+FOJeIE2WcD/K7CzutCRjOB243G4YJkyqb0Wn0oLS0XMgw1e60IzG6hcnTy2oj7WiWNLnZuk0bqhqmVsebFFoEhbsUS/zRtExcBAu/LiFquXsRCBvpyxgg7L2LTg4=
+	t=1719170394; cv=none; b=TxaseVbGiIVN9gUt/w9Sxb56oIeEuRzZMnL1oY/QOlGd9vynt9le1lL2b9g3bynnsarvNnNJMD+ydk9TviNHcSPCXMTe9sYLEGXjUU8g953MhHgKLBCuf3hMJrd+ZaFFos9ear3rzzX84HvPppFDgt21z6GwUABUW7c10gJddVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1719170394; c=relaxed/simple;
-	bh=Ws7hGvjZkiJzCUTlmGX2m+s5i54lyChXPotsqc0/pbk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=O6L/Q0DhUcIqP3qovPcYoYRkP4SkWKZqj1sq4TJVRaUl1Y/IjqTqjBVJDxfpYhKHk0riAxT1/evR1BRn1ptYaEXUh3/D/eBySroesEEFrUQcf5sPBrhF+mnfVY6SvaFs7O+v7x7O6lBOUXK+mc0RmDbtdaS7f6sszlWfE8V7Vl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XMhugZUl; arc=none smtp.client-ip=209.85.208.172
+	bh=00qXA6IL7Yw/S9twvSBbKymSZnnafOIvWhYBnU7NjjA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=qMmZ6p/A+3lPpqp2ogBbSLTfWByq+vZuAdDQp8Axm8vrw6DDagX4obYaMEzrO3ulHLKNVUX2xmhqpYbeqBnTfVXSo/43mJg7JeWiQXz9h3fML74gQDP/H+3Ko30sGgx0xzGWt0PRxqQ8mw1UojKEXjOx3FlFjE8AROp/oGdA+64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P/G/weMA; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2ec17eb4493so49531161fa.2;
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a7241b2fe79so102464266b.1;
         Sun, 23 Jun 2024 12:19:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20230601; t=1719170391; x=1719775191; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MHw6pZIKtndeIkJjiBOSG5ktlR30QStxLBqGrPo4stE=;
-        b=XMhugZUl+nqRv59V0OhynYJRFDuZfEmA+fe5tFyafzIeQla4PivvsMWBsjLM9ANk1i
-         b+bjga6+UZQiDN4wydTF7FU/s71GSbtFJhbgYjOzMpIZev3AcYYtpqw81QGFiNPuwpNr
-         shFOVt7nX1zayhbGMm3OFIUJZwWRcK38kXBxN0FgGXxfPEyH5E6Jz93igq7Sg9U8h/7o
-         S5hI3n5KUKo3cBqyPQ2VAKQYlsZXH3LBp7DOcsM0o2fDCH3NZif/RHLmMOUEEFuAmOi4
-         DjJuI0oBSqeA8rpEzSZ3+DXj1WjcIoOxyz9xrjvYoChfecNEHoQYm+swwXcjir+F0UTe
-         XtlQ==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WaTIi5aYkZaCgsP3IdLGfbPnML7N0WxBYlilWAaafU4=;
+        b=P/G/weMAfwaibjvgmqocAUZo/pX2ty9VARq5KJMqkNQizapi8LIVKzfz8zGmshSKo7
+         dNwLrqfq9JibgidLaFbZPiJOB4NTp4IGfAWRQ34sL7mQDOklFuKy/WPxL4zA+wlaNGsF
+         F2cBbg7zwMGWrB/rZch+A9bFXxJ31PNQbzVaqdJT6/bAw6/r01GXLyZEdGghjhlP3vKd
+         j3aqb86KxqDy8Q49bb7pNjF3psAngQDvzNxqJfdgnk5Z1B6diYZUs+0ay79Ti4n9b0Kc
+         SAqdYYUeAYiSHE3U2/NzIkr0UMNFVU4YwgA7iBXM1gtVj8kOSx7XF40wNpTioxAdkQII
+         /KBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1719170391; x=1719775191;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MHw6pZIKtndeIkJjiBOSG5ktlR30QStxLBqGrPo4stE=;
-        b=BlhZ/2V1u3A+D10Ov5VfdV1QP19sn/PPJkd3Q0olLh4QSotr3RNym3Kgr1Qjdlj+IO
-         xCDM2dBH48cPynNd8y+lnrlhHw0xAnoXapnGkmYP09od/W97YPLIsK4ljH2bksKSKbXL
-         83CAvlyj2nmiJzhNBZ1FzaVpFyiSxBQ6QDHZ+CNX0dKZCqAjI0fsAULhXArvTMJpzgxp
-         RilyVwjly5epHcukAh5CsLFkhSuiY5ZrbO8IorCBcUjRovHm7RtBSoJ3OPRMXuTkIIcH
-         5rVZ3HwSVGEmP61T1p28rNRdZeA9DF1oO5z30fe62KMXPnTrgBwdkISyc3KoadfWl6ga
-         mLsA==
-X-Forwarded-Encrypted: i=1; AJvYcCXIdxWtaaGm6W5NcPyA9dZMIFrbDeENhrTxxa3ilb1p35Yxw1WBVcBeNWsnzSM/GH8JlZG2bOsLweB50IKqw5JYx+gVEAajcSh+o0DuSFEHlYywasyVrmTxxZzqQpVgwKI3OgqrhZU=
-X-Gm-Message-State: AOJu0YwQJ3lehWARjfvQpA79Bm9EQutKlv7t/XasIPYZyzEuYXeFea6K
-	we1E33tzQESivlxxWy0tmkciQqYCU7Hc3kF86JJfUJZKdaw+H3qz6afS3g==
-X-Google-Smtp-Source: AGHT+IH00LgM/ceDlja7GeFcDFgy5Ff2CYRCj5rbFwPfnV7LsZ0hRzqWiFVrfIgorPn9EX3b/6TYbA==
-X-Received: by 2002:a05:6512:a8b:b0:52c:de43:808e with SMTP id 2adb3069b0e04-52ce185275cmr2281702e87.49.1719170390353;
-        Sun, 23 Jun 2024 12:19:50 -0700 (PDT)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WaTIi5aYkZaCgsP3IdLGfbPnML7N0WxBYlilWAaafU4=;
+        b=HUFNwG4Z+mncdWT3GQnwlXTqBl2vqXmJMxX+jeCHtLUuOHuJf7ysV1uY1e5UECW5Jz
+         9wq7SkqYj3ZLaF06JlkLRekJdVGdXPkiXBuaEA5XApU3K8pZDksrBS259q307OL6FosK
+         cPC/gSu9WSodWUByEOvlQYf8y1WhMdJ4beCJfmR/MWf8feS0hpAg28qfShY9kA9M6Xpb
+         s+rOTL1Y9Dm6n1U8jIIEGVyR4DERavLVv69D6GCLr4l/q2ypEGD/E/BU2UPbGGl6olZZ
+         3eLuvWk9hszgdS0AkFL+SoPV/gMx7XQcY31k1/Rdb5vZhHyBAFXS/DKCgAP9IarNOK9C
+         xkTA==
+X-Forwarded-Encrypted: i=1; AJvYcCXwUcvtXUJSLvJdejrwefmFfDMi4TWwgQcIZCm6ZWVNtWvMLaRbWwIRrJwdIpklnJ+LFF3FiC+2FLJrWPa0+xat4IcTWAEbMcxvKX9P9Zm3HpETGJF6hikpyEKpsN4cg9sBpkYr/zc=
+X-Gm-Message-State: AOJu0YziDrhH9aBna3rw4w6lOiRrEFfqiGBVkSHCM3gZjZ++6fN6nSEB
+	ytC/k8I8qhzS2yw0E/u8RR8q7UkSA1YMxIsyDHWKPaSPPS7gRMBD
+X-Google-Smtp-Source: AGHT+IG3csI2gQK9zlXBPvg68Su41NrzsH15u4ipxEnqF+lxNb2ItVc/R+ZUCCcBECx6wd2Se2kLDQ==
+X-Received: by 2002:a17:907:a70d:b0:a72:542f:8251 with SMTP id a640c23a62f3a-a72542f830amr62708266b.56.1719170391045;
+        Sun, 23 Jun 2024 12:19:51 -0700 (PDT)
 Received: from [127.0.1.1] (31-179-0-202.dynamic.chello.pl. [31.179.0.202])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7255b56e48sm22075166b.176.2024.06.23.12.19.49
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7255b56e48sm22075166b.176.2024.06.23.12.19.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 23 Jun 2024 12:19:50 -0700 (PDT)
 From: Roman Storozhenko <romeusmeister@gmail.com>
-Subject: [PATCH 0/4] cpupower: Add 'help' target to all the makefiles that
- don't have it
-Date: Sun, 23 Jun 2024 21:19:40 +0200
-Message-Id: <20240623-make_help_rest-v1-0-4bd3fd51064b@gmail.com>
+Date: Sun, 23 Jun 2024 21:19:41 +0200
+Subject: [PATCH 1/4] cpupower: Add 'help' target to the 'bench' subproject
+ makefile
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,37 +79,45 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEx1eGYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDMyNj3dzE7NT4jNScgvii1OIS3VRzS0sLC8s0E+NEQyWgpoKi1LTMCrC
- B0bG1tQCqJ+ajYAAAAA==
+Message-Id: <20240623-make_help_rest-v1-1-4bd3fd51064b@gmail.com>
+References: <20240623-make_help_rest-v1-0-4bd3fd51064b@gmail.com>
+In-Reply-To: <20240623-make_help_rest-v1-0-4bd3fd51064b@gmail.com>
 To: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>
 Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>, 
  linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Roman Storozhenko <romeusmeister@gmail.com>
 X-Mailer: b4 0.14.0
 
-This patch series adds the 'help' target describing all the user-available
-targets to the makefiles which haven't had that target yet.
+Add 'help' target, describing all user-available targets, to the
+'bench' subproject makefile.
 
 Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
 ---
-Roman Storozhenko (4):
-      cpupower: Add 'help' target to the 'bench' subproject makefile
-      cpupower: Add 'help' target to the 'debug/kernel' subproject makefile
-      cpupower: Add 'help' target to the 'debug/x86_64' subproject makefile
-      cpupower: Add 'help' target to the 'debug/i386' subproject makefile
+ tools/power/cpupower/bench/Makefile | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
- tools/power/cpupower/bench/Makefile        | 12 ++++++++++++
- tools/power/cpupower/debug/i386/Makefile   | 12 ++++++++++++
- tools/power/cpupower/debug/kernel/Makefile | 12 ++++++++++++
- tools/power/cpupower/debug/x86_64/Makefile | 12 ++++++++++++
- 4 files changed, 48 insertions(+)
----
-base-commit: f76698bd9a8ca01d3581236082d786e9a6b72bb7
-change-id: 20240623-make_help_rest-e799889f43a1
+diff --git a/tools/power/cpupower/bench/Makefile b/tools/power/cpupower/bench/Makefile
+index a4b902f9e1c4..81c862297782 100644
+--- a/tools/power/cpupower/bench/Makefile
++++ b/tools/power/cpupower/bench/Makefile
+@@ -41,3 +41,15 @@ install: $(OUTPUT)cpufreq-bench
+ clean:
+ 	rm -f $(OUTPUT)*.o
+ 	rm -f $(OUTPUT)cpufreq-bench
++
++help:
++	@echo  'Build targets:'
++	@echo  '  all		  - Default target. Could be omitted. Put build artifacts'
++	@echo  '                    to "O" cmdline option dir (default: current dir)'
++	@echo  '  install	  - Install previously built project files from the output'
++	@echo  '                    dir defined by "O" cmdline option (default: current dir)'
++	@echo  '                    to the install dir  defined by "DESTDIR" cmdline'
++	@echo  ''
++	@echo  'Clean targets:'
++	@echo  '  clean		  - Clean build artifacts from the dir defined by "O" cmdline'
++	@echo  '                    option (default: current dir)'
 
-Best regards,
 -- 
-Roman Storozhenko <romeusmeister@gmail.com>
+2.34.1
 
 
