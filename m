@@ -1,129 +1,116 @@
-Return-Path: <linux-pm+bounces-9861-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9862-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 388839141CE
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 07:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA9DD91420D
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 07:35:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CADA81F2347E
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 05:08:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EB0B1F248FD
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 05:35:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA73F179A7;
-	Mon, 24 Jun 2024 05:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F0D118042;
+	Mon, 24 Jun 2024 05:34:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DQesso+X"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="o+QOUivS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07A74C6E;
-	Mon, 24 Jun 2024 05:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5081F17BCE
+	for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2024 05:34:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719205695; cv=none; b=uN2pZ2jrSgwx3ELHVZ7p9QB36P3gp9h6D2/ZgDmZerqXAuu87x4DaRO7kBWNXaQXKu0CQgZ37Awb3PqVbgp7VbJ4hHSem8WoVL4igK2QFCLM6Q3HMZbJPs/vzMBwo10DAjtUCqXiD+XFm/yntbJZLiOV5pp8JxyCJxBTJLXObh0=
+	t=1719207296; cv=none; b=AmCMJXfIpKdy3NPkRPpGeOzc8xvioIewPy6le5bKiuUscGAz/ioJ5/z8LTpUNo+HRSSyXSLChKPZA8Ld6WM9ed71UKWfqV32tUVI911Nh5b+6o0uJvstL4dcFsJZ1MFgxGNqofSNu4OxD76oFeO//XOP5pnaDgu8HD+3oL9OHHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719205695; c=relaxed/simple;
-	bh=6+KKjq/eT7gr7k+QJSuzGCZBQdGHTI4JtnxHih2rCC0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=agWVWU+jYqpbDrd27oXTyS8n8iu2P3hokVy9Z4N17VSKQzFdqu420DoUE9X8uGI0FBm72Qi+dXgOxszebX9lL5DABYWmrwPBVaq7d5kqFzDrkzQftQCJpk4mvTjrlT8dchJOEuDhwBGeGZJqkUQIO1VYYLrGK2o2LvxZEZVUuiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DQesso+X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 894AAC2BBFC;
-	Mon, 24 Jun 2024 05:08:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719205695;
-	bh=6+KKjq/eT7gr7k+QJSuzGCZBQdGHTI4JtnxHih2rCC0=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=DQesso+Xb1M5Iy1U+VuhHtxlDRYMHkRyVuTlS48xL+PpATJQUPIXdDEVG+fmnVaUl
-	 8aVyCCEKZGlj96pOMa3Xd4SOjPw0uyVl8En+dgjoR71Xs+IxhqSZFfU+wguPSxcSCT
-	 nIbopvycu6fw0SDhsxbAwoz+FApomkYElnOtTPmznYXWBa1AHQqiZbbs6GjMt96baE
-	 UsVJC4g28PtEvLpR9hRq33dYRqFsL4NszNQPIFKkCC7WjHFz8Iv9j3rnF68U+J4Glo
-	 kmAM1SAocvRjyIArHn5Sh4Bce5opXeN0sCCd4UWNmWbJFXwVZQOWQm7PWia+0QaCIq
-	 RacW8tX786RJA==
-Message-ID: <f50e346b-4ce6-4528-87f7-f0545c16a72e@kernel.org>
-Date: Mon, 24 Jun 2024 07:08:06 +0200
+	s=arc-20240116; t=1719207296; c=relaxed/simple;
+	bh=c4qhto/s0OdNLY9J1rt4EUXvriPgx343wWEsZ88Bdyw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d73y48Xj+ArcrQ9Gs6lNFdnY0kwb2rsnsHQW+mdcvnN9wUhElmuxRPAdR4XBTy1edhEZDcNp25o2dWT7cplUG9IwptVpqv396VyVnlz/l+1qvqCxd69By/ITeUUnOS0zwpuoRvfPgOeIpG9s6c0qmz5VEVtwXyrRttWIQXDum6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=o+QOUivS; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2ebe40673d8so44389561fa.3
+        for <linux-pm@vger.kernel.org>; Sun, 23 Jun 2024 22:34:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1719207292; x=1719812092; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=597F8StL/WJzwtlklD4026dqqrH/+l0r6AFwKiLnjjc=;
+        b=o+QOUivSovUIGb7fo1QSx0Io02uZeKqaheBUN9cK1HMKvg0E5hol95jvY6Sy6t49Ul
+         XbYdn0yNpTUYaoBZAurOEPwtdUrRfHguxwZRz904ZQ4gowqlKuLd3CSa+IqLIMf1wDng
+         GL/QKAaC3tMR0sWX3btOrnnJXXrjq61WCTe/G8wCd1x0+MVtZ2v/jXXB1BN4u7zEfX75
+         GGFCGN9ep7MPkGNx0wAjdmLRZexN0oTy8Uj1dQiYAJiSSxc3HkCvA3aBsP11z74WCjA9
+         3HIoHZopc5zI9n39jfpF3ozGhD3USB/Qt8FRFUyfeC7iysGoOMyeBHhzp6uT30OlHepO
+         KJ6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719207292; x=1719812092;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=597F8StL/WJzwtlklD4026dqqrH/+l0r6AFwKiLnjjc=;
+        b=fn3f6W0dkQ4R4gm25EHfjZRuXNAkZFuTMLdvAOFSHjnCTPx1mFrl/pXD9FW5BD4TSu
+         bml0sCxwfF5NgRPdSJn6/bvRfglC1gKoHzA9DAf+eVFSwbmGfQkyaYatcSzzEu9YjWYt
+         /wNIPfReoPA3vso7juEbMpqCTedsus/+Q7w52DxIEK207ZTeH1m9/4lqCoGQVBkr3E5s
+         aRdWoC6G3+4jd67SBJ/kdvqWRHjAmr2/4XWb9ns/BqEZVU8ikUu/yETdh9pD/8JighIJ
+         OQHgsJupzgbNe0KFBe9/3q9bEPT5wbbvSqK+QvsrzCKLRpt4lQDSIhjec0dkbrrP4WYw
+         Q12A==
+X-Forwarded-Encrypted: i=1; AJvYcCVq+GBW4YoOhyaAKtLavfWxsJ4aKWI3CdWVT4Bs/dFKoDsBT5o0pm8ZuccT5tBk0b/kRoBD1S3vWvleooUd3/j7J8aXamb2pTM=
+X-Gm-Message-State: AOJu0YyX3WE6DAfQKnhT1rfSKjaURLZYDyjrjyezdF597CgcTRUOe61s
+	pEv/19bG273R2PX55KI6XOOvr3aPDIIA0F7f9t6pwPoPu8cqbgZWQYsZwxOsESQ=
+X-Google-Smtp-Source: AGHT+IFGlNTPxkgHedK9wRG18wo6RMMt1Fe9/ddWFIoExxdLbUMR1WIHZQpU0EdbscRjwTfmjY17zQ==
+X-Received: by 2002:a2e:87d9:0:b0:2ec:5467:dcb6 with SMTP id 38308e7fff4ca-2ec5b39c57bmr20962951fa.52.1719207292470;
+        Sun, 23 Jun 2024 22:34:52 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ec4d60133csm9066621fa.15.2024.06.23.22.34.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jun 2024 22:34:52 -0700 (PDT)
+Date: Mon, 24 Jun 2024 08:34:50 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	angelogioacchino.delregno@collabora.com, andersson@kernel.org, konrad.dybcio@linaro.org, 
+	mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org, quic_sibis@quicinc.com, 
+	abel.vesa@linaro.org, otto.pflueger@abscue.de, quic_rohiagar@quicinc.com, 
+	luca@z3ntu.xyz, quic_ipkumar@quicinc.com, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] pmdomain: qcom: rpmpd: Add IPQ9574 power domains
+Message-ID: <f4w5hvhgyniecab2rhy4s5nd7ktraf2jk2ebnp6najqq25tsuy@3lqd6p4hsmij>
+References: <20240624050254.2942959-1-quic_varada@quicinc.com>
+ <20240624050254.2942959-4-quic_varada@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/7] dt-bindings: clock: Add CPR clock defines for
- IPQ9574
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org,
- angelogioacchino.delregno@collabora.com, andersson@kernel.org,
- konrad.dybcio@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
- ulf.hansson@linaro.org, quic_sibis@quicinc.com, abel.vesa@linaro.org,
- otto.pflueger@abscue.de, quic_rohiagar@quicinc.com, luca@z3ntu.xyz,
- quic_ipkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20240624050254.2942959-1-quic_varada@quicinc.com>
- <20240624050254.2942959-5-quic_varada@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240624050254.2942959-5-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240624050254.2942959-4-quic_varada@quicinc.com>
 
-On 24/06/2024 07:02, Varadarajan Narayanan wrote:
-> Add defines for the CPR block present in IPQ9574.
+On Mon, Jun 24, 2024 at 10:32:50AM GMT, Varadarajan Narayanan wrote:
+> Add the APC power domain definitions used in IPQ9574.
 > 
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+
+Given that Praveenkumar was the original author, why isn't that
+reflected using the From: header?
+
+Please review your process and keep the original authorship properly
+attributed.
+
 > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
-> v2: Add GCC_RBCPR_CLK_SRC define.
->     Not adding 'Acked-by: Krzysztof Kozlowski' as the file changed.
+> v2: Fix Signed-off-by order
 > ---
+>  drivers/pmdomain/qcom/rpmpd.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Best regards,
-Krzysztof
-
+-- 
+With best wishes
+Dmitry
 
