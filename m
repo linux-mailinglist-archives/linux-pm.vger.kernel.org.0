@@ -1,188 +1,221 @@
-Return-Path: <linux-pm+bounces-9915-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9916-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B94CD91570A
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 21:18:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E384915910
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 23:31:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 635CE284E61
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 19:18:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 613451C222B2
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 21:31:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ACFE19D8AD;
-	Mon, 24 Jun 2024 19:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2D5813D53B;
+	Mon, 24 Jun 2024 21:31:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kali.org header.i=@kali.org header.b="Dz9tb5fr"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="eAGA3wji"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2041.outbound.protection.outlook.com [40.107.100.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B237D1E868
-	for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2024 19:18:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719256707; cv=none; b=Z+7VL5E6YcIz7KooEL2ipsPW7OVzp7SQeZ7XCj8VK37EXSOMACIbutZnv4qzHZV1d8tDMX3kKCWuC6/xYVeXXOn0C4Au7OadOl+o9tp9IXYCtDOHLnecFT3TmZHupiXKcXt1Ma+xWWOs/mhXGjKC9k+KtA1YSP3D3KbngUY3DZw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719256707; c=relaxed/simple;
-	bh=1+8P9e4bjZNNeYr8EhkJJ8GlBLAx7rydpxmTmFAOTFg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DY5e3jqnEceRh1ctTb/5jQAWuFi7NIHdB3Hy8mW4MJGPcmZlOMLukBxODISGbU0if/BK+uzrhBYcMrK6kLuAnVOumnPO7hjDph5V+Tg6Vr57UIH+CC7DcD2s2tL1EwwV2rsikwX9xPTofpnhSoER/bUA4ponx6p8/hWbdIY33I0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kali.org; spf=pass smtp.mailfrom=kali.org; dkim=pass (2048-bit key) header.d=kali.org header.i=@kali.org header.b=Dz9tb5fr; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kali.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kali.org
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-57ccd1111aeso5609828a12.0
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2024 12:18:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google; t=1719256704; x=1719861504; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w/utmK01Q/aAz/jmaJoKVno7ODPMTb9bqaLsPY3576Y=;
-        b=Dz9tb5frwaL9QXBBkZt75It488ohDV/0Y1daKnhL5RsQrwmSwXtc3sECP8Yod8Q11F
-         Lwl8/C2iLhQJx+Bjbsxp+xVsAbk1jjpkpaDLlqe7V0thV8O9bn6Dgm08Pcz76hKTiPkH
-         pLtrS9Q+ylubMwkzx4CKJpPrEEtxoUCv9ztumZ0k2xlKBQ64W071WoN6YW56QbJ+uO6M
-         +ag7eHjCT4l6zrj3PzNxpdES5oiPtlk06GC4gR2Q34cUkiP73wAoJ0QigPM7bO5cgSam
-         pG4fNNwQrdQeyXndnSrhRq5DAQzZ2c+Bgj46FaM2ub4GILYH+kQS/8w5ZCszEJ0H0usn
-         VBZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719256704; x=1719861504;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w/utmK01Q/aAz/jmaJoKVno7ODPMTb9bqaLsPY3576Y=;
-        b=Mz1Kfp49xSudYElo1nYKjCK/xx4P3ma4VlS+xQmnHQ2wxs6cKIXRu8vKWe6tSLBlCF
-         y1yDak7CE8P8xDqIOwc/3TPwnoPAkxsRtQPDOp/uzI3e0jpDcB5CMoec6Y9NTzU5J+LX
-         AXFo3sOJCcOnAjE79BynqiSLb3L4RVjjrFbt4Av0b040vEYeEajX/xEXmRrCGeay7BEJ
-         9+R1vSsQoz/QBC0wFuhhie4gGcE892aTVl7V5gMxcCsvwWuGC57C3WQtVB1Wb3Zj7NfL
-         Yfb/DenynqEZU9kXZ97bKWF1aEIq3fXWuYzCMHKQxRes5nC4ODIl6CNACx296IL5zlQ0
-         p6EQ==
-X-Gm-Message-State: AOJu0YxhonAs2ztY9el5uon+MGI03Kgx32xkPTFg/n/ub5VzF5dS43k0
-	isXRJhxiEF6tmeYO0aUTrf04kIWyst/ukqth0hcQ6pt8V7S7ahB/KGgvKSQ2IfYKMqzoEDaPr8W
-	j4FR/MmjAgIXffoYb4tBVhETSiO8i+La24DojEm8OT9HUn9FQR8M=
-X-Google-Smtp-Source: AGHT+IHotRG6K2HXCdC5lYRNF4KD1Z2OXWs9Jet+gNkN4MBEBoLu0f2q74erRpdjiiCthuRWlb1Tc3ezwYipTA/uF1s=
-X-Received: by 2002:aa7:cb50:0:b0:57d:4b56:da11 with SMTP id
- 4fb4d7f45d1cf-57d4b56da8emr5008376a12.11.1719256703918; Mon, 24 Jun 2024
- 12:18:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4672381B1
+	for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2024 21:31:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719264684; cv=fail; b=HgsG2a+s352U70uCC1V5/510hC2fz9fcjTZH2iIL5CsQ4HZb8ko13CvVM7+dRjy9rJ06TAvfzXX3xLF9JBfj/F0q7DZlvsy5S881iR9pXxsW7rKHaHldGGFWIF/Fgp5ltzAu0JJO1sCYHHrf5R6mpvSZS97LsQc3kc+dwUd2puI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719264684; c=relaxed/simple;
+	bh=89GwcmDlYdsDbgyWr1p1kY3y3GB+w6OZVNbpjyYTLDI=;
+	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=H3Y4DNx19JxT3R2bINsN4oM5i6imjp3MzqWlh2Pe5MQKPuC30rmutJqZfKjjncVEETwmCrnqxxfY1ZyE7u+t/v9OHTgzdey24XirEv62ylGMj3MaB9Bld/zGAb7rbRNuRcJN2xARzboPwPGOcUo5PtKDYRm/IB5QZJ9aDIskmNM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=eAGA3wji; arc=fail smtp.client-ip=40.107.100.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S7vQwMMLeQ7lcWSBYxv7pZgAGq+7/m6qRA31scgAXs3s3aCs5AO8t7oireIHquznhvcmIrUku76daljA/w6qC/pg0sorCNqiYNGLRdtMmSQt3xawd6a0fnukBOjHPV5YuqLQ+VZej8AXyfHVoGq0Ub3iFjP6phdyrUPFKfknd7ItWkumZOI8D/w1+wc933DjLRNdbjTQUI2BLf0qDjfsLErSrEkvufIYU8nP4m8Ocdd2j9ND7dLEV+rY0nkkesOUoSkgdD8dMcIcF/3wB0+6H9ggzs2atpHBuBGsc3z5bn/qK+z7ITRJBxlkH6bQXsGgwpnIbDbqFctcSxFIHAlWeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HY9AMqEe05G/gwHTih2Yb/c+B/DGaaLrCp4k0vjC//U=;
+ b=kqVdj/tA3u9dyoLELUCunoa8HUF6ckOX1piK2NzqUEe01SbOY8pGD3Wor3Cy/Yq0T5VaOy4URWqPNtuSfxGbcLL9umi6VEBOnLXCzxmeRhBDaFNDmGKTY5gK3io8rZq6aZWc3AUfjVv7lpbqpSAKJNVcMQu1n/VXHYpFKbkaVlxDEjDkTBQCBwOmN9IYGxGKNVIEAdooUgWyx1GLDlelxfR4josgfE+xssP6Vh/TpoABCORp/dHERQ1VtF2gemlT+V/mNig2I2fy5vLluecboVytjEl9Czt/cPHWa8otNHcFNg7UQCqp9nUbh1bjF75RreWn1dREWjwW3ZJoz71CnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HY9AMqEe05G/gwHTih2Yb/c+B/DGaaLrCp4k0vjC//U=;
+ b=eAGA3wjim7XPyk5FOr+NjW3BXmDbl2zx3x+OzsOLmQdvoujZwBvxw/DccNq4Odjh6LbwmP/T/y1dNIfdfRWZtMBPrEd/C0dSxQ4wOXNq6Z/spAHf9DFFEF7iUhD96dTgPl0BXDLaVkxK3njZUv7YuLSsIiF0fr/KoWmAkgDyJWE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by PH0PR12MB5647.namprd12.prod.outlook.com (2603:10b6:510:144::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.29; Mon, 24 Jun
+ 2024 21:31:19 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%5]) with mapi id 15.20.7698.025; Mon, 24 Jun 2024
+ 21:31:19 +0000
+Message-ID: <111b995d-b99e-416e-85a9-39c144c8b23c@amd.com>
+Date: Mon, 24 Jun 2024 16:31:17 -0500
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+ "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
+Subject: Second set of amd-pstate changes for 6.11
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA0PR11CA0003.namprd11.prod.outlook.com
+ (2603:10b6:806:d3::8) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12464461.O9o76ZdvQC@rjwysocki.net>
-In-Reply-To: <12464461.O9o76ZdvQC@rjwysocki.net>
-From: Steev Klimaszewski <steev@kali.org>
-Date: Mon, 24 Jun 2024 14:18:12 -0500
-Message-ID: <CAKXuJqjAQERxkfTESUKSvPo3N5qOf+un6LbKys9YrBT_ocJG8A@mail.gmail.com>
-Subject: Re: [PATCH v1] thermal: gov_step_wise: Go straight to instance->lower
- when mitigation is over
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Jens Glathe <jens.glathe@oldschoolsolutions.biz>, Johan Hovold <johan+linaro@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|PH0PR12MB5647:EE_
+X-MS-Office365-Filtering-Correlation-Id: db58e96b-14a9-4a07-1644-08dc9494fc88
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230037|376011|366013|1800799021;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WHdoL2FGMU1uZGRQeEhFcUtlSDJ1Q0ZxZVFablZMd3VPSWw3RnJCVFE2bklV?=
+ =?utf-8?B?cTcwS0tTUys2ajlVWWJPS0JmdnN6cDQ2TUhtM29lbmJ0YS95TitwSG5KeURy?=
+ =?utf-8?B?dGx1d0RKOXJadEk0M2VCZjhVbFhaUGdrNGlqRjhJdmtwWGtIN2dmNGozUW9D?=
+ =?utf-8?B?WmlBcWtQL0NUTmFPZnRvR1NRZmdKd25OT0NYc0pxRTdXcHNVWGVPVGtaSEV0?=
+ =?utf-8?B?alQxVGJkTVlBL0pTWVozQkJMS3Y2SDNYN29FUFA2UGgxZnRHQU5ESFlhL0Vz?=
+ =?utf-8?B?M1MvaDVXellkeFhUcVBpUmhhaHY1eUd6anpPcjJ5eXEvRzdVRXF3VWVFNWNC?=
+ =?utf-8?B?SFNnVjlCYVdYMjFZMThNTUY1cWVqOFhabVhCalFLMFU0K1F3ejFmaGlkSlZW?=
+ =?utf-8?B?YUNzNXQ1N1RtaENOcHBObXhiWnRZY09XaTB0QmxSZkFEK0oyUHBmeDcvcVA5?=
+ =?utf-8?B?SXAreWZGS0t6QzdFQVRka0RaVk8xR2cxSGVRNWx4REJMZDJEVVRpNytpT2tL?=
+ =?utf-8?B?UG9jV0NkM003MEI1eUszR1NBQXJYVzRtNnRNSkNQclZTemRKcitLZVd6SVdC?=
+ =?utf-8?B?RCtNbDVKQlQ1WXRXQ3cxS1NFVmI3emhKbzJpZitSU0lRUlFHQWgwaHhVNC83?=
+ =?utf-8?B?bnUzWFB4bHp4UjVqcGdLN2ROeVFCTEZJZEt5K00zU3VIaTRGbFJGdXFFTVdQ?=
+ =?utf-8?B?eWVrNlE1aGlTaTBBUlhSdFdIdkFZRGxyK1p0TnEwZ2xWaTdjR3pHaExtQ0Zz?=
+ =?utf-8?B?TUNBU2VxNTBKL0lzR080dndRTm1lYURkc2RXOHdkTkQxTHkrcVFxUHFFN2ZV?=
+ =?utf-8?B?RUdaRytOWVdSc1BmdlM0c3JndG05TUxkZHhvbnBBZDZyNWF2TmJLRld2MUFt?=
+ =?utf-8?B?SXhjZnp6K2owTDU2aTJKTG53OXY2NWRraGNXekthQ1dqeFVnNTBLZExTOWt0?=
+ =?utf-8?B?dHRUNENGc3hISk1HdXVKZTI3RjF4dGJRYTF4ckVhemh5V2MzUkNiWlh0bURa?=
+ =?utf-8?B?bkVSbDI4eHVadEtYSHFFTjhHMW5KUWR0SHkzL3BXRFlISFYwbGZPbDVXSHRM?=
+ =?utf-8?B?bVo2S3N4Nk8vMzdxSmVMTWp4UWpsSUM3eHRrOW1wVzd3RzgxYUVVYWdqUDRn?=
+ =?utf-8?B?a3ZFT0tkd3VpTXgxc054eVN3UjFKRXZ5a1lGWjhmMXNvcUxTOFlzQzhVTE1E?=
+ =?utf-8?B?V0dSVzlmNERjNHdXa1hSSTBUeWpTUEhuZEhkRlR5STJDaUdrUURhMlVqT0V6?=
+ =?utf-8?B?Yjdqb1JScXR0UEdzNjBRVzZQYkEzMWlRRW5vQ21BMmk4ZWQxNGFqbmR0M3I3?=
+ =?utf-8?B?YmdwVFBBV2IzeXcyK3ZKSGl2U3VlUVp0NmJYaEVQWjVaUkZIYWdtdU9kdTl0?=
+ =?utf-8?B?WGJZNFc4ekZtd1BJR0tVeUMrak1PaTJwUXgwTnNySnRGYWlEOEdWaFc1dUNs?=
+ =?utf-8?B?SXJzQ05ER05TRUlROUlPN3VxM2R0ZDMzY1dIalh3YytnMCttR2JKZ0FVQklh?=
+ =?utf-8?B?QmdKaS9CQTlPYzlIeUR3eVFmUjMvbU91bVJsd3VTVTdGcFVqSEQyQ2xrREN5?=
+ =?utf-8?B?TGhyeUZMZ0tKSG5FSjhYVzJHZEVNN2x1RzVyT2RleDFvaStwY0pvV2hGdDk1?=
+ =?utf-8?B?NGNXMFFnNDBtemZGNVhOTVlET3Yzd2xXekdOV0xYbzdPR0ZTMnRkdHlKR0U4?=
+ =?utf-8?B?NEJ5bnk5Z0dRakZoWEY2blpaMm1tVWZjTWxTaXpFSm4vYk9OWFJTWDV2WCt4?=
+ =?utf-8?Q?WKnr0fCOkvIdeowGwrvN74d9e2bSnbC3hbzPhWT?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(376011)(366013)(1800799021);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?OHc1eTlRWGQ1STlIZG1YUFpLd2IzWC93c1J1ekJHWWkzcDlRM2NoV0dQUXhZ?=
+ =?utf-8?B?SDRtNmpsU1RQbDRwNHliT0FGWlZSYU45WW9tYmxaWWRUVFpxcVRZUUZMM0l5?=
+ =?utf-8?B?K0hPUjJrbG1OYU0zbkx0bkhtZWRKTFR4Uy9weFcybjFWUnlEMVI2WUJ0TVVy?=
+ =?utf-8?B?MndTVUZpR0hqeWxjOVdkTHliVHhpUGYxM2RkRlJJYU9oRFhNQ3pVODZxT25N?=
+ =?utf-8?B?VitIK0lrMml3SkgrZTB3UWs5NXV2czZKM1FYWDcxMGR3NHlxZTJ4ZEJtOXdl?=
+ =?utf-8?B?V20zbEZ6OElJa21PeXBUbWNiZ0lYNEdoMFNGV3BLRlpHSy9qYlJkVG5wMHk2?=
+ =?utf-8?B?cUxQM1owWmVRVVBpTVFPUTBQcXYzQm5JSlpRdEZnTmRKNU1tYmxybVZ1ZjNL?=
+ =?utf-8?B?V2sybzA5Tkx5WVA2TlppSU4xcHNuamo2c0xKVWRkR0xOS0hnQ2xIV2xRdmRM?=
+ =?utf-8?B?QW1xMjMzaGtjaEUyQlBRVXh1Wk1YaVlIaHNLQ2pMNFNTMXhyTlJsaWxOeG1L?=
+ =?utf-8?B?Q3orNzltM05oNzJ5cDRRM0hZd25iNUQ5NHN3UGEzUVYwdEg2TFdEdTJFTnh1?=
+ =?utf-8?B?RVhndVBYUmE2dmVDNXl1UVZTNUpheitZZjAvMk1lNkpkV0VzRnQ2VUFzZ21Y?=
+ =?utf-8?B?ODhwMDV3RzYzR1pJZFVOZHcrZThVN2tLMGNEc3cxTkJva3hoOXg0SElYRzFr?=
+ =?utf-8?B?bWt4cVMyQXFydjlNWXRvVjEwNXVEaGRSRWRIMXU3Umx2emhySmRoKzVST1J2?=
+ =?utf-8?B?YnZRMGdVWlhIcE1xNVR3cTdwNzdqRnNEQzBXMjdGRE11YWNuVG5lOUJuQWZJ?=
+ =?utf-8?B?bHorR0o1L2RKL0x5UnNtSVhwb0w1K2piOGczb2pUT0NmVjYybjhkbTFsUmdG?=
+ =?utf-8?B?dElVdERLWGxFRUI4NjBUU3FJTXlHTmFUTUdhcDVzT0ltOG1ieVY0MUg2Y0Y5?=
+ =?utf-8?B?SHFmMUhHdk92dVhwdlJiUjhqaTJxcis0YWNKZkRVcHdXYmxBY2w5L0pjYjZ1?=
+ =?utf-8?B?cVdDQ2NBeFRzTnVBVENyczNta3JIL3J3Z3BwRm53M3ltN0g0QVk4ekRXZHdF?=
+ =?utf-8?B?WE9jNGVwUTh3TUIyUW0yMHVPc2ZuQW9aMWxBcStEY1BGb2tpcjZUclpDMDk0?=
+ =?utf-8?B?bVYzcWFudEh1ZUZnZlQvS250UTlaWC9DQnZIYUJ6UWl0cVpxMnN1dERXSDlC?=
+ =?utf-8?B?ejZTYmRvRkhZWlNJUWVFZEdCOEZkdVVDZElyUjRSUU5FZUpjdVVTSmNBU3Q5?=
+ =?utf-8?B?eE5CczhMZURkSWRVT3JYMWw4SkhkdHFIZldxVE5nUGdSK2pzRnhJM2hYMXZz?=
+ =?utf-8?B?bzZka2x0aWdBWDUxcjBZNDB2bytUNmk3S0x2cms5VWJRT3d6YU1SYm1ZRFNz?=
+ =?utf-8?B?ZVh5UlNJNERpeXVHaVhhNXNSVnYrd1NiZCtwNTJEOTFVdWJQVkl5N2QyeGgr?=
+ =?utf-8?B?RTdrMUZScURyYmJUMFlyWFZ0TzhncWtjemJCVVZrcFVwRXVPd2hma3ZLbnNn?=
+ =?utf-8?B?K0xYUkJJZzhxR2VGYmR5MG1lb1hVRWlGUENZYkhNWExybmxLYzd1VmJyL1g4?=
+ =?utf-8?B?K3RtTkNZclNPdXVHYkZCT2tNV2RIWEJOUnRSdGhoVFc3ZG45bCtyWkpvQjhw?=
+ =?utf-8?B?L3BPMG1rVnY3SHVZOVFoWmVSckJQN0VPcnlBbHN6SUpLSmpXZUt5WVNpeU40?=
+ =?utf-8?B?TTFkWE9LblhGSmpUcUNiRkZoZ0xYaDNpNVhMVVFCY3Z4RmlEdXVpSS9ZL0JB?=
+ =?utf-8?B?dlJ6a2dWSUIrWXdoTUs1UDNRRUxYVnFLMURlSnd1T05QYmxnTUZyUDYwdXNq?=
+ =?utf-8?B?Z3FtNWZ2VlBoWDdHYkw5VlBoc011b3FZMllZRFN3VWpNRWdvd2ZZRnVTNUc5?=
+ =?utf-8?B?a2krNWoxVXpMRGp4SG9DRVBIeUV5RVpGSGpWV3E2cXd1emhYb1FwV05IeTdT?=
+ =?utf-8?B?SnFNakV5VlcvRUwxNTJ3ZXhTYmo3ZHJTWkFWMklTRFlxWU9zeGZvMUxTYk1S?=
+ =?utf-8?B?SThXc01LOTBiTDkwSVYwN1hOdEMxcUxvOUM2eks1MUZEcmVFMGlTMmIxcDZZ?=
+ =?utf-8?B?QkJheWZSalJ2MlF2a0IvRVRscWVJSk8rcnBhMlhSOXhpRldvcmhkWit2VDRz?=
+ =?utf-8?Q?mrMEe28N8OZ15oF0r2+Hg/v6t?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: db58e96b-14a9-4a07-1644-08dc9494fc88
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2024 21:31:19.4512
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: V4BwGXmPDvyTNeyKIlcKZR5TGWDa9SxUFQGWwIGFyUx/FEBUbcWuspk06iQQtGW3hGv7yRf7ajA1ndPd5JWt+Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5647
 
-Hi Rafael,
+The following changes since commit c00d476cbcef4cbcf0c7db8944df7e98a36bdbfa:
 
-On Sat, Jun 22, 2024 at 7:28=E2=80=AFAM Rafael J. Wysocki <rjw@rjwysocki.ne=
-t> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Commit b6846826982b ("thermal: gov_step_wise: Restore passive polling
-> management") attempted to fix a Step-Wise thermal governor issue
-> introduced by commit 042a3d80f118 ("thermal: core: Move passive polling
-> management to the core"), which caused the governor to leave cooling
-> devices in high states, by partially revering that commit.
->
-> However, this turns out to be insufficient on some systems due to
-> interactions between the governor code restored by commit b6846826982b
-> and the passive polling management in the thermal core.
->
-> For this reason, revert commit b6846826982b and make the governor set
-> the target cooling device state to the "lower" one as soon as the zone
-> temperature falls below the threshold of the trip point corresponding
-> to the given thermal instance, which means that thermal mitigation is
-> not necessary any more.
->
-> Before this change the "lower" cooling device state would be reached in
-> steps through the passive polling mechanism which was questionable for
-> three reasons: (1) cooling device were kept in high states when that was
-> not necessary (and it could adversely impact performance), (2) it only
-> worked for thermal zones with nonzero passive_delay_jiffies value, and
-> (3) passive polling belongs to the core and should not be hijacked by
-> governors for their internal purposes.
->
-> Fixes: b6846826982b ("thermal: gov_step_wise: Restore passive polling man=
-agement")
-> Closes: https://lore.kernel.org/linux-pm/6759ce9f-281d-4fcd-bb4c-b784a1cc=
-5f6e@oldschoolsolutions.biz
-> Reported-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> Tested-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/thermal/gov_step_wise.c |   23 +++++------------------
->  1 file changed, 5 insertions(+), 18 deletions(-)
->
-> Index: linux-pm/drivers/thermal/gov_step_wise.c
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-pm.orig/drivers/thermal/gov_step_wise.c
-> +++ linux-pm/drivers/thermal/gov_step_wise.c
-> @@ -55,7 +55,11 @@ static unsigned long get_target_state(st
->                 if (cur_state <=3D instance->lower)
->                         return THERMAL_NO_TARGET;
->
-> -               return clamp(cur_state - 1, instance->lower, instance->up=
-per);
-> +               /*
-> +                * If 'throttle' is false, no mitigation is necessary, so
-> +                * request the lower state for this instance.
-> +                */
-> +               return instance->lower;
->         }
->
->         return instance->target;
-> @@ -93,23 +97,6 @@ static void thermal_zone_trip_update(str
->                 if (instance->initialized && old_target =3D=3D instance->=
-target)
->                         continue;
->
-> -               if (trip->type =3D=3D THERMAL_TRIP_PASSIVE) {
-> -                       /*
-> -                        * If the target state for this thermal instance
-> -                        * changes from THERMAL_NO_TARGET to something el=
-se,
-> -                        * ensure that the zone temperature will be updat=
-ed
-> -                        * (assuming enabled passive cooling) until it be=
-comes
-> -                        * THERMAL_NO_TARGET again, or the cooling device=
- may
-> -                        * not be reset to its initial state.
-> -                        */
-> -                       if (old_target =3D=3D THERMAL_NO_TARGET &&
-> -                           instance->target !=3D THERMAL_NO_TARGET)
-> -                               tz->passive++;
-> -                       else if (old_target !=3D THERMAL_NO_TARGET &&
-> -                                instance->target =3D=3D THERMAL_NO_TARGE=
-T)
-> -                               tz->passive--;
-> -               }
-> -
->                 instance->initialized =3D true;
->
->                 mutex_lock(&instance->cdev->lock);
->
->
->
-I've tested this here against 6.10.0-rc5 and it looks like it does
-what it says on the tin now.  Locks to low speeds at thermal and
-(rather quickly) unlocks once it's no longer in the "danger zone"
+   cpufreq: amd-pstate: change cpu freq transition delay for some models 
+(2024-06-11 16:12:12 -0500)
 
-Tested-by: Steev Klimaszewski <steev@kali.org>
+are available in the Git repository at:
+
+ 
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git 
+tags/amd-pstate-v6.11-2024-06-24
+ 
+                                                                     for 
+you to fetch changes up to 2240d3e60bb3e7a00422596412d012aeb54c1573:
+
+   cpufreq: simplify boolean parsing with kstrtobool in store function 
+(2024-06-24 16:16:16 -0500)
+
+----------------------------------------------------------------
+The second round of changes for amd-pstate in 6.11:
+* Enables amd-pstate by default in "shared memory" designs without a 
+dedicated MSR.
+* Adds extra infrastructure for debugging problems.
+* Bug fixes found for init/unload failure
+ 
+ 
+----------------------------------------------------------------
+Mario Limonciello (3):
+       cpufreq: amd-pstate: Allow users to write 'default' EPP string
+       cpufreq: amd-pstate: Make amd-pstate unit tests depend on amd-pstate
+       cpufreq: amd-pstate: Don't create attributes when registration fails
+
+Meng Li (1):
+       cpufreq/amd-pstate: fix setting policy current frequency value
+
+Perry Yuan (9):
+       cpufreq: amd-pstate: optimize the initial frequency values 
+verification
+       cpufreq: amd-pstate: remove unused variable nominal_freq
+       cpufreq: amd-pstate: show CPPC debug message if CPPC is not supported
+       cpufreq: amd-pstate: add debug message while CPPC is supported 
+and disabled by SBIOS
+       Documentation: PM: amd-pstate: add guided mode to the Operation mode
+       cpufreq: amd-pstate: switch boot_cpu_has() to cpu_feature_enabled()
+       cpufreq: amd-pstate: enable shared memory type CPPC by default
+       cpufreq: amd-pstate: auto-load pstate driver by default
+       cpufreq: simplify boolean parsing with kstrtobool in store function
+
+  Documentation/admin-guide/pm/amd-pstate.rst |   2 +-
+  drivers/cpufreq/Kconfig.x86                 |   1 +
+  drivers/cpufreq/amd-pstate.c                | 176 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------------
+  drivers/cpufreq/amd-pstate.h                |   1 +
+  drivers/cpufreq/cpufreq.c                   |  11 +++---
+  5 files changed, 122 insertions(+), 69 deletions(-)
 
