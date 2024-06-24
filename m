@@ -1,248 +1,112 @@
-Return-Path: <linux-pm+bounces-9888-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9889-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F149D914650
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 11:24:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C112914697
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 11:45:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6D78280E99
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 09:24:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0651281F4C
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 09:45:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2572E136E37;
-	Mon, 24 Jun 2024 09:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695B8132123;
+	Mon, 24 Jun 2024 09:45:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="h+PiHUrA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NgvfWOkm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8BC13774D;
-	Mon, 24 Jun 2024 09:23:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC7E4595B
+	for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2024 09:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719220995; cv=none; b=mWKUUnJ9QwTcGlA7Fih+A4rqP/mRxs5IS7KarVtpZyAJ+1+m4QvJaT4tLtAUae026zxgkHFt5Je14jm+nuwsr34L/XCMVvttwJH+ETrVsMZjGeXypbygFvsnzj6qGj0rLZMsz2VBBxqzvUXRO8AsLtBqpdAK3zXAcMZZlAZQlRE=
+	t=1719222331; cv=none; b=KiIJ30xxOJi00oRGsUeYkxsc1gzKdyaOl/zWQTteaBruLR5uxzVRmPASmQIf6qhTs9jtZFb8iMGOXfBExr+6CCODk1efA6+SlddppoCG9jzc3KeOmr+5Mze0KdogHbe/42fBMKYkyWqkxF6ndGttnv8BMLyZY2RfxG7In43T5oU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719220995; c=relaxed/simple;
-	bh=8cAgcwTvBnAla3NrneIEz71Zv7i1DEghBD644/nbOXc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fbLmx51oFXO5KcZlI4v+kiiDaVw4Kpx7QtAyOYAcn6LEx3RrpfNaWajQXxeqkgAQbo+oWFQphoastGJIwj7FvAP71EMCpcUZqsUH9Kgbx42uR3zc77TYAYThs1jK4oldd3v7AxEo/yFbEZeYMF3z0NksYJpChusSfmTJyIcdYfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=h+PiHUrA; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45O8ZB9T024767;
-	Mon, 24 Jun 2024 09:23:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	+wnsSYuLmoebBtSjmfB0yze6OSKIloZRMvRN0fi5T0s=; b=h+PiHUrAmGhcV+lI
-	y8KpHRlsRFhjfmWDdl3M7LYMOzXg740dObohaRstgPPZmiV4JQXwEArgfS0uwXgQ
-	Z/rFMHQdH6smuw2YL8kl76SnHuXCWlU/9hkEdYFfOBmzwGnKZGB5MIPIXAczPPNt
-	pkAs7lnUec3mtWQa1VI1JXyUaLe1jIr21lbLrVMni8Zw83x8HYQML4Dv0Y2WSpT6
-	7mRak2wR9uyyRD+DqGKEVyMvVLpdryNlb4d08fVFGtzm1TK4eyY9ZSCoLA5yNRYV
-	sf64aXUHjUM3ehtm+K7UOzbggY1m1JW4Asnn36s95+5ma2r+LUEfvd0wrJSoLFh9
-	PkKE9g==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ywqshk570-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 24 Jun 2024 09:23:10 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45O9N93i028388
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 24 Jun 2024 09:23:10 GMT
-Received: from hu-sibis-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 24 Jun 2024 02:23:04 -0700
-From: Sibi Sankar <quic_sibis@quicinc.com>
-To: <andersson@kernel.org>, <konrad.dybcio@linaro.org>, <djakov@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <dmitry.baryshkov@linaro.org>, <srinivas.kandagatla@linaro.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <quic_rgottimu@quicinc.com>, <quic_kshivnan@quicinc.com>,
-        <quic_sibis@quicinc.com>, <conor+dt@kernel.org>,
-        <abel.vesa@linaro.org>
-Subject: [PATCH V3 4/4] arm64: dts: qcom: x1e80100: Add BWMONs
-Date: Mon, 24 Jun 2024 14:52:14 +0530
-Message-ID: <20240624092214.146935-5-quic_sibis@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240624092214.146935-1-quic_sibis@quicinc.com>
+	s=arc-20240116; t=1719222331; c=relaxed/simple;
+	bh=KN6Xy95DA/76ttyjaLKHOHB4qSMJ672x9Oas7+ljqL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sKItaX8U65cp3RZ5H+85P5Oz/j6GSobNcsx1yOqxRE4dep1XuSRjlM1kunln3I1utKVHkmVtfnJ00nPPAgK3UwLZyVkFw6/MmKksc1XRZA3M/KhpOdCXBk5ZAvphpuQXJrxZANj6x2f+MXM+e1LsJJ0VzUVBBTHKot1xJxrFyPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NgvfWOkm; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2ec1ac1aed2so49785201fa.3
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2024 02:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1719222328; x=1719827128; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R2T+vB30li/O7omHwMEYULiIVM5Yoc0a3cav+xwX2TM=;
+        b=NgvfWOkmDjCsKMcGA3jmGKn850a8PJWa3z17+DFU7VGRRj8a7S3WOaNFYf4qfAugxH
+         EcgHYwYvfFA+flOgytHVOPhnFTRFtq6cd7/OlWfIRyDjJuyIhuwhgGU4XVlBfGhpEDVs
+         djv47AzgB2d4LhfyoqxMOE2Hj9Hc47lQsq5irMCshUkjSSCZJyjMnZUPMp6VqmSY6Pw4
+         DGqlvupucKVTBfypvlB1nvLy9XrhTzaY6jcs1X5uqj4N3yfdLKqZi9tKoIM00Qlk1rCr
+         DDio7ksusP7cJJf8sKvh4Js8ZowZDMkJBQjUBiiEIuhPjZVR/8lYdGD5yCRfbx83sniv
+         L6eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719222328; x=1719827128;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R2T+vB30li/O7omHwMEYULiIVM5Yoc0a3cav+xwX2TM=;
+        b=Uu0ZOQP7kPz5uwXBIN6yZ/PTf3YhMwVsqyThAE+lormU09xFZ2kSEUKAlMleYb3eyM
+         HQpM8B6G9CfoTUw6YE+f3Z9d6eywyqQJYCHtPGy/nnmW7eRtdj7KgTUjulQ8eMaStVTc
+         dL+JihzqF7T830TcjpRN4ud7NsNYsz6SdYam9jRe2O1PdQiVNU18yGDlbF3jpTLm+Wq5
+         6lvYanNGc0X2Iq80628ZtB86nCoSgyaT1l4dZplrKbPH1QUM8tgFTZRqUCfQ62uOezoW
+         +7i9U+hNHFI5oaiXB5eKySp/E6OATnjG1sciaHFWptAxNgg2kveh4JFtPy6FdVeyzXnI
+         yphQ==
+X-Forwarded-Encrypted: i=1; AJvYcCViBA6mVPuPaX6kVgzAbQEyksPljSUjKgm1Juq78nFkwos8TY4isHTiW7YIdNMD/7yWPn1C5Egm4Zb82rodCUhs4zisq43bPlQ=
+X-Gm-Message-State: AOJu0YzgNj52NzBbveAtT1l9XLs3nKhCGsuDh8RKgimPqUiWAzQyBlRn
+	/KzI7nABcOiHokMthyiL5agfCNdj6lGLILR3Y6tWrHa3cqXhMvb+h6oACJUfHIo=
+X-Google-Smtp-Source: AGHT+IGs0sNNK7EbrMz9guyDVqQqxo6nu9BzMy8MfIzoVO8+KKxTpquIJqx9InsStNttCSY2VbCeIQ==
+X-Received: by 2002:ac2:4c86:0:b0:52c:deae:b8fa with SMTP id 2adb3069b0e04-52ce18321afmr2477186e87.3.1719222327875;
+        Mon, 24 Jun 2024 02:45:27 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ceb804334sm42225e87.183.2024.06.24.02.45.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jun 2024 02:45:27 -0700 (PDT)
+Date: Mon, 24 Jun 2024 12:45:26 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: andersson@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org, 
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	srinivas.kandagatla@linaro.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-pm@vger.kernel.org, quic_rgottimu@quicinc.com, 
+	quic_kshivnan@quicinc.com, conor+dt@kernel.org, abel.vesa@linaro.org
+Subject: Re: [PATCH V3 3/4] soc: qcom: icc-bwmon: Allow for interrupts to be
+ shared across instances
+Message-ID: <qld47ryqxciamnz6jmdqtad4s4cemcl2r6kpsd5gst5ccwa5ma@4ej2gzk2vce7>
 References: <20240624092214.146935-1-quic_sibis@quicinc.com>
+ <20240624092214.146935-4-quic_sibis@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: uN-ldSSdi10HSsqLl5M_G7z40Y2iVGHa
-X-Proofpoint-GUID: uN-ldSSdi10HSsqLl5M_G7z40Y2iVGHa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-24_08,2024-06-21_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- bulkscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
- mlxscore=0 impostorscore=0 mlxlogscore=999 priorityscore=1501 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2406140001
- definitions=main-2406240075
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240624092214.146935-4-quic_sibis@quicinc.com>
 
-Add the CPU and LLCC BWMONs on X1E80100 SoCs.
+On Mon, Jun 24, 2024 at 02:52:13PM GMT, Sibi Sankar wrote:
+> The multiple BWMONv4 instances available on the X1E80100 SoC use the
+> same interrupt number. Mark them are shared to allow for re-use across
+> instances.
+> 
+> Using IRQF_SHARED coupled with devm_request_threaded_irq implies that
+> the irq can still trigger during/after bwmon_remove due to other active
+> bwmon instances. Handle this race by relying on bwmon_disable to disable
+> the interrupt and coupled with explicit request/free irqs.
+> 
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+> 
 
-Tested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
----
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-v3:
-* Pickup Rb's and Tb's from the list.
-* Add a comment describing which cluster each bwmon instance belongs to. [Konrad]
 
- arch/arm64/boot/dts/qcom/x1e80100.dtsi | 123 +++++++++++++++++++++++++
- 1 file changed, 123 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-index 9944c654851e..f9355f616bf5 100644
---- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-+++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-@@ -5299,6 +5299,129 @@ frame@1780d000 {
- 			};
- 		};
- 
-+		pmu@24091000 {
-+			compatible = "qcom,x1e80100-llcc-bwmon", "qcom,sc7280-llcc-bwmon";
-+			reg = <0 0x24091000 0 0x1000>;
-+
-+			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>;
-+
-+			operating-points-v2 = <&llcc_bwmon_opp_table>;
-+
-+			llcc_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <800000>;
-+				};
-+
-+				opp-1 {
-+					opp-peak-kBps = <2188000>;
-+				};
-+
-+				opp-2 {
-+					opp-peak-kBps = <3072000>;
-+				};
-+
-+				opp-3 {
-+					opp-peak-kBps = <6220800>;
-+				};
-+
-+				opp-4 {
-+					opp-peak-kBps = <6835200>;
-+				};
-+
-+				opp-5 {
-+					opp-peak-kBps = <8371200>;
-+				};
-+
-+				opp-6 {
-+					opp-peak-kBps = <10944000>;
-+				};
-+
-+				opp-7 {
-+					opp-peak-kBps = <12748800>;
-+				};
-+
-+				opp-8 {
-+					opp-peak-kBps = <14745600>;
-+				};
-+
-+				opp-9 {
-+					opp-peak-kBps = <16896000>;
-+				};
-+			};
-+		};
-+
-+		/* cluster0 */
-+		pmu@240b3400 {
-+			compatible = "qcom,x1e80100-cpu-bwmon", "qcom,sdm845-bwmon";
-+			reg = <0 0x240b3400 0 0x600>;
-+
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>;
-+
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+
-+			cpu_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <4800000>;
-+				};
-+
-+				opp-1 {
-+					opp-peak-kBps = <7464000>;
-+				};
-+
-+				opp-2 {
-+					opp-peak-kBps = <9600000>;
-+				};
-+
-+				opp-3 {
-+					opp-peak-kBps = <12896000>;
-+				};
-+
-+				opp-4 {
-+					opp-peak-kBps = <14928000>;
-+				};
-+
-+				opp-5 {
-+					opp-peak-kBps = <17064000>;
-+				};
-+			};
-+		};
-+
-+		/* cluster2 */
-+		pmu@240b5400 {
-+			compatible = "qcom,x1e80100-cpu-bwmon", "qcom,sdm845-bwmon";
-+			reg = <0 0x240b5400 0 0x600>;
-+
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>;
-+
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+		};
-+
-+		/* cluster1 */
-+		pmu@240b6400 {
-+			compatible = "qcom,x1e80100-cpu-bwmon", "qcom,sdm845-bwmon";
-+			reg = <0 0x240b6400 0 0x600>;
-+
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>;
-+
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+		};
-+
- 		system-cache-controller@25000000 {
- 			compatible = "qcom,x1e80100-llcc";
- 			reg = <0 0x25000000 0 0x200000>,
 -- 
-2.34.1
-
+With best wishes
+Dmitry
 
