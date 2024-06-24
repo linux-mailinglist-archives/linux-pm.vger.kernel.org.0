@@ -1,79 +1,195 @@
-Return-Path: <linux-pm+bounces-9892-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9893-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 034B791483A
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 13:13:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81FB4914DCB
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 14:57:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34C751C21F73
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 11:13:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C351CB20931
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 12:57:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF91A137924;
-	Mon, 24 Jun 2024 11:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6E8613D2B8;
+	Mon, 24 Jun 2024 12:57:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HVbkFPZz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aohB5A8O"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E80F137911;
-	Mon, 24 Jun 2024 11:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24512556F
+	for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2024 12:57:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719227560; cv=none; b=moLnffQSybsfB3TAUCkYWI/wJULxUUyFymUemoBIO41JJfVDbp/DQpyOkRLWsrwD3M4Ff00NmIM7FDU3QeYH6z4/U/FhDYWfmuJMAaoQ4yIU/GjVypraL808TOyPPr5++ehMgm0dDtTNJwA5jzlcFDQDuuRl2N+6ZBT0EKp41cs=
+	t=1719233842; cv=none; b=PtPsu20clmLJvVx5GuOG0hZR7VOyWfaJF6oK77qEytHwo2Mb+O2x2T003UB+ndjsDZ+k1QXki6+JgwMdyKu7cl1Z9XCdNoxFJZPWeHCzdF5x6/by8m74vG/9ucJZ/gvZzIFz0J79zEMqtog1hbtv9s0/7Ul2jkk955TyF4KWIo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719227560; c=relaxed/simple;
-	bh=WCd1Cno2RQmxTnVBJ8b3pjFHBUob0E08eBaiSA3RnxY=;
+	s=arc-20240116; t=1719233842; c=relaxed/simple;
+	bh=d3771zC8yUvjtMviu7KRlfggu03pX6iFdn23jREue6U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YvdZaNDwMdjB1bqlGhlI5BRgFAGkSgC534HXEA4z8PTgIzzs1nJDfCnEv0SxHALUw/Km9RYHfEwdOYuey4t76usDJe0vgMd7hh30j04OR+H2opRY8FSYOA1gXL4tDltK4osZ9EHRpYatJtX1pJRtIyMO/uwz/naPVka7vtA1oFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HVbkFPZz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 198DDC2BBFC;
-	Mon, 24 Jun 2024 11:12:36 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=JzxujQzdSOLJzYOgJlIcojqex5EOAGmwTIlqz9QQCc3OZ3nXaw7iSyBhkLOndk8YHfJRHurFoHBy4yKfD58CEhjiFpCwBlzbP8yCfl1PhfUWjvT6kum34h9YGUNDqJuQZ9HVK1N++6LAFTzZ9ib1FmrexowKNynA7+bI5dPoO1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aohB5A8O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CBF5C2BBFC;
+	Mon, 24 Jun 2024 12:57:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719227560;
-	bh=WCd1Cno2RQmxTnVBJ8b3pjFHBUob0E08eBaiSA3RnxY=;
+	s=k20201202; t=1719233842;
+	bh=d3771zC8yUvjtMviu7KRlfggu03pX6iFdn23jREue6U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HVbkFPZzsj3YiQHPihR/F4Kw5iBijDZReGQ4XQRpWkOlq4JCMuLVewslnYRBC2K3x
-	 mRzBeNEbNi8bsO4pdGwtvHmgtfJmz+E0WkSUwbuBjelEaDiXawmx67i0MaZ01Uj74j
-	 moa1gx++S5e5A9c90/GuaXbGWLT05pSqaEmqIeSQzkPVwcEcsgm8vtj4KZsbO7vdme
-	 8y7KqW9ZvPHdb9mNEzvNSpgRD7pQNX2weLh08zXjPBZayLTzYu0b0wTSvF1TJKqxsN
-	 NJ1nLP/YQYkDW3PE+OFoEQhCg4I0BCnTDcRivo692+AldM3xbUf7fPBnr2XhSQkE6L
-	 7X/FAPo6S2yLQ==
-Date: Mon, 24 Jun 2024 12:12:34 +0100
-From: Lee Jones <lee@kernel.org>
-To: Philippe Simons <simons.philippe@gmail.com>
-Cc: macroalpha82@gmail.com, broonie@kernel.org, conor+dt@kernel.org,
-	devicetree@vger.kernel.org, jernej.skrabec@gmail.com,
-	krzk+dt@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-sunxi@lists.linux.dev,
-	macromorgan@hotmail.com, robh@kernel.org, samuel@sholland.org,
-	sre@kernel.org, wens@csie.org
-Subject: Re: [PATCH 7/8] power: supply: axp20x_battery: add support for AXP717
-Message-ID: <20240624111234.GS1318296@google.com>
-References: <CADomA48AbhFaQ2yWpBYfsTiBLyGDMeqbNbxhU_j1Oi2DEeaxAw@mail.gmail.com>
+	b=aohB5A8Ooais2d/ceAFf9VeOd3XN5DvjN0OQYFtQuMIz7tdrX3SMIA7FPZnjfsqg1
+	 hRyyPO5S3aijWiFrD9P7oWz3Ey6v/mjk0Rzb4IrLvlP/T+WpEiuUb8E9OxAh/cWWbX
+	 83YMyhcoC/hAcRGGrDnTT7u7y+HZ7q9EjkI1IVJuN6dN64s1txWuTUTjYQv6z25mqN
+	 hjVH0VrGmzYhdQ0rd5z3VUa4QK6fO6K0xK8WXBMwUPo2G7Yes+P7Y7ZAYwXm8C8Tzr
+	 ach00ihSp88Av/oVqqzd/3a1nIOaVHvUEwc7LTjgnWE22itYnfu9dMFt0b6LnskqAi
+	 k/pT06jczLLsA==
+Date: Mon, 24 Jun 2024 14:57:18 +0200
+From: Maxime Ripard <mripard@kernel.org>
+To: Stefan Wahren <wahrenst@gmx.net>
+Cc: =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>, 
+	Melissa Wen <mwen@igalia.com>, DRI Development <dri-devel@lists.freedesktop.org>, 
+	linux-pm@vger.kernel.org
+Subject: Re: vc4: WARNING during suspend to idle of Raspberry Pi 3 Plus
+Message-ID: <20240624-furry-kangaroo-of-flowers-85ecdf@houat>
+References: <7003512d-7303-4f41-b0d6-a8af5bf8e497@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qrsmrs6hyeaaw4h7"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADomA48AbhFaQ2yWpBYfsTiBLyGDMeqbNbxhU_j1Oi2DEeaxAw@mail.gmail.com>
+In-Reply-To: <7003512d-7303-4f41-b0d6-a8af5bf8e497@gmx.net>
 
-On Sat, 22 Jun 2024, Philippe Simons wrote:
 
-> sysfs correctly reports the presence, voltage and current of the
-> battery. Tested on RG35XX-H (H700)
-> 
-> Tested-by: Philippe Simons <simons.philippe@gmail.com>
+--qrsmrs6hyeaaw4h7
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Philippe, you've stripped all context AND replied off-of-thread, so none
-of us have any context left to do anything useful with this.
+On Sun, Jun 16, 2024 at 11:27:08AM GMT, Stefan Wahren wrote:
+> Hi,
+> i'm currently experiment with suspend to idle on the Raspberry Pi [1].
+>=20
+> During my tests, i noticed a WARNING of the vc4 during suspend incl.
+> Runtime PM usage count underflow. It would be nice if someone can look
+> at it. In case you want to reproduce it, i can prepare a branch with
+> some improvements/hacks. For example i disabled dwc2/USB because it
+> cause a lot of trouble during resume.
+>=20
+> Here are the steps to trigger this issue:
+> - make sure necessary kernel options are enabled ( CONFIG_SUSPEND,
+> CONFIG_PM_DEBUG, CONFIG_PM_ADVANCED_DEBUG )
+> - make sure no HDMI cable is connected to Raspberry Pi 3 Plus
+> - Add "no_console_suspend" to cmdline.txt and reboot
+> - Connect via Debug UART:
+>=20
+> echo 1 > /sys/power/pm_debug_messages
+> echo platform > /sys/power/pm_test
+> echo freeze > /sys/power/state
+>=20
+> Here is the output:
+>=20
+> [=A0=A0 75.538497] PM: suspend entry (s2idle)
+> [=A0=A0 76.915786] Filesystems sync: 1.377 seconds
+> [=A0=A0 79.678262] rpi_firmware_set_power: Set HDMI to 1
+> [=A0=A0 79.678634] rpi_firmware_set_power: Set HDMI to 0
+> [=A0=A0 79.850949] Freezing user space processes
+> [=A0=A0 79.852460] Freezing user space processes completed (elapsed 0.001
+> seconds)
+> [=A0=A0 79.852484] OOM killer disabled.
+> [=A0=A0 79.852493] Freezing remaining freezable tasks
+> [=A0=A0 79.853684] Freezing remaining freezable tasks completed (elapsed
+> 0.001 seconds)
+> [=A0=A0 80.892819] ieee80211 phy0: brcmf_fil_cmd_data: bus is down. we ha=
+ve
+> nothing to do.
+> [=A0=A0 80.892843] ieee80211 phy0: brcmf_cfg80211_get_tx_power: error (-5)
+> [=A0=A0 81.514053] PM: suspend of devices complete after 1659.336 msecs
+> [=A0=A0 81.514089] PM: start suspend of devices complete after 1660.386 m=
+secs
+> [=A0=A0 81.515616] PM: late suspend of devices complete after 1.509 msecs
+> [=A0=A0 81.515938] rpi_firmware_set_power: Set VEC to 0
+> [=A0=A0 81.516010] rpi_firmware_set_power: Set V3D to 0
+> [=A0=A0 81.516998] PM: noirq suspend of devices complete after 1.239 msecs
+> [=A0=A0 81.517016] PM: suspend debug: Waiting for 5 second(s).
+> [=A0=A0 89.598310] rpi_firmware_set_power: Set V3D to 1
+> [=A0=A0 90.078228] ------------[ cut here ]------------
+> [=A0=A0 90.078240] WARNING: CPU: 1 PID: 216 at
+> drivers/gpu/drm/vc4/vc4_hdmi.c:477
+> vc4_hdmi_connector_detect_ctx+0x2e4/0x34c [vc4]
+> [=A0=A0 90.078344] Modules linked in: aes_arm aes_generic cbc crypto_simd
+> cryptd algif_skcipher af_alg brcmfmac_wcc brcmfmac vc4 brcmutil
+> snd_soc_hdmi_codec snd_soc_core ac97_bus sha256_generic
+> snd_pcm_dmaengine libsha256 snd_pcm sha256_arm snd_timer hci_uart
+> cfg80211 btbcm snd bluetooth soundcore drm_dma_helper crc32_arm_ce
+> ecdh_generic ecc raspberrypi_hwmon libaes bcm2835_thermal
+> [=A0=A0 90.078551] CPU: 1 PID: 216 Comm: kworker/1:2 Not tainted 6.9.3-di=
+rty #30
+> [=A0=A0 90.078568] Hardware name: BCM2835
+> [=A0=A0 90.078580] Workqueue: events output_poll_execute
+> [=A0=A0 90.078610] Call trace:
+> [=A0=A0 90.078624]=A0 unwind_backtrace from show_stack+0x10/0x14
+> [=A0=A0 90.078660]=A0 show_stack from dump_stack_lvl+0x50/0x64
+> [=A0=A0 90.078688]=A0 dump_stack_lvl from __warn+0x7c/0x124
+> [=A0=A0 90.078723]=A0 __warn from warn_slowpath_fmt+0x170/0x178
+> [=A0=A0 90.078760]=A0 warn_slowpath_fmt from
+> vc4_hdmi_connector_detect_ctx+0x2e4/0x34c [vc4]
+> [=A0=A0 90.078862]=A0 vc4_hdmi_connector_detect_ctx [vc4] from
+> drm_helper_probe_detect_ctx+0x40/0x120
+> [=A0=A0 90.078951]=A0 drm_helper_probe_detect_ctx from
+> output_poll_execute+0x160/0x24c
+> [=A0=A0 90.078982]=A0 output_poll_execute from process_one_work+0x16c/0x3=
+b4
+> [=A0=A0 90.079012]=A0 process_one_work from worker_thread+0x270/0x488
+> [=A0=A0 90.079036]=A0 worker_thread from kthread+0xe0/0xfc
+> [=A0=A0 90.079060]=A0 kthread from ret_from_fork+0x14/0x28
+> [=A0=A0 90.079080] Exception stack(0xf0af9fb0 to 0xf0af9ff8)
+> [=A0=A0 90.079096] 9fa0:=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 00000000
+> 00000000 00000000 00000000
+> [=A0=A0 90.079113] 9fc0: 00000000 00000000 00000000 00000000 00000000
+> 00000000 00000000 00000000
+> [=A0=A0 90.079129] 9fe0: 00000000 00000000 00000000 00000000 00000013 000=
+00000
+> [=A0=A0 90.079141] ---[ end trace 0000000000000000 ]---
+> [=A0=A0 90.079155] vc4_hdmi 3f902000.hdmi: vc4_hdmi_connector_detect_ctx:
+> pm_runtime_resume_and_get failed: -13
+> [=A0=A0 92.638262] rpi_firmware_set_power: Set HDMI to 1
+> [=A0=A0 95.678251] rpi_firmware_set_power: Set VEC to 1
+> [=A0=A0 95.678380] PM: noirq resume of devices complete after 9160.930 ms=
+ecs
+> [=A0=A0 95.679604] PM: early resume of devices complete after 1.069 msecs
+> [=A0=A0 95.812230] brcmfmac: brcmf_fw_alloc_request: using
+> brcm/brcmfmac43455-sdio for chip BCM4345/6
+> [=A0=A0 95.812282] PM: resume of devices complete after 132.657 msecs
+> [=A0=A0 95.813246] vc4_hdmi 3f902000.hdmi: Runtime PM usage count underfl=
+ow!
+> [=A0=A0 95.814456] OOM killer enabled.
+> [=A0=A0 95.814466] Restarting tasks ... done.
+> [=A0=A0 95.817193] random: crng reseeded on system resumption
+> [=A0=A0 95.819813] rpi_firmware_set_power: Set HDMI to 0
+> [=A0=A0 95.827808] PM: suspend exit
+>=20
+> [1] - https://github.com/raspberrypi/firmware/issues/1894
 
--- 
-Lee Jones [李琼斯]
+The code itself looks fine to me still, but It's not clear to me why it
+getting called during suspend in the first place. IIRC, it's in the HPD
+interrupt handler path, could it be that the interrupt fires during
+suspend?
+
+Maxime
+
+--qrsmrs6hyeaaw4h7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZnltLgAKCRDj7w1vZxhR
+xX4IAP0bynG/MlyGeyGHDOySXB0r3ioUiv2ZfPtBx7kRWneChwEAw6Rdz0OacmMI
+aaHK7rfYZaV+K5hRISYd4WvwcEbLxAA=
+=XWx1
+-----END PGP SIGNATURE-----
+
+--qrsmrs6hyeaaw4h7--
 
