@@ -1,137 +1,173 @@
-Return-Path: <linux-pm+bounces-9913-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9914-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 191A391562C
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 20:04:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64D6991569A
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 20:44:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 491A91C219EC
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 18:04:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89E891C224B5
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 18:44:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6651419F474;
-	Mon, 24 Jun 2024 18:04:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81B81A00FA;
+	Mon, 24 Jun 2024 18:43:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IjhuXzNk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FP87Ue1g"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE9BC19B5BD
-	for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2024 18:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D6919EEDC;
+	Mon, 24 Jun 2024 18:43:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719252240; cv=none; b=jkwmt3haG3Vmwsf5mkA9AsylPsz7nPFfwOra85l5ZWgDaCoXqTvIzK7K8W1Y2XBDopuUldKDf5WBIeJDkxsosi6pvzaFSCzk7HsVvAQ3+oLVWQc2uPooFvsltSgPa5p2sLvObacLLb4WAam2tmyFSycg+uFu/tQAxPa3eV73Uyo=
+	t=1719254639; cv=none; b=mpBC5emXFuY1gYeRHBEINJWXZuJ1sXyv1AIwuVUzXLgThPhiZK9EEk8dzW7l+rZCJ4topvC5E/QUkw+FVGhRGM0gHDuzPz83sWbfZozQHsp5U3A/EdSNvaqDbDFNUnsxvRA6hplYcw4BA0+gFpivQJkUeXbnRc2tbVxiLKeROVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719252240; c=relaxed/simple;
-	bh=WzGhfsAP4XzqaIdBWpKUm18+TeenjF6Blc7M4ECnYSk=;
+	s=arc-20240116; t=1719254639; c=relaxed/simple;
+	bh=y09e6y3PeUQTPhabq8qHYrMiOnKZ9HBKHtMmPq9jIFI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uMZXo9o9nN2Nrob85eiIGzTCJXx/Oe/q2XWempJLcXrZ3l0Pet8PmMOqdpuEdKbtLisz8Z0sN2oU9f8/hfs3oDRyWTnGCoFxfo87uPq9RZl43FUuq+HcdZUrNsxxq1XjulcS8mu8fLUjAMXptuEffFXE4R39YhmfbXLaD4B1IPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IjhuXzNk; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-424997177bbso6345e9.1
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2024 11:03:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719252237; x=1719857037; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FF029z/jflx/kP7IEmWTDP0ob8VJPp9a2/waRUF4Abs=;
-        b=IjhuXzNke5DP+Cu0dwInvzsJM/bZVeMJTHFWlXANeFjpYYPAg30WJSPB35lEYJjPyU
-         rPpTr5d7dkzulOXw7+Vzs7b0XUxt6it8E689w7ToFf0p/IvCgRuBKredYy/yqVbMIDrt
-         StnVxzcdqN/TuYZvZoNd5Lo57F+09mjV/Fp6gTaRPoxKc7/4/f4xsAXS5LaelZsi4ZC8
-         rFpjSiJ1fFaEY72ntsmFfI8e46J7rfkNOe27Imy8s0M6wQTSsepbcFZj9+Lh9q4qoNwu
-         8Q37Bl1Z7Rxy29CHeMpD0eF3yLhaDzAnjWW7ck8nJvTPRL7IdAgL3+q/0Kdmo/c7jYtu
-         zWig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719252237; x=1719857037;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FF029z/jflx/kP7IEmWTDP0ob8VJPp9a2/waRUF4Abs=;
-        b=OQd4gBXn1RaFZJg3ozF9p0rPM2wI+Od77xHiKEJWLsK2ROo5IJuc1ujS2P7VAYCQ+B
-         cVKlmFRSQwK+9NWEcVPJ5wIgSkT8KTBJOAhzkzXqAjZnDj/OFyO+Uodr7BbvCwU7TYqv
-         3W87UOoyR69DSOQQb2trupV1mWiBLqdw5Q74JXGN/kHVSuV+u+1ZJEU0W+RObl1Wny1E
-         w4iCZDvFgqzjeZBmsyLyDoJ7qE1Tjd5MEFlN47dcXK2Xk8Oy1H4TEgUOtpULcFUMksm2
-         I4145O2Dxs4cIIu1nR9kS3pcnpwIwgAe+vuy5c8Uat1SGvk98oI6t22yKWa7zbdcly6J
-         zKbg==
-X-Forwarded-Encrypted: i=1; AJvYcCUkqJAMmzlN9tf8PsmNo//Tb3QREdexcOEZw2dRlhynzqDR5wtzXlHtkWgNxfx/azPKYEFFQiGpDgowTGi2U/VKVWTY7sPOAFA=
-X-Gm-Message-State: AOJu0Yxp/kA/tmBf3QYqEeI3ysICzfJR41NdlxzNICH+wjEiFJXxNRfa
-	A+RMRXfImWbqy7RGsHOMmAA9i1Wyc/8Q1RHSrUTPZoK3LuesFgqW6sAd8/170O0EM9rbBS94Q7e
-	gTb0GGGuKypRUQ51ur8TUQLPGYbPiOS1gwnE=
-X-Google-Smtp-Source: AGHT+IHrfNrvNgINjPFhE00IuMHWGEQ90pK8W7zqvkgYI7i48VPmX8HyZ3EqYScnHj5vTszY2D2Ge/7ppzdCu9YCrBk=
-X-Received: by 2002:a05:600c:4e0d:b0:424:8b0c:156a with SMTP id
- 5b1f17b1804b1-4249a1b913fmr129515e9.2.1719252236758; Mon, 24 Jun 2024
- 11:03:56 -0700 (PDT)
+	 To:Cc:Content-Type; b=fThiI7W7KPvib8Yz/k81dEjpLjYa7V3ao6pbrXcLIOT76zdAiI3Hk8p2xj91XdDAiQUDVr/AonOObrRKO60/Ub/EQYfP7uWhBx/wN7AnDAL22CxJlIP9ZmMrY5F1KwT6qn6XeoOpGpGIYRjbii0UMZX0+8y6HsI2ZBIuHeWDMls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FP87Ue1g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D6BC32789;
+	Mon, 24 Jun 2024 18:43:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719254639;
+	bh=y09e6y3PeUQTPhabq8qHYrMiOnKZ9HBKHtMmPq9jIFI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=FP87Ue1g18Vqn8BDTPayHDVW/bKrfs54ZpNc/1IdN6pHQMD1Kmd5jMs6yqkayRtsE
+	 oslOGn83lqLU40CTB/7bi7+Yhjs7FOSS5GnCtJMSlZZAEt6RvgrPqc0A6twzo9bUz/
+	 b3jgkGdf7j7FpXD9E/mQVNCHt+8m1xSiH3/nADHKgMFa0NRjRnvDrqBCXE1P5ypo56
+	 GSrhTo+B9e3XGaktMmpFk21vVFRa5q2g6ICL4xLQEsFTefUC4jyAapCPr25uYvkca8
+	 c7wUKvnO6Gt8gMeI+25lMDhxmG04lu1qbMaqZaHByBzL0wkj2uiDhgcd4i+1YjtrSB
+	 TZtlYyK7AhCGQ==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-25ce35c52e7so414154fac.2;
+        Mon, 24 Jun 2024 11:43:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUzsWOhlW61fVeEJ5c8Gt/eRJmEM8/4yW6OpWUZcNMhStmjCuHC3xJ5NVbQ0jAFGsOI1O9eR0JK6hjzbB2CeGcJW8DnwvDEdJjxaopw
+X-Gm-Message-State: AOJu0YxsJ8ygXQEaYMnT8YRMwaMrhcngpEEN6zsiqZJFkDOISYtwlVM7
+	rK15q4qNkZ5X1MAblRrF+N4sCfRBstEzUZsCocRJbX2Kz5evroJJU0aVrQEqQFtqKu2ZKlZMOIN
+	P15Pahvd+5PsXlAYMQIx1jLGoX3o=
+X-Google-Smtp-Source: AGHT+IGTXjnfYP8viplDaPFq7kk2cs7jdpgsKnxMHLUQJseBZC6rbfldcwceT98hEEwqh9gl2GiZAfqQcpHTyfNr5hY=
+X-Received: by 2002:a4a:d24a:0:b0:5bb:815d:e2ab with SMTP id
+ 006d021491bc7-5c1e5ef0b32mr6931402eaf.1.1719254638638; Mon, 24 Jun 2024
+ 11:43:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240606172813.2755930-1-isaacmanjarres@google.com>
-In-Reply-To: <20240606172813.2755930-1-isaacmanjarres@google.com>
-From: John Stultz <jstultz@google.com>
-Date: Mon, 24 Jun 2024 11:03:43 -0700
-Message-ID: <CANDhNCqhJRLgvhAong-5zjsfwk2sL7pNbK0EqWsPcaA+AuzxDQ@mail.gmail.com>
-Subject: Re: [PATCH v5] fs: Improve eventpoll logging to stop indicting timerfd
-To: "Isaac J. Manjarres" <isaacmanjarres@google.com>
-Cc: tglx@linutronix.de, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
-	Len Brown <len.brown@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	saravanak@google.com, Manish Varma <varmam@google.com>, 
-	Kelly Rossmoyer <krossmo@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <12464461.O9o76ZdvQC@rjwysocki.net>
+In-Reply-To: <12464461.O9o76ZdvQC@rjwysocki.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 24 Jun 2024 20:43:43 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hYw1xj7a4eGvm=m6xbP9ptSWLEPN7Da4-bxZ3-00GP4A@mail.gmail.com>
+Message-ID: <CAJZ5v0hYw1xj7a4eGvm=m6xbP9ptSWLEPN7Da4-bxZ3-00GP4A@mail.gmail.com>
+Subject: Re: [PATCH v1] thermal: gov_step_wise: Go straight to instance->lower
+ when mitigation is over
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Jens Glathe <jens.glathe@oldschoolsolutions.biz>, Steev Klimaszewski <steev@kali.org>, 
+	Johan Hovold <johan+linaro@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 6, 2024 at 10:28=E2=80=AFAM 'Isaac J. Manjarres' via kernel-tea=
-m
-<kernel-team@android.com> wrote:
+On Sat, Jun 22, 2024 at 2:28=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.ne=
+t> wrote:
 >
-> From: Manish Varma <varmam@google.com>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> timerfd doesn't create any wakelocks, but eventpoll can.  When it does,
-> it names them after the underlying file descriptor, and since all
-> timerfd file descriptors are named "[timerfd]" (which saves memory on
-> systems like desktops with potentially many timerfd instances), all
-> wakesources created as a result of using the eventpoll-on-timerfd idiom
-> are called... "[timerfd]".
+> Commit b6846826982b ("thermal: gov_step_wise: Restore passive polling
+> management") attempted to fix a Step-Wise thermal governor issue
+> introduced by commit 042a3d80f118 ("thermal: core: Move passive polling
+> management to the core"), which caused the governor to leave cooling
+> devices in high states, by partially revering that commit.
 >
-> However, it becomes impossible to tell which "[timerfd]" wakesource is
-> affliated with which process and hence troubleshooting is difficult.
-
-Thanks for sending this out!
-
-My apologies, as this is really meta-commentary (which I'm sure isn't
-what you're looking for), but as you've gotten limited feedback maybe
-it might help?
-
-While your explanation above is understandable, I feel like it might
-benefit from a more concrete example to show why this is problematic?
-It feels like the description gets into the weeds pretty quickly and
-makes it hard to understand the importance of the change.
-
-> This change addresses this problem by changing the way eventpoll
-> wakesources are named:
+> However, this turns out to be insufficient on some systems due to
+> interactions between the governor code restored by commit b6846826982b
+> and the passive polling management in the thermal core.
 >
-> 1) the top-level per-process eventpoll wakesource is now named
-> "epollN:P" (instead of just "eventpoll"), where N is a unique ID token,
-> and P is the PID of the creating process.
-> 2) individual per-underlying-file descriptor eventpoll wakesources are
-> now named "epollitemN:P.F", where N is a unique ID token and P is PID
-> of the creating process and F is the name of the underlying file
-> descriptor.
+> For this reason, revert commit b6846826982b and make the governor set
+> the target cooling device state to the "lower" one as soon as the zone
+> temperature falls below the threshold of the trip point corresponding
+> to the given thermal instance, which means that thermal mitigation is
+> not necessary any more.
+>
+> Before this change the "lower" cooling device state would be reached in
+> steps through the passive polling mechanism which was questionable for
+> three reasons: (1) cooling device were kept in high states when that was
+> not necessary (and it could adversely impact performance), (2) it only
+> worked for thermal zones with nonzero passive_delay_jiffies value, and
+> (3) passive polling belongs to the core and should not be hijacked by
+> governors for their internal purposes.
+>
+> Fixes: b6846826982b ("thermal: gov_step_wise: Restore passive polling man=
+agement")
+> Closes: https://lore.kernel.org/linux-pm/6759ce9f-281d-4fcd-bb4c-b784a1cc=
+5f6e@oldschoolsolutions.biz
+> Reported-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+> Tested-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/thermal/gov_step_wise.c |   23 +++++------------------
+>  1 file changed, 5 insertions(+), 18 deletions(-)
+>
+> Index: linux-pm/drivers/thermal/gov_step_wise.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-pm.orig/drivers/thermal/gov_step_wise.c
+> +++ linux-pm/drivers/thermal/gov_step_wise.c
+> @@ -55,7 +55,11 @@ static unsigned long get_target_state(st
+>                 if (cur_state <=3D instance->lower)
+>                         return THERMAL_NO_TARGET;
+>
+> -               return clamp(cur_state - 1, instance->lower, instance->up=
+per);
+> +               /*
+> +                * If 'throttle' is false, no mitigation is necessary, so
+> +                * request the lower state for this instance.
+> +                */
+> +               return instance->lower;
+>         }
+>
+>         return instance->target;
+> @@ -93,23 +97,6 @@ static void thermal_zone_trip_update(str
+>                 if (instance->initialized && old_target =3D=3D instance->=
+target)
+>                         continue;
+>
+> -               if (trip->type =3D=3D THERMAL_TRIP_PASSIVE) {
+> -                       /*
+> -                        * If the target state for this thermal instance
+> -                        * changes from THERMAL_NO_TARGET to something el=
+se,
+> -                        * ensure that the zone temperature will be updat=
+ed
+> -                        * (assuming enabled passive cooling) until it be=
+comes
+> -                        * THERMAL_NO_TARGET again, or the cooling device=
+ may
+> -                        * not be reset to its initial state.
+> -                        */
+> -                       if (old_target =3D=3D THERMAL_NO_TARGET &&
+> -                           instance->target !=3D THERMAL_NO_TARGET)
+> -                               tz->passive++;
+> -                       else if (old_target !=3D THERMAL_NO_TARGET &&
+> -                                instance->target =3D=3D THERMAL_NO_TARGE=
+T)
+> -                               tz->passive--;
+> -               }
+> -
+>                 instance->initialized =3D true;
+>
+>                 mutex_lock(&instance->cdev->lock);
+>
 
-Again the N:P.F mapping is clear, but maybe including a specific
-before and after example would help?
+If there is no feedback, I'm going to assume that this is fine with everybo=
+dy.
 
-Additionally, once you have this better named wakesource, can you
-provide a specific example to illustrate a bit on how this
-specifically helps the troubleshooting that was difficult before?
-
-thanks
--john
+Thanks!
 
