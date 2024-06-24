@@ -1,56 +1,69 @@
-Return-Path: <linux-pm+bounces-9914-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9915-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64D6991569A
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 20:44:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B94CD91570A
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 21:18:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89E891C224B5
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 18:44:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 635CE284E61
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2024 19:18:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81B81A00FA;
-	Mon, 24 Jun 2024 18:43:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ACFE19D8AD;
+	Mon, 24 Jun 2024 19:18:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FP87Ue1g"
+	dkim=pass (2048-bit key) header.d=kali.org header.i=@kali.org header.b="Dz9tb5fr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D6919EEDC;
-	Mon, 24 Jun 2024 18:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B237D1E868
+	for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2024 19:18:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719254639; cv=none; b=mpBC5emXFuY1gYeRHBEINJWXZuJ1sXyv1AIwuVUzXLgThPhiZK9EEk8dzW7l+rZCJ4topvC5E/QUkw+FVGhRGM0gHDuzPz83sWbfZozQHsp5U3A/EdSNvaqDbDFNUnsxvRA6hplYcw4BA0+gFpivQJkUeXbnRc2tbVxiLKeROVA=
+	t=1719256707; cv=none; b=Z+7VL5E6YcIz7KooEL2ipsPW7OVzp7SQeZ7XCj8VK37EXSOMACIbutZnv4qzHZV1d8tDMX3kKCWuC6/xYVeXXOn0C4Au7OadOl+o9tp9IXYCtDOHLnecFT3TmZHupiXKcXt1Ma+xWWOs/mhXGjKC9k+KtA1YSP3D3KbngUY3DZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719254639; c=relaxed/simple;
-	bh=y09e6y3PeUQTPhabq8qHYrMiOnKZ9HBKHtMmPq9jIFI=;
+	s=arc-20240116; t=1719256707; c=relaxed/simple;
+	bh=1+8P9e4bjZNNeYr8EhkJJ8GlBLAx7rydpxmTmFAOTFg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fThiI7W7KPvib8Yz/k81dEjpLjYa7V3ao6pbrXcLIOT76zdAiI3Hk8p2xj91XdDAiQUDVr/AonOObrRKO60/Ub/EQYfP7uWhBx/wN7AnDAL22CxJlIP9ZmMrY5F1KwT6qn6XeoOpGpGIYRjbii0UMZX0+8y6HsI2ZBIuHeWDMls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FP87Ue1g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D6BC32789;
-	Mon, 24 Jun 2024 18:43:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719254639;
-	bh=y09e6y3PeUQTPhabq8qHYrMiOnKZ9HBKHtMmPq9jIFI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=FP87Ue1g18Vqn8BDTPayHDVW/bKrfs54ZpNc/1IdN6pHQMD1Kmd5jMs6yqkayRtsE
-	 oslOGn83lqLU40CTB/7bi7+Yhjs7FOSS5GnCtJMSlZZAEt6RvgrPqc0A6twzo9bUz/
-	 b3jgkGdf7j7FpXD9E/mQVNCHt+8m1xSiH3/nADHKgMFa0NRjRnvDrqBCXE1P5ypo56
-	 GSrhTo+B9e3XGaktMmpFk21vVFRa5q2g6ICL4xLQEsFTefUC4jyAapCPr25uYvkca8
-	 c7wUKvnO6Gt8gMeI+25lMDhxmG04lu1qbMaqZaHByBzL0wkj2uiDhgcd4i+1YjtrSB
-	 TZtlYyK7AhCGQ==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-25ce35c52e7so414154fac.2;
-        Mon, 24 Jun 2024 11:43:59 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUzsWOhlW61fVeEJ5c8Gt/eRJmEM8/4yW6OpWUZcNMhStmjCuHC3xJ5NVbQ0jAFGsOI1O9eR0JK6hjzbB2CeGcJW8DnwvDEdJjxaopw
-X-Gm-Message-State: AOJu0YxsJ8ygXQEaYMnT8YRMwaMrhcngpEEN6zsiqZJFkDOISYtwlVM7
-	rK15q4qNkZ5X1MAblRrF+N4sCfRBstEzUZsCocRJbX2Kz5evroJJU0aVrQEqQFtqKu2ZKlZMOIN
-	P15Pahvd+5PsXlAYMQIx1jLGoX3o=
-X-Google-Smtp-Source: AGHT+IGTXjnfYP8viplDaPFq7kk2cs7jdpgsKnxMHLUQJseBZC6rbfldcwceT98hEEwqh9gl2GiZAfqQcpHTyfNr5hY=
-X-Received: by 2002:a4a:d24a:0:b0:5bb:815d:e2ab with SMTP id
- 006d021491bc7-5c1e5ef0b32mr6931402eaf.1.1719254638638; Mon, 24 Jun 2024
- 11:43:58 -0700 (PDT)
+	 To:Cc:Content-Type; b=DY5e3jqnEceRh1ctTb/5jQAWuFi7NIHdB3Hy8mW4MJGPcmZlOMLukBxODISGbU0if/BK+uzrhBYcMrK6kLuAnVOumnPO7hjDph5V+Tg6Vr57UIH+CC7DcD2s2tL1EwwV2rsikwX9xPTofpnhSoER/bUA4ponx6p8/hWbdIY33I0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kali.org; spf=pass smtp.mailfrom=kali.org; dkim=pass (2048-bit key) header.d=kali.org header.i=@kali.org header.b=Dz9tb5fr; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kali.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kali.org
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-57ccd1111aeso5609828a12.0
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2024 12:18:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google; t=1719256704; x=1719861504; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w/utmK01Q/aAz/jmaJoKVno7ODPMTb9bqaLsPY3576Y=;
+        b=Dz9tb5frwaL9QXBBkZt75It488ohDV/0Y1daKnhL5RsQrwmSwXtc3sECP8Yod8Q11F
+         Lwl8/C2iLhQJx+Bjbsxp+xVsAbk1jjpkpaDLlqe7V0thV8O9bn6Dgm08Pcz76hKTiPkH
+         pLtrS9Q+ylubMwkzx4CKJpPrEEtxoUCv9ztumZ0k2xlKBQ64W071WoN6YW56QbJ+uO6M
+         +ag7eHjCT4l6zrj3PzNxpdES5oiPtlk06GC4gR2Q34cUkiP73wAoJ0QigPM7bO5cgSam
+         pG4fNNwQrdQeyXndnSrhRq5DAQzZ2c+Bgj46FaM2ub4GILYH+kQS/8w5ZCszEJ0H0usn
+         VBZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719256704; x=1719861504;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w/utmK01Q/aAz/jmaJoKVno7ODPMTb9bqaLsPY3576Y=;
+        b=Mz1Kfp49xSudYElo1nYKjCK/xx4P3ma4VlS+xQmnHQ2wxs6cKIXRu8vKWe6tSLBlCF
+         y1yDak7CE8P8xDqIOwc/3TPwnoPAkxsRtQPDOp/uzI3e0jpDcB5CMoec6Y9NTzU5J+LX
+         AXFo3sOJCcOnAjE79BynqiSLb3L4RVjjrFbt4Av0b040vEYeEajX/xEXmRrCGeay7BEJ
+         9+R1vSsQoz/QBC0wFuhhie4gGcE892aTVl7V5gMxcCsvwWuGC57C3WQtVB1Wb3Zj7NfL
+         Yfb/DenynqEZU9kXZ97bKWF1aEIq3fXWuYzCMHKQxRes5nC4ODIl6CNACx296IL5zlQ0
+         p6EQ==
+X-Gm-Message-State: AOJu0YxhonAs2ztY9el5uon+MGI03Kgx32xkPTFg/n/ub5VzF5dS43k0
+	isXRJhxiEF6tmeYO0aUTrf04kIWyst/ukqth0hcQ6pt8V7S7ahB/KGgvKSQ2IfYKMqzoEDaPr8W
+	j4FR/MmjAgIXffoYb4tBVhETSiO8i+La24DojEm8OT9HUn9FQR8M=
+X-Google-Smtp-Source: AGHT+IHotRG6K2HXCdC5lYRNF4KD1Z2OXWs9Jet+gNkN4MBEBoLu0f2q74erRpdjiiCthuRWlb1Tc3ezwYipTA/uF1s=
+X-Received: by 2002:aa7:cb50:0:b0:57d:4b56:da11 with SMTP id
+ 4fb4d7f45d1cf-57d4b56da8emr5008376a12.11.1719256703918; Mon, 24 Jun 2024
+ 12:18:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,22 +72,22 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <12464461.O9o76ZdvQC@rjwysocki.net>
 In-Reply-To: <12464461.O9o76ZdvQC@rjwysocki.net>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 24 Jun 2024 20:43:43 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hYw1xj7a4eGvm=m6xbP9ptSWLEPN7Da4-bxZ3-00GP4A@mail.gmail.com>
-Message-ID: <CAJZ5v0hYw1xj7a4eGvm=m6xbP9ptSWLEPN7Da4-bxZ3-00GP4A@mail.gmail.com>
+From: Steev Klimaszewski <steev@kali.org>
+Date: Mon, 24 Jun 2024 14:18:12 -0500
+Message-ID: <CAKXuJqjAQERxkfTESUKSvPo3N5qOf+un6LbKys9YrBT_ocJG8A@mail.gmail.com>
 Subject: Re: [PATCH v1] thermal: gov_step_wise: Go straight to instance->lower
  when mitigation is over
 To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
 	Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, 
 	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Jens Glathe <jens.glathe@oldschoolsolutions.biz>, Steev Klimaszewski <steev@kali.org>, 
-	Johan Hovold <johan+linaro@kernel.org>
+	Jens Glathe <jens.glathe@oldschoolsolutions.biz>, Johan Hovold <johan+linaro@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 22, 2024 at 2:28=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.ne=
+Hi Rafael,
+
+On Sat, Jun 22, 2024 at 7:28=E2=80=AFAM Rafael J. Wysocki <rjw@rjwysocki.ne=
 t> wrote:
 >
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
@@ -165,9 +178,11 @@ T)
 >
 >                 mutex_lock(&instance->cdev->lock);
 >
+>
+>
+I've tested this here against 6.10.0-rc5 and it looks like it does
+what it says on the tin now.  Locks to low speeds at thermal and
+(rather quickly) unlocks once it's no longer in the "danger zone"
 
-If there is no feedback, I'm going to assume that this is fine with everybo=
-dy.
-
-Thanks!
+Tested-by: Steev Klimaszewski <steev@kali.org>
 
