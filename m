@@ -1,193 +1,131 @@
-Return-Path: <linux-pm+bounces-9927-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9928-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CD43915EC7
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 08:19:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35D0F915EEC
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 08:30:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1484F282610
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 06:19:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E60332833CC
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 06:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 172A713B2A5;
-	Tue, 25 Jun 2024 06:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB471CFB6;
+	Tue, 25 Jun 2024 06:30:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="AWoQjufD"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="A+ja9xb6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0876F145FE1;
-	Tue, 25 Jun 2024 06:19:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD370145FEA
+	for <linux-pm@vger.kernel.org>; Tue, 25 Jun 2024 06:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719296368; cv=none; b=JZHY7+fA5/fD6R4J3/ARw04jTBp+NWWror/LC9pnTuMeDb7T8M68cvfYgwZHxr2Mjihu6oH2CN/nfi6jc1zrhL7gxpF4YCfz5Xb923OXzuGteby/iDYXS7PlxzDO9aETPOBFe72FwS4sUrnUqVCFfvFE+7lsE7ytMUea0Jsu1c0=
+	t=1719297009; cv=none; b=bNDL+gOwhWcMLgnhc99YHdCt3KsaldsBy1fAaEkce0hZnD1TpNuMZZTVwsIB65D0HZBGmqyK3JebjKq+un5DGvTsVGRRXWZFl/vLxk2ENIyxM5ie7sN7IHVjW0q2C6MTlyhNdAjdSqxdjChC/4H7FI3QhAnuF3TMEAJXVjvuzoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719296368; c=relaxed/simple;
-	bh=EN/Kl52uPTOwTqtRqpZ4IO9jM1Vjjhms6ItkNCF6IxM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=RGf9NlMHdYb/Sr+zxUfXjs3opVsReUxERsMeXcW3QgM/IY4pzMoAwb/UtUIq71TSjdyYItpRDIDw1vRn+MUP7O1EQy8yNzlvI4XDLHrPsHkOVIaOx5XrwOPqg74EgbwPDmTYNXXzSjao1Efcaoywoa1Fpe3T5DM0Fhl0FYTLz4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=AWoQjufD; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45P65KcM017611;
-	Tue, 25 Jun 2024 08:18:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	bFN0URSqTU+fG3mqAp5y9Iy1xpvvUu5x6itkRCIjl+o=; b=AWoQjufDebP4pUOY
-	3+j6W6pwzw1e+PfBUvYK9pp3uT0Z/Rf/C9h8ufbltLvjo2OtE3CnOa8vPDe0m4Yk
-	DH1FDROMgAlVC5K6InFmtY7ugiHgkHXK+al4bC6m7g0y9vKrZO1YuXV3yeGVpEop
-	W2KAVxRE0bKWQHRIOSfM1A51BQ6UM+GhVtvVJT8ryhVdGvOKlg5SbrSj8+0Nm8QR
-	nE059lnorab/QB3JVATI21NsckcwTDKxUvjfSx/kRvfz1x+yiXic6wz+g3yNB4u9
-	Z6CIQdK3wMzGVb3IST8t76bdD1BxUmbIXMZxB8WGmWW5m1581BTmaeq3LHZgMnmE
-	h3PN8A==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ywnxxa0gb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 25 Jun 2024 08:18:47 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 4FF9D4002D;
-	Tue, 25 Jun 2024 08:18:42 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 97B9521074D;
-	Tue, 25 Jun 2024 08:17:43 +0200 (CEST)
-Received: from [10.48.87.62] (10.48.87.62) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 25 Jun
- 2024 08:17:40 +0200
-Message-ID: <e5c0719a-d49f-4470-964a-c72973c975e7@foss.st.com>
-Date: Tue, 25 Jun 2024 08:17:38 +0200
+	s=arc-20240116; t=1719297009; c=relaxed/simple;
+	bh=SF5BJKWFWmKExxbuKvOd847HT2mi+5PALLHDQ9FplP8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TrH49GxWSwnG+ktFl4drO7nSMoQZdHraK+2ehrlT+bOB8Bc7lQ8U4PtIOLw2uA0Ddhm85+LmZ8OE0nW1CfvzzB8i/V5ZAIyBifm0OIyMYhF3+bf2dAogHQ11KFuS4yBhcfSvKF2s0coJP9FVcINRlXYS6VXXMcbZlNxkWwL8G/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=A+ja9xb6; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1f65a3abd01so41727615ad.3
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2024 23:30:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1719297007; x=1719901807; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oLin2eJs4fK1IkzV9qGoXjaBN4ecsPke1odNMFmCj5A=;
+        b=A+ja9xb6Vqgxbouvx+E/s0s+9YhF/lBCHuQcSDc9tdxzwwoujk4dTbSr8SWJL1R65Z
+         7O5ulbpAZu+MFe10ln7IpW/mSUd74Isc9nZut3NhN6q2n/UiJxqGjMCEhuJQfwHLEmVP
+         9wbP/2F9paYiKeg/mTy37dAZ0QyNLs5O5f6ZB6L59/YxjhAQ2aj1zuLoLK0QCMMejZn3
+         5f32zOPjhaPTfrIFsTOcBr/bQlBpTjLUYgceVq+g7BDB/TQAjovhhaMq7EK8/i4ctIBp
+         8zWlirMI1EjpeXPsI1xjKo9xJ589G4PniEABl+n4FWB/XSH3dba2yAqVISItPa/6zA+0
+         3sSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719297007; x=1719901807;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oLin2eJs4fK1IkzV9qGoXjaBN4ecsPke1odNMFmCj5A=;
+        b=X8IP3QAEmn4PlusfaWJ05SVgyCD9zId29wqI4qtkYWmiWP7i8T72Iw2JJ7drI6ebY0
+         jC1v9VHoH9rwpXJ38CSxFmBdYme3vQ8fN2foZY4yUS88nP39A1bLGTLq3iNHVi/ezkJW
+         1BQbTjewkcBq3TzHGUcC3FsaSunZtpLtimon8udDqUSY7VfwW3tptXaf2siSlG2oEPJM
+         OnoG5192FMFJ53svxg6kEXg5SjFDM0NDkOH3gunFelK4sHI2deZVvuXfYhR4dL6t/9OV
+         koJH77RX80/uLLAdm5t30xaSfSJN/iNPBdWctFZq7EET1WNLlU8m4PC3tbtwRV/tTxJ6
+         fqxw==
+X-Forwarded-Encrypted: i=1; AJvYcCUeHT1wY5dIHmy5MdtnChQj5iW3YhFoLmpYCmgUQnYjd5NQBl6woNDq/yeB+dVd89zQUjfNRMNurYx8OgkP2TPbC1OrBX/yZ7s=
+X-Gm-Message-State: AOJu0YyuDnW0GMIG79GC5E6wWhWg1I1wSLke4i16EIulS0xXJLLYgM4q
+	d+ZQiqsqdF7sl7eFvYfPxZS12FbNP7nBFes0Adj5qi8C7TtXd4DkknygI0F9YzI=
+X-Google-Smtp-Source: AGHT+IFD1DL2jJ714UXhfgjkqXeHVgdsJQOr9iY3AH/d5pK2zsCZXOxdTVMtxl8nbgP08EDslfAtBA==
+X-Received: by 2002:a17:902:ea11:b0:1f6:ed74:b4e3 with SMTP id d9443c01a7336-1fa23bd1c18mr92983405ad.3.1719297006803;
+        Mon, 24 Jun 2024 23:30:06 -0700 (PDT)
+Received: from localhost ([122.172.82.13])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9eb3c6ba7sm73340125ad.168.2024.06.24.23.30.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jun 2024 23:30:06 -0700 (PDT)
+Date: Tue, 25 Jun 2024 12:00:03 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: perry.yuan@amd.com, gautham.shenoy@amd.com,
+	Linux PM <linux-pm@vger.kernel.org>,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Dhruva Gole <d-gole@ti.com>, Yipeng Zou <zouyipeng@huawei.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v14 5/5] cpufreq: Only disable boost during cpu online
+ when using frequency tables
+Message-ID: <20240625063003.cw62yt46b7uaskrp@vireshk-i7>
+References: <20240624213400.67773-1-mario.limonciello@amd.com>
+ <20240624213400.67773-6-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] thermal: st: switch from CONFIG_PM_SLEEP guards to
- pm_sleep_ptr()
-To: Raphael Gallais-Pou <rgallaispou@gmail.com>,
-        "Rafael J. Wysocki"
-	<rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Maxime Coquelin
-	<mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>
-References: <20240518-thermal-v1-0-7dfca3ed454b@gmail.com>
- <20240518-thermal-v1-1-7dfca3ed454b@gmail.com>
-Content-Language: en-US
-From: Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20240518-thermal-v1-1-7dfca3ed454b@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-25_02,2024-06-24_01,2024-05-17_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240624213400.67773-6-mario.limonciello@amd.com>
 
-
-
-On 5/18/24 14:12, Raphael Gallais-Pou wrote:
-> Letting the compiler remove these functions when the kernel is built
-> without CONFIG_PM_SLEEP support is simpler and less error prone than the
-> use of #ifdef based kernel configuration guards.
+On 24-06-24, 16:34, Mario Limonciello wrote:
+> The behavior introduced in commit f37a4d6b4a2c ("cpufreq: Fix per-policy
+> boost behavior on SoCs using cpufreq_boost_set_sw()") sets up the boost
+> policy incorrectly when boost has been enabled by the platform firmware
+> initially even if a driver sets the policy up.
 > 
-> Remove those guards on every ST thermal related drivers.
+> This is because there are no discrete entries in the frequency table.
+> Update that code to only run when a frequency table is present.
 > 
-> Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
+> Fixes: f37a4d6b4a2c ("cpufreq: Fix per-policy boost behavior on SoCs using cpufreq_boost_set_sw()")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  drivers/thermal/st/st_thermal.c        | 4 +---
->  drivers/thermal/st/st_thermal_memmap.c | 2 +-
->  drivers/thermal/st/stm_thermal.c       | 8 +++-----
->  3 files changed, 5 insertions(+), 9 deletions(-)
+> Cc: Sibi Sankar <quic_sibis@quicinc.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: Dhruva Gole <d-gole@ti.com>
+> Cc: Yipeng Zou <zouyipeng@huawei.com>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>  drivers/cpufreq/cpufreq.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/thermal/st/st_thermal.c b/drivers/thermal/st/st_thermal.c
-> index 2a105409864e..5f33543a3a54 100644
-> --- a/drivers/thermal/st/st_thermal.c
-> +++ b/drivers/thermal/st/st_thermal.c
-> @@ -236,7 +236,6 @@ void st_thermal_unregister(struct platform_device *pdev)
->  }
->  EXPORT_SYMBOL_GPL(st_thermal_unregister);
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 1fdabb660231..32c119614710 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1430,7 +1430,8 @@ static int cpufreq_online(unsigned int cpu)
+>  		}
 >  
-> -#ifdef CONFIG_PM_SLEEP
->  static int st_thermal_suspend(struct device *dev)
->  {
->  	struct st_thermal_sensor *sensor = dev_get_drvdata(dev);
-> @@ -265,9 +264,8 @@ static int st_thermal_resume(struct device *dev)
->  
->  	return 0;
->  }
-> -#endif
->  
-> -SIMPLE_DEV_PM_OPS(st_thermal_pm_ops, st_thermal_suspend, st_thermal_resume);
-> +DEFINE_SIMPLE_DEV_PM_OPS(st_thermal_pm_ops, st_thermal_suspend, st_thermal_resume);
->  EXPORT_SYMBOL_GPL(st_thermal_pm_ops);
->  
->  MODULE_AUTHOR("STMicroelectronics (R&D) Limited <ajitpal.singh@st.com>");
-> diff --git a/drivers/thermal/st/st_thermal_memmap.c b/drivers/thermal/st/st_thermal_memmap.c
-> index 29c2269b0fb3..28b380013956 100644
-> --- a/drivers/thermal/st/st_thermal_memmap.c
-> +++ b/drivers/thermal/st/st_thermal_memmap.c
-> @@ -180,7 +180,7 @@ static void st_mmap_remove(struct platform_device *pdev)
->  static struct platform_driver st_mmap_thermal_driver = {
->  	.driver = {
->  		.name	= "st_thermal_mmap",
-> -		.pm     = &st_thermal_pm_ops,
-> +		.pm     = pm_sleep_ptr(&st_thermal_pm_ops),
->  		.of_match_table = st_mmap_thermal_of_match,
->  	},
->  	.probe		= st_mmap_probe,
-> diff --git a/drivers/thermal/st/stm_thermal.c b/drivers/thermal/st/stm_thermal.c
-> index 34785b9276fc..ffd988600ed6 100644
-> --- a/drivers/thermal/st/stm_thermal.c
-> +++ b/drivers/thermal/st/stm_thermal.c
-> @@ -440,7 +440,6 @@ static int stm_thermal_prepare(struct stm_thermal_sensor *sensor)
->  	return ret;
->  }
->  
-> -#ifdef CONFIG_PM_SLEEP
->  static int stm_thermal_suspend(struct device *dev)
->  {
->  	struct stm_thermal_sensor *sensor = dev_get_drvdata(dev);
-> @@ -466,10 +465,9 @@ static int stm_thermal_resume(struct device *dev)
->  
->  	return 0;
->  }
-> -#endif /* CONFIG_PM_SLEEP */
->  
-> -static SIMPLE_DEV_PM_OPS(stm_thermal_pm_ops,
-> -			 stm_thermal_suspend, stm_thermal_resume);
-> +static DEFINE_SIMPLE_DEV_PM_OPS(stm_thermal_pm_ops,
-> +				stm_thermal_suspend, stm_thermal_resume);
->  
->  static const struct thermal_zone_device_ops stm_tz_ops = {
->  	.get_temp	= stm_thermal_get_temp,
-> @@ -580,7 +578,7 @@ static void stm_thermal_remove(struct platform_device *pdev)
->  static struct platform_driver stm_thermal_driver = {
->  	.driver = {
->  		.name	= "stm_thermal",
-> -		.pm     = &stm_thermal_pm_ops,
-> +		.pm     = pm_sleep_ptr(&stm_thermal_pm_ops),
->  		.of_match_table = stm_thermal_of_match,
->  	},
->  	.probe		= stm_thermal_probe,
-> 
-Hi Raphael
+>  		/* Let the per-policy boost flag mirror the cpufreq_driver boost during init */
+> -		policy->boost_enabled = cpufreq_boost_enabled() && policy_has_boost_freq(policy);
+> +		if (policy->freq_table)
+> +			policy->boost_enabled = cpufreq_boost_enabled() && policy_has_boost_freq(policy);
 
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+I am not sure if I understand the problem properly here. Can you
+please explain a bit in detail ?
 
-Thanks
-Patrice
+-- 
+viresh
 
