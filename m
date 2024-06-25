@@ -1,111 +1,148 @@
-Return-Path: <linux-pm+bounces-9938-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9939-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0FC6916536
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 12:25:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D567D916597
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 12:54:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F367B23585
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 10:25:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F04111C22028
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 10:54:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10ED814A089;
-	Tue, 25 Jun 2024 10:25:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B2FA14A61E;
+	Tue, 25 Jun 2024 10:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sV06yI4F"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DFuY1y9T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79C6145FF4;
-	Tue, 25 Jun 2024 10:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8674514A4E1
+	for <linux-pm@vger.kernel.org>; Tue, 25 Jun 2024 10:54:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719311132; cv=none; b=LbNWYaQK04y2fJCCp3IADKolsNE4KeWFcfdLVUIJbOqa48wfB/jxhJq14Wo/wLDbamEkXxI0HzYmpkdO+MTtruNaQjjkrnJRwS4QUpTZK+UO9QzJNa9WJdi+RhyXe6UMZylkynBFEMoPvl+zadQB4DWQ8NjsLu5UynUUDKZIphY=
+	t=1719312872; cv=none; b=loIubpx7255GYnbmYeSjnZUQwpI3fqr0VWIYntPBGENPnbbImmYFv4FP8CiiCK2alRLXk5lNplpAWlUd3exU7wDeSHzYSRryFutqH4AFGqmui8sm/12X4gOtC9pgMXFk5rgqTw57re/2Lfnv6Yos8woR5Dsp+Udbj7sPCitIEA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719311132; c=relaxed/simple;
-	bh=BtjWR+gEmc49VtSTIaCGRyr5H0C8Qccd3WQsIc/9xUo=;
+	s=arc-20240116; t=1719312872; c=relaxed/simple;
+	bh=iqAJT77/5nQtnfkRkQeaCSfi25BV9kRWodYrzB/wJ/8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jIzprul97qvN85gTVi+tqkVGo8Di2x2S/ZD5zy8Yl2AyyuM27t6e2Gtu78E2NsOd4LlqJJRoEoR4MqoTll/DRQrPnOhMb9/FKg6PZD28oDUXl5DMOQhSmCG+VRc3IijFKNeBW8ZK7ZmGsM48vpBazYVn8uulG0V4oF5zeU07f/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sV06yI4F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57878C32781;
-	Tue, 25 Jun 2024 10:25:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719311131;
-	bh=BtjWR+gEmc49VtSTIaCGRyr5H0C8Qccd3WQsIc/9xUo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sV06yI4F3RaAzDzqwrxh6gxUv8cK+xRlvTpZIbM/sOGaVNSuodtK/oe5ge9iVOteP
-	 GTxxIAgW8EbUGv0gXDsw/J+Jonpt/WC2Gy+OqWpIoKUl6Ua8WKkhdiXz9hPLxVMu+o
-	 cct/GUbgBihxs16kVJjebCJDMBRA8dUX2OAmhAgXmcNlhnvNci8GUmXJYcv0GDRPtg
-	 IxmQy1ZTFXDXXrFkj6sX1D0/TDABypZQx3CEY2aswzvo7d4y3BA/TsNKNv+/z4hFcs
-	 ILMG4ciMdK16vZWcBKjhQ/i865dSTNzInqL8/nap4BKNGfYmqhe3BqgQlozm5CZMLo
-	 ACJKjip0Nr1BQ==
-Date: Tue, 25 Jun 2024 11:25:24 +0100
-From: Mark Brown <broonie@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	matthias.bgg@gmail.com, lgirdwood@gmail.com, keescook@chromium.org,
-	gustavoars@kernel.org, henryc.chen@mediatek.com,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, kernel@collabora.com,
-	wenst@chromium.org, amergnat@baylibre.com, djakov@kernel.org
-Subject: Re: [PATCH v6 0/7] MediaTek DVFSRC Bus Bandwidth and Regulator knobs
-Message-ID: <57cf8f9f-4320-4c55-a9f8-a4c1facabfe8@sirena.org.uk>
-References: <20240610085735.147134-1-angelogioacchino.delregno@collabora.com>
- <f7b4cd98-1acf-4f6b-a7e0-57419abadba1@collabora.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qXKbmJRR/MlEWBjD7dCPe0YGRB6dDzXBDJ08y7OYfCtZpwdv2bAJYo4PpzmJn9yIvyGDDYqyWp+lNzMLFSBhaRwg4deCGYcd17SvcBFc7aHrsu9VSDo9w/KaGEP9EuWSKdVgaeCaltRvSoplhN5nULRC9vjppwe1kAE/IYdp1zI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DFuY1y9T; arc=none smtp.client-ip=209.85.160.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-25cb994dbfeso2456593fac.0
+        for <linux-pm@vger.kernel.org>; Tue, 25 Jun 2024 03:54:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1719312868; x=1719917668; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=S+cZWGB+2jcFhszdKI8ASmXDRJENXojOKhli/2LXpnM=;
+        b=DFuY1y9Tq8fED3wRUMOGD4eTRf1o0jrMFlwtxpiL2iMmHy8CKOUbe8Qnvt/FVzdOuC
+         /UY4vRozN64fI3hpRBVU6OpbIGVayayzwICgA0p8Sl92dN0NQ85D1gbzz3tj44dP31hv
+         Gmq/u3ms+w+bEaTzeKMmnz//UExcYTEUYCi7TKEGv9wLOqD60ci18GQ7QVqcyr6HUNFs
+         eufgq46+NswKdfCJyTUdnM/8Rdihk+AhrONHkuCVDtm1V6e86YLvf+L0nBEVr33g+3Fw
+         RrZ2ztisfaRy6xnbCXE/aN1d24ACInoAtEWCljK11GYepZo8MtttV4XbhoVfeFBw98+8
+         PtfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719312868; x=1719917668;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S+cZWGB+2jcFhszdKI8ASmXDRJENXojOKhli/2LXpnM=;
+        b=A2QglVd44lHLpIFGIdoDkCdcmcu2ZVqvpCIYHlLrtJH4pnATRDSvjCwAAt+bGhOYtd
+         Z/DiSnlUgtXKP5ozKlBlJVP621siv2DAjgtPzFDus9Gm8XnXX+9N3nm2TJ0AkpOTWLXv
+         DXs7rneEbfubfscAPUZ6KGIMTHVmqjAHPP8YBALawhdkpf95YW9HtxQKjkYyFwDZVhsO
+         jtVRnfYHUNyys2H+2TfnfUScw2mrNnBywTucH7128JdIEf85OkNkaledKhWUhTgkhjxz
+         4KL7RgeegLdL6DZrlmaePqQu1ZEgwUvsnZtMH+UPLAeZ+CVqMtpGz1dCfGcCWG65jjqm
+         Yw2w==
+X-Forwarded-Encrypted: i=1; AJvYcCXA1c99p3AYYOFXMU3QUR3+4+djQMWP6rjYGa0xGiE+miZOkjLuOx/m+5Wj2cepXUkI775sjCeNO1pBn3Scmm8Sfhdfbxv9GqA=
+X-Gm-Message-State: AOJu0YyHQt6k0k4gMq72FD/4DNtliVXH8rAjeaU6CpE9cfn68GjdWkrV
+	jtgPKLWq3yzcfoPVawbHTmdBJtqoZU0vGOk19j9/VWmA7QetvGpyz3WNF/Bq8p0=
+X-Google-Smtp-Source: AGHT+IHkmTwzgMVZ85oOIGg7bkGQn9jD0qlRj9ZqyfrOw1uen/yda4dypNC/fa/tx1p5pHhoPulz0A==
+X-Received: by 2002:a05:6870:9720:b0:24c:afec:f1c with SMTP id 586e51a60fabf-25d06eb4fddmr6882648fac.48.1719312868320;
+        Tue, 25 Jun 2024 03:54:28 -0700 (PDT)
+Received: from localhost ([122.172.82.13])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7067f2b97dcsm3924658b3a.129.2024.06.25.03.54.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jun 2024 03:54:27 -0700 (PDT)
+Date: Tue, 25 Jun 2024 16:24:25 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>, Nikunj Kela <nkela@quicinc.com>,
+	Prasad Sodagudi <psodagud@quicinc.com>, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-tegra@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] OPP: Fix support for required OPPs for multiple PM
+ domains
+Message-ID: <20240625105425.pkociumt4biv4j36@vireshk-i7>
+References: <20240618155013.323322-1-ulf.hansson@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="HtLS8F6gqzyPaPXW"
-Content-Disposition: inline
-In-Reply-To: <f7b4cd98-1acf-4f6b-a7e0-57419abadba1@collabora.com>
-X-Cookie: Results vary by individual.
-
-
---HtLS8F6gqzyPaPXW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240618155013.323322-1-ulf.hansson@linaro.org>
 
-On Tue, Jun 25, 2024 at 10:32:30AM +0200, AngeloGioacchino Del Regno wrote:
+On 18-06-24, 17:50, Ulf Hansson wrote:
+> In _set_opp() we are normally bailing out when trying to set an OPP that is
+> the current one. This make perfect sense, but becomes a problem when
+> _set_required_opps() calls it recursively.
+> 
+> More precisely, when a required OPP is being shared by multiple PM domains,
+> we end up skipping to request the corresponding performance-state for all
+> of the PM domains, but the first one. Let's fix the problem, by calling
+> _set_opp_level() from _set_required_opps() instead.
+> 
+> Fixes: e37440e7e2c2 ("OPP: Call dev_pm_opp_set_opp() for required OPPs")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>  drivers/opp/core.c | 47 +++++++++++++++++++++++-----------------------
+>  1 file changed, 24 insertions(+), 23 deletions(-)
+ 
+>  /* This is only called for PM domain for now */
+>  static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
+>  			      struct dev_pm_opp *opp, bool up)
+> @@ -1091,7 +1113,8 @@ static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
+>  		if (devs[index]) {
+>  			required_opp = opp ? opp->required_opps[index] : NULL;
+>  
+> -			ret = dev_pm_opp_set_opp(devs[index], required_opp);
+> +			ret = _set_opp_level(devs[index], opp_table,
+> +					     required_opp);
 
-> Mark, I assume that this series is ok from your perspective, since this h=
-as got
-> your acks and r-b -- but in order to pick the soc/mediatek stuff I need a=
-ll of
-> the dependent bindings to be in as well .. and this includes the regulato=
-r one!
->=20
-> The main issue here is that the main soc/mediatek dvfsrc binding
-> dt-bindings: soc: mediatek: Add DVFSRC bindings for MT8183 and MT8195
-> does use the others, so I can't pick this one without the others being pr=
-esent
-> or the validation obviously fails.
->=20
-> So... gentle ping :-)
+No, we won't be doing this I guess. Its like going back instead of
+moving forward :)
 
-I can't tell what you want from me here.
+The required OPPs is not just a performance domain thing, but
+specially with devs[] here, it can be used to set OPP for any device
+type and so dev_pm_opp_set_opp() is the right call here.
 
---HtLS8F6gqzyPaPXW
-Content-Type: application/pgp-signature; name="signature.asc"
+Coming back to the problem you are pointing to, I am not very clear of
+the whole picture here. Can you please help me get some details on
+that ?
 
------BEGIN PGP SIGNATURE-----
+From what I understand, you have a device which has multiple power
+domains. Now all these power domains share the same OPP table in the
+device tree (i.e. to avoid duplication of tables only). Is that right
+?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ6mxMACgkQJNaLcl1U
-h9BI1Af7BjpHZjz2dcjVv0813GPAdnKjHAGhVhRvlIhqpTpKTUhV9kb4NaCW3WA8
-WcTOuGzqXUetqxmyeIWpMFtNVeqdieIIuUfdUlMGWpTFKs+B+TEDi62ErAUlWCNd
-3xQZMy9y9glGhigclS7EAFIcMF8eRSp/rNX0B9UD8fi9IAJMMeqBqojRam0XfAII
-UT4XL/p1HG9l16q8Oo3VMAaTCh3kkgVNp/uTWMkZzeccIGDAUS0paMDbGCWnCjiH
-A5hI1uZsXMJx6TtJf2Fkoxry7a4PleBULaXS0HM92gWwpYdqINQsFr0bn9/Lw1oc
-gPxF2FlxpRXTYEQn++SXScXX8tJVAw==
-=emPb
------END PGP SIGNATURE-----
+Even if in DT we have the same OPP table for all the domains, the OPP
+core will have separate OPP tables structures (as the domains aren't
+connected). And these OPP tables will have their own `current_opp`
+fields and so we shouldn't really bail out earlier.
 
---HtLS8F6gqzyPaPXW--
+Maybe there is a bug somewhere that is causing it. Maybe I can look at
+the DT to find the issue ? (Hint: The OPP table shouldn't have the
+`shared` flag set).
+
+Maybe I completely misunderstood the whole thing :)
+
+-- 
+viresh
 
