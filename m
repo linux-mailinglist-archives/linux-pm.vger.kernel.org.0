@@ -1,139 +1,114 @@
-Return-Path: <linux-pm+bounces-9945-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9946-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B8069167E8
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 14:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A023191685C
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 14:50:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4F281F27C45
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 12:33:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55D7B1F23FC7
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 12:50:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8078155305;
-	Tue, 25 Jun 2024 12:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D452215667D;
+	Tue, 25 Jun 2024 12:50:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B6fZjpz2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QcXmLz0F"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7A414831F;
-	Tue, 25 Jun 2024 12:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DED149DF4;
+	Tue, 25 Jun 2024 12:50:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719318794; cv=none; b=NagYlL9f3ewqD1CmOxHXtVGz8IURXmjuUZy+OFyLRxl5yyohg39pI/qJ3XuMIYlKyLNKDDSxEtWEaBXPIEYFfAN47Q5IkJj/BZPjZge1xTTWAtxshod9560+wYua4WIUTNHb8dAvF7DjfNGH5bWVSRNiXfje4oaAv1vqooT8odE=
+	t=1719319824; cv=none; b=NHvUb4mvDeByxDz22lJPkETrClTjm6QZpr4cksBurKv2yDY1H+DTDKlYrOpfqBBYra5REM1XJrfmZ3Re79QcSD7GT0CJDAUSyAF/jgo8ulBY8YXv9sktWyRU05uIzWJw9Yg6Ad5zI1YIARo4kcbdK/C9mhPkXBn/6NHUprJFzB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719318794; c=relaxed/simple;
-	bh=IvZsxcaW6DWWuyobmb7LUklrNc1sMFAOoDwMsv2+SXw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TA2Sj5VfsOm2FYfZ6AyviEz3a1G8T6ZcZTsr8oEht2wSOUstp1vRs0YxqlyZnD59yZQyhvF1CaC7UGFLc5C0bRIUBgSoco7kfal5NAhiUkz+7Jy6W5LD6WIXqWOFtMpmKy9cfxC0Ocago7hh4ppgMF2srjnx4KRORGoBjheROFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B6fZjpz2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 336B6C32786;
-	Tue, 25 Jun 2024 12:33:14 +0000 (UTC)
+	s=arc-20240116; t=1719319824; c=relaxed/simple;
+	bh=s/7FiJi0GYLkjQ80S4lqlm3cUD3LaT7XZxvXN7svSLM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EH/YESIL9BHJVhBAHyTBn3qvrA6VPLtIF1SF0bFdK3Uvz0utkMfX2mo+8xjaMs9sfmPpUGFrQKR8dfP7g0oU9EXUjYtorxfZW+og7NNXF96Jlxiqfc0mo1jykEYIqDloxy+ax40WWbavuM4A+cJUzhL8cxXts7LWB/Q+S1jY9iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QcXmLz0F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86EB7C32786;
+	Tue, 25 Jun 2024 12:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719318794;
-	bh=IvZsxcaW6DWWuyobmb7LUklrNc1sMFAOoDwMsv2+SXw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=B6fZjpz2qM+OlaAn+QOLgRtJRLrNQmM07NvNguBZvqYOZ52EB8ncyg+CPkbfQpmj3
-	 7/ihZezX9cYkMtriQFuAxMvQm3Ue7AYLSkBn/6RbF+RF2S6VsZ1yi7iXbGmC3xZTHE
-	 IjqP4uhudcfn8XCtpC7+w1ILaJEbMA2Ew/1URK79ycgFE8dcyNCqbWFo7p5nYdujka
-	 au9lyf7iBd8oQA8QVtiULXumJQn7Roex2VVU5uTe+JEuEHiiFh8thh08bi49bb0Wie
-	 xfxorqF7b2Y7PxkR2thHf2niEzQtZ2atiZ7DPSGjpuz9atkM04FbMXz9+u6JZH6rPL
-	 1B9rPvsH9usEQ==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-25075f3f472so656859fac.2;
-        Tue, 25 Jun 2024 05:33:14 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVCx55Ve+AzwWOtSunFIaJVcwhYU/h4l2uheD7fuv3EyU3SMGieS/q9sJF0lqGL6yDTXwyW4rVCkO3so/W371MX2Ar/13fH7ZYjnwUNZ+beTQJh0EhzTZSWbrlYVUTLy6jHT6SEj50=
-X-Gm-Message-State: AOJu0YyzkEymJv+KXMNqjbi/Teeajn5P9hXkSjdN9YRqLaFo4w+8W1Ri
-	iWn5V3dwgt8h92GHhBy/yIdFoopha7WzWhHSSbww4+kSzbIcwfn4oEF/WcK2W5CMI3MDBxR7N90
-	T5zuI//tK/bZZoE17GBFH3MrQN1s=
-X-Google-Smtp-Source: AGHT+IFRr9D925+0qBI83k8w0CC7kMzAiMaZXAnsNnt6khprfnp9xrRlQy4NDHwFieqMb3UKWHtgvj/qu3nKhOI02rA=
-X-Received: by 2002:a05:6870:9a1b:b0:25d:d69:eaf with SMTP id
- 586e51a60fabf-25d0d69146bmr7449277fac.4.1719318793453; Tue, 25 Jun 2024
- 05:33:13 -0700 (PDT)
+	s=k20201202; t=1719319824;
+	bh=s/7FiJi0GYLkjQ80S4lqlm3cUD3LaT7XZxvXN7svSLM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QcXmLz0F9HMBbpD9AlMywFuHfaXoGktzYxKA5zWvJfhikRVK4r5RSpODDuwq8Jqqd
+	 s0ZYKfQ/d5Zwz5QPhc+wSZ8NVnoe5f2dFSJcLx+wiqTGZ3N8hkqOwkQIUqqV9NaE41
+	 z53ioDhHQrjZTxcpBoYmlNeR7b+lMGdngquXFLn0zbFenVtlot61kstgtroVyfQWHW
+	 b9s/NBtENC7InhSWB1lroKiu6mdgvQ8bryusPh0Rxuex8nc0mPRf7Yp3AvdEE3MpC2
+	 rAki5Y/LiVngw9G/PXuQn4Ut6tQXZhKzo1Nb8UWXq9c/jfF77xhKb1IWO1sR4o8eKa
+	 pFQTO7Pg8ggfA==
+Date: Tue, 25 Jun 2024 13:50:17 +0100
+From: Mark Brown <broonie@kernel.org>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	matthias.bgg@gmail.com, lgirdwood@gmail.com, keescook@chromium.org,
+	gustavoars@kernel.org, henryc.chen@mediatek.com,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, kernel@collabora.com,
+	wenst@chromium.org, amergnat@baylibre.com, djakov@kernel.org
+Subject: Re: [PATCH v6 0/7] MediaTek DVFSRC Bus Bandwidth and Regulator knobs
+Message-ID: <2e8a9cf2-2bc0-45d8-b6c1-e3a9441d5641@sirena.org.uk>
+References: <20240610085735.147134-1-angelogioacchino.delregno@collabora.com>
+ <f7b4cd98-1acf-4f6b-a7e0-57419abadba1@collabora.com>
+ <57cf8f9f-4320-4c55-a9f8-a4c1facabfe8@sirena.org.uk>
+ <39ed7b8c-b19a-40de-9b30-a731ac83ad20@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12464461.O9o76ZdvQC@rjwysocki.net> <ZnpzBuWbKxbrKvoR@hovoldconsulting.com>
-In-Reply-To: <ZnpzBuWbKxbrKvoR@hovoldconsulting.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 25 Jun 2024 14:33:01 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gytZB=WcEhFkuoOOf_X1=QBYy7+FnVEWLavXzFZc5E=g@mail.gmail.com>
-Message-ID: <CAJZ5v0gytZB=WcEhFkuoOOf_X1=QBYy7+FnVEWLavXzFZc5E=g@mail.gmail.com>
-Subject: Re: [PATCH v1] thermal: gov_step_wise: Go straight to instance->lower
- when mitigation is over
-To: Johan Hovold <johan@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Lukasz Luba <lukasz.luba@arm.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Jens Glathe <jens.glathe@oldschoolsolutions.biz>, Steev Klimaszewski <steev@kali.org>, 
-	Johan Hovold <johan+linaro@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Ck+ggcwV/Ot1gS3W"
+Content-Disposition: inline
+In-Reply-To: <39ed7b8c-b19a-40de-9b30-a731ac83ad20@collabora.com>
+X-Cookie: Results vary by individual.
 
-On Tue, Jun 25, 2024 at 9:34=E2=80=AFAM Johan Hovold <johan@kernel.org> wro=
-te:
->
-> On Sat, Jun 22, 2024 at 02:26:33PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Commit b6846826982b ("thermal: gov_step_wise: Restore passive polling
-> > management") attempted to fix a Step-Wise thermal governor issue
-> > introduced by commit 042a3d80f118 ("thermal: core: Move passive polling
-> > management to the core"), which caused the governor to leave cooling
-> > devices in high states, by partially revering that commit.
->
-> typo: reverting
 
-Thanks!
+--Ck+ggcwV/Ot1gS3W
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > However, this turns out to be insufficient on some systems due to
-> > interactions between the governor code restored by commit b6846826982b
-> > and the passive polling management in the thermal core.
->
-> Care to elaborate on what went wrong here? In my test of the previous
-> fix I saw the frequency ramping up in steps as expected when the
-> temperature dropped. Under what circumstances would that fail to happen?
+On Tue, Jun 25, 2024 at 01:58:57PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 25/06/24 12:25, Mark Brown ha scritto:
+> > On Tue, Jun 25, 2024 at 10:32:30AM +0200, AngeloGioacchino Del Regno wrote:
 
-System suspend-resume would interfere with that as it would call
-thermal_zone_device_init().
+> > > The main issue here is that the main soc/mediatek dvfsrc binding
+> > > dt-bindings: soc: mediatek: Add DVFSRC bindings for MT8183 and MT8195
+> > > does use the others, so I can't pick this one without the others being present
+> > > or the validation obviously fails.
 
-> > For this reason, revert commit b6846826982b and make the governor set
-> > the target cooling device state to the "lower" one as soon as the zone
-> > temperature falls below the threshold of the trip point corresponding
-> > to the given thermal instance, which means that thermal mitigation is
-> > not necessary any more.
-> >
-> > Before this change the "lower" cooling device state would be reached in
-> > steps through the passive polling mechanism which was questionable for
-> > three reasons: (1) cooling device were kept in high states when that wa=
-s
-> > not necessary (and it could adversely impact performance), (2) it only
-> > worked for thermal zones with nonzero passive_delay_jiffies value, and
-> > (3) passive polling belongs to the core and should not be hijacked by
-> > governors for their internal purposes.
->
-> I've tested this patch on the Lenovo ThinkPad X13s, where I could
-> reproduce the rc1 regression, and things works as intended with the
-> fix applied to rc5:
->
-> Tested-by: Johan Hovold <johan+linaro@kernel.org>
->
-> The CPU frequency still oscillates heavily but now with a more
-> sawtoothed curve.
->
-> Not sure if it helps with performance, though, as running the CPU at
-> full speed as soon as we drop below the threshold (with hysteresis)
-> also means that we get back to running at the lowest frequency even
-> faster.
+> > I can't tell what you want from me here.
 
-True, but assuming that the reason for the mitigation is still there.
-If it's actually gone, it's better to stop cooling as soon as it can
-be done.
+> I'm asking you to pick the regulator patches :-)
 
-Thanks!
+>    dt-bindings: regulator: Add bindings for MediaTek DVFSRC Regulators
+>    regulator: Remove mtk-dvfsrc-regulator.c
+>    regulator: Add refactored mtk-dvfsrc-regulator driver
+
+Is there no interdependency with the rest of the series?  There was in
+some earlier version at least I think.  If I reviewed the patches it's
+because I wasn't expecting to apply them.
+
+--Ck+ggcwV/Ot1gS3W
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ6vQgACgkQJNaLcl1U
+h9AbYgf/URHedtcxPh/nFTezG0aVe4h2eu4bJNpWaI0S7OfNW4LJT4EhtiuCuSPh
+BdAb2NA7AisSvcgOgZrIjD3COYnanTj/6j3pDfiV/YC3lCJoz+mv1TptT2kQxujQ
+nPJbzRAtsIl24RsI8sSC2B1MWsddf44E6RAfcYnlV8YDWQua9BxfLyCdEuG+gjmb
++y5YK9glKhbAzHsaUjMkzn+BjHE147scOlb7u00uD61WrN94O2Q83guy2+sybO0y
+Km6bYffp60vo0ebFLyJCTIfYEqeUAEvWw4v13TAZU7uBlHgr231EptnRd2gXLMLg
++WFplgSdJIzqSEsoZostEfIqw0bfgA==
+=t/8Q
+-----END PGP SIGNATURE-----
+
+--Ck+ggcwV/Ot1gS3W--
 
