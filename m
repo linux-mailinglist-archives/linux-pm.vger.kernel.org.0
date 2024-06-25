@@ -1,75 +1,76 @@
-Return-Path: <linux-pm+bounces-9968-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-9969-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D6089170A7
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 20:55:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 984429170A9
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 20:55:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18884B27905
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 18:55:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40BFF1F22ACD
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2024 18:55:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 818F217D897;
-	Tue, 25 Jun 2024 18:54:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF2F217D8B2;
+	Tue, 25 Jun 2024 18:54:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EF+oGYul"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UEvtx91K"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F8D17D88A;
-	Tue, 25 Jun 2024 18:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2381D17D88F;
+	Tue, 25 Jun 2024 18:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719341640; cv=none; b=oV0agqFug4CzsTGQNLY+oJTvWhoGpzONmjdSgff+fQXZO+K9+HfpaLdLp2NhQKER+gicb8HDH/menu6gNiHNntyy8oG6dDSrCQYrwvVxdJ+ke2mzalPZCYSdPQx8JhF5FsAWu1TY9fDQLkTtIuL9ioWhruo54dSvS+giCXfw6Cs=
+	t=1719341641; cv=none; b=JgUfubfiIVL5+YDCOf4GZDkFdex2ydc/4ksRN3l4hbn4gU7qVGf0PnQtsQmi6Y/XQyAvZwxMRqIN4QBhj6sCtINtwVStShAE8n2/U8sEun6beSh7S7290COTpvH8ZlrJoxuiT7lF75i38PGzPyj3lZ6FzVPlpJLgnz6QYSPZafw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719341640; c=relaxed/simple;
-	bh=JziFewVRnc/o18bHywCWsPfptesYMGm67bLCKHE+ocI=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PkFpDv95PCTfnHMCROSWOC4/40nkKOayksPIlyvmKmXbs39FP7y2HLX/b09p2A8dTxNR445RDT1xIaGlVpE8gsz3BlHffH4GUso1Ft3SBvsSelMizqvlToSPTF0YeZoXUHfo97u/anTYcfK+U0hzL77lw0j0hB7QH/cxHiOUg9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EF+oGYul; arc=none smtp.client-ip=209.85.208.48
+	s=arc-20240116; t=1719341641; c=relaxed/simple;
+	bh=1cdOCd8XjLCkgJAFNvN+vahzYa0+JWtKcvY//VUQRW8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=lTDHm6zbIlfKhN8leEH7cxmeI97EGbLgSsEcflSLD070Vt/EJU/xqS++PzJGx7WA8jyT4Vq/WrJQrsq1Sol3uOF8CXuVkRZQZCCtjWsitftL945f3NGcNJXFURhCd4OnUF0rBkO664TUPsP8KPw41CQO9/bYof1ZTMfsdU5ETrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UEvtx91K; arc=none smtp.client-ip=209.85.167.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-57cbc66a0a6so833081a12.1;
-        Tue, 25 Jun 2024 11:53:58 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52ce6c8db7bso3146836e87.1;
+        Tue, 25 Jun 2024 11:53:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719341637; x=1719946437; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2YDprlTG8geNOTc8IzqxxC6gz6+SyA4zIwEHPlVhbEI=;
-        b=EF+oGYulusNUhKt9GZJ8S5sV0tB/6XNo5dxNmXf2UdVZPaj7rBnEmVafgQicUAjjAv
-         nXpohanAAm9u7Tg6waRIESyuCYeelHJ61qcr53B0wUtibyDhTanE8u0KhnLHi6Phvcfi
-         63fmtDaujXlrTVyuZqbmsmGcOWRNMSHjwQeLNFd57pOgP0Rk6ayogzmYpe3oVn6gQfc6
-         BQeIXRmCB+rVcsBYNxVkjEq+sJWQUK5AKtdhCEFHpcgzfw1RurqLhC22Fi5i4d2NzufP
-         egNVKmK3+NPZmmVYd1OQPN4dQ/hwTNjh9zTV7/O3vBPtSjshAR73C3Go53ecsc7xq02L
-         F/lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719341637; x=1719946437;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1719341638; x=1719946438; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2YDprlTG8geNOTc8IzqxxC6gz6+SyA4zIwEHPlVhbEI=;
-        b=DOr9XWeeDMusALzXafbRsR5Ez/340W53qj6yS52UKbSmfIgpnPe6UR+h9SyCq9a6/j
-         IjQXPZLjWtUvi/z0RT2JvSGsSBBt55cpBJ29o7wlWZ9buv6aUyzTzShdhFXG5ZtzbGP+
-         mG2QfpPR96klKy//RHLrL3stBp7QWcdrDcXgKXC06KIqEVeoGL0ZX1terkk5bs0hDhKw
-         SDD+dGQK8F3l689Lsepp1bJb9UPD+Fjfya3QGxVoRKphcJObBD+F7AeYjKvrHj3LZ4Li
-         lAmLWEjEIeJ0ZANkP8u9mDVs0kTHb0SQZnE5tfvMiQUSj9RSGK/9347Xvc/+1ZEGG7xl
-         3OCg==
-X-Forwarded-Encrypted: i=1; AJvYcCVSrsmPYYzv/gjsc/B3PcCE+XwXhTVbTDmtaTXWOQ3kifEs+Y7UG+KW8+/DGpaSaMaEH6QL+BqzwtdxVaCdXMj0xiNE+N0leArbKQIX
-X-Gm-Message-State: AOJu0Yz1FAdsI1OUYoMbySPzqI8IMVmkmOSKc6sg5+ZcgADKPFJkt+EO
-	8G2BRZnD8QRE/czksXjXpYfrvVMZoT1aNWueQ3fInUYnGYRtSWqb5mjHRQ==
-X-Google-Smtp-Source: AGHT+IFoOyLCHxYZP8A3wfYekZExcgfevtj17eJD76/UiUFTm5mpSDmOfmUeTquiKZHOfxQIA6xFcA==
-X-Received: by 2002:a05:6402:31a5:b0:57d:4a0d:d597 with SMTP id 4fb4d7f45d1cf-57d701f4eb6mr2853650a12.12.1719341637022;
-        Tue, 25 Jun 2024 11:53:57 -0700 (PDT)
+        bh=tTqAF0m5NgmNYSmy9QWkbOBTT6cudWzYwZuUJYss6eA=;
+        b=UEvtx91KY8xmnxFLV61doWH8WGUY+kLFTj5oPFWEOf3oV38CphJua3YSQCq3RodgC6
+         G5Z4y7v58Ppiur2zpGKzVW7RpaVL2UBE8RCDbeRvr/jmI2hr90hDwmG49P8ibum/Qa4O
+         lyPM4raeYN4slLLVSZ4o6xJXzarab4hjskceKCzGq/nm1kRF4PeGk8SceuEG99Bo9xN0
+         5ywXrBhdUud7QOooMNG6prYqBFvEvro26kuICTZhhC01lQ8AnujvpIRAZGWriZ/wPRsb
+         Hn8g/GWne3DwF0AdprICQsvcB0WimioAyJ0C18MjO+/i6K9JLljOlt0FkG12yfF6d/3d
+         hjJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719341638; x=1719946438;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tTqAF0m5NgmNYSmy9QWkbOBTT6cudWzYwZuUJYss6eA=;
+        b=k6GrrgaqkHSVWhzCE8hTjno84fVkjsUZaGrNxHeGtaG0TO0m0OdZNhzfjlF9sY8Wr+
+         L7bgT1kK+kDcY/0Mvz5Qf9RRA1a+iPeH6OXBa9Pa/s9g74tW27boSSEJIDYhd0kDr2OZ
+         HCwqNzmx9sMhel9uL92NZnF5GjDjA82t6NKjuLFeN7BPu8tz0sa02xM6b9P5wIlYVHAA
+         Z1NPZsCnzyIpRH6XRWkatw1yXpbw9/9FHf8zrH8itIQU+Fw9nxu0C4yrK2imV18yJwNb
+         S1cjH+6sIuYGUPhgwz5rzUDtYS5x23eUx6vt/bR9HHMZNs8GvI7nQWs2k84dVjKDn8Pd
+         K9hg==
+X-Forwarded-Encrypted: i=1; AJvYcCVCi5jh9eD4+HZULep5af1HQAJ87e4t2G202mr0OqTvWCbUbp8HmPJYUPIgRxrh1hfTkEInRcqaRJrbcH3fu3zxXnJMgTbOji1RImOY
+X-Gm-Message-State: AOJu0YxgKqEsFw4wBpcyckLWdUzLVEhovpRLhTtJNUlGAKqTpC1U+qCx
+	+jkj8RtDAslU5TZmtdl/PYfWAf/vBveZ41YEF7M/5oamwRb7MrAAtowHWA==
+X-Google-Smtp-Source: AGHT+IEJAA7XJTdOGBAvwMgGxVd/JOtwaGFJL206n0vAobtmLfTO8rlJwjQ9JVtpVK+2nIQx9Go0kw==
+X-Received: by 2002:a05:6512:3ba9:b0:52c:df4d:bb9e with SMTP id 2adb3069b0e04-52ce183b7e5mr7491623e87.41.1719341638198;
+        Tue, 25 Jun 2024 11:53:58 -0700 (PDT)
 Received: from [127.0.1.1] (31-179-0-202.dynamic.chello.pl. [31.179.0.202])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57d30562ef3sm6201650a12.91.2024.06.25.11.53.56
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57d30562ef3sm6201650a12.91.2024.06.25.11.53.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jun 2024 11:53:56 -0700 (PDT)
+        Tue, 25 Jun 2024 11:53:57 -0700 (PDT)
 From: Roman Storozhenko <romeusmeister@gmail.com>
-Subject: [PATCH 0/2] cpupower: Add 'uninstall' targers for arch-related
- debug subprojects
-Date: Tue, 25 Jun 2024 20:53:54 +0200
-Message-Id: <20240625-add_uninstall-v1-0-ab031bbd98e6@gmail.com>
+Date: Tue, 25 Jun 2024 20:53:55 +0200
+Subject: [PATCH 1/2] cpupower: Add 'uninstall' target for 'debug/i386'
+ subproject
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,33 +79,42 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEISe2YC/x3MQQqAIBBA0avIrBNUTKirRIToVANioRWBePek5
- Vv8XyBjIswwsgIJH8p0xAbZMXC7jRty8s2ghNLCqJ5b75c7UsyXDYFLrbRBRGcGC605E670/r9
- prvUDPoYtuV8AAAA=
+Message-Id: <20240625-add_uninstall-v1-1-ab031bbd98e6@gmail.com>
+References: <20240625-add_uninstall-v1-0-ab031bbd98e6@gmail.com>
+In-Reply-To: <20240625-add_uninstall-v1-0-ab031bbd98e6@gmail.com>
 To: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>
 Cc: linux-pm@vger.kernel.org, 
  Javier Carrasco <javier.carrasco.cruz@gmail.com>, 
  linux-kernel@vger.kernel.org, Roman Storozhenko <romeusmeister@gmail.com>
 X-Mailer: b4 0.14.0
 
-This patch series adds 'uninstall' targets to the makefiles of
-'debug/i386' and 'debug/x86_64' architecture-specifics debug subprojects
+Add 'uninstall' target for the 'debug/i386' subproject.
+The target removes binaries previously installed to the
+'${DESTDIR}${bindir}' dir.
 
 Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
 ---
-Roman Storozhenko (2):
-      cpupower: Add 'uninstall' target for 'debug/i386' subproject
-      cpupower: Add 'uninstall' target for 'debug/x86_64' subproject
+ tools/power/cpupower/debug/i386/Makefile | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
- tools/power/cpupower/debug/i386/Makefile   | 8 +++++++-
- tools/power/cpupower/debug/x86_64/Makefile | 6 +++++-
- 2 files changed, 12 insertions(+), 2 deletions(-)
----
-base-commit: 0fc4bfab2cd45f9acb86c4f04b5191e114e901ed
-change-id: 20240625-add_uninstall-14246eeec69a
+diff --git a/tools/power/cpupower/debug/i386/Makefile b/tools/power/cpupower/debug/i386/Makefile
+index b3f771039b17..355f44dafa00 100644
+--- a/tools/power/cpupower/debug/i386/Makefile
++++ b/tools/power/cpupower/debug/i386/Makefile
+@@ -39,4 +39,10 @@ install:
+ 	$(INSTALL) $(OUTPUT)dump_psb $(DESTDIR)${bindir}
+ 	$(INSTALL) $(OUTPUT)intel_gsic $(DESTDIR)${bindir}
+ 
+-.PHONY: all default clean install
++uninstall:
++	- rm -f $(DESTDIR)${bindir}/centrino-decode
++	- rm -f $(DESTDIR)${bindir}/powernow-k8-decode
++	- rm -f $(DESTDIR)${bindir}/dump_psb
++	- rm -f $(DESTDIR)${bindir}/intel_gsic
++
++.PHONY: all default clean install uninstall
 
-Best regards,
 -- 
-Roman Storozhenko <romeusmeister@gmail.com>
+2.34.1
 
 
