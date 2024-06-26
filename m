@@ -1,133 +1,190 @@
-Return-Path: <linux-pm+bounces-10022-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10023-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EAA3917934
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 08:52:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 370D89179B1
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 09:29:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B531282543
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 06:52:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E08B52870E5
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 07:29:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DD78156257;
-	Wed, 26 Jun 2024 06:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73CA61598E9;
+	Wed, 26 Jun 2024 07:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dJ0bXan3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BVkKvZVF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D72115530F
-	for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2024 06:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A622645978;
+	Wed, 26 Jun 2024 07:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719384719; cv=none; b=i8sPz/N3oXmoFlA1dOunZMW78viVnR4NVpQA2iWhlG1sz0PDobeW/YvheQByixrgV2sIOKI0WCDCHPjAHNZxupFvorgL1lTSvZOgYVXSwprfiTAOSjrDP+KVNwOUkgkzLrCBwPLnlzjoYADvsRQutfStczyS1+5JnN2ke2M234M=
+	t=1719386987; cv=none; b=sEttuC1US5+DIBRuu+hbyxE9nTX0Yp4MZ0BQr/DqMqgZ+YjseJh3Fu8yfKkP9TE3o73hFQ5MY6n0fL1onECiXmFJn76/8Ue148prMELHP4tnAq5KkZyQNckSBojlq7us86SYt02eCkRe6gsHfpEw0uHRnSZ6w1lClTPXeEjqr7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719384719; c=relaxed/simple;
-	bh=ynqlRCWRsj3iwf/QWz3tSm58xMrYIOb+tFBeeWdwR1U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GjuYkz7nv7Y/wDmxqsoDcDbDbvO6mdDu+mlb1+JyvJH/IzbnxpUKY+6KCbRpH55BiF3fPWTHCjD38MbVN6oeHRZm8yqbqrTSwzj3TH8DD/v5uwzvRrJEdQshcInpSO2IHlyzJciurR7NC8U7vwRd7pZ1lM5eSQP5ga6rQk7VI+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dJ0bXan3; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2eaae2a6dc1so99594291fa.0
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jun 2024 23:51:57 -0700 (PDT)
+	s=arc-20240116; t=1719386987; c=relaxed/simple;
+	bh=btPQt6h4XwprAHYKvRyqIyBal4wkclf3SJRV4OeaJKQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M0SwtZnIZi3pHypgCD+88+K9HbR0MY920E+ldoRtncwyngOuHzA7JQJ7/pwOxQCZ8zCzl/06cCBfaow3Eszgh1yBKFDsFBqzjI16G3lLybDK2oXdXmSMvKhUn8j/I2KHptBppkcA8trRhLSLGUpAMbiKu7gwHBmGBfuoxm9sB2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BVkKvZVF; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-57cf8880f95so7489027a12.3;
+        Wed, 26 Jun 2024 00:29:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719384716; x=1719989516; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V3uopRJtNOMBMWqQ1sVAqEAV1XHAWRxYPml/zB8ZcPs=;
-        b=dJ0bXan3jyFLIfx5ue/LPWCGtLy11FRb1uH66z3d0uWClut3SnrKGsdmTkJ527NZ4E
-         whasMI7q2cPOzMVWhwUkIE7m8w6Uc95LESAoJ01bMBMW/kg70VkL1S1E4kJMSjcZJpU6
-         D/CFadMLjZx6QJ3BpcBA4CJckKXwJTqpxf00Xi4MZranybUWMfTDoblFKDOBnWNECQ+z
-         AxF4JghnttgvYXGU2RusC77liKpGmu8cVg7q04nRj/PlpquNRzmO5Tw7qus8oXn39K2x
-         5fTfYJFCMnr9siN/DqOG8X6tlklvIwZ6ybUq4BMYRV48Ppi3qFzpo7rK/RaanUzpCKSW
-         El1w==
+        d=gmail.com; s=20230601; t=1719386984; x=1719991784; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XvsLfYrxWOLYQugRQzs49q155HgDaGdoFenRxpUZgAs=;
+        b=BVkKvZVFmpIIYLgGMSkjF7OuJfsplR3QUTyCNxfNpYU/ah4w+PDVgTDcdyKTU8NQAk
+         WSOCgkW+IulpiIMoEqyrDf7oBjVVUXCzv/YsK6QMcFXT+dXhSUoNO9THr6ywnrzn1akA
+         YCe4pI//KhTlvhO0/nHRX4nGaXy6TSQRu46QSG4iHAj3+I0qRlBCN8awTB5zQ/kUmlse
+         qDzBEaxELx2oSC1IMefmOpqWyKt9xU6UQ0vFNR1zOdQ/6CY/Xq1QZMIRQ/evXiDQBIvc
+         ArPP8fq/HSOSgrOyIPGBCi3ynleuw3PVg+gfikPBcYCypXO97E3Iat9gJjjzmxFbiEUa
+         5b+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719384716; x=1719989516;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V3uopRJtNOMBMWqQ1sVAqEAV1XHAWRxYPml/zB8ZcPs=;
-        b=Dzo/jDtKasiJJLbJDqO1fs4jf3oyT/6oJvRkGafqbAOnW5fArGenVDQuU8jdg8tgfb
-         NIepbt4D81adrOIjWyTbzawn9qnmHcZmIs3PMRbWpGoVTO+J482CPWcW8D1htC1RCSwu
-         bsmitbuMH4cTwQSycrXulHFYLylJu0Bg+b9qOW/0+zg/baL+8wmIyoZSRjKzUfcBeGCm
-         UMArVvA/EpBoaPj6HU6cQSlLqUSkvkxEhtAnQ/dk/c1wgb3kFhiAgEsHolcyfqW642vM
-         26ncFeGJqNcoCOV7ym1urJcs6xBlhlbLfe60BV0yzKmw+CfTcnW3o1DblIv0v5tR6xh9
-         KElA==
-X-Forwarded-Encrypted: i=1; AJvYcCXVdl+oeKwtWSH5bo3+4JMhxbcyfJ4efuigiNA9rCGRTh4PLpWzEGin5/3rf2MkNfAkaOnrodrb5AZ2sdorokE7grKUpr7IR/o=
-X-Gm-Message-State: AOJu0YwFFSujfBj4jwspfz6wm6U1i+5D6q1L2/dKGIhBqw64n8UMyy4f
-	KPkOorTIB70XOxLjyFynXk9uT8W76dKyYWXgOrdAGG9ieIqIwqmGgvDWIQgfLZk=
-X-Google-Smtp-Source: AGHT+IFGGT3YphhculXUz1kiKx+zIWJ6mdQrn4bujuYnEj3vPo1Q8an8KCt9LuHs1xrWKLz4/0ZaSg==
-X-Received: by 2002:a2e:a595:0:b0:2eb:eb96:c07d with SMTP id 38308e7fff4ca-2ec5f8fd33bmr76680151fa.14.1719384715402;
-        Tue, 25 Jun 2024 23:51:55 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-424c838099esm13342605e9.40.2024.06.25.23.51.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jun 2024 23:51:54 -0700 (PDT)
-Message-ID: <ebfc206c-748a-4741-9b5f-4facec985a5f@linaro.org>
-Date: Wed, 26 Jun 2024 08:51:53 +0200
+        d=1e100.net; s=20230601; t=1719386984; x=1719991784;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XvsLfYrxWOLYQugRQzs49q155HgDaGdoFenRxpUZgAs=;
+        b=mOADmEgJZ+rI4OMG7SNzzs5UCbq72Q2JzeSdROcLwgGU0VxTz2CRPkU2kGjPev3KnB
+         NzpmRND+UR9CGg0YBJ5rRVhIiF0pptj5/hqQ9f2lbqHJFvQ/+06JO3BM0rE4kBUkgwHV
+         WYBkMBsJEgRCc/qvVF2LnUnLCyPi9DnXAIvjcEjZtPnHHpxaIdST3L79+5bypNWD+tDB
+         /7ZsmHQAfXC/evOqQkmInn3L1ep+kgFtzixkGM23F6cicp8p9l8cVRBJo9/zqlCuTyOX
+         whJUW0V/eolWtrSwMMmM4XDpMmt/uehMX6PfVIunKtoYbPsVXdRTAKzGabhdbE/xwcuw
+         XovA==
+X-Forwarded-Encrypted: i=1; AJvYcCVICZa+0e6ZUug8EBU9jTZenGDqmPV7zxCjPlXc80IxTiocW/B9yC56xYjEBtJiqEXG1HQ0vJzF9KCm+Ax6ySDOd3ewc4r1k5hdY1pUuJoa9xXPsgC1tc861gUM39w8ej1Eg2phIJo=
+X-Gm-Message-State: AOJu0Yx+gvyBGLPL3qxzP9R1bdQBaDsuEErF7k0gIATAGYL+Z/uUD9cu
+	tQ8/ubYmHaoeL0bB3Uxbh2K0B2awT27D9prkvivJSAc62QxQ4t76uy7whK//3INYDP0MVdQ3Ts0
+	L7rXW4Vb83aRZjhkL68/74IEhdKQ=
+X-Google-Smtp-Source: AGHT+IGuTpoA0mcypNBslKf6qwgEHhL6gvANk+W+gmPwXKESWU0iyT3xhAEY0exEl6rRiF0piHwaElmvhXTznngSSu0=
+X-Received: by 2002:a50:a6d9:0:b0:579:e6ff:c61f with SMTP id
+ 4fb4d7f45d1cf-57d4bd79eb6mr7551629a12.25.1719386983674; Wed, 26 Jun 2024
+ 00:29:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: drop stale Anson Huang from maintainers
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Abel Vesa <abelvesa@kernel.org>,
- Peng Fan <peng.fan@nxp.com>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Dong Aisheng <aisheng.dong@nxp.com>,
- Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- Lars-Peter Clausen <lars@metafoo.de>,
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Mark Brown <broonie@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Frank Li <Frank.Li@nxp.com>,
- devicetree@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-References: <20240617065828.9531-1-krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240617065828.9531-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240622-fix-help-issue-v2-1-6c19e28a4ec1@gmail.com> <0a5ab4c0-e397-4dda-92f8-a23bcb42765c@linuxfoundation.org>
+In-Reply-To: <0a5ab4c0-e397-4dda-92f8-a23bcb42765c@linuxfoundation.org>
+From: Roman Storozhenko <romeusmeister@gmail.com>
+Date: Wed, 26 Jun 2024 09:29:31 +0200
+Message-ID: <CALsPMBMUAEwFOSfkjrd2Os+6YKunrAnkNHrJ6eU3DOvaE6BrsQ@mail.gmail.com>
+Subject: Re: [PATCH v2] cpupower: Make help command available for custom
+ install dir
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 17/06/2024 08:58, Krzysztof Kozlowski wrote:
-> Emails to Anson Huang bounce:
-> 
->    Diagnostic-Code: smtp; 550 5.4.1 Recipient address rejected: Access denied.
-> 
-> Add IMX platform maintainers for bindings which would become orphaned.
-> 
-> Acked-by: Uwe Kleine-König <ukleinek@kernel.org>
-> Reviewed-by: Fabio Estevam <festevam@gmail.com>
-> Acked-by: Peng Fan <peng.fan@nxp.com>
-> Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com> # for I2C
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Tue, Jun 25, 2024 at 9:29=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.o=
+rg> wrote:
+>
+> On 6/22/24 07:01, Roman Storozhenko wrote:
+> > When the 'cpupower' utility installed in the custom dir, it fails to
+> > render appropriate help info for a particular subcommand:
+> > $ LD_LIBRARY_PATH=3Dlib64/ bin/cpupower help monitor
+> > with error message like 'No manual entry for cpupower-monitor.1'
+> > The issue is that under the hood it calls 'exec' function with
+> > the following args: 'man cpupower-monitor.1'. In turn, 'man' search
+> > path is defined in '/etc/manpath.config'. Of course it contains only
+> > standard system man paths.
+> > Make subcommands help available for a user by setting up 'MANPATH'
+> > environment variable to the custom installation man pages dir. That
+> > variable value will be prepended to the man pages standard search paths
+> > as described in 'SEARCH PATH' section of MANPATH(5).
+> >
+> > Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
+> > ---
+> > Changes in v2:
+> > - Fixed spelling errors
+> > - Simplified man pages search approach by the 'MANPATH' variable usage
+> > - Link to v1: https://lore.kernel.org/r/20240621-fix-help-issue-v1-1-79=
+06998d46eb@gmail.com
+> > ---
+> >   tools/power/cpupower/utils/cpupower.c | 41 ++++++++++++++++++++++++++=
+++++-----
+> >   1 file changed, 35 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/tools/power/cpupower/utils/cpupower.c b/tools/power/cpupow=
+er/utils/cpupower.c
+> > index 9ec973165af1..1b1b79c572ad 100644
+> > --- a/tools/power/cpupower/utils/cpupower.c
+> > +++ b/tools/power/cpupower/utils/cpupower.c
+> > @@ -12,6 +12,8 @@
+> >   #include <unistd.h>
+> >   #include <errno.h>
+> >   #include <sched.h>
+> > +#include <libgen.h>
+> > +#include <limits.h>
+> >   #include <sys/types.h>
+> >   #include <sys/stat.h>
+> >   #include <sys/utsname.h>
+> > @@ -80,14 +82,17 @@ static void print_help(void)
+> >
+> >   static int print_man_page(const char *subpage)
+> >   {
+> > -     int len;
+> > -     char *page;
+> > +     char *page, *man_path, *exec_dir;
+> > +     char exec_path[PATH_MAX];
+> > +     int subpage_len;
+> >
+> > -     len =3D 10; /* enough for "cpupower-" */
+> > -     if (subpage !=3D NULL)
+> > -             len +=3D strlen(subpage);
+> > +     if (!subpage)
+> > +             return -EINVAL;
+> >
+> > -     page =3D malloc(len);
+> > +     subpage_len =3D 10; /* enough for "cpupower-" */
+> > +     subpage_len +=3D strlen(subpage);
+> > +
+> > +     page =3D malloc(subpage_len);
+> >       if (!page)
+> >               return -ENOMEM;
+> >
+> > @@ -97,6 +102,30 @@ static int print_man_page(const char *subpage)
+> >               strcat(page, subpage);
+> >       }
+> >
+> > +     /* Get current process image name full path */
+> > +     if (readlink("/proc/self/exe", exec_path, PATH_MAX) > 0) {
+>
+> Using /proc/self/exe is Linux and platform specific and not a
+> good solution. Did you loom into using argv[0]?
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Yes, it is not the best solution. I would rather prefer to have a portable,
+POSIX-based one. But after exploring possible options I came to the
+conclusion that unfortunately such a solution doesn't exist.
+According to C11 language standard:
+"If the value of argc is greater than zero, the string pointed to by argv[0=
+]
+represents the program name;....".
+Notice - program name, not the absolute path to the program. The actual
+value of argv is under control of the calling environment.
+You could look at the nice discussion of the topic for example here:
+https://www.reddit.com/r/C_Programming/comments/dgcmhd/exactly_how_reliable=
+_is_argv0_at_being_the/
+Besides - this utility is a part of the Linux Kernel source tree and theref=
+ore
+has no requirement of the portability to another OSes.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+> thanks,
+> -- Shuah
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
+
+--=20
+Kind regards,
+Roman Storozhenko
 
