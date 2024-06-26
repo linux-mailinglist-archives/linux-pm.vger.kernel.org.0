@@ -1,227 +1,211 @@
-Return-Path: <linux-pm+bounces-10072-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10073-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8A88918EB2
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 20:41:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D6D2918EBA
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 20:43:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89F891F21275
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 18:41:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95ECA1F23318
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 18:43:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 968EE19067B;
-	Wed, 26 Jun 2024 18:40:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26B5D191474;
+	Wed, 26 Jun 2024 18:43:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="PmDJeFtB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mOQiKKQg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2054.outbound.protection.outlook.com [40.107.101.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF81318FC85;
-	Wed, 26 Jun 2024 18:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719427259; cv=fail; b=SXedL76ciov7FfG1JNLXBZkNQ7H+m+H1s+eAXHK83ifB7/Zv7lH2C27qUXw5wmohMYqmupVth0eJzqGdSo3ZmE890p/UZxlKAePnqhMQZ6V4JL8YVZxTd7YgQQWvkkHhvtPDl1ceLLw1HSgIQJ2tqmAkt1BNSwKoTRrFxYRh19E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719427259; c=relaxed/simple;
-	bh=XY0FtRgEWN5Ims8YYlrz12xBzdH+8Dsf+Xiy3eAnp+M=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=TgliBtdm9jb7rLmmXWSivyXAYyUgEu+7RjCS91N9Fiee5kTds0mZ6Cc5X8HhaFger5gSUM+P8tCAqf9fof4SrXHp/qFZXWkRfbXqz78KgIjZMfE8DKODAZPmyzipDyLbXH+xj6RjWGv0AgFKDDuko8j3zIh7Qb7Iy81A0MAr1js=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=PmDJeFtB; arc=fail smtp.client-ip=40.107.101.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dcWk1OjgBIm9SPYGg8oWAG613GwZmRaraxdbvPquVqxNe1j0A89fdTVHwiNdtDB0lTRvvRPsRzBpoBqhdHTIPd4V44RLkbr/Xr3ymFAGfKnSAMNA0OaO8vxlrkb5b48cdGnYlPE9QO74BAaE1/V4SLhVeRMIhIG7gimQTPBYxLSmyW4GX5t5TPTU87pFfx58XTiY0qTE1Y48vWYHXAuNh0UHO/B0nYSVbKxwd/lEvi1RbQE/gQAgEw+z9F3/6LZhUmXodgjVxVI+/6tSBiD8uhcCdKXlLykTzmYU/vyYCI4K/8Qsf1JZwpOdR25f10WS9GA4Gg16NEanCY4X8v2SlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VDAijn63/43fWU0S6wG9E+kfIVTdHWLked3XSj/CIgQ=;
- b=Q9uoxPXhGUaI33C2IIlYxP/Ofe8OCF9pwy5XXNL+SnFDdNkSQZyY3MbuYPi8p2/JsC8+z/3owm9UNUjb3oAsFs1c0or/G0N+VuWeK6hAO2tm1vw/vyUgsdZKlYOdrF2hXpyEolswnP1meYURy1nENtJMKdxKHoHznk9E709WCm+dOA7iuPj8eS8VstmUnEL1VYnNgr5CE97Dn08dE5Jh+Y68bfazgyh+84071lmEcXpSJAJv4laiUdT+LeCyaSW6heiFQcNGbDHz7Wu3dC3qvNMu7O/QDIPitYdlJ0Gmtd0Au9BKZGVcNJ3mpQlRRjLgVncftQkPjoF203tcTWkNWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VDAijn63/43fWU0S6wG9E+kfIVTdHWLked3XSj/CIgQ=;
- b=PmDJeFtBDkGYbuQIHShqX0VlSYWS8Ju+yKtpcR1qt0mO4N+a7OElQ1OvyiOuObSCdUFBhhetIZ9pvV5/9JSMEobKrlHk5w5VxZFNH2cOO3Fue5a2GJkmmdwoUzep3G2RyNRGTJ4330I1ggeOUlwtE41BY2b2p234Th/yD1Lg8pQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by IA1PR12MB8468.namprd12.prod.outlook.com (2603:10b6:208:445::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.32; Wed, 26 Jun
- 2024 18:40:55 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%5]) with mapi id 15.20.7698.025; Wed, 26 Jun 2024
- 18:40:55 +0000
-Message-ID: <6c68f0f4-ebdd-4740-9930-99124c7a6ff5@amd.com>
-Date: Wed, 26 Jun 2024 13:40:53 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: make cpufreq_boost_enabled return bool
-To: Dhruva Gole <d-gole@ti.com>, Viresh Kumar <viresh.kumar@linaro.org>,
- "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240626084354.1762483-1-d-gole@ti.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20240626084354.1762483-1-d-gole@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN4PR0501CA0012.namprd05.prod.outlook.com
- (2603:10b6:803:40::25) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5876319068A;
+	Wed, 26 Jun 2024 18:43:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719427400; cv=none; b=ofVoaM8KQ6GfhcpCLxsOhfGTnroigdZ8Jj881C3rprvDaCajuSrtop12cjeda9/FEjDZ2zKWd5szy0kN/wJyRP8UKdFd0ZmejLYlcYTK/LtOIACBiB0VdcC8s52vwOPT34MzFrMPxTpGxrVgyI50LllLfSD6ooqkkg7AKoYpSMw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719427400; c=relaxed/simple;
+	bh=zxJ/trqs037LOC82Wzr9oSEimFRNgDHJpVcrhf6ECCQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Vuh60sp3TEZ/NzHWwy3f39d6LF4B4tpRNfHPqf933zyg07Kiah8JUj1pAX71ylta0EDKlGxPKlyP84FU04ZVWrSLEsNLtDpGfnNai6vTv314IzMGc3W8TYZYXeYaS2fNYTYK08mX5Cs1LwTWeVCVU9p8sQzpdgZjAfjWB9kkN6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mOQiKKQg; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-57d1d614049so781334a12.1;
+        Wed, 26 Jun 2024 11:43:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719427397; x=1720032197; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XtTWCWeJx7mnAovFW0ao59h67JeXpvr8VNu5M9/gMfM=;
+        b=mOQiKKQgZAoZnfCC7u7SVUWZ/zm7X4BiZ7bcGIqqkEnnpHmu9FOtywH55UklRCmzLa
+         XuKB5m1weo4wEyH5C0+fUAYTG/b7TKRyjLwNPySNhgvjaQyrUPknM1qdzumhtHVs6QqH
+         D/5iv1mxsWH+DH9HSwDjxqq3Ua/6YbvsyxQpaKwYAMKIhZy0Sb13wg5wbLpGQSSq9eYF
+         OB1CgT1DuG+Ziu1hR4QW6n759XEV6re33uqyrIWqhP4/aWAZ/YPLK+fq5MWuI5QMEcaT
+         /0ht/1rHCTJSdSUd02ETqNsVv9NhCWArrhA9sL7/SQcAvNVh9SLaWoxUUAYPWH3UX4c3
+         4OxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719427397; x=1720032197;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XtTWCWeJx7mnAovFW0ao59h67JeXpvr8VNu5M9/gMfM=;
+        b=UbuSdHAGK0RlC6s8M/oAldntRn3dJfXOfmJGXQWey1Kp7j58I6f3ArPXNAVD8EaUKm
+         mND12kNveGrM65XNT9lQMn0eJoYnIO/l7fPhEeFRQilhYWq9jR9uSmoZirjvKRtqPJWa
+         +Q5UWTL51y762hkVLPAeMlyYIODSvTN8oXKiUXUEbo2GpkD426o2cTcWqq0Wh9H+Drs6
+         OOa2lZxtxb8gl1yDHRnvqoiYWXyTU415o+q6hZQ14lTepodiK0bpseGgtT/f00gp1AC3
+         ezOIrL7YK1OmGMHHiUqHEJYITE3T2qDqzbefzIuNZHLjHqGsp0x1SidPu2aqIwa6I30r
+         EzsA==
+X-Forwarded-Encrypted: i=1; AJvYcCXWY6Dn/blt1KQ+QWCfaIXfh29WihNPD7FeWrimAs+JDcFeK/qtE8W7EhF/rSMsleJxL91pfdcHP7pB5xdNGccOVUrBRFp4gcM1wRwDYJKgrB1xuXr9sR4tJm/yFBBSmXsGqwhB+iQ=
+X-Gm-Message-State: AOJu0YwmrvTDaw8x5gqAy7Z/u1DWtWuBs90cbsVLIIDz+aWXy9xeLYS0
+	ojd1omfHcXsgvQoYsPpoJICnGQwA1EzjtZ0KQqsSGsj+Y/ETg97M2CEJS/gbEIygaV3xp3HJz3H
+	edJXTYg5vTsteN5LL3Ptp0v0gXmU=
+X-Google-Smtp-Source: AGHT+IEyGkzYLAyIxCwvniZn0T3nkuwfkViX9XfjWuopWGxrEQx6INc8ek8qH2V8Bj/x3OW2VI7lb1fxMLLhqCjbOQw=
+X-Received: by 2002:a50:bac3:0:b0:57c:9c5d:d18e with SMTP id
+ 4fb4d7f45d1cf-57d4bdd02b0mr10882508a12.36.1719427396512; Wed, 26 Jun 2024
+ 11:43:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|IA1PR12MB8468:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0f0b27aa-c625-479e-482c-08dc960f837a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230038|366014|1800799022|376012;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?d2NVK2MzRis4QWFXMFVGSlRBcUljc1BuNnhXZGh5MlRXZ01HUmVhS24vcG5l?=
- =?utf-8?B?aWhBMTM0LzhpT05idG9WRVZONmszQmR1R0lURFZqYjlVMHB1Z2Q1bVFYMkFz?=
- =?utf-8?B?RG1rL3VoUzRqd2lpK0FDZ3BkSXVEamVabzhEMnRoSVdiQWc5eDZrU2hVeEtN?=
- =?utf-8?B?blBHZEYxS3R5aVRQUlZjU202a0I4dzlHbEZ3OVhhVFB4YkJCcUl0MEM2cmw3?=
- =?utf-8?B?UDgzTXlVMWxrK3dZdUg2M2xIRHZENXFCczd3N2tEMEp3ZGVsei9JME5qSFpP?=
- =?utf-8?B?WC9PdlNJNEt0My9zLzZIbmc3eGYwN3dnTHhPSjVxakpmUkthaDl5a2djaWdL?=
- =?utf-8?B?NVlJVDhZZC9hYjZ2MTRvUlFNcjNEK1dXeld6QTEwVkRubEhGV3JHZHBqR29C?=
- =?utf-8?B?ZVhJVGlCSmFQVmF5QVJtbitsQm5iL1V1eVllMk5TV1ZBVE9vTXFrVXppeEM3?=
- =?utf-8?B?L2U4YnlaVGNVaDZvaTh3K25ORHdRajZjSVl3YlBGaHFoYlhFYTk2dXBqdDVx?=
- =?utf-8?B?ZGJYQmZNSDYrMlpKc3JHamNpVFdyYTJjcjR1ZFpleXJZcmRGcDhiMDdCS0VB?=
- =?utf-8?B?QTlpMHl5b0dlQkZ3aU9XNytYVE1ObU9McUFIRTB0cXd0bGxNdjBYT3p6RDBN?=
- =?utf-8?B?OHFHUzgrUWl0bFdJdXN0aHVPYUtPclE0Zm0xcnQzb3pmcTZNWFJWTGY0TjZ5?=
- =?utf-8?B?K3Y0TW4xNEMwUnUyak13Z1VwdU53UzZabm8vMmhWUFUzNE1jY2tWRmgrV3Ju?=
- =?utf-8?B?cFR3MnhuNzRZeU43amRjaWVCU2txZlZZM09pV2FrMTIwV2NPcGVBU1U1bHk4?=
- =?utf-8?B?WWJSRUlyZm5KTnRHc3ZnTHkrMXAvS0JYWWdTT2sxTHNCRkZKV0wwUHhkZGJH?=
- =?utf-8?B?Q3ZUWkpQUFZEeFY1RlRwdllHUkJyajBnK29DTFI5emNUSjQ5V1Rzb0tmeUl5?=
- =?utf-8?B?dmNQSFFkNlh6WktWUVY3cnhRRXM5RzNEdTZxc2g3eGtEK1hBOWpXbTlva0RG?=
- =?utf-8?B?b0YxWHF3YWN0T3dkaStXekMxMlhPL0pJcmFUd0pSNExWVCtzTk9NaW1UQ3dG?=
- =?utf-8?B?ck5GT016WHRJZ2l4UXhYRGtaQ3loRGE3ZUR1UGlGV1FBajdCQW05bFRUM2t3?=
- =?utf-8?B?WE9VZVVhVkwrdWV3ekZIYWNHMHlvMnd3K0M0WWpRalZVelZPTCtYaHhIa1BP?=
- =?utf-8?B?ODV2ZzhVUUJsUTROQVhvOHlrT1p5b1VzM1NaWGtLcG80eTNadmNxTGJvcHR2?=
- =?utf-8?B?RE5yWFhjRHVobmljWUx3V3RQZ08rMFIrUXc5ZkwvUnIxTEJRZ0wzK1VyVFRy?=
- =?utf-8?B?aXhQWjNWL0xEdmZQTkhWT3VGdGRwU1ZFOFc3Sm03ZlhHd1ZVMDdpVW9MZ2tV?=
- =?utf-8?B?TWViYVBHbk5wQjRoYWVzbnU2aUFEOW5VTmNyUUNLaTdwUk5QWnFjMGgyWER3?=
- =?utf-8?B?dHp1YWQ3QzJVK0U4TitlaEIwOEtXdHZtTGpnS0FyRkRpNEVOQUJXYlBMdW9M?=
- =?utf-8?B?VmIwK05STHFDalFJSmhrRlFaOGtqcGE4dlZTM0xUUlZvSFBNdW8rMHJqUFNz?=
- =?utf-8?B?am9OUkNUNXlmN3RXSG5WZDdVci9PTVExMDhTOStqZldXSFF1SHp6WHhra3Vy?=
- =?utf-8?B?REE2WkRKTi9XN3JXRU5qNTJKWmRzZlpHNEl2Y0JIdmN6NTFiZUZINW1ZNlN5?=
- =?utf-8?B?T2pjdk1DRzZWYWxEdjlZbGpiQkRvZlYwUGhqTG9uYmtHa1ZHQUhFQTdCNGRa?=
- =?utf-8?Q?1GXq5xhV9/hfIcemdPFykkd3LWPblaM1VYbmIbn?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230038)(366014)(1800799022)(376012);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Q3F4ZmtDejExWEVGaGM2Ly80L3BBRXVtOHBmaWpDM01rM01YOEpKR0tOT253?=
- =?utf-8?B?WDZHQzdrZUhJN0Zoemk2a0tzYlJNc2pGbWxGV3o5MTk4SE9tQjFEZTVEMFFY?=
- =?utf-8?B?bjZPcExJTjZxY1hjRDRrcXoyMFV2R05WdnBDZjRpVDlTUG1VTTZwZEdTcHc3?=
- =?utf-8?B?eW56My85d2ZYYWtFam4yR2NkbGI4a3NoK1NsQmRGdXJqbHJCN20vRCtPSGJE?=
- =?utf-8?B?NzhtREU4cjdMejdxVmxTYVdRVVR5Z1FOR2pmbnRVSnBBdHh1TC9BSWQ0R0NT?=
- =?utf-8?B?cmUwcG92aWpOdWJDSEt0YmtNcEtHSThEK1d0UHdMSW4rY0lKeDJ1bVpBRDFT?=
- =?utf-8?B?dndIVTBVaUxNTXZvSTUwaWpQMlBYTHExYnlua0RpaHdoVlNEQkRlUGR3aUlU?=
- =?utf-8?B?Qk9GQUZZam9tUWtwSHRxTVNnajM3REY2U3ZRa1g0YlIyaWJZcmZEZi9PTm1C?=
- =?utf-8?B?Qnc5eFliZ3ltMTlHTWJQR3NaRFhoc0pKb01DZjdjcFlEMEQ2VW1LYitWenFR?=
- =?utf-8?B?bUtKdFdpT1c2RWJXWHl1M1JQaTNZMnNmMkFxeXJmSlp6Tkw3NnIrUnZyQ2Ns?=
- =?utf-8?B?RDllcGRnR2lwN0ZCTmFSbUtxS0NpOWhEUlQ4dG5kSGpTRnNGYXh4RWppcEZE?=
- =?utf-8?B?enB2MGtwenFZcGlvK25EVGh4ZXNYWTNBN2FoVXBvV1VGNlI0NGFJeGNxME9O?=
- =?utf-8?B?UFlwRDd2YVR0eWc5MFlFN2xxUGNhTGUrTW9GWjMwZ3lFL084dStYN0FVeXhl?=
- =?utf-8?B?cC9hQXBwZ2p3VFEvb2dBSzd1VGR5bjhXNzl0b3dpcW5YVG1lMDRyNnpHS3Mz?=
- =?utf-8?B?Snl4YXg5UUlDeXM1bU1kblpZczFqRUZWNENjdWtxRXlNa3J5N3oycFoxN3NK?=
- =?utf-8?B?QVV3aDVYK1dxRVFJdGdjTFd0RFgxRW9lektXbGN3eUkvbmlyb3VhdVlsV3ZW?=
- =?utf-8?B?a3NGYkM4S3QxVWY1ckhwaTN3MzI2TnJSbzNnb1JXLytVRUVJVWcwenIzTUdi?=
- =?utf-8?B?UXB3NnNtSytnZ01tcXh4VHA0STkzejdEeTZjQk53ckVYancxNmp2d3hra0RZ?=
- =?utf-8?B?VW9seEJkMFJndTdHZ3BaMkhSU1p1T2dxWHAxSnFpWHdkdzZPTjA3VkFLZGJC?=
- =?utf-8?B?WW9lTU5aZG5wWTduQlpMc0wwelk3NW5WQ0RnS1JEOXRDcHlhSDU3MHpjM3ps?=
- =?utf-8?B?U1h4S0NoWTlDWjdsY0ZnQnJrS0VEWDFwcVpUdFR3alBWZnJiNWoreWt3Q214?=
- =?utf-8?B?WEpVM0tRWTVkS20yL3E0aEFLKy9DUHNxNk5oVzFaYThFMnMrUFpzeTZ0Qm5o?=
- =?utf-8?B?d3dTUENHc0RjU0tFc1h1dS9SaWp3REN3aDN0ODlaVHpmZmQvekxlNE84LzJK?=
- =?utf-8?B?WEtOZHFHVUdLaEk4cXY5TDZxNHBuVVJ5MHc3OW81V0lKQWZEZzJ6bFNKWGp2?=
- =?utf-8?B?bXRINzdHdDRLcVBBRTAzaUk1Vmd5M1pyUVY0RnZGQU9TZDYvRmpqVk1UR0VP?=
- =?utf-8?B?ck5heitVVXRmaFJqM1lTNHo1SVZTeWJKT3VTL21HcHUwTkRFRzNHU1RFY2dW?=
- =?utf-8?B?dEhpQkU3cmNaOHovMm1sV2VwdlY5aE9jaU5SOFRsMFRXdUlIRDZQalQ0ZXdl?=
- =?utf-8?B?N3Vkcy9lTjBld2dBY2d1OVArVmRQcVI1dG1iNkZjQUJtN3RsdVNsYThSMEFz?=
- =?utf-8?B?ZDM5YlpTVnJvV2Vlakk0UVphejBlLzVpQ09RK01yalQ0WUI0VnQ2TmZTZzRn?=
- =?utf-8?B?M1B5MlZnb3Vvc0xQWVFESERZaW5UNUkyTmIydXZDK3pVSVZBMnJXcjhDVVFT?=
- =?utf-8?B?SkRuUmJyUW91N2haNXNLYUxhR2MwdUVZNGtFR0NhaEY2R1F4YlhscFlQN1Ba?=
- =?utf-8?B?MGx5dVNOVThuYmRiNzZjdmhpUXhxOFlrdTMrRzF4WUdMQlhvYnhvU1NETFBB?=
- =?utf-8?B?L0diemo5eUVUaVJxYm5BcjBSNFBEdTJzVmhSbDJkTzFHQmdIRzlKYWovb2N3?=
- =?utf-8?B?TlVmOFZYSkhxbkxKMWdzQjFPZVpxS040RUxJU1VzRHhnY0E3SUd0MGVQVFRN?=
- =?utf-8?B?aU82NU1FT053VUE5K0s4NXdlNlVqajZMczJJSnlJZjVacE1xZ3Y0WTVlWjNZ?=
- =?utf-8?Q?oJJRQ70tfxVSmO8yzrbMhal0R?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f0b27aa-c625-479e-482c-08dc960f837a
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2024 18:40:55.5149
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DY1zNrMSN+ZhTJy2NOqQsJHGfCV4CTihhV8WPmvbEoYH4h0ql4ZQJzysMatobPq5To9LXS70ARwaPr8E80anoA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8468
+References: <20240622-fix-help-issue-v2-1-6c19e28a4ec1@gmail.com>
+ <0a5ab4c0-e397-4dda-92f8-a23bcb42765c@linuxfoundation.org>
+ <CALsPMBMUAEwFOSfkjrd2Os+6YKunrAnkNHrJ6eU3DOvaE6BrsQ@mail.gmail.com> <7ea62dd3-723b-4691-a0e6-c4bea07db532@linuxfoundation.org>
+In-Reply-To: <7ea62dd3-723b-4691-a0e6-c4bea07db532@linuxfoundation.org>
+From: Roman Storozhenko <romeusmeister@gmail.com>
+Date: Wed, 26 Jun 2024 20:43:04 +0200
+Message-ID: <CALsPMBOuzzoW4Va9RhgTpTzz3t3kOYN8pKKU5dpiLGbXQOJjxg@mail.gmail.com>
+Subject: Re: [PATCH v2] cpupower: Make help command available for custom
+ install dir
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/26/2024 03:43, Dhruva Gole wrote:
-> Since this function is supposed to return boost_enabled which is anyway
-> a bool type make sure that it's return value is also marked as bool.
-> This helps maintain better consistency in data types being used.
-> 
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> ---
-> 
-> No functional changes, just noticed this as I was reviewing the patch,
-> "cpufreq: Allow drivers to advertise boost enabled"
-> 
->   drivers/cpufreq/cpufreq.c | 2 +-
->   include/linux/cpufreq.h   | 4 ++--
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index e678ea7b0891..5704036f294a 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -2874,7 +2874,7 @@ int cpufreq_enable_boost_support(void)
->   }
->   EXPORT_SYMBOL_GPL(cpufreq_enable_boost_support);
->   
-> -int cpufreq_boost_enabled(void)
-> +bool cpufreq_boost_enabled(void)
->   {
->   	return cpufreq_driver->boost_enabled;
->   }
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 20f7e98ee8af..523f81b7e2aa 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -785,7 +785,7 @@ ssize_t cpufreq_show_cpus(const struct cpumask *mask, char *buf);
->   
->   #ifdef CONFIG_CPU_FREQ
->   int cpufreq_boost_trigger_state(int state);
-> -int cpufreq_boost_enabled(void);
-> +bool cpufreq_boost_enabled(void);
->   int cpufreq_enable_boost_support(void);
->   bool policy_has_boost_freq(struct cpufreq_policy *policy);
->   
-> @@ -1164,7 +1164,7 @@ static inline int cpufreq_boost_trigger_state(int state)
->   {
->   	return 0;
->   }
-> -static inline int cpufreq_boost_enabled(void)
-> +static inline bool cpufreq_boost_enabled(void)
->   {
->   	return 0;
+On Wed, Jun 26, 2024 at 5:36=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.o=
+rg> wrote:
+>
+> On 6/26/24 01:29, Roman Storozhenko wrote:
+> > On Tue, Jun 25, 2024 at 9:29=E2=80=AFPM Shuah Khan <skhan@linuxfoundati=
+on.org> wrote:
+> >>
+> >> On 6/22/24 07:01, Roman Storozhenko wrote:
+> >>> When the 'cpupower' utility installed in the custom dir, it fails to
+> >>> render appropriate help info for a particular subcommand:
+> >>> $ LD_LIBRARY_PATH=3Dlib64/ bin/cpupower help monitor
+> >>> with error message like 'No manual entry for cpupower-monitor.1'
+> >>> The issue is that under the hood it calls 'exec' function with
+> >>> the following args: 'man cpupower-monitor.1'. In turn, 'man' search
+> >>> path is defined in '/etc/manpath.config'. Of course it contains only
+> >>> standard system man paths.
+> >>> Make subcommands help available for a user by setting up 'MANPATH'
+> >>> environment variable to the custom installation man pages dir. That
+> >>> variable value will be prepended to the man pages standard search pat=
+hs
+> >>> as described in 'SEARCH PATH' section of MANPATH(5).
+> >>>
+> >>> Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
+> >>> ---
+> >>> Changes in v2:
+> >>> - Fixed spelling errors
+> >>> - Simplified man pages search approach by the 'MANPATH' variable usag=
+e
+> >>> - Link to v1: https://lore.kernel.org/r/20240621-fix-help-issue-v1-1-=
+7906998d46eb@gmail.com
+> >>> ---
+> >>>    tools/power/cpupower/utils/cpupower.c | 41 +++++++++++++++++++++++=
++++++++-----
+> >>>    1 file changed, 35 insertions(+), 6 deletions(-)
+> >>>
+> >>> diff --git a/tools/power/cpupower/utils/cpupower.c b/tools/power/cpup=
+ower/utils/cpupower.c
+> >>> index 9ec973165af1..1b1b79c572ad 100644
+> >>> --- a/tools/power/cpupower/utils/cpupower.c
+> >>> +++ b/tools/power/cpupower/utils/cpupower.c
+> >>> @@ -12,6 +12,8 @@
+> >>>    #include <unistd.h>
+> >>>    #include <errno.h>
+> >>>    #include <sched.h>
+> >>> +#include <libgen.h>
+> >>> +#include <limits.h>
+> >>>    #include <sys/types.h>
+> >>>    #include <sys/stat.h>
+> >>>    #include <sys/utsname.h>
+> >>> @@ -80,14 +82,17 @@ static void print_help(void)
+> >>>
+> >>>    static int print_man_page(const char *subpage)
+> >>>    {
+> >>> -     int len;
+> >>> -     char *page;
+> >>> +     char *page, *man_path, *exec_dir;
+> >>> +     char exec_path[PATH_MAX];
+> >>> +     int subpage_len;
+> >>>
+> >>> -     len =3D 10; /* enough for "cpupower-" */
+> >>> -     if (subpage !=3D NULL)
+> >>> -             len +=3D strlen(subpage);
+> >>> +     if (!subpage)
+> >>> +             return -EINVAL;
+> >>>
+> >>> -     page =3D malloc(len);
+> >>> +     subpage_len =3D 10; /* enough for "cpupower-" */
+> >>> +     subpage_len +=3D strlen(subpage);
+> >>> +
+> >>> +     page =3D malloc(subpage_len);
+> >>>        if (!page)
+> >>>                return -ENOMEM;
+> >>>
+> >>> @@ -97,6 +102,30 @@ static int print_man_page(const char *subpage)
+> >>>                strcat(page, subpage);
+> >>>        }
+> >>>
+> >>> +     /* Get current process image name full path */
+> >>> +     if (readlink("/proc/self/exe", exec_path, PATH_MAX) > 0) {
+> >>
+> >> Using /proc/self/exe is Linux and platform specific and not a
+> >> good solution. Did you loom into using argv[0]?
+> >
+> > Yes, it is not the best solution. I would rather prefer to have a porta=
+ble,
+> > POSIX-based one. But after exploring possible options I came to the
+> > conclusion that unfortunately such a solution doesn't exist.
+> > According to C11 language standard:
+> > "If the value of argc is greater than zero, the string pointed to by ar=
+gv[0]
+> > represents the program name;....".
+> > Notice - program name, not the absolute path to the program. The actual
+> > value of argv is under control of the calling environment.
+> > You could look at the nice discussion of the topic for example here:
+> > https://www.reddit.com/r/C_Programming/comments/dgcmhd/exactly_how_reli=
+able_is_argv0_at_being_the/
+> > Besides - this utility is a part of the Linux Kernel source tree and th=
+erefore
+> > has no requirement of the portability to another OSes.
+> >
+>
+> Even so, you don't want to move it towards non-portable.
 
-If making the change to the function, I think you may as well also 
-change this to "false".
+I tried to find a portable solution one more time but couldn't.
+If you know how to do this please let me know.
 
->   }
-> 
-> base-commit: 0fc4bfab2cd45f9acb86c4f04b5191e114e901ed
+> I think I asked
+> this before on your previous version of the patch:
+>
+> What happens when you set the MANPATH before running the command?
 
+Nice catch. Thanks. Will fix this and send v3.
+
+>
+> thanks,
+> -- Shuah
+>
+
+--=20
+Kind regards,
+Roman Storozhenko
 
