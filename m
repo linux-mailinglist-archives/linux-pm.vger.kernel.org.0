@@ -1,164 +1,166 @@
-Return-Path: <linux-pm+bounces-9996-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10000-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5D47917737
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 06:21:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C78DF917743
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 06:28:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6598E1F23CF1
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 04:21:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF70F1C20E29
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 04:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 818141369A8;
-	Wed, 26 Jun 2024 04:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FF9E8003B;
+	Wed, 26 Jun 2024 04:28:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XkHXDxvj"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BbCaZIRE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2083.outbound.protection.outlook.com [40.107.236.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBACB28E8;
-	Wed, 26 Jun 2024 04:21:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719375694; cv=none; b=VEXeXHab6z/V/NonHkb4JruTFMIN2mNANdQyAhVLE1t0cDkXIT8B5PxL8ACvDxZF0nU03UvbLTDePNx4jFcVOR+XoygjLhdNJNsBCLKBQYu4RmXH+C5TJTN8YkSHWU8oiXFpWCpoGLqBJXBPV6CwrSHOrRhuWKsjoYAEgMAMjQI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719375694; c=relaxed/simple;
-	bh=QrGzaWGF/Pxgx7QLBK4bQHhV3RoAHEsagB6y31SWHXw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=qvYQ87ND7Yomx9968T6uRWuGYOT9ik+Ej2NNsb68oRztNPweR6xMoou7UCaIuBYr7yzrG+25ZdyViAQPZy8Uo0Aon3Gfzp4f4lwkA0Xv0ppvNWp4Ud3UeFkmcZ8279TAJd5SU2o9QYSbzJF6n962jHQBLY/T1y5scXn4DKuecMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XkHXDxvj; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45PIQCXv018135;
-	Wed, 26 Jun 2024 04:21:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	aPevAHX0eiKoSN3NfsCn/+HoljXZKFpW+pVLwVO2LGU=; b=XkHXDxvjELRpohOy
-	vZHb8k9a481yfsmC0o+faWMBSS8x9ZGl6/j9z4UzAMAIyGo4z3PG+dy+A1GyPcEG
-	I4r6mqMrdqO14Wea/lwhQ00FJshuwsJVfOgbcu+f/cji7vlA1zZul1MW3NdjtAhC
-	XVxngHavFeobOHkzfliNU22GOgwdlmkd3xPoGot2KT052ktqQEri5b+Jj6oxBhQY
-	PHFPMq+24S5910fKZA+ZQcpdZBnBQ7AC0FmXzw4AQgkgGlICf6tFUblrwJ8t6KOG
-	uOXZTDCjFs1NA+jIRdXOVUsrVB1UdtclDOGQP12DCIbC30CGEibcavmUb6vjbGO4
-	+CqYiA==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ywnm6r5hw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Jun 2024 04:21:28 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45Q4LRqJ030757
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Jun 2024 04:21:27 GMT
-Received: from [10.48.244.230] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 25 Jun
- 2024 21:21:26 -0700
-Message-ID: <f09b56c7-ad2f-472a-896e-466261b39ce7@quicinc.com>
-Date: Tue, 25 Jun 2024 21:21:25 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C478A175BE
+	for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2024 04:28:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.83
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719376094; cv=fail; b=idmhdcp/ASQzF287umiSdLLYB/uDQuL+f7ghuQRmcgFfNHbrbpqz4cv2EHLICRy/kjj2vkOu8z0CtX+Q9XV/eogz0kn2gC54sJeb1wZdi+WzUlkQSBjQbfexBacqYrIc3+z9GVpr94cQU2e9RgvYbVZWjxvriPwZfXcWfRMBBiY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719376094; c=relaxed/simple;
+	bh=FG62AN8FTzqaKTRwz4RLfbE7ao1z4dopdrSPH2/8Xeg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tYQVE5drCnjXHzGxpoErDwyUou8VjH9YkKzvkZR9hC4vNQMAqFXWu/AkWwFYAbo2bspgR/R6vQodVoSIRrVffZyFEaWOUYmM9tgDpMonUSEKW9Rcdp4CuTRbMFLXdK5CTH6SqR5BeoQwFmBApwdXvLQmaBhkzolA2MBybuUyhw0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=BbCaZIRE; arc=fail smtp.client-ip=40.107.236.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xb6oPRZwkbRyutfF74cDR7BDyiIP4RGjCIaZw+w6Wfa6/vUzVo5r5m4MNTV9zrshiKEQO++B2N0nRzetol7iJgqbjXrxG4UrOpgIAnjVCR4fsVkY9pQj4OHQHUyE0lmBxFcIsAbD6+7WFEF0ZKrzc3RDxhT7hWAm//POAbaLtltcAlRFaANjYyWe+B4In+U/0PaPofB3ZTVb8vT6YFynyuak69ZXHoMjartQ2I/nziCmqgEEkwkWOiMYiesth13woPJwYSsidCXdYKiAkyaK2eoVu2cMXtGwgwUbIDeeblbcDtQbRd6EvI29+JrXDtn7czsy3T3knBtscrDfoKRBeA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NUF0QAihXefDGb7r7K9kgWVLtUWBO1rKzSOUBvbW43k=;
+ b=C6ZIJbYPQET8txEmm5Q8Jt7bptaxnkxUtU77t1emj4FLsITr2xc0TScWJAlzQjXObXRgU8AfxPxZaGqy1p8WalolR8yKz5gWws4s9E3SMmtgWLDz7Gz1VGuORe33xszUCWPuiH1H24c0Smnwy5JyFQR2iDXe0dinexrn9n1CO1+JXnm9z++LgRqPA/T3TnIM7LxiVo51kD1wI2ZWYVvICOkPtLa7yrcytzvfnfC1ybx6B4okIF0z3A8Fcz4wHsrmAM4TTR7p00RRgl9sNlP0d+BpeqLLZ1kxbXE6Rg40jlFdhtay7bM9oEAHIIKlMyK5GPCwhz4YxenA0nuFSmYSlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NUF0QAihXefDGb7r7K9kgWVLtUWBO1rKzSOUBvbW43k=;
+ b=BbCaZIREBnJjlifPokqr7bM7sO88WUpmc8PKsvh92dyIKpvqrlKrlH4VjfxYFi+bIHzOI1i+B5OYnXwbVcTRlTGHAT17HhvAKLgJwpkfittzXobhWtEZxEIkYHA9EiPU3UgjnFJUj64KDlTSNGOE6czLwlWkZwOpfXiT6y8vHvk=
+Received: from SN6PR16CA0064.namprd16.prod.outlook.com (2603:10b6:805:ca::41)
+ by SN7PR12MB8101.namprd12.prod.outlook.com (2603:10b6:806:321::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.29; Wed, 26 Jun
+ 2024 04:28:10 +0000
+Received: from SN1PEPF0002636B.namprd02.prod.outlook.com
+ (2603:10b6:805:ca:cafe::33) by SN6PR16CA0064.outlook.office365.com
+ (2603:10b6:805:ca::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.38 via Frontend
+ Transport; Wed, 26 Jun 2024 04:28:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SN1PEPF0002636B.mail.protection.outlook.com (10.167.241.136) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7677.15 via Frontend Transport; Wed, 26 Jun 2024 04:28:09 +0000
+Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 25 Jun
+ 2024 23:28:09 -0500
+From: Mario Limonciello <mario.limonciello@amd.com>
+To: <perry.yuan@amd.com>, <gautham.shenoy@amd.com>
+CC: <linux-pm@vger.kernel.org>, Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v15 0/4] AMD Pstate Driver Core Performance Boost
+Date: Tue, 25 Jun 2024 23:27:29 -0500
+Message-ID: <20240626042733.3747-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] PM/devfreq: governor: add missing MODULE_DESCRIPTION()
- macros
-Content-Language: en-US
-To: MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park
-	<kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>
-References: <20240605-md-drivers-devfreq-v1-1-d01ae91b907e@quicinc.com>
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <20240605-md-drivers-devfreq-v1-1-d01ae91b907e@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SDdyq6rabC7vapdYTZ0wJnK04xcfAQiO
-X-Proofpoint-ORIG-GUID: SDdyq6rabC7vapdYTZ0wJnK04xcfAQiO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-26_02,2024-06-25_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 suspectscore=0 phishscore=0 clxscore=1015 spamscore=0
- mlxscore=0 malwarescore=0 mlxlogscore=999 lowpriorityscore=0
- impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2406140001 definitions=main-2406260032
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002636B:EE_|SN7PR12MB8101:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e0d57ee-d18a-489c-7638-08dc9598628a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230038|1800799022|82310400024|36860700011|376012;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?YhKPluqH1xcAGybp/U1kARt9InjjvVYACuD90+Zeya7YLVvTkGjYF0cPamMs?=
+ =?us-ascii?Q?ATIxlnMA1zFuCmM80JP+yvTTZOeXIidgOJJi2uIIWUZtajVJpQeyF9mGYdHw?=
+ =?us-ascii?Q?Xfbsw6pAiLBIDEAw8sqqE58WoNJY1eFqC4LWn7zHUe+EryqO1wU2BFKdIGHn?=
+ =?us-ascii?Q?/HmVQtmjVruFcnH0fXh1BdoUL8RmGsUTcZfpZ7NEYQ+3rgllMbVZ6XWLivVZ?=
+ =?us-ascii?Q?Jxs/BBjQSKKjPK/MZn9BreQcsaqns785tzYeFVAGS4VcW4WxQRu44V8vrOMr?=
+ =?us-ascii?Q?PNSIaENgdJtf3GnP5r/omkJDs3hNxQjp/bBFzh69fOYtz+QLKKYmI1yCzpNp?=
+ =?us-ascii?Q?uX8Rb9B6obDjcXPt0iFdqLRYupTGVAD57794f7ZDGn7DFsnp6V6sOAY5l/cl?=
+ =?us-ascii?Q?j3UWEPO5cp9ZWOJDcpORZvRZQDqrfyN5hSxojNN/yP/QkjBQX0ICUnAa7lVn?=
+ =?us-ascii?Q?aZbW2kPLWark2d+/olq8ZP57n4vD5rplc0zpTHUaWGGj9sS+7bMKAhYb6Mm3?=
+ =?us-ascii?Q?vFW61vMKE9cOYP2SOHxt4ETv3LTPjdJppYtK6Vf9SNbu4K4lAa6rVGQuyOqK?=
+ =?us-ascii?Q?8BZEueqqFF0VnRBScdv6xcWyfY8XSFiu9WMODCTHMvYqWlqAU9a68NhdW1gf?=
+ =?us-ascii?Q?VvKOKpkpZAbIEBMo7dmlzkNyz9ufjQz0Fxa/VuJK0dxZ86zGSbp8JBKbdsxK?=
+ =?us-ascii?Q?89QfeXPk6rOrFXH0YAbIMzRfzere5iMj3JI96Z8299WxeNsVORFtLKlgJMmu?=
+ =?us-ascii?Q?bgtqGrUW35lP4csvYttEqDfR/8tZW5Id9o4xIyfOeB/q/by2bBSmqCHuHwwu?=
+ =?us-ascii?Q?dZXY5b+NxchV7ZdwYTCLNLPKki5Wd2+2YxdU3/BjKL6HTf4yvwkZry9UKcLe?=
+ =?us-ascii?Q?AxjgXKnESFyZscAzHyEA1GXwGzpnbvK4qYqbiF25MtGTkLYjIIqOutobOaFe?=
+ =?us-ascii?Q?o3qAILuym7PaDpftkaPIaQ7SzoXrhebV7ilxqDZiWNBNetcbWGvuWAJLEOLd?=
+ =?us-ascii?Q?wDpAYJQ8eLk/1GQmbB3PShxMF7v8EKKQHFjGZ++KUI4NIivNvlcwNukkb9od?=
+ =?us-ascii?Q?LGX+6YyAvn0RBwM04Ao5/5j6Xf91ray9Oe7OwqK9cX1Ka9NySHkvEoz6vrNM?=
+ =?us-ascii?Q?e4GrS3tAbLdt62NexBI4pThC66A2GAI1yNCzuPV8DW4YC6uwCxr+NDzzZDp3?=
+ =?us-ascii?Q?gfeS3qx+FRlivM1Y0cd3TjyqkfDzQxBICqp3mRiN9m0GZemtPTZnZ4/03vBG?=
+ =?us-ascii?Q?zGmGDsInzGQq/KJsSGoj41UNv3ILmpyBUQu2LUgXo0/msvVQKZ+tii36dawS?=
+ =?us-ascii?Q?lUubLLVL7dwV1fr1TY97bXAkeL9cN52Rhv4T73Zqs/3sa4O0BljOtNnCwu5W?=
+ =?us-ascii?Q?oqV1Mx9k43an3J5aYPsQp5zWeoGoeo+lCvVj1dvEau5HfQzv0g=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230038)(1800799022)(82310400024)(36860700011)(376012);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2024 04:28:09.9639
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e0d57ee-d18a-489c-7638-08dc9598628a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF0002636B.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8101
 
-On 6/5/2024 11:18 AM, Jeff Johnson wrote:
-> make allmodconfig && make W=1 C=1 reports:
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_simpleondemand.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_performance.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_powersave.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_userspace.o
-> 
-> Add all missing invocations of the MODULE_DESCRIPTION() macro.
-> 
-> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-> ---
->  drivers/devfreq/governor_performance.c    | 1 +
->  drivers/devfreq/governor_powersave.c      | 1 +
->  drivers/devfreq/governor_simpleondemand.c | 1 +
->  drivers/devfreq/governor_userspace.c      | 1 +
->  4 files changed, 4 insertions(+)
-> 
-> diff --git a/drivers/devfreq/governor_performance.c b/drivers/devfreq/governor_performance.c
-> index 5dbc1e56ec08..2e4e981446fa 100644
-> --- a/drivers/devfreq/governor_performance.c
-> +++ b/drivers/devfreq/governor_performance.c
-> @@ -58,4 +58,5 @@ static void __exit devfreq_performance_exit(void)
->  	return;
->  }
->  module_exit(devfreq_performance_exit);
-> +MODULE_DESCRIPTION("DEVFREQ Performance governor");
->  MODULE_LICENSE("GPL");
-> diff --git a/drivers/devfreq/governor_powersave.c b/drivers/devfreq/governor_powersave.c
-> index 4746af2435b0..f059e8814804 100644
-> --- a/drivers/devfreq/governor_powersave.c
-> +++ b/drivers/devfreq/governor_powersave.c
-> @@ -58,4 +58,5 @@ static void __exit devfreq_powersave_exit(void)
->  	return;
->  }
->  module_exit(devfreq_powersave_exit);
-> +MODULE_DESCRIPTION("DEVFREQ Powersave governor");
->  MODULE_LICENSE("GPL");
-> diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
-> index d57b82a2b570..c23435736367 100644
-> --- a/drivers/devfreq/governor_simpleondemand.c
-> +++ b/drivers/devfreq/governor_simpleondemand.c
-> @@ -140,4 +140,5 @@ static void __exit devfreq_simple_ondemand_exit(void)
->  	return;
->  }
->  module_exit(devfreq_simple_ondemand_exit);
-> +MODULE_DESCRIPTION("DEVFREQ Simple On-demand governor");
->  MODULE_LICENSE("GPL");
-> diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
-> index d69672ccacc4..d1aa6806b683 100644
-> --- a/drivers/devfreq/governor_userspace.c
-> +++ b/drivers/devfreq/governor_userspace.c
-> @@ -153,4 +153,5 @@ static void __exit devfreq_userspace_exit(void)
->  	return;
->  }
->  module_exit(devfreq_userspace_exit);
-> +MODULE_DESCRIPTION("DEVFREQ Userspace governor");
->  MODULE_LICENSE("GPL");
-> 
-> ---
-> base-commit: a693b9c95abd4947c2d06e05733de5d470ab6586
-> change-id: 20240605-md-drivers-devfreq-42b19b2594a1
-> 
+This patch implements core-performance boost (CPB) for the amd-pstate
+driver.
 
-Following up to see if anything else is needed from me.
-Hoping to see this in linux-next :)
+It's a follow on to v13 submitted by Perry:
+https://lore.kernel.org/linux-pm/cover.1718988436.git.perry.yuan@amd.com/
 
-/jeff
+v14->v15:
+ * Pick up tag
+ * Split out fixes to cpufreq.c to separate series
+ * Modification for CPB patch to cover case of user setting max frequency
+   below nominal while boosted and then turning off boost.
+
+Perry Yuan (4):
+  cpufreq: acpi: move MSR_K7_HWCR_CPB_DIS_BIT into msr-index.h
+  cpufreq: amd-pstate: initialize core precision boost state
+  cpufreq: amd-pstate: Cap the CPPC.max_perf to nominal_perf if CPB is
+    off
+  Documentation: cpufreq: amd-pstate: update doc for Per CPU boost
+    control method
+
+ Documentation/admin-guide/pm/amd-pstate.rst |  16 +++
+ arch/x86/include/asm/msr-index.h            |   2 +
+ drivers/cpufreq/acpi-cpufreq.c              |   2 -
+ drivers/cpufreq/amd-pstate.c                | 122 ++++++++++++++++----
+ drivers/cpufreq/amd-pstate.h                |   1 +
+ 5 files changed, 119 insertions(+), 24 deletions(-)
+
+-- 
+2.43.0
+
 
