@@ -1,181 +1,153 @@
-Return-Path: <linux-pm+bounces-10014-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10015-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01E7D91780F
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 07:25:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB14D917813
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 07:27:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B20112833CC
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 05:25:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17EE61C21A84
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 05:27:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A851413E3EA;
-	Wed, 26 Jun 2024 05:25:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACA871428F4;
+	Wed, 26 Jun 2024 05:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="3ClKy+tV"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="eAYW8kpP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2057.outbound.protection.outlook.com [40.107.243.57])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9EA328DDF;
-	Wed, 26 Jun 2024 05:25:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719379545; cv=fail; b=uoLsqnxhdBJZxQitfLFCGqf/7uy5jN4Pr0Xy8mWKi7oNqtRGoiS6ybfgDUrTCI56378wRwv4f/ooJEUnAFcUUyutwvKIPpTTm9bN+agTCzkfaJobko6ifmcReY2BaoGZ5LjluoWepD2CklB/MW9xab4MgMTXUECR/5Mki1vSF1g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719379545; c=relaxed/simple;
-	bh=nUTgF4sPUYEp2x318UJ0y7NzvPAsvvJkMUCMtMQrJpE=;
-	h=From:To:CC:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=sPisNuNdRO2LRBevx3Y+rGPS9oVY90VWBAXkiLX6Q6PMVEZTNpvXehTnbPvh6nRCcjW2WEK63yHXv2IIL7iA62hjwtX0v8xLzJ4Q8XsTancOumlCVqDg8psANC5PluKzVsngaSJzNXmJC/QLMqsg0Y+kQ0mBgWwFpz0JyW3yPvY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=3ClKy+tV; arc=fail smtp.client-ip=40.107.243.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nvN4fZrX/bxgP/3fzPoMSNkO+i1NywcS32gDlNa3ZpbeH5nUTdPaNJooKP5iXYgmNrP5Ni0sB2mogkKqb3AX46Gm7vK8wBZ9F31QIuxSr0oh9ZQbZMfgpp0qUYm24d4otXG8a4n/r+fBDsXw9W2nZmZIvFKiEeHpGbkW2oUsNywoJ+yZoMlJOdkE2Zddk42zYb0qkfP5XGLnTDn+HeVUtv4llurBQJaOmc8fPEFEccGh9+WE9t+440Q9i2wQMjKq4Qv3kgjlv4zrwE8H5p7HMtuX6ajAx2Uw44QM0Vtqzk8ay5bxwFnBz88s1lJ4/4X7gXH3iIOysTn56ejlmPNodw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=liPYPG5ahSpqgGKu6NatyaOxE3vLrU7F1NxTHo1P5ww=;
- b=AFl0qJ+BJ6DCrvffx9IeaCJ0ftXnObbD6tVIcN9Jisc86WdiSY/Tks/krjCqodehvuYFy1jtrIqumrCM6gC+4FB6WVnEf19bQLTwhz4yawcVyfoP2/W8vPWVO7IdG6lBNDjKk+mw8V02Cs5ucrQ9NM+AiyuET01obOqK2Vqqk4FRqaSz/HUU2P6peDQx+j55y+JXB2qEnUw2zER+4QqqP9cUUDicCWJryv0yP83VSDZb8pDgsQmzsswFZZ9HKY0mHMmxxcIbbz1HeC8RFZt4g42EkQVQm7S0dw3Gbg8kIfZ5bN1ygKueZrJw5C5CIFVAEBZhWD4CXc2tbUQWPj5yeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=liPYPG5ahSpqgGKu6NatyaOxE3vLrU7F1NxTHo1P5ww=;
- b=3ClKy+tV9V7/G3IuxIIxTC4NiIWkU/+9bXBxFIZ+yYOJbpWJjVwvU6eEvznR63yONfjnSugeXR7u2tpyiT/CxLZR0NQN7pSgeuUL60eHL+qsMb+HYpAPNSYvIhTq+C0QIzmWvYpHfdlw5g5jIGZNs7rze63uq4qsta3XeH4Aww0=
-Received: from BY3PR05CA0006.namprd05.prod.outlook.com (2603:10b6:a03:254::11)
- by DS0PR12MB8455.namprd12.prod.outlook.com (2603:10b6:8:158::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.32; Wed, 26 Jun
- 2024 05:25:41 +0000
-Received: from MWH0EPF000971E4.namprd02.prod.outlook.com
- (2603:10b6:a03:254:cafe::95) by BY3PR05CA0006.outlook.office365.com
- (2603:10b6:a03:254::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.20 via Frontend
- Transport; Wed, 26 Jun 2024 05:25:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MWH0EPF000971E4.mail.protection.outlook.com (10.167.243.72) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7677.15 via Frontend Transport; Wed, 26 Jun 2024 05:25:40 +0000
-Received: from BLRRASHENOY1 (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 26 Jun
- 2024 00:25:37 -0500
-From: Gautham R.Shenoy <gautham.shenoy@amd.com>
-To: Mario Limonciello <mario.limonciello@amd.com>, <linux-pm@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, Mario Limonciello
-	<mario.limonciello@amd.com>, Sibi Sankar <quic_sibis@quicinc.com>, "Dietmar
- Eggemann" <dietmar.eggemann@arm.com>, Viresh Kumar <viresh.kumar@linaro.org>,
-	Dhruva Gole <d-gole@ti.com>, Yipeng Zou <zouyipeng@huawei.com>, "Rafael J .
- Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH 2/2] cpufreq: acpi: Mark boost policy as enabled when
- setting boost
-In-Reply-To: <20240626041135.1559-3-mario.limonciello@amd.com>
-References: <20240626041135.1559-1-mario.limonciello@amd.com>
- <20240626041135.1559-3-mario.limonciello@amd.com>
-Date: Wed, 26 Jun 2024 10:55:34 +0530
-Message-ID: <87zfr81dip.fsf@BLR-5CG11610CF.amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EFFA28DDF;
+	Wed, 26 Jun 2024 05:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719379646; cv=none; b=bQrk6ALJy3t7/olySEdkXgSyn8A+z6st5hlsQvYqNlwGVgtqVRDxjns/nCtaG2KRLOchBNdpV+z3elpZyn2toXibF/i+3o8q2WNBmIsZv9F8xa3LRYpUZh9m8EPAXxuXXSExdL5t/iYAdfTZQMRXBOpvxXtDI6KRoFICbVoniVA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719379646; c=relaxed/simple;
+	bh=tr6b7YzaNDp+6chz6an4To4uD1paZT/4oVgc4Ozi5zI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KyyUtUN/rI5NpgGMc4H9I/hRgaagLPXo8ijybT0cttR/JAvHYHoqxas7TaURmk6sKnXyhI7WO6h4z8jGdpp4eSSFPvo67NRwL38eLZ2TDp21hZWyVQvliVD7QKHoz+pRFQ4wF4s3hbn17fy7X2buGg6Ixp8u3WlSez0sdQorCZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=eAYW8kpP; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45PIxMdE018107;
+	Wed, 26 Jun 2024 05:27:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=H1ebhpLl+WMhVtgvEy9phQd1
+	h+dpJM8YkGd3n9aCPWA=; b=eAYW8kpP+LYcT8KjW7aE8PIr9FMtcMSaxD0n2Fer
+	7nsAUzZz6aV4xqo6mV6DKbXzLBwxSRS1ASLsOBPVU1nOV+mEMdIM6axa448lj17d
+	FsR04ocxn2C+0qGguZRzvzeiurzUuhxxZrRlZaPfUcbmsSUOW+Xi7Yl5ebRoS10l
+	DDiZha5FFhb8V1p1jg/Q63/xQMXVfU9HBaCtdZBnJOv6FkDwfRa93urgUOPaMLeQ
+	ZeBW5jLlsai/Me83QDA75VPsVum3NkOknaSZw2l9VQscXYZvFqZi6kYKILMRf8Yz
+	XQI74PKdIclZ2SxmplIInyqAbWtCVIX4XhXY5JamY2qz8g==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ywnm6r993-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Jun 2024 05:27:13 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45Q5RBqi022196
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Jun 2024 05:27:11 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 25 Jun 2024 22:27:06 -0700
+Date: Wed, 26 Jun 2024 10:57:02 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+CC: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <djakov@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <quic_anusha@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <bryan.odonoghue@linaro.org>
+Subject: Re: [PATCH v11 0/6] Add interconnect driver for IPQ9574 SoC
+Message-ID: <ZnumpkYR2ILpbOwF@hu-varada-blr.qualcomm.com>
+References: <20240430064214.2030013-1-quic_varada@quicinc.com>
+ <ZjXrTywO6+iRaEYk@hu-varada-blr.qualcomm.com>
+ <90bb9256-d54d-4e01-aa06-4184e2b95d48@linaro.org>
+ <Zmgc+Qzwt6Zbg/w+@hu-varada-blr.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000971E4:EE_|DS0PR12MB8455:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0fd08c78-2ff0-4254-5b64-08dc95a06b60
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230038|376012|82310400024|36860700011|1800799022;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?08b+xDVOmODn/cXj5yqq0YOvzry5bWP5KeVQyAFwXlR7m358Dp5++0B0t2jo?=
- =?us-ascii?Q?e3IE34H03d1i98isdmWPA993PE1zG3nOn5bYYJ++NsNLcNHSqwzbBpIYPJVF?=
- =?us-ascii?Q?43efCxtcL2a51w/Vt7HP3BBuF0+bPR9i65xG5SWhozIlaSGO3Qv6jg01l3Ma?=
- =?us-ascii?Q?j8FruZTOvVrk8IY5NVxBP738cHZgp65dUca5wjfV+YAcG0WXXSoLWsKT9lYs?=
- =?us-ascii?Q?u6T0cOYFmo4BLWEohUa1m+cWaS1bRn3uACiNkYZsRQ5n9d97mzOUZGRO3eZ7?=
- =?us-ascii?Q?ImekC/g9FUZ6bLJqd9wfuN/AQu9Hbjt9Gmflt1PyBT4vCOrfBUvgRpkzDSXQ?=
- =?us-ascii?Q?HpCBktJj3Y3eG5iaPX1N56+x926vO+0kxa9I6gm3kBjrgs6vwaYpXZIwwTWs?=
- =?us-ascii?Q?zvUSTnZS0T/zKQTnFSt5wqT1gwNttsY8itOMPh+EaYcrpko8qt3iliJJ0aXf?=
- =?us-ascii?Q?w6nS7Z0CapcEaMeTDxVXCmPug3vOCgM2vfWaYFGnsyPDKMWED94Tj8XSSJPV?=
- =?us-ascii?Q?Ys5EJwSXsVsUs11tdXl69UwzRMjqbx48bsxi0ilk4XdNCBfpCgSRvkY31AEW?=
- =?us-ascii?Q?yEpTaWyMsAr2gD9EN4KVl2jo4lHJX75peuGmQ+Zj9BRFR9xMcwXFCHmMGoiX?=
- =?us-ascii?Q?/byC44YdCQVT2p27pPi3cLPf6f99Ug2wjqs6X4XLuIl3n7+R5ew7VhN621nu?=
- =?us-ascii?Q?2C2AP+4uWPdyrLTE2FDSbptRb6zGr3kZucwMuUf3sKImoQ4sJmVWlzXuHcOn?=
- =?us-ascii?Q?lwFzT7musgeYQIHS2bFnDEPVGfbZSCP4WtN4c2oALL2UfqF4ueU2gkQE7zVW?=
- =?us-ascii?Q?7xXVaIjNC//bvNDourquD18sD/RzxgCrN3OaNY8ijQWYgxKX1kVauuIbKZRz?=
- =?us-ascii?Q?J8lOMVPheUJRGzV61Jk1YzGb5H+03Lqrs8G83rQcI90BuJF7kl0XOJ5DAnG9?=
- =?us-ascii?Q?thypNwIk1+spwX3uSBGPlezRWvQzbBvQ59zSC1L/QFg97I1IL3M1trso77Kg?=
- =?us-ascii?Q?hwEd81tDs/p11syNg5ZQLLC+gAz3NLrxg5ZnIMGXv1gunXpknxp6p8TvlJG2?=
- =?us-ascii?Q?nBo3FP3pk2lIjTemCs5TmQAy6ydMtmGIYWe7CrAH9/C6tbd0GjTqASwkDl7b?=
- =?us-ascii?Q?8oTe0OW+2+sNOAeQ1IXwD6QchjO6trkX+m11+EVnORQZ1wEmYHDE92SqOBVh?=
- =?us-ascii?Q?vc1qsKvcKgb6D0ZyEEzp5Fhzu6iiafIbWzf08hFad/ASjBG9cRfCt/EvuvdP?=
- =?us-ascii?Q?n0Lw/xQx6z9mD3+iytstpMtLdTCR8pEDwzXm5IAruhNH6FANTKWfQflhlq2n?=
- =?us-ascii?Q?OcgFqVG8ij8tWImquGHmwN1sY1jl18qstbe10pqJZum7B3Sql1WDiUuf+Ijd?=
- =?us-ascii?Q?jroG9HNTgYXSCsIKHTYEUYZpRARf9T3wTLomkgAygVDN2eb1NFwC/96x+dIN?=
- =?us-ascii?Q?BMgMu7vMlasocEh15fBs+EOK6XbZJfAV?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230038)(376012)(82310400024)(36860700011)(1800799022);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2024 05:25:40.6831
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fd08c78-2ff0-4254-5b64-08dc95a06b60
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000971E4.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8455
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Zmgc+Qzwt6Zbg/w+@hu-varada-blr.qualcomm.com>
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: dWqOxM9yRy2tFHsSWLqgpDrfMRDaAXu3
+X-Proofpoint-ORIG-GUID: dWqOxM9yRy2tFHsSWLqgpDrfMRDaAXu3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-26_03,2024-06-25_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 clxscore=1015 spamscore=0
+ mlxscore=0 malwarescore=0 mlxlogscore=999 lowpriorityscore=0
+ impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2406140001 definitions=main-2406260040
 
-Mario Limonciello <mario.limonciello@amd.com> writes:
-
-> When boost is set for CPUs using acpi-cpufreq the policy is not
-> updated which can cause boost to be incorrectly not reported.
+On Tue, Jun 11, 2024 at 03:16:33PM +0530, Varadarajan Narayanan wrote:
+> On Thu, Jun 06, 2024 at 04:07:23PM +0200, Konrad Dybcio wrote:
+> > On 4.05.2024 10:01 AM, Varadarajan Narayanan wrote:
+> > > Bjorn,
+> > >
+> > >> On Tue, Apr 30, 2024 at 12:12:08PM +0530, Varadarajan Narayanan wrote:
+> > >> MSM platforms manage NoC related clocks and scaling from RPM.
+> > >> However, in IPQ SoCs, RPM is not involved in managing NoC
+> > >> related clocks and there is no NoC scaling.
+> > >>
+> > >> However, there is a requirement to enable some NoC interface
+> > >> clocks for the accessing the peripherals present in the
+> > >> system. Hence add a minimalistic interconnect driver that
+> > >> establishes a path from the processor/memory to those peripherals
+> > >> and vice versa.
+> > >>
+> > >> Change icc-clk driver to take master and slave ids instead
+> > >> of auto generating.
+> > >>
+> > >> Currently, drivers/clk/qcom/clk-cbf-8996.c is the only user of
+> > >> icc-clk. And, it had exactly one master and one slave node.
+> > >> For this the auto generated master (= 1) and slave (= 0) was
+> > >> enough.
+> > >>
+> > >> However, when drivers/clk/qcom/gcc-ipq9574.c wanted to make use
+> > >> of the icc-clk framework, it had more number of master and slave
+> > >> nodes and the auto generated ids did not suit the usage.
+> > >>
+> > >> ---
+> > >> v11:	No code changes
+> > >> 	Commit log changed for the first patch
+> > >> 	Added Acked-By: to 3 patches
+> > >
+> > > Can this be included in your driver changes for 6.10?
+> >
+> Konrad,
 >
-> Suggested-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-
-> ---
-> Cc: Sibi Sankar <quic_sibis@quicinc.com>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Dhruva Gole <d-gole@ti.com>
-> Cc: Yipeng Zou <zouyipeng@huawei.com>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> v14->v15:
->  * Use Gautham's suggestion instead
-> ---
->  drivers/cpufreq/acpi-cpufreq.c | 1 +
->  1 file changed, 1 insertion(+)
+> > FWIW there is still an open discussion at v9
+> > <CAA8EJpqENsojPQmCbma_nQLEZq8nK1fz1K0JdtvLd=kPrH_DBw@mail.gmail.com>
 >
-> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> index 37f1cdf46d29..bd3f95a7a4fe 100644
-> --- a/drivers/cpufreq/acpi-cpufreq.c
-> +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -139,6 +139,7 @@ static int set_boost(struct cpufreq_policy *policy, int val)
->  			 (void *)(long)val, 1);
->  	pr_debug("CPU %*pbl: Core Boosting %s.\n",
->  		 cpumask_pr_args(policy->cpus), str_enabled_disabled(val));
-> +	policy->boost_enabled = val;
->  
->  	return 0;
->  }
-> -- 
-> 2.43.0
+> Thanks for reminding. Have responded to it.
+> https://lore.kernel.org/linux-arm-msm/Zmgb+OjdBNw71sC1@hu-varada-blr.qualcomm.com/
+
+Bjorn/Konrad,
+
+Can this be merged for 6.11. I believe the discussion open at v9
+has been addressed. Please let me know if anything is still pending.
+
+Below patches depend on this series:
+
+	PCI: https://lore.kernel.org/linux-arm-msm/20240512082858.1806694-1-quic_devipriy@quicinc.com/
+	NSSCC: https://lore.kernel.org/linux-arm-msm/20240625070536.3043630-1-quic_devipriy@quicinc.com/
+
+Thanks
+Varada
 
