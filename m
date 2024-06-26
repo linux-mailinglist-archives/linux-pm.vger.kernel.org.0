@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-10068-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10069-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 949A8918E2B
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 20:21:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F907918E46
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 20:23:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C1EA1C21565
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 18:21:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AC1A28CA12
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 18:23:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE613190661;
-	Wed, 26 Jun 2024 18:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7493319066F;
+	Wed, 26 Jun 2024 18:23:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fbYU32NS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RFnHDyoW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE1E190489
-	for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2024 18:21:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD78E190489
+	for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2024 18:23:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719426109; cv=none; b=ZWKkn9+CuHpQiqvFqHpGwDAVTYA3yK0LgfsCHPHQbBSYkAqJVFlIZgCoRGoPgtka657ZD3twqPewen305bRAP0iVrS998m15F742N0MLvA9InPnUJYEm6IA28sJ8MFOYa5S7piyaIfd40y9s68zghuQCwuBwjk1YQ6Su8PJH5tw=
+	t=1719426203; cv=none; b=AWT9XO+SGDrxZ2onRoRB29Lqja41AoF6wbDZ7pMkAitb/8q9QHFaGFl3S0NNdxk+T9JigECIha4EBv077EpNRzRGiGel+UiivGmzhw3XJFgv7NDlPM0pJO4tz3JHSSi34rYbtHGFCAD5/VClu0IAda7nUej4yzjKA8NeeyE2Wuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719426109; c=relaxed/simple;
-	bh=6TYIPbPS4R6iweSpc2w1PZdKid1Wu6t/ISBPYdapvbM=;
+	s=arc-20240116; t=1719426203; c=relaxed/simple;
+	bh=+O9+3Tj5o1+8awe97/tVFlTIjZPsuMt7DNFJlAt9VHY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sJ65M+/D4R9UmVrXtsNHd9knrndsSqOnzVvEhl6g6yKrFK761phXrtM39PdFYj7aXxqCb4Vp+7VIDF48qz/n2X3Z1PwlVoMxxHC8uKWvoEjGxvDeJF4wJNNNkhYHcUWWXsl7vX3OIy7v8ySnmX3ToKIMxwyQmm+M4yDsLLLwARc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fbYU32NS; arc=none smtp.client-ip=209.85.167.44
+	 Content-Type:Content-Disposition:In-Reply-To; b=cPv6IkTOpQFM9+HInKxjjC69QGQi2A4on2K38nLrAeJusVRZw0xp60DwQDnk+zpRjCB613ZxNtdFh9+wBsjVNwNBbb1Y7v4SS3NF0UolEgUdin3zeYfKkCrBOdOzqH9XRNvS0DjSHli09BL4GDtNT8KivK7f4vuQxDlY7TwyvHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RFnHDyoW; arc=none smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52ce9ba0cedso4717079e87.2
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2024 11:21:47 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2ec59193468so7553291fa.1
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2024 11:23:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719426106; x=1720030906; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1719426200; x=1720031000; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=//MpmAILITzcKEizX/9gxPn9UDOA+9PRAYCNpg/DcRs=;
-        b=fbYU32NSCLChz93v6SvxehylSi91JXAVA0I7Iz1fvcq4LbVVs0mRyRCVxAprAv+RbP
-         CuDSPKJ2O+HNwe6zIGFI/4FRgcWsRDmexIGuneZtraj2I/E83LDkGyt1V0fG152OF262
-         5QjVOBCkf+IY5iKtLh7EdKXnSEwoQoukGmxL8gzBzLuAPX9bumVYy9kf5PwcVyA6M9j4
-         ECGDc+f1sRMqrvDHyvh8lSmAxE4PT5k0TfKOS4KadOMH9JP3SI8j4t6hPYogXGGcgE3U
-         q9KrzxTt+Hxcb8hqs2Rdap/JwqcyA2EsF2F8Tde/adb8HGOLQV8ezYVCEbUVV+U064on
-         ZyBA==
+        bh=9eJH6Q1RShlmHM1ZlQieGvydRc7/ZyO2tJLDZW0TZMA=;
+        b=RFnHDyoWmTepmXhf3PPRlED/xXnC+Ib8BINctnr5fYZs7f2oSb/w3XZTQlItq39bd1
+         KZUO3WQoaFuLAGcqUhfhd4Sv2uTMW0fLZ5wC0Tq0NYV6p3RYb49t6l0bY/3crm4jwnrB
+         md6RyJWEzoNvrQu7g89N9aWEfF7/eZa5o8kNo9gMkB5wlXxc1KILKG/IoROlA4xgUwdr
+         4PFtDybxIPgeClAsJXxqiIlU0aALX3QDoecshAYbP4TyXNZJsVsgzrq3/lryI1IPsECU
+         AfCiTG1auF3id9a1gByU7b+Db9ntdlozD0jcr4ucMCecvM0+bb3Enu9tppzopBnrBhIe
+         bsJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719426106; x=1720030906;
+        d=1e100.net; s=20230601; t=1719426200; x=1720031000;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=//MpmAILITzcKEizX/9gxPn9UDOA+9PRAYCNpg/DcRs=;
-        b=fJ6r9Ti63tJPwc2J6PHZMRnwyGpnmkMNy6ZioIafSDm69SRpaihjkawuPFElHwk/P5
-         gw0glB0dy68PkM4h9lw24j3Pm+YZI3A7/utQ/HyLS48QHytEYUgG9MpzbJQiuSP3Fr8h
-         qSQa3Dojh/+RhNwU/Wuda0jir8xZYzxF/klY5QuuEzvKiRR3uFfoP9LAxAMG6gyUTU6W
-         WTC++gTbiaYR0YqvE5+uIWivdWZ9pPhYOtgir38sSk5DZX0H4K0J7EWBlmUSBGtOrADZ
-         +os2ST3jHO4aHjBF8uGuBEOPLFeLEzePdzLL2HY2jCmUvzweevauT1kk9SVFaJSnD/md
-         FOeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV8bnaeLZdhC4Zy8Etbmv32VZacN8gJ15ocihG2xvJXVaFQAx/LTDZ75KUMo1NODDchiRwp0GfhsFmGd6igPaFrem+BWkKyCOI=
-X-Gm-Message-State: AOJu0YzofIYbuxzT2j3jV75uSVNYk/+FlJbovITVGT4bYsVuLqArujn4
-	5EeijPVWoChPH/dCS0WktOOaYZ5Hu3AUdistHzkZS4ZEE7qzvCDnW9WnTSa64Mc=
-X-Google-Smtp-Source: AGHT+IHJ4p//CH+AaNp/ZmyKwZ/tji9Ag3MV6cZw2C1QzU/zz+/aY3hOnCofp3e1KT6QUiZEBrnMNA==
-X-Received: by 2002:a05:6512:308c:b0:52c:c9e4:3291 with SMTP id 2adb3069b0e04-52ce185ce9amr11764612e87.60.1719426105827;
-        Wed, 26 Jun 2024 11:21:45 -0700 (PDT)
+        bh=9eJH6Q1RShlmHM1ZlQieGvydRc7/ZyO2tJLDZW0TZMA=;
+        b=GEDWuZ8b53N2QvhL8L2gaSfqBd8Czu5TrcgXe2KmAJoJHVtz6AaI5kAu1A0sq8NLGC
+         Li1DkQziZihpSo1xxuaelcRfig0cOq8rlAz9mIjPtFeFvZp9CAlGD3dBgodapdPDXBal
+         0XHxmhMKDxmkcPv0u5ahD0mboRAzjq7WbcLsGrVrq3JDKbj44XDl5WgeaJFP6BklM/XW
+         kNUNbqsxp2+HdHkOeUpOaH79xHmTUIj66tFwGQgKW5Sldt0am5gGKXkQwX2FmlbvniPA
+         zkFNFNsfT2miSR8WC025R+3/W4sHyedtd7hmertNsPzl1698e74LCgSea9rE5Xffcptz
+         KHZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXuqSNUp8viuUaRyIkHfVpjhF7M6ZRW6w/g8jBg00DR6ka5pJl4s2qCzQ5KUSGkC1v4A4fFuarIcZAyP3LIhGmGX3TCZerUQjg=
+X-Gm-Message-State: AOJu0YwbTKg54qg1rRIlB7s3VtMRJNtVyBBM+rCAS8YTzxFa9JDB+T16
+	0jG2xYxugbVkb82oS93HS/6hOlPxqU+SPtapcW4gdq4YkRw9Q33GtI+QbVpbXBI=
+X-Google-Smtp-Source: AGHT+IFXCqFuajLOraGQqNzbZlp4TTxQraecaBDsIDB6TAAsyKR8HxVaBp9DwXY5qUzkh+wVwAAMMQ==
+X-Received: by 2002:a2e:81cc:0:b0:2ec:4deb:482f with SMTP id 38308e7fff4ca-2ee48040234mr1088621fa.8.1719426199846;
+        Wed, 26 Jun 2024 11:23:19 -0700 (PDT)
 Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52cdcdb981esm1450255e87.122.2024.06.26.11.21.44
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ec53b7c876sm12791181fa.62.2024.06.26.11.23.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jun 2024 11:21:45 -0700 (PDT)
-Date: Wed, 26 Jun 2024 21:21:43 +0300
+        Wed, 26 Jun 2024 11:23:19 -0700 (PDT)
+Date: Wed, 26 Jun 2024 21:23:17 +0300
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To: Varadarajan Narayanan <quic_varada@quicinc.com>
 Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
@@ -77,10 +77,11 @@ Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
 	danila@jiaxyga.com, quic_ipkumar@quicinc.com, linux-arm-msm@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
 	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 1/9] soc: qcom: cpr3: Fix 'acc_desc' usage
-Message-ID: <jgboqj56nfeuv7qmi34chan46u5urdxyezqhfmqdq3clvcv2k6@k7aktead5qbk>
+Subject: Re: [PATCH v3 2/9] cpufreq: qcom-nvmem: Add genpd names to
+ match_data_kryo
+Message-ID: <za7t6ltttq2o5qwahfrzftsb7xfzbzdtg4zx3bvnf3fewhfeqf@vjrq7na5ioqm>
 References: <20240626104002.420535-1-quic_varada@quicinc.com>
- <20240626104002.420535-2-quic_varada@quicinc.com>
+ <20240626104002.420535-3-quic_varada@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,61 +90,37 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240626104002.420535-2-quic_varada@quicinc.com>
+In-Reply-To: <20240626104002.420535-3-quic_varada@quicinc.com>
 
-On Wed, Jun 26, 2024 at 04:09:54PM GMT, Varadarajan Narayanan wrote:
-> cpr3 code assumes that 'acc_desc' is available for SoCs
-> implementing CPR version 4 or less. However, IPQ9574 SoC
-> implements CPRv4 without ACC. This causes NULL pointer accesses
-> resulting in crashes. Hence, check is 'acc_desc' is populated
-> before using it.
+On Wed, Jun 26, 2024 at 04:09:55PM GMT, Varadarajan Narayanan wrote:
+> This is used for tying up the cpu@N nodes with the power domains.
+> Without this, 'cat /sys/kernel/debug/qcom_cpr3/thread0'
+> crashes with NULL pointer access.
+
+Add the interesting part of the backtrace, please.
+
 > 
 > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
->  drivers/pmdomain/qcom/cpr3.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/pmdomain/qcom/cpr3.c b/drivers/pmdomain/qcom/cpr3.c
-> index c7790a71e74f..c28028be50d8 100644
-> --- a/drivers/pmdomain/qcom/cpr3.c
-> +++ b/drivers/pmdomain/qcom/cpr3.c
-> @@ -2399,12 +2399,12 @@ static int cpr_pd_attach_dev(struct generic_pm_domain *domain,
->  		if (ret)
->  			goto exit;
+> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> index 939702dfa73f..5e6525c7788c 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> @@ -399,6 +399,7 @@ static const char *generic_genpd_names[] = { "perf", NULL };
 >  
-> -		if (acc_desc->config)
-> +		if (acc_desc && acc_desc->config)
->  			regmap_multi_reg_write(drv->tcsr, acc_desc->config,
->  					       acc_desc->num_regs_per_fuse);
->  
->  		/* Enable ACC if required */
-> -		if (acc_desc->enable_mask)
-> +		if (acc_desc && acc_desc->enable_mask)
->  			regmap_update_bits(drv->tcsr, acc_desc->enable_reg,
->  					   acc_desc->enable_mask,
->  					   acc_desc->enable_mask);
-> @@ -2676,7 +2676,7 @@ static int cpr_probe(struct platform_device *pdev)
->  	desc = data->cpr_desc;
->  
->  	/* CPRh disallows MEM-ACC access from the HLOS */
-> -	if (!data->acc_desc && desc->cpr_type < CTRL_TYPE_CPRH)
-> +	if (!data->acc_desc && desc->cpr_type < CTRL_TYPE_CPR4)
->  		return -EINVAL;
->  
->  	drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
-> @@ -2703,7 +2703,7 @@ static int cpr_probe(struct platform_device *pdev)
->  
->  	mutex_init(&drv->lock);
->  
-> -	if (desc->cpr_type < CTRL_TYPE_CPRH) {
-> +	if (desc->cpr_type < CTRL_TYPE_CPR4) {
+>  static const struct qcom_cpufreq_match_data match_data_kryo = {
+>  	.get_version = qcom_cpufreq_kryo_name_version,
+> +	.genpd_names = generic_genpd_names,
 
-This is incorrect. This disables ACC usage for CPR4, while GFX CPR on
-MSM8998 (which is CPR4) seems to use ACC.
+This forces that every Kryo SoC has "perf" genpd, which obviously isn't
+corret (at least from the upstream support point of view).
 
->  		np = of_parse_phandle(dev->of_node, "qcom,acc", 0);
->  		if (!np)
->  			return -ENODEV;
+>  };
+>  
+>  static const struct qcom_cpufreq_match_data match_data_krait = {
 > -- 
 > 2.34.1
 > 
