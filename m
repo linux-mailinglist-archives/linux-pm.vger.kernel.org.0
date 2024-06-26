@@ -1,213 +1,164 @@
-Return-Path: <linux-pm+bounces-10082-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10083-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77F38919A2A
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 23:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AE1C2919A4B
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 00:00:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9AA861C21CB6
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 21:58:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB3C11C20C12
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 22:00:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91D78194080;
-	Wed, 26 Jun 2024 21:58:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D93191474;
+	Wed, 26 Jun 2024 22:00:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OP7lTMc9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TarhnWxt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF924433B3;
-	Wed, 26 Jun 2024 21:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A584482FE
+	for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2024 22:00:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719439137; cv=none; b=ZvbjtzplSDd6V6bV8P8q8tkp4zx3M3Zojr/ERByP5LzRvm3bFQrWYYApksGzXcLSRFAwfUwzxqfbGiSSzQnG1yuqfKuWQqmmGFk7JHVdqpp/cC1pMNiH+UuZiTwAUvxj9DVdYnc6g6pv3NWWHnFBCxA+u4VSgWqeg9e630veskc=
+	t=1719439244; cv=none; b=AYtXUyRmDrR6uIgjCP6BqAO+iml9fwUVXMuf+FVHMtPXVfsrSULCFJZakAKZrlgivYNWdfWQgEh02OqoJsTMKjB/VHIUuYOlhokSmJ1o2tBzSthq8nkjLO3iG3IDLMWIrPsniCPGSy/xTXmniMZU+oZB5dLjPRahojFsz8XPHDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719439137; c=relaxed/simple;
-	bh=hyCc2dx2iCJpyOWsnjpyBn130Gj3NHXIlTdpzmWt8/s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=na58kQzSYdibxmiKhJ2+GD3oaazgshU0PEGeO3OIOLH8qGaTdbK7NcRQIoIl4Wps3+btNa1522bPbVr4oqDF98k4MgMVsL/PpRg95vKxk6wu9/O35M7pHunsQc/vZgDtuHv7yvNoviNk3Yv0igiuSfOT5Qr7LYM27DR4stjxRrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OP7lTMc9; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719439136; x=1750975136;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hyCc2dx2iCJpyOWsnjpyBn130Gj3NHXIlTdpzmWt8/s=;
-  b=OP7lTMc9mwIjJnYPunpe5Zx2ueQue8mrmqkVsEuaRnzOX+Pg9sJ7Xrl2
-   7MSRhufdqDjgwbw3L6Ba+KAKumBfdQtWgeiHX2OvfNgKd7F8L32poYofX
-   NLQUuZ0+biPn4FI8OFr5Lto3g8uGVBZstGBJeYH8Frg5+aCfjCC+wmRx7
-   UDaeuRqeMEIcbFLY9UoLzkp67+SKNeCwkVSN5cQgBUdOIop8IHguucSyq
-   D1UpNsak2/ZOdwRTwfM+GWfbfr5gG1UWv5FD4pepIj7B7QgrcDN3fEkw2
-   TV2jg0VwYCbf0mgDfLhsDe4T5ESYLRrPYg/D1tdz7iUCZG88MH+vkciOp
-   Q==;
-X-CSE-ConnectionGUID: bsDCmnJMQu+j3zdssRQYsw==
-X-CSE-MsgGUID: aZV9Nd+mQXGdasrc9cMdDg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11115"; a="16423341"
-X-IronPort-AV: E=Sophos;i="6.08,268,1712646000"; 
-   d="scan'208";a="16423341"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 14:58:55 -0700
-X-CSE-ConnectionGUID: vx5PnEDkTEOuaVKadVDm7A==
-X-CSE-MsgGUID: tX4s7/KHQJeoxy8Sw+d/CQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,268,1712646000"; 
-   d="scan'208";a="49064537"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 26 Jun 2024 14:58:51 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sMafA-000Fav-1y;
-	Wed, 26 Jun 2024 21:58:48 +0000
-Date: Thu, 27 Jun 2024 05:58:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Raphael Gallais-Pou <rgallaispou@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] thermal: sti: depend on THERMAL_OF subsystem
-Message-ID: <202406270530.kN5wIswi-lkp@intel.com>
-References: <20240625-thermal-v2-2-bf8354ed51ee@gmail.com>
+	s=arc-20240116; t=1719439244; c=relaxed/simple;
+	bh=gvmC1346MmDk0t3iSMJUF+N7dqvo1b3jn0ulpMyO8V0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lRslpMzyHPm5ZxhgZaBbXLYf2lBOczaNWcVPrhQlynhxYCL5nrpUdwDGT0t614Voaj21R2R6JV6SwEAAtBfO6Nf4FaKbL3TbPOV5UZhRCWw0+l9v5HaXA/nqbSUwUBg8BO/nINYVM0j0I99IE9yLOi2ighRAMn2T+qOeL8BXVzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TarhnWxt; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52cf4ca8904so2797685e87.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2024 15:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1719439241; x=1720044041; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pj/nWr9R0o1AMKMsYJRQq0ZEmOgyeZ/JY1dSLu0yeL0=;
+        b=TarhnWxtEcfmjysr7J/TmjI1WW4qcLJU/R9m7+1MgCSU9673NwetTzvJdunJXeQSw7
+         80lbTGrjiqgPOnIzvrJGShYyp0AZ0+kVjWWgwxgYfJzCSuBE2xETPtjmQFINNKjKCyW9
+         vj3RJeKhHNzTV2Y7Augub8zhAenN6bWuVyq30qpayheCix4+mKKuW0vJ4clJ75PwMbJi
+         DHkEN/YJ6LMz0xS9jCdka9Qkyo1u49lg0b+jdaT2fcDC6f1wVMqumuXPtogdy7X3IQKl
+         FZ8UWEjytg903UVWr1ohIpq7bLaoXQcDYF5FtvalcSOln1MbTUb6fqrWObzK+munKl2Y
+         whnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719439241; x=1720044041;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pj/nWr9R0o1AMKMsYJRQq0ZEmOgyeZ/JY1dSLu0yeL0=;
+        b=duZR11G3agfGhoAENPc2k6yDL1QsOikaetScLFi+WK432uqzVnYkVA61QrKgexi5XO
+         /w9bd28V4NCVrtef1iNYiP4/gRn7uWZCw4yXfDR1fhPwu8Tlx9mlflDE1lMfnHw9D2gl
+         dL61J5jb/ypbfZ30ru7fFZ3BPybXDI0UpGRq6vj9uSmuY77yBQnbwN2TNdEdmwELpERe
+         6KKPmIKeawL+zuYqMBoXmNUUMM+o06c2LEQYWBBmrlJE7BJTWfB7FWWuXmhMi4CcY3BM
+         bbF253WKQutt1RwoUUYGNJ/5usfq9QrIF71r41NXQN0Sgc2BitYROupOArqmg38679p7
+         LjQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUHuUafFbah8hEyAVUCFW0B/hSUn5P51+QeOgcl7GI/7fxzZIaaRnsXeAztnbW5kgrpvti3wzoRi7C2mGrwFu1JVEtd9aVcEy0=
+X-Gm-Message-State: AOJu0YzX6YpOj2oF8gJHwDfDD9FiUnqEiQvYcRFYN2t4fgkpQV4XISaF
+	A2GrdNqxl0vUeG2/BRQhKrLtKhJljU4jmv1kkDGXVac+5Ux/oeNe7Uw+/Eo48+0=
+X-Google-Smtp-Source: AGHT+IEzkEwlSn3wePny4O5r6XyYn9tUWSErcLZK7yJB3IGNMgVAot+DNy6F2E0jNVxUeXN93S5R8Q==
+X-Received: by 2002:ac2:5617:0:b0:52c:b606:2b2 with SMTP id 2adb3069b0e04-52ce0673b84mr6942987e87.46.1719439238957;
+        Wed, 26 Jun 2024 15:00:38 -0700 (PDT)
+Received: from [192.168.215.29] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a725cc93794sm304031666b.170.2024.06.26.15.00.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jun 2024 15:00:38 -0700 (PDT)
+Message-ID: <9938a67b-1f6b-4955-b4c0-a9f78c55f276@linaro.org>
+Date: Thu, 27 Jun 2024 00:00:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240625-thermal-v2-2-bf8354ed51ee@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider
+ ability to gcc
+To: Varadarajan Narayanan <quic_varada@quicinc.com>,
+ Georgi Djakov <djakov@kernel.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, andersson@kernel.org,
+ mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, quic_anusha@quicinc.com,
+ linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <ZjshR0ekcn0gxwOa@hu-varada-blr.qualcomm.com>
+ <CAA8EJpqENsojPQmCbma_nQLEZq8nK1fz1K0JdtvLd=kPrH_DBw@mail.gmail.com>
+ <1a08ef42-b52f-4c97-90d7-e7fdee7725b4@linaro.org>
+ <Zmgb+OjdBNw71sC1@hu-varada-blr.qualcomm.com>
+ <176137e5-6312-4d46-97b6-c4494bc1c61b@kernel.org>
+ <ZmlAdETV0+6Md8HC@hu-varada-blr.qualcomm.com>
+ <e24cfd23-6f77-46a0-b020-9cb3daef6930@kernel.org>
+ <Zml4RQ5R5s3mVMnI@hu-varada-blr.qualcomm.com>
+ <8e32a8be-dbbf-49ca-92a1-2fe3c8bfb571@kernel.org>
+ <ZmpsOdsl9AMTSH88@hu-varada-blr.qualcomm.com>
+ <ZnKKjomRQtJS2ZgL@hu-varada-blr.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <ZnKKjomRQtJS2ZgL@hu-varada-blr.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Raphael,
+On 19.06.2024 9:36 AM, Varadarajan Narayanan wrote:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 0fc4bfab2cd45f9acb86c4f04b5191e114e901ed]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Raphael-Gallais-Pou/thermal-st-switch-from-CONFIG_PM_SLEEP-guards-to-pm_sleep_ptr/20240626-090203
-base:   0fc4bfab2cd45f9acb86c4f04b5191e114e901ed
-patch link:    https://lore.kernel.org/r/20240625-thermal-v2-2-bf8354ed51ee%40gmail.com
-patch subject: [PATCH v2 2/3] thermal: sti: depend on THERMAL_OF subsystem
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20240627/202406270530.kN5wIswi-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240627/202406270530.kN5wIswi-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406270530.kN5wIswi-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/thermal/st/st_thermal.c: In function 'st_thermal_register':
->> drivers/thermal/st/st_thermal.c:147:13: warning: variable 'polling_delay' set but not used [-Wunused-but-set-variable]
-     147 |         int polling_delay;
-         |             ^~~~~~~~~~~~~
+[...]
 
 
-vim +/polling_delay +147 drivers/thermal/st/st_thermal.c
+> Tested the patches with both gcc and nsscc providers having
+> 'sync_state' set to icc_sync_state.
+> 
+> 	# dmesg | grep synced
+> 	[    3.029820] qcom,gcc-ipq9574 1800000.clock-controller: interconnect provider is in synced state
+> 	[    3.470106] qcom,nsscc-ipq9574 39b00000.clock-controller: interconnect provider is in synced state
+> 
+> I can see that icc_sync_state is getting called and clocks
+> related to paths with zero bandwidth are getting disabled.
+> 
+> Will post the NSSCC patches to get the full picture.
 
-60aef7ce455653 Lee Jones           2014-06-05  138  
-60aef7ce455653 Lee Jones           2014-06-05  139  int st_thermal_register(struct platform_device *pdev,
-60aef7ce455653 Lee Jones           2014-06-05  140  			const struct of_device_id *st_thermal_of_match)
-60aef7ce455653 Lee Jones           2014-06-05  141  {
-60aef7ce455653 Lee Jones           2014-06-05  142  	struct st_thermal_sensor *sensor;
-60aef7ce455653 Lee Jones           2014-06-05  143  	struct device *dev = &pdev->dev;
-60aef7ce455653 Lee Jones           2014-06-05  144  	struct device_node *np = dev->of_node;
-60aef7ce455653 Lee Jones           2014-06-05  145  	const struct of_device_id *match;
-60aef7ce455653 Lee Jones           2014-06-05  146  
-60aef7ce455653 Lee Jones           2014-06-05 @147  	int polling_delay;
-60aef7ce455653 Lee Jones           2014-06-05  148  	int ret;
-60aef7ce455653 Lee Jones           2014-06-05  149  
-60aef7ce455653 Lee Jones           2014-06-05  150  	if (!np) {
-60aef7ce455653 Lee Jones           2014-06-05  151  		dev_err(dev, "device tree node not found\n");
-60aef7ce455653 Lee Jones           2014-06-05  152  		return -EINVAL;
-60aef7ce455653 Lee Jones           2014-06-05  153  	}
-60aef7ce455653 Lee Jones           2014-06-05  154  
-60aef7ce455653 Lee Jones           2014-06-05  155  	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
-60aef7ce455653 Lee Jones           2014-06-05  156  	if (!sensor)
-60aef7ce455653 Lee Jones           2014-06-05  157  		return -ENOMEM;
-60aef7ce455653 Lee Jones           2014-06-05  158  
-60aef7ce455653 Lee Jones           2014-06-05  159  	sensor->dev = dev;
-60aef7ce455653 Lee Jones           2014-06-05  160  
-60aef7ce455653 Lee Jones           2014-06-05  161  	match = of_match_device(st_thermal_of_match, dev);
-60aef7ce455653 Lee Jones           2014-06-05  162  	if (!(match && match->data))
-60aef7ce455653 Lee Jones           2014-06-05  163  		return -EINVAL;
-60aef7ce455653 Lee Jones           2014-06-05  164  
-60aef7ce455653 Lee Jones           2014-06-05  165  	sensor->cdata = match->data;
-60aef7ce455653 Lee Jones           2014-06-05  166  	if (!sensor->cdata->ops)
-60aef7ce455653 Lee Jones           2014-06-05  167  		return -EINVAL;
-60aef7ce455653 Lee Jones           2014-06-05  168  
-60aef7ce455653 Lee Jones           2014-06-05  169  	sensor->ops = sensor->cdata->ops;
-60aef7ce455653 Lee Jones           2014-06-05  170  
-331a5fc9f2ed28 Nicolas Boichat     2015-07-08  171  	ret = (sensor->ops->regmap_init)(sensor);
-60aef7ce455653 Lee Jones           2014-06-05  172  	if (ret)
-60aef7ce455653 Lee Jones           2014-06-05  173  		return ret;
-60aef7ce455653 Lee Jones           2014-06-05  174  
-60aef7ce455653 Lee Jones           2014-06-05  175  	ret = st_thermal_alloc_regfields(sensor);
-60aef7ce455653 Lee Jones           2014-06-05  176  	if (ret)
-60aef7ce455653 Lee Jones           2014-06-05  177  		return ret;
-60aef7ce455653 Lee Jones           2014-06-05  178  
-60aef7ce455653 Lee Jones           2014-06-05  179  	sensor->clk = devm_clk_get(dev, "thermal");
-60aef7ce455653 Lee Jones           2014-06-05  180  	if (IS_ERR(sensor->clk)) {
-60aef7ce455653 Lee Jones           2014-06-05  181  		dev_err(dev, "failed to fetch clock\n");
-60aef7ce455653 Lee Jones           2014-06-05  182  		return PTR_ERR(sensor->clk);
-60aef7ce455653 Lee Jones           2014-06-05  183  	}
-60aef7ce455653 Lee Jones           2014-06-05  184  
-60aef7ce455653 Lee Jones           2014-06-05  185  	if (sensor->ops->register_enable_irq) {
-60aef7ce455653 Lee Jones           2014-06-05  186  		ret = sensor->ops->register_enable_irq(sensor);
-60aef7ce455653 Lee Jones           2014-06-05  187  		if (ret)
-60aef7ce455653 Lee Jones           2014-06-05  188  			return ret;
-60aef7ce455653 Lee Jones           2014-06-05  189  	}
-60aef7ce455653 Lee Jones           2014-06-05  190  
-60aef7ce455653 Lee Jones           2014-06-05  191  	ret = st_thermal_sensor_on(sensor);
-60aef7ce455653 Lee Jones           2014-06-05  192  	if (ret)
-60aef7ce455653 Lee Jones           2014-06-05  193  		return ret;
-60aef7ce455653 Lee Jones           2014-06-05  194  
-60aef7ce455653 Lee Jones           2014-06-05  195  	ret = st_thermal_calibration(sensor);
-60aef7ce455653 Lee Jones           2014-06-05  196  	if (ret)
-60aef7ce455653 Lee Jones           2014-06-05  197  		goto sensor_off;
-60aef7ce455653 Lee Jones           2014-06-05  198  
-60aef7ce455653 Lee Jones           2014-06-05  199  	polling_delay = sensor->ops->register_enable_irq ? 0 : 1000;
-60aef7ce455653 Lee Jones           2014-06-05  200  
-60aef7ce455653 Lee Jones           2014-06-05  201  	sensor->thermal_dev =
-9819ef601045bf Raphael Gallais-Pou 2024-06-25  202  		devm_thermal_of_zone_register(dev, 0, sensor, &st_tz_ops);
-60aef7ce455653 Lee Jones           2014-06-05  203  	if (IS_ERR(sensor->thermal_dev)) {
-9819ef601045bf Raphael Gallais-Pou 2024-06-25  204  		dev_err(dev, "failed to register thermal of zone\n");
-60aef7ce455653 Lee Jones           2014-06-05  205  		ret = PTR_ERR(sensor->thermal_dev);
-60aef7ce455653 Lee Jones           2014-06-05  206  		goto sensor_off;
-60aef7ce455653 Lee Jones           2014-06-05  207  	}
-60aef7ce455653 Lee Jones           2014-06-05  208  
-60aef7ce455653 Lee Jones           2014-06-05  209  	platform_set_drvdata(pdev, sensor);
-60aef7ce455653 Lee Jones           2014-06-05  210  
-9819ef601045bf Raphael Gallais-Pou 2024-06-25  211  	/*
-9819ef601045bf Raphael Gallais-Pou 2024-06-25  212  	 * devm_thermal_of_zone_register() doesn't enable hwmon by default
-9819ef601045bf Raphael Gallais-Pou 2024-06-25  213  	 * Enable it here
-9819ef601045bf Raphael Gallais-Pou 2024-06-25  214  	 */
-9819ef601045bf Raphael Gallais-Pou 2024-06-25  215  	return devm_thermal_add_hwmon_sysfs(dev, sensor->thermal_dev);
-60aef7ce455653 Lee Jones           2014-06-05  216  
-60aef7ce455653 Lee Jones           2014-06-05  217  sensor_off:
-60aef7ce455653 Lee Jones           2014-06-05  218  	st_thermal_sensor_off(sensor);
-60aef7ce455653 Lee Jones           2014-06-05  219  
-60aef7ce455653 Lee Jones           2014-06-05  220  	return ret;
-60aef7ce455653 Lee Jones           2014-06-05  221  }
-60aef7ce455653 Lee Jones           2014-06-05  222  EXPORT_SYMBOL_GPL(st_thermal_register);
-60aef7ce455653 Lee Jones           2014-06-05  223  
+Going back to the original question, does removing interconnects = from
+things like PCIe now make them not work / crash the device, which would
+indicate the NoC clocks were indeed gated?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Konrad
 
