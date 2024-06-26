@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-10018-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10019-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 232D8917908
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 08:34:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17E61917915
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 08:37:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98F2A1F21E6F
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 06:34:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4945B1C217CB
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 06:37:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F717153803;
-	Wed, 26 Jun 2024 06:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60E9114D458;
+	Wed, 26 Jun 2024 06:37:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GsXVUD4W"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RD8uZLf9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 763B414F125
-	for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2024 06:33:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E688313CFBC
+	for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2024 06:37:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719383606; cv=none; b=ISIpxmASjSBBZRxbHagTEHL46c5LpgKOYDUQJEihTIMp2TZiMY1Xdom9NY16b/FpwoNZMQYxxCDZjaWUiBVoOIXPlxzgsKl0+UsZ6hP96PYvgqc49G6DKrofyoBHXoCfVnVkYBBwcoDYbjvuAQyYQcGFL22FfSpsXD5Sy9EG+b4=
+	t=1719383853; cv=none; b=JwiSKbzj3XwvuPoIrIlhAr5+pPfZOWVHYTCfy7CT2HBtJRyety3545K4kR9vSlu5TblDr/qtYlqOdGw/MFGgjdrDL2tptECMevEQraFhnAjkCPiAI8fWaqMe/0Qopnp1cIxhc2t9FeaztGgmLKLbsKJAbikBHagi8Y8ctIIuLEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719383606; c=relaxed/simple;
-	bh=Shi12dlPxlBZPg66WRXw4zfsLLkZ8IHxFQjsPCKC7/I=;
+	s=arc-20240116; t=1719383853; c=relaxed/simple;
+	bh=WjHIinQIPpgmVadzaOYL2FN1a05qHYAYurKuBSI9Ubo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=crojb4cfgArBm5GR/lI3SkGkLU0BxXeeO52ip9t+f/4OrXcBZo4RQFn8OZ/Vmhenho43RCI4R91SE9tyhbu6l5Gn6mOnUpNeGnMExg2S9UcVeXYWMWP/SZUIUGZ62kBOFjTCBI8uLNVfoeoEd0RZyHGb+POQh/jNuFnQVfrMNoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GsXVUD4W; arc=none smtp.client-ip=209.85.216.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=nAOXV6u5j1kKLLIFrGOnacv1yLrQuVD6pzmdZKkSxfFwRUMUhwrWCH4dgFONAzFeLwwqE559tTK+mBHcKnfCn3lODgW9TToRsKwwhg8UCWAUU13L+EsDSJvaxUdgjOEl4uAYZzMHX9iSTPt6oRjr/pgR56ZQGoV2zUeLIpuy6w8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RD8uZLf9; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2c1a4192d55so4830102a91.2
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jun 2024 23:33:25 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1f6fabe9da3so51743415ad.0
+        for <linux-pm@vger.kernel.org>; Tue, 25 Jun 2024 23:37:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719383605; x=1719988405; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1719383851; x=1719988651; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xIe54blZeFv2wCBTIbQ224KWLDIpEaIZB95qu35e1SY=;
-        b=GsXVUD4WXvA+uTVFUxOmJGyR70I/7numLflir729+raNSUi4YcMIrY4O9k8XSgWrDk
-         ktNUMD6ubW/+4zUgQR5DwxbDo+nzrfqEFBxL6Srf78/bK9Kpf9UpddwAJEbcQ1W+tUic
-         8r/11Z6ljpMMHGLL5jQPOVz++S07dC4tGhlBa6ge4Gfa25M22DqSliVTtyeLXRvnuXWi
-         spLnW9N8A8bUvawEegUSHazkVSE/YwCNh7LMrNYJm0KM24zNKuDgORVEkb10EqIL7M8w
-         yrspx3QW4STE+g2X3Ku4C/yvqx076Q6U7gXjXqBN6lw/LMUmRvbjXj2/L5MSC+lgc25G
-         WBkw==
+        bh=8WmbxbHO00C4vKFOsHsy0MXpWKHaZIqKhcPiT++FQA4=;
+        b=RD8uZLf9JrxlCSwyUBYwrU9F6qMHxqWHvW+eQd7TqoAIkZCq3Y1evjLDuekBOa6/+O
+         WFhHODjMkNadaHSEYzrDXIA2BY51tVkiZvcd2iupsueVxwm+1qR5Trcqo1JuRZ1aA7Ua
+         EgAT5sVR6LcgfHeFNbM+6GJhpP1sKYi8RRCSEP0v9+L5scU85scoEjCYYNPj2TDZRpHJ
+         UURgqU9IhYHy73+nZ1fkMzVK+/O3FqmmI7kgJqYQZ4WRK/mknGeWbxpeN8iq1Jna2M3K
+         k8zm1QnKNpr5vBDEZcO71BKgaBX+wmZJLGGFGd/2wG7dBu8T20Swlj5Lu6pABlYsJ/BG
+         i02g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719383605; x=1719988405;
+        d=1e100.net; s=20230601; t=1719383851; x=1719988651;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xIe54blZeFv2wCBTIbQ224KWLDIpEaIZB95qu35e1SY=;
-        b=EGemnWJRZNbXUqNNSzRGCwj3EFl5GZTgsF0QdXY1efB+J//bp+QqTLuL7EU/ecnTDV
-         trPaLZWXGOZU317B1tEJEKekjpX3BD809cpDrOWOXzC01o+l6dxXyTl7bh8xMtbKB7s9
-         NUrr5tSoFWLJlXCp3wlLyisUU27EPi1R3UnqwJ1WRNNt1rwjONt/T82tlOBvY7RjainS
-         UbpSuk12CCjyBen2XKUwFA4cTs+J3SS6CyjXOLIo16cFKEpLeu90t1WzB+YI+q/dxOD1
-         yL103qSO+KjEJOWyMe8gCNl9zVNR+o2XDhEEg755gsz0HSNOQFErMya2Vo9bD4CBFTAt
-         dLdg==
-X-Forwarded-Encrypted: i=1; AJvYcCXuq1NiS73QmBjbhf1uF5ga9lOLNdXW7ttXvSZYDuNi5qMKVlYcfnLiip0tcvJEq708bzVLyULy07ysv9X+obFa0/HivBsJBiE=
-X-Gm-Message-State: AOJu0Yxfr1/2k5Dc8fukXWnz0sbd4sFLLftH9i2sXZfPoJUxXBMSdR5G
-	7WqtjmgU7IQZUiG5TeTaS+6LVXKR+WoFF0Imat4wcPBKO2lnqIqIuEQZT1oghfc=
-X-Google-Smtp-Source: AGHT+IEvJ56j6yvQEX4nDHubHwfsFnfDLbBvWF1DIzuJCWlkxtNCeWyF2FWFrmDRy/GwFtNFQfBrvw==
-X-Received: by 2002:a17:90a:887:b0:2c8:5f01:affd with SMTP id 98e67ed59e1d1-2c85f01b7f7mr9036616a91.36.1719383604658;
-        Tue, 25 Jun 2024 23:33:24 -0700 (PDT)
+        bh=8WmbxbHO00C4vKFOsHsy0MXpWKHaZIqKhcPiT++FQA4=;
+        b=TVtbhefV8kJtMVeK8D5Y0P9pRQjao89xXYa/J+CoHCk+HMoKGUKKmy4aPelbEjDmnb
+         hS9dsLoZIdIscJkKZXYfyv7RiDCuRm3UOI3pBrKjLxhSXIvD13dkCNbgrS5GpXQsXJNR
+         jC6GrLIyMobTN3ZIS+BOU1CbmnXlteWNj5eF0/gtl4+P6xiYcXKAwLVbYVjyIenI1mIp
+         ynJkdNzZzHqfV/WkP4WYHBhNeQf1khShf6/U5EP6gttZv0BClfaIPIuRElqubsHixio4
+         p1IX31UCzvLkbHcSdBF64brRhCW4nuJozBgwwPBmR7s6YKC2X3Hxzzvn5jAo3hjhDyk1
+         jcJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUH+bvidtJ8ft6mn71ad619/IFm1Yamp8HolMmwbqUbqaYIBgp/uQJzld3TguVmkJ6AJxG+X37H6rivO0JWwczr0KdBmspgaqM=
+X-Gm-Message-State: AOJu0Yynyaxavdr9NM/sL7wFphyYcmKB2Ozz6GyHpGGWr4H1wWfk+4+w
+	QmxLsDgwDIN/BkeLjRSyCNaDVCHypMZTKWQPaQdOZwnrIXgT68Dw3JK2HRhPylI=
+X-Google-Smtp-Source: AGHT+IHPZ/M9X+i2/I7Go5isNU7nO2ti8PIKw/zBI0W44C0AvL2ALmu8+bSPbMXV8uPWpintZOHa7w==
+X-Received: by 2002:a17:903:2290:b0:1f6:d81e:d0e with SMTP id d9443c01a7336-1fa23bdc4b0mr110254425ad.5.1719383848988;
+        Tue, 25 Jun 2024 23:37:28 -0700 (PDT)
 Received: from localhost ([122.172.82.13])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c8d7e55c14sm804529a91.2.2024.06.25.23.33.23
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fa57a205b7sm38302105ad.112.2024.06.25.23.37.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jun 2024 23:33:24 -0700 (PDT)
-Date: Wed, 26 Jun 2024 12:03:21 +0530
+        Tue, 25 Jun 2024 23:37:28 -0700 (PDT)
+Date: Wed, 26 Jun 2024 12:07:26 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: Ulf Hansson <ulf.hansson@linaro.org>
 Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
@@ -78,11 +78,11 @@ Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
 	Thierry Reding <thierry.reding@gmail.com>,
 	Jonathan Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/7] OPP: Rework _set_required_devs() to manage a single
- device per call
-Message-ID: <20240626063321.3x4cvyj7yiks5f3p@vireshk-i7>
+Subject: Re: [PATCH 6/7] OPP/pmdomain: Set the required_dev for a required
+ OPP during genpd attach
+Message-ID: <20240626063726.zsnj7iasl4y7ic2d@vireshk-i7>
 References: <20240619140849.368580-1-ulf.hansson@linaro.org>
- <20240619140849.368580-4-ulf.hansson@linaro.org>
+ <20240619140849.368580-7-ulf.hansson@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -91,82 +91,15 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240619140849.368580-4-ulf.hansson@linaro.org>
+In-Reply-To: <20240619140849.368580-7-ulf.hansson@linaro.org>
 
 On 19-06-24, 16:08, Ulf Hansson wrote:
-> @@ -2494,36 +2495,68 @@ static int _opp_set_required_devs(struct opp_table *opp_table,
->  		return -EINVAL;
->  	}
->  
-> -	/* Another device that shares the OPP table has set the required devs ? */
-> -	if (opp_table->required_devs[0])
-> -		return 0;
-> +	/* Genpd core takes care of propagation to parent genpd */
-> +	if (opp_table->is_genpd) {
+> @@ -2393,8 +2392,7 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
+>  static int _opp_attach_genpd(struct opp_table *opp_table, struct device *dev,
+>  			const char * const *names, struct device ***virt_devs)
 
-A genpd can have non-genpd devices in the required OPPs and so this
-isn't sufficient. What we were ignoring earlier was genpd having
-another genpd as required opp.
-
-> +		dev_err(dev, "%s: Operation not supported for genpds\n", __func__);
-> +		return -EOPNOTSUPP;
-> +	}
->  
->  	for (i = 0; i < opp_table->required_opp_count; i++) {
-> -		/* Genpd core takes care of propagation to parent genpd */
-> -		if (required_devs[i] && opp_table->is_genpd &&
-> -		    opp_table->required_opp_tables[i]->is_genpd) {
-> -			dev_err(dev, "%s: Operation not supported for genpds\n", __func__);
-> -			return -EOPNOTSUPP;
-> -		}
-> +		struct opp_table *table = opp_table->required_opp_tables[i];
-> +
-> +		/*
-> +		 * The OPP table should be available at this point. If not, it's
-> +		 * not the one we are looking for.
-> +		 */
-> +		if (IS_ERR(table))
-> +			continue;
-> +
-> +		/* Move to the next available index. */
-> +		if (opp_table->required_devs[i])
-> +			continue;
->  
-> -		opp_table->required_devs[i] = required_devs[i];
-> +		/*
-> +		 * We need to compare the nodes for the OPP tables, rather than
-> +		 * the OPP tables themselves, as we may have separate instances.
-> +		 */
-> +		if (required_opp_table->np == table->np) {
-> +
-
-We don't keep such empty lines in OPP core generally at this place.
-
-> +			/* Cross check the OPP tables and fix it if needed. */
-
-Copy the bigger comment from_opp_attach_genpd() here too. It helps
-understanding why required_opp_tables entry is getting replaced.
-
-> +			if (required_opp_table != table) {
-> +				dev_pm_opp_put_opp_table(table);
-> +				_get_opp_table_kref(required_opp_table);
-> +				opp_table->required_opp_tables[i] = required_opp_table;
-> +			}
-> +
-> +			opp_table->required_devs[i] = required_dev;
-> +
-> +			/*
-> +			 * Add the required_dev as a user of the OPP table, so
-> +			 * we can call dev_pm_opp_set_opp() on it directly.
-> +			 */
-> +			if (!_add_opp_dev(required_dev, required_opp_table)) {
-> +				dev_err(dev, "Failed to add the device to the required OPP table\n");
-> +				return -ENOMEM;
-> +			}
-> +
-> +			return i;
-> +		}
->  	}
+I was expecting that we can get rid of this routine completely and OPP
+core won't be required to handle this anymore.
 
 -- 
 viresh
