@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-10147-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10148-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C43491B0BC
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 22:46:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C338E91B0BE
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 22:46:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C7D91C232E3
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 20:46:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E201286F09
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 20:46:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2D9019F49D;
-	Thu, 27 Jun 2024 20:44:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAEC31A01DA;
+	Thu, 27 Jun 2024 20:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CHVIyyVa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I+PqMDbz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C5E319F46C;
-	Thu, 27 Jun 2024 20:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F2C1A01CE;
+	Thu, 27 Jun 2024 20:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719521061; cv=none; b=RdiMC0A38cMYcFiXW6i+I5BuMsyrUdgCvGpuAR/5SyMzf7zalj2CkYqSJZHtRT6mMYuFcqiUPzPH2rSE3lEIzRTxE/d6jLa4ndQQy3l1JlWxoU6Uuw9G/ChgLko0rwx7OtiH0l/CmovVdWtA5DNI8umFrJLcH7Vmt6WW2uy0UUA=
+	t=1719521068; cv=none; b=b39De0OlF3uqJ7VNwCgLNhN1zNF/yiMA0mgMGnwF8gidgi+PuJJ062dma3dpXIK3Erp6KsW27u5oQX+zw/hghjQQ8PnuTYT5Y5fUac2Wnv1paa55HxVSe5TgWUGtVFW34Pde4K+ENpEO12QIQzkALI1i1fJpeR+SBT0TDxqPuls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719521061; c=relaxed/simple;
-	bh=DVzDv4uACxxSDrFRLriFQUI7g0cXPdhDN1i3ovSARok=;
+	s=arc-20240116; t=1719521068; c=relaxed/simple;
+	bh=L2IcI1EjQZtbklruJIn6Yv5Q4rHmaf70lTCCFIPHBrc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JtLEq2sZVAznvAvF73sPSMA86xsc7k2pVZ6+q5xldLy7dDn9QZbjmoe0cP2+gzAxLQe+EmNZiuavRj/Zz12TClM+fsPVR2BfvSW0Fcpf6kg7zsiZtGR9XWQ8vWoWno2Df5E8SLXJN8KqrPYfsQdIaFiLVxhdiaGq0vUzuBsIFKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CHVIyyVa; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZyeZ6tUeJGL+6ceA9RhEpdUiGc7PzH1RY3Px5zsrzlWaG0fgUNzcnU0lbIBP9+sNA/6T1/Z+nKloZf89hCBrZ2W+lsLEirfmUA+aYF4RIXu6QtQ3NXR3yoeom2gAyg3LEJmRewj3HhAJk6QyQJilQRfG0UIUSA0KmGV46BuJXDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I+PqMDbz; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719521060; x=1751057060;
+  t=1719521067; x=1751057067;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=DVzDv4uACxxSDrFRLriFQUI7g0cXPdhDN1i3ovSARok=;
-  b=CHVIyyVagqPt5zVoPOeT9a09XMjryzsSinXSSB/a0wngZH9/BVPn8gK4
-   RrtJokgFzKG3+re6gh2V/Bvm5XWwcKJPqJIXeKTE4/PJkF+kSCyozkSdi
-   jiXkWHuGhSo7c5YzshKIw9Id0kp6T04YDPVMDwS8fnqk4oZzec1xqELaa
-   w3rrjZOr/RaVMxJWnyZ24uiRrPz0kThTzQReCgvKBkZ2l3bPINsYtQL1f
-   dUvULImX8zjqJpaNdOIuP8jxv/WsfIozBY9Pj9Fp6Dvymui2N8p9b/Em6
-   uJkz3dqN66E/Faxqxna10Os2f+T3zCa+qCzegkwjpPDFEKJqIJOF1B2b9
+  bh=L2IcI1EjQZtbklruJIn6Yv5Q4rHmaf70lTCCFIPHBrc=;
+  b=I+PqMDbzEawNTZtVTpbjdX3ZD2rmOhY+l7Oow4M4EU6dFfQsf1f9v0Ck
+   yfiPgzfs6mso74YNzMU+RHlDvhGCafR4qXxyxSRPt4gvYRFxGR3YTEyQC
+   b+AX42qmIKUFqeVD1Wj7Ztg2vlASp3IwrMLzCJrV7eQmuc/ajfiZB7cqM
+   TPgMGCT8QMqAAtKLMeLC5DV4HyNigge2nrciAd8vKnybnxTTOMBUAK1p6
+   zUoPJVSmn0mzkBdqi8Im049FPAOPMJWHI1B4URIHMBDoNeRlW6c95esoz
+   SZZ8BFHsFPgk7TH5zhgfymk/+XrsyIKTiC9WGLn+QmDmVhTke5oxXv7IB
    A==;
-X-CSE-ConnectionGUID: FBo8+E47RDW/Y3F6IooyFQ==
-X-CSE-MsgGUID: oQBx7lM/T1SrPnakPv0Jgg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="34132520"
+X-CSE-ConnectionGUID: JdQOqN8tTgGAazTcBX7J/g==
+X-CSE-MsgGUID: UvCGxU1XSZaS8amOi1Cp1Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="27816240"
 X-IronPort-AV: E=Sophos;i="6.09,167,1716274800"; 
-   d="scan'208";a="34132520"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 13:44:20 -0700
-X-CSE-ConnectionGUID: w5mtiqysTy2FweArSpdLMg==
-X-CSE-MsgGUID: tg+JUzvBTnOX6U1LGBxvSQ==
+   d="scan'208";a="27816240"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 13:44:25 -0700
+X-CSE-ConnectionGUID: F/n3hlJAQISAj+eHodAlgQ==
+X-CSE-MsgGUID: LhH9NVjVQSu21ZtcFuHqRA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,167,1716274800"; 
-   d="scan'208";a="75708643"
+   d="scan'208";a="44913369"
 Received: from gbpfeiff-mobl.amr.corp.intel.com (HELO desk) ([10.255.229.132])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 13:44:19 -0700
-Date: Thu, 27 Jun 2024 13:44:18 -0700
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 13:44:26 -0700
+Date: Thu, 27 Jun 2024 13:44:24 -0700
 From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>,
@@ -76,8 +76,8 @@ Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
 	Mario Limonciello <mario.limonciello@amd.com>,
 	Perry Yuan <Perry.Yuan@amd.com>,
 	Dapeng Mi <dapeng1.mi@linux.intel.com>
-Subject: [PATCH PATCH v2 3/9] perf/x86/intel: Use topology_hw_cpu_type()
-Message-ID: <20240627-add-cpu-type-v2-3-f927bde83ad0@linux.intel.com>
+Subject: [PATCH PATCH v2 4/9] x86/cpu: Remove get_this_hybrid_cpu_type()
+Message-ID: <20240627-add-cpu-type-v2-4-f927bde83ad0@linux.intel.com>
 X-Mailer: b4 0.12.3
 References: <20240627-add-cpu-type-v2-0-f927bde83ad0@linux.intel.com>
 Precedence: bulk
@@ -90,33 +90,63 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20240627-add-cpu-type-v2-0-f927bde83ad0@linux.intel.com>
 
-get_this_hybrid_cpu_type() misses a case when cpu-type is populated
-regardless of X86_FEATURE_HYBRID_CPU. This is particularly true for hybrid
-variants that have P or E cores fused off.
+get_this_hybrid_cpu_type() is replaced by topology_hw_cpu_type(). There are
+no more callers, remove it.
 
-Instead use topology_hw_cpu_type() as it does not rely on hybrid feature to
-enumerate cpu-type. This can also help avoid the model-specific fixup
-get_hybrid_cpu_type().
-
-Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
 Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 ---
- arch/x86/events/intel/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/include/asm/cpu.h  |  6 ------
+ arch/x86/kernel/cpu/intel.c | 16 ----------------
+ 2 files changed, 22 deletions(-)
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 38c1b1f1deaa..0da1fd14b0ea 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -4753,7 +4753,7 @@ static void intel_pmu_check_hybrid_pmus(struct x86_hybrid_pmu *pmu)
+diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
+index aa30fd8cad7f..20e491c22b98 100644
+--- a/arch/x86/include/asm/cpu.h
++++ b/arch/x86/include/asm/cpu.h
+@@ -31,7 +31,6 @@ extern void __init sld_setup(struct cpuinfo_x86 *c);
+ extern bool handle_user_split_lock(struct pt_regs *regs, long error_code);
+ extern bool handle_guest_split_lock(unsigned long ip);
+ extern void handle_bus_lock(struct pt_regs *regs);
+-u8 get_this_hybrid_cpu_type(void);
+ #else
+ static inline void __init sld_setup(struct cpuinfo_x86 *c) {}
+ static inline bool handle_user_split_lock(struct pt_regs *regs, long error_code)
+@@ -45,11 +44,6 @@ static inline bool handle_guest_split_lock(unsigned long ip)
+ }
  
- static struct x86_hybrid_pmu *find_hybrid_pmu_for_cpu(void)
- {
--	u8 cpu_type = get_this_hybrid_cpu_type();
-+	u8 cpu_type = topology_hw_cpu_type(smp_processor_id());
- 	int i;
- 
- 	/*
+ static inline void handle_bus_lock(struct pt_regs *regs) {}
+-
+-static inline u8 get_this_hybrid_cpu_type(void)
+-{
+-	return 0;
+-}
+ #endif
+ #ifdef CONFIG_IA32_FEAT_CTL
+ void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index fdf3489d92a4..ac6c68a39051 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -1335,19 +1335,3 @@ void __init sld_setup(struct cpuinfo_x86 *c)
+ 	sld_state_setup();
+ 	sld_state_show();
+ }
+-
+-#define X86_HYBRID_CPU_TYPE_ID_SHIFT	24
+-
+-/**
+- * get_this_hybrid_cpu_type() - Get the type of this hybrid CPU
+- *
+- * Returns the CPU type [31:24] (i.e., Atom or Core) of a CPU in
+- * a hybrid processor. If the processor is not hybrid, returns 0.
+- */
+-u8 get_this_hybrid_cpu_type(void)
+-{
+-	if (!cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
+-		return 0;
+-
+-	return cpuid_eax(0x0000001a) >> X86_HYBRID_CPU_TYPE_ID_SHIFT;
+-}
 
 -- 
 2.34.1
