@@ -1,63 +1,64 @@
-Return-Path: <linux-pm+bounces-10144-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10145-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 695AA91B0B3
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 22:45:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7965A91B0B8
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 22:45:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC745B24398
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 20:44:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BE321C22DC0
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 20:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 306001A0B08;
-	Thu, 27 Jun 2024 20:44:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 228441A2C01;
+	Thu, 27 Jun 2024 20:44:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dIPp/VNU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YGMxtzd1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300A01A08DC;
-	Thu, 27 Jun 2024 20:44:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742C61A2562;
+	Thu, 27 Jun 2024 20:44:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719521044; cv=none; b=GKNijbW/p2F3718BDxEBsfqXs3dLJvoBhbslq45ukUMXWtbb5sPGiEReD5uoks5/Q6rPQNcDBYHb6YiHpKOtQxTRVFysIXB7tQDDVnoEnfTPUF/z4F8fdD6iVcSVCFD2f1KsyB1Z848jlRuSVXefZ2fMQblsvdxxX0TJu62WN/Q=
+	t=1719521049; cv=none; b=RR/BQpfSkH9hjjzU6yZqVrwPD6YyAsVsRF7Xhr0WR0wgx6YKv2mSturM2R0ZTHpvkiMkTpxhi9yYqcAXMe17oUfFJVc9BlOE2eotpHPkGHrkCoSh7rSk4TB408SPhY8C7r/FSjBfNHcAS/Bu8kchg0FjyIkpAEewvQryqgZTtkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719521044; c=relaxed/simple;
-	bh=L7S2iIHXOFLzfLMAPa1fWF74VBRK6JJh9ZoKxTmb66M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pBhBN0/jLKGn2FOGC9DGvpaglE1eS1K0/IiSDOMVto85EVWuO/M3Jlaiz5f9kOq/5Mp1ggdsojJFV2rhmW5qj4/nTl2KULBHIvwpJ7/sGJZJPqKpldyZiKkjxsTrlS7Tz2htVlJh5dfAy0z2BJEnlrPtt+wnvzlcG4eA93FcIns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dIPp/VNU; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1719521049; c=relaxed/simple;
+	bh=GSnYrv2tIngbGP7UO6mPjG1VZqxU7RfQH2ltGkwIMPI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RhPShrzNG4hR3dDJUVJiZl5MLBYL6CQKO6OR8HNTh1lKve35S3Vun7J8kRid4SKxOb7Upn0su1g8p9C0JOYX1LeF3mJfDA4qkISCa0+Jvjy6KFRYaUDp7Eu2xxV1Nz9Tbp+fjShPhkwiyd/oRcAOBgGvnSvZzpz7uuZWljJ6ET0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YGMxtzd1; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719521042; x=1751057042;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=L7S2iIHXOFLzfLMAPa1fWF74VBRK6JJh9ZoKxTmb66M=;
-  b=dIPp/VNUO42nffuqds6NR/wjyDfxCmpy1uvgW+NhjfuHDMzZB1Mc3bXO
-   vhLdgKyR2biaHDVb0m+BYyH8zaFqQhQFYrwnxyqlvU1Z3JROA+O6L77dt
-   HZwXP7/E8aR5VDLjeKvMDqmyckYS8SFA+zM3L6Pm1zpnqQ/UM+on5kWBL
-   fa9XOmvHKY7rRFUMaEG5KVot1G67oB9csHiO+mL6hMMZF8/uOKQUei3ct
-   TGz7lUpKr4yXHgD9cNZNumBqkfe99zMHQ8Mq82LrwTU/pDyQ7qyP1gYiY
-   Ely7GnEyKzrWM9OEBjVqyomqIDiH8jfZ78t9kK1j0QR0eeph+i17HPsIj
+  t=1719521047; x=1751057047;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GSnYrv2tIngbGP7UO6mPjG1VZqxU7RfQH2ltGkwIMPI=;
+  b=YGMxtzd1evtldTeTHbZmUua3j3Xp0iM2GuRGSRnuM53v5lkeeBgae/Aw
+   FYJ3kSQw8oOKzbooLtjB4SZo2jp8ynp1yFc4EnFLn1JtFrC/aMk7NEOGh
+   hhcYIFQ+MsDAt0f59eituyZoY6AUaloijMMH08fe3HuoL7KIMXwTAxqAY
+   IfKKDocbAB47tVf5GhBF3fWPZF7K5/0sC5jBvfJiIGn+hJ/+cK9nHTzXS
+   KecWMMxXGF+OKc/UvAZLajyD+q7BXSlvZvDsPcIFiA1JwDMGVWZliI2PY
+   qKNGOuW7WZzMJ5u1A2rkwxxS7QbqK/pJkbQC5Qw7GHZgwh0n2sFd3emMR
    g==;
-X-CSE-ConnectionGUID: lFT7hkiwQbW15+7zP048tQ==
-X-CSE-MsgGUID: riEuzdE2TkmLTXqspItc4Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="27816173"
+X-CSE-ConnectionGUID: tJBV7g8hT2OMXy9q6/ptaQ==
+X-CSE-MsgGUID: g2sdqLsZSNGKuuEGnUsCqQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="27816191"
 X-IronPort-AV: E=Sophos;i="6.09,167,1716274800"; 
-   d="scan'208";a="27816173"
+   d="scan'208";a="27816191"
 Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 13:44:01 -0700
-X-CSE-ConnectionGUID: xfNG5JCFREGJRSwwBFel5g==
-X-CSE-MsgGUID: BPwqrB/xTWWCmXoJQ69LOA==
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 13:44:07 -0700
+X-CSE-ConnectionGUID: thV0zFdERkyaHSqWflpazw==
+X-CSE-MsgGUID: 0hUuORO4THG75FcnuN/UhQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,167,1716274800"; 
-   d="scan'208";a="44913214"
+   d="scan'208";a="44913242"
 Received: from gbpfeiff-mobl.amr.corp.intel.com (HELO desk) ([10.255.229.132])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 13:44:02 -0700
-Date: Thu, 27 Jun 2024 13:44:00 -0700
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 13:44:07 -0700
+Date: Thu, 27 Jun 2024 13:44:06 -0700
 From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>,
@@ -75,13 +76,11 @@ Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
 	Mario Limonciello <mario.limonciello@amd.com>,
 	Perry Yuan <Perry.Yuan@amd.com>,
 	Dapeng Mi <dapeng1.mi@linux.intel.com>
-Subject: [PATCH v2 0/9] Add CPU-type to topology
-Message-ID: <20240627-add-cpu-type-v2-0-f927bde83ad0@linux.intel.com>
-X-B4-Tracking: v=1; b=H4sIAL/OfWYC/22NsQ6CMBRFf4W82UdaghScMC6ODm6GAduHvAQLa
- YFACP9uw+x47s09dwNPjsnDJdrA0cyeexsgOUWg29p+CNkEhkQkqcikwtoY1MOE4zoQpuZMqaJ
- GS6kgTAZHDS+H7gWP6/N2hyrELfuxd+txMsuj/O+bJQp853lR5FpIUlnZsZ2WmO1IXaz7L1T7v
- v8AislRhrUAAAA=
+Subject: [PATCH PATCH v2 1/9] x86/cpu/topology: Add CPU type to struct
+ cpuinfo_topology
+Message-ID: <20240627-add-cpu-type-v2-1-f927bde83ad0@linux.intel.com>
 X-Mailer: b4 0.12.3
+References: <20240627-add-cpu-type-v2-0-f927bde83ad0@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,76 +89,119 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240627-add-cpu-type-v2-0-f927bde83ad0@linux.intel.com>
 
-v2:
-- Move CPU-type to the end of the CPU topology structure (Andrew).
-- Use c->cpuid_level instead of cpuid_eax(0) (Andrew).
-- Move CPU-type enum out of ifdef CONFIG_NUMA (kernel test robot).
-- Rename cpu_type to hw_cpu_type (Borislav).
-- Explain replacing get_this_hybrid_cpu_type() with topology_hw_cpu_type()
-  in the commit message (Dave).
-- Fix the alignment in cpu_vuln_whitelist (Andrew).
-- Add the obj compare note in the commit message (Dave/Tony).
-- s/X86_CPU_TYPE_INTEL_ATOM/ATOM/ in cpu_vuln_whitelist (Dave).
+Sometimes it is required to identify the type of a core for taking specific
+actions e.g. intel_pstate driver uses the core type to determine CPU
+scaling. Also, some CPU vulnerabilities only affect a specific CPU type
+e.g. RFDS only affects Intel Atom. For hybrid systems that have variants
+P+E, P-only(Core) and E-only(Atom), it gets challenging to identify which
+variant is vulnerable to a specific vulnerability, as these variants share
+the same family, model and stepping.
 
-v1: https://lore.kernel.org/r/20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com
+Such processors do have CPUID fields that uniquely identify them. Like,
+P+E, P-only and E-only enumerates CPUID.1A.CORE_TYPE, while P+E
+additionally enumerates CPUID.7.HYBRID. Linux does not currently use this
+field.
 
-Hi,
+Add a new field hw_cpu_type to struct cpuinfo_topology which can be used to
+match a CPU based on its type.
 
-This series adds support for CPU-type (CPUID.1A.EAX[31-24] on Intel) to
-differentiate between hybrid variants P+E, P-only, E-only that share the
-same Family/Model/Stepping. One of the use case for CPU-type is the
-affected CPU table for CPU vulnerabilities, which can now use the CPU-type
-to filter the unaffected variants.
+The hw_cpu_type is populated in the below debugfs file:
 
-* Patch 1 adds hardware cpu-type to CPU topology structure and introduces
-  topology_hw_cpu_type().
-
-* Patch 2-4 replaces usages of get_this_hybrid_cpu_type() with
-  topology_hw_cpu_type().
-
-* Patch 5-7 Updates CPU-matching infrastructure to use CPU-type.
-
-* Patch 8 cleans up the affected CPU list.
-
-* Patch 9 uses the CPU-type to exclude P-only parts from the RFDS affected
-  list.
+  # cat /sys/kernel/debug/x86/topo/cpus/#
 
 Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 ---
-Pawan Gupta (9):
-      x86/cpu/topology: Add CPU type to struct cpuinfo_topology
-      cpufreq: intel_pstate: Use topology_cpu_type()
-      perf/x86/intel: Use topology_hw_cpu_type()
-      x86/cpu: Remove get_this_hybrid_cpu_type()
-      x86/cpu: Name CPU matching macro more generically (and shorten)
-      x86/cpu: Add cpu_type to struct x86_cpu_id
-      x86/cpu: Update x86_match_cpu() to also use cpu-type
-      x86/bugs: Declutter vulnerable CPU list
-      x86/rfds: Exclude P-only parts from the RFDS affected list
+ arch/x86/include/asm/processor.h      | 3 +++
+ arch/x86/include/asm/topology.h       | 9 +++++++++
+ arch/x86/kernel/cpu/debugfs.c         | 1 +
+ arch/x86/kernel/cpu/topology_common.c | 9 +++++++++
+ 4 files changed, 22 insertions(+)
 
- .../admin-guide/hw-vuln/reg-file-data-sampling.rst |   8 --
- arch/x86/events/intel/core.c                       |   2 +-
- arch/x86/include/asm/cpu.h                         |   6 -
- arch/x86/include/asm/cpu_device_id.h               | 117 +++++++----------
- arch/x86/include/asm/processor.h                   |   3 +
- arch/x86/include/asm/topology.h                    |   9 ++
- arch/x86/kernel/cpu/common.c                       | 138 +++++++++++----------
- arch/x86/kernel/cpu/debugfs.c                      |   1 +
- arch/x86/kernel/cpu/intel.c                        |  16 ---
- arch/x86/kernel/cpu/match.c                        |  22 ++++
- arch/x86/kernel/cpu/topology_common.c              |   9 ++
- drivers/cpufreq/intel_pstate.c                     |  14 +--
- include/linux/mod_devicetable.h                    |   2 +
- 13 files changed, 168 insertions(+), 179 deletions(-)
----
-base-commit: f2661062f16b2de5d7b6a5c42a9a5c96326b8454
-change-id: 20240617-add-cpu-type-4d5e47efc117
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index cb4f6c513c48..d8d715fcc25c 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -105,6 +105,9 @@ struct cpuinfo_topology {
+ 	// Cache level topology IDs
+ 	u32			llc_id;
+ 	u32			l2c_id;
++
++	// Hardware defined CPU-type
++	u8			hw_cpu_type;
+ };
+ 
+ struct cpuinfo_x86 {
+diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+index abe3a8f22cbd..717fdb928dc3 100644
+--- a/arch/x86/include/asm/topology.h
++++ b/arch/x86/include/asm/topology.h
+@@ -33,6 +33,14 @@
+ #include <linux/numa.h>
+ #include <linux/cpumask.h>
+ 
++#define X86_CPU_TYPE_INTEL_SHIFT	24
++
++enum x86_hw_topo_cpu_type {
++	X86_HW_CPU_TYPE_UNKNOWN		= 0,
++	X86_HW_CPU_TYPE_INTEL_ATOM	= 0x20,
++	X86_HW_CPU_TYPE_INTEL_CORE	= 0x40,
++};
++
+ #ifdef CONFIG_NUMA
+ 
+ #include <asm/mpspec.h>
+@@ -139,6 +147,7 @@ extern const struct cpumask *cpu_clustergroup_mask(int cpu);
+ #define topology_logical_die_id(cpu)		(cpu_data(cpu).topo.logical_die_id)
+ #define topology_die_id(cpu)			(cpu_data(cpu).topo.die_id)
+ #define topology_core_id(cpu)			(cpu_data(cpu).topo.core_id)
++#define topology_hw_cpu_type(cpu)		(cpu_data(cpu).topo.hw_cpu_type)
+ #define topology_ppin(cpu)			(cpu_data(cpu).ppin)
+ 
+ #define topology_amd_node_id(cpu)		(cpu_data(cpu).topo.amd_node_id)
+diff --git a/arch/x86/kernel/cpu/debugfs.c b/arch/x86/kernel/cpu/debugfs.c
+index 3baf3e435834..8082e03a5976 100644
+--- a/arch/x86/kernel/cpu/debugfs.c
++++ b/arch/x86/kernel/cpu/debugfs.c
+@@ -22,6 +22,7 @@ static int cpu_debug_show(struct seq_file *m, void *p)
+ 	seq_printf(m, "die_id:              %u\n", c->topo.die_id);
+ 	seq_printf(m, "cu_id:               %u\n", c->topo.cu_id);
+ 	seq_printf(m, "core_id:             %u\n", c->topo.core_id);
++	seq_printf(m, "hw_cpu_type:         %x\n", c->topo.hw_cpu_type);
+ 	seq_printf(m, "logical_pkg_id:      %u\n", c->topo.logical_pkg_id);
+ 	seq_printf(m, "logical_die_id:      %u\n", c->topo.logical_die_id);
+ 	seq_printf(m, "llc_id:              %u\n", c->topo.llc_id);
+diff --git a/arch/x86/kernel/cpu/topology_common.c b/arch/x86/kernel/cpu/topology_common.c
+index 9a6069e7133c..8b47bd6b0623 100644
+--- a/arch/x86/kernel/cpu/topology_common.c
++++ b/arch/x86/kernel/cpu/topology_common.c
+@@ -140,6 +140,14 @@ static void parse_topology(struct topo_scan *tscan, bool early)
+ 	}
+ }
+ 
++static void topo_set_hw_cpu_type(struct cpuinfo_x86 *c)
++{
++	c->topo.hw_cpu_type = X86_HW_CPU_TYPE_UNKNOWN;
++
++	if (c->x86_vendor == X86_VENDOR_INTEL && c->cpuid_level >= 0x1a)
++		c->topo.hw_cpu_type = cpuid_eax(0x1a) >> X86_CPU_TYPE_INTEL_SHIFT;
++}
++
+ static void topo_set_ids(struct topo_scan *tscan, bool early)
+ {
+ 	struct cpuinfo_x86 *c = tscan->c;
+@@ -190,6 +198,7 @@ void cpu_parse_topology(struct cpuinfo_x86 *c)
+ 	}
+ 
+ 	topo_set_ids(&tscan, false);
++	topo_set_hw_cpu_type(c);
+ }
+ 
+ void __init cpu_init_topology(struct cpuinfo_x86 *c)
 
-Best regards,
 -- 
-Thanks,
-Pawan
+2.34.1
 
 
 
