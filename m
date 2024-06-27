@@ -1,147 +1,180 @@
-Return-Path: <linux-pm+bounces-10099-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10100-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F4B791A159
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 10:24:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB35791A1BC
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 10:39:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A26FD1C21C51
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 08:24:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B45B0B23C3D
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 08:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 649DC78C9A;
-	Thu, 27 Jun 2024 08:24:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DD2A13AD06;
+	Thu, 27 Jun 2024 08:38:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eg6xybTK"
+	dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b="fYt77sep"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from forward501a.mail.yandex.net (forward501a.mail.yandex.net [178.154.239.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE4550285;
-	Thu, 27 Jun 2024 08:24:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098567C097;
+	Thu, 27 Jun 2024 08:38:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719476679; cv=none; b=leRF0FqBqzIhGGWH1jFNInzvisgZxqA17rIrFEZlmvi02aCoAwcK5y+/FhlguZn0dCyzX8baKsP4Mr9ACnn/OVBDKRZifpqmFq3Un63iWky9Pr5rgkyW9dGe7/BjWhDudergEQXEpZq5YHMRGuBCVM2P/uRB3/hvRcCIPV4Qnf8=
+	t=1719477511; cv=none; b=XLNDhkbXr/dR4DMCd2JJCE0Qos3YV1HJSo9TwBxPLpIe8LHWu2abh5dEEi45PfsYzuS7kNyTBW2QHB7iDxizNypSUmTiDIfxGPCdifQT0w0TZjVEorG+8pAxXQLPg9s6cVDlMby6Jo5bz5Wra7zERwQ9HcvGLFo+JiF9kkLrjdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719476679; c=relaxed/simple;
-	bh=nrcED+kfNOJnZI80OvRQZgPNWlUT47kK8X+bKOmviCM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rbVBsi4eE63PMXtXRmXFbsh2WUhQDNj7OZTK0E3SuaxToShJTSbNy6mIC064YcEmcppIoR/TmuRxzCB1bv+QQSfCYnKklcHulhwwj0eNbennJm27wMHa6A9kLNr3KA+mgwEclsI+q03jeS2n9oWrmfGpO0tMXJo5d6a/hmnMu5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eg6xybTK; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719476676; x=1751012676;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nrcED+kfNOJnZI80OvRQZgPNWlUT47kK8X+bKOmviCM=;
-  b=eg6xybTKYGhPZMv/ujzj2LmgCaDKyQ7yQtGDYVmdaEF8bW87ZsvSevRG
-   uNIdrIuQECQ0npH/39VLojTk14yxbWiXFTozUOIGTlwbef4gaG8a3fEAY
-   nsz7G2jlj+0Dka5FIN7AE0kU8ShtUGin247Aelda4RWBTrJGsvtXDPvLq
-   XX9U+saeJZmLCrRvWf43F12EaQ8IQ1QDrOGcL1GB/Y5urucs5sddmFa9D
-   pNdQjKTMUQeiJaSwIO9iuNVSaoItW+rgUyED9pIuTHecXWgv5svTE3ldy
-   rY6WTDyY41nL6vyqo/0fP/QwjLwNiA5SBe9iFY2Qwq2iM3AyAjMiadAuA
-   Q==;
-X-CSE-ConnectionGUID: DnqKiHpPQaOky7xircWvfg==
-X-CSE-MsgGUID: z1GxZ3QHQMGMzSI0W+HN8g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11115"; a="16732457"
-X-IronPort-AV: E=Sophos;i="6.08,269,1712646000"; 
-   d="scan'208";a="16732457"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 01:24:36 -0700
-X-CSE-ConnectionGUID: glugGBpTT1yyzfQ3hLwEGA==
-X-CSE-MsgGUID: T9QHmxmfQZW2EwUhcgfaTw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,269,1712646000"; 
-   d="scan'208";a="44944816"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 27 Jun 2024 01:24:31 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sMkQf-000G3N-1Q;
-	Thu, 27 Jun 2024 08:24:29 +0000
-Date: Thu, 27 Jun 2024 16:23:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Raphael Gallais-Pou <rgallaispou@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] ARM: dts: sti: add thermal-zones support on
- stih418
-Message-ID: <202406271638.0fz7OuJT-lkp@intel.com>
-References: <20240625-thermal-v2-3-bf8354ed51ee@gmail.com>
+	s=arc-20240116; t=1719477511; c=relaxed/simple;
+	bh=sncecviZ4oVzyaqVg6LU/TKkhzMCJcCvnENYdLedhDQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lCDDAcTYqAJfIwhLmscFk8xCyAW78PCjg/OoxkpdL++WvW/lVLcesjayHlKCKoa4pkxbpud7JcrwQZakAcKhWt4DSKa7DPLev6bpqsSraYWpficcmpSoHluYlKKsPP9D1+0knk07Mb5V2mNqZmeWPZNPVxLS704pF+/1M844NYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me; spf=pass smtp.mailfrom=maquefel.me; dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b=fYt77sep; arc=none smtp.client-ip=178.154.239.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=maquefel.me
+Received: from mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net [IPv6:2a02:6b8:c1f:6289:0:640:5fc6:0])
+	by forward501a.mail.yandex.net (Yandex) with ESMTPS id 62E6D62860;
+	Thu, 27 Jun 2024 11:29:53 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id hTMqF50OgeA0-419Dn7dc;
+	Thu, 27 Jun 2024 11:29:51 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail;
+	t=1719476991; bh=sncecviZ4oVzyaqVg6LU/TKkhzMCJcCvnENYdLedhDQ=;
+	h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+	b=fYt77sepJb6Dz5nNn3wvLM2BcROhwWdG7wRisBkqtF3/hXtLy8lIDdb5a9wki+xgj
+	 m+gfMLnWml2khZDKWnsANuhxBC4XcH3KBbc8wli7qPcKfOBKMiiokOznOQZASnsShb
+	 uhxbpxZgH1kBKx/Vy2qTDCDcjYAISNAwQklonyaU=
+Authentication-Results: mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <241a4cf9830b0118f01e8fcf2853c62527636049.camel@maquefel.me>
+Subject: Re: [PATCH v10 00/38] ep93xx device tree conversion
+From: Nikita Shubin <nikita.shubin@maquefel.me>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>, Arnd Bergmann
+ <arnd@arndb.de>,  Stephen Boyd <sboyd@kernel.org>
+Cc: Hartley Sweeten <hsweeten@visionengravers.com>, Alexander Sverdlin
+ <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>,
+ Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Sebastian Reichel
+ <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley <conor+dt@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Thierry Reding <thierry.reding@gmail.com>, Uwe
+ =?ISO-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>, Mark
+ Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,  Paolo
+ Abeni <pabeni@redhat.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Damien Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Liam Girdwood
+ <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
+ <tiwai@suse.com>, Ralf Baechle <ralf@linux-mips.org>,  "Wu, Aaron"
+ <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, Olof Johansson
+ <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org,  devicetree@vger.kernel.org,
+ dmaengine@vger.kernel.org,  linux-watchdog@vger.kernel.org,
+ linux-pwm@vger.kernel.org,  linux-spi@vger.kernel.org,
+ netdev@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-ide@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-sound@vger.kernel.org, Bartosz Golaszewski
+ <bartosz.golaszewski@linaro.org>,  Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, Vinod
+ Koul <vkoul@kernel.org>
+Date: Thu, 27 Jun 2024 11:29:44 +0300
+In-Reply-To: <48c242838c77034485a9e667dc0e867207c5beed.camel@maquefel.me>
+References: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
+	 <CAHp75VfSC9gAD9ipeWRPdQOxUp4FXqYYei-cJTs38nbz0cHpkg@mail.gmail.com>
+	 <48c242838c77034485a9e667dc0e867207c5beed.camel@maquefel.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240625-thermal-v2-3-bf8354ed51ee@gmail.com>
 
-Hi Raphael,
+On Tue, 2024-06-18 at 19:20 +0300, Nikita Shubin wrote:
+> Hello Andy!
+> On Mon, 2024-06-17 at 12:58 +0200, Andy Shevchenko wrote:
+> > On Mon, Jun 17, 2024 at 11:38=E2=80=AFAM Nikita Shubin via B4 Relay
+> > <devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
+> > >=20
+> > > The goal is to recieve ACKs for all patches in series to merge it
+> > > via Arnd branch.
+> >=20
+> > 'receive'
+> >=20
+> > > Unfortunately, CLK subsystem suddenly went silent on clk portion
+> > > of
+> > > series V2 reroll,
+> > > tried to ping them for about a month but no luck.
+> > >=20
+> > > Link:
+> > > https://lore.kernel.org/r/20240408-ep93xx-clk-v2-1-adcd68c13753@maque=
+fel.me
+> > >=20
+> > > Some changes since last version (v9) - see "Changes in v10",
+> > > mostly
+> > > cosmetic.
+> >=20
+> > ...
+> >=20
+> > > Patches should be formated with '--histogram'
+> >=20
+> > 'formatted'
+> >=20
+> > ...
+> >=20
+> > > Changes in v10:
+> > >=20
+> > > Reordered SoB tags to make sure they appear before Rb and Acked
+> > > tags.
+> >=20
+> > This is not required. The importance is only the order of SoBs
+> > themselves. If they are interleaved with other tags, it's fine.
+>=20
+> Ah - ok. Just saw someone was complaining about b4 reordering them.=20
+>=20
+> >=20
+> > ...
+> >=20
+> >=20
+> > Hopefully to see this series being eventually applied soon.
+> > Arnd? (Do we have all necessary subsystem maintainers' tags, btw?)
+> >=20
+> >=20
+>=20
+> As i see from my perspective only three left:
+>=20
+> Clk subsystem:
+>=20
+> - clk: ep93xx: add DT support for Cirrus EP93xx
+>=20
+> DMA subsystem (but the only request from Vinod, as far as i remember,
+> was fixing commits titles):
+>=20
+> - dmaengine: cirrus: Convert to DT for Cirrus EP93xx
+> - dmaengine: cirrus: remove platform code
+>=20
+> Beside that tags missing on platform code removal (which can be Acked
+> by Arnd himself i believe) and dtsi/dts files (same ?).
 
-kernel test robot noticed the following build warnings:
+Vinod acked the above two patches:
 
-[auto build test WARNING on 0fc4bfab2cd45f9acb86c4f04b5191e114e901ed]
+https://lore.kernel.org/all/ZnkIp8bOcZK3yVKP@matsya/
+https://lore.kernel.org/all/ZnkImp8BtTdxl7O3@matsya/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Raphael-Gallais-Pou/thermal-st-switch-from-CONFIG_PM_SLEEP-guards-to-pm_sleep_ptr/20240626-090203
-base:   0fc4bfab2cd45f9acb86c4f04b5191e114e901ed
-patch link:    https://lore.kernel.org/r/20240625-thermal-v2-3-bf8354ed51ee%40gmail.com
-patch subject: [PATCH v2 3/3] ARM: dts: sti: add thermal-zones support on stih418
-config: arm-randconfig-051-20240627 (https://download.01.org/0day-ci/archive/20240627/202406271638.0fz7OuJT-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad79a14c9e5ec4a369eed4adf567c22cc029863f)
-dtschema version: 2024.6.dev1+g833054f
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240627/202406271638.0fz7OuJT-lkp@intel.com/reproduce)
+so only:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406271638.0fz7OuJT-lkp@intel.com/
+- clk: ep93xx: add DT support for Cirrus EP93xx
 
-dtcheck warnings: (new ones prefixed by >>)
->> arch/arm/boot/dts/st/stih418.dtsi:51.28-79.5: Warning (thermal_sensors_property): /thermal-zones/cpu-thermal: Missing property '#thermal-sensor-cells' in node /soc/thermal@91a0000 or bad phandle (referred from thermal-sensors[0])
-   arch/arm/boot/dts/st/stih418-b2199.dtb: /clocks: failed to match any schema with compatible: ['st,stih418-clk', 'simple-bus']
-   arch/arm/boot/dts/st/stih418-b2199.dtb: /clocks/clockgen-a9@92b0000: failed to match any schema with compatible: ['st,clkgen-c32']
-   arch/arm/boot/dts/st/stih418-b2199.dtb: /clocks/clockgen-a9@92b0000/clockgen-a9-pll: failed to match any schema with compatible: ['st,stih418-clkgen-plla9']
-   arch/arm/boot/dts/st/stih418-b2199.dtb: /clocks/clockgen-a9@92b0000/clk-m-a9: failed to match any schema with compatible: ['st,stih407-clkgen-a9-mux', 'st,clkgen-mux']
-   arch/arm/boot/dts/st/stih418-b2199.dtb: /clocks/clockgen-a9@92b0000/clk-m-a9: failed to match any schema with compatible: ['st,stih407-clkgen-a9-mux', 'st,clkgen-mux']
-   arch/arm/boot/dts/st/stih418-b2199.dtb: /clocks/clockgen-a@90ff000: failed to match any schema with compatible: ['st,clkgen-c32']
-   arch/arm/boot/dts/st/stih418-b2199.dtb: /clocks/clockgen-a@90ff000/clk-s-a0-pll: failed to match any schema with compatible: ['st,clkgen-pll0-a0']
-   arch/arm/boot/dts/st/stih418-b2199.dtb: /clocks/clockgen-a@90ff000/clk-s-a0-flexgen: failed to match any schema with compatible: ['st,flexgen', 'st,flexgen-stih410-a0']
-   arch/arm/boot/dts/st/stih418-b2199.dtb: /clocks/clockgen-a@90ff000/clk-s-a0-flexgen: failed to match any schema with compatible: ['st,flexgen', 'st,flexgen-stih410-a0']
-   arch/arm/boot/dts/st/stih418-b2199.dtb: /clocks/clockgen-c@9103000: failed to match any schema with compatible: ['st,clkgen-c32']
---
->> arch/arm/boot/dts/st/stih418.dtsi:51.28-79.5: Warning (thermal_sensors_property): /thermal-zones/cpu-thermal: Missing property '#thermal-sensor-cells' in node /soc/thermal@91a0000 or bad phandle (referred from thermal-sensors[0])
-   arch/arm/boot/dts/st/stih418-b2264.dtb: /clocks: failed to match any schema with compatible: ['st,stih418-clk', 'simple-bus']
-   arch/arm/boot/dts/st/stih418-b2264.dtb: /clocks/clockgen-a9@92b0000: failed to match any schema with compatible: ['st,clkgen-c32']
-   arch/arm/boot/dts/st/stih418-b2264.dtb: /clocks/clockgen-a9@92b0000/clockgen-a9-pll: failed to match any schema with compatible: ['st,stih418-clkgen-plla9']
-   arch/arm/boot/dts/st/stih418-b2264.dtb: /clocks/clockgen-a9@92b0000/clk-m-a9: failed to match any schema with compatible: ['st,stih407-clkgen-a9-mux', 'st,clkgen-mux']
-   arch/arm/boot/dts/st/stih418-b2264.dtb: /clocks/clockgen-a9@92b0000/clk-m-a9: failed to match any schema with compatible: ['st,stih407-clkgen-a9-mux', 'st,clkgen-mux']
-   arch/arm/boot/dts/st/stih418-b2264.dtb: /clocks/clockgen-a@90ff000: failed to match any schema with compatible: ['st,clkgen-c32']
-   arch/arm/boot/dts/st/stih418-b2264.dtb: /clocks/clockgen-a@90ff000/clk-s-a0-pll: failed to match any schema with compatible: ['st,clkgen-pll0-a0']
-   arch/arm/boot/dts/st/stih418-b2264.dtb: /clocks/clockgen-a@90ff000/clk-s-a0-flexgen: failed to match any schema with compatible: ['st,flexgen', 'st,flexgen-stih410-a0']
-   arch/arm/boot/dts/st/stih418-b2264.dtb: /clocks/clockgen-a@90ff000/clk-s-a0-flexgen: failed to match any schema with compatible: ['st,flexgen', 'st,flexgen-stih410-a0']
-   arch/arm/boot/dts/st/stih418-b2264.dtb: /clocks/clockgen-c@9103000: failed to match any schema with compatible: ['st,clkgen-c32']
+https://lore.kernel.org/all/20240617-ep93xx-v10-3-662e640ed811@maquefel.me/
 
-vim +51 arch/arm/boot/dts/st/stih418.dtsi
+left.
 
-  > 51			cpu_thermal: cpu-thermal {
+Hope Stephen will find some time for this one.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
