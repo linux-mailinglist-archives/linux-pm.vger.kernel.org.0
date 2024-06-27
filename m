@@ -1,124 +1,106 @@
-Return-Path: <linux-pm+bounces-10085-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10086-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67C40919B06
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 01:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B8F78919DA4
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 05:01:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22216283265
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2024 23:08:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 416D9284DE8
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 03:01:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26BAE1940A1;
-	Wed, 26 Jun 2024 23:07:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3F28BE4F;
+	Thu, 27 Jun 2024 03:00:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kw4BKMAp"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="RxHB2CqF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F8C18FDCD;
-	Wed, 26 Jun 2024 23:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBCE26FC6;
+	Thu, 27 Jun 2024 03:00:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719443276; cv=none; b=JL6bo0dSp5kk7f3liU9LiBy1sSgoUrriuouHZaMhr/hQ4toLrUHW0gyZd/qW2vQKaS/1cRtBPij5Np08VdlfcqkwdRmO9N9nmfdD+uwnsHYfZ/12dZDEdN8dog4A9574NITzGYwVf9cK02bNgZuMDazSPUoKvW/YD/rTuWjcKt8=
+	t=1719457257; cv=none; b=Jm5I7ICMG7qfaOzyR/l7+ZA5fPO11tuRkLPFLBfzArhhUq6/OVmoAueaAK1uy7U54ud52nP3ooEVzLnhGLoWBWspo7I+ybKc2KH/Zth1j4Cek47cwLLnF4C1PLbxbpW0sVmo1G7JedOqwQcCZR17nXQSZAQ9PnI3JbeRLxTFZ/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719443276; c=relaxed/simple;
-	bh=bGsS6QAH1iQGXflkC3m0fScbHj4wlKNAw4ntnVc0CEY=;
+	s=arc-20240116; t=1719457257; c=relaxed/simple;
+	bh=WqZGsjNQqac+8MnivgotfefTlGfUXJbcBN+NkTQKZQc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TT/PkaAn5TB8kMJYaIUfrKBa1XG2RdliFtiuB0ELSqsO24E7cI9/ocTMVpNPBZ+RV0DEeR8Fptyfxl9UsuBIhhjW15FTKqXv3G+9UdRXItlKR704Z+4lMHudvBfYlr+kQ1EwXUHzaEoGXx45f2pLLHNaI4+vcwLSwte746NaFIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kw4BKMAp; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719443274; x=1750979274;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bGsS6QAH1iQGXflkC3m0fScbHj4wlKNAw4ntnVc0CEY=;
-  b=Kw4BKMApq0+bZxmEbkuMjKQFa+DLnmaxZn0AV+Tb5SdsnipwcipGfbYH
-   JdFt+ndDARQbGgyGHIcFmImLqkKmpwMhCcekxK6QbYH6yIEsHyzDdn9iQ
-   hzPBsyMPgovVl9brocdX4BvFJQiT8kjn/LdxuSVcotDGEi6S3uA1KIVuK
-   CpaESrvv7w1Qt+gIi1xiRCmWcjibTYrQS3cM7OA6ENnC/DO2gGDSAQje1
-   6WMHdjpUj9HuiJwCbPHWIRKZKVi1y0GGOpD82AiHcXabpQPsyHlkVaI7Z
-   B8E7sCvKMdLlxOqsPA7zCXMO5k7J3XSEQM7R4R06Y5p5qNkqwfGeYlCNN
-   A==;
-X-CSE-ConnectionGUID: ls/XAyU1S7u1OvpoUMgOMA==
-X-CSE-MsgGUID: 0AWQRi/ETRKkzv3jJLpP9A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11115"; a="34078217"
-X-IronPort-AV: E=Sophos;i="6.08,268,1712646000"; 
-   d="scan'208";a="34078217"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 16:07:53 -0700
-X-CSE-ConnectionGUID: V9jZL/3xQI6a9qnQu9Z9UQ==
-X-CSE-MsgGUID: LAfmfYIOQZ2TdpOB7fLhaQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,268,1712646000"; 
-   d="scan'208";a="67390811"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 26 Jun 2024 16:07:49 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sMbjv-000Fe6-1J;
-	Wed, 26 Jun 2024 23:07:47 +0000
-Date: Thu, 27 Jun 2024 07:06:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Raphael Gallais-Pou <rgallaispou@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Paul Gazzillo <paul@pgazz.com>,
-	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-	oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] thermal: sti: depend on THERMAL_OF subsystem
-Message-ID: <202406270605.qodaWd4n-lkp@intel.com>
-References: <20240625-thermal-v2-2-bf8354ed51ee@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bk+9834dCqYsdSOKiCjkbjlblhecniVYraNKbJ5pX/a9eJhgtYYijFOA62+smv7RzkDWSmBj18mSd3wkLdVFXW4aru8742Qq9eCnaZjEykrKv4i6PU0VUf48pGxtRy80XODvrVLB2PKvAKgPI/EQwfDRegjF/O27/dtLETOnThg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=RxHB2CqF; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 04D7540E0218;
+	Thu, 27 Jun 2024 03:00:52 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id DrsUvQUOunVS; Thu, 27 Jun 2024 03:00:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1719457248; bh=AY4aMCo9kTgD3MRGQfEJ79FC77YpLM84z9ED/n/mc04=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RxHB2CqF3t+CTlineP1Zx0d2XuVqSbkH0Yuxdm0FoLanZCGoA0vF2q3MAylyCpX3S
+	 vs7GZfC8E/GmEGDA8g51CLOIpA3w9oPQT341E2uQPh9fLRxFPF2N8QUvhyq/McaJGm
+	 iVeOXAxo1IddgqnBlndSK+FYVV7rBCetl+CI6AKUzDiQvlv0p9nsPZ+NO49nY3hvXd
+	 Yh0ONb4Xxxpqt/uFxlQzEaGPccuzMXRBBfR4AIaLw0Xl0vH4uvgiP/lCUjBtUykTq2
+	 mvEVvWkQ+s+4r6H1CuWsHv9FtFPIuCEwU7ABBFDntzZWSU5yK7ieg+PPK+59kv+nVh
+	 d0cnS4VzfY2+ZhLBeZ0fLGNM2yffbmAf+CkSl2+pP/F0+r/tlYaoggzUm+AgzCmGsb
+	 DJJXa8kGK8NQ8xq8Z1EwR+uk9txvvkLpwZDr3zkeauqjMYKth5VHT8Un7pBQxdnmF5
+	 66P+oLZx1o35PDIwos6Cx47bKgy9ZklM+54auT5ukCv3kJJfqAcKaM1FOtz590SkOY
+	 WRtzXJ5uEYncEmc6sqia6/hpt2l5jBfhyfpaEKoMazrlQb/ooCUhT9GsmDxQZB8j6n
+	 m105RooDj41u3bw4QXkJehaV/z4NQF5cHA4iXuVUtxhUltP6wkDJGWoclilmqKWsq3
+	 xPh9Iccur9sMubLu/d5V706Q=
+Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3760340E01D6;
+	Thu, 27 Jun 2024 03:00:33 +0000 (UTC)
+Date: Thu, 27 Jun 2024 05:00:26 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+	"H . Peter Anvin" <hpa@zytor.com>, Huang Rui <ray.huang@amd.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
+	"open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 1/2] x86/cpu/amd: Clarify amd_get_highest_perf()
+Message-ID: <20240627030026.GAZnzVyitzWW6nE_s8@fat_crate.local>
+References: <20240626042043.2410-1-mario.limonciello@amd.com>
+ <20240626042043.2410-2-mario.limonciello@amd.com>
+ <20240626171421.GRZnxMbcI83xe1SLtB@fat_crate.local>
+ <681732d3-76ba-47ba-9cce-362c6fe094cb@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240625-thermal-v2-2-bf8354ed51ee@gmail.com>
+In-Reply-To: <681732d3-76ba-47ba-9cce-362c6fe094cb@amd.com>
 
-Hi Raphael,
+On Wed, Jun 26, 2024 at 01:18:17PM -0500, Mario Limonciello wrote:
+> And then patch 2 or patch 3 change the "default" return to 166 and if there
+> is functional issues then they need to be special cased.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 0fc4bfab2cd45f9acb86c4f04b5191e114e901ed]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Raphael-Gallais-Pou/thermal-st-switch-from-CONFIG_PM_SLEEP-guards-to-pm_sleep_ptr/20240626-090203
-base:   0fc4bfab2cd45f9acb86c4f04b5191e114e901ed
-patch link:    https://lore.kernel.org/r/20240625-thermal-v2-2-bf8354ed51ee%40gmail.com
-patch subject: [PATCH v2 2/3] thermal: sti: depend on THERMAL_OF subsystem
-config: arm64-kismet-CONFIG_ST_THERMAL-CONFIG_ST_THERMAL_MEMMAP-0-0 (https://download.01.org/0day-ci/archive/20240627/202406270605.qodaWd4n-lkp@intel.com/config)
-reproduce: (https://download.01.org/0day-ci/archive/20240627/202406270605.qodaWd4n-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406270605.qodaWd4n-lkp@intel.com/
-
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for ST_THERMAL when selected by ST_THERMAL_MEMMAP
-   WARNING: unmet direct dependencies detected for ST_THERMAL
-     Depends on [n]: THERMAL [=y] && (ARCH_STI || ARCH_STM32 [=y]) && OF [=y] && THERMAL_OF [=n]
-     Selected by [y]:
-     - ST_THERMAL_MEMMAP [=y] && THERMAL [=y] && (ARCH_STI || ARCH_STM32 [=y]) && OF [=y]
+Sounds ok to me. Keep the whole logic in one place. Sure.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
