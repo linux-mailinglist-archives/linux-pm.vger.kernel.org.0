@@ -1,67 +1,69 @@
-Return-Path: <linux-pm+bounces-10128-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10130-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8797C91AAF2
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 17:17:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B5F691AB01
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 17:21:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 322CC1F26A4A
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 15:17:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FDC4B20D76
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 15:21:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7D0219885B;
-	Thu, 27 Jun 2024 15:16:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E02F198A09;
+	Thu, 27 Jun 2024 15:20:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DtMUsgH2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q5b4zUYw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2805715216F;
-	Thu, 27 Jun 2024 15:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA17D179647;
+	Thu, 27 Jun 2024 15:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719501415; cv=none; b=eFNHcnHfAIOm6fQxNxx2RGEQM745u/K3pSHVZyY39JQ2wkG/20Pj2xt/xZhA/y1XJgXGOnZss2tZFjl8Zts/0ifFeA515AZJlXkaeBWLoY+gmLv5gkypUzPCbzkCp67nQaCtVtuzDXdMzEK4qznaVtAkYCj9NwcjrSEF48JBE8E=
+	t=1719501658; cv=none; b=jPzKGdSwXEj/Ok9uB8DaxKw/rI09I3UtpaEDBtDrC7okPWL4TuW8R1EhYiLBMc0Z6wXdyZmGSWVnCzGbEZaaQg7GXUhwYQ/HfeIhrjl7eEYZbvZMTLla8Np9zjybY+4sbLvQ20whBMD8OujW9p69jJgIdKo8JKQ8rkytST/lIhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719501415; c=relaxed/simple;
-	bh=3GozPIpP9jAx9el91ibI+vx4flekmq46sTMmK/4U6m0=;
+	s=arc-20240116; t=1719501658; c=relaxed/simple;
+	bh=NkvMMppuUbS6id5yTyzLodQXYpLnaEoYzmCfyXpSxOU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MFcdKmA7WSvIwpK3rbZFhPtrtp0vVm437kaTdi+9SBMuMIiu7yW6Q/okiHf9zWmut8zvlw5hPSNOW3feWGKzIH2A+iC4KCGYm+84DvxRR4743ghCD53KEhl2Sjd+O0TY6aV+QaL0YAPZv+/JZVRdaoGMrav6OPw8zaaOLDqoO+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DtMUsgH2; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=d7ZEv/HnUfS2UAPuqf89+JfNsDyMiP3YI8d6iMW8TqzuiAfpvtHh4CuuIVxg6s5yARbK4QkhSsvm08YzZBnoD0gIPP3qDVdMKfbXEQhjiRIK5V0V9e0JUeOAa5Qwa5CmuysKaANf1DkIalYOql+xldpjfXslZSw/370x3BA8caU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q5b4zUYw; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719501415; x=1751037415;
+  t=1719501658; x=1751037658;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=3GozPIpP9jAx9el91ibI+vx4flekmq46sTMmK/4U6m0=;
-  b=DtMUsgH2GvJcVoo3xam8Tj4w9i6qM0a00FEAYWlESYlshfDne2ZaYTFA
-   ASjNbU72BlWl8Grq3qCvO71iSADi0/GOgxz1gO2cAWkcQvQoyLLBjxZ+R
-   zAGaof+ZvEWsb9ttptgWUIgQLNS8r/hIjIwoSRklA7TolXEwBvijw6jCX
-   /oPLKafCMZIDr3VdJcOComu3WSjjtQ4y6R+t9f7T4fcGfUE2KC8L2fv1R
-   f6a5eI6XJ7RuWm0sQAVoclSIyiku0gypusNH4S4wGZuUt42BjATPUZWoX
-   2p683EMrwr4bnhYm6t61uAiiq2+8ln6j30kgIZkCFzt3ODw14CUvFO2Xd
-   Q==;
-X-CSE-ConnectionGUID: ffg1S4zQSmKAIvXw0ySyNg==
-X-CSE-MsgGUID: cyV3Vh+/RLG6JAPab249iw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="16469949"
+   mime-version:in-reply-to;
+  bh=NkvMMppuUbS6id5yTyzLodQXYpLnaEoYzmCfyXpSxOU=;
+  b=Q5b4zUYwJYVnGwccwyMvrKeodErxBCvwm375jUTlEjmkOtygaXpV3lnp
+   LmiQMi7p637UToz4cbkxsqWF3TdlDUAcOYNvJIK5Oq7ZDqnAbPx3fsqIU
+   fZnxYtclpvR4PYk/1Ko0Bg8B9ZmMUgaQn/43aRRBs/NxWyjdZYjxgKIna
+   18G/9g74rVcsWAskn/UWc5YCKO8dOI4iZr+e3NaYQ3iUnWBmDvbrZ2ZRv
+   h0NIff658P6ND0iNsg08xgk5+GCGC08duV+FUgTSgyhP3YSgkqYXlMNHL
+   CZtFaqKIV4Ulvqp+7rR5h516JGYOgWH/KFNEYbw/raItKyXuridLCyveA
+   w==;
+X-CSE-ConnectionGUID: eUBS5FRVSwK8jIVKpyhM0A==
+X-CSE-MsgGUID: L6eJ8QnVQ+yNKfELxv7PXg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="16598246"
 X-IronPort-AV: E=Sophos;i="6.09,166,1716274800"; 
-   d="scan'208";a="16469949"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 08:16:54 -0700
-X-CSE-ConnectionGUID: kDj9fzqvTfCF4dhc72knZA==
-X-CSE-MsgGUID: 9kmkGbpiQuq+VPsyOAnhZg==
+   d="scan'208";a="16598246"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 08:20:05 -0700
+X-CSE-ConnectionGUID: laF0R0DCS324PwXm2xKZAA==
+X-CSE-MsgGUID: yXj6WzGcSD6YukqcR3Unrw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,166,1716274800"; 
-   d="scan'208";a="44236881"
+   d="scan'208";a="49580365"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 08:16:53 -0700
-Date: Thu, 27 Jun 2024 08:22:59 -0700
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 08:20:04 -0700
+Date: Thu, 27 Jun 2024 08:26:09 -0700
 From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: Brice Goglin <brice.goglin@gmail.com>
-Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: Dave Hansen <dave.hansen@intel.com>,
+	Brice Goglin <brice.goglin@gmail.com>,
+	srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
@@ -69,41 +71,48 @@ Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-perf-users@vger.kernel.org,
 	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
 	"Liang, Kan" <kan.liang@linux.intel.com>,
 	Andrew Cooper <andrew.cooper3@citrix.com>
 Subject: Re: [PATCH 0/9] Add CPU-type to topology
-Message-ID: <20240627152259.GB5201@ranerica-svr.sc.intel.com>
+Message-ID: <20240627152609.GC5201@ranerica-svr.sc.intel.com>
 References: <20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com>
  <8d757ea3-87a3-4663-ac76-66b04e33e6b3@gmail.com>
+ <20240619015315.3ei5f6rovzdnxovo@desk>
+ <bc75ff55161671e4470849ed51baa547f619889d.camel@linux.intel.com>
+ <0021f5f2-67c5-4b20-939d-48c9c1c60cdb@gmail.com>
+ <1b99017a-6964-46de-ba3a-09552e7cf072@intel.com>
+ <20240627125154.GA4743@ranerica-svr.sc.intel.com>
+ <20240627132230.hondzls5bt3jspay@desk>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8d757ea3-87a3-4663-ac76-66b04e33e6b3@gmail.com>
+In-Reply-To: <20240627132230.hondzls5bt3jspay@desk>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 
-On Tue, Jun 18, 2024 at 02:49:10PM +0200, Brice Goglin wrote:
-> Le 17/06/2024 à 11:11, Pawan Gupta a écrit :
-
-[...]
- 
-> Hello
+On Thu, Jun 27, 2024 at 06:22:30AM -0700, Pawan Gupta wrote:
+> On Thu, Jun 27, 2024 at 05:51:54AM -0700, Ricardo Neri wrote:
+> > ARM gives userspace specific details. This makes more sense to me. Instead
+> > of reading these details, user space would have to infer these details if
+> > a CPU type was given in sysfs.
+> > 
+> > Having said that, Intel does have a CPUID leaf that gives the CPU type. Such
+> > leaf also has a "Native Model ID". Exposing only the CPU type may not be
+> > sufficient.
 > 
-> Is there still a plan to expose this info in sysfs? Userspace currently uses
-> frequencies to guess which cores are E or P. Intel sent some patches several
-> years ago [1], but they got abandoned nowhere as far as I know.
+> Do we know if there are applications that would benefit from this information?
 
-At the time of writing those patches an alternative interface emerged from
-perf sysfs. You can read the CPUs of a given type from
-/sys/devices/cpu_{core,atom}/cpus .
+Probably not, but exposing it would follow ARM's approach of exposing the
+raw details and let user space consume it as it wishes instead of having
+kernel give an answer that could probably be imcomplete.
 
-Yes, this is perf sysfs, but is not obvious from the name and has a list of
-CPUs. It meet the need, IMO.
+> 
+> We agreed to leave sysfs for another series. I will be sending v2 soon.
+
+It is fine, just wanted to express some opinions. :)
 
