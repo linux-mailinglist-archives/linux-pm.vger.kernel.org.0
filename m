@@ -1,116 +1,131 @@
-Return-Path: <linux-pm+bounces-10140-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10141-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27BF591AFAB
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 21:30:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B820F91AFB8
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 21:32:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81805B24ADD
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 19:30:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4055DB213E8
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 19:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC1A8200DE;
-	Thu, 27 Jun 2024 19:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECEBC19D06D;
+	Thu, 27 Jun 2024 19:31:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fE6OiMfr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cYSLOh7e"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880631CFB9
-	for <linux-pm@vger.kernel.org>; Thu, 27 Jun 2024 19:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C230519DF90;
+	Thu, 27 Jun 2024 19:31:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719516632; cv=none; b=tEJmuYL7VZb2NKqGjKo5dgGtoXUiFgavOwAMzksuuiMLCs0t/MH7i78TApf0Mf6UAOSruqxady78AclBitF3+OBNxBmhhizG/XBDJPP7aNKtjese00+b3mfcnjaEfqhp9M2GoIA6vRG4qRLpEUiJc51wf3zkDXmqyzvgV+lDyKU=
+	t=1719516680; cv=none; b=hfzVoTpUiAqcPYfJiGDdd5n/j1DV50QQ/U96RxYEPWFPe6w7PHT+Eoa9c4AYgnT7KlKbrlXGIFd4zWiGKnAoZbi7+8hKeaS5HrXUmseZF3ZVbxnfC7V5C5duNEkL8zwdQoYcDxdaBoKYkbnHhBWaRsnJBUfrhgE7PgDBztpmsI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719516632; c=relaxed/simple;
-	bh=s+wMAH3BSxFxvYUPIFCBd2sKp7raIRDY8ajnbhVZMOY=;
+	s=arc-20240116; t=1719516680; c=relaxed/simple;
+	bh=3poSqnkU27MlbMUArOdTV7Zd/i8XTuPHTq/gY272ASs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FrNVYqgj2dxYKBZqlrc3CmSexTzkhOsIasa6UjAuG2+faNAszgwlPjsQuGjBfBfSPVMYZDxSCm3xwYEoxwjvEK3qfBDp2Js724I2pTavUdVrTE7cTTFYsdtuuOjzhqOUOgG91VWfXIPUPKqOyMr+4vzGOpEX7/MWlZybo/BiVuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fE6OiMfr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1061EC2BD10
-	for <linux-pm@vger.kernel.org>; Thu, 27 Jun 2024 19:30:32 +0000 (UTC)
+	 To:Cc:Content-Type; b=T3lujdvmHXPzYjQNHKGO9OORhoIYI+S/UKSMSeAZPZbEFZqq3bH3JJunQuOphm4xdyPfQcOS50rq4LyRiKZ2AcLdEas55iLjI0npz/W1V25j+T6jEWarX9TK45DN+mYrJGhpFy4tCtLv55MAWk2H3fTLzExjS/VC+heBcsfjsbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cYSLOh7e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56191C2BD10;
+	Thu, 27 Jun 2024 19:31:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719516632;
-	bh=s+wMAH3BSxFxvYUPIFCBd2sKp7raIRDY8ajnbhVZMOY=;
+	s=k20201202; t=1719516680;
+	bh=3poSqnkU27MlbMUArOdTV7Zd/i8XTuPHTq/gY272ASs=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fE6OiMfr7wpc9nv9/hCh6Jrjqo9UqwV4Ohjb9QeJADQhcfCRdsyPexZcnUbn5B4eY
-	 VJL/J5Q/F6Fl5y2NrsVS2NLMQZLbujNBtnj9WlXK0VHf+bIWsSXoBcSNRY52Iz5kbs
-	 f+M1CppM1d8TkQZ+DN9sakxvqOIqU+l7rwe4PyShIoosKVMYa5DywM0L04h+wdNjF7
-	 RtrdD/J7F89wdMyrZXYdeBy5MOTGnVHGkBQ2UnMEHVgbNxFVfON02uSYtNYdIF/ImU
-	 WcCuBCyw9SjpimHPGVS9EEbr97cRVsocSjSqrDHyn4PcQjceVsHzAClU0ym9Fy+GAX
-	 vjZqzMry2PdDA==
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5c2256e52f3so118479eaf.1
-        for <linux-pm@vger.kernel.org>; Thu, 27 Jun 2024 12:30:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXLGVoVhPigY55xCytt+zRzhyZpDWBqSCOCpOLs74kCzuuChCj47DFrgXKyHfPk3L5P/ro++ISkSoArFsbBCseeO5VF/REOVrU=
-X-Gm-Message-State: AOJu0YyKIEm+tGPDVaoMsCG7hKLzsyeiaGmI9gNyg+49+ZG1qLgpJ9YT
-	j5ousjrwCN+ygPPTofujNGsTCAwM54Mw4/ucLlsAaIhpElGV/WCmh8j4grUagwpJw/iFoFZFm2f
-	4Bf8QY5nXY5dTgCwwikDdDsMTXk0=
-X-Google-Smtp-Source: AGHT+IFN4G2m39zSfuklRJbqCJ1cwM5LnZWS931kyvwmL8Qa7AhMJsiHo/yGUj25E5ci/YD2POUfdPbiBZnufxZ4COQ=
-X-Received: by 2002:a4a:c186:0:b0:5c2:25cb:e6c6 with SMTP id
- 006d021491bc7-5c225cbe811mr4957924eaf.0.1719516631344; Thu, 27 Jun 2024
- 12:30:31 -0700 (PDT)
+	b=cYSLOh7eesEE/dCEO0mxEyhAZTrTH3Z5MxH2qcFahnSMDbPjrSoQw5p6hwShGBxnp
+	 8/wvykNxcZ9UObm/XGdNe4NLxKBbN1xGIVLuh5VXdCZNgR1PXwjSfsZup25Rumb6S0
+	 A1xG0CHkxzzzQjPpnw7NNp36gD4clbb3+v7Cw1Loq9NieK6WG/dvo+nl1y3GBqwM+H
+	 7TBQiMkaIGvjpJ/928qaM4ODFiXdE9xvrIGu2EW/AdxK9psEB3SkhYzOKF+VtqhGdh
+	 kC97oEbHBsA1nLLonVKSaM9tAiedgM9jEdDFbid5XNY0WbUpeukt7jVw6fIw2MnWX0
+	 QENwkLoJMq7Ew==
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5c1bd1c7baaso371731eaf.0;
+        Thu, 27 Jun 2024 12:31:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVyYAQopMQgEFtWWZp8zfcTw2xVqB34eStWhibmgGae83Tw7dohJEW+7Cd6PIgnPMkKV3gTROd0v+U/Nqd4zOHHR4n0tHq6ekeB1CiTxg4zz0yFK8qAXShkP8ozYh9CGOXBTQ1Cjng=
+X-Gm-Message-State: AOJu0YxuVrwZf4FG2FlN8R9++jWqf5ozgjBxQhCXO8sO7lMW1W+ulxda
+	Bi/1EXAIhaVm78F3fQLAwwcgZ14fW4gnlU/pf+CIigunVQ/m9exjkl65LCt5q+xEZfZnXWc5cBg
+	ud6OgP9pZ1Ynp/+9iwMVf6wOMTBM=
+X-Google-Smtp-Source: AGHT+IHHhllphzFt6NUYtGazmnIKi8U79UcPjh58779psCVSvH7ADdMppyTG63IdsU2A2l3/6GdamGq8aBuuOjBvYAY=
+X-Received: by 2002:a4a:a789:0:b0:5c2:20aa:db25 with SMTP id
+ 006d021491bc7-5c4135bae77mr765841eaf.1.1719516679658; Thu, 27 Jun 2024
+ 12:31:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <56258f5f-c529-4f91-b0a6-09f233174e1f@amd.com>
-In-Reply-To: <56258f5f-c529-4f91-b0a6-09f233174e1f@amd.com>
+References: <b9e0ae38-006f-4c72-bb64-f39e6002fc84@linuxfoundation.org>
+In-Reply-To: <b9e0ae38-006f-4c72-bb64-f39e6002fc84@linuxfoundation.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 27 Jun 2024 21:30:20 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0izHJZJhBAqB14An51zdi-5L4rDV4=Gkw7uf6nH4C2=eA@mail.gmail.com>
-Message-ID: <CAJZ5v0izHJZJhBAqB14An51zdi-5L4rDV4=Gkw7uf6nH4C2=eA@mail.gmail.com>
-Subject: Re: 3rd amd-pstate pull request for 6.11
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Date: Thu, 27 Jun 2024 21:31:08 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gcVJkpAkY1Y9MkfYRF5=sRGVTuzoerF5M4CPsSYGhqGw@mail.gmail.com>
+Message-ID: <CAJZ5v0gcVJkpAkY1Y9MkfYRF5=sRGVTuzoerF5M4CPsSYGhqGw@mail.gmail.com>
+Subject: Re: [GIT PULL] cpupower update for Linux 6.11-rc1
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, trenn@suse.de, shuah <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 26, 2024 at 10:53=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+Hi Shuah,
+
+On Tue, Jun 25, 2024 at 11:10=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.=
+org> wrote:
 >
-> The following changes since commit 2240d3e60bb3e7a00422596412d012aeb54c15=
-73:
+> Hi Rafael,
 >
->    cpufreq: simplify boolean parsing with kstrtobool in store function
-> (2024-06-24 16:16:16 -0500)
+> Please pull the following cpupower update for Linux 6.11-rc1.
+>
+> This cpupower update for Linux 6.11-rc1 consists of cleanups to man
+> pages, README files, and enhancements to add help to Makefile.
+>
+> diff is attached.
+>
+> thanks,
+> -- Shuah
+>
+> ----------------------------------------------------------------
+> The following changes since commit 43cad521c6d228ea0c51e248f8e5b3a6295a28=
+49:
+>
+>    tools/power/cpupower: Fix Pstate frequency reporting on AMD Family 1Ah=
+ CPUs (2024-05-28 09:22:57 -0600)
 >
 > are available in the Git repository at:
 >
+>    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-c=
+pupower-6.11-rc1
 >
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
-> tags/amd-pstate-v6.11-2024-06-26
+> for you to fetch changes up to 3e1f12c26646eb0ad67d3eaefd32f765997da6a8:
 >
-> for you to fetch changes up to 6d588891a90c5a946aaac11a93d06edd89ed9054:
->
->    Documentation: cpufreq: amd-pstate: update doc for Per CPU boost
-> control method (2024-06-26 15:48:21 -0500)
->
-> ----------------------------------------------------------------
-> Add support for amd-pstate core performance boost support which
-> allows controlling which CPU cores can operate above nominal
-> frequencies for short periods of time.
+>    cpupower: Change the var type of the 'monitor' subcommand display mode=
+ (2024-06-20 10:08:08 -0600)
 >
 > ----------------------------------------------------------------
-> Perry Yuan (4):
->        cpufreq: acpi: move MSR_K7_HWCR_CPB_DIS_BIT into msr-index.h
->        cpufreq: amd-pstate: initialize core precision boost state
->        cpufreq: amd-pstate: Cap the CPPC.max_perf to nominal_perf if CPB
-> is off
->        Documentation: cpufreq: amd-pstate: update doc for Per CPU boost
-> control method
+> linux-cpupower-6.11-rc1
 >
->   Documentation/admin-guide/pm/amd-pstate.rst |  16 ++++++++++++
->   arch/x86/include/asm/msr-index.h            |   2 ++
->   drivers/cpufreq/acpi-cpufreq.c              |   2 --
->   drivers/cpufreq/amd-pstate.c                | 122
-> ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-=
----------------
->   drivers/cpufreq/amd-pstate.h                |   1 +
->   5 files changed, 119 insertions(+), 24 deletions(-)
+> This cpupower update for Linux 6.11-rc1 consists of cleanups to man
+> pages, README files, and enhancements to add help to Makefile.
+>
+> ----------------------------------------------------------------
+> Roman Storozhenko (5):
+>        cpupower: Replace a dead reference link with working ones
+>        cpupower: Add 'help' target to the main Makefile
+>        cpupower: Improve cpupower build process description
+>        cpupower: Remove absent 'v' parameter from monitor man page
+>        cpupower: Change the var type of the 'monitor' subcommand display =
+mode
+>
+>   tools/power/cpupower/Makefile                      |  37 ++++-
+>   tools/power/cpupower/README                        | 160 ++++++++++++++=
++++++--
+>   tools/power/cpupower/man/cpupower-monitor.1        |  13 +-
+>   .../cpupower/utils/idle_monitor/cpupower-monitor.c |   2 +-
+>   4 files changed, 192 insertions(+), 20 deletions(-)
+> ----------------------------------------------------------------
 
 Pulled and added to the linux-next branch in linux-pm.git, thanks!
 
