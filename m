@@ -1,102 +1,101 @@
-Return-Path: <linux-pm+bounces-10123-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10124-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C49891AA06
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 16:57:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9435691AA90
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 17:09:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0663B22347
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 14:57:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51C0B2893E6
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2024 15:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2993C19645E;
-	Thu, 27 Jun 2024 14:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66AC8198E71;
+	Thu, 27 Jun 2024 15:09:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wyvw3kj7"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="dYJZRQGE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.mainlining.org (static.95.144.75.5.clients.your-server.de [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09F213DBBC;
-	Thu, 27 Jun 2024 14:57:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55FE198E6C;
+	Thu, 27 Jun 2024 15:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719500221; cv=none; b=UD8FpDN1OUgT0ebPF9oMfg8Vqq65EJIsrLEEukeMdVlXWbpX19gxFJRm0p0qQFooAuCadLVQfusqpczr9pCmgHed0/vtHOQoC/0nuu6+nwvBt6zV1t/apZ4+qzyTJDVQMqtoDzdLmHkRsp2nfjpoSLd8i1GaXzPi/BXx8lxKsno=
+	t=1719500945; cv=none; b=sbSPPkMKCA+Lrwkk2DmiVx2ofL/pv9zVUTJ+XnUIHLW8j+DZb9CLO1zeUouaXxkDF/nfv7LURnsEbowejLvAJyXf3tQNHYSQ23kIpDY8f7tTbl1aNBNaeH0USwsAvVtBLnMf0OLz6UbhO5kwJpaR4WYD9Xkyw27g2W83HzGSUZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719500221; c=relaxed/simple;
-	bh=i0jPmHeV6CW8BboUWCjCcCcbiGOGEGkREHGrut7jWv0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=swziQh3Nbna8gUH4OwaEWV4Mx9qQC2tzxB28YBo9vi9lfsslf0SemyoQmZ+Jq/wJyE9WFWAQJPv11yG868vnjcfDnsFkE8zksz61qzKfd+ZvGL3RRvmYpjMUBx0vfKvJgVUz6g1k0KUX8jHLkbwmjE1EGjVeNyUpyd60ZyLhxz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wyvw3kj7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B55D2C2BBFC;
-	Thu, 27 Jun 2024 14:56:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719500220;
-	bh=i0jPmHeV6CW8BboUWCjCcCcbiGOGEGkREHGrut7jWv0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wyvw3kj7OLX/75jmYALHB97fyIeiAH0iDxbn/BkWcjaAGoC70sXoNhJjKlyOSlBYC
-	 zwAtQhABTFQ/tQ6UZpQQORIkqQhKuS2qk7CkRMZx7b56tZXu/CSgXXyFg3EVHg93Hx
-	 8huPSdgfgEHy4xEOqLNTWJ6D6YqGuZqUK78ohOg5OQKuK8TVUBXKRkT1wirNFZoZNk
-	 k47gmn1A22mUQtYYLu7MlMqyndABXPKAtPQe/RGmfGrHOYeg5IWNWrSfEY6DkdATXs
-	 1plpqQdbEHS6OgqoQjjg8fw57VH/ZQQoZwQj+uO5Ez/y4401OBnFEtuKA8xf82ML/L
-	 bT6MTqIf7kFzQ==
-Date: Thu, 27 Jun 2024 15:56:55 +0100
-From: Conor Dooley <conor@kernel.org>
-To: xianwei.zhao@amlogic.com
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Jianxin Pan <jianxin.pan@amlogic.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, Hongyu Chen <hongyu.chen1@amlogic.com>
-Subject: Re: [PATCH 1/3] dt-bindings: power: add Amlogic A5 power domains
-Message-ID: <20240627-fool-willfully-381d32cb7189@spud>
-References: <20240627-a5_secpower-v1-0-1f47dde1270c@amlogic.com>
- <20240627-a5_secpower-v1-1-1f47dde1270c@amlogic.com>
+	s=arc-20240116; t=1719500945; c=relaxed/simple;
+	bh=JoOSiJtZunrz+OCSKVggQNZqebs0k2RruV6S9ufU4ks=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=apF7f6716QjpAY28GZcyWotHuD6bkw0W1DIJqsEpNTDkmdNKYpgM5wv+7Y/d1qlfhOwk522oDi2CS9SvJwoNalUY/rbrj0MZxPpU3tRfddqmVUYA4rfFQycIbs4oLSCkaujh7c3HP+o8gYlLs086CQ48qeeO1Y0G7KZUWP9H8Bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=dYJZRQGE; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+Received: from [192.168.1.130] (BC2492F3.dsl.pool.telekom.hu [188.36.146.243])
+	by mail.mainlining.org (Postfix) with ESMTPSA id A07B1DAC33;
+	Thu, 27 Jun 2024 15:08:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
+	s=psm; t=1719500934;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ass3ueSG+2KqItaVWFmW7+4bd32BMf/+ocWnJZumNqA=;
+	b=dYJZRQGET5uu5D1+rvf1tAxQsj1UNTeTd3oQQYCKkrt2IqP9HQ4/mkljv9AoI9EXmHoBUK
+	d4r1OwMFb/z5r/wnQBf4EC2cODMbiKJJ1OLxtYlKsYW8LTg9ClLrF/Pg4smRuKCsmsyfpd
+	uYP3KGCAMuP9TZmrClVMBGwcnnBOGwKlPT7W76/lP7p1O5O32KQCExSqa1RrA8KwZh7lDx
+	fLF04DdIv8TxdTNOfYlEo13BJrdYGY+9bHipLOX3PdfYvgMy2o2W1WTEyOjgYwHepscP4w
+	b2l7Z69ZMM1nFNlYf7uEFnuB665+X8txLi3nggCwA37Rc6TcoOitaI7EhLGmlQ==
+From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
+Subject: [PATCH v2 0/2] Add interconnect driver for MSM8953/SDM450/SDM632
+Date: Thu, 27 Jun 2024 17:08:45 +0200
+Message-Id: <20240627-msm8953-interconnect-v2-0-b4940a8eab69@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Nb7gwQ9rDGfruR6Q"
-Content-Disposition: inline
-In-Reply-To: <20240627-a5_secpower-v1-1-1f47dde1270c@amlogic.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAH2AfWYC/22NQQqDMBBFryKzbkoyUbFd9R7FhYlTHagTSURax
+ Ls3Fbrr8j3472+QKDIluBYbRFo5cZAMeCrAj50MpLjPDKix1DVWakpTc6msYlko+iBCflGkrS/
+ JYdPrCvJ0jvTg15G9t5lHTkuI7+NlNV/7C9b/g6tRWhE5azpEa5y+TR3Lk4VlOIc4QLvv+wc1O
+ b2qvQAAAA==
+To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
+ Vladimir Lypak <vladimir.lypak@gmail.com>
+X-Mailer: b4 0.14.0
 
+This patch series add interconnect driver for MSM8953/SDM450/SDM632
+based devices.
 
---Nb7gwQ9rDGfruR6Q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+---
+Changes in v2:
+- Make nodes const pointers.
+- Fix schema issues addressed by reviews.
+- Link to v1: https://lore.kernel.org/r/20240626-msm8953-interconnect-v1-0-eeb31a2231b0@mainlining.org
 
-On Thu, Jun 27, 2024 at 07:47:51PM +0800, Xianwei Zhao via B4 Relay wrote:
-> From: Xianwei Zhao <xianwei.zhao@amlogic.com>
->=20
-> Add devicetree binding document and related header file for
-> Amlogic A5 secure power domains.
->=20
-> Signed-off-by: Hongyu Chen <hongyu.chen1@amlogic.com>
-> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+---
+Vladimir Lypak (2):
+      dt-bindings: interconnect: qcom: Add Qualcomm MSM8953 NoC
+      interconnect: qcom: Add MSM8953 driver
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+ .../bindings/interconnect/qcom,msm8953.yaml        |  101 ++
+ drivers/interconnect/qcom/Kconfig                  |    9 +
+ drivers/interconnect/qcom/Makefile                 |    2 +
+ drivers/interconnect/qcom/msm8953.c                | 1325 ++++++++++++++++++++
+ include/dt-bindings/interconnect/qcom,msm8953.h    |   93 ++
+ 5 files changed, 1530 insertions(+)
+---
+base-commit: 62c97045b8f720c2eac807a5f38e26c9ed512371
+change-id: 20240625-msm8953-interconnect-e03c4eb28d05
 
---Nb7gwQ9rDGfruR6Q
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+-- 
+Barnabás Czémán <barnabas.czeman@mainlining.org>
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZn19twAKCRB4tDGHoIJi
-0kGoAP0fbvycpS60F3qceed5hqd3hvVpzthMCcPCceocqcNgggD8DdsmSP5iVjUF
-/SiVKgXplReeg0WEoSoQAy7qQUiHQQU=
-=G7MA
------END PGP SIGNATURE-----
-
---Nb7gwQ9rDGfruR6Q--
 
