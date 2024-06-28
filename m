@@ -1,190 +1,151 @@
-Return-Path: <linux-pm+bounces-10171-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10173-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E06991BA59
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 10:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 481C391BAA4
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 11:01:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08A8E1F22F6D
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 08:48:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B43941F24746
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 09:01:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E65914BF89;
-	Fri, 28 Jun 2024 08:48:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE035147C71;
+	Fri, 28 Jun 2024 09:01:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pbf77/b+"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="hgJdHlnT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from out203-205-221-205.mail.qq.com (out203-205-221-205.mail.qq.com [203.205.221.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3788A2139D4;
-	Fri, 28 Jun 2024 08:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774A27347B;
+	Fri, 28 Jun 2024 09:01:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719564507; cv=none; b=D9M1ux4v/SvU9MNCX/cXOCHr4i4AY1W3+rqgLQIIfBjTk7jxJ41QtsM/JQ46UH2mBaQtL/EW6zcOIEkD6RXfXWMuQ31CmGIphEV4kzro/JCqbaJw+hkIXk3QJh79NyVUG5gHOPij9Uj9sP36J7EfgzcTgQMbdJlqpgERlF/OgOQ=
+	t=1719565285; cv=none; b=KXiIyEWTmKXePTxk48rLTNDxtnZ5ow5vh6dDsmiQ9miy7bWxYfbYj8cmJNOdUx+fivUdxhfswJiro2UB3J2UZGu2VOq8UGvI4HIm5LpNb+mAx5+IMK2O63dqObzhqClISD5A86EFOXWoKvKv6ewi6cU6gggaBs6lru8CwVarhkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719564507; c=relaxed/simple;
-	bh=5583eqhtGvPr11ryz4ZpEypX9g+qKSFTog1c7ZcLsuI=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SCNGqQ5AbNKrRs+0Xcc+Ch3Fkii86NEnWdzOspsozATsoSsPMsgGaDHed0MeXW8X6CS8T2jp6FlFmWJ7MIfq+/DFzeQfjUyNygDfn9CI2X+2vEf8LuRt6y/93Jj0u9+y/PzBD2n+p+kM1MiBw33K5TqYn+i5j3pqRwb94brK5SM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pbf77/b+; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45S4wZmK032242;
-	Fri, 28 Jun 2024 08:48:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=xtV+MoUKKNww7l9Qxey8uYdd
-	oo65kVVgk6K8vmnP6EY=; b=pbf77/b+YkkLdSr+qpRBdzeN0QVBQwayXPDHWaZ5
-	iMHofBY1eNve9lpXVnf5uXsRkAMcZ8zTlok8QHWaxs4lfLpBqidxJPQ2PuIHcJlS
-	0wv22HTA1WmCxXt4gD/OkrVbjNf7CnO2nto6/LPaGcno6p0WeZxwVPTanCs9uf+s
-	5RUlPSkTvKvVY4oGcin2+nNiRWDQJf5X3HnjN8lrzl/Ocynn5PiO1Vpk005JuFij
-	ZzDf5v2Wf7z7joPrMbsX+V+nnnPbup7sGhB4mvHqVIGwdMY6HqyUA3k4hg7DF3Nx
-	woBIJSTO/OMSq4glag5k8rTYhbEyT4JVIH/zUQNDtjX3ag==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 401pm58m8e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 28 Jun 2024 08:48:16 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45S8mFaf019395
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 28 Jun 2024 08:48:15 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 28 Jun 2024 01:48:10 -0700
-Date: Fri, 28 Jun 2024 14:18:06 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-CC: Georgi Djakov <djakov@kernel.org>,
-        Dmitry Baryshkov
-	<dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <quic_anusha@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider
- ability to gcc
-Message-ID: <Zn54xhM/qfBv58e2@hu-varada-blr.qualcomm.com>
-References: <1a08ef42-b52f-4c97-90d7-e7fdee7725b4@linaro.org>
- <Zmgb+OjdBNw71sC1@hu-varada-blr.qualcomm.com>
- <176137e5-6312-4d46-97b6-c4494bc1c61b@kernel.org>
- <ZmlAdETV0+6Md8HC@hu-varada-blr.qualcomm.com>
- <e24cfd23-6f77-46a0-b020-9cb3daef6930@kernel.org>
- <Zml4RQ5R5s3mVMnI@hu-varada-blr.qualcomm.com>
- <8e32a8be-dbbf-49ca-92a1-2fe3c8bfb571@kernel.org>
- <ZmpsOdsl9AMTSH88@hu-varada-blr.qualcomm.com>
- <ZnKKjomRQtJS2ZgL@hu-varada-blr.qualcomm.com>
- <9938a67b-1f6b-4955-b4c0-a9f78c55f276@linaro.org>
+	s=arc-20240116; t=1719565285; c=relaxed/simple;
+	bh=t6E3YyEOBf2I57/ODAt4w7a2zijQZIz76U604qLgUMY=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=fygSisCJYkRCbMpMI8cuFJjW47NvbxAfXUQ3JzIYdEGyBiZIWjcFXN+lzAIWOgfdVoRCB+P5VJzcgW94TyZpgrjm4qxei2zQu/qbZzHmyMulbOp+4zv4PWngmzo0ooVG7dz3uzCgYJwYVSOPY02lfOdo5ouw3dDc7ZCCo3kWBt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=hgJdHlnT; arc=none smtp.client-ip=203.205.221.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1719564976; bh=k3xkOZZAZTnOpfeg6oi7bd7/Sd8fmJuPwEsMntl666A=;
+	h=From:To:Cc:Subject:Date;
+	b=hgJdHlnT7zwpiIxcijQAykz1IWaJw7jZxfStkymoKUaXmlYcdHJ4JXMpZMELFoh3x
+	 e7rd0ce4MO6pLtmtI/mQMXFaJodCGYKwU4c2h/F7VjjH4eCbtYujcrIS2WOEIrIuMR
+	 8Cy3szulA7JLnsVm8bpFMtnFiXqaunqTDncrsH2w=
+Received: from iZ2ze0ccts00nkjy9wuyo6Z.localdomain ([101.201.76.96])
+	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
+	id C4495684; Fri, 28 Jun 2024 16:49:04 +0800
+X-QQ-mid: xmsmtpt1719564544tww7kpsch
+Message-ID: <tencent_2ACBECB5B8EF2442CE608CE48F8E6131CC09@qq.com>
+X-QQ-XMAILINFO: MR/iVh5QLeieE0DHHvt6z9zbR8n+svGXHWYIZDrXyjTPPjKJvuBEkArYgBmCZT
+	 OhN9FXtqOCpWMOocaSmZnGpvuNw65hRWtW0CEuAdKmbI+BzLuYn1DYy7dlAt8Zyf4bMDZTKyCX4Q
+	 2ChFqHsuCtmcgzAH8y7RY9vTYOCnIVavry+10A3OwxNJMORo6CMYqCOhL5J0dOTGgTKlCyHCizNT
+	 AvrJwezbawCFM1jDNPiRk51mDjZnCVjvZZMiwA2Zi3d/5DO6zMIhX/Q7SwEzPiUH1VwZPZFUKohT
+	 2gghTjuYZLQzG5GMJG0veffmuUgA7DIk84ZzQbS5vsC1Rqwl5Vubs8qozfOxAfXBeQF8MMnf5cno
+	 vl6PVGtkfeF04dH6vHR14ablfERIcRpgd7d/oBCd/XgEbh0j123ePDHXdjXKBxnLUntkJZxARsOo
+	 QCpdsgY+gd4vFw4b0wvS+InGgS/vPAK2H0AYAyitsByVul1vfjiGejBUIOvyzY8Fc6y5+McHYB8g
+	 iMDQMXAiXPZjRWRjPBBX3/N97eTu8+/jiKvvkKrZ5AKuChMl1/PFB/sI0r5EmlcbrwfL5G/XZcHv
+	 0yVZ5eoniPiKzLZ1gdEpUp8q9Xr4IwWw5l7MKaThSMy0SxHPpw9dEf/ZexvhlL/18R5s15s9EzrD
+	 H4N5UOM0buNS87K45lB0am74PXrPBWsNBq8qViOLwMuJS0+ykLCbP0OjWHERbtCCkeAp9nxtsSd2
+	 +CEgIGdtLle2Qs6rCbiL+4QUujDfOyApkmMFm2dkFlaQT+8dQD5krIw7IrnGiA7ev0AsmHjcmX73
+	 ij6eJ1veqh16Ng7oNwGwXsHxlVANw0ksxPR6n5awO3VDz06imGtj8Yxh5hPbjDTWTkf4HFCvVmvx
+	 5TYbmT2/PUNDEERaptlTgfdots5zJ6p72BSXrufPgjccoIm5eo4qNpAnMUxjraUZRIEfIpwVm9ra
+	 7rS60i+lWA0aIneaibFP7dujULExUp
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+From: ysay <570260087@qq.com>
+To: rafael@kernel.org
+Cc: daniel.lezcano@linaro.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ysay <ysaydong@gmail.com>
+Subject: [PATCH] drivers/cpuidle: Fix guest_halt_poll_ns failed to take effect
+Date: Fri, 28 Jun 2024 16:49:02 +0800
+X-OQ-MSGID: <20240628084902.57897-1-570260087@qq.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <9938a67b-1f6b-4955-b4c0-a9f78c55f276@linaro.org>
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: lLyucKUWU34WsxEbmbU0wbWK5G-MyKc0
-X-Proofpoint-ORIG-GUID: lLyucKUWU34WsxEbmbU0wbWK5G-MyKc0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-28_04,2024-06-28_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- priorityscore=1501 phishscore=0 adultscore=0 suspectscore=0 spamscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2406280064
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 27, 2024 at 12:00:35AM +0200, Konrad Dybcio wrote:
-> On 19.06.2024 9:36 AM, Varadarajan Narayanan wrote:
->
-> [...]
->
->
-> > Tested the patches with both gcc and nsscc providers having
-> > 'sync_state' set to icc_sync_state.
-> >
-> > 	# dmesg | grep synced
-> > 	[    3.029820] qcom,gcc-ipq9574 1800000.clock-controller: interconnect provider is in synced state
-> > 	[    3.470106] qcom,nsscc-ipq9574 39b00000.clock-controller: interconnect provider is in synced state
-> >
-> > I can see that icc_sync_state is getting called and clocks
-> > related to paths with zero bandwidth are getting disabled.
-> >
-> > Will post the NSSCC patches to get the full picture.
->
-> Going back to the original question, does removing interconnects = from
-> things like PCIe now make them not work / crash the device, which would
-> indicate the NoC clocks were indeed gated?
+From: ysay <ysaydong@gmail.com>
 
-Yes. With and without 'interconnects =', the following behaviour
-is same
-	* Boot completes
-	* PCIe devices were probed succesfully and can be
-	  seen in /proc/bus/pci/devices.
-	* icc_sync_state is called. The system has 4 pcie nodes
-	  in the DT, out of which pcie0 is not enabled.
+When guest_halt_poll_allow_shrink=N,setting guest_halt_poll_ns
+from a large value to 0 does not reset the CPU polling time,
+despite guest_halt_poll_ns being intended as a mandatory maximum
+time limit.
 
-The difference is seen in icc_sync_state
+The problem was situated in the adjust_poll_limit() within
+drivers/cpuidle/governors/haltpoll.c:79.
 
-    With 'interconnects ='
+Specifically, when guest_halt_poll_allow_shrink was set to N,
+resetting guest_halt_poll_ns to zero did not lead to executing any
+section of code that adjusts dev->poll_limit_ns.
 
-	* During icc_sync_state, the following 2 clocks
-	  corresponding to the interconnects of 'pcie0' get
-	  disabled.
+The issue has been resolved by relocating the check and assignment for
+dev->poll_limit_ns outside of the conditional block.
+This ensures that every modification to guest_halt_poll_ns
+properly influences the CPU polling time.
 
-	[    2.986356] ---> clk_core_disable_lock: gcc_anoc_pcie0_1lane_m_clk
-	[    3.012486] ---> clk_core_disable_lock: gcc_snoc_pcie0_1lane_s_clk
+Signed-off-by: ysay <ysaydong@gmail.com>
+---
+ drivers/cpuidle/governors/haltpoll.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-	* System shutdown also completes without issues
+diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
+index 663b7f164..99c6260d7 100644
+--- a/drivers/cpuidle/governors/haltpoll.c
++++ b/drivers/cpuidle/governors/haltpoll.c
+@@ -78,26 +78,22 @@ static int haltpoll_select(struct cpuidle_driver *drv,
+ 
+ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
+ {
+-	unsigned int val;
++	unsigned int val = dev->poll_limit_ns;
+ 
+ 	/* Grow cpu_halt_poll_us if
+ 	 * cpu_halt_poll_us < block_ns < guest_halt_poll_us
+ 	 */
+ 	if (block_ns > dev->poll_limit_ns && block_ns <= guest_halt_poll_ns) {
+-		val = dev->poll_limit_ns * guest_halt_poll_grow;
++		val *= guest_halt_poll_grow;
+ 
+ 		if (val < guest_halt_poll_grow_start)
+ 			val = guest_halt_poll_grow_start;
+-		if (val > guest_halt_poll_ns)
+-			val = guest_halt_poll_ns;
+ 
+ 		trace_guest_halt_poll_ns_grow(val, dev->poll_limit_ns);
+-		dev->poll_limit_ns = val;
+ 	} else if (block_ns > guest_halt_poll_ns &&
+ 		   guest_halt_poll_allow_shrink) {
+ 		unsigned int shrink = guest_halt_poll_shrink;
+ 
+-		val = dev->poll_limit_ns;
+ 		if (shrink == 0) {
+ 			val = 0;
+ 		} else {
+@@ -108,8 +104,12 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
+ 		}
+ 
+ 		trace_guest_halt_poll_ns_shrink(val, dev->poll_limit_ns);
+-		dev->poll_limit_ns = val;
+ 	}
++
++	if (val > guest_halt_poll_ns)
++		val = guest_halt_poll_ns;
++
++	dev->poll_limit_ns = val;
+ }
+ 
+ /**
+-- 
+2.43.5
 
-    Without the 'interconnects =',
-
-	* During icc_sync_state, the following clocks
-	  corresponding to the interconnects of all the 4 PCIe
-	  nodes get disabled.
-
-	[    2.887860] ---> clk_core_disable_lock: gcc_anoc_pcie0_1lane_m_clk
-	[    2.913988] ---> clk_core_disable_lock: gcc_snoc_pcie0_1lane_s_clk
-	[    2.939857] ---> clk_core_disable_lock: gcc_anoc_pcie1_1lane_m_clk
-	[    2.965725] ---> clk_core_disable_lock: gcc_snoc_pcie1_1lane_s_clk
-	[    2.991594] ---> clk_core_disable_lock: gcc_anoc_pcie2_2lane_m_clk
-	[    3.017463] ---> clk_core_disable_lock: gcc_snoc_pcie2_2lane_s_clk
-	[    3.043328] ---> clk_core_disable_lock: gcc_anoc_pcie3_2lane_m_clk
-	[    3.069201] ---> clk_core_disable_lock: gcc_snoc_pcie3_2lane_s_clk
-
-	* System shutdown hangs (possibly due to un-clocked
-	  access of PCIe register) in pcie_pme_interrupt_enable
-
-		[   10.773134]  dump_stack+0x18/0x24
-		[   10.776779]  pcie_pme_remove+0x2c/0x88
-		[   10.780078]  pcie_port_remove_service+0x50/0x74
-		[   10.783725]  device_remove+0x12c/0x148
-		[   10.788151]  __device_release_driver+0x65c/0x8cc
-		[   10.791972]  device_release_driver+0x2c/0x44
-		[   10.796746]  bus_remove_device+0xcc/0x10c
-		[   10.800999]  device_del+0x14c/0x400
-		[   10.804904]  device_unregister+0x18/0x34
-		[   10.808203]  remove_iter+0x2c/0x3c
-		[   10.812369]  device_for_each_child+0x60/0xb4
-		[   10.815583]  pcie_portdrv_shutdown+0x34/0x90
-		[   10.820009]  pci_device_shutdown+0x34/0x74
-		[   10.824263]  device_shutdown+0x150/0x258
-		[   10.828169]  kernel_restart_prepare+0x98/0xbc
-		[   10.832249]  kernel_restart+0x44/0x110
-		[   10.836502]  __do_sys_reboot+0x18c/0x304
-
-I believe, this is confirms NOC clocks getting disabled by
-icc_sync_state.
-
-Thanks
-Varada
 
