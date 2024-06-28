@@ -1,278 +1,194 @@
-Return-Path: <linux-pm+bounces-10163-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10164-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17FC791B730
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 08:34:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DFA191B7CD
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 09:08:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5730EB2453F
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 06:34:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A96F61F21FCB
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 07:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B8D7E10B;
-	Fri, 28 Jun 2024 06:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cJUubSwQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75ACC7F498;
+	Fri, 28 Jun 2024 07:08:22 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D887D07E;
-	Fri, 28 Jun 2024 06:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A66848788
+	for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 07:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719556401; cv=none; b=rTHi+TEJLa1vsUSx1erUPq87eQA3lnQHECWdkg7felPtPOD5hhuwG2LQ7CoOEpQJzmy+hcXXE0V7jdbEb2TFVD7SxVGHmL4R9sjWOCb23+Kih63kYOCRgFy5HuOhxyJBSBqpVrZoymzIj6Oxc28KWXHl/eIX/ize1JPJyElYRmM=
+	t=1719558502; cv=none; b=huT/JwdnHlwRHgTkij4PGH6Wc8nxc9syaON/2zlOjyEUOAnVmy/YGRi4J33MgH033qfMsXAgZMg+srXfWoiEvTiHMAk4L7NJf/GUfgcmz0/4iQreHX5tBOsz1zmd8yYU3LmKctTVvmCzufsTC0yar6RJmLnUSVmrqnn10C1GZyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719556401; c=relaxed/simple;
-	bh=DSuk/g9EQGxxaw9OBuQaAAoFp2D2AXWfCawqxyeRdLM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RRGMGFCEuDTkU3kbl5uYnjyc/hmXkgJc9TPEtybrRtFl26rCJHXcLUKTeyPfzQhDjsd/H9zo+Cz99hO/ZXCoNlvbAfPdG7TTH7n+r6tnavMB0nTi4tHJ//QggXj/930RvmvW4uhfgrSb3monGh97WOZZLrp4J/935N8IaAfE/yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=cJUubSwQ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45S4wLGG028111;
-	Fri, 28 Jun 2024 06:33:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=TdrgMjfEA3UbEPOJ4pvIezuJ
-	SWBOJDpU11yem8J7nec=; b=cJUubSwQJifl3Bfp5/pKnH3yrj7LopVymvxPeLaW
-	b/SRJPyChviElaFUb1n2EoTSV7W18ts/ohH4BRT+9bF18uCX0rrsxkl/AEoV9N6h
-	8ecMRPx3nMNSCv9AEmBw0SM+BeJGv5ds0EkEAgZdOGiys70LbbtA9/9KvLwxfKr1
-	EnDSp+PR43J8rfWXroPW2RI1DiNAcKlY4aH5TTVaZOBpGNidj1LEDCFeqiqMRniX
-	TcWLBlLwjmIVBiKk1QkvctKc36h8ET8NyayjLwhuqoTvJgsGvKVONJr2bLb845z/
-	Gvm3uIAeL0gCY1ifoRIrL346TZhHvbJe0wZcA3WaPeLK3A==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 401pm305gf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 28 Jun 2024 06:33:01 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45S6X0hF027827
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 28 Jun 2024 06:33:00 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 27 Jun 2024 23:32:53 -0700
-Date: Fri, 28 Jun 2024 12:02:48 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <angelogioacchino.delregno@collabora.com>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <ilia.lin@kernel.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <ulf.hansson@linaro.org>,
-        <quic_sibis@quicinc.com>, <otto.pflueger@abscue.de>,
-        <neil.armstrong@linaro.org>, <luca@z3ntu.xyz>, <abel.vesa@linaro.org>,
-        <danila@jiaxyga.com>, <quic_ipkumar@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3 2/9] cpufreq: qcom-nvmem: Add genpd names to
- match_data_kryo
-Message-ID: <Zn5ZEI1m4jImz/Wp@hu-varada-blr.qualcomm.com>
-References: <20240626104002.420535-1-quic_varada@quicinc.com>
- <20240626104002.420535-3-quic_varada@quicinc.com>
- <za7t6ltttq2o5qwahfrzftsb7xfzbzdtg4zx3bvnf3fewhfeqf@vjrq7na5ioqm>
+	s=arc-20240116; t=1719558502; c=relaxed/simple;
+	bh=IW4BvU+WtkslLV6DlrajbdSUd/DH91yJLMPSAG8b9zg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kQ0QfL0m1ylWTE3bsgbZUndZ8Hqwb1TqL9lPzHC2PIPWowGkve+7YIUayMfCkKl7IOFbkeRibApclSViOBsf+y8LpKqQ+kGkDrkw1Xq8sXnrzRHj9K8dVZ8snUdpuye8D5L2LENFVVWAwu7ExHpBomUvnOzAK2+KbGZraa5LIKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52ce01403f6so276486e87.0
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 00:08:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719558496; x=1720163296;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zo3VHVTl7gNC6GGZIm3/Sa7uX+11Aj0WDxqixq9tZw0=;
+        b=ap9PJwgxh3zuqEpiu8dVWl6u/CuEjn9Jog7ZEhDIJhEzIWLIRP5BozAiO7eZXcmw5w
+         16MfQQuPkjb1SGwyYYOKClcqR7tj67nU4dAX7nzCqYnCVQ9Bt5daeF8imoz3wijSQaBN
+         MFmlCgDex4wM5SV/ZhX0ymHBHYOx7hOQWRQmZ0UNzkIU2WwySZCvc9SbXX84XO7jbPH/
+         g5qpWdhRv3uc3fbqoqC9VEGeky+G50eflTyu2avUOl4IDSoX06v0SDyGioZ/9pyPT0it
+         myxIokBmh4tjvcO0An3tOWtFUg+Hd10U+9HYRBKFQdse7jOTqXXaKbNHx2+bGC/p6dy0
+         iCVw==
+X-Forwarded-Encrypted: i=1; AJvYcCXwDNlGHm/OwLrOkewN/KDX6dSNHkeoUjz8ntByl67LmQP0j4T96LcjwjmyCUz7Qv6/Y2xH8T5sGOuiZ0wrECkUa8YcB8UD7nI=
+X-Gm-Message-State: AOJu0YwZpsRqKWtAzsWqSnxwItMz1zsUFmtUHgBTwZvUamVwsmJYIpMr
+	c2w0riTmMyxnqY3bVio6pU4dGYl05AZ7aSO+7Mxmys6zYQgZH2jr3RkL67Q4qUs=
+X-Google-Smtp-Source: AGHT+IHB6wqL691S3XA/rg2+a5nGJp+FM/W/EPKMYtIDDdMw7HOAodTqzuj5lbWyqKL+wrRgRDVNLQ==
+X-Received: by 2002:a05:6512:2394:b0:52c:d84c:1182 with SMTP id 2adb3069b0e04-52ce1862c12mr11626808e87.64.1719558496217;
+        Fri, 28 Jun 2024 00:08:16 -0700 (PDT)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52e7ab3b441sm188314e87.291.2024.06.28.00.08.14
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jun 2024 00:08:14 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ec4eefbaf1so2309391fa.1
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 00:08:14 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWAi0Y4S0cezqu9I5REFoKCu/9e7MmGNpaWU5AdAKUUimfDk3MApxLSxDb1WpyeqtLAuHnV3RsBdxkwPzEpG/Vf9v/949UvxJQ=
+X-Received: by 2002:a05:651c:1991:b0:2ec:5bb2:c230 with SMTP id
+ 38308e7fff4ca-2ec5bb2c26bmr125219161fa.12.1719558494097; Fri, 28 Jun 2024
+ 00:08:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <za7t6ltttq2o5qwahfrzftsb7xfzbzdtg4zx3bvnf3fewhfeqf@vjrq7na5ioqm>
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 4RFBM3tIvXlTgmaI6gxR1EeOUt3opYXj
-X-Proofpoint-GUID: 4RFBM3tIvXlTgmaI6gxR1EeOUt3opYXj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-28_02,2024-06-28_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- impostorscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 priorityscore=1501 suspectscore=0 mlxscore=0 bulkscore=0
- clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2406280046
+References: <20240628061929.89273-2-u.kleine-koenig@baylibre.com>
+In-Reply-To: <20240628061929.89273-2-u.kleine-koenig@baylibre.com>
+Reply-To: wens@csie.org
+From: Chen-Yu Tsai <wens@csie.org>
+Date: Fri, 28 Jun 2024 15:08:02 +0800
+X-Gmail-Original-Message-ID: <CAGb2v67m7y2E1Kq8PM9AFYZvBas_kW4k_ihpY42nBTOqZqWJmQ@mail.gmail.com>
+Message-ID: <CAGb2v67m7y2E1Kq8PM9AFYZvBas_kW4k_ihpY42nBTOqZqWJmQ@mail.gmail.com>
+Subject: Re: [PATCH] PM / devfreq: sun8i-a33-mbus: Make use of devm_ functions
+ for clks
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>, 
+	Chanwoo Choi <cw00.choi@samsung.com>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 26, 2024 at 09:23:17PM +0300, Dmitry Baryshkov wrote:
-> On Wed, Jun 26, 2024 at 04:09:55PM GMT, Varadarajan Narayanan wrote:
-> > This is used for tying up the cpu@N nodes with the power domains.
-> > Without this, 'cat /sys/kernel/debug/qcom_cpr3/thread0'
-> > crashes with NULL pointer access.
+On Fri, Jun 28, 2024 at 2:19=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@baylibre.com> wrote:
 >
-> Add the interesting part of the backtrace, please.
-
-        if (thread->drv->desc->cpr_type < CTRL_TYPE_CPRH) {
-                seq_printf(s, "current_volt = %d uV\n", thread->drv->last_uV);
-                seq_printf(s, "requested voltage: %d uV\n", thread->corner->last_uV);
-        }
-
-thread->corner is NULL in the second printf above.
-
-	# cat /sys/kernel/debug/qcom_cpr3/thread0
-	[   16.965241] Unable to handle kernel NULL pointer dereference at virtual address 000000000000000c
-	[   16.965270] Mem abort info:
-	[   16.973181]   ESR = 0x0000000096000004
-	[   16.975607]   EC = 0x25: DABT (current EL), IL = 32 bits
-	[   16.979425]   SET = 0, FnV = 0
-	[   16.984889]   EA = 0, S1PTW = 0
-	[   16.987756]   FSC = 0x04: level 0 translation fault
-	[   16.990792] Data abort info:
-	[   16.995652]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-	[   16.998779]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-	[   17.004074]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-	[   17.009196] user pgtable: 4k pages, 48-bit VAs, pgdp=00000000481b1000
-	[   17.014579] [000000000000000c] pgd=0000000000000000, p4d=0000000000000000
-	[   17.020919] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-	[   17.020921] Modules linked in:
-	[   17.020926] CPU: 0 UID: 0 PID: 118 Comm: cat Not tainted 6.10.0-rc4-next-20240620-00020-g125eb3184fc1-dirty #9
-	[   17.020931] Hardware name: Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C7 (DT)
-	[   17.020933] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-	[   17.020936] pc : cpr3_debug_info_show+0x3a0/0x3ac
-	[   17.020945] lr : cpr3_debug_info_show+0x390/0x3ac
-	[   17.020948] sp : ffff800086293b90
-	[   17.020949] x29: ffff800086293b90 x28: ffff0000034ae038 x27: 0000000000400cc0
-	[   17.020953] x26: 000000007ffff000 x25: ffff0000034ae028 x24: 0000000000000000
-	[   17.020957] x23: ffff800086293c80 x22: ffff000002399880 x21: ffff000002a8fa80
-	[   17.020960] x20: ffff0000034ae000 x19: 0000000000000000 x18: ffffffffffffffff
-	[   17.020964] x17: 0000000000000000 x16: 0000000000000000 x15: ffff800086293a40
-	[   17.020967] x14: ffff000002913000 x13: ffff00000291200f x12: 0000000000000000
-	[   17.020970] x11: 0000000000000000 x10: 0000000000000000 x9 : ffff0000034a9000
-	[   17.020973] x8 : 000000000a567520 x7 : 0000000000000001 x6 : 000000000a567520
-	[   17.020976] x5 : ffff000002912014 x4 : ffff800080e1f3a5 x3 : 0000000000000014
-	[   17.020979] x2 : 0000000000000000 x1 : ffff800080e1f848 x0 : ffff0000034ae000
-	[   17.020983] Call trace:
-	[   17.020984]  cpr3_debug_info_show+0x3a0/0x3ac
-	[   17.020987]  seq_read_iter+0xe0/0x45c
-	[   17.020993]  seq_read+0xec/0x130
-	[   17.020996]  full_proxy_read+0x60/0xb4
-	[   17.020999]  vfs_read+0xc0/0x31c
-	[   17.021003]  ksys_read+0x70/0x104
-	[   17.021006]  __arm64_sys_read+0x1c/0x28
-	[   17.021008]  invoke_syscall+0x48/0x114
-	[   17.021014]  el0_svc_common+0x3c/0xe8
-	[   17.021017]  do_el0_svc+0x20/0x2c
-	[   17.021020]  el0_svc+0x34/0xd8
-	[   17.021024]  el0t_64_sync_handler+0x120/0x12c
-	[   17.021027]  el0t_64_sync+0x190/0x194
-	[   17.021031] Code: f94012c2 aa1403e0 b0004701 91212021 (b9400c42)
-	[   17.021033] ---[ end trace 0000000000000000 ]---
-	Segmentation fault
-
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> >  drivers/cpufreq/qcom-cpufreq-nvmem.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > index 939702dfa73f..5e6525c7788c 100644
-> > --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > @@ -399,6 +399,7 @@ static const char *generic_genpd_names[] = { "perf", NULL };
-> >
-> >  static const struct qcom_cpufreq_match_data match_data_kryo = {
-> >  	.get_version = qcom_cpufreq_kryo_name_version,
-> > +	.genpd_names = generic_genpd_names,
+> Using devm_clk_get_enabled() and devm_clk_rate_exclusive_get() allows to
+> simplify the error paths in .probe() and the remove callback.
 >
-> This forces that every Kryo SoC has "perf" genpd, which obviously isn't
-> corret (at least from the upstream support point of view).
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com>
 
-While trying to get the above backtrace, randomly during boot
-I see the following BUG too.
+Reviewed-by: Chen-Yu Tsai <wens@csie.org>
 
-	[    1.562847] ------------[ cut here ]------------
-	[    1.574342] kernel BUG at drivers/cpufreq/cpufreq.c:1542!
-	[    1.579203] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-	[    1.579209] Modules linked in:
-	[    1.579217] CPU: 2 UID: 0 PID: 11 Comm: kworker/u16:0 Not tainted 6.10.0-rc4-next-20240620-00020-g125eb3184fc1-dirty #10
-	[    1.579227] Hardware name: Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C7 (DT)
-	[    1.579232] Workqueue: events_unbound deferred_probe_work_func
-	[    1.579249] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-	[    1.579257] pc : cpufreq_online+0x938/0x954
-	[    1.579271] lr : cpufreq_online+0x788/0x954
-	[    1.579281] sp : ffff8000817c3520
-	[    1.579283] x29: ffff8000817c3520 x28: ffff0000029efa50 x27: 0000000000000001
-	[    1.579294] x26: 0000000000000001 x25: ffff8000814d8da0 x24: 0000000000000000
-	[    1.579303] x23: ffff0000029ef9d0 x22: ffff800081735000 x21: 0000000000000000
-	[    1.579312] x20: 00000000000c15c0 x19: ffff0000029ef800 x18: ffff00000183481c
-	[    1.579321] x17: ffff8000818a3638 x16: 0000000000000000 x15: ffff8000818a3670
-	[    1.579330] x14: 0000000000000003 x13: ffff00000192b140 x12: ffff8000814d8c58
-	[    1.579338] x11: ffff00000192b140 x10: 00000000000009b0 x9 : ffff8000817c3240
-	[    1.579347] x8 : ffff00000192bad0 x7 : 0000000000000001 x6 : ffff8000814d8da0
-	[    1.579355] x5 : ffff8000812c32d0 x4 : 0000000000000000 x3 : 0000000000000000
-	[    1.579363] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 00000000fffffff0
-	[    1.579372] Call trace:
-	[    1.579375]  cpufreq_online+0x938/0x954
-	[    1.579386]  cpufreq_add_dev+0x80/0x98
-	[    1.579395]  subsys_interface_register+0x100/0x130
-	[    1.579404]  cpufreq_register_driver+0x150/0x244
-	[    1.579413]  dt_cpufreq_probe+0x8c/0x440
-	[    1.579420]  platform_probe+0x68/0xc8
-	[    1.579430]  really_probe+0xbc/0x29c
-	[    1.579438]  __driver_probe_device+0x78/0x12c
-	[    1.579446]  driver_probe_device+0xd8/0x15c
-	[    1.579454]  __device_attach_driver+0xb8/0x134
-	[    1.579463]  bus_for_each_drv+0x84/0xe0
-	[    1.579470]  __device_attach+0x9c/0x188
-	[    1.579478]  device_initial_probe+0x14/0x20
-	[    1.579487]  bus_probe_device+0xac/0xb0
-	[    1.579494]  device_add+0x55c/0x720
-	[    1.579500]  platform_device_add+0x1b8/0x244
-	[    1.579510]  platform_device_register_full+0xfc/0x184
-	[    1.579516]  platform_device_register_resndata.constprop.0+0x5c/0x8c
-	[    1.579524]  qcom_cpufreq_probe+0x1e4/0x498
-	[    1.579531]  platform_probe+0x68/0xc8
-	[    1.579540]  really_probe+0xbc/0x29c
-	[    1.579548]  __driver_probe_device+0x78/0x12c
-	[    1.579556]  driver_probe_device+0xd8/0x15c
-	[    1.579564]  __device_attach_driver+0xb8/0x134
-	[    1.579573]  bus_for_each_drv+0x84/0xe0
-	[    1.579580]  __device_attach+0x9c/0x188
-	[    1.579588]  device_initial_probe+0x14/0x20
-	[    1.579596]  bus_probe_device+0xac/0xb0
-	[    1.579603]  deferred_probe_work_func+0x88/0xc0
-	[    1.579611]  process_one_work+0x148/0x28c
-	[    1.579623]  worker_thread+0x2e8/0x3f8
-	[    1.579633]  kthread+0x110/0x114
-	[    1.579641]  ret_from_fork+0x10/0x20
-	[    1.579653] Code: aa1703e0 52800021 97e38ed5 17ffffea (d4210000)
-	[    1.579657] ---[ end trace 0000000000000000 ]---
-	[    1.851078] note: kworker/u16:0[11] exited with irqs disabled
-	[    1.855791] note: kworker/u16:0[11] exited with preempt_count 1
-	[    1.861586] ------------[ cut here ]------------
-
-Randomly, the following call seems to return -EBUSY causing
-the above BUG().
-
-	ret = __cpufreq_driver_target(policy, old_freq - 1,
-				      CPUFREQ_RELATION_L);
-
-	/*
-	 * Reaching here after boot in a few seconds may not
-	 * mean that system will remain stable at "unknown"
-	 * frequency for longer duration. Hence, a BUG_ON().
-	 */
-	BUG_ON(ret);
-
-Not sure why this does not happen in every boot, and how it
-is tied to genpd_names. Will debug and update.
-
-Thanks
-Varada
-
-> >  };
-> >
-> >  static const struct qcom_cpufreq_match_data match_data_krait = {
-> > --
-> > 2.34.1
-> >
+> ---
+>  drivers/devfreq/sun8i-a33-mbus.c | 38 +++++++++-----------------------
+>  1 file changed, 10 insertions(+), 28 deletions(-)
 >
+> diff --git a/drivers/devfreq/sun8i-a33-mbus.c b/drivers/devfreq/sun8i-a33=
+-mbus.c
+> index bcf654f4ff96..4c179d7ddf0b 100644
+> --- a/drivers/devfreq/sun8i-a33-mbus.c
+> +++ b/drivers/devfreq/sun8i-a33-mbus.c
+> @@ -360,7 +360,7 @@ static int sun8i_a33_mbus_probe(struct platform_devic=
+e *pdev)
+>         if (IS_ERR(priv->reg_mbus))
+>                 return PTR_ERR(priv->reg_mbus);
+>
+> -       priv->clk_bus =3D devm_clk_get(dev, "bus");
+> +       priv->clk_bus =3D devm_clk_get_enabled(dev, "bus");
+>         if (IS_ERR(priv->clk_bus))
+>                 return dev_err_probe(dev, PTR_ERR(priv->clk_bus),
+>                                      "failed to get bus clock\n");
+> @@ -375,24 +375,17 @@ static int sun8i_a33_mbus_probe(struct platform_dev=
+ice *pdev)
+>                 return dev_err_probe(dev, PTR_ERR(priv->clk_mbus),
+>                                      "failed to get mbus clock\n");
+>
+> -       ret =3D clk_prepare_enable(priv->clk_bus);
+> +       /* Lock the DRAM clock rate to keep priv->nominal_bw in sync. */
+> +       ret =3D devm_clk_rate_exclusive_get(dev, priv->clk_dram);
+>         if (ret)
+>                 return dev_err_probe(dev, ret,
+> -                                    "failed to enable bus clock\n");
+> -
+> -       /* Lock the DRAM clock rate to keep priv->nominal_bw in sync. */
+> -       ret =3D clk_rate_exclusive_get(priv->clk_dram);
+> -       if (ret) {
+> -               err =3D "failed to lock dram clock rate\n";
+> -               goto err_disable_bus;
+> -       }
+> +                                    "failed to lock dram clock rate\n");
+>
+>         /* Lock the MBUS clock rate to keep MBUS_TMR_PERIOD in sync. */
+> -       ret =3D clk_rate_exclusive_get(priv->clk_mbus);
+> -       if (ret) {
+> -               err =3D "failed to lock mbus clock rate\n";
+> -               goto err_unlock_dram;
+> -       }
+> +       ret =3D devm_clk_rate_exclusive_get(dev, priv->clk_mbus);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret,
+> +                                    "failed to lock mbus clock rate\n");
+>
+>         priv->gov_data.upthreshold      =3D 10;
+>         priv->gov_data.downdifferential =3D  5;
+> @@ -405,10 +398,8 @@ static int sun8i_a33_mbus_probe(struct platform_devi=
+ce *pdev)
+>         priv->profile.max_state         =3D max_state;
+>
+>         ret =3D devm_pm_opp_set_clkname(dev, "dram");
+> -       if (ret) {
+> -               err =3D "failed to add OPP table\n";
+> -               goto err_unlock_mbus;
+> -       }
+> +       if (ret)
+> +               return dev_err_probe(dev, ret, "failed to add OPP table\n=
+");
+>
+>         base_freq =3D clk_get_rate(clk_get_parent(priv->clk_dram));
+>         for (i =3D 0; i < max_state; ++i) {
+> @@ -448,12 +439,6 @@ static int sun8i_a33_mbus_probe(struct platform_devi=
+ce *pdev)
+>
+>  err_remove_opps:
+>         dev_pm_opp_remove_all_dynamic(dev);
+> -err_unlock_mbus:
+> -       clk_rate_exclusive_put(priv->clk_mbus);
+> -err_unlock_dram:
+> -       clk_rate_exclusive_put(priv->clk_dram);
+> -err_disable_bus:
+> -       clk_disable_unprepare(priv->clk_bus);
+>
+>         return dev_err_probe(dev, ret, err);
+>  }
+> @@ -472,9 +457,6 @@ static void sun8i_a33_mbus_remove(struct platform_dev=
+ice *pdev)
+>                 dev_warn(dev, "failed to restore DRAM frequency: %d\n", r=
+et);
+>
+>         dev_pm_opp_remove_all_dynamic(dev);
+> -       clk_rate_exclusive_put(priv->clk_mbus);
+> -       clk_rate_exclusive_put(priv->clk_dram);
+> -       clk_disable_unprepare(priv->clk_bus);
+>  }
+>
+>  static const struct sun8i_a33_mbus_variant sun50i_a64_mbus =3D {
+>
+> base-commit: 642a16ca7994a50d7de85715996a8ce171a5bdfb
 > --
-> With best wishes
-> Dmitry
+> 2.43.0
+>
 
