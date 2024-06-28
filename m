@@ -1,120 +1,206 @@
-Return-Path: <linux-pm+bounces-10187-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10188-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9931F91BD76
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 13:31:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97A2691BDE0
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 13:54:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CAFB283F73
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 11:31:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAEAF1C21EBC
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 11:54:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17AE9155A59;
-	Fri, 28 Jun 2024 11:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA608158207;
+	Fri, 28 Jun 2024 11:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ew49spsc"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Gwv3z3k5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703D936B11;
-	Fri, 28 Jun 2024 11:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB171865A;
+	Fri, 28 Jun 2024 11:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719574272; cv=none; b=cN3fwGdECkhMQspbywpXGdY39sEgZltqaU6GtqtnfsiTJEd7OpN3v5br42OXB7DyKY5TZTScTgiF1Y6f6Y2NAwFZqyYt/47kJ3qYX9OqCHPDDNHwKrcqGN6GGmc2UuPk1xiB1w+fqC9A2/lMfNdq1alwVMwd5hO2LVK35jI4z4E=
+	t=1719575646; cv=none; b=LO8Suj/5CdLG3aRcgE/nypKF7gq6YnYq9g+lj10FHmcZ15l7sJ8KcEIV5BBmT5BYHitqNy2vaZqoUNBo6uWxLAe6245mDZYeCSvSexv15BKSwDU6bEuPXLPG1Nc+t2zP3osyQFBbz/TkbJwd73xMG0scqA2+dcWnRRvbsoy8crc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719574272; c=relaxed/simple;
-	bh=TNbh7kr7o8ZhrD0QtPetaMUbfVxV7BCiJh8Y/z/LoUY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D3wk391AFZYdGoByOBeY6AiBP1a4/6/pWAJRgQst/lr+oMG1L2KxRC/mNFf0r5AgsObWsN0SM+hSJzYLbzYh3n1We6pmMtlI/myJ0/cBfNTai3K4wmGouKhU5yDiWIDqAkeF+kXxiHzrns+NY6LZQRUZtDOHpGfkJQVh6Fz6Uxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ew49spsc; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-57d20d89748so599984a12.0;
-        Fri, 28 Jun 2024 04:31:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719574269; x=1720179069; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TNbh7kr7o8ZhrD0QtPetaMUbfVxV7BCiJh8Y/z/LoUY=;
-        b=ew49spscFiHUDHR0pCDX8XtIPU9twBdbGVyD+jCS5nvgVGXRhgVQ21oFT1V2yJwwkj
-         WQjP+W71YFrd9whXiHHPRUfgSc4zbygNPqm+8U0moNkWOEzqLWHTyUY73VxcM1m9fX5V
-         VIG0+HCiODNMle/+RrIKgrETbiXh8fg2UaiDy8e9a9z52zZevXFPO/3ZHPED4fQnJuJv
-         +s3/1QYsa1l6Pv+4/E08UIRisve1nJoSPSQ4Wk1NViAvuHHwnQGNCqnzKG81eD8OeYCE
-         C+CvBOQlemqMhoC36IfsmceoeN94pN0+fOuydXQAevI1iGMW75tDiJ96ayUkwHOBGuJ+
-         kabg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719574269; x=1720179069;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TNbh7kr7o8ZhrD0QtPetaMUbfVxV7BCiJh8Y/z/LoUY=;
-        b=j4IbvbrsbM6kyE3gbQOnEBVjWlf3a/xvYoEQ+bUUpmXqUdE7pGPMl618zDy+UDI3w3
-         ypVerc/kvtyb/H/469TiKuhnjA5thAjtfS77fhZaJWSWKUVU+mI9DqqV7I9oTsn9i9qm
-         NbjzpFVcYTWpofZZgsA9NUkqdvF1SOHK3P1eDpdxl9hUxzet771vCa+pKuLtOzTPnm5l
-         Efqj8q1mzutKy00oTk7O6ylJm38IQcotkgZHYuTSRT+6M1t0FJmgYLuww2rimGYsbXBQ
-         abM20eoxvuEe6Chcblcof/e0ij0+fu79mejbTOqtzUFFl5DD8qbuZ4Q69tonBriaQG1x
-         cQ8A==
-X-Forwarded-Encrypted: i=1; AJvYcCXD8E2dY/KF44bq+u7+URzwWezDZMPPb5Q8XEsor5CO7CPesvnb8fvaHwuJ6pZLr8OuUSkZgeRqs5QvUDsUmfbNaeODlDnfjw+u77RnIqEuYmGoAgAVvPejAB68T1onYdX5rESK/Hw=
-X-Gm-Message-State: AOJu0YyeTWjGcYKOvduUpT3fE8VQ0tNaL1K0qwNYvaLC/RhGR9f0Wl/G
-	MTM60OohkL0nH0D0Skh3Rh0t7sgjHwk7lqoQPioQdH1mu8FsvGPXxs1M3dZD9H+0a8qk5qaHtwo
-	tRU6sGF93TdlHPvtnpETu4sOp5BA=
-X-Google-Smtp-Source: AGHT+IGr5leLxrSm2FuRQCxaU5tFV02KFH2s7nnXe/Arg9OQSRUvFxehjob4WYaZ+ZFNSh6vDdF83E+R3D6z+xuQaqc=
-X-Received: by 2002:a05:6402:35c7:b0:585:f46d:f573 with SMTP id
- 4fb4d7f45d1cf-585f46df576mr1781292a12.0.1719574268511; Fri, 28 Jun 2024
- 04:31:08 -0700 (PDT)
+	s=arc-20240116; t=1719575646; c=relaxed/simple;
+	bh=EfZPK4bQlzDxBEzFkfeTiecD2ZjbyZUL5K5NzJWy8bM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gP8SZ4mIyLczJl21V0bqqa02J0DNMull+0ECpNhOo5kFamoo51GguooSFJ9wJjkFHJH51iE35mGDnYLGiUaIS7I1VjSTxrOV2pIuCdVoFoHOmhOMzTS0FCt2sNt8huK/3BeLNed6FEke9HVUb6XjHSpWzE+5LV1SWNCyvQHRE3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Gwv3z3k5; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45S8EoQN015125;
+	Fri, 28 Jun 2024 11:53:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=9At5m60WgpAapqFuAPwU1Hli
+	wnsb0FkeiKytGYb9+YA=; b=Gwv3z3k5DjFBLwP9W3KTTI9oJm6iGxryDIbMJw0e
+	XzhN7ngX3Ge1+hr3Z2FaFSj/kH+y4UJHbckJ4qLvOxDbzAAywGJlAK/jrrbkK/4o
+	L4t1jJTAE9Ejw36cg5OrKeV+I0RWnw/4LS9eEX65pQwmkW48m5e1n0q4Zk6C7/Lv
+	dOaxMf8bxiJET7kkVWprAm9EmHk3OkO0LjCxdZ1E0IzzouM/VaC34EOaTQu3HUJW
+	2A/q72AGincj8xFb2+7R5tNEufuTLZgCXoELHz/1Ev+gtBV/zCk5sDbTT+ep+ybT
+	jfSf+kSO1YPhoFSUsA8RM4RAfnY2QaoHJeWJHMwsgCJ8Mg==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ywqshysxs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Jun 2024 11:53:50 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45SBrnnD027966
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Jun 2024 11:53:49 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 28 Jun 2024 04:53:42 -0700
+Date: Fri, 28 Jun 2024 17:23:38 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <ilia.lin@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <ulf.hansson@linaro.org>,
+        <quic_sibis@quicinc.com>, <otto.pflueger@abscue.de>,
+        <neil.armstrong@linaro.org>, <luca@z3ntu.xyz>, <abel.vesa@linaro.org>,
+        <danila@jiaxyga.com>, <quic_ipkumar@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v3 8/9] soc: qcom: cpr3: Add IPQ9574 definitions
+Message-ID: <Zn6kQuw1Fm9ylppX@hu-varada-blr.qualcomm.com>
+References: <20240626104002.420535-1-quic_varada@quicinc.com>
+ <20240626104002.420535-9-quic_varada@quicinc.com>
+ <txid2b47zhnuknz35xaosfctuojrnrskcjehhqmyqubuxdimqj@7q7pzxlavk6k>
+ <Zn0TZiIDQ9W/ttox@hu-varada-blr.qualcomm.com>
+ <3mzerxpsa2gj227pryu2pg5rgaoqya7y3fplvpdsq5cnffuzj3@puwzk4j2t2t5>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240627-fix-help-issue-v3-1-85318a3974e4@gmail.com> <c9df6637-6055-4668-b80b-a1a6e6be445e@linuxfoundation.org>
-In-Reply-To: <c9df6637-6055-4668-b80b-a1a6e6be445e@linuxfoundation.org>
-From: Roman Storozhenko <romeusmeister@gmail.com>
-Date: Fri, 28 Jun 2024 13:30:56 +0200
-Message-ID: <CALsPMBMeo5E9ZND0bPK089VHBZnybsigkvoC2r8BLCTjYt9QFA@mail.gmail.com>
-Subject: Re: [PATCH v3] cpupower: Make help command available for custom
- install dir
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <3mzerxpsa2gj227pryu2pg5rgaoqya7y3fplvpdsq5cnffuzj3@puwzk4j2t2t5>
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: eEv0sBU4hXyiL4tztb316o4l1ifuEe84
+X-Proofpoint-GUID: eEv0sBU4hXyiL4tztb316o4l1ifuEe84
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-28_08,2024-06-28_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ bulkscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
+ mlxscore=0 impostorscore=0 mlxlogscore=999 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2406140001
+ definitions=main-2406280087
 
-On Thu, Jun 27, 2024 at 7:33=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.o=
-rg> wrote:
+On Thu, Jun 27, 2024 at 04:46:05PM +0300, Dmitry Baryshkov wrote:
+> On Thu, Jun 27, 2024 at 12:53:18PM GMT, Varadarajan Narayanan wrote:
+> > On Wed, Jun 26, 2024 at 09:27:53PM +0300, Dmitry Baryshkov wrote:
+> > > On Wed, Jun 26, 2024 at 04:10:01PM GMT, Varadarajan Narayanan wrote:
+> > > > From: Praveenkumar I <quic_ipkumar@quicinc.com>
+> > > >
+> > > > Add thread, scaling factor, CPR descriptor defines to enable CPR
+> > > > on IPQ9574.
+> > > >
+> > > > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > > ---
+> > > > v3: Fix patch author
+> > > >     Included below information in cover letter
+> > > > v2: Fix Signed-off-by order
+> > > > Depends:
+> > > > 	[1] https://lore.kernel.org/lkml/20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org/T/
+> > > > 	[2] https://github.com/quic-varada/cpr/commits/konrad/
+> > > > ---
+> > > >  drivers/pmdomain/qcom/cpr3.c | 137 +++++++++++++++++++++++++++++++++++
+> > > >  1 file changed, 137 insertions(+)
+> > > >
+> > > > diff --git a/drivers/pmdomain/qcom/cpr3.c b/drivers/pmdomain/qcom/cpr3.c
+> > > > index c28028be50d8..66c8a4bd9adc 100644
+> > > > --- a/drivers/pmdomain/qcom/cpr3.c
+> > > > +++ b/drivers/pmdomain/qcom/cpr3.c
+> > >
+> > > > +
+> > > > +static const struct cpr_desc ipq9574_cpr_desc = {
+> > > > +	.cpr_type = CTRL_TYPE_CPR4,
+> > >
+> > > So, is it CPR4 or CPRh?
+> >
+> > CPR4.
 >
-> On 6/27/24 01:49, Roman Storozhenko wrote:
-> > When the 'cpupower' utility installed in the custom dir, it fails to
-> > render appropriate help info for a particular subcommand:
-> > $ LD_LIBRARY_PATH=3Dlib64/ bin/cpupower help monitor
-> > with error message like 'No manual entry for cpupower-monitor.1'
-> > The issue is that under the hood it calls 'exec' function with
-> > the following args: 'man cpupower-monitor.1'. In turn, 'man' search
-> > path is defined in '/etc/manpath.config'. Of course it contains only
-> > standard system man paths.
-> > Make subcommands help available for a user by setting up 'MANPATH'
-> > environment variable to the custom installation man pages dir. That
-> > variable value will be prepended to the man pages standard search paths
-> > as described in 'SEARCH PATH' section of MANPATH(5).
+> Then why do you have cprh in the compatible?
+
+Sorry, copy-paste from msm8998. Will fix that in the next version.
+
+Thanks
+Varada
+
+> > > > +	.num_threads = 1,
+> > > > +	.apm_threshold = 850000,
+> > > > +	.apm_crossover = 880000,
+> > > > +	.apm_hysteresis = 0,
+> > > > +	.cpr_base_voltage = 700000,
+> > > > +	.cpr_max_voltage = 1100000,
+> > > > +	.timer_delay_us = 5000,
+> > > > +	.timer_cons_up = 0,
+> > > > +	.timer_cons_down = 0,
+> > > > +	.up_threshold = 2,
+> > > > +	.down_threshold = 2,
+> > > > +	.idle_clocks = 15,
+> > > > +	.count_mode = CPR3_CPR_CTL_COUNT_MODE_ALL_AT_ONCE_MIN,
+> > > > +	.count_repeat = 1,
+> > > > +	.gcnt_us = 1,
+> > > > +	.vreg_step_fixed = 12500,
+> > > > +	.vreg_step_up_limit = 1,
+> > > > +	.vreg_step_down_limit = 1,
+> > > > +	.vdd_settle_time_us = 34,
+> > > > +	.corner_settle_time_us = 6,
+> > > > +	.reduce_to_corner_uV = true,
+> > > > +	.hw_closed_loop_en = false,
+> > > > +	.threads = (const struct cpr_thread_desc *[]) {
+> > > > +		&ipq9574_thread_silver,
+> > >
+> > > If it's silver, where is gold or bronze?
+> >
+> > Will rename this as "ipq9574_thread"
+> >
+> > Thanks
+> > Varada
+> >
+> > > > +	},
+> > > > +};
+> > > > +
+> > > > +static const struct cpr_acc_desc ipq9574_cpr_acc_desc = {
+> > > > +	.cpr_desc = &ipq9574_cpr_desc,
+> > > > +};
+> > > > +
+> > > >  static const int sdm630_gold_scaling_factor[][CPR3_RO_COUNT] = {
+> > > >  	/* Same RO factors for all fuse corners */
+> > > >  	{
+> > > > @@ -2828,6 +2964,7 @@ static void cpr_remove(struct platform_device *pdev)
+> > > >  }
+> > > >
+> > > >  static const struct of_device_id cpr3_match_table[] = {
+> > > > +	{ .compatible = "qcom,ipq9574-cprh", .data = &ipq9574_cpr_acc_desc },
+> > > >  	{ .compatible = "qcom,msm8998-cprh", .data = &msm8998_cpr_acc_desc },
+> > > >  	{ .compatible = "qcom,sdm630-cprh", .data = &sdm630_cpr_acc_desc },
+> > > >  	{ }
+> > > > --
+> > > > 2.34.1
+> > > >
+> > >
+> > > --
+> > > With best wishes
+> > > Dmitry
 >
-> What I am asking you is what happens when you set the MANPATH before
-> running the command?
-
-It adds the custom search path to the beginning of the MANPATH variable.
-I tested this case. All works as expected.
-
->
-> thanks,
-> -- Shuah
-
-
-
---=20
-Kind regards,
-Roman Storozhenko
+> --
+> With best wishes
+> Dmitry
 
