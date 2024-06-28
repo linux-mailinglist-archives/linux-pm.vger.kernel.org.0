@@ -1,71 +1,72 @@
-Return-Path: <linux-pm+bounces-10215-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10216-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64E6C91C6C0
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 21:39:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEE3391C6CD
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 21:46:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95DC61C23DC6
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 19:39:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 988BF286167
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 19:45:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B0EC76413;
-	Fri, 28 Jun 2024 19:39:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54CF974C09;
+	Fri, 28 Jun 2024 19:45:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EUESVM0x"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QXNmpUmz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A235A75817
-	for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 19:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF41873514
+	for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 19:45:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719603585; cv=none; b=uyo3lSPX57R1Dapb5KIivbbx6KJFAOPmMeSP4+cywwbirS1qrScoZgLQodLOTGKNJpV6vKpwSuLt2qp+J86KRA7JuwY/NR5M4UC8GiCjZ6vlkJydsukDpgdqe4JiFKozJTc2+8TO5yRDe95HO/ZKmIcWvh0M5KRN3p4qHOHoWHs=
+	t=1719603956; cv=none; b=MiUUmS+nFL68iIamyKvvLPrvF9ENaRoIYHTF6W8PJMgvTzSqzAOHwtfWcn6qnYtNMVpQF/7DoPwo5Uhtb4Ru1ez6GduCRy4Cr1FOq2Lus1of+AZZ4h/LgBPE3DZLIpo8tMk4EHqQgVz/C9aA7F2cfbN/B+MRKu7hK3yz8xqvdFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719603585; c=relaxed/simple;
-	bh=AiKlbNF2JyzTB73CXpB1ZJjuPsbUQGJbXOtwJrCQavA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=TnTafdpWVb1pJDksTJRvqCN+npr1oCwHypV/LQIjzbC+avwhPKnfbBawzm6ElXvCLq3ok0qD3YCIpzKomXheg0eAyYRaYkDWiSRru7oKhk9iCiHB8rz9fQJLHEeip7T0yHbBZpe2t+wbVvi6p6GVmJMsr3oqcC/YULLpK9cQatw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EUESVM0x; arc=none smtp.client-ip=209.85.166.178
+	s=arc-20240116; t=1719603956; c=relaxed/simple;
+	bh=H6sDvQFpHpw0Rc2a1DhQlzCPAHSVJqQJGxNnUBOfnwY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GEeUYYSIzhsQG6NXWA4t/hbF27zlR88nTZ8GJ8YklKdtAtAbEAu1iSEZ5eQI5Gm5QH1SYpUms/zLJzxjmlFx5XGqVr1cNpuoKbWYUC80mNXEE61lU1+6FP6TjZJj5jqR+em8OL4JP9UViRggmUJbNIpccrMNkVtYIW56/BUU6m0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QXNmpUmz; arc=none smtp.client-ip=209.85.166.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3762c172d99so593115ab.0
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 12:39:42 -0700 (PDT)
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3762c172d99so596605ab.0
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 12:45:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1719603581; x=1720208381; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Jlu7OFoSigy4VBRWahwI/CAdqSq3ZHba+Z6d6xpDy0s=;
-        b=EUESVM0x+XPkNnj5nWjY/8assAO+ASkJX3u3d8foYc88i2FbJvO/pxfC/Uouel6kMt
-         zV9LpmUPTaryLRWIbiOF1wJUavylRu4mfAXHr/9mNJqMFqypHRQu3lAkJNq/8ZeSKWRq
-         0K/0G8NwUBL/d+4rd3QWreJBhwFJBQ/vlnO7E=
+        d=linuxfoundation.org; s=google; t=1719603954; x=1720208754; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wFy2b8oVABYcj3xshUopT/e34dAfFxSX3qpBpatyN90=;
+        b=QXNmpUmz/+7nvRkY9A68PsYZqslHEj7zcFiZ2xswe7DcNVEFcmI7k1f1bKVRe8sIzP
+         MArhrtsQOztYStHymKNDFBYxRu5PwAtSABJsB4I7sFZ2a2lbzFMdl2XaXajINtqFJoYD
+         phLxRbVUiCbwyrkhgBUPlASizoPg++qz/kUpM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719603581; x=1720208381;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1719603954; x=1720208754;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jlu7OFoSigy4VBRWahwI/CAdqSq3ZHba+Z6d6xpDy0s=;
-        b=RbUdpEBb/egYP6LNhNyuBkZjsG/uU1Mw4grEj7gKHQ61biR16rtlMCcLG0bb6eRhq+
-         EgzWx+o7JbeyeyxM6Ty/83awgX1JB9x019zRoXlhD/ENIwl/tb8SgImzfCzANL7ZkW3k
-         fyPczBAozhuLVGv4bl+TpZbK2NYv6THPisOh+HQy2Hzz2vrSfMLIORVMcgI5IpsKvIvz
-         H496VItKKaqNrr/oyfpuVtsMpQjZf9lhDWJXKcQQCF1Dai8+yuhsWYHl1O5DqcyS+Ya5
-         Ulc6cB7Ya6tNlaoWf1OSwEFKdqddOJqnWokjKTiXG1mZyTk+lT/hA4hlW74D8qfZEDQb
-         3R2g==
-X-Forwarded-Encrypted: i=1; AJvYcCUq8MOOBfCTObBCUqVqYE1cUsM9/qZl13GXHGSLT+WItnEqwaAh1PfvnXI6XZc+jTK8stqJYfK21Opw3fwUSFQ3KFPCtIyvCH4=
-X-Gm-Message-State: AOJu0YzFXEdn1qtY7Q/X7o7r59h1v+g43fwv23O4vSrsQtzUdEYbwEQ+
-	0rC3ze678M/j8JySOYb3NiepLhX7ZCKZg4ZoiwdxcamI7v11LM46GLjaCQmi7AM=
-X-Google-Smtp-Source: AGHT+IEFN9w6La20dA4pfLcoEu0o6yN5RPDj+kWUC6AC8H3QgED7762nwW8XTv0QM/TYaxu3/bA0JQ==
-X-Received: by 2002:a05:6e02:13a5:b0:376:3918:c50 with SMTP id e9e14a558f8ab-37639180e02mr219326075ab.0.1719603581458;
-        Fri, 28 Jun 2024 12:39:41 -0700 (PDT)
+        bh=wFy2b8oVABYcj3xshUopT/e34dAfFxSX3qpBpatyN90=;
+        b=eloJB1BFSQin8auyVs13mvpqJvoWOYMbwe9xfF6VHCxkuOL7ehfjvRKviW4NJBFoa0
+         lteWdmknEy1bW6qn+dS0RbuR28cHQdvLOzCO29T4Fcbd92s6E/PvJXovrq6G1dn3vIZJ
+         CVjeEhyf8a5kmzZyek06FM22scrctMxOo/nuN43iWJm6gFjMZ9C4tQk/5j2HKfXn3eqb
+         y9hB1YE4p1nZlB7htPDWYsGodGn53hVJSXnV8My4Gf359KNJVXsKxuw5Pt8YzWoL/rcn
+         jqa1PEfaFvO5jJe69JZx31u9G+TySB9fKRHhdRPG6RdACRga/gbpcmIM4cPF5ae+qGLM
+         aeRg==
+X-Forwarded-Encrypted: i=1; AJvYcCXW0eVtPsSCckGVKDca/lr82UXr+YYHW4mlVzlhW3Fm/FRAoyN2VMYCIMQzWe7x5oFdrFvJbF4RBGlmqoEa18KIjbcqkLYwL4I=
+X-Gm-Message-State: AOJu0YxoIYZs6C6B/SPkDbR7j6oC4gWz4PUlioTMqAV1jSj/9Qd77w8l
+	UuyGJ1e9YpRNr5nz4t38quE4rrnw/dJh76Gy/d5G0xCdLagD6TAyCryUaM6D/LaaUXWeGIn0aLz
+	z
+X-Google-Smtp-Source: AGHT+IHPYjY418V10PP89PM7T1NNet/PvWH3Qy86QLmNXQ7IR7y3dgq4cdm/cyZF8VR66Lh172wBGA==
+X-Received: by 2002:a5d:984e:0:b0:7f3:9dd3:15bf with SMTP id ca18e2360f4ac-7f39dd317famr1651334739f.0.1719603953855;
+        Fri, 28 Jun 2024 12:45:53 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-37ad2f40743sm5547015ab.43.2024.06.28.12.39.40
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4bb742bd3c8sm687734173.147.2024.06.28.12.45.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jun 2024 12:39:41 -0700 (PDT)
-Message-ID: <74e09bb5-6226-4c6c-8694-7f4235dbb9f9@linuxfoundation.org>
-Date: Fri, 28 Jun 2024 13:39:40 -0600
+        Fri, 28 Jun 2024 12:45:53 -0700 (PDT)
+Message-ID: <f1261f1c-abbe-49e4-b0bb-b72af367da7f@linuxfoundation.org>
+Date: Fri, 28 Jun 2024 13:45:52 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -73,40 +74,51 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] Updating maintainer and correcting Czech translation
- in cpupower
-To: Daniel Hejduk <danielhejduk@disroot.org>, shuah@kernel.org,
- trenn@suse.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ba4d74fd-6762-4e9d-8346-5f3384cb60ce@linuxfoundation.org>
- <20240628174420.5370-1-danielhejduk@disroot.org>
+Subject: Re: [PATCH v3] cpupower: Make help command available for custom
+ install dir
+To: Roman Storozhenko <romeusmeister@gmail.com>
+Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240627-fix-help-issue-v3-1-85318a3974e4@gmail.com>
+ <c9df6637-6055-4668-b80b-a1a6e6be445e@linuxfoundation.org>
+ <CALsPMBMeo5E9ZND0bPK089VHBZnybsigkvoC2r8BLCTjYt9QFA@mail.gmail.com>
 Content-Language: en-US
-Cc: Shuah Khan <skhan@linuxfoundation.org>
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240628174420.5370-1-danielhejduk@disroot.org>
+In-Reply-To: <CALsPMBMeo5E9ZND0bPK089VHBZnybsigkvoC2r8BLCTjYt9QFA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/28/24 11:44, Daniel Hejduk wrote:
-> *** BLURB HERE ***
-
-Explain what this patch series does.
+On 6/28/24 05:30, Roman Storozhenko wrote:
+> On Thu, Jun 27, 2024 at 7:33 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> On 6/27/24 01:49, Roman Storozhenko wrote:
+>>> When the 'cpupower' utility installed in the custom dir, it fails to
+>>> render appropriate help info for a particular subcommand:
+>>> $ LD_LIBRARY_PATH=lib64/ bin/cpupower help monitor
+>>> with error message like 'No manual entry for cpupower-monitor.1'
+>>> The issue is that under the hood it calls 'exec' function with
+>>> the following args: 'man cpupower-monitor.1'. In turn, 'man' search
+>>> path is defined in '/etc/manpath.config'. Of course it contains only
+>>> standard system man paths.
+>>> Make subcommands help available for a user by setting up 'MANPATH'
+>>> environment variable to the custom installation man pages dir. That
+>>> variable value will be prepended to the man pages standard search paths
+>>> as described in 'SEARCH PATH' section of MANPATH(5).
+>>
+>> What I am asking you is what happens when you set the MANPATH before
+>> running the command?
 > 
-> Daniel Hejduk (3):
->    Updating cpupower's Czech translation maintainer
->    Correcting needs work strings and adding new to cpupower's Czech
->      translation
->    Adding changelog for cpupower
-
-short summary format is wrong. Refer to commits in the kernel
-rep for reference on how to write summary and commit logs.
-  
+> It adds the custom search path to the beginning of the MANPATH variable.
+> I tested this case. All works as expected.
 > 
->   tools/power/cpupower/ChangeLog |   3 +
->   tools/power/cpupower/po/cs.po  | 174 +++++++++++++++++----------------
->   2 files changed, 95 insertions(+), 82 deletions(-)
->   create mode 100644 tools/power/cpupower/ChangeLog
+
+Let's try again. What happens if you run the command with MANPATH set and
+exported and then run the command. Can you send the output?
 
 thanks,
 -- Shuah
+
+
 
 
