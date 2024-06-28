@@ -1,84 +1,134 @@
-Return-Path: <linux-pm+bounces-10205-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10207-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DED091C519
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 19:44:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9B3791C540
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 19:56:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D56C11F237DC
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 17:44:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 154B2B2134D
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 17:56:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 950C11CD5B8;
-	Fri, 28 Jun 2024 17:44:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="P5clS6VO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BD991CCCA6;
+	Fri, 28 Jun 2024 17:56:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9516A1CCCBF;
-	Fri, 28 Jun 2024 17:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B18815253B;
+	Fri, 28 Jun 2024 17:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719596683; cv=none; b=CfIhdRNNBYtAbYOb5S+O9ewjmXQUDxTmWZg7CW+sJ61/JTxbyO1T4KcsQgjvQ65tirJFrzkaAsXbX+zjcNanV1PLveSxdM2NJX4dubI6avOwjuFLpzA1NDNzg1CX3LMtPy61c4ETeqeybgYrFa70ZUH6zLF+eUU62v9Jg0q+vBE=
+	t=1719597399; cv=none; b=Af22rg3dW6eqT0hnSs8A4eez5iLFqpxuBjF4FSfgPLIxJag83nvTsLCZF4l7AcVA0a30tRr4N9kqbZPvTVnjBpF9kJ4j35DgAGNdTpkprjaeU0YYF4HslikjLJPpsZjzJoYjvQ4/zITU3ho66fs6YY0bzvs/jDrlTve2ruDOgAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719596683; c=relaxed/simple;
-	bh=iNkUfxlYovNR0cv33dnHDIK5HssQmmjk4QDhJwt9Ntw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MOcXzibhBbflXx6utubV+lqH9c1iPnyJX1zAq6SOUry4W2spProDIvFGevQTXBh73QICOWgeCtnlDss9qSvFzfxxoCpv6TMQf2eYXrPo9+BJ8VSj14a5IqSKaHaX/ohCo5YLYx703zxUs2xD1lbkBKt3bwtV0vUvLLTEOa2VhB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=P5clS6VO; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-X-Virus-Scanned: SPAM Filter at disroot.org
-From: Daniel Hejduk <danielhejduk@disroot.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1719596678; bh=iNkUfxlYovNR0cv33dnHDIK5HssQmmjk4QDhJwt9Ntw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=P5clS6VOUz5/2pQ7Lf410GsDb7Szq1SlcgwIY50CDR+gHpyUZBXI73pc484vTE2oh
-	 3PR0ICVQNmm8yIFMiViM0RJBkDugKPszjzpDxlzUpg6gEqbmb6BsAJwBbiSrSnXlG4
-	 p7F2fFZe7NEUKXfg8WzQ0Twt83JLOsB3yEXbZyQ6lL4aps1K9+ZeT2N67lIoWrv89k
-	 qzu6o3Qbb2mWSYoCa7NQYcEFELRPWFlvh1CmjKvB9YAmIr1Octd4Dxu7I6NpxcgudC
-	 +LXHYO4X+a900mniTeQTGPjMCz09u1nn5Pg0CsYgWBv0xCpbPItT3TG0hZMV71Xaa6
-	 cWL6szCBWothw==
-To: shuah@kernel.org,
-	trenn@suse.com,
+	s=arc-20240116; t=1719597399; c=relaxed/simple;
+	bh=oYS7jmYESQRNo05AqB51F3nXEy6uK/Kv0yx6spSKe/o=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Aq7n43jp/31Fjqz7YX1+eij7oNbVxTwbSGkpgiQj6vRbXaJxknUzd6rujOORRwUWrTLfaWU4GbY3gEhpKlcvSxxGmWsEKs6EsA6FDBpVqvDZuRR/7UJ7rz4F7JTQmIMdRaF7U9RiS9HOktj23D6ead7gEBDeV2LW+SG6TNpNEZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8572C116B1;
+	Fri, 28 Jun 2024 17:56:33 +0000 (UTC)
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Marc Zyngier <maz@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	linux-acpi@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Daniel Hejduk <danielhejduk@disroot.org>
-Subject: [PATCH 3/3] Adding changelog for cpupower
-Date: Fri, 28 Jun 2024 19:44:18 +0200
-Message-ID: <20240628174420.5370-4-danielhejduk@disroot.org>
-In-Reply-To: <20240628174420.5370-1-danielhejduk@disroot.org>
-References: <ba4d74fd-6762-4e9d-8346-5f3384cb60ce@linuxfoundation.org>
- <20240628174420.5370-1-danielhejduk@disroot.org>
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	loongarch@lists.linux.dev,
+	x86@kernel.org,
+	Russell King <linux@armlinux.org.uk>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Miguel Luis <miguel.luis@oracle.com>,
+	James Morse <james.morse@arm.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Hanjun Guo <guohanjun@huawei.com>,
+	Gavin Shan <gshan@redhat.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	linuxarm@huawei.com,
+	justin.he@arm.com,
+	jianyong.wu@arm.com
+Subject: Re: [PATCH v10 00/19] ACPI/arm64: add support for virtual cpu hotplug
+Date: Fri, 28 Jun 2024 18:56:31 +0100
+Message-Id: <171959723432.44645.7883276197359651212.b4-ty@arm.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
+References: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-I am also writing about the Czech translation change into the Changelog
+On Wed, 29 May 2024 14:34:27 +0100, Jonathan Cameron wrote:
+> v10:
+> - Make acpi_processor_set_per_cpu() return 0 / error rather than bool
+>   to simplify error handling at the call sites.
+>   (Thanks to both Rafael and Gavin who commented on this)
+> - Gather tags.
+> - Rebase on v6.10-rc1
+> 
+> [...]
 
-Signed-off-by: Daniel Hejduk <danielhejduk@disroot.org>
----
- tools/power/cpupower/ChangeLog | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 tools/power/cpupower/ChangeLog
+Applied to arm64 (for-next/vcpu-hotplug), thanks! If nothing falls
+apart, it should end up in mainline for 6.11.
 
-diff --git a/tools/power/cpupower/ChangeLog b/tools/power/cpupower/ChangeLog
-new file mode 100644
-index 000000000..d8f16e469
---- /dev/null
-+++ b/tools/power/cpupower/ChangeLog
-@@ -0,0 +1,3 @@
-+Version 6.10.0-rc5 (2024-06-28)
-+==========
-+* Corrected needs work strings and added new in Czech Translation
+Thomas, the GICv3 patches have been acked by Marc but they are missing
+your ack. If you want it added, I can refresh the series in the next day
+or so, otherwise the branch should remain stable. Thanks.
+
+[01/19] ACPI: processor: Simplify initial onlining to use same path for cold and hotplug
+        https://git.kernel.org/arm64/c/c1385c1f0ba3
+[02/19] cpu: Do not warn on arch_register_cpu() returning -EPROBE_DEFER
+        https://git.kernel.org/arm64/c/d830ef3ac569
+[03/19] ACPI: processor: Drop duplicated check on _STA (enabled + present)
+        https://git.kernel.org/arm64/c/157080f03c7a
+[04/19] ACPI: processor: Return an error if acpi_processor_get_info() fails in processor_add()
+        https://git.kernel.org/arm64/c/fadf231f0a06
+[05/19] ACPI: processor: Fix memory leaks in error paths of processor_add()
+        https://git.kernel.org/arm64/c/47ec9b417ed9
+[06/19] ACPI: processor: Move checks and availability of acpi_processor earlier
+        https://git.kernel.org/arm64/c/cd9239660b8c
+[07/19] ACPI: processor: Add acpi_get_processor_handle() helper
+        https://git.kernel.org/arm64/c/36b921637e90
+[08/19] ACPI: processor: Register deferred CPUs from acpi_processor_get_info()
+        https://git.kernel.org/arm64/c/b398a91decd9
+[09/19] ACPI: scan: switch to flags for acpi_scan_check_and_detach()
+        https://git.kernel.org/arm64/c/1859a671bdb9
+[10/19] ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
+        https://git.kernel.org/arm64/c/3b9d0a78aeda
+[11/19] arm64: acpi: Move get_cpu_for_acpi_id() to a header
+        https://git.kernel.org/arm64/c/8d34b6f17b9a
+[12/19] arm64: acpi: Harden get_cpu_for_acpi_id() against missing CPU entry
+        https://git.kernel.org/arm64/c/2488444274c7
+[13/19] irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
+        https://git.kernel.org/arm64/c/fa2dabe57220
+[14/19] irqchip/gic-v3: Add support for ACPI's disabled but 'online capable' CPUs
+        https://git.kernel.org/arm64/c/d633da5d3ab1
+[15/19] arm64: psci: Ignore DENIED CPUs
+        https://git.kernel.org/arm64/c/643e12da4a49
+[16/19] arm64: arch_register_cpu() variant to check if an ACPI handle is now available.
+        https://git.kernel.org/arm64/c/eba4675008a6
+[17/19] arm64: Kconfig: Enable hotplug CPU on arm64 if ACPI_PROCESSOR is enabled.
+        https://git.kernel.org/arm64/c/9d0873892f4d
+[18/19] arm64: document virtual CPU hotplug's expectations
+        https://git.kernel.org/arm64/c/828ce929d1c3
+[19/19] cpumask: Add enabled cpumask for present CPUs that can be brought online
+        https://git.kernel.org/arm64/c/4e1a7df45480
+
 -- 
-2.45.2
+Catalin
 
 
