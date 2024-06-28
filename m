@@ -1,134 +1,114 @@
-Return-Path: <linux-pm+bounces-10207-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10208-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9B3791C540
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 19:56:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EA2A91C5EC
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 20:40:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 154B2B2134D
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 17:56:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB5191F22C7E
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 18:40:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BD991CCCA6;
-	Fri, 28 Jun 2024 17:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 728881CD5D4;
+	Fri, 28 Jun 2024 18:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S05dfqxr"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B18815253B;
-	Fri, 28 Jun 2024 17:56:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2AA1C8FAB;
+	Fri, 28 Jun 2024 18:39:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719597399; cv=none; b=Af22rg3dW6eqT0hnSs8A4eez5iLFqpxuBjF4FSfgPLIxJag83nvTsLCZF4l7AcVA0a30tRr4N9kqbZPvTVnjBpF9kJ4j35DgAGNdTpkprjaeU0YYF4HslikjLJPpsZjzJoYjvQ4/zITU3ho66fs6YY0bzvs/jDrlTve2ruDOgAk=
+	t=1719599996; cv=none; b=jCPFvdpls3hI1Njjr2cMwPWr6A4xyN2DMR5YChUJAKbRYT32C/BUtecybvgXURCBIUnT/1jyUdjPK0Rel6N/P4a2YoFTz1u4hxclmukrIW3UAoF7TvtlYr4Q/gRRNDHtE/1zoIurH91QA+TFF9Z9gbjX0IjQf+v6dtlAfvFi5KI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719597399; c=relaxed/simple;
-	bh=oYS7jmYESQRNo05AqB51F3nXEy6uK/Kv0yx6spSKe/o=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Aq7n43jp/31Fjqz7YX1+eij7oNbVxTwbSGkpgiQj6vRbXaJxknUzd6rujOORRwUWrTLfaWU4GbY3gEhpKlcvSxxGmWsEKs6EsA6FDBpVqvDZuRR/7UJ7rz4F7JTQmIMdRaF7U9RiS9HOktj23D6ead7gEBDeV2LW+SG6TNpNEZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8572C116B1;
-	Fri, 28 Jun 2024 17:56:33 +0000 (UTC)
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Marc Zyngier <maz@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	linux-acpi@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	loongarch@lists.linux.dev,
-	x86@kernel.org,
-	Russell King <linux@armlinux.org.uk>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Miguel Luis <miguel.luis@oracle.com>,
-	James Morse <james.morse@arm.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	Hanjun Guo <guohanjun@huawei.com>,
-	Gavin Shan <gshan@redhat.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	linuxarm@huawei.com,
-	justin.he@arm.com,
-	jianyong.wu@arm.com
-Subject: Re: [PATCH v10 00/19] ACPI/arm64: add support for virtual cpu hotplug
-Date: Fri, 28 Jun 2024 18:56:31 +0100
-Message-Id: <171959723432.44645.7883276197359651212.b4-ty@arm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
-References: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
+	s=arc-20240116; t=1719599996; c=relaxed/simple;
+	bh=XoSwQPaw4xVSbnAE6h9xsyMVlZcN3NV1inNXV2TNqpI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g2yEGqdU5gNc57FUa9YkuSrRi8VXnpj6MdWofX1DmCutrGffKYOexVQl4ryT5ZgQx/j9wnLDY00WJYop8NWOQ5EUyKUaMh3Ej7Jxj+T+DGpM5YDk7sJkWgalt0cbq5oz52+sKi3KMVf18D9b3POmqzjhtmyugxK1YzPcLLlLCAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S05dfqxr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB8A5C116B1;
+	Fri, 28 Jun 2024 18:39:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719599995;
+	bh=XoSwQPaw4xVSbnAE6h9xsyMVlZcN3NV1inNXV2TNqpI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=S05dfqxrMD31tfJs1vAXWacCilgnvjqVWdB1Xp39HiiTM0CrR3S+Tb089H6w4CVBt
+	 8jY6m0l2TZKR5W8WgBIfdhJ9V+BIHKIF7ZEHnbzEQoZNeKZ9LFOkhI+5bC2i0f8veI
+	 P/cmNZH3WX5lQuzFugKlbga0w5mkS0Cdu/njXy2ud3Cwozg1GqhLIRVhwxLeY41U6i
+	 papDbkXage/4s79R1YO+gGpk/0E2O5c7+xkz215PS3/ydxCpUASihT+mleSKII5Xrq
+	 bM+F/uMhLOYzK0Ja6cFGMWQPteYWGYQ/rJKnbTaONXXO0obod4x3jFC1upElwYHPxL
+	 6q65VHUIhsqHw==
+Message-ID: <f0f09455-5bfd-4dbc-b393-dbef75441e8a@kernel.org>
+Date: Fri, 28 Jun 2024 21:39:50 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] interconnect: qcom: Add MSM8953 driver
+To: =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ Vladimir Lypak <vladimir.lypak@gmail.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20240628-msm8953-interconnect-v3-0-a70d582182dc@mainlining.org>
+ <20240628-msm8953-interconnect-v3-2-a70d582182dc@mainlining.org>
+Content-Language: en-US
+From: Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20240628-msm8953-interconnect-v3-2-a70d582182dc@mainlining.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On Wed, 29 May 2024 14:34:27 +0100, Jonathan Cameron wrote:
-> v10:
-> - Make acpi_processor_set_per_cpu() return 0 / error rather than bool
->   to simplify error handling at the call sites.
->   (Thanks to both Rafael and Gavin who commented on this)
-> - Gather tags.
-> - Rebase on v6.10-rc1
+Hi Barnabás,
+
+Thank you for the patches!
+
+On 28.06.24 17:01, Barnabás Czémán wrote:
+> From: Vladimir Lypak <vladimir.lypak@gmail.com>
 > 
-> [...]
+> Add driver for interconnect busses found in MSM8953 based platforms.
+> The topology consists of four NoCs that are partially controlled by a
+> RPM processor.
+> 
+> Note that one of NoCs (System NoC) has a counterpart (System NoC MM)
+> that is modelled as child device to avoid resource conflicts, since it
+> uses same MMIO space for configuration.
+> 
+> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+> ---
+>   drivers/interconnect/qcom/Kconfig   |    9 +
+>   drivers/interconnect/qcom/Makefile  |    2 +
+>   drivers/interconnect/qcom/msm8953.c | 1321 +++++++++++++++++++++++++++++++++++
+>   3 files changed, 1332 insertions(+)
+[..]
+> +++ b/drivers/interconnect/qcom/msm8953.c
+[..]
+> +static const struct of_device_id msm8953_noc_of_match[] = {
+> +	{ .compatible = "qcom,msm8953-bimc", .data = &msm8953_bimc },
+> +	{ .compatible = "qcom,msm8953-pcnoc", .data = &msm8953_pcnoc },
+> +	{ .compatible = "qcom,msm8953-snoc", .data = &msm8953_snoc },
+> +	{ .compatible = "qcom,msm8953-snoc-mm", .data = &msm8953_snoc_mm },
+> +	{ }
+> +};
+> +
+> +static struct platform_driver msm8953_noc_driver = {
+> +	.probe = qnoc_probe,
+> +	.remove_new = qnoc_remove,
+> +	.driver = {
+> +		.name = "qnoc-msm8953",
+> +		.of_match_table = msm8953_noc_of_match,
 
-Applied to arm64 (for-next/vcpu-hotplug), thanks! If nothing falls
-apart, it should end up in mainline for 6.11.
+Why no .sync_state?
 
-Thomas, the GICv3 patches have been acked by Marc but they are missing
-your ack. If you want it added, I can refresh the series in the next day
-or so, otherwise the branch should remain stable. Thanks.
-
-[01/19] ACPI: processor: Simplify initial onlining to use same path for cold and hotplug
-        https://git.kernel.org/arm64/c/c1385c1f0ba3
-[02/19] cpu: Do not warn on arch_register_cpu() returning -EPROBE_DEFER
-        https://git.kernel.org/arm64/c/d830ef3ac569
-[03/19] ACPI: processor: Drop duplicated check on _STA (enabled + present)
-        https://git.kernel.org/arm64/c/157080f03c7a
-[04/19] ACPI: processor: Return an error if acpi_processor_get_info() fails in processor_add()
-        https://git.kernel.org/arm64/c/fadf231f0a06
-[05/19] ACPI: processor: Fix memory leaks in error paths of processor_add()
-        https://git.kernel.org/arm64/c/47ec9b417ed9
-[06/19] ACPI: processor: Move checks and availability of acpi_processor earlier
-        https://git.kernel.org/arm64/c/cd9239660b8c
-[07/19] ACPI: processor: Add acpi_get_processor_handle() helper
-        https://git.kernel.org/arm64/c/36b921637e90
-[08/19] ACPI: processor: Register deferred CPUs from acpi_processor_get_info()
-        https://git.kernel.org/arm64/c/b398a91decd9
-[09/19] ACPI: scan: switch to flags for acpi_scan_check_and_detach()
-        https://git.kernel.org/arm64/c/1859a671bdb9
-[10/19] ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
-        https://git.kernel.org/arm64/c/3b9d0a78aeda
-[11/19] arm64: acpi: Move get_cpu_for_acpi_id() to a header
-        https://git.kernel.org/arm64/c/8d34b6f17b9a
-[12/19] arm64: acpi: Harden get_cpu_for_acpi_id() against missing CPU entry
-        https://git.kernel.org/arm64/c/2488444274c7
-[13/19] irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
-        https://git.kernel.org/arm64/c/fa2dabe57220
-[14/19] irqchip/gic-v3: Add support for ACPI's disabled but 'online capable' CPUs
-        https://git.kernel.org/arm64/c/d633da5d3ab1
-[15/19] arm64: psci: Ignore DENIED CPUs
-        https://git.kernel.org/arm64/c/643e12da4a49
-[16/19] arm64: arch_register_cpu() variant to check if an ACPI handle is now available.
-        https://git.kernel.org/arm64/c/eba4675008a6
-[17/19] arm64: Kconfig: Enable hotplug CPU on arm64 if ACPI_PROCESSOR is enabled.
-        https://git.kernel.org/arm64/c/9d0873892f4d
-[18/19] arm64: document virtual CPU hotplug's expectations
-        https://git.kernel.org/arm64/c/828ce929d1c3
-[19/19] cpumask: Add enabled cpumask for present CPUs that can be brought online
-        https://git.kernel.org/arm64/c/4e1a7df45480
-
--- 
-Catalin
-
+BR,
+Georgi
 
