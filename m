@@ -1,229 +1,118 @@
-Return-Path: <linux-pm+bounces-10158-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10159-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EA1291B4C7
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 03:52:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D61591B571
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 05:27:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26BF01C216DB
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 01:52:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28DA72829EE
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 03:27:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFD1514277;
-	Fri, 28 Jun 2024 01:52:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="kJmtjvL+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 683C31CD11;
+	Fri, 28 Jun 2024 03:27:35 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1CBE1400A
-	for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 01:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D4BBA53
+	for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 03:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719539525; cv=none; b=eSF0sMNdnsWzCUBStDteJM4RR3d0FoPR/vOc2Dkwgju1AW5PDY+xKBO7YCDJ2sF1LcO04N4BhiWJWWcYDrfhPQ66fXGbCiRspa6gEhI+S6evyljCLcp+L/auzhHoBobseqkeyc6YTCggs53tafhvu+H8CnkTr0rasz2TZIHMrF8=
+	t=1719545255; cv=none; b=TkGIFioYecfPUNW5yuxZwzz1Peq/JvjTfI/LknnqjEVMsj+n65zRn/LDtLmmuONB/Rsphz+/+NzKIemInLnjfftOZv0KSBAl6GD3IGY2jeTk6veJEr7DoRY/2CLCqPaBN02HLA3NTcP2E6SRelhtbCjCAe5Ob6e032kHce1a96c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719539525; c=relaxed/simple;
-	bh=NpbEpSTdbFRJ9jSFWZ/I6EHnZGo1rDdUX9yvuPzZo9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nvvvaGm1i7Ho8QyS6fxrwQ3CxXMsxTI8nUD/XtilfqF3EXp+XXDpeNjLTd2PPwTyhxJm1Dw8ibYzSlLHARmkVt0qwr7WfHdA/3K4uEzwCKGYXxOFmAWv1H842I33nsYM0yiMkJMPZ24PBnU3RZLHBzvvvabrYYNwjYFjGmNuE+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=kJmtjvL+; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-42564a0d3ceso811755e9.0
-        for <linux-pm@vger.kernel.org>; Thu, 27 Jun 2024 18:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1719539522; x=1720144322; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lvyvL7sSYnWF73nZZ2R616gtm5dM5S1yjRMp5jsz2YI=;
-        b=kJmtjvL+kVCEkCfyC1ayjD/WwmfNnhKUAR4bq3uhhKNc7YHljTeOTM4hyvbejxo9ds
-         Fd04uOYUIDWMglySRWlSqcP/B8P6tGkHkw5AaTFmp5IYyF1/oiuEHm3zubFW09+ZQ1tS
-         bRiH7xmNjvzE4tfQkEpMKOpu3nvzZOP7RWilRuFvjuUyzB10kGKKdhoG3gZdak6p7yVD
-         fOn/a7TgG20Ut6aOLRq0TVFV4+zyvxVKvMoToU8dRsmKdQcRStEG7TsTGPnC45EtGqu0
-         zEnCkySaxXmDWE5IRDETh76XkyWKoUv4/nRSZfLeS2m4NI2Kugdh9eJ0wJl6qZNCbKaC
-         13Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719539522; x=1720144322;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lvyvL7sSYnWF73nZZ2R616gtm5dM5S1yjRMp5jsz2YI=;
-        b=OJmzibVht+Hfb6qbrL5aKwOl4HMsmVm3pykemo9/KcYRiYV1vDm2XhwnzDg3/ZF3m3
-         nrhZdSzfwJ70E4+4L9TNuS3zlFEvWnt5MqIe0/3NYsZA9FXRaYlKKYwxsDG8Jrs+GN8C
-         sdapwnM9LArLwyPwSDOCgT2zCLyp5vOjN3Jg+b76oaXfIc4nGD+C3AlMwkc0FLOFjJKW
-         SlaRltx7Ffx/QAS2vN9HpprDo4jk7nFv0v/19iCf6WwllITecxEcRTo7CVNg1oGhR7FR
-         r/nXTBgJMD5vvuMeVMKST1vk51Gg35SGH8un6Z4p7cqqMwhqtg07lZnOzDmGiEOiJHrs
-         lb4A==
-X-Forwarded-Encrypted: i=1; AJvYcCXnPnERIaOuuSJIXkGW7GpHWn0WjVXmP6dcYTJlXQm4GsuaSfIWGWA3RlGEJfsZ3ofr5iykU//rLX1XttqJzsRqaEETZMsCnzM=
-X-Gm-Message-State: AOJu0YzHgTN/OiQJdoTMajPL3RTIid6Rn0cBcWEoFGUewlChtWZTgZ5W
-	vAZGpi+68/S64u9LzIJH1KNbAAuB3UCYhbowFuxOrx33n1vPgY7ALoKgMz9D/+E=
-X-Google-Smtp-Source: AGHT+IHTJZg+LuweCmL8WGATnVT0JLoi2AWTzn3z8vnE4MboAjk01OaoXqEm1/sLrVCaDrDFi6rfbQ==
-X-Received: by 2002:a05:600c:19d3:b0:425:6b77:f5e0 with SMTP id 5b1f17b1804b1-4256b77f81cmr6169465e9.31.1719539522295;
-        Thu, 27 Jun 2024 18:52:02 -0700 (PDT)
-Received: from airbuntu (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256b097bcbsm13809025e9.35.2024.06.27.18.52.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jun 2024 18:52:01 -0700 (PDT)
-Date: Fri, 28 Jun 2024 02:52:00 +0100
-From: Qais Yousef <qyousef@layalina.io>
-To: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Loehle <christian.loehle@arm.com>,
-	Hongyan Xia <hongyan.xia2@arm.com>,
-	John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] sched: Consolidate cpufreq updates
-Message-ID: <20240628015200.vw75huo53redgkzf@airbuntu>
-References: <20240619201409.2071728-1-qyousef@layalina.io>
- <f281ba07-d54a-460a-8f78-f7eb6bd8ed88@arm.com>
+	s=arc-20240116; t=1719545255; c=relaxed/simple;
+	bh=a3olSj8nVDgW4q/EBPpehEZzXrNx6E2BpkN/BcooknI=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=HmQakiCcVzhduNSxzGNTAezYZ80kyDqsQ0hS4oN45lEwV7wmtxxleWIc7ib/dxQkVC4y7BfLfvm+ajsNhUp9StioZPXj/ueRGluqTTrOXxBNq9/dOfT3Fl+Q0ulgip/utO48zak2UY66vj/Wa8rV+xkTe80XCx2FOMshP1Si3bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1719545240-086e231108138f50001-MQbzy6
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx1.zhaoxin.com with ESMTP id tbdnvh16gC4lZJdo (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 28 Jun 2024 11:27:20 +0800 (CST)
+X-Barracuda-Envelope-From: LindaChai@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 28 Jun
+ 2024 11:27:20 +0800
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 28 Jun
+ 2024 11:27:19 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from zxbjmbx1.zhaoxin.com ([fe80::2c4a:ac53:52a8:1a13]) by
+ zxbjmbx1.zhaoxin.com ([fe80::2c4a:ac53:52a8:1a13%3]) with mapi id
+ 15.01.2507.039; Fri, 28 Jun 2024 11:27:19 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+From: "Linda Chai(BJ-RD)" <LindaChai@zhaoxin.com>
+To: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+CC: "Cobe Chen(BJ-RD)" <CobeChen@zhaoxin.com>, LeoLiu-oc
+	<LeoLiu-oc@zhaoxin.com>, "Linda Chai(BJ-RD)" <LindaChai@zhaoxin.com>, "Tim
+ Guo(BJ-RD)" <TimGuo@zhaoxin.com>, "acpica-devel@lists.linux.dev"
+	<acpica-devel@lists.linux.dev>, "bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "hpa@zytor.com"
+	<hpa@zytor.com>, "j.granados@samsung.com" <j.granados@samsung.com>,
+	"lenb@kernel.org" <lenb@kernel.org>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "mcgrof@kernel.org" <mcgrof@kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>, "peterz@infradead.org"
+	<peterz@infradead.org>, "rafael@kernel.org" <rafael@kernel.org>,
+	"ricardo.neri-calderon@linux.intel.com"
+	<ricardo.neri-calderon@linux.intel.com>, "robert.moore@intel.com"
+	<robert.moore@intel.com>, "tglx@linutronix.de" <tglx@linutronix.de>,
+	"viresh.kumar@linaro.org" <viresh.kumar@linaro.org>, "x86@kernel.org"
+	<x86@kernel.org>
+Subject: Re: [PATCH 3/3] ACPI: cpufreq: Add ITMT support when CPPC enabled for
+ Zhaoxin CPUs
+Thread-Topic: Re: [PATCH 3/3] ACPI: cpufreq: Add ITMT support when CPPC
+ enabled for Zhaoxin CPUs
+X-ASG-Orig-Subj: Re: [PATCH 3/3] ACPI: cpufreq: Add ITMT support when CPPC enabled for
+ Zhaoxin CPUs
+Thread-Index: AdrJCJizLp8Sv9dXStirpjor4h554A==
+Date: Fri, 28 Jun 2024 03:27:19 +0000
+Message-ID: <4bee9e6ac2c84311ad7f7654d398f62a@zhaoxin.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f281ba07-d54a-460a-8f78-f7eb6bd8ed88@arm.com>
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1719545240
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 574
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -1.99
+X-Barracuda-Spam-Status: No, SCORE=-1.99 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=BSF_SC0_SA_TO_FROM_DOMAIN_MATCH, THREAD_INDEX, THREAD_TOPIC
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.126861
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
+	0.01 THREAD_INDEX           thread-index: AcO7Y8iR61tzADqsRmmc5wNiFHEOig==
+	0.01 THREAD_TOPIC           Thread-Topic: ...(Japanese Subject)...
+	0.01 BSF_SC0_SA_TO_FROM_DOMAIN_MATCH Sender Domain Matches Recipient
+	                           Domain
 
-On 06/25/24 14:58, Dietmar Eggemann wrote:
-
-> > @@ -4917,6 +4927,84 @@ static inline void __balance_callbacks(struct rq *rq)
-> >  
-> >  #endif
-> >  
-> > +static __always_inline void
-> > +__update_cpufreq_ctx_switch(struct rq *rq, struct task_struct *prev)
-> > +{
-> > +#ifdef CONFIG_CPU_FREQ
-> > +	if (prev && prev->dl.flags & SCHED_FLAG_SUGOV) {
-> > +		/* Sugov just did an update, don't be too aggressive */
-> > +		return;
-> > +	}
-> > +
-> > +	/*
-> > +	 * RT and DL should always send a freq update. But we can do some
-> > +	 * simple checks to avoid it when we know it's not necessary.
-> > +	 *
-> > +	 * iowait_boost will always trigger a freq update too.
-> > +	 *
-> > +	 * Fair tasks will only trigger an update if the root cfs_rq has
-> > +	 * decayed.
-> > +	 *
-> > +	 * Everything else should do nothing.
-> > +	 */
-> > +	switch (current->policy) {
-> > +	case SCHED_NORMAL:
-> > +	case SCHED_BATCH:
-> 
-> What about SCHED_IDLE tasks?
-
-I didn't think they matter from cpufreq perspective. These tasks will just run
-at whatever the idle system is happen to be at and have no specific perf
-requirement since they should only run when the system is idle which a recipe
-for starvation anyway?
-
-> 
-> > +		if (unlikely(current->in_iowait)) {
-> > +			cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT | SCHED_CPUFREQ_FORCE_UPDATE);
-> > +			return;
-> > +		}
-> > +
-> > +#ifdef CONFIG_SMP
-> > +		if (unlikely(rq->cfs.decayed)) {
-> > +			rq->cfs.decayed = false;
-> > +			cpufreq_update_util(rq, 0);
-> > +			return;
-> > +		}
-> > +#else
-> > +		cpufreq_update_util(rq, 0);
-> > +#endif
-> 
-> We can have !CONFIG_SMP and CONFIG_FAIR_GROUP_SCHED systems. Does this
-> mean on those systems we call cpufreq_update_util() for each cfs_rq of
-> the hierarchy where on CONFIG_SMP we only do this for the root cfs_rq?
-
-No. This is called on context switch only and hierarchy doesn't matter here. We
-just do it unconditionally for UP since we only track the decayed at cfs_rq
-level and I didn't think it's worth trying to make it at rq level.
-
-> 
-> [...]
-> 
-> > @@ -4744,8 +4716,8 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
-> >  	if (se->avg.last_update_time && !(flags & SKIP_AGE_LOAD))
-> >  		__update_load_avg_se(now, cfs_rq, se);
-> >  
-> > -	decayed  = update_cfs_rq_load_avg(now, cfs_rq);
-> > -	decayed |= propagate_entity_load_avg(se);
-> > +	cfs_rq->decayed |= update_cfs_rq_load_avg(now, cfs_rq);
-> > +	cfs_rq->decayed |= propagate_entity_load_avg(se);
-> >  
-> >  	if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
-> >  
-> > @@ -4766,11 +4738,8 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
-> >  		 */
-> >  		detach_entity_load_avg(cfs_rq, se);
-> >  		update_tg_load_avg(cfs_rq);
-> > -	} else if (decayed) {
-> > -		cfs_rq_util_change(cfs_rq, 0);
-> > -
-> > -		if (flags & UPDATE_TG)
-> > -			update_tg_load_avg(cfs_rq);
-> > +	} else if (cfs_rq->decayed && (flags & UPDATE_TG)) {
-> > +		update_tg_load_avg(cfs_rq);
-> >  	}
-> >  }
-> 
-> You set cfs_rq->decayed for each taskgroup level but you only reset it
-> for the root cfs_rq in __update_cpufreq_ctx_switch() and task_tick_fair()?
-
-Yes. We only care about using it for root level. Tracking the information at
-cfs_rq level is the most natural way to do it as this is what update_load_avg()
-is acting on.
-
-> 
-> [...]
-> 
-> > @@ -8418,6 +8378,14 @@ static void check_preempt_wakeup_fair(struct rq *rq, struct task_struct *p, int
-> >  	if (pick_eevdf(cfs_rq) == pse)
-> >  		goto preempt;
-> >  
-> > +nopreempt:
-> > +#ifdef CONFIG_SMP
-> > +	if (rq->cfs.decayed && rq->cfs.h_nr_running > 1)
-> > +		cpufreq_update_util(rq, SCHED_CPUFREQ_TASK_ENQUEUED);
-> 
-> Why don't you set rq->cfs.decayed to false here as well?
-> 
-> Is it because the request might fail in sugov_should_update_freq() in
-> case 'delta_ns < sysctl_sched_base_slice'?
-
-Yes. This call is likely to fail and we don't have a way to get a feedback to
-know whether it went through or not.
-
-FWIW I already have a patch that I considered sending along this submission
-but opted not to as it'll make things too complicated.
-
-But FWIW, I make cpufreq_update_util() return a bool to indicate whether
-cpufreq update has happened or not and this helps to reset rq->cfs.decayed more
-accurately in all call site like this one. But I think this should be another
-independent patch.
-
-
-Thanks!
-
---
-Qais Yousef
+SGmjrEFsbA0KSSBoYXZlbid0IHJlY2VpdmVkIGFueSByZXBseSBhYm91dCB0aGlzIG1haWwgZm9y
+IGEgbG9uZyB0aW1lLiBJIGRvdWJ0IGlmIHlvdSBoYXZlIG5vdGljZWQgaXQ/DQpJIHJlYWxseSBs
+b29rIGZvcndhcmQgdG8gcmVjZWl2aW5nIHlvdXIgc3VnZ2VzdGlvbiBhYm91dCB0aGlzIG5ldyBw
+YXRjaC4NCg0KQlJzDQpMaW5kYQ0KDQoNCrGjw9zJ+cP3o7oNCrG+08q8/rqs09Cxo8Pcu/LXqNPQ
+0MXPoqOsvfa5qda4tqjK1bz+yMvKudPDoaPRz737ttSxvtPKvP678sbkxNrI3df2yM66zs60vq3K
+2siotcSy6dTEoaLKudPDoaK4tNbGu/LXqreioaMNCkNPTkZJREVOVElBTCBOT1RFOg0KVGhpcyBl
+bWFpbCBjb250YWlucyBjb25maWRlbnRpYWwgb3IgbGVnYWxseSBwcml2aWxlZ2VkIGluZm9ybWF0
+aW9uIGFuZCBpcyBmb3IgdGhlIHNvbGUgdXNlIG9mIGl0cyBpbnRlbmRlZCByZWNpcGllbnQuIEFu
+eSB1bmF1dGhvcml6ZWQgcmV2aWV3LCB1c2UsIGNvcHlpbmcgb3IgZm9yd2FyZGluZyBvZiB0aGlz
+IGVtYWlsIG9yIHRoZSBjb250ZW50IG9mIHRoaXMgZW1haWwgaXMgc3RyaWN0bHkgcHJvaGliaXRl
+ZC4NCg==
 
