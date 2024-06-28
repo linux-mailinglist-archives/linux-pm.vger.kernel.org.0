@@ -1,70 +1,70 @@
-Return-Path: <linux-pm+bounces-10226-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10227-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B998991C889
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 23:50:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD59D91C8E8
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 00:05:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4357A1F202CA
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 21:50:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF9F61C228E4
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 22:05:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E9167FBB7;
-	Fri, 28 Jun 2024 21:50:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9821F80BE5;
+	Fri, 28 Jun 2024 22:05:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OUEkaevm"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NOYIM9kH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1C07CF25
-	for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 21:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC0678C64
+	for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 22:05:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719611400; cv=none; b=BWD1OotcQedpzeLdxw8rW/ZRRdf0OhurIzs+DYNNGo9+QtGU2gSyi6ALy8/CcrBB5/d4tdX4MJbRvE3CNrqvKeDk1Y9+3J/SoTGN0FWR5nnmvi1nfBnw8lPgykZLqEuO2cTwPmZ3pCjnFA+/6tjoaVT9XxkdaBtZFepNT6FDXQQ=
+	t=1719612342; cv=none; b=DeDG4g3SREfPlTvceyYFuHkBwpu/Ha4QbSjO1xhK6P5SRD2Zfcl7MiPN1eyJmoSkw1gdFYr6/1Wpn/snqSCMCdx7A90PAzJubiWbTGp/vDnc+4oF/Hma5MtRZAbB+60+ttN8oo8CBVB3jLAGg8i/1QDWMXvZCx5xkmob5YTBnpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719611400; c=relaxed/simple;
-	bh=Mhcw8dQaw95Pc6+sf7N/ghWDxBkX67de3Yl1cdzhkII=;
+	s=arc-20240116; t=1719612342; c=relaxed/simple;
+	bh=3aGEUvIOf/bidCVYqF7K+ZG+H0niWJmyzjVQCHJgyDY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BNLB2/gGYNwa0CaIcy4xg0eP3k0+9CqdlqaTCE+zq/7PRSVOWIrpDo9fst8EMW8qvxfQ6kZae0Vgk/o/dj61Ov2xvhsj2/rgzzjjVfe8ZtMz3Wj+rvj+yKsqHXddq49W8SWKs94JU6hpgiIxe77mvJ0N0kmaqEiE0DItf3p2h5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OUEkaevm; arc=none smtp.client-ip=209.85.166.173
+	 In-Reply-To:Content-Type; b=oYUsiLwEayg5565Kun3/9TAZ1pTBLsioaE5+ZUq0DnPsY/P6OJU7ruqYnhoukY95QsqJY9XmTrFWoJNa/wCeOsfbY+e8RNFuk8BWPJzTnmP4AiQBfsJkKGj+SVhSd7VXlvPfh9rQsk3zxGC9yppZYv/iS3UBJPRlz3g/i83plZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NOYIM9kH; arc=none smtp.client-ip=209.85.166.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-3758686ef2fso790495ab.0
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 14:49:59 -0700 (PDT)
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3762c172d99so667265ab.0
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2024 15:05:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1719611398; x=1720216198; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1719612339; x=1720217139; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lOPDDVwK5vwajC7/NBhsDpQNatLDyfxhDEgsEgFJfxk=;
-        b=OUEkaevm6VTFx0BxDK1tx7qVP2ZhN8P4YhPr6U7LVCwkt54fDZR1Rdg0QJ/Y6ZG9XO
-         EHNmBRl/P/x7GwDGQm/bt7wUn05qGLBDbJO6ouSsCNtJyB++2s32jwAtdBoDPSfKG2dZ
-         4F5dxzdVlSroFxeLSacbwpwMJHFtZvAQW4R3c=
+        bh=4zlra1gL7XkIhl5N+DR/hN71YFNtByPQ/FFGNneM+Yw=;
+        b=NOYIM9kHcvXxaGbifJSO7dRypGIHhiJV2SotzEC12EUh2kppj9dzx2y8T/DtkT0m6z
+         hNewHC3nYgdhsdRT/xuDM2KXdi97mBS4d40785+GLrAjWwNkudPBsd5rwXMm9ee8DOL0
+         sUE5JU9T6fJ+EDDSWQuZ+a1OYJcgrFC2hkJYI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719611398; x=1720216198;
+        d=1e100.net; s=20230601; t=1719612339; x=1720217139;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lOPDDVwK5vwajC7/NBhsDpQNatLDyfxhDEgsEgFJfxk=;
-        b=HYkatbU+97jlczVnkntR5EQZE5e7/I5bRJG/IywZX9zglqL6JW2hJT1QnAbCKlTsKo
-         SAn9Ggk6ya26NJFchQLkGjv3rhNi9thms5Cou7EVbOB6OF+6/O3JjZZ3QSIr9CWsXcDH
-         sUjgT01j5C9GEJrvIbVOx/UauNd3qacFE6kQu3RqHynUvUUtF2CDenqDP3Mdd2u3dGhl
-         ulZZhqGGR5wnvaGZ1HKQGptyJO/QW5TB3P00kU7V1NstA4PXB5C4bws3gge1f/l0ozkI
-         HRcyFTuxvlUify05pYGszXp0QFeX12dk4KZrtugHgseBXGUiryAXnz/yzyFpcEZYTjNn
-         pDCg==
-X-Gm-Message-State: AOJu0YyrhvsQ2DmcuBvfhFyRCyH0luGCKTcAic8aUbP4zeNWoMBmcbng
-	j2wGBCSMDBfZXoJefXiIo3rcs//IsHDuIzHJx1RqZsBtkzN7PwaTVPMCQFmQRQg=
-X-Google-Smtp-Source: AGHT+IH1rBy1D6MMXMURrKhLgM/QVCR4/NjWc1GJCR98wa8bc1bw/NyWUMkmgHh/zML+/5LatlTbug==
-X-Received: by 2002:a05:6602:81b:b0:7f3:d3ed:1ca3 with SMTP id ca18e2360f4ac-7f3d3ed1dedmr799268339f.1.1719611398619;
-        Fri, 28 Jun 2024 14:49:58 -0700 (PDT)
+        bh=4zlra1gL7XkIhl5N+DR/hN71YFNtByPQ/FFGNneM+Yw=;
+        b=dr6zRE2AL6Q1R6fhxnU5WbDlOs+XQ4Eo0/LKg93TaHdCktM2FnhP6BiYX06Az3wXFK
+         boBOoIWOsxFlJ2WeOFY0VpN7U0/RlLHCDv+G4E8bnx+fWGq3P8W0nwcyBHHcc/3NU3a9
+         nlpNxHlKoa0mPQdvPwp1l2ca6HX+EsyxA5t40UvR2Ay3DgS2RdFuHZdBVCW3/CyUZ+Cw
+         ytg3Z68mYGddiyLZOJHRAFc0dB9xCPj0Grn9b/AmKD5UAnryH/tKUtrX6dcbmyhRIzfF
+         ZcSXu0TOvpXKZMRQJCEEo4kTeOGlR3o9mK9mGY+Ldc7RaLLKtpbRLI8F1HqVRqvwXcAY
+         SeLw==
+X-Gm-Message-State: AOJu0YwfUiubdCxq8zgXbJG+E+hpvu3EKgY25NppNNDWUM/Qr8n1hj19
+	zBRhnApYgJ9sQbEYzZ/kJCecfJk/J4lBbxUgdsKz2rX7ztzvdKsPdLi2EBD76Gw=
+X-Google-Smtp-Source: AGHT+IF5OaIaROSuGC1uEW7EZhHMkRrJMyqFF1GvL+sDpctUstwwNAvMlMZLGaJx48j+sKTVWG2yKQ==
+X-Received: by 2002:a05:6e02:b21:b0:378:cf86:357b with SMTP id e9e14a558f8ab-378cf8636b9mr98406635ab.3.1719612338752;
+        Fri, 28 Jun 2024 15:05:38 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4bb742f1cdasm731031173.172.2024.06.28.14.49.57
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-37ad4370c90sm6147595ab.69.2024.06.28.15.05.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jun 2024 14:49:57 -0700 (PDT)
-Message-ID: <6da74747-ead4-4abc-b732-2cc27f7fce5d@linuxfoundation.org>
-Date: Fri, 28 Jun 2024 15:49:57 -0600
+        Fri, 28 Jun 2024 15:05:37 -0700 (PDT)
+Message-ID: <c1bcd796-033e-4ff1-b610-c7c2f64e0b44@linuxfoundation.org>
+Date: Fri, 28 Jun 2024 16:05:37 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -72,42 +72,48 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] cpupower: Add 'uninstall' targers for arch-related
- debug subprojects
+Subject: Re: [PATCH] cpupower: Disable direct build of the 'bench' subproject
 To: Roman Storozhenko <romeusmeister@gmail.com>,
- Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-pm@vger.kernel.org, Javier Carrasco
- <javier.carrasco.cruz@gmail.com>, linux-kernel@vger.kernel.org,
+ Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20240625-add_uninstall-v1-0-ab031bbd98e6@gmail.com>
+References: <20240626-fix_bench_compilation-v1-1-d039bd5fa551@gmail.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240625-add_uninstall-v1-0-ab031bbd98e6@gmail.com>
+In-Reply-To: <20240626-fix_bench_compilation-v1-1-d039bd5fa551@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 6/25/24 12:53, Roman Storozhenko wrote:
-> This patch series adds 'uninstall' targets to the makefiles of
-> 'debug/i386' and 'debug/x86_64' architecture-specifics debug subprojects
+On 6/26/24 10:45, Roman Storozhenko wrote:
+> Execution of the 'make' command in the 'bench' subfolder causes the
+> following error:
+> 
+> $ make O=cpupower/build/ DESTDIR=cpupower/install/ -j8
+> "  CC      " cpupower/build//main.o
+> "  CC      " cpupower/build//parse.o
+> /bin/sh: 1: "  CC      "cpupower/build//system.o
+>    CC      : not found
+>    make: *** [Makefile:21: cpupower/build//main.o] Error 127
+>    make: *** Waiting for unfinished jobs....
+>    /bin/sh: 1:   CC      : not found
+>    /bin/sh: 1:   CC      : not found
+>    make: *** [Makefile:21: cpupower/build//parse.o] Error 127
+>    make: *** [Makefile:21: cpupower/build//system.o] Error 127
+> 
+> The makefile uses variables defined in the main project makefile and it
+> is not intended to run standalone. The reason is that 'bench' subproject
+> depends on the 'libcpupower' library, see the 'compile-bench' target in
+> the main makefile.
+> Add a check that prevents standalone execution of the 'bench' makefile.
 > 
 > Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
 > ---
-> Roman Storozhenko (2):
->        cpupower: Add 'uninstall' target for 'debug/i386' subproject
->        cpupower: Add 'uninstall' target for 'debug/x86_64' subproject
-> 
->   tools/power/cpupower/debug/i386/Makefile   | 8 +++++++-
->   tools/power/cpupower/debug/x86_64/Makefile | 6 +++++-
->   2 files changed, 12 insertions(+), 2 deletions(-)
-> ---
-> base-commit: 0fc4bfab2cd45f9acb86c4f04b5191e114e901ed
-> change-id: 20240625-add_uninstall-14246eeec69a
-> 
-> Best regards,
 
-I am inclined to not take these as these are special case
-debug tools and modules for developers.
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/log/?h=cpupower
+for Linux 6.11-rc1
 
 thanks,
 -- Shuah
+
 
