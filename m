@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-10166-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10167-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EFA491B8A6
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 09:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E66FB91B8A8
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 09:41:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54AA91F229EF
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 07:41:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B7CE1F226A2
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 07:41:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AE4E140363;
-	Fri, 28 Jun 2024 07:41:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D56DF140363;
+	Fri, 28 Jun 2024 07:41:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l98QEoPs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eJyVXgZa"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BC63F8F1;
-	Fri, 28 Jun 2024 07:41:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A793B48788;
+	Fri, 28 Jun 2024 07:41:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719560475; cv=none; b=pYe+TVPhbtbKF8sFQzrH/J7xSng/uGEc8S4gGDxeKwF+7G5/uXSxNz90cwDXH0lDgz+gJoonuklSYKC3vKUpooY0FHqhPmTybcAtE9jSRis7bZtmiEzDIXgfqEwy/5b87/KHDuUc2REYlB/oI0uiXEhs1W8Hqt+sosmGpvlFx28=
+	t=1719560505; cv=none; b=aMMSC3B2oTlfLvrVzOKanfCPTH7r0BUDsfNR6C51E04IhQuIFW5L01M0FmRQdTKLTMxtESBfxDSSn6hvbzQTXScdB66Cldh/UunB3VrdtRt+TB4CRuuSzxERalfanVjvwUEaEKByDi0iBAOhzCmq6bhUjoGoCuOrvkG7JIx7kaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719560475; c=relaxed/simple;
-	bh=kJfcBL1+TYkx+4diQWGRnb+5DWkWwN9w6mPG704LIWg=;
+	s=arc-20240116; t=1719560505; c=relaxed/simple;
+	bh=Wt2QyXbbxL8PTmXZ2Z39CcMI+SgW9ROVsMqtFb7xo3g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lRkO+2JiXjYolPM65wUGlpyuZ1J0v2zraQMs4XFl29r/8lERMo8jZwJausNEjzROpNT8A4cJ1QYy7f3gstzULL8B925LTBEuiunvPU2ssxqpCZjuMCfCC1At+NL7gtpd95SVFpGShDu7LxpffLwBnFtMJnTiKkMJ4/pzS+96sDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l98QEoPs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ABBFC116B1;
-	Fri, 28 Jun 2024 07:41:10 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=jx5SSMHlmcOjDpFlVJlujxO1nxxwPr1gwtJhf2pK0+wwloEQ6bTtnC2gBWL/kpMIwcQn51QrnALPhfyMeEm29FyfX82/sSR58xFJdapQy5DI+UsRXqt3zm1W/CWpIru9v17l/QFzIVIRbWXB4modiXFtYPdZZ5HjxVo7+mnBeMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eJyVXgZa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49AD4C116B1;
+	Fri, 28 Jun 2024 07:41:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719560474;
-	bh=kJfcBL1+TYkx+4diQWGRnb+5DWkWwN9w6mPG704LIWg=;
+	s=k20201202; t=1719560505;
+	bh=Wt2QyXbbxL8PTmXZ2Z39CcMI+SgW9ROVsMqtFb7xo3g=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=l98QEoPs+J67MTNkFsyzpdjsntaHJlnZMpltSTm+AOwcl/GFrBkYsDh+Obx4olsUf
-	 hcVtlpOME8KWorb6aRE+gXaeQo7RgsOhWMCsc5HMhtw6prNXxF/qrfWiQVFUL0kkTx
-	 417Ezd1zXRgH4dhoWXKoyPS0FytyXTgf13eQpMei6PhpXyezY9heuxteFpOc6pBsRR
-	 kBPJOkg8gXyzE6isN93njIiNsKUPltZV5fIXsBQq2x+6RnNO/0URSpMV/3TAjDQ0Pn
-	 /7PRGIDks+eZEBbe1NBEG5JPbiCs83fSHfqaP1xdJML9s9aUAypCS3nKFepGtVhAB7
-	 sU52K/FXC1+uQ==
-Message-ID: <8a9b5dae-dcd7-4437-ae07-9a53b9441652@kernel.org>
-Date: Fri, 28 Jun 2024 09:41:08 +0200
+	b=eJyVXgZaGjMK53Z83reYtBISCzGWxnheM32eCFiSZlxD/1k5NFVw3AOGT6ug4KrdY
+	 ci3jzunGWWqbJS1jSQBP/JaU3Dq2XUTdacgOMnZfn402ebzBE1qeyk4BbVeF4m5n9O
+	 QdzgrdJZz8q+/Yz/DDK8vmZCZZzD4vqDldkAhJjuVUja3GAJ4LrQNpm0dSBHO2RxWK
+	 S2BLY4fKjpQpKJ/mmRhYkXji1nq0XI9tmyQ0Rbqd8F36Ojg3msJqsGdJWr2NZZrThy
+	 4NnMGAgNG/i84YEObq/InOsdevGGblzHFBofp+MLXKj1zyrMzQi+DRDokCjt3xab4n
+	 7BNnb1jFGOjZg==
+Message-ID: <68e56d01-6cda-4101-a8dc-659cc5160afc@kernel.org>
+Date: Fri, 28 Jun 2024 09:41:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: interconnect: qcom: Add Qualcomm
- MSM8953 NoC
+Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add MSM8953 driver
 To: =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
  Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
@@ -59,7 +58,7 @@ Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
  linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  Vladimir Lypak <vladimir.lypak@gmail.com>
 References: <20240627-msm8953-interconnect-v2-0-b4940a8eab69@mainlining.org>
- <20240627-msm8953-interconnect-v2-1-b4940a8eab69@mainlining.org>
+ <20240627-msm8953-interconnect-v2-2-b4940a8eab69@mainlining.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,40 +104,26 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240627-msm8953-interconnect-v2-1-b4940a8eab69@mainlining.org>
+In-Reply-To: <20240627-msm8953-interconnect-v2-2-b4940a8eab69@mainlining.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 27/06/2024 17:08, Barnabás Czémán wrote:
 > From: Vladimir Lypak <vladimir.lypak@gmail.com>
 > 
-> Add the device-tree bindings for interconnect providers
-> used on MSM8953 platform.
+> Add driver for interconnect busses found in MSM8953 based platforms.
+> The topology consists of four NoCs that are partially controlled by a
+> RPM processor.
+> 
+> Note that one of NoCs (System NoC) has a counterpart (System NoC MM)
+> that is modelled as child device to avoid resource conflicts, since it
+> uses same MMIO space for configuration.
 > 
 > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
 > Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
----
-
-<form letter>
-This is an automated instruction, just in case, because many review tags
-are being ignored. If you know the process, you can skip it (please do
-not feel offended by me posting it here - no bad intentions intended).
-If you do not know the process, here is a short explanation:
-
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
-</form letter>
 
 Best regards,
 Krzysztof
