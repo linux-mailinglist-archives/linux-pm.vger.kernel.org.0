@@ -1,133 +1,147 @@
-Return-Path: <linux-pm+bounces-10212-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10213-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22E0991C623
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 20:56:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1785391C644
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 20:59:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5536B1C2167F
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 18:56:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C6E2B25DCC
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2024 18:59:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A8A5381B;
-	Fri, 28 Jun 2024 18:56:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF05C6BB33;
+	Fri, 28 Jun 2024 18:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZnqCbULC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lky0WtaY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1C027725;
-	Fri, 28 Jun 2024 18:56:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87E426A8BE;
+	Fri, 28 Jun 2024 18:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719600963; cv=none; b=S2ui+erLyIwhbFFM4/gTu96C8H1eUVTmyIgsPzFv2qSwfDWsCKpr7Ldm+zIpm5TOWghQQPstj8MbWaxVqw5UZ9Vy3fOqhFXvsUJvAn7oAc8m8J6Uwf4RjNXAcKn4uXk1jlng/eAHG/t7IPAUJewLrXHenA8i6H44WOPE6BhrkCI=
+	t=1719601163; cv=none; b=j0UeT0HUnzES3Hlmc2vbXZ0vB1C0Ykr/lcTURLnDu4z45KQSXqYSdA6DjTRBqzHcLdsKAegKfWqlbuMtc1VP4bgWJOgmyac/90GRAT1lHbB5x88tVE3R7EGazHcCP1VGTO4LKQbvS5axuHP/qv0Pi4ms7FP84P9W83+n+QOqa0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719600963; c=relaxed/simple;
-	bh=VDbB67Z3bIECGKJDj4pPAbgO82rGC1DMBgigZ4Sr46Y=;
+	s=arc-20240116; t=1719601163; c=relaxed/simple;
+	bh=e+e7fSsfY1C3BBErHbLSk9HJdSyiw+J5R+fAtwg1pJ0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uqb1bp/4c8T8/LLq1DvmfY2JPp637VVM1VqQbh1SRurrHeRvVba3N919rqkiFXXBYdxukJpBrPYJh/pdJ6pDgZBZBWyzNJiEcaegrhq7IfNhU80CwvtdZyeCvHBqm65hOWAGBJLf2MI6/u3FT7jXG7rpJB789mFxGS2iFCh5yBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZnqCbULC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C427FC116B1;
-	Fri, 28 Jun 2024 18:56:02 +0000 (UTC)
+	 To:Cc:Content-Type; b=HJlcZS+fSM2JXzGI9Ot8fTF2RV5czDoSyx9RohzhCj6D+rWuxVkD5DTuoKCSLakpxphCxP2EcQPL6ITK6f9OQWlxTkUKFye3J7qAwTrRXDlaOO6koOAA0+NsCSCNGeXCIlniBvhNL4bedAfZLUNiSGHOWZhfhnH2hVgYSg6VOb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lky0WtaY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11488C2BD10;
+	Fri, 28 Jun 2024 18:59:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719600962;
-	bh=VDbB67Z3bIECGKJDj4pPAbgO82rGC1DMBgigZ4Sr46Y=;
+	s=k20201202; t=1719601163;
+	bh=e+e7fSsfY1C3BBErHbLSk9HJdSyiw+J5R+fAtwg1pJ0=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ZnqCbULCQevrFv/B5YSxGwoBu9z9HzbBunC97BGheVU2J4m9qSP+N1IgynGqE+iuo
-	 nn8dBKVjEVzr6JTn4KDWuUCRLGvCRj34HKuMyscTlvjVYrVcBuGtDc4yj+1CfXYvYU
-	 Imk7GjX7NEjH1oZXxYbMCST9NJ3x/9wlM7vFfFKFHDZI0CjRiN0smlA8bku87YeNDE
-	 4k97TO7gBix90gfkk8cUihmh+uRG8EnRg29ah2YrFEpSAOFyibSM/9H56BpVPy3Ms1
-	 qlp1/QgERKmLPfComGndI5eT+kE43gyKQvAIhLsf885sRqWBDqQJ538Bn1PN2HdQj+
-	 Z68FJeDaJxRuw==
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-25c98395938so135859fac.3;
-        Fri, 28 Jun 2024 11:56:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW1zlvD0hMSchRoYYNVPbUjDtVGlBbt8aO31XA0Dq32vGzPZxTawtCe8v8bTBNryIwtLzlTDsmnJYH7IRPC+cmN/PdSwmO6nYzgAcg/4Z6IEDV7cuIegdBwuGWEbdUPR1i3XIWfC68=
-X-Gm-Message-State: AOJu0YyG1lQpxlaiGfWPVWAeyE3EOZh9yzoawitbWumKP6Dt3qkO9rmo
-	wNHjJXnXtLYKn/rl9BZ7EHAEi1B9ksGIXrqMl0+poiEUO5t/tud0CqfSU+0T9VHD0oL0TyD/RBY
-	DQtWr5ATUfRy7AXJt5x9cQBk4Mvw=
-X-Google-Smtp-Source: AGHT+IFavZi+phT1i/Y33ndVBo5RWqyyhymCCRWkZBya/izLWOy0ES7Nkokp23mNUk7SlmoXrW1bfLVhs9lijk0t9SA=
-X-Received: by 2002:a05:6870:17a8:b0:254:7dbe:1b89 with SMTP id
- 586e51a60fabf-25cf3c23288mr20251722fac.1.1719600962163; Fri, 28 Jun 2024
- 11:56:02 -0700 (PDT)
+	b=Lky0WtaYuX9PtdrDhTgm23grSRxDhHGxW4BhJUHnVqn8GHOUFSnSROVzVO4VgWTQz
+	 SHKeJSXNzyrDfbL4TahWt2t52sR9ajV42iSG94c/6IjUIg0vHcIV8iHCWRULoGgc22
+	 hJlosNQRftqIoKlzmIOwCuBSCaVIb5fXp1uSRt/FBQKhSvsvg0qPYDjWKhAnVon1Zy
+	 CFuoWtPyLpqqPVlIp7NF1ryKDOCQieRdGEGU1isA0zTxupD82MIBEPUmbfiPdLlgib
+	 E7RvYplbxoYaEcG10JKgWhGQCGmNHjRnHMz5TOqc2RvYdJ0uB9FIQr/Unp9AHsGsVN
+	 zSAypOoa20OwA==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-24c5ec50da1so142627fac.3;
+        Fri, 28 Jun 2024 11:59:23 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV1DmNDMbpZco8IKYuZbsQM3VQD/RSLp7vfweGYjFKxGFk6pMXLa8mor+y1TJ9iuxGky0bBdNc0uJyMxVGyrr3UjCBQ9AzLQgzzuW3jdQOYs2RHJHYCME543P+7bPWJfPp7LgYPx+4=
+X-Gm-Message-State: AOJu0YzOTGIFM2fVYsBu38wmjZHO6wClz/7EJPLc3OtcMNG3IqLRdnD1
+	es3aRpPgSzwK5NVpw5qOUdHmWVF3uAjl9z1TAiSpZFsY7sdQWRFscEkANBrwfq3rD4SJDyJq/Ns
+	B2jyQStYpCSbYt7gcOHnwVjzxzDs=
+X-Google-Smtp-Source: AGHT+IFCGem2eoo0rvWIQme4AModLWMeThmakQhaXznbYg6pzoUdgPw1z1j4Z3n03wPqWNcgzKpINtZF+b7Ieem+r/0=
+X-Received: by 2002:a05:6870:7d1a:b0:25d:7935:43b7 with SMTP id
+ 586e51a60fabf-25d7935f4f4mr6079402fac.0.1719601162419; Fri, 28 Jun 2024
+ 11:59:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240624161109.1427640-1-srinivas.pandruvada@linux.intel.com> <CAJZ5v0iE_-eMi1JvWfDJM5-Z810WUdQPUoq9Qn8q62F5daXoSg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iE_-eMi1JvWfDJM5-Z810WUdQPUoq9Qn8q62F5daXoSg@mail.gmail.com>
+References: <20240627060117.1809477-1-d-gole@ti.com> <31841424-c6dd-49e2-ac2c-2394662b7f30@amd.com>
+In-Reply-To: <31841424-c6dd-49e2-ac2c-2394662b7f30@amd.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 28 Jun 2024 20:55:50 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hOv26eWVFommYx-q=kOfadJjtA+ZWU-PBiypJkfbXXQA@mail.gmail.com>
-Message-ID: <CAJZ5v0hOv26eWVFommYx-q=kOfadJjtA+ZWU-PBiypJkfbXXQA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Update highest frequency of a CPU after boot
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: x86@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org, 
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, hpa@zytor.com, linux-pm@vger.kernel.org, 
+Date: Fri, 28 Jun 2024 20:59:11 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hqvdTo5TJkB1S+23dMfC8ivs5_rNbV1XnhkaTntkZ3Aw@mail.gmail.com>
+Message-ID: <CAJZ5v0hqvdTo5TJkB1S+23dMfC8ivs5_rNbV1XnhkaTntkZ3Aw@mail.gmail.com>
+Subject: Re: [PATCH V2] cpufreq: make cpufreq_boost_enabled return bool
+To: Mario Limonciello <mario.limonciello@amd.com>, Dhruva Gole <d-gole@ti.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, 
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 25, 2024 at 9:04=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
+On Thu, Jun 27, 2024 at 8:57=E2=80=AFPM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> On Mon, Jun 24, 2024 at 6:11=E2=80=AFPM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
+> On 6/27/2024 01:01, Dhruva Gole wrote:
+> > Since this function is supposed to return boost_enabled which is anyway
+> > a bool type make sure that it's return value is also marked as bool.
+> > This helps maintain better consistency in data types being used.
 > >
-> > Intel Xeon servers, which are capable of dynamic highest performance
-> > change, are unable to achieve the highest frequency when the performanc=
-e
-> > profile is changed.
-> >
-> > The highest frequency at which a CPU can operate is not fixed and can
-> > vary after the system boots. These changes can be initiated by switchin=
-g
-> > to different performance profiles using the Intel Speed Select Technolo=
-gy
-> > interface. Additionally, adjustments can be made remotely through a BMC
-> > (Baseboard Management Controller) interface. Administrators can select
-> > various performance profiles to align with specific performance
-> > requirements, as these choices will directly influence the total power
-> > consumption and cooling requirements.
-> >
-> > Whenever an administrator switches to a different performance profile t=
-hat
-> > alters the highest frequency, the hardware sends an interrupt and updat=
-e
-> > the new highest frequency at which the system can operate. This interru=
-pt
-> > can be enabled via the MSR_HWP_INTERRUPT register, and only if support =
-is
-> > indicated by the CPUID[6].EAX[15] =3D 1.
-> >
-> > To enable changes to the highest frequency, add a CPU features flag and
-> > enable the HWP (Hardware P-states) highest performance change interrupt
-> > when it is supported by the CPU.
-> >
-> > v2:
-> > - Prevent display in /proc/cpuinfo flags
-> > - Use cpu_feature_enabled() instead of boot_cpu_has()
-> >
-> > Srinivas Pandruvada (2):
-> >   x86/cpufeatures: Add HWP highest perf change feature flag
-> >   cpufreq: intel_pstate: Support highest performance change interrupt
-> >
-> >  arch/x86/include/asm/cpufeatures.h |  1 +
-> >  drivers/cpufreq/intel_pstate.c     | 23 +++++++++++++++++++----
-> >  2 files changed, 20 insertions(+), 4 deletions(-)
-> >
-> > --
+> > Signed-off-by: Dhruva Gole <d-gole@ti.com>
 >
-> Please let me know if there are objections against this from the x86 angl=
-e.
->
-> If not, I'll pick it up.
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 
-Applied now, as 6.11 material.
+Applied as 6.11 material, thanks!
 
-Thanks!
+> > ---
+> >
+> > Changelog:
+> > "return false" instead of 0 as per Mario's suggestion.
+> >
+> > Link to previous patch:
+> > https://lore.kernel.org/linux-pm/20240626084354.1762483-1-d-gole@ti.com=
+/
+> >
+> > ---
+> >
+> >   drivers/cpufreq/cpufreq.c | 2 +-
+> >   include/linux/cpufreq.h   | 6 +++---
+> >   2 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 82c500389a40..709e7b1f9826 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -2873,7 +2873,7 @@ int cpufreq_enable_boost_support(void)
+> >   }
+> >   EXPORT_SYMBOL_GPL(cpufreq_enable_boost_support);
+> >
+> > -int cpufreq_boost_enabled(void)
+> > +bool cpufreq_boost_enabled(void)
+> >   {
+> >       return cpufreq_driver->boost_enabled;
+> >   }
+> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> > index 20f7e98ee8af..6f57de7de433 100644
+> > --- a/include/linux/cpufreq.h
+> > +++ b/include/linux/cpufreq.h
+> > @@ -785,7 +785,7 @@ ssize_t cpufreq_show_cpus(const struct cpumask *mas=
+k, char *buf);
+> >
+> >   #ifdef CONFIG_CPU_FREQ
+> >   int cpufreq_boost_trigger_state(int state);
+> > -int cpufreq_boost_enabled(void);
+> > +bool cpufreq_boost_enabled(void);
+> >   int cpufreq_enable_boost_support(void);
+> >   bool policy_has_boost_freq(struct cpufreq_policy *policy);
+> >
+> > @@ -1164,9 +1164,9 @@ static inline int cpufreq_boost_trigger_state(int=
+ state)
+> >   {
+> >       return 0;
+> >   }
+> > -static inline int cpufreq_boost_enabled(void)
+> > +static inline bool cpufreq_boost_enabled(void)
+> >   {
+> > -     return 0;
+> > +     return false;
+> >   }
+> >
+> >   static inline int cpufreq_enable_boost_support(void)
+> >
+> > base-commit: df9574a57d02b265322e77fb8628d4d33641dda9
+>
+>
 
