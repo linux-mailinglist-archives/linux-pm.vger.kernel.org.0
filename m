@@ -1,133 +1,130 @@
-Return-Path: <linux-pm+bounces-10231-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10232-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDF8B91CAF3
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 06:26:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA44091CB9F
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 10:23:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BFF62848D9
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 04:26:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 808501F22718
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 08:23:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01B8C1EA91;
-	Sat, 29 Jun 2024 04:25:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NHQVdcNN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49A902F874;
+	Sat, 29 Jun 2024 08:22:56 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6061DA53;
-	Sat, 29 Jun 2024 04:25:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 943E13BBC9;
+	Sat, 29 Jun 2024 08:22:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719635156; cv=none; b=rhMGvRhe67zTRqrPe5keS+UTD+kQPNp0XLRwLuu6D2y5tNdydXZ1/nmQoQiW2VNRZjx0PEfLJAZ0xMn0KAd9G1auOZ0aRmt57YPjCLcS8hrGgfeShXiXvAhAoMNEl5Z8l+Bh5QDZOhcI6L8LBmfV6wADvXy0hQquL68/XXNVIds=
+	t=1719649376; cv=none; b=GFabQH4eSk1StHAd4ad5ia9TuktqtT21S4VJgi5ebCUMkPbDPsGV2TvI28081x4j4xN+oOU/YILbZBaddUB8G2IJ/s+5okkYkb9YlmwlshZD5cWLWs+PWFNpbWT+nYXUvyhLEq9r0JsJIP2NE9jK20n7t73fpi+wYRkDFoIcF7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719635156; c=relaxed/simple;
-	bh=pbUWmzBZxa7d97eWO0V0lrZEifzBld3FlFLlGxEXEcc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VPt6DoCccfdM71lp2qvIXj+PgrCLKArT3fscSm9iXFalIuRplhewxdcVkj+yWg7oBznNJLgAzKrvqJx/BaT4MZPcDPtVtddGA1EYMLty8GwEi21i8rVrcYLvsvXRbW/4SeZ20sx6AxvdBUae4dS1Hoi6A6QRMjIKTJZfbzeuNwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NHQVdcNN; arc=none smtp.client-ip=209.85.161.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5c21ba58227so645800eaf.0;
-        Fri, 28 Jun 2024 21:25:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719635154; x=1720239954; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=30kxa0Q+gUHVRJCK4oP0++E6pyeV3ESDyAZnq2q+C5o=;
-        b=NHQVdcNNbc/e/xktlU6oxlx/Th6rEzy2MMItZGrkidNa6vy4mYJ5xkA7sfq4OAYNHB
-         gwU39nTSTQuiJ91boANXaV6AG5I1TC+b7XHX7E3bDTtPKP4f2RHunLNm6BwqbDfiaS3E
-         brhrTD6S0L4bXEHIvL8Lycio0jmFzSZN4baVs/ri/h80erjBLsH/kahmY4n53isr6y1I
-         +gJRZQv++KwY5NBGMEjyPSwshfqUzn09lGMgrkMlwFmtz0M59T3i0ycCTTvTW6vm8R4/
-         WEH7CAcbSUJwwD+LOtWu3QOeSEkwWHtA8O6EwkPreIr8evn4wbJe3aUPqf5c/0YWgy1j
-         VI8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719635154; x=1720239954;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=30kxa0Q+gUHVRJCK4oP0++E6pyeV3ESDyAZnq2q+C5o=;
-        b=nLXjGtX6D75odboFQTLt85EKCfGi42N2RYVHubO6Y9XGkbGYWHm219XieVxfmdiBU2
-         EHaJHYTJ5JEdtyyd/+gfVXLo1/w+bICiLZDV8WAQoo7LOTgE5pvyVmix2XNQOsWLJeIH
-         XHgPvdeHur834w6ddXBoazPOi0DdbgaZnOIhkmgq1uyxASCoIiKqf3hjputxObxNxuaq
-         GOXUdkvatjkFfMRglL4ol7kyUkjhEH+aUApLDzoLPBDKvVEzzIi0v0dAnUDfOaT3rnY7
-         p/0vThwP9LZ1jsa+O6IGOezVuhYjNayp0eD812cw5QE68zfOaT1AX6EBgrJ2UZ+g/McO
-         jUdg==
-X-Forwarded-Encrypted: i=1; AJvYcCXY5WiaK8T9JnfMj6VuXT9kjbvieF6OCy/VP1T8+IPEoWc2M6SXYHno6+Qxloe8DGrmeGAoUh88dta0o/wFpq+adBPPfZEhDkLAwNiQtathU6egnIsDwVvlGYINUMa/7XJjW+PQhsd0sSXdDs1F60EjYd41oyOEzftO/0XC7udS0B4MTEGwRPVqUg==
-X-Gm-Message-State: AOJu0YztXjiQ5QyBMkDTwjmP+BrFk17WtbvCIT7JfY3/r4OFGoDIS2D5
-	J9artIyF+G4o3p1VjToMDtW4myXTKn4Rr7IwREAjPSvDCARw0ldDkgMBzE+5YPjBAtTon5A35km
-	LyQhrA+F4Mf50qB6U0OEZFeViCpg=
-X-Google-Smtp-Source: AGHT+IHTyqC+oWHQSDqh/4MuJ4c4xX2WdLH/YKVOYoC1crgGxMG+PzC2Z4AqXkc0NcLW8CJto3S2vXHr58J93giO4SY=
-X-Received: by 2002:a4a:4884:0:b0:5c2:23ee:bc33 with SMTP id
- 006d021491bc7-5c439051779mr68928eaf.5.1719635154450; Fri, 28 Jun 2024
- 21:25:54 -0700 (PDT)
+	s=arc-20240116; t=1719649376; c=relaxed/simple;
+	bh=P8MFF88WFe0wi+HNjE5Y0mEKeKHhp/3xlM7BHh0MSKk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Gq97fEIJGdStsrZbfipX64fVBdsyv3/2G8tpAS6SN8Se0+7T7sWAHd75/oYxdiwetjNYwLTSeVEDm3mCnw+deHp5pbDv2SDmIOv0Gb3YQRh8H111+r6Pj2Bz4mZuJMkvX+sPTHu5Z3u8U4OmQitysKo4oa2U2RPI8gXFk8eGw4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB7CD339;
+	Sat, 29 Jun 2024 01:23:17 -0700 (PDT)
+Received: from [10.1.33.10] (e127648.arm.com [10.1.33.10])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 207403F766;
+	Sat, 29 Jun 2024 01:22:49 -0700 (PDT)
+Message-ID: <c40acf72-010f-4a8b-80e4-33f133ba266b@arm.com>
+Date: Sat, 29 Jun 2024 09:22:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240510094034.12493-1-linux.amoon@gmail.com> <CANAwSgTRfEChziyys251-FezSevSq9pxHLJixVCAybJhq5YAqw@mail.gmail.com>
- <15b164aa-601f-4dad-8115-14a715608319@kernel.org>
-In-Reply-To: <15b164aa-601f-4dad-8115-14a715608319@kernel.org>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Sat, 29 Jun 2024 09:55:37 +0530
-Message-ID: <CANAwSgRyZ=43yBxiAmj-+5xL0b9FBkoDeR88BJ8FqDTQX7KVFg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] PM / devfreq: exynos: Use Use devm_clk_get_enabled()
- helpers
-To: Chanwoo Choi <chanwoo@kernel.org>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, 
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, linux-pm@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: [PATCHv4 3/3] cpuidle: teo: Don't count non-existent intercepts
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ vincent.guittot@linaro.org, qyousef@layalina.io, peterz@infradead.org,
+ daniel.lezcano@linaro.org, ulf.hansson@linaro.org, anna-maria@linutronix.de,
+ dsmythies@telus.net, kajetan.puchalski@arm.com, lukasz.luba@arm.com,
+ dietmar.eggemann@arm.com
+References: <20240628095955.34096-1-christian.loehle@arm.com>
+ <20240628095955.34096-4-christian.loehle@arm.com>
+ <CAJZ5v0jaEt2yo9OvYqpzfcbPtAvTk63tKXjm6QCi7zeKuU2SUA@mail.gmail.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAJZ5v0jaEt2yo9OvYqpzfcbPtAvTk63tKXjm6QCi7zeKuU2SUA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Chanwoo,
+When bailing out early, teo will not query the sleep length anymore
+since commit 6da8f9ba5a87 ("cpuidle: teo:
+Skip tick_nohz_get_sleep_length() call in some cases") with an
+expected sleep_length_ns value of KTIME_MAX.
+This lead to state0 accumulating lots of 'intercepts' because
+the actually measured sleep length was < KTIME_MAX, so query the sleep
+length instead for teo to recognize if it still is in an
+intercept-likely scenario without alternating between the two modes.
 
-On Wed, 26 Jun 2024 at 20:00, Chanwoo Choi <chanwoo@kernel.org> wrote:
->
-> 24. 6. 17. 17:24=EC=97=90 Anand Moon =EC=9D=B4(=EA=B0=80) =EC=93=B4 =EA=
-=B8=80:
-> > Hi All,
-> >
-> > On Fri, 10 May 2024 at 15:10, Anand Moon <linux.amoon@gmail.com> wrote:
-> >>
-> >> The devm_clk_get_enabled() helpers:
-> >>     - call devm_clk_get()
-> >>     - call clk_prepare_enable() and register what is needed in order t=
-o
-> >>      call clk_disable_unprepare() when needed, as a managed resource.
-> >>
-> >> This simplifies the code and avoids the calls to clk_disable_unprepare=
-().
-> >>
-> >> While at it, use dev_err_probe consistently, and use its return value
-> >> to return the error code.
-> >>
-> >> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> >
-> > Gentle ping?
-> >
-> > Thanks
-> > -Anand
-> >
->
-> Applied it. Thanks.
-> I'm sorry for late reply.
->
-Thanks & Regards
--Anand
+Fundamentally we can only do one of the two:
+1. Skip sleep_length_ns query when we think intercept is likely
+2. Have accurate data if sleep_length_ns is actually intercepted when
+we believe it is currently intercepted.
 
-> --
-> Best Regards,
-> Samsung Electronics
-> Chanwoo Choi
->
+Previously teo did the former while this patch chooses the latter as
+the additional time it takes to query the sleep length was found to be
+negligible and the variants of option 1 (count all unknowns as misses
+or count all unknown as hits) had significant regressions (as misses
+had lots of too shallow idle state selections and as hits had terrible
+performance in intercept-heavy workloads).
+
+Fixes: 6da8f9ba5a87 ("cpuidle: teo: Skip tick_nohz_get_sleep_length() call in some cases")
+Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+---
+v4: Skip constraint check if intercept logic selects state0
+
+ drivers/cpuidle/governors/teo.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+index 200a3598cbcf..6dc44197a80e 100644
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -287,6 +287,7 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+ 	unsigned int hit_sum = 0;
+ 	int constraint_idx = 0;
+ 	int idx0 = 0, idx = -1;
++	int prev_intercept_idx;
+ 	s64 duration_ns;
+ 	int i;
+ 
+@@ -364,6 +365,7 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+ 	 * all of the deeper states a shallower idle state is likely to be a
+ 	 * better choice.
+ 	 */
++	prev_intercept_idx = idx;
+ 	if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
+ 		int first_suitable_idx = idx;
+ 
+@@ -415,6 +417,15 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+ 			first_suitable_idx = i;
+ 		}
+ 	}
++	if (!idx && prev_intercept_idx) {
++		/*
++		 * We have to query the sleep length here otherwise we don't
++		 * know after wakeup if our guess was correct.
++		 */
++		duration_ns = tick_nohz_get_sleep_length(&delta_tick);
++		cpu_data->sleep_length_ns = duration_ns;
++		goto out_tick;
++	}
+ 
+ 	/*
+ 	 * If there is a latency constraint, it may be necessary to select an
+-- 
+2.34.1
+
+
 
