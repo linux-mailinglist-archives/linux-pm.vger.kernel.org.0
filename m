@@ -1,191 +1,152 @@
-Return-Path: <linux-pm+bounces-10240-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10241-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CA8E91CD3D
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 15:36:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7772891CD6E
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 15:52:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BEBD1F22191
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 13:36:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B84B282C8B
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 13:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DC6C80614;
-	Sat, 29 Jun 2024 13:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBF0E80035;
+	Sat, 29 Jun 2024 13:52:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m9wQ9gaE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lziih1CO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BAD61D52D
-	for <linux-pm@vger.kernel.org>; Sat, 29 Jun 2024 13:36:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53C6220B35;
+	Sat, 29 Jun 2024 13:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719668212; cv=none; b=XlZxpWjT4MJHJbVO5Hl/Skliqr1PnxNmwO7SMX7f8cAGgwrd/48Vx1DRKa9O9VXSf7x3iCoFsWvc7Ltt8+kXkoDOaVr6V+FX+9l+hAtJwjLxVD/Kvg4zSRVSVSyDSe6i2hEwN6vd+SkXN09ZxP9eDl9t3yGscM0r4/SJHumrLlw=
+	t=1719669141; cv=none; b=NOOnJHvMlkt/Szgi1V+lz1P9dZ4CZlT9hSz/EVJRNw0Zx8WA60egRb5uWO8O0PQ42XgtvotMBj8mHhWlOTESy/P7niKeWWyOVl8tWk1tu6Oitlosa6pF0FrpdZ0Hq2yKvq1F9t4YO8sLK4Zoddh/cpwmkLnJmxrhRMqtI5khpPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719668212; c=relaxed/simple;
-	bh=pEKkk9d0dkZtVkvo71avDXYFjS+/LQXs6eudgJgzkCU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PUGT6Gn7eo41audHvVMZWGn+v9eM4gYvX6RXRoGBoCc+EaTJ0Q7dhIJNzm0w8Gu1OYljDpc8i5CGZ+QclvQS9EJE0ifZ6PC9CnYb1nfQaqF6eGMpdhTp4rLZrQ8pKq9/KpXbwNdZa3Vn6HLwJZ86Blx8q6F2ETaQj1tl8q7Mc3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=m9wQ9gaE; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ebe0a81dc8so20315931fa.2
-        for <linux-pm@vger.kernel.org>; Sat, 29 Jun 2024 06:36:50 -0700 (PDT)
+	s=arc-20240116; t=1719669141; c=relaxed/simple;
+	bh=TbbyMyfvILKCy9QD4+VE6X1XF2QUuSxC/os+k31QF6g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aN1j5ZxsnROw2ugHgYgGWXLI8p8SDwaZTQJp7OAIn7FOD3Ghdh4PmPDzyHateYtUcG/AtnA3ott2bZnoVz3Xc6Q9dSiQ9rgK5oi/CsAYk6uu3DIR2XzdWQj5fyZOUxyHsd7R/GjBk21TfXnQURINKtPdq9ThnrCLYcECvQLip+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lziih1CO; arc=none smtp.client-ip=209.85.161.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5c21ba58227so780342eaf.0;
+        Sat, 29 Jun 2024 06:52:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719668208; x=1720273008; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fb+wSaIrJVe+pkmIcOdPYU+4bx32BHvpwZol/N+Ajuo=;
-        b=m9wQ9gaEGSueTlCiFflwMTHImkHduTDhofaQZ0/fB+JwSTOdcAfWvfs865Co1e4rkf
-         rdTVWXva2aNUp8bvRbmgTRb2oLPE+EO5tlDjMM6D2k1Os1nrMCCtM3mW5M6uFURybKvF
-         xn7IuEtilhwXAe/PIuh6fopUYkk7WYfwQkfVvsRgMsEPxMXKZ9uTW+DYzJBDcMgY8Pb6
-         QaIndoqSXTV6qU1HT5e8+BC59xQfh5/zZj0MyFm3w0gc9D6rbJRh7p7ICzXkEElrnzlK
-         hWh/P5wNlUJpc/hbYL1x/uVgDhZ4y4ZrIIkK3yfge4yC0pfFDv63Gw7VU4FxmnEdvnb5
-         kCnQ==
+        d=gmail.com; s=20230601; t=1719669139; x=1720273939; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wisMx0ek/spfbVP70onUB10Oer/RxJ8B4YlAA8+gQ8w=;
+        b=Lziih1COlBYG2EiRvyU/sgOhEVKNdmAbLKIsBz2j1CKEH7jIdFqquhgD07lXGjuu8O
+         zUqjEggyOxUbx0moJJLROmutiYtThZs2hQUIlkNl40tXp/BQB5JeXGkUSPlMxOtEy0mM
+         CIj9Gi3C1jzvRCLo2/q/ubdi2UyyhBAyXv8xjOG+ogGdCwOA8PsNOJyX6gFsWy4GZl57
+         O5pK+giizdu1xmLl/bJIZ1oqx/BkCCGg0noq1/jR2oiTryMwPxGAUSkqFsEOfdaAyhVv
+         tKwU0LzDIyGG+1/wvqSeBLgj40/CnZ10ZtX9U3ZdfV5PEBX0VcVMqEfzQ/Z9Wi1QSrjk
+         0fAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719668208; x=1720273008;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fb+wSaIrJVe+pkmIcOdPYU+4bx32BHvpwZol/N+Ajuo=;
-        b=g2h5NZdcuZ7j9l6Aq/9R1GJ92hx7SKM9HVRnDW9ZitjOHbB3mxnUFpL7wZzqR3bstl
-         hhpFJAc661EWK5ZAhBmhflfoQ1nVpYrktd0G8vXymB4Z6wopLkpnKbmKfcgNkI64nlht
-         m/FhrsiGTQ5fznIUmY7kvg+Q4BT+jKdtyFaKmt6taVj4jRF2QEPPlzHPNlGIAZDM7fNw
-         UhsH1cXkC2uD146sNWZK21bP2wIsRMiPjm6fogE+6ki3dsbC9g7zzmRFaR5FNIRAv+C8
-         XQT5ERoJNijWJCAmRaCfDE4BsYMy0sE6l9zUHcUzBYkDCVX6hU2vZbZeQLdfyU525Mvc
-         Tb/g==
-X-Forwarded-Encrypted: i=1; AJvYcCW+eSacVcP3TvEOlza5QY39Dg43WUvpu0nZqrfMR5TiAbY2laMa/OftmYxdQXQT00PnzhRD/3z+8U+OqWV+h+LXNoXfLh1o6P4=
-X-Gm-Message-State: AOJu0Yx1T6arfKKtIGuzeNlw7ftCGzlur51dd8v14KoAX+gIJiRAmMsv
-	+lzcI5CPVmSRxKt94+CulOb7PAtK4xHy5MUekRdtbU15uPnfc0NywHf7VjGsNbo=
-X-Google-Smtp-Source: AGHT+IFViPkvLnjVI+tzuVPmDLNUpmDc9Ajbta0rj8EHH09MphUCQjSVvr6pLzm9yp2KFajt9W7Q6A==
-X-Received: by 2002:a2e:b00e:0:b0:2ec:5785:ee97 with SMTP id 38308e7fff4ca-2ee5e707ddemr8165451fa.53.1719668208268;
-        Sat, 29 Jun 2024 06:36:48 -0700 (PDT)
-Received: from [192.168.215.29] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5861381756esm2268082a12.56.2024.06.29.06.36.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Jun 2024 06:36:47 -0700 (PDT)
-Message-ID: <bc6d0faa-b3d6-4094-b569-dec3a5ed7545@linaro.org>
-Date: Sat, 29 Jun 2024 15:36:46 +0200
+        d=1e100.net; s=20230601; t=1719669139; x=1720273939;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wisMx0ek/spfbVP70onUB10Oer/RxJ8B4YlAA8+gQ8w=;
+        b=oWuljWkntLocFnAAyHEA+U+jThn0IY7GnyQcpvqRICQD+dDGFjRTCmqFsWj0eHm7AL
+         aC6EQqAZItyXS6pSLbnCo9UHxSDG+YEpb4kKMCDps9wC6JZRxSpPHzhFbWBk9FApNry4
+         Q82fd6MWEnIVqDC4lCPCDZcsUtZu9oxhPZWjqhJ7qac1Wg5JCDPX6+zWzHoCZOe8i6ub
+         LzDAZDRAZG2zT+udLCjJfsw6MPdc8o6KvYFSMmbn7BaKeaP7kQLoiQPrku2WIj1dZFnK
+         H7sRY4fgEW6CCtLKl5Amj3zE/AAXKpDOSxgvbBT90P7vhChdqRxza5KVoFByvP4f8Bxt
+         /Qrg==
+X-Forwarded-Encrypted: i=1; AJvYcCXZu1DTDgajxQuaGvjHgzLkSKrjguqdtTJ+01wSTvdCvR/0/ffcq1V+Z0H9FeITj6+2bof+lqlzdKdp4ppD3bK6AOIlLbWmwfupStoNf425IdRlA3V0I3Pzk4KOqZJxu4wSoRNPvQzLRfuyW+OX6ESqHZ0PNUZDyRcXIW0e3OV9ph4nl7pILvQeFA==
+X-Gm-Message-State: AOJu0YzxJY0orMQUE3Fg5P67OJP/F/Xn4KcbcqyXYy3pkOS/qEdr+UQJ
+	EXwlmsi0DKlgrLYFB9UkH6Qg4dWL9rZCNtXtjZRLP9cv1hcxNOtdxPuLPaEkqpAQpCxrFaN9mxb
+	WQ9tz6CC9cJFs7RqBnA1HhOlZgLI=
+X-Google-Smtp-Source: AGHT+IEnqeU/rjRxtlGchXeDSLdHKdBq5buSR6YNbubUtRs1QS9eoTiCbB4x+HyoR4KIHTFFBNwQOpSnJYXZ1R+yCbs=
+X-Received: by 2002:a05:6870:d14d:b0:250:8913:7400 with SMTP id
+ 586e51a60fabf-25db35af930mr802172fac.40.1719669139304; Sat, 29 Jun 2024
+ 06:52:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 0/6] Add interconnect driver for IPQ9574 SoC
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, djakov@kernel.org,
- dmitry.baryshkov@linaro.org, quic_anusha@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, bryan.odonoghue@linaro.org
-References: <20240430064214.2030013-1-quic_varada@quicinc.com>
- <ZjXrTywO6+iRaEYk@hu-varada-blr.qualcomm.com>
- <90bb9256-d54d-4e01-aa06-4184e2b95d48@linaro.org>
- <Zmgc+Qzwt6Zbg/w+@hu-varada-blr.qualcomm.com>
- <ZnumpkYR2ILpbOwF@hu-varada-blr.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <ZnumpkYR2ILpbOwF@hu-varada-blr.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240510094034.12493-1-linux.amoon@gmail.com> <20240510094034.12493-2-linux.amoon@gmail.com>
+In-Reply-To: <20240510094034.12493-2-linux.amoon@gmail.com>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Sat, 29 Jun 2024 19:22:02 +0530
+Message-ID: <CANAwSgRETDNtLLyh_5z-TXdkhRN_VwegDBZuaSyx=hXWkAJdRA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] PM / devfreq: exynos: Use local clk variable
+ instead of exynos_bus member
+To: Chanwoo Choi <cw00.choi@samsung.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>, linux-pm@vger.kernel.org, 
+	linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 26.06.2024 7:27 AM, Varadarajan Narayanan wrote:
-> On Tue, Jun 11, 2024 at 03:16:33PM +0530, Varadarajan Narayanan wrote:
->> On Thu, Jun 06, 2024 at 04:07:23PM +0200, Konrad Dybcio wrote:
->>> On 4.05.2024 10:01 AM, Varadarajan Narayanan wrote:
->>>> Bjorn,
->>>>
->>>>> On Tue, Apr 30, 2024 at 12:12:08PM +0530, Varadarajan Narayanan wrote:
->>>>> MSM platforms manage NoC related clocks and scaling from RPM.
->>>>> However, in IPQ SoCs, RPM is not involved in managing NoC
->>>>> related clocks and there is no NoC scaling.
->>>>>
->>>>> However, there is a requirement to enable some NoC interface
->>>>> clocks for the accessing the peripherals present in the
->>>>> system. Hence add a minimalistic interconnect driver that
->>>>> establishes a path from the processor/memory to those peripherals
->>>>> and vice versa.
->>>>>
->>>>> Change icc-clk driver to take master and slave ids instead
->>>>> of auto generating.
->>>>>
->>>>> Currently, drivers/clk/qcom/clk-cbf-8996.c is the only user of
->>>>> icc-clk. And, it had exactly one master and one slave node.
->>>>> For this the auto generated master (= 1) and slave (= 0) was
->>>>> enough.
->>>>>
->>>>> However, when drivers/clk/qcom/gcc-ipq9574.c wanted to make use
->>>>> of the icc-clk framework, it had more number of master and slave
->>>>> nodes and the auto generated ids did not suit the usage.
->>>>>
->>>>> ---
->>>>> v11:	No code changes
->>>>> 	Commit log changed for the first patch
->>>>> 	Added Acked-By: to 3 patches
->>>>
->>>> Can this be included in your driver changes for 6.10?
->>>
->> Konrad,
->>
->>> FWIW there is still an open discussion at v9
->>> <CAA8EJpqENsojPQmCbma_nQLEZq8nK1fz1K0JdtvLd=kPrH_DBw@mail.gmail.com>
->>
->> Thanks for reminding. Have responded to it.
->> https://lore.kernel.org/linux-arm-msm/Zmgb+OjdBNw71sC1@hu-varada-blr.qualcomm.com/
-> 
-> Bjorn/Konrad,
-> 
-> Can this be merged for 6.11. I believe the discussion open at v9
-> has been addressed. Please let me know if anything is still pending.
-> 
-> Below patches depend on this series:
-> 
-> 	PCI: https://lore.kernel.org/linux-arm-msm/20240512082858.1806694-1-quic_devipriy@quicinc.com/
-> 	NSSCC: https://lore.kernel.org/linux-arm-msm/20240625070536.3043630-1-quic_devipriy@quicinc.com/
+Hi Chamwoo,
 
-Looks solved now! Bjorn, feel free to pick this up
+On Fri, 10 May 2024 at 15:11, Anand Moon <linux.amoon@gmail.com> wrote:
+>
+> This commit modifies the exynos bus driver to use a local clk variable
+> for clock handling instead of storing it in the exynos_bus struct member.
+> This helps in simplifying the code and makes it more readable.
+>
+> Suggested-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
 
-Konrad
+I am letting you know that you missed this patch.
+
+> v5: New patch
+> ---
+>  drivers/devfreq/exynos-bus.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+> index 7d06c476d8e9..e55ae59a8ae7 100644
+> --- a/drivers/devfreq/exynos-bus.c
+> +++ b/drivers/devfreq/exynos-bus.c
+> @@ -34,7 +34,6 @@ struct exynos_bus {
+>         unsigned long curr_freq;
+>
+>         int opp_token;
+> -       struct clk *clk;
+>         unsigned int ratio;
+>  };
+>
+> @@ -241,13 +240,14 @@ static int exynos_bus_parse_of(struct device_node *np,
+>  {
+>         struct device *dev = bus->dev;
+>         struct dev_pm_opp *opp;
+> +       struct clk *clk;
+>         unsigned long rate;
+>         int ret;
+>
+>         /* Get the clock to provide each bus with source clock */
+> -       bus->clk = devm_clk_get_enabled(dev, "bus");
+> -       if (IS_ERR(bus->clk))
+> -               return dev_err_probe(dev, PTR_ERR(bus->clk),
+> +       clk = devm_clk_get_enabled(dev, "bus");
+> +       if (IS_ERR(clk))
+> +               return dev_err_probe(dev, PTR_ERR(clk),
+>                                 "failed to get bus clock\n");
+>
+>         /* Get the freq and voltage from OPP table to scale the bus freq */
+> @@ -257,7 +257,7 @@ static int exynos_bus_parse_of(struct device_node *np,
+>                 return ret;
+>         }
+>
+> -       rate = clk_get_rate(bus->clk);
+> +       rate = clk_get_rate(clk);
+>
+>         opp = devfreq_recommended_opp(dev, &rate, 0);
+>         if (IS_ERR(opp)) {
+> --
+> 2.44.0
+>
+Thanks & Regards
+
+-Anand
 
