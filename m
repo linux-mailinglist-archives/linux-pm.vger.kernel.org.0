@@ -1,191 +1,133 @@
-Return-Path: <linux-pm+bounces-10230-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10231-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0E5C91CABF
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 05:02:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDF8B91CAF3
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 06:26:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 016E5B2231A
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 03:02:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BFF62848D9
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Jun 2024 04:26:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FA8F1CD23;
-	Sat, 29 Jun 2024 03:01:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01B8C1EA91;
+	Sat, 29 Jun 2024 04:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Ee+6M+zq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NHQVdcNN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705EB1859;
-	Sat, 29 Jun 2024 03:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6061DA53;
+	Sat, 29 Jun 2024 04:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719630114; cv=none; b=ds7dgGY6W+jktHUDYYx3FLAX/VhBr99L4hxKvIYqy4j1xOy6ACnyDtTTUv2F1n03EG+SycqcpmkhU2nzeT//QMTJ+8Zcv+X4nst0T6/+zyo0/Kcc4gq8LDwK7T+i5uaySFDnhtOrdwF2RVauVWOcLD+3tk+i02J1zy8agYeGgzs=
+	t=1719635156; cv=none; b=rhMGvRhe67zTRqrPe5keS+UTD+kQPNp0XLRwLuu6D2y5tNdydXZ1/nmQoQiW2VNRZjx0PEfLJAZ0xMn0KAd9G1auOZ0aRmt57YPjCLcS8hrGgfeShXiXvAhAoMNEl5Z8l+Bh5QDZOhcI6L8LBmfV6wADvXy0hQquL68/XXNVIds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719630114; c=relaxed/simple;
-	bh=3IQeLnklReFRlCopick9SeNMiQklOjr/8DJVzRCzPTg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ZYZWjpsPIpBVgLMi2vZybg4OlWpfDwTITuRNTIT+sNisPZ/1zEX8WFyxpBj73+/goPm1uRQ3JOE6TnY968fSbQsp3SS+H6dZkUl4BWyejjlJ6qHno0UHUI+fdGyyloLB/vx2LWFoSJgDM7Xvqfh2uB59EPyQWARrQ8jaAhJD8CE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Ee+6M+zq; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45T29Yvf020510;
-	Sat, 29 Jun 2024 03:01:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	6QWl/x/pOp/DbI8aAEPuPXrupu+Fmk104wx/R4KbeJs=; b=Ee+6M+zqyrAH8tu1
-	qK9PAj9mkAbVSLZnPprVhNOOaH4DRcqR26Oux6dbfnpQxhK53qG31w5w+plLMuD5
-	wZdb0w7Mpurt5Aj9fdn4eJ0jlruEhXZmYy/unu2XMxrOSm7jKWF7+VLJVKuwLlKq
-	VlxwRXiMb0nOeWUX6LUT20Y5OGrl4kl7WeJjF6CPxCyQ5buUn7yeXzsQFvRHx0bU
-	Dep5ui4QD96F9L67cz0FEff7o1q7gK5KViL7KnD8uKtm4MAK+RQmePb6kWDQ17Zv
-	/li8bqO6aoa2Mi96ja6/g5yxgaFcWY8KACyCZ8A5SbCUUWKGK1Aq7+ba7iE38B/y
-	clJl4w==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40297rg1x0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 29 Jun 2024 03:01:31 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45T31Uob030745
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 29 Jun 2024 03:01:30 GMT
-Received: from [10.48.245.152] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 28 Jun
- 2024 20:01:29 -0700
-Message-ID: <bec5aa30-3c53-4be7-95be-243ff998edfe@quicinc.com>
-Date: Fri, 28 Jun 2024 20:01:28 -0700
+	s=arc-20240116; t=1719635156; c=relaxed/simple;
+	bh=pbUWmzBZxa7d97eWO0V0lrZEifzBld3FlFLlGxEXEcc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VPt6DoCccfdM71lp2qvIXj+PgrCLKArT3fscSm9iXFalIuRplhewxdcVkj+yWg7oBznNJLgAzKrvqJx/BaT4MZPcDPtVtddGA1EYMLty8GwEi21i8rVrcYLvsvXRbW/4SeZ20sx6AxvdBUae4dS1Hoi6A6QRMjIKTJZfbzeuNwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NHQVdcNN; arc=none smtp.client-ip=209.85.161.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5c21ba58227so645800eaf.0;
+        Fri, 28 Jun 2024 21:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719635154; x=1720239954; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=30kxa0Q+gUHVRJCK4oP0++E6pyeV3ESDyAZnq2q+C5o=;
+        b=NHQVdcNNbc/e/xktlU6oxlx/Th6rEzy2MMItZGrkidNa6vy4mYJ5xkA7sfq4OAYNHB
+         gwU39nTSTQuiJ91boANXaV6AG5I1TC+b7XHX7E3bDTtPKP4f2RHunLNm6BwqbDfiaS3E
+         brhrTD6S0L4bXEHIvL8Lycio0jmFzSZN4baVs/ri/h80erjBLsH/kahmY4n53isr6y1I
+         +gJRZQv++KwY5NBGMEjyPSwshfqUzn09lGMgrkMlwFmtz0M59T3i0ycCTTvTW6vm8R4/
+         WEH7CAcbSUJwwD+LOtWu3QOeSEkwWHtA8O6EwkPreIr8evn4wbJe3aUPqf5c/0YWgy1j
+         VI8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719635154; x=1720239954;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=30kxa0Q+gUHVRJCK4oP0++E6pyeV3ESDyAZnq2q+C5o=;
+        b=nLXjGtX6D75odboFQTLt85EKCfGi42N2RYVHubO6Y9XGkbGYWHm219XieVxfmdiBU2
+         EHaJHYTJ5JEdtyyd/+gfVXLo1/w+bICiLZDV8WAQoo7LOTgE5pvyVmix2XNQOsWLJeIH
+         XHgPvdeHur834w6ddXBoazPOi0DdbgaZnOIhkmgq1uyxASCoIiKqf3hjputxObxNxuaq
+         GOXUdkvatjkFfMRglL4ol7kyUkjhEH+aUApLDzoLPBDKvVEzzIi0v0dAnUDfOaT3rnY7
+         p/0vThwP9LZ1jsa+O6IGOezVuhYjNayp0eD812cw5QE68zfOaT1AX6EBgrJ2UZ+g/McO
+         jUdg==
+X-Forwarded-Encrypted: i=1; AJvYcCXY5WiaK8T9JnfMj6VuXT9kjbvieF6OCy/VP1T8+IPEoWc2M6SXYHno6+Qxloe8DGrmeGAoUh88dta0o/wFpq+adBPPfZEhDkLAwNiQtathU6egnIsDwVvlGYINUMa/7XJjW+PQhsd0sSXdDs1F60EjYd41oyOEzftO/0XC7udS0B4MTEGwRPVqUg==
+X-Gm-Message-State: AOJu0YztXjiQ5QyBMkDTwjmP+BrFk17WtbvCIT7JfY3/r4OFGoDIS2D5
+	J9artIyF+G4o3p1VjToMDtW4myXTKn4Rr7IwREAjPSvDCARw0ldDkgMBzE+5YPjBAtTon5A35km
+	LyQhrA+F4Mf50qB6U0OEZFeViCpg=
+X-Google-Smtp-Source: AGHT+IHTyqC+oWHQSDqh/4MuJ4c4xX2WdLH/YKVOYoC1crgGxMG+PzC2Z4AqXkc0NcLW8CJto3S2vXHr58J93giO4SY=
+X-Received: by 2002:a4a:4884:0:b0:5c2:23ee:bc33 with SMTP id
+ 006d021491bc7-5c439051779mr68928eaf.5.1719635154450; Fri, 28 Jun 2024
+ 21:25:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: powerpc: add missing MODULE_DESCRIPTION() macros
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar
-	<viresh.kumar@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas
- Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <kernel-janitors@vger.kernel.org>
-References: <20240614-md-powerpc-drivers-cpufreq-v1-1-de4034d87fd2@quicinc.com>
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <20240614-md-powerpc-drivers-cpufreq-v1-1-de4034d87fd2@quicinc.com>
+References: <20240510094034.12493-1-linux.amoon@gmail.com> <CANAwSgTRfEChziyys251-FezSevSq9pxHLJixVCAybJhq5YAqw@mail.gmail.com>
+ <15b164aa-601f-4dad-8115-14a715608319@kernel.org>
+In-Reply-To: <15b164aa-601f-4dad-8115-14a715608319@kernel.org>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Sat, 29 Jun 2024 09:55:37 +0530
+Message-ID: <CANAwSgRyZ=43yBxiAmj-+5xL0b9FBkoDeR88BJ8FqDTQX7KVFg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] PM / devfreq: exynos: Use Use devm_clk_get_enabled()
+ helpers
+To: Chanwoo Choi <chanwoo@kernel.org>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, 
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, linux-pm@vger.kernel.org, 
+	linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: c6PMjhct0JQbmnNNYPTlvrKUlRveqLGT
-X-Proofpoint-GUID: c6PMjhct0JQbmnNNYPTlvrKUlRveqLGT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-28_18,2024-06-28_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- lowpriorityscore=0 clxscore=1015 mlxscore=0 suspectscore=0 spamscore=0
- adultscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2406290022
+Content-Transfer-Encoding: quoted-printable
 
-On 6/14/2024 11:08 PM, Jeff Johnson wrote:
-> With ARCH=powerpc, make allmodconfig && make W=1 C=1 reports:
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cpufreq/ppc-cbe-cpufreq.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cpufreq/powernv-cpufreq.o
-> 
-> Add the missing invocation of the MODULE_DESCRIPTION() macro to all
-> files which have a MODULE_LICENSE().
-> 
-> This includes three additional files which, although they did not
-> produce a warning with the powerpc allmodconfig configuration, may
-> cause this warning with specific options enabled in the kernel
-> configuration.
-> 
-> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-> ---
-> Corrections to these descriptions are welcomed. I'm not an expert in
-> this code so in most cases I've taken these descriptions directly from
-> code comments, Kconfig descriptions, or git logs.  History has shown
-> that in some cases these are originally wrong due to cut-n-paste
-> errors, and in other cases the drivers have evolved such that the
-> original information is no longer accurate.
-> ---
->  drivers/cpufreq/maple-cpufreq.c   | 1 +
->  drivers/cpufreq/pasemi-cpufreq.c  | 1 +
->  drivers/cpufreq/pmac64-cpufreq.c  | 1 +
->  drivers/cpufreq/powernv-cpufreq.c | 1 +
->  drivers/cpufreq/ppc_cbe_cpufreq.c | 1 +
->  5 files changed, 5 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/maple-cpufreq.c b/drivers/cpufreq/maple-cpufreq.c
-> index f9306410a07f..19ca7f874d28 100644
-> --- a/drivers/cpufreq/maple-cpufreq.c
-> +++ b/drivers/cpufreq/maple-cpufreq.c
-> @@ -238,4 +238,5 @@ static int __init maple_cpufreq_init(void)
->  module_init(maple_cpufreq_init);
->  
->  
-> +MODULE_DESCRIPTION("cpufreq driver for Maple 970FX Evaluation Board");
->  MODULE_LICENSE("GPL");
-> diff --git a/drivers/cpufreq/pasemi-cpufreq.c b/drivers/cpufreq/pasemi-cpufreq.c
-> index 039a66bbe1be..92a99f09884a 100644
-> --- a/drivers/cpufreq/pasemi-cpufreq.c
-> +++ b/drivers/cpufreq/pasemi-cpufreq.c
-> @@ -271,5 +271,6 @@ static void __exit pas_cpufreq_exit(void)
->  module_init(pas_cpufreq_init);
->  module_exit(pas_cpufreq_exit);
->  
-> +MODULE_DESCRIPTION("cpufreq driver for PA Semi PWRficient");
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("Egor Martovetsky <egor@pasemi.com>, Olof Johansson <olof@lixom.net>");
-> diff --git a/drivers/cpufreq/pmac64-cpufreq.c b/drivers/cpufreq/pmac64-cpufreq.c
-> index 2cd2b06849a2..9d3fe36075f8 100644
-> --- a/drivers/cpufreq/pmac64-cpufreq.c
-> +++ b/drivers/cpufreq/pmac64-cpufreq.c
-> @@ -671,4 +671,5 @@ static int __init g5_cpufreq_init(void)
->  module_init(g5_cpufreq_init);
->  
->  
-> +MODULE_DESCRIPTION("cpufreq driver for SMU & 970FX based G5 Macs");
->  MODULE_LICENSE("GPL");
-> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-> index fddbd1ea1635..e923f717e1d7 100644
-> --- a/drivers/cpufreq/powernv-cpufreq.c
-> +++ b/drivers/cpufreq/powernv-cpufreq.c
-> @@ -1162,5 +1162,6 @@ static void __exit powernv_cpufreq_exit(void)
->  }
->  module_exit(powernv_cpufreq_exit);
->  
-> +MODULE_DESCRIPTION("cpufreq driver for the IBM POWER processors");
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("Vaidyanathan Srinivasan <svaidy at linux.vnet.ibm.com>");
-> diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.c b/drivers/cpufreq/ppc_cbe_cpufreq.c
-> index 88afc49941b7..72f568d14f30 100644
-> --- a/drivers/cpufreq/ppc_cbe_cpufreq.c
-> +++ b/drivers/cpufreq/ppc_cbe_cpufreq.c
-> @@ -169,5 +169,6 @@ static void __exit cbe_cpufreq_exit(void)
->  module_init(cbe_cpufreq_init);
->  module_exit(cbe_cpufreq_exit);
->  
-> +MODULE_DESCRIPTION("cpufreq driver for Cell BE processors");
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("Christian Krafft <krafft@de.ibm.com>");
-> 
-> ---
-> base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
-> change-id: 20240614-md-powerpc-drivers-cpufreq-6d345e48164e
+Hi Chanwoo,
 
-Following up to see if anything else is needed from me. Hoping to see this in
-linux-next so I can remove it from my tracking spreadsheet :)
+On Wed, 26 Jun 2024 at 20:00, Chanwoo Choi <chanwoo@kernel.org> wrote:
+>
+> 24. 6. 17. 17:24=EC=97=90 Anand Moon =EC=9D=B4(=EA=B0=80) =EC=93=B4 =EA=
+=B8=80:
+> > Hi All,
+> >
+> > On Fri, 10 May 2024 at 15:10, Anand Moon <linux.amoon@gmail.com> wrote:
+> >>
+> >> The devm_clk_get_enabled() helpers:
+> >>     - call devm_clk_get()
+> >>     - call clk_prepare_enable() and register what is needed in order t=
+o
+> >>      call clk_disable_unprepare() when needed, as a managed resource.
+> >>
+> >> This simplifies the code and avoids the calls to clk_disable_unprepare=
+().
+> >>
+> >> While at it, use dev_err_probe consistently, and use its return value
+> >> to return the error code.
+> >>
+> >> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> >
+> > Gentle ping?
+> >
+> > Thanks
+> > -Anand
+> >
+>
+> Applied it. Thanks.
+> I'm sorry for late reply.
+>
+Thanks & Regards
+-Anand
 
-/jeff
+> --
+> Best Regards,
+> Samsung Electronics
+> Chanwoo Choi
+>
 
