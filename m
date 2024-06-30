@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-10256-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10255-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6DDB91D27C
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Jun 2024 17:38:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E053491D279
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Jun 2024 17:38:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62697280DA8
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Jun 2024 15:38:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D091B21250
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Jun 2024 15:38:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1083156F33;
-	Sun, 30 Jun 2024 15:37:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE58156C61;
+	Sun, 30 Jun 2024 15:37:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="Gpf1//3s"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="OAM7af0S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 061A0156967;
-	Sun, 30 Jun 2024 15:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858E6155739;
+	Sun, 30 Jun 2024 15:37:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719761877; cv=none; b=jpFKpnfGDrIab0QmUl411fAybccERJUpxBqBq+ysQxN/6k9GOtHG5VpJ4TDXHWwbqjPufL+BE3pTRRy62uOqMuKB0iUnBrVmqQnQgo12dKGcP0crCwNBy7hka+84P3miUwQuUC26XPdT+GcCRBY9F+Z+534pTzADVooBO/8Xrdo=
+	t=1719761876; cv=none; b=Fe5n1lojfrT4WIyamxAe4Jj8jCdhdpgbdMumv7L9i5j5Vnvtab3vd2TAvXU3Do9QjCiaeY7xIv/SxkBsMb/rRxpxaNf5BYbJfMqsPH1GGiFEqIWLaSOxv/ZqfqJc56PpgdIUPJR9pkfL99KFAuglVLYzZBTuNchX78UWa1aKN4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719761877; c=relaxed/simple;
-	bh=Z/y0IFADfKfJvFiNwnyAj1kXb+3X4rxM/FOzZQk6XVw=;
+	s=arc-20240116; t=1719761876; c=relaxed/simple;
+	bh=htFaQCpdyD71n4pNPL8ZQEsGXm5kTTzIwWkMkp+T2HM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=X7dEhntk67cEfwC9n2ElcPFdgUU2EmG3o76169GviC6EgCjrdytLpAu0lSURN/D7iQQbHXIIWYLq7N13abx9GUf5uryRZrUQIwfaFn1BIF9NMYJC4oK7wjK42qKKoHYS3ImnG8afEBooniCB4xDUlKnN89o6iRL5/uTeAHpE9ZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=Gpf1//3s; arc=none smtp.client-ip=212.227.15.18
+	 MIME-Version; b=J+zzIXfmQ0U6K0A+ZwgBhhGUBeC/efKkLUZtVFWLqQKjSjz+c8OOpfMxwl9m9M5QK88+f8zfpFsTmjmVJY3kWkt+r5YKmiY1C7+8E3cBR4IEy7ADB8B2COlalTiE1TPFXAUGOeLYAzhgGCZWev038tm9RLMAydy1yX7BHAiTV+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=OAM7af0S; arc=none smtp.client-ip=212.227.15.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1719761844; x=1720366644; i=wahrenst@gmx.net;
-	bh=lCFQBeBlbmpUg9EyXUyqn5DC7Bbo3JN2mDc4pQ7TCIw=;
+	s=s31663417; t=1719761845; x=1720366645; i=wahrenst@gmx.net;
+	bh=P9b6UEReDpU77Jd10Cj2qEnGBLfdX01BBvJz6wX6RDo=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=Gpf1//3sptoh0BqAY9+K8DWuGeBmw+14AW5vGaMnqtdrUtrC60rP9HwuSjH1nEq2
-	 tZjNmkjPkCQCVY/FwfeTawoESM8K2FlwLo2aszffrrayuQu7Rp6L8z3WrPMVEfscV
-	 aI/SuHreY7rXStZY+T+VNyIgNIJvbJrVV5fo86kgPZfwHq5KVCN8xhTF4YQyAgruF
-	 MNTtarpzEYfcKuThXAZ4QelWbD6n+1lbxJYkG51dKwPeK+ro7nEH+C9yM3P2fJXh8
-	 FIcpAptoxrmAcTSDvQs+3GGUE4UrNB0vppZxNjumCGCLmkiYoQsY+vvAmiFLNRla1
-	 9QYMcbfMC8rclpxwIg==
+	b=OAM7af0SnCS1ZARK4RA4CkYk6exCAufqxsQsCgLR3fzwetYAHxX8NmH/xwsSHH52
+	 fn1X+6k5daXF2o1dCVvJQcbRKkBqB9dCRlPuxjhk4WWwPfkESO8kqXJQGd5/e+Yea
+	 daEuJ0eMROYKxns6+GMiGnSo8oeUg63Xb80p1qAWsD+UaUL0OQ5vgEcr/v6NvqRND
+	 ir43c+JlVVjWo4dAVHoaJ9y77syEzO06rQGJ3d0mrWPETWcKuseoLBKc+qZPFETen
+	 q7UsPqvgIG1dtXKZ3gzaFHF2ghr6cyavqKQWFVWFrYsSvc2NhQZ8RTZPj78V/oL87
+	 qifxeKiHGa1paw5yYg==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFsZ3-1seevT2qMh-00Fv84; Sun, 30
- Jun 2024 17:37:24 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MGz1V-1sbMbW2khX-00EpCe; Sun, 30
+ Jun 2024 17:37:25 +0200
 From: Stefan Wahren <wahrenst@gmx.net>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Florian Fainelli <florian.fainelli@broadcom.com>,
@@ -74,9 +74,9 @@ Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	linux-arm-kernel@lists.infradead.org,
 	kernel-list@raspberrypi.com,
 	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH 08/11] usb: dwc2: debugfs: Print parameter no_clock_gating
-Date: Sun, 30 Jun 2024 17:36:49 +0200
-Message-Id: <20240630153652.318882-9-wahrenst@gmx.net>
+Subject: [PATCH 09/11] usb: dwc2: Skip clock gating on Broadcom SoCs
+Date: Sun, 30 Jun 2024 17:36:50 +0200
+Message-Id: <20240630153652.318882-10-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240630153652.318882-1-wahrenst@gmx.net>
 References: <20240630153652.318882-1-wahrenst@gmx.net>
@@ -87,49 +87,85 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Y2/ydqCyqYHWHavK5/XG4b46LsgTWvQ3AzoHTM5k/IIqoHGxAdu
- YmHJwmsQJKG3BiEcn/lVB63s5ODVPmRQCXvi1v/puqwcPbB9y/BglDKYBDHBcNlySv4Pux8
- Aiv2WHULsE2ioRoX6rVAL9MGN7wv0b+hY9DQIVE8t7jRYaaD3R4y47BjYJtZHz3kf9g40YU
- kCRuybOwyGdQwQf6CYwQw==
+X-Provags-ID: V03:K1:pI9X3saIj1rv3u8rkYVt5Z2mn5Afvx+C+DmVZ9+PgFr6tyA0tFT
+ f2di+bJIcWOzMogkgezYjB2heHLGJEe8mitLQMHh9hvvizU9Hub7dsnOj4PIXEncKhn0sOG
+ qFyhE2FzXXiMAY4c3kL70pxuCzZlNgA5sOSR1b7MqrlnsWwpJm+DpDqU60tldbwLzD8KCtz
+ q+ZBsE8ao6B1eNETfpP5Q==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:1mr6sDBPqAY=;ZVkIx5NNUR0ZJQM95skTQK9wG9G
- YQ//jV7KGMQwMhiLuozF7iwuXXsavmAxKDlwYcvpTnqcCoQ4cRO7JXS8WvjpeO0CGzkH8/CeZ
- KVwxEH49j4t+hhkiUBoSh0Udkzx8SNT1KQg2pu/qFHDnfYsRY1t5HRznGr3/GZ1ad6gI32WII
- mfDwlCe1hjdKj56Peofvihz41IHFncxcDsOt9SP1pBGjqR9EnDVUJe777Xrx5bEk9Nf+jNEB8
- NtQ5DAFBDZGx+31cDrhg06e59qTg7leiT67FUse0/SQWvvHBRGDSd/fniQSS3YwBs2KJxgUhT
- bH/YZp+tZZjUuMC5XdAXNBANuhFGAFE4YVA/eR81UBc10kVDFfH/cmBREY98OMGdbi58569/X
- lgsygz2Vq0ponplUSfg7M+o3YZG9zxjRhG7aUkJ3dCWPWpxREe00h2Qbd6oXLGmP0y0c3NVQO
- cK8eoYBXpmBm6qUhrpKYvvfQmmM5YEFCPgxNVOQydubkcppzK1MYa+bBSfvZrnODoMEvQ+GMB
- ArEDD2Za/Bsi5Xom854maKOkcXgySDsNHH2pPopgQJQH6jEZU/xwynvwjqFZCHdpk/uO1YM91
- hrdlK8rrbRVH5vs/tVA3e3lz5jlByvi/IQ7zat3EBsVHwzeQBFr1bc+biyxd+e0RPr/aPKcil
- Sy9u6YyxO/gY/or8MPDKihrxH/0N7bad414NbWboObpHEd2Yvb8VP2JbXBTs1xb5rOVxGP3tD
- xvItjcHC7chExI5cbgLJs98U5I4t3QtKlDfUVEt4s3uXrYoGfP6/p1UVQ5307NO1sbYcrCgmc
- /55cQvNWI6q+ZRrzkWJCoJojDh6UMUCt3bm0ZICYtxtpk=
+UI-OutboundReport: notjunk:1;M01:P0:r+xf4Y+CXp8=;dAxB9no4yNcRmM23mLNbkn4eZo0
+ gJCfajaBuonOEWkB8tcs8u29OtY9HzcchKLFC269zRzIh6A2oqV3NtDMHpkfbEANkUhMm1Qcb
+ 179qo1P8aCyoO/ZyOP3ZYJajVnrKo8+HKOMH6JbZxKE/sd7oqzPwf9icHwS8tpiEGs/qhnWYx
+ cOtF3xjeahz5zE56PFH9Vp2Pmq7m1oohwh6A8exJYoNuVmcucmwcRc8rgo6cTcET2UH+s+JC9
+ Rlqs9/AsBxgLNy4sRWcZFVpQ5EKrrlLu7VP+JuCdBhPHpkr4kdbFfpRyOjqUD8FuJkacwdble
+ v8N11NQXp2AaMNUB+f1IDYAzDywiNcJGZedSkfMTWJJYdUEZL4eB4RevvWZ8/nJ/o0uAFrp2M
+ MtHBholgzoF2F5MMKzaFF7HLSmUZcC/iRa3ZQkXEyXk+8G1u5EjBHuqJ4cVOC+NtYHusYEjVt
+ mVMr0/pC7dBf/dhJCvJ8KcN+T7XgVKG03fpRzG3il+g66/V/NBjECOhZQ1gythLP+ara/KBNA
+ svb7saNx+lZ/Mj3ieDkFFbEaJ0MGVa7vQXozZpJ6Ta03U7nsrJVPaqIfEr/ykkq7h/DlFKPYt
+ n43yd5fgYkm4l1a1JOM3WoM9kgTecGab53+kFTRW7z8yrhAEceUbBjvivjLK4kyM1Pkb2RgyK
+ P/VcJyHNUyDtZ31jvnVzDzUaksEjHH26JoYQ6SYmoKnL/4ceTi/s/wDDtGDyF3/gGPiVWDj3Z
+ n41gLwUZ869NfKYPmkpKfJjYec8zWnthXdSKxtJPCUU+sbNSxWlnBffvZl2zGz6pFOqwebFbp
+ MqDNR8LlYtDj15hOgxvhLT5CCquAP/IoO4r60kKWmcFpE=
 
-The commit c4a0f7a6ab54 ("usb: dwc2: Skip clock gating on Samsung
-SoCs") introduced a parameter to skip enabling clock gating mode
-even the hardware platform should supports it.
+On resume of the Raspberry Pi the dwc2 driver fails to enable
+HCD_FLAG_HW_ACCESSIBLE before re-enabling the interrupts.
+This causes a situation where both handler ignore a incoming port
+interrupt and force the upper layers to disable the dwc2 interrupt line.
+This leaves the USB interface in a unusable state:
 
-In order to make this more visible also print this in show
-parameters of debugfs.
+irq 66: nobody cared (try booting with the "irqpoll" option)
+CPU: 0 PID: 0 Comm: swapper/0 Tainted: G W          6.10.0-rc3
+Hardware name: BCM2835
+Call trace:
+unwind_backtrace from show_stack+0x10/0x14
+show_stack from dump_stack_lvl+0x50/0x64
+dump_stack_lvl from __report_bad_irq+0x38/0xc0
+__report_bad_irq from note_interrupt+0x2ac/0x2f4
+note_interrupt from handle_irq_event+0x88/0x8c
+handle_irq_event from handle_level_irq+0xb4/0x1ac
+handle_level_irq from generic_handle_domain_irq+0x24/0x34
+generic_handle_domain_irq from bcm2836_chained_handle_irq+0x24/0x28
+bcm2836_chained_handle_irq from generic_handle_domain_irq+0x24/0x34
+generic_handle_domain_irq from generic_handle_arch_irq+0x34/0x44
+generic_handle_arch_irq from __irq_svc+0x88/0xb0
+Exception stack(0xc1b01f20 to 0xc1b01f68)
+1f20: 0005c0d4 00000001 00000000 00000000 c1b09780 c1d6b32c c1b04e54 c1a5e=
+ae8
+1f40: c1b04e90 00000000 00000000 00000000 c1d6a8a0 c1b01f70 c11d2da8 c11d4=
+160
+1f60: 60000013 ffffffff
+__irq_svc from default_idle_call+0x1c/0xb0
+default_idle_call from do_idle+0x21c/0x284
+do_idle from cpu_startup_entry+0x28/0x2c
+cpu_startup_entry from kernel_init+0x0/0x12c
+handlers:
+[<f539e0f4>] dwc2_handle_common_intr
+[<75cd278b>] usb_hcd_irq
+Disabling IRQ #66
 
+Disabling clock gatling workaround this issue.
+
+Fixes: 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr funct=
+ion.")
+Link: https://lore.kernel.org/linux-usb/3fd0c2fb-4752-45b3-94eb-42352703e1=
+fd@gmx.net/T/
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 =2D--
- drivers/usb/dwc2/debugfs.c | 1 +
+ drivers/usb/dwc2/params.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc2/debugfs.c b/drivers/usb/dwc2/debugfs.c
-index 7c82ab590401..3116ac72747f 100644
-=2D-- a/drivers/usb/dwc2/debugfs.c
-+++ b/drivers/usb/dwc2/debugfs.c
-@@ -702,6 +702,7 @@ static int params_show(struct seq_file *seq, void *v)
- 	print_param(seq, p, uframe_sched);
- 	print_param(seq, p, external_id_pin_ctl);
- 	print_param(seq, p, power_down);
-+	print_param(seq, p, no_clock_gating);
- 	print_param(seq, p, lpm);
- 	print_param(seq, p, lpm_clock_gating);
- 	print_param(seq, p, besl);
+diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+index 5a1500d0bdd9..66580de52882 100644
+=2D-- a/drivers/usb/dwc2/params.c
++++ b/drivers/usb/dwc2/params.c
+@@ -23,6 +23,7 @@ static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg=
+)
+ 	p->max_transfer_size =3D 65535;
+ 	p->max_packet_count =3D 511;
+ 	p->ahbcfg =3D 0x10;
++	p->no_clock_gating =3D true;
+ }
+
+ static void dwc2_set_his_params(struct dwc2_hsotg *hsotg)
 =2D-
 2.34.1
 
