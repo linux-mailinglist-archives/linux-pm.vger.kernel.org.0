@@ -1,157 +1,132 @@
-Return-Path: <linux-pm+bounces-10293-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10294-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9A0691E61B
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 19:00:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3263891E625
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 19:02:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 369FCB21A16
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 16:59:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6242E1C21BDA
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 17:02:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4908516DC3A;
-	Mon,  1 Jul 2024 16:59:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2B6B16D31E;
+	Mon,  1 Jul 2024 17:02:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Inzjp2EA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ukJ1XLye"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212B943144;
-	Mon,  1 Jul 2024 16:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B31014AD25;
+	Mon,  1 Jul 2024 17:02:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719853177; cv=none; b=gQIEJ1B0q9aZv/13ey1bAxZUnE37pYdbivf/CZBnDFlCdS91e6J3zXciZVBZgygM0gb1oY5Bahp6AhW5oRE/ZivcafrvEHMtcjswrNBAvAHaONWb3cuixApfJqqLVNEyFfpY+jnb8WdxTpEpBJ5Y+NGAoQf7O5ayBhhRfICzb60=
+	t=1719853352; cv=none; b=qPd9V2JqaSIwOL/H6xhHz5FOPm1gBNfxu/2vokwKa71q2MesV9bLQjmI9+JomEp+AiQ3alWnEDw72/I9vIrKtNQ8jhsZxmB2rLWqdynIJMZf50QZz0uRSnLcC7TNkn5SyK2asVZq2F4lACyT40UMiyzhUH8mUvmmCEmjDCyCFZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719853177; c=relaxed/simple;
-	bh=zUGL8isiXEnqzL1HE8Wbu1BcaCkPiWfaa1HJedHH6p8=;
+	s=arc-20240116; t=1719853352; c=relaxed/simple;
+	bh=rrZg9Pb0++jARgOgd/Z0l3VmYE7RR9w+0Gh7JqwfciA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WmmRWqc+lZJQkfh3jRN2iHmVyIIZS0QZQkO/8q/bDH5lk2Xij48SZh/z/DUl6EejU3rz7lZDlLgLBvWCCiGO6+gvjzjrM7iATHhaLc6goBUEKD2McQVzj2VWURmdhAMGYP4pPmsqOYX0i989UABhuQgyciq2PISTck8Apu9yZBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Inzjp2EA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87DD1C4AF10;
-	Mon,  1 Jul 2024 16:59:36 +0000 (UTC)
+	 To:Cc:Content-Type; b=IPgHppmyyLYIxInRnZuXDBcoqaiUf9pKhoZN1ROWIuqbL9gaEPdmNyb0rj/arVsrEsjMi3ZWsYzfMSDp3Jed8oKyAAZXH4C/7QTP1A+st/gigegpeShff4KpbOYlMQEyrEerbCIKfR2HFq2yMkccQXLte9UEEGDGKp+oDQpu074=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ukJ1XLye; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 250B5C4AF12;
+	Mon,  1 Jul 2024 17:02:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719853176;
-	bh=zUGL8isiXEnqzL1HE8Wbu1BcaCkPiWfaa1HJedHH6p8=;
+	s=k20201202; t=1719853352;
+	bh=rrZg9Pb0++jARgOgd/Z0l3VmYE7RR9w+0Gh7JqwfciA=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Inzjp2EADF0fqQJi+DIeZB0Hwvma8nd533uc3N9Obi5CIwYMOuaVGDp2QugqPB3vy
-	 7Hn96cPBcaonYothTe9+nN6ARzXqjQ1mH2lnDUMdjziOIJtIBSen2fdxiFZlJBd8/z
-	 Ns1c8ouDcQlsIXREerT0KIvU8UpHZWvmmqPHCRLHMms2k1+KDudg0shTmrDcrq0yDi
-	 0iBwc0FqR0Ji+nr/i8z+3L0EzJl5glRjqarpnY6h9NX6dlhedz0zTRU6XVA6iuijg8
-	 rfNA9Y2mVWiSAUVRrM+aoiFcSlvsgL/AcAQyyIxLj3LKxgwodcjP9OZle1rzO5y/L9
-	 JVYgtfPHiMZkA==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-24c5ec50da1so453333fac.3;
-        Mon, 01 Jul 2024 09:59:36 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWWXOmbCCDbM/4bLefCz3SOVqzKnor3SD94w0pVhMIlbqfk09sKCMs8X3wGd+UZLotSzwgxRObXr0Sl+bGffEQx55SSIrMXkit+VceXAWj5rKtv8TDrJL/1hwB50nWohvZI+A7ajkE=
-X-Gm-Message-State: AOJu0YxeqFcLZecWCSh6qVTB7P2RBuZYJw7pDYIm2YLC3KIkrjjEDnNW
-	IELrFy7dtD/gpB66T+7E6MaXet0AtsI/Yyiu6UCDBNQk2Vu1LFdHz65HMYeYJb32wVUWFfrIyrn
-	1HaS16f915Wkaa77omEiX+0QSYiw=
-X-Google-Smtp-Source: AGHT+IFoPgW50EvjNW4Q1RLKjT3T97gSHyMry3rat4zYIOxXZ83z/B+T4onbyQO++EPGBuprRtcQmiqwGw4HC4uuV+E=
-X-Received: by 2002:a05:6870:8192:b0:24f:e599:9168 with SMTP id
- 586e51a60fabf-25db33732ffmr6149076fac.1.1719853175725; Mon, 01 Jul 2024
- 09:59:35 -0700 (PDT)
+	b=ukJ1XLyeOU7dxCB49i0ennHAaVa1jJTryhFOGA+E8Nere57bzHshRUNzzdezWqB1w
+	 oW9gtcr8NPmhf+eYmD0PztlGnOihLVLIUbkTZs2Syu6FHAnDWqp6na+67mSsRtY4Jl
+	 dkeOummBLEWEi3FKYBFmei747ke6iObMkO3PyR+zSstsmpRFjGeOBLScJc/0LdE5ki
+	 hWuznYaexvRgB04gAFoo0NS9M0DZdxjm6VRwHjpqpVPnSxjjF1znzSFtRVPQYT87Hg
+	 1V+iYtEJqGUNypGYdO75dJc2nR+Gnc2S6uwHjQTJN0Cssuk+s0a7/UbjhTjJK7Uzvo
+	 6U3N39uZo2pCQ==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-25989f87e20so504939fac.1;
+        Mon, 01 Jul 2024 10:02:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVc3RyDe9B2GkUXOZKAZElHzsAFnNYk2U0sbkikOCGRM83fIwQXDGcGEz9NeHKBqwx3yZHDsqCx7I0+fvwg43p1YrdjdoY2+oT8RZcCQFwJemBUV/s0PpOKvM1bo5Sn09K72R00cD8=
+X-Gm-Message-State: AOJu0Yxm5PD8BqWut5NsjdAqcRPKzD3mCZvR1H7VL/9x7IuJKZ5Fwq3P
+	OkhcZ7js4TCHVWPapknJTXge0gnR/qokmVWM269faPxznDQES+La3OHMCZFyylkXcBmewNdff42
+	PMFsH9g9GSJeZsY0tCjgo0DJhpm0=
+X-Google-Smtp-Source: AGHT+IEJpZmbqEHO1Bh+OEp3LPFinKMG1IadW16uX8PwTkV1l2Yyvu7JRQgOww++E+3PBknGG60nkJTheF+JVlO6A5A=
+X-Received: by 2002:a05:6870:4195:b0:25d:d69:eaf with SMTP id
+ 586e51a60fabf-25db36406d0mr6091618fac.4.1719853351316; Mon, 01 Jul 2024
+ 10:02:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240628095955.34096-1-christian.loehle@arm.com>
- <20240628095955.34096-4-christian.loehle@arm.com> <CAJZ5v0jaEt2yo9OvYqpzfcbPtAvTk63tKXjm6QCi7zeKuU2SUA@mail.gmail.com>
- <c40acf72-010f-4a8b-80e4-33f133ba266b@arm.com>
-In-Reply-To: <c40acf72-010f-4a8b-80e4-33f133ba266b@arm.com>
+References: <20240628091456.57301-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20240628091456.57301-1-yang.lee@linux.alibaba.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 1 Jul 2024 18:59:24 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hCANG0JBVcLgVkuS9N5Vb=sLVFtdZiJD8HYSQoX8NZgg@mail.gmail.com>
-Message-ID: <CAJZ5v0hCANG0JBVcLgVkuS9N5Vb=sLVFtdZiJD8HYSQoX8NZgg@mail.gmail.com>
-Subject: Re: [PATCHv4 3/3] cpuidle: teo: Don't count non-existent intercepts
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, vincent.guittot@linaro.org, qyousef@layalina.io, 
-	peterz@infradead.org, daniel.lezcano@linaro.org, ulf.hansson@linaro.org, 
-	anna-maria@linutronix.de, dsmythies@telus.net, kajetan.puchalski@arm.com, 
-	lukasz.luba@arm.com, dietmar.eggemann@arm.com
+Date: Mon, 1 Jul 2024 19:02:20 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h1OZ1=x3Evfkdb90oHML_KOALS9FmPW+jk-o7udOY-yQ@mail.gmail.com>
+Message-ID: <CAJZ5v0h1OZ1=x3Evfkdb90oHML_KOALS9FmPW+jk-o7udOY-yQ@mail.gmail.com>
+Subject: Re: [PATCH -next] mm/treewide: Add missing kernel-doc function comments.
+To: Yang Li <yang.lee@linux.alibaba.com>
+Cc: mingo@redhat.com, rafael@kernel.org, tglx@linutronix.de, pavel@ucw.cz, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Abaci Robot <abaci@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 29, 2024 at 10:22=E2=80=AFAM Christian Loehle
-<christian.loehle@arm.com> wrote:
+On Fri, Jun 28, 2024 at 11:15=E2=80=AFAM Yang Li <yang.lee@linux.alibaba.co=
+m> wrote:
 >
-> When bailing out early, teo will not query the sleep length anymore
-> since commit 6da8f9ba5a87 ("cpuidle: teo:
-> Skip tick_nohz_get_sleep_length() call in some cases") with an
-> expected sleep_length_ns value of KTIME_MAX.
-> This lead to state0 accumulating lots of 'intercepts' because
-> the actually measured sleep length was < KTIME_MAX, so query the sleep
-> length instead for teo to recognize if it still is in an
-> intercept-likely scenario without alternating between the two modes.
+> Add kernel-doc style comments for the pfn_is_nosave and
+> arch_hibernation_header_save functions.
 >
-> Fundamentally we can only do one of the two:
-> 1. Skip sleep_length_ns query when we think intercept is likely
-> 2. Have accurate data if sleep_length_ns is actually intercepted when
-> we believe it is currently intercepted.
->
-> Previously teo did the former while this patch chooses the latter as
-> the additional time it takes to query the sleep length was found to be
-> negligible and the variants of option 1 (count all unknowns as misses
-> or count all unknown as hits) had significant regressions (as misses
-> had lots of too shallow idle state selections and as hits had terrible
-> performance in intercept-heavy workloads).
->
-> Fixes: 6da8f9ba5a87 ("cpuidle: teo: Skip tick_nohz_get_sleep_length() cal=
-l in some cases")
-> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D9453
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 > ---
-> v4: Skip constraint check if intercept logic selects state0
+>  arch/x86/power/hibernate.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
 >
->  drivers/cpuidle/governors/teo.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+> diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
+> index 5b81d19cd114..90f682ff63b1 100644
+> --- a/arch/x86/power/hibernate.c
+> +++ b/arch/x86/power/hibernate.c
+> @@ -41,7 +41,8 @@ unsigned long temp_pgt __visible;
+>  unsigned long relocated_restore_code __visible;
 >
-> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/=
-teo.c
-> index 200a3598cbcf..6dc44197a80e 100644
-> --- a/drivers/cpuidle/governors/teo.c
-> +++ b/drivers/cpuidle/governors/teo.c
-> @@ -287,6 +287,7 @@ static int teo_select(struct cpuidle_driver *drv, str=
-uct cpuidle_device *dev,
->         unsigned int hit_sum =3D 0;
->         int constraint_idx =3D 0;
->         int idx0 =3D 0, idx =3D -1;
-> +       int prev_intercept_idx;
->         s64 duration_ns;
->         int i;
->
-> @@ -364,6 +365,7 @@ static int teo_select(struct cpuidle_driver *drv, str=
-uct cpuidle_device *dev,
->          * all of the deeper states a shallower idle state is likely to b=
-e a
->          * better choice.
->          */
-> +       prev_intercept_idx =3D idx;
->         if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
->                 int first_suitable_idx =3D idx;
->
-> @@ -415,6 +417,15 @@ static int teo_select(struct cpuidle_driver *drv, st=
-ruct cpuidle_device *dev,
->                         first_suitable_idx =3D i;
->                 }
->         }
-> +       if (!idx && prev_intercept_idx) {
-> +               /*
-> +                * We have to query the sleep length here otherwise we do=
-n't
-> +                * know after wakeup if our guess was correct.
-> +                */
-> +               duration_ns =3D tick_nohz_get_sleep_length(&delta_tick);
-> +               cpu_data->sleep_length_ns =3D duration_ns;
-> +               goto out_tick;
-> +       }
->
->         /*
->          * If there is a latency constraint, it may be necessary to selec=
-t an
-> --
+>  /**
+> - *     pfn_is_nosave - check if given pfn is in the 'nosave' section
+> + * pfn_is_nosave - check if given pfn is in the 'nosave' section
+> + * @pfn: The Page Frame Number to check
 
-Applied as 6.11 material, thanks!
+This is fine.
+
+>   */
+>  int pfn_is_nosave(unsigned long pfn)
+>  {
+> @@ -84,9 +85,11 @@ static inline u32 compute_e820_crc32(struct e820_table=
+ *table)
+>  #endif
+>
+>  /**
+> - *     arch_hibernation_header_save - populate the architecture specific=
+ part
+> - *             of a hibernation image header
+> - *     @addr: address to save the data at
+> + * arch_hibernation_header_save - populate the architecture specific par=
+t
+> + * of a hibernation image header
+
+But this is not.
+
+If you take the time to clean this up, please rephrase this so it fits
+into one line.
+
+> + * @addr: address to save the data at
+> + * @max_size: the maximum size of the data to save
+> + *
+>   */
+>  int arch_hibernation_header_save(void *addr, unsigned int max_size)
+>  {
+> --
+> 2.20.1.7.g153144c
+>
+>
 
