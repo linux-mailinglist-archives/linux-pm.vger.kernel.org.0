@@ -1,138 +1,113 @@
-Return-Path: <linux-pm+bounces-10296-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10297-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AD5591E63B
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 19:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E9ADA91E645
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 19:11:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D8ED1C21D58
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 17:09:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 281F51C2224F
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 17:11:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 807BC16E861;
-	Mon,  1 Jul 2024 17:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4559016EB40;
+	Mon,  1 Jul 2024 17:11:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2jnUjY0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WaCsXyfm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D0216631C;
-	Mon,  1 Jul 2024 17:08:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA5016E880;
+	Mon,  1 Jul 2024 17:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719853733; cv=none; b=X0BszuGLPRxaErRg6lyrDZ5FBJYZmPqLD7o080rR8oxBG29p5wI07/U+k7TUan+KrykSTa1I5NDqlSnrFJZYs7N3USMBG6hPNec1vwgue+e4NkM9k93UbT1e/r41KZnf9tfYmf223RDdAMObNZKYKkcoAEFxy3QFiSTOx+lUraI=
+	t=1719853877; cv=none; b=fZfKtVOkzTT4RE48vs3mHA76M1Rmp3bNwH7cQR9Mxqkfj+pheHc0VBA4jFi6+VevhS0zCCsKmCnTDLchRlKlxpdveJJEQxRx5mo74gY+mLJWdFCkUdNuaH00Oj5PstAoyi3xB7jOS6CH3LOLfWydl38ZurQy5uArOxSmW0K0i3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719853733; c=relaxed/simple;
-	bh=zsbuHy5w3OfgJ0azDM2BXoti/8qlEfU9xPQTRcEHelw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=De3fillKepmd6Dvu88Xa2HIpwgXoPIqoR2vfDqNeVhnECV5dls8hqIIZDzeU45wasvCGXf/LPo0/AHmjG7inLOi1VRtrWYjPuWtpYVfmohQlG6vpdx3/tbMPDmHEYZ88ZqOllGBUCIwN6vM69KwhM64kj2guqgl7Vg2FokCS4aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2jnUjY0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCD7FC116B1;
-	Mon,  1 Jul 2024 17:08:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719853732;
-	bh=zsbuHy5w3OfgJ0azDM2BXoti/8qlEfU9xPQTRcEHelw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=F2jnUjY0VX/mlOYaaaNOahMAfD4fMzU2DiWaZErPsQyjNQ54vosqhObE2Br7YSC6C
-	 XhzIXAZNPVuU9frlgBdRX2VyQUK6CIBtiXPdJKn6iuGrYIzBtw8rYLsHhWCLaiZjkb
-	 pSOHU3AuRZjehR/LRU0C+OBApkLKBRdvEf2o3wi/1TzazaaTFs5s/YbxP66zS0HHAr
-	 txWK8GIpyb3UBLSfAJbGNjTc68vTU/6u3USm+lkml5zwU4dp61haT9SzTz519ruHiu
-	 mOb46CW+BdcTCdxnyp7QevmaEogoZUIwtlHXrXij1LhDq/F5Vd7de1fyKiOvBhF7M/
-	 6nNjV8zO7HnDA==
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-25cd2b51fd3so429436fac.3;
-        Mon, 01 Jul 2024 10:08:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX2+p8AwhpO+OnofTGUeYndZ8l/QUYstLZP/0FmO97FAjsz33caxHAqVYEW9CtOwkWnYnv2jOp1MP3TNnc1599FiwN8GnNIMDp1S59sidLG5A4Wd/jWWD/cn9W4LNipX7B0efIFnHsqA23HFUplFZ6yvaGWGi7uKW0QC6EpRhcNc9Ong0MYuoP5
-X-Gm-Message-State: AOJu0YwvVtdxRnQ9KbhfcBmYC6C3Z9+z5cc4mDz+4DoE3iBSMhD2L/hu
-	uF1gdi4JgevETCbPU5eFvc5rWVuD+AbCX9y3QQBiKn3zKIInOrfcqB69YSqD9tigMYk0sfbH2n8
-	JflY4d0lBgcjxkZtgP5bnlfkR0jU=
-X-Google-Smtp-Source: AGHT+IHR4xtavs3WYiLzujF4aoqo2c9S9zl3NErTsshLspZCJKaUFkpOeuqq5NUryZB+mKUEOJsqiLWQefG2dVeChEg=
-X-Received: by 2002:a05:6871:71e:b0:25d:707d:2550 with SMTP id
- 586e51a60fabf-25db344441amr6479512fac.2.1719853732094; Mon, 01 Jul 2024
- 10:08:52 -0700 (PDT)
+	s=arc-20240116; t=1719853877; c=relaxed/simple;
+	bh=R0NWfF0fDtyeoauyfED8t0eoe2J52bkoikEJUoUb0Lw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SBcN2tsJsq4A6g7ex/e4qhklVrrUOmUm+mfA8rZHjNxpN/Ap3fsHtoUc6xG6AwnDjQTL4xFYfsHQCa3kSDkDrUacYG3RDq9GBzFqpNB/6cfALALxcVPugfQVtN5uNZfMWDJZQYUAysdElGKabkI7kwprK4cCZLVDjfzVul9u37g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WaCsXyfm; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-42122ac2f38so19673815e9.1;
+        Mon, 01 Jul 2024 10:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719853874; x=1720458674; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RFr8Ofpiwm2nPtOKnS8vgxJYURmMVP4cZnCgpB044ic=;
+        b=WaCsXyfmSAUdLIDFnCXlF2N6Xv7PYAUVbmjLbCk8yZSblydZgRFWuLpOL8KiQb+mRY
+         kDGrMIb5+oKYwCQdVJbYTVIrgp70mA0zxoHOlyFNlJayYg/jDFxRvHs2xz41e1wuaMi6
+         jinbSQvuJzy6yVoy8wNg6E07vH1cVPZUet2gbLUW98YVV6qpupgs89/P9fr9apEeFemK
+         QQu2oqjI4bV6rdExuEqF0GrZuvvG9JIYWd0JLZ7wvvfnOZtyKWYfa19GWJn3ypZnSYlS
+         2Z6N+a0mHU4s44YbeWFp+1LavBajvRmvIiMhcYblT4YNWWUZesDZVMV1uM7rH8uT+Dyw
+         0PbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719853874; x=1720458674;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RFr8Ofpiwm2nPtOKnS8vgxJYURmMVP4cZnCgpB044ic=;
+        b=ohaprcwnSNjorvs+mDM/QBmgy65+wRi1LXac8NAlADr9tHcL43+HQvzm7MlCVL3Vjq
+         5J8vDaAgOF43aXo3ft4/8/FsmUgCHosU+QABCE/1xoPFioDw7FjvTen4mxMd80ytDGgh
+         1iA2Mb6m2bW9wz87G2JneEA00QubejYDFI1dbJXcYkJQ9mHSIaODzJ5pNEc8CDc4Ds5y
+         2Gp6Czb1MyXub1Sf1VQcY/naJoguVniUEH6ZU4rZvSpYAn5rUneHhjUohV4pqcDclL7r
+         Pij1sck7/acJv3EtheUh0z6Cb2SPY/VDU4RrcvpL/G6sCQbVgh9F+RF9zPOlEqVfEhKD
+         +zSg==
+X-Forwarded-Encrypted: i=1; AJvYcCXJfZtWr3FHG8LzbVrPt+1aAQhTX02o4RRpMCjPI0ymiGpP/pUOF8UU+R2MDKK+xUUDeyosl9WRvvSJaRD+Cy07fBQ4IUd6sBLmJu3prsfT/2fc8U4XfJRQTlU/J/uxF4q4roePuSVt
+X-Gm-Message-State: AOJu0YznAd5ha2fXlhSeJC3YAyr426+coJnRd7erIr0o8pOq4BBS3kTV
+	KFY7DxYPIOWa7bs3LhIZ1hKhsTNLrlRYSZPlrRXUFh5IhiZBTMZv
+X-Google-Smtp-Source: AGHT+IGj+dj/EQvMf0Xx7lgxXlKS6qpK6UTruNerxqVaDzO91UchOJE4v36wVK4R6I8c1OknxTOwXw==
+X-Received: by 2002:a05:600c:3089:b0:424:ab8c:a24e with SMTP id 5b1f17b1804b1-4257986256bmr53666225e9.11.1719853873438;
+        Mon, 01 Jul 2024 10:11:13 -0700 (PDT)
+Received: from localhost ([2001:861:3385:e20:6384:4cf:52c5:3194])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3675a104dbdsm10581949f8f.113.2024.07.01.10.11.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jul 2024 10:11:12 -0700 (PDT)
+From: Raphael Gallais-Pou <rgallaispou@gmail.com>
+To: "'Rafael J . Wysocki'" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: linux-pm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: docs: Add missing scaling_available_frequencies description
+Date: Mon,  1 Jul 2024 19:10:40 +0200
+Message-ID: <20240701171040.369030-1-rgallaispou@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240627-add-cpu-type-v2-0-f927bde83ad0@linux.intel.com> <20240627-add-cpu-type-v2-2-f927bde83ad0@linux.intel.com>
-In-Reply-To: <20240627-add-cpu-type-v2-2-f927bde83ad0@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 1 Jul 2024 19:08:41 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0g+ih6Yh3su58Wrj+p04vr_4nmcJc41O-8_OCyzVQFKpA@mail.gmail.com>
-Message-ID: <CAJZ5v0g+ih6Yh3su58Wrj+p04vr_4nmcJc41O-8_OCyzVQFKpA@mail.gmail.com>
-Subject: Re: [PATCH PATCH v2 2/9] cpufreq: intel_pstate: Use topology_cpu_type()
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	daniel.sneddon@linux.intel.com, tony.luck@intel.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
-	"Liang, Kan" <kan.liang@linux.intel.com>, Andrew Cooper <andrew.cooper3@citrix.com>, 
-	Brice Goglin <brice.goglin@gmail.com>, Mario Limonciello <mario.limonciello@amd.com>, 
-	Perry Yuan <Perry.Yuan@amd.com>, Dapeng Mi <dapeng1.mi@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 27, 2024 at 10:44=E2=80=AFPM Pawan Gupta
-<pawan.kumar.gupta@linux.intel.com> wrote:
->
-> Intel pstate driver uses hybrid_get_type() to get the cpu-type of a given
-> CPU. It uses smp_call_function_single() which is sub-optimal. Avoid it by
-> using topology_hw_cpu_type(cpu) that returns the cached cpu-type.
->
-> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Add a description of the scaling_available_frequencies attribute in
+sysfs to the documentation.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
+---
+ Documentation/admin-guide/pm/cpufreq.rst | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-and I'm assuming that it will be routed along with the rest of the series.
+diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
+index 6adb7988e0eb..fe1be4ad88cb 100644
+--- a/Documentation/admin-guide/pm/cpufreq.rst
++++ b/Documentation/admin-guide/pm/cpufreq.rst
+@@ -267,6 +267,10 @@ are the following:
+ ``related_cpus``
+ 	List of all (online and offline) CPUs belonging to this policy.
+ 
++``scaling_available_frequencies``
++	List of available frequencies of the CPUs belonging to this policy
++	(in kHz).
++
+ ``scaling_available_governors``
+ 	List of ``CPUFreq`` scaling governors present in the kernel that can
+ 	be attached to this policy or (if the |intel_pstate| scaling driver is
+-- 
+2.45.2
 
-Thanks!
-
-> ---
->  drivers/cpufreq/intel_pstate.c | 14 +++-----------
->  1 file changed, 3 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
-e.c
-> index 15de5e3d96fd..0a1e832c7536 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -1956,24 +1956,16 @@ static int knl_get_turbo_pstate(int cpu)
->         return ret;
->  }
->
-> -static void hybrid_get_type(void *data)
-> -{
-> -       u8 *cpu_type =3D data;
-> -
-> -       *cpu_type =3D get_this_hybrid_cpu_type();
-> -}
-> -
->  static int hwp_get_cpu_scaling(int cpu)
->  {
-> -       u8 cpu_type =3D 0;
-> +       u8 cpu_type =3D topology_hw_cpu_type(cpu);
->
-> -       smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
->         /* P-cores have a smaller perf level-to-freqency scaling factor. =
-*/
-> -       if (cpu_type =3D=3D 0x40)
-> +       if (cpu_type =3D=3D X86_HW_CPU_TYPE_INTEL_CORE)
->                 return hybrid_scaling_factor;
->
->         /* Use default core scaling for E-cores */
-> -       if (cpu_type =3D=3D 0x20)
-> +       if (cpu_type =3D=3D X86_HW_CPU_TYPE_INTEL_ATOM)
->                 return core_get_scaling();
->
->         /*
->
-> --
 
