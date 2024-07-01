@@ -1,165 +1,123 @@
-Return-Path: <linux-pm+bounces-10302-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10303-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3FA291E91C
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 22:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31C0691E92A
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 22:07:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EC292829B6
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 20:02:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E11F12822FA
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 20:07:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9E9E16F0E1;
-	Mon,  1 Jul 2024 20:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7259816FF5C;
+	Mon,  1 Jul 2024 20:07:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="NXYBi3ru"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pV7iWmMn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from msa.smtpout.orange.fr (msa-217.smtpout.orange.fr [193.252.23.217])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D4185934;
-	Mon,  1 Jul 2024 20:02:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.23.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0A216F840
+	for <linux-pm@vger.kernel.org>; Mon,  1 Jul 2024 20:07:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719864136; cv=none; b=AzspceaoIHzY2YsPqrM1k5Mjf85N4nn9Fwf5Aq6KKcEBKWG+LLOyd8KrNhxAm+fphwxQVgExIRamb3eSkTdBNhkZM6XY8uMioVveOCjX1vX5f2iNTbjM3rKVTpedh4SYDDbhh9gSAmLYcDpIA1hCwOqzm4azA29mmFkMLahm2uM=
+	t=1719864436; cv=none; b=Usvnmw7WbAYxJ/9tuJ2i027I2/Vsk+iJE9fwgI4N4Ak9BcLHLNjo8t9TEw4ssRX9GM/JdQan8U4ao24HVxhVmONR5CkH6OFtlf9/xqjxo16i02trDmC7J4uBmbqryuQiRUJVTFqmdmB5v73lVbNP5vjkXZhu/TEw/ndJXmpuMUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719864136; c=relaxed/simple;
-	bh=jQdOwtAk9sV1JIpaAlSIWJ8MY68481iecsUhvG2Hxgk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gHBTLQgflNVACQ43BNSEqjsm+QjvDXgwUXt3z2wfCLDWmhH6yliuZ6eH/1ZcUJKYN1H3yVHsnfpBKVB9St8zQKfK56quwPEE0OkhDlM0VSGwpMBsIemLUGT5Y6c2JitODrLGCyu6f4tvyLbeeVhKk7TZhvawriPHSRQzGWLz2tE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=NXYBi3ru; arc=none smtp.client-ip=193.252.23.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from fedora.. ([77.131.3.81])
-	by smtp.orange.fr with ESMTPA
-	id ON5TsnKqM3PPAON5UsfK1q; Mon, 01 Jul 2024 21:53:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1719863602;
-	bh=vMCou+9uf+uUUkz293F72Wo3DfglK/VKpyr7CR/9w3U=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=NXYBi3ruSXep/nOHyr+39Y8bVRoQF5zRRgVKeRE8wLAKdSURmXLuOLqLtoeEsboPF
-	 N6AsQOovL4wUDg0jNvKE9klGF1eYYaBC2KRGO/smC/Hb6FvGLz5EK5yHT/bSb+yTls
-	 nbKfFEjqfavg8m0Q41i7KL/YmYOBR2ImU/8Kjf2xBFvmkSa76Acd78iwQAdknj5DGE
-	 cadz5geCbOHj4IvlYkiib9bSlNicnSZfNZdKjFgROt3FJCOc4waI9wKcetGq4sP+d5
-	 GKh/MQ7jM1gU1YkbNk8k6s4xFG5gbus7a+L/JktoNlPL+x7WF0J0dENDlY1td0OtV5
-	 ixu41dYZWgGPA==
-X-ME-Helo: fedora..
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 01 Jul 2024 21:53:22 +0200
-X-ME-IP: 77.131.3.81
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org
-Subject: [PATCH] pmdomain: amlogic: Constify struct meson_secure_pwrc_domain_desc
-Date: Mon,  1 Jul 2024 21:53:16 +0200
-Message-ID: <871d6b708de8bb42e1fabd8a601dc9a9a217cf00.1719863475.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1719864436; c=relaxed/simple;
+	bh=DTx0TnMXknMnU1py/GEV3TbUeQ0A4+c8OwKWSEIEY60=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UYTjkk7tmwpnYHaf8Hqgx21hAQgyeg/O7EdaV1d3vtbtOfVuRqPvUYXUgxcQbaJeEyFvs2QrhxXTOABuIB4cpL2KtUxqVd9TA11y4OX7DLiqXvGmY1uFYGl1bFYB7E9fstSIG8RA7VMatLntuREgTdvq5aPXC6b/RmL3h0fAoho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pV7iWmMn; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-57d119fddd9so10813a12.1
+        for <linux-pm@vger.kernel.org>; Mon, 01 Jul 2024 13:07:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1719864433; x=1720469233; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HA1dU22m3UNj5lyj13MGSrb+8h3p7MYcfXDGMuEpnwo=;
+        b=pV7iWmMnE4CLmq/TiV0X7tzonmq/wxD24BAM1cWI/CSi7jua2bZ+hR/8iqNnZvmmCD
+         lqfrr8GMbU9DCJpVX3xmkkMZPAmd3kJImpE/q9WXkjnSZxlwd3WYd3Ay/r1od6cJWll7
+         p6XX92skCQsVjeyAB6JEQuuBNPPtUGq4tvFpVRLtmHPgFxHr67+njCHPsasnMnCD6ji/
+         T7D2HQ+O/ZRAozy5waDZoewOIK/hmXFu65GgxBVv9Wzsl/E99kKQGBQRWBExOBWRy6Xg
+         GLhw2ySClsWGHZDTmrbVIkwm0r0/GcijvTusNEuaVAGv+zYb5MptAp3y9KMXp/IEwpsU
+         0fBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719864433; x=1720469233;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HA1dU22m3UNj5lyj13MGSrb+8h3p7MYcfXDGMuEpnwo=;
+        b=ThmEtcRJB+3sGKwDQrXbIDQg1mIEUL1pdszPtQ6nnzaF3ROzyXPWcJ3vTV7uAoKuBr
+         2aYPg8Afm6wOGTpqKObBn4/e9lQLmbYi+M+0B2c+YcnmzYZGr9E8JFvtPImFDYWRMp1v
+         VOv1nsm3/Cj1dCeLB4fc2LmlaLM/utoKh6e0fKzI2Ac64B8Qx/o9JYoqsTYOjqC2Mrla
+         ATpZsz7z3Q6hQskanx2pUNex2l/3kF8KKLPK4sNwyxf7UlugAJkeKJAJ+BGMsqvLsmPr
+         82I+1Sd3bAzTHjP/N7ltr8S8C7lvx1EfhQWugZGXSCgHOcFdG0RvPnZAkVh3/EtZOi3L
+         6N+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUh2JWg1PixbNJ+CLGZ+QBi5Rqy4c0CPjSY3pTKd3JBpkIZ7L5eJDcRawy1yZUQ1+6jP+E/MwKjYgbmo/K1ccOUPivVDywxkcE=
+X-Gm-Message-State: AOJu0YwtYPpuPfI8HUkkewTggtdPCsVrVFF6BNOuLKxWmIGSNFUpyF7t
+	NM92VqsZa8ZNMoIxVTrvZocO6RETjkhFIFmg95DdhawZUlK8/X1hfuTgeqZrkMX/shI1cXTcmzW
+	ZsdSk81qp9hTGiveyduFCVB0qatYUO9nOTYM2
+X-Google-Smtp-Source: AGHT+IH9YyeTHtOmKWNRjWDZNOFaOcyjCIO5hmhn2IbnyBQewSRB362+m++tv5m6fkb6HeoZ2TpHUYTYJYIbCgB85hk=
+X-Received: by 2002:a50:d799:0:b0:58b:93:b624 with SMTP id 4fb4d7f45d1cf-58b0093b6fdmr89607a12.1.1719864432894;
+ Mon, 01 Jul 2024 13:07:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240701162025.375134-1-robdclark@gmail.com>
+In-Reply-To: <20240701162025.375134-1-robdclark@gmail.com>
+From: Pranjal Shrivastava <praan@google.com>
+Date: Tue, 2 Jul 2024 01:37:00 +0530
+Message-ID: <CAN6iL-TCsS1dxwZngJ77J1MJcBeRsZW22W9uNLG59Z-isy9J5w@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] iommu/arm-smmu: Prettyify context fault messages
+To: Rob Clark <robdclark@gmail.com>
+Cc: iommu@lists.linux.dev, linux-arm-msm@vger.kernel.org, 
+	Stephen Boyd <swboyd@chromium.org>, Robin Murphy <robin.murphy@arm.com>, 
+	Rob Clark <robdclark@chromium.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Georgi Djakov <quic_c_gdjako@quicinc.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Jerry Snitselaar <jsnitsel@redhat.com>, Joerg Roedel <jroedel@suse.de>, Krishna Reddy <vdumpa@nvidia.com>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	"moderated list:ARM SMMU DRIVERS" <linux-arm-kernel@lists.infradead.org>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>, 
+	"open list:TEGRA IOMMU DRIVERS" <linux-tegra@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-'struct meson_secure_pwrc_domain_desc' is not modified in this driver.
+On Mon, Jul 1, 2024 at 9:50=E2=80=AFPM Rob Clark <robdclark@gmail.com> wrot=
+e:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> v3: Split out the reg bitfield renaming, rework
+>     print_context_fault_info() helper
+>
+> Rob Clark (3):
+>   iommu/arm-smmu: Add CB prefix to register bitfields
+>   iommu/arm-smmu-qcom-debug: Do not print for handled faults
+>   iommu/arm-smmu: Pretty-print context fault related regs
+>
+>  drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c  |  2 +-
+>  .../iommu/arm/arm-smmu/arm-smmu-qcom-debug.c  | 66 ++++++-----------
+>  drivers/iommu/arm/arm-smmu/arm-smmu.c         | 74 ++++++++++++++-----
+>  drivers/iommu/arm/arm-smmu/arm-smmu.h         | 71 +++++++++++-------
+>  drivers/iommu/arm/arm-smmu/qcom_iommu.c       |  4 +-
+>  5 files changed, 127 insertions(+), 90 deletions(-)
+>
+> --
+> 2.45.2
+>
+For the series:
 
-Constifying this structure moves some data to a read-only section, so
-increase overall security.
+Reviewed-by: Pranjal Shrivastava <praan@google.com>
 
-On a x86_64, with allmodconfig, as an example:
-Before:
-======
-   text	   data	    bss	    dec	    hex	filename
-   4909	   4072	      0	   8981	   2315	drivers/pmdomain/amlogic/meson-secure-pwrc.o
-
-After:
-=====
-   text	   data	    bss	    dec	    hex	filename
-   8605	    392	      0	   8997	   2325	drivers/pmdomain/amlogic/meson-secure-pwrc.o
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Compile tested-only.
-
-The .is_off() function is *always* set as pwrc_secure_is_off(), so it could
-make sense to remove this function pointer and call pwrc_secure_is_off()
-directly when needed.
-This would save some memory and useless indirection.
-
-I leave it as-is because it is maybe here for future use.
----
- drivers/pmdomain/amlogic/meson-secure-pwrc.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/pmdomain/amlogic/meson-secure-pwrc.c b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
-index df5567418226..62857482f874 100644
---- a/drivers/pmdomain/amlogic/meson-secure-pwrc.c
-+++ b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
-@@ -46,7 +46,7 @@ struct meson_secure_pwrc_domain_desc {
- 
- struct meson_secure_pwrc_domain_data {
- 	unsigned int count;
--	struct meson_secure_pwrc_domain_desc *domains;
-+	const struct meson_secure_pwrc_domain_desc *domains;
- };
- 
- static bool pwrc_secure_is_off(struct meson_secure_pwrc_domain *pwrc_domain)
-@@ -110,7 +110,7 @@ static int meson_secure_pwrc_on(struct generic_pm_domain *domain)
- 	.parent = __parent,			\
- }
- 
--static struct meson_secure_pwrc_domain_desc a1_pwrc_domains[] = {
-+static const struct meson_secure_pwrc_domain_desc a1_pwrc_domains[] = {
- 	SEC_PD(DSPA,	0),
- 	SEC_PD(DSPB,	0),
- 	/* UART should keep working in ATF after suspend and before resume */
-@@ -137,7 +137,7 @@ static struct meson_secure_pwrc_domain_desc a1_pwrc_domains[] = {
- 	SEC_PD(RSA,	0),
- };
- 
--static struct meson_secure_pwrc_domain_desc a4_pwrc_domains[] = {
-+static const struct meson_secure_pwrc_domain_desc a4_pwrc_domains[] = {
- 	SEC_PD(A4_AUDIO,	0),
- 	SEC_PD(A4_SDIOA,	0),
- 	SEC_PD(A4_EMMC,	0),
-@@ -155,7 +155,7 @@ static struct meson_secure_pwrc_domain_desc a4_pwrc_domains[] = {
- 	SEC_PD(A4_AO_IR,	GENPD_FLAG_ALWAYS_ON),
- };
- 
--static struct meson_secure_pwrc_domain_desc c3_pwrc_domains[] = {
-+static const struct meson_secure_pwrc_domain_desc c3_pwrc_domains[] = {
- 	SEC_PD(C3_NNA,		0),
- 	SEC_PD(C3_AUDIO,	0),
- 	SEC_PD(C3_SDIOA,	0),
-@@ -172,7 +172,7 @@ static struct meson_secure_pwrc_domain_desc c3_pwrc_domains[] = {
- 	SEC_PD(C3_VCODEC,	0),
- };
- 
--static struct meson_secure_pwrc_domain_desc s4_pwrc_domains[] = {
-+static const struct meson_secure_pwrc_domain_desc s4_pwrc_domains[] = {
- 	SEC_PD(S4_DOS_HEVC,	0),
- 	SEC_PD(S4_DOS_VDEC,	0),
- 	SEC_PD(S4_VPU_HDMI,	0),
-@@ -184,7 +184,7 @@ static struct meson_secure_pwrc_domain_desc s4_pwrc_domains[] = {
- 	SEC_PD(S4_AUDIO,	0),
- };
- 
--static struct meson_secure_pwrc_domain_desc t7_pwrc_domains[] = {
-+static const struct meson_secure_pwrc_domain_desc t7_pwrc_domains[] = {
- 	SEC_PD(T7_DSPA,		0),
- 	SEC_PD(T7_DSPB,		0),
- 	TOP_PD(T7_DOS_HCODEC,	0, PWRC_T7_NIC3_ID),
--- 
-2.45.2
-
+Thanks,
+Praan
 
