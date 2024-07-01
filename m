@@ -1,132 +1,159 @@
-Return-Path: <linux-pm+bounces-10294-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10295-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3263891E625
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 19:02:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B00991E62F
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 19:07:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6242E1C21BDA
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 17:02:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46F1E1F23D03
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2024 17:07:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2B6B16D31E;
-	Mon,  1 Jul 2024 17:02:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 960CF16DED5;
+	Mon,  1 Jul 2024 17:06:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ukJ1XLye"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A1MvCpoT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B31014AD25;
-	Mon,  1 Jul 2024 17:02:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA7A16DEC8;
+	Mon,  1 Jul 2024 17:06:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719853352; cv=none; b=qPd9V2JqaSIwOL/H6xhHz5FOPm1gBNfxu/2vokwKa71q2MesV9bLQjmI9+JomEp+AiQ3alWnEDw72/I9vIrKtNQ8jhsZxmB2rLWqdynIJMZf50QZz0uRSnLcC7TNkn5SyK2asVZq2F4lACyT40UMiyzhUH8mUvmmCEmjDCyCFZ4=
+	t=1719853617; cv=none; b=XGwEl5JBtYHgCrDLYHsCn04LQ1sW2YiUUS/Nphdz6ZeS8OQrU9H+HhvkeIrzbeDf3o7rB3ERQ8UOKor62xwqEPrB5KyC5IMbkU8rTqWLQaHkO4Zf/QBc+bbOWk+mlWrhimikVBvbV5tpLVcSKhSXTNYV6O+4uhi/m4V7vfqdxfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719853352; c=relaxed/simple;
-	bh=rrZg9Pb0++jARgOgd/Z0l3VmYE7RR9w+0Gh7JqwfciA=;
+	s=arc-20240116; t=1719853617; c=relaxed/simple;
+	bh=2MHUMtUTr2rUtINqeV5IrNWFoQd81TAN0bY26G+DKoI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IPgHppmyyLYIxInRnZuXDBcoqaiUf9pKhoZN1ROWIuqbL9gaEPdmNyb0rj/arVsrEsjMi3ZWsYzfMSDp3Jed8oKyAAZXH4C/7QTP1A+st/gigegpeShff4KpbOYlMQEyrEerbCIKfR2HFq2yMkccQXLte9UEEGDGKp+oDQpu074=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ukJ1XLye; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 250B5C4AF12;
-	Mon,  1 Jul 2024 17:02:32 +0000 (UTC)
+	 To:Cc:Content-Type; b=h9JUBeK13VyWKwO4p8c5bTOjFiqnur222S9qVqV05x8RU/a2DzUmvSEwxFAdecpgKet9urLH4hwGNsuGt0/dC32kRa2LPyL7H8kgvLRwFP/Fj1dFpN/XvgHXrIMG9M1AaPBhWH4IFvLAgkdqZ3IJbQ1vmXDqJ2EMsmeD6uR/37Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A1MvCpoT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE90C32786;
+	Mon,  1 Jul 2024 17:06:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719853352;
-	bh=rrZg9Pb0++jARgOgd/Z0l3VmYE7RR9w+0Gh7JqwfciA=;
+	s=k20201202; t=1719853617;
+	bh=2MHUMtUTr2rUtINqeV5IrNWFoQd81TAN0bY26G+DKoI=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ukJ1XLyeOU7dxCB49i0ennHAaVa1jJTryhFOGA+E8Nere57bzHshRUNzzdezWqB1w
-	 oW9gtcr8NPmhf+eYmD0PztlGnOihLVLIUbkTZs2Syu6FHAnDWqp6na+67mSsRtY4Jl
-	 dkeOummBLEWEi3FKYBFmei747ke6iObMkO3PyR+zSstsmpRFjGeOBLScJc/0LdE5ki
-	 hWuznYaexvRgB04gAFoo0NS9M0DZdxjm6VRwHjpqpVPnSxjjF1znzSFtRVPQYT87Hg
-	 1V+iYtEJqGUNypGYdO75dJc2nR+Gnc2S6uwHjQTJN0Cssuk+s0a7/UbjhTjJK7Uzvo
-	 6U3N39uZo2pCQ==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-25989f87e20so504939fac.1;
-        Mon, 01 Jul 2024 10:02:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVc3RyDe9B2GkUXOZKAZElHzsAFnNYk2U0sbkikOCGRM83fIwQXDGcGEz9NeHKBqwx3yZHDsqCx7I0+fvwg43p1YrdjdoY2+oT8RZcCQFwJemBUV/s0PpOKvM1bo5Sn09K72R00cD8=
-X-Gm-Message-State: AOJu0Yxm5PD8BqWut5NsjdAqcRPKzD3mCZvR1H7VL/9x7IuJKZ5Fwq3P
-	OkhcZ7js4TCHVWPapknJTXge0gnR/qokmVWM269faPxznDQES+La3OHMCZFyylkXcBmewNdff42
-	PMFsH9g9GSJeZsY0tCjgo0DJhpm0=
-X-Google-Smtp-Source: AGHT+IEJpZmbqEHO1Bh+OEp3LPFinKMG1IadW16uX8PwTkV1l2Yyvu7JRQgOww++E+3PBknGG60nkJTheF+JVlO6A5A=
-X-Received: by 2002:a05:6870:4195:b0:25d:d69:eaf with SMTP id
- 586e51a60fabf-25db36406d0mr6091618fac.4.1719853351316; Mon, 01 Jul 2024
- 10:02:31 -0700 (PDT)
+	b=A1MvCpoTKaLOQfFZUdGfxwjJZFH6PulvN5kioPxVuWXm2Q6uX1H/064U/jby+kadS
+	 Tfwzz+VLat2rqIpkZHoAQchWcTyj8Woe8Z3u3pFsfE7a9Bh2GU4amkQpnI826XNIym
+	 QY7t9uuCfVwd1Z4D6ZmYuWfk0A3eVTKH6BRx0vOeNMCmFq4uQyi6N5QQbWL+FLYXc9
+	 M5pIQP1vvoFgzXCTZ7mBJ2RsG59VaPscFbrYDAbSEjZdjHxnMgOMtuHTcCkNrJtlAz
+	 MuezoDNOE8se+93zsm/SwC0MTVzJzpBwPCexoDlTaBIRlJ6YwIVBLGxdmBm/UnBPLI
+	 Tnrk9p0d0onJw==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-25cb022c0e6so421062fac.0;
+        Mon, 01 Jul 2024 10:06:57 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX0WexqW3K4G1FGJdRo7mnleH9f8RRzBDloSshVTrIkTxz61WA6qa+5BQ6qSutkhGQ6c1ATHFY1UD4zH2BQGAHA+VuDBbkSnpjYpxk1p3m4Yo7AQ1UmF47gxa0cF/dMNLhhOY8zk34=
+X-Gm-Message-State: AOJu0YwmWW8VRX0+7OUM2uoKF2l4dvfTAmvFgCAZLdBs/xfRoNQpYDMh
+	f7Mq13sTqPBXrX1KNxlKXE7Qm8WEdu1IxQoLEKcBiAtdeNUmGVZ6GQmdChy5/8yP5TGfdeal8Ui
+	1yZhwz8u/G8Cj3sRPqXh9AFHICxc=
+X-Google-Smtp-Source: AGHT+IEyPvXu/dDq0QuY+drlNclWMjinscF8HzLFNro78MKqrQbiyKMolAUvlrXEuV5qtJNQyhjVYzMi23lOxek8EeU=
+X-Received: by 2002:a05:6870:9629:b0:25c:ad1f:b335 with SMTP id
+ 586e51a60fabf-25db363c020mr6276623fac.4.1719853616592; Mon, 01 Jul 2024
+ 10:06:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240628091456.57301-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20240628091456.57301-1-yang.lee@linux.alibaba.com>
+References: <tencent_2ACBECB5B8EF2442CE608CE48F8E6131CC09@qq.com>
+In-Reply-To: <tencent_2ACBECB5B8EF2442CE608CE48F8E6131CC09@qq.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 1 Jul 2024 19:02:20 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h1OZ1=x3Evfkdb90oHML_KOALS9FmPW+jk-o7udOY-yQ@mail.gmail.com>
-Message-ID: <CAJZ5v0h1OZ1=x3Evfkdb90oHML_KOALS9FmPW+jk-o7udOY-yQ@mail.gmail.com>
-Subject: Re: [PATCH -next] mm/treewide: Add missing kernel-doc function comments.
-To: Yang Li <yang.lee@linux.alibaba.com>
-Cc: mingo@redhat.com, rafael@kernel.org, tglx@linutronix.de, pavel@ucw.cz, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Abaci Robot <abaci@linux.alibaba.com>
+Date: Mon, 1 Jul 2024 19:06:45 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ioSZaB39Xb5W7R4Y5b6chYNnU0qTy6feVaY8-ucm0dqg@mail.gmail.com>
+Message-ID: <CAJZ5v0ioSZaB39Xb5W7R4Y5b6chYNnU0qTy6feVaY8-ucm0dqg@mail.gmail.com>
+Subject: Re: [PATCH] drivers/cpuidle: Fix guest_halt_poll_ns failed to take effect
+To: ysay <570260087@qq.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, ysay <ysaydong@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 28, 2024 at 11:15=E2=80=AFAM Yang Li <yang.lee@linux.alibaba.co=
-m> wrote:
+On Fri, Jun 28, 2024 at 11:01=E2=80=AFAM ysay <570260087@qq.com> wrote:
 >
-> Add kernel-doc style comments for the pfn_is_nosave and
-> arch_hibernation_header_save functions.
+> From: ysay <ysaydong@gmail.com>
 >
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D9453
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> When guest_halt_poll_allow_shrink=3DN,setting guest_halt_poll_ns
+> from a large value to 0 does not reset the CPU polling time,
+> despite guest_halt_poll_ns being intended as a mandatory maximum
+> time limit.
+>
+> The problem was situated in the adjust_poll_limit() within
+> drivers/cpuidle/governors/haltpoll.c:79.
+>
+> Specifically, when guest_halt_poll_allow_shrink was set to N,
+> resetting guest_halt_poll_ns to zero did not lead to executing any
+> section of code that adjusts dev->poll_limit_ns.
+>
+> The issue has been resolved by relocating the check and assignment for
+> dev->poll_limit_ns outside of the conditional block.
+> This ensures that every modification to guest_halt_poll_ns
+> properly influences the CPU polling time.
+>
+> Signed-off-by: ysay <ysaydong@gmail.com>
+
+This should carry a Fixes: tag pointing to the commit fixed by it.
+
+Also, is it -stable material?
+
 > ---
->  arch/x86/power/hibernate.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+>  drivers/cpuidle/governors/haltpoll.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 >
-> diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
-> index 5b81d19cd114..90f682ff63b1 100644
-> --- a/arch/x86/power/hibernate.c
-> +++ b/arch/x86/power/hibernate.c
-> @@ -41,7 +41,8 @@ unsigned long temp_pgt __visible;
->  unsigned long relocated_restore_code __visible;
+> diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/gover=
+nors/haltpoll.c
+> index 663b7f164..99c6260d7 100644
+> --- a/drivers/cpuidle/governors/haltpoll.c
+> +++ b/drivers/cpuidle/governors/haltpoll.c
+> @@ -78,26 +78,22 @@ static int haltpoll_select(struct cpuidle_driver *drv=
+,
+>
+>  static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
+>  {
+> -       unsigned int val;
+> +       unsigned int val =3D dev->poll_limit_ns;
+>
+>         /* Grow cpu_halt_poll_us if
+>          * cpu_halt_poll_us < block_ns < guest_halt_poll_us
+>          */
+>         if (block_ns > dev->poll_limit_ns && block_ns <=3D guest_halt_pol=
+l_ns) {
+> -               val =3D dev->poll_limit_ns * guest_halt_poll_grow;
+> +               val *=3D guest_halt_poll_grow;
+>
+>                 if (val < guest_halt_poll_grow_start)
+>                         val =3D guest_halt_poll_grow_start;
+> -               if (val > guest_halt_poll_ns)
+> -                       val =3D guest_halt_poll_ns;
+>
+>                 trace_guest_halt_poll_ns_grow(val, dev->poll_limit_ns);
+> -               dev->poll_limit_ns =3D val;
+>         } else if (block_ns > guest_halt_poll_ns &&
+>                    guest_halt_poll_allow_shrink) {
+>                 unsigned int shrink =3D guest_halt_poll_shrink;
+>
+> -               val =3D dev->poll_limit_ns;
+>                 if (shrink =3D=3D 0) {
+>                         val =3D 0;
+>                 } else {
+> @@ -108,8 +104,12 @@ static void adjust_poll_limit(struct cpuidle_device =
+*dev, u64 block_ns)
+>                 }
+>
+>                 trace_guest_halt_poll_ns_shrink(val, dev->poll_limit_ns);
+> -               dev->poll_limit_ns =3D val;
+>         }
+> +
+> +       if (val > guest_halt_poll_ns)
+> +               val =3D guest_halt_poll_ns;
+> +
+> +       dev->poll_limit_ns =3D val;
+>  }
 >
 >  /**
-> - *     pfn_is_nosave - check if given pfn is in the 'nosave' section
-> + * pfn_is_nosave - check if given pfn is in the 'nosave' section
-> + * @pfn: The Page Frame Number to check
-
-This is fine.
-
->   */
->  int pfn_is_nosave(unsigned long pfn)
->  {
-> @@ -84,9 +85,11 @@ static inline u32 compute_e820_crc32(struct e820_table=
- *table)
->  #endif
->
->  /**
-> - *     arch_hibernation_header_save - populate the architecture specific=
- part
-> - *             of a hibernation image header
-> - *     @addr: address to save the data at
-> + * arch_hibernation_header_save - populate the architecture specific par=
-t
-> + * of a hibernation image header
-
-But this is not.
-
-If you take the time to clean this up, please rephrase this so it fits
-into one line.
-
-> + * @addr: address to save the data at
-> + * @max_size: the maximum size of the data to save
-> + *
->   */
->  int arch_hibernation_header_save(void *addr, unsigned int max_size)
->  {
 > --
-> 2.20.1.7.g153144c
+> 2.43.5
 >
 >
 
