@@ -1,40 +1,74 @@
-Return-Path: <linux-pm+bounces-10333-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10334-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9DDB923B54
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 12:24:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67510923BE8
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 12:56:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 797E3281279
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 10:24:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C13C1C20BAD
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 10:56:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C16D715821D;
-	Tue,  2 Jul 2024 10:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E169A1591EA;
+	Tue,  2 Jul 2024 10:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hTvye0VH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5DB6154449;
-	Tue,  2 Jul 2024 10:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0895F2C6B7
+	for <linux-pm@vger.kernel.org>; Tue,  2 Jul 2024 10:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719915845; cv=none; b=C+XnbTCWW9zJ5K3s+LdT9DPWTzmYGQGKSG+60dO1a+35U4FUQZOZKpf8EMbulnOgQWbDv2HHzZtjq0gbVtdo2lBdlt09MarWvTqywpDeQ5/HSi62aUsDfj799YJWLVqhz68vBgjysrr7grciIU6/bC6Inuy463TqynfjPQNsQnk=
+	t=1719917786; cv=none; b=cPPZt5AWEUG5FSdK7xhhbbEikmlQ8D4L/FPGwyT/pPaBsrhTyl4NvyFim6m/5X/0SuN09XXMnqIzGHWhBWVSRZrtyGIDu3p7RgWMvGezwhrcPt0LijPteuz1CSqiRq4/RSBuT0wldb62Qi795G85Xo3W6pn6x8PSKI6CuQigi2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719915845; c=relaxed/simple;
-	bh=ATd5VV0LncNUb8HTNw6yZa2RlrvTq5uy/ZnS4DU0H50=;
+	s=arc-20240116; t=1719917786; c=relaxed/simple;
+	bh=1myzl7/ReuyURZRVUOadpwvalz9QBb1UC83VgjATMgQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MZd3kWu8GPB4pbZ99CarAtOZBbkkSE5MSQVraRpm31sQVUjEzEA2nfA3JQeuOvSxwCgIcHsOr34e8OeZAz5uA/gRLTb8rx8ozNB2rSBxfkQM2BxyhKpAIdsdqWdqxWnDxERx4XJ8HS58/w2xtIa0V+QMgGst41Nk2eMqH2wJl+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA864339;
-	Tue,  2 Jul 2024 03:24:26 -0700 (PDT)
-Received: from [10.1.34.77] (e133649.arm.com [10.1.34.77])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11BA53F762;
-	Tue,  2 Jul 2024 03:23:59 -0700 (PDT)
-Message-ID: <63c76af4-6451-4d6a-8aeb-0bc4812c4101@arm.com>
-Date: Tue, 2 Jul 2024 11:23:58 +0100
+	 In-Reply-To:Content-Type; b=XlFPPE7La6v5y5fYemE8w43kpZm24VVn5lA06dYjuJB5dJnsL1f7dhUSEksaT89G0pwUpe1ZBkKwkU9tOaXKMkNm7VfG+P/szkquJsqozJJ+/IElPblGaV6i1NJbitvlMR8p1KUrA0xjgb6l1I/OSam6WcGHpofhFpAP4j0b41Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hTvye0VH; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52cd628f21cso4183894e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 02 Jul 2024 03:56:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1719917783; x=1720522583; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uBFOYeYiQehf+q7ddrFQQ41V9SB1/rmuKYpa9s1NP18=;
+        b=hTvye0VHlVY5aLHxweMwUSPhLm2T1Xvs+uQANk7Xy/5joA1yahaBAgmsU+0/HHzwqJ
+         CErJi1N/sMtsYXRBEM6qYKJuM6f9CUYQra5N7hyTimg1bZBT179UTybGGuBsM8bEX1+Z
+         v55THyFzyafVv9kzdqmees4beCopQUlDMctJmmSDQ/V2wxYyd0ISqciOrIcDU/kvYaYs
+         UDU9vW4+q+CTEicxNssLWumkkDhHoBVdt6MkXnWjqpO8liHuhtPhqKUUT4b0xAlKVMgH
+         MkmvXzM/7woGKn1+Ale5DbE1jWFmNV03AO17PE/sQfm12uP1R9NC1uX9n65xeSliGem3
+         ghjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719917783; x=1720522583;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uBFOYeYiQehf+q7ddrFQQ41V9SB1/rmuKYpa9s1NP18=;
+        b=DEzIrgCbOJv+0LsndUNHEmdCxKkG8jMYwSlXsGtErHrCxFuCYLPGMy87goP21EHqe/
+         LzbIjzy+ihqv681kbrAGCtDQsLhH4+9ua1f2YmIQbAxowxN4rPl4srO15Woanjsn/NPz
+         NgFuVWUY7b0Frnor5fTOXKPk1ZUOE0koXeSIf2hG1y/Hbmv1XhzlfryjIDeFGeW2pou2
+         79+LL+udB/vYJ3S4P1N0JWPvw2n02vHIfK9ySQLr/j4zMayg26FljqHTX91ncBuRwCJ2
+         OiJ0m18NugPLQ1B0qjcpdo0EsURYo7rhdUFBZ5xyeWZ+/BFInGhqj1T/DckDJgjPHB36
+         REyA==
+X-Forwarded-Encrypted: i=1; AJvYcCWdkKqPq973020ZZPkdNgfkImPNqex1r7jZi0dwsGEslzw2xquxuukmlAczyNIKljqOeWperx3RB3s4kgoErcIIWA+WBWICLBg=
+X-Gm-Message-State: AOJu0YzyRuT/bbmf6RpXgQW74yeL2tMWsdY29Xi0d4sfn7fLGO68Siow
+	ab4FOPYi5Tfhyv+xg5X9AdujjgxooHTs0IMSzxZ2MWllVRoIK2AOrETFRjrvp0I=
+X-Google-Smtp-Source: AGHT+IF/Z5m5dzwnYrpm/rBgxVFvZKe6jykrkDc3dwOp7KqdIY6S6UT+aNwIDsWmm5knsXPHwpoWrA==
+X-Received: by 2002:a05:6512:1386:b0:52c:9e82:a971 with SMTP id 2adb3069b0e04-52e8264e569mr6250887e87.7.1719917781163;
+        Tue, 02 Jul 2024 03:56:21 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:de58:360d:d635:3977? ([2a05:6e02:1041:c10:de58:360d:d635:3977])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4256b0cee27sm193419955e9.48.2024.07.02.03.56.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Jul 2024 03:56:20 -0700 (PDT)
+Message-ID: <1eb7eb88-4230-4803-83fe-415ce0745951@linaro.org>
+Date: Tue, 2 Jul 2024 12:56:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,132 +76,110 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] sched_ext: Add cpuperf support
-To: Tejun Heo <tj@kernel.org>, rafael@kernel.org, viresh.kumar@linaro.org
-Cc: linux-pm@vger.kernel.org, void@manifault.com,
- linux-kernel@vger.kernel.org, kernel-team@meta.com, mingo@redhat.com,
- peterz@infradead.org, David Vernet <dvernet@meta.com>,
- "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-References: <20240619031250.2936087-1-tj@kernel.org>
- <20240619031250.2936087-3-tj@kernel.org>
+Subject: Re: [PATCH] thermal/core: Introduce user trip points
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, linux-pm@vger.kernel.org,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+References: <20240627085451.3813989-1-daniel.lezcano@linaro.org>
+ <20240701162600.GA4119789-robh@kernel.org>
+ <98fe3146-07ae-4095-b372-6aed6e080d94@linaro.org>
+ <CAJZ5v0ix+RDtrR+r3jd=A_W7D5U7JodMiirJ519-wwLrHeBbSw@mail.gmail.com>
 Content-Language: en-US
-From: Hongyan Xia <hongyan.xia2@arm.com>
-In-Reply-To: <20240619031250.2936087-3-tj@kernel.org>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0ix+RDtrR+r3jd=A_W7D5U7JodMiirJ519-wwLrHeBbSw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 19/06/2024 04:12, Tejun Heo wrote:
-> sched_ext currently does not integrate with schedutil. When schedutil is the
-> governor, frequencies are left unregulated and usually get stuck close to
-> the highest performance level from running RT tasks.
+On 02/07/2024 12:22, Rafael J. Wysocki wrote:
+> On Tue, Jul 2, 2024 at 11:29 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 01/07/2024 18:26, Rob Herring wrote:
+>>> On Thu, Jun 27, 2024 at 10:54:50AM +0200, Daniel Lezcano wrote:
+>>>> Currently the thermal framework has 4 trip point types:
+>>>>
+>>>> - active : basically for fans (or anything requiring energy to cool
+>>>>     down)
+>>>>
+>>>> - passive : a performance limiter
+>>>>
+>>>> - hot : for a last action before reaching critical
+>>>>
+>>>> - critical : a without return threshold leading to a system shutdown
+>>>>
+>>>> A thermal zone monitors the temperature regarding these trip
+>>>> points. The old way to do that is actively polling the temperature
+>>>> which is very bad for embedded systems, especially mobile and it is
+>>>> even worse today as we can have more than fifty thermal zones. The
+>>>> modern way is to rely on the driver to send an interrupt when the trip
+>>>> points are crossed, so the system can sleep while the temperature
+>>>> monitoring is offloaded to a dedicated hardware.
+>>>>
+>>>> However, the thermal aspect is also managed from userspace to protect
+>>>> the user, especially tracking down the skin temperature sensor. The
+>>>> logic is more complex than what we found in the kernel because it
+>>>> needs multiple sources indicating the thermal situation of the entire
+>>>> system.
+>>>>
+>>>> For this reason it needs to setup trip points at different levels in
+>>>> order to get informed about what is going on with some thermal zones
+>>>> when running some specific application.
+>>>>
+>>>> For instance, the skin temperature must be limited to 43°C on a long
+>>>> run but can go to 48°C for 10 minutes, or 60°C for 1 minute.
+>>>>
+>>>> The thermal engine must then rely on trip points to monitor those
+>>>> temperatures. Unfortunately, today there is only 'active' and
+>>>> 'passive' trip points which has a specific meaning for the kernel, not
+>>>> the userspace. That leads to hacks in different platforms for mobile
+>>>> and embedded systems where 'active' trip points are used to send
+>>>> notification to the userspace. This is obviously not right because
+>>>> these trip are handled by the kernel.
+>>>>
+>>>> This patch introduces the 'user' trip point type where its semantic is
+>>>> simple: do nothing at the kernel level, just send a notification to
+>>>> the user space.
+>>>
+>>> Sounds like OS behavior/policy though I guess the existing ones kind are
+>>> too. Maybe we should have defined *what* action to take and then the OS
+>>> could decide whether what actions to handle vs. pass it up a level.
+>>
+>> Right
+>>
+>>> Why can't userspace just ask to be notified at a trip point it
+>>> defines?
+>>
+>> Yes I think it is possible to create a netlink message to create a trip
+>> point which will return a trip id.
+>>
+>> Rafael what do you think ?
 > 
-> Add CPU performance monitoring and scaling support by integrating into
-> schedutil. The following kfuncs are added:
+> Trips cannot be created on the fly ATM.
 > 
-> - scx_bpf_cpuperf_cap(): Query the relative performance capacity of
->    different CPUs in the system.
-> 
-> - scx_bpf_cpuperf_cur(): Query the current performance level of a CPU
->    relative to its max performance.
-> 
-> - scx_bpf_cpuperf_set(): Set the current target performance level of a CPU.
-> 
-> This gives direct control over CPU performance setting to the BPF scheduler.
-> The only changes on the schedutil side are accounting for the utilization
-> factor from sched_ext and disabling frequency holding heuristics as it may
-> not apply well to sched_ext schedulers which may have a lot weaker
-> connection between tasks and their current / last CPU.
-> 
-> With cpuperf support added, there is no reason to block uclamp. Enable while
-> at it.
-> 
-> A toy implementation of cpuperf is added to scx_qmap as a demonstration of
-> the feature.
-> 
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Reviewed-by: David Vernet <dvernet@meta.com>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   kernel/sched/cpufreq_schedutil.c         |  12 +-
->   kernel/sched/ext.c                       |  83 ++++++++++++-
->   kernel/sched/ext.h                       |   9 ++
->   kernel/sched/sched.h                     |   1 +
->   tools/sched_ext/include/scx/common.bpf.h |   3 +
->   tools/sched_ext/scx_qmap.bpf.c           | 142 ++++++++++++++++++++++-
->   tools/sched_ext/scx_qmap.c               |   8 ++
->   7 files changed, 252 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 972b7dd65af2..12174c0137a5 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -197,7 +197,9 @@ unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
->   
->   static void sugov_get_util(struct sugov_cpu *sg_cpu, unsigned long boost)
->   {
-> -	unsigned long min, max, util = cpu_util_cfs_boost(sg_cpu->cpu);
-> +	unsigned long min, max;
-> +	unsigned long util = cpu_util_cfs_boost(sg_cpu->cpu) +
-> +		scx_cpuperf_target(sg_cpu->cpu);
->   
->   	util = effective_cpu_util(sg_cpu->cpu, util, &min, &max);
->   	util = max(util, boost);
-> @@ -330,6 +332,14 @@ static bool sugov_hold_freq(struct sugov_cpu *sg_cpu)
->   	unsigned long idle_calls;
->   	bool ret;
->   
-> +	/*
-> +	 * The heuristics in this function is for the fair class. For SCX, the
-> +	 * performance target comes directly from the BPF scheduler. Let's just
-> +	 * follow it.
-> +	 */
-> +	if (scx_switched_all())
-> +		return false;
-> +
->   	/* if capped by uclamp_max, always update to be in compliance */
->   	if (uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)))
->   		return false;
-> diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-> index f814e84ceeb3..04fb0eeee5ec 100644
-> --- a/kernel/sched/ext.c
-> +++ b/kernel/sched/ext.c
-> @@ -16,6 +16,8 @@ enum scx_consts {
->   	SCX_EXIT_BT_LEN			= 64,
->   	SCX_EXIT_MSG_LEN		= 1024,
->   	SCX_EXIT_DUMP_DFL_LEN		= 32768,
-> +
-> +	SCX_CPUPERF_ONE			= SCHED_CAPACITY_SCALE,
->   };
->   
->   enum scx_exit_kind {
-> @@ -3520,7 +3522,7 @@ DEFINE_SCHED_CLASS(ext) = {
->   	.update_curr		= update_curr_scx,
->   
->   #ifdef CONFIG_UCLAMP_TASK
-> -	.uclamp_enabled		= 0,
-> +	.uclamp_enabled		= 1,
->   #endif
->   };
->   
+> What can be done is to create trips that are invalid to start with and
+> then set their temperature via sysfs.  This has been done already for
+> quite a while AFAICS.
 
-Hi. I know this is a bit late, but the implication of this change here 
-can be quite interesting.
+Yes, I remember that.
 
-With this patch but without switching this knob from 0 to 1, this series 
-gives me the perfect opportunity to implement a custom uclamp within 
-sched_ext on top of the cpufreq support added. I think this would be 
-what some vendors looking at sched_ext would also want. But, if 
-.uclamp_enabled == 1, then the mainline uclamp implementation is in 
-effect regardless of what ext scheduler is loaded. In fact, 
-uclamp_{inc,dec}() are before calling the {enqueue,dequeue}_task() so 
-now there's no easy way to circumvent it.
+I would like to avoid introducing more weirdness in the thermal 
+framework which deserve a clear ABI.
 
-What would be really nice is to have cpufreq support in sched_ext but 
-not force uclamp_enabled. But, I also think there will be people who are 
-happy with the current uclamp implementation and want to just reuse it. 
-The best thing is to let the loaded scheduler decide, somehow, which I 
-don't know if there's an easy way to do this yet.
+What is missing to create new trip points on the fly ?
 
-> [...]
+
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
