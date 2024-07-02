@@ -1,167 +1,165 @@
-Return-Path: <linux-pm+bounces-10313-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10314-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CFD291F061
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 09:40:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C263291F091
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 09:56:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4F23287547
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 07:40:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B0BC1F227E5
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 07:56:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A8B8144D36;
-	Tue,  2 Jul 2024 07:40:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8979712FF9D;
+	Tue,  2 Jul 2024 07:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mwOFnNRw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eP6buZoF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5FB54FB5;
-	Tue,  2 Jul 2024 07:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D095755C1A;
+	Tue,  2 Jul 2024 07:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719906035; cv=none; b=AP/k0Pg9tk3ntDk0tnpf/+4JkC3IDZudMztTJSst6VskcycCbJA6GhIAQDBGvFqUynnwnwYRXmgP7mLOMkaA+LHNpKLEeiJhS2R6XxTt+kZRUFGi+0G9Azt0orQVy9hddmBv/D0Of/guRMbyLzDuXWrQIsDY1VtyTUPhbrGqWr0=
+	t=1719906998; cv=none; b=eefI97E3z1D14PlJfvH9fH1YDpuyKYfbVjZsB2IPoCWfy4Mvp6gk4dmqkGrRtpFnznZU/zJZQOwSnrlWPk3jJp/3Tn+EI5+PQ7CwNcYcQ3JlWOufYu3zuU7To/aFbzhjA4KzGIo1ZbF2dEjTjE0MGTrmfwVayyHb7xbHjMz/+u8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719906035; c=relaxed/simple;
-	bh=PcVk9pcskDazelhQkcuxF07f4ocoy3fBKZA9lVRhRdc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MhdTNyBD6jZGFRZ55Xq7K1lOn531PjvuzB0R2oE/AporRsSOo0V0Ip1H/rUqjWa2CCJgXHj7VLThA6NoSpkt7lXkH2YzwgStcjjFVTSlJcElkjQXR/b0rtUk3vPDlybdNYOXeEFrEDkjrQokHQbyWQb/41/HZWgtAT57TUPOI9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mwOFnNRw; arc=none smtp.client-ip=209.85.218.47
+	s=arc-20240116; t=1719906998; c=relaxed/simple;
+	bh=bkQnc3weswRHI7W6Mm8xk+rSJ13Bladvrf+0ktUOofU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=M7ml66usk4T+3Ww3AuOjasqEVT1VXHvVsTVTIBC/AUlffRnJD4s5BcyK7s72PKtsERfZcRpm4LtCF4JM6ek61mwWsJbqUrWkGkJur9UNabewFg+rhe8UQtn4bwbyhyluDXz9dH8/rsEZJAZaFQEl/bwcJDMzYYzK7uK1UHiZfHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eP6buZoF; arc=none smtp.client-ip=209.85.218.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a72988749f0so573259466b.0;
-        Tue, 02 Jul 2024 00:40:33 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a6fe81a5838so363982566b.3;
+        Tue, 02 Jul 2024 00:56:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719906032; x=1720510832; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PcVk9pcskDazelhQkcuxF07f4ocoy3fBKZA9lVRhRdc=;
-        b=mwOFnNRwVuZSRKTuD9YocuxaIqIZQIfh2ppMMMQnM/9BMSgy6mzQZpOGJQ5AJVS2JV
-         8DT+YU6PKRb3rRkO8cJwBg7G0f8Y6dK8dLGkOP05fHMuP3wOan8vqibOY7hZRnoH7Grq
-         mtEd1HBnkCNEesOB3Zyeeldxcz8EOUOgHpWj5VnPZsQzWjAO02WUTinTTq/CgYC5c9mA
-         /5JvXRaQT3d/5gYST6nXfJhXmnUwnr9P6F1qSRhtY68r6sgyG4fC1E7W0tCeVY0t47GD
-         SKha3CZv17ba5Pb0LWsOre+WPXCtKTN/NeasDB7WNw5FhEnj3859SsXM6m8PuVtphuf2
-         kHQQ==
+        d=gmail.com; s=20230601; t=1719906994; x=1720511794; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JRFw+14wzSvcpBsFAqmuHO9XlGAERfrIw3u757eVjMk=;
+        b=eP6buZoF7PyQ8eMoWjpsf5Koe/yDXT0RQjWyGunu6JwTwYjBGn84uIMpYWlt/6diB0
+         rFHWEXsmheKEcgRhMO7lhYuEp2DJUzF9bqZjD3VDz7MF6dniiGrCtB4io1bIZwApnKzJ
+         b4mjgWlJuIhud09nsAN51hFH5igr6MPfdH8gHE1Tr9PKm6t9Y/Y6wW1ANsDkNSeAXi3H
+         u248V/vEUd4DK2ifnO0OYfiNUQrD2qcshUqCQFD6d4vU/LhIYLWGTeTn6MQYixtYdH2A
+         BrWIe9eUhOlq1wKTfQvjb7E8cGFKAyrW1FNEwtvHSubRtBoA6o5grDdECMaH1ETN8SOz
+         nEog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719906032; x=1720510832;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PcVk9pcskDazelhQkcuxF07f4ocoy3fBKZA9lVRhRdc=;
-        b=oACZLjdQL57B6ah9rGQCpwlAukyfhnqDROrbupAQzGQ351CBiZb+Gb7mMeRiEyLBEB
-         PfQUQ/ZaZXJvnbFS/4W8T/0oWE0Hy0rWNjLmw/j9aCOIIRBXyOveDArYYMmWZSlbXEFz
-         h/3aRLxjRaFsMTu3eFMuQN3QGtgKh7uKm6hek1OqDC+laL2hqhly7lSd+Siea7rI8+Fy
-         0J12r3V8RHY87NFSolz0se3eIOgCoO2wB7ZvS9CWGU5jSOy9SCtNE1/YeuAlAN5HqJqx
-         qV5dv+MiuMueI6fS36+8vGCqRMTq+0gLlHTZbOYRJ2IeRKYMMuKVNvnWijtKtHZJPmMJ
-         oevw==
-X-Forwarded-Encrypted: i=1; AJvYcCUvxSgk4aWIOhMg5KZeGyg3LHzC7TVqczr2Wyw1AiWJTb6ptyY/H9opEQT0VVCqiNohSYRoF1QLnhTn5frLB0G5k9jECllE2R5qfj6mRqQcaZsVW9MacsmKP5yX7Ziruvk8Mm2+vBc=
-X-Gm-Message-State: AOJu0Yx2gynxUgxCEjGA0mvhzE42T+kRFHZI/O4PZdHIvfwoFNy9vAt6
-	yvPma65mxNMHCL4yk2osAfBo62l1Y5pJhy3XvP1E2SWcAsMzqyojUm8+SfPYjRM+jWhcItWMKuz
-	f2LdUrsiwXb4/zUn1yKEf3HMm52g=
-X-Google-Smtp-Source: AGHT+IHgGHjnZenrRqWi/oLaXC+N3WLnnNwhl7v5Bn7Ch8VqF+oo9nxaMmCeFy5urpbboScGqmnOrD3RwjIoehRm/gs=
-X-Received: by 2002:a17:906:c28a:b0:a6f:5815:f5e6 with SMTP id
- a640c23a62f3a-a751446321amr463320566b.8.1719906031756; Tue, 02 Jul 2024
- 00:40:31 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719906994; x=1720511794;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JRFw+14wzSvcpBsFAqmuHO9XlGAERfrIw3u757eVjMk=;
+        b=bHY9PoDGUVQoW+HKpFlTwja/YjwZfLDSSfL6dzPErU9g9U/Mwuu9oW/4v7gnIZcmIu
+         LM0SoQnWLvGIsFiU0S+fSaQaNkhWkn8UARvlnu7yHPKKcavMfKw1VY4wxuyo30qzXCGm
+         /k0D5Kt9hqRpGZ7oRnfAWhO289ERQOAbh6SECjP09BAR7wgwytK/ibMnI7iwNdej7/5d
+         Fy6eUWBmYAJM6oSl5LKUtnfr5jSXgwmub1wXFfNyvdYLGrubJ6r9NnGZws19NK4LcNuI
+         UQJVdw4XgfbSHs70cHvBqsCMqUMHQ2nJUCCXLHfBMscZPo5De4EmjN6T+IWOcWmiQ1tS
+         H+KQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXmo78TNT96DbIKAUXIzuFC3Q8teBdQDCsrjKgd7tfWTgq0z8p5RY753XAnQkEyPzu4s7pVIqqGOd6YYX/72nuq2j7uSPCv0oBSPPy4b3HU05xZTmV19jnv8uNLzradTF5fyMDZsGM=
+X-Gm-Message-State: AOJu0Yzh6eQRSSDBvcz4mp6gUwJfcvT87f42SU63av5dRVVYSd1/8xkC
+	qNqfCimQI5Ijxq5bwiIf/6J9PuRjh0xUiknGz3u0vsaSNrImES04qg5Epw==
+X-Google-Smtp-Source: AGHT+IEh0TFZ1ULj49zw9AlQ+kVE08m8FyR8qBlPy29r0N4DcWIu8tP3XLOulwMeWDHWpzqI3Xi+iA==
+X-Received: by 2002:a17:907:845:b0:a75:2387:7801 with SMTP id a640c23a62f3a-a752387794bmr393026166b.61.1719906994188;
+        Tue, 02 Jul 2024 00:56:34 -0700 (PDT)
+Received: from [127.0.1.1] (31-179-0-202.dynamic.chello.pl. [31.179.0.202])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72aaf638fesm394175866b.68.2024.07.02.00.56.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jul 2024 00:56:33 -0700 (PDT)
+From: Roman Storozhenko <romeusmeister@gmail.com>
+Date: Tue, 02 Jul 2024 09:56:25 +0200
+Subject: [PATCH v2] cpupower: fix lib default installation path
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240627-fix-help-issue-v3-1-85318a3974e4@gmail.com>
- <c9df6637-6055-4668-b80b-a1a6e6be445e@linuxfoundation.org>
- <CALsPMBMeo5E9ZND0bPK089VHBZnybsigkvoC2r8BLCTjYt9QFA@mail.gmail.com>
- <f1261f1c-abbe-49e4-b0bb-b72af367da7f@linuxfoundation.org>
- <CALsPMBP42_oKJDegVQOzHUE00mie2Mh_aPyvyTUhgsnjQO1DDQ@mail.gmail.com> <501954d6-3f0a-4f1e-863b-c60353435700@linuxfoundation.org>
-In-Reply-To: <501954d6-3f0a-4f1e-863b-c60353435700@linuxfoundation.org>
-From: Roman Storozhenko <romeusmeister@gmail.com>
-Date: Tue, 2 Jul 2024 09:40:19 +0200
-Message-ID: <CALsPMBPkE=CCTgm8UcsdL7qEG+1u1H8NFYYTJvEMK3uXvg97Ng@mail.gmail.com>
-Subject: Re: [PATCH v3] cpupower: Make help command available for custom
- install dir
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240702-fix-lib-install-v2-1-9b84dcd3c22b@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAKiyg2YC/3WNyw6CMBREf4Xctde0BYW48j8Mi76Am5SWtKTRk
+ P67lb3LM5k5c0CykWyCR3NAtJkSBV9BXBrQi/SzRTKVQTDRsbtocaI3OlJIPu3SOWxVb7Q2ykz
+ dDepqi7ZWTuNrrLxQ2kP8nAeZ/9L/rsyRo9LKsGodzNA/51WSu+qwwlhK+QLJwvGKrgAAAA==
+To: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Roman Storozhenko <romeusmeister@gmail.com>
+X-Mailer: b4 0.14.0
 
-On Mon, Jul 1, 2024 at 9:40=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.or=
-g> wrote:
->
-> On 6/29/24 04:48, Roman Storozhenko wrote:
-> > On Fri, Jun 28, 2024 at 9:45=E2=80=AFPM Shuah Khan <skhan@linuxfoundati=
-on.org> wrote:
-> >>
-> >> On 6/28/24 05:30, Roman Storozhenko wrote:
-> >>> On Thu, Jun 27, 2024 at 7:33=E2=80=AFPM Shuah Khan <skhan@linuxfounda=
-tion.org> wrote:
-> >>>>
-> >>>> On 6/27/24 01:49, Roman Storozhenko wrote:
-> >>>>> When the 'cpupower' utility installed in the custom dir, it fails t=
-o
-> >>>>> render appropriate help info for a particular subcommand:
-> >>>>> $ LD_LIBRARY_PATH=3Dlib64/ bin/cpupower help monitor
-> >>>>> with error message like 'No manual entry for cpupower-monitor.1'
-> >>>>> The issue is that under the hood it calls 'exec' function with
-> >>>>> the following args: 'man cpupower-monitor.1'. In turn, 'man' search
-> >>>>> path is defined in '/etc/manpath.config'. Of course it contains onl=
-y
-> >>>>> standard system man paths.
-> >>>>> Make subcommands help available for a user by setting up 'MANPATH'
-> >>>>> environment variable to the custom installation man pages dir. That
-> >>>>> variable value will be prepended to the man pages standard search p=
-aths
-> >>>>> as described in 'SEARCH PATH' section of MANPATH(5).
-> >>>>
-> >>>> What I am asking you is what happens when you set the MANPATH before
-> >>>> running the command?
-> >>>
-> >>> It adds the custom search path to the beginning of the MANPATH variab=
-le.
-> >>> I tested this case. All works as expected.
-> >>>
-> >>
-> >> Let's try again. What happens if you run the command with MANPATH set =
-and
-> >> exported and then run the command. Can you send the output?
-> >
-> > hedin@laptop:~/prj/cpupower/install/usr$ echo $MANPATH
-> > /tmp/
-> > hedin@laptop:~/prj/cpupower/install/usr$ LD_LIBRARY_PATH=3Dlib64/
-> > bin/cpupower help monitor
-> > ...................
-> > man output
-> > ...................
-> > hedin@laptop:~/prj/cpupower/install/usr$ echo $MANPATH
-> > /tmp/
-> > hedin@laptop:~/prj/cpupower/install/usr$
-> >
->
-> Is this with your patch or mainline? Can you give cut and paste
-> the man output here for the mainline coupower without your patch?
+Invocation the tool built with the default settings fails:
+$ cpupower
+cpupower: error while loading shared libraries: libcpupower.so.1: cannot
+open shared object file: No such file or directory
 
-The above output is from my patch.
-This is the output from the mainline:
-hedin@laptop:~/prj/cpupower/install/usr$ sudo LD_LIBRARY_PATH=3Dlib64/
-bin/cpupower help monitor
-[sudo] password for hedin:
-No manual entry for cpupower-monitor
-hedin@laptop:~/prj/cpupower/install/usr$ echo $MANPATH
-/tmp/
-hedin@laptop:~/prj/cpupower/install/usr$
+The issue is that Makefile puts the library to "/usr/lib64" dir for a 64
+bit machine. This is wrong. According to the "File hierarchy standard
+specification:
+https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard
+https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf
 
+"/usr/lib<qual>" dirs are intended for alternative-format libraries
+(e.g., "/usr/lib32" for 32-bit libraries on a 64-bit machine (optional)).
 
->
-> thanks,
-> -- Shuah
->
+The utility is built for the current machine and doesn't handle
+'CROSS_COMPILE' and 'ARCH' env variables. It also doesn't change bit
+depth. So the result is always the same - binary for x86_64
+architecture. Therefore the library should be put in the '/usr/lib'
+dir regardless of the build options.
+This is the case for all the distros that comply with the
+'File Hierarchy Standard 3.0" by Linux Foundation. Most of the distros
+comply with it. For example, one can check this by examining the
+"/usr/lb64" dir on debian-based distros and find that it contains only
+"/usr/lib64/ld-linux-x86-64.so.2". And examine that "/usr/lib" contains
+both 32 and 64 bit code:
+find /usr/lib -name "*.so*" -type f | xargs file | grep 32-bit
+find /usr/lib -name "*.so*" -type f | xargs file | grep 64-bit
 
+Fix the issue by changing library destination dir to "/usr/lib".
 
---=20
-Kind regards,
-Roman Storozhenko
+Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
+---
+Changes in v2:
+- Enchance changelog by providing more details
+- Link to v1: https://lore.kernel.org/r/20240623-fix-lib-install-v1-1-bcbd03b78d87@gmail.com
+---
+ tools/power/cpupower/Makefile | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+index cd0225a312b4..6c02f401069e 100644
+--- a/tools/power/cpupower/Makefile
++++ b/tools/power/cpupower/Makefile
+@@ -67,6 +67,7 @@ LANGUAGES = 			de fr it cs pt ka
+ bindir ?=	/usr/bin
+ sbindir ?=	/usr/sbin
+ mandir ?=	/usr/man
++libdir ?=	/usr/lib
+ includedir ?=	/usr/include
+ localedir ?=	/usr/share/locale
+ docdir ?=       /usr/share/doc/packages/cpupower
+@@ -94,15 +95,6 @@ RANLIB = $(CROSS)ranlib
+ HOSTCC = gcc
+ MKDIR = mkdir
+ 
+-# 64bit library detection
+-include ../../scripts/Makefile.arch
+-
+-ifeq ($(IS_64_BIT), 1)
+-libdir ?=	/usr/lib64
+-else
+-libdir ?=	/usr/lib
+-endif
+-
+ # Now we set up the build system
+ #
+ 
+
+---
+base-commit: f76698bd9a8ca01d3581236082d786e9a6b72bb7
+change-id: 20240623-fix-lib-install-3b7dccdbdf45
+
+Best regards,
+-- 
+Roman Storozhenko <romeusmeister@gmail.com>
+
 
