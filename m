@@ -1,172 +1,136 @@
-Return-Path: <linux-pm+bounces-10388-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10389-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 807189249E9
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 23:25:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7CE79249F7
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 23:34:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3658D1F22ED6
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 21:25:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9F531C22857
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 21:34:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5EC320127D;
-	Tue,  2 Jul 2024 21:25:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7BD5201279;
+	Tue,  2 Jul 2024 21:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NIrbnihi"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LVosFV6S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1791148FF0;
-	Tue,  2 Jul 2024 21:25:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57BE201245
+	for <linux-pm@vger.kernel.org>; Tue,  2 Jul 2024 21:34:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719955536; cv=none; b=OW/8v4bhqxBlWd8OOBa6RVVPP2zd/sjHbRGs8/+I+5vhriTT+bEfl0nrHTzNZnT8Nk1hxBxbkkgpC2ALigWSfrXWmGJ7jTnUfh+Bj2OX/ESuvhkARe/iBbFJhzkLToHRr3DFQBfTPO5+FzzsbuUqY+3uadIbpOc0VeQgC2ncVJ0=
+	t=1719956049; cv=none; b=PxB4UBP9a1ApEGPSII7bbAkgmm4hS3ZP8XaR7kWY3immz3Cn2owlC+vnCe8L9JtQ8Wab3rMUOy4eLaPJNkZ2ORjwQ707rewFXo+XbuGVlq4r1EpL3AxpH5y8G7cCFiieXWuS198d3zQILf9WnWyzu9YhwmGRLVCdDUIKCVBZjKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719955536; c=relaxed/simple;
-	bh=kxOa+jj5icSx1TV8u2CbRScO5ZwrgRSKLg5LVgqTcd4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NzD6cliAj8qvdXCOgV2m1WViVu0P4Odp4+jJ3/QW6Gpk/5HPuEw3xXlHVbpzofvZr/5xocq5BZGlrwxBKD/FCAPDmre9P46oC9waItDHnNQoyouoRe4mvGZoTZ0UR4PReG+o1UuECA6lAvF02irZm78scPxdmEGxA+KRhMBBe5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NIrbnihi; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1719955533;
-	bh=kxOa+jj5icSx1TV8u2CbRScO5ZwrgRSKLg5LVgqTcd4=;
-	h=From:Date:Subject:To:Cc:From;
-	b=NIrbnihinxT1gB6gnvSxy9dSyWS1U4oNykI4qNhHHbhc6wrMt+E4QBlLB2tRSGaRV
-	 QKJxRJdPqZq1Cl9C8lIupmKiOrkOAMAgJAu6iHzSlQNOKnkc4DKeIXbiKwj4QWOyOK
-	 0IokuOqs384mSikorJS4Fe5DE65g8MUgruHm72sNFBJiw2cv8mbz0SYAGx60cf3Hzo
-	 D3qUYWQp8UOvdaTkuFFGf2X9txI6MgrByQVG0AkcDrgUUkHkmbEuo2obbBfCWTtmwY
-	 AV/eef5DHJec8GYKHS9fSszxvSt3WNaGX2SKz1N2uGdQ0LK8e+4cB8JWdXWedPBu6x
-	 iTaTOeRcNiGqg==
-Received: from [192.168.1.203] (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0ED6037811EB;
-	Tue,  2 Jul 2024 21:25:30 +0000 (UTC)
-From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Tue, 02 Jul 2024 17:24:56 -0400
-Subject: [PATCH] thermal: gov_power_allocator: Return early in manage if
- trip_max is null
+	s=arc-20240116; t=1719956049; c=relaxed/simple;
+	bh=ELI3qm3FmCNzQfbVTY5hJV3PlWzVeUfnT25kFEvdp+Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HjL1hVwCQNAUhAnUtc8Y4d9Sy4zlGYx0auNsocFw2hIm7Ftu+MHQGrQlLVj2V9oHcEaInL/wF6IPiw2LmiTkjDLdOkr0aoE7uZfDN+wdZ5ajwTna6CvqVuIhnipsBqdSOk0piBrAMcnuhhA2gCEhAXBIcKIc8hh2cUhX5tv6mfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LVosFV6S; arc=none smtp.client-ip=209.85.166.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-375dea76edaso2655335ab.2
+        for <linux-pm@vger.kernel.org>; Tue, 02 Jul 2024 14:34:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1719956047; x=1720560847; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b1WgNk/YPEbRVNBSRfJrE9za+i3oxO1I0TjYFVdi7kY=;
+        b=LVosFV6SOdwJE8vs1ZKkpRVEu6+F9AHp25lwTL5QspYf7XlLKUOVCSY0dnvhK3Dddl
+         0xcwNkUCu+38hls6fOoVMhNZCbZ/fzB8Vk8MeAgmCLCUBwt5Tb7foz/sPpW8cdpAMNXI
+         LfSJpmOqEkD109N2zM2Wd/N3+1pkIbX2oOE6g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719956047; x=1720560847;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b1WgNk/YPEbRVNBSRfJrE9za+i3oxO1I0TjYFVdi7kY=;
+        b=DAWFmC6qYVtSBYi4hpJ4t1EH3w6Mo9qX3sTJfOG0lnsklTxHgw4PbMS8l9mlj5WXhK
+         SzlbrUaqcsz571h2ZkwVPKKI5xbiLOHaA+d9hHSxjanmcc97YWYqiSqgwT8aOqkKGP4W
+         Er/jcd+VSz7fONVK9U/VNb6Rj7sktiBfFCisLuoLX8ka2f1c/VV9/72gcZa/o8sEKqCP
+         pOD6X40Et9P3TYgTBzKBFgdtXjMzKO1dPeK7V3tf7Tfx5ax0cZIshtXw6luWIGSUpueM
+         B1xpNzpYN5tZhJ9tmChYVNcjfMhbxnvhjz5mejHciNz0kuhkydlL76rmnSwzDNJljLtH
+         lvAA==
+X-Forwarded-Encrypted: i=1; AJvYcCUPa/kV/3U2kCU6S3q4KwnrQIkufuSrGMBu+Kt/9bNoz3vZYvO9uCJEv8MZim1O3myB8kOhkGyqDyEMlzcTac0XP9VEG8iW8qA=
+X-Gm-Message-State: AOJu0YxKcUo/q498c1KzMe80gCxsc/rK+WzY5BZ2WX2feRYEoagNac37
+	aru2alhVVeg/4PlYPr2EAV+9b/eML5vXfpsI+VfT0JDE/RQyhTcZqou+e8PTCD+waGwTyHS0jYe
+	o
+X-Google-Smtp-Source: AGHT+IHtaBQC52DDcEJ8qeKFFOsLfGso6U0Z9VOH3B7LnIkEUyY6IjpKReJg7jT8NZRnXtU9141MDQ==
+X-Received: by 2002:a6b:fe09:0:b0:7eb:66a5:d1c with SMTP id ca18e2360f4ac-7f62ed686a2mr915246239f.0.1719956046707;
+        Tue, 02 Jul 2024 14:34:06 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4bb73e08428sm2972009173.77.2024.07.02.14.34.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Jul 2024 14:34:06 -0700 (PDT)
+Message-ID: <753c55df-82d7-4756-861b-62e4e59c7615@linuxfoundation.org>
+Date: Tue, 2 Jul 2024 15:34:05 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240702-power-allocator-null-trip-max-v1-1-47a60dc55414@collabora.com>
-X-B4-Tracking: v=1; b=H4sIACdwhGYC/x3MwQqDMAwA0F+RnBfoiqD4K2OHLEYN1LakbhPEf
- 7d4fJd3QBFTKTA0B5j8tGiKFc9HA7xQnAV1rAbvfOs65zGnvxhSCIlpS4bxGwJuphlX2vHDved
- +7ISEoR7ZZNL9/l/v87wAJiIUDG8AAAA=
-To: Lukasz Luba <lukasz.luba@arm.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Nikita Travkin <nikita@trvn.ru>
-Cc: kernel@collabora.com, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-X-Mailer: b4 0.14.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] cpupower: fix lib default installation path
+To: Roman Storozhenko <romeusmeister@gmail.com>,
+ Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240702-fix-lib-install-v2-1-9b84dcd3c22b@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240702-fix-lib-install-v2-1-9b84dcd3c22b@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Commit da781936e7c3 ("thermal: gov_power_allocator: Allow binding
-without trip points") allowed the governor to bind even when trip_max
-is null. This allows a null pointer dereference to happen in the manage
-callback. Add an early return to prevent it, since the governor is
-expected to not do anything in this case.
+On 7/2/24 01:56, Roman Storozhenko wrote:
+> Invocation the tool built with the default settings fails:
+> $ cpupower
+> cpupower: error while loading shared libraries: libcpupower.so.1: cannot
+> open shared object file: No such file or directory
+> 
+> The issue is that Makefile puts the library to "/usr/lib64" dir for a 64
+> bit machine. This is wrong. According to the "File hierarchy standard
+> specification:
+> https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard
+> https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf
+> 
+> "/usr/lib<qual>" dirs are intended for alternative-format libraries
+> (e.g., "/usr/lib32" for 32-bit libraries on a 64-bit machine (optional)).
+> 
+> The utility is built for the current machine and doesn't handle
+> 'CROSS_COMPILE' and 'ARCH' env variables. It also doesn't change bit
+> depth. So the result is always the same - binary for x86_64
+> architecture. Therefore the library should be put in the '/usr/lib'
+> dir regardless of the build options.
+> This is the case for all the distros that comply with the
+> 'File Hierarchy Standard 3.0" by Linux Foundation. Most of the distros
+> comply with it. For example, one can check this by examining the
+> "/usr/lb64" dir on debian-based distros and find that it contains only
+> "/usr/lib64/ld-linux-x86-64.so.2". And examine that "/usr/lib" contains
+> both 32 and 64 bit code:
+> find /usr/lib -name "*.so*" -type f | xargs file | grep 32-bit
+> find /usr/lib -name "*.so*" -type f | xargs file | grep 64-bit
+> 
+> Fix the issue by changing library destination dir to "/usr/lib".
+> 
+> Signed-off-by: Roman Storozhenko <romeusmeister@gmail.com>
+> ---
+> Changes in v2:
+> - Enchance changelog by providing more details
+> - Link to v1: https://lore.kernel.org/r/20240623-fix-lib-install-v1-1-bcbd03b78d87@gmail.com
+> ---
 
-Fixes: da781936e7c3 ("thermal: gov_power_allocator: Allow binding without trip points")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
-This issue was noticed by KernelCI during a boot test on the
-mt8195-cherry-tomato-r2 platform with the config in [1]. The stack trace
-is attached below.
+Applied to
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/?h=cpupower
 
-[1] http://0x0.st/XaON.txt
+thanks,
+-- Shuah
 
-[    4.015786] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-[    4.015791] Mem abort info:
-[    4.015793]   ESR = 0x0000000096000004
-[    4.015796]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    4.015799]   SET = 0, FnV = 0
-[    4.015802]   EA = 0, S1PTW = 0
-[    4.015804]   FSC = 0x04: level 0 translation fault
-[    4.015807] Data abort info:
-[    4.015809]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-[    4.015811]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-[    4.015814]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-[    4.015818] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109809000
-[    4.015821] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-[    4.015835] Modules linked in: mt8195_mt6359(+) mt6577_auxadc snd_soc_mt8195_afe mtk_scp_ipi snd_sof_utils mtk_wdt(+)
-[    4.015852] CPU: 2 PID: 13 Comm: kworker/u32:1 Not tainted 6.10.0-rc6 #1 c5d519ae8e7fec6bbe67cb8c50bfebcb89dfa54e
-[    4.015859] Hardware name: Acer Tomato (rev2) board (DT)
-[    4.015862] Workqueue: events_unbound deferred_probe_work_func
-[    4.015875] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    4.015880] pc : power_allocator_manage+0x110/0x6a0
-[    4.015888] lr : __thermal_zone_device_update+0x1dc/0x400
-[    4.015893] sp : ffff8000800eb800
-[    4.015895] x29: ffff8000800eb810 x28: 0000000000000001 x27: 0000000000000001
-[    4.015903] x26: aaaaaaaaaaaaaaab x25: ffff07a0461c15a0 x24: ffffb58530ca67c0
-[    4.015911] x23: 0000000000000000 x22: ffff07a04098fcc0 x21: ffffb58532eec848
-[    4.015918] x20: ffff8000800eb920 x19: ffff07a0461c1000 x18: 0000000000000b4b
-[    4.015926] x17: 5359534255530031 x16: ffffb585310352e4 x15: 0000000000000020
-[    4.015933] x14: 0000000000000000 x13: ffffffff00000000 x12: 0000000000000040
-[    4.015940] x11: 0101010101010101 x10: ffffffffffffffff x9 : ffffb58530ca8d78
-[    4.015948] x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : 0000000000001388
-[    4.015955] x5 : 0000000000000000 x4 : 0000000000000384 x3 : 0000000000000000
-[    4.015962] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
-[    4.015970] Call trace:
-[    4.015972]  power_allocator_manage+0x110/0x6a0
-[    4.015978]  __thermal_zone_device_update+0x1dc/0x400
-[    4.015983]  thermal_zone_device_set_mode+0x7c/0xa0
-[    4.015987]  thermal_zone_device_enable+0x1c/0x28
-[    4.015991]  thermal_of_zone_register+0x43c/0x498
-[    4.015996]  devm_thermal_of_zone_register+0x6c/0xb8
-[    4.016001]  gadc_thermal_probe+0x140/0x214
-[    4.016007]  platform_probe+0x70/0xc4
-[    4.016012]  really_probe+0x140/0x270
-[    4.016018]  __driver_probe_device+0xfc/0x114
-[    4.016024]  driver_probe_device+0x44/0x100
-[    4.016029]  __device_attach_driver+0x64/0xdc
-[    4.016035]  bus_for_each_drv+0xb4/0xdc
-[    4.016041]  __device_attach+0xdc/0x16c
-[    4.016046]  device_initial_probe+0x1c/0x28
-[    4.016052]  bus_probe_device+0x44/0xac
-[    4.016057]  deferred_probe_work_func+0xb0/0xc4
-[    4.016063]  process_scheduled_works+0x114/0x330
-[    4.016070]  worker_thread+0x1c0/0x20c
-[    4.016076]  kthread+0xf8/0x108
-[    4.016081]  ret_from_fork+0x10/0x20
-[    4.016090] Code: d1030294 17ffffdd f94012c0 f9401ed7 (b9400000)
-[    4.016095] ---[ end trace 0000000000000000 ]---
----
- drivers/thermal/gov_power_allocator.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 45f04a25255a..1b2345a697c5 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -759,6 +759,9 @@ static void power_allocator_manage(struct thermal_zone_device *tz)
- 		return;
- 	}
- 
-+	if (!params->trip_max)
-+		return;
-+
- 	allocate_power(tz, params->trip_max->temperature);
- 	params->update_cdevs = true;
- }
-
----
-base-commit: 82e4255305c554b0bb18b7ccf2db86041b4c8b6e
-change-id: 20240702-power-allocator-null-trip-max-bc82c8d7eaec
-
-Best regards,
--- 
-Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 
