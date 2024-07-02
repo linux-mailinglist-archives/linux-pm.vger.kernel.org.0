@@ -1,74 +1,40 @@
-Return-Path: <linux-pm+bounces-10364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10365-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 034059243F7
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 18:52:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB2D1924490
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 19:12:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FAFDB27C4E
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 16:52:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 272B11C21E6A
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 17:12:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBD3A1BD509;
-	Tue,  2 Jul 2024 16:52:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NJ8JYCrs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 365CD1BE234;
+	Tue,  2 Jul 2024 17:12:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F531509AE
-	for <linux-pm@vger.kernel.org>; Tue,  2 Jul 2024 16:52:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6CA315218A;
+	Tue,  2 Jul 2024 17:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719939135; cv=none; b=SLuVNDhTj2Ur1ib/FhGl973zMMAhEwpnOvz4FjuYqm39IOrT7fiP/jpaUOIo7PK/excl+chLfObJcOQm7ZPjxBKbY/qRwz4FvZKiDoMWflpjFNzriETtBQ5C+EqPK9LZJO/VTCe9zAekc8qZSXRht4dPPm/xLB4zdXBJGywHxig=
+	t=1719940328; cv=none; b=SE8v9ekHpwtjLeuqiddzB9W978U7Ti4CL1ecNpoUBzV/PxzBgAen1Chm5tMiPS48JNtjD5wMzYvB0IjlEv2HlA511CqgOB63CaVNgWVj+75ZhA18Ex4pd+lH6YDGhJ9zS4OxsSLmvGqwL5RSGLYq7K+Slebg8s/z35pMzj2VY/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719939135; c=relaxed/simple;
-	bh=67wdZHMGthQ9tYMWUTf83nlNhKOnjz2Zui5kHHhZWVc=;
+	s=arc-20240116; t=1719940328; c=relaxed/simple;
+	bh=OO4RDTbDrd5/pF3NmruVBtYwZwqibJ+oqEtHhjEtSs4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r0JM8iCWMrUV4kgjhZHnTtGdYaJb0JSaHA7r2k6+ZWZIKiMBqCyjYv1DCE27k0SrjnwT0+4N99L6efd7s0cE4VdO7aeVxDz1CpbIv8kHS3YtaAofNm/n2Sajm6sE+TVS6/V3LCE7zqwu19gsiHQ9+x9XEzWHa8vAPwGxYdfEKak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NJ8JYCrs; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-424ad289949so32289535e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 02 Jul 2024 09:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719939132; x=1720543932; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eehroHY6jsxRCXVO0ZlO8N+9Mr345Lhd3RIOJPZlnAY=;
-        b=NJ8JYCrsx8afLy1T6M8bA1WiodCFtQsH7vLP2kB8q0/4ekAdOY4bDeeV0fYcQO+0ZV
-         lXzr4Z+/+ywQE7L7I61ti/ffc+4Zd3qEiK0r8gbon2TwEQE1QOzf1hj28vdHnSsDCmpc
-         CYQjrA1HqfmGVlCclWUzBFkcl9C2NUGUSm2b+CsErmgydE77Y/hdnC6Qlp6GPWLreaPN
-         FKMwdw622kW6dD4cNu0wo3Bil4Gv6sDvCnfjeSjUNiNsT/BlOmpFwB+59G7u8aw2Cemk
-         593TjzNi4/EKxnbwA5vIvKc0A5uCgstfqKPpGiyver7mwmIOA6Hj/U3+qtWR0IeAPacl
-         UvwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719939132; x=1720543932;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eehroHY6jsxRCXVO0ZlO8N+9Mr345Lhd3RIOJPZlnAY=;
-        b=Oe/l8kjaDotVbDENktqFDlzmdGZjgWO20gnUZLkMdMOwkBBSgiEyzlp1bcZABPAanJ
-         87tNsZlIypRvt670xat4OeAaOHC3bXLElCDNo2kAef+W1pDMDAAsLIR4jSvaChY3PiQl
-         809CFcbxzs14DQ452QoD3qEvxGTZyAkjW3URby+ZFaOvYMGRJRKw5l0pKju7UES8fotf
-         2Cc1J8CeJ5EEfGrUBAUqQ7d1HyYhalWmBNwhsxMZ+WrAH+n+cYa1ZeZ4y/90JOPebnru
-         GApzGryMVzAw9bsUNGnth/RdUzLP8YuYXTaDRGgvouRWmrJtDFmMwL959Y0P/DyboIBO
-         lmzw==
-X-Forwarded-Encrypted: i=1; AJvYcCVi8aEw0YioeovaVBmMHQr76as7exY1aMYFSZ4gtYbzScFBbK5bnx2rSXzdzqtJiF6+2vzi0HEiAcxeWSBM/m6bQN5e/wae8PQ=
-X-Gm-Message-State: AOJu0Yyy6v4uosvEAQQtMcxDqpKUmvfcQGIxIhBVvl1IJN++mIUhjxKK
-	JOAF2/5AKqzhwPJrKizMTuYe2A2uYgK+irjatDkvllj+g9tyVzw4nEnH/s0aqH0=
-X-Google-Smtp-Source: AGHT+IF3V1HC4chVUPw7FP944I/P3u9IFqa0gz5TuDk7AOj8IDGj87TQ830i2eIZSX6jeLFY+OsoJw==
-X-Received: by 2002:a05:600c:2d8c:b0:425:7833:db91 with SMTP id 5b1f17b1804b1-4257a00cd97mr64098005e9.20.1719939132436;
-        Tue, 02 Jul 2024 09:52:12 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4256af5a3b0sm206096705e9.13.2024.07.02.09.52.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jul 2024 09:52:11 -0700 (PDT)
-Message-ID: <eee20abf-6bb2-48f5-a0c1-a8c023a2b7b4@linaro.org>
-Date: Tue, 2 Jul 2024 18:52:11 +0200
+	 In-Reply-To:Content-Type; b=Dg0otu6E1yL1h1Ivb5uz1asN8BWZwk/G6vwbR77ad4xPDb2pFmp3frNuf1xUf9qqKudHfDpLEwTWWoDA5UYh6DSyRuOFMdegC5z3THGCOBTDdUsjndbmlq4maMA2X0N8IxaL/K09kFdxZEYgo+QQ8dyPsansy1aezQfMNHfrgtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A22D339;
+	Tue,  2 Jul 2024 10:12:30 -0700 (PDT)
+Received: from [10.1.34.77] (e133649.arm.com [10.1.34.77])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB2BF3F73B;
+	Tue,  2 Jul 2024 10:12:02 -0700 (PDT)
+Message-ID: <940a41d0-2660-4a7a-ad07-581b3ac24cca@arm.com>
+Date: Tue, 2 Jul 2024 18:12:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,43 +42,52 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: thermal: correct thermal zone node name
- limit
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Amit Kucheria <amit.kucheria@linaro.org>,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org
-References: <20240702145248.47184-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 2/2] sched_ext: Add cpuperf support
+To: Tejun Heo <tj@kernel.org>
+Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+ void@manifault.com, linux-kernel@vger.kernel.org, kernel-team@meta.com,
+ mingo@redhat.com, peterz@infradead.org, David Vernet <dvernet@meta.com>,
+ "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20240619031250.2936087-1-tj@kernel.org>
+ <20240619031250.2936087-3-tj@kernel.org>
+ <63c76af4-6451-4d6a-8aeb-0bc4812c4101@arm.com>
+ <ZoQs384bAMuaeDEs@slm.duckdns.org>
 Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240702145248.47184-1-krzysztof.kozlowski@linaro.org>
+From: Hongyan Xia <hongyan.xia2@arm.com>
+In-Reply-To: <ZoQs384bAMuaeDEs@slm.duckdns.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 02/07/2024 16:52, Krzysztof Kozlowski wrote:
-> Linux kernel uses thermal zone node name during registering thermal
-> zones and has a hard-coded limit of 20 characters, including terminating
-> NUL byte.  The bindings expect node names to finish with '-thermal'
-> which is eight bytes long, thus we have only 11 characters for the reset
-> of the node name (thus 10 for the pattern after leading fixed character).
+On 02/07/2024 17:37, Tejun Heo wrote:
+> Hello, Hongyan.
 > 
-> Reported-by: Rob Herring <robh@kernel.org>
-> Closes: https://lore.kernel.org/all/CAL_JsqKogbT_4DPd1n94xqeHaU_J8ve5K09WOyVsRX3jxxUW3w@mail.gmail.com/
-> Fixes: 1202a442a31f ("dt-bindings: thermal: Add yaml bindings for thermal zones")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> On Tue, Jul 02, 2024 at 11:23:58AM +0100, Hongyan Xia wrote:
+>> What would be really nice is to have cpufreq support in sched_ext but not
+>> force uclamp_enabled. But, I also think there will be people who are happy
+>> with the current uclamp implementation and want to just reuse it. The best
+>> thing is to let the loaded scheduler decide, somehow, which I don't know if
+>> there's an easy way to do this yet.
+> 
+> I don't know much about uclamp but at least from sched_ext side, it's
+> trivial add an ops flag for it and because we know that no tasks are on the
+> ext class before BPF scheduler is loaded, as long as we switch the
+> uclamp_enabled value while the BPF scheduler is not loaded, the uclamp
+> buckets should stay balanced. AFAICS, the only core change we need to make
+> is mooving the uclamp_enabled bool outside sched_class so that it can be
+> changed runtime. Is that the case or am I missing something?
+> 
 
-Applied, thanks
+Pretty much. Just to clarify what I meant, it would be fantastic if for 
+ext, sched_class->uclamp_enabled is decided the moment we load the 
+custom scheduler, not globally enabled all the time for all ext 
+schedulers, in case the custom scheduler wants to ignore uclamp or has 
+its own uclamp implementation. During ext_ops->init(), it would be great 
+if the loaded scheduler could decide whether its 
+sched_class->uclamp_enabled should be enabled.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+However, sched_class->uclamp_enabled is just a normal struct variable, 
+so I cannot immediately see a clean way to let the loaded scheduler 
+program this field. We might be able to expose a function from the 
+kernel side to write sched_class->uclamp_enabled during ext_ops->init(), 
+although that looks a bit messy.
 
