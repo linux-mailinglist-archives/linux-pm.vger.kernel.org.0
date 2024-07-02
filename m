@@ -1,155 +1,131 @@
-Return-Path: <linux-pm+bounces-10386-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10387-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EEFF9249BB
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 23:06:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F303B9249C6
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 23:12:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A2391F22392
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 21:06:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30EDD1C22BD8
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 21:12:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BC91201264;
-	Tue,  2 Jul 2024 21:06:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A536C201265;
+	Tue,  2 Jul 2024 21:12:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T0jF5n0X"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YxUFwnKB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAEA20126C
-	for <linux-pm@vger.kernel.org>; Tue,  2 Jul 2024 21:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C711CE0A1;
+	Tue,  2 Jul 2024 21:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719954379; cv=none; b=MwmH9nv23HQ/LK9AJm0thBnjD46KoxNXFgGOoc66PSIzMopwdqq61zshFZy8b5H1nf3f43PrOxm6MWCTBBwwPnQ7Nbr/U6KoclfH4EyqWvQE7G7U4V2aP9RI5KBCkwQ2gNSM4Sy4lKT1wK5AewWA0wmK5oyr8k7xU+1cTlvfFc4=
+	t=1719954750; cv=none; b=R9uuzizBpYITjzM1bF7UmjKsibv4yOa8ZEVbUuxXVkepWMciTnswikEXmHL0Cwpj5GE+Eb55EFikmMq/h3lQ5LP7+2rIGEHRykHyygx6aw2EPWQ/A5FLwmqRcLfJIcbbspECICMEb93i/fXhsstrExA0PNKNdbR03Dp09tNgmCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719954379; c=relaxed/simple;
-	bh=NyzwM0fsXKf4dXOAJKkuMhvtpscp3UAXzQ88ePFkdHg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RPZUaclQOuW3AMGfDU7QXBUqyIyiL6ewUw2vJe+/ZaF/ojwTOMKK3DetYhHatL3fWgns/B0irHo+V4guqReAOyhUbTFqa48FyVBwsFkaU5NwFOXzgQvKlO55gmdSenflI/Ziu1uBb53InBP3uhupM44e5gJoNt13Wv11ge75QAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T0jF5n0X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB4CC4AF18
-	for <linux-pm@vger.kernel.org>; Tue,  2 Jul 2024 21:06:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719954379;
-	bh=NyzwM0fsXKf4dXOAJKkuMhvtpscp3UAXzQ88ePFkdHg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=T0jF5n0XmYOBWCFsIhEiFwCW709AF2iNAJBXPHQDhZ3ouUIflhHJtwIPSeAQkemwl
-	 uvh5nDRj8MsScENuyxikrGs7trBmvGpceQ90A9jThyM6OwHTK1hSB47GteIED0mkfp
-	 yIXfQgx1XVTTfS14P6B441+5oNJT53fpMKqRINxMzkGSKAywbiMtggfLmF/5MhXRyE
-	 MR2OEIi2KWdc0w+AofhLDxqqtYNvgWMUcCMzmTV90XllmcI+M2rs3uGRjmGpiIo+bY
-	 S7E4wTeW1JLVmvZdlftDTuGLXlMEsznlapdBUQq2P/lZic0fAeIbHo/yvEPyuqkLW8
-	 0fIXzDl9OJV+g==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-52cecba8d11so5683388e87.1
-        for <linux-pm@vger.kernel.org>; Tue, 02 Jul 2024 14:06:19 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUmytdSjknT+H5CsNateuwfeaM0QICOzAcbb7TOEOY4r5+iTktNqtrZVG4HOe/YhWOAnmWJFrRT+niNBUzHyjtXM/H9lLCfQx8=
-X-Gm-Message-State: AOJu0Yz/LrlFCYA6pXjwdpL3PvXo12qu4JDhZpDiZvQdWhYcX1yOxau6
-	LB8UxgXQ2h/vc89PNEMTpEpPzFdB7DEED8DryT7ZEC2y7F/BRuwhJV0anwUv0H3O3QTgNUGT2f/
-	ReEDZSdbA5CYIaSKpRxNrYVKKdbDusaazWCj0uw==
-X-Google-Smtp-Source: AGHT+IGUxDpnfmOI+j4i7sET5B6iGTwPCxoZxCFPXJYFFkWMGwCKQTKuc3id2P0lUND+5DiDyxhNNJ4MNomLGxiA7Lo=
-X-Received: by 2002:a17:906:f185:b0:a72:b1b1:eb3a with SMTP id
- a640c23a62f3a-a751447b093mr634755766b.19.1719954357446; Tue, 02 Jul 2024
- 14:05:57 -0700 (PDT)
+	s=arc-20240116; t=1719954750; c=relaxed/simple;
+	bh=50pxIjAYA+PSTf24f+Xa6MwNL5oYB80QnpIER/2Z94o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D36qQfz/M9JtENj5ZHHosjKnaNP8xMjN3s8HdnyDgS/FwxLcDuI18s4+XI52HuvaxBDqZjEgSkvFtdOa7/nG6s+2xPDLK1L3k9Ge9lqgK1zR1y0BYrCOfwwXdQRJNXVHwBwVo1fj+epD4Zg4jBBfBE7+bqOiXRsnpeD8uftt67M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YxUFwnKB; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2c825f0b381so2801987a91.1;
+        Tue, 02 Jul 2024 14:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719954748; x=1720559548; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iony3ImHNNZSo/A8ERibxy5kdhCM8Iq7KPKtZvCa59w=;
+        b=YxUFwnKBR0Q31lIukIbK3og8iTn88e1Fb/oKEKAKgPSya/p8+Twk/GTW7RI5BrJ5jt
+         8O/UhOF/yYO7cNP+R5MeoJy4Xg4/ph2y75Eicgp5yL8TD/eMg+ltG7KLt2kQr2LlsO9t
+         JYqDMgbdHNgHyYd/YPEWqAcV2FMovcQ4ODN/4OuxQ6whFAE7RKMtgjmZPuN2pvZL7ZrH
+         0iFiWzwAfnOZQKoxZQAZSA4YOEFexIncGtKLbYV7oPYdQA4qAf9h8+DhUrT5yutOdatK
+         c9oZO+IoNlsTzI/8xmfdp8K/DTwOuo+2xmcNndqqCGNK/TYezANkjDiZh77dqbpi+Y26
+         7hUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719954748; x=1720559548;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iony3ImHNNZSo/A8ERibxy5kdhCM8Iq7KPKtZvCa59w=;
+        b=cTMXYkkg/1trAw7jtdcLKe76gHtBsvhqqNWmlQ/IJKwwCXQMAragmGuuEjjMIfeoq1
+         3wHq+o0X4vYQhAXyBTaSW7lWnXSnDPzRa4bwvnAEXe8tfJJKXRZ8vtepo/3nqYeLq+ZS
+         unbJAI1SWvpdNW3nnhzZL6ceEZQJsZXuZlWtMb2vBns2YIEHZkgzEnxRvzWINiuZdfG3
+         x1FRpwPxz9rz+2o+RjKKzgFNkgufar74XrXCXVST77Os1R0A6VQ1NYBlxtBJx5D6B+/m
+         aR+SgbdjWCUn0HJGCt0KL3YtuDpMYppZDpZP2DyTkMynAWqrt2eD3fIeNaP5l+KarjIj
+         VmxA==
+X-Forwarded-Encrypted: i=1; AJvYcCVciHB0MoWavdXHxSLrkuk2GahAboW9RuIjcwn/EzP9F1JlZ/ZH1Ty1ESvEsphv5x4h7XgBKdT+lBhVOP2xfr/neutvmZzNvF0sj3WfABp3nzOgB9g6gig1LARFoQHKbopJ9xoP3Bo=
+X-Gm-Message-State: AOJu0Yx2YYUcQdmdEFehplVbaaQ32J1yyJ6eC1Q+E+LehxvgAmDS4RQJ
+	RhwUNz5RbfbL4zDaoXgidFu0rHZunT6HopEMAsECbeZflXpB51Ju
+X-Google-Smtp-Source: AGHT+IFLlwCns/7n4EroZ2tnRF78fWZtZ7BFKCMgWQzgPaRLFFwKydxj+WmRQh9Lnb8JKmEKPEjibQ==
+X-Received: by 2002:a17:90a:e508:b0:2c8:bcab:e103 with SMTP id 98e67ed59e1d1-2c93d77a630mr6616993a91.42.1719954748368;
+        Tue, 02 Jul 2024 14:12:28 -0700 (PDT)
+Received: from localhost (dhcp-141-239-149-160.hawaiiantel.net. [141.239.149.160])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c91d3e8196sm9391616a91.49.2024.07.02.14.12.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jul 2024 14:12:28 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Tue, 2 Jul 2024 11:12:26 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Hongyan Xia <hongyan.xia2@arm.com>
+Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+	void@manifault.com, linux-kernel@vger.kernel.org,
+	kernel-team@meta.com, mingo@redhat.com, peterz@infradead.org,
+	David Vernet <dvernet@meta.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH 2/2] sched_ext: Add cpuperf support
+Message-ID: <ZoRtOuAWBb27RXBc@slm.duckdns.org>
+References: <20240619031250.2936087-1-tj@kernel.org>
+ <20240619031250.2936087-3-tj@kernel.org>
+ <63c76af4-6451-4d6a-8aeb-0bc4812c4101@arm.com>
+ <ZoQs384bAMuaeDEs@slm.duckdns.org>
+ <940a41d0-2660-4a7a-ad07-581b3ac24cca@arm.com>
+ <ZoQ_XuXn1Y2Kp3Ba@slm.duckdns.org>
+ <20208c07-1ea8-43a0-a499-51c9fd63b037@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240614-dt-bindings-thermal-allof-v1-0-30b25a6ae24e@linaro.org> <20240614-dt-bindings-thermal-allof-v1-11-30b25a6ae24e@linaro.org>
-In-Reply-To: <20240614-dt-bindings-thermal-allof-v1-11-30b25a6ae24e@linaro.org>
-From: Amit Kucheria <amitk@kernel.org>
-Date: Wed, 3 Jul 2024 02:35:45 +0530
-X-Gmail-Original-Message-ID: <CAHLCerMuG92Sf8+BdqPLqh+x3YxBjD6YdYF2k+AxQcwCqerxzw@mail.gmail.com>
-Message-ID: <CAHLCerMuG92Sf8+BdqPLqh+x3YxBjD6YdYF2k+AxQcwCqerxzw@mail.gmail.com>
-Subject: Re: [PATCH 11/22] dt-bindings: thermal: qcom-tsens: reference
- thermal-sensor schema
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Guillaume La Roque <glaroque@baylibre.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Vasily Khoruzhick <anarsoul@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Anson Huang <Anson.Huang@nxp.com>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	=?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>, 
-	Heiko Stuebner <heiko@sntech.de>, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Orson Zhai <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Chunyan Zhang <zhang.lyra@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Pascal Paillet <p.paillet@foss.st.com>, Keerthy <j-keerthy@ti.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
-	zhanghongchen <zhanghongchen@loongson.cn>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Bjorn Andersson <andersson@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, linux-pm@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-amlogic@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	imx@lists.linux.dev, linux-tegra@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-stm32@st-md-mailman.stormreply.com, 
-	Florian Fainelli <f.fainelli@gmail.com>, linux-rpi-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20208c07-1ea8-43a0-a499-51c9fd63b037@arm.com>
 
-On Fri, Jun 14, 2024 at 3:17=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Device is a thermal sensor and it requires '#thermal-sensor-cells', so
-> reference the thermal-sensor.yaml to simplify it and bring the
-> common definition of '#thermal-sensor-cells' property.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hello,
 
-Reviewed-by: Amit Kucheria <amitk@kernel.org>
+On Tue, Jul 02, 2024 at 09:41:30PM +0100, Hongyan Xia wrote:
+...
+> Actually, if we are okay with changing the sched_class struct and touching
+> the code of other classes, I wonder if a cleaner solution is just to
+> completely remove sched_class->uclamp_enabled and let each class decide what
+> to do in enqueue and dequeue, so instead of
+> 
+> 	uclamp_inc/dec();
+> 	p->sched_class->enqueue/dequeue_task();
+> 
+> we can just
+> 
+> 	p->sched_class->enqueue/dequeue_task();
+> 		do_uclamp_inside_each_class();
+> 
+> and we export uclamp_inc/dec() functions from core.c to RT, fair and ext.
+> For RT and fair, just
+> 
+> 	enqueue/dequeue_task_fair/rt();
+> 		uclamp_inc/dec();
+>
+> For ext, maybe expose bpf_uclamp_inc/dec() to the custom scheduler. If a
+> scheduler wants to reuse the current uclamp implementation, just call these.
+> If not, skip them and implement its own.
 
-> ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/=
-Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> index 99d9c526c0b6..cce6624228c7 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> @@ -217,18 +217,16 @@ properties:
->
->    "#thermal-sensor-cells":
->      const: 1
-> -    description:
-> -      Number of cells required to uniquely identify the thermal sensors.=
- Since
-> -      we have multiple sensors this is set to 1
->
->  required:
->    - compatible
->    - interrupts
->    - interrupt-names
-> -  - "#thermal-sensor-cells"
->    - "#qcom,sensors"
->
->  allOf:
-> +  - $ref: thermal-sensor.yaml#
-> +
->    - if:
->        properties:
->          compatible:
-> @@ -292,7 +290,7 @@ allOf:
->        required:
->          - reg
->
-> -additionalProperties: false
-> +unevaluatedProperties: false
->
->  examples:
->    - |
->
-> --
-> 2.43.0
->
+That does sound a lot better. Mind writing up a patchset?
+
+Thanks.
+
+-- 
+tejun
 
