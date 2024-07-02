@@ -1,181 +1,151 @@
-Return-Path: <linux-pm+bounces-10380-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10381-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0B7E92484B
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 21:29:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6469924891
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 21:47:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5896A1F213C4
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 19:29:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5139E1F226FC
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 19:47:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76D061CFD6A;
-	Tue,  2 Jul 2024 19:28:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C64142E77;
+	Tue,  2 Jul 2024 19:47:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E3acl89+"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Gn3N4xBd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F3F1CE09B;
-	Tue,  2 Jul 2024 19:28:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8261CE0BC;
+	Tue,  2 Jul 2024 19:47:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.60.130.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719948519; cv=none; b=VU5F1HOhr8cbas876mF2QBnKwTHRHltdWmWyG+6Pqdp8z/mZi7Mx0al97c/lisRwcl6XGCzKPNKcEVmA7N4jmGhMC3ic4mVCRJXVi7E7BmlXviSQs9KUEuvF/42wSIu2wMeD3U3/IgQpsVaZIVghCibjlnNk31MDCrpBely7qio=
+	t=1719949627; cv=none; b=un8PWMGyYrvhDe3xH1W3X/VtXiPk0YmyvXkdgGIvTNCHfZLIAIYAXBCko6paBcXt3Av6MZ8ADkQ4aq26TRloMxFjFLBulaOHM2IKs7uaOQ+FP05ttfTcS8ZoHLa8SqpF9OZEHhIe1/PyOGaAGW5EmQTr+Ef5ZJaTOFdCTn1xXwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719948519; c=relaxed/simple;
-	bh=tul9GGxVOJheZfp6ob6RkPcc0U0d7m5QmW2bOPPbdg8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nZMRG/hCWThzgdj8P+ptwuPmO38wFx81htWyYRXvOcdUMA+H2Ul7yrqyS/8aAqzqK99xozRwBS01sn8DyMrIKEa9U/VpcuG6gajj54L36oDXSGilZVpqYAmUAVscj2IBwBnK1rXT2bCaj5f1lIh8GZSk3vuQxT2jwVJgtZfVFH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E3acl89+; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-424ad289912so32273125e9.2;
-        Tue, 02 Jul 2024 12:28:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719948516; x=1720553316; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tul9GGxVOJheZfp6ob6RkPcc0U0d7m5QmW2bOPPbdg8=;
-        b=E3acl89+9FCgDvAhl+5crCOYHlEXKkK50tzu0SGTg8FWhUHLw6zyr3YH/z7YOgKkCE
-         RFN9jwXxuaoCs9fZ0XN6Em/Aw+3sBTFj8ZfQwj4Agudk4c/QiLYxFDv+R5zfzYWXT+RQ
-         ooVGlXFpHSzTn2JJs0yZR54TNTlC1gXN+bMvNgb1rDPFw9lRKizljwpG6sEhawx8Effu
-         XHcf6eEUATInxC05KvrHYL4N9TVihQPfsQTHiUZhr5uGgjf6F3lNZc4prkFDlBZ9p0kc
-         QRpbMbQGsDzrhHo0BwSShyFPCAh+LM40CFA2MQR/OwUVgdo5IPx6/1djZYcrsb18xVBe
-         k6ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719948516; x=1720553316;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tul9GGxVOJheZfp6ob6RkPcc0U0d7m5QmW2bOPPbdg8=;
-        b=jJ3tt7BkQMhmmmrtnJme0BylPuaYG6aIeWGsPJAUKhuyCFw+N1cELLz7xXXmn61quR
-         Sfg1VBnhmrbzcUWTEpn1oK/OcfjAuzUaWBkOIqLvjqirSjVOYJ3Xh5O10MdlumEoTz8X
-         H+Lf5BfzLIFjKq85TY08Q85/Xw1PBC+0KKcxyhHqSxq1VOblgWWPsq4565VURsjcd1t0
-         NMc3kI85G6zoCOoaS6xPzY0dUxIJ+roqYpKCKXYlaxXYQpnF6JC0u0fkOM/1Wx58xMUL
-         rRaxI3JvEjwc29Hgs9YyrGps4t1YPJV3ufJqDfkVVUdWOneQB9wgkgiSt4x80YxLrzzb
-         1Ang==
-X-Forwarded-Encrypted: i=1; AJvYcCWc3dTQIwKR2OpCvY/EEI1ElMvzlXTbf4fRWYGjao8O05E0e2HVbJdMaEopgULnHHIubkjai3GZ5QX4ImdgZAZVPoXlMla5MImlCEhkti38HWy01gExG9cvNere95D7Dyjw00DSIgNKbIZXD5BY8apvkpqKkIE+8hbQJHoK7/4e4ItgHV0uoYqhzhbBQ4LJvGkF8BHNBpNYAhkp
-X-Gm-Message-State: AOJu0YxY4qcQZBSJIN7qkwqMI6biN1JEJZlSsGJC7L7Y3SZSR/8zZCL5
-	3SjUn+Cio+r3PW6NZghz7TvS4cLKB2QhKPrllSIBZFSsvuCnqI4K
-X-Google-Smtp-Source: AGHT+IEvjPTxMj0JsgTr5zdhlobmpuoHq2YNMq0ll0Nna1fgaDgjHIF7g/bD9TLi2GctXVCTSByhDw==
-X-Received: by 2002:a05:600c:304a:b0:424:ac90:8571 with SMTP id 5b1f17b1804b1-4257a01161cmr64297235e9.18.1719948515718;
-        Tue, 02 Jul 2024 12:28:35 -0700 (PDT)
-Received: from ?IPv6:2001:8a0:e622:f700:768c:7ffe:4763:3ff5? ([2001:8a0:e622:f700:768c:7ffe:4763:3ff5])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256af55aeasm206364485e9.17.2024.07.02.12.28.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jul 2024 12:28:35 -0700 (PDT)
-Message-ID: <87e0dac344d927ca6e2655ce7f7433ff73da6b58.camel@gmail.com>
-Subject: Re: [PATCH v1] arm64: dts: imx8mp: Fix VPU PGC power-domain parents
-From: Vitor Soares <ivitro@gmail.com>
-To: Peng Fan <peng.fan@nxp.com>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Shawn
- Guo <shawnguo@kernel.org>,  Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam
- <festevam@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Vitor Soares <vitor.soares@toradex.com>, "devicetree@vger.kernel.org"
- <devicetree@vger.kernel.org>, "imx@lists.linux.dev" <imx@lists.linux.dev>, 
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "linux-pm@vger.kernel.org"
- <linux-pm@vger.kernel.org>, "stable@vger.kernel.org"
- <stable@vger.kernel.org>,  Lucas Stach <l.stach@pengutronix.de>
-Date: Tue, 02 Jul 2024 20:28:33 +0100
-In-Reply-To: <AM6PR04MB5941E53A5742E95EF1579C6688D32@AM6PR04MB5941.eurprd04.prod.outlook.com>
-References: <20240701124302.16520-1-ivitro@gmail.com>
-	 <AM6PR04MB5941E53A5742E95EF1579C6688D32@AM6PR04MB5941.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1719949627; c=relaxed/simple;
+	bh=K4x11SUOMM6y1zNMKACNbl8folHmYwsL2pwPSCj15uM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OHaWls+VTZTKwoFpyDm0g2vC/h1J7rZvggiFn6sVhHyIM9DzbPHVxvL8FivAWglebw/gbV2SM7LY/wukaskFV5HOaZ/4+QRJMlkqOIk0qLBQT/jwMVszfKCYMw1UFvEdazoIRVCV3Yd5ILl5ak+kUvx2VUuC6imxPENHYiRMJgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Gn3N4xBd; arc=none smtp.client-ip=178.60.130.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=7Y/kIBa4MocqL5VsX4pa8YlTzbYsFHxrleMVSoRGylU=; b=Gn3N4xBdm+qM8pwbIk7A5brYm7
+	LexsVZJ2whsJBS+iv3Ia2IW+LxgYzbSkz3gi0Zbtip7pmL3yAxQRAJ8Pe/ejdn3AKXwITEsy4NYUX
+	C2vKGo/5jifhIwFVu8HuXl3D0UgDBdW1wfnCHj46j0lEF9YJQldF5U06WiRH7tw5N3KuziY6PI0dt
+	HqE6LXEPstM4BUYS6lLqWwjMLoemkOMRlrpL324EFjEJ8fV10h7KuS2l/VnIFJ+XOLxkyizifp5oC
+	Njsy0wi0DMtb2QkxqkX1bWiRj1DAEaVdJQn9qZdKZCU6rt/YzLC4Vb3E2v1mQeIkOewXf+gVdAj5y
+	NjzTm7tQ==;
+Received: from [187.36.213.55] (helo=[192.168.1.212])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1sOjSK-00ARCD-DC; Tue, 02 Jul 2024 21:46:24 +0200
+Message-ID: <1e8b7043-b92f-4a91-8b71-48117a2da0c0@igalia.com>
+Date: Tue, 2 Jul 2024 16:46:12 -0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/11] drm/vc4: hdmi: Handle error case of
+ pm_runtime_resume_and_get
+To: Stefan Wahren <wahrenst@gmx.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Jassi Brar <jassisinghbrar@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Minas Harutyunyan <hminas@synopsys.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+References: <20240630153652.318882-1-wahrenst@gmx.net>
+ <20240630153652.318882-7-wahrenst@gmx.net>
+Content-Language: en-US
+From: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
+Autocrypt: addr=mcanal@igalia.com; keydata=
+ xjMEZIsaeRYJKwYBBAHaRw8BAQdAGU6aY8oojw61KS5rGGMrlcilFqR6p6ID45IZ6ovX0h3N
+ H01haXJhIENhbmFsIDxtY2FuYWxAaWdhbGlhLmNvbT7CjwQTFggANxYhBDMCqFtIvFKVRJZQ
+ hDSPnHLaGFVuBQJkixp5BQkFo5qAAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQNI+cctoYVW5u
+ GAEAwpaC5rI3wD8zqETKwGVoXd6+AbmGfZuVD40xepy7z/8BAM5w95/oyPsHUqOsg/xUTlNp
+ rlbhA+WWoaOXA3XgR+wCzjgEZIsaeRIKKwYBBAGXVQEFAQEHQGoOK0jgh0IorMAacx6WUUWb
+ s3RLiJYWUU6iNrk5wWUbAwEIB8J+BBgWCAAmFiEEMwKoW0i8UpVEllCENI+cctoYVW4FAmSL
+ GnkFCQWjmoACGwwACgkQNI+cctoYVW6cqwD/Q9R98msvkhgRvi18fzUPFDwwogn+F+gQJJ6o
+ pwpgFkAA/R2zOfla3IT6G3SBoV5ucdpdCpnIXFpQLbmfHK7dXsAC
+In-Reply-To: <20240630153652.318882-7-wahrenst@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-T24gTW9uLCAyMDI0LTA3LTAxIGF0IDIzOjU5ICswMDAwLCBQZW5nIEZhbiB3cm90ZToKPiA+IFN1
-YmplY3Q6IFtQQVRDSCB2MV0gYXJtNjQ6IGR0czogaW14OG1wOiBGaXggVlBVIFBHQyBwb3dlci1k
-b21haW4KPiA+IHBhcmVudHMKPiA+IAo+ID4gRnJvbTogVml0b3IgU29hcmVzIDx2aXRvci5zb2Fy
-ZXNAdG9yYWRleC5jb20+Cj4gPiAKPiA+IE9uIGlNWDhNIFBsdXMgUXVhZExpdGUgKFZQVS1sZXNz
-IFNvQyksIHRoZSBkZXBlbmRlbmN5IGJldHdlZW4KPiA+IFZQVSBwb3dlciBkb21haW5zIGxlYWQg
-dG8gYSBkZWZlcnJlZCBwcm9iZSBlcnJvciBkdXJpbmcgYm9vdDoKPiA+IFvCoMKgIDE3LjE0MDE5
-NV0gaW14LXBnYyBpbXgtcGdjLWRvbWFpbi44OiBmYWlsZWQgdG8gY29tbWFuZCBQR0MKPiA+IFvC
-oMKgIDE3LjE0NzE4M10gcGxhdGZvcm0gaW14LXBnYy1kb21haW4uMTE6IGRlZmVycmVkIHByb2Jl
-IHBlbmRpbmc6Cj4gPiAocmVhc29uIHVua25vd24pCj4gPiBbwqDCoCAxNy4xNDcyMDBdIHBsYXRm
-b3JtIGlteC1wZ2MtZG9tYWluLjEyOiBkZWZlcnJlZCBwcm9iZSBwZW5kaW5nOgo+ID4gKHJlYXNv
-biB1bmtub3duKQo+ID4gW8KgwqAgMTcuMTQ3MjA3XSBwbGF0Zm9ybSBpbXgtcGdjLWRvbWFpbi4x
-MzogZGVmZXJyZWQgcHJvYmUgcGVuZGluZzoKPiA+IChyZWFzb24gdW5rbm93bikKPiA+IAo+ID4g
-VGhpcyBpcyBpbmNvcnJlY3QgYW5kIHNob3VsZCBiZSB0aGUgVlBVIGJsay1jdHJsIGNvbnRyb2xs
-aW5nIHRoZXNlIHBvd2VyCj4gPiBkb21haW5zLCB3aGljaCBpcyBhbHJlYWR5IGRvaW5nIGl0Lgo+
-ID4gCj4gPiBBZnRlciByZW1vdmluZyB0aGUgYHBvd2VyLWRvbWFpbmAgcHJvcGVydHkgZnJvbSB0
-aGUgVlBVIFBHQyBub2RlcywKPiA+IGJvdGggaU1YOE0gUGx1cyB3LyBhbmQgdy9vdXQgVlBVIGJv
-b3QgY29ycmVjdGx5LiBIb3dldmVyLCBpdCBicmVha3MKPiA+IHRoZSBzdXNwZW5kL3Jlc3VtZSBm
-dW5jdGlvbmFsaXR5LiBBIGZpeCBmb3IgdGhpcyBpcyBwZW5kaW5nLCBzZWUgTGlua3MuCj4gPiAK
-PiA+IENjOiA8c3RhYmxlQHZnZXIua2VybmVsLm9yZz4KPiA+IEZpeGVzOiBkZjY4MDk5MmRkNjIg
-KCJhcm02NDogZHRzOiBpbXg4bXA6IGFkZCB2cHUgcGdjIG5vZGVzIikKPiA+IExpbms6Cj4gPiBT
-dWdnZXN0ZWQtYnk6IEx1Y2FzIFN0YWNoIDxsLnN0YWNoQHBlbmd1dHJvbml4LmRlPgo+ID4gU2ln
-bmVkLW9mZi1ieTogVml0b3IgU29hcmVzIDx2aXRvci5zb2FyZXNAdG9yYWRleC5jb20+Cj4gCj4g
-Rm9yIFZQVS1MZXNzIDhNUCwgYWxsIHRoZSBWUFUgUEdDIG5vZGVzIHNob3VsZCBiZSBkcm9wcGVk
-LAo+IHJpZ2h0PwoKVGhleSBkb24ndCBuZWVkIHRvIGJlIGRyb3BwZWQuIFRha2luZyB0aGUgaU1Y
-OE1NIExpdGUgdmFyaWFudGUgYXMgZXhhbXBsZSAoaXQKYWxzbyBkb2Vzbid0IGhhdmUgVlBVKSwg
-dGhlIG5vZGVzIGFyZSB0aGVyZSBhbmQgdGhpcyBpc3N1ZSBpcyBub3QgcHJlc2VudC4KCj4gCj4g
-V2h5IG5vdCB1c2UgYm9vdGxvYWRlciB0byB1cGRhdGUgdGhlIGRldmljZSB0cmVlIGJhc2VkIG9u
-IGZ1c2UKPiBzZXR0aW5ncz8KCldoaWxlIGZpeGluZyBWUFUgYmxrLWN0cmwgc3VzcGVuZC9yZXN1
-bWUgZnVuY3Rpb25hbGl0eSwgSSByZWNlaXZlZCBmZWVkYmFjayB0aGF0CnRoaXMgVlBVIEdQQyBk
-ZXBlbmRlbmN5IGlzIGluY29ycmVjdCBhbmQgaXMgdXAgdG8gVlBVIGJsay1jdHJsIHRvIGNvbnRy
-b2wgdGhlCkdQQyBkb21haW5zLgpBcyB3ZSBkaXNhYmxlIHRoZSBWUFUgYmxrLWN0cmwgbm9kZSBv
-biB0aGUgYm9vdGxvYWRlciwgcmVtb3ZpbmcgdGhlIGRlcGVuZGVuY3kKc29sdmVzIHRoZSBpc3N1
-ZS4KClJlZ2FyZHMsClZpdG9yIFNvYXJlcwo+IAo+IFJlZ2FyZHMsCj4gUGVuZy4KPiAKPiA+IC0t
-LQo+ID4gwqBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4bXAuZHRzaSB8IDMgLS0t
-Cj4gPiDCoDEgZmlsZSBjaGFuZ2VkLCAzIGRlbGV0aW9ucygtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0
-IGEvYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OG1wLmR0c2kKPiA+IGIvYXJjaC9h
-cm02NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OG1wLmR0c2kKPiA+IGluZGV4IGI5MmFiYjVhNWM1
-My4uMTI1NDgzMzZiNzM2IDEwMDY0NAo+ID4gLS0tIGEvYXJjaC9hcm02NC9ib290L2R0cy9mcmVl
-c2NhbGUvaW14OG1wLmR0c2kKPiA+ICsrKyBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxl
-L2lteDhtcC5kdHNpCj4gPiBAQCAtODgyLDIxICs4ODIsMTggQEAgcGdjX3ZwdW1peDogcG93ZXIt
-ZG9tYWluQDE5IHsKPiA+IAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwZ2NfdnB1X2cxOiBw
-b3dlci0KPiA+IGRvbWFpbkAyMCB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAjcG93ZXItZG9tYWluLQo+ID4gY2VsbHMgPSA8MD47Cj4gPiAtwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBvd2VyLWRvbWFpbnMgPQo+ID4gPCZwZ2NfdnB1bWl4
-PjsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZyA9Cj4gPiA8
-SU1YOE1QX1BPV0VSX0RPTUFJTl9WUFVfRzE+Owo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgY2xvY2tzID0gPCZjbGsKPiA+IElNWDhNUF9DTEtfVlBVX0cxX1JPT1Q+
-Owo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Owo+ID4gCj4gPiDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoHBnY192cHVfZzI6IHBvd2VyLQo+ID4gZG9tYWluQDIxIHsKPiA+IMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCNwb3dlci1kb21haW4tCj4gPiBjZWxscyA9IDww
-PjsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcG93ZXItZG9tYWlu
-cyA9Cj4gPiA8JnBnY192cHVtaXg+Owo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgcmVnID0KPiA+IDxJTVg4TVBfUE9XRVJfRE9NQUlOX1ZQVV9HMj47Cj4gPiDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9ja3MgPSA8JmNsawo+ID4gSU1Y
-OE1QX0NMS19WUFVfRzJfUk9PVD47Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH07Cj4gPiAK
-PiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcGdjX3ZwdV92YzgwMDBlOiBwb3dlci0KPiA+IGRv
-bWFpbkAyMiB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjcG93
-ZXItZG9tYWluLQo+ID4gY2VsbHMgPSA8MD47Cj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoHBvd2VyLWRvbWFpbnMgPQo+ID4gPCZwZ2NfdnB1bWl4PjsKPiA+IMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZyA9Cj4gPiA8SU1YOE1QX1BPV0VS
-X0RPTUFJTl9WUFVfVkM4MDAwRT47Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqBjbG9ja3MgPSA8JmNsawo+ID4gSU1YOE1QX0NMS19WUFVfVkM4S0VfUk9PVD47Cj4g
-PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH07Cj4gPiAtLQo+ID4gMi4zNC4xCj4gCgo=
+On 6/30/24 12:36, Stefan Wahren wrote:
+> The commit 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is
+> powered in detect") introduced the necessary power management handling
+> to avoid register access while controller is powered down.
+> Unfortunately it just print a warning if pm_runtime_resume_and_get()
+> fails and proceed anyway.
+> 
+> This could happen during suspend to idle. So we must assume it is unsafe
+> to access the HDMI register. So bail out properly.
+> 
+> Fixes: 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is powered in detect")
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 
+ From the docs, I see that `DRM_ERROR` was deprecated in favor of
+`pr_err()` (although I'm seeing some drivers using `dev_err()`). So,
+after this change, this is:
+
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
+
+It would be nice to have a follow-up patch changing other vc4 files,
+as they are using `DRM_ERROR` when returning the error from
+`pm_runtime_resume_and_get()`.
+
+Best Regards,
+- Maíra
+
+> ---
+>   drivers/gpu/drm/vc4/vc4_hdmi.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> index d57c4a5948c8..b3a42b709718 100644
+> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> @@ -429,6 +429,7 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_connector *connector,
+>   {
+>   	struct vc4_hdmi *vc4_hdmi = connector_to_vc4_hdmi(connector);
+>   	enum drm_connector_status status = connector_status_disconnected;
+> +	int ret;
+> 
+>   	/*
+>   	 * NOTE: This function should really take vc4_hdmi->mutex, but
+> @@ -441,7 +442,11 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_connector *connector,
+>   	 * the lock for now.
+>   	 */
+> 
+> -	WARN_ON(pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev));
+> +	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
+> +	if (ret) {
+> +		DRM_ERROR("Failed to retain HDMI power domain: %d\n", ret);
+> +		return status;
+> +	}
+> 
+>   	if (vc4_hdmi->hpd_gpio) {
+>   		if (gpiod_get_value_cansleep(vc4_hdmi->hpd_gpio))
+> --
+> 2.34.1
+> 
 
