@@ -1,133 +1,178 @@
-Return-Path: <linux-pm+bounces-10309-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10310-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBAF291EE33
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 07:15:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FCCA91EE85
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 07:48:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 925E028351F
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 05:15:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20C101F229FD
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 05:48:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C26CA54FB5;
-	Tue,  2 Jul 2024 05:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586543A260;
+	Tue,  2 Jul 2024 05:48:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="g+/6Qg7r"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="4L1OOc1C"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E902A1D7
-	for <linux-pm@vger.kernel.org>; Tue,  2 Jul 2024 05:15:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC06179CC;
+	Tue,  2 Jul 2024 05:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719897332; cv=none; b=h0LKhqVYM06M85t363iVHxP6SEhcQmJ5S631UkEe1Q9JJnsOJe378buRLP/XK9Vd+Bw3PAQh4SQWYUhP7tbYycDi4ojrvJb0OOlPcEaeEdgKmtLyBnFdKRbPnmUziP+7uFU2qpyxM13eGk4MYoesmE892LzSZMRalyVn7AQ6niE=
+	t=1719899280; cv=none; b=TE1iErGEh+XHSkPq8nk1sV6WkqJXu0sQTfAwab+IRKHCT3KflMtY/pmbaT4im6fRmN66FhV4lCt10ZOq/9CWAzs/zJ8n2yqW/21PLa9EBbzLMpRZFc/n6baunfjBogG7SbRUrf5JAR7cs4OgxiUEQ9NSZHkkj1HCpNZOogPphmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719897332; c=relaxed/simple;
-	bh=gwUHLMvROBtiR4lWNGAYwsWo7SWaaTdIfS35b+n6CSo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NqMWz36aRhmrga3b7gSITJXgoIGDiC84Wt87yaTyfa1oBrNK3wFK/V4zMTeAiZY2GiTFBI0yKuRYmxgExWUtaBrii5MdN/HZfH42oHxMFFWuruzue70WlHoy87mu6tzNps4zN961SlCaa7lY3iJ+Ft8q/+t3hzCTM3Yxd4ALM3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=g+/6Qg7r; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7182a634815so2191033a12.3
-        for <linux-pm@vger.kernel.org>; Mon, 01 Jul 2024 22:15:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719897329; x=1720502129; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BSVGA1NqzD8+RwsUi1pxJNxEDfClGTBrTdKnbsjw64U=;
-        b=g+/6Qg7ryDXx7+kvz8/YDqFcaQI0fXoH9suMQV0UkGd5IEuO8HoYpq26XnoNF1Iwbq
-         bmphLPC1lEbt3IfuYJ0q5MAUX6Y33MoEPAdFOHOZIQa/miQGrvyTxS9NbM0p1j0coT8I
-         zq9FXqEGj3ySUo3I7sfMZ2aL9wOQYQ2EfEho99+R8aWvQOd2rwTJMfeK0HJpWNzFUncV
-         UdRefSYMm6SqAch9AyxV08LjknqpN/OPUhNrcpLPxv+UBAhNhdxAqHyhB6dUZYzoEsC7
-         1Jcx75IIE2kBiIy0Z/1f1uZrPBVPtXPsPfbZbIMISme3qNnXHHUvElu+G5xgIrfv+tgC
-         MLiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719897329; x=1720502129;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BSVGA1NqzD8+RwsUi1pxJNxEDfClGTBrTdKnbsjw64U=;
-        b=gn4jLIGv9zfOe/U2Usgzz+raD+HpKlH/LN3K44d2d029UO0hUjZZahpK2fJN5XdOqQ
-         8CaHE1MfmLfGlh/m5iGPNAfZC5PsqitZkUoLhyEuQOAJVRc5KtlDOYfkxDUC0jVA7snZ
-         NvdqMiRhykC2NOZbOIro3mlGDQGvJQaFwt629YFKygBKM3wBaFaH9DWAgl8Wn31TrEjI
-         2ae27eupTdkndk+F78wRNyt4SU+T6yfMkNONHT6icjpcha4ovdQQ47E5UsXaAuKQWUE8
-         E7LUHZqEh9JmeuA1XXjEyDEVFX7hGtm4dZa1pT22fdoGr/c9SlEg0524+XrwekdAYfAR
-         +TTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUl0MR4hVsk48yh8XZDGM7lWUf9+fZLcXM+rNGSsgnIJK9MnK9EBbXohxvGvs5qF/x45hk1lDqCDAVJueX39/8BbHngVeHw5PU=
-X-Gm-Message-State: AOJu0YzHt6+V8dTryXfdMpb/sccOh70wryTWR8G+MZ98rp+ltW6PJRdD
-	fsiV/6gChlWhZ/PFqWriit+B6SGLgLoK5DkIMFZbOi8W0kuZChcmqvcXbG9oux7jTRRBi5o7zw5
-	z
-X-Google-Smtp-Source: AGHT+IEm7OBi3HKDMeGDVx09VV6N1pDpq1JjC1MRP7keTE059spnR/JoI4AduNHYTeO/MMUWdGUrcQ==
-X-Received: by 2002:a05:6a21:3983:b0:1be:e1f9:a33 with SMTP id adf61e73a8af0-1bef610d0femr7432248637.32.1719897329448;
-        Mon, 01 Jul 2024 22:15:29 -0700 (PDT)
-Received: from localhost ([122.172.82.13])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fad58e84d7sm61170145ad.74.2024.07.01.22.15.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jul 2024 22:15:28 -0700 (PDT)
-Date: Tue, 2 Jul 2024 10:45:26 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>, Nikunj Kela <nkela@quicinc.com>,
-	Prasad Sodagudi <psodagud@quicinc.com>, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-tegra@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] OPP: Fix support for required OPPs for multiple PM
- domains
-Message-ID: <20240702051526.hyqhvmxnywofsjp2@vireshk-i7>
-References: <20240618155013.323322-1-ulf.hansson@linaro.org>
- <20240625105425.pkociumt4biv4j36@vireshk-i7>
- <CAPDyKFpLfBjozpcOzKp4jngkYenqSdpmejvCK37XvE1-WbBY2g@mail.gmail.com>
- <20240701114748.hodf6pngk7opx373@vireshk-i7>
+	s=arc-20240116; t=1719899280; c=relaxed/simple;
+	bh=Bn3wG4lA+xxGiSruiHBol9oYVeiEnMeIGUNym8g/cIo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WFv62Vn35yW95sPPIOKESQXALOdC5EueFWiLe4Kio5TP5PWGbnSTKR26B8kAgU2z8Y07hRYYNXkDgfVpAOAalBbh3JQ9pItFTZgU1QSPeHfwvIJxoLWSkkTZfTXpPyVw2ZpHHxuH3eN6eWrG1WBpbLpq0TypN4cHS9kP2+Q4eus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=4L1OOc1C; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1719899277;
+	bh=Bn3wG4lA+xxGiSruiHBol9oYVeiEnMeIGUNym8g/cIo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=4L1OOc1CMaqgg0QIXjgIFNkXfJ0CecvLU2J0BI6d5vzQBkZQhz0yY2bR9K+YU0sor
+	 GOHqzqFBN8NXvkwF3Sz8yft2ORq6G7wDqct3gu0wYmVY4dIE+L3xnuuEC/09vpcrrq
+	 SPwsLiB437/77bdi6yDbrI/hFopyJI4vey7asWFl/y3ENpqKVhlY2hQQ73Vnm2P7Z/
+	 IGvoEhoSJqsL6GVHjqKsg7mQMDZOqCHJG7OxmcPujOYn4GB+B4Xdb0lNApvmJ3xQpk
+	 SOD5S+yyLGZiwY2MAUUuRdeSKuxmV63nRzZF8HmtlI3sWs+trb/wyHuyvk7/hVEg8N
+	 PEEFRuxcTIidg==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 81F9837811EB;
+	Tue,  2 Jul 2024 05:47:56 +0000 (UTC)
+Message-ID: <70b31b71-750b-4de0-9102-0852fef7d623@collabora.com>
+Date: Tue, 2 Jul 2024 07:47:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240701114748.hodf6pngk7opx373@vireshk-i7>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: mediatek: Use dev_err_probe in every error path
+ in probe
+To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>
+Cc: kernel@collabora.com, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org
+References: <20240628-mtk-cpufreq-dvfs-fail-init-err-v1-1-19c55db23011@collabora.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20240628-mtk-cpufreq-dvfs-fail-init-err-v1-1-19c55db23011@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 01-07-24, 17:17, Viresh Kumar wrote:
-> What about this patch instead ?
+Il 28/06/24 21:48, Nícolas F. R. A. Prado ha scritto:
+> Use the dev_err_probe() helper to log the errors on every error path in
+> the probe function and its sub-functions. This includes
+> * adding error messages where there was none
+> * converting over dev_err/dev_warn
+> * removing the top-level error message after mtk_cpu_dvfs_info_init() is
+>    called, since every error path inside that function already logs the
+>    error reason. This gets rid of the misleading error message when probe
+>    is deferred:
 > 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 5f4598246a87..2086292f8355 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1091,7 +1091,8 @@ static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
->  		if (devs[index]) {
->  			required_opp = opp ? opp->required_opps[index] : NULL;
->  
-> -			ret = dev_pm_opp_set_opp(devs[index], required_opp);
-> +			/* Set required OPPs forcefully */
-> +			ret = dev_pm_opp_set_opp_forced(devs[index], required_opp, true);
+>      mtk-cpufreq mtk-cpufreq: failed to initialize dvfs info for cpu0
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>   drivers/cpufreq/mediatek-cpufreq.c | 66 ++++++++++++++++++--------------------
+>   1 file changed, 31 insertions(+), 35 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index 518606adf14e..b21425bb83be 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
 
-Maybe better to do just this instead:
+..snip..
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 5f4598246a87..9484acbeaa66 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1386,7 +1386,12 @@ int dev_pm_opp_set_opp(struct device *dev, struct dev_pm_opp *opp)
-                return PTR_ERR(opp_table);
-        }
+> @@ -487,7 +488,7 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+>   	rate = clk_get_rate(info->inter_clk);
+>   	opp = dev_pm_opp_find_freq_ceil(cpu_dev, &rate);
+>   	if (IS_ERR(opp)) {
+> -		dev_err(cpu_dev, "cpu%d: failed to get intermediate opp\n", cpu);
+> +		dev_err_probe(cpu_dev, ret, "cpu%d: failed to get intermediate opp\n", cpu);
+>   		ret = PTR_ERR(opp);
 
--       ret = _set_opp(dev, opp_table, opp, NULL, false);
-+       /*
-+        * For a genpd's OPP table, we always want to set the OPP (and
-+        * performance level) and let the genpd core take care of aggregating
-+        * the votes. Set `forced` to true for a genpd here.
-+        */
-+       ret = _set_opp(dev, opp_table, opp, NULL, opp_table->is_genpd);
-        dev_pm_opp_put_opp_table(opp_table);
+I believe you want to first assign ret, and then use it in dev_err_probe() :-P
 
-        return ret;
+Please fix. After which:
 
--- 
-viresh
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Cheers!
+
+>   		goto out_disable_inter_clock;
+>   	}
+> @@ -501,7 +502,7 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+>   	info->opp_nb.notifier_call = mtk_cpufreq_opp_notifier;
+>   	ret = dev_pm_opp_register_notifier(cpu_dev, &info->opp_nb);
+>   	if (ret) {
+> -		dev_err(cpu_dev, "cpu%d: failed to register opp notifier\n", cpu);
+> +		dev_err_probe(cpu_dev, ret, "cpu%d: failed to register opp notifier\n", cpu);
+>   		goto out_disable_inter_clock;
+>   	}
+>   
+> @@ -629,11 +630,9 @@ static int mtk_cpufreq_probe(struct platform_device *pdev)
+>   	int cpu, ret;
+>   
+>   	data = dev_get_platdata(&pdev->dev);
+> -	if (!data) {
+> -		dev_err(&pdev->dev,
+> -			"failed to get mtk cpufreq platform data\n");
+> -		return -ENODEV;
+> -	}
+> +	if (!data)
+> +		return dev_err_probe(&pdev->dev, -ENODEV,
+> +				     "failed to get mtk cpufreq platform data\n");
+>   
+>   	for_each_possible_cpu(cpu) {
+>   		info = mtk_cpu_dvfs_info_lookup(cpu);
+> @@ -643,24 +642,21 @@ static int mtk_cpufreq_probe(struct platform_device *pdev)
+>   		info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
+>   		if (!info) {
+>   			ret = -ENOMEM;
+> +			dev_err_probe(&pdev->dev, ret, "Failed to allocate dvfs_info\n");
+>   			goto release_dvfs_info_list;
+>   		}
+>   
+>   		info->soc_data = data;
+>   		ret = mtk_cpu_dvfs_info_init(info, cpu);
+> -		if (ret) {
+> -			dev_err(&pdev->dev,
+> -				"failed to initialize dvfs info for cpu%d\n",
+> -				cpu);
+> +		if (ret)
+>   			goto release_dvfs_info_list;
+> -		}
+>   
+>   		list_add(&info->list_head, &dvfs_info_list);
+>   	}
+>   
+>   	ret = cpufreq_register_driver(&mtk_cpufreq_driver);
+>   	if (ret) {
+> -		dev_err(&pdev->dev, "failed to register mtk cpufreq driver\n");
+> +		dev_err_probe(&pdev->dev, ret, "failed to register mtk cpufreq driver\n");
+>   		goto release_dvfs_info_list;
+>   	}
+>   
+> 
+> ---
+> base-commit: 0fc4bfab2cd45f9acb86c4f04b5191e114e901ed
+> change-id: 20240627-mtk-cpufreq-dvfs-fail-init-err-0a662ca72de2
+> 
+> Best regards,
+
+
 
