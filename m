@@ -1,138 +1,126 @@
-Return-Path: <linux-pm+bounces-10344-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10345-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDBAE923F73
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 15:49:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A4399240A2
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 16:25:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C57A1C21DC0
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 13:49:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8F7CB260B1
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 14:25:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84A1D1B4C59;
-	Tue,  2 Jul 2024 13:49:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A9F1BA86C;
+	Tue,  2 Jul 2024 14:24:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YuHPUAcO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iecGdUr6"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5400A38F83;
-	Tue,  2 Jul 2024 13:49:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22CF1BA067;
+	Tue,  2 Jul 2024 14:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719928140; cv=none; b=rlaunR4HTVGKyUgYIqTNR/Mw0aDCwsWykF3XHUluVtPsXAkCUWB9DJcpeNS8Ap2ldewn+KvVLIsK01aIW8dv6TD0Aio/GANl21+DjHhL4H2xDYVH+qftSP81MhdYTQ705bDOJ2ZHoQtMPQRbS0D2QPxCJeWHFSeyKh6uZbvLSXg=
+	t=1719930289; cv=none; b=sNsNFvVGQZ3fiUIkbIkHm6lfu+fk4n7S+Iuk3iP/O0OGbMIDuIaxOfNnDHmZVxvbRS/5qFDfgBIzVkNiqTx5CEPtXEB7x6i5AipsQYVNyCt/n+m3R7ZdUUgZ+KIbxYS0NuO/JRX2vME7U0ao/2Nd409o5aoX0q6J+2rtO4qz2d0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719928140; c=relaxed/simple;
-	bh=VCPpptoX1lcwq96YppGpSXnQWpM75LfIS4wYd/aLFic=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lyEeTYkUAshVX0qcvgHiA+juOyYOTe+7kk4f2inaTGahp4KXb3uVtKk59ztNI8gDMkAuRCPxWBENntYiasV83+Pf8y7szU5BpfkFkAIeYSPvy2lUs7115nnphGnk1DRU2otfY/8cldvy/aY8vpkUa1KALXY8vT/e9BdhR4xzP3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YuHPUAcO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D32C116B1;
-	Tue,  2 Jul 2024 13:48:59 +0000 (UTC)
+	s=arc-20240116; t=1719930289; c=relaxed/simple;
+	bh=g3/8sR4OH8c20K/Buo1WahFsemqahwgvChuPN8IsSII=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XtFPaB64cMefBQ7FjXXxFS9lpJdNpXocdA88jGa/7qp4iJpRElcVEvi7m7NiDlt/r+BVpUERkYXdfrXIMebWJQ0VUXAG/rZDfc0U1NAj5QnU9QPSaeUCyRV+BV5q29Of7NEJ2CHD+XE89Ofc5uIKHH72hYBClae+pkOSyiDQePc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iecGdUr6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B55C116B1;
+	Tue,  2 Jul 2024 14:24:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719928140;
-	bh=VCPpptoX1lcwq96YppGpSXnQWpM75LfIS4wYd/aLFic=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YuHPUAcOv0zJ88c4w282ikL5+HjfDYySsZqWzZ6z4k8bucULdTOueiT8Xt39ZZsSy
-	 FckqcvS8VSOY8AoToQB0wbAFVBCVrYULGeHHHRZb9TKivukD9/05lqDeRYoJTj2a3c
-	 O6qwOWl/iStS9qA74fMtQppXoYNuW54FKVMi3IhSX+IHKMwNNQ13UH4jwxsA+8Y3MB
-	 L6V7Amly/uTRECMB4TQpjCWMHtWt7DXgCf9If/tcQ9Tuaxi9UiJY9o++fTpsYn8M1C
-	 JCtZt3EbrnWiT/+jSZgFaKzeFaaUvf3qa9rhHcZ9hAKRkYuUo7Z/VpvBZQmTGnOJ6S
-	 dILkiHwJ99P1A==
-Date: Tue, 2 Jul 2024 15:48:57 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Jassi Brar <jassisinghbrar@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Minas Harutyunyan <hminas@synopsys.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>, 
-	Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org, 
-	bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kernel-list@raspberrypi.com
-Subject: Re: [PATCH 06/11] drm/vc4: hdmi: Handle error case of
- pm_runtime_resume_and_get
-Message-ID: <20240702-mysterious-excellent-hyena-0ff24f@houat>
-References: <20240630153652.318882-1-wahrenst@gmx.net>
- <20240630153652.318882-7-wahrenst@gmx.net>
+	s=k20201202; t=1719930288;
+	bh=g3/8sR4OH8c20K/Buo1WahFsemqahwgvChuPN8IsSII=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iecGdUr6T3xYlMFw8t+bEIVuqByJouOiYc5zdBcPvk7EVLnyiIe22T8OXWHnCvcFn
+	 anxYOBDR59TmINLSxG095yMx2TxEhFuURdHNR76HRz3lZPmncuit42MPm2uHbzQoyB
+	 3931ngOgN76QIUMRUvDoYEMVGg0VuS6UMqitymaL1mi5U2ilRPvIY7a16BZiF1ntZS
+	 aUjKz1GXMy2SMxWeoN53UEIa7Hn58sUsUv1pmNsw3oIBvBimX/JfsGSQdvXAwoe/YC
+	 ojLS01Fgaj6xCPaR7/w6ERl2juRhYcSmuzC5Pa6JrkCQQWyIXjYQ7fB5GDgdfBiSx/
+	 F+2Ywy2oMlAcg==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>,
+	Randy Dunlap <rdunlap@infradead.org>
+Cc: suleiman@google.com,
+	briannorris@google.com,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v8 0/1] PM: sleep: Expose last succeeded resumed timestamp in sysfs
+Date: Tue,  2 Jul 2024 23:24:43 +0900
+Message-ID:  <171993028355.95379.9391483220285994310.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.45.2.803.g4e1b14247a-goog
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2tl7zqzcymelkodz"
-Content-Disposition: inline
-In-Reply-To: <20240630153652.318882-7-wahrenst@gmx.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+Hi,
+
+Here is the 8th version of the patch to expose last succeeded resumed
+timestamp in sysfs as /sys/power/suspend_stats/last_success_resume_time.
+The previous version is here.
+
+https://lore.kernel.org/lkml/170359668692.1864392.6909734045167510522.stgit@mhiramat.roam.corp.google.com/
+
+This version is just update against for the upstream kernel.
 
 
---2tl7zqzcymelkodz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On some system like the ChromeOS, the system suspend and resume are
+controlled by a power management process. The user-space tasks will be
+noticed the suspend and the resume signal from it.
+To improve the suspend/resume performance and/or to find regressions,
+we would like to know how long the resume processes are taken in kernel
+and in user-space.
 
-On Sun, Jun 30, 2024 at 05:36:47PM GMT, Stefan Wahren wrote:
-> The commit 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is
-> powered in detect") introduced the necessary power management handling
-> to avoid register access while controller is powered down.
-> Unfortunately it just print a warning if pm_runtime_resume_and_get()
-> fails and proceed anyway.
->=20
-> This could happen during suspend to idle. So we must assume it is unsafe
-> to access the HDMI register. So bail out properly.
->=20
-> Fixes: 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is powered =
-in detect")
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> ---
->  drivers/gpu/drm/vc4/vc4_hdmi.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdm=
-i.c
-> index d57c4a5948c8..b3a42b709718 100644
-> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> @@ -429,6 +429,7 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_c=
-onnector *connector,
->  {
->  	struct vc4_hdmi *vc4_hdmi =3D connector_to_vc4_hdmi(connector);
->  	enum drm_connector_status status =3D connector_status_disconnected;
-> +	int ret;
->=20
->  	/*
->  	 * NOTE: This function should really take vc4_hdmi->mutex, but
-> @@ -441,7 +442,11 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_=
-connector *connector,
->  	 * the lock for now.
->  	 */
->=20
-> -	WARN_ON(pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev));
-> +	ret =3D pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
-> +	if (ret) {
-> +		DRM_ERROR("Failed to retain HDMI power domain: %d\n", ret);
+This patch introduces a last succeeded resumed timestamp (just before
+thawing processes) on sysfs which allows us to find when the kernel
+resume process successfully done in MONOTONIC clock. Thus user processes
+can measure the elapsed time taken by its resume process at any point
+in time.
 
-We need to use drm_err here
+This will help us to detect abnormal value (longer time) process in
+the resuming and quickly decide the root cause is in the kernel or
+user-space. The kernel side we can use many tools (e.g. printk or
+ftrace) but for user-space we need to define the starting point of
+the resuming process. Actually, the kernel side needs to use local
+clock because the clock subsystem is also suspended. But in that
+case, user space can not use that timestamp because the local clock
+is not exposed.
 
-Maxime
+So this will be used something like
 
---2tl7zqzcymelkodz
-Content-Type: application/pgp-signature; name="signature.asc"
+where_the_user_space_resume_finish() {
+	clock_gettime(CLOCK_MONOTONIC, &etime_ts);
+	fileread("/sys/.../last_success_resume_time", stime);
+	convert_timespec(stime, &stime_ts);
+	user_resume_time = timespec_delta(&etime_ts, &stime_ts);
+	...
+}
 
------BEGIN PGP SIGNATURE-----
+Thank you,
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZoQFSAAKCRDj7w1vZxhR
-xR4/AQDlMoVj1zwSuHz/bCYLp1ELUmStN8Gur4k7nkQPa0OGXwEAwA9Q9GmP0gCm
-VfIDlBnxh2bhtPw45TXbzLBN26P30w8=
-=U+hE
------END PGP SIGNATURE-----
+---
 
---2tl7zqzcymelkodz--
+Masami Hiramatsu (1):
+      PM: sleep: Expose last succeeded resumed timestamp in sysfs
+
+
+ Documentation/ABI/testing/sysfs-power |   11 +++++++++++
+ kernel/power/main.c                   |   28 ++++++++++++++++++++++++++++
+ kernel/power/power.h                  |    1 +
+ kernel/power/suspend.c                |    1 +
+ 4 files changed, 41 insertions(+)
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
