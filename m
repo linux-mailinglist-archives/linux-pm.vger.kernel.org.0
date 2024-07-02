@@ -1,82 +1,82 @@
-Return-Path: <linux-pm+bounces-10382-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10383-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EA3F9248B5
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 22:02:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4FCB9248C4
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 22:08:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7821B211B3
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 20:02:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FA9D2855F1
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 20:08:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD33D1474CC;
-	Tue,  2 Jul 2024 20:02:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E1431D47DF;
+	Tue,  2 Jul 2024 20:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vh3b7xn2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JPKH+kZI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369B61A28C;
-	Tue,  2 Jul 2024 20:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8641D3638;
+	Tue,  2 Jul 2024 20:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719950551; cv=none; b=L0IZPr12j1r4YqoFHYpHxReVZOqxniFK6aLasXf6FwXr9zvYBQD3kzh5RlXMKtIpFFIb6g984IR6c4Exrlz7kj5JjiYNKgCCaC5CXQIr4U8ymKadsMs1bXJ+fAofkD1zQ8CLFwZfbh4kS8L1cBtGz9ocD8oTGwAiB0nUa4Zmtlg=
+	t=1719950929; cv=none; b=XUiuwaGFNE4Fer2wLHRuL8055+4Ko3Aeh/U64G81h77MsrZYpX2lzVG80qZ3ymCudveV8y5OQGSXqv0O/pg6EbbVieb3eByGz9d27B7U22llRVZPqyCpDAxeMFdkQLihZw5/ApYZzPsf/oKfR4BrU6+a2g0S53WpJwHYtFkf+LU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719950551; c=relaxed/simple;
-	bh=aNMcKdGJy1ejuhUj8RLapiBJNpx/dCopM/eNakY/F+s=;
+	s=arc-20240116; t=1719950929; c=relaxed/simple;
+	bh=ErTJG4vcHSq470As+25tvh1RBupFrLsM68ruJgI+uy8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qgGXP01BI9OC0aC78/7eDnb5hfPy4p7LscsCVS9Rj3KpwgQOBDDdEQhAlS+l+k9p2/A4sf5BzPAy+NLrxV6ztmnR4uXBrPkq2/Q4Dk8YUcE9egwZbhxpK5UTbf348RM+GeD7CTwQrLn0yQQiDZpRPWILOX5fUNnLmYDzzSYnyNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vh3b7xn2; arc=none smtp.client-ip=209.85.208.41
+	 To:Cc:Content-Type; b=BUVX+bGIhYDlO9HHWH3/Ffx9AgyzZMeS0RDLGTB9J3EczCt3zlkFCQ5m+6cAA54abbR2f7SE+fwaXntTzS4CcUT2zL/G02jSOkUkjQZrjKZHmmvCMAdxXcP/VyxIsfjsn1RsWLnGCCy90n7RBxP+6rWE+/svEfWSuy64VUDf9og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JPKH+kZI; arc=none smtp.client-ip=209.85.208.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-58b447c5112so1447116a12.3;
-        Tue, 02 Jul 2024 13:02:29 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2ee4ae13aabso49044511fa.2;
+        Tue, 02 Jul 2024 13:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719950548; x=1720555348; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719950926; x=1720555726; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Pg/7/y0EFr0qym6npwJSRe3aSLtAiBDqbT1OWBwL6c=;
-        b=Vh3b7xn2bqmX5/Pm8w1yaXy6BUMKUWFXOUsCnuDRaMwSgvHoV2ff7ZVBiHpCKhLYHP
-         ELCr9MJ3eYnT4PwJB/ylr72K86QydMTqlIdorNBZTdiGlQWFB+ZgTqoEWoJy6M/7Jc2p
-         P0J7n61aKn01+u8COou8BF7R1Xm55UQeciLXJrSrlKCxgo8OA63e3HCTdnOlm86UvH9E
-         0Bhbz+Mqg1vq8m8LU62v9RTDjFSkkKqwkJzBKzei4y3uHxAzR404gsjlwVYi7pXaNRs7
-         QXu+DMuKTBzUbDdgVExlCuS7mBg0ERrWm/J/SZYc3AwPwmnzz/7gG1dtN/ZB0xdCpsGO
-         IkDg==
+        bh=IzH64RTqn+FaUcV18/HlgJMuVfUQPdBgy9ejrE2KEAw=;
+        b=JPKH+kZIgPHkJLVwKfRrzdDv0b4fo9N3eS6c6YGuiulitUnTMGQhZc7441F94uWU52
+         w/vBnYu+q6z35aBh2o5wJTbZWr4eGnFmVFEX3w+C405GkG4tl0fpD2VXJ+Ed3+CEWnOR
+         S+aXH5UM1y29zLv2k+iOH/tvP/Ow993FOG83fufDoDCLYmYcMgB5Dx+PJQM3WEx8dKnm
+         i1pVsY/etb4GA+yD99uLRhPVolmOBO5Nlb6bcUg4tyPoEFygRW6hhLG6VhQHuiIxypT9
+         oTKFax8usEPsRXaKrB3Uu77ZAxTSIJaGuGZVpgBdDjpyF+PvgcgvBKHlwXrA08+3q4Ex
+         drGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719950548; x=1720555348;
+        d=1e100.net; s=20230601; t=1719950926; x=1720555726;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3Pg/7/y0EFr0qym6npwJSRe3aSLtAiBDqbT1OWBwL6c=;
-        b=KgBHnGp1sX4Xce8vFGQcbMHP7UIaupTDBuG3sInnf4012hlUo1GUAxquArRRPTWX8g
-         NV9LQ2LiBfJ6CA3HSC2bqOxyj8TQW8rBKCeWk5u0Mfa38uDZRMMKGfJ0oyjvN8L4xakS
-         2/aETU4/b2SJB68T9Pw7Mdx/kL9vHmbtwUC3HSZFqTUObqf284FiN0+SWvFO/2L6mP+X
-         lM0xK3k2Gqfknw42Hpax3/cM3yrm3+rI76MPOA3+RxDzzktF6lEP8Ldr4fviPw5YPY5U
-         aPXWU7ycYPAuS9nxsYGZXGKYJOA4CgT7CdW71ainn0YlDLXwavlAZk/CW/eFzi/tiE/Q
-         LFnA==
-X-Forwarded-Encrypted: i=1; AJvYcCUwV3F7+Cs7EFz16Eo6gLxwULcHBXF4b0ihrm1SylAlPPDrXOpVq1m1HRwamJKZ5xRf7ucdLt7NAEBsyV6zD7/1HOVGO7kdwuBm1VTVMYotzi26tCVnLDIm90TXsfMcre2Gi7GQyQUpdTq9zzv+KN1cLoxeP+g9w0nNmT6oBvXfD/g=
-X-Gm-Message-State: AOJu0YxXHbFwYCRbKYuBaZUUE+0HN9Kx5P4UHVa9NrDr0kCuU/rNfiv6
-	j/RrJuz/nSW0b15ng/0odj+PrCDFBysfndjJIVAbgrhwJ8n5RsXXyNjYSaZAUHiDfb9wguioa8i
-	qFoXWInBx3wivFLRlg+cibzPkojY=
-X-Google-Smtp-Source: AGHT+IErxlYpYjfRcRB5QMt7MSaZ5l3hizvYH11QkFqGX9oRaokGttb3uuyPnhbm4/zJYyWoC3TDeO2AFSWSTp5Tgyc=
-X-Received: by 2002:a05:6402:51c6:b0:58b:a92f:2917 with SMTP id
- 4fb4d7f45d1cf-58ba92f2c06mr1496921a12.36.1719950548285; Tue, 02 Jul 2024
- 13:02:28 -0700 (PDT)
+        bh=IzH64RTqn+FaUcV18/HlgJMuVfUQPdBgy9ejrE2KEAw=;
+        b=bbsHxId/JWZAmjqg61MVXYMMfMSWqiRQYEp5tB5gdn5fvkJCQJn+euOBykk1K5WPgA
+         G01ajwmHdUH2KMNXLYKDTrpRdfHiMykZ6ZUnDdDDRs8vpRwRnMnTbpAyMssgzJ4F4pAk
+         qWRrs2dR1vA4cC7n6tTpjRI22V99ThNpEsb+fJ4dVZ97+bcv4RMmAReqv7uJx/ULLTp/
+         4aLbL0lPZIIGIl7TY3N1eWiVtAUYs3tcUbqkBIUxymzSYvqbp1IZN+L/7lOSahAYzf5E
+         STF4uK+KW6ttgN3E4FT5B2mltPl1XsDkSIQPuT4wNMqBtRAXCuTwj+2+WuXDXZxxpkz+
+         gAzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWIVNm+VB7aFgg9tlOIyiTcXXF+MrhtpMxXMWSlU3W3ACOJfS0Uyv9RI+cuPuPM0TzWHgoVUtzJUnK/l1E7Z449p2WK+V+F+CxyIDlLYZ6qr+e5A+uqMxwRSIfhZZwFMIsigqv+EDGtKwJ4NjzRKJrcb5qoj4+YqmVNWsJZ+KolEb0=
+X-Gm-Message-State: AOJu0YwI0s+0gHrsrWwxwCG1DLDYaS6FzGMUD02wkjBKogvI03mZZtvB
+	JRK89+pqyElOrAslgRHrIv5frnWva2id79EU1LlafU/DCn3s+kKas2cYSfLwYZxteOzfCAtfiA8
+	V8vqBDKbXcYDy88xMX5WLom30ElE=
+X-Google-Smtp-Source: AGHT+IEbnNwEICAmy8lZBda4cz1ZJA7iuStARN+4cLloZVt3cvlyN0vsRezK8xmrP3tIgonfEjrZvr0zWEcZ2HWVKkg=
+X-Received: by 2002:a05:651c:86:b0:2ec:588d:7eb8 with SMTP id
+ 38308e7fff4ca-2ee5e36eb67mr61061881fa.21.1719950925725; Tue, 02 Jul 2024
+ 13:08:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240630153652.318882-1-wahrenst@gmx.net> <20240630153652.318882-8-wahrenst@gmx.net>
-In-Reply-To: <20240630153652.318882-8-wahrenst@gmx.net>
+References: <20240630153652.318882-1-wahrenst@gmx.net>
+In-Reply-To: <20240630153652.318882-1-wahrenst@gmx.net>
 From: Peter Robinson <pbrobinson@gmail.com>
-Date: Tue, 2 Jul 2024 21:02:16 +0100
-Message-ID: <CALeDE9OpdUntjW61i=Ge2b9uOyPKWRmeP+2ybxoNA2CR4DHWXg@mail.gmail.com>
-Subject: Re: [PATCH 07/11] drm/vc4: hdmi: Disable connector status polling
- during suspend
+Date: Tue, 2 Jul 2024 21:08:34 +0100
+Message-ID: <CALeDE9OFKS_g3KU=AuN-o_jLRyDG1eiJhXs0rLRQx-1GyA+dcA@mail.gmail.com>
+Subject: Re: [PATCH 00/11] ARM: bcm2835: Implement initial S2Idle for
+ Raspberry Pi
 To: Stefan Wahren <wahrenst@gmx.net>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
 	Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
@@ -94,66 +94,81 @@ Content-Type: text/plain; charset="UTF-8"
 
 Hi Stefan,
 
-> Suspend of VC4 HDMI will likely triggers a warning from
-> vc4_hdmi_connector_detect_ctx() during poll of connector status.
-> The power management will prevent the resume and keep the relevant
-> power domain disabled.
->
-> Since there is no reason to poll the connector status during
-> suspend, the polling should be disabled during this.
+> This series implement the initial Suspend-To-Idle support for
+> the Raspberry Pi, which was a long time on my TODO list [1]. The
+> changes allow to suspend and resume the Raspberry Pi via debug UART.
+> The focus is on the BCM2835 SoC, because it's less complex than its
+> successors and have enough documentation.
 
-What about HDMI-CEC? I don't know well enough how CEC integrates at
-this level but CEC can wake up the device over HDMI from a TV display
-for example so if this affects that, while it's maybe not required for
-first pass, I know the rpi is used in a lot of media use cases so the
-ability to wake up via CEC would certainly be welcomed.
+Firstly a big thank you for this work!
 
-> It not possible to use drm_mode_config_helper_suspend() here,
-> because the callbacks might be called during bind phase and not all
-> components are fully initialized.
+> The series is a loose collection of fixes and improvements.
+> So cherry-picking should be fine.
 >
-> Link: https://lore.kernel.org/dri-devel/7003512d-7303-4f41-b0d6-a8af5bf8e497@gmx.net/
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> ---
->  drivers/gpu/drm/vc4/vc4_hdmi.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+> Test steps:
+> - configure debug console (pl011 or mini UART) as wakeup source
+> - send system to idle state
 >
-> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> index b3a42b709718..e80495cea6ac 100644
-> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> @@ -3106,6 +3106,13 @@ static int vc5_hdmi_init_resources(struct drm_device *drm,
->  static int vc4_hdmi_runtime_suspend(struct device *dev)
->  {
->         struct vc4_hdmi *vc4_hdmi = dev_get_drvdata(dev);
-> +       struct drm_device *drm = vc4_hdmi->connector.dev;
-> +
-> +       /*
-> +        * Don't disable polling if it was never initialized
-> +        */
-> +       if (drm && drm->mode_config.poll_enabled)
-> +               drm_kms_helper_poll_disable(drm);
+>   echo freeze > /sys/power/state
 >
->         clk_disable_unprepare(vc4_hdmi->hsm_clock);
+> - wakeup system by console traffic
 >
-> @@ -3115,6 +3122,7 @@ static int vc4_hdmi_runtime_suspend(struct device *dev)
->  static int vc4_hdmi_runtime_resume(struct device *dev)
->  {
->         struct vc4_hdmi *vc4_hdmi = dev_get_drvdata(dev);
-> +       struct drm_device *drm = vc4_hdmi->connector.dev;
->         unsigned long __maybe_unused flags;
->         u32 __maybe_unused value;
->         unsigned long rate;
-> @@ -3159,6 +3167,9 @@ static int vc4_hdmi_runtime_resume(struct device *dev)
->         }
->  #endif
+> The implementation isn't perfect and contains workarounds like
+> patch 4 and 9. So there is still room for improvements, but
+> at least the system won't freeze forever as before [2].
+
+I've got a test kernel for Fedora that I'm going to test on
+RPi3/Zero2W so let me know if you want me to test anything in
+particular, I will do my best to give review/test on each individual
+test over the next few days.
+
+Cheer,
+Peter
+
+> Here are some figures for the Raspberry Pi 1 (without any
+> devices connected except of a debug UART):
 >
-> +       if (drm && drm->mode_config.poll_enabled)
-> +               drm_kms_helper_poll_enable(drm);
-> +
->         return 0;
+> running but CPU idle = 1.67 W
+> suspend to idle      = 1.33 W
 >
->  err_disable_clk:
+> The series has been tested on the following platforms:
+> Raspberry Pi 1 B
+> Raspberry Pi 3 A+
+> Raspberry Pi 3 B+
+>
+> Known issues:
+> - currently it's not possible to power down the USB domain [3]
+> - there seems to be an issue with the DWC2 suspend handling [4]
+>
+> [1] - https://github.com/lategoodbye/rpi-zero/issues/9
+> [2] - https://bugzilla.redhat.com/show_bug.cgi?id=2283978
+> [3] - https://github.com/raspberrypi/firmware/issues/1894
+> [4] - https://lore.kernel.org/linux-usb/3fd0c2fb-4752-45b3-94eb-42352703e1fd@gmx.net/T/
+>
+> Stefan Wahren (11):
+>   firmware: raspberrypi: Improve timeout warning
+>   mailbox: bcm2835: Fix timeout during suspend mode
+>   pmdomain: raspberrypi-power: Adjust packet definition
+>   pmdomain: raspberrypi-power: Avoid powering down USB
+>   irqchip/bcm2835: Enable SKIP_SET_WAKE and MASK_ON_SUSPEND
+>   drm/vc4: hdmi: Handle error case of pm_runtime_resume_and_get
+>   drm/vc4: hdmi: Disable connector status polling during suspend
+>   usb: dwc2: debugfs: Print parameter no_clock_gating
+>   usb: dwc2: Skip clock gating on Broadcom SoCs
+>   serial: 8250_bcm2835aux: add PM suspend/resume support
+>   ARM: bcm2835_defconfig: Enable SUSPEND
+>
+>  arch/arm/configs/bcm2835_defconfig        |  2 --
+>  drivers/firmware/raspberrypi.c            |  3 ++-
+>  drivers/gpu/drm/vc4/vc4_hdmi.c            | 18 +++++++++++++++++-
+>  drivers/irqchip/irq-bcm2835.c             |  4 +++-
+>  drivers/mailbox/bcm2835-mailbox.c         |  3 ++-
+>  drivers/pmdomain/bcm/raspberrypi-power.c  | 17 ++++++++++++-----
+>  drivers/tty/serial/8250/8250_bcm2835aux.c | 23 +++++++++++++++++++++++
+>  drivers/usb/dwc2/debugfs.c                |  1 +
+>  drivers/usb/dwc2/params.c                 |  1 +
+>  9 files changed, 61 insertions(+), 11 deletions(-)
+>
 > --
 > 2.34.1
 >
