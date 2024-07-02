@@ -1,167 +1,204 @@
-Return-Path: <linux-pm+bounces-10324-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10325-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA65A923A03
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 11:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 47FA3923A0A
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 11:29:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0ECC61C2109C
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 09:29:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70E251C2295A
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2024 09:29:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B345C15098E;
-	Tue,  2 Jul 2024 09:29:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0835A153836;
+	Tue,  2 Jul 2024 09:29:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="IM+jVdAF"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q3M7S8qi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01olkn2072.outbound.protection.outlook.com [40.92.107.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A61141448DD;
-	Tue,  2 Jul 2024 09:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.107.72
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719912563; cv=fail; b=ISUEtpS5daTHgZXvhuimKT2XenSf7k5seXrNR0d2zwAZp8uig/d9Qm7iIuirxe1cZ68c4pTKM49IVOsWWlVpuYpjqU05qp9IXRjLVjncSGxztj2tnLa1OgfIBCfUJHYPtPLJk/bPmMEn4n0uMW2JmWQAZSTwPI5U5g30E+wcwEU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719912563; c=relaxed/simple;
-	bh=ocSitBsrfbb0zpwJXCfPxSch1FHNx0unxQS7ZAV1wDw=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=lXsGJPFcyPT4qK3YtaW6oOUdfnMHrbM/ueEiZRH2hcMkKJDHVuYaN+6FYYLLY1Vd+Mvt95o6OhYMcyhfcrKm0Cu4R+og0aoXVCDe6A4SN1Tfnceb1v2gV0h3JzVj0njrC6KyMAPAYLxhzgBJkJMefYcagROhVTzLPzgw/qiUT00=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=IM+jVdAF; arc=fail smtp.client-ip=40.92.107.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kJe4Stmcy310UQQCH5Ywr+hyPkmWZIG8Lgko2QLFgXGH9s6slqaAK8KGTsVy8JDYhTEmz8vIiTw3DMumOtDkFWTa0Nn9HvX+uikF/N2NLS+lGTuEHzSo+8P5eUeB8mG0TMDAPaedhsQLNn3OxDWK+qH7I2p8SfuAS0WuJ3XVX8QwvG4sCoo6X5Ymlzhtwtur1GXSsWLDB7Xtpm8utUDZ5uUkn7bu6oCOf5ny7nanFRlU2KDfkDf5CAubq/FaaFqgBx8Vz86y+/kWJnEacDuBObA8scL8p7Ylrb9XTm//fmWuvwEq8EDhEDXbdcCUEHMWQLIgsiAmP9TGuWX7LjCRRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4wPto6yStXQTF+mmhWmBfgxZL8A7ed9JkuwQXXzMnC8=;
- b=bGUFrgRCfQ4A2qOWDhdHyuqhyPvpWR6NW9zQgsnu/kL7WREWIXW6uvlTae3Pm69NijchRr36fBBVCNyhcQC+NaTykSKuA7HcIAoErAsUh1qDz6dfsT8ixigqcsLupJqNpouyHb36sG+qcGEV7f0C5ObIfMrJVrD+b6PX36cwwNqAJ/9iZmaX/vE48fM+etkizeHAYuOEfLfBbg2R5Nrn3Su1xx+Oq4crnF2h9pexEStcVgiJHh2AUyNbDiXPVbz4X5Mb/rKIgT3DUhtdB3HMuZ40VH2nr6xnJOwYnXCxaeGZWQB3jKXOtZg8tQirgU5z6Qpc1+gBf/c2DVsgg7yVtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4wPto6yStXQTF+mmhWmBfgxZL8A7ed9JkuwQXXzMnC8=;
- b=IM+jVdAFr6VyeOuXch11Ur3TJB0qq1A1RhHqpt3VtHGtSreNTBu9zLQubbgqFjraJ6OGf9ZpVRpo0qyFJjmGpkFcHqHQDg/YME3ViC+VHieEmM61zGBqc5j6gE5+qgLgz8RcIapg1A+ZkwwsOnlr+PsuBoxaemyRWbLtHh5pXns1l9hobcbr7VqeWd5ITiT4WC97gav3FHBNxeslCRj3t6YiVATF9Lg+zC8O/mjxP4sNG9cbUtaI7u4+UhHiRxa0DNaADP9GH45FGV9T/UwdtX1cmamMTID/sNCFCY3r2Sb6J+Uh4HFfnNiB70NGCXbFKrOGzIASUt3+BUagis8pCQ==
-Received: from SEYPR01MB4221.apcprd01.prod.exchangelabs.com
- (2603:1096:101:56::12) by SEZPR01MB4157.apcprd01.prod.exchangelabs.com
- (2603:1096:101:46::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.34; Tue, 2 Jul
- 2024 09:29:15 +0000
-Received: from SEYPR01MB4221.apcprd01.prod.exchangelabs.com
- ([fe80::b674:8f70:6e29:3756]) by SEYPR01MB4221.apcprd01.prod.exchangelabs.com
- ([fe80::b674:8f70:6e29:3756%4]) with mapi id 15.20.7719.029; Tue, 2 Jul 2024
- 09:29:15 +0000
-From: Haylen Chu <heylenay@outlook.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@outlook.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Jisheng Zhang <jszhang@kernel.org>
-Cc: linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	Haylen Chu <heylenay@outlook.com>
-Subject: [PATCH v3 0/3] riscv: sophgo: add thermal sensor support for cv180x/sg200x SoCs
-Date: Tue,  2 Jul 2024 09:28:19 +0000
-Message-ID:
- <SEYPR01MB42213F3A032C60C6AF5EB677D7DC2@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
-X-Mailer: git-send-email 2.45.2
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN: [VctJtdOsgx7Xr87gqJ3YWZulJDvis8Zz]
-X-ClientProxiedBy: TYCPR01CA0150.jpnprd01.prod.outlook.com
- (2603:1096:400:2b7::19) To SEYPR01MB4221.apcprd01.prod.exchangelabs.com
- (2603:1096:101:56::12)
-X-Microsoft-Original-Message-ID: <20240702092818.65413-2-heylenay@outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B108F1514E3
+	for <linux-pm@vger.kernel.org>; Tue,  2 Jul 2024 09:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719912588; cv=none; b=s060vK8SKRX5EQKGLGwWuuI/vgRu+cv63UruVIJdZP4MHCDhQ8beECOEfFHjdagtbKdIwcM+qz90LwQlqEmH9/gPOSCX2l1x4+hlVH03OSnH24DCMhjr0d8IDEqMbpXzCy2djObMWVFeJdyrH04pcZM868azIjk/6R/K0Nk+HFA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719912588; c=relaxed/simple;
+	bh=TerRgP+v40fCEJSwAyzuLhhySHf5Xi59Fhbfu6zqEXE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fFwTHtuQLg0eq2F1D8Jyu5Azv33VsL1lA/unDFeCIS5mD7y3dnoju4fLISnF4rTF/aRLv5fCF1zWohOfoKhTrZCqQM/CcZFzz1CHPuDQ1jP/gEhC0shB3oJ/WoAuZID2pzBwD8U5MMOAPEcuvUo+OvzxJxiam5YKVLpdwRv2t00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q3M7S8qi; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4256eec963eso27802895e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 02 Jul 2024 02:29:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1719912584; x=1720517384; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gFNGLntKhW/Guwso71i4rkzJq++IdrdgxniMyjmtpdk=;
+        b=q3M7S8qiINZ8QiqZFJsYYDWmjZIzHPeL+Ii+Ea89O7yX9IZH6ufX/Wj2huYB1UaLhR
+         kuLgT4ro33yssRFoPGNOUUz04TIIAJhuf4PuPC+Q3QsghdViLQOF+8rv6A23fG72gBWO
+         YtEtiN7cY7GpXmbc1uBlZ634AykFVlYL57wxDpS3P5wYn1qYzML6RWWZ9UN93TwdyZY+
+         MVxJVBiBftqJS4Rm+kGQ7ZzAFdD8Gmw/7Pd4wWA9aOYFMQCvdZpdc9weDC4HBKFy9Rg9
+         l+rjxDk3EPzr4GG2qaizQnGnRSmA2NCRmuIhmEltxUCSDCY/VcIixzue9Fb68GDczadS
+         g6lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719912584; x=1720517384;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gFNGLntKhW/Guwso71i4rkzJq++IdrdgxniMyjmtpdk=;
+        b=IbV4Iri1wZHCqQDxa3P0z4YWo4+Bf7N13Vb0Iifj95OgTTjb1i1OvY+1C3xoQszzz7
+         YBay+44oQtTtaCMnW0eag1xJK/v+ND4/aGPZDIJRGnZ2rmBr4bw0vkVDvh5digPk4R/y
+         +PN+nMpLb/eG+6Xb90SB0sJHRVovEiDdxLAPldV3nfePw+BIyCTfnqKN6lj+5aNpoQLD
+         wTOCkAqeqnHhR2vnJytj08ugZlhWSTgWT+DaoiE8LXRrKtxuRLVFIGFF5iA4xV3xt/sX
+         SkUthtIM8aS7VQ7S58IJ/rd2XiUoydk+jObrgXQ+Zg0slYOv/x/xhDeTjle1iDly1yBD
+         qBYA==
+X-Forwarded-Encrypted: i=1; AJvYcCU8mkdbc/rv5M5eMlEXCOQSx5OiPbFAdjmxD1jw4phFpFnGLggKuCVJlhkxemo6fyu4PlSmH2b2A3E9kdvAHal/YmQqPUrM0ak=
+X-Gm-Message-State: AOJu0YzY3lVnCa1H1jGspH9qqmk515rCZplI3ZUgzsMZnwvyvDu60+BM
+	XfcSgTkVL/Pqbel/Od/QHxxKO/9BReutvaykUJYSDhPmdtB8M0Z0npfsciEAd9MqtgIxUgEWIGT
+	G
+X-Google-Smtp-Source: AGHT+IGcvq6Md4bK4F0AZvBieiuaKUIzYS5wkTsJTtgZyqDebBXPayfayMlcGBx0YgPhznQfC9z7ug==
+X-Received: by 2002:a05:600c:4589:b0:425:6911:eb00 with SMTP id 5b1f17b1804b1-4257a02c894mr52320595e9.5.1719912583999;
+        Tue, 02 Jul 2024 02:29:43 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:de58:360d:d635:3977? ([2a05:6e02:1041:c10:de58:360d:d635:3977])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4257fb4fabdsm96567125e9.46.2024.07.02.02.29.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Jul 2024 02:29:43 -0700 (PDT)
+Message-ID: <98fe3146-07ae-4095-b372-6aed6e080d94@linaro.org>
+Date: Tue, 2 Jul 2024 11:29:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEYPR01MB4221:EE_|SEZPR01MB4157:EE_
-X-MS-Office365-Filtering-Correlation-Id: c79ffe61-a28d-4533-0cca-08dc9a797078
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199028|8060799006|440099028|3412199025|1710799026;
-X-Microsoft-Antispam-Message-Info:
-	jPcymg5SJiHco4LqFbPaTy5wRyEiMm6isylADqDaYWlLpMiu9zgKnhoGz0wUpwQtVdGwUyw02mt8MPsMlN4Klt5EAFZz726OYsm+djJozVMzbeKmr6MMxJ1MaEIeYDKsNsWlg0qc8Tu0Zv95LygXblI7+8h2C7w4jwjnugKBSDmRql3m6U/Wkw4MWgwg4AV7r/GvVenQD4gyizsOHAg8bE/uL2szNIMCJfRgCdheviuLY4xArqhZarocR778/DK44u9t7HDsiVWZbPa2qDt+y0fbAsHOC2qdLCx39u0G90t3ABgqd19e5l6hq5D1EUYMvCO0Q2K+Hui3ivwtq58npEnuSo66teNPsnUBRZ3UYWXehmes9RJHulskXJwd3gkEfCsK8CWqc0L51FH35k3VXlFu23Sz4H66ISv8ai1F2SMT8dxLzxu9DXOI1rx7M9CHMa4mQWiprFnJidxSDE5jotc7zEE+VfP+MikamfeZWPJ15fcnossZ8sPKKq8+rZNbEfnAxyumKTqAHQuC+6sr9oj+snP2cH/7Jx+G5NBZMsLP0dmm9rtR5HKgS225pnBXYU6pY/gVaDxDWujJoSQnwFV6vi0+2lkdZqMT1GakfjT5wjdV2+zNvuB/7phIDrMCjSKpUVQmM/e8CkUGftXsqg==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?XGXhK9q5iENvEeBIEaP9QBHFWHxzpAq/3jV0OoHO+4zWhonPqo/xq80oTPnV?=
- =?us-ascii?Q?1qQrRweS42ZCq7s8V5flL6fLcumvu7tjsCpdocAf8S+fuVSDJvEqFhSz+MAY?=
- =?us-ascii?Q?GqmKwyy7o+OXtJpvYiJuLICroZxi7pE7Mbs6kXH7nYreMofdjW7At5mzMBza?=
- =?us-ascii?Q?Xlfa/dLV6Yv5fmI6YGneUYLsU7SW+INR5Vkqy+wrPkRziL/FCKqKWL9/EZWx?=
- =?us-ascii?Q?UaJ4/8QJlJ86I+IC9I5zTqmdFxdzwxjDRjtfZvn9YsOsz6autKMCOZw9lTyb?=
- =?us-ascii?Q?maWFfhBjPoswhf9hLm+ocAUjRkw4Wrstz4K3RQWFxdLbhpVIqPP6qklLDI2k?=
- =?us-ascii?Q?JzlaZkjMZrB/NMpGgJU3lyfHZApfKJrvEWGu1Ln3h3LLWouSEfYUHKBMClJ3?=
- =?us-ascii?Q?FBS9+2cU0BPHs61KoLKoSu9K5eKZffvykMtPKxI/GJK/N4eaZlIyqrc2jwwq?=
- =?us-ascii?Q?iq/W20wIPVK/1e/kmHkuLfvMkch6m9m7zQU4pvJWBN/Nqind3VgkQYfw038Y?=
- =?us-ascii?Q?ETCkVW1eEwmog/YxEldmj19pOYAGWANokP+ZzR5BDE/4+qzb+BlL3nClibml?=
- =?us-ascii?Q?Nr4uIMdbT0Hp/e7Qlt5QMFl0HXNSnTaN3YupYISdkQSN86bWBHfvb+ZfqOGw?=
- =?us-ascii?Q?LKuOvANx32RjZh3zJp9GFvItfMvEhE18vgV0yz7dWTC7IsHBxUB3D8e9tZ0d?=
- =?us-ascii?Q?/JTqmWGdXP6AbLWM2NnDCAUuGej6q8NYaKAxw6VI6JfNe0//fWooE7JqkEjg?=
- =?us-ascii?Q?wCyrls0fyvy8wVAhpmyyQejcdF0BHBkUFZxU5MRdCY8QIdU6f+pKXhisIN8n?=
- =?us-ascii?Q?xOtwADyGC/Zgf73+PCFardiUFx1PlXWyQO8rYhyySVrsIta8rn3puO9EIx/U?=
- =?us-ascii?Q?EzTLZULSZaSYhsgZwA1Ctn7BC7FVcvBOyeLitqTqbwIVH7jen/0vuziiS1zx?=
- =?us-ascii?Q?apaKYzDAXSHV5bUWSwizk5XbDpWnlxcRAAOlcleXE50nHSuaEYhTpgw48jAe?=
- =?us-ascii?Q?Kon9Gf3xjQyzl61ysRHuTeQe8KLtP0T6LoHc313onkxX2CP7oBVA7Zrb54Yc?=
- =?us-ascii?Q?BA+r+zmd67K7UT4FH15L4O4ibl0wn5ZrSUImCN4xddZjLmhMquJn9tAwWQBa?=
- =?us-ascii?Q?DS27aXjvAdAGctE5NbJhjIR1ySCncs7QCTePsjrNBbV5kZBoPULnhyZRqWfu?=
- =?us-ascii?Q?bTyweHUKW6FTi8oNHOUCZLcHNt4oADu1U2Q/0nBxmOcw6epEj/BcxEjSQjQ?=
- =?us-ascii?Q?=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c79ffe61-a28d-4533-0cca-08dc9a797078
-X-MS-Exchange-CrossTenant-AuthSource: SEYPR01MB4221.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2024 09:29:15.2305
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR01MB4157
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal/core: Introduce user trip points
+To: Rob Herring <robh@kernel.org>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+References: <20240627085451.3813989-1-daniel.lezcano@linaro.org>
+ <20240701162600.GA4119789-robh@kernel.org>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20240701162600.GA4119789-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-This series implements driver for Sophgo cv180x/sg200x on-chip thermal
-sensor and adds thermal zones for CV1800B SoCs.
+On 01/07/2024 18:26, Rob Herring wrote:
+> On Thu, Jun 27, 2024 at 10:54:50AM +0200, Daniel Lezcano wrote:
+>> Currently the thermal framework has 4 trip point types:
+>>
+>> - active : basically for fans (or anything requiring energy to cool
+>>    down)
+>>
+>> - passive : a performance limiter
+>>
+>> - hot : for a last action before reaching critical
+>>
+>> - critical : a without return threshold leading to a system shutdown
+>>
+>> A thermal zone monitors the temperature regarding these trip
+>> points. The old way to do that is actively polling the temperature
+>> which is very bad for embedded systems, especially mobile and it is
+>> even worse today as we can have more than fifty thermal zones. The
+>> modern way is to rely on the driver to send an interrupt when the trip
+>> points are crossed, so the system can sleep while the temperature
+>> monitoring is offloaded to a dedicated hardware.
+>>
+>> However, the thermal aspect is also managed from userspace to protect
+>> the user, especially tracking down the skin temperature sensor. The
+>> logic is more complex than what we found in the kernel because it
+>> needs multiple sources indicating the thermal situation of the entire
+>> system.
+>>
+>> For this reason it needs to setup trip points at different levels in
+>> order to get informed about what is going on with some thermal zones
+>> when running some specific application.
+>>
+>> For instance, the skin temperature must be limited to 43°C on a long
+>> run but can go to 48°C for 10 minutes, or 60°C for 1 minute.
+>>
+>> The thermal engine must then rely on trip points to monitor those
+>> temperatures. Unfortunately, today there is only 'active' and
+>> 'passive' trip points which has a specific meaning for the kernel, not
+>> the userspace. That leads to hacks in different platforms for mobile
+>> and embedded systems where 'active' trip points are used to send
+>> notification to the userspace. This is obviously not right because
+>> these trip are handled by the kernel.
+>>
+>> This patch introduces the 'user' trip point type where its semantic is
+>> simple: do nothing at the kernel level, just send a notification to
+>> the user space.
+> 
+> Sounds like OS behavior/policy though I guess the existing ones kind are
+> too. Maybe we should have defined *what* action to take and then the OS
+> could decide whether what actions to handle vs. pass it up a level.
 
-Changed from v2:
-1. style and code improvements
-2. use human-readable value for sensor parameters
+Right
 
-Changed from v1:
-1. style and code improvements
-2. make sample parameters configurable
-3. generalize document temperature calculating formula
+> Why can't userspace just ask to be notified at a trip point it
+> defines?
 
-Haylen Chu (3):
-  dt-bindings: thermal: sophgo,cv1800-thermal: Add Sophgo CV1800 thermal
-  riscv: dts: sophgo: cv18xx: Add sensor device and thermal zone
-  thermal: cv180x: Add cv180x thermal driver support
+Yes I think it is possible to create a netlink message to create a trip 
+point which will return a trip id.
 
- .../thermal/sophgo,cv1800-thermal.yaml        |  74 +++++
- arch/riscv/boot/dts/sophgo/cv1800b.dtsi       |  30 ++
- arch/riscv/boot/dts/sophgo/cv18xx.dtsi        |   8 +
- drivers/thermal/Kconfig                       |   6 +
- drivers/thermal/Makefile                      |   1 +
- drivers/thermal/cv180x_thermal.c              | 281 ++++++++++++++++++
- 6 files changed, 400 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
- create mode 100644 drivers/thermal/cv180x_thermal.c
+Rafael what do you think ?
+
+> If we keep this in DT, perhaps 'notice' would be a better name that
+> doesn't encode the OS architecture details.
+
+[ ... ]
+
+> BTW, can we decide what to do about 'trips' node being required or not?
+> That's nearly the only DT warning left for some platforms.
+
+A thermal zone is a combination of a sensor, a mitigation logic (user or 
+kernel), hardware limits with trip points to activate the logic. Without 
+trip points, this logic can not operate, consequently the thermal zone 
+description is incomplete.
+
+I guess those thermal zones are set to have the sensor exported in 
+/sys/class/thermal, so the userspace can access the temperature.
+
+However, existing thermal zone description should have at least a 'hot' 
+trip point and a 'critical' trip point.
+
+On the other hand, now that we are introducing the 'user' trip point, 
+those thermal zone can exist without trip points because we can create 
+them at any time from userspace.
+
+So at the first glance, I would say we can drop the "required" 
+constraint for the trip points in the thermal zone description.
+
+
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>   .../devicetree/bindings/thermal/thermal-zones.yaml        | 1 +
+> 
+> Please make bindings a separate patch.
+> 
+>>   drivers/thermal/thermal_core.c                            | 8 ++++++++
+>>   drivers/thermal/thermal_of.c                              | 1 +
+>>   drivers/thermal/thermal_trace.h                           | 4 +++-
+>>   drivers/thermal/thermal_trip.c                            | 1 +
+>>   include/uapi/linux/thermal.h                              | 1 +
+>>   6 files changed, 15 insertions(+), 1 deletion(-)
+> 
 
 -- 
-2.45.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
