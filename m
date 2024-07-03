@@ -1,156 +1,186 @@
-Return-Path: <linux-pm+bounces-10550-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10551-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F070D9263A7
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 16:43:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29078926461
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 17:09:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB01DB25A19
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 14:42:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D517928BFE5
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 15:09:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D61AA17C23F;
-	Wed,  3 Jul 2024 14:42:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E878180A73;
+	Wed,  3 Jul 2024 15:09:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YMWpgNuk"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G2bL6tD9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AFD217C202
-	for <linux-pm@vger.kernel.org>; Wed,  3 Jul 2024 14:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7816E17E8EE
+	for <linux-pm@vger.kernel.org>; Wed,  3 Jul 2024 15:09:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720017756; cv=none; b=Uvo1HY/k/cPVFLB4ILVXxt1DGU/WHFm/Ap+jD5xoQebJkjP3fpi4J0nIhen+FzPUPCPeuKdYV7d7nc1xvh7TXEpzskljmYSgvo2S3PNvqBkMWWcOFozG6pAvzsaRtfpAu0K9jLpg+gwjKmNqKHW+9Lxqo6Ze1wGhyxuW8FbLsFQ=
+	t=1720019390; cv=none; b=IAdwbET/QojmxicrIftc4IHncA9wOTSltszjJgP+S0NAEfDKape6sgS87YV0Diwinxwad77TK1wNE4HV6s8boeJ9/prVaLzKEaNNurcRciW40/kPuBJMP5c2o/LImxK9w+xFPQu+QOoRD42vUwlJEXJhfFg+ue9mB24exJFN5OE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720017756; c=relaxed/simple;
-	bh=C15t/sdBdK2pqoieRzfm0iDE3WaqQ1vxRVz4kCxIp70=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=T68cYmP0nCoAF8fBTBf10/8qucRrxnSQ21bozI+fbLM/9rVfT+v9Ackk09D47fW8Yh5rvBOZWE0xBDe3gbHsGZzaB9fCBorThhdOKQy7kKDebkB5FLGe5xZF+mH7biGDdY5LN22tOFW3QXgd8Yz00vIIaTgDxJA1fskF28m5WV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YMWpgNuk; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ec3f875e68so61544941fa.0
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2024 07:42:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720017753; x=1720622553; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WUiYUTX4uw6YTF8+5ehB1MO6FQf/YNFuHtJtecY3i88=;
-        b=YMWpgNukH3mZw0v9TaDNg6ZT7ky7eNtSP28Si7gUuNaEOjOjulRwI7u1O6VGmr8LJO
-         /gY5lSe7L6D2ZqLWJvwP5sdL8k8wOI8Q5OOsamhGAO/90rTqk++4Zc1SgbxbhEIm+prb
-         CZgSpa2/5Oa0kiC8LyNNxIXNTkxjBG2adaDgGQZenRRdbDna4MzJ7Qs4DFonCKp5q6mM
-         M+25FHq7CO/lCCwwFefgxcXo7mpSRqmNHRmf/7H5cP/9jb/SZMocwOWRbepb5+zVvP4I
-         Se5lncJ/OLC2BQvhW6Hyj+ihWRNlEQLJ54AeuUqVBIEWQEP7XNgyEB15cbXE3J9C5ugf
-         E5BA==
+	s=arc-20240116; t=1720019390; c=relaxed/simple;
+	bh=fhpejWcF/vfLe6nwrakqQTsElpgre49BCBgEinb2+BE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TKcBbnc9+QtJ+AYgSdd3FpFGewWaGkC5+mj4gpjXan8reJWJ55btdiPzLur/TruxCkOw1cjQzrM58jwd/nQd6xSNQwV9ctel5gUfJr/3rEfusZSYYp4w9g+S00kRUXySaH001Nun4spMo47MOS/0Cs4dOrjmKF5svYXoft26V0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G2bL6tD9; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720019387;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OwJT/oF0rqnt+S31sg05vpTbadEupYIHlD2ocZCHgDI=;
+	b=G2bL6tD9MH3jW9g1eYfLj+TmhYW774/+7RBogi/iGXJGeNf04YRIn16S1nZF53UOJ4ah/Z
+	/07VuJdaORsDwljSJnciaZed3PspqvVIm3GmOt8IJZBylXXOGtFGiMxrDhqFt/toAQXORp
+	ygiDRj2h3eSH2Hd5vRj77B8klEzhTvo=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-138-sHAKgbiVO06AozPBLoN-vg-1; Wed, 03 Jul 2024 11:09:46 -0400
+X-MC-Unique: sHAKgbiVO06AozPBLoN-vg-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4450544eaadso69205241cf.1
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2024 08:09:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720017753; x=1720622553;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WUiYUTX4uw6YTF8+5ehB1MO6FQf/YNFuHtJtecY3i88=;
-        b=pxO2fpucX3dZYnIlk/jSxpP8OLnMc24GgfFLRiYyYVF2kAr56Wad+KsXZGR3L28s7d
-         PdCHwJqZfC1ILYfYsk0F0Uz0b7st1TKBY0YxLF0JEUxsseAzLzcwyTLgluw98mmkHqnX
-         kVXowFLycAK5FNZ/7zTbR6JI5S6rUv5grWnQPxP26mrgzmYTJr62t4uvF/Iqs166YNlc
-         NAgrPBDg+uRIv9VoVCQF4YDEftkJ3Ek8C/jaMi8rxPPbKAmMH+0hEDT+NJkA/mbCnbSU
-         1n2xNGTXLl8pHJwy1V8CeJnx84/6HCNcI4b6IAdRN2OqdKFRsgaUpMmUf/w4BgPRLHbU
-         NTxA==
-X-Forwarded-Encrypted: i=1; AJvYcCV/CZt3DxtnNELwpji2DsQ0NVRPQQCcij2S9cbrzIm9A+12rq6dCXZHn+CtCbfywCHPrrdKDAccwd0GBlEcMa2YM+C+q7GTwsI=
-X-Gm-Message-State: AOJu0YxSF5eBcMrNxMlNH8B1Wm93S7R3DAoMYYKuTgq33WHGJkb2olLi
-	GHoidTKBcLCirVBJRbQ9Kz0RR3ICZ3DokV03K2zri28LE0co5MU2VDd4iSCdcQ4=
-X-Google-Smtp-Source: AGHT+IHBzq9dEW29kEqNN4LDlotId1dB+PxWXtoeJ6QEnDFpAhjD/42H7fT4DP7lT+3GUim7ec21Uw==
-X-Received: by 2002:a05:651c:49b:b0:2eb:d9a3:2071 with SMTP id 38308e7fff4ca-2ee5e6c9cd8mr65401681fa.50.1720017750942;
-        Wed, 03 Jul 2024 07:42:30 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:ef03:73b5:7503:ee71? ([2a01:e0a:982:cbb0:ef03:73b5:7503:ee71])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256b068e93sm241883765e9.24.2024.07.03.07.42.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Jul 2024 07:42:30 -0700 (PDT)
-Message-ID: <ce6c2e8a-65a7-4cb2-a91d-fbcaeef6edc1@linaro.org>
-Date: Wed, 3 Jul 2024 16:42:29 +0200
+        d=1e100.net; s=20230601; t=1720019382; x=1720624182;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OwJT/oF0rqnt+S31sg05vpTbadEupYIHlD2ocZCHgDI=;
+        b=XjL8P3pUfutZ1Xnw1g/uaUcuH5lbMh8a1wvD0hLc7gG2RNXW+W2bn5/dHS8mhzoMbe
+         Vj69PrPPkuKdF/80wJKIml1qMKE+i41pr7k2q8//3LXB4aF9Dpu2/eeziuS4n8ENIJSf
+         VPlVV7CZDvCko/tZig8xzB0S+r5kCCiViKO86clSw5WwInfH6Bb6GzXsYFzVa2oAzqg3
+         JTYSeTbuJoWLVqSbGSoCsGR0/JLlxnTLESTVnkkPCElb38kTNarVdXHOiQqBFfYuBC+5
+         cnRv4zAQDTqDoGKzzZ9veDSUdmxnKk9oouOoL6ZGmVttcaLkBMmOyawuxWla/tdmJCbW
+         QGGw==
+X-Forwarded-Encrypted: i=1; AJvYcCXt20Gu/Bc9oTorama6KCsuB/IX8URkgGpah614xkOl2aq3UAggSQNd54TgRwEC77S/avBGa3th27yFfj1+83lRVq3pN13mAPc=
+X-Gm-Message-State: AOJu0Yx8HS41PK/Bl35hV3T9+DQiuTuuy9AMLxdZgPDWhDzsTGB18Qh6
+	Iy/GPidVkozTsccYEWRJ4vSFUKetAJUfOYFnpt+w433Dt6IPkrmMYOzt7MkgYsTVK7cD5hrPWoc
+	lzkkf8OVCF+nB0zVh+SohZdMVStjxHncKMMoygNDzsOPsZTkd85iBcrAk
+X-Received: by 2002:ac8:7d84:0:b0:444:b495:e94d with SMTP id d75a77b69052e-44662c99f4bmr119753201cf.3.1720019381987;
+        Wed, 03 Jul 2024 08:09:41 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE8jWmpy5/3+Y1qV1pkAlEofbtK+RF6spB2E3wXQKII8gdILaaxSAxoLFic14g5Q4iTwcc7CA==
+X-Received: by 2002:ac8:7d84:0:b0:444:b495:e94d with SMTP id d75a77b69052e-44662c99f4bmr119751991cf.3.1720019381501;
+        Wed, 03 Jul 2024 08:09:41 -0700 (PDT)
+Received: from x1gen2nano ([2600:1700:1ff0:d0e0::40])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4465c4bf7ecsm43222571cf.80.2024.07.03.08.09.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jul 2024 08:09:41 -0700 (PDT)
+Date: Wed, 3 Jul 2024 10:09:36 -0500
+From: Andrew Halaney <ahalaney@redhat.com>
+To: Tengfei Fan <quic_tengfan@quicinc.com>
+Cc: andersson@kernel.org, konrad.dybcio@linaro.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, djakov@kernel.org, mturquette@baylibre.com, 
+	sboyd@kernel.org, jassisinghbrar@gmail.com, herbert@gondor.apana.org.au, 
+	davem@davemloft.net, manivannan.sadhasivam@linaro.org, will@kernel.org, 
+	joro@8bytes.org, conor@kernel.org, tglx@linutronix.de, amitk@kernel.org, 
+	thara.gopinath@gmail.com, linus.walleij@linaro.org, wim@linux-watchdog.org, 
+	linux@roeck-us.net, rafael@kernel.org, viresh.kumar@linaro.org, vkoul@kernel.org, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com, 
+	robimarko@gmail.com, quic_gurus@quicinc.com, bartosz.golaszewski@linaro.org, 
+	kishon@kernel.org, quic_wcheng@quicinc.com, alim.akhtar@samsung.com, 
+	avri.altman@wdc.com, bvanassche@acm.org, agross@kernel.org, 
+	gregkh@linuxfoundation.org, quic_tdas@quicinc.com, robin.murphy@arm.com, 
+	daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com, 
+	quic_rjendra@quicinc.com, ulf.hansson@linaro.org, quic_sibis@quicinc.com, 
+	otto.pflueger@abscue.de, quic_rohiagar@quicinc.com, luca@z3ntu.xyz, 
+	neil.armstrong@linaro.org, abel.vesa@linaro.org, bhupesh.sharma@linaro.org, 
+	alexandre.torgue@foss.st.com, peppe.cavallaro@st.com, joabreu@synopsys.com, 
+	netdev@vger.kernel.org, lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com, 
+	krzysztof.kozlowski@linaro.org, u.kleine-koenig@pengutronix.de, dmitry.baryshkov@linaro.org, 
+	quic_cang@quicinc.com, danila@jiaxyga.com, quic_nitirawa@quicinc.com, 
+	mantas@8devices.com, athierry@redhat.com, quic_kbajaj@quicinc.com, 
+	quic_bjorande@quicinc.com, quic_msarkar@quicinc.com, quic_devipriy@quicinc.com, 
+	quic_tsoni@quicinc.com, quic_rgottimu@quicinc.com, quic_shashim@quicinc.com, 
+	quic_kaushalk@quicinc.com, quic_tingweiz@quicinc.com, quic_aiquny@quicinc.com, 
+	srinivas.kandagatla@linaro.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-crypto@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, kernel@quicinc.com
+Subject: Re: [PATCH 29/47] dt-bindings: net: qcom,ethqos: add description for
+ qcs9100
+Message-ID: <u5ekupjqvgoehkl76pv7ljyqqzbnnyh6ci2dilfxfkcdvdy3dp@ehdujhkul7ow>
+References: <20240703025850.2172008-1-quic_tengfan@quicinc.com>
+ <20240703025850.2172008-30-quic_tengfan@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2] thermal: core: Call monitor_thermal_zone() if zone
- temperature is invalid
-To: Daniel Lezcano <daniel.lezcano@linaro.org>,
- "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>,
- linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <2764814.mvXUDI8C0e@rjwysocki.net>
- <2ed4c630-204a-4f80-a37f-f2ca838eb455@linaro.org>
- <8d91a3c1-018f-495b-83be-979b795b5548@linaro.org>
- <12c5c133-9519-4a26-b9a3-2da1d3466e94@linaro.org>
- <15b67ce6-3238-435d-ad28-7c06efbe9153@linaro.org>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <15b67ce6-3238-435d-ad28-7c06efbe9153@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240703025850.2172008-30-quic_tengfan@quicinc.com>
 
-On 03/07/2024 16:00, Daniel Lezcano wrote:
-> On 03/07/2024 14:43, neil.armstrong@linaro.org wrote:
->> Hi,
->>
->> On 03/07/2024 14:25, Daniel Lezcano wrote:
->>>
->>> Hi Neil,
->>>
->>> it seems there is something wrong with the driver actually.
->>>
->>> There can be a moment where the sensor is not yet initialized for different reason, so reading the temperature fails. The routine will just retry until the sensor gets ready.
->>>
->>> Having these errors seem to me that the sensor for this specific thermal zone is never ready which may be the root cause of your issue. The change is spotting this problem IMO.
->>
->> Probably, but it gets printed every second until system shutdown, but only for a single thermal_zone.
->>
->> Using v1 of Rafael's patch makes the message disappear completely.
+On Wed, Jul 03, 2024 at 10:58:32AM GMT, Tengfei Fan wrote:
+> Add the compatible for the MAC controller on qcs9100 platforms. This MAC
+> works with a single interrupt so add minItems to the interrupts property.
+> The fourth clock's name is different here so change it. Enable relevant
+> PHY properties. Add the relevant compatibles to the binding document for
+> snps,dwmac as well.
+
+This description doesn't match what was done in this patch, its what
+Bart did when he made changes to add the sa8775 changes. Please consider
+using a blurb indicating that this is the same SoC as sa8775p, just with
+different firmware strategies or something along those lines?
+
 > 
-> Yes, because you have probably the thermal zone polling delay set to zero, thus it fails the first time and does no longer try to set it up again. The V1 is an incomplete fix.
+> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/net/qcom,ethqos.yaml | 1 +
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml  | 3 +++
+>  2 files changed, 4 insertions(+)
 > 
-> Very likely the problem is in the sensor platform driver, or in the thermal zone description in the device tree which describes a non functional thermal zone.
+> diff --git a/Documentation/devicetree/bindings/net/qcom,ethqos.yaml b/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+> index 6672327358bc..8ab11e00668c 100644
+> --- a/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+> +++ b/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+> @@ -20,6 +20,7 @@ properties:
+>    compatible:
+>      enum:
+>        - qcom,qcs404-ethqos
+> +      - qcom,qcs9100-ethqos
+>        - qcom,sa8775p-ethqos
+>        - qcom,sc8280xp-ethqos
+>        - qcom,sm8150-ethqos
+> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> index 3bab4e1f3fbf..269c21779396 100644
+> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> @@ -67,6 +67,7 @@ properties:
+>          - loongson,ls2k-dwmac
+>          - loongson,ls7a-dwmac
+>          - qcom,qcs404-ethqos
+> +        - qcom,qcs9100-ethqos
+>          - qcom,sa8775p-ethqos
+>          - qcom,sc8280xp-ethqos
+>          - qcom,sm8150-ethqos
+> @@ -582,6 +583,7 @@ allOf:
+>                - ingenic,x1600-mac
+>                - ingenic,x1830-mac
+>                - ingenic,x2000-mac
+> +              - qcom,qcs9100-ethqos
+>                - qcom,sa8775p-ethqos
+>                - qcom,sc8280xp-ethqos
+>                - snps,dwmac-3.50a
+> @@ -639,6 +641,7 @@ allOf:
+>                - ingenic,x1830-mac
+>                - ingenic,x2000-mac
+>                - qcom,qcs404-ethqos
+> +              - qcom,qcs9100-ethqos
+>                - qcom,sa8775p-ethqos
+>                - qcom,sc8280xp-ethqos
+>                - qcom,sm8150-ethqos
+> -- 
+> 2.25.1
 > 
-
-It was at 0 but the delay was removed recently:
-https://lore.kernel.org/all/20240510-topic-msm-polling-cleanup-v2-0-436ca4218da2@linaro.org/
-
-That doesn't explain it because only the last platforms have this error message printed.
-
-Neil
 
 
