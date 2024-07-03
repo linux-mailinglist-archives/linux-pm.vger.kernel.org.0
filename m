@@ -1,208 +1,152 @@
-Return-Path: <linux-pm+bounces-10540-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10541-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D369925ED9
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 13:41:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9AE8926020
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 14:21:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F169F297ACA
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 11:38:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 229991C21B0C
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 12:21:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FCEE170836;
-	Wed,  3 Jul 2024 11:33:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6A0F175555;
+	Wed,  3 Jul 2024 12:21:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cDtZDFkx"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hEy79cb8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A0516F0FB;
-	Wed,  3 Jul 2024 11:33:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F39E172798
+	for <linux-pm@vger.kernel.org>; Wed,  3 Jul 2024 12:21:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720006395; cv=none; b=QfrN4uWXvtBwR80obmTUmJKzbYgmyqxC9jFivJFyXhCgCUSr0fD9CQs6Qt5EgnsM0Oyi35HsrJb1soTRdETWFRWphmB4mFcZ/dptT0lQrMQf/fbBsidht3wLk1Lap4EQyP02atj5faOHgqAmm3lmkl0A1mut2zNDApEOIERR8gk=
+	t=1720009276; cv=none; b=kGtEPVgOCRb4d6JtS67rWnFRpqdVVkUhdWM1H7cwkXL87wX3TlwyVkKyWQV+smpKr4zIiZHOL3f+3u5H6vhn7FMnVaghpRMk6+G9XuWqvn85NhEpEYcaf1GW5TXrafSy3dvc2hekQyu7TXOwIEgyn2VEK7Uod8q1vDQNoiHLzFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720006395; c=relaxed/simple;
-	bh=Gc9yo+QOB2HbQlWCJcQ7J5N8ryhmmuLbpm/SMDo7jBQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GmBgf53ERX48pN8YpuKiVNIJGP49JIKid6JUw0xMetI4tCU8TntwBKiJHEAkhqurvulxtBWATeOBMGql8zkbNgE7CrhZ8Fjj2KmKkWE7n6PEJ875wDNnynXVRVplPWPg3swl5yU0NxEJ2TvREmORUYjyt5ID6tEdqO2qQuVo1Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cDtZDFkx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C5F8C4AF0C;
-	Wed,  3 Jul 2024 11:33:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720006394;
-	bh=Gc9yo+QOB2HbQlWCJcQ7J5N8ryhmmuLbpm/SMDo7jBQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cDtZDFkxrfRFrPzouwAqfStjgakXZFTCaoKvUV1P5NLELEx9RlMpV1hiApa640dkE
-	 V5+omsuEOKJb/Qs34717BGaGb++42Bj02vH0f+m4wzJr0P+tIXfD9iT2Ymx+1aMfWx
-	 uRnZein8x6BWFLLuezWdgxtPUDYVXib+aT47Mok7NLDL4L9Dk/ioaEThFsCp9kddBE
-	 /j7J2ujPZRHilMB2DjmM9YShq9vf/R9waa05u92fiPgpUV30+lXK+BLJ5PDX6iAAA7
-	 BbY6nUl4kMXKSkVlezYCmveRKlhGoa7M3wsPW/0Aqtw+y3i+2HTBe9meCx9d+VpZD7
-	 u5i5RVcCpbtQw==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-24c582673a5so706136fac.2;
-        Wed, 03 Jul 2024 04:33:14 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWywpnx0XyiC5CAGBPukEOCjki7YnGK9xyWn/9Cgeb04t6h1Xerv4dbT6vNBa4t7lbdbKG3RQeKVpAPmkPvKewSbsq/oPWNieb0KnQfPKzubMGA88JvUyfv+yaQTvBYpvlELi9nZ4s=
-X-Gm-Message-State: AOJu0YxrRZUFZ82fujFLjD6xBN+dftFuiT8vOYTluu+uZ/zUyCiJg1C0
-	IKOpVPR9ZN1HMujla8gRd2V5OnDhqoFlepzRo7AVGFdbTQM121s13qnMUSogCkwN2S2tkhw1IMz
-	+icKoD8sJcRt2pU9FTcWOpKsUYME=
-X-Google-Smtp-Source: AGHT+IF5FzPy4fwTNbmiEWnBsgiD5fwThxJKbWlk0jsuxIlKgIRe9jkv+WZCm2nQKksldrq0ZGYPWxa1IbZ0sT9F1g0=
-X-Received: by 2002:a05:6871:24d5:b0:25d:f237:e108 with SMTP id
- 586e51a60fabf-25df237e289mr4249900fac.0.1720006393848; Wed, 03 Jul 2024
- 04:33:13 -0700 (PDT)
+	s=arc-20240116; t=1720009276; c=relaxed/simple;
+	bh=cubV7PSPhJbJ+Qx4nqp+Dd4OkcCI8xjyljP7mHG1qOg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LlY6HogA75Oh8EmImy67TE+X6kz6hHJDMOBGeAW7LO4pq1gIC8sDWwHvgSAd3+lgrYo9DSuwODy0eHZ2Z0yLLLk0frvi+fXF04G/DQzuwUMS4s+PUXwRjGsrt4LvHeE9xIOnCk1yLn2pzBWe5sGbNcdgNiBweoJZqxatvEFSfmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hEy79cb8; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-52cdbc20faeso7603293e87.1
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2024 05:21:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720009273; x=1720614073; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+m8M3n1qsYckd6mSAf4YNSgVy1Uh2copyKJHcyhOiQ4=;
+        b=hEy79cb8yCJ8LpfHgReutG402o3o3xLWz7STVx0R/B3rn65FjszZrjBQxYYH3MrhTE
+         DQhYL/cXr7YJ6HOicYRPOEu1X7fR3qYTDxEMWg/Er2X2Ob59fqs24HQiHNBLyP/rnjPt
+         l0kCQk9Rl2UtTp4wn4/AAoJNth0A1gayb2k8W7JhFus7uoivwhOMaaeF2J3m2b4R58NY
+         rnWDwkUxkWij2fN4xabWLO8ff5qLOMZEvDFlir+T4A4DtlVFvkEslEvumD9Vljre0s3i
+         yJeDMj9yfHLdbcXSB0KzPGUKBGOpc8hCHTz0hqwZB6yKnS5q64Ib4Y6DXZnwemvHgNgZ
+         rX4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720009273; x=1720614073;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+m8M3n1qsYckd6mSAf4YNSgVy1Uh2copyKJHcyhOiQ4=;
+        b=AjcNDx9G7Qe2sxoWfxBZrADfapLS0TdZ5mpFYIlLve/Tua+Ua1DT++A0KCrZ2C1mxf
+         ashxu1H4f4vUlEDQf7dhBNQVdCKcvmn0rRehJPsVW6Y3bx2jocnnb5OpbhN6Pe1YuaPH
+         /lt0+LVoIJHBPWM/GLr3A7guDfxNE1KpedOWT2qXM50USl9OHf6JVLpm7RLCtz4JZjaf
+         BNg29tEe0HSUJid051D0f3yypE2GelH6l9mq67NnnTGY5OVl0L439zUnKe7Tqr0tkuFt
+         Iv9X5pvV8XU/DCDSSzSTM6nMlABguE7SQKC9ed1Kmm8tmzgjZn53ZWvsKa4XLq/l/Ly7
+         EALg==
+X-Forwarded-Encrypted: i=1; AJvYcCXgGgZhLSeQL2kmoATd9uvKZYvZJewiy3FBXZ+eQunUj3PJavpx3DRH0fOcHn81jI6NmAQ2EpmRPbhqhVyRJ6ltY6Md2RrpzJg=
+X-Gm-Message-State: AOJu0YwvWXHtqoBVcY5ohs06gZQreJ9ej67qNZSj/GySfNwchlsERRu2
+	BVNTXDfUPoNi97tFTLttr6XF/ebfExgR2bwqUmtxnzE3k+LNJUKpn/gq8RapViA=
+X-Google-Smtp-Source: AGHT+IGoCrWnpI4H3vkYZIW4U5GwbaIxS3AV0bKKM6IK+U0+ym4oAlShp5iDrd+SuM0Al6aqGSLjKA==
+X-Received: by 2002:a05:6512:3988:b0:52c:f2e0:db23 with SMTP id 2adb3069b0e04-52e826886a0mr8508503e87.40.1720009272232;
+        Wed, 03 Jul 2024 05:21:12 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4256b0c19eesm243158405e9.45.2024.07.03.05.21.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Jul 2024 05:21:11 -0700 (PDT)
+Message-ID: <47440afc-1b76-4dff-8c72-427103d7184a@linaro.org>
+Date: Wed, 3 Jul 2024 14:21:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240703055445.125362-1-rui.zhang@intel.com>
-In-Reply-To: <20240703055445.125362-1-rui.zhang@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 3 Jul 2024 13:33:03 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gVFPNK=_=Tnr0QJ-yBWfSWc+wuJrE079Fz+Ba1P57TmA@mail.gmail.com>
-Message-ID: <CAJZ5v0gVFPNK=_=Tnr0QJ-yBWfSWc+wuJrE079Fz+Ba1P57TmA@mail.gmail.com>
-Subject: Re: [PATCH] Thermal: intel: hfi: Give HFI instances package scope
-To: Zhang Rui <rui.zhang@intel.com>, ricardo.neri-calderon@linux.intel.com
-Cc: rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RESEND][PATCH v1 4/5] thermal: imx: Drop critical trip check
+ from imx_set_trip_temp()
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Zhang Rui <rui.zhang@intel.com>, Shawn Guo <shawnguo@kernel.org>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Thara Gopinath <thara.gopinath@gmail.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>, linux-wireless@vger.kernel.org,
+ linux-tegra@vger.kernel.org
+References: <1890956.tdWV9SEqCh@rjwysocki.net>
+ <2272035.iZASKD2KPV@rjwysocki.net>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <2272035.iZASKD2KPV@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 3, 2024 at 7:55=E2=80=AFAM Zhang Rui <rui.zhang@intel.com> wrot=
-e:
->
-> The Intel Software Developer's Manual defines the scope of HFI (registers
-> and memory buffer) as package. Use package scope* in the software
+On 02/07/2024 16:43, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Because the IMX thermal driver does not flag its critical trip as
+> writable, imx_set_trip_temp() will never be invoked for it and so the
+> critical trip check can be dropped from there.
 
-"as a package"
+And as a rule of thumb, we should not allow writing the critical trip 
+point temperature in the thermal core code.
 
-> representation of an HFI instance.
->
-> Using die scope in HFI instances has the effect of creating multiple,
-> conflicting, instances for the same package: each instance allocates its
-> own memory buffer and configures the same package-level registers.
-> Specifically, only one of the allocated memory buffers can be set in the
-> MSR_IA32_HW_FEEDBACK_PTR register. CPUs get incorrect HFI data from the
-> table.
->
-> The problem does not affect current HFI-capable platforms because they
-> all have single-die processors.
->
-> * We used die scope for HFI instances because there have been processors
-> in which packages where enumerated as dies. None of those systems support
-
-"were"
-
-> HFI. If such a system emerged we would need to quirk it.
->
-> Co-developed-by: Chen Yu <yu.c.chen@intel.com>
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-
-Ricardo, any concerns?
-
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  drivers/thermal/intel/intel_hfi.c | 30 +++++++++++++++++-------------
->  1 file changed, 17 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/in=
-tel_hfi.c
-> index a180a98bb9f1..5b18a46a10b0 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -401,10 +401,10 @@ static void hfi_disable(void)
->   * intel_hfi_online() - Enable HFI on @cpu
->   * @cpu:       CPU in which the HFI will be enabled
->   *
-> - * Enable the HFI to be used in @cpu. The HFI is enabled at the die/pack=
-age
-> - * level. The first CPU in the die/package to come online does the full =
-HFI
-> + * Enable the HFI to be used in @cpu. The HFI is enabled at the package
-> + * level. The first CPU in the package to come online does the full HFI
->   * initialization. Subsequent CPUs will just link themselves to the HFI
-> - * instance of their die/package.
-> + * instance of their package.
->   *
->   * This function is called before enabling the thermal vector in the loc=
-al APIC
->   * in order to ensure that @cpu has an associated HFI instance when it r=
-eceives
-> @@ -414,31 +414,31 @@ void intel_hfi_online(unsigned int cpu)
->  {
->         struct hfi_instance *hfi_instance;
->         struct hfi_cpu_info *info;
-> -       u16 die_id;
-> +       u16 pkg_id;
->
->         /* Nothing to do if hfi_instances are missing. */
->         if (!hfi_instances)
->                 return;
->
->         /*
-> -        * Link @cpu to the HFI instance of its package/die. It does not
-> +        * Link @cpu to the HFI instance of its package. It does not
->          * matter whether the instance has been initialized.
->          */
->         info =3D &per_cpu(hfi_cpu_info, cpu);
-> -       die_id =3D topology_logical_die_id(cpu);
-> +       pkg_id =3D topology_logical_package_id(cpu);
->         hfi_instance =3D info->hfi_instance;
->         if (!hfi_instance) {
-> -               if (die_id >=3D max_hfi_instances)
-> +               if (pkg_id >=3D max_hfi_instances)
->                         return;
->
-> -               hfi_instance =3D &hfi_instances[die_id];
-> +               hfi_instance =3D &hfi_instances[pkg_id];
->                 info->hfi_instance =3D hfi_instance;
->         }
->
->         init_hfi_cpu_index(info);
->
->         /*
-> -        * Now check if the HFI instance of the package/die of @cpu has b=
-een
-> +        * Now check if the HFI instance of the package of @cpu has been
->          * initialized (by checking its header). In such case, all we hav=
-e to
->          * do is to add @cpu to this instance's cpumask and enable the in=
-stance
->          * if needed.
-> @@ -504,7 +504,7 @@ void intel_hfi_online(unsigned int cpu)
->   *
->   * On some processors, hardware remembers previous programming settings =
-even
->   * after being reprogrammed. Thus, keep HFI enabled even if all CPUs in =
-the
-> - * die/package of @cpu are offline. See note in intel_hfi_online().
-> + * package of @cpu are offline. See note in intel_hfi_online().
->   */
->  void intel_hfi_offline(unsigned int cpu)
->  {
-> @@ -674,9 +674,13 @@ void __init intel_hfi_init(void)
->         if (hfi_parse_features())
->                 return;
->
-> -       /* There is one HFI instance per die/package. */
-> -       max_hfi_instances =3D topology_max_packages() *
-> -                           topology_max_dies_per_package();
-> +       /*
-> +        * Note: HFI resources are managed at the physical package scope.
-> +        * There could be platforms that enumerate packages as Linux dies=
-.
-> +        * Special handling would be needed if this happens on an HFI-cap=
-able
-> +        * platform.
-> +        */
-> +       max_hfi_instances =3D topology_max_packages();
->
->         /*
->          * This allocation may fail. CPU hotplug callbacks must check
-> --
-> 2.34.1
->
->
+>   drivers/thermal/imx_thermal.c |    9 ---------
+>   1 file changed, 9 deletions(-)
+> 
+> Index: linux-pm/drivers/thermal/imx_thermal.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/imx_thermal.c
+> +++ linux-pm/drivers/thermal/imx_thermal.c
+> @@ -335,21 +335,12 @@ static int imx_set_trip_temp(struct ther
+>   			     int temp)
+>   {
+>   	struct imx_thermal_data *data = thermal_zone_device_priv(tz);
+> -	struct thermal_trip trip;
+>   	int ret;
+>   
+>   	ret = pm_runtime_resume_and_get(data->dev);
+>   	if (ret < 0)
+>   		return ret;
+>   
+> -	ret = __thermal_zone_get_trip(tz, trip_id, &trip);
+> -	if (ret)
+> -		return ret;
+> -
+> -	/* do not allow changing critical threshold */
+> -	if (trip.type == THERMAL_TRIP_CRITICAL)
+> -		return -EPERM;
+> -
+>   	/* do not allow passive to be set higher than critical */
+>   	if (temp < 0 || temp > trips[IMX_TRIP_CRITICAL].temperature)
+>   		return -EINVAL;
+> 
+> 
+> 
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
