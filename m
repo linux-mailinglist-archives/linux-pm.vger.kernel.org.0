@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-10417-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10420-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04C74924F0E
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 05:15:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74919924F30
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 05:17:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D7431C209CF
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 03:15:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A9B41F272E7
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 03:17:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC4738DC7;
-	Wed,  3 Jul 2024 03:08:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE30314264C;
+	Wed,  3 Jul 2024 03:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H/oFHSCo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VdUPI78J"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D6DCA6F;
-	Wed,  3 Jul 2024 03:08:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A791422BD;
+	Wed,  3 Jul 2024 03:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719976090; cv=none; b=suqEZBHaoD1+h/Ocua2JvN8BVF0u1nwhS8JJ9YjRQb5cGR24MeF1kZAadbZuoBbxrANX8aA0owqgPW1PU1mHvLid0EQB+p7Lt3G0/Pk9cvVKiuRCNqsMObv0AH+Pze7SQ/9JCMVmgnLw5Row8OEx44wjZyBHu0o4LeIY/yjM4PA=
+	t=1719976116; cv=none; b=OLgKunLKJ6JhmG6TzJUzcAfEZyGqE+SbUKlUwIOEbz1I/MJaI3C6sA/5g/w4V79xTSgrTQ+mvyzfT3INaSRdJWafwEzzedOirVKn/ofCsOWotfDxg6638Y4Ostc07cdJaUE4EjvpavNFHBGjbTg9sTb4s2WJApWtYv7aGdSbb8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719976090; c=relaxed/simple;
-	bh=dwDIrNX1cXKYArj3wRoS4iZ6/Bs4bEiF2Y8U9tZ8r6c=;
+	s=arc-20240116; t=1719976116; c=relaxed/simple;
+	bh=g9m3cGvHR4ck9CMMppV/qXr3G9Un1KzAXp1S8wWWDeM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R2t3zdtA4QK22ehSysXZ47LzAUpOhqj5jXE3SMwoshP6hpq0qMVdsoBflq8Rs87edUrr9BV7+99ImgmAeTo07g0fivJpk/Ey/61jKi+NnadRfASShIPt5gFTiVTT/PEmm2qmHbZhxhdfUrEMJ0DHColshYSifkRitKtQQNWTp/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H/oFHSCo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD17C116B1;
-	Wed,  3 Jul 2024 03:08:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=AaBv2Yd1kzjHGAENzX6XCMFcS+TKpQRCUxC5hH9X5Rm0QQHrPp5XzqB3Y05QKb5i3USZhed5PWvF3UMv1dL+e0qAx2Itb+457hTO1wnM7meHnHR+Thuw8tDt++byv6vNTtiguXn7Vk9NoS1ijERFamdmtq80B7kiGgFrr/HEhQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VdUPI78J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3749CC116B1;
+	Wed,  3 Jul 2024 03:08:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719976089;
-	bh=dwDIrNX1cXKYArj3wRoS4iZ6/Bs4bEiF2Y8U9tZ8r6c=;
+	s=k20201202; t=1719976116;
+	bh=g9m3cGvHR4ck9CMMppV/qXr3G9Un1KzAXp1S8wWWDeM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H/oFHSCoJEnDLxJkAZ6Onvt0Es6AN7qxhTaONKom9VEl5sLem3MUXycwMJ6bSoMNn
-	 QpvA2xc6tastla97sPLDnW32LOLBXN2TFeTUFmxfKS378dD4RgZZgUD40HlcIwtZaJ
-	 3hJxkOlFhbfhGxx0Zl6wNdUo8kibm2PhwCyUhG9g+lrO2RD1SIZvH0lqJIvgygj4sE
-	 t9jpjovm2eX5wbMVggfBnfOaQNEW6mG8iQBNXeTn6J+jkb9+6epgmxBN6HD7rn+xno
-	 AFZAkg7wV/QWK+tRsIpPh6+9pq3eJvQbChjhzMY+LUMHD+t53SJq+mj454LyL09G+M
-	 8tlT8vnDjkBDw==
-Date: Tue, 2 Jul 2024 22:08:05 -0500
+	b=VdUPI78Jzd9RXAkLUKhGwqeBJb3VXdKatP+aEPDrmhxuARFctcOEZs92Qx/AwGNZK
+	 BpkYOj8FeU04fqYP+QZHzN6aeEGmmvz7TwIsCTeHDUdVkocQBU4tAoJ5F5cASI1jdY
+	 xBjMiQ/FL6MY4DvXu4+J+q2Q2tISdoGJVmkY/cGYBzQYG6V7F0Eo7J7FiS28R711HX
+	 y+NYaWh8lNunfW7DJA3ibkStPFVggKvFCBia+0wAXiTcEZzVfBIUOvjwkRHeoSYB/N
+	 EjGNuY/9+MVnJgG2uw6nCMUnJnsaoBzDzR4BZvufyF9HqQxvirWzOAVMYDnMIIaVAM
+	 ZFWLE2RCBUBqw==
+Date: Tue, 2 Jul 2024 22:08:27 -0500
 From: Bjorn Andersson <andersson@kernel.org>
 To: Jagadeesh Kona <quic_jkona@quicinc.com>
 Cc: Michael Turquette <mturquette@baylibre.com>, 
@@ -56,11 +56,11 @@ Cc: Michael Turquette <mturquette@baylibre.com>,
 	linux-kernel@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>, 
 	Satya Priya Kakitapalli <quic_skakitap@quicinc.com>, Imran Shaik <quic_imrashai@quicinc.com>, 
 	Ajit Pandey <quic_ajipan@quicinc.com>
-Subject: Re: [PATCH V7 3/5] clk: qcom: gdsc: Add set and get hwmode callbacks
- to switch GDSC mode
-Message-ID: <7mzxt3h3pohxczatfsvqxtxvptdy6ooq76mq7ylywzkqncjkvs@aap4wnoo6j3p>
+Subject: Re: [PATCH V7 4/5] clk: qcom: videocc: Use HW_CTRL_TRIGGER for
+ SM8250, SC7280 vcodec GDSC's
+Message-ID: <c76yhzs4psywaqes32zb23ixbujejurn3f3hj3qswbzaxf3j25@2wslykbylak4>
 References: <20240624044809.17751-1-quic_jkona@quicinc.com>
- <20240624044809.17751-4-quic_jkona@quicinc.com>
+ <20240624044809.17751-5-quic_jkona@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -69,108 +69,65 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240624044809.17751-4-quic_jkona@quicinc.com>
+In-Reply-To: <20240624044809.17751-5-quic_jkona@quicinc.com>
 
-On Mon, Jun 24, 2024 at 10:18:07AM GMT, Jagadeesh Kona wrote:
-> Some GDSC client drivers require the GDSC mode to be switched dynamically
-> to HW mode at runtime to gain the power benefits. Typically such client
-> drivers require the GDSC to be brought up in SW mode initially to enable
-> the required dependent clocks and configure the hardware to proper state.
-> Once initial hardware set up is done, they switch the GDSC to HW mode to
-> save power. At the end of usecase, they switch the GDSC back to SW mode
-> and disable the GDSC.
-> 
-> Introduce HW_CTRL_TRIGGER flag to register the set_hwmode_dev and
-> get_hwmode_dev callbacks for GDSC's whose respective client drivers
-> require the GDSC mode to be switched dynamically at runtime using
+On Mon, Jun 24, 2024 at 10:18:08AM GMT, Jagadeesh Kona wrote:
+> For Venus V6 variant SoCs(sm8250, sc7280), the venus driver uses the newly
+> introduced dev_pm_genpd_set_hwmode() API to switch the vcodec GDSC to
+> HW/SW control modes at runtime. Hence use HW_CTRL_TRIGGER flag for vcodec
+> GDSC's on sm8250, sc7280 to register the set_hwmode_dev & get_hwmode_dev
+> callbacks for vcodec GDSC and allow the GDSC mode to be changed using
 > dev_pm_genpd_set_hwmode() API.
 > 
 > Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
 > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > Reviewed-by: Taniya Das <quic_tdas@quicinc.com>
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Acked-by: Bjorn Andersson <andersson@kernel.org>
 
 Regards,
 Bjorn
 
 > ---
->  drivers/clk/qcom/gdsc.c | 41 +++++++++++++++++++++++++++++++++++++++++
->  drivers/clk/qcom/gdsc.h |  1 +
->  2 files changed, 42 insertions(+)
+>  drivers/clk/qcom/videocc-sc7280.c | 2 +-
+>  drivers/clk/qcom/videocc-sm8250.c | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> index df9618ab7eea..fa5fe4c2a2ee 100644
-> --- a/drivers/clk/qcom/gdsc.c
-> +++ b/drivers/clk/qcom/gdsc.c
-> @@ -363,6 +363,43 @@ static int gdsc_disable(struct generic_pm_domain *domain)
->  	return 0;
->  }
+> diff --git a/drivers/clk/qcom/videocc-sc7280.c b/drivers/clk/qcom/videocc-sc7280.c
+> index 317b325d6daf..88c90853cf6e 100644
+> --- a/drivers/clk/qcom/videocc-sc7280.c
+> +++ b/drivers/clk/qcom/videocc-sc7280.c
+> @@ -240,7 +240,7 @@ static struct gdsc mvs0_gdsc = {
+>  		.name = "mvs0_gdsc",
+>  	},
+>  	.pwrsts = PWRSTS_OFF_ON,
+> -	.flags = HW_CTRL | RETAIN_FF_ENABLE,
+> +	.flags = HW_CTRL_TRIGGER | RETAIN_FF_ENABLE,
+>  };
 >  
-> +static int gdsc_set_hwmode(struct generic_pm_domain *domain, struct device *dev, bool mode)
-> +{
-> +	struct gdsc *sc = domain_to_gdsc(domain);
-> +	int ret;
-> +
-> +	ret = gdsc_hwctrl(sc, mode);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/*
-> +	 * Wait for the GDSC to go through a power down and
-> +	 * up cycle. If we poll the status register before the
-> +	 * power cycle is finished we might read incorrect values.
-> +	 */
-> +	udelay(1);
-> +
-> +	/*
-> +	 * When the GDSC is switched to HW mode, HW can disable the GDSC.
-> +	 * When the GDSC is switched back to SW mode, the GDSC will be enabled
-> +	 * again, hence we need to poll for GDSC to complete the power up.
-> +	 */
-> +	if (!mode)
-> +		return gdsc_poll_status(sc, GDSC_ON);
-> +
-> +	return 0;
-> +}
-> +
-> +static bool gdsc_get_hwmode(struct generic_pm_domain *domain, struct device *dev)
-> +{
-> +	struct gdsc *sc = domain_to_gdsc(domain);
-> +	u32 val;
-> +
-> +	regmap_read(sc->regmap, sc->gdscr, &val);
-> +
-> +	return !!(val & HW_CONTROL_MASK);
-> +}
-> +
->  static int gdsc_init(struct gdsc *sc)
->  {
->  	u32 mask, val;
-> @@ -451,6 +488,10 @@ static int gdsc_init(struct gdsc *sc)
->  		sc->pd.power_off = gdsc_disable;
->  	if (!sc->pd.power_on)
->  		sc->pd.power_on = gdsc_enable;
-> +	if (sc->flags & HW_CTRL_TRIGGER) {
-> +		sc->pd.set_hwmode_dev = gdsc_set_hwmode;
-> +		sc->pd.get_hwmode_dev = gdsc_get_hwmode;
-> +	}
+>  static struct gdsc mvsc_gdsc = {
+> diff --git a/drivers/clk/qcom/videocc-sm8250.c b/drivers/clk/qcom/videocc-sm8250.c
+> index d7e0c32284c1..df479a69cddd 100644
+> --- a/drivers/clk/qcom/videocc-sm8250.c
+> +++ b/drivers/clk/qcom/videocc-sm8250.c
+> @@ -293,7 +293,7 @@ static struct gdsc mvs0_gdsc = {
+>  	.pd = {
+>  		.name = "mvs0_gdsc",
+>  	},
+> -	.flags = HW_CTRL,
+> +	.flags = HW_CTRL_TRIGGER,
+>  	.pwrsts = PWRSTS_OFF_ON,
+>  };
 >  
->  	ret = pm_genpd_init(&sc->pd, NULL, !on);
->  	if (ret)
-> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
-> index 803512688336..1e2779b823d1 100644
-> --- a/drivers/clk/qcom/gdsc.h
-> +++ b/drivers/clk/qcom/gdsc.h
-> @@ -67,6 +67,7 @@ struct gdsc {
->  #define ALWAYS_ON	BIT(6)
->  #define RETAIN_FF_ENABLE	BIT(7)
->  #define NO_RET_PERIPH	BIT(8)
-> +#define HW_CTRL_TRIGGER	BIT(9)
->  	struct reset_controller_dev	*rcdev;
->  	unsigned int			*resets;
->  	unsigned int			reset_count;
+> @@ -302,7 +302,7 @@ static struct gdsc mvs1_gdsc = {
+>  	.pd = {
+>  		.name = "mvs1_gdsc",
+>  	},
+> -	.flags = HW_CTRL,
+> +	.flags = HW_CTRL_TRIGGER,
+>  	.pwrsts = PWRSTS_OFF_ON,
+>  };
+>  
 > -- 
 > 2.43.0
 > 
