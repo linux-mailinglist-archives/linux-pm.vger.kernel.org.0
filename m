@@ -1,187 +1,219 @@
-Return-Path: <linux-pm+bounces-10499-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10500-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FD1092560B
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 11:00:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38B9E925614
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 11:03:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D999CB23335
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 09:00:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64CAA1C222CE
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 09:03:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07FFF13C8EE;
-	Wed,  3 Jul 2024 09:00:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07C2A13440A;
+	Wed,  3 Jul 2024 09:03:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="wUFFz+hy"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ygyqeGpu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2057.outbound.protection.outlook.com [40.107.237.57])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522EA8F58;
-	Wed,  3 Jul 2024 09:00:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719997209; cv=fail; b=Soi4Ey8wbZD0pk+5PfbxhVQ5VGg/mn2xJ4dzhSsJZ5JA73ZZ23erOkjyBOyXi7NcjWB2xLPMX6mMGLAwLJIgKaH1JniVsllcugHL2a31vvjrOHc7MgbKLKsvJ7rEb2kdWHXe0XhAvg/3zHbkrwYDjC2hEBo9A2sHkUeAMD51ZGg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719997209; c=relaxed/simple;
-	bh=NuFnVDQri/lHoHx/14dFKG5q0qdkMDiTKT7f80RGVBc=;
-	h=From:To:CC:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=JGnv1XsS6B/HnHp9e8zsW2g0bbjzOD4lX7iSFZrr2aZljPLwH2mZfb+6ueLFKvShd83y4+iTiMZYgO7wO4flxBSuxwqRUfRgPLTH+8MEEnpuEmPo4dfIQUWb+9j2duc2s0N4gp89klC/Od653h/Oti9j1p+voQwYMNmxLVKua2Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=wUFFz+hy; arc=fail smtp.client-ip=40.107.237.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SbDmvKiJbizdZsoD35EMU3+4Av427Ixgx4zuR1kR2g0Mwyg0NEhsB7AT3CDN+4yXCVlFOc10sKwF2CCSzF91PH+/rPiKZ7i0Nc1CO3bg0A9xi1btxCLiRb+J3OfbYGjNKwoZDeWeemx/GoNRk0ezgEl6M5ddp/q/s+ppJ9W0GPETbXbP6DkGo4/9xnRdApFXBQSn9/9amaRk4wZI9sxRoabIIlUbNohsO2GXoEuv0Rcocf/Za+TnGdZfNYFHgcTxoxG9lo+MS/4dMnBO2SLPBqATY6R3N0pRXuQScPUfnTuV7CpB+xqARxkcD44aXF7T2KyknFVpus20MtEudQPMXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XuVy20ey0baBbiPerAXIJXubohA1j/+DYdB9MNKgrzk=;
- b=eumkw6PCc9T043Nf0wMNbU1BBWHugeN1xzGnFaU30En1gPmHOjo/M253EQgMIey39oKNzlBDQOHUm9VqbehCUne6b74+BttP6KrIuhTo1E49PxOAMC2rcfdcNgK6OLTDgDj4dg87+5ncZe82/ZHTuwy5+Ru401i5KcDGxP8jk12vSmK8uRJGAbJMg5GpdpJ5AYcac/sFRceQOkQEaUOO5xc2VuMEVJuCPa+5MQUbVXAmYgtCxgq92rCcFB4DaEhIKfBMVf85igD2KaT6GbQyo0w8aiF/uSV8C7N/1XGxsa7mzYn3Bt6rRauzUT9oz/zyGxun4VzgOscfj1z+d9O/vw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XuVy20ey0baBbiPerAXIJXubohA1j/+DYdB9MNKgrzk=;
- b=wUFFz+hyKdvVbpt5UrCFCJDcCE3fRW5N5QAhUNde25Z17c2qjqkPPCtfGTsv6vsoq7d7eRAbzgkstr/W1vgZcILlZnAFCOMfWFlhjaBPbP9g8lQJUzBntPqrFY24B4CGRN5Vki1c6oU9Ut+b6ZTPZ91O1cauKgIbm045UW/85A0=
-Received: from DM6PR02CA0072.namprd02.prod.outlook.com (2603:10b6:5:177::49)
- by MN2PR12MB4375.namprd12.prod.outlook.com (2603:10b6:208:24f::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.23; Wed, 3 Jul
- 2024 09:00:05 +0000
-Received: from CY4PEPF0000EDD3.namprd03.prod.outlook.com
- (2603:10b6:5:177:cafe::df) by DM6PR02CA0072.outlook.office365.com
- (2603:10b6:5:177::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.25 via Frontend
- Transport; Wed, 3 Jul 2024 09:00:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EDD3.mail.protection.outlook.com (10.167.241.199) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7741.18 via Frontend Transport; Wed, 3 Jul 2024 09:00:04 +0000
-Received: from BLRRASHENOY1 (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 3 Jul
- 2024 03:59:59 -0500
-From: Gautham R.Shenoy <gautham.shenoy@amd.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-CC: Meng Li <li.meng@amd.com>, Perry Yuan <perry.yuan@amd.com>, "open list:AMD
- PSTATE DRIVER" <linux-pm@vger.kernel.org>, open list
-	<linux-kernel@vger.kernel.org>, Dhananjay Ugwekar
-	<Dhananjay.Ugwekar@amd.com>, Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH 1/2] cpufreq/amd-pstate-ut: Don't check for highest perf
- matching on prefcore
-In-Reply-To: <20240702171515.6780-1-mario.limonciello@amd.com>
-References: <20240702171515.6780-1-mario.limonciello@amd.com>
-Date: Wed, 3 Jul 2024 14:29:57 +0530
-Message-ID: <87h6d6rgtu.fsf@BLR-5CG11610CF.amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27D308F58;
+	Wed,  3 Jul 2024 09:03:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719997415; cv=none; b=LG2RwhDyDJP1QZ7CM2kt99pp7coLnGelerPWBjQ+4R/9efhF8+2+iQt0DAR1MgW6LypWzekfxEZ2ZqQrR/Qf6p/eFb8iSXnWCaRxFQFN3n4O1jRNidqH7/QAdovJDDSHNM0eBgszdKrZ8QoJvuRW8rt6UNu9T7sCz4r1o3OjrK8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719997415; c=relaxed/simple;
+	bh=qXenZ0csaX6SeJadkS72uSPMTmyTGhj6/K07F9HFwdw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UCwwEypL6h+IVBHSGVbpLNh+5RK9J5ieS6bNOHF62iaZIV8o6InyAC5Y6FxU2HkefkWjiQzghCNoGFGwSREGyseZXsi6/phDffhDBmq07QgLdipCn3JiBrlgxmy9PDBQEZ7UJiRHdhzpiVECeUV+gMzPLR+6nGY8s1Fi72G1GbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ygyqeGpu; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1719997405;
+	bh=qXenZ0csaX6SeJadkS72uSPMTmyTGhj6/K07F9HFwdw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ygyqeGpuS+Hc1+IKhvCf444jnZzx3TiXCp7eRWY5N+iPWp8m00hnde20To/T1Yjj1
+	 RyH16vE9iPW8tVOlt1ode3zK0wzgjYwQz1oi293Mg6rPMseC67lk9zHkF9UMGMvJN2
+	 eyZsAs4QlcAq+HRKEMqBoLwM1Z1yUqSpOgf8/nB1LFC9s+S4aAz6mMNEaehXbqh4pf
+	 2BVcGqJCmoeOU2qujOl3k4PVASzJXtTEHmLtTbfXnjc+wIpyN1DrQEJ/wvmhj9Tb0p
+	 1VtAXvycu3PR3Rm4JgPgkJUi3r4XzXXcd0JZq8B1nqKlcY7TNgbPEkcRXivCXREe+y
+	 Pn620zfXNbI6w==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E137837821CD;
+	Wed,  3 Jul 2024 09:03:24 +0000 (UTC)
+Message-ID: <18b1724c-9bab-4501-b956-278896324e55@collabora.com>
+Date: Wed, 3 Jul 2024 11:03:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD3:EE_|MN2PR12MB4375:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4748d5e9-de62-4184-1d9c-08dc9b3e87be
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|376014|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?kdDzFwJVnMKWS4Y5qK5DShGSuOowsAzcVAHFx7Pl1TLbOoC+YrDBFhxn/ypQ?=
- =?us-ascii?Q?zZY6D8iqFS43Bia50NTTFGzGBBPYN7Nra8HNBtxWcxjZzwnt3S3+IeSmliwP?=
- =?us-ascii?Q?a74ZyTau0eoYarLHGHLwLfEH9Iiks8PfLZxRJhNccIQPQHs121aGgjxynxKe?=
- =?us-ascii?Q?ykm4BTBM2q1/Nn7Cp5faM2YJTq0Ev3qzLQvh4Y08znUQTRlsSnuTOxhW3K84?=
- =?us-ascii?Q?cx/X6Lx1r4XOTYn99v7l0mqwD4DFsfL9qLWyfgWVZ8niOLZ9MrJ8iiVTxlwf?=
- =?us-ascii?Q?lNHKiFmtZDtNQN3YqT/nh0Iteeiw7IXOGIrTMgCbEsh+VzQYlq9WKuo8tbF/?=
- =?us-ascii?Q?AAwe+LSWul76jBfq7fEImw6UOvwgsFziTn9B60u1fFKQ8LwXqBVCQQFGpQSb?=
- =?us-ascii?Q?sYnzf4Fn4hQylQprxmPCj+tYYNvH4pOBFREZqqOcnay7QDkl0hrP7p8lEzQ6?=
- =?us-ascii?Q?fSz9Im5QEpbu4wIHfpGKUc8Y3+SwG5XmyX4PYWk/SdV5teRC+lFFtXb/H6jD?=
- =?us-ascii?Q?aUiu+pulhuI8U7Fhj/uMgIpMxwYwHZtACAsJxi2bwuF5UtEqrcq5Jaxy/qAt?=
- =?us-ascii?Q?YCddASSGzyB7oM2/ZIXxins023COaEafjd0piUE6bZkc7JD4ixJtkWn0apOu?=
- =?us-ascii?Q?Z9xzIv7FQt8AKdXub7nTz7zyrwZgloSIwNSMtAPt6XqWuKvnRVptBCybHYJ4?=
- =?us-ascii?Q?effqf26y7IM1vyJYjGcgjX7f1wGQpeUB6lKvTW+u4NaFTE30I2VbNaeNOzTt?=
- =?us-ascii?Q?STzp/5AJz4uHutJ8cv8kw8Aj95c4oruGrXBGCQnNPwfrxZkEEwLntPFnQCLe?=
- =?us-ascii?Q?N7W03v3aPrJMEMY0GA0fGNUSELAPVfEwDTG4lClsKbD1r9/OF2+CB5+EZtih?=
- =?us-ascii?Q?iWtPDXt1UimpB7heiB4sIZk2aORHgfArl71ZACJPTc+xsljR9LfXL195f9MW?=
- =?us-ascii?Q?1vrNfueoo2POEcV28+B+PT3Lf8quPMpGPIZJHJeZAZsmEHsyRoMUxvDBN7fK?=
- =?us-ascii?Q?rOmgRTeMp6svgI3/L/fEAv6EinBqdw0Z1888Bb+MF/lRGVZnhze35V05XO77?=
- =?us-ascii?Q?6je8X0PlJy6ukN81Tj6bq8NMqikNqC+VoaxEJ+rdHw54ESoHlaBrCimKZYY4?=
- =?us-ascii?Q?58jFuLdeWLlSGvjicaTCSTKpIA5YrXd30NtQMFa7rZ6gi4cOJD4+peMpDv3B?=
- =?us-ascii?Q?NK5O7CZ/+Naw6rGg8bHu8L3GzC+RNYsQap/w6YqtPm5TjTahb4+ATgZxjU8Z?=
- =?us-ascii?Q?q1qIJCM+Y71so4kMZD+B2BtXYLYDzfytVA5+ZyzR6ivYbDYPWcH4w/ht2q3N?=
- =?us-ascii?Q?2a4HgjvyL+5cbpImTv1C6SSlEoa1FmxResqn5wPZCSUAwzMHLJkihaOTBiTy?=
- =?us-ascii?Q?0GNuQ0YLRZtu38kj21dyZobxO/RhMGPeRQ5EY7FCxv50aYYhHx/OfQ85Uy6O?=
- =?us-ascii?Q?Hd63Va4uBcuzYpSocIi9ftiY0zFj1i/N?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2024 09:00:04.6179
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4748d5e9-de62-4184-1d9c-08dc9b3e87be
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EDD3.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4375
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal: gov_power_allocator: Return early in manage if
+ trip_max is null
+To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Nikita Travkin <nikita@trvn.ru>
+Cc: kernel@collabora.com, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240702-power-allocator-null-trip-max-v1-1-47a60dc55414@collabora.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20240702-power-allocator-null-trip-max-v1-1-47a60dc55414@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Mario Limonciello <mario.limonciello@amd.com> writes:
-
-> If a system is using preferred cores the highest perf will be inconsistent
-> as it can change from system events.
->
-> Skip the checks for it.
->
-> Fixes: e571a5e2068e ("cpufreq: amd-pstate: Update amd-pstate preferred core ranking dynamically")
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-
+Il 02/07/24 23:24, Nícolas F. R. A. Prado ha scritto:
+> Commit da781936e7c3 ("thermal: gov_power_allocator: Allow binding
+> without trip points") allowed the governor to bind even when trip_max
+> is null. This allows a null pointer dereference to happen in the manage
+> callback. Add an early return to prevent it, since the governor is
+> expected to not do anything in this case.
+> 
+> Fixes: da781936e7c3 ("thermal: gov_power_allocator: Allow binding without trip points")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 > ---
->  drivers/cpufreq/amd-pstate-ut.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
-> index 66b73c308ce6..b7318669485e 100644
-> --- a/drivers/cpufreq/amd-pstate-ut.c
-> +++ b/drivers/cpufreq/amd-pstate-ut.c
-> @@ -160,14 +160,17 @@ static void amd_pstate_ut_check_perf(u32 index)
->  			lowest_perf = AMD_CPPC_LOWEST_PERF(cap1);
->  		}
->  
-> -		if ((highest_perf != READ_ONCE(cpudata->highest_perf)) ||
-> -			(nominal_perf != READ_ONCE(cpudata->nominal_perf)) ||
-> +		if (highest_perf != READ_ONCE(cpudata->highest_perf) && !cpudata->hw_prefcore) {
-> +			pr_err("%s cpu%d highest=%d %d highest perf doesn't match\n",
-> +				__func__, cpu, highest_perf, cpudata->highest_perf);
-> +			goto skip_test;
-> +		}
-> +		if ((nominal_perf != READ_ONCE(cpudata->nominal_perf)) ||
->  			(lowest_nonlinear_perf != READ_ONCE(cpudata->lowest_nonlinear_perf)) ||
->  			(lowest_perf != READ_ONCE(cpudata->lowest_perf))) {
->  			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
-> -			pr_err("%s cpu%d highest=%d %d nominal=%d %d lowest_nonlinear=%d %d lowest=%d %d, they should be equal!\n",
-> -				__func__, cpu, highest_perf, cpudata->highest_perf,
-> -				nominal_perf, cpudata->nominal_perf,
-> +			pr_err("%s cpu%d nominal=%d %d lowest_nonlinear=%d %d lowest=%d %d, they should be equal!\n",
-> +				__func__, cpu, nominal_perf, cpudata->nominal_perf,
->  				lowest_nonlinear_perf, cpudata->lowest_nonlinear_perf,
->  				lowest_perf, cpudata->lowest_perf);
->  			goto skip_test;
-> -- 
-> 2.43.0
+> This issue was noticed by KernelCI during a boot test on the
+> mt8195-cherry-tomato-r2 platform with the config in [1]. The stack trace
+> is attached below.
+> 
+> [1] http://0x0.st/XaON.txt
+> 
+> [    4.015786] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+> [    4.015791] Mem abort info:
+> [    4.015793]   ESR = 0x0000000096000004
+> [    4.015796]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    4.015799]   SET = 0, FnV = 0
+> [    4.015802]   EA = 0, S1PTW = 0
+> [    4.015804]   FSC = 0x04: level 0 translation fault
+> [    4.015807] Data abort info:
+> [    4.015809]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+> [    4.015811]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+> [    4.015814]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+> [    4.015818] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109809000
+> [    4.015821] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+> [    4.015835] Modules linked in: mt8195_mt6359(+) mt6577_auxadc snd_soc_mt8195_afe mtk_scp_ipi snd_sof_utils mtk_wdt(+)
+> [    4.015852] CPU: 2 PID: 13 Comm: kworker/u32:1 Not tainted 6.10.0-rc6 #1 c5d519ae8e7fec6bbe67cb8c50bfebcb89dfa54e
+> [    4.015859] Hardware name: Acer Tomato (rev2) board (DT)
+> [    4.015862] Workqueue: events_unbound deferred_probe_work_func
+> [    4.015875] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    4.015880] pc : power_allocator_manage+0x110/0x6a0
+> [    4.015888] lr : __thermal_zone_device_update+0x1dc/0x400
+> [    4.015893] sp : ffff8000800eb800
+> [    4.015895] x29: ffff8000800eb810 x28: 0000000000000001 x27: 0000000000000001
+> [    4.015903] x26: aaaaaaaaaaaaaaab x25: ffff07a0461c15a0 x24: ffffb58530ca67c0
+> [    4.015911] x23: 0000000000000000 x22: ffff07a04098fcc0 x21: ffffb58532eec848
+> [    4.015918] x20: ffff8000800eb920 x19: ffff07a0461c1000 x18: 0000000000000b4b
+> [    4.015926] x17: 5359534255530031 x16: ffffb585310352e4 x15: 0000000000000020
+> [    4.015933] x14: 0000000000000000 x13: ffffffff00000000 x12: 0000000000000040
+> [    4.015940] x11: 0101010101010101 x10: ffffffffffffffff x9 : ffffb58530ca8d78
+> [    4.015948] x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : 0000000000001388
+> [    4.015955] x5 : 0000000000000000 x4 : 0000000000000384 x3 : 0000000000000000
+> [    4.015962] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
+> [    4.015970] Call trace:
+> [    4.015972]  power_allocator_manage+0x110/0x6a0
+> [    4.015978]  __thermal_zone_device_update+0x1dc/0x400
+> [    4.015983]  thermal_zone_device_set_mode+0x7c/0xa0
+> [    4.015987]  thermal_zone_device_enable+0x1c/0x28
+> [    4.015991]  thermal_of_zone_register+0x43c/0x498
+> [    4.015996]  devm_thermal_of_zone_register+0x6c/0xb8
+> [    4.016001]  gadc_thermal_probe+0x140/0x214
+> [    4.016007]  platform_probe+0x70/0xc4
+> [    4.016012]  really_probe+0x140/0x270
+> [    4.016018]  __driver_probe_device+0xfc/0x114
+> [    4.016024]  driver_probe_device+0x44/0x100
+> [    4.016029]  __device_attach_driver+0x64/0xdc
+> [    4.016035]  bus_for_each_drv+0xb4/0xdc
+> [    4.016041]  __device_attach+0xdc/0x16c
+> [    4.016046]  device_initial_probe+0x1c/0x28
+> [    4.016052]  bus_probe_device+0x44/0xac
+> [    4.016057]  deferred_probe_work_func+0xb0/0xc4
+> [    4.016063]  process_scheduled_works+0x114/0x330
+> [    4.016070]  worker_thread+0x1c0/0x20c
+> [    4.016076]  kthread+0xf8/0x108
+> [    4.016081]  ret_from_fork+0x10/0x20
+> [    4.016090] Code: d1030294 17ffffdd f94012c0 f9401ed7 (b9400000)
+> [    4.016095] ---[ end trace 0000000000000000 ]---
+> ---
+>   drivers/thermal/gov_power_allocator.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index 45f04a25255a..1b2345a697c5 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -759,6 +759,9 @@ static void power_allocator_manage(struct thermal_zone_device *tz)
+>   		return;
+>   	}
+>   
+> +	if (!params->trip_max)
+> +		return;
+> +
+
+I'm not sure that this is the right thing to do.
+
+If you do that, allocate_power() will never be called, so the entire algo doesn't
+work, making binding this completely useless (as it's going to be a noop..!).
+
+Check what get_governor_trips() says in the documentation:
+
+  * If there is only one trip point, then that's considered to be the
+  * "maximum desired temperature" trip point and the governor is always
+  * on.  If there are no passive or active trip points, then the
+  * governor won't do anything.  In fact, its throttle function
+  * won't be called at all.
+
+....and it looks like you're aware of that, as you said that in the commit
+description as well.
+
+Now, I don't have time to dig too much into the documentation and the workings
+of this governor, but I'll throw a doubt.
+
+In get_governor_trips(), this driver looks for either a TRIP_PASSIVE or a
+TRIP_ACTIVE thermal_trip - ignoring everything else, including HOT and CRITICAL.
+
+Keeping in mind the "usual" meanings of those two types:
+   - CRITICAL: "bad things are about to happen - shut me down NOOOOOOOWWWWW!!!"
+   - HOT: "I'm about to reach Tj, cool me down aggressively please"
+
+I believe that, unless I got something wrong, this governor should contribute
+to the decisions in the HOT state/trip point, setting a relatively low power
+budget to the target HW, throttling it and avoiding to get to CRITICAL state.
+
+I am therefore proposing to add THERMAL_TRIP_HOT to the mix in get_governor_trips()
+so that
+  if (!first_passive, && !last_passive && !last_active)
+    trip_max = hot_trip;
+
+...where hot_trip might get treated as passive instead of having special treatment,
+but anyway the special treatment would be local to that function in this case, so
+it's not really important (just readability choices).
+
+
+Thermal maintainers, please, ideas? Considerations?
+
+Cheers,
+Angelo
+
+>   	allocate_power(tz, params->trip_max->temperature);
+>   	params->update_cdevs = true;
+>   }
+> 
+> ---
+> base-commit: 82e4255305c554b0bb18b7ccf2db86041b4c8b6e
+> change-id: 20240702-power-allocator-null-trip-max-bc82c8d7eaec
+> 
+> Best regards,
+
+
+
 
