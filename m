@@ -1,296 +1,691 @@
-Return-Path: <linux-pm+bounces-10548-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10549-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E59DA926363
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 16:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 59993926390
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 16:38:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70E5128EEC3
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 14:27:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EAD4128090A
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 14:38:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB09F17C204;
-	Wed,  3 Jul 2024 14:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AC0D17BB13;
+	Wed,  3 Jul 2024 14:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qauGSJ+f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qtnegB6M"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41BC17BB27;
-	Wed,  3 Jul 2024 14:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524A818C08;
+	Wed,  3 Jul 2024 14:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720016830; cv=none; b=hxHFz5c0RV0AN1PyrUrvQL/Ivg/74d8pTYlCKkUaSysV1fnJMFlKrTw6oyRewOJiJfl5ErsayvXpHJULxT65InD2TlNfJUstZvMokaTF4akyUwZPGvUp0M/SGhmmOPbbx8ZGygjqj6B3mdZ2x8WI2cSy1cJY+hBh8As3CGgHGw8=
+	t=1720017481; cv=none; b=sf1mKAs8GpPjaN2oAf93sIcuUf9/1ZI736S7DZxiaKpBnv/a1dvT4KBtbuV0+FX6Nyfgh+zJQ4SsFbjmebRsXDW2g4x5RHsJitF5HyzhCNPxlgQbkh4jfBxBirfZN2c2aTBxLZfceEvuWYGp3li5uxjznOotP61Cr1yUCaI+eu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720016830; c=relaxed/simple;
-	bh=qpbgv23Hv6YaTHHKOMnAEx6ivMHeJJRztP7r02797XE=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=OWWjFaQl5AwQkXFhp/oyhMz4x/cMgE1e8qYHS1Cof6WuzySK+JtI3EvEmtfgzPkO1VuhOdhAZhzgeBEZ6KySMGvcQDWXK5OuYpUtkqpTFtSW+dKsfbjOBRZ9LXw20OUlZkOb+TXWUSPcFKMB6IFS5vH7qFM7mwPqURTchwJlzvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qauGSJ+f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18555C2BD10;
-	Wed,  3 Jul 2024 14:27:10 +0000 (UTC)
+	s=arc-20240116; t=1720017481; c=relaxed/simple;
+	bh=9fQrsdABjkrH4cRRS6+W8rK2EpChjZXbqbmbLXoomlo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WG56tM4bat45vvUNKQFr5ugprcHosR3z/yeXzVxjzGPTMfd80ry7ITOJLjyKHH8cWmFyY1Yg+NQ8xWdsjMqK0iFQBpj2weA8F6E1ZuMiabxn43u5jLorGSMcesJm9s8Rm5hiCYRdY4I7zl7mkbmtLiZya1T0Qts0hL59lbcRhew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qtnegB6M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D41BFC32781;
+	Wed,  3 Jul 2024 14:38:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720016830;
-	bh=qpbgv23Hv6YaTHHKOMnAEx6ivMHeJJRztP7r02797XE=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=qauGSJ+fHzsCMYTDzUc7AdO+QA9jijSznfoGILlrtdlU/Nk7tKbu1pSjwfYjaysOp
-	 ZQzVJEKQ7i87tKpoZnv2S3H2xE1dr29opGXibUmtgYdy4TUAcMCrbmz197kp1urpLD
-	 Oe1Rj75k9TUOaUTBFxr4nzuAjn1TMmo90MPYQOqPpw/WYOkBB0IKTHZ108tBvfmPwL
-	 OYyBfH1Vnuh7AxT0co8GKeAog69NPBgQ+cibqx+ZW+KUlYnJCfHBdd54cdf/gYcz1Y
-	 f56dtvzqUJZKCpXCtMV0B3Q4ltjDySLBYoMZWvAyf65mhQUGTbeZuT3BY+9HiNpzBO
-	 UpQffA39bUFyg==
-Date: Wed, 03 Jul 2024 08:27:09 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1720017480;
+	bh=9fQrsdABjkrH4cRRS6+W8rK2EpChjZXbqbmbLXoomlo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qtnegB6MSGcwkcgnGs37nsWSTXLOQRU0YFLGIPNOsDES6ppE5jT472rgkIT8FpPuC
+	 fF2g+G/5sEbZ73+t2G9rG0NScdFgCwxJ399PNxVidD4XCSPtCtXku7sg4VUexZOm6i
+	 Nua53s7ZotK4q0b0Y7085FRL4uOCd5/rhB1EUwO+EMFf7gJMLIisAt78RxRgrnzL41
+	 g7G7SaoNJhquvAFaoED6xaJZZwWyEnj1NF/sVRKjDqjD5H5G3PKXsHBlv8XZLAXNG7
+	 fFGkVgnR3LQwLkZZ+d+JDRdhoMYyUVpMceEy4agkujDvWucYO7IBGMp4fjiZpXIQpY
+	 AoLjd/JLzr6Uw==
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a689ad8d1f6so635110366b.2;
+        Wed, 03 Jul 2024 07:38:00 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXd3z7iT/jmdULDxpbNsCS9k/jT+UO/rmvR34lMwuIk5vy+HVC8K8HIV0o4b5wM/o9+97u8JYYEWS1AVQbaMZgLlVQuRn9D5+zFbtSNQYOxVYW5NW6URAACS3kcgvouWYczb6OzJlI=
+X-Gm-Message-State: AOJu0Yy0B9u0POEJkgSTDzOaELLrGCWHusfSOa6gbWc5t+LaGr3VQX0P
+	n8ouDpPfMHiouiHtho5kWT8K0NPjvV2nEfcz6J3mJvKmr+pyyW65rcFDuT9svlFUnpw4SQtdCGM
+	1roSCZoKGbgw9yZlPyx08dUhu9kQ=
+X-Google-Smtp-Source: AGHT+IE50KLf3lFNcX0ULPBaHHXUH0kvHS5HaRTgxw3Pa1cLetXWbvf5gxw5XjU8VDIHmFCAjsJixPQvrJAlKzQk10s=
+X-Received: by 2002:a17:906:27c9:b0:a6f:6ae6:8ae8 with SMTP id
+ a640c23a62f3a-a751445fa34mr766551966b.74.1720017479233; Wed, 03 Jul 2024
+ 07:37:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Varshini Rajendran <varshini.rajendran@microchip.com>
-Cc: linux-clk@vger.kernel.org, linux@armlinux.org.uk, 
- alexandre.belloni@bootlin.com, andrei.simion@microchip.com, 
- gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, sre@kernel.org, 
- p.zabel@pengutronix.de, mturquette@baylibre.com, mpe@ellerman.id.au, 
- conor+dt@kernel.org, linux-pm@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, claudiu.beznea@tuxon.dev, 
- krzk+dt@kernel.org, dharma.b@microchip.com, akpm@linux-foundation.org, 
- richard.genoud@bootlin.com, linux-spi@vger.kernel.org, 
- geert+renesas@glider.be, radu_nicolae.pirea@upb.ro, arnd@arndb.de, 
- devicetree@vger.kernel.org, sboyd@kernel.org, nicolas.ferre@microchip.com, 
- linux-serial@vger.kernel.org, rdunlap@infradead.org, 
- mihai.sain@microchip.com, jirislaby@kernel.org, tglx@linutronix.de, 
- durai.manickamkr@microchip.com
-In-Reply-To: <20240703102011.193343-1-varshini.rajendran@microchip.com>
-References: <20240703102011.193343-1-varshini.rajendran@microchip.com>
-Message-Id: <172001675806.274724.11565183611251810294.robh@kernel.org>
-Subject: Re: [PATCH v5 00/27] Add support for sam9x7 SoC family
+References: <20240702152737.1184244-1-chenhuacai@loongson.cn>
+ <20240702152737.1184244-3-chenhuacai@loongson.cn> <20240703101850.dtck223pleiiwfxp@vireshk-i7>
+In-Reply-To: <20240703101850.dtck223pleiiwfxp@vireshk-i7>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Wed, 3 Jul 2024 22:37:47 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H74HJr0=8g0GtHj=zZH5nJijRpc90zLLRY_sXJfKFVtHA@mail.gmail.com>
+Message-ID: <CAAhV-H74HJr0=8g0GtHj=zZH5nJijRpc90zLLRY_sXJfKFVtHA@mail.gmail.com>
+Subject: Re: [PATCH V2 2/2] cpufreq: Add Loongson-3 CPUFreq driver support
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Huacai Chen <chenhuacai@loongson.cn>, "Rafael J . Wysocki" <rafael@kernel.org>, loongarch@lists.linux.dev, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	Binbin Zhou <zhoubinbin@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi, Viresh,
 
-On Wed, 03 Jul 2024 15:50:11 +0530, Varshini Rajendran wrote:
-> This patch series adds support for the new SoC family - sam9x7.
->  - The device tree, configs and drivers are added
->  - Clock driver for sam9x7 is added
->  - Support for basic peripherals is added
->  - Target board SAM9X75 Curiosity is added
-> 
->  Changes in v5:
->  --------------
-> 
->  - Addressed all the review comments in the patches
->  - Picked up all Acked-by and Reviewed-by tags
->  - Dropped applied patches from the series
->  - Addressed the ABI breakage reported in the IRQ patch
->  - All the specific changes are captured in the corresponding patches
-> 
->  Changes in v4:
->  --------------
-> 
->  - Addressed all the review comments in the patches
->  - Picked up all Acked-by and Reviewed-by tags
->  - Dropped applied patches from the series
->  - Added pwm node and related dt binding documentation
->  - Added support for exporting some clocks to DT
->  - Dropped USB related patches and changes. See NOTE.
->  - All the specific changes are captured in the corresponding patches
-> 
->  NOTE: Owing to the discussion here
->  https://lore.kernel.org/linux-devicetree/CAL_JsqJ9PrX6fj-EbffeJce09MXs=B7t+KS_kOinxaRx38=WxA@mail.gmail.com/
->  the USB related changes are dropped from this series in order to enable
->  us to work on the mentioned issues before adding new compatibles as
->  said. The issues/warnings will be addressed in subsequent patches.
->  After which the USB related support for sam9x7 SoCs will be added. Hope
->  this works out fine.
-> 
->  Changes in v3:
->  --------------
-> 
->  - Fixed the DT documentation errors pointed out in v2.
->  - Dropped Acked-by tag in tcb DT doc patch as it had to be adapted
->    according to sam9x7 correctly.
->  - Picked by the previously missed tags.
->  - Dropped this patch "dt-bindings: usb: generic-ehci: Document clock-names
->    property" as the warning was not found while validating DT-schema for
->    at91-sam9x75_curiosity.dtb.
->  - Dropped redundant words in the commit message.
->  - Fixed the CHECK_DTBS warnings validated against
->    at91-sam9x75_curiosity.dtb.
->  - Renamed dt nodes according to naming convention.
->  - Dropped unwanted status property in dts.
->  - Removed nodes that are not in use from the board dts.
->  - Removed spi DT doc patch from the series as it was already applied
->    and a fix patch was applied subsequently. Added a patch to remove the
->    compatible to adapt sam9x7.
->  - Added sam9x7 compatibles in usb dt documentation.
-> 
-> 
->  Changes in v2:
->  --------------
-> 
->  - Added sam9x7 specific compatibles in DT with fallbacks
->  - Documented all the newly added DT compatible strings
->  - Added device tree for the target board sam9x75 curiosity and
->    documented the same in the DT bindings documentation
->  - Removed the dt nodes that are not supported at the moment
->  - Removed the configs added by previous version that are not supported
->    at the moment
->  - Fixed all the corrections in the commit message
->  - Changed all the instances of copyright year to 2023
->  - Added sam9x7 flag in PIT64B configuration
->  - Moved macro definitions to header file
->  - Added another divider in mck characteristics in the pmc driver
->  - Fixed the memory leak in the pmc driver
->  - Dropped patches that are no longer needed
->  - Picked up Acked-by and Reviewed-by tags
-> 
-> 
-> Varshini Rajendran (27):
->   dt-bindings: atmel-sysreg: add sam9x7
->   dt-bindings: atmel-ssc: add microchip,sam9x7-ssc
->   dt-bindings: serial: atmel,at91-usart: add compatible for sam9x7.
->   ARM: at91: pm: add support for sam9x7 SoC family
->   ARM: at91: pm: add sam9x7 SoC init config
->   ARM: at91: add support in SoC driver for new sam9x7
->   dt-bindings: clocks: atmel,at91sam9x5-sckc
->   dt-bindings: clocks: atmel,at91rm9200-pmc
->   clk: at91: clk-sam9x60-pll: re-factor to support individual core freq
->     outputs
->   clk: at91: sam9x7: add support for HW PLL freq dividers
->   clk: at91: sama7g5: move mux table macros to header file
->   dt-bindings: clock: at91: Allow PLLs to be exported and referenced in
->     DT
->   clk: at91: sam9x7: add sam9x7 pmc driver
->   dt-bindings: interrupt-controller: Add support for sam9x7 aic
->   dt-bindings: interrupt-controller: Document the property
->     microchip,nr-irqs
->   irqchip/atmel-aic5: Add support to get nr_irqs from DT for sam9x60 &
->     sam9x7
->   ARM: dts: at91: sam9x60: Add nirqs property in the dt node
->   power: reset: at91-poweroff: lookup for proper pmc dt node for sam9x7
->   power: reset: at91-reset: add reset support for sam9x7 SoC
->   power: reset: at91-reset: add sdhwc support for sam9x7 SoC
->   dt-bindings: reset: atmel,at91sam9260-reset: add sam9x7
->   dt-bindings: power: reset: atmel,sama5d2-shdwc: add sam9x7
->   ARM: at91: Kconfig: add config flag for SAM9X7 SoC
->   ARM: configs: at91: enable config flags for sam9x7 SoC family
->   ARM: dts: at91: sam9x7: add device tree for SoC
->   dt-bindings: arm: add sam9x75 curiosity board
->   ARM: dts: microchip: sam9x75_curiosity: add sam9x75 curiosity board
-> 
->  .../devicetree/bindings/arm/atmel-at91.yaml   |    6 +
->  .../devicetree/bindings/arm/atmel-sysregs.txt |    7 +-
->  .../bindings/clock/atmel,at91rm9200-pmc.yaml  |    2 +
->  .../bindings/clock/atmel,at91sam9x5-sckc.yaml |    4 +-
->  .../interrupt-controller/atmel,aic.yaml       |   28 +-
->  .../devicetree/bindings/misc/atmel-ssc.txt    |    1 +
->  .../power/reset/atmel,sama5d2-shdwc.yaml      |    3 +
->  .../reset/atmel,at91sam9260-reset.yaml        |    4 +
->  .../bindings/serial/atmel,at91-usart.yaml     |    9 +-
->  arch/arm/boot/dts/microchip/Makefile          |    3 +
->  .../dts/microchip/at91-sam9x75_curiosity.dts  |  312 +++++
->  arch/arm/boot/dts/microchip/sam9x60.dtsi      |    1 +
->  arch/arm/boot/dts/microchip/sam9x7.dtsi       | 1226 +++++++++++++++++
->  arch/arm/configs/at91_dt_defconfig            |    1 +
->  arch/arm/mach-at91/Kconfig                    |   22 +-
->  arch/arm/mach-at91/Makefile                   |    1 +
->  arch/arm/mach-at91/generic.h                  |    2 +
->  arch/arm/mach-at91/pm.c                       |   29 +
->  arch/arm/mach-at91/sam9x7.c                   |   33 +
->  drivers/clk/at91/Makefile                     |    1 +
->  drivers/clk/at91/clk-sam9x60-pll.c            |   42 +-
->  drivers/clk/at91/pmc.h                        |   18 +
->  drivers/clk/at91/sam9x60.c                    |    7 +
->  drivers/clk/at91/sam9x7.c                     |  946 +++++++++++++
->  drivers/clk/at91/sama7g5.c                    |   42 +-
->  drivers/irqchip/irq-atmel-aic5.c              |    8 +-
->  drivers/power/reset/Kconfig                   |    4 +-
->  drivers/power/reset/at91-sama5d2_shdwc.c      |    1 +
->  drivers/soc/atmel/soc.c                       |   23 +
->  drivers/soc/atmel/soc.h                       |    9 +
->  include/dt-bindings/clock/at91.h              |    4 +
->  31 files changed, 2750 insertions(+), 49 deletions(-)
->  create mode 100644 arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dts
->  create mode 100644 arch/arm/boot/dts/microchip/sam9x7.dtsi
->  create mode 100644 arch/arm/mach-at91/sam9x7.c
->  create mode 100644 drivers/clk/at91/sam9x7.c
-> 
+On Wed, Jul 3, 2024 at 6:18=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.or=
+g> wrote:
+>
+> On 02-07-24, 23:27, Huacai Chen wrote:
+> > Some of LoongArch processors (Loongson-3 series) support DVFS, their
+> > IOCSR.FEATURES has IOCSRF_FREQSCALE set. And they has a micro-core in
+> > the package called SMC (System Management Controller), which can be
+> > used to detect temperature, control fans, scale frequency and voltage,
+> > etc.
+> >
+> > The Loongson-3 CPUFreq driver is very simple now, it communicate with
+> > SMC, get DVFS info, set target frequency from CPUFreq core, and so on.
+> >
+> > There is a command list to interact with SMC, widely-used commands in
+> > the CPUFreq driver include:
+> >
+> > CMD_GET_VERSION: Get SMC firmware version.
+> >
+> > CMD_GET_FEATURE: Get enabled SMC features.
+> >
+> > CMD_SET_FEATURE: Enable SMC features, such as basic DVFS, BOOST.
+> >
+> > CMD_GET_FREQ_LEVEL_NUM: Get the number of normal frequency levels.
+> >
+> > CMD_GET_FREQ_BOOST_NUM: Get the number of boost frequency levels.
+> >
+> > CMD_GET_FREQ_LEVEL_INFO: Get the detail info of a frequency level.
+> >
+> > CMD_GET_FREQ_INFO: Get the current frequency.
+> >
+> > CMD_SET_FREQ_INFO: Set the target frequency.
+> >
+> > In future we will add automatic frequency scaling, which is similar to
+> > Intel's HWP (HardWare P-State).
+> >
+> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  MAINTAINERS                         |   1 +
+> >  drivers/cpufreq/Kconfig             |  12 +
+> >  drivers/cpufreq/Makefile            |   1 +
+> >  drivers/cpufreq/loongson3_cpufreq.c | 399 ++++++++++++++++++++++++++++
+> >  4 files changed, 413 insertions(+)
+> >  create mode 100644 drivers/cpufreq/loongson3_cpufreq.c
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index cd2ca0c3158e..2af33319f1ff 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -12968,6 +12968,7 @@ F:    Documentation/arch/loongarch/
+> >  F:   Documentation/translations/zh_CN/arch/loongarch/
+> >  F:   arch/loongarch/
+> >  F:   drivers/*/*loongarch*
+> > +F:   drivers/cpufreq/loongson3_cpufreq.c
+> >
+> >  LOONGSON GPIO DRIVER
+> >  M:   Yinbo Zhu <zhuyinbo@loongson.cn>
+> > diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+> > index 94e55c40970a..10cda6f2fe1d 100644
+> > --- a/drivers/cpufreq/Kconfig
+> > +++ b/drivers/cpufreq/Kconfig
+> > @@ -262,6 +262,18 @@ config LOONGSON2_CPUFREQ
+> >         If in doubt, say N.
+> >  endif
+> >
+> > +if LOONGARCH
+> > +config LOONGSON3_CPUFREQ
+> > +     tristate "Loongson3 CPUFreq Driver"
+> > +     help
+> > +       This option adds a CPUFreq driver for Loongson processors which
+> > +       support software configurable cpu frequency.
+> > +
+> > +       Loongson-3 family processors support this feature.
+> > +
+> > +       If in doubt, say N.
+> > +endif
+> > +
+> >  if SPARC64
+> >  config SPARC_US3_CPUFREQ
+> >       tristate "UltraSPARC-III CPU Frequency driver"
+> > diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
+> > index 8d141c71b016..0f184031dd12 100644
+> > --- a/drivers/cpufreq/Makefile
+> > +++ b/drivers/cpufreq/Makefile
+> > @@ -103,6 +103,7 @@ obj-$(CONFIG_POWERNV_CPUFREQ)             +=3D powe=
+rnv-cpufreq.o
+> >  # Other platform drivers
+> >  obj-$(CONFIG_BMIPS_CPUFREQ)          +=3D bmips-cpufreq.o
+> >  obj-$(CONFIG_LOONGSON2_CPUFREQ)              +=3D loongson2_cpufreq.o
+> > +obj-$(CONFIG_LOONGSON3_CPUFREQ)              +=3D loongson3_cpufreq.o
+> >  obj-$(CONFIG_SH_CPU_FREQ)            +=3D sh-cpufreq.o
+> >  obj-$(CONFIG_SPARC_US2E_CPUFREQ)     +=3D sparc-us2e-cpufreq.o
+> >  obj-$(CONFIG_SPARC_US3_CPUFREQ)              +=3D sparc-us3-cpufreq.o
+> > diff --git a/drivers/cpufreq/loongson3_cpufreq.c b/drivers/cpufreq/loon=
+gson3_cpufreq.c
+> > new file mode 100644
+> > index 000000000000..6d7da2238542
+> > --- /dev/null
+> > +++ b/drivers/cpufreq/loongson3_cpufreq.c
+> > @@ -0,0 +1,399 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * CPUFreq driver for the loongson-3 processors
+>
+> A full stop at the end please.
+OK, thanks.
+
+>
+> > + *
+> > + * All revisions of Loongson-3 processor support this feature.
+>
+> What do you mean by `feature` here ?
+Means "cpu_has_freqscale", will modify in next version.
+
+>
+> > + *
+> > + * Author: Huacai Chen <chenhuacai@loongson.cn>
+> > + * Copyright (C) 2020-2024 Loongson Technology Corporation Limited
+>
+> Can't really use 2020 here. We are adding the driver for the first
+> time in 2024 only.
+OK, thanks.
+
+>
+> > + */
+> > +#include <linux/delay.h>
+> > +#include <linux/module.h>
+> > +#include <linux/cpufreq.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/units.h>
+>
+> Please keep them in alphabetical order.  And you are missing few other
+> headers (which are getting included indirectly for now). Like for
+> mutex. Please cross check all types you are using and include their
+> headers directly.
+OK, thanks.
+
+>
+> > +
+> > +#include <asm/idle.h>
+> > +#include <asm/loongarch.h>
+> > +#include <asm/loongson.h>
+> > +
+> > +/* Message */
+> > +union smc_message {
+> > +     u32 value;
+> > +     struct {
+> > +             u32 id          : 4;
+> > +             u32 info        : 4;
+> > +             u32 val         : 16;
+> > +             u32 cmd         : 6;
+> > +             u32 extra       : 1;
+> > +             u32 complete    : 1;
+> > +     };
+> > +};
+> > +
+> > +/* Command return values */
+> > +#define CMD_OK                               0  /* No error */
+> > +#define CMD_ERROR                    1  /* Regular error */
+> > +#define CMD_NOCMD                    2  /* Command does not support */
+> > +#define CMD_INVAL                    3  /* Invalid Parameter */
+> > +
+> > +/* Version commands */
+> > +/*
+> > + * CMD_GET_VERSION - Get interface version
+> > + * Input: none
+> > + * Output: version
+> > + */
+> > +#define CMD_GET_VERSION                      0x1
+> > +
+> > +/* Feature commands */
+> > +/*
+> > + * CMD_GET_FEATURE - Get feature state
+> > + * Input: feature ID
+> > + * Output: feature flag
+> > + */
+> > +#define CMD_GET_FEATURE                      0x2
+> > +
+> > +/*
+> > + * CMD_SET_FEATURE - Set feature state
+> > + * Input: feature ID, feature flag
+> > + * output: none
+> > + */
+> > +#define CMD_SET_FEATURE                      0x3
+> > +
+> > +/* Feature IDs */
+> > +#define FEATURE_SENSOR                       0
+> > +#define FEATURE_FAN                  1
+> > +#define FEATURE_DVFS                 2
+> > +
+> > +/* Sensor feature flags */
+> > +#define FEATURE_SENSOR_ENABLE                BIT(0)
+> > +#define FEATURE_SENSOR_SAMPLE                BIT(1)
+> > +
+> > +/* Fan feature flags */
+> > +#define FEATURE_FAN_ENABLE           BIT(0)
+> > +#define FEATURE_FAN_AUTO             BIT(1)
+> > +
+> > +/* DVFS feature flags */
+> > +#define FEATURE_DVFS_ENABLE          BIT(0)
+> > +#define FEATURE_DVFS_BOOST           BIT(1)
+> > +#define FEATURE_DVFS_AUTO            BIT(2)
+> > +#define FEATURE_DVFS_SINGLE_BOOST    BIT(3)
+> > +
+> > +/* Sensor commands */
+> > +/*
+> > + * CMD_GET_SENSOR_NUM - Get number of sensors
+> > + * Input: none
+> > + * Output: number
+> > + */
+> > +#define CMD_GET_SENSOR_NUM           0x4
+> > +
+> > +/*
+> > + * CMD_GET_SENSOR_STATUS - Get sensor status
+> > + * Input: sensor ID, type
+> > + * Output: sensor status
+> > + */
+> > +#define CMD_GET_SENSOR_STATUS                0x5
+> > +
+> > +/* Sensor types */
+> > +#define SENSOR_INFO_TYPE             0
+> > +#define SENSOR_INFO_TYPE_TEMP                1
+> > +
+> > +/* Fan commands */
+> > +/*
+> > + * CMD_GET_FAN_NUM - Get number of fans
+> > + * Input: none
+> > + * Output: number
+> > + */
+> > +#define CMD_GET_FAN_NUM                      0x6
+> > +
+> > +/*
+> > + * CMD_GET_FAN_INFO - Get fan status
+> > + * Input: fan ID, type
+> > + * Output: fan info
+> > + */
+> > +#define CMD_GET_FAN_INFO             0x7
+> > +
+> > +/*
+> > + * CMD_SET_FAN_INFO - Set fan status
+> > + * Input: fan ID, type, value
+> > + * Output: none
+> > + */
+> > +#define CMD_SET_FAN_INFO             0x8
+> > +
+> > +/* Fan types */
+> > +#define FAN_INFO_TYPE_LEVEL          0
+> > +
+> > +/* DVFS commands */
+> > +/*
+> > + * CMD_GET_FREQ_LEVEL_NUM - Get number of freq levels
+> > + * Input: CPU ID
+> > + * Output: number
+> > + */
+> > +#define CMD_GET_FREQ_LEVEL_NUM               0x9
+> > +
+> > +/*
+> > + * CMD_GET_FREQ_BOOST_LEVEL - Get number of boost levels
+> > + * Input: CPU ID
+> > + * Output: number
+> > + */
+> > +#define CMD_GET_FREQ_BOOST_LEVEL     0x10
+> > +
+> > +/*
+> > + * CMD_GET_FREQ_LEVEL_INFO - Get freq level info
+> > + * Input: CPU ID, level ID
+> > + * Output: level info
+> > + */
+> > +#define CMD_GET_FREQ_LEVEL_INFO              0x11
+> > +
+> > +/*
+> > + * CMD_GET_FREQ_INFO - Get freq info
+> > + * Input: CPU ID, type
+> > + * Output: freq info
+> > + */
+> > +#define CMD_GET_FREQ_INFO            0x12
+> > +
+> > +/*
+> > + * CMD_SET_FREQ_INFO - Set freq info
+> > + * Input: CPU ID, type, value
+> > + * Output: none
+> > + */
+> > +#define CMD_SET_FREQ_INFO            0x13
+> > +
+> > +/* Freq types */
+> > +#define FREQ_INFO_TYPE_FREQ          0
+> > +#define FREQ_INFO_TYPE_LEVEL         1
+> > +
+> > +#define FREQ_MAX_LEVEL                       (16 + 1)
+> > +
+> > +enum freq {
+> > +     FREQ_LEV0, /* Reserved */
+> > +     FREQ_LEV1, FREQ_LEV2, FREQ_LEV3, FREQ_LEV4,
+> > +     FREQ_LEV5, FREQ_LEV6, FREQ_LEV7, FREQ_LEV8,
+> > +     FREQ_LEV9, FREQ_LEV10, FREQ_LEV11, FREQ_LEV12,
+> > +     FREQ_LEV13, FREQ_LEV14, FREQ_LEV15, FREQ_LEV16,
+> > +     FREQ_RESV
+> > +};
+> > +
+> > +static struct mutex cpufreq_mutex[MAX_PACKAGES];
+> > +static struct cpufreq_driver loongson3_cpufreq_driver;
+> > +static DEFINE_PER_CPU(struct cpufreq_frequency_table *, freq_table);
+> > +
+> > +static inline int do_service_request(u32 id, u32 info, u32 cmd, u32 va=
+l, u32 extra)
+> > +{
+> > +     int retries;
+> > +     unsigned int cpu =3D smp_processor_id();
+> > +     unsigned int package =3D cpu_data[cpu].package;
+> > +     union smc_message msg, last;
+> > +
+> > +     mutex_lock(&cpufreq_mutex[package]);
+> > +
+> > +     last.value =3D iocsr_read32(LOONGARCH_IOCSR_SMCMBX);
+> > +     if (!last.complete) {
+> > +             mutex_unlock(&cpufreq_mutex[package]);
+> > +             return -EPERM;
+> > +     }
+> > +
+> > +     msg.id          =3D id;
+> > +     msg.info        =3D info;
+> > +     msg.cmd         =3D cmd;
+> > +     msg.val         =3D val;
+> > +     msg.extra       =3D extra;
+> > +     msg.complete    =3D 0;
+> > +
+> > +     iocsr_write32(msg.value, LOONGARCH_IOCSR_SMCMBX);
+> > +     iocsr_write32(iocsr_read32(LOONGARCH_IOCSR_MISC_FUNC) | IOCSR_MIS=
+C_FUNC_SOFT_INT,
+> > +                   LOONGARCH_IOCSR_MISC_FUNC);
+> > +
+> > +     for (retries =3D 0; retries < 10000; retries++) {
+> > +             msg.value =3D iocsr_read32(LOONGARCH_IOCSR_SMCMBX);
+> > +             if (msg.complete)
+> > +                     break;
+> > +
+> > +             usleep_range(8, 12);
+> > +     }
+> > +
+> > +     if (!msg.complete || msg.cmd !=3D CMD_OK) {
+> > +             mutex_unlock(&cpufreq_mutex[package]);
+> > +             return -EPERM;
+> > +     }
+> > +
+> > +     mutex_unlock(&cpufreq_mutex[package]);
+> > +
+> > +     return msg.val;
+>
+> Thanks, this looks much better now.
+>
+> > +}
+> > +
+> > +static unsigned int loongson3_cpufreq_get(unsigned int cpu)
+> > +{
+> > +     int ret;
+> > +
+> > +     ret =3D do_service_request(cpu, FREQ_INFO_TYPE_FREQ, CMD_GET_FREQ=
+_INFO, 0, 0);
+> > +
+> > +     return ret * KILO;
+> > +}
+> > +
+> > +static int loongson3_cpufreq_set(struct cpufreq_policy *policy, int fr=
+eq_level)
+> > +{
+> > +     return do_service_request(cpu_data[policy->cpu].core, FREQ_INFO_T=
+YPE_LEVEL, CMD_SET_FREQ_INFO, freq_level, 0);
+> > +}
+> > +
+> > +/*
+> > + * Here we notify other drivers of the proposed change and the final c=
+hange.
+>
+> What do you mean by other drivers here ? I would just drop the
+> comment.
+OK, it will be dropped.
+
+>
+> > + */
+> > +static int loongson3_cpufreq_target(struct cpufreq_policy *policy, uns=
+igned int index)
+> > +{
+> > +     /* setting the cpu frequency */
+>
+> The obvious comments can be dropped.
+OK, it will be dropped.
+
+>
+> > +     return loongson3_cpufreq_set(policy, index);
+>
+> Why use a separate function for calling do_service_request() ? Just
+> open code it here.
+Hmm, there is a loongson3_cpufreq_get() function, so I make a
+loongson3_cpufreq_set() function, too.
+
+>
+> > +}
+> > +
+> > +static int loongson3_cpufreq_get_freq_table(int cpu)
+>
+> If you want to simplify the naming a bit, you can just call all
+> internal routines without `loongson3_cpufreq_` prefix. Just
+> create_freq_table() would be appropriate here.
+OK, I will rename this function.
+
+>
+> For all routines passed to core, via the cpufreq_driver pointers, you
+> can keep using the prefix.
+>
+> > +{
+> > +     int i, ret, boost_level, max_level, freq_level;
+> > +     struct cpufreq_frequency_table *table;
+> > +
+> > +     if (per_cpu(freq_table, cpu))
+> > +             return 0;
+> > +
+> > +     ret =3D do_service_request(cpu, 0, CMD_GET_FREQ_LEVEL_NUM, 0, 0);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +     max_level =3D ret;
+> > +
+> > +     ret =3D do_service_request(cpu, 0, CMD_GET_FREQ_BOOST_LEVEL, 0, 0=
+);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +     boost_level =3D ret;
+> > +
+> > +     freq_level =3D min(max_level, FREQ_MAX_LEVEL);
+> > +     table =3D kzalloc(sizeof(struct cpufreq_frequency_table) * (freq_=
+level + 1), GFP_KERNEL);
+>
+> devm_kcalloc(pdev, ...) instead ?
+I remember you told me this in V1, but devm_kalloc() needs a pdev
+instance, which doesn't exist here, so I keep kzalloc().
+
+>
+> sizeof(*table) instead.
+OK, thanks.
+
+>
+> Also please run `scripts/checkpatch.pl --strict` on your patches to
+> find out general formatting issues.
+OK, I will run checkpatch.pl.
+
+>
+> > +     if (!table)
+> > +             return -ENOMEM;
+> > +
+> > +     for (i =3D 0; i < freq_level; i++) {
+> > +             ret =3D do_service_request(cpu, FREQ_INFO_TYPE_FREQ, CMD_=
+GET_FREQ_LEVEL_INFO, i, 0);
+> > +             if (ret < 0) {
+> > +                     kfree(table);
+> > +                     return ret;
+> > +             }
+> > +
+> > +             table[i].frequency =3D ret * KILO;
+>
+> > +             table[i].driver_data =3D FREQ_LEV0 + i;
+>
+> I don't think you are using this, you don't have to fill it at all.
+OK, I will drop it.
+
+>
+> > +             table[i].flags =3D (i >=3D boost_level) ? CPUFREQ_BOOST_F=
+REQ : 0;
+> > +     }
+> > +
+> > +     table[freq_level].frequency =3D CPUFREQ_TABLE_END;
+> > +     table[freq_level].driver_data =3D FREQ_RESV;
+> > +     table[freq_level].flags =3D 0;
+> > +
+> > +     per_cpu(freq_table, cpu) =3D table;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int loongson3_cpufreq_cpu_init(struct cpufreq_policy *policy)
+> > +{
+> > +     int ret;
+> > +
+> > +     ret =3D loongson3_cpufreq_get_freq_table(policy->cpu);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     policy->cur =3D loongson3_cpufreq_get(policy->cpu);
+>
+> cpufreq core does this during initialization. The drivers don't need
+> to do it.
+OK, I will drop it.
+
+>
+> > +     policy->cpuinfo.transition_latency =3D 10000;
+> > +     policy->freq_table =3D per_cpu(freq_table, policy->cpu);
+> > +     cpumask_copy(policy->cpus, topology_sibling_cpumask(policy->cpu))=
+;
+> > +
+> > +     if (policy_has_boost_freq(policy)) {
+> > +             ret =3D cpufreq_enable_boost_support();
+> > +             if (ret < 0) {
+> > +                     pr_warn("cpufreq: Failed to enable boost: %d\n", =
+ret);
+> > +                     return ret;
+> > +             }
+> > +             loongson3_cpufreq_driver.boost_enabled =3D true;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int loongson3_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+> > +{
+> > +     kfree(policy->freq_table);
+> > +     return 0;
+> > +}
+> > +
+> > +static int loongson3_cpufreq_cpu_online(struct cpufreq_policy *policy)
+> > +{
+> > +     return 0;
+> > +}
+> > +
+> > +static int loongson3_cpufreq_cpu_offline(struct cpufreq_policy *policy=
+)
+> > +{
+> > +     return 0;
+> > +}
+> > +
+> > +static struct cpufreq_driver loongson3_cpufreq_driver =3D {
+> > +     .name =3D "loongson3",
+> > +     .flags =3D CPUFREQ_CONST_LOOPS,
+> > +     .init =3D loongson3_cpufreq_cpu_init,
+> > +     .exit =3D loongson3_cpufreq_cpu_exit,
+> > +     .online =3D loongson3_cpufreq_cpu_online,
+> > +     .offline =3D loongson3_cpufreq_cpu_offline,
+> > +     .verify =3D cpufreq_generic_frequency_table_verify,
+> > +     .target_index =3D loongson3_cpufreq_target,
+> > +     .get =3D loongson3_cpufreq_get,
+> > +     .attr =3D cpufreq_generic_attr,
+> > +};
+> > +
+> > +static int configure_cpufreq_info(void)
+> > +{
+> > +     int ret;
+> > +
+> > +     ret =3D do_service_request(0, 0, CMD_GET_VERSION, 0, 0);
+> > +     if (ret <=3D 0)
+> > +             return -EPERM;
+> > +
+> > +     return do_service_request(FEATURE_DVFS, 0, CMD_SET_FEATURE, FEATU=
+RE_DVFS_ENABLE | FEATURE_DVFS_BOOST, 0);
+> > +}
+> > +
+> > +static int loongson3_cpufreq_probe(struct platform_device *pdev)
+> > +{
+> > +     int i, ret;
+> > +
+> > +     ret =3D configure_cpufreq_info();
+>
+> Maybe just open code the function here.. It is just two function calls
+> which are quite straight forward.
+OK, thanks.
+
+>
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     for (i =3D 0; i < MAX_PACKAGES; i++)
+> > +             mutex_init(&cpufreq_mutex[i]);
+>
+> This must be initialized before calling configure_cpufreq_info() as
+> you end up using them there.
+OK, thanks.
+
+Huacai
+>
+> > +     ret =3D cpufreq_register_driver(&loongson3_cpufreq_driver);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     pr_info("cpufreq: Loongson-3 CPU frequency driver.\n");
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static void loongson3_cpufreq_remove(struct platform_device *pdev)
+> > +{
+> > +     cpufreq_unregister_driver(&loongson3_cpufreq_driver);
+> > +}
+> > +
+> > +static struct platform_device_id cpufreq_id_table[] =3D {
+> > +     { "loongson3_cpufreq", },
+> > +     { /* sentinel */ }
+> > +};
+> > +MODULE_DEVICE_TABLE(platform, cpufreq_id_table);
+> > +
+> > +static struct platform_driver loongson3_platform_driver =3D {
+> > +     .driver =3D {
+> > +             .name =3D "loongson3_cpufreq",
+> > +     },
+> > +     .id_table =3D cpufreq_id_table,
+> > +     .probe =3D loongson3_cpufreq_probe,
+> > +     .remove_new =3D loongson3_cpufreq_remove,
+> > +};
+> > +module_platform_driver(loongson3_platform_driver);
+> > +
+> > +MODULE_AUTHOR("Huacai Chen <chenhuacai@loongson.cn>");
+> > +MODULE_DESCRIPTION("CPUFreq driver for Loongson-3 processors");
+> > +MODULE_LICENSE("GPL");
+> > --
+> > 2.43.0
+>
 > --
-> 2.25.1
-> 
-> 
-> 
-
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y microchip/at91-sam9x75_curiosity.dtb' for 20240703102011.193343-1-varshini.rajendran@microchip.com:
-
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /ahb/mmc@80000000: failed to match any schema with compatible: ['microchip,sam9x7-sdhci', 'microchip,sam9x60-sdhci']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /ahb/mmc@80000000: failed to match any schema with compatible: ['microchip,sam9x7-sdhci', 'microchip,sam9x60-sdhci']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /ahb/mmc@90000000: failed to match any schema with compatible: ['microchip,sam9x7-sdhci', 'microchip,sam9x60-sdhci']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /ahb/mmc@90000000: failed to match any schema with compatible: ['microchip,sam9x7-sdhci', 'microchip,sam9x60-sdhci']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/dma-controller@f0008000: failed to match any schema with compatible: ['microchip,sam9x7-dma', 'atmel,sama5d4-dma']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/dma-controller@f0008000: failed to match any schema with compatible: ['microchip,sam9x7-dma', 'atmel,sama5d4-dma']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/ssc@f0010000: failed to match any schema with compatible: ['microchip,sam9x7-ssc', 'atmel,at91sam9g45-ssc']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/ssc@f0010000: failed to match any schema with compatible: ['microchip,sam9x7-ssc', 'atmel,at91sam9g45-ssc']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f0028000: failed to match any schema with compatible: ['microchip,sam9x7-pit64b', 'microchip,sam9x60-pit64b']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f0028000: failed to match any schema with compatible: ['microchip,sam9x7-pit64b', 'microchip,sam9x60-pit64b']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f0040000: failed to match any schema with compatible: ['microchip,sam9x7-pit64b', 'microchip,sam9x60-pit64b']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f0040000: failed to match any schema with compatible: ['microchip,sam9x7-pit64b', 'microchip,sam9x60-pit64b']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: timer@f8008000: compatible:0: 'microchip,sam9x7-tcb' is not one of ['atmel,at91rm9200-tcb', 'atmel,at91sam9x5-tcb', 'atmel,sama5d2-tcb']
-	from schema $id: http://devicetree.org/schemas/soc/microchip/atmel,at91rm9200-tcb.yaml#
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: timer@f8008000: compatible:1: 'simple-mfd' was expected
-	from schema $id: http://devicetree.org/schemas/soc/microchip/atmel,at91rm9200-tcb.yaml#
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: timer@f8008000: compatible:2: 'syscon' was expected
-	from schema $id: http://devicetree.org/schemas/soc/microchip/atmel,at91rm9200-tcb.yaml#
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: timer@f8008000: compatible: ['microchip,sam9x7-tcb', 'atmel,sama5d2-tcb', 'simple-mfd', 'syscon'] is too long
-	from schema $id: http://devicetree.org/schemas/soc/microchip/atmel,at91rm9200-tcb.yaml#
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f8008000: failed to match any schema with compatible: ['microchip,sam9x7-tcb', 'atmel,sama5d2-tcb', 'simple-mfd', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/sfr@f8050000: failed to match any schema with compatible: ['microchip,sam9x7-sfr', 'microchip,sam9x60-sfr', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/sfr@f8050000: failed to match any schema with compatible: ['microchip,sam9x7-sfr', 'microchip,sam9x60-sfr', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/matrix@ffffde00: failed to match any schema with compatible: ['microchip,sam9x7-matrix', 'atmel,at91sam9x5-matrix', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/matrix@ffffde00: failed to match any schema with compatible: ['microchip,sam9x7-matrix', 'atmel,at91sam9x5-matrix', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/ecc-engine@ffffe000: failed to match any schema with compatible: ['microchip,sam9x7-pmecc', 'atmel,at91sam9g45-pmecc']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/ecc-engine@ffffe000: failed to match any schema with compatible: ['microchip,sam9x7-pmecc', 'atmel,at91sam9g45-pmecc']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/mpddrc@ffffe800: failed to match any schema with compatible: ['microchip,sam9x7-ddramc', 'atmel,sama5d3-ddramc']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/mpddrc@ffffe800: failed to match any schema with compatible: ['microchip,sam9x7-ddramc', 'atmel,sama5d3-ddramc']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/smc@ffffea00: failed to match any schema with compatible: ['microchip,sam9x7-smc', 'atmel,at91sam9260-smc', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/smc@ffffea00: failed to match any schema with compatible: ['microchip,sam9x7-smc', 'atmel,at91sam9260-smc', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400: failed to match any schema with compatible: ['microchip,sam9x7-pinctrl', 'microchip,sam9x60-pinctrl', 'simple-mfd']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400: failed to match any schema with compatible: ['microchip,sam9x7-pinctrl', 'microchip,sam9x60-pinctrl', 'simple-mfd']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400/gpio@fffff400: failed to match any schema with compatible: ['microchip,sam9x7-gpio', 'microchip,sam9x60-gpio', 'atmel,at91rm9200-gpio']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400/gpio@fffff400: failed to match any schema with compatible: ['microchip,sam9x7-gpio', 'microchip,sam9x60-gpio', 'atmel,at91rm9200-gpio']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400/gpio@fffff400: failed to match any schema with compatible: ['microchip,sam9x7-gpio', 'microchip,sam9x60-gpio', 'atmel,at91rm9200-gpio']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400/gpio@fffff600: failed to match any schema with compatible: ['microchip,sam9x7-gpio', 'microchip,sam9x60-gpio', 'atmel,at91rm9200-gpio']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400/gpio@fffff600: failed to match any schema with compatible: ['microchip,sam9x7-gpio', 'microchip,sam9x60-gpio', 'atmel,at91rm9200-gpio']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400/gpio@fffff600: failed to match any schema with compatible: ['microchip,sam9x7-gpio', 'microchip,sam9x60-gpio', 'atmel,at91rm9200-gpio']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400/gpio@fffff800: failed to match any schema with compatible: ['microchip,sam9x7-gpio', 'microchip,sam9x60-gpio', 'atmel,at91rm9200-gpio']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400/gpio@fffff800: failed to match any schema with compatible: ['microchip,sam9x7-gpio', 'microchip,sam9x60-gpio', 'atmel,at91rm9200-gpio']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400/gpio@fffff800: failed to match any schema with compatible: ['microchip,sam9x7-gpio', 'microchip,sam9x60-gpio', 'atmel,at91rm9200-gpio']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400/gpio@fffffa00: failed to match any schema with compatible: ['microchip,sam9x7-gpio', 'microchip,sam9x60-gpio', 'atmel,at91rm9200-gpio']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400/gpio@fffffa00: failed to match any schema with compatible: ['microchip,sam9x7-gpio', 'microchip,sam9x60-gpio', 'atmel,at91rm9200-gpio']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/pinctrl@fffff400/gpio@fffffa00: failed to match any schema with compatible: ['microchip,sam9x7-gpio', 'microchip,sam9x60-gpio', 'atmel,at91rm9200-gpio']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/syscon@fffffe60: failed to match any schema with compatible: ['microchip,sam9x7-gpbr', 'atmel,at91sam9260-gpbr', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/syscon@fffffe60: failed to match any schema with compatible: ['microchip,sam9x7-gpbr', 'atmel,at91sam9260-gpbr', 'syscon']
-
-
-
-
-
+> viresh
 
