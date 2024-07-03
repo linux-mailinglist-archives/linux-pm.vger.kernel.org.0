@@ -1,391 +1,320 @@
-Return-Path: <linux-pm+bounces-10493-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10484-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 025899254B2
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 09:33:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 234FF92547C
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 09:16:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 270C51C25097
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 07:33:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B92B1F22A39
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 07:16:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66F3E13DDC3;
-	Wed,  3 Jul 2024 07:31:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 892A2136E3B;
+	Wed,  3 Jul 2024 07:16:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lO5ALY/o"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GbKq6viF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B7613D898
-	for <linux-pm@vger.kernel.org>; Wed,  3 Jul 2024 07:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F186135A5B;
+	Wed,  3 Jul 2024 07:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719991876; cv=none; b=l3S8bWNnjFnpSOXZ2XdqMvAJ3ObV+aJltQNvlYRaM4rM9/XuNZSupfwMFpGu6VSVeNIB135yR1gOBG5B3ud0m7vvy4IjwsmRAhCIatx6zIxAP9KimZGzi6Lg9aGhLVFUd2ytoDa3CVDecxQ0ew4vkbXHx8XdJGcRP/hBQT4jz4M=
+	t=1719991000; cv=none; b=BKv8qUUoDf2R34sIfM/pWbyK/P/StY0kalHjrEEJ5t95nuS5HC+QSYoEjW3pcmgtcgYufgp9DZDRXXhhsVAMtQV+z9uv4MocajTOzXdWvDZTRcASl/GlVGcsPXZwTVwlXt4t73iDGER+UX9LJqKvLBJMkKElIoH6uRWEm0jw0jI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719991876; c=relaxed/simple;
-	bh=m4XniaMihLd8qlHJenTfcjOxaFkup1FyvaUGHn+pk8M=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PXwA6BfC9MZ8fUsCIOql3Ir7v+R/Xsc7j+KpAw8fB+hiR2QmXFQWx9HjcahQgrAJjJNWL6D55SVuct0DJYujUTdVtLmCSqbXvLlHSgc/a57vK3p0P0ozW5hLOQULLz363R03Ol7Y/PaymnXQOU1+xWmbpIcvJIyo6Rb0ymOTOfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lO5ALY/o; arc=none smtp.client-ip=209.85.167.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3d55c0fadd2so3180612b6e.3
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2024 00:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719991873; x=1720596673; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L48fOb2APX+YOqtqYC3BeSMU2cmish3fGmpJ70CUgSU=;
-        b=lO5ALY/o/O58aoq6Yis5PfejMuhhSpC4/e7F23Q3GjJJv+W/Teh6OmEc8TTTuSKYxo
-         hDQ6D+mh+zKdAOgZayPFohIYojcTxgL2cNacpDa/qnf7Xdp0lQVZ/NfC64MlZgA6z1S9
-         ht7eqgn6Z4QPf6gNBRsiW0asK0/iockIvVYDNez+CtoJOBojnO0Caiuvdte+wzVplwXw
-         NPnmz6smws9VGPVu/UAwDvUz8pGVx+hIi0UYjVXKT/oUdIFaVo8LjaUvdsMCSysjk7jo
-         cV6xLRDmV29Yw7ubtxFsMMG38HNHyuqMie93orh4X4rS9gc25jQXY/ktoquyPRBUp7jK
-         dVCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719991873; x=1720596673;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L48fOb2APX+YOqtqYC3BeSMU2cmish3fGmpJ70CUgSU=;
-        b=qAU3vW/08m/HAmJo5ORCWyVK3fBlsFRO3M4tWBgA5x7znhAOCbowHVhys2XuwE2Zhz
-         xAxOVSEPJtG7fBchxXj3QWQvlVhLJtUoeW5Z+1E68gZKPkdFD9X45857aTPBTx97P3Wf
-         AOOrYr8opWhVuggETIu4sMM5XdUTVW68w96nBmBj43G9lZw7uBbG3ILF1qWNTcZZvr2L
-         MOzjygg32/AWZQ6JrsQCs5jz1EgMLO5Gr5wMdTfFPcDGVrJEKjywps7Alla4zECLkxJU
-         q5q4dwehiAmLAXuGSB1rNHzQtb5Q4BhMr7l/Nfscx7HtMLmuUwDgMmcQ7VvqJNtEsMKl
-         YjNw==
-X-Gm-Message-State: AOJu0YxlQOSyLvJfotbLu/8XMAqLnsIMIgknKHns/CLW0THGdur76yjc
-	P+HkqhawQEN/2uSpAXdcH+5fEe3WN4E+EVPgvJ2DT73Y1U4S+1+aHwEGVnYkrHM=
-X-Google-Smtp-Source: AGHT+IFms6h8jZorNAQzSh3CJhe/oYnjzyhvKstmwlguqvNIql3wjHi+rQlxPQbcAx1zxn62PoX2LQ==
-X-Received: by 2002:a05:6808:1b2b:b0:3d2:2a62:3fdf with SMTP id 5614622812f47-3d6b4de2294mr12115665b6e.54.1719991872555;
-        Wed, 03 Jul 2024 00:31:12 -0700 (PDT)
-Received: from localhost ([122.172.82.13])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-708043b708fsm10029525b3a.147.2024.07.03.00.31.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jul 2024 00:31:12 -0700 (PDT)
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>
-Cc: linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	=?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH V3 8/8] cpufreq: Add Rust based cpufreq-dt driver
-Date: Wed,  3 Jul 2024 12:44:33 +0530
-Message-Id: <b7df0c75cc07a451243b554fb2272c91cbe42dfe.1719990273.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1719990273.git.viresh.kumar@linaro.org>
-References: <cover.1719990273.git.viresh.kumar@linaro.org>
+	s=arc-20240116; t=1719991000; c=relaxed/simple;
+	bh=Jnn7HRX+w2X1FfG/ozQi4PUqTF2VQIuM9En9tHDhNG0=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mLbI77JbenQxx2tP60sAyJy6K8lJCGd0JxTtlUA078++PNr8R/CkPoaMMh/+s/R70jXvVsFM3bTYjobnTVSuSlWvXkWOwdrfXMBzjDo/bGkBg7QDe9JUI77vJfz9S0uwr1HtJKtFH5Xy6PXKwWvrt4hANgmOW5rRmbUci68lNsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=GbKq6viF; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 462JHddG031391;
+	Wed, 3 Jul 2024 07:16:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=/sACPhImwWUed1O1qusp4XbK
+	WCHzdJchPgYvl42r6lU=; b=GbKq6viFhVIdDb/ENBp71K6HZMoT150paza7QfQE
+	7KJn4MOcDClDefdg0tSiOJN0e+CJPKFU5DmQ/S+3WyvX4wPuXjcVHwisheMJZMxi
+	bdw+Cf9FFws74XWkP+f2t/cr+uINS+eHwbYn5VaWTmEXOis+mJ+yBvtCiW2Haov+
+	DDjnkgmP+rv1gKcccXOIQ0PV7zbDMInoIXobvJ3IwvlrvzjTcFsx0krV7E1SrXIh
+	WJmYcZTYfJluxKg4Gn2ExgfOIhxSQAIxRrIdM4WwopkJCycbX4GFMmaZYwVtwzEu
+	Lo2NigvzHf/AluNsNV8Ezma9qVnR20et4/4sgIt0lx9UdQ==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 402bj8aj9k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 03 Jul 2024 07:16:25 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4637GO4c017837
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 3 Jul 2024 07:16:24 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 3 Jul 2024 00:16:17 -0700
+Date: Wed, 3 Jul 2024 12:46:12 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <ilia.lin@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <ulf.hansson@linaro.org>,
+        <quic_sibis@quicinc.com>, <otto.pflueger@abscue.de>,
+        <neil.armstrong@linaro.org>, <luca@z3ntu.xyz>, <abel.vesa@linaro.org>,
+        <danila@jiaxyga.com>, <quic_ipkumar@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v3 2/9] cpufreq: qcom-nvmem: Add genpd names to
+ match_data_kryo
+Message-ID: <ZoT6vBAipbkfdh11@hu-varada-blr.qualcomm.com>
+References: <20240626104002.420535-1-quic_varada@quicinc.com>
+ <20240626104002.420535-3-quic_varada@quicinc.com>
+ <za7t6ltttq2o5qwahfrzftsb7xfzbzdtg4zx3bvnf3fewhfeqf@vjrq7na5ioqm>
+ <Zn5ZEI1m4jImz/Wp@hu-varada-blr.qualcomm.com>
+ <kcgqm3ywdzdttllk357szirjdvdddsrcznfuwux6y237ncjnwb@3ots4rqreznu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <kcgqm3ywdzdttllk357szirjdvdddsrcznfuwux6y237ncjnwb@3ots4rqreznu>
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: QAcsVQlZX_EfFTXbYG5ElCoxJ3YLrwsN
+X-Proofpoint-GUID: QAcsVQlZX_EfFTXbYG5ElCoxJ3YLrwsN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-03_03,2024-07-02_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ spamscore=0 suspectscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501
+ malwarescore=0 adultscore=0 bulkscore=0 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2406140001
+ definitions=main-2407030052
 
-This commit adds a Rust based cpufreq-dt driver, which covers most of
-the functionality of the existing C based driver. Only a handful of
-things are left, like fetching platform data from cpufreq-dt-platdev.c.
+On Fri, Jun 28, 2024 at 10:40:23AM +0300, Dmitry Baryshkov wrote:
+> On Fri, Jun 28, 2024 at 12:02:48PM GMT, Varadarajan Narayanan wrote:
+> > On Wed, Jun 26, 2024 at 09:23:17PM +0300, Dmitry Baryshkov wrote:
+> > > On Wed, Jun 26, 2024 at 04:09:55PM GMT, Varadarajan Narayanan wrote:
+> > > > This is used for tying up the cpu@N nodes with the power domains.
+> > > > Without this, 'cat /sys/kernel/debug/qcom_cpr3/thread0'
+> > > > crashes with NULL pointer access.
+> > >
+> > > Add the interesting part of the backtrace, please.
 
-This is tested with the help of QEMU for now and switching of
-frequencies work as expected.
+Sure.
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/Kconfig        |  12 ++
- drivers/cpufreq/Makefile       |   1 +
- drivers/cpufreq/rcpufreq_dt.rs | 225 +++++++++++++++++++++++++++++++++
- 3 files changed, 238 insertions(+)
- create mode 100644 drivers/cpufreq/rcpufreq_dt.rs
+> >
+> >         if (thread->drv->desc->cpr_type < CTRL_TYPE_CPRH) {
+> >                 seq_printf(s, "current_volt = %d uV\n", thread->drv->last_uV);
+> >                 seq_printf(s, "requested voltage: %d uV\n", thread->corner->last_uV);
+> >         }
+> >
+> > thread->corner is NULL in the second printf above.
+> >
+> > 	# cat /sys/kernel/debug/qcom_cpr3/thread0
+> > 	[   16.965241] Unable to handle kernel NULL pointer dereference at virtual address 000000000000000c
+> > 	[   16.965270] Mem abort info:
+> > 	[   16.973181]   ESR = 0x0000000096000004
+> > 	[   16.975607]   EC = 0x25: DABT (current EL), IL = 32 bits
+> > 	[   16.979425]   SET = 0, FnV = 0
+> > 	[   16.984889]   EA = 0, S1PTW = 0
+> > 	[   16.987756]   FSC = 0x04: level 0 translation fault
+> > 	[   16.990792] Data abort info:
+> > 	[   16.995652]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+> > 	[   16.998779]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+> > 	[   17.004074]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+> > 	[   17.009196] user pgtable: 4k pages, 48-bit VAs, pgdp=00000000481b1000
+> > 	[   17.014579] [000000000000000c] pgd=0000000000000000, p4d=0000000000000000
+> > 	[   17.020919] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+> > 	[   17.020921] Modules linked in:
+> > 	[   17.020926] CPU: 0 UID: 0 PID: 118 Comm: cat Not tainted 6.10.0-rc4-next-20240620-00020-g125eb3184fc1-dirty #9
+> > 	[   17.020931] Hardware name: Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C7 (DT)
+> > 	[   17.020933] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > 	[   17.020936] pc : cpr3_debug_info_show+0x3a0/0x3ac
+> > 	[   17.020945] lr : cpr3_debug_info_show+0x390/0x3ac
+> > 	[   17.020948] sp : ffff800086293b90
+> > 	[   17.020949] x29: ffff800086293b90 x28: ffff0000034ae038 x27: 0000000000400cc0
+> > 	[   17.020953] x26: 000000007ffff000 x25: ffff0000034ae028 x24: 0000000000000000
+> > 	[   17.020957] x23: ffff800086293c80 x22: ffff000002399880 x21: ffff000002a8fa80
+> > 	[   17.020960] x20: ffff0000034ae000 x19: 0000000000000000 x18: ffffffffffffffff
+> > 	[   17.020964] x17: 0000000000000000 x16: 0000000000000000 x15: ffff800086293a40
+> > 	[   17.020967] x14: ffff000002913000 x13: ffff00000291200f x12: 0000000000000000
+> > 	[   17.020970] x11: 0000000000000000 x10: 0000000000000000 x9 : ffff0000034a9000
+> > 	[   17.020973] x8 : 000000000a567520 x7 : 0000000000000001 x6 : 000000000a567520
+> > 	[   17.020976] x5 : ffff000002912014 x4 : ffff800080e1f3a5 x3 : 0000000000000014
+> > 	[   17.020979] x2 : 0000000000000000 x1 : ffff800080e1f848 x0 : ffff0000034ae000
+> > 	[   17.020983] Call trace:
+> > 	[   17.020984]  cpr3_debug_info_show+0x3a0/0x3ac
+> > 	[   17.020987]  seq_read_iter+0xe0/0x45c
+> > 	[   17.020993]  seq_read+0xec/0x130
+> > 	[   17.020996]  full_proxy_read+0x60/0xb4
+> > 	[   17.020999]  vfs_read+0xc0/0x31c
+> > 	[   17.021003]  ksys_read+0x70/0x104
+> > 	[   17.021006]  __arm64_sys_read+0x1c/0x28
+> > 	[   17.021008]  invoke_syscall+0x48/0x114
+> > 	[   17.021014]  el0_svc_common+0x3c/0xe8
+> > 	[   17.021017]  do_el0_svc+0x20/0x2c
+> > 	[   17.021020]  el0_svc+0x34/0xd8
+> > 	[   17.021024]  el0t_64_sync_handler+0x120/0x12c
+> > 	[   17.021027]  el0t_64_sync+0x190/0x194
+> > 	[   17.021031] Code: f94012c2 aa1403e0 b0004701 91212021 (b9400c42)
+> > 	[   17.021033] ---[ end trace 0000000000000000 ]---
+> > 	Segmentation fault
+>
+> Well, I asked to add it, so please drop the timestamps and registers and
+> include it into the commit message. While you are at it, please review
+> Documentation/process/submitting-patches.rst and change the commit
+> message to follow the guidelines.
+>
+> While doing so (and while responding to a comment below) you will notice
+> that this change should not be applied to the generic match_data_kryo
+> instance. Instead you should add a device-specific entry into match
+> table and use struct qcom_cpufreq_match_data instance that has
+> .genpd_names set.
 
-diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-index 94e55c40970a..eb9359bd3c5c 100644
---- a/drivers/cpufreq/Kconfig
-+++ b/drivers/cpufreq/Kconfig
-@@ -217,6 +217,18 @@ config CPUFREQ_DT
- 
- 	  If in doubt, say N.
- 
-+config CPUFREQ_DT_RUST
-+	tristate "Rust based Generic DT based cpufreq driver"
-+	depends on HAVE_CLK && OF && RUST
-+	select CPUFREQ_DT_PLATDEV
-+	select PM_OPP
-+	help
-+	  This adds a Rust based generic DT based cpufreq driver for frequency
-+	  management.  It supports both uniprocessor (UP) and symmetric
-+	  multiprocessor (SMP) systems.
-+
-+	  If in doubt, say N.
-+
- config CPUFREQ_DT_PLATDEV
- 	tristate "Generic DT based cpufreq platdev driver"
- 	depends on OF
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index 8d141c71b016..4981d908b803 100644
---- a/drivers/cpufreq/Makefile
-+++ b/drivers/cpufreq/Makefile
-@@ -15,6 +15,7 @@ obj-$(CONFIG_CPU_FREQ_GOV_COMMON)		+= cpufreq_governor.o
- obj-$(CONFIG_CPU_FREQ_GOV_ATTR_SET)	+= cpufreq_governor_attr_set.o
- 
- obj-$(CONFIG_CPUFREQ_DT)		+= cpufreq-dt.o
-+obj-$(CONFIG_CPUFREQ_DT_RUST)		+= rcpufreq_dt.o
- obj-$(CONFIG_CPUFREQ_DT_PLATDEV)	+= cpufreq-dt-platdev.o
- 
- # Traces
-diff --git a/drivers/cpufreq/rcpufreq_dt.rs b/drivers/cpufreq/rcpufreq_dt.rs
-new file mode 100644
-index 000000000000..652458e7a3b9
---- /dev/null
-+++ b/drivers/cpufreq/rcpufreq_dt.rs
-@@ -0,0 +1,225 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! Rust based implementation of the cpufreq-dt driver.
-+
-+use core::format_args;
-+
-+use kernel::{
-+    b_str, c_str, clk, cpufreq, cpumask::Cpumask, define_of_id_table, device::Device,
-+    error::code::*, fmt, macros::vtable, module_platform_driver, of, opp, platform, prelude::*,
-+    str::CString, sync::Arc,
-+};
-+
-+// Finds exact supply name from the OF node.
-+fn find_supply_name_exact(np: &of::DeviceNode, name: &str) -> Option<CString> {
-+    let name_cstr = CString::try_from_fmt(fmt!("{}-supply", name)).ok()?;
-+
-+    np.find_property(&name_cstr).ok()?;
-+    CString::try_from_fmt(fmt!("{}", name)).ok()
-+}
-+
-+// Finds supply name for the CPU from DT.
-+fn find_supply_names(dev: &Device, cpu: u32) -> Option<Vec<CString>> {
-+    let np = of::DeviceNode::from_dev(dev).ok()?;
-+
-+    // Try "cpu0" for older DTs.
-+    let name = match cpu {
-+        0 => find_supply_name_exact(&np, "cpu0"),
-+        _ => None,
-+    }
-+    .or(find_supply_name_exact(&np, "cpu"))?;
-+
-+    let mut list = Vec::with_capacity(1, GFP_KERNEL).ok()?;
-+    list.push(name, GFP_KERNEL).ok()?;
-+
-+    Some(list)
-+}
-+
-+// Represents the cpufreq dt device.
-+struct CPUFreqDTDevice {
-+    opp_table: opp::Table,
-+    freq_table: opp::FreqTable,
-+    #[allow(dead_code)]
-+    mask: Cpumask,
-+    #[allow(dead_code)]
-+    token: Option<opp::ConfigToken>,
-+    #[allow(dead_code)]
-+    clk: clk::Clk,
-+}
-+
-+struct CPUFreqDTDriver;
-+
-+#[vtable]
-+impl opp::ConfigOps for CPUFreqDTDriver {}
-+
-+#[vtable]
-+impl cpufreq::Driver for CPUFreqDTDriver {
-+    type Data = ();
-+    type PData = Arc<CPUFreqDTDevice>;
-+
-+    fn init(policy: &mut cpufreq::Policy) -> Result<Self::PData> {
-+        let cpu = policy.cpu();
-+        let dev = Device::from_cpu(cpu)?;
-+        let mut mask = Cpumask::new()?;
-+
-+        mask.set(cpu);
-+
-+        let token = match find_supply_names(&dev, cpu) {
-+            Some(names) => Some(
-+                opp::Config::<Self>::new()
-+                    .set_regulator_names(names)?
-+                    .set(&dev)?,
-+            ),
-+            _ => None,
-+        };
-+
-+        // Get OPP-sharing information from "operating-points-v2" bindings.
-+        let fallback = match opp::Table::of_sharing_cpus(&dev, &mut mask) {
-+            Ok(_) => false,
-+            Err(e) => {
-+                if e != ENOENT {
-+                    return Err(e);
-+                }
-+
-+                // "operating-points-v2" not supported. If the platform hasn't
-+                // set sharing CPUs, fallback to all CPUs share the `Policy`
-+                // for backward compatibility.
-+                opp::Table::sharing_cpus(&dev, &mut mask).is_err()
-+            }
-+        };
-+
-+        // Initialize OPP tables for all policy cpus.
-+        //
-+        // For platforms not using "operating-points-v2" bindings, we do this
-+        // before updating policy cpus. Otherwise, we will end up creating
-+        // duplicate OPPs for the CPUs.
-+        //
-+        // OPPs might be populated at runtime, don't fail for error here unless
-+        // it is -EPROBE_DEFER.
-+        let mut opp_table = match opp::Table::from_of_cpumask(&dev, &mask) {
-+            Ok(table) => table,
-+            Err(e) => {
-+                if e == EPROBE_DEFER {
-+                    return Err(e);
-+                }
-+
-+                // The table is added dynamically ?
-+                opp::Table::from_dev(&dev)?
-+            }
-+        };
-+
-+        // The OPP table must be initialized, statically or dynamically, by this point.
-+        opp_table.opp_count()?;
-+
-+        // Set sharing cpus for fallback scenario.
-+        if fallback {
-+            mask.set_all();
-+            opp_table.set_sharing_cpus(&mask)?;
-+        }
-+
-+        let mut transition_latency = opp_table.max_transition_latency() as u32;
-+        if transition_latency == 0 {
-+            transition_latency = cpufreq::ETERNAL_LATENCY;
-+        }
-+
-+        let freq_table = opp_table.to_cpufreq_table()?;
-+        let clk = policy
-+            .set_freq_table(freq_table.table())
-+            .set_dvfs_possible_from_any_cpu()
-+            .set_suspend_freq((opp_table.suspend_freq() / 1000) as u32)
-+            .set_transition_latency(transition_latency)
-+            .set_clk(&dev, None)?;
-+
-+        mask.copy(policy.cpus());
-+
-+        Ok(Arc::new(
-+            CPUFreqDTDevice {
-+                opp_table,
-+                freq_table,
-+                mask,
-+                token,
-+                clk,
-+            },
-+            GFP_KERNEL,
-+        )?)
-+    }
-+
-+    fn exit(_policy: &mut cpufreq::Policy, _data: Option<Self::PData>) -> Result<()> {
-+        Ok(())
-+    }
-+
-+    fn online(_policy: &mut cpufreq::Policy) -> Result<()> {
-+        // We did light-weight tear down earlier, nothing to do here.
-+        Ok(())
-+    }
-+
-+    fn offline(_policy: &mut cpufreq::Policy) -> Result<()> {
-+        // Preserve policy->data and don't free resources on light-weight
-+        // tear down.
-+        Ok(())
-+    }
-+
-+    fn suspend(policy: &mut cpufreq::Policy) -> Result<()> {
-+        policy.generic_suspend()
-+    }
-+
-+    fn verify(data: &mut cpufreq::PolicyData) -> Result<()> {
-+        data.generic_verify()
-+    }
-+
-+    fn target_index(policy: &mut cpufreq::Policy, index: u32) -> Result<()> {
-+        let data = match policy.data::<Self::PData>() {
-+            Some(data) => data,
-+            None => return Err(ENOENT),
-+        };
-+
-+        let freq = data.freq_table.freq(index.try_into().unwrap())? as u64;
-+        data.opp_table.set_rate(freq * 1000)
-+    }
-+
-+    fn get(policy: &mut cpufreq::Policy) -> Result<u32> {
-+        policy.generic_get()
-+    }
-+
-+    fn set_boost(_policy: &mut cpufreq::Policy, _state: i32) -> Result<()> {
-+        Ok(())
-+    }
-+
-+    fn register_em(policy: &mut cpufreq::Policy) {
-+        policy.register_em_opp()
-+    }
-+}
-+
-+type DeviceData = Box<cpufreq::Registration<CPUFreqDTDriver>>;
-+
-+impl platform::Driver for CPUFreqDTDriver {
-+    type Data = Arc<DeviceData>;
-+
-+    define_of_id_table! {(), [
-+        (of::DeviceId(b_str!("operating-points-v2")), None),
-+    ]}
-+
-+    fn probe(_dev: &mut platform::Device, _id_info: Option<&Self::IdInfo>) -> Result<Self::Data> {
-+        let drv = Arc::new(
-+            cpufreq::Registration::<CPUFreqDTDriver>::register(
-+                c_str!("cpufreq-dt"),
-+                (),
-+                cpufreq::flags::NEED_INITIAL_FREQ_CHECK | cpufreq::flags::IS_COOLING_DEV,
-+                true,
-+            )?,
-+            GFP_KERNEL,
-+        )?;
-+
-+        pr_info!("CPUFreq DT driver registered\n");
-+
-+        Ok(drv)
-+    }
-+}
-+
-+module_platform_driver! {
-+    type: CPUFreqDTDriver,
-+    name: "cpufreq_dt",
-+    author: "Viresh Kumar <viresh.kumar@linaro.org>",
-+    description: "Generic CPUFreq DT driver",
-+    license: "GPL v2",
-+}
--- 
-2.31.1.272.g89b43f80a514
+Ok, will add a new match data for IPQ9574.
 
+> > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > > ---
+> > > >  drivers/cpufreq/qcom-cpufreq-nvmem.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> > > > index 939702dfa73f..5e6525c7788c 100644
+> > > > --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> > > > +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> > > > @@ -399,6 +399,7 @@ static const char *generic_genpd_names[] = { "perf", NULL };
+> > > >
+> > > >  static const struct qcom_cpufreq_match_data match_data_kryo = {
+> > > >  	.get_version = qcom_cpufreq_kryo_name_version,
+> > > > +	.genpd_names = generic_genpd_names,
+> > >
+> > > This forces that every Kryo SoC has "perf" genpd, which obviously isn't
+> > > corret (at least from the upstream support point of view).
+
+Understand, will have a different match data for IPQ9574.
+
+> > While trying to get the above backtrace, randomly during boot
+> > I see the following BUG too.
+>
+> This isn't a response to my comment.
+
+Sorry, felt that genpd_names would be needed for kryo CPUs too
+and wanted to bring this BUG() to your attention. Was wondering
+how kryo CPUs didn't face the following BUG(). Since this BUG()
+was hitting occasionally, assumed it could be some boot time
+driver probe order/timing related race that was getting masked in
+kryo CPUs but occuring in IQP9574.
+
+> > 	[    1.562847] ------------[ cut here ]------------
+> > 	[    1.574342] kernel BUG at drivers/cpufreq/cpufreq.c:1542!
+> > 	[    1.579203] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+> > 	[    1.579209] Modules linked in:
+> > 	[    1.579217] CPU: 2 UID: 0 PID: 11 Comm: kworker/u16:0 Not tainted 6.10.0-rc4-next-20240620-00020-g125eb3184fc1-dirty #10
+> > 	[    1.579227] Hardware name: Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C7 (DT)
+> > 	[    1.579232] Workqueue: events_unbound deferred_probe_work_func
+> > 	[    1.579249] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > 	[    1.579257] pc : cpufreq_online+0x938/0x954
+> > 	[    1.579271] lr : cpufreq_online+0x788/0x954
+> > 	[    1.579281] sp : ffff8000817c3520
+> > 	[    1.579283] x29: ffff8000817c3520 x28: ffff0000029efa50 x27: 0000000000000001
+> > 	[    1.579294] x26: 0000000000000001 x25: ffff8000814d8da0 x24: 0000000000000000
+> > 	[    1.579303] x23: ffff0000029ef9d0 x22: ffff800081735000 x21: 0000000000000000
+> > 	[    1.579312] x20: 00000000000c15c0 x19: ffff0000029ef800 x18: ffff00000183481c
+> > 	[    1.579321] x17: ffff8000818a3638 x16: 0000000000000000 x15: ffff8000818a3670
+> > 	[    1.579330] x14: 0000000000000003 x13: ffff00000192b140 x12: ffff8000814d8c58
+> > 	[    1.579338] x11: ffff00000192b140 x10: 00000000000009b0 x9 : ffff8000817c3240
+> > 	[    1.579347] x8 : ffff00000192bad0 x7 : 0000000000000001 x6 : ffff8000814d8da0
+> > 	[    1.579355] x5 : ffff8000812c32d0 x4 : 0000000000000000 x3 : 0000000000000000
+> > 	[    1.579363] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 00000000fffffff0
+> > 	[    1.579372] Call trace:
+> > 	[    1.579375]  cpufreq_online+0x938/0x954
+> > 	[    1.579386]  cpufreq_add_dev+0x80/0x98
+> > 	[    1.579395]  subsys_interface_register+0x100/0x130
+> > 	[    1.579404]  cpufreq_register_driver+0x150/0x244
+> > 	[    1.579413]  dt_cpufreq_probe+0x8c/0x440
+> > 	[    1.579420]  platform_probe+0x68/0xc8
+> > 	[    1.579430]  really_probe+0xbc/0x29c
+> > 	[    1.579438]  __driver_probe_device+0x78/0x12c
+> > 	[    1.579446]  driver_probe_device+0xd8/0x15c
+> > 	[    1.579454]  __device_attach_driver+0xb8/0x134
+> > 	[    1.579463]  bus_for_each_drv+0x84/0xe0
+> > 	[    1.579470]  __device_attach+0x9c/0x188
+> > 	[    1.579478]  device_initial_probe+0x14/0x20
+> > 	[    1.579487]  bus_probe_device+0xac/0xb0
+> > 	[    1.579494]  device_add+0x55c/0x720
+> > 	[    1.579500]  platform_device_add+0x1b8/0x244
+> > 	[    1.579510]  platform_device_register_full+0xfc/0x184
+> > 	[    1.579516]  platform_device_register_resndata.constprop.0+0x5c/0x8c
+> > 	[    1.579524]  qcom_cpufreq_probe+0x1e4/0x498
+> > 	[    1.579531]  platform_probe+0x68/0xc8
+> > 	[    1.579540]  really_probe+0xbc/0x29c
+> > 	[    1.579548]  __driver_probe_device+0x78/0x12c
+> > 	[    1.579556]  driver_probe_device+0xd8/0x15c
+> > 	[    1.579564]  __device_attach_driver+0xb8/0x134
+> > 	[    1.579573]  bus_for_each_drv+0x84/0xe0
+> > 	[    1.579580]  __device_attach+0x9c/0x188
+> > 	[    1.579588]  device_initial_probe+0x14/0x20
+> > 	[    1.579596]  bus_probe_device+0xac/0xb0
+> > 	[    1.579603]  deferred_probe_work_func+0x88/0xc0
+> > 	[    1.579611]  process_one_work+0x148/0x28c
+> > 	[    1.579623]  worker_thread+0x2e8/0x3f8
+> > 	[    1.579633]  kthread+0x110/0x114
+> > 	[    1.579641]  ret_from_fork+0x10/0x20
+> > 	[    1.579653] Code: aa1703e0 52800021 97e38ed5 17ffffea (d4210000)
+> > 	[    1.579657] ---[ end trace 0000000000000000 ]---
+> > 	[    1.851078] note: kworker/u16:0[11] exited with irqs disabled
+> > 	[    1.855791] note: kworker/u16:0[11] exited with preempt_count 1
+> > 	[    1.861586] ------------[ cut here ]------------
+> >
+> > Randomly, the following call seems to return -EBUSY causing
+> > the above BUG().
+> >
+> > 	ret = __cpufreq_driver_target(policy, old_freq - 1,
+> > 				      CPUFREQ_RELATION_L);
+> >
+> > 	/*
+> > 	 * Reaching here after boot in a few seconds may not
+> > 	 * mean that system will remain stable at "unknown"
+> > 	 * frequency for longer duration. Hence, a BUG_ON().
+> > 	 */
+> > 	BUG_ON(ret);
+> >
+> > Not sure why this does not happen in every boot, and how it
+> > is tied to genpd_names. Will debug and update.
+
+qcom_cpufreq_probe invokes dev_pm_opp_set_config if either
+genpd_names or get_version is set in qcom_cpufreq_match_data.
+If genpd_names is available, dev_pm_opp_set_config calls
+_opp_attach_genpd giving genpd_names as an input. This in turn
+calls dev_pm_domain_attach_by_name and binds the CPU device with
+the OPP tables etc. Sometimes, the pm_domain driver is probed by
+this time and sometimes it is not. When it is not probed,
+qcom_cpufreq_probe is also held back via the EPROBE_DEFER
+mechanism. This in turn holds back the cpufreq driver probe.
+
+When genpd_names is not set in match_data_kryo,
+dev_pm_opp_set_config doesn't call _opp_attach_genpd. Hence,
+regardless of pm_domain driver's probe status, qcom_cpufreq_probe
+completes. This allows the cpufreq driver's probe to proceed. The
+cpufreq driver tries to set some frequency based on the
+opp-tables. At this point if pm_domain driver is probed, the
+frequency change goes through. If pm_domain is not probed yet,
+the above BUG() happens.
+
+Will post the next version shortly with this and the other
+comments addressed. Please take a look.
+
+Thanks
+Varada
 
