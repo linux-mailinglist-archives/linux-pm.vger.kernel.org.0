@@ -1,179 +1,212 @@
-Return-Path: <linux-pm+bounces-10553-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10554-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD0049264E2
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 17:33:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED6B79264F2
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 17:35:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 248761F2316C
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 15:33:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3CA028415B
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 15:35:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D19517C7C4;
-	Wed,  3 Jul 2024 15:33:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EDC7181B90;
+	Wed,  3 Jul 2024 15:35:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="b+swRCGH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="InE0LzIp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F441168C4;
-	Wed,  3 Jul 2024 15:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EFF0181B8C;
+	Wed,  3 Jul 2024 15:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720020805; cv=none; b=UtZqCbUW2k2THhU0GezKbgC6rWzeTJ0kOEhf4FH/zWHybEjyoRkjh9Zmrb4ldz9tBYpT5PraBNpTu/IUrh1Hm4OatSnidQbQmBmaU9DR85IZbbWTSBItVWwPg/tN+hqG/BLRgFKb6Hk9lsGK+OeFmsMC4/81ng7xxF5hZhaHA0w=
+	t=1720020901; cv=none; b=bqm2VjzSyuFd6d0X6lFj9YWHWJjODDizLQ1oPZrFUbHlvfVGOe+oq/CIowiKAx2ROa1KxH1xj7PD99Dvirn5eOiiwTkCcA0F8mPoTCB6+K0Lltw8GbrcjTUaCQRADREpOhRIQkzFeUM5BJhkrlkNYOMr0m9csRzCTY5JKJ4d3zA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720020805; c=relaxed/simple;
-	bh=yl1nTP1CLzZB+KqfQ4zqkTGplb9iUlDVeXwjVUfcLNU=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=A2Elsj6/2Atmh9xyqfob0PXSu29mviU8y/JAz7QtLtHCRN9b1qmfNpRjebKKZb120v8iM6Dr6DqTkLQGPlXn0I3KheA+PbI74WkXyDlBGCX8jmpCNtVO2njHZ6cryWydksiZCjk4zq4CLYxGgd6PPHrvpKlBMfdYgak0HP8aArU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=b+swRCGH; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1720020776; x=1720625576; i=wahrenst@gmx.net;
-	bh=yl1nTP1CLzZB+KqfQ4zqkTGplb9iUlDVeXwjVUfcLNU=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
-	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=b+swRCGHMb7T+IF+fLsxlqXDlj1oFqgPtFBkTNegQXukR8sdNLLn2xCk/Br/xQ9I
-	 NFPNM8V1FBGFxvUo5QLezthP0RsxQ2phPTarefOyMUZqDoW+CHE8+j1u4HBcssa2A
-	 W6fBg3iuEXqdTzDS2LO/SqqEOZGxNuCoS0eOinsQCHd+IZF2iYL+BGXhxdrXvbLFM
-	 uXywgNlGCxuCQ4Ic1f7WGU0hgtSIYbAFVeMsbAgSPxboSnyJknuCVDk+PS5dwK638
-	 nH+NGLauAV+tgP68qmZzazk6tE2MjEL4JvUshko8gj6soP/OjB9T7V2JhuyqLzsIS
-	 QtoLgixMhOhFBtt1fg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MkYXs-1s0N3m1OM2-00kHIT; Wed, 03
- Jul 2024 17:32:56 +0200
-Message-ID: <7e3d4769-bd9c-47e8-bac2-9245b08866c3@gmx.net>
-Date: Wed, 3 Jul 2024 17:32:53 +0200
+	s=arc-20240116; t=1720020901; c=relaxed/simple;
+	bh=WoXjh+ypt7zasFF+jb9rD3vMfTVDYAqnKxgrqLWK2PE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KNYNVSosdNRJ+2ky78YpjDFewrDGpKOXdxgNcswSjPkML8Hg4j9N0H3THkF6QoQmKTJCSsnU7g/cQXFr1st1VUMRbfgA9fjWFFYczp4bCUbx9gbvAKufSH/SUmP5zTgAts7s4VbkIj0PWbtEO8xGwHCkOUQHgRpeoI7j4Or1VuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=InE0LzIp; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-79c056a7d4eso324181785a.2;
+        Wed, 03 Jul 2024 08:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720020898; x=1720625698; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=x/l9NCWIE0l4Bx+XrdXwTpflR2LutCCCxUOf/LMelxo=;
+        b=InE0LzIpza2ZgMh9M2YaFaUduzO8Vpo3UsvAfnDYNYQb45XtApSbseKOtnLbUA5PvH
+         ovD4Fp/1nIzQElU0/3/9t4zj9bAfQZ+9gWPBOIsA/NqZLo/B3Ou/q7j5NGKYH19Eitxd
+         RumuYu+s/AKxlJ3KfU/y/maq9/VBtpIF1rIiznqaBmoouO86jYo1SzhZLbr/d38PPzJo
+         OYP4gfM39yVfCcMZ0gwttk8z6QHgdFhP/U8imUKIGo2bwTXspUxdy3MKIu7ONFWTnjGs
+         x+hCFkJHCFqisoEbQeQKOw11c0viD37/xG2EH6UHYMT1J/5JignLpY/wVhQqemMU5qrv
+         BkNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720020898; x=1720625698;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x/l9NCWIE0l4Bx+XrdXwTpflR2LutCCCxUOf/LMelxo=;
+        b=th1L2yK387iY70hCS5SJnmAVSyJ9AOMRH0EAftCcmvjNoVrr+uoL2uv/oKiGfEvVAr
+         jHMWXKKWiD9KNHwFNU4PTb2v4GuWupGwC1a1ygxld6WB5IhZG3p/5+ecmsLxwwWnBU//
+         Swhhyx2+4aSQJqvXE3NpUAPbcOoP5gvuva2DQtIBdJVxLTwV+O+QMyrbkyVdtA4gahAi
+         wR4oLc+mGTMrsF91s0hYSZgzusvCVNrEj5FWNBk7t03Qu7eI0KPLPk1WuuAZrkfdq73+
+         d34cr4oedBODhmwgn+kUxpjHkvb2I/zTCekq79ULOWNLXJqxn4wiPFoLw03ljbZ1AAL4
+         Eh8w==
+X-Forwarded-Encrypted: i=1; AJvYcCVwWGchL0LJmnLaIfQnPhNQMbvnsXNOs9+dRPfrSnOfpQTgLkP+HvBQpoCpCkhyU8twN2UjzsWMhnJb5cvVdNVMDYjkxHzxLO9EbIJWV3Vh4ArCWfprm2TF8KBkChgE5dJcehAfvJEAWwVyaYW1xUQdtBoVPdHqyxEaoKd1aOVzmJCJpW7I1g==
+X-Gm-Message-State: AOJu0YwWChpflNT+kziy7foxsWmmQBwO1oxNfp2o5wbNNL/MgrI6z5Yx
+	Oij8laVjUMXA1PnoogAutCKAOeghuCkYa0oT5kRWkcXA1f8xZotH
+X-Google-Smtp-Source: AGHT+IEO4d2+aOnQArZ0S0ETV0kECHeJ9pw9DdLn3G4dWl2YLKyImfiX01E+IK2AhKyvjtzb/1cuCA==
+X-Received: by 2002:ad4:5d49:0:b0:6b5:de1e:4bc1 with SMTP id 6a1803df08f44-6b5de1e4df1mr37812496d6.51.1720020898517;
+        Wed, 03 Jul 2024 08:34:58 -0700 (PDT)
+Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b5e3d4b56csm4534756d6.48.2024.07.03.08.34.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jul 2024 08:34:57 -0700 (PDT)
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id 244211200043;
+	Wed,  3 Jul 2024 11:34:57 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute7.internal (MEProxy); Wed, 03 Jul 2024 11:34:57 -0400
+X-ME-Sender: <xms:oW-FZjiKjNwbtqpKpce0t7OUID3NoJS9L5vePjOeg6UX4whTG3YH7Q>
+    <xme:oW-FZgBGm2-keJLkSXRoYqpwmfXO_4u60M3TwaI4hdRpC0YSUi6ijx57lQQ0zZ21E
+    8s1UpbVpr5y2-1q2Q>
+X-ME-Received: <xmr:oW-FZjEmYYWtndaJ7WpAG141qzt9Wu-EQKvbeOKNER3tMkOhkKkaQbNBsQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejgdeltdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpedtuedtveethfdugfejieetleekteekgeeguefhvedvteeljeelteehhffh
+    ieetffenucffohhmrghinheptggrshhtrdgrshenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghr
+    shhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvg
+    hngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:oW-FZgS1vAodjsg-AiSVHGVlUnwX5eeNDGhBHIXHEX6ILo_GI9F4tQ>
+    <xmx:oW-FZgxv7rDfADyfXu9HSStSXn_BeRp6ZYFCMfXfmZSsdVr6bLViMg>
+    <xmx:oW-FZm6sQNUNo7NQ9Cr-q8TOVusgKy9Yz4ubNw6RMtRwoO7cd5v6fQ>
+    <xmx:oW-FZlzQebP0q8E4d-OfhD29xYWX6oQn6Qv1mdfdNOFqVHhlPk6oiw>
+    <xmx:oW-FZggskcFHT1Oa_tFVHo1ZR_NEvvBsLZNdlHjVcevbDmsXaxh7SJ6d>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 3 Jul 2024 11:34:56 -0400 (EDT)
+Date: Wed, 3 Jul 2024 08:34:55 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>, linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+	rust-for-linux@vger.kernel.org,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Erik Schilling <erik.schilling@linaro.org>,
+	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH V3 1/8] rust: Add initial bindings for OPP framework
+Message-ID: <ZoVvn0QCSR8y4HQJ@Boquns-Mac-mini.home>
+References: <cover.1719990273.git.viresh.kumar@linaro.org>
+ <fe8e9a96b29122876346fc98a6a9ede7e4f28707.1719990273.git.viresh.kumar@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/11] drm/vc4: hdmi: Disable connector status polling
- during suspend
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Thomas Gleixner <tglx@linutronix.de>, Jassi Brar <jassisinghbrar@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
- Minas Harutyunyan <hminas@synopsys.com>,
- Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
- Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
- bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
-References: <20240630153652.318882-1-wahrenst@gmx.net>
- <20240630153652.318882-8-wahrenst@gmx.net>
- <20240702-qualified-archetypal-worm-416a2f@houat>
- <b4295be1-6fa4-4118-8554-b8a7cc605f9d@gmx.net>
-Content-Language: en-US
-In-Reply-To: <b4295be1-6fa4-4118-8554-b8a7cc605f9d@gmx.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ePjWIzkXckMeXLCLN/9eWki0p9PbzMMzwiOfq3KAK6zQa7sDIBF
- zH8h+siK/1Z3d4McRciBNMemTboDtgGnkEtqsmZ7h95n/EwESNV73n6tV7WEHvrhu3K0Qh0
- potxhOzBRp5gWXn1F+pPXcE9TzfCaXny5WdTC+fsWiiYs9R1H5C6OjsKcRDToQbAlO2TRNi
- oy3MbvVrQbkJqmuUhOzDw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:BQzv5ocnjQY=;x9/HKnkcpT8XNMHe0LAN+c4jHE2
- QAlqSIu10Lv8ioocBQxf6Q07NbNighg/IJzNce9x9jq3oSQ/pL2TpJaJy6ME1OG9AgW3VbxUK
- GFJzdu/tllTghQlPOKAQ52RmJJ/JqX2eGWjYd2lf29U1fX26sUT9afSyD8G89RuGOARYK7asl
- ys19OVQUKejWOYACtcpdQBDI5B6v9UHKvtErQ0Pkaidnp3q3D08zu5nbfIl7t8+TwDPWauQGt
- u/IxlhYBs2mST1NgHDGzg7guiooeGdx9117SCPcA7Y5dyeChavFTyh7IMQ8JfjjmXsU98fwC1
- RPbvwUBIhy3orNk5RNT7jU3URrhfx4ogbq/iFnq9serP7aufYPMiG3Z4zCjFnVD0F45+mYBx6
- 6Fo9zFu6Xn9LtoXjL1u3xWnwPAdAzZ9l6xVs4VXswcObkPL7kCCtqtxjaUvQk3C7liGzmMuLb
- +Rr1WJYNHeWrhcEVMFSZlpBN8/4xZ3cpJdKjw4smgTpFpNsNzIBcs7dGp8JRzzdzetOylAksP
- JXgl3qDdYyCCIV+U5KX1Sk1g35nkMNRoxYMdAXkIO5acBbYQDfrln7PbZyWq3cv+ulnEq3+Yy
- pXdaITskzC1+l7RRW+28eR1nyRQLm0h2vSI1TMstoZYCsZZmF2pIX5ya+ZjAtBnWW+NBUfB2/
- WNpiwXGLxnGRaXaViQfOi+ZBLJ76e+xfqoPnjRZW0Y8yFZOasoCRA6VmEjr3S+eyjqgyxlVfL
- xZV+ixfsIDZxI5aZ5C8i8EBjK0eAiuHwNw1QPsm5y4N5IEfHzhsDnNKy8M7yUXRvWfi+gWFDf
- jX8TvgK/ORZkMzrQlMtFYKs6VGiwqIDQllJcvLX5wxAb8=
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fe8e9a96b29122876346fc98a6a9ede7e4f28707.1719990273.git.viresh.kumar@linaro.org>
 
-Am 03.07.24 um 12:28 schrieb Stefan Wahren:
-> Hi Maxime,
->
-> Am 02.07.24 um 15:48 schrieb Maxime Ripard:
->> Hi,
->>
->> On Sun, Jun 30, 2024 at 05:36:48PM GMT, Stefan Wahren wrote:
->>> Suspend of VC4 HDMI will likely triggers a warning from
->>> vc4_hdmi_connector_detect_ctx() during poll of connector status.
->>> The power management will prevent the resume and keep the relevant
->>> power domain disabled.
->>>
->>> Since there is no reason to poll the connector status during
->>> suspend, the polling should be disabled during this.
->>>
->>> It not possible to use drm_mode_config_helper_suspend() here,
->>> because the callbacks might be called during bind phase and not all
->>> components are fully initialized.
->>>
->>> Link:
->>> https://lore.kernel.org/dri-devel/7003512d-7303-4f41-b0d6-a8af5bf8e497=
-@gmx.net/
->>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
->>> ---
->>> =C2=A0 drivers/gpu/drm/vc4/vc4_hdmi.c | 11 +++++++++++
->>> =C2=A0 1 file changed, 11 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c
->>> b/drivers/gpu/drm/vc4/vc4_hdmi.c
->>> index b3a42b709718..e80495cea6ac 100644
->>> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
->>> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
->>> @@ -3106,6 +3106,13 @@ static int vc5_hdmi_init_resources(struct
->>> drm_device *drm,
->>> =C2=A0 static int vc4_hdmi_runtime_suspend(struct device *dev)
->>> =C2=A0 {
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct vc4_hdmi *vc4_hdmi =3D dev_get_d=
-rvdata(dev);
->>> +=C2=A0=C2=A0=C2=A0 struct drm_device *drm =3D vc4_hdmi->connector.dev=
-;
->>> +
->>> +=C2=A0=C2=A0=C2=A0 /*
->>> +=C2=A0=C2=A0=C2=A0=C2=A0 * Don't disable polling if it was never init=
-ialized
->>> +=C2=A0=C2=A0=C2=A0=C2=A0 */
->>> +=C2=A0=C2=A0=C2=A0 if (drm && drm->mode_config.poll_enabled)
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 drm_kms_helper_poll_disabl=
-e(drm);
->> Does it make sense to add it to runtime_suspend?
-> i saw that other drm drivers used drm_mode_config_helper_suspend() in
-> the RUNTIME_PM_OPS. But i agree, it should be better moved to
-> SYSTEM_SLEEP_PM_OPS.
->> What if the board boots without a display connected, and only after a
->> while one is connected? Wouldn't that prevent the driver from detecting
->> it?
-> tbh I noticed that HDMI re-detection didn't worked in my setup
-> 6.10-rcX before this series. I need to investigate ...
-Okay, this patch breaks definitely HDMI re-detection. So please ignore
-this patch. Sorry, about this mess.
+Hi Viresh,
 
-There is another minor issue which already exists before that cause the
-following log entry on HDMI reconnect:
+On Wed, Jul 03, 2024 at 12:44:26PM +0530, Viresh Kumar wrote:
+> This commit adds initial Rust bindings for the Operating performance
+> points (OPP) core. This adds bindings for `struct dev_pm_opp` and
+> `struct dev_pm_opp_data` to begin with.
+> 
+> Reviewed-by: Manos Pitsidianakis <manos.pitsidianakis@linaro.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+[...]
+> +
+> +/// Operating performance point (OPP).
+> +///
+> +/// # Invariants
+> +///
+> +/// The pointer stored in `Self` is non-null and valid for the lifetime of the ARef instance. In
+> +/// particular, the ARef instance owns an increment on underlying object´s reference count.
 
-[=C2=A0=C2=A0 74.078745] vc4-drm soc:gpu: [drm] User-defined mode not supp=
-orted:
-"1920x1200": 60 154000 1920 1968 2000 2080 1200 1203 1209 1235 0x68 0x9
+Since you use `ARef` pattern now, you may want to rewrite this
+"invariants".
 
-But in this case HDMI works.
+> +#[repr(transparent)]
+> +pub struct OPP(Opaque<bindings::dev_pm_opp>);
+> +
+> +// SAFETY: `OPP` only holds a pointer to a C OPP, which is safe to be used from any thread.
+> +unsafe impl Send for OPP {}
+> +
+> +// SAFETY: `OPP` only holds a pointer to a C OPP, references to which are safe to be used from any
+> +// thread.
+> +unsafe impl Sync for OPP {}
+> +
 
-Regards
->>
->> Maxime
->
+Same for the above safety comments, as they are still based on the old
+implementation.
 
+> +// SAFETY: The type invariants guarantee that [`OPP`] is always refcounted.
+> +unsafe impl AlwaysRefCounted for OPP {
+> +    fn inc_ref(&self) {
+> +        // SAFETY: The existence of a shared reference means that the refcount is nonzero.
+> +        unsafe { bindings::dev_pm_opp_get(self.0.get()) };
+> +    }
+> +
+> +    unsafe fn dec_ref(obj: ptr::NonNull<Self>) {
+> +        // SAFETY: The safety requirements guarantee that the refcount is nonzero.
+> +        unsafe { bindings::dev_pm_opp_put(obj.cast().as_ptr()) }
+> +    }
+> +}
+> +
+> +impl OPP {
+[...]
+> +
+> +impl Drop for OPP {
+
+I don't think you need the `drop` implementation here, since it should
+be already handled by `impl AlwaysRefCounted`, could you try to a doc
+test for this? Something like:
+
+	let opp: ARef<OPP> = <from a raw dev_pm_opp ponter whose refcount is 1>
+	drop(opp);
+
+IIUC, this will result double-free with the current implementation.
+
+Overall, `OPP` is now representing to the actual device instead of the
+pointer to the device, so the `drop` function won't need to handle the
+refcounting.
+
+Regards,
+Boqun
+
+> +    fn drop(&mut self) {
+> +        // SAFETY: The safety requirements guarantee that the refcount is nonzero.
+> +        unsafe { bindings::dev_pm_opp_put(self.as_raw()) }
+> +    }
+> +}
+> -- 
+> 2.31.1.272.g89b43f80a514
+> 
 
