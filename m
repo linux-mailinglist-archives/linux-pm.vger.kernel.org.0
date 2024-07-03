@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-10504-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10505-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F758925653
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 11:18:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45B02925657
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 11:18:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C272285759
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 09:18:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0EEA1F28459
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 09:18:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7AE13CA95;
-	Wed,  3 Jul 2024 09:17:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43A9D13D524;
+	Wed,  3 Jul 2024 09:18:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="idXw1Ieq"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="BqzXZUha"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF7713C8EE;
-	Wed,  3 Jul 2024 09:17:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80BA136E3A;
+	Wed,  3 Jul 2024 09:18:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719998278; cv=none; b=sw2FGCkqXdyuY8Wk/HK3iwB8QYRRhQk55X9FSkICNRjNm/otB+ZPLriEbIql1rKyUeM2Ss2ftVQ+JvAcNulDQENEOFPyUP+R35L8VUl9pgs/tNakp8aTzMkFnjeN0/yft9vPv6oxaSL6eVrRGgLUCUJQwRtRutip1tjLYtygSII=
+	t=1719998286; cv=none; b=ldJoR/XnwQrlYlDb84qg8Mqf7cd4EAkqpAolJN1c/SD8I2FyRqk6wUpYLYxrUMebhmrqHKMp18avpOFsAvhXR9+OeGvi6FVs/NdBhWTylZSfcqQ44kq/qM1Gu0yKuBKGr3+SFKPeg5lPqshqwiGDb5aCzZfubBTlquTowIPFurU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719998278; c=relaxed/simple;
-	bh=dbf/rL/FyPZZYRw3yCB0mNrAQS41nJrX96F9bPC+fBc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A3lOSaBUA3CrQhX8382q3+LfeIEyvvi+0iHeO4mMdz2lnBkFvY5ETjpUU+YBsJIgKhnY5X0IxOoAfGITj0YcMTmIR60VZK1NMcjHAhcf1OsTM92cL+JG4RZzJCqT9zINQgX4NQbLBD40OJ1THVkWlSmLu+vvrv9oaMU2Czxlv98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=idXw1Ieq; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1719998286; c=relaxed/simple;
+	bh=tDjrifa2LqFmQWsLg/ZSP6qje1xKGbwYP8qq+mdaR4Q=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=o7LxHAt/FGE4m6VYyK8HvdP0MHaPvo6HcnftcMGCOfG61mxzzYRtqm1tWQwf+dYwAKS7jAd4cdzZ5Fy5rw+Ok+CIevuYXYNd9Tf2CgNw39ONoJQQp6eAFIeNiy7Dxmh69zSA+UWkaK+VgfamOK8Sbt6nPH7iXV9KayWzNeUqgX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=BqzXZUha; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4635JsYa024431;
-	Wed, 3 Jul 2024 09:17:43 GMT
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 463857O3003186;
+	Wed, 3 Jul 2024 09:17:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	C0fIEm0CuCF3UCWIAb9JxkR8v15bhRZIqQrykRN84RA=; b=idXw1IeqnMwS7Q3G
-	XnQNG60c9tu47gkNAkc+FHxJobL0Yt3XReEDttRV60Few6POf8KvdQGA6Hhu7L3e
-	3G3fRrN0XCmVVlhAvVi4RmWvYN6sO7mlvLg/lks6BcV+nV69omLi40d0kWeJnqgk
-	dOlRKhY/zYCGKhacz8iU244h7EpzQawieM0F+QcdNm98cbnWQKexJc2eKxkN+bS/
-	vmAofPBJos30yaffH2XzyzitcJzIUVcWT4vU+3vtmtJQCRrp/FfG60qfhryVRRnU
-	oFJafAyi9WI4tAu439O7plKpAdo0Qrp/QOZrhN1Bmerik3V7iHnWCNzWovuOynVS
-	An9vyQ==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4050cy8jj1-1
+	LpWFBmy7fneVsM1DRhC0RthcvO+OK8rZqAR7uEmawuo=; b=BqzXZUhalcb/EBWa
+	H4KhAmymWvdVjIQM9YP+H9UHFv7tozq14f6tLZOhPn4cWqpcv4Lzlewz3I4FpiaU
+	Vy8xj06bwmM2pYZq0OEzcXAH1ZZ6aVT8j4bCZkx+Vz/vmuh6p5J83/PXStJSlIFm
+	lZvlTIcXAZgpycm1uHBymhv2zauw5oEsS2ScKe6zHiGLF5jEsSoBM2+rnQZF53hF
+	+wKz0HN9r5yVa7yKfHE/L2atbiUiTGI/wLS8tNw090EmgAPHop6ZLWfs87rUKwN5
+	WCZ0N+zzMUur2oAocdoe30spDvQLAIiO6VmpNNaddCLEm61IyAK+ljE8IptWvvpT
+	8OpCHA==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4029uxga98-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Jul 2024 09:17:43 +0000 (GMT)
+	Wed, 03 Jul 2024 09:17:51 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4639Hfil025354
+	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4639Honc028244
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 3 Jul 2024 09:17:41 GMT
+	Wed, 3 Jul 2024 09:17:50 GMT
 Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 3 Jul 2024 02:17:33 -0700
+ 15.2.1544.9; Wed, 3 Jul 2024 02:17:41 -0700
 From: Varadarajan Narayanan <quic_varada@quicinc.com>
 To: <vireshk@kernel.org>, <nm@ti.com>, <sboyd@kernel.org>, <robh@kernel.org>,
         <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
@@ -70,9 +70,10 @@ To: <vireshk@kernel.org>, <nm@ti.com>, <sboyd@kernel.org>, <robh@kernel.org>,
         <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-clk@vger.kernel.org>
-Subject: [PATCH v4 02/10] cpufreq: qcom-nvmem: Add support for IPQ9574
-Date: Wed, 3 Jul 2024 14:46:43 +0530
-Message-ID: <20240703091651.2820236-3-quic_varada@quicinc.com>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 03/10] dt-bindings: power: rpmpd: Add IPQ9574 power domains
+Date: Wed, 3 Jul 2024 14:46:44 +0530
+Message-ID: <20240703091651.2820236-4-quic_varada@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240703091651.2820236-1-quic_varada@quicinc.com>
 References: <20240703091651.2820236-1-quic_varada@quicinc.com>
@@ -88,62 +89,55 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: TEK89Fqy3HaU0jrU1VdfWvGo4pfbBIhG
-X-Proofpoint-ORIG-GUID: TEK89Fqy3HaU0jrU1VdfWvGo4pfbBIhG
+X-Proofpoint-GUID: QLwJLAohtBkic7jGHIycFu3-p7_UuId4
+X-Proofpoint-ORIG-GUID: QLwJLAohtBkic7jGHIycFu3-p7_UuId4
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-03_05,2024-07-02_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- mlxlogscore=999 priorityscore=1501 adultscore=0 mlxscore=0 impostorscore=0
- spamscore=0 phishscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2406140001
- definitions=main-2407030068
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=937
+ priorityscore=1501 impostorscore=0 bulkscore=0 spamscore=0 mlxscore=0
+ clxscore=1015 phishscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2407030068
 
-Add qcom_cpufreq_match_data for IPQ9574. This is used for tying
-up the cpu@N nodes with the power domains. match_data_kryo is not
-used since it doesn't set genpd_names. If genpd_names is not set,
-'cat /sys/kernel/debug/qcom_cpr3/thread0' causes cpr3_debug_info_show()
-to crash while trying to read thread->corner->last_uV as
-thread->corner is NULL.
+Add the compatibles and indexes for the rpmpd in IPQ9574.
 
-	Call trace:
-		cpr3_debug_info_show
-		seq_read_iter
-		seq_read
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 ---
-v4: Update commit log to include stack trace
-    Introduce qcom_cpufreq_match_data for IPQ9574
+v3 & v4: no changes
+v2: Add Reviewed-by
 ---
- drivers/cpufreq/qcom-cpufreq-nvmem.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/power/qcom,rpmpd.yaml | 1 +
+ include/dt-bindings/power/qcom-rpmpd.h                  | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-index 939702dfa73f..95558586c2e6 100644
---- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-@@ -428,6 +428,11 @@ static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
- 	.get_version = qcom_cpufreq_ipq8074_name_version,
- };
+diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+index 929b7ef9c1bc..e20ba25fa094 100644
+--- a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
++++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+@@ -17,6 +17,7 @@ properties:
+   compatible:
+     oneOf:
+       - enum:
++          - qcom,ipq9574-rpmpd
+           - qcom,mdm9607-rpmpd
+           - qcom,msm8226-rpmpd
+           - qcom,msm8909-rpmpd
+diff --git a/include/dt-bindings/power/qcom-rpmpd.h b/include/dt-bindings/power/qcom-rpmpd.h
+index 608087fb9a3d..0538370bfbb4 100644
+--- a/include/dt-bindings/power/qcom-rpmpd.h
++++ b/include/dt-bindings/power/qcom-rpmpd.h
+@@ -402,6 +402,9 @@
+ #define QCM2290_VDD_LPI_CX	6
+ #define QCM2290_VDD_LPI_MX	7
  
-+static const struct qcom_cpufreq_match_data match_data_ipq9574 = {
-+	.get_version = qcom_cpufreq_kryo_name_version,
-+	.genpd_names = generic_genpd_names,
-+};
++/* IPQ9574 Power Domains */
++#define IPQ9574_VDDAPC		0
 +
- static void qcom_cpufreq_suspend_virt_devs(struct qcom_cpufreq_drv *drv, unsigned int cpu)
- {
- 	const char * const *name = drv->data->genpd_names;
-@@ -621,7 +626,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
- 	{ .compatible = "qcom,ipq8064", .data = &match_data_ipq8064 },
- 	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
- 	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
--	{ .compatible = "qcom,ipq9574", .data = &match_data_kryo },
-+	{ .compatible = "qcom,ipq9574", .data = &match_data_ipq9574 },
- 	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
- 	{ .compatible = "qcom,msm8960", .data = &match_data_krait },
- 	{},
+ /* RPM SMD Power Domain performance levels */
+ #define RPM_SMD_LEVEL_RETENTION       16
+ #define RPM_SMD_LEVEL_RETENTION_PLUS  32
 -- 
 2.34.1
 
