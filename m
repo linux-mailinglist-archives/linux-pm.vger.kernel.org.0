@@ -1,187 +1,228 @@
-Return-Path: <linux-pm+bounces-10555-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10556-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A442A926565
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 17:59:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B66859265A6
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 18:09:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F810B22209
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 15:59:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F1B6289E6B
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2024 16:09:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77135181CE4;
-	Wed,  3 Jul 2024 15:59:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD1C181D02;
+	Wed,  3 Jul 2024 16:09:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="LqjFPToF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bcZIgWdS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B53F18131E
-	for <linux-pm@vger.kernel.org>; Wed,  3 Jul 2024 15:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7DF181CEC;
+	Wed,  3 Jul 2024 16:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720022350; cv=none; b=XPthnV2KmwYhOl6Sv6iq3bexNOsfWJeKtr3fm7FRxj9WpP+qj/HUJHGJ8KxSprEbNqNDVZ7wSFG08R+uLFkpH2ZamkPRaPm9JRp3dv/M7WJnyiByY/bMvDEBvNpQOoMEwaISXnOHjX76UYA4L0vySaVneYNCqWr9n1FBW06PmJ0=
+	t=1720022940; cv=none; b=TYcloX+Qw45xVZ1ebsuX3lreMSrtg9cYjMsJ6AbL2MaA/TJpUSFdfBch4zL6GAOHuZOcLmQHmf1yzBRef6l6L9U23jFp15zE9rboy9VBV+slDVm6/XVIiEf5+wEadv/3AJi0qRio2MvS39GiAbvpBq1IEnyXMj4UrqR9Vb+32A4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720022350; c=relaxed/simple;
-	bh=kw+i48wUHIKLPANobfnoGVgboD9WtzhZacEnJR9xTj4=;
+	s=arc-20240116; t=1720022940; c=relaxed/simple;
+	bh=Wrl2QCxQh9DL4QM23kjgDJ21J8YSKTQXFbPMz9pni74=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=spemAwvgJ3klB1Tx3PUWxSHWh35I13rHj7v0cqKuoQSaA4hJFTyOOGdTb1Z5JO73tUv16waHfwa1zAu13gUcUGDA4dWeqnNR1dG526CpkNIb+1Bh7rDIhksJMzwOurVXV94Lej/9ECcWNmYceVhO7BQZfb9oZ0iEsbixC+v+Pw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=LqjFPToF; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dfa71ded97bso624258276.1
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2024 08:59:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1720022346; x=1720627146; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AzVnxmrPhsGH+MV5zEtWgqYRuXmnHJ2NW9xRAWbg94o=;
-        b=LqjFPToF6bmN70L2sptauAMPmAU7InVz8t5il6BpMsyJAA7n56o3UmnWTL1Rl8Y54H
-         ujbFNMu63il6tQoSyhEJ30XYdniaowiVbNBhlMVtoXurKjm/gNy2jvLiiDOfZ9mzeZhZ
-         alLD8zaBO+MItc36xNgZydAxC8DZXBZpuX2sX5Tj60p+w+ce49qd3Cglp+Epm9UZrXyA
-         5FZZR9cduYuFgIwNMAZ+9Z6aZGHBsGXe7/F6jBOVCcBJvz9cgxOD0tlzl+BS1sRPflJp
-         dQN9ZY9mfzD+fD8jN8BADuUlUgFQdo9oOXMRM2daq8zMQTgU/vcBLiagVRI39R8Hn8SX
-         /VsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720022346; x=1720627146;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AzVnxmrPhsGH+MV5zEtWgqYRuXmnHJ2NW9xRAWbg94o=;
-        b=dwEGYj7w4jOfqRLhcSJbm4F0N0r8x5l0BIaI7AskveHZbpVzVQ7GbvL4CFmwfYMhXY
-         M+XQOK+vcfOpXFmKCDLWkN8vcxQk0fzmnQdJwsl5EJv4gmHJjLZrF/VhKiZE5LfPWzka
-         Kh73RZv8JJysILZ1kJTwxY0oUz+5Xr3pi/kQqpnQuV6TjfAGXTqf2z4tPJ/SGJJpLIYm
-         V3KTkxyxE2Jq/lsXalgvPWFDtBTXU10Vxwx3//dkwCuIrUGNQ3Adw7OJyExgN9ngnBaZ
-         R2zsq/0cHfyHA/Jrg76uFCSHAxxtpwiySnHsdx+J3cuHO/WQOyJBfuihhYec5t/Dm9K+
-         t1uQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWY6zfACZSjRO7BBeLXBQXi/pTceO4UqKJfbs47ksaq19RSAfPMZvk/Ff2SiIiguuNoIjZgeZaTU2Gxi65ShlKRTDnVL+oQBsg=
-X-Gm-Message-State: AOJu0YwxzWum9duQH/yp6jL6V/JPHn4cQGIltgWWvlUZDMPcSDBOSgIu
-	a7Z+9CzC1cW5Ek6zZ7i1kQfZIH5AA/1OTsi/7zf1Q86cUKUF6m3hDLQe4jFPdfSG7DU0W/b04yJ
-	RnoZPeq66LyLSHlM2/2Y1GVfMZ3pVa5UxMY6JnQ==
-X-Google-Smtp-Source: AGHT+IGqCViiKmmK3QRMAQYZrLMjCIwJNQ8NdAg3wRUVNKBTDZnLrc4qjCCOWQvlXVuWYKuWOAPNETjht013Knj8XzI=
-X-Received: by 2002:a25:9105:0:b0:e03:5372:6b1a with SMTP id
- 3f1490d57ef6-e03ad927492mr1348985276.20.1720022346289; Wed, 03 Jul 2024
- 08:59:06 -0700 (PDT)
+	 To:Cc:Content-Type; b=msdAkZkWBlvjE21yyKJfpivHiPXxWcu+GAaBNTIvCEwqtLjeLR1i92KSjQw6r/bIyETEi+qKYOY6dEizW26anU+Qfg4QJ15bjLgxChoTPXyMTLLxpySGnzDiSIcnXvHzYGg7cza4cxyxkXKjThH7b1RhHj5jTBam8DlbtxmsybY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bcZIgWdS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA87C4AF0E;
+	Wed,  3 Jul 2024 16:08:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720022939;
+	bh=Wrl2QCxQh9DL4QM23kjgDJ21J8YSKTQXFbPMz9pni74=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=bcZIgWdSHl9HqQ9LWnmRQCxhKdtymnFvObDMowIfDX0vIXUhmbAhMgYTRkUSumnAR
+	 m3SBYSqMuezR0YxitmmwBymOefuijwH0aS8P6SMCa0dEAEbUuZDgaSQ58OxUvnl6HJ
+	 i0hCxuUii7tmCd6aeedo/Nn5S7+Qe0cCw1ig1l76LEklhotELD0NfRMWK9XLXpxAOj
+	 cQavn/1t2QmSQZ2noBvZ7som789iL75LNcJdVTzw/oxkvBbpJP1Dtdsr9VXV9hhtGI
+	 0LgnXIEA0cC2qlw2z4OPhcIg6fW/5ZSPmORwAEzViUYgJNMEjmGECtwIpuo80hy48i
+	 mwGqlWHLHmC6g==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-25e19ad0050so78493fac.0;
+        Wed, 03 Jul 2024 09:08:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVWKQWCHNiDXrHDIUI44c3NDRla27AdvzgXeU42/ib8wUxNQcn+rlPEzF4uEBWEEgT2LQliUm2RX47I8+7+6yLSFT2TYVEw+Nq9ek3KIxkOAdWd6v6qerSo9MEfAfp+jIiO5P3+qQX/T1ETrcQhS4bweAe1fPyxPR/Hn1Y7rwCRHt4xIan9
+X-Gm-Message-State: AOJu0YyyIxR9k9bFYd1dG5AYEr9jZVlpWejPrxY3V5Fms5fy3b2IAddf
+	/J0MCYRlUxlLxEhusLVLsRZY+QvqfxphdsI9pLKT7Yn1x0tkU2m0fHSWYEj/h/aREqO9cpKKMna
+	W1IbI1aht+DM+Hw7BQXUwZDezCXE=
+X-Google-Smtp-Source: AGHT+IG/+G5oxAf3pRAL08K5QVCFB8+ouzzqF/SX5Qi842HGV2jF2VSe0OAQWbDffHLH1vdDzdUWiacN6hqcO09jXs0=
+X-Received: by 2002:a05:6870:8a0b:b0:25c:f5f8:a7fd with SMTP id
+ 586e51a60fabf-25db34044admr11982494fac.2.1720022938630; Wed, 03 Jul 2024
+ 09:08:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240630153652.318882-1-wahrenst@gmx.net> <20240630153652.318882-8-wahrenst@gmx.net>
- <20240702-qualified-archetypal-worm-416a2f@houat> <b4295be1-6fa4-4118-8554-b8a7cc605f9d@gmx.net>
- <7e3d4769-bd9c-47e8-bac2-9245b08866c3@gmx.net>
-In-Reply-To: <7e3d4769-bd9c-47e8-bac2-9245b08866c3@gmx.net>
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date: Wed, 3 Jul 2024 16:58:49 +0100
-Message-ID: <CAPY8ntDg_cqqN4TmQPNiULVS-Fw0uOx8Ut-VCro56_-FTALeQg@mail.gmail.com>
-Subject: Re: [PATCH 07/11] drm/vc4: hdmi: Disable connector status polling
- during suspend
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: Maxime Ripard <mripard@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Jassi Brar <jassisinghbrar@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Minas Harutyunyan <hminas@synopsys.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>, 
-	Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org, 
-	bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+References: <2764814.mvXUDI8C0e@rjwysocki.net> <2ed4c630-204a-4f80-a37f-f2ca838eb455@linaro.org>
+ <8d91a3c1-018f-495b-83be-979b795b5548@linaro.org> <12c5c133-9519-4a26-b9a3-2da1d3466e94@linaro.org>
+ <15b67ce6-3238-435d-ad28-7c06efbe9153@linaro.org>
+In-Reply-To: <15b67ce6-3238-435d-ad28-7c06efbe9153@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 3 Jul 2024 18:08:47 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jiCgPKRha81NyUChNVGe02+GDNX442NsZL=XDPao_4WA@mail.gmail.com>
+Message-ID: <CAJZ5v0jiCgPKRha81NyUChNVGe02+GDNX442NsZL=XDPao_4WA@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: core: Call monitor_thermal_zone() if zone
+ temperature is invalid
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: neil.armstrong@linaro.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Lukasz Luba <lukasz.luba@arm.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="0000000000004400ae061c5a0c44"
+
+--0000000000004400ae061c5a0c44
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stefan
-
-On Wed, 3 Jul 2024 at 16:32, Stefan Wahren <wahrenst@gmx.net> wrote:
+On Wed, Jul 3, 2024 at 4:00=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
+o.org> wrote:
 >
-> Am 03.07.24 um 12:28 schrieb Stefan Wahren:
-> > Hi Maxime,
+> On 03/07/2024 14:43, neil.armstrong@linaro.org wrote:
+> > Hi,
 > >
-> > Am 02.07.24 um 15:48 schrieb Maxime Ripard:
-> >> Hi,
+> > On 03/07/2024 14:25, Daniel Lezcano wrote:
 > >>
-> >> On Sun, Jun 30, 2024 at 05:36:48PM GMT, Stefan Wahren wrote:
-> >>> Suspend of VC4 HDMI will likely triggers a warning from
-> >>> vc4_hdmi_connector_detect_ctx() during poll of connector status.
-> >>> The power management will prevent the resume and keep the relevant
-> >>> power domain disabled.
-> >>>
-> >>> Since there is no reason to poll the connector status during
-> >>> suspend, the polling should be disabled during this.
-> >>>
-> >>> It not possible to use drm_mode_config_helper_suspend() here,
-> >>> because the callbacks might be called during bind phase and not all
-> >>> components are fully initialized.
-> >>>
-> >>> Link:
-> >>> https://lore.kernel.org/dri-devel/7003512d-7303-4f41-b0d6-a8af5bf8e497@gmx.net/
-> >>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> >>> ---
-> >>>   drivers/gpu/drm/vc4/vc4_hdmi.c | 11 +++++++++++
-> >>>   1 file changed, 11 insertions(+)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> >>> b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> >>> index b3a42b709718..e80495cea6ac 100644
-> >>> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> >>> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> >>> @@ -3106,6 +3106,13 @@ static int vc5_hdmi_init_resources(struct
-> >>> drm_device *drm,
-> >>>   static int vc4_hdmi_runtime_suspend(struct device *dev)
-> >>>   {
-> >>>       struct vc4_hdmi *vc4_hdmi = dev_get_drvdata(dev);
-> >>> +    struct drm_device *drm = vc4_hdmi->connector.dev;
-> >>> +
-> >>> +    /*
-> >>> +     * Don't disable polling if it was never initialized
-> >>> +     */
-> >>> +    if (drm && drm->mode_config.poll_enabled)
-> >>> +        drm_kms_helper_poll_disable(drm);
-> >> Does it make sense to add it to runtime_suspend?
-> > i saw that other drm drivers used drm_mode_config_helper_suspend() in
-> > the RUNTIME_PM_OPS. But i agree, it should be better moved to
-> > SYSTEM_SLEEP_PM_OPS.
-> >> What if the board boots without a display connected, and only after a
-> >> while one is connected? Wouldn't that prevent the driver from detecting
-> >> it?
-> > tbh I noticed that HDMI re-detection didn't worked in my setup
-> > 6.10-rcX before this series. I need to investigate ...
-> Okay, this patch breaks definitely HDMI re-detection. So please ignore
-> this patch. Sorry, about this mess.
->
-> There is another minor issue which already exists before that cause the
-> following log entry on HDMI reconnect:
->
-> [   74.078745] vc4-drm soc:gpu: [drm] User-defined mode not supported:
-> "1920x1200": 60 154000 1920 1968 2000 2080 1200 1203 1209 1235 0x68 0x9
->
-> But in this case HDMI works.
-
-That's saying the mode specified on the kernel command line via
-"video=" is invalid. All other modes enumerated from the EDID should
-still be present.
-
-I don't immediately see anything wrong with the mode - it's just DMT
-mode 0x44 aka 1920x1200@60Hz with reduced blanking. 154MHz clock is
-less than the 162MHz limit for Pi0-3 so should be supported.
-Setting the module parameter drm.debug to 0x4 should give you the
-extra debug of the reason the mode was rejected via the log message at
-[1].
-
-At a guess the firmware has inserted the video= line based on the mode
-it configured. Whilst that was useful, we've moved away from that now
-by setting "disable_fw_kms_setup=1" in config.txt.
-
-  Dave
-
-[1] https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/drm_modes.c#L1815-L1816
-
-> Regards
+> >> Hi Neil,
 > >>
-> >> Maxime
+> >> it seems there is something wrong with the driver actually.
+> >>
+> >> There can be a moment where the sensor is not yet initialized for
+> >> different reason, so reading the temperature fails. The routine will
+> >> just retry until the sensor gets ready.
+> >>
+> >> Having these errors seem to me that the sensor for this specific
+> >> thermal zone is never ready which may be the root cause of your issue.
+> >> The change is spotting this problem IMO.
 > >
+> > Probably, but it gets printed every second until system shutdown, but
+> > only for a single thermal_zone.
+> >
+> > Using v1 of Rafael's patch makes the message disappear completely.
 >
+> Yes, because you have probably the thermal zone polling delay set to
+> zero, thus it fails the first time and does no longer try to set it up
+> again. The V1 is an incomplete fix.
+>
+> Very likely the problem is in the sensor platform driver, or in the
+> thermal zone description in the device tree which describes a non
+> functional thermal zone.
+
+I agree, but polling this useless thermal zone forever is not
+particularly useful.
+
+I was kind of afraid that something like this would happen, but then I
+didn't want to complicate the patch unnecessarily until I knew that it
+really would happen.
+
+So attached is a modification of the $subject patch that will double
+the temperature recheck delay after every failed attempt to get the
+zone temperature and it will give up eventually (in this particular
+version, after the recheck delay exceeds 30 s).
+
+I would appreciate giving it a go (obviously, by replacing the
+$subject one with it).
+
+--0000000000004400ae061c5a0c44
+Content-Type: text/x-patch; charset="US-ASCII"; name="thermal-poll-if-temp-invalid-v3.patch"
+Content-Disposition: attachment; 
+	filename="thermal-poll-if-temp-invalid-v3.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ly617b6o0>
+X-Attachment-Id: f_ly617b6o0
+
+RnJvbTogUmFmYWVsIEouIFd5c29ja2kgPHJhZmFlbC5qLnd5c29ja2lAaW50ZWwuY29tPgpTdWJq
+ZWN0OiBbUEFUQ0ggdjNdIHRoZXJtYWw6IGNvcmU6IENhbGwgbW9uaXRvcl90aGVybWFsX3pvbmUo
+KSBpZiB6b25lIHRlbXBlcmF0dXJlIGlzIGludmFsaWQKCkNvbW1pdCAyMDJhYTBkNGJiNTMgKCJ0
+aGVybWFsOiBjb3JlOiBEbyBub3QgY2FsbCBoYW5kbGVfdGhlcm1hbF90cmlwKCkKaWYgem9uZSB0
+ZW1wZXJhdHVyZSBpcyBpbnZhbGlkIikgY2F1c2VkIF9fdGhlcm1hbF96b25lX2RldmljZV91cGRh
+dGUoKQp0byByZXR1cm4gZWFybHkgaWYgdGhlIGN1cnJlbnQgdGhlcm1hbCB6b25lIHRlbXBlcmF0
+dXJlIHdhcyBpbnZhbGlkLgoKVGhpcyB3YXMgZG9uZSB0byBhdm9pZCBydW5uaW5nIGhhbmRsZV90
+aGVybWFsX3RyaXAoKSBhbmQgZ292ZXJub3IKY2FsbGJhY2tzIGluIHRoYXQgY2FzZSB3aGljaCBs
+ZWQgdG8gY29uZnVzaW9uLiAgSG93ZXZlciwgaXQgd2VudCB0b28KZmFyIGJlY2F1c2UgbW9uaXRv
+cl90aGVybWFsX3pvbmUoKSBzdGlsbCBuZWVkcyB0byBiZSBjYWxsZWQgZXZlbiB3aGVuCnRoZSB6
+b25lIHRlbXBlcmF0dXJlIGlzIGludmFsaWQgdG8gZW5zdXJlIHRoYXQgaXQgd2lsbCBiZSB1cGRh
+dGVkCmV2ZW50dWFsbHkgaW4gY2FzZSB0aGVybWFsIHBvbGxpbmcgaXMgZW5hYmxlZCBhbmQgdGhl
+IGRyaXZlciBoYXMgbm8Kb3RoZXIgbWVhbnMgdG8gbm90aWZ5IHRoZSBjb3JlIG9mIHpvbmUgdGVt
+cGVyYXR1cmUgY2hhbmdlcyAoZm9yIGV4YW1wbGUsCml0IGRvZXMgbm90IHJlZ2lzdGVyIGFuIGlu
+dGVycnVwdCBoYW5kbGVyIG9yIEFDUEkgbm90aWZpZXIpLgoKQWxzbyBpZiB0aGUgLnNldF90cmlw
+cygpIHpvbmUgY2FsbGJhY2sgaXMgZXhwZWN0ZWQgdG8gc2V0IHVwIG1vbml0b3JpbmcKaW50ZXJy
+dXB0cyBmb3IgYSB0aGVybWFsIHpvbmUsIGl0IG5lZWRzIHRvIGJlIHByb3ZpZGVkIHdpdGggdmFs
+aWQKYm91bmRhcmllcyBhbmQgdGhhdCBjYW4gb25seSBiZSBkb25lIGlmIHRoZSB6b25lIHRlbXBl
+cmF0dXJlIGlzIGtub3duLgoKQWNjb3JkaW5nbHksIHRvIGVuc3VyZSB0aGF0IF9fdGhlcm1hbF96
+b25lX2RldmljZV91cGRhdGUoKSB3aWxsCnJ1biBhZ2FpbiBhZnRlciBhIGZhaWxpbmcgem9uZSB0
+ZW1wZXJhdHVyZSBjaGVjaywgbWFrZSBpdCBjYWxsCm1vbml0b3JfdGhlcm1hbF96b25lKCkgcmVn
+YXJkbGVzcyBvZiB3aGV0aGVyIG9yIG5vdCB0aGUgem9uZQp0ZW1wZXJhdHVyZSBpcyB2YWxpZCBh
+bmQgbWFrZSB0aGUgbGF0dGVyIHNjaGVkdWxlIGEgdGhlcm1hbCB6b25lCnRlbXBlcmF0dXJlIHVw
+ZGF0ZSBpZiB0aGUgem9uZSB0ZW1wZXJhdHVyZSBpcyBpbnZhbGlkIGV2ZW4gaWYKcG9sbGluZyBp
+cyBub3QgZW5hYmxlZCBmb3IgdGhlIHRoZXJtYWwgem9uZSAoaG93ZXZlciwgaWYgdGhpcwpjb250
+aW51ZXMgdG8gZmFpbCwgZ2l2ZSB1cCBhZnRlciBzb21lIHRpbWUpLgoKRml4ZXM6IDIwMmFhMGQ0
+YmI1MyAoInRoZXJtYWw6IGNvcmU6IERvIG5vdCBjYWxsIGhhbmRsZV90aGVybWFsX3RyaXAoKSBp
+ZiB6b25lIHRlbXBlcmF0dXJlIGlzIGludmFsaWQiKQpSZXBvcnRlZC1ieTogRGFuaWVsIExlemNh
+bm8gPGRhbmllbC5sZXpjYW5vQGxpbmFyby5vcmc+ClNpZ25lZC1vZmYtYnk6IFJhZmFlbCBKLiBX
+eXNvY2tpIDxyYWZhZWwuai53eXNvY2tpQGludGVsLmNvbT4KLS0tCiBkcml2ZXJzL3RoZXJtYWwv
+dGhlcm1hbF9jb3JlLmMgfCAgIDEzICsrKysrKysrKysrKy0KIGRyaXZlcnMvdGhlcm1hbC90aGVy
+bWFsX2NvcmUuaCB8ICAgIDkgKysrKysrKysrCiAyIGZpbGVzIGNoYW5nZWQsIDIxIGluc2VydGlv
+bnMoKyksIDEgZGVsZXRpb24oLSkKCkluZGV4OiBsaW51eC1wbS9kcml2ZXJzL3RoZXJtYWwvdGhl
+cm1hbF9jb3JlLmMKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PQotLS0gbGludXgtcG0ub3JpZy9kcml2ZXJzL3RoZXJtYWwv
+dGhlcm1hbF9jb3JlLmMKKysrIGxpbnV4LXBtL2RyaXZlcnMvdGhlcm1hbC90aGVybWFsX2NvcmUu
+YwpAQCAtMzAwLDYgKzMwMCwxNCBAQCBzdGF0aWMgdm9pZCBtb25pdG9yX3RoZXJtYWxfem9uZShz
+dHJ1Y3QKIAkJdGhlcm1hbF96b25lX2RldmljZV9zZXRfcG9sbGluZyh0eiwgdHotPnBhc3NpdmVf
+ZGVsYXlfamlmZmllcyk7CiAJZWxzZSBpZiAodHotPnBvbGxpbmdfZGVsYXlfamlmZmllcykKIAkJ
+dGhlcm1hbF96b25lX2RldmljZV9zZXRfcG9sbGluZyh0eiwgdHotPnBvbGxpbmdfZGVsYXlfamlm
+Zmllcyk7CisJZWxzZSBpZiAodHotPnRlbXBlcmF0dXJlID09IFRIRVJNQUxfVEVNUF9JTlZBTElE
+ICYmCisJCSB0ei0+cmVjaGVja19kZWxheV9qaWZmaWVzIDw9IFRIRVJNQUxfTUFYX1JFQ0hFQ0tf
+REVMQVkpIHsKKwkJdGhlcm1hbF96b25lX2RldmljZV9zZXRfcG9sbGluZyh0eiwgdHotPnJlY2hl
+Y2tfZGVsYXlfamlmZmllcyk7CisJCS8qIERvdWJsZSB0aGUgcmVjaGVjayBkZWxheSBmb3IgdGhl
+IG5leHQgYXR0ZW1wdC4gKi8KKwkJdHotPnJlY2hlY2tfZGVsYXlfamlmZmllcyArPSB0ei0+cmVj
+aGVja19kZWxheV9qaWZmaWVzOworCQlpZiAodHotPnJlY2hlY2tfZGVsYXlfamlmZmllcyA+IFRI
+RVJNQUxfTUFYX1JFQ0hFQ0tfREVMQVkpCisJCQlkZXZfaW5mbygmdHotPmRldmljZSwgIlRlbXBl
+cmF0dXJlIHVua25vd24sIGdpdmluZyB1cFxuIik7CisJfQogfQogCiBzdGF0aWMgc3RydWN0IHRo
+ZXJtYWxfZ292ZXJub3IgKnRoZXJtYWxfZ2V0X3R6X2dvdmVybm9yKHN0cnVjdCB0aGVybWFsX3pv
+bmVfZGV2aWNlICp0eikKQEAgLTQzMCw2ICs0MzgsNyBAQCBzdGF0aWMgdm9pZCB1cGRhdGVfdGVt
+cGVyYXR1cmUoc3RydWN0IHRoCiAKIAl0ei0+bGFzdF90ZW1wZXJhdHVyZSA9IHR6LT50ZW1wZXJh
+dHVyZTsKIAl0ei0+dGVtcGVyYXR1cmUgPSB0ZW1wOworCXR6LT5yZWNoZWNrX2RlbGF5X2ppZmZp
+ZXMgPSAxOwogCiAJdHJhY2VfdGhlcm1hbF90ZW1wZXJhdHVyZSh0eik7CiAKQEAgLTUxNCw3ICs1
+MjMsNyBAQCB2b2lkIF9fdGhlcm1hbF96b25lX2RldmljZV91cGRhdGUoc3RydWN0CiAJdXBkYXRl
+X3RlbXBlcmF0dXJlKHR6KTsKIAogCWlmICh0ei0+dGVtcGVyYXR1cmUgPT0gVEhFUk1BTF9URU1Q
+X0lOVkFMSUQpCi0JCXJldHVybjsKKwkJZ290byBtb25pdG9yOwogCiAJdHotPm5vdGlmeV9ldmVu
+dCA9IGV2ZW50OwogCkBAIC01MzYsNiArNTQ1LDcgQEAgdm9pZCBfX3RoZXJtYWxfem9uZV9kZXZp
+Y2VfdXBkYXRlKHN0cnVjdAogCiAJdGhlcm1hbF9kZWJ1Z191cGRhdGVfdHJpcF9zdGF0cyh0eik7
+CiAKK21vbml0b3I6CiAJbW9uaXRvcl90aGVybWFsX3pvbmUodHopOwogfQogCkBAIC0xNDM4LDYg
+KzE0NDgsNyBAQCB0aGVybWFsX3pvbmVfZGV2aWNlX3JlZ2lzdGVyX3dpdGhfdHJpcHMoCiAKIAl0
+aGVybWFsX3NldF9kZWxheV9qaWZmaWVzKCZ0ei0+cGFzc2l2ZV9kZWxheV9qaWZmaWVzLCBwYXNz
+aXZlX2RlbGF5KTsKIAl0aGVybWFsX3NldF9kZWxheV9qaWZmaWVzKCZ0ei0+cG9sbGluZ19kZWxh
+eV9qaWZmaWVzLCBwb2xsaW5nX2RlbGF5KTsKKwl0ei0+cmVjaGVja19kZWxheV9qaWZmaWVzID0g
+MTsKIAogCS8qIHN5cyBJL0YgKi8KIAkvKiBBZGQgbm9kZXMgdGhhdCBhcmUgYWx3YXlzIHByZXNl
+bnQgdmlhIC5ncm91cHMgKi8KSW5kZXg6IGxpbnV4LXBtL2RyaXZlcnMvdGhlcm1hbC90aGVybWFs
+X2NvcmUuaAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09Ci0tLSBsaW51eC1wbS5vcmlnL2RyaXZlcnMvdGhlcm1hbC90aGVy
+bWFsX2NvcmUuaAorKysgbGludXgtcG0vZHJpdmVycy90aGVybWFsL3RoZXJtYWxfY29yZS5oCkBA
+IC02Nyw2ICs2Nyw4IEBAIHN0cnVjdCB0aGVybWFsX2dvdmVybm9yIHsKICAqIEBwb2xsaW5nX2Rl
+bGF5X2ppZmZpZXM6IG51bWJlciBvZiBqaWZmaWVzIHRvIHdhaXQgYmV0d2VlbiBwb2xscyB3aGVu
+CiAgKgkJCWNoZWNraW5nIHdoZXRoZXIgdHJpcCBwb2ludHMgaGF2ZSBiZWVuIGNyb3NzZWQgKDAg
+Zm9yCiAgKgkJCWludGVycnVwdCBkcml2ZW4gc3lzdGVtcykKKyAqIEByZWNoZWNrX2RlbGF5X2pp
+ZmZpZXM6IGRlbGF5IGFmdGVyIGEgZmFpbGVkIHRoZXJtYWwgem9uZSB0ZW1wZXJhdHVyZSBjaGVj
+aworICogCQkJYmVmb3JlIGF0dGVtcHRpbmcgdG8gY2hlY2sgaXQgYWdhaW4KICAqIEB0ZW1wZXJh
+dHVyZToJY3VycmVudCB0ZW1wZXJhdHVyZS4gIFRoaXMgaXMgb25seSBmb3IgY29yZSBjb2RlLAog
+ICoJCQlkcml2ZXJzIHNob3VsZCB1c2UgdGhlcm1hbF96b25lX2dldF90ZW1wKCkgdG8gZ2V0IHRo
+ZQogICoJCQljdXJyZW50IHRlbXBlcmF0dXJlCkBAIC0xMDgsNiArMTEwLDcgQEAgc3RydWN0IHRo
+ZXJtYWxfem9uZV9kZXZpY2UgewogCWludCBudW1fdHJpcHM7CiAJdW5zaWduZWQgbG9uZyBwYXNz
+aXZlX2RlbGF5X2ppZmZpZXM7CiAJdW5zaWduZWQgbG9uZyBwb2xsaW5nX2RlbGF5X2ppZmZpZXM7
+CisJdW5zaWduZWQgbG9uZyByZWNoZWNrX2RlbGF5X2ppZmZpZXM7CiAJaW50IHRlbXBlcmF0dXJl
+OwogCWludCBsYXN0X3RlbXBlcmF0dXJlOwogCWludCBlbXVsX3RlbXBlcmF0dXJlOwpAQCAtMTMz
+LDYgKzEzNiwxMiBAQCBzdHJ1Y3QgdGhlcm1hbF96b25lX2RldmljZSB7CiAJc3RydWN0IHRoZXJt
+YWxfdHJpcF9kZXNjIHRyaXBzW10gX19jb3VudGVkX2J5KG51bV90cmlwcyk7CiB9OwogCisvKgor
+ICogTWF4aW11bSBkZWxheSBhZnRlciBhIGZhaWxpbmcgdGhlcm1hbCB6b25lIHRlbXBlcmF0dXJl
+IGNoZWNrIGJlZm9yZQorICogYXR0ZW1wdGluZyB0byBjaGVjayBpdCBhZ2FpbiAoaW4gamlmZmll
+cykuCisgKi8KKyNkZWZpbmUgVEhFUk1BTF9NQVhfUkVDSEVDS19ERUxBWQkoMzAgKiBIWikKKwog
+LyogRGVmYXVsdCBUaGVybWFsIEdvdmVybm9yICovCiAjaWYgZGVmaW5lZChDT05GSUdfVEhFUk1B
+TF9ERUZBVUxUX0dPVl9TVEVQX1dJU0UpCiAjZGVmaW5lIERFRkFVTFRfVEhFUk1BTF9HT1ZFUk5P
+UiAgICAgICAic3RlcF93aXNlIgo=
+--0000000000004400ae061c5a0c44--
 
