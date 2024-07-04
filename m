@@ -1,104 +1,115 @@
-Return-Path: <linux-pm+bounces-10592-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10593-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5206A9272FA
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 11:26:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7231392732B
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 11:37:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 079AD28BF85
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 09:26:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E13E3B2125A
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 09:37:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6846A1AB503;
-	Thu,  4 Jul 2024 09:26:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AF151AAE06;
+	Thu,  4 Jul 2024 09:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MruRNUHP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C5D11AAE29;
-	Thu,  4 Jul 2024 09:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBEF01A4F22;
+	Thu,  4 Jul 2024 09:37:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720085196; cv=none; b=l2izSEnNUAJZaYkW+UtLhNaJKMsEE0jPCPO3XB8zsV0CJPqh0RUWGx1EY2JODMn8gNHyhTZHqZjzJe93DkOwvLEMNxq+8ewHDN5sbockupzajcVZSYwzUF5AcPBHCJmrYMtPNe8bVFHa1uxdYQpgqBKhVzHKuHEgSg3FwYpOR+I=
+	t=1720085825; cv=none; b=XNZavQJ8dMith+KOeKjGsTpo5Unlab2DziS2ZK5hHz6mZKbd4fga+gXLNL9juMn6054O5IuSXXr5s9Lu+m81hM+DwILklPh/kAd6XLCF2zGjxH+Sc657jC7F1Np4Bri8YRWOXbnejj2fqS2PwHiNUCUpzkujUhTThNCRsTjExgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720085196; c=relaxed/simple;
-	bh=kK96TeKGcssH878y2ucEpd6cY3M4B7FOVaLWCw4mfVU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I7ufLtArPMPS4/CDBuRJUV0oXp8NZ5LxoFBaQOkapnAx38C4G+kFO08KoKSTYQstm7yr2XbkpQs+pFtCry39ZJSLCrB6I6BeDCHit5D7mJp2E5G6h1Rjab5gU2nUKQ/9LtSlKddB8ZtItOUOuj/pHPsnYl1PwDVzldAx9A7ZH7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2C4C367;
-	Thu,  4 Jul 2024 02:26:57 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E27D83F766;
-	Thu,  4 Jul 2024 02:26:27 -0700 (PDT)
-Date: Thu, 4 Jul 2024 10:26:25 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Huang Rui <ray.huang@amd.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Perry Yuan <perry.yuan@amd.com>, Hector Martin <marcan@marcan.st>,
-	Sven Peter <sven@svenpeter.dev>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Markus Mayer <mmayer@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Lizhe <sensor1010@163.com>, linux-kernel@vger.kernel.org,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 4/4] cpufreq: Make cpufreq_driver->exit() return void
-Message-ID: <ZoZqwb8LdQQohQHM@bogus>
-References: <cover.1720075640.git.viresh.kumar@linaro.org>
- <3f73fda736818128558b61ad5fe2bed5dce3ddc4.1720075640.git.viresh.kumar@linaro.org>
+	s=arc-20240116; t=1720085825; c=relaxed/simple;
+	bh=Y5ZZ4NJ9EbtCr2Y9omXiRAO1MHjSjiox9FbqVaEaEwU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rrAo6C/pV9Fq9UBJSTdVkqJ7KVRBCdrqxtPrmbBXt7WT/RQRSLZXou04mS66D/APHJF41MkMnqz9Wh3FY0qpHlRxjMy/RT+heZ0ML2MTIAkRlZZ+AL1Nb/vQFOS9e0Flfk7/8bcgOJ+unq9hK6wgB+lLT7nw0MMNy3cGXCp3q9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MruRNUHP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 641E9C4AF0E;
+	Thu,  4 Jul 2024 09:37:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720085824;
+	bh=Y5ZZ4NJ9EbtCr2Y9omXiRAO1MHjSjiox9FbqVaEaEwU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=MruRNUHPf/Q6j7rKgP/iwgqp/Y3ezohxwnrCOY+a2rJZ+JpW/Zc970RIBugYAQpgw
+	 hlcktUALLCz7oRHAU9yDYy8+DWYx4zOLPmC+ZBoTh0tgL7p+P6RTmyBEjW9uKHEQs9
+	 C8WOMpHj/YjsGCfx5UwTOpP1Xwntx4zGWMJ39wOMv9LjJNgaQqf8k0fjuZFO3XeD53
+	 U4LfFb2F3jEtePLraUWpBrwOv//pXSpUI3n9zuTp955bLgmos8UqEjnzsdLoytvGLG
+	 N/HJ/VT9M2mP9ey1LYh8oOgWZJRfoEXnFl0qhC5stHPRoiyRYpU7dCMyQmLxOwIWnm
+	 vIG79AZxw+gHw==
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-58ef19aa69dso12055a12.3;
+        Thu, 04 Jul 2024 02:37:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVhkF4qY8ejne0KlITsGM8e0+STxRX9VuEHLngmgQJAEE4hs5DOPGy1irFZQ/iOZcIVl3ZWgbHAefrtVVKi+Ohpsb2w1691MbRO9Nm+f4aszkj+sdsgFEOc5utbY66jORgYIdHfO4Ub97N3c9m3wE509r98JSlPegVn2g8YAqa8ZauN
+X-Gm-Message-State: AOJu0Yxf1sx9PqNaycSzq0pYixwAfHmfvqFxzf5BW5D09yYRIwvcfGPQ
+	e3cX6gNAitIPLNbZlhQ+WmwQ60fYCYsq60d1VQ2MQZ9REZA7Mj2wzJeMdMr9DfPeIWUC9hxmizp
+	A/Lesf0JGeolFJap0f+h+dBZ0eUc=
+X-Google-Smtp-Source: AGHT+IEfnVppQjNn4Xl/+dYerNkiNX2JL+01n+mxYMdoqIoBLf5oc1L9HAY5x2Xlahb+pNBKpQBSUMpPXkJFEtcGhp4=
+X-Received: by 2002:a17:907:94d0:b0:a77:a403:f260 with SMTP id
+ a640c23a62f3a-a77ba44c776mr91053066b.4.1720085822929; Thu, 04 Jul 2024
+ 02:37:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f73fda736818128558b61ad5fe2bed5dce3ddc4.1720075640.git.viresh.kumar@linaro.org>
+References: <cover.1720075640.git.viresh.kumar@linaro.org> <f09ee1fa731db0c1565b5d4b919d54d5f258957b.1720075640.git.viresh.kumar@linaro.org>
+In-Reply-To: <f09ee1fa731db0c1565b5d4b919d54d5f258957b.1720075640.git.viresh.kumar@linaro.org>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Thu, 4 Jul 2024 17:36:49 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7S5jruSvkt6PcuChxNEbuZQ=75Oj6VSgSvDqeydGvFLw@mail.gmail.com>
+Message-ID: <CAAhV-H7S5jruSvkt6PcuChxNEbuZQ=75Oj6VSgSvDqeydGvFLw@mail.gmail.com>
+Subject: Re: [PATCH 2/4] cpufreq: loongson2: Remove empty exit() callback
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 04, 2024 at 12:23:55PM +0530, Viresh Kumar wrote:
-> From: Lizhe <sensor1010@163.com>
-> 
-> The cpufreq core doesn't check the return type of the exit() callback
-> and there is not much the core can do on failures at that point. Just
-> drop the returned value and make it return void.
-> 
-> Signed-off-by: Lizhe <sensor1010@163.com>
-> [ Viresh: Reworked the patches to fix all missing changes together. ]
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+
+On Thu, Jul 4, 2024 at 2:56=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.or=
+g> wrote:
+>
+> The exit() callback is optional, remove the empty one.
+>
 > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
-
-[...]
-
->  drivers/cpufreq/scmi-cpufreq.c         |  4 +---
->  drivers/cpufreq/scpi-cpufreq.c         |  4 +---
->  drivers/cpufreq/vexpress-spc-cpufreq.c |  5 ++---
-
-(For the above 3 files)
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-
---
-Regards,
-Sudeep
+>  drivers/cpufreq/loongson2_cpufreq.c | 6 ------
+>  1 file changed, 6 deletions(-)
+>
+> diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongs=
+on2_cpufreq.c
+> index afc59b292153..6a8e97896d38 100644
+> --- a/drivers/cpufreq/loongson2_cpufreq.c
+> +++ b/drivers/cpufreq/loongson2_cpufreq.c
+> @@ -85,18 +85,12 @@ static int loongson2_cpufreq_cpu_init(struct cpufreq_=
+policy *policy)
+>         return 0;
+>  }
+>
+> -static int loongson2_cpufreq_exit(struct cpufreq_policy *policy)
+> -{
+> -       return 0;
+> -}
+> -
+>  static struct cpufreq_driver loongson2_cpufreq_driver =3D {
+>         .name =3D "loongson2",
+>         .init =3D loongson2_cpufreq_cpu_init,
+>         .verify =3D cpufreq_generic_frequency_table_verify,
+>         .target_index =3D loongson2_cpufreq_target,
+>         .get =3D cpufreq_generic_get,
+> -       .exit =3D loongson2_cpufreq_exit,
+>         .attr =3D cpufreq_generic_attr,
+>  };
+>
+> --
+> 2.31.1.272.g89b43f80a514
+>
+>
 
