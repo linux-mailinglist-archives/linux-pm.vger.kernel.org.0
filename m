@@ -1,56 +1,56 @@
-Return-Path: <linux-pm+bounces-10622-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10623-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75858927A3F
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 17:34:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEB42927A55
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 17:41:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4BAEB2811B
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 15:34:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4CC1FB28E90
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 15:41:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BDA11B1216;
-	Thu,  4 Jul 2024 15:34:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCC0C1B140F;
+	Thu,  4 Jul 2024 15:41:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="IfB7BJIz"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="gEHUN9mZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167CB1AED3D;
-	Thu,  4 Jul 2024 15:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75501AEFC9;
+	Thu,  4 Jul 2024 15:41:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720107249; cv=none; b=ga8nuQD12lWy9jrIMA0UZbjzDOYgMlna45ad0VLzop3EjuAeMJAy13kuNAqgxgNsS4RryH0R6LWT9Mz5euH8FYPINaqyBXFOxDM4QdSSI1rRqKm7MiF0jiBWqSU40h+M7UN9SgjQCfzNABh3ORUZYkQ5ZP438bsio6lXVpSyzpo=
+	t=1720107684; cv=none; b=YWWc+QL+LzAMQzUFqU58FNFkT6VABmzGnoAWnyzrPx9G4wRriApp4J6bBugYUrcaZFUEex77725RjrtFkSwYhJlbWGC1lLrBzJ7DqqMs9p6bH02uScvUSff0Eq859UNsvEHzKOiUos6T3onAxL/CQuJPWkgZ+pl6fmfiEjt5f2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720107249; c=relaxed/simple;
-	bh=98Fv4WaU9GlBG/dHpM2dEGKJgOrhk2ynM6NmVcPE9QI=;
+	s=arc-20240116; t=1720107684; c=relaxed/simple;
+	bh=hud1vpInUQlaKt9ICSakeFJcziAncxZvxPZh1ULIInQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KKzjQ9Du1DxeCqyuIsAjxJLTiJ5qS4rqcMex/DjNTUkAxbHY0synzY9jNEm6/gMRQQKA+OMUSaOAgNq12MorG+myUkt4aixstHtqwcIudiF/IeaoOh/A90VdNhtTaYKEbXhwcuwa+snMUhcKpOzyxFyckNq9lja6vqM5etLD8Fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=IfB7BJIz; arc=none smtp.client-ip=212.227.15.15
+	 In-Reply-To:Content-Type; b=Ki0KsIlgs8tM4YaPw/T8u1plpiqT7cSZzAa0s7xPvTDvyNv4gP4CJPMGbYgcu9hMGvf5EDudY8DC+e2hUlRmvT9+/JgiaS65oHNo0kuUV5zD5SrDpFgTxLI6y4FEEPEz3i3m1CYuCLjn+8D+ZB+Ikt/JgzU1yymNSlGxF8sB1WE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=gEHUN9mZ; arc=none smtp.client-ip=212.227.15.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1720107211; x=1720712011; i=wahrenst@gmx.net;
-	bh=98Fv4WaU9GlBG/dHpM2dEGKJgOrhk2ynM6NmVcPE9QI=;
+	s=s31663417; t=1720107651; x=1720712451; i=wahrenst@gmx.net;
+	bh=hud1vpInUQlaKt9ICSakeFJcziAncxZvxPZh1ULIInQ=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
 	 References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding:cc:content-transfer-encoding:
 	 content-type:date:from:message-id:mime-version:reply-to:subject:
 	 to;
-	b=IfB7BJIzm3FbgnqQrPiJDHydXnP33zbtPotcO4fDqVNDDTLwYvSkJHVOsLhBvEyc
-	 jX8ajkdysTMYzb6wljafi8uypqeRgxEjl/xV3OR/SY7biLZ8QMtFtAM0KUFge0yIr
-	 iZLqty3SF8kGjKMtW3A1DZUb0ggQfg+cqUhJdxbkYKZEWlGApbhkRe70k7VRD+Wik
-	 /nFIieC5QiPgbqW91cSbJAXcIvbrOa2CF4XvfXZlel5pl69cwOTBWo9RJfSo3hE+f
-	 4Gk5hhyQxu5fDgKCJISgZ7gGC+N5JClPRuHXYh7GlrF/B413Q1h+Qkxc/fb/x3qTn
-	 0pDj8gHA+sCj65Uk2Q==
+	b=gEHUN9mZQpcA8fkXuUOxqch91i+iX60pXLem6vjqbVdQa51zqSpE2NuZqnEiePHV
+	 SlVfyQJ6pY0ATtkxFaYr7sXWtGDqkzqnpZD9M5BCfkMCUuRWzI3OTS6lnXp3EIJFQ
+	 txx86wQrMglvTKL9lj4mwEqFy2MpRcNDrGoWRvNcgYHJZGS+MBB2xjMU1PacooRPB
+	 eTLizDu9eEb+oX8i2J80SwThUsSPIi7l2BImoiq7iL18PQ4LApooa73TySHj1vvTr
+	 wYYeJDGxf7qBn+Scub4T0YDu41fPHDbv0dIAL60KyEtudL+KtGW4q0UZs4wDp5+6e
+	 aSV5rkHFMIFfx+EALQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M89Kr-1sTXSq1JWF-006291; Thu, 04
- Jul 2024 17:33:31 +0200
-Message-ID: <3e926b4d-07e5-4f9b-adc9-aee0a2722f1c@gmx.net>
-Date: Thu, 4 Jul 2024 17:33:28 +0200
+Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mj8mV-1rtenX40FJ-00mKAp; Thu, 04
+ Jul 2024 17:40:51 +0200
+Message-ID: <c14c1656-9f16-4dae-bca6-117583473a58@gmx.net>
+Date: Thu, 4 Jul 2024 17:40:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,7 +58,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/11] usb: dwc2: Skip clock gating on Broadcom SoCs
+Subject: Re: [PATCH RFT 10/11] serial: 8250_bcm2835aux: add PM suspend/resume
+ support
 To: Florian Fainelli <florian.fainelli@broadcom.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ray Jui
  <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
@@ -74,110 +75,72 @@ Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
  linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
 References: <20240630153652.318882-1-wahrenst@gmx.net>
- <20240630153652.318882-10-wahrenst@gmx.net>
- <95762956-b46a-4dfa-b22f-bccbfa39558d@broadcom.com>
+ <20240630165304.323095-1-wahrenst@gmx.net>
+ <6b987d6c-daa0-481f-8333-9e0fb9996a69@broadcom.com>
 Content-Language: en-US
 From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <95762956-b46a-4dfa-b22f-bccbfa39558d@broadcom.com>
+In-Reply-To: <6b987d6c-daa0-481f-8333-9e0fb9996a69@broadcom.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:w4pSxCNjC/D9OtsHIZDqyIGCKnLROh7+9G0ssYOdaT9Aw1wW7WN
- cB3k4sAz6S9j1K2d0vOeNijqu9VMMP7C3jelcpkbp+XQA4yWsJoEXafBGiMQ3TY9fR37arx
- vOyRtLFYMVci6rREjreiVju2A14cqPBU+rA3Wf+621oJ3EzFbw2YS3BPBq/KUDZf8lCFeSI
- 6/pHnXNMWJsChBeWW8yUA==
+X-Provags-ID: V03:K1:ve7EXqG1MpDqKtVknr59hKvp+E96Mnf1jhzgBGe1/6Za/l2DRx8
+ 7QOuTgEuOOCyECYAUetqTl7XZAVRzOJHv9emADRX6P7/QQBS1IflvRoK6da05FXcbyc/wjx
+ fulFLHATNYHqKnzwSPkTWacDr0M8Tt08uHrce2pEWNlkWHk2lSclwhRD9vTk7oNGnPvrS4w
+ UKSfxFWn/kqb/8hzyPrGA==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:Rv48hkiZCGU=;i8aKzOnd47OXo4FG50ROfCiFRrj
- YUQRAV5OHAgxzF76ZObXHgxs8cE8ga9JFIcb9669uZLWH+VAPX9IgsPO0IfjQ4K8y7DyvEd1V
- CxpzVd6FoZAcVInn/nkNVDov3XEP9xSDeJUkO8ukmZkKvLcWyNoCB4IjcgLy++7kAbSKK6ZPR
- Gusv23hB9M+FD4SCRwV+6N1hULkunhaWQCiez1ZzvilB+Ow8K5C/XUhTSKHV1NKIhMvSzBGUf
- DpwVwexfuUbDKT6IKHZmgSglmJ/4j61yQtx+cqZVSwOz7mT2kZfIxg3T2cEOAHiabkkriUB/c
- 8B6QRY33eQrSd4cNarwGSrnajIWfP3tj4DB3bim4+VSCbGNH07QhLvRUxWyusKZzPLFpbykzw
- DlEMmvakX7g3qW6/DiYTfRCKbyXnS4ngLK9orUHf2m/rUM9HmigEOAgqLFQMT53C8RcJrZsaA
- kuqA5L+Y02Y6iG+nYpwsuWOQ4LAxlSSNWzxO8A/VLELIkRWig5qtQzGGJzHndvZr6JkkVFjd6
- mAw0ZQMHguuy0dgSb9Es3Ar0gnBmSGIjv7fIvBYOOEkpuwRl4veIhUjy/kINd+jFYOIR+DOXO
- X67Eq/Gm60/o0fv22oAuAxLdPx2msnf03YmD3qRgQWv+h1uFM3ea6iu8VymTGv2QThcEkPGQd
- ZaTo0sCTgpnufs1RhBTELvF9N2qJ+qeUsp76FHgefO85p2558D2HuLx3V6kqwnZRZyLtgtniq
- wtHS0Dzgs3pcRq1dHLZgDLvMQAK5fUY+DQCA+VKKO5q9IEQDjTti2xwZFRbdUOWkIZgp89APv
- IOu8/H6+ojMp6qECy5QNW8PJeIds/+juweFFTJyLWKZDE=
+UI-OutboundReport: notjunk:1;M01:P0:wuzcuiK83II=;7RPNe1qDOEPvIJ597g7St04Xbie
+ z0DirYdff5Jy2GvQ2B+n0becS07714DFe4wg0f6wJm60DaQI6yBna58CeRZ8JD5HZtE/KbudP
+ /23o0TI/Vfa79loPgGzRLuPxDt9uo6JBgEKcgS7jM/pqifK8jq5J8+uiNC3tTSI7dRqhLrGw6
+ dGoU1JtDv7z/h02Ak/0/FyQiRwxh1JCnxxCnjyiEF/fbgVhjZMPQgS2ZOz4TDrAICgxyQXgVE
+ GoT8jWrJTAUlTmZ+j9tLq1THOC+egk2N24IcxIEn0ehiWC4EC/G5YOfZLNTp870ph3iUpwhWU
+ ACrFJK/5KuZkkEv7sZwONL/avUkaVL62AdW4nIo6sdjcVyd1jmXF7jJqLOpAkFw0tWbYe4rfG
+ 1POa78mtA9eXCw5msvzFUel4hLgV5mLhufb58EQqL54/9lL1wn+199G+2K6azqOuzsNleopHy
+ 2J3Vl/RYrVCzvHCxcuUudTSGPKJH69hb8s/ekM5e8I0OTT9717ShidQ+eoxfKodKKNchndtXB
+ 4TzGYjEKyPB3jwmiMimpzvKuBmwhHf7T5H+sJ0mBTTRGuHwH1myI3/7sC/xnzrL8taZUwPPLv
+ mKsWvluqcDlNHKXjp4dCMQoe4eNW/twC2TLoYLKYFMT4qFdBDl7nmDdCaANFO8bUEbQxrUfG4
+ Pr9ac09npjouWUI1ylRtcNvNWqEftMQTSn63W9QcjOY9oH4wujsyyNJBbX9aAcKMkuOAd1J7D
+ X12oVaOm/y/A40bCE7rqOMksPFJTDjZUC10viZFOkZCdFR6cXp3SEcuHa1DjhuDKYFG44EWCM
+ xVHFvBYoeExUCzquqhYIwLI9QHlXqK9tVKQyIBIYiyntw=
 
 Hi Florian,
 
-Am 04.07.24 um 16:14 schrieb Florian Fainelli:
+Am 04.07.24 um 16:12 schrieb Florian Fainelli:
 >
 >
-> On 6/30/2024 4:36 PM, Stefan Wahren wrote:
->> On resume of the Raspberry Pi the dwc2 driver fails to enable
->> HCD_FLAG_HW_ACCESSIBLE before re-enabling the interrupts.
->> This causes a situation where both handler ignore a incoming port
->> interrupt and force the upper layers to disable the dwc2 interrupt line=
-.
->> This leaves the USB interface in a unusable state:
+> On 6/30/2024 5:53 PM, Stefan Wahren wrote:
+>> This adds suspend/resume support for the 8250_bcm2835aux
+>> driver to provide power management support on attached
+>> devices.
 >>
->> irq 66: nobody cared (try booting with the "irqpoll" option)
->> CPU: 0 PID: 0 Comm: swapper/0 Tainted: G W=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 6.10.0-rc3
->> Hardware name: BCM2835
->> Call trace:
->> unwind_backtrace from show_stack+0x10/0x14
->> show_stack from dump_stack_lvl+0x50/0x64
->> dump_stack_lvl from __report_bad_irq+0x38/0xc0
->> __report_bad_irq from note_interrupt+0x2ac/0x2f4
->> note_interrupt from handle_irq_event+0x88/0x8c
->> handle_irq_event from handle_level_irq+0xb4/0x1ac
->> handle_level_irq from generic_handle_domain_irq+0x24/0x34
->> generic_handle_domain_irq from bcm2836_chained_handle_irq+0x24/0x28
->> bcm2836_chained_handle_irq from generic_handle_domain_irq+0x24/0x34
->> generic_handle_domain_irq from generic_handle_arch_irq+0x34/0x44
->> generic_handle_arch_irq from __irq_svc+0x88/0xb0
->> Exception stack(0xc1b01f20 to 0xc1b01f68)
->> 1f20: 0005c0d4 00000001 00000000 00000000 c1b09780 c1d6b32c c1b04e54
->> c1a5eae8
->> 1f40: c1b04e90 00000000 00000000 00000000 c1d6a8a0 c1b01f70 c11d2da8
->> c11d4160
->> 1f60: 60000013 ffffffff
->> __irq_svc from default_idle_call+0x1c/0xb0
->> default_idle_call from do_idle+0x21c/0x284
->> do_idle from cpu_startup_entry+0x28/0x2c
->> cpu_startup_entry from kernel_init+0x0/0x12c
->> handlers:
->> [<f539e0f4>] dwc2_handle_common_intr
->> [<75cd278b>] usb_hcd_irq
->> Disabling IRQ #66
->>
->> Disabling clock gatling workaround this issue.
->
-> Typo: gatling/gating.
->
->>
->> Fixes: 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr
->> function.")
->> Link:
->> https://lore.kernel.org/linux-usb/3fd0c2fb-4752-45b3-94eb-42352703e1fd@=
-gmx.net/T/
 >> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 >> ---
->> =C2=A0 drivers/usb/dwc2/params.c | 1 +
->> =C2=A0 1 file changed, 1 insertion(+)
 >>
->> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
->> index 5a1500d0bdd9..66580de52882 100644
->> --- a/drivers/usb/dwc2/params.c
->> +++ b/drivers/usb/dwc2/params.c
->> @@ -23,6 +23,7 @@ static void dwc2_set_bcm_params(struct dwc2_hsotg
->> *hsotg)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 p->max_transfer_size =3D 65535;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 p->max_packet_count =3D 511;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 p->ahbcfg =3D 0x10;
->> +=C2=A0=C2=A0=C2=A0 p->no_clock_gating =3D true;
+>> Since i don't have a RS485 setup, any test feedback would be great.
+>>
+>> =C2=A0 drivers/tty/serial/8250/8250_bcm2835aux.c | 23 +++++++++++++++++=
+++++++
+>> =C2=A0 1 file changed, 23 insertions(+)
+>>
+>> diff --git a/drivers/tty/serial/8250/8250_bcm2835aux.c
+>> b/drivers/tty/serial/8250/8250_bcm2835aux.c
+>> index 121a5ce86050..cccd2a09cb6f 100644
+>> --- a/drivers/tty/serial/8250/8250_bcm2835aux.c
+>> +++ b/drivers/tty/serial/8250/8250_bcm2835aux.c
+>> @@ -213,11 +213,34 @@ static const struct acpi_device_id
+>> bcm2835aux_serial_acpi_match[] =3D {
+>> =C2=A0 };
+>> =C2=A0 MODULE_DEVICE_TABLE(acpi, bcm2835aux_serial_acpi_match);
+>>
+>> +static int __maybe_unused bcm2835aux_suspend(struct device *dev)
+>> +{
+>> +=C2=A0=C2=A0=C2=A0 struct bcm2835aux_data *data =3D dev_get_drvdata(de=
+v);
+>> +
+>> +=C2=A0=C2=A0=C2=A0 serial8250_suspend_port(data->line);
 >
-> Could we set this depending upon whether the dwc2 host controller is a
-> wake-up source for the system or not?
+> Don't you also need to disable the clock here, unless the device is a
+> wake-up source, and conversely re-enable the clock upon resume?
+at first I experiment with the pm implementation from 8250_uniphier.c,
+but this didn't work as soon as I drop "no_console_suspend" from the
+Kernel cmdline. Maybe that's the wrong pattern.
 
-I would prefer to fix the suspend/resume behavior reported here [1]
-instead of making tricky workarounds. But i don't have an idea how to
-achieve this.
-
-[1] -
-https://lore.kernel.org/linux-usb/3fd0c2fb-4752-45b3-94eb-42352703e1fd@gmx=
-.net/
 
