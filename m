@@ -1,263 +1,231 @@
-Return-Path: <linux-pm+bounces-10609-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10610-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E2569277AE
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 16:04:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5C4C9277D1
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 16:10:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B35A1F2711A
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 14:04:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CC3D283834
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 14:10:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B681AD9E0;
-	Thu,  4 Jul 2024 14:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75E631AEFC4;
+	Thu,  4 Jul 2024 14:10:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jq9YLrUf"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="OQ9+sw+x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2951D1822E2;
-	Thu,  4 Jul 2024 14:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1971AED43
+	for <linux-pm@vger.kernel.org>; Thu,  4 Jul 2024 14:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720101846; cv=none; b=qV+TIxCFzcUnN4yhaUvp6+0wXL8RIksk8tSJUltJft0mREksaDw+3XNSnFY0TaSa+KfRV5qSTqS519tMezHVXNWGlDYj5wTFoYSiHR6ijsZ9h2Z+3JWn4U4IuJvHNA6GcujOo1Y3zvWmQDNVB6HzMEzooGKoVpHn883uCcoz060=
+	t=1720102224; cv=none; b=UQrZu2safhe/67I75UQ7ZDBC+JY7oHsGpFccdCsmt3wlim9S8tR91iGKlcMAeLYaBruau9veTdrcHgw0wdICQfKPun9ZKRWiZshKCZ0Tz5gs5C7mibuVeX3c/Z2gR3hLQ0RowlRMYH9DkrRMp4FKAOSm5qv6pLRncjozXVyiAps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720101846; c=relaxed/simple;
-	bh=wZYTKnFz/gwAFTRm5C60rPGzgtSUfuPJ/lymJgtVcEA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cWxx048mBOgLAET7d5xK4qBBr+2EVluJv+yzZbfS4zQSqjOXkqupD6gT2o5kM2wB6UtPkwswPCImvWtOWcn1KJ7nhItDr3X0kbbScofj3W974v516/PTGzkwmN3ZPpBoG/GVNsfz8F06sart7P94JdpJRsdSSn3LOTQ4i3+hYPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jq9YLrUf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B81F0C3277B;
-	Thu,  4 Jul 2024 14:04:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720101845;
-	bh=wZYTKnFz/gwAFTRm5C60rPGzgtSUfuPJ/lymJgtVcEA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jq9YLrUfdXj7LHp7+oLnavu16y5PMMM+Ls1RDM2mCFsudxLRBEnIQnhnEw/Yax01j
-	 D1uaZu2rZlZZg2fCHUOvS+778jbN+Ryvg4AS77YPSfmGwLygcG6U3W/p2Ra3BoPVRJ
-	 JB39gllQ/2jL6bFJncsyYPFq3rXi+MoMZXxk7wLvt2b/02neOuhn+8dQgYdPAO3Arj
-	 6Wys57sfhenLpp0PPbNozfBmLUgaJpPFzCz9F5T679QS5cWvjrcmvPpOZi+M2PXfXp
-	 m2q4/aGMlgNCeMuYt5AL98nYuNzpqDrXcBFh6oqNdnJAFE+Sx4pnXK2N7/+gXcMVS8
-	 C7FYkTa2P4HUQ==
-Date: Thu, 4 Jul 2024 16:03:59 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: "Isaac J. Manjarres" <isaacmanjarres@google.com>
-Cc: tglx@linutronix.de, jstultz@google.com, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Jan Kara <jack@suse.cz>, saravanak@google.com, mjguzik@gmail.com, 
-	Manish Varma <varmam@google.com>, Kelly Rossmoyer <krossmo@google.com>, kernel-team@android.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v6] fs: Improve eventpoll logging to stop indicting
- timerfd
-Message-ID: <20240704-umsatz-drollig-38db6b84da7b@brauner>
-References: <20240703214315.454407-1-isaacmanjarres@google.com>
+	s=arc-20240116; t=1720102224; c=relaxed/simple;
+	bh=wZXAjXI36uWt/Z1AETZWd+8CDUpCW+JUm3RKs+BcYWc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XkiYUWil7azEw5WdpYkR7bScFCQHdWL1NvMJL1glVmO0IeWVklKuFer2+dr8ZQkT9kCRH3ZQzCfO3dQhm9x9gLkazOjatoX0aVSDysTMgT4FPTyWoThw7Nwlvjbn0cVZIqyyQxStjPQ1YlZjXGCk757xqiGWlrX6Z6PqtBnRRl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=OQ9+sw+x; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-70af4868d3dso481357b3a.3
+        for <linux-pm@vger.kernel.org>; Thu, 04 Jul 2024 07:10:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1720102222; x=1720707022; darn=vger.kernel.org;
+        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sUheo+AW9ags+goRlNDiNbc0vDF4qXQwpvponMmcOJ0=;
+        b=OQ9+sw+xUsea2F2DSzdMPV+g3W1O0EfJCK4XGmQncpT2yivjRxU/UFIDbZewcIt/c3
+         t8b5SqOxcKJc3aevawYXFzeiSL8I1SmZRBfqeXOCAEtrMm9jTdBCdGu6z31VPyfzjCEL
+         1AADzuCTELLFkplmrFtBnkgOIiDa24un632lc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720102222; x=1720707022;
+        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=sUheo+AW9ags+goRlNDiNbc0vDF4qXQwpvponMmcOJ0=;
+        b=ZbCOH1YHC5daQvRb73uaYpVV3OvkUCBcuAFJZUtyAY1EqfW6jbsW3AL3LYBvzgW9I/
+         XxHyW+sSyeTfUgDQF15IWrQbnVDhbFH39JpEaT4pVJO0qPz/hZgamZFmwlNEQ/d8hcDh
+         hp5z4+cbrH49Lsl5uGcqcVlgflSqnqiqJ3Nu4/bRKPIyyKwEsIA2MAmuLkev4qB0U14c
+         rj61sVhnYX+Lz0Uh1a3pA6NpOLHBIydHS0+JONK+cUk24xw64vqMOzGlY8UKNOAsgPpA
+         SRuBYfb4z0dq8saXK+n8itCPlJbZxcnqpxU7jjzUMJOlMi7+Fzv2vIvDTx5ZTZTiEE5+
+         ogOg==
+X-Forwarded-Encrypted: i=1; AJvYcCVGw9OOIOknbHrP4CkwkOQb5x9Af06v3tKlFl1rf0A839pwaPWPryq8eeNpKaZFBSv1nTA5pbugApHxCDmclQezr2FxR3IgHhw=
+X-Gm-Message-State: AOJu0Yw2FFXiP2oAlKWdR/0IkFZn/IFCa8rtSlr7Lu9Varyr/t4A/Cn1
+	C1iLB8pc2U0GTNsN4zOPuX0soOnsG3fyOvHUlWEyMcVy1cefhcJa+5l1w6e0ow==
+X-Google-Smtp-Source: AGHT+IF8hxSelLaskDjQ0b8nlLP2ANXkSzhsrySOhljC4/pq4lcE7UrtCIFlnhR+QblsaDLjm/iN5g==
+X-Received: by 2002:a05:6a20:3ca9:b0:1be:d1f7:e91d with SMTP id adf61e73a8af0-1c0cc75dc87mr1890296637.29.1720102221857;
+        Thu, 04 Jul 2024 07:10:21 -0700 (PDT)
+Received: from [10.40.5.113] ([89.207.175.15])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac10d2652sm123286975ad.1.2024.07.04.07.10.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Jul 2024 07:10:21 -0700 (PDT)
+Message-ID: <212ae02a-52f0-4dd6-868a-91f76de1f0a0@broadcom.com>
+Date: Thu, 4 Jul 2024 15:10:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240703214315.454407-1-isaacmanjarres@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 01/11] firmware: raspberrypi: Improve timeout warning
+To: Stefan Wahren <wahrenst@gmx.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Jassi Brar <jassisinghbrar@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Minas Harutyunyan <hminas@synopsys.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+References: <20240630153652.318882-1-wahrenst@gmx.net>
+ <20240630153652.318882-2-wahrenst@gmx.net>
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <20240630153652.318882-2-wahrenst@gmx.net>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000f3726e061c6c8113"
 
-On Wed, Jul 03, 2024 at 02:43:14PM GMT, Isaac J. Manjarres wrote:
-> From: Manish Varma <varmam@google.com>
-> 
-> We'll often see aborted suspend operations that look like:
-> 
->  PM: suspend entry 2024-07-03 15:55:15.372419634 UTC
->  PM: PM: Pending Wakeup Sources: [timerfd]
->  Abort: Pending Wakeup Sources: [timerfd]
->  PM: suspend exit 2024-07-03 15:55:15.445281857 UTC
-> 
-> From this, it seems a timerfd caused the abort, but that can be
-> confusing, as timerfds don't create wakeup sources. However,
-> eventpoll can, and when it does, it names them after the underlying
-> file descriptor. Unfortunately, all the file descriptors are called
-> "[timerfd]", and a system may have many timerfds, so this isn't very
-> useful to debug what's going on to cause the suspend to abort.
-> 
-> To improve this, change the way eventpoll wakeup sources are named:
-> 
-> 1) The top-level per-process eventpoll wakeup source is now named
-> "epollN:P" (instead of just "eventpoll"), where N is a unique ID token,
-> and P is the PID of the creating process.
-> 
-> 2) Individual eventpoll item wakeup sources are now named
-> "epollitemN:P.F", where N is a unique ID token, P is PID of the creating
-> process, and F is the name of the underlying file descriptor.
+--000000000000f3726e061c6c8113
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Fyi, that PID is meaningless or even actively misleading in the face of
-pid namespaces. And since such wakeups seem to be registered in sysfs
-globally they are visible to all containers. That means a container will
-now see some timerfd wakeup source with a PID that might just accidently
-correspond to a process inside the container. Which in turn also means
-you're leaking the info about the creating process into the container.
-IOW, if PID 1 ends up registering some wakeup source the container gets
-to know about it.
 
+
+On 6/30/2024 4:36 PM, Stefan Wahren wrote:
+> Recent work on raspberry-power driver showed that even the
+> stacktrace on firmware property timeout doesn't provide
+> enough information. So add the first tag name to the warning
+> to be in line with a status error.
 > 
-> Now, when the scenario described earlier is encountered, the following
-> kernel logs are emitted:
-> 
->  PM: suspend entry 2024-07-03 15:39:24.945791824 UTC
->  PM: PM: Pending Wakeup Sources: epollitem30:6375.[timerfd]
->  Abort: Pending Wakeup Sources: epollitem30:6375.[timerfd]
->  PM: suspend exit 2024-07-03 15:39:25.017775019 UTC
-> 
-> There are various benefits to this new naming convention:
-> 
-> 1) It is clear that the wakeup source is linked to an eventpoll
-> item.
-> 
-> 2) Now that the PID of the process associated with that timerfd
-> instance is known, it is easy to map the PID of the process to the
-> name of the process. With this information, it is easy to start
-> debugging which process is causing this issue to occur.
-> 
-> 3) Even if process 6375 creates multiple timerfd instances, the
-> ID token is useful in identifying which timerfd instance associated
-> with the process is causing suspend to abort, as it is monotonically
-> increasing. So if the order in which the timerfd instances for the
-> process is known, then one can pinpoint which timerfd instance is
-> causing this issue.
-> 
-> Co-developed-by: Kelly Rossmoyer <krossmo@google.com>
-> Signed-off-by: Kelly Rossmoyer <krossmo@google.com>
-> Signed-off-by: Manish Varma <varmam@google.com>
-> Co-developed-by: Isaac J. Manjarres <isaacmanjarres@google.com>
-> Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
-> ---
->  drivers/base/power/wakeup.c | 12 +++++++++---
->  fs/eventpoll.c              | 11 +++++++++--
->  include/linux/pm_wakeup.h   |  8 ++++----
->  3 files changed, 22 insertions(+), 9 deletions(-)
-> 
->  v1 -> v2:
->  - Renamed instance count to wakesource_create_id to better describe
->    its purpose.
->  - Changed the wakeup source naming convention for wakeup sources
->    created by eventpoll to avoid changing the timerfd names.
->  - Used the PID of the process instead of the process name for the
->    sake of uniqueness when creating wakeup sources.
-> 
-> v2 -> v3:
->  - Changed wakeup_source_register() to take in a format string
->    and arguments to avoid duplicating code to construct wakeup
->    source names.
->  - Moved the definition of wakesource_create_id so that it is
->    always defined to fix an compilation error.
-> 
-> v3 -> v4:
->  - Changed the naming convention for the top-level epoll wakeup
->    sources to include an ID for uniqueness. This is needed in
->    cases where a process is using two epoll fds.
->  - Edited commit log to reflect new changes and add new tags.
-> 
-> v4 -> v5:
->  - Added the format attribute to the wakeup_source_register()
->    function to address a warning from the kernel test robot:
->    https://lore.kernel.org/all/202406050504.UvdlPAQ0-lkp@intel.com/
-> 
-> v5 -> v6:
->  - Reworded the commit text to clarify the scenarios in which this
->    patch is helpful, as per feedback from
->    John Stultz <jstultz@google.com>
-> 
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index 752b417e8129..04a808607b62 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -209,13 +209,19 @@ EXPORT_SYMBOL_GPL(wakeup_source_remove);
->  /**
->   * wakeup_source_register - Create wakeup source and add it to the list.
->   * @dev: Device this wakeup source is associated with (or NULL if virtual).
-> - * @name: Name of the wakeup source to register.
-> + * @fmt: format string for the wakeup source name
->   */
-> -struct wakeup_source *wakeup_source_register(struct device *dev,
-> -					     const char *name)
-> +__printf(2, 3) struct wakeup_source *wakeup_source_register(struct device *dev,
-> +							    const char *fmt, ...)
->  {
->  	struct wakeup_source *ws;
->  	int ret;
-> +	char name[128];
-> +	va_list args;
-> +
-> +	va_start(args, fmt);
-> +	vsnprintf(name, sizeof(name), fmt, args);
-> +	va_end(args);
->  
->  	ws = wakeup_source_create(name);
->  	if (ws) {
-> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-> index f53ca4f7fced..941df15208a4 100644
-> --- a/fs/eventpoll.c
-> +++ b/fs/eventpoll.c
-> @@ -338,6 +338,7 @@ static void __init epoll_sysctls_init(void)
->  #define epoll_sysctls_init() do { } while (0)
->  #endif /* CONFIG_SYSCTL */
->  
-> +static atomic_t wakesource_create_id  = ATOMIC_INIT(0);
->  static const struct file_operations eventpoll_fops;
->  
->  static inline int is_file_epoll(struct file *f)
-> @@ -1545,15 +1546,21 @@ static int ep_create_wakeup_source(struct epitem *epi)
->  {
->  	struct name_snapshot n;
->  	struct wakeup_source *ws;
-> +	pid_t task_pid;
-> +	int id;
-> +
-> +	task_pid = task_pid_nr(current);
->  
->  	if (!epi->ep->ws) {
-> -		epi->ep->ws = wakeup_source_register(NULL, "eventpoll");
-> +		id = atomic_inc_return(&wakesource_create_id);
-> +		epi->ep->ws = wakeup_source_register(NULL, "epoll:%d:%d", id, task_pid);
->  		if (!epi->ep->ws)
->  			return -ENOMEM;
->  	}
->  
-> +	id = atomic_inc_return(&wakesource_create_id);
->  	take_dentry_name_snapshot(&n, epi->ffd.file->f_path.dentry);
-> -	ws = wakeup_source_register(NULL, n.name.name);
-> +	ws = wakeup_source_register(NULL, "epollitem%d:%d.%s", id, task_pid, n.name.name);
->  	release_dentry_name_snapshot(&n);
->  
->  	if (!ws)
-> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-> index 76cd1f9f1365..1fb6dca981c2 100644
-> --- a/include/linux/pm_wakeup.h
-> +++ b/include/linux/pm_wakeup.h
-> @@ -99,8 +99,8 @@ extern struct wakeup_source *wakeup_source_create(const char *name);
->  extern void wakeup_source_destroy(struct wakeup_source *ws);
->  extern void wakeup_source_add(struct wakeup_source *ws);
->  extern void wakeup_source_remove(struct wakeup_source *ws);
-> -extern struct wakeup_source *wakeup_source_register(struct device *dev,
-> -						    const char *name);
-> +extern __printf(2, 3) struct wakeup_source *wakeup_source_register(struct device *dev,
-> +								   const char *fmt, ...);
->  extern void wakeup_source_unregister(struct wakeup_source *ws);
->  extern int wakeup_sources_read_lock(void);
->  extern void wakeup_sources_read_unlock(int idx);
-> @@ -140,8 +140,8 @@ static inline void wakeup_source_add(struct wakeup_source *ws) {}
->  
->  static inline void wakeup_source_remove(struct wakeup_source *ws) {}
->  
-> -static inline struct wakeup_source *wakeup_source_register(struct device *dev,
-> -							   const char *name)
-> +static inline __printf(2, 3) struct wakeup_source *wakeup_source_register(struct device *dev,
-> +									  const char *fmt, ...)
->  {
->  	return NULL;
->  }
-> -- 
-> 2.45.2.803.g4e1b14247a-goog
-> 
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
+
+--000000000000f3726e061c6c8113
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJ8RRN5zFU+yK0Hd
+1Jdpoh3I4AchHHX01p/cg77YiBErMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTI0MDcwNDE0MTAyMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCPSuxghRdUyrIS2qm8MM5Mcc7UTqrUnA8X
+TJH0TIjDmDVAmAk6rBmOQAHAUeuDUCdf59Ir2AJOP0iVw6YS3Hcun3eZ64aeBbnqYkpklIdzApTQ
+40L4NmsuZfpujcm+MIXFu7UgYsXGGcmPcUAfz2O48NFCEiJp+I7QiB9Za8BeJ8Ov12DWQa8SkkEZ
+GR1m7zXBfzlsr8KFd9RCTxjej9+rwayWdYo3kcl265Rr/b3eKfMDWVqMbqlVlgOEywCWmu00Jxlh
+AWujB8Vc/bghAJPRSi0fgm3EdX8vr5h4RG7IIsJxs9HvRVXDF2SslBEDsA+zRuGv6Cy+f0d3XEXt
+L5ac
+--000000000000f3726e061c6c8113--
 
