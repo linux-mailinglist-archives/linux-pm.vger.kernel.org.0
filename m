@@ -1,131 +1,286 @@
-Return-Path: <linux-pm+bounces-10603-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10604-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C3969275EC
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 14:26:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D91192760E
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 14:31:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 471AE2817F1
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 12:26:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C28741C22F82
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 12:31:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E1C01AC435;
-	Thu,  4 Jul 2024 12:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49D1B1AD9D5;
+	Thu,  4 Jul 2024 12:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RM9/1U+u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EHFCjWiu"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7680C4C76;
-	Thu,  4 Jul 2024 12:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8C11822FB;
+	Thu,  4 Jul 2024 12:31:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720096001; cv=none; b=qHikNJF2lE/s3KZFrQ3YaeX2wM5mNA3SLpiGIKAacqNrfUTfMzTPaFjQV1iaJ07RMcuW2JQpcjBw5uNOP3vywnv6KC6+HSj+ui6K303YawRYx06CFWdN3ltueicVe53HClgzL/rnQsBrCP9JUy/vEgeVujYw3rAn+TqvJfNxQv4=
+	t=1720096283; cv=none; b=UhIQeRMCFvNUXBWG1v0ZJb+FwmfxJ3nkpWmvqI7HifVnvpItWJXXO91nYNJN17/RpOQiWj4o7xMLpdsTuSkBTJc/xv8H+1rZVW1WZVM7TnFN7+1ko5Fcj4sGi7YgapfHyyo6eWQZBJXYEm+pC6XB7EUcOnN2PwmhFnnHv8+Eu8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720096001; c=relaxed/simple;
-	bh=Ol59wRsiQ2j9IWEiSxxfL5HPw8wR16SoFWRvc59G4tg=;
+	s=arc-20240116; t=1720096283; c=relaxed/simple;
+	bh=NrMOdvTHRfD6/EsYygG6xW5j1RcLbOwnQz82914Hkto=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ap311DKy5eKZ44+P6X47ytz+xhkAmPTQVIMzJF2MiLOzQRQVRS+XH3QsxUsJbufRu1tbunTOKAhY1RSnVz7xeTlYwUotZvMczF+HjIA0G6vfHHRx9v6NZUQI8yuIeiDTU3DMm2T1AZhigTl7fpKxavZCyYNePZDr84HRiEC+IfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RM9/1U+u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08832C4AF07;
-	Thu,  4 Jul 2024 12:26:41 +0000 (UTC)
+	 To:Cc:Content-Type; b=tH3Mk3T6g8W4aLEzeoJaCQl8O/P1lkVrqiWvsT3GCqp5nK3WY5NvrOHrdJnNFRzuExMR6Lj14NTsjQmVbvJZE2lon621IaSof53rJiRdrl5qX+1EPCNJfYQJZ0RoXLObu5+gIZo4sZdF3rYfGQCkGCDs/wrHP8Rm/Hrk/7uHLhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EHFCjWiu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8336EC4AF10;
+	Thu,  4 Jul 2024 12:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720096001;
-	bh=Ol59wRsiQ2j9IWEiSxxfL5HPw8wR16SoFWRvc59G4tg=;
+	s=k20201202; t=1720096282;
+	bh=NrMOdvTHRfD6/EsYygG6xW5j1RcLbOwnQz82914Hkto=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=RM9/1U+u9zb6ni6iEl7rMSfQaNseyNwAp5z6yLPlkhnc/MHEfWkuZHf//lBTpgUGv
-	 hC/YL8FDc94dWPiMBuz+m2WHGfACwPKWCuHlyR+emie35mRLh2q7Gt/iwXmyr1LrgP
-	 ckxXjUbsltr4jo9RnhORaw+DueA0nQk2lStJtB/B4jvsMqx2NvG4n/Hm3s5MRw658Y
-	 Kjewb1V2nt9YdeFjYLguDWmWr1WWPLCJw2KgL78rpKatfH1QxWnoIzfeoWlFIbrK7/
-	 sQbmkjT9AfuGsaDq6JL1fARhKffDA3PzdWjx3pIOrXVotS65cU1j5pd4CQpW4tV7Ln
-	 K4MT0clDCh8Iw==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-25e23e0492dso101038fac.3;
-        Thu, 04 Jul 2024 05:26:40 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXAuLQz4cz3wCBkvdDb1qO6i4NKbtKXhC59YvdOo/quSV1E6QTQw0G4eZ2DBWYNxfYmyiO8OteVD6ugojBLNcCq6RxgRWfWw3lktEaNex+HpVBqTCgrmZ89SST8nlp9E5kXYeYI8Aw=
-X-Gm-Message-State: AOJu0Yy2LKLWHPrCsdGJJOeqwktmoa3u5lXAJnknzyjK2GDeQjCYpIsx
-	T8sC3O3B17Fik6248iJi6G1R2QEVV9LmAs75kQk80Wn/qga+dHvvY8W5P6+Y/TPkPfdTOcDwuDG
-	+oLH4Gzm/gknXNVxT2CY45/Gamss=
-X-Google-Smtp-Source: AGHT+IE0nlVQZC0eK4Kf15Rg9nA0DHs7RMKa3liL4gNSoysZh7Ye3+nogqNGp8r41o/wLW4/dast0CC3YEinfYYGrvg=
-X-Received: by 2002:a05:6820:2c07:b0:5c4:5cbc:b1b4 with SMTP id
- 006d021491bc7-5c646a91827mr1382273eaf.0.1720096000243; Thu, 04 Jul 2024
- 05:26:40 -0700 (PDT)
+	b=EHFCjWiuLWsNEZEzppNdUTY4pbRY24icGXWiW+La46jmCSQuOWEiKrLLQmNGx/7tm
+	 n8vozMQ91ujB44hYlDZ65PguTZ9a8zrtwZvlsMrfrT65mVqPfhWpEmTfFQd/GbWbbR
+	 xVr4P33izq0nzf7wPvuRJdAkTAYn/0c5SVkQ4V06nmK2+4NL++SCdoL/KETAGda9uf
+	 /tj40T4Riv+yQaLGwLuo5xLPnhu6X0uyAEdx+FZzgEkwmvvHtohpbe7Wyxmjk7agUv
+	 x0OXP73bCElTl3O7Z4L9MOiTUa+G8XLS5Dzp77RbDeofrSa15TiKDSgdvL2T6r4YNd
+	 q9lEeqDSAKJlQ==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-25cb5ee9d2dso100855fac.1;
+        Thu, 04 Jul 2024 05:31:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVBY7YkKj9g/7vB5bPxX/9oFGuIU17OIwJZfr5BZIzulPB50yBFolAnp1wr96LjmKkA6s+EFvcgVi470V3VgjJzKeGpXvLHkRXjf7Xp287W3KbgnGL9r+b3XPk0V2F5YM59LIj3ZGyDOOzKfJj1fRyWmwtC8jeEdQk5oDYecb9lyLbPsZrY
+X-Gm-Message-State: AOJu0YxPAnQh6XG9OS9LlP0oYrZdFpp8ffY/tW6cZZ8g/Jf4m3YUiyZF
+	Iq3DLgZfAxptA/j/rX5CELpi2cdVoWJB6RYjAbX3e0aGf+u70DvbPbvlVMcNcO6k3xbqZiZDNOW
+	12GyqvNSyDs2ovDNl5D5XQj97PUw=
+X-Google-Smtp-Source: AGHT+IGvQjd8yj5g2VnXn6ZjT/Wc4/TD5l5l8Rj/Lpm695mm8KbI+B1Rfuqz3a2+DNIfcwRnKsG29Drd7eA2IMD48J8=
+X-Received: by 2002:a4a:9219:0:b0:5c2:20aa:db25 with SMTP id
+ 006d021491bc7-5c646ec7d4bmr1689927eaf.1.1720096281712; Thu, 04 Jul 2024
+ 05:31:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240703083141.96013-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240703083141.96013-1-krzysztof.kozlowski@linaro.org>
+References: <20240703214315.454407-1-isaacmanjarres@google.com>
+In-Reply-To: <20240703214315.454407-1-isaacmanjarres@google.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 4 Jul 2024 14:26:29 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iCEE1z8jV-+iRgXgHr8SNkeGioUCEij7w_T+H0rzKtbQ@mail.gmail.com>
-Message-ID: <CAJZ5v0iCEE1z8jV-+iRgXgHr8SNkeGioUCEij7w_T+H0rzKtbQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: constify 'type' in devm_thermal_of_cooling_device_register()
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Thu, 4 Jul 2024 14:31:10 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j6xSD4FJGe1=hb=A4UsCqOqBczQ5QNN_0VJAd-7ePZWQ@mail.gmail.com>
+Message-ID: <CAJZ5v0j6xSD4FJGe1=hb=A4UsCqOqBczQ5QNN_0VJAd-7ePZWQ@mail.gmail.com>
+Subject: Re: [PATCH v6] fs: Improve eventpoll logging to stop indicting timerfd
+To: "Isaac J. Manjarres" <isaacmanjarres@google.com>
+Cc: tglx@linutronix.de, jstultz@google.com, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, saravanak@google.com, 
+	mjguzik@gmail.com, Manish Varma <varmam@google.com>, Kelly Rossmoyer <krossmo@google.com>, 
+	kernel-team@android.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 3, 2024 at 10:31=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Wed, Jul 3, 2024 at 11:43=E2=80=AFPM Isaac J. Manjarres
+<isaacmanjarres@google.com> wrote:
 >
-> The 'type' string passed to thermal_of_cooling_device_register() is a
-> 'const char *', so make the same in the devm interface.
+> From: Manish Varma <varmam@google.com>
 >
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> We'll often see aborted suspend operations that look like:
+>
+>  PM: suspend entry 2024-07-03 15:55:15.372419634 UTC
+>  PM: PM: Pending Wakeup Sources: [timerfd]
+>  Abort: Pending Wakeup Sources: [timerfd]
+>  PM: suspend exit 2024-07-03 15:55:15.445281857 UTC
+>
+> From this, it seems a timerfd caused the abort, but that can be
+> confusing, as timerfds don't create wakeup sources. However,
+> eventpoll can, and when it does, it names them after the underlying
+> file descriptor. Unfortunately, all the file descriptors are called
+> "[timerfd]", and a system may have many timerfds, so this isn't very
+> useful to debug what's going on to cause the suspend to abort.
+>
+> To improve this, change the way eventpoll wakeup sources are named:
+>
+> 1) The top-level per-process eventpoll wakeup source is now named
+> "epollN:P" (instead of just "eventpoll"), where N is a unique ID token,
+> and P is the PID of the creating process.
+>
+> 2) Individual eventpoll item wakeup sources are now named
+> "epollitemN:P.F", where N is a unique ID token, P is PID of the creating
+> process, and F is the name of the underlying file descriptor.
+>
+> Now, when the scenario described earlier is encountered, the following
+> kernel logs are emitted:
+>
+>  PM: suspend entry 2024-07-03 15:39:24.945791824 UTC
+>  PM: PM: Pending Wakeup Sources: epollitem30:6375.[timerfd]
+>  Abort: Pending Wakeup Sources: epollitem30:6375.[timerfd]
+>  PM: suspend exit 2024-07-03 15:39:25.017775019 UTC
+>
+> There are various benefits to this new naming convention:
+>
+> 1) It is clear that the wakeup source is linked to an eventpoll
+> item.
+>
+> 2) Now that the PID of the process associated with that timerfd
+> instance is known, it is easy to map the PID of the process to the
+> name of the process. With this information, it is easy to start
+> debugging which process is causing this issue to occur.
+>
+> 3) Even if process 6375 creates multiple timerfd instances, the
+> ID token is useful in identifying which timerfd instance associated
+> with the process is causing suspend to abort, as it is monotonically
+> increasing. So if the order in which the timerfd instances for the
+> process is known, then one can pinpoint which timerfd instance is
+> causing this issue.
+>
+> Co-developed-by: Kelly Rossmoyer <krossmo@google.com>
+> Signed-off-by: Kelly Rossmoyer <krossmo@google.com>
+> Signed-off-by: Manish Varma <varmam@google.com>
+> Co-developed-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+> Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
 > ---
->  drivers/thermal/thermal_core.c | 2 +-
->  include/linux/thermal.h        | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
-e.c
-> index 3fb55060646e..4ea27dd25477 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1132,7 +1132,7 @@ static void thermal_cooling_device_release(struct d=
-evice *dev, void *res)
->  struct thermal_cooling_device *
->  devm_thermal_of_cooling_device_register(struct device *dev,
->                                 struct device_node *np,
-> -                               char *type, void *devdata,
-> +                               const char *type, void *devdata,
->                                 const struct thermal_cooling_device_ops *=
-ops)
->  {
->         struct thermal_cooling_device **ptr, *tcd;
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index f1155c0439c4..f732dab20368 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -261,7 +261,7 @@ thermal_of_cooling_device_register(struct device_node=
- *np, const char *, void *,
->  struct thermal_cooling_device *
->  devm_thermal_of_cooling_device_register(struct device *dev,
->                                 struct device_node *np,
-> -                               char *type, void *devdata,
-> +                               const char *type, void *devdata,
->                                 const struct thermal_cooling_device_ops *=
-ops);
->  void thermal_cooling_device_update(struct thermal_cooling_device *);
->  void thermal_cooling_device_unregister(struct thermal_cooling_device *);
-> @@ -305,7 +305,7 @@ thermal_of_cooling_device_register(struct device_node=
- *np,
->  static inline struct thermal_cooling_device *
->  devm_thermal_of_cooling_device_register(struct device *dev,
->                                 struct device_node *np,
-> -                               char *type, void *devdata,
-> +                               const char *type, void *devdata,
->                                 const struct thermal_cooling_device_ops *=
-ops)
->  {
->         return ERR_PTR(-ENODEV);
-> --
+>  drivers/base/power/wakeup.c | 12 +++++++++---
 
-Applied as 6.11 material, thanks!
+For the changes in wakeup.c
+
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+
+>  fs/eventpoll.c              | 11 +++++++++--
+>  include/linux/pm_wakeup.h   |  8 ++++----
+>  3 files changed, 22 insertions(+), 9 deletions(-)
+>
+>  v1 -> v2:
+>  - Renamed instance count to wakesource_create_id to better describe
+>    its purpose.
+>  - Changed the wakeup source naming convention for wakeup sources
+>    created by eventpoll to avoid changing the timerfd names.
+>  - Used the PID of the process instead of the process name for the
+>    sake of uniqueness when creating wakeup sources.
+>
+> v2 -> v3:
+>  - Changed wakeup_source_register() to take in a format string
+>    and arguments to avoid duplicating code to construct wakeup
+>    source names.
+>  - Moved the definition of wakesource_create_id so that it is
+>    always defined to fix an compilation error.
+>
+> v3 -> v4:
+>  - Changed the naming convention for the top-level epoll wakeup
+>    sources to include an ID for uniqueness. This is needed in
+>    cases where a process is using two epoll fds.
+>  - Edited commit log to reflect new changes and add new tags.
+>
+> v4 -> v5:
+>  - Added the format attribute to the wakeup_source_register()
+>    function to address a warning from the kernel test robot:
+>    https://lore.kernel.org/all/202406050504.UvdlPAQ0-lkp@intel.com/
+>
+> v5 -> v6:
+>  - Reworded the commit text to clarify the scenarios in which this
+>    patch is helpful, as per feedback from
+>    John Stultz <jstultz@google.com>
+>
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index 752b417e8129..04a808607b62 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -209,13 +209,19 @@ EXPORT_SYMBOL_GPL(wakeup_source_remove);
+>  /**
+>   * wakeup_source_register - Create wakeup source and add it to the list.
+>   * @dev: Device this wakeup source is associated with (or NULL if virtua=
+l).
+> - * @name: Name of the wakeup source to register.
+> + * @fmt: format string for the wakeup source name
+>   */
+> -struct wakeup_source *wakeup_source_register(struct device *dev,
+> -                                            const char *name)
+> +__printf(2, 3) struct wakeup_source *wakeup_source_register(struct devic=
+e *dev,
+> +                                                           const char *f=
+mt, ...)
+>  {
+>         struct wakeup_source *ws;
+>         int ret;
+> +       char name[128];
+> +       va_list args;
+> +
+> +       va_start(args, fmt);
+> +       vsnprintf(name, sizeof(name), fmt, args);
+> +       va_end(args);
+>
+>         ws =3D wakeup_source_create(name);
+>         if (ws) {
+> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+> index f53ca4f7fced..941df15208a4 100644
+> --- a/fs/eventpoll.c
+> +++ b/fs/eventpoll.c
+> @@ -338,6 +338,7 @@ static void __init epoll_sysctls_init(void)
+>  #define epoll_sysctls_init() do { } while (0)
+>  #endif /* CONFIG_SYSCTL */
+>
+> +static atomic_t wakesource_create_id  =3D ATOMIC_INIT(0);
+>  static const struct file_operations eventpoll_fops;
+>
+>  static inline int is_file_epoll(struct file *f)
+> @@ -1545,15 +1546,21 @@ static int ep_create_wakeup_source(struct epitem =
+*epi)
+>  {
+>         struct name_snapshot n;
+>         struct wakeup_source *ws;
+> +       pid_t task_pid;
+> +       int id;
+> +
+> +       task_pid =3D task_pid_nr(current);
+>
+>         if (!epi->ep->ws) {
+> -               epi->ep->ws =3D wakeup_source_register(NULL, "eventpoll")=
+;
+> +               id =3D atomic_inc_return(&wakesource_create_id);
+> +               epi->ep->ws =3D wakeup_source_register(NULL, "epoll:%d:%d=
+", id, task_pid);
+>                 if (!epi->ep->ws)
+>                         return -ENOMEM;
+>         }
+>
+> +       id =3D atomic_inc_return(&wakesource_create_id);
+>         take_dentry_name_snapshot(&n, epi->ffd.file->f_path.dentry);
+> -       ws =3D wakeup_source_register(NULL, n.name.name);
+> +       ws =3D wakeup_source_register(NULL, "epollitem%d:%d.%s", id, task=
+_pid, n.name.name);
+>         release_dentry_name_snapshot(&n);
+>
+>         if (!ws)
+> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+> index 76cd1f9f1365..1fb6dca981c2 100644
+> --- a/include/linux/pm_wakeup.h
+> +++ b/include/linux/pm_wakeup.h
+> @@ -99,8 +99,8 @@ extern struct wakeup_source *wakeup_source_create(const=
+ char *name);
+>  extern void wakeup_source_destroy(struct wakeup_source *ws);
+>  extern void wakeup_source_add(struct wakeup_source *ws);
+>  extern void wakeup_source_remove(struct wakeup_source *ws);
+> -extern struct wakeup_source *wakeup_source_register(struct device *dev,
+> -                                                   const char *name);
+> +extern __printf(2, 3) struct wakeup_source *wakeup_source_register(struc=
+t device *dev,
+> +                                                                  const =
+char *fmt, ...);
+>  extern void wakeup_source_unregister(struct wakeup_source *ws);
+>  extern int wakeup_sources_read_lock(void);
+>  extern void wakeup_sources_read_unlock(int idx);
+> @@ -140,8 +140,8 @@ static inline void wakeup_source_add(struct wakeup_so=
+urce *ws) {}
+>
+>  static inline void wakeup_source_remove(struct wakeup_source *ws) {}
+>
+> -static inline struct wakeup_source *wakeup_source_register(struct device=
+ *dev,
+> -                                                          const char *na=
+me)
+> +static inline __printf(2, 3) struct wakeup_source *wakeup_source_registe=
+r(struct device *dev,
+> +                                                                        =
+ const char *fmt, ...)
+>  {
+>         return NULL;
+>  }
+> --
+> 2.45.2.803.g4e1b14247a-goog
+>
 
