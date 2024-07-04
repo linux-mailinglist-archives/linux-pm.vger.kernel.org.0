@@ -1,129 +1,124 @@
-Return-Path: <linux-pm+bounces-10624-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10625-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 817B9927AD0
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 18:04:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 396E6927B13
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 18:25:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2EFF1C2375C
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 16:04:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A8EA1C222B7
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 16:25:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A121B372B;
-	Thu,  4 Jul 2024 16:04:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B68101B29C5;
+	Thu,  4 Jul 2024 16:25:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="uctUXtst"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="NjPL3mHL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459E11B29CD;
-	Thu,  4 Jul 2024 16:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0A74C70;
+	Thu,  4 Jul 2024 16:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720109064; cv=none; b=dtotdWw6xNKVeLbu9nkBsgl+d+Ed+1vwQeHAagnj/e11FE65YnwU6qlhWO9BGGh57KKu/4TV+ENUh768lDIG/SqPxv9e66cSOD/382TzdLqDlrU56elUvJWfSxf3PVKVoS21PCxC75KusaT0wmia6/RCBJfaLdayoKyefWf4LC8=
+	t=1720110344; cv=none; b=s4GDWdGr+6zngN1HlhKQ6Oc6b/xGicdgNJWSUATNLAM0aShKFl2LPPTI7lOKIw3qZTCKYBTVxodxR16ye0J5pTETsUB75Qep2EHBVuG60RpXwFMflFOAsAm6j2UDzUTm0QiIBWZRWh5I8sGbDygM9wPa0qjqpsO1oLBlC1jsqoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720109064; c=relaxed/simple;
-	bh=1+toRJY35/129MSR44qFWaryqVoiascuVBFB3NmaZ/M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tvy2tcntNmsqvvyfx7GRr4698K+UJKCPlS582UAIpLc0LbyuwfhuvStqlafx/vfeO2vBDPvFSJpXbYjJKO0E8g7YPCjOsPQRamI2/vrn/+eLnpWPL2KDaxbDaOIOwKwvCJwFuYZm/Oj01MidtxcDaio519FI6guNC5V/3e7Swkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=uctUXtst; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=NUvYT0Apw8SqjInlbdvt2ov0pZsd3AGE3tETszdRDzg=; b=uctUXtstqOdYStp1RAdEevee8A
-	og2m1rbeRGyNCyWKUOMtyM5AqIVxQFyxOPDwVFm9FnkbszNQ36vazTBa9yXYKCDMQBhsJURhhsCMA
-	j1mTGX2YuuLQQvVFM9F5PJp4GaLgK5ASkZXssZl/rnBc5yDOus60fNPX7zh7xaHLB3Ec=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1sPOvS-001pKc-Qp; Thu, 04 Jul 2024 18:03:14 +0200
-Date: Thu, 4 Jul 2024 18:03:14 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Tengfei Fan <quic_tengfan@quicinc.com>
-Cc: Andrew Halaney <ahalaney@redhat.com>, andersson@kernel.org,
-	konrad.dybcio@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, djakov@kernel.org, mturquette@baylibre.com,
-	sboyd@kernel.org, jassisinghbrar@gmail.com,
-	herbert@gondor.apana.org.au, davem@davemloft.net,
-	manivannan.sadhasivam@linaro.org, will@kernel.org, joro@8bytes.org,
-	conor@kernel.org, tglx@linutronix.de, amitk@kernel.org,
-	thara.gopinath@gmail.com, linus.walleij@linaro.org,
-	wim@linux-watchdog.org, linux@roeck-us.net, rafael@kernel.org,
-	viresh.kumar@linaro.org, vkoul@kernel.org, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-	robimarko@gmail.com, bartosz.golaszewski@linaro.org,
-	kishon@kernel.org, quic_wcheng@quicinc.com, alim.akhtar@samsung.com,
-	avri.altman@wdc.com, bvanassche@acm.org, agross@kernel.org,
-	gregkh@linuxfoundation.org, quic_tdas@quicinc.com,
-	robin.murphy@arm.com, daniel.lezcano@linaro.org,
-	rui.zhang@intel.com, lukasz.luba@arm.com, quic_rjendra@quicinc.com,
-	ulf.hansson@linaro.org, quic_sibis@quicinc.com,
-	otto.pflueger@abscue.de, luca@z3ntu.xyz, neil.armstrong@linaro.org,
-	abel.vesa@linaro.org, bhupesh.sharma@linaro.org,
-	alexandre.torgue@foss.st.com, peppe.cavallaro@st.com,
-	joabreu@synopsys.com, netdev@vger.kernel.org, lpieralisi@kernel.org,
-	kw@linux.com, bhelgaas@google.com, krzysztof.kozlowski@linaro.org,
-	u.kleine-koenig@pengutronix.de, dmitry.baryshkov@linaro.org,
-	quic_cang@quicinc.com, danila@jiaxyga.com,
-	quic_nitirawa@quicinc.com, mantas@8devices.com, athierry@redhat.com,
-	quic_kbajaj@quicinc.com, quic_bjorande@quicinc.com,
-	quic_msarkar@quicinc.com, quic_devipriy@quicinc.com,
-	quic_tsoni@quicinc.com, quic_rgottimu@quicinc.com,
-	quic_shashim@quicinc.com, quic_kaushalk@quicinc.com,
-	quic_tingweiz@quicinc.com, quic_aiquny@quicinc.com,
-	srinivas.kandagatla@linaro.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-crypto@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	kernel@quicinc.com
-Subject: Re: [PATCH 29/47] dt-bindings: net: qcom,ethqos: add description for
- qcs9100
-Message-ID: <add1bdda-2321-4c47-91ef-299f99385bc8@lunn.ch>
-References: <20240703025850.2172008-1-quic_tengfan@quicinc.com>
- <20240703025850.2172008-30-quic_tengfan@quicinc.com>
- <u5ekupjqvgoehkl76pv7ljyqqzbnnyh6ci2dilfxfkcdvdy3dp@ehdujhkul7ow>
- <f4162b7f-d957-4dd6-90a0-f65c1cbc213a@quicinc.com>
+	s=arc-20240116; t=1720110344; c=relaxed/simple;
+	bh=G8nXDKhDWAf5zwXbHzmWPr4KvRFncauKrb4vRKEg3ko=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Su9J/2X/J53Ble/6CKpjD8BvUMhQoUTeV9bRwzEbULCFvsaSUnSyPCHUtpz3S6sCNFfN1Vnbs0Vk7Pn2S9LtaeaViVBc+V1eQaT7cU0qMJKxNleeU/ml3XYPZ2b76nciYCAf48afAGt1eOE/kZ5SuErLA/J4cjpoLu4jWInXIS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=NjPL3mHL; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1720110318; x=1720715118; i=wahrenst@gmx.net;
+	bh=G8nXDKhDWAf5zwXbHzmWPr4KvRFncauKrb4vRKEg3ko=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=NjPL3mHLpGoKd4mDJddhb//xKf4YmbApwL8JkLoLRCnRMtpSpLV29Ur5nCqGJ0I0
+	 EP+z7x0d4oAsN312Gi/JuIMZLux73x7C0W/sFQiLb0Srlio0HCAJy2xPH4QdA02y/
+	 c06o2DVCgcQL1x8NIXYTkX+0CllFtVq/wes/TZChkxv2feRI530v7Pu56u/PoGX/c
+	 KjtPtgF8nAeIO5LJTcluJPRJ1d1XZOdWKGTDq/P0QxUeDTY24h5NPbu0blu45iItQ
+	 TtjHnHu/E/vNljG4m4kA8IuxfdX9+X+1uuf9ZYYy2yRSc5w59ae+TSmo5jnhFt8vM
+	 5FYiEu96Vf8jhvgmwQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MMXUD-1sfYoD0zHr-00I3GP; Thu, 04
+ Jul 2024 18:25:18 +0200
+Message-ID: <4d48bbdb-91fb-46f2-b101-112f45c81cdd@gmx.net>
+Date: Thu, 4 Jul 2024 18:25:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4162b7f-d957-4dd6-90a0-f65c1cbc213a@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 07/11] drm/vc4: hdmi: Disable connector status polling
+ during suspend
+To: Peter Robinson <pbrobinson@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Jassi Brar <jassisinghbrar@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Minas Harutyunyan <hminas@synopsys.com>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ dri-devel@lists.freedesktop.org, bcm-kernel-feedback-list@broadcom.com,
+ linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kernel-list@raspberrypi.com
+References: <20240630153652.318882-1-wahrenst@gmx.net>
+ <20240630153652.318882-8-wahrenst@gmx.net>
+ <CALeDE9OpdUntjW61i=Ge2b9uOyPKWRmeP+2ybxoNA2CR4DHWXg@mail.gmail.com>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <CALeDE9OpdUntjW61i=Ge2b9uOyPKWRmeP+2ybxoNA2CR4DHWXg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:e9DVrq5jG1tQYjou4M48Ieq6c+HG2N8PKRsDwhcsvlXjmcfHMEm
+ 5YgHnadFU/xlL1Bysj7N+xe+d1+LrvYXLxNNbLe5ueCdX+uJpIcbDAySg9Yu3QvHoJT03rH
+ /CKZ/eYfoLstRyaKhkrZvKrTJg4H0jTt1qc2XHg19ULmAbwSIYIeo8cQ5K6/epGLpRxhg77
+ hkFTF9VEg3w9zHkcBLceQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:4z4MiHBYFqM=;VeOJKcvLWARNmwRjqx6xlU/V35H
+ 0amzJL09fb4TJD7p7usMBUW+PvbKHHHhBbtI/DMStmffuefLsHdbm4jSOFWBYN6Wn0LC8dNle
+ qjJbeyh07dW1yy9uVlT9mDTerf+E5spIO8D/izpdvQdg7ZMbof9K0ION5QKNvsmeDw0kAA/Kf
+ DYQIleNZkNY5c+3d3OmBQ81W6jX6MrnrLq+CyhY257AHvfiYQUSN8czl7y8q9RKXj0NVJuX3Q
+ IWn0C80/cIcVQOM6yAVVfB+eRkIQzX/UcXqh6N+RIzbRZec0khkwKaMRfIIigwilECO3GXjbG
+ Nlvs7g+s6bxzE9xilKE8zwyix1hsMvISlFQIRWHPT4EQ4u9WkyUSMR24BFqveNsojtIs8kQGp
+ cekVd855UyIJSNmOSpBLd4wDLamAynH4pj++60eBFYsgiWuxlwdSC8Pf33NSJIueYjSEwK99M
+ 2bPs6higbl8WeU/BGtXt8clemiaycV5XMvsRT8ulSk8MLKJwejaml0GZpTIyfg50kBm7AKRDn
+ prMsxN98XsAx45PJ5rRx5KzVQf+9WmtLXnc4UiHTMk+HqhSnZF1jgjpQFMCgAMtaAiKpt4IAj
+ 8uLYGD4QBNYhLXuddgt++vN6gOZZbI2eWw3JnIrLIZeIOghlGf/bG5GpHLX6LMoHHl+QxKVZf
+ g9Os0+BbQunqBg8OwG5IpgGTlyorBhhO4ojgRgNL+cmV22XKQ2DzyvNEQ/KR/SmeCqEpZnAgZ
+ pGlC9+OCCiuCicv+uXYBC8EiajhIGJ50VWGCat+Nztab3t8aa1nsHoMh/eV37t80GxNPVQQ+0
+ 2YtM56sbhygAeFhWHO2AOD9OgvfG5ZnpWi1CiwzrV49QI=
 
-On Thu, Jul 04, 2024 at 09:13:59AM +0800, Tengfei Fan wrote:
-> 
-> 
-> On 7/3/2024 11:09 PM, Andrew Halaney wrote:
-> > On Wed, Jul 03, 2024 at 10:58:32AM GMT, Tengfei Fan wrote:
-> > > Add the compatible for the MAC controller on qcs9100 platforms. This MAC
-> > > works with a single interrupt so add minItems to the interrupts property.
-> > > The fourth clock's name is different here so change it. Enable relevant
-> > > PHY properties. Add the relevant compatibles to the binding document for
-> > > snps,dwmac as well.
-> > 
-> > This description doesn't match what was done in this patch, its what
-> > Bart did when he made changes to add the sa8775 changes. Please consider
-> > using a blurb indicating that this is the same SoC as sa8775p, just with
-> > different firmware strategies or something along those lines?
-> 
-> I will update this commit message as you suggested.
+Hi Peter,
 
-Hi Andrew, Tengfei
-
-Please trim emails when replying to just the needed context.
-
-Thanks
-	Andrew
+Am 02.07.24 um 22:02 schrieb Peter Robinson:
+> Hi Stefan,
+>
+>> Suspend of VC4 HDMI will likely triggers a warning from
+>> vc4_hdmi_connector_detect_ctx() during poll of connector status.
+>> The power management will prevent the resume and keep the relevant
+>> power domain disabled.
+>>
+>> Since there is no reason to poll the connector status during
+>> suspend, the polling should be disabled during this.
+> What about HDMI-CEC? I don't know well enough how CEC integrates at
+> this level but CEC can wake up the device over HDMI from a TV display
+> for example so if this affects that, while it's maybe not required for
+> first pass, I know the rpi is used in a lot of media use cases so the
+> ability to wake up via CEC would certainly be welcomed.
+unfortunately i don't know much about HDMI-CEC, too. The only thing I
+noticed was that I currently cannot configure vc4 as a wakeup source.
 
