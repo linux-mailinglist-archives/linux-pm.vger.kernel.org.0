@@ -1,82 +1,81 @@
-Return-Path: <linux-pm+bounces-10577-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10578-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ABF3927013
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 08:54:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E41CE927018
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 08:55:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05733285B13
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 06:54:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 997B61F240E6
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 06:55:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69F811A256A;
-	Thu,  4 Jul 2024 06:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C29CB1A257F;
+	Thu,  4 Jul 2024 06:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wX98WCi6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gEHGGDgX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7711A2558
-	for <linux-pm@vger.kernel.org>; Thu,  4 Jul 2024 06:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5669B1A2C03
+	for <linux-pm@vger.kernel.org>; Thu,  4 Jul 2024 06:54:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720076059; cv=none; b=G3ZiQT49qtDjUzMLx1IZMq0SdMksjL2Y20DIfVeK7Z9JGzQ0dc+oWL4AFLMVsc3clxEqnmwAQ5sHPjLNYYEBEbcLVG9SZpe0UCcT7PFRS4EbbBt7jY5nrgsejsqijo+xJHa54MK6kEJwBFaOjFIJh5IyVKjqWrBf9c4XvUDTleg=
+	t=1720076062; cv=none; b=H7M9s8WlEcpFU/cg8gTRoUtPrHVGx8XNsBYEOX8vZA2J6hNjMiKjbC14ZcACNTDSXXjZuO7ftr0sOzIsaC8p2TcBS94ByKnO09VfySNbHw9/h6YBcjLe4C+6KK7SCjZm6L8tmiaDlYwW3MYrSRt7rTuVSE0m6d474g0EqwhT2gA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720076059; c=relaxed/simple;
-	bh=rvmbprnMHM6RuihnA3iI8+faiVS/K3OKoDAAx/cTilc=;
+	s=arc-20240116; t=1720076062; c=relaxed/simple;
+	bh=p3g4yOXFGrC+1v+U9pGXCG8xiA5NUBZG/HMlE2fajnY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KvCIMrsoSfkr134l/wLYPheqTfAp9Cz0rrmIbH45yntPMLBCfbJi6JN4YhlFAuIvMM/k26kLa1WLVKKo3YNtBVdAPAlMmevgbnA4RB/9u94hSHD7WACjPlQkiXr5cpLFDRzqpmd4BCprn+POMi2sTQzIfxCfGnF88IzeIeOWhdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wX98WCi6; arc=none smtp.client-ip=209.85.216.41
+	 MIME-Version; b=te3R338CKFEbLM4tgB5aj96boX4TD5zTLWQSxKUkEN0e+PuZBBEqKXvWep2JJPw8FRkBVB4Por54/CNbAN9sx5QxSa4G1kGv5Gxz7wgCXd76R3WlcEvFmHA3QjUQ028nMdmcM2c26y+M/54kP32IwseAk1N+nPB/CjeWh13tUMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gEHGGDgX; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2c97aceb6e4so226590a91.2
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2024 23:54:17 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-701b0b0be38so257927b3a.0
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2024 23:54:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720076057; x=1720680857; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1720076061; x=1720680861; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dqt2bqXZTu+jtLjs9BXsNPr4gZaqVWVCViCBOTfKtXs=;
-        b=wX98WCi66wvL9ePxOdfS4OnbQRyI/c0FgklI6XAqYMeWTSYJI9wvkDc4tbLNK+A1OI
-         yLMVzJqwrNHu6pGKzqfymgYL0DFOJCFeQ9h7uaGAHUcynbWP+KEzTCBjAgRMpgGF61xV
-         NFvoYL70Af6sfdWub3ODW6qZi5SbkI8bsHalsjjJQKB3GTZ33ABxNpdzGOOdi7Mm2qmM
-         EfbP6hZQh+MpznRkdzuBWBCdt9YvGEZepyUCO3HS+U+qtbXdqj0iuGPhlzVgB0Wwicwo
-         0I5rYG4E3hVC/2rMVvpYj+Rx9mSjwdZ9Bc5xbKvd7nHidr26Cy2O+YVZv9UjY9KJw3M3
-         FHag==
+        bh=w6xrWhuQO/F2V4yv6AaPs7D8YwIWXmiw86tXq5hUOyc=;
+        b=gEHGGDgXeN9uRQ5mQw8cfJZXr8+lNd+O50G9phLkH7cV6VUefbWGzTnZzw8SMiPj/h
+         haHP+74LUYBFYjrbSRqTB8X2sevpShKRfg9O4yNS3ljN25xpXnK782YUiyPmQ6LLnWKg
+         JYFmMgwU80Ako40+PKnfCvTLHMKSLMkrSQ6ED1Po4DZ0nTUWJ1RC63/FyCCjn9KapZjU
+         +VmnmJ4AQ3gSbiDe49qtTcS3lk4kEJ4GFaSE61DFYFoAuDBD/XGFmpVk68mD+Jpj/QQW
+         eQ9ZX0avPtt0/XVYuCrXmOmJxJDqae++fub3eo6mWONPs+FArLda2GZ7BkZchegEuUcw
+         nrUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720076057; x=1720680857;
+        d=1e100.net; s=20230601; t=1720076061; x=1720680861;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dqt2bqXZTu+jtLjs9BXsNPr4gZaqVWVCViCBOTfKtXs=;
-        b=rYqbuN362H5EpKjzffRpP/iABWlBDUBnx2nog/oOpWGh7xldiX3f6acwIPTW9yhk1V
-         tIiJ8hs66rLoRKDbRlXDHYWuJTeBcq+WuCR/lnxovJWqXg08p7itrLID442eFeS7vR7R
-         6PA/rddMW0uD2N7FLFfwWItjy+RmJDGPYj20RjP6EQuAn+lmKClGmkkO33yD5OO58NBL
-         DltOsKZPR2+WhwTyg4WA0CpWaWD9WkwI71FK/DYRLCAO6MySnBnRjFxdWZwpsyhgnE0R
-         6ggP4T3me0dd22sad60Jor5oWihUE+dC4m8QuI/cHaQmZMon30Vbxay6hH6IIuKTWFeC
-         uGmg==
-X-Gm-Message-State: AOJu0YzV/L0zAT+j1A0qsI+V5f+79q4SrdmYqrembRKsTVMlHAj9wSJU
-	udfwQYeUWy5xdu/To+PVKdcOFZkXVF9k7Jh8iZ76vRx5A66WV8jBNEHICBEoyCA=
-X-Google-Smtp-Source: AGHT+IE6fNB2yrW6RNftQOsnBHViWmextONFWbrX8jTlqq5TSpm4UeSlu7EdPmVmpu6y90sy4DvlNg==
-X-Received: by 2002:a17:90b:4b04:b0:2c9:6791:a752 with SMTP id 98e67ed59e1d1-2c99c6d0948mr487823a91.44.1720076057304;
-        Wed, 03 Jul 2024 23:54:17 -0700 (PDT)
+        bh=w6xrWhuQO/F2V4yv6AaPs7D8YwIWXmiw86tXq5hUOyc=;
+        b=DBqbgz2fyxbVbEgFlYDw7TIgMbcsW5Xc0kFHaoFq+8G2tKiI8LMBQ5zUaWSaFoVqUT
+         MTa3SATwG1NhGCJdSrVrg8fBISoo74zUl94dpqIaYMMd8TWL/clBFyInqFirDu+ZsgYN
+         pJwncw4z+ucIcDY9l4h8wZrJlhdX3DulkeXsme/vo2LDOvsRh/WlyfolZKJ2O7ZjNgsf
+         tMqytA9JxPahZ7Fhx8Lxqn8/s18I4IH8ZJEElx7iTHEfrng+9g8IiaCxR7LEJhfkR1nB
+         tz3GCpqpffUb55GfyMEIl3b06/THRdn9mgvdUquog9vt7WewVUlfFe5ZiNK6AuclWcqf
+         PU8Q==
+X-Gm-Message-State: AOJu0YzjBv4Tq4A1KqSYAiHfD2jtePXLrEPD0q4dke0ap4WLs+MAsU4l
+	WxmcnpStWO5EZaDgf7Q2dZn1lANwx9Y3fJgvc062gF7cvDun1G3UCD8lvFJ+uv56xEfUCHkjqjP
+	n
+X-Google-Smtp-Source: AGHT+IGnPnbN5hoDog45bSFXx983A7/UJMbl0GjEfYUbedd3XUIpEPJwHqdYZ6FsK+nT7KO4hY8SRw==
+X-Received: by 2002:a05:6a00:1784:b0:708:11f:d151 with SMTP id d2e1a72fcca58-70b009695cbmr851143b3a.16.1720076060590;
+        Wed, 03 Jul 2024 23:54:20 -0700 (PDT)
 Received: from localhost ([122.172.82.13])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c99a947485sm706021a91.4.2024.07.03.23.54.16
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b03a9d996sm245894b3a.96.2024.07.03.23.54.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jul 2024 23:54:16 -0700 (PDT)
+        Wed, 03 Jul 2024 23:54:20 -0700 (PDT)
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	Viresh Kumar <viresh.kumar@linaro.org>
 Cc: linux-pm@vger.kernel.org,
 	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-mips@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] cpufreq: loongson2: Remove empty exit() callback
-Date: Thu,  4 Jul 2024 12:23:53 +0530
-Message-Id: <f09ee1fa731db0c1565b5d4b919d54d5f258957b.1720075640.git.viresh.kumar@linaro.org>
+Subject: [PATCH 3/4] cpufreq: pcc: Remove empty exit() callback
+Date: Thu,  4 Jul 2024 12:23:54 +0530
+Message-Id: <02fbaba9bfee5814b2446a747785746fc242e92a.1720075640.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1720075640.git.viresh.kumar@linaro.org>
 References: <cover.1720075640.git.viresh.kumar@linaro.org>
@@ -92,30 +91,30 @@ The exit() callback is optional, remove the empty one.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/cpufreq/loongson2_cpufreq.c | 6 ------
+ drivers/cpufreq/pcc-cpufreq.c | 6 ------
  1 file changed, 6 deletions(-)
 
-diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
-index afc59b292153..6a8e97896d38 100644
---- a/drivers/cpufreq/loongson2_cpufreq.c
-+++ b/drivers/cpufreq/loongson2_cpufreq.c
-@@ -85,18 +85,12 @@ static int loongson2_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	return 0;
+diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
+index 6f8b5ea7aeae..771efbf51a48 100644
+--- a/drivers/cpufreq/pcc-cpufreq.c
++++ b/drivers/cpufreq/pcc-cpufreq.c
+@@ -562,18 +562,12 @@ static int pcc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 	return result;
  }
  
--static int loongson2_cpufreq_exit(struct cpufreq_policy *policy)
+-static int pcc_cpufreq_cpu_exit(struct cpufreq_policy *policy)
 -{
 -	return 0;
 -}
 -
- static struct cpufreq_driver loongson2_cpufreq_driver = {
- 	.name = "loongson2",
- 	.init = loongson2_cpufreq_cpu_init,
- 	.verify = cpufreq_generic_frequency_table_verify,
- 	.target_index = loongson2_cpufreq_target,
- 	.get = cpufreq_generic_get,
--	.exit = loongson2_cpufreq_exit,
- 	.attr = cpufreq_generic_attr,
+ static struct cpufreq_driver pcc_cpufreq_driver = {
+ 	.flags = CPUFREQ_CONST_LOOPS,
+ 	.get = pcc_get_freq,
+ 	.verify = pcc_cpufreq_verify,
+ 	.target = pcc_cpufreq_target,
+ 	.init = pcc_cpufreq_cpu_init,
+-	.exit = pcc_cpufreq_cpu_exit,
+ 	.name = "pcc-cpufreq",
  };
  
 -- 
