@@ -1,159 +1,263 @@
-Return-Path: <linux-pm+bounces-10608-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10609-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C498927685
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 14:56:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E2569277AE
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 16:04:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29889B222FD
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 12:56:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B35A1F2711A
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 14:04:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDB7A1AE86E;
-	Thu,  4 Jul 2024 12:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B681AD9E0;
+	Thu,  4 Jul 2024 14:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="l3qk7iYb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jq9YLrUf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCD171AE861;
-	Thu,  4 Jul 2024 12:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2951D1822E2;
+	Thu,  4 Jul 2024 14:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720097754; cv=none; b=n8yypXpdQAx+ORxrEZKvfNP3rXxSlGUJtV2lHvQ9DuD1lSOZvIRFZe7Hd++HiFVf0pB1O876rtXiRiEiU+wYJDZVPUgssMvPxxZDt+nny4A+s1FLUJo7FgDqf1l2uYLZtvyVMhPARUOqO7tcIUeWEOueeU8a3B2WR7cJe32i3mQ=
+	t=1720101846; cv=none; b=qV+TIxCFzcUnN4yhaUvp6+0wXL8RIksk8tSJUltJft0mREksaDw+3XNSnFY0TaSa+KfRV5qSTqS519tMezHVXNWGlDYj5wTFoYSiHR6ijsZ9h2Z+3JWn4U4IuJvHNA6GcujOo1Y3zvWmQDNVB6HzMEzooGKoVpHn883uCcoz060=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720097754; c=relaxed/simple;
-	bh=3Gn+5X8kApPn/TQHUrXkCfhIU8vbH4qzNoznN0rMLNw=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ke7UfqyTuF/lPdRqyWDCCEAJFSNU62/hIkTHf/cFRmEUvzIbIqhIuvzROEj2yzjQ8qCiUWRbwRqf5eTqInk7pd8iXlU4AYwfXOAMQsLyY/SouGKgZsLuMQ7wf7hcxMiDD94zQo2nX+JpQZKUvaPzFNEwItR01QFiRJ0G9OTqReU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=l3qk7iYb; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4648bkRD000337;
-	Thu, 4 Jul 2024 12:55:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:message-id:mime-version:subject:to; s=
-	qcppdkim1; bh=nFqrxVv5j0XXUicQugiyuQ7XNx0h0LFXvHKht5Lk8gM=; b=l3
-	qk7iYbvmy6XZFdIUZ5xyNuIZp3pU+r1ghTijs1lc/Vy7lKxy1S2tmD3sIyBFlorq
-	UkeE2EiZ8kSd2B/n7VQeAZBjJyh5iS/qWco4iS9IGD2zU18YDgmLTmt8Kr1f2I3O
-	b4s5vvfSAP7TDDGwhqDQIC+dlHzx1Z+D3/t0janRbvPM1vzqdwOhbQacRg/KlfJJ
-	vJqY6CrSwCttaz1Rasm3zPbQS74SsPXr/dbQc3v8XUZv93d6u5QfPUEwxis3VvZv
-	3NGlLalaZXTbbGU7ibJnBIxKX7dwlKuudl+urJWqv1sDYE6oUhiRgco4BFKJm2pq
-	oUdiZHpl+RtkddHETR7g==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 402abtuh34-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 04 Jul 2024 12:55:46 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 464Ctjxw031604
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 4 Jul 2024 12:55:45 GMT
-Received: from hu-okukatla-hyd.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 4 Jul 2024 05:55:40 -0700
-From: Odelu Kukatla <quic_okukatla@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC: Kees Cook <keescook@chromium.org>, <cros-qcom-dts-watchers@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>, <quic_rlaggysh@quicinc.com>,
-        <quic_mdtipton@quicinc.com>, <quic_okukatla@quicinc.com>
-Subject: [PATCH] interconnect: qcom: Fix DT backwards compatibility for QoS
-Date: Thu, 4 Jul 2024 18:25:15 +0530
-Message-ID: <20240704125515.22194-1-quic_okukatla@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1720101846; c=relaxed/simple;
+	bh=wZYTKnFz/gwAFTRm5C60rPGzgtSUfuPJ/lymJgtVcEA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cWxx048mBOgLAET7d5xK4qBBr+2EVluJv+yzZbfS4zQSqjOXkqupD6gT2o5kM2wB6UtPkwswPCImvWtOWcn1KJ7nhItDr3X0kbbScofj3W974v516/PTGzkwmN3ZPpBoG/GVNsfz8F06sart7P94JdpJRsdSSn3LOTQ4i3+hYPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jq9YLrUf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B81F0C3277B;
+	Thu,  4 Jul 2024 14:04:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720101845;
+	bh=wZYTKnFz/gwAFTRm5C60rPGzgtSUfuPJ/lymJgtVcEA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jq9YLrUfdXj7LHp7+oLnavu16y5PMMM+Ls1RDM2mCFsudxLRBEnIQnhnEw/Yax01j
+	 D1uaZu2rZlZZg2fCHUOvS+778jbN+Ryvg4AS77YPSfmGwLygcG6U3W/p2Ra3BoPVRJ
+	 JB39gllQ/2jL6bFJncsyYPFq3rXi+MoMZXxk7wLvt2b/02neOuhn+8dQgYdPAO3Arj
+	 6Wys57sfhenLpp0PPbNozfBmLUgaJpPFzCz9F5T679QS5cWvjrcmvPpOZi+M2PXfXp
+	 m2q4/aGMlgNCeMuYt5AL98nYuNzpqDrXcBFh6oqNdnJAFE+Sx4pnXK2N7/+gXcMVS8
+	 C7FYkTa2P4HUQ==
+Date: Thu, 4 Jul 2024 16:03:59 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: "Isaac J. Manjarres" <isaacmanjarres@google.com>
+Cc: tglx@linutronix.de, jstultz@google.com, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, saravanak@google.com, mjguzik@gmail.com, 
+	Manish Varma <varmam@google.com>, Kelly Rossmoyer <krossmo@google.com>, kernel-team@android.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v6] fs: Improve eventpoll logging to stop indicting
+ timerfd
+Message-ID: <20240704-umsatz-drollig-38db6b84da7b@brauner>
+References: <20240703214315.454407-1-isaacmanjarres@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: qWI9-P1L0w6GS7MJ0lnPkwwiJiQtu9Dg
-X-Proofpoint-ORIG-GUID: qWI9-P1L0w6GS7MJ0lnPkwwiJiQtu9Dg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-04_09,2024-07-03_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 mlxscore=0 clxscore=1015 suspectscore=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 spamscore=0 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2407040092
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240703214315.454407-1-isaacmanjarres@google.com>
 
-Add qos_clks_required flag to skip QoS configuration if clocks property
-is not populated in devicetree for providers which require clocks to be
-enabled for accessing registers. This is to keep the QoS configuration
-backwards compatible with devices that have older DTB.
+On Wed, Jul 03, 2024 at 02:43:14PM GMT, Isaac J. Manjarres wrote:
+> From: Manish Varma <varmam@google.com>
+> 
+> We'll often see aborted suspend operations that look like:
+> 
+>  PM: suspend entry 2024-07-03 15:55:15.372419634 UTC
+>  PM: PM: Pending Wakeup Sources: [timerfd]
+>  Abort: Pending Wakeup Sources: [timerfd]
+>  PM: suspend exit 2024-07-03 15:55:15.445281857 UTC
+> 
+> From this, it seems a timerfd caused the abort, but that can be
+> confusing, as timerfds don't create wakeup sources. However,
+> eventpoll can, and when it does, it names them after the underlying
+> file descriptor. Unfortunately, all the file descriptors are called
+> "[timerfd]", and a system may have many timerfds, so this isn't very
+> useful to debug what's going on to cause the suspend to abort.
+> 
+> To improve this, change the way eventpoll wakeup sources are named:
+> 
+> 1) The top-level per-process eventpoll wakeup source is now named
+> "epollN:P" (instead of just "eventpoll"), where N is a unique ID token,
+> and P is the PID of the creating process.
+> 
+> 2) Individual eventpoll item wakeup sources are now named
+> "epollitemN:P.F", where N is a unique ID token, P is PID of the creating
+> process, and F is the name of the underlying file descriptor.
 
-Reported-by: Bjorn Andersson <andersson@kernel.org>
-Closes: https://lore.kernel.org/all/ciji6nlxn752ina4tmh6kwvek52nxpnguomqek6plwvwgvoqef@yrtexkpmn5br/
-Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
----
- drivers/interconnect/qcom/icc-rpmh.c | 2 +-
- drivers/interconnect/qcom/icc-rpmh.h | 1 +
- drivers/interconnect/qcom/sc7280.c   | 2 ++
- 3 files changed, 4 insertions(+), 1 deletion(-)
+Fyi, that PID is meaningless or even actively misleading in the face of
+pid namespaces. And since such wakeups seem to be registered in sysfs
+globally they are visible to all containers. That means a container will
+now see some timerfd wakeup source with a PID that might just accidently
+correspond to a process inside the container. Which in turn also means
+you're leaking the info about the creating process into the container.
+IOW, if PID 1 ends up registering some wakeup source the container gets
+to know about it.
 
-diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
-index 93047defd5e2..f49a8e0cb03c 100644
---- a/drivers/interconnect/qcom/icc-rpmh.c
-+++ b/drivers/interconnect/qcom/icc-rpmh.c
-@@ -311,7 +311,7 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
- 		}
- 
- 		qp->num_clks = devm_clk_bulk_get_all(qp->dev, &qp->clks);
--		if (qp->num_clks < 0) {
-+		if (qp->num_clks < 0 || (!qp->num_clks && desc->qos_clks_required)) {
- 			dev_info(dev, "Skipping QoS, failed to get clk: %d\n", qp->num_clks);
- 			goto skip_qos_config;
- 		}
-diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
-index 9a5142c70486..14db89850fb3 100644
---- a/drivers/interconnect/qcom/icc-rpmh.h
-+++ b/drivers/interconnect/qcom/icc-rpmh.h
-@@ -153,6 +153,7 @@ struct qcom_icc_desc {
- 	size_t num_nodes;
- 	struct qcom_icc_bcm * const *bcms;
- 	size_t num_bcms;
-+	bool qos_clks_required;
- };
- 
- int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
-diff --git a/drivers/interconnect/qcom/sc7280.c b/drivers/interconnect/qcom/sc7280.c
-index 759c609a20bf..167971f8e8be 100644
---- a/drivers/interconnect/qcom/sc7280.c
-+++ b/drivers/interconnect/qcom/sc7280.c
-@@ -1691,6 +1691,7 @@ static const struct qcom_icc_desc sc7280_aggre1_noc = {
- 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
- 	.bcms = aggre1_noc_bcms,
- 	.num_bcms = ARRAY_SIZE(aggre1_noc_bcms),
-+	.qos_clks_required = true,
- };
- 
- static struct qcom_icc_bcm * const aggre2_noc_bcms[] = {
-@@ -1722,6 +1723,7 @@ static const struct qcom_icc_desc sc7280_aggre2_noc = {
- 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
- 	.bcms = aggre2_noc_bcms,
- 	.num_bcms = ARRAY_SIZE(aggre2_noc_bcms),
-+	.qos_clks_required = true,
- };
- 
- static struct qcom_icc_bcm * const clk_virt_bcms[] = {
--- 
-2.17.1
-
+> 
+> Now, when the scenario described earlier is encountered, the following
+> kernel logs are emitted:
+> 
+>  PM: suspend entry 2024-07-03 15:39:24.945791824 UTC
+>  PM: PM: Pending Wakeup Sources: epollitem30:6375.[timerfd]
+>  Abort: Pending Wakeup Sources: epollitem30:6375.[timerfd]
+>  PM: suspend exit 2024-07-03 15:39:25.017775019 UTC
+> 
+> There are various benefits to this new naming convention:
+> 
+> 1) It is clear that the wakeup source is linked to an eventpoll
+> item.
+> 
+> 2) Now that the PID of the process associated with that timerfd
+> instance is known, it is easy to map the PID of the process to the
+> name of the process. With this information, it is easy to start
+> debugging which process is causing this issue to occur.
+> 
+> 3) Even if process 6375 creates multiple timerfd instances, the
+> ID token is useful in identifying which timerfd instance associated
+> with the process is causing suspend to abort, as it is monotonically
+> increasing. So if the order in which the timerfd instances for the
+> process is known, then one can pinpoint which timerfd instance is
+> causing this issue.
+> 
+> Co-developed-by: Kelly Rossmoyer <krossmo@google.com>
+> Signed-off-by: Kelly Rossmoyer <krossmo@google.com>
+> Signed-off-by: Manish Varma <varmam@google.com>
+> Co-developed-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+> Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+> ---
+>  drivers/base/power/wakeup.c | 12 +++++++++---
+>  fs/eventpoll.c              | 11 +++++++++--
+>  include/linux/pm_wakeup.h   |  8 ++++----
+>  3 files changed, 22 insertions(+), 9 deletions(-)
+> 
+>  v1 -> v2:
+>  - Renamed instance count to wakesource_create_id to better describe
+>    its purpose.
+>  - Changed the wakeup source naming convention for wakeup sources
+>    created by eventpoll to avoid changing the timerfd names.
+>  - Used the PID of the process instead of the process name for the
+>    sake of uniqueness when creating wakeup sources.
+> 
+> v2 -> v3:
+>  - Changed wakeup_source_register() to take in a format string
+>    and arguments to avoid duplicating code to construct wakeup
+>    source names.
+>  - Moved the definition of wakesource_create_id so that it is
+>    always defined to fix an compilation error.
+> 
+> v3 -> v4:
+>  - Changed the naming convention for the top-level epoll wakeup
+>    sources to include an ID for uniqueness. This is needed in
+>    cases where a process is using two epoll fds.
+>  - Edited commit log to reflect new changes and add new tags.
+> 
+> v4 -> v5:
+>  - Added the format attribute to the wakeup_source_register()
+>    function to address a warning from the kernel test robot:
+>    https://lore.kernel.org/all/202406050504.UvdlPAQ0-lkp@intel.com/
+> 
+> v5 -> v6:
+>  - Reworded the commit text to clarify the scenarios in which this
+>    patch is helpful, as per feedback from
+>    John Stultz <jstultz@google.com>
+> 
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index 752b417e8129..04a808607b62 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -209,13 +209,19 @@ EXPORT_SYMBOL_GPL(wakeup_source_remove);
+>  /**
+>   * wakeup_source_register - Create wakeup source and add it to the list.
+>   * @dev: Device this wakeup source is associated with (or NULL if virtual).
+> - * @name: Name of the wakeup source to register.
+> + * @fmt: format string for the wakeup source name
+>   */
+> -struct wakeup_source *wakeup_source_register(struct device *dev,
+> -					     const char *name)
+> +__printf(2, 3) struct wakeup_source *wakeup_source_register(struct device *dev,
+> +							    const char *fmt, ...)
+>  {
+>  	struct wakeup_source *ws;
+>  	int ret;
+> +	char name[128];
+> +	va_list args;
+> +
+> +	va_start(args, fmt);
+> +	vsnprintf(name, sizeof(name), fmt, args);
+> +	va_end(args);
+>  
+>  	ws = wakeup_source_create(name);
+>  	if (ws) {
+> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+> index f53ca4f7fced..941df15208a4 100644
+> --- a/fs/eventpoll.c
+> +++ b/fs/eventpoll.c
+> @@ -338,6 +338,7 @@ static void __init epoll_sysctls_init(void)
+>  #define epoll_sysctls_init() do { } while (0)
+>  #endif /* CONFIG_SYSCTL */
+>  
+> +static atomic_t wakesource_create_id  = ATOMIC_INIT(0);
+>  static const struct file_operations eventpoll_fops;
+>  
+>  static inline int is_file_epoll(struct file *f)
+> @@ -1545,15 +1546,21 @@ static int ep_create_wakeup_source(struct epitem *epi)
+>  {
+>  	struct name_snapshot n;
+>  	struct wakeup_source *ws;
+> +	pid_t task_pid;
+> +	int id;
+> +
+> +	task_pid = task_pid_nr(current);
+>  
+>  	if (!epi->ep->ws) {
+> -		epi->ep->ws = wakeup_source_register(NULL, "eventpoll");
+> +		id = atomic_inc_return(&wakesource_create_id);
+> +		epi->ep->ws = wakeup_source_register(NULL, "epoll:%d:%d", id, task_pid);
+>  		if (!epi->ep->ws)
+>  			return -ENOMEM;
+>  	}
+>  
+> +	id = atomic_inc_return(&wakesource_create_id);
+>  	take_dentry_name_snapshot(&n, epi->ffd.file->f_path.dentry);
+> -	ws = wakeup_source_register(NULL, n.name.name);
+> +	ws = wakeup_source_register(NULL, "epollitem%d:%d.%s", id, task_pid, n.name.name);
+>  	release_dentry_name_snapshot(&n);
+>  
+>  	if (!ws)
+> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+> index 76cd1f9f1365..1fb6dca981c2 100644
+> --- a/include/linux/pm_wakeup.h
+> +++ b/include/linux/pm_wakeup.h
+> @@ -99,8 +99,8 @@ extern struct wakeup_source *wakeup_source_create(const char *name);
+>  extern void wakeup_source_destroy(struct wakeup_source *ws);
+>  extern void wakeup_source_add(struct wakeup_source *ws);
+>  extern void wakeup_source_remove(struct wakeup_source *ws);
+> -extern struct wakeup_source *wakeup_source_register(struct device *dev,
+> -						    const char *name);
+> +extern __printf(2, 3) struct wakeup_source *wakeup_source_register(struct device *dev,
+> +								   const char *fmt, ...);
+>  extern void wakeup_source_unregister(struct wakeup_source *ws);
+>  extern int wakeup_sources_read_lock(void);
+>  extern void wakeup_sources_read_unlock(int idx);
+> @@ -140,8 +140,8 @@ static inline void wakeup_source_add(struct wakeup_source *ws) {}
+>  
+>  static inline void wakeup_source_remove(struct wakeup_source *ws) {}
+>  
+> -static inline struct wakeup_source *wakeup_source_register(struct device *dev,
+> -							   const char *name)
+> +static inline __printf(2, 3) struct wakeup_source *wakeup_source_register(struct device *dev,
+> +									  const char *fmt, ...)
+>  {
+>  	return NULL;
+>  }
+> -- 
+> 2.45.2.803.g4e1b14247a-goog
+> 
 
