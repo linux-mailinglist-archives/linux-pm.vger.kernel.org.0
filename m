@@ -1,203 +1,241 @@
-Return-Path: <linux-pm+bounces-10600-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10601-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64C0792756B
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 13:46:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80261927591
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 13:56:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E90531F22098
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 11:46:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A46791C21A5A
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 11:56:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 807621AB514;
-	Thu,  4 Jul 2024 11:46:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092A81AD9D4;
+	Thu,  4 Jul 2024 11:56:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="OVwS3+J+"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="kpWo+L2T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2082.outbound.protection.outlook.com [40.107.223.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9650A15B54F;
-	Thu,  4 Jul 2024 11:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720093598; cv=none; b=ieqwQN42vXBI5z/8Bqi6/3A9zes+VhooTgyvBXCUFG0Py9f9Jac8L9alep0omt1/XiRLVEFhlWlGoTRBnAIUUGEFKt8nXiC6Dit5g86K5bHc8QKcIFhwsoUOkzmXpRntNefwpVlIRL6qbHrzy5df81o5gDco/AZxpOQ89jFX2fU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720093598; c=relaxed/simple;
-	bh=Dkc9e4ulA+RsHD4AJ3485vUQCI71iUJJHsbJBqCdWPM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=F1c+1S2qyrmjyAjgW3Sgaq96qxrbbeaoCBYFkdT4AHkwD+FpvzDfftK7iYpdTRrGYRcRKncP475AKQYtrbt2GJfT6WmdLmG+qdDLaK/xwpD8t76lu9YlJCwEXa6kBlX+I9mTGRIOnjjLyhFdh4o3Y31uOQlSBc4Z9QjL8h3MMJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=OVwS3+J+ reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id ef6c16801bd96395; Thu, 4 Jul 2024 13:46:27 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 7D5AEA229B3;
-	Thu,  4 Jul 2024 13:46:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1720093587;
-	bh=Dkc9e4ulA+RsHD4AJ3485vUQCI71iUJJHsbJBqCdWPM=;
-	h=From:To:Cc:Subject:Date;
-	b=OVwS3+J+9mFelrPnZOCtEaH9jH0gSv5TvMW9JbAmZP4eemzi5MXw255+UugN/Zeut
-	 PEKWM6pVG2Ehfln8g1z0XtVCN/Pk3aPZcUSId9Aojy7Zm7bmJDrAomLKRHNh3Rdr/T
-	 xKacTnt3BrrbRr3+pC7+OdPTCceR1wilejA1v23tyFU1QFt8ZqllP5ZnVa1Ftrz83N
-	 2qZy7h3vMQtzN4AtEzQLUaWkWfup79x49hkJ9ZfZdd3NQI5i1w33M0R1mEkj2uy474
-	 b5G956Fj5TNxhLpzTp/VokRp7TxJeRPVWgul/8xlx16uf/jEzv7oZXm3tf+/2BBWzB
-	 hRKRlY7VTtLEQ==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
- LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDBA14B078;
+	Thu,  4 Jul 2024 11:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.82
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720094194; cv=fail; b=i3iNs3g7KTXZwZAxACsC9aI6DcsAHNBfNIXp/FVHloaIDJxopp+TduRS77i+isGlcZP1eFgz67T0wB2lcMjokKIROz2mYRoRyxYBopnd/Fnebdg5BOHGCRXZvFrGWZ++HqK6iHEZXtzeHV69qmFwIh4kMb9VM1Kd6r7O9MtVhJo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720094194; c=relaxed/simple;
+	bh=9WPSV0GPECzZXPnkRc66glV8Uv4czNs2JWxDTFLYCPg=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=f6WjSwUuMbVnb9dcJMwSPzIVQTMEf+XXCWHsvBYmyW5YFpXr9Y9TdOVUeaCPReBEMgtgEIj+J0ANP9PwZMftuCdWTDs9Uc/ApbvViXvPE49Q2STf+mZjY5gVTncWkO58GIm9QHMmsWKVD7Hv0ajWaPSFO0RXjMK0oSv2z7/QcGc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=kpWo+L2T; arc=fail smtp.client-ip=40.107.223.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jSclwcWa+yOL+Y7f0spuxT6G6ffqWYpJ5dz1bOaDvNxJd/vmL3kPp81tWNx5U7IuOuLR4zi0Zi3ps1E3d/vVWRQq/m5Ir9UcniZSujFGdmvMYPH6CVIQe36p/4xvHHTGifEc7OoXRRwDkucFlGS4FXvCroY/MPKroo4sw1hp3rZwij6Oj/OidCNH/WGqEklWsntPkZ5/jmP77QlLluR2k0AY0pcdKGbEGGXGRsUp+HP/toIxn1ISxMhjzgpM5wpfke27d0Mo515txg22jtyaBPeSSF4bUuk+GTcS6YNWjK/jk5pDnt46VIri3xYfIKpfg8aI4t6Vhk2AePOfsf+SLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9Nj8ylJiAK4PaC05sjG/G9aUfCyDoaMH5FJUWNxbC9E=;
+ b=Fk0IH1V8QXV+LQus2q/t7vSKPkK72+ApXlcw5nwq8ivX12r5hecorDyxYokZEYFaZ1AYN/IvvCev6Me/IDq3zNsLR8Nx0StWMJkkxDu1ouVFPtx5MVa3smxDufMbm/TMToSCdFLVtnITZY/5A0obVrwapvxXSlTimoGngHrFHKwbriGy2AvBMPpS8jYCR4kJqDkLfhWmAnG6YadLjiRnC/QSPy1uZhtRrV3/G628zlpx8os5F0X4I/W+3Cv6rE/cwYrkH8XOdxMFzYw3q6jvd1YSvxa3qzZjGdajMmfll8OEhWmltplU59S34dTGmo0yR/P8W068NpmEqLTMorBPXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9Nj8ylJiAK4PaC05sjG/G9aUfCyDoaMH5FJUWNxbC9E=;
+ b=kpWo+L2TJh6yg5jtsSiZjJOem9P1wVZqlonZuu7TI4hee+jslJFts1FZC3Pac8bsUxzn90zDWaoTblWPPrfPgQ/jrz0AEIcutZTc4ppjmXDSLGCvM1IvQI+TZA0KAK6cv9+kkuNN+TDNElMhzyQEv8QOTVXs5YGrwaZ272CKTnc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DM4PR12MB8523.namprd12.prod.outlook.com (2603:10b6:8:18e::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.26; Thu, 4 Jul
+ 2024 11:56:29 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%6]) with mapi id 15.20.7719.029; Thu, 4 Jul 2024
+ 11:56:29 +0000
+Message-ID: <11b57ff8-91a9-42d8-acbb-ea618157d655@amd.com>
+Date: Thu, 4 Jul 2024 06:56:25 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/4] cpufreq: Make cpufreq_driver->exit() return void
+To: Viresh Kumar <viresh.kumar@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Huang Rui <ray.huang@amd.com>,
+ "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Perry Yuan
+ <perry.yuan@amd.com>, Hector Martin <marcan@marcan.st>,
+ Sven Peter <sven@svenpeter.dev>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ Markus Mayer <mmayer@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>
-Subject:
- [PATCH v3] thermal: core: Call monitor_thermal_zone() if zone temperature is
- invalid
-Date: Thu, 04 Jul 2024 13:46:26 +0200
-Message-ID: <6064157.lOV4Wx5bFT@rjwysocki.net>
+ Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+ Sudeep Holla <sudeep.holla@arm.com>,
+ Cristian Marussi <cristian.marussi@arm.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>,
+ Lizhe <sensor1010@163.com>, linux-kernel@vger.kernel.org,
+ asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-omap@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-mediatek@lists.infradead.org
+References: <cover.1720075640.git.viresh.kumar@linaro.org>
+ <3f73fda736818128558b61ad5fe2bed5dce3ddc4.1720075640.git.viresh.kumar@linaro.org>
+Content-Language: en-US
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <3f73fda736818128558b61ad5fe2bed5dce3ddc4.1720075640.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA0PR11CA0087.namprd11.prod.outlook.com
+ (2603:10b6:806:d2::32) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrudelgdegvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghr
- mhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM4PR12MB8523:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1d45e0ab-be42-48ff-49de-08dc9c205719
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UzYvTUFQWDhuaEtwOG9lRnB5UEl4UHowaVNNZzR6UlQwaHpUWkluNkE0RVZI?=
+ =?utf-8?B?TFRFMlp1c2NHaXRBZy96UzlId1VsYWV1M1hqRlRSdC8rS01JSHhEYlJWTGd5?=
+ =?utf-8?B?L1FDYUtCYmkyR3YrQmJEZ1F2VnNRQjVIWStnaDF4dWthMkluR2EycGZYVnFX?=
+ =?utf-8?B?MFA4OTFyZms2WVB6NnhkdWdsOTJiWWMzUDhRQ3JRcG4xKzRxZjdjQUdrS0lG?=
+ =?utf-8?B?RlR0Rzd6aER0TExmWVI3aDlVWTljblF6T3hBZ1kyT1FnOG92UHF1bkR2eGVy?=
+ =?utf-8?B?VjJGSHlrRFFLSHh4T0RzTnZpNCtIVW8rQWl5M0JGTTYyNmc3SHVtUkFDUVBE?=
+ =?utf-8?B?b2k3QWJlZGxPa0hoTVJVbkRNNjN5RlV1RDBCNmxYUkZoOUlmb1JGS2xLUlBS?=
+ =?utf-8?B?Q0dmL2hzRWxRaXRJWXhpOXZEeEgwbDVRakMzeEE1WEpsUVRENmtvenBPM2Y1?=
+ =?utf-8?B?VjVqQWU2ZkZveEZUOUxvMHJSTGVtS0FmMlZEcVB6YXE3YjNIdHEyY1dLL1dQ?=
+ =?utf-8?B?OW9yWHlZTHlqcUdnU3B6UlN5bWxzZVFRZzV4dG9GY3VCc2RWUGU0bUNGNndk?=
+ =?utf-8?B?Z0pORVhxS044STQrUTRxMEtteXMySkhTcTFEYmw1LzZrRU53clgxR3g1VEZP?=
+ =?utf-8?B?ODRucjlHWXg5azAySXVZV1l5VUMzOG41akhtb3A4eWN4cDRMSlRxclBPOXZt?=
+ =?utf-8?B?R1ZhYVlQVFhGcjlUc24zU2plUnhWekh3RVdKYU1neDBmZ0pWRTkzOTJhY2da?=
+ =?utf-8?B?VzlVNDBjUUpoWERYZmpDRmFuWTV3bzhpVG5DOCswTjFuUmZEMjd5TGFQdFhJ?=
+ =?utf-8?B?S0FWREpDRXNzanF0S0JpcjFoU3BJVlpySCtEQzk1eHhLb3FBaGxkMloyU093?=
+ =?utf-8?B?N2FpM0FFa0NBU3NpeUFtUCtod1RWNDlZREVOY01nNU9qVm9VYmR6NTlBa1lH?=
+ =?utf-8?B?RTFPRENNWXNodDVJcTl0VjU3dWdwR091c1VKY1AzRGcxM2hIWWh3dHk1Nkpp?=
+ =?utf-8?B?ODJBMHlVOGNiZ1plL0pENmd3VkJPa1ZUMjlFa3hkeVl3VWVUejF5cUlYR1cz?=
+ =?utf-8?B?aUsvOWRjSUYzdUNhWnQvZVluN0lYaXkyQ3pQNG5vbU1ydFRSam5QbTdtRitB?=
+ =?utf-8?B?ak5uU1dlazEyQ2trL3NMMWdZSTFGaTZLT3hCNnU2R1RzRWtSbXFNT3RCWkYy?=
+ =?utf-8?B?bjNrMS9oYldXeDd1RVBrQWNkTSs5K3pLRGUxckp1Q05KNWNZeklKRERFOVJi?=
+ =?utf-8?B?M3dZUFM3YXVOK1JDWTlEckI2WTNPZ3J2NTNwbUYwR2VwUU5Fckt3MUJVNGJp?=
+ =?utf-8?B?UWRBdWRTSUNtOFFrTlRsczcrRGU5TlBzNEEvSHh6NHhQWjZDSjE2U3puNDA0?=
+ =?utf-8?B?TzRWc25CU2lZcHRlTVhrZmhPS25TVStCenZVUUxqdHZIZ3NVS2tKbmh6TXJk?=
+ =?utf-8?B?U2g2OEg3Mk1UdEtVMHEwTG8reHNOYzRraE5kRVJrWk1waCtncU04WnNSZ1pn?=
+ =?utf-8?B?SDVHby9wejNlV2F4NFU0anhVdkV5cDhQbDFGQmtqQ09sVmFFTHdLOWU1K21R?=
+ =?utf-8?B?NloyWTcrRFFDcUVUalQzNjVldVFxZUVBcFcyRlYrbzU2SUlrNjFmaGZQMVZp?=
+ =?utf-8?B?cHFSQ1JqLzZnODQ0V0V6L3V0bW5zOVBVa0lHVWhGTWZ5YWJEYnJyY2hsNVE2?=
+ =?utf-8?B?NzdXa3JlNGRoWm5qbi9hdUhiL215NjdSQ3p3cWs3MGkwVExyNXV5dEhFaEJO?=
+ =?utf-8?B?djAyUDBwcURGTVdPSHdxb3VEQXRxTlN2R1RGMHpDODg3TEFIVmhTZDkrRi9n?=
+ =?utf-8?B?eDRaalc2cVFlbDR0Sjk2UHpMR082MWJpRnQwWUdnTzN1TUtWWDc4VWt3MlEw?=
+ =?utf-8?Q?l15JoDHqahDdw?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Z2p1ckFwVEsvcE12QUFTMERCS3JoYjY1K0lkWEErcDIzS2tVTDdQY3VnbmU1?=
+ =?utf-8?B?cEFIcDdoV3pPVVZncUdvdXNKaHRicWxxR0tQdkVOdTZUczJJK1k1UDR4OW9K?=
+ =?utf-8?B?RGIrakFLMUhhRWoyNEJ3UGRic0FVeHF3L2FpdlpJampQcHNXV1gwWW1lT0Jm?=
+ =?utf-8?B?SnlocExsRzVnN2FINFdrM2tOV2VTT2oyYUdNSjZvT1c5d2JrNEFvdG1jSlRs?=
+ =?utf-8?B?elB3UG12bnA1S0VTdElEcFovekdLbHhmZWdqMFZ5R2MzOUh6SXcrbEtWbDh4?=
+ =?utf-8?B?SkZiRVVLRTU2TDQ4d3pZaVBmVTl5ZHI2eW9EaDhKU044aGoySzZSeVF4WXAw?=
+ =?utf-8?B?WisvWG5RaHFtcGFTTjJDTnlhVCswQU1OUk8rQTllU2srWVJwZUZRQzgyUm83?=
+ =?utf-8?B?TkgxM2hjckdXZGRWRXdNRTZxV2J0U0owU0R4bHhNTkE0MzVwZ0YzY3o1WU9L?=
+ =?utf-8?B?U0R5eFAxaVFOV0NKc3QwUEMrNGlPRk9kZVZHMXhuYlZZdnV3TTlOKzM3aFFx?=
+ =?utf-8?B?bnVabUFFWlRDZWpMZDhHU1R5RjdGdUQ4Tlo1RmFZSzRaMjZsbFBCY0kxbVdT?=
+ =?utf-8?B?YUVBQ2NuQWRQZXQ5bVhlU2hlQkdXclBMdklrUmRlS05KRng5dUVlUjJJNFdD?=
+ =?utf-8?B?U0Z0VHBnU1hzV2N2STJWcGp6U0VVa3BwdDVhbHJjQ1pncFI3MVRXaG5JWFBv?=
+ =?utf-8?B?bmVXd2NEczhjM1N3TW5kV3NDdHdBZzhOV1hsQTdCVFZuWjlTbUJza0cvYlJq?=
+ =?utf-8?B?QitLSjNnVWloU0JzTURnZE9LakFuMFNYdG1kNzUxdXRReGFOSXBoZjZpSUZ6?=
+ =?utf-8?B?NU1JMnBaL1puUTFtQk52MXVPSEEyOHd2RnRaR21EcFE4RmphSDNRZWc5RFVU?=
+ =?utf-8?B?SFhDSGVMNjdCY2IrVDVHOVAzbEFJOEgvN1RLMU5FU1daeDJ1MUpxMmtlbktz?=
+ =?utf-8?B?Rmh0VlV1Vllqd3J5ZEt3aDdES2pHUjRtTzBRN3RUKzhoV3pySXcrMTBIU3Q0?=
+ =?utf-8?B?bjVQNVc4SWxoaS96MUlqVkVONk5zNTM3OXhVU2J6bTB1R1JxVnNsTWNSSSs4?=
+ =?utf-8?B?cDRCUE9LQXp1T21pcHZqbVM4M2VyV1EvamltLzBhdEhPRWxKQzN6Yi9memNH?=
+ =?utf-8?B?S1E3eUhuWEpwamdnb2VyNVRBcGMyUkJ3SXpjdm1yaEZxV1QvVVRLRTFEb1py?=
+ =?utf-8?B?UmRRSnJhdE9TcDZROXp4MzkrUHpybTE0VUZ3eUlmWS96eEQwNG1QOTVEcHRy?=
+ =?utf-8?B?Uk03RWNPQWc0Y2tyL0VScjk0b2FyMDZ6NHZqSzJVSVRXUkRFOXhTSUR5bFFa?=
+ =?utf-8?B?ZDV0MkN6ekh3WnVkcllXOXFoZVFpc2lnRHpCemJtbmxqMDAwN00wWnIxL0Y0?=
+ =?utf-8?B?c04zNFRpSmhmUWRBVHlVODJMalpTR2NkYXRSMzhIYkQyQTN5YXlrYTdQSlNw?=
+ =?utf-8?B?TkFXazVKU2NPVDVNaWtSZ2VmcXZxeERBRVJsL3FFdzNwQ3QyWVo3Nkc4Uklw?=
+ =?utf-8?B?M3FhWnZDOFNxbmJwNEN3TldOdjVTSlZoLzZIQVdkbnRydkRlc0JhWTZyb3Y2?=
+ =?utf-8?B?WmJaVVBDb2lFQ1ZJMVVlTVlBNnpkVHQzaHlCdyt2SDhiK2JNS1BST0JpM29B?=
+ =?utf-8?B?VFRmVUNtT3lOaThvMXdwYUZuclplclVwVU9sYng5ZGFGT29uZWlad2k1VHdI?=
+ =?utf-8?B?cW9jM3NnREQ1S2dqRDllSXFmTVU3R3M5TUp6TzNTS0QweVZRK2wxbDlUbjly?=
+ =?utf-8?B?bGpXSGdPcjhMOEZQNDJvTS9uQ2NkRXY5WWo1dEcvRzZ2dnVaTHkybVFxcWVZ?=
+ =?utf-8?B?RVRSZ0FPNk4wMU9ZenJtU0VNT1M2WWpqQ0d0OTN5eUZBU1pueFVLMnlqWE9k?=
+ =?utf-8?B?K3hYR0ZJTjV5SkJFQWhXYm9PNURwZ1hiLzB3b09sNjF3cFFieEdoQzVQS0Zh?=
+ =?utf-8?B?WFcvcVErdTNrZmp6K0xnN0tLb0JwNktld3E2L0JQdzhIQ0dONnZvNHViV1lS?=
+ =?utf-8?B?YklOT3NvUUEzQm4vWi9hcGJ5c2t5YmkraE9Uc3I2VjhMMzJ3clRUQ2dBQTZG?=
+ =?utf-8?B?OWVHYzhZTTNlZ3pyODhlb0l1Z3VqVFVPYVV1UFk3SkhiVGJmc1BLVEhTcHdQ?=
+ =?utf-8?Q?FYxajcg53TcY7zbB42KbjizF/?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1d45e0ab-be42-48ff-49de-08dc9c205719
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2024 11:56:29.5669
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: niRj7KYRpM3UUg+fcmUQe8DDJAewM+qvNSVarbAZ/vqCNPSpDUIO0a/OHBI44NAqN+TPLAS1dUZenEWSxU1kTA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8523
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 7/4/2024 1:53, Viresh Kumar wrote:
+> From: Lizhe <sensor1010@163.com>
+> 
+> The cpufreq core doesn't check the return type of the exit() callback
+> and there is not much the core can do on failures at that point. Just
+> drop the returned value and make it return void.
+> 
+> Signed-off-by: Lizhe <sensor1010@163.com>
+> [ Viresh: Reworked the patches to fix all missing changes together. ]
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>   drivers/cpufreq/acpi-cpufreq.c         |  4 +---
+>   drivers/cpufreq/amd-pstate.c           |  7 ++-----
+>   drivers/cpufreq/apple-soc-cpufreq.c    |  4 +---
+>   drivers/cpufreq/bmips-cpufreq.c        |  4 +---
+>   drivers/cpufreq/cppc_cpufreq.c         |  3 +--
+>   drivers/cpufreq/cpufreq-dt.c           |  3 +--
+>   drivers/cpufreq/e_powersaver.c         |  3 +--
+>   drivers/cpufreq/intel_pstate.c         |  8 +++-----
+>   drivers/cpufreq/mediatek-cpufreq-hw.c  |  4 +---
+>   drivers/cpufreq/mediatek-cpufreq.c     |  4 +---
+>   drivers/cpufreq/omap-cpufreq.c         |  3 +--
+>   drivers/cpufreq/pasemi-cpufreq.c       |  6 ++----
+>   drivers/cpufreq/powernow-k6.c          |  5 ++---
+>   drivers/cpufreq/powernow-k7.c          |  3 +--
+>   drivers/cpufreq/powernow-k8.c          |  6 ++----
+>   drivers/cpufreq/powernv-cpufreq.c      |  4 +---
+>   drivers/cpufreq/ppc_cbe_cpufreq.c      |  3 +--
+>   drivers/cpufreq/qcom-cpufreq-hw.c      |  4 +---
+>   drivers/cpufreq/qoriq-cpufreq.c        |  4 +---
+>   drivers/cpufreq/scmi-cpufreq.c         |  4 +---
+>   drivers/cpufreq/scpi-cpufreq.c         |  4 +---
+>   drivers/cpufreq/sh-cpufreq.c           |  4 +---
+>   drivers/cpufreq/sparc-us2e-cpufreq.c   |  3 +--
+>   drivers/cpufreq/sparc-us3-cpufreq.c    |  3 +--
+>   drivers/cpufreq/speedstep-centrino.c   | 10 +++-------
+>   drivers/cpufreq/tegra194-cpufreq.c     |  4 +---
+>   drivers/cpufreq/vexpress-spc-cpufreq.c |  5 ++---
+>   include/linux/cpufreq.h                |  2 +-
+>   28 files changed, 37 insertions(+), 84 deletions(-)
 
-Commit 202aa0d4bb53 ("thermal: core: Do not call handle_thermal_trip()
-if zone temperature is invalid") caused __thermal_zone_device_update()
-to return early if the current thermal zone temperature was invalid.
-
-This was done to avoid running handle_thermal_trip() and governor
-callbacks in that case which led to confusion.  However, it went too
-far because monitor_thermal_zone() still needs to be called even when
-the zone temperature is invalid to ensure that it will be updated
-eventually in case thermal polling is enabled and the driver has no
-other means to notify the core of zone temperature changes (for example,
-it does not register an interrupt handler or ACPI notifier).
-
-Also if the .set_trips() zone callback is expected to set up monitoring
-interrupts for a thermal zone, it needs to be provided with valid
-boundaries and that can only be done if the zone temperature is known.
-
-Accordingly, to ensure that __thermal_zone_device_update() will
-run again after a failing zone temperature check, make it call
-monitor_thermal_zone() regardless of whether or not the zone
-temperature is valid and make the latter schedule a thermal zone
-temperature update if the zone temperature is invalid even if
-polling is not enabled for the thermal zone (however, if this
-continues to fail, give up after some time).
-
-Fixes: 202aa0d4bb53 ("thermal: core: Do not call handle_thermal_trip() if zone temperature is invalid")
-Reported-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/linux-pm/dc1e6cba-352b-4c78-93b5-94dd033fca16@linaro.org
-Link: https://lore.kernel.org/linux-pm/2764814.mvXUDI8C0e@rjwysocki.net
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_core.c |   13 ++++++++++++-
- drivers/thermal/thermal_core.h |    9 +++++++++
- 2 files changed, 21 insertions(+), 1 deletion(-)
-
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -300,6 +300,14 @@ static void monitor_thermal_zone(struct
- 		thermal_zone_device_set_polling(tz, tz->passive_delay_jiffies);
- 	else if (tz->polling_delay_jiffies)
- 		thermal_zone_device_set_polling(tz, tz->polling_delay_jiffies);
-+	else if (tz->temperature == THERMAL_TEMP_INVALID &&
-+		 tz->recheck_delay_jiffies <= THERMAL_MAX_RECHECK_DELAY) {
-+		thermal_zone_device_set_polling(tz, tz->recheck_delay_jiffies);
-+		/* Double the recheck delay for the next attempt. */
-+		tz->recheck_delay_jiffies += tz->recheck_delay_jiffies;
-+		if (tz->recheck_delay_jiffies > THERMAL_MAX_RECHECK_DELAY)
-+			dev_info(&tz->device, "Temperature unknown, giving up\n");
-+	}
- }
- 
- static struct thermal_governor *thermal_get_tz_governor(struct thermal_zone_device *tz)
-@@ -430,6 +438,7 @@ static void update_temperature(struct th
- 
- 	tz->last_temperature = tz->temperature;
- 	tz->temperature = temp;
-+	tz->recheck_delay_jiffies = 1;
- 
- 	trace_thermal_temperature(tz);
- 
-@@ -514,7 +523,7 @@ void __thermal_zone_device_update(struct
- 	update_temperature(tz);
- 
- 	if (tz->temperature == THERMAL_TEMP_INVALID)
--		return;
-+		goto monitor;
- 
- 	tz->notify_event = event;
- 
-@@ -536,6 +545,7 @@ void __thermal_zone_device_update(struct
- 
- 	thermal_debug_update_trip_stats(tz);
- 
-+monitor:
- 	monitor_thermal_zone(tz);
- }
- 
-@@ -1438,6 +1448,7 @@ thermal_zone_device_register_with_trips(
- 
- 	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
- 	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
-+	tz->recheck_delay_jiffies = 1;
- 
- 	/* sys I/F */
- 	/* Add nodes that are always present via .groups */
-Index: linux-pm/drivers/thermal/thermal_core.h
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.h
-+++ linux-pm/drivers/thermal/thermal_core.h
-@@ -67,6 +67,8 @@ struct thermal_governor {
-  * @polling_delay_jiffies: number of jiffies to wait between polls when
-  *			checking whether trip points have been crossed (0 for
-  *			interrupt driven systems)
-+ * @recheck_delay_jiffies: delay after a failed thermal zone temperature check
-+ * 			before attempting to check it again
-  * @temperature:	current temperature.  This is only for core code,
-  *			drivers should use thermal_zone_get_temp() to get the
-  *			current temperature
-@@ -108,6 +110,7 @@ struct thermal_zone_device {
- 	int num_trips;
- 	unsigned long passive_delay_jiffies;
- 	unsigned long polling_delay_jiffies;
-+	unsigned long recheck_delay_jiffies;
- 	int temperature;
- 	int last_temperature;
- 	int emul_temperature;
-@@ -133,6 +136,12 @@ struct thermal_zone_device {
- 	struct thermal_trip_desc trips[] __counted_by(num_trips);
- };
- 
-+/*
-+ * Maximum delay after a failing thermal zone temperature check before
-+ * attempting to check it again (in jiffies).
-+ */
-+#define THERMAL_MAX_RECHECK_DELAY	(30 * HZ)
-+
- /* Default Thermal Governor */
- #if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
- #define DEFAULT_THERMAL_GOVERNOR       "step_wise"
-
+Acked-by: Mario Limonciello <mario.limonciello@amd.com> # 
+drivers/cpufreq/amd-pstate.c
 
 
 
