@@ -1,142 +1,165 @@
-Return-Path: <linux-pm+bounces-10571-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10572-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42963926DF8
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 05:15:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D09F9926EA3
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 07:01:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB6D31F219F8
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 03:15:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86E922828FF
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 05:01:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083D817BAB;
-	Thu,  4 Jul 2024 03:15:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C3E19B3EF;
+	Thu,  4 Jul 2024 05:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KEnzbZSz"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LcCwBpRN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7971755B
-	for <linux-pm@vger.kernel.org>; Thu,  4 Jul 2024 03:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838BB19AD4F;
+	Thu,  4 Jul 2024 05:01:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720062936; cv=none; b=hae7GfMUFWzRvRIzTB3f9DsYjEgyyIJ5/42mQ1uxDwArjtJdyBrYs+m28L7frt5Tw9OfQqzO2zX8rVRqTQpC5Wndve3p7wHz1sgpkeBVYM3UsPJEh34D+UTtbynr73tYQNDDfF4hCyt7EJ9R1PGnKMntm45Pxsd+8yjUl4uBnzg=
+	t=1720069312; cv=none; b=RoR7QyJMll8nXp90BGbserCgwug87RLamIgEi4O9sJYI+LiTp8ayOJRWnywBf6Q/e9KeZLC1vtEY1yep5OB1JKWqGcEn54OY7vfjcNuJ/IdE0Y+DqDDKJ93gw2S0c5TRH5ppiD9Yk3285WWAycVB8jEEIqFfHNBgb73qrNtABds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720062936; c=relaxed/simple;
-	bh=84LAN5AvodIdD2krtRzJJ7eWWZkwf62ts7mCfwmL7m0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kP9Jm9kvDqqN1Q3y77yiFKRwzjR9x1ddb7w8/zxUSK5HQE1KqRI8AnNK8NuZUiOhfR22SKXH5o4QRQJKn0Nlf3yDR2uzPNjm4SESTNWG2O9BEEJy7mTuUhlCXKNosuEpkGgYA198HD26pkFoMI2lZ/0YO+mak9Ve2iva2yTZGGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KEnzbZSz; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1f9ffd24262so949605ad.0
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2024 20:15:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720062935; x=1720667735; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OxpOKbSyZF+WftZDHrhQeUp38zw13Z/EQZYlL8Cj7SM=;
-        b=KEnzbZSzD8RZpTej8qQ9WBkJnq7zVchogjXk9condEAbuOUq0hHI3eyfalpA7SmSES
-         jtoSslTCwjR53NSrJPhC/5O4nA4jUcGcOJCOpNiMLrv0s1Whex+AJPY5VuwlzLW/TcWI
-         AUjgpitdDl7xHsslew/YtdoD1Mr8QuekaCjzuMQH0WCGggmUBjm+2yAl5a5NyQahDlnv
-         ovJCVHUf5TPWHvQHt/nERJ9gaFXuzjhybchalEgbGzl48+n86Bi9HYJIH/bQZsJrkQym
-         CMC5akyqFVVFT9Ap7zJUydAzuEdFcuy1b7cZ5fOawmP7fVUfYyxJF5gY/ogtCdHbcNBq
-         h+qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720062935; x=1720667735;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OxpOKbSyZF+WftZDHrhQeUp38zw13Z/EQZYlL8Cj7SM=;
-        b=fDm6ROqQVZUocCu0rwrZHlmX3678GRam3iVdgUD5X7nR0ccunFKhBcYN2TaBRuTtVf
-         WqNHRpw0VZowxnTejFWAEDlE4NkPDKJm+Q84X0s/WQB95+AgrNKrpkIpuKeNUM2Z76eA
-         U2OVXthjJf4U92Rm1VuZUcrJhv7Rmt4RoNsFaXP20mKAeBMDKC0/rU8JgbQDJcIP9SBY
-         EK/qF6/79Rm4jLJ/NafcR41rJ59RuIaS98qJMKzLcRAZ3xfw7tT0C43ekTBQI7w/h0MD
-         zMikbHLcqgKjVM5XZbk0DuvaGKpXFzBpFUUo+Vgxt5uaWTOuJQw/4Sa2Cza1YwNYUTDs
-         QDYA==
-X-Forwarded-Encrypted: i=1; AJvYcCUkvsKobkIPyKLoHCXk8yuex3MTmIEHkbj9OvENdIuPiXVUrN5oLx+scmAb3H+JqNA3NoP8YsV+DphniDKM5I5pkHY7il8egto=
-X-Gm-Message-State: AOJu0YyQY0n/DGmXNK50xE+cKXivaWMTVVj6l1otALt4iZtvHHz2jAa2
-	xSOR8aSu/RJfW4j51K24iDE0m0JpLlHX036/hSnbCu3nZDY26/sRkcGdoRI7VC+fyXzlUP2+nPy
-	J
-X-Google-Smtp-Source: AGHT+IHuvXn0DSewmFV1N4IkbJv5j3w21MonR1q2vZlGPKXP1aEu9fzii35l9bVOl2J1zNs0Kby9/g==
-X-Received: by 2002:a17:90a:eb15:b0:2c9:5c7c:815d with SMTP id 98e67ed59e1d1-2c99c57ed63mr312263a91.22.1720062934777;
-        Wed, 03 Jul 2024 20:15:34 -0700 (PDT)
-Received: from localhost ([122.172.82.13])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c99a9cd3e7sm307714a91.39.2024.07.03.20.15.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jul 2024 20:15:34 -0700 (PDT)
-Date: Thu, 4 Jul 2024 08:45:32 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Huacai Chen <chenhuacai@loongson.cn>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, loongarch@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Xuerui Wang <kernel@xen0n.name>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: Re: [PATCH V2 2/2] cpufreq: Add Loongson-3 CPUFreq driver support
-Message-ID: <20240704031532.5bkh4nr7d3vcvzwq@vireshk-i7>
-References: <20240702152737.1184244-1-chenhuacai@loongson.cn>
- <20240702152737.1184244-3-chenhuacai@loongson.cn>
- <20240703101850.dtck223pleiiwfxp@vireshk-i7>
- <CAAhV-H74HJr0=8g0GtHj=zZH5nJijRpc90zLLRY_sXJfKFVtHA@mail.gmail.com>
+	s=arc-20240116; t=1720069312; c=relaxed/simple;
+	bh=OYs1t1EmMEjWZgSl4Ptu8WjVFYsUOekGhU8TVwQVpks=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Msa0rtL9LVFYNv9cWoeTdzTVtkM6s1NuREXOiCWtiFoJZYAqgofEu/cy/0hxpnJeYsKtvc+cbmFfUUQSFj84EEfYH3J77an2Ojj2fl/4R85B9rRE6Nt/0D90UBwX8Ibg0xt4EbBDheGRxSVs+c1hBdl1MF6hjOXRzKoj3cCnWxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=LcCwBpRN; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 463HXx4h031975;
+	Thu, 4 Jul 2024 05:01:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=iNcgdvMIwG/M4ntfOngIntDi
+	XupZN3NLrHQzlpVZhPk=; b=LcCwBpRNBTvo92+5XS2XYHmSYij/zXVq5K85orgv
+	HA7UFcXRBQ1oPvF0rZS2JXEDjBLrq4aG2wBT6ZoY/pK8cruN/crrebAMM45sVGNn
+	uVhJL4nStLDgND2l6olrqfBUyNepmAGFNcSl147KMGl88SA8Sbq1du8Di0b6KBEX
+	27Zu44HAWmquPhZMMtTRpEipZYgRGD0jTuFshiKNkBQrj+SGoln9Awnws2gFtlvs
+	2GAa9TTInMUbgLDnSvg8iX5NyvtMzIEp3SMCHMjQCFReF4ilCBe3tOOPn0eci4ge
+	GM7Qoz46Z0hCS2I6hDxufcv4UL5i9p6l2FG8/YAuXPxHsg==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 402abtth4p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 04 Jul 2024 05:01:03 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 464512oD024693
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 4 Jul 2024 05:01:02 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 3 Jul 2024 22:00:54 -0700
+Date: Thu, 4 Jul 2024 10:30:50 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: <vireshk@kernel.org>, <nm@ti.com>, <sboyd@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <ilia.lin@kernel.org>, <rafael@kernel.org>, <ulf.hansson@linaro.org>,
+        <quic_sibis@quicinc.com>, <quic_rjendra@quicinc.com>,
+        <quic_rohiagar@quicinc.com>, <abel.vesa@linaro.org>,
+        <otto.pflueger@abscue.de>, <danila@jiaxyga.com>,
+        <quic_ipkumar@quicinc.com>, <luca@z3ntu.xyz>,
+        <stephan.gerhold@kernkonzept.com>, <nks@flawful.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v4 01/10] soc: qcom: cpr3: Fix 'acc_desc' usage
+Message-ID: <ZoYsguLOCnZjxOku@hu-varada-blr.qualcomm.com>
+References: <20240703091651.2820236-1-quic_varada@quicinc.com>
+ <20240703091651.2820236-2-quic_varada@quicinc.com>
+ <u4hzxnecdyow6h4vhddcp53tuxrqhbqu6cv4cznytihsyshzy4@lqxhsn3qvjbz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhV-H74HJr0=8g0GtHj=zZH5nJijRpc90zLLRY_sXJfKFVtHA@mail.gmail.com>
+In-Reply-To: <u4hzxnecdyow6h4vhddcp53tuxrqhbqu6cv4cznytihsyshzy4@lqxhsn3qvjbz>
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: bEcWj8Bcx6_gILCbvWsYn4OcS9KhX2bf
+X-Proofpoint-ORIG-GUID: bEcWj8Bcx6_gILCbvWsYn4OcS9KhX2bf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-03_18,2024-07-03_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1015 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 spamscore=0 impostorscore=0
+ mlxlogscore=565 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2407040035
 
-On 03-07-24, 22:37, Huacai Chen wrote:
-> On Wed, Jul 3, 2024 at 6:18 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > +static int loongson3_cpufreq_target(struct cpufreq_policy *policy, unsigned int index)
-> > > +{
-> > > +     /* setting the cpu frequency */
-> > > +     return loongson3_cpufreq_set(policy, index);
+On Wed, Jul 03, 2024 at 01:46:54PM +0300, Dmitry Baryshkov wrote:
+> On Wed, Jul 03, 2024 at 02:46:42PM GMT, Varadarajan Narayanan wrote:
+> > cpr3 code assumes that 'acc_desc' is available for SoCs
+> > implementing CPR version 4 or less. However, IPQ9574 SoC
+> > implements CPRv4 without ACC. This causes NULL pointer accesses
+> > resulting in crashes. Hence, check if 'acc_desc' is populated
+> > before using it.
 > >
-> > Why use a separate function for calling do_service_request() ? Just
-> > open code it here.
-> Hmm, there is a loongson3_cpufreq_get() function, so I make a
-> loongson3_cpufreq_set() function, too.
-
-The counterpart of _get is _target and so a separate set function
-isn't required at all. Just get rid of it.
-
-> > > +static int loongson3_cpufreq_get_freq_table(int cpu)
-> > > +{
-> > > +     int i, ret, boost_level, max_level, freq_level;
-> > > +     struct cpufreq_frequency_table *table;
-> > > +
-> > > +     if (per_cpu(freq_table, cpu))
-> > > +             return 0;
-> > > +
-> > > +     ret = do_service_request(cpu, 0, CMD_GET_FREQ_LEVEL_NUM, 0, 0);
-> > > +     if (ret < 0)
-> > > +             return ret;
-> > > +     max_level = ret;
-> > > +
-> > > +     ret = do_service_request(cpu, 0, CMD_GET_FREQ_BOOST_LEVEL, 0, 0);
-> > > +     if (ret < 0)
-> > > +             return ret;
-> > > +     boost_level = ret;
-> > > +
-> > > +     freq_level = min(max_level, FREQ_MAX_LEVEL);
-> > > +     table = kzalloc(sizeof(struct cpufreq_frequency_table) * (freq_level + 1), GFP_KERNEL);
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> > v4: Undo the acc_desc validation in probe function as that could
+> >     affect other SoC.
+> > ---
+> >  drivers/pmdomain/qcom/cpr3.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
 > >
-> > devm_kcalloc(pdev, ...) instead ?
-> I remember you told me this in V1, but devm_kalloc() needs a pdev
-> instance, which doesn't exist here, so I keep kzalloc().
+> > diff --git a/drivers/pmdomain/qcom/cpr3.c b/drivers/pmdomain/qcom/cpr3.c
+> > index c7790a71e74f..6ceb7605f84d 100644
+> > --- a/drivers/pmdomain/qcom/cpr3.c
+> > +++ b/drivers/pmdomain/qcom/cpr3.c
+> > @@ -2399,12 +2399,12 @@ static int cpr_pd_attach_dev(struct generic_pm_domain *domain,
+> >  		if (ret)
+> >  			goto exit;
+> >
+> > -		if (acc_desc->config)
+> > +		if (acc_desc && acc_desc->config)
+> >  			regmap_multi_reg_write(drv->tcsr, acc_desc->config,
+> >  					       acc_desc->num_regs_per_fuse);
+> >
+> >  		/* Enable ACC if required */
+> > -		if (acc_desc->enable_mask)
+> > +		if (acc_desc && acc_desc->enable_mask)
+> >  			regmap_update_bits(drv->tcsr, acc_desc->enable_reg,
+> >  					   acc_desc->enable_mask,
+> >  					   acc_desc->enable_mask);
+>
+> Should the same fix be applied to other places which access acc_desc?
+> For example cpr_pre_voltage() and cpr_post_voltage() which call
+> cpr_set_acc()?
 
-See how drivers/cpufreq/brcmstb-avs-cpufreq.c stores the pdev in
-cpufreq_driver's driver_data and reuses later on.
+With this patch alone, if acc_desc is NULL, cpr_probe() will fail
+at the start itself because of this check
 
--- 
-viresh
+	if (!data->acc_desc && desc->cpr_type < CTRL_TYPE_CPRH)
+		return -EINVAL;
+
+After applying this patch series, cpr_probe will cross the above
+check to accomodate IPQ9574. However, the check below will ensure
+drv->tcsr is not initialized.
+
+	if (desc->cpr_type < CTRL_TYPE_CPRH &&
+	    !of_device_is_compatible(dev->of_node, "qcom,ipq9574-cpr4"))
+
+cpr_pre_voltage() and cpr_post_voltage() call cpr_set_acc() only
+if drv->tcsr is not NULL. Hence acc_desc need not be checked.
+
+Will add the check to cpr_pre_voltage() and cpr_post_voltage() if
+you feel it will make it more robust regardless of the changes to
+cpr_probe in future. Please let me know.
+
+Thanks
+Varada
 
