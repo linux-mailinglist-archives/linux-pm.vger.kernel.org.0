@@ -1,121 +1,183 @@
-Return-Path: <linux-pm+bounces-10692-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10693-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39C409287FB
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 13:31:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C4B9928801
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 13:32:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFD241F24A52
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 11:31:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30D531C23354
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 11:32:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADA7514A092;
-	Fri,  5 Jul 2024 11:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE7D1494D7;
+	Fri,  5 Jul 2024 11:32:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aO1LUb3p"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gUgvIRR8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AD21494C9
-	for <linux-pm@vger.kernel.org>; Fri,  5 Jul 2024 11:31:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A831494A8
+	for <linux-pm@vger.kernel.org>; Fri,  5 Jul 2024 11:32:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720179082; cv=none; b=mOsOkwwbywbbgSjbj/Ub4Zu4KLAFvEnfIy3bcY8NmXpNhqLXvNikguy2OmHXAp6tunLKfDqY0mvU0yRy4xcp47LZLlVng6HNcYTp6oXwBbx/Mo0JToULseEOpr3cBoNs+iyDw9odfeHNF7FoSw8CPGM+407z8nEenh4C4DPOEZw=
+	t=1720179148; cv=none; b=D/YqW45M7yVMjul3HcU6lF1WoL5IhEBy23WF2Z7LM+5SVOL1DWg9/69+FSn3sI+wgik6gYfP23fO2v5Bpcb5hE0e1m/4cZ0JFknQRpBZuStok4aPHmS7kn6/cTfSw/yRxSF9Rzl5UkwT61+6ENjiklxAlrwxKSm3eoZJIukA6do=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720179082; c=relaxed/simple;
-	bh=hPHreMrDt1doXkKIFfOnokfWoTTGR/eEdk8FJb3tsIk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XOhaFZVYpOs74YbKE3uv5IQMBlQVvKlMhifpBjr0CehbvJE53zZ++7oTO0Aaf1EMSGEYXT16NFh0Qw24VFVZzTG9YAUQo7/KAkTbVqrKAyw0Zs07XlJL4dYcl0cZzc+qYTB4svsv4vKwZOz7bQ3g64ewQ/KZ9NI6axlke/wgIbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aO1LUb3p; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-52e94eaf5efso1637538e87.2
-        for <linux-pm@vger.kernel.org>; Fri, 05 Jul 2024 04:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720179078; x=1720783878; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=peeNZCDuyoda2DYpfs5bkgO4H7nlJlel4Yeo4yaX2aw=;
-        b=aO1LUb3pdRnseVxQg2tcjLyD8kGPA76n2adwf9WQtS0FasZ9lPfLi2kE2953XpwoEr
-         PcUyvOu09kuXefCjSzSwUTr1qLxHOxJ+C8tAWblLomlZW8ouTxGeWEtz6Gk2loWpfQLZ
-         eSeMdzxBD4joNhBLflWHOMtlhcWeBacwotzDYuMS/+jt0q5dZRpQcYBmJrIKdTwnbIrN
-         aXwEBf87IJiFGeJ+tISv3ev+rcqeLosp6gQtVJ/bGwyeS6pPCqVrXG3u1IWjbCgnGmt4
-         MtFG27pu5tb4UJd9BKV89yR9SvlllWDVS+v4uPQB6lRa3W4BkVpYxMmWUEj7eT/0fyFs
-         yuDQ==
+	s=arc-20240116; t=1720179148; c=relaxed/simple;
+	bh=LuO94MjSEqAzZZ+OdQaO8GGVDhFrlkG2Ta2cSnC8spg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u5bQSgqcwE2TSrrxSgamrai7kkry71A2O6W3eFGkdZ2MyIQN/O8Mb9zEQrtwm5o0RmgrDLgYTA+7YOs87MsgwWsREaxO0jtrzoXhyt8SUoMS90hA5nQYswzbtWfHCsZJG/PUy+StOTnj+SK0baMKSqbRQ0Vy99w6jZBgtoQijVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gUgvIRR8; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720179145;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jE6S85bFX7ia/r0z6WYFjOqpTUOd5eKCH2fyhxzh5mo=;
+	b=gUgvIRR8gVdtlctS4LSsyqkZ7dTrtf/F6bG6NvrRiJObq2+UWb3Ffbb2N318ru1vn6HmqP
+	kGPC95bN5FL7viWCZiPXXUkFmlazp1xt0rnBiRqT7N2Ec7zwMLGjuqnvaJpgTedGPYLaaM
+	sJ2V3bK8i5QmsKF9osHWAZ34PuUeTzg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-213-AGHpcc9XPDqiVNO7-KFDAQ-1; Fri, 05 Jul 2024 07:32:24 -0400
+X-MC-Unique: AGHpcc9XPDqiVNO7-KFDAQ-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-42566e8a995so12130395e9.0
+        for <linux-pm@vger.kernel.org>; Fri, 05 Jul 2024 04:32:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720179078; x=1720783878;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=peeNZCDuyoda2DYpfs5bkgO4H7nlJlel4Yeo4yaX2aw=;
-        b=GiiIJOjSpmXDbEgJxUUWxwP4VBC/bgm6kAjmkj9OxbaLSKkTvAIUhtPxUUGqd+p2Db
-         WMcorTptiR9b7qxqEgVjrIOnE3uU+gq6FHMVfWRToFeIYa18AKmWy3lV0XcerYOLeMHR
-         cQpyabW+V+vI4Xk+o6jcH8aO88zv4JjcXKU2HmoiorcA2Agn53Zz85so6cwhZL5HF3AE
-         XJNQ8nwJClvscQqeh5QgoLMaudK4vj3SByafVCh/93/eQ28Nwh6NVttvEokrTCp5Zd2I
-         BZtekrdb1Cn//IZxFbzo6JMfh8LaWfteiaJUm3rCDlsIUnD4+kQscm5jNblp5DPu+AMk
-         kLkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVrWEh3PbiHPQ/xSGqnnX/M3Ojo1dVFqh6Ky0mFdVmwicpgg3N9KdAKxsZ3sfv7IYjHgiDtFpikpT6VtgGljfkQmsFE5ne4gtE=
-X-Gm-Message-State: AOJu0YxaaJmNlAlgs0wAjw1Gia6z/XPKSeBMpSx0vpowHhqPNsaofkIg
-	SziA3QIrVuwsl68966TP7XfZBV3OgXg5p8k+p74IS56zAw0rHPAxhOXoXLY08sU=
-X-Google-Smtp-Source: AGHT+IG87fGjXF+TaN2rAGmYDwXmCBV4e70dP7HYgoU/5vS+jGGZ87IXfHT7BTxzfN8kyxOo+KkYcg==
-X-Received: by 2002:a05:6512:3ca8:b0:52c:8abe:51fb with SMTP id 2adb3069b0e04-52ea061f4e1mr4207586e87.10.1720179078543;
-        Fri, 05 Jul 2024 04:31:18 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.137])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4264a2fc942sm58090725e9.42.2024.07.05.04.31.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jul 2024 04:31:17 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Sebastian Reichel <sre@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] power: supply: twl4030_charger: correct comparision with old current
-Date: Fri,  5 Jul 2024 13:31:13 +0200
-Message-ID: <20240705113113.42851-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240705113113.42851-1-krzysztof.kozlowski@linaro.org>
-References: <20240705113113.42851-1-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20230601; t=1720179143; x=1720783943;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jE6S85bFX7ia/r0z6WYFjOqpTUOd5eKCH2fyhxzh5mo=;
+        b=XCEB8GX4RcrzfXfCx+3/PXiYEGy6/sgiS4+gVzqM1PU9EgeCp833NvattHglxd1tnx
+         RqxsHVwspM/ESSkUg05V1mS89EYZ+AIYBKxQ8+L+fCsZ3WyZkQJS0txAUGvabiYveYZR
+         Rduhmjg+Ynlxez5U69RF0MaS8sTYbyRinJYzfLzK+Cz6f5BePXU8XODft1ClKgm+Om8a
+         1pOubckHxYQO49KkEfJhZMQ9wEEF4FMfhuboe487OXzhbySM2D0EHVFSZUPE63TV3jnU
+         oNlANlMRLAPpEmrfbya+Pc8SFCpiswAZakDrvOZYfpvaa1+tfOBi6cwzCpxn90r1zDGM
+         DzoQ==
+X-Gm-Message-State: AOJu0YyXBAKv3/U2JE5+IexhT7zliIaCxpF/ZT2uF+Mi/szCu2ep2nnm
+	6htUzG0Wvo9v0BmRjp36F/VVJYOXhbbBN/mFboFk/WtndIko0vX31ecrjq+AosWPMMvnEeKqeIe
+	fgHL5bYaN7Zl+ZLoCJhSQ7VjA2iX5ZMxgJVRFxCt/BxmkH7lrV8Y45YUx
+X-Received: by 2002:a05:600c:4b87:b0:426:59fc:cdec with SMTP id 5b1f17b1804b1-42659fccf3bmr4970835e9.21.1720179143038;
+        Fri, 05 Jul 2024 04:32:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFwwu8Zih5RO6YSe8hQ4RBs6xd5L3lcOJBKw/I/nyz5x44QjIrLSHbrH1hqM8ht621bYpY3Cw==
+X-Received: by 2002:a05:600c:4b87:b0:426:59fc:cdec with SMTP id 5b1f17b1804b1-42659fccf3bmr4970545e9.21.1720179142584;
+        Fri, 05 Jul 2024 04:32:22 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:4b3f:ee94:abf:b8ff:feee:998b? ([2a02:810d:4b3f:ee94:abf:b8ff:feee:998b])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4264a1dda61sm58241895e9.19.2024.07.05.04.32.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Jul 2024 04:32:22 -0700 (PDT)
+Message-ID: <f0016987-4288-4adf-954d-665b35ae1bf1@redhat.com>
+Date: Fri, 5 Jul 2024 13:32:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH V3 8/8] cpufreq: Add Rust based cpufreq-dt driver
+To: Viresh Kumar <viresh.kumar@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
+ <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>,
+ Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>
+Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>,
+ Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+ rust-for-linux@vger.kernel.org,
+ Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+ Erik Schilling <erik.schilling@linaro.org>,
+ =?UTF-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>,
+ Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+ linux-kernel@vger.kernel.org
+References: <cover.1719990273.git.viresh.kumar@linaro.org>
+ <b7df0c75cc07a451243b554fb2272c91cbe42dfe.1719990273.git.viresh.kumar@linaro.org>
+Content-Language: en-US
+From: Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <b7df0c75cc07a451243b554fb2272c91cbe42dfe.1719990273.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Driver reads existing current value from two 8-bit registers, but then
-compares only one of them with the new 16-bit value.  clang W=1 is also
-not happy:
+Hi Viresh,
 
-  twl4030_charger.c:243:16: error: variable 'cur_reg' set but not used [-Werror,-Wunused-but-set-variable]
+On 7/3/24 09:14, Viresh Kumar wrote:
+> This commit adds a Rust based cpufreq-dt driver, which covers most of
+> the functionality of the existing C based driver. Only a handful of
+> things are left, like fetching platform data from cpufreq-dt-platdev.c.
+> 
+> This is tested with the help of QEMU for now and switching of
+> frequencies work as expected.
+> 
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>   drivers/cpufreq/Kconfig        |  12 ++
+>   drivers/cpufreq/Makefile       |   1 +
+>   drivers/cpufreq/rcpufreq_dt.rs | 225 +++++++++++++++++++++++++++++++++
+>   3 files changed, 238 insertions(+)
+>   create mode 100644 drivers/cpufreq/rcpufreq_dt.rs
+> 
+> diff --git a/drivers/cpufreq/rcpufreq_dt.rs b/drivers/cpufreq/rcpufreq_dt.rs
+> new file mode 100644
+> index 000000000000..652458e7a3b9
+> --- /dev/null
+> +++ b/drivers/cpufreq/rcpufreq_dt.rs
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/power/supply/twl4030_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+<snip>
 
-diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/supply/twl4030_charger.c
-index 7b9b0b3e164e..f3f1a0862e93 100644
---- a/drivers/power/supply/twl4030_charger.c
-+++ b/drivers/power/supply/twl4030_charger.c
-@@ -363,7 +363,7 @@ static int twl4030_charger_update_current(struct twl4030_bci *bci)
- 	if (status < 0)
- 		return status;
- 	cur_reg |= oldreg << 8;
--	if (reg != oldreg) {
-+	if (reg != cur_reg) {
- 		/* disable write protection for one write access for
- 		 * BCIIREF */
- 		status = twl_i2c_write_u8(TWL_MODULE_MAIN_CHARGE, 0xE7,
--- 
-2.43.0
+> +
+> +type DeviceData = Box<cpufreq::Registration<CPUFreqDTDriver>>;
+> +
+> +impl platform::Driver for CPUFreqDTDriver {
+> +    type Data = Arc<DeviceData>;
+> +
+> +    define_of_id_table! {(), [
+> +        (of::DeviceId(b_str!("operating-points-v2")), None),
+> +    ]}
+> +
+> +    fn probe(_dev: &mut platform::Device, _id_info: Option<&Self::IdInfo>) -> Result<Self::Data> {
+> +        let drv = Arc::new(
+> +            cpufreq::Registration::<CPUFreqDTDriver>::register(
+> +                c_str!("cpufreq-dt"),
+> +                (),
+> +                cpufreq::flags::NEED_INITIAL_FREQ_CHECK | cpufreq::flags::IS_COOLING_DEV,
+> +                true,
+> +            )?,
+> +            GFP_KERNEL,
+> +        )?;
+
+Putting the `cpufreq::Registration` into `Arc<DeviceData>` is unsafe from a
+lifetime point of view. Nothing prevents this `Arc` to out-live the
+`platform::Driver`.
+
+Instead, you should wrap `cpufreq::Registration` into `Devres`. See
+`drm::drv::Registration` for an example [1].
+
+[1] https://gitlab.freedesktop.org/drm/nova/-/blob/nova-next/rust/kernel/drm/drv.rs?ref_type=heads#L173
+
+> +
+> +        pr_info!("CPUFreq DT driver registered\n");
+> +
+> +        Ok(drv)
+> +    }
+> +}
+> +
+> +module_platform_driver! {
+> +    type: CPUFreqDTDriver,
+> +    name: "cpufreq_dt",
+> +    author: "Viresh Kumar <viresh.kumar@linaro.org>",
+> +    description: "Generic CPUFreq DT driver",
+> +    license: "GPL v2",
+> +}
 
 
