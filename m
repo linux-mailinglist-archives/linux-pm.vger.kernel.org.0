@@ -1,215 +1,226 @@
-Return-Path: <linux-pm+bounces-10640-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10641-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20E3B927EEB
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 00:08:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3877A927F53
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 02:22:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E67A1F224F9
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2024 22:08:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 642EB1C22397
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 00:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C070142E86;
-	Thu,  4 Jul 2024 22:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6132717F5;
+	Fri,  5 Jul 2024 00:22:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FVr6VLg2"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="dU5MprSN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB577344C
-	for <linux-pm@vger.kernel.org>; Thu,  4 Jul 2024 22:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3C6ED9
+	for <linux-pm@vger.kernel.org>; Fri,  5 Jul 2024 00:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720130913; cv=none; b=owsDTxPkWpD3MS7MZazfMYoG5nWFjW293y3PKXFWRBEisbWXGBvWaIo6/GGnp0b9CauynSaXFrErgqnlWTH3Wl7NVz+pcOcf0TldJbwmXnvSfay5F+K6uK3aM/YQUdHtV7vTgAmZOwih76ADjt48fcEBdHfmNtez6wbjHngA1uc=
+	t=1720138931; cv=none; b=ZtjCOx5fW43qK1oW8/g77AVFC47NPK+cOuSQ2M4FJwaDpqmXMeYQCmt7R/P3rFefi3E113lIkTRN276Gy1Y6eC078uzntPVB/lfCWF0r44lpxaS0ArtZ6Lfvyt20x6PlinpP9x4yuekJeXQZDe4brQ7CQjfsKMEZ1ENgpcee6+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720130913; c=relaxed/simple;
-	bh=I/spWcT0ddJymuNpaxXWsxmb7P5DOH54YSRIk6B7uV0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=CYSb4aXva0NDjMvwhi8ySf2QMoQeODZeBnMcO04fVYwB99SDdqHo+yTF8fdOGPwb9tMMqz7KQCFW1qfwxpdQ7q3bHoPiuw29ar7+TX3ADh/jp0o2Sz83jr3pBH2kVzROuQWuN+WzYEj/sMaNf5ddMupDtJHHKa7Uf0kRAb8gsoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FVr6VLg2; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720130911; x=1751666911;
-  h=date:from:to:cc:subject:message-id;
-  bh=I/spWcT0ddJymuNpaxXWsxmb7P5DOH54YSRIk6B7uV0=;
-  b=FVr6VLg2t+dc1NVF61DJ3Wq8smM4AdaE2YSdemC+mozdkjWDfV7/rvkx
-   mQMIZD21jy1xifU2r8nyhAO22lm+rMvaQW3XnWfRQzlMxxfIR758KT0Hb
-   vtNWwyYgiCKw29Lk3E6gI033NVfQgBVNL9ozD0x88YBWHoilIfSuH/nv1
-   S5IwCXUQEOADfRBLDNcoeBD6GI1QWygzkXfZ4cnrf4OYkPRO+ExjdGxx4
-   KtApHS1yFCeAQIhGeYuSEGsljBOu248+uJmzqYXRGq4e+O7BUvt2NG9Ae
-   lTtxq6ko38hh515t4jpJIyNdrbqs9G29wr+UDDF0OvC1+s4C1YMkwn4TH
-   A==;
-X-CSE-ConnectionGUID: hWrTyYX1Qm+HD5vOE3luiw==
-X-CSE-MsgGUID: +68UOeR3Sk2NtUsTLC4rBg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="21184114"
-X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
-   d="scan'208";a="21184114"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2024 15:08:30 -0700
-X-CSE-ConnectionGUID: yFO26G33QGy3nFCfGwl1vg==
-X-CSE-MsgGUID: 4D7DQO9ERsupmfQdyeVgYA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
-   d="scan'208";a="47349055"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 04 Jul 2024 15:08:30 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sPUct-000RVZ-1f;
-	Thu, 04 Jul 2024 22:08:27 +0000
-Date: Fri, 05 Jul 2024 06:07:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: linux-pm@vger.kernel.org
-Subject: [amd-pstate:bleeding-edge] BUILD SUCCESS
- 2e65811232f8b105e7988ce3ab8c8a6c931b45f3
-Message-ID: <202407050627.qSPUhQZL-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1720138931; c=relaxed/simple;
+	bh=HsjJxtfbTQPyq2x16Lmy4FQUwXd3PsjDgfeN6E6NqeM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=stkNrR5jZsnHwaK0o+QzaBsOS9Mp6hQRQcIfQjEYugGiM+vB597iDoRk9NfbVg/8aaTznvJ0Pq+mYKovzREmubin6gq3/YA8o9YxAxSpQT4/UfVC2tW5JusciowgNR08+FfvGUiuUZg9qWCV0A2P2INWcQEJ4Fh4zyIblAN1lE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=dU5MprSN; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2ee7885aa5fso11919551fa.1
+        for <linux-pm@vger.kernel.org>; Thu, 04 Jul 2024 17:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1720138927; x=1720743727; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o623ORWAvJBn7up0k1SQlLqfsLuDL+TsI3SsUtdwat0=;
+        b=dU5MprSN+e6OqVNoAjJ7f9yfrSBR0x+ZT01MX3Wym4FmnwAGRdFOjnkbGYxEexCFw7
+         XFqZrhZAoGNfl5Y5+7hopypEFohno4IcdDZp0l7tALr13WoZaieHU2HwWTCYcT+GNc5Q
+         upGmh0ETFq03bFfqk+MIOdKXTtIvxnBrYA/tD+zvzF81yWFMD+8ACHVfNLkrmWFtWzm+
+         UejlaAukjCLr6CNSi38kP6lsVFAqgK0xfaYeyRvi1I9YCMkOXFky7SZ9H0x3v/CgDg9K
+         AaWqWFlPzfpjZiNPmYCMVoo4Odkkv0SWgHU1XK8LyTXmwXCInJn8gEVcXQhddHcyA0gu
+         ii3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720138927; x=1720743727;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o623ORWAvJBn7up0k1SQlLqfsLuDL+TsI3SsUtdwat0=;
+        b=kxnkzppu/T3SVxauel5TAJEadCwx4/zGpDhwUMqnI2aYDyuaaDCfsPSC/Unpn6ON0k
+         4w2LUZPKx36LNULwBwBp8mSJC/RHgfte6vr5S/q2ajLZurveeK3ywRbvkrp7zs9wgJOl
+         x6ksCE6Y2aoKTUkxBjMfRKfG7tDcpff0qWMarEeogT5T1ZhRoEIzc24iUGZJGiZIAs2T
+         IHpFEYhc99OikTTjhTAZo0Mowj2UvSrNeut+JqrVP4p91mA6s9g9O4bJQMXUbiRMYQwx
+         2vwP8uGPW2dbgLkqeNkRd/APXfPwo2e5NeAGgRmhTQzt/tx0Z0uwdjU4+JXa+izRKPns
+         7g1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUZjD1Rlgk/uJRMFLDNwOXoeXOJupub4UYZPDrKUDZneiRUXJFEMgvV+09DmHB7i1OxhMg9wH/dhx3HoHETP7tqgWYE7cEAq4U=
+X-Gm-Message-State: AOJu0Yx24jNQQKJ5qgBFwy64jMU7pxMompK4EuFcixKk04ZZNu/ZyMYK
+	LxT/MRdWUjXD5O+HVdeU+i+3lgnTzY9dV3tDGXdfMRQUC7bZDpWDPBOO0RETBkc=
+X-Google-Smtp-Source: AGHT+IEeRPhPPavqMDdDaq2qhDtdIIeK9qTXoeIeONH0nAK74rQfQAtjU9/ED0inVF5J5QTVsnkzIw==
+X-Received: by 2002:a2e:b0d1:0:b0:2ec:57c7:c740 with SMTP id 38308e7fff4ca-2ee8edffcc2mr20270911fa.39.1720138927355;
+        Thu, 04 Jul 2024 17:22:07 -0700 (PDT)
+Received: from airbuntu (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4264a251ef5sm40491345e9.36.2024.07.04.17.22.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jul 2024 17:22:06 -0700 (PDT)
+Date: Fri, 5 Jul 2024 01:22:05 +0100
+From: Qais Yousef <qyousef@layalina.io>
+To: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Hongyan Xia <hongyan.xia2@arm.com>,
+	John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] sched: Consolidate cpufreq updates
+Message-ID: <20240705002205.nnrgq7savzvsoqgl@airbuntu>
+References: <20240619201409.2071728-1-qyousef@layalina.io>
+ <f281ba07-d54a-460a-8f78-f7eb6bd8ed88@arm.com>
+ <20240628015200.vw75huo53redgkzf@airbuntu>
+ <d510f41a-1225-46d9-a2d7-ff9e6ff599d2@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d510f41a-1225-46d9-a2d7-ff9e6ff599d2@arm.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
-branch HEAD: 2e65811232f8b105e7988ce3ab8c8a6c931b45f3  cpufreq/amd-pstate: Fix the scaling_max_freq setting on shared memory CPPC systems
+On 07/04/24 12:12, Dietmar Eggemann wrote:
+> On 28/06/2024 03:52, Qais Yousef wrote:
+> > On 06/25/24 14:58, Dietmar Eggemann wrote:
+> > 
+> >>> @@ -4917,6 +4927,84 @@ static inline void __balance_callbacks(struct rq *rq)
+> >>>  
+> >>>  #endif
+> >>>  
+> >>> +static __always_inline void
+> >>> +__update_cpufreq_ctx_switch(struct rq *rq, struct task_struct *prev)
+> >>> +{
+> >>> +#ifdef CONFIG_CPU_FREQ
+> >>> +	if (prev && prev->dl.flags & SCHED_FLAG_SUGOV) {
+> >>> +		/* Sugov just did an update, don't be too aggressive */
+> >>> +		return;
+> >>> +	}
+> >>> +
+> >>> +	/*
+> >>> +	 * RT and DL should always send a freq update. But we can do some
+> >>> +	 * simple checks to avoid it when we know it's not necessary.
+> >>> +	 *
+> >>> +	 * iowait_boost will always trigger a freq update too.
+> >>> +	 *
+> >>> +	 * Fair tasks will only trigger an update if the root cfs_rq has
+> >>> +	 * decayed.
+> >>> +	 *
+> >>> +	 * Everything else should do nothing.
+> >>> +	 */
+> >>> +	switch (current->policy) {
+> >>> +	case SCHED_NORMAL:
+> >>> +	case SCHED_BATCH:
+> >>
+> >> What about SCHED_IDLE tasks?
+> > 
+> > I didn't think they matter from cpufreq perspective. These tasks will just run
+> > at whatever the idle system is happen to be at and have no specific perf
+> > requirement since they should only run when the system is idle which a recipe
+> > for starvation anyway?
+> 
+> Not sure we talk about the same thing here? idle_sched_class vs.
+> SCHED_IDLE policy (FAIR task with a tiny weight of WEIGHT_IDLEPRIO).
 
-elapsed time: 1448m
+Yes I am referring to SCHED_IDLE policy too. What is your expectation? AFAIK
+the goal of this policy to run when there's nothing else needs running.
 
-configs tested: 122
-configs skipped: 1
+> 
+> >>> +		if (unlikely(current->in_iowait)) {
+> >>> +			cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT | SCHED_CPUFREQ_FORCE_UPDATE);
+> >>> +			return;
+> >>> +		}
+> >>> +
+> >>> +#ifdef CONFIG_SMP
+> >>> +		if (unlikely(rq->cfs.decayed)) {
+> >>> +			rq->cfs.decayed = false;
+> >>> +			cpufreq_update_util(rq, 0);
+> >>> +			return;
+> >>> +		}
+> >>> +#else
+> >>> +		cpufreq_update_util(rq, 0);
+> >>> +#endif
+> >>
+> >> We can have !CONFIG_SMP and CONFIG_FAIR_GROUP_SCHED systems. Does this
+> >> mean on those systems we call cpufreq_update_util() for each cfs_rq of
+> >> the hierarchy where on CONFIG_SMP we only do this for the root cfs_rq?
+> > 
+> > No. This is called on context switch only and hierarchy doesn't matter here. We
+> > just do it unconditionally for UP since we only track the decayed at cfs_rq
+> > level and I didn't think it's worth trying to make it at rq level.
+> 
+> OK, I see. The call in __update_cpufreq_ctx_switch() plus
+> (task_tick_fair() and check_preempt_wakeup_fair()) are not related to a
+> cfs_rq, but rather to the rq and/or task directly.
+> 
+> Currently we have the thing in update_load_avg() for !CONFIG_SMP and
+> there we use cfs_rq_util_change() which only calls cpufreq_update_util()
+> for root cfs_rq but this clearly has a cfs_rq context.
+> 
+> >> [...]
+> >>
+> >>> @@ -4744,8 +4716,8 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+> >>>  	if (se->avg.last_update_time && !(flags & SKIP_AGE_LOAD))
+> >>>  		__update_load_avg_se(now, cfs_rq, se);
+> >>>  
+> >>> -	decayed  = update_cfs_rq_load_avg(now, cfs_rq);
+> >>> -	decayed |= propagate_entity_load_avg(se);
+> >>> +	cfs_rq->decayed |= update_cfs_rq_load_avg(now, cfs_rq);
+> >>> +	cfs_rq->decayed |= propagate_entity_load_avg(se);
+> >>>  
+> >>>  	if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
+> >>>  
+> >>> @@ -4766,11 +4738,8 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+> >>>  		 */
+> >>>  		detach_entity_load_avg(cfs_rq, se);
+> >>>  		update_tg_load_avg(cfs_rq);
+> >>> -	} else if (decayed) {
+> >>> -		cfs_rq_util_change(cfs_rq, 0);
+> >>> -
+> >>> -		if (flags & UPDATE_TG)
+> >>> -			update_tg_load_avg(cfs_rq);
+> >>> +	} else if (cfs_rq->decayed && (flags & UPDATE_TG)) {
+> >>> +		update_tg_load_avg(cfs_rq);
+> >>>  	}
+> >>>  }
+> >>
+> >> You set cfs_rq->decayed for each taskgroup level but you only reset it
+> >> for the root cfs_rq in __update_cpufreq_ctx_switch() and task_tick_fair()?
+> > 
+> > Yes. We only care about using it for root level. Tracking the information at
+> > cfs_rq level is the most natural way to do it as this is what update_load_avg()
+> > is acting on.
+> 
+> But IMHO this creates an issue with those non-root cfs_rq's within
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I am not seeing the issue, could you expand on what is it?
 
-tested configs:
-alpha                             allnoconfig   gcc-13.2.0
-arc                              allmodconfig   gcc-13.2.0
-arc                               allnoconfig   gcc-13.2.0
-arc                              allyesconfig   gcc-13.2.0
-arc                   randconfig-001-20240704   gcc-13.2.0
-arc                   randconfig-002-20240704   gcc-13.2.0
-arm                              allmodconfig   gcc-13.2.0
-arm                               allnoconfig   clang-19
-arm                              allyesconfig   gcc-13.2.0
-arm                          ixp4xx_defconfig   gcc-13.2.0
-arm                          pxa168_defconfig   clang-19
-arm                   randconfig-001-20240704   gcc-13.2.0
-arm                   randconfig-002-20240704   gcc-13.2.0
-arm                   randconfig-003-20240704   clang-19
-arm                   randconfig-004-20240704   gcc-13.2.0
-arm                           sama7_defconfig   clang-19
-arm64                            allmodconfig   clang-19
-arm64                             allnoconfig   gcc-13.2.0
-arm64                 randconfig-001-20240704   clang-19
-arm64                 randconfig-002-20240704   gcc-13.2.0
-arm64                 randconfig-003-20240704   clang-19
-arm64                 randconfig-004-20240704   gcc-13.2.0
-csky                              allnoconfig   gcc-13.2.0
-csky                  randconfig-001-20240704   gcc-13.2.0
-csky                  randconfig-002-20240704   gcc-13.2.0
-hexagon                           allnoconfig   clang-19
-hexagon               randconfig-001-20240704   clang-19
-hexagon               randconfig-002-20240704   clang-19
-i386                             allmodconfig   gcc-13
-i386                              allnoconfig   gcc-13
-i386                             allyesconfig   gcc-13
-i386         buildonly-randconfig-001-20240704   clang-18
-i386         buildonly-randconfig-002-20240704   gcc-13
-i386         buildonly-randconfig-003-20240704   gcc-13
-i386         buildonly-randconfig-004-20240704   gcc-12
-i386         buildonly-randconfig-005-20240704   gcc-12
-i386         buildonly-randconfig-006-20240704   gcc-12
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240704   clang-18
-i386                  randconfig-002-20240704   gcc-13
-i386                  randconfig-003-20240704   clang-18
-i386                  randconfig-004-20240704   gcc-13
-i386                  randconfig-005-20240704   clang-18
-i386                  randconfig-006-20240704   gcc-12
-i386                  randconfig-011-20240704   gcc-13
-i386                  randconfig-012-20240704   clang-18
-i386                  randconfig-013-20240704   clang-18
-i386                  randconfig-014-20240704   clang-18
-i386                  randconfig-015-20240704   clang-18
-i386                  randconfig-016-20240704   clang-18
-loongarch                        allmodconfig   gcc-13.2.0
-loongarch                         allnoconfig   gcc-13.2.0
-loongarch             randconfig-001-20240704   gcc-13.2.0
-loongarch             randconfig-002-20240704   gcc-13.2.0
-m68k                             allmodconfig   gcc-13.2.0
-m68k                              allnoconfig   gcc-13.2.0
-m68k                             allyesconfig   gcc-13.2.0
-m68k                       m5208evb_defconfig   gcc-13.2.0
-microblaze                       allmodconfig   gcc-13.2.0
-microblaze                        allnoconfig   gcc-13.2.0
-microblaze                       allyesconfig   gcc-13.2.0
-mips                              allnoconfig   gcc-13.2.0
-mips                      fuloong2e_defconfig   gcc-13.2.0
-mips                      maltasmvp_defconfig   gcc-13.2.0
-nios2                             allnoconfig   gcc-13.2.0
-nios2                 randconfig-001-20240704   gcc-13.2.0
-nios2                 randconfig-002-20240704   gcc-13.2.0
-openrisc                          allnoconfig   gcc-13.2.0
-openrisc                            defconfig   gcc-13.2.0
-parisc                            allnoconfig   gcc-13.2.0
-parisc                              defconfig   gcc-13.2.0
-parisc                randconfig-001-20240704   gcc-13.2.0
-parisc                randconfig-002-20240704   gcc-13.2.0
-powerpc                           allnoconfig   gcc-13.2.0
-powerpc                    amigaone_defconfig   gcc-13.2.0
-powerpc                   bluestone_defconfig   clang-19
-powerpc                     ksi8560_defconfig   gcc-13.2.0
-powerpc                  mpc885_ads_defconfig   clang-19
-powerpc                    sam440ep_defconfig   gcc-13.2.0
-powerpc                      walnut_defconfig   gcc-13.2.0
-riscv                             allnoconfig   gcc-13.2.0
-riscv                    nommu_virt_defconfig   clang-19
-s390                              allnoconfig   clang-19
-s390                             allyesconfig   gcc-13.2.0
-sh                               allmodconfig   gcc-13.2.0
-sh                                allnoconfig   gcc-13.2.0
-sh                               allyesconfig   gcc-13.2.0
-sh                ecovec24-romimage_defconfig   gcc-13.2.0
-sh                      rts7751r2d1_defconfig   gcc-13.2.0
-sh                        sh7763rdp_defconfig   gcc-13.2.0
-sparc                            allmodconfig   gcc-13.2.0
-um                                allnoconfig   clang-17
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64       buildonly-randconfig-001-20240704   clang-18
-x86_64       buildonly-randconfig-002-20240704   gcc-12
-x86_64       buildonly-randconfig-003-20240704   clang-18
-x86_64       buildonly-randconfig-004-20240704   gcc-13
-x86_64       buildonly-randconfig-005-20240704   gcc-12
-x86_64       buildonly-randconfig-006-20240704   gcc-13
-x86_64                              defconfig   gcc-13
-x86_64                randconfig-001-20240704   clang-18
-x86_64                randconfig-002-20240704   gcc-11
-x86_64                randconfig-003-20240704   clang-18
-x86_64                randconfig-004-20240704   clang-18
-x86_64                randconfig-005-20240704   gcc-13
-x86_64                randconfig-006-20240704   clang-18
-x86_64                randconfig-011-20240704   gcc-13
-x86_64                randconfig-012-20240704   gcc-10
-x86_64                randconfig-013-20240704   gcc-13
-x86_64                randconfig-014-20240704   clang-18
-x86_64                randconfig-015-20240704   clang-18
-x86_64                randconfig-016-20240704   gcc-13
-x86_64                randconfig-071-20240704   gcc-12
-x86_64                randconfig-072-20240704   gcc-13
-x86_64                randconfig-073-20240704   clang-18
-x86_64                randconfig-074-20240704   gcc-12
-x86_64                randconfig-075-20240704   clang-18
-x86_64                randconfig-076-20240704   clang-18
-x86_64                          rhel-8.3-rust   clang-18
-xtensa                            allnoconfig   gcc-13.2.0
-xtensa                         virt_defconfig   gcc-13.2.0
+> update_load_avg() itself. They will stay decayed after cfs_rq->decayed
+> has been set to 1 once and will never be reset to 0. So with UPDATE_TG
+> update_tg_load_avg() will then always be called on those non-root
+> cfs_rq's all the time.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+We could add a check to update only the root cfs_rq. But what do we gain? Or
+IOW, what is the harm of unconditionally updating cfs_rq->decayed given that we
+only care about the root cfs_rq? I see more if conditions and branches which
+I am trying to avoid.
 
