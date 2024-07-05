@@ -1,70 +1,72 @@
-Return-Path: <linux-pm+bounces-10691-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10692-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 834AF9287F9
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 13:31:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39C409287FB
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 13:31:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DFA8284BBC
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 11:31:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFD241F24A52
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 11:31:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29B56149C61;
-	Fri,  5 Jul 2024 11:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADA7514A092;
+	Fri,  5 Jul 2024 11:31:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="r+xCSguV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aO1LUb3p"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0A1146D45
-	for <linux-pm@vger.kernel.org>; Fri,  5 Jul 2024 11:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AD21494C9
+	for <linux-pm@vger.kernel.org>; Fri,  5 Jul 2024 11:31:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720179081; cv=none; b=CmmrvBXnFCD8yAWZwJpT7z3/h2BTZy8xEJ/H+fyd1HXjQ8/f5gzwcl70EH3uJD3Fh0hURhMTA9mdHAZ5MPkiePgK2alpOmSS4lWunYzUOUCHPVKx5hQPh/E2VWVqOnjJHLDMPlyrUTe7AYRfA/N01CVgmdEGafFz4Ik/PIU0OzQ=
+	t=1720179082; cv=none; b=mOsOkwwbywbbgSjbj/Ub4Zu4KLAFvEnfIy3bcY8NmXpNhqLXvNikguy2OmHXAp6tunLKfDqY0mvU0yRy4xcp47LZLlVng6HNcYTp6oXwBbx/Mo0JToULseEOpr3cBoNs+iyDw9odfeHNF7FoSw8CPGM+407z8nEenh4C4DPOEZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720179081; c=relaxed/simple;
-	bh=FuBrajrqQG9XnSm84KCc44rCbv9kqxWntaHnPCAb3kM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O3AItOQkc9Kl5z6vHcuqzqHGmRWNNj61S/aTRXjK6R3/8xzNFQcHFIKXOJPeWkg9Xm/CZzRCyumYpc8X61rIbxBMpCDgERUd0iRnv1hnevoBkJtirF6k2/DZL5jjJfxqXoxFlu3FfL1M+7srSL9UW7ME5yQ87m4GERnJ6UieMnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=r+xCSguV; arc=none smtp.client-ip=209.85.167.47
+	s=arc-20240116; t=1720179082; c=relaxed/simple;
+	bh=hPHreMrDt1doXkKIFfOnokfWoTTGR/eEdk8FJb3tsIk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XOhaFZVYpOs74YbKE3uv5IQMBlQVvKlMhifpBjr0CehbvJE53zZ++7oTO0Aaf1EMSGEYXT16NFh0Qw24VFVZzTG9YAUQo7/KAkTbVqrKAyw0Zs07XlJL4dYcl0cZzc+qYTB4svsv4vKwZOz7bQ3g64ewQ/KZ9NI6axlke/wgIbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aO1LUb3p; arc=none smtp.client-ip=209.85.167.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-52ea0f18500so1436448e87.3
-        for <linux-pm@vger.kernel.org>; Fri, 05 Jul 2024 04:31:18 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-52e94eaf5efso1637538e87.2
+        for <linux-pm@vger.kernel.org>; Fri, 05 Jul 2024 04:31:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720179077; x=1720783877; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4KHOTg83zzFfVGaUl4+JK0iTPEEAglfxmKaKcO2W6Q4=;
-        b=r+xCSguVCV9dCT51vF37tpB8ekHlxtxdDfutNgl5qA3jl5awWr/F0WtF8X61BWRK5d
-         pT84FPJxm9P8N184EtaFf//X87vwUQnr2LKsc2UZ5dUAjOuNsUgS2uDv78FFOzDa0sVq
-         MayojkLmM41ptVoBOm/0prmuK2st5Oh74BhxvsS8z3UaTdVwrn6oE7fncbd5UV8fyzak
-         z2igfyo1zA/Qc3WyfIfAQSl+E4TDamo1NxPmZQlKeSOFbVA5wr1c5p9XMqloN4f90J3D
-         NnuRRz0019rrXuz5bsExzVkS4UVv5RbZ1K6H2DmU1B1o2h1nAFVOlG8b0QfU3u3CkT3X
-         QcFw==
+        d=linaro.org; s=google; t=1720179078; x=1720783878; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=peeNZCDuyoda2DYpfs5bkgO4H7nlJlel4Yeo4yaX2aw=;
+        b=aO1LUb3pdRnseVxQg2tcjLyD8kGPA76n2adwf9WQtS0FasZ9lPfLi2kE2953XpwoEr
+         PcUyvOu09kuXefCjSzSwUTr1qLxHOxJ+C8tAWblLomlZW8ouTxGeWEtz6Gk2loWpfQLZ
+         eSeMdzxBD4joNhBLflWHOMtlhcWeBacwotzDYuMS/+jt0q5dZRpQcYBmJrIKdTwnbIrN
+         aXwEBf87IJiFGeJ+tISv3ev+rcqeLosp6gQtVJ/bGwyeS6pPCqVrXG3u1IWjbCgnGmt4
+         MtFG27pu5tb4UJd9BKV89yR9SvlllWDVS+v4uPQB6lRa3W4BkVpYxMmWUEj7eT/0fyFs
+         yuDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720179077; x=1720783877;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4KHOTg83zzFfVGaUl4+JK0iTPEEAglfxmKaKcO2W6Q4=;
-        b=CPkYViAUrIAWSV/KFEY1e5z/ftw6yE8C99NL/YzYdoMteRUSodTTAaQg/L7zf/sGOd
-         e0XHukE4gOOB9vzLPXh5rqyA0jpVoqxmCNxkuWDqJG+SSFJf/Ru9tVDTSj6uRebJNAid
-         IN1bwu6EDT1DIwTrQwQ7DSKaSXAWxrSIW0hMpp7ym+i0UhiWf9M/+35bapWPGy1Vdlno
-         tMOXXuRq2UuFq6gZ13UtxjoJU1IUI+h2wUIwyn47H8IDpcGDiS1Ub5iCM6Xb3VN6E6kw
-         XuKmXNQxHBRCt0BzIWNhRKF79YmHk+gK0NTylFlV7EVQLKT77/v6avAD5AS7ohJ7DR0A
-         HQEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUaTtylOF3l1U60NEOOmh/usYWloVRJ5G0LNf9iUbj6kGIR8+rnKe5W4JRmSgMtP1obe07n3kHG3xXYonIJkbE7uZbD9qLwxAE=
-X-Gm-Message-State: AOJu0Yzwkhx2qBmiJsyFYKJURjx2uvcy49FvzEtA0Sn1J9rohtjomm0Y
-	OemmcGpwx51xldc7H3Ci03U7f+TC255W4kWfwv9LHK1ysew8lakptWY0eZpb2R4=
-X-Google-Smtp-Source: AGHT+IHu8JpvSRGOprQzL81TsvGKBnMmQCKqCq82+aGtEZ11VImpyhljjvm/eD9bz0xqu6/70v7QyQ==
-X-Received: by 2002:a19:ac45:0:b0:52d:b1c9:34e with SMTP id 2adb3069b0e04-52ea062e361mr2952258e87.21.1720179077159;
-        Fri, 05 Jul 2024 04:31:17 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1720179078; x=1720783878;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=peeNZCDuyoda2DYpfs5bkgO4H7nlJlel4Yeo4yaX2aw=;
+        b=GiiIJOjSpmXDbEgJxUUWxwP4VBC/bgm6kAjmkj9OxbaLSKkTvAIUhtPxUUGqd+p2Db
+         WMcorTptiR9b7qxqEgVjrIOnE3uU+gq6FHMVfWRToFeIYa18AKmWy3lV0XcerYOLeMHR
+         cQpyabW+V+vI4Xk+o6jcH8aO88zv4JjcXKU2HmoiorcA2Agn53Zz85so6cwhZL5HF3AE
+         XJNQ8nwJClvscQqeh5QgoLMaudK4vj3SByafVCh/93/eQ28Nwh6NVttvEokrTCp5Zd2I
+         BZtekrdb1Cn//IZxFbzo6JMfh8LaWfteiaJUm3rCDlsIUnD4+kQscm5jNblp5DPu+AMk
+         kLkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVrWEh3PbiHPQ/xSGqnnX/M3Ojo1dVFqh6Ky0mFdVmwicpgg3N9KdAKxsZ3sfv7IYjHgiDtFpikpT6VtgGljfkQmsFE5ne4gtE=
+X-Gm-Message-State: AOJu0YxaaJmNlAlgs0wAjw1Gia6z/XPKSeBMpSx0vpowHhqPNsaofkIg
+	SziA3QIrVuwsl68966TP7XfZBV3OgXg5p8k+p74IS56zAw0rHPAxhOXoXLY08sU=
+X-Google-Smtp-Source: AGHT+IG87fGjXF+TaN2rAGmYDwXmCBV4e70dP7HYgoU/5vS+jGGZ87IXfHT7BTxzfN8kyxOo+KkYcg==
+X-Received: by 2002:a05:6512:3ca8:b0:52c:8abe:51fb with SMTP id 2adb3069b0e04-52ea061f4e1mr4207586e87.10.1720179078543;
+        Fri, 05 Jul 2024 04:31:18 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.219.137])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4264a2fc942sm58090725e9.42.2024.07.05.04.31.15
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4264a2fc942sm58090725e9.42.2024.07.05.04.31.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jul 2024 04:31:16 -0700 (PDT)
+        Fri, 05 Jul 2024 04:31:17 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Sebastian Reichel <sre@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
@@ -75,10 +77,12 @@ To: Sebastian Reichel <sre@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] power: supply: core: simplify with cleanup.h
-Date: Fri,  5 Jul 2024 13:31:12 +0200
-Message-ID: <20240705113113.42851-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] power: supply: twl4030_charger: correct comparision with old current
+Date: Fri,  5 Jul 2024 13:31:13 +0200
+Message-ID: <20240705113113.42851-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240705113113.42851-1-krzysztof.kozlowski@linaro.org>
+References: <20240705113113.42851-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -87,53 +91,30 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Allocate the memory with scoped/cleanup.h to reduce error handling and
-make the code a bit simpler.
+Driver reads existing current value from two 8-bit registers, but then
+compares only one of them with the new 16-bit value.  clang W=1 is also
+not happy:
+
+  twl4030_charger.c:243:16: error: variable 'cur_reg' set but not used [-Werror,-Wunused-but-set-variable]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/power/supply/power_supply_core.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/power/supply/twl4030_charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 8f6025acd10a..2b845ac51157 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -9,6 +9,7 @@
-  *  Modified: 2004, Oct     Szabolcs Gyurko
-  */
- 
-+#include <linux/cleanup.h>
- #include <linux/module.h>
- #include <linux/types.h>
- #include <linux/init.h>
-@@ -756,10 +757,10 @@ int power_supply_get_battery_info(struct power_supply *psy,
- 
- 	for (index = 0; index < len; index++) {
- 		struct power_supply_battery_ocv_table *table;
--		char *propname;
- 		int i, tab_len, size;
- 
--		propname = kasprintf(GFP_KERNEL, "ocv-capacity-table-%d", index);
-+		char *propname __free(kfree) = kasprintf(GFP_KERNEL, "ocv-capacity-table-%d",
-+							 index);
- 		if (!propname) {
- 			power_supply_put_battery_info(psy, info);
- 			err = -ENOMEM;
-@@ -768,13 +769,11 @@ int power_supply_get_battery_info(struct power_supply *psy,
- 		list = of_get_property(battery_np, propname, &size);
- 		if (!list || !size) {
- 			dev_err(&psy->dev, "failed to get %s\n", propname);
--			kfree(propname);
- 			power_supply_put_battery_info(psy, info);
- 			err = -EINVAL;
- 			goto out_put_node;
- 		}
- 
--		kfree(propname);
- 		tab_len = size / (2 * sizeof(__be32));
- 		info->ocv_table_size[index] = tab_len;
- 
+diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/supply/twl4030_charger.c
+index 7b9b0b3e164e..f3f1a0862e93 100644
+--- a/drivers/power/supply/twl4030_charger.c
++++ b/drivers/power/supply/twl4030_charger.c
+@@ -363,7 +363,7 @@ static int twl4030_charger_update_current(struct twl4030_bci *bci)
+ 	if (status < 0)
+ 		return status;
+ 	cur_reg |= oldreg << 8;
+-	if (reg != oldreg) {
++	if (reg != cur_reg) {
+ 		/* disable write protection for one write access for
+ 		 * BCIIREF */
+ 		status = twl_i2c_write_u8(TWL_MODULE_MAIN_CHARGE, 0xE7,
 -- 
 2.43.0
 
