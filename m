@@ -1,113 +1,166 @@
-Return-Path: <linux-pm+bounces-10720-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10721-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB88A928EB7
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 23:14:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAF5B928F62
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2024 00:46:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 715E31F22407
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 21:14:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27354B26311
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 22:46:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AC3414037C;
-	Fri,  5 Jul 2024 21:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092F81494AD;
+	Fri,  5 Jul 2024 22:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OLFzEhrT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818AC13CFA4;
-	Fri,  5 Jul 2024 21:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924A3144D11
+	for <linux-pm@vger.kernel.org>; Fri,  5 Jul 2024 22:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720214068; cv=none; b=E/HhAO0t8f20bE2sTwTod2C0YyyN4ThVWg2BBYDLljpJCcThrKSjnlbkXBAgY6KnGtREY67o1pWkA6HvT5/DtTJehKBOsx1efpQqggWUl9sSaV3vjNkf5zJyuWcCm/lrC6pa39lDg8DB/l0LJEQGokpGNZvpeUW7XTSA5eIyilE=
+	t=1720219546; cv=none; b=qdUpyINXZOENrVWGUw6KpKEeg6p36Uc/rK/98xMGzgNlHUb6+2L1dCtM/cQgQ7lEqd1t9qQy3qJ/c2W+2LhCc5eaiYvfgI2jbp5pZo+bfsL/fCT3FML2eMwVjnzWNvSz/CxiLDCA61iTb65D/bCqmCgbt6XF3ZwbquF/p8MQiXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720214068; c=relaxed/simple;
-	bh=OtzqFyB7K35uLIMVNqJqPm5ZCsRSwSZvqb4rrNMEv1o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y8gu6BWktcZBqzIH643uAnxfdTpnfPFa7D/u7+CAeiBxPXQSFe793i+Ii9XfGLy7OkSIEUHvU5naOH+ABYJfUbxnXNaCh563iK3AsBqMVGZiCE4xRS+uoXBh22JBA4cqfrroqLiM6EDMN/OebwIbfwTiswE7GTs+UelZ52/9bBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.78.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout2.hostsharing.net (Postfix) with ESMTPS id BF5BD2800B750;
-	Fri,  5 Jul 2024 23:14:14 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 99DB832455; Fri,  5 Jul 2024 23:14:14 +0200 (CEST)
-Date: Fri, 5 Jul 2024 23:14:14 +0200
-From: Lukas Wunner <lukas@wunner.de>
-To: Jeremy Linton <jeremy.linton@arm.com>
-Cc: Stefan Wahren <wahrenst@gmx.net>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Minas Harutyunyan <hminas@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Peter Robinson <pbrobinson@gmail.com>,
-	dri-devel@lists.freedesktop.org,
-	bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
-Subject: Re: [PATCH 09/11] usb: dwc2: Skip clock gating on Broadcom SoCs
-Message-ID: <ZohiJgyaDwAoGtAx@wunner.de>
-References: <20240630153652.318882-1-wahrenst@gmx.net>
- <20240630153652.318882-10-wahrenst@gmx.net>
- <95762956-b46a-4dfa-b22f-bccbfa39558d@broadcom.com>
- <ZoezRpXBgB1B5WjB@wunner.de>
- <4502d826-d80c-4a98-a889-da7badfa698e@gmx.net>
- <ZogLXYopViQO11ta@wunner.de>
- <43fa421c-5e5b-40a6-a546-d80e753586e3@gmx.net>
- <38e46b44-6248-45e8-bdf9-66008a2fe290@arm.com>
+	s=arc-20240116; t=1720219546; c=relaxed/simple;
+	bh=J2u1qHCiKCA3RfsyCI2pggoYFpbeaiFVXegTV/9f4hI=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=UFGTjPJlL6RrzxKqTqmRE0If7gL88qN8lghb/Kw5A6iMj6CoQdCgXdntotsLZ1Bte0oGFv777XrhVJdQza0nx/WEwysOBsOXKmIbR+rB9HmMMFUaE5hn+sXawYoY2YWBCqRlpauKBU+5vEnrayVRoHZ9fqU0VuASDgrp64Ay25Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OLFzEhrT; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-7f70a7470d3so300239f.0
+        for <linux-pm@vger.kernel.org>; Fri, 05 Jul 2024 15:45:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1720219540; x=1720824340; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=XPMYfJWmf3WNCz84K05Te7W0yqGn9oyU7AN35KIwYek=;
+        b=OLFzEhrTE6L9HUJZfU0NgoXaZ9Pa7O0tEZjN/ttgVEdvpijgDuFM3euIpEprE/+m02
+         9f8B5CZX6iHygVjZMPKV9xYCHcK9JGZR/9K7ohuO2cg4ZKICOzQKp7lUwMN66cFxNhiD
+         gTJjqntesu7eGpm69lU1JrEaz+hoaobehuy+c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720219540; x=1720824340;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XPMYfJWmf3WNCz84K05Te7W0yqGn9oyU7AN35KIwYek=;
+        b=Fwg+Gbpu695W/Lh5i3toewpmU210a5nFkl0DuKbTZRy8w6cU0Az6q9jSg++pdjRxUo
+         AW9wKNZ30akCYd+S4/mqV5xA7WSQFe6UhNIoxN7uvr/GS9jlxNVUQwxzAsR1ucGE6XOb
+         3hWryPgByfUKLO7L9u0L3dKSIS/VLeFWp6W+dl+2TLIJECOiL3Jp0cKduusT+8hLsN88
+         9nU+7ClMy+juwQcLhPzawinClKNrhkqlLtxSsvFYsO/4J6Q3LD+zJZfGDcxmnMh8Au8W
+         QldCDf0wsn835g/aEn2tM4UeYfuCQdrUL/IRCUta7q3/h4qGn44huhaPlmChFs6+MWwT
+         jDgw==
+X-Forwarded-Encrypted: i=1; AJvYcCXP24yhX0mjxtOqKvLagyqEKgE51sud64wFjYO/2oidVoTl1vqIbjecAPltEIZgD4gQmm5uLMu6oSSDRGmSyWKN8izIi2J6R/I=
+X-Gm-Message-State: AOJu0YyHniIPu0rQk0MkS8LTYAX5t60M4cS9B0zL3bP25Z1OBN8VuUL3
+	su4TyWFDOmEet6vzJoQYVqEbtkiXo1uT+TJ33yI7NjpF7k9CWwRBwNfFkoCf+f4=
+X-Google-Smtp-Source: AGHT+IFiOtWsyaxb1z0ZzXLScuB6n4UhuXRTJth4ktjjKG0Ac43ITwVD9tXgNdHw5GjyVxL8f3BU/A==
+X-Received: by 2002:a05:6602:6183:b0:7f8:bfcd:db3e with SMTP id ca18e2360f4ac-7f8bfcddd04mr3425139f.0.1720219540586;
+        Fri, 05 Jul 2024 15:45:40 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4bb73bb374dsm4604825173.36.2024.07.05.15.45.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Jul 2024 15:45:39 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------boPeTQlb4MMG8ACs0OicDOlH"
+Message-ID: <00aaf29c-e638-4161-90fa-49eff270598e@linuxfoundation.org>
+Date: Fri, 5 Jul 2024 16:45:39 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <38e46b44-6248-45e8-bdf9-66008a2fe290@arm.com>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Thomas Renninger <trenn@suse.de>, Shuah Khan <skhan@linuxfoundation.org>,
+ shuah <shuah@kernel.org>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+From: Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] cpupower second update for Linux 6.11-rc1
 
-On Fri, Jul 05, 2024 at 12:16:14PM -0500, Jeremy Linton wrote:
-> > Am 05.07.24 um 17:03 schrieb Lukas Wunner:
-> > > Careful there, the patch vaguely says...
-> > > 
-> > >     With that added and identified as "BCM2848",
-> > >     an id in use by other OSs for this device, the dw2
-> > >     controller on the BCM2711 will work.
-> > > 
-> > > ...which sounds like they copy-pasted the BCM2848 id from somewhere else.
-> > > I would assume that BCM2848 is really a different SoC and not just
-> > > a different name for the BCM2835, but hopefully BroadCom folks will
-> > > be able to confirm or deny this (and thus the necessity of the quirk
-> > > on BCM2848 and not just on BCM2835).
-> 
-> This id comes from the edk2-platforms ACPI tables and is currently used by
-> both the rpi3 and rpi4, and AFAIK nothing else as the rpi5-dev work is
-> currently only exposing XHCI.
-> 
-> The ID is strictly the USB controller not the SoC. Its a bit confusingly
-> named, but something we inherited from the much older windows/edk2 port,
-> where it appears that the peripheral HID's were just picked in numerical
-> order.
-> 
-> [0] https://github.com/tianocore/edk2-platforms/blob/12f68d29abdc9d703f67bd743fdec23ebb1e966e/Platform/RaspberryPi/AcpiTables/GpuDevs.asl#L15
+This is a multi-part message in MIME format.
+--------------boPeTQlb4MMG8ACs0OicDOlH
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-So BCM2848, BCM2849, BCM2850 and so on are just made-up IDs
-for a Windows/EDK2 port that got cargo-culted into the kernel?
-Yikes!
+Hi Rafael,
 
-Has anyone checked whether they collide with actual Broadcom products?
+Please pull the following cpupower second update for Linux 6.11-rc1.
+
+This cpupower second update for Linux 6.11-rc1 consists of
+
+-- fix to install cpupower library in standard librray intall
+    location - /usr/lib
+-- disable direct build of cpupower bench as it can only be
+    built from the cpupower main makefile.
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit 3e1f12c26646eb0ad67d3eaefd32f765997da6a8:
+
+   cpupower: Change the var type of the 'monitor' subcommand display mode (2024-06-20 10:08:08 -0600)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-6.11-rc1-2
+
+for you to fetch changes up to 3a5bb5066f4c7170e850b930e84b1075e25f8e90:
+
+   cpupower: fix lib default installation path (2024-07-02 15:30:32 -0600)
+
+----------------------------------------------------------------
+linux-cpupower-6.11-rc1-2
+
+This cpupower second update for Linux 6.11-rc1 consists of
+
+-- fix to install cpupower library in standard librray intall
+    location - /usr/lib
+-- disable direct build of cpupower bench as it can only be
+   built from the cpupower main makefile.
+
+----------------------------------------------------------------
+Roman Storozhenko (2):
+       cpupower: Disable direct build of the 'bench' subproject
+       cpupower: fix lib default installation path
+
+  tools/power/cpupower/Makefile       | 10 +---------
+  tools/power/cpupower/bench/Makefile |  5 +++++
+  2 files changed, 6 insertions(+), 9 deletions(-)
+----------------------------------------------------------------
+--------------boPeTQlb4MMG8ACs0OicDOlH
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-cpupower-6.11-rc1-2.diff"
+Content-Disposition: attachment; filename="linux-cpupower-6.11-rc1-2.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlIGIvdG9vbHMvcG93
+ZXIvY3B1cG93ZXIvTWFrZWZpbGUKaW5kZXggY2QwMjI1YTMxMmI0Li42YzAyZjQwMTA2OWUg
+MTAwNjQ0Ci0tLSBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlCisrKyBiL3Rvb2xz
+L3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlCkBAIC02Nyw2ICs2Nyw3IEBAIExBTkdVQUdFUyA9
+IAkJCWRlIGZyIGl0IGNzIHB0IGthCiBiaW5kaXIgPz0JL3Vzci9iaW4KIHNiaW5kaXIgPz0J
+L3Vzci9zYmluCiBtYW5kaXIgPz0JL3Vzci9tYW4KK2xpYmRpciA/PQkvdXNyL2xpYgogaW5j
+bHVkZWRpciA/PQkvdXNyL2luY2x1ZGUKIGxvY2FsZWRpciA/PQkvdXNyL3NoYXJlL2xvY2Fs
+ZQogZG9jZGlyID89ICAgICAgIC91c3Ivc2hhcmUvZG9jL3BhY2thZ2VzL2NwdXBvd2VyCkBA
+IC05NCwxNSArOTUsNiBAQCBSQU5MSUIgPSAkKENST1NTKXJhbmxpYgogSE9TVENDID0gZ2Nj
+CiBNS0RJUiA9IG1rZGlyCiAKLSMgNjRiaXQgbGlicmFyeSBkZXRlY3Rpb24KLWluY2x1ZGUg
+Li4vLi4vc2NyaXB0cy9NYWtlZmlsZS5hcmNoCi0KLWlmZXEgKCQoSVNfNjRfQklUKSwgMSkK
+LWxpYmRpciA/PQkvdXNyL2xpYjY0Ci1lbHNlCi1saWJkaXIgPz0JL3Vzci9saWIKLWVuZGlm
+Ci0KICMgTm93IHdlIHNldCB1cCB0aGUgYnVpbGQgc3lzdGVtCiAjCiAKZGlmZiAtLWdpdCBh
+L3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2JlbmNoL01ha2VmaWxlIGIvdG9vbHMvcG93ZXIvY3B1
+cG93ZXIvYmVuY2gvTWFrZWZpbGUKaW5kZXggYTRiOTAyZjllMWM0Li4zNGU1ODk0NDc2ZWIg
+MTAwNjQ0Ci0tLSBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2JlbmNoL01ha2VmaWxlCisrKyBi
+L3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2JlbmNoL01ha2VmaWxlCkBAIC0xLDQgKzEsOSBAQAog
+IyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMAoraWZlcSAoJChNQUtFTEVWRUwp
+LDApCiskKGVycm9yIFRoaXMgTWFrZWZpbGUgaXMgbm90IGludGVuZGVkIHRvIGJlIHJ1biBz
+dGFuZGFsb25lLCBidXQgb25seSBhcyBhIHBhcnQgXAorb2YgdGhlICBtYWluIG9uZSBpbiB0
+aGUgcGFyZW50IGRpcikKK2VuZGlmCisKIE9VVFBVVCA6PSAuLwogaWZlcSAoIiQob3JpZ2lu
+IE8pIiwgImNvbW1hbmQgbGluZSIpCiBpZm5lcSAoJChPKSwpCg==
+
+--------------boPeTQlb4MMG8ACs0OicDOlH--
 
