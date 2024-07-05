@@ -1,181 +1,146 @@
-Return-Path: <linux-pm+bounces-10657-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10658-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4CA99283A7
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 10:28:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CAD092840A
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 10:48:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF57EB2205D
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 08:28:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C482C1F22864
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 08:48:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CE5B145B18;
-	Fri,  5 Jul 2024 08:28:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p72nLYYa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCC6A144D34;
+	Fri,  5 Jul 2024 08:48:19 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4248613D276;
-	Fri,  5 Jul 2024 08:28:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1BE144D0E;
+	Fri,  5 Jul 2024 08:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720168101; cv=none; b=CVbec5DwoVpJ004Q3OcoReQRjQw3w8p3WDvNdbmDfcRba/65Kmycwh6OSLYvn5pV7f3ApO0Nq6AwvPoolZLn+qrs0EFhWIgR0BqLLCgqcC39lMubRT9K++r5DqKBpTKOJYdOO0je0aqy35bEXAcyjQ/R9zQupHTLHZHXrlO5tB4=
+	t=1720169299; cv=none; b=gIHj08HqnTak6sniKkFdrsBS/xwQcn++xTaI2EWsN4F017JG1v1Pb1+k2pfuo74RXRbovSilJmROCo+un7/BQ0/SSgcJKNNv9zzyxeqqmv01NOiEU8pzWjPuqX8+AIUbaQWXXj+O4M/G0ZrzVmcW+BsHjcgs/R/LQXle5ptQFjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720168101; c=relaxed/simple;
-	bh=scqZPC5wO4m0aCmMMW3d4hxG0BVZgv+1Scylw50NJeQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rTO5jYEoMV3VLGmgZlvI45UeR/lKmtETNUBwW5wb5+hU1WvaWivnrwISh7iZxlUrkMRxSCTn6jjWmZ8MuGpgv7eQICC/O6VT9l/ym7eLBsmmFzpuKZKBxsxKocA7O1O1ySSaH15ktdhOx0vDOFLJTkij+GuG+OXaMSijBF59Cwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p72nLYYa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7E61C4AF0C;
-	Fri,  5 Jul 2024 08:28:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720168100;
-	bh=scqZPC5wO4m0aCmMMW3d4hxG0BVZgv+1Scylw50NJeQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=p72nLYYaqrTeBYJpENa6BI2NQ4zdl6osq7j38dmH3D02nPdiSHuwPLfQApA09Yih1
-	 aW92hvslFgm6IXq3MBklRLigB1mZF/8rK5NBAwMS3cXTJDIPhuhB1Mw/jje8lU1Uf+
-	 8d38d9/xFQo82+69IWdQ90NWSw6fvuUJp2YpOYoVvCTdiDWZLqn6XpPPFmS6MwVRFC
-	 Fqj+HFzaQzJIk+ZjNX5SukLm0yGBrCYF5YPW1QjamXCJy9ebgXBEyAG8oUV289wKw9
-	 buDsNRlSjsbIWq2W2gY+bmFAhZI4Nh2QI4xgagtP7F4yomEA+Cx8t+niD1ytEVkwys
-	 dXebjxeE4+TvQ==
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a77abe5c709so168897866b.2;
-        Fri, 05 Jul 2024 01:28:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXmLeG2zOVlE4XEcRMICaBxLtD9giCk/XheKfybMxVXFH/8sqhaPbStsvkjPok2dsF1HLuvsTT9EBuvzQ6X4rXMYe3WTxbs6aV3RpBS7TMyB7j1kofui17eKJvs110GqlGuLBzFrcI=
-X-Gm-Message-State: AOJu0YyyANeWqUnSY1uz+0Loaa6UnSjvs+F8tR2NwhpQ0p4XfJAnivGz
-	hjk4A6WDPVP3RPTB9bLD5o19jJjnPgGuIdczEnmLAc+/tAGKqMdQuFMKsifEyLbECMO7AdCoP3H
-	+90Dw1JxiBmmCQTZDBflgjhNvozE=
-X-Google-Smtp-Source: AGHT+IGah1K+v5YHUGFSEIZOI8yyQ+ZJW4cZA61Xt/1RDCkQrBl8XYkuZYWtxCGtiwzPHsVLtaGQKFNuzSvcrSOJohk=
-X-Received: by 2002:a17:906:1c13:b0:a77:c002:e4ac with SMTP id
- a640c23a62f3a-a77c002eafbmr204243166b.0.1720168099392; Fri, 05 Jul 2024
- 01:28:19 -0700 (PDT)
+	s=arc-20240116; t=1720169299; c=relaxed/simple;
+	bh=nvSl3iBk/fZcuCRP386vT6ZbD9nSkasbsf8j9vWzPtU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VaKwTZALSOkEjvl3oBhEAHRSwWhoHg3gnUy8Xmhpw6NRziw+EAC4wL3zNeoTPFHPFixYn1tQmqjNMvrLdcihDHl2AoXhrqacUDyDzTUAhRg/Ix/5EAztXMLR7t8G5/FApNIIyEyjBLO0z2IYp5tebmWTvTXnYmZQ2jhSsXygpkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 77A2E3000D5B1;
+	Fri,  5 Jul 2024 10:48:06 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 637213E9B8; Fri,  5 Jul 2024 10:48:06 +0200 (CEST)
+Date: Fri, 5 Jul 2024 10:48:06 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Stefan Wahren <wahrenst@gmx.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Minas Harutyunyan <hminas@synopsys.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Peter Robinson <pbrobinson@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+Subject: Re: [PATCH 09/11] usb: dwc2: Skip clock gating on Broadcom SoCs
+Message-ID: <ZoezRpXBgB1B5WjB@wunner.de>
+References: <20240630153652.318882-1-wahrenst@gmx.net>
+ <20240630153652.318882-10-wahrenst@gmx.net>
+ <95762956-b46a-4dfa-b22f-bccbfa39558d@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240705060650.243497-1-chenhuacai@loongson.cn>
- <20240705060650.243497-3-chenhuacai@loongson.cn> <20240705071313.ddl6geg72t4n7j3s@vireshk-i7>
- <CAAhV-H5q5hv2sA7EAm1D1nmbG-VGPzc4kpTnHMDSFuFiTKEH7A@mail.gmail.com> <20240705081723.6y23ts757aunwyhi@vireshk-i7>
-In-Reply-To: <20240705081723.6y23ts757aunwyhi@vireshk-i7>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Fri, 5 Jul 2024 16:28:07 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H47OkbiA9awcCVwj4Jz-_o65rCSx++gU+OARhM+XSqLtQ@mail.gmail.com>
-Message-ID: <CAAhV-H47OkbiA9awcCVwj4Jz-_o65rCSx++gU+OARhM+XSqLtQ@mail.gmail.com>
-Subject: Re: [PATCH V3 2/2] cpufreq: Add Loongson-3 CPUFreq driver support
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Huacai Chen <chenhuacai@loongson.cn>, "Rafael J . Wysocki" <rafael@kernel.org>, loongarch@lists.linux.dev, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
-	Binbin Zhou <zhoubinbin@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <95762956-b46a-4dfa-b22f-bccbfa39558d@broadcom.com>
 
-On Fri, Jul 5, 2024 at 4:17=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.or=
-g> wrote:
->
-> On 05-07-24, 15:34, Huacai Chen wrote:
-> > It seems except changing mutex_init to devm_mutex_init, all other
-> > changes are line breaks? If so, I think additional tests are
-> > unnecessary. :)
->
-> Yeah, I just wanted to make sure the build passes and I have not
-> introduced a stupid bug.
->
-> > But now long lines (> 80 columns) are accepted by checkpatch.pl. Even
-> > with --strict, only > 100 columns are warned.
-> >
-> > Especially for the change in loongson3_cpufreq_cpu_exit(), there is
-> > only 82 columns and I think that line can keep as the original state.
-> > And if possible, I also want the devm_kzalloc() line keep as original.
->
-> Fair enough. I am still hung on 80 columns I believe, but I shouldn't
-> be as the kernel has moved on :)
->
-> New diff (Prototype of exit() callback has changed in my tree, so a
-> change for that too).
->
-> diff --git a/drivers/cpufreq/loongson3_cpufreq.c b/drivers/cpufreq/loongs=
-on3_cpufreq.c
-> index a530e4a56b78..5f79b6de127c 100644
-> --- a/drivers/cpufreq/loongson3_cpufreq.c
-> +++ b/drivers/cpufreq/loongson3_cpufreq.c
-> @@ -31,10 +31,10 @@ union smc_message {
->  };
->
->  /* Command return values */
-> -#define CMD_OK                         0  /* No error */
-> -#define CMD_ERROR                      1  /* Regular error */
-> -#define CMD_NOCMD                      2  /* Command does not support */
-> -#define CMD_INVAL                      3  /* Invalid Parameter */
-> +#define CMD_OK                         0 /* No error */
-> +#define CMD_ERROR                      1 /* Regular error */
-> +#define CMD_NOCMD                      2 /* Command does not support */
-> +#define CMD_INVAL                      3 /* Invalid Parameter */
->
->  /* Version commands */
->  /*
-> @@ -230,7 +230,8 @@ static int loongson3_cpufreq_target(struct cpufreq_po=
-licy *policy, unsigned int
->  {
->         int ret;
->
-> -       ret =3D do_service_request(cpu_data[policy->cpu].core, FREQ_INFO_=
-TYPE_LEVEL, CMD_SET_FREQ_INFO, index, 0);
-> +       ret =3D do_service_request(cpu_data[policy->cpu].core,
-> +                                FREQ_INFO_TYPE_LEVEL, CMD_SET_FREQ_INFO,=
- index, 0);
->
->         return (ret >=3D 0) ? 0 : ret;
->  }
-> @@ -310,13 +311,11 @@ static int loongson3_cpufreq_cpu_init(struct cpufre=
-q_policy *policy)
->         return 0;
->  }
->
-> -static int loongson3_cpufreq_cpu_exit(struct cpufreq_policy *policy)
-> +static void loongson3_cpufreq_cpu_exit(struct cpufreq_policy *policy)
->  {
->         int cpu =3D policy->cpu;
->
->         loongson3_cpufreq_target(policy, per_cpu(freq_data, cpu)->def_fre=
-q_level);
-> -
-> -       return 0;
->  }
->
->  static int loongson3_cpufreq_cpu_online(struct cpufreq_policy *policy)
-> @@ -348,13 +347,14 @@ static int loongson3_cpufreq_probe(struct platform_=
-device *pdev)
->         int i, ret;
->
->         for (i =3D 0; i < MAX_PACKAGES; i++)
-> -               mutex_init(&cpufreq_mutex[i]);
-> +               devm_mutex_init(&pdev->dev, &cpufreq_mutex[i]);
->
->         ret =3D do_service_request(0, 0, CMD_GET_VERSION, 0, 0);
->         if (ret <=3D 0)
->                 return -EPERM;
->
-> -       ret =3D  do_service_request(FEATURE_DVFS, 0, CMD_SET_FEATURE, FEA=
-TURE_DVFS_ENABLE | FEATURE_DVFS_BOOST, 0);
-> +       ret =3D do_service_request(FEATURE_DVFS, 0, CMD_SET_FEATURE,
-> +                                FEATURE_DVFS_ENABLE | FEATURE_DVFS_BOOST=
-, 0);
->         if (ret < 0)
->                 return -EPERM;
->
->
-> Applied the patch. You need to take 1/2 through the arch specific
-> tree. Thanks.
-OK, thank you very much.
+On Thu, Jul 04, 2024 at 03:14:50PM +0100, Florian Fainelli wrote:
+> On 6/30/2024 4:36 PM, Stefan Wahren wrote:
+> > On resume of the Raspberry Pi the dwc2 driver fails to enable
+> > HCD_FLAG_HW_ACCESSIBLE before re-enabling the interrupts.
+> > This causes a situation where both handler ignore a incoming port
+> > interrupt and force the upper layers to disable the dwc2 interrupt line.
+> > This leaves the USB interface in a unusable state:
+> > 
+> > irq 66: nobody cared (try booting with the "irqpoll" option)
+> > CPU: 0 PID: 0 Comm: swapper/0 Tainted: G W          6.10.0-rc3
+> > Hardware name: BCM2835
+> > Call trace:
+> > unwind_backtrace from show_stack+0x10/0x14
+> > show_stack from dump_stack_lvl+0x50/0x64
+> > dump_stack_lvl from __report_bad_irq+0x38/0xc0
+> > __report_bad_irq from note_interrupt+0x2ac/0x2f4
+> > note_interrupt from handle_irq_event+0x88/0x8c
+> > handle_irq_event from handle_level_irq+0xb4/0x1ac
+> > handle_level_irq from generic_handle_domain_irq+0x24/0x34
+> > generic_handle_domain_irq from bcm2836_chained_handle_irq+0x24/0x28
+> > bcm2836_chained_handle_irq from generic_handle_domain_irq+0x24/0x34
+> > generic_handle_domain_irq from generic_handle_arch_irq+0x34/0x44
+> > generic_handle_arch_irq from __irq_svc+0x88/0xb0
 
-Huacai
->
-> --
-> viresh
->
+A similar issue was reported for Agilex platforms back in 2021:
+
+https://lore.kernel.org/all/5e8cbce0-3260-2971-484f-fc73a3b2bd28@synopsys.com/
+
+It was fixed by commit 3d8d3504d233 ("usb: dwc2: Add platform specific
+data for Intel's Agilex"), which sets the no_clock_gating flag on that
+platform.
+
+Looking at drivers/usb/dwc2/params.c, numerous other platforms need
+the same flag.
+
+Please amend the commit message to mention the Agilex issue and
+resulting commit.
+
+
+> > --- a/drivers/usb/dwc2/params.c
+> > +++ b/drivers/usb/dwc2/params.c
+> > @@ -23,6 +23,7 @@ static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg)
+> >   	p->max_transfer_size = 65535;
+> >   	p->max_packet_count = 511;
+> >   	p->ahbcfg = 0x10;
+> > +	p->no_clock_gating = true;
+> 
+> Could we set this depending upon whether the dwc2 host controller is a
+> wake-up source for the system or not?
+
+The flag seems to mean whether the platform is actually capable of
+disabling the clock of the USB controller.  BCM2835 seems to be
+incapable and as a result, even though dwc2_host_enter_clock_gating()
+is called, the chip signals interrupts.
+
+There doesn't seem to be a relation to using the controller as a
+wakeup source, so your comment doesn't seem to make sense.
+If the clock can't be gated, the chip can always serve as a
+wakeup source.
+
+The real question is whether BCM2848 platforms likewise cannot disable
+the clock of the dwc2 controller or whether this is specific to the
+BCM2835.  Right now dwc2_set_bcm_params() is applied to both the
+BCM2848 and BCM2835.  If the BCM2848 behaves differently in this
+regard, we'd have to duplicate dwc2_set_bcm_params() for the BCM2835.
+
+Thanks,
+
+Lukas
 
