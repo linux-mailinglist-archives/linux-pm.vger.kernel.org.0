@@ -1,56 +1,73 @@
-Return-Path: <linux-pm+bounces-10705-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10706-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1D52928B8A
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 17:21:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E66CF928BEF
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 17:40:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D35CB1C208F8
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 15:21:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 75DF9B24B06
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 15:40:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24FC515FA75;
-	Fri,  5 Jul 2024 15:21:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7002C16D30D;
+	Fri,  5 Jul 2024 15:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="oAIdPXs3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NKoskVbb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C87714AA0;
-	Fri,  5 Jul 2024 15:21:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67691154C12
+	for <linux-pm@vger.kernel.org>; Fri,  5 Jul 2024 15:40:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720192897; cv=none; b=ANeuLW8KLB8Jb/QRE+0DcTZCnAb6ptZPhWRhR5iCad/ERpMf5hj275Yr/Tz/7RqgtZuWhz+tMTJvbxFay1Exd39PEEAqJVow/RJ3lbjZzIXv+r+hGMjmCJT1k7L2roCwlj0rMXKu/8OF87K72gw8dZgrpjAZ2WFNyBIw4GV0mP4=
+	t=1720194013; cv=none; b=WCAyKpP3aER4hy5lYO7YMnI9NzF9EYMdVPgyOww06YpM3f359QcGnBtyVgIVDuT4drnI1LkUItkinRY13jnoXajHOuyAPNNyuIUA9HcwLNPyLbOOlVlO6SU5nfShAP4a8MIBcAqYNEUkxzIIqBfGhQPpNTpCIHqnBzsqFiEA4P0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720192897; c=relaxed/simple;
-	bh=1f0oCOoYGyWpwSVfOMou0lPhsV9ZUgqvHkKWaqav4Gk=;
+	s=arc-20240116; t=1720194013; c=relaxed/simple;
+	bh=lvk3fb6EH5rw6dp1DOnJCL3dq9tQI3MOZD7gcFF+qDM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E2lpWltCmtBWaiPukgleTaCs2hWAt4xwOSvabAUzj6Aijht11bkrKr8Nh7h6y97XRY7oT7GNKdo8ZZtAHwchGCjh0qGm0NDh1OXeXg9SYi0MwTDDrKejJDyJCF0XmSfFmdry7f/TJTNxqThUwD/coi/ejQgk65R+/nsrL2n64p0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=oAIdPXs3; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1720192868; x=1720797668; i=wahrenst@gmx.net;
-	bh=hwXx7X/JWO629nMGozpbxOU/sJMCVJf7jb2Wh2OBaFo=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=oAIdPXs3mQlwtD2Kv6SVDhIT3WbZhYmmB7E8msKCEaeZzlnpofm5Vk0vBjiNOaqm
-	 C2zR7aS8SjSTTsnL4RLXYXy2eADdjqZXxiS2+SbS0NYnoDhSvUpQAQ9f6Z0wd9rjU
-	 NvP66HksPR13Q7yZO9bjhRDWVg1mBS3aX3Ys/tD7GcmnWRfu1+/NMSsVOykKhv74M
-	 jpHdbPg4MhSjIiKALFJUQRjeqt5HbW0VDN3YYfm4YBxMiohoiL/kUDABbEuWiEurT
-	 YB/StJdWzhnoLgh5mqhYSZ4sYTRypNBqwgZ1UCnj3aoF4nRNTX6pV2K0LwSrvYcYp
-	 3nUu/sZN1yll+Ar5SA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MuUj2-1s8uNq0H22-00rvkj; Fri, 05
- Jul 2024 17:21:08 +0200
-Message-ID: <43fa421c-5e5b-40a6-a546-d80e753586e3@gmx.net>
-Date: Fri, 5 Jul 2024 17:21:05 +0200
+	 In-Reply-To:Content-Type; b=XGq2HMzud9SU7/Gk5BWJVXt8GhO6KxGgpgODsPw9Ua8qdBiR4wfW/z5rk1TT7hplgaPPsXlUL2r+jUDrzB6gAzyuEV8+B6N2xjitEmGyx3PE3aZF7Q8Ydp/y5DodmqDb2lSntxFpGw6/aAMQeU4p1JhrQ5VjUJ3/4Jy8I44gUTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NKoskVbb; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-36796d2e5a9so1195598f8f.3
+        for <linux-pm@vger.kernel.org>; Fri, 05 Jul 2024 08:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720194010; x=1720798810; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rWJsmVbnxMDiuFLY+fOlqn//TXBBmUogobIIxAviZlc=;
+        b=NKoskVbboCs15opK/u8G0ePgBYosmRGjKGCHS/WSYb5wNVrWjJ4EX2lGolUGCOPdB9
+         0uQaIWeVLcyyqRkl0aDLiC0M22BQfSsWudXssBVXP3pxhsgp2pHVNeCJJ6pFb0ysOvku
+         csxvRFZtHVu2Riz/jqwBzAfHZ5pM4k4APkaTzbOevLhvQsW6500bwwj0ndhPXjErmehh
+         +i751M0SzL+icns0EEBvjcXD6QpV1PfdYxsBePfojkYHuOO8lnW0oE7zvqH7TvCPxW5U
+         dkeyRnYpatAZTpYE+qHY+vGIlRIQn6i3NQk7nUNyPXFA2dJHiPpf6KfsSmBx3SHxxs5u
+         bJpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720194010; x=1720798810;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rWJsmVbnxMDiuFLY+fOlqn//TXBBmUogobIIxAviZlc=;
+        b=VpJQorB+T4qKtlcWW8NG4r5krGiRkiwY0uCU9aJhQmF1lpfOcq9IoxKTmi5ggwI6Vy
+         5KvG8W85hiJAtbP7ccJTvEqefpDoQIVL7/Rv967qbSHtdDUvD40/cil+Ffh0hbIDxp3D
+         Fn1Rm79SW+4XavB/OSB0v8D/B+Hvr5DzYPnuLFfZGhZsroPhiqjKOGsGefovijM/zxbB
+         VM0wSa1yVxQZy9rT2BBnaVq2Aw9LuL8So8Pk652MC8QFl72J8x9CFkt/OO5aWrcdv4SF
+         KEr4UoZLTBpkdvfrm7CUzZVRTaL4xGg0d3xqeq+F65HVUIcGGQGsfTJwM+cX6eet6CBe
+         m3Zw==
+X-Gm-Message-State: AOJu0YzDyLfU7mwQGTJSlKhSoSOpMRy82afmOVM+Rp5KJG+EBg3JmUo9
+	b80CyaIrDTN4G4r7GdkbancFQDci0Bwwz8pmfAgGmoRlpNeNt2bbAC4k6rkM9Lw=
+X-Google-Smtp-Source: AGHT+IFZ5tZcHjh9afQQV6N+UDpsdiCgwUbQuOPcHUbDQTq2FuqnU3hsZXAXDh/UpS3fDJuMgQV8qw==
+X-Received: by 2002:adf:a18f:0:b0:366:f469:a8d with SMTP id ffacd0b85a97d-3679dd35e71mr3543623f8f.35.1720194009828;
+        Fri, 05 Jul 2024 08:40:09 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-36795d1fc9csm6559538f8f.83.2024.07.05.08.40.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Jul 2024 08:40:09 -0700 (PDT)
+Message-ID: <c7c78d7d-c920-415f-b97b-c3b7c61eb9fe@linaro.org>
+Date: Fri, 5 Jul 2024 17:40:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,83 +75,53 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/11] usb: dwc2: Skip clock gating on Broadcom SoCs
-To: Lukas Wunner <lukas@wunner.de>, Jeremy Linton <jeremy.linton@arm.com>
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
- Minas Harutyunyan <hminas@synopsys.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Jassi Brar <jassisinghbrar@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- Jiri Slaby <jirislaby@kernel.org>,
- Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Peter Robinson <pbrobinson@gmail.com>,
- dri-devel@lists.freedesktop.org, bcm-kernel-feedback-list@broadcom.com,
- linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kernel-list@raspberrypi.com
-References: <20240630153652.318882-1-wahrenst@gmx.net>
- <20240630153652.318882-10-wahrenst@gmx.net>
- <95762956-b46a-4dfa-b22f-bccbfa39558d@broadcom.com>
- <ZoezRpXBgB1B5WjB@wunner.de> <4502d826-d80c-4a98-a889-da7badfa698e@gmx.net>
- <ZogLXYopViQO11ta@wunner.de>
+Subject: Re: [PATCH RESEND 00/22] dt-bindings: thermal: few cleanups
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Zhang Rui <rui.zhang@intel.com>, Rob Herring <robh@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Guillaume La Roque <glaroque@baylibre.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+ Fabio Estevam <festevam@gmail.com>
+Cc: linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, imx@lists.linux.dev,
+ linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ Florian Fainelli <f.fainelli@gmail.com>,
+ linux-rpi-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ Conor Dooley <conor.dooley@microchip.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Vasily Khoruzhick <anarsoul@gmail.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Amit Kucheria <amitk@kernel.org>,
+ =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
+ Heiko Stuebner <heiko@sntech.de>, Biju Das <biju.das.jz@bp.renesas.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+References: <20240705-dt-bindings-thermal-allof-v1-0-554061b52fbc@linaro.org>
 Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <ZogLXYopViQO11ta@wunner.de>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20240705-dt-bindings-thermal-allof-v1-0-554061b52fbc@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:BJGrNpbHXbxVeXDB3xE978jxAJSmTOKF7NAPEoMIBFmnco1FxmF
- lZkHxE5fWXY5JkJWk7/VhhpCAfRjCJVJESnrVJW7aLJ2N/Y9dsXV1doNgYEoQbZ5ldT1+VO
- A+Odv1KyVh8vVPyj9xWw4ZAHA2xuIQBFiDmsU6sfpUVbOSZHbOhDRHD/vdoQlOIr+g4Wlg/
- 3MsXndQrf3WTVS8vQxEsA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:JQQ/R1k87NA=;1b+BZxXnPVoIRZHBh9XctHJp4/x
- 12Z+Wfgi0mUwKBUCAlQJYec5etl4ChEpvyoSWr9IdJvVqgJP73/Mo1p2P/xkZnENxTRSOrmTr
- TJDApa4d/H/D9tBsclA89E8TxrWgtiQUW3RMDSpIY2KRwVT6/op7ccJhWyj98kJlncJrCGQ1d
- Xsa8T0UwBxARN6B12ZrauAFPJ/2Z+4XFCDfP7cyrRrCEahas1/hsFXSCdMNnGNXsRzClc8Hev
- nksU5f3aTIN229lGXqrwXHfb4pFM+Ad3Amd/bNp9p+sB6Gizs3NotpbTuLYOK2pE33uwaaXK/
- u/l8hqcAHtgFCO2IpKQN1cKU+bdEoncl7sX6+wUPcw5dpeYtd/XaUxHWabQPn0a+Jovy6o07t
- GK5UY74mXa464sOPWQVFpXfr/rcu0uDTZSIi6Ve5DMtS/fi9TXT78F2cjbk9wL0xPSeYRq8lt
- gUErMLVfgAFdhBngda62lkwkqBH2+7fYVpPdTfYcKiwjD5ciLq+8zK2iC6HdGYil1j8ialKVn
- a9lrANOqqXVtHCVAcSmoKp18ACeOwk4qo/YQXN61+6vNOJcBlp2m65gh6ZjYGpC4Zzg5EIEbd
- Nh2gg/b9tO78dnmidxHClHQCgIFqnNij+Fznt7KDBF/ZjEpkwNXR9FaT5NQtRcc78q5Se78bx
- qEi8Ux7Zhs8CNU52QjUGZPzs7RD0Ka+g2uC1FLrLRME/1nJB8vUZl5H/Z6Hyi66lSKBCoRBzy
- oM+eTunrR3ZUXPWrM8JQLZUNICB9ZkPhBfsFQeKIIPtXZQc8CW3DntFK7EKS2Iw/OngDsxuVk
- pEt/rNuIZAXpu9a/DZoL24nQr9wxzll9arxysdXnuGdgY=
+Content-Transfer-Encoding: 8bit
 
-Hi Jeremy,
+On 05/07/2024 11:51, Krzysztof Kozlowski wrote:
+> Hi,
+> 
+> Resending (with added tags) because patchset was still not applied.
+> Daniel, can you pick it up?
 
-Am 05.07.24 um 17:03 schrieb Lukas Wunner:
-> On Fri, Jul 05, 2024 at 12:22:33PM +0200, Stefan Wahren wrote:
->> Am 05.07.24 um 10:48 schrieb Lukas Wunner:
->>> The real question is whether BCM2848 platforms likewise cannot disable
->>> the clock of the dwc2 controller or whether this is specific to the
->>> BCM2835.  Right now dwc2_set_bcm_params() is applied to both the
->>> BCM2848 and BCM2835.  If the BCM2848 behaves differently in this
->>> regard, we'd have to duplicate dwc2_set_bcm_params() for the BCM2835.
->>  From my understand BCM2848 refers to the same SoC, but the ACPI
->> implementation uses a different ID [2]. So I think this is safe.
->> [2] -
->> https://patches.linaro.org/project/linux-usb/patch/20210413215834.3126447-2-jeremy.linton@arm.com/
-> Careful there, the patch vaguely says...
->
->      With that added and identified as "BCM2848",
->      an id in use by other OSs for this device, the dw2
->      controller on the BCM2711 will work.
->
-> ...which sounds like they copy-pasted the BCM2848 id from somewhere else.
-> I would assume that BCM2848 is really a different SoC and not just
-> a different name for the BCM2835, but hopefully BroadCom folks will
-> be able to confirm or deny this (and thus the necessity of the quirk
-> on BCM2848 and not just on BCM2835).
-could you please clarify this situation?
+Applied, thanks
 
-Thanks
->
-> Thanks,
->
-> Lukas
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
