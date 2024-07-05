@@ -1,194 +1,159 @@
-Return-Path: <linux-pm+bounces-10699-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10700-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F01329289DA
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 15:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE02F9289F2
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 15:42:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A16A28A656
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 13:37:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 856E4281835
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 13:42:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CEC914C5BD;
-	Fri,  5 Jul 2024 13:34:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEB4914D6F9;
+	Fri,  5 Jul 2024 13:42:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="DBwN7dch"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bpWpiZWt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5571A14659D
-	for <linux-pm@vger.kernel.org>; Fri,  5 Jul 2024 13:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC9E14C58A
+	for <linux-pm@vger.kernel.org>; Fri,  5 Jul 2024 13:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720186474; cv=none; b=jEhE+YzRgqkvsJoWUk6GmWsJoJyzCyLljZzFdVd+7NDcVaUfTdUzMCjkm0/xP0zXFX6rN4st76LqdKbSjHPanoKV00IS6DvdJ1OKO1H+VxRNt2RDWxqy8DQ8bZrN53v7HOvzD705JXK3ucdRr5B+sdLm3/rASg9Gxd/W8Chsxyk=
+	t=1720186949; cv=none; b=dTXaMoNo+kGLzlj8gQycdKgnl1Rdcd4hzjh17K8dsZ3OcXHC7SYdef/QmFdNkien/zSKkqQSfsqunui8voURjHXQR7G7aaYxDVuE24y7FGdUmKPw8FHJ+ZzMVa/gC7vHrXS2mNxGU8tSXRucF8yfBJ0aJ/UBPxRx0bX8kLfcnEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720186474; c=relaxed/simple;
-	bh=/WWUk8xgbMeoX+XMjmJKMzm4jVM0QnM4PPaAAtS6ETg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EdGjnT4WuG0BUgDT6RWmwkRWd37IOJLwRV4KRmUPlOcpLY6USdZ072xrxIsOMkF4Xd7KaUdqPrzyWm+6EFU86/J9XBYDmHErP7kO4obDpDyphy4lS6XBaW+57rwR5X7igl/vOUablJ5+lTRvuSxVUFrWXlNfGViWFiu47E10o+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=DBwN7dch; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52e9a550e9fso2436144e87.0
-        for <linux-pm@vger.kernel.org>; Fri, 05 Jul 2024 06:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1720186469; x=1720791269; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+7lziJDkz8ksR4dmlddeHMdYw7zMgC8DIyGzxNLyJTo=;
-        b=DBwN7dchrM3Uhg+n02ERwvcj+HPkIr+eeN3Y0hVvZU+poqph18SqrUpsRb5dSvPXLP
-         Bl8bNTdNMs/SuoDAoRBr34bDHcresooRAlZ+WI4Z6SF3N6br9Jwyie3873hslJPTC8it
-         XI8TC8TvKqf0slKrVdh1Glb9oUi7fSWUcEaM52pS7/jP7I7Bs11b5DxPaxGn2xXcaH/p
-         D5LTJcH+d1K8VHnMEzisIELFthjn/kqnKQs1eEABc/BEZ8iafqaKpFnsUULTDsuErzoj
-         W9uYmuXDn4S8V82szriUbBspjQ3g5iX133Lc9WTmfo9usHFeIdvyjfV7sL3110MaU3y5
-         JHhQ==
+	s=arc-20240116; t=1720186949; c=relaxed/simple;
+	bh=xAiLtazfBXSZFhUCuJv5iLA8GUS2Erahe3O/6nbCjGE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UB+QFOeYb99vvprnMbBvGiSkQ0tlgPnB0joCiyDWI/ELeIVcP9Q8TtEVAufD39HLp2kqFLeQJHOQBBuUp8kaHLJaKkZq+mlCGGrjY7IRLvo8bOZl0gqREit+kt1/iNasOD+mRpib8osGdGrHWm5agtorCjc18uDXMHNPW5ri3I4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bpWpiZWt; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720186947;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lNWQiXa5WTonO6VnFXHoZW4uvs/niJejriJYafDuJeE=;
+	b=bpWpiZWtGij1UUtfdU8lo/VBPlZfJZBgH5ziz7t0RvheZGq/0IgI/1AS3c2TAMF6Ivp+yZ
+	siXFJZMR9y4pIWaaRPvJEePB0u4N/HkuekY66gXr00j9aCtjCUNjouYubmr9RdTtAqNFMj
+	JcxJ+Kog6hrcDU48UmIjUmN+P3ob5d0=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-392-9-SCHevqNb-MWL-Rw-zFOw-1; Fri, 05 Jul 2024 09:42:25 -0400
+X-MC-Unique: 9-SCHevqNb-MWL-Rw-zFOw-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-79ef85570d8so102143585a.1
+        for <linux-pm@vger.kernel.org>; Fri, 05 Jul 2024 06:42:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720186469; x=1720791269;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+7lziJDkz8ksR4dmlddeHMdYw7zMgC8DIyGzxNLyJTo=;
-        b=f67zC4MYTjPbfK3AXi1m7Fvtppsyb4zLUn3ZLQr/Hffvhe38TT3R5645kL4Wmi2LE1
-         HbM3jlEFDf5rc34tX8y62oRee0BX6/gzy+yrUBRzZdqeOXe3Cj1atLrv9M6OG0ia2hNn
-         79zMsHj64ynBuNKB1j2qez/JjEGZn6KkY4ptk9FDOy2WTX/VE7/KAHKYilKWSu9EjQyu
-         zH/ohcPd0nMRgqLfkTN+4yI4Pi3vbghb760x4mjRv+tYTKb2eVIMy78+weubq4Gj0i7I
-         X93d03oz9rsHdfyH6jnB+NgSSshTRb7PCZcbKY0P8zfHWcUzEXd84KozKfJHaqsW7WM4
-         QA6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWHouT+eaUNPGWjsR/PyaJwB8jc2wX2UEXQBfEzJkdL6OKe/4GCQi1xM9HYItGrjCm8iJnyt8db8pXl1wV0ttjWvuIPl0+94zc=
-X-Gm-Message-State: AOJu0Yzlf2ZK8ZrQzmCWo+PeXWKtjw4kF3YJm5F5/Vek0WhDhoOPsLRv
-	5UoaxmvbRuaqcrM/O6pE3YxBzMFKy7WZ5GsuzThT0RjIm5y6vwnrKSezmdSGasg4zNauJjeJu3S
-	Ck/AmjHDiXlmEaraH05Yb2SgsWWD3hY6vNzuLtw==
-X-Google-Smtp-Source: AGHT+IH002bET0sLDg515bzQ4elXCWBoy5idHfanq8GGKi/meSChCtgNax2EBm7zNVr+Mq15wxISI8Af7tGceGvs1Lk=
-X-Received: by 2002:a05:6512:3694:b0:52c:ebf6:9a87 with SMTP id
- 2adb3069b0e04-52ea0e00c5emr1457812e87.26.1720186469286; Fri, 05 Jul 2024
- 06:34:29 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1720186945; x=1720791745;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lNWQiXa5WTonO6VnFXHoZW4uvs/niJejriJYafDuJeE=;
+        b=Tt7D5ycVgyeepkkJ7aTkf0FRynK81KfkCwyAadvRORPJO7rXfV6HZVo6nf1d9lpbUJ
+         0Nduj0lNV9YajRLcCT43nX1zrJMV1ikY2r5VwKZndwm//R9H1T8GX3KF3L/3AOf2FGae
+         KcTMBWgOJIle91vdBYsLiU+3PpsKyBnJWdYeGKaI4yf/BCWwZBE9otJRi8uHCsCIeFbv
+         H62UsTZFRcvAaRqLGwKW4laSijnmNmZfIPpiHWkijjICEo2Di0qi5f8K4epZzMm0MvOl
+         eywWkt5oWQdG1iNHfU/BGsHUPAOf/Uajy7nwmggVZfwhMfLb9ZoKn5j0Tux9H0z8NYht
+         5MIw==
+X-Forwarded-Encrypted: i=1; AJvYcCWz8UkWSMMDSOcVAk3hwtJtqp/Pv8yISMRabFo45duB1L3B+mYv55IZ9eawoC4kUxjdkGTzH0HcEAzej4yIcrJdNiMJcyGktDA=
+X-Gm-Message-State: AOJu0YzBBDqSFAqWMiVMpFjgc2fU7le+j4Zfv4I9XOY94knKhVrd7Sh+
+	lVWR9wsOZv+cRnJD+sFD7KXQ2WSuCV/rvjBJiU7Lp78jLGO2Mk6oEdFh8OKqR7bYXbTeXZVGjIG
+	WOePnq6WAlpYLGHYhTWt9OiieGGHQBFA1Cvr7dBnKZYAyTHAvb6i21XQO
+X-Received: by 2002:a05:620a:13d2:b0:79d:7e5a:d044 with SMTP id af79cd13be357-79eef4c0f06mr737794685a.28.1720186944970;
+        Fri, 05 Jul 2024 06:42:24 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHzRoLCo4GeRRFCdesL0t0J6Xc2rhP3ZGCRDtPGGaxotQxYNzT1wzmgDzK5ccFskQ+43Nbdxg==
+X-Received: by 2002:a05:620a:13d2:b0:79d:7e5a:d044 with SMTP id af79cd13be357-79eef4c0f06mr737789985a.28.1720186944583;
+        Fri, 05 Jul 2024 06:42:24 -0700 (PDT)
+Received: from x1gen2nano ([2600:1700:1ff0:d0e0::b])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-79d69299b81sm773174785a.71.2024.07.05.06.42.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jul 2024 06:42:24 -0700 (PDT)
+Date: Fri, 5 Jul 2024 08:42:19 -0500
+From: Andrew Halaney <ahalaney@redhat.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Tengfei Fan <quic_tengfan@quicinc.com>, andersson@kernel.org, 
+	konrad.dybcio@linaro.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	djakov@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, 
+	jassisinghbrar@gmail.com, herbert@gondor.apana.org.au, davem@davemloft.net, 
+	manivannan.sadhasivam@linaro.org, will@kernel.org, joro@8bytes.org, conor@kernel.org, 
+	tglx@linutronix.de, amitk@kernel.org, thara.gopinath@gmail.com, 
+	linus.walleij@linaro.org, wim@linux-watchdog.org, linux@roeck-us.net, rafael@kernel.org, 
+	viresh.kumar@linaro.org, vkoul@kernel.org, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, mcoquelin.stm32@gmail.com, robimarko@gmail.com, 
+	bartosz.golaszewski@linaro.org, kishon@kernel.org, quic_wcheng@quicinc.com, 
+	alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org, agross@kernel.org, 
+	gregkh@linuxfoundation.org, quic_tdas@quicinc.com, robin.murphy@arm.com, 
+	daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com, 
+	quic_rjendra@quicinc.com, ulf.hansson@linaro.org, quic_sibis@quicinc.com, 
+	otto.pflueger@abscue.de, luca@z3ntu.xyz, neil.armstrong@linaro.org, abel.vesa@linaro.org, 
+	bhupesh.sharma@linaro.org, alexandre.torgue@foss.st.com, peppe.cavallaro@st.com, 
+	joabreu@synopsys.com, netdev@vger.kernel.org, lpieralisi@kernel.org, kw@linux.com, 
+	bhelgaas@google.com, krzysztof.kozlowski@linaro.org, u.kleine-koenig@pengutronix.de, 
+	dmitry.baryshkov@linaro.org, quic_cang@quicinc.com, danila@jiaxyga.com, 
+	quic_nitirawa@quicinc.com, mantas@8devices.com, athierry@redhat.com, 
+	quic_kbajaj@quicinc.com, quic_bjorande@quicinc.com, quic_msarkar@quicinc.com, 
+	quic_devipriy@quicinc.com, quic_tsoni@quicinc.com, quic_rgottimu@quicinc.com, 
+	quic_shashim@quicinc.com, quic_kaushalk@quicinc.com, quic_tingweiz@quicinc.com, 
+	quic_aiquny@quicinc.com, srinivas.kandagatla@linaro.org, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-phy@lists.infradead.org, linux-crypto@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	iommu@lists.linux.dev, linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, kernel@quicinc.com
+Subject: Re: [PATCH 29/47] dt-bindings: net: qcom,ethqos: add description for
+ qcs9100
+Message-ID: <gt35pxlulfowpbca3sb6nf5ble4lhq3kolmjyc275vtdcmeixx@gkctewz6tbwv>
+References: <20240703025850.2172008-1-quic_tengfan@quicinc.com>
+ <20240703025850.2172008-30-quic_tengfan@quicinc.com>
+ <u5ekupjqvgoehkl76pv7ljyqqzbnnyh6ci2dilfxfkcdvdy3dp@ehdujhkul7ow>
+ <f4162b7f-d957-4dd6-90a0-f65c1cbc213a@quicinc.com>
+ <add1bdda-2321-4c47-91ef-299f99385bc8@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240705-pwrseq-v1-0-31829b47fc72@amlogic.com> <20240705-pwrseq-v1-1-31829b47fc72@amlogic.com>
-In-Reply-To: <20240705-pwrseq-v1-1-31829b47fc72@amlogic.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Fri, 5 Jul 2024 15:34:18 +0200
-Message-ID: <CAMRc=Me+Fd_Kjgm0u0JhUatVEp=XS71xys82snAimpw2U5MQTw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: power: Add power sequence for Amloigc
- WCN chips
-To: yang.li@amlogic.com
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <add1bdda-2321-4c47-91ef-299f99385bc8@lunn.ch>
 
-On Fri, Jul 5, 2024 at 1:13=E2=80=AFPM Yang Li via B4 Relay
-<devnull+yang.li.amlogic.com@kernel.org> wrote:
->
-> From: Yang Li <yang.li@amlogic.com>
->
-> Add binding document to introduce power sequence of
-> Amlogic WCN chips.
->
+On Thu, Jul 04, 2024 at 06:03:14PM GMT, Andrew Lunn wrote:
+> On Thu, Jul 04, 2024 at 09:13:59AM +0800, Tengfei Fan wrote:
+> > 
+> > 
+> > On 7/3/2024 11:09 PM, Andrew Halaney wrote:
+> > > On Wed, Jul 03, 2024 at 10:58:32AM GMT, Tengfei Fan wrote:
+> > > > Add the compatible for the MAC controller on qcs9100 platforms. This MAC
+> > > > works with a single interrupt so add minItems to the interrupts property.
+> > > > The fourth clock's name is different here so change it. Enable relevant
+> > > > PHY properties. Add the relevant compatibles to the binding document for
+> > > > snps,dwmac as well.
+> > > 
+> > > This description doesn't match what was done in this patch, its what
+> > > Bart did when he made changes to add the sa8775 changes. Please consider
+> > > using a blurb indicating that this is the same SoC as sa8775p, just with
+> > > different firmware strategies or something along those lines?
+> > 
+> > I will update this commit message as you suggested.
+> 
+> Hi Andrew, Tengfei
+> 
+> Please trim emails when replying to just the needed context.
+> 
 
-Hi! Thanks for the interest in this new subsystem.
+Sorry, I'm always a little guilty of this. In this case I didn't trim
+since the patch was small and trimming the diff out would then make it
+tough to see how my comment about the description relates to the body of
+the patch. But I'll try and trim when appropriate. Just replying here to
+explain myself as this isn't the first time I've been suggested to trim
+more aggressively and I don't want folks to think I'm completely ignoring them.
 
-> Signed-off-by: Yang Li <yang.li@amlogic.com>
-> ---
->  .../bindings/power/amlogic,w155s2-pwrseq.yaml      | 62 ++++++++++++++++=
-++++++
->  1 file changed, 62 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/power/amlogic,w155s2-pwrse=
-q.yaml b/Documentation/devicetree/bindings/power/amlogic,w155s2-pwrseq.yaml
-> new file mode 100644
-> index 000000000000..f99a775fcf9b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/amlogic,w155s2-pwrseq.yaml
-> @@ -0,0 +1,62 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/amlogic,w155s2-pwrseq.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic power sequence for WCN chips
-> +
-> +maintainers:
-> +  - Yang Li <yang.li@amlogic.com>
-> +
-> +description:
-> +  The Amlogic WCN chip contains discrete modules for WLAN and Bluetooth.=
- Power on
-> +  Bluetooth and Wi-Fi respectively, including chip_en pull-up and bt_en =
-pull-up,
-> +  and generation of the 32.768KHz clock.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: amlogic,w155s2-pwrseq
-> +      - items:
-> +          - enum:
-> +              - amlogic,w265s1-pwrseq
-> +              - amlogic,w265p1-pwrseq
-> +              - amlogic,w265s2-pwrseq
-> +          - const: amlogic,w155s2-pwrseq
+Thanks,
+Andrew
 
-The name is wrong. There's no such device as 'pwrseq'. There's most
-likely some kind of a Power Management Unit and the compatible string
-must reflect this.
-
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description: clock provided to the controller (32.768KHz)
-> +
-> +  clock-names:
-> +    items:
-> +      - const: ext_clock
-> +
-> +  amlogic,chip-enable-gpios:
-> +    maxItems: 1
-> +    description: gpio specifier used to enable chipset
-
-Why not simply: chip-enable-gpios or even enable-gpios?
-
-> +
-> +  amlogic,bt-enable-gpios:
-> +    maxItems: 1
-> +    description: gpio specifier used to enable BT
-> +
-
-Same here: should be simply bt-enable-gpios.
-
-Bart
-
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - amlogic,chip-enable-gpios
-> +  - amlogic,bt-enable-gpios
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    wcn_pwrseq {
-> +        compatible =3D "amlogic,w155s2-pwrseq";
-> +        clocks =3D <&extclk>;
-> +        clock-names =3D "ext_clock";
-> +        amlogic,chip-enable-gpios =3D <&gpio 7 GPIO_ACTIVE_HIGH>;
-> +        amlogic,bt-enable-gpios =3D <&gpio 17 GPIO_ACTIVE_HIGH>;
-> +    };
->
-> --
-> 2.42.0
->
->
 
