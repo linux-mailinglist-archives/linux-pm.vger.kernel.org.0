@@ -1,52 +1,52 @@
-Return-Path: <linux-pm+bounces-10688-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10686-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93CBE928795
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 13:13:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 532CB92878F
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 13:13:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0FEEFB241D5
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 11:13:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D69591F21B31
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 11:13:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB9961494D8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E44381494CC;
 	Fri,  5 Jul 2024 11:13:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UoM4hH0/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ndAmxVER"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94D3148853;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94451442FD;
 	Fri,  5 Jul 2024 11:13:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720178008; cv=none; b=e//GxiyG619bgUnZj21/2q1eTunBR86J2EnMr4SVkFUBeYvfUQfJhH/sBtaT90bWVxRVbaC/KBdEVbSOYhxnaIfbGkoynYbo9o095DhjtKCes9VAJptObrPsqrSXi5QJeg5ZuXZ/raPgZc98XaXtBvi5i30Zt6SdGR6w0yl85yQ=
+	t=1720178008; cv=none; b=PzLl3HJ2v34+FPv5QJjunbG/Qx4p1N/whswUoz12ND1V2DJnLyIRuTDWpBnDWz1jS/kXexjrr0lOzLjURZbzy4c9F6tcm5f3lD/e6wN/SsvJjgoYKm5u/3K7fW+mYPlB1qQSYhd8d4PhJVlBD8l956l6oZvrspaK/QveZWsPYUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1720178008; c=relaxed/simple;
-	bh=HryCnz5qoaUXH/FBSiZsvPjDEnxJY2JJUVkJawwHDVs=;
+	bh=gM9KnxmaYBefs+3c9rtIvUowsz/8HqevZUOFQO1FdSA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RZ68XcESeibcKYWuoQU09FTBJSoS7ZOB3Qs0uAvAFoAHOHt0OTnVFUjZf6Fy25r8/mx2+hGVmPknJGbU3uVdpe1/CtoZltD1oaOF2vdyg2CDE9wA9CnJorl1hQeEoqwXmQXRaWiSarD3uHLTcs8+jsUHwK2oLy1iOJ3xZCYM/50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UoM4hH0/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6282FC4AF0A;
+	 In-Reply-To:To:Cc; b=Av03qKCOnJJfMeyZdMaWhDOxfKp13/0dF/jWglJ/bV6czJwqlon/CY07DsPpFN3E5+NRMqwWxq2rdnOQnubbUHoJ3Q18CQKwgKHdvOayPwmClNmulGwhvxFkUQp+a9AXR10mtlfIx36a0tuS+OlQ8Izs42/jeOoJqlp4mA83sOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ndAmxVER; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 69BF0C32781;
 	Fri,  5 Jul 2024 11:13:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1720178008;
-	bh=HryCnz5qoaUXH/FBSiZsvPjDEnxJY2JJUVkJawwHDVs=;
+	bh=gM9KnxmaYBefs+3c9rtIvUowsz/8HqevZUOFQO1FdSA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=UoM4hH0/f8OvRpZci/CA9xk1NWZnkijbFp1/8mZg6BIGvdFsjffJQb7JzYZfenicb
-	 iBg6dnFS64ASjqiQUSPhI3P9QlTYig0/jmGS5y0omlRIwUSsQ79okmOTQFEgv543BO
-	 aVEe7LSGRDz9BhsfrJHkoUZJmTioqlJ19uJsejG3KskOMzYtYlUbvt4skqQiDGdmDq
-	 ao/CFPh2y6AtK5A+Vi+PqK9ow/OCm30Md/lR9ZwsPc/RndDM+UPQB6LFzx/tEE7Kb8
-	 lBuwETdiTXrqUS/u+udSuNW95NK+WOZ7LjFHBaqqTk+Pc5gC4SIrdk3C47S/b8bPo3
-	 zSwZ4X0VLKchQ==
+	b=ndAmxVEROAcSdGban1ehA+SH9UdFlPywpCZC7HNnNI+omD+1GY75vw5zHd6bWlWNG
+	 n5DI0vHSi8/Bdkulw9h30GzOm6pdFc5drrprMrzopG+jlRkavupvzmo8EeSDt0v/Jf
+	 Awtq4sNCl8ogOumAdog6KTRcFE+WeknLoheugzK47HmLJjGvOHyvWze7P7P41TcShF
+	 OdXMyRxmzPHno0pPzuIKn44+PzaAtNM6mohur1nLFStB4AcyXXJgszJL+H39DSx/+e
+	 cl8u11F9wcQHdBAdah2LZjIAHz11MKSgiXhhL9ox1dbruAAeGl/xaW61dkhMNhQQhu
+	 Cwl2CDIoxV0DA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DA62C3271F;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B308C3DA40;
 	Fri,  5 Jul 2024 11:13:28 +0000 (UTC)
 From: Yang Li via B4 Relay <devnull+yang.li.amlogic.com@kernel.org>
-Date: Fri, 05 Jul 2024 19:13:25 +0800
-Subject: [PATCH 1/3] dt-bindings: power: Add power sequence for Amloigc WCN
+Date: Fri, 05 Jul 2024 19:13:26 +0800
+Subject: [PATCH 2/3] power: sequenceing: Add power sequence for Amlogic WCN
  chips
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240705-pwrseq-v1-1-31829b47fc72@amlogic.com>
+Message-Id: <20240705-pwrseq-v1-2-31829b47fc72@amlogic.com>
 References: <20240705-pwrseq-v1-0-31829b47fc72@amlogic.com>
 In-Reply-To: <20240705-pwrseq-v1-0-31829b47fc72@amlogic.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -64,11 +64,11 @@ To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-pm@vger.kernel.org, Yang Li <yang.li@amlogic.com>
 X-Mailer: b4 0.13-dev-f0463
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1720178006; l=2253;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1720178006; l=7619;
  i=yang.li@amlogic.com; s=20240418; h=from:subject:message-id;
- bh=Auw5UiFZ9CP6p9qGv3EDPmIfB9jiHZ0hXlsvvoTN/ac=;
- b=A3eWNA2Xhb2xqKFtC1NDx9O6zNPk8xO2nQ2dBMcUTAi9r8HL2TjivlHCg5VDBH6AYeEOK2Ear
- 1bvNUV8YZQHAuYjZKvMOISrEVof3wJSwqigoXnWT8ZWMn5eoq8SQYtK
+ bh=fusHaIg3W/yshsJI12RRwPi4r8wzlUyT/DZ/71Atthg=;
+ b=xBFSKEUkFyv9tbViHER0T6AOEI4XaVkjkqWO2D12mt/jg7tb0QjU9O/QHyCxsOQyHQxI1YX+4
+ xO/9OUBHwAqB4vh6/Dr88KdbovrFS/D30t5Z4bbdzfvf6uHE7zYNRih
 X-Developer-Key: i=yang.li@amlogic.com; a=ed25519;
  pk=86OaNWMr3XECW9HGNhkJ4HdR2eYA5SEAegQ3td2UCCs=
 X-Endpoint-Received: by B4 Relay for yang.li@amlogic.com/20240418 with
@@ -78,82 +78,256 @@ Reply-To: yang.li@amlogic.com
 
 From: Yang Li <yang.li@amlogic.com>
 
-Add binding document to introduce power sequence of
-Amlogic WCN chips.
+Add power sequence for Bluetooth and Wi-Fi respectively, including chip_en
+pull-up and bt_en pull-up, and generation of the 32.768 clock.
 
 Signed-off-by: Yang Li <yang.li@amlogic.com>
 ---
- .../bindings/power/amlogic,w155s2-pwrseq.yaml      | 62 ++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ drivers/power/sequencing/Kconfig          |   7 +
+ drivers/power/sequencing/Makefile         |   1 +
+ drivers/power/sequencing/pwrseq-aml-wcn.c | 209 ++++++++++++++++++++++++++++++
+ 3 files changed, 217 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/power/amlogic,w155s2-pwrseq.yaml b/Documentation/devicetree/bindings/power/amlogic,w155s2-pwrseq.yaml
+diff --git a/drivers/power/sequencing/Kconfig b/drivers/power/sequencing/Kconfig
+index c9f1cdb66524..65d3b2c20bfb 100644
+--- a/drivers/power/sequencing/Kconfig
++++ b/drivers/power/sequencing/Kconfig
+@@ -26,4 +26,11 @@ config POWER_SEQUENCING_QCOM_WCN
+ 	  this driver is needed for correct power control or else we'd risk not
+ 	  respecting the required delays between enabling Bluetooth and WLAN.
+ 
++config POWER_SEQUENCING_AML_WCN
++	tristate "Amlogic WCN family PMU driver"
++	default m if ARCH_MESON
++	help
++	  Say Y here to enable the power sequencing driver for Amlogic
++	  WCN Bluetooth/WLAN chipsets.
++
+ endif
+diff --git a/drivers/power/sequencing/Makefile b/drivers/power/sequencing/Makefile
+index 2eec2df7912d..32706daf8f0f 100644
+--- a/drivers/power/sequencing/Makefile
++++ b/drivers/power/sequencing/Makefile
+@@ -4,3 +4,4 @@ obj-$(CONFIG_POWER_SEQUENCING)		+= pwrseq-core.o
+ pwrseq-core-y				:= core.o
+ 
+ obj-$(CONFIG_POWER_SEQUENCING_QCOM_WCN)	+= pwrseq-qcom-wcn.o
++obj-$(CONFIG_POWER_SEQUENCING_AML_WCN)	+= pwrseq-aml-wcn.o
+diff --git a/drivers/power/sequencing/pwrseq-aml-wcn.c b/drivers/power/sequencing/pwrseq-aml-wcn.c
 new file mode 100644
-index 000000000000..f99a775fcf9b
+index 000000000000..6f5bfcf60b9c
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/amlogic,w155s2-pwrseq.yaml
-@@ -0,0 +1,62 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/amlogic,w155s2-pwrseq.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/power/sequencing/pwrseq-aml-wcn.c
+@@ -0,0 +1,209 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR MIT)
++/*
++ * Copyright (C) 2024 Amlogic, Inc. All rights reserved
++ */
 +
-+title: Amlogic power sequence for WCN chips
++#include <linux/clk.h>
++#include <linux/delay.h>
++#include <linux/device.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/of.h>
++#include <linux/gpio.h>
++#include <linux/of_gpio.h>
++#include <linux/platform_device.h>
++#include <linux/pwrseq/provider.h>
++#include <linux/string.h>
++#include <linux/types.h>
 +
-+maintainers:
-+  - Yang Li <yang.li@amlogic.com>
++struct pwrseq_aml_wcn_ctx {
++	struct pwrseq_device *pwrseq;
++	int bt_enable_gpio;
++	int chip_enable_gpio;
++	struct clk *lpo_clk;
++	unsigned int pwr_count;
++};
 +
-+description:
-+  The Amlogic WCN chip contains discrete modules for WLAN and Bluetooth. Power on
-+  Bluetooth and Wi-Fi respectively, including chip_en pull-up and bt_en pull-up,
-+  and generation of the 32.768KHz clock.
++static DEFINE_MUTEX(pwrseq_lock);
 +
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: amlogic,w155s2-pwrseq
-+      - items:
-+          - enum:
-+              - amlogic,w265s1-pwrseq
-+              - amlogic,w265p1-pwrseq
-+              - amlogic,w265s2-pwrseq
-+          - const: amlogic,w155s2-pwrseq
++static int pwrseq_aml_wcn_chip_enable(struct pwrseq_device *pwrseq)
++{
++	struct pwrseq_aml_wcn_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
++	int err;
 +
-+  clocks:
-+    maxItems: 1
-+    description: clock provided to the controller (32.768KHz)
++	mutex_lock(&pwrseq_lock);
++	if (ctx->pwr_count == 0) {
++		gpio_request(ctx->chip_enable_gpio, "chip-enable-gpios");
++		gpio_direction_output(ctx->chip_enable_gpio, 1);
++		gpio_free(ctx->chip_enable_gpio);
 +
-+  clock-names:
-+    items:
-+      - const: ext_clock
++		if (!IS_ERR(ctx->lpo_clk)) {
++			err = clk_prepare_enable(ctx->lpo_clk);
++			if (err) {
++				mutex_unlock(&pwrseq_lock);
++				return err;
++			}
++		}
++	}
 +
-+  amlogic,chip-enable-gpios:
-+    maxItems: 1
-+    description: gpio specifier used to enable chipset
++	ctx->pwr_count++;
++	mutex_unlock(&pwrseq_lock);
++	return 0;
++}
 +
-+  amlogic,bt-enable-gpios:
-+    maxItems: 1
-+    description: gpio specifier used to enable BT
++static int pwrseq_aml_wcn_chip_disable(struct pwrseq_device *pwrseq)
++{
++	struct pwrseq_aml_wcn_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
 +
-+required:
-+  - compatible
-+  - clocks
-+  - clock-names
-+  - amlogic,chip-enable-gpios
-+  - amlogic,bt-enable-gpios
++	mutex_lock(&pwrseq_lock);
++	if (--ctx->pwr_count == 0) {
++		gpio_request(ctx->chip_enable_gpio, "chip-enable-gpios");
++		gpio_direction_output(ctx->chip_enable_gpio, 0);
++		gpio_free(ctx->chip_enable_gpio);
 +
-+additionalProperties: false
++		if (!IS_ERR(ctx->lpo_clk))
++			clk_disable_unprepare(ctx->lpo_clk);
++	}
 +
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    wcn_pwrseq {
-+        compatible = "amlogic,w155s2-pwrseq";
-+        clocks = <&extclk>;
-+        clock-names = "ext_clock";
-+        amlogic,chip-enable-gpios = <&gpio 7 GPIO_ACTIVE_HIGH>;
-+        amlogic,bt-enable-gpios = <&gpio 17 GPIO_ACTIVE_HIGH>;
-+    };
++	mutex_unlock(&pwrseq_lock);
++	return 0;
++}
++
++static const struct pwrseq_unit_data pwrseq_aml_wcn_chip_power_unit_data = {
++	.name = "chip-enable",
++	.enable = pwrseq_aml_wcn_chip_enable,
++	.disable = pwrseq_aml_wcn_chip_disable,
++};
++
++static const struct pwrseq_unit_data *pwrseq_aml_wcn_unit_deps[] = {
++	&pwrseq_aml_wcn_chip_power_unit_data,
++	NULL
++};
++
++static int pwrseq_aml_wcn_bt_enable(struct pwrseq_device *pwrseq)
++{
++	struct pwrseq_aml_wcn_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
++
++	gpio_request(ctx->bt_enable_gpio, "bt-enable-gpios");
++	gpio_direction_output(ctx->bt_enable_gpio, 1);
++	gpio_free(ctx->bt_enable_gpio);
++
++	/* wait 100ms for bluetooth controller power on  */
++	msleep(100);
++
++	return 0;
++}
++
++static int pwrseq_aml_wcn_bt_disable(struct pwrseq_device *pwrseq)
++{
++	struct pwrseq_aml_wcn_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
++
++	gpio_request(ctx->bt_enable_gpio, "bt-enable-gpios");
++	gpio_direction_output(ctx->bt_enable_gpio, 0);
++	gpio_free(ctx->bt_enable_gpio);
++
++	return 0;
++}
++
++static const struct pwrseq_unit_data pwrseq_aml_wcn_bt_unit_data = {
++	.name = "bluetooth-enable",
++	.deps = pwrseq_aml_wcn_unit_deps,
++	.enable = pwrseq_aml_wcn_bt_enable,
++	.disable = pwrseq_aml_wcn_bt_disable,
++};
++
++static const struct pwrseq_unit_data pwrseq_aml_wcn_wlan_unit_data = {
++	.name = "wlan-enable",
++	.deps = pwrseq_aml_wcn_unit_deps,
++};
++
++static const struct pwrseq_target_data pwrseq_aml_wcn_bt_target_data = {
++	.name = "bluetooth",
++	.unit = &pwrseq_aml_wcn_bt_unit_data,
++};
++
++static const struct pwrseq_target_data pwrseq_aml_wcn_wlan_target_data = {
++	.name = "wlan",
++	.unit = &pwrseq_aml_wcn_wlan_unit_data,
++};
++
++static const struct pwrseq_target_data *pwrseq_aml_wcn_targets[] = {
++	&pwrseq_aml_wcn_bt_target_data,
++	&pwrseq_aml_wcn_wlan_target_data,
++	NULL
++};
++
++static int pwrseq_aml_wcn_match(struct pwrseq_device *pwrseq,
++				 struct device *dev)
++{
++	struct device_node *dev_node = dev->of_node;
++
++	if (!of_property_present(dev_node, "amlogic,wcn-pwrseq"))
++		return 0;
++
++	return 1;
++}
++
++static int pwrseq_aml_wcn_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct pwrseq_aml_wcn_ctx *ctx;
++	struct pwrseq_config config;
++
++	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++
++	ctx->bt_enable_gpio = of_get_named_gpio(dev->of_node,
++					       "amlogic,bt-enable-gpios", 0);
++	if (!gpio_is_valid(ctx->bt_enable_gpio))
++		return dev_err_probe(dev, ctx->bt_enable_gpio,
++				"Failed to get the bt enable GPIO");
++
++	ctx->chip_enable_gpio = of_get_named_gpio(dev->of_node,
++					       "amlogic,chip-enable-gpios", 0);
++	if (!gpio_is_valid(ctx->chip_enable_gpio))
++		return dev_err_probe(dev, ctx->bt_enable_gpio,
++					"Failed to get the chip enable GPIO");
++
++	ctx->lpo_clk = devm_clk_get_optional(dev, NULL);
++	if (IS_ERR(ctx->lpo_clk))
++		return dev_err_probe(dev, PTR_ERR(ctx->lpo_clk),
++				"Failed to get the clock source");
++
++	memset(&config, 0, sizeof(config));
++
++	config.parent = dev;
++	config.owner = THIS_MODULE;
++	config.drvdata = ctx;
++	config.match = pwrseq_aml_wcn_match;
++	config.targets = pwrseq_aml_wcn_targets;
++
++	ctx->pwr_count = 0;
++	ctx->pwrseq = devm_pwrseq_device_register(dev, &config);
++	if (IS_ERR(ctx->pwrseq))
++		return dev_err_probe(dev, PTR_ERR(ctx->pwrseq),
++				     "Failed to register the power sequencer\n");
++
++	return 0;
++}
++
++static const struct of_device_id pwrseq_aml_wcn_of_match[] = {
++	{ .compatible = "amlogic,w155s2-pwrseq" },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(of, pwrseq_aml_wcn_of_match);
++
++static struct platform_driver pwrseq_aml_wcn_driver = {
++	.driver = {
++		.name = "pwrseq-aml_wcn",
++		.of_match_table = pwrseq_aml_wcn_of_match,
++	},
++	.probe = pwrseq_aml_wcn_probe,
++};
++module_platform_driver(pwrseq_aml_wcn_driver);
++
++MODULE_AUTHOR("Yang Li <yang.li@amlogic.com>");
++MODULE_DESCRIPTION("Amlogic WCN PMU power sequencing driver");
++MODULE_LICENSE("GPL");
 
 -- 
 2.42.0
