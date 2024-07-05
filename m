@@ -1,131 +1,113 @@
-Return-Path: <linux-pm+bounces-10719-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10720-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D48FA928E1B
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 22:22:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB88A928EB7
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 23:14:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 119DE1C21EA2
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 20:22:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 715E31F22407
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 21:14:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E5E616D9D7;
-	Fri,  5 Jul 2024 20:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="kf5Yh2XB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AC3414037C;
+	Fri,  5 Jul 2024 21:14:28 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03BE9135417;
-	Fri,  5 Jul 2024 20:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818AC13CFA4;
+	Fri,  5 Jul 2024 21:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720210957; cv=none; b=ZIaIDGwX99YInJttPhwi4hw9Wk1sS8a9H+jD0CKAyegbwfWbhptflmXhtbGl8Cx3aGVXoL918QSujE/4Fs7VShn4keaEHHswdA/hVDH9nPmLkqYnhTHdc/JjliM4RBKXeiY3WJktWvLmlfpYa6zPqQ2iUWtXv0ZwrYWpaqOpLLQ=
+	t=1720214068; cv=none; b=E/HhAO0t8f20bE2sTwTod2C0YyyN4ThVWg2BBYDLljpJCcThrKSjnlbkXBAgY6KnGtREY67o1pWkA6HvT5/DtTJehKBOsx1efpQqggWUl9sSaV3vjNkf5zJyuWcCm/lrC6pa39lDg8DB/l0LJEQGokpGNZvpeUW7XTSA5eIyilE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720210957; c=relaxed/simple;
-	bh=iQ+b5Jx7WMdrTUsanaaaUzqA8tHQvM7MXl7JMEqouCQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=u6PagdB1IRgvFBZlvHJFv4F8oLpQH1HelUpmuSU3Fo+KF3WMmLFjyc9NEO4jFlUQ3ukMRJc00V3mc6LsJ6uFF0i9QwMvjVRk3mrEaB+h8K+62w1S5I/ngvDnazEGa7Mm7zhZe+x7heF9kJ9ZlhkuPx3lmIHPcyJf5SwncnBYMGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=kf5Yh2XB reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id c4c2457a26282e1f; Fri, 5 Jul 2024 21:22:32 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
+	s=arc-20240116; t=1720214068; c=relaxed/simple;
+	bh=OtzqFyB7K35uLIMVNqJqPm5ZCsRSwSZvqb4rrNMEv1o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y8gu6BWktcZBqzIH643uAnxfdTpnfPFa7D/u7+CAeiBxPXQSFe793i+Ii9XfGLy7OkSIEUHvU5naOH+ABYJfUbxnXNaCh563iK3AsBqMVGZiCE4xRS+uoXBh22JBA4cqfrroqLiM6EDMN/OebwIbfwTiswE7GTs+UelZ52/9bBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.78.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id AF27F7F5773;
-	Fri,  5 Jul 2024 21:22:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1720207352;
-	bh=iQ+b5Jx7WMdrTUsanaaaUzqA8tHQvM7MXl7JMEqouCQ=;
-	h=From:To:Cc:Subject:Date;
-	b=kf5Yh2XBwtGJA/bx0D7vX12i68f4o/QJakhWRzb1ZRmzVHEIVXXp7wPgMDhgPUDfM
-	 UcymDvABuizND04yru9QsOhXihS+tMXPdfgDzjYX+AR8MG41fq3rPgYQiOAvrBu0wh
-	 YhzmB58RRtfkNHL6NMYv5Qoqlt4T6oSIaiqfLZ308MDWe+yP2mPW4RWV5quOBLZETs
-	 goREv6/q9yHelrk8bxmlCEFLJG/xIuArSDludk5jyUn9PqDaXZODIJdy46RDEDdwFh
-	 MIF1e5007tb/QYKW4KAyYv+jPdC7t7AFMbaw6v7k8m6U/uRccwTEz7QDoyPCeRc0Eb
-	 Pfl64nIiHfJ0g==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
- LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
-Subject:
- [PATCH v1] thermal: core: Simplify list sorting in
- __thermal_zone_device_update()
-Date: Fri, 05 Jul 2024 21:22:31 +0200
-Message-ID: <2745398.mvXUDI8C0e@rjwysocki.net>
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout2.hostsharing.net (Postfix) with ESMTPS id BF5BD2800B750;
+	Fri,  5 Jul 2024 23:14:14 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 99DB832455; Fri,  5 Jul 2024 23:14:14 +0200 (CEST)
+Date: Fri, 5 Jul 2024 23:14:14 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Jeremy Linton <jeremy.linton@arm.com>
+Cc: Stefan Wahren <wahrenst@gmx.net>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Minas Harutyunyan <hminas@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Peter Robinson <pbrobinson@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+Subject: Re: [PATCH 09/11] usb: dwc2: Skip clock gating on Broadcom SoCs
+Message-ID: <ZohiJgyaDwAoGtAx@wunner.de>
+References: <20240630153652.318882-1-wahrenst@gmx.net>
+ <20240630153652.318882-10-wahrenst@gmx.net>
+ <95762956-b46a-4dfa-b22f-bccbfa39558d@broadcom.com>
+ <ZoezRpXBgB1B5WjB@wunner.de>
+ <4502d826-d80c-4a98-a889-da7badfa698e@gmx.net>
+ <ZogLXYopViQO11ta@wunner.de>
+ <43fa421c-5e5b-40a6-a546-d80e753586e3@gmx.net>
+ <38e46b44-6248-45e8-bdf9-66008a2fe290@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrvddugddufeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <38e46b44-6248-45e8-bdf9-66008a2fe290@arm.com>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Fri, Jul 05, 2024 at 12:16:14PM -0500, Jeremy Linton wrote:
+> > Am 05.07.24 um 17:03 schrieb Lukas Wunner:
+> > > Careful there, the patch vaguely says...
+> > > 
+> > >     With that added and identified as "BCM2848",
+> > >     an id in use by other OSs for this device, the dw2
+> > >     controller on the BCM2711 will work.
+> > > 
+> > > ...which sounds like they copy-pasted the BCM2848 id from somewhere else.
+> > > I would assume that BCM2848 is really a different SoC and not just
+> > > a different name for the BCM2835, but hopefully BroadCom folks will
+> > > be able to confirm or deny this (and thus the necessity of the quirk
+> > > on BCM2848 and not just on BCM2835).
+> 
+> This id comes from the edk2-platforms ACPI tables and is currently used by
+> both the rpi3 and rpi4, and AFAIK nothing else as the rpi5-dev work is
+> currently only exposing XHCI.
+> 
+> The ID is strictly the USB controller not the SoC. Its a bit confusingly
+> named, but something we inherited from the much older windows/edk2 port,
+> where it appears that the peripheral HID's were just picked in numerical
+> order.
+> 
+> [0] https://github.com/tianocore/edk2-platforms/blob/12f68d29abdc9d703f67bd743fdec23ebb1e966e/Platform/RaspberryPi/AcpiTables/GpuDevs.asl#L15
 
-Notice that it is not necessary to sort way_down_list in descending
-order.  Instead, it can be sorted in ascending order, like way_up_list,
-and walked in reverse order.
+So BCM2848, BCM2849, BCM2850 and so on are just made-up IDs
+for a Windows/EDK2 port that got cargo-culted into the kernel?
+Yikes!
 
-Use this observation to simplify list sorting slightly in
-__thermal_zone_device_update() which also causes the code to
-be somewhat more straightforward and so easier to follow.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_core.c |   10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -487,16 +487,14 @@ static void thermal_trip_crossed(struct
- 	thermal_governor_trip_crossed(governor, tz, trip, crossed_up);
- }
- 
--static int thermal_trip_notify_cmp(void *ascending, const struct list_head *a,
-+static int thermal_trip_notify_cmp(void *not_used, const struct list_head *a,
- 				   const struct list_head *b)
- {
- 	struct thermal_trip_desc *tda = container_of(a, struct thermal_trip_desc,
- 						     notify_list_node);
- 	struct thermal_trip_desc *tdb = container_of(b, struct thermal_trip_desc,
- 						     notify_list_node);
--	int ret = tdb->notify_temp - tda->notify_temp;
--
--	return ascending ? ret : -ret;
-+	return tdb->notify_temp - tda->notify_temp;
- }
- 
- void __thermal_zone_device_update(struct thermal_zone_device *tz,
-@@ -525,12 +523,12 @@ void __thermal_zone_device_update(struct
- 
- 	thermal_zone_set_trips(tz);
- 
--	list_sort(&way_up_list, &way_up_list, thermal_trip_notify_cmp);
-+	list_sort(NULL, &way_up_list, thermal_trip_notify_cmp);
- 	list_for_each_entry(td, &way_up_list, notify_list_node)
- 		thermal_trip_crossed(tz, &td->trip, governor, true);
- 
- 	list_sort(NULL, &way_down_list, thermal_trip_notify_cmp);
--	list_for_each_entry(td, &way_down_list, notify_list_node)
-+	list_for_each_entry_reverse(td, &way_down_list, notify_list_node)
- 		thermal_trip_crossed(tz, &td->trip, governor, false);
- 
- 	if (governor->manage)
-
-
-
+Has anyone checked whether they collide with actual Broadcom products?
 
