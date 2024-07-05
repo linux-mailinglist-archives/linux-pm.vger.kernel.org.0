@@ -1,66 +1,63 @@
-Return-Path: <linux-pm+bounces-10716-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10719-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48EC3928DE4
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 21:46:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D48FA928E1B
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 22:22:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA33BB20F69
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 19:46:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 119DE1C21EA2
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 20:22:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B13D71B25;
-	Fri,  5 Jul 2024 19:46:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E5E616D9D7;
+	Fri,  5 Jul 2024 20:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="Fdx95Ees"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="kf5Yh2XB"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B78681E;
-	Fri,  5 Jul 2024 19:46:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03BE9135417;
+	Fri,  5 Jul 2024 20:22:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720208797; cv=none; b=Yo//TvCg2L3XMGF/AKhXckSmb2H4yx0upm591eIipworz5dpN0XO+tYqBBcv3rMLcDB6rQM/Vagxk1v8dmYHL8zQZVZDfYyrDm0GMtkrNql16mHOIuzY5IAzOZyQFl8/RoeEmlzCxDlIdnsPTk/cKiwzU01qPDsySz6sD0k5d40=
+	t=1720210957; cv=none; b=ZIaIDGwX99YInJttPhwi4hw9Wk1sS8a9H+jD0CKAyegbwfWbhptflmXhtbGl8Cx3aGVXoL918QSujE/4Fs7VShn4keaEHHswdA/hVDH9nPmLkqYnhTHdc/JjliM4RBKXeiY3WJktWvLmlfpYa6zPqQ2iUWtXv0ZwrYWpaqOpLLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720208797; c=relaxed/simple;
-	bh=+Hnc0W3VFjT04dRzb+V+EIXQp3/8mibNcLKXb6XAYuk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SoIUFwdOn1YPHocW8yTwMxP7CHmC1X2IA4wjzPMD25mKXJrg6ICAS1DaizLYWlTNuCRqFad1xDyC61H6mc6r3sNa8AJBBBtGd9ssvFoZwNxhtLxMSd3+NTol7i1zuz0eihd0t+Eb21esoGzMFV8a901oDoLVdXdG8RudfSlF2as=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=Fdx95Ees reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	s=arc-20240116; t=1720210957; c=relaxed/simple;
+	bh=iQ+b5Jx7WMdrTUsanaaaUzqA8tHQvM7MXl7JMEqouCQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=u6PagdB1IRgvFBZlvHJFv4F8oLpQH1HelUpmuSU3Fo+KF3WMmLFjyc9NEO4jFlUQ3ukMRJc00V3mc6LsJ6uFF0i9QwMvjVRk3mrEaB+h8K+62w1S5I/ngvDnazEGa7Mm7zhZe+x7heF9kJ9ZlhkuPx3lmIHPcyJf5SwncnBYMGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=kf5Yh2XB reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id 512e5ef9af243a9b; Fri, 5 Jul 2024 21:46:33 +0200
+ id c4c2457a26282e1f; Fri, 5 Jul 2024 21:22:32 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 91CB27F5774;
-	Fri,  5 Jul 2024 21:46:32 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id AF27F7F5773;
+	Fri,  5 Jul 2024 21:22:31 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1720208793;
-	bh=+Hnc0W3VFjT04dRzb+V+EIXQp3/8mibNcLKXb6XAYuk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Fdx95EesRkYkh3+t2/+muioHxJMN3+RXFdvWR1waKCe7FSL6WDa6wjMqTYkXrIsbw
-	 w5XULUwxQsrOORKTOz7PZZV+apYHSTdP921CwHCzrxVRsACkf0heX0GiiQSLeeRzEt
-	 RNPE+O7oOoOsw3G7c6Usq5S4y4GTXa7LcDaCHVitB+YJxNF0NtoKzc5L3UV5Iv2vp7
-	 OJE0IbLWJRn7LIT2ZVhDB7xVv1zYNra4EcsycIJQ+4QL30jwql6b1zCcPtbjcIyA3V
-	 lYSaDo/bhKbEOc6hGPouDi8UumIrsB2jbt6Dn8PMPX1hrogRxxb3rBvLNIWVMw7tUb
-	 YDwY/bhlsVJjA==
+	s=dkim; t=1720207352;
+	bh=iQ+b5Jx7WMdrTUsanaaaUzqA8tHQvM7MXl7JMEqouCQ=;
+	h=From:To:Cc:Subject:Date;
+	b=kf5Yh2XBwtGJA/bx0D7vX12i68f4o/QJakhWRzb1ZRmzVHEIVXXp7wPgMDhgPUDfM
+	 UcymDvABuizND04yru9QsOhXihS+tMXPdfgDzjYX+AR8MG41fq3rPgYQiOAvrBu0wh
+	 YhzmB58RRtfkNHL6NMYv5Qoqlt4T6oSIaiqfLZ308MDWe+yP2mPW4RWV5quOBLZETs
+	 goREv6/q9yHelrk8bxmlCEFLJG/xIuArSDludk5jyUn9PqDaXZODIJdy46RDEDdwFh
+	 MIF1e5007tb/QYKW4KAyYv+jPdC7t7AFMbaw6v7k8m6U/uRccwTEz7QDoyPCeRc0Eb
+	 Pfl64nIiHfJ0g==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
  LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
 Subject:
- [PATCH v2 2/2] thermal: core: Add sanity check for polling_delay and
- passive_delay
-Date: Fri, 05 Jul 2024 21:46:26 +0200
-Message-ID: <4940808.31r3eYUQgx@rjwysocki.net>
-In-Reply-To: <2746673.mvXUDI8C0e@rjwysocki.net>
-References: <2746673.mvXUDI8C0e@rjwysocki.net>
+ [PATCH v1] thermal: core: Simplify list sorting in
+ __thermal_zone_device_update()
+Date: Fri, 05 Jul 2024 21:22:31 +0200
+Message-ID: <2745398.mvXUDI8C0e@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -71,46 +68,63 @@ Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: spam:low
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrvddugddugedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuufhprghmkfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhr
- tghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomh
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrvddugddufeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomh
 X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-If polling_delay is nonzero and passive_delay is 0, the thermal zone
-will use polling except when tz->passive is nonzero, which does not make
-sense.
+Notice that it is not necessary to sort way_down_list in descending
+order.  Instead, it can be sorted in ascending order, like way_up_list,
+and walked in reverse order.
 
-Also if polling_delay is nonzero and passive_delay is greater than
-polling_delay, the thermal zone temperature will be updated less often
-when tz->passive is nonzero.  This does not make sense either.
-
-Ensure that none of the above will happen.
+Use this observation to simplify list sorting slightly in
+__thermal_zone_device_update() which also causes the code to
+be somewhat more straightforward and so easier to follow.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
-
-v1 -> v2: The patch actually matches the changelog
-
----
- drivers/thermal/thermal_core.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/thermal/thermal_core.c |   10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
 Index: linux-pm/drivers/thermal/thermal_core.c
 ===================================================================
 --- linux-pm.orig/drivers/thermal/thermal_core.c
 +++ linux-pm/drivers/thermal/thermal_core.c
-@@ -1440,6 +1440,9 @@ thermal_zone_device_register_with_trips(
- 		td->threshold = INT_MAX;
- 	}
+@@ -487,16 +487,14 @@ static void thermal_trip_crossed(struct
+ 	thermal_governor_trip_crossed(governor, tz, trip, crossed_up);
+ }
  
-+	if (polling_delay && (passive_delay > polling_delay || !passive_delay))
-+		passive_delay = polling_delay;
-+
- 	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
- 	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
+-static int thermal_trip_notify_cmp(void *ascending, const struct list_head *a,
++static int thermal_trip_notify_cmp(void *not_used, const struct list_head *a,
+ 				   const struct list_head *b)
+ {
+ 	struct thermal_trip_desc *tda = container_of(a, struct thermal_trip_desc,
+ 						     notify_list_node);
+ 	struct thermal_trip_desc *tdb = container_of(b, struct thermal_trip_desc,
+ 						     notify_list_node);
+-	int ret = tdb->notify_temp - tda->notify_temp;
+-
+-	return ascending ? ret : -ret;
++	return tdb->notify_temp - tda->notify_temp;
+ }
  
+ void __thermal_zone_device_update(struct thermal_zone_device *tz,
+@@ -525,12 +523,12 @@ void __thermal_zone_device_update(struct
+ 
+ 	thermal_zone_set_trips(tz);
+ 
+-	list_sort(&way_up_list, &way_up_list, thermal_trip_notify_cmp);
++	list_sort(NULL, &way_up_list, thermal_trip_notify_cmp);
+ 	list_for_each_entry(td, &way_up_list, notify_list_node)
+ 		thermal_trip_crossed(tz, &td->trip, governor, true);
+ 
+ 	list_sort(NULL, &way_down_list, thermal_trip_notify_cmp);
+-	list_for_each_entry(td, &way_down_list, notify_list_node)
++	list_for_each_entry_reverse(td, &way_down_list, notify_list_node)
+ 		thermal_trip_crossed(tz, &td->trip, governor, false);
+ 
+ 	if (governor->manage)
 
 
 
