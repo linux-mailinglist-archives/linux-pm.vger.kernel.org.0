@@ -1,195 +1,273 @@
-Return-Path: <linux-pm+bounces-10684-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10685-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1816F9286B5
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 12:23:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CD4A928775
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 13:02:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BA841C228C8
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 10:23:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D9511F28158
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2024 11:02:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8916146D7E;
-	Fri,  5 Jul 2024 10:23:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CF911494C7;
+	Fri,  5 Jul 2024 11:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="kHF9P/LJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xNy3X87O"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75187E576;
-	Fri,  5 Jul 2024 10:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ECB8149C51
+	for <linux-pm@vger.kernel.org>; Fri,  5 Jul 2024 11:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720174991; cv=none; b=sl41eo5eVrVjcE7kOtwBAyix9MI7TiSjDRq92Y9JEbrF/7//hSDxseL4yEjqKWetZAGbOXrLaN91SiPwtaNCEf0Szq7pWCyKAh56jEWF976sDopoIOU5ROibkhMJX1YU3HmFyPRXzg8W3KkIeys4vDHvq4UY6QcNqdVwDsuuznw=
+	t=1720177354; cv=none; b=qDKeAGb1HvpITz91m6wQOCl6ENHfGhtMYHlIS/s83HusBEip5vanLZsGLRTIJcct6mxMC2h3jIBqvXGarCdd6eV6ZbAZti6Qj0uZALk1gsT8GBJIsX2DJDfmUHQWqqremWBMLXXZKc9Q2XEYkZErDc5Un0SoOizQEjr0/FtAkzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720174991; c=relaxed/simple;
-	bh=aoMVEkjZB0i7YBh8SSiTxRUXuRXr8tD4I0Gyia1A8Iw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B4/lf2GvQ/Azw2Ax0OfjZcAvDCyVrKLntpGnCNexkoo2En2u1zZdhc4yFMQEdvCz7f9gugTtx3Q7Fsdd1E+r1+RtweqdHQK56IclMOzWl/4aBLhR8xwmSVwDBqBYgx9L/gxE9WuGBaI65MV8KSncGkMrzgSgmAzO/gossjPRYnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=kHF9P/LJ; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1720174958; x=1720779758; i=wahrenst@gmx.net;
-	bh=WD4OZpkM4HUgmvqGgh/yyEha0LutMtATs1AB8Udylds=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=kHF9P/LJU5e1luz5bnILmbyTiKn66/EykuCu8uQEym5+jkWniuLBvCU25Yad/M5r
-	 cp0yZK8YXZ0Zs/D4lwmY292yuXPOMWUjugLgjeJdPzIC41l3+G51DZCO6TO3Dde5m
-	 Secb2sBCf0lBuSCickUBB9ibET85kYXNn1y3v426PRWNQMhUIPJYBj/tr3Bd3QcoP
-	 Oein3YFh6neqZnfcmntEoz+SZqiumJR9wCzPkYrxDK7BMRPZDrnAJWx++r/07/jt6
-	 /XZu31Fa7d0la9N3haeUeQZC2HGOuNMvRlzwrW1WoJR5g7RNPGe/9C/RJ/6XQwvAx
-	 ERvQgKbZVCHKVbmQqQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MRCOE-1skWrK1Pb2-00UNmP; Fri, 05
- Jul 2024 12:22:38 +0200
-Message-ID: <4502d826-d80c-4a98-a889-da7badfa698e@gmx.net>
-Date: Fri, 5 Jul 2024 12:22:33 +0200
+	s=arc-20240116; t=1720177354; c=relaxed/simple;
+	bh=S7Om4GQ30fztSBIh/w1AFY6W2F2OWAuCWAmODzJ3pS4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IwsmI2LV2ZMz0nGZlPsdDiIocx6Uyc1NGF4MJS5v5jM24anWPfXDd8wQ0iCjvwhXoNLr2AyIse/BZOEU/B4EjsmUu8/n6Z8MbXVjk1HyPsOxnQqAhZjFzICeeDRTSt8oJuWHmYGY/8k0x4SVlETea2VeYMnRPrBuetb7/PNzpQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xNy3X87O; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70af5fbf0d5so946212b3a.1
+        for <linux-pm@vger.kernel.org>; Fri, 05 Jul 2024 04:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720177352; x=1720782152; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=f92fjw8JYMT1dRrD53VjhAAntEQwgMhVvh6//opJzE8=;
+        b=xNy3X87OrauY7Bu6xLPpMPYKCNZvtVIkC+XZvIMK+UMjyUsAKcp4Won6TSlC+o9rfa
+         f2ctiZcNg1cUd16zC1ouhfxWRxMcInzUvqdnVJBER/4qoWWms/h4+rKS1Gw8BuBjpOUx
+         ghwqgzyOMaSK63zDn4rYF8ET72oL/c/FSEJQFX7Y32SNYWCGIEk/yY+0GvuYwoaeFC4D
+         MgkXXcnYdwjlvSDtl9/9YtSx6JS7bBvq3Rb7NkR9o04Ur+NYv1ISU+g2ROhHsRIIjOkh
+         URZ3WUhJhKDis9s5qBbH3o5ceY0jYxgc815QZ9WJ3+YhmUQJRON93diW4vU+zWjExBac
+         ZH5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720177352; x=1720782152;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f92fjw8JYMT1dRrD53VjhAAntEQwgMhVvh6//opJzE8=;
+        b=Cl0v5EzEC0yfcKvoyIXnQZf/xXyY74Jsa1CItkwZ1+DN1VccKyz7FXcQFReJF4cLhS
+         znTj4gfu53oXzZ6VaCGMQXmGIsrVgC/0m8t53rmGs5lSKa1kunL8lhg08MG0raoXvdrB
+         OZ7JRpHTYAy8gDzBL1Vq2je6lhgYXWRQHdEHyedcBesZNrAJR1fUDQuSv21ER2D/szq0
+         gS9qKf7AcgtVkgXGX05fXtSoFFrcqIPmlfA1XiTXLMvPIi9XwcGhLH8AS4WZka8tbIPA
+         hsxo/x6+sh3leDRAoHoiovFTMct5c+o4eKlOWBJNsCkrS4WVS5q3EWOT6cl3yswbtHKR
+         FcLg==
+X-Forwarded-Encrypted: i=1; AJvYcCUofTBxxEFvSgkS2ejj4IUPFL/GNzdU+H9IGrT/MHip/h47xZFROkl0NM3h3Ogse25fk4MXZNPLm4FCY9f2qHK+Sk5K3GYi1rA=
+X-Gm-Message-State: AOJu0YwtFEaTFPHkk4m5SM03BJ0A48AXyuOeWCU01+nlLcdS4wr2kAKH
+	9qlQxGGD4KdgubfQRkY9xCul5q9pME5NNjNtqbHElPrd4WC/WU491bPn2i+b5EI=
+X-Google-Smtp-Source: AGHT+IGn1rhycWvEt5pEiJxdXzjK4S9Y8JJLU4mSVvnpE1+Y+yvmX3R8Ee/LOSlG8/Svf+b05wC0wA==
+X-Received: by 2002:a62:f205:0:b0:70a:ef84:7683 with SMTP id d2e1a72fcca58-70b01980885mr6239722b3a.1.1720177351516;
+        Fri, 05 Jul 2024 04:02:31 -0700 (PDT)
+Received: from localhost ([122.172.82.13])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70afffefeafsm2805087b3a.207.2024.07.05.04.02.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jul 2024 04:02:30 -0700 (PDT)
+Date: Fri, 5 Jul 2024 16:32:28 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>, linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+	rust-for-linux@vger.kernel.org,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Erik Schilling <erik.schilling@linaro.org>,
+	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH V3 1/8] rust: Add initial bindings for OPP framework
+Message-ID: <20240705110228.qqhhynbwwuwpcdeo@vireshk-i7>
+References: <cover.1719990273.git.viresh.kumar@linaro.org>
+ <fe8e9a96b29122876346fc98a6a9ede7e4f28707.1719990273.git.viresh.kumar@linaro.org>
+ <ZoVvn0QCSR8y4HQJ@Boquns-Mac-mini.home>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/11] usb: dwc2: Skip clock gating on Broadcom SoCs
-To: Lukas Wunner <lukas@wunner.de>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Minas Harutyunyan <hminas@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Jassi Brar <jassisinghbrar@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- Jiri Slaby <jirislaby@kernel.org>,
- Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Peter Robinson <pbrobinson@gmail.com>,
- dri-devel@lists.freedesktop.org, bcm-kernel-feedback-list@broadcom.com,
- linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kernel-list@raspberrypi.com
-References: <20240630153652.318882-1-wahrenst@gmx.net>
- <20240630153652.318882-10-wahrenst@gmx.net>
- <95762956-b46a-4dfa-b22f-bccbfa39558d@broadcom.com>
- <ZoezRpXBgB1B5WjB@wunner.de>
-Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <ZoezRpXBgB1B5WjB@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:s+lf1cnW0lEbygFenT7V76UBWNdrqq8ojM/03RmipVMIMIqD5IT
- Z+Qzg8vlIRZLRIxUSCq2mJtSCJhrNm9K9JGychlpUeWijNb5IyLRwyxkSX1nk+50MmXZQ1z
- SgacpF1Mf/ROQGgoWa8uG1WF6ohMQHpSU9oeCJa0wPfdHe0Zkm7IVypQbOXWe9+7ZW93EYG
- f1IZxqOf2aRpbzNJgCOKw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:G8MuPM7llmI=;2KJoPdYNmWC1SKxRuWqqXmv2svh
- UoCMWjX8g5y4HJgonBJqmV/xVqL1ZlRh7qJ2OulPl6T0w4FsxgYqhcBVWoTlzULYOWszO1S2e
- T2Pynq/3UubdHabsa9lNN6IUMJRokOesNHdGFQYTg4HXvT2op+rWTXYqSLNHByAoNxFd+x1r1
- bN7dgsK0et7f6smUlEdWVg3JJ12WYK52YhJ+rIq0i0UG4nIxpelIkfgM0ftOsU/cFYvFYiaaZ
- pv3Wh8q/92UaBmeZ0/LcylKrgBrX4rRpMheT0TrFwcW0QY9MJXo6zfOG3zCxCxIDc8ucDHUCF
- Oaf5EGQO4EMwMFZhR77/Ke2Ie35Pv8sZrst3rSiHRtxNyOuMPkvNJMvohGZGhMt0J5vB34IB9
- ZJBmsrxdhNYkuVqVvkqOV4Zoq96wDIyJqqomq0winS3bSHFw8qeILS/iri7j01hTiuY43ZWxe
- 3Scx2/x019+DCqUZ32wWVBixB4aRGaeEKjHBqBIaCeBkXLCexQ+xJj7rXtWOarFh2t2aYJ4c1
- krEkK+Lkq3OIJqqIYcncuFdZd9VFwmPoinC8Qfy4MEIm/ati2R0nbQM6qMcxNQsho5O/3mdtV
- U/+qJLe4VR0t3RrF/H3WhakpUj4WYVvytqzxp+opxpUHI7rc5yulVWihTBFwhSRN835b8TKAP
- e5AuTf1flkFzvX81/XrQf5Z1PD1bR2OtPLoyb89xpoHUrRJm+/g4dL/0+/GJEfjnLDFkx9F9P
- YdrndTkE3hXvKSAXEEEgtF1/zTNgxAErrAgU/Lw3MzkfYZi/ZKT/M64OGx56lAmISAkVwFUxo
- ARjNbwxxuM4UyS3vxX8w3UC5j5RKCt1jSkgHM0rc+8Z4A=
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZoVvn0QCSR8y4HQJ@Boquns-Mac-mini.home>
 
-Am 05.07.24 um 10:48 schrieb Lukas Wunner:
-> On Thu, Jul 04, 2024 at 03:14:50PM +0100, Florian Fainelli wrote:
->> On 6/30/2024 4:36 PM, Stefan Wahren wrote:
->>> On resume of the Raspberry Pi the dwc2 driver fails to enable
->>> HCD_FLAG_HW_ACCESSIBLE before re-enabling the interrupts.
->>> This causes a situation where both handler ignore a incoming port
->>> interrupt and force the upper layers to disable the dwc2 interrupt lin=
-e.
->>> This leaves the USB interface in a unusable state:
->>>
->>> irq 66: nobody cared (try booting with the "irqpoll" option)
->>> CPU: 0 PID: 0 Comm: swapper/0 Tainted: G W          6.10.0-rc3
->>> Hardware name: BCM2835
->>> Call trace:
->>> unwind_backtrace from show_stack+0x10/0x14
->>> show_stack from dump_stack_lvl+0x50/0x64
->>> dump_stack_lvl from __report_bad_irq+0x38/0xc0
->>> __report_bad_irq from note_interrupt+0x2ac/0x2f4
->>> note_interrupt from handle_irq_event+0x88/0x8c
->>> handle_irq_event from handle_level_irq+0xb4/0x1ac
->>> handle_level_irq from generic_handle_domain_irq+0x24/0x34
->>> generic_handle_domain_irq from bcm2836_chained_handle_irq+0x24/0x28
->>> bcm2836_chained_handle_irq from generic_handle_domain_irq+0x24/0x34
->>> generic_handle_domain_irq from generic_handle_arch_irq+0x34/0x44
->>> generic_handle_arch_irq from __irq_svc+0x88/0xb0
-> A similar issue was reported for Agilex platforms back in 2021:
->
-> https://lore.kernel.org/all/5e8cbce0-3260-2971-484f-fc73a3b2bd28@synopsy=
-s.com/
->
-> It was fixed by commit 3d8d3504d233 ("usb: dwc2: Add platform specific
-> data for Intel's Agilex"), which sets the no_clock_gating flag on that
-> platform.
->
-> Looking at drivers/usb/dwc2/params.c, numerous other platforms need
-> the same flag.
->
-> Please amend the commit message to mention the Agilex issue and
-> resulting commit.
- From my understanding Samsung noticed this issue at first and
-introduced the no_clock_gating flag [1] and they referenced 0112b7ce68ea
-("usb: dwc2: Update dwc2_handle_usb_suspend_intr function.") as I did in
-this patch. Later some platforms like Rockchip and Agilex followed.
+Hi Boqun,
 
-Should i better refer to the Samsung bugfix instead of the Agilex bugfix?
->
->
->>> --- a/drivers/usb/dwc2/params.c
->>> +++ b/drivers/usb/dwc2/params.c
->>> @@ -23,6 +23,7 @@ static void dwc2_set_bcm_params(struct dwc2_hsotg *h=
-sotg)
->>>    	p->max_transfer_size =3D 65535;
->>>    	p->max_packet_count =3D 511;
->>>    	p->ahbcfg =3D 0x10;
->>> +	p->no_clock_gating =3D true;
->> Could we set this depending upon whether the dwc2 host controller is a
->> wake-up source for the system or not?
-> The flag seems to mean whether the platform is actually capable of
-> disabling the clock of the USB controller.  BCM2835 seems to be
-> incapable and as a result, even though dwc2_host_enter_clock_gating()
-> is called, the chip signals interrupts.
-That's why I was asking about this in the initial bug report. Since I
-didn't get a reply, I submitted this workaround.
-> There doesn't seem to be a relation to using the controller as a
-> wakeup source, so your comment doesn't seem to make sense.
-> If the clock can't be gated, the chip can always serve as a
-> wakeup source.
-I wouldn't conclude that the chip can always serve as a wakeup source
-(e.g. power down the USB domain would also prevent this), but i agree
-creating a relation between wakeup source and clock gating is a bad idea.
-> The real question is whether BCM2848 platforms likewise cannot disable
-> the clock of the dwc2 controller or whether this is specific to the
-> BCM2835.  Right now dwc2_set_bcm_params() is applied to both the
-> BCM2848 and BCM2835.  If the BCM2848 behaves differently in this
-> regard, we'd have to duplicate dwc2_set_bcm_params() for the BCM2835.
- From my understand BCM2848 refers to the same SoC, but the ACPI
-implementation uses a different ID [2]. So I think this is safe.
->
-> Thanks,
->
-> Lukas
+On 03-07-24, 08:34, Boqun Feng wrote:
+> On Wed, Jul 03, 2024 at 12:44:26PM +0530, Viresh Kumar wrote:
+> > +/// Operating performance point (OPP).
+> > +///
+> > +/// # Invariants
+> > +///
+> > +/// The pointer stored in `Self` is non-null and valid for the lifetime of the ARef instance. In
+> > +/// particular, the ARef instance owns an increment on underlying object´s reference count.
+> 
+> Since you use `ARef` pattern now, you may want to rewrite this
+> "invariants".
 
-[1] -
-https://lore.kernel.org/linux-usb/20210716050127.4406-1-m.szyprowski@samsu=
-ng.com/
-[2] -
-https://patches.linaro.org/project/linux-usb/patch/20210413215834.3126447-=
-2-jeremy.linton@arm.com/
+I copied it from the device's documentation. What all details should I
+be writing here ? A link to some other implementation would be useful.
 
+> > +impl Drop for OPP {
+> 
+> I don't think you need the `drop` implementation here, since it should
+> be already handled by `impl AlwaysRefCounted`,
+
+Right.
+
+> could you try to a doc
+> test for this? Something like:
+> 
+> 	let opp: ARef<OPP> = <from a raw dev_pm_opp ponter whose refcount is 1>
+> 	drop(opp);
+
+I now tested it with a kernel test to see what's going on internally
+
+> IIUC, this will result double-free with the current implementation.
+
+Quite the opposite actually. I am getting double get and a single put :)
+
+Thanks a lot for pointing me to this direction as I have found that my
+implementation was incorrect. This is how I understand it, I can be
+wrong since I am okayish with Rust:
+
+- What's getting returned from `from_raw_opp/from_raw_opp_owned` is a
+  reference: `<&'a Self>`.
+
+- Since this is a reference, when it gets out of scope, nothing
+  happens. i.e. the `drop()` fn of `struct OPP` never gets called for
+  the OPP object, as there is no real OPP object, but just a
+  reference.
+
+- When this gets converted to an `ARef` object (implicit typecasting),
+  we increment the count. And when that gets dropped, we decrement it.
+  But Apart from an `ARef` object, only the reference to the OPP gets
+  dropped and hence again, drop() doesn't get called.
+
+- The important part here is that `from_raw_opp()` shouldn't be
+  incrementing the refcount, as drop() will never get called. And
+  since we reach here from the C implementation, the OPP will remain
+  valid for the function call.
+
+- On the other hand, I can't return <&'a Self> from
+  from_raw_opp_owned() anymore. In this case the OPP core has already
+  incremented the refcount of the OPP (while it searched the OPP on
+  behalf of the Rust code). Whatever is returned here, must drop the
+  refcount when it goes out of scope. Also the returned OPP reference
+  can live for a longer period of time in this case, since the call
+  originates from the Rust side. So, it needs to be an explicit
+  conversion to ARef which won't increment the refcount, but just
+  decrement when the ARef gets out of scope.
+
+Here is the diff that I need:
+
+diff --git a/rust/kernel/opp.rs b/rust/kernel/opp.rs
+index aaf220e6aeac..a99950b4d835 100644
+--- a/rust/kernel/opp.rs
++++ b/rust/kernel/opp.rs
+@@ -692,7 +692,7 @@ pub fn opp_from_freq(
+         })?;
+ 
+         // SAFETY: The `ptr` is guaranteed by the C code to be valid.
+-        Ok(unsafe { OPP::from_raw_opp_owned(ptr)?.into() })
++        unsafe { OPP::from_raw_opp_owned(ptr) }
+     }
+ 
+     /// Finds OPP based on level.
+@@ -718,7 +718,7 @@ pub fn opp_from_level(&self, mut level: u32, stype: SearchType) -> Result<ARef<O
+         })?;
+ 
+         // SAFETY: The `ptr` is guaranteed by the C code to be valid.
+-        Ok(unsafe { OPP::from_raw_opp_owned(ptr)?.into() })
++        unsafe { OPP::from_raw_opp_owned(ptr) }
+     }
+ 
+     /// Finds OPP based on bandwidth.
+@@ -743,7 +743,7 @@ pub fn opp_from_bw(&self, mut bw: u32, index: i32, stype: SearchType) -> Result<
+         })?;
+ 
+         // SAFETY: The `ptr` is guaranteed by the C code to be valid.
+-        Ok(unsafe { OPP::from_raw_opp_owned(ptr)?.into() })
++        unsafe { OPP::from_raw_opp_owned(ptr) }
+     }
+ 
+     /// Enable the OPP.
+@@ -834,31 +834,33 @@ unsafe fn dec_ref(obj: ptr::NonNull<Self>) {
+ }
+ 
+ impl OPP {
+-    /// Creates a reference to a [`OPP`] from a valid pointer.
++    /// Creates an owned reference to a [`OPP`] from a valid pointer.
+     ///
+     /// # Safety
+     ///
+-    /// The caller must ensure that `ptr` is valid and remains valid for the lifetime of the
+-    /// returned [`OPP`] reference.
+-    pub unsafe fn from_raw_opp_owned<'a>(ptr: *mut bindings::dev_pm_opp) -> Result<&'a Self> {
+-        // SAFETY: The caller guarantees that the pointer is not dangling
+-        // and stays valid for the duration of 'a. The cast is okay because
+-        // `OPP` is `repr(transparent)`.
+-        Ok(unsafe { &*ptr.cast() })
++    /// The caller must ensure that `ptr` is valid and OPP's refcount is incremented. The refcount
++    /// will be decremented by `dec_ref` when the ARef object is dropped.
++    pub unsafe fn from_raw_opp_owned(ptr: *mut bindings::dev_pm_opp) -> Result<ARef<Self>> {
++        let ptr = ptr::NonNull::new(ptr).ok_or(ENODEV)?;
++
++        // SAFETY: The safety requirements guarantee the validity of the pointer.
++        //
++        // INVARIANT: The refcount is already incremented by the C API that returned the pointer,
++        // and we pass ownership of the refcount to the new `ARef<OPP>`.
++        Ok(unsafe { ARef::from_raw(ptr.cast()) })
+     }
+ 
+     /// Creates a reference to a [`OPP`] from a valid pointer.
+     ///
+     /// # Safety
+     ///
+-    /// The caller must ensure that `ptr` is valid and remains valid for the lifetime of the
+-    /// returned [`OPP`] reference.
++    /// The caller must ensure that `ptr` is valid and remains valid for the duration of 'a. The
++    /// refcount is not updated by the Rust API unless the returned reference is converted to an
++    /// ARef object.
+     pub unsafe fn from_raw_opp<'a>(ptr: *mut bindings::dev_pm_opp) -> Result<&'a Self> {
+-        let opp = unsafe { Self::from_raw_opp_owned(ptr) }?;
+-
+-        // Take an extra reference to the OPP since the caller didn't take it.
+-        opp.inc_ref();
+-        Ok(opp)
++        // SAFETY: The caller guarantees that the pointer is not dangling and stays valid for the
++        // duration of 'a. The cast is okay because `OPP` is `repr(transparent)`.
++        Ok(unsafe { &*ptr.cast() })
+     }
+ 
+     #[inline]
+@@ -910,10 +912,3 @@ pub fn is_turbo(&self) -> bool {
+         unsafe { bindings::dev_pm_opp_is_turbo(self.as_raw()) }
+     }
+ }
+-
+-impl Drop for OPP {
+-    fn drop(&mut self) {
+-        // SAFETY: The safety requirements guarantee that the refcount is nonzero.
+-        unsafe { bindings::dev_pm_opp_put(self.as_raw()) }
+-    }
+-}
+
+Makes sense ?
+
+-- 
+viresh
 
