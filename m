@@ -1,74 +1,74 @@
-Return-Path: <linux-pm+bounces-10724-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10725-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75E929293D9
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2024 15:41:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 624B49293E6
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2024 15:46:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DC16B2172B
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2024 13:41:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D5E51C215E9
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2024 13:46:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C88C12F5B1;
-	Sat,  6 Jul 2024 13:41:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4227012FF9F;
+	Sat,  6 Jul 2024 13:46:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C3QUkE3W"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AqkbaKJj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA082757EA;
-	Sat,  6 Jul 2024 13:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C8F23BE;
+	Sat,  6 Jul 2024 13:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720273297; cv=none; b=oHJbQlR9Jab2NrwElzKfgC9D/253dZswugU8uzbifEIuFUquZKP0graAprk5BfexG16SMAcXZz8RGkATW3iTqFPv1dGglfhjcWdRX6yxlFT20wtMwWHHFMIcTZVNS8V+TK3wB4TFYyBJYuzL0Ttyn+X3gaglHurp+qunbpZ78ow=
+	t=1720273569; cv=none; b=T9WNjsS/phNh60+h0Zqr1szFUtA5uKe0c5118O+FgvBCUV9n0GLT1tAWPf7r3Yzp86T3jwsvyl9UEeI9JbcaOd0XPVrkr5OAZIw1E9VLQ8fP9SQ8aO2XH3OcvGX0Dj+t7lyquI/IbC3fB+cAo1vWdMDnw/POxwNAt/1C9wG+Icc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720273297; c=relaxed/simple;
-	bh=tpCfZvqW9yvz1Mou1k19Lf7SlicdQ3FqOCMPrEm8fKo=;
+	s=arc-20240116; t=1720273569; c=relaxed/simple;
+	bh=a0xkC2CLkpYpkF8G1wQwLuQnMKi3EUIfeGO7uLK5X2Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Td0/4ianOsgfOs0ZDtXm8AWdZUN3gabxUi01Mj8UGPfjQaLT6ZkYwI+8IOZBS69/MAFNkX3tVAcj83eBTSNHbAk66iQohmiqrjSsFY8OEb13OKCF9nZnFo3iNRxpMfSLegsK2icsh/7uLhCpJ7NIZO7GCf/ky0Eii/pAu7HuVJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C3QUkE3W; arc=none smtp.client-ip=209.85.218.42
+	 In-Reply-To:Content-Type; b=pd0jZXhtGDZ6S5auhEsvzSyAQRLXwMnQ1FVQ1rChPm9hm74QLrfbothYJwVPOKR8BGd8HZnemA3jiVK1YUTZlPFFZPwpTMWumT1hbc9ziQnoGDIII0dAxt7+gYiCjBDzSC/8zou379x0NPIoxUm2vePbl0/CZ5BW+ntFTcIlFic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AqkbaKJj; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a77c9d3e593so179742666b.0;
-        Sat, 06 Jul 2024 06:41:35 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-57cbc66a0a6so4209135a12.1;
+        Sat, 06 Jul 2024 06:46:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720273294; x=1720878094; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720273566; x=1720878366; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tpCfZvqW9yvz1Mou1k19Lf7SlicdQ3FqOCMPrEm8fKo=;
-        b=C3QUkE3WsT6MpIt8UFXyRgo65yqe82zcg8y9HqjZHOQyeL7vt/EovnI/Hf2p7iPfkK
-         HmJGO2d737Ox/v3Z0NC7+ykt9VbRAO8ZkWK6YPphhOCJo+3wpSFGXorfwo1AFnvRWq4N
-         6T1QhM+THizQ4Y5rT1cooo09QTr00zxcUd0uW7i1rcKIIVKadKHS/9n0K3Ick7m6ZOxg
-         3JXUfu0V4PPLxXsOlQTOI7qrbzWDbF61M0XzV6QPGOeCtdvOvvyJJsEwlV51PTmD+0Up
-         tOedLHgsuHBdXQCYEwc6CG6/aMwz6S9xmDNas5sVSi+KvPIVuY6LBi37vvocIq8042h8
-         /GGA==
+        bh=OAJC70EpEcbjk6VlaxzRollcBomBiQ2/i0MAtk2+5fM=;
+        b=AqkbaKJjfLVtfpCbUJF03CAzB4EqvGveust/mCLk7Jj8WJhgC8f0kKbPytzPz5cEzR
+         LRBz7fQ5rom/79wcybr07mGlfLGDt+RphhHjVFU/I2+1Q7ETDC2NyuaemBOIHs9mUwSv
+         T3DuyTGc27dsxL/o+2Muj9g+OW1+iGC/eWhcOZPiYLXsApoVPxRt228RR51647RRNBus
+         7Mwt8fNaA0R5d2Gb1NWK/RXoVfAmo5ETJYQWtJaUt5LDU8l2mMOHHEr/SLAP/vGYGCZJ
+         upUrB285Te4la30PhuZ7gFcyCVosxT2ziR6QkFsDxrEOlyMxDs694ELCAF+DFx6q00YF
+         VxVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720273294; x=1720878094;
+        d=1e100.net; s=20230601; t=1720273566; x=1720878366;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tpCfZvqW9yvz1Mou1k19Lf7SlicdQ3FqOCMPrEm8fKo=;
-        b=geVVwDyVTiGID0U7PD5U+t0it9zsGK3k8DWVREkIdvM64jDL3gK+AQ35Kb7i9+ufbS
-         8M3tDDJN3FpIb1T0l+0/9XM7LANfn5z/i7LIt1wpFKFwxnH4p/SQbQCYFbUWaMOez6i6
-         WgilZ9Z2wOB7Y15ntXcIBO7MB1UEPV6PE4pHHS4LAr5Kvly3Q4gwtY3m5kqkgGD7v6I4
-         hkizgpNvZprYqZeF2VfKpXu48NuCV2AagvzfJdn7Mv1aYUdDVN868vrNSsD5Dyhtb3ID
-         P9MqOlExR7Vrj+i2nPD26BtQzRxI5If+MI6upf8e3lUNvt9PlFtQEU9QrWAveWAuCtpZ
-         XcOA==
-X-Forwarded-Encrypted: i=1; AJvYcCXpUxTIw0A1Jl5vrFOXjTylfJkfBd+kMwRMHK0GRQPniG6BoqTjZLRzay8Eu2Mc0VefV4EZ7Va/ux820h/7XTgYQa7hOAn6uQaNXPTeURs4tsnRODm3GL/3ZGoalypxgTxce42QKqaLk1IWnJK50iwV64HxxOwISjLxvqJIomPWd4rIRjMem871SvYMA5B8uMxY+McwefIiiAnPrRJEQVIL+Q==
-X-Gm-Message-State: AOJu0YxA9OlxfaMl09axa+UJBA/YhzlXp/gwijeA+17xJXFr58DSG86Y
-	28DQCj+VhmLcJ70VIZ0zvBr9lwhwatKXwjsJydBevmSJ88rOkemZ
-X-Google-Smtp-Source: AGHT+IE0ZemeIlvOgoNhCkacJ61zvRUuBkEL0wi6xZgy1jnf1+/l/KIsA+BVHMf2hMT1fUew2XvFzQ==
-X-Received: by 2002:a17:906:5293:b0:a6f:b67d:959e with SMTP id a640c23a62f3a-a77ba71188cmr379032566b.53.1720273293897;
-        Sat, 06 Jul 2024 06:41:33 -0700 (PDT)
+        bh=OAJC70EpEcbjk6VlaxzRollcBomBiQ2/i0MAtk2+5fM=;
+        b=EKf6O18BJ8NlNAkqT/izeQV/QgH4ZAgtb5JGn5EIA5nghgOhOrd2f3RZk3pXWFXzPz
+         8MraLLVav9XX/Fr3yJ1absJuBY4nA/y6l/7GaRkvEfPqPY3BYDLlbl5mXIeg3llWavJD
+         oMT0Vz2LW9B2dNcB23RL1fe3O6+SKR0CFqZje317NUMmQ+2X/t75s205H9us2v2MjHht
+         TkvG5jaVBesuux2zMaH/mZkKkRPbIkSyNQtozHOC8QQdR7IyNqLd//UZ+nPz7LWubK8q
+         rNkt9T4yRnwcVyTYPxQ+3bHAsB70My+rrGsKmCk8HQRenO5Jyi32kgZdwhgNV1u/70Xq
+         JhqA==
+X-Forwarded-Encrypted: i=1; AJvYcCXaTGeUAZCbFMXEbzuYvkyEsL6nFtiDnZ5Mi/NPMLKy+ri3miZF35wLRDpMjvaf8BhUglDDqa6Y0b/YPwn6fN1JQrtA9aFI/Z3ptHd8bBAeuqJIney0/ipy2iiJhrTVsgtRflHZcDGKNhXiSaXZ5rVOBzzUXnllic6WpP8VzOQ5LoXDWsM0pUZmN3Wg9woSm1XIPDOmjaN6VequYlmM8V/5LA==
+X-Gm-Message-State: AOJu0YwCsEaCg8mOScdupLckjW9ALR+HxvZ7GVfesF7yqLbIlBjWCzXL
+	to7BcVOG4OgApUZD2wtSjHeMgWH2p/Wtb3XjQxIeMUNyI7bI8edI
+X-Google-Smtp-Source: AGHT+IGrL3cRO40LFioSD/y8T+h3SDJ4vWA2cnDjypHphTEGvbO3m+TIBosJdQKRoB6xVO/mWRPz+g==
+X-Received: by 2002:a05:6402:50cd:b0:58c:77b4:404b with SMTP id 4fb4d7f45d1cf-58e7b6efab1mr5477282a12.15.1720273565769;
+        Sat, 06 Jul 2024 06:46:05 -0700 (PDT)
 Received: from [192.168.1.13] (bzc167.neoplus.adsl.tpnet.pl. [83.30.48.167])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a77e1ff678fsm66100066b.137.2024.07.06.06.41.31
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-590377a7e8bsm1440661a12.14.2024.07.06.06.46.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Jul 2024 06:41:33 -0700 (PDT)
-Message-ID: <5bb295b8-a79f-48ea-800c-3176c2402021@gmail.com>
-Date: Sat, 6 Jul 2024 15:41:30 +0200
+        Sat, 06 Jul 2024 06:46:04 -0700 (PDT)
+Message-ID: <375de691-59ed-48d8-9af2-83f330745b48@gmail.com>
+Date: Sat, 6 Jul 2024 15:46:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,7 +76,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/8] msm8937/msm8976/qcs404 icc patches
+Subject: Re: [PATCH v2 7/8] dt-bindings: interconnect: qcom: msm8939: Fix
+ example
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
  Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
@@ -87,65 +88,44 @@ Cc: phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
  linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20240704200327.8583-1-a39.skl@gmail.com>
- <b4b94938-903a-40ba-baf3-d04226dc9f90@linaro.org>
+ <20240704200327.8583-8-a39.skl@gmail.com>
+ <52ef47d0-8344-4367-b0ee-32e9471bc64e@linaro.org>
 Content-Language: en-US
 From: Adam Skladowski <a39.skl@gmail.com>
-In-Reply-To: <b4b94938-903a-40ba-baf3-d04226dc9f90@linaro.org>
+In-Reply-To: <52ef47d0-8344-4367-b0ee-32e9471bc64e@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
-On 7/5/24 08:49, Krzysztof Kozlowski wrote:
+On 7/5/24 08:57, Krzysztof Kozlowski wrote:
 > On 04/07/2024 22:02, Adam Skladowski wrote:
->> This series introduce new ICC drivers for some legacy socs
->> while at it also updates a bit of qcs404 driver which seems
->> to not receive much attention lately.
->> Please take in consideration i do not own any qcs404 board
->> so i cannot test anything else than if it compiles.
+>> For now example list snoc_mm as children of bimc which is obviously
+>> not valid, drop snoc and snoc_mm and leave bimc alone.
 >>
->> Changes since v1
->> ================
->> 1. Reworded commit messages
->> 2. Adjusted yamls.
->> 3. Adjusted examples.
-> Adjusted to what? This is supposed to be specific.
+>> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+>> ---
+>>  .../bindings/interconnect/qcom,msm8939.yaml         | 13 +------------
+>>  1 file changed, 1 insertion(+), 12 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
+>> index fd15ab5014fb..3aed8b77f35d 100644
+>> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
+>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
+>> @@ -56,19 +56,8 @@ examples:
+>>    - |
+>>      #include <dt-bindings/clock/qcom,rpmcc.h>
+>>  
+>> -    snoc: interconnect@580000 {
+>> -        compatible = "qcom,msm8939-snoc";
+> The one correct example would be the snoc, because it is the most
+> complete, but well...
 >
-> BTW, you use here odd email address, so:
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >
-> <form letter>
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC (and consider --no-git-fallback argument). It might
-> happen, that command when run on an older kernel, gives you outdated
-> entries. Therefore please be sure you base your patches on recent Linux
-> kernel.
->
-> Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-> people, so fix your workflow. Tools might also fail if you work on some
-> ancient tree (don't, instead use mainline) or work on fork of kernel
-> (don't, instead use mainline). Just use b4 and everything should be
-> fine, although remember about `b4 prep --auto-to-cc` if you added new
-> patches to the patchset.
-> </form letter>
 >
 > Best regards,
 > Krzysztof
 >
-Indeed i send patches from different OS with old kernel tree inside,
-i haven't had idea about that.
-
-Will update tree before sending.
-Regarding v3 which im going to send anyway, should i reword changes in v2?
-
-Like in v2 i Adjusted yaml to look the way msm8953 is(seems its wrong).
-
-Adjusting examples refers to removing redundant nodes from yaml examples.
-
-For sending i use this command:
-git send-email --to-cover --cc-cover patch-dir/*.patch --cc
-phone-devel@vger.kernel.org --cc ~postmarketos/upstreaming@lists.sr.ht
---cc-cmd='scripts/get_maintainer.pl --norolestats patch-dir/*.patch'
-
-Is switching to any different tool required?
-I doubt i would be able to do it without making some big mistakes.
+Will do it for v3 so this r-b ain't going to be carried.
 
 
