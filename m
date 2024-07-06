@@ -1,75 +1,74 @@
-Return-Path: <linux-pm+bounces-10723-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10724-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE82A929392
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2024 14:31:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75E929293D9
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2024 15:41:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 589C91F2125E
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2024 12:31:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DC16B2172B
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2024 13:41:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C448D1E4B2;
-	Sat,  6 Jul 2024 12:31:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C88C12F5B1;
+	Sat,  6 Jul 2024 13:41:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jEbGzdph"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C3QUkE3W"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 020F54C62
-	for <linux-pm@vger.kernel.org>; Sat,  6 Jul 2024 12:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA082757EA;
+	Sat,  6 Jul 2024 13:41:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720269109; cv=none; b=Fl86pj1rvrXjMYYbXrxXwoFTksqF1WHXhTvfL7ss4QAEDyA7j+QBghThChPF64BAGq5Ewv5i7SL9+rAJDdc1yVPK/VRb6szhMTbeqxU08F04d8sM0+Ze95o/w6jxocr5EVwR3fm1l4lpk+gdNxoakzqTPQtSrXMAs0l/e6gB+04=
+	t=1720273297; cv=none; b=oHJbQlR9Jab2NrwElzKfgC9D/253dZswugU8uzbifEIuFUquZKP0graAprk5BfexG16SMAcXZz8RGkATW3iTqFPv1dGglfhjcWdRX6yxlFT20wtMwWHHFMIcTZVNS8V+TK3wB4TFYyBJYuzL0Ttyn+X3gaglHurp+qunbpZ78ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720269109; c=relaxed/simple;
-	bh=AZeVgGjUhu0VLE0MdVJfGODsbNpLCLUc7QabVgczy4c=;
+	s=arc-20240116; t=1720273297; c=relaxed/simple;
+	bh=tpCfZvqW9yvz1Mou1k19Lf7SlicdQ3FqOCMPrEm8fKo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FSpglHxyl5OKFo8PZq5Qtgujwar0FpnzkXbZUtj9L1vQUD/D4ZYBwp/qT7f9arIVvmVLc6ovtzihFXdexXSK+V4ZW8nk0fapDgbuLaR+m36c4lNvlslm76l1qP0x1YbhcMC6De6qkv74lqNTk8wMFi/57PR7oxFYRZS0SKJijCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jEbGzdph; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-585e774fd3dso3255736a12.0
-        for <linux-pm@vger.kernel.org>; Sat, 06 Jul 2024 05:31:47 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=Td0/4ianOsgfOs0ZDtXm8AWdZUN3gabxUi01Mj8UGPfjQaLT6ZkYwI+8IOZBS69/MAFNkX3tVAcj83eBTSNHbAk66iQohmiqrjSsFY8OEb13OKCF9nZnFo3iNRxpMfSLegsK2icsh/7uLhCpJ7NIZO7GCf/ky0Eii/pAu7HuVJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C3QUkE3W; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a77c9d3e593so179742666b.0;
+        Sat, 06 Jul 2024 06:41:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720269106; x=1720873906; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=WxO9tUoRJ8g2YphFGWhNO5NnoblLdOv7a0AOZSNvnaY=;
-        b=jEbGzdphwYMn99g5rD4CYqpGE1FgTnTeRZTL83RvKQSYiUaetjPXK6CK6gD34Eq+9n
-         qmS7FjaGpVhJegb10zHMr3afEHO29YgW3TnA9ClNuT6X+vvn0YmTNNJJEJsgCy1ygsLU
-         An86qfpKidBEMuYWnaZUiBuun4TbIg8NZBMHj2lLMMxhdbSrJ2QdHPv9Q5dVNquHeBKj
-         BZPgz8c6pmlR6J9sJZyw245ARhVvMiAg7oHlQouf/L9FnLa8gjBSQA8vhUFiHw5gsdhm
-         j83AztYMT/4Q6FFdVA+JR9g/XjEDNPl963RyNysM+PV6F0C8mg6PeIAIU0sriETu9/h5
-         7g6Q==
+        d=gmail.com; s=20230601; t=1720273294; x=1720878094; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tpCfZvqW9yvz1Mou1k19Lf7SlicdQ3FqOCMPrEm8fKo=;
+        b=C3QUkE3WsT6MpIt8UFXyRgo65yqe82zcg8y9HqjZHOQyeL7vt/EovnI/Hf2p7iPfkK
+         HmJGO2d737Ox/v3Z0NC7+ykt9VbRAO8ZkWK6YPphhOCJo+3wpSFGXorfwo1AFnvRWq4N
+         6T1QhM+THizQ4Y5rT1cooo09QTr00zxcUd0uW7i1rcKIIVKadKHS/9n0K3Ick7m6ZOxg
+         3JXUfu0V4PPLxXsOlQTOI7qrbzWDbF61M0XzV6QPGOeCtdvOvvyJJsEwlV51PTmD+0Up
+         tOedLHgsuHBdXQCYEwc6CG6/aMwz6S9xmDNas5sVSi+KvPIVuY6LBi37vvocIq8042h8
+         /GGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720269106; x=1720873906;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WxO9tUoRJ8g2YphFGWhNO5NnoblLdOv7a0AOZSNvnaY=;
-        b=LpU1ffFByUkzSH6p8ahbLjLTSrHACjg3ZbDxDy7yqd8y+AuOldkp09Ns5jdnUJuPo+
-         pUijGgNl/GEgOuzutqZHrxLw3HqDkue+Fw7XE0WBZx/ST8/EJWWtOBWRQwq+/aLMxE5W
-         i0S0Fo+D6jR2fdPGNxPK2/phoScOoSJkj9b0/r2BHiRl95FL0FfUXFn1Jo0isOVwg/J0
-         R4k/ggqgAcpNYksDbjqPm6JJp8n+zPGab9K9Ng5Ch+H2CDyPr9YOT5Gy70wOHaN1SKrL
-         +cHJ8Q6SW4N4MlWPM+WknPB0RoJsmGFjzpNgZRPeDymqFZ5c3psQDM6lmmjb7lIv083W
-         bUeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXGx8UA/nAtLUrp79jpqPWZEx7K5ajnfNmv5JFsqxCpCJ7XYjsyNuOn+9HcoiVJSlMfqy9SiSdy4JJtzAXaZz+zyBnbJ0QvvA0=
-X-Gm-Message-State: AOJu0YxcrJlxFo6s96iCKg/XYlxOqJI4Lc4ncCxYFFCcW0fr7P75aplh
-	DpwIb+osjF4oH1QkYWhnz5Uflzl7wBERSNXkkdfbhyLdz+pxMN9erc2D9r5HROA=
-X-Google-Smtp-Source: AGHT+IFI1cK6dkv274ZfwByVzNk3B8KSxmGMCLvDGsiBoU/kAEVX4B/R+FpPnlJdrcjBGgmV37lYoA==
-X-Received: by 2002:a05:6402:5108:b0:57d:692:92d9 with SMTP id 4fb4d7f45d1cf-58e59265f08mr5744423a12.4.1720269105563;
-        Sat, 06 Jul 2024 05:31:45 -0700 (PDT)
-Received: from [192.168.105.194] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-58f63380f3csm2126686a12.58.2024.07.06.05.31.43
+        d=1e100.net; s=20230601; t=1720273294; x=1720878094;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tpCfZvqW9yvz1Mou1k19Lf7SlicdQ3FqOCMPrEm8fKo=;
+        b=geVVwDyVTiGID0U7PD5U+t0it9zsGK3k8DWVREkIdvM64jDL3gK+AQ35Kb7i9+ufbS
+         8M3tDDJN3FpIb1T0l+0/9XM7LANfn5z/i7LIt1wpFKFwxnH4p/SQbQCYFbUWaMOez6i6
+         WgilZ9Z2wOB7Y15ntXcIBO7MB1UEPV6PE4pHHS4LAr5Kvly3Q4gwtY3m5kqkgGD7v6I4
+         hkizgpNvZprYqZeF2VfKpXu48NuCV2AagvzfJdn7Mv1aYUdDVN868vrNSsD5Dyhtb3ID
+         P9MqOlExR7Vrj+i2nPD26BtQzRxI5If+MI6upf8e3lUNvt9PlFtQEU9QrWAveWAuCtpZ
+         XcOA==
+X-Forwarded-Encrypted: i=1; AJvYcCXpUxTIw0A1Jl5vrFOXjTylfJkfBd+kMwRMHK0GRQPniG6BoqTjZLRzay8Eu2Mc0VefV4EZ7Va/ux820h/7XTgYQa7hOAn6uQaNXPTeURs4tsnRODm3GL/3ZGoalypxgTxce42QKqaLk1IWnJK50iwV64HxxOwISjLxvqJIomPWd4rIRjMem871SvYMA5B8uMxY+McwefIiiAnPrRJEQVIL+Q==
+X-Gm-Message-State: AOJu0YxA9OlxfaMl09axa+UJBA/YhzlXp/gwijeA+17xJXFr58DSG86Y
+	28DQCj+VhmLcJ70VIZ0zvBr9lwhwatKXwjsJydBevmSJ88rOkemZ
+X-Google-Smtp-Source: AGHT+IE0ZemeIlvOgoNhCkacJ61zvRUuBkEL0wi6xZgy1jnf1+/l/KIsA+BVHMf2hMT1fUew2XvFzQ==
+X-Received: by 2002:a17:906:5293:b0:a6f:b67d:959e with SMTP id a640c23a62f3a-a77ba71188cmr379032566b.53.1720273293897;
+        Sat, 06 Jul 2024 06:41:33 -0700 (PDT)
+Received: from [192.168.1.13] (bzc167.neoplus.adsl.tpnet.pl. [83.30.48.167])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a77e1ff678fsm66100066b.137.2024.07.06.06.41.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Jul 2024 05:31:45 -0700 (PDT)
-Message-ID: <c15fc1de-c930-44b6-a9f9-d17e4da002fe@linaro.org>
-Date: Sat, 6 Jul 2024 14:31:42 +0200
+        Sat, 06 Jul 2024 06:41:33 -0700 (PDT)
+Message-ID: <5bb295b8-a79f-48ea-800c-3176c2402021@gmail.com>
+Date: Sat, 6 Jul 2024 15:41:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,112 +76,76 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] interconnect: qcom: Fix DT backwards compatibility for
- QoS
-To: Bjorn Andersson <andersson@kernel.org>,
- Odelu Kukatla <quic_okukatla@quicinc.com>
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+Subject: Re: [PATCH v2 0/8] msm8937/msm8976/qcs404 icc patches
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+ Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Georgi Djakov <djakov@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Kees Cook <keescook@chromium.org>,
- cros-qcom-dts-watchers@chromium.org,
- "Gustavo A . R . Silva" <gustavoars@kernel.org>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, quic_rlaggysh@quicinc.com,
- quic_mdtipton@quicinc.com
-References: <20240704125515.22194-1-quic_okukatla@quicinc.com>
- <jhfya4mjnckrmogtmusyvwjv4mlyycgqj3apt2kaj5umxprhtv@rfew7c5w3zf5>
+ Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240704200327.8583-1-a39.skl@gmail.com>
+ <b4b94938-903a-40ba-baf3-d04226dc9f90@linaro.org>
 Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <jhfya4mjnckrmogtmusyvwjv4mlyycgqj3apt2kaj5umxprhtv@rfew7c5w3zf5>
+From: Adam Skladowski <a39.skl@gmail.com>
+In-Reply-To: <b4b94938-903a-40ba-baf3-d04226dc9f90@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4.07.2024 7:44 PM, Bjorn Andersson wrote:
-> On Thu, Jul 04, 2024 at 06:25:15PM GMT, Odelu Kukatla wrote:
->> Add qos_clks_required flag to skip QoS configuration if clocks property
->> is not populated in devicetree for providers which require clocks to be
->> enabled for accessing registers. This is to keep the QoS configuration
->> backwards compatible with devices that have older DTB.
->>
-> 
-> Please read "Describe your changes" [1], and make your commit message
-> start with the problem description - establish to the reader why this
-> change is needed, then follow that with a technical description of the
-> solution (likely in a separate paragraph).
-> 
-> [1] https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
-> 
->> Reported-by: Bjorn Andersson <andersson@kernel.org>
->> Closes: https://lore.kernel.org/all/ciji6nlxn752ina4tmh6kwvek52nxpnguomqek6plwvwgvoqef@yrtexkpmn5br/
->> Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
->> ---
->>  drivers/interconnect/qcom/icc-rpmh.c | 2 +-
->>  drivers/interconnect/qcom/icc-rpmh.h | 1 +
->>  drivers/interconnect/qcom/sc7280.c   | 2 ++
->>  3 files changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
->> index 93047defd5e2..f49a8e0cb03c 100644
->> --- a/drivers/interconnect/qcom/icc-rpmh.c
->> +++ b/drivers/interconnect/qcom/icc-rpmh.c
->> @@ -311,7 +311,7 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
->>  		}
->>  
->>  		qp->num_clks = devm_clk_bulk_get_all(qp->dev, &qp->clks);
->> -		if (qp->num_clks < 0) {
->> +		if (qp->num_clks < 0 || (!qp->num_clks && desc->qos_clks_required)) {
-> 
-> For this new case, I think the dev_info() below makes total sense. I.e.
-> this looks good to me.
-> 
-> 
-> However, the num_clks < 0 case would represent finding a devicetree node
-> with clocks specified, but failing to get these clocks. I believe that
-> this would include EPROBE_DEFER.
-> 
-> I don't think it's correct to print a informational message and continue
-> without QoS. I think we should fail here.
 
-Since setting QoS settings is optional, I'd say we should simply skip trying
-to do so. Unless setting them on some buses (i.e. ones without failing clocks)
-and not on the rest would cause issues. But then, these settings should be
-bus-local, so perhaps it would still be fine?
+On 7/5/24 08:49, Krzysztof Kozlowski wrote:
+> On 04/07/2024 22:02, Adam Skladowski wrote:
+>> This series introduce new ICC drivers for some legacy socs
+>> while at it also updates a bit of qcs404 driver which seems
+>> to not receive much attention lately.
+>> Please take in consideration i do not own any qcs404 board
+>> so i cannot test anything else than if it compiles.
+>>
+>> Changes since v1
+>> ================
+>> 1. Reworded commit messages
+>> 2. Adjusted yamls.
+>> 3. Adjusted examples.
+> Adjusted to what? This is supposed to be specific.
+>
+> BTW, you use here odd email address, so:
+>
+> <form letter>
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC (and consider --no-git-fallback argument). It might
+> happen, that command when run on an older kernel, gives you outdated
+> entries. Therefore please be sure you base your patches on recent Linux
+> kernel.
+>
+> Tools like b4 or scripts/get_maintainer.pl provide you proper list of
+> people, so fix your workflow. Tools might also fail if you work on some
+> ancient tree (don't, instead use mainline) or work on fork of kernel
+> (don't, instead use mainline). Just use b4 and everything should be
+> fine, although remember about `b4 prep --auto-to-cc` if you added new
+> patches to the patchset.
+> </form letter>
+>
+> Best regards,
+> Krzysztof
+>
+Indeed i send patches from different OS with old kernel tree inside,
+i haven't had idea about that.
 
-Konrad
+Will update tree before sending.
+Regarding v3 which im going to send anyway, should i reword changes in v2?
+
+Like in v2 i Adjusted yaml to look the way msm8953 is(seems its wrong).
+
+Adjusting examples refers to removing redundant nodes from yaml examples.
+
+For sending i use this command:
+git send-email --to-cover --cc-cover patch-dir/*.patch --cc
+phone-devel@vger.kernel.org --cc ~postmarketos/upstreaming@lists.sr.ht
+--cc-cmd='scripts/get_maintainer.pl --norolestats patch-dir/*.patch'
+
+Is switching to any different tool required?
+I doubt i would be able to do it without making some big mistakes.
+
 
