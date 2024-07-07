@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-10730-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10731-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6901A9297F9
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Jul 2024 14:59:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8051D9297FD
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Jul 2024 15:02:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCDB91F21AB1
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Jul 2024 12:59:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36B1A28270F
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Jul 2024 13:02:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 320D51DFDE;
-	Sun,  7 Jul 2024 12:59:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D76241E4A4;
+	Sun,  7 Jul 2024 13:02:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k3iSw9ML"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KVhuVdfQ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042C01429B;
-	Sun,  7 Jul 2024 12:59:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FCF1DFD0;
+	Sun,  7 Jul 2024 13:02:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720357191; cv=none; b=njXPwKW1XVtMh6cdmC8b1+DEAfGnmgUKniCzDXD0gHshX2PwmzsnOfUtVNzgCwYT5RH1pLzKmpHNqST10HoT0YH8TlSVtxya32YXLJoPsfpzvTjObRWg0VLvK6nj8l0TXQBUWQPQvHAUySFVbweFz3bHMWHc//PwwZDKur3cpVI=
+	t=1720357362; cv=none; b=r+Q69pu/5ng4EowKGSfNzORLe1SjkOIts5KbnOMRf6fQxpse2wTuwrNwvxEaFANIS7Dz8sv4T7LH8fpDhz9oR++BNevBcGxioKqngy0XqJ1zfRqWvf4uDyRQ9+Vve38wwlqeJWi+mSAKoYgXp/hx2RDGNzZq+22fYalFNve3NHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720357191; c=relaxed/simple;
-	bh=tiXMA8EECBkqN/vv2Nt4zH0sM+yAKEX9K1n1zCy7yDU=;
+	s=arc-20240116; t=1720357362; c=relaxed/simple;
+	bh=AISQHqqAR/mblpWZAWlUUZweLSIxHkE/HcK1mnvfczs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CmBgKvKaDldIx8MBmF0Mwp/wiYz5ceViNgpCH0XGmVFjtLhFbnZgtth0uS2x2gEIUO38gYGi9pTxvxhxR4cE2blaaEALpi58ns1XvV9wQIsifE8uhheK4M10XSbgLFgQq45x7T3eDfIRsGpNS/bvDut7uKgYkYEa2VzgiY8RjyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k3iSw9ML; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7056AC3277B;
-	Sun,  7 Jul 2024 12:59:47 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Vn/jTni8i7eja+Cl+u15WP/UZXASVCDzcvHeeK77gQWvXRlUY+qE4KOBah8VWQAL/gwf9eTMwKz5Av0ZBWNQXn20nj7ksnv1EDFkwVMUMlMZEsSpm63uh9rraTWKWZUC6oYS8AO5m3Tvx9RK9DMTjJ7/4vlemkTZQWab9xlzM7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KVhuVdfQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C70FC3277B;
+	Sun,  7 Jul 2024 13:02:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720357190;
-	bh=tiXMA8EECBkqN/vv2Nt4zH0sM+yAKEX9K1n1zCy7yDU=;
+	s=k20201202; t=1720357362;
+	bh=AISQHqqAR/mblpWZAWlUUZweLSIxHkE/HcK1mnvfczs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=k3iSw9MLTQChGjG8cN9oUX2rM6wytHwmk+SoKRGOKGU/ZHJClzLXbtECPEb/LASPj
-	 ikdewirGrr1ly6Q87+3fKOHS9tnk+fUz8d+uLhNY72wn26fIrSSPa3zgjknmdk2Gki
-	 2beXfNiqkffUlNvmKivL3c1RkpdLrKQrdUDbiT1m8hnSARqZKmxMK0snepAisTX3K4
-	 WdGiGIo+y+4nDycEKyjRfZIBdvqO9dWlfj+bOzFgashQCgnry77o0ygxkUUML6JyYu
-	 g37Ercm9NIzl8M/Y/Zr+hsLqXgrCVVH+ZZUZP/FNwt1xm8FLa309qNqR/L/X1iQKJT
-	 1cK4QyMCVNY7g==
-Message-ID: <a4d08999-55ea-4674-bb0f-6d618b7bdea7@kernel.org>
-Date: Sun, 7 Jul 2024 14:59:44 +0200
+	b=KVhuVdfQQ/cHa02J18+0WmRI6kb36VBBxqnC4l+9Jes6cWMW5qPvMUJnyMDy8zYJH
+	 L32bAxXujDXI/Esf4TKLOv3++8v507YLLYzN0FMPlkyywlsWqlO3rIS4AYIQvQWlVt
+	 aJNAMrBqDep7zGEAnU4Jn9jSIsogC53k/jxgkp/lMdKsbx+lwetrP4+FDjPPF67npA
+	 dicrw8QBHXL3ly+zcJMr41ctiE2cCByDIIkb9aZwUATCDsrwu5KpCoit9SvYccG+U/
+	 fnRo0ULwTXB9V3d6ydGkCGZnN5atx0ueyJPTUtk8G7YIxrlcXuMvuv5nz8gqyr9K1Z
+	 O/TnJdav0Efag==
+Message-ID: <5c1658a1-3290-48c3-a39a-9e5c837bdb70@kernel.org>
+Date: Sun, 7 Jul 2024 15:02:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: power: Add power sequence for Amloigc
+Subject: Re: [PATCH 2/3] power: sequenceing: Add power sequence for Amlogic
  WCN chips
 To: yang.li@amlogic.com, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -58,7 +58,7 @@ To: yang.li@amlogic.com, Rob Herring <robh@kernel.org>,
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org
 References: <20240705-pwrseq-v1-0-31829b47fc72@amlogic.com>
- <20240705-pwrseq-v1-1-31829b47fc72@amlogic.com>
+ <20240705-pwrseq-v1-2-31829b47fc72@amlogic.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,96 +104,100 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240705-pwrseq-v1-1-31829b47fc72@amlogic.com>
+In-Reply-To: <20240705-pwrseq-v1-2-31829b47fc72@amlogic.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 05/07/2024 13:13, Yang Li via B4 Relay wrote:
 > From: Yang Li <yang.li@amlogic.com>
 > 
-> Add binding document to introduce power sequence of
-> Amlogic WCN chips.
+> Add power sequence for Bluetooth and Wi-Fi respectively, including chip_en
+> pull-up and bt_en pull-up, and generation of the 32.768 clock.
 > 
 > Signed-off-by: Yang Li <yang.li@amlogic.com>
-> ---
->  .../bindings/power/amlogic,w155s2-pwrseq.yaml      | 62 ++++++++++++++++++++++
->  1 file changed, 62 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/amlogic,w155s2-pwrseq.yaml b/Documentation/devicetree/bindings/power/amlogic,w155s2-pwrseq.yaml
-> new file mode 100644
-> index 000000000000..f99a775fcf9b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/amlogic,w155s2-pwrseq.yaml
-> @@ -0,0 +1,62 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/amlogic,w155s2-pwrseq.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic power sequence for WCN chips
-> +
-> +maintainers:
-> +  - Yang Li <yang.li@amlogic.com>
-> +
-> +description:
-> +  The Amlogic WCN chip contains discrete modules for WLAN and Bluetooth. Power on
-> +  Bluetooth and Wi-Fi respectively, including chip_en pull-up and bt_en pull-up,
-> +  and generation of the 32.768KHz clock.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: amlogic,w155s2-pwrseq
-> +      - items:
-> +          - enum:
-> +              - amlogic,w265s1-pwrseq
-> +              - amlogic,w265p1-pwrseq
-> +              - amlogic,w265s2-pwrseq
-> +          - const: amlogic,w155s2-pwrseq
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description: clock provided to the controller (32.768KHz)
-> +
-> +  clock-names:
-> +    items:
-> +      - const: ext_clock
 
-Drop _clock... or actually drop entire clock-names, not much helpful.
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of.h>
+> +#include <linux/gpio.h>
+> +#include <linux/of_gpio.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pwrseq/provider.h>
+> +#include <linux/string.h>
+> +#include <linux/types.h>
+> +
+> +struct pwrseq_aml_wcn_ctx {
+> +	struct pwrseq_device *pwrseq;
+> +	int bt_enable_gpio;
+
+Why? It's never used... or you use wrong API. Confusing code.
+
+> +	int chip_enable_gpio;
+> +	struct clk *lpo_clk;
+> +	unsigned int pwr_count;
+> +};
+> +
+> +static DEFINE_MUTEX(pwrseq_lock);
+
+Why this is not part of structure above?
 
 > +
-> +  amlogic,chip-enable-gpios:
-> +    maxItems: 1
-> +    description: gpio specifier used to enable chipset
 
-For entire chipset? Then enable-gpios
+
+...
 
 > +
-> +  amlogic,bt-enable-gpios:
-> +    maxItems: 1
-> +    description: gpio specifier used to enable BT
-
-Follow existing bindings for Qualcomm as example.
-
+> +static int pwrseq_aml_wcn_match(struct pwrseq_device *pwrseq,
+> +				 struct device *dev)
+> +{
+> +	struct device_node *dev_node = dev->of_node;
 > +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - amlogic,chip-enable-gpios
-> +  - amlogic,bt-enable-gpios
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    wcn_pwrseq {
+> +	if (!of_property_present(dev_node, "amlogic,wcn-pwrseq"))
 
-No underscores in node names, generic node names.
+You cannot have undocumented properties, sorry, that's a NAK.
 
-There is no device as "pwrseq". I also do not get what "wcn" means here.
+> +		return 0;
+> +
+> +	return 1;
+> +}
+> +
+> +static int pwrseq_aml_wcn_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct pwrseq_aml_wcn_ctx *ctx;
+> +	struct pwrseq_config config;
+> +
+> +	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
+> +	if (!ctx)
+> +		return -ENOMEM;
+> +
+> +	ctx->bt_enable_gpio = of_get_named_gpio(dev->of_node,
+> +					       "amlogic,bt-enable-gpios", 0);
+> +	if (!gpio_is_valid(ctx->bt_enable_gpio))
+> +		return dev_err_probe(dev, ctx->bt_enable_gpio,
+> +				"Failed to get the bt enable GPIO");
+> +
+> +	ctx->chip_enable_gpio = of_get_named_gpio(dev->of_node,
+> +					       "amlogic,chip-enable-gpios", 0);
+> +	if (!gpio_is_valid(ctx->chip_enable_gpio))
+> +		return dev_err_probe(dev, ctx->bt_enable_gpio,
+> +					"Failed to get the chip enable GPIO");
+> +
+> +	ctx->lpo_clk = devm_clk_get_optional(dev, NULL);
+
+Clock is not optional, according to you binding.
+
+> +	if (IS_ERR(ctx->lpo_clk))
+> +		return dev_err_probe(dev, PTR_ERR(ctx->lpo_clk),
+> +				"Failed to get the clock source");
+> +
+> +	memset(&config, 0, sizeof(config));
+
+Just initialize it on the stack with 0.
 
 
 
