@@ -1,145 +1,129 @@
-Return-Path: <linux-pm+bounces-10771-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10772-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B062292A3C3
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 15:38:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4228192A3FE
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 15:47:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E22341C214FC
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 13:38:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1A74B22217
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 13:47:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08152137923;
-	Mon,  8 Jul 2024 13:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED6D13C3F6;
+	Mon,  8 Jul 2024 13:47:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eswCSAla"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U4+J9ZaO"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4EE97CF3A;
-	Mon,  8 Jul 2024 13:38:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F30D770F3;
+	Mon,  8 Jul 2024 13:47:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720445899; cv=none; b=txOH93xcaDVXLw8NkUkltkthVLdrTaCu2ryYL/95mojxTFg5r2g7IT7mN4WLOZ/R7he35srmD5Rui/IPuCVQRSAGxP91N9jCrAqouOUGbRkhEMZ9hoBuwN+7MCgr+vBfs8yQEfR7/7JBAdBD63xXc3VtHmYGO9YTDVhVvRNKN3k=
+	t=1720446435; cv=none; b=dALAEssrgr5l8ZyL/IF6AVunTxAVtne1YMgPqLFnO929yaVULWk9T2c6o4Y5JhejLHkHOYy/wn0zW4QlZDtQ9S+KikC/P/67YAEyALf6grBGCbiQq9nPcnBaeTMboQ2inVxBjFdKVmMa1NYy2b1uv9riLzE66TZvVp2XMN0ATJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720445899; c=relaxed/simple;
-	bh=BIjZ/Q/rNq6WVjfjZF4oPBh7N8vXtzm3u6cUD8VASMM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=by/RGv5oVThba/f9hBBg9Nn78S+pq5Cf68SeUyMKNXg08UAy53ayMYCO0SV5w4QZxtNvcDBZpNHcYzcbsn8Z7g1ZDav30nLVUTIM0CSR2c5DsRNB8QlAyax0L3Q1X30SV2zPy1wHoLgOciCYK3TNN2jBvCDj3+3pBkPOqcVKqXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eswCSAla; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BFC3C4AF0C;
-	Mon,  8 Jul 2024 13:38:19 +0000 (UTC)
+	s=arc-20240116; t=1720446435; c=relaxed/simple;
+	bh=2vomq8mEESeFfhHmhQ5eoZsQ2DEc5hIHJUkmN3qwLnk=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=JZDGCsf0s0tsQW9V7SLkIgy1RSjMlVO47w7azzyzdg6N93XIZudcSNGD9tMoz0o5WV4bpvcPFJOSi2Xv8RiLO3Yw/j66H246+HUc4gzddrJjyNWF3hEOmuGikdL2kgr/WIeMweDWtkJODvFR9KeKkJPaMhwY68Kp56duoTOwnTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U4+J9ZaO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F10C116B1;
+	Mon,  8 Jul 2024 13:47:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720445899;
-	bh=BIjZ/Q/rNq6WVjfjZF4oPBh7N8vXtzm3u6cUD8VASMM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=eswCSAlaM65qts60lonI5GLmgMkbe40KF2V6kLATyxpS/gViFqZutFwh7/FaPuwOQ
-	 pvx44U7+AufJkue/iQ930/g5x5t6MDHGuUl9Tkv1wknegzxPLvS8GaZWuXyNLq3Can
-	 mF0I6fLoO49PGcuHLq3VGj80EpoQ2QbqOgZaxjQp4HleE8fr/4CmRIjf3UvoQNHeeP
-	 bBQXMxjP4CQCenpiDqrsi9wDiyx48QjvToWclyg22/hq49PZGMnp3tliBJnDnKIJA4
-	 Vh37JCuUF4bguUaMy85CZj/MsVqgzrNNA/VKGLUeocrE4kH77c5g8vDJH/8Sw9itKg
-	 BX+2qnGu9iuCw==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5c6780d13afso27449eaf.2;
-        Mon, 08 Jul 2024 06:38:19 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXdQfnSRDWWKjXIclry0mwHuXHdkEc8fFuxTj47BRPF0IGWM1SRxVmXScuFqPvVWdwTKoVEPZwL8U6VMc6UrwGrwBM+vp+HRPpYivojXbwnFR3S2BSwv47ZCjxbdYxd9PeA9/e1teE=
-X-Gm-Message-State: AOJu0YzilrQ3YQpbJ5WivSeE1AlAh7mMQttU+LWk7vbhoOeyJ/ERmGff
-	6U0K/vI7GeC0MJhbYo/2rw+fnOhEMawswP8AR4oL+6mWRCjSbGEj339pofJw3wcHCT9fog+4Ulj
-	q7H3qY7iK6p8Hvt5LianElsbceWE=
-X-Google-Smtp-Source: AGHT+IEbB8eIB9JsuUUbx3IAYLs+olnVxVzaZTOQA37htD5fMkqZfxqKkPm8ZGK0PNpmnE9euG9vWejD6Uur9ptQ8/k=
-X-Received: by 2002:a05:6820:b90:b0:5c6:65fb:d734 with SMTP id
- 006d021491bc7-5c665fbd78cmr5526042eaf.1.1720445898719; Mon, 08 Jul 2024
- 06:38:18 -0700 (PDT)
+	s=k20201202; t=1720446435;
+	bh=2vomq8mEESeFfhHmhQ5eoZsQ2DEc5hIHJUkmN3qwLnk=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=U4+J9ZaO/WP8O9id+1gpZf41+qJtJ56JjqlQnnetfmgZDX/p2Em4SdLADSZVpPvsY
+	 yS8b1uvRqw5fvEeCWqd5acaYwMZ+r4Ny51XKZVYXdYJ8GRaJR/PnKMN+hCAWpn1XK0
+	 tcoTG+akL0rGlgz9YTzEun1YKj8dZfT4TP8lhM+nTshNRQBQ7adqOKom/SVyp83lFO
+	 IrbNk41MFFgQ3C10uLFXioOZ1hH5j/phbVMoNQZeZTZOru2a6OUwFIZgIkXtK6MxZs
+	 F5E72UiQ6UfWD066+LPn76RavHu0coAoqv0FxPL7CZ2Y7c2IdBVi1KfIzaKNULk1IT
+	 CZX6WsUHtwoxw==
+Date: Mon, 08 Jul 2024 07:47:13 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2746673.mvXUDI8C0e@rjwysocki.net> <4940808.31r3eYUQgx@rjwysocki.net>
- <402ede79-5eda-48fc-8eb8-5d89ffe6bd41@linaro.org>
-In-Reply-To: <402ede79-5eda-48fc-8eb8-5d89ffe6bd41@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 8 Jul 2024 15:38:07 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jgTN+6WC9nPGCidMnMjSsYMcMe+m=8Ge7Hr--utefM2Q@mail.gmail.com>
-Message-ID: <CAJZ5v0jgTN+6WC9nPGCidMnMjSsYMcMe+m=8Ge7Hr--utefM2Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] thermal: core: Add sanity check for polling_delay
- and passive_delay
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Jeffrey Hugo <quic_jhugo@quicinc.com>, 
+ Viresh Kumar <vireshk@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Mark Brown <broonie@kernel.org>, 
+ Andy Gross <agross@kernel.org>, Nishanth Menon <nm@ti.com>, 
+ linux-pm@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>, 
+ Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org, 
+ Varadarajan Narayanan <quic_varada@quicinc.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ Ulf Hansson <ulf.hansson@linaro.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Marijn Suijten <marijn.suijten@somainline.org>, 
+ Rob Herring <robh+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Niklas Cassel <nks@flawful.org>, 
+ Liam Girdwood <lgirdwood@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+In-Reply-To: <20240708-topic-cpr3h-v15-4-5bc8b8936489@linaro.org>
+References: <20240708-topic-cpr3h-v15-0-5bc8b8936489@linaro.org>
+ <20240708-topic-cpr3h-v15-4-5bc8b8936489@linaro.org>
+Message-Id: <172044643349.2927781.3846230770478390037.robh@kernel.org>
+Subject: Re: [PATCH v15 04/10] dt-bindings: soc: qcom: cpr3: Add bindings
+ for CPR3+ driver
 
-On Mon, Jul 8, 2024 at 2:12=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
->
-> On 05/07/2024 21:46, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > If polling_delay is nonzero and passive_delay is 0, the thermal zone
-> > will use polling except when tz->passive is nonzero, which does not mak=
-e
-> > sense.
-> >
-> > Also if polling_delay is nonzero and passive_delay is greater than
-> > polling_delay, the thermal zone temperature will be updated less often
-> > when tz->passive is nonzero.  This does not make sense either.
-> >
-> > Ensure that none of the above will happen.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > v1 -> v2: The patch actually matches the changelog
-> >
-> > ---
-> >   drivers/thermal/thermal_core.c |    3 +++
-> >   1 file changed, 3 insertions(+)
-> >
-> > Index: linux-pm/drivers/thermal/thermal_core.c
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > --- linux-pm.orig/drivers/thermal/thermal_core.c
-> > +++ linux-pm/drivers/thermal/thermal_core.c
-> > @@ -1440,6 +1440,9 @@ thermal_zone_device_register_with_trips(
-> >               td->threshold =3D INT_MAX;
-> >       }
-> >
-> > +     if (polling_delay && (passive_delay > polling_delay || !passive_d=
-elay))
-> > +             passive_delay =3D polling_delay;
->
-> Given this is a system misconfiguration, it would make more sense to
-> bail out with -EINVAL. Assigning a default value in the back of the
-> caller will never raise its attention and can make a bad configuration
-> staying for a long time.
 
-This works except for the case mentioned below.
+On Mon, 08 Jul 2024 14:22:35 +0200, Konrad Dybcio wrote:
+> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> 
+> Add the bindings for the Qualcomm CPR3+ hardware.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> [Konrad: Make binding check pass, some other changes]
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 286 +++++++++++++++++++++
+>  1 file changed, 286 insertions(+)
+> 
 
-I think that passive_delay > polling_delay can trigger a -EINVAL, but
-(polling_delay && !passive_delay) cannot do it because it is regarded
-as a valid case as per the below.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-> That said, there are configurations with a passive delay set to zero but
-> with a non zero polling delay. For instance, a thermal zone mitigated
-> with a fan, so active trip points are set. Another example is when there
-> is only critical trip points for a thermal zone.
->
-> Actually there are multiple combinations with delays value which may
-> look invalid but which are actually valid.
->
-> For example, a setup with polling_delay > 0, passive_delay =3D 0, active
-> trip points, cooling map to this active trips, passive trip points
-> without cooling map.
->
-> IMHO, it is better to do the configuration the system is asking for,
-> even if it sounds weird
+yamllint warnings/errors:
 
-Except that it doesn't work as expected because if passive_delay =3D 0,
-polling is paused when tz->passive is set.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-1:qcom,opp-cloop-vadj:0: [0] is too short
+	from schema $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-1:qcom,opp-oloop-vadj:0: [0] is too short
+	from schema $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-2:qcom,opp-cloop-vadj:0: [0] is too short
+	from schema $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-2:qcom,opp-oloop-vadj:0: [0] is too short
+	from schema $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-3:qcom,opp-cloop-vadj:0: [0] is too short
+	from schema $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-3:qcom,opp-oloop-vadj:0: [0] is too short
+	from schema $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
 
-Thanks!
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240708-topic-cpr3h-v15-4-5bc8b8936489@linaro.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
