@@ -1,219 +1,286 @@
-Return-Path: <linux-pm+bounces-10750-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10749-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82F80929D58
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 09:42:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 155A0929D4F
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 09:42:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CC661F2249C
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 07:42:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29A331C21AA5
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 07:42:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9491D2C1A2;
-	Mon,  8 Jul 2024 07:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93EFA28DA0;
+	Mon,  8 Jul 2024 07:41:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b="VhLZU4xm"
+	dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b="GoswDOiS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from forward500d.mail.yandex.net (forward500d.mail.yandex.net [178.154.239.208])
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2127.outbound.protection.outlook.com [40.107.255.127])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522F5381B9;
-	Mon,  8 Jul 2024 07:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.208
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720424534; cv=none; b=aCBRDhC+fQSIyKfGLvD9JovgMnyrTTrcT41pG4eHKAsC+PtnC9yiEwGk1TJGLyOHu9SPG8OE+8yUp0qBunhRnZeaJZabqH+nHO7A2lnyMB9+8ckJHPzSQbggwQD+A3SP+mVWLgZnR46JIl0sBGIf44o9j+s/n+JWVn/0V7Efhwg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720424534; c=relaxed/simple;
-	bh=O9RoOO9HvF5SuUCeDg6vUA4wVmtzSSul9Xm5/s61R6Y=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GZvza9XF6nJILN6gLmoEHqQ9x8nje2HC//JgXX1onsz18q0bmZF87ZXtK401h6yLmsqZlTjYumbt54CpIWxqOvPMdhOIdd+9tu5rPaAtPegM8g7CQ2Z4dejZltQLbRzPUlvLaRHsYodxcKvQYCvqnD1gCliZs5P7kLaOUFGUk7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me; spf=pass smtp.mailfrom=maquefel.me; dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b=VhLZU4xm; arc=none smtp.client-ip=178.154.239.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=maquefel.me
-Received: from mail-nwsmtp-smtp-production-main-24.klg.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-24.klg.yp-c.yandex.net [IPv6:2a02:6b8:c42:7dca:0:640:d4d9:0])
-	by forward500d.mail.yandex.net (Yandex) with ESMTPS id C5DDC60A3F;
-	Mon,  8 Jul 2024 10:34:32 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-24.klg.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 6YW3mBQe3W20-qUQtuv72;
-	Mon, 08 Jul 2024 10:34:30 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail;
-	t=1720424070; bh=O9RoOO9HvF5SuUCeDg6vUA4wVmtzSSul9Xm5/s61R6Y=;
-	h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
-	b=VhLZU4xmXX2w4OBfMMBdLTuYfNHiVS81wr+5BeazZfJVOu+yyXSQdoaO60cjQziKc
-	 M0uTvIyCbbrFj9TBj/klf6qeczg17/a4YJiSE0dCEH6yKJCldgKqcd4qvfnukuaDOU
-	 WcbQbDv7ImiZUeCsbYrO017QDF3uXjKDnJWXQ9oc=
-Authentication-Results: mail-nwsmtp-smtp-production-main-24.klg.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Message-ID: <663b1749afeb5cec281149fdb445ed36fdcbc68e.camel@maquefel.me>
-Subject: Re: [PATCH v10 00/38] ep93xx device tree conversion
-From: Nikita Shubin <nikita.shubin@maquefel.me>
-To: Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>, 
-	Arnd Bergmann
-	 <arnd@arndb.de>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>, Stephen Boyd
- <sboyd@kernel.org>,  Hartley Sweeten <hsweeten@visionengravers.com>,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>, Russell King
- <linux@armlinux.org.uk>, Lukasz Majewski <lukma@denx.de>, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Andy
- Shevchenko <andy@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
- <conor+dt@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter
- Roeck <linux@roeck-us.net>, Thierry Reding <thierry.reding@gmail.com>, Mark
- Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Damien Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Liam Girdwood
- <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,  Takashi Iwai
- <tiwai@suse.com>, Ralf Baechle <ralf@linux-mips.org>, "Wu, Aaron"
- <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, Olof Johansson
- <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-pm@vger.kernel.org,  devicetree@vger.kernel.org,
- dmaengine@vger.kernel.org,  linux-watchdog@vger.kernel.org,
- linux-pwm@vger.kernel.org,  linux-spi@vger.kernel.org,
- netdev@vger.kernel.org, linux-mtd@lists.infradead.org, 
- linux-ide@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-sound@vger.kernel.org, Bartosz Golaszewski
- <bartosz.golaszewski@linaro.org>,  Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, Vinod
- Koul <vkoul@kernel.org>
-Date: Mon, 08 Jul 2024 10:34:05 +0300
-In-Reply-To: <jyvlqfvqn5bp3jmvxvwyrcqmihjohuq3o757mfph7x37kbwvtq@gtgyh4fca4fq>
-References: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
-	 <CAHp75VfSC9gAD9ipeWRPdQOxUp4FXqYYei-cJTs38nbz0cHpkg@mail.gmail.com>
-	 <48c242838c77034485a9e667dc0e867207c5beed.camel@maquefel.me>
-	 <241a4cf9830b0118f01e8fcf2853c62527636049.camel@maquefel.me>
-	 <jyvlqfvqn5bp3jmvxvwyrcqmihjohuq3o757mfph7x37kbwvtq@gtgyh4fca4fq>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A36A22EEF;
+	Mon,  8 Jul 2024 07:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.127
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720424518; cv=fail; b=CkihBIYvBx2/7f9O41BHkPTSnIsA2xT5cj3Zomqca60HrSqMUkmdhymkyrM7x69fn93g5t041Dv2wwJkxCGCuWEb85upt7XUbYfe2U1qwbPwqG1C545XdWaSLvXMdYqmX8BXxZZnNywMozNDfFDhPUaDZ2LwxZTAEbJBQwWWqxc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720424518; c=relaxed/simple;
+	bh=NmP26Hhc/nXdp7y/jLzrz/v+Zym10W1ZmIIzpfS2boY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Wng5GSfxmgzv4PXVgUiCcamWY53xKreFQc32B5MK7f9I4Gavcb1VeWmC37u7DfWBBTBst+uPmo5CR1YVGeSCwFBGzS2R0Mu58nzoraUqSRDJRS4yoqyUD7t/E0Q30s/pvKw6Mud+85rEjeMHrC+OxaUNZXX4aUKdn6QGcZqmZ8M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com; spf=pass smtp.mailfrom=amlogic.com; dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b=GoswDOiS; arc=fail smtp.client-ip=40.107.255.127
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amlogic.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E1mrAACCJlQo/pf+Vxwhz/CEAT6/Nb6RjyTnoSSDOPdNANo8e5ki8zupq/fBaq4KEdSSqp0itZvK0Za0IUuK81QW1JIAasDdYa7foSQoX2jk0u9+GUuekpdcI8y1NxsK7WW63Cw18XR7YUuxfMFQ6vBvUX8klDusLGLvqfoy/wDriI1tZ45Hwuq0PjV0ZbNdScKmdTh/IvIgB3OWsR4pWp87nQ7IeFKZEOKsobv9ZtMUSNC7PRUulKcfy3pk1b7zszFppPJR2/3jys213mpd06040IdQbJX1xmlI3wXF1gKPxzKB3izwaaW68K/hlktkidq3jNCb6kM2kIyuw+Gkrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yTMSJgptXYdNeupcqRcUmpq0YrkU8HUKbgroASztT0E=;
+ b=jPVUBjHHp8So3/IplF4QL1sLc2Dt3fUPX/wM81e7XaqTR5bVt/JGzfXlqQCQqjiITED22YLm+jYe7com2+nAa1GTxAysTu3MqOx65FrYMWAsar+L2WQb/Ggvqac+5UE+SHdjMViiVYdt7V4jF9KmXdCVcveP6n431ogov2MEIEfcBjyCvDy6j1Bj1x9cE+JC9Dm26K9JDyDocuwpuz1scxPQffGziDfvedQHePPWumv4z2Ywwb7Dm7jPe/9Lg+R/GTrQTxdIK6i4vewi99HXfm15aXXtEt5zZsi2XikRiK/UvHDvzOfAoI/RqVdfb8D4XiII8Fa1OuV2t7lAmsPAmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
+ dkim=pass header.d=amlogic.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yTMSJgptXYdNeupcqRcUmpq0YrkU8HUKbgroASztT0E=;
+ b=GoswDOiSMebSl3D/6cY4iCtXXUWZ3UHuBFhV6whvrPM6xAcl3Q2batQw4r2Xj188+/cM1sfGpvU9ap20p89BFz4sYJ8sIsI5U0Nt3zLLPBIEtLnn0M85RcrMTSYOeYGzdz3obTAR5uTWT2TeLZtp027bQQb+GJtauuJWtr9q+JM3BAjZeFqRfLtE3uoKcqVmEdGy8EUye4yPc+D46hly1q+j17km6Cf+H5BXtrOxgNsmcevtrDnT3fEYroO9Ufnjcy4k+yBX6s+voFehHo4IerdstKwdLIWeGJqbMx40CuEf/Pe+sMiBaCYcsoxQuwAS03SPHK8Lz06GrBtSoTbfKg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amlogic.com;
+Received: from JH0PR03MB7468.apcprd03.prod.outlook.com (2603:1096:990:16::12)
+ by SEZPR03MB8740.apcprd03.prod.outlook.com (2603:1096:101:216::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.35; Mon, 8 Jul
+ 2024 07:41:50 +0000
+Received: from JH0PR03MB7468.apcprd03.prod.outlook.com
+ ([fe80::4128:9446:1a0f:11fd]) by JH0PR03MB7468.apcprd03.prod.outlook.com
+ ([fe80::4128:9446:1a0f:11fd%6]) with mapi id 15.20.7741.033; Mon, 8 Jul 2024
+ 07:41:50 +0000
+Message-ID: <00fe66b7-1c04-48ec-a8ed-404e941dfeab@amlogic.com>
+Date: Mon, 8 Jul 2024 15:41:27 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] power: sequenceing: Add power sequence for Amlogic
+ WCN chips
+To: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20240705-pwrseq-v1-0-31829b47fc72@amlogic.com>
+ <20240705-pwrseq-v1-2-31829b47fc72@amlogic.com>
+ <5c1658a1-3290-48c3-a39a-9e5c837bdb70@kernel.org>
+From: Yang Li <yang.li@amlogic.com>
+In-Reply-To: <5c1658a1-3290-48c3-a39a-9e5c837bdb70@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2P153CA0032.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:190::23) To JH0PR03MB7468.apcprd03.prod.outlook.com
+ (2603:1096:990:16::12)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: JH0PR03MB7468:EE_|SEZPR03MB8740:EE_
+X-MS-Office365-Filtering-Correlation-Id: c5becfeb-ec7b-4a42-73e3-08dc9f216d79
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UWF3N2ZGYVFQVVlCcFJYV1hGNjlZaTQ4U2cvcUoyQ2dxdU9DMExIV0J6T0pQ?=
+ =?utf-8?B?d2REZWhFTFZod3VGQXRxZ0FWZGRVeG1EeGVQZUJyUFQvOERod1ZkR3FRNy9H?=
+ =?utf-8?B?YzIwbk1Ga3JDeXF1bDN5Q0lHUEZQZzlZWHQyZjZISEpyYUEwdnZNQU1jY1U1?=
+ =?utf-8?B?czJvM1J6bWMzQVoxOS9jRUdObUdmSFNwc2I1TU5uZ2RjYkhZRXVnSnlrTFNG?=
+ =?utf-8?B?a3Q2WkViaW9CaWpxeDRKS2pzaFQwdmo5UkhXSTdhUnZDcTlTQmVJZ1Q5Sk5I?=
+ =?utf-8?B?a2QwNHZyMFpxeURzc1JzcXNBNkZwTUoxUFJkcDdGSGs3S0UrQjJaNVl5elow?=
+ =?utf-8?B?OTYzSnNIVkc2UCszbmJSN3V3d04rdmhIcTg5MjZpL1NsODFzTy9WTHFsSUpR?=
+ =?utf-8?B?YlNLN1VFM1dEeHdtTEtYQTQyS1dhQ3Y2NkMzQXhNM0svNEtkUi91b0ExbTV5?=
+ =?utf-8?B?MHVBeEUxOEcxaVlUZW4xV2F4QWZPS1NMZnl0dkRFMnU4dytkZ1M1SnhreEZi?=
+ =?utf-8?B?WnU1OVlRdkVSbkpUUkFuVEthcWhHaEYxV2I2T2JuTlMxTlgyOW84dnVUeEQy?=
+ =?utf-8?B?RW9nL0lISitZQ053QkpHcXM0V0VoRE1vekcwRHZJbHlJNkwrOXVqYjk0ZEo3?=
+ =?utf-8?B?NGdEeWFqZW5KcmlkNWhKRFdjL0NjNlBMYTlFQVBpV2srQW5hQlh1WWV1SjJp?=
+ =?utf-8?B?R3V2ckRLR0pjcG1MMGtVTkpZMno2bERNelV0Um5xM1lyc2lTekJJY05EMWtU?=
+ =?utf-8?B?S3F3R2pvOU5XNWVFZHFieFk2UzdHemtUbXM2ZWl6TUZrQnJsY2VUeHVtSGZi?=
+ =?utf-8?B?aE1TZ2ZJOE96dFlIQUk3TkJxMkJRMjJyalRzTjJkN2k5YkhRcWg0YTUvOWRa?=
+ =?utf-8?B?WStyMFJrMEpxbS82eHByeVNjWU1OcnBYdi80alNGMWpLZ0R3TWFkeXFPYmts?=
+ =?utf-8?B?QXRrSXVlU2RFWTBuWUdOQWVGWkVOenJsRk84eUtRNDFzdzBORG5RRUU0UTVP?=
+ =?utf-8?B?KzZ2OURLQ05zS1grWmlDa3c3eTBXaTZILzl5K2wzWTRES0hta0NZdzYrMjBC?=
+ =?utf-8?B?YUgxOWI5NG14OFcybThDMG1DYllOSGs0UE5oNEgrUlZRQVcvWHFqc0VPK283?=
+ =?utf-8?B?eHI1VE5jU0RtWEJ6UUlaM3BQaHNMRVJTUytoaktwZmI1V1lkV3lURThBV1BX?=
+ =?utf-8?B?eTdXZWVpWHlBLzVHNmQ4S0dZRURWcUt0UFJKN1RpTGJqaC83a1pTamFWWFRs?=
+ =?utf-8?B?RzJjcE1ITmVlWlVvQjRMa0lxSmVvODNpRlNZS3JuckFEcEFCNFA1MWIyTnYy?=
+ =?utf-8?B?NTVib1lqcFU0NzRYYS94WmtMNHFyU0FJa2g5QnZodk1pa2NpQy84RTl3YTRi?=
+ =?utf-8?B?U1lnUlcvM3Bqc2hoL1VMYTN4ZlEvdmx2aUhNN2owZUpsMHZReTlIRjBTTTA1?=
+ =?utf-8?B?bnlaL0NlTnM0UzdIMXV6QXRPMVJ6MWFmcmtqYXFwZEdzRlZsTThtR2ZsbVpI?=
+ =?utf-8?B?RjJuQnAvdWI3RWQ5RmNXcnZ6S05TdytJdldXUDM0bXBHQ0x2Q2hiQlArMGVw?=
+ =?utf-8?B?dWZPK29YVCtPektmRFMyYks0bjFUZ3FwMkc1RXovR3hNdEgwOU5EWXRGeWk5?=
+ =?utf-8?B?QkpOUW1qTTRqUnYzOThxR1czS2N5eldhV2ZSeTI1Zk5hSVN6NFhMWHNZS2ho?=
+ =?utf-8?B?Z05CV2ZWZndSRlBuZitCdG9qSXZqQ0QrV0xnVmFVVWU5bUVla1lMQ1dPZ2Uv?=
+ =?utf-8?B?bURveTE3QnA0bnVqZDlvaSt3bzlQOXBnbElQcVZqckx0MDZpaEdqRmhQTEJK?=
+ =?utf-8?B?ckRuRlNpdTdOSHRnMXAydz09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:JH0PR03MB7468.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Z0FOa0FLVW5qZjQ0WDROdlk2bVpuUDJYRWtCSkQvTHJ5VEVETHhEZDE3WFVC?=
+ =?utf-8?B?MTh1bnpMS28vZVFkZlN6MzVNY1o0c1B6WFRVYXFKRFRkdXBxNEVSL1cwREph?=
+ =?utf-8?B?QzZ5M01aWlQwZU1YVHlmejBGREZIeFpJZFdYYlRueTNFZ2lYREZSV2tCQ1ZV?=
+ =?utf-8?B?YWFsdFV5RU1JaEVYb1hvTnhydzV1eFU3bldHNDhTYlQwSldlTGNIQzhlN3lH?=
+ =?utf-8?B?Q1JvNG12SDJDQ2tHQ014MkhQZGd0dUZXR05KbGw0NkRXUHdCYndDelJ0TVpK?=
+ =?utf-8?B?S0RFbXJQdzdTTkpFMks5YUFwd2ZLQjBnV0xSSW5SbXdGdk45MGRFdVlMK2Ir?=
+ =?utf-8?B?TW9xT3FYZlVkOXZlNVBOZ2o5dmdsOWhGcitES1hYZDVWaTgyUmV3LzgxS0Nj?=
+ =?utf-8?B?c1B0alh1R1N4NVA3WFNTMzJwUGtrY3MwODhoTmRKcURSWnphcXA5L05hektS?=
+ =?utf-8?B?eGI1ZWVoMWFRWFpUc3l0aTJORXJuWXdyQlJvcUNPcWkrSWt1RVFvc3FMbmhO?=
+ =?utf-8?B?clZjQ1gwbWN6U2FURkJlQTB3YlhBenhodzZaUHZvaDloN2xjY3BEMWR0K21V?=
+ =?utf-8?B?T0NNR0VHLy9EYldCb0tBTEpIdFJzZVlVVXM2WTJVK3BtZHBnWkJLUDB6TmlH?=
+ =?utf-8?B?d1VZVnNzbjgzK1NYRmFMM1lxRzBKVk9tYzB5U0JNWkdaT1VibVRydFVNQ0tj?=
+ =?utf-8?B?ZlhESlIvclRPN1F2S0tqUnpWK1k5azMrY1I4SjV2YTdVdk5ndTVzMWtaU0RY?=
+ =?utf-8?B?Yi82dVZsa05TVXVlbWIvQ01ybVFRVldaOXBnWWdhRFBnZjBkVjJnRzcvSStx?=
+ =?utf-8?B?ZWRyNEhCQnZoblA3am5FeVBIS3VURGVJNUpUK1lvYndPaExEUVFTR3pCeE9X?=
+ =?utf-8?B?dkRPb2c4OWlZU3RONGlVd0cvZFdKeXRWVnppU0VVdk5uL1daZmpqblRHU0xx?=
+ =?utf-8?B?czdvdzRsTncwZ2RpVVFOQlNLTUdhRXFia2hXZjQvaWtSTDdoTDdvUmU5WWlG?=
+ =?utf-8?B?VnZXU25wWnBQUmlDMFVZQ1pXSGhuQ1I5ZmowTjloNVVyYjhFNUhVcnJmQWYz?=
+ =?utf-8?B?TzdXV2xRZUZQa0p0RWV3Sklnb29nS2tDLzUrMGZ3cEFCZjdhQ2Q3SVB2NGZv?=
+ =?utf-8?B?TjJTRXlORTRrem1PTmU1bU5kTVZPYkNWbFNjcVl5RXB3N2hsNXg0QnhqVFc5?=
+ =?utf-8?B?elF0Q3d1b0ZIWVBYZTRUa2tXNFZ1U0VFVXEzbzVmTnpqV0UzTHl3MklnNmtz?=
+ =?utf-8?B?dzNJWUtnSU04RFp4cXpoMmpIdmJ1MDBKdEIrSEZ0SWJHYVFqa01YK0VaSGhQ?=
+ =?utf-8?B?VmNzNVAyNS95cVdZUEZBWkVMRXU5b1VTdG52V1hnOC93UEFrUzloZGJyQVBJ?=
+ =?utf-8?B?QVdmeTA2Sm5ZZ0FQcFEyNUlaV09rOUk4SENJNUU2VUZLcTNublVySkc1VnBP?=
+ =?utf-8?B?RTlvRFdBUHlCdDFzdXBpdkRSZWthN2JkYzFKcTM4UFVGYS9MWTltY05pZnlW?=
+ =?utf-8?B?bytHRDR3TkpYRlMybTVMdzNTeXplb202TjdKQXRIaWxLOE84YVkrRmE0Y2E1?=
+ =?utf-8?B?aXBwYWwvYkRTTzJtazA5UEEvQk92b093SUlJek9QN09ZUjBxajNDVlROalUy?=
+ =?utf-8?B?dmIwbU1RME52TFVVeUVPOWhTcEJVaCtqQXhSRTkwMFJEaHdCR0I0SkZld2hL?=
+ =?utf-8?B?OXBMWHhMSkJRbGJtcXlHdFRBSFNhVmVnVVN5ZHludFVoeVI2Q0JKR09GT3da?=
+ =?utf-8?B?bVFFdk55RkYyN2FuaU5ZbmhwcEx5RkJqSlExZUFrV2xtT3ZSTllrSkJ0WHEx?=
+ =?utf-8?B?QTRmT3FIMjJxYVdGdmdxSllyYWZvdlJ6T0krQzJzMktLSDdON1ZWdHlIMzl2?=
+ =?utf-8?B?SFVwb2pnS1ZLWDNkR0J2NGhjWG03M3c3WlpSU2Z0UDY0YVcyNWZHbDhIMnlv?=
+ =?utf-8?B?UmZ0Q29PbjNDYjloYkhldFJYTi9yZWJPSUVITXF6Ny9yOVJlTlduTTlZS21p?=
+ =?utf-8?B?VDdCa09FaTY4M0dUNXZKazBGcXB4QVBEandGakxzMDZCMFJCRlFRV3ZiSHc5?=
+ =?utf-8?B?SzgxS0hSVkcxUHVWcnZwL3F5dTR2RU9HcmJ4MFVXR3NrT0QyVkdpd24vRDZU?=
+ =?utf-8?Q?BTvdeQMnNgJ1p/IAsv1d/pMpv?=
+X-OriginatorOrg: amlogic.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5becfeb-ec7b-4a42-73e3-08dc9f216d79
+X-MS-Exchange-CrossTenant-AuthSource: JH0PR03MB7468.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2024 07:41:49.9964
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IVKAI3Hls2svzZUnufXBCg89khNkv8CSO3wTMzn+iohfWFMCoag8s0OXVIpTfE9ZgBLs0P+Z6W/w0K1c87DU4Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR03MB8740
 
-Arnd,=20
+Dear Krzysztof
 
-Are we continuing this patch series ?
+Thanks for your comments.
+> On 05/07/2024 13:13, Yang Li via B4 Relay wrote:
+>> From: Yang Li <yang.li@amlogic.com>
+>>
+>> Add power sequence for Bluetooth and Wi-Fi respectively, including chip_en
+>> pull-up and bt_en pull-up, and generation of the 32.768 clock.
+>>
+>> Signed-off-by: Yang Li <yang.li@amlogic.com>
+>> +#include <linux/clk.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/device.h>
+>> +#include <linux/mod_devicetable.h>
+>> +#include <linux/module.h>
+>> +#include <linux/mutex.h>
+>> +#include <linux/of.h>
+>> +#include <linux/gpio.h>
+>> +#include <linux/of_gpio.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/pwrseq/provider.h>
+>> +#include <linux/string.h>
+>> +#include <linux/types.h>
+>> +
+>> +struct pwrseq_aml_wcn_ctx {
+>> +     struct pwrseq_device *pwrseq;
+>> +     int bt_enable_gpio;
+> Why? It's never used... or you use wrong API. Confusing code.
+Well, I will used the "struct gpio_desc" replace current method.
+>
+>> +     int chip_enable_gpio;
+>> +     struct clk *lpo_clk;
+>> +     unsigned int pwr_count;
+>> +};
+>> +
+>> +static DEFINE_MUTEX(pwrseq_lock);
+> Why this is not part of structure above?
 
-You are silent since last version submit, which makes me a bit worried.
+Sorry, I referenced some outdated examples.
 
-If you suddenly changed your mind please let us know, cause anyway we
-have no possibility to merge these series without you.
+And I will put it in structure of pwrseq_aml_wcn_ctx.
 
+>> +
+>
+> ...
+>
+>> +
+>> +static int pwrseq_aml_wcn_match(struct pwrseq_device *pwrseq,
+>> +                              struct device *dev)
+>> +{
+>> +     struct device_node *dev_node = dev->of_node;
+>> +
+>> +     if (!of_property_present(dev_node, "amlogic,wcn-pwrseq"))
+> You cannot have undocumented properties, sorry, that's a NAK.
 
-On Fri, 2024-07-05 at 11:21 +0200, Uwe Kleine-K=C3=B6nig wrote:
-> Hello,
->=20
-> On Thu, Jun 27, 2024 at 11:29:44AM +0300, Nikita Shubin wrote:
-> > On Tue, 2024-06-18 at 19:20 +0300, Nikita Shubin wrote:
-> > > Hello Andy!
-> > > On Mon, 2024-06-17 at 12:58 +0200, Andy Shevchenko wrote:
-> > > > On Mon, Jun 17, 2024 at 11:38=E2=80=AFAM Nikita Shubin via B4 Relay
-> > > > <devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
-> > > > >=20
-> > > > > The goal is to recieve ACKs for all patches in series to
-> > > > > merge it
-> > > > > via Arnd branch.
-> > > >=20
-> > > > 'receive'
-> > > >=20
-> > > > > Unfortunately, CLK subsystem suddenly went silent on clk
-> > > > > portion
-> > > > > of
-> > > > > series V2 reroll,
-> > > > > tried to ping them for about a month but no luck.
-> > > > >=20
-> > > > > Link:
-> > > > > https://lore.kernel.org/r/20240408-ep93xx-clk-v2-1-adcd68c13753@m=
-aquefel.me
-> > > > >=20
-> > > > > Some changes since last version (v9) - see "Changes in v10",
-> > > > > mostly
-> > > > > cosmetic.
-> > > >=20
-> > > > ...
-> > > >=20
-> > > > > Patches should be formated with '--histogram'
-> > > >=20
-> > > > 'formatted'
-> > > >=20
-> > > > ...
-> > > >=20
-> > > > > Changes in v10:
-> > > > >=20
-> > > > > Reordered SoB tags to make sure they appear before Rb and
-> > > > > Acked
-> > > > > tags.
-> > > >=20
-> > > > This is not required. The importance is only the order of SoBs
-> > > > themselves. If they are interleaved with other tags, it's fine.
-> > >=20
-> > > Ah - ok. Just saw someone was complaining about b4 reordering
-> > > them.=20
-> > >=20
-> > > >=20
-> > > > ...
-> > > >=20
-> > > >=20
-> > > > Hopefully to see this series being eventually applied soon.
-> > > > Arnd? (Do we have all necessary subsystem maintainers' tags,
-> > > > btw?)
-> > > >=20
-> > > >=20
-> > >=20
-> > > As i see from my perspective only three left:
-> > >=20
-> > > Clk subsystem:
-> > >=20
-> > > - clk: ep93xx: add DT support for Cirrus EP93xx
-> > >=20
-> > > DMA subsystem (but the only request from Vinod, as far as i
-> > > remember,
-> > > was fixing commits titles):
-> > >=20
-> > > - dmaengine: cirrus: Convert to DT for Cirrus EP93xx
-> > > - dmaengine: cirrus: remove platform code
-> > >=20
-> > > Beside that tags missing on platform code removal (which can be
-> > > Acked
-> > > by Arnd himself i believe) and dtsi/dts files (same ?).
-> >=20
-> > Vinod acked the above two patches:
-> >=20
-> > https://lore.kernel.org/all/ZnkIp8bOcZK3yVKP@matsya/
-> > https://lore.kernel.org/all/ZnkImp8BtTdxl7O3@matsya/
-> >=20
-> > so only:
-> >=20
-> > - clk: ep93xx: add DT support for Cirrus EP93xx
-> >=20
-> > https://lore.kernel.org/all/20240617-ep93xx-v10-3-662e640ed811@maquefel=
-.me/
-> >=20
-> > left.
-> >=20
-> > Hope Stephen will find some time for this one.
->=20
-> As we're approaching the merge window and this is still unclear, I
-> applied the pwm bits (i.e. patches 12, 13). If I understand
-> correctly,
-> patch 33 isn't suitable for application yet as it has a dependency on
-> pinctrl changes in that series.
->=20
-> (side note: Your patches are signed, but that doesn't bring any
-> benefit
-> if the receivers don't have your key. I didn't find it neither on
-> keys.openpgp.org nor in the kernel pgp key collection.)
->=20
-> Best regards
-> Uwe
+About the match () function I also have some doubts, the 
+drivers/power/sequence/core.c requirements need to be defined match () 
+function is used to determine whether a potential consumers actually 
+related to the sequencer. So, I need to add a meaningless node 
+"amlogic,wcn-pwrseq" to both the consumer dt-binding and the provider 
+dt-binding.
 
+Right now, I add "amlogic,wcn-pwrseq" in binding file of 
+"amlogic,w155s2-bt.yaml" only, may I need to add this properties 
+("amlogic,wcn-pwrseq") in the binding file of "amlogic,w155s2-pwrseq.yaml"?
+
+>> +             return 0;
+>> +
+>> +     return 1;
+>> +}
+>> +
+>> +static int pwrseq_aml_wcn_probe(struct platform_device *pdev)
+>> +{
+>> +     struct device *dev = &pdev->dev;
+>> +     struct pwrseq_aml_wcn_ctx *ctx;
+>> +     struct pwrseq_config config;
+>> +
+>> +     ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
+>> +     if (!ctx)
+>> +             return -ENOMEM;
+>> +
+>> +     ctx->bt_enable_gpio = of_get_named_gpio(dev->of_node,
+>> +                                            "amlogic,bt-enable-gpios", 0);
+>> +     if (!gpio_is_valid(ctx->bt_enable_gpio))
+>> +             return dev_err_probe(dev, ctx->bt_enable_gpio,
+>> +                             "Failed to get the bt enable GPIO");
+>> +
+>> +     ctx->chip_enable_gpio = of_get_named_gpio(dev->of_node,
+>> +                                            "amlogic,chip-enable-gpios", 0);
+>> +     if (!gpio_is_valid(ctx->chip_enable_gpio))
+>> +             return dev_err_probe(dev, ctx->bt_enable_gpio,
+>> +                                     "Failed to get the chip enable GPIO");
+>> +
+>> +     ctx->lpo_clk = devm_clk_get_optional(dev, NULL);
+> Clock is not optional, according to you binding.
+Yes, I will used API of devm_clk_get(dev, "extclk") to relace it.
+>
+>> +     if (IS_ERR(ctx->lpo_clk))
+>> +             return dev_err_probe(dev, PTR_ERR(ctx->lpo_clk),
+>> +                             "Failed to get the clock source");
+>> +
+>> +     memset(&config, 0, sizeof(config));
+> Just initialize it on the stack with 0.
+Okay, I will delete this line and set config to zero when initializing.
+>
+>
+>
+> Best regards,
+> Krzysztof
+>
 
