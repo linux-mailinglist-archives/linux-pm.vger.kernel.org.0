@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-10747-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10748-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81AE2929D17
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 09:31:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE415929D24
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 09:32:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 330B72817E8
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 07:31:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37F171F21189
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 07:32:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98392210EC;
-	Mon,  8 Jul 2024 07:31:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A4321CFB2;
+	Mon,  8 Jul 2024 07:32:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W2NDqntp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hdJlhn8P"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFCB1946F;
-	Mon,  8 Jul 2024 07:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5091C69C;
+	Mon,  8 Jul 2024 07:32:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720423902; cv=none; b=L4lvWAw5sqTc/S9ODSgfysCd738Egw+czvME2sfF7cK7vBGiGYPO0bvA4KmBkevvFTKRoVdwpCD0Iw40nfurmGU3DLI3TG8bguxfwYzcxI3R9FwpUjckKLoMSc4QgpFg+DP47ppYvLh8Lwc4bPRcJGT4/DJn9X3uhavTfIWgmCY=
+	t=1720423945; cv=none; b=ZSm/yA8IIOFwgifLVPyr+Ny0GChSXUZf0f1zMtHJbQfsuSNHyllHfaIbp8frRABwQoE3IOGh9KS+ejjgoyoZl5l5NaDzjVTGH3EUvKP0Fpac9v5xcmQYoLclHhieDUzTdk32wl1k0NzDyjzGahVE/2WyW+BEDJluUmr71JR48Vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720423902; c=relaxed/simple;
-	bh=b686QiTKvy8ZMExM84K9kzUt3iG3OHu8RvGNrJ3LUPU=;
+	s=arc-20240116; t=1720423945; c=relaxed/simple;
+	bh=mxc0aIzrGRkymB+r7SJybcNK+Hz+AkkmmW0SRfK2dj4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gVlq2AqxV9YhN/gjIr8zpsE2coYr7ahNKSzBiFQM8nKD2elY2DwOL+wRvmucqfd0AUjcBlU7XW33M4LInnuv0GihRKzCo9jFsQ9yqBMDkvo2/u0Ihtc9Il+r4BP/cKDZwOieZ8eN5qNdKeuNKNYDL52rESSLHcfdQgwtV/dbNDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W2NDqntp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E3BBC116B1;
-	Mon,  8 Jul 2024 07:31:14 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=P1H4x9ysuJdcHKv10dDwoKeKiKVO0H3HbXnWn/geqqL8dFGQ/5Y/8vtPHRZRYRBlgkVI7Nf4QtCAafiD+nqnmiqbCFHPhbw8aYhvUwK4tOpVbyaUR9njX/hRZbFeGS5dilK8IEGTJ2UMGyRYCPVzDrs+mYbJy86bww4Kr13mAjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hdJlhn8P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03DAFC116B1;
+	Mon,  8 Jul 2024 07:32:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720423901;
-	bh=b686QiTKvy8ZMExM84K9kzUt3iG3OHu8RvGNrJ3LUPU=;
+	s=k20201202; t=1720423944;
+	bh=mxc0aIzrGRkymB+r7SJybcNK+Hz+AkkmmW0SRfK2dj4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=W2NDqntp1Ulgp8VAPtW9t6MUVRBg2m24WUTXj6PfM3FSPT6WnvnROZIOHULWUqOgT
-	 aWqsNEhpd+JKiouZTJGp7zJZg+KEggH+2wFwNf9Jvcbyr/tjpShaShqhdXl2lVlj49
-	 qjscpyLwq1KwbCmSwqT+Jqat5Y2n7bIV8a/ZPwwr4+gFyY0o1Cs3AUeHCYUskKypQI
-	 Jis8m+kGIeU9LqBdsmcbTFufx5GqCPgZXGDZPzEh5McNcju/zyfQSj/Xf2sKw+pDti
-	 hHmWLNmFSVBozoY7HjZbCxHNC2jlqlgeXUMur4A392g6iSujvhXKe4jHoSKmcPYE0x
-	 RD+heg8f8EMGQ==
-Message-ID: <f8d17f99-cb76-427a-a23c-6777ab8f4370@kernel.org>
-Date: Mon, 8 Jul 2024 09:31:11 +0200
+	b=hdJlhn8P1C35+Wug77kuwygiEDgGjwhtpDqUrAc3i8laXYlnrHZO51x+FlfMOjxKL
+	 +PBtmzzc2GtT08BLhPSNPBX5E/TlHp/E1TeFCV3gGlsIfFzK5qHnz5o1nOBq0ZZqhY
+	 XyTtuxNSFTjy1NOPMs1I5QyWjqtuByRd5gNY/dgCTlXkXjqgAWPPl+24DTtOISYt6R
+	 rtK5txPpka3/wR0tWGGCHs85ZplWkm8CURYFv8/csWjM/gbDHoIcWDxbmt0l39NZR8
+	 +2Z3fiW8Bm4HfFFTfLR/Oo8AVzIViIfUxtEVflePrZ0hXfxhH+ds9vBfMDU/j0Kosx
+	 Q2dcGrq1F2gqA==
+Message-ID: <7d109ab0-ebd0-4739-a15e-958e82552a7d@kernel.org>
+Date: Mon, 8 Jul 2024 09:32:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,56 +50,21 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/47] dt-bindings: arm: qcom: Document QCS9100 SoC and
- RIDE board
-To: "Aiqun Yu (Maria)" <quic_aiquny@quicinc.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Tengfei Fan <quic_tengfan@quicinc.com>, andersson@kernel.org,
- konrad.dybcio@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, djakov@kernel.org, mturquette@baylibre.com,
- sboyd@kernel.org, jassisinghbrar@gmail.com, herbert@gondor.apana.org.au,
- davem@davemloft.net, manivannan.sadhasivam@linaro.org, will@kernel.org,
- joro@8bytes.org, conor@kernel.org, tglx@linutronix.de, amitk@kernel.org,
- thara.gopinath@gmail.com, linus.walleij@linaro.org, wim@linux-watchdog.org,
- linux@roeck-us.net, rafael@kernel.org, viresh.kumar@linaro.org,
- vkoul@kernel.org, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com
-Cc: robimarko@gmail.com, bartosz.golaszewski@linaro.org, kishon@kernel.org,
- quic_wcheng@quicinc.com, alim.akhtar@samsung.com, avri.altman@wdc.com,
- bvanassche@acm.org, agross@kernel.org, gregkh@linuxfoundation.org,
- quic_tdas@quicinc.com, robin.murphy@arm.com, daniel.lezcano@linaro.org,
- rui.zhang@intel.com, lukasz.luba@arm.com, quic_rjendra@quicinc.com,
- ulf.hansson@linaro.org, quic_sibis@quicinc.com, otto.pflueger@abscue.de,
- luca@z3ntu.xyz, neil.armstrong@linaro.org, abel.vesa@linaro.org,
- bhupesh.sharma@linaro.org, alexandre.torgue@foss.st.com,
- peppe.cavallaro@st.com, joabreu@synopsys.com, netdev@vger.kernel.org,
- lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
- ahalaney@redhat.com, u.kleine-koenig@pengutronix.de,
- dmitry.baryshkov@linaro.org, quic_cang@quicinc.com, danila@jiaxyga.com,
- quic_nitirawa@quicinc.com, mantas@8devices.com, athierry@redhat.com,
- quic_kbajaj@quicinc.com, quic_bjorande@quicinc.com,
- quic_msarkar@quicinc.com, quic_devipriy@quicinc.com, quic_tsoni@quicinc.com,
- quic_rgottimu@quicinc.com, quic_shashim@quicinc.com,
- quic_kaushalk@quicinc.com, quic_tingweiz@quicinc.com,
- srinivas.kandagatla@linaro.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-crypto@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-gpio@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, kernel@quicinc.com
-References: <20240703025850.2172008-1-quic_tengfan@quicinc.com>
- <20240703025850.2172008-2-quic_tengfan@quicinc.com>
- <665f6c8c-4f43-4d20-90e9-9e037a942066@kernel.org>
- <fbeb5969-0b3a-455e-88eb-b83734bf2c50@quicinc.com>
- <97c9484b-e257-4163-a104-3457d59bc69b@kernel.org>
- <63eb3f58-d4a4-4a27-b78c-f4cb83e62c63@quicinc.com>
- <f8f3c4d4-bf24-4195-a7b0-eec95cd64b57@linaro.org>
- <c9822569-896c-4d5f-b917-2826bf414e67@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 1/3] dt-bindings: power: Add power sequence for Amloigc
+ WCN chips
+To: Yang Li <yang.li@amlogic.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20240705-pwrseq-v1-0-31829b47fc72@amlogic.com>
+ <20240705-pwrseq-v1-1-31829b47fc72@amlogic.com>
+ <a4d08999-55ea-4674-bb0f-6d618b7bdea7@kernel.org>
+ <9c550278-2205-4663-917c-c303c65726ad@amlogic.com>
+ <726a0561-b3fc-46bb-a834-3ed8b0e993e1@kernel.org>
+ <91e42fbc-712e-44b4-8200-23aaf1fade43@amlogic.com>
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -143,55 +108,57 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <c9822569-896c-4d5f-b917-2826bf414e67@quicinc.com>
+In-Reply-To: <91e42fbc-712e-44b4-8200-23aaf1fade43@amlogic.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 08/07/2024 09:13, Aiqun Yu (Maria) wrote:
+On 08/07/2024 08:32, Yang Li wrote:
 > 
-> 
-> On 7/8/2024 2:07 PM, Krzysztof Kozlowski wrote:
->> On 08/07/2024 06:45, Aiqun Yu (Maria) wrote:
->>>
->>>
->>> On 7/3/2024 5:33 PM, Krzysztof Kozlowski wrote:
->>>> On 03/07/2024 11:21, Tengfei Fan wrote:
->>>>>>>         - items:
->>>>>>>             - enum:
->>>>>>> +              - qcom,qcs9100-ride
->>>>>>>                 - qcom,sa8775p-ride
->>>>>>> +          - const: qcom,qcs9100
->>>>>>
->>>>>> This changes existing compatible for sa8775p without any explanation in
->>>>>> commit msg.
->>>>>>
->>>>>> Best regards,
->>>>>> Krzysztof
->>>>>>
->>>>>
->>>>> In the next verion patch series, I will provide relevant explanatory 
->>>>> information in this patch commit message.
->>>>
->>>> TBH, I cannot think of any reasonable explanation for this, especially
->>>> considering rest of the patchset which does not fix resulting dtbs_check
->>>> warning.
->>>
->>> The existing compatible "sa8775p" warning can only be addressed When
->>> @Nikunj's "sa8775p" changes merged.
->>>
->>> Let me know if you have other suggestions for this.
+> 在 2024/7/8 14:11, Krzysztof Kozlowski 写道:
+>> [ EXTERNAL EMAIL ]
 >>
->> I don't have, because I don't understand why do you want/need to change
->> existing board compatible.
+>> On 08/07/2024 08:04, Yang Li wrote:
+>>>>> +
+>>>>> +required:
+>>>>> +  - compatible
+>>>>> +  - clocks
+>>>>> +  - clock-names
+>>>>> +  - amlogic,chip-enable-gpios
+>>>>> +  - amlogic,bt-enable-gpios
+>>>>> +
+>>>>> +additionalProperties: false
+>>>>> +
+>>>>> +examples:
+>>>>> +  - |
+>>>>> +    #include <dt-bindings/gpio/gpio.h>
+>>>>> +    wcn_pwrseq {
+>>>> No underscores in node names, generic node names.
+>>>>
+>>>> There is no device as "pwrseq". I also do not get what "wcn" means here.
+>>> Yes, I understand.
+>>>
+>>> Can I change "wcn_pwrseq" to "pmu", and do I need to change the binding
+>> What is pmu for your device? What is this device in the first place you
+>> are documenting? Where is the datasheet?
 > 
-> We can left the current existing sa8775p board compatible as it is. And
-> have a brand new qcs9100 and qcs9100-board item for current non-scmi
-> resources compatible.
+> ^_^ Well, You are right, the "pmu" wasn't really fit in here.
 > 
-> Will that be more reasonable from your end?
+> I'd like to explain the current usage first, and could you please give 
+> me a suggestion?
+> 
+> This module(pwrseq) used to power on Bluetooth & Wi-Fi combo chip, both 
+> Bluetooth and
+> 
+> Wi-Fi driver need to control "chip-en-gpios" pins, so we introduced the 
+> power sequence module.
+> 
+> What should we call it in this case?
 
-Yes, this is what I would expect. If you choose any other way - just
-like I wrote - you need to explain why you are doing this.
+Sorry, you describe driver, not a device.
+
+That would be a no-go for entire binding. Please describe the hardware,
+not what you want to achieve in Linux drivers.
+
 
 Best regards,
 Krzysztof
