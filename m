@@ -1,120 +1,128 @@
-Return-Path: <linux-pm+bounces-10783-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10785-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AF8692A683
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 17:59:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC3A392A727
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 18:19:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BADEE2879BB
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 15:59:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28FCB1C20912
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 16:19:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EB7F148820;
-	Mon,  8 Jul 2024 15:55:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A402A143881;
+	Mon,  8 Jul 2024 16:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UuYXxDIw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rq8/Ch9A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D54D81442FB;
-	Mon,  8 Jul 2024 15:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AAAA1E532;
+	Mon,  8 Jul 2024 16:19:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720454130; cv=none; b=EfoRHoj8qpRyYYd3BvpbYnngjzQrGvZMDvJvISUO3XNkBCc3fuQq7qYV1CA+JhcD3NOuqwiHBvOPEg2cTkACt3HunOIYnRnf2UZP8GCjygQ7WMCCQl38e3DzBcRHTX2KRP3nSQ8I4kCF+I65Y8mFcrKUFjgsrywKwcIYGWdOaV8=
+	t=1720455544; cv=none; b=VN5V+OQnLdfo3nrn0jhUqIxIKGzSzhDagUX/rm6Dnht8BwVaZqGrgw5FVOmnOVvnuO8E5lN28jGhZ23sqCgVj5IzDgPKyQTNeoSZCs0NbD6beBOE8tK2Ga/kP4RnAOV+wxB/OGJZOmS6KPF7XOiB2/fBPqe3az53CjGMZZxjhsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720454130; c=relaxed/simple;
-	bh=klBVxy8IiZUybk4NUjWGo9X6b6GwYIN3vkEddYVTDBM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HmKs9WnhwUv1M2xY40cgQdBt1hhB8F2z8p0PYJc3HR/X21eK1DeuqJyvaicxOudVuMtbvyWGZwwwY8qBKiZCvt0UUoJGDs9lVTe37/rdUCa9vpMXEQn8sXlJYU6CjTs/1AgiJuvzsHXRMZn4hZQQE70OkqSesoLtSLbka38g5kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UuYXxDIw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F2E3C116B1;
-	Mon,  8 Jul 2024 15:55:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720454130;
-	bh=klBVxy8IiZUybk4NUjWGo9X6b6GwYIN3vkEddYVTDBM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UuYXxDIwcX4c9njAFXgqD6kPCnPvkqX13R4dwZkTjIwWzz9OlnkW+7lI2+BXng8Ex
-	 HlueLCAKnas2BmaNAh8QSG+hNMLtbnRy4vkD6hZIxgpC9QQluc2SdJPnXlJrlZMWf6
-	 28++49Pxyc8yqDP+VuaugpaSlF+qhCUagZeOQc+WrV9NL6UtEW3Klsz7G68LZWFZTo
-	 QEySb4mqzeqfsZCdbu5dyK0D4OF8BzcNmgLCSKA4/RbdAIQM8L04RHG2DgZNQ8Uuh4
-	 9G3rpoNOteMmvTxDGL2r26Udlv6QoM0cnjch5TTdK42W/BPN8UVVs5rMiTpjJ5Glfq
-	 dZykVd8kygQfg==
-Date: Mon, 8 Jul 2024 09:55:29 -0600
-From: Rob Herring <robh@kernel.org>
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, angelogioacchino.delregno@collabora.com,
-	andersson@kernel.org, konrad.dybcio@linaro.org,
-	mturquette@baylibre.com, ilia.lin@kernel.org, rafael@kernel.org,
-	ulf.hansson@linaro.org, quic_sibis@quicinc.com,
-	quic_rjendra@quicinc.com, quic_rohiagar@quicinc.com,
-	abel.vesa@linaro.org, otto.pflueger@abscue.de, danila@jiaxyga.com,
-	quic_ipkumar@quicinc.com, luca@z3ntu.xyz,
-	stephan.gerhold@kernkonzept.com, nks@flawful.org,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org
-Subject: Re: [PATCH v4 09/10] dt-bindings: opp: v2-qcom-level: Update
- minItems for oloop-vadj & cloop-vadj
-Message-ID: <20240708155529.GA3244015-robh@kernel.org>
-References: <20240703091651.2820236-1-quic_varada@quicinc.com>
- <20240703091651.2820236-10-quic_varada@quicinc.com>
+	s=arc-20240116; t=1720455544; c=relaxed/simple;
+	bh=T6zqV2s16QFB7PZs29sqDQW6Klci55YbTwdo2bCNLgo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PWaRDyX82WNi8guM2KpIv2iU+QrbH0lTSpS3CnVJYEWaH5s8k0PqIsWtxlSerNzPoMR2FePiz2XVrN3c5lmrp7a7Fo/sCBHTmwytkKXa/j/pZORlQuDeiNg+UiTYIVzikDZJuMgsFiXkTK9ZoGgqn6P5qKFYKrOXdAPNbXvxFMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rq8/Ch9A; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4265c2b602aso16837655e9.3;
+        Mon, 08 Jul 2024 09:19:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720455541; x=1721060341; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=38p8QWMHWXz9B5rjFOZCS6GDANaWGeHzqVbGxVlItoM=;
+        b=Rq8/Ch9ALszkptVTkGKygV3FZBppOpI8e/w+xltE4HDoZmJtEKes4wDf2QTX7FucfP
+         4RsDOpvjQNTqxHdu33YeeksaTl2XiGmTGaIifQxc6a4/Wecg3/Knac4Ti4VzWjavC/hO
+         WgbafyQ70LToHEAW8NPo5IUZqBVaFhVc2ayHUspUhmjVDyts8s+sN8olDkfuZjtP3Dq/
+         0i9XzA+IoT4x/Nyl9b5EkMBj9rh+y81pkbSoQMWsdJKiKfetZ38xA4TVwqCYN1CofrYh
+         lIhjvB9xFAycO3GPStKTu+9aeqxf4gK4Fp04vRQpRlT29jj+2cj2uO1RPgKESIUm07No
+         SJRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720455541; x=1721060341;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=38p8QWMHWXz9B5rjFOZCS6GDANaWGeHzqVbGxVlItoM=;
+        b=Tl3IQK5nHkPgrCFsgkEmdmancc2Fx6Z0m+1s5HWtc95c1ugif+71LCBhLAuV6Dd0/h
+         VjDj8uaz3uYc+n2EW8D57OaI2DkYRcAgPRJmE4jbKevRO09N+BXlDpc0wDma6RMOYnxs
+         oi0jkQH4GGxJDFKoRf8Qs9xrW8sRSRh0oC6iSrTZV4NfeQcg3faFM7gwaTPc6AZkUzfi
+         YA7M52CJIp8E7POQrtAJVHLJ1C3/vwQg1AT2iEi861Np9/agnaI6Hr3eh/lbE6OGyhVe
+         Ho+KOnx+lAYQr9YN730XNclJDf5s4+0GVVYcrMm8UaF5095AzHbpYThCjtT/bhfDsUnn
+         e2Pw==
+X-Forwarded-Encrypted: i=1; AJvYcCXPApOnGE1acV+hviTghyWeVTw3L0q2rcHPfTYmkcUHnU1t5QtqvrIA1sew2RhbUhEswiUxYtIPCeP/ZjBIZ9qaoMqdkg+CZov3E1Wo
+X-Gm-Message-State: AOJu0YzLil+jc9YVFqaCaI1lF5kSWVfqUdNpR2FzaP6Ef4vAKbEG7+tc
+	ksiXqkZUFKFBAoikqOjwbwjswy0cNrDMATMTl3H+redfDn8GadBc
+X-Google-Smtp-Source: AGHT+IFHLZ3dF6AgkEP+YQrJhIu1QNJYC+GQ0YMNE7yaN8YQVR9Q+BhNdqHebfjyC0VzrRXYQ5tZ9w==
+X-Received: by 2002:a05:600c:3b8d:b0:426:6765:d6b0 with SMTP id 5b1f17b1804b1-426707db70emr578985e9.15.1720455541065;
+        Mon, 08 Jul 2024 09:19:01 -0700 (PDT)
+Received: from localhost ([2001:861:3385:e20:6384:4cf:52c5:3194])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4266f6e0b6bsm4371665e9.3.2024.07.08.09.19.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jul 2024 09:19:00 -0700 (PDT)
+From: Raphael Gallais-Pou <rgallaispou@gmail.com>
+To: "'Rafael J . Wysocki'" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] thermal: sti: cleanup code related to stih416
+Date: Mon,  8 Jul 2024 18:18:40 +0200
+Message-ID: <20240708161840.102004-1-rgallaispou@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240703091651.2820236-10-quic_varada@quicinc.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 03, 2024 at 02:46:50PM +0530, Varadarajan Narayanan wrote:
-> Since IPQ9574 has only one CPR thread it will specify
-> only one voltage adjustment value. Hence update min items
-> accordingly for oloop-vadj and cloop-vadj. Without
-> constraining min items, dt_binding_check gives errors
-> 
-> 	opp-table-cpr4:opp-0:qcom,opp-cloop-vadj:0: [0] is too short
-> 	opp-table-cpr4:opp-0:qcom,opp-oloop-vadj:0: [0] is too short
-> 
-> 	Failed validating 'minItems' in schema . . .
-> 		{'maxItems': 2, 'minItems': 2}
-> 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
-> v4: Fix dt_bindings_check error
-> ---
->  Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+"st,stih416-mpe-thermal" compatible seems to appear nowhere in the
+device-tree nor in the documentation.
+Remove compatible and related code.
 
-This is going to need to be rolled into your dependency because it needs 
-the same fix.
+Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
+---
+ drivers/thermal/st/st_thermal_memmap.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-> 
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-> index b203ea01b17a..1c1a9e12d57a 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-> @@ -39,6 +39,7 @@ patternProperties:
->            An array of per-thread values representing the closed-loop
->            voltage adjustment value associated with this OPP node.
->          $ref: /schemas/types.yaml#/definitions/int32-array
-> +        minItems: 1
->          maxItems: 2
->  
->        qcom,opp-oloop-vadj:
-> @@ -46,6 +47,7 @@ patternProperties:
->            An array of per-thread values representing the open-loop
->            voltage adjustment value associated with this OPP node.
->          $ref: /schemas/types.yaml#/definitions/int32-array
-> +        minItems: 1
->          maxItems: 2
->  
->      required:
-> -- 
-> 2.34.1
-> 
+diff --git a/drivers/thermal/st/st_thermal_memmap.c b/drivers/thermal/st/st_thermal_memmap.c
+index 29c2269b0fb3..e427117381a4 100644
+--- a/drivers/thermal/st/st_thermal_memmap.c
++++ b/drivers/thermal/st/st_thermal_memmap.c
+@@ -142,15 +142,6 @@ static const struct st_thermal_sensor_ops st_mmap_sensor_ops = {
+ 	.enable_irq		= st_mmap_enable_irq,
+ };
+ 
+-/* Compatible device data stih416 mpe thermal sensor */
+-static const struct st_thermal_compat_data st_416mpe_cdata = {
+-	.reg_fields		= st_mmap_thermal_regfields,
+-	.ops			= &st_mmap_sensor_ops,
+-	.calibration_val	= 14,
+-	.temp_adjust_val	= -95,
+-	.crit_temp		= 120,
+-};
+-
+ /* Compatible device data stih407 thermal sensor */
+ static const struct st_thermal_compat_data st_407_cdata = {
+ 	.reg_fields		= st_mmap_thermal_regfields,
+@@ -161,7 +152,6 @@ static const struct st_thermal_compat_data st_407_cdata = {
+ };
+ 
+ static const struct of_device_id st_mmap_thermal_of_match[] = {
+-	{ .compatible = "st,stih416-mpe-thermal", .data = &st_416mpe_cdata },
+ 	{ .compatible = "st,stih407-thermal",     .data = &st_407_cdata },
+ 	{ /* sentinel */ }
+ };
+-- 
+2.45.2
+
 
