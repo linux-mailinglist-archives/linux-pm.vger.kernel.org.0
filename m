@@ -1,221 +1,144 @@
-Return-Path: <linux-pm+bounces-10779-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10780-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBFEE92A567
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 17:11:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CFFC92A578
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 17:16:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80CD228109C
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 15:11:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B02BB20A1F
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 15:16:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 357451422C8;
-	Mon,  8 Jul 2024 15:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BF7180045;
+	Mon,  8 Jul 2024 15:16:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cKH0f+kM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="cufcPMnW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B06B13EFF3;
-	Mon,  8 Jul 2024 15:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 362539461;
+	Mon,  8 Jul 2024 15:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720451494; cv=none; b=mQAEOVriOY8wGByZl2onOBaOqndP2f99eLfuuiXwRR80l6pxFkGJj0W2aG7N6WEo/KZMU6j516nj9HgyCuCANGuMXUyc83hGzQeOELU2bHUKt7sIWpu7oPwDelsnaix1drJjSPSm56eWtHQAXOfEayHQaFstZepctdWi/0PIiMU=
+	t=1720451771; cv=none; b=QK+a9qHDpHqSM2K5V94Ecn9RYoplH187A4wdOlbb+8O7yGSDeJ1umwuzrMRdPsfRkkeX+cmdB20BmaMsg4bCutXhh1fm6m/EJ5zX8AMnTtAV+2sZf0Rh4R9WvL7Gu9HeOnVO9RwaSQ7FqtIBJbROMlH9qeCYrOjF3XtjgP5NCOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720451494; c=relaxed/simple;
-	bh=HY1B5gDZ1B+3w+pQBL9URGoslG1Sq2Spw3a9sUsSZuI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u+P5m3etpjdCWHvk0kd47YiAGSielZZMxuSvYY6eEmFemeag2xHFMk/eQxvppwnVXh/W53m9hnvN8UrSsjBcacG2YfTjIgG0ldgYfYD0ofp+o47tP7hqmW3Y76w/Cb4k5OUW8v2XsVFJUEZPebn6Z11329ZJO2PAnIjmnU6po8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cKH0f+kM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F11C4AF0C;
-	Mon,  8 Jul 2024 15:11:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720451493;
-	bh=HY1B5gDZ1B+3w+pQBL9URGoslG1Sq2Spw3a9sUsSZuI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cKH0f+kMaqJcbUg8h3Bg9MXN/inKyUNN6Q/6cKTW1Z0aPeQPuWLt0YpPZsRk4PcoH
-	 FsFFLAqlptZEy0M+NyKvRK3ugrqucGIq5b8uYHYH8MFxXsKMxrLOx2+7PqSrJSmR4u
-	 ncMzMSIjyJtVlohrt7YfVCXH+kbTae69W54BMkx7J0txuwdxS73rYBKOsDB+9/Uu+d
-	 VRUb/nzSv5FXrgaTdqBa98Iw2opK9x4AqNTkLy8DfZL7BPspyLO9si2us1tw5nT/mP
-	 kBjKeenqfT0LzPco+Oo1mn8LB+Ewopq8+ElpYNkyfzwin32F5e3BLsAlk1S0hl1l2y
-	 n9R2SXWkKSF9g==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-25e80d68776so192213fac.1;
-        Mon, 08 Jul 2024 08:11:33 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXpTTT1aQDX+GATuaFl6GjO3mIJMYmt1ojo4hMQhUf1lmbeNX0AZwBEZoDqSiC1sU9eLN5BA78FU/OGiw4czhSQ8e8nX1xWl+SlG3o9HcWeW1u4MSdmUPBu0JlpmaySTJcrNx/ci5A=
-X-Gm-Message-State: AOJu0YzXGQ1OuJnJOG4J806Vm+IqaQsvYBMgrVoTOxMBL2Es8JBqspzX
-	IpK63pCCYIO0R/OP2sPXCbnDu6v7JJDLXKTPvRQTvjSEv98hpSGPYG3LlKF/HGvOqCurve8MuGm
-	kfC2LrSELAdyBGrSZPUPzhdiJKHY=
-X-Google-Smtp-Source: AGHT+IHX1Wc170FCbddRY989Bhft9DN1TkSuthlvkZXkH/qTMMDKfhl2p57pI5rIzUmQJgE1GP7zx/vSmywAj7aZXJ4=
-X-Received: by 2002:a05:6870:a1a0:b0:254:7e18:7e1a with SMTP id
- 586e51a60fabf-25e2bff9792mr12086430fac.5.1720451492903; Mon, 08 Jul 2024
- 08:11:32 -0700 (PDT)
+	s=arc-20240116; t=1720451771; c=relaxed/simple;
+	bh=l3v9wn8dWtkx2YVHLV24qtxF1/RBQnC1l9jMiqsoLYU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hmE0USMEGkLG4ap4thYnn4YC72oRWywpOluA8fJCXOBjuQUQjUfkqVnqhMkmP5GA37rJzeovtorMspCjlFFCI6uhAA3PUGOuK0d/R0DjuNv8fpV1WvodXjASgtLppAv8kltKEFYqkNvfE729OZjPOuy+Zw4jFihpp7vyh7aCkIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=cufcPMnW reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id 5fd8f54dc7a77aa8; Mon, 8 Jul 2024 17:16:01 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id B62397F3AB9;
+	Mon,  8 Jul 2024 17:16:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1720451761;
+	bh=l3v9wn8dWtkx2YVHLV24qtxF1/RBQnC1l9jMiqsoLYU=;
+	h=From:To:Cc:Subject:Date;
+	b=cufcPMnWmQQpPk8Q8rdMPLR2oSecix1Brypz/utIR8RTgwexlGkS/mbFfOIp1Itkx
+	 41ynHIw150s9PBnm0KnEPn9HcIUWSOP+sfSUyR9c4zRZIL88Fqf69j1UoasDADqWxS
+	 Zuk8Y/7MQiCNzY9GAzuSAQwDhLWZ0mzN7pQCzEnzYW3Eea5AzSlEp/FQmHD3o7xzR8
+	 LkuyYY3s9OS1tRCh7K7fNMpVxacg6vRHEXaHw5myJL6xeol972lT+exLmV09vy98kv
+	 H4X+Zntfkapy2EFTz/sm9qFOK6/UUgVDLJJUf9nrHbGo7fIwI+MdUIaYPU4vPvj182
+	 9enApLlSpxsbw==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>
+Cc: LKML <linux-kernel@vger.kernel.org>
+Subject:
+ [PATCH v2] thermal: core: Fix list sorting in __thermal_zone_device_update()
+Date: Mon, 08 Jul 2024 17:16:00 +0200
+Message-ID: <12481676.O9o76ZdvQC@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2746673.mvXUDI8C0e@rjwysocki.net> <4940808.31r3eYUQgx@rjwysocki.net>
- <402ede79-5eda-48fc-8eb8-5d89ffe6bd41@linaro.org> <CAJZ5v0jgTN+6WC9nPGCidMnMjSsYMcMe+m=8Ge7Hr--utefM2Q@mail.gmail.com>
- <a5188c05-cd06-4678-8fb4-1f0b55c18b04@linaro.org> <CAJZ5v0i89BJD8AayxqJR912rkg+P8m9qq=GubCXJxmdPuj7DmQ@mail.gmail.com>
- <02ed646e-b344-4802-a4ef-806a1e0cac67@linaro.org>
-In-Reply-To: <02ed646e-b344-4802-a4ef-806a1e0cac67@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 8 Jul 2024 17:11:21 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hSf4cmNmmNpYn-EAy9PG19bxjW2189dNj3nt-82Zk7MA@mail.gmail.com>
-Message-ID: <CAJZ5v0hSf4cmNmmNpYn-EAy9PG19bxjW2189dNj3nt-82Zk7MA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] thermal: core: Add sanity check for polling_delay
- and passive_delay
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Lukasz Luba <lukasz.luba@arm.com>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrvdejgdekiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgv
+ lhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
-On Mon, Jul 8, 2024 at 4:32=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
->
-> On 08/07/2024 16:03, Rafael J. Wysocki wrote:
-> > On Mon, Jul 8, 2024 at 3:58=E2=80=AFPM Daniel Lezcano <daniel.lezcano@l=
-inaro.org> wrote:
-> >>
-> >> On 08/07/2024 15:38, Rafael J. Wysocki wrote:
-> >>> On Mon, Jul 8, 2024 at 2:12=E2=80=AFPM Daniel Lezcano <daniel.lezcano=
-@linaro.org> wrote:
-> >>>>
-> >>>> On 05/07/2024 21:46, Rafael J. Wysocki wrote:
-> >>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>>>
-> >>>>> If polling_delay is nonzero and passive_delay is 0, the thermal zon=
-e
-> >>>>> will use polling except when tz->passive is nonzero, which does not=
- make
-> >>>>> sense.
-> >>>>>
-> >>>>> Also if polling_delay is nonzero and passive_delay is greater than
-> >>>>> polling_delay, the thermal zone temperature will be updated less of=
-ten
-> >>>>> when tz->passive is nonzero.  This does not make sense either.
-> >>>>>
-> >>>>> Ensure that none of the above will happen.
-> >>>>>
-> >>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>>> ---
-> >>>>>
-> >>>>> v1 -> v2: The patch actually matches the changelog
-> >>>>>
-> >>>>> ---
-> >>>>>     drivers/thermal/thermal_core.c |    3 +++
-> >>>>>     1 file changed, 3 insertions(+)
-> >>>>>
-> >>>>> Index: linux-pm/drivers/thermal/thermal_core.c
-> >>>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>>> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> >>>>> +++ linux-pm/drivers/thermal/thermal_core.c
-> >>>>> @@ -1440,6 +1440,9 @@ thermal_zone_device_register_with_trips(
-> >>>>>                 td->threshold =3D INT_MAX;
-> >>>>>         }
-> >>>>>
-> >>>>> +     if (polling_delay && (passive_delay > polling_delay || !passi=
-ve_delay))
-> >>>>> +             passive_delay =3D polling_delay;
-> >>>>
-> >>>> Given this is a system misconfiguration, it would make more sense to
-> >>>> bail out with -EINVAL. Assigning a default value in the back of the
-> >>>> caller will never raise its attention and can make a bad configurati=
-on
-> >>>> staying for a long time.
-> >>>
-> >>> This works except for the case mentioned below.
-> >>>
-> >>> I think that passive_delay > polling_delay can trigger a -EINVAL, but
-> >>> (polling_delay && !passive_delay) cannot do it because it is regarded
-> >>> as a valid case as per the below.
-> >>
-> >> Right I can see ATM only this as an illogic combination:
-> >>
-> >>          polling_delay && passive_delay &&
-> >>          (polling_delay < passive_delay)
-> >>
-> >>>> That said, there are configurations with a passive delay set to zero=
- but
-> >>>> with a non zero polling delay. For instance, a thermal zone mitigate=
-d
-> >>>> with a fan, so active trip points are set. Another example is when t=
-here
-> >>>> is only critical trip points for a thermal zone.
-> >>>>
-> >>>> Actually there are multiple combinations with delays value which may
-> >>>> look invalid but which are actually valid.
-> >>>>
-> >>>> For example, a setup with polling_delay > 0, passive_delay =3D 0, ac=
-tive
-> >>>> trip points, cooling map to this active trips, passive trip points
-> >>>> without cooling map.
-> >>>>
-> >>>> IMHO, it is better to do the configuration the system is asking for,
-> >>>> even if it sounds weird
-> >>>
-> >>> Except that it doesn't work as expected because if passive_delay =3D =
-0,
-> >>> polling is paused when tz->passive is set.
-> >>
-> >> Yes, but as there is no cooling map, there is no governor action, thus
-> >> tz->passive is never set.
-> >
-> > In current linux-next, it is set when a passive trip is crossed on the =
-way up.
->
-> Ah, I see. AFAIR that was the gov_step_wise which was changing this
-> value but based on the thermal instance.
->
-> >> So we can have a passive polling equal to zero
-> >> without being illegal as no passive mitigation will happen.
-> >>
-> >> The passive delay is really there only if there is a passive cooling
-> >> device mapped to a passive trip point.
-> >
-> > Well, shouldn't user space get notified more often when passive
-> > cooling is under way?
->
-> (Assuming you meant "user space get notified when a passive trip point
-> is crossed")
->
-> Mmh, yes. I see the point.
->
->
-> >> The polling delay is in charge of mitigating the active cooling device
-> >> like a fan. So it is possible to mix an active trip point to mitigate
-> >> with a fan and then put at a higher temperature a passive trip point
-> >> with a higher sampling resolution.
-> >
-> > But it is not correct to pause polling when tz->passive is set.
->
-> I'm not sure to get the comment.
->
-> Just to clarify:
->
-> trip A is active with a multi speed fan, polling every 1s
->
-> trip B is passive with a cpufreq cooling device, polling every 100ms
->
-> temp(tripA) < temp(tripB)
->
-> When the trip A is crossed, the mitigation happens at <polling> rate.
-> Assuming it fails to cool down, the fan continues to increase its speed
-> until it reaches its max state.
->
-> The temperature continues to increase and crosses the passive trip
-> point. The fan speed stays at its maximum and the polling switches to
-> the passive polling delay.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Yes, but if the passive polling delay happens to be zero, it will stop
-the polling entirely until tz->passive becomes zero again.
+The order in which lists are sorted in __thermal_zone_device_update()
+is reverse with respect to what it should be due to a mistake in
+thermal_trip_notify_cmp().
 
-I don't believe that this is correct.
+Fix it and observe that it is not necessary to sort the lists in
+different orders.  They can both be sorted in ascending order if
+way_down_list is walked in reverse order which allows the code to
+be slightly more straightforward (and less prone to silly mistakes).
+
+Fixes: 7454f2c42cce ("thermal: core: Sort trip point crossing notifications by temperature")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+This supersedes
+
+https://lore.kernel.org/linux-pm/2745398.mvXUDI8C0e@rjwysocki.net/
+
+and hence v2.
+
+It is urgent and I have verified that it actually works, so I'm going to
+fast track it to get it into final 6.10.
+
+---
+ drivers/thermal/thermal_core.c |   10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -487,16 +487,14 @@ static void thermal_trip_crossed(struct
+ 	thermal_governor_trip_crossed(governor, tz, trip, crossed_up);
+ }
+ 
+-static int thermal_trip_notify_cmp(void *ascending, const struct list_head *a,
++static int thermal_trip_notify_cmp(void *not_used, const struct list_head *a,
+ 				   const struct list_head *b)
+ {
+ 	struct thermal_trip_desc *tda = container_of(a, struct thermal_trip_desc,
+ 						     notify_list_node);
+ 	struct thermal_trip_desc *tdb = container_of(b, struct thermal_trip_desc,
+ 						     notify_list_node);
+-	int ret = tdb->notify_temp - tda->notify_temp;
+-
+-	return ascending ? ret : -ret;
++	return tda->notify_temp - tdb->notify_temp;
+ }
+ 
+ void __thermal_zone_device_update(struct thermal_zone_device *tz,
+@@ -525,12 +523,12 @@ void __thermal_zone_device_update(struct
+ 
+ 	thermal_zone_set_trips(tz);
+ 
+-	list_sort(&way_up_list, &way_up_list, thermal_trip_notify_cmp);
++	list_sort(NULL, &way_up_list, thermal_trip_notify_cmp);
+ 	list_for_each_entry(td, &way_up_list, notify_list_node)
+ 		thermal_trip_crossed(tz, &td->trip, governor, true);
+ 
+ 	list_sort(NULL, &way_down_list, thermal_trip_notify_cmp);
+-	list_for_each_entry(td, &way_down_list, notify_list_node)
++	list_for_each_entry_reverse(td, &way_down_list, notify_list_node)
+ 		thermal_trip_crossed(tz, &td->trip, governor, false);
+ 
+ 	if (governor->manage)
+
+
+
 
