@@ -1,123 +1,167 @@
-Return-Path: <linux-pm+bounces-10787-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10788-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C2C392A81E
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 19:15:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 601B592A8B0
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 20:09:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C91C9280FFF
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 17:15:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC4B81F2222F
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 18:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31769148317;
-	Mon,  8 Jul 2024 17:14:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F73A149DEF;
+	Mon,  8 Jul 2024 18:09:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e3HDmOWM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iSv0hOMT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761F5146D74;
-	Mon,  8 Jul 2024 17:14:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C4F5148FFC
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jul 2024 18:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720458890; cv=none; b=LfAG03Qv9GDI7iGxeA1R7M62MlD2UyL6yaZsEBn3I4hjI+oLjlEiw9wHsxFkxt4779+3o8CeWiJEU6UftsSEqpO1dPzuiQnjsABp9XPFv7kU/LLFh3cOocHzQ8TvdOx2EYPqLL0rufUHGBBfbKDPdSXWyIPbKYwLSOAPRZu/ECY=
+	t=1720462147; cv=none; b=Xv2/v+r0bt96/jAUQPxStJrkcOjlVHayXXxc2yrp76jw6Xbeh6tv3JvNVqBlu6zF5rWR3p5JpQnGfnfQpiAb1Cn8AueeqAfkAfX5oI4gFtUHSvykIFv44lvZFh0+Moe8HzzE5POtmYQmmxTWGMKVSzMVAoH9pfJCi/JQ6fVwQQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720458890; c=relaxed/simple;
-	bh=98KZVehEnsd3PhQXr987y4Edy9ytXgP3wLgPB/Ivc0Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GZ4Pm1VLUVJvXWS0OROVNHaWy42oM6WzzzZDt9ChvPGyNKF8U+3RwiCp+k9xxlsmqNYVz/r1XE1giXQbbDmEoJwUeH1cMrNd5tEARJqOgeQw3jYGrASwRLSA1vieoqCUlRsLdkYUf5drjoj4kj1RfXBi6eEcp0IX+6qWmb/yM0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e3HDmOWM; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ee8911b451so52117271fa.2;
-        Mon, 08 Jul 2024 10:14:48 -0700 (PDT)
+	s=arc-20240116; t=1720462147; c=relaxed/simple;
+	bh=CG707koYbJnede1fww7JQ7JLqlDrWGnQkLN5J+JJjnM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GWvbGld9oPD4P2WkR5mjVdrVKLcI7TXGpkmXcgR7hg5NJ9KY7tds49kdBLaB3maAjcLLG7GLSiSq1XCWZMrddNVCOM5D0bqFmZmhplaZ7yrbsgZdlBZv4fe2nxWmS9e+FmPaE4534N+RUnqtsQUoRZYJAGh+H1MnBOQTulK6M+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iSv0hOMT; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-58bac81f3f9so5519578a12.2
+        for <linux-pm@vger.kernel.org>; Mon, 08 Jul 2024 11:09:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720458886; x=1721063686; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AH6LUdcBA2pznTYvrbFIdQvAbh5slbBjvxCpyNIT8HU=;
-        b=e3HDmOWMCNOKg2k+JYr3F5uQkV3ja3LD3R9d8yoD1NJxM6UZjlcNMzhfJ981sYkeZi
-         EwLjgFS07FfvIeOCkFHv6nHaCrnz8kzvVwQSIP2fLDA86QoNhXhsp7BK6h2e+Pe74WVO
-         ObUlWPdf4u1hlbdRR3vZxt6vvkeH3UhD7SRpA8BG9PcYUc3SaOdLeWbu8tHCPXKFq1jd
-         cmS1sZinnVRLegYqAfbrgOLZoBEuiE48wFnF4oIwRYnnKNwb/Q5b65N0hNumvISk4/BD
-         a0rSdp4iB/me7BemB8aeML7otIh32DewcvhOWWqsLkuQmBJ3apPF3Rf2JbZzTY3B0aaH
-         RUZw==
+        d=linaro.org; s=google; t=1720462144; x=1721066944; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=h9SclVHHKmhSqXdWBkdjpfcUGGg73PYZ76UnLpmlrPA=;
+        b=iSv0hOMTxQjy252hK+lJdahNOjRMvdEM754WGhaHmKvdZn+uL5HbMYCm5HzFGCd9Mg
+         Qoh8rPuVsmMt1d0R9toj0TW3zv85+OeMpy0TRr4AJxPM7DROF4Pb7AVTtMF1mzCHIymm
+         m7bXDqZ7oOYAZf4unDE3AMj0MlBzdaqHCUUdsXjQHLVnXB8bOWUCcIRVkpbh/X0lvl7n
+         SEfogpmSKiTN7i1eY8Ro0Z6Y6ja506Ilq3iP+/IQLa5QaNo7iuYwWjeW4xZXsNmTQ9t7
+         pL4zmJ93Uhyx3J11MP7tSG9d/LOi/Azji0lTSgX7jXaaIMEH4A5k9QlBAfk91VgYzBYT
+         paTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720458886; x=1721063686;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AH6LUdcBA2pznTYvrbFIdQvAbh5slbBjvxCpyNIT8HU=;
-        b=ItiDu4h9o26rHcftxkWryUNqaOZmtw4cnhTfeOCpvtud+EiHLh5WnvbSS6gEl78N5I
-         i6LepZya0lf+oBeLFooRbK7ce8ZMpUnkVuCQIXzq2an1kg76YyN3pdTUmXeCLFS5A40z
-         /sYdJ7ZaqjWIf6PUMAZqHONlpLifpPZ4UtqNBbRH1DvMIsD6O8kgXsj13E47fYchnwdH
-         1zPCEHdATJ7XoELqibIn96rkdzaBukt2nk8nTyU6Voc16UZbYNVWnZqt+ND3xLxQ1Nvz
-         Yc4EaPGGVz1LqjNRIj0m3XYpxhH39CmCVO5Sl0sDqjQ+0/Rgasd7Zja/jZ/0KVOV4/ia
-         954Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVlzTvlLUstUPrx+4UHElc11K2hxXZqynQTgjBCdq+uBi8Hjh6MdZd8DIq4f3/lRHCrnxBaAvwTz7UfkBE+aTTb+00hn0uLdcBihMvNmrhVsP09JcNIieeUTUmde0cncaq7jBseMVw=
-X-Gm-Message-State: AOJu0YyA8hCYdgCnCG5+dnb2hrMAY1cQ3mjE9oTrHf6xxH8NeE7tBsqt
-	d1pIRtCZkYu639IrcSqCmj0loWDMjxNedHwoCPJ37T3s+w3m+aLa
-X-Google-Smtp-Source: AGHT+IEN5DfkubDT5gfgqNhNr0gKh0isbiFIhj+wDr5xuXU5SvAS70bUQlCMHGeHRici2j9JlCnHmQ==
-X-Received: by 2002:a05:651c:4c9:b0:2ee:8171:8e13 with SMTP id 38308e7fff4ca-2eeb318a3a4mr2723491fa.44.1720458885961;
-        Mon, 08 Jul 2024 10:14:45 -0700 (PDT)
-Received: from localhost ([2001:861:3385:e20:6384:4cf:52c5:3194])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4266f6f5a27sm6034055e9.23.2024.07.08.10.14.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jul 2024 10:14:45 -0700 (PDT)
-From: Raphael Gallais-Pou <rgallaispou@gmail.com>
-To: Patrice Chotard <patrice.chotard@foss.st.com>,
-	"'Rafael J . Wysocki'" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: sti: fix build warning
-Date: Mon,  8 Jul 2024 19:14:34 +0200
-Message-ID: <20240708171434.111623-1-rgallaispou@gmail.com>
-X-Mailer: git-send-email 2.45.2
+        d=1e100.net; s=20230601; t=1720462144; x=1721066944;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h9SclVHHKmhSqXdWBkdjpfcUGGg73PYZ76UnLpmlrPA=;
+        b=YNdnlJ4DqjbyVPzOiIKp1Jjma59hhnID/8y8yVFHQPU0Oa4F8oWJ8ryLQV6/2kN6Ef
+         JNBY6jIebzxj5QtVfOux/flAldctuA6fD1bylJuDjvHX4zJPftN3YT+v7+0S+d5oOw8z
+         JxkztV8kXGfu2bdRaTTYNTxm7GL0RFI0PxPwk7MmGKuQZGeD/JCkhXF4G8//D1tjhd+X
+         Wxyw6K0QsljhQCPhn3yreCU3P4J1aGOhic7vhMngcYHcyYlJbvhXlV/hw7ueny9P82OR
+         bIIrhe33eJcM6jvtBpVrEw8efeTQsDR0pYl2VB0LmrFG9UmwDCnuPSovMgikwim4Y8wb
+         cxtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWaeGS/O0qVvY8P3Znz1KWlGbhzXCHIN40l89sXsZuv7vhZnPBGWqIqzBa+/NVuXjt6dB1eS6+8uMUYqVwBe30mh3U3RAoNliY=
+X-Gm-Message-State: AOJu0YzrJxDSatFNRHt5ymnXMkUaZx2iLkcN6nF79uYwW4cIGF8SnOH4
+	AFwCicGnLMK+NwWfJ3j7JbklcyiBf546+9tS9YFtWe1N/YBh8UwMOSqVa65iRtM=
+X-Google-Smtp-Source: AGHT+IEY4wUlDLgxf2i3rdkVHcpk1OUK0j5ihUIo/iySjtcBRkZ3zUlg7nzE4G/y1pYBhf9gKCamKg==
+X-Received: by 2002:a05:6402:84c:b0:58e:2b65:385b with SMTP id 4fb4d7f45d1cf-594ba0c9e5dmr286249a12.14.1720462143775;
+        Mon, 08 Jul 2024 11:09:03 -0700 (PDT)
+Received: from [192.168.105.194] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-594bda308efsm98182a12.81.2024.07.08.11.08.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Jul 2024 11:09:03 -0700 (PDT)
+Message-ID: <d83ff8c4-15de-4e20-9c27-eb0247184b5f@linaro.org>
+Date: Mon, 8 Jul 2024 20:08:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 23/23] arm64: dts: qcom: starqltechn: add new features
+To: Dzmitry Sankouski <dsankouski@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson
+ <andersson@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>,
+ Jessica Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>,
+ phone-devel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-pwm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org
+References: <20240618-starqltechn_integration_upstream-v3-0-e3f6662017ac@gmail.com>
+ <20240618-starqltechn_integration_upstream-v3-23-e3f6662017ac@gmail.com>
+ <13fea5c0-5906-4075-b734-52649e35eb69@linaro.org>
+ <CABTCjFDebBxf=XcvTbVtifROFHrQLXtArLtj0wHVF_e529NVAg@mail.gmail.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <CABTCjFDebBxf=XcvTbVtifROFHrQLXtArLtj0wHVF_e529NVAg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Building this driver yields the following:
+On 8.07.2024 5:54 PM, Dzmitry Sankouski wrote:
+> вт, 18 июн. 2024 г. в 17:12, Konrad Dybcio <konrad.dybcio@linaro.org>:
+>>
+>>
+> ...
+>>
+>>>       gpio-reserved-ranges = <0 4>, <27 4>, <81 4>, <85 4>;
+>>
+>> Do you know what these are for?
+>>
+>> Konrad
+> 
+> <85 4> is spi for fingerprint.
+> <27 4> is spi for eSE(embedded Secure Element)
+> The rest shouldn't be reserved.
 
-.../drivers/cpufreq/sti-cpufreq.c:215:50: warning: ‘%d’ directive output may be truncated writing between 1 and 10 bytes into a region of size 2 [-Wformat-truncation=]
-  215 |         snprintf(name, MAX_PCODE_NAME_LEN, pcode%d, pcode);
-      |                                                  ^~
-.../drivers/cpufreq/sti-cpufreq.c:215:44: note: directive argument in the range [0, 2147483647]
-  215 |         snprintf(name, MAX_PCODE_NAME_LEN, pcode%d, pcode);
-      |                                            ^~~~~~~~~
-.../drivers/cpufreq/sti-cpufreq.c:215:9: note: ‘snprintf’ output between 7 and 16 bytes into a destination of size 7
-  215 |         snprintf(name, MAX_PCODE_NAME_LEN, pcode%d, pcode);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Thanks for digging this up!
 
-Fix the buffer size to avoid the warning at build time.
+Please add a comment for it, like in x1e80100-crd.dts
 
-Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
----
- drivers/cpufreq/sti-cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/sti-cpufreq.c b/drivers/cpufreq/sti-cpufreq.c
-index 1ffa23dd8907..8e2e703c3865 100644
---- a/drivers/cpufreq/sti-cpufreq.c
-+++ b/drivers/cpufreq/sti-cpufreq.c
-@@ -18,7 +18,7 @@
- #include <linux/regmap.h>
- 
- #define VERSION_ELEMENTS	3
--#define MAX_PCODE_NAME_LEN	7
-+#define MAX_PCODE_NAME_LEN	16
- 
- #define VERSION_SHIFT		28
- #define HW_INFO_INDEX		1
--- 
-2.45.2
-
+Konrad
 
