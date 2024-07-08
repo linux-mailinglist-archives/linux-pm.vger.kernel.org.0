@@ -1,115 +1,111 @@
-Return-Path: <linux-pm+bounces-10757-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10758-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D7D092A016
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 12:24:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD91092A03B
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 12:30:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 492FA1F227FC
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 10:24:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7291E1F22B04
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 10:30:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2A3A76F1B;
-	Mon,  8 Jul 2024 10:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC95B7E10B;
+	Mon,  8 Jul 2024 10:29:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="voTcisUh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DzA3KY9z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161A72E85E
-	for <linux-pm@vger.kernel.org>; Mon,  8 Jul 2024 10:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974127D3E4
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jul 2024 10:29:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720434240; cv=none; b=DDZ5ZQwx3/YCUaVS/H4fUjoraFY1UqSW8j2SBupIdRnivX+mEXp9TJczrpnMwv8ANVlUq5GL/Nr5P8McmqZIof7d7zCqXi42UVxVpKgvcjM2PKaprhMnIfalKtDl9WPAprPPiVOXJyhcOKRu4oGmmBsHRN2wOBVc9ZgKYM9nRac=
+	t=1720434558; cv=none; b=mFST5fSaPW/zFsYIXOVQICwQWZZZv1I8DfcGhDVHOJL+Ol1kNuDYuSSt3QemJTTgTfBJ1tJB+ePR75mtu7G9rTqYQysNzSMsDwB2pAh6lUtrGoGJNu5520/PXajp05a7JQry/wwMJFeddENV/ay+sr7njnlGY1/ExqfrIA2MXAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720434240; c=relaxed/simple;
-	bh=SmSR9+Zy5h+7+91csxjnolavjIEWaulnUtgKd7wHjBw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F8gXXDTRyr6Lv7akMqznJWmJI5xpR4BWwfHzhRb9/QCckLgmXy7lNi8XA1H8tQJiuMsS9EJkkXqAMN6xk/cgLDy9O5URkYiIJalWsZPhd4joaZsslWaDuhpsuHmK0vzf97musxz2dwnvG0v/6rN9Uw/zsQZZGIuH2CpGUXMeOQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=voTcisUh; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2ec61eeed8eso46311791fa.0
-        for <linux-pm@vger.kernel.org>; Mon, 08 Jul 2024 03:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720434237; x=1721039037; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SdHyc3E9lDPINEIoBlnhtvfdKjc0jZ+mb9i/W3sps1Y=;
-        b=voTcisUhgwers2jzBYpNlrDV0MozMtxd2gnT1RtnCHLhNX6JKmN5vOgc+JudQmugZI
-         sPkcfQyNcxZ/YM3qVtt47uqUbkkg2zyxeRb36YiCfJsle0G6YWCQClnoY5KzNTCd9m7O
-         yXkDTUpBETX4cigabAHbj3QFh6lwq7fDpwA29J1qdm6tG5a+MjcjS5MliAFqKTjrmjJd
-         IZAZBbxUdawQ9rwh5NOoTSEkseALXSQWiwlmHn7dJD2sjzh3KOZYciVh/Iy3JtOinEfF
-         DfJko7C+AERH24qUDIdMBDqWueCuEP0fqPbK6cSxpFSZr+GpjyuSlKUuAq52gXJxUWFw
-         egjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720434237; x=1721039037;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SdHyc3E9lDPINEIoBlnhtvfdKjc0jZ+mb9i/W3sps1Y=;
-        b=u2JvtvBTMqX9KYVrZL2OCdBJQvs6PDH7/m6V7/JJcyXQBjFcduyAGhZLpiOURv6qDD
-         2qJLlNm+Pq63EKf4dk8B4sAIUpaZ79DqFKamkW13OaGkLK2fNiLe0NR8piRZ2nUfgQ5O
-         pa10mE4Go77Gq3Rimn/SIV/GuVnwmcGcpOdxLRkP6QHXvpblZ4Deq7RXHcKpUWW2jQUB
-         7RGRhhucRpCkzo6lHvr2AXjRc/kE/H3HNDeeDH1lcESMxaW7LuocAbmclmY8RRVjBNyc
-         WEINJvRFt5ZpdFrgXpmQS18p4KLUxNrcFAHdBti+bn8rAtmISp9i2vWeyEeKwaIzeyzL
-         OiWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV+O0Waowa66UDobOEcoFyWY8XLl/7WHFVNo0Tm/ysxsyG90nxXNEyJYzMdvop5fKR88jwAKzgc1XHj80y10wWUrlohSBG+vn0=
-X-Gm-Message-State: AOJu0Yy1OXZSKLN0/Zeey2kf1q3TOeeqL/uhpGCYAOVuwZjjxGgI0Pvc
-	bEppqMvoyYmZqBDsSdPaj6Hyboo5yuiXCUz7V2xUNd07xxVpn4pkeboESGXp24s=
-X-Google-Smtp-Source: AGHT+IGtGJ2uxprR9XwTilWfavRjiJbPES5/C+lYbwqGMTXjQPenf6skImCxag9NiDg4gG3mANhDtQ==
-X-Received: by 2002:a05:651c:1071:b0:2ee:8698:10e8 with SMTP id 38308e7fff4ca-2ee8ed5ed71mr68114851fa.20.1720434237238;
-        Mon, 08 Jul 2024 03:23:57 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4264a1f22acsm159963515e9.24.2024.07.08.03.23.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jul 2024 03:23:56 -0700 (PDT)
-Message-ID: <4069f1b9-658e-4b18-8219-b575903b627b@linaro.org>
-Date: Mon, 8 Jul 2024 12:23:56 +0200
+	s=arc-20240116; t=1720434558; c=relaxed/simple;
+	bh=QdPCHkKSPXJuaDd64bIhxiRIePqZpZZuLA3yebj7XM8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q/NY4mODU8LN0y0OFT2JjmlPpa/jiMEMGDB7/1V18bLryEjw7mm20+qlhcrklnWWjN6K7pIltm6CIN2++g9lZo/NC76WzhXxLb3U7O9SpqfzCIaEqsfn0ykbMmXM6BPNLB9Ps1T07BDqVL/ZhIXmReChie36YHBtbHZG6DBH01s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DzA3KY9z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24352C4AF0C
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jul 2024 10:29:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720434558;
+	bh=QdPCHkKSPXJuaDd64bIhxiRIePqZpZZuLA3yebj7XM8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DzA3KY9zeXdNFLVvf0NItcEOtDqRflyKihl/tWDomNp0U1HpNpu/0PhjC9yM77SlM
+	 +L0XZuotd+tSv3syoRwCBGwTkL58HMz/wzOoQeMD6r1L+8qMWYPsU0wiWxeqIXNCLV
+	 JjMd97lBDlTC7TUfXrjEetzUyemI/Nig/9IRc7feu+TU1XDuOPpaLO8oDW4ee/fg9T
+	 8GdyqA46S8gkOzMX24MCeNJHi2c7DB4hYXUc9S7AvbzFOzZwkxe+9wmg19tLiRJYnW
+	 0J1ao3T/uZe6zHubxBtZKTs9WkirNmeZkjR/knHNNA4VoLIZw1eJ7wIVeo8rOWAMIk
+	 4ASWDZXv8HA+A==
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5c66797e197so42519eaf.3
+        for <linux-pm@vger.kernel.org>; Mon, 08 Jul 2024 03:29:18 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUQyaShCGGppGgDbYxAwk6cNtUcaTVo4IjfmmqmMpxvzWCVT+SkQJcUZRITT7JCZ13FSp/H2agrxt7OqSK2bY5ZAxPsXCCWYBQ=
+X-Gm-Message-State: AOJu0Yz2q3XR21q1ZCAQgyHYlwMuV89QENWcUwVjknK3tlv3UK2t3oD4
+	DypNSgn0Fu0xFeVST0RNTai+URGbeoMPwZxtcLYOrUdoRHKEW/P+j7YijkKoSZU8S4lj4ZlOlOP
+	PlqLRyJP0vxtyYh+LWg4jXE4E05Q=
+X-Google-Smtp-Source: AGHT+IG68gI1eMPZFKK0eQDw9Iwz9HHxC6BpZ7aNyVwFBtch+i1wFPL7THGxJWvdMbhixNHGyJrW5T2+gXiUtJO5Fn0=
+X-Received: by 2002:a05:6820:228a:b0:5c4:7895:93b8 with SMTP id
+ 006d021491bc7-5c646ecb3c8mr13544163eaf.1.1720434557376; Mon, 08 Jul 2024
+ 03:29:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] thermal: core: Change passive_delay and
- polling_delay data type
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
-References: <2746673.mvXUDI8C0e@rjwysocki.net>
- <5803791.DvuYhMxLoT@rjwysocki.net>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <5803791.DvuYhMxLoT@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <144c8309-c355-447b-9106-1396a0169bb2@amd.com>
+In-Reply-To: <144c8309-c355-447b-9106-1396a0169bb2@amd.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 8 Jul 2024 12:29:01 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ib1nAn_egXGg3+Jcpn40Aiajdi4b9qYMjYQUyuuoPCug@mail.gmail.com>
+Message-ID: <CAJZ5v0ib1nAn_egXGg3+Jcpn40Aiajdi4b9qYMjYQUyuuoPCug@mail.gmail.com>
+Subject: Re: 4th set of changes for amd-pstate on 6.11
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 05/07/2024 21:44, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> It is better to use unsigned int as the data type for the passive_delay
-> and polling_delay arguments of thermal_zone_device_register_with_trips()
-> because they are implicitly cast to unsigned int anyway in
-> thermal_set_delay_jiffies() and if they happen to be negative at that
-> point, the resulting behavior may not be as desired.
-> 
-> Update the thermal_zone_device_register_with_trips() definition
-> accordingly.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Sun, Jul 7, 2024 at 6:04=E2=80=AFPM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> The following changes since commit 6d588891a90c5a946aaac11a93d06edd89ed90=
+54:
+>
+>    Documentation: cpufreq: amd-pstate: update doc for Per CPU boost
+> control method (2024-06-26 15:48:21 -0500)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
+> tags/amd-pstate-v6.11-2024-07-07
+>
+> for you to fetch changes up to 738d7d03571c7e38565bd245c0815a2c74665018:
+>
+>    cpufreq/amd-pstate: Fix the scaling_max_freq setting on shared memory
+> CPPC systems (2024-07-07 10:32:48 -0500)
+>
+> ----------------------------------------------------------------
+> Fourth set of changes for amd-pstate in 6.11
+>
+> This adds fixes for setting scaling max frequency on systems
+> without a dedicated MSR for setting CPPC requests.
+>
+> ----------------------------------------------------------------
+> Dhananjay Ugwekar (2):
+>        cpufreq/amd-pstate-ut: Convert nominal_freq to khz during comparis=
+ons
+>        cpufreq/amd-pstate: Fix the scaling_max_freq setting on shared
+> memory CPPC systems
+>
+>   drivers/cpufreq/amd-pstate-ut.c | 12 +++++++-----
+>   drivers/cpufreq/amd-pstate.c    | 43
+> +++++++++++++++++++++++--------------------
+>   2 files changed, 30 insertions(+), 25 deletions(-)
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Pulled and added to linux-pm,git/linux-next, thanks!
 
