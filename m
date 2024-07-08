@@ -1,122 +1,108 @@
-Return-Path: <linux-pm+bounces-10743-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10744-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91BF1929C55
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 08:37:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E14DA929C5C
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 08:43:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D32B280DA6
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 06:37:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DC621C212F7
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 06:43:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3837713AF9;
-	Mon,  8 Jul 2024 06:37:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6858013ACC;
+	Mon,  8 Jul 2024 06:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bywO3buZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j6XsnBZQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEC5B101F7
-	for <linux-pm@vger.kernel.org>; Mon,  8 Jul 2024 06:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F060E1171D
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jul 2024 06:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720420640; cv=none; b=kXGP7jG3TQmt4nluklDiByYV0Rn0Ctjwpk4xh5uDH4ik0+u0lTPj5QgjMua8KPZHqi+7PUb2ByX5px0ouAeovOqAISjKWkga2e22r9zMIBrkJLij6tC58ichIVg+VlxUaPfyzDBt87BffXwgovTs6DWpMCO5mrSSsg16D+iHh+Q=
+	t=1720420977; cv=none; b=rjN2q6jcG3YrpfOFvHrT1yru0WDPY1ROZ9kXpkypUobibmAPB9EwjrIWuj3LTNQvgi1lQvrp7yyFhONoogeBvgwz5qg31Z+9ULUCnW429qCl/eZs8AkwUmcXw9DlIQ5sjzuvULTjYsrxfvlsMgJzE8sXwGI9RW95aswGWfzxu/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720420640; c=relaxed/simple;
-	bh=9XH+A+A6pdQhS/+ynwXmaeoQJ2J+3srt7+L2hiZznZ0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eb4/LCK0aeIbJTgVjP05bDld0FK06B//pvqjvWpVrj77h8snGWhI9PSM7JEeAif/ao7GmYKWDeRG0kjs8XKVJJ09L2hI0JE78vuWNHgQeAEnrZmnhzxgT/CbqoBA3mKFWoCqYXlF14u8jszdmd0967NVhc0aI4hPNuz3cTpmeVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bywO3buZ; arc=none smtp.client-ip=209.85.216.44
+	s=arc-20240116; t=1720420977; c=relaxed/simple;
+	bh=XDCXukSSG5eu7Enir6B20Xw7BTHGqHHg5Qjp0HFF7D4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YzhWtyHtwMb5kmdvlBplCjkK7m9kicJ+HXt133K2MLQ6ZvKayAVZQ35fVPsXSr1O/wTU+hkG5NrEbR0nEA7YssYQksfI7V3Q3ONIVfN6EzobFWUkRtPwrPxMPUA26M1gmnfzCivXVXIj+7M9e7iM+HxkrYcCs813raIf4xTRzaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=j6XsnBZQ; arc=none smtp.client-ip=209.85.161.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2c97ff39453so2404234a91.0
-        for <linux-pm@vger.kernel.org>; Sun, 07 Jul 2024 23:37:18 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5c477d97159so1825037eaf.3
+        for <linux-pm@vger.kernel.org>; Sun, 07 Jul 2024 23:42:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720420638; x=1721025438; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9XH+A+A6pdQhS/+ynwXmaeoQJ2J+3srt7+L2hiZznZ0=;
-        b=bywO3buZUdxpNrcvoWwPkTVXHrEo4GfcDYGFzlGh81MGEOMLfywJPjnSHWRp+8s6X7
-         ka7nBEpJIChIg01ycgZE8DsNeor3Uo0smg1BpWACHteBgenyJyclmEer4zKVzrHCgG4Z
-         RmLIMOfzHGkrlJUwzvWsDiVR0ktw90rh0UI1W//7REpoaHR6wXvtvmhJhT1ovET0C5nH
-         KFhJO+NhdUniXiFZ3rKLRUZZBsaadddWPJa5HlNmBAy6Kx8Ik9mU0RukCvL0Vo6lyDNb
-         95Es2THK7Xx0Cel8NSYoA5+uUnpbnnQuXW/T24ZJ2r11j8qwpgrfLFsOD7RoxLKHjwko
-         ozLQ==
+        d=linaro.org; s=google; t=1720420975; x=1721025775; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1FcWtX9vaZBCwduln3dpe45i1fpCK57rnuMSwlu6aWA=;
+        b=j6XsnBZQ+KLh0p6v2x9lK//D99xqJ2pfrdVgZvmSuyl8Ep17Ci66hOgGaD2tt+Cb4Z
+         h1wW8r+7qEXsI2LkIrvoCEy4PF+IG/efjJe6xAaWcdVfH76bjDsWp5ebdbj/4klDai5y
+         5CkZU2vVuPZJTbda6ttRb3xM7/QAPjRStFHY2RCZ/ZaDqX7kRsy8mzYxNaquflqaklET
+         VH9dL6E2hjBfx5xMKngMeXF4TfO4rRgMlQGa8qAdZOhI50IjJGmQ9rtJ0d1g7pdRmoJJ
+         sjdascT11jiNSFTXsWap467yXHVHJ4UimXgri637BIDEZOK+VXuw1wOvmN2rHXw680oR
+         o6Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720420638; x=1721025438;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9XH+A+A6pdQhS/+ynwXmaeoQJ2J+3srt7+L2hiZznZ0=;
-        b=QMxfefTRhpczyeSxVrh1zYxeDEq8C3J7S6hYhIf41CnqzeNGUMLdJVVf3hZ9ffQSZh
-         lj31HCDGUbGfg5T5MQEJxU+VhjK8ci2TZ+f9dmFrPU++Q3p/1AVOmFIKRzsYtK56mzkl
-         2CBtIpxNrpxQ3qjPUKmBPiIEp+/n7uJJ2fMKBV8FySFGDtTBTOMV/ycIJU8Ln3Sr1ZHn
-         5rtfnko7qEgrQxhPzSrIQ8/z15Nly0fhyyQLFz9A5rwoZTYVe+A4Uw5syqUEO++J4rwE
-         24rM550wVnq4mYlx8ZBgS7wU4kzoMtTU2z7qn/3Uu9DFpk8LVkSjifnk8e+ngfURhV3C
-         zGdA==
-X-Forwarded-Encrypted: i=1; AJvYcCWXc0sP9af0vlDVxE7DMJg7yxackyxgfq9EelSSItMLrzzrX1AjX6Ta+kqFI5TFZvpfGN+jg0UTJLzg7m35F3943M4kFkg5j8c=
-X-Gm-Message-State: AOJu0Yz3cJDIsfOvPSOX21egexRTwJj4BMayB8f8sOPYP0Ow1ZB6D7fs
-	VqydWsID/CC6zio4yt5oGBkMhJWk7LKNVmCdvHMDTeldef06/T52fbra1c/sLeUPuq0eLkp1LPf
-	KP1TAUdhUvVzlyHL1ckcAGvRVkqiNvZYJEwp/Cg==
-X-Google-Smtp-Source: AGHT+IHjePj0LxGfR2nvdNbd5IvGhQSRQUzfXtW9Tgm1FFUXiJudOU0iSHUIUplho3zA+arT6C/C1fet0EhIf1iW6Zw=
-X-Received: by 2002:a17:90b:4c89:b0:2c3:11fb:a163 with SMTP id
- 98e67ed59e1d1-2c99c502fe3mr9745271a91.6.1720420638031; Sun, 07 Jul 2024
- 23:37:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1720420975; x=1721025775;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1FcWtX9vaZBCwduln3dpe45i1fpCK57rnuMSwlu6aWA=;
+        b=cf5EMtXfuMALrTyjKTtHVH36BIa4+4HxTHeWPznUC7fZY2f6NEweC6dF8aoXTEU3zz
+         U0+sj5FGq58MdcluNvf1WjYkhpjDE1JsjPyD4qjnfd0uGe/vVpDP3XZuvDQK5A5iVpWC
+         CWqHFPy6P38HGki/vZR+POx+DTWGIvW4cTq5RU+J0nc1E2fi2+NErdGisETSb1pMjg/E
+         n2hJKwD+Nf8AOubEo+hVzRMFB9A2b5by12ZyxHzIa2Gp4CbfazlmetCcv6ew7hT8U9we
+         wnDio2hNnGm5sAm/JMLNB2/yLIBORdoANiZkSpNGIAPWX5wK1h7jdaUwHbbPrBU9KLMk
+         CEHw==
+X-Forwarded-Encrypted: i=1; AJvYcCX4rF07Jc0uC/qLnhzkfCg23dMvmgTtZ39ryXKCQZCswyqKbVaYqCI9AbQyHLN3+S08dXGhvyGhNxv/OvxRwVT1a5L1XdjER9s=
+X-Gm-Message-State: AOJu0YyEM+C7gUV7VXdXDxqBd8LyA0g8EsPKQbDW02sNKMYb9v8WYPvx
+	I0YTPv5uX8f/YLvHKNvQT6mkkGMVAUOnz1sI9Ky58rCbnVXvo3WAYsrfDcGHY4A=
+X-Google-Smtp-Source: AGHT+IEpqAis6dJIEMNcexBdNxU9+uzyMP+q55/0m9GwePwrj4Gs0P9PuuQDc9r/zZs34DMwLSdBrg==
+X-Received: by 2002:a05:6871:688:b0:25e:14f0:62c3 with SMTP id 586e51a60fabf-25e2bd878b7mr9528568fac.33.1720420974988;
+        Sun, 07 Jul 2024 23:42:54 -0700 (PDT)
+Received: from localhost ([122.172.84.129])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b116e43f0sm5260455b3a.101.2024.07.07.23.42.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Jul 2024 23:42:54 -0700 (PDT)
+Date: Mon, 8 Jul 2024 12:12:52 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, kernel@collabora.com,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] cpufreq: mediatek: Use dev_err_probe in every error path
+ in probe
+Message-ID: <20240708064252.sydvhfnmx3akafql@vireshk-i7>
+References: <20240628-mtk-cpufreq-dvfs-fail-init-err-v1-1-19c55db23011@collabora.com>
+ <20240702055703.obendyy2ykbbutrz@vireshk-i7>
+ <aa6e93bd-aba2-4e4d-bce9-04e818ac25ed@collabora.com>
+ <20240702084307.wwvl5dchxa4frif3@vireshk-i7>
+ <8602bf12-1b8d-4249-8814-52ecaa29d0ec@notapiano>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240619031250.2936087-1-tj@kernel.org> <20240619031250.2936087-3-tj@kernel.org>
- <ZnM2ywDVRZbrN6OC@slm.duckdns.org> <CAKfTPtBPObGdcaQF5nKqr4042f-+5obTMm_S6S+=3_Ct33ZMyw@mail.gmail.com>
- <Zog5-Yd5wV0-Y76y@slm.duckdns.org> <CAKfTPtDeA4OTPJmEHd-wKToYwDVizcny-_qxEuDUA-OcaVm2Uw@mail.gmail.com>
- <ZonzAdyd6zb2Sm06@slm.duckdns.org>
-In-Reply-To: <ZonzAdyd6zb2Sm06@slm.duckdns.org>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Mon, 8 Jul 2024 08:37:06 +0200
-Message-ID: <CAKfTPtDE2rWbRouf8zRyM3UpTfK1k_xrWmvAs-zfoRZqM3zGsw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] sched_ext: Add cpuperf support
-To: Tejun Heo <tj@kernel.org>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
-	void@manifault.com, linux-kernel@vger.kernel.org, kernel-team@meta.com, 
-	mingo@redhat.com, peterz@infradead.org, David Vernet <dvernet@meta.com>, 
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8602bf12-1b8d-4249-8814-52ecaa29d0ec@notapiano>
 
-On Sun, 7 Jul 2024 at 03:44, Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Sat, Jul 06, 2024 at 11:01:20AM +0200, Vincent Guittot wrote:
-> > > There's scx_enabled() and scx_switched_all(). The former is set when some
-> > > tasks may be on sched_ext. The latter when all tasks are on sched_ext. When
-> > > some tasks may be on sched_ext but other tasks may be on fair, the condition
-> > > is scx_enabled() && !scx_switched_all(). So, the above if statement
-> > > condition is true for all cases that tasks may be on CFS (sched_ext is
-> > > disabled or is enabled in partial mode).
-> >
-> > My point is that if there is no fair task, cpu_util_cfs_boost() will
-> > already return 0 so there is no need to add a sched_ext if statement
-> > there
->
-> I see, but scx_switched_all() is a static key while cpu_util_cfs_boost()
-> isn't necessarily trivial. I can remove the conditional but wouldn't it make
-> more sense to keep it?
+On 05-07-24, 11:13, Nícolas F. R. A. Prado wrote:
+> That would only run once during boot and only in the error path...
+> I'm confident in saying this won't amount to any real performance gain. So the
+> usage of dev_err_probe() everywhere for log and source code standardization is
+> well worth it.
 
-I prefer to minimize (if not remove) sched_ext related calls in the
-fair path so we can easily rework it if needed. And this will also
-ensure that all fair task are cleanly removed when they are all
-switched to sched_ext
+Hmm. Fair enough.
 
-Thanks
-Vincent
-
->
-> Thanks.
->
-> --
-> tejun
+-- 
+viresh
 
