@@ -1,116 +1,117 @@
-Return-Path: <linux-pm+bounces-10789-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10790-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37B5592A8E2
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 20:20:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 786B192AA0D
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 21:48:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95CCFB20A12
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 18:20:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33653286481
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 19:48:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A1BD146A63;
-	Mon,  8 Jul 2024 18:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D93C14D439;
+	Mon,  8 Jul 2024 19:48:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H3TceRZu"
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="LbZNkTBp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AED979FD;
-	Mon,  8 Jul 2024 18:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377641D52D;
+	Mon,  8 Jul 2024 19:48:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720462834; cv=none; b=NM/8phQA4SyvOXn4B2JTL+4etja7Omka2/qUPuk0AATQsWMXOGUNMvdtd6q2YuWJn2+eNpni/nx6IgT3mL7T/Crgeqv0paXyLwC3L6JCN2C9WgQ3jMGZ+vGwSi37dfA9EyQm+fJk+qBv5/rwjFj0V8a0IX8iGT6mOHkGvVZ3gJ0=
+	t=1720468102; cv=none; b=bCAdHC1M9OecgiARcQY5kzNGxn+mBqrdCtNjGxOd58bIQtQwb6cmaMkGPyDjLvAGL3AF451+uh/0AN6hQpy4X4OSVtvkCdoSF502atnBKDltHO81ksXzz6BqOJmDFfXsXDlxUe1Y+OUlgfRcPc1ER9pAtXl6W/Ixu9VeGJoH9Ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720462834; c=relaxed/simple;
-	bh=0Ot1C3XCfv9H3+leeuLXAjpAiNRjVc9eAfmODEiiDd4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uG9LwnDu/8KRulA8xMRlJvEl/a+nFx3ssU4gRoxE/sOC7q2Md+2byYCipqb/uSHoK/OWmEMgu7wayDWiLbIF/eVy8p5F35XuF/efPJL6rxDgyKLCFBFsKtRYrxmZg3oujMj+1T4KflDZlwGACpb/jKGYtsKKLYR/rgFkb6x8hOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H3TceRZu; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-707040e3018so2760234a12.1;
-        Mon, 08 Jul 2024 11:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720462832; x=1721067632; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0vwQyNgx5l06JN6vKVkGLyfa4vRNR4YaNZWudr9WkWI=;
-        b=H3TceRZup/gbnW2MvDxm8h+FZ3ELiyAzKJTCXWYoUax5GL+0kW+qEAX88K0iqnMAzN
-         rdMLq1DIpkgiLrmXUs4q6/J7mfmqzfBPFKgmK5UIbVaHdyNtLm6/3x+FzsYUC+JBuYpi
-         KVxo41k5pAufRIZMoRe8KO4S0fM1MUBOfwpdxmtnHqoJmRB5LU4xWw5eg3pzrif9dyN1
-         sVK96eTMUjxjhgG6PoqNdEgoZz23Nq7ZOEG2hKtUNS6KlK0I5fP3pZiTCLE11QA85O7T
-         ohjsgfjDy+nd3vP7uT9oOGeQSXGWWndAVsRZ9i+PYshkxnSrMQEpkkCT9n0PSrvqqzk/
-         bB0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720462832; x=1721067632;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0vwQyNgx5l06JN6vKVkGLyfa4vRNR4YaNZWudr9WkWI=;
-        b=bfOOdjLM/vLN1F+t3Hoitf4KkI18Nqv5HiR/5A8a6NK6qSnSpO1xpjYzsNey2O9WCv
-         HIreDaak6h49uG7xDm2E2PBpj42CblMiQMJ8D230eiJcjFwtQ1q3MviiBY2BVGtv5Qk0
-         5WE4t7JWmiFFR7lr5gfq9eLfUSsT3YzkdePmzS5bzwDD2d4BDlIsbMjSdBoPsKO2Al7o
-         iF5wxucbByPIzzFTsbLegdRovqLPT375SNLg9NtmxKoyQ7wNbChN7z5EqHjVlFNNBmc+
-         nxEC3lnn5Edz2tGhTdfhCIIdMZoBGnh/UOCzOBZM26xtlDE/uEF7OaqlWx+Uqoj7YYjm
-         F1bw==
-X-Forwarded-Encrypted: i=1; AJvYcCWp5kp97kICGGSAGRdGO0B5ZPwMQS3O8rdCyHJtt+mZ+521RN6DGCuxgUnTk05tovaVSH0MHYwXzFk8/IoB/HASsLTALcXOjzA8iPXwXKf0beDvrTil8WB+lzNRyH6JIY1F+z6FQNE=
-X-Gm-Message-State: AOJu0YwxQPRzGaieA4yqfT/RVraOSiNFDa4b0Emtr+SAFfzbAsrmQfVU
-	VU82BxMmLhYvMLWJVoTiP4cBDLtyWOBugdkPvzvfVxa0QANABTdc
-X-Google-Smtp-Source: AGHT+IGrhAkN3YE/mZDFUIgozy1SbQ4lc6JYKiA8I+DDJenl3jj7q9rT0rcHmwsupEvVBxJTezmEag==
-X-Received: by 2002:a05:6a21:1a7:b0:1c0:f20c:5ba5 with SMTP id adf61e73a8af0-1c2984d7a93mr222577637.51.1720462832521;
-        Mon, 08 Jul 2024 11:20:32 -0700 (PDT)
-Received: from localhost (dhcp-141-239-149-160.hawaiiantel.net. [141.239.149.160])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b43898e3csm180758b3a.3.2024.07.08.11.20.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jul 2024 11:20:32 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Mon, 8 Jul 2024 08:20:30 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
-	void@manifault.com, linux-kernel@vger.kernel.org,
-	kernel-team@meta.com, mingo@redhat.com, peterz@infradead.org,
-	David Vernet <dvernet@meta.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v2 2/2] sched_ext: Add cpuperf support
-Message-ID: <Zowt7pVWFB-Of-me@slm.duckdns.org>
-References: <20240619031250.2936087-1-tj@kernel.org>
- <20240619031250.2936087-3-tj@kernel.org>
- <ZnM2ywDVRZbrN6OC@slm.duckdns.org>
- <CAKfTPtBPObGdcaQF5nKqr4042f-+5obTMm_S6S+=3_Ct33ZMyw@mail.gmail.com>
- <Zog5-Yd5wV0-Y76y@slm.duckdns.org>
- <CAKfTPtDeA4OTPJmEHd-wKToYwDVizcny-_qxEuDUA-OcaVm2Uw@mail.gmail.com>
- <ZonzAdyd6zb2Sm06@slm.duckdns.org>
- <CAKfTPtDE2rWbRouf8zRyM3UpTfK1k_xrWmvAs-zfoRZqM3zGsw@mail.gmail.com>
+	s=arc-20240116; t=1720468102; c=relaxed/simple;
+	bh=xUZY/g9NH9hWrJ5MTIb/Ij2QXJdJdb9amn0iqhwDow4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FMW9yI7l0yafrCpKHyQx9nJQxYvOlA3tiLWbtxamS1YYLdCkOO6uc2RwrhF/o3vbYHXaADSpeVXmpbD0VCYVCyeha5+KMGcl0Pk/WuNV8gbQmE3ix50NUH/0M5lReGErDuvcE9k6smsELhuqXbuv+i3pNBIBLiL9K4/z+NBK9tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=LbZNkTBp; arc=none smtp.client-ip=45.89.224.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
+Received: from p-infra-ksmg-sc-msk02.sberdevices.ru (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id 054BE120005;
+	Mon,  8 Jul 2024 22:48:16 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 054BE120005
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1720468096;
+	bh=b6lWsM0Po6dUCUZmlJfrJE/GhXqZ9octg7GqBGyGm3M=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+	b=LbZNkTBpkHeqONTCklpSMKnFlKM+Pzn1G27nbN9Q81h21xTOv6+KL+KJ+zGanNKOd
+	 f+8p7a8QPJpt6sLVZNWDpge6amOYqdiW6QKH3xi417EWZNj9ik4lTExc9v6jgD+lRa
+	 lZi/tpvwuV148JVHQ+f6SiduZXBeuPgX9ylk5iavrEeB+A368ZKWH+vDwEdKG6Hkmp
+	 tl0rz43QGnbacN1Ko3VAY9aUPz5jzFDYUo+EGjcSPGzvEmw11fRc+fvRKUn6CznzVG
+	 bqdfXvA1dk1si5YT/rssT6qieTr/XnPTejTdLS9R2y1fEx+NVUeX0v/o0JH/SjUy+6
+	 ODLRR//vZdXAQ==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Mon,  8 Jul 2024 22:48:15 +0300 (MSK)
+Received: from work.sberdevices.ru (100.64.160.123) by
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Mon, 8 Jul 2024 22:48:15 +0300
+From: George Stark <gnstark@salutedevices.com>
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<neil.armstrong@linaro.org>, <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+	<martin.blumenstingl@googlemail.com>, <hkallweit1@gmail.com>,
+	<broonie@kernel.org>, <glaroque@baylibre.com>, <rafael@kernel.org>,
+	<daniel.lezcano@linaro.org>, <rui.zhang@intel.com>, <lukasz.luba@arm.com>,
+	<b.galvani@gmail.com>, <mmkurbanov@sberdevices.ru>
+CC: <linux-i2c@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-amlogic@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <kernel@salutedevices.com>, George Stark
+	<gnstark@salutedevices.com>
+Subject: [PATCH 0/4] amlogic SoC's power-domains fixes
+Date: Mon, 8 Jul 2024 22:48:04 +0300
+Message-ID: <20240708194808.1819185-1-gnstark@salutedevices.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtDE2rWbRouf8zRyM3UpTfK1k_xrWmvAs-zfoRZqM3zGsw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 186376 [Jul 08 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: gnstark@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 23 0.3.23 8881c50ebb08f9085352475be251cf18bb0fcfdd, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;100.64.160.123:7.1.2;salutedevices.com:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;smtp.sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/07/08 16:01:00 #25918429
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-Hello, Vincent.
+Here's some fixes to the bindings and device tree related to Amlogic A1 SoC.
+The SoC provides dedicated power domain for for almost all periphery.
 
-On Mon, Jul 08, 2024 at 08:37:06AM +0200, Vincent Guittot wrote:
-> I prefer to minimize (if not remove) sched_ext related calls in the
-> fair path so we can easily rework it if needed. And this will also
-> ensure that all fair task are cleanly removed when they are all
-> switched to sched_ext
+George Stark (4):
+  dt-bindings: spi: amlogic,a1-spifc: make power-domains required
+  dt-bindings: i2c: amlogic,meson6-i2c: add optional power-domains
+  dt-bindings: thermal: amlogic,thermal: add power-domains
+  arm64: dts: meson: a1: bind power domain to temperature sensor
 
-Unless we add a WARN_ON_ONCE, if it doesn't behave as expected, the end
-result will most likely be cpufreq sometimes picking a higher freq than
-requested, which won't be the easiest to notice. Would you be against adding
-WARN_ON_ONCE(scx_switched_all && !util) too?
+ .../bindings/i2c/amlogic,meson6-i2c.yaml           |  3 +++
+ .../devicetree/bindings/spi/amlogic,a1-spifc.yaml  |  4 ++++
+ .../bindings/thermal/amlogic,thermal.yaml          | 14 ++++++++++++++
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |  1 +
+ 4 files changed, 22 insertions(+)
 
-Thanks.
+--
+2.25.1
 
--- 
-tejun
 
