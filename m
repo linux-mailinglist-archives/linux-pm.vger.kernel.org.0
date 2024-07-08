@@ -1,111 +1,157 @@
-Return-Path: <linux-pm+bounces-10758-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10759-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD91092A03B
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 12:30:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7239292A240
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 14:13:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7291E1F22B04
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 10:30:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A662EB232D8
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 12:13:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC95B7E10B;
-	Mon,  8 Jul 2024 10:29:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A582081AA2;
+	Mon,  8 Jul 2024 12:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DzA3KY9z"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NWhhWVC8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974127D3E4
-	for <linux-pm@vger.kernel.org>; Mon,  8 Jul 2024 10:29:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A7F7EEFD
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jul 2024 12:06:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720434558; cv=none; b=mFST5fSaPW/zFsYIXOVQICwQWZZZv1I8DfcGhDVHOJL+Ol1kNuDYuSSt3QemJTTgTfBJ1tJB+ePR75mtu7G9rTqYQysNzSMsDwB2pAh6lUtrGoGJNu5520/PXajp05a7JQry/wwMJFeddENV/ay+sr7njnlGY1/ExqfrIA2MXAA=
+	t=1720440398; cv=none; b=LElbUkaigMAotoKVA+Cr49ToK6qAAAl65wbVt98u45HawzQDrZ/eVCtsnnsKXc7sOd8RO7YOkcU4z7nhLvPZqYQFOR8DVuKirbXpCTvnx4eIUfjqU/jRKv710ngixwgpD36oNY3LJVLEUBjFVCqzq5680FNEL5rd2Ou2N/RtOPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720434558; c=relaxed/simple;
-	bh=QdPCHkKSPXJuaDd64bIhxiRIePqZpZZuLA3yebj7XM8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q/NY4mODU8LN0y0OFT2JjmlPpa/jiMEMGDB7/1V18bLryEjw7mm20+qlhcrklnWWjN6K7pIltm6CIN2++g9lZo/NC76WzhXxLb3U7O9SpqfzCIaEqsfn0ykbMmXM6BPNLB9Ps1T07BDqVL/ZhIXmReChie36YHBtbHZG6DBH01s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DzA3KY9z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24352C4AF0C
-	for <linux-pm@vger.kernel.org>; Mon,  8 Jul 2024 10:29:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720434558;
-	bh=QdPCHkKSPXJuaDd64bIhxiRIePqZpZZuLA3yebj7XM8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DzA3KY9zeXdNFLVvf0NItcEOtDqRflyKihl/tWDomNp0U1HpNpu/0PhjC9yM77SlM
-	 +L0XZuotd+tSv3syoRwCBGwTkL58HMz/wzOoQeMD6r1L+8qMWYPsU0wiWxeqIXNCLV
-	 JjMd97lBDlTC7TUfXrjEetzUyemI/Nig/9IRc7feu+TU1XDuOPpaLO8oDW4ee/fg9T
-	 8GdyqA46S8gkOzMX24MCeNJHi2c7DB4hYXUc9S7AvbzFOzZwkxe+9wmg19tLiRJYnW
-	 0J1ao3T/uZe6zHubxBtZKTs9WkirNmeZkjR/knHNNA4VoLIZw1eJ7wIVeo8rOWAMIk
-	 4ASWDZXv8HA+A==
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5c66797e197so42519eaf.3
-        for <linux-pm@vger.kernel.org>; Mon, 08 Jul 2024 03:29:18 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUQyaShCGGppGgDbYxAwk6cNtUcaTVo4IjfmmqmMpxvzWCVT+SkQJcUZRITT7JCZ13FSp/H2agrxt7OqSK2bY5ZAxPsXCCWYBQ=
-X-Gm-Message-State: AOJu0Yz2q3XR21q1ZCAQgyHYlwMuV89QENWcUwVjknK3tlv3UK2t3oD4
-	DypNSgn0Fu0xFeVST0RNTai+URGbeoMPwZxtcLYOrUdoRHKEW/P+j7YijkKoSZU8S4lj4ZlOlOP
-	PlqLRyJP0vxtyYh+LWg4jXE4E05Q=
-X-Google-Smtp-Source: AGHT+IG68gI1eMPZFKK0eQDw9Iwz9HHxC6BpZ7aNyVwFBtch+i1wFPL7THGxJWvdMbhixNHGyJrW5T2+gXiUtJO5Fn0=
-X-Received: by 2002:a05:6820:228a:b0:5c4:7895:93b8 with SMTP id
- 006d021491bc7-5c646ecb3c8mr13544163eaf.1.1720434557376; Mon, 08 Jul 2024
- 03:29:17 -0700 (PDT)
+	s=arc-20240116; t=1720440398; c=relaxed/simple;
+	bh=vvhp4fRApGwcWx+HYgN66svEhYeuk2Cy5WZpOCo0nx4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dSdjfbvavTIsjhkuDZCq4lycqxmA+SHE6fKZOGIez3t5glDK6rUR2oF0hn4kwLMfJbaGAa5c6VPiCsGlFW46Zhbp45c5Y8BlmU2B1oJgLnvC+GHUc/pJFEhcwskR+Pv401XYYHx+jWIoiGnjOZJizhIuUJSw0g96xTV+f/RKVPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NWhhWVC8; arc=none smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2ebe40673d8so51304251fa.3
+        for <linux-pm@vger.kernel.org>; Mon, 08 Jul 2024 05:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720440395; x=1721045195; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GIOHsuoN+RJIrgoMh8AOlVtaMS5uVmOStC/SKT1pRY4=;
+        b=NWhhWVC8IkFdOxM8oeAOq6g1YgxyiZ+LrU+YiMumcYIOP9Ug5xM+n7amIBKEA6EQHL
+         Tr3NawyaZIEgqdXvbg6VF+SbXzvDeWpCI99nxh4RVFRUVHcqgKKzGyPKhF8YJQOjoTFD
+         Pzfne7Rw57BA1Miuc9Dbc9XMnoKzqujZ7WqjtGYLDY0UNtwUPBrXie+fHvndR92KTxYf
+         BY4S1BsFl08LYnqCKrakxDCqWYsNMYcU9zB8AuCkVm+FoYEvpCF0cYRkLZQcxX7lBOXN
+         fEL05YQCHh809UU+h5NmNbopMggeAQpxgnnm03wTpd2QHvOMRAtai/1FNY36KcRKb8+M
+         FpCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720440395; x=1721045195;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GIOHsuoN+RJIrgoMh8AOlVtaMS5uVmOStC/SKT1pRY4=;
+        b=LQTtWKxpfAfX7kqAq/s4o0PVg9WcSQiwxIUx56KMk9gzkFraCOALm3ODmx+VIpbq6X
+         qNIhKJfmd5QHVXDpDoDV3FeAztOQflFaGR4JdxD0zNBcpXBz8NnMmcIA7Go1KbVOQhsF
+         Y9M6jHfS/H/XAcGUXcRLl46NFszorUQHJk5b1nZt3rothMazKPzalZ5iwnvazQb7DV8P
+         3PgZzEPMWWSe1rpZz5mIlDLzkVj970vQacH50oacCPfxcPScjIqnkY68ESpwo1cZFo/p
+         XDOsG9l94e4Vl0tXscu9XUeHYTYuW/QSBlRuv8x+AuxslTXgTFYVzSmenCpNA5ktc2Lj
+         TLeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVx9Hlhmy6u7XTvbEb1SXg1EUYSN2lPWO93V4FoDlFxpCl7e3SQzJoLi6U3RbnOliP+0S+4KGrNf6+E4VXarL4kL47NK8iLzY0=
+X-Gm-Message-State: AOJu0YwsC1QVgj/5DepbooRKU6wq9QlbVFLX5/H1NTfZrzO1UxPw9S5m
+	nkHy0BCax9PP6DxGXjIp7dSADJd7Xn+Z5n2jLnuyyYj/t+u4N6VIBJY+ad95S64=
+X-Google-Smtp-Source: AGHT+IGgWz353tljKhdO83u9sS54lkUMOPfQr8fMIV7vCsqQ+f3NT52R0i3CP1D+AoSSca2X/CFjuA==
+X-Received: by 2002:a2e:99c9:0:b0:2ee:8bc6:6817 with SMTP id 38308e7fff4ca-2ee8ed5e0ecmr71535501fa.16.1720440394755;
+        Mon, 08 Jul 2024 05:06:34 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-58f4114a9ffsm4282023a12.12.2024.07.08.05.06.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Jul 2024 05:06:34 -0700 (PDT)
+Message-ID: <402ede79-5eda-48fc-8eb8-5d89ffe6bd41@linaro.org>
+Date: Mon, 8 Jul 2024 14:06:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <144c8309-c355-447b-9106-1396a0169bb2@amd.com>
-In-Reply-To: <144c8309-c355-447b-9106-1396a0169bb2@amd.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 8 Jul 2024 12:29:01 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ib1nAn_egXGg3+Jcpn40Aiajdi4b9qYMjYQUyuuoPCug@mail.gmail.com>
-Message-ID: <CAJZ5v0ib1nAn_egXGg3+Jcpn40Aiajdi4b9qYMjYQUyuuoPCug@mail.gmail.com>
-Subject: Re: 4th set of changes for amd-pstate on 6.11
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] thermal: core: Add sanity check for polling_delay
+ and passive_delay
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
+References: <2746673.mvXUDI8C0e@rjwysocki.net>
+ <4940808.31r3eYUQgx@rjwysocki.net>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <4940808.31r3eYUQgx@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jul 7, 2024 at 6:04=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> The following changes since commit 6d588891a90c5a946aaac11a93d06edd89ed90=
-54:
->
->    Documentation: cpufreq: amd-pstate: update doc for Per CPU boost
-> control method (2024-06-26 15:48:21 -0500)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
-> tags/amd-pstate-v6.11-2024-07-07
->
-> for you to fetch changes up to 738d7d03571c7e38565bd245c0815a2c74665018:
->
->    cpufreq/amd-pstate: Fix the scaling_max_freq setting on shared memory
-> CPPC systems (2024-07-07 10:32:48 -0500)
->
-> ----------------------------------------------------------------
-> Fourth set of changes for amd-pstate in 6.11
->
-> This adds fixes for setting scaling max frequency on systems
-> without a dedicated MSR for setting CPPC requests.
->
-> ----------------------------------------------------------------
-> Dhananjay Ugwekar (2):
->        cpufreq/amd-pstate-ut: Convert nominal_freq to khz during comparis=
-ons
->        cpufreq/amd-pstate: Fix the scaling_max_freq setting on shared
-> memory CPPC systems
->
->   drivers/cpufreq/amd-pstate-ut.c | 12 +++++++-----
->   drivers/cpufreq/amd-pstate.c    | 43
-> +++++++++++++++++++++++--------------------
->   2 files changed, 30 insertions(+), 25 deletions(-)
+On 05/07/2024 21:46, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> If polling_delay is nonzero and passive_delay is 0, the thermal zone
+> will use polling except when tz->passive is nonzero, which does not make
+> sense.
+> 
+> Also if polling_delay is nonzero and passive_delay is greater than
+> polling_delay, the thermal zone temperature will be updated less often
+> when tz->passive is nonzero.  This does not make sense either.
+> 
+> Ensure that none of the above will happen.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> v1 -> v2: The patch actually matches the changelog
+> 
+> ---
+>   drivers/thermal/thermal_core.c |    3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> Index: linux-pm/drivers/thermal/thermal_core.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_core.c
+> +++ linux-pm/drivers/thermal/thermal_core.c
+> @@ -1440,6 +1440,9 @@ thermal_zone_device_register_with_trips(
+>   		td->threshold = INT_MAX;
+>   	}
+>   
+> +	if (polling_delay && (passive_delay > polling_delay || !passive_delay))
+> +		passive_delay = polling_delay;
 
-Pulled and added to linux-pm,git/linux-next, thanks!
+Given this is a system misconfiguration, it would make more sense to 
+bail out with -EINVAL. Assigning a default value in the back of the 
+caller will never raise its attention and can make a bad configuration 
+staying for a long time.
+
+That said, there are configurations with a passive delay set to zero but 
+with a non zero polling delay. For instance, a thermal zone mitigated 
+with a fan, so active trip points are set. Another example is when there 
+is only critical trip points for a thermal zone.
+
+Actually there are multiple combinations with delays value which may 
+look invalid but which are actually valid.
+
+For example, a setup with polling_delay > 0, passive_delay = 0, active 
+trip points, cooling map to this active trips, passive trip points 
+without cooling map.
+
+IMHO, it is better to do the configuration the system is asking for, 
+even if it sounds weird
+
+
+>   	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
+>   	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
