@@ -1,125 +1,112 @@
-Return-Path: <linux-pm+bounces-10794-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10795-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 458AF92AA21
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 21:49:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62A0592AA2B
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 21:51:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E028D1F2267D
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 19:48:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F117280F99
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 19:51:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE44B14F13A;
-	Mon,  8 Jul 2024 19:48:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 388CE14D444;
+	Mon,  8 Jul 2024 19:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="k/ZYvHij"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cSTkVmkw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C78E14B09E;
-	Mon,  8 Jul 2024 19:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA88E1DDF4
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jul 2024 19:51:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720468103; cv=none; b=X7dg8aHGEr+rGPyyOg1XmYkJJsALKzCqUHesxx8PX3Wnptm0Lo3mmj30NksEGyYhmj3DWTWBFMv1N70G8I42FSj4YC+8/r5ieiT3YN+thz+DXcp+bDKkx9oa1r1obkFGOrQCceKuEMIZqj8pciy3VAJcwq/wD03Cxrv6gboAk6Y=
+	t=1720468282; cv=none; b=AXZplDDx1d4S8+n/2qzaYg6DfXgH91PvZX6iVHbxHrCtPkl8MlvUQdiwRm3tDSnm5uvFoWDDlhR3u2P1sIcnTIWOJVTzRH/A2vMprSxFjX89y0L+c7sMsqD3i5Rm7+Alk3f9XhIJvHkV/aSCWl+vRFJS2p0WmavDZxZyej5Rl/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720468103; c=relaxed/simple;
-	bh=YHoCWP0idcg6l6M4oUDp8f+1XG7eHy48jeJFhTAAj8k=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qHlGYv5l2Y3WZlyKv65uVPthUit5hAYZLJIPTmL98gB1SYq984kd9kc/WpJoFN7s5t3PsYZynaWzAcExdR04So435HAiu++KTsBO/TGsWrm1jDZbYClH9c2pI7YJIpo8U5TZ7V61zGh55EIWsGFg/awGPUqcW5MVjaLAWv/pnJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=k/ZYvHij; arc=none smtp.client-ip=45.89.224.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
-Received: from p-infra-ksmg-sc-msk02.sberdevices.ru (localhost [127.0.0.1])
-	by mx1.sberdevices.ru (Postfix) with ESMTP id 15264120009;
-	Mon,  8 Jul 2024 22:48:17 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 15264120009
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
-	s=mail; t=1720468097;
-	bh=IoalWO5CwiNil7FYL/DMHEzj0S1zxI7MgZa/AXwCx+c=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=k/ZYvHijSyaxjVd6FjyDk2b9Q+nrSpnhEQfYB2s9SVf5L6/Ksy319BkAuL9yEIcbE
-	 cla0ec1AiC7uch8Tzv4gM5TlUbxJrD6eufVhFtQPwglv5Y2KoyN3WfLCVA+HuXl1up
-	 +9clovB1wnQ+d6W0PzAEE6V3XsGP4sSYwqioEFDCSVh7c6bxt3vBfCQ0mFD60WlBF5
-	 /PpBbfvcceyvitt/5f+62j9OFxU7sHnqqPBUTI032xIbgAVocgC7heF+LouzYt50gH
-	 V+DYF85kYs+Y4GPZIpaMAbvIZ/4v92v+BNJxgwZ5NpbHUsf1vEo3JFxb3qQPzavC4/
-	 ZnfRL0/uqUQ6A==
-Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.sberdevices.ru (Postfix) with ESMTPS;
-	Mon,  8 Jul 2024 22:48:16 +0300 (MSK)
-Received: from work.sberdevices.ru (100.64.160.123) by
- p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 8 Jul 2024 22:48:16 +0300
-From: George Stark <gnstark@salutedevices.com>
-To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<neil.armstrong@linaro.org>, <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-	<martin.blumenstingl@googlemail.com>, <hkallweit1@gmail.com>,
-	<broonie@kernel.org>, <glaroque@baylibre.com>, <rafael@kernel.org>,
-	<daniel.lezcano@linaro.org>, <rui.zhang@intel.com>, <lukasz.luba@arm.com>,
-	<b.galvani@gmail.com>, <mmkurbanov@sberdevices.ru>
-CC: <linux-i2c@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-amlogic@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <kernel@salutedevices.com>, George Stark
-	<gnstark@salutedevices.com>
-Subject: [PATCH 4/4] arm64: dts: meson: a1: bind power domain to temperature sensor
-Date: Mon, 8 Jul 2024 22:48:08 +0300
-Message-ID: <20240708194808.1819185-5-gnstark@salutedevices.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240708194808.1819185-1-gnstark@salutedevices.com>
-References: <20240708194808.1819185-1-gnstark@salutedevices.com>
+	s=arc-20240116; t=1720468282; c=relaxed/simple;
+	bh=8X9bK0XUzYMuIB1GdfKNqGafAd/FFfRUhMSqUretYa8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LHPnedzMrheetvQlktDciMAWwr6RsXbQWjXZdwIl0UTGzAhNVwy+lOX/P4+xwyr7q5gDMaYaDbFAVH9DQ0IMMwsTa+PZhLlIUWV58gmZCbYmLgM0hsVL1Rs+k2CIrtbLCMPVdxwUvFAmhvqNpEYmqDnrSS8h4iHpemzUov+9EQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cSTkVmkw; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-70af81e8439so3559212b3a.0
+        for <linux-pm@vger.kernel.org>; Mon, 08 Jul 2024 12:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720468280; x=1721073080; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8X9bK0XUzYMuIB1GdfKNqGafAd/FFfRUhMSqUretYa8=;
+        b=cSTkVmkwlqiPa7D43n2CxETa+xFYTAIlxsh5d47iyyxcHC02gQ6AtSUh/acBC7JabJ
+         XNNesLhc6cLt8sGpIAfMYo8l9OqEiKNBSMbJE/fEGUmCIbg/VcI5b8a6Lb7cSvfHRQPD
+         T3LTnG/jBz/MpDBWw9QbtEoZ+ZP70MVI1JtvCykNyYPxwL8g/ub42+4cv6vx7BHsk694
+         pCZPwlKEOd48g6GlBCsz056T0o84zTPe8PjHweaw78Cu6xL6s3r1qvi3d+99hVN8JqLs
+         EALZMJ4iYKA8wZ8sfJFpTm9IGKr8GiRsZ14ktmZPRrIDfyHKN1SVHzjAUPi7J/Md6avq
+         Lrlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720468280; x=1721073080;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8X9bK0XUzYMuIB1GdfKNqGafAd/FFfRUhMSqUretYa8=;
+        b=eMR+DZOzaZYAi/uQNZs53PiJR0o8KjtB+YMQyt3q77sdSZeu+MzX9SstOR/K/jFKq+
+         ooXPdpNnhfgRx9Vd+PyT6RbMQBezh05iROrrS9j2rQ+T7TwCBCHZGMkBKLSMgGs5inou
+         9Gw9qDS8TNBktWvK+YMiqvBqSJU+lPgN+e/QZzX6BsJ1p0C4bGXY0HYnfjUWyTTfTX6v
+         jGUaCZR5t4QTTcU7hW3ErMpEDUIoTwD+kk9pvlqyu3aWNBspq0XvJEFkiS1rL4z/mJoy
+         3Axe+tr5BZUXC7w4glOBCN+w/ywsPyHUoD2g93YRvxACKwWD4k8X0hlslksg2QG6LqrI
+         UqFw==
+X-Forwarded-Encrypted: i=1; AJvYcCUWyRmy719MbxgA1xAyhp4IBjOmOjuS383pOUTFG3cEbEBraHtnghLTsWvzhJ2hmkrztH5F8TE2gejdR4I7HT11lvhrr2tZnuo=
+X-Gm-Message-State: AOJu0Yyk811wDyPgDkwL6Q0nHy687ypHFJdEj9IzGssEN8kNrdAdh/R8
+	6Rj4Bwc2GfvRCzcE6anjYZPUZJIU42l/Wqc+5iAXxHXivW5QYW6fJv5EJvIvp4onGlA+HQYaP9R
+	nhKLQuaO4KIcXNRy6tmHpacO2/hKxUmf5sn/mmA==
+X-Google-Smtp-Source: AGHT+IGwK1fsuaerAwZ7Lfb5nwlt5kbLQoUQfH/PmZaRy3CJf5sSqawqyBE+y4GU5auXRGAihVauG7L4gNx6sxfnSF0=
+X-Received: by 2002:a05:6a20:3d89:b0:1c0:e699:fa13 with SMTP id
+ adf61e73a8af0-1c2984d8c30mr509029637.52.1720468280070; Mon, 08 Jul 2024
+ 12:51:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 186376 [Jul 08 2024]
-X-KSMG-AntiSpam-Version: 6.1.0.4
-X-KSMG-AntiSpam-Envelope-From: gnstark@salutedevices.com
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 23 0.3.23 8881c50ebb08f9085352475be251cf18bb0fcfdd, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;100.64.160.123:7.1.2;salutedevices.com:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;smtp.sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/07/08 16:01:00 #25918429
-X-KSMG-AntiVirus-Status: Clean, skipped
+References: <20240619031250.2936087-1-tj@kernel.org> <20240619031250.2936087-3-tj@kernel.org>
+ <ZnM2ywDVRZbrN6OC@slm.duckdns.org> <CAKfTPtBPObGdcaQF5nKqr4042f-+5obTMm_S6S+=3_Ct33ZMyw@mail.gmail.com>
+ <Zog5-Yd5wV0-Y76y@slm.duckdns.org> <CAKfTPtDeA4OTPJmEHd-wKToYwDVizcny-_qxEuDUA-OcaVm2Uw@mail.gmail.com>
+ <ZonzAdyd6zb2Sm06@slm.duckdns.org> <CAKfTPtDE2rWbRouf8zRyM3UpTfK1k_xrWmvAs-zfoRZqM3zGsw@mail.gmail.com>
+ <Zowt7pVWFB-Of-me@slm.duckdns.org>
+In-Reply-To: <Zowt7pVWFB-Of-me@slm.duckdns.org>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Mon, 8 Jul 2024 21:51:08 +0200
+Message-ID: <CAKfTPtB=77c-RsJ23suNZVf7qByeGSjYQJbiEU4JpXU6DezNLQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] sched_ext: Add cpuperf support
+To: Tejun Heo <tj@kernel.org>
+Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
+	void@manifault.com, linux-kernel@vger.kernel.org, kernel-team@meta.com, 
+	mingo@redhat.com, peterz@infradead.org, David Vernet <dvernet@meta.com>, 
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Meson A1 temperature sensor has dedicated power domain so bind it
-to the device node.
+On Mon, 8 Jul 2024 at 20:20, Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello, Vincent.
+>
+> On Mon, Jul 08, 2024 at 08:37:06AM +0200, Vincent Guittot wrote:
+> > I prefer to minimize (if not remove) sched_ext related calls in the
+> > fair path so we can easily rework it if needed. And this will also
+> > ensure that all fair task are cleanly removed when they are all
+> > switched to sched_ext
+>
+> Unless we add a WARN_ON_ONCE, if it doesn't behave as expected, the end
+> result will most likely be cpufreq sometimes picking a higher freq than
+> requested, which won't be the easiest to notice. Would you be against adding
+> WARN_ON_ONCE(scx_switched_all && !util) too?
 
-Signed-off-by: George Stark <gnstark@salutedevices.com>
----
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+A WARN_ON_ONCE to detect misbehavior would be ok
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-index dd5695963caa..86d77f51c25c 100644
---- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-@@ -919,6 +919,7 @@ cpu_temp: temperature-sensor@4c00 {
- 				assigned-clock-rates = <500000>;
- 				#thermal-sensor-cells = <0>;
- 				amlogic,ao-secure = <&sec_AO>;
-+				power-domains = <&pwrc PWRC_I2C_ID>;
- 			};
- 
- 			hwrng: rng@5118 {
--- 
-2.25.1
-
+>
+> Thanks.
+>
+> --
+> tejun
 
