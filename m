@@ -1,89 +1,85 @@
-Return-Path: <linux-pm+bounces-10744-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10745-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E14DA929C5C
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 08:43:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37D65929C84
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 08:52:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DC621C212F7
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 06:43:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E724D281141
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2024 06:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6858013ACC;
-	Mon,  8 Jul 2024 06:42:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC9D1BDDB;
+	Mon,  8 Jul 2024 06:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j6XsnBZQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RFFiqZsa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F060E1171D
-	for <linux-pm@vger.kernel.org>; Mon,  8 Jul 2024 06:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E8517545
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jul 2024 06:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720420977; cv=none; b=rjN2q6jcG3YrpfOFvHrT1yru0WDPY1ROZ9kXpkypUobibmAPB9EwjrIWuj3LTNQvgi1lQvrp7yyFhONoogeBvgwz5qg31Z+9ULUCnW429qCl/eZs8AkwUmcXw9DlIQ5sjzuvULTjYsrxfvlsMgJzE8sXwGI9RW95aswGWfzxu/k=
+	t=1720421549; cv=none; b=VYEMjyh5BbLXtdPTEHmJRSqOLybWQ9w64w8k8xf9fu8Za1FIod7gVgzhw2ZKgvPx2XRuyCBaNg+6Dzk4hJBH5emtmwGsPfc3nIOci2jJhrGXxTCzD0qircIPRSdKptMPxJqqU1EbyXAeuGTgh6ROl7iy0o05JsJOtrOHF7xYL7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720420977; c=relaxed/simple;
-	bh=XDCXukSSG5eu7Enir6B20Xw7BTHGqHHg5Qjp0HFF7D4=;
+	s=arc-20240116; t=1720421549; c=relaxed/simple;
+	bh=l2FIO3fCqBGmXOF5K6tW+a19O8tFfegMu7Ea4neklnk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YzhWtyHtwMb5kmdvlBplCjkK7m9kicJ+HXt133K2MLQ6ZvKayAVZQ35fVPsXSr1O/wTU+hkG5NrEbR0nEA7YssYQksfI7V3Q3ONIVfN6EzobFWUkRtPwrPxMPUA26M1gmnfzCivXVXIj+7M9e7iM+HxkrYcCs813raIf4xTRzaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=j6XsnBZQ; arc=none smtp.client-ip=209.85.161.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=pHjyn41g6t3Alh4e9FKyIWqbmHrGtf6a8F3+zircLF0z+MZ8oA/5My1we0R1/kv7rn5OSCXihEQlkDkx1LtPiKo7ZpdazPPvIQ+er6RI3tOmLHkO3ANkdoyCZA3OiLRgtDMPsFP0bVNSNMCMBdGEBzsv/mCbM/+jViGExEZ1RmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RFFiqZsa; arc=none smtp.client-ip=209.85.166.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5c477d97159so1825037eaf.3
-        for <linux-pm@vger.kernel.org>; Sun, 07 Jul 2024 23:42:55 -0700 (PDT)
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-383e7a29808so15087775ab.3
+        for <linux-pm@vger.kernel.org>; Sun, 07 Jul 2024 23:52:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720420975; x=1721025775; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1720421545; x=1721026345; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=1FcWtX9vaZBCwduln3dpe45i1fpCK57rnuMSwlu6aWA=;
-        b=j6XsnBZQ+KLh0p6v2x9lK//D99xqJ2pfrdVgZvmSuyl8Ep17Ci66hOgGaD2tt+Cb4Z
-         h1wW8r+7qEXsI2LkIrvoCEy4PF+IG/efjJe6xAaWcdVfH76bjDsWp5ebdbj/4klDai5y
-         5CkZU2vVuPZJTbda6ttRb3xM7/QAPjRStFHY2RCZ/ZaDqX7kRsy8mzYxNaquflqaklET
-         VH9dL6E2hjBfx5xMKngMeXF4TfO4rRgMlQGa8qAdZOhI50IjJGmQ9rtJ0d1g7pdRmoJJ
-         sjdascT11jiNSFTXsWap467yXHVHJ4UimXgri637BIDEZOK+VXuw1wOvmN2rHXw680oR
-         o6Qw==
+        bh=+DS07n3S2EpZ5vKJ03RyX8V+ApT3KBt/z3ClQ42xfto=;
+        b=RFFiqZsa93lgN4L2ybRuE1iIgzzWKmQx6Plink61hltm+xQrYzzYF5z8S+vK4ibqSF
+         CbF+FK9DxfndMwJgGwsaLyNipXDmGpimihM1OyTQoMHL2TbCvr3n86MR+vsg0z5wh17T
+         k+ifdEckHPTaWtWIRHxa6khT5bMdL+vi4OHIgSiCcGNYHeNvei3atuttii8JDA81ksut
+         OE8RibZrAhCpEM2bsyvSOPGUpfeNsMC8fzMoR9la36cOQt1QFq5rrcUth6TT3ZDUOtn3
+         BsEmlTkSitrp0GZYVx0CJk9PuGMC6cKtsqz04o5ymD4M+yXTalbhxFLoEsAfP8JgdGpi
+         EQHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720420975; x=1721025775;
+        d=1e100.net; s=20230601; t=1720421545; x=1721026345;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1FcWtX9vaZBCwduln3dpe45i1fpCK57rnuMSwlu6aWA=;
-        b=cf5EMtXfuMALrTyjKTtHVH36BIa4+4HxTHeWPznUC7fZY2f6NEweC6dF8aoXTEU3zz
-         U0+sj5FGq58MdcluNvf1WjYkhpjDE1JsjPyD4qjnfd0uGe/vVpDP3XZuvDQK5A5iVpWC
-         CWqHFPy6P38HGki/vZR+POx+DTWGIvW4cTq5RU+J0nc1E2fi2+NErdGisETSb1pMjg/E
-         n2hJKwD+Nf8AOubEo+hVzRMFB9A2b5by12ZyxHzIa2Gp4CbfazlmetCcv6ew7hT8U9we
-         wnDio2hNnGm5sAm/JMLNB2/yLIBORdoANiZkSpNGIAPWX5wK1h7jdaUwHbbPrBU9KLMk
-         CEHw==
-X-Forwarded-Encrypted: i=1; AJvYcCX4rF07Jc0uC/qLnhzkfCg23dMvmgTtZ39ryXKCQZCswyqKbVaYqCI9AbQyHLN3+S08dXGhvyGhNxv/OvxRwVT1a5L1XdjER9s=
-X-Gm-Message-State: AOJu0YyEM+C7gUV7VXdXDxqBd8LyA0g8EsPKQbDW02sNKMYb9v8WYPvx
-	I0YTPv5uX8f/YLvHKNvQT6mkkGMVAUOnz1sI9Ky58rCbnVXvo3WAYsrfDcGHY4A=
-X-Google-Smtp-Source: AGHT+IEpqAis6dJIEMNcexBdNxU9+uzyMP+q55/0m9GwePwrj4Gs0P9PuuQDc9r/zZs34DMwLSdBrg==
-X-Received: by 2002:a05:6871:688:b0:25e:14f0:62c3 with SMTP id 586e51a60fabf-25e2bd878b7mr9528568fac.33.1720420974988;
-        Sun, 07 Jul 2024 23:42:54 -0700 (PDT)
+        bh=+DS07n3S2EpZ5vKJ03RyX8V+ApT3KBt/z3ClQ42xfto=;
+        b=Tj+7Zd9sqsy9dTD4q43qRUOwiiZQde7WWrjPgQpUE/c8h/j/hmW10lFNsKz7D2b7KR
+         /DpU8C90/gjd1DS23AJM+yuItP+CJfYJE5CrMiJQaZUP+0hWKGFtHtkUh1fkWH1p6nLr
+         uQ1sM1bjoYAnn3Ox4A1GF5jhkZSHPuEnMF4Y98qBIaplJVJy+kb3elq18OPqOPexUWkp
+         ixLlrQiafqB923m6a0fgQybxgAVO5nGxcNQWa+E8r7DzRSzfPgY69ZG+b22gbGGpV9co
+         O4R6OlaVCJs6dJOnvjZMF6FcvJmi5HYHGkBkT8p7Aolko9hN1TCD4PzxydXjudlWnyvk
+         naJw==
+X-Forwarded-Encrypted: i=1; AJvYcCVaPPJ6m42CcDFPDfaFFjWnXGiffmukhHVS0zPNprZyNU/KVv2JC3YB3eXWC2QhUsobmbiYj4rrZD3FhJk1fDXUNt6MwUQzick=
+X-Gm-Message-State: AOJu0YyWYs7qVJlhwyjE++0TWPoFYUcOXrf3xDhUP0ICW65gHpooBiGk
+	rntYQ/rwEGvQkJ49MgLl5V4Kx9K4K8oiruTwXiOWoj3vvcXdbnay06bNSy44vnk=
+X-Google-Smtp-Source: AGHT+IFBya5V2xQbhJizaPr/Q8T7hEPEzcZGX3jK6EfAM0X5nJdKs0HW0u+/neZnaqmpTki+tnx14w==
+X-Received: by 2002:a05:6e02:1d86:b0:376:4049:69d2 with SMTP id e9e14a558f8ab-38398710582mr172377945ab.6.1720421545272;
+        Sun, 07 Jul 2024 23:52:25 -0700 (PDT)
 Received: from localhost ([122.172.84.129])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b116e43f0sm5260455b3a.101.2024.07.07.23.42.54
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b2248b69esm3094293b3a.144.2024.07.07.23.52.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jul 2024 23:42:54 -0700 (PDT)
-Date: Mon, 8 Jul 2024 12:12:52 +0530
+        Sun, 07 Jul 2024 23:52:24 -0700 (PDT)
+Date: Mon, 8 Jul 2024 12:22:22 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, kernel@collabora.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	kernel@collabora.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] cpufreq: mediatek: Use dev_err_probe in every error path
- in probe
-Message-ID: <20240708064252.sydvhfnmx3akafql@vireshk-i7>
-References: <20240628-mtk-cpufreq-dvfs-fail-init-err-v1-1-19c55db23011@collabora.com>
- <20240702055703.obendyy2ykbbutrz@vireshk-i7>
- <aa6e93bd-aba2-4e4d-bce9-04e818ac25ed@collabora.com>
- <20240702084307.wwvl5dchxa4frif3@vireshk-i7>
- <8602bf12-1b8d-4249-8814-52ecaa29d0ec@notapiano>
+Subject: Re: [PATCH v2] cpufreq: mediatek: Use dev_err_probe in every error
+ path in probe
+Message-ID: <20240708065222.iip3hzlffn2dthjg@vireshk-i7>
+References: <20240705-mtk-cpufreq-dvfs-fail-init-err-v2-1-3a7f91b02ab0@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -93,15 +89,34 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8602bf12-1b8d-4249-8814-52ecaa29d0ec@notapiano>
+In-Reply-To: <20240705-mtk-cpufreq-dvfs-fail-init-err-v2-1-3a7f91b02ab0@collabora.com>
 
-On 05-07-24, 11:13, Nícolas F. R. A. Prado wrote:
-> That would only run once during boot and only in the error path...
-> I'm confident in saying this won't amount to any real performance gain. So the
-> usage of dev_err_probe() everywhere for log and source code standardization is
-> well worth it.
+On 05-07-24, 11:54, Nícolas F. R. A. Prado wrote:
+> Use the dev_err_probe() helper to log the errors on every error path in
+> the probe function and its sub-functions. This includes
+> * adding error messages where there was none
+> * converting over dev_err/dev_warn
+> * removing the top-level error message after mtk_cpu_dvfs_info_init() is
+>   called, since every error path inside that function already logs the
+>   error reason. This gets rid of the misleading error message when probe
+>   is deferred:
+> 
+>     mtk-cpufreq mtk-cpufreq: failed to initialize dvfs info for cpu0
+> 
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+> Changes in v2:
+> - Fixed one occurrence of the error code being set after the usage
+> - For the paths that need to set the `ret` variable to the error code,
+>   changed them so they set it from dev_err_probe()'s return, in a single
+>   line.
+> - Link to v1: https://lore.kernel.org/r/20240628-mtk-cpufreq-dvfs-fail-init-err-v1-1-19c55db23011@collabora.com
+> ---
+>  drivers/cpufreq/mediatek-cpufreq.c | 72 ++++++++++++++++++--------------------
+>  1 file changed, 34 insertions(+), 38 deletions(-)
 
-Hmm. Fair enough.
+Applied. Thanks.
 
 -- 
 viresh
