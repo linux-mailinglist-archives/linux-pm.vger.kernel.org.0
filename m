@@ -1,171 +1,169 @@
-Return-Path: <linux-pm+bounces-10858-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10859-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0417892B75C
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 13:23:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10ADB92B7F2
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 13:29:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 821C81F21A45
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:23:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88D141F21640
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:29:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B93B158DD2;
-	Tue,  9 Jul 2024 11:22:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60B5E15884F;
+	Tue,  9 Jul 2024 11:28:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kkozKfJV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ayo1fYoB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347AE158DCD;
-	Tue,  9 Jul 2024 11:22:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A3E157E61
+	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 11:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720524132; cv=none; b=L95IkQaBUwTBlJuB8NkRJng5eaBS9USboZn58HLzpWJ7sCw5+7o8iN38pnj3WcVKwIZb/qtnzw+Ii7rxhJjVb6IT5FRCCleUN+Zb0ydiUCZ+Pe29tw+5hQ2Yzo1IB6PZfFSIHLwyw9QFrQAT6OlEabpMpOQtBRt9EG7jBMz+jMk=
+	t=1720524535; cv=none; b=eEJEjTyMus/1LBmdHsFVfJDRfKwwLYwJTskzn/aYY29zR/5fgN8E0835ez/OefFuZebXdp8o9hvruuIqRos4HIqw8BuXBtOtT6T5v2ut+ywUB1BjnGC7MjQULEVT8kwQgZ/U9iFNu4n065DKjzvXFh1geYfmBiz2bWtJhxCw/P0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720524132; c=relaxed/simple;
-	bh=0bIQwvttVlhEBLtbAG0LnxAJT60Athlg39gMLKlKBKc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mtcsDs7JK2L7mJKF5fvXNZmSsT74v2QGW1K79SACV/n3IMT9iUuB7yUtXCYFi+9CYSonVkjHfYJg5xv/yD0xL6SPeXTtPTluWn5wRpxMq47PyzeuS8ucZvOchGftJlzZSjnr3t1Lkibu69GOMZ1yMC6OUC/KiWcVugesDlTrws8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kkozKfJV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9B83C3277B;
-	Tue,  9 Jul 2024 11:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720524132;
-	bh=0bIQwvttVlhEBLtbAG0LnxAJT60Athlg39gMLKlKBKc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=kkozKfJVAE1H97lBT62JnvFUrcHE1xcKecw/I3BmYVHdJIQcY7Nu4VCo20EfBmMR1
-	 4CrYDJofcHws6wS1jplT3QwyZ6QvpOJ9l4t4ZvpJKKDY8eDTArw94calAhV2943r+W
-	 1x7OowB3UUc+mq+i7ZaZpSB3EQ7RDdhO+fLRtkYF62+AzLyF78lSfzZIg+OIO149tf
-	 prp/aguWyAXb2mJE309ZR1gxVk2CLmhPdSPwCrVpj1lZMyq+XqgpMW8zrrJgjPzebL
-	 vONB9i3Hdrj/BzgSCnB+L4GEND+p4VxBvgj3vyFRFL2AvhATvc6z6gHPf85/JR1W27
-	 XOMBech8LZV2A==
-From: Georgi Djakov <djakov@kernel.org>
-To: gregkh@linuxfoundation.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	djakov@kernel.org
-Subject: [GIT PULL] interconnect changes for 6.11
-Date: Tue,  9 Jul 2024 14:21:34 +0300
-Message-Id: <20240709112134.782462-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1720524535; c=relaxed/simple;
+	bh=ViVFjZGgS8dNPjz5ZsLdjn3yYXpL9aBl4uTllH3CRXM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bSljdjAaQTbnlWxlGNIX1js4P+rvJ9RMYyBYlISfiH9vMNMv+eiw4+1v+x3uXZ35e4nr8dqI9ZyL4IYdR6abrzpy4HX5hOI7YVxCs3vVuIlXFoNImtD8QAdDBZFpGybGo5PZA++UoAWZFstHq/ILuy/U7//PG35XisNOerIaTuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ayo1fYoB; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2eaae2a6dc1so72874361fa.0
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 04:28:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720524531; x=1721129331; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=3qzAJjCuxDfaalc2old/6w/0ikvjZdAHEMZJhAtd5HY=;
+        b=ayo1fYoBJJWD+RtYUNvHxZokC1nykAxVgvPCnAaNsWoM9BbKuR3wO8oHwAZWB8oRmX
+         zM8wS32V8lEcBz3daIKPie4x/kjF2Bzi4AD/7M60ZPN06aTfxynRIy/RxOHotEUI1PU6
+         Rk0HJXzpMnIqAIAy0UTdH9RZZE2ax0CT9wWdLsOtfFoZSp7CmY9nQlRgLj9YOtE+s+YW
+         GfvGzndm/NvDNML8Pqt0nzCuEUgYH52uZlhzdErg0v3brT7yI/XoFwSM1qhFNuRA8zTQ
+         YGDDXbtXvAKtxJJxXlT32jIOYe6WBjjp4AUimxy/ncjZPRL7Fq7eBdsZOrqyvLwnl5et
+         mnBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720524531; x=1721129331;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3qzAJjCuxDfaalc2old/6w/0ikvjZdAHEMZJhAtd5HY=;
+        b=j0PRq0qnkVcqh+Mlz95Bd0UtQIwawMykUgNUVY5MGdYdgkWmr7ikpSwSkxrOrv26TO
+         KV32HNbPVJ98oIx5a25Kx5Gu3QOQBqqRN4z8y9R7/BKxbLbEbIpsgSVA21onyrNBCdDy
+         2+c3gpk3iKv5E9ob+85AOy8OdjjN3PjOJy9dJZppimjxHXwh6yJqN/mHCI9HURPH8n34
+         jljpTaQ1XuOHO+AJxnecBrAFFHx6sTtYEvyJEBUYI+Roy5nseQJsjrdNi6nYJD8rQ1yf
+         yQOE2wLAE2yHkVXCAZj8zFQ8ulyAzkxwfEIUJGi8nXEvDh4Efp4mDhIl7Qn1KB5yIuPS
+         IjWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX5LFoLG64HVzI6oEQ2hpk5akYaV39IeUnpiuI9QbITYJjOGVUGwr+uAZlWuco3y5NlQzRo79YBObTgGtHfXkFHnqAixY3OUwA=
+X-Gm-Message-State: AOJu0YzETJOoXMgSQWS1gh9EwFBuz/b2bXXmX5B6a7ymd98PmktOYzhG
+	pEbEgLLZBZOwTHHCLsMkmMspKpw+yEjGrnHBSVtLFNvjVkyLd6RCuV4W8z2e5WY=
+X-Google-Smtp-Source: AGHT+IGS4L2H+hCKSxQz3uGyB0VuG6clhftOdyLInR1ymwePpLnvGZ+2GHobh0M7Xqc+cm/ImHJG3g==
+X-Received: by 2002:a2e:a7c7:0:b0:2ee:8d9a:811a with SMTP id 38308e7fff4ca-2eeb310233amr24871521fa.31.1720524530481;
+        Tue, 09 Jul 2024 04:28:50 -0700 (PDT)
+Received: from [192.168.105.194] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a780a7ff02dsm68784266b.110.2024.07.09.04.28.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jul 2024 04:28:50 -0700 (PDT)
+Message-ID: <1ec0dbfa-dbef-41e6-a871-7da61651572b@linaro.org>
+Date: Tue, 9 Jul 2024 13:28:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 09/10] dt-bindings: opp: v2-qcom-level: Update minItems
+ for oloop-vadj & cloop-vadj
+To: Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc: vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, angelogioacchino.delregno@collabora.com,
+ andersson@kernel.org, mturquette@baylibre.com, ilia.lin@kernel.org,
+ rafael@kernel.org, ulf.hansson@linaro.org, quic_sibis@quicinc.com,
+ quic_rjendra@quicinc.com, quic_rohiagar@quicinc.com, abel.vesa@linaro.org,
+ otto.pflueger@abscue.de, danila@jiaxyga.com, quic_ipkumar@quicinc.com,
+ luca@z3ntu.xyz, stephan.gerhold@kernkonzept.com, nks@flawful.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org
+References: <20240703091651.2820236-1-quic_varada@quicinc.com>
+ <20240703091651.2820236-10-quic_varada@quicinc.com>
+ <20240708155529.GA3244015-robh@kernel.org>
+ <ZozgNAYKAvhPr0qk@hu-varada-blr.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <ZozgNAYKAvhPr0qk@hu-varada-blr.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello Greg,
+On 9.07.2024 9:01 AM, Varadarajan Narayanan wrote:
+> On Mon, Jul 08, 2024 at 09:55:29AM -0600, Rob Herring wrote:
+>> On Wed, Jul 03, 2024 at 02:46:50PM +0530, Varadarajan Narayanan wrote:
+>>> Since IPQ9574 has only one CPR thread it will specify
+>>> only one voltage adjustment value. Hence update min items
+>>> accordingly for oloop-vadj and cloop-vadj. Without
+>>> constraining min items, dt_binding_check gives errors
+>>>
+>>> 	opp-table-cpr4:opp-0:qcom,opp-cloop-vadj:0: [0] is too short
+>>> 	opp-table-cpr4:opp-0:qcom,opp-oloop-vadj:0: [0] is too short
+>>>
+>>> 	Failed validating 'minItems' in schema . . .
+>>> 		{'maxItems': 2, 'minItems': 2}
+>>>
+>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>> ---
+>>> v4: Fix dt_bindings_check error
+>>> ---
+>>>  Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>
+>> This is going to need to be rolled into your dependency because it needs
+>> the same fix.
+> 
+> Konrad,
+> 
+> Can you please squash this into https://lore.kernel.org/lkml/20230217-topic-cpr3h-v14-2-9fd23241493d@linaro.org/
 
-This is the pull request with interconnect changes for the v6.11-rc1 merge
-window. It contains some new drivers and bugfixes. As always, the summary
-is in the signed tag.
+Yes, I'll do that in the next revision.. forgot to validate this..
 
-The patches have been in linux-next for a while. There are no reported issues
-currently. Please pull into char-misc-next when possible.
-
-Thanks,
-Georgi
-
-The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
-
-  Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.11-rc1
-
-for you to fetch changes up to 226e58b20975000960cb40b7488f55f173007489:
-
-  Merge branch 'icc-rpmh-qos' into icc-next (2024-07-04 22:45:20 +0300)
-
-----------------------------------------------------------------
-interconnect changes for 6.11
-
-This pull request contains the interconnect changes for the 6.11-rc1 merge
-window. It contains just driver changes with the following highlights:
-
-Driver changes:
-- New driver for MediaTek MT8183/8195 platforms
-- New driver for MSM8953 platforms
-- New QoS support for RPMh-based platforms with SC7280 being the
-  first one to benefit from it.
-- Fix incorrect master-id value in qcm2290 driver
-- Add missing MODULE_DESCRIPTION in a few drivers
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-AngeloGioacchino Del Regno (2):
-      dt-bindings: interconnect: Add MediaTek EMI Interconnect bindings
-      interconnect: mediatek: Add MediaTek MT8183/8195 EMI Interconnect driver
-
-Georgi Djakov (4):
-      Merge branch 'icc-mtk' into icc-next
-      Merge branch 'icc-fixes' into icc-next
-      Merge branch 'icc-msm8953' into icc-next
-      Merge branch 'icc-rpmh-qos' into icc-next
-
-Jeff Johnson (2):
-      interconnect: imx: add missing MODULE_DESCRIPTION() macros
-      interconnect: qcom: add missing MODULE_DESCRIPTION() macros
-
-Jiapeng Chong (1):
-      interconnect: mediatek: remove unneeded semicolon
-
-Konrad Dybcio (1):
-      interconnect: qcom: qcm2290: Fix mas_snoc_bimc RPM master ID
-
-Odelu Kukatla (4):
-      dt-bindings: interconnect: add clock property to enable QOS on SC7280
-      interconnect: qcom: icc-rpmh: Add QoS configuration support
-      interconnect: qcom: sc7280: enable QoS configuration
-      interconnect: qcom: Fix DT backwards compatibility for QoS
-
-Vladimir Lypak (2):
-      dt-bindings: interconnect: qcom: Add Qualcomm MSM8953 NoC
-      interconnect: qcom: Add MSM8953 driver
-
- .../devicetree/bindings/interconnect/mediatek,mt8183-emi.yaml  |   51 +
- .../devicetree/bindings/interconnect/qcom,msm8953.yaml         |  101 +
- .../devicetree/bindings/interconnect/qcom,sc7280-rpmh.yaml     |   53 +
- drivers/interconnect/Kconfig                                   |    1 +
- drivers/interconnect/Makefile                                  |    1 +
- drivers/interconnect/imx/imx.c                                 |    1 +
- drivers/interconnect/imx/imx8mm.c                              |    1 +
- drivers/interconnect/imx/imx8mn.c                              |    1 +
- drivers/interconnect/imx/imx8mp.c                              |    1 +
- drivers/interconnect/imx/imx8mq.c                              |    1 +
- drivers/interconnect/mediatek/Kconfig                          |   29 +
- drivers/interconnect/mediatek/Makefile                         |    5 +
- drivers/interconnect/mediatek/icc-emi.c                        |  153 +
- drivers/interconnect/mediatek/icc-emi.h                        |   40 +
- drivers/interconnect/mediatek/mt8183.c                         |  143 +
- drivers/interconnect/mediatek/mt8195.c                         |  339 ++
- drivers/interconnect/qcom/Kconfig                              |    9 +
- drivers/interconnect/qcom/Makefile                             |    2 +
- drivers/interconnect/qcom/icc-common.c                         |    1 +
- drivers/interconnect/qcom/icc-rpmh.c                           |   94 +
- drivers/interconnect/qcom/icc-rpmh.h                           |   36 +
- drivers/interconnect/qcom/msm8953.c                            | 1321 ++++++++
- drivers/interconnect/qcom/qcm2290.c                            |    2 +-
- drivers/interconnect/qcom/sc7280.c                             |  276 ++
- include/dt-bindings/interconnect/mediatek,mt8183.h             |   23 +
- include/dt-bindings/interconnect/mediatek,mt8195.h             |   44 +
- include/dt-bindings/interconnect/qcom,msm8953.h                |   93 +
- 27 files changed, 2821 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,mt8183-emi.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,msm8953.yaml
- create mode 100644 drivers/interconnect/mediatek/Kconfig
- create mode 100644 drivers/interconnect/mediatek/Makefile
- create mode 100644 drivers/interconnect/mediatek/icc-emi.c
- create mode 100644 drivers/interconnect/mediatek/icc-emi.h
- create mode 100644 drivers/interconnect/mediatek/mt8183.c
- create mode 100644 drivers/interconnect/mediatek/mt8195.c
- create mode 100644 drivers/interconnect/qcom/msm8953.c
- create mode 100644 include/dt-bindings/interconnect/mediatek,mt8183.h
- create mode 100644 include/dt-bindings/interconnect/mediatek,mt8195.h
- create mode 100644 include/dt-bindings/interconnect/qcom,msm8953.h
+Konrad
 
