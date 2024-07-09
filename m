@@ -1,207 +1,173 @@
-Return-Path: <linux-pm+bounces-10878-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10879-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC0C292BC4E
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 16:00:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE6EB92BD45
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 16:43:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64324285632
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 14:00:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3EAE8B27E37
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 14:43:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E6DE18E77B;
-	Tue,  9 Jul 2024 13:59:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B127F19B5A9;
+	Tue,  9 Jul 2024 14:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMBqYN+u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J9QIpnUp"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03449156238;
-	Tue,  9 Jul 2024 13:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3731684AE;
+	Tue,  9 Jul 2024 14:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720533558; cv=none; b=RKUbZauoGGW8FSckwhRb83B3UWNbeBEbVdQF2HVxIl9UnJU23ZCc/WeUekGQV+3YIDFO5dSfJZXJvkuu3ENw5jog+tOR0Ago34V1t/5aGrFwF5hAxcOBtU+cNmfKXrT16K7fieGiTU9sPm1dL4g2OZzV6NgSmkUdutAsb4u7bvU=
+	t=1720536170; cv=none; b=DYO1PWVqoC4ZJY7IUdwwAiQ08j6IslFfoo6YRL3vfAITwwGbKIY2A5Vqe4Ftlv08W7SQ9te1fG1VIDuNOryNGGpo4/o1iFstSo78848VzI/AZsQjIwoITCZuSDb5HZa//nwSd0Axl6RF1HO2jGznG2N4RneA7XvO0COQhByRBf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720533558; c=relaxed/simple;
-	bh=lOu/lBsHlc0T260klipFJ3eC1pkfxWiSQhwcmOXWsVc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DefYaAggZ2odaY+zuIYmsTmGcqk91GNdgl4+Hm6F3f7VL66noiUxRE3riGtI2yXyeT2nf1/dNdVjNu5LYr1IbOTeIU1zkoVR+OOKih00Lim10iYLke92g7EGhmwv9cPZdwxLdcXWxVcWvz9N1D3xEvo0tknOMDaUj5f8zDpo/hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OMBqYN+u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EADAC3277B;
-	Tue,  9 Jul 2024 13:59:17 +0000 (UTC)
+	s=arc-20240116; t=1720536170; c=relaxed/simple;
+	bh=VQb5HbnAAByGw4UpXRmO5+2h/szz+KBf2dd25NC67wg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T+jM6jSVxKpyKbCw/YAkoWi8jAOdDzmGVopKycrgatnWEWAfYPcVRMtSeBLE52ZztP7uGJR8CtBHN3J5K/vCdqa+wFvjCIF/OrE1YPn8TSN3YEgFJPsJv3SKsBzv43/Bkyyscdnz0AujJuv22HHlUw9PGcPvn6+HUXZsPGQqw5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J9QIpnUp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEB8BC32786;
+	Tue,  9 Jul 2024 14:42:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720533557;
-	bh=lOu/lBsHlc0T260klipFJ3eC1pkfxWiSQhwcmOXWsVc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=OMBqYN+uslxW2al/s9+gRrrahqmKqVwbxAMJYDtN8CWX81snbPwX15dfdtn8Pz0Bb
-	 +IovT5mqe8Psr+vz6GaBBc8o9RtQfYU6M4S+2Gx+NUUbpGA/HK3Z8knXugNYi3p6+U
-	 78qpneNgjjFgQAu76HOpnjtMqWno1vSL98EX4VAp2LPz4j5pT0E+/44KPIi32WwZPu
-	 tjNTXmY9EyO8A+MLcG62SSxJozhu8leZy8nJpLXGcyGV7LP2vcOGKrl4bJWU0XsFYT
-	 kF6bpZbhgYDo9J/AqwU/6ppB7azQQTD2wdfdk7DA15FIUWikczGZ3sHsmu1spFGXbn
-	 HqYrIHjyJ7isQ==
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ee9b098bd5so44988711fa.0;
-        Tue, 09 Jul 2024 06:59:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVAyEeb3sQHe3oJ3e/h9Hpw32fiOTPSOrfTy1gBySlhPuLQIrxAcKGou+f3N8RhC6dSlW1TbZr/WaSTtYwVSW0yA0Bd95WCcCL4CK9vUiPNHs79Alv1aSqynoCAnJuim8sZ79biPjHwtrMf/xYLXbDL7XaGaK/k+QjkJJF3dosurXNjoxqf1jlqOcTKtAzowJIqVFsTfSloEk1YQ/5sfayaci55XynoHRgJZLSdvk/6uEMFJoRkIO9kOFXzn0YMwokp/gE/SPwe68xfZ1Knvuu1tEWOvjNTSBRlA6hmQPA1CHNbYrHsmJ5tKYTokTVps0yyPgtV3FsdzbxtuvFQheeB22Aucckz3nVmK4Jj1vyxzSNdd7l1c6C9arHDmaa2v9RjyzopJkkJ9A31zBLazXbRXmEInLmRjSJQOAHjQ7WkUeheBxoZJXjVGdKJhWArkIoT57bF2cE+IfXtl6grsDhd52hqL6MLcSPnQGvEIONu256ION0jlth4VqCRMPJ3tnXgNoQnj3gBe6LV9M/wmppRCHK+3MVmrg==
-X-Gm-Message-State: AOJu0YytM8xAoMl+LSShIku3CScUPdwzUdVwjr7hpEkoc7pu7XvpMzYY
-	acQDuA8rlt2xadE9VxfjhCjQzB1gIrvVYn4SW6ig3Eo35qjs9bPA/uXCXY3BL+r5Z3DtejIW//0
-	8Oi9f1cvz5Z7ZCUn3Yv0ICrjbHg==
-X-Google-Smtp-Source: AGHT+IGMENhIgXoK8usdNd4oA5p2Oya5uy5180V2zPL6MX5LWDNpdwwwQ6+gVbUVi74o5Dj052FJFnlAxOODOirsQJA=
-X-Received: by 2002:a05:6512:3c8c:b0:52e:9951:7881 with SMTP id
- 2adb3069b0e04-52eb99d20b8mr2282487e87.52.1720533535249; Tue, 09 Jul 2024
- 06:58:55 -0700 (PDT)
+	s=k20201202; t=1720536170;
+	bh=VQb5HbnAAByGw4UpXRmO5+2h/szz+KBf2dd25NC67wg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=J9QIpnUpFtPW7X9iVzt18ET+maZ+keqhGsGaUHuaqQFkC1Q4UO+XywiFHGGdi2WJ2
+	 qiLvsB2/UcjtnrKu4AjzB+g2mPZre5hDDFR/cUgD2JBwtLrPGo+rJ26JwwrwTxZJ1K
+	 S5QeeLe5OzFzAePXFaWMuNqcUjjgljCs/DA2l4NOIaWLY8/3Cd+tenZ1nQcymxaa8P
+	 JVnOVnQfTCIDu7aL9rl2K72UDKkcB9b4H2Ck8P4BhcGwT7uZJpu9Y+CpMdcIc/Z6+k
+	 N3R8FX47L4XfCouHCsfEBxC8rPpp1bAUCn6XpWAWT/Sedrnoepx9x7tMMef1BlemDi
+	 9FYEiohFcpH1w==
+Message-ID: <d35f5c94-7a86-4eea-bb0a-3f2785a25465@kernel.org>
+Date: Tue, 9 Jul 2024 16:42:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
- <CAHp75VfSC9gAD9ipeWRPdQOxUp4FXqYYei-cJTs38nbz0cHpkg@mail.gmail.com>
- <48c242838c77034485a9e667dc0e867207c5beed.camel@maquefel.me>
- <241a4cf9830b0118f01e8fcf2853c62527636049.camel@maquefel.me> <jyvlqfvqn5bp3jmvxvwyrcqmihjohuq3o757mfph7x37kbwvtq@gtgyh4fca4fq>
-In-Reply-To: <jyvlqfvqn5bp3jmvxvwyrcqmihjohuq3o757mfph7x37kbwvtq@gtgyh4fca4fq>
-From: Rob Herring <robh+dt@kernel.org>
-Date: Tue, 9 Jul 2024 07:58:42 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+9Jk90HovH8bwzgCHwwh9j4mBm_Aaiq+EOj1HT3R17_Q@mail.gmail.com>
-Message-ID: <CAL_Jsq+9Jk90HovH8bwzgCHwwh9j4mBm_Aaiq+EOj1HT3R17_Q@mail.gmail.com>
-Subject: Re: [PATCH v10 00/38] ep93xx device tree conversion
-To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Nikita Shubin <nikita.shubin@maquefel.me>, Andy Shevchenko <andy.shevchenko@gmail.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>, 
-	Hartley Sweeten <hsweeten@visionengravers.com>, 
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Sebastian Reichel <sre@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Thierry Reding <thierry.reding@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, 
-	Sergey Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Ralf Baechle <ralf@linux-mips.org>, "Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, 
-	Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-spi@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-sound@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Vinod Koul <vkoul@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v15 01/10] MAINTAINERS: Include new Qualcomm CPR drivers
+ in the file list
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>, Niklas Cassel <nks@flawful.org>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Ulf Hansson
+ <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org, Jeffrey Hugo <quic_jhugo@quicinc.com>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Varadarajan Narayanan <quic_varada@quicinc.com>
+References: <20240708-topic-cpr3h-v15-0-5bc8b8936489@linaro.org>
+ <20240708-topic-cpr3h-v15-1-5bc8b8936489@linaro.org>
+ <cd1c3450-1905-4d71-bcdd-5f880d743820@kernel.org>
+ <94b2842b-6093-4c4d-a099-3e0a3198b753@linaro.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <94b2842b-6093-4c4d-a099-3e0a3198b753@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jul 5, 2024 at 3:21=E2=80=AFAM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@baylibre.com> wrote:
->
-> Hello,
->
-> On Thu, Jun 27, 2024 at 11:29:44AM +0300, Nikita Shubin wrote:
-> > On Tue, 2024-06-18 at 19:20 +0300, Nikita Shubin wrote:
-> > > Hello Andy!
-> > > On Mon, 2024-06-17 at 12:58 +0200, Andy Shevchenko wrote:
-> > > > On Mon, Jun 17, 2024 at 11:38=E2=80=AFAM Nikita Shubin via B4 Relay
-> > > > <devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
-> > > > >
-> > > > > The goal is to recieve ACKs for all patches in series to merge it
-> > > > > via Arnd branch.
-> > > >
-> > > > 'receive'
-> > > >
-> > > > > Unfortunately, CLK subsystem suddenly went silent on clk portion
-> > > > > of
-> > > > > series V2 reroll,
-> > > > > tried to ping them for about a month but no luck.
-> > > > >
-> > > > > Link:
-> > > > > https://lore.kernel.org/r/20240408-ep93xx-clk-v2-1-adcd68c13753@m=
-aquefel.me
-> > > > >
-> > > > > Some changes since last version (v9) - see "Changes in v10",
-> > > > > mostly
-> > > > > cosmetic.
-> > > >
-> > > > ...
-> > > >
-> > > > > Patches should be formated with '--histogram'
-> > > >
-> > > > 'formatted'
-> > > >
-> > > > ...
-> > > >
-> > > > > Changes in v10:
-> > > > >
-> > > > > Reordered SoB tags to make sure they appear before Rb and Acked
-> > > > > tags.
-> > > >
-> > > > This is not required. The importance is only the order of SoBs
-> > > > themselves. If they are interleaved with other tags, it's fine.
-> > >
-> > > Ah - ok. Just saw someone was complaining about b4 reordering them.
-> > >
-> > > >
-> > > > ...
-> > > >
-> > > >
-> > > > Hopefully to see this series being eventually applied soon.
-> > > > Arnd? (Do we have all necessary subsystem maintainers' tags, btw?)
-> > > >
-> > > >
-> > >
-> > > As i see from my perspective only three left:
-> > >
-> > > Clk subsystem:
-> > >
-> > > - clk: ep93xx: add DT support for Cirrus EP93xx
-> > >
-> > > DMA subsystem (but the only request from Vinod, as far as i remember,
-> > > was fixing commits titles):
-> > >
-> > > - dmaengine: cirrus: Convert to DT for Cirrus EP93xx
-> > > - dmaengine: cirrus: remove platform code
-> > >
-> > > Beside that tags missing on platform code removal (which can be Acked
-> > > by Arnd himself i believe) and dtsi/dts files (same ?).
-> >
-> > Vinod acked the above two patches:
-> >
-> > https://lore.kernel.org/all/ZnkIp8bOcZK3yVKP@matsya/
-> > https://lore.kernel.org/all/ZnkImp8BtTdxl7O3@matsya/
-> >
-> > so only:
-> >
-> > - clk: ep93xx: add DT support for Cirrus EP93xx
-> >
-> > https://lore.kernel.org/all/20240617-ep93xx-v10-3-662e640ed811@maquefel=
-.me/
-> >
-> > left.
-> >
-> > Hope Stephen will find some time for this one.
->
-> As we're approaching the merge window and this is still unclear, I
-> applied the pwm bits (i.e. patches 12, 13). If I understand correctly,
-> patch 33 isn't suitable for application yet as it has a dependency on
-> pinctrl changes in that series.
+On 09/07/2024 11:49, Konrad Dybcio wrote:
+> On 9.07.2024 11:04 AM, Krzysztof Kozlowski wrote:
+>> On 08/07/2024 14:22, Konrad Dybcio wrote:
+>>> Expand the Qualcomm Core Power Reduction section to include the files
+>>> concerning CPR3+ support.
+>>>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>  MAINTAINERS | 5 +++--
+>>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index dcb37b635f2c..f3e013a52c16 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -18687,14 +18687,15 @@ F:	Documentation/accel/qaic/
+>>>  F:	drivers/accel/qaic/
+>>>  F:	include/uapi/drm/qaic_accel.h
+>>>  
+>>> -QUALCOMM CORE POWER REDUCTION (CPR) AVS DRIVER
+>>> +QUALCOMM CORE POWER REDUCTION (CPR) AVS DRIVERS
+>>>  M:	Bjorn Andersson <andersson@kernel.org>
+>>>  M:	Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>  L:	linux-pm@vger.kernel.org
+>>>  L:	linux-arm-msm@vger.kernel.org
+>>>  S:	Maintained
+>>>  F:	Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
+>>> -F:	drivers/pmdomain/qcom/cpr.c
+>>> +F:	Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+>>
+>> Maybe combine these two into:
+>> Documentation/devicetree/bindings/power/avs/qcom,cpr*
+> 
+> I think avs was proposed to be a subsystem/driver directory at some point
+> and (adaptive voltage source? something like that) and this is the only file
+> in that directory in bindings..
+> 
+> Should we continue with this "class" of devices, or should I move qcom,cpr.yaml
+> to soc?
 
-Now causing an error in linux-next:
+Rather cpr3 should be moved to avs or some other power directory. "soc"
+is fallback, junkyard for things without clear domain.
 
-Documentation/devicetree/bindings/pwm/cirrus,ep9301-pwm.example.dts:18:18:
-fatal error: dt-bindings/clock/cirrus,ep9301-syscon.h: No such file or
-directory
-   18 |         #include <dt-bindings/clock/cirrus,ep9301-syscon.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [scripts/Makefile.lib:442:
-Documentation/devicetree/bindings/pwm/cirrus,ep9301-pwm.example.dtb]
-Error 1
+
+Best regards,
+Krzysztof
+
 
