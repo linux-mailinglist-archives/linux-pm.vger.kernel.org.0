@@ -1,123 +1,175 @@
-Return-Path: <linux-pm+bounces-10852-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10853-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F1ED92B612
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 13:02:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ABE292B696
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 13:15:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B8EF284A08
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:02:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E9AB1C223E7
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2736E157A48;
-	Tue,  9 Jul 2024 11:02:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E24F158218;
+	Tue,  9 Jul 2024 11:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tOAOMrxm"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KjNeS0jE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C10152E0F
-	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 11:02:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1901586C0
+	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 11:15:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720522970; cv=none; b=o3u4f1WsdsROJJPFAGDQbm2qwrKs60/UIEStHM65UL78ms92CTxZjmpnvhIsqZH07/jhlvhaeF6fNzI9urk/ylAU4ZBbGXW4jdNXkfRDy22Mh/AkfzWPg1Czuiyq2PRt47ZIfBVFW8Bn8nqqyC3f0FB2Ji9BG3FFWyiDczcQNR8=
+	t=1720523711; cv=none; b=DA5hqpfiqZOrWBYJc/KrAUYE52vuzgjwa7Fxr6Rq/cQr3O4MIxWW/uJoBi+HEC2R4E7axACLcnUQJgXhuX+Yil72zbWKJPS9I5JEu7v0wUXDbcfHgaYY+fhqMiSeISCDYn9rkzZ5hiwQu74HytZ4wYkbP/5zNtmaQ6r19VW3Nu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720522970; c=relaxed/simple;
-	bh=ICwC8hHB4nssKkN75Qlzvd8rIcpX9ZQoWm9Hdqy5DwE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UMe1Y/p1AgTSaQeX4un0jrf8QRysHMJwKSBPFI7IgtiFATXmImwnQO50PtL/tUe9r7fTP3gA3khonubNVViuZPvIhizBhHZX90qrHLBG9m6qQ1wYooNHNwHoNFnxWQCtnDLR92KhmWY5ttPS145Bn8+02VXNWBcms7tAElwek5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tOAOMrxm; arc=none smtp.client-ip=209.85.210.170
+	s=arc-20240116; t=1720523711; c=relaxed/simple;
+	bh=yQ9NM+l1zVqq0j7T77l/b9HGHEwF0xiqRl64ejpWhBk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ec2aHVfdbxt2TLPwiF5ey+zNfzTpcYF9DRvOKCUq5FZ/9QgUJXQhHbJzvKYXecKfHY4kwVMhkJ7cg+yDOkTxVBE9UFGcuQoCjSrNjgnc+T81riUORXonBpERr0UjFWAjbVE/s/1eCTKCVxO1KSNn9DXIF3jk/9/UKuy81AL3c38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KjNeS0jE; arc=none smtp.client-ip=209.85.128.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-70af0684c2bso3049663b3a.0
-        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 04:02:48 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6512866fa87so43490297b3.2
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 04:15:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720522968; x=1721127768; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yz8rqRMqOY683u5fU+cnnte1WW97jEHEhVYRD53PDio=;
-        b=tOAOMrxmF5SX9/yidFT9l3oQFPMmITisdEw0c3YjacAvBaG4OwL32ijQGjOnU4tScA
-         loK0ASFvIfha/dDCuOCQj6Hj/fVeAjpoGLPdHHUHYvBkG2Kr5FRmefmd8CUe5/rQZ3XC
-         kjR/7HQuMuD1uzpIiX0NW64A3E7kkdkOYJS+F7PKXOo5fJs9TX+fNzVeBVh5sKBCBfuq
-         5uzEWpnI61a4f0qdHO6hnDA35m3vFd28VdVyRaQZc8cycXWcFfAMS3Ac6Wog94+v5eBb
-         VyjNFC/xBaaZzMl7YOe/9ryJ3QOOBju2zUgCSc0iMlbdtBpnxmeKL8kEL+reOMeXTUvw
-         vfNA==
+        d=linaro.org; s=google; t=1720523708; x=1721128508; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1xs0HKvjIXU9N0dl5ke31NoTuxcyqc28H/Jk8DSGVHw=;
+        b=KjNeS0jEhFg1AgPLy5il0ZcjuzYFPO+xHYlWzssXh9rWQhTbaswDUs8bEeLd5WVxFb
+         JxKyPED0Z1HRSWl4+MxU619nOteTstGGwO8H8VZHoeilUydHU6DAktmaiVnhiR4b68YN
+         WVQ5RFONPmMOkIeBCBPOi91M28eJVBai/4OvVbW9e4zgwE2PAD1y+axc0YFd1vyIJeg5
+         PcgcHgM8UNnQ/Q3cTKgObReaz+TR3iVDNcvLXMATTNwOu/Pu1GzkVJFWZOz32m99G0zq
+         E7RMhkmy8ekaFJeRgU2tI1pEeOPh7LxpByUnH78r/psPoGlN1a8oLB7AZ18HVmEhnnsY
+         3jag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720522968; x=1721127768;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yz8rqRMqOY683u5fU+cnnte1WW97jEHEhVYRD53PDio=;
-        b=CbTRFWuvzoeZSS3XurK9rR8xKY5niHpvtllAbcKZqo8aXbHD8VRSdErQP/Dih4Zjad
-         ZW8CVWG+4MZ2t2WhzsySK29o9K4h5S9e6JK9eHdjzhO+qC6NHs1MYGTC3wxCn5/C5CWa
-         Gqx41TECRbfra3R1vETkh38sr2pCuyAbO7DAGolitdkgHXDeRKlrG0ZfDOvskOgVrYLE
-         AB9Lu9UHzRW2U2mph3eKPhogDrfrCGwtQRuqdizwroc/AJzUyMtFmszprg85aPt5YR/7
-         sT8oXxU1pTrjGe7kzkaNetqTR3f2tCvbqae8kc6KDi9XXsw8fUAa/fqeq+aGLhvr5UdR
-         PLFA==
-X-Forwarded-Encrypted: i=1; AJvYcCXGYT9eLV+rT3UviRmbsAQSD/l3BAsDF7YEGu1AXrjlMATZ3noJja5CWwdXs7/TV5dZ8Fcz89JR8/WpQ8dn2X1Dj2JYG1TPZ90=
-X-Gm-Message-State: AOJu0YxOJZJ7ADHrRMbPCId5P2zQQtPhiT9vYn8+Z2Nbr7DSM5cOn8dW
-	MykdGS6bGSMpC3WrTHyYmuj9ZQTQLhOLh34TnDSkRmsvoibQgIJUCDBWxw51hwk=
-X-Google-Smtp-Source: AGHT+IEnZeyyy+JNipf3YeCIVNiI2S39fnrN1eQJ+5u6wVxKp7TogZLRs6I2FcH4SNfru3myy0T1dQ==
-X-Received: by 2002:a05:6a00:1d0e:b0:706:6cb2:ed17 with SMTP id d2e1a72fcca58-70b435220f9mr2429638b3a.2.1720522967959;
-        Tue, 09 Jul 2024 04:02:47 -0700 (PDT)
-Received: from localhost ([122.172.84.129])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b438c0996sm1513827b3a.60.2024.07.09.04.02.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jul 2024 04:02:47 -0700 (PDT)
-Date: Tue, 9 Jul 2024 16:32:45 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>, linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH V3 1/8] rust: Add initial bindings for OPP framework
-Message-ID: <20240709110245.o73xnrj6jsvz2v2w@vireshk-i7>
-References: <cover.1719990273.git.viresh.kumar@linaro.org>
- <fe8e9a96b29122876346fc98a6a9ede7e4f28707.1719990273.git.viresh.kumar@linaro.org>
- <ZoVvn0QCSR8y4HQJ@Boquns-Mac-mini.home>
+        d=1e100.net; s=20230601; t=1720523708; x=1721128508;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1xs0HKvjIXU9N0dl5ke31NoTuxcyqc28H/Jk8DSGVHw=;
+        b=jVjpv5Gt8nUgjyB54UofF8+6ao/JYabGLEaHoCb2NraTgE8yBEYTUn+iga1NhnnmPu
+         I9u2pGMHi4+/OW7FIfT1CDcIk2Y+nYkMDmXROOWVMz+k0veNIUghECgBBSRff2IxG4Jv
+         jj5BC/EWaGo2G/Eq1ViJWAikA1bsJboDYzF9MJM7ujaiffoQVygQFYP0PlG/Dk9XUgb4
+         OEGOvcru5xCHWjliRBQhFlGzg5IawD0E/MkWJPV+3nWLhSDvlW063v5vrum2nzjNCf6b
+         XeFqbO68t3pQP+Hx7OwYV1eJJcrsgC+5CyXjAYHPbFMGSr0oMPU8vqQmKbJlG7qh719d
+         pKPg==
+X-Forwarded-Encrypted: i=1; AJvYcCWEdsruECDnkS3pGKQv6C1kvTt6jD28oHMXlQeBoSVUUifdP46qtyPuT0zBJp1GpXxXKwoknCY8I+hofX/MdbuLPm6ce00eo28=
+X-Gm-Message-State: AOJu0Yzd5bQGCP6IkZR/R+wfztVr7DnMmqU8iw6BpNcb4oE/OpCDGuDE
+	Wuu+7x15TEo0K3Uw+9es+YZkaGdyGIzUCQYRjQc7HceWNaI5PboqEXihW7yAgFDF9QmNkT3hZSA
+	GnGsG+N3G3GBWGnAYXg6LoPXchwYNJ9xT+SbgGw==
+X-Google-Smtp-Source: AGHT+IEe3nga3KVXtHrrwMw0LhHVXjdHyDPZ5uKUnuXkRHUYNX06lcrnyme+JwGrKLNVy4VLF2PrLdXqWcdfOSeg4IQ=
+X-Received: by 2002:a81:5b42:0:b0:64a:6eda:fc60 with SMTP id
+ 00721157ae682-658ee69ac4cmr26076237b3.4.1720523708479; Tue, 09 Jul 2024
+ 04:15:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZoVvn0QCSR8y4HQJ@Boquns-Mac-mini.home>
+References: <20240625-avoid_mxc_retention-v2-1-af9c2f549a5f@quicinc.com>
+In-Reply-To: <20240625-avoid_mxc_retention-v2-1-af9c2f549a5f@quicinc.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 9 Jul 2024 13:14:32 +0200
+Message-ID: <CAPDyKFpid-LEqqSXBHYRc6CKdHpmT+FnS3xrCTt7Z0RhcCSfCg@mail.gmail.com>
+Subject: Re: [PATCH v2] pmdomain: qcom: rpmhpd: Skip retention level for Power Domains
+To: Taniya Das <quic_tdas@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, quic_jkona@quicinc.com, 
+	quic_imrashai@quicinc.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 03-07-24, 08:34, Boqun Feng wrote:
-> On Wed, Jul 03, 2024 at 12:44:26PM +0530, Viresh Kumar wrote:
-> > +// SAFETY: `OPP` only holds a pointer to a C OPP, which is safe to be used from any thread.
-> > +unsafe impl Send for OPP {}
-> > +
-> > +// SAFETY: `OPP` only holds a pointer to a C OPP, references to which are safe to be used from any
-> > +// thread.
-> > +unsafe impl Sync for OPP {}
-> > +
-> 
-> Same for the above safety comments, as they are still based on the old
-> implementation.
+On Tue, 25 Jun 2024 at 06:33, Taniya Das <quic_tdas@quicinc.com> wrote:
+>
+> In the cases where the power domain connected to logics is allowed to
+> transition from a level(L)-->power collapse(0)-->retention(1) or
+> vice versa retention(1)-->power collapse(0)-->level(L)  will cause the
+> logic to lose the configurations. The ARC does not support retention
+> to collapse transition on MxC rails.
+>
+> The targets from SM8450 onwards the PLL logics of clock controllers are
+> connected to MxC rails and the recommended configurations are carried
+> out during the clock controller probes. The MxC transition as mentioned
+> above should be skipped to ensure the PLL settings are intact across
+> clock controller power on & off.
+>
+> On older targets that do not split MX into MxA and MxC does not collapse
+> the logic and it is parked always at RETENTION, thus this issue is never
+> observed on those targets.
+>
+> Cc: stable@vger.kernel.org # v5.17
+> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
 
-Do I still need to change these ? Since we aren't always using ARef
-now.
+Applied for fixes, thanks!
 
--- 
-viresh
+Kind regards
+Uffe
+
+
+> ---
+> [Changes in v2]: Incorporate the comments in the commit text.
+> ---
+>  drivers/pmdomain/qcom/rpmhpd.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
+> index de9121ef4216..d2cb4271a1ca 100644
+> --- a/drivers/pmdomain/qcom/rpmhpd.c
+> +++ b/drivers/pmdomain/qcom/rpmhpd.c
+> @@ -40,6 +40,7 @@
+>   * @addr:              Resource address as looped up using resource name from
+>   *                     cmd-db
+>   * @state_synced:      Indicator that sync_state has been invoked for the rpmhpd resource
+> + * @skip_retention_level: Indicate that retention level should not be used for the power domain
+>   */
+>  struct rpmhpd {
+>         struct device   *dev;
+> @@ -56,6 +57,7 @@ struct rpmhpd {
+>         const char      *res_name;
+>         u32             addr;
+>         bool            state_synced;
+> +       bool            skip_retention_level;
+>  };
+>
+>  struct rpmhpd_desc {
+> @@ -173,6 +175,7 @@ static struct rpmhpd mxc = {
+>         .pd = { .name = "mxc", },
+>         .peer = &mxc_ao,
+>         .res_name = "mxc.lvl",
+> +       .skip_retention_level = true,
+>  };
+>
+>  static struct rpmhpd mxc_ao = {
+> @@ -180,6 +183,7 @@ static struct rpmhpd mxc_ao = {
+>         .active_only = true,
+>         .peer = &mxc,
+>         .res_name = "mxc.lvl",
+> +       .skip_retention_level = true,
+>  };
+>
+>  static struct rpmhpd nsp = {
+> @@ -819,6 +823,9 @@ static int rpmhpd_update_level_mapping(struct rpmhpd *rpmhpd)
+>                 return -EINVAL;
+>
+>         for (i = 0; i < rpmhpd->level_count; i++) {
+> +               if (rpmhpd->skip_retention_level && buf[i] == RPMH_REGULATOR_LEVEL_RETENTION)
+> +                       continue;
+> +
+>                 rpmhpd->level[i] = buf[i];
+>
+>                 /* Remember the first corner with non-zero level */
+>
+> ---
+> base-commit: 62c97045b8f720c2eac807a5f38e26c9ed512371
+> change-id: 20240625-avoid_mxc_retention-b095a761d981
+>
+> Best regards,
+> --
+> Taniya Das <quic_tdas@quicinc.com>
+>
 
