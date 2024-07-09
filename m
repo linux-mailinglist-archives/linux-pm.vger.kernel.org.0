@@ -1,48 +1,76 @@
-Return-Path: <linux-pm+bounces-10836-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10837-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D01692B32C
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:06:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C292592B33D
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:08:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E32D1C2267C
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:06:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42EA21F22B0C
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:08:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64791154C04;
-	Tue,  9 Jul 2024 09:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE0CB153801;
+	Tue,  9 Jul 2024 09:08:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X93fsIjw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bR6e3GoC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 308D4146016;
-	Tue,  9 Jul 2024 09:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165137BAE3
+	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 09:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720515903; cv=none; b=JCWqtGu91H5yqqA6z22ML5b4Gh+OolayrWXC+nqMgfdEQ2P+mBQirsS+ym9OnjwPuMrxTsXmHnbHRnOIxRynDRr1W7iAjk95LpNOIbHjLsvDWLV1QQGi7fJEniyy5TIBK6wgP4nK88IPZaMtlJN8DJHDemWMWSBrRP9MTT/0Wik=
+	t=1720516131; cv=none; b=mpZ9GqWACqqE/4t4Rvlz3B7EtbTl+LO++FuXgyJBGUYNEF/n3PfgUaygTgfU4m/hUgXx125j1Bq/7Q3rM8cvW3O6JvyMZlTr17ICf6EWd2uNY+Jv1V6AXDHD1HvQSKQc1e1hB05Tw4AT0gJmjmCbCO9EBWtRiwy5ZL53TNWLAR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720515903; c=relaxed/simple;
-	bh=89XNTjD8VvzQueTdSLIVAzNuM+7Ti1HQSRC2JVCLW2Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=o55bPEtyjPDip3qyeUxM0lTUByUaoa/IsfQN1ojibTibOXV06E/17NOCXYIGv8kBou8ec2Yz+r+C6yp4xa99DwyE/HRqYtyrPq05bvQTPaRSyWuuD3oCn8ICbc9euwNKifXu0rD612Qri972EaXlKACrdl56nJbo5UkCPdtMQIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X93fsIjw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7777FC3277B;
-	Tue,  9 Jul 2024 09:04:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720515902;
-	bh=89XNTjD8VvzQueTdSLIVAzNuM+7Ti1HQSRC2JVCLW2Y=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=X93fsIjwVRnrDDB2GIoZnBy01lkEOlZIGve/z0YRyddSqfMSM/xvfQZ1BMcDbUdx1
-	 4DttWiRroPUjoMI696cKWbd0mf0WEz/C2L3taqySSgzsVgPMRlcT+s0FSl/RK0TfIZ
-	 2b+AtyrbRFRD3NAuZ5OWzd2H6g18h7sooOBfFC5OUl5pvpfsLcUeDxhSdAP3he3mia
-	 dp3JX9CR36Wi8V5/hb9+ZfZGvUzgC3O1gQ6kS69Czm6mKfoILQa0rFvl2RcUaj7BX6
-	 66RRPh2pbE9k0y4nAIP2PZ9P2ruQtGmxf1E8CyxVQNwhyPaZyReIBdCVgXelClPYVk
-	 f36RAmT5ij5ww==
-Message-ID: <94e9aea3-6231-4dbe-9a7d-07f79216e78b@kernel.org>
-Date: Tue, 9 Jul 2024 11:04:52 +0200
+	s=arc-20240116; t=1720516131; c=relaxed/simple;
+	bh=Z0xPFpGMNM1DRzaaF5OZtuXrdJ6qOuf1nCpsWBwhJ0k=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=KKJz8ndD/M25yUa7bnjcWtQk3koTiL2hwqtcyZ8KzKT8chZXMPj9gAMQ9dd7Gcaqi3/YmIvm+trt3jdgvk1clf82Q4CvGHFKp+8yjM2InbGJTmVwrOskAqQxXJXfwVABB00Ou6xytuaeB8UlDQEulYvBCoutbxeaDKP8FGjYjOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bR6e3GoC; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4256742f67fso35391775e9.3
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 02:08:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720516128; x=1721120928; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5ANmKzDOIKVmKZHKX18dtZ0Xwvo3oCJHasWzFPD4tQ0=;
+        b=bR6e3GoCkpNowZ88fec/nhAWdy7s974miRfJqwTkqq4F8SllCYmMuqDy/mNIogwcgN
+         v4Ho56sMRJX7RwglB9yU503gA7hjoVhngvhuqJ6vzJ5B31vbI5DgZEs8V1B4ASghDwjW
+         B0sgAIMMLGAYA9OLQ522X3rsscTVNVPeZW8lxg4XJBFYm1QF8e3TsGwAX/kalk++QXtF
+         dmCWlGpPVFHelox/sTvDjDzVZXcPd3+a2Zqx+80p5oiWRHOUlOg32G+oc2+qATwVEos5
+         AQPbyFkJVtb2ULPBK9iOrN9PsL1n1KhKOR8/xvFx/GEpBVTbkqkzlgGgdyd2vtzMUuXs
+         rMcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720516128; x=1721120928;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5ANmKzDOIKVmKZHKX18dtZ0Xwvo3oCJHasWzFPD4tQ0=;
+        b=fvmm2KPOI5UOQBpEKBU6Pwae302gw8pGm2bfGv0UNaCkDOusOWErN2r6eyGtYoOCV0
+         t4Ib9y4pmsuyFNNQzKHt70OvoyGA1J5F4uCRRBidlA0sh0tMZY0nSU+ht98plN0A3ady
+         Aucy5WR+UaSTAlnHmov0DYrDdOVT6O2TB2CmJIyktvhqRuvZ/IyyUhtWfFo7nJVt2BXO
+         M8YH7xKG22np9psI/wCPk183H0tbwSoQrILFftXRqSFDFb42esKIjzTB1C7tNlru1p5U
+         Tc6CKhUDZILza694DzLW6WViwNrOsUNvj0+xq15t8f20w1rR4dZLVYxffI04D+jlEPSF
+         cYnw==
+X-Forwarded-Encrypted: i=1; AJvYcCU8ewFk8Afl7sfyGDaN1wmYnnVqBsGEfTFnDY8PUILR0VtBhfuionTXJv0QifTvi3cWqIhcRWW/7BlmFh1/OZSPT9YFFx64Tfo=
+X-Gm-Message-State: AOJu0Yy+Vh4mpVMBCvQtNc5oDudqhlOY3jl9rXTbSTtIEA3XtM5dp+W0
+	97+RV/KNBZSnGzWnk3k+H/n6LI8tbm/oOKDjBwYWYZVTxhVE4zau3xwxShM33jE=
+X-Google-Smtp-Source: AGHT+IE8dGfgukDFvsdorYHZw//51MvpbEXXLFPm2ybjz9IBphbGLeUpfAWThkn7OBaAt18C73eG9A==
+X-Received: by 2002:a7b:c446:0:b0:426:5ddf:fd22 with SMTP id 5b1f17b1804b1-426705ce962mr12407445e9.6.1720516128261;
+        Tue, 09 Jul 2024 02:08:48 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:cad:2140:b12a:8461:5e2a:dfe? ([2a01:e0a:cad:2140:b12a:8461:5e2a:dfe])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42663f049e5sm98687965e9.35.2024.07.09.02.08.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jul 2024 02:08:47 -0700 (PDT)
+Message-ID: <3ad982d1-6626-4618-b815-cbee1f4f4901@linaro.org>
+Date: Tue, 9 Jul 2024 11:08:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,87 +78,137 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 9/9] dts: arm64: qcom: ipq9574: Enable CPR
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org,
- angelogioacchino.delregno@collabora.com, andersson@kernel.org,
- konrad.dybcio@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
- ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
- ulf.hansson@linaro.org, quic_sibis@quicinc.com, quic_rjendra@quicinc.com,
- otto.pflueger@abscue.de, luca@z3ntu.xyz, danila@jiaxyga.com,
- quic_ipkumar@quicinc.com, stephan.gerhold@kernkonzept.com,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20240709090132.117077-1-quic_varada@quicinc.com>
- <20240709090132.117077-10-quic_varada@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240709090132.117077-10-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] pmdomain: amlogic: Constify struct
+ meson_secure_pwrc_domain_desc
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Kevin Hilman <khilman@baylibre.com>,
+ Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-amlogic@lists.infradead.org
+References: <871d6b708de8bb42e1fabd8a601dc9a9a217cf00.1719863475.git.christophe.jaillet@wanadoo.fr>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <871d6b708de8bb42e1fabd8a601dc9a9a217cf00.1719863475.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 09/07/2024 11:01, Varadarajan Narayanan wrote:
-> * Add CPR, RPMPD, OPP table nodes as applicable to IPQ9574 to
->   enable CPR functionality on IPQ9574.
+On 01/07/2024 21:53, Christophe JAILLET wrote:
+> 'struct meson_secure_pwrc_domain_desc' is not modified in this driver.
 > 
-> * Bootloader set frequency 792MHz is added to the OPP table to
->   the avoid 'need at least 2 OPPs to use CPR' error
+> Constifying this structure moves some data to a read-only section, so
+> increase overall security.
 > 
-> * Remove 1.2GHz as it is not supported in any of the IPQ9574 SKUs.
+> On a x86_64, with allmodconfig, as an example:
+> Before:
+> ======
+>     text	   data	    bss	    dec	    hex	filename
+>     4909	   4072	      0	   8981	   2315	drivers/pmdomain/amlogic/meson-secure-pwrc.o
 > 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> After:
+> =====
+>     text	   data	    bss	    dec	    hex	filename
+>     8605	    392	      0	   8997	   2325	drivers/pmdomain/amlogic/meson-secure-pwrc.o
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Compile tested-only.
+> 
+> The .is_off() function is *always* set as pwrc_secure_is_off(), so it could
+> make sense to remove this function pointer and call pwrc_secure_is_off()
+> directly when needed.
+> This would save some memory and useless indirection.
+> 
+> I leave it as-is because it is maybe here for future use.
+> ---
+>   drivers/pmdomain/amlogic/meson-secure-pwrc.c | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/pmdomain/amlogic/meson-secure-pwrc.c b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
+> index df5567418226..62857482f874 100644
+> --- a/drivers/pmdomain/amlogic/meson-secure-pwrc.c
+> +++ b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
+> @@ -46,7 +46,7 @@ struct meson_secure_pwrc_domain_desc {
+>   
+>   struct meson_secure_pwrc_domain_data {
+>   	unsigned int count;
+> -	struct meson_secure_pwrc_domain_desc *domains;
+> +	const struct meson_secure_pwrc_domain_desc *domains;
+>   };
+>   
+>   static bool pwrc_secure_is_off(struct meson_secure_pwrc_domain *pwrc_domain)
+> @@ -110,7 +110,7 @@ static int meson_secure_pwrc_on(struct generic_pm_domain *domain)
+>   	.parent = __parent,			\
+>   }
+>   
+> -static struct meson_secure_pwrc_domain_desc a1_pwrc_domains[] = {
+> +static const struct meson_secure_pwrc_domain_desc a1_pwrc_domains[] = {
+>   	SEC_PD(DSPA,	0),
+>   	SEC_PD(DSPB,	0),
+>   	/* UART should keep working in ATF after suspend and before resume */
+> @@ -137,7 +137,7 @@ static struct meson_secure_pwrc_domain_desc a1_pwrc_domains[] = {
+>   	SEC_PD(RSA,	0),
+>   };
+>   
+> -static struct meson_secure_pwrc_domain_desc a4_pwrc_domains[] = {
+> +static const struct meson_secure_pwrc_domain_desc a4_pwrc_domains[] = {
+>   	SEC_PD(A4_AUDIO,	0),
+>   	SEC_PD(A4_SDIOA,	0),
+>   	SEC_PD(A4_EMMC,	0),
+> @@ -155,7 +155,7 @@ static struct meson_secure_pwrc_domain_desc a4_pwrc_domains[] = {
+>   	SEC_PD(A4_AO_IR,	GENPD_FLAG_ALWAYS_ON),
+>   };
+>   
+> -static struct meson_secure_pwrc_domain_desc c3_pwrc_domains[] = {
+> +static const struct meson_secure_pwrc_domain_desc c3_pwrc_domains[] = {
+>   	SEC_PD(C3_NNA,		0),
+>   	SEC_PD(C3_AUDIO,	0),
+>   	SEC_PD(C3_SDIOA,	0),
+> @@ -172,7 +172,7 @@ static struct meson_secure_pwrc_domain_desc c3_pwrc_domains[] = {
+>   	SEC_PD(C3_VCODEC,	0),
+>   };
+>   
+> -static struct meson_secure_pwrc_domain_desc s4_pwrc_domains[] = {
+> +static const struct meson_secure_pwrc_domain_desc s4_pwrc_domains[] = {
+>   	SEC_PD(S4_DOS_HEVC,	0),
+>   	SEC_PD(S4_DOS_VDEC,	0),
+>   	SEC_PD(S4_VPU_HDMI,	0),
+> @@ -184,7 +184,7 @@ static struct meson_secure_pwrc_domain_desc s4_pwrc_domains[] = {
+>   	SEC_PD(S4_AUDIO,	0),
+>   };
+>   
+> -static struct meson_secure_pwrc_domain_desc t7_pwrc_domains[] = {
+> +static const struct meson_secure_pwrc_domain_desc t7_pwrc_domains[] = {
+>   	SEC_PD(T7_DSPA,		0),
+>   	SEC_PD(T7_DSPB,		0),
+>   	TOP_PD(T7_DOS_HCODEC,	0, PWRC_T7_NIC3_ID),
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching. For bindings, the preferred subjects are
-explained here:
-https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 
