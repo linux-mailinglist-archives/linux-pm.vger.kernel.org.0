@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-10831-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10832-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67C7692B30E
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:04:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 327EB92B313
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:04:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EB611F2167C
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:04:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50A211C20E5A
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:04:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F13E155329;
-	Tue,  9 Jul 2024 09:03:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A184154BE5;
+	Tue,  9 Jul 2024 09:03:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="eSQpt7d0"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="FZPWMFFv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABFD127462;
-	Tue,  9 Jul 2024 09:02:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D5A14534C;
+	Tue,  9 Jul 2024 09:03:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720515780; cv=none; b=mdeZXI3W0mzAKleiELTj48cHkzm/7VruEg8aRr7hiLY5Qk9/RdMBR9HpB/goGQo1EBNklp2gOGZYzyVMgrnjE/iJ68HaR1f79tfJCWqFpTW/q4KdANbmTmsvQFNIa5C0wOkI+ySMh4Kfl+k2wKt+FHniwv001HESf/wf+JqQDZc=
+	t=1720515790; cv=none; b=I+xQQZrAc1b3BTb/bzV7xnKl9l7KbS+11/7SYTR1AnmDLNTHBqXe/LNMLdTWeVwvw4KIZmbrDg4Bpavn7nn7wqMVmKZeFmImotcCrX3uF6QkDfHucFaXZHsWOxCTW65YIPG7Y4LpeMA8ljGrN+XfRxiKXVj4fm6UrisnBE8Wj0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720515780; c=relaxed/simple;
-	bh=NbghBCuv6Z9GqbuZNLOUww8AHwyziSDpjlICfOPy36A=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gfjR1ZZS0ge8gtsiQMHewmyMIKNCKZFCi1Qda2pitZ1ALtGEialw/XUCIgQwfjb9u7ebcQnskoIWb7RVDBfQLbYLS4Db/CMOUKreDM8L+s5GbVTmMvfE63LkneQK7tUeK267YgwRoiLCojbDndJvAFkjfU5onZo4ruUlKzYCkoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=eSQpt7d0; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1720515790; c=relaxed/simple;
+	bh=MfbTgRpBj3sU6kaXGp0JaMUcTJhWlOzILi1ZNfHROUA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XpzYiR1fm0X9P5NS8uzu+Z9TsOxlvA5dIEjj8QIkueytkj5SZZfGTKke7WyNmn7o5f3OORWCaBHhN3OTs0r48b57syKcn+YrutZKwmGqRqp4s1zaRpqZMWJaHHe7slTJQfjPHxwlZrJLdwn4uUDJoHnALHWo0W5G5bjHRJGud1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=FZPWMFFv; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46936KDv003751;
-	Tue, 9 Jul 2024 09:02:48 GMT
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4692iFCR016208;
+	Tue, 9 Jul 2024 09:02:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	b7L/FBiJ5rwG+vtCCzRfyxibTJlnj405qJWswdSeEWc=; b=eSQpt7d0Dtv0YnrE
-	wj1mD/fHmxLEtI6B4N89i6yVxZbJ8PXtmTQHR6I0jR8AQ4z5wEVJJR62brLMldiw
-	9zZ7H3bm6FhfvaCKo6/9KKcMzh/WbS41gqxJe4N/e0TqGW6jTNxVTeAXdzm1oMuM
-	scJ6KSDTnX+M7Vq4dZz99B4dBXKBEyhi09n8ck4UL4/iNiYnRhiLp7Ewm08Wdwh1
-	qhmbNs8vozQnHJdjR0maL47jAjFqpE+W2Cs4M3k5DsfH3icA5Fw6wb06dNj5m7Dy
-	5x2G0mPohHsqaYCDkjif4yEPRRyy+jEVljBDOvbJ8tL6TU49I0+ZbbGrnyQaGo9x
-	dQWOEA==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 408w0r8qqd-1
+	M+2dHiD7fdSjIpvBDMqoz15fZ8USQiqrgnJbQkR6D+8=; b=FZPWMFFvN/Z6ie0x
+	MKAs4CSZ+px8/81Q2i5lOcOa0BhTHOKYAsOzYqTmERnQhkJZI6MDA8DJBIjlDFuy
+	VkN6NTMtxcLqDD0d5blB0qKUyC7KZklfEKaul2BoZjbuQjVIvc1PIfWY3jyNqTKp
+	nWoCmU71s5TPwsS8NDjLe7r7xTqg0TBLd1l4wxC8PdSLztEXV+GwCDTmGo7hAgZN
+	HSzMv0sBb1eqBz6Vbkz2eHoj0W/Xc7FWvDmxMWkv3vUd/XheLjUTavuiNXVyc0Mr
+	yi+OBfuGxt+7maLx7FZ9AeL7/e7JxXTEo28fdaMk7dlX6C7X5nxee8UJUn4AcRZ6
+	hyo/Mw==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 406x516148-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Jul 2024 09:02:47 +0000 (GMT)
+	Tue, 09 Jul 2024 09:02:54 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46992kgQ007930
+	by NASANPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46992rZY030709
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 9 Jul 2024 09:02:46 GMT
+	Tue, 9 Jul 2024 09:02:53 GMT
 Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 9 Jul 2024 02:02:38 -0700
+ 15.2.1544.9; Tue, 9 Jul 2024 02:02:45 -0700
 From: Varadarajan Narayanan <quic_varada@quicinc.com>
 To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
         <angelogioacchino.delregno@collabora.com>, <andersson@kernel.org>,
@@ -68,10 +68,9 @@ To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
         <stephan.gerhold@kernkonzept.com>, <linux-arm-msm@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-clk@vger.kernel.org>, <linux-pm@vger.kernel.org>
-CC: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v5 7/9] clk: qcom: gcc-ipq9574: Add CPR clock definition
-Date: Tue, 9 Jul 2024 14:31:30 +0530
-Message-ID: <20240709090132.117077-8-quic_varada@quicinc.com>
+Subject: [PATCH v5 8/9] soc: qcom: cpr3: Add IPQ9574 definitions
+Date: Tue, 9 Jul 2024 14:31:31 +0530
+Message-ID: <20240709090132.117077-9-quic_varada@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240709090132.117077-1-quic_varada@quicinc.com>
 References: <20240709090132.117077-1-quic_varada@quicinc.com>
@@ -87,83 +86,207 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: mhpXg8V3v0v7aVE5avSo_gPGt7iRIg7b
-X-Proofpoint-GUID: mhpXg8V3v0v7aVE5avSo_gPGt7iRIg7b
+X-Proofpoint-GUID: ZfQBlbhNglkyKUrth-_6lXdKXfNljQv9
+X-Proofpoint-ORIG-GUID: ZfQBlbhNglkyKUrth-_6lXdKXfNljQv9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-08_15,2024-07-08_01,2024-05-17_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- impostorscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=999
- phishscore=0 spamscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ suspectscore=0 impostorscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2406140001 definitions=main-2407090060
 
-Add the CPR clock definition needed for enabling access to
-CPR register space.
+From: Praveenkumar I <quic_ipkumar@quicinc.com>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+* Add thread, scaling factor, CPR descriptor defines to enable
+  CPR on IPQ9574.
+
+* Skip 'acc' usage since IPQ9574 does not have acc
+
+Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
 Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 ---
- drivers/clk/qcom/gcc-ipq9574.c | 39 ++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+v5: Move the 'acc_desc' usage check to first patch
 
-diff --git a/drivers/clk/qcom/gcc-ipq9574.c b/drivers/clk/qcom/gcc-ipq9574.c
-index e1dc74d04ed1..eac557937fd3 100644
---- a/drivers/clk/qcom/gcc-ipq9574.c
-+++ b/drivers/clk/qcom/gcc-ipq9574.c
-@@ -3994,6 +3994,43 @@ static struct clk_branch gcc_xo_div4_clk = {
- 	},
+v4: s/silver//, s/cprh/cpr4/
+    Skip 'acc' related code as IPQ9574 does not have acc
+
+v3: Fix patch author
+    Included below information in cover letter
+v2: Fix Signed-off-by order
+Depends:
+	[1] https://lore.kernel.org/lkml/20230217-topic-cpr3h-v14-0-9fd23241493d@linaro.org/T/
+	[2] https://github.com/quic-varada/cpr/commits/konrad/
+---
+ drivers/pmdomain/qcom/cpr3.c | 140 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 139 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/pmdomain/qcom/cpr3.c b/drivers/pmdomain/qcom/cpr3.c
+index 08a306d86403..1abdec8c137e 100644
+--- a/drivers/pmdomain/qcom/cpr3.c
++++ b/drivers/pmdomain/qcom/cpr3.c
+@@ -2056,6 +2056,142 @@ static const struct cpr_acc_desc msm8998_cpr_acc_desc = {
+ 	.cpr_desc = &msm8998_cpr_desc,
  };
  
-+static const struct freq_tbl ftbl_hmss_rbcpr_clk_src[] = {
-+	F(24000000, P_XO, 1, 0, 0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 rbcpr_clk_src = {
-+	.cmd_rcgr = 0x48044,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = gcc_xo_map,
-+	.freq_tbl = ftbl_gp1_clk_src,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "rbcpr_clk_src",
-+		.parent_data = gcc_xo_gpll0_gpll4,
-+		.num_parents = ARRAY_SIZE(gcc_xo_map),
-+		.ops = &clk_rcg2_ops,
++static const int ipq9574_scaling_factor[][CPR3_RO_COUNT] = {
++	/* Fuse Corner 0 */
++	{
++		2383, 2112, 2250, 1502, 2269, 2055, 2046, 1949,
++		2128, 1945, 2282, 2061, 2010, 2216, 2054, 2332
++	},
++	/* Fuse Corner 1 */
++	{
++		2383, 2112, 2250, 1502, 2269, 2055, 2046, 1949,
++		2128, 1945, 2282, 2061, 2010, 2216, 2054, 2332
++	},
++	/* Fuse Corner 2 */
++	{
++		2383, 2112, 2250, 1502, 2269, 2055, 2046, 1949,
++		2128, 1945, 2282, 2061, 2010, 2216, 2054, 2332
++	},
++	/* Fuse Corner 3 */
++	{
++		2383, 2112, 2250, 1502, 2269, 2055, 2046, 1949,
++		2128, 1945, 2282, 2061, 2010, 2216, 2054, 2332
 +	},
 +};
 +
-+static struct clk_branch gcc_rbcpr_clk = {
-+	.halt_reg = 0x48008,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x48008,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "gcc_rbcpr_clk",
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&rbcpr_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
++static const struct cpr_thread_desc ipq9574_thread = {
++	.controller_id = 0,
++	.hw_tid = 0,
++	.ro_scaling_factor = ipq9574_scaling_factor,
++	.sensor_range_start = 0,
++	.sensor_range_end = 6,
++	.init_voltage_step = 10000,
++	.init_voltage_width = 6,
++	.step_quot_init_min = 0,
++	.step_quot_init_max = 15,
++	.num_fuse_corners = 4,
++	.fuse_corner_data = (struct fuse_corner_data[]){
++		/* fuse corner 0 */
++		{
++			.ref_uV = 725000,
++			.max_uV = 725000,
++			.min_uV = 725000,
++			.range_uV = 0,
++			.volt_cloop_adjust = 0,
++			.volt_oloop_adjust = 0,
++			.max_volt_scale = 4,
++			.max_quot_scale = 10,
++			.quot_offset = 0,
++			.quot_scale = 1,
++			.quot_adjust = 0,
++			.quot_offset_scale = 5,
++			.quot_offset_adjust = 0,
++		},
++		/* fuse corner 1 */
++		{
++			.ref_uV = 862500,
++			.max_uV = 862500,
++			.min_uV = 725000,
++			.range_uV = 0,
++			.volt_cloop_adjust = 0,
++			.volt_oloop_adjust = 0,
++			.max_volt_scale = 500,
++			.max_quot_scale = 800,
++			.quot_offset = 0,
++			.quot_scale = 1,
++			.quot_adjust = 0,
++			.quot_offset_scale = 5,
++			.quot_offset_adjust = 0,
++		},
++		/* fuse corner 2 */
++		{
++			.ref_uV = 987500,
++			.max_uV = 987500,
++			.min_uV = 787500,
++			.range_uV = 0,
++			.volt_cloop_adjust = 0,
++			.volt_oloop_adjust = 0,
++			.max_volt_scale = 280,
++			.max_quot_scale = 650,
++			.quot_offset = 0,
++			.quot_scale = 1,
++			.quot_adjust = 0,
++			.quot_offset_scale = 5,
++			.quot_offset_adjust = 0,
++
++		},
++		/* fuse corner 3 */
++		{
++			.ref_uV = 1062500,
++			.max_uV = 1062500,
++			.min_uV = 850000,
++			.range_uV = 0,
++			.volt_cloop_adjust = 0,
++			.volt_oloop_adjust = 0,
++			.max_volt_scale = 430,
++			.max_quot_scale = 800,
++			.quot_offset = 0,
++			.quot_scale = 1,
++			.quot_adjust = 0,
++			.quot_offset_scale = 5,
++			.quot_offset_adjust = 0,
 +		},
 +	},
 +};
 +
- static struct clk_hw *gcc_ipq9574_hws[] = {
- 	&gpll0_out_main_div2.hw,
- 	&gcc_xo_div4_clk_src.hw,
-@@ -4219,6 +4256,8 @@ static struct clk_regmap *gcc_ipq9574_clks[] = {
- 	[GCC_PCIE1_PIPE_CLK] = &gcc_pcie1_pipe_clk.clkr,
- 	[GCC_PCIE2_PIPE_CLK] = &gcc_pcie2_pipe_clk.clkr,
- 	[GCC_PCIE3_PIPE_CLK] = &gcc_pcie3_pipe_clk.clkr,
-+	[GCC_RBCPR_CLK_SRC] = &rbcpr_clk_src.clkr,
-+	[GCC_RBCPR_CLK] = &gcc_rbcpr_clk.clkr,
- };
++static const struct cpr_desc ipq9574_cpr_desc = {
++	.cpr_type = CTRL_TYPE_CPR4,
++	.num_threads = 1,
++	.apm_threshold = 850000,
++	.apm_crossover = 880000,
++	.apm_hysteresis = 0,
++	.cpr_base_voltage = 700000,
++	.cpr_max_voltage = 1100000,
++	.timer_delay_us = 5000,
++	.timer_cons_up = 0,
++	.timer_cons_down = 0,
++	.up_threshold = 2,
++	.down_threshold = 2,
++	.idle_clocks = 15,
++	.count_mode = CPR3_CPR_CTL_COUNT_MODE_ALL_AT_ONCE_MIN,
++	.count_repeat = 1,
++	.gcnt_us = 1,
++	.vreg_step_fixed = 12500,
++	.vreg_step_up_limit = 1,
++	.vreg_step_down_limit = 1,
++	.vdd_settle_time_us = 34,
++	.corner_settle_time_us = 6,
++	.reduce_to_corner_uV = true,
++	.hw_closed_loop_en = false,
++	.threads = (const struct cpr_thread_desc *[]) {
++		&ipq9574_thread,
++	},
++};
++
++static const struct cpr_acc_desc ipq9574_cpr_acc_desc = {
++	.cpr_desc = &ipq9574_cpr_desc,
++};
++
+ static const int sdm630_gold_scaling_factor[][CPR3_RO_COUNT] = {
+ 	/* Same RO factors for all fuse corners */
+ 	{
+@@ -2676,7 +2812,8 @@ static int cpr_probe(struct platform_device *pdev)
+ 	desc = data->cpr_desc;
  
- static const struct qcom_reset_map gcc_ipq9574_resets[] = {
+ 	/* CPRh disallows MEM-ACC access from the HLOS */
+-	if (!data->acc_desc && desc->cpr_type < CTRL_TYPE_CPRH)
++	if (!data->acc_desc && desc->cpr_type < CTRL_TYPE_CPRH &&
++	    !of_device_is_compatible(dev->of_node, "qcom,ipq9574-cpr4"))
+ 		return -EINVAL;
+ 
+ 	drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
+@@ -2828,6 +2965,7 @@ static void cpr_remove(struct platform_device *pdev)
+ }
+ 
+ static const struct of_device_id cpr3_match_table[] = {
++	{ .compatible = "qcom,ipq9574-cpr4", .data = &ipq9574_cpr_acc_desc },
+ 	{ .compatible = "qcom,msm8998-cprh", .data = &msm8998_cpr_acc_desc },
+ 	{ .compatible = "qcom,sdm630-cprh", .data = &sdm630_cpr_acc_desc },
+ 	{ }
 -- 
 2.34.1
 
