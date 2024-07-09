@@ -1,125 +1,207 @@
-Return-Path: <linux-pm+bounces-10877-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10878-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9132092BB84
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 15:38:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC0C292BC4E
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 16:00:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2DFA1C23CA0
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 13:38:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64324285632
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 14:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D45216D9B4;
-	Tue,  9 Jul 2024 13:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E6DE18E77B;
+	Tue,  9 Jul 2024 13:59:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TmPGTSwh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMBqYN+u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04FBA16D4C8
-	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 13:36:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03449156238;
+	Tue,  9 Jul 2024 13:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720532209; cv=none; b=pNJF74smb21r9ZHb9Y/0FMFKTPTe6/zP4QqeOXebaBE5OBEkeq8gCRvqD2VCrShlFWLLJ6XcHKbUdy7XquUwcm/I3qZFpp1N1N4S1mUIjkBB9J1mqYqf3YUKHE+iaaq2dr4hMWecFWoyfEK76/Nz2kmvYnitz4YYC4Igi5n/AH0=
+	t=1720533558; cv=none; b=RKUbZauoGGW8FSckwhRb83B3UWNbeBEbVdQF2HVxIl9UnJU23ZCc/WeUekGQV+3YIDFO5dSfJZXJvkuu3ENw5jog+tOR0Ago34V1t/5aGrFwF5hAxcOBtU+cNmfKXrT16K7fieGiTU9sPm1dL4g2OZzV6NgSmkUdutAsb4u7bvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720532209; c=relaxed/simple;
-	bh=Onc/w0W8oRYcL0nlkLqAaGGC05n10oVyNR6/WGfjgEY=;
+	s=arc-20240116; t=1720533558; c=relaxed/simple;
+	bh=lOu/lBsHlc0T260klipFJ3eC1pkfxWiSQhwcmOXWsVc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iJ5wDBNcGh8ssHMqIxtJQGZ8Yn6BrCY4El2vs9/tixemdfiyD/xIA6/jHmi7x8ZqxlsUlvBfDfWU7vD1xfMIZ/sRP5JOHe8D9JscqKxgIXnjQt8x33ha4g/CIvaPJknsJazmsEBniSZP9ytzBvBr/o2/Nh+IHN70VVbSYFUDEsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TmPGTSwh; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-447e2d719afso18282111cf.0
-        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 06:36:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720532207; x=1721137007; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Onc/w0W8oRYcL0nlkLqAaGGC05n10oVyNR6/WGfjgEY=;
-        b=TmPGTSwhhyAV4cjd0l1IUaQCuEk9eNBsPGO2/hVROmb0jF1uGQEbKKMi/IExfHZRs+
-         BYJrdSo/IvcQeM/XnO3mDS0TEgYnbzY3vVFGeVAMSqKhjjki5MT2Gum/VMeF3NHRi001
-         owG9Cs86Mq/llplhxSzo4ScOBpMNxIQtsbmPD/PSikxaNaY7Hmkx7riojYzVVFQoemK7
-         N+jsW7uhwsnjrlnbCc6Nzrr5aayCvc/TaoV+BlnmcxOgqmB0d1No6uYdschNvdKkla8i
-         VnXEaSo4cTEjtGS39p+otkeJybimHdc/T1fvDDCQFYEim1LSKY7Du8bWz6zs0dVt4ZPC
-         a0vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720532207; x=1721137007;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Onc/w0W8oRYcL0nlkLqAaGGC05n10oVyNR6/WGfjgEY=;
-        b=rUy05Gn4qMsJz2Lbj77JR+requZXAmxltB19BVfU0DtxuRVLDwAmR9y7Ny/DXwgndH
-         GUlHZUe2JmwIApAaOJLDqXv9+qkZby5awpqptO8UhYnM2WmrmbFWV0TYoZyalGsw12/k
-         X+HNCFyFGKYw0xT/oOu5IOFkrZrGcuCx2nh5jiyYV5ndYnE8hJMreDyv98dL39dyyP53
-         ETks+pPwep9QTh6cf4v99aLWjQTQ1PPKmaCIb3UOxxJhRRllR4CYMpxA/IGzRnHxsgrP
-         AW/XZCfRVmqBKFivTp+nLr0TKwebf32x6OipZDgBKDR1Cos7yQDUUXqYqkeaTx3BS0lY
-         aWQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXez/iTRvaL2xxsMkeICcLrWK+zL4TjVZ88q6277ZacW06DPkpXkuA2VQffbPxk5xwG1fp9q+qRnAovMQB/w0ixKk4C7rwGpUs=
-X-Gm-Message-State: AOJu0YyYdAFqhFURgG3tPoTY5JoE1OAKaeatcRvKFEmnSYrjPVjIRa7P
-	8+TQ8NrCI6llhjgk76HL16qpgMTr2kgRcD2vKJHztYamOxZWfVARXR2AodERawlBijPFBZAVbqQ
-	YbPsv8bLOLp8g2BM/Zv9TgU7p2+OvrazGGBpVqA==
-X-Google-Smtp-Source: AGHT+IFbY6+qvqocJnF91c8cRGW6w2sl4YtsuoGZuQkrm2HWP2P7YQnkbM6czb/WQ8nm2/0yW0zSzCFDvYSYvR4R3Sg=
-X-Received: by 2002:ac8:73d6:0:b0:447:e591:2d27 with SMTP id
- d75a77b69052e-447fc364793mr29602491cf.6.1720532206879; Tue, 09 Jul 2024
- 06:36:46 -0700 (PDT)
+	 To:Cc:Content-Type; b=DefYaAggZ2odaY+zuIYmsTmGcqk91GNdgl4+Hm6F3f7VL66noiUxRE3riGtI2yXyeT2nf1/dNdVjNu5LYr1IbOTeIU1zkoVR+OOKih00Lim10iYLke92g7EGhmwv9cPZdwxLdcXWxVcWvz9N1D3xEvo0tknOMDaUj5f8zDpo/hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OMBqYN+u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EADAC3277B;
+	Tue,  9 Jul 2024 13:59:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720533557;
+	bh=lOu/lBsHlc0T260klipFJ3eC1pkfxWiSQhwcmOXWsVc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OMBqYN+uslxW2al/s9+gRrrahqmKqVwbxAMJYDtN8CWX81snbPwX15dfdtn8Pz0Bb
+	 +IovT5mqe8Psr+vz6GaBBc8o9RtQfYU6M4S+2Gx+NUUbpGA/HK3Z8knXugNYi3p6+U
+	 78qpneNgjjFgQAu76HOpnjtMqWno1vSL98EX4VAp2LPz4j5pT0E+/44KPIi32WwZPu
+	 tjNTXmY9EyO8A+MLcG62SSxJozhu8leZy8nJpLXGcyGV7LP2vcOGKrl4bJWU0XsFYT
+	 kF6bpZbhgYDo9J/AqwU/6ppB7azQQTD2wdfdk7DA15FIUWikczGZ3sHsmu1spFGXbn
+	 HqYrIHjyJ7isQ==
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ee9b098bd5so44988711fa.0;
+        Tue, 09 Jul 2024 06:59:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVAyEeb3sQHe3oJ3e/h9Hpw32fiOTPSOrfTy1gBySlhPuLQIrxAcKGou+f3N8RhC6dSlW1TbZr/WaSTtYwVSW0yA0Bd95WCcCL4CK9vUiPNHs79Alv1aSqynoCAnJuim8sZ79biPjHwtrMf/xYLXbDL7XaGaK/k+QjkJJF3dosurXNjoxqf1jlqOcTKtAzowJIqVFsTfSloEk1YQ/5sfayaci55XynoHRgJZLSdvk/6uEMFJoRkIO9kOFXzn0YMwokp/gE/SPwe68xfZ1Knvuu1tEWOvjNTSBRlA6hmQPA1CHNbYrHsmJ5tKYTokTVps0yyPgtV3FsdzbxtuvFQheeB22Aucckz3nVmK4Jj1vyxzSNdd7l1c6C9arHDmaa2v9RjyzopJkkJ9A31zBLazXbRXmEInLmRjSJQOAHjQ7WkUeheBxoZJXjVGdKJhWArkIoT57bF2cE+IfXtl6grsDhd52hqL6MLcSPnQGvEIONu256ION0jlth4VqCRMPJ3tnXgNoQnj3gBe6LV9M/wmppRCHK+3MVmrg==
+X-Gm-Message-State: AOJu0YytM8xAoMl+LSShIku3CScUPdwzUdVwjr7hpEkoc7pu7XvpMzYY
+	acQDuA8rlt2xadE9VxfjhCjQzB1gIrvVYn4SW6ig3Eo35qjs9bPA/uXCXY3BL+r5Z3DtejIW//0
+	8Oi9f1cvz5Z7ZCUn3Yv0ICrjbHg==
+X-Google-Smtp-Source: AGHT+IGMENhIgXoK8usdNd4oA5p2Oya5uy5180V2zPL6MX5LWDNpdwwwQ6+gVbUVi74o5Dj052FJFnlAxOODOirsQJA=
+X-Received: by 2002:a05:6512:3c8c:b0:52e:9951:7881 with SMTP id
+ 2adb3069b0e04-52eb99d20b8mr2282487e87.52.1720533535249; Tue, 09 Jul 2024
+ 06:58:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240619031250.2936087-1-tj@kernel.org> <20240619031250.2936087-3-tj@kernel.org>
- <ZnM2ywDVRZbrN6OC@slm.duckdns.org> <CAKfTPtBPObGdcaQF5nKqr4042f-+5obTMm_S6S+=3_Ct33ZMyw@mail.gmail.com>
- <Zog5-Yd5wV0-Y76y@slm.duckdns.org> <CAKfTPtDeA4OTPJmEHd-wKToYwDVizcny-_qxEuDUA-OcaVm2Uw@mail.gmail.com>
- <ZonzAdyd6zb2Sm06@slm.duckdns.org> <CAKfTPtDE2rWbRouf8zRyM3UpTfK1k_xrWmvAs-zfoRZqM3zGsw@mail.gmail.com>
- <Zowt7pVWFB-Of-me@slm.duckdns.org> <CAKfTPtB=77c-RsJ23suNZVf7qByeGSjYQJbiEU4JpXU6DezNLQ@mail.gmail.com>
- <ZoxVZPCrWokjfmFY@slm.duckdns.org>
-In-Reply-To: <ZoxVZPCrWokjfmFY@slm.duckdns.org>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Tue, 9 Jul 2024 15:36:34 +0200
-Message-ID: <CAKfTPtAjFvOPByPyeAURN3gw0yp8ByVmpa99_dGEZiTGw_Fawg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] sched_ext: Add cpuperf support
-To: Tejun Heo <tj@kernel.org>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
-	void@manifault.com, linux-kernel@vger.kernel.org, kernel-team@meta.com, 
-	mingo@redhat.com, peterz@infradead.org, David Vernet <dvernet@meta.com>, 
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
+ <CAHp75VfSC9gAD9ipeWRPdQOxUp4FXqYYei-cJTs38nbz0cHpkg@mail.gmail.com>
+ <48c242838c77034485a9e667dc0e867207c5beed.camel@maquefel.me>
+ <241a4cf9830b0118f01e8fcf2853c62527636049.camel@maquefel.me> <jyvlqfvqn5bp3jmvxvwyrcqmihjohuq3o757mfph7x37kbwvtq@gtgyh4fca4fq>
+In-Reply-To: <jyvlqfvqn5bp3jmvxvwyrcqmihjohuq3o757mfph7x37kbwvtq@gtgyh4fca4fq>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Tue, 9 Jul 2024 07:58:42 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+9Jk90HovH8bwzgCHwwh9j4mBm_Aaiq+EOj1HT3R17_Q@mail.gmail.com>
+Message-ID: <CAL_Jsq+9Jk90HovH8bwzgCHwwh9j4mBm_Aaiq+EOj1HT3R17_Q@mail.gmail.com>
+Subject: Re: [PATCH v10 00/38] ep93xx device tree conversion
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Nikita Shubin <nikita.shubin@maquefel.me>, Andy Shevchenko <andy.shevchenko@gmail.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>, 
+	Hartley Sweeten <hsweeten@visionengravers.com>, 
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Sebastian Reichel <sre@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Thierry Reding <thierry.reding@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, 
+	Sergey Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Ralf Baechle <ralf@linux-mips.org>, "Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, 
+	Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-spi@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-sound@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Vinod Koul <vkoul@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 8 Jul 2024 at 23:09, Tejun Heo <tj@kernel.org> wrote:
+On Fri, Jul 5, 2024 at 3:21=E2=80=AFAM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@baylibre.com> wrote:
 >
-> Hello, Vincent.
+> Hello,
 >
-> On Mon, Jul 08, 2024 at 09:51:08PM +0200, Vincent Guittot wrote:
-> > > Unless we add a WARN_ON_ONCE, if it doesn't behave as expected, the end
-> > > result will most likely be cpufreq sometimes picking a higher freq than
-> > > requested, which won't be the easiest to notice. Would you be against adding
-> > > WARN_ON_ONCE(scx_switched_all && !util) too?
+> On Thu, Jun 27, 2024 at 11:29:44AM +0300, Nikita Shubin wrote:
+> > On Tue, 2024-06-18 at 19:20 +0300, Nikita Shubin wrote:
+> > > Hello Andy!
+> > > On Mon, 2024-06-17 at 12:58 +0200, Andy Shevchenko wrote:
+> > > > On Mon, Jun 17, 2024 at 11:38=E2=80=AFAM Nikita Shubin via B4 Relay
+> > > > <devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
+> > > > >
+> > > > > The goal is to recieve ACKs for all patches in series to merge it
+> > > > > via Arnd branch.
+> > > >
+> > > > 'receive'
+> > > >
+> > > > > Unfortunately, CLK subsystem suddenly went silent on clk portion
+> > > > > of
+> > > > > series V2 reroll,
+> > > > > tried to ping them for about a month but no luck.
+> > > > >
+> > > > > Link:
+> > > > > https://lore.kernel.org/r/20240408-ep93xx-clk-v2-1-adcd68c13753@m=
+aquefel.me
+> > > > >
+> > > > > Some changes since last version (v9) - see "Changes in v10",
+> > > > > mostly
+> > > > > cosmetic.
+> > > >
+> > > > ...
+> > > >
+> > > > > Patches should be formated with '--histogram'
+> > > >
+> > > > 'formatted'
+> > > >
+> > > > ...
+> > > >
+> > > > > Changes in v10:
+> > > > >
+> > > > > Reordered SoB tags to make sure they appear before Rb and Acked
+> > > > > tags.
+> > > >
+> > > > This is not required. The importance is only the order of SoBs
+> > > > themselves. If they are interleaved with other tags, it's fine.
+> > >
+> > > Ah - ok. Just saw someone was complaining about b4 reordering them.
+> > >
+> > > >
+> > > > ...
+> > > >
+> > > >
+> > > > Hopefully to see this series being eventually applied soon.
+> > > > Arnd? (Do we have all necessary subsystem maintainers' tags, btw?)
+> > > >
+> > > >
+> > >
+> > > As i see from my perspective only three left:
+> > >
+> > > Clk subsystem:
+> > >
+> > > - clk: ep93xx: add DT support for Cirrus EP93xx
+> > >
+> > > DMA subsystem (but the only request from Vinod, as far as i remember,
+> > > was fixing commits titles):
+> > >
+> > > - dmaengine: cirrus: Convert to DT for Cirrus EP93xx
+> > > - dmaengine: cirrus: remove platform code
+> > >
+> > > Beside that tags missing on platform code removal (which can be Acked
+> > > by Arnd himself i believe) and dtsi/dts files (same ?).
 > >
-> > A WARN_ON_ONCE to detect misbehavior would be ok
+> > Vinod acked the above two patches:
+> >
+> > https://lore.kernel.org/all/ZnkIp8bOcZK3yVKP@matsya/
+> > https://lore.kernel.org/all/ZnkImp8BtTdxl7O3@matsya/
+> >
+> > so only:
+> >
+> > - clk: ep93xx: add DT support for Cirrus EP93xx
+> >
+> > https://lore.kernel.org/all/20240617-ep93xx-v10-3-662e640ed811@maquefel=
+.me/
+> >
+> > left.
+> >
+> > Hope Stephen will find some time for this one.
 >
-> I tried this and it's a bit problematic. Migrating out all the tasks do
-> bring the numbers pretty close to zero but the math doesn't work out exactly
-> and it often leaves 1 in the averages. While the fair class is in use, they
+> As we're approaching the merge window and this is still unclear, I
+> applied the pwm bits (i.e. patches 12, 13). If I understand correctly,
+> patch 33 isn't suitable for application yet as it has a dependency on
+> pinctrl changes in that series.
 
-hmm interesting, such remaining small value could be expected for
-load_avg but not with util_avg which is normally a direct propagation.
-Do you have a sequence in particular ?
+Now causing an error in linux-next:
 
-> would decay quickly through __update_blocked_fair(); however, when all tasks
-> are switched to sched_ext, that function doesn't get called and the
-> remaining small value never decays.
->
-> Now, the value being really low, it doesn't really matter but it's an
-> unnecessary complication. I can make sched_ext keep calling
-> __update_blocked_fair() in addition to update_other_load_avgs() to decay
-> fair's averages but that seems a lot more complicated than having one
-> scx_switched_all() test.
->
-> Thanks.
->
-> --
-> tejun
+Documentation/devicetree/bindings/pwm/cirrus,ep9301-pwm.example.dts:18:18:
+fatal error: dt-bindings/clock/cirrus,ep9301-syscon.h: No such file or
+directory
+   18 |         #include <dt-bindings/clock/cirrus,ep9301-syscon.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [scripts/Makefile.lib:442:
+Documentation/devicetree/bindings/pwm/cirrus,ep9301-pwm.example.dtb]
+Error 1
 
