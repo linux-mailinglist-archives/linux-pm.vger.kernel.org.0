@@ -1,273 +1,126 @@
-Return-Path: <linux-pm+bounces-10889-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10890-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A1BF92BF24
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 18:08:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84DB992C18A
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 19:02:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F34FBB2712E
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 16:08:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AA4E1F23584
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 17:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3373A19F469;
-	Tue,  9 Jul 2024 16:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AB461AD9EC;
+	Tue,  9 Jul 2024 16:31:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cXIyipxv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lEV8ZWwO"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A56B19F461;
-	Tue,  9 Jul 2024 16:06:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330DA41C6D;
+	Tue,  9 Jul 2024 16:30:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720541213; cv=none; b=kiODDIKuowPWPGPZOdwHfUbJIpcnhJDE6WCgZv6doLCLZdk0S5tlaI0Cced38/UszOQXHLudNVtrC3BrUb7wYDdXQIMCFpiGfEvuvaNV244t6aZ4y97FJz0I3r/CqDl/8NZIhHvyv6IS+tr3MFeKXD6W5oNKI4jWGdDFbrB9oTM=
+	t=1720542660; cv=none; b=fMB37sfpfEDxmXKhu08cdHpN7kKM37iWCI5M11SzAmp9Kbuu38N27TQOpg3q59aQJUwQpoH86womQv8tsNFq5OQJTF2EmnkqRLtwYX+xy15Vu2iEI/XuD/ZpkLnPQPPBTGOqOj9MuSpdrtd8nvAi9IkDc+2WqrZCHQbjun0a1gQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720541213; c=relaxed/simple;
-	bh=CC2PHQNnrsdYgFYaV6OamdCWY/YV/JF9+Qkm60FkWTM=;
+	s=arc-20240116; t=1720542660; c=relaxed/simple;
+	bh=aZ0XXr0nDnQLLxUcNF9UReVDz1vfMZZfSrVsx0gtJVg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AXTHRsjhbNjvfCH4hOUx0p0yNi+jasi7rrITGVdFXQulsIPXKSHCw0L/BKzmf1vOymRuWjxzv1L0biOWt4wIm8a9mNd9a9AtroXsy45YmdTVYKsBY38MYaXrMhjVs/28JlEvsRLnnV5Ms4Ju+oP1w77ndUY6HKAx5Lr6OGSbCW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cXIyipxv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96083C3277B;
-	Tue,  9 Jul 2024 16:06:52 +0000 (UTC)
+	 To:Cc:Content-Type; b=RSlSSITLHGoH4jsMgQ+fJqcNdAwrvhQplN4K4ecVJJJjCrwgPSSknGStKVRf6/RIlddrfbq0d9aunUQekUXR5eevq+yPq9C1pqQE8O/r59a4PsaN9CDkrVusaEEqmmVJRLwqIa4Nhss/JO/qTkNUh4xBgboXDrDFRlMVpugO5iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lEV8ZWwO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C09E6C32782;
+	Tue,  9 Jul 2024 16:30:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720541212;
-	bh=CC2PHQNnrsdYgFYaV6OamdCWY/YV/JF9+Qkm60FkWTM=;
+	s=k20201202; t=1720542659;
+	bh=aZ0XXr0nDnQLLxUcNF9UReVDz1vfMZZfSrVsx0gtJVg=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cXIyipxv1ymkxMtR9Mf1qaTzVQ4H57kdVUmNyJLKn8fq8Xq0fpLs3LEx/NRaMh+S+
-	 A3r5nTaBKBdndAXz5A4dtKWCIrdzumsifF9AlSsfwKHbJGLY9Z1EXLTN5k0kpNlNaR
-	 BU0NKE//YStAqDboENA4Vt4eHIxUGTmzM+lIMtbGo8hMQUWXLhDZdV6y5RIBPHSRNv
-	 6esWX+gFcDD7CumrbfBy9XZE/5xjMN7FYlZPpzihNyfqidpshcUFQjTUjOong30V/v
-	 rHVdrzgVNr/ScNQLeJpv27JXTuay6yjsRzWwITsaC/GoenSHyb5wk9yWePwAPAz03J
-	 W0TOy8q7NkuZQ==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-25e14bf05e5so199615fac.1;
-        Tue, 09 Jul 2024 09:06:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUUZV776I2PuZqgGXST6QjkXmaYdr2hgErLDG/45iyPZyrYtNZw5cO2pzeODZstoMi/OBtB9l5Bja5WYUG3xV7fQRNHkDkfd7ZvGu512XbhfTpRNBFshRnTL9iLW/cGST4=
-X-Gm-Message-State: AOJu0YwCTsnjgSktxnyzqOXXVs4lz9bnc9bKRDLgfol7hhuN4tRWmTsl
-	RDjk9LlE/vidg0Z0VjT1Zb475JC58s554jDky5tJu+ieyMbhoAH+6hSOHPPBSX3/A4VzxYJZJvA
-	ReKwqd8kuTpMioKKTLt0iXwV9xcE=
-X-Google-Smtp-Source: AGHT+IFqiW5QZHZ9ZUza/Bt2hsVzHJKzpK259ONyXwKp9f5S4cEObEvF7s+/kF8vvJ1iTZfp8Qop48dz9aT1ch/wwcU=
-X-Received: by 2002:a05:6871:24da:b0:25e:2624:eb5f with SMTP id
- 586e51a60fabf-25eae764acbmr2293933fac.1.1720541211853; Tue, 09 Jul 2024
- 09:06:51 -0700 (PDT)
+	b=lEV8ZWwOqa2+hjsQS8bf4Nx3aKCxGtFwb2epTvrNk88QN0p7jh6gPE0Yjb8RpHAvM
+	 EHw9y8D6EyhphynGMwsQB+8XUzlCPM+EWdNW1ZLqsSn3uXewCeNwNAmcMz70xsJqZY
+	 ZJDJDjyXp8lTHif1ObB1VVF7iGxazSzZoljAZQXeObNh1+Df8uDAm1SZdt+J6OedQ+
+	 t8rJJhEpggK+ehdsJHWXmOZ6Z7dieAQs8rAzRVFqBQ7fH19nFLZmiLcL9e08XsQh9T
+	 klCbUvBFKYAs7qd4gqzqe6Rbd0U/Kk+ghwBmg/tyhOZ418RzRikBSXqMdtwOrZHeJ1
+	 6QNo6WGwVdZyA==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-25e14bf05e5so202684fac.1;
+        Tue, 09 Jul 2024 09:30:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU1BPUth0zOSmv6BtaqcG+P+zXcwX66qfRltKLhoYAsmrvFo7iEqWYpK+ILGqxYz5FJJ7JscXVbX6man8nbPqm7PjRZhLI7FUURbWxds2qk0l9ImgTVftxR3AyVfAUjW4pj0WIMKg8=
+X-Gm-Message-State: AOJu0YzMDvoo2QRDRe2xkjynmdMBL1aPFjpmbfPUH5eHE+07Pv23+Dup
+	N43PbpbB/uK+DfAHwO7w7OuF3q6zU1koQKnamLXvlwClYGggwAcQz7g1aBFKShMHAi4p6PhI8u3
+	ce6jv7bxe+G39mW1kd3VhcmO1PGk=
+X-Google-Smtp-Source: AGHT+IFg4SGPhvte9A3/r95e5Z76zMscbdv+0BmKg1Frjs8YNDDKJG7v4RzwM/VDlXhKkuThdheXwyeWn/39T483/SA=
+X-Received: by 2002:a05:6871:24d5:b0:254:ecbd:1815 with SMTP id
+ 586e51a60fabf-25eaece08f4mr2668644fac.5.1720542659073; Tue, 09 Jul 2024
+ 09:30:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1719849427.git.petrm@nvidia.com> <a9b97ecf80c722b42eceac1800f78ba57027af48.1719849427.git.petrm@nvidia.com>
-In-Reply-To: <a9b97ecf80c722b42eceac1800f78ba57027af48.1719849427.git.petrm@nvidia.com>
+References: <20240703055445.125362-1-rui.zhang@intel.com> <CAJZ5v0gVFPNK=_=Tnr0QJ-yBWfSWc+wuJrE079Fz+Ba1P57TmA@mail.gmail.com>
+ <20240709021917.GA1891@ranerica-svr.sc.intel.com>
+In-Reply-To: <20240709021917.GA1891@ranerica-svr.sc.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 9 Jul 2024 18:06:40 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hAN0Csd6Qnc=2hNGafpbEGRVGX41LC8qrmUkoCk=whrw@mail.gmail.com>
-Message-ID: <CAJZ5v0hAN0Csd6Qnc=2hNGafpbEGRVGX41LC8qrmUkoCk=whrw@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/3] mlxsw: core_thermal: Report valid current
- state during cooling device registration
-To: Petr Machata <petrm@nvidia.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
-	Ido Schimmel <idosch@nvidia.com>, mlxsw@nvidia.com, linux-pm@vger.kernel.org, 
-	Vadim Pasternak <vadimp@nvidia.com>
+Date: Tue, 9 Jul 2024 18:30:47 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jTfayK6GbiQWYOVt7OxxyzcFduCiGgNEVNodmoC==88w@mail.gmail.com>
+Message-ID: <CAJZ5v0jTfayK6GbiQWYOVt7OxxyzcFduCiGgNEVNodmoC==88w@mail.gmail.com>
+Subject: Re: [PATCH] Thermal: intel: hfi: Give HFI instances package scope
+To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, rafael.j.wysocki@intel.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 1, 2024 at 6:45=E2=80=AFPM Petr Machata <petrm@nvidia.com> wrot=
-e:
+On Tue, Jul 9, 2024 at 4:13=E2=80=AFAM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
 >
-> From: Ido Schimmel <idosch@nvidia.com>
+> On Wed, Jul 03, 2024 at 01:33:03PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Jul 3, 2024 at 7:55=E2=80=AFAM Zhang Rui <rui.zhang@intel.com> =
+wrote:
+> > >
+> > > The Intel Software Developer's Manual defines the scope of HFI (regis=
+ters
+> > > and memory buffer) as package. Use package scope* in the software
+> >
+> > "as a package"
+> >
+> > > representation of an HFI instance.
+> > >
+> > > Using die scope in HFI instances has the effect of creating multiple,
+> > > conflicting, instances for the same package: each instance allocates =
+its
+> > > own memory buffer and configures the same package-level registers.
+> > > Specifically, only one of the allocated memory buffers can be set in =
+the
+> > > MSR_IA32_HW_FEEDBACK_PTR register. CPUs get incorrect HFI data from t=
+he
+> > > table.
+> > >
+> > > The problem does not affect current HFI-capable platforms because the=
+y
+> > > all have single-die processors.
+> > >
+> > > * We used die scope for HFI instances because there have been process=
+ors
+> > > in which packages where enumerated as dies. None of those systems sup=
+port
+> >
+> > "were"
+> >
+> > > HFI. If such a system emerged we would need to quirk it.
+> > >
+> > > Co-developed-by: Chen Yu <yu.c.chen@intel.com>
+> > > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> >
+> > Ricardo, any concerns?
 >
-> Commit 31a0fa0019b0 ("thermal/debugfs: Pass cooling device state to
-> thermal_debug_cdev_add()") changed the thermal core to read the current
-> state of the cooling device as part of the cooling device's
-> registration. This is incompatible with the current implementation of
-> the cooling device operations in mlxsw, leading to initialization
-> failure with errors such as:
+> No concerns. IMO, it is important to document why we were using die scope
+> before. Rui has done it.
 >
-> mlxsw_spectrum 0000:01:00.0: Failed to register cooling device
-> mlxsw_spectrum 0000:01:00.0: cannot register bus device
+> This patch looks good to me.
 >
-> The reason for the failure is that when the get current state operation
-> is invoked the driver tries to derive the index of the cooling device by
-> walking a per thermal zone array and looking for the matching cooling
-> device pointer. However, the pointer is returned from the registration
-> function and therefore only set in the array after the registration.
->
-> The issue was later fixed by commit 1af89dedc8a5 ("thermal: core: Do not
-> fail cdev registration because of invalid initial state") by not failing
-> the registration of the cooling device if it cannot report a valid
-> current state during registration, although drivers are responsible for
-> ensuring that this will not happen.
->
-> Therefore, make sure the driver is able to report a valid current state
-> for the cooling device during registration by passing to the
-> registration function a per cooling device private data that already has
-> the cooling device index populated.
->
-> Cc: linux-pm@vger.kernel.org
-> Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
-> Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-> Signed-off-by: Petr Machata <petrm@nvidia.com>
+> FWIW, Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-
-> ---
->  .../ethernet/mellanox/mlxsw/core_thermal.c    | 50 ++++++++++---------
->  1 file changed, 26 insertions(+), 24 deletions(-)
->
-> diff --git a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c b/drivers=
-/net/ethernet/mellanox/mlxsw/core_thermal.c
-> index 5c511e1a8efa..eee3e37983ca 100644
-> --- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-> +++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-> @@ -100,6 +100,12 @@ static const struct mlxsw_cooling_states default_coo=
-ling_states[] =3D {
->
->  struct mlxsw_thermal;
->
-> +struct mlxsw_thermal_cooling_device {
-> +       struct mlxsw_thermal *thermal;
-> +       struct thermal_cooling_device *cdev;
-> +       unsigned int idx;
-> +};
-> +
->  struct mlxsw_thermal_module {
->         struct mlxsw_thermal *parent;
->         struct thermal_zone_device *tzdev;
-> @@ -123,7 +129,7 @@ struct mlxsw_thermal {
->         const struct mlxsw_bus_info *bus_info;
->         struct thermal_zone_device *tzdev;
->         int polling_delay;
-> -       struct thermal_cooling_device *cdevs[MLXSW_MFCR_PWMS_MAX];
-> +       struct mlxsw_thermal_cooling_device cdevs[MLXSW_MFCR_PWMS_MAX];
->         struct thermal_trip trips[MLXSW_THERMAL_NUM_TRIPS];
->         struct mlxsw_cooling_states cooling_states[MLXSW_THERMAL_NUM_TRIP=
-S];
->         struct mlxsw_thermal_area line_cards[];
-> @@ -147,7 +153,7 @@ static int mlxsw_get_cooling_device_idx(struct mlxsw_=
-thermal *thermal,
->         int i;
->
->         for (i =3D 0; i < MLXSW_MFCR_PWMS_MAX; i++)
-> -               if (thermal->cdevs[i] =3D=3D cdev)
-> +               if (thermal->cdevs[i].cdev =3D=3D cdev)
->                         return i;
->
->         /* Allow mlxsw thermal zone binding to an external cooling device=
- */
-> @@ -352,17 +358,14 @@ static int mlxsw_thermal_get_cur_state(struct therm=
-al_cooling_device *cdev,
->                                        unsigned long *p_state)
->
->  {
-> -       struct mlxsw_thermal *thermal =3D cdev->devdata;
-> +       struct mlxsw_thermal_cooling_device *mlxsw_cdev =3D cdev->devdata=
-;
-> +       struct mlxsw_thermal *thermal =3D mlxsw_cdev->thermal;
->         struct device *dev =3D thermal->bus_info->dev;
->         char mfsc_pl[MLXSW_REG_MFSC_LEN];
-> -       int err, idx;
->         u8 duty;
-> +       int err;
->
-> -       idx =3D mlxsw_get_cooling_device_idx(thermal, cdev);
-> -       if (idx < 0)
-> -               return idx;
-> -
-> -       mlxsw_reg_mfsc_pack(mfsc_pl, idx, 0);
-> +       mlxsw_reg_mfsc_pack(mfsc_pl, mlxsw_cdev->idx, 0);
->         err =3D mlxsw_reg_query(thermal->core, MLXSW_REG(mfsc), mfsc_pl);
->         if (err) {
->                 dev_err(dev, "Failed to query PWM duty\n");
-> @@ -378,22 +381,19 @@ static int mlxsw_thermal_set_cur_state(struct therm=
-al_cooling_device *cdev,
->                                        unsigned long state)
->
->  {
-> -       struct mlxsw_thermal *thermal =3D cdev->devdata;
-> +       struct mlxsw_thermal_cooling_device *mlxsw_cdev =3D cdev->devdata=
-;
-> +       struct mlxsw_thermal *thermal =3D mlxsw_cdev->thermal;
->         struct device *dev =3D thermal->bus_info->dev;
->         char mfsc_pl[MLXSW_REG_MFSC_LEN];
-> -       int idx;
->         int err;
->
->         if (state > MLXSW_THERMAL_MAX_STATE)
->                 return -EINVAL;
->
-> -       idx =3D mlxsw_get_cooling_device_idx(thermal, cdev);
-> -       if (idx < 0)
-> -               return idx;
-> -
->         /* Normalize the state to the valid speed range. */
->         state =3D max_t(unsigned long, MLXSW_THERMAL_MIN_STATE, state);
-> -       mlxsw_reg_mfsc_pack(mfsc_pl, idx, mlxsw_state_to_duty(state));
-> +       mlxsw_reg_mfsc_pack(mfsc_pl, mlxsw_cdev->idx,
-> +                           mlxsw_state_to_duty(state));
->         err =3D mlxsw_reg_write(thermal->core, MLXSW_REG(mfsc), mfsc_pl);
->         if (err) {
->                 dev_err(dev, "Failed to write PWM duty\n");
-> @@ -753,17 +753,21 @@ int mlxsw_thermal_init(struct mlxsw_core *core,
->         }
->         for (i =3D 0; i < MLXSW_MFCR_PWMS_MAX; i++) {
->                 if (pwm_active & BIT(i)) {
-> +                       struct mlxsw_thermal_cooling_device *mlxsw_cdev;
->                         struct thermal_cooling_device *cdev;
->
-> +                       mlxsw_cdev =3D &thermal->cdevs[i];
-> +                       mlxsw_cdev->thermal =3D thermal;
-> +                       mlxsw_cdev->idx =3D i;
->                         cdev =3D thermal_cooling_device_register("mlxsw_f=
-an",
-> -                                                              thermal,
-> +                                                              mlxsw_cdev=
-,
->                                                                &mlxsw_coo=
-ling_ops);
->                         if (IS_ERR(cdev)) {
->                                 err =3D PTR_ERR(cdev);
->                                 dev_err(dev, "Failed to register cooling =
-device\n");
->                                 goto err_thermal_cooling_device_register;
->                         }
-> -                       thermal->cdevs[i] =3D cdev;
-> +                       mlxsw_cdev->cdev =3D cdev;
->                 }
->         }
->
-> @@ -824,8 +828,8 @@ int mlxsw_thermal_init(struct mlxsw_core *core,
->  err_thermal_zone_device_register:
->  err_thermal_cooling_device_register:
->         for (i =3D 0; i < MLXSW_MFCR_PWMS_MAX; i++)
-> -               if (thermal->cdevs[i])
-> -                       thermal_cooling_device_unregister(thermal->cdevs[=
-i]);
-> +               if (thermal->cdevs[i].cdev)
-> +                       thermal_cooling_device_unregister(thermal->cdevs[=
-i].cdev);
->  err_reg_write:
->  err_reg_query:
->         kfree(thermal);
-> @@ -848,10 +852,8 @@ void mlxsw_thermal_fini(struct mlxsw_thermal *therma=
-l)
->         }
->
->         for (i =3D 0; i < MLXSW_MFCR_PWMS_MAX; i++) {
-> -               if (thermal->cdevs[i]) {
-> -                       thermal_cooling_device_unregister(thermal->cdevs[=
-i]);
-> -                       thermal->cdevs[i] =3D NULL;
-> -               }
-> +               if (thermal->cdevs[i].cdev)
-> +                       thermal_cooling_device_unregister(thermal->cdevs[=
-i].cdev);
->         }
->
->         kfree(thermal);
-> --
-> 2.45.0
->
->
+Applied as 6.11 material, thanks!
 
