@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-10894-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10895-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0402092C3C2
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 21:11:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 167E792C3C6
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 21:12:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3585E1C2193F
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 19:11:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7459283866
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 19:12:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 244B3182A58;
-	Tue,  9 Jul 2024 19:11:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CEFC182A52;
+	Tue,  9 Jul 2024 19:12:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n1xGWNKc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OTqL0wO7"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8F5182A4F;
-	Tue,  9 Jul 2024 19:11:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA39E180053;
+	Tue,  9 Jul 2024 19:12:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720552299; cv=none; b=GIrVnHNS99UbrkHk95oskKxrFqP5RXZyZ5UfHUAB80lvW/zL+w2+Tha7sT0KZtZi2EsHPwAki9QkaIPMse0iVgCnIJtWXdhnbkRlNfTqFB4XfxdGR9kSXjViQoWkR/P6Q15iohRePgga62chL9F/Sd/gaYneSSyE0LX6gpID7Uk=
+	t=1720552364; cv=none; b=eI8PRAC8Mgha+sQxsHMuXS/e3Xv3nx3NOtSKqSDelrv1bD1G/hZv1udb+g+Uqo5iApD7q+bJnHF7DJO9oIzJ20qjOCZBS/TSdHI0Uy0OQt64AfSxmvvMB0HnmwPZ928EoNvG/yL/bGqSYwaDsYzbe/oLuqjMG3IKPLyXRalTTHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720552299; c=relaxed/simple;
-	bh=YfjdhNm53xzOTj3Z9NufeiEhaRfrnE/93sBlKfwCkw4=;
+	s=arc-20240116; t=1720552364; c=relaxed/simple;
+	bh=jFCriMPf/fsY0JPkaXj8hV7KNOljgDzvKMA/4JhgyDQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ssflCCydaUIllixHKmmXWxB+yRpOKDM6PLrqHN90GRJg96ckuJ3+lYfV7KoDqER6H/qXDhorEB7axw6dzcOTPQom/6EgDsYI36K3N9f3n1tuOT+pu/CaMcZuyn+S6T3hduyN5iWL54pNepXVDenGU+8R/2rO7utBHhRNienn848=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n1xGWNKc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 719B9C3277B;
-	Tue,  9 Jul 2024 19:11:16 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=r3qWTrPF8FwsvipOfZ81fjVUo3gVlJx1B5w5CwYDO5BySxDanvr+/U4gZdM5iOWnT9EMDDBEip6Cqc5a4ztOaaq4G0XqxkualwduRBNi/bS3Oku9JNeklfspW8TfW4rHFy6aw9PuNlkBqs+n159Y/qlepXcuiPvro4MVC3IuJQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OTqL0wO7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D91AC3277B;
+	Tue,  9 Jul 2024 19:12:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720552298;
-	bh=YfjdhNm53xzOTj3Z9NufeiEhaRfrnE/93sBlKfwCkw4=;
+	s=k20201202; t=1720552364;
+	bh=jFCriMPf/fsY0JPkaXj8hV7KNOljgDzvKMA/4JhgyDQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=n1xGWNKcA3jQU1NvWSmP4Kgc5Fhvc9PnsEtPXzf9WTwI/TAbA3zBvxjfYcnQi174E
-	 mx3r7rc4t3WfrLaiyHH3wvPtsvPuevdkktak+O0VmRiz+7PPfbwjdDixiwyz/N6ViX
-	 fwlkc2tJ29nOrCsNBoNQYokiS6NGkoLpcgFdgm34q2LSZYu05snnCXAs1lAD4VkRET
-	 3PW8yIm8+3BzAIX7L9sSey+ghDBtY/HCxASy6TtYbJSGBmuNvCFDnCWktd5So5GaEi
-	 u2Tu6QQMiJaY2DBzRt6yIeOo93bmE/0hZfq1JUvzyyay2wxauzWJ7RD3J7kuX6I0Y7
-	 xed2SI43K/dCQ==
-Date: Tue, 9 Jul 2024 14:11:05 -0500
+	b=OTqL0wO70S01B4Yw9jpnkYrij+//yNXzYfuzKIpdryj5rINygOnaZsFkzXABBmtB/
+	 /3LyYBD3Y7OWvt9AVamfOySFv3tmhv/q/nk4iL7XTlaub4aZK71AhU1BjEoSlaI6fD
+	 kU7GtW3/jmA8aMGdfQqKZfpKlffz62R8oTEg+0uSnNI9d2jL8dDDl77mtJMAJVTGRr
+	 gQtj0+NTg6bpYMSu/BUmx0Sg/fqXH8glaDsOFfZCAvS7jjdpG5+3rvOQ5kz74EX8+n
+	 w3bUNXygr5LkiXRh/bdB7P0jjKD3OCNUHnbvbYAJ5glRqN3UGEiZ/YkiiY7JUbwaaF
+	 m3A+tPPLXOFdg==
+Date: Tue, 9 Jul 2024 14:12:16 -0500
 From: Bjorn Andersson <andersson@kernel.org>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
@@ -56,11 +56,11 @@ Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	linux-pm@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
 	imx@lists.linux.dev, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 09/12] thermal/drivers/qcom-spmi-adc-tm5: simplify with
+Subject: Re: [PATCH 10/12] thermal/drivers/qcom-tsens: simplify with
  dev_err_probe()
-Message-ID: <kytoekbx4t52dynndilmbham45ufvsnhbnel6vmjmn4iztdc3c@an4jnvq57gw7>
+Message-ID: <kiingkxvtdyuuyabn5acfsvpazolso6yvlsmzacxilos2jwanp@dsvceugddgep>
 References: <20240709-thermal-probe-v1-0-241644e2b6e0@linaro.org>
- <20240709-thermal-probe-v1-9-241644e2b6e0@linaro.org>
+ <20240709-thermal-probe-v1-10-241644e2b6e0@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -69,9 +69,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240709-thermal-probe-v1-9-241644e2b6e0@linaro.org>
+In-Reply-To: <20240709-thermal-probe-v1-10-241644e2b6e0@linaro.org>
 
-On Tue, Jul 09, 2024 at 02:59:39PM GMT, Krzysztof Kozlowski wrote:
+On Tue, Jul 09, 2024 at 02:59:40PM GMT, Krzysztof Kozlowski wrote:
 > Error handling in probe() can be a bit simpler with dev_err_probe().
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
@@ -82,29 +82,28 @@ Regards,
 Bjorn
 
 > ---
->  drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+>  drivers/thermal/qcom/tsens.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-> index 756ac6842ff9..7c9f4023babc 100644
-> --- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-> +++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-> @@ -829,12 +829,9 @@ static int adc_tm5_get_dt_channel_data(struct adc_tm5_chip *adc_tm,
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index e76e23026dc8..0b4421bf4785 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -1336,11 +1336,9 @@ static int tsens_probe(struct platform_device *pdev)
 >  
->  	channel->iio = devm_fwnode_iio_channel_get_by_name(adc_tm->dev,
->  							   of_fwnode_handle(node), NULL);
-> -	if (IS_ERR(channel->iio)) {
-> -		ret = PTR_ERR(channel->iio);
-> -		if (ret != -EPROBE_DEFER)
-> -			dev_err(dev, "%s: error getting channel: %d\n", name, ret);
-> -		return ret;
-> -	}
-> +	if (IS_ERR(channel->iio))
-> +		return dev_err_probe(dev, PTR_ERR(channel->iio), "%s: error getting channel\n",
-> +				     name);
+>  	if (priv->ops->calibrate) {
+>  		ret = priv->ops->calibrate(priv);
+> -		if (ret < 0) {
+> -			if (ret != -EPROBE_DEFER)
+> -				dev_err(dev, "%s: calibration failed\n", __func__);
+> -			return ret;
+> -		}
+> +		if (ret < 0)
+> +			return dev_err_probe(dev, ret, "%s: calibration failed\n",
+> +					     __func__);
+>  	}
 >  
->  	ret = of_property_read_u32_array(node, "qcom,pre-scaling", varr, 2);
->  	if (!ret) {
+>  	ret = tsens_register(priv);
 > 
 > -- 
 > 2.43.0
