@@ -1,212 +1,174 @@
-Return-Path: <linux-pm+bounces-10819-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10820-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4117692B184
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:49:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11B2192B22A
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 10:30:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 593501C216C8
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 07:49:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94ED91F222C2
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 08:30:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 041BD149C65;
-	Tue,  9 Jul 2024 07:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3851C152796;
+	Tue,  9 Jul 2024 08:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IwZgr6ze"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="a5dC9Xk1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632DBC148
-	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 07:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7114A12D75A;
+	Tue,  9 Jul 2024 08:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720511381; cv=none; b=KYiTvlOn7i+fcSsmNERKb2Su9d7q596lMzMhph/ra4NFEs/T7g7TkfORadxLAfZmAvvGpScr6LIcvYkNP3FxqRz2r7T1UkHGylJtR98cQipfhHjaszxW4usze5Ro7Wi9D4Q2/xWg8lN5faeKxSj+eE6TGQA3sOcEMJvl85J2z9I=
+	t=1720513830; cv=none; b=n4znXIH3uclPgyQob0VY5fghN5L0vWe58gpyF658a7W2inCVNCrH/3PeO/6i9/TeZGLIjr82xfC+eL0sq477i6CrPnv3AMyA6q8W07mikk0hEfKdEVeZg0kQjBKuPVRRjqStzbq2EQxMl8TneFn2A4N1N7pMmcWM9TBfP1rIp7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720511381; c=relaxed/simple;
-	bh=ORIDWCZW+nLVv0yi5atZdPkxAx4F0xQ2MBKeSXLwc1U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Hc3mQKNHY2gSPvkDfbTkxfrmnlWWGlL0WtwFMt5sZ1kkoKBBnlcMbOp1+y/DxoTnLBlrkdRGGPfrbBYSOGxtbZRM6v6UuKW+cSLuDmmvCd5U3LH/aRmRJgAjSL4VrYA+H6LbLvNBgo/25uh/TYgQg1QE6DhJBCR/4/dQTgu+SM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IwZgr6ze; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1fb1c918860so38551965ad.1
-        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 00:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720511380; x=1721116180; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=S7gQvlQ7nmc33EZc3TAmGWy4QTOZnTUv37897hEicL4=;
-        b=IwZgr6zeHIvBlBqaOL0cZP9tohiV3nrsP4Lkj32mDAN3ZvDN/ougRmM2EevlAzlrcs
-         NpPVjm2WXorkaOVZ+Qd+Y4Inq/yIdFTatl60rlNsCJGUcbjAbhNY4K2nY8PkN+zwoJ8W
-         QoLPpGxfoXn9kcJQrGf6g914J6OspIUGUHzz7X4fhNJzbMwMuWSkqYoRFIn4qOEk+0UW
-         7oD07TTk4a6ckV0lWqkyv+BVqeZujhdJawI6C9BUZbZLFljKU2m/xAuRuGHibCSDJA9D
-         x5zfmLtgvp9dLq7/NHuoNrgQ1eKJO0yKmvqNHRcRPP/vCWrUIrk2EJenDMngmn+1nNE/
-         GoDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720511380; x=1721116180;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S7gQvlQ7nmc33EZc3TAmGWy4QTOZnTUv37897hEicL4=;
-        b=WZolB3dP1HfFAfmWRRcG5mDYcbkhC6rL4oU3vP+RHpePWco4cQVYJWrrAZh6uOr7dR
-         CYJEikwCaxe5mIxJCNTF59IIK4szB9Quo4vSKvBLrdr6spmgSZtrLOlUVf+YmumJjoI+
-         hIgIcTiyghPH6QqeHQiCl909GYEDAb4NNQTwrvYJjuAoN7LuT/12zkhtLY9CEKuHGKnu
-         AiaqT1SGkNxtbuBnQbi1OSFl3VWJ+sbZFlKbpiWji7zk5WoZuUbvfj+UvDebDY57Bu2L
-         o0d0fMiDyzy28QavygSmFf+rRS4AyRVMYwUaEp7jO2HOCtmG+9VhKcaiFgbb+P0gFWsi
-         HcZw==
-X-Forwarded-Encrypted: i=1; AJvYcCVjgH1KOGcFqUmdagQQuCxienyh4OhAHTdGMmxaNxiDWYVhcVcLYtmB9KzaNh3myk/M6DNKEO6wOcupnQ7GqxTaXxL3Tc4qRwk=
-X-Gm-Message-State: AOJu0Yy02Y4bNn6hgq5ouzQ1zlXwuT+Df4sO01IRUi2sQP5Xwlxm/+6X
-	qgI5zpkzGhoxAZ7+nnOPdIy3lfky//vBtZ7MblaWIloxbJ+q9juDfjpiqyvpGRETdgn/1EulwYQ
-	FwfXCN/TOZTQzV3cY8CRlvgUsUu6vg2fRxmrezg==
-X-Google-Smtp-Source: AGHT+IFWbqCvJuj1LIc7RqlWDt4HZWrqbAM52x3de0fwb24xn3/Ksr8TOgjeS8qKRlF+fONP9MjMW4/IF6nKIgQmPPs=
-X-Received: by 2002:a17:90a:b313:b0:2c8:f3b5:7dd1 with SMTP id
- 98e67ed59e1d1-2ca3a7e6762mr2250952a91.16.1720511379662; Tue, 09 Jul 2024
- 00:49:39 -0700 (PDT)
+	s=arc-20240116; t=1720513830; c=relaxed/simple;
+	bh=vZko0zXObbnUfm5fUonCC4PkDMvlJpOGq/V0uKONUq8=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a/WfmYBxcjnK2fGLJrWzXMzk0UEmIhQ1r7rOSFvOtkVXE9k14QmcNneomnwZcl50V73842my8B50prLk8uOeC/r4wxU4FQra/PBeXsyZnHlpRWh0WnpiUJ7ynAZg+i+6Sk5mgZ0PoQEjRQndfhMrogyY+m8xtbkR2y6sxJXMBoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=a5dC9Xk1; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 468NitN4003666;
+	Tue, 9 Jul 2024 08:30:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=/Zy5mILeNBOv9xCjrLcyUBqI
+	7DnDFNjrOAIfm3ywjqk=; b=a5dC9Xk1Vw//BsDrD6ZCTikMyylswjGhCur0AQG/
+	A/AH6UZ9FrHt1+SIGjmvC4QVsXUPsg1M6oNCZOL93iN0M4sio8Ap7XTlo8gHMyoZ
+	PiAHk/ku36SWYl1Bwhhy64e2AgvmMfQGYoSyMwLjcedcWuD/Rxlyaw5P0FiegcXb
+	V2+WHmqp+zNTGecxqKbiDQ8idf7ZatNhKomgeLIojul1NkrscyH7fEOTZ6b+YDGx
+	LfOtox/M7ZQN+PCQlCWwpwcf95bG/SVkxhNwTh0dhfylmvsy8blUjDQbIhLOBz6q
+	IimA9fP5qrnNVERwPgRSCRmJpmcL84WhSjJGUzyNhm5lHg==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 406wgwns97-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Jul 2024 08:30:07 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4698U5AS021028
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 9 Jul 2024 08:30:05 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 9 Jul 2024 01:29:57 -0700
+Date: Tue, 9 Jul 2024 13:59:53 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: <vireshk@kernel.org>, <nm@ti.com>, <sboyd@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <ilia.lin@kernel.org>, <rafael@kernel.org>, <ulf.hansson@linaro.org>,
+        <quic_sibis@quicinc.com>, <quic_rjendra@quicinc.com>,
+        <quic_rohiagar@quicinc.com>, <abel.vesa@linaro.org>,
+        <otto.pflueger@abscue.de>, <danila@jiaxyga.com>,
+        <quic_ipkumar@quicinc.com>, <luca@z3ntu.xyz>,
+        <stephan.gerhold@kernkonzept.com>, <nks@flawful.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v4 01/10] soc: qcom: cpr3: Fix 'acc_desc' usage
+Message-ID: <Zoz1AQh+6jfbgJSy@hu-varada-blr.qualcomm.com>
+References: <20240703091651.2820236-1-quic_varada@quicinc.com>
+ <20240703091651.2820236-2-quic_varada@quicinc.com>
+ <u4hzxnecdyow6h4vhddcp53tuxrqhbqu6cv4cznytihsyshzy4@lqxhsn3qvjbz>
+ <ZoYsguLOCnZjxOku@hu-varada-blr.qualcomm.com>
+ <bsr6l33xllblwwoa3ftbldxvqwe6tcljt3ek2petoc4hc5xgsg@b36fw3wetj5f>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240619201409.2071728-1-qyousef@layalina.io> <f281ba07-d54a-460a-8f78-f7eb6bd8ed88@arm.com>
- <20240628015200.vw75huo53redgkzf@airbuntu> <d510f41a-1225-46d9-a2d7-ff9e6ff599d2@arm.com>
- <20240705002205.nnrgq7savzvsoqgl@airbuntu> <2e988929-142c-4e69-8e2e-2f3e64c9f08c@arm.com>
-In-Reply-To: <2e988929-142c-4e69-8e2e-2f3e64c9f08c@arm.com>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Tue, 9 Jul 2024 09:49:28 +0200
-Message-ID: <CAKfTPtD4og8CDZzVd-=o7agcchQe8Q6GMWgiz5bDfdAepnX9Wg@mail.gmail.com>
-Subject: Re: [PATCH v6] sched: Consolidate cpufreq updates
-To: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Qais Yousef <qyousef@layalina.io>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Ingo Molnar <mingo@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Daniel Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>, 
-	Christian Loehle <christian.loehle@arm.com>, Hongyan Xia <hongyan.xia2@arm.com>, 
-	John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <bsr6l33xllblwwoa3ftbldxvqwe6tcljt3ek2petoc4hc5xgsg@b36fw3wetj5f>
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IYsyehHIqrfsAk7y8KFh5IFdaJTTBdNT
+X-Proofpoint-ORIG-GUID: IYsyehHIqrfsAk7y8KFh5IFdaJTTBdNT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-08_15,2024-07-08_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=651 mlxscore=0
+ adultscore=0 malwarescore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1015 priorityscore=1501 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2407090055
 
-On Fri, 5 Jul 2024 at 13:50, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->
-> On 05/07/2024 02:22, Qais Yousef wrote:
-> > On 07/04/24 12:12, Dietmar Eggemann wrote:
-> >> On 28/06/2024 03:52, Qais Yousef wrote:
-> >>> On 06/25/24 14:58, Dietmar Eggemann wrote:
-> >>>
-> >>>>> @@ -4917,6 +4927,84 @@ static inline void __balance_callbacks(struct rq *rq)
-> >>>>>
-> >>>>>  #endif
-> >>>>>
-> >>>>> +static __always_inline void
-> >>>>> +__update_cpufreq_ctx_switch(struct rq *rq, struct task_struct *prev)
-> >>>>> +{
-> >>>>> +#ifdef CONFIG_CPU_FREQ
-> >>>>> + if (prev && prev->dl.flags & SCHED_FLAG_SUGOV) {
-> >>>>> +         /* Sugov just did an update, don't be too aggressive */
-> >>>>> +         return;
-> >>>>> + }
-> >>>>> +
-> >>>>> + /*
-> >>>>> +  * RT and DL should always send a freq update. But we can do some
-> >>>>> +  * simple checks to avoid it when we know it's not necessary.
-> >>>>> +  *
-> >>>>> +  * iowait_boost will always trigger a freq update too.
-> >>>>> +  *
-> >>>>> +  * Fair tasks will only trigger an update if the root cfs_rq has
-> >>>>> +  * decayed.
-> >>>>> +  *
-> >>>>> +  * Everything else should do nothing.
-> >>>>> +  */
-> >>>>> + switch (current->policy) {
-> >>>>> + case SCHED_NORMAL:
-> >>>>> + case SCHED_BATCH:
-> >>>>
-> >>>> What about SCHED_IDLE tasks?
-> >>>
-> >>> I didn't think they matter from cpufreq perspective. These tasks will just run
-> >>> at whatever the idle system is happen to be at and have no specific perf
-> >>> requirement since they should only run when the system is idle which a recipe
-> >>> for starvation anyway?
-> >>
-> >> Not sure we talk about the same thing here? idle_sched_class vs.
-> >> SCHED_IDLE policy (FAIR task with a tiny weight of WEIGHT_IDLEPRIO).
+On Fri, Jul 05, 2024 at 06:16:51PM +0300, Dmitry Baryshkov wrote:
+> On Thu, Jul 04, 2024 at 10:30:50AM GMT, Varadarajan Narayanan wrote:
+> > On Wed, Jul 03, 2024 at 01:46:54PM +0300, Dmitry Baryshkov wrote:
+> > > On Wed, Jul 03, 2024 at 02:46:42PM GMT, Varadarajan Narayanan wrote:
+> > > > cpr3 code assumes that 'acc_desc' is available for SoCs
+> > > > implementing CPR version 4 or less. However, IPQ9574 SoC
+> > > > implements CPRv4 without ACC. This causes NULL pointer accesses
+> > > > resulting in crashes. Hence, check if 'acc_desc' is populated
+> > > > before using it.
+> > > >
+> > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > > ---
+> > > > v4: Undo the acc_desc validation in probe function as that could
+> > > >     affect other SoC.
+> > > > ---
+> > > >  drivers/pmdomain/qcom/cpr3.c | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/pmdomain/qcom/cpr3.c b/drivers/pmdomain/qcom/cpr3.c
+> > > > index c7790a71e74f..6ceb7605f84d 100644
+> > > > --- a/drivers/pmdomain/qcom/cpr3.c
+> > > > +++ b/drivers/pmdomain/qcom/cpr3.c
+> > > > @@ -2399,12 +2399,12 @@ static int cpr_pd_attach_dev(struct generic_pm_domain *domain,
+> > > >  		if (ret)
+> > > >  			goto exit;
+> > > >
+> > > > -		if (acc_desc->config)
+> > > > +		if (acc_desc && acc_desc->config)
+> > > >  			regmap_multi_reg_write(drv->tcsr, acc_desc->config,
+> > > >  					       acc_desc->num_regs_per_fuse);
+> > > >
+> > > >  		/* Enable ACC if required */
+> > > > -		if (acc_desc->enable_mask)
+> > > > +		if (acc_desc && acc_desc->enable_mask)
+> > > >  			regmap_update_bits(drv->tcsr, acc_desc->enable_reg,
+> > > >  					   acc_desc->enable_mask,
+> > > >  					   acc_desc->enable_mask);
+> > >
+> > > Should the same fix be applied to other places which access acc_desc?
+> > > For example cpr_pre_voltage() and cpr_post_voltage() which call
+> > > cpr_set_acc()?
 > >
-> > Yes I am referring to SCHED_IDLE policy too. What is your expectation? AFAIK
-> > the goal of this policy to run when there's nothing else needs running.
+> > With this patch alone, if acc_desc is NULL, cpr_probe() will fail
+> > at the start itself because of this check
+> >
+> > 	if (!data->acc_desc && desc->cpr_type < CTRL_TYPE_CPRH)
+> > 		return -EINVAL;
+> >
+> > After applying this patch series, cpr_probe will cross the above
+> > check to accomodate IPQ9574. However, the check below will ensure
+> > drv->tcsr is not initialized.
+> >
+> > 	if (desc->cpr_type < CTRL_TYPE_CPRH &&
+> > 	    !of_device_is_compatible(dev->of_node, "qcom,ipq9574-cpr4"))
+> >
+> > cpr_pre_voltage() and cpr_post_voltage() call cpr_set_acc() only
+> > if drv->tcsr is not NULL. Hence acc_desc need not be checked.
+> >
+> > Will add the check to cpr_pre_voltage() and cpr_post_voltage() if
+> > you feel it will make it more robust regardless of the changes to
+> > cpr_probe in future. Please let me know.
 >
-> IMHO, SCHED_IDLE tasks fight with all the other FAIR task over the
-> resource rq. I would include SCHED_IDLE into this switch statement next
-> to SCHED_NORMAL and SCHED_BATCH.
-> What do you do if only SCHED_IDLE FAIR tasks are runnable? They probably
-> also want to have their CPU frequency needs adjusted.
+> Having !acc_desc check instead of the of_device_is_compatible would
+> solve the issue.
 
-I agree SCHED_IDLE means do not preempt SCHED_NORMAL and SCHED_BATCH
-but not do run at a random frequency
+Ok. Will post next version with that.
 
->
-> [...]
->
-> >>>>> @@ -4766,11 +4738,8 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
-> >>>>>            */
-> >>>>>           detach_entity_load_avg(cfs_rq, se);
-> >>>>>           update_tg_load_avg(cfs_rq);
-> >>>>> - } else if (decayed) {
-> >>>>> -         cfs_rq_util_change(cfs_rq, 0);
-> >>>>> -
-> >>>>> -         if (flags & UPDATE_TG)
-> >>>>> -                 update_tg_load_avg(cfs_rq);
-> >>>>> + } else if (cfs_rq->decayed && (flags & UPDATE_TG)) {
-> >>>>> +         update_tg_load_avg(cfs_rq);
-> >>>>>   }
-> >>>>>  }
-> >>>>
-> >>>> You set cfs_rq->decayed for each taskgroup level but you only reset it
-> >>>> for the root cfs_rq in __update_cpufreq_ctx_switch() and task_tick_fair()?
-> >>>
-> >>> Yes. We only care about using it for root level. Tracking the information at
-> >>> cfs_rq level is the most natural way to do it as this is what update_load_avg()
-> >>> is acting on.
-> >>
-> >> But IMHO this creates an issue with those non-root cfs_rq's within
-> >
-> > I am not seeing the issue, could you expand on what is it?
->
-> I tried to explained it in the 4 lines below. With a local 'decayed'
-> update_cfs_rq_load_avg() and propagate_entity_load_avg() set it every
-> time update_load_avg() gets called. And this then determines whether
-> update_tg_load_avg() is called on this cfs_rq later in update_load_avg().
->
-> The new code:
->
->   cfs_rq->decayed |= update_cfs_rq_load_avg() (*)
->   cfs_rq->decayed |= propagate_entity_load_avg()
->
-> will not reset 'cfs_rq->decayed' for non-root cfs_rq's.
->
-> (*) You changed this in v3 from:
->
->   cfs_rq->decayed  = update_cfs_rq_load_avg()
->
->
-> >> update_load_avg() itself. They will stay decayed after cfs_rq->decayed
-> >> has been set to 1 once and will never be reset to 0. So with UPDATE_TG
-> >> update_tg_load_avg() will then always be called on those non-root
-> >> cfs_rq's all the time.
-> >
-> > We could add a check to update only the root cfs_rq. But what do we gain? Or
-> > IOW, what is the harm of unconditionally updating cfs_rq->decayed given that we
-> > only care about the root cfs_rq? I see more if conditions and branches which
-> > I am trying to avoid.
->
-> Yes, keep 'decayed' local and add a:
->
->     if (cfs_rq == &rq_of(cfs_rq)->cfs)
->         cfs_rq->decayed = decayed
->
->
->
->
->
+Thanks
+Varada
 
