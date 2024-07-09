@@ -1,40 +1,75 @@
-Return-Path: <linux-pm+bounces-10838-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10839-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F66B92B45B
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:49:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E59592B45D
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:49:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5246F1C2030A
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:49:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D04051F218C9
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:49:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21DAB1553A7;
-	Tue,  9 Jul 2024 09:48:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 582C31553B3;
+	Tue,  9 Jul 2024 09:49:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vxmz/atC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87A25152E03;
-	Tue,  9 Jul 2024 09:48:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EA6152E03
+	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 09:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720518537; cv=none; b=TCy7RZOzUGPWwNf85RoV/E/I5LbgyiMNxusNkN3ir54mYfkYGYwxZf/iVNQWaSTPv5BQuGV19VkddQU6bTkMQbqFkXbNWNFgJJN88ZArVrovbV76c79OlyPmqkd5C3zg35PxRE7oeT+a3APfY0mcRnaRSYCP3eJzHqqWjQu4JgE=
+	t=1720518586; cv=none; b=POVkg/ZxjarQqjQwPtwNde4fOaa4wDFvxNxGRSOgOY8JdjfyBMCvDYLHszZaTe9F3486loj4NH5zhivuBOtoOwPVyMsZd3wjTC3Sv9o65aYg5id/LsxOsMDyOJjEg/mCmqjnJHSqUo1nm5sDNXvajF9nAy8uhLfQAtWTvEXQnaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720518537; c=relaxed/simple;
-	bh=p6HyUakPKG2/gUVP2W4O18eZ/kXn7hhUZPSBkg7AqHw=;
+	s=arc-20240116; t=1720518586; c=relaxed/simple;
+	bh=+chQesbQ8IjMDaLXVcqZFyhiyu7jYuAsU6LcpQ3w/nU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cf7ScKyrYnE+gy66T7WVcLpki72jCjNRbbxI82EIxEzyMljyi/goXtycyfSelMhBvQ3DDVBtrnhQJF3iTSGTeFSutyYDcK59QrKKNhL9KDHpl11OKv/g7+EoShE/xYN58HpkejG9z0ssU2LUCOxqrFqxEDPmtZ8qMwlaS8lOdcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C4E8F139F;
-	Tue,  9 Jul 2024 02:49:13 -0700 (PDT)
-Received: from [10.57.44.235] (unknown [10.57.44.235])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 794533F766;
-	Tue,  9 Jul 2024 02:48:46 -0700 (PDT)
-Message-ID: <b7028264-167a-410a-af0c-a9aa156ca993@arm.com>
-Date: Tue, 9 Jul 2024 10:49:03 +0100
+	 In-Reply-To:Content-Type; b=qa+vuJlzWIVP4/YlPoLvXBL1/7fOe2Yt+FPIBVDf2XuW0NlWoZ2vvMH0WamOzrN7D6uhpMPIpMnoO4i4LSiHOD5QststiN8CCGeW61NmoL0MTL0WIyVas7ag9VCEawJYxdEjDfcunadtHLYLxRczTjtZbGcieHoaO6XH1Hr9JpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vxmz/atC; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a6cb130027aso287537866b.2
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 02:49:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720518583; x=1721123383; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=YnCSBbKU3ioIHg5WvkeZ7VAE/TUgPg1AYZbUSm93KBg=;
+        b=vxmz/atC7O9+TTrc8cTTJm5er8juHC4km8btrEaERViRGFuTx76Yds70uW4c/h3d06
+         lMEgGmrLDoslf3GZU2eKRnVVvlKPwvDJmYHBYTNAs/EjltF8JiPYZS3YnwqKZeA4LxUp
+         EmqPGY7tn1kkzkGU9mB73JYkp6BsFNnpI6xaHhFfzt+rljZRXTly2yYVy4y+NfHwMvJa
+         991Uq8stbDSKN5dyIYK15AOrPlNOskvxkdcO6o3YMLwLF3RSdfHwVhsW7HPHFtgMdAGw
+         XwW+vHlAVP9vCxrR2jy+0aE3Hrb1rRNpnNF/TEw93quiK5TqRoNxDEioyxgO5gGfqeNt
+         0z3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720518583; x=1721123383;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YnCSBbKU3ioIHg5WvkeZ7VAE/TUgPg1AYZbUSm93KBg=;
+        b=ZvLqbp/CHFywQlmo6SfBtWi+QEHrwirgvqvwaGio45sO6aGHK1TEqWIK+LHPsdjnh7
+         jvd16Fzfb9iqbnd2n5g+lW4fJddk+DYxUm6t1+mvOpbposCmyG9H0SvRWRbFnYzY8rlK
+         9MD1DIA6hMs6LwpKg5WTFCFDZCnUwT8+AoGQQyaLEKBdx27cAklLZW8UPdNn8CVY8vW/
+         JwuBOa4GnMEFOjqhC6PD/MHUSITcGqf0xib/Sg7oEmlU7K7cEcwDaKD9hVVh8O9wQYqI
+         k9Td9JYuvkrKn5/kA9Y0+KdFdzO9echfgtXJiBx2c4nzvH5blCkDUNJpOJWgkfLVeDAO
+         ZbqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX+QmYVZUbzNUaBJ3qmIt7ib+WAwXm6vrJMoUa+I7+ruigb7d/bQbuNCx0Z0pnY8ey7h364HPTDejxIXLEiYBDy8eL9o5UAu6U=
+X-Gm-Message-State: AOJu0Yz1rMZ34n/uurZcbv9Pb1js1VIC54o91nZu/4ycEfo8y8aU7CNy
+	mmvpdBD2vK17uxG7mPd4xskXrfV2pz9iAGs1sMR98BRVJs7gxauxgKH4vzu6jII=
+X-Google-Smtp-Source: AGHT+IF3WOZNV5SxJx71Y5Vzqutl5kaWi2iKT/CrgRtHdwVifN3axQWMUdfNrRCiuQeWx0uDeOH0fA==
+X-Received: by 2002:a05:6402:40d5:b0:57d:3df:f881 with SMTP id 4fb4d7f45d1cf-594bab80834mr1900788a12.3.1720518582870;
+        Tue, 09 Jul 2024 02:49:42 -0700 (PDT)
+Received: from [192.168.105.194] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a780a6bc701sm63664966b.34.2024.07.09.02.49.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jul 2024 02:49:42 -0700 (PDT)
+Message-ID: <94b2842b-6093-4c4d-a099-3e0a3198b753@linaro.org>
+Date: Tue, 9 Jul 2024 11:49:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,148 +77,108 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal: gov_power_allocator: Return early in manage if
- trip_max is null
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Nikita Travkin <nikita@trvn.ru>, kernel@collabora.com,
- "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240702-power-allocator-null-trip-max-v1-1-47a60dc55414@collabora.com>
- <18b1724c-9bab-4501-b956-278896324e55@collabora.com>
- <CAJZ5v0jvsCCFFLPd7Rnrssf+WccKMjHX3NJEW5hdbLTriD6Rgg@mail.gmail.com>
+Subject: Re: [PATCH v15 01/10] MAINTAINERS: Include new Qualcomm CPR drivers
+ in the file list
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>, Niklas Cassel <nks@flawful.org>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Ulf Hansson
+ <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org, Jeffrey Hugo <quic_jhugo@quicinc.com>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Varadarajan Narayanan <quic_varada@quicinc.com>
+References: <20240708-topic-cpr3h-v15-0-5bc8b8936489@linaro.org>
+ <20240708-topic-cpr3h-v15-1-5bc8b8936489@linaro.org>
+ <cd1c3450-1905-4d71-bcdd-5f880d743820@kernel.org>
 Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0jvsCCFFLPd7Rnrssf+WccKMjHX3NJEW5hdbLTriD6Rgg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <cd1c3450-1905-4d71-bcdd-5f880d743820@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-
-On 7/3/24 21:20, Rafael J. Wysocki wrote:
-> On Wed, Jul 3, 2024 at 11:03 AM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
+On 9.07.2024 11:04 AM, Krzysztof Kozlowski wrote:
+> On 08/07/2024 14:22, Konrad Dybcio wrote:
+>> Expand the Qualcomm Core Power Reduction section to include the files
+>> concerning CPR3+ support.
 >>
->> Il 02/07/24 23:24, Nícolas F. R. A. Prado ha scritto:
->>> Commit da781936e7c3 ("thermal: gov_power_allocator: Allow binding
->>> without trip points") allowed the governor to bind even when trip_max
->>> is null. This allows a null pointer dereference to happen in the manage
->>> callback. Add an early return to prevent it, since the governor is
->>> expected to not do anything in this case.
->>>
->>> Fixes: da781936e7c3 ("thermal: gov_power_allocator: Allow binding without trip points")
->>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>> ---
->>> This issue was noticed by KernelCI during a boot test on the
->>> mt8195-cherry-tomato-r2 platform with the config in [1]. The stack trace
->>> is attached below.
->>>
->>> [1] http://0x0.st/XaON.txt
->>>
->>> [    4.015786] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
->>> [    4.015791] Mem abort info:
->>> [    4.015793]   ESR = 0x0000000096000004
->>> [    4.015796]   EC = 0x25: DABT (current EL), IL = 32 bits
->>> [    4.015799]   SET = 0, FnV = 0
->>> [    4.015802]   EA = 0, S1PTW = 0
->>> [    4.015804]   FSC = 0x04: level 0 translation fault
->>> [    4.015807] Data abort info:
->>> [    4.015809]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
->>> [    4.015811]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
->>> [    4.015814]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
->>> [    4.015818] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109809000
->>> [    4.015821] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
->>> [    4.015835] Modules linked in: mt8195_mt6359(+) mt6577_auxadc snd_soc_mt8195_afe mtk_scp_ipi snd_sof_utils mtk_wdt(+)
->>> [    4.015852] CPU: 2 PID: 13 Comm: kworker/u32:1 Not tainted 6.10.0-rc6 #1 c5d519ae8e7fec6bbe67cb8c50bfebcb89dfa54e
->>> [    4.015859] Hardware name: Acer Tomato (rev2) board (DT)
->>> [    4.015862] Workqueue: events_unbound deferred_probe_work_func
->>> [    4.015875] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->>> [    4.015880] pc : power_allocator_manage+0x110/0x6a0
->>> [    4.015888] lr : __thermal_zone_device_update+0x1dc/0x400
->>> [    4.015893] sp : ffff8000800eb800
->>> [    4.015895] x29: ffff8000800eb810 x28: 0000000000000001 x27: 0000000000000001
->>> [    4.015903] x26: aaaaaaaaaaaaaaab x25: ffff07a0461c15a0 x24: ffffb58530ca67c0
->>> [    4.015911] x23: 0000000000000000 x22: ffff07a04098fcc0 x21: ffffb58532eec848
->>> [    4.015918] x20: ffff8000800eb920 x19: ffff07a0461c1000 x18: 0000000000000b4b
->>> [    4.015926] x17: 5359534255530031 x16: ffffb585310352e4 x15: 0000000000000020
->>> [    4.015933] x14: 0000000000000000 x13: ffffffff00000000 x12: 0000000000000040
->>> [    4.015940] x11: 0101010101010101 x10: ffffffffffffffff x9 : ffffb58530ca8d78
->>> [    4.015948] x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : 0000000000001388
->>> [    4.015955] x5 : 0000000000000000 x4 : 0000000000000384 x3 : 0000000000000000
->>> [    4.015962] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
->>> [    4.015970] Call trace:
->>> [    4.015972]  power_allocator_manage+0x110/0x6a0
->>> [    4.015978]  __thermal_zone_device_update+0x1dc/0x400
->>> [    4.015983]  thermal_zone_device_set_mode+0x7c/0xa0
->>> [    4.015987]  thermal_zone_device_enable+0x1c/0x28
->>> [    4.015991]  thermal_of_zone_register+0x43c/0x498
->>> [    4.015996]  devm_thermal_of_zone_register+0x6c/0xb8
->>> [    4.016001]  gadc_thermal_probe+0x140/0x214
->>> [    4.016007]  platform_probe+0x70/0xc4
->>> [    4.016012]  really_probe+0x140/0x270
->>> [    4.016018]  __driver_probe_device+0xfc/0x114
->>> [    4.016024]  driver_probe_device+0x44/0x100
->>> [    4.016029]  __device_attach_driver+0x64/0xdc
->>> [    4.016035]  bus_for_each_drv+0xb4/0xdc
->>> [    4.016041]  __device_attach+0xdc/0x16c
->>> [    4.016046]  device_initial_probe+0x1c/0x28
->>> [    4.016052]  bus_probe_device+0x44/0xac
->>> [    4.016057]  deferred_probe_work_func+0xb0/0xc4
->>> [    4.016063]  process_scheduled_works+0x114/0x330
->>> [    4.016070]  worker_thread+0x1c0/0x20c
->>> [    4.016076]  kthread+0xf8/0x108
->>> [    4.016081]  ret_from_fork+0x10/0x20
->>> [    4.016090] Code: d1030294 17ffffdd f94012c0 f9401ed7 (b9400000)
->>> [    4.016095] ---[ end trace 0000000000000000 ]---
->>> ---
->>>    drivers/thermal/gov_power_allocator.c | 3 +++
->>>    1 file changed, 3 insertions(+)
->>>
->>> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
->>> index 45f04a25255a..1b2345a697c5 100644
->>> --- a/drivers/thermal/gov_power_allocator.c
->>> +++ b/drivers/thermal/gov_power_allocator.c
->>> @@ -759,6 +759,9 @@ static void power_allocator_manage(struct thermal_zone_device *tz)
->>>                return;
->>>        }
->>>
->>> +     if (!params->trip_max)
->>> +             return;
->>> +
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  MAINTAINERS | 5 +++--
+>>  1 file changed, 3 insertions(+), 2 deletions(-)
 >>
->> I'm not sure that this is the right thing to do.
->>
->> If you do that, allocate_power() will never be called, so the entire algo doesn't
->> work, making binding this completely useless (as it's going to be a noop..!).
->>
->> Check what get_governor_trips() says in the documentation:
->>
->>    * If there is only one trip point, then that's considered to be the
->>    * "maximum desired temperature" trip point and the governor is always
->>    * on.  If there are no passive or active trip points, then the
->>    * governor won't do anything.  In fact, its throttle function
->>    * won't be called at all.
->>
->> ....and it looks like you're aware of that, as you said that in the commit
->> description as well.
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index dcb37b635f2c..f3e013a52c16 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -18687,14 +18687,15 @@ F:	Documentation/accel/qaic/
+>>  F:	drivers/accel/qaic/
+>>  F:	include/uapi/drm/qaic_accel.h
+>>  
+>> -QUALCOMM CORE POWER REDUCTION (CPR) AVS DRIVER
+>> +QUALCOMM CORE POWER REDUCTION (CPR) AVS DRIVERS
+>>  M:	Bjorn Andersson <andersson@kernel.org>
+>>  M:	Konrad Dybcio <konrad.dybcio@linaro.org>
+>>  L:	linux-pm@vger.kernel.org
+>>  L:	linux-arm-msm@vger.kernel.org
+>>  S:	Maintained
+>>  F:	Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
+>> -F:	drivers/pmdomain/qcom/cpr.c
+>> +F:	Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
 > 
-> IIUC, the problematic commit allowed the power allocator governor to
-> bind to a tripless thermal zone in order to prevent failing the entire
-> thermal zone registration.
-> 
-> Yes, it will be a noop in this case because in the absence of any
-> trips there will be nothing to do for it.  Still, user space can check
-> the zone temperature via sysfs.
-> 
-> Adding a NULL pointer check before the place where the pointer in
-> question is dereferenced is not a bad idea at all.
+> Maybe combine these two into:
+> Documentation/devicetree/bindings/power/avs/qcom,cpr*
 
+I think avs was proposed to be a subsystem/driver directory at some point
+and (adaptive voltage source? something like that) and this is the only file
+in that directory in bindings..
 
-Yes, I agree. My apologies for being late.
+Should we continue with this "class" of devices, or should I move qcom,cpr.yaml
+to soc?
 
-Thanks Rafael for applying the patch.
-
-Lukasz
+Konrad
 
