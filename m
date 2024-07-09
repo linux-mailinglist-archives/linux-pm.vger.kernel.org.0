@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-10835-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10836-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA0A392B329
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:06:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D01692B32C
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:06:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CC12283D32
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:06:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E32D1C2267C
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:06:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B675D155A5B;
-	Tue,  9 Jul 2024 09:04:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64791154C04;
+	Tue,  9 Jul 2024 09:05:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KN0xhdtw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X93fsIjw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80E90154BEB;
-	Tue,  9 Jul 2024 09:04:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 308D4146016;
+	Tue,  9 Jul 2024 09:05:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720515870; cv=none; b=mZXm5lzE1b4ozWuRSOlTDy3ZuOlLoHU5T+EjNQ8khBmRrBzPw1T5yN3qgt6g78O4a0k3jvQu8SQFlI10c0PFKeuS18/OnNmXwcJWw3cBT1VE3L2FPgHBXQxVc9IektcfvjdoLE5Fm2d5n5KoIsOUEUGhi/Z/JlVVKkReI/N9+DQ=
+	t=1720515903; cv=none; b=JCWqtGu91H5yqqA6z22ML5b4Gh+OolayrWXC+nqMgfdEQ2P+mBQirsS+ym9OnjwPuMrxTsXmHnbHRnOIxRynDRr1W7iAjk95LpNOIbHjLsvDWLV1QQGi7fJEniyy5TIBK6wgP4nK88IPZaMtlJN8DJHDemWMWSBrRP9MTT/0Wik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720515870; c=relaxed/simple;
-	bh=n+WH758AVAI6VhY+aToA4ETl7TMD/4WKio4PaKCRZNQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r5OG0Qg3QGgKD2bEhxtHicfrefq7Aw0Dz2N7bvF4ooTzYyesjM1kvMn7tmJW9vDdRhaZUZAtzCEv4socpdW7DAKhUEv2wlp3D8h5kaD/OkUaqaSZ3t/kz16OfT5+mazHHdq2Srd9mSqxDWB2nTDtTr62N/ed/PEAGyYpV7wt9PM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KN0xhdtw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9CBCC32786;
-	Tue,  9 Jul 2024 09:04:21 +0000 (UTC)
+	s=arc-20240116; t=1720515903; c=relaxed/simple;
+	bh=89XNTjD8VvzQueTdSLIVAzNuM+7Ti1HQSRC2JVCLW2Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=o55bPEtyjPDip3qyeUxM0lTUByUaoa/IsfQN1ojibTibOXV06E/17NOCXYIGv8kBou8ec2Yz+r+C6yp4xa99DwyE/HRqYtyrPq05bvQTPaRSyWuuD3oCn8ICbc9euwNKifXu0rD612Qri972EaXlKACrdl56nJbo5UkCPdtMQIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X93fsIjw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7777FC3277B;
+	Tue,  9 Jul 2024 09:04:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720515870;
-	bh=n+WH758AVAI6VhY+aToA4ETl7TMD/4WKio4PaKCRZNQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KN0xhdtw5feu6gu/dHUHcIqaq5Ursv53cyPg4MU02nfAFy0ty8IkSGQeoJSqGBT3r
-	 wf2ufQkchGBNBjgA9yYwIHH0gKZ5/j2hbWaWHBuYpxhT9ZLKt7eyI24xbL+Qn5YTWV
-	 bWcqxOI4lWUXT/+RlClxZAraqLo2Rv9rmfSEpdFcFgL+rmEPnCMagpUxcgfSiRwJO3
-	 2QLeh4WGkMJkJnrMDE1XrRMF3oBF+AiL5AdlgpC29/lKhPmTfjYZBXS9DpaS8ior6C
-	 je2RWHJsw0rvM2b1fVRie1PrE2DwEu+pEbTh8LR+YaOMbLQI30AXO01FdHg6xH3Qr4
-	 Ct1egylm/WcJw==
-Message-ID: <7130ca4c-2486-4043-b71a-b81e0970a382@kernel.org>
-Date: Tue, 9 Jul 2024 11:04:21 +0200
+	s=k20201202; t=1720515902;
+	bh=89XNTjD8VvzQueTdSLIVAzNuM+7Ti1HQSRC2JVCLW2Y=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=X93fsIjwVRnrDDB2GIoZnBy01lkEOlZIGve/z0YRyddSqfMSM/xvfQZ1BMcDbUdx1
+	 4DttWiRroPUjoMI696cKWbd0mf0WEz/C2L3taqySSgzsVgPMRlcT+s0FSl/RK0TfIZ
+	 2b+AtyrbRFRD3NAuZ5OWzd2H6g18h7sooOBfFC5OUl5pvpfsLcUeDxhSdAP3he3mia
+	 dp3JX9CR36Wi8V5/hb9+ZfZGvUzgC3O1gQ6kS69Czm6mKfoILQa0rFvl2RcUaj7BX6
+	 66RRPh2pbE9k0y4nAIP2PZ9P2ruQtGmxf1E8CyxVQNwhyPaZyReIBdCVgXelClPYVk
+	 f36RAmT5ij5ww==
+Message-ID: <94e9aea3-6231-4dbe-9a7d-07f79216e78b@kernel.org>
+Date: Tue, 9 Jul 2024 11:04:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,28 +50,20 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 03/10] dt-bindings: opp: v2-qcom-level: Allow
- opp-shared
-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
- Stephen Boyd <sboyd@kernel.org>, Niklas Cassel <nks@flawful.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Ulf Hansson
- <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
+Subject: Re: [PATCH v5 9/9] dts: arm64: qcom: ipq9574: Enable CPR
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org,
+ angelogioacchino.delregno@collabora.com, andersson@kernel.org,
+ konrad.dybcio@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
+ ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+ ulf.hansson@linaro.org, quic_sibis@quicinc.com, quic_rjendra@quicinc.com,
+ otto.pflueger@abscue.de, luca@z3ntu.xyz, danila@jiaxyga.com,
+ quic_ipkumar@quicinc.com, stephan.gerhold@kernkonzept.com,
  linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-pm@vger.kernel.org, Jeffrey Hugo <quic_jhugo@quicinc.com>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Varadarajan Narayanan <quic_varada@quicinc.com>
-References: <20240708-topic-cpr3h-v15-0-5bc8b8936489@linaro.org>
- <20240708-topic-cpr3h-v15-3-5bc8b8936489@linaro.org>
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20240709090132.117077-1-quic_varada@quicinc.com>
+ <20240709090132.117077-10-quic_varada@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -117,17 +109,26 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240708-topic-cpr3h-v15-3-5bc8b8936489@linaro.org>
+In-Reply-To: <20240709090132.117077-10-quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 08/07/2024 14:22, Konrad Dybcio wrote:
-> Some devices may use a shared OPP table, such as separate CPR threads.
-> Allow the table to be marked as such.
+On 09/07/2024 11:01, Varadarajan Narayanan wrote:
+> * Add CPR, RPMPD, OPP table nodes as applicable to IPQ9574 to
+>   enable CPR functionality on IPQ9574.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> * Bootloader set frequency 792MHz is added to the OPP table to
+>   the avoid 'need at least 2 OPPs to use CPR' error
+> 
+> * Remove 1.2GHz as it is not supported in any of the IPQ9574 SKUs.
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
 
 Best regards,
 Krzysztof
