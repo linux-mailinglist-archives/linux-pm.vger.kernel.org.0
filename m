@@ -1,89 +1,76 @@
-Return-Path: <linux-pm+bounces-10896-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10897-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C807292C51C
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 23:04:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F41292C668
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 01:08:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9D841C21C35
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 21:04:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6731BB218E5
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 23:08:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46AF618004E;
-	Tue,  9 Jul 2024 21:04:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B20D156C62;
+	Tue,  9 Jul 2024 23:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="omruXFHX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ezr3iZDr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B0D14D2A7
-	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 21:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB901420A8;
+	Tue,  9 Jul 2024 23:08:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720559091; cv=none; b=lXJwlmHFBS9wJareUQ0RtT6wgSj4hgwO1KQjvkT0Hz3OGionQCCMihLVXP4vo5ic0fhHIrjWWkvFwYcbmEXvnaA6aYyAOYI526oRHtka8sp3Js0oE+mv2FwByY9RABx0vZ3eukcEGHWCj+W2nqAnmbtAdyxj8hlNsqMQ+GANurU=
+	t=1720566526; cv=none; b=MS/2n3oA3BOE+naR53/VGrl2HX50eHc2sPJMRcCCvb34hq+mOlXAse0+ljKaOBm8BRwi/0SqX22tK0YdE292iLvZltpTpUBlMcUdohmxZcXSEbkuJ0FyJ2y6mXPrmSJFE0dkA0iVMaNPha5+rKzsw3+mLgripgfnttzkBsAKAR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720559091; c=relaxed/simple;
-	bh=pQuWpDrDEaCFl7ELhP2pM9jtryDd25mq43Dk6pVulGw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=frh2G7S5WG698vSDqN8MSJS8SXibDBWkMfnlLDMPPC7Mc6HVVGYaP064sWOu95adl22ZHNXIXNDSefyZ82OdxYPaRRWBsOk+gJmTr2bNli/EJWb5Dg3OCYSSY4UaIR0bba+Hrqy6n73nZY87TdB7Ms+GxnG9keJ9ClFwrGzH7n0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=omruXFHX; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1fb10519ae3so19745ad.1
-        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 14:04:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720559089; x=1721163889; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yOZEUf/J6siPzygu395P3D/gjZTzmsga/ioXaj0U6JM=;
-        b=omruXFHXUBjKOYPm3rt8AQhwbj75vzdL377WHBGIif0PTZs4fLUSGT9AlbUjRc8Chu
-         2SNI9PSWAj93mB3WljCJjgcFvfw+Mh2AouEa3bh46rpERpP4JiRBqVD3ANcN5amxlTys
-         jGsRCrf21Ggnda7ziRQK6mUUcZ3eeR0sMalKZRJppAiR9MwVC8nOvCAjJS0xO07ngMd5
-         czA3bSveOHOWU35domkKi70Qslp4/29Qo1wntovCrGdT0ImkE0v/XMBRP8/nJ5dAHYDv
-         y8qVin6pN25B0tN3cmpyWy9lEPsqND+ovCg1O5MUvVpigSLAJzgtpP5QLGnj7Mlz3tN8
-         p0FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720559089; x=1721163889;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yOZEUf/J6siPzygu395P3D/gjZTzmsga/ioXaj0U6JM=;
-        b=pjwwXWyJqOcIlXkdHQDYGEnG5LiktnpqBvHcfyj+RMuw1Kyh9xGmmqFERjMW1FvTEn
-         32w4c4is8z6URmhq4cv7XigSj5f5VzsZxZpLCojBslL3jG5SX+hwyBNOgJOqbgoNqlCQ
-         AZtfYrWe5WHmzHEIz4IW0DDBq911o6gAuxuXVkHpv4DeZyhZf9CrNjv9EcC4/nsERFso
-         hEn5SIn7MmbEA8Q87dy2xG3G8Nq1KS5s6yXzYxfAzlUP2Hu8W/xkhI1ktBOHgl29oxHA
-         PYZGfu+wDsw60c+Wiy64mCKLSmpX/n5b42Hq3tMnQdemqPLvUvt9ZWGgqLPi61eSR/fT
-         BpZA==
-X-Forwarded-Encrypted: i=1; AJvYcCVeVa0NXxZ0F+z2z1bc4Dg3DPi7W0SIXm57h+XqlELY+JIZIJmQlLu2XETnDWRc0Su61FV0mBwvmG89snAYSE3yzdflfOelzZs=
-X-Gm-Message-State: AOJu0YzJENYv8yaF2nKN70iZvxdZKEym4uWnfm9H8+DfrSt/poLz3Mu1
-	Vfgjzurp0AkFSzKcNFovaACGU1cpMxKg8iVAMXdUw6kTESG3Gj2ui0+Kxp8now==
-X-Google-Smtp-Source: AGHT+IGZUitn76mfCM9EnzN6heABLFA1iE9kZnxKb2TuoqafSIshuqFsZaMjvSrHhwGNWXnqfTBkog==
-X-Received: by 2002:a17:903:2003:b0:1f7:34e4:ebc1 with SMTP id d9443c01a7336-1fbce1391d4mr234535ad.5.1720559088778;
-        Tue, 09 Jul 2024 14:04:48 -0700 (PDT)
-Received: from google.com ([2620:15c:2d:3:e5ff:5d06:df02:cdba])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fbb6a122cfsm21086945ad.5.2024.07.09.14.04.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jul 2024 14:04:48 -0700 (PDT)
-Date: Tue, 9 Jul 2024 14:04:43 -0700
-From: Isaac Manjarres <isaacmanjarres@google.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: tglx@linutronix.de, jstultz@google.com,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	saravanak@google.com, mjguzik@gmail.com,
-	Manish Varma <varmam@google.com>,
-	Kelly Rossmoyer <krossmo@google.com>, kernel-team@android.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v6] fs: Improve eventpoll logging to stop indicting
- timerfd
-Message-ID: <Zo2l65cTwuSMDU-Z@google.com>
-References: <20240703214315.454407-1-isaacmanjarres@google.com>
- <20240704-umsatz-drollig-38db6b84da7b@brauner>
+	s=arc-20240116; t=1720566526; c=relaxed/simple;
+	bh=cNtPCsXpegbZHe34ASEf5jaMB+nDOKdd5xsGxoFawNA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=F6U1i2EuuLZa6VPBvwHWG1Keq4dsOFAmjSWHjX5gGxhMqFA/J7xbiWTbfAB6XhzeeAiq2XHCqxzFE7lfJlv1y8McfbxrAUDEzN9lRRwtG5uLCcx2EoETBp2rr1RXbUgXz7ivCD2/Q7bwXJ455v3FvZSscrL6UnHrHdA62TQdwhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ezr3iZDr; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720566524; x=1752102524;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cNtPCsXpegbZHe34ASEf5jaMB+nDOKdd5xsGxoFawNA=;
+  b=Ezr3iZDrtbmaKUEwNCDHkb3OqA7wO2FSRaIynlGdTb8BSvFbSnXiUpfa
+   j/oxGVhL/h/l/Qc9Ks5KT5nvFYBUpYV0k+4/pgijTr4aQnIr5xeGPB5wW
+   BFFNbw9NMAhtCy++9zh5I8ax4w1Me7hW3tle67cDI4V+irh6ylHUWWk7R
+   zDjdeYM40EaQgalwPnYYZ6UPvtd63oWnUpgi0i1uFwKvQmmcKwmzNWx35
+   yLqmGMTjUZJRuCfC3g9LAkTABikPrepBQMia60EmFqPzBjnF2OTmKKVjH
+   1wY+0CNEqDwklYHXTOXMby5GO/sXkQ/0KrN2QWHspkiYAlbvzuyCp0BX8
+   Q==;
+X-CSE-ConnectionGUID: zNpxlb21TYeANds3PM4Evg==
+X-CSE-MsgGUID: 3tTvOWNUT1ugv1DPB0PWug==
+X-IronPort-AV: E=McAfee;i="6700,10204,11128"; a="21675828"
+X-IronPort-AV: E=Sophos;i="6.09,196,1716274800"; 
+   d="scan'208";a="21675828"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2024 16:08:43 -0700
+X-CSE-ConnectionGUID: 7SgoeVKzTViHXU+M14B96g==
+X-CSE-MsgGUID: sacxh7KrRqekArwXSWl8iQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,196,1716274800"; 
+   d="scan'208";a="48106741"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 09 Jul 2024 16:08:42 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sRJwt-000XCp-2J;
+	Tue, 09 Jul 2024 23:08:39 +0000
+Date: Wed, 10 Jul 2024 07:08:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+	devel@acpica.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 179/184]
+ drivers/thermal/imx_thermal.c:385:26: error: initialization of 'int
+ (*)(struct thermal_zone_device *, const struct thermal_trip *, int)' from
+ incompatible pointer type 'int (*)(struct thermal_zone_device *, int,  int)'
+Message-ID: <202407100628.3zCKg3YO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -92,57 +79,52 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240704-umsatz-drollig-38db6b84da7b@brauner>
 
-On Thu, Jul 04, 2024 at 04:03:59PM +0200, Christian Brauner wrote:
-> On Wed, Jul 03, 2024 at 02:43:14PM GMT, Isaac J. Manjarres wrote:
-> > From: Manish Varma <varmam@google.com>
-> > 
-> > We'll often see aborted suspend operations that look like:
-> > 
-> >  PM: suspend entry 2024-07-03 15:55:15.372419634 UTC
-> >  PM: PM: Pending Wakeup Sources: [timerfd]
-> >  Abort: Pending Wakeup Sources: [timerfd]
-> >  PM: suspend exit 2024-07-03 15:55:15.445281857 UTC
-> > 
-> > From this, it seems a timerfd caused the abort, but that can be
-> > confusing, as timerfds don't create wakeup sources. However,
-> > eventpoll can, and when it does, it names them after the underlying
-> > file descriptor. Unfortunately, all the file descriptors are called
-> > "[timerfd]", and a system may have many timerfds, so this isn't very
-> > useful to debug what's going on to cause the suspend to abort.
-> > 
-> > To improve this, change the way eventpoll wakeup sources are named:
-> > 
-> > 1) The top-level per-process eventpoll wakeup source is now named
-> > "epollN:P" (instead of just "eventpoll"), where N is a unique ID token,
-> > and P is the PID of the creating process.
-> > 
-> > 2) Individual eventpoll item wakeup sources are now named
-> > "epollitemN:P.F", where N is a unique ID token, P is PID of the creating
-> > process, and F is the name of the underlying file descriptor.
-> 
-> Fyi, that PID is meaningless or even actively misleading in the face of
-> pid namespaces. And since such wakeups seem to be registered in sysfs
-> globally they are visible to all containers. That means a container will
-> now see some timerfd wakeup source with a PID that might just accidently
-> correspond to a process inside the container. Which in turn also means
-Thanks for your feedback on this, Christian. With regards to this
-scenario: would it be useful to use a namespace ID, along with the PID,
-to uniquely identify the process? If not, do you have a suggestion for
-this?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   87efced4091268c3ec327c53829b5e375be155dd
+commit: fac8bf59e782ac74bb54d8427581f725bba8a769 [179/184] thermal: trip: Pass trip pointer to .set_trip_temp() thermal zone callback
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20240710/202407100628.3zCKg3YO-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240710/202407100628.3zCKg3YO-lkp@intel.com/reproduce)
 
-I understand that the proposed naming scheme has a chance of causing
-collisions, however, it is still an improvement over the existing
-naming scheme in terms of being able to attribute wakeups to a
-particular application.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407100628.3zCKg3YO-lkp@intel.com/
 
-> you're leaking the info about the creating process into the container.
-> IOW, if PID 1 ends up registering some wakeup source the container gets
-> to know about it.
-Is there a general security concern about this? If not, can you please
-elaborate why this is a problem?
+All error/warnings (new ones prefixed by >>):
 
-Thanks,
-Isaac
+>> drivers/thermal/imx_thermal.c:385:26: error: initialization of 'int (*)(struct thermal_zone_device *, const struct thermal_trip *, int)' from incompatible pointer type 'int (*)(struct thermal_zone_device *, int,  int)' [-Werror=incompatible-pointer-types]
+     385 |         .set_trip_temp = imx_set_trip_temp,
+         |                          ^~~~~~~~~~~~~~~~~
+   drivers/thermal/imx_thermal.c:385:26: note: (near initialization for 'imx_tz_ops.set_trip_temp')
+   cc1: some warnings being treated as errors
+--
+   drivers/thermal/tegra/soctherm.c: In function 'tegra_thermctl_set_trip_temp':
+>> drivers/thermal/tegra/soctherm.c:592:13: warning: unused variable 'ret' [-Wunused-variable]
+     592 |         int ret;
+         |             ^~~
+
+
+vim +385 drivers/thermal/imx_thermal.c
+
+ca3de46b508090 Shawn Guo             2013-06-24  379  
+cbb07bb35de6eb Eduardo Valentin      2014-01-06  380  static struct thermal_zone_device_ops imx_tz_ops = {
+ca3de46b508090 Shawn Guo             2013-06-24  381  	.bind = imx_bind,
+ca3de46b508090 Shawn Guo             2013-06-24  382  	.unbind = imx_unbind,
+ca3de46b508090 Shawn Guo             2013-06-24  383  	.get_temp = imx_get_temp,
+f5e50bf4d3ef0a Andrzej Pietrasiewicz 2020-06-29  384  	.change_mode = imx_change_mode,
+017e51420cc440 Philipp Zabel         2013-08-01 @385  	.set_trip_temp = imx_set_trip_temp,
+ca3de46b508090 Shawn Guo             2013-06-24  386  };
+ca3de46b508090 Shawn Guo             2013-06-24  387  
+
+:::::: The code at line 385 was first introduced by commit
+:::::: 017e51420cc44098308b00dffd9d4e514ddf40f3 thermal: imx: dynamic passive and SoC specific critical trip points
+
+:::::: TO: Philipp Zabel <p.zabel@pengutronix.de>
+:::::: CC: Zhang Rui <rui.zhang@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
