@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-10825-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10826-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AA1192B2F0
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:02:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 680A492B2F7
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:02:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2168F1F230FF
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:02:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A8C81C22498
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:02:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 201B5153503;
-	Tue,  9 Jul 2024 09:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36A7B154433;
+	Tue,  9 Jul 2024 09:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fp0tQxqx"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="a3lH7wVh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938B214A0A7;
-	Tue,  9 Jul 2024 09:02:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E09712CD89;
+	Tue,  9 Jul 2024 09:02:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720515735; cv=none; b=XArH8+3uDRPSrVVi/fx47ohnJdtsflbS2la7FAafwrpbe+vwFgSqeQh2FjfkSTiYEiF5qhfryuuUYZTZXWFgFU6OCw0a4UVIDF2xqGr2pV2lwQPTCJvHwrnBMK2XZPKaSYtCzcm4PaB0j9yF9VQnj0wpI7dqFuDnSURCaKvplyc=
+	t=1720515745; cv=none; b=IHpfqxwXvLNo7QAmXBKt7OGTJoJIzwgsM6jSkcyTJUqlHJ/87YNynjfGMn9deS8Q0YXGtC3S+qSAbU2g4quDVq9ba7VQ3xKqBsE5ATRAv597wMBwXtfF1md/vVCi7fy3Wpw1ENDaE1YiDy3S0IVdETFC5HXIUJuvUp1HHU86f38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720515735; c=relaxed/simple;
-	bh=b3i/0MCfgU6QEYwO+bz83cgYeRopRLQVdxliOV9f+Mc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oF9wR6G7GMsTK0cyN1K/HLinpeiya6EvhP7XDo2EEtKrAa8TpAZ52De7Q3P4AiLsYrmG6mfKnExldkc9+TRgupC8Z+zmAr+j8bj8msQ5Abz+G/zqKdwuNBXDWLrqa/Z5qEKt1ikQ5JRVhByXBApgMCFxEq7a2rp5MIritfgrF/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fp0tQxqx; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1720515745; c=relaxed/simple;
+	bh=u5GDcskkLkPvszCAkvzuDxSce+h0qv79jWl002Twdps=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lKCc7LUHlv89wEJIc9fiC7AVNt6ossP3ZffGaysbU3CeXNJkQ0tITBoq8zvHCufuyMGTjVh6hBblWJAsN5PqTsmrhm9zNJ390AM8/uI3U3SgC+6WCr+pSCmT/Ey21LpOkC2jE/AAxglOg+IlVdPkBNQ0Tpn7XJ7Vi/MrqiauA34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=a3lH7wVh; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4691kXAw028546;
-	Tue, 9 Jul 2024 09:02:01 GMT
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 468NdFMr018410;
+	Tue, 9 Jul 2024 09:02:09 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	FzK5OFs+lr/zFK/GI0khIU41rLOIjusdVR//B7Nztbs=; b=fp0tQxqxlFYK+fIQ
-	aHrk49mP6cIm8qMNjEYe+j04KzniQyG7fGxkITOs5GyvROVfslOeNcMvBiJ+rKAm
-	NZqTj0kwwYbiqql4nVjdQtnWp3s37I+8aW1uajDkIZVY9FiCQMbwsmM6swO2PtrV
-	T+lIOBdkxoDSDDkTs2ssDhUXm7VB/38gOWbpMNc1rl2ioCn02U3ulrD0TY3RL+xX
-	N0urStyAA98HwyMWKqkspWbXnjc7NaHyDesOf9OjSxMrJdzMcS7K9oPd40Hs9wN+
-	awmyS7q8AuaNl8TjbFASUt+8i7HxYeZQxABpi1NOlP3Wt4cN0Jj/r4GCu/Kk4KfK
-	k2sCXw==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 406wjn63ns-1
+	V4jjdhYt7mtR0F7AzgJDsh8z3aA3+2GN85+4XBhWQMA=; b=a3lH7wVhixLLudqZ
+	0mQjysDL1LfduYckzA5QQ3DQX6m9y3bvgHRa1+5V/BIhkqu0geuDDkI+L88gBRXY
+	jP+TzgsskxJ4SwGrsKum9yajFUvSmMxiKmDWHfGk+3PNXedXoL7o6H0+EJkPEvNJ
+	pBqlmrmIfZF+EC/pltywJy3tYss5jkMvK1WcPnR3jAymwWB/5MzukEuod/KMNULb
+	Ms3TLkoEc/JeAxRliPW4B7/Y2TFitjS7Pj8Ur/je4Q0R59lHoVI987p7bQpywzq6
+	FPbf9EQZRmr5uDS0hTjE2ziqkLxWXc7XBO9hcdWsANluAy16eCijD+qaJ+SiDEz9
+	twMdBQ==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 406x0t630f-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Jul 2024 09:02:01 +0000 (GMT)
+	Tue, 09 Jul 2024 09:02:09 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 469920XL028282
+	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4699272r007095
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 9 Jul 2024 09:02:00 GMT
+	Tue, 9 Jul 2024 09:02:07 GMT
 Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 9 Jul 2024 02:01:52 -0700
+ 15.2.1544.9; Tue, 9 Jul 2024 02:01:59 -0700
 From: Varadarajan Narayanan <quic_varada@quicinc.com>
 To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
         <angelogioacchino.delregno@collabora.com>, <andersson@kernel.org>,
@@ -68,9 +68,10 @@ To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
         <stephan.gerhold@kernkonzept.com>, <linux-arm-msm@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-clk@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: [PATCH v5 1/9] soc: qcom: cpr3: Fix 'acc_desc' usage
-Date: Tue, 9 Jul 2024 14:31:24 +0530
-Message-ID: <20240709090132.117077-2-quic_varada@quicinc.com>
+CC: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH v5 2/9] cpufreq: qcom-nvmem: Add support for IPQ9574
+Date: Tue, 9 Jul 2024 14:31:25 +0530
+Message-ID: <20240709090132.117077-3-quic_varada@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240709090132.117077-1-quic_varada@quicinc.com>
 References: <20240709090132.117077-1-quic_varada@quicinc.com>
@@ -86,61 +87,57 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: bCZa46p-U440S9LoGlUdWHdjqZURj8v6
-X-Proofpoint-GUID: bCZa46p-U440S9LoGlUdWHdjqZURj8v6
+X-Proofpoint-GUID: 8gUV4WDRKToJyohxu10wBUDx5W0zwzEI
+X-Proofpoint-ORIG-GUID: 8gUV4WDRKToJyohxu10wBUDx5W0zwzEI
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-08_15,2024-07-08_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=901 clxscore=1015
- mlxscore=0 adultscore=0 lowpriorityscore=0 suspectscore=0
- priorityscore=1501 phishscore=0 malwarescore=0 bulkscore=0 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ lowpriorityscore=0 impostorscore=0 adultscore=0 suspectscore=0
+ phishscore=0 mlxlogscore=999 priorityscore=1501 malwarescore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2406140001 definitions=main-2407090060
 
-cpr3 code assumes that 'acc_desc' is available for SoCs
-implementing CPR version 4 or less. However, IPQ9574 SoC
-implements CPRv4 without ACC. This causes NULL pointer accesses
-resulting in crashes. Hence, check if 'acc_desc' is populated
-before using it.
+IPQ9574 uses CPR4 power domain to manage core supplies. Use
+device-specific match data for this platform that includes
+genpd_names configuration.
 
+Acked-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 ---
-v5: Add acc_desc check in a different way without breaking other SoC
+v5: Change commit message and add Acked-by
 
-v4: Undo the acc_desc validation in probe function as that could
-    affect other SoC.
+v4: Update commit log to include stack trace
+    Introduce qcom_cpufreq_match_data for IPQ9574
 ---
- drivers/pmdomain/qcom/cpr3.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pmdomain/qcom/cpr3.c b/drivers/pmdomain/qcom/cpr3.c
-index c7790a71e74f..08a306d86403 100644
---- a/drivers/pmdomain/qcom/cpr3.c
-+++ b/drivers/pmdomain/qcom/cpr3.c
-@@ -2399,12 +2399,12 @@ static int cpr_pd_attach_dev(struct generic_pm_domain *domain,
- 		if (ret)
- 			goto exit;
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index 939702dfa73f..95558586c2e6 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -428,6 +428,11 @@ static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
+ 	.get_version = qcom_cpufreq_ipq8074_name_version,
+ };
  
--		if (acc_desc->config)
-+		if (acc_desc && acc_desc->config)
- 			regmap_multi_reg_write(drv->tcsr, acc_desc->config,
- 					       acc_desc->num_regs_per_fuse);
- 
- 		/* Enable ACC if required */
--		if (acc_desc->enable_mask)
-+		if (acc_desc && acc_desc->enable_mask)
- 			regmap_update_bits(drv->tcsr, acc_desc->enable_reg,
- 					   acc_desc->enable_mask,
- 					   acc_desc->enable_mask);
-@@ -2703,7 +2703,7 @@ static int cpr_probe(struct platform_device *pdev)
- 
- 	mutex_init(&drv->lock);
- 
--	if (desc->cpr_type < CTRL_TYPE_CPRH) {
-+	if (data->acc_desc && desc->cpr_type < CTRL_TYPE_CPRH) {
- 		np = of_parse_phandle(dev->of_node, "qcom,acc", 0);
- 		if (!np)
- 			return -ENODEV;
++static const struct qcom_cpufreq_match_data match_data_ipq9574 = {
++	.get_version = qcom_cpufreq_kryo_name_version,
++	.genpd_names = generic_genpd_names,
++};
++
+ static void qcom_cpufreq_suspend_virt_devs(struct qcom_cpufreq_drv *drv, unsigned int cpu)
+ {
+ 	const char * const *name = drv->data->genpd_names;
+@@ -621,7 +626,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
+ 	{ .compatible = "qcom,ipq8064", .data = &match_data_ipq8064 },
+ 	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
+ 	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
+-	{ .compatible = "qcom,ipq9574", .data = &match_data_kryo },
++	{ .compatible = "qcom,ipq9574", .data = &match_data_ipq9574 },
+ 	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
+ 	{ .compatible = "qcom,msm8960", .data = &match_data_krait },
+ 	{},
 -- 
 2.34.1
 
