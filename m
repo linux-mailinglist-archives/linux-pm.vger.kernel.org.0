@@ -1,66 +1,89 @@
-Return-Path: <linux-pm+bounces-10895-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10896-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 167E792C3C6
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 21:12:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C807292C51C
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 23:04:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7459283866
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 19:12:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9D841C21C35
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 21:04:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CEFC182A52;
-	Tue,  9 Jul 2024 19:12:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46AF618004E;
+	Tue,  9 Jul 2024 21:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OTqL0wO7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="omruXFHX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA39E180053;
-	Tue,  9 Jul 2024 19:12:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B0D14D2A7
+	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 21:04:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720552364; cv=none; b=eI8PRAC8Mgha+sQxsHMuXS/e3Xv3nx3NOtSKqSDelrv1bD1G/hZv1udb+g+Uqo5iApD7q+bJnHF7DJO9oIzJ20qjOCZBS/TSdHI0Uy0OQt64AfSxmvvMB0HnmwPZ928EoNvG/yL/bGqSYwaDsYzbe/oLuqjMG3IKPLyXRalTTHs=
+	t=1720559091; cv=none; b=lXJwlmHFBS9wJareUQ0RtT6wgSj4hgwO1KQjvkT0Hz3OGionQCCMihLVXP4vo5ic0fhHIrjWWkvFwYcbmEXvnaA6aYyAOYI526oRHtka8sp3Js0oE+mv2FwByY9RABx0vZ3eukcEGHWCj+W2nqAnmbtAdyxj8hlNsqMQ+GANurU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720552364; c=relaxed/simple;
-	bh=jFCriMPf/fsY0JPkaXj8hV7KNOljgDzvKMA/4JhgyDQ=;
+	s=arc-20240116; t=1720559091; c=relaxed/simple;
+	bh=pQuWpDrDEaCFl7ELhP2pM9jtryDd25mq43Dk6pVulGw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r3qWTrPF8FwsvipOfZ81fjVUo3gVlJx1B5w5CwYDO5BySxDanvr+/U4gZdM5iOWnT9EMDDBEip6Cqc5a4ztOaaq4G0XqxkualwduRBNi/bS3Oku9JNeklfspW8TfW4rHFy6aw9PuNlkBqs+n159Y/qlepXcuiPvro4MVC3IuJQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OTqL0wO7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D91AC3277B;
-	Tue,  9 Jul 2024 19:12:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720552364;
-	bh=jFCriMPf/fsY0JPkaXj8hV7KNOljgDzvKMA/4JhgyDQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OTqL0wO70S01B4Yw9jpnkYrij+//yNXzYfuzKIpdryj5rINygOnaZsFkzXABBmtB/
-	 /3LyYBD3Y7OWvt9AVamfOySFv3tmhv/q/nk4iL7XTlaub4aZK71AhU1BjEoSlaI6fD
-	 kU7GtW3/jmA8aMGdfQqKZfpKlffz62R8oTEg+0uSnNI9d2jL8dDDl77mtJMAJVTGRr
-	 gQtj0+NTg6bpYMSu/BUmx0Sg/fqXH8glaDsOFfZCAvS7jjdpG5+3rvOQ5kz74EX8+n
-	 w3bUNXygr5LkiXRh/bdB7P0jjKD3OCNUHnbvbYAJ5glRqN3UGEiZ/YkiiY7JUbwaaF
-	 m3A+tPPLXOFdg==
-Date: Tue, 9 Jul 2024 14:12:16 -0500
-From: Bjorn Andersson <andersson@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
-	linux-pm@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
-	imx@lists.linux.dev, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 10/12] thermal/drivers/qcom-tsens: simplify with
- dev_err_probe()
-Message-ID: <kiingkxvtdyuuyabn5acfsvpazolso6yvlsmzacxilos2jwanp@dsvceugddgep>
-References: <20240709-thermal-probe-v1-0-241644e2b6e0@linaro.org>
- <20240709-thermal-probe-v1-10-241644e2b6e0@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=frh2G7S5WG698vSDqN8MSJS8SXibDBWkMfnlLDMPPC7Mc6HVVGYaP064sWOu95adl22ZHNXIXNDSefyZ82OdxYPaRRWBsOk+gJmTr2bNli/EJWb5Dg3OCYSSY4UaIR0bba+Hrqy6n73nZY87TdB7Ms+GxnG9keJ9ClFwrGzH7n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=omruXFHX; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1fb10519ae3so19745ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 14:04:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1720559089; x=1721163889; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yOZEUf/J6siPzygu395P3D/gjZTzmsga/ioXaj0U6JM=;
+        b=omruXFHXUBjKOYPm3rt8AQhwbj75vzdL377WHBGIif0PTZs4fLUSGT9AlbUjRc8Chu
+         2SNI9PSWAj93mB3WljCJjgcFvfw+Mh2AouEa3bh46rpERpP4JiRBqVD3ANcN5amxlTys
+         jGsRCrf21Ggnda7ziRQK6mUUcZ3eeR0sMalKZRJppAiR9MwVC8nOvCAjJS0xO07ngMd5
+         czA3bSveOHOWU35domkKi70Qslp4/29Qo1wntovCrGdT0ImkE0v/XMBRP8/nJ5dAHYDv
+         y8qVin6pN25B0tN3cmpyWy9lEPsqND+ovCg1O5MUvVpigSLAJzgtpP5QLGnj7Mlz3tN8
+         p0FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720559089; x=1721163889;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yOZEUf/J6siPzygu395P3D/gjZTzmsga/ioXaj0U6JM=;
+        b=pjwwXWyJqOcIlXkdHQDYGEnG5LiktnpqBvHcfyj+RMuw1Kyh9xGmmqFERjMW1FvTEn
+         32w4c4is8z6URmhq4cv7XigSj5f5VzsZxZpLCojBslL3jG5SX+hwyBNOgJOqbgoNqlCQ
+         AZtfYrWe5WHmzHEIz4IW0DDBq911o6gAuxuXVkHpv4DeZyhZf9CrNjv9EcC4/nsERFso
+         hEn5SIn7MmbEA8Q87dy2xG3G8Nq1KS5s6yXzYxfAzlUP2Hu8W/xkhI1ktBOHgl29oxHA
+         PYZGfu+wDsw60c+Wiy64mCKLSmpX/n5b42Hq3tMnQdemqPLvUvt9ZWGgqLPi61eSR/fT
+         BpZA==
+X-Forwarded-Encrypted: i=1; AJvYcCVeVa0NXxZ0F+z2z1bc4Dg3DPi7W0SIXm57h+XqlELY+JIZIJmQlLu2XETnDWRc0Su61FV0mBwvmG89snAYSE3yzdflfOelzZs=
+X-Gm-Message-State: AOJu0YzJENYv8yaF2nKN70iZvxdZKEym4uWnfm9H8+DfrSt/poLz3Mu1
+	Vfgjzurp0AkFSzKcNFovaACGU1cpMxKg8iVAMXdUw6kTESG3Gj2ui0+Kxp8now==
+X-Google-Smtp-Source: AGHT+IGZUitn76mfCM9EnzN6heABLFA1iE9kZnxKb2TuoqafSIshuqFsZaMjvSrHhwGNWXnqfTBkog==
+X-Received: by 2002:a17:903:2003:b0:1f7:34e4:ebc1 with SMTP id d9443c01a7336-1fbce1391d4mr234535ad.5.1720559088778;
+        Tue, 09 Jul 2024 14:04:48 -0700 (PDT)
+Received: from google.com ([2620:15c:2d:3:e5ff:5d06:df02:cdba])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fbb6a122cfsm21086945ad.5.2024.07.09.14.04.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jul 2024 14:04:48 -0700 (PDT)
+Date: Tue, 9 Jul 2024 14:04:43 -0700
+From: Isaac Manjarres <isaacmanjarres@google.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: tglx@linutronix.de, jstultz@google.com,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	saravanak@google.com, mjguzik@gmail.com,
+	Manish Varma <varmam@google.com>,
+	Kelly Rossmoyer <krossmo@google.com>, kernel-team@android.com,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v6] fs: Improve eventpoll logging to stop indicting
+ timerfd
+Message-ID: <Zo2l65cTwuSMDU-Z@google.com>
+References: <20240703214315.454407-1-isaacmanjarres@google.com>
+ <20240704-umsatz-drollig-38db6b84da7b@brauner>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -69,44 +92,57 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240709-thermal-probe-v1-10-241644e2b6e0@linaro.org>
+In-Reply-To: <20240704-umsatz-drollig-38db6b84da7b@brauner>
 
-On Tue, Jul 09, 2024 at 02:59:40PM GMT, Krzysztof Kozlowski wrote:
-> Error handling in probe() can be a bit simpler with dev_err_probe().
+On Thu, Jul 04, 2024 at 04:03:59PM +0200, Christian Brauner wrote:
+> On Wed, Jul 03, 2024 at 02:43:14PM GMT, Isaac J. Manjarres wrote:
+> > From: Manish Varma <varmam@google.com>
+> > 
+> > We'll often see aborted suspend operations that look like:
+> > 
+> >  PM: suspend entry 2024-07-03 15:55:15.372419634 UTC
+> >  PM: PM: Pending Wakeup Sources: [timerfd]
+> >  Abort: Pending Wakeup Sources: [timerfd]
+> >  PM: suspend exit 2024-07-03 15:55:15.445281857 UTC
+> > 
+> > From this, it seems a timerfd caused the abort, but that can be
+> > confusing, as timerfds don't create wakeup sources. However,
+> > eventpoll can, and when it does, it names them after the underlying
+> > file descriptor. Unfortunately, all the file descriptors are called
+> > "[timerfd]", and a system may have many timerfds, so this isn't very
+> > useful to debug what's going on to cause the suspend to abort.
+> > 
+> > To improve this, change the way eventpoll wakeup sources are named:
+> > 
+> > 1) The top-level per-process eventpoll wakeup source is now named
+> > "epollN:P" (instead of just "eventpoll"), where N is a unique ID token,
+> > and P is the PID of the creating process.
+> > 
+> > 2) Individual eventpoll item wakeup sources are now named
+> > "epollitemN:P.F", where N is a unique ID token, P is PID of the creating
+> > process, and F is the name of the underlying file descriptor.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Fyi, that PID is meaningless or even actively misleading in the face of
+> pid namespaces. And since such wakeups seem to be registered in sysfs
+> globally they are visible to all containers. That means a container will
+> now see some timerfd wakeup source with a PID that might just accidently
+> correspond to a process inside the container. Which in turn also means
+Thanks for your feedback on this, Christian. With regards to this
+scenario: would it be useful to use a namespace ID, along with the PID,
+to uniquely identify the process? If not, do you have a suggestion for
+this?
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+I understand that the proposed naming scheme has a chance of causing
+collisions, however, it is still an improvement over the existing
+naming scheme in terms of being able to attribute wakeups to a
+particular application.
 
-Regards,
-Bjorn
+> you're leaking the info about the creating process into the container.
+> IOW, if PID 1 ends up registering some wakeup source the container gets
+> to know about it.
+Is there a general security concern about this? If not, can you please
+elaborate why this is a problem?
 
-> ---
->  drivers/thermal/qcom/tsens.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index e76e23026dc8..0b4421bf4785 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -1336,11 +1336,9 @@ static int tsens_probe(struct platform_device *pdev)
->  
->  	if (priv->ops->calibrate) {
->  		ret = priv->ops->calibrate(priv);
-> -		if (ret < 0) {
-> -			if (ret != -EPROBE_DEFER)
-> -				dev_err(dev, "%s: calibration failed\n", __func__);
-> -			return ret;
-> -		}
-> +		if (ret < 0)
-> +			return dev_err_probe(dev, ret, "%s: calibration failed\n",
-> +					     __func__);
->  	}
->  
->  	ret = tsens_register(priv);
-> 
-> -- 
-> 2.43.0
-> 
-> 
+Thanks,
+Isaac
 
