@@ -1,204 +1,273 @@
-Return-Path: <linux-pm+bounces-10888-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10889-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E33EB92BF0B
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 18:04:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A1BF92BF24
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 18:08:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97A5D28442C
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 16:04:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F34FBB2712E
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 16:08:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87338192B6F;
-	Tue,  9 Jul 2024 16:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3373A19F469;
+	Tue,  9 Jul 2024 16:06:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p2y2Q8ij"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cXIyipxv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615B14A02
-	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 16:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A56B19F461;
+	Tue,  9 Jul 2024 16:06:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720541074; cv=none; b=JUweQsPgz7GpfV1qEwe+DQFYPycIdZ+5TfYcn5uUmf8a16FbuQyt/UiVdtiVYr0AWJE6KDLSX1FYYq5cAmhBoKzI8u0FQ/rAQrbgJdobjXD7AIb1jfBDNFJwyZY9SPXBH+MVhWXsnBto8RXCZx55Asf2IlQQBlKsnm/qJ8L3NiQ=
+	t=1720541213; cv=none; b=kiODDIKuowPWPGPZOdwHfUbJIpcnhJDE6WCgZv6doLCLZdk0S5tlaI0Cced38/UszOQXHLudNVtrC3BrUb7wYDdXQIMCFpiGfEvuvaNV244t6aZ4y97FJz0I3r/CqDl/8NZIhHvyv6IS+tr3MFeKXD6W5oNKI4jWGdDFbrB9oTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720541074; c=relaxed/simple;
-	bh=hz8rKy7Lhj7i+v5o2V7dgxw/eWkWPwzwU+QxDBTJOlU=;
+	s=arc-20240116; t=1720541213; c=relaxed/simple;
+	bh=CC2PHQNnrsdYgFYaV6OamdCWY/YV/JF9+Qkm60FkWTM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YelGSqYAIOVPNA+biH03sRszMexo/oeuhw5R4HRL25qNxUPzvmtr1BaJWcS3mONFxdfpoZnjsnfHgrmiJjnyz+GOs1XhWtRtb+vt13NNYOjmA6cWJ2ce85jTWlxMvAeCR3wR1AyLZI00sKOfujEF1CLLAKacvYE0ybm5AhgqDls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p2y2Q8ij; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36FF3C32782
-	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 16:04:34 +0000 (UTC)
+	 To:Cc:Content-Type; b=AXTHRsjhbNjvfCH4hOUx0p0yNi+jasi7rrITGVdFXQulsIPXKSHCw0L/BKzmf1vOymRuWjxzv1L0biOWt4wIm8a9mNd9a9AtroXsy45YmdTVYKsBY38MYaXrMhjVs/28JlEvsRLnnV5Ms4Ju+oP1w77ndUY6HKAx5Lr6OGSbCW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cXIyipxv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96083C3277B;
+	Tue,  9 Jul 2024 16:06:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720541074;
-	bh=hz8rKy7Lhj7i+v5o2V7dgxw/eWkWPwzwU+QxDBTJOlU=;
+	s=k20201202; t=1720541212;
+	bh=CC2PHQNnrsdYgFYaV6OamdCWY/YV/JF9+Qkm60FkWTM=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=p2y2Q8ij/6MroRMZd66aOc9Ao2lYpJDqCXF0nDq91bvRSxHAZVtHnWjjS3n2dvhPU
-	 /LS9rg2ObOZR0RI8Q1ySTscQ+6o3Wn3ekG59FrpQuH8TjTNommWAb2CrNRZb7KTU2M
-	 dpDL6d7jU8NDdZGCTB4zcS2Z6Zin+J5h9lSDBsg8lls9DjrpJuSD1x4MQfrYWuCHRg
-	 Ba6T+Ni7cJZVWvlsZPQE6Yq6ndU7RKq/rhKyVbDUyqnfpok/izFc4HXuZytgM/UeJl
-	 ybcHMxSdbm+bY0OmldfroozFKEQ97l8gvM229LLp6GmYwryX7AVgOOgREi8hLDqvDu
-	 Y+UOHnbzNHhRQ==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-25e6e60a879so106283fac.3
-        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 09:04:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVnLPA4Bs/x7O2l07ZOFE5xkgJrbFNmN7W4jLrO5w2DYmo2PN2+0APJpHCJyaZBz6jQG+TK5n7GturT2DdARo27RSALdVZwKBY=
-X-Gm-Message-State: AOJu0YzjZ3Pd3iNIgkNm10H/U95aNbsJ1X848i2n/Wh5geHUYuqWw4gS
-	Dum+CEfZ+OGkHxI2Kdb3g6hmc7sq6xRDmvJfOXoOYN2QwpIWUqXgSigPWZ5WaRoDJmggO1dRMuJ
-	/VN+Eg3F0y55E5lORuxs4vg3Vh5Q=
-X-Google-Smtp-Source: AGHT+IHvhJW8N9T88sV8q0TNhDEHGKwvZdK+ihGq+UZixFGyKC+jWmTp29TRuJK5x1mFxMJ/rgfJEPlPLOidUdFd13c=
-X-Received: by 2002:a05:6871:24d5:b0:254:ecbd:1815 with SMTP id
- 586e51a60fabf-25eaece08f4mr2593658fac.5.1720541073467; Tue, 09 Jul 2024
- 09:04:33 -0700 (PDT)
+	b=cXIyipxv1ymkxMtR9Mf1qaTzVQ4H57kdVUmNyJLKn8fq8Xq0fpLs3LEx/NRaMh+S+
+	 A3r5nTaBKBdndAXz5A4dtKWCIrdzumsifF9AlSsfwKHbJGLY9Z1EXLTN5k0kpNlNaR
+	 BU0NKE//YStAqDboENA4Vt4eHIxUGTmzM+lIMtbGo8hMQUWXLhDZdV6y5RIBPHSRNv
+	 6esWX+gFcDD7CumrbfBy9XZE/5xjMN7FYlZPpzihNyfqidpshcUFQjTUjOong30V/v
+	 rHVdrzgVNr/ScNQLeJpv27JXTuay6yjsRzWwITsaC/GoenSHyb5wk9yWePwAPAz03J
+	 W0TOy8q7NkuZQ==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-25e14bf05e5so199615fac.1;
+        Tue, 09 Jul 2024 09:06:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUUZV776I2PuZqgGXST6QjkXmaYdr2hgErLDG/45iyPZyrYtNZw5cO2pzeODZstoMi/OBtB9l5Bja5WYUG3xV7fQRNHkDkfd7ZvGu512XbhfTpRNBFshRnTL9iLW/cGST4=
+X-Gm-Message-State: AOJu0YwCTsnjgSktxnyzqOXXVs4lz9bnc9bKRDLgfol7hhuN4tRWmTsl
+	RDjk9LlE/vidg0Z0VjT1Zb475JC58s554jDky5tJu+ieyMbhoAH+6hSOHPPBSX3/A4VzxYJZJvA
+	ReKwqd8kuTpMioKKTLt0iXwV9xcE=
+X-Google-Smtp-Source: AGHT+IFqiW5QZHZ9ZUza/Bt2hsVzHJKzpK259ONyXwKp9f5S4cEObEvF7s+/kF8vvJ1iTZfp8Qop48dz9aT1ch/wwcU=
+X-Received: by 2002:a05:6871:24da:b0:25e:2624:eb5f with SMTP id
+ 586e51a60fabf-25eae764acbmr2293933fac.1.1720541211853; Tue, 09 Jul 2024
+ 09:06:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240709065146.okez4bvizmf5bxtx@vireshk-i7>
-In-Reply-To: <20240709065146.okez4bvizmf5bxtx@vireshk-i7>
+References: <cover.1719849427.git.petrm@nvidia.com> <a9b97ecf80c722b42eceac1800f78ba57027af48.1719849427.git.petrm@nvidia.com>
+In-Reply-To: <a9b97ecf80c722b42eceac1800f78ba57027af48.1719849427.git.petrm@nvidia.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 9 Jul 2024 18:04:21 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iMuJAT8dPOO7gJ54wW3p0YEjCJcQrrYK4yxAqRJit+aQ@mail.gmail.com>
-Message-ID: <CAJZ5v0iMuJAT8dPOO7gJ54wW3p0YEjCJcQrrYK4yxAqRJit+aQ@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm updates for 6.11
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Date: Tue, 9 Jul 2024 18:06:40 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hAN0Csd6Qnc=2hNGafpbEGRVGX41LC8qrmUkoCk=whrw@mail.gmail.com>
+Message-ID: <CAJZ5v0hAN0Csd6Qnc=2hNGafpbEGRVGX41LC8qrmUkoCk=whrw@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/3] mlxsw: core_thermal: Report valid current
+ state during cooling device registration
+To: Petr Machata <petrm@nvidia.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
+	Ido Schimmel <idosch@nvidia.com>, mlxsw@nvidia.com, linux-pm@vger.kernel.org, 
+	Vadim Pasternak <vadimp@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Viresh,
+On Mon, Jul 1, 2024 at 6:45=E2=80=AFPM Petr Machata <petrm@nvidia.com> wrot=
+e:
+>
+> From: Ido Schimmel <idosch@nvidia.com>
+>
+> Commit 31a0fa0019b0 ("thermal/debugfs: Pass cooling device state to
+> thermal_debug_cdev_add()") changed the thermal core to read the current
+> state of the cooling device as part of the cooling device's
+> registration. This is incompatible with the current implementation of
+> the cooling device operations in mlxsw, leading to initialization
+> failure with errors such as:
+>
+> mlxsw_spectrum 0000:01:00.0: Failed to register cooling device
+> mlxsw_spectrum 0000:01:00.0: cannot register bus device
+>
+> The reason for the failure is that when the get current state operation
+> is invoked the driver tries to derive the index of the cooling device by
+> walking a per thermal zone array and looking for the matching cooling
+> device pointer. However, the pointer is returned from the registration
+> function and therefore only set in the array after the registration.
+>
+> The issue was later fixed by commit 1af89dedc8a5 ("thermal: core: Do not
+> fail cdev registration because of invalid initial state") by not failing
+> the registration of the cooling device if it cannot report a valid
+> current state during registration, although drivers are responsible for
+> ensuring that this will not happen.
+>
+> Therefore, make sure the driver is able to report a valid current state
+> for the cooling device during registration by passing to the
+> registration function a per cooling device private data that already has
+> the cooling device index populated.
+>
+> Cc: linux-pm@vger.kernel.org
+> Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
+> Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+> Signed-off-by: Petr Machata <petrm@nvidia.com>
 
-On Tue, Jul 9, 2024 at 8:51=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
-g> wrote:
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+
+> ---
+>  .../ethernet/mellanox/mlxsw/core_thermal.c    | 50 ++++++++++---------
+>  1 file changed, 26 insertions(+), 24 deletions(-)
 >
-> Hi Rafael,
+> diff --git a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c b/drivers=
+/net/ethernet/mellanox/mlxsw/core_thermal.c
+> index 5c511e1a8efa..eee3e37983ca 100644
+> --- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+> +++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+> @@ -100,6 +100,12 @@ static const struct mlxsw_cooling_states default_coo=
+ling_states[] =3D {
 >
-> The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfab=
-d0:
+>  struct mlxsw_thermal;
 >
->   Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
+> +struct mlxsw_thermal_cooling_device {
+> +       struct mlxsw_thermal *thermal;
+> +       struct thermal_cooling_device *cdev;
+> +       unsigned int idx;
+> +};
+> +
+>  struct mlxsw_thermal_module {
+>         struct mlxsw_thermal *parent;
+>         struct thermal_zone_device *tzdev;
+> @@ -123,7 +129,7 @@ struct mlxsw_thermal {
+>         const struct mlxsw_bus_info *bus_info;
+>         struct thermal_zone_device *tzdev;
+>         int polling_delay;
+> -       struct thermal_cooling_device *cdevs[MLXSW_MFCR_PWMS_MAX];
+> +       struct mlxsw_thermal_cooling_device cdevs[MLXSW_MFCR_PWMS_MAX];
+>         struct thermal_trip trips[MLXSW_THERMAL_NUM_TRIPS];
+>         struct mlxsw_cooling_states cooling_states[MLXSW_THERMAL_NUM_TRIP=
+S];
+>         struct mlxsw_thermal_area line_cards[];
+> @@ -147,7 +153,7 @@ static int mlxsw_get_cooling_device_idx(struct mlxsw_=
+thermal *thermal,
+>         int i;
 >
-> are available in the Git repository at:
+>         for (i =3D 0; i < MLXSW_MFCR_PWMS_MAX; i++)
+> -               if (thermal->cdevs[i] =3D=3D cdev)
+> +               if (thermal->cdevs[i].cdev =3D=3D cdev)
+>                         return i;
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufr=
-eq-arm-updates-6.11
+>         /* Allow mlxsw thermal zone binding to an external cooling device=
+ */
+> @@ -352,17 +358,14 @@ static int mlxsw_thermal_get_cur_state(struct therm=
+al_cooling_device *cdev,
+>                                        unsigned long *p_state)
 >
-> for you to fetch changes up to d992f881764cc89444aa5a9752ff508a1baeb61e:
+>  {
+> -       struct mlxsw_thermal *thermal =3D cdev->devdata;
+> +       struct mlxsw_thermal_cooling_device *mlxsw_cdev =3D cdev->devdata=
+;
+> +       struct mlxsw_thermal *thermal =3D mlxsw_cdev->thermal;
+>         struct device *dev =3D thermal->bus_info->dev;
+>         char mfsc_pl[MLXSW_REG_MFSC_LEN];
+> -       int err, idx;
+>         u8 duty;
+> +       int err;
 >
->   cpufreq: sti: fix build warning (2024-07-09 08:45:43 +0530)
+> -       idx =3D mlxsw_get_cooling_device_idx(thermal, cdev);
+> -       if (idx < 0)
+> -               return idx;
+> -
+> -       mlxsw_reg_mfsc_pack(mfsc_pl, idx, 0);
+> +       mlxsw_reg_mfsc_pack(mfsc_pl, mlxsw_cdev->idx, 0);
+>         err =3D mlxsw_reg_query(thermal->core, MLXSW_REG(mfsc), mfsc_pl);
+>         if (err) {
+>                 dev_err(dev, "Failed to query PWM duty\n");
+> @@ -378,22 +381,19 @@ static int mlxsw_thermal_set_cur_state(struct therm=
+al_cooling_device *cdev,
+>                                        unsigned long state)
 >
-> ----------------------------------------------------------------
-> ARM cpufreq updates for 6.11
+>  {
+> -       struct mlxsw_thermal *thermal =3D cdev->devdata;
+> +       struct mlxsw_thermal_cooling_device *mlxsw_cdev =3D cdev->devdata=
+;
+> +       struct mlxsw_thermal *thermal =3D mlxsw_cdev->thermal;
+>         struct device *dev =3D thermal->bus_info->dev;
+>         char mfsc_pl[MLXSW_REG_MFSC_LEN];
+> -       int idx;
+>         int err;
 >
-> - cpufreq: Add Loongson-3 CPUFreq driver support (Huacai Chen).
-> - Make exit() callback return void (Lizhe and Viresh Kumar).
-> - Minor cleanups and fixes in several drivers (Bryan Brattlof,
->   Javier Carrasco, Jagadeesh Kona, Jeff Johnson, N=C3=ADcolas F. R. A. Pr=
-ado,
->   Primoz Fiser, Raphael Gallais-Pou, and Riwen Lu).
+>         if (state > MLXSW_THERMAL_MAX_STATE)
+>                 return -EINVAL;
 >
-> ----------------------------------------------------------------
-> Bryan Brattlof (2):
->       cpufreq: ti: update OPP table for AM62Ax SoCs
->       cpufreq: ti: update OPP table for AM62Px SoCs
+> -       idx =3D mlxsw_get_cooling_device_idx(thermal, cdev);
+> -       if (idx < 0)
+> -               return idx;
+> -
+>         /* Normalize the state to the valid speed range. */
+>         state =3D max_t(unsigned long, MLXSW_THERMAL_MIN_STATE, state);
+> -       mlxsw_reg_mfsc_pack(mfsc_pl, idx, mlxsw_state_to_duty(state));
+> +       mlxsw_reg_mfsc_pack(mfsc_pl, mlxsw_cdev->idx,
+> +                           mlxsw_state_to_duty(state));
+>         err =3D mlxsw_reg_write(thermal->core, MLXSW_REG(mfsc), mfsc_pl);
+>         if (err) {
+>                 dev_err(dev, "Failed to write PWM duty\n");
+> @@ -753,17 +753,21 @@ int mlxsw_thermal_init(struct mlxsw_core *core,
+>         }
+>         for (i =3D 0; i < MLXSW_MFCR_PWMS_MAX; i++) {
+>                 if (pwm_active & BIT(i)) {
+> +                       struct mlxsw_thermal_cooling_device *mlxsw_cdev;
+>                         struct thermal_cooling_device *cdev;
 >
-> Huacai Chen (1):
->       cpufreq: Add Loongson-3 CPUFreq driver support
+> +                       mlxsw_cdev =3D &thermal->cdevs[i];
+> +                       mlxsw_cdev->thermal =3D thermal;
+> +                       mlxsw_cdev->idx =3D i;
+>                         cdev =3D thermal_cooling_device_register("mlxsw_f=
+an",
+> -                                                              thermal,
+> +                                                              mlxsw_cdev=
+,
+>                                                                &mlxsw_coo=
+ling_ops);
+>                         if (IS_ERR(cdev)) {
+>                                 err =3D PTR_ERR(cdev);
+>                                 dev_err(dev, "Failed to register cooling =
+device\n");
+>                                 goto err_thermal_cooling_device_register;
+>                         }
+> -                       thermal->cdevs[i] =3D cdev;
+> +                       mlxsw_cdev->cdev =3D cdev;
+>                 }
+>         }
 >
-> Jagadeesh Kona (1):
->       cpufreq: scmi: Avoid overflow of target_freq in fast switch
+> @@ -824,8 +828,8 @@ int mlxsw_thermal_init(struct mlxsw_core *core,
+>  err_thermal_zone_device_register:
+>  err_thermal_cooling_device_register:
+>         for (i =3D 0; i < MLXSW_MFCR_PWMS_MAX; i++)
+> -               if (thermal->cdevs[i])
+> -                       thermal_cooling_device_unregister(thermal->cdevs[=
+i]);
+> +               if (thermal->cdevs[i].cdev)
+> +                       thermal_cooling_device_unregister(thermal->cdevs[=
+i].cdev);
+>  err_reg_write:
+>  err_reg_query:
+>         kfree(thermal);
+> @@ -848,10 +852,8 @@ void mlxsw_thermal_fini(struct mlxsw_thermal *therma=
+l)
+>         }
 >
-> Javier Carrasco (4):
->       cpufreq: sun50i: fix memory leak in dt_has_supported_hw()
->       cpufreq: sun50i: replace of_node_put() with automatic cleanup handl=
-er
->       cpufreq: qcom-nvmem: fix memory leaks in probe error paths
->       cpufreq: qcom-nvmem: eliminate uses of of_node_put()
+>         for (i =3D 0; i < MLXSW_MFCR_PWMS_MAX; i++) {
+> -               if (thermal->cdevs[i]) {
+> -                       thermal_cooling_device_unregister(thermal->cdevs[=
+i]);
+> -                       thermal->cdevs[i] =3D NULL;
+> -               }
+> +               if (thermal->cdevs[i].cdev)
+> +                       thermal_cooling_device_unregister(thermal->cdevs[=
+i].cdev);
+>         }
 >
-> Jeff Johnson (1):
->       cpufreq: dt-platdev: add missing MODULE_DESCRIPTION() macro
->
-> Lizhe (1):
->       cpufreq: Make cpufreq_driver->exit() return void
->
-> N=C3=ADcolas F. R. A. Prado (1):
->       cpufreq: mediatek: Use dev_err_probe in every error path in probe
->
-> Primoz Fiser (2):
->       cpufreq: ti-cpufreq: Handle deferred probe with dev_err_probe()
->       OPP: ti: Fix ti_opp_supply_probe wrong return values
->
-> Raphael Gallais-Pou (2):
->       cpufreq: sti: add missing MODULE_DEVICE_TABLE entry for stih418
->       cpufreq: sti: fix build warning
->
-> Riwen Lu (1):
->       cpufreq/cppc: Don't compare desired_perf in target()
->
-> Ryan Walklin (1):
->       cpufreq: sun50i: add Allwinner H700 speed bin
->
-> Viresh Kumar (3):
->       cpufreq: nforce2: Remove empty exit() callback
->       cpufreq: loongson2: Remove empty exit() callback
->       cpufreq: pcc: Remove empty exit() callback
->
-> Yang Li (1):
->       cpufreq: longhaul: Fix kernel-doc param for longhaul_setstate
->
->  MAINTAINERS                            |   1 +
->  drivers/cpufreq/Kconfig                |  12 +++++
->  drivers/cpufreq/Makefile               |   1 +
->  drivers/cpufreq/acpi-cpufreq.c         |   4 +-
->  drivers/cpufreq/amd-pstate.c           |   7 +--
->  drivers/cpufreq/apple-soc-cpufreq.c    |   4 +-
->  drivers/cpufreq/bmips-cpufreq.c        |   4 +-
->  drivers/cpufreq/cppc_cpufreq.c         |  12 ++---
->  drivers/cpufreq/cpufreq-dt-platdev.c   |   1 +
->  drivers/cpufreq/cpufreq-dt.c           |   3 +-
->  drivers/cpufreq/cpufreq-nforce2.c      |   6 ---
->  drivers/cpufreq/e_powersaver.c         |   3 +-
->  drivers/cpufreq/intel_pstate.c         |   8 ++--
->  drivers/cpufreq/longhaul.c             |   5 ++-
->  drivers/cpufreq/loongson2_cpufreq.c    |   6 ---
->  drivers/cpufreq/loongson3_cpufreq.c    | 395 +++++++++++++++++++++++++++=
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  drivers/cpufreq/mediatek-cpufreq-hw.c  |   4 +-
->  drivers/cpufreq/mediatek-cpufreq.c     |  76 +++++++++++++++------------=
------
->  drivers/cpufreq/omap-cpufreq.c         |   3 +-
->  drivers/cpufreq/pasemi-cpufreq.c       |   6 +--
->  drivers/cpufreq/pcc-cpufreq.c          |   6 ---
->  drivers/cpufreq/powernow-k6.c          |   5 +--
->  drivers/cpufreq/powernow-k7.c          |   3 +-
->  drivers/cpufreq/powernow-k8.c          |   6 +--
->  drivers/cpufreq/powernv-cpufreq.c      |   4 +-
->  drivers/cpufreq/ppc_cbe_cpufreq.c      |   3 +-
->  drivers/cpufreq/qcom-cpufreq-hw.c      |   4 +-
->  drivers/cpufreq/qcom-cpufreq-nvmem.c   |  12 ++---
->  drivers/cpufreq/qoriq-cpufreq.c        |   4 +-
->  drivers/cpufreq/scmi-cpufreq.c         |   8 ++--
->  drivers/cpufreq/scpi-cpufreq.c         |   4 +-
->  drivers/cpufreq/sh-cpufreq.c           |   4 +-
->  drivers/cpufreq/sparc-us2e-cpufreq.c   |   3 +-
->  drivers/cpufreq/sparc-us3-cpufreq.c    |   3 +-
->  drivers/cpufreq/speedstep-centrino.c   |  10 ++---
->  drivers/cpufreq/sti-cpufreq.c          |   3 +-
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c |  30 +++++--------
->  drivers/cpufreq/tegra194-cpufreq.c     |   4 +-
->  drivers/cpufreq/ti-cpufreq.c           |  96 +++++++++++++++++++++++++++=
-+++++++++++--
->  drivers/cpufreq/vexpress-spc-cpufreq.c |   5 +--
->  drivers/opp/ti-opp-supply.c            |   6 ++-
->  include/linux/cpufreq.h                |   2 +-
->  42 files changed, 603 insertions(+), 183 deletions(-)
->  create mode 100644 drivers/cpufreq/loongson3_cpufreq.c
->
+>         kfree(thermal);
 > --
-
-Pulled and added to linux-pm.git/linux-next, thanks!
+> 2.45.0
+>
+>
 
