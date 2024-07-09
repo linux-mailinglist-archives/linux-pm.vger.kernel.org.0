@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-10848-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10849-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A219C92B552
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 12:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4981F92B557
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 12:31:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 248EE1F21F3B
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 10:30:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E80861F21959
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 10:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 058DA155C8C;
-	Tue,  9 Jul 2024 10:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35510155C8C;
+	Tue,  9 Jul 2024 10:30:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gxvCoAmG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jp+GRLWA"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56EA820DE8;
-	Tue,  9 Jul 2024 10:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97B9014290;
+	Tue,  9 Jul 2024 10:30:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720521029; cv=none; b=N8+eK3Yw3qUPOgvyQ1s2dz3D8js2EDnKQfJAurKi/7KOXnJ0bftzIJqa61cKeiYbtxXNHd21Ef4CclqWffCltVKvg1HP2Rvkw5DAZu+K8xHWi0G/h4rTB8gf3HmDeMk568TXqXa32OPcGcKaTo6jG3ORqx5aaTTYPpTSssIsInM=
+	t=1720521056; cv=none; b=STB54goSDDpiUAxxPumED4MFRjGlGLlmbne2hHBACU8U5Yjnqh9bRI1hHZUhLDlMh//sJIdNgNXcF2XGEV3OzGq63bSgCG/yk4sk8v5LC1W7Ud2RAlqb6INMeK+MoEHAiynyQn/WEQgo7urAi+suyq5obQ6WudLAvtYeWQQFfpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720521029; c=relaxed/simple;
-	bh=Bo+8vwjDQLHQRyezkFe8wTzncFjjp4ATpNyKNZ97028=;
+	s=arc-20240116; t=1720521056; c=relaxed/simple;
+	bh=xfPBQzBeW4Tv/lqWpULf17daEKzix9DRjXatlfKOswk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LF89nMLtEQ+jujbof6eGH3rocKlarUu6sVhhGx7EcWqt5ePlixugYQd5Yjt7L4r5jD3J2oaXEqX050yNHdWB8L05+3O9Gbds5Cd3ssWoNF+vacsLrkpxcqWvsU980NpGGfa7yzlr/rkZntjKg1qNMIPWp7HXZJDDS9klf27hKdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gxvCoAmG; arc=none smtp.client-ip=209.85.208.52
+	 MIME-Version; b=oQnaITZPdjOdVghBUVkpTzSeWsgvtK9HQju9GAuVbimDjGV6LCZrgVDIBvJ8BNnfUcEB/wtHLLCPE9o8B/GTVtuJDFiILWs8tncSAgNbwvKfKbe/vb4vjEETmIzbYlmdltB95IPci8vGFEPY+vjpMWqZ4gv5qQe0qsCQvQm49zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jp+GRLWA; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-59559ea9cfdso401736a12.0;
-        Tue, 09 Jul 2024 03:30:28 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5956fbe6d0dso440549a12.1;
+        Tue, 09 Jul 2024 03:30:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720521026; x=1721125826; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720521052; x=1721125852; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yOYoImCISLmjV4V0lw2Fa8ZU/fZdwVwBDAKgyU4Yn7g=;
-        b=gxvCoAmGyumV+hjpafS0MOZLjAZWptAxMokINX/joBLA/GLHWwZbTQvDgg1yaXExZR
-         7jX+gmKAbv9uEDT853D57b6wjWW6T/AFGRE48NUaewkiZ8ivnO6/onklFe+UbWKjFyi/
-         kMp1cMuMvRTb2aC44uv/1BvLNnT52yupkLUnKQMbKnIJmMxb1L++BJJ84XbdUivX5dBW
-         x0OcE8DNLaxxqdtkhbefN0akr4rD4NuKGy1NNjBEACGhcqyqr3ymNTUZF7XVP0qn4PNq
-         jKRj01EChiNX91vehX4SCdV6yEiLbkdVz1bcQ9YTcR44Gzoz6YxhyTYevXCFoBfjBrNV
-         gyuQ==
+        bh=aIt+jIdXxKvutjLGPruJn2rCWqpErD00vGwYrFUI2jE=;
+        b=jp+GRLWAP41qyMHCn7QAnIHrAXBlAhjN1pFKsaw946jWZ2wNJAUMyMtJqUNPjPmMmt
+         EvaGYiTQn8ILZjtp2rYJkLPgLQf3/fu9/FjH45YY8/vR1p1Cnzp9sjObOaWlFEASr2n/
+         YpulxOLJs1zIHrjHK7TV8GuQelWcBqq7oWH7lnflc7T9Rz5bmRA8O37EISCNOp8zD2b7
+         lPxnkyHlUbjIFSLFWHENz2e73LCzTGbiQRO8r50S8UVkpl66CAThfgDxAJ4mVJs1bGa2
+         qtqzbtEDWwJlvXW4UDL+rJ3mCvR5clTYaV/y4NgCYGHapiVLAIcCK/yRxo2fYFzH2wOt
+         JYuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720521026; x=1721125826;
+        d=1e100.net; s=20230601; t=1720521052; x=1721125852;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yOYoImCISLmjV4V0lw2Fa8ZU/fZdwVwBDAKgyU4Yn7g=;
-        b=NPXP+qxhvCG22+dDiMkTLdNP5b1+zi3RihEvYLRjkFq7CiGIGDygMb3cBE3JTqIHY1
-         EzRbcqXSrnaGWQ9RZgURVa2gyxLY3qOCSiGsT+JscRYufXmH7eqDa/wvxrtOkIp3HUi8
-         2xJ95scI9FqwKbQKlecWN70A8yymQZoO4ylUm9Jp+ZzhlUMmsc+j6Zm7SADcP0nXo+E3
-         5T170DjieCNH7zZ7zOO3P81I3PMIwDO1VymYQMNd3dD8EaxihBZQ3hHSqTbQVSgu5N0n
-         y5EuKWRPsP0A77OxfRXqz2oKyHw0vdQjnZcROIp/ni7OC+wAwdKGo1fosCfHBCcNuxOJ
-         DDtA==
-X-Forwarded-Encrypted: i=1; AJvYcCUyWqJ8VjOSeHeqz9o2odatdIBFhyG0q0uDoZQnVcFeNZtH7da1MV4sMZ2zKZL0KLMV8d4VHUsSd5YgPX11kmvcEmvF1neKbMn4aHO22PevJnoM6akhm3KbfOdPRQhNpR9d2OzSillk4mxtAa/cSlMd3rMyl9qv6vLOdPc7TYR5mvfBIs5c/d4k1ISYWivWCTtHSSDreHmKPntOiJ38owX0Fw==
-X-Gm-Message-State: AOJu0YxjPUvX5eqFu7BwvlR1AwbKvFCV7IJVuDalFBCveLU6IieyiLCK
-	fkQ4ocqy6pNU1GRLt1IInbLWVwelONk6jGJX9kkQKaIIq38AmtERm0cS3g==
-X-Google-Smtp-Source: AGHT+IFAVbp5Xhz+Qd9F332Ru+KEdrPyFW17706lzfARFQr/oCIyYBmSzobiJdVge44rwdBy/74mhg==
-X-Received: by 2002:a17:907:10c2:b0:a75:2495:a6a3 with SMTP id a640c23a62f3a-a780b89d121mr167496666b.67.1720521026276;
-        Tue, 09 Jul 2024 03:30:26 -0700 (PDT)
+        bh=aIt+jIdXxKvutjLGPruJn2rCWqpErD00vGwYrFUI2jE=;
+        b=TRaLerClM7UCidSABsydWiTP1t0oAN3H7/QciXNkjpk6ihgeryKYLYv9mq+TrBm0uf
+         GiFbeTK2OuXGK1+dbaqGHepiaMkqFEKlpaRGlgESuQe/Cc9FH25OA/bwxpi7jnDfiPsE
+         QLSxHUXrBSh7PuzCth/QwnWY/Sk6IIiO8oP/7PFKCxDcclK08zpOtdYcgSYDYXhIjdzn
+         mgT0es4gGXWCLsOwZoljXJunvfXnTVHSF+d6sdb05kI6eag/w+RtkGTSGn0p5fqJkgSo
+         D+A017uSIs/hKps1YvawI+28HTOPBaWMzJK/6TcB1gFWICaZ3asDTCZhH+uubHrjN3cv
+         j8SQ==
+X-Forwarded-Encrypted: i=1; AJvYcCURbbPEI0irIkGcOt2DdDNAyd7PFzEZwpTfLOZ5uV83zEJ4w3IkbGyhCKc58T6jGj6Tdyk17UoXX+s40sDNqRzB3IxEn9pq9vdxW+BMXawRoiovToOyAfjVPfeBajchZXJXAe/bgI/0y4mctt0xJI081YXho8rSnmZvgqsI92UiZscSo9I5QEZbHsFc1LL/KNmRPPhueACHQIDsWVFRw9KQnA==
+X-Gm-Message-State: AOJu0YzUWnkv7wfvVfHQuxhnPixR/sqo669G9b1cxvoFDJoG4nBdd/v9
+	AhQhQiBgC6gAnVV0gUE+/c8eSn4sR8o0FIDKgR/bBVl5l9MzZuUsSKcVrg==
+X-Google-Smtp-Source: AGHT+IG+g0RfzuMoLuFgs/UBmwZ7vjY32b0jDS5/Rd7t7zjlcn8tVPd2nXkOMlzIcrAZ5LhXPoupfg==
+X-Received: by 2002:a17:906:f146:b0:a72:81f5:85b6 with SMTP id a640c23a62f3a-a780b6b1e19mr135544366b.18.1720521052536;
+        Tue, 09 Jul 2024 03:30:52 -0700 (PDT)
 Received: from localhost.localdomain (bza125.neoplus.adsl.tpnet.pl. [83.30.46.125])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a780a6bcc21sm66528166b.16.2024.07.09.03.30.23
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a780a6bcc21sm66528166b.16.2024.07.09.03.30.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jul 2024 03:30:25 -0700 (PDT)
+        Tue, 09 Jul 2024 03:30:52 -0700 (PDT)
 From: Adam Skladowski <a39.skl@gmail.com>
 To: 
 Cc: phone-devel@vger.kernel.org,
@@ -92,10 +92,11 @@ Cc: phone-devel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Abel Vesa <abel.vesa@linaro.org>
-Subject: [PATCH v3 6/9] interconnect: qcom: qcs404: Add regmaps and more bus descriptions
-Date: Tue,  9 Jul 2024 12:22:51 +0200
-Message-ID: <20240709102728.15349-7-a39.skl@gmail.com>
+	Abel Vesa <abel.vesa@linaro.org>,
+	Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH v3 7/9] dt-bindings: interconnect: qcom: msm8939: Fix example
+Date: Tue,  9 Jul 2024 12:22:52 +0200
+Message-ID: <20240709102728.15349-8-a39.skl@gmail.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240709102728.15349-1-a39.skl@gmail.com>
 References: <20240709102728.15349-1-a39.skl@gmail.com>
@@ -107,97 +108,31 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently we are lacking descriptions of regmaps, bus clocks
-and types of busses, provide them.
+For now example list snoc_mm as children of bimc which is obviously
+not valid, drop bimc and move snoc_mm into snoc.
 
 Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 ---
- drivers/interconnect/qcom/qcs404.c | 42 +++++++++++++++++++++++++++---
- 1 file changed, 39 insertions(+), 3 deletions(-)
+ .../devicetree/bindings/interconnect/qcom,msm8939.yaml      | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
-index 91b2ccc56a33..63e9ff223ac4 100644
---- a/drivers/interconnect/qcom/qcs404.c
-+++ b/drivers/interconnect/qcom/qcs404.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/mod_devicetable.h>
- #include <linux/platform_device.h>
-+#include <linux/regmap.h>
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
+index d19e20247df8..4b08be72bbd7 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
+@@ -69,12 +69,6 @@ examples:
+         compatible = "qcom,msm8939-snoc";
+         reg = <0x00580000 0x14000>;
+         #interconnect-cells = <1>;
+-    };
+-
+-    bimc: interconnect@400000 {
+-        compatible = "qcom,msm8939-bimc";
+-        reg = <0x00400000 0x62000>;
+-        #interconnect-cells = <1>;
  
- 
- #include "icc-rpm.h"
-@@ -1067,10 +1068,22 @@ static struct qcom_icc_node * const qcs404_bimc_nodes[] = {
- 	[SLAVE_BIMC_SNOC] = &slv_bimc_snoc,
- };
- 
-+static const struct regmap_config qcs404_bimc_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.max_register = 0x80000,
-+	.fast_io = true,
-+};
-+
- static const struct qcom_icc_desc qcs404_bimc = {
--	.bus_clk_desc = &bimc_clk,
-+	.type = QCOM_ICC_BIMC,
- 	.nodes = qcs404_bimc_nodes,
- 	.num_nodes = ARRAY_SIZE(qcs404_bimc_nodes),
-+	.bus_clk_desc = &bimc_clk,
-+	.regmap_cfg = &qcs404_bimc_regmap_config,
-+	.qos_offset = 0x8000,
-+	.ab_coeff = 153,
- };
- 
- static struct qcom_icc_node * const qcs404_pcnoc_nodes[] = {
-@@ -1122,10 +1135,22 @@ static struct qcom_icc_node * const qcs404_pcnoc_nodes[] = {
- 	[SLAVE_PCNOC_SNOC] = &slv_pcnoc_snoc,
- };
- 
-+static const struct regmap_config qcs404_pcnoc_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.max_register = 0x15080,
-+	.fast_io = true,
-+};
-+
- static const struct qcom_icc_desc qcs404_pcnoc = {
--	.bus_clk_desc = &bus_0_clk,
-+	.type = QCOM_ICC_NOC,
- 	.nodes = qcs404_pcnoc_nodes,
- 	.num_nodes = ARRAY_SIZE(qcs404_pcnoc_nodes),
-+	.bus_clk_desc = &bus_0_clk,
-+	.qos_offset = 0x7000,
-+	.keep_alive = true,
-+	.regmap_cfg = &qcs404_pcnoc_regmap_config,
- };
- 
- static struct qcom_icc_node * const qcs404_snoc_nodes[] = {
-@@ -1151,10 +1176,21 @@ static struct qcom_icc_node * const qcs404_snoc_nodes[] = {
- 	[SLAVE_LPASS] = &slv_lpass,
- };
- 
-+static const struct regmap_config qcs404_snoc_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.max_register = 0x23080,
-+	.fast_io = true,
-+};
-+
- static const struct qcom_icc_desc qcs404_snoc = {
--	.bus_clk_desc = &bus_1_clk,
-+	.type = QCOM_ICC_NOC,
- 	.nodes = qcs404_snoc_nodes,
- 	.num_nodes = ARRAY_SIZE(qcs404_snoc_nodes),
-+	.bus_clk_desc = &bus_1_clk,
-+	.qos_offset = 0x11000,
-+	.regmap_cfg = &qcs404_snoc_regmap_config,
- };
- 
- 
+           snoc_mm: interconnect-snoc {
+               compatible = "qcom,msm8939-snoc-mm";
 -- 
 2.45.2
 
