@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-10834-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10835-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F31A92B325
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:05:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA0A392B329
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 11:06:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7BB9B22A72
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:05:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CC12283D32
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 09:06:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A67A615443C;
-	Tue,  9 Jul 2024 09:04:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B675D155A5B;
+	Tue,  9 Jul 2024 09:04:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LgUZHzWv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KN0xhdtw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A61153BC1;
-	Tue,  9 Jul 2024 09:04:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80E90154BEB;
+	Tue,  9 Jul 2024 09:04:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720515857; cv=none; b=ScVueTPMWEvEBmjSRzB3BfZBEOvC+qrI8ZXUrzMojPOm15r1tDnyP56XbqxSAJRrZWiWMdLrO1py0Inuc6cmnxBpJBoCxUcqAdlGTeZQs8y1rRokTjfw4/PUcTZ78ocPP6Otm06bCLZ6ii0CvKsICPRJ685Mb7X/KuOZmU5MidE=
+	t=1720515870; cv=none; b=mZXm5lzE1b4ozWuRSOlTDy3ZuOlLoHU5T+EjNQ8khBmRrBzPw1T5yN3qgt6g78O4a0k3jvQu8SQFlI10c0PFKeuS18/OnNmXwcJWw3cBT1VE3L2FPgHBXQxVc9IektcfvjdoLE5Fm2d5n5KoIsOUEUGhi/Z/JlVVKkReI/N9+DQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720515857; c=relaxed/simple;
-	bh=TkMqJJtBHpKKSpWVKMvli8Ta5TF/pMoIrGR2Theemmw=;
+	s=arc-20240116; t=1720515870; c=relaxed/simple;
+	bh=n+WH758AVAI6VhY+aToA4ETl7TMD/4WKio4PaKCRZNQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jro4Tp6uuluD+Sf8YWa3lQQxPXLtFmHpCxSpX1REHMEAhuOusNn9szV/fPVjhxFnarVbNLKHwUY2rsQVGIWXIjR2pHZke+F67TvEZTBTEuRNFoEvYJmbNfcxTCsrylN/bEtw4R555+c3os2uxeM14q7nje1H9y5H5q/Wx1am4uA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LgUZHzWv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CAF8C3277B;
-	Tue,  9 Jul 2024 09:04:08 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=r5OG0Qg3QGgKD2bEhxtHicfrefq7Aw0Dz2N7bvF4ooTzYyesjM1kvMn7tmJW9vDdRhaZUZAtzCEv4socpdW7DAKhUEv2wlp3D8h5kaD/OkUaqaSZ3t/kz16OfT5+mazHHdq2Srd9mSqxDWB2nTDtTr62N/ed/PEAGyYpV7wt9PM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KN0xhdtw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9CBCC32786;
+	Tue,  9 Jul 2024 09:04:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720515856;
-	bh=TkMqJJtBHpKKSpWVKMvli8Ta5TF/pMoIrGR2Theemmw=;
+	s=k20201202; t=1720515870;
+	bh=n+WH758AVAI6VhY+aToA4ETl7TMD/4WKio4PaKCRZNQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LgUZHzWvEFq1YuQB2MDEVbyxTDCGRMYXIcHlkFbW69A4+lvuRscPqRFRH1ieb6ItE
-	 xqH6+4o/D2N7If83W8Ba+Fe2bx+6JUU0gY+1ojDkKo97GDhcklwyDJ16BB8AjdJG06
-	 q9tIh0loAdbOeck7rFDoogv5K6fKifxjO3KDaoWfeckrjCHwo4AeE1jFAZufOoyg+I
-	 6C0J9CXucmlCbk4btVqKt9Nz+HP7pEWWiEdsVqPvr7Ns16HA/wpnZextgZvMOBVcg4
-	 SYggPDphfIdbiPD7E9xqlOW6m49cSQNzip8TNuwsWHtghVdX/20n6v4xp4UpCvHEUM
-	 muzr0vuNA3Zrw==
-Message-ID: <cd1c3450-1905-4d71-bcdd-5f880d743820@kernel.org>
-Date: Tue, 9 Jul 2024 11:04:05 +0200
+	b=KN0xhdtw5feu6gu/dHUHcIqaq5Ursv53cyPg4MU02nfAFy0ty8IkSGQeoJSqGBT3r
+	 wf2ufQkchGBNBjgA9yYwIHH0gKZ5/j2hbWaWHBuYpxhT9ZLKt7eyI24xbL+Qn5YTWV
+	 bWcqxOI4lWUXT/+RlClxZAraqLo2Rv9rmfSEpdFcFgL+rmEPnCMagpUxcgfSiRwJO3
+	 2QLeh4WGkMJkJnrMDE1XrRMF3oBF+AiL5AdlgpC29/lKhPmTfjYZBXS9DpaS8ior6C
+	 je2RWHJsw0rvM2b1fVRie1PrE2DwEu+pEbTh8LR+YaOMbLQI30AXO01FdHg6xH3Qr4
+	 Ct1egylm/WcJw==
+Message-ID: <7130ca4c-2486-4043-b71a-b81e0970a382@kernel.org>
+Date: Tue, 9 Jul 2024 11:04:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 01/10] MAINTAINERS: Include new Qualcomm CPR drivers
- in the file list
+Subject: Re: [PATCH v15 03/10] dt-bindings: opp: v2-qcom-level: Allow
+ opp-shared
 To: Konrad Dybcio <konrad.dybcio@linaro.org>,
  AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
  Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
@@ -71,7 +71,7 @@ Cc: Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
  Konrad Dybcio <konradybcio@kernel.org>,
  Varadarajan Narayanan <quic_varada@quicinc.com>
 References: <20240708-topic-cpr3h-v15-0-5bc8b8936489@linaro.org>
- <20240708-topic-cpr3h-v15-1-5bc8b8936489@linaro.org>
+ <20240708-topic-cpr3h-v15-3-5bc8b8936489@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -117,40 +117,17 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240708-topic-cpr3h-v15-1-5bc8b8936489@linaro.org>
+In-Reply-To: <20240708-topic-cpr3h-v15-3-5bc8b8936489@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 08/07/2024 14:22, Konrad Dybcio wrote:
-> Expand the Qualcomm Core Power Reduction section to include the files
-> concerning CPR3+ support.
+> Some devices may use a shared OPP table, such as separate CPR threads.
+> Allow the table to be marked as such.
 > 
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  MAINTAINERS | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index dcb37b635f2c..f3e013a52c16 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18687,14 +18687,15 @@ F:	Documentation/accel/qaic/
->  F:	drivers/accel/qaic/
->  F:	include/uapi/drm/qaic_accel.h
->  
-> -QUALCOMM CORE POWER REDUCTION (CPR) AVS DRIVER
-> +QUALCOMM CORE POWER REDUCTION (CPR) AVS DRIVERS
->  M:	Bjorn Andersson <andersson@kernel.org>
->  M:	Konrad Dybcio <konrad.dybcio@linaro.org>
->  L:	linux-pm@vger.kernel.org
->  L:	linux-arm-msm@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
-> -F:	drivers/pmdomain/qcom/cpr.c
-> +F:	Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
 
-Maybe combine these two into:
-Documentation/devicetree/bindings/power/avs/qcom,cpr*
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
