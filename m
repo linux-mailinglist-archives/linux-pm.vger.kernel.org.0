@@ -1,124 +1,118 @@
-Return-Path: <linux-pm+bounces-10886-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10887-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39A7792BE75
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 17:31:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 203F892BF09
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 18:04:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E873A284434
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 15:31:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50E591C2199D
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2024 16:04:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCB0A158A0D;
-	Tue,  9 Jul 2024 15:31:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AC04181D0D;
+	Tue,  9 Jul 2024 16:03:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OJwghMV7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rq+3oCYi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536022629D
-	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 15:31:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 362A74A02
+	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 16:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720539110; cv=none; b=BE7L+htPl2Fe8+rEkxwKXYJC8hGFj/7u3xAP9OWkroN7qhTPgnSe/G0XIjF2IZ3uIfMxVN6WMM4QlXIaZ4/IFe2rKpWczMsv3X5bY2hLqzFpygWy922h9eIFy+HLzFWNVnOiEjmw+wxqORXM1LygKn3HsUmwCc6lVLgUt2bghOY=
+	t=1720541039; cv=none; b=IhrVr/xOsgGTfmR3AhsqTLhr61s+fSYckk5qKVf8ql7pTvnHjtHzgBMfCDhHTCio9dGptN3xtvGDLYXtEjj7+l4CmrstcwBeQzxqHd4NjgnkO8AwMRCrbSI78fNqD0wSXRFmv2ShyCTw7bSn7REED1LIpj2FtrlnNxYrywC3z/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720539110; c=relaxed/simple;
-	bh=voZI5s8NJ7G6cqBvxozBaN0IUoJi+5Na3Tpon9hVe7A=;
+	s=arc-20240116; t=1720541039; c=relaxed/simple;
+	bh=Ck721sAoczFrwR/3RAlb+lr96G0Kz0LPVJnKok5qARo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ougdxK4p3zIVX/9+U6jzH2scr622CElUCPY+6MExrGHBnYmTyNmTnVQfOIzFqHfHz8oRGkQBPiT7uh9x57EjUINMzgl4Dq3BUU6T7MJdLhAjGYXegQ67ZBhQvZlyCxqypiaoRNafn3PpmtYjSpb2USSnd/83qLJXcTHHRg1sQ1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OJwghMV7; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e03c689addcso5589817276.0
-        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 08:31:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720539108; x=1721143908; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qQoKhA+ICd3MJpIZmDmZs/xX1LjfxyqH2Gz0ml2Sepk=;
-        b=OJwghMV7yN0k9UHa0lk7VpVtaqxiR88169IcFVg+WZKL283wZmhN50dP74AK6bhtwg
-         YcJ9Md4gfmOMWI/X5Qjm+E2Lkb+IqKVez21rsM5Tl9dH6xfGjcrGaSafe1VyBeklnwZR
-         ISOCw0kZzkBR4Izwavd4OeRzsK4PD2Uk4gx/1f3fV4Jy2+KeCVaqTOFu+o6y+W0FvKIG
-         eUIhWOxhPo/FJTSw9ZMDCkXBFVCcupxRy4tcwx/laFXLx5vfQXmencSmieAPWk+wTFZZ
-         UEiSW+LpntVFNjdmxGp8pxEu+lR35QMxUFTdBviMrJdGBjR+G7FGn9cQ8hmqCkVEzNek
-         Nn5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720539108; x=1721143908;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qQoKhA+ICd3MJpIZmDmZs/xX1LjfxyqH2Gz0ml2Sepk=;
-        b=gd45/GO32VLvdDXVabgr3JGD7Dh7opn3BzPJe0ruUbm3b7AJIJw0/B//jNSvGFL39o
-         oYGbV9bqGdnD+uxjsodieymeBFw/9WyuGhMWWRyutAwyxbokFmYHs6ZkUh+kWzeM3S5p
-         eE1t1Ylps7WDixp/hAdoxnfgxpAtiPZ/QXeepM5Fqq4P6zvGSO0Q3Ci529pARghiMyZr
-         8yThQRNm60iFxzAPM6zjW00/HH5BEHsG47QY0c1ZGQ/UMrDZb4CiPCMerXr2hEJRepW8
-         43WmRrqr34nLFBuSZ2I/cYvSAgB38EN0+PMa2whEtBB1Pe01P0KLlcGRliWfM/GJzO6M
-         VwBg==
-X-Forwarded-Encrypted: i=1; AJvYcCXMjbrU10PALwUOGIabyKqp4s0iQ9kRgrZnuHzx+T7Pzcyl/oQOrczLidXVCVFjf8L9xAWNPdbq9VzFgDG6nSuToxCV5h+hCfw=
-X-Gm-Message-State: AOJu0YyzrE7nsUSUtn9d5CURVjvpQdJHT8KEFgysL0yl0K5kPsZONwK9
-	ENLqFo1OdrBtpcH7qiCiPJ9qskl8q2fXXc4LQNI97G8FEYaR4Gjszm407oczD2CDtTsiIIdQY65
-	RWduCWi/HAhDj16XRChNviCOOq3gx6W2QfEJncw==
-X-Google-Smtp-Source: AGHT+IGAIeptn+tE7RkQYiH+yO0nFWuIoGL2cBnHEGQOA05tCKNOiKuaJATENwPLzVHZt9hSxTz4NtjwLh9UJcOo5kk=
-X-Received: by 2002:a25:d30b:0:b0:e03:6241:b8f9 with SMTP id
- 3f1490d57ef6-e041b070896mr3436258276.1.1720539108320; Tue, 09 Jul 2024
- 08:31:48 -0700 (PDT)
+	 To:Cc:Content-Type; b=LVacfyZwmXXblhmVRtiyFmb76I+rbzRJ3MpVVFRbmwfB8lOUkXdXc72m0NZsmCpycToS4XXymB5BV1fzd5bEIXQOYs95732eoV2GeeC6Rs4+zYNwxiUEMjMpxIAO9zO4AbF3Vc69tHffxQZon8G5Qfcw3ZgYtrYdCvTGd+YHVs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rq+3oCYi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3849C4AF07
+	for <linux-pm@vger.kernel.org>; Tue,  9 Jul 2024 16:03:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720541038;
+	bh=Ck721sAoczFrwR/3RAlb+lr96G0Kz0LPVJnKok5qARo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rq+3oCYiqTr2GB5VS16Vs5FnhWfUT+G0Cmm05vuwTxpSZk8jTZXqklEFrKQTJ4Pkq
+	 9/aDxfg+JajByI4296dnkS+ZNIon0XBiv2gJV9NDP+pCvI+JrTTRzIY67LakhEu6vA
+	 qni17e7YPvZETNFn0DfF6iECqe0aU8SYLSftSfseQZOWO65QbOtRPs8bIMk8p9ZwCU
+	 ew6079uSsq6FLja1obeUERDmRFIDoUjkKpk+qG0Kc7z5oxYv6B8Kwah7+gunzhjuap
+	 G0f/1cnGeHIyU+8pMqJx4ySW6rTSrua/5y4pVM2BuBioF9i74h8Z03elpJd2ueHYOG
+	 Co/eFpl/hZ1uQ==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5c7af5b5fbdso1907eaf.0
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 09:03:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXOkEUdL1zjfc/FioS9FyZnPA3QRCOhT8a5D/X0cg7jBZJ1JcwgbzSrKm3IhdBUWT9jdBXd+DI1L/xLirExCK6ooKqstPnrgbM=
+X-Gm-Message-State: AOJu0Yz4+w3BadZ9YM2svUEgih8KwzBUrwfpvY4i/NE6AYCjHKfo4Aoa
+	puSfUALY3Sz43urbKyiGtUKPhsblQtNOFr7n3CcuCl/eW4LYluHX7X3+HHg5hHDYYlR6DVgJ+vW
+	mEUF4c/cuntbYZ3tNNoEaNMBl0BM=
+X-Google-Smtp-Source: AGHT+IGvW3AUooy2Uvkf0BbMfKWVObc3ybenrWBRGp3nMaHNXGvNauXwaA8UskBDOAlRQjnMFzIeSJp+8dwXls+v1zA=
+X-Received: by 2002:a05:6820:1d99:b0:5c6:6029:1568 with SMTP id
+ 006d021491bc7-5c68dfe1f20mr2897534eaf.0.1720541037908; Tue, 09 Jul 2024
+ 09:03:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240527142557.321610-1-ulf.hansson@linaro.org> <20240708135310.3VRFnmk1@linutronix.de>
-In-Reply-To: <20240708135310.3VRFnmk1@linutronix.de>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 9 Jul 2024 17:31:12 +0200
-Message-ID: <CAPDyKFo6hE9BPgS7Bhe259Mxki-KBZDYyMkaBPFuznETbZhGkQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] pmdomain/cpuidle-psci: Support s2idle/s2ram on PREEMPT_RT
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org, 
-	Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>, Nikunj Kela <nkela@quicinc.com>, 
-	Prasad Sodagudi <psodagud@quicinc.com>, Maulik Shah <quic_mkshah@quicinc.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, linux-rt-users@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20240709070434.lhqicz2px555sykz@vireshk-i7>
+In-Reply-To: <20240709070434.lhqicz2px555sykz@vireshk-i7>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 9 Jul 2024 18:03:46 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hxJXgOumrKz8GP5zq7Hya97SaMCsRNAJEjBkk_ur+RYg@mail.gmail.com>
+Message-ID: <CAJZ5v0hxJXgOumrKz8GP5zq7Hya97SaMCsRNAJEjBkk_ur+RYg@mail.gmail.com>
+Subject: Re: [GIT PULL] OPP updates for 6.11
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 8 Jul 2024 at 15:53, Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
+Hi Viresh,
+
+On Tue, Jul 9, 2024 at 9:04=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
+g> wrote:
 >
-> On 2024-05-27 16:25:50 [+0200], Ulf Hansson wrote:
-> > Updates in v2:
-> >       - Rebased and fixed a small issue in genpd, see patch3.
-> >       - Re-tested on v6.9-rt5 (PREEMPT_RT enabled)
-> >       - Re-tested on v6.10-rc1 (for regressions, PREEMPT_RT disabled)
-> >
-> > The hierarchical PM domain topology and the corresponding domain-idle-states
-> > are currently disabled on a PREEMPT_RT based configuration. The main reason is
-> > because spinlocks are turned into sleepable locks on PREEMPT_RT, which means
-> > genpd and runtime PM can't be use in the atomic idle-path when
-> > selecting/entering an idle-state.
-> >
-> > For s2idle/s2ram this is an unnecessary limitation that this series intends to
-> > address. Note that, the support for cpuhotplug is left to future improvements.
-> > More information about this are available in the commit messages.
+> Hi Rafael,
 >
-> I looked at it and it seems limited to pmdomain/core.c, also I don't
-> know if there is a ->set_performance_state callback set since the one I
-> checked have mutex_t locking ;)
-> So if this is needed, then be it. s2ram wouldn't be used in "production"
-> but in "safe state" so I wouldn't worry too much about latency spikes.
-> Not sure what it means for the other modes.
-> I am not to worried for now, please don't let spread more than needed ;)
+> The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfab=
+d0:
+>
+>   Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-u=
+pdates-6.11
+>
+> for you to fetch changes up to e3943f00afdb71684c4f209f9d3a90d6b79771fc:
+>
+>   OPP: Introduce an OF helper function to inform if required-opps is used=
+ (2024-06-26 11:17:20 +0530)
+>
+> ----------------------------------------------------------------
+> OPP Updates for 6.11
+>
+> - Introduce an OF helper function to inform if required-opps is used (Ulf=
+ Hansson).
+> - Generic cleanus (Ulf Hansson and Viresh Kumar).
+>
+> ----------------------------------------------------------------
+> Ulf Hansson (2):
+>       OPP: Drop a redundant in-parameter to _set_opp_level()
+>       OPP: Introduce an OF helper function to inform if required-opps is =
+used
+>
+> Viresh Kumar (1):
+>       OPP: Fix missing cleanup on error in _opp_attach_genpd()
+>
+>  drivers/opp/core.c     | 15 ++++++++-------
+>  drivers/opp/of.c       | 32 ++++++++++++++++++++++++++++++++
+>  include/linux/pm_opp.h |  6 ++++++
+>  3 files changed, 46 insertions(+), 7 deletions(-)
+>
+> --
 
-Thanks for taking a look and for providing your thoughts. Can I
-consider that as an "ack" for the whole series?
-
-Before I decide to apply this I am awaiting some additional
-confirmation from Qcom guys. It's getting late for v6.11, so I may
-need to make another re-spin, but let's see.
-
-Kind regards
-Uffe
+Pulled and added to linux-pm.git/linux-next, thanks!
 
