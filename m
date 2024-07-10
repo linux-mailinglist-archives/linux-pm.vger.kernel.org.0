@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-10907-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10908-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19C9C92CA80
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 08:12:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE22592CA88
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 08:13:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4E1128148D
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 06:12:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B49E1C2272E
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 06:13:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E82B5F876;
-	Wed, 10 Jul 2024 06:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 884616F31C;
+	Wed, 10 Jul 2024 06:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ndAQGUYh"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pVF5yOXg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0511581749;
-	Wed, 10 Jul 2024 06:12:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 113AB57C8D;
+	Wed, 10 Jul 2024 06:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720591927; cv=none; b=qRYCEzJ9AbqOWxxyB9Vscv4SwhS7MLMHiNHNYFcBe8wEmNA6CQrtQAoiqe9lKtLfPpLFUDDsuAFc8uqLFeUkZtbAeFFiyviSWitvp7YPeSqUu11lwOd3lOHmZoEIqdRrJqzLeO1YHcL43tWywVisuVrVxWBxcGdCUS6YTrefeY8=
+	t=1720591941; cv=none; b=dXrRlj6mZkPQEDsc/wPTfr9gjFl3k3HDfJmgtqGiAnbfjSDmSmTmy+eoDsFNiJDJIQcGT9erh4c61Mwt0BDYCmgpDwUjuP/ihihfJ7NoSFakB5wiFP4XkKnUxek7e1MChRn7q0NBbDx8dwZhGDSQYWkcChlOZV8hRyEUoHwFYWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720591927; c=relaxed/simple;
-	bh=8QAiUetgH+uMQr+3WPYPyfbPiCKY4Fxd2pJPqi7I88M=;
+	s=arc-20240116; t=1720591941; c=relaxed/simple;
+	bh=kyT2lvnZ/z/NDW94MzCkn8+4xY1RNh2feW47eeACaGM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JJ5OSUnBTTQLNcT7jCCOrQnKD7XML+ym9ToJZVsJFEPI5qnDqT+sAwfsLx1yR9d0d0hPtDuTGqcYd1aVancgRvElocwXZwjPj0Ts5cVMyf8CYQlhrAsB7ybjbHRtrt2JiDrbQo6TOTfOmRhn0pb0uwejJwCxlClD4x+XFvwufaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ndAQGUYh; arc=none smtp.client-ip=205.220.180.131
+	 MIME-Version:Content-Type; b=RgdptI1FKaCh1opKbCKTaAtoReCpSrk2YXKrnMUPip67yBrwIAd00DAGurMGfHOhwhaY8Yu+O1T3XKzisIqFv3R1NqWyrONJePPhD4comMEqzRQrL5wntiZf9E5UNXE31QwB3cPoCFGjBHnNFyrTrrwzMajuaq2CT55c/DQqhzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pVF5yOXg; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46A3fjO4003747;
-	Wed, 10 Jul 2024 06:11:55 GMT
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 469HB3jl026771;
+	Wed, 10 Jul 2024 06:12:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	8votFYtWC5ZVkTh4pE34LQoGOOCgrCEPwPBfDeW49Lw=; b=ndAQGUYh6TKzEYkJ
-	vH/0sB1dlIHX+fCQKjDePw+Vu7uC8gmLTQK/9hTnf2S0cfd+eygAyTM5Skeg1VhH
-	MpXw4rNCdyIDiE01dL5OO8MqfPqwZ5dcxAX1jn8UYUv1mWZonPK+lIrwFDbDGCCZ
-	+PvvOnEs7QPPu3r6V3U/CiFr/ytWmuaBLD5tGpyr596SG2tqulqTB+2kY5OJRk5I
-	bZP6+X2Qw1JZWcrH4L2qm+iGJ8szJObPpA9dPUAC7yPr7kPj+F1cCttfE0Ibye6v
-	sfxbaoAIhfjkXGO5nHnChC6O2EBYaSL28+ayclsZW+IbaXjLJ9c9mUeEuXdfO4Mj
-	9KeJFA==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 408w0rb7yq-1
+	ZReu1Re5cu0W/i7PRU33nbGEbt3ZUnonMSTjz/njU+A=; b=pVF5yOXgyUDW96PU
+	aD/QbkPFt2Z1KqY5Fr9NnPjDNQQkjB3btNwwgr47H9jTupc4lJgCXCDrHxNnCDQT
+	xqQDwPRklcRIS1ic2xKBengjQMxS9ls0Myo6rcpr+pBFpcjduXb+6XDDjtqeGAHc
+	TDZKwAQTLrblV9OeM1UZ97ePK6ho085HNXNwx2mNyvDGODzWKXd8wBui6SZ68seU
+	Uv54a9ULdbYR1oAhhWo/2EMnF9E2OrcEetz5itaeh7rkmMGI3ihgapW99M7Gkb7d
+	iWkMfkoEAZ1whJ8G6llkNAZzWNb0ZpVbkVc71d5C32Vk5H8q+L0+Prpi8jrs8pxt
+	EcXTXw==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4091jdjnes-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jul 2024 06:11:55 +0000 (GMT)
+	Wed, 10 Jul 2024 06:12:03 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46A6BreT031426
+	by NASANPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46A6C2SR024489
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jul 2024 06:11:53 GMT
+	Wed, 10 Jul 2024 06:12:02 GMT
 Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 9 Jul 2024 23:11:46 -0700
+ 15.2.1544.9; Tue, 9 Jul 2024 23:11:54 -0700
 From: Varadarajan Narayanan <quic_varada@quicinc.com>
 To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
         <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
@@ -69,10 +69,12 @@ To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
         <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
         <linux-clk@vger.kernel.org>
-CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v6 4/9] dt-bindings: soc: qcom: cpr3: Add bindings for IPQ9574
-Date: Wed, 10 Jul 2024 11:40:57 +0530
-Message-ID: <20240710061102.1323550-5-quic_varada@quicinc.com>
+CC: Praveenkumar I <quic_ipkumar@quicinc.com>,
+        Dmitry Baryshkov
+	<dmitry.baryshkov@linaro.org>
+Subject: [PATCH v6 5/9] pmdomain: qcom: rpmpd: Add IPQ9574 power domains
+Date: Wed, 10 Jul 2024 11:40:58 +0530
+Message-ID: <20240710061102.1323550-6-quic_varada@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240710061102.1323550-1-quic_varada@quicinc.com>
 References: <20240710061102.1323550-1-quic_varada@quicinc.com>
@@ -88,103 +90,76 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: MEV-HsgeALnFRM8UiJzjeRixweU1AFZR
-X-Proofpoint-GUID: MEV-HsgeALnFRM8UiJzjeRixweU1AFZR
+X-Proofpoint-GUID: rfPWICN7bGvtt5MxKLcz-Dhv_M8ueML0
+X-Proofpoint-ORIG-GUID: rfPWICN7bGvtt5MxKLcz-Dhv_M8ueML0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-10_02,2024-07-09_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- impostorscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=999
- phishscore=0 spamscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2407100046
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ lowpriorityscore=0 adultscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
+ mlxscore=0 priorityscore=1501 phishscore=0 clxscore=1015 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2406140001
+ definitions=main-2407100045
 
-Add the bindings for the IPQ9574 CPR3 driver to the documentation.
+From: Praveenkumar I <quic_ipkumar@quicinc.com>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Add the APC power domain definitions used in IPQ9574.
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
 Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 ---
-v5: Add Reviewed-by
-
-v4: Change compatible string to cpr4 instead of cprh
-    Not adding Reviewed-By as compatible string changed
-
-v2: Constrained nvmem-cells and the other variant.
-    Removed unnecessary blank line.
+v4: Add Reviewed-by: Dmitry Baryshkov
+v3: Fix patch author
+v2: Fix Signed-off-by order
 ---
- .../bindings/soc/qcom/qcom,cpr3.yaml          | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ drivers/pmdomain/qcom/rpmpd.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-index 2e6712aa1c58..c00373948901 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-@@ -24,6 +24,7 @@ properties:
-       - const: qcom,cpr4
-       - items:
-           - enum:
-+              - qcom,ipq9574-cpr4
-               - qcom,msm8998-cprh
-               - qcom,sdm630-cprh
-           - const: qcom,cprh
-@@ -52,9 +53,11 @@ properties:
+diff --git a/drivers/pmdomain/qcom/rpmpd.c b/drivers/pmdomain/qcom/rpmpd.c
+index 5e6280b4cf70..947d6a9c3897 100644
+--- a/drivers/pmdomain/qcom/rpmpd.c
++++ b/drivers/pmdomain/qcom/rpmpd.c
+@@ -38,6 +38,7 @@ static struct qcom_smd_rpm *rpmpd_smd_rpm;
+ #define KEY_FLOOR_CORNER	0x636676   /* vfc */
+ #define KEY_FLOOR_LEVEL		0x6c6676   /* vfl */
+ #define KEY_LEVEL		0x6c766c76 /* vlvl */
++#define RPM_KEY_UV		0x00007675 /* "uv" */
  
-   nvmem-cells:
-     description: Cells containing the fuse corners and revision data
-+    minItems: 17
-     maxItems: 32
+ #define MAX_CORNER_RPMPD_STATE	6
  
-   nvmem-cell-names:
-+    minItems: 17
-     maxItems: 32
+@@ -644,6 +645,23 @@ static const struct rpmpd_desc mdm9607_desc = {
+ 	.max_state = RPM_SMD_LEVEL_TURBO,
+ };
  
-   operating-points-v2: true
-@@ -74,6 +77,36 @@ required:
- additionalProperties: false
- 
- allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,ipq9574-cpr4
-+    then:
-+      properties:
-+        nvmem-cells:
-+          maxItems: 17
-+        nvmem-cell-names:
-+          items:
-+            - const: cpr_speed_bin
-+            - const: cpr_fuse_revision
-+            - const: cpr0_quotient1
-+            - const: cpr0_quotient2
-+            - const: cpr0_quotient3
-+            - const: cpr0_quotient4
-+            - const: cpr0_quotient_offset2
-+            - const: cpr0_quotient_offset3
-+            - const: cpr0_quotient_offset4
-+            - const: cpr0_init_voltage1
-+            - const: cpr0_init_voltage2
-+            - const: cpr0_init_voltage3
-+            - const: cpr0_init_voltage4
-+            - const: cpr0_ring_osc1
-+            - const: cpr0_ring_osc2
-+            - const: cpr0_ring_osc3
-+            - const: cpr0_ring_osc4
++static struct rpmpd apc_s1_lvl = {
++	.pd = { .name = "apc", },
++	.res_type = RPMPD_SMPA,
++	.res_id = 1,
++	.key = RPM_KEY_UV,
++};
 +
-   - if:
-       properties:
-         compatible:
-@@ -82,6 +115,8 @@ allOf:
-               - qcom,msm8998-cprh
-     then:
-       properties:
-+        nvmem-cells:
-+          minItems: 32
-         nvmem-cell-names:
-           items:
-             - const: cpr_speed_bin
++static struct rpmpd *ipq9574_rpmpds[] = {
++	[IPQ9574_VDDAPC] =	&apc_s1_lvl,
++};
++
++static const struct rpmpd_desc ipq9574_desc = {
++	.rpmpds = ipq9574_rpmpds,
++	.num_pds = ARRAY_SIZE(ipq9574_rpmpds),
++	.max_state = RPM_SMD_LEVEL_TURBO_HIGH,
++};
++
+ static struct rpmpd *msm8226_rpmpds[] = {
+ 	[MSM8226_VDDCX] =	&cx_s1a_corner,
+ 	[MSM8226_VDDCX_AO] =	&cx_s1a_corner_ao,
+@@ -931,6 +949,7 @@ static const struct rpmpd_desc qcm2290_desc = {
+ };
+ 
+ static const struct of_device_id rpmpd_match_table[] = {
++	{ .compatible = "qcom,ipq9574-rpmpd", .data = &ipq9574_desc },
+ 	{ .compatible = "qcom,mdm9607-rpmpd", .data = &mdm9607_desc },
+ 	{ .compatible = "qcom,msm8226-rpmpd", .data = &msm8226_desc },
+ 	{ .compatible = "qcom,msm8909-rpmpd", .data = &msm8916_desc },
 -- 
 2.34.1
 
