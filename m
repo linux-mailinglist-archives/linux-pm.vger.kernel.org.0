@@ -1,308 +1,172 @@
-Return-Path: <linux-pm+bounces-10926-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10927-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B47592D016
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 13:06:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C66AF92D044
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 13:11:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3804286F44
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 11:06:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C6B81F25DD8
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 11:11:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 192CD18FC61;
-	Wed, 10 Jul 2024 11:06:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8770918FC93;
+	Wed, 10 Jul 2024 11:11:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AqLIaNjW"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="eCv/rKFS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674FB18FA2F
-	for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2024 11:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE2518FA32;
+	Wed, 10 Jul 2024 11:10:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720609573; cv=none; b=upy+rAH5Z8kG0XB7CqprhXW6bHnck49Td+gxJFvNYaaVePm9mQqe+8mSook5+p/g7xAshcayppEe3mo47UfyxxNTpxQGvYlBpjbkvFlt94oDkB8Qs21CXXh0F2A+aFjceHhBPNAFVF7bXIOYkQUIL1vw3bfgViAcmapbhrzHqbU=
+	t=1720609860; cv=none; b=A/pG0rAQmRb4MohbwAZhZanNquo2L90gRMXOUOYfubBw6Vf7oNkoRlOhbK8idGRxW251TRE+BlUIZHzQsbMGLo56goWdlMhvidABT/0yXvwqHzmvfG1RDh93x2k197o8lMwF8aG9VaUXxUdZJ/C1VS2s7Efe92N92dYIzwiCbB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720609573; c=relaxed/simple;
-	bh=WIA4TotBcO1wv97QgOlFDGMdA0xJxoIGnpOGFJOKzBw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W/MyO57FAaf6l0dlax2wbXtoKNDeCAYMkIagPE/Xjdu0q98QwNwlkxbeW13jmoNhLdKKxYH/C8iXscpHv8Df/tBUhYOHP4UWL37aYNi37XkF/rb8qm1Zr9d8GpPFxI/AeZxvATT0ZKtkeyxPdYqzyJyQBum7ZaritavXTWZDorc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AqLIaNjW; arc=none smtp.client-ip=209.85.166.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7f9be1f6cdbso180814539f.1
-        for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2024 04:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720609570; x=1721214370; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NjxciFMY6AgSQrZA4JvBx90yFCzozg1YraYrNNx6v74=;
-        b=AqLIaNjWBWeabxpLY1ukZAIpYYfTGtnFlGX8+y5S2jOBCjbWn1vhwtUkEOOU9QHNQ1
-         0jFQepDj+KqkOcJvvIU0OOCqnn1faPJcY0Mi1hauSejEcyUJfFUss+O86HTu8roN5DsX
-         3xavaDrJX9zwNhH0c7G6P19O4wGQ6BhYWxQoJbn2BFOCIbgZS6lKad5H76dEshmWIpYg
-         rg/xPTjqQxDXRUhSZzjAZ57HobqYBOsvJlM8hcUEwcBZiqbjPtLHdesScIIuYRernxjH
-         Q7vrxEnnJFOeBilIPWtGfsbKLrLfZJbC4vOJI79yWd4nQrlOX9HzNhm6iINwoAaL4F3s
-         HCCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720609570; x=1721214370;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NjxciFMY6AgSQrZA4JvBx90yFCzozg1YraYrNNx6v74=;
-        b=RhaVH8DFU+MhYEy8kDXOOKSin/xMSLzc4bs5Y2fP9NjYFug4l74TRJl9CRuxnvltFT
-         Ga7f8GtZR0cEOke1Ugk4Z21V7KaXxXjy5IEhHYZ2lMsRKBUhdrsPESjry3gTRMzKw+Df
-         B4W6w53/3pI7k/y0Saa6kAC4NrNt4tn2FmDXsbxTaM7M6oMtHrxZcJX9pNsFIDSkGabe
-         mAzJ/CD1shEjZE7pLJaml9WeWw+blP0UT1VextJRtr5Xr29ZPx2cY/iYyTiyDb7u6gxT
-         Zs0/AyKchLJUCelP8w9Ji80txBcynd8rN4eKDgE4RgyGdiOJJR8yIw6nauyBn42tZcN9
-         s79A==
-X-Forwarded-Encrypted: i=1; AJvYcCVQx5Nd8Yas4x5CAGXKipSJxtS93frUdlMHc+xz9r0HWq5VXvERV8Skfv+VVDAgJ0BW2GR85h6phzbbG3O0s3ttp5VtCHS44SE=
-X-Gm-Message-State: AOJu0YwYdQ+seGcXPsug8Uu+8leK7ZwH68Xp55BWo/WZH5mdPa9uUHFF
-	UAqK2TVNe6My5cgWtXdKOjWRnrqfZhOp0Vf16eMNTDDx488SUAhNmIDvkgRelfs=
-X-Google-Smtp-Source: AGHT+IHHP3HRmd2EsbjwI9w2/6NbkfIvEI56qh5hn64SFjwqYpPsYUkoeA8UyLo/iqLrjDRTr6bMEg==
-X-Received: by 2002:a05:6602:6d1a:b0:7f7:96e3:ef23 with SMTP id ca18e2360f4ac-7ffffe21f1cmr705146739f.2.1720609570390;
-        Wed, 10 Jul 2024 04:06:10 -0700 (PDT)
-Received: from localhost ([122.172.84.129])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-77d66bc0fdasm2695879a12.62.2024.07.10.04.06.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jul 2024 04:06:09 -0700 (PDT)
-Date: Wed, 10 Jul 2024 16:36:07 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>, linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH V3 1/8] rust: Add initial bindings for OPP framework
-Message-ID: <20240710110607.jywoxf3wnkze2ouu@vireshk-i7>
-References: <cover.1719990273.git.viresh.kumar@linaro.org>
- <fe8e9a96b29122876346fc98a6a9ede7e4f28707.1719990273.git.viresh.kumar@linaro.org>
- <ZoVvn0QCSR8y4HQJ@Boquns-Mac-mini.home>
- <20240709110245.o73xnrj6jsvz2v2w@vireshk-i7>
- <Zo13PB-fZ8B9WEYy@boqun-archlinux>
- <20240710073623.qdxatsqvumkguabp@vireshk-i7>
+	s=arc-20240116; t=1720609860; c=relaxed/simple;
+	bh=bJ7UMNrJhy/yiqIhlNGo85s491lo6a1mzP3pH0oIg8Y=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HSJSuBzswcV1O0yPcK1vbm0+57J7xUXw8Z8x1Q5KKcHB3zYDXG3whlEAv0WsuAoked1+W9AsJ0XCVtijneWeF+Tt3Px5IHUY5YUCV1XWvuwSR5S4QV12WAiyL3jZBavcuil+Mj4UakCdmSIp33+sbBKxDawCkJYcbpL/FTgFCq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=eCv/rKFS; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46A5per4001981;
+	Wed, 10 Jul 2024 11:10:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=DakjzVf8c5gxPDRSJYZ/afTX
+	K/uKlCpAbl68FU+/wfA=; b=eCv/rKFSSRJKwHopYCOMuKgIYSnb8cXx72hlNQDY
+	DvE04ssag2gCs2i3i2612E8BTlgaB8r8j+OxDdjBfvZZ0h+Bva8S+2+ffv/uVGA4
+	6zgxu7HHT3V4e1JVvK4qXwRJz2bXoTphznCk/mgLGddav0lgB6QAxZyV8JJHY15X
+	0m8S6ZojDk5F1MfEUhhdz9+NUgEt6+VV9WQ+tHHbxt78ypUU9MScLVRmsTGUL91z
+	k83XNsR28qCKtyY87HCdlARVJb5/TrGDjYBwknhlQWR1Q5YtSGP8xUHYFei6rslB
+	14hHN5bzBeSdZdp5Oiw0VzMDgy24HIGtS922P4L904ns1w==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 406we90yp5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Jul 2024 11:10:43 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46ABAgl4031750
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Jul 2024 11:10:42 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 10 Jul 2024 04:10:35 -0700
+Date: Wed, 10 Jul 2024 16:40:31 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+CC: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <ilia.lin@kernel.org>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <ulf.hansson@linaro.org>, <quic_sibis@quicinc.com>,
+        <quic_rjendra@quicinc.com>, <danila@jiaxyga.com>,
+        <neil.armstrong@linaro.org>, <otto.pflueger@abscue.de>,
+        <abel.vesa@linaro.org>, <luca@z3ntu.xyz>, <geert+renesas@glider.be>,
+        <stephan.gerhold@kernkonzept.com>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v6 1/9] soc: qcom: cpr3: Fix 'acc_desc' usage
+Message-ID: <Zo5sJ1Uk7wAzWflg@hu-varada-blr.qualcomm.com>
+References: <20240710061102.1323550-1-quic_varada@quicinc.com>
+ <20240710061102.1323550-2-quic_varada@quicinc.com>
+ <325a45b7-bb02-4a32-8590-6abc14ad9619@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20240710073623.qdxatsqvumkguabp@vireshk-i7>
+In-Reply-To: <325a45b7-bb02-4a32-8590-6abc14ad9619@linaro.org>
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: aB0tn39dEoel6FhajxL5jKgoeTXpIBVR
+X-Proofpoint-GUID: aB0tn39dEoel6FhajxL5jKgoeTXpIBVR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-10_06,2024-07-10_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ bulkscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0 phishscore=0
+ priorityscore=1501 mlxlogscore=740 malwarescore=0 mlxscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2406140001
+ definitions=main-2407100077
 
-On 10-07-24, 13:06, Viresh Kumar wrote:
-> I am not entirely sure what the change must be like that :)
+On Wed, Jul 10, 2024 at 01:05:12PM +0200, Konrad Dybcio wrote:
+> On 10.07.2024 8:10 AM, Varadarajan Narayanan wrote:
+> > cpr3 code assumes that 'acc_desc' is available for SoCs
+> > implementing CPR version 4 or less. However, IPQ9574 SoC
+> > implements CPRv4 without ACC. This causes NULL pointer accesses
+> > resulting in crashes. Hence, check if 'acc_desc' is populated
+> > before using it.
+> >
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+>
+> Does it not work if you drop this patch?
+>
+> In v15, drv->tcsr is left NULL (from kzalloc), unless data->acc_desc
+> is present
 
-Anyway, I have looked around and made some changes. Please see how it
-looks now. Thanks Boqun.
+It crashed for me with NULL pointer access.
 
-diff --git a/rust/kernel/opp.rs b/rust/kernel/opp.rs
-new file mode 100644
-index 000000000000..2ef262c4640a
---- /dev/null
-+++ b/rust/kernel/opp.rs
-@@ -0,0 +1,188 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! Operating performance points.
-+//!
-+//! This module provides bindings for interacting with the OPP subsystem.
-+//!
-+//! C header: [`include/linux/pm_opp.h`](srctree/include/linux/pm_opp.h)
-+
-+use crate::{
-+    bindings,
-+    device::Device,
-+    error::{code::*, to_result, Result},
-+    types::{ARef, AlwaysRefCounted, Opaque},
-+};
-+
-+use core::ptr;
-+
-+/// Dynamically created Operating performance point (OPP).
-+pub struct Token {
-+    dev: ARef<Device>,
-+    freq: u64,
-+}
-+
-+impl Token {
-+    /// Adds an OPP dynamically.
-+    pub fn new(dev: &ARef<Device>, mut data: Data) -> Result<Self> {
-+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
-+        // requirements.
-+        to_result(unsafe { bindings::dev_pm_opp_add_dynamic(dev.as_raw(), &mut data.0) })?;
-+        Ok(Self {
-+            dev: dev.clone(),
-+            freq: data.freq(),
-+        })
-+    }
-+}
-+
-+impl Drop for Token {
-+    fn drop(&mut self) {
-+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
-+        // requirements.
-+        unsafe { bindings::dev_pm_opp_remove(self.dev.as_raw(), self.freq) };
-+    }
-+}
-+
-+/// Equivalent to `struct dev_pm_opp_data` in the C Code.
-+#[repr(transparent)]
-+pub struct Data(bindings::dev_pm_opp_data);
-+
-+impl Data {
-+    /// Creates new instance of [`Data`].
-+    pub fn new(freq: u64, u_volt: u64, level: u32, turbo: bool) -> Self {
-+        Self(bindings::dev_pm_opp_data {
-+            turbo,
-+            freq,
-+            u_volt,
-+            level,
-+        })
-+    }
-+
-+    /// Adds an OPP dynamically. The OPP is freed once the [`Token`] gets freed.
-+    pub fn add_opp(self, dev: &ARef<Device>) -> Result<Token> {
-+        Token::new(dev, self)
-+    }
-+
-+    fn freq(&self) -> u64 {
-+        self.0.freq
-+    }
-+}
-+
-+/// Operating performance point (OPP).
-+///
-+/// Wraps the kernel's `struct dev_pm_opp`.
-+///
-+/// The pointer stored in `Self` is non-null and valid for the lifetime of the `OPP` instance.
-+///
-+/// # Refcounting
-+///
-+/// Instances of this type are reference-counted. The reference count is incremented by the
-+/// `dev_pm_opp_get()` function and decremented by `dev_pm_opp_put`. The Rust type `ARef<OPP>`
-+/// represents a pointer that owns a reference count on the OPP.
-+///
-+/// A reference to the `OPP`, `&OPP` isn't refcounted by the Rust code. The C code guarantees that
-+/// the pointer stored in `OPP` is is valid for the lifetime of the reference and hence refcounting
-+/// isn't required.
-+
-+#[repr(transparent)]
-+pub struct OPP(Opaque<bindings::dev_pm_opp>);
-+
-+// SAFETY: It is okay to send ownership of `OPP` across thread boundaries and `OPP::dec_ref` can be
-+// called from any thread.
-+unsafe impl Send for OPP {}
-+
-+// SAFETY: It's OK to access `OPP` through shared references from other threads because we're
-+// either accessing properties that don't change or that are properly synchronised by C code.
-+unsafe impl Sync for OPP {}
-+
-+// SAFETY: The type invariants guarantee that [`OPP`] is always refcounted.
-+unsafe impl AlwaysRefCounted for OPP {
-+    fn inc_ref(&self) {
-+        // SAFETY: The existence of a shared reference means that the refcount is nonzero.
-+        unsafe { bindings::dev_pm_opp_get(self.0.get()) };
-+    }
-+
-+    unsafe fn dec_ref(obj: ptr::NonNull<Self>) {
-+        // SAFETY: The safety requirements guarantee that the refcount is nonzero.
-+        unsafe { bindings::dev_pm_opp_put(obj.cast().as_ptr()) }
-+    }
-+}
-+
-+impl OPP {
-+    /// Creates an owned reference to a [`OPP`] from a valid pointer.
-+    ///
-+    /// The refcount is incremented by the C code and will be decremented by `dec_ref()` when the
-+    /// ARef object is dropped.
-+    ///
-+    /// # Safety
-+    ///
-+    /// The caller must ensure that `ptr` is valid and OPP's refcount is incremented.
-+    pub unsafe fn from_raw_opp_owned(ptr: *mut bindings::dev_pm_opp) -> Result<ARef<Self>> {
-+        let ptr = ptr::NonNull::new(ptr).ok_or(ENODEV)?;
-+
-+        // SAFETY: The safety requirements guarantee the validity of the pointer.
-+        Ok(unsafe { ARef::from_raw(ptr.cast()) })
-+    }
-+
-+    /// Creates a reference to a [`OPP`] from a valid pointer.
-+    ///
-+    /// The refcount is not updated by the Rust API unless the returned reference is converted to
-+    /// an ARef object.
-+    ///
-+    /// # Safety
-+    ///
-+    /// The caller must ensure that `ptr` is valid and remains valid for the duration of 'a.
-+    pub unsafe fn from_raw_opp<'a>(ptr: *mut bindings::dev_pm_opp) -> Result<&'a Self> {
-+        // SAFETY: The caller guarantees that the pointer is not dangling and stays valid for the
-+        // duration of 'a. The cast is okay because `OPP` is `repr(transparent)`.
-+        Ok(unsafe { &*ptr.cast() })
-+    }
-+
-+    #[inline]
-+    fn as_raw(&self) -> *mut bindings::dev_pm_opp {
-+        self.0.get()
-+    }
-+
-+    /// Returns the frequency of an OPP.
-+    pub fn freq(&self, index: Option<u32>) -> u64 {
-+        let index = index.unwrap_or(0);
-+
-+        // SAFETY: By the type invariants, we know that `self` owns a reference, so it is safe to
-+        // use it.
-+        unsafe { bindings::dev_pm_opp_get_freq_indexed(self.as_raw(), index) }
-+    }
-+
-+    /// Returns the voltage of an OPP.
-+    pub fn voltage(&self) -> u64 {
-+        // SAFETY: By the type invariants, we know that `self` owns a reference, so it is safe to
-+        // use it.
-+        unsafe { bindings::dev_pm_opp_get_voltage(self.as_raw()) }
-+    }
-+
-+    /// Returns the level of an OPP.
-+    pub fn level(&self) -> u32 {
-+        // SAFETY: By the type invariants, we know that `self` owns a reference, so it is safe to
-+        // use it.
-+        unsafe { bindings::dev_pm_opp_get_level(self.as_raw()) }
-+    }
-+
-+    /// Returns the power of an OPP.
-+    pub fn power(&self) -> u64 {
-+        // SAFETY: By the type invariants, we know that `self` owns a reference, so it is safe to
-+        // use it.
-+        unsafe { bindings::dev_pm_opp_get_power(self.as_raw()) }
-+    }
-+
-+    /// Returns the required pstate of an OPP.
-+    pub fn required_pstate(&self, index: u32) -> u32 {
-+        // SAFETY: By the type invariants, we know that `self` owns a reference, so it is safe to
-+        // use it.
-+        unsafe { bindings::dev_pm_opp_get_required_pstate(self.as_raw(), index) }
-+    }
-+
-+    /// Returns true if the OPP is turbo.
-+    pub fn is_turbo(&self) -> bool {
-+        // SAFETY: By the type invariants, we know that `self` owns a reference, so it is safe to
-+        // use it.
-+        unsafe { bindings::dev_pm_opp_is_turbo(self.as_raw()) }
-+    }
-+}
+	Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+	input: gpio-keys as /devices/platform/gpio-keys/input/input0
+	Mem abort info:
+	  ESR = 0x0000000096000004
+	  EC = 0x25: DABT (current EL), IL = 32 bits
+	  SET = 0, FnV = 0
+	  EA = 0, S1PTW = 0
+	clk: Disabling unused clocks
+	  FSC = 0x04: level 0 translation fault
+	Data abort info:
+	  ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+	  CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+	PM: genpd: Disabling unused power domains
+	  GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+	[0000000000000010] user address but active_mm is swapper
+	Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+	Modules linked in:
+	CPU: 0 UID: 0 PID: 74 Comm: sugov:0 Not tainted 6.10.0-rc6-next-20240703-00018-g3dfa5a2e6f31-dirty #13
+	Hardware name: Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C7 (DT)
+	pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+	pc : cpr_commit_state+0x228/0x2a8
+	lr : cpr_commit_state+0x10c/0x2a8
+	sp : ffff800086163a90
+	x29: ffff800086163a90 x28: 0000000000000000 x27: 0000000000000000
+	x26: 0000000000000000 x25: ffff000006953080 x24: ffff000006913280
+	x23: 00000000000fa3e8 x22: 00000000000fa3e8 x21: 00000000000fa3e8
+	x20: 0000000000000003 x19: 00000000000fa3e8 x18: 0000000000000000
+	x17: 63682d6963687820 x16: 0000000000000000 x15: ffff00003fc8fd00
+	x14: 0000000000000000 x13: 0000000000000001 x12: ffff8000814e8c60
+	x11: 0000000000000000 x10: 00000000000009b0 x9 : 0000000000000000
+	x8 : ffff00003fc87f40 x7 : 0000000000000240 x6 : 0000000000000002
+	x5 : 000000000000007f x4 : 0000000000000000 x3 : 0000000000000000
+	x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
+	Call trace:
+	 cpr_commit_state+0x228/0x2a8
+	 cpr_set_performance_state+0x94/0xf4
+	 _genpd_set_performance_state+0x190/0x1ac
+	 genpd_set_performance_state.isra.0+0xbc/0xdc
+	 genpd_dev_pm_set_performance_state+0x60/0xc0
+	 dev_pm_domain_set_performance_state+0x24/0x3c
+	 _set_opp+0xb4/0x51c
+	 dev_pm_opp_set_opp+0x70/0xfc
+	 _set_required_opps.isra.0+0x74/0xd4
+	 _set_opp+0x90/0x51c
+	 dev_pm_opp_set_rate+0x184/0x274
+	 set_target+0x34/0x40
+	 __cpufreq_driver_target+0x250/0x698
+	 sugov_work+0x54/0x70
+	 kthread_worker_fn+0xc4/0x174
+	 kthread+0x110/0x114
+	 ret_from_fork+0x10/0x20
+
+Thanks
+Varada
 
