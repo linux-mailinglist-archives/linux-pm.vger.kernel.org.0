@@ -1,134 +1,168 @@
-Return-Path: <linux-pm+bounces-10916-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10917-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8966592CDB0
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 10:59:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE82A92CDE2
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 11:05:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B57A01C22EC0
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 08:59:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4BA11F28494
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 09:05:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8F017D35D;
-	Wed, 10 Jul 2024 08:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35C2E18F2EC;
+	Wed, 10 Jul 2024 09:05:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="h05QYKA2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nOOdkfKj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7000517E457
-	for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2024 08:56:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E6516938C;
+	Wed, 10 Jul 2024 09:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720601817; cv=none; b=t/WKFov0bqCw9+XTLvGk/pJVazwP9PCTC5JUwvWtMZrPnBlWW7nAPF1cBd/4ZmDN7J04a2JXv8ckXR8Cj4eO5I/4ze66Et+yf+OdZ4jdBCiKzQtN0LyNOFFZkRXsI1dHEq92Zi6o7MpAVMcrDDKQMPR0WXnxsDK7APnGWCxW2h4=
+	t=1720602342; cv=none; b=Y/83+4ndmJJbps5nTpLV3KpTqZDxbttte68pik++DTMsdBf6TurvsBy0gmDELCkQD4+i5xo34ruv3vAYW+owDNsx9sF5kjcNwoJupCOVX4RhFt8TWZHOwiG10n9Iw8X9ZFycGVlJmNOSEK4ViuOhF5kLksfu9CKE4CKgdouHCOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720601817; c=relaxed/simple;
-	bh=3Q0FUOtutHaqhRnuNFkCtC2MR/nRZK3/RbDrWmaE24g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h6wlVtEkSgz8y8rUPkSE1GymtFIWxvp78BHQbE23A3iEHoGqTP8rJHrU4WpEqYe7tnuyPMeXzLfsFrOUkN7Ryt6Bq5Sz4f0Prhz4ez/Ir2AcY/5g+cTvwhVSVL/fyx3PIG7att1iNvuCUWPLv4uq65mU/FJ5AQBUK8oOyamW2qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=h05QYKA2; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1fa9ecfb321so37200085ad.0
-        for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2024 01:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720601816; x=1721206616; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IBRUpPu0VPQIPvE2nK8BuSgJ8l83VNDUH/RgQpIaWCI=;
-        b=h05QYKA2V92nHOCcfQtvJQoxJFjvEOprAVzygrWap8dlLLwFt7YOuvqbPFmmSR7B4e
-         j+epieavb0A12+TmXZGpEeDHoSLoG5jxJ5AvoEsYIAnKOxmHpvl7aziKolKT6xhCS/5/
-         sND4OMtoMvcmC8X85EJe/vdF2F1BRyp90/PSnNm03cTmzXn+1s8oDXbn3Ov+q9AyNYvg
-         C4aVbb5LAbPi3TYNX5iDjfT9NFfxT/rnuyDccpzRqBaelghUYUQbrfJ03W+/8Takb36r
-         fd3lZW2tnX3jijep/+XogmZI6feKz7/LyORv4ZEHNXSyH28ZPExUkQ8s8dA3dx2ai8qM
-         cxKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720601816; x=1721206616;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IBRUpPu0VPQIPvE2nK8BuSgJ8l83VNDUH/RgQpIaWCI=;
-        b=wYiLTsa3Ik7BLrLFwFl9HTcTXXOAdaZHkeBgq1BcvHXask9FW6KYS8VgrWNwKJfzK8
-         FitOiSS/E6WQZVMv3690c+MGpnMz66CdqHBJWR5EylnhPTp5tESWpV263co+f1DIT0A6
-         irUwoaez2/RvwuUSUzkE9zUO3BHXSrH3DUfUfUl3dW0j9axACzPZ/qgrVklTOMAKgNNm
-         KqgowjXihOfrVXIUn/wXf0d61WOKHlc8EKKNQ+K67Ap5fJ+EwwdOIo7LNQWfRuO6YDLM
-         PmehOahfmkqpe6J9MA1V2UtR3eTYc4AZN0y4g5YxHtIQ8sGo66VmKosqk9c/chA4NKoT
-         6HfA==
-X-Forwarded-Encrypted: i=1; AJvYcCV2zw6hkxi7UgLG4B0ZHXWRodERD495X4V9FDblYY03eAvHBrXy3kFVDi7OumGFvCaGWqjQI4Hv2waXL076XBYsCIOxxVrbwjo=
-X-Gm-Message-State: AOJu0Yz7+ftNsCQgfJ55Fbq5qshUpKdSUtRG00eU4rpyScoQDIBEDBYR
-	8En7gmgmLNwtMo0fXQ0LcOJRG9wvwb+oC0Zed55KXZzYjnOYESyx3bmst567HCg=
-X-Google-Smtp-Source: AGHT+IEVB8tOcTvVkQMKYUorCO7nrunLCIRVS0MNQOClkyaYDOIHlwMfGp0zUV38Ne6qCbyn25fBsg==
-X-Received: by 2002:a17:902:ec8a:b0:1f7:1b97:e91f with SMTP id d9443c01a7336-1fbb6d3e8ebmr42132875ad.26.1720601815731;
-        Wed, 10 Jul 2024 01:56:55 -0700 (PDT)
-Received: from localhost ([122.172.84.129])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fbb6a122cfsm29737245ad.5.2024.07.10.01.56.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jul 2024 01:56:54 -0700 (PDT)
-Date: Wed, 10 Jul 2024 14:26:52 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Danilo Krummrich <dakr@redhat.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>, linux-pm@vger.kernel.org,
+	s=arc-20240116; t=1720602342; c=relaxed/simple;
+	bh=oV4+5bN3h0YlN7HPv4WOQIlgS47Ixt5yvCvPSzurRN0=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CkwXk99PLQR9FL7OJysNnvCG+HaTHL1uk+WL4CIm+XVqFzoiMEYzxkbzS6+5TDwsQBNW+1Yu+Na+yGWaFE+0LRwTQZzDuAw3XUOulFmAt8vpVKx/OIr98mcTN5cXALbyjQwWIggkV+zCqYZYsNQfxrxcR90LaLvO9EIvw2gwabg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nOOdkfKj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C587C32781;
+	Wed, 10 Jul 2024 09:05:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720602341;
+	bh=oV4+5bN3h0YlN7HPv4WOQIlgS47Ixt5yvCvPSzurRN0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=nOOdkfKjPBYe5QietuCg0nb8HQcizq7Glr3tdoW7spRIEGHsWILsm9CLcyQpx8Iqe
+	 /6SiHWUryFpLgMQAG8jp/vSRpmAYFmhHKZnyt/uICGV2gLbGOwC+R8/VnijSt0ucSR
+	 RydMN0yCPJMhRNheF/UvkJUDHEybBdYBRiO6SbWfu0of98HjklgBfqRkKQfILPFV3S
+	 ht1Diu5N+QaqkMMeR7x3r2nLC91ne3vaqLKeiBP9a/fgIPCh9PfCcxmS18UppKoQmB
+	 hRXjxHPpse6HLsqMvrjCk9l+1+SQihe+6zaiyiFav9m3BVIl/XSm9t4btRgiHdumEB
+	 nnFz4P8YqwqsA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1sRTGd-00BAW4-24;
+	Wed, 10 Jul 2024 10:05:39 +0100
+Date: Wed, 10 Jul 2024 10:05:37 +0100
+Message-ID: <86wmlt39cu.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: David Dai <davidai@google.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Quentin Perret <qperret@google.com>,
+	Masami Hiramatsu <mhiramat@google.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
 	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Pavan Kondeti <quic_pkondeti@quicinc.com>,
+	Gupta Pankaj <pankaj.gupta@amd.com>,
+	Mel Gorman <mgorman@suse.de>,
+	kernel-team@android.com,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH V3 8/8] cpufreq: Add Rust based cpufreq-dt driver
-Message-ID: <20240710085652.zu7ntnv4gmy7zr2i@vireshk-i7>
-References: <cover.1719990273.git.viresh.kumar@linaro.org>
- <b7df0c75cc07a451243b554fb2272c91cbe42dfe.1719990273.git.viresh.kumar@linaro.org>
- <f0016987-4288-4adf-954d-665b35ae1bf1@redhat.com>
+Subject: Re: [PATCH v6 2/2] cpufreq: add virtual-cpufreq driver
+In-Reply-To: <20240628125106.i4hhyzdgt3uoskat@bogus>
+References: <20240521043102.2786284-1-davidai@google.com>
+	<20240521043102.2786284-3-davidai@google.com>
+	<20240628125106.i4hhyzdgt3uoskat@bogus>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.3
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f0016987-4288-4adf-954d-665b35ae1bf1@redhat.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sudeep.holla@arm.com, davidai@google.com, rafael@kernel.org, viresh.kumar@linaro.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, saravanak@google.com, qperret@google.com, mhiramat@google.com, will@kernel.org, peterz@infradead.org, vincent.guittot@linaro.org, oliver.upton@linux.dev, dietmar.eggemann@arm.com, quic_pkondeti@quicinc.com, pankaj.gupta@amd.com, mgorman@suse.de, kernel-team@android.com, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 05-07-24, 13:32, Danilo Krummrich wrote:
-> On 7/3/24 09:14, Viresh Kumar wrote:
-> > +    fn probe(_dev: &mut platform::Device, _id_info: Option<&Self::IdInfo>) -> Result<Self::Data> {
-> > +        let drv = Arc::new(
-> > +            cpufreq::Registration::<CPUFreqDTDriver>::register(
-> > +                c_str!("cpufreq-dt"),
-> > +                (),
-> > +                cpufreq::flags::NEED_INITIAL_FREQ_CHECK | cpufreq::flags::IS_COOLING_DEV,
-> > +                true,
-> > +            )?,
-> > +            GFP_KERNEL,
-> > +        )?;
+On Fri, 28 Jun 2024 13:51:06 +0100,
+Sudeep Holla <sudeep.holla@arm.com> wrote:
 > 
-> Putting the `cpufreq::Registration` into `Arc<DeviceData>` is unsafe from a
-> lifetime point of view. Nothing prevents this `Arc` to out-live the
-> `platform::Driver`.
-
-Hmm, the platform driver layer (in Rust) should guarantee that the
-data will be freed from the driver removal path. Isn't it ?
-
-> Instead, you should wrap `cpufreq::Registration` into `Devres`. See
-> `drm::drv::Registration` for an example [1].
+> On Mon, May 20, 2024 at 09:30:52PM -0700, David Dai wrote:
+> > Introduce a virtualized cpufreq driver for guest kernels to improve
+> > performance and power of workloads within VMs.
+> >
+> > This driver does two main things:
+> >
+> > 1. Sends the frequency of vCPUs as a hint to the host. The host uses the
+> > hint to schedule the vCPU threads and decide physical CPU frequency.
+> >
+> > 2. If a VM does not support a virtualized FIE(like AMUs), it queries the
+> > host CPU frequency by reading a MMIO region of a virtual cpufreq device
+> > to update the guest's frequency scaling factor periodically. This enables
+> > accurate Per-Entity Load Tracking for tasks running in the guest.
+> >
+> > +
+> > +/*
+> > + * CPU0..CPUn
+> > + * +-------------+-------------------------------+--------+-------+
+> > + * | Register    | Description                   | Offset |   Len |
+> > + * +-------------+-------------------------------+--------+-------+
+> > + * | cur_perf    | read this register to get     |    0x0 |   0x4 |
+> > + * |             | the current perf (integer val |        |       |
+> > + * |             | representing perf relative to |        |       |
+> > + * |             | max performance)              |        |       |
+> > + * |             | that vCPU is running at       |        |       |
+> > + * +-------------+-------------------------------+--------+-------+
+> > + * | set_perf    | write to this register to set |    0x4 |   0x4 |
+> > + * |             | perf value of the vCPU        |        |       |
+> > + * +-------------+-------------------------------+--------+-------+
+> > + * | perftbl_len | number of entries in perf     |    0x8 |   0x4 |
+> > + * |             | table. A single entry in the  |        |       |
+> > + * |             | perf table denotes no table   |        |       |
+> > + * |             | and the entry contains        |        |       |
+> > + * |             | the maximum perf value        |        |       |
+> > + * |             | that this vCPU supports.      |        |       |
+> > + * |             | The guest can request any     |        |       |
+> > + * |             | value between 1 and max perf  |        |       |
+> > + * |             | when perftbls are not used.   |        |       |
+> > + * +---------------------------------------------+--------+-------+
+> > + * | perftbl_sel | write to this register to     |    0xc |   0x4 |
+> > + * |             | select perf table entry to    |        |       |
+> > + * |             | read from                     |        |       |
+> > + * +---------------------------------------------+--------+-------+
+> > + * | perftbl_rd  | read this register to get     |   0x10 |   0x4 |
+> > + * |             | perf value of the selected    |        |       |
+> > + * |             | entry based on perftbl_sel    |        |       |
+> > + * +---------------------------------------------+--------+-------+
+> > + * | perf_domain | performance domain number     |   0x14 |   0x4 |
+> > + * |             | that this vCPU belongs to.    |        |       |
+> > + * |             | vCPUs sharing the same perf   |        |       |
+> > + * |             | domain number are part of the |        |       |
+> > + * |             | same performance domain.      |        |       |
+> > + * +-------------+-------------------------------+--------+-------+
+> > + */
 > 
-> [1] https://gitlab.freedesktop.org/drm/nova/-/blob/nova-next/rust/kernel/drm/drv.rs?ref_type=heads#L173
+> I think it is good idea to version this table, so that it gives flexibility
+> to update the entries. It is a must if we are getting away with DT. I didn't
+> give complete information in my previous response where I agreed with Rafael.
+> 
+> I am not sure how much feasible it is, but can it be queried via KVM IOCTLs
+> to VMM. Just a thought, I am exploring how to make this work even on ACPI
+> systems. It is simpler if we neednot rely on DT or ACPI.
 
-I can convert to that too, will do it anyway.
+KVM should not have to know any of this. This is purely between a
+contract (and a pretty weak one) between userspace and the guest.
+
+	M.
 
 -- 
-viresh
+Without deviation from the norm, progress is not possible.
 
