@@ -1,172 +1,165 @@
-Return-Path: <linux-pm+bounces-10927-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10928-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C66AF92D044
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 13:11:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7397E92D049
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 13:12:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C6B81F25DD8
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 11:11:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DE2A2830DD
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 11:12:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8770918FC93;
-	Wed, 10 Jul 2024 11:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C37CF18FC9F;
+	Wed, 10 Jul 2024 11:12:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="eCv/rKFS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Gt4vGZ7p"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE2518FA32;
-	Wed, 10 Jul 2024 11:10:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC0F18FA32
+	for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2024 11:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720609860; cv=none; b=A/pG0rAQmRb4MohbwAZhZanNquo2L90gRMXOUOYfubBw6Vf7oNkoRlOhbK8idGRxW251TRE+BlUIZHzQsbMGLo56goWdlMhvidABT/0yXvwqHzmvfG1RDh93x2k197o8lMwF8aG9VaUXxUdZJ/C1VS2s7Efe92N92dYIzwiCbB4=
+	t=1720609948; cv=none; b=IHnw7mtZ0Dv/qMCFRwvAV2Krq9wlsG5A2e3uxDxAeZ2GjiXDUkEQ2XpzYx2GW0Q720oVtMT1lTzl1qd0Yk5B+Y10NJR4KF5BPlU+jZz68NKMQA/lnoYBO8xiqj+CyPp+2NoE53nBHpT6ieDQ0xtjP2TxB3HifUpBp1sF9xuqrNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720609860; c=relaxed/simple;
-	bh=bJ7UMNrJhy/yiqIhlNGo85s491lo6a1mzP3pH0oIg8Y=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HSJSuBzswcV1O0yPcK1vbm0+57J7xUXw8Z8x1Q5KKcHB3zYDXG3whlEAv0WsuAoked1+W9AsJ0XCVtijneWeF+Tt3Px5IHUY5YUCV1XWvuwSR5S4QV12WAiyL3jZBavcuil+Mj4UakCdmSIp33+sbBKxDawCkJYcbpL/FTgFCq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=eCv/rKFS; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46A5per4001981;
-	Wed, 10 Jul 2024 11:10:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=DakjzVf8c5gxPDRSJYZ/afTX
-	K/uKlCpAbl68FU+/wfA=; b=eCv/rKFSSRJKwHopYCOMuKgIYSnb8cXx72hlNQDY
-	DvE04ssag2gCs2i3i2612E8BTlgaB8r8j+OxDdjBfvZZ0h+Bva8S+2+ffv/uVGA4
-	6zgxu7HHT3V4e1JVvK4qXwRJz2bXoTphznCk/mgLGddav0lgB6QAxZyV8JJHY15X
-	0m8S6ZojDk5F1MfEUhhdz9+NUgEt6+VV9WQ+tHHbxt78ypUU9MScLVRmsTGUL91z
-	k83XNsR28qCKtyY87HCdlARVJb5/TrGDjYBwknhlQWR1Q5YtSGP8xUHYFei6rslB
-	14hHN5bzBeSdZdp5Oiw0VzMDgy24HIGtS922P4L904ns1w==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 406we90yp5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jul 2024 11:10:43 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46ABAgl4031750
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jul 2024 11:10:42 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 10 Jul 2024 04:10:35 -0700
-Date: Wed, 10 Jul 2024 16:40:31 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-CC: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <ilia.lin@kernel.org>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <ulf.hansson@linaro.org>, <quic_sibis@quicinc.com>,
-        <quic_rjendra@quicinc.com>, <danila@jiaxyga.com>,
-        <neil.armstrong@linaro.org>, <otto.pflueger@abscue.de>,
-        <abel.vesa@linaro.org>, <luca@z3ntu.xyz>, <geert+renesas@glider.be>,
-        <stephan.gerhold@kernkonzept.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v6 1/9] soc: qcom: cpr3: Fix 'acc_desc' usage
-Message-ID: <Zo5sJ1Uk7wAzWflg@hu-varada-blr.qualcomm.com>
-References: <20240710061102.1323550-1-quic_varada@quicinc.com>
- <20240710061102.1323550-2-quic_varada@quicinc.com>
- <325a45b7-bb02-4a32-8590-6abc14ad9619@linaro.org>
+	s=arc-20240116; t=1720609948; c=relaxed/simple;
+	bh=SQ9kCUdzACmuHwpugnHBMoB4qv9Vh8LB8PCdqYhcXng=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YsaOQEqCb0f1ypUTPJe4vF9TbOkx4uLnQ/s2BsJtbIipbqphpPGqbtFh+9Ui70WXvoTpOiUo+eah7KPjd3GTh5MNk9tDCjLabzvusWPcFFgn1V1HDgUtg54FrhNiqzE5iX/+8S6YOr/ADjoAq8ocO2iEX4FCf6fNqeogCePfJJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Gt4vGZ7p; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a77e392f59fso484780766b.1
+        for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2024 04:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720609945; x=1721214745; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=vB73kdSFUrPUhND8XfaA5GR0yZnlCfSAO/xYLehxM4g=;
+        b=Gt4vGZ7p88MasGNKshAivBTMouRGis3G1cJC4lMWMTmZK/3tdREyJv81jWVVwhQSvq
+         cSLkKPX0MoHpSaLEK7fCNd/axOxVGscsxz+8Hm5ln7rtTrNLOE4Si6I5l2KeX66Wi2H0
+         gpg0fGGCmRnN2Bzz55ajg4dys0z950pxY0Is6A4EkZjnBnMyym2eR3/9NOUrrfuW+dMB
+         w9rAgMHBP6TO+2gEHvH19zrbvq+rMK58kuo7IUEi45Wcs78SPKJthT5hm/asnXgkc8Zp
+         lZOp0RovJpG6FqKANz/AGjKNLlnIeL93KuPBa2fCRHsqiGaVvE6z4yv4rMnPP1wEOQqJ
+         G/fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720609945; x=1721214745;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vB73kdSFUrPUhND8XfaA5GR0yZnlCfSAO/xYLehxM4g=;
+        b=D+UytfvleuxlGwuvrjCBkpMf8pcsL/HMlC0nySkQZMA/MjNDfwUm61VO03zKhMnhls
+         QHbsvDARuii6S6yKlsfdjPtFqx49snxJN0ZYGSoTgA/J3Zh+nzFWsYdRd++vBX45eA4B
+         Plax8SvHWqU25LjeTpxAUdxMJsVRnhUrbsX8PHoMYM7pvjy4gIf4hfUwYjMnptJGQCWq
+         zgJdkeDCCHMB1nFuRqkX7RhPK6a4cOpGZXlDqjJs+EuKE+5miSlAZmicZSPMNrag6W+N
+         W2Vo3AemqsjHUcAVIwdiik5IYcsOQ9x7CtkYlUdGgcss0tPgzbbiAEdaBjWOroIYxUGq
+         Oy6g==
+X-Forwarded-Encrypted: i=1; AJvYcCW9YFI/l1C4I1lokAzxoHmZkjStvMjllwZ22u2u0L94XJFD64PCebJ4/hW+++xhCYtgimQTRiC++itxQVvH6FToBB7TYeABtyk=
+X-Gm-Message-State: AOJu0Yzk5Ecl0hq2SFo3yr+UYx0rNjRIvXN0eFmo+BE2XnpmVJLjLGlA
+	LAeYfmtm3deDOwXnkOypxdq2eooM70yt7sqG9ev74jMVJ1h1oMlLj89x3yVxytE=
+X-Google-Smtp-Source: AGHT+IGHqUcDkpZ772nIx5h3EY5gdXnCfr4kq3q/jYYK+E4mE0Rnt1Tusk0df0PZl6CDki0a7+OOUw==
+X-Received: by 2002:a17:907:d8a:b0:a72:7c0d:8fdc with SMTP id a640c23a62f3a-a780b68a311mr413889566b.14.1720609945265;
+        Wed, 10 Jul 2024 04:12:25 -0700 (PDT)
+Received: from [192.168.105.194] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a780a871fd2sm147849766b.213.2024.07.10.04.12.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Jul 2024 04:12:24 -0700 (PDT)
+Message-ID: <4c3ada32-1476-4d98-89d7-7b2ffa0f9a65@linaro.org>
+Date: Wed, 10 Jul 2024 13:12:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <325a45b7-bb02-4a32-8590-6abc14ad9619@linaro.org>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: aB0tn39dEoel6FhajxL5jKgoeTXpIBVR
-X-Proofpoint-GUID: aB0tn39dEoel6FhajxL5jKgoeTXpIBVR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-10_06,2024-07-10_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- bulkscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0 phishscore=0
- priorityscore=1501 mlxlogscore=740 malwarescore=0 mlxscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2406140001
- definitions=main-2407100077
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 8/9] soc: qcom: cpr3: Add IPQ9574 definitions
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, andersson@kernel.org,
+ mturquette@baylibre.com, sboyd@kernel.org, ilia.lin@kernel.org,
+ rafael@kernel.org, viresh.kumar@linaro.org, ulf.hansson@linaro.org,
+ quic_sibis@quicinc.com, quic_rjendra@quicinc.com, danila@jiaxyga.com,
+ neil.armstrong@linaro.org, otto.pflueger@abscue.de, abel.vesa@linaro.org,
+ luca@z3ntu.xyz, geert+renesas@glider.be, stephan.gerhold@kernkonzept.com,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-clk@vger.kernel.org
+Cc: Praveenkumar I <quic_ipkumar@quicinc.com>
+References: <20240710061102.1323550-1-quic_varada@quicinc.com>
+ <20240710061102.1323550-9-quic_varada@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20240710061102.1323550-9-quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 10, 2024 at 01:05:12PM +0200, Konrad Dybcio wrote:
-> On 10.07.2024 8:10 AM, Varadarajan Narayanan wrote:
-> > cpr3 code assumes that 'acc_desc' is available for SoCs
-> > implementing CPR version 4 or less. However, IPQ9574 SoC
-> > implements CPRv4 without ACC. This causes NULL pointer accesses
-> > resulting in crashes. Hence, check if 'acc_desc' is populated
-> > before using it.
-> >
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
->
-> Does it not work if you drop this patch?
->
-> In v15, drv->tcsr is left NULL (from kzalloc), unless data->acc_desc
-> is present
+On 10.07.2024 8:11 AM, Varadarajan Narayanan wrote:
+> From: Praveenkumar I <quic_ipkumar@quicinc.com>
+> 
+> * Add thread, scaling factor, CPR descriptor defines to enable
+>   CPR on IPQ9574.
+> 
+> * Skip 'acc' usage since IPQ9574 does not have acc
+> 
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
 
-It crashed for me with NULL pointer access.
+[...]
 
-	Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
-	input: gpio-keys as /devices/platform/gpio-keys/input/input0
-	Mem abort info:
-	  ESR = 0x0000000096000004
-	  EC = 0x25: DABT (current EL), IL = 32 bits
-	  SET = 0, FnV = 0
-	  EA = 0, S1PTW = 0
-	clk: Disabling unused clocks
-	  FSC = 0x04: level 0 translation fault
-	Data abort info:
-	  ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-	  CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-	PM: genpd: Disabling unused power domains
-	  GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-	[0000000000000010] user address but active_mm is swapper
-	Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-	Modules linked in:
-	CPU: 0 UID: 0 PID: 74 Comm: sugov:0 Not tainted 6.10.0-rc6-next-20240703-00018-g3dfa5a2e6f31-dirty #13
-	Hardware name: Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C7 (DT)
-	pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-	pc : cpr_commit_state+0x228/0x2a8
-	lr : cpr_commit_state+0x10c/0x2a8
-	sp : ffff800086163a90
-	x29: ffff800086163a90 x28: 0000000000000000 x27: 0000000000000000
-	x26: 0000000000000000 x25: ffff000006953080 x24: ffff000006913280
-	x23: 00000000000fa3e8 x22: 00000000000fa3e8 x21: 00000000000fa3e8
-	x20: 0000000000000003 x19: 00000000000fa3e8 x18: 0000000000000000
-	x17: 63682d6963687820 x16: 0000000000000000 x15: ffff00003fc8fd00
-	x14: 0000000000000000 x13: 0000000000000001 x12: ffff8000814e8c60
-	x11: 0000000000000000 x10: 00000000000009b0 x9 : 0000000000000000
-	x8 : ffff00003fc87f40 x7 : 0000000000000240 x6 : 0000000000000002
-	x5 : 000000000000007f x4 : 0000000000000000 x3 : 0000000000000000
-	x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
-	Call trace:
-	 cpr_commit_state+0x228/0x2a8
-	 cpr_set_performance_state+0x94/0xf4
-	 _genpd_set_performance_state+0x190/0x1ac
-	 genpd_set_performance_state.isra.0+0xbc/0xdc
-	 genpd_dev_pm_set_performance_state+0x60/0xc0
-	 dev_pm_domain_set_performance_state+0x24/0x3c
-	 _set_opp+0xb4/0x51c
-	 dev_pm_opp_set_opp+0x70/0xfc
-	 _set_required_opps.isra.0+0x74/0xd4
-	 _set_opp+0x90/0x51c
-	 dev_pm_opp_set_rate+0x184/0x274
-	 set_target+0x34/0x40
-	 __cpufreq_driver_target+0x250/0x698
-	 sugov_work+0x54/0x70
-	 kthread_worker_fn+0xc4/0x174
-	 kthread+0x110/0x114
-	 ret_from_fork+0x10/0x20
+>  
+>  	/* CPRh disallows MEM-ACC access from the HLOS */
+> -	if (!(data->acc_desc || desc->cpr_type == CTRL_TYPE_CPRH))
+> +	if (!(data->acc_desc || desc->cpr_type == CTRL_TYPE_CPRH ||
+> +	      of_device_is_compatible(dev->of_node, "qcom,ipq9574-cpr4")))
+>  		return dev_err_probe(dev, -EINVAL, "Invalid ACC data\n");
 
-Thanks
-Varada
+This is something I'd also like to fold into v16.. perhaps 
+
+if (data->acc_desc && desc->cpr_type == CTRL_TYPE_CPRH)
+
+could work instead? this way we trust the programmer that
+acc_desc's presence/absence is intentional and only throw and
+error if it's present with type == CPRH
+
+Konrad
 
