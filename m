@@ -1,136 +1,190 @@
-Return-Path: <linux-pm+bounces-10899-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10900-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 909DE92C7EE
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 03:25:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29F3D92C7FB
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 03:34:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4978728193F
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 01:25:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B297B21408
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 01:34:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00EAC443D;
-	Wed, 10 Jul 2024 01:25:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF70C10FF;
+	Wed, 10 Jul 2024 01:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l8+MnV0A"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="udR0wP7T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F87610FF;
-	Wed, 10 Jul 2024 01:25:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A3D5CB8
+	for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2024 01:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720574737; cv=none; b=R7pPyJb7kzVXw6oI0uDxwA8GrumiSV7BfeG9TmBi2yNnboPN15jPQW2TMLpiw8S/UajMcMr2cEcZdh99ZthpANQi6AXwCt3KiX3i4DKGqKB70MCOPY2kyNcv4Wyh0YAS2qnouVF9d9NpIocYaENh7fB254eBuGrL0QHw9zFbdAE=
+	t=1720575258; cv=none; b=TFSrcPyeVvAYCS5LwUsAKNkPa7LTZb6mgX+viPTvqDWH//+xGLCMYeAke4vVHB9YqxCKEe9aM6uXCnhwuoMM1zE4lwExfsdpC2hFz1eFNskLVk3tIU2G3rfyQvccCrKurMlDksCtFxLIfInBlOeWTjuVYsmlE76fR2H1uh/52O8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720574737; c=relaxed/simple;
-	bh=kZm1sT7nWrDSzIOlLZ3soMLEol9aGiCB3UvnqOj+7jY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jkHNEY1OqHJYXxfnZ9OYs1H7vGpfsFH64aQ9HtTkcsZfFKnn5w/uaSQkHGhDHQpqSGl8Oser9zej2CO6Zr1/lZuNyxo6GETs8+Wbw/MTBfoVYPT8aFLTif0qwa5X2MvXRGfNQ0uP685F0Rpte2XEwg/eVgnP2gn6qxeE+Mj255c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l8+MnV0A; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720574736; x=1752110736;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kZm1sT7nWrDSzIOlLZ3soMLEol9aGiCB3UvnqOj+7jY=;
-  b=l8+MnV0AHzBU36PcuUEQuhc3O6E9D14ci2enT9Q0MKoY11ltOOwUYQ2M
-   J2FeR+sVucsD2rexLY0vNWS3MVMnDM/4297oBkDCUQZv0L8fp8sgwvNRY
-   X98gyZhNuHLK7P1l0FPG6EWVrVEPpXAid7L9D0ZPqFi53rD/zrKHQJn7s
-   OAKiyeuAzKcYqZLnuNEpBv4sZP3VkWEgOexGGLHL6oxN5bdTAgrgDk8wn
-   HeGRfPpdEOfo+68g6qZNvGtHH36Zwq2030UZXxz2Zf8bDqsZvzw9El0B0
-   F4wCatBwuxjiRo5STlhWiRAC7gQpfTHkPpOXrjoP5IEWpBGBCnSVq+vdW
-   w==;
-X-CSE-ConnectionGUID: gNxa7hfMRiOyeGDmE4YOzw==
-X-CSE-MsgGUID: J+FDh+AJT5CvMkI9kSHlLw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11128"; a="18007198"
-X-IronPort-AV: E=Sophos;i="6.09,196,1716274800"; 
-   d="scan'208";a="18007198"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2024 18:25:35 -0700
-X-CSE-ConnectionGUID: jBKqCJ0wRsKfSBUNNcnD/g==
-X-CSE-MsgGUID: y87zk1jbSMqdWMawiFXa/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,196,1716274800"; 
-   d="scan'208";a="48014106"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 09 Jul 2024 18:25:00 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sRM4m-000XKM-2h;
-	Wed, 10 Jul 2024 01:24:56 +0000
-Date: Wed, 10 Jul 2024 09:24:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 179/184]
- drivers/thermal/intel/intel_quark_dts_thermal.c:258:16: error: expected ':'
- before 'return'
-Message-ID: <202407100927.FM8ya0gq-lkp@intel.com>
+	s=arc-20240116; t=1720575258; c=relaxed/simple;
+	bh=ldeuoc7v8GrRu6PJEgWUzqhA9hGwmeELxMXSbyehjhQ=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=F+ibjE6URYi4ADR0EPmmWNYY7ZhCFOTHCLEvEBe2r7ZdreFicJMSaqwNBIpUJ3H2YZEehPHCYLo9nnGL69BnVjrR29+FzfL/fMF6jiktwMKrYCwdCyyKsvzrjkifbB7ZVY0p88knRcn3QvOqdItO6dzdF+qsn0a293bEwdJQm3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=udR0wP7T; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-375f713a099so21319665ab.2
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2024 18:34:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1720575256; x=1721180056; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=i06YfrhxXFXKJ0o/MddqS2E4l+TdpaD0POisD3yKlyE=;
+        b=udR0wP7T58tIlTubTuex0NtoIE3v8wCyHZpcdFb6QWLHFB4nMqSqmdRWEbkevKYle1
+         NKlif2VXBOYbtNHhKHqC/B9KJ9JHdQFErmxkaGEoxEmB2kNrwvRIawfPLiFzNczW4wWo
+         AJfsdEUo/ueVY2OTNjKVfc6OiP8X7TM7REWsfWgnVeXkBxyOeZH+aNginqFJLE0CmYVu
+         PR7sJ+mCij1REc08y1i+yYQyBcRbsbHMI2f9cc3piHdLTyvT4Vplu6yW7HmgpX1AYa9B
+         jTblF/d3YImRibHwepHUtpHuMFhAcLFn90kaIC0XX1Qu2En+gN9O8p0ywkrTkSST2w+P
+         jhDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720575256; x=1721180056;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i06YfrhxXFXKJ0o/MddqS2E4l+TdpaD0POisD3yKlyE=;
+        b=go2XM3F7c9Y++w3JATKUQxIrIwRP08ihARMc1OoWEFpa3RNdFhI3jyVY9+0yrnYb5U
+         hcBdxpXnSbLNdCLBRCzF0Vu04LvUpQVVLnqgGJ2TTJvBIHMu47DritDZcx1nfa801lvK
+         hghsJ79WAmXCwLYYXNAgTK8ulw5pcBxJGQHJ9catkrgxUvJZYg36eO0D4sPhlUcBBMD4
+         m1tqt/4v8SIPIc9eEyyQHw8SMaUnVUh2PLfMjquF0da1URVeHMuEyhJvs2ap5E/UpmNx
+         06L3627JemcSXqCGQ30a4GDdJWXWaaqrpkICck1QYnRZY9hsdlvWrL3PtDZlrLYxRLt0
+         AnlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXSSwygMfc+B84RKm9c14z6+cXyGZs6Xa4nsAMGa4IeSZuYr/xKe/7TEjiojin/PEXEeHyrTD2N39h9H6wTPw3mA6iZG5Nu+s8=
+X-Gm-Message-State: AOJu0YyzZyP9vFNLjM+QGZu0WTFssggQfjkSEHRJVhfoyENL7tkqOG3B
+	XAcN4AqdmadW7RqCPzxKn+sjYIJZmQ/eX6yOuPbtiCr0WYTWIcyjNeqCk0aLelI=
+X-Google-Smtp-Source: AGHT+IFS0UHhZpvraDainCEvnEPHQzGsFck6SfsVUhGphAIpMZOsxGfJ0ee2QIpimXWs/mjhJcOqRA==
+X-Received: by 2002:a05:6e02:19cc:b0:375:a282:c96b with SMTP id e9e14a558f8ab-38a598b39demr44696035ab.27.1720575255987;
+        Tue, 09 Jul 2024 18:34:15 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b439b0401sm2575435b3a.170.2024.07.09.18.34.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jul 2024 18:34:15 -0700 (PDT)
+Message-ID: <668de517.050a0220.467c1.c7a3@mx.google.com>
+Date: Tue, 09 Jul 2024 18:34:15 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-rc7-171-g72d2d9b52a2d8
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 1 build: 0 failed, 1 passed,
+ 16 warnings (v6.10-rc7-171-g72d2d9b52a2d8)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   87efced4091268c3ec327c53829b5e375be155dd
-commit: fac8bf59e782ac74bb54d8427581f725bba8a769 [179/184] thermal: trip: Pass trip pointer to .set_trip_temp() thermal zone callback
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20240710/202407100927.FM8ya0gq-lkp@intel.com/config)
-compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240710/202407100927.FM8ya0gq-lkp@intel.com/reproduce)
+pm/testing build: 1 build: 0 failed, 1 passed, 16 warnings (v6.10-rc7-171-g=
+72d2d9b52a2d8)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407100927.FM8ya0gq-lkp@intel.com/
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+10-rc7-171-g72d2d9b52a2d8/
 
-All error/warnings (new ones prefixed by >>):
+Tree: pm
+Branch: testing
+Git Describe: v6.10-rc7-171-g72d2d9b52a2d8
+Git Commit: 72d2d9b52a2d897a42ac5e306d3d7b12d584f589
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 1 unique architecture
 
-   drivers/thermal/intel/intel_quark_dts_thermal.c: In function 'sys_set_trip_temp':
->> drivers/thermal/intel/intel_quark_dts_thermal.c:258:16: error: expected ':' before 'return'
-     258 |         default
-         |                ^
-         |                :
-     259 |                 return -EINVAL;
-         |                 ~~~~~~
->> drivers/thermal/intel/intel_quark_dts_thermal.c:251:9: warning: enumeration value 'THERMAL_TRIP_ACTIVE' not handled in switch [-Wswitch]
-     251 |         switch (trip->type) {
-         |         ^~~~~~
->> drivers/thermal/intel/intel_quark_dts_thermal.c:251:9: warning: enumeration value 'THERMAL_TRIP_PASSIVE' not handled in switch [-Wswitch]
+Warnings Detected:
+
+sparc:
+    sparc64_defconfig (gcc-12): 16 warnings
 
 
-vim +258 drivers/thermal/intel/intel_quark_dts_thermal.c
+Warnings summary:
 
-   244	
-   245	static inline int sys_set_trip_temp(struct thermal_zone_device *tzd,
-   246					    const struct thermal_trip *trip,
-   247					    int temp)
-   248	{
-   249		unsigned int trip_index;
-   250	
- > 251		switch (trip->type) {
-   252		case THERMAL_TRIP_HOT:
-   253			trip_index = QRK_DTS_ID_TP_HOT;
-   254			break;
-   255		case THERMAL_TRIP_CRITICAL:
-   256			trip_index = QRK_DTS_ID_TP_CRITICAL;
-   257			break;
- > 258		default
-   259			return -EINVAL;
-   260		}
-   261	
-   262		return update_trip_temp(thermal_zone_device_priv(tzd), trip_index, temp);
-   263	}
-   264	
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o:=
+ missing .note.GNU-stack section implies executable stack
+    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missin=
+g .note.GNU-stack section implies executable stack
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
+=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
+r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 16 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
+te.GNU-stack section implies executable stack
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
+ing .note.GNU-stack section implies executable stack
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
+=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
+=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---
+For more info write to <info@kernelci.org>
 
