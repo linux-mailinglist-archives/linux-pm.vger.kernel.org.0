@@ -1,117 +1,92 @@
-Return-Path: <linux-pm+bounces-10936-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10937-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33A7992D552
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 17:50:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0105792D569
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 17:54:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 657AD1C21144
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 15:50:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1B0A283886
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2024 15:54:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0E1119346A;
-	Wed, 10 Jul 2024 15:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A03194A62;
+	Wed, 10 Jul 2024 15:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mIP5lwrV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 433A6192B7F;
-	Wed, 10 Jul 2024 15:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC7E194135;
+	Wed, 10 Jul 2024 15:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720626626; cv=none; b=Org9euPnZI2j8wTeJRSDbxsU2VzCWNoNSgDKLtFoJFc5d2/WURG0JH/siy4OUylaoDURgti4naH1qQwtMaOkr3qaCYYW9k74/V/8BlkAbSSfcIIrLafBSTRUzsauTRz35+cKLUq719W20nlj/xTRw86g06mpD93NLmURsgBQFSk=
+	t=1720626876; cv=none; b=DHSmxVGTf0Dj0jTxIabZnB4GU6GmJOBfO2WgqpvDAbpePEpUhiiNxtcBue1yXWRoRLUxw3I9GnFSXj97FSie0wa9SEAZ8embOsKrigWOxS3wJZjQ3o80jVqty6vebZzhI9LptaO6AYSQwrsofpfh/RHPFZ3/VSH080xTXRF49vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720626626; c=relaxed/simple;
-	bh=XF44xrSUK2QFKEPGQz0Jr1oXHtQLyZPOUdnO+XzlNks=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=imQBc/sCXWA9zse1/57t+PTaDMgV+C9afrRD/Eqw+MQ3orZIryHyT49RyewkW4gIgqiV/v0wDNFwJ8QGgXQ/koC4f/zA06IsxJ0qp5Cz6BJWDCODBtYG+BgKcknar1MsjE2DZZFHqmCGSyzinHPEmI8duUCRxM0+nU5ZXkV/jPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC2F7106F;
-	Wed, 10 Jul 2024 08:50:49 -0700 (PDT)
-Received: from [192.168.47.77] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 58A873F762;
-	Wed, 10 Jul 2024 08:50:19 -0700 (PDT)
-Message-ID: <88dd08fe-5a69-48b2-8838-8231928d29ab@arm.com>
-Date: Wed, 10 Jul 2024 10:50:17 -0500
+	s=arc-20240116; t=1720626876; c=relaxed/simple;
+	bh=Xhl6yW2VQ6hvwt67WTdZt+JNLP73wtB47sYfqu1Fp0I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uvpQDby+ERuweCJuVUmLP9OBPNt2/SaIIjH4vNAM/Cu8o1RSftsGNu6PN09Adiy9uK7Z6I3Ynr1U+F0zbkAXOCXKA1HwO4GszaiulqLzHflwNi3n+lbPgz35JGrik20SAV6ixUkNnzC4HKcQhAetnfpE4pDVpRz/awydQbF9edc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mIP5lwrV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C5FC4AF09;
+	Wed, 10 Jul 2024 15:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720626875;
+	bh=Xhl6yW2VQ6hvwt67WTdZt+JNLP73wtB47sYfqu1Fp0I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mIP5lwrV5IIPUUZbRfbxZfu4lA2AyMqAVBxwrpi/aJO2nku5AP94HWCbGzSPj4SMi
+	 SZhIqk4vlW3Vb2P0k3lCVR9ZaL2MKIQsY3z9zGyYjgXmeHDFBobmK+CJQx3UXi2MN5
+	 tEeLJpklUkpvHJDCFQK1Obg+0vjuXhvvOT09r3rR8riNOUde/+EhU0sya8KriXdpQp
+	 AjB4Z3JfXYhe9mfKDhM6bqdl96usoLjV7m2Ix7kbt8tgv9iZ7wJz1gmxJV6JR/Fxpd
+	 cjwS33cyc4xIfKYGq7vDVB+/2b31zz9ftlLVr/8QeFiqllfCK+t6fmgm2mMwzjyvqN
+	 o6YPgbSZM+9jg==
+Date: Wed, 10 Jul 2024 09:54:24 -0600
+From: Rob Herring <robh@kernel.org>
+To: Adam Skladowski <a39.skl@gmail.com>
+Cc: phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+	Georgi Djakov <djakov@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Vladimir Lypak <vladimir.lypak@gmail.com>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Rohit Agarwal <quic_rohiagar@quicinc.com>,
+	Danila Tikhonov <danila@jiaxyga.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+	Andrew Halaney <ahalaney@redhat.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Barnabas Czeman <barnabas.czeman@mainlining.org>,
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Abel Vesa <abel.vesa@linaro.org>
+Subject: Re: [PATCH v3 1/9] dt-bindings: interconnect: qcom: Add Qualcomm
+ MSM8976 NoC
+Message-ID: <20240710155424.GA3133981-robh@kernel.org>
+References: <20240709102728.15349-1-a39.skl@gmail.com>
+ <20240709102728.15349-2-a39.skl@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/11] usb: dwc2: Skip clock gating on Broadcom SoCs
-Content-Language: en-US
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Stefan Wahren <wahrenst@gmx.net>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Minas Harutyunyan <hminas@synopsys.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Jassi Brar <jassisinghbrar@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- Jiri Slaby <jirislaby@kernel.org>,
- Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Peter Robinson <pbrobinson@gmail.com>,
- dri-devel@lists.freedesktop.org, bcm-kernel-feedback-list@broadcom.com,
- linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kernel-list@raspberrypi.com
-References: <20240630153652.318882-1-wahrenst@gmx.net>
- <20240630153652.318882-10-wahrenst@gmx.net>
- <95762956-b46a-4dfa-b22f-bccbfa39558d@broadcom.com>
- <ZoezRpXBgB1B5WjB@wunner.de> <4502d826-d80c-4a98-a889-da7badfa698e@gmx.net>
- <ZogLXYopViQO11ta@wunner.de> <43fa421c-5e5b-40a6-a546-d80e753586e3@gmx.net>
- <38e46b44-6248-45e8-bdf9-66008a2fe290@arm.com> <ZohiJgyaDwAoGtAx@wunner.de>
-From: Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <ZohiJgyaDwAoGtAx@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240709102728.15349-2-a39.skl@gmail.com>
 
-Hi,
-
-On 7/5/24 16:14, Lukas Wunner wrote:
-> On Fri, Jul 05, 2024 at 12:16:14PM -0500, Jeremy Linton wrote:
->>> Am 05.07.24 um 17:03 schrieb Lukas Wunner:
->>>> Careful there, the patch vaguely says...
->>>>
->>>>      With that added and identified as "BCM2848",
->>>>      an id in use by other OSs for this device, the dw2
->>>>      controller on the BCM2711 will work.
->>>>
->>>> ...which sounds like they copy-pasted the BCM2848 id from somewhere else.
->>>> I would assume that BCM2848 is really a different SoC and not just
->>>> a different name for the BCM2835, but hopefully BroadCom folks will
->>>> be able to confirm or deny this (and thus the necessity of the quirk
->>>> on BCM2848 and not just on BCM2835).
->>
->> This id comes from the edk2-platforms ACPI tables and is currently used by
->> both the rpi3 and rpi4, and AFAIK nothing else as the rpi5-dev work is
->> currently only exposing XHCI.
->>
->> The ID is strictly the USB controller not the SoC. Its a bit confusingly
->> named, but something we inherited from the much older windows/edk2 port,
->> where it appears that the peripheral HID's were just picked in numerical
->> order.
->>
->> [0] https://github.com/tianocore/edk2-platforms/blob/12f68d29abdc9d703f67bd743fdec23ebb1e966e/Platform/RaspberryPi/AcpiTables/GpuDevs.asl#L15
+On Tue, Jul 09, 2024 at 12:22:46PM +0200, Adam Skladowski wrote:
+> Add bindings for Qualcomm MSM8976 Network-On-Chip interconnect devices.
 > 
-> So BCM2848, BCM2849, BCM2850 and so on are just made-up IDs
-> for a Windows/EDK2 port that got cargo-culted into the kernel?
-> Yikes!
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+> ---
+>  .../bindings/interconnect/qcom,msm8939.yaml   | 15 ++-
+>  .../dt-bindings/interconnect/qcom,msm8976.h   | 97 +++++++++++++++++++
+>  2 files changed, 107 insertions(+), 5 deletions(-)
+>  create mode 100644 include/dt-bindings/interconnect/qcom,msm8976.h
 
-You could say that, but there was some due diligence a couple years ago 
-to track down the owner of the pnp id/information at broadcom, and it 
-didn't yield anything helpful. Whether they are legitimate seems to be 
-lost in time. At this point they are widely/publicly known Ids, without 
-apparent conflict.
-
-
-> 
-> Has anyone checked whether they collide with actual Broadcom products?
-
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
