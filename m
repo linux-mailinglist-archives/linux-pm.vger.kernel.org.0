@@ -1,127 +1,186 @@
-Return-Path: <linux-pm+bounces-10956-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10957-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55DA392E009
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 08:25:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4EDC92E06B
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 08:58:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C1E61F225BF
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 06:25:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6CCEB22269
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 06:58:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55005839F4;
-	Thu, 11 Jul 2024 06:25:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F66E12FB02;
+	Thu, 11 Jul 2024 06:58:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ON5/gIDn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IM/wf5EM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238B91C14;
-	Thu, 11 Jul 2024 06:25:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E777612F386
+	for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 06:58:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720679133; cv=none; b=WOr8WGlcURVbwagrPDDDY8GR9kYcUGWVd9rOsxeGlh96ErfJaAKr3zKlRFmbcNSHyRG41U58lEtR1mFSJ0xS5z9upEHz70mO7h6PFi02YvBLWyLUAnI2tobTAnO+Hwm23iEA9CdTRumEAs6tqHHb9tPdZFdc0z4T0wCANlsV0mY=
+	t=1720681090; cv=none; b=tt8eK25KfYRSDTdfdRR3vGkYogecqZ8zu0D/S81UiuTj0uG7Hth4UhsrcRNn37Jr9u9XPjt6dJ+zOWBwTO5DoyBh9LyMmKHd/r9XHkUnhIm2wKti7Hs7eX9DKw0nW7onRp5x9Bau/31RSG9GO2ma29x4kKeKaKe40pXIy/F4R74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720679133; c=relaxed/simple;
-	bh=YQfeuPN2HOffCv0MVzTXwIsDX0oyjlA8SwrOf5ZnO2k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rqgfdsvmxcjp5s/BtErYPO9NNmYkvhpKImvTXiCVoJkiVVoKlJlDs2nY9sPlKxZkdQQ/MN+4fvPH07tujV86UGIQhmL/UT7ZUt0+xD0eg5bRgYKJGxPFrjGl4Td/S5q3cmg6IaWdqkExcL3fz62Nkyfk9a9NOfAQ2tXuowPzRcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ON5/gIDn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41563C116B1;
-	Thu, 11 Jul 2024 06:25:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720679132;
-	bh=YQfeuPN2HOffCv0MVzTXwIsDX0oyjlA8SwrOf5ZnO2k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ON5/gIDnPsfVCZ/QIqwJ4P9F562+8pwPRhjsP781+12O13KiubrqYxouc24RQ5+G4
-	 Kao00dsMVmIn7fs7FpTfU10zM+dYIetlhwnCCH6HDpWE4/LhBFiATYeIEfPOCAEQ19
-	 wkK9SSPmsyoZFYSyskfnXiWdcjvK1c0oTj2fBtRFMimJFHk0SzVg07lok5DwVYOQkq
-	 xB+/9dlhTmvFM5Hl/6y7wSw8wbWvKda9wVaGqKcJVc8DoIRd95CobPvwulz/+FXLVg
-	 SwD2E7KE78k2+dkb3MHa2OVhZL3lyA0Lmmwf8CoKr15r2sUEmsvMhYH5eql88/c6DH
-	 3mR8I+cFYnw+w==
-Message-ID: <00706b14-9366-4109-802c-c52aefb67cd0@kernel.org>
-Date: Thu, 11 Jul 2024 08:25:22 +0200
+	s=arc-20240116; t=1720681090; c=relaxed/simple;
+	bh=VbV8n5fZKF1PMujDojYs/OiGZSy1hDuq9GQMWoMh+Jc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=R38pqmtrhdiDL8qIsJJAFEBg6KTAF+hevTjCoEiUaBBJbk6izorS7JNZAgPbacxblMx8/Dm7VVptAcVsXrvN2OOmbvfxs6fSQxhVXg8wwC1yVd80MIQQAgkR4OkfdfhXHsKcaxMRux/z6k5jaYwIbJej3dVjzNvfqrU7h5BWaSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IM/wf5EM; arc=none smtp.client-ip=209.85.166.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-38abd30a1c9so2088315ab.3
+        for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2024 23:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720681088; x=1721285888; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3toptsoMNGxVTtM8r/mDQ2GtXlGc7pzgPc/YT1pqslQ=;
+        b=IM/wf5EMmAoO9oHbApzt6focoFfXdTQjxe0s3ftmSe7eFqJEBQvikG5qkPA422n+ia
+         SbpR94Adeohn32qdh9WzAwyOb2ejwbKQI/LE/mk77bMxgPcUcVIYwNvAnzwRKcdfQ146
+         u6cELK8XUmv+rm99G7+VGSZqXYN43o21M61R7q6GhCazqpyfDfR8Scr8pkRlLrr/d+JD
+         fG/X+cLDL1YddHWbsJdv80TYf+Kr3LGN8yRpdtfPSKHaHo4fjVTaFBak1x9Qgo7Yfa23
+         oTMUiJqMnOW1tbt0XFXWSV+Qq8EqORLpiu/cBxlX9/EJEmXcnK1tHMCHiOXrd1G5U01E
+         CVwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720681088; x=1721285888;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3toptsoMNGxVTtM8r/mDQ2GtXlGc7pzgPc/YT1pqslQ=;
+        b=mxD9qU1DN6EUggTQL19AI7647WumLxI70E/w4rEwLdTAvTDfmztOkTiVRcutyTt32l
+         19pbIEGHHmC5ex5aoIpB5y93jC9smKFhrKjgUQtoolrHyaIbcxdvsmpCeKMNLF7NtVV8
+         jOgLPtSYP7O4RzddMO60Fqsh/Szt4To215PI4eZB1JPhOgySS0FMoyzqHiwlypwFm/cn
+         lQh53uisz1D9JR27KafSa44CxvpBOrA0jPZAzE1153klkw1fpEObesbdnD9fMULVIQL6
+         PQivhOzXU20auQQeX2oVcQpGmdfCFTk4ZgBe/1vBXcZimZP0V9xcSumVKTpzluN0Ko6n
+         oQqA==
+X-Gm-Message-State: AOJu0YwqO8Jsn6oZjGzp17O/I9RgzLzJhg348zS9kxQXPdOp762Y2eiR
+	w1a0jO1hCE49qs5u5z9jmokrFWHQXc8IVyERi9M88sygGCIvUI5m4wUSAKQoqc8=
+X-Google-Smtp-Source: AGHT+IFS9ttr8vgB5L0xprzERmk0Pue4prYYOP61KK6nfcxE5tq8k4JxtA3/ILvDMV75gLXHgwZFEw==
+X-Received: by 2002:a05:6e02:1d16:b0:382:e06a:6a88 with SMTP id e9e14a558f8ab-38a57ad8d4amr97756245ab.10.1720681087811;
+        Wed, 10 Jul 2024 23:58:07 -0700 (PDT)
+Received: from localhost ([122.172.84.129])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b4389abb6sm5103343b3a.18.2024.07.10.23.58.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jul 2024 23:58:06 -0700 (PDT)
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Danilo Krummrich <dakr@redhat.com>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc: linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
+	rust-for-linux@vger.kernel.org,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Erik Schilling <erik.schilling@linaro.org>,
+	=?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH V4 0/8] Rust bindings for cpufreq and OPP core + sample driver
+Date: Thu, 11 Jul 2024 12:27:42 +0530
+Message-Id: <cover.1720680252.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] dt-bindings: thermal: amlogic,thermal: add
- optional power-domains
-To: George Stark <gnstark@salutedevices.com>, andi.shyti@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- neil.armstrong@linaro.org, khilman@baylibre.com, jbrunet@baylibre.com,
- martin.blumenstingl@googlemail.com, glaroque@baylibre.com,
- rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
- lukasz.luba@arm.com, b.galvani@gmail.com, mmkurbanov@sberdevices.ru
-Cc: linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- kernel@salutedevices.com
-References: <20240710223214.2348418-1-gnstark@salutedevices.com>
- <20240710223214.2348418-3-gnstark@salutedevices.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240710223214.2348418-3-gnstark@salutedevices.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/07/2024 00:32, George Stark wrote:
-> On newer SoCs, the thermal hardware can require a power domain to
-> operate so add corresponding optional property.
-> 
-> Signed-off-by: George Stark <gnstark@salutedevices.com>
+Hello,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This adds initial rust bindings for two subsystems, cpufreq and operating
+performance points (OPP). The bindings are provided for most of the interface
+these subsystems expose.
 
-Best regards,
-Krzysztof
+This series also provides a sample cpufreq driver rcpufreq-dt, which is a
+duplicate of the merged cpufreq-dt driver (A generic platform agnostic device
+tree based cpufreq driver) used on most of the ARM platforms.
+
+This is tested with the help of QEMU for now and frequency transitions, various
+configurations, driver binding/unbinding work as expected. No performance
+measurement is done with this.
+
+These patches (along with few other dependencies) are pushed here for anyone to
+give them a try:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/linux.git rust/cpufreq-dt
+
+
+This depends on basic bindings for few other modules: device/driver, platform
+driver, OF, clk, and cpumask. I am not looking to upstream support for them yet.
+
+Based on staging/rust-device from the Rust tree (which is based over v6.10-rc1).
+
+V3->V4:
+- Fix bugs with freeing of OPP structure. Dropped the Drop routine and fixed
+  reference counting.
+- Registration object of the cpufreq core is modified a bit to remove the
+  registered field, and few other cleanups.
+- Use Devres for instead of platform data.
+- Improve SAFETY comments.
+
+V2->V3:
+- Rebased on latest rust-device changes, which removed `Data` and so few changes
+  were required to make it work.
+- use srctree links (Alice Ryhl).
+- Various changes the OPP creation APIs, new APIs: from_raw_opp() and
+  from_raw_opp_owned() (Alice Ryhl).
+- Inline as_raw() helpers (Alice Ryhl).
+- Add new interface (`OPP::Token`) for dynamically created OPPs.
+- Add Reviewed-by tag from Manos.
+- Modified/simplified cpufreq registration structure / method a bit.
+
+V1->V2:
+- Create and use separate bindings for OF, clk, cpumask, etc (not included in
+  this patchset but pushed to the above branch). This helped removing direct
+  calls from the driver.
+- Fix wrong usage of Pinning + Vec.
+- Use Token for OPP Config.
+- Use Opaque, transparent and Aref for few structures.
+- Broken down into smaller patches to make it easy for reviewers.
+- Based over staging/rust-device.
+
+Thanks.
+
+Viresh Kumar (8):
+  rust: Add initial bindings for OPP framework
+  rust: Extend OPP bindings for the OPP table
+  rust: Extend OPP bindings for the configuration options
+  rust: Add initial bindings for cpufreq framework
+  rust: Extend cpufreq bindings for policy and driver ops
+  rust: Extend cpufreq bindings for driver registration
+  rust: Extend OPP bindings with CPU frequency table
+  cpufreq: Add Rust based cpufreq-dt driver
+
+ drivers/cpufreq/Kconfig         |   12 +
+ drivers/cpufreq/Makefile        |    1 +
+ drivers/cpufreq/rcpufreq_dt.rs  |  222 +++++++
+ rust/bindings/bindings_helper.h |    2 +
+ rust/helpers.c                  |   15 +
+ rust/kernel/cpufreq.rs          | 1023 +++++++++++++++++++++++++++++++
+ rust/kernel/lib.rs              |    4 +
+ rust/kernel/opp.rs              |  925 ++++++++++++++++++++++++++++
+ 8 files changed, 2204 insertions(+)
+ create mode 100644 drivers/cpufreq/rcpufreq_dt.rs
+ create mode 100644 rust/kernel/cpufreq.rs
+ create mode 100644 rust/kernel/opp.rs
+
+-- 
+2.31.1.272.g89b43f80a514
 
 
