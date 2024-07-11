@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-10976-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10977-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF29192E4B7
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 12:29:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7FE592E4B9
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 12:30:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F05201C2120E
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 10:29:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C7521F230D1
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 10:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7720158DA7;
-	Thu, 11 Jul 2024 10:29:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57468158DA7;
+	Thu, 11 Jul 2024 10:29:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="fhxHwBvR"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="SlMhc0f+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2085.outbound.protection.outlook.com [40.107.92.85])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2050.outbound.protection.outlook.com [40.107.237.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CC814D44F;
-	Thu, 11 Jul 2024 10:29:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.85
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C52F14D44F;
+	Thu, 11 Jul 2024 10:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720693776; cv=fail; b=NKRUWZTA9jz/giqtb9KSAJ5pbgGJ2NVSNknNeRCNqdN5H30+lOzmwAPm9Qp+uNPfDP7RlUNSr8aCaeMQVHlzH/QB4l5DIccapSwy3/HyMC/RyiZfyvBDu8oYqqRM35S9mjrs/HMw4A7fpwqvsVBbJprAbGnisq1bTYjWwAd/inU=
+	t=1720693797; cv=fail; b=ZRsvuwWRw5kagttn9d2Hh4rql0DK4MCpxDI0X2jPLKKGYeQAmzM/PNK08wG1sQfZLagoP9PJt3vSniKdwszHMwT9qOX25t8MQWw0lQnTqCsbVwwtqqzP5zKMag0ZLqRhjkwA9hWHeD33C/2ByGeWqnAvMi1E/HAwZUV77RQuiCA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720693776; c=relaxed/simple;
-	bh=omifWwMgL75tly7bRNMfyrMsb2mGwm57uU9jhd6MT+I=;
+	s=arc-20240116; t=1720693797; c=relaxed/simple;
+	bh=D+gLgTvQgEN5lztrVYIjZ2UW4DehNy3FMRMtdl6ZsR8=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Kk4n85qQH3TQsyr8E98d7M8oVt15ub/aAdAYNao/3gR+vASBgKCwrrvQPh3ya84kBUF1H/3qKe8r5lENn5+ptlGxpYG655em6Kc5dVvS0WgdhIgsM7rHO1/vMvxnck1Y8cJHPDmS6CS8sRzQaSIIcKjR/hJMUBAQT3TGGPgAGOQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=fhxHwBvR; arc=fail smtp.client-ip=40.107.92.85
+	 MIME-Version:Content-Type; b=tNxU78AH6d0n9JU84onlMIw2GmXmnatjrqwd/05ky9oSGgizJjZQDn/L/YFQ8cITyvl/2jYcccdnozAD/nY/5vvuyXRFOikpGaeZG8E3COj4p1r9ZKzN/nNNtl65K1BZknQU0mbyq+JDfXsoJMDnU+PoPJI49JlG6N6MgGM8P0Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=SlMhc0f+; arc=fail smtp.client-ip=40.107.237.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JQHUJi83apgWv3+YU9HxhWrML+nfsbIxXNETVoNPLDyP/8HQgPLWo3n7aIxWoUVt1Q0Zj+FYwHnF1XaJS+7xqReub0X5UMajjGON16xEictIpet6k1sSuCqEnexervyKdnfwKmeJMrseXE5IlR9DG5q7dyH5kRdEzS5teW2/OvgyFpESjtZEdDV6uNP9HtdygHsUEvvcY6czzPuYZMTjxbYjgL61jwICCIxvkadArf4WYcHf9NmnWPB+r09+YsZcU9eD3QNqhYGWY76AuKcPF6BTyV43EHPwM5hWBSQeV80zALKgmXB+xbk5vhJngLMwvT8kSjsGeLnTzOMik7Wcog==
+ b=k9t1JrWXldSTvp3ke1paBiDljp0ZnQ//xmd0/ir/3ZApAuyhqqcPgfaiLVLWs6OPXuPNR49XErbEdYbTbq273ZPtRLxAj6nq/mo981cU8ZOsQEiUMpfMcaObdu/sl1HzjNSH2f2Q3pT0tSMGMhmsRLwVxomLKLID7dVJ6VPTH3KkQkz2lyUzdhlFFg32ky9xb8UdT9WrYxjtAlBXze+/wX5mtUvvIwNM1SPRibtMXoCYI6OZCNP8Y8mUweJaHa8ITHJOCsz2nHoDoPDyGXbI63zQKsKi2Ly9Rg+0Eb+IEftVAqZcDmqB6dvr+rMg01h+BMYD3VMhnkgIHo9CLSbQWg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V2o5vVrSzegCXlx7d4sKaxeoqAOh8OXb8m9Fv7s/wTQ=;
- b=UWnzPVzF3T1yKIciACp3mEyD0PE1yVlofuRNS2Rh1JcglGZdbAiZicTvA7UE8coQNRxMTxYf+l6+4E+MngXXZbJ1hrOE4Sh9gN3gP8Y4mU4tUa/ELmahbapPCFJC7xD6TBeglXiFen258OJByqJ3ueMkt61U3bw943M9GWL2xiYzgYlcAaW4FaoJPP7pVXy+aD9ODkeleTR6s6zGgkjffmJq5qMA0DoPfTs5fAAJQVrj3UqljvZUS/1SFxW7TIeCni/U9CVw0+RaVW/vLyklFJnVWE2yG9zmMJx63Z63/gdzBW9CmONQueYf4K0mYk2OJ9yJBjdbF63Tnc6fK+Rbow==
+ bh=7QETpHWz7mQm/u1yCrpkg7I/uOwOXgKiBOV6erzVswI=;
+ b=TpUc+tY2g9w0Yovq1qI2dHLeMOc+XxXcRPA++VTAxTbqrEFZqx1jAECv9PhzUM0hpxUYzjt7CXQLGNfUDZOfkG5FOUG8Bn7avDDIEZ2Of05j6tnodH/soKACNBc8smvO2lYqv2ejMwingGNFUj14toiZtCbotZLTvqXAlUdrIxWHmt5fS8MJ5iMYSxNrh/a3li8kt3VOVTI4NYfTptVaJEgfSW2PTphzS8vvJQjziGYVFxLwu20S3mO/WzG4dAFT2JUHnudSGlNLPVTXYW6si4+pr46ZEoj7abKvdLA5nExLl6kvtWZnkKjuFDKR+bBc9pJAzz2ZJCS0mHiFpER+jw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V2o5vVrSzegCXlx7d4sKaxeoqAOh8OXb8m9Fv7s/wTQ=;
- b=fhxHwBvR9++kDYlOZA0vAc7QA4ujn/U1y8QU9T79pXtLVhJ3mUSNjraOlx0mEPgiIkNvnsl16LFCf81LN8a2+Lrw0sZhpHNdrBU3Wd1Qcu3fU+RULlPre6yoGAEC67V8rj74vPCgpF0uHGYbqpr1kio2GyvwEA6hshnFpb6bz7k=
-Received: from SN6PR2101CA0005.namprd21.prod.outlook.com
- (2603:10b6:805:106::15) by LV2PR12MB6013.namprd12.prod.outlook.com
- (2603:10b6:408:171::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.36; Thu, 11 Jul
- 2024 10:29:32 +0000
-Received: from SA2PEPF00003AEA.namprd02.prod.outlook.com
- (2603:10b6:805:106:cafe::f5) by SN6PR2101CA0005.outlook.office365.com
- (2603:10b6:805:106::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.12 via Frontend
- Transport; Thu, 11 Jul 2024 10:29:31 +0000
+ bh=7QETpHWz7mQm/u1yCrpkg7I/uOwOXgKiBOV6erzVswI=;
+ b=SlMhc0f+IpydG+AOiETeCVsd6bMCkBOyixxpqR1k8NZRfMrj0FvsNU4ulS06dRXnXv/+h2IFHC2zd8wfflSpy6nmwmswMJpZkL6+MkgO1Oz+8dFJejehX3sqxKF6UB2XOl1HHWSFEhd62eVlYZV8LburuTQq9Cj4a+PtYCiHVO0=
+Received: from SA0PR11CA0167.namprd11.prod.outlook.com (2603:10b6:806:1bb::22)
+ by SA1PR12MB7341.namprd12.prod.outlook.com (2603:10b6:806:2ba::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.35; Thu, 11 Jul
+ 2024 10:29:52 +0000
+Received: from SA2PEPF00003AE6.namprd02.prod.outlook.com
+ (2603:10b6:806:1bb:cafe::dc) by SA0PR11CA0167.outlook.office365.com
+ (2603:10b6:806:1bb::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.36 via Frontend
+ Transport; Thu, 11 Jul 2024 10:29:52 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +63,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SA2PEPF00003AEA.mail.protection.outlook.com (10.167.248.10) with Microsoft
+ SA2PEPF00003AE6.mail.protection.outlook.com (10.167.248.6) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7762.17 via Frontend Transport; Thu, 11 Jul 2024 10:29:31 +0000
+ 15.20.7762.17 via Frontend Transport; Thu, 11 Jul 2024 10:29:51 +0000
 Received: from shatadru.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 11 Jul
- 2024 05:29:22 -0500
+ 2024 05:29:43 -0500
 From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
 To: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
 	<namhyung@kernel.org>, <mark.rutland@arm.com>,
@@ -83,9 +83,9 @@ CC: <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<gautham.shenoy@amd.com>, <kprateek.nayak@amd.com>, <ravi.bangoria@amd.com>,
 	<sandipan.das@amd.com>, <linux-pm@vger.kernel.org>,
 	<Dhananjay.Ugwekar@amd.com>
-Subject: [PATCH v4 06/11] perf/x86/rapl: Add wrapper for online/offline functions
-Date: Thu, 11 Jul 2024 10:24:34 +0000
-Message-ID: <20240711102436.4432-7-Dhananjay.Ugwekar@amd.com>
+Subject: [PATCH v4 07/11] perf/x86/rapl: Add an argument to the cleanup and init functions
+Date: Thu, 11 Jul 2024 10:24:35 +0000
+Message-ID: <20240711102436.4432-8-Dhananjay.Ugwekar@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240711102436.4432-1-Dhananjay.Ugwekar@amd.com>
 References: <20240711102436.4432-1-Dhananjay.Ugwekar@amd.com>
@@ -101,137 +101,122 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00003AEA:EE_|LV2PR12MB6013:EE_
-X-MS-Office365-Filtering-Correlation-Id: f7521a8c-a939-495a-fb8c-08dca1945a26
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003AE6:EE_|SA1PR12MB7341:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a6f62be-a69e-46f6-fdf4-08dca1946636
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|376014|7416014|921020;
+	BCL:0;ARA:13230040|82310400026|376014|7416014|1800799024|36860700013|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?f0pAssa8JLXYAC30q0eSNp1QgUC45+vuPhUc4YtF6o84t9EUeAMIvwzzoNKs?=
- =?us-ascii?Q?9y5kBnEhqaUHKC0xsnlaqoX/Lqhs5Pib38IXivjoEk6Bpp2QYAt+2JtZbMcQ?=
- =?us-ascii?Q?4l25Y9ItU8ZKcFUTN34FoPYIhdAuhosvIiCl9Cuyh2R4M7NYFSUSRUvQwJzO?=
- =?us-ascii?Q?H+bYvIiHqB9RzrZl5Ypls60q9N3+DAQ8ifJ1WP+vmRrjpZ0Qb1fBiTLvo+eN?=
- =?us-ascii?Q?UlQyLvuUi1g3ZoKCxUtnvEisfeSQBC76ZRlx97NgFn40XJLpEqJ180rda6pl?=
- =?us-ascii?Q?7JvGUna7RZQ1qqJQwNhC3APlKdX+QUDgtMCsFgnEUt3zPfpcTPOIHBqcsa/G?=
- =?us-ascii?Q?uttZrFQXUIHUCSnc8VWK7fEZJb4idtjZKotOQAzTGxVA1IxD2xTnGsM483XO?=
- =?us-ascii?Q?fC0Y2wnIabQwKAJBbZAhO3TsxcQGxE+w1eTmbgx8jkFhsPcI/PCBia74NBZS?=
- =?us-ascii?Q?w2ytJwu8n62Qt3znzvex9Kd6woEy38YflmqpZMVZDx+fJmMKscDGVaZHRBLO?=
- =?us-ascii?Q?s6iTUm6VCgs7HWzLvOGdg0ht1vUUaDP7rmn2g+6BfsjEq09m1f3LvgycUria?=
- =?us-ascii?Q?FnZXR7Dg+TmkShGWPes5EMIg0jONzECyIyyGf9BRZCCUhifAZVT/kKMgj5QN?=
- =?us-ascii?Q?736UN7/u5hDspVniGyleZ/JcSKSwWa6ldlE3zrzXfiXJoAA4xreV5btCmYi2?=
- =?us-ascii?Q?ThLoIkz6le6NGjNMaJYfGs7i96RNCm558IcSHYypRJ6cmhU83NF0D8gf9ijN?=
- =?us-ascii?Q?EeDAg788tovWelbToJFGfj6qe8iayMRHPk3UCxydnc+Tl2cwm0jrc39OqWDs?=
- =?us-ascii?Q?UoHnHKwJSYrwEtfN/M1byMpGx2JnTcuLQSBbaW+w4d29p7hoHivZeFXcU77W?=
- =?us-ascii?Q?zZeKJzMyC9V/y6tYogbHaAmUSfc23zOq2gbzcnDwk9NwPWiKJBCvB964Dzzi?=
- =?us-ascii?Q?ito2caRQ15/8m05K15p7QrCRQy9aliv1MG7CO8v9m9weOkZGWl1yFSy+l+qO?=
- =?us-ascii?Q?U9LHHKLIKW70km3e8xPkcEz942ze0UsODJcPBWpsy0RN2vwHO8086rH5y3pl?=
- =?us-ascii?Q?wymo9dyTyb3mMKccK6SKi9mB2sLQpOBEYo0l8jRPX7n4ZHJZ1qm5QDZzdnQ/?=
- =?us-ascii?Q?NJOHaAnGXzqO6hhVAF0SXfZxUj506O2bpJ+MdcPs8DXWkJC2GxCRsr4uwA0g?=
- =?us-ascii?Q?vnjq/PlUxx7acMoqu4O+x6t3iF6ZBlV9Vp8NyQHZOA0SyvvRIvFeuXoZMfTp?=
- =?us-ascii?Q?Ea3M7lnRBuUCiKiTgZhCEK14HXF4Hh8yRPh+4wbQeYtDb6h27Z2ch+drWzs5?=
- =?us-ascii?Q?YKxWPYBXWRcEjL11pHl8BBYETgb4oyOj0CHximpV/2LmmAMguxuT+zNV03k3?=
- =?us-ascii?Q?fVHGx/oU9nvTCWFLcIl82htJRtb+LnfwEkco7S+yDIiPaaCOnyXRB4bbAcuc?=
- =?us-ascii?Q?q4kPLLVKJlNjLWLuH5wB8CDwKYVvLpPG/kiK7Jef1S81FxtwVWru6Q=3D=3D?=
+	=?us-ascii?Q?QlgJscLsHAwugKOtgX07GpfXVj9oYbNwH3OE3eeC5FzkISTDJ+nLQ3v2JQlp?=
+ =?us-ascii?Q?+Bmd6k+EXD6k4NlVb+S/EpcMKLLB1+h8+lvvIlPnWITMNZs/6hIK2RMX9jfq?=
+ =?us-ascii?Q?4M5YvV9UdhZC0R/KoIOx0rEe5bVkFyP5xunZGvzFwAxQKesYhICQ7b7d6r1C?=
+ =?us-ascii?Q?gs/CdkL9xpRPfasNAGuY/ubRJGw0tam2U3wH9dN0CqriREYh01138WaLryMl?=
+ =?us-ascii?Q?VPM7b4uyqOchJkFL5xeig5wLNrObLKmmHXJK7f8lA2/b96PF1sUoON0I5c66?=
+ =?us-ascii?Q?PZQtKVd2Wmnb/U80Zk8FrXqwQcHhBGY+lp8Jp7uCxoyTrE5vfeGxlKYW10dG?=
+ =?us-ascii?Q?7dEEDeJHjbqDAA+IRhyrEWoDx/d0fHi2iG4Zn/KkTLXUT2fnQh90ll48jxDR?=
+ =?us-ascii?Q?0PuTVPEpPaAv7TBLdjc00pu/nYzMJS4EPXdCTuPMJwf5Ip6iMf5dOGEkXCyd?=
+ =?us-ascii?Q?sUuXQNw+P2kBtJ11+DOzQzLTryBhVIxpUDZyV/gqm1HZoN+wfBtQtjjUnkAY?=
+ =?us-ascii?Q?L/vsoy0ib5goM3ilm+EgQWxvfyDzRSkkSgCZu0nBTFZIf0tMHvAl/DC8a7qM?=
+ =?us-ascii?Q?Jq89dV+zCKqY7lG8loUI386g5JnQC7tGVHwd+Z3oPnwhuruHmp05qs73Y3zI?=
+ =?us-ascii?Q?oF5At4N0clw4i9cDqSisBlPiX5kBpUJxqPb2zPaVTV/DIwAr9qcw7zm+v3Wy?=
+ =?us-ascii?Q?OlMxX4OiQUMwxFveWf2e+k+RKdowmeG7n3O3eOtIS6kbE570MlEA2b+BIPkN?=
+ =?us-ascii?Q?XwZ9DFYEEUkeARVSxvagzGO7OAlfCwA0AnFdv3kWjyT4BcmM0Jeg2r18q3BR?=
+ =?us-ascii?Q?f7r+odQQroKizg50hvsMEe6/M8+Fs5z3SEbvQnkrXVEcHeEo8SlIv7FOJK6o?=
+ =?us-ascii?Q?njJ0WvyylAAQRvKBLicG48PEVFIA6x2MJW/k10mYwll8nsOteQdxKNnDHaKG?=
+ =?us-ascii?Q?MzPyWTEdMaX+EPqc/jnpW1rgahMtnb+cGmHRahZeQLR7+hb/Ka5hYq0jvaUr?=
+ =?us-ascii?Q?i0gJEhvvJmI1gBMm3Y9qHoQscwfma4Vxf5IywdFoEg0dbcZ1+I8velbsHIcf?=
+ =?us-ascii?Q?nzZpQV9DIEY5Wd8LyUSuWfD7H8TQ/aCihag9APDvrUVgBAHTylYDz2waTeVm?=
+ =?us-ascii?Q?8vrepbY4p0BhiG7O7x28cfTFNAMxHsESkSYOIyuly3+TK4pekla84W9lvXth?=
+ =?us-ascii?Q?/a6xPJz2NYhzkOv6J5klnX397KEh772vWCzhum0pnfHR21ijvRJciSD3LvyR?=
+ =?us-ascii?Q?AfX66Asr8kOlPqoxPT3t87nfPkCH7/I5H3UHtLMidHjYmW85Vut+EHq+auw+?=
+ =?us-ascii?Q?fWErpRsZkBV5tuiV0W80dkKx6DeTdZ+rAuEF/7AIQdbMLbQgi5zpyVeSk5+W?=
+ =?us-ascii?Q?HcwlDvEbr4RRIIyH3gystGmqXLzSfg5DrN/PGxY9DIXuwhL9FVdqeN6x1drd?=
+ =?us-ascii?Q?6T3jqUV52JF0EhQxQWbKvKc3Kf0TRQRL?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(1800799024)(36860700013)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2024 10:29:31.7003
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2024 10:29:51.9379
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f7521a8c-a939-495a-fb8c-08dca1945a26
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a6f62be-a69e-46f6-fdf4-08dca1946636
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00003AEA.namprd02.prod.outlook.com
+	SA2PEPF00003AE6.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB6013
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7341
 
-This is in preparation for the addition of per-core RAPL counter support
-for AMD CPUs.
-
-The CPU online and offline functions will need to handle the setting up and
-migration of the new per-core PMU as well. The wrapper functions added
-below will make it easier to pass the corresponding args for both the PMUs.
+Prep for per-core RAPL PMU addition.
 
 No functional change.
 
 Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
 ---
- arch/x86/events/rapl.c | 30 +++++++++++++++++++++---------
- 1 file changed, 21 insertions(+), 9 deletions(-)
+ arch/x86/events/rapl.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-index e3d0a82e12b9..1d36565d0cb9 100644
+index 1d36565d0cb9..362e82284ccb 100644
 --- a/arch/x86/events/rapl.c
 +++ b/arch/x86/events/rapl.c
-@@ -565,10 +565,10 @@ static struct perf_msr amd_rapl_msrs[] = {
- 	[PERF_RAPL_PSYS] = { 0, &rapl_events_psys_group,  NULL, false, 0 },
+@@ -694,7 +694,7 @@ static void __init rapl_advertise(void)
+ 	}
+ }
+ 
+-static void cleanup_rapl_pmus(void)
++static void cleanup_rapl_pmus(struct rapl_pmus *rapl_pmus)
+ {
+ 	int i;
+ 
+@@ -712,9 +712,10 @@ static const struct attribute_group *rapl_attr_update[] = {
+ 	NULL,
  };
  
--static int rapl_cpu_offline(unsigned int cpu)
-+static int __rapl_cpu_offline(struct rapl_pmus *rapl_pmus, unsigned int rapl_pmu_idx,
-+			      const struct cpumask *event_cpumask, unsigned int cpu)
+-static int __init init_rapl_pmus(void)
++static int __init init_rapl_pmus(struct rapl_pmus **rapl_pmus_ptr)
  {
--	const struct cpumask *rapl_pmu_cpumask = get_rapl_pmu_cpumask(cpu);
--	struct rapl_pmu *rapl_pmu = cpu_to_rapl_pmu(cpu);
-+	struct rapl_pmu *rapl_pmu = rapl_pmus->rapl_pmu[rapl_pmu_idx];
- 	int target;
+ 	int nr_rapl_pmu = topology_max_packages();
++	struct rapl_pmus *rapl_pmus;
  
- 	/* Check if exiting cpu is used for collecting rapl events */
-@@ -577,7 +577,7 @@ static int rapl_cpu_offline(unsigned int cpu)
- 
- 	rapl_pmu->cpu = -1;
- 	/* Find a new cpu to collect rapl events */
--	target = cpumask_any_but(rapl_pmu_cpumask, cpu);
-+	target = cpumask_any_but(event_cpumask, cpu);
- 
- 	/* Migrate rapl events to the new target */
- 	if (target < nr_cpu_ids) {
-@@ -588,11 +588,16 @@ static int rapl_cpu_offline(unsigned int cpu)
+ 	if (!rapl_pmu_is_pkg_scope())
+ 		nr_rapl_pmu *= topology_max_dies_per_package();
+@@ -738,6 +739,9 @@ static int __init init_rapl_pmus(void)
+ 	rapl_pmus->pmu.read		= rapl_pmu_event_read;
+ 	rapl_pmus->pmu.module		= THIS_MODULE;
+ 	rapl_pmus->pmu.capabilities	= PERF_PMU_CAP_NO_EXCLUDE;
++
++	*rapl_pmus_ptr = rapl_pmus;
++
  	return 0;
  }
  
--static int rapl_cpu_online(unsigned int cpu)
-+static int rapl_cpu_offline(unsigned int cpu)
- {
--	unsigned int rapl_pmu_idx = get_rapl_pmu_idx(cpu);
--	const struct cpumask *rapl_pmu_cpumask = get_rapl_pmu_cpumask(cpu);
--	struct rapl_pmu *rapl_pmu = cpu_to_rapl_pmu(cpu);
-+	return __rapl_cpu_offline(rapl_pmus, get_rapl_pmu_idx(cpu),
-+				  get_rapl_pmu_cpumask(cpu), cpu);
-+}
-+
-+static int __rapl_cpu_online(struct rapl_pmus *rapl_pmus, unsigned int rapl_pmu_idx,
-+			     const struct cpumask *event_cpumask, unsigned int cpu)
-+{
-+	struct rapl_pmu *rapl_pmu = rapl_pmus->rapl_pmu[rapl_pmu_idx];
- 	int target;
+@@ -879,7 +883,7 @@ static int __init rapl_pmu_init(void)
+ 	if (ret)
+ 		return ret;
  
- 	if (!rapl_pmu) {
-@@ -613,7 +618,7 @@ static int rapl_cpu_online(unsigned int cpu)
- 	 * Check if there is an online cpu in the package which collects rapl
- 	 * events already.
- 	 */
--	target = cpumask_any_and(rapl_pmus->cpumask, rapl_pmu_cpumask);
-+	target = cpumask_any_and(rapl_pmus->cpumask, event_cpumask);
- 	if (target < nr_cpu_ids)
- 		return 0;
+-	ret = init_rapl_pmus();
++	ret = init_rapl_pmus(&rapl_pmus);
+ 	if (ret)
+ 		return ret;
  
-@@ -622,6 +627,13 @@ static int rapl_cpu_online(unsigned int cpu)
- 	return 0;
+@@ -903,7 +907,7 @@ static int __init rapl_pmu_init(void)
+ 	cpuhp_remove_state(CPUHP_AP_PERF_X86_RAPL_ONLINE);
+ out:
+ 	pr_warn("Initialization failed (%d), disabled\n", ret);
+-	cleanup_rapl_pmus();
++	cleanup_rapl_pmus(rapl_pmus);
+ 	return ret;
  }
- 
-+static int rapl_cpu_online(unsigned int cpu)
-+{
-+	return __rapl_cpu_online(rapl_pmus, get_rapl_pmu_idx(cpu),
-+				 get_rapl_pmu_cpumask(cpu), cpu);
-+}
-+
-+
- static int rapl_check_hw_unit(void)
+ module_init(rapl_pmu_init);
+@@ -912,6 +916,6 @@ static void __exit intel_rapl_exit(void)
  {
- 	u64 msr_rapl_power_unit_bits;
+ 	cpuhp_remove_state_nocalls(CPUHP_AP_PERF_X86_RAPL_ONLINE);
+ 	perf_pmu_unregister(&rapl_pmus->pmu);
+-	cleanup_rapl_pmus();
++	cleanup_rapl_pmus(rapl_pmus);
+ }
+ module_exit(intel_rapl_exit);
 -- 
 2.34.1
 
