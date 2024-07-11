@@ -1,97 +1,91 @@
-Return-Path: <linux-pm+bounces-10995-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10996-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7977492E8F7
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 15:11:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1207A92E911
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 15:16:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33C19287D1A
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 13:11:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41F3F1C21736
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 13:16:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC7215E5A6;
-	Thu, 11 Jul 2024 13:08:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6015A15E5CD;
+	Thu, 11 Jul 2024 13:16:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sdTwny3L"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eiHXWkjD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6392816C689
-	for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 13:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34D115E5BA
+	for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 13:16:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720703287; cv=none; b=jW6q+XIuVEQXuuueZvH+09nsciKnFa5uIOVO+wt9wcK4Y/EGS2imHNfvXjW57WQ8Bo15GdP0l1WVrX1iMI0v/Q8KGTXniMwd8vnUWKjNbjf77laeHWwBx/+2iB9z2UgE2pJQgYrx6VlAePv/WC2vxhhW9t+20+r+7NC7HeHKiCM=
+	t=1720703802; cv=none; b=fg87J4kptEG4cmMTFT3L4NKeZicfpoy9sM5xcBVf6LdaFu/QKyh9z+kmjupM3P9mJpKR/3lChPgE7kVT//uMHiJvcWlcrJyAEBvD8hhywj+ZrhFRvpeDGuuY+CaJqvqpGcOVM3oGZTWpyIZiF9gd4Y7EfS7HjUomT1aO9U1WBp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720703287; c=relaxed/simple;
-	bh=iKLvXVCWEZ1L1B1OIv3plS/Y10k4Svm8KS1lPng7TAg=;
+	s=arc-20240116; t=1720703802; c=relaxed/simple;
+	bh=4ikN8JjZ+bXsTenqm2X8BKNxzCzpZv4nGiKyu8dkyWI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C3CoGwZyhnTBelZ8wcrd7x95jPRmJ6Qb0HAefFj3RpAZN0QL0VPy84mkbPnRCLzL9bUVmNv3gHgBXwhFKrtX6soolX9UaFu0DSOcLmlrmvjGGeMmKbGyh6fIYxcXtbClUTR2bYcomNjzfuEj6ShXbOY0adjHP5++uKd/ItRx2+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sdTwny3L; arc=none smtp.client-ip=209.85.210.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=FEqn3Ta14QqoELabbGUK67M9vw/L5iZyhyG6rYQWEqKgA76ztqC72TLJec+Imhd1ehy7M9qZ6jaYj4wRNDNRgC0NIDTjzwe5GsG4kAnA82O5I5pajOC2LQDdON6rRWlZadHI11HyaLJZvDNYBt1MyVhz5zXusDBfNt4KueUXCmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eiHXWkjD; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-70b05260c39so648648b3a.0
-        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 06:08:06 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70b05260c39so658418b3a.0
+        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 06:16:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720703286; x=1721308086; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1720703800; x=1721308600; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o4q0vF60ULh5IO/VmYdyQo5nT/zQh4fBZAg3It3beqc=;
-        b=sdTwny3LnQXe3mrl8r2UeJNZ9qZtb2IGMfhE3xnlo/X5h4Tz64s3B5OFpEMvrsCRGR
-         1R6OA/19xKlHZ56dY+05qMpB48uLVBfBQMXWLjpzIiUdEZcXdoI2YtLZNeU6sC/j0oyB
-         wrxxzcwaOBKsyyYfMVPsk43ruGfHAbDGHtvHr9UAaekL9Xphzq3I2C631wtKmZpn8SpQ
-         TXiyJXO9q/uX8svWAWSUfKUHzaryeDScNwuIsrlIZ8PIpYwwtfnCgZyUwOPJOi9DZW7i
-         arf3LP2+XNvlGEQAAvdrIrKQIMfNFNCoAvP91skpeDYVgXC7YyuFX9WBuMuKkZOb+x+O
-         kpSQ==
+        bh=wuplHtDIUsY+v60dipyWU9k8SUH+WJQjVihPpkXe2os=;
+        b=eiHXWkjDVLIUYlWvL56YD/VvZQRnfVI0njAfBQwZPsTdZ8xYqhkx3j5LndmnBn0fHg
+         pNxNn8scVZcoEl8CqGH5r9QONkaJVlBsRS0QinN1DT1xKcuhUGdsCz+8zkbQij7xRXN9
+         594WWeEuBjwKUb+4YwBFwY7oGy4nwEievCX39QaQE3G2NWW+IhtH8Yz01j9M8ikGM9Mq
+         4n7dpSpP9gWO1Ssubdw61N8W/4OGiBLwzu5yFPeFUkj4t8q5WVrYAeNbw0nOH/ObhpNf
+         W0BpsKtQ02nK3hLpqxKrRQX8qSMq+ekiZk5ffoGX55OsPKOumzQCEGx+4539INkG1ek1
+         COAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720703286; x=1721308086;
+        d=1e100.net; s=20230601; t=1720703800; x=1721308600;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=o4q0vF60ULh5IO/VmYdyQo5nT/zQh4fBZAg3It3beqc=;
-        b=cIqvwgB8NeDqzgjsszEVBoNSi8qYP2ZqWG6lfbJ4wLvd4kmgyR6aR2KhwDLux4nkUF
-         +Fm/tU2xNNyPBAiH1Qa5NipFlWxaRvLdADKImmNaeAc21YX2f0N8S97LWQoZ0IuDHPGg
-         H/GjAjbyAi2YLJzwZEbpQA2u4Dfrq0xFL772VAM8Ju/KGXJ/57v8/Xm9YkoS8nyO8h1f
-         WfNRWjRyb2FUhAeYbjVZfFghHpdtQ2f8fqgF5qn/XIR6m6ZjXjsqcVaDczLaomJVruor
-         PNgMiKHONYa/R0UOkEnUXv8AdJdDpLWjhrUl2Rm3R6EM7ZF4Zs9sgTeo4pIjWtwCFuBg
-         UhwA==
-X-Forwarded-Encrypted: i=1; AJvYcCVzsaGTTHsMlNn30CqLE6JOVtQ/aKXzGOysVvLQGcat1K0+nSuaNxwJgG1vH4bcJQqVYIyoG3UvBsXeHFHex8X7TPDk1mNK5A8=
-X-Gm-Message-State: AOJu0YxKWO61birwvvJkhCCQqGo4YlsGvGdFiN7WlBaaPQdnmztuaV+K
-	PzsAXRUvkjIFxPzAGxAV6y/Aej6K/DVwgLXdc7/KzLK4PZ7yhoeq/WmZ8Ftdr7s=
-X-Google-Smtp-Source: AGHT+IGF/lwYTnH/yNgBlYFmzN6i0q9elfIFjJX82Lz71K3GRNMMLFBmqZwxNZJH309pIiGtCTcRuA==
-X-Received: by 2002:a05:6a00:1950:b0:706:3204:fa4e with SMTP id d2e1a72fcca58-70b4337347dmr10360567b3a.0.1720703285481;
-        Thu, 11 Jul 2024 06:08:05 -0700 (PDT)
+        bh=wuplHtDIUsY+v60dipyWU9k8SUH+WJQjVihPpkXe2os=;
+        b=uUz5Q4tn9cmbFfADdCov+vlba74OX5UItbQB+W0N/Tjw+J91GKaqdIAJ5MgXrEBDcN
+         sBBOYzXtv4Biyj/salcczP9VL8bG9nGntqyCyYMVqADqwrQtTVjltePvD8wNs1KOPd8l
+         I6iHL3ZejUO4x5wqghqosBTa/PiSrsAICRppcVMy8d0YBhlKjYvXIylbl2fVly+nN+6b
+         GH1YZV5FcQKIs8wGLMn9/IDuzxR7ffwbl8JhEel8hWJRt+q3rdey9TJShaqfjcaWnjHW
+         FFi/50H2o6AN1m2st27lycOAOwbKKOnlj+dUAhuc54hXEzLUVfKimFNoGVgS0jb/gLhQ
+         LBjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW6edb3MwPZtWm15BydqTPrcU2MnYuBtYg6fnTF1dOF+lUnKkHZw0iKHmGQMC0hxhN4pisJbWuPwYSqYcOA9+iwbgZr0eAJHsM=
+X-Gm-Message-State: AOJu0Yy3otmYQEBcgrtXSDZ5MuCWcwAXaDm/o8Tv6rQeigU9p9ZYR2x8
+	h6UXl9cNUeoZbCNTqT0M5okC3OXTvAr4MZCYwH29v8SU0eyvJKeo3MgTqJoI7oE=
+X-Google-Smtp-Source: AGHT+IHZ3UH1ty7UF4a3wIr5FEGH2dlGV92koJ4rrmQlAuhh3VFAuItSKIUZOvFCugjqmOgiWXH3+w==
+X-Received: by 2002:a05:6a20:d50b:b0:1c2:9f03:82d4 with SMTP id adf61e73a8af0-1c29f038726mr6683433637.53.1720703800081;
+        Thu, 11 Jul 2024 06:16:40 -0700 (PDT)
 Received: from localhost ([122.172.84.129])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b43967791sm5607158b3a.118.2024.07.11.06.08.04
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b4396ab5esm5794716b3a.140.2024.07.11.06.16.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jul 2024 06:08:04 -0700 (PDT)
-Date: Thu, 11 Jul 2024 18:38:02 +0530
+        Thu, 11 Jul 2024 06:16:39 -0700 (PDT)
+Date: Thu, 11 Jul 2024 18:46:37 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Danilo Krummrich <dakr@redhat.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>, linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4 8/8] cpufreq: Add Rust based cpufreq-dt driver
-Message-ID: <20240711130802.vk7af6zd4um3b2cm@vireshk-i7>
-References: <cover.1720680252.git.viresh.kumar@linaro.org>
- <b1601c1dbdf68a4b812fcfaf73f3b5dea67f2025.1720680252.git.viresh.kumar@linaro.org>
- <Zo-3QIPbhBsv8EjB@pollux>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>, Nikunj Kela <nkela@quicinc.com>,
+	Prasad Sodagudi <psodagud@quicinc.com>, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-tegra@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] OPP: Fix support for required OPPs for multiple PM
+ domains
+Message-ID: <20240711131637.opzrayksfadimgq4@vireshk-i7>
+References: <20240618155013.323322-1-ulf.hansson@linaro.org>
+ <20240625105425.pkociumt4biv4j36@vireshk-i7>
+ <CAPDyKFpLfBjozpcOzKp4jngkYenqSdpmejvCK37XvE1-WbBY2g@mail.gmail.com>
+ <20240701114748.hodf6pngk7opx373@vireshk-i7>
+ <20240702051526.hyqhvmxnywofsjp2@vireshk-i7>
+ <CAPDyKFoA9O5a6xZ+948QOzYqsRjk_0jJaSxeYRwx=76YsLHzXQ@mail.gmail.com>
+ <20240711031356.rl2j6fqxrykmqfoy@vireshk-i7>
+ <CAPDyKFocjOt+JyzcAqOfCnmTxBMZmPjMerSh6RZ-hSMajRhzEA@mail.gmail.com>
+ <CAPDyKFoWgX=r1QtrcpEF-Y4BkiOtVnz4jaztL9zggo-=uiKsUg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -100,43 +94,48 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zo-3QIPbhBsv8EjB@pollux>
+In-Reply-To: <CAPDyKFoWgX=r1QtrcpEF-Y4BkiOtVnz4jaztL9zggo-=uiKsUg@mail.gmail.com>
 
-On 11-07-24, 12:43, Danilo Krummrich wrote:
-> Please just call this function `cpufreq::Registration::new`.
+On 11-07-24, 13:05, Ulf Hansson wrote:
+> On Thu, 11 Jul 2024 at 12:31, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > On Thu, 11 Jul 2024 at 05:13, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > >
+> > > On 10-07-24, 15:51, Ulf Hansson wrote:
+> > > > I think this should work, but in this case we seem to need a similar
+> > > > thing for dev_pm_opp_set_rate().
+> > >
+> > > We don't go to that path for genpd's I recall. Do we ? For genpd's,
+> > > since there is no freq, we always call _set_opp().
+> >
+> > You are right! Although, maybe it's still preferred to do it in
+> > _set_opp() as it looks like the code would be more consistent? No?
+
+Since the function already accepted a flag, it was very easier to just reuse it
+without.
+
+> No matter how we do this, we end up enforcing OPPs for genpds.
 > 
-> The existance of a `cpufreq::Registration` means that it's registered. Once it
-> is dropped, it's unregistered. It's the whole point of a `Registration` type
-> to bind the period of a driver being registered to the lifetime of a
-> `Registration` instance.
-> 
-> Having `Registration::register` implies a bit, that we could ever have an
-> unregistered `Registration`, which can never happen.
-> 
-> Besides that, it'd be nice to follow the same naming scheme everywhere.
+> It means that we may be requesting the same performance-level that we
+> have already requested for the device. Of course genpd manages this,
+> but it just seems a bit in-efficient to mee. Or maybe this isn't a big
+> deal as consumer drivers should end up doing this anyway?
 
-Sure, ::new() looks fine.
+Normally I won't expect a consumer driver to do this check and so was the
+opp core handling that. But for genpd's we need to make this inefficient to not
+miss a vote.
 
-> > +            c_str!("cpufreq-dt"),
-> > +            (),
-> > +            cpufreq::flags::NEED_INITIAL_FREQ_CHECK | cpufreq::flags::IS_COOLING_DEV,
-> > +            true,
-> > +        )?;
-> > +
-> > +        Devres::new_foreign_owned(dev.as_ref(), drv, GFP_KERNEL)?;
-> 
-> This should be called by `cpufreq::Registration` directly, otherwise it's every
-> driver's responsibility to take care of the registration lifetime.
+The problem is at another level though. Normally for any other device, like CPU,
+there is one vote for the entire range of devices supported by the OPP table.
+For example all CPUs of a cluster will share an OPP table (and they do dvfs
+together), and you call set_opp() for any of the CPU, we will go and change the
+OPP. There is no per-device vote.
 
-Some details were shared in another thread [1] earlier and I understand that
-they are not very clear otherwise.
-
-The problem is that it is not guaranteed that a struct device will be available
-to the cpufreq core all the time, to which a platform driver (or other bus) can
-be bound. And so this has to be taken care of by the individual drivers only.
+This whole design is broken in case of genpd, since you are expecting a separate
+vote per device. Ideally, each device should have had its own copy of the OPP
+table, but it is messy in case of genpd and to make it all work nicely, we may
+have to choose this inefficient way of doing it :(
 
 -- 
 viresh
-
-[1] https://lore.kernel.org/all/20240620100556.xsehtd7ii25rtn7k@vireshk-i7/
 
