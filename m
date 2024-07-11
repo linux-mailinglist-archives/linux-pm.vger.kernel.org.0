@@ -1,273 +1,206 @@
-Return-Path: <linux-pm+bounces-11009-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11010-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BF0B92F1A7
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 00:04:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C74B92F1D2
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 00:24:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E1901C20DF8
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 22:04:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A5FD1F21B33
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 22:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FA0016D326;
-	Thu, 11 Jul 2024 22:04:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC42D1A0719;
+	Thu, 11 Jul 2024 22:24:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Vpq4bz06"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0K8zKent"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7DF54903
-	for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 22:04:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC2F15CD79
+	for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 22:24:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720735472; cv=none; b=hFzJSQEZx02U56oosEMUsTyMPXByOjEApT/jj7K2bdd7FHBHeZDxvdkxdK+YOa6+3bLz2NzwiEjiCKGUB+0teIPTsHlW5U8ggwfpJq5SVAOQbbhLEqdCri/SSaic3yW04S4q6FcoRZQTM+rdG6xDvP4HJNj0KYTlG95ld2L42i4=
+	t=1720736651; cv=none; b=iG5Q9/QMQ2ux8p30Z87z0Rlzt0Q0VE2A9t3Kopp22x4N2LrMboGD+ptg+zEJ8cWA0yMl6zel5yAq0P7BXIdXSboSQpwW3jxQzKfl4kbkBsaBHftRXYS2mT00I9HEV+eDNiVP6Faa1husNCELAD3nmk36NZkE71fFjBptX+5TfXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720735472; c=relaxed/simple;
-	bh=jTtojrs415LsZjpQ0Vn2QfRq+QwuphR8j59Tynk8jgQ=;
-	h=Message-ID:Date:MIME-Version:From:To:Cc:Subject:Content-Type; b=dM6k4JsnMMI2+z8SPLWzGSuHvXoX7YgbbZpmegySO+mmxVENo1/WqSNR4qPMfg0X1v4AjYRSdajYHQjw27bYSVCaYg4Z4pY2rpX49xE9IHWOpJYlQ/gZNhfWY0f8aT6O7m2XjDbG1H1u9BNaBUROLMsFZLtP5UQ3FhkJqsVPzPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Vpq4bz06; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: linux-pm@vger.kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1720735467;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=buTfwAwTuTr+XL/Sjd9SAC3T4TE2wTRulcsG9043rJ4=;
-	b=Vpq4bz06ckPCogcsR9ZB3WivafiENm7Nebvc/Kjzv0bZwzHZuIIolYGX2ose415uVm1KOr
-	AzrXop4O9gLQBn3+mKKZUvgK2kcXw1p18Zvnd2cOnLkjDT51yu4iA/OpfN9I7NxsaMSt5l
-	ocnY7h+aJWSkxIKQOQn1GxMAgUYzO1w=
-X-Envelope-To: rui.zhang@intel.com
-X-Envelope-To: amitk@kernel.org
-X-Envelope-To: daniel.lezcano@linaro.org
-X-Envelope-To: rafael@kernel.org
-X-Envelope-To: michal.simek@amd.com
-X-Envelope-To: andy.tang@nxp.com
-X-Envelope-To: linux-arm-kernel@lists.infradead.org
-Message-ID: <4572255d-282a-4e26-85bd-8bd83b845c89@linux.dev>
-Date: Thu, 11 Jul 2024 18:04:22 -0400
+	s=arc-20240116; t=1720736651; c=relaxed/simple;
+	bh=umz65CgamqI9woTw9I8lAdO2908JYg7ok02eaBGsWkc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Lwx2WwSkRrbB+zJuTBU/LzGjaLgosouyK0VkkX0EGaEna48VQ2fjBgpvrmOqUmEaBZNiLhs1jExOLwUjRv+EPGBBL5Xtg0Nvu8GrWf6ORPsLd2d34EGznpEneqTGxkzjZ8fycjhhgZjrc95GO9FDo4owrRomUx/Fwol9JUpWSS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0K8zKent; arc=none smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-447df43324fso48911cf.1
+        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 15:24:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1720736648; x=1721341448; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1ikbsIYih3ehLlIfT5YoG7a0BVQ8XeYIK6rrLHADErw=;
+        b=0K8zKent4k5GsWH1KQPj9oEjzCUYsfoNU7SHZQrlt2GtoD0LfCTi2MCIMmMjJ0aPaA
+         aojFhlLvvMclR1/zsOmdBeGC1mjD5puCGZN1VoKGaHv2q3uvXf/k4F4tszCRIkBZBuP0
+         SmB2f+b2SOR4PlRLElHZTSpQxFPNTGutQVbYLwgmGRe4Q5rP1SK0QbHqEYohRoI6zkAE
+         XB5k45KcwYfYTsARQsQd2derr7ZT4UByHkR5vUxV0bH6c2Y3Fv5Hk+scwq7GFqfQmQsM
+         IJhGEP7mx1POBgWnT1k9Wn8lZCU1GAzaWQlXnyHrnCZ76eYiiOR1bMNw3cvA9JiT8nj/
+         kFvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720736648; x=1721341448;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1ikbsIYih3ehLlIfT5YoG7a0BVQ8XeYIK6rrLHADErw=;
+        b=VIr6yNB1mDdN0QFhcm9ssyL6iMb1XIX6a+DfQXXosLonMyuTc7sc6R2R98zNioLHRt
+         OtrbESbDCG9IfTwVVJa46tQ8VVCifZ0T1m/5yIAkxAaX29uyZ50NA5rdicrtGwjzlP7y
+         Q5PYQ7NQ/AXlFRGVidOdZDQWiJv0E4xCve6VUrdIkOYsmQzbxN5qWTOZzJ1on1vJ76zt
+         jMb65yjBrvqegsc/KmGJvf5k/nR/W6Z21in5Sd3UfakT/P29OjM6f7clcCv+5G1cAKU4
+         vlCDEpm0PwbsHrKQe1PW0x7iUVmE7bWvbFGKY689SjKmg3DPOkRMHn6wXQa4OKjYYKOC
+         dfTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXvrSU3OnTHPowGmcnLi0/FZMVCpC1jfgpgHa2lOSZ4FHsMjEU51UXifXAAsZ9HuYL7AowNA3+XiyQWJTIwKe0kjkcqMHZ3geA=
+X-Gm-Message-State: AOJu0YyqqK5ARkoaI0JT7eiPVhANlqNW0ZVhlVUvZjv7pANPM1rLREx7
+	wyuk3w++Sfw5BigpILtGam01CVvd+N3X9CzuPV6+rNqP7k77LgMyGfUY0C0FAeIC9zBHTC+6VrI
+	WsupMNBW69C3Zb9lF3+K8GIDHGWQfepoTi3xM
+X-Google-Smtp-Source: AGHT+IGAc884CVEDTkvsd7h8jIYVN5c3I7pSJJVtiIZ6adS6zViqgnZWfojP5ub98vVg/kgQUmfRgXI+GvGBo0Nwylo=
+X-Received: by 2002:a05:622a:289a:b0:447:f3ae:383b with SMTP id
+ d75a77b69052e-44e9e556a99mr307391cf.19.1720736647474; Thu, 11 Jul 2024
+ 15:24:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Sean Anderson <sean.anderson@linux.dev>
-To: linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
- Amit Kucheria <amitk@kernel.org>, Daniel Lezcano
- <daniel.lezcano@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Michal Simek <michal.simek@amd.com>, Yuantian Tang <andy.tang@nxp.com>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Designing a thermal policy
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20240711102436.4432-1-Dhananjay.Ugwekar@amd.com>
+In-Reply-To: <20240711102436.4432-1-Dhananjay.Ugwekar@amd.com>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 11 Jul 2024 15:23:56 -0700
+Message-ID: <CAP-5=fXXuWchzUK0n5KTH8kamr=DQoEni+bUoo8f-4j8Y+eMBg@mail.gmail.com>
+Subject: Re: [PATCH v4 00/11] Add per-core RAPL energy counter support for AMD CPUs
+To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
+	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
+	jolsa@kernel.org, adrian.hunter@intel.com, kan.liang@linux.intel.com, 
+	tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, 
+	kees@kernel.org, gustavoars@kernel.org, rui.zhang@intel.com, 
+	oleksandr@natalenko.name, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	ananth.narayan@amd.com, gautham.shenoy@amd.com, kprateek.nayak@amd.com, 
+	ravi.bangoria@amd.com, sandipan.das@amd.com, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi All,
+On Thu, Jul 11, 2024 at 3:25=E2=80=AFAM Dhananjay Ugwekar
+<Dhananjay.Ugwekar@amd.com> wrote:
+>
+> Currently the energy-cores event in the power PMU aggregates energy
+> consumption data at a package level. On the other hand the core energy
+> RAPL counter in AMD CPUs has a core scope (which means the energy
+> consumption is recorded separately for each core). Earlier efforts to add
+> the core event in the power PMU had failed [1], due to the difference in
+> the scope of these two events. Hence, there is a need for a new core scop=
+e
+> PMU.
+>
+> This patchset adds a new "power_per_core" PMU alongside the existing
+> "power" PMU, which will be responsible for collecting the new
+> "energy-per-core" event.
 
-I'm working on adding some thermal zones for the ZynqMP, but I'm not
-sure what I should set the passive/critical temperatures to. I've done
-some looking around the tree, but there seem to be as many thermal
-policies as there are SoCs. While the thermal policy I select will be
-specific to the ZynqMP, I think the decisions are common to most SoCs.
+Sorry for being naive, is the only reason for adding the new PMU for
+the sake of the cpumask? Perhaps we can add per event cpumasks like
+say `/sys/devices/power/events/energy-per-core.cpumask` which contains
+the CPUs of the different cores in this case. There's supporting
+hotplugging CPUs as an issue. Adding the tool support for this
+wouldn't be hard and it may be less messy (although old perf tools on
+new kernels wouldn't know about these files).
 
-My goals
-========
+Thanks,
+Ian
 
-I would like to achieve the following goals for in-tree trip points, in
-order of priority:
 
-1. Provide safe defaults that can be used without modification (agnostic
-   to e.g. the size of the heatsink on any particular board).
-2. Achieve as much thermal margin as possible.
-
-Additionally, I also want to determine good trip points for my specific
-hardware, if they happen to be different from the above.
-
-The Hardware
-============
-
-All ZynqMP parts have an absolute maximum junction temperature of 125C.
-Additionally, for extended/industrial parts, the recommended maximum
-operating temperature is 100C, and for automotive/military parts the
-recommended maximum operating temperature is 125C. Xilinx has the
-following to say about these values:
-
-> Stresses beyond those listed under Absolute Maximum Ratings might
-> cause permanent damage to the device. These are stress ratings only,
-> and functional operation of the device at these or any other
-> conditions beyond those listed under Operating Conditions is not
-> implied. Exposure to Absolute Maximum Ratings conditions for extended
-> periods of time might affect device reliability.
-
-So, as I interpret it:
-
-- Extended/industrial devices may not function properly above 100C [1].
-- Extended/industrial devices will be damaged if operated above 100C
-  for extended periods. However, it may be acceptable to tolerate brief
-  excursions (such as the time taken to shut down).
-- All devices will be damaged if operated above 125C.
-
-Additionally, there is some uncertainty in the temperature measurement
-using the internal sensors. Below 110C, the temperature is accurate to
-within 3.5C. Above 110C, the temperature is accurate to within 5C. So
-a measured temperature of above 96.5C could indicate an actual
-temperature of 100C. Similarly, a measured temperature of 120C could
-indicate an actual temperature of 125C.
-
-Complicating things is that there is no way to determine what
-temperature range a device supports at runtime. The only way to tell
-what temperature range a device is in is to look at the package marking.
-I think the easiest way to solve this would be to set trip points
-appropriate for extended/industrial devices and have userspace update
-the trip points for automotive/military devices on boot. I don't know if
-this counts as an ABI break, since previously Linux would only shut down
-when the hardware failed (typically above 125C). The alternative (using
-automotive/military trip points by default) would leave
-extended/industrial devices prone to damage.
-
-Policy
-======
-
-OK, so how do we set trip points based on this? I think it's reasonable
-to set the critical trip point at the recommended maximum operating
-temperature. This ensures we never damage the device or operate outside
-of recommended conditions. By this method, the critical trip point would
-be 96.5C for extended/industrial devices and 120C for
-automotive/military devices.
-
-But what about the passive trip point? It is unclear to me how to
-effectively utilize passive cooling. I have observed that even after
-throttling the CPUs the junction temperature may continue to rise for a
-bit. Therefore the passive trip point needs to be set sufficiently below
-the critical trip point in order to allow the throttling to have time to
-work.
-
-But is throttling the CPU an effective strategy in the first place? The
-CPU is performing work, and throttling it may reduce performance of the
-system below acceptable levels. Additionally, many workloads are bursty,
-where the CPU has a mostly-fixed amount of work it needs to perform in
-response to events (e.g. processing packets or user input) and then it
-can go back to sleep. If a workload can tolerate a lower level of
-performance, might it not be better to perform the work as quickly as
-possible and then go back to idling the CPU? That is to say, why don't
-we let cpufreq handle things?
-
-And if the workload really does require 100% CPU utilization to function
-properly, then the passive trip point does nothing but remove thermal
-margin. If the passive trip point is set to X, then if the temperature
-ever reaches X+5, Linux will have throttled the CPUs all the way back.
-On the other hand, a degraded system may be better than no system at all.
-
-Lastly, we have hysteresis. I have no idea how to choose this. Common
-values are:
-
-$ git grep -ho 'hysteresis =[^;]*;' '**.dts*' | sort | uniq -c | sort -n | tail -5
-     56 hysteresis = <10000>;
-    205 hysteresis = <5000>;
-    267 hysteresis = <0>;
-    432 hysteresis = <1000>;
-   1105 hysteresis = <2000>;
-
-but it's really unclear to me how one would decide "ah, I should use 10C
-hysteresis and not 5C" or even nothing at all.
-
-Prior Art
-=========
-
-Here's a (not very random) survey of some assorted SOCs and their trip
-points:
-
-SAMA7G5
--------
-
-The passive trip point is 90C and the critical trip point is at 100C.
-The recommended maximum operating temperature is 105C. There is no
-absolute maximum temperature. The temperature sensor is accurate to
-within 5C.
-
-This is roughly analogous to the method I outlined above.
-
-LS1046A
--------
-
-There are several zones, but they all have their passive trip points at
-85C and their critical trip points at 95C. The maximum operating
-temperature is 105C. There is no absolute maximum temperature. The
-temperature sensor is accurate to within 1C over the range of interest.
-
-This is much more conservative than what I outlined, allowing 9C of rise
-between the critical trip point and the max recommended. It does place
-the passive 10C below the critical, like the SAMA7G5.
-
-RK3399
-------
-
-The passive trip point is 70C-75C (some CPUs are throttled before
-others), and the critical trip point is at 95C. This SoC is also a
-little unusual because some CPUs cannot be throttled and are idled
-instead. There is no recommended operating temperature, although the
-recommended ambient operating temperature is 80C. The absolute maximum
-temperature is 125C.
-
-It's hard to really determine how much margin is being allowed between
-the (unlisted) recommended maximum operating temperature and the
-critical trip point, but there's clearly at least 20C of margin between 
-
-Stingray
---------
-
-There is no passive trip point and the critical trip point is set to
-105C. The recommended maximum operating temperature is 75C or 85C
-(depending on the grade). The absolute maximum temperature is 110C [2].
-
-This chip is a bit unusual since the critical temperature is set based
-on the absolute maximum and not the recommended operating.
-
-Tegra 124
----------
-
-The hot (like passive?) trip point is 100C, and the critical trip point
-is 103C. I couldn't find a datasheet for this part.
-
-This one is interesting since the passive trip point is only 3C below
-the critical. This only sacrifices 3-4C of margin for throttling, which
-seems much more reasonable to me than some of the 
-
-Exynos5422 Odroid HC1
----------------------
-
-There are two passive trip points, one at 70C and one at 85C, each
-throttling the CPU a bit more. The critical trip point is at 120C. The
-passive trip points also have 10C of hysteresis. I couldn't find a
-datasheet for this part either.
-
-This one has a huge passive cooling range (starting 50C below the
-critical level), although it's not all enabled at once. Perhaps this
-makes more sense in a mobile application?
-
-Closing Questions
-=================
-
-Are there any good references for setting thermal policy?
-
-If you wrote a thermal policy, how did you pick your trip points?
-
-What's the point of passive cooling?
-
-How much margin is necessary between the passive and critical trip
-points?
-
-How do you pick hysteresis values?
-
---Sean
-
-[1] Although Xilinx does produce some extended devices which can be used
-    at 110C for no more than 1% of the device's life.
-[2] https://lore.kernel.org/all/6e040f49-deb0-a3ac-d3ee-0b0e6751a949@milecki.pl/
+> Tested the package level and core level PMU counters with workloads
+> pinned to different CPUs.
+>
+> Results with workload pinned to CPU 1 in Core 1 on an AMD Zen4 Genoa
+> machine:
+>
+> $ perf stat -a --per-core -e power_per_core/energy-per-core/ -- sleep 1
+>
+>  Performance counter stats for 'system wide':
+>
+> S0-D0-C0         1          0.02 Joules power_per_core/energy-per-core/
+> S0-D0-C1         1          5.72 Joules power_per_core/energy-per-core/
+> S0-D0-C2         1          0.02 Joules power_per_core/energy-per-core/
+> S0-D0-C3         1          0.02 Joules power_per_core/energy-per-core/
+> S0-D0-C4         1          0.02 Joules power_per_core/energy-per-core/
+> S0-D0-C5         1          0.02 Joules power_per_core/energy-per-core/
+> S0-D0-C6         1          0.02 Joules power_per_core/energy-per-core/
+> S0-D0-C7         1          0.02 Joules power_per_core/energy-per-core/
+> S0-D0-C8         1          0.02 Joules power_per_core/energy-per-core/
+> S0-D0-C9         1          0.02 Joules power_per_core/energy-per-core/
+> S0-D0-C10        1          0.02 Joules power_per_core/energy-per-core/
+>
+> [1]: https://lore.kernel.org/lkml/3e766f0e-37d4-0f82-3868-31b14228868d@li=
+nux.intel.com/
+>
+> This patchset applies cleanly on top of v6.10-rc7 as well as latest
+> tip/master.
+>
+> v4 changes:
+> * Add patch 11 which removes the unused function cpu_to_rapl_pmu()
+> * Add Rui's rb tag for patch 1
+> * Invert the pmu scope check logic in patch 2 (Peter)
+> * Add comments explaining the scope check in patch 2 (Peter)
+> * Use cpumask_var_t instead of cpumask_t in patch 5 (Peter)
+> * Move renaming code to patch 8 (Rui)
+> * Reorder the cleanup order of per-core and per-pkg PMU in patch 10 (Rui)
+> * Add rapl_core_hw_unit variable to store the per-core PMU unit in patch
+>   10 (Rui)
+>
+> PS: Scope check logic is still kept the same (i.e., all Intel systems bei=
+ng
+> considered as die scope), Rui will be modifying it to limit the die-scope
+> only to Cascadelake-AP in a future patch on top of this patchset.
+>
+> v3 changes:
+> * Patch 1 added to introduce the logical_core_id which is unique across
+>   the system (Prateek)
+> * Use the unique topology_logical_core_id() instead of
+>   topology_core_id() (which is only unique within a package on tested
+>   AMD and Intel systems) in Patch 10
+>
+> v2 changes:
+> * Patches 6,7,8 added to split some changes out of the last patch
+> * Use container_of to get the rapl_pmus from event variable (Rui)
+> * Set PERF_EV_CAP_READ_ACTIVE_PKG flag only for pkg scope PMU (Rui)
+> * Use event id 0x1 for energy-per-core event (Rui)
+> * Use PERF_RAPL_PER_CORE bit instead of adding a new flag to check for
+>   per-core counter hw support (Rui)
+>
+> Dhananjay Ugwekar (10):
+>   perf/x86/rapl: Fix the energy-pkg event for AMD CPUs
+>   perf/x86/rapl: Rename rapl_pmu variables
+>   perf/x86/rapl: Make rapl_model struct global
+>   perf/x86/rapl: Move cpumask variable to rapl_pmus struct
+>   perf/x86/rapl: Add wrapper for online/offline functions
+>   perf/x86/rapl: Add an argument to the cleanup and init functions
+>   perf/x86/rapl: Modify the generic variable names to *_pkg*
+>   perf/x86/rapl: Remove the global variable rapl_msrs
+>   perf/x86/rapl: Add per-core energy counter support for AMD CPUs
+>   perf/x86/rapl: Remove the unused function cpu_to_rapl_pmu
+>
+> K Prateek Nayak (1):
+>   x86/topology: Introduce topology_logical_core_id()
+>
+>  Documentation/arch/x86/topology.rst   |   4 +
+>  arch/x86/events/rapl.c                | 454 ++++++++++++++++++--------
+>  arch/x86/include/asm/processor.h      |   1 +
+>  arch/x86/include/asm/topology.h       |   1 +
+>  arch/x86/kernel/cpu/debugfs.c         |   1 +
+>  arch/x86/kernel/cpu/topology_common.c |   1 +
+>  6 files changed, 328 insertions(+), 134 deletions(-)
+>
+> --
+> 2.34.1
+>
 
