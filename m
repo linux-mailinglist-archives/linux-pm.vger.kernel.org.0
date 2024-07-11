@@ -1,152 +1,158 @@
-Return-Path: <linux-pm+bounces-10990-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10991-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FA4192E7E8
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 14:04:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF1B192E7FD
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 14:11:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EAF3DB23726
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 11:58:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F720B20FFD
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 12:10:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8507315ADB6;
-	Thu, 11 Jul 2024 11:58:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6957615B119;
+	Thu, 11 Jul 2024 12:10:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FaA63Xir"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="fHTEuUOv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423B5156F2D;
-	Thu, 11 Jul 2024 11:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF11E1459E3;
+	Thu, 11 Jul 2024 12:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720699120; cv=none; b=UxDVwTyhhwTQKJbXh4V5YP1FKWF4rT0spjCBMumvHoDwr09t78R+K7dAOqWvnshq56PuNWMUrhmZ62lQ9zQhSrEdK8LWaoaPpNUK+KnzdDHRXZMLasP8GGIUuPmvhwuwpaDD6ow5Cv0mMyq6E9jRcdlP/II9mS4oqElxxrkmH7Y=
+	t=1720699851; cv=none; b=jYvrtRA5vN0Kc0pgnuqZltdsWjE/GTxeKdIAMqZCXXiAbYiXnXVRK61Sp+15wMKp9HEoTIJTDS2lGvoYb1yEiJ3Hzf9JYDh0OzzQgc4BLsih18IfesN7aXDHjjAnolp8flLJO7RlOBMUaXURIEuZ0yNgI8zo2MPyRpcIvianm1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720699120; c=relaxed/simple;
-	bh=HguvgwvBpfqOovw/jwg7IosK9ScAa4vcIicrJd3hq3A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=XgHUw18zmJXdmVSpUAM6MvWfjdCAufarwS/yglkh9Efdv7pPCEUseHE1Qfju04xBoSuBBDkRb2ZXmwO0vsn9S+il9h1RMcQYQ9Nlbkht2pO50rsfLF3dwQvzoz9E+rJDGbYAU/5bXEg+71PFW796zzONhav0EM4F1v1CK6ejqvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FaA63Xir; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 220DEC32786;
-	Thu, 11 Jul 2024 11:58:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720699119;
-	bh=HguvgwvBpfqOovw/jwg7IosK9ScAa4vcIicrJd3hq3A=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=FaA63XirlsuMviOf8i7MJTazgVYL2Ch6vFUDsvIOJ2sozDymDwiiVBf8PBGbMSO9N
-	 CokXW15chmFXFbymH71lS85ijqE40UnOYtcHGE3jrs2slFFSFJK90RUXCKC7QHTTaZ
-	 22UGZAhYYwDi/oowJwgDWqUYysNtCOkaylo/pRDN6i3fELtXNwtN++oXwRdVKU4pyk
-	 LkLxvpa2AWxchzkPwqAuCJmOw2Y2HuF0/4l7ZGZjj/hpdTBWGiqxZ1dWb/U5sRjk7n
-	 zlpQlF7xti3TilxjyI57eYWJA0INQSj/xm09mICJP/kTeLY/2BBTtWzANbh94WdZMW
-	 /zoZMT+BWS6OQ==
-Message-ID: <ae98e21f-91ac-4878-8cab-916b24e927e5@kernel.org>
-Date: Thu, 11 Jul 2024 13:58:31 +0200
+	s=arc-20240116; t=1720699851; c=relaxed/simple;
+	bh=XJwBrfIcWqjEPYahjyYBt4DTy6v62wPnyh8cd2LRczw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WpEIM/IVO0lveeR1Vh7cVO7eCOR/zkihJ7L1g0AZbKVXv5ycSSmLs1qOcvwUY2bHEGzp8BM6WLP6nthZzQXo9PCadZkEUHCUZoObJxRRmk83daQn6AqOd/LjRbuA8c4jhzfNSr+O24+AtHfjy3Di7eJhjbbK6bhwPHxEELVsSfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=fHTEuUOv; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1720699848;
+	bh=XJwBrfIcWqjEPYahjyYBt4DTy6v62wPnyh8cd2LRczw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fHTEuUOvUidwBEshRx8+oT12TKqyvganJ1dmVNZ5X63+aNrAQ0ENfIdsD48KEsLq1
+	 vqIASHgM7OmxMsEdS64bEDov74nHX6F7GtLaEG5n7ryS50TAe/Ud5q39U4ZgIFeqh9
+	 ulkoKhDaOV+cjKBFBZoIDE5ZJqipa4m1qC818o8ky4MBU8DskODNN+C8Pw1limtHts
+	 +mQ1m4G7mHQk7JmnbkhGSt67+jAB3Arkzbz2xr/GPlPt7Dx5g4xYKNGLXCxz8Pra5z
+	 wivHG1QdoCaVWgr6BzRiLHuQI73N7layJ3JwhHsOgUFjW6yXp9PrIXZUSsmNf45m9C
+	 10+hYQDVgQQiA==
+Received: from shreeya.shreeya (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: shreeya)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D103237812FA;
+	Thu, 11 Jul 2024 12:10:45 +0000 (UTC)
+From: Shreeya Patel <shreeya.patel@collabora.com>
+To: rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	shuah@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel@collabora.com,
+	Shreeya Patel <shreeya.patel@collabora.com>
+Subject: [PATCH] kselftest: cpufreq: Add RTC wakeup alarm
+Date: Thu, 11 Jul 2024 17:40:33 +0530
+Message-Id: <20240711121033.3569948-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: interconnect: Add Qualcomm IPQ5332
- support
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
- mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org,
- konrad.dybcio@linaro.org, djakov@kernel.org, quic_wcheng@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20240711113239.3063546-1-quic_varada@quicinc.com>
- <20240711113239.3063546-2-quic_varada@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240711113239.3063546-2-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/07/2024 13:32, Varadarajan Narayanan wrote:
-> Add interconnect-cells to clock provider so that it can be
-> used as icc provider.
-> 
-> Add master/slave ids for Qualcomm IPQ5332 Network-On-Chip
-> interfaces. This will be used by the gcc-ipq5332 driver
-> for providing interconnect services using the icc-clk
-> framework.
-> 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+Add RTC wakeup alarm for devices to resume after specific time interval.
+This improvement in the test will help in enabling this test
+in the CI systems and will eliminate the need of manual intervention
+for resuming back the devices after suspend/hibernation.
 
-That's another patchset from Qualcomm where tags get ignored. Maybe it's
-the same team? You have very good internal guideline, so read it before
-posting.
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+---
+ tools/testing/selftests/cpufreq/cpufreq.sh | 24 ++++++++++++++++++++++
+ tools/testing/selftests/cpufreq/main.sh    | 13 +++++++++++-
+ 2 files changed, 36 insertions(+), 1 deletion(-)
 
-Expecting us to do the same review we already did, is a waste of
-community resources.
-
-<form letter>
-This is a friendly reminder during the review process.
-
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
-
-If a tag was not added on purpose, please state why and what changed.
-</form letter>
-
-Best regards,
-Krzysztof
+diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/testing/selftests/cpufreq/cpufreq.sh
+index a8b1dbc0a3a5..a0f5b944a8fe 100755
+--- a/tools/testing/selftests/cpufreq/cpufreq.sh
++++ b/tools/testing/selftests/cpufreq/cpufreq.sh
+@@ -231,6 +231,30 @@ do_suspend()
+ 
+ 		for i in `seq 1 $2`; do
+ 			printf "Starting $1\n"
++
++			if [ "$3" = "rtc" ]; then
++				now=$(date +%s)
++				wakeup_time=$((now + 15)) # Wake up after 15 seconds
++
++				echo $wakeup_time > /sys/class/rtc/rtc0/wakealarm
++
++				if [ $? -ne 0 ]; then
++					printf "Failed to set RTC wake alarm\n"
++					return 1
++				fi
++
++				# Enable the RTC as a wakeup source
++				echo enabled > /sys/class/rtc/rtc0/device/power/wakeup
++
++				if [ $? -ne 0 ]; then
++					printf "Failed to set RTC wake alarm\n"
++					return 1
++				fi
++
++				# Reset the wakeup alarm
++				echo 0 > /sys/class/rtc/rtc0/wakealarm
++			fi
++
+ 			echo $filename > $SYSFS/power/state
+ 			printf "Came out of $1\n"
+ 
+diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
+index a0eb84cf7167..f12ff7416e41 100755
+--- a/tools/testing/selftests/cpufreq/main.sh
++++ b/tools/testing/selftests/cpufreq/main.sh
+@@ -24,6 +24,8 @@ helpme()
+ 	[-t <basic: Basic cpufreq testing
+ 	     suspend: suspend/resume,
+ 	     hibernate: hibernate/resume,
++	     suspend_rtc: suspend/resume back using the RTC wakeup alarm,
++	     hibernate_rtc: hibernate/resume back using the RTC wakeup alarm,
+ 	     modtest: test driver or governor modules. Only to be used with -d or -g options,
+ 	     sptest1: Simple governor switch to produce lockdep.
+ 	     sptest2: Concurrent governor switch to produce lockdep.
+@@ -76,7 +78,8 @@ parse_arguments()
+ 				helpme
+ 				;;
+ 
+-			t) # --func_type (Function to perform: basic, suspend, hibernate, modtest, sptest1/2/3/4 (default: basic))
++			t) # --func_type (Function to perform: basic, suspend, hibernate,
++			   # suspend_rtc, hibernate_rtc, modtest, sptest1/2/3/4 (default: basic))
+ 				FUNC=$OPTARG
+ 				;;
+ 
+@@ -121,6 +124,14 @@ do_test()
+ 		do_suspend "hibernate" 1
+ 		;;
+ 
++		"suspend_rtc")
++                do_suspend "suspend" 1 rtc
++                ;;
++
++                "hibernate_rtc")
++                do_suspend "hibernate" 1 rtc
++                ;;
++
+ 		"modtest")
+ 		# Do we have modules in place?
+ 		if [ -z $DRIVER_MOD ] && [ -z $GOVERNOR_MOD ]; then
+-- 
+2.39.2
 
 
