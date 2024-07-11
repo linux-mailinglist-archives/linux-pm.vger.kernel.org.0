@@ -1,147 +1,164 @@
-Return-Path: <linux-pm+bounces-11001-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11002-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4382092EBA0
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 17:26:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7DF792EC69
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 18:12:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEDDDB2227D
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 15:26:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DE131F24D9E
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 16:12:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8E9D16C437;
-	Thu, 11 Jul 2024 15:26:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89FF116C87F;
+	Thu, 11 Jul 2024 16:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Dm8Srm4/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ifp+SIpK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DC116B392
-	for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 15:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC8916C6B8
+	for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 16:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720711596; cv=none; b=lQMb4ieLZI6PPHer3tiX8NQnOYKE3CkbHhXZ/prFV3u/g3MfH+sIX1Q96PGK4bGCDlG09UWUuFjLHximTHGG03hYxcZVUMK3SGRqqCwkrPxAoXo5yOlwq/QKBXtoSJ13z4gvxitjWVKd6pTQevfljhC8ZxrQCycFXq27tlUmN7o=
+	t=1720714342; cv=none; b=OZwAeOuiUAH7s8+TSUBX9bn66HLWk/qg6uvMUK0yZqVpLwlCy8Nn/CMWn8ROv51se2VrWSQiOmxm4/ulPndlxcTSblZ6BmJtArWP2jGDTyQD+nFjrzvrJ7X0zSkKQjpv5dZRjkMa2prNs+4bbiH0i/5wpBkQkPikFr5YHfhjawA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720711596; c=relaxed/simple;
-	bh=Z2UifNQfHSWQactTbUxwngct7Jif7447IF3QEfZiqWY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HoqvDrBe2CdfBJBm6v9PXAZe5vPNjivfBe4oXlkiG3gMj1rPSK5z0tnK1vIB/JGWLDrjQocheEooCYlMyNdPeySc8EAZdiDA+qYVieo+gQkWTelD0l6jrTJWwzNgQDZz3qMcRnBemyUDRRIUPhenQlZlTUQd1CmQNWic0hL4eVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Dm8Srm4/; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e03a0faee1eso1001655276.1
-        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 08:26:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720711594; x=1721316394; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z2UifNQfHSWQactTbUxwngct7Jif7447IF3QEfZiqWY=;
-        b=Dm8Srm4/3k2UEj5Pe02DINegUCr/eEMDoyOSMG572SioW6VYEAA61+e4tg7qSzJ8T9
-         3WosFTFlDbR7kcJpU9fWeQkF1fp0ZLmES/wvMHwlJ/1qMvcD9Rj9kl5/AvLCRr4HGrRG
-         PKAH9K+Gl0eOJRtCu5LqaBUDhTZQrE1JvU0CwV5gR9igIt4+PHxXjRhHH2SGYHmeXC/z
-         7ZlXe6ryKVE7KMWV8BjpOg7EdvyGFVIRl7L45yFW1in2aTvJYDmcpQr8Bxpf1pUUOGgj
-         yRvBruI118fAdQXPMKcmpJD657fFU66S30CGsHjHZrY/LOIDLoKP2tsLK4P5IRgUyMyV
-         1Ljw==
+	s=arc-20240116; t=1720714342; c=relaxed/simple;
+	bh=xSv/pAElyqabmJkJ/UvEKYZHt7PFzhtbXS0sLNGobLs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gf1YuRObLda+/jvrA2HT4CLAecFLlQ/WUFoYFf90mdXx3j2r3zM3U8t0lEfDQUE3bWEkfN2VU1lI3MiBPosBfdRO7FaUX+bCGH844jnz6mmw0K3kifZk4Bz76yGT6t4qqqApdUE85m7G92P9knnCyx1IpQRN1IeH95Rx/lcpHXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ifp+SIpK; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720714340;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jGp0x2KyrISOhdhVBMxGIYQs/iAq5rAVU04UXibc0EE=;
+	b=Ifp+SIpK0GYigO4WzeS76t81fS5pqjTNNj4yC0vchnieh7V7Bio+vNfkI2fj/KcSHWskKi
+	BLO8HByMCAHRqq0ai6KT/n/kCSXZW9Pzyo0nQoS2Kz42DU09lYbu/uyF//9rN8gL3k7+BE
+	KqIv3d1RUB12j1egqi9vMN0attgkQos=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-126-72Is6QBHNVGnfVs83Hrs5Q-1; Thu, 11 Jul 2024 12:12:12 -0400
+X-MC-Unique: 72Is6QBHNVGnfVs83Hrs5Q-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-367991a0a64so513697f8f.1
+        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 09:12:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720711594; x=1721316394;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z2UifNQfHSWQactTbUxwngct7Jif7447IF3QEfZiqWY=;
-        b=MCVMWkXygyVxWGep+qKGhRMT0zwC2IbntuDBTxEddtd8r2zJ8fFCcc8dNUQFt95wh/
-         GQanEpDHc4VG3TZHuYuuVM4WzR2DG7oTIYz9fiPQqgXZwWDP+O5sJxyNcm1MWfmUEQzS
-         5ooujh2Wh+/FTMNxT4Ycgd/PgzBL032NNTgDsbC9n1TUhSe9XEkrPPHhvaIRZoXpkr8+
-         Mnx95S89oc3yqWlpCM+xraWZ0UPJKiDUwcb8BZWf9sU2JHJSoDrxA6AxU5sAb3YzVQnN
-         lBP9N34G4eRg+nGqtIj/RV8bKFWd6WkIjfx4v3cRjK/hl33xpUPEv74DEVAq7u0+uMMb
-         BCWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWCL+ZN12erpDcy++xvdS4tm/C9P+xXT7zPTw5TEuj1UtxH8PQylX2Tum+oUkI4q1cUxmPdH44VgQRaspsY4y3qE8ANSpEw2qE=
-X-Gm-Message-State: AOJu0Yxksk+PMXZXt0PtYi/y2IaywduWjUK0ZmKQXB6QEsX5klOGqxRF
-	F0RjBBeZ4ovZrHXCwJyR3eyVRvBrz9p9AXG0b3qlNXFjV104825N9FMHhN3SOc2T8l+9s3Rnta4
-	kNfRXqaMenL3CtLBHhJDwhY/KPwrXABenQBGngIkTTn8mamM8
-X-Google-Smtp-Source: AGHT+IHRSvRxtciU4D9HXYrANT6oCsSmGR5hfnzw9CYJVDrCkRv/UkJgcHyyeRSNtmZhuOvpcZVYT0H141BgwBp64+o=
-X-Received: by 2002:a25:d852:0:b0:dfb:61e:3ee0 with SMTP id
- 3f1490d57ef6-e041b034870mr9885394276.10.1720711593970; Thu, 11 Jul 2024
- 08:26:33 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1720714332; x=1721319132;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jGp0x2KyrISOhdhVBMxGIYQs/iAq5rAVU04UXibc0EE=;
+        b=Dn3ei88lsLzfsVXEpCjMX+aYVpZlBl9k6Pnsqd1xsn3PJvQYntxqhXyYnDBr9bnIP3
+         Ka2l+CjCJrAymRpva/ZcPmzZ9/yAniFbW81PaIKFb716sZPwFfNth19b28GFhqQz9imU
+         rhwYwKhAiFI6kMYimj75TSAiaX/j5U3pbfpEMqMVJ3LNpChnpTLBnIysjLkKVSv9vIxC
+         vG2v2Jj6jKy4yZB1UXYERevMsusBnwnMeRIpsfZ2uxHYmhPgohfFnadb/RXHPSp/VXcN
+         kESnmh3BZNKY6uO0b27klUHtsjTkctpgzSZWIfIyZVM1Zu5y1V/azp5qij2wIDsdLgB0
+         CegQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVivAm4OLDhNyMHepUMzBP6UNvHNGTR38i4/bjEtr9VLqt6LT6m2Omno0J9DUHZjrA0CSejeqiaEwYX44hpuQpJkHyiOErKMhU=
+X-Gm-Message-State: AOJu0Yyy+tqw1oDroofuSkFK+62KzHLCpJOCw4VRt3fNX++D1I2iwpDv
+	D9KOUEHYCuWRjitKMapHwevS6Q2WQfCWDPhYMk3gSlxYNt1XYKX7ugQBrv//RNbUHHiE3FRxAtZ
+	Yjf92eJ2M9k1YGozuzLKvL1OgMAO5kE1+kea2Elo74jq+/wNkmucaSckz
+X-Received: by 2002:adf:cd8b:0:b0:367:99fd:d7b8 with SMTP id ffacd0b85a97d-367cea965a1mr5399169f8f.35.1720714331748;
+        Thu, 11 Jul 2024 09:12:11 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEk9MfL1t+xrZwkJ0qJ3kx9NSKMMHVhwHWXaLexst1iGqnCx78rqRXhjzLmuuqO7RJ/+QTB1g==
+X-Received: by 2002:adf:cd8b:0:b0:367:99fd:d7b8 with SMTP id ffacd0b85a97d-367cea965a1mr5399140f8f.35.1720714331381;
+        Thu, 11 Jul 2024 09:12:11 -0700 (PDT)
+Received: from pollux ([2a02:810d:4b3f:ee94:abf:b8ff:feee:998b])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367cde84907sm8138566f8f.43.2024.07.11.09.12.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jul 2024 09:12:10 -0700 (PDT)
+Date: Thu, 11 Jul 2024 18:12:08 +0200
+From: Danilo Krummrich <dakr@redhat.com>
+To: Greg KH <greg@kroah.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>, linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+	rust-for-linux@vger.kernel.org,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Erik Schilling <erik.schilling@linaro.org>,
+	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 8/8] cpufreq: Add Rust based cpufreq-dt driver
+Message-ID: <ZpAEWAzETnrVI-cs@pollux>
+References: <cover.1720680252.git.viresh.kumar@linaro.org>
+ <b1601c1dbdf68a4b812fcfaf73f3b5dea67f2025.1720680252.git.viresh.kumar@linaro.org>
+ <Zo-3QIPbhBsv8EjB@pollux>
+ <20240711130802.vk7af6zd4um3b2cm@vireshk-i7>
+ <Zo_cW57i_GMlmYV-@pollux>
+ <2024071122-escargot-treadmill-6e9a@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240618155013.323322-1-ulf.hansson@linaro.org>
- <20240625105425.pkociumt4biv4j36@vireshk-i7> <CAPDyKFpLfBjozpcOzKp4jngkYenqSdpmejvCK37XvE1-WbBY2g@mail.gmail.com>
- <20240701114748.hodf6pngk7opx373@vireshk-i7> <20240702051526.hyqhvmxnywofsjp2@vireshk-i7>
- <CAPDyKFoA9O5a6xZ+948QOzYqsRjk_0jJaSxeYRwx=76YsLHzXQ@mail.gmail.com>
- <20240711031356.rl2j6fqxrykmqfoy@vireshk-i7> <CAPDyKFocjOt+JyzcAqOfCnmTxBMZmPjMerSh6RZ-hSMajRhzEA@mail.gmail.com>
- <CAPDyKFoWgX=r1QtrcpEF-Y4BkiOtVnz4jaztL9zggo-=uiKsUg@mail.gmail.com> <20240711131637.opzrayksfadimgq4@vireshk-i7>
-In-Reply-To: <20240711131637.opzrayksfadimgq4@vireshk-i7>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 11 Jul 2024 17:25:57 +0200
-Message-ID: <CAPDyKFqczrJzHApBOYRSg=MXzzd1_nSgQQ3QwKYLWzgZ+XY32A@mail.gmail.com>
-Subject: Re: [PATCH] OPP: Fix support for required OPPs for multiple PM domains
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Nikunj Kela <nkela@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2024071122-escargot-treadmill-6e9a@gregkh>
 
-On Thu, 11 Jul 2024 at 15:16, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 11-07-24, 13:05, Ulf Hansson wrote:
-> > On Thu, 11 Jul 2024 at 12:31, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > >
-> > > On Thu, 11 Jul 2024 at 05:13, Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > >
-> > > > On 10-07-24, 15:51, Ulf Hansson wrote:
-> > > > > I think this should work, but in this case we seem to need a similar
-> > > > > thing for dev_pm_opp_set_rate().
-> > > >
-> > > > We don't go to that path for genpd's I recall. Do we ? For genpd's,
-> > > > since there is no freq, we always call _set_opp().
-> > >
-> > > You are right! Although, maybe it's still preferred to do it in
-> > > _set_opp() as it looks like the code would be more consistent? No?
->
-> Since the function already accepted a flag, it was very easier to just reuse it
-> without.
->
-> > No matter how we do this, we end up enforcing OPPs for genpds.
-> >
-> > It means that we may be requesting the same performance-level that we
-> > have already requested for the device. Of course genpd manages this,
-> > but it just seems a bit in-efficient to mee. Or maybe this isn't a big
-> > deal as consumer drivers should end up doing this anyway?
->
-> Normally I won't expect a consumer driver to do this check and so was the
-> opp core handling that. But for genpd's we need to make this inefficient to not
-> miss a vote.
->
-> The problem is at another level though. Normally for any other device, like CPU,
-> there is one vote for the entire range of devices supported by the OPP table.
-> For example all CPUs of a cluster will share an OPP table (and they do dvfs
-> together), and you call set_opp() for any of the CPU, we will go and change the
-> OPP. There is no per-device vote.
->
-> This whole design is broken in case of genpd, since you are expecting a separate
-> vote per device. Ideally, each device should have had its own copy of the OPP
-> table, but it is messy in case of genpd and to make it all work nicely, we may
-> have to choose this inefficient way of doing it :(
+On Thu, Jul 11, 2024 at 04:37:50PM +0200, Greg KH wrote:
+> On Thu, Jul 11, 2024 at 03:21:31PM +0200, Danilo Krummrich wrote:
+> > (2) You require drivers to always implement a "dummy" struct platform_device,
+> > there is platform_device_register_simple() for that purpose.
+> 
+> No, NEVER do that.  platform devices are only for real platform devices,
+> do not abuse that interface any more than it already is.
 
-Right, I get your point.
+I thought we're talking about cases like [1] or [2], but please correct me if
+those are considered abusing the platform bus as well.
 
-Although, it seems to me that just limiting required-opps to
-performance-levels, could avoid us from having to enforce the OPPs for
-genpd. In other words, doing something along the lines of $subject
-patch should work fine.
+(Those drivers read the CPU OF nodes, instead of OF nodes that represent a
+separate device.)
 
-In fact, it looks to me that the required-opps handling for the
-*single* PM domain case, is already limited to solely
-performance-levels (opp-level), as there are no required_devs being
-assigned for it. Or did I get that wrong?
+[1] https://elixir.bootlin.com/linux/latest/source/drivers/cpuidle/cpuidle-riscv-sbi.c#L586
+[2] https://elixir.bootlin.com/linux/latest/source/drivers/cpuidle/cpuidle-psci.c#L441
 
-Kind regards
-Uffe
+> 
+> > I think (2) is the preferred option.
+> 
+> No, not at all, sorry.
+> 
+> Use a real device, you have one somewhere that relates to this hardware,
+> otherwise you aren't controlling anything and then you can use a virtual
+> device.
+
+Of course we should stick to a real device if there is one, I didn't meant to
+say anything else.
+
+But since it came up now, some virtual drivers still require a parent device.
+
+For instance, in DRM we have vGEM [3] and vKMS [4], that use
+platform_device_register_simple() for this purpose.
+
+What should they use instead? I'm happy to fix things up if required.
+
+[3] https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/vgem/vgem_drv.c
+[4] https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/vkms/vkms_drv.c
+
+> 
+> Again, do NOT abuse the platform subsystem.  It's one reason I am loath
+> to even want to allow rust bindings to it.
+
+How is that related to Rust?
+
+> 
+> greg k-h
+> 
+
 
