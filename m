@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-10973-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10974-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66E7692E4B0
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 12:29:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD86B92E4B3
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 12:29:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CE4D280E4A
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 10:29:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 948D22816FE
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 10:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86B4715957E;
-	Thu, 11 Jul 2024 10:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10D7C158DA8;
+	Thu, 11 Jul 2024 10:28:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="0lrLyAu3"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="mKwvcYCs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2048.outbound.protection.outlook.com [40.107.243.48])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2060.outbound.protection.outlook.com [40.107.237.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A787F15884B;
-	Thu, 11 Jul 2024 10:28:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AAFA1586F5;
+	Thu, 11 Jul 2024 10:28:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.60
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720693714; cv=fail; b=MVZqmzdhmrD6Jkj8PxFNOcieNfxdKkysYkAjWGB/vB9L7pyRZ8fYvCocml0hV7sBNBwUazyfBPehNPh30QY/RLxIx/S8Y3/+xynr8frD80YmOM1d6oh6VBtJiQtMxa2gitAHFVWN3CImZ/tFNmBnk2jHHSDuacRTsvGwAqslKus=
+	t=1720693732; cv=fail; b=e4pDqQ92HsR75wvyYtW6i1P0MmiEmMSbp0WAXvrB2VcVvZAPENx6DzSQy8aDBfgXhIvG+35Ng6FcCJ91y6k0O/H4igLtcWenjdyKZYiX0+O7IbjjqCKSsoeTBWJfHgPQKY/CYVg83VVnGo4y60drgWu7Ei2gLGM9uynm0QTCwkE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720693714; c=relaxed/simple;
-	bh=xTBlUvYaEIIIGYJV0fVDx9dMMuSyz4NabjTP1bAYJAo=;
+	s=arc-20240116; t=1720693732; c=relaxed/simple;
+	bh=BGlL3wKkjX1ahoEXEoOMehGxN0nrWF1fTc5vtApf8bs=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E9C9cXNGE2AbOqzAQciG2V83V4awIVyxY8lVCVL8moj7zE20oo6o6oNDmbfSkX32/KwpXcKx+pn8ezMCYZkWwE5tS2WqSIH8E3uprrH6oN+abcGcrmtfUd77/11p/cCB+3r4jPciG2LO4A3JS7cvi+1TJ3l37tFU8A0o6aysmZo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=0lrLyAu3; arc=fail smtp.client-ip=40.107.243.48
+	 MIME-Version:Content-Type; b=iPeVly2+ZlgscR6wvevY+gbBPDimnCBl+n+WZEiOgCgj4Kd/uCB8Oy/YBJ2xAJshQqlZrUi6rS7FxwzrONoAH+SosffJj2uQciikLDcYlqczzMKU/HbhelZqIMIxHvDufNMpKk0srNyW5CBDOzxaYBnuHiTvago6pz83hGXNUFA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=mKwvcYCs; arc=fail smtp.client-ip=40.107.237.60
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=X5U+/bwqbtS4hmvcKTU1bVaMP7oEdD9GK3YSh3HIZ1LU45hO54yiI4e6eJfHShpZ/zreW7O0lRF9IOfSoGmBkM+ZpPHTog18ChUj/4yxAFisp52Ru7bAv+DDFz2vL/8izUVMsQRaoXdd+80qK8FZw1vtWqW+4fnuYG+YfG6i+M7xBbUXlvf3T4qvXhuKtCX2RpAEmfjkKieozu0gvE5sVEKF57zN/vA2b1DlO6xo5iYgoaL4dGb1PmftNYNNOW9LRS3CclLMZLlPfoV1wsQIFdVazL+8nHS374KCHAcQF8Hg4IPvWVzZMuopuUKo48Pfl7QPE8IIrTSeSnK3o6r3MQ==
+ b=WGzOkjkT4FnG5n5s2O0LA+6jQs7xTvrWZWOUrhavqTbHiX1Ml4t7VmDkUMeqZl0fMeLhelIIT/IagfGhWegoJwxpZ0MNSmO4SSfPhUhfVxMigFalhgm7Z5iQQTxg1aRBSSzpewzXp7vv/oWYmorNlZMM8tkTuogHCiQrfhgOqNdf45WDZxUCFOZgECCjecwTPyhv8YPqRo1S+w7Wlmc5ln6P+33BXyALGnrf/ez2BN6XwrL49pfDJCeTzUkzmn7Czc5D3+dW0Oeu/PQiag/5YqCyd3Zc1f6aNlNKgmwGWZrlfAAOKKeJZyTIGsqvnZDTWqeT1sr3HrByYU1SoewIMA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RIPhj8h4cQiIYc0jDEwV0VDQenk3gExjAwQTQlQcimk=;
- b=ipqK2vPym0wxfAihUOK6c5AJz2hLYxlnmrfwne2LWX+/ghulwZHFweGCadHCFzJ5XtCDyVJg6NP9ic5JYnVY3DjZxj90YACCmJzpJJ+U/Pfqg+vwYFAkjjnfnQnA05geJGWq57sJNSLK5ct7PhEaGJ7j8U/+jfypq1s2sSGLnYA5/Y1EnS8NAANYlZTmA6wyrSGLuhMPvLv5x9QNbNKxx8pCJgYqzKE5zjrQBUgQrjNDDS8OBKV5aahNlN5BipUHJWVlhOQEYe6TnbSfRco7jBuDOYy6yNR6rtWDinIIetJfDE0kUlIvwb+nhN/EVY950MR1dDKQ1mWwr0GPL49GOQ==
+ bh=QwvKzhiCu8RUG++KiyHsiIQq6fkd/iM2B2yf3UIOWqs=;
+ b=Po+Id89Ql8e7cT7yKoRrVSjWdSqEran8lBGDAz+cJs7hcyrqvqh7D8QGKnHzQz1wQhXfG439PDcMDMLS5KTgVhZgZzuPdfjiJOo0c3zCdosUHJI9R0bR5E4+n0o1NI4HKxdGGiCrF88X5PBHvEMYs6lkmr0lSbvgMjVfv6Zo1nZv3Ww3Gw4qPm1O0c4ScA68UcUlxA6PQpCQwBF8BBo+5ggkKODF+mfDKnD/kkgFpfD7bN0MWAGdQfoQZjRDU91t5DO72sbv5IDib4l8rHQ3Ku1v5NC+rIpb2wGNA6qfMEHUkLB5QC5vLM4dvZs3tLv2dAm/7hYegFjR/w1UIX/wBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RIPhj8h4cQiIYc0jDEwV0VDQenk3gExjAwQTQlQcimk=;
- b=0lrLyAu3GuxfGbw+SuPtXtyM7PtqSZo/MkX8EIlFPy673Chug+fQ045PB3T2nnVbSF8Sg2NQC8i0bRxqtSl1VjweOZ9eBauQDMLdBBAIX1v9EtGUXvIfgj3+5VKBMx4ljqD1amuFCXVUqIFW9EypIWQ+EP7/6qBOQGajwm9Nr+Y=
-Received: from SA1PR02CA0011.namprd02.prod.outlook.com (2603:10b6:806:2cf::28)
- by SN7PR12MB8129.namprd12.prod.outlook.com (2603:10b6:806:323::13) with
+ bh=QwvKzhiCu8RUG++KiyHsiIQq6fkd/iM2B2yf3UIOWqs=;
+ b=mKwvcYCsibFuXG/SoGCROQoo950RLEZRb0qfyIDD2Pf5xMecEY4/E/zjDJiRcDQQkdonkc6J1r3DClZ4d9UXDE0UaEFOADgQSOWU/xTRZmg5C2VhDyR5/QHYQnyRxuDQP5b1ZaGEhsEeTkzbBB+esdX2yMG3DgK/iUVwIKlwFdg=
+Received: from SA0PR11CA0173.namprd11.prod.outlook.com (2603:10b6:806:1bb::28)
+ by CYXPR12MB9428.namprd12.prod.outlook.com (2603:10b6:930:d5::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.35; Thu, 11 Jul
- 2024 10:28:27 +0000
-Received: from SA2PEPF00003AEA.namprd02.prod.outlook.com
- (2603:10b6:806:2cf:cafe::d0) by SA1PR02CA0011.outlook.office365.com
- (2603:10b6:806:2cf::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.21 via Frontend
- Transport; Thu, 11 Jul 2024 10:28:27 +0000
+ 2024 10:28:48 +0000
+Received: from SA2PEPF00003AE6.namprd02.prod.outlook.com
+ (2603:10b6:806:1bb:cafe::32) by SA0PR11CA0173.outlook.office365.com
+ (2603:10b6:806:1bb::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.23 via Frontend
+ Transport; Thu, 11 Jul 2024 10:28:47 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +63,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SA2PEPF00003AEA.mail.protection.outlook.com (10.167.248.10) with Microsoft
+ SA2PEPF00003AE6.mail.protection.outlook.com (10.167.248.6) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7762.17 via Frontend Transport; Thu, 11 Jul 2024 10:28:26 +0000
+ 15.20.7762.17 via Frontend Transport; Thu, 11 Jul 2024 10:28:47 +0000
 Received: from shatadru.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 11 Jul
- 2024 05:28:18 -0500
+ 2024 05:28:38 -0500
 From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
 To: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
 	<namhyung@kernel.org>, <mark.rutland@arm.com>,
@@ -83,9 +83,9 @@ CC: <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<gautham.shenoy@amd.com>, <kprateek.nayak@amd.com>, <ravi.bangoria@amd.com>,
 	<sandipan.das@amd.com>, <linux-pm@vger.kernel.org>,
 	<Dhananjay.Ugwekar@amd.com>
-Subject: [PATCH v4 03/11] perf/x86/rapl: Rename rapl_pmu variables
-Date: Thu, 11 Jul 2024 10:24:31 +0000
-Message-ID: <20240711102436.4432-4-Dhananjay.Ugwekar@amd.com>
+Subject: [PATCH v4 04/11] perf/x86/rapl: Make rapl_model struct global
+Date: Thu, 11 Jul 2024 10:24:32 +0000
+Message-ID: <20240711102436.4432-5-Dhananjay.Ugwekar@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240711102436.4432-1-Dhananjay.Ugwekar@amd.com>
 References: <20240711102436.4432-1-Dhananjay.Ugwekar@amd.com>
@@ -101,327 +101,124 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00003AEA:EE_|SN7PR12MB8129:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1fbcab8c-05f6-4653-1c96-08dca194337e
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003AE6:EE_|CYXPR12MB9428:EE_
+X-MS-Office365-Filtering-Correlation-Id: 70ae9840-6cc6-4a4c-371b-08dca1943f8e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|7416014|376014|1800799024|82310400026|921020;
+	BCL:0;ARA:13230040|376014|7416014|1800799024|82310400026|36860700013|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?1l+Eho19HR5ArgE6EqX8t/9tB6leb09I2p44C3P9uTxEUJcErfwonbXizUH9?=
- =?us-ascii?Q?oXC+//5dK6za3tP8XRLwU1fhIfm64rVxvfj04lHBFXn7al+Dkg1H6XCPzsaC?=
- =?us-ascii?Q?rxqNEXZcVKG8TM2PVreLnhlzC9Dqz18dsJVQXkVqlH+qFwmfNZKeuuO3mp/K?=
- =?us-ascii?Q?4PCXMHLg0JvXN+ewuOsO+g6nOGrQ4f7XKr7l29+mz06zQjTRzbuQO1yJMZ6z?=
- =?us-ascii?Q?yCOoPe9dKqxGSSdav9OZ3RkXBA75UnmxMT7/SibRFhy0bkAEm0ioE/mrUNW7?=
- =?us-ascii?Q?+Q33l1B39pOV5fmhoHdZQTh6yAfDlA0oTkJ886p93AT3QBLpnOwbyO8Vv69Z?=
- =?us-ascii?Q?aLMwr/HliJu0j+xMkp4u2fPPETXKRlhoYzYHkVHni9MBCYqoF1ZghmK42kpw?=
- =?us-ascii?Q?0g+087rKA9MqQg+8R/5Bae0Mf/zLshMvBioYURp9fELNXzX5w6TmSSraB1fW?=
- =?us-ascii?Q?IF60iMoi16qD6MZ//K+EWr2FSN+GF1k1y68IdZ9UH1HVpSZi87NKAOfBtVKZ?=
- =?us-ascii?Q?q7kFjC18CPtpiVnCqSbAUbtyUdwe48C+dRzALL28EsoYjejoUCLbedjOIBss?=
- =?us-ascii?Q?BYT6W6A80E6MJrjuj2R2SWPccddbexR3VQurFQQ/Oo+g7oM6WaglJm9ed0Q+?=
- =?us-ascii?Q?0I+o4o7u2ZJOVy/TXXgAHMbGPPwIWzFX1+y5ESSsx2OrVayIXYeTFypd9OHJ?=
- =?us-ascii?Q?XOytJbNB/TH/nRjmu3X/GFnO7TqChVSvVYETTZfSyynnXrr9sRQlsfl+9BQr?=
- =?us-ascii?Q?ZnFGSY40o+hCGA+vXrJ1AroLeSNqB6KadfTYfNbYBAjdCfhdRJyVHyPD1Twl?=
- =?us-ascii?Q?3/XdlsOVSvK0AQPgxfZwbvlL2tkKT/izJNw0QIXG+ACYRqPzJXbtLkCGH8AP?=
- =?us-ascii?Q?VFaH1l5cJywNNfcbYnwuOrfwTTXrYY5lFviltULDY0eVhF2PU9YyHlT5grKw?=
- =?us-ascii?Q?bALofP1toeIAgSyScLV4YyuEUcFcBylWSVVW6eHVQqRjEQfYTyVYNJRAYCYL?=
- =?us-ascii?Q?LDB772G2fyriE5aLr50PdM29n/0gqfACZaIiPClJ2I8DM7KVkU3Vcg4qkG1Z?=
- =?us-ascii?Q?ArmwKc+EDXYXNAfigRVP97vR2YaTc9jnHKyepB/+34EQwwoheYvspSnEVPVO?=
- =?us-ascii?Q?dkF/CfEKbKcMr7InIwxWGlRpxQ6V8hc0Gbj8KInHxklGWQjErNe84HuXeX8+?=
- =?us-ascii?Q?0KvC7M/GMK4R3Bp/cpqsxOoMJQ8oLPR7HDqLI+7mPyugtofs1LPJjmggpBT0?=
- =?us-ascii?Q?03R3StPm0Ax8VgGj+0TXBNMxmgpeMJSxoRm05ATGno7UMg0n2CfxXC0qL/yL?=
- =?us-ascii?Q?J7A77t7LVwQ40HMw0Tov1htQFBR7fL57MWpRy6k1ol1S9czMNHcg0BLwesOg?=
- =?us-ascii?Q?bKWcpqXhkpWXXwz9Zn7MCzjCBnRsGsyVZkB9uq+0lZWZS9gRyHn1L+D5uh+C?=
- =?us-ascii?Q?UfoyhL3LxnVCRUkscMsP9R5jw7dk5rRZDuQn/xChyYdhxVcT4nsxuQ=3D=3D?=
+	=?us-ascii?Q?A92bHzRfxvni/+0xNpYjNKodt/MRu24cQsOkLCvZc0Yzvhpgp9Q1e72JXUnF?=
+ =?us-ascii?Q?xKmjW0yQRNLMu1ZoKUo3hhfkNGMIbeKB0XrS9kkCo7fJeDblzX9hRScvPJuu?=
+ =?us-ascii?Q?0a+bLzDuxjosmPqv5jnyXBg/l7Z6vFFoMrHnjxTX0gxm+0evifWgTK7tIKfC?=
+ =?us-ascii?Q?oH4qHyLPBcyJ2b8Tfv3phOJ3pJZRtY6GhugTuc5zF6SKh0q8HqPk3lGWQpbE?=
+ =?us-ascii?Q?FoUMKSSRRqmrzwgtQLCm7u9XA16UGZoBIN4EO8ml33jzPPLcLxQtn4aeg0hO?=
+ =?us-ascii?Q?rND54vqoXzhzPOlhXWWCu+w2xFI7wDPR6+gnMCftTtY86oMFs+8Sf8IXMMIG?=
+ =?us-ascii?Q?9wHHqg4iFZLMruZPDL3Dm97yWD6rrziXaKnjmrpqg0wKFetxJMF3sWGgaBiN?=
+ =?us-ascii?Q?EKhCl7WF/uid/BKQshUidnoMBYL2MZJvqLELkmMibPIzCc+UU32OXoQK3oZg?=
+ =?us-ascii?Q?2bWNkVHh53FWafU+XpWaAznm9vCGrKzQSrzcU/rZR3BxTb6IWfAe8njkog5B?=
+ =?us-ascii?Q?716+/H8aw3F7It4I0cn6Q+GBY+z9G5FblAA9227698q3/lxhgAyi7OorlFgi?=
+ =?us-ascii?Q?/lvONG53q7FNvdB9E9qmttWFTfJRk0w6bYskygdMIS1Ia3zLSz3JOOUGDpb3?=
+ =?us-ascii?Q?1g5NVl4c/Kxu3azyVRe3jKg+RtK9ONI2ZB2sr6V1qvRjl8VLSft6byQDRJYw?=
+ =?us-ascii?Q?DmcVDkGWp8cYeohVxAhn1btYfuFJb+WF2Dv+gK+1D9LwFc0ywugynrLMc8j3?=
+ =?us-ascii?Q?STN70mdEaJBFZD06MOdASTge/Cuhp9pr8b9r4CZ+GfA7KVC4q4PQgDvEQQ9S?=
+ =?us-ascii?Q?V/76CAFeLosKf9CNPnFI6dfWyNlCdhuJeiijvAxqyFt9sQanucQyTBLeAPZ5?=
+ =?us-ascii?Q?ZONfRxx+6Mpe6etNKXXxT8KGzcewLVqZZr0m91XySlXuT8cLWcr0Z5kjhd6T?=
+ =?us-ascii?Q?TavDB9Wlc9AgyzwJgT/uvKDSU8WFkJlbkmOvjE7UuejwqLt/2btit4BDgv/6?=
+ =?us-ascii?Q?k330zd9WQMZDVnsd6a1AKsm3w3YMj5kL6663OKoSx9ZsEG+IadOsRYoa/2r0?=
+ =?us-ascii?Q?dt40CGVnTdwibm76mfk9qDWOPbH5a6zP4T5WCDR9R95vhiM+ZL00qxO2s85A?=
+ =?us-ascii?Q?Rr0QnJ3/p2eIBsFf92ZEqAWa7zozuW25YKX9jDer8i7zudDNG6PXxj61J1LH?=
+ =?us-ascii?Q?Ic8L/mtbtGINLRdz1GsRPgRv2Vc/qWDpL8fljpSwSdDBpecR2fXSNPxrsdl6?=
+ =?us-ascii?Q?yYbxnnq1mnsouwFM+e5stsEfoE/k7tUx4ETyOFZ3kl6ZgWdxOjIfKsi/WLo+?=
+ =?us-ascii?Q?3INWHOkbBO8BBex+8xpQMpBlwBJ+aykrIm3mz22p6XfHzznZkJNsKGqNoKWU?=
+ =?us-ascii?Q?dAfNswIpXl1Qni+dZBoijUgUJYGym8/Q2yOcOhgqp2K8NzJ9OaSifw3Ze1Fh?=
+ =?us-ascii?Q?u1PoWujmKAgNYXWYg76M1sIEWy8F8orP5sLiTkaD1QZDkC7rbGnaOA=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(1800799024)(82310400026)(921020);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(82310400026)(36860700013)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2024 10:28:26.9027
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2024 10:28:47.1096
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1fbcab8c-05f6-4653-1c96-08dca194337e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70ae9840-6cc6-4a4c-371b-08dca1943f8e
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00003AEA.namprd02.prod.outlook.com
+	SA2PEPF00003AE6.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8129
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYXPR12MB9428
 
-Rename struct rapl_pmu variables from "pmu" to "rapl_pmu", to
-avoid any confusion between the variables of two different
-structs pmu and rapl_pmu. As rapl_pmu also contains a pointer to
-struct pmu, which leads to situations in code like pmu->pmu,
-which is needlessly confusing. Above scenario is replaced with
-much more readable rapl_pmu->pmu with this change.
-
-Also rename "pmus" member in rapl_pmus struct, for same reason.
+To support AMD's per_core RAPL counter, we will need to check
+per_core capability of the current rapl_model multiple times in
+rapl_cpu_online/offline, init_rapl_pmus functions, so cache the
+matched rapl model in a global variable, to avoid calling
+x86_match_cpu() multiple times.
 
 No functional change.
 
 Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
 ---
- arch/x86/events/rapl.c | 104 ++++++++++++++++++++---------------------
- 1 file changed, 52 insertions(+), 52 deletions(-)
+ arch/x86/events/rapl.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-index df71f38ad98d..e6162bd84f23 100644
+index c3afeaf679c2..4ee0877eb4d8 100644
 --- a/arch/x86/events/rapl.c
 +++ b/arch/x86/events/rapl.c
-@@ -123,7 +123,7 @@ struct rapl_pmu {
- struct rapl_pmus {
- 	struct pmu		pmu;
- 	unsigned int		nr_rapl_pmu;
--	struct rapl_pmu		*pmus[] __counted_by(nr_rapl_pmu);
-+	struct rapl_pmu		*rapl_pmu[] __counted_by(nr_rapl_pmu);
- };
+@@ -146,6 +146,7 @@ static cpumask_t rapl_cpu_mask;
+ static unsigned int rapl_cntr_mask;
+ static u64 rapl_timer_ms;
+ static struct perf_msr *rapl_msrs;
++static struct rapl_model *rapl_model;
  
- enum rapl_unit_quirk {
-@@ -171,7 +171,7 @@ static inline struct rapl_pmu *cpu_to_rapl_pmu(unsigned int cpu)
- 	 * The unsigned check also catches the '-1' return value for non
- 	 * existent mappings in the topology map.
- 	 */
--	return rapl_pmu_idx < rapl_pmus->nr_rapl_pmu ? rapl_pmus->pmus[rapl_pmu_idx] : NULL;
-+	return rapl_pmu_idx < rapl_pmus->nr_rapl_pmu ? rapl_pmus->rapl_pmu[rapl_pmu_idx] : NULL;
- }
- 
- static inline u64 rapl_read_counter(struct perf_event *event)
-@@ -235,34 +235,34 @@ static void rapl_start_hrtimer(struct rapl_pmu *pmu)
- 
- static enum hrtimer_restart rapl_hrtimer_handle(struct hrtimer *hrtimer)
- {
--	struct rapl_pmu *pmu = container_of(hrtimer, struct rapl_pmu, hrtimer);
-+	struct rapl_pmu *rapl_pmu = container_of(hrtimer, struct rapl_pmu, hrtimer);
- 	struct perf_event *event;
- 	unsigned long flags;
- 
--	if (!pmu->n_active)
-+	if (!rapl_pmu->n_active)
- 		return HRTIMER_NORESTART;
- 
--	raw_spin_lock_irqsave(&pmu->lock, flags);
-+	raw_spin_lock_irqsave(&rapl_pmu->lock, flags);
- 
--	list_for_each_entry(event, &pmu->active_list, active_entry)
-+	list_for_each_entry(event, &rapl_pmu->active_list, active_entry)
- 		rapl_event_update(event);
- 
--	raw_spin_unlock_irqrestore(&pmu->lock, flags);
-+	raw_spin_unlock_irqrestore(&rapl_pmu->lock, flags);
- 
--	hrtimer_forward_now(hrtimer, pmu->timer_interval);
-+	hrtimer_forward_now(hrtimer, rapl_pmu->timer_interval);
- 
- 	return HRTIMER_RESTART;
- }
- 
--static void rapl_hrtimer_init(struct rapl_pmu *pmu)
-+static void rapl_hrtimer_init(struct rapl_pmu *rapl_pmu)
- {
--	struct hrtimer *hr = &pmu->hrtimer;
-+	struct hrtimer *hr = &rapl_pmu->hrtimer;
- 
- 	hrtimer_init(hr, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	hr->function = rapl_hrtimer_handle;
- }
- 
--static void __rapl_pmu_event_start(struct rapl_pmu *pmu,
-+static void __rapl_pmu_event_start(struct rapl_pmu *rapl_pmu,
- 				   struct perf_event *event)
- {
- 	if (WARN_ON_ONCE(!(event->hw.state & PERF_HES_STOPPED)))
-@@ -270,39 +270,39 @@ static void __rapl_pmu_event_start(struct rapl_pmu *pmu,
- 
- 	event->hw.state = 0;
- 
--	list_add_tail(&event->active_entry, &pmu->active_list);
-+	list_add_tail(&event->active_entry, &rapl_pmu->active_list);
- 
- 	local64_set(&event->hw.prev_count, rapl_read_counter(event));
- 
--	pmu->n_active++;
--	if (pmu->n_active == 1)
--		rapl_start_hrtimer(pmu);
-+	rapl_pmu->n_active++;
-+	if (rapl_pmu->n_active == 1)
-+		rapl_start_hrtimer(rapl_pmu);
- }
- 
- static void rapl_pmu_event_start(struct perf_event *event, int mode)
- {
--	struct rapl_pmu *pmu = event->pmu_private;
-+	struct rapl_pmu *rapl_pmu = event->pmu_private;
- 	unsigned long flags;
- 
--	raw_spin_lock_irqsave(&pmu->lock, flags);
--	__rapl_pmu_event_start(pmu, event);
--	raw_spin_unlock_irqrestore(&pmu->lock, flags);
-+	raw_spin_lock_irqsave(&rapl_pmu->lock, flags);
-+	__rapl_pmu_event_start(rapl_pmu, event);
-+	raw_spin_unlock_irqrestore(&rapl_pmu->lock, flags);
- }
- 
- static void rapl_pmu_event_stop(struct perf_event *event, int mode)
- {
--	struct rapl_pmu *pmu = event->pmu_private;
-+	struct rapl_pmu *rapl_pmu = event->pmu_private;
- 	struct hw_perf_event *hwc = &event->hw;
- 	unsigned long flags;
- 
--	raw_spin_lock_irqsave(&pmu->lock, flags);
-+	raw_spin_lock_irqsave(&rapl_pmu->lock, flags);
- 
- 	/* mark event as deactivated and stopped */
- 	if (!(hwc->state & PERF_HES_STOPPED)) {
--		WARN_ON_ONCE(pmu->n_active <= 0);
--		pmu->n_active--;
--		if (pmu->n_active == 0)
--			hrtimer_cancel(&pmu->hrtimer);
-+		WARN_ON_ONCE(rapl_pmu->n_active <= 0);
-+		rapl_pmu->n_active--;
-+		if (rapl_pmu->n_active == 0)
-+			hrtimer_cancel(&rapl_pmu->hrtimer);
- 
- 		list_del(&event->active_entry);
- 
-@@ -320,23 +320,23 @@ static void rapl_pmu_event_stop(struct perf_event *event, int mode)
- 		hwc->state |= PERF_HES_UPTODATE;
- 	}
- 
--	raw_spin_unlock_irqrestore(&pmu->lock, flags);
-+	raw_spin_unlock_irqrestore(&rapl_pmu->lock, flags);
- }
- 
- static int rapl_pmu_event_add(struct perf_event *event, int mode)
- {
--	struct rapl_pmu *pmu = event->pmu_private;
-+	struct rapl_pmu *rapl_pmu = event->pmu_private;
- 	struct hw_perf_event *hwc = &event->hw;
- 	unsigned long flags;
- 
--	raw_spin_lock_irqsave(&pmu->lock, flags);
-+	raw_spin_lock_irqsave(&rapl_pmu->lock, flags);
- 
- 	hwc->state = PERF_HES_UPTODATE | PERF_HES_STOPPED;
- 
- 	if (mode & PERF_EF_START)
--		__rapl_pmu_event_start(pmu, event);
-+		__rapl_pmu_event_start(rapl_pmu, event);
- 
--	raw_spin_unlock_irqrestore(&pmu->lock, flags);
-+	raw_spin_unlock_irqrestore(&rapl_pmu->lock, flags);
- 
- 	return 0;
- }
-@@ -350,7 +350,7 @@ static int rapl_pmu_event_init(struct perf_event *event)
- {
- 	u64 cfg = event->attr.config & RAPL_EVENT_MASK;
- 	int bit, ret = 0;
--	struct rapl_pmu *pmu;
-+	struct rapl_pmu *rapl_pmu;
- 
- 	/* only look at RAPL events */
- 	if (event->attr.type != rapl_pmus->pmu.type)
-@@ -380,11 +380,11 @@ static int rapl_pmu_event_init(struct perf_event *event)
- 		return -EINVAL;
- 
- 	/* must be done before validate_group */
--	pmu = cpu_to_rapl_pmu(event->cpu);
--	if (!pmu)
-+	rapl_pmu = cpu_to_rapl_pmu(event->cpu);
-+	if (!rapl_pmu)
- 		return -EINVAL;
--	event->cpu = pmu->cpu;
--	event->pmu_private = pmu;
-+	event->cpu = rapl_pmu->cpu;
-+	event->pmu_private = rapl_pmu;
- 	event->hw.event_base = rapl_msrs[bit].msr;
- 	event->hw.config = cfg;
- 	event->hw.idx = bit;
-@@ -567,22 +567,22 @@ static struct perf_msr amd_rapl_msrs[] = {
- static int rapl_cpu_offline(unsigned int cpu)
- {
- 	const struct cpumask *rapl_pmu_cpumask = get_rapl_pmu_cpumask(cpu);
--	struct rapl_pmu *pmu = cpu_to_rapl_pmu(cpu);
-+	struct rapl_pmu *rapl_pmu = cpu_to_rapl_pmu(cpu);
- 	int target;
- 
- 	/* Check if exiting cpu is used for collecting rapl events */
- 	if (!cpumask_test_and_clear_cpu(cpu, &rapl_cpu_mask))
- 		return 0;
- 
--	pmu->cpu = -1;
-+	rapl_pmu->cpu = -1;
- 	/* Find a new cpu to collect rapl events */
- 	target = cpumask_any_but(rapl_pmu_cpumask, cpu);
- 
- 	/* Migrate rapl events to the new target */
- 	if (target < nr_cpu_ids) {
- 		cpumask_set_cpu(target, &rapl_cpu_mask);
--		pmu->cpu = target;
--		perf_pmu_migrate_context(pmu->pmu, cpu, target);
-+		rapl_pmu->cpu = target;
-+		perf_pmu_migrate_context(rapl_pmu->pmu, cpu, target);
- 	}
- 	return 0;
- }
-@@ -591,21 +591,21 @@ static int rapl_cpu_online(unsigned int cpu)
- {
- 	unsigned int rapl_pmu_idx = get_rapl_pmu_idx(cpu);
- 	const struct cpumask *rapl_pmu_cpumask = get_rapl_pmu_cpumask(cpu);
--	struct rapl_pmu *pmu = cpu_to_rapl_pmu(cpu);
-+	struct rapl_pmu *rapl_pmu = cpu_to_rapl_pmu(cpu);
- 	int target;
- 
--	if (!pmu) {
--		pmu = kzalloc_node(sizeof(*pmu), GFP_KERNEL, cpu_to_node(cpu));
--		if (!pmu)
-+	if (!rapl_pmu) {
-+		rapl_pmu = kzalloc_node(sizeof(*rapl_pmu), GFP_KERNEL, cpu_to_node(cpu));
-+		if (!rapl_pmu)
- 			return -ENOMEM;
- 
--		raw_spin_lock_init(&pmu->lock);
--		INIT_LIST_HEAD(&pmu->active_list);
--		pmu->pmu = &rapl_pmus->pmu;
--		pmu->timer_interval = ms_to_ktime(rapl_timer_ms);
--		rapl_hrtimer_init(pmu);
-+		raw_spin_lock_init(&rapl_pmu->lock);
-+		INIT_LIST_HEAD(&rapl_pmu->active_list);
-+		rapl_pmu->pmu = &rapl_pmus->pmu;
-+		rapl_pmu->timer_interval = ms_to_ktime(rapl_timer_ms);
-+		rapl_hrtimer_init(rapl_pmu);
- 
--		rapl_pmus->pmus[rapl_pmu_idx] = pmu;
-+		rapl_pmus->rapl_pmu[rapl_pmu_idx] = rapl_pmu;
- 	}
- 
- 	/*
-@@ -617,7 +617,7 @@ static int rapl_cpu_online(unsigned int cpu)
- 		return 0;
- 
- 	cpumask_set_cpu(cpu, &rapl_cpu_mask);
--	pmu->cpu = cpu;
-+	rapl_pmu->cpu = cpu;
+ /*
+  * Helper functions to get the correct topology macros according to the
+@@ -621,18 +622,18 @@ static int rapl_cpu_online(unsigned int cpu)
  	return 0;
  }
  
-@@ -686,7 +686,7 @@ static void cleanup_rapl_pmus(void)
+-static int rapl_check_hw_unit(struct rapl_model *rm)
++static int rapl_check_hw_unit(void)
+ {
+ 	u64 msr_rapl_power_unit_bits;
  	int i;
  
- 	for (i = 0; i < rapl_pmus->nr_rapl_pmu; i++)
--		kfree(rapl_pmus->pmus[i]);
-+		kfree(rapl_pmus->rapl_pmu[i]);
- 	kfree(rapl_pmus);
- }
+ 	/* protect rdmsrl() to handle virtualization */
+-	if (rdmsrl_safe(rm->msr_power_unit, &msr_rapl_power_unit_bits))
++	if (rdmsrl_safe(rapl_model->msr_power_unit, &msr_rapl_power_unit_bits))
+ 		return -1;
+ 	for (i = 0; i < NR_RAPL_DOMAINS; i++)
+ 		rapl_hw_unit[i] = (msr_rapl_power_unit_bits >> 8) & 0x1FULL;
  
-@@ -706,7 +706,7 @@ static int __init init_rapl_pmus(void)
- 	if (!rapl_pmu_is_pkg_scope())
- 		nr_rapl_pmu *= topology_max_dies_per_package();
+-	switch (rm->unit_quirk) {
++	switch (rapl_model->unit_quirk) {
+ 	/*
+ 	 * DRAM domain on HSW server and KNL has fixed energy unit which can be
+ 	 * different than the unit from power unit MSR. See
+@@ -846,21 +847,20 @@ MODULE_DEVICE_TABLE(x86cpu, rapl_model_match);
+ static int __init rapl_pmu_init(void)
+ {
+ 	const struct x86_cpu_id *id;
+-	struct rapl_model *rm;
+ 	int ret;
  
--	rapl_pmus = kzalloc(struct_size(rapl_pmus, pmus, nr_rapl_pmu), GFP_KERNEL);
-+	rapl_pmus = kzalloc(struct_size(rapl_pmus, rapl_pmu, nr_rapl_pmu), GFP_KERNEL);
- 	if (!rapl_pmus)
- 		return -ENOMEM;
+ 	id = x86_match_cpu(rapl_model_match);
+ 	if (!id)
+ 		return -ENODEV;
+ 
+-	rm = (struct rapl_model *) id->driver_data;
++	rapl_model = (struct rapl_model *) id->driver_data;
+ 
+-	rapl_msrs = rm->rapl_msrs;
++	rapl_msrs = rapl_model->rapl_msrs;
+ 
+ 	rapl_cntr_mask = perf_msr_probe(rapl_msrs, PERF_RAPL_MAX,
+-					false, (void *) &rm->events);
++					false, (void *) &rapl_model->events);
+ 
+-	ret = rapl_check_hw_unit(rm);
++	ret = rapl_check_hw_unit();
+ 	if (ret)
+ 		return ret;
  
 -- 
 2.34.1
