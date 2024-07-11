@@ -1,186 +1,147 @@
-Return-Path: <linux-pm+bounces-11000-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11001-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 907D992EB86
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 17:18:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4382092EBA0
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 17:26:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 436091F22E26
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 15:18:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEDDDB2227D
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 15:26:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1255B16C6B4;
-	Thu, 11 Jul 2024 15:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8E9D16C437;
+	Thu, 11 Jul 2024 15:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Dm8Srm4/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C1AAD39;
-	Thu, 11 Jul 2024 15:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DC116B392
+	for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 15:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720711116; cv=none; b=b7cXxq5Zya8j9wDD1tncRpelPlk0sjQZ85w0aIJdaEZNlxGH6AHliEzRbIlZMPei1LQcpcoe5DGI32c1fA/288DiyH4mvTxfPYrk2Dq/03kyRe3xQ61rshwIHtAeITUMMGcc/AOn0Tpb5wenIjl7ox6UQAuavZjuYmoITFrLFCg=
+	t=1720711596; cv=none; b=lQMb4ieLZI6PPHer3tiX8NQnOYKE3CkbHhXZ/prFV3u/g3MfH+sIX1Q96PGK4bGCDlG09UWUuFjLHximTHGG03hYxcZVUMK3SGRqqCwkrPxAoXo5yOlwq/QKBXtoSJ13z4gvxitjWVKd6pTQevfljhC8ZxrQCycFXq27tlUmN7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720711116; c=relaxed/simple;
-	bh=Tq1oeU1YPdBdfADF26/cofRUjx0OrnlvxD8M3h1GQwk=;
-	h=From:In-Reply-To:Content-Type:References:Date:Cc:To:MIME-Version:
-	 Message-ID:Subject; b=WJBJtWYa5mUKnnp+03LMTQoigWG5RcEiuJfTJY9aSMm+ckyA/F9BtAtGMa6DWaQUn0AqvaT9fwUYn2IU+120r8e3pG9alx1fgGsEU+J9lDJsQVEAaJPdZjjKqn+P+HExP83p8a//lK98+rhSHKoTnEHiC3AeFH6KUycLPOoDk+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Received: from harlem.collaboradmins.com (harlem.collaboradmins.com [IPv6:2a01:4f8:1c0c:5936::1])
-	by madrid.collaboradmins.com (Postfix) with ESMTP id 29DAF3782207;
-	Thu, 11 Jul 2024 15:18:32 +0000 (UTC)
-From: "Shreeya Patel" <shreeya.patel@collabora.com>
-In-Reply-To: <CAJZ5v0gYj5MfwVZihiJEFUWohRmKjudOEExpYgew0Fg4Cu+whA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-X-Forward: 127.0.0.1
-References: <20240711121033.3569948-1-shreeya.patel@collabora.com> <CAJZ5v0gYj5MfwVZihiJEFUWohRmKjudOEExpYgew0Fg4Cu+whA@mail.gmail.com>
-Date: Thu, 11 Jul 2024 16:18:31 +0100
-Cc: viresh.kumar@linaro.org, shuah@kernel.org, linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@collabora.com
-To: =?utf-8?q?Rafael_J=2E_Wysocki?= <rafael@kernel.org>
+	s=arc-20240116; t=1720711596; c=relaxed/simple;
+	bh=Z2UifNQfHSWQactTbUxwngct7Jif7447IF3QEfZiqWY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HoqvDrBe2CdfBJBm6v9PXAZe5vPNjivfBe4oXlkiG3gMj1rPSK5z0tnK1vIB/JGWLDrjQocheEooCYlMyNdPeySc8EAZdiDA+qYVieo+gQkWTelD0l6jrTJWwzNgQDZz3qMcRnBemyUDRRIUPhenQlZlTUQd1CmQNWic0hL4eVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Dm8Srm4/; arc=none smtp.client-ip=209.85.219.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e03a0faee1eso1001655276.1
+        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 08:26:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720711594; x=1721316394; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z2UifNQfHSWQactTbUxwngct7Jif7447IF3QEfZiqWY=;
+        b=Dm8Srm4/3k2UEj5Pe02DINegUCr/eEMDoyOSMG572SioW6VYEAA61+e4tg7qSzJ8T9
+         3WosFTFlDbR7kcJpU9fWeQkF1fp0ZLmES/wvMHwlJ/1qMvcD9Rj9kl5/AvLCRr4HGrRG
+         PKAH9K+Gl0eOJRtCu5LqaBUDhTZQrE1JvU0CwV5gR9igIt4+PHxXjRhHH2SGYHmeXC/z
+         7ZlXe6ryKVE7KMWV8BjpOg7EdvyGFVIRl7L45yFW1in2aTvJYDmcpQr8Bxpf1pUUOGgj
+         yRvBruI118fAdQXPMKcmpJD657fFU66S30CGsHjHZrY/LOIDLoKP2tsLK4P5IRgUyMyV
+         1Ljw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720711594; x=1721316394;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z2UifNQfHSWQactTbUxwngct7Jif7447IF3QEfZiqWY=;
+        b=MCVMWkXygyVxWGep+qKGhRMT0zwC2IbntuDBTxEddtd8r2zJ8fFCcc8dNUQFt95wh/
+         GQanEpDHc4VG3TZHuYuuVM4WzR2DG7oTIYz9fiPQqgXZwWDP+O5sJxyNcm1MWfmUEQzS
+         5ooujh2Wh+/FTMNxT4Ycgd/PgzBL032NNTgDsbC9n1TUhSe9XEkrPPHhvaIRZoXpkr8+
+         Mnx95S89oc3yqWlpCM+xraWZ0UPJKiDUwcb8BZWf9sU2JHJSoDrxA6AxU5sAb3YzVQnN
+         lBP9N34G4eRg+nGqtIj/RV8bKFWd6WkIjfx4v3cRjK/hl33xpUPEv74DEVAq7u0+uMMb
+         BCWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWCL+ZN12erpDcy++xvdS4tm/C9P+xXT7zPTw5TEuj1UtxH8PQylX2Tum+oUkI4q1cUxmPdH44VgQRaspsY4y3qE8ANSpEw2qE=
+X-Gm-Message-State: AOJu0Yxksk+PMXZXt0PtYi/y2IaywduWjUK0ZmKQXB6QEsX5klOGqxRF
+	F0RjBBeZ4ovZrHXCwJyR3eyVRvBrz9p9AXG0b3qlNXFjV104825N9FMHhN3SOc2T8l+9s3Rnta4
+	kNfRXqaMenL3CtLBHhJDwhY/KPwrXABenQBGngIkTTn8mamM8
+X-Google-Smtp-Source: AGHT+IHRSvRxtciU4D9HXYrANT6oCsSmGR5hfnzw9CYJVDrCkRv/UkJgcHyyeRSNtmZhuOvpcZVYT0H141BgwBp64+o=
+X-Received: by 2002:a25:d852:0:b0:dfb:61e:3ee0 with SMTP id
+ 3f1490d57ef6-e041b034870mr9885394276.10.1720711593970; Thu, 11 Jul 2024
+ 08:26:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <2e667d-668ff800-1-22d70300@133606496>
-Subject: =?utf-8?q?Re=3A?= [PATCH] =?utf-8?q?kselftest=3A?==?utf-8?q?_cpufreq=3A?= 
- Add RTC wakeup alarm
-User-Agent: SOGoMail 5.10.0
-Content-Transfer-Encoding: quoted-printable
+References: <20240618155013.323322-1-ulf.hansson@linaro.org>
+ <20240625105425.pkociumt4biv4j36@vireshk-i7> <CAPDyKFpLfBjozpcOzKp4jngkYenqSdpmejvCK37XvE1-WbBY2g@mail.gmail.com>
+ <20240701114748.hodf6pngk7opx373@vireshk-i7> <20240702051526.hyqhvmxnywofsjp2@vireshk-i7>
+ <CAPDyKFoA9O5a6xZ+948QOzYqsRjk_0jJaSxeYRwx=76YsLHzXQ@mail.gmail.com>
+ <20240711031356.rl2j6fqxrykmqfoy@vireshk-i7> <CAPDyKFocjOt+JyzcAqOfCnmTxBMZmPjMerSh6RZ-hSMajRhzEA@mail.gmail.com>
+ <CAPDyKFoWgX=r1QtrcpEF-Y4BkiOtVnz4jaztL9zggo-=uiKsUg@mail.gmail.com> <20240711131637.opzrayksfadimgq4@vireshk-i7>
+In-Reply-To: <20240711131637.opzrayksfadimgq4@vireshk-i7>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 11 Jul 2024 17:25:57 +0200
+Message-ID: <CAPDyKFqczrJzHApBOYRSg=MXzzd1_nSgQQ3QwKYLWzgZ+XY32A@mail.gmail.com>
+Subject: Re: [PATCH] OPP: Fix support for required OPPs for multiple PM domains
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Nikunj Kela <nkela@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thursday, July 11, 2024 17:43 IST, "Rafael J. Wysocki" <rafael@kerne=
-l.org> wrote:
+On Thu, 11 Jul 2024 at 15:16, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 11-07-24, 13:05, Ulf Hansson wrote:
+> > On Thu, 11 Jul 2024 at 12:31, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >
+> > > On Thu, 11 Jul 2024 at 05:13, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > >
+> > > > On 10-07-24, 15:51, Ulf Hansson wrote:
+> > > > > I think this should work, but in this case we seem to need a similar
+> > > > > thing for dev_pm_opp_set_rate().
+> > > >
+> > > > We don't go to that path for genpd's I recall. Do we ? For genpd's,
+> > > > since there is no freq, we always call _set_opp().
+> > >
+> > > You are right! Although, maybe it's still preferred to do it in
+> > > _set_opp() as it looks like the code would be more consistent? No?
+>
+> Since the function already accepted a flag, it was very easier to just reuse it
+> without.
+>
+> > No matter how we do this, we end up enforcing OPPs for genpds.
+> >
+> > It means that we may be requesting the same performance-level that we
+> > have already requested for the device. Of course genpd manages this,
+> > but it just seems a bit in-efficient to mee. Or maybe this isn't a big
+> > deal as consumer drivers should end up doing this anyway?
+>
+> Normally I won't expect a consumer driver to do this check and so was the
+> opp core handling that. But for genpd's we need to make this inefficient to not
+> miss a vote.
+>
+> The problem is at another level though. Normally for any other device, like CPU,
+> there is one vote for the entire range of devices supported by the OPP table.
+> For example all CPUs of a cluster will share an OPP table (and they do dvfs
+> together), and you call set_opp() for any of the CPU, we will go and change the
+> OPP. There is no per-device vote.
+>
+> This whole design is broken in case of genpd, since you are expecting a separate
+> vote per device. Ideally, each device should have had its own copy of the OPP
+> table, but it is messy in case of genpd and to make it all work nicely, we may
+> have to choose this inefficient way of doing it :(
 
-Hi,
+Right, I get your point.
 
-> On Thu, Jul 11, 2024 at 2:10=E2=80=AFPM Shreeya Patel
-> <shreeya.patel@collabora.com> wrote:
-> >
-> > Add RTC wakeup alarm for devices to resume after specific time inte=
-rval.
-> > This improvement in the test will help in enabling this test
-> > in the CI systems and will eliminate the need of manual interventio=
-n
-> > for resuming back the devices after suspend/hibernation.
->=20
-> Why don't you use rtcwake for this?
->=20
+Although, it seems to me that just limiting required-opps to
+performance-levels, could avoid us from having to enforce the OPPs for
+genpd. In other words, doing something along the lines of $subject
+patch should work fine.
 
-You are right, using rtcwake would have been better here.
-I'll send a v2 with the changes
+In fact, it looks to me that the required-opps handling for the
+*single* PM domain case, is already limited to solely
+performance-levels (opp-level), as there are no required_devs being
+assigned for it. Or did I get that wrong?
 
-
-Thanks,
-Shreeya Patel
-
-> > Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-> > ---
-> >  tools/testing/selftests/cpufreq/cpufreq.sh | 24 ++++++++++++++++++=
-++++
-> >  tools/testing/selftests/cpufreq/main.sh    | 13 +++++++++++-
-> >  2 files changed, 36 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/tes=
-ting/selftests/cpufreq/cpufreq.sh
-> > index a8b1dbc0a3a5..a0f5b944a8fe 100755
-> > --- a/tools/testing/selftests/cpufreq/cpufreq.sh
-> > +++ b/tools/testing/selftests/cpufreq/cpufreq.sh
-> > @@ -231,6 +231,30 @@ do=5Fsuspend()
-> >
-> >                 for i in `seq 1 $2`; do
-> >                         printf "Starting $1\n"
-> > +
-> > +                       if [ "$3" =3D "rtc" ]; then
-> > +                               now=3D$(date +%s)
-> > +                               wakeup=5Ftime=3D$((now + 15)) # Wak=
-e up after 15 seconds
-> > +
-> > +                               echo $wakeup=5Ftime > /sys/class/rt=
-c/rtc0/wakealarm
-> > +
-> > +                               if [ $? -ne 0 ]; then
-> > +                                       printf "Failed to set RTC w=
-ake alarm\n"
-> > +                                       return 1
-> > +                               fi
-> > +
-> > +                               # Enable the RTC as a wakeup source
-> > +                               echo enabled > /sys/class/rtc/rtc0/=
-device/power/wakeup
-> > +
-> > +                               if [ $? -ne 0 ]; then
-> > +                                       printf "Failed to set RTC w=
-ake alarm\n"
-> > +                                       return 1
-> > +                               fi
-> > +
-> > +                               # Reset the wakeup alarm
-> > +                               echo 0 > /sys/class/rtc/rtc0/wakeal=
-arm
-> > +                       fi
-> > +
-> >                         echo $filename > $SYSFS/power/state
-> >                         printf "Came out of $1\n"
-> >
-> > diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testin=
-g/selftests/cpufreq/main.sh
-> > index a0eb84cf7167..f12ff7416e41 100755
-> > --- a/tools/testing/selftests/cpufreq/main.sh
-> > +++ b/tools/testing/selftests/cpufreq/main.sh
-> > @@ -24,6 +24,8 @@ helpme()
-> >         [-t <basic: Basic cpufreq testing
-> >              suspend: suspend/resume,
-> >              hibernate: hibernate/resume,
-> > +            suspend=5Frtc: suspend/resume back using the RTC wakeu=
-p alarm,
-> > +            hibernate=5Frtc: hibernate/resume back using the RTC w=
-akeup alarm,
-> >              modtest: test driver or governor modules. Only to be u=
-sed with -d or -g options,
-> >              sptest1: Simple governor switch to produce lockdep.
-> >              sptest2: Concurrent governor switch to produce lockdep=
-.
-> > @@ -76,7 +78,8 @@ parse=5Farguments()
-> >                                 helpme
-> >                                 ;;
-> >
-> > -                       t) # --func=5Ftype (Function to perform: ba=
-sic, suspend, hibernate, modtest, sptest1/2/3/4 (default: basic))
-> > +                       t) # --func=5Ftype (Function to perform: ba=
-sic, suspend, hibernate,
-> > +                          # suspend=5Frtc, hibernate=5Frtc, modtes=
-t, sptest1/2/3/4 (default: basic))
-> >                                 FUNC=3D$OPTARG
-> >                                 ;;
-> >
-> > @@ -121,6 +124,14 @@ do=5Ftest()
-> >                 do=5Fsuspend "hibernate" 1
-> >                 ;;
-> >
-> > +               "suspend=5Frtc")
-> > +                do=5Fsuspend "suspend" 1 rtc
-> > +                ;;
-> > +
-> > +                "hibernate=5Frtc")
-> > +                do=5Fsuspend "hibernate" 1 rtc
-> > +                ;;
-> > +
-> >                 "modtest")
-> >                 # Do we have modules in place?
-> >                 if [ -z $DRIVER=5FMOD ] && [ -z $GOVERNOR=5FMOD ]; =
-then
-> > --
-> > 2.39.2
-> >
-> >
-> =5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=
-=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F
-> Kernel mailing list -- kernel@mailman.collabora.com
-> To unsubscribe send an email to kernel-leave@mailman.collabora.com
-> This list is managed by https://mailman.collabora.com
-
+Kind regards
+Uffe
 
