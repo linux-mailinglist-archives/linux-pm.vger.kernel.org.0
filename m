@@ -1,136 +1,158 @@
-Return-Path: <linux-pm+bounces-10954-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-10955-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 266B692DF3D
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 06:58:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84CEE92DFDA
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 08:06:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCE38284435
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 04:58:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A242B22230
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2024 06:06:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7D3147F7F;
-	Thu, 11 Jul 2024 04:58:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70B59824B1;
+	Thu, 11 Jul 2024 06:06:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="d2r500OM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AUVHatp8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1577A29CF0;
-	Thu, 11 Jul 2024 04:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E5D7EF09
+	for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2024 06:06:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720673913; cv=none; b=eLBZF1Bjs5ikxH7Cc1nPm/fEm8AJ8ajSO7C9Fv4omwKs+NExUHtnL9KTg2JjToRdF/8fFN4rZSZ1FIN0o9SWKQiaji9XHrP01pUEbwNDrkGG33GxOau5Kg4415hQVvXS5NIVXcmiI5H1gxw0oLPz5+FgVxfz6ENq3D/rVCpc0Es=
+	t=1720677967; cv=none; b=XptRTxjCjZGLRa+0Yit+6NvDfRCVxI0FuMdaFaKL0tsTHBAY4TMhkrS56YDjIpMrJv57ocV0JnuSO6NFVW4OVxowCPde85ato9nDZmhvHulz0CjAR4DL2bdkx3KCI58c3SPncOGoHfduRiRW8Ttsri2BQdVVBDuLwRk3FUUjDyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720673913; c=relaxed/simple;
-	bh=d87vYux2oYnYK80Z/hqKA457vpsQNT+AIQcJKMK6NbQ=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YplIKy6F4Gw9awuPmyhp0fb4HTA5M1GNHPleermHPm15E0j3ZephWA/xIRpNVuryzQMPAOxkZWuTFJlkOMzz82N1fgWRNhcHIQVLzxKdswbWd+8D6X5Td0LJ2nqu4agijcUL23Knmxd26HSPawpvPm6bD8/OnO+oj+kqeltdbkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=d2r500OM; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46B4mucc008113;
-	Thu, 11 Jul 2024 04:58:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=QfexAfiFTGJbsV6Jlp1wIh2D
-	0ABmelrFAt2LL9NkLGc=; b=d2r500OM1kEgbdT7lgvsRYvg6u164GQXn1UeQe2s
-	6r9L5GadhK0Zi56M8+9dMFbC4tg8yfgj8Z7HP0ldGd/ep6rEImhMSQCzdhsAiUiJ
-	u4fcSxx9NVODKCxuD7gQ6dch9ZcaSSZsIzSVmV4gUvOB99CNLhw6SwvnM56AfBI8
-	ZMQqS9NVVlyuqpGGVQAS2qO6saig6WEpam+yfTT3g/uAvzGWWTnMYQmnI43TdaLV
-	k8SzwFObPJdtVyntsrKcBRsP/irW+PmfNr8fSIy7UpNQMtdnslhDsDigzBtGJVMD
-	fKbIW7y+ikN3DrqZhBG6YnbklV4KzBLYls1umljOhjDt6g==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 406wg43gm4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jul 2024 04:58:12 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46B4wCLD004693
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jul 2024 04:58:12 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 10 Jul 2024 21:58:04 -0700
-Date: Thu, 11 Jul 2024 10:28:00 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-CC: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <ilia.lin@kernel.org>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <ulf.hansson@linaro.org>, <quic_sibis@quicinc.com>,
-        <quic_rjendra@quicinc.com>, <danila@jiaxyga.com>,
-        <neil.armstrong@linaro.org>, <otto.pflueger@abscue.de>,
-        <abel.vesa@linaro.org>, <luca@z3ntu.xyz>, <geert+renesas@glider.be>,
-        <stephan.gerhold@kernkonzept.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        Praveenkumar I
-	<quic_ipkumar@quicinc.com>
-Subject: Re: [PATCH v6 8/9] soc: qcom: cpr3: Add IPQ9574 definitions
-Message-ID: <Zo9mWMUJiTJoj2b+@hu-varada-blr.qualcomm.com>
-References: <20240710061102.1323550-1-quic_varada@quicinc.com>
- <20240710061102.1323550-9-quic_varada@quicinc.com>
- <4c3ada32-1476-4d98-89d7-7b2ffa0f9a65@linaro.org>
+	s=arc-20240116; t=1720677967; c=relaxed/simple;
+	bh=Pct07P2cTZvGxvW7F2GXSza3Mvzjb0y516idEyqvNVM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=myPCoTYpCMIM3F84XoJ1iJntITdAJnbSycawlMg9kRyF3Co3tzIH1pUuJ2+kg7x1QOhnQ3AfXo4RWv1X3rPmenWA4FxQnf+0hBuAxJVFgbsq4uOTDfNcA08Yl1UPy+dvMWcoRAYnhUf8NeoBff5pNlwYvAsp/x+RXeioGbzVSbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AUVHatp8; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2c2c6b27428so415048a91.3
+        for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2024 23:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720677965; x=1721282765; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=G1naGOzRkLRpp7KZwz3L99c4a5Zz60/yAipmQv8kxf0=;
+        b=AUVHatp8vF5gYWwK7526wGdxIPpkALAZEMDYWToA4vF544UtTUi74jWaPIdQ1g9DPO
+         pXNgvOD556DCuLqIYmyx4ryXxemvk5JIokhoqW5+5+spST9uOHDjhmq0Wht24YNxYy4H
+         3aPFEyqabzkry67W2RxBhndVTL5ecwW+z+iuCmRyApyD3cWaOnBZQRQM1dnTrzGg1WQJ
+         +VsDP2/qTo9iYDDHE2Hlh8vucEjwshP1gFAfs3boRv9ycPxNPw/ffgrwdtZ8xxG6gVUW
+         DyACbPE9oreHJbJ1X+duzTHNc/TJy427YHK3/EkGGnQ2T24fJSSxKxbPVtznV5pM7ypi
+         aAAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720677965; x=1721282765;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G1naGOzRkLRpp7KZwz3L99c4a5Zz60/yAipmQv8kxf0=;
+        b=oiaIcuXOdalybogwy6l6mBsWWw9PiteuErW0dNIdN5h9/0JJYX7XVrk2aJrNZYNU59
+         P/S+ulKAGpCNfT/+/SBXrOfQZiGdEfUyJZWGhaLJoU3dxqHxRjZz6TrLO4VXiCU74R78
+         AC5o4UmG1tLET4sey3t2VddONclVfdSSyXU9amCr/h7kDdE9ZFb4gzbPNqaV0tmfWjFH
+         c7kAcPUM//70SR35lbHdTkG2TNBczeI7i7AMwsYlV9FUsUowI2MECz3EA0AEm2EeaogH
+         RfjDAwDzbEp75OweF2pDoVcLLuedImaG6HJ2Ofcn6xPupYZ0BMOnFbznYUgZ5bKTHVK2
+         Zsgg==
+X-Forwarded-Encrypted: i=1; AJvYcCWg3VtSwMjIn1q9Nk3aEq7U6NqibZKrq3XYxTLSfTT9z+SyHOUwqUuFu77ym+ectmPnkPXkWH4UlM6LRUpW5/KEb+jBRYvilPQ=
+X-Gm-Message-State: AOJu0YyJtKtc0pY3LUj1p/5iK9rrySPK8DTJp1z3wjEkh84rJwar+PTd
+	tCbdj+bxOoYuWs6Z2ARr133EQfKmrQvAZMAq3Tw0oKKxE7CSvNHODaDQArAlbb4=
+X-Google-Smtp-Source: AGHT+IHKIRAKhiyYiKLP0CQNpVmFEZVj0D+u79CNLoPp13J4mrQM8iSlQeqWiA0KS/IHQxTYeT1Glw==
+X-Received: by 2002:a17:90a:c7c9:b0:2c9:718c:73e with SMTP id 98e67ed59e1d1-2ca35c79e3emr6122202a91.29.1720677965084;
+        Wed, 10 Jul 2024 23:06:05 -0700 (PDT)
+Received: from localhost ([122.172.84.129])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c99a951741sm13039837a91.15.2024.07.10.23.06.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jul 2024 23:06:04 -0700 (PDT)
+Date: Thu, 11 Jul 2024 11:36:01 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Alice Ryhl <aliceryhl@google.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Danilo Krummrich <dakr@redhat.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>, linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+	rust-for-linux@vger.kernel.org,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Erik Schilling <erik.schilling@linaro.org>,
+	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH V3 8/8] cpufreq: Add Rust based cpufreq-dt driver
+Message-ID: <20240711060601.fmnttgqhbh2pitzj@vireshk-i7>
+References: <cover.1719990273.git.viresh.kumar@linaro.org>
+ <b7df0c75cc07a451243b554fb2272c91cbe42dfe.1719990273.git.viresh.kumar@linaro.org>
+ <f0016987-4288-4adf-954d-665b35ae1bf1@redhat.com>
+ <20240710085652.zu7ntnv4gmy7zr2i@vireshk-i7>
+ <Zo6oqfFX-TNIeaIC@pollux>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4c3ada32-1476-4d98-89d7-7b2ffa0f9a65@linaro.org>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GILWLXyo901De_1Xy6p6ZkeSDHKiScW7
-X-Proofpoint-GUID: GILWLXyo901De_1Xy6p6ZkeSDHKiScW7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-11_02,2024-07-10_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=995 clxscore=1015 impostorscore=0 malwarescore=0 mlxscore=0
- bulkscore=0 spamscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2407110031
+In-Reply-To: <Zo6oqfFX-TNIeaIC@pollux>
 
-On Wed, Jul 10, 2024 at 01:12:19PM +0200, Konrad Dybcio wrote:
-> On 10.07.2024 8:11 AM, Varadarajan Narayanan wrote:
-> > From: Praveenkumar I <quic_ipkumar@quicinc.com>
-> >
-> > * Add thread, scaling factor, CPR descriptor defines to enable
-> >   CPR on IPQ9574.
-> >
-> > * Skip 'acc' usage since IPQ9574 does not have acc
-> >
-> > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
->
-> [...]
->
-> >
-> >  	/* CPRh disallows MEM-ACC access from the HLOS */
-> > -	if (!(data->acc_desc || desc->cpr_type == CTRL_TYPE_CPRH))
-> > +	if (!(data->acc_desc || desc->cpr_type == CTRL_TYPE_CPRH ||
-> > +	      of_device_is_compatible(dev->of_node, "qcom,ipq9574-cpr4")))
-> >  		return dev_err_probe(dev, -EINVAL, "Invalid ACC data\n");
->
-> This is something I'd also like to fold into v16.. perhaps
->
-> if (data->acc_desc && desc->cpr_type == CTRL_TYPE_CPRH)
->
-> could work instead? this way we trust the programmer that
-> acc_desc's presence/absence is intentional and only throw and
-> error if it's present with type == CPRH
+On 10-07-24, 17:28, Danilo Krummrich wrote:
+> No, the platform driver layer will only guarantee that it decreses the reference
+> count of the `Arc` by one, that doesn't guarantee a free. If something else
+> still holds a reference to the `Arc` it will keep the `Registration` alive,
+> unless it's wrapped by `Devres`.
 
-I tried this change and it works for ipq9574.
+I see. Thanks.
 
-Thanks
-Varada
+There is one problem that I haven't found a solution to yet. If I make
+the following change to the driver:
+
+diff --git a/drivers/cpufreq/rcpufreq_dt.rs b/drivers/cpufreq/rcpufreq_dt.rs
+index 315adca2a747..052ea2db095a 100644
+--- a/drivers/cpufreq/rcpufreq_dt.rs
++++ b/drivers/cpufreq/rcpufreq_dt.rs
+@@ -236,7 +236,7 @@ fn probe(dev: &mut platform::Device, _id_info: Option<&Self::IdInfo>) -> Result<
+
+ module_platform_driver! {
+     type: CPUFreqDTDriver,
+-    name: "cpufreq_dt",
++    name: "cpufreq-dt",
+     author: "Viresh Kumar <viresh.kumar@linaro.org>",
+     description: "Generic CPUFreq DT driver",
+     license: "GPL v2",
+
+then I get this error:
+
+  CLIPPY     drivers/cpufreq/rcpufreq_dt.o
+error: expected one of `:`, `;`, or `=`, found `-`
+   --> /mnt/ssd/all/work/repos/kernel/linux/drivers/cpufreq/rcpufreq_dt.rs:237:1
+    |
+237 | / module_platform_driver! {
+238 | |     type: CPUFreqDTDriver,
+239 | |     name: "cpufreq-dt",
+240 | |     author: "Viresh Kumar <viresh.kumar@linaro.org>",
+241 | |     description: "Generic CPUFreq DT driver",
+242 | |     license: "GPL v2",
+243 | | }
+    | |_^ expected one of `:`, `;`, or `=`
+    |
+    = note: this error originates in the macro
+    `$crate::prelude::module` which comes from the expansion of the
+    macro `module_platform_driver` (in Nightly builds, run with -Z
+    macro-backtrace for more info)
+
+
+And because of that I had to change the name of the platform device
+too in the existing kernel.
+
+-- 
+viresh
 
