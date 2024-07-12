@@ -1,176 +1,165 @@
-Return-Path: <linux-pm+bounces-11055-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11056-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1890292FF3F
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 19:13:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 489E692FF49
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 19:14:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82953B246D7
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 17:13:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE2081F21CAD
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 17:14:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F764178367;
-	Fri, 12 Jul 2024 17:10:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 682EC176ABE;
+	Fri, 12 Jul 2024 17:13:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GjmjTNaj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bX2UJ4T1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9266017799F;
-	Fri, 12 Jul 2024 17:10:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316A317C6B;
+	Fri, 12 Jul 2024 17:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720804259; cv=none; b=iTQm9hQPIAE+M7tc35boUvP4fpIBrzJo+zIVxI565xO0gTHJK/jkUIKCqm6xwkf8fKREXYMH9SsBqFX0FFNtpamNwax4FnlyXNL1r88emqqcTa8/HAw/bgH3JmmH+Q2mRFlrv8l56Ik/erVIT+o8vA2L265ZqhgANWG5HewdvCg=
+	t=1720804406; cv=none; b=Iv0YQdfmBboNfeL/Zo/bB6Bh/ycECH6CwYCyDFuhP3dR24YM3Ma5M2hyBS2k1Q1xL1mDO/WnlztfLGVltG4jMCGfmUZKMO+JIuR9GnuKnGxe0dcfIaTpYmSvu+G/F4OjOjrVmKsxu93Rk6gQrikjQJKwGqHbmayUM4mR3pflL0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720804259; c=relaxed/simple;
-	bh=SMOskrIxYKC4O6emQHBW68wMQEv/leiHAjttfBN/gl0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tG5Vow9MXosO7fCEt1ARezcuLkA3OZjU9nl1a8vxzWeWYzvGGaKJLYCmsawqdVhcppNGRfl3jjof9rEJUi5cB+e3n3/u8AgkO6Wn6H2OxacwjrlTf7kEB6wTQKbYHlgYDh7C82W0+P6Q6jo8nEG9guvfSzI00LmM0XEzbPeOJOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GjmjTNaj; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-70b09cb7776so1866220b3a.1;
-        Fri, 12 Jul 2024 10:10:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720804257; x=1721409057; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ky0nWnwJmHd6zu8RRtvg8wvKZFzCwLW2MVRtue5Z0Es=;
-        b=GjmjTNajcOc96G5ZMYNdJfZO+HX1JlSCXorCoSLfoB+jJz7CaQtrJ/r8dP3FA8SE0i
-         bd+765JqGLNRRwpnOcDyXi+aa/jODJ4Cr9N4kLTIGMbhT5fqEbYiuRaDoCiXMrjIGMcq
-         D9hB+pQ9N/cIy0l+w4t12jcix/ntX3BKH36pK9Fy1yELFAZo8IbjjDhJMRddqhxSE501
-         WEMRdpk04sztJh6P0vVb5ybhLeV6yBxhoeufSPww7pWP77tb3hoM9rIr4ZlOo9DueKes
-         6vgbqFhQZvD2jYUsEasJqlCrFBC+7Bklo06JO9ju7Ue8CvT4R9K1PlDFfeeaAw2TlGq6
-         0Mow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720804257; x=1721409057;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ky0nWnwJmHd6zu8RRtvg8wvKZFzCwLW2MVRtue5Z0Es=;
-        b=N3mPkmnW2O4JiSYREtUnEWk6O10xcU8Qi7uDvk4YFklo/HP0fvxhA7wyzDLqVfCYSr
-         uMPRlS4gYZnbDCNX3IMpIgb6UFnhqxHPZmko6zNEXWrZ5KKDXnQ240/x5R80ImWoyqtY
-         Bd4oM1JFx5jroh+ivTI3F12oRHQDwEzBsFESXs/KtiHNYlIWWDzl13+YSqoGaDqpMYqg
-         ENm5H/K3N00USBUSO+wV0eqHM+Y8IZD9Zd1yhehWDunMDpxFLK+6ynfgUiDx65QZaniF
-         r2YAvABNCKwaTMDboXzYCKAGzJmUsQnPTF3cdRVk44PJAMjeNgd7Htw4Q4x61k+ClxQ2
-         2R3A==
-X-Forwarded-Encrypted: i=1; AJvYcCUJn4DHZoU4vzJbq1f+i2H5ksJpuO6q+v6/ixjBl3Zl1Xoh+BTAz2fYyNucjVmcECysMMI9z4aw570cdalemTUkNmTwvTmRUrOxXs+i/GwWWrwpluZ78wMUX90VD/+av2dAnU1o/1g=
-X-Gm-Message-State: AOJu0YyKNPWXRbgSc0x21KD/IvXFuuecn3hVAnpDpA/u72WKXkOUC557
-	WFAcL+2BmisF4iRgKSIFKs+oe4p8cz9drQluaUV9aAUpHBA/muSk
-X-Google-Smtp-Source: AGHT+IHWY0PYRkiaZE96Ze+d5DJRCgHcTNMFPwfFIdu5MuD5uzpo6HG5J+QpX4y0rCmOlsKcUHtxkQ==
-X-Received: by 2002:a05:6a00:1142:b0:706:5cd9:655d with SMTP id d2e1a72fcca58-70b435f0138mr15253231b3a.22.1720804256643;
-        Fri, 12 Jul 2024 10:10:56 -0700 (PDT)
-Received: from localhost (dhcp-141-239-149-160.hawaiiantel.net. [141.239.149.160])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b438c3910sm7742080b3a.51.2024.07.12.10.10.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jul 2024 10:10:56 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Fri, 12 Jul 2024 07:10:55 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
-	void@manifault.com, linux-kernel@vger.kernel.org,
-	kernel-team@meta.com, mingo@redhat.com, peterz@infradead.org,
-	David Vernet <dvernet@meta.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v2 2/2] sched_ext: Add cpuperf support
-Message-ID: <ZpFjn4GXNXvSnWnK@slm.duckdns.org>
-References: <Zog5-Yd5wV0-Y76y@slm.duckdns.org>
- <CAKfTPtDeA4OTPJmEHd-wKToYwDVizcny-_qxEuDUA-OcaVm2Uw@mail.gmail.com>
- <ZonzAdyd6zb2Sm06@slm.duckdns.org>
- <CAKfTPtDE2rWbRouf8zRyM3UpTfK1k_xrWmvAs-zfoRZqM3zGsw@mail.gmail.com>
- <Zowt7pVWFB-Of-me@slm.duckdns.org>
- <CAKfTPtB=77c-RsJ23suNZVf7qByeGSjYQJbiEU4JpXU6DezNLQ@mail.gmail.com>
- <ZoxVZPCrWokjfmFY@slm.duckdns.org>
- <CAKfTPtAjFvOPByPyeAURN3gw0yp8ByVmpa99_dGEZiTGw_Fawg@mail.gmail.com>
- <Zo1omq73-ESGsVVg@slm.duckdns.org>
- <CAKfTPtDdG+fhZjG0JEtXm+rq3w_v3iSrYxDLe0XXurOLEcOuNw@mail.gmail.com>
+	s=arc-20240116; t=1720804406; c=relaxed/simple;
+	bh=BC2o51l++B6qfPOoy83p3Zssk/5Y2C5t/nDEBU6cW84=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=udONQprwNgcTe0R0Fraef8jl+wm+SnHNbI/qniIkA3UVfEm8jk+Nl2nadZpqkIl+l05xhbXl0f0JvPWefxYS/Sln1J46/8oI/+VUeX2LgxH/Eh84Xk0ttWPeC1NcihcfCxw1g9vSfjSg5SA6NpKrjD2mV1tkii2idOStybLEeHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bX2UJ4T1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A246C32782;
+	Fri, 12 Jul 2024 17:13:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720804405;
+	bh=BC2o51l++B6qfPOoy83p3Zssk/5Y2C5t/nDEBU6cW84=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bX2UJ4T16kwYutfIyvHhrErXaLkAFRNCwYcMJ0Fmx1d+pbo6JlufFNZxayN5uhYeM
+	 1iyCdsZglIvLnez+EkGN3ditWvgFo89RCWvLVNfL7TIf2PWLVNbS04F2VIfhJw+FrQ
+	 n23wcl3jpltkj8kb/hQJOp1T54bmOrEAbnyoALReNithOqC2kqHF0jbC/SWs0ziwG+
+	 TLeSDYbaT4EOa0Rcc+sBt0VQNG7x3aH8UwBTq4urbLeD08j1RBRQMklv0w1qp/eFzR
+	 zkcj77GAeX3GOmqxZEDimX7ILdT4NCjji7ITL8w886hBdQrp1CuanpSZGY4I6JPH2o
+	 en/Xpwj0tMwjA==
+Message-ID: <26b8fe36-da94-4552-8e50-3b38c8b3fb0d@kernel.org>
+Date: Fri, 12 Jul 2024 19:13:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtDdG+fhZjG0JEtXm+rq3w_v3iSrYxDLe0XXurOLEcOuNw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/5] ARM: dts: qcom: Add vadc support for pm8775 pmic on
+ SA8775P
+To: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+ Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Amit Kucheria <amitk@kernel.org>,
+ Thara Gopinath <thara.gopinath@gmail.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Kamal Wadhwa <quic_kamalw@quicinc.com>, Taniya Das
+ <quic_tdas@quicinc.com>, Jishnu Prakash <quic_jprakash@quicinc.com>,
+ linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, Ajit Pandey <quic_ajipan@quicinc.com>,
+ Imran Shaik <quic_imrashai@quicinc.com>,
+ Jagadeesh Kona <quic_jkona@quicinc.com>
+References: <20240712-mbg-tm-support-v1-0-7d78bec920ca@quicinc.com>
+ <20240712-mbg-tm-support-v1-4-7d78bec920ca@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240712-mbg-tm-support-v1-4-7d78bec920ca@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello,
+On 12/07/2024 14:43, Satya Priya Kakitapalli wrote:
+> Add support for reading the adc channels of pm8775 on SA8775P platforms.
+> 
+> Signed-off-by: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 90 +++++++++++++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> index 1369c3d43f86..bd4f5f51e094 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> @@ -1,8 +1,10 @@
+>  // SPDX-License-Identifier: BSD-3-Clause
+>  /*
+>   * Copyright (c) 2023, Linaro Limited
+> + * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved.
+>   */
+>  
+> +#include <dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8775.h>
+>  #include <dt-bindings/input/input.h>
+>  #include <dt-bindings/spmi/spmi.h>
+>  
+> @@ -105,6 +107,28 @@ pmm8654au_0: pmic@0 {
+>  		#address-cells = <1>;
+>  		#size-cells = <0>;
+>  
+> +		pmm8654au_0_adc: vadc@8000 {
+> +			compatible = "qcom,spmi-adc5-gen3";
+> +			reg = <0x8000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			interrupts-extended = <&spmi_bus 0x0 0x80 0x1 IRQ_TYPE_EDGE_RISING>;
+> +			interrupt-names = "adc-sdam0";
+> +			#io-channel-cells = <1>;
+> +
+> +			pmm8654au_0_die_temp {
 
-On Fri, Jul 12, 2024 at 12:12:32PM +0200, Vincent Guittot wrote:
-...
-> II failed to setup my dev system for reproducing your use case in time
-> and I'm going to be away for the coming weeks so I suppose that you
-> should move forward and I will look at that when back to my dev system
+Please read DTS coding style first and your internal guideline go/upstream.
 
-Thankfully, this should be pretty easy to fix up however we want afterwards.
+Best regards,
+Krzysztof
 
-> It seems that "make -C tools/sched_ext ARCH=arm64 LLVM=-16" doesn't
-> use clang-16 everywhere like the rest of the kernel which triggers
-> error on my system:
-
-Hmm... there is llvm prefix/suffix handling in the Makefile. I wonder what's
-broken.
-
-> make -C <path-to-linux>/linux/tools/sched_ext ARCH=arm64
-> LOCALVERSION=+ LLVM=-16
-> O=<path-to-linux>/out/kernel/arm64-llvm/tools/sched_ext
-> ...
-> clang-16 -g -O0 -fPIC -std=gnu89 -Wbad-function-cast
-> -Wdeclaration-after-statement -Wformat-security -Wformat-y2k
-> -Winit-self -Wmissing-declarations -Wmissing-prototypes
-> -Wnested-externs -Wno-system-headers -Wold-style-definition -Wpacked
-> -Wredundant-decls -Wstrict-prototypes -Wswitch-default -Wswitch-enum
-> -Wundef -Wwrite-strings -Wformat -Wno-type-limits -Wshadow
-> -Wno-switch-enum -Werror -Wall
-> -I<path-to-linux>/out/kernel/arm64-llvm/tools/sched_ext/build/obj/libbpf/
-> -I<path-to-linux>/linux/tools/include
-> -I<path-to-linux>/linux/tools/include/uapi -fvisibility=hidden
-> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  \
-> --shared -Wl,-soname,libbpf.so.1 \
-> -Wl,--version-script=libbpf.map
-> <path-to-linux>/out/kernel/arm64-llvm/tools/sched_ext/build/obj/libbpf/sharedobjs/libbpf-in.o
-> -lelf -lz -o <path-to-linux>/out/kernel/arm64-llvm/tools/sched_ext/build/obj/libbpf/libbpf.so.1.5.0
-
-So, thi sis regular arm target buliding.
-
-> clang -g -D__TARGET_ARCH_arm64 -mlittle-endian
-> -I<path-to-linux>/linux/tools/sched_ext/include
-> -I<path-to-linux>/linux/tools/sched_ext/include/bpf-compat
-> -I<path-to-linux>/out/kernel/arm64-llvm/tools/sched_ext/build/include
-> -I<path-to-linux>/linux/tools/include/uapi -I../../include -idirafter
-> /usr/lib/llvm-14/lib/clang/14.0.0/include -idirafter
-> /usr/local/include -idirafter /usr/include/x86_64-linux-gnu -idirafter
-> /usr/include  -Wall -Wno-compare-distinct-pointer-types -O2 -mcpu=v3
-> -target bpf -c scx_simple.bpf.c -o
-> <path-to-linux>/out/kernel/arm64-llvm/tools/sched_ext/build/obj/sched_ext/scx_simple.bpf.o
-> In file included from scx_simple.bpf.c:23:
-> <path-to-linux>/linux/tools/sched_ext/include/scx/common.bpf.h:27:17:
-> error: use of undeclared identifier 'SCX_DSQ_FLAG_BUILTIN'
->         _Static_assert(SCX_DSQ_FLAG_BUILTIN,
->                        ^
-> fatal error: too many errors emitted, stopping now [-ferror-limit=]
-> 5 warnings and 20 errors generated.
-
-This is BPF.
-
-The Makefile is mostly copied from other existing BPF Makefiles under tools,
-so I don't quite understand why things are set up this way but
-
-  CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
-
-is what's used to build regular targets, while
-
-  $(CLANG) $(BPF_CFLAGS) -target bpf -c $< -o $@
-
-is what's used to build BPF targets. It's not too out there to use a
-different compiler for BPF targtes, so maybe that's why? I'll ask BPF folks.
-
-Thanks.
-
--- 
-tejun
 
