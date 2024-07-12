@@ -1,121 +1,164 @@
-Return-Path: <linux-pm+bounces-11063-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11064-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BEC5930105
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 21:40:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A945B93010E
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 21:43:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3FEBB227F5
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 19:40:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 346A81F233FE
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 19:43:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56BBC38DD9;
-	Fri, 12 Jul 2024 19:40:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 658DF39AC3;
+	Fri, 12 Jul 2024 19:43:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="HJMnYMS3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bLENL5rZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459D21B95B
-	for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2024 19:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98644347B4
+	for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2024 19:43:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720813212; cv=none; b=KlITZOU9hbsTAURN/uHdq2bBUOWpYR5PSiV9xE4AlU7EtOyiHKg4Y9/hq+atV5hDZ/5+8BrNWOX51a6wGuZPXWJ5cV+OfWNo1eL6Vcbfst/qDjGGwQ4G6m3EId/lnRngCwtFUCr+ixPcb6jm1JyerxqCCjJDftvJUS3qpklIXpw=
+	t=1720813423; cv=none; b=dK+ORBTpyEyZ8yJvAwY6wW+690kDhFttfVyxR2uDC4wvvc4oM8uw+c5My4pAztgu3WaucN1460W/ea/ltPAeYv5l+VwC8g7NxDiwY5z4p9tPBxVaZhtsA+wmet+vkSrMUNCBdRlF8E7slaj5NXkLYERIl6U/sGotGcb50cIc/Gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720813212; c=relaxed/simple;
-	bh=MIU3owLLrwypm5/MgWUvunJsmR9PY6tV2qPUPU8aLZw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IKHnlubwkfPAjfonAfrP49CaqMmhA+ynWIC7y27vE1W0KoRUgRtMiBwM9YcRpiW572OQiyTe3yZLJ7xr8+1U3xo3aLJdnyvbxfubEvMOfplCoBmKNml8JZAOtuxuqpm/qYwVH5rF5h7jF9yiEsVEt61q8P4SfCL9NNr/I1ChWXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=HJMnYMS3; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-367990aaef3so1341069f8f.0
-        for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2024 12:40:09 -0700 (PDT)
+	s=arc-20240116; t=1720813423; c=relaxed/simple;
+	bh=1lEUspWAaO5u1XSmEkkpRCZaASP5SBuIUGMnwoj8aY4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pG95yXzHKh9EwumUfl3AtgyNUJdXXXZrQF+ItElE1KoWG/BzDF8QlYtPC75oRWzdRHTC/RG7Yr/lJ6XhpPJsbesbcC7LcgmcYNjG/0Pt0jEbKW6gST8da9+a+Z4uEeZbdEEkRuIV3rFEEjIVGjMX5pO6RcCD94Cb7dsbafBAz94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bLENL5rZ; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a77e7420697so348317966b.1
+        for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2024 12:43:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1720813207; x=1721418007; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FvuQrQGGQIwwog/EnWsNcgH7JSV94m6PJ1TUizGo8OI=;
-        b=HJMnYMS3Nv+hSX5/QYJeog+MLpSwIUrVlyJzKagzQh2yQ8bGopGHHNOCQk+08rwvyl
-         bZUKeGAuoNbuAmEdwFW3kzM/4ds96Q8mc2L1gF6TpYaAaUQgRMpV/otuvpPgkY5v28+x
-         /dfdIABQavA8eMGrFtA2A2XJv5s3l2mkjUQJcV9ZfryPxupuKFWjn+Z+OFbAs2+SuDzr
-         6Ir5clbdIIXMGfcQDg0CVGyN2H6cp4ZFuqaphAe+klUMT4meybiZP3vGnzCgUNCgvugO
-         S4lkLiAyZ9GdXyYpxn2t0XZqffq9aIfCXYrJB+byhWn84NVI9MJJ8Kv62LJeM/kjJ/68
-         8+zw==
+        d=linaro.org; s=google; t=1720813419; x=1721418219; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=jdmhCOprl+my3R8CgZP6ngYaYIZyq201uioObhwKcnA=;
+        b=bLENL5rZ5aNqqbfRvgVtWWvJ6+r7lOnAq5pOe/wGhANz3o35o7V1kqAeSX7X6lNUQ8
+         dJRC+V11e+L3bPKcdzbYsDnUAId/bV02/tXxnX0MKGAiPgrx9bCaCRqSq1l0l+85Xdjz
+         pp0kRELmW8p+TmUDoYvHSP0ysTZaYXfwn/GE8E7KuT/fl7xtuSCu3MZNkJ2ok7WpFLh2
+         ROm7zAb3hZsKr/yPA9QTHokBzhhr1Foh/9924+8T8DxoFmLhVVk0ovfjsPv0B0epqOpb
+         IOUS57ssmMo4oxJcH4R3FV9fqDE4q/JuLXc3j4AtCzjtf5tzs/5O7TDeBkAHf8vQLvhd
+         RlMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720813207; x=1721418007;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FvuQrQGGQIwwog/EnWsNcgH7JSV94m6PJ1TUizGo8OI=;
-        b=XmuQmWa1xGfgh0wVpBm8wPX9rymmfXzl9WqqgDCzqYc2QkG43b3/pi7NiX4ugf3/Wj
-         cSByhE5NfuS3xVxYpvBICbU9QmgNnL1KgZxEVnBAKUFRRm2w8TNFXEi1n7sGRwhlB0Tu
-         ewxqN+5rB1wYNQRNzkO9/VAWOBnQW5IHnWAl2qwU8J6alv5lpyuazQ4A2dDY+85ZZa5a
-         725oW4jwNA/xd/AWXbzWbDfwOTrK3vcCtwJB7AeR/ZyzyhNqgQhaHuW4FAC5fXFjSehn
-         3pB3e5Vz1OofqHPuOxXJX8Nd5S2NtOjCBDtb559ckn0ed/jwQZOTYbeQOs1C8+LUxqaE
-         nFnw==
-X-Gm-Message-State: AOJu0YwJwyZRCjpCqDA2wWzETiUeVbKEQInkeYall5fFqmztBp55NCOd
-	J2yTMDxDDFhCasZmNvYtks/x7tB677poIgfkkUPkWOwbK3HvpluZFNwyFzftiaE=
-X-Google-Smtp-Source: AGHT+IHNcSqKCNvMJWlQ3+gm4ni/DPQb7E7vc0oXSqOGorhg1y87UCQAfw7iqfKkb+xvsPeDXJZ4fg==
-X-Received: by 2002:adf:ee4f:0:b0:367:8a68:e749 with SMTP id ffacd0b85a97d-367cea964ecmr9035312f8f.37.1720813207457;
-        Fri, 12 Jul 2024 12:40:07 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:ac5f:fcfa:c856:a4d9])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367df88b1c5sm8862467f8f.4.2024.07.12.12.40.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jul 2024 12:40:07 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Dan Carpenter <dan.carpenter@linaro.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v2] power: sequencing: fix an invalid pointer dereference in error path
-Date: Fri, 12 Jul 2024 21:40:04 +0200
-Message-ID: <20240712194004.241939-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1720813419; x=1721418219;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jdmhCOprl+my3R8CgZP6ngYaYIZyq201uioObhwKcnA=;
+        b=GQkAdWFS4PTPirErzPhs2ii4H1KUkmsKGEIa+G4pfgcivb1pzQ5QWXMOWYzkZ0YMoZ
+         U/t3GSxFbZIssBU3cvUEqYXtWVHKV9OHsAJWgAvhsn9m6MGYEQa93+6PWLkXBb4XU60I
+         LVcwdjJu8T5KRu538qsUoDiBUqW8lryQwi/ocutNxQjKVVaeg/LkWaWh9rWLOkwuZzRw
+         2sTy8JTiG2f/6vI+ruZh2l0iuUlHHD6g2gRaVMWwco7ssM9XI2wqZOBdoxy4Huh1yvvf
+         7iklFESlS45mTMgRWx0UXQPVezhE0PffoWtkerSxN6JeyjotA7+EG9zCcNPlCGRg6qDj
+         UyYg==
+X-Forwarded-Encrypted: i=1; AJvYcCU00+Ft/DTmqTKAu/MM80mzCG/qVUU40qFWhz2SBMj6EFyOWsaORyYUg1p6MSyOvhqBNPJkA/m96ljT50hq+lQbsK4ZjTHc99Y=
+X-Gm-Message-State: AOJu0YwO/dxThg6UQwDF9dBpebkEWKKMYdJO7sV9gnWjbMhVrNEhVNmK
+	Vbi3A7OKrYfXhb2Y94IKNw+7Fb7X8n7dk9pX3pgESUS8SbPlKoAUTwVmpZsopII=
+X-Google-Smtp-Source: AGHT+IENsgMX+uB30BzFuKiY0VK7jTYuAcwlOSncj3lPj2Y1ijF/x3cXaWJqdaGwyXkblGalqYwh7Q==
+X-Received: by 2002:a17:907:38f:b0:a77:e48d:bad with SMTP id a640c23a62f3a-a780b6b1f20mr818567666b.32.1720813418498;
+        Fri, 12 Jul 2024 12:43:38 -0700 (PDT)
+Received: from [192.168.105.194] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a780a6bc8a2sm377290966b.15.2024.07.12.12.43.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Jul 2024 12:43:37 -0700 (PDT)
+Message-ID: <ec59e5a0-81c1-4a2a-be9d-b28fa63ee473@linaro.org>
+Date: Fri, 12 Jul 2024 21:43:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/5] ARM: dts: qcom: Add support for MBG TM for pm8775 on
+ SA8775P
+To: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+ Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Amit Kucheria <amitk@kernel.org>,
+ Thara Gopinath <thara.gopinath@gmail.com>,
+ Bjorn Andersson <andersson@kernel.org>
+Cc: Kamal Wadhwa <quic_kamalw@quicinc.com>, Taniya Das
+ <quic_tdas@quicinc.com>, Jishnu Prakash <quic_jprakash@quicinc.com>,
+ linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, Ajit Pandey <quic_ajipan@quicinc.com>,
+ Imran Shaik <quic_imrashai@quicinc.com>,
+ Jagadeesh Kona <quic_jkona@quicinc.com>
+References: <20240712-mbg-tm-support-v1-0-7d78bec920ca@quicinc.com>
+ <20240712-mbg-tm-support-v1-5-7d78bec920ca@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
+ BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
+ HGWdmtO+RvadOVi6CoUDqALsmfS3MUG5Pj2Ne9+0jRg4hEnB92AyF9rW2G3qisFcwPgvatt7
+ TXD5E38mLyOPOUyXNj9XpDbt1hNwKQfiidmPh5e7VNAWRnW1iCMMoKqzM1Anzq7e5Afyeifz
+ zRcQPLaqrPjnKqZGL2BKQSZDh6NkI5ZLRhhHQf61fkWcUpTp1oDC6jWVfT7hwRVIQLrrNj9G
+ MpPzrlN4YuAqKeIer1FMt8cq64ifgTzxHzXsMcUdclzq2LTk2RXaPl6Jg/IXWqUClJHbamSk
+ t1bfif3SnmhA6TiNvEpDKPiT3IDs42THU6ygslrBxyROQPWLI9IL1y8S6RtEh8H+NZQWZNzm
+ UQ3imZirlPjxZtvz1BtnnBWS06e7x/UEAguj7VHCuymVgpl2Za17d1jj81YN5Rp5L9GXxkV1
+ aUEwONM3eCI3qcYm5JNc5X+JthZOWsbIPSC1Rhxz3JmWIwP1udr5E3oNRe9u2LIEq+wH/toH
+ kpPDhTeMkvt4KfE5m5ercid9+ZXAqoaYLUL4HCEw+HW0DXcKDwARAQABzShLb25yYWQgRHli
+ Y2lvIDxrb25yYWQuZHliY2lvQGxpbmFyby5vcmc+wsGOBBMBCAA4FiEEU24if9oCL2zdAAQV
+ R4cBcg5dfFgFAmQ5bqwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQR4cBcg5dfFjO
+ BQ//YQV6fkbqQCceYebGg6TiisWCy8LG77zV7DB0VMIWJv7Km7Sz0QQrHQVzhEr3trNenZrf
+ yy+o2tQOF2biICzbLM8oyQPY8B///KJTWI2khoB8IJSJq3kNG68NjPg2vkP6CMltC/X3ohAo
+ xL2UgwN5vj74QnlNneOjc0vGbtA7zURNhTz5P/YuTudCqcAbxJkbqZM4WymjQhe0XgwHLkiH
+ 5LHSZ31MRKp/+4Kqs4DTXMctc7vFhtUdmatAExDKw8oEz5NbskKbW+qHjW1XUcUIrxRr667V
+ GWH6MkVceT9ZBrtLoSzMLYaQXvi3sSAup0qiJiBYszc/VOu3RbIpNLRcXN3KYuxdQAptacTE
+ mA+5+4Y4DfC3rUSun+hWLDeac9z9jjHm5rE998OqZnOU9aztbd6zQG5VL6EKgsVXAZD4D3RP
+ x1NaAjdA3MD06eyvbOWiA5NSzIcC8UIQvgx09xm7dThCuQYJR4Yxjd+9JPJHI6apzNZpDGvQ
+ BBZzvwxV6L1CojUEpnilmMG1ZOTstktWpNzw3G2Gis0XihDUef0MWVsQYJAl0wfiv/0By+XK
+ mm2zRR+l/dnzxnlbgJ5pO0imC2w0TVxLkAp0eo0LHw619finad2u6UPQAkZ4oj++iIGrJkt5
+ Lkn2XgB+IW8ESflz6nDY3b5KQRF8Z6XLP0+IEdLOOARkOW7yEgorBgEEAZdVAQUBAQdAwmUx
+ xrbSCx2ksDxz7rFFGX1KmTkdRtcgC6F3NfuNYkYDAQgHwsF2BBgBCAAgFiEEU24if9oCL2zd
+ AAQVR4cBcg5dfFgFAmQ5bvICGwwACgkQR4cBcg5dfFju1Q//Xta1ShwL0MLSC1KL1lXGXeRM
+ 8arzfyiB5wJ9tb9U/nZvhhdfilEDLe0jKJY0RJErbdRHsalwQCrtq/1ewQpMpsRxXzAjgfRN
+ jc4tgxRWmI+aVTzSRpywNahzZBT695hMz81cVZJoZzaV0KaMTlSnBkrviPz1nIGHYCHJxF9r
+ cIu0GSIyUjZ/7xslxdvjpLth16H27JCWDzDqIQMtg61063gNyEyWgt1qRSaK14JIH/DoYRfn
+ jfFQSC8bffFjat7BQGFz4ZpRavkMUFuDirn5Tf28oc5ebe2cIHp4/kajTx/7JOxWZ80U70mA
+ cBgEeYSrYYnX+UJsSxpzLc/0sT1eRJDEhI4XIQM4ClIzpsCIN5HnVF76UQXh3a9zpwh3dk8i
+ bhN/URmCOTH+LHNJYN/MxY8wuukq877DWB7k86pBs5IDLAXmW8v3gIDWyIcgYqb2v8QO2Mqx
+ YMqL7UZxVLul4/JbllsQB8F/fNI8AfttmAQL9cwo6C8yDTXKdho920W4WUR9k8NT/OBqWSyk
+ bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
+ nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
+ izWDgYvmBE8=
+In-Reply-To: <20240712-mbg-tm-support-v1-5-7d78bec920ca@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 12.07.2024 2:43 PM, Satya Priya Kakitapalli wrote:
+> Add support for MBG TM peripheral for pm8775 sail pmics on SA8775P.
+> 
+> Signed-off-by: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 120 ++++++++++++++++++++++++++++
+>  1 file changed, 120 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> index bd4f5f51e094..69910306885e 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> @@ -89,6 +89,62 @@ trip1 {
+>  				};
+>  			};
+>  		};
+> +
+> +		pmm8654au_0_mbg_tm: pmm8654au_0_mbg_tz {
+> +			polling-delay-passive = <100>;
+> +			polling-delay = <0>;
 
-We may end up calling pwrseq_target_free() on a partially initialized
-target object whose unit is either NULL or an ERR_PTR(). Avoid
-dereferencing invalid memory by adding an appropriate check to
-pwrseq_target_free().
+0 is the default polling delay, you can drop this
 
-Fixes: 249ebf3f65f8 ("power: sequencing: implement the pwrseq core")
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/linux-pm/62a3531e-9927-40f8-b587-254a2dfa47ef@stanley.mountain/
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
-- check for ERR_PTR() in addition to checking for NULL
-- only add the check to pwrseq_target_free() as anywhere else unit is
-  always set and if it's not then it's another bug that needs fixing
-
- drivers/power/sequencing/core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/power/sequencing/core.c b/drivers/power/sequencing/core.c
-index 9c32b07a55e7..0ffc259c6bb6 100644
---- a/drivers/power/sequencing/core.c
-+++ b/drivers/power/sequencing/core.c
-@@ -212,7 +212,8 @@ pwrseq_target_new(const struct pwrseq_target_data *data)
- 
- static void pwrseq_target_free(struct pwrseq_target *target)
- {
--	pwrseq_unit_put(target->unit);
-+	if (!IS_ERR_OR_NULL(target->unit))
-+		pwrseq_unit_put(target->unit);
- 	kfree_const(target->name);
- 	kfree(target);
- }
--- 
-2.43.0
-
+Konrad
 
