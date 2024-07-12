@@ -1,230 +1,126 @@
-Return-Path: <linux-pm+bounces-11030-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11031-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FAE292F7A9
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 11:13:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BF7692F898
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 12:00:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51F4F1C216B2
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 09:13:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0B06B223D3
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 10:00:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55B481442F7;
-	Fri, 12 Jul 2024 09:13:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEC3D14D71D;
+	Fri, 12 Jul 2024 10:00:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="Dy+SZtag"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hKcfqs8U"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68105146D79
-	for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2024 09:13:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2540913E03A
+	for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2024 10:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720775596; cv=none; b=aIFR5n1h0vxlY7vaKTMxhZjeQPhKwqKMwT7beTinYTKRgo66g/yUh653k17XYDRqRrhT8hO0gEMEIawsY1kr4UCYVCPUb/sqs3nUw2mnNlbjlDHu0c2oxgAAJDSUaTu1AZcDYac9OQOcgQ3dr9HRbLDM8r+msbWDKZpOpWCqoEM=
+	t=1720778427; cv=none; b=VB4pL0AA/pfVn8UULRQ3Jk0sDh2SMR6cEvCYftwRdlUcXrVbTm5Cu8dqc6TZ5JIDzUmj5QvNilirR7sIF+BUFvHbESPhQ1qv8kMgX50nMI8z6V6eEV69NdsVqFobmlYL5deVMHqQf4k8/M4dAVcUjuPuwrAyX6DEAffx8hIL6FE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720775596; c=relaxed/simple;
-	bh=O0udixIhFIlkQTpES69xYcmtII6BLgpv7Aux1uCd4Ik=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NCUBnBeDRMhQtGmzqcpto3gnuHvT6hXoDGrgNRve3WeCbIp5IBzXKIMP2SIe028w8WgI3dHnicHgpj0Ohnc1bYJ98UADH0Au8YagtnPH9WQwOkut9BAzDIWpi34l2yHLps4kimjRLkR/IzXBUG04KF2TTasfBZsoV1Fp8UQq1sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=Dy+SZtag; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-42793fc0a6dso11742135e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2024 02:13:14 -0700 (PDT)
+	s=arc-20240116; t=1720778427; c=relaxed/simple;
+	bh=rgfGe+n4aLY4lJb277XVowuNUYiTJ84gMEi9sQ/DjvQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=g5glyZzvUoSp1kbGWRBMnrgLfJgavilyOKl5R7WWSGPD2fmHh9LfnFJei1+zlFOxlwI6hjWlNFH7eu/e4zNWNiDM/e+Y74G5bXqZLfrvL3j+SO88+b3y8AtHETr5AuevVLFy50/B/PGfKysYni++//h9AuOFBbIXF5QnmEpjnMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hKcfqs8U; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4266fd395eeso12615645e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2024 03:00:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1720775593; x=1721380393; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TC7yfYJbviu34ruPABofUUVbagrt3olVNXXc2jSVt6g=;
-        b=Dy+SZtagNrluodzuwPtlHKzYiUerm8vg70xd58ZZyyx+Qh/YNWUUxFCkqrEim8Dby2
-         MyEvjWzgvoEB+tS0XivrKDRU5zKkJz5vlFIwJBg7G8M6baxW5mLmKf3V4YyrfkX+30hr
-         RxmMf2rUWZvG2hOX1Flz1l13/CzDEJBJuoHgCh/EorgLmtE8XUo/zbN3JwYxI8m/Lqqe
-         KmQ4VcStoqmgOl2ofw7CCEn4g7ck9+CvEjT/LgXbeXta5O4yANTVTcJimWXvDB4nBa/1
-         41XJYNFgdMtAS95aJ05CAhMjeYDuUDhNJdboKcwhYuDoygptS8xgko7TTEhd8gbJLyPG
-         Gfcg==
+        d=linaro.org; s=google; t=1720778424; x=1721383224; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fSsytuug3CRKYELeUghAkPTYddqwto5qSFyfJvfzsKY=;
+        b=hKcfqs8U4nBbsvTyDSYx3zsKWYT0x+QrdHUGnnV0j3DUHePVF1eAGLIbCGKrBp06JG
+         nRQvqOyW35ZEZhFc1LlYgW+RVdgWFQfI2tQ708emrGZLfP2AUGSgPwmKCKTrAHPFXUBC
+         C6P3tcDTXliDPnMRFn3IHTQimzrMKY+C+JoJYQU1cHSlKUUtzbxNG20WntPEW3HOXotQ
+         WF6d/jr+y/06EuvcAmA130DcTy2Q9GaLgyfoSM2QwJzR1wXK/C5xuMBFObZjky4b4Tju
+         +A3wfn2b90gSLBy7FO2dGdMfObAp6F3ZMcImhkfuHJIAn6katIxkaiJW8lhHOBkO2VhI
+         jm/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720775593; x=1721380393;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1720778424; x=1721383224;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TC7yfYJbviu34ruPABofUUVbagrt3olVNXXc2jSVt6g=;
-        b=DgMW8qZiMEXjx9BKvlgmPQECZteKPHQxaO4148iRfDNjcIwoW75lYRK8MFsZNc+XMP
-         v1TnFaPg1/no52VqcM8gasS4NMCuCGDnfDqrsEp+eCeUPvKRBZU83y04wtc8hh7Z5age
-         9K1zkgjXTVHNd4cRZEHDGJruKV0IGQ8nqo0yybrwbknT0XVt8U38Kn7aoT9sOIQ6LbWk
-         kMhwjIb32o2gkmZVpJAku6EgnIiHmgBfEvQs27qJObpXMAMXVXOPL7nZgsFDDid/gbMp
-         X2jdpgFcPbJgj9eb1LZ4ILDffO2Czqk9llf24+ZAg6T6QWAS6YyDAYvxmmhGe7seWsmg
-         g4Pg==
-X-Forwarded-Encrypted: i=1; AJvYcCUvtd+iOI85x5lwLOYeKIkQ8Jz16AHLiycjqSiym0+rIrWwuwM5kUK/4csfSn1L1lIeQrWZMw6yQ0C1CVHHcC5gXgqhwnOOnVI=
-X-Gm-Message-State: AOJu0Yzj/0vGMDIRN4eGtUL4WjhlKI7G3jUcjuZwUd2SmbxZUNOOK8HG
-	DqkhfFjrYO/SF09iS3EtrJsG461WxGfbewMCZ0CTN61KjIPWCTo1angLyrH3Xf0=
-X-Google-Smtp-Source: AGHT+IEyV+qMKabf7Lhp+SPEVFoBgOg/FYABYcBuVBv0YNzlKd31oWS8D/mDy3Ib1FIvwp+Gnx0xvA==
-X-Received: by 2002:a05:600c:4797:b0:426:6945:75b8 with SMTP id 5b1f17b1804b1-426708f14ccmr71137695e9.31.1720775592614;
-        Fri, 12 Jul 2024 02:13:12 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:ac5f:fcfa:c856:a4d9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4279f24495bsm16339145e9.2.2024.07.12.02.13.11
+        bh=fSsytuug3CRKYELeUghAkPTYddqwto5qSFyfJvfzsKY=;
+        b=qxiJPhkpUMuHEI/2RM/IG76CHSSQMw3SS8HBR7IIu1tcMQqCFDyjAn9Rs5jNdquI3D
+         Cm7QbdKTHuzUfU8+4jJfzBjgyp+T500ZHOcwSj6Lbn2TQps7m3VeDCYHZR6ktswTkQJU
+         11JeXWi/mDncma0nd+Ro+z0v+X8ZiJXXuS4HLcahGhRqx5Zuxu7Ndl0q24XGba3Zu/04
+         VXi8w7Y8jPHpEZgsScbDlAeRFyLlXQxpT92TVz+lP+NE8k3gDAgB/mQrNadghSFAdnHy
+         5ePZbxMv4OaE092kurkGOmx4XrGXRyBI5wF7C5W+iu/GI6AwZFp/itkpb+9fqo0VFlCt
+         yDAg==
+X-Forwarded-Encrypted: i=1; AJvYcCVRdO1GQtfCBDTlt7/gF3vdyqKa9gaOicjnabSKXMZJtEd5RLj7V+GheyQW6juSieaMwLEqvstm8WuDRg3NxlEvdm65LCRRgqI=
+X-Gm-Message-State: AOJu0YwN6EEYpJSG4xIsYKUgxD4Pxjj3PvN/Nl9vfiW3lm3DaUstj1/f
+	E+KJ3FctMk92hQaB98ldl+3Vf1zxz7TH0GUYoCrnos3Exx4oVKpDEf39W/ldH+k=
+X-Google-Smtp-Source: AGHT+IE4X36PNQS0IVul3KYRWEkZF9TnHf11aAzYXEcD9kLqBbfDlDwUZknOIMZ6msu0SsEo3y6NLQ==
+X-Received: by 2002:a05:600c:42d3:b0:426:6edf:4f41 with SMTP id 5b1f17b1804b1-426705ced8fmr86596275e9.8.1720778424394;
+        Fri, 12 Jul 2024 03:00:24 -0700 (PDT)
+Received: from [127.0.0.2] ([2a02:2454:ff1f:b240:cbc0:d3ac:530e:4e1d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4279f288470sm17641885e9.23.2024.07.12.03.00.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jul 2024 02:13:12 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [GIT PULL] power sequencing updates for v6.11-rc1
-Date: Fri, 12 Jul 2024 11:10:08 +0200
-Message-ID: <20240712091008.14815-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.43.0
+        Fri, 12 Jul 2024 03:00:24 -0700 (PDT)
+From: Stephan Gerhold <stephan.gerhold@linaro.org>
+Date: Fri, 12 Jul 2024 12:00:03 +0200
+Subject: [PATCH] power: supply: qcom_battmgr: Ignore extra __le32 in info
+ payload
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240712-x1e80100-battmgr-v1-1-a253d767f493@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAKL+kGYC/x2MQQqAIBAAvxJ7Tti1IOkr0UFrtT1koRJB9Pek4
+ 8DMPJA5CWcYmwcSX5LliBWobWDZbAysZK0MGnWPA5G6iQ0SonK2lD0kRWyt65zx1YCanYm93P9
+ ymt/3A5ZV2yBiAAAA
+To: Sebastian Reichel <sre@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>, 
+ Abel Vesa <abel.vesa@linaro.org>, Johan Hovold <johan@kernel.org>, 
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+X-Mailer: b4 0.13.0
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Some newer ADSP firmware versions on X1E80100 report an extra __le32 at the
+end of the battery information request payload, causing qcom_battmgr to
+fail to initialize. Adjust the check to ignore the extra field in the info
+payload so we can support both old and newer firmware versions.
 
-Linus,
+Tested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Signed-off-by: Stephan Gerhold <stephan.gerhold@linaro.org>
+---
+ drivers/power/supply/qcom_battmgr.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I'm sending this early as this is the initial pull-request for a new driver
-subsystem living under drivers/power/sequencing/. I'll try to be brief here
-and allow myself to link the cover letter from the last time the series was
-sent in its entirety[1] (as opposed to smaller chunks targetting specific
-maintainers) for a very detailed description of the problem and the solution.
-I'll just stick to the key points below.
+diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+index 46f36dcb185c..a5b5f1251af1 100644
+--- a/drivers/power/supply/qcom_battmgr.c
++++ b/drivers/power/supply/qcom_battmgr.c
+@@ -1007,7 +1007,9 @@ static void qcom_battmgr_sc8280xp_callback(struct qcom_battmgr *battmgr,
+ 		battmgr->error = 0;
+ 		break;
+ 	case BATTMGR_BAT_INFO:
+-		if (payload_len != sizeof(resp->info)) {
++		/* some firmware versions report an extra __le32 at the end of the payload */
++		if (payload_len != sizeof(resp->info) &&
++		    payload_len != (sizeof(resp->info) + sizeof(__le32))) {
+ 			dev_warn(battmgr->dev,
+ 				 "invalid payload length for battery information request: %zd\n",
+ 				 payload_len);
 
-This has been in development since last year's Linux Plumbers Conference and
-was inspired by the need to enable support upstream for Bluetooth/WLAN chips
-on Qualcomm platforms.
+---
+base-commit: 3fe121b622825ff8cc995a1e6b026181c48188db
+change-id: 20240711-x1e80100-battmgr-1eaab3b8f024
 
-The main problem we're fixing is powering up devices which are represented as
-separate objects in the kernel (binding to different drivers) but which share
-parts of the power-up sequence and thus need some kind of a mediator who knows
-the possible interactions and can assure they don't interfere with neither
-device's bring up. An example of such an inter-driver interaction is the WCN
-family of BT/WLAN chips from Qualcomm of which some models require the user to
-observe a certain delay between driving the bt-enable and wlan-enable GPIOs.
+Best regards,
+-- 
+Stephan Gerhold <stephan.gerhold@linaro.org>
 
-This is not a new problem but up to this point all attempts at addressing it
-ended up hitting one wall or another and being dropped. The main obstacle was
-the fact that most these attempts tried to introduce the concept of a "power
-sequence" into the device-tree bindings which breaks the main DT rule:
-describe the hardware, not its behavior. The solution I proposed focuses on
-making the power sequencer drivers interpret the actual HW description
-flexibly. More details on that are in the linked cover letter.
-
-The second problem fixed here is powering up PCI devices before they are
-detected on the bus. This is achieved by creating special platform devices
-for device-tree nodes describing hard-wired PCI devices which bind to the
-so-called PCI power control drivers which enable required resources and
-trigger a bus rescan once the controlled device is up then setup the correct
-devlink hierarchy for power-management.
-
-By combining the two new frameworks we implemented the power sequencing PCI
-power control driver which is capable of powering up the WLAN modules of the
-QCom WCN family of chipsets.
-
-All this has spent a significant amount of time in linux-next and enabled
-WLAN/BT support on several Qualcomm platforms. To further prove that this is
-useful and needed: right after this was picked up into next, I was sent
-a series using the subsystem for a similar use-case on Amlogic platforms[2].
-
-This PR contains the core power sequencing framework, the first driver, PCI
-changes using the pwrseq library (blessed by Bjorn Helgaas) and some fixes
-that came later.
-
-You'll also see the pwrseq core pulled into the Bluetooth tree to satisfy the
-build-time dependency on power sequencing in the hci_qca driver which uses the
-same power sequence provider as the PCI pwrctl driver added in this PR.
-
-More changes that don't have build-time dependencies on pwrseq are scattered
-across three other maintainer trees: there will be DT bindings in the
-regulator and wireless trees and DTS changes in the arm64 tree.
-
-Please consider pulling for v6.11.
-
-Best Regards,
-Bartosz Golaszewski
-
-[1] https://lore.kernel.org/all/20240528-pwrseq-v8-0-d354d52b763c@linaro.org/
-[2] https://lore.kernel.org/lkml/20240705-pwrseq-v1-0-31829b47fc72@amlogic.com/
-
-The following changes since commit 83a7eefedc9b56fe7bfeff13b6c7356688ffa670:
-
-  Linux 6.10-rc3 (2024-06-09 14:19:43 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/pwrseq-updates-for-v6.11-rc1
-
-for you to fetch changes up to 50b040ef373293b4ae2ecdc5873daa4656724868:
-
-  PCI/pwrctl: only call of_platform_populate() if CONFIG_OF is enabled (2024-07-08 21:15:26 +0200)
-
-----------------------------------------------------------------
-pwrseq updates for v6.11-rc1
-
-- add the pwrseq core framework
-- add the first power sequencing driver: pwrseq-qcom-wcn
-- add power control (pwrctl) changes to PCI core
-- add the first PCI pwrctl power sequencing driver
-
-----------------------------------------------------------------
-Bartosz Golaszewski (7):
-      power: sequencing: implement the pwrseq core
-      power: pwrseq: add a driver for the PMU module on the QCom WCN chipsets
-      PCI: Hold the rescan mutex when scanning for the first time
-      PCI/pwrctl: Reuse the OF node for power controlled devices
-      PCI/pwrctl: Create platform devices for child OF nodes of the port node
-      PCI/pwrctl: Add PCI power control core code
-      PCI/pwrctl: Add a PCI power control driver for power sequenced devices
-
-Bert Karwatzki (1):
-      PCI/pwrctl: only call of_platform_populate() if CONFIG_OF is enabled
-
-Krzysztof Kozlowski (1):
-      power: sequencing: simplify returning pointer without cleanup
-
- MAINTAINERS                                |   16 +
- drivers/pci/Kconfig                        |    1 +
- drivers/pci/Makefile                       |    1 +
- drivers/pci/bus.c                          |    9 +
- drivers/pci/of.c                           |   14 +-
- drivers/pci/probe.c                        |    2 +
- drivers/pci/pwrctl/Kconfig                 |   17 +
- drivers/pci/pwrctl/Makefile                |    6 +
- drivers/pci/pwrctl/core.c                  |  137 ++++
- drivers/pci/pwrctl/pci-pwrctl-pwrseq.c     |   89 +++
- drivers/pci/remove.c                       |    3 +-
- drivers/power/Kconfig                      |    1 +
- drivers/power/Makefile                     |    1 +
- drivers/power/sequencing/Kconfig           |   29 +
- drivers/power/sequencing/Makefile          |    6 +
- drivers/power/sequencing/core.c            | 1105 ++++++++++++++++++++++++++++
- drivers/power/sequencing/pwrseq-qcom-wcn.c |  336 +++++++++
- include/linux/pci-pwrctl.h                 |   51 ++
- include/linux/pwrseq/consumer.h            |   56 ++
- include/linux/pwrseq/provider.h            |   75 ++
- 20 files changed, 1950 insertions(+), 5 deletions(-)
- create mode 100644 drivers/pci/pwrctl/Kconfig
- create mode 100644 drivers/pci/pwrctl/Makefile
- create mode 100644 drivers/pci/pwrctl/core.c
- create mode 100644 drivers/pci/pwrctl/pci-pwrctl-pwrseq.c
- create mode 100644 drivers/power/sequencing/Kconfig
- create mode 100644 drivers/power/sequencing/Makefile
- create mode 100644 drivers/power/sequencing/core.c
- create mode 100644 drivers/power/sequencing/pwrseq-qcom-wcn.c
- create mode 100644 include/linux/pci-pwrctl.h
- create mode 100644 include/linux/pwrseq/consumer.h
- create mode 100644 include/linux/pwrseq/provider.h
 
