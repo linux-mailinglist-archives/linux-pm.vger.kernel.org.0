@@ -1,174 +1,116 @@
-Return-Path: <linux-pm+bounces-11047-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11048-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79A4092FCBD
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 16:39:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C623B92FCD2
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 16:46:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EC2F283EE2
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 14:39:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 53539B2262A
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2024 14:46:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5009171E6E;
-	Fri, 12 Jul 2024 14:39:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1E2C171E66;
+	Fri, 12 Jul 2024 14:45:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pygdGV22"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="DOQoBHpE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DB4171E65
-	for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2024 14:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2731428E5
+	for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2024 14:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720795182; cv=none; b=oB188FMF5xrMV7XJkflAZojVIPQdwJtBBEmqtvFQ66aa4uolTLB0jQ6p/b+22iQn01kJvRvyXSr383MVtjrOINn/T/MIbGxDKSPpN3NE5Ar75tU40WdFsc4AV9IsRemKkekWz3q5d+8iw98iqjFxW6we2RrHo3mQfAY+55b6tiI=
+	t=1720795557; cv=none; b=HKnIcBhFNnSlQb+2y9kplQhtzdoMOCT2Q0+EMD5Nk2rv+0XWx/hsVbxzYo7haX5/bx8SnV3IMos0b7XPxFXZ6whvjR+RWrpvaTPz6KdWbjZRHVlALrkG8OJIfdo0s81qaQ3zQOWwv1b4KN7fgvKqDtcW/9WZQPxf2LP0BJri+5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720795182; c=relaxed/simple;
-	bh=vCag917Ay33RsHIAYI483LRvFB14mVxaZIpusLuag/w=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=UC+Jbfw9n2wQ9N7ZLEnSDu7kOA1wqHmrQBN5R86DQhtlXcMg502s55Ebzy4ggTc1V6YoNWcnzJyo8q+Q+A+68levNP1sXmpFpGxUTl5AksYfVPMZKeuOmbnOWOg/Rd4losKPQljiOcAYU/5hCJqghZDMnfFoq1ihjASlRuJ+nlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pygdGV22; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-52e9c55febcso2707802e87.2
-        for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2024 07:39:40 -0700 (PDT)
+	s=arc-20240116; t=1720795557; c=relaxed/simple;
+	bh=23GKNyE9PLGr6YAiYTbtJm8q7GT6UoIX+SmnMPRgnhM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rXRwXNOxmYvze7eJT5eeGM0gR/HGe8Hxr+oLzREf3WjvRnkvYH2f10sj9xHoRQVpuA2/d/jTIgyeQQ8BGiHw2f+nQq+jj0U7Kvn4wArcmIJuuh4JlVfXGw76kHczAYe/E9mFILOlTDqkH4Z4Tn2JHtml1Gt05cEOzhbOQwJuRnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=DOQoBHpE; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4266ea6a488so16704805e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2024 07:45:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720795179; x=1721399979; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j+529H3GiijTCXecWV4ffQBMI7Sa+Z0BYJ6CZ1mod40=;
-        b=pygdGV22A3lSDkoGSZm2+Bqvl+KTy+8iA/J8lVAsQx3y4xjCuABoXSvsd1oeq1gZYZ
-         vUaghTadeitpyWLSJ1OUgq803WaNO9H3IwAk3fOutxykiYVgjM4vbS/dQbSvjaHP/B//
-         CmgPCnb8/+CWT2YMQvYbMWcBOBAkUC/X9uqb5aM8/EVKWvQS7gCPqAuYLOPgrj4TGNZN
-         ccdc+X+TbuHRwVRaFeno4TOvOz9AIFXjyw43is9QWtWubL6xJZ06s5opwD0eR3xtxoUV
-         vv83p9z78uA0L16QTmdbulQ/o1TKTCm/6jFT6sRdhrxj11e2vfu1m0tjmHBRajwbvhh2
-         NRjQ==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1720795553; x=1721400353; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=r7DJWJIBnnLN7/m2qPdHFhTG1iO/GpmbvrntFpTu3ic=;
+        b=DOQoBHpEX5SP4KiB0pKAbKTrkLhOfxC5SeKlk7mWT1zTgv20XVMeCC6go4O4oSBqm6
+         uLSGbyS7fzmsf6vW62jy72UovOV+ORXq2wiQxgwaVZZtEO/q8L8+/6UDGAOPTKZYtOzS
+         N8E6r4bYeCddarkfPBAi1JK4WQtExdxECHmHx1oKF+uumcOqSucH7/FubZtlgVvyoEnD
+         4tqaUW010/xVnPMYWtD5la1sOYdVaX8OQ04O1P/pF0mgjy9Y+IASOqCGKFf+w5Xn5e8Z
+         /sCb3q1pXM7xi9/XIUj8iRAEo9ZBceiwMm3PhP5n3ctXchmQmUmLz1sjyQhtG62jKxLU
+         imdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720795179; x=1721399979;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=j+529H3GiijTCXecWV4ffQBMI7Sa+Z0BYJ6CZ1mod40=;
-        b=WQ/GkG7/fKa8gDjsJSn7fKGkUw8+QswiicPwacFch0sh6HuKA23Ni01exoPPduk/1c
-         NAuSBhoRlv0XpO4VoHdmDT2jYwuXv7H9ezZbJYX+AyASkpucIA4A40KEEAWKIOziKtio
-         uD4jd1t1XN4j1ucNiAGmGYyHl8nLSzTeUKzkAnjPZgPoPIVqZU0AUbIOE3ZvWFXLaYj8
-         lg9vkVi26x2DNVVVb1N22JDlSBSvX/WzewOH44Vew242iRO5rw5hUTdVGZIzP2NbURki
-         Sj54GI27RU0+Q4EUpsHfzeMKaJDLURMzgyj8Soyt9TY8AGi5oyBI1boqRjavubkH2EIF
-         6dgA==
-X-Forwarded-Encrypted: i=1; AJvYcCXtIX58+IxmI8yhhYzD4AydaB+bhVAaqW++AKJ29Uc7jFrPHCmVf8a7L7z/vsYXjrf7N2O3VU10VKCf7tRIrbWJjF/EEfGPK70=
-X-Gm-Message-State: AOJu0YzJaYVJML1YDmebFUqp4hV2VFr8X2TKLky6a/D+1OtUMa6BP/1a
-	/W5226Vyp0sYDIlSjGHnALPpcYs/E6+NVkVKhftsaWoFSQ+b9hNSHc646oMY97Y=
-X-Google-Smtp-Source: AGHT+IEUJv2E2YmWwP9keqGtBKgVNIRhkD50j8KUevpEmBZBl6UJ/Ph9d40mcCJXS6cKySEZWRH03Q==
-X-Received: by 2002:a2e:b8c4:0:b0:2ee:d8f3:188d with SMTP id 38308e7fff4ca-2eed8f345e7mr5211101fa.14.1720795178997;
-        Fri, 12 Jul 2024 07:39:38 -0700 (PDT)
-Received: from ?IPV6:2a0d:e487:123f:f92c:4c8f:b8cc:9804:975e? ([2a0d:e487:123f:f92c:4c8f:b8cc:9804:975e])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4279f25b946sm25336675e9.19.2024.07.12.07.39.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jul 2024 07:39:38 -0700 (PDT)
-Message-ID: <306baccf-0106-4253-b6b1-72eaee9c5911@linaro.org>
-Date: Fri, 12 Jul 2024 16:39:32 +0200
+        d=1e100.net; s=20230601; t=1720795553; x=1721400353;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r7DJWJIBnnLN7/m2qPdHFhTG1iO/GpmbvrntFpTu3ic=;
+        b=k78yDGLtFpRDhQaFX7Ucxazb1bU2gJHH9Ebj6eYRDAMMCqB7LW/IylLmBzyZ1O0mXC
+         2UYKWXMqJtKj1PXxs7RuvucpM/G83/N2jx21mjXFmhaOPNr7VWeDvm+VbM2LLldlQZeK
+         rbY46Orc3BJCevzBHt9c7ZT3hT++v2nXVsYwB3aIX650n+zWJkBa2ZFFxBUUUFIzxwGZ
+         8dxmtd61OtPfuRdNQVghREtr+8mbJ2Qy26sUjT3x7GvLZxo6x4LkpTat88G3UACNB0KG
+         dBoMWOlHycpjDPR7S7tec+MYFMwc0cnFISd5eaT6UETL/kqGi3dJgzcDHz0MdYy4HbuZ
+         tPyQ==
+X-Gm-Message-State: AOJu0YzY8OwmG6cA8r5NE/ULUtVMecip+dB/lSzoaqlTIwDCdgxCwvWI
+	DRdsXQwyRzexjD9XCyLfQFou34BruPGwKbivsXovC81sDWbG6rthyPzmkzRN4WY=
+X-Google-Smtp-Source: AGHT+IE/Bg/DxrK0231HQRehavFFx39v8TMrRX01cM7LMiVJJoDkf8F0um2u6yjqf0Pd+5Vl6oos9Q==
+X-Received: by 2002:adf:eac9:0:b0:367:9511:b612 with SMTP id ffacd0b85a97d-367ceadc704mr9958447f8f.61.1720795553543;
+        Fri, 12 Jul 2024 07:45:53 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:ac5f:fcfa:c856:a4d9])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367cdfab106sm10362309f8f.103.2024.07.12.07.45.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jul 2024 07:45:53 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Dan Carpenter <dan.carpenter@linaro.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH] power: sequencing: fix NULL-pointer dereference in error path
+Date: Fri, 12 Jul 2024 16:45:46 +0200
+Message-ID: <20240712144546.222119-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 0/5] Add support for MBG Thermal monitoring device
-To: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
- Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Amit Kucheria <amitk@kernel.org>,
- Thara Gopinath <thara.gopinath@gmail.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Kamal Wadhwa <quic_kamalw@quicinc.com>, Taniya Das
- <quic_tdas@quicinc.com>, Jishnu Prakash <quic_jprakash@quicinc.com>,
- linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, Ajit Pandey <quic_ajipan@quicinc.com>,
- Imran Shaik <quic_imrashai@quicinc.com>,
- Jagadeesh Kona <quic_jkona@quicinc.com>
-References: <20240712-mbg-tm-support-v1-0-7d78bec920ca@quicinc.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20240712-mbg-tm-support-v1-0-7d78bec920ca@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-On 12/07/2024 14:43, Satya Priya Kakitapalli wrote:
-> Add bindings, driver and DT for the Qualcomm's MBG thermal
-> monitoring device.
-> 
-> Please note that this series is dependent on [1] which adds
-> ADC5-GEN3 support.
-> 
-> [1] https://lore.kernel.org/linux-iio/20231231171237.3322376-1-quic_jprakash@quicinc.com/
+We may call pwrseq_target_free() on a target without the final unit
+assigned yet. In this case pwrseq_unit_put() will dereference
+a NULL-pointer. Add a check to the latter function.
 
-Since this dependency was sent almost 7 months ago, and had plenty of changes requests,
-this patchset should've been either delayed until a proper support of ADC5-GEN3
-was accepted or marked as RFC.
+Fixes: 249ebf3f65f8 ("power: sequencing: implement the pwrseq core")
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/linux-pm/62a3531e-9927-40f8-b587-254a2dfa47ef@stanley.mountain/
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ drivers/power/sequencing/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> 
-> Signed-off-by: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
-> ---
-> Satya Priya Kakitapalli (5):
->        dt-bindings: iio: adc: Add ADC5 GEN3 Channel info for pm8775 PMIC
->        dt-bindings: thermal: qcom: Add MBG thermal monitor bindings
->        thermal: qcom: Add support for MBG Temp monitor
->        ARM: dts: qcom: Add vadc support for pm8775 pmic on SA8775P
->        ARM: dts: qcom: Add support for MBG TM for pm8775 on SA8775P
-
-Those should be: "arm64: dts: qcom: sa8775p-pmics: ..."
-
-> 
->   .../bindings/thermal/qcom-spmi-mbg-tm.yaml         |  63 +++++
->   arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi        | 210 ++++++++++++++++
->   drivers/thermal/qcom/Kconfig                       |  11 +
->   drivers/thermal/qcom/Makefile                      |   1 +
->   drivers/thermal/qcom/qcom-spmi-mbg-tm.c            | 269 +++++++++++++++++++++
->   .../iio/adc/qcom,spmi-adc5-gen3-pm8775.h           |  42 ++++
->   6 files changed, 596 insertions(+)
-> ---
-> base-commit: c27723304c1f6af79f7bece5edacace6a8d46167
-> change-id: 20240627-mbg-tm-support-7bbf25c246e1
-> 
-> Best regards,
-
-Neil
+diff --git a/drivers/power/sequencing/core.c b/drivers/power/sequencing/core.c
+index 9c32b07a55e7..fe07100e4b33 100644
+--- a/drivers/power/sequencing/core.c
++++ b/drivers/power/sequencing/core.c
+@@ -119,7 +119,8 @@ static void pwrseq_unit_release(struct kref *ref);
+ 
+ static void pwrseq_unit_put(struct pwrseq_unit *unit)
+ {
+-	kref_put(&unit->ref, pwrseq_unit_release);
++	if (unit)
++		kref_put(&unit->ref, pwrseq_unit_release);
+ }
+ 
+ /**
+-- 
+2.43.0
 
 
