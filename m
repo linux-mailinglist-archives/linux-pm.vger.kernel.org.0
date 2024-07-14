@@ -1,74 +1,74 @@
-Return-Path: <linux-pm+bounces-11078-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11079-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4968E930A37
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Jul 2024 15:39:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04B26930A42
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Jul 2024 15:41:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04C27281715
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Jul 2024 13:39:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3351F1C2126A
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Jul 2024 13:41:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C605F1369B0;
-	Sun, 14 Jul 2024 13:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34487136663;
+	Sun, 14 Jul 2024 13:41:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="MteoV7rC"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="FACF3Chw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77FA51311B5
-	for <linux-pm@vger.kernel.org>; Sun, 14 Jul 2024 13:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 918E1132106
+	for <linux-pm@vger.kernel.org>; Sun, 14 Jul 2024 13:41:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720964380; cv=none; b=EDLIKPMnPuaoyzs8NnxSyEs1oqILBYtyD5H6aymzV1SlJSb6SqDe8TcBsx7C/wfu8/sM71I41qJdZk2a7s55DYZET+UNP5p5vDiD9+343uFV++rwdi1q8ecvvLCDuEPgXNtbQ90kccEe3WCYUavEShwOsjqb1Y5TWwF50t/GguY=
+	t=1720964491; cv=none; b=daN4nviUkeflnGsQ3efZ9qk93IijcwsnQI1ikAC+aEcr/Q9XsSGFat7VUJKJjOjB3oThIbc6lzv5XOfevkq0mFMuGi6VePNWR+3TL+Km7UxY/ejUNIGGAEdHwn9rqXzCeiFZoLOntW21Zm9vAzOgSX5nKIsOba/EU318RycGiFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720964380; c=relaxed/simple;
-	bh=6MJHalS0sNrCA+xbhaPI6x2za5a/YVSdLA+2rmpP1o0=;
+	s=arc-20240116; t=1720964491; c=relaxed/simple;
+	bh=nBfPreotN/WrxMiwWJk0/N1s90noTh+ul4zihYIDLuo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IFOuOvB+66coz7YXJMDmgQMX7FobHAlydBGqiOJdHw3dB32JXlH4qFZk0/yXHvttl1gmvRwfi5FLuEMJ10YNC1IEc7lswr/k5cgoT8jlygrGarQRS4fLmKgfK2E0nh97uoyt1+vwhYrAbEpJNZHsq+3gxqro1qp1UOWAkNWcUWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=MteoV7rC; arc=none smtp.client-ip=209.85.128.49
+	 In-Reply-To:Content-Type; b=kyRxBs57wHu7uzK8xReSUPFh/ehXnGPtnCPGyQEmY8jeBS757VU7DRb47uIBTVDzYM81dSD4h0HCLJ46UTvHvtE6j72Gmwst5LPE+LhUgNupKndCfLR10/OGUEj/9cv9GOLFxEM1qeH8RN0c+QmLKJYHWOmhxY9vECnufd9U3g8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=FACF3Chw; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4279c924ca7so19347565e9.2
-        for <linux-pm@vger.kernel.org>; Sun, 14 Jul 2024 06:39:38 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-367ab50a07aso2134702f8f.0
+        for <linux-pm@vger.kernel.org>; Sun, 14 Jul 2024 06:41:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1720964377; x=1721569177; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1720964488; x=1721569288; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=u2hvoP8bymcjCbxd1ikVm85o7S/ITtdMUvn8D2WhS9U=;
-        b=MteoV7rClLUfRgFs2GBjk9pvvw91GaJ/Tw/q7LnZXGR4Ex77WZrhD+tBSpe/TIVYS3
-         pNEHBvM4YFZjzyoI+t6RcEtTRN942GPsGjo5tlo8XHj43Yhb7RU2AdBxQ1BoVzVIFaIv
-         fUYT51xVDeD6KT9W9I0SrBkFVPOzbdosYiACIRBmExL1JJPq/8EoDBbevwYTd4I7s5LR
-         QuRVTqVj93Ce0/z8yzanlmE+W9e78pMvzscJqUH0rwqMsNY3FLcVM8IgGejbntkVVbsq
-         eqm08pGrhsPPoG2pbCaeEAfF2oeLzowZ5McWgYKDNWgYJHRHixXuUHvukCxCzVkoqZHm
-         qdcA==
+        bh=Jihw6LjoGxoxtoTBxFDRasBpW6zvsmRAV9veTSj6sFA=;
+        b=FACF3ChwMp8QgQ5udtF3OZZYUaZqkWtyhs2fMkcRD/UGefjsYAb/9csFaLlh6gQe8w
+         ytfFbbsaDZk70MiWEQYs0VXN6QH0deMssmuW3QBYGHSi6FGyWkWRHyeoZ3WZfgLd3UdE
+         JsQeP0zS6MXe/5L6Ucaw6YML4OAlxFWx83MLfp4R48NkZFvEJ7ldHlj07goR8kIHhr20
+         aoQeKkkzF+f/CNH9NxMDTR3DlyySmc7txpnhifOcqEBtIeAPMg1t3+lD626Lhx2auIVO
+         MsxuvShQgmn+3xXMzy1M7yVO5QTyGJa9T4QCBrPNNNUS73YfooTqFZkKFRCADoZtZE0s
+         2Tpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720964377; x=1721569177;
+        d=1e100.net; s=20230601; t=1720964488; x=1721569288;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u2hvoP8bymcjCbxd1ikVm85o7S/ITtdMUvn8D2WhS9U=;
-        b=dIa+K6NDfeHmVpmYqVN1u4tyCLsl5TAUYe9mM1SHR7wk8PEz6Bbq2MZ5meHUdXp5lr
-         xyVs3eDLOpbq3OTwt0rT1WGuPFCloTke9iibZxUgaRtY72/SiOUAUYPiqi+3RcjzhXh2
-         TcgcQ0E56UniUd7nxjzHIa/YZsd/ahfHN/+F51E3bYr5x0fBwqzUWPqqtgYPxGdbQ5MQ
-         X7LXMTBBCuPFeFly2MC1vO5bduix/6LrwwhQpPuLavVUFZk7z6cd0smXDbp4ivVxj7j6
-         V/tboDqYoQDp4XksDnpXOrb2KnAILR35xzyPs+Ed8dmwyy0EdeIDMXNL+kOFl6hiYdtJ
-         MUQg==
-X-Forwarded-Encrypted: i=1; AJvYcCWU8bqVmuHBCS3mtQ4PMc72KczJogUZZDVhmPBbaIn0/hwA2U9WpqzBl/GOcf4kwEG4deaTton+wePJxZeyPUrHvOlTdbfuDHI=
-X-Gm-Message-State: AOJu0Yw6PggTOaBcTgu1l2I7HIt2aa4cz5ln2E72Sc7fn0eNRGTkDhPY
-	4UcWKOC5/1uL+cKMC0O+UY9U8xEpOe+bIxa9G074PKreVSVqYFLSDjcMIHwZiFE=
-X-Google-Smtp-Source: AGHT+IHOmqMftI8wjJ5esGhg3yKLJXkjcJ17Z7maulQQ2gwkEzP+a0iVJeuDAaXkcdChgxLz64Bcow==
-X-Received: by 2002:a05:600c:3b12:b0:426:66fb:fcd6 with SMTP id 5b1f17b1804b1-426706c64b5mr95085065e9.3.1720964376615;
-        Sun, 14 Jul 2024 06:39:36 -0700 (PDT)
+        bh=Jihw6LjoGxoxtoTBxFDRasBpW6zvsmRAV9veTSj6sFA=;
+        b=kxKK/FrymltL2T0ZoYaTdTFpSaHtllJWZahztfY5CXqlE1tM06sZKEF3tsNQ0E21Q7
+         WPyG+CHLmjVIeCZ82AuOsju6UXa5px5KB/40nIxR3LSpU3/p7rvbbGP05czNsJp2ebFT
+         Z12XNP6IvuOqb+YCgxiPNXh1jHZf/T2Ejmip7DXiLYchu5eFOv67bxqz5dQV7LbDPVkP
+         t+YDEnLBI4tmPlfybXk456GftVaPaQujy2VI/5FdHeTYnTiVsMFuGAHvcxbMppIPN0wv
+         DM13FAZxcye/uqRLBh1Hv9y+Ao8cYtZDd6YL3v0QSOfnqL9bwMbgZ7qf+Dd0lrmb8gxM
+         aeIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVH1cvNJlTPCoD9fJ2M9DZ34kciQVE0i5gTFe0MNbYBbwxxnWVTwoXDKf0ZE+5L8zXZpbrz+dNgRtcOHuXrWxw4hpCCkwBvZzg=
+X-Gm-Message-State: AOJu0YyMifpXC/cgM9kMGVJSxFM1wl1OjX4z7Q1gbtIH1x1PCaQTps+X
+	0VdDvxx6zlGu5lbEUKCnzv3R2ImDbrOfvWLvoI+lRPHqebgb8/vSc5BUa0OaBcQ=
+X-Google-Smtp-Source: AGHT+IHggpH+Y3o1aBi5tNvS934po/PJoMBxDG4GaFnY8NfPfS0+/6X/6pYmiXhWogFXibyM14aa4A==
+X-Received: by 2002:adf:f20b:0:b0:366:ecd1:2f38 with SMTP id ffacd0b85a97d-367cea45cb1mr10565682f8f.7.1720964488117;
+        Sun, 14 Jul 2024 06:41:28 -0700 (PDT)
 Received: from [192.168.50.4] ([82.78.167.171])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3680dafbea9sm3871306f8f.82.2024.07.14.06.39.35
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4279f276a62sm87036695e9.24.2024.07.14.06.41.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Jul 2024 06:39:36 -0700 (PDT)
-Message-ID: <dafd938f-cdee-4348-b091-fe3ed8209d53@tuxon.dev>
-Date: Sun, 14 Jul 2024 16:39:35 +0300
+        Sun, 14 Jul 2024 06:41:27 -0700 (PDT)
+Message-ID: <7ba0d06b-a6db-47fa-b6be-894b70207bda@tuxon.dev>
+Date: Sun, 14 Jul 2024 16:41:26 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,44 +76,47 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 19/27] power: reset: at91-reset: add reset support for
- sam9x7 SoC
+Subject: Re: [PATCH v5 18/27] power: reset: at91-poweroff: lookup for proper
+ pmc dt node for sam9x7
 Content-Language: en-US
 To: Varshini Rajendran <varshini.rajendran@microchip.com>, sre@kernel.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
 Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
 References: <20240703102011.193343-1-varshini.rajendran@microchip.com>
- <20240703102843.196257-1-varshini.rajendran@microchip.com>
+ <20240703102834.196209-1-varshini.rajendran@microchip.com>
 From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20240703102843.196257-1-varshini.rajendran@microchip.com>
+In-Reply-To: <20240703102834.196209-1-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
 On 03.07.2024 13:28, Varshini Rajendran wrote:
-> Add power reset support for SAM9X7 SoC.
+> Use sam9x7 pmc's compatible to lookup for in the SHDWC driver.
 > 
 > Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 > Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
 Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 
+The suggestion from v4 still applies to avoid increasing this array.
+
 > ---
->  drivers/power/reset/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/power/reset/at91-sama5d2_shdwc.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index fece990af4a7..e3ebebc1f80d 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -26,7 +26,7 @@ config POWER_RESET_AT91_POWEROFF
->  config POWER_RESET_AT91_RESET
->  	tristate "Atmel AT91 reset driver"
->  	depends on ARCH_AT91
-> -	default SOC_AT91SAM9 || SOC_SAM9X60 || SOC_SAMA5
-> +	default SOC_AT91SAM9 || SOC_SAM9X60 || SOC_SAM9X7 || SOC_SAMA5
->  	help
->  	  This driver supports restart for Atmel AT91SAM9 and SAMA5
->  	  SoCs
+> diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
+> index 959ce0dbe91d..2121d7e74e12 100644
+> --- a/drivers/power/reset/at91-sama5d2_shdwc.c
+> +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
+> @@ -326,6 +326,7 @@ static const struct of_device_id at91_pmc_ids[] = {
+>  	{ .compatible = "atmel,sama5d2-pmc" },
+>  	{ .compatible = "microchip,sam9x60-pmc" },
+>  	{ .compatible = "microchip,sama7g5-pmc" },
+> +	{ .compatible = "microchip,sam9x7-pmc" },
+>  	{ /* Sentinel. */ }
+>  };
+>  
 
