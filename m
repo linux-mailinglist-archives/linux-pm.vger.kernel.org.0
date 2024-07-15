@@ -1,154 +1,126 @@
-Return-Path: <linux-pm+bounces-11119-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11120-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B51F9931AF6
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 21:26:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 330BA931B10
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 21:35:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A6E31F22B84
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 19:26:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADE72283161
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 19:35:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD30132464;
-	Mon, 15 Jul 2024 19:26:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4BED7A13A;
+	Mon, 15 Jul 2024 19:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Fag9qzlm"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="U+c8yoRC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83AD88120A;
-	Mon, 15 Jul 2024 19:26:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202A415491;
+	Mon, 15 Jul 2024 19:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721071613; cv=none; b=YfVj71FjK7mmO2yxz5sUb5YMdOQty+rvsSk13z1AdlyRhwcQh7o5BzeQn0xnaGnZy/e9J+OKUVfNNdqLZ2kr76KO6myJ43CcumZGZrt7FF/KgFejsgIm7y246BqxUHpJYz6Pypy5M+3mBIWBtZMe+rAcvZ2+l06kxWWlZqQC9D4=
+	t=1721072135; cv=none; b=rpppwk+tsumDYwTN05tITuPvOTIGZYzJbVVntHPA/d+ObIL1C6suBFKoLeLdJ1Bp3wTiXbNzvdabEDtKpeyvtNmD0i9FXEFVsr0mrU/cq70LLgJhU9WQL9/AvWXwwdnw/ent909bLC5lH2tNSa1Hl7LZ7CiLUs+voByAm21j2fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721071613; c=relaxed/simple;
-	bh=AquTpmNI8+puJUmowTTXFIpoKd+gUu82yvOdOBhT4d8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mpLVI5NWNlPtlnDND208dCEeCTWeaH7bMfzv4kMtswajGGOKTQn7YcLD3WvfAFrVt+pwjFQydNDAWb5ni83QbfZyUEL5j6saLE7nSKX8QZOvpwZe5f9omMa6+/fZVbFugzuo/jiZsLTGBELu9zAi9tH9F+F94QuH3vPTMr0bgjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Fag9qzlm; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1721071609;
-	bh=AquTpmNI8+puJUmowTTXFIpoKd+gUu82yvOdOBhT4d8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Fag9qzlmoEQunH8oVsPYPkrluS6owJOZysQRuljdnu7pw3GF/e80louYXky2VbSpG
-	 sIEQo2UnG1vecL5Q8wJdSeMQDiv80u8cle4xKSK/zO3MS/d+ovvOw2kzlJOpWaaoqC
-	 Yd1RcC9djhb4f453IQdF1NOc5qSdVxKIVCt0P1TujMPwiI+dzJA5u2D48cj+79Tuxh
-	 uDurCeB7zK4bRlvT6CN56MfmE/AlGgpzRL8t/2F40xbNDjJEWe/g5WETsXRnT9fqFT
-	 SHqtGQ6vE+ulCoMU0YoOVoTiVDJgG2cNjixv1AiUyx39JWT+JQIWVG34dnISC4A8ir
-	 LeR0nbXu38+pQ==
-Received: from shreeya.shreeya (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: shreeya)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B111A378143B;
-	Mon, 15 Jul 2024 19:26:47 +0000 (UTC)
-From: Shreeya Patel <shreeya.patel@collabora.com>
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	shuah@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel@collabora.com,
-	Shreeya Patel <shreeya.patel@collabora.com>
-Subject: [PATCH v2] kselftest: cpufreq: Add RTC wakeup alarm
-Date: Tue, 16 Jul 2024 00:56:34 +0530
-Message-Id: <20240715192634.19272-1-shreeya.patel@collabora.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1721072135; c=relaxed/simple;
+	bh=FRn9L6xt/4pBPTKmgkgNlVfwV8prnDiH2WQXjDdDtOM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=h5RB6wYZnr23Nn3cuAMOEGnGTulYo9adDBYKW68EYB5+aMDYmxj/F9EKt7E0RpMoh0vrSCpQd/878jMaOy/ZtsmOkjA9TJcSmoUCt/crtwcgztS6b6rhFH5eBHKVWr4TZvCpFUDjouMaBVLp59+Z/jzM7YpygePFY+2/IZ/8tug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=U+c8yoRC; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46FH8jKZ031938;
+	Mon, 15 Jul 2024 19:35:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	KMUJ2TW4Kz92vZ1WNbj9fim2oaakNFSraWNVGeLCagg=; b=U+c8yoRCaunVsvgr
+	XG+15WKI+r84R5ti6CuwxYjgMxlP7Sm0SE1k2Tm1Mrg9d/O7GvrjlRw4kqEu9vhQ
+	6KixL6vuFBRM/EZ1+JHTU+yfNyaVwhEO6MKy+tju10wQdfVY0l32MCoQnlz/Z/KL
+	20ovJCG4Ugy7LJbNX0Ynt6qTatm/P7cKSCmk/sw8cl4Ycx7K/0s9drAYggl3UOpV
+	Ux3vpxaL2z34mt7SfO/h5g0P5CrXc5m0R1kutWp+xppsA5qpV6xxmFkP8prBHNQv
+	kNS61b1lkOMM9b5l5ByeKUmQdwrlnxZLqEts3vS0BxBsXowysOWdvltHBkUgEyYv
+	wTm9mw==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40bjbh50b2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 15 Jul 2024 19:35:13 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46FJZC02001309
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 15 Jul 2024 19:35:12 GMT
+Received: from [10.48.247.129] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 15 Jul
+ 2024 12:35:11 -0700
+Message-ID: <6c324421-f35a-450a-9a39-05aab3136c8d@quicinc.com>
+Date: Mon, 15 Jul 2024 12:35:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: powerpc: add missing MODULE_DESCRIPTION() macros
+Content-Language: en-US
+To: Viresh Kumar <viresh.kumar@linaro.org>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Michael Ellerman
+	<mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy
+	<christophe.leroy@csgroup.eu>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <kernel-janitors@vger.kernel.org>
+References: <20240614-md-powerpc-drivers-cpufreq-v1-1-de4034d87fd2@quicinc.com>
+ <20240701083320.c3r4aussa4qojewq@vireshk-i7>
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20240701083320.c3r4aussa4qojewq@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ctGWlwWjxygEGzUEfixMirX5izh2d6XZ
+X-Proofpoint-GUID: ctGWlwWjxygEGzUEfixMirX5izh2d6XZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-15_13,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 priorityscore=1501
+ clxscore=1011 spamscore=0 mlxlogscore=999 mlxscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2407150152
 
-Add RTC wakeup alarm for devices to resume after specific time interval.
-This improvement in the test will help in enabling this test
-in the CI systems and will eliminate the need of manual intervention
-for resuming back the devices after suspend/hibernation.
+On 7/1/2024 1:33 AM, Viresh Kumar wrote:
+> On 14-06-24, 23:08, Jeff Johnson wrote:
+>> With ARCH=powerpc, make allmodconfig && make W=1 C=1 reports:
+>> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cpufreq/ppc-cbe-cpufreq.o
+>> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cpufreq/powernv-cpufreq.o
+>>
+>> Add the missing invocation of the MODULE_DESCRIPTION() macro to all
+>> files which have a MODULE_LICENSE().
+>>
+>> This includes three additional files which, although they did not
+>> produce a warning with the powerpc allmodconfig configuration, may
+>> cause this warning with specific options enabled in the kernel
+>> configuration.
+>>
+>> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+> 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> 
 
-Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
----
+I still don't see this in linux-next. Is anything else needed from me?
 
-Changes in v2
-  - Use rtcwake utility instead of sysfs for setting up
-a RTC wakeup alarm
-
- tools/testing/selftests/cpufreq/cpufreq.sh | 15 +++++++++++++++
- tools/testing/selftests/cpufreq/main.sh    | 13 ++++++++++++-
- 2 files changed, 27 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/testing/selftests/cpufreq/cpufreq.sh
-index b583a2fb4504..a427de1f9e08 100755
---- a/tools/testing/selftests/cpufreq/cpufreq.sh
-+++ b/tools/testing/selftests/cpufreq/cpufreq.sh
-@@ -232,6 +232,21 @@ do_suspend()
- 
- 		for i in `seq 1 $2`; do
- 			printf "Starting $1\n"
-+
-+			if [ "$3" = "rtc" ]; then
-+				if ! command -v rtcwake &> /dev/null; then
-+					printf "rtcwake could not be found, please install it.\n"
-+					return 1
-+				fi
-+
-+				rtcwake -m $filename -s 15
-+
-+				if [ $? -ne 0 ]; then
-+					printf "Failed to suspend using RTC wake alarm\n"
-+					return 1
-+				fi
-+			fi
-+
- 			echo $filename > $SYSFS/power/state
- 			printf "Came out of $1\n"
- 
-diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
-index 60ce18ed0666..b1ca4147a5e6 100755
---- a/tools/testing/selftests/cpufreq/main.sh
-+++ b/tools/testing/selftests/cpufreq/main.sh
-@@ -24,6 +24,8 @@ helpme()
- 	[-t <basic: Basic cpufreq testing
- 	     suspend: suspend/resume,
- 	     hibernate: hibernate/resume,
-+	     suspend_rtc: suspend/resume back using the RTC wakeup alarm,
-+	     hibernate_rtc: hibernate/resume back using the RTC wakeup alarm,
- 	     modtest: test driver or governor modules. Only to be used with -d or -g options,
- 	     sptest1: Simple governor switch to produce lockdep.
- 	     sptest2: Concurrent governor switch to produce lockdep.
-@@ -76,7 +78,8 @@ parse_arguments()
- 				helpme
- 				;;
- 
--			t) # --func_type (Function to perform: basic, suspend, hibernate, modtest, sptest1/2/3/4 (default: basic))
-+			t) # --func_type (Function to perform: basic, suspend, hibernate,
-+			   # suspend_rtc, hibernate_rtc, modtest, sptest1/2/3/4 (default: basic))
- 				FUNC=$OPTARG
- 				;;
- 
-@@ -122,6 +125,14 @@ do_test()
- 		do_suspend "hibernate" 1
- 		;;
- 
-+		"suspend_rtc")
-+                do_suspend "suspend" 1 rtc
-+                ;;
-+
-+                "hibernate_rtc")
-+                do_suspend "hibernate" 1 rtc
-+                ;;
-+
- 		"modtest")
- 		# Do we have modules in place?
- 		if [ -z $DRIVER_MOD ] && [ -z $GOVERNOR_MOD ]; then
--- 
-2.39.2
-
+Of the almost 300 patches I've submitted to fix these issues tree-wide, this
+is one of the 13 remaining. Hopefully this can make it into the 6.11 merge
+window. If not, Greg KH has indicated he'll take this as an -rc instead of
+waiting for 6.12.
 
