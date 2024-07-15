@@ -1,172 +1,131 @@
-Return-Path: <linux-pm+bounces-11093-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11094-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AA6D9311EB
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 12:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AC6993128E
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 12:46:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE84DB223CB
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 10:03:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DB8CB22C2B
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 10:46:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 870E0187327;
-	Mon, 15 Jul 2024 10:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBA60187321;
+	Mon, 15 Jul 2024 10:45:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Nf64t7TV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="scQt2OIV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9753F175A6
-	for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2024 10:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5AB188CB8
+	for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2024 10:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721037798; cv=none; b=em0Gvgp9ww6VjI5kkrGQYkqdsXypq2FlnCvA86BploFCLoY4sLy/b+1O3RPjplcS2xS/XDefj79YjJ2L7UDLyvYF3EWy6Saimb9DpY9S1ucD/CYCkOYSIo/veTOqWYirC7xS9PXClCXlmFQKIv/OeLlMu3E1aSAGGuzkaeL24h8=
+	t=1721040343; cv=none; b=XLE+GZFubJ8vkgJO+wbhBJOIB87n44vzVGkvtzyWvzvhPQSKv1QcUgypf6pcO6MPiVwMwOCCiERqTNuXPOZnwK/6AdgpUvxaQioM7Ji4M98CeQjZW/1L4fXO47zB+OqZxYzlD6uPEYfaIKY558pVbKyzSsjI03nyHiIrbU04KOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721037798; c=relaxed/simple;
-	bh=FFKfg1684QIA7PRwfOeCkgPT/Dpt9B7p3dbIFnegUNo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=O5OzOq0Y5ZchQuBrtZGz0GDFt7zfBQZr02kL08aOntA1aGrJ8ndP1GupCdcuYdodWqnCz2HmK1xgi6s4E7SZ6WHQccm+ybOSmK2VYzCk4rEVMa0cfCRY86KagK65g7x8z7zMqnj2M0N+XXnhVrehObJw9iVfR1jDWwh/x8ApsXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Nf64t7TV; arc=none smtp.client-ip=209.85.208.180
+	s=arc-20240116; t=1721040343; c=relaxed/simple;
+	bh=xjBL2fmW3TgBTvZT0aWd1kqyspv9jLM8TJPFJw+qAII=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hvqOGwtx8DlxDz6+6f1ihCDJnxvOxF3btldlePD+mThAvh/t6yUuEFztuLALDv74hX03hO0FB8OTtGA+hU9XSaZznbXruXY1ccRDPlFi92BnA0vMmRKzz3/WJggzBQ64t1KIhzJxfqQ7fOCkwTedLOPzmoHwEt9NQQsYwwIX6lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=scQt2OIV; arc=none smtp.client-ip=209.85.167.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2eee1384e85so20010431fa.2
-        for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2024 03:03:16 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52ea2ce7abaso7084691e87.0
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2024 03:45:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721037795; x=1721642595; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XJD/Ixfz4BpRjDRZ9qBCyO/QidsQI5u1FfQwVpas3a0=;
-        b=Nf64t7TV/DC+65yIJNNWnEixg3XwFa2wZs4a4OntArOJe+XhxI25O9p3r0A/TUNWIc
-         a7Qxh0lWPkYtdIvwl8xSY6UgSqo0/MzUpkWjEZy+Zn2UbbJi1Nqh7hxlRl90/zcM8zW9
-         tXM8s0OZ80KPZiEaY6MYTMxty3tX4f8LV5BPtGNrBYANAQipfJ2EPL/LMN3a8MDvAbPj
-         bL97HkH3S+xjGHDFaTGrvygoSOiV9O5d6BywMhkp70RKd12+FfiUMxF1fRmMSoxIcD3B
-         bQ8sg8QKFD3o9LKWQZ9GD0POqyin+dv1aOjHtcxejrFDX1QT+U2G34XgIVxmmKgM3MEc
-         UQnQ==
+        d=linaro.org; s=google; t=1721040340; x=1721645140; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SUzWRVB3Ign+byNOBs/BvozI65zwxs+5D+rjLO5GL2g=;
+        b=scQt2OIVkgUQeOaEWb/DzOkDG11+Yy67QVuuptOsvninmGvADk/wqeIs9zjx76q9fo
+         qJa5LIPqqTnclamN4PGoY+H8cvum3lJWb5/xBGgIPfILH9DXmgBXuP4hx3qWDu+wy/7q
+         s96QyAtW2L7FOmurSIbJb5YmypJFGndby55PRH6zE4DSFz75rTQWHpNsZnHN89CS+hkp
+         yhCUO8SREOXVMJtZe3y2PTwvzI8LArGKserCmw7HIkDy2cXvxBf/gQZFu9ih7jwOENsC
+         vywKvF+FTMwcQGQ2aM/yldC9q6Q/oc1LoVpHj8WcWgNcJkk/UwCQ9HslG9OchJ93O2W3
+         bTUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721037795; x=1721642595;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XJD/Ixfz4BpRjDRZ9qBCyO/QidsQI5u1FfQwVpas3a0=;
-        b=vGOnfJiyLj2Nzr/iECeat2NO6ArunXeliEglOgHXDPaUb09PT9fwQ9nwy0teMymZ1O
-         pKC4JJp5HO+RGxqxSmDjoqbFNavkklrEJEj6MjWP6AGQcVq1RAmVnoRVjxuzR+SL1//e
-         A/d947b/th/erIl9CwPMqefFLEXokFgUmg2Wv6tqH5tsW9jqAoBxqFrGmtqhlQ05l88O
-         qKfnGiC1zN1P/z98YP7tdzd+FNWSGLoSD8Ay8RGObHWTUHwHbaUf8kBPsHCGy+4RKW5m
-         McSQAGL3tU6qXX7ko4064TGcfRuz72RBszFdeIdy8TdQof7dIwCV8Ui2/1kKgmJBNP8G
-         4cUA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJ+hrFPAYVJrudAUK+H4uFAD8EOBKkJtDHnz8n2bV9AKJSJEClK0GRFCnaLBFVLgMWLQ2WF71rRBrB99piab0G8/ViLnVGQVs=
-X-Gm-Message-State: AOJu0YyWK9sarW1rJH9ij6VdE7s/HDCRsL4gmTvvsh8FGM2u24ojRLFq
-	Xe8QVdXEojiPKEdWHbrXQjcuL5gKEguvEbiOS7a9NqSNq6oSsQ82bTOEtRcokow=
-X-Google-Smtp-Source: AGHT+IGIukgKLkWoP2duYj1VtBFLw7fF0D3nkSuQETO64JSPFG53i/vghm8+IM/zpQ7RTwQhVMqGNA==
-X-Received: by 2002:a05:651c:1a08:b0:2ec:3e02:9737 with SMTP id 38308e7fff4ca-2eeb30b89d4mr156183081fa.2.1721037794213;
-        Mon, 15 Jul 2024 03:03:14 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2eee195f380sm8080991fa.138.2024.07.15.03.03.13
+        d=1e100.net; s=20230601; t=1721040340; x=1721645140;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SUzWRVB3Ign+byNOBs/BvozI65zwxs+5D+rjLO5GL2g=;
+        b=n3uD4I5YjiJqFxUaQpWWvBnHetC7grDAMzxGz5KvdxHC83JMS78q3Jr5zgrUYs4B6V
+         Tb9FSz/AsKamj7bfFtCayaHEFD0RXQrXThbcuhiUM8EiHIoHmH7ec8mJKU7+uNgqvbww
+         HaWVe0+naDJgD6FYMTNj6f0YkfrECWArkVjFDtcB0V8M4+41AOXqv8H+Ifc+J/G6i4A7
+         10/MO8G3AEZPm74iJIN0qQT2hclAmGeXtDLcrv+HnJMYymozZNjPFiwO0Gido271aOMl
+         MezF88tqYIRBuOR/XKNDhRueHeveHdbZ7ttATMe/DQ9Pea2hqp1DDb0wddlePJDPVo8R
+         d4Dw==
+X-Forwarded-Encrypted: i=1; AJvYcCXYr/NdzFRMRlBJ82Rncmzei4bXyHP6xs8Ypsjw4FVR0fsvhKezS6tAu/Hs6fmp6HirEWf4IKePyK+YyXGi+N/JAsEZ7VG7irQ=
+X-Gm-Message-State: AOJu0Ywfa+mJ/hVPh9TH7iChAq+yIznigJO2jBjZ0J4NpizhyuZsYCXy
+	i3SdvdkBeUQIGFYaakj8hgNX4+TR+VOqg/LXVOJ+MsxIjjVXPpSVrKUpzpTuUl8=
+X-Google-Smtp-Source: AGHT+IGlLc7ogIwMfIOjYjHViVtMeOvAD5PbbH1+l3irHrd7ow0h98tjC4a6fY+TC/cyAIx1PWbN9Q==
+X-Received: by 2002:a05:6512:b8f:b0:52c:9942:b008 with SMTP id 2adb3069b0e04-52eb9990ca1mr14838566e87.2.1721040340187;
+        Mon, 15 Jul 2024 03:45:40 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ed252d74asm805405e87.122.2024.07.15.03.45.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jul 2024 03:03:13 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Linus <torvalds@linux-foundation.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] pmdomain updates for v6.11
-Date: Mon, 15 Jul 2024 12:03:12 +0200
-Message-Id: <20240715100312.175281-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 15 Jul 2024 03:45:39 -0700 (PDT)
+Date: Mon, 15 Jul 2024 13:45:38 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Stephan Gerhold <stephan.gerhold@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>, linux-arm-msm@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Bjorn Andersson <andersson@kernel.org>, Abel Vesa <abel.vesa@linaro.org>, 
+	Johan Hovold <johan@kernel.org>, Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH] power: supply: qcom_battmgr: Ignore extra __le32 in info
+ payload
+Message-ID: <72ogcymwktce2qhkummff5kkaugmtmpk2467dk4vymsyb447gi@qbo2ql27mvqp>
+References: <20240712-x1e80100-battmgr-v1-1-a253d767f493@linaro.org>
+ <mz6h625ecs4ozmjxoozjdnunfmr3vsdw5yyo6il5vyzknyzqsz@pun3t27zhiv4>
+ <ZpTopJi7GJSLaF99@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZpTopJi7GJSLaF99@linaro.org>
 
-Hi Linus,
+On Mon, Jul 15, 2024 at 11:15:16AM GMT, Stephan Gerhold wrote:
+> On Sat, Jul 13, 2024 at 07:17:51PM +0300, Dmitry Baryshkov wrote:
+> > On Fri, Jul 12, 2024 at 12:00:03PM GMT, Stephan Gerhold wrote:
+> > > Some newer ADSP firmware versions on X1E80100 report an extra __le32 at the
+> > > end of the battery information request payload, causing qcom_battmgr to
+> > > fail to initialize. Adjust the check to ignore the extra field in the info
+> > > payload so we can support both old and newer firmware versions.
+> > > 
+> > > Tested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> > > Signed-off-by: Stephan Gerhold <stephan.gerhold@linaro.org>
+> > > ---
+> > >  drivers/power/supply/qcom_battmgr.c | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+> > > index 46f36dcb185c..a5b5f1251af1 100644
+> > > --- a/drivers/power/supply/qcom_battmgr.c
+> > > +++ b/drivers/power/supply/qcom_battmgr.c
+> > > @@ -1007,7 +1007,9 @@ static void qcom_battmgr_sc8280xp_callback(struct qcom_battmgr *battmgr,
+> > >  		battmgr->error = 0;
+> > >  		break;
+> > >  	case BATTMGR_BAT_INFO:
+> > > -		if (payload_len != sizeof(resp->info)) {
+> > > +		/* some firmware versions report an extra __le32 at the end of the payload */
+> > 
+> > Any useful information in that extra?
+> > 
+> 
+> No, I don't think so. I think we can just ignore it.
 
-Here's the PR with the pmdomain updates for v6.11. Details about the highlights
-are as usual found in the signed tag.
-
-Please pull this in!
-
-Kind regards
-Ulf Hansson
+If that's the case,
 
 
-The following changes since commit ddab91f4b2de5c5b46e312a90107d9353087d8ea:
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-  pmdomain: qcom: rpmhpd: Skip retention level for Power Domains (2024-07-09 12:47:46 +0200)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.11
-
-for you to fetch changes up to 67ce905f5f725c0ff4675b1aea381df0d80a5f03:
-
-  mdomain: Merge branch fixes into next (2024-07-09 13:12:41 +0200)
-
-----------------------------------------------------------------
-pmdomain core:
- - Add support for HW-managed devices
-
-pmdomain providers:
- - amlogic: Add support for the A5 and the A4 power domains
- - arm: Enable system wakeups for the SCMI PM domain
- - qcom/clk: Add HW-mode callbacks to allow switching of GDSC mode
-
-pmdomain consumers:
- - qcom/media/venus: Enable support for switching GDSC HW-mode on V6
-
-----------------------------------------------------------------
-Abel Vesa (1):
-      PM: domains: Add the domain HW-managed mode to the summary
-
-Christophe JAILLET (1):
-      pmdomain: amlogic: Constify struct meson_secure_pwrc_domain_desc
-
-Geert Uytterhoeven (2):
-      pmdomain: core: Use genpd_is_irq_safe() helper
-      pmdomain: renesas: rmobile-sysc: Use for_each_child_of_node_scoped()
-
-Jagadeesh Kona (3):
-      clk: qcom: gdsc: Add set and get hwmode callbacks to switch GDSC mode
-      clk: qcom: videocc: Use HW_CTRL_TRIGGER for SM8250, SC7280 vcodec GDSC's
-      venus: pm_helpers: Use dev_pm_genpd_set_hwmode to switch GDSC mode on V6
-
-Jeff Johnson (1):
-      pmdomain: amlogic: add missing MODULE_DESCRIPTION() macros
-
-Peng Fan (1):
-      pmdomain: arm: scmi_pm_domain: set flag GENPD_FLAG_ACTIVE_WAKEUP
-
-Ulf Hansson (3):
-      pmdomain: Merge branch dt into next
-      PM: domains: Allow devices attached to genpd to be managed by HW
-      mdomain: Merge branch fixes into next
-
-Xianwei Zhao (4):
-      dt-bindings: power: add Amlogic A4 power domains
-      pmdomain: amlogic: Add support for A4 power domains controller
-      dt-bindings: power: add Amlogic A5 power domains
-      pmdomain: amlogic: Add support for A5 power domains controller
-
- .../bindings/power/amlogic,meson-sec-pwrc.yaml     |  2 +
- drivers/clk/qcom/gdsc.c                            | 41 +++++++++++
- drivers/clk/qcom/gdsc.h                            |  1 +
- drivers/clk/qcom/videocc-sc7280.c                  |  2 +-
- drivers/clk/qcom/videocc-sm8250.c                  |  4 +-
- drivers/media/platform/qcom/venus/pm_helpers.c     | 39 ++++++-----
- drivers/pmdomain/amlogic/meson-ee-pwrc.c           |  1 +
- drivers/pmdomain/amlogic/meson-gx-pwrc-vpu.c       |  1 +
- drivers/pmdomain/amlogic/meson-secure-pwrc.c       | 65 ++++++++++++++++--
- drivers/pmdomain/arm/scmi_pm_domain.c              |  1 +
- drivers/pmdomain/core.c                            | 80 +++++++++++++++++++++-
- drivers/pmdomain/renesas/rmobile-sysc.c            |  8 +--
- include/dt-bindings/power/amlogic,a4-pwrc.h        | 21 ++++++
- include/dt-bindings/power/amlogic,a5-pwrc.h        | 21 ++++++
- include/linux/pm_domain.h                          | 17 +++++
- 15 files changed, 271 insertions(+), 33 deletions(-)
- create mode 100644 include/dt-bindings/power/amlogic,a4-pwrc.h
- create mode 100644 include/dt-bindings/power/amlogic,a5-pwrc.h
+-- 
+With best wishes
+Dmitry
 
