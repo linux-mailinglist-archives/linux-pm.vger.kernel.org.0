@@ -1,76 +1,75 @@
-Return-Path: <linux-pm+bounces-11111-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11112-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A03C931523
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 14:58:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC05193153C
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 15:00:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCFDBB23D5C
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 12:57:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 683B51F21B83
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 13:00:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A776318FDCC;
-	Mon, 15 Jul 2024 12:55:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A53518EA75;
+	Mon, 15 Jul 2024 12:57:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hIXtwzIO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wMwMrnUk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A7B18FA2C;
-	Mon, 15 Jul 2024 12:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77B418C351
+	for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2024 12:57:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721048132; cv=none; b=APqAk14QXkd6vlGblqZZDKFTcbeH5FZa63YxrBpHJd9uAXtIw7fp1lMbmYpP1qbBQN2Hq3d0n38opiMpWme9dzTTkxgZxnzV/xM/nMi4QYg2tNkd4f7nHpEmuQA7ucsv2PmZVb45tReK/FzeQa2OGhHi4BWsvAo/oy+9XP1U9Ws=
+	t=1721048238; cv=none; b=GtUD6R5HDCmJ7A/WHL6IBOchG2CjkDC+cnEo81Uv7CRe63ORD5Bz01vlKGl+8AMpRRG4pLiZ4cRNXX9ZcjcFjhUrH4Bax9nuCrNtdY9KMytSVUrpcNlTcDBu3zur39mvlYHYgCQtpQ2MrBYLHxW4HyeQybsKVGPEoLJSS2LqW3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721048132; c=relaxed/simple;
-	bh=JPvmuWMb9Cv6qRz3cEGIn/kWuF1SOLW1hi0UXwnEzKQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LZ6Z8B3i8nLuU/tkgTIxZiqFfcRWu/EcPyXV1m1STwcSfjKiTYQoo0PbVytUEjNRbuxD18gQ8pB/vqg9I5levc4BFe0Y2dWSTrbvpAXJIcBr6SYI9k2PG9ISfgvukVlgbJ1xPm30fGwUNT/pq0Pwec3rVOv7o6l6oQM6Hz2r21c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hIXtwzIO; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2eee1384e0aso21675831fa.1;
-        Mon, 15 Jul 2024 05:55:30 -0700 (PDT)
+	s=arc-20240116; t=1721048238; c=relaxed/simple;
+	bh=+4kd2F1VnGUNVU9oW0bAD/syychtxHxo8PxEX9mf8lU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=aRlk3BRlaKFQPT9FIoc3l7UKFAlrO9MrATadE6HGFONYUmBuBb2CHVD8YDQUJsBwv01CrM+NeLGEK+8UtFWqqahBJr42c+uupjC8VT/cH5EZcfAKA3p0ZiUo/XIcMqYi0EAo21R3wKeRyClPpZ8u/iFNpk+vzeHTgybqArVbJ4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wMwMrnUk; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-36816ff695dso788773f8f.1
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2024 05:57:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721048129; x=1721652929; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g142l+1Rp8I4V1ReaaLX7dN3MJPiIMAN9KWL++3gC6o=;
-        b=hIXtwzIOWrDvYitkLe5qMQs1KWxw9g96vgApmLCL3xxcORS3uby5rHn5jzcyCdytO+
-         fVwrXzc7lMOBwJqOIcB3ovPNa+ed3LV0v2pqq6ifamgAit+8tMKLPM4Ggq8lRk3u9xbq
-         8TpjW3AMm2kYsL2KvSLw6OurkvVN9AjyxdZ+/4YZi3LJMrHLtub9yfS6Rw8mFIzO08DJ
-         18cnACU2Ko0kVUbPv9bG1zYuWAdXfSVHjEnZ63EoDPQTL7A82McB86HloUY1MBu5LCoZ
-         3zTainZ7fSkPC42UjY73j/HjTlf4jfAMeYeJIul626roCQ+8R6Y8zt8mZkFSOFcPwmCo
-         0QsA==
+        d=linaro.org; s=google; t=1721048235; x=1721653035; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BnmqxlBPCkR2j92uKnpeN2blqkcOYQP6/xqO49jA5GI=;
+        b=wMwMrnUkfken2fQXhlgBbdj049YdQTIKy+L3xRPZ9cm2yNfJQ2+OZR+QI6Zz460zrs
+         MvDFUQ0BdVsc6Ie202x7OJ0yFbwfz8VS1QNQFk0lfNKZYKWD8D+03MQeNH6gfDRJJK2R
+         BE409ukhmVBbmABeih2W6umtsY1xbumVgxvWzv8lhQck4MuMnsKwp5fHQws3jDn4qorJ
+         /5q8JG9sR3TUiFdhRUW6u2xY8nXzM7WwlWlr9Z9cvt/35OHnd73RS3qEuYwsRFXlMH18
+         K1bxOaHFW1pdYBO8lOlNtdpSrZjlu6kSgj+jq+tqNXgU8QNjRoXI2PuTnqVs00Mwt9Qx
+         C1aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721048129; x=1721652929;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g142l+1Rp8I4V1ReaaLX7dN3MJPiIMAN9KWL++3gC6o=;
-        b=rWo3BeZRi/W+6885Qo9oyKftjGDe+zKRq47MiEsoYHdY75V7AOfVdnuUdOorVC9Gf+
-         nvtq0tfw5EhL/3eB5pD8g/3uy2G9R41WNa1IBmnQ+sCs1KBW7EF4qYXW3nyNuBcYts0z
-         sqH+UEDo1ansl4yeIJRxpvdmPumawdmKsGqCr/JLXcSjHlQOHa/fLYK1IxLZacPOJ6jd
-         HNqXjV3pjbqlzy/FshxDUVzudJrjWcEuUMXK4aVtPOkLqcstHTrn5/EjtUW0Ki2A9SB8
-         4dytpO41CCF7f//u2pki5eMes3r2Ah+2sE4JiEKkL+Txk0aoqD3P1bkBDQZXrnqJ8XDe
-         NOSA==
-X-Forwarded-Encrypted: i=1; AJvYcCXPhcM5ymzLFxxzw7FheR20KQGMSb4p+1OF74O8VmsXaiaL40caHHQxlFN7nvrWUA/Iy5yGoxMPniP6HWNIZFDl3tZRtPuwPQr/7rkXhNXC61/6dmVLCLQAWpJJHCerSa0i/X/FaEMX3O4ju2aFlEvCpwoKPf4YWqLCgsE10cPlfpnTwVGFzPyXcL2/ycrUgi6a0EZwzTwGlTvASnIC8PAckMUQosc=
-X-Gm-Message-State: AOJu0YxchuPRxiasQv+1wt9JwEYGzHiznAa7XadVb2aNRF27rW0FUxlq
-	92B3lreW/gbXCIMoijqq725R4+gcaF4IpOXWDwPbDsgjTg/buPBTeizcrYFp
-X-Google-Smtp-Source: AGHT+IFx8MQcTRzx3JN+U8ZxghUQcdnvTgYnKydFLvaBZKUXf4eaprXj8MMYOE+oITfaurUMxJRBMQ==
-X-Received: by 2002:a05:6512:2247:b0:52c:dec1:4578 with SMTP id 2adb3069b0e04-52eb99d3d82mr11609664e87.60.1721048129043;
-        Mon, 15 Jul 2024 05:55:29 -0700 (PDT)
-Received: from tablet.my.domain (ip-37-248-157-210.multi.internet.cyfrowypolsat.pl. [37.248.157.210])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-59b26f62165sm3333307a12.87.2024.07.15.05.55.27
+        d=1e100.net; s=20230601; t=1721048235; x=1721653035;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BnmqxlBPCkR2j92uKnpeN2blqkcOYQP6/xqO49jA5GI=;
+        b=qibWwP0p/k/g9Mn3IC6Qmdjgc2wh+/2ktna2d+hKebIZL3Ad9B1iY1NRv2+SZNBfNp
+         htVavVwGJBDCdydmIAZFUKRMNik8AmvoBd7hvUi6WPRbnCpFFq185zX3s/cnx6c9jFy8
+         6bVdx8TVYGytShzBg3tUE5jVB3X7GaaWaol+obq5UiCA8DY5lBz8ggXFYwU23mby11XU
+         1LlmiUexctXE6OJ4yuVTx//X2HsZH1BHVjCf4Icz4j8fXb0RjRpRUt1L+uH4KL0GYohm
+         +blJcf77fqdsa7o4IX9gAbPqtH23Il98W//VyOHo9yzZcudIGJ+NhxFXv2cgesaJwCpb
+         7ndw==
+X-Forwarded-Encrypted: i=1; AJvYcCUWdhJOFTImakd4NoJ+g0O82FAeqThXTKjf9c6x+ck4A3hqCEYw4YbBgnUQlUDXtW5NxNbqitzexmn63jYhTz9G+YtmHyd1HDY=
+X-Gm-Message-State: AOJu0Ywa3UBopXf0o1WYJ85nL1GNWcru2Ia1DTEevD3b3gNHvbzei2yb
+	9nuJkb1SdvbHh3qtKnjmqevtU8ebP+c07w470n9LFzjolKFJnJjNWUp8XEzpFUklZxSUQgdgyOS
+	9
+X-Google-Smtp-Source: AGHT+IESyZ4Z7rBrd/pjuZAtkysmd8HKrQLlJxI1+a1THWh40nxYbZNSoSFDLdkyn5qOYjRQF4e3JA==
+X-Received: by 2002:a5d:4ed2:0:b0:35f:28e1:5028 with SMTP id ffacd0b85a97d-367cea67f26mr12074672f8f.15.1721048232708;
+        Mon, 15 Jul 2024 05:57:12 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3680dafbf19sm6303018f8f.68.2024.07.15.05.57.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jul 2024 05:55:28 -0700 (PDT)
-From: Artur Weber <aweber.kernel@gmail.com>
-Date: Mon, 15 Jul 2024 14:55:11 +0200
-Subject: [PATCH v2 9/9] ARM: dts: samsung: exynos4212-tab3: Add USB
- connector node
+        Mon, 15 Jul 2024 05:57:12 -0700 (PDT)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Date: Mon, 15 Jul 2024 14:57:06 +0200
+Subject: [PATCH] power: supply: qcom_battmgr: return EAGAIN when firmware
+ service is not up
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,82 +78,106 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240715-max77693-charger-extcon-v2-9-0838ffbb18c3@gmail.com>
-References: <20240715-max77693-charger-extcon-v2-0-0838ffbb18c3@gmail.com>
-In-Reply-To: <20240715-max77693-charger-extcon-v2-0-0838ffbb18c3@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, 
- Chanwoo Choi <cw00.choi@samsung.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- ~postmarketos/upstreaming@lists.sr.ht, Henrik Grimler <henrik@grimler.se>, 
- Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>, 
- Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>, 
- Artur Weber <aweber.kernel@gmail.com>
+Message-Id: <20240715-topic-sm8x50-upstream-fix-battmgr-temp-tz-warn-v1-1-16e842ccead7@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAKEclWYC/x2NQQrCMBAAv1L27EIaGq1+RTzEZFv3kDRsVi0t/
+ bvB48Aws0MlYapw63YQ+nDlJTfoTx2El88zIcfGYI0dzKV3qEvhgDWNqzP4LlWFfMKJV3x61TQ
+ LKqWCuuHXS8bgvJ2u7hztGKFFi1Bz/8P74zh+jUtAj4AAAAA=
+To: Sebastian Reichel <sre@kernel.org>, 
+ Bjorn Andersson <andersson@kernel.org>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-arm-msm@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1245;
- i=aweber.kernel@gmail.com; h=from:subject:message-id;
- bh=JPvmuWMb9Cv6qRz3cEGIn/kWuF1SOLW1hi0UXwnEzKQ=;
- b=owEBbQKS/ZANAwAKAbO7+KEToFFoAcsmYgBmlRwqnFSOEjC8QWSCPslauoOTiO933O3gvdDEc
- e3gOsFdVleJAjMEAAEKAB0WIQTmYwAOrB3szWrSiQ2zu/ihE6BRaAUCZpUcKgAKCRCzu/ihE6BR
- aFmxEACYfKH/GNZtUBx1ayE51+WDZH8Lsh7YCHzX0J0u0GIF7sy4e52YDmnH48GfzystWyPPaXX
- 4tChxghI0ZSVFts1vH67Iqd3zBRaDCJkHERejtV5sMP6QIX5hSlqD8pj4OAFPecpgcJG3dT+pLj
- IK330kJ2pKG36NHMRti2HiX1GtLzdG4YL7EakFGVo79x2s0V1dLXYrUz8BGFpeEDT9sHnYVA/0x
- wKkvzRnSWK+aGj0Hj8AQHaC6z3+0J0sJin+VltFKpxLIIFuQtVZJzz9YXH+bpaHPg2oBBf6ixhE
- jReLMZEDFWSyt+bStQBUW6pp3ZB7vTx89JFQh1l9eIzLwufABxHIWWcKBcK1pBPGaWE5T42vLcr
- tfLeyEG9XJiypKn6b9SPCVsEvulMQ4y/zjhOZhiLht7qe3EtHkEEex0SAOKD1IGsR01bVhnOtfJ
- f4ojHCmJMu58yv0PLcKYW9JzCEW4zVp3rePVQngPLpYhCbM+iskfDyhP3z/d0aiBU05GojgWItf
- j6YyJEC0wpDsLiLDZF48LEMBb6sT3LjQtHXcME4t6fJeox3Nw9KPh6Dh9s40VGQxSzETgSd+i17
- dB8Pf1NRrzuZ0lGjYPXjfPTh8Vo2SMTqsGlijr2xWVcWYxXZN0cKKoIix6fRrngVy79JzpYP1FL
- tULnfR+O6VXKZxw==
-X-Developer-Key: i=aweber.kernel@gmail.com; a=openpgp;
- fpr=E663000EAC1DECCD6AD2890DB3BBF8A113A05168
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2617;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=+4kd2F1VnGUNVU9oW0bAD/syychtxHxo8PxEX9mf8lU=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBmlRyn4WsgPHsjeq6W3RktjkoSu9goVIP+o9UE2tCo
+ gJLzYGqJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZpUcpwAKCRB33NvayMhJ0cfoEA
+ CquF4UV2qZzHb9lnIWqRh/BggKsTGggRpl2qQU8AW8IAZIIqFTV/h+dHY3jwIFkIS8tVYGZii7glFg
+ 6WXp6wQkX9hHlGA08zmW0aJhIgNVS3aQ8jmeInD/IBPj/m059AxH44FSqjjWrZdKXMTn6UjXqMa2d1
+ lgX0bANe2yZjzmhOuIxAaPiBTKwjSJeyM8q6kGT0j0bAA+YYpfHv+D04H+d1RGy57NWrjlaberAi15
+ 3Yby5R+veUvn5wb6xbTM0rlNht37iM+KrrZKiSweiNm3xgDbnJS7xWourNCOH9rMDFFahz24AsfiP0
+ f6RupQTTErVSjadBOTzjECgcz0KZ/iLMpcL/EBqrko5vFh08xaH1426wBGsReEOTz4b2MeJXvrnnED
+ nsHV6wXUw7PZehBKgjIZF+eLOfarMsPgu3vSkU8QAydZN9yPzLo/HNzFXasgA2r50bKSOViemKxUiu
+ pjSyuUCCUJpjtUVSbxh5zOgniFxeULOgkH8au11Oq1LMTtkfdCPbi6Tb3GROP1KEOl/Yil52iiQZUr
+ PpjgM7rM5EAF564IgwfGiIW0Pi1ujP3FPx+18XJyihMcnhydjZEM5rn8z8jnnN7fGxJaBr8Gy9RPtI
+ x0kipwe/6gUtT4AM4bmiRu8wcQ/yOkI1cWaTp7KKWiFzjpS4dUIqnIu46RGw==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 
-Add a subnode to the MAX77693 MFD for the MUIC and connect the USB
-connector node to the charger to allow for charger type/OTG cable
-detection.
+The driver returns -ENODEV when the firmware battmrg service hasn't
+started yet, while per-se -ENODEV is fine, we usually use -EAGAIN to
+tell the user to retry again later. And the power supply core uses
+-EGAIN when the device isn't initialized, let's use the same return.
 
-Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+This notably causes an infinite spam of:
+thermal thermal_zoneXX: failed to read out thermal zone (-19)
+because the thermal core doesn't understand -ENODEV, but only
+considers -EAGAIN as a non-fatal error.
+
+While it didn't appear until now, commit [1] fixes thermal core
+and no more ignores thermal zones returning an error at first
+temperature update.
+
+[1] 5725f40698b9 ("thermal: core: Call monitor_thermal_zone() if zone temperature is invalid")
+
+Link: https://lore.kernel.org/all/2ed4c630-204a-4f80-a37f-f2ca838eb455@linaro.org/
+Cc: stable@vger.kernel.org
+Fixes: 29e8142b5623 ("power: supply: Introduce Qualcomm PMIC GLINK power supply")
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/power/supply/qcom_battmgr.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi b/arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi
-index 7905e33234f2..f5ee3640a940 100644
---- a/arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi
-+++ b/arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi
-@@ -151,6 +151,17 @@ charger_reg: CHARGER {
- 				};
- 			};
+diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+index 46f36dcb185c..bde874b5e0e7 100644
+--- a/drivers/power/supply/qcom_battmgr.c
++++ b/drivers/power/supply/qcom_battmgr.c
+@@ -486,7 +486,7 @@ static int qcom_battmgr_bat_get_property(struct power_supply *psy,
+ 	int ret;
  
-+			muic {
-+				compatible = "maxim,max77693-muic";
-+
-+				usb_conn: connector {
-+					compatible = "samsung,usb-connector-11pin",
-+						     "usb-b-connector";
-+					label = "micro-USB";
-+					type = "micro";
-+				};
-+			};
-+
- 			charger {
- 				compatible = "maxim,max77693-charger";
- 				monitored-battery = <&battery>;
-@@ -160,6 +171,8 @@ charger {
- 				maxim,thermal-regulation-celsius = <100>;
- 				maxim,battery-overcurrent-microamp = <3500000>;
- 				maxim,charge-input-threshold-microvolt = <4300000>;
-+
-+				maxim,usb-connector = <&usb_conn>;
- 			};
- 		};
- 	};
+ 	if (!battmgr->service_up)
+-		return -ENODEV;
++		return -EAGAIN;
+ 
+ 	if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
+ 		ret = qcom_battmgr_bat_sc8280xp_update(battmgr, psp);
+@@ -683,7 +683,7 @@ static int qcom_battmgr_ac_get_property(struct power_supply *psy,
+ 	int ret;
+ 
+ 	if (!battmgr->service_up)
+-		return -ENODEV;
++		return -EAGAIN;
+ 
+ 	ret = qcom_battmgr_bat_sc8280xp_update(battmgr, psp);
+ 	if (ret)
+@@ -748,7 +748,7 @@ static int qcom_battmgr_usb_get_property(struct power_supply *psy,
+ 	int ret;
+ 
+ 	if (!battmgr->service_up)
+-		return -ENODEV;
++		return -EAGAIN;
+ 
+ 	if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
+ 		ret = qcom_battmgr_bat_sc8280xp_update(battmgr, psp);
+@@ -867,7 +867,7 @@ static int qcom_battmgr_wls_get_property(struct power_supply *psy,
+ 	int ret;
+ 
+ 	if (!battmgr->service_up)
+-		return -ENODEV;
++		return -EAGAIN;
+ 
+ 	if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
+ 		ret = qcom_battmgr_bat_sc8280xp_update(battmgr, psp);
 
+---
+base-commit: 91e3b24eb7d297d9d99030800ed96944b8652eaf
+change-id: 20240715-topic-sm8x50-upstream-fix-battmgr-temp-tz-warn-c5a2f956d28d
+
+Best regards,
 -- 
-2.45.2
+Neil Armstrong <neil.armstrong@linaro.org>
 
 
