@@ -1,142 +1,172 @@
-Return-Path: <linux-pm+bounces-11101-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11102-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89E469314F5
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 14:54:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A83C9314FD
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 14:55:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 404F61F20D38
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 12:54:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91C6B1F21BAE
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 12:55:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D554918C19F;
-	Mon, 15 Jul 2024 12:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B098518D4A8;
+	Mon, 15 Jul 2024 12:55:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=s.l-h@gmx.de header.b="AxPkirED"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fs1FI234"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A31018732C;
-	Mon, 15 Jul 2024 12:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B0118C34F;
+	Mon, 15 Jul 2024 12:55:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721048088; cv=none; b=aIDNNx5a1DpX+3K7twPez3ANDlNx1vPsd5lN5AAQGPgFr5nfPQvfpUSkDtZ3c+L/ftGLaQpjWMrV3MZroEnSteNAtWYi2Fp6EyktmdtBfenAqmTCvsWplswIH1U4UAN0ORy/Mrt9LPOg5+XlHLqCoVaA/D2wu2sab8UVPBldcSk=
+	t=1721048113; cv=none; b=WiUeR1EeNeYZWzYwGe5uqEokXJhV6M3omixa86Q6VHE5hLgI6nrQgXbRMrNmTPNRBJVE6GVMMemS49gRoHjsjoWdoUV1pI9rPf71TgjslVWWDci+9RdLINmh++q+sPJwgFUqQH81Mbw7LSO2WRqJf9FdAEZn+HEQnI4s2FsCfUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721048088; c=relaxed/simple;
-	bh=X35c0J75N6VMsyWa7OmyBbJkqHT7XYO5W8q1PqTyygk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ARPLgViwOMfLIbmr8BKnRiM/hKxhHdwfDEYv1FlBxhmz2RdW9U0Lmz4DLVC/36gn8b7M82H+ucoz4l/CeJZ8AYOE3r3SJ4tmDr6XXH44NCr3n0r/agztBcIyHqs9e3SQayMvBR33bWRlE38zt6yxrZE2Sk4RL8xZmtVyh1GfCbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=s.l-h@gmx.de header.b=AxPkirED; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1721048070; x=1721652870; i=s.l-h@gmx.de;
-	bh=EOVWSVyeKd4gJsRQExx0kzHP/0gq1uu28A/ey4WtF3w=;
-	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
-	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=AxPkirEDMWoD/K5EJX1OPdpCss2dEjb0VcicW8SdnosZQgF5hAG83J6YbW9lXVGj
-	 BYN+8bGM34+dUEMGRfPN6UO2L5MMGwOi7RgQeNwVF8R1JbNezFIh5TPL88sDE1g8C
-	 BYjve2hJf5HuwqAVhhAwW74HfJ/OEiT/UTYOm6cWVXVbtxYK0/3MG4A11pCfnN6lh
-	 KCjOmAnnNDp2ppfoVc/jRmIqinI5yh1Qear5g2lTf5zwW9fqblCCxzF+qzUIhzhGK
-	 M4D/0vGeRM8JXCo2F5UyWh+5eCLzcw18PjCYZpxO7P8edcvFjbPs7rgPd1lc/1tBH
-	 ov7vgps5ObAZmTC3JA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from mir ([94.31.83.155]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N4QwW-1sKEOu3Ki6-016f5q; Mon, 15
- Jul 2024 14:54:30 +0200
-Date: Mon, 15 Jul 2024 14:54:26 +0200
-From: Stefan Lippers-Hollmann <s.l-h@gmx.de>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Eric Biggers
- <ebiggers@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
- <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, Lukasz
- Luba <lukasz.luba@arm.com>, Srinivas Pandruvada
- <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v3] thermal: core: Call monitor_thermal_zone() if zone
- temperature is invalid
-Message-ID: <20240715145426.199c31d0@mir>
-In-Reply-To: <CAJZ5v0gx6GyKBYt7YMFwmUQ4OCG49d9k2H=P-4Awr-mJ=eFHKw@mail.gmail.com>
-References: <6064157.lOV4Wx5bFT@rjwysocki.net>
-	<20240715044527.GA1544@sol.localdomain>
-	<4d7e11a7-b352-4ced-acee-b5f64e3cd0b6@linaro.org>
-	<CAJZ5v0gx6GyKBYt7YMFwmUQ4OCG49d9k2H=P-4Awr-mJ=eFHKw@mail.gmail.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1721048113; c=relaxed/simple;
+	bh=joW1dUBhJoxnwAipx4tWr4333aQdsreO5ngTla7wYSs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dcbzrRE0mrzgF8GX+8mWTpWJoSNr4JTPsuobNpvLaE5tmh3KcB/GLoGvPu/5u2rkYe5CUZM/ATXHoyR+ssPEwecq/Zr7yVXCSlYxOkKKW8A4ClhbE+My0W5gRYejU7dUc9Fw80b/c8buQAVsiCBFrSdiL1V5a1VrONip3lbjs9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fs1FI234; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-595856e2336so277050a12.1;
+        Mon, 15 Jul 2024 05:55:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721048110; x=1721652910; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l4oxwn9faJBZWNYakjxQw34lzbdzSD9MrW7c7EhtXGw=;
+        b=fs1FI234eRSSTEHb0G1e9uznsBVrTpQRjc+fcgpFgNmyh+7G7xUszq7msvbfxjgash
+         53pRWD3ZQKyaek7zwXTbnS5horLFEeAnX30jjnk1cuV+vppJP0WChXqmb2zzrc6ukSW9
+         HcIu4QvM2b3lI2WnllbEnFb/G3YuU1kFVVmLNGELVY+Hx8+5aO7NdcmnIaR9s/txmspJ
+         yA9JVZ+qB7f9IJe9svB3kFyBhePKSW7eubABni7/UyBhN6b9ncuiRDdOOQFSYd/YDcCG
+         QxsSyAkRKJzp5WdoLHMvYILFloQF/t76yFMBt1PCVVi5/1ZWw7W9XEhc0j4EXdqPlqof
+         Uwgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721048110; x=1721652910;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l4oxwn9faJBZWNYakjxQw34lzbdzSD9MrW7c7EhtXGw=;
+        b=Ou+xfFdIcSf0AWXLvMel3aEl0z8T3/qxQTSFmXUy7fqfEZNYBfLAojdEX2q53y5MWw
+         cHk7fc7SfZ10n3jEVJEgvHmY1X0OEVOfyYVS4eL951BpT7QHKer40oMCO1IQXGTUs3V6
+         O1R3mRZw4TfUlobet8yUvsqjopgCDLCCn2j4BJnDQEU6slSS220GU/M3Uk5LfPDbO7i/
+         EQ1R0oGaFbAVWTSjeuClit74CKmbjzYjUIYEyuYXOlUAeB4jHyy/5piyQ6cA/eqQi0MK
+         DH9zKAzTK+HAtEqnmhMGsE3U891vGW0rEggJE1CuizfnDr6tAZq8hb002aLSNHhBrwCK
+         m8Lg==
+X-Forwarded-Encrypted: i=1; AJvYcCWccPQX8pY0Sbnx+W7pF6Kg2AA9wboy7IsCUeeLlQApTSRcJIrlSdSNhHDz/p3BcMPZZ5FjlWCgCoxfZJErYmc0lfdEUQ19YGlx2FdKOP2Tc00dXNseiGXoaSFHEJ+0NrWyg8V+OCjshG4l7a/OIDvqUBYjjknG2Ie4gcGBVUeucEO6RGvt2c0MSmTzJJ2ctH0f/SGiV/xaJxn6iOXb7FhY8kEnBAs=
+X-Gm-Message-State: AOJu0Yzox9RTLdMsIR+E4RljzsnJtnuOTB7WWE3iuf3QxfSu5RsUdXSK
+	Zndf8CRsEvzVhoWqBfrotvkn1v48IQFyeATus8nDc+iTIyjPMNabWutMNZ4O
+X-Google-Smtp-Source: AGHT+IFiuhD+U3uimNCwm9sMXN3yk+88hpselw5hq29H3RlOMCChzciDUtnwlTqLtREIV1f6gBzhyw==
+X-Received: by 2002:a50:d7c9:0:b0:59a:442d:67bd with SMTP id 4fb4d7f45d1cf-59a442d68acmr4790387a12.20.1721048109582;
+        Mon, 15 Jul 2024 05:55:09 -0700 (PDT)
+Received: from tablet.my.domain (ip-37-248-157-210.multi.internet.cyfrowypolsat.pl. [37.248.157.210])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-59b26f62165sm3333307a12.87.2024.07.15.05.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jul 2024 05:55:09 -0700 (PDT)
+From: Artur Weber <aweber.kernel@gmail.com>
+Subject: [PATCH v2 0/9] power: supply: max77693: Toggle charging/OTG based
+ on extcon status
+Date: Mon, 15 Jul 2024 14:55:02 +0200
+Message-Id: <20240715-max77693-charger-extcon-v2-0-0838ffbb18c3@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:CPoKV8zwtWwHtmBQX4uQnsR/WhOigdwjt40qTzm6fWJBZugB1x3
- MXMpg71iN2u6Vz4rzKu2GF6TvoEC5WNDvS+0iMdBoZ+o7D63jNP+YIEqoGaU1JX4kNFeSvV
- 6mjv31HsGG04cysp1Pk6sAtSOHuq2OQKf+Lj60DEmhanuxhBORuHRJ/oSYrIIGZYHC73a2S
- dG1U8j62gxk1f+V9TL91Q==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:wbI78QXFeSo=;2RXZrQffbAexL/lg+k/6/7G0z2m
- nbILtXZJm79wy5pgfN4rYDPGuFDkPWWWua7wkzJWPhNBdj2ijZ7jzoCXpPb5OL2mKjtb/Z1yP
- FpaSjxnnStvWt0/kG5AzTXM2MhVdF5y9AQM5g0s8KfzTbbXwj+LDH+DotqtOtqk6cJ8uzQBT8
- ey6aslfhQzCeNaE7ouoXS1bk586GlfdZLqG3k4MZN2PPm6VOctjMmq9zVKIiuiJHn8dDYGDhE
- sWBrFqsN04E2IsXJgB7SgkVggHrc6BDwhtlcNl7BZWPycxpYFDSZq/FSJs+WZpYazye8fSrYV
- /ask4kQYQ7HJV9bGwZ7kFwqiEpjYmrCY+zxTI49MURvlDCB+2rfI8OLKzEZn0e9aHxnAizll7
- EqxE1asme1fCitx2cSsJ0N91V3JPfWfsVPGVpyrrFbfn4Nhzz8uSBTJZHAsDHu4gWCiUybpIQ
- UqoQIJvTLO7Q3Iv6LB1RFRwtdFQjJR5ysnUs+NX8plwV+2GVkoSEb9cosUjLMf2CbRxisJa8X
- dzrDiANB9nXUlIdLobwEfbd5ZM627jbtIpqStVFezTk4LNE5o3e3oODY0pNc9+8hgsj9O15Gu
- YBDq6qZCpDst9JQTZ8nCJEC5nT+ylbG3VUKdRBtlkhUhNp7iilVvArH+UilrkdpPj5yH4DXLv
- xaSNLvM0WRkNX3pZCUQI7a2ELtS88zNjXuZAN0Qwto5LkZ2trEY3DwsxKfSvLA6Tnl8CVZMd3
- iRLmir3Irt1qITKzq8I6rfjEDPtYmyPrYkNhn0AKFiQ99BpMyQwMbPDZYwJ6SrOnDeB5DNarP
- /DbqJPIKURAXPv9kjq8D80gw==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACYclWYC/3WNzQ6CMBCEX4Xs2TWlFRFPvofh0J8FNhFKWtJgC
+ O9uJV49fjOZbzaIFJgi3IsNAiWO7KcM8lSAHfTUE7LLDFLIi6hkhaNe6/raKMx16CkgrYv1EzZ
+ kTG20uylLkNdzoI7Xw/xsMw8cFx/ex1Eqv+nPqcRfZypRoLNSN1QZ1ynx6EfNr7P1I7T7vn8Ak
+ w8nUL4AAAA=
+To: Krzysztof Kozlowski <krzk@kernel.org>, 
+ Chanwoo Choi <cw00.choi@samsung.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ ~postmarketos/upstreaming@lists.sr.ht, Henrik Grimler <henrik@grimler.se>, 
+ Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>, 
+ Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>, 
+ Artur Weber <aweber.kernel@gmail.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2480;
+ i=aweber.kernel@gmail.com; h=from:subject:message-id;
+ bh=joW1dUBhJoxnwAipx4tWr4333aQdsreO5ngTla7wYSs=;
+ b=owEBbQKS/ZANAwAKAbO7+KEToFFoAcsmYgBmlRwo9PihOl5L28LE9qP4hgOpnfxfXs8CFPp05
+ CKvz5ISW/+JAjMEAAEKAB0WIQTmYwAOrB3szWrSiQ2zu/ihE6BRaAUCZpUcKAAKCRCzu/ihE6BR
+ aB0vD/90CLEESM73nmoes655DvnKe9FoKfY0xRcn8DjYELj1oRQsnFmYNzH+Hm4TLWm5wE7Styi
+ FGgmxM/d/ffqC87fdmUpqsmntH5snyajqNAmA7NSPg31xUhoD/MyuEnDc+pm5p4Lngr3iGKPmz1
+ 1RT4MMjLoc1eATadbdTl0bohDfQd5sV1gWsb475Tu7GoevaUzvAs4boj38JKMQtstZ3r5J7Jymm
+ FUgbSioMlcAlF+Hnz6vfgY89jkfwwbbzrtDnp0azbXjm3kS3LBWlttOS9hPHdTe+sLgPs7hfk9a
+ wp6ETUNq0YdSNRUvqJDmJBR014OIxJWOJ/LQfTpr51PSDSa7ALYJAU+lM+CLcX2iaEbxzBqkh0m
+ HvBAhGcYLq+U7tMg1xQbhbQD/MfR0435xZq6I9911JcbyaarK1U+HUnpbqq4i6+OgN2dxHpiPfS
+ w5PowAQzE96/3BfURYLYtzuPTljJrKZzxjIaP9rsezom8vF7Ih4SB90gLUFBrpbq+JrvDIaPpIQ
+ bGFxTcWR2A/5qX3P+WuNsaUfn+lVSbGFCYBY2mbEdJjyDfVYjfscHaMsp9zZRSSOMdOvqna3K6g
+ lFfRsiFhkAZTl4EkZEh+EueB3kMOHgMYSxovU7GgyunqAIc+h1udPKU02Ri5HxMOY9rrqvisyjn
+ 0p9vpp5IDI5eFxw==
+X-Developer-Key: i=aweber.kernel@gmail.com; a=openpgp;
+ fpr=E663000EAC1DECCD6AD2890DB3BBF8A113A05168
 
-Hi
+This patchset does the following:
 
-On 2024-07-15, Rafael J. Wysocki wrote:
-> On Mon, Jul 15, 2024 at 11:09=E2=80=AFAM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
-> > On 15/07/2024 06:45, Eric Biggers wrote:
-> > > On Thu, Jul 04, 2024 at 01:46:26PM +0200, Rafael J. Wysocki wrote:
-> > >> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >>
-> > >> Commit 202aa0d4bb53 ("thermal: core: Do not call handle_thermal_tri=
-p()
-[...]
-> > Does the following change fixes the messages  ?
-> >
-> > diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-> > b/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-> > index 61a4638d1be2..b519db76d402 100644
-> > --- a/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-> > +++ b/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-> > @@ -622,7 +622,7 @@ static int iwl_mvm_tzone_get_temp(struct
-> > thermal_zone_device *device,
-> >
-> >         if (!iwl_mvm_firmware_running(mvm) ||
-> >             mvm->fwrt.cur_fw_img !=3D IWL_UCODE_REGULAR) {
-> > -               ret =3D -ENODATA;
-> > +               ret =3D -EAGAIN;
-> >                 goto out;
-> >         }
-> >
-> >
-> > --
->
-> It would make the message go away, but it wouldn't stop the useless
-> polling of the dead thermal zone.
+- Add CURRENT_MAX and INPUT_CURRENT_MAX power supply properties to
+  expose the "fast charge current" (maximum current from charger to
+  battery) and "CHGIN input current limit" (maximum current from
+  external supply to charger).
 
-Silencing the warnings is already a big improvement - and that patch
-works to this extent for me with an ax200, thanks.
+- Add functions for toggling charging and OTG modes.
 
-> I think that two things need to be done:
->
-> (1) Add backoff to the thermal core as proposed previously.
-> (2) Make iwlwifi enable the thermal zone only if the firmware is running=
-.
+- Add an extcon-based handler that enables charging or OTG depending
+  on the cable type plugged in. The extcon device to use for cable
+  detection can be specified in the device tree, and is entirely
+  optional.
 
-Regards
-	Stefan Lippers-Hollmann
+The extcon listener implementation is inspired by the rt5033 charger
+driver (commit 8242336dc8a8 ("power: supply: rt5033_charger: Add cable
+detection and USB OTG supply")).
+
+Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+---
+See v1 for old description:
+
+https://lore.kernel.org/r/20240530-max77693-charger-extcon-v1-0-dc2a9e5bdf30@gmail.com
+---
+Changes in v2:
+- Changed to use monitored-battery for charge current value
+- Both current limit variables are now set by the CHARGER regulator
+- Link to v1: https://lore.kernel.org/r/20240530-max77693-charger-extcon-v1-0-dc2a9e5bdf30@gmail.com
+
+---
+Artur Weber (9):
+      dt-bindings: power: supply: max77693: Add monitored-battery property
+      dt-bindings: power: supply: max77693: Add maxim,usb-connector property
+      regulator: max77693: Set fast charge current in MAX77693 CHARGER regulator
+      power: supply: max77693: Expose CURRENT_MAX property
+      power: supply: max77693: Set charge current limits during init
+      power: supply: max77693: Add USB extcon detection for enabling charging
+      power: supply: max77693: Add support for detecting and enabling OTG
+      ARM: dts: samsung: exynos4212-tab3: Add battery node with charge current value
+      ARM: dts: samsung: exynos4212-tab3: Add USB connector node
+
+ .../bindings/power/supply/maxim,max77693.yaml      |  15 ++
+ arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi     |  19 ++
+ drivers/power/supply/Kconfig                       |   1 +
+ drivers/power/supply/max77693_charger.c            | 273 ++++++++++++++++++++-
+ drivers/regulator/max77693-regulator.c             |  34 ++-
+ include/linux/mfd/max77693-private.h               |  11 +
+ 6 files changed, 340 insertions(+), 13 deletions(-)
+---
+base-commit: a38297e3fb012ddfa7ce0321a7e5a8daeb1872b6
+change-id: 20240525-max77693-charger-extcon-9ebb7bad83ce
+
+Best regards,
+-- 
+Artur Weber <aweber.kernel@gmail.com>
+
 
