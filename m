@@ -1,123 +1,119 @@
-Return-Path: <linux-pm+bounces-11081-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11082-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69996930C20
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 01:08:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F349A930D5F
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 06:45:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 250342817D9
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Jul 2024 23:08:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1723C1C20E4B
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 04:45:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62E2113D601;
-	Sun, 14 Jul 2024 23:08:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0946F4500D;
+	Mon, 15 Jul 2024 04:45:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IMIdFc4M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L74PKLs+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56A615C0
-	for <linux-pm@vger.kernel.org>; Sun, 14 Jul 2024 23:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D738D28FA;
+	Mon, 15 Jul 2024 04:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720998497; cv=none; b=LEHRKyxNYq4COe+unPLI+istKqgF38rOvAMY9TH3XbajAHo2vffs+b107mtbsGprhqLh5+VLANAIstC7COPALUG3/knhBHtKPm2deCRRILEopuzRz9lxeDpijM6jtvu2QcfwM2uOZ0GRTi3W0GMihgGALeyq4efeUPqwqquWhTo=
+	t=1721018729; cv=none; b=bTWlKjB3NREWma4f4gOePc3JYsJIZ9nW7yLwe+G+H3KLqrJ/RSHb1GCSA6PbBt10ul4/CSK5l5nBxM97q3JdRw5LpPcUEH309d0pTAGtf53PEtYyu+H1+GtF2a+6GQE8b66omY1a14tXOsRZr0pIZNBtVGwAzw4UNiRImqvJmCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720998497; c=relaxed/simple;
-	bh=OMkN5np2QtCs1JNvE31sSeSC1J+h0T2xqETYrtz/Jvo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nk5fnDCoHlSwlorZTzftJOl4GqMZO6s+lYqC/AFDFPN18c+F3S8oe5Rao4BkQwZm+hByPgMjURTFP9BtLhmfdnRRVLXuaAD8IfXwEHS0WgHaZ0KMJF1DufqbzfpxZZI+HK/PbS/VpJ7P+pC9qSzXEVrLO5U2zXiCyFCUdvxRsoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IMIdFc4M; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4266182a9d7so23282635e9.0
-        for <linux-pm@vger.kernel.org>; Sun, 14 Jul 2024 16:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720998493; x=1721603293; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=giOaqGkW3gh78EAsAQJqHIlxqObHcBjMGF7SPoyrBgw=;
-        b=IMIdFc4MW2Yg6OPSpUgXBa4MZbS6twZtslBhTsBJ/IK001rWc78GjXZPPWUOeHMfem
-         NRTkTmWSWoTKQoznW7tU+fXPkOnQPuQzCu/WbSOg71unlJYQo+mcFADiKCfGX5vv6qwi
-         gmiFfLImakLREO9JdXat5GPOOPSyrOQkFQVy4WRbDCBkrE2s/4VKmLp9U3cCWYXBM//E
-         DHFY3FAAN2d13PTOmtvWc3b+AgUkAtfuO/f7+FZCbX8ouqDizj7YZHVwvO3MUnBnIxm6
-         1CXBX/53qgkJAGhy8gq1OXN+Wd9P/wMTBKHgURf2+QbCEvS3ROKrhD3ZqF3BK6lf2r0o
-         3PLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720998493; x=1721603293;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=giOaqGkW3gh78EAsAQJqHIlxqObHcBjMGF7SPoyrBgw=;
-        b=gGiwwpvhMW1+LSqeINdwZF4hMEsfXUOKU6md1/p8cpshFclc2ryQHL1fTSHnoWsNO5
-         gAhZNqGapRGWucbQmwcY5IWn/Jw2aL3eA6rIZwA6n81ngurImEoD9GdXCKezDCZ78Y5e
-         MGEice/CQ3L5oTSS6AhNykRu350tbIFAyRvS6rEJcNGKx7i+/a7fbCnPA5usog54bp4M
-         rgmYcOBpmqNISnhR0mGjWGL6hy9jK/u8hxZ+mwACEwygbZU7QeKLq4kJnIp4vwK8J04Q
-         TTQhRVD0qag8/SP+j0iuc3KwjgQBE67kngQEXmP4ctYt4yty2qjFGHmSWxXHdOusXYEc
-         ztmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU7h6odJ+cHqqWiPPgYTPNxQ651lC1+bx4A6u8Bo2mFpnKNIx2C4djfIH946Useh9ayc8cza3cC2BCe8JVsGp69G+hZhs1qlg8=
-X-Gm-Message-State: AOJu0Yxr5nF3yFUb52O7Qc6K2dl4uKsSsvgCgw+yFeybSIgGvBZSc3o7
-	ZW9HyXcUTS2qa5f6rOz5Syn7lEOPlwWlWJptMfGRURmCuK9IG3gw0jHZ+hENfoc=
-X-Google-Smtp-Source: AGHT+IHEJtdJ8gx7OOIcLqOTFIx9I0LKxCSaI1ZsOORagte27E0UhFbA3bxbSv/hBaM4nMePlTVBRg==
-X-Received: by 2002:a5d:6a52:0:b0:367:8909:197b with SMTP id ffacd0b85a97d-367cead94b9mr10738905f8f.61.1720998493213;
-        Sun, 14 Jul 2024 16:08:13 -0700 (PDT)
-Received: from [192.168.0.3] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3680daccc55sm4807421f8f.50.2024.07.14.16.08.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Jul 2024 16:08:12 -0700 (PDT)
-Message-ID: <dfe6be96-9ec1-4f49-b561-19865bc313c9@linaro.org>
-Date: Mon, 15 Jul 2024 00:08:11 +0100
+	s=arc-20240116; t=1721018729; c=relaxed/simple;
+	bh=dmwckEozZOxfYWPsH5K7q9jjZbrRCrhk5aZ3XiX2IEA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eXkhMuNLeQ73BWXnjteu+faiFTWZlSU+6U37n+5rmhT+uJFAfCqr3pR+0W6kcHlOcsIUIyGP62m32hG59LxhH2L4EQJuHdmKw//HvOIwqX+P3uzo4iFPzOrCxQVzDs0ZOOc110lO6L1d07gVE/2LI7YX5qw6UZY8azeaLRP29ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L74PKLs+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E15AC4AF0A;
+	Mon, 15 Jul 2024 04:45:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721018729;
+	bh=dmwckEozZOxfYWPsH5K7q9jjZbrRCrhk5aZ3XiX2IEA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=L74PKLs+13hB9RUudNATkLyXhvd4KYwevczb3NDG0Q1O8NIRFlWZ68xTN+Xraaopi
+	 MuGwV0QqOjMoWnwuYwuaJ04B/69+gb/8R8GDZUJG1v16s1CnjlvuPwEEjXGXpKO7nt
+	 REMaA0drEFIEiu8FauRxrqzzsAX7PrRe+037b0sNeyUKBoZkkw9VtRrHQFi1WnLCZl
+	 OFsoIsmReeugvrdHHb1Ks3prllMxY9gn1FHUXMw3z79XYo3t4ntYmL0jYF+Mkb64Cj
+	 rnl71tun9pA0+nsmtrKhOTf2Qj8sP3zD6f8W+PMblZ2JPMgzEi1d4sWn0WltnwA/Yf
+	 5SLtnJpoFo7vA==
+Date: Sun, 14 Jul 2024 21:45:27 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v3] thermal: core: Call monitor_thermal_zone() if zone
+ temperature is invalid
+Message-ID: <20240715044527.GA1544@sol.localdomain>
+References: <6064157.lOV4Wx5bFT@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] PM: domains: add device managed version of
- dev_pm_domain_attach|detach_list()
-To: Dikshita Agarwal <quic_dikshita@quicinc.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
- Len Brown <len.brown@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
- Vikash Garodia <quic_vgarodia@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, Philipp Zabel
- <p.zabel@pengutronix.de>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Stanimir Varbanov <stanimir.varbanov@linaro.org>,
- Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-arm-msm@vger.kernel.org
-References: <1720763312-13018-1-git-send-email-quic_dikshita@quicinc.com>
- <1720763312-13018-2-git-send-email-quic_dikshita@quicinc.com>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <1720763312-13018-2-git-send-email-quic_dikshita@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6064157.lOV4Wx5bFT@rjwysocki.net>
 
-On 12/07/2024 06:48, Dikshita Agarwal wrote:
-> This patch adds the devres-enabled version of dev_pm_domain_attach|detach_list.
-> If client drivers use devm_pm_domain_attach_list() to attach the PM domains,
-> devm_pm_domain_detach_list() will be invoked implicitly during remove phase.
+Hello,
+
+On Thu, Jul 04, 2024 at 01:46:26PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> ---
+> Commit 202aa0d4bb53 ("thermal: core: Do not call handle_thermal_trip()
+> if zone temperature is invalid") caused __thermal_zone_device_update()
+> to return early if the current thermal zone temperature was invalid.
+> 
+> This was done to avoid running handle_thermal_trip() and governor
+> callbacks in that case which led to confusion.  However, it went too
+> far because monitor_thermal_zone() still needs to be called even when
+> the zone temperature is invalid to ensure that it will be updated
+> eventually in case thermal polling is enabled and the driver has no
+> other means to notify the core of zone temperature changes (for example,
+> it does not register an interrupt handler or ACPI notifier).
+> 
+> Also if the .set_trips() zone callback is expected to set up monitoring
+> interrupts for a thermal zone, it needs to be provided with valid
+> boundaries and that can only be done if the zone temperature is known.
+> 
+> Accordingly, to ensure that __thermal_zone_device_update() will
+> run again after a failing zone temperature check, make it call
+> monitor_thermal_zone() regardless of whether or not the zone
+> temperature is valid and make the latter schedule a thermal zone
+> temperature update if the zone temperature is invalid even if
+> polling is not enabled for the thermal zone (however, if this
+> continues to fail, give up after some time).
+> 
+> Fixes: 202aa0d4bb53 ("thermal: core: Do not call handle_thermal_trip() if zone temperature is invalid")
+> Reported-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Link: https://lore.kernel.org/linux-pm/dc1e6cba-352b-4c78-93b5-94dd033fca16@linaro.org
+> Link: https://lore.kernel.org/linux-pm/2764814.mvXUDI8C0e@rjwysocki.net
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> +	num_pds = dev_pm_domain_attach_list(dev, data, list);
-> +
-> +	ret = devm_add_action_or_reset(dev, devm_pm_domain_detach_list, (void *)list);
+On v6.10 I'm seeing the following messages spammed to the kernel log endlessly,
+and reverting this commit fixes it.
 
-Fairly sure that cast isn't necessary eg
+    [  156.410567] thermal thermal_zone0: failed to read out thermal zone (-61)
+    [  156.666583] thermal thermal_zone0: failed to read out thermal zone (-61)
+    [  156.922598] thermal thermal_zone0: failed to read out thermal zone (-61)
+    [  157.178613] thermal thermal_zone0: failed to read out thermal zone (-61)
+    [  157.434636] thermal thermal_zone0: failed to read out thermal zone (-61)
+    [  157.690774] thermal thermal_zone0: failed to read out thermal zone (-61)
+    [  157.946659] thermal thermal_zone0: failed to read out thermal zone (-61)
+    [  158.202717] thermal thermal_zone0: failed to read out thermal zone (-61)
+    [  158.458697] thermal thermal_zone0: failed to read out thermal zone (-61)
 
-drivers/input/touchscreen/ili210x.c::ili210x_i2c_probe()
-drivers/power/supply/axp288_fuel_gauge.c::axp288_fuel_gauge_probe()
+/sys/class/thermal/thermal_zone0/type contains "iwlwifi_1".
 
----
-bod
+- Eric
 
