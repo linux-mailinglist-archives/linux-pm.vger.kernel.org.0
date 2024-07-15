@@ -1,272 +1,325 @@
-Return-Path: <linux-pm+bounces-11117-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11118-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E5799318D8
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 18:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 086E6931A72
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 20:43:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D0261C21029
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 16:52:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01F311C21134
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 18:43:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABA131CF92;
-	Mon, 15 Jul 2024 16:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ED7661FDA;
+	Mon, 15 Jul 2024 18:43:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="y+POQP9o"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="VWfte1kx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5D2175AE
-	for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2024 16:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E9F6E611
+	for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2024 18:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721062316; cv=none; b=NPMUofWIQe2xMDK5DWL879FDnkpV6ekP+J1NJK3V+gSsd/A+Ubi3tTfp8dD+jui9k4SaE8eg11r7quc0tcuK6aPJgCUnpTPKGSzQasfmzlVXy04lPDmhaf1qhSj5ZF3zTm0+95bQ++nxJxgwRozwX5R3wgQ/r557zP+DGgof70w=
+	t=1721069016; cv=none; b=pp1nZkWF7ntYAJhrXh13UBM1P3/Nlmv3AwnZMqTKCw5sx1fN98lazpT6zWMGhszUIx/e8WcR2BZ9v+uAuqQeg+a0nyfiZEuXb+9rrAITB4lRhXuoZ2I0adFSJnWjs3nxC8MK9YP6wDf2XcQxaNFM5L4kxcnMKnptyEeUfTVl6IQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721062316; c=relaxed/simple;
-	bh=wfiYzRp+rvevmyYqKuvdRSOI8ys2xMrFBcHMoASo1zg=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=sKTJe9CJgGspuKdnidQxqMULdHfmzMmaQInu5DS5IGYqNT1qufxlzJZXy1LfjJkHj3QhXHwp4Y8ck/xFLo0Dkhq/cKZ2fL8xUabhMyXDsHrJHWimg1t5x7IZUDEIGNGT0K4qA/kSacdtu3qkVADawgqv/JD7PsiPjk/S8Eg9KFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=y+POQP9o; arc=none smtp.client-ip=209.85.214.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f195.google.com with SMTP id d9443c01a7336-1fb3cf78fcaso31455875ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2024 09:51:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1721062314; x=1721667114; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=KVruKN/62esGMLR+cgyjYUhUPzszmwmeWjjzFttkroE=;
-        b=y+POQP9orNm1R6WNBc3lcpJqxyrqydz8QnimBukz22zOsgda/GzAC6NnJvdxhEq6v4
-         emYZRX2C2VlaTpxsQLEXewQ6bn41Imh7lqUBpnIua2+BRIq4LtRJP3qLHzJyRCLyoc+y
-         zAvpQzlaqlutRMCYOIL2VIOjB9LtsqJPfpDjzIyAfjrhVmvBf44Z+QFZlZSmZB382VTJ
-         66yoMIA9hmoM87iFWxyXzSw6j8kE2tb2C6mzJ/MpxB5Vjt7Ws9fVV2paReChuLciPEuc
-         fDGoFG6rNHWz19E8m8j1wfoBFA/e5xU/4lFhyuPr/hqodWaJrcKe8IvUiyMIOHD+wApt
-         p9Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721062314; x=1721667114;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KVruKN/62esGMLR+cgyjYUhUPzszmwmeWjjzFttkroE=;
-        b=elIUQ0NCcG15sT2ar6oP9V7JP2+WfZD+1weicRSTEzgtqvrSW4OsWardtR5MeZ6csd
-         zJP3RK0Ddl/T284YyrM+fIK/Mv7ZVCwTu4az79rPTpM3y5IHFXocQJBwojjOTzWVLK1G
-         e4udLz4sHpk40Bl2b1aOb/J/Ih0ZSS/n7wf69M+zyzICbj8GeOV+j9syCflkwkqmP4om
-         VGuAt6tsfS3yv4hz1D65I7ee6QGjpqwOZGDSuPVoFgRPGKeWQg90AFPAhBg3bSIZqqpi
-         z5cKStnwgQCsW4TS432cOkQMHejj4cE7bHemEZt/NPZzNkPKV2LM5Aw6LX2G4rTQ3g4b
-         dM/w==
-X-Forwarded-Encrypted: i=1; AJvYcCVrPXHQvPVfL0b4cSv+xmqZAoXFtHMsSUdPkd4sjxeRstwCvke5bi+g4GbHah/jL45Vc6gN4uQNfB33n45GG2wQesnL93WP3nM=
-X-Gm-Message-State: AOJu0YzQ87A8xdAe3gMRFyGYY3iDP4FxLDpjz3eB4/oGnIL0VXGbIuml
-	jBdaMgUSsuqL/bwxnPLeLKE0dDxFOsF2BNGfFPGCM7fP0b1Rrq1Nv/2z4IrtWNRGvDl1JDNBjrI
-	ia4XgJg==
-X-Google-Smtp-Source: AGHT+IGFvGMdEhIpsFC9kYybQ7mZKpKua4HkZNWlJ7lm7k+vfi4XVRqxdlfBvqSo+rU+I/h+5bRUHA==
-X-Received: by 2002:a17:902:e5c9:b0:1fb:bd7:f22c with SMTP id d9443c01a7336-1fbb6ef8301mr203509115ad.56.1721062313762;
-        Mon, 15 Jul 2024 09:51:53 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bc3a1a7sm43444435ad.203.2024.07.15.09.51.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jul 2024 09:51:53 -0700 (PDT)
-Message-ID: <669553a9.170a0220.b771a.c5dc@mx.google.com>
-Date: Mon, 15 Jul 2024 09:51:53 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1721069016; c=relaxed/simple;
+	bh=Gktwz+O8OSr8hIWsnXfOUrLKW+gh5DI3nariSLEdRqU=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To; b=SgTvdcmMVpZ+d5Aj7xs4EAbmq+mIZVoau64jUe+JX29mat+sdsLuM3g9GHPCHRKEkabMEgbUAJy5CIcrlqoGocDy5gnlRpoX+usnkiCiXrNVbFMzMjR8VHPboLVR62iKk7m6LIepWCRlpGuQ5ltF6yLFyhWXvSrgorm4kwTIMVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=VWfte1kx; arc=none smtp.client-ip=166.84.1.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
+	(No client certificate requested)
+	by l2mail1.panix.com (Postfix) with ESMTPS id 4WN9g01dYPzDZH
+	for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2024 14:27:56 -0400 (EDT)
+Received: from [192.168.8.249] (unknown [184.169.45.4])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4WN9fm2VDlz13Pf;
+	Mon, 15 Jul 2024 14:27:43 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1721068069; bh=Gktwz+O8OSr8hIWsnXfOUrLKW+gh5DI3nariSLEdRqU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=VWfte1kxq8wsqPeFkLU8Kf9qrxHgNgk3fycK9PJ0WDsjzQLMLXrSh1uSGmZTkWlKV
+	 CTEKYHl6SJMgiSSS9TjQMZmPzQzNc1ny5raIze2bUE6AqLz5lyrGWD+xALWwCOyoYI
+	 hrxJAZmkYNVtFPlOSej7b249aihvT0nP8Iw3xG1M=
+Content-Type: multipart/mixed; boundary="------------zz0BKE2ezdTM0oNnsBy0FBrX"
+Message-ID: <0481ec61-3a57-4b4b-a0d8-b8b523af3f17@panix.com>
+Date: Mon, 15 Jul 2024 11:27:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.10-rc7-232-g218ca41f1f26
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 21 warnings (v6.10-rc7-232-g218ca41f1f26)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: My AlderLake Dell (XPS-9320) needs these patches to get full
+ standby/low-power modes
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc: vidyas@nvidia.com, bhelgaas@google.com, andrea.righi@canonical.com,
+ vicamo.yang@canonical.com, linux-pm@vger.kernel.org
+References: <218aa81f-9c6-5929-578d-8dc15f83dd48@panix.com>
+ <1c6a9a8c-a6f-c884-7d58-5c713b1d77d7@panix.com>
+ <CAAd53p70Hkv6vaim0HOncSQGBPO83f4QOGLE869T+4WKWdLjBw@mail.gmail.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <CAAd53p70Hkv6vaim0HOncSQGBPO83f4QOGLE869T+4WKWdLjBw@mail.gmail.com>
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 21 warnings (v6.10-rc7-232-=
-g218ca41f1f26)
-
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-10-rc7-232-g218ca41f1f26/
-
-Tree: pm
-Branch: testing
-Git Describe: v6.10-rc7-232-g218ca41f1f26
-Git Commit: 218ca41f1f26732bf9b2d041ba0e7e52a1c29ad2
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
-
-Warnings Detected:
-
-arc:
-    haps_hs_smp_defconfig (gcc-12): 2 warnings
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-12): 3 warnings
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-12): 16 warnings
-
-x86_64:
+This is a multi-part message in MIME format.
+--------------zz0BKE2ezdTM0oNnsBy0FBrX
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-Warnings summary:
+No joy yet for 6.10, so here's my patches, maybe it'll save someone some 
+time (they're pretty much the same as 6.9) .
 
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o:=
- missing .note.GNU-stack section implies executable stack
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missin=
-g .note.GNU-stack section implies executable stack
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
-=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
-r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
-ls' found, but node is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
- is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
-rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
- provider
-    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
+Fingers crossed for 6.11!
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+-Kenny
 
-Detailed per-defconfig build reports:
+On 3/21/24 03:12, Kai-Heng Feng wrote:
+> Hi Kenneth,
+> 
+> On Tue, Mar 12, 2024 at 10:37 AM Kenneth R. Crudup <kenny@panix.com> wrote:
+>>
+>>
+>> On Sat, 4 Nov 2023, Kenneth R. Crudup wrote:
+>>
+>>> The only release kernel that was able to get this laptop to fully get into
+>>> low-power (unfortunately only s0ix) was the Ubuntu-6.2.0- ... series from Ubuntu
+>>
+>>> I'd bisected it to the following commits:
+>>> 4ff116d0d5fd PCI/ASPM: Save L1 PM Substates Capability for suspend/resume
+>>> 5e85eba6f50d PCI/ASPM: Refactor L1 PM Substates Control Register programming
+>>> 1a0102a08f20 UBUNTU: SAUCE: PCI/ASPM: Enable ASPM for links under VMD domain
+>>> 47c7bfd31514 UBUNTU: SAUCE: PCI/ASPM: Enable LTR for endpoints behind VMD
+>>> 154d48da2c57 UBUNTU: SAUCE: vmd: fixup bridge ASPM by driver name instead
+>>
+>> Since (for what I'm sure is a good reason ... I hope :) ) this has yet to make
+>> it into mainline, here's the set of commits refactored for v6.8; maybe someone
+>> scanning the archives for a solution to their Dell draining too much power can
+>> use them.
+>>
+>> But is there anything I can do to help these go in? I saw that "Refactor L1
+>> PM Substates Control Register programming" is still reverted, is that still
+>> an issue on the machine it affected?
+> 
+> Let me work on this.
+> 
+> I think both VMD and Thunderbolt devices need ASPM enabled by default
+> regardless of BIOS setting, but I am not sure if PCI folks will like
+> the idea.
+> 
+> Kai-Heng
+> 
+>>
+>>          -Kenny
+>>
+>> --
+>> Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange County CA
+> 
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
+--------------zz0BKE2ezdTM0oNnsBy0FBrX
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0003-UBUNTU-SAUCE-vmd-fixup-bridge-ASPM-by-driver-name-in.patch"
+Content-Disposition: attachment;
+ filename*0="0003-UBUNTU-SAUCE-vmd-fixup-bridge-ASPM-by-driver-name-in.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
 
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
-ot an interrupt provider
-    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
-ound, but node is not an interrupt provider
-    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
+RnJvbSA5NDcwOTExOGQxMTM0ZGRlYTdlZDU1ODYxOTBkZTljNDM5ZjkxM2JkIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBZb3UtU2hlbmcgWWFuZyA8dmljYW1vLnlhbmdAY2Fu
+b25pY2FsLmNvbT4KRGF0ZTogTW9uLCAxMSBBcHIgMjAyMiAxNzoyNDozNCArMDgwMApTdWJq
+ZWN0OiBbUEFUQ0ggMy8zXSBVQlVOVFU6IFNBVUNFOiB2bWQ6IGZpeHVwIGJyaWRnZSBBU1BN
+IGJ5IGRyaXZlciBuYW1lCiBpbnN0ZWFkCgpCdWdMaW5rOiBodHRwczovL2J1Z3MubGF1bmNo
+cGFkLm5ldC9idWdzLzE5NDIxNjAKCkFkZGl0aW9uYWwgVk1EIGJyaWRnZSBJRHMgbmVlZGVk
+IGZvciBuZXcgQWxkZXIgTGFrZSBwbGF0Zm9ybXMsIGJ1dAphY3R1YWxseSB0aGVyZSBpcyBu
+byBhIGNvbXBsZXRlIGxpc3QgZm9yIHRoZW0uIEhlcmUgd2UgbWF0Y2ggYnJpZGdlCmRldmlj
+ZXMgaWYgdGhleSdyZSBkaXJlY3RseSBhdHRhY2hlZCB0byBhIFZNRCBjb250cm9sbGVyIGlu
+c3RlYWQuCgpTaWduZWQtb2ZmLWJ5OiBZb3UtU2hlbmcgWWFuZyA8dmljYW1vLnlhbmdAY2Fu
+b25pY2FsLmNvbT4KU2lnbmVkLW9mZi1ieTogQW5kcmVhIFJpZ2hpIDxhbmRyZWEucmlnaGlA
+Y2Fub25pY2FsLmNvbT4KKGNoZXJyeSBwaWNrZWQgZnJvbSBjb21taXQgMTU0ZDQ4ZGEyYzU3
+NTE0ZTRiNWRhZGM3YjhjNzBhNGVkYjU1MDk4MSkKLS0tCiBkcml2ZXJzL3BjaS9xdWlya3Mu
+YyB8IDMyICsrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdl
+ZCwgMjMgaW5zZXJ0aW9ucygrKSwgOSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2
+ZXJzL3BjaS9xdWlya3MuYyBiL2RyaXZlcnMvcGNpL3F1aXJrcy5jCmluZGV4IDI2OWY1MzI1
+ZDFhMS4uOTRiZTM1MGNhYTcxIDEwMDY0NAotLS0gYS9kcml2ZXJzL3BjaS9xdWlya3MuYwor
+KysgYi9kcml2ZXJzL3BjaS9xdWlya3MuYwpAQCAtNjI3NCwyMyArNjI3NCwzNiBAQCBERUNM
+QVJFX1BDSV9GSVhVUF9GSU5BTChQQ0lfVkVORE9SX0lEX0dMSSwgMHg5NzUwLCBwY2lfbWFz
+a19yZXBsYXlfdGltZXJfdGltZW91dAogREVDTEFSRV9QQ0lfRklYVVBfRklOQUwoUENJX1ZF
+TkRPUl9JRF9HTEksIDB4OTc1NSwgcGNpX21hc2tfcmVwbGF5X3RpbWVyX3RpbWVvdXQpOwog
+I2VuZGlmCiAvKgotICogRGV2aWNlIFs4MDg2OjlhMDldLCBbODA4NjphMGIwXSBhbmQgWzgw
+ODY6YTBiY10KICAqIEJJT1MgbWF5IG5vdCBiZSBhYmxlIHRvIGFjY2VzcyBjb25maWcgc3Bh
+Y2Ugb2YgZGV2aWNlcyB1bmRlciBWTUQgZG9tYWluLCBzbwogICogaXQgcmVsaWVzIG9uIHNv
+ZnR3YXJlIHRvIGVuYWJsZSBBU1BNIGZvciBsaW5rcyB1bmRlciBWTUQuCiAgKi8KLXN0YXRp
+YyBjb25zdCBzdHJ1Y3QgcGNpX2RldmljZV9pZCB2bWRfYnJpZGdlX3RibFtdID0gewotCXsg
+UENJX1ZERVZJQ0UoSU5URUwsIDB4OWEwOSkgfSwKLQl7IFBDSV9WREVWSUNFKElOVEVMLCAw
+eGEwYjApIH0sCi0JeyBQQ0lfVkRFVklDRShJTlRFTCwgMHhhMGJjKSB9LAotCXsgfQotfTsK
+K3N0YXRpYyBib29sIHBjaV9maXh1cF9pc192bWRfYnJpZGdlKHN0cnVjdCBwY2lfZGV2ICpw
+ZGV2KQoreworCXN0cnVjdCBwY2lfYnVzICpidXMgPSBwZGV2LT5idXM7CisJc3RydWN0IGRl
+dmljZSAqZGV2OworCXN0cnVjdCBwY2lfZHJpdmVyICpwZHJ2OworCisJaWYgKCFwY2lfaXNf
+cm9vdF9idXMoYnVzKSkKKwkJcmV0dXJuIGZhbHNlOworCisJZGV2ID0gYnVzLT5icmlkZ2Ut
+PnBhcmVudDsKKwlpZiAoZGV2ID09IE5VTEwpCisJCXJldHVybiBmYWxzZTsKKworCXBkcnYg
+PSBwY2lfZGV2X2RyaXZlcih0b19wY2lfZGV2KGRldikpOworCWlmIChwZHJ2ID09IE5VTEwg
+fHwgc3RyY21wKCJ2bWQiLCBwZHJ2LT5uYW1lKSkKKwkJcmV0dXJuIGZhbHNlOworCisJcmV0
+dXJuIHRydWU7Cit9CiAKIHN0YXRpYyB2b2lkIHBjaV9maXh1cF9lbmFibGVfYXNwbShzdHJ1
+Y3QgcGNpX2RldiAqcGRldikKIHsKLQlpZiAoIXBjaV9tYXRjaF9pZCh2bWRfYnJpZGdlX3Ri
+bCwgcGRldikpCisJaWYgKCFwY2lfZml4dXBfaXNfdm1kX2JyaWRnZShwZGV2KSkKIAkJcmV0
+dXJuOwogCiAJcGRldi0+ZGV2X2ZsYWdzIHw9IFBDSV9ERVZfRkxBR1NfRU5BQkxFX0FTUE07
+CisJcGNpX2luZm8ocGRldiwgImVuYWJsZSBBU1BNIGZvciBwY2kgYnJpZGdlIGJlaGluZCB2
+bWQiKTsKIH0KIERFQ0xBUkVfUENJX0ZJWFVQX0NMQVNTX0hFQURFUihQQ0lfVkVORE9SX0lE
+X0lOVEVMLCBQQ0lfQU5ZX0lELAogCQkJICAgICAgIFBDSV9DTEFTU19CUklER0VfUENJLCA4
+LCBwY2lfZml4dXBfZW5hYmxlX2FzcG0pOwpAQCAtNjMwNSw3ICs2MzE4LDcgQEAgc3RhdGlj
+IHZvaWQgcGNpX2ZpeHVwX2VuYWJsZV92bWRfbnZtZV9sdHIoc3RydWN0IHBjaV9kZXYgKnBk
+ZXYpCiAJaWYgKCFwYXJlbnQpCiAJCXJldHVybjsKIAotCWlmICghcGNpX21hdGNoX2lkKHZt
+ZF9icmlkZ2VfdGJsLCBwYXJlbnQpKQorCWlmICghcGNpX2ZpeHVwX2lzX3ZtZF9icmlkZ2Uo
+cGFyZW50KSkKIAkJcmV0dXJuOwogCiAJcG9zID0gcGNpX2ZpbmRfZXh0X2NhcGFiaWxpdHko
+cGRldiwgUENJX0VYVF9DQVBfSURfTFRSKTsKQEAgLTYzMjMsNiArNjMzNiw3IEBAIHN0YXRp
+YyB2b2lkIHBjaV9maXh1cF9lbmFibGVfdm1kX252bWVfbHRyKHN0cnVjdCBwY2lfZGV2ICpw
+ZGV2KQogCS8qIDMxNDU3MjhucywgaS5lLiAweDMwMDAwMG5zICovCiAJcGNpX3dyaXRlX2Nv
+bmZpZ193b3JkKHBkZXYsIHBvcyArIFBDSV9MVFJfTUFYX1NOT09QX0xBVCwgMHgxMDAzKTsK
+IAlwY2lfd3JpdGVfY29uZmlnX3dvcmQocGRldiwgcG9zICsgUENJX0xUUl9NQVhfTk9TTk9P
+UF9MQVQsIDB4MTAwMyk7CisJcGNpX2luZm8ocGRldiwgImVuYWJsZSBMVFIgZm9yIG52bWUg
+YmVoaW5kIHZtZCIpOwogfQogREVDTEFSRV9QQ0lfRklYVVBfQ0xBU1NfRUFSTFkoUENJX0FO
+WV9JRCwgUENJX0FOWV9JRCwKIAkJCSAgICAgIFBDSV9DTEFTU19TVE9SQUdFX0VYUFJFU1Ms
+IDAsIHBjaV9maXh1cF9lbmFibGVfdm1kX252bWVfbHRyKTsKLS0gCjIuMzQuMQoK
+--------------zz0BKE2ezdTM0oNnsBy0FBrX
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0002-UBUNTU-SAUCE-PCI-ASPM-Enable-LTR-for-endpoints-behin.patch"
+Content-Disposition: attachment;
+ filename*0="0002-UBUNTU-SAUCE-PCI-ASPM-Enable-LTR-for-endpoints-behin.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+RnJvbSAzNjI0MzAyNmJkN2JlNTYwYTYxYjhlMDljODExZWI0ODFkNTQ2ZTNkIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBLYWktSGVuZyBGZW5nIDxrYWkuaGVuZy5mZW5nQGNh
+bm9uaWNhbC5jb20+CkRhdGU6IE1vbiwgMTEgQXByIDIwMjIgMTc6MjQ6MzMgKzA4MDAKU3Vi
+amVjdDogW1BBVENIIDIvM10gVUJVTlRVOiBTQVVDRTogUENJL0FTUE06IEVuYWJsZSBMVFIg
+Zm9yIGVuZHBvaW50cyBiZWhpbmQKIFZNRAoKQnVnTGluazogaHR0cHM6Ly9idWdzLmxhdW5j
+aHBhZC5uZXQvYnVncy8xOTQyMTYwCgpJbiBhZGRpdGlvbiB0byBBU1BNLCBMVFIgYWxzbyBu
+ZWVkcyB0byBiZSBwcm9ncmFtbWVkIHdpdGggYSByZWFzb25hYmxlCnZhbHVlIHRvIGxldCBQ
+Q0llIGxpbmsgcmVhY2hlcyBMMS4yLgoKRm9yIG5vdywgcHJvZ3JhbSBhIGhhcmRjb2RlZCB2
+YWx1ZSB0aGF0IGlzIHVzZWQgdW5kZXIgV2luZG93cy4KCldoaWxlIGF0IGl0LCBjb25zb2xp
+ZGF0ZSBBU1BNIGFuZCBMVFIgZW5hYmxpbmcgbG9naWMgdG8gc2hhcmUgYSBzYW1lIHBjaQpk
+ZXZpY2UgdGFibGUuCgpTaWduZWQtb2ZmLWJ5OiBLYWktSGVuZyBGZW5nIDxrYWkuaGVuZy5m
+ZW5nQGNhbm9uaWNhbC5jb20+ClNpZ25lZC1vZmYtYnk6IEFuZHJlYSBSaWdoaSA8YW5kcmVh
+LnJpZ2hpQGNhbm9uaWNhbC5jb20+CihjaGVycnkgcGlja2VkIGZyb20gY29tbWl0IDQ3Yzdi
+ZmQzMTUxNGU3YjU0YTFmODMwZjc3MDcyOTdhZWJiYjg2NzkpCi0tLQogZHJpdmVycy9wY2kv
+cXVpcmtzLmMgfCA0OCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+Ky0tLQogMSBmaWxlIGNoYW5nZWQsIDQ1IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0p
+CgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9wY2kvcXVpcmtzLmMgYi9kcml2ZXJzL3BjaS9xdWly
+a3MuYwppbmRleCBlYWUyNTdjNjkyNTUuLjI2OWY1MzI1ZDFhMSAxMDA2NDQKLS0tIGEvZHJp
+dmVycy9wY2kvcXVpcmtzLmMKKysrIGIvZHJpdmVycy9wY2kvcXVpcmtzLmMKQEAgLTYyNzQs
+MTMgKzYyNzQsNTUgQEAgREVDTEFSRV9QQ0lfRklYVVBfRklOQUwoUENJX1ZFTkRPUl9JRF9H
+TEksIDB4OTc1MCwgcGNpX21hc2tfcmVwbGF5X3RpbWVyX3RpbWVvdXQKIERFQ0xBUkVfUENJ
+X0ZJWFVQX0ZJTkFMKFBDSV9WRU5ET1JfSURfR0xJLCAweDk3NTUsIHBjaV9tYXNrX3JlcGxh
+eV90aW1lcl90aW1lb3V0KTsKICNlbmRpZgogLyoKLSAqIERldmljZSBbODA4Njo5YTA5XQor
+ICogRGV2aWNlIFs4MDg2OjlhMDldLCBbODA4NjphMGIwXSBhbmQgWzgwODY6YTBiY10KICAq
+IEJJT1MgbWF5IG5vdCBiZSBhYmxlIHRvIGFjY2VzcyBjb25maWcgc3BhY2Ugb2YgZGV2aWNl
+cyB1bmRlciBWTUQgZG9tYWluLCBzbwogICogaXQgcmVsaWVzIG9uIHNvZnR3YXJlIHRvIGVu
+YWJsZSBBU1BNIGZvciBsaW5rcyB1bmRlciBWTUQuCiAgKi8KK3N0YXRpYyBjb25zdCBzdHJ1
+Y3QgcGNpX2RldmljZV9pZCB2bWRfYnJpZGdlX3RibFtdID0geworCXsgUENJX1ZERVZJQ0Uo
+SU5URUwsIDB4OWEwOSkgfSwKKwl7IFBDSV9WREVWSUNFKElOVEVMLCAweGEwYjApIH0sCisJ
+eyBQQ0lfVkRFVklDRShJTlRFTCwgMHhhMGJjKSB9LAorCXsgfQorfTsKKwogc3RhdGljIHZv
+aWQgcGNpX2ZpeHVwX2VuYWJsZV9hc3BtKHN0cnVjdCBwY2lfZGV2ICpwZGV2KQogeworCWlm
+ICghcGNpX21hdGNoX2lkKHZtZF9icmlkZ2VfdGJsLCBwZGV2KSkKKwkJcmV0dXJuOworCiAJ
+cGRldi0+ZGV2X2ZsYWdzIHw9IFBDSV9ERVZfRkxBR1NfRU5BQkxFX0FTUE07CiB9Ci1ERUNM
+QVJFX1BDSV9GSVhVUF9IRUFERVIoUENJX1ZFTkRPUl9JRF9JTlRFTCwgMHg5YTA5LCBwY2lf
+Zml4dXBfZW5hYmxlX2FzcG0pOwotREVDTEFSRV9QQ0lfRklYVVBfSEVBREVSKFBDSV9WRU5E
+T1JfSURfSU5URUwsIDB4YTBiMCwgcGNpX2ZpeHVwX2VuYWJsZV9hc3BtKTsKK0RFQ0xBUkVf
+UENJX0ZJWFVQX0NMQVNTX0hFQURFUihQQ0lfVkVORE9SX0lEX0lOVEVMLCBQQ0lfQU5ZX0lE
+LAorCQkJICAgICAgIFBDSV9DTEFTU19CUklER0VfUENJLCA4LCBwY2lfZml4dXBfZW5hYmxl
+X2FzcG0pOworCitzdGF0aWMgdm9pZCBwY2lfZml4dXBfZW5hYmxlX3ZtZF9udm1lX2x0cihz
+dHJ1Y3QgcGNpX2RldiAqcGRldikKK3sKKwlzdHJ1Y3QgcGNpX2RldiAqcGFyZW50OworCWlu
+dCBwb3M7CisJdTE2IHZhbDsKKworCXBhcmVudCA9IHBjaV91cHN0cmVhbV9icmlkZ2UocGRl
+dik7CisJaWYgKCFwYXJlbnQpCisJCXJldHVybjsKKworCWlmICghcGNpX21hdGNoX2lkKHZt
+ZF9icmlkZ2VfdGJsLCBwYXJlbnQpKQorCQlyZXR1cm47CisKKwlwb3MgPSBwY2lfZmluZF9l
+eHRfY2FwYWJpbGl0eShwZGV2LCBQQ0lfRVhUX0NBUF9JRF9MVFIpOworCWlmICghcG9zKQor
+CQlyZXR1cm47CisKKwlwY2lfcmVhZF9jb25maWdfd29yZChwZGV2LCBwb3MgKyBQQ0lfTFRS
+X01BWF9TTk9PUF9MQVQsICZ2YWwpOworCWlmICh2YWwpCisJCXJldHVybjsKKworCXBjaV9y
+ZWFkX2NvbmZpZ193b3JkKHBkZXYsIHBvcyArIFBDSV9MVFJfTUFYX05PU05PT1BfTEFULCAm
+dmFsKTsKKwlpZiAodmFsKQorCQlyZXR1cm47CisKKwkvKiAzMTQ1NzI4bnMsIGkuZS4gMHgz
+MDAwMDBucyAqLworCXBjaV93cml0ZV9jb25maWdfd29yZChwZGV2LCBwb3MgKyBQQ0lfTFRS
+X01BWF9TTk9PUF9MQVQsIDB4MTAwMyk7CisJcGNpX3dyaXRlX2NvbmZpZ193b3JkKHBkZXYs
+IHBvcyArIFBDSV9MVFJfTUFYX05PU05PT1BfTEFULCAweDEwMDMpOworfQorREVDTEFSRV9Q
+Q0lfRklYVVBfQ0xBU1NfRUFSTFkoUENJX0FOWV9JRCwgUENJX0FOWV9JRCwKKwkJCSAgICAg
+IFBDSV9DTEFTU19TVE9SQUdFX0VYUFJFU1MsIDAsIHBjaV9maXh1cF9lbmFibGVfdm1kX252
+bWVfbHRyKTsKLS0gCjIuMzQuMQoK
+--------------zz0BKE2ezdTM0oNnsBy0FBrX
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-UBUNTU-SAUCE-PCI-ASPM-Enable-ASPM-for-links-under-VM.patch"
+Content-Disposition: attachment;
+ filename*0="0001-UBUNTU-SAUCE-PCI-ASPM-Enable-ASPM-for-links-under-VM.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+RnJvbSBiMDljYmVkYmYzN2E5NjUxZTNiZGRiOWNhY2IzMzhlNmY4ZjQ5YTgxIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBLYWktSGVuZyBGZW5nIDxrYWkuaGVuZy5mZW5nQGNh
+bm9uaWNhbC5jb20+CkRhdGU6IE1vbiwgMTEgQXByIDIwMjIgMTc6MjQ6MzIgKzA4MDAKU3Vi
+amVjdDogW1BBVENIIDEvM10gVUJVTlRVOiBTQVVDRTogUENJL0FTUE06IEVuYWJsZSBBU1BN
+IGZvciBsaW5rcyB1bmRlciBWTUQKIGRvbWFpbgoKQnVnTGluazogaHR0cHM6Ly9idWdzLmxh
+dW5jaHBhZC5uZXQvYnVncy8xOTQyMTYwCgpOZXcgSW50ZWwgbGFwdG9wcyB3aXRoIFZNRCBj
+YW5ub3QgcmVhY2ggZGVlcGVyIHBvd2VyIHNhdmluZyBzdGF0ZSwKcmVuZGVycyB2ZXJ5IHNo
+b3J0IGJhdHRlcnkgdGltZS4KCkFzIEJJT1MgbWF5IG5vdCBiZSBhYmxlIHRvIHByb2dyYW0g
+dGhlIGNvbmZpZyBzcGFjZSBmb3IgZGV2aWNlcyB1bmRlcgpWTUQgZG9tYWluLCBBU1BNIG5l
+ZWRzIHRvIGJlIHByb2dyYW1tZWQgbWFudWFsbHkgYnkgc29mdHdhcmUuIFRoaXMgaXMKYWxz
+byB0aGUgY2FzZSB1bmRlciBXaW5kb3dzLgoKVGhlIFZNRCBjb250cm9sbGVyIGl0c2VsZiBp
+cyBhIHJvb3QgY29tcGxleCBpbnRlZ3JhdGVkIGVuZHBvaW50IHRoYXQKZG9lc24ndCBoYXZl
+IEFTUE0gY2FwYWJpbGl0eSwgc28gd2UgY2FuJ3QgcHJvcGFnYXRlIHRoZSBBU1BNIHNldHRp
+bmdzIHRvCmRldmljZXMgdW5kZXIgaXQuIEhlbmNlLCBzaW1wbHkgYXBwbHkgQVNQTV9TVEFU
+RV9BTEwgdG8gdGhlIGxpbmtzIHVuZGVyClZNRCBkb21haW4sIHVuc3VwcG9ydGVkIHN0YXRl
+cyB3aWxsIGJlIGNsZWFyZWQgb3V0IGFueXdheS4KClNpZ25lZC1vZmYtYnk6IEthaS1IZW5n
+IEZlbmcgPGthaS5oZW5nLmZlbmdAY2Fub25pY2FsLmNvbT4KU2lnbmVkLW9mZi1ieTogQW5k
+cmVhIFJpZ2hpIDxhbmRyZWEucmlnaGlAY2Fub25pY2FsLmNvbT4KKGNoZXJyeSBwaWNrZWQg
+ZnJvbSBjb21taXQgMWEwMTAyYTA4ZjIwNjE0OWQ5YWJkNTZjMmIyODg3N2M4NzhiNTUyNikK
+LS0tCiBkcml2ZXJzL3BjaS9wY2llL2FzcG0uYyB8ICAzICsrLQogZHJpdmVycy9wY2kvcXVp
+cmtzLmMgICAgfCAxMSArKysrKysrKysrKwogaW5jbHVkZS9saW51eC9wY2kuaCAgICAgfCAg
+MiArKwogMyBmaWxlcyBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0p
+CgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9wY2kvcGNpZS9hc3BtLmMgYi9kcml2ZXJzL3BjaS9w
+Y2llL2FzcG0uYwppbmRleCBjZWUyMzY1ZTU0YjguLmVhOTZhZDA1OTgxNCAxMDA2NDQKLS0t
+IGEvZHJpdmVycy9wY2kvcGNpZS9hc3BtLmMKKysrIGIvZHJpdmVycy9wY2kvcGNpZS9hc3Bt
+LmMKQEAgLTgzMCw3ICs4MzAsOCBAQCBzdGF0aWMgdm9pZCBwY2llX2FzcG1fY2FwX2luaXQo
+c3RydWN0IHBjaWVfbGlua19zdGF0ZSAqbGluaywgaW50IGJsYWNrbGlzdCkKIAlhc3BtX2wx
+c3NfaW5pdChsaW5rKTsKIAogCS8qIFNhdmUgZGVmYXVsdCBzdGF0ZSAqLwotCWxpbmstPmFz
+cG1fZGVmYXVsdCA9IGxpbmstPmFzcG1fZW5hYmxlZDsKKwlsaW5rLT5hc3BtX2RlZmF1bHQg
+PSBwYXJlbnQtPmRldl9mbGFncyAmIFBDSV9ERVZfRkxBR1NfRU5BQkxFX0FTUE0gPworCQkJ
+ICAgICBQQ0lFX0xJTktfU1RBVEVfQVNQTV9BTEwgOiBsaW5rLT5hc3BtX2VuYWJsZWQ7CiAK
+IAkvKiBTZXR1cCBpbml0aWFsIGNhcGFibGUgc3RhdGUuIFdpbGwgYmUgdXBkYXRlZCBsYXRl
+ciAqLwogCWxpbmstPmFzcG1fY2FwYWJsZSA9IGxpbmstPmFzcG1fc3VwcG9ydDsKZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvcGNpL3F1aXJrcy5jIGIvZHJpdmVycy9wY2kvcXVpcmtzLmMKaW5k
+ZXggNTY4NDEwZTY0Y2U2Li5lYWUyNTdjNjkyNTUgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvcGNp
+L3F1aXJrcy5jCisrKyBiL2RyaXZlcnMvcGNpL3F1aXJrcy5jCkBAIC02MjczLDMgKzYyNzMs
+MTQgQEAgc3RhdGljIHZvaWQgcGNpX21hc2tfcmVwbGF5X3RpbWVyX3RpbWVvdXQoc3RydWN0
+IHBjaV9kZXYgKnBkZXYpCiBERUNMQVJFX1BDSV9GSVhVUF9GSU5BTChQQ0lfVkVORE9SX0lE
+X0dMSSwgMHg5NzUwLCBwY2lfbWFza19yZXBsYXlfdGltZXJfdGltZW91dCk7CiBERUNMQVJF
+X1BDSV9GSVhVUF9GSU5BTChQQ0lfVkVORE9SX0lEX0dMSSwgMHg5NzU1LCBwY2lfbWFza19y
+ZXBsYXlfdGltZXJfdGltZW91dCk7CiAjZW5kaWYKKy8qCisgKiBEZXZpY2UgWzgwODY6OWEw
+OV0KKyAqIEJJT1MgbWF5IG5vdCBiZSBhYmxlIHRvIGFjY2VzcyBjb25maWcgc3BhY2Ugb2Yg
+ZGV2aWNlcyB1bmRlciBWTUQgZG9tYWluLCBzbworICogaXQgcmVsaWVzIG9uIHNvZnR3YXJl
+IHRvIGVuYWJsZSBBU1BNIGZvciBsaW5rcyB1bmRlciBWTUQuCisgKi8KK3N0YXRpYyB2b2lk
+IHBjaV9maXh1cF9lbmFibGVfYXNwbShzdHJ1Y3QgcGNpX2RldiAqcGRldikKK3sKKwlwZGV2
+LT5kZXZfZmxhZ3MgfD0gUENJX0RFVl9GTEFHU19FTkFCTEVfQVNQTTsKK30KK0RFQ0xBUkVf
+UENJX0ZJWFVQX0hFQURFUihQQ0lfVkVORE9SX0lEX0lOVEVMLCAweDlhMDksIHBjaV9maXh1
+cF9lbmFibGVfYXNwbSk7CitERUNMQVJFX1BDSV9GSVhVUF9IRUFERVIoUENJX1ZFTkRPUl9J
+RF9JTlRFTCwgMHhhMGIwLCBwY2lfZml4dXBfZW5hYmxlX2FzcG0pOwpkaWZmIC0tZ2l0IGEv
+aW5jbHVkZS9saW51eC9wY2kuaCBiL2luY2x1ZGUvbGludXgvcGNpLmgKaW5kZXggY2FmYzVh
+YjFjYmNiLi40YjYyNjkyNjM4ZjggMTAwNjQ0Ci0tLSBhL2luY2x1ZGUvbGludXgvcGNpLmgK
+KysrIGIvaW5jbHVkZS9saW51eC9wY2kuaApAQCAtMjQ1LDYgKzI0NSw4IEBAIGVudW0gcGNp
+X2Rldl9mbGFncyB7CiAJUENJX0RFVl9GTEFHU19OT19SRUxBWEVEX09SREVSSU5HID0gKF9f
+Zm9yY2UgcGNpX2Rldl9mbGFnc190KSAoMSA8PCAxMSksCiAJLyogRGV2aWNlIGRvZXMgaG9u
+b3IgTVNJIG1hc2tpbmcgZGVzcGl0ZSBzYXlpbmcgb3RoZXJ3aXNlICovCiAJUENJX0RFVl9G
+TEFHU19IQVNfTVNJX01BU0tJTkcgPSAoX19mb3JjZSBwY2lfZGV2X2ZsYWdzX3QpICgxIDw8
+IDEyKSwKKwkvKiBFbmFibGUgQVNQTSByZWdhcmRsZXNzIG9mIGhvdyBMbmtDdGwgaXMgcHJv
+Z3JhbW1lZCAqLworCVBDSV9ERVZfRkxBR1NfRU5BQkxFX0FTUE0gPSAoX19mb3JjZSBwY2lf
+ZGV2X2ZsYWdzX3QpICgxIDw8IDEzKSwKIH07CiAKIGVudW0gcGNpX2lycV9yZXJvdXRlX3Zh
+cmlhbnQgewotLSAKMi4zNC4xCgo=
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
-er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
-ider
-    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 16 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
-te.GNU-stack section implies executable stack
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
-ing .note.GNU-stack section implies executable stack
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+--------------zz0BKE2ezdTM0oNnsBy0FBrX--
 
