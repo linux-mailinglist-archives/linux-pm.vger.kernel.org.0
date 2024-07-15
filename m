@@ -1,75 +1,76 @@
-Return-Path: <linux-pm+bounces-11102-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11103-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A83C9314FD
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 14:55:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CE0E931500
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 14:55:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91C6B1F21BAE
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 12:55:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDB601F21AF2
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 12:55:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B098518D4A8;
-	Mon, 15 Jul 2024 12:55:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE23E18D4B6;
+	Mon, 15 Jul 2024 12:55:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fs1FI234"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GrWptQsk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B0118C34F;
-	Mon, 15 Jul 2024 12:55:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECAC18D4B8;
+	Mon, 15 Jul 2024 12:55:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721048113; cv=none; b=WiUeR1EeNeYZWzYwGe5uqEokXJhV6M3omixa86Q6VHE5hLgI6nrQgXbRMrNmTPNRBJVE6GVMMemS49gRoHjsjoWdoUV1pI9rPf71TgjslVWWDci+9RdLINmh++q+sPJwgFUqQH81Mbw7LSO2WRqJf9FdAEZn+HEQnI4s2FsCfUw=
+	t=1721048116; cv=none; b=MCih89CR0MXx9InIzQ0qzU3FIKG2lgBhUVmH2S8tWyHbinFnM+yjsL7wwpitEwOJ9pbB4xyIXiHTSPfcBWCY/CXYa+N+aWz+kzh0x//cbsTv27FMyIxHEeU/tXEJszI63FWuGG/dH1Ln11jU/1z0tRxTBZ2vfBgyytiUyY0sJQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721048113; c=relaxed/simple;
-	bh=joW1dUBhJoxnwAipx4tWr4333aQdsreO5ngTla7wYSs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dcbzrRE0mrzgF8GX+8mWTpWJoSNr4JTPsuobNpvLaE5tmh3KcB/GLoGvPu/5u2rkYe5CUZM/ATXHoyR+ssPEwecq/Zr7yVXCSlYxOkKKW8A4ClhbE+My0W5gRYejU7dUc9Fw80b/c8buQAVsiCBFrSdiL1V5a1VrONip3lbjs9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fs1FI234; arc=none smtp.client-ip=209.85.208.51
+	s=arc-20240116; t=1721048116; c=relaxed/simple;
+	bh=Sep2YFazyIuwJAAWmtMhPpLW3/gwTfw1XNyWXLhamO8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Q7ZC9c12sjniTvq01iMKV+s8U16YaEN81dsmVuffCPNGqXqOdJ5BkcZ3fWtAvQ0kku9vcuEe5k30SRNtPyLIbVv+6411Dhk/OLTrZQfqrnpM+liQF32rPeSRoU1SpYqxdBOb977k0SwV5iXud6IcZ/LxyvuNDHgGSGx1OBd2qyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GrWptQsk; arc=none smtp.client-ip=209.85.208.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-595856e2336so277050a12.1;
-        Mon, 15 Jul 2024 05:55:11 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2eebc76119aso47977991fa.2;
+        Mon, 15 Jul 2024 05:55:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721048110; x=1721652910; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=l4oxwn9faJBZWNYakjxQw34lzbdzSD9MrW7c7EhtXGw=;
-        b=fs1FI234eRSSTEHb0G1e9uznsBVrTpQRjc+fcgpFgNmyh+7G7xUszq7msvbfxjgash
-         53pRWD3ZQKyaek7zwXTbnS5horLFEeAnX30jjnk1cuV+vppJP0WChXqmb2zzrc6ukSW9
-         HcIu4QvM2b3lI2WnllbEnFb/G3YuU1kFVVmLNGELVY+Hx8+5aO7NdcmnIaR9s/txmspJ
-         yA9JVZ+qB7f9IJe9svB3kFyBhePKSW7eubABni7/UyBhN6b9ncuiRDdOOQFSYd/YDcCG
-         QxsSyAkRKJzp5WdoLHMvYILFloQF/t76yFMBt1PCVVi5/1ZWw7W9XEhc0j4EXdqPlqof
-         Uwgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721048110; x=1721652910;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1721048113; x=1721652913; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=l4oxwn9faJBZWNYakjxQw34lzbdzSD9MrW7c7EhtXGw=;
-        b=Ou+xfFdIcSf0AWXLvMel3aEl0z8T3/qxQTSFmXUy7fqfEZNYBfLAojdEX2q53y5MWw
-         cHk7fc7SfZ10n3jEVJEgvHmY1X0OEVOfyYVS4eL951BpT7QHKer40oMCO1IQXGTUs3V6
-         O1R3mRZw4TfUlobet8yUvsqjopgCDLCCn2j4BJnDQEU6slSS220GU/M3Uk5LfPDbO7i/
-         EQ1R0oGaFbAVWTSjeuClit74CKmbjzYjUIYEyuYXOlUAeB4jHyy/5piyQ6cA/eqQi0MK
-         DH9zKAzTK+HAtEqnmhMGsE3U891vGW0rEggJE1CuizfnDr6tAZq8hb002aLSNHhBrwCK
-         m8Lg==
-X-Forwarded-Encrypted: i=1; AJvYcCWccPQX8pY0Sbnx+W7pF6Kg2AA9wboy7IsCUeeLlQApTSRcJIrlSdSNhHDz/p3BcMPZZ5FjlWCgCoxfZJErYmc0lfdEUQ19YGlx2FdKOP2Tc00dXNseiGXoaSFHEJ+0NrWyg8V+OCjshG4l7a/OIDvqUBYjjknG2Ie4gcGBVUeucEO6RGvt2c0MSmTzJJ2ctH0f/SGiV/xaJxn6iOXb7FhY8kEnBAs=
-X-Gm-Message-State: AOJu0Yzox9RTLdMsIR+E4RljzsnJtnuOTB7WWE3iuf3QxfSu5RsUdXSK
-	Zndf8CRsEvzVhoWqBfrotvkn1v48IQFyeATus8nDc+iTIyjPMNabWutMNZ4O
-X-Google-Smtp-Source: AGHT+IFiuhD+U3uimNCwm9sMXN3yk+88hpselw5hq29H3RlOMCChzciDUtnwlTqLtREIV1f6gBzhyw==
-X-Received: by 2002:a50:d7c9:0:b0:59a:442d:67bd with SMTP id 4fb4d7f45d1cf-59a442d68acmr4790387a12.20.1721048109582;
-        Mon, 15 Jul 2024 05:55:09 -0700 (PDT)
+        bh=Yy4EKK2MMNMVFHHJLnbyF0PIFup9QUbwgUbkF8k93AY=;
+        b=GrWptQskV8HS4ww1ce+YEx+l0JwSZT3Alrp/PfApLsGKDAy6qreWZDyggcHxnwCPgF
+         GRTvHe+5pnGQW5niajJ43iV20KV3d6bgG3xiYDdOmPhqDQJktSvdCan7/hKRHHyhH0oq
+         fLCWTSP923x+GqlKFfFidBRWk9kKiIJvQVT7rAWR3EyreDQDcjThumDH/HCsiV6W9rNz
+         fmhg6i2evQmNL70qThC4lE33QebvrU5hipfEAOJCwYjdNrsJpniaSAWMBKG6q3w7/S6R
+         Hy3SWuuA6Wk8E8gcja5NoH/L4wzr37pkLXLJif2a+OrToInLSE1geKyxIxCUyICzkYtT
+         ahBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721048113; x=1721652913;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Yy4EKK2MMNMVFHHJLnbyF0PIFup9QUbwgUbkF8k93AY=;
+        b=OiMUjhCKQwPrJNE5sJ2orszf+eTnOqvKSEqDFVQMqCxARZcHB/8u3ToWzLXVP5LlQR
+         M/5AbEwu2N9b005RbNTdl4VcAiRgdXH3rusW2Th9nlNco6C91Tj3GD/Y4a1OLESoTg5U
+         3Lre5tUnt515vFCcSadPEiizbX809H0eIP17tW2lbFIWfrBrCKed6qnePr70gYnp2rgy
+         4kDDluLPdXn8ytCvPuBqpC0sRopPMEU/dnPnTenxZpncbIryyKkcgIrxrDEOwRo9+81I
+         3x/IVCoAZVTkUjsZKTFRB7+cFmVEvWDRuSYWChrxLrHqvkv6yG2MujmDqkjzSMKAgtvw
+         yRLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUqFoaefrTxIEi20D4hQOhv7IEfC/A1hZ88FoO4fdOdE784XzNzjXclQisEpeCKDA+05Z3AlibQLf/ZauSeNCWtOe8bsrYFrajpDJmI/DG33VeByVuhYdEsaAKRlZEEOMRJGaKD3JQ6GLdxkWJBjxKVx76bT5ZwXn/PkBd+hH9YZdFNnaL7zRTdoqUBq2jI/FQqUG0a02N2HGRsHePvFZ2OJ3F8hUM=
+X-Gm-Message-State: AOJu0YzpKmuEZcNxJLA54Ej6febO6y5wpH5BHSIZRB2HGv64Cjwg0EQ0
+	upHSwaX15FW9HTciEzfOK6d+nzdL4ZN7598QrRIvW5T55qmK9VjwPogRdUyq
+X-Google-Smtp-Source: AGHT+IEZ/wluphxBn2a6YcKsiQTSr9JzIe+b2teGX2aiGb1mLWNivX+caxnotyDZOe8tkjXU+WzrGQ==
+X-Received: by 2002:a2e:9d06:0:b0:2ec:4acf:97dc with SMTP id 38308e7fff4ca-2eeb30bc9eemr126107771fa.11.1721048112386;
+        Mon, 15 Jul 2024 05:55:12 -0700 (PDT)
 Received: from tablet.my.domain (ip-37-248-157-210.multi.internet.cyfrowypolsat.pl. [37.248.157.210])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-59b26f62165sm3333307a12.87.2024.07.15.05.55.06
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-59b26f62165sm3333307a12.87.2024.07.15.05.55.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jul 2024 05:55:09 -0700 (PDT)
+        Mon, 15 Jul 2024 05:55:12 -0700 (PDT)
 From: Artur Weber <aweber.kernel@gmail.com>
-Subject: [PATCH v2 0/9] power: supply: max77693: Toggle charging/OTG based
- on extcon status
-Date: Mon, 15 Jul 2024 14:55:02 +0200
-Message-Id: <20240715-max77693-charger-extcon-v2-0-0838ffbb18c3@gmail.com>
+Date: Mon, 15 Jul 2024 14:55:03 +0200
+Subject: [PATCH v2 1/9] dt-bindings: power: supply: max77693: Add
+ monitored-battery property
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,10 +79,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACYclWYC/3WNzQ6CMBCEX4Xs2TWlFRFPvofh0J8FNhFKWtJgC
- O9uJV49fjOZbzaIFJgi3IsNAiWO7KcM8lSAHfTUE7LLDFLIi6hkhaNe6/raKMx16CkgrYv1EzZ
- kTG20uylLkNdzoI7Xw/xsMw8cFx/ex1Eqv+nPqcRfZypRoLNSN1QZ1ynx6EfNr7P1I7T7vn8Ak
- w8nUL4AAAA=
+Message-Id: <20240715-max77693-charger-extcon-v2-1-0838ffbb18c3@gmail.com>
+References: <20240715-max77693-charger-extcon-v2-0-0838ffbb18c3@gmail.com>
+In-Reply-To: <20240715-max77693-charger-extcon-v2-0-0838ffbb18c3@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
  Chanwoo Choi <cw00.choi@samsung.com>
 Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -95,78 +95,63 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>, 
  Artur Weber <aweber.kernel@gmail.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2480;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1452;
  i=aweber.kernel@gmail.com; h=from:subject:message-id;
- bh=joW1dUBhJoxnwAipx4tWr4333aQdsreO5ngTla7wYSs=;
- b=owEBbQKS/ZANAwAKAbO7+KEToFFoAcsmYgBmlRwo9PihOl5L28LE9qP4hgOpnfxfXs8CFPp05
- CKvz5ISW/+JAjMEAAEKAB0WIQTmYwAOrB3szWrSiQ2zu/ihE6BRaAUCZpUcKAAKCRCzu/ihE6BR
- aB0vD/90CLEESM73nmoes655DvnKe9FoKfY0xRcn8DjYELj1oRQsnFmYNzH+Hm4TLWm5wE7Styi
- FGgmxM/d/ffqC87fdmUpqsmntH5snyajqNAmA7NSPg31xUhoD/MyuEnDc+pm5p4Lngr3iGKPmz1
- 1RT4MMjLoc1eATadbdTl0bohDfQd5sV1gWsb475Tu7GoevaUzvAs4boj38JKMQtstZ3r5J7Jymm
- FUgbSioMlcAlF+Hnz6vfgY89jkfwwbbzrtDnp0azbXjm3kS3LBWlttOS9hPHdTe+sLgPs7hfk9a
- wp6ETUNq0YdSNRUvqJDmJBR014OIxJWOJ/LQfTpr51PSDSa7ALYJAU+lM+CLcX2iaEbxzBqkh0m
- HvBAhGcYLq+U7tMg1xQbhbQD/MfR0435xZq6I9911JcbyaarK1U+HUnpbqq4i6+OgN2dxHpiPfS
- w5PowAQzE96/3BfURYLYtzuPTljJrKZzxjIaP9rsezom8vF7Ih4SB90gLUFBrpbq+JrvDIaPpIQ
- bGFxTcWR2A/5qX3P+WuNsaUfn+lVSbGFCYBY2mbEdJjyDfVYjfscHaMsp9zZRSSOMdOvqna3K6g
- lFfRsiFhkAZTl4EkZEh+EueB3kMOHgMYSxovU7GgyunqAIc+h1udPKU02Ri5HxMOY9rrqvisyjn
- 0p9vpp5IDI5eFxw==
+ bh=Sep2YFazyIuwJAAWmtMhPpLW3/gwTfw1XNyWXLhamO8=;
+ b=owEBbQKS/ZANAwAKAbO7+KEToFFoAcsmYgBmlRwpJjCLdx8HCWez4ml9uY6NIVfmATTP1DiqK
+ sIjVobrj/2JAjMEAAEKAB0WIQTmYwAOrB3szWrSiQ2zu/ihE6BRaAUCZpUcKQAKCRCzu/ihE6BR
+ aA+OD/wKoQpFNAsUIXuHULAyeJawNlA3bvCuREiYKFG7ppjjBd3+Nx6dCwCUfb1o75KDWzlZ2zp
+ v/r8kICqtqtcoyqKffJfMsaImvev6dq8Bk2hebpwa86QvRiEs+ssMw1eViuJXLmP4nw6r7lku4f
+ q6mbFW5qHLvpxI4CBgeuwY28y9y6NR/OgwcGsTx9CRGNwo/Vf5WGQG5TASW7DskE11ftwWVprv5
+ 6PIWKIg4EYWWwVqTsBPCc9bzk46dYMMO4sk0Q8fvkB4KUGGzI+0HMlj4bSDQdn/ZF2rPpJoow2v
+ ba75TL3UVonJA/gCRZz14y+zdIc3Hpq0YObqOW7xDCa+GfPdc1QNyxd1p8+iyGhTPRk3Ix8kMWz
+ lbH55+nzJ8jM8MGx//51mew6uWa8wzcA4GNA4NQP0pxoptfvcvu6NEBwqlJf/tpIp+eOc4G9OVV
+ eqggCPYcLQuhrX+UuewKbxsigbH49om2D+Y3h+i3YZgZ8VokbmhdStE4aqddEcv9MVAmteM8DWq
+ 6X/KaCOtvopY9MCw57bXHgyitnxbi6kgy9gXa9S/KThHcEXxfJBtXw9l7+XW0UiS+D4czK3M5us
+ 86XTizBWbtRm0MfkNC0eyyx9QB5umLav+YaZLWYhojB6R6a2hmaYpK4AYdjwsmKyGL+8iO2mqS3
+ PFg7DCJfY4Xde5Q==
 X-Developer-Key: i=aweber.kernel@gmail.com; a=openpgp;
  fpr=E663000EAC1DECCD6AD2890DB3BBF8A113A05168
 
-This patchset does the following:
-
-- Add CURRENT_MAX and INPUT_CURRENT_MAX power supply properties to
-  expose the "fast charge current" (maximum current from charger to
-  battery) and "CHGIN input current limit" (maximum current from
-  external supply to charger).
-
-- Add functions for toggling charging and OTG modes.
-
-- Add an extcon-based handler that enables charging or OTG depending
-  on the cable type plugged in. The extcon device to use for cable
-  detection can be specified in the device tree, and is entirely
-  optional.
-
-The extcon listener implementation is inspired by the rt5033 charger
-driver (commit 8242336dc8a8 ("power: supply: rt5033_charger: Add cable
-detection and USB OTG supply")).
+Add the monitored-battery property, so that its constant charge current
+property can be used to specify the current limit to use for fast charge
+(when plugged into a wall charger).
 
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
-See v1 for old description:
-
-https://lore.kernel.org/r/20240530-max77693-charger-extcon-v1-0-dc2a9e5bdf30@gmail.com
----
 Changes in v2:
-- Changed to use monitored-battery for charge current value
-- Both current limit variables are now set by the CHARGER regulator
-- Link to v1: https://lore.kernel.org/r/20240530-max77693-charger-extcon-v1-0-dc2a9e5bdf30@gmail.com
-
+- Switched to monitored-battery property from separate fast charge
+  current property
 ---
-Artur Weber (9):
-      dt-bindings: power: supply: max77693: Add monitored-battery property
-      dt-bindings: power: supply: max77693: Add maxim,usb-connector property
-      regulator: max77693: Set fast charge current in MAX77693 CHARGER regulator
-      power: supply: max77693: Expose CURRENT_MAX property
-      power: supply: max77693: Set charge current limits during init
-      power: supply: max77693: Add USB extcon detection for enabling charging
-      power: supply: max77693: Add support for detecting and enabling OTG
-      ARM: dts: samsung: exynos4212-tab3: Add battery node with charge current value
-      ARM: dts: samsung: exynos4212-tab3: Add USB connector node
+ .../devicetree/bindings/power/supply/maxim,max77693.yaml         | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
- .../bindings/power/supply/maxim,max77693.yaml      |  15 ++
- arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi     |  19 ++
- drivers/power/supply/Kconfig                       |   1 +
- drivers/power/supply/max77693_charger.c            | 273 ++++++++++++++++++++-
- drivers/regulator/max77693-regulator.c             |  34 ++-
- include/linux/mfd/max77693-private.h               |  11 +
- 6 files changed, 340 insertions(+), 13 deletions(-)
----
-base-commit: a38297e3fb012ddfa7ce0321a7e5a8daeb1872b6
-change-id: 20240525-max77693-charger-extcon-9ebb7bad83ce
+diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
+index f5fd53debbc8..2f4437dafdc0 100644
+--- a/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
++++ b/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
+@@ -16,10 +16,19 @@ description: |
+   See also Documentation/devicetree/bindings/mfd/maxim,max77693.yaml for
+   additional information and example.
+ 
++allOf:
++  - $ref: power-supply.yaml#
++
+ properties:
+   compatible:
+     const: maxim,max77693-charger
+ 
++  monitored-battery:
++    description:
++      Phandle to "simple-battery"-compatible battery node.
++      The constant-charge-current-max-microamps property of the battery
++      node is used to specify the fast charge current.
++
+   maxim,constant-microvolt:
+     description: |
+       Battery constant voltage in uV. The charger will operate in fast
 
-Best regards,
 -- 
-Artur Weber <aweber.kernel@gmail.com>
+2.45.2
 
 
