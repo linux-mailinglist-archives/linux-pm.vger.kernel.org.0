@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-11106-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11107-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBA5193150D
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 14:56:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9CA9931511
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 14:56:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BF321F217CD
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 12:56:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FDDC28194B
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2024 12:56:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4257618EA7D;
-	Mon, 15 Jul 2024 12:55:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BCE418EFC8;
+	Mon, 15 Jul 2024 12:55:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UKRKnbLj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vm34n+iL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB0118EA61;
-	Mon, 15 Jul 2024 12:55:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506F018EA81;
+	Mon, 15 Jul 2024 12:55:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721048122; cv=none; b=jq3Bxsghai4A1eB0Y5njKK5Wtg/whYPcYbh3dik40yo0uOmgq2qFuEouf6XVBtdpipWZZU22tOBWJT+GVVu+VwbJz3PY1yTN2ENmZoC6iUAuMr/wRGw4xUKzQzRApaUeaZ61HMCyd4hPYrzHLBg4koCderfsniWtZLJ6jZrYI/g=
+	t=1721048124; cv=none; b=p/EXkjwrKN/UZtbR23P7XX6GDTQPVJ1in2x5/GWNdgPlAfBbs3VXdnzFvsVPlyTJIdS9mZtUjA0JwX8+JCH024SsRo++HERZBLYdTnKZZ3ZqVuJxAuc4KC+nZ1ofXta1o4Z4xaAlFDwjduzVcIgYZ8DDMU7c0SsII8YS4RP9zOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721048122; c=relaxed/simple;
-	bh=1lV+PvQs9RkMQaB50b7Zw5vUCqbzy36VnOEmeBWappo=;
+	s=arc-20240116; t=1721048124; c=relaxed/simple;
+	bh=d9xJyVGdkLb6jVsuC/vB8diOax6NmCIBMwGr2E4GxCQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Bm0VOlTymBnKCJ/843mLG5UPRKJqoDQ1Jms18GSvLWvAzC6OTFZzAVSKIvdiPvzGnzOACQ99XRzjvTAMGA7UMoEntWcncElJI2PXI9ua9OgHklVreXvDhM4HcmZlwvRwfCeLvvDgBvs4XE8/3D6BSqbhQYk0hwwjJZN1F9s3QJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UKRKnbLj; arc=none smtp.client-ip=209.85.208.49
+	 In-Reply-To:To:Cc; b=rYikyN4/9oulxTKZCaE3tbzOADuriSNBv7kJ/+wbmklKVmAWwZ0jfmAqPEgovR9HLWMhZEr9xEtP/7ZOgpKT6IIIjrUl6TVM3ASl6eW3d04R7CfbUcfar+QdOufJPPKQ7rC0pGL4X9XeQfvYIrTu9mI+LZyBAJ/Un7COL7dLNFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vm34n+iL; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-58b0beaf703so5331768a12.2;
-        Mon, 15 Jul 2024 05:55:20 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-57cf8880f95so5285481a12.3;
+        Mon, 15 Jul 2024 05:55:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721048119; x=1721652919; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721048121; x=1721652921; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2dnrbGKaoLS2/r35L01fJO0wiCmLb/VBCvJttZm/KZE=;
-        b=UKRKnbLjXkcxRAt+6NRFNQCv/XcxAbsdqgEb4IyDHkqtMRvGWHl+gGRCwQ7giaSDO4
-         vFkFSoXweb6QoQ7uEnFXDSerVDuVpodG5vew8pC5u13/ulNSSBFsHWO29idLbNGU9ihr
-         JRfM/TTMjKCJJyhTnPBFzsRkZ8u6+P3fzWe5cwKsfek5t7Y70Ba/VFtYLw137OsDqDog
-         F9PEEZpAyLlFCrNFfc4PyuVeQZJJfLaW8XaDhI+wPLydvcdXPB+d6/lWTLBo3tMIFR89
-         HkF4oKOdrq60RRWXg9Uemhe7I7fsBuR14iFBef1PKI1HNZ05xqkU4Fmdj+SwaUdN+l/0
-         ahwQ==
+        bh=JepbQc7AbCsn4MwQCws5rv8exDXvYLKDGPZlZpP5vYA=;
+        b=Vm34n+iLhRLTODsfg4t6kHbpNY0KoLH6IWJwb2adkCkJMfrpSoTaxp8OMNB/z35uav
+         S8wp0bNgsPDSXu5RvGnDyrkQv6ZRGujdTike7L+bhpxSTOFYanc9ddidKzvNQU54hJof
+         HyYO3TyiaR5V3KaxJbB4a4/MBGXGpPrKPzKTRkjXgtx+3v8DYE0HaN9jslsX8FH5+8I8
+         gwE69pArcMy+6ShnwxLot6HRVDRpFB2EfK3DayI7bz8DAc1D0npCZtsBvHntyR3LN1m5
+         daS79VkhxhlRE6agOdq3nGDBVW3eMQW2WRq02fglV7LxrrEomp4BMUcyqsWjlkMw+QlE
+         oxGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721048119; x=1721652919;
+        d=1e100.net; s=20230601; t=1721048121; x=1721652921;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2dnrbGKaoLS2/r35L01fJO0wiCmLb/VBCvJttZm/KZE=;
-        b=ZDo91c2oev4kovXj26HUdIA0AGAvh6yVdRykPaByjOJI3IR2mB7EQhLLzBvPL5ZrI0
-         3XhL13sOKInNzWncyqPnMq1MS1IEMxmQCL+g/+aVK0Hywzz2TdVtkJAKwlmQVFiqbwUf
-         5dvO3arc9A1dzhwTdlSBzknM5Wra2q8Zoa+fDq++U1nhQUlWmNXCkLMMwFfupBBYhWNX
-         THoWsoJ/NpTI/hh4bAp80p9yuoVqY7gm6TXgs7wMsCmbpvUtT1ViTiXky49pNG378/8O
-         lqMSJNwcbEPuz2AUN11HYZhOupnQ+QByicre9pki0k/nx3VyZrKr0VLM7/N9RL1iZ3TM
-         ETLw==
-X-Forwarded-Encrypted: i=1; AJvYcCVzkHo5as5LSeotUZBOs0NZAsygHb4RCNOrqcwWWAx7mMbCNp6z83Reo+ggX45XFhwSlpJMV56XATQeUJnY7ro6hgqQeYuxevCtDNWKpKlOOntOrbOM/xLdxMXNvaveq1Bq7YdsCiLCMHoFDmmk9beIjARz1bZxSI8FtxZHXLwCKJraxoiqiQo8KAcmRxXr4Ax1iaTC21NeiSRNcJsNsOtpyge+Myc=
-X-Gm-Message-State: AOJu0YxkPi9oaULnM4tgteiMuEygBaQqatVC60oYcQ01/7EIKXq48mLr
-	kkfeQAba3QfoJMj50lFnH/xXFarFKPJu2pifCdfS1jkBEEoU4EzTrNu42JMm
-X-Google-Smtp-Source: AGHT+IGKYmXJeIOPB/b6vl4yOzL3ahdkEu80vW0kNZgFlL4bFu7UcYPpvXzfkUGFqZN0xjUW9B6bFA==
-X-Received: by 2002:a50:bb04:0:b0:59e:65d1:a573 with SMTP id 4fb4d7f45d1cf-59e65d1a75fmr199688a12.21.1721048118746;
-        Mon, 15 Jul 2024 05:55:18 -0700 (PDT)
+        bh=JepbQc7AbCsn4MwQCws5rv8exDXvYLKDGPZlZpP5vYA=;
+        b=Cd7eaOka7hof3W9thO/at53ga5BRS4mfkpdfaK38tGpAd6gqlofFwsUwwlOudgOQvS
+         kQCEVk9wqczp4oggRdZ+ctg9QiPhTquRtJvyi2suWgujjrYoI3u/hPwzosbDVWOe3lvG
+         Gv+pfUdKqihHw7arWOdk1NimLU0dZukU+bPqoXPFL2AP/ho4ruR1DRc2NByM0U/rmKL6
+         ieRh3qMbswgRO5vjM3z/yae6hyUMLHaYEpnS2iqyo1psqLURjLcfBY5BdE1hF++JB3bT
+         HknINxYzPJAR5nVNnhi80NYD2uwE5NWPgZYqkW9SvkVqNep3zDRZ5XE9oCN5HhLeCMP7
+         yzUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUHIaLiC5RRH1vUtYV1hQsoV9dF5yNvDeVj/jvLmVtA2LoWdvqHVycQ4WeouHs1iXT5jVR6+78nWeaSK4CFMg3vUFXTp7QkyeZTZ+OBsCezEyK8WVZNagBnuQJ68C2TsKqCtYQHHBIhPn1xB/x7TKoO/I8j/7a1duAKRUwmlFs4IY7FOIo5wVHAQexQpGS+qf2veIyELcMHoaHQ3vUel580mi30Amg=
+X-Gm-Message-State: AOJu0Yy3m2mrlyfjlWrTPzNnEWvYo/obg3CvNcpnXjqznfP9BDJt4xEH
+	2pgK10ybdFmSuD3HcvA5SJiO4WJqeot/1m3ajslRv5Vg199Jaxt216icDyht
+X-Google-Smtp-Source: AGHT+IGIWouH56vOf6Qbnawj6h4Sop+wyVlJV9Nl0ERoET1sC3NknxcHB6X4S/u+v6iC8pqN/5i91w==
+X-Received: by 2002:a05:6402:33d5:b0:57d:3ea:3862 with SMTP id 4fb4d7f45d1cf-594bc7c9133mr12051429a12.27.1721048120664;
+        Mon, 15 Jul 2024 05:55:20 -0700 (PDT)
 Received: from tablet.my.domain (ip-37-248-157-210.multi.internet.cyfrowypolsat.pl. [37.248.157.210])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-59b26f62165sm3333307a12.87.2024.07.15.05.55.16
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-59b26f62165sm3333307a12.87.2024.07.15.05.55.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jul 2024 05:55:18 -0700 (PDT)
+        Mon, 15 Jul 2024 05:55:20 -0700 (PDT)
 From: Artur Weber <aweber.kernel@gmail.com>
-Date: Mon, 15 Jul 2024 14:55:06 +0200
-Subject: [PATCH v2 4/9] power: supply: max77693: Expose CURRENT_MAX
- property
+Date: Mon, 15 Jul 2024 14:55:07 +0200
+Subject: [PATCH v2 5/9] power: supply: max77693: Set charge current limits
+ during init
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,7 +79,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240715-max77693-charger-extcon-v2-4-0838ffbb18c3@gmail.com>
+Message-Id: <20240715-max77693-charger-extcon-v2-5-0838ffbb18c3@gmail.com>
 References: <20240715-max77693-charger-extcon-v2-0-0838ffbb18c3@gmail.com>
 In-Reply-To: <20240715-max77693-charger-extcon-v2-0-0838ffbb18c3@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -95,21 +95,21 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>, 
  Artur Weber <aweber.kernel@gmail.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3161;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5592;
  i=aweber.kernel@gmail.com; h=from:subject:message-id;
- bh=1lV+PvQs9RkMQaB50b7Zw5vUCqbzy36VnOEmeBWappo=;
- b=owEBbQKS/ZANAwAKAbO7+KEToFFoAcsmYgBmlRwpt1JLmGw3JWwB62NBhkT4suEV7QjKcBC3M
- zVBlzxGAFmJAjMEAAEKAB0WIQTmYwAOrB3szWrSiQ2zu/ihE6BRaAUCZpUcKQAKCRCzu/ihE6BR
- aLeJD/9Ef/NUzUm3MsA+/2pPGkUkhL4zfMZx//VessDpHA5cioDs6pX5hk4kbkfKTFwVBiGE9+l
- EtoTOt7Jjqigf63T6WidXghkyjcY7IZ2KIL8Qr6ZhuJESM0BWmoafPQNmwHO8w0euZHLDknW0T5
- M1inRVJynstVx/a1k2yM1peHB/oijHfPRKINmUFleDSURUVhxH0nBmj8eQ5YjV/CwA9p07EZ7MX
- cG9e8pl1Er379lWOc4NcT88omRw/aFz/znEfmJ8i+/lCm8rJV4LYdTes9Nx3/T+PTzrL9xj3y5s
- abiRw7f9JpQuuDJr3NVzIc0OxMEUPMFFIY7+ao8O7rmHE1A5bpzED45+VBiDCe1+ydTN9uOQO6f
- w+mt8u2Hx73aQjfQRymE710Uer8XBajg9hZTt3I27sb+3U8OL0n/+sJeRcOrf/w59rnrsx5j1xf
- OX1zwrxS5WkHkiaO5cMMcCkTazQmGAoG6/15v4ioJSP60+5fnQCGbkWLRT9EZJ435HWc1GFZWD6
- JjhE2KqJ1NV2wzBfyDJxn4IbO0ymKzLikJ1i0lE0oXVHSy1j1Hvp/UVGTgy8kbonCtg4FS+Jzr7
- WrLCMN9+Eol+lAmkfVn4DW0fTNicVqY0dnMcCbKs+QkQ6VUICLKz5mj8N4CbH1uC9wU3dXksxAp
- UnGHu9AqNxsyt7A==
+ bh=d9xJyVGdkLb6jVsuC/vB8diOax6NmCIBMwGr2E4GxCQ=;
+ b=owEBbQKS/ZANAwAKAbO7+KEToFFoAcsmYgBmlRwpgRncJxk6pRZ/FjwXbwkFvP4KP7Pdm10nk
+ WTNeVQukMmJAjMEAAEKAB0WIQTmYwAOrB3szWrSiQ2zu/ihE6BRaAUCZpUcKQAKCRCzu/ihE6BR
+ aJB9D/wNFjY5v1IfChoZvKH+jUttjJ1AP8mE9CbHD9JEEL+mBrKMZzcDzm5hh18kwNHEpOKEu/1
+ E5vzCjNch4L//UPyRl3e6pYWXEfmpfiEz9d85F5sMq4zNvFw02YzjbMimMtUuNlV1ctR/Nu1Gei
+ gwynsEPFtPbuJVB4VBspHyG280xHQiIDMubg23rmqBu+UTTz5ZyhzVJ15ZqjQbygADxSny7Nimf
+ yLZJWa4dio75WN9sFk2nJKySk763gEjB02GKTtduYdHqWzx3bPBjJ5s3uw3x1R8NenUAOtl0pS1
+ 5lRqtvlgOcfphmt5XRAECMMV5pm8k8ogFQsyRs/HiXHbPynIlLVdo6W4b78whASSgmvUyH2UHZj
+ f8sQgNF/NVycHx5ZIBMM+TDrzIDv5VjYKec2XIAmzCdZELUP6zHUgcIzbYy5r2AdQ+nZSeOsrhc
+ vWDvHgheH5ALFtSMOOdD41DlAi/HTSnMRzO3p8HNj3Ql0umti3IVq2OFtsO692CjGI1L59ADR8T
+ T78fqI+g67R91MPQwbkiXHWM9XiwzuLC2qo9KXxMVRho/2ziVM1szI/A7BJBtA6P9XB84G4grNr
+ s04avBsVnfKSlN6AUk6D7gQJSZ32lblxr9Ej6tyVtG9rxAaztiZVkyF2Ig5KqLtX6eLmM/iTG3A
+ uuZlAiTByDE3fcQ==
 X-Developer-Key: i=aweber.kernel@gmail.com; a=openpgp;
  fpr=E663000EAC1DECCD6AD2890DB3BBF8A113A05168
 
@@ -120,94 +120,159 @@ There are two charger current limit registers:
 - CHGIN input current limit (which controls current going into the
   charger through the cable).
 
-Both of them are aggregated in the CHARGER regulator. Add a property
-that allows for reading the current limit from userspace.
+Add a function for setting both of the values, and set them to a
+safe default value of 500mA at initialization.
+
+The default value for the fast charge current limit can be modified
+by setting the constant-charge-current-max-ua DT property of the
+battery node specified in the monitored-battery charger DT property.
 
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
 Changes in v2:
-- Adapted to both current limits being managed in the CHARGER regulator
+- Squashed mfd include register additions into this commit
+- Changed from custom fast charge current property to monitored-battery
+  (devm_power_supply_register call has been moved up as it is needed by
+  the DT init function now)
+- Changed to adapt to both current limit values being managed by the
+  CHARGER regulator
 ---
- drivers/power/supply/max77693_charger.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ drivers/power/supply/max77693_charger.c | 43 ++++++++++++++++++++++++---------
+ include/linux/mfd/max77693-private.h    |  6 +++++
+ 2 files changed, 38 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/power/supply/max77693_charger.c b/drivers/power/supply/max77693_charger.c
-index 2001e12c9f7d..0d53f61d58ba 100644
+index 0d53f61d58ba..0ddaa03669a2 100644
 --- a/drivers/power/supply/max77693_charger.c
 +++ b/drivers/power/supply/max77693_charger.c
-@@ -9,6 +9,7 @@
- #include <linux/platform_device.h>
- #include <linux/power_supply.h>
- #include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/mfd/max77693.h>
- #include <linux/mfd/max77693-common.h>
- #include <linux/mfd/max77693-private.h>
-@@ -21,6 +22,7 @@ struct max77693_charger {
- 	struct device		*dev;
- 	struct max77693_dev	*max77693;
- 	struct power_supply	*charger;
-+	struct regulator	*regu;
- 
- 	u32 constant_volt;
+@@ -28,6 +28,7 @@ struct max77693_charger {
  	u32 min_system_volt;
-@@ -197,12 +199,33 @@ static int max77693_get_online(struct regmap *regmap, int *val)
- 	return 0;
+ 	u32 thermal_regulation_temp;
+ 	u32 batttery_overcurrent;
++	u32 fast_charge_current;
+ 	u32 charge_input_threshold_volt;
+ };
+ 
+@@ -570,6 +571,14 @@ static int max77693_set_batttery_overcurrent(struct max77693_charger *chg,
+ 			CHG_CNFG_12_B2SOVRC_MASK, data);
  }
  
-+/*
-+ * There are *two* current limit registers:
-+ * - CHGIN limit, which limits the input current from the external charger;
-+ * - Fast charge current limit, which limits the current going to the battery.
-+ * Both are managed by the CHARGER regulator.
-+ */
-+
-+static int max77693_get_current_limit(struct max77693_charger *chg, int *val)
++static int max77693_set_current_limit(struct max77693_charger *chg,
++		unsigned int uamp)
 +{
-+	int ret;
++	dev_dbg(chg->dev, "Current limit: %u\n", uamp);
 +
-+	ret = regulator_get_current_limit(chg->regu);
-+	if (ret < 0)
-+		return ret;
-+
-+	*val = ret;
-+
-+	return 0;
++	return regulator_set_current_limit(chg->regu, (int)uamp, (int)uamp);
 +}
 +
- static enum power_supply_property max77693_charger_props[] = {
- 	POWER_SUPPLY_PROP_STATUS,
- 	POWER_SUPPLY_PROP_CHARGE_TYPE,
- 	POWER_SUPPLY_PROP_HEALTH,
- 	POWER_SUPPLY_PROP_PRESENT,
- 	POWER_SUPPLY_PROP_ONLINE,
-+	POWER_SUPPLY_PROP_CURRENT_MAX,
- 	POWER_SUPPLY_PROP_MODEL_NAME,
- 	POWER_SUPPLY_PROP_MANUFACTURER,
- };
-@@ -231,6 +254,9 @@ static int max77693_charger_get_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_ONLINE:
- 		ret = max77693_get_online(regmap, &val->intval);
- 		break;
-+	case POWER_SUPPLY_PROP_CURRENT_MAX:
-+		ret = max77693_get_current_limit(chg, &val->intval);
-+		break;
- 	case POWER_SUPPLY_PROP_MODEL_NAME:
- 		val->strval = max77693_charger_model;
- 		break;
-@@ -680,6 +706,12 @@ static int max77693_charger_probe(struct platform_device *pdev)
- 	chg->dev = &pdev->dev;
- 	chg->max77693 = max77693;
+ static int max77693_set_charge_input_threshold_volt(struct max77693_charger *chg,
+ 		unsigned int uvolt)
+ {
+@@ -647,6 +656,10 @@ static int max77693_reg_init(struct max77693_charger *chg)
+ 	if (ret)
+ 		return ret;
  
-+	/* This gets the CHARGER regulator from the parent MAX77693 device */
-+	chg->regu = devm_regulator_get(chg->dev, "CHARGER");
-+	if (IS_ERR(chg->regu))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(chg->regu),
-+				     "failed to get charger regulator\n");
++	ret = max77693_set_current_limit(chg, DEFAULT_FAST_CHARGE_CURRENT);
++	if (ret)
++		return ret;
++
+ 	return max77693_set_charge_input_threshold_volt(chg,
+ 			chg->charge_input_threshold_volt);
+ }
+@@ -654,6 +667,7 @@ static int max77693_reg_init(struct max77693_charger *chg)
+ #ifdef CONFIG_OF
+ static int max77693_dt_init(struct device *dev, struct max77693_charger *chg)
+ {
++	struct power_supply_battery_info *battery_info;
+ 	struct device_node *np = dev->of_node;
+ 
+ 	if (!np) {
+@@ -682,11 +696,20 @@ static int max77693_dt_init(struct device *dev, struct max77693_charger *chg)
+ 		chg->charge_input_threshold_volt =
+ 			DEFAULT_CHARGER_INPUT_THRESHOLD_VOLT;
+ 
++	if (power_supply_get_battery_info(chg->charger, &battery_info) ||
++				!battery_info->constant_charge_current_max_ua)
++		chg->fast_charge_current = DEFAULT_FAST_CHARGE_CURRENT;
++	else
++		chg->fast_charge_current = \
++				battery_info->constant_charge_current_max_ua;
++
+ 	return 0;
+ }
+ #else /* CONFIG_OF */
+ static int max77693_dt_init(struct device *dev, struct max77693_charger *chg)
+ {
++	chg->fast_charge_current = DEFAULT_FAST_CHARGE_CURRENT;
++
+ 	return 0;
+ }
+ #endif /* CONFIG_OF */
+@@ -712,6 +735,15 @@ static int max77693_charger_probe(struct platform_device *pdev)
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(chg->regu),
+ 				     "failed to get charger regulator\n");
+ 
++	psy_cfg.drv_data = chg;
++
++	chg->charger = devm_power_supply_register(&pdev->dev,
++						  &max77693_charger_desc,
++						  &psy_cfg);
++	if (IS_ERR(chg->charger))
++		return dev_err_probe(&pdev->dev, PTR_ERR(chg->charger),
++				     "failed: power supply register\n");
 +
  	ret = max77693_dt_init(&pdev->dev, chg);
  	if (ret)
  		return ret;
+@@ -720,8 +752,6 @@ static int max77693_charger_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	psy_cfg.drv_data = chg;
+-
+ 	ret = device_create_file(&pdev->dev, &dev_attr_fast_charge_timer);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "failed: create fast charge timer sysfs entry\n");
+@@ -741,15 +771,6 @@ static int max77693_charger_probe(struct platform_device *pdev)
+ 		goto err;
+ 	}
+ 
+-	chg->charger = devm_power_supply_register(&pdev->dev,
+-						  &max77693_charger_desc,
+-						  &psy_cfg);
+-	if (IS_ERR(chg->charger)) {
+-		dev_err(&pdev->dev, "failed: power supply register\n");
+-		ret = PTR_ERR(chg->charger);
+-		goto err;
+-	}
+-
+ 	return 0;
+ 
+ err:
+diff --git a/include/linux/mfd/max77693-private.h b/include/linux/mfd/max77693-private.h
+index 54444ff2a5de..4570646e2f33 100644
+--- a/include/linux/mfd/max77693-private.h
++++ b/include/linux/mfd/max77693-private.h
+@@ -145,6 +145,8 @@ enum max77693_pmic_reg {
+ #define DEFAULT_THERMAL_REGULATION_TEMP		100
+ /* microamps */
+ #define DEFAULT_BATTERY_OVERCURRENT		3500000
++/* microamps */
++#define DEFAULT_FAST_CHARGE_CURRENT		500000
+ /* microvolts */
+ #define DEFAULT_CHARGER_INPUT_THRESHOLD_VOLT	4300000
+ 
+@@ -217,6 +219,10 @@ enum max77693_charger_battery_state {
+ #define CHG_CNFG_01_CHGRSTRT_MASK	(0x3 << CHG_CNFG_01_CHGRSTRT_SHIFT)
+ #define CHG_CNFG_01_PQEN_MAKS		BIT(CHG_CNFG_01_PQEN_SHIFT)
+ 
++/* MAX77693_CHG_REG_CHG_CNFG_02 register */
++#define CHG_CNFG_02_CC_SHIFT		0
++#define CHG_CNFG_02_CC_MASK		0x3F
++
+ /* MAX77693_CHG_REG_CHG_CNFG_03 register */
+ #define CHG_CNFG_03_TOITH_SHIFT		0
+ #define CHG_CNFG_03_TOTIME_SHIFT	3
 
 -- 
 2.45.2
