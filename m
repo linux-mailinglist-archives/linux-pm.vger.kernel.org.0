@@ -1,212 +1,273 @@
-Return-Path: <linux-pm+bounces-11177-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11178-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D4CD932F31
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 19:35:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 445B09331DC
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 21:29:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B07241C20AFC
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 17:35:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACDE5B23543
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 19:28:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44B4A1A01CC;
-	Tue, 16 Jul 2024 17:35:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684461A01C6;
+	Tue, 16 Jul 2024 19:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Odpg4G1l"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="VnkCgzCp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E02419FA81;
-	Tue, 16 Jul 2024 17:35:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF6719F49D;
+	Tue, 16 Jul 2024 19:28:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721151317; cv=none; b=Ma5GrYC2CoGhBMwPZI2fIFn+WImTPtHIYSb93nSxQWUu4NprGO2OonxrBW8kEIQdbAoL5WgQQRlBR/Wqe+X/A/Rz6EquAREC6IKh9TOIRYbTvNMf4zQ8gDxRiGTuKZ0A3c0rU/qhRaEmlc6CWc0rhyfHVjDEiSyPUTONVU71rp0=
+	t=1721158134; cv=none; b=jr95D1svT8YCDbf4sbgI8gHb7r4scmH9qyP66Liqtc8pOzDwGczp3eD49q6KyBEpJm25HbYGb/mPlHIhel5/bmt6W/+M8QzSSNZCNPSZpAP+qdEbNgoV79MnT1xEcYiUIk2KxD/PXXqh/fcKsxCNzlXhsvKMwUrWIGIxjPdU7cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721151317; c=relaxed/simple;
-	bh=xlHRw3w2m2tg6cht4Qq290RJJ7J5SeCZAW8m9wfBb1k=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RMKUtcn9dMlebYA3p7EbZ44Wf17YWHrquLUSRLhUk+5IOd3tWSb9MZXQfq4qmwYmizmqth0Vsqwse7UekCb970t8623tKbRCYvEz9fvBJuoxRQjB5jk1Ot1MVfZuPCamtrcB92hjmUP91EziR4mkVQHTVpVWoyg/oHsv2nAd1Xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Odpg4G1l; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-367ab76d5e1so1919402f8f.3;
-        Tue, 16 Jul 2024 10:35:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721151314; x=1721756114; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mFZzo+h40ZkOiMih2IEE7mwoxCHvaz4i8bbYlqWEClA=;
-        b=Odpg4G1lZPl9u8TEk7/tp0rUITV/8bCcuyKbohJ3/NIS8FksCDX1dvDPIzioUnuhXK
-         oeOnE4ErnMb3QLbG9pVE0TqbZeb/KYBTQHv6IW2RESUgwOv/Z7M/czUPPJ2xnsq1z5Wu
-         kYknGw5IY7zi5uSu4EQLP64YiCnMOAcMyoaWYLUMr9P/aNl6xbA/6twlPWZ2uiJtFRmH
-         OXOkxc8kMoMuLA7nKXZ4EK6MqTidGbbaMrmcMaPH00CA3V2jAwXvgt9tC7L+xLAECQeR
-         YSnjoRIS62M3TV2PGE7nEIUUGk0zmA4yLOaYhnXf4Bq6pWpFDUfzKG24wM9ZAaS9uxEO
-         /MzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721151314; x=1721756114;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mFZzo+h40ZkOiMih2IEE7mwoxCHvaz4i8bbYlqWEClA=;
-        b=bfhOMYeVoMvuYC1bjyyL95Hkjgf4lT1CtbXqr0TU4tpOt7My9pJYJ4BB2a8bB4y4m3
-         Uwo1eMS9JRmJB/8BHUbvTsK8hCCl8HWirDpXkp5UpyHScbfn4qbjGUGBwBRc5Tahqfq6
-         LkfiL3n0tWTzfdYk44HsElnuXGaDZBZzHv71VammtHjXtLezbwPbhcRGR4kXrklYy8mY
-         xvrjsSxJBsbGG5dfkgXE1B7hQk0aI7BPWyGZVoK2mfj3dOjDS2KLb+bKur3xYNnpwrRo
-         MthUchkTx8b/Xjn60LIRXqZ4hr6gYUFpNvsiVW73TYiiyx2N06YQvBCAGL+tS4hajNpy
-         DbiA==
-X-Forwarded-Encrypted: i=1; AJvYcCVtYozKIFBikB5BtJmhmOcb92N44B2WJJH056CUDX8AbPc4GRUqRk47QMjNP6Mn3H8lFpx8a/8FuBGXpPznRnNjfJ6VQy/dULzfOlwsW/H/WVUSZnSEmqGTzWJR1iAFjn5HRxRHmaJHrQ==
-X-Gm-Message-State: AOJu0YxawpHx2lKPhQ4PCisVBMKASG962DGYGOQzB5qUvciKVMn7uzld
-	TVmXpCcMr/4/HxWHShhLusZkX11GYi2f8RzzaF3RdltMDPlIv/Ch
-X-Google-Smtp-Source: AGHT+IE70zhsNBUYOAewbvXHcYgepuMa8i+6KzIjuE7KgPVIgmBQVK7/cIQLRs1F0enKt0xhxVITpg==
-X-Received: by 2002:a5d:588d:0:b0:367:958e:9822 with SMTP id ffacd0b85a97d-36825f715c0mr2543892f8f.14.1721151313262;
-        Tue, 16 Jul 2024 10:35:13 -0700 (PDT)
-Received: from localhost ([2001:861:3385:e20:6384:4cf:52c5:3194])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4279f27877dsm167381895e9.26.2024.07.16.10.35.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 10:35:13 -0700 (PDT)
-From: Raphael Gallais-Pou <rgallaispou@gmail.com>
-Date: Tue, 16 Jul 2024 19:34:52 +0200
-Subject: [PATCH v4 2/2] thermal: sti: depend on THERMAL_OF subsystem
+	s=arc-20240116; t=1721158134; c=relaxed/simple;
+	bh=SuovC/4pv/WVqF9AOaB86qHbgdSlxyVh31YXHQgC28M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=f5Q8tXmgKK5mzx584A+XWfiRedDsMV+9E7KwOjJ2+rmRi+EFvhD0OYwz6SVk3zMHwBuYQlPuLtIMGAlt6P+iQkTB02UD0jsPvVk9rgQfJv5lWpc5MOKLWE8EjMudYwvIDyxFS/vDN1/b46luiK0b8orcRHdZ1E8LjK9CwLp9FXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=VnkCgzCp reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id 3fdb65b94ab04a48; Tue, 16 Jul 2024 21:28:43 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 77B4D996462;
+	Tue, 16 Jul 2024 21:28:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1721158123;
+	bh=SuovC/4pv/WVqF9AOaB86qHbgdSlxyVh31YXHQgC28M=;
+	h=From:To:Cc:Subject:Date;
+	b=VnkCgzCp5eD3B4IDQo8ljq4FH6e86rha8CinqX+L7vrMD7VFvIApEc9MHv+NJXPLa
+	 L87vdJW0voMh4etgJO1/jydMueCRbNdM8ymyrxI0SEH+ANTHNChZY+Gm8J6701xyfH
+	 aH8NM6WhTBX7xa0mAL/Pyr7uDPVHYn2Fxuc5Nyq6fd2U+a04Ll8i0juv2YRLJ464Xi
+	 TGgRgyhgrggZCGBvXLOLkxzB0tQvFFQ7SYuBflHLPt7GYNcMl5QKeAjbt0LxvmIQb4
+	 xoK+Du4W47Zv5AUs0oUeme3NKXEKdfnhHM4oXepcHlDoUTVh79Rnw6AUf2zCVXB9P6
+	 GBSGn86kVkkEw==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+ Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
+ Eric Biggers <ebiggers@kernel.org>, Stefan Lippers-Hollmann <s.l-h@gmx.de>,
+ Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject:
+ [PATCH v1] thermal: core: Allow thermal zones to tell the core to ignore them
+Date: Tue, 16 Jul 2024 21:28:42 +0200
+Message-ID: <12488450.O9o76ZdvQC@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240716-thermal-v4-2-947b327e165c@gmail.com>
-References: <20240716-thermal-v4-0-947b327e165c@gmail.com>
-In-Reply-To: <20240716-thermal-v4-0-947b327e165c@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Patrice Chotard <patrice.chotard@foss.st.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-stm32@st-md-mailman.stormreply.com, 
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-X-Mailer: b4 0.14.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrgeeggddufeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedutddprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrges
+ rghrmhdrtghomhdprhgtphhtthhopehmihhrihgrmhdrrhgrtghhvghlrdhkohhrvghnsghlihhtsehinhhtvghlrdgtohhmpdhrtghpthhtohepkhhvrghloheskhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
 
-Switch to thermal_of_zone to handle thermal-zones. Replace
-thermal_zone_device_register() by devm_thermal_of_zone_register() and
-remove ops st_thermal_get_trip_type, st_thermal_get_trip_temp.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
+The iwlwifi wireless driver registers a thermal zone that is only needed
+when the network interface handled by it is up and it wants that thermal
+zone to be effectively ignored by the core otherwise.
+
+Before commit a8a261774466 ("thermal: core: Call monitor_thermal_zone()
+if zone temperature is invalid") that could be achieved by returning
+an error code from the thermal zone's .get_temp() callback because the
+core did not really handle errors returned by it almost at all.
+However, commit a8a261774466 made the core attempt to recover from the
+situation in which the temperature of a thermal zone cannot be
+determined due to errors returned by its .get_temp() and is always
+invalid from the core's perspective.
+
+That was done because there are thermal zones in which .get_temp()
+returns errors to start with due to some difficulties related to the
+initialization ordering, but then it will start to produce valid
+temperature values at one point.
+
+Unfortunately, the simple approach taken by commit a8a261774466,
+which is to poll the thermal zone periodically until its .get_temp()
+callback starts to return valid temperature values, is at odds with
+the special thermal zone in iwlwifi in which .get_temp() may always
+return an error because its network interface may always be down.  If
+that happens, every attempt to invoke the thermal zone's .get_temp()
+callback resulting in an error causes the thermal core to print a
+dev_warn() message to the kernel log which is super-noisy.
+
+To address this problem, make the core handle the case in which
+.get_temp() return 0, but the temperature value returned by it
+is not actually valid, in a special way.  Namely, make the core
+completely ignore the invalid temperature value coming from
+.get_temp() in that case, which requires folding in
+update_temperature() into its caller and a few related changes.
+
+On the iwlwifi side, modify iwl_mvm_tzone_get_temp() to return 0
+and put THERMAL_TEMP_INVALID into the temperature return memory
+location instead of returning an error when the firmware is not
+running or it is not of the right type.
+
+Also, to clearly separate the handling of invalid temperature
+values from the thermal zone initialization, introduce a special
+THERMAL_TEMP_INIT value specifically for the latter purpose.
+
+Fixes: a8a261774466 ("thermal: core: Call monitor_thermal_zone() if zone temperature is invalid")
+Closes: https://lore.kernel.org/linux-pm/20240715044527.GA1544@sol.localdomain/
+Reported-by: Eric Biggers <ebiggers@kernel.org>
+Reported-by: Stefan Lippers-Hollmann <s.l-h@gmx.de>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=201761
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc: 6.10+ <stable@vger.kernel.org> # 6.10+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
-Changes in v4:
-- Optimize dependencies
-- Do not return devm_* exit code
-Changes in v3:
-- Fix unmet dependency when building with ARM64 compiler
-  https://lore.kernel.org/lkml/202406270605.qodaWd4n-lkp@intel.com/
-- Remove no more used polling_delay variable detected by kernel robot
-  https://lore.kernel.org/lkml/202406270530.kN5wIswi-lkp@intel.com/
-Changes in v2:
-- Remove unused struct thermal_trip trip
----
- drivers/thermal/Kconfig         |  2 +-
- drivers/thermal/st/st_thermal.c | 28 +++++++++++-----------------
- 2 files changed, 12 insertions(+), 18 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/tt.c |    7 +++
+ drivers/thermal/thermal_core.c              |   51 +++++++++++++---------------
+ drivers/thermal/thermal_core.h              |    3 +
+ 3 files changed, 33 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index ed16897584b4..b6b916e7e294 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -429,7 +429,7 @@ source "drivers/thermal/samsung/Kconfig"
- endmenu
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -300,8 +300,6 @@ static void monitor_thermal_zone(struct
+ 		thermal_zone_device_set_polling(tz, tz->passive_delay_jiffies);
+ 	else if (tz->polling_delay_jiffies)
+ 		thermal_zone_device_set_polling(tz, tz->polling_delay_jiffies);
+-	else if (tz->temperature == THERMAL_TEMP_INVALID)
+-		thermal_zone_device_set_polling(tz, msecs_to_jiffies(THERMAL_RECHECK_DELAY_MS));
+ }
  
- menu "STMicroelectronics thermal drivers"
--depends on (ARCH_STI || ARCH_STM32) && OF
-+depends on (ARCH_STI || ARCH_STM32) && THERMAL_OF
- source "drivers/thermal/st/Kconfig"
- endmenu
+ static struct thermal_governor *thermal_get_tz_governor(struct thermal_zone_device *tz)
+@@ -382,7 +380,7 @@ static void handle_thermal_trip(struct t
+ 	td->threshold = trip->temperature;
  
-diff --git a/drivers/thermal/st/st_thermal.c b/drivers/thermal/st/st_thermal.c
-index 5f33543a3a54..a14a37d54698 100644
---- a/drivers/thermal/st/st_thermal.c
-+++ b/drivers/thermal/st/st_thermal.c
-@@ -12,6 +12,7 @@
- #include <linux/of_device.h>
+ 	if (tz->last_temperature >= old_threshold &&
+-	    tz->last_temperature != THERMAL_TEMP_INVALID) {
++	    tz->last_temperature != THERMAL_TEMP_INIT) {
+ 		/*
+ 		 * Mitigation is under way, so it needs to stop if the zone
+ 		 * temperature falls below the low temperature of the trip.
+@@ -417,27 +415,6 @@ static void handle_thermal_trip(struct t
+ 	}
+ }
  
- #include "st_thermal.h"
-+#include "../thermal_hwmon.h"
+-static void update_temperature(struct thermal_zone_device *tz)
+-{
+-	int temp, ret;
+-
+-	ret = __thermal_zone_get_temp(tz, &temp);
+-	if (ret) {
+-		if (ret != -EAGAIN)
+-			dev_warn(&tz->device,
+-				 "failed to read out thermal zone (%d)\n",
+-				 ret);
+-		return;
+-	}
+-
+-	tz->last_temperature = tz->temperature;
+-	tz->temperature = temp;
+-
+-	trace_thermal_temperature(tz);
+-
+-	thermal_genl_sampling_temp(tz->id, temp);
+-}
+-
+ static void thermal_zone_device_check(struct work_struct *work)
+ {
+ 	struct thermal_zone_device *tz = container_of(work, struct
+@@ -452,7 +429,7 @@ static void thermal_zone_device_init(str
  
- /* The Thermal Framework expects millidegrees */
- #define mcelsius(temp)			((temp) * 1000)
-@@ -135,8 +136,6 @@ static struct thermal_zone_device_ops st_tz_ops = {
- 	.get_temp	= st_thermal_get_temp,
+ 	INIT_DELAYED_WORK(&tz->poll_queue, thermal_zone_device_check);
+ 
+-	tz->temperature = THERMAL_TEMP_INVALID;
++	tz->temperature = THERMAL_TEMP_INIT;
+ 	tz->passive = 0;
+ 	tz->prev_low_trip = -INT_MAX;
+ 	tz->prev_high_trip = INT_MAX;
+@@ -504,6 +481,7 @@ void __thermal_zone_device_update(struct
+ 	struct thermal_trip_desc *td;
+ 	LIST_HEAD(way_down_list);
+ 	LIST_HEAD(way_up_list);
++	int temp, ret;
+ 
+ 	if (tz->suspended)
+ 		return;
+@@ -511,10 +489,29 @@ void __thermal_zone_device_update(struct
+ 	if (!thermal_zone_device_is_enabled(tz))
+ 		return;
+ 
+-	update_temperature(tz);
++	ret = __thermal_zone_get_temp(tz, &temp);
++	if (ret) {
++		if (ret != -EAGAIN)
++			dev_info(&tz->device, "Temperature check failed (%d)\n", ret);
+ 
+-	if (tz->temperature == THERMAL_TEMP_INVALID)
++		thermal_zone_device_set_polling(tz, msecs_to_jiffies(THERMAL_RECHECK_DELAY_MS));
++		return;
++	} else if (temp <= THERMAL_TEMP_INVALID) {
++		/*
++		 * Special case: No valid temperature value is available, but
++		 * the zone owner does not want the core to do anything about
++		 * it.  Continue regular zone polling if needed, so that this
++		 * function can be called again, but skip everything else.
++		 */
+ 		goto monitor;
++	}
++
++	tz->last_temperature = tz->temperature;
++	tz->temperature = temp;
++
++	trace_thermal_temperature(tz);
++
++	thermal_genl_sampling_temp(tz->id, temp);
+ 
+ 	tz->notify_event = event;
+ 
+Index: linux-pm/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
+===================================================================
+--- linux-pm.orig/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
++++ linux-pm/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
+@@ -622,7 +622,12 @@ static int iwl_mvm_tzone_get_temp(struct
+ 
+ 	if (!iwl_mvm_firmware_running(mvm) ||
+ 	    mvm->fwrt.cur_fw_img != IWL_UCODE_REGULAR) {
+-		ret = -ENODATA;
++		/*
++		 * Tell the core that there is no valid temperature value to
++		 * return, but it need not worry about this.
++		 */
++		*temperature = THERMAL_TEMP_INVALID;
++		ret = 0;
+ 		goto out;
+ 	}
+ 
+Index: linux-pm/drivers/thermal/thermal_core.h
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.h
++++ linux-pm/drivers/thermal/thermal_core.h
+@@ -133,6 +133,9 @@ struct thermal_zone_device {
+ 	struct thermal_trip_desc trips[] __counted_by(num_trips);
  };
  
--static struct thermal_trip trip;
--
- int st_thermal_register(struct platform_device *pdev,
- 			const struct of_device_id *st_thermal_of_match)
- {
-@@ -145,7 +144,6 @@ int st_thermal_register(struct platform_device *pdev,
- 	struct device_node *np = dev->of_node;
- 	const struct of_device_id *match;
- 
--	int polling_delay;
- 	int ret;
- 
- 	if (!np) {
-@@ -197,29 +195,24 @@ int st_thermal_register(struct platform_device *pdev,
- 	if (ret)
- 		goto sensor_off;
- 
--	polling_delay = sensor->ops->register_enable_irq ? 0 : 1000;
--
--	trip.temperature = sensor->cdata->crit_temp;
--	trip.type = THERMAL_TRIP_CRITICAL;
--
- 	sensor->thermal_dev =
--		thermal_zone_device_register_with_trips(dev_name(dev), &trip, 1, sensor,
--							&st_tz_ops, NULL, 0, polling_delay);
-+		devm_thermal_of_zone_register(dev, 0, sensor, &st_tz_ops);
- 	if (IS_ERR(sensor->thermal_dev)) {
--		dev_err(dev, "failed to register thermal zone device\n");
-+		dev_err(dev, "failed to register thermal of zone\n");
- 		ret = PTR_ERR(sensor->thermal_dev);
- 		goto sensor_off;
- 	}
--	ret = thermal_zone_device_enable(sensor->thermal_dev);
--	if (ret)
--		goto tzd_unregister;
- 
- 	platform_set_drvdata(pdev, sensor);
- 
-+	/*
-+	 * devm_thermal_of_zone_register() doesn't enable hwmon by default
-+	 * Enable it here
-+	 */
-+	devm_thermal_add_hwmon_sysfs(dev, sensor->thermal_dev);
++/* Initial thermal zone temperature. */
++#define THERMAL_TEMP_INIT	INT_MIN
 +
- 	return 0;
- 
--tzd_unregister:
--	thermal_zone_device_unregister(sensor->thermal_dev);
- sensor_off:
- 	st_thermal_sensor_off(sensor);
- 
-@@ -232,7 +225,8 @@ void st_thermal_unregister(struct platform_device *pdev)
- 	struct st_thermal_sensor *sensor = platform_get_drvdata(pdev);
- 
- 	st_thermal_sensor_off(sensor);
--	thermal_zone_device_unregister(sensor->thermal_dev);
-+	thermal_remove_hwmon_sysfs(sensor->thermal_dev);
-+	devm_thermal_of_zone_unregister(sensor->dev, sensor->thermal_dev);
- }
- EXPORT_SYMBOL_GPL(st_thermal_unregister);
- 
+ /*
+  * Default delay after a failing thermal zone temperature check before
+  * attempting to check it again.
 
--- 
-2.45.2
+
 
 
