@@ -1,243 +1,212 @@
-Return-Path: <linux-pm+bounces-11156-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11157-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74E3C932717
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 15:07:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AC8B93274F
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 15:20:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 974D51C22966
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 13:07:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60293B2133D
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 13:20:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1E3719AD55;
-	Tue, 16 Jul 2024 13:07:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E13419AA7B;
+	Tue, 16 Jul 2024 13:20:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="A4efNqqL"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=s.l-h@gmx.de header.b="ScWtrcZ4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D775D524B4
-	for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2024 13:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06F228387;
+	Tue, 16 Jul 2024 13:20:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721135265; cv=none; b=o0zwgz95ZtZvHubmpBmFFEzz5tRLJnmbbX1PbqyMvCMWGczP+Zt6ef6LQehMcz5KgJsy57ftlu7GlO6DjHoKtZVbF7gyIX7YrOSGdpKwPmKwDAs8R3JYx1loZUAFeKJ1vCAqAsv3JOjaYNa1fmz4ZjWhcmDX8LXFHfV7W9mGI2M=
+	t=1721136048; cv=none; b=NvLZJaDt+yLPqKiDI7P0mpCqrTyZz2hD7EkJrigVqPdYaotgzGZG/1w3UozK5RRR65dRc8lFvCkfLSMBONvR2zEBWDcqQfMrmmS25bAUTZMwlMY/G1k2e2zVCWvcD6bDwF0L9HmMBcuJMmjp2iDNwcsA9tq3hAgOa3ZGEG/NOnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721135265; c=relaxed/simple;
-	bh=/mSMzgnAvU9FogdwEeb+89ILNkuvIAWGgcX6+IqGe+s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tPMR0V0hGLz45qR/7Vgf6+m47U3HLTO5Qk0AVgHLiRnoDG45WqbLrv6XyfTihZuNBBey73Ml5be7wnX8sPZvDHt4D+O1EMqFguMbUChM9SsyOmofg8cCNkADR90OA2/M0lYDLLLaq5/PyqeETFHFeDYTeV7RUTFdzUFdLGvHGE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=A4efNqqL; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-427b8571820so8304495e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2024 06:07:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721135261; x=1721740061; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HJ8+1Dls9gHXZmTlH8ttAZgOqS31ryuk4YadVHCctP4=;
-        b=A4efNqqLoM9EqNRj+FkrTquIXE+8OObLdDMh4ExberxI7GyTkzGusBqX1m4Nqq+jyH
-         NldMzaJtoXfMkk6/nrjPFWnHXyU96V7mJssnUJwHxzUejLZDq6KeW/sl6YXCZgd4VQ9v
-         PaoUGjwMaakpErVkEzYeL+s5Y7h5WmxS2qzezWkzTJum9Tj9+2I2Gc6mJEDvAv26otoz
-         DAy/pCdcOCxx9/h0w6yle9x2TUqV3fjIvEONNvG4sVCf1Vkt19z2TCnnMHH38z/7n2H0
-         UXHya1ogX+DIIxxRG1tyo27cu9o22ZcubRI9vCj442PPs+DFgLuyN5qPlEj/5VVM/ePg
-         S/oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721135261; x=1721740061;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HJ8+1Dls9gHXZmTlH8ttAZgOqS31ryuk4YadVHCctP4=;
-        b=EtCixR/JzYoMacCPRSxFaHflQiMskJDaku3C+5ThjUrCypsqBwNcJwMPws1Ri1sYVO
-         B2/BkZLWxWzXohRi9ezDE97KSwnp9GDpxR1caI/JYWEdBehl9tTa2S/j0erTKpBgsbsj
-         5bs92YAk8TQwxnrYjc2E3IzfQYKtbpVNB0wr7HNK3kNEC3KrvG/ISmdcWFrnqf1EpbEQ
-         hHp2/o0bKFZWd6uJfjZ8ScnrMUfYnlRkw4UQ0uk1DSsKUOAqa8zCUsf6BTXa3aj6f/1P
-         phPjwd07iLuYJgmlZEEX13+RpMPSeFw5V4w7jcPKehsMRkebe3T0Zt6zbJ9cBEz+wc8Y
-         6ASw==
-X-Gm-Message-State: AOJu0YxCBkgDu03CDLnblbv2p0q8xr73APgJokeJcQcLoPVgBb5l7vMa
-	dMeURbFSSpQHfstzn4qGmQk75krXfP9JsQhATcMKQVWK7/sIZ3oemolcpx6h0vM=
-X-Google-Smtp-Source: AGHT+IF/mJWDmCM/RTFS4KnpUoj8ACXVsq97TxQdcyfYwcgw8wActI/cmP5PqGmH/ftOaErkRt/3KA==
-X-Received: by 2002:a5d:64ab:0:b0:367:9625:bd06 with SMTP id ffacd0b85a97d-3682633a6aamr1634036f8f.42.1721135261033;
-        Tue, 16 Jul 2024 06:07:41 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:5abd:5899:c977:d551? ([2a05:6e02:1041:c10:5abd:5899:c977:d551])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-427a5e8144dsm127215135e9.11.2024.07.16.06.07.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jul 2024 06:07:40 -0700 (PDT)
-Message-ID: <046303cd-54d0-42f0-990d-2d18a9de1f3e@linaro.org>
-Date: Tue, 16 Jul 2024 15:07:39 +0200
+	s=arc-20240116; t=1721136048; c=relaxed/simple;
+	bh=AtAOBV7bnSPUuscLq8rdkSFWIOQBpUtV0DPaZ6zFNAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cKv1i7uHORvYxppf8Sl2JmfSKlFwSUb73Pq1ewK37AnpW23oWzWr5VclsK3P6wiuvAjyIkQXQ+nXbAvqHMWBGbxkSQac/Mv90ZQg/+jE/IV+OyVVwazYLEZUQLMp5Nm/CRvRe00HsxgydN/jxr0+tcXEQ+ry/oeF6XP/JrZdq5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=s.l-h@gmx.de header.b=ScWtrcZ4; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1721136028; x=1721740828; i=s.l-h@gmx.de;
+	bh=qaaJnwwOJeq0Tus7RbxDEYWH4Q9zRZMm7LlWwaOaigU=;
+	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=ScWtrcZ4d/IDXf1snaWbM8+UeAS6LD/Qb/hIjACXRE2wGHFLVCQw1urqyoSwMPMe
+	 UxVV41zEdTwAWlYCYlkmfW1bhmSAN9nx9pcALGYHFGlBFKtEqIW2GvqRG7os8/Hf1
+	 Ot1z6Hczc3HEjfoLcXz9OQgI2kjWI78E0uznUYHT/ACsNcJ31zxepeBdT3Ux6Gs/p
+	 wGfh8HbXwwYaUObmwzIen+hlZCfHbOd/Xfuqy11CFkHnb8TG47ZE+edtqtZHbFjyz
+	 Lzj4AOYx9r/H3yhy2N5ffjoaX9V0lbAxJACu1JMslRh4HgNwcOtpGAR2G1uQYaJ17
+	 h0gnfPQhsDv41nn6Aw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mir ([94.31.83.155]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MwQT9-1sBMGv2vf3-00y6M4; Tue, 16
+ Jul 2024 15:20:28 +0200
+Date: Tue, 16 Jul 2024 15:20:25 +0200
+From: Stefan Lippers-Hollmann <s.l-h@gmx.de>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Eric Biggers
+ <ebiggers@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
+ <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, Lukasz
+ Luba <lukasz.luba@arm.com>, Srinivas Pandruvada
+ <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v3] thermal: core: Call monitor_thermal_zone() if zone
+ temperature is invalid
+Message-ID: <20240716152025.7f935fb0@mir>
+In-Reply-To: <CAJZ5v0g8L-TA7kT92J_nX8PkjyGkqGeuXh4-ATOprhSPKsY7Rg@mail.gmail.com>
+References: <6064157.lOV4Wx5bFT@rjwysocki.net>
+	<20240715044527.GA1544@sol.localdomain>
+	<4d7e11a7-b352-4ced-acee-b5f64e3cd0b6@linaro.org>
+	<CAJZ5v0gx6GyKBYt7YMFwmUQ4OCG49d9k2H=P-4Awr-mJ=eFHKw@mail.gmail.com>
+	<20240715145426.199c31d0@mir>
+	<CAJZ5v0gPiwkNczZhCf_rkxVoUX33tS9c6irMf_7=Rg48Nw9C4w@mail.gmail.com>
+	<20240716014830.243bb0cf@mir>
+	<CAJZ5v0jkA72=avuthGkrS5iu_UGEQeaEp7LjedXCpzamcnRKsA@mail.gmail.com>
+	<20240716125538.09f716d1@mir>
+	<20240716131500.35cf4f00@mir>
+	<CAJZ5v0j2w-8c83Lw6OdJGg53pOKQMdeWiwaNkEEThwE6fXLiHQ@mail.gmail.com>
+	<CAJZ5v0g8L-TA7kT92J_nX8PkjyGkqGeuXh4-ATOprhSPKsY7Rg@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] thermal: sti: depend on THERMAL_OF subsystem
-To: Raphael Gallais-Pou <rgallaispou@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Patrice Chotard <patrice.chotard@foss.st.com>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-References: <20240714-thermal-v3-0-88f2489ef7d5@gmail.com>
- <20240714-thermal-v3-2-88f2489ef7d5@gmail.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240714-thermal-v3-2-88f2489ef7d5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:BuctFrxmpgMmHs/b0oCkUBW87B3AItciqXRkhNWTtfjO+U6a0AV
+ OGJqvF6/MEURSJXL2nM2BnMegHU1/bppd0jCOqex2pWbjpbTY8GuZRuRSmN4F4O9+Y0XMDH
+ NOfB2WegdDtDoNEYouDxMcqdcLh6PY7SaSaL3ytoZZXbWsoymTefO9rhLtN2JgyQMmJhT+P
+ Sbi/tgOYFZX2wgM3r95CA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:Fpj+yPuf1NA=;TrF5dYQHwYa6V8q/A0iNoHJ6MOm
+ BmthHWWGrUl9mb6Or+DBHmPZGN/begyHO963MSKFPJ9blcZO33e8Yk9Gc2rpJ9y4f+J9vLfH4
+ LrwxdQviqYcVs0VfHktRaoLgc2Iimuc47HUwIpJDcpo7WSGMWRiAiN+xJbXpxCeZ1G4yL2mvP
+ WpLgCEdjEt5jNxv3cjLK7nKaFQ71HSOSAmtNv2YBGJtu6Qc3Gs2FYbr/dXwu4+jDVV/NXnu+n
+ vhY1K11HL8ls3FytCAWMYUVJgzj37BEMNh+b0m0LhkFEam6r0rzhZ/5+/pW3ARxR3Pl0HgH6F
+ FkUuQum2qXg60iKMErTx+ZcR1ddQCUPFD4iWuZp3uljyIQq93Qfm6QTfDFrYLHtHxiVZmqHFv
+ 0DemIFyBpsU/ogi3hNdfGCrum1dXeYtxqvkJpqwE2G8wvAxEcM+I7kd16mc3rFTGJmpuLyu2V
+ L3R2zSPrwTiU9H2ZqV+RAxkiAogomSWATyQPR4+wb8yNdqOS6anGYQJOiWyvCaU055DIleh29
+ TPeiHGzbm4JjtaZjFon1crqxksB5NVXBQeFgr7R7u0fl66FCk2+X3BVmaeq4hm4IXWLkHo+Lc
+ sJtv+bhTZHaCi6Q4FsSr22sv+s3BzF/67ytlkDpLx3xXSJWEEL5y5l5dTqsun4gvOkQTXKObD
+ rdsag3j1dY81Qq+wBsTXSqYrtqyHrAgt6RRsR6lmS4MrVFFFlYX9Ccmzhe+tyWDcvlfj/Mlq0
+ WWYeKxD8sc4sleI9NY6rpGWQBod9CJ6P3T5PEupVJaSRS0Q8QdwA434fOvxW9SglCdoE+T6Pq
+ EA6o1VhWuuhuWCZSUmUtn2bg==
 
-On 14/07/2024 13:42, Raphael Gallais-Pou wrote:
-> Switch to thermal_of_zone to handle thermal-zones. Replace
-> thermal_zone_device_register() by devm_thermal_of_zone_register() and
-> remove ops st_thermal_get_trip_type, st_thermal_get_trip_temp.
-> 
-> Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
-> ---
-> Changes in v3:
-> - Fix unmet dependency when building with ARM64 compiler
->    https://lore.kernel.org/lkml/202406270605.qodaWd4n-lkp@intel.com/
-> - Remove no more used polling_delay variable detected by kernel robot
->    https://lore.kernel.org/lkml/202406270530.kN5wIswi-lkp@intel.com/
-> Changes in v2:
-> - Remove unused struct thermal_trip trip
-> ---
->   drivers/thermal/st/Kconfig      |  2 ++
->   drivers/thermal/st/st_thermal.c | 28 ++++++++++------------------
->   2 files changed, 12 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/thermal/st/Kconfig b/drivers/thermal/st/Kconfig
-> index ecbdf4ef00f4..95a634709a99 100644
-> --- a/drivers/thermal/st/Kconfig
-> +++ b/drivers/thermal/st/Kconfig
-> @@ -5,12 +5,14 @@
->   
->   config ST_THERMAL
->   	tristate "Thermal sensors on STMicroelectronics STi series of SoCs"
-> +	depends on THERMAL_OF
->   	help
->   	  Support for thermal sensors on STMicroelectronics STi series of SoCs.
->   
->   config ST_THERMAL_MEMMAP
->   	select ST_THERMAL
->   	tristate "STi series memory mapped access based thermal sensors"
-> +	depends on THERMAL_OF
+Hi
 
-Given the changes below it is possible to move this dependency in the 
-upper Kconfig AFAICS:
+On 2024-07-16, Rafael J. Wysocki wrote:
+> On Tue, Jul 16, 2024 at 1:36=E2=80=AFPM Rafael J. Wysocki <rafael@kernel=
+.org> wrote:
+> > On Tue, Jul 16, 2024 at 1:15=E2=80=AFPM Stefan Lippers-Hollmann <s.l-h=
+@gmx.de> wrote:
+> > > On 2024-07-16, Stefan Lippers-Hollmann wrote:
+> > > > On 2024-07-16, Rafael J. Wysocki wrote:
+> > > > > On Tue, Jul 16, 2024 at 1:48=E2=80=AFAM Stefan Lippers-Hollmann =
+<s.l-h@gmx.de> wrote:
+> > > > > > On 2024-07-15, Rafael J. Wysocki wrote:
+> > > > > > > On Mon, Jul 15, 2024 at 2:54=E2=80=AFPM Stefan Lippers-Hollm=
+ann <s.l-h@gmx.de> wrote:
+> > > > > > > > On 2024-07-15, Rafael J. Wysocki wrote:
+> > > > > > > > > On Mon, Jul 15, 2024 at 11:09=E2=80=AFAM Daniel Lezcano
+> > > > > > > > > <daniel.lezcano@linaro.org> wrote:
+> > > > > > > > > > On 15/07/2024 06:45, Eric Biggers wrote:
+> > > > > > > > > > > On Thu, Jul 04, 2024 at 01:46:26PM +0200, Rafael J. =
+Wysocki wrote:
+> > > > > > > > > > >> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com=
+>
+> > > > > > [...]
+> > > > > > > > Silencing the warnings is already a big improvement - and =
+that patch
+> > > > > > > > works to this extent for me with an ax200, thanks.
+> > > > > > >
+> > > > > > > So attached is a patch that should avoid enabling the therma=
+l zone
+> > > > > > > when it is not ready for use in the first place, so it shoul=
+d address
+> > > > > > > both the message and the useless polling.
+> > > > > > >
+> > > > > > > I would appreciate giving it a go (please note that it hasn'=
+t received
+> > > > > > > much testing so far, though).
+> > > > > >
+> > > > > > Sadly this patch doesn't seem to help:
+> > > > >
+> > > > > This is likely because it is missing checks for firmware image t=
+ype.
+> > > > > I've added them to the attached new version.  Please try it.
+> > > > >
+> > > > > I've also added two pr_info() messages to get a better idea of w=
+hat's
+> > > > > going on, so please grep dmesg for "Thermal zone not ready" and
+> > > > > "Enabling thermal zone".
+> > > >
+> > > > This is the output with the patch applied:
+> > >
+> > > The ax200 wlan interface is currently not up/ configured (system
+> > > using its wired ethernet cards instead), the thermal_zone1 stops
+> > > if I manually enable the interface (ip link set dev wlp4s0 up)
+> > > after booting up:
+> >
+> > This explains it, thanks!
+> >
+> > The enabling of the thermal zone in iwl_mvm_load_ucode_wait_alive() is
+> > premature or it should get disabled in the other two places that clear
+> > the IWL_MVM_STATUS_FIRMWARE_RUNNING bit.
+> >
+> > I'm not sure why the thermal zone depends on whether or not this bit
+> > is set, though. Is it really a good idea to return errors from it if
+> > the interface is not up?
+[...]
+> > > [   22.033468] thermal thermal_zone1: failed to read out thermal zon=
+e (-61)
+> > > [   22.213120] thermal thermal_zone1: Enabling thermal zone
+> > > [   22.283954] iwlwifi 0000:04:00.0: Registered PHC clock: iwlwifi-P=
+TP, with index: 0
+> >
+> > Thanks for this data point!
+> >
+> > AFAICS the thermal zone in iwlwifi is always enabled, but only valid
+> > if the interface is up.  It looks to me like the thermal core needs a
+> > special "don't poll me" error code to be returned in such cases.
+>
+> Attached is a thermal core patch with an iwlwifi piece along the lines
+> above (tested lightly).  It adds a way for a driver to indicate that
+> temperature cannot be provided at the moment, but that's OK and the
+> core need not worry about that.
+>
+> Please give it a go.
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index ed16897584b4..b6b916e7e294 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -429,7 +429,7 @@ source "drivers/thermal/samsung/Kconfig"
-  endmenu
+This seems to fail to build on top of v6.10, should I test Linus' HEAD
+or some staging tree instead?
 
-  menu "STMicroelectronics thermal drivers"
--depends on (ARCH_STI || ARCH_STM32) && OF
-+depends on (ARCH_STI || ARCH_STM32) && THERMAL_OF
-  source "drivers/thermal/st/Kconfig"
-  endmenu
+[ I will be offline for the next few hours now, but will test it as soon
+  as possible, probably in ~9-10 hours ]
 
-THERMAL_OF depends on OF
+  CC      drivers/thermal/thermal_core.o
+drivers/thermal/thermal_core.c: In function 'handle_thermal_trip':
+drivers/thermal/thermal_core.c:383:37: error: 'THERMAL_TEMP_INIT' undeclar=
+ed (first use in this function); did you mean 'THERMAL_TEMP_INVALID'?
+  383 |             tz->last_temperature !=3D THERMAL_TEMP_INIT) {
+      |                                     ^~~~~~~~~~~~~~~~~
+      |                                     THERMAL_TEMP_INVALID
+drivers/thermal/thermal_core.c:383:37: note: each undeclared identifier is=
+ reported only once for each function it appears in
+drivers/thermal/thermal_core.c: In function 'thermal_zone_device_init':
+drivers/thermal/thermal_core.c:432:27: error: 'THERMAL_TEMP_INIT' undeclar=
+ed (first use in this function); did you mean 'THERMAL_TEMP_INVALID'?
+  432 |         tz->temperature =3D THERMAL_TEMP_INIT;
+      |                           ^~~~~~~~~~~~~~~~~
+      |                           THERMAL_TEMP_INVALID
 
->   config STM32_THERMAL
->   	tristate "Thermal framework support on STMicroelectronics STM32 series of SoCs"
-> diff --git a/drivers/thermal/st/st_thermal.c b/drivers/thermal/st/st_thermal.c
-> index 5f33543a3a54..23597819ce84 100644
-> --- a/drivers/thermal/st/st_thermal.c
-> +++ b/drivers/thermal/st/st_thermal.c
-> @@ -12,6 +12,7 @@
->   #include <linux/of_device.h>
->   
->   #include "st_thermal.h"
-> +#include "../thermal_hwmon.h"
->   
->   /* The Thermal Framework expects millidegrees */
->   #define mcelsius(temp)			((temp) * 1000)
-> @@ -135,8 +136,6 @@ static struct thermal_zone_device_ops st_tz_ops = {
->   	.get_temp	= st_thermal_get_temp,
->   };
->   
-> -static struct thermal_trip trip;
-> -
->   int st_thermal_register(struct platform_device *pdev,
->   			const struct of_device_id *st_thermal_of_match)
->   {
-> @@ -145,7 +144,6 @@ int st_thermal_register(struct platform_device *pdev,
->   	struct device_node *np = dev->of_node;
->   	const struct of_device_id *match;
->   
-> -	int polling_delay;
->   	int ret;
->   
->   	if (!np) {
-> @@ -197,29 +195,22 @@ int st_thermal_register(struct platform_device *pdev,
->   	if (ret)
->   		goto sensor_off;
->   
-> -	polling_delay = sensor->ops->register_enable_irq ? 0 : 1000;
-> -
-> -	trip.temperature = sensor->cdata->crit_temp;
-> -	trip.type = THERMAL_TRIP_CRITICAL;
-> -
->   	sensor->thermal_dev =
-> -		thermal_zone_device_register_with_trips(dev_name(dev), &trip, 1, sensor,
-> -							&st_tz_ops, NULL, 0, polling_delay);
-> +		devm_thermal_of_zone_register(dev, 0, sensor, &st_tz_ops);
->   	if (IS_ERR(sensor->thermal_dev)) {
-> -		dev_err(dev, "failed to register thermal zone device\n");
-> +		dev_err(dev, "failed to register thermal of zone\n");
->   		ret = PTR_ERR(sensor->thermal_dev);
->   		goto sensor_off;
->   	}
-> -	ret = thermal_zone_device_enable(sensor->thermal_dev);
-> -	if (ret)
-> -		goto tzd_unregister;
->   
->   	platform_set_drvdata(pdev, sensor);
->   
-> -	return 0;
-> +	/*
-> +	 * devm_thermal_of_zone_register() doesn't enable hwmon by default
-> +	 * Enable it here
-> +	 */
-> +	return devm_thermal_add_hwmon_sysfs(dev, sensor->thermal_dev);
-
-Other drivers ignore the return code or just print a message in case it 
-is not zero. Otherwise, that makes the thermal driver to fail because of 
-hwmon.
-
-> -tzd_unregister:
-> -	thermal_zone_device_unregister(sensor->thermal_dev);
->   sensor_off:
->   	st_thermal_sensor_off(sensor);
->   
-> @@ -232,7 +223,8 @@ void st_thermal_unregister(struct platform_device *pdev)
->   	struct st_thermal_sensor *sensor = platform_get_drvdata(pdev);
->   
->   	st_thermal_sensor_off(sensor);
-> -	thermal_zone_device_unregister(sensor->thermal_dev);
-> +	thermal_remove_hwmon_sysfs(sensor->thermal_dev);
-> +	devm_thermal_of_zone_unregister(sensor->dev, sensor->thermal_dev);
->   }
->   EXPORT_SYMBOL_GPL(st_thermal_unregister);
->   
-> 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-"
+Regards
+	Stefan Lippers-Hollmann
 
