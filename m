@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-11179-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11180-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E51CC933221
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 21:37:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0E1A933226
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 21:37:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 224F31C225D1
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 19:37:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C95B1F28152
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 19:37:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 686401A0700;
-	Tue, 16 Jul 2024 19:35:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E74B51A08C7;
+	Tue, 16 Jul 2024 19:35:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oXIyHUNn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bz1FQ1f1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375B02B9B3;
-	Tue, 16 Jul 2024 19:35:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF35819E7F7;
+	Tue, 16 Jul 2024 19:35:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721158525; cv=none; b=FhmvrCM+xUTwzXsrOfI4Gbba97+u9S1LCWwCB7rXM8/Nhk0T4Uu30QjJw3e78ZBwiubg6HGuYl7wQdGjiVQDo9zd34qQvJTn9zXeoG7r5QFD8FIXja/bs2gUAPsruvPx3slXhV4SM9rwuJhk9N82CYSXR6xf4bWMd92NpMpIUrc=
+	t=1721158548; cv=none; b=P88EIOv8icS29n4wkl1z8Nwo20jWwnqvBDkEffTyMrAhmjMonKlKzv6bdl1SUpg3zBHAHQK1znJ4WahZoNuMtuqBqg9qh4Hcr+rOKAca9tLBdmgKF2mDewTBMYkxNZwVUXlZBa8bT+mePPVJ0j6/3Y4qM0Epzwh6hJBdJqwXDc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721158525; c=relaxed/simple;
-	bh=Jj9Z4uSeu2WcwER6qQ74OBjx3l8I+OIYRcL/UaxP95A=;
+	s=arc-20240116; t=1721158548; c=relaxed/simple;
+	bh=IrZRJ0n90HZLw27SUYcz87kjmOhRk5L2rmzTqOXNwvo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fYjozR8JZec05zYF1kwuWI/KvfNmN2sM7Za13txihgN8xSbK3p0vTmp/nSueTQhOmjwe4+M++kfdM4aka8QQ1/t5Cs7KqMa/zWMtDzzygMFhMAANsBN7PhIOjk3n/la2Pb1wVf9ZhoZByR0meVQct4oC97yPmm47Mb2ALGSRaEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oXIyHUNn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0904AC4AF0B;
-	Tue, 16 Jul 2024 19:35:20 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=dbAFMn3LhebQBM8UvunPxbzx0EH+lvVcNpjJwEReAoPAT88egIlqSBOLGhKpwu11Oj7z9Q16agO4/VLWXq8lVrPznmFNMta3tgZoHYwyHMKaMEv0OtrxLjt3Oa4RKbWQ9Vc6xiIgeGMHHNFGKVMHT0zBIj4xTETM8ZEt0LVpcks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bz1FQ1f1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEFB3C4AF0D;
+	Tue, 16 Jul 2024 19:35:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721158524;
-	bh=Jj9Z4uSeu2WcwER6qQ74OBjx3l8I+OIYRcL/UaxP95A=;
+	s=k20201202; t=1721158548;
+	bh=IrZRJ0n90HZLw27SUYcz87kjmOhRk5L2rmzTqOXNwvo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oXIyHUNnd1dloiZo5BvaDXVAIYgVDxFfV8wb0AyizrXNdFWoJDRin5Ws016AEo3dH
-	 +Dmg8vWOGiatNPl+Jl3/9hNrXpef1BbqPIMN28JLXfUHLdfPq7STe68WYDnhkG8FCj
-	 q0kkwd/Y36EPyjRb9gUKMTGcNRdZC4e9E2UZIWbxp6I0jSS6iIiOgbhSJ6yqruJkd3
-	 Yu7RExlAxuvJa6d68UM7qMnT77mSAK3eQM5ICQyBQhYfoNSFjb8qcDb6PuTkbmGqYB
-	 36fapwoaWmwu8zYvLxH9tXHRLXAfB7oPNqNoYKSSJ7P8u5yyAIRejVo3jq2IREC3Xd
-	 Usui6g4sBXeFg==
-Message-ID: <26aa15cd-bc47-4409-81dd-b21b8cf9ae9b@kernel.org>
-Date: Tue, 16 Jul 2024 21:35:18 +0200
+	b=bz1FQ1f1D+nSZjMJiYFdIfTV4eCHJwpbrf7FASWx37uZWjyK8RIZUx4/CXzMV6h6N
+	 ya9afuVltzErsplNT7/SkxI9yHx0yLsZ8+c+33icaHX/+TfGfKQ9Uk/VoW5ZzvLiMb
+	 ElTDfREFHKpu2F/rwREiJHf2ytWN9QLYjaqb8CdxED1I2DtAj59yajLM9QjP2A1Oq5
+	 dhJh0jP2PNSJkvUKXPZjt1/tXLpNfJF7YLstzjCc/sUlOECe6B8/JKdfXDmcvRn5sC
+	 diuQWQBux4hvgxkuKY+9diiDd4YboSuCI7vtxms/12dA3fB/YfmS3ZVpOAgHYr24Ji
+	 510HWPN8kRIYA==
+Message-ID: <96831423-68bc-4bbd-9eda-ebf23b7723be@kernel.org>
+Date: Tue, 16 Jul 2024 21:35:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,15 +50,18 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: interconnect: qcom,rpmh: correct sm8150
- camnoc
+Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: Document ipq6018
+ temperature sensor
 To: Rayyan Ansari <rayyan.ansari@linaro.org>, devicetree@vger.kernel.org
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+Cc: Amit Kucheria <amitk@kernel.org>,
+ Thara Gopinath <thara.gopinath@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Odelu Kukatla <quic_okukatla@quicinc.com>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240716144738.109823-1-rayyan.ansari@linaro.org>
+ <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240716133803.82907-1-rayyan.ansari@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,20 +107,18 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240716144738.109823-1-rayyan.ansari@linaro.org>
+In-Reply-To: <20240716133803.82907-1-rayyan.ansari@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 16/07/2024 16:47, Rayyan Ansari wrote:
-> The sm8150 camnoc interconnect was mistakenly documented as
-> "qcom,sm8150-camnoc-noc", for which there is no reference to in
-> drivers or device tree.
-> 
-> Correct this to "qcom,sm8150-camnoc-virt".
+On 16/07/2024 15:38, Rayyan Ansari wrote:
+> Document the ipq6018 temperature sensor, which is used in ipq6018.dtsi
+> and is compatible with the ipq8074 temperature sensor.
 > 
 > Signed-off-by: Rayyan Ansari <rayyan.ansari@linaro.org>
+> ---
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
