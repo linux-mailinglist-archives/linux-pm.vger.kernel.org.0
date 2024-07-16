@@ -1,130 +1,242 @@
-Return-Path: <linux-pm+bounces-11173-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11174-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E159E932E9E
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 18:49:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C3A6932ED3
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 19:03:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65614B22641
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 16:49:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B2B728305C
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 17:03:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 553C519F486;
-	Tue, 16 Jul 2024 16:49:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4BDE19E7D0;
+	Tue, 16 Jul 2024 17:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VjQ9Ou7h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ili9IX1U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89D61E528
-	for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2024 16:49:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4A725761;
+	Tue, 16 Jul 2024 17:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721148550; cv=none; b=rNTrnOkaftUKU/rYK+swzljW8HFZcIYAN+UMUeoASkyapLn4uqgJkMiWgj/X/66FeGuGPgEsoltcGVhENENnDR62E6UL2Y4aH3olFn/Ohgp+pbuu/Ee2AeaLtSkQV2fXvztVLjMzws/7NQfN308hMvp/AZzUSQbYFB4D17OvFrU=
+	t=1721149428; cv=none; b=DJUXvThe9a75dtxxIEPw8w4g1laPdThDHMVCpP58GgimbcBhEqmS/cWuTjE4sU4fz71aGaQNHcM+1gCj0BfessFRsj7U50Wqxnua6yz3YWcqRurhLhgTHz6e+B4V/ALnA/pWWBc9izsotm6X34mfGCySdhbj/+S05zqHTSb7goc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721148550; c=relaxed/simple;
-	bh=1SvrFrUwY0ssB2UFXaVjKnT3739nqui0AqyelNUF8f4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E1H2ukOnH+K02Pbs6yYB9VOrLoli8cLkePh86PVfxac8UdRAP5hy++VGAJa7uOEqCW2hxPCcGS560lLBjtLmUk1pV7ick602befdN7q/gXym7o4wnaxng2TdbgwlG5qL23E+va/Vh10G11MYwXnZtQ5PEsm2EPpwtgvytfazDC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VjQ9Ou7h; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52eafec1e84so8117506e87.0
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2024 09:49:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721148546; x=1721753346; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1S+7gwS1UwbWxt9zx0GhM0+f0sa2DWHmC5X67Dgdt8E=;
-        b=VjQ9Ou7hERCrAzWoRPcRtrlBzM/qkKp91XviMfjTZGbSxrzB4sPqIj3zfcosLBYag/
-         l9CZp+dZ3bsDmZnBju31s9RWd4jyPWuYoGqgRSTs8rRCmSQPDAuex/LmDvy4mZ2Joy/C
-         zXMOEAFfkIkc1EuybntVFYijQDKHm5sJK6CufAh5nj7aXeqWtP12JRaECxom79z3VKVv
-         epkxQ+Qv76KBYYBD5SzjoCyZDTkWlYBH14QVMc/gwFI8zChDcbKrIVnv2OYZEgNB9Qgs
-         uTcERdC+0r4h4xnGxAoao3+/xXpsqHK2zqlH5NbpsVaBehI76u5+f7I0jAHwCmAmYBEa
-         me1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721148546; x=1721753346;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1S+7gwS1UwbWxt9zx0GhM0+f0sa2DWHmC5X67Dgdt8E=;
-        b=GTgm6QLnWejC42C0xObfgAPTkhAI9zgqH9yX5NOpjxBjD0WDEtit+lv7U9ZhR8Fj9f
-         Gl9Q7VrhxIYSa3icUwZdJuMjxmVVM7RfPpF+x+zpnjCvtm7YxsdN9J+fMnNiBIJfQlpr
-         2vOFuP4it08fckzc4PqlUm+89N51KwLPQeQXAPh1rQlNiCfsQbD+w/UFpVZ2wM/ebwpl
-         D//F2Jk7S6nlCynjPeE0zqYjNOJd6ix35cHHckf7/MNRGapFu/W+FbcGpnTSDjx9mGlW
-         hQMuOPXN5uJUylO6Ba4tmJZTEF79JApA6HPIMyVYlLnYESv5HPKjPIEXHWUgcoGnowG9
-         8xaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUhTKpu4eu1Yt8Tcvqfa8lKSJu4riXLE2/qvM+wwFFncIq2ANEW7iThkKGjtnwTiLnAQKlh65XJfcf3T4Q1Av6rODL2yChdK2E=
-X-Gm-Message-State: AOJu0Yw8Y8+pGYKQLF6hA4l4j9vKwmVXLRxf1DNDM68yIjci02lT4V5J
-	Av3JsJIpZdqQqAoBZtiW3PLGuMrEiEVUtUz5ZU7QcjHeteUE4l5cgrCAdZ2tt8R0AKSYbJw7c1U
-	C
-X-Google-Smtp-Source: AGHT+IFfYwT3eFsB3BfCBMShxUS4iHT2qR8EKCoDrDdhlZUTVH1+b0uGU9S8rbJSVSVD0ci8YFztBg==
-X-Received: by 2002:a05:6512:3d91:b0:52e:be0d:56dd with SMTP id 2adb3069b0e04-52edf03017fmr2122314e87.40.1721148545801;
-        Tue, 16 Jul 2024 09:49:05 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ed24e1f7csm1216331e87.48.2024.07.16.09.49.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 09:49:05 -0700 (PDT)
-Date: Tue, 16 Jul 2024 19:49:03 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Rayyan Ansari <rayyan.ansari@linaro.org>
-Cc: devicetree@vger.kernel.org, Georgi Djakov <djakov@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Odelu Kukatla <quic_okukatla@quicinc.com>, 
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: interconnect: qcom,rpmh: correct sm8150
- camnoc
-Message-ID: <uvvczamt4vcl2tt4hjcmrc66rwrnd5fy5254lzshoeart6ytmm@3sqsbmqlojq5>
-References: <20240716144738.109823-1-rayyan.ansari@linaro.org>
+	s=arc-20240116; t=1721149428; c=relaxed/simple;
+	bh=MMCx01sQkZXr2bYV8A4ZzgSApVnPCts9ZdziPtO5VtM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YYI5EnrOqT5wK6updOeqKcrTYwSe02eq99dXLxo3sCjZt7YIODrbm62D4bH7Nw2Bzv2r+pFLbNUPQwsv7vQvUYzaiETz0FFvQ/GJCH8viguLOxIrLFP0KAmvJt+sX09Oth5Oy3liqDqkjzyGbn2VoCZiYkQw8zs6ud6EM79R7D0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ili9IX1U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2432FC4AF0D;
+	Tue, 16 Jul 2024 17:03:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721149428;
+	bh=MMCx01sQkZXr2bYV8A4ZzgSApVnPCts9ZdziPtO5VtM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ili9IX1URa9NAUUZ83lvohGbA4JbDFOG+HmR7sfXio6hRLeT1xYs3j0dJ2B2UU8SL
+	 eWTcuzf4IQxmcLKkg8BsO5/z4mW6OQZZ9oTju0wci53yk95Ai4mSGqVTB+D5eztsNt
+	 Kq280BclDvDZVSD2i7aqye5H52JkL31SOfeKZKqqe22k09/Jm7KklbrMPDJNz1Kjdp
+	 c7zW4phMK7tOG98iiycI1mUirfjvvEkfhg8S2MW1B/bbmfYzavbTS/v2dOydm2xsmD
+	 YTD7jdbZ9kkXwEQa8cjPt1yhuMIEsMT5z+STVLgrtK9DhDjO3zQclqBudQVBUBDvwA
+	 W7ndDP3473tGw==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5cd2bfc8915so66333eaf.2;
+        Tue, 16 Jul 2024 10:03:48 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXGArH7Ker7FTazsgMLgcEGVYTl7qH0YueYh/cGA5bTLKAs+A5eTL9LQQL3zfjv2UoKFZvpQpFpXZG5TqpAk41gpEUlp0kDGl+rzrcZJxzwfI1EdP2ZXVsqQ/hIKCrbH/4jVuzIjOU=
+X-Gm-Message-State: AOJu0YxhMw8hryrae3VXmC976YeV6mwGV0myAAmBLvMeVIAfAWEz/TVL
+	I2lM0OskgZzEJYxctc/DjthX3LEW9CQbz3WcLXVR7bx04k+rAbRQPY9pr2OQaqjisOpCNVXhz0q
+	94ILXoWMwTCr54JW5Ug4eN8CruDs=
+X-Google-Smtp-Source: AGHT+IHkWjDT44R1OHPFm+DuX3NSMA6mAzhQls9y5Grg44VSDEQoPtwf7ZdP0vQBar5Ai5QfvBPE6BpQRsEBr1wttew=
+X-Received: by 2002:a05:6820:1dc5:b0:5c6:6029:1568 with SMTP id
+ 006d021491bc7-5d3c8f1573dmr20500eaf.0.1721149427315; Tue, 16 Jul 2024
+ 10:03:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240716144738.109823-1-rayyan.ansari@linaro.org>
+References: <6064157.lOV4Wx5bFT@rjwysocki.net> <20240716152025.7f935fb0@mir>
+ <CAJZ5v0gZ5611KXqfjSZOdjRi7v8num3P-vO82c7LGuS1Ak1=FQ@mail.gmail.com> <12474042.O9o76ZdvQC@natalenko.name>
+In-Reply-To: <12474042.O9o76ZdvQC@natalenko.name>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 16 Jul 2024 19:03:35 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jc5Cm+0ktyLm_0un149xws4dpVQfs4C277PMVqbHi7jw@mail.gmail.com>
+Message-ID: <CAJZ5v0jc5Cm+0ktyLm_0un149xws4dpVQfs4C277PMVqbHi7jw@mail.gmail.com>
+Subject: Re: [PATCH v3] thermal: core: Call monitor_thermal_zone() if zone
+ temperature is invalid
+To: Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc: Stefan Lippers-Hollmann <s.l-h@gmx.de>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Eric Biggers <ebiggers@kernel.org>, 
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 16, 2024 at 03:47:38PM GMT, Rayyan Ansari wrote:
-> The sm8150 camnoc interconnect was mistakenly documented as
-> "qcom,sm8150-camnoc-noc", for which there is no reference to in
-> drivers or device tree.
-> 
-> Correct this to "qcom,sm8150-camnoc-virt".
+Hi,
 
-Sadly enough, it's not a -virt, but a real -noc, but it's too late to
-fix that.
+On Tue, Jul 16, 2024 at 6:38=E2=80=AFPM Oleksandr Natalenko
+<oleksandr@natalenko.name> wrote:
+>
+> Hello.
+>
+> On =C3=BAter=C3=BD 16. =C4=8Dervence 2024 16:04:16, SEL=C4=8C Rafael J. W=
+ysocki wrote:
+> > On Tue, Jul 16, 2024 at 3:20=E2=80=AFPM Stefan Lippers-Hollmann <s.l-h@=
+gmx.de> wrote:
+> > >
+> > > Hi
+> > >
+> > > On 2024-07-16, Rafael J. Wysocki wrote:
+> > > > On Tue, Jul 16, 2024 at 1:36=E2=80=AFPM Rafael J. Wysocki <rafael@k=
+ernel.org> wrote:
+> > > > > On Tue, Jul 16, 2024 at 1:15=E2=80=AFPM Stefan Lippers-Hollmann <=
+s.l-h@gmx.de> wrote:
+> > > > > > On 2024-07-16, Stefan Lippers-Hollmann wrote:
+> > > > > > > On 2024-07-16, Rafael J. Wysocki wrote:
+> > > > > > > > On Tue, Jul 16, 2024 at 1:48=E2=80=AFAM Stefan Lippers-Holl=
+mann <s.l-h@gmx.de> wrote:
+> > > > > > > > > On 2024-07-15, Rafael J. Wysocki wrote:
+> > > > > > > > > > On Mon, Jul 15, 2024 at 2:54=E2=80=AFPM Stefan Lippers-=
+Hollmann <s.l-h@gmx.de> wrote:
+> > > > > > > > > > > On 2024-07-15, Rafael J. Wysocki wrote:
+> > > > > > > > > > > > On Mon, Jul 15, 2024 at 11:09=E2=80=AFAM Daniel Lez=
+cano
+> > > > > > > > > > > > <daniel.lezcano@linaro.org> wrote:
+> > > > > > > > > > > > > On 15/07/2024 06:45, Eric Biggers wrote:
+> > > > > > > > > > > > > > On Thu, Jul 04, 2024 at 01:46:26PM +0200, Rafae=
+l J. Wysocki wrote:
+> > > > > > > > > > > > > >> From: Rafael J. Wysocki <rafael.j.wysocki@inte=
+l.com>
+> > > > > > > > > [...]
+> > > > > > > > > > > Silencing the warnings is already a big improvement -=
+ and that patch
+> > > > > > > > > > > works to this extent for me with an ax200, thanks.
+> > > > > > > > > >
+> > > > > > > > > > So attached is a patch that should avoid enabling the t=
+hermal zone
+> > > > > > > > > > when it is not ready for use in the first place, so it =
+should address
+> > > > > > > > > > both the message and the useless polling.
+> > > > > > > > > >
+> > > > > > > > > > I would appreciate giving it a go (please note that it =
+hasn't received
+> > > > > > > > > > much testing so far, though).
+> > > > > > > > >
+> > > > > > > > > Sadly this patch doesn't seem to help:
+> > > > > > > >
+> > > > > > > > This is likely because it is missing checks for firmware im=
+age type.
+> > > > > > > > I've added them to the attached new version.  Please try it=
+.
+> > > > > > > >
+> > > > > > > > I've also added two pr_info() messages to get a better idea=
+ of what's
+> > > > > > > > going on, so please grep dmesg for "Thermal zone not ready"=
+ and
+> > > > > > > > "Enabling thermal zone".
+> > > > > > >
+> > > > > > > This is the output with the patch applied:
+> > > > > >
+> > > > > > The ax200 wlan interface is currently not up/ configured (syste=
+m
+> > > > > > using its wired ethernet cards instead), the thermal_zone1 stop=
+s
+> > > > > > if I manually enable the interface (ip link set dev wlp4s0 up)
+> > > > > > after booting up:
+> > > > >
+> > > > > This explains it, thanks!
+> > > > >
+> > > > > The enabling of the thermal zone in iwl_mvm_load_ucode_wait_alive=
+() is
+> > > > > premature or it should get disabled in the other two places that =
+clear
+> > > > > the IWL_MVM_STATUS_FIRMWARE_RUNNING bit.
+> > > > >
+> > > > > I'm not sure why the thermal zone depends on whether or not this =
+bit
+> > > > > is set, though. Is it really a good idea to return errors from it=
+ if
+> > > > > the interface is not up?
+> > > [...]
+> > > > > > [   22.033468] thermal thermal_zone1: failed to read out therma=
+l zone (-61)
+> > > > > > [   22.213120] thermal thermal_zone1: Enabling thermal zone
+> > > > > > [   22.283954] iwlwifi 0000:04:00.0: Registered PHC clock: iwlw=
+ifi-PTP, with index: 0
+> > > > >
+> > > > > Thanks for this data point!
+> > > > >
+> > > > > AFAICS the thermal zone in iwlwifi is always enabled, but only va=
+lid
+> > > > > if the interface is up.  It looks to me like the thermal core nee=
+ds a
+> > > > > special "don't poll me" error code to be returned in such cases.
+> > > >
+> > > > Attached is a thermal core patch with an iwlwifi piece along the li=
+nes
+> > > > above (tested lightly).  It adds a way for a driver to indicate tha=
+t
+> > > > temperature cannot be provided at the moment, but that's OK and the
+> > > > core need not worry about that.
+> > > >
+> > > > Please give it a go.
+> > >
+> > > This seems to fail to build on top of v6.10, should I test Linus' HEA=
+D
+> > > or some staging tree instead?
+> >
+> > No, it's missing one hunk, sorry about that.
+> >
+> > > [ I will be offline for the next few hours now, but will test it as s=
+oon
+> > >   as possible, probably in ~9-10 hours ]
+> >
+> > No worries and thanks for your persistence!
+> >
+> > >   CC      drivers/thermal/thermal_core.o
+> > > drivers/thermal/thermal_core.c: In function 'handle_thermal_trip':
+> > > drivers/thermal/thermal_core.c:383:37: error: 'THERMAL_TEMP_INIT' und=
+eclared (first use in this function); did you mean 'THERMAL_TEMP_INVALID'?
+> > >   383 |             tz->last_temperature !=3D THERMAL_TEMP_INIT) {
+> > >       |                                     ^~~~~~~~~~~~~~~~~
+> > >       |                                     THERMAL_TEMP_INVALID
+> > > drivers/thermal/thermal_core.c:383:37: note: each undeclared identifi=
+er is reported only once for each function it appears in
+> > > drivers/thermal/thermal_core.c: In function 'thermal_zone_device_init=
+':
+> > > drivers/thermal/thermal_core.c:432:27: error: 'THERMAL_TEMP_INIT' und=
+eclared (first use in this function); did you mean 'THERMAL_TEMP_INVALID'?
+> > >   432 |         tz->temperature =3D THERMAL_TEMP_INIT;
+> > >       |                           ^~~~~~~~~~~~~~~~~
+> > >       |                           THERMAL_TEMP_INVALID
+> > >
+> >
+> > Attached is a new version that builds for me on top of plain 6.10.
+> >
+>
+> This builds and runs fine for me, no dmesg spamming any more. In `sensors=
+` I get this:
+>
+> ```
+> iwlwifi_1-virtual-0
+> Adapter: Virtual device
+> temp1:       -274.0=C2=B0C
+> ```
+>
+> (very beneficial during the heat wave)
+>
+> There are no "thermal" messages in dmesg whatsoever, any other info you'd=
+ like me to provide?
 
-Acked-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+No, thank you, it works as expected.
 
+> Also, feel free to add:
+>
+> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 
-> 
-> Signed-off-by: Rayyan Ansari <rayyan.ansari@linaro.org>
-> ---
->  Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> index 9318b845ec35..0cb4f7154844 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> @@ -71,7 +71,7 @@ properties:
->        - qcom,sdx65-system-noc
->        - qcom,sm8150-aggre1-noc
->        - qcom,sm8150-aggre2-noc
-> -      - qcom,sm8150-camnoc-noc
-> +      - qcom,sm8150-camnoc-virt
->        - qcom,sm8150-compute-noc
->        - qcom,sm8150-config-noc
->        - qcom,sm8150-dc-noc
-> -- 
-> 2.45.2
-> 
-
--- 
-With best wishes
-Dmitry
+Thanks!
 
