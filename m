@@ -1,118 +1,119 @@
-Return-Path: <linux-pm+bounces-11162-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11163-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDFBE9329A7
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 16:49:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FF1F932A28
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 17:15:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06E991C22010
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 14:49:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 295A7288A93
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 15:15:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ECA519CD0C;
-	Tue, 16 Jul 2024 14:48:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8825919B3E2;
+	Tue, 16 Jul 2024 15:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="efPuzL5W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XwWWMv2W"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CBCF54BD4
-	for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2024 14:48:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8262B9B3;
+	Tue, 16 Jul 2024 15:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721141330; cv=none; b=RtJ+8qcUedRhO9bTljlB/W8CDkmeotfMH8+1wHVlc5nY1P32ACmuSBaRa+JmXiiIg1DN02IwXHZedbySNjujDdFI6rLxYSkxAYbQ7zBJPprIaftrVYMFvKshfK3r2Ve/j7n5ouWKL3ugH/p24x8yJSolZcFZJ0hVEHMulPiwYUY=
+	t=1721142934; cv=none; b=PkXnBuC9cgkBt8wKi2Qi9prV7ODZ16/0Q4Pv0NbgURYNDWMcbEYMdXtR24Szc7A+Y8T2YU4RlacaLAAVNG7ZNNU/WZwB4GE0PQB83ZzFU8xADxWF5di6Z5WjaVndzQ8UR1d7cQIkBQTBsuBmQ/yjJ7AzC15XPXWYHY57kVNnIfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721141330; c=relaxed/simple;
-	bh=bWuhf1ICw3I2jwagK6LuZPJ5kgY086Z9ZS82Q9meJUA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=toW+yOUjsQF8xb1O7++QlAj8pwaMjd8PlodKSTao7D3vPPOIo/H8SK0/YE14rhidHP2S2bN3IeVghcNjrtGlrIDLEtmeifA8YWJpvDYI4TxH6fUouQUHnJgR/wXSPf30FoC7tXSCsW48zV3RThdB90zyCOHFrFnxQvhi+DUSdrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=efPuzL5W; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-427b9dcbb09so7191645e9.3
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2024 07:48:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721141327; x=1721746127; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8i31+WVNl/nD6EKdwlewPxCt2fUhKOj0/YKykgGnpWo=;
-        b=efPuzL5WHy+Hxe6k+fUFNWh/4Wgi7wHojEOFTVsLLGfZmRkX1reodISk5M3z6AqKgE
-         6zTfrXirEoYK1NvJ+v9QmlVNUGkvn9m0lpNKAikKRguIEZZ4Zq0YLPC23tNZniUlUU40
-         sC1bgszmQXmrUzb4osTXbfOhYPDI2ruA2RQfRvZ6OkIK4G9+qGfhvVUUrSnk1seIBzpu
-         pPItp+VjXt5GoUjXWbtzlrJFRSd1XcVCWbsgwaBi1bWchxuNuKFzICTVSNFTv3ym+h78
-         5iBLYpRdqVjHThTwIOzNKf1mhSS4OKkgeuhmjBNWD2auGw8EWaFaIj8y9oXxswbgCVLf
-         JkVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721141327; x=1721746127;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8i31+WVNl/nD6EKdwlewPxCt2fUhKOj0/YKykgGnpWo=;
-        b=unurzQ3PahXurFt4VsewBBlC4UwmC+PYsiGkFW8v+E4V1Xj/Rm+mYQD0+9ry/0N+kH
-         AV+GBTMCIz693IDlPoBS/ZRLa0Zm41R5QQDA0DV7/vr4AFO1qwRedPRw71z8yeTVdd0t
-         t4sJzD6d7rH01tFL3wKKS5Srrcxg7NYG7yUd7JQN+t34+8MNYuu8DToqLn4mIy0cCEd5
-         mepfmaAPea/K+MpvLw4mOz0siABdGsqE0jkeLU92x70b2H7ImdZ0S+vnBxSo4Eyn3e0T
-         RKKsHI9boDlcR396DvCQI283W+keDI87e07TE8xWqbuCfrfQ0q07NXwLw2VsdyrONPbY
-         4/sw==
-X-Forwarded-Encrypted: i=1; AJvYcCVrP3guKxlBKMXBVoNE9DhbcnFQQKJjtLnZvv3wBD8GoXW8ZGDlIJmkDV+mfWq+vzIwRWknNC7vPhpGSRDcqeDgw8hdh0yXjLg=
-X-Gm-Message-State: AOJu0YwvftotzgoKkxNMiUcLAY855c1Yn5M/0y3CV0HmyiSc+qB/cc/L
-	Oz94l3MJCusMmXx6wFpfru4GiFVkHOt900KW6PEds7E/8aey3RvO2Tm5ci85LsU=
-X-Google-Smtp-Source: AGHT+IFSyftMP3yVlnEcZDbvmlEYg59teKQ9FJhUnZ0QnL7q3XwsBMSuMJCTplBqZIJLQQ2kqfK6+Q==
-X-Received: by 2002:a05:600c:4e52:b0:426:597c:7d58 with SMTP id 5b1f17b1804b1-427ba72af91mr18038825e9.39.1721141326863;
-        Tue, 16 Jul 2024 07:48:46 -0700 (PDT)
-Received: from rayyan-pc.broadband ([2a0a:ef40:ee7:2401:197d:e048:a80f:bc44])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-427a5ef44b4sm131907145e9.42.2024.07.16.07.48.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 07:48:46 -0700 (PDT)
-From: Rayyan Ansari <rayyan.ansari@linaro.org>
-To: devicetree@vger.kernel.org
-Cc: Rayyan Ansari <rayyan.ansari@linaro.org>,
-	Georgi Djakov <djakov@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Odelu Kukatla <quic_okukatla@quicinc.com>,
-	linux-arm-msm@vger.kernel.org,
-	linux-pm@vger.kernel.org,
+	s=arc-20240116; t=1721142934; c=relaxed/simple;
+	bh=gH/9v8gdvRPTuEMlos4E4YaZ22thsKhD8PVSvs6RoRY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PSYRC80hHQx7AxKOmMNzG9lWzS5WPeTZOcLzdSdUfeWmZN7Em5kN9a6biwGpReA5kqD9hAZAMEnnFCfDz4dUQnShfFCxtMoqzCDvhWRvqvIcjqHH9ZsRvkvvMQMVShmymqyfSMm7u6ymHjcrBa3dC+BjxiNaaotvOopkTiC62WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XwWWMv2W; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA084C116B1;
+	Tue, 16 Jul 2024 15:15:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721142933;
+	bh=gH/9v8gdvRPTuEMlos4E4YaZ22thsKhD8PVSvs6RoRY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XwWWMv2W964OtTHvFJbs2l54wvapkUOVCVPZCYUMoi6Z3eVz7kmEUwOi1cDGehWOx
+	 TzmJ5G4mxSLaw7HfydJ9c9OIaLssAQ6IM9lzNjj2RhXiL2jb04cK8Gu3LI5RMYI9Ns
+	 +NrBMobZgoXJQyG0+WxQAcp1rKcGhQx+7soPLpbpWYVot6LX+/P1gwkmYjb+6vF7fd
+	 miYJoBGoKFv+3/J61zdZ3DyRn6zssDKbw2ech2dPCGqi1lrIuufs0jdLq0FOK7H1NJ
+	 C+R/tNXXuRRrfD2SAnCx9xbWf3BVyEk2taeHBiK2Aqw7F8GbIfY2g+h28RclQOaiJ2
+	 4iA1Vx6t1sgKg==
+Date: Tue, 16 Jul 2024 17:15:25 +0200
+From: Danilo Krummrich <dakr@kernel.org>
+To: Greg KH <greg@kroah.com>
+Cc: Danilo Krummrich <dakr@redhat.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>, linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+	rust-for-linux@vger.kernel.org,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Erik Schilling <erik.schilling@linaro.org>,
+	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: interconnect: qcom,rpmh: correct sm8150 camnoc
-Date: Tue, 16 Jul 2024 15:47:38 +0100
-Message-ID: <20240716144738.109823-1-rayyan.ansari@linaro.org>
-X-Mailer: git-send-email 2.45.2
+Subject: Re: [PATCH V4 8/8] cpufreq: Add Rust based cpufreq-dt driver
+Message-ID: <ZpaOjcuzBsSx45jE@cassiopeiae>
+References: <cover.1720680252.git.viresh.kumar@linaro.org>
+ <b1601c1dbdf68a4b812fcfaf73f3b5dea67f2025.1720680252.git.viresh.kumar@linaro.org>
+ <Zo-3QIPbhBsv8EjB@pollux>
+ <20240711130802.vk7af6zd4um3b2cm@vireshk-i7>
+ <Zo_cW57i_GMlmYV-@pollux>
+ <2024071122-escargot-treadmill-6e9a@gregkh>
+ <ZpAEWAzETnrVI-cs@pollux>
+ <2024071111-negotiate-spoof-da94@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2024071111-negotiate-spoof-da94@gregkh>
 
-The sm8150 camnoc interconnect was mistakenly documented as
-"qcom,sm8150-camnoc-noc", for which there is no reference to in
-drivers or device tree.
+On Thu, Jul 11, 2024 at 06:34:22PM +0200, Greg KH wrote:
+> On Thu, Jul 11, 2024 at 06:12:08PM +0200, Danilo Krummrich wrote:
+> > On Thu, Jul 11, 2024 at 04:37:50PM +0200, Greg KH wrote:
+> > > On Thu, Jul 11, 2024 at 03:21:31PM +0200, Danilo Krummrich wrote:
+> > > > (2) You require drivers to always implement a "dummy" struct platform_device,
+> > > > there is platform_device_register_simple() for that purpose.
+> > > 
+> > > No, NEVER do that.  platform devices are only for real platform devices,
+> > > do not abuse that interface any more than it already is.
+> > 
+> > I thought we're talking about cases like [1] or [2], but please correct me if
+> > those are considered abusing the platform bus as well.
+> > 
+> > (Those drivers read the CPU OF nodes, instead of OF nodes that represent a
+> > separate device.)
+> > 
+> > [1] https://elixir.bootlin.com/linux/latest/source/drivers/cpuidle/cpuidle-riscv-sbi.c#L586
+> > [2] https://elixir.bootlin.com/linux/latest/source/drivers/cpuidle/cpuidle-psci.c#L441
+> 
+> Yes, these are abuses of that and should be virtual devices as they have
+> nothing to do with the platform bus.
 
-Correct this to "qcom,sm8150-camnoc-virt".
+For those drivers, wouldn't it be better if proper devices would be derived from
+the CPU OF nodes directly? This seems to be a common problem for cpuidle and
+cpufreq drivers.
 
-Signed-off-by: Rayyan Ansari <rayyan.ansari@linaro.org>
----
- Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+But it's quite a while ago I dealt with such drivers, maybe there are reasons
+not to do so.
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-index 9318b845ec35..0cb4f7154844 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-@@ -71,7 +71,7 @@ properties:
-       - qcom,sdx65-system-noc
-       - qcom,sm8150-aggre1-noc
-       - qcom,sm8150-aggre2-noc
--      - qcom,sm8150-camnoc-noc
-+      - qcom,sm8150-camnoc-virt
-       - qcom,sm8150-compute-noc
-       - qcom,sm8150-config-noc
-       - qcom,sm8150-dc-noc
--- 
-2.45.2
+Anyway, using a virtual device for those seems a bit wrong to me.
 
+- Danilo
 
