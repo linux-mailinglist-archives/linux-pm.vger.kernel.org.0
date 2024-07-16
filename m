@@ -1,304 +1,223 @@
-Return-Path: <linux-pm+bounces-11151-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11152-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B954D93268B
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 14:30:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6059B93268E
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 14:31:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 473C5283274
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 12:30:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83A041C20B2C
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 12:31:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB62D1991D4;
-	Tue, 16 Jul 2024 12:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 561F0198A2A;
+	Tue, 16 Jul 2024 12:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jxQlEcrY"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="TM1Gmtj+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2069.outbound.protection.outlook.com [40.92.103.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00421D530;
-	Tue, 16 Jul 2024 12:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721133028; cv=none; b=EYgHJFHFdcQhasO1pfwHZ3Uqvoii6SmrA0SIUPHbur59bIwgu4X+YYxjtyyT6Hi4eTCk63cTFri6GdOPwob4fl5TFRyl9zPg7rBqSuKo7EM421/KixZTvqjjuA3MiSBhhRBfO5diMz68mNPn6/wjqbmwRCq/12KxIR+QlI6+O4s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721133028; c=relaxed/simple;
-	bh=L1WKGOPLT3EO6aZEdn/m6YYAOzuwnjZIz5btJTgd+2E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kBqAW0OEB1hkP3mw0rbWTtC2Kh5DcPX3deyCj372yTLFhRBCzJyVeRk8qVsU0G3mQ5Xmjwb7bInC8no6Gfd/ZjwHpSq8TeNLJ3U3kSU18sYGdhbLBOjM6jV0lErQVHE33mbKez8sMppJKVmPLT6LH08bFBH3CCKT1H6InTjBYf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jxQlEcrY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 802A5C116B1;
-	Tue, 16 Jul 2024 12:30:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721133028;
-	bh=L1WKGOPLT3EO6aZEdn/m6YYAOzuwnjZIz5btJTgd+2E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jxQlEcrYo0Ju9x+V9v0grJpP6gnUAB9FbOpGIVmADrni2aNkXVmkuHfUlkyU+CN6d
-	 S54+L6BJiCJef9x2Qy5QhiSMO3Onyzpy20yFcbu57n8CwbXXjGbS9U0tX+13M+2eeC
-	 T67rlceY/oQaplZ3SVE8GUjLPPFbYMzZIFK4eJ7JOFxP+2B25NWog9n5wEJXAChiBU
-	 aIlXflzzDruIj+ZDaK5Wgwu9sANn/rbFlO6RHHyKmQTGQNNUABCWd7RyouXBjd2naC
-	 w5AwssGmVAzoQKuoSkiCGalxzOPZSPdZO18fN1RLlBSfjua8GfBVOhki/b+4z2HXKz
-	 xjbK8phY8t1ww==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5c7adbb7719so159639eaf.2;
-        Tue, 16 Jul 2024 05:30:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUuF7P6/4rIHGsqzJBB3hTdcuPKa61VZpbfsbCfG90PtmjrJvtu4BWj+S2v+/3vVZR8wLB89QZ7ORD/8gLaxrKQYgf+eboD5lTefX/XMXVAk9NfJGl/B/IULEBYbGOcpiQFEqFr0gM=
-X-Gm-Message-State: AOJu0YwSL1tmDBAZh/qbmaTW5HdOU7/+UoFO/os4OgoMEHfOxON6Q3Hz
-	M2MJWmsnEZKhgoBDl20oFAkq6ypalWsi9t0Lzuo7cPpGJw1EYxYxlywyxiMJ6Ke0rzoRbnO1kbR
-	Wnzb4Qq2aphpM5VpEGcL0TosRM8g=
-X-Google-Smtp-Source: AGHT+IHUeqJA5PuHSv0EtqJkTPJnmr4x+ByEXS6UVaFNYxonALWGrMw2bqdSC1IB9gwietFw4TDjD1cesCGXzlr/DXY=
-X-Received: by 2002:a05:6808:f01:b0:3da:ac08:cd53 with SMTP id
- 5614622812f47-3dac63fb510mr1628784b6e.7.1721133027758; Tue, 16 Jul 2024
- 05:30:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9184C7B;
+	Tue, 16 Jul 2024 12:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.103.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721133096; cv=fail; b=A3HSLolqRqy8MkBKsjarR78dJRPoQ6KQSv9/WhRujECHUhtrxZGewkXT8ilm1143EY+Izs05pOoP3967/MqkyQzKV0NRtkhlwGGB+0F7x8gu+zcPAENejgA/M72KFkfuNta3ODOhzKZaqp2Avlr40GDSi1diCRKO+DsrgEiKML4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721133096; c=relaxed/simple;
+	bh=Lu0UlDPGGeqPlxpmytJYfSTeXTgwOJeKv4K5Yhie7Lo=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=bLNx5DGVW9cwDB1szVGzvMsA4zXPkP/ErzFAbc5h/hmdGjjQdKVveT3ZVvpDZBlQ7x7wshG0IVc7JAN+6QKgOoF/kHZWfmm8h3n9dsj+OxT6oLtUoSlHEocizpG1MZwztKhbIGQ3EYfjz5CN8CtLKfJ6uYFXNQr13pvy9nTxmko=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=TM1Gmtj+; arc=fail smtp.client-ip=40.92.103.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gZo0CSRwYzgwYDr2gjy8FKHRssqIP+C4fV/BQ+0BYK8b6WYtPvrPRWh91HbnCn/ZCCSutak/et8WgoHZ/aa8l7ivp49RN82HpJsxhqOPPSYJPbBiSf1o58pr0RtsqF2v5f/XxUsV7ghtLVvNFTPeaKblPI+cvOyTzH9EmM0+9B3qXYcaMuZLoLtDRuxr3p0x4RMGCXD29WF8kQwh9YhgXPHjK0DcmUN68qgOjvcvGqusYz3Qwy9unhpdRgJtuDEUgfvAG96bz4HE7fTLQ7SF3WPb/ey06b6s6zmH7G9xSl1p6cAQgp/sGnlx3sdaLkoF4db6WdQnchkH7uost6NkwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4Lb998CHZzP9AP49vMUZogm3bl4ZmNxrgcsZZqpXSEk=;
+ b=dJ2AWTxScGj+0FRIQYnuE74FeOtmdzBb0Ru2hqje+VFV5IPLOP4Q0xVHekW9T/f3ZGoQrqC9Li4pEZptN5yCP9S4lWCLFesP0nofJ8XecXEdGdjCdFEMcWjlU32ZYuH9baQAYR1ucjGAtocOcaVNBa+vyWowvq/6uHofXfZX9J6r3bBzrVcQOp5FqQXXJr8GsdWEJUiDyvpK5pDAypIKZ1shVRx6WFP/78+BRDxNLNDCKpRNwbuHHgVy4bOmkt+pAXB6HZqTc37E4WJuIx0hVGdvqEWlWlLw/j9eCwXs3r8NFilmQhX5aERoryVaYOiGKGJgKI+cQXaeqaLfYvvX9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4Lb998CHZzP9AP49vMUZogm3bl4ZmNxrgcsZZqpXSEk=;
+ b=TM1Gmtj+X5rXkJkRCQNBZ34ZsfES7ZL3Y35j0CG9M2TeJ1uQ9P0MM1l43imgS0gjK1Cr/HHPbt82Q/wACyDdRSXwuAxX4k7ueMHNf0ge59zobujzF4AYqUG3eBAAPN0YXklkrJp3SLvNr35JnQzQzxr+XAPsG9jmwbO39OtxwTzANqBy03aZptkGHQc4pdPSC09BuwUXsRVRKi9tqhmUvQ9a8RmeoHprhDYaUGJbcrk99rP23QlpX4wr53ZFB65mY1zTpHpoWivL98pgDwkGe3kFPQ570j+8wZ39HGs4nYxCJ7S8BM6tk7UI02DDIjz3inHqS2Fy3u+84QKiJEZ4ug==
+Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:138::5)
+ by PN0P287MB1305.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:190::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.14; Tue, 16 Jul
+ 2024 12:31:26 +0000
+Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ ([fe80::a94:ad0a:9071:806c]) by MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ ([fe80::a94:ad0a:9071:806c%5]) with mapi id 15.20.7762.027; Tue, 16 Jul 2024
+ 12:31:26 +0000
+Message-ID:
+ <MA0P287MB2822D6D2EE89DBFBF4835678FEA22@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+Date: Tue, 16 Jul 2024 20:31:14 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/3] riscv: dts: sophgo: cv18xx: Add sensor device and
+ thermal zone
+To: Haylen Chu <heylenay@outlook.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Inochi Amaoto <inochiama@outlook.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Jisheng Zhang <jszhang@kernel.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <SEYPR01MB422158B2766DA03728AD90CBD7A22@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
+ <SEYPR01MB42211B13FF62603E3E18B8DCD7A22@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
+From: Chen Wang <unicorn_wang@outlook.com>
+In-Reply-To: <SEYPR01MB42211B13FF62603E3E18B8DCD7A22@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TMN: [jvB/P+SZCtXiWlqRZ249doPujEUJJ7LR]
+X-ClientProxiedBy: TYCPR01CA0173.jpnprd01.prod.outlook.com
+ (2603:1096:400:2b2::11) To MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:138::5)
+X-Microsoft-Original-Message-ID:
+ <178e4d7e-69dd-4564-88ee-6383c65042dd@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6064157.lOV4Wx5bFT@rjwysocki.net> <20240715044527.GA1544@sol.localdomain>
- <4d7e11a7-b352-4ced-acee-b5f64e3cd0b6@linaro.org> <CAJZ5v0gx6GyKBYt7YMFwmUQ4OCG49d9k2H=P-4Awr-mJ=eFHKw@mail.gmail.com>
- <20240715145426.199c31d0@mir> <CAJZ5v0gPiwkNczZhCf_rkxVoUX33tS9c6irMf_7=Rg48Nw9C4w@mail.gmail.com>
- <20240716014830.243bb0cf@mir> <CAJZ5v0jkA72=avuthGkrS5iu_UGEQeaEp7LjedXCpzamcnRKsA@mail.gmail.com>
- <20240716125538.09f716d1@mir> <20240716131500.35cf4f00@mir> <CAJZ5v0j2w-8c83Lw6OdJGg53pOKQMdeWiwaNkEEThwE6fXLiHQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j2w-8c83Lw6OdJGg53pOKQMdeWiwaNkEEThwE6fXLiHQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 16 Jul 2024 14:30:16 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0g8L-TA7kT92J_nX8PkjyGkqGeuXh4-ATOprhSPKsY7Rg@mail.gmail.com>
-Message-ID: <CAJZ5v0g8L-TA7kT92J_nX8PkjyGkqGeuXh4-ATOprhSPKsY7Rg@mail.gmail.com>
-Subject: Re: [PATCH v3] thermal: core: Call monitor_thermal_zone() if zone
- temperature is invalid
-To: Stefan Lippers-Hollmann <s.l-h@gmx.de>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Eric Biggers <ebiggers@kernel.org>, 
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>
-Content-Type: multipart/mixed; boundary="000000000000bb4804061d5c82c0"
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MA0P287MB2822:EE_|PN0P287MB1305:EE_
+X-MS-Office365-Filtering-Correlation-Id: eda397d9-d56d-42c7-7670-08dca593350e
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|19110799003|8060799006|461199028|4302099013|3412199025|1602099012|440099028;
+X-Microsoft-Antispam-Message-Info:
+	bI/ykK5P4xn/Q5NiSuGNlFUfxgF6FNQjTWbm+7dpf0Akv0CaY95hGS6CkBayOjSZEQ9h/6m037MvkgBF4PSNU8jsApYJFD3gQFWRGbLlKkbGaW4hM2pMzSv81ELvgPIN7lCqSB+KcsMeBUd5+RxGIa4IUudkZjEjpegd5MjfwAuceLvClwF9xPdtY8VkEv2Xtq3biq5A0xYF46r+arvMfFUXd7VKmEwshStF0oxOphfgF/i53kptJZ9IXXKlr2G/vh7+2K5vG2SAdXws2FAYhGArNALKlWURfYi4rjDqVPntL0E3MhhSEpm4T0fXFIm2oFKuxvpJrboyJDMSkbP3uE2HPKsKZhkzQ99RhLzv7fsIyCxZSWZaQDvevREI9PTQiijeBGUpXSr1LJmNWiFFIfwpl27JWaY2JPxhnXsUSRe+7AfDqFaFwNSaQAxZAj6gxblJFuukFFVYrsmq9VvSv5p2tnih7z06/tylsjEBpecrnasR9CAmX6kQPww0doiTHEbSVjm3Zt/jAJKGgfCKrX4nFEaq9MPenFqr25J1ZwM1aRZVqrttmEdwtK5VYIc1f4AiyNCNQAaMPM2b2WTgwy/KQ4PemFi2Dn3W6TsTAAyRQX+QbBMFTZ29rpRFCUf4ImGvSOTVpTre70R64V4WuAYociOM5pFk1Nw6Kwo/yYuw1ZYoWz6pafVoo11R+VmpDfwEr8TbDdUUVys7MRrywXSv1/8t+wd2dADPwcTbQ62nDmd8ST6LrNEtM56sQVZM
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?THJUWXJ1NTc1Qm5mQ2g1NFB0QXFCRlNXbDlsaFFIdU03aHRJYXdTU2lRRTNi?=
+ =?utf-8?B?eHFVeTEycHhCOUM3YWJLSkJVKzlHS3hFOFhKNStNWllYMm5WZzgrOTlxbkVX?=
+ =?utf-8?B?WHI1RVdKVkRIS1JKZmcxZVdLTVBQcHB2UXlUa1RGL09aVFBSYzRKR3lhZ1F5?=
+ =?utf-8?B?WmdBeFhXYWRzcWtObnhVZnFDYXJaYXlDZ0xORkpOQVZGRTVrTUViaEUzUjVL?=
+ =?utf-8?B?eHRuQUNNSUp0Tlljc1NML09LTms4N2tLanVmVEJiUUZWdU5vWGF2WS92UlEv?=
+ =?utf-8?B?L0RCYkpVUG5hZ29LMjhkRzI1cGxML2NUVm5qaTZiQ1VuSE5JZVhZZGtocVNz?=
+ =?utf-8?B?RUtOb1hPdlVjSDVKd096a1F5WmNaOVlEQWtsMjkrUFBZZ0xvak82a3RoaUVl?=
+ =?utf-8?B?amhFOFMrcGozaWdJb1gvc245QWRQNC9TSStNMzVHY2VYUDZKeERaV1NvWStm?=
+ =?utf-8?B?dVRTUVM0dTVDSjNyakVGaVJVVW9Uczd5a0ZsbGk0ZmtSNHBld3lsR29yVDdW?=
+ =?utf-8?B?bkFhblJGNzRTcFQ2ckVkTzlvOFdua01Bd20zVmdxV3ZiWVp0UjdUalc1NHpp?=
+ =?utf-8?B?US9BVTNSdWNoVUNya1o0Vmdhb1djM05UTnNNTjZLdzlteDh3U2UvUUYyNTZL?=
+ =?utf-8?B?QlZydDA2dmkyanAvV0QrMWZ4NG5KZW5DWFArMmRDcGhYU2N5bUovKzl4Znpj?=
+ =?utf-8?B?R3NDOGFhSzZ4bi9mTXBuenZ2b29MdEJRY3ZPcnJhZ3hCRVd3WVREaWt1Ynhu?=
+ =?utf-8?B?dXNWaURJNGlldlFjSEZMc3NmTnNtQVJ2bUZoUDdja1I4VEg3QUpQaXlVRmho?=
+ =?utf-8?B?MDhRZ2liU3o1cUVWeU5HYURoNElHb01DNkh3MUZpV2p0R2RNSFQwVVBraDFU?=
+ =?utf-8?B?VjdWeDVONXhraDZuelpnVVMxNGpGNjdIZkxzZkRVWDZXTnQvQ0xIV2t6dTNj?=
+ =?utf-8?B?b2I0djNXY1FrQXR3MVdoZHNmdnVQOS9sc1Y5UE9TSW1nZjc2VW5EUmg5bHFQ?=
+ =?utf-8?B?Z2pIWm51THZUU1FHZWp5aGpWWUE2elU4WFk0TWhGbXYxM2N5N3dsZ043M3l6?=
+ =?utf-8?B?bm5aQlZId3BOejdVWjVvaVhRbG9sbnpxMlpERGFBTzRhOG54TjF5TzhjTmxU?=
+ =?utf-8?B?YkdnNm9ZWnpUeWZzbmtLbkVkZUVwOUR3T05uT21vWG15ZnlSdTBtanZ2SWdt?=
+ =?utf-8?B?NFEwOVYxL0JKaUhLRVByS0h4QTgxa2JtNlFwbEpIa0xwU1FRTFN6aXQrODV6?=
+ =?utf-8?B?azhzSFRxQlJyZS9tVWZkMCs5dWdWL3FqMndMdVBYWFVTWUhqekdWWUd0a1l6?=
+ =?utf-8?B?KzBndTNtMlJTS3BwQlI2TklpRSs5YVBjTm9HZmJOdy9nOUdjQzk5N09qajBw?=
+ =?utf-8?B?V0FJMTU4dEpOWEw3ZHpXcEk2aG1McXk0SklXZzVTaEtDRS9qSFZ2bkE0UllE?=
+ =?utf-8?B?ek14V3lJWGNhNVgzMTZNVHBWMVoyejBMWXQyUFFuUzJTTDBHKzZKU2hwK2NS?=
+ =?utf-8?B?RGpjYnFIL2Q4eUNwYzBBUUE5UEVwclJ5Z28xOG1tbndnREtWUDRVTjcrdDJi?=
+ =?utf-8?B?NXUxL09YMnhLaWxtMnYwdTVOY2dpbWdKMHNuWUxLOUpkM3RWZVJKUWNRbUJN?=
+ =?utf-8?B?OFJXRjdrcXNlWUhUazlCWWY2d2VWaXdjeVpuaG1WKzVIRW5MVTgybDNackU0?=
+ =?utf-8?Q?GSA16r36vAbpj0oGyBfw?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eda397d9-d56d-42c7-7670-08dca593350e
+X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2024 12:31:26.4096
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0P287MB1305
 
---000000000000bb4804061d5c82c0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 16, 2024 at 1:36=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
+On 2024/7/16 17:42, Haylen Chu wrote:
+> Add common sensor device Sophgo CV18xx SoCs and thermal zone for
+> CV1800b SoCs.
 >
-> On Tue, Jul 16, 2024 at 1:15=E2=80=AFPM Stefan Lippers-Hollmann <s.l-h@gm=
-x.de> wrote:
-> >
-> > Hi
-> >
-> > On 2024-07-16, Stefan Lippers-Hollmann wrote:
-> > > On 2024-07-16, Rafael J. Wysocki wrote:
-> > > > On Tue, Jul 16, 2024 at 1:48=E2=80=AFAM Stefan Lippers-Hollmann <s.=
-l-h@gmx.de> wrote:
-> > > > > On 2024-07-15, Rafael J. Wysocki wrote:
-> > > > > > On Mon, Jul 15, 2024 at 2:54=E2=80=AFPM Stefan Lippers-Hollmann=
- <s.l-h@gmx.de> wrote:
-> > > > > > > On 2024-07-15, Rafael J. Wysocki wrote:
-> > > > > > > > On Mon, Jul 15, 2024 at 11:09=E2=80=AFAM Daniel Lezcano
-> > > > > > > > <daniel.lezcano@linaro.org> wrote:
-> > > > > > > > > On 15/07/2024 06:45, Eric Biggers wrote:
-> > > > > > > > > > On Thu, Jul 04, 2024 at 01:46:26PM +0200, Rafael J. Wys=
-ocki wrote:
-> > > > > > > > > >> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > [...]
-> > > > > > > Silencing the warnings is already a big improvement - and tha=
-t patch
-> > > > > > > works to this extent for me with an ax200, thanks.
-> > > > > >
-> > > > > > So attached is a patch that should avoid enabling the thermal z=
-one
-> > > > > > when it is not ready for use in the first place, so it should a=
-ddress
-> > > > > > both the message and the useless polling.
-> > > > > >
-> > > > > > I would appreciate giving it a go (please note that it hasn't r=
-eceived
-> > > > > > much testing so far, though).
-> > > > >
-> > > > > Sadly this patch doesn't seem to help:
-> > > >
-> > > > This is likely because it is missing checks for firmware image type=
-.
-> > > > I've added them to the attached new version.  Please try it.
-> > > >
-> > > > I've also added two pr_info() messages to get a better idea of what=
-'s
-> > > > going on, so please grep dmesg for "Thermal zone not ready" and
-> > > > "Enabling thermal zone".
-> > >
-> > > This is the output with the patch applied:
-> >
-> > The ax200 wlan interface is currently not up/ configured (system
-> > using its wired ethernet cards instead), the thermal_zone1 stops
-> > if I manually enable the interface (ip link set dev wlp4s0 up)
-> > after booting up:
+> Signed-off-by: Haylen Chu <heylenay@outlook.com>
+> ---
+>   arch/riscv/boot/dts/sophgo/cv1800b.dtsi | 30 +++++++++++++++++++++++++
+>   arch/riscv/boot/dts/sophgo/cv18xx.dtsi  |  8 +++++++
+>   2 files changed, 38 insertions(+)
 >
-> This explains it, thanks!
->
-> The enabling of the thermal zone in iwl_mvm_load_ucode_wait_alive() is
-> premature or it should get disabled in the other two places that clear
-> the IWL_MVM_STATUS_FIRMWARE_RUNNING bit.
->
-> I'm not sure why the thermal zone depends on whether or not this bit
-> is set, though. Is it really a good idea to return errors from it if
-> the interface is not up?
->
-> > $ dmesg | grep -i -e iwlwifi -e thermal
-> > [    0.080899] CPU0: Thermal monitoring enabled (TM1)
-> > [    0.113768] thermal_sys: Registered thermal governor 'fair_share'
-> > [    0.113770] thermal_sys: Registered thermal governor 'bang_bang'
-> > [    0.113771] thermal_sys: Registered thermal governor 'step_wise'
-> > [    0.113772] thermal_sys: Registered thermal governor 'user_space'
-> > [    0.113773] thermal_sys: Registered thermal governor 'power_allocato=
-r'
-> > [    3.759673] iwlwifi 0000:04:00.0: enabling device (0140 -> 0142)
-> > [    3.764918] iwlwifi 0000:04:00.0: Detected crf-id 0x3617, cnv-id 0x1=
-00530 wfpm id 0x80000000
-> > [    3.764974] iwlwifi 0000:04:00.0: PCI dev 2723/0084, rev=3D0x340, rf=
-id=3D0x10a100
-> > [    3.769432] iwlwifi 0000:04:00.0: TLV_FW_FSEQ_VERSION: FSEQ Version:=
- 89.3.35.37
-> > [    3.873466] iwlwifi 0000:04:00.0: loaded firmware version 77.a20fb07=
-d.0 cc-a0-77.ucode op_mode iwlmvm
-> > [    3.907122] iwlwifi 0000:04:00.0: Detected Intel(R) Wi-Fi 6 AX200 16=
-0MHz, REV=3D0x340
-> > [    3.907886] iwl_mvm_thermal_zone_register: Thermal zone not ready
-> > [    4.032380] iwlwifi 0000:04:00.0: Detected RF HR B3, rfid=3D0x10a100
-> > [    4.032392] thermal thermal_zone1: Enabling thermal zone
-> > [    4.098308] iwlwifi 0000:04:00.0: base HW address: 94:e6:f7:XX:XX:XX
-> > [    4.112535] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [    4.128306] iwlwifi 0000:04:00.0 wlp4s0: renamed from wlan0
-> > [    4.369396] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [    4.625385] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [    4.881416] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [    5.137377] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [    5.394377] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [    5.649412] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [    5.905379] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [    6.161380] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [    6.418381] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [    6.673381] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [    6.929377] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> >                [...]
-> > [   21.009413] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [   21.265496] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [   21.521462] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [   21.777481] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [   22.033468] thermal thermal_zone1: failed to read out thermal zone (=
--61)
-> > [   22.213120] thermal thermal_zone1: Enabling thermal zone
-> > [   22.283954] iwlwifi 0000:04:00.0: Registered PHC clock: iwlwifi-PTP,=
- with index: 0
->
-> Thanks for this data point!
->
-> AFAICS the thermal zone in iwlwifi is always enabled, but only valid
-> if the interface is up.  It looks to me like the thermal core needs a
-> special "don't poll me" error code to be returned in such cases.
+> diff --git a/arch/riscv/boot/dts/sophgo/cv1800b.dtsi b/arch/riscv/boot/dts/sophgo/cv1800b.dtsi
+> index ec9530972ae2..0b5c7bc94b05 100644
+> --- a/arch/riscv/boot/dts/sophgo/cv1800b.dtsi
+> +++ b/arch/riscv/boot/dts/sophgo/cv1800b.dtsi
+> @@ -12,6 +12,34 @@ memory@80000000 {
+>   		device_type = "memory";
+>   		reg = <0x80000000 0x4000000>;
+>   	};
+> +
+> +	thermal-zones {
+> +		soc-thermal {
+> +			polling-delay-passive   = <1000>;
+> +			polling-delay           = <1000>;
+> +			thermal-sensors         = <&soc_temp>;
+> +
+> +			trips {
+> +				soc_passive: soc-passive {
+> +					temperature     = <75000>;
+> +					hysteresis      = <5000>;
+> +					type            = "passive";
+> +				};
+> +
+> +				soc_hot: soc-hot {
+> +					temperature     = <85000>;
+> +					hysteresis      = <5000>;
+> +					type            = "hot";
+> +				};
+> +
+> +				soc_critical: soc-critical {
+> +					temperature     = <100000>;
+> +					hysteresis      = <0>;
+> +					type            = "critical";
+> +				};
+> +			};
+> +		};
+> +	};
+>   };
+>   
+>   &plic {
+> @@ -25,3 +53,5 @@ &clint {
+>   &clk {
+>   	compatible = "sophgo,cv1800-clk";
+>   };
+> +
+> +
+> diff --git a/arch/riscv/boot/dts/sophgo/cv18xx.dtsi b/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
+> index 891932ae470f..76b02cc279aa 100644
+> --- a/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
+> +++ b/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
+> @@ -310,5 +310,13 @@ clint: timer@74000000 {
+>   			reg = <0x74000000 0x10000>;
+>   			interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>;
+>   		};
+> +
+> +		soc_temp: thermal-sensor@30e0000 {
 
-Attached is a thermal core patch with an iwlwifi piece along the lines
-above (tested lightly).  It adds a way for a driver to indicate that
-temperature cannot be provided at the moment, but that's OK and the
-core need not worry about that.
+Nodes on any bus, thus using unit addresses for children, shall be 
+ordered by unit address in ascending order.
 
-Please give it a go.
+See https://docs.kernel.org/devicetree/bindings/dts-coding-style.html.
 
---000000000000bb4804061d5c82c0
-Content-Type: text/x-patch; charset="US-ASCII"; name="thermal-core-recheck-temperature.patch"
-Content-Disposition: attachment; 
-	filename="thermal-core-recheck-temperature.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lyoe2p0h0>
-X-Attachment-Id: f_lyoe2p0h0
+> +			compatible = "sophgo,cv1800-thermal";
+> +			reg = <0x30e0000 0x100>;
+> +			clocks = <&clk CLK_TEMPSEN>;
+> +			interrupts = <16 IRQ_TYPE_LEVEL_HIGH>;
+> +			#thermal-sensor-cells = <0>;
+> +		};
+>   	};
+>   };
 
-LS0tCiBkcml2ZXJzL25ldC93aXJlbGVzcy9pbnRlbC9pd2x3aWZpL212bS90dC5jIHwgICAgNyAr
-KysKIGRyaXZlcnMvdGhlcm1hbC90aGVybWFsX2NvcmUuYyAgICAgICAgICAgICAgfCAgIDUxICsr
-KysrKysrKysrKystLS0tLS0tLS0tLS0tLS0KIDIgZmlsZXMgY2hhbmdlZCwgMzAgaW5zZXJ0aW9u
-cygrKSwgMjggZGVsZXRpb25zKC0pCgpJbmRleDogbGludXgtcG0vZHJpdmVycy90aGVybWFsL3Ro
-ZXJtYWxfY29yZS5jCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT0KLS0tIGxpbnV4LXBtLm9yaWcvZHJpdmVycy90aGVybWFs
-L3RoZXJtYWxfY29yZS5jCisrKyBsaW51eC1wbS9kcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9jb3Jl
-LmMKQEAgLTMwMCw4ICszMDAsNiBAQCBzdGF0aWMgdm9pZCBtb25pdG9yX3RoZXJtYWxfem9uZShz
-dHJ1Y3QKIAkJdGhlcm1hbF96b25lX2RldmljZV9zZXRfcG9sbGluZyh0eiwgdHotPnBhc3NpdmVf
-ZGVsYXlfamlmZmllcyk7CiAJZWxzZSBpZiAodHotPnBvbGxpbmdfZGVsYXlfamlmZmllcykKIAkJ
-dGhlcm1hbF96b25lX2RldmljZV9zZXRfcG9sbGluZyh0eiwgdHotPnBvbGxpbmdfZGVsYXlfamlm
-Zmllcyk7Ci0JZWxzZSBpZiAodHotPnRlbXBlcmF0dXJlID09IFRIRVJNQUxfVEVNUF9JTlZBTElE
-KQotCQl0aGVybWFsX3pvbmVfZGV2aWNlX3NldF9wb2xsaW5nKHR6LCBtc2Vjc190b19qaWZmaWVz
-KFRIRVJNQUxfUkVDSEVDS19ERUxBWV9NUykpOwogfQogCiBzdGF0aWMgc3RydWN0IHRoZXJtYWxf
-Z292ZXJub3IgKnRoZXJtYWxfZ2V0X3R6X2dvdmVybm9yKHN0cnVjdCB0aGVybWFsX3pvbmVfZGV2
-aWNlICp0eikKQEAgLTM4Miw3ICszODAsNyBAQCBzdGF0aWMgdm9pZCBoYW5kbGVfdGhlcm1hbF90
-cmlwKHN0cnVjdCB0CiAJdGQtPnRocmVzaG9sZCA9IHRyaXAtPnRlbXBlcmF0dXJlOwogCiAJaWYg
-KHR6LT5sYXN0X3RlbXBlcmF0dXJlID49IG9sZF90aHJlc2hvbGQgJiYKLQkgICAgdHotPmxhc3Rf
-dGVtcGVyYXR1cmUgIT0gVEhFUk1BTF9URU1QX0lOVkFMSUQpIHsKKwkgICAgdHotPmxhc3RfdGVt
-cGVyYXR1cmUgIT0gVEhFUk1BTF9URU1QX0lOSVQpIHsKIAkJLyoKIAkJICogTWl0aWdhdGlvbiBp
-cyB1bmRlciB3YXksIHNvIGl0IG5lZWRzIHRvIHN0b3AgaWYgdGhlIHpvbmUKIAkJICogdGVtcGVy
-YXR1cmUgZmFsbHMgYmVsb3cgdGhlIGxvdyB0ZW1wZXJhdHVyZSBvZiB0aGUgdHJpcC4KQEAgLTQx
-NywyNyArNDE1LDYgQEAgc3RhdGljIHZvaWQgaGFuZGxlX3RoZXJtYWxfdHJpcChzdHJ1Y3QgdAog
-CX0KIH0KIAotc3RhdGljIHZvaWQgdXBkYXRlX3RlbXBlcmF0dXJlKHN0cnVjdCB0aGVybWFsX3pv
-bmVfZGV2aWNlICp0eikKLXsKLQlpbnQgdGVtcCwgcmV0OwotCi0JcmV0ID0gX190aGVybWFsX3pv
-bmVfZ2V0X3RlbXAodHosICZ0ZW1wKTsKLQlpZiAocmV0KSB7Ci0JCWlmIChyZXQgIT0gLUVBR0FJ
-TikKLQkJCWRldl93YXJuKCZ0ei0+ZGV2aWNlLAotCQkJCSAiZmFpbGVkIHRvIHJlYWQgb3V0IHRo
-ZXJtYWwgem9uZSAoJWQpXG4iLAotCQkJCSByZXQpOwotCQlyZXR1cm47Ci0JfQotCi0JdHotPmxh
-c3RfdGVtcGVyYXR1cmUgPSB0ei0+dGVtcGVyYXR1cmU7Ci0JdHotPnRlbXBlcmF0dXJlID0gdGVt
-cDsKLQotCXRyYWNlX3RoZXJtYWxfdGVtcGVyYXR1cmUodHopOwotCi0JdGhlcm1hbF9nZW5sX3Nh
-bXBsaW5nX3RlbXAodHotPmlkLCB0ZW1wKTsKLX0KLQogc3RhdGljIHZvaWQgdGhlcm1hbF96b25l
-X2RldmljZV9jaGVjayhzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspCiB7CiAJc3RydWN0IHRoZXJt
-YWxfem9uZV9kZXZpY2UgKnR6ID0gY29udGFpbmVyX29mKHdvcmssIHN0cnVjdApAQCAtNDUyLDcg
-KzQyOSw3IEBAIHN0YXRpYyB2b2lkIHRoZXJtYWxfem9uZV9kZXZpY2VfaW5pdChzdHIKIAogCUlO
-SVRfREVMQVlFRF9XT1JLKCZ0ei0+cG9sbF9xdWV1ZSwgdGhlcm1hbF96b25lX2RldmljZV9jaGVj
-ayk7CiAKLQl0ei0+dGVtcGVyYXR1cmUgPSBUSEVSTUFMX1RFTVBfSU5WQUxJRDsKKwl0ei0+dGVt
-cGVyYXR1cmUgPSBUSEVSTUFMX1RFTVBfSU5JVDsKIAl0ei0+cGFzc2l2ZSA9IDA7CiAJdHotPnBy
-ZXZfbG93X3RyaXAgPSAtSU5UX01BWDsKIAl0ei0+cHJldl9oaWdoX3RyaXAgPSBJTlRfTUFYOwpA
-QCAtNTA0LDYgKzQ4MSw3IEBAIHZvaWQgX190aGVybWFsX3pvbmVfZGV2aWNlX3VwZGF0ZShzdHJ1
-Y3QKIAlzdHJ1Y3QgdGhlcm1hbF90cmlwX2Rlc2MgKnRkOwogCUxJU1RfSEVBRCh3YXlfZG93bl9s
-aXN0KTsKIAlMSVNUX0hFQUQod2F5X3VwX2xpc3QpOworCWludCB0ZW1wLCByZXQ7CiAKIAlpZiAo
-dHotPnN1c3BlbmRlZCkKIAkJcmV0dXJuOwpAQCAtNTExLDEwICs0ODksMjkgQEAgdm9pZCBfX3Ro
-ZXJtYWxfem9uZV9kZXZpY2VfdXBkYXRlKHN0cnVjdAogCWlmICghdGhlcm1hbF96b25lX2Rldmlj
-ZV9pc19lbmFibGVkKHR6KSkKIAkJcmV0dXJuOwogCi0JdXBkYXRlX3RlbXBlcmF0dXJlKHR6KTsK
-KwlyZXQgPSBfX3RoZXJtYWxfem9uZV9nZXRfdGVtcCh0eiwgJnRlbXApOworCWlmIChyZXQpIHsK
-KwkJaWYgKHJldCAhPSAtRUFHQUlOKQorCQkJZGV2X2luZm8oJnR6LT5kZXZpY2UsICJUZW1wZXJh
-dHVyZSBjaGVjayBmYWlsZWQgKCVkKVxuIiwgcmV0KTsKIAotCWlmICh0ei0+dGVtcGVyYXR1cmUg
-PT0gVEhFUk1BTF9URU1QX0lOVkFMSUQpCisJCXRoZXJtYWxfem9uZV9kZXZpY2Vfc2V0X3BvbGxp
-bmcodHosIG1zZWNzX3RvX2ppZmZpZXMoVEhFUk1BTF9SRUNIRUNLX0RFTEFZX01TKSk7CisJCXJl
-dHVybjsKKwl9IGVsc2UgaWYgKHRlbXAgPD0gVEhFUk1BTF9URU1QX0lOVkFMSUQpIHsKKwkJLyoK
-KwkJICogU3BlY2lhbCBjYXNlOiBObyB2YWxpZCB0ZW1wZXJhdHVyZSB2YWx1ZSBpcyBhdmFpbGFi
-bGUsIGJ1dAorCQkgKiB0aGUgem9uZSBvd25lciBkb2VzIG5vdCB3YW50IHRoZSBjb3JlIHRvIGRv
-IGFueXRoaW5nIGFib3V0CisJCSAqIGl0LiAgQ29udGludWUgcmVndWxhciB6b25lIHBvbGxpbmcg
-aWYgbmVlZGVkLCBzbyB0aGF0IHRoaXMKKwkJICogZnVuY3Rpb24gY2FuIGJlIGNhbGxlZCBhZ2Fp
-biwgYnV0IHNraXAgZXZlcnl0aGluZyBlbHNlLgorCQkgKi8KIAkJZ290byBtb25pdG9yOworCX0K
-KworCXR6LT5sYXN0X3RlbXBlcmF0dXJlID0gdHotPnRlbXBlcmF0dXJlOworCXR6LT50ZW1wZXJh
-dHVyZSA9IHRlbXA7CisKKwl0cmFjZV90aGVybWFsX3RlbXBlcmF0dXJlKHR6KTsKKworCXRoZXJt
-YWxfZ2VubF9zYW1wbGluZ190ZW1wKHR6LT5pZCwgdGVtcCk7CiAKIAl0ei0+bm90aWZ5X2V2ZW50
-ID0gZXZlbnQ7CiAKSW5kZXg6IGxpbnV4LXBtL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2ludGVsL2l3
-bHdpZmkvbXZtL3R0LmMKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PQotLS0gbGludXgtcG0ub3JpZy9kcml2ZXJzL25ldC93
-aXJlbGVzcy9pbnRlbC9pd2x3aWZpL212bS90dC5jCisrKyBsaW51eC1wbS9kcml2ZXJzL25ldC93
-aXJlbGVzcy9pbnRlbC9pd2x3aWZpL212bS90dC5jCkBAIC02MjIsNyArNjIyLDEyIEBAIHN0YXRp
-YyBpbnQgaXdsX212bV90em9uZV9nZXRfdGVtcChzdHJ1Y3QKIAogCWlmICghaXdsX212bV9maXJt
-d2FyZV9ydW5uaW5nKG12bSkgfHwKIAkgICAgbXZtLT5md3J0LmN1cl9md19pbWcgIT0gSVdMX1VD
-T0RFX1JFR1VMQVIpIHsKLQkJcmV0ID0gLUVOT0RBVEE7CisJCS8qCisJCSAqIFRlbGwgdGhlIGNv
-cmUgdGhhdCB0aGVyZSBpcyBubyB2YWxpZCB0ZW1wZXJhdHVyZSB2YWx1ZSB0bworCQkgKiByZXR1
-cm4sIGJ1dCBpdCBuZWVkIG5vdCB3b3JyeSBhYm91dCB0aGlzLgorCQkgKi8KKwkJKnRlbXBlcmF0
-dXJlID0gVEhFUk1BTF9URU1QX0lOVkFMSUQ7CisJCXJldCA9IDA7CiAJCWdvdG8gb3V0OwogCX0K
-IAo=
---000000000000bb4804061d5c82c0--
 
