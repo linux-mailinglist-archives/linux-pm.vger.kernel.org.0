@@ -1,176 +1,223 @@
-Return-Path: <linux-pm+bounces-11153-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11154-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7BF19326BB
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 14:42:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08EC19326C0
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 14:43:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA3941C21BF1
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 12:42:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B47B6284894
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 12:43:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E05C19AA5D;
-	Tue, 16 Jul 2024 12:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE21119AA5F;
+	Tue, 16 Jul 2024 12:43:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eXzN2oqs"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="ZnmuryUQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2023.outbound.protection.outlook.com [40.92.102.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8847199EB1
-	for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2024 12:42:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721133772; cv=none; b=bAksD4BKcHY51NGoZs0Gkk4jxqp5dWai1a3OjcOh7Owk6S5Q+Myv7qpka26hvntkmjgrMvy4bGPI8Z2BW1oOzmRNbBXBSlFuU24Xs1j97+FclM98kjvozVN10Q8uAIPdXojOWmkA6GT3ETda4WGgW2C6y1VjbWByKBNtg4plVrc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721133772; c=relaxed/simple;
-	bh=VJJZquS/P0YNc9UeBC9Nt7mXot1B5hUOhRYzxYu3GJw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RpcDmimlYm3D/sB5110ho3AB1A98aJ7DFOX4BLyy4cYj8T1h2i5snj7xGcp0IJEB+L1BIsUUxr8GgexSWMf8MOODpC0NFguTD0vkVjACbwx6Yyim2I4MMH71hb99gW2u+qxZp0Kq0gSn6YGfLUJVFaTWZgXeeB3hAXJAW6nx220=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eXzN2oqs; arc=none smtp.client-ip=209.85.128.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-4266dc7591fso37983895e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2024 05:42:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721133769; x=1721738569; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bDOFu1w1GjC5O3toNyE2qTxbfeyv2wcTcN9pFC2ABm4=;
-        b=eXzN2oqs4Aeub4OWqozwIHe2wM1yiyzl99znXTYfX8TMoSEaoLJ8ksWoD1gqvZIkEx
-         KSR/SpWB5XWNx8tfPmxQdyDJIIZKoejHSYxdUnQUvkqD/AL5HutkC9OOAB9CvzvuqfPy
-         CXwN2Ftg7Wyv6uuWW4vd0XoSBXwbCYT58xsP+EqgMlYFm50/j31AVqqgtUdbNPpbg/cj
-         rcrW9wK0/4PuztMUUlK2cko5X/SvxhHg4JBOTCnO3mKTsab+TXiBPRznNRXkd/ZXPmh+
-         qjKzAfL5aFJ76GjAVURy0fQWqXwPXUU5PDGui4+RozYLzdrqTN9scLlJhetpmpcvCQlt
-         g3cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721133769; x=1721738569;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bDOFu1w1GjC5O3toNyE2qTxbfeyv2wcTcN9pFC2ABm4=;
-        b=fYD1yGc9FoyTvby8LLJ/vPv+g+zwZXSo0rbZw7QjNNcmR5WVUH97+WOKjFJ+lLMab7
-         Agiz31ZbS+0zYH6T/59b2PIW+TWPzp//uXd2G/NhLLsPzhhDUCZjV3rAFRlCob2gLpJM
-         rjirL2LhCjpTxv2QtHcekTBg5RtKqVov5Gw5wO638c3tFQJ4cos64ppZkai4/wKpgyt+
-         rhfjRuPeB71RJHmRg3EkJN60scvOepJOftDuPy0I7rOBo+5jIgGh+FQE62J5ffgla2d0
-         hAMO+S8B0i79sDJtBWpKxEQDG3ODw14trlI54G8J/CfmWxrp3aD+n7pxjYLTDbjt+jUt
-         nPKw==
-X-Forwarded-Encrypted: i=1; AJvYcCVAGZZq41e89qMICYRaRjNwirogMQ/6t14xJ6FmQbmgJtu7J24uQ0EU/SCQuZ2XOQgDOeOWqh/a+FxA3IroSODl3Fkfb6srRq0=
-X-Gm-Message-State: AOJu0YwocOcTidcYEZxz2fDb9rKiwC4W1e03OcelxS5TyvJAhQ9mpoLb
-	xKLvx6IRBRsohJ2M9aVnk5JG3OcxnVXhKValbbdo6M/V7pwrzZjb279GmhGBkKs=
-X-Google-Smtp-Source: AGHT+IHVhasDFRpNi8H81iWLBfyj86iIjk8RqZ5Dg+VMsBjYFk6zW1zKZ8bejyuXVEkAukw39EHSpw==
-X-Received: by 2002:a05:600c:4455:b0:426:62c5:473e with SMTP id 5b1f17b1804b1-427ba697989mr12541385e9.26.1721133769202;
-        Tue, 16 Jul 2024 05:42:49 -0700 (PDT)
-Received: from linaro.org ([2a02:2454:ff1f:b280:1e82:77b7:9ac1:bc6c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4279f259761sm157780385e9.11.2024.07.16.05.42.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 05:42:48 -0700 (PDT)
-Date: Tue, 16 Jul 2024 14:42:44 +0200
-From: Stephan Gerhold <stephan.gerhold@linaro.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>, Abel Vesa <abel.vesa@linaro.org>
-Subject: Re: [PATCH] power: supply: qcom_battmgr: return EAGAIN when firmware
- service is not up
-Message-ID: <ZpZqxEof85jo-1K3@linaro.org>
-References: <20240715-topic-sm8x50-upstream-fix-battmgr-temp-tz-warn-v1-1-16e842ccead7@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06AE413CABC;
+	Tue, 16 Jul 2024 12:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.102.23
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721133815; cv=fail; b=FKtUbnH5XV0yBl9Aa7OxkzU8+SfIqzr2+DtNuvWE9Ujkl23zRFSFiCTIvfFDrDlUhXENvkdcfZ8eDcRzv7ZLDKWLfvxjsfnAntuhjmXZJp5g90qiRvmDuVkTOqlWZejHdsH1fgutn8pM4pHEt5hgu2QPS5ktDAJVeUJwUvlXeEU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721133815; c=relaxed/simple;
+	bh=tI5y37zONZ7Q8N9D0oabj/i9anmsJjeMT+OuQV4ydjw=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=L52PAjg9MA/TiuR8IK7W8ir0ZIqUOwjj+X/BTVw+ZvXiddXgo1EHmO5mItuA6lcguIDZgFFVtnpYrHtE4RDBoxvFzURusdJE1ueWTtdNIwoUpGktLvWKDDaMhUuPzmH0vD7Vu24EyIXcyNEUwiq0TBk1fV2+KZKgXTyCiE8NRHg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=ZnmuryUQ; arc=fail smtp.client-ip=40.92.102.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=d95KVbZ21nP/1BAP/X355Qcl6gKtyfrDKgs/K5ddVwGq+jpusJgQQoW5SBDsb8O8Ok2/xEaxC8gndZ9aLxC3MmFI2qlUqwZWU0Xmn7CFi/gD4sbqRKiIU+bijC02x3x6s3aeHKYXW80JdEoVZSQJqlLOPHqsGL8Ff2palEios3jHwk6vNkEM2Z6WR3iXjSYUhgHB0rPQCbH/qsJxbjPg52l35hIk7CG2yC47F+q2qDERbFNyA2SMdl8dlXm0RyJ03Ic5QJUpqy4NC+t8D9hKdrzp64BoqSM5Ds/3ANXE0ew7aeIyyUMEuFEYV/ja3WyLAoj3awIXXZCMeaBAoOQv7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AbhlDfFEx8e1YSxC8khG9L9VX53bldQc+rWGKxT5jvU=;
+ b=hHDUjRecUATFzXFerHSvNxg+4QDnKDYcTHiP7ydy3x0W718J193vED/4zWeZcJ3b7Fzg8xZgC5ui+sU31PqPFp+Bdnlm/5qIAzxdkZQ1GsfXUQ1iei66bamAPbjvVRb7XSqEAYQGm3H3T6VlNyjqkRAcKtLvKufjcTJVBwVMqlyuBtveK37MtdmOMhaOdT3QJQpMkf3FNEoj1syxSKaVfdbVeQnaUbXNe44YL6nFQmIPauXIYnlA9qYMvtVtvkyCw39dOXJwZVL/uAjVtFFUqUh9xMKSw68fs1IQGG0GXj8aF+EbsnUAU1I6u2uWIozSEtPeWgs/n7WSgubstyPtXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AbhlDfFEx8e1YSxC8khG9L9VX53bldQc+rWGKxT5jvU=;
+ b=ZnmuryUQLO5PMTasr2xFboHeR7zaAl6lf9CL3doJJxzebiGmMfZKgK08ei4r8bkd+2vv83dV5/JfW5mmKJswSjiUKSMTl8kQRk7BajWHumxWJMnEbDf+lMSTa37OFyqjE3bd25P32BK8bQM1iHG0T5yucAoYT49MBBrDixwCsdpN1Dx8MQjeZdJjvoIrZSSSJj5cTDq1jOOKzjLE3ghy9unzEbCtn0qdow7FfQdGsDA3a2V/GN7GWn9/TcYow1zPIAzlQZOe9mgizAyhKvjG97RgTt+YQ9XdcKnE2VJdpKavCNPSi0Jy0jAF/PzlLWxLVLkN9j13YME6pve8KK9xPQ==
+Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:138::5)
+ by PN0P287MB1114.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:142::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.14; Tue, 16 Jul
+ 2024 12:43:25 +0000
+Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ ([fe80::a94:ad0a:9071:806c]) by MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ ([fe80::a94:ad0a:9071:806c%5]) with mapi id 15.20.7762.027; Tue, 16 Jul 2024
+ 12:43:24 +0000
+Message-ID:
+ <MA0P287MB2822445DD34485B94D22E7FFFEA22@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+Date: Tue, 16 Jul 2024 20:43:19 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/3] dt-bindings: thermal: sophgo,cv1800-thermal: Add
+ Sophgo CV1800 thermal
+To: Haylen Chu <heylenay@outlook.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Inochi Amaoto <inochiama@outlook.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Jisheng Zhang <jszhang@kernel.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <SEYPR01MB422158B2766DA03728AD90CBD7A22@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
+ <SEYPR01MB4221281561CCE511A5094D28D7A22@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
+From: Chen Wang <unicorn_wang@outlook.com>
+In-Reply-To: <SEYPR01MB4221281561CCE511A5094D28D7A22@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TMN: [yrwUKm1i9gePRn1xm9eSWU8kQ8dF5JaE]
+X-ClientProxiedBy: SG2PR02CA0073.apcprd02.prod.outlook.com
+ (2603:1096:4:90::13) To MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:138::5)
+X-Microsoft-Original-Message-ID:
+ <d4673d3f-4e93-496d-9236-eb67a16550f8@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240715-topic-sm8x50-upstream-fix-battmgr-temp-tz-warn-v1-1-16e842ccead7@linaro.org>
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MA0P287MB2822:EE_|PN0P287MB1114:EE_
+X-MS-Office365-Filtering-Correlation-Id: cbf25f90-ffee-4db0-2216-08dca594e21a
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|19110799003|8060799006|461199028|4302099013|3412199025|1602099012|440099028;
+X-Microsoft-Antispam-Message-Info:
+	Nr1ckIhHJhfHbUfF9tPFekcmDS2rvQw35isqypakcQXdKtlz6W7gTVO20bmrg6OvzATp/Ywc0n8cMRBLjnJLVzkPiZRk8E5Mzjvsyo+TcSheNF4707pfCydi0BsCSGg45RRmIom3JDqkJGpqsKgvXr7J7+0scCaCKnR8tG7kUzMGgPTPeq7hJ0O28t8HSPlDEIlhyaCa20JWvkJfSA0CAOiaOiayi3fJ6C2us9m1Mzb7TRjtC4zCMuVApj0NSq5c1BMPvgCn0gbO4EFF593xPhLOwU8Cy9l4Vq/J8CJhvfNtGPt5hF/JouSVd80J+WNyvTBhxve0WVDLVPEX4bOD59OLQ8yn/us/5Whfngl3plyTCVa2OEbWjE+ZLPRQA16+xqALlgIvbC/5P+VMa5cFcI4+UFp4EwdS1SJgC9sLNDPI2dSIjyVuc1nDkO8NQx5c0hZGCmb3kjcpM5Jyz4DYNnKOzleyXOKcfloSVuz8Fpde+78TTyd24ML+BTDVsLofx+dUSkBWfKcky4vdrHBhoMRHbhIerjdp1Nz9d+i8Zusm4KKiz6Xjovu6BECMH+BJnv45uQj1bZoj5Gho0H+eIFPcS4cN6d532XT/cwivzhpwGZLo4Dq8r1SZLW5Lxas5kJaklXm8q+QlffmuttzMGLfRTp+VV1FZOtJhvb/GA56N5cnn9RSWthronBmRUw1ITrLY+1/nrxqXIl2SYUy6Yih1lRYyRHgxJSA8o039XzeD8mchOU77OVfUEQdrdQy9dOFOffq4EHVa6a4+P55GSQ==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Q1N4dlc5ZEVjbzE2QXkxT0VDUGVhN2hnRTZaSW8xR1ZTQ0dUS1EwdGxrV216?=
+ =?utf-8?B?L0xkVXhsWTRWM0xXUlVQdGVrdnVSS2d5WnlKZkpHTzliRkJLRlBiR0N4ZzQw?=
+ =?utf-8?B?VndXV3lFZDQ1RDBwQ1VncWg2ZU1Nbm9yVHRlT3JLMW9tVis1V0RKdXY3ZUtT?=
+ =?utf-8?B?Q2VLMWlQcmZlSisyWUlpNHg3eHRBazQvaGlZMVM0cTBGdUJyS1RCUXlXUjN3?=
+ =?utf-8?B?aTdrc0JsTkVDdU9KM24zczE0V2IyZDlEczdXUkFVM3hTWVZZS1R4elBGL0Nt?=
+ =?utf-8?B?OHVpNlRXWHFFMzdpMHFuRFpUNEVtWENJMGdZbmRFVE1ZSnhYbCtPT3B0Z0Yy?=
+ =?utf-8?B?eHZ2N3RQUGRQRW1OZ3Zjbml2c1lVNDl3cENHUExtVnRJMmdRUk9YdkdmenE2?=
+ =?utf-8?B?eTI4QmpVWmdUTUNndUJJNk5XRDYza1RwMFBSSXNLVEEwcEpDS3E3REsxalhK?=
+ =?utf-8?B?Tk55Zi9TdzgrSlZqZUozN3NTOGdWMm1DbTJkZlVqMzhwN0JSZlhXSk9yZUUy?=
+ =?utf-8?B?WmlWL3lKb0NBL2s3dnlUS0JqUnVwT1FVdnhFNkZmK0oxRTY2VWZzTDFpQUtE?=
+ =?utf-8?B?cjl1R01KeG42ZHdieWpnM0pYRGJUeWVkVi9aZEpqc2h3eG5VNVNvRHltMmR6?=
+ =?utf-8?B?SnFxa3d4UGd2ZlhwOFN6K1F2ZmNGV1ozZnBXd2RRSS9CVnJGbGpCaG1NVEVO?=
+ =?utf-8?B?V09QRDhENUd3b1lVTEFHS3BDVSt2azRBWGU4cmkvbDNPWEpXaFBsWjR3L2Jr?=
+ =?utf-8?B?QW5YOVhIVks0OGkzTy9JZHFSeXpJbXllU3dQOHhkY0ZWRUFpZkg1aktFaVZm?=
+ =?utf-8?B?YklOcnZxN3VvbWJGYXVLZ3pmS2NxVVFqRzRyVkVBb1QvTUxscUVxd3JiNnY4?=
+ =?utf-8?B?eU42UVFsbWxIMExPaWF6RUlqZEF1RlhFMnlwajdES2VvSUNwRmpRRzVxWFVP?=
+ =?utf-8?B?MW03TFR5ZytmYVllSGJwM2tnMTZvMnFDUTR2R1ZKNHdTb3Z1aWoxWDFTYlN2?=
+ =?utf-8?B?KzN4YmZybC9IV2JVdlE3TUt4L2c1RGorSTdFR2J5VkhPMXdsL2tVTVQ2WnR2?=
+ =?utf-8?B?NnBuQndjZnZtRU9LbVBMMmpCc3Y3WU52K0FIQ1ozb0Y1M0xITWZUK0FqVmlB?=
+ =?utf-8?B?WmtzaTVZV0NiTjVWUEJNaExEQ050aDMyWGRicFJITGtXTUxLY1Z0cldVMGhI?=
+ =?utf-8?B?V3VEMHgyYUFJc3lyVjh1b28wK0VKenVpVlNlcTFjR2tFZWdhOFJCN1lYYVpS?=
+ =?utf-8?B?RWlIV0QrMFE4L0ZtL2pzeXd2L0pEUitPSHN4WVp4YWdCWFJNWXBxL1B5SVBD?=
+ =?utf-8?B?NHU4ZU9CeUZuYW5SbVVveW1samUxanNsTjFuaGgrNjhFL3pYczA5U09FRmEr?=
+ =?utf-8?B?MHl6ZVdNSHlxS2ZjWEpsQjBWZmhjd2FHU3hHMzMxN0NNSUwrVmxzNS91bCtJ?=
+ =?utf-8?B?aUVjd2d6MTlYVy9ZR01QZDFyMmpqeVFoWmlDL0twZU1hMllqcjlJRHBjWWxv?=
+ =?utf-8?B?bG5EelM2OVZSM2lJa2R3UHdmcGhGSnhQcVJxQ2cwdjQ1c0RaVHVsc01aTGh5?=
+ =?utf-8?B?YnFOYUZZU0Nvak54a1lKSHozZkpmTzVmYmloR25tcG5uYXE3WUw0MU9tb1dB?=
+ =?utf-8?B?WHlrMnA5Q1ZZVjhyMzQzL0psRVA3dlduTHFOYVRRb0RnL2lxSC9hUFZqOGZX?=
+ =?utf-8?Q?d7jWHs+CMvnu0t6Lfs4G?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cbf25f90-ffee-4db0-2216-08dca594e21a
+X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2024 12:43:24.9162
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0P287MB1114
 
-On Mon, Jul 15, 2024 at 02:57:06PM +0200, Neil Armstrong wrote:
-> The driver returns -ENODEV when the firmware battmrg service hasn't
-> started yet, while per-se -ENODEV is fine, we usually use -EAGAIN to
-> tell the user to retry again later. And the power supply core uses
-> -EGAIN when the device isn't initialized, let's use the same return.
-> 
-> This notably causes an infinite spam of:
-> thermal thermal_zoneXX: failed to read out thermal zone (-19)
-> because the thermal core doesn't understand -ENODEV, but only
-> considers -EAGAIN as a non-fatal error.
-> 
-> While it didn't appear until now, commit [1] fixes thermal core
-> and no more ignores thermal zones returning an error at first
-> temperature update.
-> 
-> [1] 5725f40698b9 ("thermal: core: Call monitor_thermal_zone() if zone temperature is invalid")
-> 
-> Link: https://lore.kernel.org/all/2ed4c630-204a-4f80-a37f-f2ca838eb455@linaro.org/
-> Cc: stable@vger.kernel.org
-> Fixes: 29e8142b5623 ("power: supply: Introduce Qualcomm PMIC GLINK power supply")
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-The "failed to read out thermal zone (-19)" error happens on 6.10 on the
-Qualcomm X1E80100 CRD too. This patch fixes it. Thanks for looking into
-this! FWIW:
-
-Tested-by: Stephan Gerhold <stephan.gerhold@linaro.org>
-Reviewed-by: Stephan Gerhold <stephan.gerhold@linaro.org>
-
+On 2024/7/16 17:42, Haylen Chu wrote:
+> Add devicetree binding documentation for thermal sensors integrated in
+> Sophgo CV180X SoCs.
+>
+> Signed-off-by: Haylen Chu <heylenay@outlook.com>
 > ---
->  drivers/power/supply/qcom_battmgr.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-> index 46f36dcb185c..bde874b5e0e7 100644
-> --- a/drivers/power/supply/qcom_battmgr.c
-> +++ b/drivers/power/supply/qcom_battmgr.c
-> @@ -486,7 +486,7 @@ static int qcom_battmgr_bat_get_property(struct power_supply *psy,
->  	int ret;
->  
->  	if (!battmgr->service_up)
-> -		return -ENODEV;
-> +		return -EAGAIN;
->  
->  	if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
->  		ret = qcom_battmgr_bat_sc8280xp_update(battmgr, psp);
-> @@ -683,7 +683,7 @@ static int qcom_battmgr_ac_get_property(struct power_supply *psy,
->  	int ret;
->  
->  	if (!battmgr->service_up)
-> -		return -ENODEV;
-> +		return -EAGAIN;
->  
->  	ret = qcom_battmgr_bat_sc8280xp_update(battmgr, psp);
->  	if (ret)
-> @@ -748,7 +748,7 @@ static int qcom_battmgr_usb_get_property(struct power_supply *psy,
->  	int ret;
->  
->  	if (!battmgr->service_up)
-> -		return -ENODEV;
-> +		return -EAGAIN;
->  
->  	if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
->  		ret = qcom_battmgr_bat_sc8280xp_update(battmgr, psp);
-> @@ -867,7 +867,7 @@ static int qcom_battmgr_wls_get_property(struct power_supply *psy,
->  	int ret;
->  
->  	if (!battmgr->service_up)
-> -		return -ENODEV;
-> +		return -EAGAIN;
->  
->  	if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
->  		ret = qcom_battmgr_bat_sc8280xp_update(battmgr, psp);
-> 
-> ---
-> base-commit: 91e3b24eb7d297d9d99030800ed96944b8652eaf
-> change-id: 20240715-topic-sm8x50-upstream-fix-battmgr-temp-tz-warn-c5a2f956d28d
-> 
-> Best regards,
-> -- 
-> Neil Armstrong <neil.armstrong@linaro.org>
-> 
+>   .../thermal/sophgo,cv1800-thermal.yaml        | 55 +++++++++++++++++++
+
+I see sometimes you call it cv1800, and in patch 3, the file name is 
+cv180x_thermal.c, and for dts changes, you changed cv18xx.dtsi. Please 
+unify it.
+
+I think sg200x is new name for cv181x serias, so if you want to cover 
+cv180x/sg200x, is cv18xx better?
+
+>   1 file changed, 55 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml b/Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
+> new file mode 100644
+> index 000000000000..58bd4432cd10
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/sophgo,cv1800-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sophgo CV1800 on-SoC Thermal Sensor
+> +
+> +maintainers:
+> +  - Haylen Chu <heylenay@outlook.com>
+> +
+> +description: Sophgo CV1800 on-SoC thermal sensor
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - sophgo,cv1800-thermal
+cv18xx-thermal ?
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: The thermal sensor clock
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  sample-rate-hz:
+> +    minimum: 1
+> +    maximum: 1908
+> +    default: 1
+> +
+> +  '#thermal-sensor-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +        #include <dt-bindings/clock/sophgo,cv1800.h>
+> +        #include <dt-bindings/interrupt-controller/irq.h>
+> +        thermal-sensor@30e0000 {
+> +            compatible = "sophgo,cv1800-thermal";
+> +            reg = <0x30e0000 0x100>;
+> +            clocks = <&clk CLK_TEMPSEN>;
+> +            interrupts = <16 IRQ_TYPE_LEVEL_HIGH>;
+> +            #thermal-sensor-cells = <0>;
+> +        };
+> +...
 
