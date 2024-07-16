@@ -1,150 +1,199 @@
-Return-Path: <linux-pm+bounces-11142-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11143-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BB4593245B
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 12:49:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3EA2932478
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 12:56:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCC321F23F52
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 10:49:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81FE3281A33
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 10:56:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7300D198E79;
-	Tue, 16 Jul 2024 10:49:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11929196438;
+	Tue, 16 Jul 2024 10:56:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="M22kyT+h"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=s.l-h@gmx.de header.b="QZ1HW0VT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5FC198E6E
-	for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2024 10:49:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CF413D630;
+	Tue, 16 Jul 2024 10:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721126949; cv=none; b=BmilvfVx5whxdbZHH41NfGUBfn5sP954xwA/XuH1jKXD30vjuN+JHb2925fdtdy+PJN+fba1EXH8tMrpqZo/kKmPlVoZMTQSlDARg8tTpo/Y3vwTT9sP0R2FDfZAtCV437Z6eoog3Bhcgg6PKEJpOXLaEf9GY8KHOxSPQ1yGyPc=
+	t=1721127362; cv=none; b=JPU+j/uYM/o7mrToLSqLlXRy0QAo/WB/b0orPk8JacrWE6OQQyqN77mw4lCwbyxSpbkM5+Mu/7bSHBUnzWKRgNgtKm2nzf2jgaYHEDIc9QYlQfnJGy/dgqk4rMlU7E3lboU665EaJ77WDcF/3RUkdZQY4/ImKSYdBKRyvpRfF7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721126949; c=relaxed/simple;
-	bh=6PplKpjlGffvC5RHfmAoC1yuM9SJwAHrJsEqjUdSKDE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rD6B1vsnPT3HF94xtaQXBLH/j+YCh4x9zoLJhtDZzZuWI4VTc0pxB8GEhJ7B+1JzhIBzfWDkqDBPl9q4aAE/RZFHI1FBBkbTRTkggPLAhZeKc1Hj3FWbX7fHbVk3iahH7eFO7I1bu/DXQW24u8zSO+6zBfVLGia4k5UuYjrKGO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=M22kyT+h; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5957040e32aso3507677a12.2
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2024 03:49:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721126946; x=1721731746; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=JSSdPTO8wok657BaYCcgzt7XSIZBPPA7Zl3G6wPHAJ0=;
-        b=M22kyT+hlxc/bvxRjJoaKlIPOoUDohKKLjaVr49DEGuai8a4jpRNRj71Y+Mp8ujIAN
-         N9EAoo9XamZwcV/fJBOUz6nz6j/Lc+qZgTNAbdvZfNRQ2g7ELFhGQ5sgDWI1S7lv8uIo
-         OfdY75+hzbVywWb3xO4vnYQ+qqtJ4GJqiB4BjKz6pYifDAVBfhYT5GiRxQsY46w5Zljv
-         bxVwiviwHsvmwut2s1AedJfpXBzK/Cd2y1l68my5tO2d1/8c8xB5V/VyzeJl0vDG88is
-         sVRw4w92tKeqUacMxXOI+3uT+aV5RJWuLqfFovjIDWKDeLDov8FEudXJmZXEjqOuM6de
-         N1wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721126946; x=1721731746;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JSSdPTO8wok657BaYCcgzt7XSIZBPPA7Zl3G6wPHAJ0=;
-        b=A88Xc1raE2t+exXX2BEh/p2iyQF+zi66ggufuTwAFSRWW+umT4aAtZdh0ERT/FFg4n
-         cS9l7aiqQnihwQvCl/RwCkrDUY/JO0ke5vkeFkzPt0lr/F+OfZdr1F3y/pP83b+btGmj
-         GoKx6wa35QqNB13AJPP7TusvPvNV9lxwnDHPYPhJfYGxk1M3VT+csyYSyABrSmqW1XZn
-         OfAL6993MJpgyg97xvcq5ujf7PS+zUCNqeGFzDxuMxl3Eob0vIopmxklOjYQRqtgZI4k
-         kyxOKicb76bUjF2gxh2z0wTHtiArzsCs4jb2ZxKmgCj2+M/rlDv+W1Ux8tdCYRg088SJ
-         w+Qw==
-X-Forwarded-Encrypted: i=1; AJvYcCW9bOEml3iNmt38jDYa6Spd/hL3aXlslha7AhNpGqhTRy85v7fKmbT0KVmUoZAeSm713rXBWWnkL3gvEXLrwhKdijmbF/oAFns=
-X-Gm-Message-State: AOJu0YySJfkGN471hqAR5Z6+VS6DmmDwccRzsgEmVVGnRomUfi7yGahF
-	I+888ONHLYdeArmf37+ONKUDkWKTKrlBHFprGCUl7wcWXYN186q1h2yRM5A/+BA=
-X-Google-Smtp-Source: AGHT+IEsrbkhN72GyfBmxo/hV8M5Q2LQBsNbIHXZvi0vkLi4V9jtbDdrRXWd2qscg7UBR3yi6L6y4Q==
-X-Received: by 2002:a05:6402:26c1:b0:58e:2f7c:a9c with SMTP id 4fb4d7f45d1cf-59eefa9bf9fmr1444655a12.26.1721126945732;
-        Tue, 16 Jul 2024 03:49:05 -0700 (PDT)
-Received: from [192.168.105.194] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-59b2504b915sm4744682a12.34.2024.07.16.03.49.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jul 2024 03:49:05 -0700 (PDT)
-Message-ID: <2ab03911-1774-422e-b04d-f67fc75ec6da@linaro.org>
-Date: Tue, 16 Jul 2024 12:49:02 +0200
+	s=arc-20240116; t=1721127362; c=relaxed/simple;
+	bh=RQ3y3PQ7crcZ7ZGxgOJF8qEI16yOasY0cMut+iWSaOU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HsPZtgwrN/wVkxUISGFb/ztm5Usj7t+aQu52CmRas5dG9XI4Vk/KkDAqR/RuPQfGozBkxa4mZCdRCe6rOhOzwM1GXHZyZ2DDdriZhkwZuNpxpFTpIaYoJtvWd2nSnqXj14SRdXbrIjwQtybbPsTghnF6JxpTNQhenxUVKcABPZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=s.l-h@gmx.de header.b=QZ1HW0VT; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1721127341; x=1721732141; i=s.l-h@gmx.de;
+	bh=mlL3qiEKWhlaSR86j38poKpFJD8cyzTAaqVAoAn6vCM=;
+	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Type:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=QZ1HW0VT8qAwMLSgW5RIUkkREmsjVINZxOH3TrbOy5HPSALGOaGQvobKm01jEp95
+	 E0SHcdGbssFFJyWWKmyApBFINkdTx5GVjb7O7AkqwkJNBClTjoky2pyzLkjS5JHXI
+	 R+PnRojfp+XzisdVUhRROBh/IxzM8AKqjkW+NfXqN9qzRQ4F+WaMIlpgZNoxcTBJ0
+	 AvhxWxGi7M+whO0Maa0c1PQz+MMxsNRb8eZxS7fu2yLH+qxH3A60w/jL/tDZxvXuk
+	 bV1rKlDmJzVYFT7MusCGWvo/D2pRlqzi1roVjy9ypGGzqZIBiq8aQuZJ+lZurX0So
+	 pNhf5NK8LpFwJvN7cw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mir ([94.31.83.155]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJmKh-1sngdI23cP-00SrVO; Tue, 16
+ Jul 2024 12:55:41 +0200
+Date: Tue, 16 Jul 2024 12:55:38 +0200
+From: Stefan Lippers-Hollmann <s.l-h@gmx.de>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Eric Biggers
+ <ebiggers@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
+ <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, Lukasz
+ Luba <lukasz.luba@arm.com>, Srinivas Pandruvada
+ <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v3] thermal: core: Call monitor_thermal_zone() if zone
+ temperature is invalid
+Message-ID: <20240716125538.09f716d1@mir>
+In-Reply-To: <CAJZ5v0jkA72=avuthGkrS5iu_UGEQeaEp7LjedXCpzamcnRKsA@mail.gmail.com>
+References: <6064157.lOV4Wx5bFT@rjwysocki.net>
+	<20240715044527.GA1544@sol.localdomain>
+	<4d7e11a7-b352-4ced-acee-b5f64e3cd0b6@linaro.org>
+	<CAJZ5v0gx6GyKBYt7YMFwmUQ4OCG49d9k2H=P-4Awr-mJ=eFHKw@mail.gmail.com>
+	<20240715145426.199c31d0@mir>
+	<CAJZ5v0gPiwkNczZhCf_rkxVoUX33tS9c6irMf_7=Rg48Nw9C4w@mail.gmail.com>
+	<20240716014830.243bb0cf@mir>
+	<CAJZ5v0jkA72=avuthGkrS5iu_UGEQeaEp7LjedXCpzamcnRKsA@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 01/20] media: venus: pm_helpers: Only set rate of the
- core clock in core_clks_enable
-To: Dikshita Agarwal <quic_dikshita@quicinc.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
- Len Brown <len.brown@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
- Vikash Garodia <quic_vgarodia@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, Philipp Zabel
- <p.zabel@pengutronix.de>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Andy Gross <agross@kernel.org>
-Cc: Stanimir Varbanov <stanimir.varbanov@linaro.org>,
- Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, Marijn Suijten <marijn.suijten@somainline.org>
-References: <20230911-topic-mars-v2-0-3dac84b88c4b@linaro.org>
- <20230911-topic-mars-v2-1-3dac84b88c4b@linaro.org>
- <0a9d7f9f-871c-80ea-e5b1-c7dee354a175@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <0a9d7f9f-871c-80ea-e5b1-c7dee354a175@quicinc.com>
+Content-Type: multipart/signed; boundary="Sig_/Rw./VzWhpwsM8iFyc=ywj9o";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Provags-ID: V03:K1:PuMlUK0IdDrNegEJKYQbbOifkYWqN1wFfEKchi0RFrNl3tgbBwx
+ YUfcRA3Nai8+eyJ61SmctrDZPSML+fN5Fei6Z9tgPOWhvN78pRi08OIkR8UyuZ+E50CAVBD
+ FIz03H1x8hjmGMSeA4HSx8fs5wtK059U95+oOaYUOLhlfA3/1nInr8uSA6Pa2K4bGUQuSGd
+ Z1US4h0VCeYfeO/cfWQ1A==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:cHU28S3U2I0=;/dJtd3FxeVJTHVZLqgoBl205xot
+ 0HXwPM1HhtuoKjcT9lMF+tzptFLrYNK5fSvUvbSqGRBnSs0Avja0ePSwf6ETAihid9ZPJEejF
+ 1ePmg1fWbsX2GglsJpGq0YGpl7NqDPWQLrW2xrhAF5xEI6wywkznlecyWQ2CzRCjb1kG9BHrg
+ hktZzbsML3DtgLHkBercYfhPLAhsMxOGhhrd5cGmLTfndNeLY5KSuGs70bJT+tTBjv/7P5T4p
+ ExX3EFSi8sbhN3mzYpveQxeBz7doUEwvtAhvotB7UVJLaf4ZMmr1IAxcFCLefSq3Fc18nudfJ
+ QhuIMUsLymrXC6lxWxvVaSdvThL/mNvI1Yfax1CSMeq1H/9vAuyllKrCP5KppZ2GGiOW3DN9e
+ vLIX7w45oixH4qxekLHQQJ1Xf3mz5fd+3r15/JBkqMqFgijhu9eAbzCHCCEPbHNhh9BAtgsNQ
+ HVJa0V62dxwoMwyJkgt2Gzpj/cY/J+sqjPQMj9EGrZFtH/R0PHbY3FEMgYiOAotuC7Ok0yO2l
+ 3Q9sIJJDg6YIGrZm4a1xWenI1wfl/iUmussS98t+pcW4Os+5GUPcnCKnHSSVPNDHLCtvJC9iX
+ 3uQJj7trXePXfrN7GZdli4I7D9U7gZ9yFgGeDgk3FZkHHh2kTHRtCEq93ff4c+OC/Cc38BpiX
+ vsUBFzGLIlunVCR6zel9/FHdjhNvYnIINYjc85SqG7elplUrepEKZysc1TVHv3OXxUdyTDYEl
+ UUNQO7lR6cngwMyQyF7hlBDU90tnR9eGpqTkuqMF3uGlx0R3Q28fjsDC0K63Rw31ZUAI52xM+
+ /TzvvHsEWdM039NZlznM9Prg==
+
+--Sig_/Rw./VzWhpwsM8iFyc=ywj9o
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On 12.07.2024 8:07 AM, Dikshita Agarwal wrote:
-> Hi All,
-> 
-> Please ignore this patch, didn't realize it was in my workspace when I sent
-> the other series. Sorry for spam.
+Hi
 
-Hm?
+On 2024-07-16, Rafael J. Wysocki wrote:
+> On Tue, Jul 16, 2024 at 1:48=E2=80=AFAM Stefan Lippers-Hollmann <s.l-h@gm=
+x.de> wrote:
+> > On 2024-07-15, Rafael J. Wysocki wrote:
+> > > On Mon, Jul 15, 2024 at 2:54=E2=80=AFPM Stefan Lippers-Hollmann <s.l-=
+h@gmx.de> wrote:
+> > > > On 2024-07-15, Rafael J. Wysocki wrote:
+> > > > > On Mon, Jul 15, 2024 at 11:09=E2=80=AFAM Daniel Lezcano
+> > > > > <daniel.lezcano@linaro.org> wrote:
+> > > > > > On 15/07/2024 06:45, Eric Biggers wrote:
+> > > > > > > On Thu, Jul 04, 2024 at 01:46:26PM +0200, Rafael J. Wysocki w=
+rote:
+> > > > > > >> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > [...]
+> > > > Silencing the warnings is already a big improvement - and that patch
+> > > > works to this extent for me with an ax200, thanks.
+> > >
+> > > So attached is a patch that should avoid enabling the thermal zone
+> > > when it is not ready for use in the first place, so it should address
+> > > both the message and the useless polling.
+> > >
+> > > I would appreciate giving it a go (please note that it hasn't received
+> > > much testing so far, though).
+> >
+> > Sadly this patch doesn't seem to help:
+>=20
+> This is likely because it is missing checks for firmware image type.
+> I've added them to the attached new version.  Please try it.
+>=20
+> I've also added two pr_info() messages to get a better idea of what's
+> going on, so please grep dmesg for "Thermal zone not ready" and
+> "Enabling thermal zone".
 
-Konrad
+This is the output with the patch applied:
+
+$ dmesg | grep -i -e iwlwifi -e thermal
+[    0.081026] CPU0: Thermal monitoring enabled (TM1)
+[    0.113898] thermal_sys: Registered thermal governor 'fair_share'
+[    0.113900] thermal_sys: Registered thermal governor 'bang_bang'
+[    0.113901] thermal_sys: Registered thermal governor 'step_wise'
+[    0.113902] thermal_sys: Registered thermal governor 'user_space'
+[    0.113903] thermal_sys: Registered thermal governor 'power_allocator'
+[    3.917770] iwlwifi 0000:04:00.0: enabling device (0140 -> 0142)
+[    3.926543] iwlwifi 0000:04:00.0: Detected crf-id 0x3617, cnv-id 0x10053=
+0 wfpm id 0x80000000
+[    3.926551] iwlwifi 0000:04:00.0: PCI dev 2723/0084, rev=3D0x340, rfid=
+=3D0x10a100
+[    3.936737] iwlwifi 0000:04:00.0: TLV_FW_FSEQ_VERSION: FSEQ Version: 89.=
+3.35.37
+[    4.021494] iwlwifi 0000:04:00.0: loaded firmware version 77.a20fb07d.0 =
+cc-a0-77.ucode op_mode iwlmvm
+[    4.347478] iwlwifi 0000:04:00.0: Detected Intel(R) Wi-Fi 6 AX200 160MHz=
+, REV=3D0x340
+[    4.347616] iwl_mvm_thermal_zone_register: Thermal zone not ready
+[    4.478749] iwlwifi 0000:04:00.0: Detected RF HR B3, rfid=3D0x10a100
+[    4.478777] thermal thermal_zone2: Enabling thermal zone
+[    4.543601] iwlwifi 0000:04:00.0: base HW address: 94:e6:f7:XX:XX:XX
+[    4.559564] thermal thermal_zone2: failed to read out thermal zone (-61)
+[    4.602339] iwlwifi 0000:04:00.0 wlp4s0: renamed from wlan0
+[    4.810373] thermal thermal_zone2: failed to read out thermal zone (-61)
+[    5.066381] thermal thermal_zone2: failed to read out thermal zone (-61)
+[    5.322385] thermal thermal_zone2: failed to read out thermal zone (-61)
+[    5.579377] thermal thermal_zone2: failed to read out thermal zone (-61)
+[    5.834375] thermal thermal_zone2: failed to read out thermal zone (-61)
+[    6.091372] thermal thermal_zone2: failed to read out thermal zone (-61)
+[    6.346400] thermal thermal_zone2: failed to read out thermal zone (-61)
+               [...]
+
+Regards
+	Stefan Lippers-Hollmann
+
+--Sig_/Rw./VzWhpwsM8iFyc=ywj9o
+Content-Type: application/pgp-signature
+Content-Description: Digitale Signatur von OpenPGP
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEMQMcJCzZm4GSqVV4v+AtZbHRQu0FAmaWUaoACgkQv+AtZbHR
+Qu1ZrhAAz0er4fsRIN93aBskjoCRENQK1Zlrc7zPWZbSKzRsqB7LhapzKFEofCAc
+IYF7OkZHyTTKyQOhqFkDbyvk6VQ/PfpszRRpNplsZyug68C1uZ5g45MD5Pnv8rUE
+4NpVnu6OVjX8PhoQacjjHJJWUj0BsDQiLII+GOmHqZWWrwKt4fbyCh1a1+ZOirUY
+Y5Dleyv1vpsHX3IYdsZ6XKPqckYogo4DwN62bcDRqtBgtSymUr4xtY2j+PtcIdzA
+HMjJFtXTiQZ3zlpe6FXVwshw8zmzSe9/wkwLcOZtMey2WNjqDwCWNu7T46FS1m47
+MSzfIbunuTYKHuJbieVK9q5tlrrR5QA2NlZqrsb9OUbxXmxF3p8m/1pKKmbWjfym
+Ktf4a1LcLOBKS4Ahjyh3FDhxIuNpK7ctXd5EruUlOgznwO4U0QfISszCv7EJDR/+
+SXLIirdFNUW5R9nmOdCd05AvjGT4zUAgRF0zl3Q2gsWb2qIyoB2UYwAN7ePJTXvw
+ZH2fj+R7Ms0G0K9daqqan4J63UsPzeyoTv97cixkxYWaqoIWhrBKU9BE4a0rUcXu
+npO9Vj1jcD9vpNXta3LDbuzzsQGQ+EFrSaw+9H4CGzp6myNx75qtHFqW2IVfFUCf
+I2MMZ+lNZPe46HKoNASiL713T9pD/S6BqZCcNBp2fe9zDC8ddAQ=
+=QIPE
+-----END PGP SIGNATURE-----
+
+--Sig_/Rw./VzWhpwsM8iFyc=ywj9o--
 
