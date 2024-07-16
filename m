@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-11169-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11170-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 881DB932C9C
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 17:57:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBEC7932CAA
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 17:57:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC3131C20AFC
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 15:57:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85EE01F245BC
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2024 15:57:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3449C1A00E3;
-	Tue, 16 Jul 2024 15:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01D0219EEC4;
+	Tue, 16 Jul 2024 15:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ggKVjpcH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DPDK7QaG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0814319AD72;
-	Tue, 16 Jul 2024 15:56:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA04819AD72;
+	Tue, 16 Jul 2024 15:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721145386; cv=none; b=SopLbqUOqA1h26nLSnoxq4Qo/xmpTnGHNGBQMfweyi8FzK2ZmtgP/LYcIlqayRLDYoKIbjAiSXL7L/jGeYEQcY3aTS9iXFNSvNX5L1SSDXPQu5A3CwVX1zI1Or//wK3En4jSEuPz3Pjx4TRWbYYhgtQC8McwCGVq+LBpnZPJtMY=
+	t=1721145410; cv=none; b=sHyyjxFG4gojClsyDtZI34ksIJYw/h2zF2QjnDDHXrI7KKZCupq8C3yVzzvQoWAUuAVh0cG3+ZHprE3mtLkxLpzFu45fPPMYVlgdWMxJ+V1hT5tPes2F3XBAH8K4dBKYr8wLuaX/R2y2dHZaVUQPNvti+T8c2eUFLDZqYVWCJDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721145386; c=relaxed/simple;
-	bh=r/htFNCVklPZB/qPrEURIqLCThKwRnJ1/+jRgVESHbo=;
+	s=arc-20240116; t=1721145410; c=relaxed/simple;
+	bh=bQ+ttntg1F2BqOw5DH8I2+BYMIw0dG/UaFjsoOJyGL4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JVkKfQcMJY5xIeBEhjbLcnUHQGQrFlUR4EQgB8nl2PfUYpa/S8z9WfVWg2CgNgF8oOJmmbLWHXd2UYjZX+KYHkOouiaNN2BLUwcPlvCN7+dWhZiOVC9RVXE5CjGFmPHD2yhONNqhyBag2CsOd0UZBormekN5lVzQhBN0Y5kGoRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ggKVjpcH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B55C4AF0D;
-	Tue, 16 Jul 2024 15:56:19 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=b+gMjPVJsOeQQulBCrXhwq3LERCHwVuVbMpJpxhFkrez5FrhcMmMQF8KOA+I14CBlI9EzL5jszpeKtADFndjIDN2xJrTZjw1zn5X0I6QdLxs3vopZ/IfSn/QS1j2+8AQMGw39nhoDjuH/i/oVqJLmUgbC4NovnJVuVWwgPKDybs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DPDK7QaG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE8EEC4AF0E;
+	Tue, 16 Jul 2024 15:56:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721145385;
-	bh=r/htFNCVklPZB/qPrEURIqLCThKwRnJ1/+jRgVESHbo=;
+	s=k20201202; t=1721145410;
+	bh=bQ+ttntg1F2BqOw5DH8I2+BYMIw0dG/UaFjsoOJyGL4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ggKVjpcHRTVt3nuE3+NlkEpIVNPb4tGQnvdsl2dFWFndOA1s0PxqudPmpPgkph86R
-	 OlDJiTXgZnlRQhxFWdpckTbvqyfUEMM2eQqKFpi9BNTqcO0guMQhedXt0SWdD84b2/
-	 GJESE43JofmgmaglHg9aY4RZHMppNkzz68n1AyDbtxm9/GRpl8eeGRohu9h6HvZ1Gu
-	 UZtNS8vES8HR/IjicEE7G+NxqcHDJ1qBQPNYkR3bCgf28c5Donmr/86FCPAAf5ed4b
-	 zhL/hToDpD7HTF8LmVOmSPtyZTxeOidtXocDBkv4IHAeCTK1TmjCv4vQwIiOpa/BGr
-	 cdjfw+bKB1cTQ==
-Message-ID: <c4be8ef7-e8a6-46a8-bdba-f4d03aca5027@kernel.org>
-Date: Tue, 16 Jul 2024 17:56:17 +0200
+	b=DPDK7QaGEnKzyZqaaers6rlPKf+a2VjMUiDAzUzawY0DXC9oPpPBEovhInzaMIv6e
+	 ACqhquG/4E3Odoetg5xaOipKm98/cCnDSs6nypTpgjvMm8jt6jofu34dq/eNbEKv/R
+	 dzVaNmpptEO1SwYWmCmFe5l1OjV/rjQHsGFfqBoWEeugD5o9DFpOYbhDPH6+HTVwRW
+	 bbCuQBDX5TUxxe4+7bePosMWZ0xMqVVj3eVHN7T7RtM4/Xytg4/kQOtPsqISb9Tq+/
+	 M2rIESQqK0WvzaFflHEn2LY6Zas5Xkx0+SZfoDki+GnIVsdPkRSddx/fzSyYzvo0LF
+	 l9ih82bnvQh/Q==
+Message-ID: <2d35d27e-ec67-4185-9597-4fa5c64243af@kernel.org>
+Date: Tue, 16 Jul 2024 17:56:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/3] dt-bindings: thermal: sophgo,cv1800-thermal: Add
- Sophgo CV1800 thermal
+Subject: Re: [PATCH v4 2/3] riscv: dts: sophgo: cv18xx: Add sensor device and
+ thermal zone
 To: Haylen Chu <heylenay@outlook.com>, "Rafael J. Wysocki"
  <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
  Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
@@ -64,7 +64,7 @@ To: Haylen Chu <heylenay@outlook.com>, "Rafael J. Wysocki"
 Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
 References: <SEYPR01MB422158B2766DA03728AD90CBD7A22@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
- <SEYPR01MB4221281561CCE511A5094D28D7A22@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
+ <SEYPR01MB42211B13FF62603E3E18B8DCD7A22@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,84 +110,30 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <SEYPR01MB4221281561CCE511A5094D28D7A22@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
+In-Reply-To: <SEYPR01MB42211B13FF62603E3E18B8DCD7A22@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 16/07/2024 11:42, Haylen Chu wrote:
-> Add devicetree binding documentation for thermal sensors integrated in
-> Sophgo CV180X SoCs.
-> 
-> Signed-off-by: Haylen Chu <heylenay@outlook.com>
-> ---
->  .../thermal/sophgo,cv1800-thermal.yaml        | 55 +++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml b/Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
-> new file mode 100644
-> index 000000000000..58bd4432cd10
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/sophgo,cv1800-thermal.yaml
-> @@ -0,0 +1,55 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/sophgo,cv1800-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +				soc_critical: soc-critical {
+> +					temperature     = <100000>;
+> +					hysteresis      = <0>;
+> +					type            = "critical";
+> +				};
+> +			};
+> +		};
+> +	};
+>  };
+>  
+>  &plic {
+> @@ -25,3 +53,5 @@ &clint {
+>  &clk {
+>  	compatible = "sophgo,cv1800-clk";
+>  };
 > +
-> +title: Sophgo CV1800 on-SoC Thermal Sensor
-> +
-> +maintainers:
-> +  - Haylen Chu <heylenay@outlook.com>
-> +
-> +description: Sophgo CV1800 on-SoC thermal sensor
 > +
 
-Missing $ref to thermal-sensor.yaml
-
-
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sophgo,cv1800-thermal
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description: The thermal sensor clock
-
-Description is useless. You miss constraints on the other hand, so maxItems.
-
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  sample-rate-hz:
-> +    minimum: 1
-> +    maximum: 1908
-> +    default: 1
-> +
-> +  '#thermal-sensor-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +        #include <dt-bindings/clock/sophgo,cv1800.h>
-> +        #include <dt-bindings/interrupt-controller/irq.h>
-
-Use 4 spaces for example indentation.
-
-
+Why? Drop.
 
 Best regards,
 Krzysztof
