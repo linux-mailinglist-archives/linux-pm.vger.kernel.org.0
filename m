@@ -1,149 +1,176 @@
-Return-Path: <linux-pm+bounces-11219-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11220-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52E3B9343C5
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2024 23:24:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A25093451E
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2024 01:46:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1050A284A2D
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2024 21:24:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBEA71F2220C
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2024 23:46:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC68618508E;
-	Wed, 17 Jul 2024 21:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9918E4D8BA;
+	Wed, 17 Jul 2024 23:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gK/tkL3f"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="Y/9pS4Q9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B771CD26;
-	Wed, 17 Jul 2024 21:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACF4947E
+	for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2024 23:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721251463; cv=none; b=PrR1mohsksHEJBIdgRo0Zhfn4J9fLvA21GWbd4wYvWhS3ag5UWQD2TpPFps4VmnykYhRSOYdht096svZcU87SGbPLGPvnuI9FwO8QO/hdC71dHH1ivhdTt+OXieACbjPGV+99xpiJYmThLhhF2LWaLeLYUYJeDrAAz3DjMU+7DE=
+	t=1721259993; cv=none; b=XAabbvB3KF5v4PMRIKYIqyC4YEIRW8V4s9hn1qX87nZIJPHLESBXoZRN2xXrK/76UOzhqqqLlKVZ1OQsyMzHVrS/y56drp0fERGoKwVQj2UEZ1R1uB7I7s4DMIon/FAWaUjNNMEiwuWdmiOr/vGZumptPzjEXZyaXDAKry6g1a8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721251463; c=relaxed/simple;
-	bh=1EY+vvc7jNlEdDJjAXGm1QryO1IfYmX5lIziu+1P168=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nj9CpQtJPAPfwv5TfJ3izrqNF2wNjIjRwPFq0NvcsDJeQCLwI2EaWbcYL391F1oz1ssIVBCpb1IXdK4dgSMwtqnjYi1iOkmo369kijDhMKxEg7c4l86iJdbYrf3maVukmSqnIzqdKl2v8uvN/iP2OZ9QIcmL16VCc0q7/Ljq9BM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gK/tkL3f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6F1AC2BD10;
-	Wed, 17 Jul 2024 21:24:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721251463;
-	bh=1EY+vvc7jNlEdDJjAXGm1QryO1IfYmX5lIziu+1P168=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gK/tkL3f97uSs56KpwRiMUV5Bwx3eXpVEi/WJjpgUZEX0th0IeqcGp0ItIgThbd9E
-	 He+DVz2m1tMAa4wNF10MU6hQgtyYZpDaEQdKA++QhGAp49Tz/5eX9y7M+gVBozW8hU
-	 oh3lctY8/fVWcDZpGzmQLJ3WyN+itS6m8Kf1Z1M1NGteuMEBwkHHuvWKV2r6thTBR3
-	 WGGkVt0FibIraYnmzlnTYqhaWjkC/8RCRfebIYqA12cSVX+2KIPkQB352ORqY+osft
-	 dyueKLESA3NX3q+Pm01BYwNXDxAXRiqZZn1TMhb78cnylJFgQb5tYxvVUKRpTBwzSD
-	 HcMkB5oFXHUBQ==
-Date: Wed, 17 Jul 2024 14:24:21 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-	Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
-	Stefan Lippers-Hollmann <s.l-h@gmx.de>,
-	Oleksandr Natalenko <oleksandr@natalenko.name>,
-	Ben Greear <greearb@candelatech.com>
-Subject: Re: [PATCH v2] thermal: core: Allow thermal zones to tell the core
- to ignore them
-Message-ID: <20240717212421.GA1191@sol.localdomain>
-References: <4950004.31r3eYUQgx@rjwysocki.net>
+	s=arc-20240116; t=1721259993; c=relaxed/simple;
+	bh=BYBe7GCWh1mxQcGSZIilFN44Jf6SBePPgzECZbyRpfE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=S8ei0hRLnYJpX9FzSblzFM+kBblexXFbllp/SFK6s0BMQZwG63XpeiZFJoDwxUdndDOPXlzqzWrRGQwgP31V8c7Q6Bw8y3jQfN7e/Gpi0VvkUq566Lf5wlwFR7S8SZUQ5WsBEvt5sFtJePsEZTT/pSjEvOcvExbF0CRAjEf1Hh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=Y/9pS4Q9; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [192.168.80.67] (unknown [207.7.121.250])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4WPXdc431lz4Dsh;
+	Wed, 17 Jul 2024 19:46:28 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1721259989; bh=BYBe7GCWh1mxQcGSZIilFN44Jf6SBePPgzECZbyRpfE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Y/9pS4Q9erzr7k6rvRInRJVcVZUfXO4afPrA7yK6O5kiQj4ktuVOIcPhwddkbP1o1
+	 UXYAzRX4pDNEu1eDGxmUUg/LD0COm7/637W2yz7+Drr/xuz/AgpCjYpk8CR5loYtXT
+	 sIlZfCACIKnCv/H9kgEgIzS+cjHY0NyeIE/qbBEo=
+Message-ID: <bff3e11e-7b60-4e23-933a-3e84fd82aabc@panix.com>
+Date: Wed, 17 Jul 2024 16:46:27 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4950004.31r3eYUQgx@rjwysocki.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: My AlderLake Dell (XPS-9320) needs these patches to get full
+ standby/low-power modes
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>,
+ Kenneth Crudup <kenny@panix.com>
+Cc: vidyas@nvidia.com, bhelgaas@google.com, andrea.righi@canonical.com,
+ vicamo.yang@canonical.com, linux-pm@vger.kernel.org
+References: <218aa81f-9c6-5929-578d-8dc15f83dd48@panix.com>
+ <1c6a9a8c-a6f-c884-7d58-5c713b1d77d7@panix.com>
+ <CAAd53p70Hkv6vaim0HOncSQGBPO83f4QOGLE869T+4WKWdLjBw@mail.gmail.com>
+ <0481ec61-3a57-4b4b-a0d8-b8b523af3f17@panix.com>
+ <CAAd53p7NpwK11AyMtAOiFxAEJ8Ho=V=93gwje_2j=h3a=L5G9Q@mail.gmail.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <CAAd53p7NpwK11AyMtAOiFxAEJ8Ho=V=93gwje_2j=h3a=L5G9Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 17, 2024 at 09:45:02PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> The iwlwifi wireless driver registers a thermal zone that is only needed
-> when the network interface handled by it is up and it wants that thermal
-> zone to be effectively ignored by the core otherwise.
-> 
-> Before commit a8a261774466 ("thermal: core: Call monitor_thermal_zone()
-> if zone temperature is invalid") that could be achieved by returning
-> an error code from the thermal zone's .get_temp() callback because the
-> core did not really handle errors returned by it almost at all.
-> However, commit a8a261774466 made the core attempt to recover from the
-> situation in which the temperature of a thermal zone cannot be
-> determined due to errors returned by its .get_temp() and is always
-> invalid from the core's perspective.
-> 
-> That was done because there are thermal zones in which .get_temp()
-> returns errors to start with due to some difficulties related to the
-> initialization ordering, but then it will start to produce valid
-> temperature values at one point.
-> 
-> Unfortunately, the simple approach taken by commit a8a261774466,
-> which is to poll the thermal zone periodically until its .get_temp()
-> callback starts to return valid temperature values, is at odds with
-> the special thermal zone in iwlwifi in which .get_temp() may always
-> return an error because its network interface may always be down.  If
-> that happens, every attempt to invoke the thermal zone's .get_temp()
-> callback resulting in an error causes the thermal core to print a
-> dev_warn() message to the kernel log which is super-noisy.
-> 
-> To address this problem, make the core handle the case in which
-> .get_temp() returns 0, but the temperature value returned by it
-> is not actually valid, in a special way.  Namely, make the core
-> completely ignore the invalid temperature value coming from
-> .get_temp() in that case, which requires folding in
-> update_temperature() into its caller and a few related changes.
-> 
-> On the iwlwifi side, modify iwl_mvm_tzone_get_temp() to return 0
-> and put THERMAL_TEMP_INVALID into the temperature return memory
-> location instead of returning an error when the firmware is not
-> running or it is not of the right type.
-> 
-> Also, to clearly separate the handling of invalid temperature
-> values from the thermal zone initialization, introduce a special
-> THERMAL_TEMP_INIT value specifically for the latter purpose.
-> 
-> Fixes: a8a261774466 ("thermal: core: Call monitor_thermal_zone() if zone temperature is invalid")
-> Closes: https://lore.kernel.org/linux-pm/20240715044527.GA1544@sol.localdomain/
-> Reported-by: Eric Biggers <ebiggers@kernel.org>
-> Reported-by: Stefan Lippers-Hollmann <s.l-h@gmx.de>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=201761
-> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> Tested-by: Stefan Lippers-Hollmann <s.l-h@gmx.de>
-> Cc: 6.10+ <stable@vger.kernel.org> # 6.10+
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> v1 -> v2:
->    * It is safer to retain the old behavior in thermal_zone_get_temp(),
->      which is the second place where the .get_temp() zone callback is
->      used, so make it return -ENODATA if the temperature value coming
->      from that callback is invalid.
->    * Add Tested-by: for Stefan.
-> 
-> I have retained the previous Tested-by because the part of the patch that has
-> been tested remains unchanged.
-> 
-> ---
->  drivers/net/wireless/intel/iwlwifi/mvm/tt.c |    7 +++
->  drivers/thermal/thermal_core.c              |   51 +++++++++++++---------------
->  drivers/thermal/thermal_core.h              |    3 +
->  drivers/thermal/thermal_helpers.c           |    2 +
->  4 files changed, 35 insertions(+), 28 deletions(-)
 
-This makes the log messages go away for me.  However I had to resolve a conflict
-in drivers/net/wireless/intel/iwlwifi/mvm/tt.c to apply this patch to the latest
-upstream.
+Seems to be working OK, I do think running power states seem to be 
+spending more time in pc10/cpuLPI/SysLPI, but that's just 
+seat-of-the-pants though.
 
-- Eric
+While-suspended battery drain seems about the same, however:
+
+----
+[E130] 518 /home/kenny> cat /tmp/battery-levels
+suspend-in:  Wed, 17 Jul 2024 09:33:33 -0700
+/sys/power/wakeup_count:46
+/sys/power/suspend_stats/success:0
+/sys/class/power_supply/BAT0/charge_full:3882000
+/sys/class/power_supply/BAT0/capacity:100
+/sys/class/power_supply/BAT0/voltage_now:12856000
+/sys/class/power_supply/BAT0/status:Full
+/sys/class/power_supply/BAT0/capacity_level:Full
+/sys/devices/system/cpu/cpuidle/low_power_idle_system_residency_us:0
+/sys/kernel/debug/pmc_core/slp_s0_residency_usec:0
+----------
+suspend-out: Wed, 17 Jul 2024 16:38:37 -0700
+/sys/kernel/debug/pmc_core/slp_s0_residency_usec:0
+/sys/devices/system/cpu/cpuidle/low_power_idle_system_residency_us:0
+/sys/class/power_supply/BAT0/charge_full:3882000
+/sys/class/power_supply/BAT0/capacity:89
+/sys/class/power_supply/BAT0/voltage_now:12206000
+/sys/class/power_supply/BAT0/status:Discharging
+/sys/class/power_supply/BAT0/capacity_level:Normal
+/sys/power/suspend_stats/success:1
+/sys/power/wakeup_count:52
+==================================================
+
+[17/16:44:11 kenny@xps-9320]
+----
+
+On 7/16/24 18:59, Kai-Heng Feng wrote:
+> Hi Kenneth,
+> 
+> On Tue, Jul 16, 2024 at 2:27 AM Kenneth Crudup <kenny@panix.com> wrote:
+>>
+>>
+>> No joy yet for 6.10, so here's my patches, maybe it'll save someone some
+>> time (they're pretty much the same as 6.9) .
+>>
+>> Fingers crossed for 6.11!
+> 
+> I forgot to Cc you when I sent the patch [0].
+> 
+> It will be great if you can test it out.
+> 
+> [0] https://lore.kernel.org/linux-pci/20240530085227.91168-1-kai.heng.feng@canonical.com/
+> 
+> Kai-Heng
+> 
+>>
+>> -Kenny
+>>
+>> On 3/21/24 03:12, Kai-Heng Feng wrote:
+>>> Hi Kenneth,
+>>>
+>>> On Tue, Mar 12, 2024 at 10:37 AM Kenneth R. Crudup <kenny@panix.com> wrote:
+>>>>
+>>>>
+>>>> On Sat, 4 Nov 2023, Kenneth R. Crudup wrote:
+>>>>
+>>>>> The only release kernel that was able to get this laptop to fully get into
+>>>>> low-power (unfortunately only s0ix) was the Ubuntu-6.2.0- ... series from Ubuntu
+>>>>
+>>>>> I'd bisected it to the following commits:
+>>>>> 4ff116d0d5fd PCI/ASPM: Save L1 PM Substates Capability for suspend/resume
+>>>>> 5e85eba6f50d PCI/ASPM: Refactor L1 PM Substates Control Register programming
+>>>>> 1a0102a08f20 UBUNTU: SAUCE: PCI/ASPM: Enable ASPM for links under VMD domain
+>>>>> 47c7bfd31514 UBUNTU: SAUCE: PCI/ASPM: Enable LTR for endpoints behind VMD
+>>>>> 154d48da2c57 UBUNTU: SAUCE: vmd: fixup bridge ASPM by driver name instead
+>>>>
+>>>> Since (for what I'm sure is a good reason ... I hope :) ) this has yet to make
+>>>> it into mainline, here's the set of commits refactored for v6.8; maybe someone
+>>>> scanning the archives for a solution to their Dell draining too much power can
+>>>> use them.
+>>>>
+>>>> But is there anything I can do to help these go in? I saw that "Refactor L1
+>>>> PM Substates Control Register programming" is still reverted, is that still
+>>>> an issue on the machine it affected?
+>>>
+>>> Let me work on this.
+>>>
+>>> I think both VMD and Thunderbolt devices need ASPM enabled by default
+>>> regardless of BIOS setting, but I am not sure if PCI folks will like
+>>> the idea.
+>>>
+>>> Kai-Heng
+>>>
+>>>>
+>>>>           -Kenny
+>>>>
+>>>> --
+>>>> Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange County CA
+>>>
+>>
+>> --
+>> Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange
+>> County CA
+> 
+
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
