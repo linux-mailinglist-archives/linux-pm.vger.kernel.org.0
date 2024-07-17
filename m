@@ -1,129 +1,149 @@
-Return-Path: <linux-pm+bounces-11217-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11219-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ACAE9342E4
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2024 22:03:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52E3B9343C5
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2024 23:24:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E88451F21D6F
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2024 20:03:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1050A284A2D
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2024 21:24:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E14CC1822E8;
-	Wed, 17 Jul 2024 20:03:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC68618508E;
+	Wed, 17 Jul 2024 21:24:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UIslOM8K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gK/tkL3f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EA91CF90
-	for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2024 20:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B771CD26;
+	Wed, 17 Jul 2024 21:24:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721246628; cv=none; b=BYHkqxM3YpoH3GiDvwSMaSorf+uTpBoslRqdmds3Xqqypc2rm2uIlFPIRXiXHIanymjYLIY68vLWlBli8JsK2fdCrN4VyC53NEynaOdKjbSHnTeFAODltImob9agvOLFIJyFueGdit52vHFjf9Q3iXidfmpNMMyX8hTX1Zbn26s=
+	t=1721251463; cv=none; b=PrR1mohsksHEJBIdgRo0Zhfn4J9fLvA21GWbd4wYvWhS3ag5UWQD2TpPFps4VmnykYhRSOYdht096svZcU87SGbPLGPvnuI9FwO8QO/hdC71dHH1ivhdTt+OXieACbjPGV+99xpiJYmThLhhF2LWaLeLYUYJeDrAAz3DjMU+7DE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721246628; c=relaxed/simple;
-	bh=KGrfaJ5s+0k6XkuiXVwFQK/U93ROKT3s3z3P/ZDCxL0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h2lo0o9UUtVwfYEXkZBS/m7YKazkozdzU60enPSzCZYhHMVaoExrsVimOdtv0kLTwFFQWZ2fVx7XhU6vYkxr7UbsR97DQvrJmvlhoiiLnFdau3J5bG+hXwHb1iiEQc3LOGcu9ZBX+mWaUG1p5ORBzeffQhVloJy6O/iRDM/wV6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UIslOM8K; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1721246626;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6rW0UG9Yof46y51ZacZBWXQDytJijvjwyuV4pHxrgHQ=;
-	b=UIslOM8K3+QjiSY7Nmnc2Aj3ahHSCmMt7MFrcwx0+fRN58newjhkl+6snqF6tm49oWe3BV
-	npGqOGrX2R5Q/2HKPYOGaxRa4kzFqDAA9YLWQN20TsIpTmJMZLp3prg/WcGHPS272LUsu9
-	748hRtsm6mPlUCj4e1mlQzaVu8TLcZQ=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-637-4Txr62dIN263a1cnIpYHIQ-1; Wed,
- 17 Jul 2024 16:03:44 -0400
-X-MC-Unique: 4Txr62dIN263a1cnIpYHIQ-1
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3571A1955D4C;
-	Wed, 17 Jul 2024 20:03:43 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.192.36])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A613419560B2;
-	Wed, 17 Jul 2024 20:03:41 +0000 (UTC)
-From: Hans de Goede <hdegoede@redhat.com>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	Chen-Yu Tsai <wens@csie.org>,
-	linux-pm@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH 2/2] power: supply: axp288_charger: Round constant_charge_voltage writes down
-Date: Wed, 17 Jul 2024 22:03:33 +0200
-Message-ID: <20240717200333.56669-2-hdegoede@redhat.com>
-In-Reply-To: <20240717200333.56669-1-hdegoede@redhat.com>
-References: <20240717200333.56669-1-hdegoede@redhat.com>
+	s=arc-20240116; t=1721251463; c=relaxed/simple;
+	bh=1EY+vvc7jNlEdDJjAXGm1QryO1IfYmX5lIziu+1P168=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nj9CpQtJPAPfwv5TfJ3izrqNF2wNjIjRwPFq0NvcsDJeQCLwI2EaWbcYL391F1oz1ssIVBCpb1IXdK4dgSMwtqnjYi1iOkmo369kijDhMKxEg7c4l86iJdbYrf3maVukmSqnIzqdKl2v8uvN/iP2OZ9QIcmL16VCc0q7/Ljq9BM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gK/tkL3f; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6F1AC2BD10;
+	Wed, 17 Jul 2024 21:24:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721251463;
+	bh=1EY+vvc7jNlEdDJjAXGm1QryO1IfYmX5lIziu+1P168=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gK/tkL3f97uSs56KpwRiMUV5Bwx3eXpVEi/WJjpgUZEX0th0IeqcGp0ItIgThbd9E
+	 He+DVz2m1tMAa4wNF10MU6hQgtyYZpDaEQdKA++QhGAp49Tz/5eX9y7M+gVBozW8hU
+	 oh3lctY8/fVWcDZpGzmQLJ3WyN+itS6m8Kf1Z1M1NGteuMEBwkHHuvWKV2r6thTBR3
+	 WGGkVt0FibIraYnmzlnTYqhaWjkC/8RCRfebIYqA12cSVX+2KIPkQB352ORqY+osft
+	 dyueKLESA3NX3q+Pm01BYwNXDxAXRiqZZn1TMhb78cnylJFgQb5tYxvVUKRpTBwzSD
+	 HcMkB5oFXHUBQ==
+Date: Wed, 17 Jul 2024 14:24:21 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+	Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
+	Stefan Lippers-Hollmann <s.l-h@gmx.de>,
+	Oleksandr Natalenko <oleksandr@natalenko.name>,
+	Ben Greear <greearb@candelatech.com>
+Subject: Re: [PATCH v2] thermal: core: Allow thermal zones to tell the core
+ to ignore them
+Message-ID: <20240717212421.GA1191@sol.localdomain>
+References: <4950004.31r3eYUQgx@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4950004.31r3eYUQgx@rjwysocki.net>
 
-Round constant_charge_voltage writes down to the first supported lower
-value, rather then rounding them up to the first supported higher value.
+On Wed, Jul 17, 2024 at 09:45:02PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> The iwlwifi wireless driver registers a thermal zone that is only needed
+> when the network interface handled by it is up and it wants that thermal
+> zone to be effectively ignored by the core otherwise.
+> 
+> Before commit a8a261774466 ("thermal: core: Call monitor_thermal_zone()
+> if zone temperature is invalid") that could be achieved by returning
+> an error code from the thermal zone's .get_temp() callback because the
+> core did not really handle errors returned by it almost at all.
+> However, commit a8a261774466 made the core attempt to recover from the
+> situation in which the temperature of a thermal zone cannot be
+> determined due to errors returned by its .get_temp() and is always
+> invalid from the core's perspective.
+> 
+> That was done because there are thermal zones in which .get_temp()
+> returns errors to start with due to some difficulties related to the
+> initialization ordering, but then it will start to produce valid
+> temperature values at one point.
+> 
+> Unfortunately, the simple approach taken by commit a8a261774466,
+> which is to poll the thermal zone periodically until its .get_temp()
+> callback starts to return valid temperature values, is at odds with
+> the special thermal zone in iwlwifi in which .get_temp() may always
+> return an error because its network interface may always be down.  If
+> that happens, every attempt to invoke the thermal zone's .get_temp()
+> callback resulting in an error causes the thermal core to print a
+> dev_warn() message to the kernel log which is super-noisy.
+> 
+> To address this problem, make the core handle the case in which
+> .get_temp() returns 0, but the temperature value returned by it
+> is not actually valid, in a special way.  Namely, make the core
+> completely ignore the invalid temperature value coming from
+> .get_temp() in that case, which requires folding in
+> update_temperature() into its caller and a few related changes.
+> 
+> On the iwlwifi side, modify iwl_mvm_tzone_get_temp() to return 0
+> and put THERMAL_TEMP_INVALID into the temperature return memory
+> location instead of returning an error when the firmware is not
+> running or it is not of the right type.
+> 
+> Also, to clearly separate the handling of invalid temperature
+> values from the thermal zone initialization, introduce a special
+> THERMAL_TEMP_INIT value specifically for the latter purpose.
+> 
+> Fixes: a8a261774466 ("thermal: core: Call monitor_thermal_zone() if zone temperature is invalid")
+> Closes: https://lore.kernel.org/linux-pm/20240715044527.GA1544@sol.localdomain/
+> Reported-by: Eric Biggers <ebiggers@kernel.org>
+> Reported-by: Stefan Lippers-Hollmann <s.l-h@gmx.de>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=201761
+> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> Tested-by: Stefan Lippers-Hollmann <s.l-h@gmx.de>
+> Cc: 6.10+ <stable@vger.kernel.org> # 6.10+
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> v1 -> v2:
+>    * It is safer to retain the old behavior in thermal_zone_get_temp(),
+>      which is the second place where the .get_temp() zone callback is
+>      used, so make it return -ENODATA if the temperature value coming
+>      from that callback is invalid.
+>    * Add Tested-by: for Stefan.
+> 
+> I have retained the previous Tested-by because the part of the patch that has
+> been tested remains unchanged.
+> 
+> ---
+>  drivers/net/wireless/intel/iwlwifi/mvm/tt.c |    7 +++
+>  drivers/thermal/thermal_core.c              |   51 +++++++++++++---------------
+>  drivers/thermal/thermal_core.h              |    3 +
+>  drivers/thermal/thermal_helpers.c           |    2 +
+>  4 files changed, 35 insertions(+), 28 deletions(-)
 
-This fixes e.g. writing 4250000 resulting in a value of 4350000 which
-might be dangerous, instead writing 4250000 will now result in a safe
-4200000 value.
+This makes the log messages go away for me.  However I had to resolve a conflict
+in drivers/net/wireless/intel/iwlwifi/mvm/tt.c to apply this patch to the latest
+upstream.
 
-Fixes: 843735b788a4 ("power: axp288_charger: axp288 charger driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/power/supply/axp288_charger.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-index aea17289a178..ac05942e4e6a 100644
---- a/drivers/power/supply/axp288_charger.c
-+++ b/drivers/power/supply/axp288_charger.c
-@@ -178,18 +178,18 @@ static inline int axp288_charger_set_cv(struct axp288_chrg_info *info, int cv)
- 	u8 reg_val;
- 	int ret;
- 
--	if (cv <= CV_4100MV) {
--		reg_val = CHRG_CCCV_CV_4100MV;
--		cv = CV_4100MV;
--	} else if (cv <= CV_4150MV) {
--		reg_val = CHRG_CCCV_CV_4150MV;
--		cv = CV_4150MV;
--	} else if (cv <= CV_4200MV) {
--		reg_val = CHRG_CCCV_CV_4200MV;
--		cv = CV_4200MV;
--	} else {
-+	if (cv >= CV_4350MV) {
- 		reg_val = CHRG_CCCV_CV_4350MV;
- 		cv = CV_4350MV;
-+	} else if (cv >= CV_4200MV) {
-+		reg_val = CHRG_CCCV_CV_4200MV;
-+		cv = CV_4200MV;
-+	} else if (cv >= CV_4150MV) {
-+		reg_val = CHRG_CCCV_CV_4150MV;
-+		cv = CV_4150MV;
-+	} else {
-+		reg_val = CHRG_CCCV_CV_4100MV;
-+		cv = CV_4100MV;
- 	}
- 
- 	reg_val = reg_val << CHRG_CCCV_CV_BIT_POS;
--- 
-2.45.2
-
+- Eric
 
