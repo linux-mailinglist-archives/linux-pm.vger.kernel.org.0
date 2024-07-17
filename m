@@ -1,124 +1,135 @@
-Return-Path: <linux-pm+bounces-11205-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11206-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 700049339AF
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2024 11:14:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1C1C933D27
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2024 14:52:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29753283CFB
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2024 09:14:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 896822835A1
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2024 12:52:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE8603BBCB;
-	Wed, 17 Jul 2024 09:14:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34AAE17FAD8;
+	Wed, 17 Jul 2024 12:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ON01uFzo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CphmN5Wl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202F9210EC;
-	Wed, 17 Jul 2024 09:14:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1060038DC3
+	for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2024 12:52:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721207677; cv=none; b=a85HW5k6VHy/BHRaUAiE53ARyN3uCMKJP9UJNRDJXMgjVhzHrJZkW31lilWN7xZcnRFbEB9y7kS25SrsjdI++q+JwAOln/DJS+LO6MttBkRzYFM4qLj6RdAzBJSiKNdJKUH1jJimvED97hp9z56qXLDFl3EjXR3m3XH+wJjXwqI=
+	t=1721220749; cv=none; b=FLhQJGe8Xkeb9yqv2On3/FzekK+JS2RqPq+RjgJLu9/dOjTJLdznUzahyEp0UnZT4AwztKeh8doTEu8b3dQ3WkP0HYypp2ebcsHVldBa49MawRnOEpNM/lv0BlQA47PTQnv1RGD7+gQab0BYAZbVwXHWOvlQRSSafaldnYDHNm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721207677; c=relaxed/simple;
-	bh=TGtt0bW+t5XJtO6KzmFODkBvqD4p0IDOOckyrWKen7g=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o0iJPoycK0Az4uEPCu0B2tgNrqcNhbpOD7gPM12CpLabUDDU0Ch16DFIlN0CZbPLStMOyt/wl94TpVCJysyryjkfpEx8wUL6H4nJb4J0Gu5ISZWdWgV2E3JprperjSXSkjOPfUBO8vz3ennEViHg4LXYu5JVJSzrHLMadHfANWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ON01uFzo; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46H6X66X023125;
-	Wed, 17 Jul 2024 09:14:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=TGtt0bW+t5XJtO6KzmFODkBv
-	qD4p0IDOOckyrWKen7g=; b=ON01uFzo5H0exnnJTG/2A140pxllPBpxzfJI/2DD
-	kdwj4Y7OYStZwTAPtWtLKeidFLFA4Fa93DizcwrDHviLV+BWQnPpc/IKYRJMrJRd
-	yzYio63r8HMfhcArjo6nYzSrv0ChhkaTSJglzncJT0pGwFLMziY4Q88gO5BqqSJH
-	jpnyADUTO25wJBsotdmB6nq/WP/MD6159bX0NaEJdTf5kyTXQNRgwbtINpFCPY9s
-	LQrbSax1aI8GBjPOIvdcAQt9Zb4Ul8vThpAnv303iJEM1o0WwIaUY0cywSDCFv3m
-	FqOXleV1LqaMt/yy3wE3KgdN195urPMOEdJIaw0IYvj+og==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40dwfnht8m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jul 2024 09:14:21 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46H9EJjr019519
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jul 2024 09:14:19 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 17 Jul 2024 02:14:11 -0700
-Date: Wed, 17 Jul 2024 14:44:08 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-CC: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <ilia.lin@kernel.org>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <ulf.hansson@linaro.org>, <quic_sibis@quicinc.com>,
-        <quic_rjendra@quicinc.com>, <danila@jiaxyga.com>,
-        <neil.armstrong@linaro.org>, <otto.pflueger@abscue.de>,
-        <abel.vesa@linaro.org>, <luca@z3ntu.xyz>, <geert+renesas@glider.be>,
-        <stephan.gerhold@kernkonzept.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        Praveenkumar I
-	<quic_ipkumar@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v6 5/9] pmdomain: qcom: rpmpd: Add IPQ9574 power domains
-Message-ID: <ZpeLYG6vegJYZ5Rs@hu-varada-blr.qualcomm.com>
-References: <20240710061102.1323550-1-quic_varada@quicinc.com>
- <20240710061102.1323550-6-quic_varada@quicinc.com>
- <d454e01f-3d6b-4a02-87cf-3d289bc6957c@linaro.org>
+	s=arc-20240116; t=1721220749; c=relaxed/simple;
+	bh=QdTBCleGzWTdZlVSD2RIVnuf2oFhcuY5Akv5ctFpmas=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=i72r7RnFPcewvvhUft2zX8lw4u9BPRR9EnzussELraJv4Jx68Pyqrepp7YsCqJBEzbSYwqZRc1oXd6D+GciYKjli24ByNMiHm4EfMyqNCwU98jIkuPzq2os24qoppc3o+uyGGR934D8SKFPnOiEAgNswf4yDfZyudlUojk5t7L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CphmN5Wl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D340C4AF09
+	for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2024 12:52:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721220748;
+	bh=QdTBCleGzWTdZlVSD2RIVnuf2oFhcuY5Akv5ctFpmas=;
+	h=From:To:Subject:Date:From;
+	b=CphmN5WlM0NNISsH3wrt+5R3ICfh3FM3/BMDaizEW9D1N3irWZr3yXwh9puBZnxaZ
+	 f1+Ruq+l6p0pvBt44jA1IV47dCigKqABMfuqSM9zgK+hZuIJS2TKKkwuV5zc3glycp
+	 +UY7tThsesZFvpb1O7mcuerS7ewogbgiX1WgdHkV2S/LAx3wXWjx8cCZc/hns4fhkK
+	 sJABPXUxFltfJOSVxr3nEimcv5GE4xcTBuBz76/+CWShTvr7VYIPF9MyTP5+rzbiRf
+	 2DHvQ848a70E2Rp3qZNd6hZAeEWloMpiWxz3yiSUa/PmqhEBm/ZFKVh1skXCYdOeeA
+	 2q0kg+3p36gjQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 846DCC53BA7; Wed, 17 Jul 2024 12:52:28 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 219051] New: amd_pstate=active reset computer
+Date: Wed, 17 Jul 2024 12:52:28 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: catalin@antebit.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-219051-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <d454e01f-3d6b-4a02-87cf-3d289bc6957c@linaro.org>
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ctY3uiSTACLzGBq0eIG6LP4jbRP4fj8x
-X-Proofpoint-ORIG-GUID: ctY3uiSTACLzGBq0eIG6LP4jbRP4fj8x
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-17_05,2024-07-16_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 bulkscore=0 malwarescore=0 suspectscore=0
- priorityscore=1501 clxscore=1015 spamscore=0 mlxscore=0 phishscore=0
- mlxlogscore=386 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2407110000 definitions=main-2407170070
 
-On Tue, Jul 16, 2024 at 02:15:12PM +0200, Konrad Dybcio wrote:
-> On 10.07.2024 8:10 AM, Varadarajan Narayanan wrote:
-> > From: Praveenkumar I <quic_ipkumar@quicinc.com>
-> >
-> > Add the APC power domain definitions used in IPQ9574.
-> >
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
->
-> Could you please confirm [1]?
->
-> Konrad
->
-> [1] https://lore.kernel.org/linux-arm-msm/57dadb35-5dde-4127-87aa-962613730336@linaro.org/
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219051
 
-The author is off for a few days. Will get back to you once he is in.
+            Bug ID: 219051
+           Summary: amd_pstate=3Dactive reset computer
+           Product: Power Management
+           Version: 2.5
+          Hardware: AMD
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: cpufreq
+          Assignee: linux-pm@vger.kernel.org
+          Reporter: catalin@antebit.com
+        Regression: No
 
-Thanks
-Varada
+Hello!
+
+I have a ASUS TUF A17 FA706QR laptop. Ryzen 5800H, nvidia dgpu.
+
+I have installed Ubuntu Desktop 24.04 LTS with kernel 6.8 and the laptop
+started to reset shortly after booting: from a few minutes to 30 minutes,
+nothing in the logs.
+Before I had Ubuntu 20.04 with 5.15 kernel, no problems, but amd_pstate was=
+ not
+active.
+Reset occurs by leaving the laptop at idle or doing something like playing =
+an
+youtube video.
+I also tried kdump without getting any dump files.
+
+I noticed that the processor runs at lower frequencies than 20.04, so do the
+fans, most of the time at 0 rpm. Temps 50-70 degrees.
+
+I ran stress on one core, youtube play in the same time, cpu temp ~90 degre=
+es,
+no reset!
+
+I switched the power profile to Performance and it didn't reset.
+It only happens on Balanced or Power Saver profiles.
+
+Next step was amd_pstate=3Dpassive, reset only on Power Saver.
+
+The fix was amd_pstate=3Ddisable. No reset at all
+
+Not happening on other Asus laptops with Ryzen 6800H, Lenovo (no Nvidia) 58=
+00H,
+6800H, 7840HS with amd_pstate=3Dactive, Ubuntu 22/24, 6.5 and 6.8 kernels.
+
+
+Thanks!
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
