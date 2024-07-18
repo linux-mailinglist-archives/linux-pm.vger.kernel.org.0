@@ -1,232 +1,147 @@
-Return-Path: <linux-pm+bounces-11234-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11235-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7AC8937083
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2024 00:03:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4408B93712C
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2024 01:43:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36F2EB21556
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2024 22:03:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 046791F2109B
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2024 23:43:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0E5145B30;
-	Thu, 18 Jul 2024 22:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4621B146A6B;
+	Thu, 18 Jul 2024 23:43:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MhOmgyuM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lQKtL87Y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8131459ED;
-	Thu, 18 Jul 2024 22:03:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC08145FE3
+	for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2024 23:43:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721340204; cv=none; b=MaFsPYGoKYmVXLwQLk+JawOqtXi1ljzWFp7p+UivLkYE7ymz/YWdWlCBbeH/UvtwEtyw0hbdrRr6EDxiV84VI7a16oLke89yeRac4Jdafz4bz7CJneaF9oVy5Qj2yBJZv4FiLhq3SYOqbtIvggRNunz5atJVx40IBwfVpSZ/7G0=
+	t=1721346208; cv=none; b=ShRI76+enraek33/bkCmJaYFUPdkjq+OKjAiS4bn/Ns5ZEYaWhfFgAN5TGQI0o8xS6PIlWb+vmqnPxcY9DfS4Ev1A/r8n64MXy+MU3neJUcDcsyLV2lRjRMN9GtzH4njJ4DFMbFyDGU5Zj1RKHsZslN14eUV2V7M7/16DAYTNMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721340204; c=relaxed/simple;
-	bh=6OyBPYPMnBJGM+6F64l7Q9yrxKTPe2JBHU7Pq5T3I5Y=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qke1iKbLk+QtGzEeTw0j3gPSxDp6TJWcQTfF3KEkFI8SXw84BqB3OXgDwuvXeViQCZ+lJWurZumt0HvfgvQRV2j8AaXZtxvPcKmQLGbqjCT3TQC3SeeRMARXsVa4WQvnTMjtj6HVn5j1es5/rqZNPvrV/cY3ncHMEXxmjwsKOZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MhOmgyuM; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721340202; x=1752876202;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=6OyBPYPMnBJGM+6F64l7Q9yrxKTPe2JBHU7Pq5T3I5Y=;
-  b=MhOmgyuM6aODhAeknvLqjFphCY+exYYBMk9Cla+l+AulvPZjHIlC81pD
-   9lQZ9SL2XYTgBWe6oqi7PpLQrAWLZhUKiCF+ZRCat7e9WiuOvQBk/5Wiy
-   EQsXnrC9tcWr5obK39GwpxFl60WJ5lDTDcgaP275W+5kV8tKEO4LQCjdE
-   AS8v+6tmUQv6PzMoqy8aIQbArRq8Sn9aPxAIBto02tqGIPKd/DFzXg6eD
-   Oiepd1pHyxeBZw/VNWu0Cp3Qk6GpBtB/dZOKeVpQGBuOomm3QLkNVmAy9
-   ZZOg517wKhl90rg+baaETG9LtgDDcUb27LLQRdcmLG+t3Oi2dp+shpebd
-   Q==;
-X-CSE-ConnectionGUID: Rctf+VLjQHeH70JJQUX+Pg==
-X-CSE-MsgGUID: m+10Cf4gQD+0prDlXr3nfQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="44358579"
-X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
-   d="scan'208";a="44358579"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 15:03:04 -0700
-X-CSE-ConnectionGUID: d5eUzs88SN2Wg//5JFQhUQ==
-X-CSE-MsgGUID: LqGUorbFTmiqPfavkBN1zQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
-   d="scan'208";a="50875778"
-Received: from msatwood-mobl.amr.corp.intel.com (HELO [10.125.108.193]) ([10.125.108.193])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 15:03:04 -0700
-Message-ID: <b07c39fab5ac0e32e7768ed3e8a799c8eb68802a.camel@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: queue policy->update work to rt thread to
- reduce  its schedule latency
-From: Tim Chen <tim.c.chen@linux.intel.com>
-To: Gaowei Pu <pugaowei@oppo.com>, rafael@kernel.org, viresh.kumar@linaro.org
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 18 Jul 2024 15:03:04 -0700
-In-Reply-To: <20240717063321.629-1-pugaowei@oppo.com>
-References: <20240717063321.629-1-pugaowei@oppo.com>
-Autocrypt: addr=tim.c.chen@linux.intel.com; prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+	s=arc-20240116; t=1721346208; c=relaxed/simple;
+	bh=Fs8BMs6N/B/fxf7s4SP/Ab68hcA0mRBxxocOljHPwzc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ieSP12bSJSOfSacy++tv3TVxm/qnxB7OjiOmGIyN+MGX0Rx+po3c5dN6g1jJbg6RI/LUfh10TfXBYHYBunb30zszdi0MOCJesVdiPK0C4GzD0R+pntcXpSqfAdhijxSEyLVQJ1n71bkfnRLub2OTklmJtLdEQ/1MfhgVeY4QF40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lQKtL87Y; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52ea79e689eso1588115e87.1
+        for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2024 16:43:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1721346204; x=1721951004; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2G6Wi/ghJW7ne1nL1LZ4kJtoZ1WxIyqIm9N6B8fvRMM=;
+        b=lQKtL87YSjKAeWJ1Izcu8bBm0eHgThAiDHJcf8CN2ZbTsHVPDXW01gQmeiHMCOiVqL
+         OZ4FSrx4M/V6gs79tp6CuxvIym3tI5xCSuplS4BC84wztNJA4u6zeg/k3kRvdP0nG7Z9
+         kgUAPlhY5JHAb1KRDa75jjg5Z0KFNneYo3GsNVXsV4MaUI6mLyayQJIXWzy1CHrDxakh
+         I+uN1Mijv1p+oeT5/76XeTxjnYHYW3LcLSl39H/Qy14EhIIXKyiniQ2O9U4IDmvQxVBm
+         w4PSV5nEVux4/uUenuUt6RDVQCWraWtJwhRbPlF2YUMlwAO7Sy6TbecPhDdh6UHemjVe
+         znOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721346204; x=1721951004;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2G6Wi/ghJW7ne1nL1LZ4kJtoZ1WxIyqIm9N6B8fvRMM=;
+        b=Mx2VqLuBrrwoOA4skRk70Tsiecl3slWkvkSUFpIK2MNHzY5HvtzzdkwCMg6o5QuPC+
+         9asUU9JZRbuf++KuriTdwg7zSAhrE/DIQMPos3prjVk3IeTsbIQnv2QYgxsIvzG88FHb
+         lYI+SYNL8erf0UlegWHEylh71C9nfJAbo6Bj+9r1xaGune4K3DBW9eloT5fhDBWEW+R5
+         ZeP94bCjLj0NJzso6zd41JNYdnTrzH+nt52D2wI/Y/3q3w5H81haD5j+bDaAfo9LtPKz
+         JL9WCmZV40j+AoY1WcP7zL0Dc8Gmr5oNyimquo7G2nPD2GwFpcVuIDqSPD9QdOzbNnYd
+         wuPA==
+X-Forwarded-Encrypted: i=1; AJvYcCXHU8vdhsF0C+RBJXGhqJE/pubRw93sArSAY7qyWF0d3wCJxmZB8Ndo3XjIOMdcp665XLDvAYwPJ1TEqZ7cf/jA85azn/j1rzc=
+X-Gm-Message-State: AOJu0YwCOLAVv/xhr9dGAqMBunJfs8qND02Evz+L7w1JANK5/6o1Pfg2
+	oaJUkcdLj2e5h3IladxTMg3JPSV+S7gtMtO5+ov2VxeBmuHuNgo0hkBuycYh5Ug=
+X-Google-Smtp-Source: AGHT+IF+UwNsOHX2ZzNai2nhy5hTeg1HLABZ8GOiwqfPygMYjAAPG1DIHy5+fJSGlK3pIRK+hwampg==
+X-Received: by 2002:a05:6512:3055:b0:52c:df83:a740 with SMTP id 2adb3069b0e04-52ee53d7630mr5487536e87.30.1721346204544;
+        Thu, 18 Jul 2024 16:43:24 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ef556b4fbsm22491e87.139.2024.07.18.16.43.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jul 2024 16:43:24 -0700 (PDT)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Viresh Kumar <vireshk@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Nikunj Kela <nkela@quicinc.com>,
+	Prasad Sodagudi <psodagud@quicinc.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/6] OPP/pmdomain: Assign required_devs for required OPPs through genpd
+Date: Fri, 19 Jul 2024 01:43:13 +0200
+Message-Id: <20240718234319.356451-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2024-07-17 at 14:33 +0800, Gaowei Pu wrote:
-> Currently we encountered a problem that the cpufreq boost latency
-> is about 10 milliseconds or worse when we boost through cpufreq QOS reque=
-st
-> under high workload scenarios, while the boost latency mainly consumed by
-> schedule latency of policy->update work.
+Through dev_pm_opp_set_config() the _opp_attach_genpd() allows consumer drivers
+to hook up a device to its PM domains. Their corresponding virtual devices that
+are created by genpd during attach, are later being assigned as the
+required_devs for the corresponding required OPPs.
 
-What is the tail latency now after your change?
+In _opp_attach_genpd() we are also cross-checking whether the attached device's
+required OPPs really belongs to its PM domain's OPP table - and tries to fix it
+up if possible. In principle this works fine, but sometimes it's not convenient
+for consumer drivers to use _opp_attach_genpd().  Especially in the single PM
+domain case, when a device is usually attached by the bus-level ->probe()
+callbacks.
 
->=20
-> We should ensure the low schedule latency of cpu frequency limits work
-> to meet performance and power demands. so queue the policy->update work
-> to rt thread to reduce its schedule latency.
+Moreover, we now have dev_pm_domain_attach|detach_list() that helps consumer
+drivers to attach their devices to their PM domains.
 
-If my understanding is correct, kthread has a default nice
-value of 0 and is not a rt thread.=C2=A0
+To improve the situation, this series moves genpd to assign the required_devs
+during device attach in genpd, which makes the cross-check of the OPP table to
+always get done.
 
-I think the gain you see is
-your patch created a dedicated kthread work queue on CPU 0.
-The work from policy change no longer have to compete time with other
-requests coming from schedule_work().=20
+Note that, we still need to support the existing users of _opp_attach_genpd(),
+which makes this series slightly complicated. Once we have migrated those users
+to dev_pm_domain_attach|detach_list(), we should be able to remove
+_opp_attach_genpd() altogether.
 
-If the policy change really needs to get ahead
-of other tasks, I think you need a dedicated
-workqueue with alloc_workqueue() using WQ_HIGHPRI flag.
+To test this, I have used a QEMU setup, with local PM test-drivers to try to
+test all various combinations of single/multi power/performance PM domains for
+a device. Hopefully I have covered it all, but I would certainly appreciate if
+someone could help to run a slew of tests on some HWs.
 
-Tim
+Kind regards
+Ulf Hansson
 
->=20
-> Signed-off-by: Gaowei Pu <pugaowei@oppo.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 24 ++++++++++++++++++------
->  include/linux/cpufreq.h   |  4 +++-
->  2 files changed, 21 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index a45aac17c20f..e6e42a3ba9ab 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1193,7 +1193,7 @@ void refresh_frequency_limits(struct cpufreq_policy=
- *policy)
->  }
->  EXPORT_SYMBOL(refresh_frequency_limits);
-> =20
-> -static void handle_update(struct work_struct *work)
-> +static void handle_update(struct kthread_work *work)
->  {
->  	struct cpufreq_policy *policy =3D
->  		container_of(work, struct cpufreq_policy, update);
-> @@ -1209,7 +1209,7 @@ static int cpufreq_notifier_min(struct notifier_blo=
-ck *nb, unsigned long freq,
->  {
->  	struct cpufreq_policy *policy =3D container_of(nb, struct cpufreq_polic=
-y, nb_min);
-> =20
-> -	schedule_work(&policy->update);
-> +	kthread_queue_work(policy->worker, &policy->update);
->  	return 0;
->  }
-> =20
-> @@ -1218,7 +1218,7 @@ static int cpufreq_notifier_max(struct notifier_blo=
-ck *nb, unsigned long freq,
->  {
->  	struct cpufreq_policy *policy =3D container_of(nb, struct cpufreq_polic=
-y, nb_max);
-> =20
-> -	schedule_work(&policy->update);
-> +	kthread_queue_work(policy->worker, &policy->update);
->  	return 0;
->  }
-> =20
-> @@ -1301,15 +1301,25 @@ static struct cpufreq_policy *cpufreq_policy_allo=
-c(unsigned int cpu)
->  		goto err_min_qos_notifier;
->  	}
-> =20
-> +	policy->worker =3D kthread_create_worker_on_cpu(cpu, 0, "policy_worker%=
-d", cpu);
-> +	if (IS_ERR(policy->worker)) {
-> +		dev_err(dev, "Failed to create policy_worker%d\n", cpu);
-> +		goto err_max_qos_notifier;
-> +	}
-> +
-> +	sched_set_fifo_low(policy->worker->task);
->  	INIT_LIST_HEAD(&policy->policy_list);
->  	init_rwsem(&policy->rwsem);
->  	spin_lock_init(&policy->transition_lock);
->  	init_waitqueue_head(&policy->transition_wait);
-> -	INIT_WORK(&policy->update, handle_update);
-> +	kthread_init_work(&policy->update, handle_update);
-> =20
->  	policy->cpu =3D cpu;
->  	return policy;
-> =20
-> +err_max_qos_notifier:
-> +	freq_qos_remove_notifier(&policy->constraints, FREQ_QOS_MAX,
-> +				 &policy->nb_max);
->  err_min_qos_notifier:
->  	freq_qos_remove_notifier(&policy->constraints, FREQ_QOS_MIN,
->  				 &policy->nb_min);
-> @@ -1353,7 +1363,9 @@ static void cpufreq_policy_free(struct cpufreq_poli=
-cy *policy)
->  				 &policy->nb_min);
-> =20
->  	/* Cancel any pending policy->update work before freeing the policy. */
-> -	cancel_work_sync(&policy->update);
-> +	kthread_cancel_work_sync(&policy->update);
-> +	if (policy->worker)
-> +		kthread_destroy_worker(policy->worker);
-> =20
->  	if (policy->max_freq_req) {
->  		/*
-> @@ -1802,7 +1814,7 @@ static unsigned int cpufreq_verify_current_freq(str=
-uct cpufreq_policy *policy, b
-> =20
->  		cpufreq_out_of_sync(policy, new_freq);
->  		if (update)
-> -			schedule_work(&policy->update);
-> +			kthread_queue_work(policy->worker, &policy->update);
->  	}
-> =20
->  	return new_freq;
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 20f7e98ee8af..73029daddfc5 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -20,6 +20,7 @@
->  #include <linux/spinlock.h>
->  #include <linux/sysfs.h>
->  #include <linux/minmax.h>
-> +#include <linux/kthread.h>
-> =20
->  /*********************************************************************
->   *                        CPUFREQ INTERFACE                          *
-> @@ -77,8 +78,9 @@ struct cpufreq_policy {
->  	void			*governor_data;
->  	char			last_governor[CPUFREQ_NAME_LEN]; /* last governor used */
-> =20
-> -	struct work_struct	update; /* if update_policy() needs to be
-> +	struct kthread_work	update; /* if update_policy() needs to be
->  					 * called, but you're in IRQ context */
-> +	struct kthread_worker *worker;
-> =20
->  	struct freq_constraints	constraints;
->  	struct freq_qos_request	*min_freq_req;
+Ulf Hansson (6):
+  OPP: Fix support for required OPPs for multiple PM domains
+  OPP: Rework _set_required_devs() to manage a single device per call
+  pmdomain: core: Manage the default required OPP from a separate
+    function
+  OPP/pmdomain: Set the required_dev for a required OPP during genpd
+    attach
+  pmdomain: core: Drop the redundant dev_to_genpd_dev()
+  OPP: Drop redundant code in _link_required_opps()
+
+ drivers/opp/core.c        | 182 ++++++++++++++++++--------------------
+ drivers/opp/of.c          |  39 +-------
+ drivers/opp/opp.h         |   4 +-
+ drivers/pmdomain/core.c   | 107 +++++++++++++++++-----
+ include/linux/pm_domain.h |   6 --
+ include/linux/pm_opp.h    |  10 ++-
+ 6 files changed, 183 insertions(+), 165 deletions(-)
+
+-- 
+2.34.1
 
 
