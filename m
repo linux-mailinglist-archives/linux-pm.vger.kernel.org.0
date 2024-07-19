@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-11248-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11249-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B96199375AD
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2024 11:27:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52F3D9375B1
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2024 11:28:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC6CA1C20FD8
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2024 09:27:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91C22B227A5
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2024 09:28:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB15280C0C;
-	Fri, 19 Jul 2024 09:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5BD280C0C;
+	Fri, 19 Jul 2024 09:27:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="EFUNICHH"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="RSh5Jrav"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2084.outbound.protection.outlook.com [40.107.237.84])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2058.outbound.protection.outlook.com [40.107.236.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC207CF30;
-	Fri, 19 Jul 2024 09:27:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1039555769;
+	Fri, 19 Jul 2024 09:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.58
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721381228; cv=fail; b=lSdF/M+n7l6YR1UNJxQ5GZ+kezIkgj+VQl7ObWUJ5s+lZAykaFz1jQl0buByTC3EmVAGii4cJM5sXVS8ukrbmHJ6qdlBNX9DHn5fiTgrf/7MHbNaqHpNtNhIvVB+wJeYUvrkcXPMjbaSjWz31YVDDPdip5fde9UAjewanW1/WlU=
+	t=1721381277; cv=fail; b=nMqk5iRmIt6ElXwbZ5j32u/p5F1p8dlZIwem+5VCTywe4rqaURBEgbhni3MkVGOJ4JQoC5e5a4u2LoTUxi/BWRt0s/Aqk8AnL7bLLIRqq6fkgL4hj0L+Tl4ofaeJqTmsgA/KTJdDEgnzqnqPrMlWrP9Pnxnj6T5TEGyR5uPhoXE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721381228; c=relaxed/simple;
-	bh=W1rfPuI2Ps76fwniubH9otaxlgyzPkIhOmDSsuotpcE=;
+	s=arc-20240116; t=1721381277; c=relaxed/simple;
+	bh=De2+nqgQnlomAEL78IlpI06+cIGsmRvwpK6sQpZas8c=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a3l3XktWoruMYhnMeuWAyaUc1/vaCeIKBzz9+m1Z7wJoIM0IHSNR6IUF3p2NBHGJyFQMGK5AOR0mP3V0jEVM/cfl02fPbg5RrtUOp8jwoOR0vuRGObsaL4OjkxeTmJZ9+3xa12vaQ/Wv9QLfcVK36WDZ4173GzyvvWz5YtjduaU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=EFUNICHH; arc=fail smtp.client-ip=40.107.237.84
+	 MIME-Version:Content-Type; b=k8F9dZfrktocokbdf+FHCE1hJY7jFhoyFA2krLpeTK1vSBFs1dDkebzw2j9wLm3rWfwA0PEGJ2PEdfB9DYxaOU8Zsso+BXmkFGnTZEf6oD4NapywBy5WOwZ0bHb4eVkkD7iw/lWh3F4H34q366vGSYc2h9K5FLf+G6Pm+z7t+wk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=RSh5Jrav; arc=fail smtp.client-ip=40.107.236.58
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=f9fy7wGvgKSxsnHGhg65MZ+NKDGl6CIlIfsJpiGRybssERoOGbh/yArGN6EIzK+jvx+GDFnjQ9/1WnsXFuLoUOsLVITxbE/9A2lqkPFNTjCLxwiH1pi1jQMAwHwDh1BtWrj9Z9Zj/0IjbnNN+ilcWHq0sUwM703hcS+wzgjfI/C1bidRrKRYpdFNxjERbfx4jbC35pUNzxv2RMiNSBL49HgGFMDYI+i8p35DxvSM1ku0Z+KDT6z/3hKm9evTvnEZ8g0rTNOvg+s7XFZFKGxLVe76/t5Nj/mwXzyebVzj5zvdw42nVCiA+V5eBS3umXAT4gse/ZS9tybEnSW/DXg/FQ==
+ b=b6KgUkb8TnnzXkd2NNaXFiTj9Wvj6FgZbdVcOywvqIdpj2790NGyP/1qki36AJ9WirvpJDZhIFb45qiEfjoiukaZpCCct4efLisUqjWOsvuNQD4sfe5viwr+wrTuzPZBu1mzlXjivepHQjmKKu6TmmGatXrJiHAfjPv3e0gZ9BiOxquR0Aj+pN4+msjJP27Z2+nQBBIypolYF/Szp/h9xWN3xLxEFiiuG85rP4tCw5pWBzyHyZONb1T7eZJkACtiIq4Xy/RZ/g88fqJwTo4bL4Zl1iG21PMwp/Y3CRRMB6ff+3s8hXyI+f7kD62AvHQkfpxpo1qy8SH49AIn+j5n+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Hns6iUpnsStGaUm73S7UEvM3rUovbwY6xB2r8Qg1BFw=;
- b=tu2Kj8SlV2ezMCVOGqowjKcV/iQ57fov4vZZjAxjMRnJIUhAEu2Ur2nHBheb+KGy5xzubsVS3TgrP3zP4uyhYmyxJu48wYWWkhAps2ZaKOpK2jpt6H8W93ubCFSe7kt7h7An2GpcqlvAVk/lo169y6VD8jvwohyGEdoRqhB73okw0sL8MU2D8+CHhP53eW/ZYVvzdgRqiD6XZDr/+AychakGtJvnhsQlBoyTGRfMO+WMox97tVjZvdbgciySXc/At3cJtgVTzsR0SRKRdky6rdhspkCcvm6j3uYJliIJynVsWqaRaP5+X8pn4ojVOdjNNTg6AA9sJC8oi+ROASjRQA==
+ bh=CSJ7tNvUspHjJs8Xn06jhcj7534DAqAuRIal2aoVMKw=;
+ b=OgZgmqkjLI6iwEfSHJw/RF22kIJ1XyNMasXUlLVuYtldUgl0c4FtEtJm086ac6dE1BzREiY6c/l1VTF+HlCSmbn7g2BdgtZXW4DKpdFkF+jFfjqsE9k8YoQl9RsHph8q3dj/2LyllBLskPa5NxFvoSvuibaWyET0oMvlleFUsF2EsNso6xZTshG6iUdwMi3/Puvy3USvFhHGgP9dQZDEa0SVJf4wN1JgwlcUiBOBO3Ph7SAplBawDBdkFEQdRr9lUzRiTdURYaz8SRta3Yz7GMzT/wo6cvvPMRJBf3svH4bsrXKiZhpZ0pKV/IP6TVFaWzgJzh8KXz7ODmqW3oHTdw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hns6iUpnsStGaUm73S7UEvM3rUovbwY6xB2r8Qg1BFw=;
- b=EFUNICHHb2Y1vmm28ehjridK1l7vxm5siuG21mHD90vz87XT+U9AiKpHYezlc+HRfDN6A0lJUVVe+BIJjQ0UjYtvQx1XvyD0+G4D23Edrtr3yWmBW71zjcdYaePcTBaHCXuif7S7iu01pwexBsGZ9BxIohFogHYi3UCWwCbFCRQ=
-Received: from SA0PR11CA0060.namprd11.prod.outlook.com (2603:10b6:806:d0::35)
- by SN7PR12MB6713.namprd12.prod.outlook.com (2603:10b6:806:273::8) with
+ bh=CSJ7tNvUspHjJs8Xn06jhcj7534DAqAuRIal2aoVMKw=;
+ b=RSh5Jrav69f+bFeq1+mAhZhtpQ2NuB3cPRegk8m83B08LvyuABAR+TAwLlcknF6TJfcz2o20ultG4TL3bEuOvvMcy4VWjUDopvgeoguyvy8f4mf155l+YJGKOPNVl4Y46KYFhZRMmctEAOsOEQGP1+gKXy4I3PaEY5nmdujPC6Q=
+Received: from SN7P220CA0013.NAMP220.PROD.OUTLOOK.COM (2603:10b6:806:123::18)
+ by PH7PR12MB7842.namprd12.prod.outlook.com (2603:10b6:510:27a::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.29; Fri, 19 Jul
- 2024 09:27:03 +0000
-Received: from SA2PEPF00003AE8.namprd02.prod.outlook.com
- (2603:10b6:806:d0:cafe::2f) by SA0PR11CA0060.outlook.office365.com
- (2603:10b6:806:d0::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.29 via Frontend
- Transport; Fri, 19 Jul 2024 09:27:03 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.18; Fri, 19 Jul
+ 2024 09:27:53 +0000
+Received: from SA2PEPF00003AE4.namprd02.prod.outlook.com
+ (2603:10b6:806:123:cafe::6) by SN7P220CA0013.outlook.office365.com
+ (2603:10b6:806:123::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.18 via Frontend
+ Transport; Fri, 19 Jul 2024 09:27:53 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +63,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- SA2PEPF00003AE8.mail.protection.outlook.com (10.167.248.8) with Microsoft
+ SA2PEPF00003AE4.mail.protection.outlook.com (10.167.248.4) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7784.11 via Frontend Transport; Fri, 19 Jul 2024 09:27:02 +0000
+ 15.20.7784.11 via Frontend Transport; Fri, 19 Jul 2024 09:27:52 +0000
 Received: from shatadru.amd.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 19 Jul
- 2024 04:26:56 -0500
+ 2024 04:27:46 -0500
 From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
 To: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
 	<namhyung@kernel.org>, <mark.rutland@arm.com>,
@@ -80,10 +80,11 @@ To: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
 CC: <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<linux-pm@vger.kernel.org>, <ananth.narayan@amd.com>,
 	<gautham.shenoy@amd.com>, <kprateek.nayak@amd.com>, <ravi.bangoria@amd.com>,
-	<sandipan.das@amd.com>, <Dhananjay.Ugwekar@amd.com>
-Subject: [PATCH 1/2] perf/x86/rapl: Fix the energy-pkg event for AMD CPUs
-Date: Fri, 19 Jul 2024 09:25:45 +0000
-Message-ID: <20240719092545.50441-2-Dhananjay.Ugwekar@amd.com>
+	<sandipan.das@amd.com>, <Dhananjay.Ugwekar@amd.com>, Michael Larabel
+	<michael@michaellarabel.com>
+Subject: [PATCH 2/2] powercap/intel_rapl: Fix the energy-pkg event for AMD CPUs
+Date: Fri, 19 Jul 2024 09:25:46 +0000
+Message-ID: <20240719092545.50441-3-Dhananjay.Ugwekar@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240719092545.50441-1-Dhananjay.Ugwekar@amd.com>
 References: <20240719092545.50441-1-Dhananjay.Ugwekar@amd.com>
@@ -99,98 +100,105 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
  (10.181.40.144)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00003AE8:EE_|SN7PR12MB6713:EE_
-X-MS-Office365-Filtering-Correlation-Id: b7b63bec-93b5-4762-95fa-08dca7d4f2a5
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003AE4:EE_|PH7PR12MB7842:EE_
+X-MS-Office365-Filtering-Correlation-Id: 36bc9582-ce49-4d1f-73a6-08dca7d510a4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|1800799024|36860700013|376014|82310400026|921020;
+	BCL:0;ARA:13230040|1800799024|7416014|376014|82310400026|36860700013|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?07Ua3secpOOq3q+EbT+lqIEMd3MJofWgyukDDOCRTmGiInA7bMwPaOuEPaJY?=
- =?us-ascii?Q?fHIwTE5duWDHKGNTlZLjRW9yvB1lLBuMV3c9D0BiKbzA9+85ny0a0zcCkBLV?=
- =?us-ascii?Q?Beiz8+ufdR9V/KeWQhqKhvegautC8Sl+qE3bwlIzV645E6GoA2rCg5CiK2AE?=
- =?us-ascii?Q?mButRGVw+lVYiyUolFBJ8qgTkeUYLV6KqYlx5DrCD+yNb9eTHLx1YmAJW+l6?=
- =?us-ascii?Q?TAFNWNe5+CNtSP3jAC8c82SZHhCbiu+JjBNxLKuIcXwgUVO9TX1t6B1xhN/c?=
- =?us-ascii?Q?vd3x1UzSYV4qYFnDEOf8Ac1rEZuTQvPESslZMQm7RmdtqVt9YxE6Lh0DtWSR?=
- =?us-ascii?Q?/B56frOMe7InqV8X1R6lR7QOUMTQsWdntxy8s6dVmBLm8lrnMNDf812Va4wp?=
- =?us-ascii?Q?zQzH/A8orQJXhH4mNMHWtylrWbkqsodGsR4oiyACxW9vcLD4wYP5cRqw1fzf?=
- =?us-ascii?Q?Ue/RaleMMvh49jM5Lm2qmyZYa7uKrhufNJEBxWmUsQe8430bfKYBoUpPabvV?=
- =?us-ascii?Q?+1mDK5MadCQvvAceHtm/ysQCVY8V2+KCYtp0uKo5IvoGEDCX5k+2GOi6CTMx?=
- =?us-ascii?Q?8bniq3yyUyT9pVwn/P5OtU4ahyhkTMk2QIZ0+cXpfiRdKgpHCiAGa2XrybvD?=
- =?us-ascii?Q?1qoyJ9DMC8j5MBlBI/n9sX+oz+ksECLZZIxhEfjtdp6L1WseRw2gRWLojCjm?=
- =?us-ascii?Q?l2QZQH79XyX51Svi0CK+d0s+9wHyLjaxdYFjw0tXX6qVdMsOVXjTMPho1vzE?=
- =?us-ascii?Q?MYOxxHXRkLj2Sr5F3HnVcLxWh1ld3kMZ9gC8Rm3UKhcdu2LFquD5soFOHrNd?=
- =?us-ascii?Q?MavtDM3FDpWkqN8qZI9bn6nFaS+ENxaAKx8r8VeW35zyN/XHTeh4kL46Bgxj?=
- =?us-ascii?Q?cX6LUHflZCPsYRrxW0YOsXIufvUCXIS6OlSHnbX5yfO3A6XuUjixIx6JEYlo?=
- =?us-ascii?Q?Bbe+5JBNwU9icL47IioKlle/9VQwF0YJcLYB/a1JdHDENpY2/Txtsnrx8amy?=
- =?us-ascii?Q?n5GYSCpiMQ4WRCoCiFyoYpsRQVtuMG0xBbkQNtO2eE1/dIG8wfikMLtwoVmX?=
- =?us-ascii?Q?aKVQ6Yx/gSDOKvsnzIZFIpFh9f3fqY9A28JgGw0WN2iJvXkh4SKXQ/1zfC90?=
- =?us-ascii?Q?qVnI1yulNuDQWsdgdSAtFN2HoGJn93f/sOYBpHRrUoGWCFd6drPccSVUYI4h?=
- =?us-ascii?Q?PqmS90qu8xTBZWa22nVbbiz6N5yERyCVI2LIClyAYGIl/v2u8dpdRt1kB59D?=
- =?us-ascii?Q?+cbNgoV1Hd5YgGCSPKDbzvY8eOo72OVnRlrGd7GAw7UE3Z6qQiWwScpUiowA?=
- =?us-ascii?Q?pnLTeE/pSh+rLwJniupcJJzQnTs6pa4B4PmPas+7HIPf+wNQojZ/Xroogqq1?=
- =?us-ascii?Q?C1cwTuPQCOHuchOD1CaraOS7i0mqP4mRfv/u9Vk58rFUb7zySgyx0siPOet4?=
- =?us-ascii?Q?f35lT3PcIOLCplL9Dg6Kp7fijT0tN4XaZW0U2oY3z1vUiijuOyVRkg=3D=3D?=
+	=?us-ascii?Q?3rAOs6mTRebPTJ/YiwA7cwH1ZtFWakwOum9EEeU4UfVIGFt7gvhmnhRhpWsJ?=
+ =?us-ascii?Q?w9gyU78z1144qemtUmsFTHdNCyGIVQ0xYfjnOZohsfy8kyYAWepGFNi0cbeD?=
+ =?us-ascii?Q?E1kl64SlP07++TwKO3+CS9ccrVrOMT765kdXPRGIQPq+XWnMNA/2Tf3q/NFr?=
+ =?us-ascii?Q?BNAptXIgPecrs9aOZUPSy/9Jqp9RrzOofCTkLUU2UvLRiBVOHhIxgWcwN3fu?=
+ =?us-ascii?Q?jXfrFuDt4GQ4bskHMduYuJqHH5zKfpt7BSOSA7bUUjAzTwomkpYkdknZMNMQ?=
+ =?us-ascii?Q?Sma42TsmoyJK05cVWOWqEg2hL2SWY+Qqs/7ftm1Ge+at/+FiNHd1zgr3iFfx?=
+ =?us-ascii?Q?uCgh9cEkyXnQllQx6k7chLo8QdFBd+K0g0TpeHJicw2gd9UhBSMoQ8lvE1vZ?=
+ =?us-ascii?Q?ghEhSkLH6OaRZhnviUNHNDpEUBCxSLfIvsVHPic0IKyT38/rVTfJHp2r0tpS?=
+ =?us-ascii?Q?8S52ft/76tgulZXgvC4nj09RlyTCffEcYxQAjDxuJ//U6WwiO5ZfBgq/2Rbe?=
+ =?us-ascii?Q?dzX5cwO4tBy8kyYD/zfA83qr3cAWWTF8kzwZ9ExudE8I98PEBwRUaaxm6KDZ?=
+ =?us-ascii?Q?XBYdVxp3Q2ECA/bbAcgw4SHUWahN9nuOO84nFWkWDDTRZUSc2z1j073f7qUW?=
+ =?us-ascii?Q?3b8shI+mmNZPi0qKc4dsQs4IyttZR3zxRvsf2DkK1xt8ZIHQj4yusQsr3oMg?=
+ =?us-ascii?Q?9iJqcaS3amgbVZxrc+iRG+6TgmU8qKPnS+rpgryq7/vxpSeYWCXPaL9SYuBV?=
+ =?us-ascii?Q?C1Lu510FEQxVGzHz+CAJYMZ2dVozqA2OrmZK6vcCgdSXOY5LgShW/4/oflis?=
+ =?us-ascii?Q?Sb5qVeLEh01kBYMwRSk4S1t8MED6nxHDpn2JJPxr+6sS+QZylP72Nr7t0VkC?=
+ =?us-ascii?Q?rRnWaPGA/bKZ2sM0vE/y6Pvk9A0IF6gQSeGa3hIAdNIXIphYePN+qEHHLlPo?=
+ =?us-ascii?Q?rP5HbedpZmzl7OiHeozN9zIRcUi9MhgFp4J/H9qR0gZUEwnHwTZ46HV/0XWz?=
+ =?us-ascii?Q?yJiCws0gz8fepJnPkgX/bch8ZujeOelVtXaX8hecmGacS/rm6xuQxf752Rlf?=
+ =?us-ascii?Q?LYxy98c1h+56lIb4Iv7i895fxcmovrzUWggPkXMATUQvf2isfPFhlU4ZcF2A?=
+ =?us-ascii?Q?5AaJ4PBIkH47WuTfsNs/IFnHNUxZqW0IymXmSTV7UfnmmJ8XBi9OEr96Zudz?=
+ =?us-ascii?Q?0mzUOhZZQn+JbOZp49o3uKLziIBNptzZulWLKtAdxrg4XnNS3bluP18tra4d?=
+ =?us-ascii?Q?LDQZGebnH9W620rWFPQtsMPhaKHuSEbzVKGoOeDSsOcJsArhiVuPGFmADaYL?=
+ =?us-ascii?Q?Pv5M64m/KCw3XjWC1ekd5rFItt/pdHyTwkSzZ254gQk0AjqMYEA/3ZINxY4w?=
+ =?us-ascii?Q?aGwobH46T7+liJXNvdqpD4SOmX0lW0PD1SGtXg85uMAWVy51GW2OckFDG/sY?=
+ =?us-ascii?Q?q8DUo/ueHHajHnTi3WQWxg8NeqCeGqACP0Yl9hLxUEFCD2uShsf5YQ=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(36860700013)(376014)(82310400026)(921020);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(82310400026)(36860700013)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2024 09:27:02.4673
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2024 09:27:52.8072
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7b63bec-93b5-4762-95fa-08dca7d4f2a5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36bc9582-ce49-4d1f-73a6-08dca7d510a4
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00003AE8.namprd02.prod.outlook.com
+	SA2PEPF00003AE4.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6713
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7842
 
 After commit ("x86/cpu/topology: Add support for the AMD 0x80000026 leaf"),
 on AMD processors that support extended CPUID leaf 0x80000026, the
-topology_die_cpumask() and topology_logical_die_id() macros, no longer
-return the package cpumask and package id, instead they return the CCD
-(Core Complex Die) mask and id respectively. This leads to the energy-pkg
+topology_logical_die_id() macros, no longer returns package id, instead it
+returns the CCD (Core Complex Die) id. This leads to the energy-pkg
 event scope to be modified to CCD instead of package.
 
 For more historical context, please refer to commit 32fb480e0a2c
 ("powercap/intel_rapl: Support multi-die/package"), which initially changed
 the RAPL scope from package to die for all systems, as Intel systems
 with Die enumeration have RAPL scope as die, and those without die
-enumeration were not affected by it. So, all systems(Intel, AMD, Hygon),
-worked correctly with topology_logical_die_id() until recently, but this
-changed after the "0x80000026 leaf" commit mentioned above.
+enumeration are not affected. So, all systems(Intel, AMD, Hygon), worked
+correctly with topology_logical_die_id() until recently, but this changed
+after the "0x80000026 leaf" commit mentioned above.
 
 Replacing topology_logical_die_id() with topology_physical_package_id()
 conditionally only for AMD and Hygon fixes the energy-pkg event.
 
-On a 12 CCD 1 Package AMD Zen4 Genoa machine:
+On an AMD 2 socket 8 CCD Zen5 server:
 
 Before:
-$ cat /sys/devices/power/cpumask
-0,8,16,24,32,40,48,56,64,72,80,88.
 
-The expected cpumask here is supposed to be just "0", as it is a package
-scope event, only one CPU will be collecting the event for all the CPUs in
-the package.
+linux$ ls /sys/class/powercap/
+intel-rapl      intel-rapl:1:0  intel-rapl:3:0  intel-rapl:5:0
+intel-rapl:7:0  intel-rapl:9:0  intel-rapl:b:0  intel-rapl:d:0
+intel-rapl:f:0  intel-rapl:0    intel-rapl:2    intel-rapl:4
+intel-rapl:6    intel-rapl:8    intel-rapl:a    intel-rapl:c
+intel-rapl:e    intel-rapl:0:0  intel-rapl:2:0  intel-rapl:4:0
+intel-rapl:6:0  intel-rapl:8:0  intel-rapl:a:0  intel-rapl:c:0
+intel-rapl:e:0  intel-rapl:1    intel-rapl:3    intel-rapl:5
+intel-rapl:7    intel-rapl:9    intel-rapl:b    intel-rapl:d
+intel-rapl:f
 
 After:
-$ cat /sys/devices/power/cpumask
-0
+
+linux$ ls /sys/class/powercap/
+intel-rapl  intel-rapl:0  intel-rapl:0:0  intel-rapl:1  intel-rapl:1:0
+
+Only one sysfs entry per-event per-package is created after this change.
 
 Fixes: 63edbaa48a57 ("x86/cpu/topology: Add support for the AMD 0x80000026 leaf")
+Reported-by: Michael Larabel <michael@michaellarabel.com>
 Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
-Reviewed-by: Zhang Rui <rui.zhang@intel.com>
 ---
- arch/x86/events/rapl.c | 44 +++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 39 insertions(+), 5 deletions(-)
+ drivers/powercap/intel_rapl_common.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-index b985ca79cf97..6e81bb685f7c 100644
---- a/arch/x86/events/rapl.c
-+++ b/arch/x86/events/rapl.c
-@@ -103,6 +103,18 @@ static struct perf_pmu_events_attr event_attr_##v = {				\
- 	.event_str	= str,							\
- };
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index 3cffa6c79538..2f24ca764408 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -2128,6 +2128,18 @@ void rapl_remove_package(struct rapl_package *rp)
+ }
+ EXPORT_SYMBOL_GPL(rapl_remove_package);
  
 +/*
 + * Intel systems that enumerate DIE domain have RAPL domains implemented
@@ -204,95 +212,32 @@ index b985ca79cf97..6e81bb685f7c 100644
 +	(boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||	\
 +	 boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
 +
- struct rapl_pmu {
- 	raw_spinlock_t		lock;
- 	int			n_active;
-@@ -140,9 +152,25 @@ static unsigned int rapl_cntr_mask;
- static u64 rapl_timer_ms;
- static struct perf_msr *rapl_msrs;
+ /* caller to ensure CPU hotplug lock is held */
+ struct rapl_package *rapl_find_package_domain_cpuslocked(int id, struct rapl_if_priv *priv,
+ 							 bool id_is_cpu)
+@@ -2136,7 +2148,8 @@ struct rapl_package *rapl_find_package_domain_cpuslocked(int id, struct rapl_if_
+ 	int uid;
  
-+/*
-+ * Helper functions to get the correct topology macros according to the
-+ * RAPL PMU scope.
-+ */
-+static inline unsigned int get_rapl_pmu_idx(int cpu)
-+{
-+	return rapl_pmu_is_pkg_scope() ? topology_logical_package_id(cpu) :
-+					 topology_logical_die_id(cpu);
-+}
-+
-+static inline const struct cpumask *get_rapl_pmu_cpumask(int cpu)
-+{
-+	return rapl_pmu_is_pkg_scope() ? topology_core_cpumask(cpu) :
-+					 topology_die_cpumask(cpu);
-+}
-+
- static inline struct rapl_pmu *cpu_to_rapl_pmu(unsigned int cpu)
- {
--	unsigned int rapl_pmu_idx = topology_logical_die_id(cpu);
-+	unsigned int rapl_pmu_idx = get_rapl_pmu_idx(cpu);
+ 	if (id_is_cpu)
+-		uid = topology_logical_die_id(id);
++		uid = rapl_pmu_is_pkg_scope() ?
++		      topology_physical_package_id(id) : topology_logical_die_id(id);
+ 	else
+ 		uid = id;
  
- 	/*
- 	 * The unsigned check also catches the '-1' return value for non
-@@ -543,6 +571,7 @@ static struct perf_msr amd_rapl_msrs[] = {
+@@ -2168,9 +2181,10 @@ struct rapl_package *rapl_add_package_cpuslocked(int id, struct rapl_if_priv *pr
+ 		return ERR_PTR(-ENOMEM);
  
- static int rapl_cpu_offline(unsigned int cpu)
- {
-+	const struct cpumask *rapl_pmu_cpumask = get_rapl_pmu_cpumask(cpu);
- 	struct rapl_pmu *pmu = cpu_to_rapl_pmu(cpu);
- 	int target;
- 
-@@ -552,7 +581,7 @@ static int rapl_cpu_offline(unsigned int cpu)
- 
- 	pmu->cpu = -1;
- 	/* Find a new cpu to collect rapl events */
--	target = cpumask_any_but(topology_die_cpumask(cpu), cpu);
-+	target = cpumask_any_but(rapl_pmu_cpumask, cpu);
- 
- 	/* Migrate rapl events to the new target */
- 	if (target < nr_cpu_ids) {
-@@ -565,10 +594,12 @@ static int rapl_cpu_offline(unsigned int cpu)
- 
- static int rapl_cpu_online(unsigned int cpu)
- {
-+	const struct cpumask *rapl_pmu_cpumask = get_rapl_pmu_cpumask(cpu);
- 	struct rapl_pmu *pmu = cpu_to_rapl_pmu(cpu);
- 	int target;
- 
- 	if (!pmu) {
-+		unsigned int rapl_pmu_idx = get_rapl_pmu_idx(cpu);
- 		pmu = kzalloc_node(sizeof(*pmu), GFP_KERNEL, cpu_to_node(cpu));
- 		if (!pmu)
- 			return -ENOMEM;
-@@ -579,14 +610,14 @@ static int rapl_cpu_online(unsigned int cpu)
- 		pmu->timer_interval = ms_to_ktime(rapl_timer_ms);
- 		rapl_hrtimer_init(pmu);
- 
--		rapl_pmus->pmus[topology_logical_die_id(cpu)] = pmu;
-+		rapl_pmus->pmus[rapl_pmu_idx] = pmu;
- 	}
- 
- 	/*
- 	 * Check if there is an online cpu in the package which collects rapl
- 	 * events already.
- 	 */
--	target = cpumask_any_and(&rapl_cpu_mask, topology_die_cpumask(cpu));
-+	target = cpumask_any_and(&rapl_cpu_mask, rapl_pmu_cpumask);
- 	if (target < nr_cpu_ids)
- 		return 0;
- 
-@@ -675,7 +706,10 @@ static const struct attribute_group *rapl_attr_update[] = {
- 
- static int __init init_rapl_pmus(void)
- {
--	int nr_rapl_pmu = topology_max_packages() * topology_max_dies_per_package();
-+	int nr_rapl_pmu = topology_max_packages();
-+
-+	if (!rapl_pmu_is_pkg_scope())
-+		nr_rapl_pmu *= topology_max_dies_per_package();
- 
- 	rapl_pmus = kzalloc(struct_size(rapl_pmus, pmus, nr_rapl_pmu), GFP_KERNEL);
- 	if (!rapl_pmus)
+ 	if (id_is_cpu) {
+-		rp->id = topology_logical_die_id(id);
++		rp->id = rapl_pmu_is_pkg_scope() ?
++			 topology_physical_package_id(id) : topology_logical_die_id(id);
+ 		rp->lead_cpu = id;
+-		if (topology_max_dies_per_package() > 1)
++		if (!rapl_pmu_is_pkg_scope() && topology_max_dies_per_package() > 1)
+ 			snprintf(rp->name, PACKAGE_DOMAIN_NAME_LENGTH, "package-%d-die-%d",
+ 				 topology_physical_package_id(id), topology_die_id(id));
+ 		else
 -- 
 2.34.1
 
