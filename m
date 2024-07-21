@@ -1,193 +1,270 @@
-Return-Path: <linux-pm+bounces-11269-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11270-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C20ED9382D6
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Jul 2024 23:00:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84D4293833F
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Jul 2024 04:06:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 774942818DC
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Jul 2024 21:00:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66FD72813B3
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Jul 2024 02:06:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42059148FED;
-	Sat, 20 Jul 2024 20:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TbsGy1PW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3459F139D;
+	Sun, 21 Jul 2024 02:06:16 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8BB12C53D;
-	Sat, 20 Jul 2024 20:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+Received: from spindle.queued.net (spindle.queued.net [45.33.49.30])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A0001396;
+	Sun, 21 Jul 2024 02:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.33.49.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721509196; cv=none; b=Z3yOx19IOxPWpUB9/iTdVDMJbwF05rb1WCqAgy4wb/Ko3SgweTWjSBcG86N8ryagAtWzdtpFGnPRwpGGfRlf+uhqbYW20n1zOlfezWb64kJZJfQZyJZGXxOGS1nERvIB54KzBF+XA4MdRUxKFKCh8cXLrLrXJgfI1BN+gawleNY=
+	t=1721527576; cv=none; b=Dmrkjth9YIJ9oyoifjipo5ctWewdltu99yUr3wzITeNF4QDLQrsXONTFFzekz5na+KFnLBGNu4ZjIOGJstqXnawexYPCtwEw4fbbTEbiW5LhlKsz1F+fQQlfHksPy1eM6mxG047kjGlGo8jvvIDNTzoL6zMjc8R4pI8DMRUJPBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721509196; c=relaxed/simple;
-	bh=SlGKA4DV6FGnIBjWZGbtVj/JmqmMFy0wLQN7pXsLwSA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gpUDJ3HPbNF+qjCW9wNubD+EX1NWAV2FAuF2KLTXiECVZkquj3FP6uckM7zyKt2XA9F/9i0xX6qy4gsDOlFGywNS93W/iTBmNYTzIIRUhFMNmSROFPh8T/YpbIgtv51ThA2IZMZWzuL1SlZ22blcylmcoh+kJPGpRIiGXBNnlbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TbsGy1PW; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a77e6dd7f72so309692066b.3;
-        Sat, 20 Jul 2024 13:59:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721509193; x=1722113993; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=67Vuv3zAuzzgj+Keqr3OaB52OBKHkioKfqjoF6CFvfk=;
-        b=TbsGy1PWRmGD+b9EnEgVYMXtD039XbPVq/K+O6NJteqyQyu6zjr0DHTRdKONT8nY8g
-         3D5uAcM7hz3fnkhFT+6bi6aZk8hX1SdGiJyEUOn31DZ5RKzNZQFGjo2Uh6bqELWY20IA
-         400PcVG5JAyv8Z/Yl/N/lTtFbSsBTMPfZp9GN3NkQpvXyT8JyZMz5tfN3QpSzhppBfyo
-         E1R+VFY9Z2KdOKKS7oafbZAWoE2/rObreTN6kNwmUdhxf9AcTbSyw93lou6KHYzKanUj
-         Cs3lNntNYGzo28h1BddDDWKh+rUC3LBsq7MmCQWD6udFJmDsorwaf7/yykgKpxZi6/Ud
-         Y3Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721509193; x=1722113993;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=67Vuv3zAuzzgj+Keqr3OaB52OBKHkioKfqjoF6CFvfk=;
-        b=aau9NUJSoBq0bsrzqRUYWiqraNO0kRCAJEVeFvngPUiRlWmJB7tVuDJCQ4lD29reGO
-         SxyGBxsbEyvZ0Kj7P2E6XfcU/2/cyZmOBWXHXFgNY1shj8Nc1dJxRyYBBzNmHN38B+Rx
-         f4rQNPbb375BM3Nx28jIOGRaQP9QczqqlolmqCJGNQNTjERwtiBguLTqBfQl99YFnuHz
-         +JHyqY3SF2agz9ZHZWvD3K3bX67P015mxLR9mEzddbzWGJySQIjpu+IIE0EEopKiOn33
-         CRoeGGhqGVvZ5/eQc8ys69iLsBlvOstxu9zz2R7HUC/IX3/MYjUl286g4fnN1+4P8qG7
-         v+uw==
-X-Forwarded-Encrypted: i=1; AJvYcCVrW169zmLneJRbDEAov49CKvVrbt1Apz0rHnPgAt4Yo/pFotF0DabDC5m+qSZ7IwS1yzBBUj1OT1ViXPGk7iL/hPzvdWqwPF3h1iEEHzo6oPMdJyfbII6XCZ3AadHbcNeEMV9qDp+JvSwWF8ohhWsT82Za6zQ3hmE+uBj3YWGsTTuwKDVpcR21/2o6uQKyFrC+S5IA3OsylJJ+ab/o8+c0LCPU4wU=
-X-Gm-Message-State: AOJu0Yz95crVjLrm5gsmpjeZjFuxfIZ7yhXaU5dV5NQytQTV1xcdiPs5
-	QQHFidvlJxVH2+VI9dRr0D64AWypGQtN+wrdGTlJx8ekBMz8UeHj
-X-Google-Smtp-Source: AGHT+IHNEdJBvRJKbVIo+S/5Nm83uuH67pFaqEGP4SVw6APoYnJr7dz8GhawOqOHKw4QK8uU3/hYjw==
-X-Received: by 2002:a17:907:3dab:b0:a72:60e2:bdf with SMTP id a640c23a62f3a-a7a4c22636bmr173086166b.50.1721509192460;
-        Sat, 20 Jul 2024 13:59:52 -0700 (PDT)
-Received: from [192.168.0.37] (082139000187.radom.vectranet.pl. [82.139.0.187])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7a3c8bea1fsm205169266b.111.2024.07.20.13.59.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 20 Jul 2024 13:59:52 -0700 (PDT)
-Message-ID: <9eedeaa3-ceda-427a-80d8-de6b59eb1f4d@gmail.com>
-Date: Sat, 20 Jul 2024 22:59:50 +0200
+	s=arc-20240116; t=1721527576; c=relaxed/simple;
+	bh=j6wDrTm4fG5Noo6HKl4B9hE3bi5WT6wHqEMyqQNgyCI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=G2ShFcyBWQpAzNI7tVggt2nHfba/ehDYT+yvF5aEmyV9g+SreeEE/5454XmhppTNabM+7pqK/At9lDfcMf86kRPgUoN9ae+SHXYCFhPdrouEcAUoEwIaMgjzMfytDwQA7ceJ0Q8WUgIoxoh6YdYoIbAheM9AQ9SDuGVDac9pwEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=queued.net; spf=pass smtp.mailfrom=queued.net; arc=none smtp.client-ip=45.33.49.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=queued.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queued.net
+Received: by spindle.queued.net (Postfix, from userid 1001)
+	id E9C1B11594C; Sat, 20 Jul 2024 22:06:13 -0400 (EDT)
+Received: from 5400 (unknown [172.56.164.186])
+	by spindle.queued.net (Postfix) with ESMTPSA id 75D4011593F;
+	Sat, 20 Jul 2024 22:06:10 -0400 (EDT)
+Date: Sat, 20 Jul 2024 22:06:06 -0400
+From: Andres Salomon <dilinger@queued.net>
+To: Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc: linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ Matthew Garrett <mjg59@srcf.ucam.org>, Sebastian Reichel <sre@kernel.org>,
+ Hans de Goede <hdegoede@redhat.com>, Ilpo =?UTF-8?B?SsOkcnZpbmVu?=
+ <ilpo.jarvinen@linux.intel.com>, linux-pm@vger.kernel.org,
+ Dell.Client.Kernel@dell.com, Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH] platform/x86:dell-laptop: Add knobs to change battery
+ charge settings
+Message-ID: <20240720220606.1934df43@5400>
+In-Reply-To: <20240720095507.uyaotkofkyasdgbd@pali>
+References: <20240720012220.26d62a54@5400>
+	<20240720084019.hrnd4wgt4muorydp@pali>
+	<20240720052419.73b1415a@5400>
+	<20240720095507.uyaotkofkyasdgbd@pali>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/9] power: supply: max77693: Add USB extcon detection
- for enabling charging
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Chanwoo Choi <cw00.choi@samsung.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- ~postmarketos/upstreaming@lists.sr.ht, Henrik Grimler <henrik@grimler.se>,
- Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
- Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
-References: <20240715-max77693-charger-extcon-v2-0-0838ffbb18c3@gmail.com>
- <20240715-max77693-charger-extcon-v2-6-0838ffbb18c3@gmail.com>
-Content-Language: en-US
-From: Artur Weber <aweber.kernel@gmail.com>
-In-Reply-To: <20240715-max77693-charger-extcon-v2-6-0838ffbb18c3@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Bogosity: Ham, tests=bogofilter, spamicity=0.000000, version=1.2.5
 
-On 15.07.2024 14:55, Artur Weber wrote:
-> Add a device tree property, "maxim,usb-connector", that can be used to
-> specify a USB connector to use to detect whether a charging cable has
-> been plugged in/out, and enable/disable charging accordingly.
-> 
-> To accommodate this, also add an internal pointer to the CHARGER regulator,
-> which is used to enable/disable charging and set the input current limit
-> (which will be done in subsequent commits).
-> 
-> The extcon listener/worker implementation is inspired by the rt5033_charger
-> driver.
-> 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ...> diff --git a/drivers/power/supply/max77693_charger.c 
-b/drivers/power/supply/max77693_charger.c
-> index 0ddaa03669a2..2dc273dd96ee 100644
-> --- a/drivers/power/supply/max77693_charger.c
-> +++ b/drivers/power/supply/max77693_charger.c
-> ...
-> +static int max77693_set_charging(struct max77693_charger *chg, bool enable)
-> +{
-> +	int is_enabled;
-> +	int ret = 0;
-> +
-> +	is_enabled = regulator_is_enabled(chg->regu);
-> +	if (is_enabled < 0)
-> +		return is_enabled;
-> +
-> +	if (enable && !is_enabled)
-> +		ret = regulator_enable(chg->regu);
-> +	else if (!enable && is_enabled)
-> +		ret = regulator_disable(chg->regu);
-> +
-> +	return ret;
-> +}
+On Sat, 20 Jul 2024 11:55:07 +0200
+Pali Roh=C3=A1r <pali@kernel.org> wrote:
 
-Nevermind, the regulator-based approach simply doesn't work here, 
-because we pretty frequently end up in a situation like this:
+> On Saturday 20 July 2024 05:24:19 Andres Salomon wrote:
+> > Thanks for the quick feedback! Responses below.
+> >=20
+> > On Sat, 20 Jul 2024 10:40:19 +0200
+> > Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> >  =20
+> > > Hello,
+> > >=20
+> > > I looked at your patch. I wrote some comments below. The main issue is
+> > > how to correctly interpret read token values.
+> > > =20
+[...]
+> > > > +
+> > > > +static ssize_t charge_type_show(struct device *dev,
+> > > > +		struct device_attribute *attr,
+> > > > +		char *buf)
+> > > > +{
+> > > > +	enum battery_charging_mode mode;
+> > > > +	ssize_t count =3D 0;
+> > > > +
+> > > > +	for (mode =3D DELL_BAT_MODE_STANDARD; mode < DELL_BAT_MODE_MAX; m=
+ode++) {
+> > > > +		if (battery_state[mode]) {
+> > > > +			count +=3D sysfs_emit_at(buf, count,
+> > > > +				mode =3D=3D bat_chg_current ? "[%s] " : "%s ",
+> > > > +				battery_state[mode]);
+> > > > +		}
+> > > > +	}
+> > > > +
+> > > > +	/* convert the last space to a newline */
+> > > > +	count--;
+> > > > +	count +=3D sysfs_emit_at(buf, count, "\n");   =20
+> > >=20
+> > > Here is missing protection in the case when number of valid modes is
+> > > zero, so count is 0 and buf was untouched.
+> > >  =20
+> >=20
+> > This will never be zero (based on the hardcoded value of DELL_BAT_MODE_=
+MAX), =20
+>=20
+> Now I see. You are iterating over members of constant array battery_state=
+[].
+> I overlooked it and I thought that this iteration over mode values.
+>=20
+> What about writing the for- conditions to be visible that you are
+> iterating over the array? E.g.
+>=20
+> 	size_t i;
+> 	...
+> 	for (i =3D 0; i < ARRAY_SIZE(battery_state); i++) {
+> 		if (!battery_state[i])
+> 			continue;
+> 		count +=3D sysfs_emit_at(buf, count, i =3D=3D bat_chg_current ? "[%s] "=
+ : "%s ", battery_state[i]);
+> 	}
+> 	...
+>=20
+> This has an advantage that you do not depend on DELL_BAT_MODE_MAX value,
+> compiler will calculate upper bound automatically.
+>=20
+> Or another way. You can define array of tokens, like it is done for
+> keyboard backlight. See how the array kbd_tokens[] is used.
+>=20
+> With this approach you can completely get rid of the DELL_BAT_MODE_MAX.
+>=20
 
-[   20.162612] ------------[ cut here ]------------
-[   20.162618] WARNING: CPU: 0 PID: 29 at drivers/regulator/core.c:3015 
-_regulator_disable+0x140/0x1a0
-[   20.162645] unbalanced disables for CHARGER
-[   20.162649] Modules linked in: fuse brcmfmac_wcc hci_uart btintel 
-btbcm bluetooth snd_soc_midas_wm1811 st_accel_i2c st_sensors_i2c 
-st_accel_spi st_accel brcmfmac ecdh_generic st_sensors st_sensors_spi 
-ecc libaes brcmutil cfg80211 rfkill exynos_adc yamaha_yas530 
-industrialio_triggered_buffer kfifo_buf exynos_rng s5p_sss cm3323 
-industrialio
-[   20.162737] CPU: 0 PID: 29 Comm: kworker/0:2 Tainted: G        W 
-     6.10.0-postmarketos-exynos4 #82
-[   20.162747] Hardware name: Samsung Exynos (Flattened Device Tree)
-[   20.162754] Workqueue: events max77693_charger_extcon_work
-[   20.162770] Call trace:
-[   20.162778]  unwind_backtrace from show_stack+0x10/0x14
-[   20.162804]  show_stack from dump_stack_lvl+0x50/0x64
-[   20.162824]  dump_stack_lvl from __warn+0x94/0xc0
-[   20.162838]  __warn from warn_slowpath_fmt+0x120/0x1b4
-[   20.162855]  warn_slowpath_fmt from _regulator_disable+0x140/0x1a0
-[   20.162873]  _regulator_disable from regulator_disable+0x34/0x6c
-[   20.162890]  regulator_disable from 
-max77693_charger_extcon_work+0x1e4/0x268
-[   20.162907]  max77693_charger_extcon_work from 
-process_one_work+0x154/0x2dc
-[   20.162925]  process_one_work from worker_thread+0x250/0x438
-[   20.162941]  worker_thread from kthread+0x110/0x12c
-[   20.162958]  kthread from ret_from_fork+0x14/0x28
-[   20.162970] Exception stack(0xc18edfb0 to 0xc18edff8)
-[   20.162979] dfa0:                                     00000000 
-00000000 00000000 00000000
-[   20.162987] dfc0: 00000000 00000000 00000000 00000000 00000000 
-00000000 00000000 00000000
-[   20.162994] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[   20.162999] ---[ end trace 0000000000000000 ]---
-[   20.163007] max77693-charger max77693-charger: failed to set charging 
-(-5)
+See below for a question about charge_type_store() if we get rid of
+DELL_BAT_MODE_MAX.
 
-This can be reproduced by booting the device in with no cable plugged 
-in, then plugging in an OTG cable. It prints the warning on connect and 
-disconnect. More importantly, this prevents a switch to/from OTG mode in 
-the scenarios that print a warning. (I've also encountered some issues 
-with similar warnings being printed on unsuspend, but wasn't able to 
-reproduce them; I'm willing to assume they were related to plugging in 
-an OTG cable as the wakeup trigger.)
+> > but perhaps a static_assert or BUILD_BUG_ON to verify that the number of
+> > modes > 0? =20
+>=20
+> I think it is not needed.
+>=20
+> >    =20
+> > > > +
+> > > > +	return count;
+> > > > +}
+> > > > +
+> > > > +static ssize_t charge_type_store(struct device *dev,
+> > > > +		struct device_attribute *attr,
+> > > > +		const char *buf, size_t size)
+> > > > +{
+> > > > +	enum battery_charging_mode mode;
+> > > > +	const char *label;
+> > > > +	int ret =3D -EINVAL;
+> > > > +
+> > > > +	for (mode =3D DELL_BAT_MODE_STANDARD; mode < DELL_BAT_MODE_MAX; m=
+ode++) {
+> > > > +		label =3D battery_state[mode];
+> > > > +		if (label && sysfs_streq(label, buf))
+> > > > +			break;
+> > > > +	}
+> > > > +
+> > > > +	if (mode > DELL_BAT_MODE_NONE && mode < DELL_BAT_MODE_MAX) {
+> > > > +		ret =3D battery_charging_mode_set(mode);
+> > > > +		if (!ret) {
+> > > > +			bat_chg_current =3D mode;
+> > > > +			ret =3D size;
+> > > > +		}
+> > > > +	}
+> > > > +
+> > > > +	return ret;
+> > > > +}
 
-As far as I understand it, this is because regulator_is_enabled checks 
-for the hardware state, not for the in-software regulator enable count, 
-and the charging bits are flipped on by default (presumably by the 
-bootloader). I thought regulator-boot-on would handle this, but clearly 
-it doesn't...
+Here we're using DELL_BAT_MODE_MAX to determine if we failed to match
+any mode strings sent from the user. If we get rid of that, we're either
+going to have to use a separate variable (eg, 'bool matched =3D false;' and
+set it to true in case of a match), or iterate backwards (eg,
+for (mode =3D ARRAY_SIZE(battery_state); mode >=3D DELL_BAT_MODE_NONE; mode=
+--) {
+	...
+}
+if (mode !=3D DELL_BAT_MODE_NONE) {
+	ret =3D battery_charging_mode_set(mode);
 
-Best regards
-Artur
+
+Do you have a preference?
+
+
+[...]
+> > > > +static ssize_t charge_control_start_threshold_store(struct device =
+*dev,
+> > > > +		struct device_attribute *attr,
+> > > > +		const char *buf, size_t size)
+> > > > +{ =20
+> > [...]
+> >  =20
+> > > > +
+> > > > +static void __init dell_battery_init(struct device *dev)
+> > > > +{
+> > > > +	enum battery_charging_mode current_mode =3D DELL_BAT_MODE_NONE;
+> > > > +
+> > > > +	dell_battery_read_req(BAT_CUSTOM_MODE_TOKEN, (int *) &current_mod=
+e);
+> > > > +	if (current_mode !=3D DELL_BAT_MODE_NONE) {   =20
+> > >=20
+> > > I quite do not understand how is this code suppose to work.
+> > >=20
+> > > Why is there mix of custom kernel enum battery_charging_mode and retu=
+rn
+> > > value from Dell's API? =20
+> >=20
+> > This is from the original patch from Dell; tbh, I'm not sure. It does
+> > work, though. That is, current_mode ends up holding the correct value
+> > based on what was previously set, even if the charging mode is set from
+> > the BIOS.
+> >=20
+> > I just scanned through the libsmbios code to see what it's doing, and
+> > it appears to loop through every charging mode to check if its active.
+> > I'm not really sure that makes much more sense, so I'll try some more
+> > tests. =20
+>=20
+> Keyboard backlight code (kbd_get_first_active_token_bit) is doing also
+> this type scan. If I remember correctly, for every keyboard backlight
+> token we just know the boolean value - if the token is set or not.
+>=20
+> It would really nice to see what (raw) value is returned by the
+> dell_battery_read_req(token) function for every battery token and for
+> every initial state.
+
+I checked this. The BIOS sets the mode value in every related token
+location. I'm still not really sure what libsmbios is doing, but the
+kernel code seems to arbitrarily choose one of the token locations
+to read from. This makes sense to me now.
+
+In the BIOS when I set the mode to "ExpressCharge",
+this what I pulled for each token location:
+
+[    5.704651] dell-laptop dell-laptop: BAT_CUSTOM_MODE_TOKEN value: 2
+[    5.707015] dell-laptop dell-laptop: BAT_PRI_AC_MODE_TOKEN value: 2
+[    5.709114] dell-laptop dell-laptop: BAT_ADAPTIVE_MODE_TOKEN value: 2
+[    5.711041] dell-laptop dell-laptop: BAT_STANDARD_MODE_TOKEN value: 2
+[    5.713705] dell-laptop dell-laptop: BAT_EXPRESS_MODE_TOKEN value: 2
+
+Similar story when I set it to Custom (all were '5'), or Standard ('1').
+When I set it from linux as well, it changed all location values.
+
+>=20
+> Because it is really suspicious if dell_battery_read_req() would return
+> value of the enum battery_charging_mode (as this is kernel enum).
+>=20
+>=20
+> Also another important thing. In past it was possible to buy from Dell
+> special batteries with long warranty (3+ years). I'm not sure if these
+> batteries are still available for end-user customers. With this type of
+> battery, it was not possible to change charging mode to ExpressCharge
+> (bios option was fade-out). I do not have such battery anymore, but I
+> would expect that the firmware disabled BAT_EXPRESS_MODE_TOKEN as mark
+> it as unavailable.
+>=20
+> I think that we should scan list of available tokens, like it is done
+> for keyboard backlight in kbd_init_tokens(). And export via sysfs only
+> those battery modes for which there is available token.
+
+I agree, but I'm not seeing a way to do that right now given how the
+BIOS sets the mode. Maybe libsmbios has some clues...
+
+
+
+
+
+--=20
+I'm available for contract & employment work, see:
+https://spindle.queued.net/~dilinger/resume-tech.pdf
 
