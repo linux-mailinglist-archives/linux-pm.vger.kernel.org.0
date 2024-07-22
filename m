@@ -1,145 +1,187 @@
-Return-Path: <linux-pm+bounces-11301-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11302-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07F6F9392A5
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 18:39:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC894939307
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 19:15:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7B611F220E9
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 16:39:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A300B2826BF
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 17:15:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88E516EBE4;
-	Mon, 22 Jul 2024 16:39:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7018316EC06;
+	Mon, 22 Jul 2024 17:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="S6Av95GY"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="djbMJbL9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6018316E89B;
-	Mon, 22 Jul 2024 16:39:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.18.73.165
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8275716EB58;
+	Mon, 22 Jul 2024 17:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721666379; cv=none; b=slhFB7W3kCDbrek8G8A3rIXeJCNTJM+KWR8weQUa9gI5xKOvBCQPyvv00lZrQpEGmQ07QxIyPRU1NboebILfh6k8yy/1HWOOk4oScrodZwKcobvBFJIfzTUC37r0K2xM+EfIBXUkkOOfys565ZcMfhu5JEOFqLXCVcT79yo2r1Y=
+	t=1721668501; cv=none; b=uz5LRupepc5lx1xv7ANLSuIuy7hvZtZ/EskP0JjaIMG3rsq4pBhfW00N8kTrEUzMJ9UCUAIkE/jTQDFwgH0RMFv/61G7lYevuoBLuzHHE6N2zqdC3GvO31AhcOkNc+kKDUePVUP9zsP9SkZ3CzgkIXmlkYMNjnL5umBKjJ2ZJW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721666379; c=relaxed/simple;
-	bh=TL1jutkvv3YvQIjehoa241BkB0CICQzeJpkPUCpNBAM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=C5AkUV6vuLpk5ogKBHCanJMiyaOFC17p2n1imkdSidy+coy9LISgTPGn1AnaiIXP46qjlA408/ofCVR/cAHxxii4176Hq/sL2OspzTwLkhOUbdHpEfup6suSOOttckoP/J76hKDVtxv9PJeD61cX+j3GRbnv4rxzDM0bIvpk9KA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=S6Av95GY; arc=none smtp.client-ip=37.18.73.165
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
-Received: from p-infra-ksmg-sc-msk01.sberdevices.ru (localhost [127.0.0.1])
-	by mx1.sberdevices.ru (Postfix) with ESMTP id 8A00E10000F;
-	Mon, 22 Jul 2024 19:39:24 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 8A00E10000F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
-	s=mail; t=1721666364;
-	bh=G2Z3S8wIHcZug9iXb9QT6hPkXn+2qflVBxbNjjuuZaQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
-	b=S6Av95GYVVv1S0DXP5uPsra8kLVYxNrahmHeu35SgM2s6ivKZQfiLPTmojbNYczu0
-	 nge13K8kLu8L02xVnvuVCJmgl1mYCqZ2KbE+r057sNVv5DuLgQm53UBi9O2Blntat9
-	 RAfwxoV5/HD0ZQSKliweF5fXh1t+L1GHOJS8YoxT+OLt5VLMR4KAm0VU5gQorysLX5
-	 ztiu9z2VOKi9mQGyfz5u83ch9VZ6infPxKXz/kfSWbE9RP5aZvQwipOpf7Mne0x5Vc
-	 E/IbS6IEyIYmDZ6Fg8f3TKdlS+vtIaIiW0iDnkZ+i/GvWs8pKXX8SiyqqolZZXXprm
-	 Nn4xnkUUkpP+w==
-Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.sberdevices.ru (Postfix) with ESMTPS;
-	Mon, 22 Jul 2024 19:39:24 +0300 (MSK)
-Received: from [192.168.1.143] (100.64.160.123) by
- p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 22 Jul 2024 19:39:23 +0300
-Message-ID: <b78abab9-ad62-480a-8260-6a8aa76fe9dd@salutedevices.com>
-Date: Mon, 22 Jul 2024 19:39:23 +0300
+	s=arc-20240116; t=1721668501; c=relaxed/simple;
+	bh=txky++HVzek3k5qMTEIxRzRys85RHmGx5x+kEiX6lsc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=S2+QxhkCdGGdCnu/YgY4PsPv5Ms843nloFDKnPs5quGswz6bYVNYpXSLQedoYn3Za0ooL9t0B76oIe/D9jnSpIChYWPCgvbXg0QNfCte6QRwTV2YbTZAyoTAUrLuS1XTZBtAkNJZFig8Ij+Vi7khs/wabvRPus6RY8Q71i/trGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=djbMJbL9; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46MAnGu9016652;
+	Mon, 22 Jul 2024 17:14:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=DJuEf0+ffGnn080Fj8jr6M
+	4q22Ojwqr9XmAvJUN0tcw=; b=djbMJbL98VL/INNvjMmJltsn1RzMovYvqBlg7J
+	i1VEGSRVzjC3TToXfs84+TmpnpDlv0wJ6K/7WzzotKWZzOxlAy8c4OIm2y6VxfZZ
+	tyt4fqlAR0YINb9E6pZMjAHjc12Y9NBK01lULioiNEXiszkt36Ofjc+pbfXKPeHb
+	O4prrhC7DbfvSQqokjBAwobdApk7elLCWt05s7NC8NFnK9j40DJhkFwBqBJdIPLQ
+	2UeDDtkc9Z2XSHJWAT6GhtPy95AgmuDUBwS/lIA9LM8Ph/UMjckjHNAyYF/y3at3
+	2VreLE4twYGchrxER9B2yBB6TtOj/y1YjEwi8gs88iRt9VVA==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40g5m6vgjh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Jul 2024 17:14:35 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46MHEY69007338
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Jul 2024 17:14:34 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 22 Jul
+ 2024 10:14:33 -0700
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Mon, 22 Jul 2024 10:14:32 -0700
+Subject: [PATCH v2] cpufreq: powerpc: add missing MODULE_DESCRIPTION()
+ macros
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] amlogic SoC's power-domains fixes
-To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<neil.armstrong@linaro.org>
-CC: <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <glaroque@baylibre.com>,
-	<martin.blumenstingl@googlemail.com>, <khilman@baylibre.com>,
-	<jbrunet@baylibre.com>, <devicetree@vger.kernel.org>,
-	<linux-amlogic@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <kernel@salutedevices.com>,
-	<mmkurbanov@sberdevices.ru>, <b.galvani@gmail.com>, <rui.zhang@intel.com>,
-	<daniel.lezcano@linaro.org>, <rafael@kernel.org>, <lukasz.luba@arm.com>
-References: <20240710223214.2348418-1-gnstark@salutedevices.com>
-Content-Language: en-US
-From: George Stark <gnstark@salutedevices.com>
-In-Reply-To: <20240710223214.2348418-1-gnstark@salutedevices.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 186657 [Jul 22 2024]
-X-KSMG-AntiSpam-Version: 6.1.0.4
-X-KSMG-AntiSpam-Envelope-From: gnstark@salutedevices.com
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 24 0.3.24 186c4d603b899ccfd4883d230c53f273b80e467f, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, smtp.sberdevices.ru:7.1.1,5.0.1;salutedevices.com:7.1.1;100.64.160.123:7.1.2;lore.kernel.org:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2, FromAlignment: s, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean, bases: 2024/07/22 13:53:00
-X-KSMG-LinksScanning: Clean, bases: 2024/07/22 15:57:00
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/07/22 07:11:00 #26122445
-X-KSMG-AntiVirus-Status: Clean, skipped
+Message-ID: <20240722-md-powerpc-drivers-cpufreq-v2-1-bb84d715eb3d@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAHiTnmYC/42OQQ6CMBBFr2K6dgyFisSV9zAsSjvIJNLCFCqGc
+ HcLJ3D5kv/f/6sIyIRB3E+rYIwUyLsE+fkkTKfdC4FsYpFnucpKqaC3MPgP8mDAMkXkAGaYW8Y
+ RSluoK6pKlgpFEgyMLS2H/FknbnRAaFg70+3KN7l5gV6HCXmPdxQmz9/jSpR76a/VKEGCRZUVy
+ la31uaPcSZDzlyM70W9bdsP5VQafeUAAAA=
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar
+	<viresh.kumar@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Nicholas
+ Piggin" <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <kernel-janitors@vger.kernel.org>,
+        "Jeff
+ Johnson" <quic_jjohnson@quicinc.com>
+X-Mailer: b4 0.14.0
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lFISRuN1Pb2YJbtbhedmbtS_Q1m3UrZf
+X-Proofpoint-ORIG-GUID: lFISRuN1Pb2YJbtbhedmbtS_Q1m3UrZf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-22_11,2024-07-22_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 mlxscore=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1015 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407220129
 
-Hello
+With ARCH=powerpc, make allmodconfig && make W=1 C=1 reports:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cpufreq/ppc-cbe-cpufreq.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cpufreq/powernv-cpufreq.o
 
- From this series i2c patch was applied.
-Are the thermal sensor's dts and bindings patches ok? Should I do 
-anything on it?
+Add the missing invocation of the MODULE_DESCRIPTION() macro to all
+files which have a MODULE_LICENSE().
 
+This includes three additional files which, although they did not
+produce a warning with the powerpc allmodconfig configuration, may
+cause this warning with specific options enabled in the kernel
+configuration.
 
-On 7/11/24 01:32, George Stark wrote:
-> Here's some fixes to the bindings and device tree related to Amlogic A1 SoC.
-> The SoC provides dedicated power domain for for almost all periphery.
-> 
-> Changes in v2:
->    dt-bindings: spi: amlogic,a1-spifc: make power-domains required
->      - drop the patch
->    dt-bindings: thermal: amlogic,thermal: add optional power-domains
->      - drop required conditional
->      - rewrite commit message
->    dt-bindings: i2c: amlogic,meson6-i2c: add optional power-domains
->      - add RvB: Neil Armstrong <neil.armstrong@linaro.org>
->      - add RvB: Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
->    arm64: dts: meson: a1: bind power domain to temperature sensor
->      - add RvB: Neil Armstrong <neil.armstrong@linaro.org>
->    previous version [1]
-> 
-> [1] https://lore.kernel.org/lkml/20240708194808.1819185-3-gnstark@salutedevices.com/T/#m398c283b369108c5c557e68b7a1ada9abf3e5cba
-> 
-> George Stark (3):
->    dt-bindings: i2c: amlogic,meson6-i2c: add optional power-domains
->    dt-bindings: thermal: amlogic,thermal: add optional power-domains
->    arm64: dts: meson: a1: bind power domain to temperature sensor
-> 
->   Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml  | 3 +++
->   Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml | 3 +++
->   arch/arm64/boot/dts/amlogic/meson-a1.dtsi                      | 1 +
->   3 files changed, 7 insertions(+)
-> 
-> --
-> 2.25.1
-> 
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+Changes in v2:
+- Per Michael Ellerman updated maple-cpufreq.c and powernv-cpufreq.c
+  descriptions
+- Did not carry forward Viresh Kumar's Acked-by due to this change
+- Link to v1: https://lore.kernel.org/r/20240614-md-powerpc-drivers-cpufreq-v1-1-de4034d87fd2@quicinc.com
+---
+ drivers/cpufreq/maple-cpufreq.c   | 1 +
+ drivers/cpufreq/pasemi-cpufreq.c  | 1 +
+ drivers/cpufreq/pmac64-cpufreq.c  | 1 +
+ drivers/cpufreq/powernv-cpufreq.c | 1 +
+ drivers/cpufreq/ppc_cbe_cpufreq.c | 1 +
+ 5 files changed, 5 insertions(+)
 
--- 
-Best regards
-George
+diff --git a/drivers/cpufreq/maple-cpufreq.c b/drivers/cpufreq/maple-cpufreq.c
+index f9306410a07f..690da85c4865 100644
+--- a/drivers/cpufreq/maple-cpufreq.c
++++ b/drivers/cpufreq/maple-cpufreq.c
+@@ -238,4 +238,5 @@ static int __init maple_cpufreq_init(void)
+ module_init(maple_cpufreq_init);
+ 
+ 
++MODULE_DESCRIPTION("cpufreq driver for Maple 970FX/970MP boards");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/cpufreq/pasemi-cpufreq.c b/drivers/cpufreq/pasemi-cpufreq.c
+index ee925b53b6b9..5fc9cb480516 100644
+--- a/drivers/cpufreq/pasemi-cpufreq.c
++++ b/drivers/cpufreq/pasemi-cpufreq.c
+@@ -269,5 +269,6 @@ static void __exit pas_cpufreq_exit(void)
+ module_init(pas_cpufreq_init);
+ module_exit(pas_cpufreq_exit);
+ 
++MODULE_DESCRIPTION("cpufreq driver for PA Semi PWRficient");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Egor Martovetsky <egor@pasemi.com>, Olof Johansson <olof@lixom.net>");
+diff --git a/drivers/cpufreq/pmac64-cpufreq.c b/drivers/cpufreq/pmac64-cpufreq.c
+index 2cd2b06849a2..9d3fe36075f8 100644
+--- a/drivers/cpufreq/pmac64-cpufreq.c
++++ b/drivers/cpufreq/pmac64-cpufreq.c
+@@ -671,4 +671,5 @@ static int __init g5_cpufreq_init(void)
+ module_init(g5_cpufreq_init);
+ 
+ 
++MODULE_DESCRIPTION("cpufreq driver for SMU & 970FX based G5 Macs");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
+index 50c62929f7ca..bc55723b4d87 100644
+--- a/drivers/cpufreq/powernv-cpufreq.c
++++ b/drivers/cpufreq/powernv-cpufreq.c
+@@ -1160,5 +1160,6 @@ static void __exit powernv_cpufreq_exit(void)
+ }
+ module_exit(powernv_cpufreq_exit);
+ 
++MODULE_DESCRIPTION("cpufreq driver for IBM/OpenPOWER powernv systems");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Vaidyanathan Srinivasan <svaidy at linux.vnet.ibm.com>");
+diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.c b/drivers/cpufreq/ppc_cbe_cpufreq.c
+index 5ee4c7bfdcc5..98595b3ea13f 100644
+--- a/drivers/cpufreq/ppc_cbe_cpufreq.c
++++ b/drivers/cpufreq/ppc_cbe_cpufreq.c
+@@ -168,5 +168,6 @@ static void __exit cbe_cpufreq_exit(void)
+ module_init(cbe_cpufreq_init);
+ module_exit(cbe_cpufreq_exit);
+ 
++MODULE_DESCRIPTION("cpufreq driver for Cell BE processors");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Christian Krafft <krafft@de.ibm.com>");
+
+---
+base-commit: 933069701c1b507825b514317d4edd5d3fd9d417
+change-id: 20240614-md-powerpc-drivers-cpufreq-6d345e48164e
+
 
