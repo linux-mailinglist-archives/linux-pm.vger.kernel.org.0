@@ -1,156 +1,332 @@
-Return-Path: <linux-pm+bounces-11290-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11292-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B123938B1C
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 10:24:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC993938B3B
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 10:27:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2957B1C2105C
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 08:24:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7533F1F2182C
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 08:27:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03D5C1662FA;
-	Mon, 22 Jul 2024 08:24:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C98161B43;
+	Mon, 22 Jul 2024 08:27:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZMVgYA/S"
+	dkim=pass (1024-bit key) header.d=oppo.com header.i=@oppo.com header.b="iMpycTI6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2082.outbound.protection.outlook.com [40.107.215.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CEDA5464A
-	for <linux-pm@vger.kernel.org>; Mon, 22 Jul 2024 08:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721636678; cv=none; b=a9kbkhp4TTeif5UADy0WlPTNOjno1Eu5xUCsvRAkqRZMQrV+WWMOwkQngPzP2GgAZVmdUV3wVFO9KAq7RZxM0MJIulhgcdhMWc4tAJ5p50jsXq49vqNCcE+4NHZqzNegwY88RrFk0TwQnqHwcYQheDjqXkJ9xw3uB4Y0MYqSGyg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721636678; c=relaxed/simple;
-	bh=dOl0YE5EVmUekTPh1z3GkHps3RoYLWAbv+veTel0xyQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nf+mhMy9uU1n15TfWTLXg74OEFzCliRUPnYl6x2uMo1+kUDDMy/HU2RED8f1Ig47OnPwGpS0Gv9B/H9YUzlEK7CoKLsj/9uONi6DA2FMpShiP8TpXHM+JT6jwVAxj/+OdtJsMIEK2eHJZMNgMkzTBXVtH5lrXNCGWT7xSGgStQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZMVgYA/S; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52efd855adbso1869021e87.2
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jul 2024 01:24:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721636675; x=1722241475; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZgzE/IxCJWBRiP2I7PFm4ei8b0N+E/ct1yB02Kh58Sw=;
-        b=ZMVgYA/SKaQC5f2j9DZjl3cx19EfHbzZoFFI2Dgf89FGpjjssAdU0d9jLpGo8X5EwI
-         0D0hJpljANaOdVTKKpWxS7VY6NAFDjFGC3cYvu3NsHHag5Lc6V3xoeeRH6TZMxN/1J2j
-         3XyqnoBObhm+T5X9G4rDZf4fLsbACtWP+aUaN1to13U/wfMx/eoiUGyHQjBHQT19z25o
-         vXQHLD3tXrnGrOxhlC2uvGv3SEUgJiluoUT56KGQGxgHjRPx9y1ZShmDLpuNXbw7xc5x
-         EtjUEBOsZUanuusKaJIORj8nBzHtFlcWR2YMROUs+ivLpCodFkpgry/akJ8XcPJMyuU2
-         3rDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721636675; x=1722241475;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZgzE/IxCJWBRiP2I7PFm4ei8b0N+E/ct1yB02Kh58Sw=;
-        b=NRucVR2+4hCQN+T5F5/URLUNG78ru/Lk2Q4t8NoOezqQBu/LjZZFF9UW1Dvo/DJbOO
-         eYi4drZ9HN6r5m8wHzBUHVOPVKVH5glCAmh8/Gq1HyejLCxaUpaxW7JTuL5sB/leabcl
-         8XT0gFgC7p5tpqjX1WPT/XXJQiPhbYkofm4z1+VdtW/2CCdd43qFm6DuB7iUpZPkDYDj
-         3MvrVQQCsKDUuaHKJa7KClU5CB19kBAGcgLCYEB2preoeUs3bLkk+oLZswlx3yQ+osbI
-         LLo0BWcNcxm6/M2xxIUJz2wzp3ynmkAYDTl/WOPXdtWMLztSg86mZiuvIREs0UnMUfNz
-         g/kw==
-X-Forwarded-Encrypted: i=1; AJvYcCX/6gOIdgbsRniOYHxVHl0+CsmPrj5mcpj/tzpK9RNicktUWTNW00vOjzgyWrt/Z3C1JvvxvjiUP6nMT3X2oWJPFBzSeiV4/iY=
-X-Gm-Message-State: AOJu0Yx9bEZ8TjKg5CY0AMwD1Y8VA1MdIjTSECHrIC6fIx9W++0Jhotd
-	7u/3CzO4HrSInsnY0CqAgXPIVBMLup6eFlrKuu1DpRF8PKLHAXRDlrY5ySbDrsU=
-X-Google-Smtp-Source: AGHT+IFrF/v3D/EbEYt4Vwr1M6wYuXzOKRe+7Qed7iAdA18QZ/SGcjYDjEKN1Yi8ZAK82iRriZoPWw==
-X-Received: by 2002:a05:6512:a86:b0:52c:b008:3db8 with SMTP id 2adb3069b0e04-52efb77a765mr3360812e87.38.1721636675345;
-        Mon, 22 Jul 2024 01:24:35 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ef5571de0sm1114612e87.202.2024.07.22.01.24.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jul 2024 01:24:34 -0700 (PDT)
-Date: Mon, 22 Jul 2024 11:24:33 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, 
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	gregkh@linuxfoundation.org, konrad.dybcio@linaro.org, djakov@kernel.org, 
-	quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 3/5] clk: qcom: ipq5332: Register
- gcc_qdss_tsctr_clk_src
-Message-ID: <bgu4ii2lumk2afgendf2hrcj57gavqd7k3essblcqnhue2auy3@bkmfy4zjv3xs>
-References: <20240722055539.2594434-1-quic_varada@quicinc.com>
- <20240722055539.2594434-4-quic_varada@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A770182BD;
+	Mon, 22 Jul 2024 08:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.82
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721636827; cv=fail; b=rCsNJCT0IpQlrHUdshchrYyvkPJnx830UFfbil7eob94TMlwoKS3k6Ptvn/VKvn3wGsvSaTNfJVYJ+uudd5O36OzClDAGqLJ4Krai04hIqFkrxZLOQc40dAmzD9wyErMmIlyAki5S08Xl4Q9tubclXVx6IlSfQClZ+gkYoqk4Dw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721636827; c=relaxed/simple;
+	bh=+8hqQTUdnW0+VeQyRtRiloraMd8X1icguoQw+tzhpKg=;
+	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=NDbkRPQUkbDnROzlh8p2BtvYGpRfxlj/kzI01llyFIuSpMwne5G0p/PX7qRjXX2XRjfgeX9+I+VfkshTogJr1hb0lXibAgDNKS5VPxgw2J9HWCFJRxx1v2RrrYqMsCGn4YSRSC7TY91q64VU6MNP4R4tAo1xdm7/b4AjIw0fFvg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oppo.com; spf=pass smtp.mailfrom=oppo.com; dkim=pass (1024-bit key) header.d=oppo.com header.i=@oppo.com header.b=iMpycTI6; arc=fail smtp.client-ip=40.107.215.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oppo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oppo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BRhabF3b10Ml+N7DlF/DBL52phI7wq5e+R5T3wGRhr1Ru/MD9jA8Ei459qVBSrGSjZhYt+K2TgLKpOvMPUzfLHM9KYkPTM1MpHzgnYpLa24zVGywIobRXRQarf/O5rVKxFL6kexaER8gKkqRp1CgHPnc/EHjbhNUf05BjKuDmOUOG6b1L+m6WcBXMLTyACuLOutbEubDO60f+KAFr+tnoqk0onCsVU0hfEhnuI4i11pdbJMHc2RdjYQigY4h5f6Z81gyLcDGKElE9tgm4u5XR7+sGnok5+sHEgOUaRZ4REP/VdYCgHEnvMN+XhXaSMrWOXZe6BsuCc/QWk98mciJSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JfnrcfN968K5NEVDFg5gs7r/zJYbOxpFFZN/rkKpkP4=;
+ b=IzcV+RVoaORIytn/Sg2KxBowh7woEfax2hkhIhoIPshS7UI13wnYrjfNLKwb8x/GBqhzHOQ9QNZhJLT8KxbvPj+ifD51Vmiqj8s3aE8AIB3UTwrMB5TYkrtwCxlpCE3zXh3Nd4xXZYrgIijqumOYKy3m/Pg006Lwl5fQhQQUefZZa7ktJzouARbVMR8Ng4R6ZJIFMNhFyBtpIft/4tZKlKi9jemjwtAcr7Ybj5/OWnzRADaiwUcY/l3JLCg40/j6bBdeEV9UQBT2zO85Xg/G0Gf2Y7gmT7NqdZ0+60zhNlPRlpyrqpPcKshw8LeTWIWGN40D1nxEDchkamvMsHZZnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JfnrcfN968K5NEVDFg5gs7r/zJYbOxpFFZN/rkKpkP4=;
+ b=iMpycTI6yyaBUFF23DlH/UfmafriK/K5CK5ZTd8Th00+hXG4xOmFjzspi3lcP9Aaoo5NiXr22+kIIihn3A9mhx02HKVT7DxYwqxUvQ7aYiWehaXfgD+OAeXjV/HyC855NARRTpoxgLsva/dyJRh8GzfLRpBjmipCttAqHpGuKDM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+Received: from SEYPR02MB8152.apcprd02.prod.outlook.com (2603:1096:101:206::6)
+ by SEYPR02MB7460.apcprd02.prod.outlook.com (2603:1096:101:1dd::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.29; Mon, 22 Jul
+ 2024 08:27:01 +0000
+Received: from SEYPR02MB8152.apcprd02.prod.outlook.com
+ ([fe80::6bae:c194:2032:70d7]) by SEYPR02MB8152.apcprd02.prod.outlook.com
+ ([fe80::6bae:c194:2032:70d7%4]) with mapi id 15.20.7762.027; Mon, 22 Jul 2024
+ 08:27:01 +0000
+Message-ID: <6c643297-fe13-42c9-820c-2f95db5a63b9@oppo.com>
+Date: Mon, 22 Jul 2024 16:26:56 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: queue policy->update work to rt thread to reduce
+ its schedule latency
+From: Gaowei Pu <pugaowei@oppo.com>
+To: Tim Chen <tim.c.chen@linux.intel.com>, rafael@kernel.org,
+ viresh.kumar@linaro.org
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240717063321.629-1-pugaowei@oppo.com>
+ <b07c39fab5ac0e32e7768ed3e8a799c8eb68802a.camel@linux.intel.com>
+ <06ce2143-cc74-41e5-b39f-15053133b232@oppo.com>
+In-Reply-To: <06ce2143-cc74-41e5-b39f-15053133b232@oppo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR06CA0003.apcprd06.prod.outlook.com
+ (2603:1096:4:186::14) To SEYPR02MB8152.apcprd02.prod.outlook.com
+ (2603:1096:101:206::6)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240722055539.2594434-4-quic_varada@quicinc.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEYPR02MB8152:EE_|SEYPR02MB7460:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1dd1f046-f188-4ab8-6bcf-08dcaa280f09
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TEljUTFRVXNGRjFCcGZIQi91YURxaFNITWRuTmFLL3lvRTFGWnBwZmx5YXdZ?=
+ =?utf-8?B?Szl4aG51bUlYTWo3TnI3dFcxY1JrT1FQSE1GT1hUbENrN2Y4ZG50T3RwOCth?=
+ =?utf-8?B?NCtZS2oyVzk2VUhkMDEvYnNYRzBvRENzbVcrQ3lnbUZncFA5UENRYVp5alhR?=
+ =?utf-8?B?Q3FINTZzcGxERG1YYVM1cGZYZ0F3SHZRQjNRU1VkR2tTMFdLamtGeC9OZUJM?=
+ =?utf-8?B?b2p5bUFGWElJMlFsKzU1OVZ2Mkh4TzVrV0JDNDljOVJxT1JmTnpyaHZYQitR?=
+ =?utf-8?B?dzZlalAzT2FXVjhmcWI2a0RQalk3b2NSL3hEMmpCZHZBRkd0QVhjQlB4WG5K?=
+ =?utf-8?B?UkljdWxGNU9zL3h2WlFHcVhoRSs0U1MxRmF0NXppclhIZFU5dEpyZ2dFZFNz?=
+ =?utf-8?B?VVZtRXl0NXgwNEQzWEphQVhwZWhUMVgwc3lyU3NUK0hwN1VSWWt0c0gyQTR3?=
+ =?utf-8?B?T3ZZL24xVlRFRmIzMHgvQ2Y0WFNza2s2eVFZOWFhMkp6dC9mOWhuQlVUelFr?=
+ =?utf-8?B?N2h2R08yRnRwVjRmZk9ZNmpMV3VYRnpacjVHdXFMZnU3UWo4ZnZYYU1mTEp4?=
+ =?utf-8?B?QVhocGZwckdIeGtuU01jVlRwSVdvUWJTdi80QWttbGJBUE1ORXlSaDdLOG5F?=
+ =?utf-8?B?US9sZkNIVzMzY1pmSHBBTkp3N05SUFVEVVVaQzFkQUNrUGI3aHM1RmlrRVE2?=
+ =?utf-8?B?eWZ5N3hKamlSOVdZNXdVZTJFT1pjMldUdE5YRW5rWUJCTzlhMmJTYXFhYkk3?=
+ =?utf-8?B?R2ZSUmpNcFlxYVUwRXl5NmJEUW1rSXdoUVBSdTd6UzZjWGNtdlN6K0dRQ000?=
+ =?utf-8?B?UTNjNVZOTUZiZlRwYW1RZm5xQklGTVJRN29tQS96enBtVHVMV1lmcEpSS0dp?=
+ =?utf-8?B?czcwRjBnOGMzQW9VR1FtMVBCcU5FV3RIN0JiOWZITTdKTmpuQUZqQk5DbTB5?=
+ =?utf-8?B?WFdzVmhIQkpucm1nNnIwVXlBeUF6azNUTEtZWVVUMkxJemxxc1RNV2phV0lw?=
+ =?utf-8?B?c2VVYXlMWTdzaGdPcGVoY3lLWE9hQmorVUYwSTh5NTAyakkwaXhXZk9xL2Fp?=
+ =?utf-8?B?Z0FncVNqS0pWZzd1bHVDRElwRkx3M2V5ajFocFFVd2NXRVUzc2RudkhwdVJV?=
+ =?utf-8?B?U3ZrTHBjNEJ0TWhEdVFYWjF4bzBEd1BlSjdEallmSVlJcU9xdE5QMmcvNDFL?=
+ =?utf-8?B?S2hscmQ1d01XVFBzVlJheDlqZmRpYzNuVk9mNGtVbS9meFFLTXBIckNuUlow?=
+ =?utf-8?B?V1YwVUo2cGFlaXJIS3pEMTVPUlkxKzNFYnlTVGxXSElFTWhMT2twbGU3bERq?=
+ =?utf-8?B?Q2krdHMyRDVPaWNia1pPTkpRUUkya0Nrd24zazhkaHAySjAvU1l2T1A3QkJI?=
+ =?utf-8?B?SGtyNnA2NlBmNkJ5QXpreXpjZzMwb215anRKRm5YbkFHWTI2S3N4QWNsalBZ?=
+ =?utf-8?B?cTFNUDFydFlJaFFDSUl1RTVQS0FHdk0wR1N6TG52MHBBWXBzZnArcXA3bmJw?=
+ =?utf-8?B?ekFRUGNTZ3FTbXc1aVQxaTU0d08yck5QNnladXpYVDdsMUhxWS9ZZ2hKaEg0?=
+ =?utf-8?B?NFlrclR4UXRQMStHeTNSbW1HNzBQc2V3c2dreWJITXlTRGpjYjNjQ2E3MzBG?=
+ =?utf-8?B?N25FK0JJdDlMOHVLMVhnQ2lpRHdOMEFwYlFlQTRMeGRXYy8rakd1cmY0M3J6?=
+ =?utf-8?B?Vk1XUW1WQk9CYVdxdy96VE1oRkNyRmJORWVuT205dVNFTVQ4eUNRVGJXRll2?=
+ =?utf-8?B?aXovcUw5T0NDZFV3Vm9JVG1tZXlLZzJYb3A2aUI1RWZsZWFRVlYydXZJOTkw?=
+ =?utf-8?B?ckVoaHFjRlRBMWxBVXlmUT09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEYPR02MB8152.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?U3pBSEdUUG1KS3ZRYkllN2lsaUJndmY1OFFjY0dtSkdMMG9yRzRoYS9JaC92?=
+ =?utf-8?B?VDBwSlZySGFXNlNaT3M0THZULzNlRElvQ01JUUlNYy8xTm9YYlNPVnVESEYx?=
+ =?utf-8?B?QzE3ekgyZDN6ZjJHWVNrcG1DZUpSWS83TWhGaU1wTnVKd25sZmxlQ2VtTWdS?=
+ =?utf-8?B?eXllbGY5elZZMlVFL3I5YXhzL2VCU2N3Wmt0NWw1T2NlRERlL3Z6WXdjVmx2?=
+ =?utf-8?B?QVlYYmhpenRKU0FTbXErcTFsS3pHNlZqUW56R3Y3K3JiM3lHRWtGRURaR1o0?=
+ =?utf-8?B?czBBclY2Q042KzY5Z21rWEhFZlR5SWJNZ2kzUXdSZ1VCZmtjYmFpYm5sTG1z?=
+ =?utf-8?B?Q0MrVzR0SXR6UDkyd0E0RjdWLzhFOURBZWw3eUJXWC9zQjB3RnZRMXh1eFBV?=
+ =?utf-8?B?ZmZxRXh5QTNhYitrczhSK3JnaENJamxNOTJveGdhdmhPQTcycG43eUhIak1n?=
+ =?utf-8?B?UGRZejU0Zmhudm5pYUVLNkZmVmVhYjNQcFR6RTQ0Z2dnUmhXcEtSY3ZpM1BJ?=
+ =?utf-8?B?RTRCODlkODFGOW5nS0JGWDRRenUzREQxdkdOcnZhSkpVaG8vNTljTDRBQWFX?=
+ =?utf-8?B?UlUxQ0x6ckZpb3h1aVBDdGhCZVV3QTJuQ3h0d0Y0allnaW1ycjIzdk1NRUlm?=
+ =?utf-8?B?aXpzTXZoMFRRRjR3TDcwU2hrUGhuZ1g3aGsxTmlzdlh3RVAxNzlhbVlsQ2Nt?=
+ =?utf-8?B?NmR2WmlNZHUwMzRXSk0zUjM5M0hhYUxaS296cnhTQTl4eXprMGFmTGVZb25G?=
+ =?utf-8?B?ZzA4ZTNsM2poRVpvREQ3SFRPYlRaV0haYjBMaUFSZ1JNK0ZXM2xDZkRzOUgv?=
+ =?utf-8?B?aG9UVUNmRnBwd0Y4bC96QUQ2Q3JQMmJuaEVTMEJiS1pwOTFHbGtVMGI3NTRQ?=
+ =?utf-8?B?RlFoNXhpakpIY2lleUpBUHR0M0RJRzRrMmlLeVdiTnZwekdiSGNlY2tMVXVD?=
+ =?utf-8?B?a2svVUk5d2p2djhRQmc3eTMwVVRJQnljZStpaDJ0SGQ1TzJMUXNySmlVS2Rr?=
+ =?utf-8?B?RGkyUmxrZWUxeGw2UVdtc0VDUjd5RGpjVHF4ejJvcGxkRHpxK1B2UURPQ2cx?=
+ =?utf-8?B?WmM5dVVPTXp5eGk3VlVLTnZrWkJ2U1pHaVN6eklFbGNicmo2VjkwTzVBb1lC?=
+ =?utf-8?B?YXplT0pIdWd2L3FUM2plZHRBT1ltUWtFdXAwV1RIRkg2VUE4ZWpIWUJKZ2R3?=
+ =?utf-8?B?WlZNYXJYakY3aEoxS3VlQUFpSE1DcDdYRzZuRUVMZWtha3k1ZXo5VzEwUXFX?=
+ =?utf-8?B?Q1lubVZkT3NpQWI4YnRRN245eXFHMG90Ujd6L21QL3BYOHdkdy9lVEV3K3pv?=
+ =?utf-8?B?WFR1VnVhOTVDbHdKR2FHeGkxT3RCK1QyUHlST2pnM0lyRG93MzM5MHdmVUhY?=
+ =?utf-8?B?bHYyZWI3cHNydGUvaTV0SDMvQUJzWWRuZmhURUNTN0hNMHZqRXR2MUw0MW10?=
+ =?utf-8?B?bnFIYUdka3lmTzhuL3FlZ1UxTG02UEx0R2RidDBHMTc1cUFsNkVOcGUwM2g3?=
+ =?utf-8?B?cTc0MU13WWVNV2lpdFlqNmk1UkxPMVgrMmFUaDAyak9uYzRtVmhvbDBwNTRt?=
+ =?utf-8?B?TVR1SE9EcDVqb1JMeUNPRGJkME9NVDJzRmRPcnF0elZrRmlrenI4Nnd5S0F4?=
+ =?utf-8?B?aWtyd2ErNEZsS0xleDlFRFV0enBmTEszZ3lacFN6aG9XT3FpZlBkZVMxRy9m?=
+ =?utf-8?B?ZnVSMUQvRHlxMnE5WXpUVmE2S0xSeEhKNnJKbHJyd2RaMTNSbDBURmdJTW5k?=
+ =?utf-8?B?VFI5OExBU0ZrZDBuZWpkcFA3THhuQThjOG9ZMXhoeU1BOG54Uy9RdktFVkt3?=
+ =?utf-8?B?MXVYTS9makNyTmdRZWVjUGFzY2EyUFZFemV2aDEyanBWU0szeVNKeER4Z29N?=
+ =?utf-8?B?ZzJaRUZKOEVwY3JaMzU3azFDdndZTkdQR29iZ0txRnc0YWNsR0pCb1RqVFRt?=
+ =?utf-8?B?ZStFZ0FmdlhYMXQ4bG01N2lSb1d6SnRWVDJkWnJUaE0va1oxMGlESjJVZGxp?=
+ =?utf-8?B?ZWlMNmtKdjcvalBHRFZGaUFhOVp0U2lDRWhLT3kxSzN5QWtWbHE4M2xKYWlQ?=
+ =?utf-8?B?VU9HTjZTRnNhUW00RENpKzNGTVUzdEFTelRRcGVIbTFwcDY3SFZmcGh5dzRJ?=
+ =?utf-8?Q?aHdf/7YHB1Ownp/P/uz4H8xw9?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1dd1f046-f188-4ab8-6bcf-08dcaa280f09
+X-MS-Exchange-CrossTenant-AuthSource: SEYPR02MB8152.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2024 08:27:01.1452
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: M5IAt6yAL3N37spBu3c/p+4qRd8qOg0ZIydDZq/SLhG4LIm+cEeKo+FKhzXkF6MW/vzpPj1+YZicoZxU0E140w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR02MB7460
 
-On Mon, Jul 22, 2024 at 11:25:37AM GMT, Varadarajan Narayanan wrote:
-> gcc_qdss_tsctr_clk_src (enabled in the boot loaders and dependent
-> on gpll4_main) was not registered as one of the ipq5332 clocks.
-> Hence clk_disable_unused() disabled 'gpll4_main' assuming there
-> were no consumers for 'gpll4_main' resulting in system freeze or
-> reboots.
+
+
+On 2024/7/22 10:30, Gaowei Pu wrote:
+> Hi Tim,
 > 
-> After registering gcc_qdss_tsctr_clk_src, CLK_IGNORE_UNUSED can
-> be removed from gpll4_main.
+> On 2024/7/19 6:03, Tim Chen wrote:
+>> On Wed, 2024-07-17 at 14:33 +0800, Gaowei Pu wrote:
+>>> Currently we encountered a problem that the cpufreq boost latency
+>>> is about 10 milliseconds or worse when we boost through cpufreq QOS request
+>>> under high workload scenarios, while the boost latency mainly consumed by
+>>> schedule latency of policy->update work.
+>>
+>> What is the tail latency now after your change?
 
-Commented below.
+sorry missed this.
+the tail latency now is about within 50 microseconds after my change.
 
+>>
+>>>
+>>> We should ensure the low schedule latency of cpu frequency limits work
+>>> to meet performance and power demands. so queue the policy->update work
+>>> to rt thread to reduce its schedule latency.
+>>
+>> If my understanding is correct, kthread has a default nice
+>> value of 0 and is not a rt thread. 
+>>
+>> I think the gain you see is
+>> your patch created a dedicated kthread work queue on CPU 0.
+>> The work from policy change no longer have to compete time with other
+>> requests coming from schedule_work(). 
+> It's not just other requests coming from schedule_work(), also some normal
+> cfs tasks running on the same cpu.
 > 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> In order to not competing time with the above threads, i change the thread
+> policy to rt and prio set to 98 to reduce the schedule latency.
+>>
+>> If the policy change really needs to get ahead
+>> of other tasks, I think you need a dedicated
+>> workqueue with alloc_workqueue() using WQ_HIGHPRI flag.
 
-Fixes?
-
-> ---
->  drivers/clk/qcom/gcc-ipq5332.c | 12 +-----------
->  1 file changed, 1 insertion(+), 11 deletions(-)
+> I think the cpufreq boost or limit action should be trigger in time to meet
+> performance and power demands. An dedicated workqueue with highpri will be
+> better but maybe not good enough because cfs pick or preempt policy is not
+> purely based on thread nice value. So i think the final solution is rt thread
+> and the policy change work deserves it :)
+> thanks.
+>>
+>> Tim
+>>
+>>>
+>>> Signed-off-by: Gaowei Pu <pugaowei@oppo.com>
+>>> ---
+>>>  drivers/cpufreq/cpufreq.c | 24 ++++++++++++++++++------
+>>>  include/linux/cpufreq.h   |  4 +++-
+>>>  2 files changed, 21 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>>> index a45aac17c20f..e6e42a3ba9ab 100644
+>>> --- a/drivers/cpufreq/cpufreq.c
+>>> +++ b/drivers/cpufreq/cpufreq.c
+>>> @@ -1193,7 +1193,7 @@ void refresh_frequency_limits(struct cpufreq_policy *policy)
+>>>  }
+>>>  EXPORT_SYMBOL(refresh_frequency_limits);
+>>>  
+>>> -static void handle_update(struct work_struct *work)
+>>> +static void handle_update(struct kthread_work *work)
+>>>  {
+>>>  	struct cpufreq_policy *policy =
+>>>  		container_of(work, struct cpufreq_policy, update);
+>>> @@ -1209,7 +1209,7 @@ static int cpufreq_notifier_min(struct notifier_block *nb, unsigned long freq,
+>>>  {
+>>>  	struct cpufreq_policy *policy = container_of(nb, struct cpufreq_policy, nb_min);
+>>>  
+>>> -	schedule_work(&policy->update);
+>>> +	kthread_queue_work(policy->worker, &policy->update);
+>>>  	return 0;
+>>>  }
+>>>  
+>>> @@ -1218,7 +1218,7 @@ static int cpufreq_notifier_max(struct notifier_block *nb, unsigned long freq,
+>>>  {
+>>>  	struct cpufreq_policy *policy = container_of(nb, struct cpufreq_policy, nb_max);
+>>>  
+>>> -	schedule_work(&policy->update);
+>>> +	kthread_queue_work(policy->worker, &policy->update);
+>>>  	return 0;
+>>>  }
+>>>  
+>>> @@ -1301,15 +1301,25 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+>>>  		goto err_min_qos_notifier;
+>>>  	}
+>>>  
+>>> +	policy->worker = kthread_create_worker_on_cpu(cpu, 0, "policy_worker%d", cpu);
+>>> +	if (IS_ERR(policy->worker)) {
+>>> +		dev_err(dev, "Failed to create policy_worker%d\n", cpu);
+>>> +		goto err_max_qos_notifier;
+>>> +	}
+>>> +
+>>> +	sched_set_fifo_low(policy->worker->task);
+>>>  	INIT_LIST_HEAD(&policy->policy_list);
+>>>  	init_rwsem(&policy->rwsem);
+>>>  	spin_lock_init(&policy->transition_lock);
+>>>  	init_waitqueue_head(&policy->transition_wait);
+>>> -	INIT_WORK(&policy->update, handle_update);
+>>> +	kthread_init_work(&policy->update, handle_update);
+>>>  
+>>>  	policy->cpu = cpu;
+>>>  	return policy;
+>>>  
+>>> +err_max_qos_notifier:
+>>> +	freq_qos_remove_notifier(&policy->constraints, FREQ_QOS_MAX,
+>>> +				 &policy->nb_max);
+>>>  err_min_qos_notifier:
+>>>  	freq_qos_remove_notifier(&policy->constraints, FREQ_QOS_MIN,
+>>>  				 &policy->nb_min);
+>>> @@ -1353,7 +1363,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+>>>  				 &policy->nb_min);
+>>>  
+>>>  	/* Cancel any pending policy->update work before freeing the policy. */
+>>> -	cancel_work_sync(&policy->update);
+>>> +	kthread_cancel_work_sync(&policy->update);
+>>> +	if (policy->worker)
+>>> +		kthread_destroy_worker(policy->worker);
+>>>  
+>>>  	if (policy->max_freq_req) {
+>>>  		/*
+>>> @@ -1802,7 +1814,7 @@ static unsigned int cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
+>>>  
+>>>  		cpufreq_out_of_sync(policy, new_freq);
+>>>  		if (update)
+>>> -			schedule_work(&policy->update);
+>>> +			kthread_queue_work(policy->worker, &policy->update);
+>>>  	}
+>>>  
+>>>  	return new_freq;
+>>> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+>>> index 20f7e98ee8af..73029daddfc5 100644
+>>> --- a/include/linux/cpufreq.h
+>>> +++ b/include/linux/cpufreq.h
+>>> @@ -20,6 +20,7 @@
+>>>  #include <linux/spinlock.h>
+>>>  #include <linux/sysfs.h>
+>>>  #include <linux/minmax.h>
+>>> +#include <linux/kthread.h>
+>>>  
+>>>  /*********************************************************************
+>>>   *                        CPUFREQ INTERFACE                          *
+>>> @@ -77,8 +78,9 @@ struct cpufreq_policy {
+>>>  	void			*governor_data;
+>>>  	char			last_governor[CPUFREQ_NAME_LEN]; /* last governor used */
+>>>  
+>>> -	struct work_struct	update; /* if update_policy() needs to be
+>>> +	struct kthread_work	update; /* if update_policy() needs to be
+>>>  					 * called, but you're in IRQ context */
+>>> +	struct kthread_worker *worker;
+>>>  
+>>>  	struct freq_constraints	constraints;
+>>>  	struct freq_qos_request	*min_freq_req;
+>>
 > 
-> diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
-> index f98591148a97..237b6a766179 100644
-> --- a/drivers/clk/qcom/gcc-ipq5332.c
-> +++ b/drivers/clk/qcom/gcc-ipq5332.c
-> @@ -126,17 +126,6 @@ static struct clk_alpha_pll gpll4_main = {
->  			.parent_data = &gcc_parent_data_xo,
->  			.num_parents = 1,
->  			.ops = &clk_alpha_pll_stromer_ops,
-> -			/*
-> -			 * There are no consumers for this GPLL in kernel yet,
-> -			 * (will be added soon), so the clock framework
-> -			 * disables this source. But some of the clocks
-> -			 * initialized by boot loaders uses this source. So we
-> -			 * need to keep this clock ON. Add the
-> -			 * CLK_IGNORE_UNUSED flag so the clock will not be
-> -			 * disabled. Once the consumer in kernel is added, we
-> -			 * can get rid of this flag.
-> -			 */
-> -			.flags = CLK_IGNORE_UNUSED,
-
-You can't drop it in this patch, since GPLL4 still can get disabled if
-GCC_QDSS_TSCTR_CLK_SRC gets disabled. This chunk should go to the next
-patch (or you should reorder the patches).
-
->  		},
->  	},
->  };
-> @@ -3388,6 +3377,7 @@ static struct clk_regmap *gcc_ipq5332_clocks[] = {
->  	[GCC_QDSS_DAP_DIV_CLK_SRC] = &gcc_qdss_dap_div_clk_src.clkr,
->  	[GCC_QDSS_ETR_USB_CLK] = &gcc_qdss_etr_usb_clk.clkr,
->  	[GCC_QDSS_EUD_AT_CLK] = &gcc_qdss_eud_at_clk.clkr,
-> +	[GCC_QDSS_TSCTR_CLK_SRC] = &gcc_qdss_tsctr_clk_src.clkr,
->  	[GCC_QPIC_AHB_CLK] = &gcc_qpic_ahb_clk.clkr,
->  	[GCC_QPIC_CLK] = &gcc_qpic_clk.clkr,
->  	[GCC_QPIC_IO_MACRO_CLK] = &gcc_qpic_io_macro_clk.clkr,
-> -- 
-> 2.34.1
-> 
-
--- 
-With best wishes
-Dmitry
 
