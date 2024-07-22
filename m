@@ -1,161 +1,197 @@
-Return-Path: <linux-pm+bounces-11285-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11286-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6A539388AA
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 07:57:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBE6A9388BF
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 08:05:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D88041C20E4F
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 05:57:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46EABB20DA8
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 06:05:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36F411862F;
-	Mon, 22 Jul 2024 05:56:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 368E5179A8;
+	Mon, 22 Jul 2024 06:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Z9XBfxRy"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YS1zItC/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9127538DD2;
-	Mon, 22 Jul 2024 05:56:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1462F26;
+	Mon, 22 Jul 2024 06:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721627790; cv=none; b=uzFQxmwDq53xaF8M9cPcHtWd0E1Hd25rTbpWhrRNmaWxzLl/O5SZeUE0aJgj71JQNhMTvW690XSpHMWMUkcvA6XYKGr/HADoGvBABFqBMZv92dU5MayNiwVtQeTCgZssLL+0JRcZd0mseql+ZoGtHeQmj4kx2c1gL2meXXY9cu0=
+	t=1721628329; cv=none; b=s/LImKSjuHcZBWeKFQHyH4tflM0gVjjh0tHbNTqRf+P5eyYJN4UdiNq0Uj9m9puwF7lqSxUWu+qNtj31s5ldAeisyJzI3ySQ+zlCp3BRhE4ZKF4HnTXvq/SDdS9Zc06pULS37d14dkV4+m6a/ROXZGcvnnV2aIfzAoQfkAHw/As=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721627790; c=relaxed/simple;
-	bh=VgiJR7kEM+cnGMiBj+lSW8qPAhtGTOoj5UWbY5zfUyI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ixTSINE5wJfXkZhPeb+MC7XljnAdoflq3hMJ/SvAnQAz7ySfFmRCLJtGtQqpF2gHUUrB3MtLp6gHV+vUmvOCT5Xa0LCqZfKXieRpY2Hh6aSXVQz0GOh9+va691o9UJtnod0irQMcxTUZTGaD4wv17/S3VHFRkLuhnFZuMPj+DzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Z9XBfxRy; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1721628329; c=relaxed/simple;
+	bh=ot0ga8bRdPH4v9X9BxrgDdbzThdk5I4c40OAQw2KIYg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uTxvrrVDAqcAyQ5oDLwpqXCk/NIStqgbUYYO1wDrv0ygaJv0wIS7EnOdjvdN7Wv5mZcaisSKByluYQZDTRWq45iFEH6f3nGUcqFP6IQ5BP6xh+PTAISMVApTj5zv5FwYGaKfv5SmCcmoLv+Gmlf8sWNF6Y5MFZXo1HnSpfdLBIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YS1zItC/; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46LM0ElG031835;
-	Mon, 22 Jul 2024 05:56:24 GMT
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46M0pFxw009618;
+	Mon, 22 Jul 2024 06:05:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	9ifLbZTRgpqGEv2r30ppykhhVp36eH3TXwx0BaaMj7o=; b=Z9XBfxRyhVjX9i5/
-	JhlgmGdMyi0kWqC97ss1uEiDXkugknqFmz+2X0lp3ksR14O2hMR4Yb9IPMw1GD32
-	XOTTwN9t7bKhfR+PkJ7SQBg+8kSDQB2OgzN5m2J02gSwtx2oQv4AJDie1gv+4jkx
-	cDHDkv0G45G9rx4jrciE1BR0pQt199wHNt9KMdUMX88OHaHidaphkfxXMnrdGZ2Q
-	tzK9SNHk0Kdfg6wEUIC0OWWq9ctW9VnQNL4ogb5FLgDrWJ6Nd6hviXOK5aAkrcCX
-	exVkjO34Dk4QbX+UFXam/hV6Co47j/KLgDTRkn7seUp2R7ROBouf3w8BO1ToDbpr
-	/thwbw==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40g5m6tqp4-1
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=kPOCMe6t/U0WJp2e32dF6ru1
+	NveNnHm9mbaos1MAeBQ=; b=YS1zItC/bHQLG43cgDgVcv4SSwb2UPvwFALrq/Vi
+	MsOxncgDEcHxBmEjxxPhhnu4FOu3ovJRFFTGW9JOvtNDsf32Z4TXvXOOMXYFcfVF
+	aNYfxQK7JLJfzYboWa9T1sduA18BNQRY/Upp8ACdLXVsNk3WyhdVsm9QEpBr9f6I
+	fU1Hc/ENtGcwXe1zrzScuHJppOGwDj610RQe9ZWaZGzP/OJlNJSlbTApQiAv3Ntf
+	EWxBoO4Sr4WomMjt0oP/IBHaQ0tKYFiZGakceZdPygHQjJ6tytFP/hd+t2SaP/fi
+	qKCd0V3D8pDHvpIuUYhUycg7Nx3JjioRSMHG7fc9rIm1Xg==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40g2xeaw4k-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 22 Jul 2024 05:56:24 +0000 (GMT)
+	Mon, 22 Jul 2024 06:05:21 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46M5uM2u025155
+	by NASANPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46M65KTS002699
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 22 Jul 2024 05:56:23 GMT
+	Mon, 22 Jul 2024 06:05:21 GMT
 Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Sun, 21 Jul 2024 22:56:17 -0700
+ 15.2.1544.9; Sun, 21 Jul 2024 23:05:15 -0700
+Date: Mon, 22 Jul 2024 11:35:12 +0530
 From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
         <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
         <gregkh@linuxfoundation.org>, <konrad.dybcio@linaro.org>,
         <djakov@kernel.org>, <quic_wcheng@quicinc.com>,
         <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-usb@vger.kernel.org>, <linux-pm@vger.kernel.org>
-CC: Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v3 5/5] arm64: dts: qcom: ipq5332: Add icc provider ability to gcc
-Date: Mon, 22 Jul 2024 11:25:39 +0530
-Message-ID: <20240722055539.2594434-6-quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240722055539.2594434-1-quic_varada@quicinc.com>
-References: <20240722055539.2594434-1-quic_varada@quicinc.com>
+Subject: Re: [PATCH v2 3/4] clk: qcom: ipq5332: Use icc-clk for enabling NoC
+ related clocks
+Message-ID: <Zp32mJZdEH1MLrLd@hu-varada-blr.qualcomm.com>
+References: <20240711113239.3063546-1-quic_varada@quicinc.com>
+ <20240711113239.3063546-4-quic_varada@quicinc.com>
+ <iwdennlw4njxefulw5e2wofu4pylep65el4hiiso6xqmoaq5fb@i4hrltrn2o6z>
+ <ZpjxobF6LZMMN8A9@hu-varada-blr.qualcomm.com>
+ <CAA8EJpqHrgi-AvfxGxwph0MEs0=ALV_7XWoUcSgGTG3vVj62FA@mail.gmail.com>
+ <Zpt9Jb0aIg96yKN3@hu-varada-blr.qualcomm.com>
+ <CAA8EJppqoDR=q_6Dh4dF-rh5f-2B1=JZZPe83EbrCRGu-NmB2Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAA8EJppqoDR=q_6Dh4dF-rh5f-2B1=JZZPe83EbrCRGu-NmB2Q@mail.gmail.com>
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YzwQuuPRByQakgHIiM-QCtKKz1Q_cKHI
-X-Proofpoint-ORIG-GUID: YzwQuuPRByQakgHIiM-QCtKKz1Q_cKHI
+X-Proofpoint-GUID: FUHGficn9ltdcs08p76-c6UFcKr68SmQ
+X-Proofpoint-ORIG-GUID: FUHGficn9ltdcs08p76-c6UFcKr68SmQ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-22_02,2024-07-18_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- mlxlogscore=999 adultscore=0 bulkscore=0 mlxscore=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 clxscore=1015 malwarescore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 adultscore=0
+ phishscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2407220045
+ engine=8.19.0-2407110000 definitions=main-2407220046
 
-IPQ SoCs dont involve RPM in managing NoC related clocks and
-there is no NoC scaling. Linux itself handles these clocks.
-However, these should not be exposed as just clocks and align
-with other Qualcomm SoCs that handle these clocks from a
-interconnect provider.
+On Sat, Jul 20, 2024 at 12:05:59PM +0300, Dmitry Baryshkov wrote:
+> On Sat, 20 Jul 2024 at 12:02, Varadarajan Narayanan
+> <quic_varada@quicinc.com> wrote:
+> >
+> > On Thu, Jul 18, 2024 at 01:47:32PM +0300, Dmitry Baryshkov wrote:
+> > > On Thu, 18 Jul 2024 at 13:42, Varadarajan Narayanan
+> > > <quic_varada@quicinc.com> wrote:
+> > > >
+> > > > On Sat, Jul 13, 2024 at 07:21:29PM +0300, Dmitry Baryshkov wrote:
+> > > > > On Thu, Jul 11, 2024 at 05:02:38PM GMT, Varadarajan Narayanan wrote:
+> > > > > > Use the icc-clk framework to enable few clocks to be able to
+> > > > > > create paths and use the peripherals connected on those NoCs.
+> > > > > >
+> > > > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > > > > ---
+> > > > > >  drivers/clk/qcom/gcc-ipq5332.c | 36 +++++++++++++++++++++++++++++-----
+> > > > > >  1 file changed, 31 insertions(+), 5 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
+> > > > > > index f98591148a97..6d7672cae0f7 100644
+> > > > > > --- a/drivers/clk/qcom/gcc-ipq5332.c
+> > > > > > +++ b/drivers/clk/qcom/gcc-ipq5332.c
+> > > > > > @@ -4,12 +4,14 @@
+> > > > > >   */
+> > > > > >
+> > > > > >  #include <linux/clk-provider.h>
+> > > > > > +#include <linux/interconnect-provider.h>
+> > > > > >  #include <linux/mod_devicetable.h>
+> > > > > >  #include <linux/module.h>
+> > > > > >  #include <linux/platform_device.h>
+> > > > > >  #include <linux/regmap.h>
+> > > > > >
+> > > > > >  #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
+> > > > > > +#include <dt-bindings/interconnect/qcom,ipq5332.h>
+> > > > > >
+> > > > > >  #include "clk-alpha-pll.h"
+> > > > > >  #include "clk-branch.h"
+> > > > > > @@ -131,12 +133,14 @@ static struct clk_alpha_pll gpll4_main = {
+> > > > > >                      * (will be added soon), so the clock framework
+> > > > > >                      * disables this source. But some of the clocks
+> > > > > >                      * initialized by boot loaders uses this source. So we
+> > > > > > -                    * need to keep this clock ON. Add the
+> > > > > > -                    * CLK_IGNORE_UNUSED flag so the clock will not be
+> > > > > > -                    * disabled. Once the consumer in kernel is added, we
+> > > > > > -                    * can get rid of this flag.
+> > > > > > +                    * need to keep this clock ON.
+> > > > > > +                    *
+> > > > > > +                    * After initial bootup, when the ICC framework turns
+> > > > > > +                    * off unused paths, as part of the icc-clk dependencies
+> > > > > > +                    * this clock gets disabled resulting in a hang. Marking
+> > > > > > +                    * it as critical to ensure it is not turned off.
+> > > > >
+> > > > > Previous comment was pretty clear: there are missing consumers, the flag
+> > > > > will be removed once they are added. Current comment doesn't make sense.
+> > > > > What is the reason for the device hang if we have all the consumers in
+> > > > > place?
+> > > >
+> > > > Earlier, since there were no consumers for this clock, it got
+> > > > disabled via clk_disable_unused() and CLK_IGNORE_UNUSED helped
+> > > > prevent that.
+> > > >
+> > > > Now, since this clk is getting used indirectly via icc-clk
+> > > > framework, it doesn't qualify for being disabled by
+> > > > clk_disable_unused(). However, when icc_sync_state is called, if
+> > > > it sees there are no consumers for a path and that path gets
+> > > > disabled, the relevant clocks get disabled and eventually this
+> > > > clock also gets disabled. To avoid this have changed 'flags' from
+> > > > CLK_IGNORE_UNUSED -> CLK_IS_CRITICAL.
+> > >
+> > > You don't seem to be answering my question: "What is the reason for
+> > > the device hang if we have all the consumers in place?"
+> > > Could you please answer it rather than describing the CCF / icc-clk behaviour?
+> >
+> > Sorry if I hadn't expressed myself clearly. All the consumers are
+> > not there in place yet.
+> >
+> > > Are there any actual consumers for GPLL4 at this point? If not, why do
+> > > you want to keep it running? Usually all PLLs are shut down when there
+> > > are no consumers and then restarted when required. This is the
+> > > expected and correct behaviour.
+> >
+> > There are consumers for GPLL4, but they are getting disabled by
+> > clk_disable_unused (this is expected). There seems to be some
+> > consumer that got enabled in boot loader itself but not accounted
+> > in Linux because of which we are relying on CLK_IGNORE_UNUSED.
+> >
+> > If missing consumer(s) is identified, we can do away with this
+> > flag. Till that is done, was hoping CLK_IS_CRITICAL could help.
+>
+> NAK, please identify missing consumers instead of landing workarounds.
 
-Hence include icc provider capability to the gcc node so that
-peripherals can use the interconnect facility to enable these
-clocks. Change USB to use the icc-clk framework for the iface
-clock.
+Please review v3, have identified the missing consumer.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
-v3: Fix #include file order
----
- arch/arm64/boot/dts/qcom/ipq5332.dtsi | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-index 573656587c0d..7e8f9d578382 100644
---- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-@@ -7,6 +7,7 @@
- 
- #include <dt-bindings/clock/qcom,apss-ipq.h>
- #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
-+#include <dt-bindings/interconnect/qcom,ipq5332.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
- / {
-@@ -208,6 +209,7 @@ gcc: clock-controller@1800000 {
- 			reg = <0x01800000 0x80000>;
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
-+			#interconnect-cells = <1>;
- 			clocks = <&xo_board>,
- 				 <&sleep_clk>,
- 				 <0>,
-@@ -327,11 +329,9 @@ usb: usb@8af8800 {
- 					  "dm_hs_phy_irq";
- 
- 			clocks = <&gcc GCC_USB0_MASTER_CLK>,
--				 <&gcc GCC_SNOC_USB_CLK>,
- 				 <&gcc GCC_USB0_SLEEP_CLK>,
- 				 <&gcc GCC_USB0_MOCK_UTMI_CLK>;
- 			clock-names = "core",
--				      "iface",
- 				      "sleep",
- 				      "mock_utmi";
- 
-@@ -342,6 +342,9 @@ usb: usb@8af8800 {
- 			#address-cells = <1>;
- 			#size-cells = <1>;
- 			ranges;
-+			interconnects = <&gcc MASTER_SNOC_USB &gcc SLAVE_SNOC_USB>,
-+					<&gcc MASTER_SNOC_USB &gcc SLAVE_SNOC_USB>;
-+			interconnect-names = "usb-ddr", "apps-usb";
- 
- 			status = "disabled";
- 
--- 
-2.34.1
-
+Thanks
+Varada
 
