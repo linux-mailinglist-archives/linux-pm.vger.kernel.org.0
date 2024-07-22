@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-11278-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11279-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBE26938876
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 07:49:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAF28938879
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 07:50:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 914771F213B1
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 05:49:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 089291C20D25
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2024 05:50:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85DA417597;
-	Mon, 22 Jul 2024 05:49:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58E7D17597;
+	Mon, 22 Jul 2024 05:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cnOUMEHX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BCNDQNlk"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FAF317580;
-	Mon, 22 Jul 2024 05:49:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268F77FD;
+	Mon, 22 Jul 2024 05:49:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721627342; cv=none; b=sV6FjpD94fOEmvqBltHsRn8mYLEASVDTA3zjrTIOGb0NeK3+P7N1BanLIW2DxR40fAg7K3ZMyda5ROJP5NGWlY1VAGvUQRqj/BSzOo5vBCJS5emKn2RBdpm9bxnonRs8DqSpP6umbWIIIQjGFk2Gc8SEAf33DDOqHrmnY9qyLiU=
+	t=1721627398; cv=none; b=I/AWmLZdLzQx1eL+WW2ZBXTUs4lKh9pFrxM5njPNJJg9NR1ujSzGbnCGejo1J06cI96t1e5B2nAGz4hoA6hdWuOOysaFW6wAiuNOEb69+uGMxNboSIyr6EDN2/287ycbsoE0ORNds7ehw6Ymeku3qlAsvHPEfaRNWBI0sosR8aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721627342; c=relaxed/simple;
-	bh=XzEok5NcFCLF0H8YZyRLoUBL2fVIZ6Kor2YGKH0dzu4=;
+	s=arc-20240116; t=1721627398; c=relaxed/simple;
+	bh=uOjahW7i0RiUVqAeFlGJUASOXZrkA8G3LTLa+YiT0+U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kl8d994v6BezHiDs472TBzugddK1MZVdOxSWz5+qqS0Ya3bkWKnLSyQ8H46+C5INygAk/ejgx0VzB5eddFM6FKqsDtY3fE9U6JBrawBqU2ZVFQdW+QYk4fobo+FWmW3wMTHSy03es5mLjnfz1QbCPSS8jk7UhxR5LN8Ib4VR08k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cnOUMEHX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07AA8C116B1;
-	Mon, 22 Jul 2024 05:48:56 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=U+/yoDAJmbcoSlwmeVbPYLn+vye2A7EjTtusOeW7ASDo5/McN4zm6IJ3tcYjR+U8Z2KXAxk3b04FFqIthlGRlV8ElyEZmR3T1FM+0TrM/+rv9P973U9n/dCX1MKY68YfVQvrqnx4suUaq1ZDkmkgoqXgd/HnW8JxBbjHhDEWhS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BCNDQNlk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C14C116B1;
+	Mon, 22 Jul 2024 05:49:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721627342;
-	bh=XzEok5NcFCLF0H8YZyRLoUBL2fVIZ6Kor2YGKH0dzu4=;
+	s=k20201202; t=1721627397;
+	bh=uOjahW7i0RiUVqAeFlGJUASOXZrkA8G3LTLa+YiT0+U=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cnOUMEHXuHMTLZqfDbCQfoqpZenGtC9oXxXYliTXLR08UrYxtKbJs6ZPaNeQxqMiG
-	 y0dt0vCWFpkd5XnJVRRc8k3gFgeLM8VcpIDJcLtX74x19OH9Tjuc7U/pN6T4DPlcky
-	 OZdz5D4t7X1+xl5RDQJ0luN+TOfHAamE54zie1yXOEa57yxCVBjtI6C3BDmTJcGLHA
-	 lvjwZxW/or4ssSNT3IUJykmSB2T61wSaXpAK+WPu116X1s4G6KKBZpFP/NjHjJkz8w
-	 sjZuUQkCrJs1aWxN4RUP6SFOXeqyvNHnSoxAR6XMYQnlxDvVWFp6KMmII9AMi00HFO
-	 N1aGuNOaRgfIw==
-Message-ID: <b4a83536-aa42-4512-8b75-68b81561669c@kernel.org>
-Date: Mon, 22 Jul 2024 07:48:54 +0200
+	b=BCNDQNlkCZxnEmDkQzDAc+4ifLqaGM7/WQ4zNd0PYg8Y4nLZRxUwQK38OMNAMZRHw
+	 1rhnSyId/qnVXf70zmWXdjOKzTHho87JASP4PeuOEgkiWkSn+DjSWvsH84Lim9IBmj
+	 AEWjI2FXQypGE3TpOOd6SmSY+fm/Ve6OQgD80jwTEo5mjmkAG8ekCesXKH/1Pyr+Gu
+	 PlUl7sBuSjF1p9K7OBa6n6Z8CV7wLtKWZHRsyrgACntKO4jAG0mjf9YeOphcjMbvbg
+	 aQu1TYvEf63o6Tr2ZwG+h+oPtKoda6S84xrN5b+o1AFc1TptKVDTU4lAUf6HrKk6Ge
+	 ZnIoVHHF7paJg==
+Message-ID: <6271e36a-f94e-4412-befc-a5d60ac93c82@kernel.org>
+Date: Mon, 22 Jul 2024 07:49:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/9] dt-bindings: power: supply: max77693: Add
- monitored-battery property
+Subject: Re: [PATCH v2 2/9] dt-bindings: power: supply: max77693: Add
+ maxim,usb-connector property
 To: Artur Weber <aweber.kernel@gmail.com>,
  Chanwoo Choi <cw00.choi@samsung.com>
 Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -64,7 +64,7 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
 References: <20240715-max77693-charger-extcon-v2-0-0838ffbb18c3@gmail.com>
- <20240715-max77693-charger-extcon-v2-1-0838ffbb18c3@gmail.com>
+ <20240715-max77693-charger-extcon-v2-2-0838ffbb18c3@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,25 +110,35 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240715-max77693-charger-extcon-v2-1-0838ffbb18c3@gmail.com>
+In-Reply-To: <20240715-max77693-charger-extcon-v2-2-0838ffbb18c3@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 15/07/2024 14:55, Artur Weber wrote:
-> Add the monitored-battery property, so that its constant charge current
-> property can be used to specify the current limit to use for fast charge
-> (when plugged into a wall charger).
+> Allow for specifying a USB connector to use for charger type/OTG cable
+> detection.
+> 
+> The way this is done is inspired by the rt5033-charger implementation.
 > 
 > Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
-> Changes in v2:
-> - Switched to monitored-battery property from separate fast charge
->   current property
-> ---
->  .../devicetree/bindings/power/supply/maxim,max77693.yaml         | 9 +++++++++
->  1 file changed, 9 insertions(+)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+<form letter>
+This is a friendly reminder during the review process.
+
+It looks like you received a tag and forgot to add it.
+
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tag is "received", when
+provided in a message replied to you on the mailing list. Tools like b4
+can help here. However, there's no need to repost patches *only* to add
+the tags. The upstream maintainer will do that for tags received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+
+If a tag was not added on purpose, please state why and what changed.
+</form letter>
 
 Best regards,
 Krzysztof
