@@ -1,56 +1,63 @@
-Return-Path: <linux-pm+bounces-11350-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11351-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BC5893A4F2
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2024 19:28:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59F4593A614
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2024 20:31:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EBD9283B27
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2024 17:28:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11AB6282BEE
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2024 18:31:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF429158866;
-	Tue, 23 Jul 2024 17:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ADAE15821A;
+	Tue, 23 Jul 2024 18:31:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="Y/KpqwE6"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="nz90t1af"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D8F158848;
-	Tue, 23 Jul 2024 17:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B7415821E;
+	Tue, 23 Jul 2024 18:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721755689; cv=none; b=ZWFyV5cZOJl7sQM8Izw3MECDxoYFuCMdulNxrepJLmgrMumBOL+RSQlPPY1vkMq36qj/X+8wR6LXtbV8tC6wGRShKOkzJnI3g/pJ5IT2I6tQVXc9sJGTgihfxIkfJXQf2LQ8EtQ6LFFCcHV9zY2U5fdJAp4CjTMoXUrZ/RmHxBw=
+	t=1721759489; cv=none; b=LD75pD11FTUhD4B+y17/RPckHB832GJN7YaGvFPBQZHPNwOmGxWnCa9TsQFySz0uZoJ48WXCwZoVCS0iG+wlkxVlas4ufbhYrAysUR17uDkBztQPR5cj5AFD1TFVr3BJLpQOv0EuiGyYsXFIQP1y1M0WEEiJuDkCrx+NvpLu8qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721755689; c=relaxed/simple;
-	bh=ejYMhhfHckj+3PtMfK7nop2ITFE6angxRFcmJSSjT0I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CX7X/k34R96sTNtPlP+5dncJ68d681c3zXgRjInjeD98ZadcYA3LYEVSbtt8w9e3SvlM+VVQ88BJNOYfJZmgFCrMoXIL3aHv9oJkP42OBFlxn+P+XmqeQc7v1dB5IVzOemVPRtxRDUEMsWBSpDCqR7duSyAcRFcjLG9I8D1d6as=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=Y/KpqwE6; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1721755644; x=1722360444; i=wahrenst@gmx.net;
-	bh=80fjjAf9XBmhMPzSq4fA1co69LzROIvpMlHPKGRpFfo=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=Y/KpqwE6ibEsV6yVHuH8aRQNyQdjStlltEWXEQjuX6Nd/jrbur0r+XmG3qKnkNsZ
-	 BTvhsCTzT7W0kBbtv/8Lv5zqADvkjQOExyVSDgvURiNe7WSWT9I5AbTie/oZxGDEP
-	 wDv2GAM7so+ZSMDaRmrWlWMbHotwfbAFLYgNK48yTHYc2a4bxukSC73ZA/2ijIbDU
-	 AHaNP+MlB/qLmOdL0T7AYtUfcnMLZIoSwWKqtQtwIpOthT00ZcXUwqdMFR7gcf8Pz
-	 Uo5TpFLjAdk4/sPEV1LZLhPHO0aKQufqK+qiScRimfuKRyq6CntG1snlkCpZQJvMY
-	 jBtoydziH6XXzdqiMA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N79uI-1sFai008ei-00vs3P; Tue, 23
- Jul 2024 19:27:24 +0200
-Message-ID: <7f498dd6-f21e-481c-bff9-1449327ac94a@gmx.net>
-Date: Tue, 23 Jul 2024 19:27:21 +0200
+	s=arc-20240116; t=1721759489; c=relaxed/simple;
+	bh=nGeubOj0aFAvEDDVidBpz//vAu/I0XKtSRIWt2NlxUg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=cOSXIQGeeTyKcJbF93G3mNJ5LlnbaPjvVPrDlMXOHjmvbUNVLN259SOHSOHQLf5TG/EdgFxFBvJhYHmbaJWo4TvEBlsXvAmfbipudsoZjdJVaLSsQnd8D9dIXxkHYsabGVgdLMGhaWaPiizhbS+MCb1BcQiJYu9kl5D4FTinBeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=nz90t1af; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46NB8Cgr013108;
+	Tue, 23 Jul 2024 18:31:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Ie9ulMpQcFi6Uj23FHCbwUX6LK2hWvaAQ/QQF2cZFJY=; b=nz90t1afue99IUF6
+	1Mbyxel7jHTGSyT/NGPmCuBsdbssZShytrHQeuwzUAMD1EtUqOTZCfme1mYZ/Djn
+	SdLVUMo+Z5YdUTkayWRPnXCI5zpPSc+wAVKk7ZTLtlBbWCss8nTc5snxn5/HyCoa
+	gha/vaBiodKCZ70j3BZc7IYmO7SsHDJiYqippY9wR9jk3uXPR0IRQ9v032YMDt7C
+	mueaZpITMrP9yVxb53GA5eWdm87SryVzsW0tnAO15Ft4H/6DgbREbCAlupfupifk
+	4lk8ECZaU+v/q9cSLD0mItDZgxP9+mgr+w86CNdOycSSDUFOicALXG0BPXcU8xWE
+	cRF5+Q==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40g487fw1n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Jul 2024 18:31:22 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46NIVLw8022886
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Jul 2024 18:31:21 GMT
+Received: from [10.111.176.36] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 23 Jul
+ 2024 11:31:20 -0700
+Message-ID: <37357507-d997-4e74-8e98-c120f27b9291@quicinc.com>
+Date: Tue, 23 Jul 2024 11:31:20 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,107 +65,139 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/11] drm/vc4: hdmi: Handle error case of
- pm_runtime_resume_and_get
-To: Maxime Ripard <mripard@kernel.org>, =?UTF-8?Q?Ma=C3=ADra_Canal?=
- <mcanal@igalia.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
- Jiri Slaby <jirislaby@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
- Minas Harutyunyan <hminas@synopsys.com>,
- Peter Robinson <pbrobinson@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- Scott Branden <sbranden@broadcom.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Thomas Gleixner <tglx@linutronix.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- dri-devel@lists.freedesktop.org, bcm-kernel-feedback-list@broadcom.com,
- Ray Jui <rjui@broadcom.com>, linux-pm@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
-References: <20240630153652.318882-1-wahrenst@gmx.net>
- <20240630153652.318882-7-wahrenst@gmx.net>
+Subject: Re: [PATCH] PM/devfreq: governor: add missing MODULE_DESCRIPTION()
+ macros
 Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <20240630153652.318882-7-wahrenst@gmx.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Nzd9l7pAHFgSgPujxmJeeQJNfuVnleLtW7GuiqkrRWzJSKop67p
- CkCMyNTcAlgTI6rANC3i6Hr+cwhws5UFKyfxhJYlT+fFiE6H1IKQKNxG30c3ZlcIk8SLEmj
- DiwyUF/125vIN7zUdywBPNMJZf58SsvuGdwiRcWJ9FbzcA9V8CIKdofia2cmgA2Y3PUT+TO
- t8b0OZe6qUAU/9Lo6vaUQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:wpdg22WfDQk=;AKCwxABGI9PRvrQviv1h7ESd+Sp
- o1MZ8bg8S3PJomoQA+DXQ5d+bR0slqcHco8FPUCX5gHvCtYLhYqqimQx9IrVOvaFYr6ZhK+Fu
- Q0d+UQWui6jQfVr6O73GT1zvOJIEYZKED90eo0DgZYPZFw1AYrpreC1gmP05iV8hvdF2ZogHN
- +7mRQZoWKGwOpkL9D/a93huFBvzzuf+qpGKZrEjVM28Gnc2pIEMyFaecMjKCYiLHHeYEkoO6P
- AkSPL9c/z2zPD2Y84gAuDiGoCe7RjIPxLS6ZbhNgPKeCmm+IfBBfbaxesBwxHOOYtLHiPQJ7b
- hdZFeHlP3ydrRtpU0I7isoXu6jJl2E9kLEQB2Y3gIT7UNt79vAdMVvs1vET0U6QqTtK6ssG2u
- EEt9oUWFvcOSCy2dOZEnRL1pDrS3KNMnxizI5c3WGv8K+kVTL8V2IbiLGwLRS4J+za/7sj4XV
- W92kziet+mXRzjRgcwn8o0jnJQF+smk2+arLjtOgeo2u5bHTEFwCNktD+KwBXIHFRg0Lbz+JV
- LrUVR0ri5IaJDVoNOECoTQLhVAUH+GmVb1vp9Az9r6a48N4qr6pDI+7/Em6XcW0n9iT05djGT
- +LTtUyaslE7etrGgLADfvDRwTOoTnHRljG+J2qISrPNHTKBlAcAvMTNq72vecrMF+qEwpAcQf
- aeVf1Q2BKarzFGhxLvGT4WW6MExX/cH065q8CFyiNIUuVxNvxq0suE5RbIHrCl7jpSZTS6u82
- wJuNhGK7fKr9Ti/jCyN50fWRai61FVL+Z2ohG6MH7LeMr34S6kAfv/UUmqmrXhPY9fl+tPg7p
- LkreV75flkZIMi94z3lu7sWA==
+To: Chanwoo Choi <cw00.choi@samsung.com>,
+        'MyungJoo Ham'
+	<myungjoo.ham@samsung.com>,
+        'Kyungmin Park' <kyungmin.park@samsung.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <20240605-md-drivers-devfreq-v1-1-d01ae91b907e@quicinc.com>
+ <CGME20240626042133epcas1p3f68b406443e993411c4e01072ed63d5f@epcas1p3.samsung.com>
+ <f09b56c7-ad2f-472a-896e-466261b39ce7@quicinc.com>
+ <001501dac79d$53cdf390$fb69dab0$@samsung.com>
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <001501dac79d$53cdf390$fb69dab0$@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: CtQgZQQMjvzu6bt8MtaJhUsvqKM6uEO8
+X-Proofpoint-GUID: CtQgZQQMjvzu6bt8MtaJhUsvqKM6uEO8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-23_09,2024-07-23_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ suspectscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
+ malwarescore=0 adultscore=0 impostorscore=0 clxscore=1011
+ lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2407230128
 
-Hello,
+On 6/26/2024 12:49 AM, Chanwoo Choi wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Jeff Johnson <quic_jjohnson@quicinc.com>
+>> Sent: Wednesday, June 26, 2024 1:21 PM
+>> To: MyungJoo Ham <myungjoo.ham@samsung.com>; Kyungmin Park
+>> <kyungmin.park@samsung.com>; Chanwoo Choi <cw00.choi@samsung.com>
+>> Cc: linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; kernel-
+>> janitors@vger.kernel.org
+>> Subject: Re: [PATCH] PM/devfreq: governor: add missing MODULE_DESCRIPTION()
+>> macros
+>>
+>> On 6/5/2024 11:18 AM, Jeff Johnson wrote:
+>>> make allmodconfig && make W=1 C=1 reports:
+>>> WARNING: modpost: missing MODULE_DESCRIPTION() in
+>> drivers/devfreq/governor_simpleondemand.o
+>>> WARNING: modpost: missing MODULE_DESCRIPTION() in
+>> drivers/devfreq/governor_performance.o
+>>> WARNING: modpost: missing MODULE_DESCRIPTION() in
+>> drivers/devfreq/governor_powersave.o
+>>> WARNING: modpost: missing MODULE_DESCRIPTION() in
+>> drivers/devfreq/governor_userspace.o
+>>>
+>>> Add all missing invocations of the MODULE_DESCRIPTION() macro.
+>>>
+>>> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+>>> ---
+>>>  drivers/devfreq/governor_performance.c    | 1 +
+>>>  drivers/devfreq/governor_powersave.c      | 1 +
+>>>  drivers/devfreq/governor_simpleondemand.c | 1 +
+>>>  drivers/devfreq/governor_userspace.c      | 1 +
+>>>  4 files changed, 4 insertions(+)
+>>>
+>>> diff --git a/drivers/devfreq/governor_performance.c
+>> b/drivers/devfreq/governor_performance.c
+>>> index 5dbc1e56ec08..2e4e981446fa 100644
+>>> --- a/drivers/devfreq/governor_performance.c
+>>> +++ b/drivers/devfreq/governor_performance.c
+>>> @@ -58,4 +58,5 @@ static void __exit devfreq_performance_exit(void)
+>>>  	return;
+>>>  }
+>>>  module_exit(devfreq_performance_exit);
+>>> +MODULE_DESCRIPTION("DEVFREQ Performance governor");
+>>>  MODULE_LICENSE("GPL");
+>>> diff --git a/drivers/devfreq/governor_powersave.c
+>> b/drivers/devfreq/governor_powersave.c
+>>> index 4746af2435b0..f059e8814804 100644
+>>> --- a/drivers/devfreq/governor_powersave.c
+>>> +++ b/drivers/devfreq/governor_powersave.c
+>>> @@ -58,4 +58,5 @@ static void __exit devfreq_powersave_exit(void)
+>>>  	return;
+>>>  }
+>>>  module_exit(devfreq_powersave_exit);
+>>> +MODULE_DESCRIPTION("DEVFREQ Powersave governor");
+>>>  MODULE_LICENSE("GPL");
+>>> diff --git a/drivers/devfreq/governor_simpleondemand.c
+>> b/drivers/devfreq/governor_simpleondemand.c
+>>> index d57b82a2b570..c23435736367 100644
+>>> --- a/drivers/devfreq/governor_simpleondemand.c
+>>> +++ b/drivers/devfreq/governor_simpleondemand.c
+>>> @@ -140,4 +140,5 @@ static void __exit devfreq_simple_ondemand_exit(void)
+>>>  	return;
+>>>  }
+>>>  module_exit(devfreq_simple_ondemand_exit);
+>>> +MODULE_DESCRIPTION("DEVFREQ Simple On-demand governor");
+>>>  MODULE_LICENSE("GPL");
+>>> diff --git a/drivers/devfreq/governor_userspace.c
+>> b/drivers/devfreq/governor_userspace.c
+>>> index d69672ccacc4..d1aa6806b683 100644
+>>> --- a/drivers/devfreq/governor_userspace.c
+>>> +++ b/drivers/devfreq/governor_userspace.c
+>>> @@ -153,4 +153,5 @@ static void __exit devfreq_userspace_exit(void)
+>>>  	return;
+>>>  }
+>>>  module_exit(devfreq_userspace_exit);
+>>> +MODULE_DESCRIPTION("DEVFREQ Userspace governor");
+>>>  MODULE_LICENSE("GPL");
+>>>
+>>> ---
+>>> base-commit: a693b9c95abd4947c2d06e05733de5d470ab6586
+>>> change-id: 20240605-md-drivers-devfreq-42b19b2594a1
+>>>
+>>
+>> Following up to see if anything else is needed from me.
+>> Hoping to see this in linux-next :)
+>>
+>> /jeff
+> 
+> I'm sorry for late reply. I applied it.
+> 
+> Thanks,
+> Chanwoo Choi
+> 
 
-Am 30.06.24 um 17:36 schrieb Stefan Wahren:
-> The commit 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is
-> powered in detect") introduced the necessary power management handling
-> to avoid register access while controller is powered down.
-> Unfortunately it just print a warning if pm_runtime_resume_and_get()
-> fails and proceed anyway.
->
-> This could happen during suspend to idle. So we must assume it is unsafe
-> to access the HDMI register. So bail out properly.
->
-> Fixes: 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is powered=
- in detect")
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> ---
->   drivers/gpu/drm/vc4/vc4_hdmi.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hd=
-mi.c
-> index d57c4a5948c8..b3a42b709718 100644
-> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> @@ -429,6 +429,7 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_=
-connector *connector,
->   {
->   	struct vc4_hdmi *vc4_hdmi =3D connector_to_vc4_hdmi(connector);
->   	enum drm_connector_status status =3D connector_status_disconnected;
-> +	int ret;
->
->   	/*
->   	 * NOTE: This function should really take vc4_hdmi->mutex, but
-> @@ -441,7 +442,11 @@ static int vc4_hdmi_connector_detect_ctx(struct drm=
-_connector *connector,
->   	 * the lock for now.
->   	 */
->
-> -	WARN_ON(pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev));
-> +	ret =3D pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
-> +	if (ret) {
-> +		DRM_ERROR("Failed to retain HDMI power domain: %d\n", ret);
-> +		return status;
-I noticed today that the enum drm_connector_status also supports
-connector_status_unknown. Wouldn't this be a more appropriate return
-value in this error case?
+Hi,
+I see this landed in linux-next, but is not currently in Linus' tree for 6.11.
+Will you be able to have this pulled during the merge window?
+I'm trying to eradicate all of these warnings before 6.11 rc-final.
 
-Why isn't status initialized with connector_status_unknown at all?
-
-Best regards
-> +	}
->
->   	if (vc4_hdmi->hpd_gpio) {
->   		if (gpiod_get_value_cansleep(vc4_hdmi->hpd_gpio))
-> --
-> 2.34.1
->
-
+Thanks!
+/jeff
 
