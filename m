@@ -1,160 +1,138 @@
-Return-Path: <linux-pm+bounces-11361-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11362-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDBE193AC98
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2024 08:27:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B57B93AD12
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2024 09:14:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71A4B1F21BCE
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2024 06:27:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCBA01C21F91
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2024 07:14:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A7C452F6F;
-	Wed, 24 Jul 2024 06:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ED9113792B;
+	Wed, 24 Jul 2024 07:13:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VpftxuPe"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wZJhcyce"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE06D3E49D;
-	Wed, 24 Jul 2024 06:27:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE32C130484
+	for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2024 07:13:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721802431; cv=none; b=WJnWt9SPi2IkXih8/yN7OjtwrO6/r6r3dS3A0yTrjyBmBBv4f3GEQRTt0wpLzwlnF2dAwjc+YhmiyXI/NIW1gqom1+8oRHr1KhZ3kgRmzZzultCWwWnlzf7QCZgLcFXIkSpR3WiNWU373ee5HOHiCiqVDvs2hOKM7Lmye5283BY=
+	t=1721805218; cv=none; b=QIp72Goj4Q67cixYlQh6GFGLmU58g6KzVqKhBpsCQLfYltakJRpnWtnYP3xFSrLG6BWkzvcLFLOO1TO5hBXv6teIkctVbEs8pV4Ik7HEu0dpAcyOwIt/JLHmLlg3JqgxmAyxVPDs6uQRm/tkME3KsPwsteEy/wnhCssNicJK6qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721802431; c=relaxed/simple;
-	bh=2X0Ry7zeY8Ep1p58TlKAhA7i7D12mqF3dvDhfi5t5FA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=jo8W1CbNETAOBB0Z+z6o8WtqmKJEUjN8tVrQnH8u1GJUAXND+I+MU2aAlUV5X/DvphnpBcxVwUwxuIIyKC9blT8YMK2Dmu7obYyFmsgkfXYzjgqdpfQp9iFHjYKdqJNH9eoizMOULCnvHhLsDam7NQjw3qKXyZ/zV3rb7d/4hLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VpftxuPe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91AA8C32782;
-	Wed, 24 Jul 2024 06:27:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721802431;
-	bh=2X0Ry7zeY8Ep1p58TlKAhA7i7D12mqF3dvDhfi5t5FA=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=VpftxuPe+ul+mUuxKy4yqo1LmMWETOnaSBcHcRqzRDpQTOeYXIeYkYMxrkbiZxtvg
-	 ItpstGSiCG7h42APRFxvdGyuaEmwWN2cHMTSopQ5v+SQaqXhXjQjRL1FSF5ZPNAyaJ
-	 7oqSD3fz1B5vL3mEn1CdnGyf3LXxMIEdF7oRxqgcCziTNJAuaZc/yFzE2Ta2XuM/q0
-	 vyrZKeHD22UjS/kbTzlgeEEu41ebqy71RWPyyKW9HpbAU8/jp/hDocJKFpXooyUD5J
-	 t2ijdtnOhH0MQcdHLyEBMApvDbt9V2s7Vy8U8Xpzx3kf6ZKxhF09BUXoevS2GSdNZK
-	 HheD/6bP098HA==
-Message-ID: <ac34c454-4800-4057-9a50-e0c5db1d3806@kernel.org>
-Date: Wed, 24 Jul 2024 08:27:03 +0200
+	s=arc-20240116; t=1721805218; c=relaxed/simple;
+	bh=uwyZFwSs4zyRVcD6GNu+z1tt0btijTTHCaceFk9BSDo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Cg+1+ZYYJVj20Hkt9kPDcF831Td9zypaNIzWI4C7MZQm0NFaafYCI/ztZqY4MagsRdIBxGQ90xwv5BegTA/pGGloZHXrxzS1PqGo8WFJIIY7IsXWQu1pDfQ7LeuUAj+Eso/S+WvIE44DxIwFNHQuYbOWmZSQ4ZAg2DyYvOj7S2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wZJhcyce; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-661d7e68e89so4913657b3.0
+        for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2024 00:13:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1721805215; x=1722410015; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+a1tPg3HOKKRtQ+H1Jww0GEhJ0d9bDqysfDZw/250x0=;
+        b=wZJhcyceCLvqdj41AmHl6BSJWrbVGR5EJU9+lZHLvK8pAuzDotD58d3HLvX+WmCh1p
+         u9M+S3zqPuG1d/5nif5pRQSuKVfkGycZQqu/m9gBGgHRjlliK1jrckAbJW7/Q+kIdNdX
+         G/nqzIraJJ9WZpEo2huEdxucw/EPsFDQCA1b3Dw4qOcn4+PdBUWp9gcP0/El6t24vl9h
+         ByDU6qChUcpFh6eBjRMOF6IWuov6xdswoXsf13JqNI3fl+PIIOP+AYebfAREeOLFRJBp
+         tWxdYz/g/CdDxJxw5n8VNVXKlKdAnD7YHT55+atYQgepW8977MGPR/2/YJf4N2wvldc/
+         y5GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721805215; x=1722410015;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+a1tPg3HOKKRtQ+H1Jww0GEhJ0d9bDqysfDZw/250x0=;
+        b=MCUWYJKs6VIAJPDpYTSavRd9Qez88Dxy+NGmAboZB1xzu8D2/rKqjD8F7fQsz1oU8h
+         QpbEa67gdqYLppCoPGXC28cqO1by8nT4tn42XhW4HJClRpwly+XHo5B7uomboTj5vWJb
+         4ti6oMSmVRsRdjWrwbMHlwcZtzu4Cw+ghVBgoESOAaRZq5NHz8OGcfCsOAMXicLPRafJ
+         BF09GODLKZfKTZx7MuJpHHqZez3va6OWlTaS3AGXJMNAW/I5P0XKEk30GGG1FaiFaLk3
+         tG7fRTEli0FJ0KxzalwPjLPFr9+E26DmMGMvonY8tjhPFriGU1qThdu43HUkBCTxNejY
+         CFZw==
+X-Forwarded-Encrypted: i=1; AJvYcCWh4XZa32jzmOLaVHbjwigUjMLRB8Ke6jLYVadyeXKVZ+59NHeIfv6b4KS0j+cdGb00FqRPQrLqSPXuB/ZkWyq5ZEOTRQ1U0a0=
+X-Gm-Message-State: AOJu0YzjB0ETFt9lGyYFKGuZHcuibTFttY7SJSHw35gYkdHk9KkeJxG/
+	6DwZdFJxayjcCbqgepTxrwbcAKGUExbCyW3v1d80etC9MdOmNll4v5lgARODAfLl1dzcqVe8qJ0
+	olM6fcI4tu7h6j5vstPvP/KdcHfuQ8DtG/0u71A==
+X-Google-Smtp-Source: AGHT+IEPG1bHq5OcfqednTsQJ647G2YbNdaFkAv2JHjQWuG+H9RUFpS0NlqBBVg0Uc/Z02sFUMoTU5E5IsQ01hU01b4=
+X-Received: by 2002:a05:690c:2e0f:b0:65f:96e9:42f4 with SMTP id
+ 00721157ae682-672bdaa5cd0mr5792037b3.15.1721805214701; Wed, 24 Jul 2024
+ 00:13:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/5] dt-bindings: usb: qcom,dwc3: Update ipq5332 clock
- details
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
- mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org,
- konrad.dybcio@linaro.org, djakov@kernel.org, quic_wcheng@quicinc.com,
- quic_kathirav@quicinc.com, linux-arm-msm@vger.kernel.org,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20240723090304.336428-1-quic_varada@quicinc.com>
- <20240723090304.336428-3-quic_varada@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240723090304.336428-3-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240703091651.2820236-1-quic_varada@quicinc.com>
+ <20240703091651.2820236-6-quic_varada@quicinc.com> <57dadb35-5dde-4127-87aa-962613730336@linaro.org>
+ <ZqCCpf1FwLWulSgr@hu-varada-blr.qualcomm.com>
+In-Reply-To: <ZqCCpf1FwLWulSgr@hu-varada-blr.qualcomm.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Wed, 24 Jul 2024 10:13:23 +0300
+Message-ID: <CAA8EJpq5XLQ8WXVxr+3=DZ58URpfqM2phcWVhukpmc_HnRsRfQ@mail.gmail.com>
+Subject: Re: [PATCH v4 05/10] pmdomain: qcom: rpmpd: Add IPQ9574 power domains
+To: Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>, vireshk@kernel.org, nm@ti.com, 
+	sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	angelogioacchino.delregno@collabora.com, andersson@kernel.org, 
+	mturquette@baylibre.com, ilia.lin@kernel.org, rafael@kernel.org, 
+	ulf.hansson@linaro.org, quic_sibis@quicinc.com, quic_rjendra@quicinc.com, 
+	quic_rohiagar@quicinc.com, abel.vesa@linaro.org, otto.pflueger@abscue.de, 
+	danila@jiaxyga.com, quic_ipkumar@quicinc.com, luca@z3ntu.xyz, 
+	stephan.gerhold@kernkonzept.com, nks@flawful.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 23/07/2024 11:03, Varadarajan Narayanan wrote:
-> USB uses icc-clk framework to enable the NoC interface clock.
-> Hence the 'iface' clock is removed from the list of clocks.
-> Update the clock-names list accordingly.
+On Wed, 24 Jul 2024 at 07:27, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
+>
+> On Tue, Jul 09, 2024 at 11:52:19AM +0200, Konrad Dybcio wrote:
+> > On 3.07.2024 11:16 AM, Varadarajan Narayanan wrote:
+> > > From: Praveenkumar I <quic_ipkumar@quicinc.com>
+> > >
+> > > Add the APC power domain definitions used in IPQ9574.
+> > >
+> > > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > ---
+> > > v4: Add Reviewed-by: Dmitry Baryshkov
+> > > v3: Fix patch author
+> > > v2: Fix Signed-off-by order
+> > > ---
+> > >  drivers/pmdomain/qcom/rpmpd.c | 19 +++++++++++++++++++
+> > >  1 file changed, 19 insertions(+)
+> > >
+> > > diff --git a/drivers/pmdomain/qcom/rpmpd.c b/drivers/pmdomain/qcom/rpmpd.c
+> > > index 5e6280b4cf70..947d6a9c3897 100644
+> > > --- a/drivers/pmdomain/qcom/rpmpd.c
+> > > +++ b/drivers/pmdomain/qcom/rpmpd.c
+> > > @@ -38,6 +38,7 @@ static struct qcom_smd_rpm *rpmpd_smd_rpm;
+> > >  #define KEY_FLOOR_CORNER   0x636676   /* vfc */
+> > >  #define KEY_FLOOR_LEVEL            0x6c6676   /* vfl */
+> > >  #define KEY_LEVEL          0x6c766c76 /* vlvl */
+> > > +#define RPM_KEY_UV         0x00007675 /* "uv" */
+> >
+> > The "uv" key is handled in qcom_smd-regulator.c.. I'm assuming on this
+> > platform, it accepts level idx instead of the regulator properties
+> > and this is intentional?
+>
+> IPQ9574 RPM accepts regulator properties (uv) and not the level idx.
+> Hence added the "uv" key in the rpmpd.c
 
-But the clock is still there and is still used by this block. This looks
-like adjusting hardware per Linux implementation.
+Does it expect the actual voltage? If so, then it is not a power
+domain and it should be modelled as a regulator instead.
 
-Why suddenly this clock was removed from this hardware?
 
-> 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  .../devicetree/bindings/usb/qcom,dwc3.yaml      | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> index efde47a5b145..6c5f962bbcf9 100644
-> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> @@ -220,6 +220,22 @@ allOf:
->              - const: sleep
->              - const: mock_utmi
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,ipq5332-dwc3
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 3
-> +        clock-names:
-> +          items:
-> +            - const: core
-> +            - const: sleep
-> +            - const: mock_utmi
-
-So this is the same as first case. Just put it there. It's your task to
-check if you are duplicating a case, not reviewer's...
-
-Best regards,
-Krzysztof
-
+-- 
+With best wishes
+Dmitry
 
