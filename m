@@ -1,147 +1,171 @@
-Return-Path: <linux-pm+bounces-11364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11365-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AD8693B0C3
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2024 13:55:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8FBC93B39E
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2024 17:31:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B55A3281285
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2024 11:55:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 383BE1F22123
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2024 15:31:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22471586F5;
-	Wed, 24 Jul 2024 11:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69DA215B14E;
+	Wed, 24 Jul 2024 15:31:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gmHy6cNe"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="kOxdbZ63"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14DE1514ED;
-	Wed, 24 Jul 2024 11:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5BA159217
+	for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2024 15:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721822150; cv=none; b=hYWLXpIwX8Y8xo2Dk5UkHTmLQGgqmJVECgb2MCF02lNNrsrvgDfBbs5kXecTue3/1egJiuf+R/6StfMXQWHcl4J81I7KCt5ppXYjl2DF/dzzeXW42OKAEEn0j8MiqevMTz/FUtFhQvYwgjY1esMF1ILEormmVX74RTmj+zrGikg=
+	t=1721835067; cv=none; b=YxWHSXCu0eJkZGBHdj9k8NDHJdysKF9SkcIu0H+qYWONJRqRoXz3IPFYKWGvT/cqM+8gHOqCTfF/kIbqmijGNyhFPhemVKZ0BkC32fuzm6COP50bC4jteiMv4Xui3MAm5X+cBZY8T43wEDn920UYzM28VUfP7yMVZooy5OxekH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721822150; c=relaxed/simple;
-	bh=aD1WuGUjqO0uEHPch3G63drQXoYwCBw9LLbsQd2a1pE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EBqzwH0kU4Zx/QovXBFpgOGyjDZuT5Mu91nRPN305JpGjajjzqvKtZAqbMMN9k+bmgQNbBtL92pVXftbx+Gb0HMl+m1tuyDIznzA78wmAXXUA1qdj4D8Wmw2M11uSyXlYU+HB4RPLyDqFigbrRzLLM6CGVC2DdakKKY9id/CnGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gmHy6cNe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57EBDC4AF0E;
-	Wed, 24 Jul 2024 11:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721822150;
-	bh=aD1WuGUjqO0uEHPch3G63drQXoYwCBw9LLbsQd2a1pE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gmHy6cNea0ci0v+HR1ntWSL6sH/t3GZvvOMfoUNYnH6NqSxbnLWZTIDchw8eQlrLs
-	 D+3riNF1MyV3JFrqGfwe6/ZiQAKfrNXx34/hJyVQFGuSDBWAY0KuBsWNe0GPH6XSQg
-	 5pYGnrtZ6MNQUvb+9usuQSa6unPkIgNaZkJpWYWF3CNmVrs692IWi9YNJCpCp/ogpr
-	 6qbMo1aTECDoCQLxyX0PyGmw57WTpU1KZpRZ4RghNchjDRiGi+Wj4qeqb26R/04m+k
-	 MQzMwEArEo1QRvXQwVZrQnnGiugIidQMmBjL44xu2TiicxxkOh+RxXDrlVHYDHRUh3
-	 eiDi2Jzv3+Ggw==
-Message-ID: <bc2da461-fd21-44d1-85a7-f89c60e2b207@kernel.org>
-Date: Wed, 24 Jul 2024 13:55:41 +0200
+	s=arc-20240116; t=1721835067; c=relaxed/simple;
+	bh=r2MN2bBc3Kfp18tWdCR53taAy1x7zD5Ls8IFUyz/n+o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type:References; b=bS8QYvIozASkihvmH8c5vp/PwiixukKNfRBUvCHo/fpAd+STLyWY8ja9mMh/b0hQgNGd0S3A545QbByAl4GVykibs2ymoNoYTXa14KwGjjFncyxbMjQH/22QEiabq28uphSq1HA8Aj/mJEX1lglvsQz/+vudX7l3GhfK7PCI0G8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=kOxdbZ63; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240724153057euoutp02efe89349ec3241635cb60f7d980d21e5~lL9y8ia-F2378423784euoutp02K
+	for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2024 15:30:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240724153057euoutp02efe89349ec3241635cb60f7d980d21e5~lL9y8ia-F2378423784euoutp02K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1721835057;
+	bh=dzddrlA5sh87ryozwXveIOfmk/31qNlAPzRYhrbGzG4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=kOxdbZ63dVTUhtGz6ZfWdFHm7GCH8FxHVpx/rkhpA9+PrKU+q39HYwAY93Fyf9e/k
+	 uF5zcLAo4qrPo+zD+AqPZYHHIDXQG9iQK9W4zYyilYo9LqeSuyP+j4yBJDYJk0iTYp
+	 VkmJ/2NXAoqmhWHOVS3QEl5UaZzTLk3Ej8PNPWSk=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+	20240724153057eucas1p1647824aff7aaf1285d72e32be9fc00b2~lL9yaWgsS3047230472eucas1p1I;
+	Wed, 24 Jul 2024 15:30:57 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges1new.samsung.com (EUCPMTA) with SMTP id D0.5C.09624.03E11A66; Wed, 24
+	Jul 2024 16:30:56 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20240724153056eucas1p193056deacd26701e60519fa0466269f5~lL9x61iOs3053930539eucas1p1J;
+	Wed, 24 Jul 2024 15:30:56 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240724153056eusmtrp20b8cf6f68438112bde9364ba673226b7~lL9x6AhQC0772707727eusmtrp2S;
+	Wed, 24 Jul 2024 15:30:56 +0000 (GMT)
+X-AuditID: cbfec7f2-c11ff70000002598-f8-66a11e30ac00
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+	eusmgms1.samsung.com (EUCPMTA) with SMTP id 26.39.08810.03E11A66; Wed, 24
+	Jul 2024 16:30:56 +0100 (BST)
+Received: from AMDC4515.eu.corp.samsungelectronics.net (unknown
+	[106.120.51.28]) by eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240724153055eusmtip192f5253364ae6bfc12bf594e3dfd9db6~lL9xFJInI3047830478eusmtip1H;
+	Wed, 24 Jul 2024 15:30:55 +0000 (GMT)
+From: Mateusz Majewski <m.majewski2@samsung.com>
+To: Sam Protsenko <semen.protsenko@linaro.org>
+Cc: Mateusz Majewski <m.majewski2@samsung.com>, linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Krzysztof Kozlowski
+	<krzk@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+	<daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+	<lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
+Subject: Re: [PATCH 5/6] drivers/thermal/exynos: add initial Exynos 850
+ support
+Date: Wed, 24 Jul 2024 17:30:36 +0200
+Message-ID: <20240724153037.914681-1-m.majewski2@samsung.com>
+X-Mailer: git-send-email 2.45.1
+In-Reply-To: <CAPLW+4katjgDUS+e4+iYt+Cz_pKizLFUxqV4KGnbQ5ekAq9Mvw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/5] dt-bindings: usb: qcom,dwc3: Update ipq5332 clock
- details
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- gregkh@linuxfoundation.org, konrad.dybcio@linaro.org, djakov@kernel.org,
- quic_wcheng@quicinc.com, quic_kathirav@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20240723090304.336428-1-quic_varada@quicinc.com>
- <20240723090304.336428-3-quic_varada@quicinc.com>
- <ac34c454-4800-4057-9a50-e0c5db1d3806@kernel.org>
- <ZqDoXu9+Y4+O8M7W@hu-varada-blr.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <ZqDoXu9+Y4+O8M7W@hu-varada-blr.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOKsWRmVeSWpSXmKPExsWy7djP87oGcgvTDN7ft7B4MG8bm8X3LdeZ
+	LNbsPcdkMe+zrMX8I+dYLc6f38BusenxNVaLy7vmsFl87j3CaDHj/D4mi4VNLewWE49NZraY
+	+2Uqs8X/PTvYLZ487GOzeN63j8lBwGPNvDWMHjtn3WX3WLznJZPHplWdbB53ru1h89i8pN6j
+	b8sqRo/Pm+QCOKK4bFJSczLLUov07RK4Mr42dbEVrOKreNZ/hq2BcSp3FyMHh4SAicSSy+ld
+	jFwcQgIrGCWmr2tg62LkBHK+MErcmZ0GkfjMKPFnx3FWkARIw925R9kgEssZJf49mM8E4bQy
+	SezcPpEdpIpNwEDiwZtlYLaIgJ7Eupmv2EGKmAU2s0hceDoTbJSwQKDE+TVNLCA2i4CqxPG3
+	38F28wrYSmza+5IFYp28RO/+PiYQmxOo/vvs5ywQNYISJ2c+AbOZgWqat85mhqifzCnR89Ie
+	wnaRWN55nxHCFpZ4dXwLO4QtI/F/53wmCDtfYsbm9yyQsKiQuHvQC8K0lvh4hhnEZBbQlFi/
+	Sx+i2FFi17IGJogKPokbbwUh9vNJTNo2nRkizCvR0SYEUQ300p5JUGdJSzxpuQ210kOiY9Jm
+	lgmMirOQfDILySezEPYuYGRexSieWlqcm55abJiXWq5XnJhbXJqXrpecn7uJEZjWTv87/mkH
+	49xXH/UOMTJxMB5ilOBgVhLhffJqbpoQb0piZVVqUX58UWlOavEhRmkOFiVxXtUU+VQhgfTE
+	ktTs1NSC1CKYLBMHp1QD02Lx0PLr3s+F/yRE7WzbP+ffhNKDPKXKYmwcXYwV/HtSbvQyev2e
+	Edm/ICFYvevQx4/sf0wPvVky/efqnoL72a6T3i+7yOOw4sVN9WmX9US69cNKtkxz/92i8qhb
+	TfejgIL5nPQejp9W9k49uw7ddXz/eNKkFVMW5qqoKUa/qooqC7hd5dC3z1Lmsc9OFytL/p+i
+	jQX/nGc6N0z8VMjV6FfDL6n4bdEXa0PlRRc3xS7SKV/F6tuy8+6Keztnav4Q0/6bLRC/ZsWt
+	CJV3i2ZUxa08ftxZd730X8+gD+cDNfge823c1WDA6Pg9hO/L5y6Hj+evqPRo+c1LMVTiOPV1
+	iwrfrtfcMvcvWqeW8QnuVGIpzkg01GIuKk4EAG59KWXaAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrNIsWRmVeSWpSXmKPExsVy+t/xu7oGcgvTDOY/lLZ4MG8bm8X3LdeZ
+	LNbsPcdkMe+zrMX8I+dYLc6f38BusenxNVaLy7vmsFl87j3CaDHj/D4mi4VNLewWE49NZraY
+	+2Uqs8X/PTvYLZ487GOzeN63j8lBwGPNvDWMHjtn3WX3WLznJZPHplWdbB53ru1h89i8pN6j
+	b8sqRo/Pm+QCOKL0bIryS0tSFTLyi0tslaINLYz0DC0t9IxMLPUMjc1jrYxMlfTtbFJSczLL
+	Uov07RL0Mr42dbEVrOKreNZ/hq2BcSp3FyMnh4SAicTduUfZuhi5OIQEljJKzFl9kBEiIS1x
+	+MsUdghbWOLPtS6oomYmiXU/LrCBJNgEDCQevFkGViQioCexbuYrdpAiZoGDLBJ9r68wgySE
+	Bfwlvl9oZwGxWQRUJY6//Q7WzCtgK7Fp70sWiA3yEr37+5hAbE6BQInvs5+DxYUEeCRebdjP
+	CFEvKHFy5hOwODNQffPW2cwTGAVmIUnNQpJawMi0ilEktbQ4Nz232FCvODG3uDQvXS85P3cT
+	IzAWtx37uXkH47xXH/UOMTJxMB5ilOBgVhLhffJqbpoQb0piZVVqUX58UWlOavEhRlOguycy
+	S4km5wOTQV5JvKGZgamhiZmlgamlmbGSOK9nQUeikEB6YklqdmpqQWoRTB8TB6dUA1Mpg3X0
+	Fq+MD9Fxcz2tLkzljXq/KsxddaNo/prevfxLanLNxQyt4g8tTDYI2pOp3et+al/zf89HVmdM
+	P1yLZdIXSheUPr27+/nSQ2K5Ie+LVzFPqN354PadhZ9uxi9beOvrvFlVwhXXL2bcnG9zITqn
+	nGv7L5YbOTVz8lRunXdsrlvV67+vYLGDikjhHr3Abc8ilk7Revdlfnhpqsbj0C8PfDclz5qh
+	Iz+1Y/McYx5+jSerNWeqtZt86eGPD1Obe+HBqnKVorMNZ70Xf9PX21BcVel7sNMiv7e/Mrvk
+	jf1zQfZ/WtMmh6//fZ5J5PFPl4Jdje+Wd9TeZC5yuRTG/a+7ZNfjg6ETrVSKdHdPPqLEUpyR
+	aKjFXFScCADGboBITgMAAA==
+X-CMS-MailID: 20240724153056eucas1p193056deacd26701e60519fa0466269f5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20240724153056eucas1p193056deacd26701e60519fa0466269f5
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20240724153056eucas1p193056deacd26701e60519fa0466269f5
+References: <CGME20240724153056eucas1p193056deacd26701e60519fa0466269f5@eucas1p1.samsung.com>
 
-On 24/07/2024 13:41, Varadarajan Narayanan wrote:
-> On Wed, Jul 24, 2024 at 08:27:03AM +0200, Krzysztof Kozlowski wrote:
->> On 23/07/2024 11:03, Varadarajan Narayanan wrote:
->>> USB uses icc-clk framework to enable the NoC interface clock.
->>> Hence the 'iface' clock is removed from the list of clocks.
->>> Update the clock-names list accordingly.
->>
->> But the clock is still there and is still used by this block. This looks
->> like adjusting hardware per Linux implementation.
->>
->> Why suddenly this clock was removed from this hardware?
+> It feels like there is an error for Exynos7 case there. Take a look at
+> this commit:
 > 
-> This clock per se is not used by the USB block. It is needed to
-> enable the path for CPU to reach the USB block (and vice versa).
-> Hence, we were adviced to use the ICC framework to enable this
-> clock and not the clocks/clock-names DT entries.
+>     aef27b658b43 ("thermal: exynos: use sanitize_temp_error() in
+> exynos7_tmu_initialize()")
 > 
-> Please refer to [1] where similar clocks for IPQ9574 were NAK'ed.
+> I think that commit just forgets to update the shift value for Exynos7
+> properly. This code:
+> 
+>     data->temp_error1 = trim_info & tmu_temp_mask;
+>     data->temp_error2 = ((trim_info >> EXYNOS_TRIMINFO_85_SHIFT) &
+>                 EXYNOS_TMU_TEMP_MASK);
+> 
+> in case of Exynos7 becomes:
+> 
+>     data->temp_error1 = trim_info & 0x1ff;    // mask = 9 bits
+>     data->temp_error2 = (trim_info >> 8) & 0xff;
+> 
+> it contradicts itself, because it takes 9 rightmost bits for error1,
+> and then uses 1 of those bits for error2 too. It's obvious that if 9
+> bits are already used for error1, then for error2 it has to be shifted
+> by 9 bits, not 8.
+> 
+> That's why I think your patch 2/6 is legit and useful on its own, and
+> it's actually a good catch on your part! But the shift value has to be
+> fixed as well (for Exynos7). It's not ideal you don't have the
+> hardware to test it, but it just screams *bug* to me :) Also, maybe we
+> can ask someone who has Exynos7 hardware to test it for us?
 
-So the original submission was not correct?
-
-You really need to stop sending DTS based on current driver support and
-focus on proper hardware description.
-
-Such things pop up from time to time for Qualcomm and I don't see much
-of improvement. And we do not talk about some ancient code, predating
-guidelines, but IPQ5332 upstreamed ~1 year ago.
-
-Best regards,
-Krzysztof
-
+I thought about it for a bit and finally realized that Exynos7 only
+supports one point trimming. That is why in that commit, the original
+exynos7_tmu_initialize did not do anything with temp_error2. So
+temp_error2 will never be used in Exynos7. The real "fix" I guess is to
+only calculate temp_error2 if two point trimming is used, which is
+possible with a very small reordering of exynos7_tmu_initialize. But
+then the shift value will never be reachable in Exynos7 anyway. What do
+you think about this? I feel like it's worth it to change the shift
+value just because the code is a bit confusing anyway.
 
