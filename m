@@ -1,278 +1,115 @@
-Return-Path: <linux-pm+bounces-11406-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11407-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD9AA93C69E
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2024 17:39:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73DCC93C6D3
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2024 17:52:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0E651C21EC9
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2024 15:39:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BCE10B22549
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2024 15:52:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B8B19D890;
-	Thu, 25 Jul 2024 15:39:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA04619D89C;
+	Thu, 25 Jul 2024 15:52:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LlOI1Y+X"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N6ihvnkY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEFE19CCEB;
-	Thu, 25 Jul 2024 15:39:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4788919CD05
+	for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2024 15:52:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721921943; cv=none; b=kWbzlX+rxnVKQ9ZVMfgaG3Rl2V5uO4O8bvxIH6DCglYklo34gyUS3NXaWj1ANV/nxiyVrRuVMFkQSGNxSsbwMNqXZqR2QI9fiCjW4Ljluo4x6l2mgIEgmD6jMCX0po9dh9qMVHey18WZUBDeUV+m/Y1AWqhwZFxw2CrEXBvlrco=
+	t=1721922744; cv=none; b=L+y8IN99YeXXl397xIxufOhIZU0ekG7Jzxle/7xFuJhbymFxxnnKWOrkNIkKGmqd8bVas0UAg6p9bbUx5D+VPHC6wOqUNBOzqJGSZjJew7sLlEGOERKHH5lrghhV1MmjmeeRUUUN7BrQu9mEM2+MvIhHTF5pktGB+D8xVmIm6Fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721921943; c=relaxed/simple;
-	bh=ukqdJDYHs+lhevV2NPb6J9PdNC83BV+yVXkKRp1WVmc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p+baP5kNTRgYR51Mtrf5Rqjuyd6Kiy/qtSH6QMQe2l9eB4eAKM9uJEQGZFT6lHbr1+3VxuOOmRj2/KPxJs9RzQI+UKVRAlmDNED3Wdlr/OA6mxjOxWTUV5Ji4xQjzA3msjgr/EHPdTnAtEtWEYQKMN23YVfAWugCVcH/3qaMucc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LlOI1Y+X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FD32C116B1;
-	Thu, 25 Jul 2024 15:38:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721921942;
-	bh=ukqdJDYHs+lhevV2NPb6J9PdNC83BV+yVXkKRp1WVmc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LlOI1Y+XWS/tHgYIuzARRnvk2G6NqDAIBb7u7K1xl4Wy6PhQ3ABoAe9qsQfG8FIN0
-	 yaSGVJwMxfCKlJJ7J+Llx8hhzNtGteeN5QWQksirYozKj6Vl8EAuUzxrYxoDgyNMTw
-	 nhsDvnbtxE+4gt+fR/gZ1TbvkSz6TZ/0PG0GAAEuuy45cB21wc/q/Hm2MzGx2kFeXj
-	 9uOiUAUqAtcEEuXeUcLiAvTM8U7Ag/LkxWzb2+xhKXd2BJm1Dppv8NwnFJRDDGqcEL
-	 WEVSQy6R8uKySfD5Y389XDg5Xl7yvv5PdhOx7g3nYQSjRhfNS5LQJbISG2EbKNGwvv
-	 /IW1M0UW85PVQ==
-Date: Thu, 25 Jul 2024 16:38:56 +0100
-From: Lee Jones <lee@kernel.org>
-To: Artur Weber <aweber.kernel@gmail.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	~postmarketos/upstreaming@lists.sr.ht,
-	Henrik Grimler <henrik@grimler.se>,
-	Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
-	Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
-Subject: Re: [PATCH v2 7/9] power: supply: max77693: Add support for
- detecting and enabling OTG
-Message-ID: <20240725153856.GH501857@google.com>
-References: <20240715-max77693-charger-extcon-v2-0-0838ffbb18c3@gmail.com>
- <20240715-max77693-charger-extcon-v2-7-0838ffbb18c3@gmail.com>
+	s=arc-20240116; t=1721922744; c=relaxed/simple;
+	bh=mo7q2/uoC4GEhq90NIoOuGRylVoOtZelBxC1FagUlWo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sQZOqao5osC7rOQeyrndvP3In+vhxnROPzPIaUyvMHrjm4F6ZlTnjZre+GmGat65mqbt/Snh0pPN3K3VCwLCo3K6RNcV8uFd9JMoLdQ6RcNPnLV0RKksSzLv9PNsZ8btm0KLWaYwoYLOiN3pFiTTSRF2NcTzoJqyLJXakKZXmak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N6ihvnkY; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-804cba4c8a8so2122439f.2
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2024 08:52:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1721922742; x=1722527542; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S/JqN+pHcExrSb356L3vtrB44/14O6YEZAAfNBlaK60=;
+        b=N6ihvnkY4Am59VPON1UN6LEMi24lWBE5RJJWPIFDlYZSFK1Yb8TrB9RAk+si5NwnEm
+         TYfv71WxMUFC2K+/Sj52QIrktwCao72aJXxaJr9wJcXF+ywVXGtT6gd1kTEUTmK8dKXr
+         GxStFdjaGWjyT5sZqAxe3Kl3CRRofwxvT43Yc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721922742; x=1722527542;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S/JqN+pHcExrSb356L3vtrB44/14O6YEZAAfNBlaK60=;
+        b=EGqfExoKxGOzqKEqmoPgPwmHGBUP1qFl2bLYN2IWLXpEuQMRScg12TZcJ+/FC3U0wE
+         7sG4fnvqNo2s4Exnyu9Lt5AcUN14pz+Q4FCfund/ZeNn1r0BUWPej1URLG+OMerf8vZ2
+         vcSe6bSh3a5bI8/H9Us8dzHE8XcVQEk/vlI0vKyH7poicyzUYgHRTsUTLmYb2E7HmrHr
+         K0yEf/k1D7rt/dkwHYeHZPcDazkCJiy/jU3FcyfBGx2yzWKNVv6n0yEsMLpSF5uYz7f4
+         w/qQjgayyuUryP9MA5kxuFkVFk1Ll42pNruiuyBONO0eS4MffyR5yH5ct+7PuzACpUOI
+         FqnA==
+X-Forwarded-Encrypted: i=1; AJvYcCW5Ev4Txt5MpbW/Cf751KO8KOkpQIEA6zSPpEFL1ldr9sGdJH3GjEK1NPWrfUjR2hSlanpp91PXpw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdV9IGUWhy7Ffa68BjWoAS4AxiXVsHcf0/N/3aylW9vhhBvgu1
+	5BQ/knWJXVffBO4oV07QAc2Q5QNiCkaeEo6IdutBq1SFCmyuTXotGzfOmNM/suY=
+X-Google-Smtp-Source: AGHT+IEqVp/oG+/InFGTAhbwWhUAvE4/fcFF2CC3JSSKpBgRYqaeQfyRqJFHexKt4gYsGUq+GQmjdA==
+X-Received: by 2002:a5e:df47:0:b0:7f3:9dd3:15b2 with SMTP id ca18e2360f4ac-81f7cf031bbmr207094739f.0.1721922742449;
+        Thu, 25 Jul 2024 08:52:22 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c29fa43ec2sm392272173.11.2024.07.25.08.52.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Jul 2024 08:52:22 -0700 (PDT)
+Message-ID: <5339a20c-86e4-4829-bad2-2b998c184523@linuxfoundation.org>
+Date: Thu, 25 Jul 2024 09:52:21 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240715-max77693-charger-extcon-v2-7-0838ffbb18c3@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] kselftest: cpufreq: Add RTC wakeup alarm
+To: Viresh Kumar <viresh.kumar@linaro.org>,
+ Shreeya Patel <shreeya.patel@collabora.com>
+Cc: rafael@kernel.org, shuah@kernel.org, linux-pm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240715192634.19272-1-shreeya.patel@collabora.com>
+ <20240725035742.uahab5uf2kmv476g@vireshk-i7>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240725035742.uahab5uf2kmv476g@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, 15 Jul 2024, Artur Weber wrote:
-
-> Building upon the newly added extcon detection support, add detection
-> for USB OTG cables (EXTCON_USB_HOST type), and enable/disable the OTG
-> bits as needed.
+On 7/24/24 21:57, Viresh Kumar wrote:
+> On 16-07-24, 00:56, Shreeya Patel wrote:
+>> Add RTC wakeup alarm for devices to resume after specific time interval.
+>> This improvement in the test will help in enabling this test
+>> in the CI systems and will eliminate the need of manual intervention
+>> for resuming back the devices after suspend/hibernation.
+>>
+>> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+>> ---
+>>
+>> Changes in v2
+>>    - Use rtcwake utility instead of sysfs for setting up
+>> a RTC wakeup alarm
+>>
+>>   tools/testing/selftests/cpufreq/cpufreq.sh | 15 +++++++++++++++
+>>   tools/testing/selftests/cpufreq/main.sh    | 13 ++++++++++++-
+>>   2 files changed, 27 insertions(+), 1 deletion(-)
 > 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
-> Changes in v2:
-> - Added CHGIN OTG current limit value
-> - Squashed MFD header register changes into this commit
-> ---
->  drivers/power/supply/max77693_charger.c | 103 +++++++++++++++++++++++++++-----
-
->  include/linux/mfd/max77693-private.h    |   5 ++
-
-Acked-by: Lee Jones <lee@kernel.org>
-
->  2 files changed, 94 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/power/supply/max77693_charger.c b/drivers/power/supply/max77693_charger.c
-> index 2dc273dd96ee..34d68b1050d4 100644
-> --- a/drivers/power/supply/max77693_charger.c
-> +++ b/drivers/power/supply/max77693_charger.c
-> @@ -669,6 +669,16 @@ static int max77693_reg_init(struct max77693_charger *chg)
->  	if (ret)
->  		return ret;
->  
-> +	/* Set OTG current limit to 900 mA */
-> +	data = (0x1 << CHG_CNFG_02_OTG_ILIM_SHIFT);
-> +	ret = regmap_update_bits(chg->max77693->regmap,
-> +				MAX77693_CHG_REG_CHG_CNFG_02,
-> +				CHG_CNFG_02_OTG_ILIM_MASK, data);
-> +	if (ret) {
-> +		dev_err(chg->dev, "Error setting OTG current limit: %d\n", ret);
-> +		return ret;
-> +	}
-> +
->  	return max77693_set_charge_input_threshold_volt(chg,
->  			chg->charge_input_threshold_volt);
->  }
-> @@ -690,11 +700,42 @@ static int max77693_set_charging(struct max77693_charger *chg, bool enable)
->  	return ret;
->  }
->  
-> +static int max77693_set_otg(struct max77693_charger *chg, bool enable)
-> +{
-> +	struct regmap *regmap = chg->max77693->regmap;
-> +	unsigned int data;
-> +	bool is_enabled;
-> +	int ret;
-> +
-> +	ret = regmap_read(regmap, MAX77693_CHG_REG_CHG_CNFG_00, &data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	is_enabled = !!(data & CHG_CNFG_00_OTG_MASK);
-> +
-> +	if (enable && !is_enabled) {
-> +		/* OTG on, boost on, DIS_MUIC_CTRL on */
-> +		data |= CHG_CNFG_00_OTG_MASK | CHG_CNFG_00_BOOST_MASK \
-> +				| CHG_CNFG_00_DIS_MUIC_CTRL_MASK;
-> +
-> +	} else if (!enable && is_enabled) {
-> +		/* OTG off, boost off, DIS_MUIC_CTRL off */
-> +		data &= ~(CHG_CNFG_00_OTG_MASK | CHG_CNFG_00_BOOST_MASK \
-> +				| CHG_CNFG_00_DIS_MUIC_CTRL_MASK);
-> +	}
-> +
-> +	return regmap_write(chg->max77693->regmap,
-> +			MAX77693_CHG_REG_CHG_CNFG_00,
-> +			data);
-> +}
-> +
->  static void max77693_charger_extcon_work(struct work_struct *work)
->  {
->  	struct max77693_charger *chg = container_of(work, struct max77693_charger,
->  						  cable.work);
->  	struct extcon_dev *edev = chg->cable.edev;
-> +	bool set_charging, set_otg;
-> +	unsigned int current_limit;
->  	int connector, state;
->  	int ret;
->  
-> @@ -707,31 +748,61 @@ static void max77693_charger_extcon_work(struct work_struct *work)
->  
->  	switch (connector) {
->  	case EXTCON_CHG_USB_SDP:
-> -	case EXTCON_CHG_USB_DCP:
->  	case EXTCON_CHG_USB_CDP:
-> +	case EXTCON_CHG_USB_SLOW:
-> +		current_limit = 500000; /* 500 mA */
-> +		set_charging = true;
-> +		set_otg = false;
-> +
-> +		dev_info(chg->dev, "slow charging. connector type: %d\n",
-> +			 connector);
-> +		break;
-> +	case EXTCON_CHG_USB_DCP:
->  	case EXTCON_CHG_USB_ACA:
->  	case EXTCON_CHG_USB_FAST:
-> -	case EXTCON_CHG_USB_SLOW:
->  	case EXTCON_CHG_USB_PD:
-> -		ret = max77693_set_charging(chg, true);
-> -		if (ret) {
-> -			dev_err(chg->dev, "failed to enable charging\n");
-> -			break;
-> -		}
-> -		dev_info(chg->dev, "charging. connector type: %d\n",
-> +		current_limit = chg->fast_charge_current;
-> +		set_charging = true;
-> +		set_otg = false;
-> +
-> +		dev_info(chg->dev, "fast charging. connector type: %d\n",
-> +			 connector);
-> +		break;
-> +	case EXTCON_USB_HOST:
-> +		current_limit = 500000; /* 500 mA */
-> +		set_charging = false;
-> +		set_otg = true;
-> +
-> +		dev_info(chg->dev, "USB host. connector type: %d\n",
->  			 connector);
->  		break;
->  	default:
-> -		ret = max77693_set_charging(chg, false);
-> -		if (ret) {
-> -			dev_err(chg->dev, "failed to disable charging\n");
-> -			break;
-> -		}
-> -		dev_info(chg->dev, "charging. connector type: %d\n",
-> +		current_limit = 500000; /* 500 mA */
-> +		set_charging = false;
-> +		set_otg = false;
-> +
-> +		dev_info(chg->dev, "disconnected. connector type: %d\n",
->  			 connector);
->  		break;
->  	}
->  
-> +	ret = max77693_set_current_limit(chg, current_limit);
-> +	if (ret) {
-> +		dev_err(chg->dev, "failed to set current limit (%d)\n", ret);
-> +		goto out;
-> +	}
-> +
-> +	ret = max77693_set_charging(chg, set_charging);
-> +	if (ret) {
-> +		dev_err(chg->dev, "failed to set charging (%d)\n", ret);
-> +		goto out;
-> +	}
-> +
-> +	ret = max77693_set_otg(chg, set_otg);
-> +	if (ret)
-> +		dev_err(chg->dev, "failed to set OTG (%d)\n", ret);
-> +
-> +out:
->  	power_supply_changed(chg->charger);
->  }
->  
-> @@ -793,6 +864,10 @@ static int max77693_dt_init(struct device *dev, struct max77693_charger *chg)
->  			&chg->batttery_overcurrent))
->  		chg->batttery_overcurrent = DEFAULT_BATTERY_OVERCURRENT;
->  
-> +	if (of_property_read_u32(np, "maxim,fast-charge-current-microamp",
-> +			&chg->fast_charge_current))
-> +		chg->fast_charge_current = DEFAULT_FAST_CHARGE_CURRENT;
-> +
->  	if (of_property_read_u32(np, "maxim,charge-input-threshold-microvolt",
->  			&chg->charge_input_threshold_volt))
->  		chg->charge_input_threshold_volt =
-> diff --git a/include/linux/mfd/max77693-private.h b/include/linux/mfd/max77693-private.h
-> index 4570646e2f33..313fcc3173f9 100644
-> --- a/include/linux/mfd/max77693-private.h
-> +++ b/include/linux/mfd/max77693-private.h
-> @@ -209,7 +209,10 @@ enum max77693_charger_battery_state {
->  
->  /* MAX77693 CHG_CNFG_00 register */
->  #define CHG_CNFG_00_CHG_MASK		0x1
-> +#define CHG_CNFG_00_OTG_MASK		0x2
->  #define CHG_CNFG_00_BUCK_MASK		0x4
-> +#define CHG_CNFG_00_BOOST_MASK		0x8
-> +#define CHG_CNFG_00_DIS_MUIC_CTRL_MASK	0x20
->  
->  /* MAX77693_CHG_REG_CHG_CNFG_01 register */
->  #define CHG_CNFG_01_FCHGTIME_SHIFT	0
-> @@ -222,6 +225,8 @@ enum max77693_charger_battery_state {
->  /* MAX77693_CHG_REG_CHG_CNFG_02 register */
->  #define CHG_CNFG_02_CC_SHIFT		0
->  #define CHG_CNFG_02_CC_MASK		0x3F
-> +#define CHG_CNFG_02_OTG_ILIM_SHIFT	7
-> +#define CHG_CNFG_02_OTG_ILIM_MASK	0x80
->  
->  /* MAX77693_CHG_REG_CHG_CNFG_03 register */
->  #define CHG_CNFG_03_TOITH_SHIFT		0
-> 
-> -- 
-> 2.45.2
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 > 
 
--- 
-Lee Jones [李琼斯]
+Thank you. I will apply this once merge window closes.
+
+thanks,
+-- Shuah
 
