@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-11447-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11448-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ADB093D94B
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 21:52:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 882C093D94E
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 21:52:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E37C1F24124
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 19:52:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41D2628517B
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 19:52:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9497E13C906;
-	Fri, 26 Jul 2024 19:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37B39143759;
+	Fri, 26 Jul 2024 19:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZsmC0JAh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G7XcyCSf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1853857CBE;
-	Fri, 26 Jul 2024 19:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2833BBC1;
+	Fri, 26 Jul 2024 19:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722023541; cv=none; b=A0QZzhFN1TQivNfF2EPQNDM70Fg++iSIr8gj+yh46CcDMVcmjrsV+3hMHNc58Gcd4XtAy3NULbIFuwM3a+nkPxFBx7eZ2em1BgTmjBD/rR3hsFDtKDB4CgC9EgxdQv5NoPXfvRrUOsBHfIcm3aD9DzkAKNWPFUX8l6OA6kv7YWg=
+	t=1722023542; cv=none; b=s/0WlYMt7z0oC+pLbQ2NOeS2uC19D5Z3D8mo3MRSa1ES1fmKDT4RPdho8AMQ9a3W9FEi1MJGcwQMmxR4pDuh5oXUimRcTtjQDnszhA8zjwMQK9NxKdQVp+d/52RUj+EwxrVWNe8bipr9IvPG+ENotCuFJ+Dl9tF+JihQMA7Pz9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722023541; c=relaxed/simple;
-	bh=LFM9PFIR9IbGtOZpA6vNbeiXMowkml4+wA1Zh5gQWAM=;
+	s=arc-20240116; t=1722023542; c=relaxed/simple;
+	bh=gIetfDeVvAKFROU3FU4BaYItI5DB23RvX5/OVYo/aqQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fTHtQolvdFT8cUFYVn1A3/ofbi4Zu1jNSyA8Jg2cKWxE4XvwFTFgr+pycs3bA1E9Tsxx7fzn5unGAzP98fbPPVfXW8dYDyP8QZOBe/86yOKP6qwieYtXjD/6N6Dtbf32n6yKdWKFHZ3PdGDKs7V1ysRxlO4ysPf/U4ZILT4mKzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZsmC0JAh; arc=none smtp.client-ip=209.85.210.48
+	 MIME-Version; b=lY+WXNt8UMhT/KU81eb8xXmzGrotUU2/uXYUHMXXFi9sgwdWWfSRThDoY3qfUBqbjNR/JfTyyQGH1CkFBKjd4+IOJnWokm8mAN43oadEOzhNqf/3QBvaj9/NOLqEjSgxLTattj0QfThcNV6OCJ1ihEBz5AB40jE9BkJd9Gv4QOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G7XcyCSf; arc=none smtp.client-ip=209.85.210.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-708cf5138b6so1020355a34.0;
-        Fri, 26 Jul 2024 12:52:19 -0700 (PDT)
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7093f3a1af9so358377a34.1;
+        Fri, 26 Jul 2024 12:52:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722023539; x=1722628339; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722023540; x=1722628340; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P6rmiAxGwGeB9IJv4k45WD7DbCveUNV1yEEf/83JRaI=;
-        b=ZsmC0JAhPUnk9VOKXr3YD5KPvoZShsr4TC82BNZBK05xrO1EVAKWh9ARi3eByzotCd
-         AY74Pa9knRIQz9psDNSZRSnsV8oxFNSS35Tdj+Aw2X/vDMAiHXhXfjodA86cU56kZaS6
-         FlqLpV9aQulOflYnKtm2ZTvCNEIbfy0/1AvctgTKxO52bd1EmCfbHAywWJjFvZ1hBK6i
-         4Dau9StrVvbTS8Jc2AA3vRurYOmWdsEPD77QS9qyFNlaaoOayAkzcegdKn+wHNMxWGA7
-         t1Ii4TwSPAPA/0VCMQag4sYBWqi/NwilduI5tQJu7Eh6KKv4wwqRKBANf6yYZXOAFeU7
-         p9Xg==
+        bh=h1/2W8RcQjiqKYDLwnvQA5GcanCOKJKq8/U5bOmJErk=;
+        b=G7XcyCSf1JXLLVKMnUAx80Kl6wsjATra2OJU9iLl6vRWTRcpJLZBEYyK/uk/IwMMia
+         7tCRPveGWaEPCXa4HYuNaDmbZSs/cxdpc6QpqoQQbQHQ879HcqJ9+kT2/inJcQxoupeb
+         cj9rl/Ag56RgxPaIPhuLRHH7orcUVpBKQOsN78rlkt7CVbNULPBMMAVEuhWEsTbbl4r4
+         /zki9N7YsR3aoQbcGIqgZRoMBj+3XDJNOSFS/QqbFiSF6mbnPZulGdZORyJHlGu6cVH7
+         x3LeeHYadezwSc2Zv/s2/l4rZ1yh3F+wf5AKWe+Y3zADl75juQEHS6a7Rol2DLb1nUhf
+         dr4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722023539; x=1722628339;
+        d=1e100.net; s=20230601; t=1722023540; x=1722628340;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=P6rmiAxGwGeB9IJv4k45WD7DbCveUNV1yEEf/83JRaI=;
-        b=gD8disPj+hHPgj6cFP2FT/vyic+j2auJ1rNQWxYTR8dRKSEVJ6MHaEN2uxOkgG9bWk
-         Tkf0RWjNNlmbiXY9nbP15wfRA7JxjJWtMjNyqzud+yL03fZcneSl5iOmZMkefR1A8zR8
-         Pk/H09cS/YczZO5YzLfd6rkXCpZJvCUjAB+ZYGOMtCTa0zRqYuk5bzEE/ihKeoehUF2m
-         cT89C8dlljfSX+2dgBElT+DGDNE3wCNEBk7PNLR2cdHd44WyoeUNGlssYM8seu4JuZXv
-         I/jLm4UCO+PNfPPton72oEr2xVRY2/auNqlcOBAAbi44d/3RV8WW+mX++K+HfQFXh9Ah
-         oMgg==
-X-Forwarded-Encrypted: i=1; AJvYcCWjyX77byetg5edMUTunRt8qf55k4Po4BaTNBxhsEQKQLSQxfgPsD50yEvs9SnpjYbngNSWhVJ2sGSrOZBsgKcv0XS2UW6aTcZj9g==
-X-Gm-Message-State: AOJu0Yz3BMPIE94AGU34xx5hl3KuOjPpWwMmj3KaUupJg9GY4SH+MOgB
-	EPUxkeJIONWQEEAEu8rYoiZKrpm7/hEwWFDxo4U3TrhX/PIiV0g5
-X-Google-Smtp-Source: AGHT+IF0f29yKR6vZmoW9R2ZZFUMQXzYcT8J4lUuOIvw9i6Fucmn9tM77BX2/R1rNf1Ei5yrVKN1pw==
-X-Received: by 2002:a05:6830:2aa5:b0:703:6cdf:461b with SMTP id 46e09a7af769-70940c05695mr890633a34.6.1722023539199;
+        bh=h1/2W8RcQjiqKYDLwnvQA5GcanCOKJKq8/U5bOmJErk=;
+        b=PPBoWpIz4Y811V/3z/4N8FnmqrxM+I3zU/GRMr8gmpy0rKLAOPRyEU0eGz/JUomsod
+         nAS+jCrVpbppHkwwX1smB/Ls8cihrjKn2XYCofYQaSaZfJf/hVGOL9qwCyLVq0r15P8p
+         8qSuR2Wn7y+XB8uiDkVx9Ww30M8d9hLx6cOEoItJfV4bpmgTIdVo1ofAqAVf9tnncREI
+         HFpSLI5CUQndS5bo/iCOny8ovmyxPw3pxVkjh6mMNRWegGDu1pD+LFBYpP8O505dmHlm
+         6fnzLWMs5nJEPdXARHJQHUTpzIZyidfc0uhUptGRUP/U8Jn97Dk6vkiqoE6abIWBX24j
+         MlLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU66kdBhTtLmSQZHVTzN9UhOQ4k98JBjcn2rk9sKQ+QtzU3Cav3pIoEyJ1RCY3jyfEJqRtoJN/1ao6H1HpxtseV/8Z2jL1Gp6Ixtw==
+X-Gm-Message-State: AOJu0YxDJiP4KaxejcbPb7ZIbHIktAgw/HdVihGRO72ffL77VWB1Y9rM
+	xbxAQgy0ghlxAMgCcFeSPHC0xzBNUA3Sw70Urb1VudTEbHg5M0AF
+X-Google-Smtp-Source: AGHT+IGFD8UcnUWfAtOrktYS3XPLNwRusDiWDkC1Xvsjj1zIrmYzOL1G4rpSrpvg425XDPJUWhxSfQ==
+X-Received: by 2002:a05:6830:6e04:b0:707:e28:58d2 with SMTP id 46e09a7af769-70940c0b3d6mr919254a34.2.1722023539885;
         Fri, 26 Jul 2024 12:52:19 -0700 (PDT)
 Received: from localhost.localdomain ([2600:1700:fb0:1bcf:c1f3:7caa:bc8b:ab10])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-70930778069sm889972a34.59.2024.07.26.12.52.18
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-70930778069sm889972a34.59.2024.07.26.12.52.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jul 2024 12:52:18 -0700 (PDT)
+        Fri, 26 Jul 2024 12:52:19 -0700 (PDT)
 From: Chris Morgan <macroalpha82@gmail.com>
 To: linux-rockchip@lists.infradead.org
 Cc: linux-pm@vger.kernel.org,
@@ -81,9 +81,9 @@ Cc: linux-pm@vger.kernel.org,
 	krzk+dt@kernel.org,
 	robh@kernel.org,
 	Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH 3/5] arm64: dts: rockchip: Pull up sdio pins on RK3588
-Date: Fri, 26 Jul 2024 14:49:46 -0500
-Message-Id: <20240726194948.109326-4-macroalpha82@gmail.com>
+Subject: [PATCH 4/5] dt-bindings: arm: rockchip: Add GameForce Ace
+Date: Fri, 26 Jul 2024 14:49:47 -0500
+Message-Id: <20240726194948.109326-5-macroalpha82@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240726194948.109326-1-macroalpha82@gmail.com>
 References: <20240726194948.109326-1-macroalpha82@gmail.com>
@@ -97,44 +97,29 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-When using an Ampak derived bcm43456 on an RK3588s based GameForce Ace
-the WiFi failed to work properly until I set the SDIO pins from
-pull-none to pull-up. This matches the vendor kernel located at [1].
-I tested this then on an RK3588s based Indiedroid Nova and did not
-observe any adverse effects.
-
-[1] https://github.com/rockchip-linux/kernel/commit/b96485b7af46a99c14f3c4818eb18c7836eb809c
+Add devicetree binding for the GameForce Ace.
 
 Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi
-index 30db12c4fc82..d1368418502a 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi
-@@ -2449,15 +2449,15 @@ sdiom1_pins: sdiom1-pins {
- 				/* sdio_clk_m1 */
- 				<3 RK_PA5 2 &pcfg_pull_none>,
- 				/* sdio_cmd_m1 */
--				<3 RK_PA4 2 &pcfg_pull_none>,
-+				<3 RK_PA4 2 &pcfg_pull_up>,
- 				/* sdio_d0_m1 */
--				<3 RK_PA0 2 &pcfg_pull_none>,
-+				<3 RK_PA0 2 &pcfg_pull_up>,
- 				/* sdio_d1_m1 */
--				<3 RK_PA1 2 &pcfg_pull_none>,
-+				<3 RK_PA1 2 &pcfg_pull_up>,
- 				/* sdio_d2_m1 */
--				<3 RK_PA2 2 &pcfg_pull_none>,
-+				<3 RK_PA2 2 &pcfg_pull_up>,
- 				/* sdio_d3_m1 */
--				<3 RK_PA3 2 &pcfg_pull_none>;
-+				<3 RK_PA3 2 &pcfg_pull_up>;
- 		};
- 	};
+diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+index 1ef09fbfdfaf..a5a2621404ae 100644
+--- a/Documentation/devicetree/bindings/arm/rockchip.yaml
++++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+@@ -255,6 +255,11 @@ properties:
+           - const: friendlyarm,cm3588
+           - const: rockchip,rk3588
  
++      - description: GameForce Ace
++        items:
++          - const: gameforce,ace
++          - const: rockchip,rk3588s
++
+       - description: GameForce Chi
+         items:
+           - const: gameforce,chi
 -- 
 2.34.1
 
