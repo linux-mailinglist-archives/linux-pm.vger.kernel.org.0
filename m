@@ -1,45 +1,48 @@
-Return-Path: <linux-pm+bounces-11464-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11466-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4694293DAB5
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 00:39:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D07F93DABB
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 00:39:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 019AE28412E
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 22:39:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6ED581C23185
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 22:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E34150981;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EF6C153808;
 	Fri, 26 Jul 2024 22:39:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36ED014F9EE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4951527B4;
 	Fri, 26 Jul 2024 22:39:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722033557; cv=none; b=Y2lR/tZTDPEh7oBGJcjlh8xcXurmOIYw1/tRm69uL8P9DZCh4hX3C6Ir8eyF4w6dj0H+IepYsyPC0/BP1yDA7g+clj6Nf7errOd1eThBQP9C6RnElPzX8Id+rsK1lDi+Gzaif7GNXN5Kv6XdHZCo91K8B0UuJ0UX2/bxio41xYk=
+	t=1722033557; cv=none; b=ZKkOwxH8SVU7NfA+wgbTarMft23ExWowmZtfsVBHYKMI4mZeIUZMZ+REGpc7cosOQUBXMy+98vQV/51yHUlz71IBJYzWa1DT+DHeNFFGKwmBWQwvcX8WG2D6MlBsu+UIEfQwrLdWHc2SDUZ5cIRtM5psFflGYMns5u5i09XAj2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1722033557; c=relaxed/simple;
-	bh=zeojFsQiHDX4XmNxWccT0AR/xon04OLn1RGYQ8D2Tas=;
+	bh=ZypOPMYT7LnQZE/cklTe2XVxU0bVptXb5S3g48F+Qmo=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=dQHh7rEtyLWW8sQN828dM+ld+TfkDBM/ZCz0SrLztLy3sw5odcxAErFL/TqhlcH73XdN0flmJjFcDgNvjLPZiUWEilYDCDp0nYkkJVl4KuknLsFfQmpd8zPpAAV691iRj+3GT+Dw2KcqYtA+Om5JNNNwkzTRXgBXtrk3kQDV1JU=
+	 MIME-Version:Content-Type; b=hFvUIS9LWqq1/G3lN0lxp8UGcR1W74Fnmty6LT356MfZzofdNu5cot7OOSIEnxVS0HQoD60Oyu3vhn5LHnYi01+JgbdqIKI3EfWFm8M98QTUvbWmPdijOj2bxmbeM4Bpfbhxx32jhJQWsPVD0t8oTUP1ihKqQ9bows29E9z2zZA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E803CC4AF0B;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F047AC4AF0E;
 	Fri, 26 Jul 2024 22:39:16 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 67D5E106097F; Sat, 27 Jul 2024 00:39:14 +0200 (CEST)
+	id 7142E1060981; Sat, 27 Jul 2024 00:39:14 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, Hans de Goede <hdegoede@redhat.com>
-Cc: Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org, 
- stable@vger.kernel.org
-In-Reply-To: <20240717200333.56669-1-hdegoede@redhat.com>
-References: <20240717200333.56669-1-hdegoede@redhat.com>
-Subject: Re: [PATCH 1/2] power: supply: axp288_charger: Fix
- constant_charge_voltage writes
-Message-Id: <172203355435.246603.3475606894803303467.b4-ty@collabora.com>
+To: Sebastian Reichel <sre@kernel.org>, 
+ Stephan Gerhold <stephan.gerhold@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>, 
+ Abel Vesa <abel.vesa@linaro.org>, Johan Hovold <johan@kernel.org>, 
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20240712-x1e80100-battmgr-v1-1-a253d767f493@linaro.org>
+References: <20240712-x1e80100-battmgr-v1-1-a253d767f493@linaro.org>
+Subject: Re: [PATCH] power: supply: qcom_battmgr: Ignore extra __le32 in
+ info payload
+Message-Id: <172203355445.246603.641268123308931375.b4-ty@collabora.com>
 Date: Sat, 27 Jul 2024 00:39:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -52,22 +55,18 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13.0
 
 
-On Wed, 17 Jul 2024 22:03:32 +0200, Hans de Goede wrote:
-> info->max_cv is in millivolts, divide the microvolt value being written
-> to constant_charge_voltage by 1000 *before* clamping it to info->max_cv.
+On Fri, 12 Jul 2024 12:00:03 +0200, Stephan Gerhold wrote:
+> Some newer ADSP firmware versions on X1E80100 report an extra __le32 at the
+> end of the battery information request payload, causing qcom_battmgr to
+> fail to initialize. Adjust the check to ignore the extra field in the info
+> payload so we can support both old and newer firmware versions.
 > 
-> Before this fix the code always tried to set constant_charge_voltage
-> to max_cv / 1000 = 4 millivolt, which ends up in setting it to 4.1V
-> which is the lowest supported value.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/2] power: supply: axp288_charger: Fix constant_charge_voltage writes
-      commit: b34ce4a59cfe9cd0d6f870e6408e8ec88a964585
-[2/2] power: supply: axp288_charger: Round constant_charge_voltage writes down
-      commit: 81af7f2342d162e24ac820c10e68684d9f927663
+[1/1] power: supply: qcom_battmgr: Ignore extra __le32 in info payload
+      commit: d6cca7631a4b54a8995e3bc53e5afb11d3b0c8ff
 
 Best regards,
 -- 
