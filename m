@@ -1,115 +1,81 @@
-Return-Path: <linux-pm+bounces-11463-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11465-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5527793DA3F
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 23:42:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 731C093DAB8
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 00:39:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 007C81F245BF
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 21:42:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B2AA1C230FA
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 22:39:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90AF4149E16;
-	Fri, 26 Jul 2024 21:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD811527B1;
+	Fri, 26 Jul 2024 22:39:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CB6911C83;
-	Fri, 26 Jul 2024 21:42:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5004C15099D;
+	Fri, 26 Jul 2024 22:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722030164; cv=none; b=uSA7pbfD1qFQ6I3JcsTUW/GIaYvu2BDXedkGqeSkPCnPMaED+ZoVOQaHTy0fimRgS8Trl8UgW7jA/NN3fyvRTRH1+Sfbbd9bu3OERneBcgr3a62SpNqHgpcQzjm7QkmuJ4xxKHn+OYbAd54dgfu0AhzRYSux9fAlNJviX7Y7t7k=
+	t=1722033557; cv=none; b=MYJPcbva8iM+UiVJ8Qwn9JFeRV5S6YdPNVHgHjLJIdY/QZLTK3YekBePgfsFM+8zs8i55NobwhTLkbBWHwwUHClBZ22wjfv9MQX/Ht8XiUUzbj1iFip+bc3JNgx8eNZrWXBQVzevL9jiW2VXO8WaA3EPt1ZhE21xNzOgmfH91UM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722030164; c=relaxed/simple;
-	bh=hr3UHgo089N1m2yRD5I8C8JXQOzE4pkrHTHPGkRb8OE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TaIIwAZ8pnIn/jlHZ7ZVYERwaByKhrnPJLKwMOywiBkF2SPpKL6A9vQ/bWVKrMEOPlC0Thk7aV4MTejQsg/VUq8YnfGlTwo7Zq5RWYSMLGzQlFvaCbqtcrCsLhvztoZM83rPPS1UrdBaVNiiOPuoq+hcLugmq7h6L2teBw8phTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from i5e860cde.versanet.de ([94.134.12.222] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1sXShq-00063F-Ml; Fri, 26 Jul 2024 23:42:30 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: linux-rockchip@lists.infradead.org, Chris Morgan <macroalpha82@gmail.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, jagan@edgeble.ai,
- andyshrk@163.com, jonas@kwiboo.se, sre@kernel.org, t.schramm@manjaro.org,
- conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org,
- Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH 3/5] arm64: dts: rockchip: Pull up sdio pins on RK3588
-Date: Fri, 26 Jul 2024 23:42:28 +0200
-Message-ID: <5127387.e8TTKsaY2g@diego>
-In-Reply-To: <20240726194948.109326-4-macroalpha82@gmail.com>
-References:
- <20240726194948.109326-1-macroalpha82@gmail.com>
- <20240726194948.109326-4-macroalpha82@gmail.com>
+	s=arc-20240116; t=1722033557; c=relaxed/simple;
+	bh=Bu5UslRBZq44O0sqBkTIKfN+TgpcyydLs8owUsPUz8w=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=M466wzzR+rlZh/3fyC+S1Q3r5y9AbOBEW/QzeLu4pUzOfJtmmwD4dSrKIRb4HQRZ2VcbfqYsNZZ6go0LCjNcVeZEKW6iK0VSWTNn8EmtpybDI3NAISuEYOczkN/B3mGdV38MLq1bUNOnVn2n2Mz44gch1h6nIzSdQfS4QxEAkzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7141C32782;
+	Fri, 26 Jul 2024 22:39:16 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id 6CB721060980; Sat, 27 Jul 2024 00:39:14 +0200 (CEST)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Sebastian Reichel <sre@kernel.org>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-arm-msm@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org
+In-Reply-To: <20240715-topic-sm8x50-upstream-fix-battmgr-temp-tz-warn-v1-1-16e842ccead7@linaro.org>
+References: <20240715-topic-sm8x50-upstream-fix-battmgr-temp-tz-warn-v1-1-16e842ccead7@linaro.org>
+Subject: Re: [PATCH] power: supply: qcom_battmgr: return EAGAIN when
+ firmware service is not up
+Message-Id: <172203355443.246603.13662219731890792931.b4-ty@collabora.com>
+Date: Sat, 27 Jul 2024 00:39:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-Am Freitag, 26. Juli 2024, 21:49:46 CEST schrieb Chris Morgan:
-> From: Chris Morgan <macromorgan@hotmail.com>
+
+On Mon, 15 Jul 2024 14:57:06 +0200, Neil Armstrong wrote:
+> The driver returns -ENODEV when the firmware battmrg service hasn't
+> started yet, while per-se -ENODEV is fine, we usually use -EAGAIN to
+> tell the user to retry again later. And the power supply core uses
+> -EGAIN when the device isn't initialized, let's use the same return.
 > 
-> When using an Ampak derived bcm43456 on an RK3588s based GameForce Ace
-> the WiFi failed to work properly until I set the SDIO pins from
-> pull-none to pull-up. This matches the vendor kernel located at [1].
-> I tested this then on an RK3588s based Indiedroid Nova and did not
-> observe any adverse effects.
+> This notably causes an infinite spam of:
+> thermal thermal_zoneXX: failed to read out thermal zone (-19)
+> because the thermal core doesn't understand -ENODEV, but only
+> considers -EAGAIN as a non-fatal error.
 > 
-> [1] https://github.com/rockchip-linux/kernel/commit/b96485b7af46a99c14f3c4818eb18c7836eb809c
+> [...]
 
-As you're essentially duplicating the change by Alex Zhao it might be
-nice to keep their authorship?
+Applied, thanks!
 
-So, "From" + first Signed-off from Alex, then you add a
-[adapted to pinctrl filename change]
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+[1/1] power: supply: qcom_battmgr: return EAGAIN when firmware service is not up
+      commit: bf9d5cb588755ee41ac12a8976dccf44ae18281b
 
-below that.
-
-> 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> ---
->  arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi
-> index 30db12c4fc82..d1368418502a 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi
-> @@ -2449,15 +2449,15 @@ sdiom1_pins: sdiom1-pins {
->  				/* sdio_clk_m1 */
->  				<3 RK_PA5 2 &pcfg_pull_none>,
->  				/* sdio_cmd_m1 */
-> -				<3 RK_PA4 2 &pcfg_pull_none>,
-> +				<3 RK_PA4 2 &pcfg_pull_up>,
->  				/* sdio_d0_m1 */
-> -				<3 RK_PA0 2 &pcfg_pull_none>,
-> +				<3 RK_PA0 2 &pcfg_pull_up>,
->  				/* sdio_d1_m1 */
-> -				<3 RK_PA1 2 &pcfg_pull_none>,
-> +				<3 RK_PA1 2 &pcfg_pull_up>,
->  				/* sdio_d2_m1 */
-> -				<3 RK_PA2 2 &pcfg_pull_none>,
-> +				<3 RK_PA2 2 &pcfg_pull_up>,
->  				/* sdio_d3_m1 */
-> -				<3 RK_PA3 2 &pcfg_pull_none>;
-> +				<3 RK_PA3 2 &pcfg_pull_up>;
->  		};
->  	};
->  
-> 
-
-
-
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
 
 
