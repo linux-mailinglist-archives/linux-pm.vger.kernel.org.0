@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-11427-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11428-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FDAB93D204
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 13:19:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57EE593D207
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 13:19:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EECEA282A19
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 11:19:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8854F1C21CC9
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 11:19:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0CD217A931;
-	Fri, 26 Jul 2024 11:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B853917B41A;
+	Fri, 26 Jul 2024 11:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RcNbaqxE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MOpzWCsb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60B517997A
-	for <linux-pm@vger.kernel.org>; Fri, 26 Jul 2024 11:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E5617A5B1
+	for <linux-pm@vger.kernel.org>; Fri, 26 Jul 2024 11:18:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721992725; cv=none; b=AHsNNxAAHSPikwIM18sekRnVS2gW/qHciKpHHiX7dc0dFtvN/wPD3Vh2qMhAhiLCjo4yphEbOS/Z+V0UxLyB9hg/W87vJSvR8luHGRNwK3ppdhoyRlMAVnv+N1f5ECo+L8NQ6F+sq9fCir40xq4T5wMnyuitQp8vupKBbBHUF6M=
+	t=1721992726; cv=none; b=dJ61WameINGVzK6KlDKtU5giezm5QGp6u2/2ImZNLdH1wmsTy/6MxJsKtgglkUKy/LUhBfzDHpVVHHv4YZSaRIxLEEScwZH0jhJPH7kunCdFZRJh9mFO+M5jzA1au4uW9AvMLqmvGRgy8FiwZoPX4BP2m5pR0vFcEKSjHdGQGZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721992725; c=relaxed/simple;
-	bh=ckCyUrhBgaUj/zbznCBeQ3fcpP9VdQ8U2iRFPANaIoI=;
+	s=arc-20240116; t=1721992726; c=relaxed/simple;
+	bh=/dPro3zmVHXBKc6IoJRwERhe3BXDGxTNO7EBgEZy8h0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TWmIgNLsram4Ca+1todP35XNDpcD4A2wJ/Ho0725EbhtLiuFIUiFmWUD+NOd92YpJQQ7eUEoe6kv7bcmImUjv9a8BEMpNMNCtuPWJWQ5i7QKX+lK+Is7DR2aYk0EXVB+btefkHk5OmWUWARW84e8UeIaM5nkVcAJR7DCQOjblh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RcNbaqxE; arc=none smtp.client-ip=209.85.218.46
+	 In-Reply-To:To:Cc; b=HEu+1H7bHLahyuHddDioMkvnqgiAmfHSPYDHVcf+4utkCrLXQ0E+T1v+iF4Ymd79Z7viTZdLaHkVKolh75Z17JqmVnuEEZUqKeF+XTj7dWjb+qznhXBfp7H8Qp+xEIwyPYKkZJ91z99S8KfUSkSmvzmaP+er83DjhcaDtAwfwko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MOpzWCsb; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a7a9185e1c0so138508866b.1
-        for <linux-pm@vger.kernel.org>; Fri, 26 Jul 2024 04:18:42 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a7a9a7af0d0so198504466b.3
+        for <linux-pm@vger.kernel.org>; Fri, 26 Jul 2024 04:18:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721992721; x=1722597521; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1721992723; x=1722597523; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+RSSre3AYsx9Ck3+Gf7pgOKZ6yzR7bvdD8OyLOsFucA=;
-        b=RcNbaqxE96dT6dUfpN/AmHwMUvGYabTuZapJPSaoDjuT1HF4TTeVQMhBkHKiUcSU+Q
-         Kq68ZCSghMcj+pbzBNRB1RF3GcH9pr8jflXKsDHuo/ZEdAKkGi+0Nhl54QU5OecPQHca
-         s2345mkGVXGpvnKIw+vNDPUHOqPgvRjfmQN8K6U3PTljXDt9SlC7D4TJiJKuvO5foc3p
-         WhvAKL4Y06YqOdm+Ozloq5bscxFLl6hE005hMp0PdEreqIWyVPF/WZZNrn5/Sd1Wc99g
-         oSDS3APN6Xt6STm8fxYomNqobWnPRoq4YBf5n6Ohl7axHJBL0p9B5RehON8MFJvq3yRX
-         ec2Q==
+        bh=VxGxU8SYIBjBWPzi4Sb41+wNLkpnb94P+sh7kj+6cNA=;
+        b=MOpzWCsbzeg4cantUz4Y6bvtEe081OTTCjfOiAuOkxAeohDbl4fk0BPOlTUrwOCnPV
+         PR+6Eo/TRNwfQ6U09iHAdx5JIUuC8KKI7bRZ9yyfCqdy2U2nimDvm/53aeCCfsdnJbPg
+         DrRPEdpxp5L0G6/u9BeJ+0e4/pI1q9UOUcRLQvnkYjwb7U2/I0FtZO84NNUtnE30IY45
+         vuh8ClpQeqUpR4FibhM5Olfmobc+eMlZV+hFSqupL18hwatDo4alYpMpHiUzcLiAPo6M
+         VIorIaM3iYff6ShlMFwdd8qz6Z9FdFzJ9Ru1GZIJSHfqdHv5fqY250l9fbrtg2CdvOM+
+         2Nxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721992721; x=1722597521;
+        d=1e100.net; s=20230601; t=1721992723; x=1722597523;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+RSSre3AYsx9Ck3+Gf7pgOKZ6yzR7bvdD8OyLOsFucA=;
-        b=C7CF9hjoxlyAaiJZPE3mI4qb6e4/W+yqqPjGxQX6+NRZl8aYE75juKrx8xjBucmUmh
-         mnM/1q8Ai9sC/bAmlsXA+gj0kh2ecWbV3isnfnwgxdCBrH64PrFShfpiAXAcc7ACMrky
-         BuBA/4Jrc2BnVn9iqi9cEDQwv8A+nh6OcQiuKFBkYXio0p3XWkU13Ir9/vEGKM/qH5Ox
-         kjGAlbrFFuczl1/m1TmsvpIJYcecsFnomOeHqOmpd7aQmScPelcM9+jG382GUGC9+FLh
-         TEmh7FApzg3KOg6MMBd8pUJo+9jyiNr5vVO/V0RkIRBUQFTwGFmGkfOsAWWbcq93Dm28
-         PebA==
-X-Forwarded-Encrypted: i=1; AJvYcCUfikBWA++EsBiyIZjtvZyREnPB5fFvKGWGfTzBEna++ai4IZ6iV8P0SVy9o5J+0c9PvhgGKy0D3KqJBI7ECyZNr3vmLMedC8g=
-X-Gm-Message-State: AOJu0YxxsSWkQhbwz5EREVQhhYQ2va4zxZfj1n0vqjhxkOsmnCzim1OG
-	IZGbPDXV8CRBxhVgjrBiGgJ/vur9gwv6oxz8kIb3dDI7jMnOCM0gKIHUJSCQEbI=
-X-Google-Smtp-Source: AGHT+IGedxxg/izaM1e+VztqZWQWxkaWXqj8R3F912/FfkJgI46WkcgQ7+j+9WvvDIum0fdm0GHjIw==
-X-Received: by 2002:a17:907:6d01:b0:a7a:a0c9:124e with SMTP id a640c23a62f3a-a7ac4daffe8mr483108366b.4.1721992720735;
-        Fri, 26 Jul 2024 04:18:40 -0700 (PDT)
+        bh=VxGxU8SYIBjBWPzi4Sb41+wNLkpnb94P+sh7kj+6cNA=;
+        b=KpMgjoMSCzhe7i7Csjl1iyKcUA3cDJpSrMQ1+vlIrqJZJyIPgfvnhSqikKFjx8jU8I
+         zzl/EbjebnWrugz4oUlpLWTFqML3Yezc1bKJ/iax/rSZCDjGtyRsaF9xWOEQWpPxLrUY
+         ckvC3QbV+pxuTVPfglHexvxIpx+9TNS/t1lBLGavI+pyvs72e7an8tpAKRI3w4EFiTyT
+         lC1NmwuF2gTmHfYiL68Iz0Ix8mpPtRk1enDdNpOqI20KMkWq179Wkg2pdBwlfAkLYXUz
+         6ruKm+IKpPmt8GRRFyxDKvS4T+trqQ5AolRGUTRHHoPBc/MUIeIAymEsCA2qLSp+wZYg
+         d0/A==
+X-Forwarded-Encrypted: i=1; AJvYcCUbhTWDVyAhuMOf6h1E3g0R0kqZlgtgeHo7I/3p034sT1zgD9Vl/C9zsKEW//eTHkcct69XrS5g6G+nc6OzWHvSyAj6mvKwpPA=
+X-Gm-Message-State: AOJu0YyLBhNZ513fl/fhil6Opu9OvJh7rtYF+j88Fe6SZPmoaW4fp7q7
+	x29E+ALPtga4GlPXybFNK6I+rKxU/y1OSqeziz9D8JBI3MiSvg4x9K2z/uBEb5Q=
+X-Google-Smtp-Source: AGHT+IH+rwWCKvZykJlAAH6LNkpi65KtAACKb0MHHBRIglRLIVIJhjuI3O0okF7LvJcM+Fs+Wg3qfw==
+X-Received: by 2002:a17:907:971d:b0:a7a:ac5f:bbfa with SMTP id a640c23a62f3a-a7acad1c3f2mr345732466b.0.1721992722770;
+        Fri, 26 Jul 2024 04:18:42 -0700 (PDT)
 Received: from [192.168.105.194] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acab233aasm164703166b.8.2024.07.26.04.18.39
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acab233aasm164703166b.8.2024.07.26.04.18.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jul 2024 04:18:40 -0700 (PDT)
+        Fri, 26 Jul 2024 04:18:42 -0700 (PDT)
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Google-Original-From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Fri, 26 Jul 2024 13:18:23 +0200
-Subject: [PATCH 1/3] mailmap: Add an entry for Konrad Dybcio
+Date: Fri, 26 Jul 2024 13:18:24 +0200
+Subject: [PATCH 2/3] MAINTAINERS: Update Konrad Dybcio's email address
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,7 +79,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240726-topic-konrad_email-v1-1-f94665da2919@kernel.org>
+Message-Id: <20240726-topic-konrad_email-v1-2-f94665da2919@kernel.org>
 References: <20240726-topic-konrad_email-v1-0-f94665da2919@kernel.org>
 In-Reply-To: <20240726-topic-konrad_email-v1-0-f94665da2919@kernel.org>
 To: Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -92,34 +92,52 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-gpio@vger.kernel.org, 
  linux-remoteproc@vger.kernel.org, Konrad Dybcio <konradybcio@kernel.org>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1721992717; l=857;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1721992717; l=1340;
  i=konradybcio@kernel.org; s=20230215; h=from:subject:message-id;
- bh=ckCyUrhBgaUj/zbznCBeQ3fcpP9VdQ8U2iRFPANaIoI=;
- b=CNtGakN4VUWxmqa0J8qCXm3ryhK2xBygjVnd3sLEs1hjjigxFk6KXgVO8RguVUgvC2vrvozQN
- 0TFoswoCFN/Bf5JR+kUjCYQ/6OyAUzfDbdzncCFa0m34zezBQ43DbYf
+ bh=/dPro3zmVHXBKc6IoJRwERhe3BXDGxTNO7EBgEZy8h0=;
+ b=ju0yvv6H2nwlTdVb9cib/k9p3rqemfp5NXS7b/Y34MGtZuQUegciMPzF7tHC7+U6QA00B1Za2
+ ECyneyJz3BfD/m8cFCsM6T6occxCyUbApmwMI8k8On8FV3B08w8yBoX
 X-Developer-Key: i=konradybcio@kernel.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-Map my old addresses.
+Use my @kernel.org address everywhere.
 
 Signed-off-by: Konrad Dybcio <konradybcio@kernel.org>
 ---
- .mailmap | 2 ++
- 1 file changed, 2 insertions(+)
+ MAINTAINERS | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/.mailmap b/.mailmap
-index e51d76df75c2..d189c6424697 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -353,6 +353,8 @@ Kenneth Westfield <quic_kwestfie@quicinc.com> <kwestfie@codeaurora.org>
- Kiran Gunda <quic_kgunda@quicinc.com> <kgunda@codeaurora.org>
- Kirill Tkhai <tkhai@ya.ru> <ktkhai@virtuozzo.com>
- Kishon Vijay Abraham I <kishon@kernel.org> <kishon@ti.com>
-+Konrad Dybcio <konradybcio@kernel.org> <konrad.dybcio@linaro.org>
-+Konrad Dybcio <konradybcio@kernel.org> <konrad.dybcio@somainline.org>
- Konstantin Khlebnikov <koct9i@gmail.com> <khlebnikov@yandex-team.ru>
- Konstantin Khlebnikov <koct9i@gmail.com> <k.khlebnikov@samsung.com>
- Koushik <raghavendra.koushik@neterion.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9200d953868e..6c7d3951192f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2745,7 +2745,7 @@ F:	include/linux/soc/qcom/
+ 
+ ARM/QUALCOMM SUPPORT
+ M:	Bjorn Andersson <andersson@kernel.org>
+-M:	Konrad Dybcio <konrad.dybcio@linaro.org>
++M:	Konrad Dybcio <konradybcio@kernel.org>
+ L:	linux-arm-msm@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
+@@ -7107,7 +7107,7 @@ F:	drivers/gpu/drm/tiny/panel-mipi-dbi.c
+ DRM DRIVER for Qualcomm Adreno GPUs
+ M:	Rob Clark <robdclark@gmail.com>
+ R:	Sean Paul <sean@poorly.run>
+-R:	Konrad Dybcio <konrad.dybcio@linaro.org>
++R:	Konrad Dybcio <konradybcio@kernel.org>
+ L:	linux-arm-msm@vger.kernel.org
+ L:	dri-devel@lists.freedesktop.org
+ L:	freedreno@lists.freedesktop.org
+@@ -18765,7 +18765,7 @@ F:	include/uapi/drm/qaic_accel.h
+ 
+ QUALCOMM CORE POWER REDUCTION (CPR) AVS DRIVER
+ M:	Bjorn Andersson <andersson@kernel.org>
+-M:	Konrad Dybcio <konrad.dybcio@linaro.org>
++M:	Konrad Dybcio <konradybcio@kernel.org>
+ L:	linux-pm@vger.kernel.org
+ L:	linux-arm-msm@vger.kernel.org
+ S:	Maintained
 
 -- 
 2.45.2
