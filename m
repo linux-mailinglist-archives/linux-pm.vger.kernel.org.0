@@ -1,70 +1,70 @@
-Return-Path: <linux-pm+bounces-11446-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11447-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 634A193D949
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 21:52:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ADB093D94B
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 21:52:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F11F1C22ECD
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 19:52:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E37C1F24124
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2024 19:52:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E01C679952;
-	Fri, 26 Jul 2024 19:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9497E13C906;
+	Fri, 26 Jul 2024 19:52:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZIPCIqdY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZsmC0JAh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6930F44C61;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1853857CBE;
 	Fri, 26 Jul 2024 19:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722023540; cv=none; b=n49uJ1EoaA5z/sfVtNSCx3BkQa2heC+iNEK15wbQ0OyPKHJZ/TqoUsUYNVkyGTx63nbQrf7CwZtPqGiRjlwNPhjS9JlXqkDAQihXIWz1jOPZVsDBNQY75UUwuamLrqi0nffbuDYhnpdt4E2tF26z/BNuESnyIFOUiwVtP4NqdgQ=
+	t=1722023541; cv=none; b=A0QZzhFN1TQivNfF2EPQNDM70Fg++iSIr8gj+yh46CcDMVcmjrsV+3hMHNc58Gcd4XtAy3NULbIFuwM3a+nkPxFBx7eZ2em1BgTmjBD/rR3hsFDtKDB4CgC9EgxdQv5NoPXfvRrUOsBHfIcm3aD9DzkAKNWPFUX8l6OA6kv7YWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722023540; c=relaxed/simple;
-	bh=Wg5fWNhfV3VcE5zdPsBscKsWfwaOt8kpZhzfjWLAknI=;
+	s=arc-20240116; t=1722023541; c=relaxed/simple;
+	bh=LFM9PFIR9IbGtOZpA6vNbeiXMowkml4+wA1Zh5gQWAM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=edHk2WCU5JqRhn8spt360PjKdDsX0cm+sF5jg1hiGBk9sev5JDafbYRQFYqsY9f9oZtEWZCcy8FUPDWRjF+TVYencTePVTD3KFmppXDDijPykf6ulWzKpw6eD+lBJnys7VYWitSsHlKT3IP78gl87rpgU3kkhY1ROlgAqSU0Ex0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZIPCIqdY; arc=none smtp.client-ip=209.85.210.43
+	 MIME-Version; b=fTHtQolvdFT8cUFYVn1A3/ofbi4Zu1jNSyA8Jg2cKWxE4XvwFTFgr+pycs3bA1E9Tsxx7fzn5unGAzP98fbPPVfXW8dYDyP8QZOBe/86yOKP6qwieYtXjD/6N6Dtbf32n6yKdWKFHZ3PdGDKs7V1ysRxlO4ysPf/U4ZILT4mKzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZsmC0JAh; arc=none smtp.client-ip=209.85.210.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-70361745053so616508a34.0;
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-708cf5138b6so1020355a34.0;
         Fri, 26 Jul 2024 12:52:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722023538; x=1722628338; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722023539; x=1722628339; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U65j//PVGPMnXq7lvPNajRb5WEczobVRzKngFXWVkqo=;
-        b=ZIPCIqdYfGT8Bww2t1Ylww04HY3yZ888x7VTLW05BSZ7gD/MlXPSbAfDI3ANg/uMIQ
-         hf0b/0U2XIQM4aZDko5CUoAcMokwqq03vPnjidnVFk2Xe6oFaLqigv2Nou8XYURi1/V4
-         gXRDlqtJ1z/y5pPNHrttWQixVMIDMzSQpmtvIdv5HijT6jIBQuQmAiN4vuiCkhnTNppv
-         THT4AkhGbqD0Y/6vsXYd/pzJ5UxCFM1iJcHjIcoR2bk48qdROBQ7sGAdUSvd1p21sZoo
-         5GDc08iOqYgmN/3wr1iF8iFkcVy1OF9gqATQ4ns1HSM5taNcQJyTtLm7TBY8HyolrnmW
-         wxeA==
+        bh=P6rmiAxGwGeB9IJv4k45WD7DbCveUNV1yEEf/83JRaI=;
+        b=ZsmC0JAhPUnk9VOKXr3YD5KPvoZShsr4TC82BNZBK05xrO1EVAKWh9ARi3eByzotCd
+         AY74Pa9knRIQz9psDNSZRSnsV8oxFNSS35Tdj+Aw2X/vDMAiHXhXfjodA86cU56kZaS6
+         FlqLpV9aQulOflYnKtm2ZTvCNEIbfy0/1AvctgTKxO52bd1EmCfbHAywWJjFvZ1hBK6i
+         4Dau9StrVvbTS8Jc2AA3vRurYOmWdsEPD77QS9qyFNlaaoOayAkzcegdKn+wHNMxWGA7
+         t1Ii4TwSPAPA/0VCMQag4sYBWqi/NwilduI5tQJu7Eh6KKv4wwqRKBANf6yYZXOAFeU7
+         p9Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722023538; x=1722628338;
+        d=1e100.net; s=20230601; t=1722023539; x=1722628339;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U65j//PVGPMnXq7lvPNajRb5WEczobVRzKngFXWVkqo=;
-        b=Etj7sWcN/hLMz3pCOF13r5I9I87hbh1wCi1V+ebuOiyLfWIhBfdDjaTbA9OLp7CcXT
-         DF46f2TXcQaPSIRPNcHX6+0pZW1eqWxs5F3MjVo23CC4bd5ErpZtgvPrU0J9ijbVGx+z
-         N4895TpFf2BKTuuUxTLPOIRxxsoVrbo0P6Hcb+nDuywAkSTKjSFAry1RFqCM9lQdzKPY
-         Et9qeyd0gLkwK1B4X8UWx0+6Cn+gFZrefDRWscEdnBz+2p1KQCsuBUCs8OXNd7ts5CM+
-         qg3cese8q9zMCbBtHdL1WiHI3aP5AedFI9LzZZ4q5TYq8oCs7X4Gh67FKDF5e4YDp6hH
-         cu0g==
-X-Forwarded-Encrypted: i=1; AJvYcCXBt6YUl8Heu0H1NnRgEJttnK2BnmxjHejDB5ManKVlubZ8CCBUIz1wBNIOp6KJa4vQ8EM8keeVrV2nZoKXet6P6QYLXAt1aOLEdA==
-X-Gm-Message-State: AOJu0YyKQ83AxWykbyxXOFB1c33L8s32fo6Pqd7RKXwVlQPALALYzya/
-	wgIdrPhgWWqF+d3olkRQAbIF0ncT5BJEvvv5pofL00dziKJ+PEdl
-X-Google-Smtp-Source: AGHT+IGqDKOZrQG0lnORBUuq0nhr1WbgwJ0MZK5eJDcDyNunTGSy0TUpdkpY3iH5A8Zl9p/Gr/nj+A==
-X-Received: by 2002:a05:6830:6817:b0:703:6cde:1cb9 with SMTP id 46e09a7af769-70940c93075mr242842a34.13.1722023538443;
-        Fri, 26 Jul 2024 12:52:18 -0700 (PDT)
+        bh=P6rmiAxGwGeB9IJv4k45WD7DbCveUNV1yEEf/83JRaI=;
+        b=gD8disPj+hHPgj6cFP2FT/vyic+j2auJ1rNQWxYTR8dRKSEVJ6MHaEN2uxOkgG9bWk
+         Tkf0RWjNNlmbiXY9nbP15wfRA7JxjJWtMjNyqzud+yL03fZcneSl5iOmZMkefR1A8zR8
+         Pk/H09cS/YczZO5YzLfd6rkXCpZJvCUjAB+ZYGOMtCTa0zRqYuk5bzEE/ihKeoehUF2m
+         cT89C8dlljfSX+2dgBElT+DGDNE3wCNEBk7PNLR2cdHd44WyoeUNGlssYM8seu4JuZXv
+         I/jLm4UCO+PNfPPton72oEr2xVRY2/auNqlcOBAAbi44d/3RV8WW+mX++K+HfQFXh9Ah
+         oMgg==
+X-Forwarded-Encrypted: i=1; AJvYcCWjyX77byetg5edMUTunRt8qf55k4Po4BaTNBxhsEQKQLSQxfgPsD50yEvs9SnpjYbngNSWhVJ2sGSrOZBsgKcv0XS2UW6aTcZj9g==
+X-Gm-Message-State: AOJu0Yz3BMPIE94AGU34xx5hl3KuOjPpWwMmj3KaUupJg9GY4SH+MOgB
+	EPUxkeJIONWQEEAEu8rYoiZKrpm7/hEwWFDxo4U3TrhX/PIiV0g5
+X-Google-Smtp-Source: AGHT+IF0f29yKR6vZmoW9R2ZZFUMQXzYcT8J4lUuOIvw9i6Fucmn9tM77BX2/R1rNf1Ei5yrVKN1pw==
+X-Received: by 2002:a05:6830:2aa5:b0:703:6cdf:461b with SMTP id 46e09a7af769-70940c05695mr890633a34.6.1722023539199;
+        Fri, 26 Jul 2024 12:52:19 -0700 (PDT)
 Received: from localhost.localdomain ([2600:1700:fb0:1bcf:c1f3:7caa:bc8b:ab10])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-70930778069sm889972a34.59.2024.07.26.12.52.17
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-70930778069sm889972a34.59.2024.07.26.12.52.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 26 Jul 2024 12:52:18 -0700 (PDT)
 From: Chris Morgan <macroalpha82@gmail.com>
@@ -81,9 +81,9 @@ Cc: linux-pm@vger.kernel.org,
 	krzk+dt@kernel.org,
 	robh@kernel.org,
 	Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH 2/5] power: supply: cw2015: Add support for dual-cell configurations
-Date: Fri, 26 Jul 2024 14:49:45 -0500
-Message-Id: <20240726194948.109326-3-macroalpha82@gmail.com>
+Subject: [PATCH 3/5] arm64: dts: rockchip: Pull up sdio pins on RK3588
+Date: Fri, 26 Jul 2024 14:49:46 -0500
+Message-Id: <20240726194948.109326-4-macroalpha82@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240726194948.109326-1-macroalpha82@gmail.com>
 References: <20240726194948.109326-1-macroalpha82@gmail.com>
@@ -97,48 +97,44 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-The Cellwise cw2015 datasheet reports that it can handle two cells
-in a series configuration. Allow a device tree parameter to note
-this condition so that the driver reports the correct voltage values
-to userspace.
+When using an Ampak derived bcm43456 on an RK3588s based GameForce Ace
+the WiFi failed to work properly until I set the SDIO pins from
+pull-none to pull-up. This matches the vendor kernel located at [1].
+I tested this then on an RK3588s based Indiedroid Nova and did not
+observe any adverse effects.
+
+[1] https://github.com/rockchip-linux/kernel/commit/b96485b7af46a99c14f3c4818eb18c7836eb809c
 
 Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 ---
- drivers/power/supply/cw2015_battery.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply/cw2015_battery.c
-index f63c3c410451..b23a6d4fa4fa 100644
---- a/drivers/power/supply/cw2015_battery.c
-+++ b/drivers/power/supply/cw2015_battery.c
-@@ -77,6 +77,8 @@ struct cw_battery {
- 	u32 poll_interval_ms;
- 	u8 alert_level;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi
+index 30db12c4fc82..d1368418502a 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-base-pinctrl.dtsi
+@@ -2449,15 +2449,15 @@ sdiom1_pins: sdiom1-pins {
+ 				/* sdio_clk_m1 */
+ 				<3 RK_PA5 2 &pcfg_pull_none>,
+ 				/* sdio_cmd_m1 */
+-				<3 RK_PA4 2 &pcfg_pull_none>,
++				<3 RK_PA4 2 &pcfg_pull_up>,
+ 				/* sdio_d0_m1 */
+-				<3 RK_PA0 2 &pcfg_pull_none>,
++				<3 RK_PA0 2 &pcfg_pull_up>,
+ 				/* sdio_d1_m1 */
+-				<3 RK_PA1 2 &pcfg_pull_none>,
++				<3 RK_PA1 2 &pcfg_pull_up>,
+ 				/* sdio_d2_m1 */
+-				<3 RK_PA2 2 &pcfg_pull_none>,
++				<3 RK_PA2 2 &pcfg_pull_up>,
+ 				/* sdio_d3_m1 */
+-				<3 RK_PA3 2 &pcfg_pull_none>;
++				<3 RK_PA3 2 &pcfg_pull_up>;
+ 		};
+ 	};
  
-+	bool dual_cell;
-+
- 	unsigned int read_errors;
- 	unsigned int charge_stuck_cnt;
- };
-@@ -325,6 +327,9 @@ static int cw_get_voltage(struct cw_battery *cw_bat)
- 	 */
- 	voltage_mv = avg * 312 / 1024;
- 
-+	if (cw_bat->dual_cell)
-+		voltage_mv *= 2;
-+
- 	dev_dbg(cw_bat->dev, "Read voltage: %d mV, raw=0x%04x\n",
- 		voltage_mv, reg_val);
- 	return voltage_mv;
-@@ -587,6 +592,8 @@ static int cw2015_parse_properties(struct cw_battery *cw_bat)
- 			return ret;
- 	}
- 
-+	cw_bat->dual_cell = device_property_read_bool(dev, "cellwise,dual-cell");
-+
- 	ret = device_property_read_u32(dev, "cellwise,monitor-interval-ms",
- 				       &cw_bat->poll_interval_ms);
- 	if (ret) {
 -- 
 2.34.1
 
