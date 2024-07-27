@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-11485-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11487-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45EA393E08B
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 20:27:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CD7893E08D
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 20:27:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 696C71C20BE3
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 18:27:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C2081F21960
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 18:27:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FABF18756E;
-	Sat, 27 Jul 2024 18:27:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91D1D187568;
+	Sat, 27 Jul 2024 18:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nkowGy8B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ntbR9y2n"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D49F3187349
-	for <linux-pm@vger.kernel.org>; Sat, 27 Jul 2024 18:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C35187353
+	for <linux-pm@vger.kernel.org>; Sat, 27 Jul 2024 18:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722104823; cv=none; b=nXUyI3ChOw712N72oc647ei2DQEO6SSHI15ChrDumdBIYmexK0bIF4iaMgEoIwkEnet2/fAk6ASfIUmZnjP7kN0MaIdA0GsCJOV8c70IgU4KX5lqo45s/kB+EMl7t/FMNnY5hUdP+eznPMNxZrIDwhzpSsleQyAlMrcIKBZtQqI=
+	t=1722104824; cv=none; b=EMu/WcWFHvMkT2y50C80KArgDrbwE5zvkfSlYnjmtgAjF6wsAVWYiFKl2sukknLLp9N8l09rLo9L4bMvGiy9lMBdl2LPQ//Y4UCASoHGijNRTXvyuzgluyOXqUP/TMEmNlzUfHJuAjX/kbP9cFsPDBT8UFTuxzkAfauAlmdHHts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722104823; c=relaxed/simple;
-	bh=FJRL3LAKI/9nXiob5WNC0lMnW/jrtyi/FRdes11HOkM=;
+	s=arc-20240116; t=1722104824; c=relaxed/simple;
+	bh=+mQ06OcK/AsgTTVZgaabGhID5UJw0Ot/QuA2UzgqPV8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oFv+UTo5ezeOCjbOyMYmWG5n1dmtPM7Khj4T+gOaEXYXInC2ymGIFfRjzV9nCxYSBmJwjkpnujAX+2ll1skKFN4slCGvWrAYuX+2UxnKj+SducwEdJKQK3ouMxf+X99r2GH5tbbMYRKQ5ISnNuH+HJve5qvY0vfQQSM0rQQHSg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nkowGy8B; arc=none smtp.client-ip=209.85.210.42
+	 MIME-Version; b=YWawWKAD0Ic0ja2Qjj764kHMfy5u8ZB1Z3EdyJ6qKdaZV2b3AnYEZfM/AA5bWuDFprIoN88RmiNxs8QCa0jFOQ5Flr1lpPg2CRnRZ5N/vYDDJwe6LsYvZUsE4T+33IMf7lZPiD26uBkObW+/O1RKj0RyAf7XOekQFDvJmNUIIPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ntbR9y2n; arc=none smtp.client-ip=209.85.161.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-70944dc8dc6so373427a34.3
-        for <linux-pm@vger.kernel.org>; Sat, 27 Jul 2024 11:27:01 -0700 (PDT)
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5d5af743b8fso1057087eaf.3
+        for <linux-pm@vger.kernel.org>; Sat, 27 Jul 2024 11:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722104821; x=1722709621; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722104822; x=1722709622; darn=vger.kernel.org;
         h=content-transfer-encoding:organization:reply-to:mime-version
          :references:in-reply-to:message-id:date:subject:cc:to:from:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4DuT1/HcMJIx92HYiFDWlQ5IgVJeLmwM3GZ6oGZt2ok=;
-        b=nkowGy8BWrbF2E+xXas5uGvQfjJernoa7EZvg6YEIgk7bBers+J+93w9uQU0fJz1P3
-         hI4kL5Bn7AKDKE8s3drdMQKuezi+QlXu52iZ6o1SoTM5xE+yLcJfJ2V4zTQbeKwAzaCh
-         Ng7sRVX2HKAP5C4JUSksqEH/Ax5SC6pqDfucMWCnhIXx4tAEQRS4YYiVhyjVdG8czAAr
-         puFAhR74gcIm2X/Ryzjzslhu53/YZcHmdp/r14VF6zOgWE5TobmQj4Bn21zTtVw/UkUp
-         hC1eOiSVe88t82YCrb4JrmWCzYC0/UWAWTCjb4+gpYzJ61plgZ0RwdKaFSDm7Th2D3XO
-         550Q==
+        bh=tK0c1fQvqk8x/6mwc5S14OPA08FERnPTY0Z5fCGx4J8=;
+        b=ntbR9y2nIqvLaK7RGMdhL/CY5HL/sxDUSzWBH1hPYtRgdtEb64EZ66HXE6kk67PZ/f
+         38tADdR5VBXnguoddRVrXDJQdedM3+V0QoMWw+EMilHrgyhjb+4/vr90jtD2saDeHY0I
+         oXf6kfHZXSO8UezHV/EgeDHSAu6i56uJAzZNLvfB3KxYU9h/3EKeAumxUd4ubVLWegli
+         Xu7fOBji3v/g/ibBOx01TJO4k/tUFTbXgypAx0nDUmaU9P7ZKufZzA1f1KJmEH2jUf/B
+         9k74edCa+ni94w8+mBDgFBCK6lpZpuqmCTygGuGlAXAlPDZep1fFeFJrkTRhtb12H19W
+         /zXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722104821; x=1722709621;
+        d=1e100.net; s=20230601; t=1722104822; x=1722709622;
         h=content-transfer-encoding:organization:reply-to:mime-version
          :references:in-reply-to:message-id:date:subject:cc:to:from:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4DuT1/HcMJIx92HYiFDWlQ5IgVJeLmwM3GZ6oGZt2ok=;
-        b=Brv5qMrmK5zigSwlCCIOMcVXPo03GAXpQjQn89/8YiFTZB0qJhPVmdf8Exh9nex4sZ
-         m2Umi+a3s4dbl3Xtq6Enk1bN/GYkrpWpyC30mdwWB/3kYeRWcOZOL3uRX5E1xujhzb8M
-         dvq/2InBRx3uotwCEHCq/6o7SSAizlqIRwMjG4yO6rYi4xIdFG0gjcjNuUj3/wmQQIwh
-         FzunXu0JrvTGXvLTJFjFRf3E7b9hXx0MrAk0StDUhRO2VPmiZmARl06M38Lit4vG4neK
-         P+f065E84Y/JN6ZKNIWYYRNZDkMv+dWtUGTiSXd0kA+u8HF/iPY+fjw4/75eid/sguzY
-         yvhQ==
-X-Gm-Message-State: AOJu0YxKm/7/7aAqf/NEOXKvAsIGfLdj7kuJt+4Q4QmyI5BQx3nPM0ea
-	jxEt3Wg1qTwW3RBJo8O5/jK6OmF059gIIeFGwsWyFVvjm7rmgyUDUhrajg==
-X-Google-Smtp-Source: AGHT+IFhMwQVtnjJlcs81gIORAPchVxqn6Eb2zAZDrAK4trIfARU7n0+yMhc6dSRi1DBDWXL0nHscw==
-X-Received: by 2002:a05:6870:e391:b0:260:f50e:9242 with SMTP id 586e51a60fabf-267d4f5806amr4386503fac.41.1722104820750;
-        Sat, 27 Jul 2024 11:27:00 -0700 (PDT)
+        bh=tK0c1fQvqk8x/6mwc5S14OPA08FERnPTY0Z5fCGx4J8=;
+        b=u5b8/xyONidXCfeVmn2+J+FQEfVSMzLFF7oKrOm+AWrimh3VtYkO1Akb5+MnKkjJVM
+         JPiugg8IEgfWN9dYJehztwJFj0Ifu5OmTNsutExUTv6FvXoql0J+Fe/K7NkxvpEMqHw6
+         5GvR5F6ckuCdxU3KrZbq0tbYvEQjbdA5uOo+pfAd2s1VtahSJ/bNG9LpjQKHTSk08oKw
+         X0s67gIXe79/4dY84yLuO/PQpFYcIUe/KHyMVQWqDw6mleqvvgQcD0NqDKg10psLMWDt
+         k1NPDpQxMDCjTx42VkE+S/YLxhukWhMc1BWW6x6Ci+YadXbKwkxFVpLch852Qode5531
+         ywnA==
+X-Gm-Message-State: AOJu0Yy1BQJglGXSY3Odikz1Vga7iHvvaDMnvYNnpV8LS93VlJknJvMt
+	MtdDAa2NzQMhaDq5d+3Pk+uQkDdE61tN/xxck8dXa/6cjTCA1parCcvehg==
+X-Google-Smtp-Source: AGHT+IFXLmTxI6m6GrU+qWekznEMWdoms+olHVeAdRxpLGq6fAhjZPgwjElVroSjRo/2iR5Q4hOB/w==
+X-Received: by 2002:a05:6870:5594:b0:260:ee08:8e43 with SMTP id 586e51a60fabf-267d4dd3d63mr3881104fac.29.1722104821589;
+        Sat, 27 Jul 2024 11:27:01 -0700 (PDT)
 Received: from lenb-intel-nuc8i7hvkva.. (h75-100-80-185.cntcnh.broadband.dynamic.tds.net. [75.100.80.185])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7093050a35fsm1314136a34.6.2024.07.27.11.26.59
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7093050a35fsm1314136a34.6.2024.07.27.11.27.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jul 2024 11:27:00 -0700 (PDT)
+        Sat, 27 Jul 2024 11:27:01 -0700 (PDT)
 Sender: Len Brown <lenb417@gmail.com>
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>,
 	Len Brown <len.brown@intel.com>
-Subject: [PATCH 16/18] tools/power turbostat: Document PMT in turbostat.8
-Date: Sat, 27 Jul 2024 14:23:42 -0400
-Message-ID: <944264a2a99cc4dd4b10eaa9798b6aab80adf4be.1722019621.git.len.brown@intel.com>
+Subject: [PATCH 17/18] tools/power turbostat: Include umask=%x in perf counter's config
+Date: Sat, 27 Jul 2024 14:23:43 -0400
+Message-ID: <19d076903b95896ce55c7cc3679f795731591ac6.1722019621.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <1b3bf0747d4f1a963e59c26e602868bdce195318.1722019621.git.len.brown@intel.com>
 References: <1b3bf0747d4f1a963e59c26e602868bdce195318.1722019621.git.len.brown@intel.com>
@@ -89,100 +89,143 @@ Content-Transfer-Encoding: 8bit
 
 From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 
-Add a general description of the user interface for adding PMT
-counters with the new --add pmt,... option.
-
-Provide a complete example for requesting two counters.
+Some counters, like cpu/cache-misses/, expose and require umask=%x
+parameter alongside event=%x in the sysfs perf counter's event file.
+This change make sure we parse and use it when opening user added
+counters.
 
 Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.8 | 65 +++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ tools/power/x86/turbostat/turbostat.c | 60 ++++++++++++++++++++++-----
+ 1 file changed, 50 insertions(+), 10 deletions(-)
 
-diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/turbostat/turbostat.8
-index 44cbc7cb382d..067717bce1d4 100644
---- a/tools/power/x86/turbostat/turbostat.8
-+++ b/tools/power/x86/turbostat/turbostat.8
-@@ -55,6 +55,39 @@ name as necessary to disambiguate it from others is necessary.  Note that option
- 		as the column header.
- .fi
- .PP
-+\fB--add pmt,[attr_name=attr_value, ...]\fP add column with a PMT (Intel Platform Monitoring Technology) counter in a similar way to --add option above, but require PMT metadata to be supplied to correctly read and display the counter. The metadata can be found in the Intel PMT XML files, hosted at https://github.com/intel/Intel-PMT. For a complete example see "ADD PMT COUNTER EXAMPLE".
-+.nf
-+	name="name_string"
-+		For column header.
-+
-+	type={\fBraw\fP}
-+		'raw' shows the counter contents in hex.
-+		default: raw
-+
-+	format={\fBraw\fP | \fBdelta\fP}
-+		'raw' shows the counter contents in hex.
-+		'delta' shows the difference in values during the measurement interval.
-+		default: raw
-+
-+	domain={\fBcpu%u\fP | \fBcore%u\fP | \fBpackage%u\fP}
-+		'cpu' per cpu/thread counter.
-+		'core' per core counter.
-+		'package' per package counter.
-+		'%u' denotes id of the domain that the counter is associated with. For example core4 would mean that the counter is associated with core number 4.
-+
-+	offset=\fB%u\fP
-+		'%u' offset within the PMT MMIO region.
-+
-+	lsb=\fB%u\fP
-+		'%u' least significant bit within the 64 bit value read from 'offset'. Together with 'msb', used to form a read mask.
-+
-+	msb=\fB%u\fP
-+		'%u' most significant bit within the 64 bit value read from 'offset'. Together with 'lsb', used to form a read mask.
-+
-+	guid=\fB%x\fP
-+		'%x' hex identifier of the PMT MMIO region.
-+.fi
-+.PP
- \fB--cpu cpu-set\fP limit output to system summary plus the specified cpu-set.  If cpu-set is the string "core", then the system summary plus the first CPU in each core are printed -- eg. subsequent HT siblings are not printed.  Or if cpu-set is the string "package", then the system summary plus the first CPU in each package is printed.  Otherwise, the system summary plus the specified set of CPUs are printed.  The cpu-set is ordered from low to high, comma delimited with ".." and "-" permitted to denote a range. eg. 1,2,8,14..17,21-44
- .PP
- \fB--hide column\fP do not show the specified built-in columns.  May be invoked multiple times, or with a comma-separated list of column names.
-@@ -354,6 +387,38 @@ CPU     pCPU%c1 CPU%c1
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index f769e8beabd3..ed5f032c6b3f 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -4017,15 +4017,55 @@ static unsigned int read_perf_type(const char *subsys)
+ 	return read_perf_counter_info_n(path, format);
+ }
  
- .fi
+-static unsigned int read_rapl_config(const char *subsys, const char *event_name)
++static unsigned int read_perf_config(const char *subsys, const char *event_name)
+ {
+ 	const char *const path_format = "/sys/bus/event_source/devices/%s/events/%s";
+-	const char *const format = "event=%x";
++	FILE *fconfig = NULL;
+ 	char path[128];
++	char config_str[64];
++	unsigned int config;
++	unsigned int umask;
++	bool has_config = false;
++	bool has_umask = false;
++	unsigned int ret = -1;
  
-+.SH ADD PMT COUNTER EXAMPLE
-+Here we limit turbostat to showing just the CPU number 0.
-+We add two counters, showing crystal clock count and the DC6 residency.
-+All the parameters passed are based on the metadata found in the PMT XML files.
-+
-+For the crystal clock count, we
-+label it with the column header, "XTAL",
-+we set the type to 'raw', to read the number of clock ticks in hex,
-+we set the format to 'delta', to display the difference in ticks during the measurement interval,
-+we set the domain to 'package0', to collect it and associate it with the whole package number 0,
-+we set the offset to '0', which is a offset of the counter within the PMT MMIO region,
-+we set the lsb and msb to cover all 64 bits of the read 64 bit value,
-+and finally we set the guid to '0x1a067102', that identifies the PMT MMIO region to which the 'offset' is applied to read the counter value.
-+
-+For the DC6 residency counter, we
-+label it with the column header, "Die%c6",
-+we set the type to 'txtal_time', to obtain the percent residency value
-+we set the format to 'delta', to display the difference in ticks during the measurement interval,
-+we set the domain to 'package0', to collect it and associate it with the whole package number 0,
-+we set the offset to '0', which is a offset of the counter within the PMT MMIO region,
-+we set the lsb and msb to cover all 64 bits of the read 64 bit value,
-+and finally we set the guid to '0x1a067102', that identifies the PMT MMIO region to which the 'offset' is applied to read the counter value.
-+
-+.nf
-+sudo ./turbostat --quiet --cpu 0 --show CPU --add pmt,name=XTAL,type=raw,format=delta,domain=package0,offset=0,lsb=0,msb=63,guid=0x1a067102 --add pmt,name=Die%c6,type=txtal_time,format=delta,domain=package0,offset=120,lsb=0,msb=63,guid=0x1a067102
-+0.104352 sec
-+CPU                   XTAL      Die%c6
-+-       0x0000006d4d957ca7      0.00
-+0       0x0000006d4d957ca7      0.00
-+0.102448 sec
-+.fi
-+
- .SH INPUT
+ 	snprintf(path, sizeof(path), path_format, subsys, event_name);
  
- For interval-mode, turbostat will immediately end the current interval
+-	return read_perf_counter_info_n(path, format);
++	fconfig = fopen(path, "r");
++	if (!fconfig)
++		return -1;
++
++	if (fgets(config_str, ARRAY_SIZE(config_str), fconfig) != config_str)
++		goto cleanup_and_exit;
++
++	for (char *pconfig_str = &config_str[0]; pconfig_str;) {
++		if (sscanf(pconfig_str, "event=%x", &config) == 1) {
++			has_config = true;
++			goto next;
++		}
++
++		if (sscanf(pconfig_str, "umask=%x", &umask) == 1) {
++			has_umask = true;
++			goto next;
++		}
++
++	next:
++		pconfig_str = strchr(pconfig_str, ',');
++		if (pconfig_str) {
++			*pconfig_str = '\0';
++			++pconfig_str;
++		}
++	}
++
++	if (!has_umask)
++		umask = 0;
++
++	if (has_config)
++		ret = (umask << 8) | config;
++
++cleanup_and_exit:
++	fclose(fconfig);
++	return ret;
+ }
+ 
+ static unsigned int read_perf_rapl_unit(const char *subsys, const char *event_name)
+@@ -4044,7 +4084,7 @@ static unsigned int read_perf_rapl_unit(const char *subsys, const char *event_na
+ 	return RAPL_UNIT_INVALID;
+ }
+ 
+-static double read_perf_rapl_scale(const char *subsys, const char *event_name)
++static double read_perf_scale(const char *subsys, const char *event_name)
+ {
+ 	const char *const path_format = "/sys/bus/event_source/devices/%s/events/%s.scale";
+ 	const char *const format = "%lf";
+@@ -7425,7 +7465,7 @@ int add_rapl_perf_counter_(int cpu, struct rapl_counter_info_t *rci, const struc
+ 	if (no_perf)
+ 		return -1;
+ 
+-	const double scale = read_perf_rapl_scale(cai->perf_subsys, cai->perf_name);
++	const double scale = read_perf_scale(cai->perf_subsys, cai->perf_name);
+ 
+ 	if (scale == 0.0)
+ 		return -1;
+@@ -7436,7 +7476,7 @@ int add_rapl_perf_counter_(int cpu, struct rapl_counter_info_t *rci, const struc
+ 		return -1;
+ 
+ 	const unsigned int rapl_type = read_perf_type(cai->perf_subsys);
+-	const unsigned int rapl_energy_pkg_config = read_rapl_config(cai->perf_subsys, cai->perf_name);
++	const unsigned int rapl_energy_pkg_config = read_perf_config(cai->perf_subsys, cai->perf_name);
+ 
+ 	const int fd_counter =
+ 	    open_perf_counter(cpu, rapl_type, rapl_energy_pkg_config, rci->fd_perf, PERF_FORMAT_GROUP);
+@@ -7598,7 +7638,7 @@ int add_cstate_perf_counter_(int cpu, struct cstate_counter_info_t *cci, const s
+ 		return -1;
+ 
+ 	const unsigned int type = read_perf_type(cai->perf_subsys);
+-	const unsigned int config = read_rapl_config(cai->perf_subsys, cai->perf_name);
++	const unsigned int config = read_perf_config(cai->perf_subsys, cai->perf_name);
+ 
+ 	const int fd_counter = open_perf_counter(cpu, type, config, *pfd_group, PERF_FORMAT_GROUP);
+ 
+@@ -7628,7 +7668,7 @@ int add_msr_perf_counter_(int cpu, struct msr_counter_info_t *cci, const struct
+ 		return -1;
+ 
+ 	const unsigned int type = read_perf_type(cai->perf_subsys);
+-	const unsigned int config = read_rapl_config(cai->perf_subsys, cai->perf_name);
++	const unsigned int config = read_perf_config(cai->perf_subsys, cai->perf_name);
+ 
+ 	const int fd_counter = open_perf_counter(cpu, type, config, cci->fd_perf, PERF_FORMAT_GROUP);
+ 
+@@ -8571,7 +8611,7 @@ int added_perf_counters_init_(struct perf_counter_info *pinfo)
+ 				continue;
+ 			}
+ 
+-			perf_config = read_rapl_config(pinfo->device, pinfo->event);
++			perf_config = read_perf_config(pinfo->device, pinfo->event);
+ 			if (perf_config == (unsigned int)-1) {
+ 				warnx("%s: perf/%s/%s: failed to read %s",
+ 				      __func__, pinfo->device, pinfo->event, "config");
+@@ -8579,7 +8619,7 @@ int added_perf_counters_init_(struct perf_counter_info *pinfo)
+ 			}
+ 
+ 			/* Scale is not required, some counters just don't have it. */
+-			perf_scale = read_perf_rapl_scale(pinfo->device, pinfo->event);
++			perf_scale = read_perf_scale(pinfo->device, pinfo->event);
+ 			if (perf_scale == 0.0)
+ 				perf_scale = 1.0;
+ 
 -- 
 2.43.0
 
