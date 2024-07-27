@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-11481-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11482-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C80993E087
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 20:27:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF26F93E088
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 20:27:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0EF11F21BDC
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 18:27:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85F6A281E34
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 18:27:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD933187341;
-	Sat, 27 Jul 2024 18:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDC20187347;
+	Sat, 27 Jul 2024 18:26:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ChceasrA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NRSDR2bE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC13187553
-	for <linux-pm@vger.kernel.org>; Sat, 27 Jul 2024 18:26:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B471187357
+	for <linux-pm@vger.kernel.org>; Sat, 27 Jul 2024 18:26:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722104818; cv=none; b=NVtUcYjeQ25UBuhEI9j8qJy0KHXKasWeE+mN8YdJWFjPgKYXMUTS4JbNM6pVJN3vqphxs85LfJMiq1MwsKiB6t7FosidC4P+P5ZvxCYYwzETbYdP+90Z3w5+mRszuhOkvjD2Cx9ZI5+aforfBQIxXBzUHXto7He25/bonMapk88=
+	t=1722104819; cv=none; b=h1W/VYtx8wmK8vLgKZq/yPdGqDybErVVbPl3jqMhCSy2VWziCO+/bUA4lEdhEw+x1fV+dP+Df3x/k1y/TQTV/1CNnofKkT2wFGNZBGjhVqmk4Txgt1CnGh+WbftqqF2MZ5vrVP+gaWNamZG1h14rGBCq9aVToU94qpy939PnF6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722104818; c=relaxed/simple;
-	bh=K0mk1PZBH574OLvSOXXRU6kBsdvdETohQvBKE2euLcI=;
+	s=arc-20240116; t=1722104819; c=relaxed/simple;
+	bh=knORRxGn4Uu+GlcmcJ5/WKXkDJpy/gVzp6p08w0WZUw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qEVAAht5FBAyLC/UbzlJ/4Ze4tZ8gCzUoMDTD3dUwtWj/41A9AL/GRqv9biZDZaj1g/7Wo4MWtkiWeYpI1JCtBHyvfTVYY0sJH9NE6IY++Aej+0kZsRSTQ9FqvPVcVMurGFSDC/dlTmgr+ptcEWlA3Y0cunmDL9h+rYws59kOn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ChceasrA; arc=none smtp.client-ip=209.85.210.42
+	 MIME-Version; b=PP5k7gR/ysm3ozQCm5MeedE/xp/T+SEFce/Y+j/E/gPaEUu/y3psLdjl2vESxUGEOdKg1ARakYIUr+nbw3T3gfMUbHHkZmhosVLQ67k8KVmpWkjL6dk9hCZ5VQcwI/mLIiYeixRC/O05Em33iJmLuXPfPq8E9Buy44WQJ7n2/OY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NRSDR2bE; arc=none smtp.client-ip=209.85.160.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7093f6adc4aso572324a34.3
-        for <linux-pm@vger.kernel.org>; Sat, 27 Jul 2024 11:26:57 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-260f863109cso1345610fac.1
+        for <linux-pm@vger.kernel.org>; Sat, 27 Jul 2024 11:26:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722104816; x=1722709616; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722104817; x=1722709617; darn=vger.kernel.org;
         h=content-transfer-encoding:organization:reply-to:mime-version
          :references:in-reply-to:message-id:date:subject:cc:to:from:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=b1kfyj2Mws1fHy2eLaLj9Wh5o0iGnT6mMxzD1h8ZkHo=;
-        b=ChceasrA/8Qq4XzaXVMNp5WOX2EqJK3tQC4K9uZWkUJvZbz8PsfyxOQ4yGRTmBOdR3
-         a256XNb03+1Mz3nw5/uEcNcXzV8zoNsFJ0NN8jCBXxpXmSr0xgA+dOFt2XzbwZ2AtRRq
-         0eu4pFYMmKWbRbF6iwXmz71APPcU9ohP9DC6kg8/urUhrA1AjQ5/cryD5v08pcs+ZEQT
-         Bic90GvPUCjwrrwnyc+NDAGZr7/ZZ6b0RgI6t3sSo82X+ZPMu5LjVYu9aBF+uj8A/HMI
-         Xd2U9lYLiMcJqNXFVkZlXtpWn3TfUF3aPzUTZ++vIM69gpRSE5VudLQsBMjlSYfJofkJ
-         Imkg==
+        bh=EltPequ97cPuDl4L5jEWw/rxuM1v2Pff0o2dQJ3M0fc=;
+        b=NRSDR2bEjBBLpslGRtZe9M05McFT/EEvAhK4GXAfz+BU7YobgAKaD/JkDPcjDyH33H
+         vyd3MOh1aVCoSreS9tcmgk97f+MoCpRTFBeCax4pfgYS7gcEIcybEwGKMC+553AXaysY
+         Pz/CtVGp91xorFLLXUZ8znvk72jD+2xzb/9Tlp6ivKf8MCJ7eFM4JeGJO9vOqvP1RXtw
+         hhNq4uUGxUhXUIryJRlA88+QSOeKN1smrv3WyuUh3b1nXBj0SZcjip3rdPH4VhQw964y
+         LdwEzvgC/BnUjal30ismMS2Furgm4gZ0NnP+74BsQuGPXN0E3Adz8DPPcB5OIuKf5jhP
+         VC5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722104816; x=1722709616;
+        d=1e100.net; s=20230601; t=1722104817; x=1722709617;
         h=content-transfer-encoding:organization:reply-to:mime-version
          :references:in-reply-to:message-id:date:subject:cc:to:from:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b1kfyj2Mws1fHy2eLaLj9Wh5o0iGnT6mMxzD1h8ZkHo=;
-        b=m8lvcS5D/cDazFha6ZlsEgpqlQsC+nSS8Iovemk8q3JuN5Q/EiReI+k5mGpVdL09gu
-         hXp/wLECJSf4quY7wyqW7bk8YfHyGZ3GkIz/iIAEvCC5cqstlDv+yDVf/Qd/LyHEXIh5
-         7l6Si/fNDLvUadiY+yNvmQnspX0BJh9HkHPRtnRg0Y8qFz/jit3cAqaPZQRbEkEl+rYF
-         gJ2rRhxjdlJLafmY68Vv/tijgZurlo4wSwhxo+9328QBptAFxBpIv2UASwsTH9UoO0bg
-         +moKMO0Cxa7E5ehcrzMS9yg7AyueOQjbhk0IPBIFXm8jOVHk+dLgrUKGglq6ijs6a9eb
-         Lrxg==
-X-Gm-Message-State: AOJu0Yw8Smgm558aO3bI2g3Sxb3SUT6dr2ZF/bZSjLe1kvF/WqUjcmwG
-	45Hq2WQYHESCefXWJOn+RbxXhIpND5dHRqn+8ujPvoQGsfLXLxxJLXQ2Ww==
-X-Google-Smtp-Source: AGHT+IH1+jKcY7FQ6YTJ2UyWyPo8MMRWPkjL/lUZ/Wp6v2YX/qV7j3I2wLvgvxnVJndp54V9Ypk1pA==
-X-Received: by 2002:a9d:76d1:0:b0:708:b344:fed8 with SMTP id 46e09a7af769-70940c9d683mr3117370a34.33.1722104816196;
-        Sat, 27 Jul 2024 11:26:56 -0700 (PDT)
+        bh=EltPequ97cPuDl4L5jEWw/rxuM1v2Pff0o2dQJ3M0fc=;
+        b=VdFco7pdE/bEFg/SN4dAj59nVOU3B8La9R6Gnz/1ElH7DIi2O8xdj1j/S2QFkJ5Th6
+         Yt7QFvjczHq/aqs8wa71Gd428uGl8RKuiG2leRcIPVbWMw3Q6G0VVb3mDCYzWAxECuYp
+         XriN3Dca1k2qBvHVmbAtoLkSr1+2kTIZ2MR3sh8TIwx7OPmnsRHK8xJt1q6aRJe/P8Ln
+         Zmth3Ats+f3NNXY7ZOZD68wIY2vtCriw8Ao16hH7hdwpeOSXsIsAn2YO8UyfLFyMrZCs
+         nqnbAXCsXpd7+H2vY9ABX0ZsaXGKTIDkC4FvgNY5MEzpzHpdpoFj4WBN4AVjojdpfsc1
+         I20w==
+X-Gm-Message-State: AOJu0Yy24UmN2bASF5FE4dsH4O+B67oOYxB4CkzLpWXdcQP7EC0davaT
+	TKJwPiLPGuhGEpwhN55CjxpjPpkEW9dbU16yyd5upV+LFptXGGldMMvfGw==
+X-Google-Smtp-Source: AGHT+IGsHDmPlxZbtzG3v+sk3IsnA0DboQGFuZY5Gj5B2O3SpPGG3O62HkwEw4n1ryPplnzMKte5bA==
+X-Received: by 2002:a05:6871:712:b0:261:1339:1cb9 with SMTP id 586e51a60fabf-267d4ef3e75mr3609859fac.35.1722104817102;
+        Sat, 27 Jul 2024 11:26:57 -0700 (PDT)
 Received: from lenb-intel-nuc8i7hvkva.. (h75-100-80-185.cntcnh.broadband.dynamic.tds.net. [75.100.80.185])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7093050a35fsm1314136a34.6.2024.07.27.11.26.55
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7093050a35fsm1314136a34.6.2024.07.27.11.26.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jul 2024 11:26:55 -0700 (PDT)
+        Sat, 27 Jul 2024 11:26:56 -0700 (PDT)
 Sender: Len Brown <lenb417@gmail.com>
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>,
 	Len Brown <len.brown@intel.com>
-Subject: [PATCH 11/18] tools/power turbostat: Move verbose counter messages to level 2
-Date: Sat, 27 Jul 2024 14:23:37 -0400
-Message-ID: <b2e4a5dfafcce87ed2b9aac0b2887f421cd2930a.1722019621.git.len.brown@intel.com>
+Subject: [PATCH 12/18] tools/power turbostat: Add selftests for SMI, APERF and MPERF counters
+Date: Sat, 27 Jul 2024 14:23:38 -0400
+Message-ID: <1f8add13e6c86653da2ec599dfc94e7a8865cdcb.1722019621.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <1b3bf0747d4f1a963e59c26e602868bdce195318.1722019621.git.len.brown@intel.com>
 References: <1b3bf0747d4f1a963e59c26e602868bdce195318.1722019621.git.len.brown@intel.com>
@@ -89,123 +89,185 @@ Content-Transfer-Encoding: 8bit
 
 From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 
-Printing information about the source and value during initialization and
-reading of the counter for each cpu, while useful when debugging,
-results in too verbose output.
+The test requests BICs that are dependent on SMI, APERF and MPERF
+counters and checks if the columns show up in the output and the
+turbostat doesn't crash. Read the counters in both --no-msr
+and --no-perf mode.
+
+The test skips counters that are not present or user does not have
+permissions to read. It is not an error, but the test may not be as
+exhaustive.
 
 Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 24 +++++++++++-------------
- 1 file changed, 11 insertions(+), 13 deletions(-)
+ .../selftests/turbostat/smi_aperf_mperf.py    | 157 ++++++++++++++++++
+ 1 file changed, 157 insertions(+)
+ create mode 100755 tools/testing/selftests/turbostat/smi_aperf_mperf.py
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index cccd9f4311a0..86bbea7d8e57 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -3797,7 +3797,7 @@ int get_rapl_counters(int cpu, unsigned int domain, struct core_data *c, struct
- 	unsigned long long perf_data[NUM_RAPL_COUNTERS + 1];
- 	struct rapl_counter_info_t *rci;
- 
--	if (debug)
-+	if (debug >= 2)
- 		fprintf(stderr, "%s: cpu%d domain%d\n", __func__, cpu, domain);
- 
- 	assert(rapl_counter_info_perdomain);
-@@ -3827,7 +3827,7 @@ int get_rapl_counters(int cpu, unsigned int domain, struct core_data *c, struct
- 			assert(pi < ARRAY_SIZE(perf_data));
- 			assert(rci->fd_perf != -1);
- 
--			if (debug)
-+			if (debug >= 2)
- 				fprintf(stderr, "Reading rapl counter via perf at %u (%llu %e %lf)\n",
- 					i, perf_data[pi], rci->scale[i], perf_data[pi] * rci->scale[i]);
- 
-@@ -3837,7 +3837,7 @@ int get_rapl_counters(int cpu, unsigned int domain, struct core_data *c, struct
- 			break;
- 
- 		case COUNTER_SOURCE_MSR:
--			if (debug)
-+			if (debug >= 2)
- 				fprintf(stderr, "Reading rapl counter via msr at %u\n", i);
- 
- 			assert(!no_msr);
-@@ -3895,7 +3895,7 @@ int get_cstate_counters(unsigned int cpu, struct thread_data *t, struct core_dat
- 
- 	struct cstate_counter_info_t *cci;
- 
--	if (debug)
-+	if (debug >= 2)
- 		fprintf(stderr, "%s: cpu%d\n", __func__, cpu);
- 
- 	assert(ccstate_counter_info);
-@@ -3965,9 +3965,8 @@ int get_cstate_counters(unsigned int cpu, struct thread_data *t, struct core_dat
- 			assert(pi < ARRAY_SIZE(perf_data));
- 			assert(cci->fd_perf_core != -1 || cci->fd_perf_pkg != -1);
- 
--			if (debug) {
-+			if (debug >= 2)
- 				fprintf(stderr, "cstate via %s %u: %llu\n", "perf", i, perf_data[pi]);
--			}
- 
- 			cci->data[i] = perf_data[pi];
- 
-@@ -3979,9 +3978,8 @@ int get_cstate_counters(unsigned int cpu, struct thread_data *t, struct core_dat
- 			if (get_msr(cpu, cci->msr[i], &cci->data[i]))
- 				return -13 - i;
- 
--			if (debug) {
-+			if (debug >= 2)
- 				fprintf(stderr, "cstate via %s0x%llx %u: %llu\n", "msr", cci->msr[i], i, cci->data[i]);
--			}
- 
- 			break;
- 		}
-@@ -4036,7 +4034,7 @@ int get_smi_aperf_mperf(unsigned int cpu, struct thread_data *t)
- 
- 	struct msr_counter_info_t *mci;
- 
--	if (debug)
-+	if (debug >= 2)
- 		fprintf(stderr, "%s: cpu%d\n", __func__, cpu);
- 
- 	assert(msr_counter_info);
-@@ -4066,7 +4064,7 @@ int get_smi_aperf_mperf(unsigned int cpu, struct thread_data *t)
- 			assert(pi < ARRAY_SIZE(perf_data));
- 			assert(mci->fd_perf != -1);
- 
--			if (debug)
-+			if (debug >= 2)
- 				fprintf(stderr, "Reading msr counter via perf at %u: %llu\n", i, perf_data[pi]);
- 
- 			mci->data[i] = perf_data[pi];
-@@ -4082,7 +4080,7 @@ int get_smi_aperf_mperf(unsigned int cpu, struct thread_data *t)
- 
- 			mci->data[i] &= mci->msr_mask[i];
- 
--			if (debug)
-+			if (debug >= 2)
- 				fprintf(stderr, "Reading msr counter via msr at %u: %llu\n", i, mci->data[i]);
- 
- 			break;
-@@ -7125,7 +7123,7 @@ int add_rapl_perf_counter(int cpu, struct rapl_counter_info_t *rci, const struct
- {
- 	int ret = add_rapl_perf_counter_(cpu, rci, cai, scale, unit);
- 
--	if (debug)
-+	if (debug >= 2)
- 		fprintf(stderr, "%s: %d (cpu: %d)\n", __func__, ret, cpu);
- 
- 	return ret;
-@@ -7284,7 +7282,7 @@ int add_cstate_perf_counter(int cpu, struct cstate_counter_info_t *cci, const st
- {
- 	int ret = add_cstate_perf_counter_(cpu, cci, cai);
- 
--	if (debug)
-+	if (debug >= 2)
- 		fprintf(stderr, "%s: %d (cpu: %d)\n", __func__, ret, cpu);
- 
- 	return ret;
+diff --git a/tools/testing/selftests/turbostat/smi_aperf_mperf.py b/tools/testing/selftests/turbostat/smi_aperf_mperf.py
+new file mode 100755
+index 000000000000..6289cc47d5f0
+--- /dev/null
++++ b/tools/testing/selftests/turbostat/smi_aperf_mperf.py
+@@ -0,0 +1,157 @@
++#!/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++import subprocess
++from shutil import which
++from os import pread
++
++# CDLL calls dlopen underneath.
++# Calling it with None (null), we get handle to the our own image (python interpreter).
++# We hope to find sched_getcpu() inside ;]
++# This is a bit ugly, but helps shipping working software, so..
++try:
++	import ctypes
++
++	this_image = ctypes.CDLL(None)
++	BASE_CPU = this_image.sched_getcpu()
++except:
++	BASE_CPU = 0 # If we fail, set to 0 and pray it's not offline.
++
++MSR_IA32_MPERF = 0x000000e7
++MSR_IA32_APERF = 0x000000e8
++
++def check_perf_access():
++	perf = which('perf')
++	if perf is None:
++		print('SKIP: Could not find perf binary, thus could not determine perf access.')
++		return False
++
++	def has_perf_counter_access(counter_name):
++		proc_perf = subprocess.run([perf, 'stat', '-e', counter_name, '--timeout', '10'],
++					    capture_output = True)
++
++		if proc_perf.returncode != 0:
++			print(f'SKIP: Could not read {counter_name} perf counter, assuming no access.')
++			return False
++
++		if b'<not supported>' in proc_perf.stderr:
++			print(f'SKIP: Could not read {counter_name} perf counter, assuming no access.')
++			return False
++
++		return True
++
++	if not has_perf_counter_access('msr/mperf/'):
++		return False
++	if not has_perf_counter_access('msr/aperf/'):
++		return False
++	if not has_perf_counter_access('msr/smi/'):
++		return False
++
++	return True
++
++def check_msr_access():
++	try:
++		file_msr = open(f'/dev/cpu/{BASE_CPU}/msr', 'rb')
++	except:
++		return False
++
++	if len(pread(file_msr.fileno(), 8, MSR_IA32_MPERF)) != 8:
++		return False
++
++	if len(pread(file_msr.fileno(), 8, MSR_IA32_APERF)) != 8:
++		return False
++
++	return True
++
++has_perf_access = check_perf_access()
++has_msr_access = check_msr_access()
++
++turbostat_counter_source_opts = ['']
++
++if has_msr_access:
++	turbostat_counter_source_opts.append('--no-perf')
++else:
++	print('SKIP: doesn\'t have MSR access, skipping run with --no-perf')
++
++if has_perf_access:
++	turbostat_counter_source_opts.append('--no-msr')
++else:
++	print('SKIP: doesn\'t have perf access, skipping run with --no-msr')
++
++if not has_msr_access and not has_perf_access:
++	print('SKIP: No MSR nor perf access detected. Skipping the tests entirely')
++	exit(0)
++
++turbostat = which('turbostat')
++if turbostat is None:
++	print('Could not find turbostat binary')
++	exit(1)
++
++timeout = which('timeout')
++if timeout is None:
++	print('Could not find timeout binary')
++	exit(1)
++
++proc_turbostat = subprocess.run([turbostat, '--list'], capture_output = True)
++if proc_turbostat.returncode != 0:
++	print(f'turbostat failed with {proc_turbostat.returncode}')
++	exit(1)
++
++EXPECTED_COLUMNS_DEBUG_DEFAULT = b'usec\tTime_Of_Day_Seconds\tAPIC\tX2APIC'
++
++SMI_APERF_MPERF_DEPENDENT_BICS = [
++	'SMI',
++	'Avg_MHz',
++	'Busy%',
++	'Bzy_MHz',
++]
++if has_perf_access:
++	SMI_APERF_MPERF_DEPENDENT_BICS.append('IPC')
++
++for bic in SMI_APERF_MPERF_DEPENDENT_BICS:
++	for counter_source_opt in turbostat_counter_source_opts:
++
++		# Ugly special case, but it is what it is..
++		if counter_source_opt == '--no-perf' and bic == 'IPC':
++			continue
++
++		expected_columns = bic.encode()
++		expected_columns_debug = EXPECTED_COLUMNS_DEBUG_DEFAULT + f'\t{bic}'.encode()
++
++		#
++		# Run turbostat for some time and send SIGINT
++		#
++		timeout_argv = [timeout, '--preserve-status', '-s', 'SIGINT', '-k', '3', '0.2s']
++		turbostat_argv = [turbostat, '-i', '0.50', '--show', bic]
++
++		if counter_source_opt:
++			turbostat_argv.append(counter_source_opt)
++
++		print(f'Running turbostat with {turbostat_argv=}... ', end = '', flush = True)
++		proc_turbostat = subprocess.run(timeout_argv + turbostat_argv, capture_output = True)
++		if proc_turbostat.returncode != 0:
++			print(f'turbostat failed with {proc_turbostat.returncode}')
++			exit(1)
++
++		actual_columns = proc_turbostat.stdout.split(b'\n')[0]
++		if expected_columns != actual_columns:
++			print(f'turbostat column check failed\n{expected_columns=}\n{actual_columns=}')
++			exit(1)
++		print('OK')
++
++		#
++		# Same, but with --debug
++		#
++		turbostat_argv.append('--debug')
++
++		print(f'Running turbostat with {turbostat_argv=}... ', end = '', flush = True)
++		proc_turbostat = subprocess.run(timeout_argv + turbostat_argv, capture_output = True)
++		if proc_turbostat.returncode != 0:
++			print(f'turbostat failed with {proc_turbostat.returncode}')
++			exit(1)
++
++		actual_columns = proc_turbostat.stdout.split(b'\n')[0]
++		if expected_columns_debug != actual_columns:
++			print(f'turbostat column check failed\n{expected_columns_debug=}\n{actual_columns=}')
++			exit(1)
++		print('OK')
 -- 
 2.43.0
 
