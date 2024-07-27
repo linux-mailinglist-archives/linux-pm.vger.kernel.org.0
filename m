@@ -1,125 +1,121 @@
-Return-Path: <linux-pm+bounces-11468-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11469-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 803BB93DE0E
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 11:10:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0659393DF11
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 13:08:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3144B28332E
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 09:10:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E95DB242E4
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2024 11:08:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA47F3B182;
-	Sat, 27 Jul 2024 09:09:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 668674D8BA;
+	Sat, 27 Jul 2024 11:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XYCPmNeh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iqxpCX1d"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC1943AAB;
-	Sat, 27 Jul 2024 09:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD459143C55
+	for <linux-pm@vger.kernel.org>; Sat, 27 Jul 2024 11:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722071399; cv=none; b=SokqYsG5M42unfK/fXZpJ8CUlmAikPg9TLmIF30HjoxxXGbrpWTmjTOelCdOvdheMKFQT6wQgQMJDDBNvJlezp2yfqsGFbXFkhVaoj3/jp62VUtyb3lVWEB80y8qo28ZIa3SK01nUZzqziHELxiDAIoyJwcE9gWkiNLNyYYhc8w=
+	t=1722078160; cv=none; b=R51OTQqUrIpFcGGF0PdLuRIVdwN3a5SYliWLvI1fz/VpWqyLhdZpKZTbWB/rD464JM2koUP2tt27jBBXyX142yj8wAyEALS0pCs49t9pCHR/1Sc6fOItSEfw14qwjbn51QgH4w4aEEIPoYeRwbViRdOedadkfEU8Rc3G26ZTdSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722071399; c=relaxed/simple;
-	bh=eLsefthmcGYqxw5g4EybCkj266s7F3dR/OoW099n4xE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IolfPuh3KXRO6ozCoLOnnokPHIvCPrxo2hbJpBWWYFIA2vTTO0IFdd1lswou2C+5uWnFeTt5FeTC5JsVJp6aLxPsVyOMuKtqdJWiw8WFZbM2BqVQ6QczDc9FxOdTbQt30bITyH+PVUuccAVlLTv6ftHM3ChjWuvjjN5HOcQALmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XYCPmNeh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC38AC32781;
-	Sat, 27 Jul 2024 09:09:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722071399;
-	bh=eLsefthmcGYqxw5g4EybCkj266s7F3dR/OoW099n4xE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XYCPmNehpOPnu868q0BIZL252/ESSFJFfy5bcnZcXfw2qBDzuNh+F9KlaJwrTnPAq
-	 ysXr6z+GmzWYwwIUPzGI8TLA8bVxW5vdcRa6x32SMat4T6OvWDzkgT/78YjRsTNhiM
-	 iLuY4RfkvOAxe53bo5tTyQ4cDtmLznvvSH13R8H/Q6sI7Q0N45jtaA+R98OcpuJkdJ
-	 W/i4+xvbet04J/21GjXbCmqMuwCXbwM7AV7iPa0rBDY4uz75aYhMBKFPutX/pDQ5Bk
-	 G6LehFM+E3niorWSdQ9KTnuOpvEikRDRg3KzU2zjQyqE/HEHDKbBkQ27G6bw2fwysF
-	 tGm2LGODwHxPA==
-Message-ID: <ddd1b5d5-d3b2-4f65-8021-2e53c9016b49@kernel.org>
-Date: Sat, 27 Jul 2024 11:09:52 +0200
+	s=arc-20240116; t=1722078160; c=relaxed/simple;
+	bh=V+YDUSc3nGYr1WxRfHK9/D7VF2Nro5Dl90xbTvXtMhs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=THYmX6P8ceOM7STymnLKks4FfA9tXROfPN/4WhpuztZjsoppZZ/ePWLigZImUtoVtXIhLgbgaAdYzFOBi4OAoT9dFplWxTbKxYMCYzwFqlCA5O8WsHr65SXvZHeAnV5PRlXoGv2r7f4BXr7VY/YxrW82qKhh6GYsPJd0CJWmnlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iqxpCX1d; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2ef2c56da6cso22785181fa.1
+        for <linux-pm@vger.kernel.org>; Sat, 27 Jul 2024 04:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722078157; x=1722682957; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jye8ZO2/pki4i7qm4KDwuAM4qsHOMHYsZkmnjiOoEkk=;
+        b=iqxpCX1dkxM06GEE/8m4VPEIYtPVSswuO+bxJzFEisOa8Y4zk81NosIQs2tJHsTcat
+         K07C2H2UqVQjfHaaKts1/O6X/RmKZAhTvJr2xmei3oHnh4lXD7KAVHgXmKsfXiLfNqal
+         R9wQWxQZv7PSOabudgky36PGRcaUnyyOaKOZ3cmca3OpYquCwviBHzCPBlGwJiXNyH88
+         hQgxy2p32kUqLoBYe7FBitroj2tAX9Jl8Vm91lIjHbcdJoJA/f0lZ+DixZVgupSe6AWF
+         JKbEYQGFL8EWuJFpFIekbD2ZRQLY4T3VJNcleIWQjUUrKQbSXkVFzTixReU1uo8PuGyH
+         rWHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722078157; x=1722682957;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jye8ZO2/pki4i7qm4KDwuAM4qsHOMHYsZkmnjiOoEkk=;
+        b=R4pUIONVdKtGs+CRw/HZH7jVs92xBXgx6/gDlrl55TZ9aCQUPumQsf79WcbvTBfDUm
+         9xUhYkmhhZDzP3c6Qto66V290xs7arhT2s4z8/iEciqqAXrjNXN3h9FoBNrqajLgW1e2
+         3pxmaOWTiwn/Tx3e3cEDCHXamnXti6Dwqn6D3SRLPOYYaXllZckozkjy5Cs6Yc93K99y
+         2L4Vi8pQ3BAvIQqFU4hEdV2kj6rr3/UQoIsVWpc1hq1v7oEyyN0b2OGWQqwkxulqBfIl
+         pPcH8n2S6EZUT2uQqCuUI51XWDbu/pWxN50qQX09EJR7s4YLdXCtQuvFNuBnHlg2bpcV
+         FRpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXmcPr16QeM0+ZsJ0V/jZtOhFSFTQRiul0MuQOKaryqTOqQuDTebzOROe4BvaJabs0Ucbk+ORqZXYpaCnzl6sZ59s4gcq4wE7I=
+X-Gm-Message-State: AOJu0Yw33+vXYmj6v1+gPO2CdSK+/SK3iQyOq8OrYrGqpdBtxWQZ01jx
+	QobVxHgp/2Q+wO0UuFi1JMpWKJaahq+ZVZWL0zzxlloTThM5/9G8AKfIZg2MY3c=
+X-Google-Smtp-Source: AGHT+IE9K63HbHii+F8cpEh7ccZeL65+H13yCLffjMNQtukHmqqedaSKiBaVF/n7Xsgj2haKQ1NhgQ==
+X-Received: by 2002:a2e:95d0:0:b0:2ef:2dac:9076 with SMTP id 38308e7fff4ca-2f12ecd2742mr13863451fa.11.1722078156689;
+        Sat, 27 Jul 2024 04:02:36 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f03cf53bc1sm6887531fa.58.2024.07.27.04.02.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Jul 2024 04:02:36 -0700 (PDT)
+Date: Sat, 27 Jul 2024 14:02:34 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Jameson Thies <jthies@google.com>, heikki.krogerus@linux.intel.com, 
+	linux-usb@vger.kernel.org, bleung@google.com, abhishekpandit@chromium.org, 
+	andersson@kernel.org, fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org, 
+	hdegoede@redhat.com, neil.armstrong@linaro.org, rajaram.regupathy@intel.com, 
+	saranya.gopal@intel.com, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] usb: typec: ucsi: Add status to UCSI power supply
+ driver
+Message-ID: <5bnu2usyw54rlqvo7msq4ve6rmsk27jeouegpwymg7m3zbnx7m@x6u3gi3yscv5>
+References: <20240724201116.2094059-1-jthies@google.com>
+ <20240724201116.2094059-2-jthies@google.com>
+ <tzljywuym6jsh5q5iuc7rrtq564d3ffl3e4ltuii7xzkd6cf7d@2nmj5qkusbkt>
+ <up2clptjacrc2n2ibzkpv5od47pky6im3pzzgjuymm4xd7ielu@ulg7lb2u5lih>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] dt-bindings: arm: rockchip: Add GameForce Ace
-To: Chris Morgan <macroalpha82@gmail.com>, linux-rockchip@lists.infradead.org
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, jagan@edgeble.ai,
- andyshrk@163.com, jonas@kwiboo.se, sre@kernel.org, t.schramm@manjaro.org,
- heiko@sntech.de, conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org,
- Chris Morgan <macromorgan@hotmail.com>
-References: <20240726194948.109326-1-macroalpha82@gmail.com>
- <20240726194948.109326-5-macroalpha82@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240726194948.109326-5-macroalpha82@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <up2clptjacrc2n2ibzkpv5od47pky6im3pzzgjuymm4xd7ielu@ulg7lb2u5lih>
 
-On 26/07/2024 21:49, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
+On Fri, Jul 26, 2024 at 11:30:37PM GMT, Sebastian Reichel wrote:
+> Hi,
 > 
-> Add devicetree binding for the GameForce Ace.
+> On Thu, Jul 25, 2024 at 06:31:00AM GMT, Dmitry Baryshkov wrote:
+> > On Wed, Jul 24, 2024 at 08:11:13PM GMT, Jameson Thies wrote:
+> > > Add status to UCSI power supply driver properties based on the port's
+> > > connection and power direction states.
+> > > 
+> > > Signed-off-by: Jameson Thies <jthies@google.com>
+> > 
+> > Please CC Power Supply maintainers for this patchset (added to cc).
 > 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+> Thanks. I guess I should add something like this to MAINTAINERS
+> considering the power-supply bits are in its own file for UCSI:
+> 
+> UCSI POWER-SUPPLY API
+> R:	Sebastian Reichel <sre@kernel.org>
+> L:	linux-pm@vger.kernel.org
+> F:	drivers/usb/typec/ucsi/psy.c
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Or maybe extract a separate USB PD PSY driver, which can get used by
+other Type-C port managers (I didn't evalue if it makes sense, i.e. if
+the TCPM drivers can provide data, I just assume they can).
 
-Best regards,
-Krzysztof
-
+-- 
+With best wishes
+Dmitry
 
