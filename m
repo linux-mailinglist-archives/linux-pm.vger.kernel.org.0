@@ -1,194 +1,225 @@
-Return-Path: <linux-pm+bounces-11493-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11494-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8821C93E241
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Jul 2024 03:02:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 396BE93E4CA
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jul 2024 13:43:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0915F1F21AF2
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Jul 2024 01:02:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4106B1C2105F
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jul 2024 11:43:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B9EC18E76E;
-	Sun, 28 Jul 2024 00:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 249AF37703;
+	Sun, 28 Jul 2024 11:43:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eXGcAMiO"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="XXp0k5iw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E761138382;
-	Sun, 28 Jul 2024 00:49:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409E921105;
+	Sun, 28 Jul 2024 11:42:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722127792; cv=none; b=C3TtoKtF+xSke051FsrgTkvX/2x4zZZLEVPIiUtf3uamEfTZVQLEYqSUNMRGf0KwOT0sBfpCfJ8q7Rc39pDtOUsf7dMYW3iQtzoGWZK0GF6A6PQTMs0+Un/3UnMfXjRbvX4aNnyMfDdLZshNXbUF3w4pewBSHXhk9rSLMjWHIe4=
+	t=1722166981; cv=none; b=iYFspgkG6QiukfFiKb+EBhy7gZwJejmSVNvMJbWYb7Q43nijwEE4+5eVWT62SKNpRS67W0/6+kLfbTblh+GEVJrtcezINsNsaMvItVZcEjTOFK/2kEWnW1UQp6HMKnJpuc7RMvoj9tJG1IW8BqG1vQArAPM9JPZ/zAXe7y4Tcro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722127792; c=relaxed/simple;
-	bh=q2GICK9JU3ujDRUk5aYaltkz5NWuqlEhDQJ3urBVj4I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SczTgbpXvO9wPtcR01uk8GO+Dd8/P4oEAwiZ7Q9q5pvEsFKWgFObvrwkmQRquGE14QGsE8+h4S9U9BDIoStRIxdMRG1Sd2pWRT2YppY0PHfdKkhUMxp9kQnROvTpDvZPqwh3hKKnl9Up29JiKT9SNz8BjM2vpT5zVXfoTnFWmQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eXGcAMiO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04083C4AF09;
-	Sun, 28 Jul 2024 00:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722127791;
-	bh=q2GICK9JU3ujDRUk5aYaltkz5NWuqlEhDQJ3urBVj4I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eXGcAMiOX2P8Bpzdc2kXo1T8aaKc0QqrvPCsc926DRaKkNPnt8pXROz98hsYYlWWG
-	 R00RYmBGlx/ofxMvB4BII9sbjSpEgRB/w8qcS5N7IkEMf3uEzxNOTv0DHUFifFXJTN
-	 pbWdvBssboeyxmPjCAXbQTxj5lNQHMbYIdym7BaehCbPVI8rjY2a7+D62dLGvqRzRH
-	 ZYgQyTt7RZElYyktL3+eCCm4+mzqyt+wNLZGnQQQ2OmY84E9wJHfB2gz2932+sM6zG
-	 6zUnkC4ys2zSDG7M/fN0G74kY0ixHaiV4ifS1N9TCgFafNElAS66eFLZUf43uovQ/E
-	 i0w1hcx0/lq7g==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Zhang Rui <rui.zhang@intel.com>,
-	Chen Yu <yu.c.chen@intel.com>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Sasha Levin <sashal@kernel.org>,
-	rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	stanislaw.gruszka@linux.intel.com,
-	tglx@linutronix.de,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.10 9/9] thermal: intel: hfi: Give HFI instances package scope
-Date: Sat, 27 Jul 2024 20:49:29 -0400
-Message-ID: <20240728004934.1706375-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240728004934.1706375-1-sashal@kernel.org>
-References: <20240728004934.1706375-1-sashal@kernel.org>
+	s=arc-20240116; t=1722166981; c=relaxed/simple;
+	bh=vqXIF19GM9IUUR5/SalBX3/7jF735N4hJXNd6kuvflY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=WAd3113IWc5l0ZpW3q6yl/DkuQl4jeqgxR6hTcJmlZCPQVOPFKpQKSRyRUZBl3erXpVDT+pLq/ixDSdrWYzTNXIY7u2kf/B22buLtELSQFq94autPNfzGVbhVzAH4yoczr7LV0PMDGmdvLRAA2D70K28B4PuhWFpgtZ359zCkAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=XXp0k5iw; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1722166927; x=1722771727; i=wahrenst@gmx.net;
+	bh=t9RUGYIzPmImI5RdyBcGPuYt4Ch3P3xZu5S+hkMDf8o=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=XXp0k5iwZir7n83XQ087VX+4Acj8Dh7Oc+qgMih5geYrDKIcnfyIj3ZXa/GiuBHx
+	 YOiBztY8UCKtHnLEizMh1IOC8W5gfHhJXECtis4z46DC4arFtGJmXPv49T8U56Ur+
+	 qRonJ8oOf5uxSNpkU32ep+vzK/KzkYfAIPapweF1PkPi8uffRq4lf4fJgKkrgkbqv
+	 cgqr5bXzoOv9a+5X/6fA2deVAbgBc5dmwD7FQASC/BdB5I1FlpXNaR4c58K04bP4G
+	 i/GDS4vI4+iDCHeWPxkDHBu7g7W58nuLHG5mNOn9l8h6AIXkdPFdzPhZjvcQxN/t6
+	 VYXCvpf1rJGp8oKGxg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYvcG-1slHrT2n32-00N5HR; Sun, 28
+ Jul 2024 13:42:07 +0200
+From: Stefan Wahren <wahrenst@gmx.net>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Minas Harutyunyan <hminas@synopsys.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Lukas Wunner <lukas@wunner.de>,
+	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+	Peter Robinson <pbrobinson@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	bcm-kernel-feedback-list@broadcom.com,
+	linux-pm@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kernel-list@raspberrypi.com,
+	Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH V2 00/16] ARM: bcm2835: Implement initial S2Idle for Raspberry Pi
+Date: Sun, 28 Jul 2024 13:41:44 +0200
+Message-Id: <20240728114200.75559-1-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.10.2
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:YNorNR+1omM35M/GKScFU7LvaIEeYUoyTg7TYTYVxeo3HqCms2E
+ dBa0huxhCkBAH10O57ek73gOEy4q2qr7qfZ6U8wUZ6etP2maMxihZhUcCKNNV9a5dM4Cxlf
+ C1sc9GJfzt22UGFKOPHVB6XUr5ce+QvlqfFH2cIYllyOo8h98YLGhlNwcO6Z9FCUyZEiYbL
+ LUXkcX26tvWx2Qk+8w1Uw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:WNzqUOykDu4=;CemkE6JrPK/fmO7QQsIf0PXdrqq
+ jD4X9TBuBB9UTe169GfebsNmSBw73UVxVDTrFAoO8+qDGhu1MKzSDTCxsPhDb9TfaWVs2M2YM
+ dLPPZTuiSkGlFsJ289uwm/BKkdfB5S4kKguffFLqxMAXWpJ4F0eqAjrKcy17BQ0yU50dQaZrB
+ 38KO0+djyJcBNbgNEWeBfqXw6SHiul8QE21dSLYmo30mNSzWPZVWcvk2DU+vQ1IaQxX+da/Vq
+ k88MYUq6yRVVfzMDdrWiV5pKt/tPovi+jrtjMyTa3tsNd1u4qIY02/3fAHfYshb5P46i36rFV
+ PDI2PQQo/eRjLMGiFzEQTO3B2tqiLggsSUsPzs86ECpEUbduisCH3bLxYHA8h/m0o6XAQQOYk
+ Hd+LG7Dg/tl1Bct6MJ8Z3eiwoC+Kf7CzSiA+RcwsI5hn4kA0eYxep2VT1Qj+leFPZwBJuK4NH
+ qF0yXMwSQBRbig/DGyziSiilnE1EIecqavalD1Gl/zjTiMXz0he8pL0vnqFFi1zz3F1tJnKrB
+ vLhUzb1WU+1uIRiYmhjxhJG7BRIsuL/c7jbRXXSVAyZvbfDlZ1g9Z4nduET/i2Ci3eUG1d1i7
+ OOSWwKXXvXky3iRPP2IAZIgyA5TeXGAK1VEaKa0tnVabHaXSz+qcUWD5Udbm3aOdKPKSrptqt
+ iMAOxqoyyH0k7hQsIP/IO4SdpP9KEotg64JzegYLOqFzDKpsWmGUfLhHexl1wZSXqWc4BXXPh
+ OVd/UcmrBy9CIBPdGeHJnhfEHIsL0r5aLNHZBPaLxNw65ox7YV2AcLs+3/PiXTSmCRl3JuyfJ
+ x2mvWOFmCajsBqv/xmNfeYxg==
 
-From: Zhang Rui <rui.zhang@intel.com>
+This series implement the initial S2Idle support for
+the Raspberry Pi, which was a long time on my TODO list [1]. The
+changes allow to suspend and resume the Raspberry Pi via debug UART.
+The focus is on the BCM2835 SoC, because it's less complex than its
+successors and have enough documentation.
 
-[ Upstream commit b755367602d70deade956cbe0b8a3f5a12f569dc ]
+The series can be roughly separated in 3 parts:
+ 1. base patches (1-5, 15, 16) which allows S2Idle support for BCM2835
+ 2. drm vc4 patches which implement S2Idle support (mostly new and not
+    really BCM2835 specific)
+ 3. dwc2 patches which handle BCM2835 specific issues (still in progress,
+    but works fine)
 
-The Intel Software Developer's Manual defines the scope of HFI (registers
-and memory buffer) as a package. Use package scope(*) in the software
-representation of an HFI instance.
+Cherry-picking of patches should be fine.
 
-Using die scope in HFI instances has the effect of creating multiple
-conflicting instances for the same package: each instance allocates its
-own memory buffer and configures the same package-level registers.
-Specifically, only one of the allocated memory buffers can be set in the
-MSR_IA32_HW_FEEDBACK_PTR register. CPUs get incorrect HFI data from the
-table.
+Test steps:
+- configure debug console (pl011 or mini UART) as wakeup source
+- send system to idle state
 
-The problem does not affect current HFI-capable platforms because they
-all have single-die processors.
+  echo freeze > /sys/power/state
 
-(*) We used die scope for HFI instances because there had been
-    processors with packages enumerated as dies. None of those systems
-    supported HFI, though. If such a system emerged, it would need to
-    be quirked.
+- wakeup system by console traffic
 
-Co-developed-by: Chen Yu <yu.c.chen@intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Link: https://patch.msgid.link/20240703055445.125362-1-rui.zhang@intel.com
-[ rjw: Changelog edits ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/thermal/intel/intel_hfi.c | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+The DWC2 part of the implementation isn't complete yet (especially patch 1=
+4),
+but much better than the first version. The USB domain is now powered down=
+ and
+the USB devices are still usable after resume. There is still room for
+improvements, but at least the system won't freeze forever as before [2].
 
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index a180a98bb9f15..5b18a46a10b06 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -401,10 +401,10 @@ static void hfi_disable(void)
-  * intel_hfi_online() - Enable HFI on @cpu
-  * @cpu:	CPU in which the HFI will be enabled
-  *
-- * Enable the HFI to be used in @cpu. The HFI is enabled at the die/package
-- * level. The first CPU in the die/package to come online does the full HFI
-+ * Enable the HFI to be used in @cpu. The HFI is enabled at the package
-+ * level. The first CPU in the package to come online does the full HFI
-  * initialization. Subsequent CPUs will just link themselves to the HFI
-- * instance of their die/package.
-+ * instance of their package.
-  *
-  * This function is called before enabling the thermal vector in the local APIC
-  * in order to ensure that @cpu has an associated HFI instance when it receives
-@@ -414,31 +414,31 @@ void intel_hfi_online(unsigned int cpu)
- {
- 	struct hfi_instance *hfi_instance;
- 	struct hfi_cpu_info *info;
--	u16 die_id;
-+	u16 pkg_id;
- 
- 	/* Nothing to do if hfi_instances are missing. */
- 	if (!hfi_instances)
- 		return;
- 
- 	/*
--	 * Link @cpu to the HFI instance of its package/die. It does not
-+	 * Link @cpu to the HFI instance of its package. It does not
- 	 * matter whether the instance has been initialized.
- 	 */
- 	info = &per_cpu(hfi_cpu_info, cpu);
--	die_id = topology_logical_die_id(cpu);
-+	pkg_id = topology_logical_package_id(cpu);
- 	hfi_instance = info->hfi_instance;
- 	if (!hfi_instance) {
--		if (die_id >= max_hfi_instances)
-+		if (pkg_id >= max_hfi_instances)
- 			return;
- 
--		hfi_instance = &hfi_instances[die_id];
-+		hfi_instance = &hfi_instances[pkg_id];
- 		info->hfi_instance = hfi_instance;
- 	}
- 
- 	init_hfi_cpu_index(info);
- 
- 	/*
--	 * Now check if the HFI instance of the package/die of @cpu has been
-+	 * Now check if the HFI instance of the package of @cpu has been
- 	 * initialized (by checking its header). In such case, all we have to
- 	 * do is to add @cpu to this instance's cpumask and enable the instance
- 	 * if needed.
-@@ -504,7 +504,7 @@ void intel_hfi_online(unsigned int cpu)
-  *
-  * On some processors, hardware remembers previous programming settings even
-  * after being reprogrammed. Thus, keep HFI enabled even if all CPUs in the
-- * die/package of @cpu are offline. See note in intel_hfi_online().
-+ * package of @cpu are offline. See note in intel_hfi_online().
-  */
- void intel_hfi_offline(unsigned int cpu)
- {
-@@ -674,9 +674,13 @@ void __init intel_hfi_init(void)
- 	if (hfi_parse_features())
- 		return;
- 
--	/* There is one HFI instance per die/package. */
--	max_hfi_instances = topology_max_packages() *
--			    topology_max_dies_per_package();
-+	/*
-+	 * Note: HFI resources are managed at the physical package scope.
-+	 * There could be platforms that enumerate packages as Linux dies.
-+	 * Special handling would be needed if this happens on an HFI-capable
-+	 * platform.
-+	 */
-+	max_hfi_instances = topology_max_packages();
- 
- 	/*
- 	 * This allocation may fail. CPU hotplug callbacks must check
--- 
-2.43.0
+Here are some figures for the Raspberry Pi 1 (without any
+devices connected except of a debug UART):
+
+running but CPU idle =3D 1.67 W
+S2Idle               =3D 1.33 W
+
+In comparison with HDMI & USB keyboard connected (but neither active
+nor wakeup source):
+
+running but CPU idle =3D 1.82 W
+S2Idle               =3D 1.33 W
+
+The series has been successfully tested on the following platforms:
+Raspberry Pi 1 B
+Raspberry Pi 3 B+
+
+Changes in V2:
+- rebased against todays mainline
+- added Reviewed-by from Florian
+- added Acked-by from Minas
+- dropped "irqchip/bcm2835: Enable SKIP_SET_WAKE and MASK_ON_SUSPEND"
+  because it has been applied by Thomas Gleixner
+- dropped "pmdomain: raspberrypi-power: Avoid powering down USB"
+  because this workaround has been replaced by patch 14
+- use drm_err_once instead of DRM_ERROR and return connector_status_unknow=
+n
+  in patch 6
+- add new patch in order to clean-up all DRM_ERROR
+- add new patch to improve raspberrypi-power logging
+- add new patch to simplify V3D clock retrieval
+- add new patch 5 to avoid power down of wakeup devices
+- add new patch 12 to avoid confusion about ACPI ID of BCM283x USB
+- add new patch 8 & 10 which address the problem that HDMI
+  is not functional after s2idle
+- add more links and fix typo in patch 13
+- add new WIP patch 14 which recover DWC2 register after power down
+- take care of UART clock in patch 15 as commented by Florian
+- use SYSTEM_SLEEP_PM_OPS in patch 15
+
+[1] - https://github.com/lategoodbye/rpi-zero/issues/9
+[2] - https://bugzilla.redhat.com/show_bug.cgi?id=3D2283978
+
+Stefan Wahren (16):
+  firmware: raspberrypi: Improve timeout warning
+  mailbox: bcm2835: Fix timeout during suspend mode
+  pmdomain: raspberrypi-power: Adjust packet definition
+  pmdomain: raspberrypi-power: Add logging to rpi_firmware_set_power
+  pmdomain: raspberrypi-power: set flag GENPD_FLAG_ACTIVE_WAKEUP
+  drm/vc4: hdmi: Handle error case of pm_runtime_resume_and_get
+  drm/vc4: Get the rid of DRM_ERROR()
+  drm/vc4: hdmi: add PM suspend/resume support
+  drm/vc4: v3d: simplify clock retrieval
+  drm/vc4: v3d: add PM suspend/resume support
+  usb: dwc2: debugfs: Print parameter no_clock_gating
+  usb: dwc2: Add comment about BCM2848 ACPI ID
+  usb: dwc2: Skip clock gating on Broadcom SoCs
+  WIP: usb: dwc2: Implement recovery after PM domain off
+  serial: 8250_bcm2835aux: add PM suspend/resume support
+  ARM: bcm2835_defconfig: Enable SUSPEND
+
+ arch/arm/configs/bcm2835_defconfig        |  2 -
+ drivers/firmware/raspberrypi.c            |  3 +-
+ drivers/gpu/drm/vc4/vc4_bo.c              | 14 ++---
+ drivers/gpu/drm/vc4/vc4_dpi.c             | 14 ++---
+ drivers/gpu/drm/vc4/vc4_dsi.c             | 32 ++++++-----
+ drivers/gpu/drm/vc4/vc4_gem.c             | 11 ++--
+ drivers/gpu/drm/vc4/vc4_hdmi.c            | 70 +++++++++++++++++------
+ drivers/gpu/drm/vc4/vc4_hvs.c             |  4 +-
+ drivers/gpu/drm/vc4/vc4_irq.c             |  2 +-
+ drivers/gpu/drm/vc4/vc4_v3d.c             | 21 +++----
+ drivers/gpu/drm/vc4/vc4_validate.c        |  8 +--
+ drivers/gpu/drm/vc4/vc4_vec.c             | 10 ++--
+ drivers/mailbox/bcm2835-mailbox.c         |  3 +-
+ drivers/pmdomain/bcm/raspberrypi-power.c  | 43 ++++++++------
+ drivers/tty/serial/8250/8250_bcm2835aux.c | 37 ++++++++++++
+ drivers/usb/dwc2/core.c                   | 16 ++++++
+ drivers/usb/dwc2/core.h                   | 17 ++++++
+ drivers/usb/dwc2/debugfs.c                |  1 +
+ drivers/usb/dwc2/gadget.c                 | 49 ++++++++++++++++
+ drivers/usb/dwc2/hcd.c                    | 49 ++++++++++++++++
+ drivers/usb/dwc2/params.c                 |  2 +
+ drivers/usb/dwc2/platform.c               | 32 +++++++++++
+ 22 files changed, 339 insertions(+), 101 deletions(-)
+
+=2D-
+2.34.1
 
 
