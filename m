@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-11495-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11496-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ED8C93E4CF
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Jul 2024 13:43:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83D6693E4D6
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jul 2024 13:44:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FB321C2120A
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Jul 2024 11:43:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A725281E3C
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jul 2024 11:44:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D29738FB0;
-	Sun, 28 Jul 2024 11:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EE3F39FCF;
+	Sun, 28 Jul 2024 11:44:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="QVaxeNA8"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="Qksm5P3p"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B9B21105;
-	Sun, 28 Jul 2024 11:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA26B37708;
+	Sun, 28 Jul 2024 11:44:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722167025; cv=none; b=V/M6Zm4XTn06e6p8l0psA73EDLz4rIzX6VwHbFs5V/3F8w/lbyp5Yb33b3Qrg6YwvhkPoF0haDE/muBbhzONPG+LWz0L55TCiIaUeuOjRUOKXf+uxt7fqP20HZT8nHF1VDQSmvZ8UwJNOo1kU3eD1VAUoE7Ad7Xn9X2m0cEWpJ8=
+	t=1722167082; cv=none; b=iuPIidzYDn8UGjajlFk2oFDeX4EnJqOTuTgD8UM+CuE0U2JLfylbPVrR+QiOl9Cc4GlYHlx7xFUz9fPgsLPmDCOuxgBmfzn7IscijkXl85y9beVcqa4lMlEn81389zkM7iZnNszkwmEt12WCr+DUJqrSFTBMZZTjIV1jq64hzPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722167025; c=relaxed/simple;
-	bh=BnouMhDpvxyN4mNec6xULKIPx0ZJaDqbAqdgxv75Ylk=;
+	s=arc-20240116; t=1722167082; c=relaxed/simple;
+	bh=wY20nfRBuENskS9j1MKl9esl/9d+REWM+u8BeV3PCjU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Obki5/7nunZWzMwDrVp6grz/cL84MlLM7pM9Vz997IvuhcV53ApX6FpZI66uiB9BHsEy/uxQDWX0DjW9ZqHiXX1yfYDR5OHbhwPb6fwPSKqGwSAlmR1TlKEHJaA2qtaLTqUsY14WVLMCOzklMXHghWvxuaiGrmZ+aIwXWoHaW7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=QVaxeNA8; arc=none smtp.client-ip=212.227.15.15
+	 MIME-Version; b=iiezJdUglP8cuoukaW6QV+EyBgCyI8b2bAkSdRDKkrM+tU5GDKIqK4r85l4yPNGj5Mbx1T346etwF4UIF2F9FDFe0pC0sIDJLou+FCnTGYCLN1hFa8/uMQ9hKJ4eYVwK5TNy2gGLsC2aoGnup3tATKQTIPAKZdY83tbIz+Egs/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=Qksm5P3p; arc=none smtp.client-ip=212.227.15.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1722166990; x=1722771790; i=wahrenst@gmx.net;
-	bh=5K5kBAdZCWeAsANsjCXXlgQc+q/qI1OkuEhMl0S3/Ys=;
+	s=s31663417; t=1722167052; x=1722771852; i=wahrenst@gmx.net;
+	bh=IbGjewfMVvYXbrFbwzubZ45vd9Gh3tFpLWbhBJeYuoI=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=QVaxeNA8glaMedGkqwJdzoQdFmy60h9oEHd+j8ZQXDknrUgEgsk1RxU5fDrvPTma
-	 XpT7tg6/VoEAThfg6Q5CTw7jw0lsaj4g5U2+NsSVvaeqLSpqtRoXv+AmBWa5bV6Md
-	 Lg9EvRHa1sirsh9i7Nk3PSk7oik8KOJFMKuWZTxUXSPDDdNSU6DvAm5ymmP8buXze
-	 7q2PQ1nwL0EAl6W5tDWLeGpf8pacRTCzIAAxh4FN7StCzOJz+BDdVHLiYI4zO2SQB
-	 o4zZzw+CKPJ8y8VnSGPxFvHoIlnmNEvmPSYwaCMd9SGI8qPt9VQQWCIkarrWDMmvD
-	 fkwOKHEDy1poP7UsmQ==
+	b=Qksm5P3p5CRNNdes+g/NL3jPU3p0HnphU3o6RslsQNc6xdp27JbMo4YFDMPvZEPp
+	 1npoVNRq8Ut84Q/9FW3e9K2LYWLKf9NuClS9noeFFCDzIx7gP67rQD1y3m52hMc6m
+	 qU9CoBFhmrcJeevpkGpCl5+KoovkMajx+0XYLEoL44FFmyk+kyJWN6JAHZU9j+Us0
+	 xGJYNwpUFNoQBBwn3zqVMQhcr1RtLU+PpMIkW7GLuPJJx0gsfB0K+brveI5BCYVGO
+	 xbRESKLXnLysz60odoVdsOgsQoSOi+3SqYSmxnDKRVC0cycwthJI1lh32sS/rTl30
+	 MypypdLKkzA9dQgv1g==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M1poA-1saEA22Pua-00AZgY; Sun, 28
- Jul 2024 13:43:10 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MTzay-1sgJoM2ID4-00L8m9; Sun, 28
+ Jul 2024 13:44:12 +0200
 From: Stefan Wahren <wahrenst@gmx.net>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Florian Fainelli <florian.fainelli@broadcom.com>,
@@ -75,9 +75,9 @@ Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	linux-arm-kernel@lists.infradead.org,
 	kernel-list@raspberrypi.com,
 	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 01/16] firmware: raspberrypi: Improve timeout warning
-Date: Sun, 28 Jul 2024 13:41:45 +0200
-Message-Id: <20240728114200.75559-2-wahrenst@gmx.net>
+Subject: [PATCH V2 02/16] mailbox: bcm2835: Fix timeout during suspend mode
+Date: Sun, 28 Jul 2024 13:41:46 +0200
+Message-Id: <20240728114200.75559-3-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240728114200.75559-1-wahrenst@gmx.net>
 References: <20240728114200.75559-1-wahrenst@gmx.net>
@@ -88,60 +88,91 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:FVA7jnUYemg65bMAN/KzrSjeUZ7AIaT5urGSfhIox8kocVwgT2/
- hh458humeGIY15HoUPJuOHuKer7xspVDz2r2LAKAfyEv1BoOW46hwaLFIFQwNw/07F6+xOw
- mBz189fmXQ5hGReyTveqQq8SOtVAh4zvRizne3aSe+wq61N+bv+Em3NA/vrzpYsGA1JOoIU
- 9t/V7UjaYw88aDrvu1YxQ==
+X-Provags-ID: V03:K1:8gHlvy2cq7q0FmBdgqfBmCudv2v+AkQkTrbr6+v+4cawgLMRiP7
+ I6WYfRp6lfU706qmZLWTww4siOukAG7n+jA1FU86+qu98d+U9UMGhdlkyDy7QS5icxFNBoQ
+ NOzJmBmCDlN8gyXryRU/xNOovaw4p4zCkJorOxMb2ZmVx52i6MHgBiBiZH9NahfdXKsFV0r
+ 17NLGKp4+sax2g19ulL0g==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:vccvTtuL2Z4=;Ona6kUu/3UswlH5eKiIBueW/r4Y
- BSZW0yIqmScj8IABKZA2mHIvKMVVQmMetWaxD+Q4CQOAMXirv3HDRFS2/PC0Oh+Ny4Y/4sSMo
- fBuvXYF2gdz9mICoLrZqOwuJcytkRpAgYHy03CzMHJfZM5577gyanz4RjkYRjj/BBMCbTSp4A
- j1iSwg0kfbLDrtaMGM0D9RiJU9v5/rzoqKXv4s3EMLkw0dLNF40JyGB5wiMN68J7PHsaiAqOR
- kgSm1V1/TN3ejUE6VnZqyUU5B8jRekuSmIYEAijH56MwNJy35e46zk8MLwyNfUVz+C9AGeOoy
- nDzEJU+AnwrDSDsxnSOPOuRfzdjOzW2PSDvmOvH3iBxo7Vg+J1+L2SEapxvAxRg19uUOcKG/Q
- ZUHA0Z3Tv9gAOjv99QhR2uE733tnO+7L/l/afzGo/eG1Ro5+ldtd/tcAkkgn7lJBmwmcNV4R3
- gBNQE3kABrlE3MnxqRxiyvLi+LFh9UFAKU1x4q6+BII7/P5mjrEYWRW9mzfEjiOJucAgAQtNL
- TCGRTHZ4QT5GxcCKp/KPVdue7lB+l4IcYbJ6r9ZJEYrN3pMzUZMRdC0JjAB8lmmANB7iWrdvK
- P4+TLXiunHl1RZ/nxq2ilajPvUSEZ4KcGmx7YkNAwP/SaGwPSxpOYxnpSxtpzkqdHaYtbIo9N
- /qSWujAvC39FpWiqp3caDigDKfMj0xRY1nMKzGLqgW9mLolHKuZ6J/WH/ezlRFgtSs8/IDwLc
- gdahJV1U4XH0lkTHgI3zAihBfQY/MZeOWTiC/h2dT1DIxWokXdsKfDS7OPJ6R5NpkgQ/nxuUG
- C/nPfrr9oT+au5fPnBfCob9Q==
+UI-OutboundReport: notjunk:1;M01:P0:GvHpumZq+Q4=;f1hgc09s2ZL1zFiR+ZdW9uLpm4l
+ Dl83J93DYLWs2cENUpRtKq+92lalmUjF3cfldUv8D4vwexvokVVZ3v6vub5l2CHu/uBNi4VFb
+ 96xBHlgEsRFrqqd/JeuZ4hzsMPoVDxAou+zwdUcAaDEVML83SSj6WxSAjHamY1O4rYbC9Z1zW
+ GpxHei+/kzjv0e1FZduakzXVqURdsOmNfpi1iUyoGaxkpYnQNjI1XTveoVXdMv2uLpvu0a2sE
+ 3El1GFJxlm4u+xubtnZjY/AMTFqZwMgbrxX5K3KD1H+FiQ15ikaeHqbZctW9tFkPoJFBarEBu
+ snVeFD4taEcrRtuBBjVqWNz9y0RTdO4KaXutvq8CkNCi51MwERHOOV2GNbm8Sa7Q37F1veRuu
+ 0Uo88LrN1eQGeC/5KYpDHEhJVdPCsVNzUpr+hBh++B84KxXpogaSvoGl0MSv3thaBu/HrQd1b
+ Vii8/RcP0dviPTwenY9KkZbIrP6BX/LTh1fktdIR1zwWb6AMZMPc83cJLRyo0vtFdBhBomTBj
+ ffpmoGVvjwUQOrtX7CV75+i5wMIQ28WR5w+8vrJMIo74GxUKUZbjU+JiwE1KM/BgrUPSNzSRG
+ 1ssfhtEEh6NFmL6xXeosAaRnjmvZDpl96wCWIGFbyfQ6d7bWS/cXvr7irUcL8Bjbn9u5pwJri
+ RwfZjiZyu4SlzmsNfq6IcPb8E7AZaoLstB2zer8eQTeXyrS7+v+LaIdHT5LFFzhTa2VZ6ygXa
+ KYC1VR/M+gHjWUHy2roAegzM2+2sZkrRahiQCY1BE4oB4r5B3/D29UlpWOwvBvydCwzxG98wr
+ EoDivwl3aXoYFWu89mq048AA==
 
-Recent work on raspberry-power driver showed that even the
-stacktrace on firmware property timeout doesn't provide
-enough information. So add the first tag name to the warning
-to be in line with a status error.
+During noirq suspend phase the Raspberry Pi power driver suffer of
+firmware property timeouts. The reason is that the IRQ of the underlying
+BCM2835 mailbox is disabled and rpi_firmware_property_list() will always
+run into a timeout [1].
 
+Since the VideoCore side isn't consider as a wakeup source, set the
+IRQF_NO_SUSPEND flag for the mailbox IRQ in order to keep it enabled
+during suspend-resume cycle.
+
+[1]
+PM: late suspend of devices complete after 1.754 msecs
+WARNING: CPU: 0 PID: 438 at drivers/firmware/raspberrypi.c:128
+ rpi_firmware_property_list+0x204/0x22c
+Firmware transaction 0x00028001 timeout
+Modules linked in:
+CPU: 0 PID: 438 Comm: bash Tainted: G         C         6.9.3-dirty #17
+Hardware name: BCM2835
+Call trace:
+unwind_backtrace from show_stack+0x18/0x1c
+show_stack from dump_stack_lvl+0x34/0x44
+dump_stack_lvl from __warn+0x88/0xec
+__warn from warn_slowpath_fmt+0x7c/0xb0
+warn_slowpath_fmt from rpi_firmware_property_list+0x204/0x22c
+rpi_firmware_property_list from rpi_firmware_property+0x68/0x8c
+rpi_firmware_property from rpi_firmware_set_power+0x54/0xc0
+rpi_firmware_set_power from _genpd_power_off+0xe4/0x148
+_genpd_power_off from genpd_sync_power_off+0x7c/0x11c
+genpd_sync_power_off from genpd_finish_suspend+0xcc/0xe0
+genpd_finish_suspend from dpm_run_callback+0x78/0xd0
+dpm_run_callback from device_suspend_noirq+0xc0/0x238
+device_suspend_noirq from dpm_suspend_noirq+0xb0/0x168
+dpm_suspend_noirq from suspend_devices_and_enter+0x1b8/0x5ac
+suspend_devices_and_enter from pm_suspend+0x254/0x2e4
+pm_suspend from state_store+0xa8/0xd4
+state_store from kernfs_fop_write_iter+0x154/0x1a0
+kernfs_fop_write_iter from vfs_write+0x12c/0x184
+vfs_write from ksys_write+0x78/0xc0
+ksys_write from ret_fast_syscall+0x0/0x54
+Exception stack(0xcc93dfa8 to 0xcc93dff0)
+[...]
+PM: noirq suspend of devices complete after 3095.584 msecs
+
+Link: https://github.com/raspberrypi/firmware/issues/1894
+Fixes: 0bae6af6d704 ("mailbox: Enable BCM2835 mailbox support")
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 =2D--
- drivers/firmware/raspberrypi.c | 3 ++-
+ drivers/mailbox/bcm2835-mailbox.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/raspberrypi.c b/drivers/firmware/raspberrypi=
-.c
-index ac34876a97f8..18cc34987108 100644
-=2D-- a/drivers/firmware/raspberrypi.c
-+++ b/drivers/firmware/raspberrypi.c
-@@ -62,7 +62,6 @@ rpi_firmware_transaction(struct rpi_firmware *fw, u32 ch=
-an, u32 data)
- 			ret =3D 0;
- 		} else {
- 			ret =3D -ETIMEDOUT;
--			WARN_ONCE(1, "Firmware transaction timeout");
- 		}
- 	} else {
- 		dev_err(fw->cl.dev, "mbox_send_message returned %d\n", ret);
-@@ -125,6 +124,8 @@ int rpi_firmware_property_list(struct rpi_firmware *fw=
-,
- 		dev_err(fw->cl.dev, "Request 0x%08x returned status 0x%08x\n",
- 			buf[2], buf[1]);
- 		ret =3D -EINVAL;
-+	} else if (ret =3D=3D -ETIMEDOUT) {
-+		WARN_ONCE(1, "Firmware transaction 0x%08x timeout", buf[2]);
- 	}
+diff --git a/drivers/mailbox/bcm2835-mailbox.c b/drivers/mailbox/bcm2835-m=
+ailbox.c
+index fbfd0202047c..ea12fb8d2401 100644
+=2D-- a/drivers/mailbox/bcm2835-mailbox.c
++++ b/drivers/mailbox/bcm2835-mailbox.c
+@@ -145,7 +145,8 @@ static int bcm2835_mbox_probe(struct platform_device *=
+pdev)
+ 	spin_lock_init(&mbox->lock);
 
- 	dma_free_coherent(fw->chan->mbox->dev, PAGE_ALIGN(size), buf, bus_addr);
+ 	ret =3D devm_request_irq(dev, irq_of_parse_and_map(dev->of_node, 0),
+-			       bcm2835_mbox_irq, 0, dev_name(dev), mbox);
++			       bcm2835_mbox_irq, IRQF_NO_SUSPEND, dev_name(dev),
++			       mbox);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to register a mailbox IRQ handler: %d\n",
+ 			ret);
 =2D-
 2.34.1
 
