@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-11576-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11577-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EF5593FCAF
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 19:49:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FA0993FCB3
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 19:49:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D92FC282145
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 17:49:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2B811C22441
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 17:49:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4209B188CC0;
-	Mon, 29 Jul 2024 17:48:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11DE21891BB;
+	Mon, 29 Jul 2024 17:48:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NyNNf0Ry"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AIKHaRFv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CDC187871;
-	Mon, 29 Jul 2024 17:47:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC4F188CB8;
+	Mon, 29 Jul 2024 17:47:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722275280; cv=none; b=cyzeIf5Kjg2BojmMb5X1P3EhRgMzxnyVoYHRLmI1TOZVpxGPf3+msqGHwoy1B5lUTE6gaCARAcYHQhvvKEkyI4+5mLgnqcUaQBDI17OoyueBAEdIwJ+wYr2ycmWIeMw4+6+IHZ6ixL63CYlg+O2VeThfGP7KvGAVGvw42bKOjXg=
+	t=1722275282; cv=none; b=KZVib97k846zqO7zc/7xgU+9M7ygX4GmoFarH5iF4q0/lHjgleJa5UfdFB1BVXOoYN0QUq+jX/3ZFXiWBDz0KX4ds/7wIrlPukmwUt0L3xti//EY2DrdWc30DXMhD+L3Z6yd7F1CJoTkWv3e+qk4rMVmLDckdqEFvVxEwptW/z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722275280; c=relaxed/simple;
-	bh=hUFm5zgvxacpJc23mhT7FrKD3yHbBhmDgpcXdgKmXlQ=;
+	s=arc-20240116; t=1722275282; c=relaxed/simple;
+	bh=024yPNon1poyVphR8keDLRzye+FGmZPcxiMYS+/Gw4c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ietBbTGzY+hlMT4BRkTiW80qAg7uvTbZRg5/iTtvJSn6gAnUfCI/MPpCNqRbQPDr5FmwUl4zLqxuSPIuWN9LQr2uLYCReGAgLxoqH7vDjKZSR7sDtrPSefz0tnodA8a+uNCLNRSvpoMBKZo4cmoddWeav1RAMR6hQsMfmKgCVmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NyNNf0Ry; arc=none smtp.client-ip=209.85.221.52
+	 In-Reply-To:To:Cc; b=Ai3CgEkTDtgUeUw45gchaT6iQ/PYVcas64bpYPjzFwAJ+UuR09glXm6cXTyBM7IvQvyNznPrcUpbmOj0CKkmBS8AtUnxswC75mf+jljtbZUEVz4oVoly1xKHJ+zkFdR56j++eN0HmlYBhhRGH59AKLa0GlWgYwfJN4XzM4bTZvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AIKHaRFv; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-368584f9e36so1524278f8f.2;
-        Mon, 29 Jul 2024 10:47:58 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-368380828d6so2089440f8f.1;
+        Mon, 29 Jul 2024 10:47:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722275277; x=1722880077; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722275278; x=1722880078; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2HtdwOmpjBLvOS2fpbCrpGHSAyy+FDyT8B72kclys+E=;
-        b=NyNNf0RyxPUCZwzdx+F0exyK6gvvdSchCigf358x5i08Tkb4dz3iySp4p10f565mUR
-         Bg/mbgvTFytec3HmCVuWKpAf4hNHio2lH4J6LxJ1b7z0320Uvq1QWU+ZiC6+cyKxv0FE
-         /VziVZvU/ZAhvDjzt6gXMqcpEcS//FUd/dCq6Ff64aIw8aznrtb5FJ+6TnsqzYEbNeYs
-         cnHOcaqnbvMc7lb8ctPB9BDRSiFm6H6B75eDC2rcpIzBsvXt7DaYztJ66mwljtIWJI9p
-         abq+wt2C0a5Db9h3sOXQJ2rn44DInYpvXwiSuldPnoZbbRThpIcASWtE+XeYkUALYlGl
-         9RQQ==
+        bh=KVY1jXrpCpuLnTI+cr7IUvSFt5/r6cGcoEVasJ6ji9A=;
+        b=AIKHaRFvT0yFvdKCLaQeJ6ZL5y3si/8rgEfNmcP3plXTy/MPwZYUZpO/vO1pyr/7dd
+         WPwoBQRi7m2biYgSd8OBviwYtt39ZOS53TxhuMoqDZ8E6Bu4gtkoVwMcws4aW3rJHpbM
+         LBfvHc7aGQ5q7AeqND7/KSE89+B2YR5Vvl97bzrZYkJviMqhXd48HKuZdoUF0fwWtKEq
+         AAAPHVwr3G4F5jYy4HTXGSLcrk/8o+4EdCNUnFBKts6bOCRT/np4WW+uUH4oB7ISjw8B
+         8h7p6gr7qoryOcE6tOLol7m0CUa3BGX5R3x0zm33L7RnnQ7BvhkDnS8BFvFtmZuzsxcF
+         lJUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722275277; x=1722880077;
+        d=1e100.net; s=20230601; t=1722275278; x=1722880078;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2HtdwOmpjBLvOS2fpbCrpGHSAyy+FDyT8B72kclys+E=;
-        b=vGos0I/2y3WOk5THdvoJjOQWK64gZE1ypUrWvBoCAAghFVECtluiL+PRknzQRe8kIB
-         67C41vzMMTWcJcj06nagb4ZCokXwDbcCztjl119Pjy1RgKq3GxIP/SJtsAAwZa/cVILU
-         tRT8f1zbCZ1mIuljUtSHI7tzVHFMJ4kHqAS9ATP4dJv/mMRPWMPN1x01G+aiyJTziZah
-         9rwzbiaE+VpBU7KzKqeeRVNYOpisOhIhLXJtuBcXBLZ7T2kAzP100EyE6bUOCk52T7ms
-         j86wKh2h43RLJ7mkcU7/l8njCUqiH3HAzmFlbXSbklTISLfU0XOelAPNu4Xa3r0vDnTb
-         Ingw==
-X-Forwarded-Encrypted: i=1; AJvYcCVkV88d+CMYRvKOcl9KybPHeBmhjo3Y5JP7Gjo5LN/xXtr0nENMGgfL964sJz/AwkAgjmuF2dFZioq80fBXui02UQ+J6kFeZW1180cihD8+SizfWMD2hvx1zikeqNuwNXfdoGwnubcMZVENEii6JIbxRsB2UE7GVSeH9hoTMau0mI3Rfh5pjUsA9nYXSX8kHi+XTqDxCffXoXUXFq1B7JHTVSo+p5Y=
-X-Gm-Message-State: AOJu0YzYeCARodTeQAZnNavkP1XiAAOwWQ1znRFMdmASUYIUkVRfP1W/
-	i5LzaYsWMa236QC/ekpzAJQXtM3a17c/xdl+NtvNVtI2tlJzo/cGdDMHbg==
-X-Google-Smtp-Source: AGHT+IEXPCegsb/usx+QhYeqYMMMnQDYD7PFJLzBQ4V90OraTh3ivSEvYAHegwPJXZctgby0WCXN1w==
-X-Received: by 2002:adf:ed46:0:b0:368:3717:10b3 with SMTP id ffacd0b85a97d-36b5cecf2efmr5965729f8f.8.1722275276558;
-        Mon, 29 Jul 2024 10:47:56 -0700 (PDT)
+        bh=KVY1jXrpCpuLnTI+cr7IUvSFt5/r6cGcoEVasJ6ji9A=;
+        b=WCrPHaCrojVi0mZjs3k1dkXh3u7YpGK0yYnO5LjQ8KuBOn6ofMiWt5DnHQDeEjHjAv
+         vZzRKP4thlBuOkJjUqKZJBSPevHMtLM73W2xvqfpixt6pMrnnEzCpNtTa18P4RctpzIx
+         w68wbIzyoUKEhZ/88ZJWvzPCmWXxCQhJA8T588RmKMHLTW/4zhWo8q9NpwBdhCyZSkFl
+         uP7PTsrFvacVkEHGzae2+pApL2/SqVWt0yKC3JkXtEJ5kDmj3+F11lY6g7QO+xPW0ZSt
+         6FYNBAq504kumDARqQyLwX16VWDajCkz4UfsO2a6D6iwcVeTc6W9C0f7YvOoCs9kV0ZV
+         30RQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVAORCCHiegz4ef1EgidXSBOwhr72nN0XWMIDC5EUrxmv3jI0WC4g7Fh2A/KCNuN9t4KYpXzNtHX8UKzHDYmqB/idodffuwQTvZaL4Q/ZKKDA7U1HHMKaLK/ZyKeu2ezAer2i6DqjdbVJlC6Koc4OzNaKdE6csaISp1AT7DF0/DzxhztPo6e4+dWDrNmYmzVtKZQVuJKI0mx1US+c7EyaVNljazYXc=
+X-Gm-Message-State: AOJu0Yy8EuEnk30OzqhzQqkGCsfAjgqh1r2kC93kQQGvE6Y6N1O3KFA9
+	x3fbpcS4n1c4aZa8eWHK1rXxLurIthAQbFCGjjbT2HCUPe2lEqG/
+X-Google-Smtp-Source: AGHT+IESUKIOz9EOD4bMAEVsQ1c3gyu5wcJumGnQDHtsVxQCfe0b14lkjpjGizmWJSNEPwvpeg6yqw==
+X-Received: by 2002:a5d:5f8f:0:b0:368:6b29:a551 with SMTP id ffacd0b85a97d-36b5cee9840mr6605792f8f.1.1722275278275;
+        Mon, 29 Jul 2024 10:47:58 -0700 (PDT)
 Received: from tablet.my.domain ([37.30.0.99])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b367fc8a7sm12716550f8f.59.2024.07.29.10.47.54
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b367fc8a7sm12716550f8f.59.2024.07.29.10.47.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 10:47:56 -0700 (PDT)
+        Mon, 29 Jul 2024 10:47:57 -0700 (PDT)
 From: Artur Weber <aweber.kernel@gmail.com>
-Date: Mon, 29 Jul 2024 19:47:39 +0200
-Subject: [PATCH v3 05/10] power: supply: max77693: Add USB extcon detection
- for enabling charging
+Date: Mon, 29 Jul 2024 19:47:40 +0200
+Subject: [PATCH v3 06/10] power: supply: max77693: Add support for
+ detecting and enabling OTG
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,7 +79,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240729-max77693-charger-extcon-v3-5-02315a6869d4@gmail.com>
+Message-Id: <20240729-max77693-charger-extcon-v3-6-02315a6869d4@gmail.com>
 References: <20240729-max77693-charger-extcon-v3-0-02315a6869d4@gmail.com>
 In-Reply-To: <20240729-max77693-charger-extcon-v3-0-02315a6869d4@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -95,225 +95,151 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>, 
  Artur Weber <aweber.kernel@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6240;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3976;
  i=aweber.kernel@gmail.com; h=from:subject:message-id;
- bh=hUFm5zgvxacpJc23mhT7FrKD3yHbBhmDgpcXdgKmXlQ=;
- b=owEBbQKS/ZANAwAKAbO7+KEToFFoAcsmYgBmp9W+94e4wiWpIzTsI3Ij6g5IB0Ibemjb17sUL
- behwtd5aLmJAjMEAAEKAB0WIQTmYwAOrB3szWrSiQ2zu/ihE6BRaAUCZqfVvgAKCRCzu/ihE6BR
- aBtJD/40NYyUkN0rn818ZUKsEVWXzmko7y+3JmjRKrqf1Gujma+xpC+c1aNdp3MSJtNCoG34BVi
- WdyFxG6L/pyXrC5+wKQLN+LojMJ8eef1XLZUgkc+u5Z2AEHuhbgm5vQKnM3TTf8U7nt3JmFJyw9
- pMWqY9k+am5Bh4wGZWqtwrDEfMPMHeqW91E5gQUK/WLtompl/fL1McSZNUnQdZlza+PpPgEkdFj
- k86tAxij2P70JVvhH71su3muxbe15Y+dep6QwTE8QMLc3qyr6CjwUtcBcfIsRHkM9I8cWCOZib9
- mFfjGZM/sBXHlwitm0IlsLpadSHpIYkifRyhfO5QuhAosbTOF99gnpzpDwDKVqCtTjDV+b9VT4L
- lMYsO5PjOJMT/6mWMuo6qj2PTrqKHtDjlDLs7Pkvb+sogKVbD4MD3Ym0Fnlm1L8hfUiiy1kuiZX
- SAftfW9ALzvrLibHdCaVFTCuHsN3AVBNU31PbvOyLJZKj69DjGKYZBs0O/cUHNxpEmLFjUCrfbj
- wujVGglzh6+h5O744JV313NkiPleJfFZf39a5NydySD6Jrl2TUBFdTyq/0VbzEh2CjfnTHHAdis
- lyi1yMQ6simdTL2ksElq2EavOsd8XsOm4XQOK3h8TfD+lrlM+gPFjLP6LiUkn99JhXz9Y9Rkpry
- 0eeuBFFO+Nf5AEQ==
+ bh=024yPNon1poyVphR8keDLRzye+FGmZPcxiMYS+/Gw4c=;
+ b=owEBbQKS/ZANAwAKAbO7+KEToFFoAcsmYgBmp9W/Lu3SRHqrCllRimkJgkfsCB052nicnaGby
+ 3fEjo5pLcCJAjMEAAEKAB0WIQTmYwAOrB3szWrSiQ2zu/ihE6BRaAUCZqfVvwAKCRCzu/ihE6BR
+ aFShD/9WBNp5/ufqDpQ7Ogg4q0KyeCU9xsAXW84ooiCrfS0a5SX8ZzT2jc5ScfhgU1ZyYuUl7+/
+ jYUxJzlwD9BdjwSavVI9AH1nBq+wLgV/KNFDy0Iu5flOwydmikW42LdfamtU8VL0JW+sAaY67EH
+ Rr0doikJvv8XipnqngyCW1SI0jgTUsssYFmy6a0ZpitqOH3Wf52+JbOLZPsaIR/FFfi87RY2ZVQ
+ jcuaLioPgV5ATsg37+pDeEMIiwQ5JavFUm48eiaLgjy6naHJ4TdJqj54raQNTzITnhegr6pQOit
+ JPE9XKf0DWqkdMUQTRUyjrrd5QP6QS5CILANFIQ5nOr5PpF/uQOKBnqoN0Mx76nqB8iXStg971k
+ rPF7CxarpHy/95mn7TNEEOnddw5w1/UIN+o9thvdlLtNDekcj9Du0y3MOaDC0Zj0I+ivWwYPu2o
+ 2Q1dXNQpg4N+qQj4QpssFSZgqp5v4MUgnnIHZQUVa/KVlxjMcIDY1jyf3ihgH8LRytX0ev2fnZE
+ Vw3U4H2NMqtUGQoaWzNQmejf+g3SZbZfGsyDNHkI0Jw5dp8dbbsd6TmAkmoIVM7sfss3ibUA2xl
+ 4QaVv2EC8fXZ078HA/xH2qQzt4qFudoKDxXHhYICp6xcXa6OUq17o5ZAKuZJot7UYUV3n1b4ygB
+ 9ZJPzKcSI4ZCXuA==
 X-Developer-Key: i=aweber.kernel@gmail.com; a=openpgp;
  fpr=E663000EAC1DECCD6AD2890DB3BBF8A113A05168
 
-1. Add a function that allows for enabling/disabling charging.
+Building upon the newly added extcon detection support, add detection
+for USB OTG cables (EXTCON_USB_HOST type), and enable/disable the OTG
+bits as needed.
 
-2. Add a device tree property, "maxim,usb-connector", that can be used to
-specify a USB connector to use to detect whether a charging cable has
-been plugged in/out, and enable/disable charging accordingly.
-
-The extcon listener/worker implementation is inspired by the rt5033_charger
-driver.
-
+Acked-by: Lee Jones <lee@kernel.org>
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
 Changes in v3:
-- Adapted to both limits being split up again
-- Move charging/extcon work functions above reg_init
-- Drop unnecessary extcon unregister from probe error path
-- Change disconnect message
+- Dropped CHARGER regulator in favor of enabling charging directly
 
 Changes in v2:
-- Changed to adapt to both current limits being managed by one function
+- Added CHGIN OTG current limit value
+- Squashed MFD header register changes into this commit
 ---
- drivers/power/supply/Kconfig            |   1 +
- drivers/power/supply/max77693_charger.c | 120 ++++++++++++++++++++++++++++++++
- 2 files changed, 121 insertions(+)
+ drivers/power/supply/max77693_charger.c | 53 ++++++++++++++++++++++++++-------
+ include/linux/mfd/max77693-private.h    |  5 ++++
+ 2 files changed, 48 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 3e31375491d5..e4aeff9e7ad1 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -549,6 +549,7 @@ config CHARGER_MAX77650
- config CHARGER_MAX77693
- 	tristate "Maxim MAX77693 battery charger driver"
- 	depends on MFD_MAX77693
-+	depends on EXTCON || !EXTCON
- 	help
- 	  Say Y to enable support for the Maxim MAX77693 battery charger.
- 
 diff --git a/drivers/power/supply/max77693_charger.c b/drivers/power/supply/max77693_charger.c
-index 17975ec69a6a..2e05467c682e 100644
+index 2e05467c682e..4ff402941d72 100644
 --- a/drivers/power/supply/max77693_charger.c
 +++ b/drivers/power/supply/max77693_charger.c
-@@ -5,6 +5,8 @@
- // Copyright (C) 2014 Samsung Electronics
- // Krzysztof Kozlowski <krzk@kernel.org>
- 
-+#include <linux/devm-helpers.h>
-+#include <linux/extcon.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/power_supply.h>
-@@ -28,6 +30,13 @@ struct max77693_charger {
- 	u32 batttery_overcurrent;
- 	u32 fast_charge_current;
- 	u32 charge_input_threshold_volt;
-+
-+	/* USB cable notifications */
-+	struct {
-+		struct extcon_dev *edev;
-+		struct notifier_block nb;
-+		struct work_struct work;
-+	} cable;
- };
- 
- static int max77693_get_charger_state(struct regmap *regmap, int *val)
-@@ -668,6 +677,77 @@ static int max77693_set_charge_input_threshold_volt(struct max77693_charger *chg
- 			CHG_CNFG_12_VCHGINREG_MASK, data);
+@@ -692,11 +692,30 @@ static int max77693_set_charging(struct max77693_charger *chg, bool enable)
+ 			data);
  }
  
-+static int max77693_set_charging(struct max77693_charger *chg, bool enable)
++static int max77693_set_otg(struct max77693_charger *chg, bool enable)
 +{
 +	unsigned int data;
 +
 +	if (enable)
-+		data = CHG_CNFG_00_CHG_MASK | CHG_CNFG_00_BUCK_MASK;
++		data = CHG_CNFG_00_OTG_MASK | CHG_CNFG_00_BOOST_MASK |
++				CHG_CNFG_00_DIS_MUIC_CTRL_MASK;
 +	else
-+		data = ~(CHG_CNFG_00_CHG_MASK | CHG_CNFG_00_BUCK_MASK);
++		data = ~(CHG_CNFG_00_OTG_MASK | CHG_CNFG_00_BOOST_MASK |
++				CHG_CNFG_00_DIS_MUIC_CTRL_MASK);
 +
 +	return regmap_update_bits(chg->max77693->regmap,
 +			MAX77693_CHG_REG_CHG_CNFG_00,
-+			CHG_CNFG_00_CHG_MASK | CHG_CNFG_00_BUCK_MASK,
++			CHG_CNFG_00_OTG_MASK | CHG_CNFG_00_BOOST_MASK |
++			CHG_CNFG_00_DIS_MUIC_CTRL_MASK,
 +			data);
 +}
 +
-+static void max77693_charger_extcon_work(struct work_struct *work)
-+{
-+	struct max77693_charger *chg = container_of(work, struct max77693_charger,
-+						  cable.work);
-+	struct extcon_dev *edev = chg->cable.edev;
-+	int connector, state;
-+	int ret;
-+
-+	for (connector = EXTCON_USB_HOST; connector <= EXTCON_CHG_USB_PD;
-+	     connector++) {
-+		state = extcon_get_state(edev, connector);
-+		if (state == 1)
-+			break;
-+	}
-+
-+	switch (connector) {
-+	case EXTCON_CHG_USB_SDP:
-+	case EXTCON_CHG_USB_DCP:
-+	case EXTCON_CHG_USB_CDP:
-+	case EXTCON_CHG_USB_ACA:
-+	case EXTCON_CHG_USB_FAST:
-+	case EXTCON_CHG_USB_SLOW:
-+	case EXTCON_CHG_USB_PD:
-+		ret = max77693_set_charging(chg, true);
-+		if (ret) {
-+			dev_err(chg->dev, "failed to enable charging\n");
-+			break;
-+		}
-+		dev_info(chg->dev, "charging. connector type: %d\n",
-+			 connector);
-+		break;
-+	default:
-+		ret = max77693_set_charging(chg, false);
-+		if (ret) {
-+			dev_err(chg->dev, "failed to disable charging\n");
-+			break;
-+		}
-+		dev_info(chg->dev, "not charging. connector type: %d\n",
-+			 connector);
-+		break;
-+	}
-+
-+	power_supply_changed(chg->charger);
-+}
-+
-+static int max77693_charger_extcon_notifier(struct notifier_block *nb,
-+					  unsigned long event, void *param)
-+{
-+	struct max77693_charger *chg = container_of(nb, struct max77693_charger,
-+						    cable.nb);
-+
-+	schedule_work(&chg->cable.work);
-+
-+	return NOTIFY_OK;
-+}
-+
- /*
-  * Sets charger registers to proper and safe default values.
-  */
-@@ -734,12 +814,32 @@ static int max77693_dt_init(struct device *dev, struct max77693_charger *chg)
+ static void max77693_charger_extcon_work(struct work_struct *work)
  {
- 	struct device_node *np = dev->of_node;
- 	struct power_supply_battery_info *battery_info;
-+	struct device_node *np_conn, *np_edev;
+ 	struct max77693_charger *chg = container_of(work, struct max77693_charger,
+ 						  cable.work);
+ 	struct extcon_dev *edev = chg->cable.edev;
++	bool set_charging, set_otg;
+ 	int connector, state;
+ 	int ret;
  
- 	if (!np) {
- 		dev_err(dev, "no charger OF node\n");
- 		return -EINVAL;
+@@ -715,25 +734,39 @@ static void max77693_charger_extcon_work(struct work_struct *work)
+ 	case EXTCON_CHG_USB_FAST:
+ 	case EXTCON_CHG_USB_SLOW:
+ 	case EXTCON_CHG_USB_PD:
+-		ret = max77693_set_charging(chg, true);
+-		if (ret) {
+-			dev_err(chg->dev, "failed to enable charging\n");
+-			break;
+-		}
++		set_charging = true;
++		set_otg = false;
++
+ 		dev_info(chg->dev, "charging. connector type: %d\n",
+ 			 connector);
+ 		break;
++	case EXTCON_USB_HOST:
++		set_charging = false;
++		set_otg = true;
++
++		dev_info(chg->dev, "USB host. connector type: %d\n",
++			 connector);
++		break;
+ 	default:
+-		ret = max77693_set_charging(chg, false);
+-		if (ret) {
+-			dev_err(chg->dev, "failed to disable charging\n");
+-			break;
+-		}
++		set_charging = false;
++		set_otg = false;
++
+ 		dev_info(chg->dev, "not charging. connector type: %d\n",
+ 			 connector);
+ 		break;
  	}
  
-+	np_conn = of_parse_phandle(np, "maxim,usb-connector", 0);
-+	np_edev = of_get_parent(np_conn);
-+
-+	chg->cable.edev = extcon_find_edev_by_node(np_edev);
-+	if (IS_ERR(chg->cable.edev)) {
-+		/*
-+		 * In case of deferred extcon probe, defer our probe as well
-+		 * until it appears.
-+		 */
-+		if (PTR_ERR(chg->cable.edev) == -EPROBE_DEFER)
-+			return PTR_ERR(chg->cable.edev);
-+		/*
-+		 * Otherwise, ignore errors (the charger can run without a
-+		 * connector provided).
-+		 */
-+		dev_warn(dev, "no extcon device found in device-tree (%ld)\n",
-+			 PTR_ERR(chg->cable.edev));
++	ret = max77693_set_charging(chg, set_charging);
++	if (ret) {
++		dev_err(chg->dev, "failed to set charging (%d)\n", ret);
++		goto out;
 +	}
 +
- 	if (of_property_read_u32(np, "maxim,constant-microvolt",
- 			&chg->constant_volt))
- 		chg->constant_volt = DEFAULT_CONSTANT_VOLT;
-@@ -811,6 +911,26 @@ static int max77693_charger_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
++	ret = max77693_set_otg(chg, set_otg);
++	if (ret)
++		dev_err(chg->dev, "failed to set OTG (%d)\n", ret);
++
++out:
+ 	power_supply_changed(chg->charger);
+ }
  
-+	/* Set up extcon if the USB connector node was found */
-+	if (!IS_ERR(chg->cable.edev)) {
-+		ret = devm_work_autocancel(&pdev->dev, &chg->cable.work,
-+					   max77693_charger_extcon_work);
-+		if (ret) {
-+			dev_err(&pdev->dev, "failed: initialize extcon work\n");
-+			return ret;
-+		}
-+
-+		chg->cable.nb.notifier_call = max77693_charger_extcon_notifier;
-+
-+		ret = devm_extcon_register_notifier_all(&pdev->dev,
-+							chg->cable.edev,
-+							&chg->cable.nb);
-+		if (ret) {
-+			dev_err(&pdev->dev, "failed: register extcon notifier\n");
-+			return ret;
-+		}
-+	}
-+
- 	ret = device_create_file(&pdev->dev, &dev_attr_fast_charge_timer);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed: create fast charge timer sysfs entry\n");
+diff --git a/include/linux/mfd/max77693-private.h b/include/linux/mfd/max77693-private.h
+index 0819cf0a4f5f..1fd93bfbf3dc 100644
+--- a/include/linux/mfd/max77693-private.h
++++ b/include/linux/mfd/max77693-private.h
+@@ -209,7 +209,10 @@ enum max77693_charger_battery_state {
+ 
+ /* MAX77693 CHG_CNFG_00 register */
+ #define CHG_CNFG_00_CHG_MASK		0x1
++#define CHG_CNFG_00_OTG_MASK		0x2
+ #define CHG_CNFG_00_BUCK_MASK		0x4
++#define CHG_CNFG_00_BOOST_MASK		0x8
++#define CHG_CNFG_00_DIS_MUIC_CTRL_MASK	0x20
+ 
+ /* MAX77693_CHG_REG_CHG_CNFG_01 register */
+ #define CHG_CNFG_01_FCHGTIME_SHIFT	0
+@@ -222,6 +225,8 @@ enum max77693_charger_battery_state {
+ /* MAX77693_CHG_REG_CHG_CNFG_02 register */
+ #define CHG_CNFG_02_CC_SHIFT		0
+ #define CHG_CNFG_02_CC_MASK		0x3F
++#define CHG_CNFG_02_OTG_ILIM_SHIFT	7
++#define CHG_CNFG_02_OTG_ILIM_MASK	0x80
+ 
+ /* MAX77693_CHG_REG_CHG_CNFG_03 register */
+ #define CHG_CNFG_03_TOITH_SHIFT		0
 
 -- 
 2.45.2
