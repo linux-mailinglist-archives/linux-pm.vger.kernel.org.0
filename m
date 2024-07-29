@@ -1,158 +1,163 @@
-Return-Path: <linux-pm+bounces-11539-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11540-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A824B93F68C
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 15:20:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4573993F6B8
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 15:31:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A0631F22000
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 13:20:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66D551C21DF1
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 13:31:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CA58148FEC;
-	Mon, 29 Jul 2024 13:20:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6281C152787;
+	Mon, 29 Jul 2024 13:31:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fpTmCQTH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eIsfwdWt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99EDE1474A9
-	for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 13:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3216145B27;
+	Mon, 29 Jul 2024 13:31:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722259251; cv=none; b=YOPCxHwU4NwORSPkSHzEkKo3M66041rhv7H06Hel71BtdhfFfBm6CgQoZtoaaBJ0vZKpzWz+Ozhb0OlodYlgDYZrSZv54OV4yp/6Cq7eZo1Vi2qgrF3JTtpTEkUJCzm2mS1Akg9u6JQ74bvFMGAuPVkpSnY40/lW+9qhdCyMyqk=
+	t=1722259875; cv=none; b=mYBiOjV3Z/rx0qTUVh7HiIUbpLw7K6hRurbITa04Ux35BKl/eziBV2bi94BvaML57HR1/wuXf7oKSRBq8iBWPm1yolQhZDLEZF9sAAquJneUG3UXb1jCY5+vgrjtjxayEaJQGs+laM2r/Vx7yhwreDCHYMqbNSFXRX+CT+DYMhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722259251; c=relaxed/simple;
-	bh=8rb1hikXPiW6MAOHtbRU55mbhiA52HsrwlinY9QcZCY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AboiTzKMYFnlxYM0R/t4soEYkPPon5A1L/KSKsSSXHRHQVQd7yOoW5F9CzkeV1htfVZQfIgoOkGdKV8G1kekLcH426VdbMCQhg3Fg8OsjpWiBrPrF4nqSX8ypET/MX7XSfkmEZ5WOrInWy6ocbBrb5QHd8rPtb1feXtYMp2yF5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fpTmCQTH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722259248;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sGHqvqp2b7N1mb9JLu1vjjXTY3vN6uA44omJS2BabFk=;
-	b=fpTmCQTHv5TJCfISQYbCJIS92fg1ygSx62YLpmOO5hFoM7de4GWv4SLoyQ/X3WGKrd+fj4
-	0ZaZkRXDSjsSpHEko5OaLUMeMz5FS+MzYBpioYNa7N5DOgpI4bm+kzkfocKCwPCbMwkCBb
-	wJgT9dt4PCDwC+gW9vXD1twlFT82ICw=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-516-SmXBmjq6O9KYfXnzpFGCPQ-1; Mon, 29 Jul 2024 09:20:46 -0400
-X-MC-Unique: SmXBmjq6O9KYfXnzpFGCPQ-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6b7a4ba59bdso49151316d6.0
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 06:20:46 -0700 (PDT)
+	s=arc-20240116; t=1722259875; c=relaxed/simple;
+	bh=dC4StydkvhN4D2FnulCowDb8t4nCXLe2HWtCaL9svbs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dxgDw684swh9a7zMdB3LmX3bAzUEvwegyQgLEGAqCXlCQmPsYedKQOu05JGb1cCWFclRqO1pkzBq67aGXKHupJVOnwJW/pxZEp+vdntzpwk8H4VaKMmDVu+GRjJxIczgAzyMkkCKw+m+tOLadt+IkP4g4JjaJqxh6ACV+cfoLaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eIsfwdWt; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2f0271b0ae9so44472441fa.1;
+        Mon, 29 Jul 2024 06:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722259872; x=1722864672; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oOY+AlMeRwJs0YCYC6hzJCvRhv1dC+GmSx9gBu2yiuA=;
+        b=eIsfwdWtksxaDwol+JBUEY3S1XHvPGcSGVyUMgOsgZJFrl3rN15ZC45ghAujJha5KB
+         1iabPY7jskcKdleR4DdUaEOxy+pdybhQMqjA87Cxmeci07YlyPK+0nhmlI7xwWy+zOF0
+         GWtsNpBTY6Ulb+Sq+UOh0PyazL8VkzIB1opFoxenvzzum9dN09xvFNEOPX3HdC709gL0
+         hLXP7LK5y5+JjuMWRpWKr9ERc2nTk1Z/I5/akZJNFHSHMirjiXH2j420QhjsaFc9lfaq
+         EHEoBgUR9myBjvM+X60PXYPWqKMtFdFqoPj7rSeU0IA2lw7esCNSbwk0/6liK7jwooHa
+         Qh9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722259246; x=1722864046;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sGHqvqp2b7N1mb9JLu1vjjXTY3vN6uA44omJS2BabFk=;
-        b=TuLlkA0yKP3i2ZhnE7xM7mQ2238VM+GSGA8Y81l9GRqpeINoGjc74z2BwDi8cEx3LH
-         2vsg37RSxNiBmIaIRs85vCWbaUwhu/vKiBlzyA7bF/wejnM60axR/BDOVsI5JkH3cp2s
-         osiRGfdLFPAOT4sEp7fWRBQNPUWgm7+mRZ1mdAHM5EH1KRKMkiqWp/3lMHz3IwXwC6oG
-         Z2d3Gc0wsWugrc97/xZnVKdN+n//gbHRtYYYaLw/cztkuDwa385HzOcXCW2eRhoUt0DH
-         GJUjMb01x7FlbKU+nB8VrD0QHBzyH8Ofo2dhL3qGM/lPB+DsSHmvdp0o+yYAgsYJaEU7
-         t3Zw==
-X-Forwarded-Encrypted: i=1; AJvYcCWAVyIyP7FmoEemJWuaBptz4qTK7hiauYbqk+/JvHXWSnI8EkmNXWvovpUcOMqvaDFDjr2X/QL/mpfks9CU3TB1hxBc/z+ZcHI=
-X-Gm-Message-State: AOJu0YwViocjsyv41T9i1HfbaFf89HNW5cyIwRGIY4yep6oFIz3wZP3y
-	ZMvDHr6ObcoX7qjgIQR4qwjCSv9KBOPscXBkwegq5lSeWvIfL0QqRDSKf5JYDDmAW8IH07TvLCG
-	Hg+fdQ4isg+mdQn+MeibUCHr5W9vg9Nn4yitu72nZ7FUT8kcP7XxRYgEm
-X-Received: by 2002:a05:6214:ac4:b0:6b5:4338:e029 with SMTP id 6a1803df08f44-6bb55a17e8dmr121436606d6.28.1722259246301;
-        Mon, 29 Jul 2024 06:20:46 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGIagqEI8ZwjW73vt5z+orzpnYd0SPiKxoIzZhWtBnW4nvuyx6llnUZpaBZpAmhOo2HZ1kI9g==
-X-Received: by 2002:a05:6214:ac4:b0:6b5:4338:e029 with SMTP id 6a1803df08f44-6bb55a17e8dmr121436316d6.28.1722259245956;
-        Mon, 29 Jul 2024 06:20:45 -0700 (PDT)
-Received: from x1gen2nano ([2600:1700:1ff0:d0e0::33])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6bb3f943352sm51735096d6.73.2024.07.29.06.20.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 06:20:45 -0700 (PDT)
-Date: Mon, 29 Jul 2024 08:20:42 -0500
-From: Andrew Halaney <ahalaney@redhat.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: sequencing: pwrseq-qcom-wcn: Depend on WCN36XX
-Message-ID: <bgev74hvkl7q5cbxuako6ljlesf256kz7kmolornhrczkwgsjv@tkfclj66d5rm>
-References: <20240725-pwrseq-wcn-config-v1-1-021dce9f2513@redhat.com>
- <CAMRc=Mcop3+00G3kZo+dazpemuj0PjXNc_3+EiyFukLevBGd_A@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1722259872; x=1722864672;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oOY+AlMeRwJs0YCYC6hzJCvRhv1dC+GmSx9gBu2yiuA=;
+        b=RcOA5tiT4RQt3oZ1WsZZ/WDFoN1Jc5o3BQEaf4TIbZ96fWgeRH5YBNijqF3excTcZt
+         /JOQH6TWZCRXG5Gf1Ur6zn0syPO615rhSgljeYqe+1Ik4XzBOVtPcVUR5jSugvGK5mQW
+         RaIW6/0MbnGo+DpcwjfiGhcXSfPMbDtgJUGby2sEIMoU/jUxnD/TH6m51RXtflzN3K3f
+         5T1v/tlzqn+XPDOPKeg8VlbcV5g546DWOXq5PyzOMJtt+R//sc59HiAn9QWGx9dxxrcx
+         Q02ZMSw/vCqfGCih4Dtw2Oy678hBr/RNrI3KYDXPyMVRZ9jhxj65tKwK1whiYfCpn9gj
+         i9dg==
+X-Forwarded-Encrypted: i=1; AJvYcCWTn7UysmnOl14qiMu5eow3ItLw4M4zs19aci6C4/b/g4S3fU2dF/qmejXpdcdxeGyOVj5TMSisWy+DBPzTZIts7QR1edOT2AlZFGcMKhAh/whotGhCFLs/iBkjhrnsgHBBy+2HqaVZ5RzC7D/IFq+QhGYPttaWse5IbSoXpi6UsGl7D2KXmAaT
+X-Gm-Message-State: AOJu0YzvP++cpCg708x1gcCFlcKCpUZ2YsOATE86Aeb9seNmTc57Gc8J
+	XnuSn7j39EVJP0qgwQafOqjl4WAHXOEb8mWaivUdlVLE7CNYmz52lbv03yvdQNcHtYXTJaKpIKH
+	YZap/1AUUEYCx2hvd4VaLoam8WwM=
+X-Google-Smtp-Source: AGHT+IEkj8gJtt7Xa/PRg0sMhXYsUI0z5cB0Kqpuw44BH7fbPSlxtdi/VtkbDXSJ+OEuJ4+ru7ds3EoONnjafiZrjfk=
+X-Received: by 2002:a2e:8710:0:b0:2ef:2f60:1950 with SMTP id
+ 38308e7fff4ca-2f12ee1bdf2mr47796711fa.30.1722259871270; Mon, 29 Jul 2024
+ 06:31:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=Mcop3+00G3kZo+dazpemuj0PjXNc_3+EiyFukLevBGd_A@mail.gmail.com>
+References: <su3wp6s44hrxf4ijvsdfzbvv4unu4ycb7kkvwbx6ltdafkldir@4g7ydqm2ap5j>
+ <aa9d6aec-ef94-4137-b2ff-0c86d9a92d42@molgen.mpg.de> <CAA8EJpqGXe0A0yDpEP==60k-bPEbDORpLUtsiPvGSi+b_XphAg@mail.gmail.com>
+ <CABBYNZJP2c4L-nFHtug0isqnKPR+Q0CE09o_ACsPLobjLpHtcg@mail.gmail.com> <CAMRc=McB1hY+Lad-gBj9-_Ve2OeW+rXaRqHL2xO4zDPMRD41jw@mail.gmail.com>
+In-Reply-To: <CAMRc=McB1hY+Lad-gBj9-_Ve2OeW+rXaRqHL2xO4zDPMRD41jw@mail.gmail.com>
+From: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date: Mon, 29 Jul 2024 14:30:57 +0100
+Message-ID: <CABBYNZJXgJmfe=o2bgj_Gs1wsD=OQRokEkzVRc_OhBs5-_+Dww@mail.gmail.com>
+Subject: Re: btqca: crash with linux-next on bt power down
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Paul Menzel <pmenzel@molgen.mpg.de>, 
+	Marcel Holtmann <marcel@holtmann.org>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	linux-bluetooth@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-pm@vger.kernel.org, regressions@lists.linux.dev, 
+	Zijun Hu <quic_zijuhu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 29, 2024 at 10:12:27AM GMT, Bartosz Golaszewski wrote:
-> On Thu, Jul 25, 2024 at 6:28 PM Andrew Halaney <ahalaney@redhat.com> wrote:
+Hi Bartosz,
+
+On Mon, Jul 29, 2024 at 12:58=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl=
+> wrote:
+>
+> On Mon, Jul 29, 2024 at 1:56=E2=80=AFPM Luiz Augusto von Dentz
+> <luiz.dentz@gmail.com> wrote:
 > >
-> > This driver does sequencing for the hardware driven by WCN36XX, let's
-> > make it depend on that. Without WCN36XX, we're sequencing power for
-> > nothing.
+> > Hi Dmitry,
 > >
-> > Fixes: 2f1630f437df ("power: pwrseq: add a driver for the PMU module on the QCom WCN chipsets")
-> > Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> > ---
-> > I *think* this makes sense, but if you disagree please let me know. I
-> > was sorting out configs in fedora and noticed this was being asked for
-> > builds that didn't have WCN36XX enabled, which seems odd to me at least.
-> > ---
-> >  drivers/power/sequencing/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
+> > On Mon, Jul 29, 2024 at 12:01=E2=80=AFPM Dmitry Baryshkov
+> > <dmitry.baryshkov@linaro.org> wrote:
+> > >
+> > > #regzbot: introduced:
+> > > 973dd9c4db4746200f88fe46e30eada7054fdbea..84f9288208dfcd955446060a53a=
+dd15b9e01af4e
+> > >
+> > > On Mon, 29 Jul 2024 at 13:21, Paul Menzel <pmenzel@molgen.mpg.de> wro=
+te:
+> > > > Am 29.07.24 um 04:11 schrieb Dmitry Baryshkov:
+> > > >
+> > > > > On Qualcomm Dragonboard 820c (APQ8096, QCA6174) soon after the bo=
+ot I
+> > > > > observe the following crash:
+> > > > >
+> > > > > Unable to handle kernel NULL pointer dereference at virtual addre=
+ss 0000000000000018
+> > > > > Mem abort info:
+> > > > >    ESR =3D 0x0000000096000006
+> > > > >    EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+> > > > >    SET =3D 0, FnV =3D 0
+> > > > >    EA =3D 0, S1PTW =3D 0
+> > > > >    FSC =3D 0x06: level 2 translation fault
+> > > > > Data abort info:
+> > > > >    ISV =3D 0, ISS =3D 0x00000006, ISS2 =3D 0x00000000
+> > > > >    CM =3D 0, WnR =3D 0, TnD =3D 0, TagAccess =3D 0
+> > > > >    GCS =3D 0, Overlay =3D 0, DirtyBit =3D 0, Xs =3D 0
+> > > > > user pgtable: 4k pages, 48-bit VAs, pgdp=3D000000010da63000
+> > > > > [0000000000000018] pgd=3D080000010da62003, p4d=3D080000010da62003=
+, pud=3D080000010da61003, pmd=3D0000000000000000
+> > > > > Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+> > > > > Modules linked in: hci_uart btqca
+> > > > > CPU: 2 UID: 0 PID: 66 Comm: kworker/u19:0 Not tainted 6.10.0-next=
+-20240726-13923-gd3ce7ebd61f9-dirty #2722
+> > > >
+> > > > I am unable to find the commit. Your tree also seems dirty. What is=
+ the
+> > > > last working commit?
+> > >
+> > > Checked the commit range on the linux-bluetooth branch, hope this hel=
+ps.
 > >
-> > diff --git a/drivers/power/sequencing/Kconfig b/drivers/power/sequencing/Kconfig
-> > index c9f1cdb665248..a4765cb33a80e 100644
-> > --- a/drivers/power/sequencing/Kconfig
-> > +++ b/drivers/power/sequencing/Kconfig
-> > @@ -16,6 +16,7 @@ if POWER_SEQUENCING
-> >  config POWER_SEQUENCING_QCOM_WCN
-> >         tristate "Qualcomm WCN family PMU driver"
-> >         default m if ARCH_QCOM
-> > +       depends on WCN36XX
-> >         help
-> >           Say Y here to enable the power sequencing driver for Qualcomm
-> >           WCN Bluetooth/WLAN chipsets.
+> > Im currently traveling so it would take some time for me to
+> > investigate this but I suspect it could be some of the changes
+> > introduced by Bartosz with power sequence, @Bartosz Golaszewski
+> > perhaps you can help?
 > >
-> > ---
-> > base-commit: 2347b4c79f5e6cd3f4996e80c2d3c15f53006bf5
-> > change-id: 20240725-pwrseq-wcn-config-0b6668b5c620
-> >
-> > Best regards,
-> > --
-> > Andrew Halaney <ahalaney@redhat.com>
-> >
-> 
-> What if we want to disable the WLAN driver but keep the Bluetooth
-> driver enabled?
-> 
+>
+> Hi!
+>
+> I just came back from last week's vacation to a bunch of different
+> regressions. I will get to it but it may be later this week.
 
-Should we:
+Thanks, looks like there were other reports saying QCA driver is not
+working which perhaps is related.
 
-    depends on WCN36XX || UKNOWN_TO_ANDREW_BLUETOOTH_CONFIG
+> Bart
 
-or, would you rather base it on something else, or nothing at all? I
-don't have any hill to die on here, but I wasn't really sure what to
-set this config option to for arches outside of aarch64 and was hoping
-some Kconfig dependencies could make that more clear.
 
-I'm a little unsure about what the WCN family of hardware is, so I don't
-know if that's something we could gate behind a different config more
-intelligently (say just ARCH_QCOM if it only makes sense as part of a
-Qualcomm SoC itself... not sure how this hardware is sold).
 
-Please let me know your thoughts!
-
-Thanks,
-Andrew
-
+--=20
+Luiz Augusto von Dentz
 
