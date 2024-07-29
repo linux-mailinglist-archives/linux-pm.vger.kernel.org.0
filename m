@@ -1,157 +1,179 @@
-Return-Path: <linux-pm+bounces-11533-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11534-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97E3693F377
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 13:01:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE90093F4AD
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 13:56:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6979B22B6D
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 11:01:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 524F31F22830
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 11:56:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35465145334;
-	Mon, 29 Jul 2024 11:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7C6714601E;
+	Mon, 29 Jul 2024 11:56:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RSwST0MB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KshWaNPw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8597B1448FF
-	for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 11:01:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38150145324;
+	Mon, 29 Jul 2024 11:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722250897; cv=none; b=SSCrVi1eF9MXj/xlYkueXsmbpurcy14bekuinobXamLbL449FEpE0BxUwaCXBAWbu2xs1DfM/pPflccUEI8gBhNBEntBaOVCA6EL4M3fYanLHQDOqhpmkTmCz3EZYLraaYDjTOcK5J2KHsaBKIICkmYYtQ3EhejX9aAEeSybFv8=
+	t=1722254202; cv=none; b=WOzDnMLsupuImNNyglMNN1GqtQFJSc1tUhAc8DXR23SbOVCLigmfDnKuOuls46Z9Z9bZCZt5atLbuowe2247nfjnfIGS5eHvpS6uYKp2vIxDjGlKTD8QJFKhrBluQ0QPYYWbQIfpoJE/Hi8YJQrNatp9R8lTtpPJNDOC+YKZq80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722250897; c=relaxed/simple;
-	bh=lduqLSkWyJhKYjonatWIdfC2fjHw1mpU9LAVB9RFSNY=;
+	s=arc-20240116; t=1722254202; c=relaxed/simple;
+	bh=qrvKMtOz6tw5r0QsJJlCGs68EFG0IVCf4AJqTnpCzfk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Brf51yylRba3gzF8qQGmbePTcvZ2iTZ2Khobx106yWehwGzXN2P2zHk700rFgvn5p2666RBEfYfmB/BEpMy8047W68cd/7NvF8YyipHSM9aqBroh0ATedXpWjJjtGmscSC6g87gK/YXTnLhNa3D6fd9yN/41WGnFMn9MyqwX8Lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RSwST0MB; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6634f0afe05so21270237b3.0
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 04:01:35 -0700 (PDT)
+	 To:Cc:Content-Type; b=J3i88uoDdM+igb1Rk7L2DGq5zQ7wsMTjefwZmhVSuGI3k0GfC23Nz5gjOjz2zSTAdkwoURDwKd5hj/jJZStBZ+1/NPmaqHebSH3HVye0HwBRgaC5xcPG7g07ImfI8EQMi0ONl0tJKeQn6934HDemSxuhz/BLh/pN/wkwdu6vEOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KshWaNPw; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2eeb1ba0481so53754451fa.2;
+        Mon, 29 Jul 2024 04:56:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722250894; x=1722855694; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qS74thyXlKVfCHirad4RXHuJPQsnIZHpLWb7ffO4dsY=;
-        b=RSwST0MBcfy2ofcxx/T4Yg9NhttQLBFmZB69eqATNFnB9V2TTL921sV+JYh38tE/01
-         hwuFFfurRgFo9LtpJK/gro6s46cB1ZMlAY01X/dzuI6FLSqMVT+xg1Z28J2R3I/LLzUE
-         0diRlt4QwY2GW4WZVvfMpGpRTdn1YOIMvKP+sMx24ULV6rBct6u5ajQQcY+Xg82Nv2j4
-         yGgewXb3fhVydFK7F7gJ9t6oWToH+tKAmI3NMJnzZ9pWljP4fT55Ft14YUQW+RaRTilK
-         8/6JKlwqocwAVyhHHSvZ4xhUxClp3D0mQrdxV6NIQUZbalSB+H/o6AA9A7/1gg141Vge
-         /mLg==
+        d=gmail.com; s=20230601; t=1722254199; x=1722858999; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IoaDZPE7aY3eyjAwEZm9aiUjU/Z3vM7/coDBxAHRjew=;
+        b=KshWaNPwbCFUQ1Nfmcl+fu6AhuueHiDfGcEPfPCsn7u/dkT1LOB8yBg/6RqqgV0bz+
+         yjphSCH6vIvGpT00r2orqBqSztB2JKjKKWEqXtnNAcXkwWKxZbWYG8qsKxrojG6BkHt3
+         tkiOChIxlaANEovwbNP1WujU7+oNNxA7D/m7teq8BAmKacO6cDMLrLaXT7usIAGWtiuH
+         AWqhD9F3Zk/DB+LGFHjc4kRfrIKiDkI1qklV7G/xqwGxadEjyvmF/IHDlYaBruvG5RO6
+         4IR1hzuRQz8cWqu3RJvRSsSQHZcNA0Z5LQfql9WncgQnwY8+xCZNziFiB738oTjFsgsN
+         ysqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722250894; x=1722855694;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qS74thyXlKVfCHirad4RXHuJPQsnIZHpLWb7ffO4dsY=;
-        b=BN9S2H3iNOGSt4Iu+HQxt68eGrmqrVDLld3/Pl6O42ZYwDf8bzfPntg063CGsmp5Kz
-         wIEPIZAkl1eFKHqVbBEWJp/jMrl3bdw4Bv0DwfoqECC1CaGs0d5WZU5Xui0huUsxegHd
-         rttvg58QFOC4UkDPo9aN2AgeUSEMsQVWYX3zIazYQAlAJbXJ04tsf0Mc9EaHCMAz5yU/
-         JkotZi9Zw37m6+fD43tddcmGiAixpef37AVaQ7wk/zs+rG3qzixhh70bjOknrfmOpen+
-         XsiaRq8R/yI8rqPFmDxjFZE4rp9JnnzviBvWsdNbQKAjZjH7iYyV89hoEg6BKtrIQjPP
-         1HNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5xzN3DA38a0nUfrASc+RSz85rfGg+DjIAuNne1hhPpoyhiNeItyRRM8PtQWkiyt/aqBY6AzwaC3Zu/dqE/3hhhQgqef2wUj0=
-X-Gm-Message-State: AOJu0YyeuaGj05r2GeWvyYXcebymzVVBHE4r2tmkH9+3/kUYR+SMgani
-	FwWyQdKLW0CNS0dMCuGNCvMKO1EIiw4s8kgraAJfkwFeMqR6LDE2ZO+i9zRseHfjzJ0l7xrfkpd
-	2H9+zh9hKa48g98QHvu0bP2b5b4O9rm5oqeXSGg==
-X-Google-Smtp-Source: AGHT+IG3EA/0IxeNAJtBbqjvCrC/pwaKq0AyGdVeJ+5pV3M8HdGLRf4CJd0exHD7znc1SNb7/XMwKGZypKi+qJlQgw8=
-X-Received: by 2002:a0d:d007:0:b0:673:1ac6:4be0 with SMTP id
- 00721157ae682-67a0a3231d1mr80378567b3.44.1722250894530; Mon, 29 Jul 2024
- 04:01:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1722254199; x=1722858999;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IoaDZPE7aY3eyjAwEZm9aiUjU/Z3vM7/coDBxAHRjew=;
+        b=KYFkBEg5/ZgHttXraqJSi00S9GyPefA0ArjO3zzXajFZ11EVD7BQhKbcjmHV7r2V63
+         mZo3XTDCqt/iZQLg+yGVkMMFdun/zr3dPonUKU1DNQA/319nzyrjhrbMOuvIIz5fiN27
+         bsXu+j8DGnyrnFC6K2etvcS2GKaLltWHH4FlTtm2cU7k7vs+3KIgsruZkJ/bhqZkUW3X
+         fEf06Bq4jCuDaOWwP7STxJKEc4av3vQ9cM337WVbF3IXBg3TPMv26KeOOEPzefGv9YUS
+         1HoxyYt0xOvg20Ggp4NLmixkcP2jYBa/3w2NIPH94tS7qcj5kmfm5Ffm434i+KkWW6cX
+         wsQg==
+X-Forwarded-Encrypted: i=1; AJvYcCUZv/VTEJDgyQwkcK8kLBiG7IihRrX69lmivQ1Kj2YyiYDAEAdWSP2LnwAW11tQhgcJ2aNVouvpeUCsWmhCiIkE8RFJKZgdxSykWJ29GPvLUaqXty7jUMjh50nZVBswHYDG0QrS5Hlp0pK+1iNSWyPuCJ7vwgBRm8SkD++ZxKA2GkMNa3+CEntU
+X-Gm-Message-State: AOJu0YxZr3pYEYQl8gRY7ITA5MznI9fe8Mocr7ZXoY0n71RvOEDZyRcf
+	zNUqU/W9/JWLZ+bDk0nfSL3RDywehiELqdtOhdgq+joI2gr3m3JqEY0oslqf6sDK4kdX4uT0mW2
+	3p5gnf7qFwMwnliAgBjhJr3pNp9I=
+X-Google-Smtp-Source: AGHT+IEIJCBEybW5ODviiZY9OXaiGOJYxUayf5oCFzfysm4zRoy1l7gK17ozt9Nn/Y6qqxZtSrunGPcUIKba83QU2lU=
+X-Received: by 2002:a2e:a495:0:b0:2ef:232c:6938 with SMTP id
+ 38308e7fff4ca-2f12ebcae5amr48522491fa.6.1722254198904; Mon, 29 Jul 2024
+ 04:56:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <su3wp6s44hrxf4ijvsdfzbvv4unu4ycb7kkvwbx6ltdafkldir@4g7ydqm2ap5j> <aa9d6aec-ef94-4137-b2ff-0c86d9a92d42@molgen.mpg.de>
-In-Reply-To: <aa9d6aec-ef94-4137-b2ff-0c86d9a92d42@molgen.mpg.de>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Mon, 29 Jul 2024 14:01:23 +0300
-Message-ID: <CAA8EJpqGXe0A0yDpEP==60k-bPEbDORpLUtsiPvGSi+b_XphAg@mail.gmail.com>
+References: <su3wp6s44hrxf4ijvsdfzbvv4unu4ycb7kkvwbx6ltdafkldir@4g7ydqm2ap5j>
+ <aa9d6aec-ef94-4137-b2ff-0c86d9a92d42@molgen.mpg.de> <CAA8EJpqGXe0A0yDpEP==60k-bPEbDORpLUtsiPvGSi+b_XphAg@mail.gmail.com>
+In-Reply-To: <CAA8EJpqGXe0A0yDpEP==60k-bPEbDORpLUtsiPvGSi+b_XphAg@mail.gmail.com>
+From: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date: Mon, 29 Jul 2024 12:56:25 +0100
+Message-ID: <CABBYNZJP2c4L-nFHtug0isqnKPR+Q0CE09o_ACsPLobjLpHtcg@mail.gmail.com>
 Subject: Re: btqca: crash with linux-next on bt power down
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Marcel Holtmann <marcel@holtmann.org>, 
 	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, linux-bluetooth@vger.kernel.org, 
 	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
 	regressions@lists.linux.dev, Zijun Hu <quic_zijuhu@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-#regzbot: introduced:
-973dd9c4db4746200f88fe46e30eada7054fdbea..84f9288208dfcd955446060a53add15b9e01af4e
+Hi Dmitry,
 
-On Mon, 29 Jul 2024 at 13:21, Paul Menzel <pmenzel@molgen.mpg.de> wrote:
-> Am 29.07.24 um 04:11 schrieb Dmitry Baryshkov:
+On Mon, Jul 29, 2024 at 12:01=E2=80=AFPM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
-> > On Qualcomm Dragonboard 820c (APQ8096, QCA6174) soon after the boot I
-> > observe the following crash:
+> #regzbot: introduced:
+> 973dd9c4db4746200f88fe46e30eada7054fdbea..84f9288208dfcd955446060a53add15=
+b9e01af4e
+>
+> On Mon, 29 Jul 2024 at 13:21, Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+> > Am 29.07.24 um 04:11 schrieb Dmitry Baryshkov:
 > >
-> > Unable to handle kernel NULL pointer dereference at virtual address 0000000000000018
-> > Mem abort info:
-> >    ESR = 0x0000000096000006
-> >    EC = 0x25: DABT (current EL), IL = 32 bits
-> >    SET = 0, FnV = 0
-> >    EA = 0, S1PTW = 0
-> >    FSC = 0x06: level 2 translation fault
-> > Data abort info:
-> >    ISV = 0, ISS = 0x00000006, ISS2 = 0x00000000
-> >    CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> >    GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> > user pgtable: 4k pages, 48-bit VAs, pgdp=000000010da63000
-> > [0000000000000018] pgd=080000010da62003, p4d=080000010da62003, pud=080000010da61003, pmd=0000000000000000
-> > Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-> > Modules linked in: hci_uart btqca
-> > CPU: 2 UID: 0 PID: 66 Comm: kworker/u19:0 Not tainted 6.10.0-next-20240726-13923-gd3ce7ebd61f9-dirty #2722
+> > > On Qualcomm Dragonboard 820c (APQ8096, QCA6174) soon after the boot I
+> > > observe the following crash:
+> > >
+> > > Unable to handle kernel NULL pointer dereference at virtual address 0=
+000000000000018
+> > > Mem abort info:
+> > >    ESR =3D 0x0000000096000006
+> > >    EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+> > >    SET =3D 0, FnV =3D 0
+> > >    EA =3D 0, S1PTW =3D 0
+> > >    FSC =3D 0x06: level 2 translation fault
+> > > Data abort info:
+> > >    ISV =3D 0, ISS =3D 0x00000006, ISS2 =3D 0x00000000
+> > >    CM =3D 0, WnR =3D 0, TnD =3D 0, TagAccess =3D 0
+> > >    GCS =3D 0, Overlay =3D 0, DirtyBit =3D 0, Xs =3D 0
+> > > user pgtable: 4k pages, 48-bit VAs, pgdp=3D000000010da63000
+> > > [0000000000000018] pgd=3D080000010da62003, p4d=3D080000010da62003, pu=
+d=3D080000010da61003, pmd=3D0000000000000000
+> > > Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+> > > Modules linked in: hci_uart btqca
+> > > CPU: 2 UID: 0 PID: 66 Comm: kworker/u19:0 Not tainted 6.10.0-next-202=
+40726-13923-gd3ce7ebd61f9-dirty #2722
+> >
+> > I am unable to find the commit. Your tree also seems dirty. What is the
+> > last working commit?
 >
-> I am unable to find the commit. Your tree also seems dirty. What is the
-> last working commit?
+> Checked the commit range on the linux-bluetooth branch, hope this helps.
 
-Checked the commit range on the linux-bluetooth branch, hope this helps.
+Im currently traveling so it would take some time for me to
+investigate this but I suspect it could be some of the changes
+introduced by Bartosz with power sequence, @Bartosz Golaszewski
+perhaps you can help?
 
+> >
+> > > Hardware name: Qualcomm Technologies, Inc. DB820c (DT)
+> > > Workqueue: hci0 hci_power_off
+> > > pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
+> > > pc : qca_power_shutdown+0x8c/0x210 [hci_uart]
+> > > lr : qca_power_shutdown+0x7c/0x210 [hci_uart]
+> > > sp : ffff8000836f3c50
+> > > x29: ffff8000836f3c50 x28: ffff00008337b900 x27: ffff000084085000
+> > > x26: 0000000000000000 x25: 0000000000000000 x24: ffff00009276f800
+> > > x23: ffff00009276f918 x22: ffff000081e1fc80 x21: 0000000000000001
+> > > x20: ffff000081e1fc80 x19: ffff00009276f800 x18: ffff0000de422170
+> > > x17: 0000000000061d88 x16: 0000000000000000 x15: 0000000000000001
+> > > x14: ffff0000813b3580 x13: 0000000000000000 x12: 00000000000001a0
+> > > x11: 0000000000000001 x10: 00000000000013f0 x9 : 0000000000000000
+> > > x8 : ffff8000836f3b40 x7 : 0000000000000000 x6 : ffff800080d52e88
+> > > x5 : 0000000000000000 x4 : ffff8000836f0000 x3 : 0000000000000000
+> > > x2 : 0000000000000000 x1 : ffff00008f56d000 x0 : 0000000000000000
+> > > Call trace:
+> > >   qca_power_shutdown+0x8c/0x210 [hci_uart]
+> > >   qca_power_off+0x70/0xfb8 [hci_uart]
+> > >   hci_dev_close_sync+0x4b0/0x6d8
+> > >   hci_power_off+0x2c/0x44
+> > >   process_one_work+0x20c/0x62c
+> > >   worker_thread+0x1bc/0x36c
+> > >   kthread+0x120/0x124
+> > >   ret_from_fork+0x10/0x20
+> > > Code: f9400681 b4000441 f9403c36 f94102c0 (f9400c00)
+> > > ---[ end trace 0000000000000000 ]---
+> > If you can reproduce this, bisecting this would be great.
+> >
+> >
+> > Kind regards,
+> >
+> > Paul
 >
-> > Hardware name: Qualcomm Technologies, Inc. DB820c (DT)
-> > Workqueue: hci0 hci_power_off
-> > pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > pc : qca_power_shutdown+0x8c/0x210 [hci_uart]
-> > lr : qca_power_shutdown+0x7c/0x210 [hci_uart]
-> > sp : ffff8000836f3c50
-> > x29: ffff8000836f3c50 x28: ffff00008337b900 x27: ffff000084085000
-> > x26: 0000000000000000 x25: 0000000000000000 x24: ffff00009276f800
-> > x23: ffff00009276f918 x22: ffff000081e1fc80 x21: 0000000000000001
-> > x20: ffff000081e1fc80 x19: ffff00009276f800 x18: ffff0000de422170
-> > x17: 0000000000061d88 x16: 0000000000000000 x15: 0000000000000001
-> > x14: ffff0000813b3580 x13: 0000000000000000 x12: 00000000000001a0
-> > x11: 0000000000000001 x10: 00000000000013f0 x9 : 0000000000000000
-> > x8 : ffff8000836f3b40 x7 : 0000000000000000 x6 : ffff800080d52e88
-> > x5 : 0000000000000000 x4 : ffff8000836f0000 x3 : 0000000000000000
-> > x2 : 0000000000000000 x1 : ffff00008f56d000 x0 : 0000000000000000
-> > Call trace:
-> >   qca_power_shutdown+0x8c/0x210 [hci_uart]
-> >   qca_power_off+0x70/0xfb8 [hci_uart]
-> >   hci_dev_close_sync+0x4b0/0x6d8
-> >   hci_power_off+0x2c/0x44
-> >   process_one_work+0x20c/0x62c
-> >   worker_thread+0x1bc/0x36c
-> >   kthread+0x120/0x124
-> >   ret_from_fork+0x10/0x20
-> > Code: f9400681 b4000441 f9403c36 f94102c0 (f9400c00)
-> > ---[ end trace 0000000000000000 ]---
-> If you can reproduce this, bisecting this would be great.
 >
 >
-> Kind regards,
->
-> Paul
+> --
+> With best wishes
+> Dmitry
 
 
 
--- 
-With best wishes
-Dmitry
+--=20
+Luiz Augusto von Dentz
 
