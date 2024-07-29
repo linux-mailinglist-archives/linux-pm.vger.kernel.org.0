@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-11578-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11579-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC0AE93FCB8
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 19:49:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CD4693FCBC
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 19:49:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C0AF1C2187E
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 17:49:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5638E1C223CE
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 17:49:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F363B189F50;
-	Mon, 29 Jul 2024 17:48:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B1CE18A93C;
+	Mon, 29 Jul 2024 17:48:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SjDZrpmP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HDyC7+pR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3632E1891C3;
-	Mon, 29 Jul 2024 17:48:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF85D189F3F;
+	Mon, 29 Jul 2024 17:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722275283; cv=none; b=DsER/MozBO5dftl3raDYNrJmUDu+/nGxvmaKOR0FMtJ49k/kyEba7NpLAC3UEjEvZxIBBJ0fd9mtImwqK/TpDMzBJ4rGKd1VvdwtCeGOj2rZ5KscJgoWlS0xP/8FzO9v0T0gb8OrCB/AG/msTruN2Ra9AftY2T4RNzzih1/yERA=
+	t=1722275285; cv=none; b=KGLb0DdqGjNovB9GXNBlkTr3cATTbwv/AFZK35vH2ZRIZqB93xTxlcYC8DMnEld4EvUlc5LUgUW1vpijZW7nJB83cton7UmTt5wc+WEEkVbh94dvFubY5zEcJsvxhDARfU867zyvtlSmbv4u401x6xoLVRI5qRXMJHVR04GkOIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722275283; c=relaxed/simple;
-	bh=tNiZCBQ9vI1N19lL0qdAjIhq26icJW5eSTf6NBMnkgo=;
+	s=arc-20240116; t=1722275285; c=relaxed/simple;
+	bh=8B1kt8AWmIpBQPncG9dfhlWKEjLZT84Kr302Znpylas=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uk3JrWs2mECQwFIVkUg55Ykjr+jqueAC4Zi1ACDgoALSRm0/dgPBbQyY+xkFo9vgX34xX4A8MAdrwGGGWOKXndr5KBsl4Rc6Sv4tC0RmY/e2JPoMaV9AdePW8n+zUKNrEsdHoCiodzQT/cnGJnaemJOBIzo8IDaT0NnsDtQRquo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SjDZrpmP; arc=none smtp.client-ip=209.85.221.44
+	 In-Reply-To:To:Cc; b=a482yByoJwBV0HiuJ9Q/ZAqff9iNLh3os15tSylnMjPzix9XJxVzqbnOXbQTdGGIebIr7VgD7cvlrLbl29uMeqkivK0uqfYHKS/5f9lXcLnwkGdWe1g/jHg7QZp23h5RKA9LyxQevz1RPw2bhAKmnE9YtFYLLX63d6/0iN1f258=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HDyC7+pR; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-368f92df172so1606802f8f.2;
-        Mon, 29 Jul 2024 10:48:01 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3684407b2deso1545473f8f.1;
+        Mon, 29 Jul 2024 10:48:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722275280; x=1722880080; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722275282; x=1722880082; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VpdY2w7Ol8tWjnklayT84Hbch6eCd/qeKmcHW5pT54o=;
-        b=SjDZrpmPRqZU4F1Avg2qNj1hhZuR5QO3ZCgEOfZGU6XJXUZ6nTJKo30b029rTP9D4A
-         wJUD5Ask+ks3i0AyDqBdp+5DFWgqBSENVqh7FHYf3NYnc4RAguAwYg4jGg9ZYaisEvaK
-         WdoW9+Wu9P2E3y1ojidU/PnzC02Jm0Tq8MCLeF+TEdkMvHZEFha+q5ia+NGbO6Jxr6zT
-         oix3iY8lxP70Q4XBrhrBRFcWZslztaP1h/Mxr+dSBJyisxvSmAk4nY545ZfGB894gTvN
-         CchkDzqLdGvEjwLKXXQAxX7JI+Z9t406By81zsNF+wkZSp03ohOz+60JB+tobf8Xue1T
-         KQVA==
+        bh=WnVUt1AGc9AqCAUSKdpREqmxFC97kSldsuL6yvP0RyA=;
+        b=HDyC7+pRwhK9F77CSG+weYlHulS5UiGni59LUML9WFhDBzN44AIiHAsbJW8v/vKleN
+         1QvlcLshGwQLjbES78lhuJXRTvoHErquUw0bbMytfLpgG/J/KHL/sEGGcjNsX1RFIbUL
+         LfiHtOHQQUq9I1/V9FkeRo4UkaMl51wWyUv2uZrI1YGQI7EcwbK/4kABgHJWXG3Rb/Pw
+         /PBtDZ2P7bglu7lSYT5FhVosbDzC+FSJhwRsJl1iprEIxUV1yz2J8Hjr6EXHBT56LZJZ
+         GXbtTT16hyS8Dntsfc1yr2FzXchUUHW/vVLNCk5jnjZylqwnW0C8i6FVrnmkQ+wokIKG
+         7drQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722275280; x=1722880080;
+        d=1e100.net; s=20230601; t=1722275282; x=1722880082;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VpdY2w7Ol8tWjnklayT84Hbch6eCd/qeKmcHW5pT54o=;
-        b=NLd1jsiuR2tE61db8m96VO5qNaPBKN5C9wPzEXr2RVbemHIyMNm6Ix/SBJpjl53+ZO
-         4Trg4ZgYEWMC1Hp4GeOkNppcLgmLyO/4eV4WQIHyfqGeaa1JWxYR34L1hcDzWMWDw4Jh
-         n18gr75pvJpv8WBSPQ+ZUtUCHOAu+pkrCUrLsqRymp+3sFxypZwm7VNmpiD0MFngVFUt
-         tgOmeDkaLBTE99A7i8Zz+sJT4Gj3ym5UeojkvP4WiaNVxwMxAvTzep5CPYeBsN5H/Att
-         xTPzLwqRSevsgFt9WWn07kJEbs0UZ5ssvZYaS2ZM59gsjujfvfz6RBncUFOtF42USU6+
-         gQJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVZBjWhNEveNZNPna4+kiD06gSrKMzfQyhSthaugK1HMArQuvH7eSJJmC/hOEBrEMyJgTxkMDZgE+vGkAF0rbOtXtk0rny6wBRcvT+42FGS5Cm9GLqrExIJHJlsyTFoEPLUXyx+4KSJ0lX7L9g0iKMImISRu0i45cASzD7O3tL4G926YwQB9xxLDL+KihO/AfPD4h+eEl8BdavfwX+m/w83TzliG5c=
-X-Gm-Message-State: AOJu0YyfaY2ndGUm9xo8tjSvFXqw0Szp6iT0lrRZatpiPVvcmD7uUybR
-	1cBqZ24sI+5pfzNBkq43zKSiE2QAgYJRh31zfdUImM/vABVHrPp4
-X-Google-Smtp-Source: AGHT+IG/etUYMRG6EQg3R1Ca5UxAVuYa4JhLhQk6wFKPKMSpy23CLMxyZ6mlKsFnXrd8dFDFYq+WEA==
-X-Received: by 2002:a05:6000:bc8:b0:368:7883:d14a with SMTP id ffacd0b85a97d-36b5d0444c5mr5780214f8f.33.1722275280385;
-        Mon, 29 Jul 2024 10:48:00 -0700 (PDT)
+        bh=WnVUt1AGc9AqCAUSKdpREqmxFC97kSldsuL6yvP0RyA=;
+        b=UX3sx2RTkbB5zl+gt9mNYWTFkZ8btawtuFBHK7LwUhQm4pF8I/hmMuqWE3eA2jLt4R
+         W2gCQkmNKeNkVg6MsS3SjwhgjiVS70YCCvsNOTe04yluhgpUnAtg+JjRCrkaakPAFs5W
+         Ic31oDW6LuV1kkNhp4m2zctk6VOzIs2senfroDkLioy8aiGUEVHtjOpSYwwMJnkB/hfP
+         H891Qh1PlLJ7bs19lMoGBGS653QSofNfbKpWQ+tEq5Ph5LSAkqyUnp2gn2hOOdtwFQ7U
+         vTUJgFGB9zxuDoDX03TPK7YfiOVFwoyBs714DWwLUoljyPLlmgn5cmfASZCuhtSiNB1n
+         8HEA==
+X-Forwarded-Encrypted: i=1; AJvYcCV/Ge5pf0hNIqyS0b2dobBxBefnpIckVnmHmXikOj+GGboJwhgx0ZZlwJnwRRYS4QOi5mm0Iz1j30nAUQIkqYMzuy6xrOB0crPmz+4/3jEyBN8/MUFbHR0oHVXXPwukoUAi5XaqW8YwaqcOIpiDmDiDSO43bXBUvB7KvOxl0B/3ANZ7ANnx0nMlH8Ys/pRc0c0rh/IFhJbWLOpXZZWSbOfqL88CgaM=
+X-Gm-Message-State: AOJu0YzFZa/AxFoin8aL8LPDWuBshJzlF7IfYh0jitEujxETNtF3y/8W
+	9ddjzZGc6D+mYREWrzyQCtlqpEB81HotX1s6/YJJMCf2TjVy8oe+
+X-Google-Smtp-Source: AGHT+IHNyFmYhpG/++yMrpkuRc2XYprU40Zz9/3C+49zl/kR3iongSZ4buzWgKt0FzzTDvZcE6BgZg==
+X-Received: by 2002:a5d:63c1:0:b0:367:9516:ffb4 with SMTP id ffacd0b85a97d-36b5cee21a2mr5812478f8f.19.1722275282210;
+        Mon, 29 Jul 2024 10:48:02 -0700 (PDT)
 Received: from tablet.my.domain ([37.30.0.99])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b367fc8a7sm12716550f8f.59.2024.07.29.10.47.58
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b367fc8a7sm12716550f8f.59.2024.07.29.10.48.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 10:48:00 -0700 (PDT)
+        Mon, 29 Jul 2024 10:48:01 -0700 (PDT)
 From: Artur Weber <aweber.kernel@gmail.com>
-Date: Mon, 29 Jul 2024 19:47:41 +0200
-Subject: [PATCH v3 07/10] power: supply: max77693: Set up charge/input
- current according to cable type
+Date: Mon, 29 Jul 2024 19:47:42 +0200
+Subject: [PATCH v3 08/10] ARM: dts: samsung: exynos4212-tab3: Add battery
+ node with charge current value
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,7 +79,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240729-max77693-charger-extcon-v3-7-02315a6869d4@gmail.com>
+Message-Id: <20240729-max77693-charger-extcon-v3-8-02315a6869d4@gmail.com>
 References: <20240729-max77693-charger-extcon-v3-0-02315a6869d4@gmail.com>
 In-Reply-To: <20240729-max77693-charger-extcon-v3-0-02315a6869d4@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -95,106 +95,64 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>, 
  Artur Weber <aweber.kernel@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2747;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1385;
  i=aweber.kernel@gmail.com; h=from:subject:message-id;
- bh=tNiZCBQ9vI1N19lL0qdAjIhq26icJW5eSTf6NBMnkgo=;
- b=owEBbQKS/ZANAwAKAbO7+KEToFFoAcsmYgBmp9W/eTAFqhVcvrxPcQ+i1t+kITIAHn3E7QU9A
- CeM1wmLctSJAjMEAAEKAB0WIQTmYwAOrB3szWrSiQ2zu/ihE6BRaAUCZqfVvwAKCRCzu/ihE6BR
- aDvyD/wNx5ko3xSL7orlI3cGVCD7U32mrcClUQ68x7NQswffpG0Xf42NfKJ8oRTLad7pBGhNMBS
- VeljVGA0BFvNoydBZEcxuoQok5SaS0V/dQCQfCYNmy7HskdQ98iyLl2GJnjKsumqHGpvmUnLgoA
- GoDSfu9hYvLNIfySqjyTdA7l7+FGS9o90jhszRGoyA/z66fhIvaz45oNM1nzWTBiIsTRjh2KPS7
- 7+0HIiFDBwO5z88Xc4dMYZNDg/T4lWImqom440DIcBexUlI7QYYHywaY/sb48GmZaYfj6To/o+T
- V/MwFb/7YCAVhfGJ9Ks/tS92cKe6MNanINbFKJpRPIdA4dByoe9PDg5KHauA5yONue1JWIKPHuk
- uD36E1hP38Vqgpg3JexTR0ftothf6Skw2U7EVNM1rpQuIMHg5rtKly0pQb1Y+xmcpJmxfxxZ4E+
- y33Gcwt6y6Y36cnKrCAKTYvDL8Q/TfNlKncnbhWpy4s1eAXwRdonGlfUWvANnYmVApYkflTBo6E
- R8r0JOQ8PwZYUvg7iIWtQMU9cSX823LV2P5JIzH7A3KoqxBdRg66NXl9+HTEwNcpp/tJIzSutdd
- BZ835HurQGvaCglBdfyT0eOQOQw9DBHqKC1ezht/u50LgujCzsMox/GoaqUVN5jv2/QqdeM8C3t
- luoi1jeXZvpb48w==
+ bh=8B1kt8AWmIpBQPncG9dfhlWKEjLZT84Kr302Znpylas=;
+ b=owEBbQKS/ZANAwAKAbO7+KEToFFoAcsmYgBmp9W/6MLFXnaSOcMkyzmUQa2TpYwPaa03T2gQd
+ VHEdtI6YyGJAjMEAAEKAB0WIQTmYwAOrB3szWrSiQ2zu/ihE6BRaAUCZqfVvwAKCRCzu/ihE6BR
+ aEnXD/9LZurHLtb9yxoipoT46Gc0pSlhbAAFltMTws9gW7PF0xBpQHj+RJUwrIxFxsvts0i6MYc
+ eWRx5cPuJYjwdftPZm7FPa/J99Pie5Ob2TWGQuiAqDITmKPOgaN4tgCwgsKw4Qg5dbNjqwxDfO8
+ tkEj5wbKjpUOYvBXDB33xzXmtyOOWTcpD5mtQSmM9jYwZT/8TbZyurZj/OCA71fNfstNFWaRYuV
+ YFe4ae/c+g+51J9CSTaOQO1xCQ/igRcu+k3z3vAK66Z5Y6rGG0z3A9+cWLdo/nI+YnnCDX2ArcR
+ kjUFAs/n8+Ku5x54lXivQ6bLvzMxl6AEUczZPoG+2/Lm+yt4Q6GctGxTu+Gk1RitAIxzVrZhLbM
+ w3P8lh+rU6QSzLMJmPhaXc2kMyHhJVof2tO05h1DGb4i4VTjVH5EDLF8Pd0tOAu1KTl2S9BND8L
+ p4TX4DHpI3VNtCU5fnMsLV4UCIVYkuSN1V5gmefHuURBIrw/cfY2z43r3d+w0vAEif9w9WSGxjJ
+ fr8GQU4Rg77Jne4EV74m0OJhxN66zpCZarrG4IeOGUY1aT2UB+vOsGFD5Mm8OfbOUYLfim6h0iO
+ Ao0OO7jFPmkZgEYMC3WbButGbhyVVCO49bGb17Rq61sL0uFnECsntOmjqgmnibxrX1thfk6A1MB
+ sZclK9Q5N2Vb7yA==
 X-Developer-Key: i=aweber.kernel@gmail.com; a=openpgp;
  fpr=E663000EAC1DECCD6AD2890DB3BBF8A113A05168
 
-This behavior was observed on a downstream kernel - for chargers, the
-current would be set to a fast charge current value, and it would be
-bumped down for all other cable types.
+This value was verified by comparing register dumps of the MAX77693
+charger with on mainline with a downstream kernel under Android; the
+value on downstream was set to 1.8 amps when charging with a proper
+charger.
 
-If we leave only the fast charge current value applied, peripheral mode
-stops working. If we stick to 500mA, charging becomes too slow. So, set
-the charge input current limit accordingly to the cable type.
+Add it to a new battery node and pass it to the MAX77693 charger
+so that the fast charge current setting can be used for charging.
 
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
-Changes in v3:
-- Re-introduced this commit from v1. It seems to have been accidentally
-  rolled into the previous commit in v2.
+Changes in v2:
+- Switched to monitored-battery
 ---
- drivers/power/supply/max77693_charger.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/power/supply/max77693_charger.c b/drivers/power/supply/max77693_charger.c
-index 4ff402941d72..a3aeaba77309 100644
---- a/drivers/power/supply/max77693_charger.c
-+++ b/drivers/power/supply/max77693_charger.c
-@@ -716,6 +716,7 @@ static void max77693_charger_extcon_work(struct work_struct *work)
- 						  cable.work);
- 	struct extcon_dev *edev = chg->cable.edev;
- 	bool set_charging, set_otg;
-+	unsigned int input_current;
- 	int connector, state;
- 	int ret;
+diff --git a/arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi b/arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi
+index 9bc05961577d..3c905bfedd96 100644
+--- a/arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi
++++ b/arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi
+@@ -159,6 +159,7 @@ charger_reg: CHARGER {
  
-@@ -728,19 +729,28 @@ static void max77693_charger_extcon_work(struct work_struct *work)
+ 			charger {
+ 				compatible = "maxim,max77693-charger";
++				monitored-battery = <&battery>;
  
- 	switch (connector) {
- 	case EXTCON_CHG_USB_SDP:
--	case EXTCON_CHG_USB_DCP:
- 	case EXTCON_CHG_USB_CDP:
-+	case EXTCON_CHG_USB_SLOW:
-+		input_current = 500000; /* 500 mA */
-+		set_charging = true;
-+		set_otg = false;
+ 				maxim,constant-microvolt = <4350000>;
+ 				maxim,min-system-microvolt = <3600000>;
+@@ -300,6 +301,11 @@ submic_bias_reg: voltage-regulator-5 {
+ 		regulator-max-microvolt = <2800000>;
+ 	};
+ 
++	battery: battery {
++		compatible = "simple-battery";
++		constant-charge-current-max-microamp = <1800000>;
++	};
 +
-+		dev_info(chg->dev, "slow charging. connector type: %d\n",
-+			 connector);
-+		break;
-+	case EXTCON_CHG_USB_DCP:
- 	case EXTCON_CHG_USB_ACA:
- 	case EXTCON_CHG_USB_FAST:
--	case EXTCON_CHG_USB_SLOW:
- 	case EXTCON_CHG_USB_PD:
-+		input_current = chg->fast_charge_current;
- 		set_charging = true;
- 		set_otg = false;
- 
--		dev_info(chg->dev, "charging. connector type: %d\n",
-+		dev_info(chg->dev, "fast charging. connector type: %d\n",
- 			 connector);
- 		break;
- 	case EXTCON_USB_HOST:
-+		input_current = 500000; /* 500 mA */
- 		set_charging = false;
- 		set_otg = true;
- 
-@@ -748,6 +758,7 @@ static void max77693_charger_extcon_work(struct work_struct *work)
- 			 connector);
- 		break;
- 	default:
-+		input_current = 500000; /* 500 mA */
- 		set_charging = false;
- 		set_otg = false;
- 
-@@ -756,6 +767,12 @@ static void max77693_charger_extcon_work(struct work_struct *work)
- 		break;
- 	}
- 
-+	ret = max77693_set_input_current_limit(chg, input_current);
-+	if (ret) {
-+		dev_err(chg->dev, "failed to set input current (%d)\n", ret);
-+		goto out;
-+	}
-+
- 	ret = max77693_set_charging(chg, set_charging);
- 	if (ret) {
- 		dev_err(chg->dev, "failed to set charging (%d)\n", ret);
+ 	sound: sound {
+ 		compatible = "samsung,midas-audio";
+ 		model = "TAB3";
 
 -- 
 2.45.2
