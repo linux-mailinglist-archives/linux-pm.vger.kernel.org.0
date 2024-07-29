@@ -1,213 +1,145 @@
-Return-Path: <linux-pm+bounces-11517-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11518-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91C7F93EC7C
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 06:16:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FD5993ED20
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 08:06:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E35D1F21CCC
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 04:16:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 099981F21D38
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 06:06:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CA3D55E4C;
-	Mon, 29 Jul 2024 04:15:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0377384A46;
+	Mon, 29 Jul 2024 06:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="oR7hrVpf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tZvJdmDa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369CF2F5A
-	for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 04:15:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6989783A07
+	for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 06:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722226559; cv=none; b=CHhYzw5/KOFhLYAj8e+F358G0+WSRNmMy15F4khyY8SN+HFeU94NLYPH+rjo/FBGNBFtKFa9/blyqZOBV0gCeA065YBayfSDXiE3hh9LmNfM9cYdUhQdUKWjSMJHfJuc//Z7v9i+yAHZH7ob5d3mdEDOaX4EZ5Y+JoqAt8xYbwM=
+	t=1722233155; cv=none; b=Vp78Lf1UTYt5PG1muU5EC6Kazm+I4RCD0Nr/lah5I1ULwUjo4EaHaZHaQ2gHWNrolxN9aizVGXViqS0wLOh8JzLWPxVV9SBZqUsMAoFDuKFKX/Y2YGjYnsNFu1RxXlqN2XbyUmP+F7r+wDUA5g8JGOacyGiGB84XI8O+maEcgw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722226559; c=relaxed/simple;
-	bh=T4lGoxYNTr6+F++283kyfPshOeS3Gn05EgTWsmKiOB8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nqwiQBpF8P2Stol/I2PR/W13bvrI/VFb7TUsg7/ICc0QzdtW3GgWeK5fIiLGQBepmOp7AvNgsT+BD46Tp5kRZWw0T68KXwwrSqxdF3WKhMLPk6aItXbDu/bLnwpNxswgoL1xFiobtptGZadA3ggLsr7kIejdcieWouMgLurIAt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=oR7hrVpf; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6BC963F187
-	for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 04:07:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1722226079;
-	bh=mS2NWChGwK2dbkHGg9LArYFfctLnmGlSEWfSEvOL2o8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=oR7hrVpf5JsdqRwmgKeb7bB1gGR652H6tslrJLtmv0iQWwU/B64LhPSsSFN1jv8fo
-	 fgssReY0pxYoscA21Jr82tI0Dez7ujzEqFP1cWhfmjUNF/psZSgyLzDMcHs/nah0iv
-	 dBpA7ug4uOrgAKyp8jPijTFjm9+rMlYirNxr6zCAGmagttbEPka9Exuxmv1gpQUjqs
-	 IVFVUmAi4rLeio47JHvS2zdv7hcAtUlXKWjP5QbgnVIpMgUAxuaoPv7C/rIw6oEHIr
-	 3ZN8DcZoMY+8zWCpPgz3DQAXZhc+1uQBGMj67SuXaj+II13q+ByzZcxmOJCfJcTyUd
-	 BiuRGc/HARW1Q==
-Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-7092fa59271so2433746a34.2
-        for <linux-pm@vger.kernel.org>; Sun, 28 Jul 2024 21:07:59 -0700 (PDT)
+	s=arc-20240116; t=1722233155; c=relaxed/simple;
+	bh=wdI1WmZ5gZzQsRNJn1qhc254kAh7G3Wla4gye/XD6YU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jqZYMYJA1TZcqfqoqEGMlYznBTJK6h0c8AGZllq9cItYnPJnc3FmMglZaP1CpeDBRrQ4RYvtdyegGIEGNBo8zEw1xFblDa2nvhlT9HFSNrvzpK3UJWQo6sO3YDbWghObbSHYFBBalGNIhThbrdQ+4FyAgx/Ulu/v+JkIXfjOfhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tZvJdmDa; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1fd640a6454so18022425ad.3
+        for <linux-pm@vger.kernel.org>; Sun, 28 Jul 2024 23:05:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722233153; x=1722837953; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PboHevTVnqGXRG8Sx3ifW5AKM7DLdqT7xZ2GPBlCnjI=;
+        b=tZvJdmDa1c2eGQ4dOD0vs8peuracE/oBrNoSdoHnr52sw5onmVe8Q7USHGh+ZzxRId
+         9fxX0wChSwCNWqVttG4g1pYwoQzzMFEezz92ihZmpII11Q3AfTa5B3jf22MkRE6Pu5Ro
+         P4OhPZLqcwhwUH8vX1qj5AG2zySW7jjzdPmoPqWxu7jF2e9g6M/qT8D0eEtVfEtRtRoR
+         scatqS4Yk2KeoVyzr/gafzp+Vi5oPpjFMqJMHIygLX4xBZOXllSbHFq7k3XaRdltT1xL
+         /RN4g8hQBKXlAmU8EryoC4cBr6sVh+Q9FIt9hQXebNtToBogt5fdbQMEeVuK61FHH4u6
+         wMLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722226078; x=1722830878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mS2NWChGwK2dbkHGg9LArYFfctLnmGlSEWfSEvOL2o8=;
-        b=XLYhnsF57r8FUznOzvW6+lMVqpnXFaemnZqf9lhwNf8dENHFx4yZvXqFSbem2wBqnP
-         L8e/ieiR8YRqpwLGER2tJzJGpRMOpucmk916DPZJZYSiGGWigOOzw7F5IdRYR0EXWS2R
-         /ymBalLawQFwTCEpluhOwjlLZsiPQ7xtiCKaD/RhnD/+AkCW+xQi71m/Myi0uKimKX9s
-         YjBO5AXj6Q5IHAlgKxjNA8lFCXFg8ClP+rKPj1xQgJTsCGYaFzIXAr+FCJfRlpyWDZjV
-         AjBB5rmAkHADTnEeJeqqC9k7TL3CwtlJHZJ6FR6kh3FlIALC7rWd/lwb+vhrHYeaqzF+
-         gj/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVbKao+b7vONziogWIFTbDy9YGV62rXpkYF1elp9Lz47qXW5zJKLL/SUM738HV6sEBkFqPg1c/WTAbeihMCQsp/6kxRvoh/aeA=
-X-Gm-Message-State: AOJu0YwyLK5EbB4FyCJgbvGGFpxVscX6rAwSN9eK3HD19Y/tGWOy4vDH
-	PA6geClqHnjfsnXhsy9AOEoXOvuRttljDUkPH7vt8naP8maxXfJiXIbOFPMEQwLWeiGccXVOPH3
-	BPFk+xjC2Q9NirmS7PjgEs+8M3sJdbYlO/lFK7pzWXgsO/tEyKoOThFzbvzjfGm79WDNHDS5+iT
-	GhB3F0mPHQUCYsWCyJNY+HEDZ7zNdhZRBNg36xPfalL/QiPiA=
-X-Received: by 2002:a05:6830:dc7:b0:709:396c:f295 with SMTP id 46e09a7af769-70940ca166emr10131650a34.32.1722226078286;
-        Sun, 28 Jul 2024 21:07:58 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF+DP7BGUy8zSvm9AXhSQBatpe/932igO8e0nfQkVowJAYO/dkU+85vlcAJsREfivDShcRlZ8ttX+F/Z41yikE=
-X-Received: by 2002:a05:6830:dc7:b0:709:396c:f295 with SMTP id
- 46e09a7af769-70940ca166emr10131636a34.32.1722226078023; Sun, 28 Jul 2024
- 21:07:58 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1722233153; x=1722837953;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PboHevTVnqGXRG8Sx3ifW5AKM7DLdqT7xZ2GPBlCnjI=;
+        b=B6jT75eWcg5b1O6gGOu1QdTwS51aAkgfk2QRGJHjvM9TBzifF2OE/Kws4w0sgY+sxy
+         sbK7F6Qnsxk6PedOjsPemz/7CLl38gqnbn0avHy5guKtFXRfXGke23XMGGO7wJxFDtFK
+         P3UCKmSPhJ9h5Vhfk5tbMKV4horAlXhk3pMT9yJ3NQL7M4JnekjTT8ev634VxxvtBvdF
+         8cWF11WbTZLziHJhQ26iBGR2c818MKaajpHnKkjVvAQoHCN9osnUu58Coe88fEYN9R5T
+         S+jUSem/F9omqfyum61sl7V1FQC+MqCP1mwuzzAuY+EeeV2ayjzekdXNlcInUywQILPW
+         X41A==
+X-Forwarded-Encrypted: i=1; AJvYcCUhM+o7mGEhHS7mhEInnpiUTdL7fYLNQTlwTzSYg+Qc5LaUhKWz3mm80KHp3EaDSgNsCeVxWe3u/7HqgOI4sTsdEmjlh/HqYwY=
+X-Gm-Message-State: AOJu0Yzs44EIf7W8lR+74nWPpAH/aEpDmgv1K+IlqgVZpieHow2IScvY
+	JCARhz+1Mqy0N1VDJkO6RqTWF3FEtGCXYMjAT61cSFg2zFd1sOFo/jeyjHByH/k=
+X-Google-Smtp-Source: AGHT+IFYgdp+iVQ1/XSuyzq4QVSdk4OFHZuD424Vvi2niU5cVUKBT7JKHVZ055ZeDc0Exz36js6Zcw==
+X-Received: by 2002:a17:903:244a:b0:1fd:a503:88f0 with SMTP id d9443c01a7336-1ff0485b418mr50544315ad.34.1722233153634;
+        Sun, 28 Jul 2024 23:05:53 -0700 (PDT)
+Received: from localhost ([122.172.84.129])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7c85930sm73991795ad.29.2024.07.28.23.05.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Jul 2024 23:05:53 -0700 (PDT)
+Date: Mon, 29 Jul 2024 11:35:50 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>, Nikunj Kela <nkela@quicinc.com>,
+	Prasad Sodagudi <psodagud@quicinc.com>, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-tegra@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] OPP: Fix support for required OPPs for multiple PM
+ domains
+Message-ID: <20240729060550.crgrmbnlv66645w2@vireshk-i7>
+References: <CAPDyKFocjOt+JyzcAqOfCnmTxBMZmPjMerSh6RZ-hSMajRhzEA@mail.gmail.com>
+ <CAPDyKFoWgX=r1QtrcpEF-Y4BkiOtVnz4jaztL9zggo-=uiKsUg@mail.gmail.com>
+ <20240711131637.opzrayksfadimgq4@vireshk-i7>
+ <CAPDyKFqczrJzHApBOYRSg=MXzzd1_nSgQQ3QwKYLWzgZ+XY32A@mail.gmail.com>
+ <20240718030556.dmgzs24d2bk3hmpb@vireshk-i7>
+ <CAPDyKFqCqDqSz2AGrNvkoWzn8-oYnS2fT1dyiMC8ZP1yqYvLKg@mail.gmail.com>
+ <20240725060211.e5pnfk46c6lxedpg@vireshk-i7>
+ <CAPDyKFpSmZgxtmCtiTrFOwgj7ZpNpkDMhxsK0KnuGsWi1a9U5g@mail.gmail.com>
+ <20240725112519.d6ec7obtclsf3ace@vireshk-i7>
+ <CAPDyKFqTtqYEFfaHq-jbxnp5gD7qm9TbLrah=k=VD2TRArvU8A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240726062601.674078-1-kai.heng.feng@canonical.com> <2048df524f8be7ed200bc92eb1c6efe106f0ed19.camel@intel.com>
-In-Reply-To: <2048df524f8be7ed200bc92eb1c6efe106f0ed19.camel@intel.com>
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date: Mon, 29 Jul 2024 12:07:46 +0800
-Message-ID: <CAAd53p5ftAjtfb-uCcVKR8G0JfoGnA_a0Se1E_vPeietgOENOg@mail.gmail.com>
-Subject: Re: [PATCH] intel_idle: Add Jasper Lake and Elkhart Lake support
-To: "Zhang, Rui" <rui.zhang@intel.com>
-Cc: "jacob.jun.pan@linux.intel.com" <jacob.jun.pan@linux.intel.com>, "lenb@kernel.org" <lenb@kernel.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"artem.bityutskiy@linux.intel.com" <artem.bityutskiy@linux.intel.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFqTtqYEFfaHq-jbxnp5gD7qm9TbLrah=k=VD2TRArvU8A@mail.gmail.com>
 
-[+Cc Rafael, Srinivas]
-
-On Fri, Jul 26, 2024 at 2:52=E2=80=AFPM Zhang, Rui <rui.zhang@intel.com> wr=
-ote:
->
-> On Fri, 2024-07-26 at 14:26 +0800, Kai-Heng Feng wrote:
-> > Without proper C-state support, the CPU can take long time to exit to
-> > C0
-> > to handle IRQ and perform DMA.
->
-> Can you provide more details?
->
-> Say, what cstate is entered w/ and w/o this patch?
-
-Without the patch it's ACPI C1, C2 and C3.
-
->
-> can you show the output of "grep .
-> /sys/devices/system/cpu/cpu0/cpuidle/state*/*" without this patch?
-
-/sys/devices/system/cpu/cpu0/cpuidle$ grep . */*
-state0/above:0
-state0/below:631
-state0/default_status:enabled
-state0/desc:CPUIDLE CORE POLL IDLE
-state0/disable:0
-state0/latency:0
-state0/name:POLL
-state0/power:4294967295
-state0/rejected:0
-state0/residency:0
-state0/time:19513
-state0/usage:635
-state1/above:26
-state1/below:12437
-state1/default_status:enabled
-state1/desc:ACPI FFH MWAIT 0x0
-state1/disable:0
-state1/latency:1
-state1/name:C1_ACPI
-state1/power:0
-state1/rejected:0
-state1/residency:1
-grep: state1/s2idle: Is a directory
-state1/time:18621370
-state1/usage:74523
-state2/above:1690
-state2/below:17
-state2/default_status:enabled
-state2/desc:ACPI FFH MWAIT 0x31
-state2/disable:0
-state2/latency:253
-state2/name:C2_ACPI
-state2/power:0
-state2/rejected:0
-state2/residency:759
-grep: state2/s2idle: Is a directory
-state2/time:7063052
-state2/usage:7909
-state3/above:13111
-state3/below:0
-state3/default_status:enabled
-state3/desc:ACPI FFH MWAIT 0x60
-state3/disable:0
-state3/latency:1048
-state3/name:C3_ACPI
-state3/power:0
-state3/rejected:0
-state3/residency:3144
-grep: state3/s2idle: Is a directory
-state3/time:4451519230
-state3/usage:55467
-
-
->
+On 28-07-24, 22:05, Ulf Hansson wrote:
+> > > > I think that design is rather correct, just like other frameworks. Just that we
+> > > > need to do only set-level for genpds and nothing else. That will have exactly
+> > > > the same behavior that you want.
+> > >
+> > > I don't quite understand what you are proposing. Do you want to add a
+> > > separate path for opp-levels?
 > >
-> > The data collect via wult shows the latency is similar to Broxton, so
-> > use the existing table to support C-state on JSL and EHL.
->
-> so you have done cstate measurement on the EHL using wult?
-> can you share more details about the measurement results?
-
-I look at the "spikes" of the aggregated graph. Not sure if it's the
-right way to interpret the graph though.
-
-It will be much better if Intel can add the proper C-states table for
-JSL and EHL.
-
-Kai-Heng
-
->
-> thanks,
-> rui
->
+> > Not separate paths, but ignore clk/regulator changes if the table belongs to a
+> > genpd.
 > >
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D219023
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
-> >  drivers/idle/intel_idle.c | 2 ++
-> >  1 file changed, 2 insertions(+)
+> > > The problem with that would be that platforms (Tegra at least) are
+> > > already using a combination of opp-level and clocks.
 > >
-> > diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> > index 9aab7abc2ae9..eb6975a1d083 100644
-> > --- a/drivers/idle/intel_idle.c
-> > +++ b/drivers/idle/intel_idle.c
-> > @@ -1538,6 +1538,8 @@ static const struct x86_cpu_id intel_idle_ids[]
-> > __initconst =3D {
-> >         X86_MATCH_VFM(INTEL_ATOM_GOLDMONT,      &idle_cpu_bxt),
-> >         X86_MATCH_VFM(INTEL_ATOM_GOLDMONT_PLUS, &idle_cpu_bxt),
-> >         X86_MATCH_VFM(INTEL_ATOM_GOLDMONT_D,    &idle_cpu_dnv),
-> > +       X86_MATCH_VFM(INTEL_ATOM_TREMONT,       &idle_cpu_bxt),
-> > +       X86_MATCH_VFM(INTEL_ATOM_TREMONT_L,     &idle_cpu_bxt),
-> >         X86_MATCH_VFM(INTEL_ATOM_TREMONT_D,     &idle_cpu_snr),
-> >         X86_MATCH_VFM(INTEL_ATOM_CRESTMONT,     &idle_cpu_grr),
-> >         X86_MATCH_VFM(INTEL_ATOM_CRESTMONT_X,   &idle_cpu_srf),
->
+> > If they are using both for a genpd's OPP table (and changes are made for both
+> > opp-level and clock by the OPP core), then it should already be wrong, isn't it?
+> 
+> They are changing the clock through the device's OPP table and the
+> level (performance-state) via genpd's table (using required OPPs).
+> This works fine as of today.
+
+There is a problem here I guess then. Lets say there are two devices A and B,
+that depend on a genpd.
+
+A requests required OPP 5 (level 5, clk 1.4 GHz), followed by 
+B requests required OPP 3 (level 3, clk 1 GHz).
+
+After this level will be configured to 5 and clk to 1 GHz I think.
+
+> It's working today for *opp-level* only, because of the commit above.
+> That's correct.
+
+Good.
+
+> My point is that calling dev_pm_opp_set_opp() recursively from
+> _set_required_opps() doesn't make sense for the single PM domain case,
+> as we can't assign a required-dev for it. This leads to an
+> inconsistent behaviour when managing the required-OPPs.
+
+We won't be calling that because of the above patch. In case of a single dev,
+the required device isn't set and so we will never end up calling
+dev_pm_opp_set_opp() for a single genpd case.
+
+-- 
+viresh
 
