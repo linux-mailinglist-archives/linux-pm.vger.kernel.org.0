@@ -1,80 +1,80 @@
-Return-Path: <linux-pm+bounces-11545-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11548-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA9AF93F8FD
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 17:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BC4493F900
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 17:04:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7C551C221F2
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 15:03:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACF2D1C2204D
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 15:04:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F849156F20;
-	Mon, 29 Jul 2024 15:03:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A728158853;
+	Mon, 29 Jul 2024 15:03:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UfhArtS+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PS25eFar"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A87BD156864
-	for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 15:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996E8154C17
+	for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 15:03:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722265419; cv=none; b=PhqzkDXX5H/DlRWYG+kavXBuaNw5UU2TUpIxpjbKHaKZCGhOdJsFLgp/8BI/uF7sZHhqPNzZvL8oC8g4/nCDu1Rv/6SQut68ow4pelB+xoV2N85jZ/BjUT0CtrPHRx1u632fhzLEIfHHRTYJsdLlkmfbTRK4czf2WI7OAE5Vhmo=
+	t=1722265421; cv=none; b=EOZQM8pl9Cke5HKNl6dIBGajL6PxSGk9Pv/0oebNh3YyDPvITAr2kHhfUnFKj/85dTLAngb6N0gd74za5iZr1cJpdfiXK6qKcwENbfANhrD07TiUpflK9+Y+LA3Y1THtuxEvMZkQ1lsuIMECDyERnhStdLySAfodoqmLS/mZIr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722265419; c=relaxed/simple;
-	bh=Luu89QxJ9UUx/pMETY8/+y9F7kJjSWoxhcq37rD9X/4=;
+	s=arc-20240116; t=1722265421; c=relaxed/simple;
+	bh=h+EE2Gqfp7GjvYl2R4KpliU+Iyr4vMitp6ZAJFHNsKg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NZb1lLgacE+F+m56JKE4leQTKSVoohYO2U/K72St5I4i9EAOQeul+wTCLafKS1LHfsOjrGT04pb/hB6V4BfrRmcxVvqOVTAOi6UaqV560BPHl/qKF5Jrc3laiS13DI89klqsjI0sejs6oQAtjlzLZbV5P/PLSC6IFT6Vbe9m4X4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UfhArtS+; arc=none smtp.client-ip=209.85.128.50
+	 MIME-Version; b=BE0L+i58p8GRibMkkKW2imolYh349q4KWX0uOesbs5hq/hr7f20yRgFdRK743/FP5M29kSbkOxzI/4ciiOuHT7Bw3VYKSYweO/NQKjbsrJzSWQq1R92/F1Kr6aF5Z4Bcr72exzXdC0+7041TUPcIZpZ0u3TVwui+fUTnHdG4Hi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PS25eFar; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4281faefea9so5432395e9.2
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 08:03:37 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-367990aaef3so1636084f8f.0
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 08:03:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722265416; x=1722870216; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1722265417; x=1722870217; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fvNWqKnvrqIzR2L2p9oPRLbv9hLOEbE07wjBN2Aeug4=;
-        b=UfhArtS+Hi+VSJ/vjXQAsp2cGl2Vbc89Oofv5HcIJHxeTMXh1TA83CTgQ0q1y4/nOJ
-         nOqziaQZqMgIulthsvyewumrGQJH2bqNE3meni3r2Eo2VCgj0WNm4OiNRXL5at3pfkQQ
-         XQB4Tj+bCZIqkGNbLTxm+8XiCtk4XS817jnQmZTjZS7djDVfax72wRXp62EGhYDGMOF6
-         /f6mMXxl6oDO+XrNQ8AGC/zOonoItMIx1JN+Pudxfjib9DkQr+HYp5BihjTv3WfYLp8f
-         tsHscCTIhfqINOT/bwF8tOEWVdlJuZcQvJjif+mNMSDY67CHQjnnzwbqhS4DiWjBKk31
-         xfqA==
+        bh=yCE6cI7Q2VTpE6v0Ag8CvQq77Igsepgge8qMIZzbipw=;
+        b=PS25eFarfBBPtUtqH/EV3DK4GuFs91xBq40f9zXjbUcdaxsEN7F4IoC40eLbu/m2yb
+         6I6i3mUKMgKNjW3fWRfUfs1dYb+WEE8b7UXwYQ0WueMMSSL7vH8I4BnytCiwg3kC6V1V
+         UgosHm5GCMH24F9mnUgbUx/jTRdI9WNFyqvdfTeSi/CMGt90eRBu6ROvCGIG/DV+T1au
+         3wqsCWtfYIdTz72Hp3gHSKS+SEL8aO8GrgVNWuKk88enuQ4OSQwP7oDIYCzSO0qBXIWH
+         BIzYH9BCrL1AeGjF4ALXOCBAWksjQYV79Sy0TwzFqz9cWdWotOKTnC4DFlP8WMd87NEB
+         N97Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722265416; x=1722870216;
+        d=1e100.net; s=20230601; t=1722265417; x=1722870217;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fvNWqKnvrqIzR2L2p9oPRLbv9hLOEbE07wjBN2Aeug4=;
-        b=rDQg+gYODwl26fots/MEHQWF3ohoSajzxff24E12vQpyZYW1XhU+1c+/8BMGYyEFwx
-         RgD529XJHoZDCPyjEeuftNy/ykAbTmA5Xc5Gqk5kktMvIAr1DxixUGxI3UEoXAz92ett
-         rv5w1vXZtEKkEFDV3/ezxGAuulSbUaAXCbryu/wP1uBllopwWE0DGOdxTnkdZ3ojDdFc
-         gTGeA2Zzs2xQWh6ii7lusBfDjw3Y4NAY7BeK3HAeQ77YKgR3c4h5BHW81cAWN8cukBkx
-         ACDMzyovJSARxXv4Xd0zw4fBt9wJwf7MHwL63r0CnObBeoiatdfQP6NwdluhNl8lVQFu
-         obbQ==
-X-Gm-Message-State: AOJu0YyPKF/Fq//RQad49/EUuuFdE7D5a2N1Q7Pg986UAWLPsTsf8sH8
-	dzIqjjYcZoqbw8XIVbUkUgKeoolRl35rbs6HOq4l3oAepefgzVrc0h7OyKogA/Y=
-X-Google-Smtp-Source: AGHT+IE4AjIWNU/ddobgDHZC/WypkJsZhyEFA7I6jLUfPSURrbhofhvqMu9IYGrhpAjeRMvlH1P8Cg==
-X-Received: by 2002:a5d:40cb:0:b0:368:445e:91cc with SMTP id ffacd0b85a97d-36b5cf0aa8cmr5376222f8f.21.1722265415868;
-        Mon, 29 Jul 2024 08:03:35 -0700 (PDT)
+        bh=yCE6cI7Q2VTpE6v0Ag8CvQq77Igsepgge8qMIZzbipw=;
+        b=NZrl+lC2Tm5esm8pAH4LULguDkfmrovHGViZYn6Qtz/Ol/XACztNAMXd+k5lfbJomr
+         keK/l9+lDXcUmwNWJMQSbBo8OnAgqwiLktNy1hx4OmEY+Rvgd1Vot4/VGzO3/6fgvH6F
+         Ppsg96wyPzljctbVTXVFcadEMSCqKQrYIYLE96amwcXK9f2aaBkJgNtBaL+gJONeTvKq
+         MPkQfLKuqB2ih2ck1h+8SSjTruAlcqWuMBbRTryb8C48HugT1n+mc2NQ/hxAI/hywmx9
+         HpEDe++ETAxVD7IqzLsdN0lQ0hH+AbEC4QZppm15XFQJUg0LR8WY3jgBh0n+kcCRRRyJ
+         xadQ==
+X-Gm-Message-State: AOJu0Yz9rDmnduQDRqvqk3MXLyNgXJ7zedH5xsN5grbQP3i68yHvlw5F
+	SB6d1Ebjs1/+Lt3djHZx+nELsjJT5puTRwKFnzoAAJpraWVeLGIZFGPKkCZVZE0=
+X-Google-Smtp-Source: AGHT+IFtpqTjJ1gxXBuzmWQix1COUvbzHyxlC0R1jbrBkvohDzqZOK5tdfQihD5ywQlXTmOWVj/gSQ==
+X-Received: by 2002:adf:f412:0:b0:367:94a7:12cb with SMTP id ffacd0b85a97d-36b5d0ae56dmr5710406f8f.43.1722265416727;
+        Mon, 29 Jul 2024 08:03:36 -0700 (PDT)
 Received: from mai.box.freepro.com (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b36863b45sm12652803f8f.107.2024.07.29.08.03.35
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b36863b45sm12652803f8f.107.2024.07.29.08.03.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 08:03:35 -0700 (PDT)
+        Mon, 29 Jul 2024 08:03:36 -0700 (PDT)
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
 To: daniel.lezcano@linaro.org,
 	rafael@kernel.org
 Cc: linux-pm@vger.kernel.org,
 	lukasz.luba@arm.com,
 	quic_manafm@quicinc.com
-Subject: [PATCH v1 3/7] thermal/core: Connect the threshold with the core
-Date: Mon, 29 Jul 2024 17:02:52 +0200
-Message-ID: <20240729150259.1089814-4-daniel.lezcano@linaro.org>
+Subject: [PATCH v1 4/7] thermal/netlink: Add the commands and the events for the thresholds
+Date: Mon, 29 Jul 2024 17:02:53 +0200
+Message-ID: <20240729150259.1089814-5-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240729150259.1089814-1-daniel.lezcano@linaro.org>
 References: <20240729150259.1089814-1-daniel.lezcano@linaro.org>
@@ -86,55 +86,595 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Initialize, de-initialize and handle the threshold in the same place
-than the trip points.
+The thresholds exist but there is no notification neither action code
+related to them yet.
+
+These changes implement the netlink for the notifications when the
+thresholds are crossed, added, deleted or flushed as well as the
+commands which allows to get the list of the thresholds, flush them,
+add and delete.
+
+As different processes in userspace can interact with the thresholds,
+the process id responsible of the action (add, delete or flush) will
+be added in the notification. This way a thermal engine is able to
+detect if another process is interfering with the thresholds. A
+process id of zero is the kernel as it is by convention usually.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/thermal_core.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/thermal/thermal_netlink.c    | 239 ++++++++++++++++++++++++++-
+ drivers/thermal/thermal_netlink.h    |   7 +
+ drivers/thermal/thermal_thresholds.c |  36 ++--
+ drivers/thermal/thermal_thresholds.h |  15 +-
+ include/uapi/linux/thermal.h         |  30 +++-
+ 5 files changed, 290 insertions(+), 37 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 5cfa2a706e96..7d35815b56b8 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -599,6 +599,8 @@ void __thermal_zone_device_update(struct thermal_zone_device *tz,
+diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+index 97157c453630..3febb119a7f0 100644
+--- a/drivers/thermal/thermal_netlink.c
++++ b/drivers/thermal/thermal_netlink.c
+@@ -9,6 +9,7 @@
+ #include <linux/module.h>
+ #include <linux/notifier.h>
+ #include <linux/kernel.h>
++#include <net/sock.h>
+ #include <net/genetlink.h>
+ #include <uapi/linux/thermal.h>
  
- 	handle_thermal_trip(tz, &way_up_list, &way_down_list, &low, &high);
- 
-+	thermal_thresholds_handle(tz, &low, &high);
+@@ -49,12 +50,19 @@ static const struct nla_policy thermal_genl_policy[THERMAL_GENL_ATTR_MAX + 1] =
+ 	[THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]		= { .type = NLA_U32 },
+ 	[THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE]	= { .type = NLA_U32 },
+ 	[THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY]	= { .type = NLA_U32 },
 +
- 	thermal_zone_set_trips(tz, low, high);
++	/* Thresholds */
++	[THERMAL_GENL_ATTR_THRESHOLD]		= { .type = NLA_NESTED },
++	[THERMAL_GENL_ATTR_THRESHOLD_TEMP]	= { .type = NLA_U32 },
++	[THERMAL_GENL_ATTR_THRESHOLD_WAY]	= { .type = NLA_U32 },
++	[THERMAL_GENL_ATTR_THRESHOLD_PID]	= { .type = NLA_U32 },
+ };
  
- 	list_sort(NULL, &way_up_list, thermal_trip_notify_cmp);
-@@ -1569,6 +1571,10 @@ thermal_zone_device_register_with_trips(const char *type,
- 			goto unregister;
+ struct param {
+ 	struct nlattr **attrs;
+ 	struct sk_buff *msg;
+ 	const char *name;
++	pid_t pid;
+ 	int tz_id;
+ 	int cdev_id;
+ 	int trip_id;
+@@ -62,6 +70,8 @@ struct param {
+ 	int trip_type;
+ 	int trip_hyst;
+ 	int temp;
++	int last_temp;
++	int direction;
+ 	int cdev_state;
+ 	int cdev_max_state;
+ 	struct thermal_genl_cpu_caps *cpu_capabilities;
+@@ -234,6 +244,36 @@ static int thermal_genl_event_cpu_capability_change(struct param *p)
+ 	return -EMSGSIZE;
+ }
+ 
++static int thermal_genl_event_threshold_add(struct param *p)
++{
++	if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_ID, p->tz_id) ||
++	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_THRESHOLD_TEMP, p->temp) ||
++	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_THRESHOLD_WAY, p->direction) ||
++	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_THRESHOLD_PID, p->pid))
++		return -EMSGSIZE;
++
++	return 0;
++}
++
++static int thermal_genl_event_threshold_flush(struct param *p)
++{
++	if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_ID, p->tz_id),
++	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_THRESHOLD_PID, p->pid))
++		return -EMSGSIZE;
++
++	return 0;
++}
++
++static int thermal_genl_event_threshold_up(struct param *p)
++{
++	if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_ID, p->tz_id) ||
++	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_LAST_TEMP, p->last_temp) ||
++	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TEMP, p->temp))
++		return -EMSGSIZE;
++
++	return 0;
++}
++
+ int thermal_genl_event_tz_delete(struct param *p)
+ 	__attribute__((alias("thermal_genl_event_tz")));
+ 
+@@ -246,6 +286,12 @@ int thermal_genl_event_tz_disable(struct param *p)
+ int thermal_genl_event_tz_trip_down(struct param *p)
+ 	__attribute__((alias("thermal_genl_event_tz_trip_up")));
+ 
++int thermal_genl_event_threshold_delete(struct param *p)
++	__attribute__((alias("thermal_genl_event_threshold_add")));
++
++int thermal_genl_event_threshold_down(struct param *p)
++	__attribute__((alias("thermal_genl_event_threshold_up")));
++
+ static cb_t event_cb[] = {
+ 	[THERMAL_GENL_EVENT_TZ_CREATE]		= thermal_genl_event_tz_create,
+ 	[THERMAL_GENL_EVENT_TZ_DELETE]		= thermal_genl_event_tz_delete,
+@@ -259,6 +305,11 @@ static cb_t event_cb[] = {
+ 	[THERMAL_GENL_EVENT_CDEV_STATE_UPDATE]	= thermal_genl_event_cdev_state_update,
+ 	[THERMAL_GENL_EVENT_TZ_GOV_CHANGE]	= thermal_genl_event_gov_change,
+ 	[THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE] = thermal_genl_event_cpu_capability_change,
++	[THERMAL_GENL_EVENT_THRESHOLD_ADD]	= thermal_genl_event_threshold_add,
++	[THERMAL_GENL_EVENT_THRESHOLD_DELETE]	= thermal_genl_event_threshold_delete,
++	[THERMAL_GENL_EVENT_THRESHOLD_FLUSH]	= thermal_genl_event_threshold_flush,
++	[THERMAL_GENL_EVENT_THRESHOLD_DOWN]	= thermal_genl_event_threshold_down,
++	[THERMAL_GENL_EVENT_THRESHOLD_UP]	= thermal_genl_event_threshold_up,
+ };
+ 
+ /*
+@@ -401,6 +452,43 @@ int thermal_genl_cpu_capability_event(int count,
+ }
+ EXPORT_SYMBOL_GPL(thermal_genl_cpu_capability_event);
+ 
++int thermal_notify_threshold_add(const struct thermal_zone_device *tz,
++				 int temperature, int direction, int pid)
++{
++	struct param p = { .tz_id = tz->id, .temp = temperature, .direction = direction, .pid = pid };
++
++	return thermal_genl_send_event(THERMAL_GENL_EVENT_THRESHOLD_ADD, &p);
++}
++
++int thermal_notify_threshold_delete(const struct thermal_zone_device *tz,
++				    int temperature, int direction, int pid)
++{
++	struct param p = { .tz_id = tz->id, .temp = temperature, .direction = direction, .pid = pid };
++
++	return thermal_genl_send_event(THERMAL_GENL_EVENT_THRESHOLD_DELETE, &p);
++}
++
++int thermal_notify_threshold_flush(const struct thermal_zone_device *tz, int pid)
++{
++	struct param p = { .tz_id = tz->id, .pid = pid };
++
++	return thermal_genl_send_event(THERMAL_GENL_EVENT_THRESHOLD_FLUSH, &p);
++}
++
++int thermal_notify_threshold_down(const struct thermal_zone_device *tz)
++{
++	struct param p = { .tz_id = tz->id, .temp = tz->temperature, .last_temp = tz->last_temperature };
++
++	return thermal_genl_send_event(THERMAL_GENL_EVENT_THRESHOLD_DOWN, &p);
++}
++
++int thermal_notify_threshold_up(const struct thermal_zone_device *tz)
++{
++	struct param p = { .tz_id = tz->id, .temp = tz->temperature, .last_temp = tz->last_temperature };
++
++	return thermal_genl_send_event(THERMAL_GENL_EVENT_THRESHOLD_UP, &p);
++}
++
+ /*************************** Command encoding ********************************/
+ 
+ static int __thermal_genl_cmd_tz_get_id(struct thermal_zone_device *tz,
+@@ -575,12 +663,130 @@ static int thermal_genl_cmd_cdev_get(struct param *p)
+ 	return ret;
+ }
+ 
++static int __thermal_genl_cmd_threshold_get(struct threshold *threshold, void *arg)
++{
++	struct sk_buff *msg = arg;
++
++	if (nla_put_u32(msg, THERMAL_GENL_ATTR_THRESHOLD_TEMP, threshold->temperature) ||
++	    nla_put_u32(msg, THERMAL_GENL_ATTR_THRESHOLD_WAY, threshold->direction))
++		return -1;
++
++	return 0;
++}
++
++static int thermal_genl_cmd_threshold_get(struct param *p)
++{
++	struct thermal_zone_device *tz;
++	struct sk_buff *msg = p->msg;
++	struct nlattr *start_trip;
++	int id, ret;
++
++	if (!p->attrs[THERMAL_GENL_ATTR_TZ_ID])
++		return -EINVAL;
++
++	id = nla_get_u32(p->attrs[THERMAL_GENL_ATTR_TZ_ID]);
++
++	tz = thermal_zone_get_by_id(id);
++	if (!tz)
++		return -EINVAL;
++
++	start_trip = nla_nest_start(msg, THERMAL_GENL_ATTR_THRESHOLD);
++	if (!start_trip)
++		return -EMSGSIZE;
++
++	mutex_lock(&tz->lock);
++	ret = thermal_thresholds_for_each(tz, __thermal_genl_cmd_threshold_get, msg);
++	mutex_unlock(&tz->lock);
++
++	if (ret)
++		return -EMSGSIZE;	
++
++	nla_nest_end(msg, start_trip);
++
++	return 0;
++}
++
++static int thermal_genl_cmd_threshold_add(struct param *p)
++{
++	struct thermal_zone_device *tz;
++	int id, temp, direction, ret = 0;
++
++	if (!p->attrs[THERMAL_GENL_ATTR_TZ_ID] ||
++	    !p->attrs[THERMAL_GENL_ATTR_THRESHOLD_TEMP] ||
++	    !p->attrs[THERMAL_GENL_ATTR_THRESHOLD_WAY])
++		return -EINVAL;
++
++	id = nla_get_u32(p->attrs[THERMAL_GENL_ATTR_TZ_ID]);
++	temp = nla_get_u32(p->attrs[THERMAL_GENL_ATTR_THRESHOLD_TEMP]);
++	direction = nla_get_u32(p->attrs[THERMAL_GENL_ATTR_THRESHOLD_WAY]);
++
++	tz = thermal_zone_get_by_id(id);
++	if (!tz)
++		return -EINVAL;
++
++	mutex_lock(&tz->lock);
++	ret = thermal_thresholds_add(tz, temp, direction, p->pid);
++	mutex_unlock(&tz->lock);
++
++	return ret;
++}
++
++static int thermal_genl_cmd_threshold_delete(struct param *p)
++{
++	struct thermal_zone_device *tz;
++	int id, temp, direction, ret = 0;
++
++	if (!p->attrs[THERMAL_GENL_ATTR_TZ_ID] ||
++	    !p->attrs[THERMAL_GENL_ATTR_THRESHOLD_TEMP] ||
++	    !p->attrs[THERMAL_GENL_ATTR_THRESHOLD_WAY])
++		return -EINVAL;
++
++	id = nla_get_u32(p->attrs[THERMAL_GENL_ATTR_TZ_ID]);
++	temp = nla_get_u32(p->attrs[THERMAL_GENL_ATTR_THRESHOLD_TEMP]);
++	direction = nla_get_u32(p->attrs[THERMAL_GENL_ATTR_THRESHOLD_WAY]);
++
++	tz = thermal_zone_get_by_id(id);
++	if (!tz)
++		return -EINVAL;
++
++	mutex_lock(&tz->lock);
++	ret = thermal_thresholds_delete(tz, temp, direction, p->pid);
++	mutex_unlock(&tz->lock);
++
++	return ret;
++}
++
++static int thermal_genl_cmd_threshold_flush(struct param *p)
++{
++	struct thermal_zone_device *tz;
++	int id;
++
++	if (!p->attrs[THERMAL_GENL_ATTR_TZ_ID])
++		return -EINVAL;
++
++	id = nla_get_u32(p->attrs[THERMAL_GENL_ATTR_TZ_ID]);
++
++	tz = thermal_zone_get_by_id(id);
++	if (!tz)
++		return -EINVAL;
++
++	mutex_lock(&tz->lock);
++	thermal_thresholds_flush(tz, p->pid);
++	mutex_unlock(&tz->lock);
++
++	return 0;
++}
++
+ static cb_t cmd_cb[] = {
+-	[THERMAL_GENL_CMD_TZ_GET_ID]	= thermal_genl_cmd_tz_get_id,
+-	[THERMAL_GENL_CMD_TZ_GET_TRIP]	= thermal_genl_cmd_tz_get_trip,
+-	[THERMAL_GENL_CMD_TZ_GET_TEMP]	= thermal_genl_cmd_tz_get_temp,
+-	[THERMAL_GENL_CMD_TZ_GET_GOV]	= thermal_genl_cmd_tz_get_gov,
+-	[THERMAL_GENL_CMD_CDEV_GET]	= thermal_genl_cmd_cdev_get,
++	[THERMAL_GENL_CMD_TZ_GET_ID]		= thermal_genl_cmd_tz_get_id,
++	[THERMAL_GENL_CMD_TZ_GET_TRIP]		= thermal_genl_cmd_tz_get_trip,
++	[THERMAL_GENL_CMD_TZ_GET_TEMP]		= thermal_genl_cmd_tz_get_temp,
++	[THERMAL_GENL_CMD_TZ_GET_GOV]		= thermal_genl_cmd_tz_get_gov,
++	[THERMAL_GENL_CMD_CDEV_GET]		= thermal_genl_cmd_cdev_get,
++	[THERMAL_GENL_CMD_THRESHOLD_GET]	= thermal_genl_cmd_threshold_get,
++	[THERMAL_GENL_CMD_THRESHOLD_ADD]	= thermal_genl_cmd_threshold_add,
++	[THERMAL_GENL_CMD_THRESHOLD_DELETE]	= thermal_genl_cmd_threshold_delete,
++	[THERMAL_GENL_CMD_THRESHOLD_FLUSH]	= thermal_genl_cmd_threshold_flush,
+ };
+ 
+ static int thermal_genl_cmd_dumpit(struct sk_buff *skb,
+@@ -623,6 +829,7 @@ static int thermal_genl_cmd_doit(struct sk_buff *skb,
+ 	if (!msg)
+ 		return -ENOMEM;
+ 	p.msg = msg;
++	p.pid = task_tgid_vnr(current);
+ 
+ 	hdr = genlmsg_put_reply(msg, info, &thermal_genl_family, 0, cmd);
+ 	if (!hdr)
+@@ -691,6 +898,26 @@ static const struct genl_small_ops thermal_genl_ops[] = {
+ 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+ 		.dumpit = thermal_genl_cmd_dumpit,
+ 	},
++	{
++		.cmd = THERMAL_GENL_CMD_THRESHOLD_GET,
++		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
++		.doit = thermal_genl_cmd_doit,
++	},
++	{
++		.cmd = THERMAL_GENL_CMD_THRESHOLD_ADD,
++		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
++		.doit = thermal_genl_cmd_doit,
++	},
++	{
++		.cmd = THERMAL_GENL_CMD_THRESHOLD_DELETE,
++		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
++		.doit = thermal_genl_cmd_doit,
++	},
++	{
++		.cmd = THERMAL_GENL_CMD_THRESHOLD_FLUSH,
++		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
++		.doit = thermal_genl_cmd_doit,
++	},
+ };
+ 
+ static struct genl_family thermal_genl_family __ro_after_init = {
+@@ -703,7 +930,7 @@ static struct genl_family thermal_genl_family __ro_after_init = {
+ 	.unbind		= thermal_genl_unbind,
+ 	.small_ops	= thermal_genl_ops,
+ 	.n_small_ops	= ARRAY_SIZE(thermal_genl_ops),
+-	.resv_start_op	= THERMAL_GENL_CMD_CDEV_GET + 1,
++	.resv_start_op	= __THERMAL_GENL_CMD_MAX,
+ 	.mcgrps		= thermal_genl_mcgrps,
+ 	.n_mcgrps	= ARRAY_SIZE(thermal_genl_mcgrps),
+ };
+diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+index e01221e8816b..715acee04f31 100644
+--- a/drivers/thermal/thermal_netlink.h
++++ b/drivers/thermal/thermal_netlink.h
+@@ -53,6 +53,13 @@ int thermal_notify_tz_gov_change(const struct thermal_zone_device *tz,
+ int thermal_genl_sampling_temp(int id, int temp);
+ int thermal_genl_cpu_capability_event(int count,
+ 				      struct thermal_genl_cpu_caps *caps);
++int thermal_notify_threshold_add(const struct thermal_zone_device *tz,
++				 int temperature, int direction, pid_t pid);
++int thermal_notify_threshold_delete(const struct thermal_zone_device *tz,
++				    int temperature, int direction, pid_t pid);
++int thermal_notify_threshold_flush(const struct thermal_zone_device *tz, pid_t pid);
++int thermal_notify_threshold_down(const struct thermal_zone_device *tz);
++int thermal_notify_threshold_up(const struct thermal_zone_device *tz);
+ #else
+ static inline int thermal_netlink_init(void)
+ {
+diff --git a/drivers/thermal/thermal_thresholds.c b/drivers/thermal/thermal_thresholds.c
+index 7506684cca58..0b87a8322fb3 100644
+--- a/drivers/thermal/thermal_thresholds.c
++++ b/drivers/thermal/thermal_thresholds.c
+@@ -31,7 +31,7 @@ int thermal_thresholds_init(struct thermal_zone_device *tz)
+ 
+ void thermal_thresholds_exit(struct thermal_zone_device *tz)
+ {
+-	thermal_thresholds_flush(tz);
++	thermal_thresholds_flush(tz, 0);
+ 	kfree(tz->thresholds);
+ 	tz->thresholds = NULL;
+ }
+@@ -110,7 +110,7 @@ static bool thermal_thresholds_handle_dropping(struct thresholds *thresholds, in
+ 	return false;
+ }
+ 
+-void thermal_thresholds_flush(struct thermal_zone_device *tz)
++void thermal_thresholds_flush(struct thermal_zone_device *tz, pid_t pid)
+ {
+ 	struct thresholds *thresholds = tz->thresholds;
+ 	struct threshold *entry, *tmp;
+@@ -122,6 +122,8 @@ void thermal_thresholds_flush(struct thermal_zone_device *tz)
+ 		kfree(entry);
  	}
  
-+	result = thermal_thresholds_init(tz);
-+	if (result)
-+		goto remove_hwmon;
++	thermal_notify_threshold_flush(tz, pid);
 +
- 	mutex_lock(&thermal_list_lock);
- 	mutex_lock(&tz->lock);
- 	list_add_tail(&tz->node, &thermal_tz_list);
-@@ -1589,6 +1595,8 @@ thermal_zone_device_register_with_trips(const char *type,
+ 	__thermal_zone_device_update(tz, THERMAL_THRESHOLD_FLUSHED);
+ }
  
- 	return tz;
+@@ -131,7 +133,6 @@ int thermal_thresholds_handle(struct thermal_zone_device *tz, int *low, int *hig
  
-+remove_hwmon:
-+	thermal_remove_hwmon_sysfs(tz);
- unregister:
- 	device_del(&tz->device);
- release_device:
-@@ -1677,6 +1685,7 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+ 	int temperature = tz->temperature;
+ 	int last_temperature = tz->last_temperature;
+-	bool notify;
  
- 	thermal_set_governor(tz, NULL);
+ 	lockdep_assert_held(&tz->lock);
  
-+	thermal_thresholds_exit(tz);
- 	thermal_remove_hwmon_sysfs(tz);
- 	ida_free(&thermal_tz_ida, tz->id);
- 	ida_destroy(&tz->ida);
+@@ -153,21 +154,21 @@ int thermal_thresholds_handle(struct thermal_zone_device *tz, int *low, int *hig
+ 	 * - increased : thresholds are crossed the way up
+ 	 * - decreased : thresholds are crossed the way down
+ 	 */
+-	if (temperature > last_temperature)
+-		notify = thermal_thresholds_handle_raising(thresholds, temperature,
+-							   last_temperature, low, high);
+-	else
+-		notify = thermal_thresholds_handle_dropping(thresholds, temperature,
+-							    last_temperature, low, high);
+-
+-	if (notify)
+-		pr_debug("A threshold has been crossed the way %s, with a temperature=%d, last_temperature=%d\n",
+-			 temperature > last_temperature ? "up" : "down", temperature, last_temperature);
++	if (temperature > last_temperature) {
++		if (thermal_thresholds_handle_raising(thresholds, temperature,
++						      last_temperature, low, high))
++			thermal_notify_threshold_up(tz);
++	} else {
++		if (thermal_thresholds_handle_dropping(thresholds, temperature,
++						       last_temperature, low, high))
++			thermal_notify_threshold_down(tz);
++	}
+ 
+ 	return 0;
+ }
+ 
+-int thermal_thresholds_add(struct thermal_zone_device *tz, int temperature, int direction)
++int thermal_thresholds_add(struct thermal_zone_device *tz,
++			   int temperature, int direction, pid_t pid)
+ {
+ 	struct thresholds *thresholds = tz->thresholds;
+ 	struct threshold *t;
+@@ -193,12 +194,15 @@ int thermal_thresholds_add(struct thermal_zone_device *tz, int temperature, int
+ 		list_sort(NULL, &thresholds->list, __thermal_thresholds_cmp);
+ 	}
+ 
++	thermal_notify_threshold_add(tz, temperature, direction, pid);
++
+ 	__thermal_zone_device_update(tz, THERMAL_THRESHOLD_ADDED);
+ 
+ 	return 0;
+ }
+ 
+-int thermal_thresholds_delete(struct thermal_zone_device *tz, int temperature, int direction)
++int thermal_thresholds_delete(struct thermal_zone_device *tz,
++			      int temperature, int direction, pid_t pid)
+ {
+ 	struct thresholds *thresholds = tz->thresholds;
+ 	struct threshold *t;
+@@ -218,6 +222,8 @@ int thermal_thresholds_delete(struct thermal_zone_device *tz, int temperature, i
+ 
+ 	__thermal_zone_device_update(tz, THERMAL_THRESHOLD_DELETED);
+ 
++	thermal_notify_threshold_delete(tz, temperature, direction, pid);
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/thermal/thermal_thresholds.h b/drivers/thermal/thermal_thresholds.h
+index 7c8ce150d6d0..b7a149b3400c 100644
+--- a/drivers/thermal/thermal_thresholds.h
++++ b/drivers/thermal/thermal_thresholds.h
+@@ -1,8 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ 
+-#define THERMAL_THRESHOLD_WAY_UP   BIT(0)
+-#define THERMAL_THRESHOLD_WAY_DOWN BIT(1)
+-
+ struct threshold {
+ 	int temperature;
+ 	int direction;
+@@ -12,9 +9,9 @@ struct threshold {
+ #ifdef CONFIG_THERMAL_THRESHOLDS
+ int thermal_thresholds_init(struct thermal_zone_device *tz);
+ void thermal_thresholds_exit(struct thermal_zone_device *tz);
+-void thermal_thresholds_flush(struct thermal_zone_device *tz);
+-int thermal_thresholds_add(struct thermal_zone_device *tz, int temperature, int direction);
+-int thermal_thresholds_delete(struct thermal_zone_device *tz, int temperature, int direction);
++void thermal_thresholds_flush(struct thermal_zone_device *tz, pid_t pid);
++int thermal_thresholds_add(struct thermal_zone_device *tz, int temperature, int direction, pid_t pid);
++int thermal_thresholds_delete(struct thermal_zone_device *tz, int temperature, int direction, pid_t pid);
+ int thermal_thresholds_handle(struct thermal_zone_device *tz, int *low, int *high);
+ int thermal_thresholds_for_each(struct thermal_zone_device *tz,
+ 				int (*cb)(struct threshold *, void *arg), void *arg);
+@@ -29,17 +26,17 @@ static inline void thermal_thresholds_exit(struct thermal_zone_device *tz)
+ 	;
+ }
+ 
+-static inline void thermal_thresholds_flush(struct thermal_zone_device *tz)
++static inline void thermal_thresholds_flush(struct thermal_zone_device *tz, pid_t pid)
+ {
+ 	;
+ }
+ 
+-static inline int thermal_thresholds_add(struct thermal_zone_device *tz, int temperature, int direction)
++static inline int thermal_thresholds_add(struct thermal_zone_device *tz, int temperature, int direction, pid_t pid)
+ {
+ 	return 0;
+ }
+ 
+-static inline int thermal_thresholds_delete(struct thermal_zone_device *tz, int temperature, int direction)
++static inline int thermal_thresholds_delete(struct thermal_zone_device *tz, int temperature, int direction, pid_t pid)
+ {
+ 	return 0;
+ }
+diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
+index fc78bf3aead7..bcbaf62a1727 100644
+--- a/include/uapi/linux/thermal.h
++++ b/include/uapi/linux/thermal.h
+@@ -3,6 +3,8 @@
+ #define _UAPI_LINUX_THERMAL_H
+ 
+ #define THERMAL_NAME_LENGTH	20
++#define THERMAL_THRESHOLD_WAY_UP	0x1
++#define THERMAL_THRESHOLD_WAY_DOWN	0x2
+ 
+ enum thermal_device_mode {
+ 	THERMAL_DEVICE_DISABLED = 0,
+@@ -18,7 +20,7 @@ enum thermal_trip_type {
+ 
+ /* Adding event notification support elements */
+ #define THERMAL_GENL_FAMILY_NAME		"thermal"
+-#define THERMAL_GENL_VERSION			0x01
++#define THERMAL_GENL_VERSION			0x02
+ #define THERMAL_GENL_SAMPLING_GROUP_NAME	"sampling"
+ #define THERMAL_GENL_EVENT_GROUP_NAME		"event"
+ 
+@@ -28,6 +30,7 @@ enum thermal_genl_attr {
+ 	THERMAL_GENL_ATTR_TZ,
+ 	THERMAL_GENL_ATTR_TZ_ID,
+ 	THERMAL_GENL_ATTR_TZ_TEMP,
++	THERMAL_GENL_ATTR_TZ_LAST_TEMP,
+ 	THERMAL_GENL_ATTR_TZ_TRIP,
+ 	THERMAL_GENL_ATTR_TZ_TRIP_ID,
+ 	THERMAL_GENL_ATTR_TZ_TRIP_TYPE,
+@@ -48,6 +51,10 @@ enum thermal_genl_attr {
+ 	THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
+ 	THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
+ 	THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
++	THERMAL_GENL_ATTR_THRESHOLD,
++	THERMAL_GENL_ATTR_THRESHOLD_TEMP,
++	THERMAL_GENL_ATTR_THRESHOLD_WAY,
++	THERMAL_GENL_ATTR_THRESHOLD_PID,
+ 	__THERMAL_GENL_ATTR_MAX,
+ };
+ #define THERMAL_GENL_ATTR_MAX (__THERMAL_GENL_ATTR_MAX - 1)
+@@ -75,6 +82,11 @@ enum thermal_genl_event {
+ 	THERMAL_GENL_EVENT_CDEV_STATE_UPDATE,	/* Cdev state updated */
+ 	THERMAL_GENL_EVENT_TZ_GOV_CHANGE,	/* Governor policy changed  */
+ 	THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE,	/* CPU capability changed */
++	THERMAL_GENL_EVENT_THRESHOLD_ADD,	/* A thresold has been added */
++	THERMAL_GENL_EVENT_THRESHOLD_DELETE,	/* A thresold has been deleted */
++	THERMAL_GENL_EVENT_THRESHOLD_FLUSH,	/* All thresolds have been deleted */
++	THERMAL_GENL_EVENT_THRESHOLD_UP,	/* A thresold has been crossed the way up */
++	THERMAL_GENL_EVENT_THRESHOLD_DOWN,	/* A thresold has been crossed the way down */
+ 	__THERMAL_GENL_EVENT_MAX,
+ };
+ #define THERMAL_GENL_EVENT_MAX (__THERMAL_GENL_EVENT_MAX - 1)
+@@ -82,12 +94,16 @@ enum thermal_genl_event {
+ /* Commands supported by the thermal_genl_family */
+ enum thermal_genl_cmd {
+ 	THERMAL_GENL_CMD_UNSPEC,
+-	THERMAL_GENL_CMD_TZ_GET_ID,	/* List of thermal zones id */
+-	THERMAL_GENL_CMD_TZ_GET_TRIP,	/* List of thermal trips */
+-	THERMAL_GENL_CMD_TZ_GET_TEMP,	/* Get the thermal zone temperature */
+-	THERMAL_GENL_CMD_TZ_GET_GOV,	/* Get the thermal zone governor */
+-	THERMAL_GENL_CMD_TZ_GET_MODE,	/* Get the thermal zone mode */
+-	THERMAL_GENL_CMD_CDEV_GET,	/* List of cdev id */
++	THERMAL_GENL_CMD_TZ_GET_ID,		/* List of thermal zones id */
++	THERMAL_GENL_CMD_TZ_GET_TRIP,		/* List of thermal trips */
++	THERMAL_GENL_CMD_TZ_GET_TEMP,		/* Get the thermal zone temperature */
++	THERMAL_GENL_CMD_TZ_GET_GOV,		/* Get the thermal zone governor */
++	THERMAL_GENL_CMD_TZ_GET_MODE,		/* Get the thermal zone mode */
++	THERMAL_GENL_CMD_CDEV_GET,		/* List of cdev id */
++	THERMAL_GENL_CMD_THRESHOLD_GET,		/* List of thresholds */
++	THERMAL_GENL_CMD_THRESHOLD_ADD,		/* Add a threshold */
++	THERMAL_GENL_CMD_THRESHOLD_DELETE,	/* Delete a threshold */
++	THERMAL_GENL_CMD_THRESHOLD_FLUSH,	/* Flush all the thresholds */
+ 	__THERMAL_GENL_CMD_MAX,
+ };
+ #define THERMAL_GENL_CMD_MAX (__THERMAL_GENL_CMD_MAX - 1)
 -- 
 2.43.0
 
