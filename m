@@ -1,155 +1,120 @@
-Return-Path: <linux-pm+bounces-11584-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11585-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3513A93FD6A
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 20:35:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E48E93FDC1
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 20:52:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA9581F22E23
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 18:35:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B581282D44
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 18:52:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68B5A16B735;
-	Mon, 29 Jul 2024 18:35:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60A0317107D;
+	Mon, 29 Jul 2024 18:52:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kjPnXLRN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fe5oeRdj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD18815F32E
-	for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 18:35:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365A257CB5;
+	Mon, 29 Jul 2024 18:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722278143; cv=none; b=rlBE7AFrLMlXWsaE30rC5IVeDUE6XW/HnwP5rhPPjSOrAZn3BRa5fDRFG6Y/lhWA0xmgOsIBil4t9quQYCQKSkKFty7jVQRQEC4uoDtojpHzcO06H9P9D3kZOeCY+FxnjmOvfScOzK1MUqylDX+QIURV021lFgJgC2EEi+51LCw=
+	t=1722279173; cv=none; b=Li7I/4AcN9JUjWBEKkY0bDJd/XZkn8cG2ymP04nbuVFHc89eMqvxCMNutyb71JSPJRg69b1W1HdB5/clGyISL5ezXsSTn+YjWP8H733SQoXQcpcQtH0Jhcwkhh0dRMEo1SK3hUHiiQXSh6EUIatP0PvTFnuyvb0ZQc0PpHFa9Pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722278143; c=relaxed/simple;
-	bh=OWLMlW9nI4AoeJRIu2xE7z91rwpxUdo9FtEkVf832u4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UbbVR98y+SBko+9vhyADaSa861Ff/B2PS0slT519JeRJg+3GBUtnEALZKC7YDJv2vNWrGWtKn7tI1NaqTY6qydozD2cJ92qGohp60WAdCAJYo8pCWsP43aNmUp0SD2mJXL5+GtsQI6u2RLyqZaamlTyZm6IGbn2MtET71wSNTXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kjPnXLRN; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1fc4aff530dso28235ad.0
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 11:35:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722278141; x=1722882941; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GekW6Drxgu1csmMta62dgFi3qy5FXE8VqaYgFnRbcnM=;
-        b=kjPnXLRNaNCcVy/OkfYIC1cPnmoKf9W/paQpMjZJoQfSfc5CrTbAp1Msh5HmU09HA0
-         iN3iMxm39ujwMiSYR8jadqeQtvyHZ/sIWp7HAWv8iZUTRr3cChPeWiLOb2JhDMF7gXxQ
-         7JcKkHgnXEy8i7Tg8dmzcFH0d7a1ahk5aWbrxBYPWdf2TI0ebHe9C1IyGPGMm46L6Ieh
-         JUWeEKJ/JnfOV/EkJn7HejwabzE4ofQ8R+uQ5WTXZSCoHiD/BRLjCA3JvLE0fpmMXCnR
-         Cia1bIYzwxDSjFtGtEf/AVLngt8C7keTRB738e5stFnDbtuH1CK6ZpuInnhfHN2Wuodl
-         mz7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722278141; x=1722882941;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GekW6Drxgu1csmMta62dgFi3qy5FXE8VqaYgFnRbcnM=;
-        b=M0kUquhEo8WWiWvajud+uwMF1T/4BZ/7qO0WYxAH3qbHcgqw+FaRMUZj39dveLBdM9
-         yzJSjUQOiiDI7JYwMA/B3qwHXCsBgeQOCbeYZ/yY4R9kf+4Ew1iSpjkW/N12XugEp3OD
-         yuoAWN6NVEILOEIO/5cBKrPJaN0+hXP6+giLTho35nPwCW3gFzk/areLRYbMbbYqCSa7
-         2rBXH+78DMKMJraidL8t0X/Io/CUJJmXIQDufp4oLYxCxzsr6rwgTXQiLhSsMrQF944d
-         v+e03eLbAENvdmQUdtJURdlhP7Y097ll3ZrqYwZ9rWvnc7XLKYFbehsiLc4Pz9/nKtU1
-         PQUg==
-X-Forwarded-Encrypted: i=1; AJvYcCUtT1VkElihwkRV60Gjbjgxc4hGqkbEr5ePSKdpd1pXzAwEFH7qjoouyxWAFLrBE+jRYytO6Own7hqyO8rlGrov36m29zr8YDQ=
-X-Gm-Message-State: AOJu0Yw1ZyYI8F009rD0qk2gNF8DzOekBVyPiYlI5Bq0XNGX7XXi4mwd
-	9bEGfFhghjvWlAjfaekMIBqPoIu9J2k7nb88drzbyLDeWjjyU1c+EB9xp+5wLg==
-X-Google-Smtp-Source: AGHT+IFDW6XvLjcuBeaeEfqTb5/MYUs4HDyKi6Wro5NOVXcPidfha5m2d484zipsCXeKMFOtOjpatw==
-X-Received: by 2002:a17:902:fc8d:b0:1fd:d0c0:1a69 with SMTP id d9443c01a7336-1ff34d8afefmr907325ad.9.1722278133866;
-        Mon, 29 Jul 2024 11:35:33 -0700 (PDT)
-Received: from google.com ([2620:15c:2d:3:c685:61bd:100e:aec7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7f1b80asm85755135ad.184.2024.07.29.11.35.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 11:35:33 -0700 (PDT)
-Date: Mon, 29 Jul 2024 11:35:28 -0700
-From: Isaac Manjarres <isaacmanjarres@google.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: tglx@linutronix.de, jstultz@google.com,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	saravanak@google.com, mjguzik@gmail.com,
-	Manish Varma <varmam@google.com>,
-	Kelly Rossmoyer <krossmo@google.com>, kernel-team@android.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v6] fs: Improve eventpoll logging to stop indicting
- timerfd
-Message-ID: <Zqfg8G-6r0ujHnpK@google.com>
-References: <20240703214315.454407-1-isaacmanjarres@google.com>
- <20240704-umsatz-drollig-38db6b84da7b@brauner>
- <Zo2l65cTwuSMDU-Z@google.com>
+	s=arc-20240116; t=1722279173; c=relaxed/simple;
+	bh=yt/TEqkUG7PE55ZFi3CWgk1De/758QNjYZB7+sdWAF8=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=soABoaLkRzhVnoVvwf2eEzLvVTFwahUucGbf0UbpazRmKIoUpWa/nAKCx/oGkisBatE8MrIDi8bDAIFxV679fhCcxyGzfcytXizIWaxKcD3B7IGy7vVfeSpdk5Rg9z+cIIpJiYJ2ZkLoRr0qhXn7a34jTsfcSrMoHPNq5vxaEYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fe5oeRdj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E48B7C32786;
+	Mon, 29 Jul 2024 18:52:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722279172;
+	bh=yt/TEqkUG7PE55ZFi3CWgk1De/758QNjYZB7+sdWAF8=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=fe5oeRdjCPJrzt8taKEaRFv5iTxsmq835QgyWaogwQnJzLezor+5acCS6DwJlaqa7
+	 oFzvObtInXfwJAg4k9Zp96ccDMJfbRK6lUcWwWtx/fkueElPKyssu4eT6QITGFwy8g
+	 4rXIu0+Ql2MPfVV63K0M5N8mgR47nkBdsdirvuKaIebO43VaNIo9+RgDN9dxSojLWN
+	 eXoQOwoQDWsHYOD6kkLTYD8vQxwBk1Nw1kSnyi2GY5xoIt3DlLClKkFFEKdBROx/Hn
+	 z1qdNFHbeNTaIfFembiNqffMcJDC3Z3+s7uNICG+M3K5BfYUfByk6MuCcG/8PqYE8P
+	 ULC2bUIvIWtTQ==
+Date: Mon, 29 Jul 2024 12:52:50 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zo2l65cTwuSMDU-Z@google.com>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Chris Morgan <macroalpha82@gmail.com>
+Cc: sre@kernel.org, linux-pm@vger.kernel.org, jagan@edgeble.ai, 
+ jonas@kwiboo.se, heiko@sntech.de, Chris Morgan <macromorgan@hotmail.com>, 
+ krzk+dt@kernel.org, andyshrk@163.com, conor+dt@kernel.org, 
+ devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+ t.schramm@manjaro.org
+In-Reply-To: <20240726194948.109326-1-macroalpha82@gmail.com>
+References: <20240726194948.109326-1-macroalpha82@gmail.com>
+Message-Id: <172227904756.1346368.2529190213661296274.robh@kernel.org>
+Subject: Re: [PATCH 0/5] Add GameForce Ace
 
-On Tue, Jul 09, 2024 at 02:04:43PM -0700, Isaac Manjarres wrote:
-> On Thu, Jul 04, 2024 at 04:03:59PM +0200, Christian Brauner wrote:
-> > On Wed, Jul 03, 2024 at 02:43:14PM GMT, Isaac J. Manjarres wrote:
-> > > From: Manish Varma <varmam@google.com>
-> > > 
-> > > We'll often see aborted suspend operations that look like:
-> > > 
-> > >  PM: suspend entry 2024-07-03 15:55:15.372419634 UTC
-> > >  PM: PM: Pending Wakeup Sources: [timerfd]
-> > >  Abort: Pending Wakeup Sources: [timerfd]
-> > >  PM: suspend exit 2024-07-03 15:55:15.445281857 UTC
-> > > 
-> > > From this, it seems a timerfd caused the abort, but that can be
-> > > confusing, as timerfds don't create wakeup sources. However,
-> > > eventpoll can, and when it does, it names them after the underlying
-> > > file descriptor. Unfortunately, all the file descriptors are called
-> > > "[timerfd]", and a system may have many timerfds, so this isn't very
-> > > useful to debug what's going on to cause the suspend to abort.
-> > > 
-> > > To improve this, change the way eventpoll wakeup sources are named:
-> > > 
-> > > 1) The top-level per-process eventpoll wakeup source is now named
-> > > "epollN:P" (instead of just "eventpoll"), where N is a unique ID token,
-> > > and P is the PID of the creating process.
-> > > 
-> > > 2) Individual eventpoll item wakeup sources are now named
-> > > "epollitemN:P.F", where N is a unique ID token, P is PID of the creating
-> > > process, and F is the name of the underlying file descriptor.
-> > 
-> > Fyi, that PID is meaningless or even actively misleading in the face of
-> > pid namespaces. And since such wakeups seem to be registered in sysfs
-> > globally they are visible to all containers. That means a container will
-> > now see some timerfd wakeup source with a PID that might just accidently
-> > correspond to a process inside the container. Which in turn also means
-> Thanks for your feedback on this, Christian. With regards to this
-> scenario: would it be useful to use a namespace ID, along with the PID,
-> to uniquely identify the process? If not, do you have a suggestion for
-> this?
-> 
-> I understand that the proposed naming scheme has a chance of causing
-> collisions, however, it is still an improvement over the existing
-> naming scheme in terms of being able to attribute wakeups to a
-> particular application.
-> 
-> > you're leaking the info about the creating process into the container.
-> > IOW, if PID 1 ends up registering some wakeup source the container gets
-> > to know about it.
-> Is there a general security concern about this? If not, can you please
-> elaborate why this is a problem?
-> 
-Hey Christian,
 
-I just wanted to follow-up to see if you had a chance to go through my
-questions above?
+On Fri, 26 Jul 2024 14:49:43 -0500, Chris Morgan wrote:
+> From: Chris Morgan <macromorgan@hotmail.com>
+> 
+> Add support for the GameForce Ace. The GameForce Ace is an RK3588s
+> based gaming device with a 1080p display, touchscreen, hall effect
+> joysticks and triggers, 128GB of eMMC, 8GB or 12GB of RAM, WiFi 5,
+> and support for a 2242 NVME.
+> 
+> Chris Morgan (5):
+>   dt-bindings: power: supply: add dual-cell for cw2015
+>   power: supply: cw2015: Add support for dual-cell configurations
+>   arm64: dts: rockchip: Pull up sdio pins on RK3588
+>   dt-bindings: arm: rockchip: Add GameForce Ace
+>   arm64: dts: rockchip: Add GameForce Ace
+> 
+>  .../devicetree/bindings/arm/rockchip.yaml     |    5 +
+>  .../bindings/power/supply/cw2015_battery.yaml |    6 +
+>  arch/arm64/boot/dts/rockchip/Makefile         |    1 +
+>  .../dts/rockchip/rk3588-base-pinctrl.dtsi     |   10 +-
+>  .../dts/rockchip/rk3588s-gameforce-ace.dts    | 1315 +++++++++++++++++
+>  drivers/power/supply/cw2015_battery.c         |    7 +
+>  6 files changed, 1339 insertions(+), 5 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
+> 
+> --
+> 2.34.1
+> 
+> 
+> 
 
-Thanks,
-Isaac
+
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y rockchip/rk3588s-gameforce-ace.dtb' for 20240726194948.109326-1-macroalpha82@gmail.com:
+
+arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dtb: typec-portc@22: 'vbus-supply' is a required property
+	from schema $id: http://devicetree.org/schemas/usb/fcs,fusb302.yaml#
+
+
+
+
+
 
