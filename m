@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-11567-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11566-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EB5F93FC1F
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 19:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A3C0B93FC1D
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 19:13:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43986283408
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 17:13:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E1272836F3
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2024 17:13:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53301186E39;
-	Mon, 29 Jul 2024 17:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33B57183098;
+	Mon, 29 Jul 2024 17:13:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="YXFoVlyK"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="YZE4Z3Us"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3EB16C874;
-	Mon, 29 Jul 2024 17:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21CC15F402;
+	Mon, 29 Jul 2024 17:12:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722273182; cv=none; b=H1gOr3c99INYSSChKDNYNelQd2JQP2rqquHaPDOhk/ST5UqZZzFgToet6O3wFSkf8o0eYPF6o1uioSyiIVnn8sDO5a+a8zS4lHNeN/LzKNru1m937pce/djzJVW0A1IHLMBQQF4RUVwwpVLl5IhI+AHvW7i7Zy9DE6eg8O6WU4E=
+	t=1722273181; cv=none; b=ekL08bzYW2tn5S1P2e5Z6hraM0918ebWl4Asn0Egx1+kKx/YhthNA0XLt2OQV/gtPenRRj9ruBPy8thst6WqNQiC7YukyIX1isyFfljCAzaRb0ICuR+6nDSPrjYPN6SsqgOrslfqmi/wUhmnS1OpL4cG2xgfZxGfMEQs5tA7rxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722273182; c=relaxed/simple;
-	bh=3tq0jW6brYY3/HGAO1RtDy2uMyLGqloBMMnB3QkGNgY=;
+	s=arc-20240116; t=1722273181; c=relaxed/simple;
+	bh=jnpvwlz1VqOkpUL/4qSfV5i5qCCsKtNNCaQfMDHRQsk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZTzSFwr7Fm/q9tEuvuapZAFKNWB/XLKs3BMfGT1XnX6muYAKJAfvysZT2ZYoMz58jQeOpU2f+gbQBuY7qMKGSaqs5TF7EfeQ2ZV/K1BUCOC6Lw8Fe4m2+lbXAaubPVA2Qr+Y6UEDIppIvexPfvJ28he3JV5t/skuB0yaUXACh9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=YXFoVlyK reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=JknSPhu/sOFciHcVmPdMk6Ng51uX+p/k4cA3U4Nd21zEbKCqJcKT/h+zr4ePBIOjB/13JRMUKX7xe5tpHC3Bi/LUKykYkvFrHjnuqf5boTmXykr6q0QWwXK4JZnXilQUZj04vcacltaHtTtLGEnq0B2EmyBIjqWRtOnoTWPb5no=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=YZE4Z3Us reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id abcc63eda9c4f667; Mon, 29 Jul 2024 18:12:58 +0200
+ id 0d16091fa96e4aa4; Mon, 29 Jul 2024 18:12:57 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 11A4077357F;
-	Mon, 29 Jul 2024 18:12:58 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 25D0777357F;
+	Mon, 29 Jul 2024 18:12:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1722269578;
-	bh=3tq0jW6brYY3/HGAO1RtDy2uMyLGqloBMMnB3QkGNgY=;
+	s=dkim; t=1722269577;
+	bh=jnpvwlz1VqOkpUL/4qSfV5i5qCCsKtNNCaQfMDHRQsk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=YXFoVlyKpzjZYTlrKoOKzzPrVe7z4+oLi3Vb3NRMf+EvemadDeVVwUo1MVMMMjPKs
-	 vwfudqmVRDi0QpXi7DWtG8jfA5JQG6vWgak3y7BCj3u2rBse/QTvADCcQnOossQdit
-	 Gk6MlKlv38VBCWZ5GYLwyEQv5R2H6GonO1Wj+ggtlvETpN1gOQS8kRwAaCtqLtBMQa
-	 3BDSDSyAY8FJZhJdpbz5VJa63+VY7fkzWnp0yKjz+p/qHfCJFFEOiURCWHWcycGWNl
-	 W8BETbU++tMm7uTvaoXMMnvBgR/FRhxJP6lX65mApf/dAcgw9zWr9gD/lt2CeQM0lS
-	 fU+4fFK2SJcCA==
+	b=YZE4Z3UseCvQKUV+LHaK8NmCIse0jXw4s4rn24Y7TDERoGDfYvvS7cs7ABpKv9aYk
+	 bjgr+XqT6cTXY6a7vty9fIjCG6oeDYn3lAro52jdmpG7FTLZVYwUFbPEE8UUhJNDlx
+	 iGLxo04zaaeJw9Mn7qcawu5fN2ny0Cvcwfg+wrq99R/hORWwrNUu3es4eBkIbDGpj6
+	 2mhP4/9OnbZd7eZQT/lLLYp8YtNdY9QfCc+vnRNyAiBuH8Pg2i1qLX0YW2tX8NsAIe
+	 VbbSEVqf2S3ymNjK7jZ9hFV7t0Rkjh2IQSmixVfN0pvdzY/hUalKEr1wH24jKUjmZ+
+	 dYxzdsZWzmd4w==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -57,10 +57,10 @@ Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
  Thierry Reding <thierry.reding@gmail.com>,
  Jonathan Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org
 Subject:
- [RESEND][PATCH v1 4/8] thermal: tegra: Introduce struct trip_temps for
- critical and hot trips
-Date: Mon, 29 Jul 2024 18:02:22 +0200
-Message-ID: <9333090.CDJkKcVGEf@rjwysocki.net>
+ [RESEND][PATCH v1 5/8] thermal: tegra: Use thermal_zone_for_each_trip() for
+ walking trip points
+Date: Mon, 29 Jul 2024 18:05:39 +0200
+Message-ID: <1819430.VLH7GnMWUR@rjwysocki.net>
 In-Reply-To: <2211925.irdbgypaU6@rjwysocki.net>
 References: <2211925.irdbgypaU6@rjwysocki.net>
 Precedence: bulk
@@ -74,128 +74,145 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrjedvgdellecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepthhhihgv
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrjedvgdellecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepthhhihgv
  rhhrhidrrhgvughinhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhonhgrthhhrghnhhesnhhvihguihgrrdgtohhmpdhrtghpthhtoheplhhinhhugidqthgvghhrrgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Introduce a helper structure, struct trip_temps, for storing the
-temperatures of the critical and hot trip points.
-
-This helps to make the code in tegra_tsensor_get_hw_channel_trips()
-somewhat cleaner and will be useful subsequently in eliminating
-iteration over trip indices from the driver.
-
-No intentional functional impact.
+It is generally inefficient to iterate over trip indices and call
+thermal_zone_get_trip() every time to get the struct thermal_trip
+corresponding to the given trip index, so modify the Tegra thermal
+drivers to use thermal_zone_for_each_trip() for walking trips.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
-This patch does not depend on the previous patch(es) in the series.
+This patch does not depend on patches [1-3/8].
 
 ---
- drivers/thermal/tegra/tegra30-tsensor.c |   34 ++++++++++++++++++--------------
- 1 file changed, 20 insertions(+), 14 deletions(-)
+ drivers/thermal/tegra/soctherm.c        |   38 ++++++++++++++++----------------
+ drivers/thermal/tegra/tegra30-tsensor.c |   25 ++++++++++-----------
+ 2 files changed, 33 insertions(+), 30 deletions(-)
 
+Index: linux-pm/drivers/thermal/tegra/soctherm.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/tegra/soctherm.c
++++ linux-pm/drivers/thermal/tegra/soctherm.c
+@@ -682,24 +682,25 @@ static const struct thermal_zone_device_
+ 	.set_trips = tegra_thermctl_set_trips,
+ };
+ 
+-static int get_hot_temp(struct thermal_zone_device *tz, int *trip_id, int *temp)
++static int get_hot_trip_cb(struct thermal_trip *trip, void *arg)
+ {
+-	int i, ret;
+-	struct thermal_trip trip;
++	const struct thermal_trip **trip_ret = arg;
+ 
+-	for (i = 0; i < thermal_zone_get_num_trips(tz); i++) {
++	if (trip->type != THERMAL_TRIP_HOT)
++		return 0;
+ 
+-		ret = thermal_zone_get_trip(tz, i, &trip);
+-		if (ret)
+-			return -EINVAL;
+-
+-		if (trip.type == THERMAL_TRIP_HOT) {
+-			*trip_id = i;
+-			return 0;
+-		}
+-	}
++	*trip_ret = trip;
++	/* Return nonzero to terminate the search. */
++	return 1;
++}
+ 
+-	return -EINVAL;
++static const struct thermal_trip *get_hot_trip(struct thermal_zone_device *tz)
++{
++	const struct thermal_trip *trip = NULL;
++
++	thermal_zone_for_each_trip(tz, get_hot_trip_cb, &trip);
++
++	return trip;
+ }
+ 
+ /**
+@@ -731,8 +732,9 @@ static int tegra_soctherm_set_hwtrips(st
+ 				      struct thermal_zone_device *tz)
+ {
+ 	struct tegra_soctherm *ts = dev_get_drvdata(dev);
++	const struct thermal_trip *hot_trip;
+ 	struct soctherm_throt_cfg *stc;
+-	int i, trip, temperature, ret;
++	int i, temperature, ret;
+ 
+ 	/* Get thermtrips. If missing, try to get critical trips. */
+ 	temperature = tsensor_group_thermtrip_get(ts, sg->id);
+@@ -749,8 +751,8 @@ static int tegra_soctherm_set_hwtrips(st
+ 	dev_info(dev, "thermtrip: will shut down when %s reaches %d mC\n",
+ 		 sg->name, temperature);
+ 
+-	ret = get_hot_temp(tz, &trip, &temperature);
+-	if (ret) {
++	hot_trip = get_hot_trip(tz);
++	if (!hot_trip) {
+ 		dev_info(dev, "throttrip: %s: missing hot temperature\n",
+ 			 sg->name);
+ 		return 0;
+@@ -763,7 +765,7 @@ static int tegra_soctherm_set_hwtrips(st
+ 			continue;
+ 
+ 		cdev = ts->throt_cfgs[i].cdev;
+-		if (get_thermal_instance(tz, cdev, trip))
++		if (thermal_trip_is_bound_to_cdev(tz, hot_trip, cdev))
+ 			stc = find_throttle_cfg_by_name(ts, cdev->type);
+ 		else
+ 			continue;
 Index: linux-pm/drivers/thermal/tegra/tegra30-tsensor.c
 ===================================================================
 --- linux-pm.orig/drivers/thermal/tegra/tegra30-tsensor.c
 +++ linux-pm/drivers/thermal/tegra/tegra30-tsensor.c
-@@ -303,8 +303,13 @@ stop_channel:
- 	return 0;
- }
+@@ -308,6 +308,18 @@ struct trip_temps {
+ 	int crit_trip;
+ };
  
-+struct trip_temps {
-+	int hot_trip;
-+	int crit_trip;
-+};
++static int tegra_tsensor_get_trips_cb(struct thermal_trip *trip, void *arg)
++{
++	struct trip_temps *temps = arg;
++
++	if (trip->type == THERMAL_TRIP_HOT)
++		temps->hot_trip = trip->temperature;
++	else if (trip->type == THERMAL_TRIP_CRITICAL)
++		temps->crit_trip = trip->temperature;
++
++	return 0;
++}
 +
  static void tegra_tsensor_get_hw_channel_trips(struct thermal_zone_device *tzd,
--					       int *hot_trip, int *crit_trip)
-+					       struct trip_temps *temps)
+ 					       struct trip_temps *temps)
  {
- 	unsigned int i;
+@@ -320,18 +332,7 @@ static void tegra_tsensor_get_hw_channel
+ 	temps->hot_trip  = 85000;
+ 	temps->crit_trip = 90000;
  
-@@ -312,8 +317,8 @@ static void tegra_tsensor_get_hw_channel
- 	 * 90C is the maximal critical temperature of all Tegra30 SoC variants,
- 	 * use it for the default trip if unspecified in a device-tree.
- 	 */
--	*hot_trip  = 85000;
--	*crit_trip = 90000;
-+	temps->hot_trip  = 85000;
-+	temps->crit_trip = 90000;
- 
- 	for (i = 0; i < thermal_zone_get_num_trips(tzd); i++) {
- 
-@@ -322,14 +327,14 @@ static void tegra_tsensor_get_hw_channel
- 		thermal_zone_get_trip(tzd, i, &trip);
- 
- 		if (trip.type == THERMAL_TRIP_HOT)
--			*hot_trip = trip.temperature;
-+			temps->hot_trip = trip.temperature;
- 
- 		if (trip.type == THERMAL_TRIP_CRITICAL)
--			*crit_trip = trip.temperature;
-+			temps->crit_trip = trip.temperature;
- 	}
+-	for (i = 0; i < thermal_zone_get_num_trips(tzd); i++) {
+-
+-		struct thermal_trip trip;
+-
+-		thermal_zone_get_trip(tzd, i, &trip);
+-
+-		if (trip.type == THERMAL_TRIP_HOT)
+-			temps->hot_trip = trip.temperature;
+-
+-		if (trip.type == THERMAL_TRIP_CRITICAL)
+-			temps->crit_trip = trip.temperature;
+-	}
++	thermal_zone_for_each_trip(tzd, tegra_tsensor_get_trips_cb, temps);
  
  	/* clamp hardware trips to the calibration limits */
--	*hot_trip = clamp(*hot_trip, 25000, 90000);
-+	temps->hot_trip = clamp(temps->hot_trip, 25000, 90000);
- 
- 	/*
- 	 * Kernel will perform a normal system shut down if it will
-@@ -338,7 +343,7 @@ static void tegra_tsensor_get_hw_channel
- 	 * shut down gracefully before sending signal to the Power
- 	 * Management controller.
- 	 */
--	*crit_trip = clamp(*crit_trip + 5000, 25000, 90000);
-+	temps->crit_trip = clamp(temps->crit_trip + 5000, 25000, 90000);
- }
- 
- static int tegra_tsensor_enable_hw_channel(const struct tegra_tsensor *ts,
-@@ -346,7 +351,8 @@ static int tegra_tsensor_enable_hw_chann
- {
- 	const struct tegra_tsensor_channel *tsc = &ts->ch[id];
- 	struct thermal_zone_device *tzd = tsc->tzd;
--	int err, hot_trip = 0, crit_trip = 0;
-+	struct trip_temps temps = { 0 };
-+	int err;
- 	u32 val;
- 
- 	if (!tzd) {
-@@ -357,24 +363,24 @@ static int tegra_tsensor_enable_hw_chann
- 		return 0;
- 	}
- 
--	tegra_tsensor_get_hw_channel_trips(tzd, &hot_trip, &crit_trip);
-+	tegra_tsensor_get_hw_channel_trips(tzd, &temps);
- 
- 	dev_info_once(ts->dev, "ch%u: PMC emergency shutdown trip set to %dC\n",
--		      id, DIV_ROUND_CLOSEST(crit_trip, 1000));
-+		      id, DIV_ROUND_CLOSEST(temps.crit_trip, 1000));
- 
--	hot_trip  = tegra_tsensor_temp_to_counter(ts, hot_trip);
--	crit_trip = tegra_tsensor_temp_to_counter(ts, crit_trip);
-+	temps.hot_trip  = tegra_tsensor_temp_to_counter(ts, temps.hot_trip);
-+	temps.crit_trip = tegra_tsensor_temp_to_counter(ts, temps.crit_trip);
- 
- 	/* program LEVEL2 counter threshold */
- 	val = readl_relaxed(tsc->regs + TSENSOR_SENSOR0_CONFIG1);
- 	val &= ~TSENSOR_SENSOR0_CONFIG1_TH2;
--	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG1_TH2, hot_trip);
-+	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG1_TH2, temps.hot_trip);
- 	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG1);
- 
- 	/* program LEVEL3 counter threshold */
- 	val = readl_relaxed(tsc->regs + TSENSOR_SENSOR0_CONFIG2);
- 	val &= ~TSENSOR_SENSOR0_CONFIG2_TH3;
--	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG2_TH3, crit_trip);
-+	val |= FIELD_PREP(TSENSOR_SENSOR0_CONFIG2_TH3, temps.crit_trip);
- 	writel_relaxed(val, tsc->regs + TSENSOR_SENSOR0_CONFIG2);
- 
- 	/*
+ 	temps->hot_trip = clamp(temps->hot_trip, 25000, 90000);
 
 
 
