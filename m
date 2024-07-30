@@ -1,134 +1,122 @@
-Return-Path: <linux-pm+bounces-11673-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11674-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ECC9941466
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 16:32:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B22394148F
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 16:41:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68315B23358
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 14:32:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65CB71C22E2B
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 14:41:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E659319FA66;
-	Tue, 30 Jul 2024 14:32:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D4961A254E;
+	Tue, 30 Jul 2024 14:41:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tsILu2Jz"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="nT7jad2G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BD318FC75;
-	Tue, 30 Jul 2024 14:32:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1EC019DF41;
+	Tue, 30 Jul 2024 14:41:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722349935; cv=none; b=kHuuuU1hK6z2LWjbtBi47D6wJMuHmuk6s34qngJfSVn8enjnnVtNnuzmIKYcJJ1oZeCJ5a7iBQZO4xiigvTfD8cqL7zfC+88aPRWSm1izmqvq34PFjpw/LPmGFHCUInrG/RP/MUbiK0/PVILmBbzv3JmREqSRXfOgt4fiycKcwI=
+	t=1722350485; cv=none; b=LzKgFNffPmzEdunZTOH1d+tbVe9BADwNAeMHC3mlI8YQu9cHMP9nWS+j+tdu4UfMRRfuAIJGAPRx/K5vqjz9PfhCnuVt6Vef/6NbkJZphfYvto09IVrd7hmBB9BO+u8CoghIZ9HZDkSiY3LlN8u922WCtY2Io5N3sOhtJOhXS4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722349935; c=relaxed/simple;
-	bh=CKlxjvDkzyWdGGZLK/lWcnBd5Y6Qq9WMwdYBOc4rO20=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k5saVjbc6fDCRQ9kNfii88s6eXKwHRTK537dOZWRu4minv7znRIHSQO+OUU1KUFoP9aoEi5apvM1q7W9i8jkyXmKzovy1FCHIBAdTjc1tpm0miWVg/hki8xng+1JrVMCGACOV0KVBAjUDLrsxNwiDusyfJxQQ4pFqkzjhUqc6nU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tsILu2Jz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A93C4AF0C;
-	Tue, 30 Jul 2024 14:32:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722349935;
-	bh=CKlxjvDkzyWdGGZLK/lWcnBd5Y6Qq9WMwdYBOc4rO20=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tsILu2JzPF0VJidxPkvQGTHWZikMKNUxpqj8Oxtekl9o07wpClAu0xFV6uqP0dW6z
-	 5RmBTu7lO9XfU6c5FpJvOA2vVTW51+YiCESx2D+ZqI8Kapss6N47T0xOFpaEXIYlZy
-	 eyB5X43dinX2xIlTgj2by+nXGk5DKiUNsGeE2Ib4GD6whAVo4QsrV2UonZovXtRy2d
-	 BGbupK3XX13l2qhmrfpyaOI1WjQFwrXwxQbVH1j/49a7u3nxZ2hEQB3N3940ivsjy+
-	 J2hFOZ8ch6d9CcEenpR1hLbFoGRWEY+INpxyKYOoLYJisZ8S5eoYMsYc3IGgHSFUtJ
-	 lwCWyABq42c1Q==
-Message-ID: <31173e79-4b2d-4027-a4a2-61071206f387@kernel.org>
-Date: Tue, 30 Jul 2024 16:32:09 +0200
+	s=arc-20240116; t=1722350485; c=relaxed/simple;
+	bh=XoGns8YSYmXTWpA+GubAi+xVCIyKLpCl6Tp3URp06/c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TADTU14qxRAIPhQB53UfV7Hy4nK6YzbG2MWBt0m4voC2ckei6Dn6KfLTAmxnj25jIUcnbOvajw3vIYN+CYIpDUboMHktzS47txqzmMHdaBCEaCwLfULeqN4m4LHSlrZxgdY8U/GyBgHegk6mTB2dcB66CzsT39YLq2YkRhGpjro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=nT7jad2G reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id 92ffbe357cbb50cf; Tue, 30 Jul 2024 16:41:19 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 18B92956FDB;
+	Tue, 30 Jul 2024 16:41:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1722350479;
+	bh=XoGns8YSYmXTWpA+GubAi+xVCIyKLpCl6Tp3URp06/c=;
+	h=From:To:Cc:Subject:Date;
+	b=nT7jad2GIMkbRnd8t3tvEenlMXJH9PaCyudcHRHtuXj0eLgNNk+IclqODfIr4OVQP
+	 CF7HHsH4fOdPzgamRsZdBhrvkcuRSiclGaW4xIriXsXbbD2BbC4HeGugMilvbeKpJ0
+	 xIwETAo9ea9LMpjU+AcM5LkYfvwOv87+ALfIfsSJi5XaxiB3MxEr1rH6K+XhjoRPaQ
+	 5uXuoDB0yPn7w7nX/VsHMJv1bxZ7Om9lsWbtFsnSK/DVU+04te8qMxAU9dyqRD8to0
+	 KPXD/PU9uZa9s+bVg0QvJHK7tf9qv/Z+4ZLLYo/qEJCCnK6ks4d96QooWPLfBuTz2R
+	 +/bbRF81GaeGg==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
+Subject:
+ [PATCH v1] thermal: trip: Avoid skipping trips in thermal_zone_set_trips()
+Date: Tue, 30 Jul 2024 16:41:18 +0200
+Message-ID: <12509184.O9o76ZdvQC@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: interconnect: qcom: Do not require reg for
- sc8180x virt NoCs
-To: djakov@kernel.org
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- quic_okukatla@quicinc.com, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-References: <20240730141016.1142608-1-djakov@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240730141016.1142608-1-djakov@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: spam:low
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrjeeggdejlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegoufhprghmkfhpucdlfedttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucfuphgrmhfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
+ thhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
-On 30/07/2024 16:10, djakov@kernel.org wrote:
-> From: Georgi Djakov <djakov@kernel.org>
-> 
-> The virtual interconnect providers do not have their own IO address space,
-> but this is not documented in the DT schema and the following warnings are
-> reported by dtbs_check:
-> 
-> sc8180x-lenovo-flex-5g.dtb: interconnect-camnoc-virt: 'reg' is a required property
-> sc8180x-lenovo-flex-5g.dtb: interconnect-mc-virt: 'reg' is a required property
-> sc8180x-lenovo-flex-5g.dtb: interconnect-qup-virt: 'reg' is a required property
-> sc8180x-primus.dtb: interconnect-camnoc-virt: 'reg' is a required property
-> sc8180x-primus.dtb: interconnect-mc-virt: 'reg' is a required property
-> sc8180x-primus.dtb: interconnect-qup-virt: 'reg' is a required property
-> 
-> Fix this by adding them to the list of compatibles that do not require
-> the reg property.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-So I guess we are giving up on
-https://lore.kernel.org/all/20230530162454.51708-4-vkoul@kernel.org/
-?
+Say there are 3 trip points A, B, C sorted in ascending temperature
+order with no hysteresis.  If the zone temerature is exactly equal to
+B, thermal_zone_set_trips() will set the boundaries to A and C and the
+hardware will not catch any crossing of B (either way) until either A
+or C is crossed and the boundaries are changed.
 
-Best regards,
-Krzysztof
+To avoid that, use non-strict inequalities when comparing the trip
+threshold to the zone temperature in thermal_zone_set_trips().
+
+In the example above, it will cause both boundaries to be set to B,
+which is desirable because an interrupt will trigger when the zone
+temperature becomes different from B regardless of which way it goes.
+That will allow a new interval to be set depending on the direction of
+the zone temperature change.
+
+Fixes: 893bae92237d ("thermal: trip: Make thermal_zone_set_trips() use trip thresholds")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+6.11-rc material.
+
+---
+ drivers/thermal/thermal_trip.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_trip.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_trip.c
++++ linux-pm/drivers/thermal/thermal_trip.c
+@@ -82,10 +82,10 @@ void thermal_zone_set_trips(struct therm
+ 		return;
+ 
+ 	for_each_trip_desc(tz, td) {
+-		if (td->threshold < tz->temperature && td->threshold > low)
++		if (td->threshold <= tz->temperature && td->threshold > low)
+ 			low = td->threshold;
+ 
+-		if (td->threshold > tz->temperature && td->threshold < high)
++		if (td->threshold >= tz->temperature && td->threshold < high)
+ 			high = td->threshold;
+ 	}
+ 
+
+
 
 
