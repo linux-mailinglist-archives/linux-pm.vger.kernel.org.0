@@ -1,212 +1,114 @@
-Return-Path: <linux-pm+bounces-11693-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11691-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AECF941F47
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 20:12:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93148941F37
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 20:09:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCB3D1C22DBD
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 18:12:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C445E1C21E93
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 18:09:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1D4518A6CE;
-	Tue, 30 Jul 2024 18:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 727D118A6A4;
+	Tue, 30 Jul 2024 18:09:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="bhx+qYuv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jiUQn0lV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48CE18A6C7;
-	Tue, 30 Jul 2024 18:12:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6EC189BB6
+	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 18:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722363129; cv=none; b=Tb1QC3SzKbUhkFL7GD0MzxNuGC/FWSrn0PPhwBRqjiF4oxnd80mzrXkvGeuPJarz6SdUjjQgz3OH4yArw/kPRxrEjutSz+0AQfjKRmN0OyMKrZ50OLDZDclRIzldJu/q9fivsDL+oTHY9BjLj/RdqrxuxYYHkfIG+V1vQTab+nc=
+	t=1722362961; cv=none; b=MPt5tBvmHDnrY3Sd2KaCr2oaKgZ1cnygCO5e1LGXbNSDInm2p6LAhJPxs4DKrwFmimxVutRJAmPfwJaSG9ATIizInHTdAVmngCuXawtPxi7B96ijYAbcxrPDq+sEy37xNBMbj1Ee+aYwRKXCoKewID+fIAyTJ1ygl2AQY0eC47c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722363129; c=relaxed/simple;
-	bh=VWN1tIXLNda64hbVwWCXnMXbhG116dkLDNVeCqm+PSk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NySt+rRLhX+mv+qpsM+PqJseQCLASmcFIiJ+G+/K02zGRMwJoYdcOzw+7xOgCR7kF5bijT7wXQvC2l2OjbM7ehbtJzFduDptsL6MDFt0jhtsUFRyuKCEMn2vv3IUlbmjQeLgjSVQTvqnZtlX9J0+beIDQqAJYKtBSkPdsGw46AU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=bhx+qYuv; arc=none smtp.client-ip=80.12.242.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id YpeWs2SrGVHKTYpeWssKuf; Tue, 30 Jul 2024 18:24:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1722356692;
-	bh=/UuxgnKYhFfTRoiZZZUFb1OSY49shSXv/0adgAuChfo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=bhx+qYuvMyayPX3PzsdM/kwX04bNqKDwbC3KI6dvg0YaaxlkB25kQmOaWMbQIx0qp
-	 P9MwwqXQ6TkMi2qR4rtR5yWa6enlRD8X1bESm4va59k5gcZdFTN/EeUVd7aHio9U2L
-	 k2yjvnf+BAFr17HWM55dcayChqb7nsMake4fmlTjLkvdgavTKXTjspgGJynfQmCzMU
-	 uqgPyTW9ciO42Fnnq1h3vrFd4CIKhFFePx6thFyiWqeKNuNXhCqJLtT5O9hfkvhIsK
-	 q4pRc5+ntuciwF93wlMSFpwgsBmyj8AsZeLlrX6mgKUR8wpdz6lK5ciNb2ZMwOICeo
-	 YmRhgkR611fKw==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Tue, 30 Jul 2024 18:24:52 +0200
-X-ME-IP: 90.11.132.44
-Message-ID: <7ed56f10-99f9-41b9-9d82-45797914f3d1@wanadoo.fr>
-Date: Tue, 30 Jul 2024 18:24:44 +0200
+	s=arc-20240116; t=1722362961; c=relaxed/simple;
+	bh=BOE3VORB6ia2yrKuWO/Pcmtm7k+QcUKcZkhKb04y7EQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=oXNsMNvjH2Cotj83CzYoHUSdjvQs+Zqs9AW3EBAMOmrEYd1u1GnWgym48cUnwowNqZyI5vSDXCRdKe28Au8uJilOepH/QO2XDnhVj/Cp4MTPL8uO8Ql6s9yZJUzblF7QFiA4JNRph+yS8TKUthIn9i07iob9ofCJjYCavHlqBd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jiUQn0lV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DC0F4C4AF0E
+	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 18:09:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722362960;
+	bh=BOE3VORB6ia2yrKuWO/Pcmtm7k+QcUKcZkhKb04y7EQ=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=jiUQn0lVGHGtnSEEwqglqxRncNm+nwRJW3jVQcZqRC6yYY0N5AJtQXa9NctxO69p2
+	 jZHpI8M3UgZ/zLtGmZ8y9kqX2e4InsjqWtNv5R+iAk5HrOoeN/rH94VDN3DUDm7FLY
+	 mcoGA2y8ES6hP5fqDLj8nfTtNPxIehKkhnvOVtM8LVYOi05pUDsTUluN7amqwYZmW1
+	 8fsUFdctiwq3+T0XB4d6LmMP/d6P1kVsOwd9fDIKK1EhXSFbi488BtsWEGb0Jg37RI
+	 s7C6E6XdR4SoN4Q6QKXBMddz4WgK1H50lvz2MUXtmjEgrfNeprOQh3XwWGIxLjQzkU
+	 YN7LkUTTc7lVA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id CA533C53B73; Tue, 30 Jul 2024 18:09:20 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 219110] amd-pstate's balance_performance
+ energy_performance_preference doesn't survive suspend resume
+Date: Tue, 30 Jul 2024 18:09:20 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219110-137361-6sEYCVgqop@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219110-137361@https.bugzilla.kernel.org/>
+References: <bug-219110-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH 2/2] PM: Use sysfs_emit() and sysfs_emit_at() in
- "show" functions
-To: Xueqin Luo <luoxueqin@kylinos.cn>, rafael@kernel.org, pavel@ucw.cz,
- len.brown@intel.com
-Cc: linux-pm@vger.kernel.org, xiongxin@kylinos.cn,
- linux-kernel@vger.kernel.org
-References: <20240730065454.2096296-1-luoxueqin@kylinos.cn>
- <20240730065454.2096296-3-luoxueqin@kylinos.cn>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240730065454.2096296-3-luoxueqin@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-Le 30/07/2024 à 08:54, Xueqin Luo a écrit :
-> As Documentation/filesystems/sysfs.rst suggested,
-> show() should only use sysfs_emit() or sysfs_emit_at() when formatting
-> the value to be returned to user space.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
-> ---
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219110
 
-Hi,
+--- Comment #2 from Artem S. Tashkinov (aros@gmx.com) ---
+(In reply to xiaojian.du from comment #1)
+> So you do one suspend cycle on your device?
 
-> @@ -149,17 +149,17 @@ static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
->   			const char *label = mem_sleep_states[i];
->   
->   			if (mem_sleep_current == i)
-> -				s += sprintf(s, "[%s] ", label);
-> +				sz += sysfs_emit_at(buf, sz, "[%s] ", label);
->   			else
-> -				s += sprintf(s, "%s ", label);
-> +				sz += sysfs_emit_at(buf, sz, "%s ", label);
->   		}
->   	}
->   
->   	/* Convert the last space to a newline if needed. */
-> -	if (s != buf)
-> -		*(s-1) = '\n';
+I have to set/restore energy_performance_preference on every resume.
 
-The goal here is to remove the trailing space. So you slightly change 
-the behavior.
-Not sure if it matters or not (this was not done in disk_show() in patch 
-1/2).
+> I think CPU power status is reset after one suspend cycle.
+> Yes, it should be a function to restore CPU power register status and
+> governor status after s3/s4/s2idle.
+> For you case, i think add one more shell script will fix this problem, you
+> know, you are setting cpu enegy policy during booting, then your can add =
+one
+> same action during suspend, any chance for this?
 
-Maybe an (ugly)
-	if (sz)
-		sz += sysfs_emit_at(buf, sz - 1, "\n");
+I can certainly do that, but with acpi-cpufreq you didn't have to do that :=
+-(
 
-or something like:
-	if (sz) {
-		sz--;
-		sz += sysfs_emit_at(buf, sz, "\n");
-	}
+You set performance/powersave/ondemand and it perfectly survives
+suspend/resume.
 
-> +	if (sz)
-> +		sz += sysfs_emit_at(buf, sz, "\n");
->   
-> -	return (s - buf);
-> +	return sz;
->   }
->   
->   static suspend_state_t decode_suspend_state(const char *buf, size_t n)
+I wonder why amd-pstate cannot. A kernel module can keep this state as a si=
+mple
+variable and restore the energy preference on resume.
 
-...
+And secondly it's quite misleading that it reports a wrong value after
+resuming.
 
-> @@ -257,22 +257,22 @@ static const char * const pm_tests[__TEST_AFTER_LAST] = {
->   static ssize_t pm_test_show(struct kobject *kobj, struct kobj_attribute *attr,
->   				char *buf)
->   {
-> -	char *s = buf;
->   	int level;
-> +	size_t sz = 0;
->   
->   	for (level = TEST_FIRST; level <= TEST_MAX; level++)
->   		if (pm_tests[level]) {
->   			if (level == pm_test_level)
-> -				s += sprintf(s, "[%s] ", pm_tests[level]);
-> +				sz += sysfs_emit_at(buf, sz, "[%s] ", pm_tests[level]);
->   			else
-> -				s += sprintf(s, "%s ", pm_tests[level]);
-> +				sz += sysfs_emit_at(buf, sz, "%s ", pm_tests[level]);
->   		}
->   
-> -	if (s != buf)
-> +	if (sz)
->   		/* convert the last space to a newline */
-> -		*(s-1) = '\n';
-> +		sz += sysfs_emit_at(buf, sz, "\n");
+--=20
+You may reply to this email to add a comment.
 
-Same here.
-
->   
-> -	return (s - buf);
-> +	return sz;
->   }
->   
->   static ssize_t pm_test_store(struct kobject *kobj, struct kobj_attribute *attr,
-> @@ -390,7 +390,7 @@ static const char * const suspend_step_names[] = {
->   static ssize_t _name##_show(struct kobject *kobj,		\
->   		struct kobj_attribute *attr, char *buf)		\
->   {								\
-> -	return sprintf(buf, format_str, suspend_stats._name);	\
-> +	return sysfs_emit(buf, format_str, suspend_stats._name);	\
-
-Maybe 1 tab should be removed?
-
->   }								\
->   static struct kobj_attribute _name = __ATTR_RO(_name)
->   
-
-...
-
-> @@ -668,21 +668,21 @@ struct kobject *power_kobj;
->   static ssize_t state_show(struct kobject *kobj, struct kobj_attribute *attr,
->   			  char *buf)
->   {
-> -	char *s = buf;
-> +	ssize_t sz = 0;
->   #ifdef CONFIG_SUSPEND
->   	suspend_state_t i;
->   
->   	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++)
->   		if (pm_states[i])
-> -			s += sprintf(s,"%s ", pm_states[i]);
-> +			sz += sysfs_emit_at(buf, sz, "%s ", pm_states[i]);
->   
->   #endif
->   	if (hibernation_available())
-> -		s += sprintf(s, "disk ");
-> -	if (s != buf)
-> +		sz += sysfs_emit_at(buf, sz, "disk ");
-> +	if (sz)
->   		/* convert the last space to a newline */
-> -		*(s-1) = '\n';
-> -	return (s - buf);
-> +		sz += sysfs_emit_at(buf, sz, "\n");
-
-Same here
-
-> +	return sz;
->   }
->   
->   static suspend_state_t decode_state(const char *buf, size_t n)
-
-...
-
-CJ
-
-
+You are receiving this mail because:
+You are the assignee for the bug.=
 
