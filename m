@@ -1,104 +1,165 @@
-Return-Path: <linux-pm+bounces-11704-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11705-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DEBA941F91
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 20:31:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DEAE941F96
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 20:33:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B382285FF4
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 18:31:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD5C51F2390B
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 18:33:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 807291482F3;
-	Tue, 30 Jul 2024 18:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 861E0189911;
+	Tue, 30 Jul 2024 18:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSnLDQzT"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="kxVpww3g"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7891A76BE
-	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 18:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 276A31662F7;
+	Tue, 30 Jul 2024 18:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722364304; cv=none; b=qcHTDNEBOpw4pQb1jj8pqI+yz/PaMCaEq2MLQVbhgp7TQq69T5DgPk7Q8BgQq1cMX9fCg1Rb3P2dHPo0/V0NRHpokAc0+qH3SSbnN+3j+RDjo6ATf7R6vlQQaKlKd/07bVISPptNQ/oMQ/YXZhJKteHkic1EAE5k9/x98xTl4pM=
+	t=1722364417; cv=none; b=JyGN1IAy5kP3aufvGddljFzW4tEQdm+7xny0xfZH1upnKzOxIGBySuYvdsT/waYBp4JUozouUBW+YzHVYpbj1pxbVmg7meKHCztC7sARkMDbXdzGBXv/JEuxjlnGW6vz2AJ6R9sr3ZjxnBT4DBJyB5FFXg9gufRsQvPG8fgio+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722364304; c=relaxed/simple;
-	bh=yu4MkBt+A5FPSswLoTztS01ERieWVN45hrl7O7QRw4A=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MqoyH+nUMmWwIT0olNRX3s/HbTryMaJO9WUfflGiRAzCRaRQBbEBg44HpmCM3intos10rtDr1zYGXnZqYi2KoXMfVX+u05y0pKTxwQQ+UAl9KOxDCUh+FnDJBBIDLi+HF08I98pbqx1alyldfHkN+bubN2kPQP71xesttPaIJDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSnLDQzT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CBD8CC4AF0A
-	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 18:31:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722364303;
-	bh=yu4MkBt+A5FPSswLoTztS01ERieWVN45hrl7O7QRw4A=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=lSnLDQzTKJ0KSU/c7/E7wbxBSpEuyA5THwgXrAcYv9giarGNNsDWWKvuluYCA9jZp
-	 tfvoRoLH6agFmYje6i5BOBJodVI9sFTH0JIWfWKqRkhJyjUGIEERqTPrXo+xToA0fK
-	 zSNJNWqq+lRkBcr83uhp9UKzNMx/sDJuyk7KRJT4csuyU2hy5I2T5ekNAvShjn0EuX
-	 VfA2erNAqulPBwir8CNqCKVEf3eKXj8YR18SH4GApTqp+QVUQzBEaGw/6XmkCemjJo
-	 n9c4tqEd+/CRHkuh5CeLbdExS0Ws7PwaTXmJN+DpgOPrvdIJbj9dK5xkBt1LX0u6k/
-	 kekiGuAwzMiDg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id C33B7C53B73; Tue, 30 Jul 2024 18:31:43 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 219110] amd-pstate's balance_performance
- energy_performance_preference doesn't survive suspend resume
-Date: Tue, 30 Jul 2024 18:31:43 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: aros@gmx.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: priority bug_severity
-Message-ID: <bug-219110-137361-PLsfJLvBdn@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219110-137361@https.bugzilla.kernel.org/>
-References: <bug-219110-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1722364417; c=relaxed/simple;
+	bh=1OBo5ac7UB980Vwp9IAp/IzlYLKbqDBtnTkktrSInEY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KWCGrbrw/vqJ1JlfGspO7NMrDSOKaV8lA5uq0YczYMD+NyfrdMt5yJvxeJbLxL/m04Gmzf4MEploucTbrPwKB30zzaUcWXe1a93aayQU83kBkiIzkhAIZFAWIr0vdLkxA0w5q0FvIJb+L47n329AWIc4Jvi+jSyXiBcbhS7cXAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=kxVpww3g reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id 3b628da5022b9dc8; Tue, 30 Jul 2024 20:33:33 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 8F388956ED0;
+	Tue, 30 Jul 2024 20:33:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1722364413;
+	bh=1OBo5ac7UB980Vwp9IAp/IzlYLKbqDBtnTkktrSInEY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=kxVpww3gkRboC5/DX5eRm0xJHayHx2aOJiphYQPpQguW7TuLOeex0kd/Uf5ny6kes
+	 VnGxuEW1HxUVvoV+XlcqYv/lw064F8H0tenzVBDEkCbgViZwm6sCqYQ90ofKHpItPu
+	 nEuUN2PFcfdeFvFgN8zmP1G9RdGjcGLpNC6YYMt/5LtHvgvAd2bkt3gM8tn8jS7MGV
+	 2LfMOqF72Aqbu0kvd58EI7Cl63oMBsyKUU6dUYCbMYJMPqVWp8axrC0TBZRThAIfHJ
+	 fuJF1DAR3aCdmJs8s9qgVMz1ohss7RcBLOJGmKhlOexbjk7hapenQQrv63ENwSBh9K
+	 f6TCBAl6Tj85g==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Linux ACPI <linux-acpi@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
+ Peter Kaestle <peter@piie.net>, platform-driver-x86@vger.kernel.org
+Subject:
+ [PATCH v1 12/17] platform/x86: acerhdf: Use the .should_bind() thermal zone
+ callback
+Date: Tue, 30 Jul 2024 20:33:32 +0200
+Message-ID: <2242500.C4sosBPzcN@rjwysocki.net>
+In-Reply-To: <1922131.tdWV9SEqCh@rjwysocki.net>
+References: <1922131.tdWV9SEqCh@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: spam:low
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrjeeggdduvdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuufhprghmkfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepkedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
+ rhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepphgvthgvrhesphhiihgvrdhnvghtpdhrtghpthhtohepphhlrghtfhhorhhmqdgurhhivhgvrhdqgiekieesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=32 Fuz1=32 Fuz2=32
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219110
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Artem S. Tashkinov (aros@gmx.com) changed:
+Make the acerhdf driver use the .should_bind() thermal zone
+callback to provide the thermal core with the information on whether or
+not to bind the given cooling device to the given trip point in the
+given thermal zone.  If it returns 'true', the thermal core will bind
+the cooling device to the trip and the corresponding unbinding will be
+taken care of automatically by the core on the removal of the involved
+thermal zone or cooling device.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Priority|P3                          |P5
-           Severity|normal                      |low
+The previously existing acerhdf_bind() function bound cooling devices
+to thermal trip point 0 only, so the new callback needs to return 'true'
+for trip point 0.  However, it is straightforward to observe that trip
+point 0 is an active trip point and the only other trip point in the
+driver's thermal zone is a critical one, so it is sufficient to return
+'true' from that callback if the type of the given trip point is
+THERMAL_TRIP_ACTIVE.
 
---- Comment #4 from Artem S. Tashkinov (aros@gmx.com) ---
-> Our team now lacks resources, both human resource and project funding
-> support.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-That's really sad to hear.
+This patch only depends on patch [09/17].
 
-> So it will take time.
+---
+ drivers/platform/x86/acerhdf.c |   33 ++++++---------------------------
+ 1 file changed, 6 insertions(+), 27 deletions(-)
 
-Thanks a ton, there's no rush.
+Index: linux-pm/drivers/platform/x86/acerhdf.c
+===================================================================
+--- linux-pm.orig/drivers/platform/x86/acerhdf.c
++++ linux-pm/drivers/platform/x86/acerhdf.c
+@@ -378,33 +378,13 @@ static int acerhdf_get_ec_temp(struct th
+ 	return 0;
+ }
+ 
+-static int acerhdf_bind(struct thermal_zone_device *thermal,
+-			struct thermal_cooling_device *cdev)
++static bool acerhdf_should_bind(struct thermal_zone_device *thermal,
++				const struct thermal_trip *trip,
++				struct thermal_cooling_device *cdev,
++				struct cooling_spec *c)
+ {
+ 	/* if the cooling device is the one from acerhdf bind it */
+-	if (cdev != cl_dev)
+-		return 0;
+-
+-	if (thermal_zone_bind_cooling_device(thermal, 0, cdev,
+-			THERMAL_NO_LIMIT, THERMAL_NO_LIMIT,
+-			THERMAL_WEIGHT_DEFAULT)) {
+-		pr_err("error binding cooling dev\n");
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-static int acerhdf_unbind(struct thermal_zone_device *thermal,
+-			  struct thermal_cooling_device *cdev)
+-{
+-	if (cdev != cl_dev)
+-		return 0;
+-
+-	if (thermal_zone_unbind_cooling_device(thermal, 0, cdev)) {
+-		pr_err("error unbinding cooling dev\n");
+-		return -EINVAL;
+-	}
+-	return 0;
++	return cdev == cl_dev && trip->type == THERMAL_TRIP_ACTIVE;
+ }
+ 
+ static inline void acerhdf_revert_to_bios_mode(void)
+@@ -447,8 +427,7 @@ static int acerhdf_get_crit_temp(struct
+ 
+ /* bind callback functions to thermalzone */
+ static struct thermal_zone_device_ops acerhdf_dev_ops = {
+-	.bind = acerhdf_bind,
+-	.unbind = acerhdf_unbind,
++	.should_bind = acerhdf_should_bind,
+ 	.get_temp = acerhdf_get_ec_temp,
+ 	.change_mode = acerhdf_change_mode,
+ 	.get_crit_temp = acerhdf_get_crit_temp,
 
---=20
-You may reply to this email to add a comment.
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+
 
