@@ -1,97 +1,204 @@
-Return-Path: <linux-pm+bounces-11692-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11694-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3FDD941F39
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 20:10:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55EE4941F5E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 20:17:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8DFC8284A51
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 18:10:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB7CCB277AB
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 18:17:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD586188003;
-	Tue, 30 Jul 2024 18:10:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 313C518B465;
+	Tue, 30 Jul 2024 18:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LqNsgUiy"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="vP3XFBnN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A928A33999
-	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 18:10:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBFF8187FF9;
+	Tue, 30 Jul 2024 18:17:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722363006; cv=none; b=TFPGnRYpTElVfa95fxq8rL4Od9X6MIauGY3a+qV1zJ6ajdsfRo3+H1lrhJkkPmNunu5BRmkfPpN+n5PQEf5STPNaDlPeQxg5rjPEfO6HANJ4zHDJ+bCIdXalRgHRFXfXTr/pwGf3vr0K9dAirXn0mtZzIju+TFHH1kZhF7sbZL4=
+	t=1722363439; cv=none; b=K7128NheArvC4nwZgw+qDkddP2VkIDEj28Mg3RaG8UnNqsZuPBtI9aNs4xRXEeSX88bzlcxF8+5xk1LpgCMeYXCQMHXdRhvdHe91/rEtS2Kbjonad5cq6NLBCj5B8vfUXByWg0EFNVonl4GCGtxGieOVSK+Hz/ZCftU/5wiH4H0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722363006; c=relaxed/simple;
-	bh=JQCDJDZKMaMWHHzl/TsiWVv0F5qrYCj6VCeQ558r8oc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OA79Qu1qbxWvXxeTSPHPUZLj+SQTtbCaBP0h9pi9nFMiPO6GDjnko6HOvO0FV7RIy1af7fpHh7C17Xl84JLrblyLOytpXtI9M764upKqtIEnC+D0nSaWQyJ+vy9B2wyWD0iyXw40iabNpSJ/2lFnreQv9qZRcsB+pVqxqU2xfq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LqNsgUiy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 33F2FC4AF0F
-	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 18:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722363006;
-	bh=JQCDJDZKMaMWHHzl/TsiWVv0F5qrYCj6VCeQ558r8oc=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=LqNsgUiyLMjO16OsuDDo6xabZgpBLTo/FEF3qWIur3Pat71qV3rT3nLs/a+CJSrQ6
-	 8vAb55KfjjhUcDZxQlFDnr2kC1XvZHpj7uYDNweXZ6QhnKb+hyYKNB5l/3SeJ/mQTZ
-	 n/G67d68b/OfOroKqfFD5OvOyA5GQ3tDJ4D83yU/n23hJVCp5TFTzFgTXqyIt73HTl
-	 2Jb5/24dbo3KHDQ1j3ft5vI7IuQP0VKaFEU6SfgWwzMQVNNUUFNSdSvtuDoW3luFJw
-	 Etm2kKmDAO8qAZRZmVCXfFP3RFb+6/UqQK3XbbDCncmyJ6TuCg8F+bDkHBUhIwkrg7
-	 E0REQ/u1zQ1zg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 2D7BCC53B7F; Tue, 30 Jul 2024 18:10:06 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218686] Fail to set energy_performance_preference of amd
- processor on asus ga403uv
-Date: Tue, 30 Jul 2024 18:10:05 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: xiaojian.du@amd.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DOCUMENTED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218686-137361-NV93Fg3wOr@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
-References: <bug-218686-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1722363439; c=relaxed/simple;
+	bh=c9eTD1l1BXML5l9sgGPaC0hgzN5RssSinVU7S9llI8s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LD/LpBaaTLbjT73k8sTUqyyIr+vRkDcYe1qKG93P4XrTt+SY8A0p/ZQ43zHUBf7knLXZRRYh+qu3FyQWN4brhFUqni4ltUk17joZasz3Dlk5GB27dFKS3oksHM1yC++dLuCx3EaxXLm5c0OMAL4BRZUunO2kuIeQRxT+X7uguec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=vP3XFBnN reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id a344f6141c964dfd; Tue, 30 Jul 2024 20:17:08 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id C1E40956ED0;
+	Tue, 30 Jul 2024 20:17:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1722363428;
+	bh=c9eTD1l1BXML5l9sgGPaC0hgzN5RssSinVU7S9llI8s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=vP3XFBnNO0NyIWlkfESY7GPxhQErGbTfo6ezXEi5HEykC6ItuxJT/wXBooX/SV600
+	 vWfhYvTuESzPbgNda4733Z/W2GdV+hGwI13sBGqBUF+rhKqOgMrj0AFBkxxu8/m3ZR
+	 ATuR7As/bibxCkOyuhdliFMgIQhfvInTbbHjXJs5sD0lahkHh+q3fqLtOVpnFYHOpW
+	 NpzYLPnGOFY/dipO21FqSAbZpE3w2nucZ0MMy2f3o0VEuasFjVB/BxPB4r2XbbvVVZ
+	 QbCsOFx/5h8h9UDEACB5e6uF7RAiNEs7b0Y++m+QtZ7xoCZ1wyBE3u8hbWQVD9a++f
+	 gEYgZqPetHyrA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Linux ACPI <linux-acpi@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>
+Subject:
+ [PATCH v1 17/17] thermal: code: Pass trip descriptors to trip bind/unbind
+ functions
+Date: Tue, 30 Jul 2024 20:16:48 +0200
+Message-ID: <3134863.CbtlEUcBR6@rjwysocki.net>
+In-Reply-To: <1922131.tdWV9SEqCh@rjwysocki.net>
+References: <1922131.tdWV9SEqCh@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: spam:low
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrjeeggdduvdegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuufhprghmkfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
+ rhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
---- Comment #59 from xiaojian.du@amd.com ---
+The code is somewhat cleaner if struct thermal_trip_desc pointers are
+passed to thermal_bind_cdev_to_trip(), thermal_unbind_cdev_from_trip(),
+and print_bind_err_msg() instead of struct thermal_trip pointers, so
+modify it accordingly.
 
-For this output info:
+No intentional functional impact.
 
-> CPU 14:
->    0x80000008 0x00: eax=3D0x00003030 ebx=3D0x111ef257 ecx=3D0x0000400f
-> edx=3D0x00010000
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_core.c |   27 ++++++++++++---------------
+ 1 file changed, 12 insertions(+), 15 deletions(-)
 
-Fn80000008_EBX bit27[CPPC] =3D 0, it remains "0", means CPPC is disabled.
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -759,9 +759,9 @@ struct thermal_zone_device *thermal_zone
+ /**
+  * thermal_bind_cdev_to_trip - bind a cooling device to a thermal zone
+  * @tz:		pointer to struct thermal_zone_device
+- * @trip:	trip point the cooling devices is associated with in this zone.
++ * @td:		descriptor of the trip point to bind @cdev to
+  * @cdev:	pointer to struct thermal_cooling_device
+- * @c:		cooling specification for @trip and @cdev
++ * @c:		cooling specification for the trip point and @cdev
+  *
+  * This interface function bind a thermal cooling device to the certain trip
+  * point of a thermal zone device.
+@@ -770,11 +770,10 @@ struct thermal_zone_device *thermal_zone
+  * Return: 0 on success, the proper error value otherwise.
+  */
+ static int thermal_bind_cdev_to_trip(struct thermal_zone_device *tz,
+-				     struct thermal_trip *trip,
++				     struct thermal_trip_desc *td,
+ 				     struct thermal_cooling_device *cdev,
+ 				     struct cooling_spec *c)
+ {
+-	struct thermal_trip_desc *td = trip_to_trip_desc(trip);
+ 	struct thermal_instance *dev, *instance;
+ 	bool upper_no_limit;
+ 	int result;
+@@ -805,7 +804,7 @@ static int thermal_bind_cdev_to_trip(str
+ 
+ 	dev->tz = tz;
+ 	dev->cdev = cdev;
+-	dev->trip = trip;
++	dev->trip = &td->trip;
+ 	dev->upper = c->upper;
+ 	dev->upper_no_limit = upper_no_limit;
+ 	dev->lower = c->lower;
+@@ -878,7 +877,7 @@ free_mem:
+ /**
+  * thermal_unbind_cdev_from_trip - unbind a cooling device from a thermal zone.
+  * @tz:		pointer to a struct thermal_zone_device.
+- * @trip:	trip point the cooling devices is associated with in this zone.
++ * @td:		descriptor of the trip point to unbind @cdev from
+  * @cdev:	pointer to a struct thermal_cooling_device.
+  *
+  * This interface function unbind a thermal cooling device from the certain
+@@ -886,10 +885,9 @@ free_mem:
+  * This function is usually called in the thermal zone device .unbind callback.
+  */
+ static void thermal_unbind_cdev_from_trip(struct thermal_zone_device *tz,
+-					  struct thermal_trip *trip,
++					  struct thermal_trip_desc *td,
+ 					  struct thermal_cooling_device *cdev)
+ {
+-	struct thermal_trip_desc *td = trip_to_trip_desc(trip);
+ 	struct thermal_instance *pos, *next;
+ 
+ 	lockdep_assert_held(&tz->lock);
+@@ -945,11 +943,11 @@ static struct class *thermal_class;
+ 
+ static inline
+ void print_bind_err_msg(struct thermal_zone_device *tz,
+-			const struct thermal_trip *trip,
++			const struct thermal_trip_desc *td,
+ 			struct thermal_cooling_device *cdev, int ret)
+ {
+ 	dev_err(&tz->device, "binding cdev %s to trip %d failed: %d\n",
+-		cdev->type, thermal_zone_trip_id(tz, trip), ret);
++		cdev->type, thermal_zone_trip_id(tz, &td->trip), ret);
+ }
+ 
+ static void thermal_zone_cdev_binding(struct thermal_zone_device *tz,
+@@ -963,7 +961,6 @@ static void thermal_zone_cdev_binding(st
+ 	mutex_lock(&tz->lock);
+ 
+ 	for_each_trip_desc(tz, td) {
+-		struct thermal_trip *trip = &td->trip;
+ 		struct cooling_spec c = {
+ 			.upper = THERMAL_NO_LIMIT,
+ 			.lower = THERMAL_NO_LIMIT,
+@@ -971,12 +968,12 @@ static void thermal_zone_cdev_binding(st
+ 		};
+ 		int ret;
+ 
+-		if (!tz->ops.should_bind(tz, trip, cdev, &c))
++		if (!tz->ops.should_bind(tz, &td->trip, cdev, &c))
+ 			continue;
+ 
+-		ret = thermal_bind_cdev_to_trip(tz, trip, cdev, &c);
++		ret = thermal_bind_cdev_to_trip(tz, td, cdev, &c);
+ 		if (ret)
+-			print_bind_err_msg(tz, trip, cdev, ret);
++			print_bind_err_msg(tz, td, cdev, ret);
+ 	}
+ 
+ 	mutex_unlock(&tz->lock);
+@@ -1287,7 +1284,7 @@ static void thermal_zone_cdev_unbinding(
+ 	mutex_lock(&tz->lock);
+ 
+ 	for_each_trip_desc(tz, td)
+-		thermal_unbind_cdev_from_trip(tz, &td->trip, cdev);
++		thermal_unbind_cdev_from_trip(tz, td, cdev);
+ 
+ 	mutex_unlock(&tz->lock);
+ }
 
---=20
-You may reply to this email to add a comment.
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+
 
