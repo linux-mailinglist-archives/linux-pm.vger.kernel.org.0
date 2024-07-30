@@ -1,48 +1,74 @@
-Return-Path: <linux-pm+bounces-11646-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11647-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77591940CFC
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 11:08:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2C85940DFD
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 11:41:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D0DD287605
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 09:08:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5A121C2442B
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 09:41:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083D6194148;
-	Tue, 30 Jul 2024 09:07:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9B8019645E;
+	Tue, 30 Jul 2024 09:40:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LPcSFeZA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oe7ULUCa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0550442C;
-	Tue, 30 Jul 2024 09:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE435194C76
+	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 09:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722330466; cv=none; b=SawI6e8hqaxOGl0XBW8iCoiacm9LtaTTO0vgoxeF/B04VW3RhiI9mniCHd/nMfe0b+20hvgSTYYdtNzNIyMZ0H0w/UsYt0hs1N33ZF7AuznH7xNaULjIDtzXGjasTHjmL1E9LhIkzVa/z/VK/WzYBwWu47r0+dWKvSpk/cM6nBw=
+	t=1722332456; cv=none; b=Bjsdzekd/rT2BsD2Nl2trTRf1Wovw20rTVPGk+XoFf27d6JheffYmTNGoqCLOozAq0TuRl5nMrowifR70mWk+dBbjJCysLK/tc5/TcA4T//Ju5FHo5pEoYAyUQ2K8ewpnKOv3GNXa9+SuLmLKZb5Jk/+dhm+nQFLTAQxoJkd9Xs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722330466; c=relaxed/simple;
-	bh=Dx+qGB5ivvHdAixyU4wClkTxaB6RCHdWtG0QU3+YkPM=;
+	s=arc-20240116; t=1722332456; c=relaxed/simple;
+	bh=N481Fef7S0N9/m+9FaoOMhDJ4evTkR6anInQLiuFzBI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Otqpc4p+ZpPuTnnFqtryaLH9IVmMo3X01ReviygOmPsHy7NRJLcP3qVf1VX+kM6HlhLrZ7xdhLv2t+uwLRDoAfLyeWiYF3QfS1bUCLz1Q2PsvU11Llp1B+h7Z//mjCnfyI8/MOogX7GzZnNeljH+PS+ofTmxI8WUTom12yrRcxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LPcSFeZA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CCF3C4AF0B;
-	Tue, 30 Jul 2024 09:07:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722330466;
-	bh=Dx+qGB5ivvHdAixyU4wClkTxaB6RCHdWtG0QU3+YkPM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LPcSFeZAIWRhX86nBBVNttOSbEDN0U71SJUnsd82NnTtGpGMBs812v4ebtZ+azK3X
-	 FuWyvalHESZLpdXOTTE+1f7pFS1Bf51P6DPumEB3OiA4wX7L+RcPYs97h8khXlmItR
-	 FiPvvaTaEkYWQRkbrRh/92fRnrJDf9ODbej8B/IebsjKeLYO/AndZQs+9wnZr2IMd1
-	 KISO0ElwVs6OQzkzj/SO3c+0ifazso3RONu1IVrIflxBVn9CrCktHnCgov3qCB4TKF
-	 VPgxPptb3PA5CqA7ZScgkHrKgcB6k631uqY7W8SuM8nKKAVJNzoCNPA+IuhXaib8Rz
-	 PFPSlh9FWbPBQ==
-Message-ID: <6e79d848-b1f0-4d56-b5cb-5fcf80868138@kernel.org>
-Date: Tue, 30 Jul 2024 11:07:33 +0200
+	 In-Reply-To:Content-Type; b=WjDMHMsWDZjqsxZvrXkIShfBjOtQjqU4V18NI57h41PsVLPBrgao64x1ZM1O6V8NQRqHR2tJk/q7aspQArQXWKGRgWFOFqgN+6bbkXhmKkmW+o7whoGPeOcuC00uN4T14K7DexDBaXfyKIvxHJQEdnWrXHSYPND48WhBqezwo+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oe7ULUCa; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-42819654737so19571635e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 02:40:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722332453; x=1722937253; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tBl8JIQ3F/WVNou28JBRaEkXsP2yFpogw/kNje56otg=;
+        b=oe7ULUCa05NNJXhuwkGFBvuIP5/smks8sLYkCBqNUIQpKfl/sGbOIE7D0AXMS9DbVk
+         q6hcm1oqdqwo0zGEg9/xsC0qwEfqMwt+ytwCjUcSXF+Gt5CHH1z2tJNfnlC4rjUZ+ZWq
+         Oiv06IYRXD2ospAYEMGnFLLtGH+tYuERcOUUyPiexY4v3ySkK/LV8LE9FjChfJ4bRADK
+         HScHwTbXOwAvABfc4EjUOcyQj6Pj4WyytvarUJXl76ILQZIG6o45raAMCWQUX/prZdon
+         hkNvO+eLS1135X1LkconO2d3o+v7hpbvAYJ+d5ZOIy0DO1DsG1pzlo8ijE4sVpy3kXUe
+         wifg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722332453; x=1722937253;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tBl8JIQ3F/WVNou28JBRaEkXsP2yFpogw/kNje56otg=;
+        b=tcl4nc+bbtJZRRGrEdnWn9C74ethO6Tnw/PNBNlCL4qYyonR/U1vv7gZhWQHWyySig
+         tsK5/C/ei+6t8bhjHdbIEO40FR4vKRC3SBXHCj+LpVQh/EC98e1K08TvdwG4cSgec2zj
+         5Anoal4bAh/YKSym0zgtnN0Ve++iBxH6WDsBdQbN0feU3qR/GUawouEFYNV/Spzt2Ohh
+         mlpGG96b9WoatYPapdLEBMtaD3LGuuBfUA1XZrbFS8/5g73eIyn6xOgxi9RekoYeoaag
+         Yk0RqO+eczgWKY4njxys34dChOs899FpLZF4MaF3Fi2LFmwMC9fnpY6soaLyhNGhAdS8
+         SiTg==
+X-Gm-Message-State: AOJu0Yx7S0j2konGD8pCAF6tZ7Q1Wlvwp1BfyqNEH/o5pY28n3Z+M6rc
+	43o56B161xwu6N2QwIL87JjRVSBnFW8hT34QqgIN97FwzlSeedVH0T/32L3Cg/xmyprieOC6bFN
+	V
+X-Google-Smtp-Source: AGHT+IGdUMP0w0Wck6yNSvXnN37NmBjT8XRcz/ZMCWDRHV4dE5dcgvUQpwlKCIwdENIsbXBVmOJZZw==
+X-Received: by 2002:a05:600c:4706:b0:425:5ec3:570b with SMTP id 5b1f17b1804b1-42811df6bf7mr64975455e9.35.1722332453008;
+        Tue, 30 Jul 2024 02:40:53 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-42824af5410sm11743535e9.1.2024.07.30.02.40.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Jul 2024 02:40:52 -0700 (PDT)
+Message-ID: <97ece7c5-d317-452b-9045-c12940567781@linaro.org>
+Date: Tue, 30 Jul 2024 11:40:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,110 +76,92 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/11] arm64: dts: qcom: sm7325: Add device-tree for
- Nothing Phone 1
-To: Danila Tikhonov <danila@jiaxyga.com>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, andersson@kernel.org,
- konrad.dybcio@linaro.org, rafael@kernel.org, viresh.kumar@linaro.org,
- heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
- kees@kernel.org, tony.luck@intel.com, gpiccoli@igalia.com,
- sudeep.holla@arm.com, quic_rjendra@quicinc.com, andre.przywara@arm.com,
- ulf.hansson@linaro.org, davidwronek@gmail.com, neil.armstrong@linaro.org,
- heiko.stuebner@cherry.de, rafal@milecki.pl, macromorgan@hotmail.com,
- linus.walleij@linaro.org, dmitry.baryshkov@linaro.org,
- johan+linaro@kernel.org, javier.carrasco.cruz@gmail.com,
- quic_kriskura@quicinc.com, lpieralisi@kernel.org, fekz115@gmail.com
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-hardening@vger.kernel.org,
- linux@mainlining.org
-References: <20240729201843.142918-1-danila@jiaxyga.com>
- <20240729201843.142918-12-danila@jiaxyga.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v1 1/7] thermal/core: Encapsulate more handle_thermal_trip
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, rafael@kernel.org
+Cc: linux-pm@vger.kernel.org, lukasz.luba@arm.com, quic_manafm@quicinc.com
+References: <20240729150259.1089814-1-daniel.lezcano@linaro.org>
+ <20240729150259.1089814-2-daniel.lezcano@linaro.org>
+ <12507467.O9o76ZdvQC@rjwysocki.net>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240729201843.142918-12-danila@jiaxyga.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 29/07/2024 22:18, Danila Tikhonov wrote:
-> From: Eugene Lepshy <fekz115@gmail.com>
-> 
-> Add device tree for the Nothing Phone 1 (nothing,spacewar) smartphone
-> which is based on the SM7325 SoC.
-
-...
-
-> +
-> +&i2c2 {
-> +	clock-frequency = <100000>;
-> +	status = "okay";
-> +
-> +	/* nxp,tfa9873 (EAR speaker codec) @ 34 */
-> +	/* nxp,tfa9873 (Main speaker codec) @ 35 */
-> +};
-> +
-> +&i2c9 {
-> +	clock-frequency = <1000000>;
-> +	status = "okay";
-> +
-> +	nfc@28 {
-> +		compatible = "nxp,nxp-nci-i2c";
-
-Prepend it with proper compatible for this NFC chip and update the bindings.
-
-> +		reg = <0x28>;
-> +
-> +		interrupt-parent = <&tlmm>;
-> +		interrupts = <41 IRQ_TYPE_NONE>;
-
-This does not look like valid interrupt type...
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <12507467.O9o76ZdvQC@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
+Hi Rafael,
 
-Best regards,
-Krzysztof
+On 29/07/2024 18:57, Rafael J. Wysocki wrote:
+> On Monday, July 29, 2024 5:02:50 PM CEST Daniel Lezcano wrote:
+>> In order to set the scene for the thresholds support which have to
+>> manipulate the low and high temperature boundaries for the interrupt
+>> support, we must pass the low and high value the incoming thresholds
+>> routine.
+>>
+>> Instead of looping in the trip descriptors in
+>> thermal_zone_device_update(), we move the loop in the
+>> handle_thermal_trip() function and use it to set the low and high
+>> values.
+>>
+>> As these variables can be set directly in the handle_thermal_trip(),
+>> we can get rid of a descriptors loop found in the thermal_set_trips()
+>> function as low and high are set in handle_thermal_trip().
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+
+[ ... ]
+
+>> -	for_each_trip_desc(tz, td)
+>> -		handle_thermal_trip(tz, td, &way_up_list, &way_down_list);
+>> +	handle_thermal_trip(tz, &way_up_list, &way_down_list, &low, &high);
+>>   
+
+[ ... ]
+
+> Well, why not do the (untested) change below instead, which is way simpler?
+
+Right, I did your proposed changed initially. The patch looks very 
+complicated but it is just the result of the difference between the 
+change above and below. It is code reorg, without functional changes 
+(except two loops => one loop).
+
+It looked to me more consistent to move the for_each_trip_desc() inside 
+handle_thermal_trip() in order to:
+  - encapsulate the trip code more and have one line call
+  - be consistent with the thermal_threshold_handle() which is also one 
+line call
+
+If you prefer, I can split the changes, but it is extra work for little 
+benefit. I pushed the changes in the git tree, the resulting code from 
+these changes are:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/thermal_core.c?h=thermal/threshold-patchset#n427
+
+and
+
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/thermal_core.c?h=thermal/threshold-patchset#n600
+
+Let me know if you prefer to do a smaller change or go forward in the 
+code encapsulation
+
+> The thermal_zone_set_trips() kerneldoc needs to be either updated or dropped
+> because it is not applicable any more after this and I think it's better to
+> just drop it.
+
+Sure
+
+> -	for_each_trip_desc(tz, td)
+> +	for_each_trip_desc(tz, td) {
+>   		handle_thermal_trip(tz, td, &way_up_list, &way_down_list);
+
+[ ... ]
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
