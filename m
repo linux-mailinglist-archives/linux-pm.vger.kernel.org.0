@@ -1,54 +1,74 @@
-Return-Path: <linux-pm+bounces-11663-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11664-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5C0F9410B0
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 13:38:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A9D99412B4
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 14:59:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64EAE1F220E0
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 11:38:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E9CA1C22A69
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 12:59:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF26419E804;
-	Tue, 30 Jul 2024 11:38:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8861919F48D;
+	Tue, 30 Jul 2024 12:59:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="UJkpbcTZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yku7b5+v"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0528519B3F9;
-	Tue, 30 Jul 2024 11:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.60.130.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D64D18EFE3
+	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 12:59:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722339502; cv=none; b=F4Rkx8p7SCFN/zGSHjqBsEQEgiNqN+Re94QMYjJpQ7wLyQb5gHHwLIqluHIRziJel7TehvAikFKMK6sAN3C5rnUt316nvR1BLPTyVgcAnitlOc/ieGSGHlMW3UB6blzbPDJRh4r/+eP2NBwKIKv3UDuqaIyK0I8yp46bu8TgJLU=
+	t=1722344344; cv=none; b=bysjdqPhzsFwuJ+b8pX//wjluXTXbps5HoKKOjprdNG2Qavz6bU35bM1c0LylmGEsJo41ZlvmKfPQ1bf7vKabvvXBeAvNtcZiutnM6GL4/Eh/BSrR6eEdwtLkphyecyK+FlngQzTx5Xktu8LvF7cUMoV18G6U05Ui2hUAFh3K1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722339502; c=relaxed/simple;
-	bh=TiJNm9C+6IUH432PuhDQhEwXYsUueLlQfTMMK0FDgD4=;
+	s=arc-20240116; t=1722344344; c=relaxed/simple;
+	bh=NJ5wWQX+MXzcjI3xAU8zMQzGIm1Nwk32FjZNMdSzKqE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UEumghNV2uQXgu4buIiC+3r1NcKKs64qbcyGQPcAst1tDImIp+pABsdUCHPqYISCBxijemXsY4TdhqDjRM+Fa9wu0uqEOO967FcafPF1TQMoa5oGwrp8HmCkzFKCz8G7/dWShMaoz00VnLzF25A8QuQJ4Pa2JuwIgknpzZUXr4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=UJkpbcTZ; arc=none smtp.client-ip=178.60.130.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=5L/gocOQMZe6co0EPVC+ZcjsICkcAhqhaliJGAeQue4=; b=UJkpbcTZkH/f2Y9iKX2AR9YDXe
-	Yc2W0yr9smfZobMe5fgLRV4lu5RjQoaNzasyRKgZhfZZkD1x7aZtj6Bc5DpgQMzN6+TroABgL61Y5
-	9VRRbtR1rvMd38F1S0ARnaLU/pKM4EyCt4QpTxpP45o0YZ89bkx3D8hLx6g2J8pIyjBXDvCq+4B/2
-	tHr5bW8/zoU5YPLUAU9OA4GkpBca9aHDIrrO+eG06OPOowR1qPr2z5UQ2Muxw91miMF7Qc+4T8IPj
-	FWCtsHBEjMIAyp2VCwhCCFOYGfp2ujZfMCZI9Pjqba37xEzuVyHYWWT5b8m/Kj8jaWDcCEM1TuTZv
-	FJtkwujg==;
-Received: from [187.36.213.55] (helo=[192.168.1.212])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1sYlB6-005Zgc-5O; Tue, 30 Jul 2024 13:38:04 +0200
-Message-ID: <0a680c00-f5b7-49f3-9b6e-852d147a5383@igalia.com>
-Date: Tue, 30 Jul 2024 08:37:52 -0300
+	 In-Reply-To:Content-Type; b=btEYlk5OxMb3wmf++bVtLYrAkzdMC2jBaPQVEfDcGkhcsN474nFb2Lt6ygaVIfP4DYrzFgWRXEk0Mokh33PZ4x8w2+MJ/yb5lhduzGtOtu12VS2jiTq4FZJAYUr2wg1brexlYs+m0h4VG5sMovDcRNdC7O6EpzorY/LynNt88Qc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yku7b5+v; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3686b554cfcso2185862f8f.1
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 05:59:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722344339; x=1722949139; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sV4jeBWTzwj/MSeNBURYBG9491IFNxtmxPBAzKA8sQA=;
+        b=yku7b5+v+/m7EbIF6+0TPzqdYiU/fCf8PpVsbLh4i1nwsPwrCxGKUOEGWDplfUgCW/
+         aSIfL62BYfQWLNOQW8oS6zcDyAqmpEwl2C8CaBtgeBfnPJfJAfLaWmmMEBvU9SMsOEtU
+         EQsl5hYJd6GJx5vMQOdqdV6Cs1DNCNzAqSnIvayjAxp1w0Gz3bttqydDyyLkHukS2Wrn
+         aQkxYjN9+ALqKHzMM+XV1KMQwK1YnFdPsg5cL9q9+/jmDPocMxiHUus5ZzDytyTpB1P7
+         MiHLPjblm8LWT9JPibyKYQpj1d2ROSufTjkiKInLLGM8rGmisocmucsj5VdwpYeJgodJ
+         dIPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722344339; x=1722949139;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sV4jeBWTzwj/MSeNBURYBG9491IFNxtmxPBAzKA8sQA=;
+        b=VaJbeXf2IImkxFJ+Wp3jlQvi8kCwngngw5XSFdvwRmNiDgXChYaGTqghkpOTGLymce
+         AdDuRM6awMkVuY8HyTXadrkjEjqKg9gdvPVsyT4CWgbzwACbJbtUX8vkTOfwZuaLqfNS
+         ofJAsHq8f2/73RgA2KX42euqC4T6u9Za7OjexA3UArDov12k3gNLEzfCPQ8WUMRimSrF
+         Z2scVIvQxfc9opvCYZJG6N7PAmJqVdAjk/BMf5WMmG6v9nR8Z4ABv6gWVvMkndDB8qdh
+         CIPUCAC7TGiRAXfYZ3A7Sht4Ob479va0DFjBNwDlS65you/0jg1VOXJnkwpW0Yb4IMZf
+         lQ9w==
+X-Forwarded-Encrypted: i=1; AJvYcCWA/00923UwqJSqL+XYz4brKB+18sxnU8cs02cpfy1L5CkE9TJRj0vbVI8VBWuv5ZTKR7ZH7AJP3X90ZvxzaahiXlKYCKtVEnA=
+X-Gm-Message-State: AOJu0YxRwtlp3+C4Iit1kh9RsvpqLVYpRRPwLvUQ/d2qcORUV0AlRzmt
+	97t4L15DTZcr4GdzrM0KLUVcwk+202iDaextQNv2gW8PXqEAL46fr6Nsej5ApsA=
+X-Google-Smtp-Source: AGHT+IEJ80Tw++90S7g7P+XpB8UJiHhB+NG+j2W+cdqE3/ULUdJYsOta4GEOWr+gvdHyJczeGBOJxg==
+X-Received: by 2002:a5d:6351:0:b0:36b:33ec:ac40 with SMTP id ffacd0b85a97d-36b5ceef045mr6414694f8f.16.1722344339443;
+        Tue, 30 Jul 2024 05:58:59 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-36b36857e46sm14761036f8f.67.2024.07.30.05.58.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Jul 2024 05:58:59 -0700 (PDT)
+Message-ID: <f9527614-01ba-4954-88de-8a17ae1a84ba@linaro.org>
+Date: Tue, 30 Jul 2024 14:58:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,90 +76,109 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 06/16] drm/vc4: hdmi: Handle error case of
- pm_runtime_resume_and_get
-To: Stefan Wahren <wahrenst@gmx.net>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
- Minas Harutyunyan <hminas@synopsys.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
- Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
- Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
- bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
-References: <20240728114200.75559-1-wahrenst@gmx.net>
- <20240728114200.75559-7-wahrenst@gmx.net>
+Subject: Re: [PATCH v4 0/4] thermal: Add support of multiple sensors
+To: Alexandre Bailon <abailon@baylibre.com>, rafael@kernel.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc: rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240613132410.161663-1-abailon@baylibre.com>
 Content-Language: en-US
-From: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
-Autocrypt: addr=mcanal@igalia.com; keydata=
- xjMEZIsaeRYJKwYBBAHaRw8BAQdAGU6aY8oojw61KS5rGGMrlcilFqR6p6ID45IZ6ovX0h3N
- H01haXJhIENhbmFsIDxtY2FuYWxAaWdhbGlhLmNvbT7CjwQTFggANxYhBDMCqFtIvFKVRJZQ
- hDSPnHLaGFVuBQJkixp5BQkFo5qAAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQNI+cctoYVW5u
- GAEAwpaC5rI3wD8zqETKwGVoXd6+AbmGfZuVD40xepy7z/8BAM5w95/oyPsHUqOsg/xUTlNp
- rlbhA+WWoaOXA3XgR+wCzjgEZIsaeRIKKwYBBAGXVQEFAQEHQGoOK0jgh0IorMAacx6WUUWb
- s3RLiJYWUU6iNrk5wWUbAwEIB8J+BBgWCAAmFiEEMwKoW0i8UpVEllCENI+cctoYVW4FAmSL
- GnkFCQWjmoACGwwACgkQNI+cctoYVW6cqwD/Q9R98msvkhgRvi18fzUPFDwwogn+F+gQJJ6o
- pwpgFkAA/R2zOfla3IT6G3SBoV5ucdpdCpnIXFpQLbmfHK7dXsAC
-In-Reply-To: <20240728114200.75559-7-wahrenst@gmx.net>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20240613132410.161663-1-abailon@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/28/24 08:41, Stefan Wahren wrote:
-> The commit 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is
-> powered in detect") introduced the necessary power management handling
-> to avoid register access while controller is powered down.
-> Unfortunately it just print a warning if pm_runtime_resume_and_get()
-> fails and proceed anyway.
-> 
-> This could happen during suspend to idle. So we must assume it is unsafe
-> to access the HDMI register. So bail out properly.
-> 
-> Fixes: 0f5251339eda ("drm/vc4: hdmi: Make sure the controller is powered in detect")
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 
-Reviewed-by: Maíra Canal <mcanal@igalia.com>
+Hi Alexandre,
 
-Best Regards,
-- Maíra
+thanks for your series and my apologizes for taking a so long time to 
+review.
 
-> ---
->   drivers/gpu/drm/vc4/vc4_hdmi.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
+I went through the series and at the first glance I'm not sure we want 
+to add all the multi specific code in a separate file.
+
+IMO, there is a preparatory work by changing the functions:
+
+thermal_zone_device_register_with_trips() and 
+thermal_zone_device_register_tripless()
+
+where we group and move the functions parameters to the 
+thermal_zone_device_param.
+
+Then we can add a num_ops field which is will default to zero.
+
+With that we should have put a foundation for multiple ops, so multiple 
+sensors.
+
+On 13/06/2024 15:24, Alexandre Bailon wrote:
+> Following this comment [1], this updates thermal_of to support multiple
+> sensors.
 > 
-> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> index d57c4a5948c8..cb424604484f 100644
-> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> @@ -429,6 +429,7 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_connector *connector,
->   {
->   	struct vc4_hdmi *vc4_hdmi = connector_to_vc4_hdmi(connector);
->   	enum drm_connector_status status = connector_status_disconnected;
-> +	int ret;
+> This series intends to add support of thermal aggregation.
+> One use case for it is using the IPA in the case we have
+> multiple sensors for one performance domain.
 > 
->   	/*
->   	 * NOTE: This function should really take vc4_hdmi->mutex, but
-> @@ -441,7 +442,12 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_connector *connector,
->   	 * the lock for now.
->   	 */
+> This has been tested on the mt8195 using s-tui.
+> To test and validate, we heat up the CPU and the heat sink.
+> At some point, we run benchmark tests with different configurations:
+> - Mediatek kernel (IPA + their own thermal aggregation)
+> - Mainline kernel
+> - Mainline kernel with IPA and aggregation enabled
+> With the IPA and the aggregation enabled, we get the best performances
+> with the most stable CPU temperature.
 > 
-> -	WARN_ON(pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev));
-> +	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
-> +	if (ret) {
-> +		drm_err_once(connector->dev, "Failed to retain HDMI power domain: %d\n",
-> +			     ret);
-> +		return connector_status_unknown;
-> +	}
+> The aggregation is configured and enabled using device tree.
+> One thermal zone has to be created with a list of sensors.
+> It will take care of registering a thermal zone for each sensors.
+> The cooling device will only be registered with the aggregating thermal
+> zone.
 > 
->   	if (vc4_hdmi->hpd_gpio) {
->   		if (gpiod_get_value_cansleep(vc4_hdmi->hpd_gpio))
-> --
-> 2.34.1
+> There are still something important missing: a way to check that all
+> aggregated sensors are part of the same performance domain.
+> So far, I don't see how this should be done. Some recommendations would be
+> appreciated.
 > 
+> Changes in v2:
+> - Rebased on 6.7
+> - Separated generic multi sensor and dt specific code
+> - Simplified the code
+> - Drop min / max and only do weighted average (seems more adequate for IPA)
+> 
+> Changes in v3:
+> - Rebased on 6.9
+> - Reworked the way to register a multi sensor thermal zone
+>    - Only one thermal zone to define in device tree
+> - Max has been re-added
+> - Enabled it on mt8195
+> 
+> Changes in v4:
+> - Rebased on lastest master (fixed the build issue)
+> - Dropped the average since I don't have any usecase for it
+> 
+> [1]: https://patchwork.kernel.org/comment/24723927/
+> 
+> Alexandre Bailon (4):
+>    dt-bindings: thermal: Restore the thermal-sensors property
+>    thermal: Add support of multi sensors to thermal_core
+>    thermal: Add support of multi sensors to thermal_of
+>    ARM64: mt8195: Use thermal aggregation for big and little cpu
+> 
+>   .../bindings/thermal/thermal-zones.yaml       |   5 +-
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 212 ++-----------
+>   drivers/thermal/Makefile                      |   1 +
+>   drivers/thermal/thermal_core.h                |  15 +
+>   drivers/thermal/thermal_multi.c               | 288 ++++++++++++++++++
+>   drivers/thermal/thermal_of.c                  | 250 ++++++++++++++-
+>   include/uapi/linux/thermal.h                  |   5 +
+>   7 files changed, 579 insertions(+), 197 deletions(-)
+>   create mode 100644 drivers/thermal/thermal_multi.c
+> 
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
