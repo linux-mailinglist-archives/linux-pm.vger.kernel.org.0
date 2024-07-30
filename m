@@ -1,158 +1,80 @@
-Return-Path: <linux-pm+bounces-11630-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11631-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93206940848
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 08:21:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9B44940864
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 08:31:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B73211C229A8
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 06:21:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 960552843AD
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 06:31:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4352018629C;
-	Tue, 30 Jul 2024 06:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6625915B0E3;
+	Tue, 30 Jul 2024 06:31:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u94Qza5X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D2gzYx6r"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B563168489;
-	Tue, 30 Jul 2024 06:21:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F723524C;
+	Tue, 30 Jul 2024 06:31:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722320493; cv=none; b=AhkjJ5jbQZYO6faSnjvMVbJNWHTfMnliyzlCvsTNvVCPj67o3e76DsjHg2Aze61j/bRqZETwiUaGCE8jw0cJl8vTwssdODCKdqHNuDnK0EzBGgWySm1HDt+WMinXQdMUknU/nDD+g+QpgSl/vJN0AFLvcqB51LXLyy3tpJNZXOI=
+	t=1722321061; cv=none; b=Lbe1mJRn7hRAKHZVW7liA0tGe8UOLRwli5mUJwZeLmGR7IwK9VGU2CLWVT6MfUEkkZXj8G/3Q5VPyDoiSDHeqv9UlGVoh6IgkBCBprQaocQBAv7YeZzSuuPM3ZZZu/ddq68StYi4sE7Yr0k4QCGnEw0PpRBbV032AhoAW1DbJto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722320493; c=relaxed/simple;
-	bh=I8YEZoPXuK/rV+92d5hmzQkGsOnReI5ypdriFlV7UWU=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=sw6drzgUDGB+J6ywWRycipK3zsAyV/6xrLCvwzTVhTs/K4gtjBTZmVo24hUN4frwq7jAXE9Zvpfu/qwz1oB3K3ODj6D3u+sdqHnVZGYkQnyR53VYf6APwU76auaWrl6WC4W1aPXzM8T4FtWTeBJrH8qKH0ATn68jedx4K8VTjPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u94Qza5X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F1D1C4AF09;
-	Tue, 30 Jul 2024 06:21:27 +0000 (UTC)
+	s=arc-20240116; t=1722321061; c=relaxed/simple;
+	bh=113zHcxOpsbcwW11a7aMT7BENgNTSv1ngvCERVMP0f8=;
+	h=Message-ID:Date:From:To:Subject:In-Reply-To:References:Cc; b=eONhWcoJczqPXU+hv08/U4T/Ng+QKvWVtxXqYDAtzfROCrtLvqzC+2qwWEtr6PZBAOwqINQk4TrsHNNDhgxUFLQvbGGKTZGxe6RsXeLDETLh8TNkffTKlggInOMWZ4oxi8E9p/l6U8CLn37CWOloPlAQQZy+A9ab8q3SB7tx07A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2gzYx6r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21FB7C32782;
+	Tue, 30 Jul 2024 06:31:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722320492;
-	bh=I8YEZoPXuK/rV+92d5hmzQkGsOnReI5ypdriFlV7UWU=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=u94Qza5XRkMfpv8tn8GGGjPEl2SqqlnWaTJfCSJCwKRIH/SdKhSyWmpKV7bycx93t
-	 urgnzWdjgB84w6ityIkZO9zVW2Qb4F89/cKs5DPQh3FEt5rkhPO9B/jvJXb3vxTICA
-	 8js3zd6+wbXsBqm2GfC22Tvr0st3CJGHOcSfRa/Q7pwxqpFWfshuEIrnsgrtgPrnOg
-	 2nlyeT1MbSEH3jRSAIarKYew6pgJPjP8aXRZ7qBO7I6TLzPuxgBXjFNnXsixI2J4fQ
-	 d9+MDc4uTL6qzgbqXypOiETjb/J8JKatvHTjzkelbYJYbqODrRAtI1SFxAlvhPV5qa
-	 f0wXeXxTjd68A==
-Message-ID: <ad2e41f6-05e9-4ded-9e2a-d263e0bfeacc@kernel.org>
-Date: Tue, 30 Jul 2024 08:21:25 +0200
+	s=k20201202; t=1722321060;
+	bh=113zHcxOpsbcwW11a7aMT7BENgNTSv1ngvCERVMP0f8=;
+	h=Date:From:To:Subject:In-Reply-To:References:Cc:From;
+	b=D2gzYx6r0P05HsmdpYls3H21fhknAGjIqhHcv06vvRN3LHZT/jZgS/E2dxjcBRE3j
+	 gu1CK+c8wLLxC+g71k0vt5byDFs49n2+2eV6zlXoNMd9+bzeVmSdjFPV87oNJFlQQ1
+	 nVpZYlmHZoxoS9aaMQu8KU7BMPm2lTlOwse71KTO5rqolHCFrE0/SyMMg1cpf6G5RZ
+	 PnMWPcBdZD3AJuEr1UvTT8Lx9nSjekrTnI/9TKyWIMqvrK5YCuNLifqZYvLGGIfQxA
+	 qRedOyhRbBOSqdEODBBRdYnNAe0XBuQBp2N8tCBJ4uvZE8P3nck4XUmf2lZd0d7q6Y
+	 wlG/GTJwF52/w==
+Message-ID: <91f9c77f71fb1bce513a02d5e2800f04@kernel.org>
+Date: Tue, 30 Jul 2024 06:30:58 +0000
+From: "Maxime Ripard" <mripard@kernel.org>
+To: "Stefan Wahren" <wahrenst@gmx.net>
+Subject: Re: [PATCH V2 07/16] drm/vc4: Get the rid of DRM_ERROR()
+In-Reply-To: <20240728114200.75559-8-wahrenst@gmx.net>
+References: <20240728114200.75559-8-wahrenst@gmx.net>
+Cc: bcm-kernel-feedback-list@broadcom.com, dri-devel@lists.freedesktop.org, kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, "Artur
+ Petrosyan" <Arthur.Petrosyan@synopsys.com>, "Daniel Vetter" <daniel@ffwll.ch>, "Dave
+ Stevenson" <dave.stevenson@raspberrypi.com>, "David Airlie" <airlied@gmail.com>, "Florian
+ Fainelli" <florian.fainelli@broadcom.com>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Jassi
+ Brar" <jassisinghbrar@gmail.com>, "Jiri Slaby" <jirislaby@kernel.org>, "Lukas
+ Wunner" <lukas@wunner.de>, "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime
+ Ripard" <mripard@kernel.org>, =?utf-8?b?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, "Minas
+ Harutyunyan" <hminas@synopsys.com>, "Peter Robinson" <pbrobinson@gmail.com>, "Ray
+ Jui" <rjui@broadcom.com>, "Scott Branden" <sbranden@broadcom.com>, "Thomas
+ Zimmermann" <tzimmermann@suse.de>, "Ulf Hansson" <ulf.hansson@linaro.org>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] dt-bindings: qcom,spmi-temp-alarm: Add compatible for
- GEN2 rev2 temp alarm
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Anjelique Melendez <quic_amelende@quicinc.com>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, amitk@kernel.org,
- thara.gopinath@gmail.com, andersson@kernel.org
-Cc: quic_collinsd@quicinc.com, rafael@kernel.org, daniel.lezcano@linaro.org,
- rui.zhang@intel.com, lukasz.luba@arm.com, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240729231259.2122976-1-quic_amelende@quicinc.com>
- <20240729231259.2122976-2-quic_amelende@quicinc.com>
- <e4f17f44-522e-47bd-aafb-f93595298e7b@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <e4f17f44-522e-47bd-aafb-f93595298e7b@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 30/07/2024 08:19, Krzysztof Kozlowski wrote:
-> On 30/07/2024 01:12, Anjelique Melendez wrote:
->> Add compatible "qcom,spmi-temp-alarm-gen2-rev2" for SPMI temp alarm GEN2
->> revision 2 peripherals. GEN2 rev2 peripherals have individual temp DAC
->> registers to set temperature thresholds for over-temperature stages 1-3.
->> Registers are configured based on thermal zone trip definition.
->>
->> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
->> ---
->>  .../devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml   | 6 ++++--
->>  1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml b/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
->> index 30b22151aa82..f9af88d51c2d 100644
->> --- a/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
->> +++ b/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
->> @@ -12,14 +12,16 @@ maintainers:
->>  description:
->>    QPNP temperature alarm peripherals are found inside of Qualcomm PMIC chips
->>    that utilize the Qualcomm SPMI implementation. These peripherals provide an
->> -  interrupt signal and status register to identify high PMIC die temperature.
->> +  interrupt signal and status registers to identify high PMIC die temperature.
->>  
->>  allOf:
->>    - $ref: thermal-sensor.yaml#
->>  
->>  properties:
->>    compatible:
->> -    const: qcom,spmi-temp-alarm
->> +    enum:
->> +      - qcom,spmi-temp-alarm
->> +      - qcom,spmi-temp-alarm-gen2-rev2
+On Sun, 28 Jul 2024 13:41:51 +0200, Stefan Wahren wrote:
+> DRM_ERROR() has been deprecated in favor of pr_err(). However, we
+> should prefer to use drm_err() whenever possible so we get device-
+> specific output with the error message. In error case of kcalloc,
+> we can simply drop DRM_ERROR(), because kcalloc already logs errors.
 > 
-> Nah, no. I have no clue what is gen2 rev2 and no one would be able to
-> decipher it, even with usermanual. Do not invent some random versions.
-> If you want to use them, document them and make them available for public.
 > 
-> Use SoC compatibles. ONLY.
+> [ ... ]
 
-SoC->PMIC, obviously.
+Reviewed-by: Maxime Ripard <mripard@kernel.org>
 
-Best regards,
-Krzysztof
-
+Thanks!
+Maxime
 
