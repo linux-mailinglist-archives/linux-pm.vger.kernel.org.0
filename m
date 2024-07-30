@@ -1,325 +1,317 @@
-Return-Path: <linux-pm+bounces-11634-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11635-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33B359408F1
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 08:56:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2B6A94090E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 09:07:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2D25285085
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 06:56:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 609C41F24179
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 07:07:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2EB190674;
-	Tue, 30 Jul 2024 06:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 580B181723;
+	Tue, 30 Jul 2024 07:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I5SZ0Dea"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C751C190679;
-	Tue, 30 Jul 2024 06:55:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C92F374C3
+	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 07:07:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722322520; cv=none; b=tzWOfjTA7qmQPSzpZQ7rnrz8ULvkoaof+D5fTsgqZs2wEwryAg2Gdl7gd8PLNPEd7oX4YqVzDssNDzS4s0nvZ697XjpPvYlAZEHXjUUMlliGfwGivuxXVkiw+qPK72ii7HIIJkUpjuyMDHlK6THKG8VwSIBEJeWHNOhoxm2J7Gs=
+	t=1722323250; cv=none; b=s6YyMf3Jndx9KI8tkjJdQw+oiiXmhA53k9JYCaJabqNz7yWrps6K5vwmNocwAxOEAmI/EgMGiP/mDXr9vyqgiNtdENxB3q6EVZQQrSvoqFqXDiIE7NNNVkIt0oXZ4YbWpIxDnZ3S4Sr+AMN/bub5GK3KE+WURxk84ql3hnE2PXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722322520; c=relaxed/simple;
-	bh=PoHSTTNR1pOiYNNUBE7bjSLO9vqCQ+kY4ubAIS5usC0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=d648aLCqvB5YXGVDLmFV36tYhQ42et10lPqrphbxlImPpJqSZQdonGE5vCTBRg6sJpKQ62tuHga7NHKQLG1c/NlBIA4JSvPCjcyb4SUCdKyWKONuTP7AtacbOgB9K8Jb2+vRx2UKKBhAenX1yEX+A0RwzwxOiMMHDQuFtcs53UU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-1fd9e6189d5so29650125ad.3;
-        Mon, 29 Jul 2024 23:55:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722322518; x=1722927318;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s5wItCNcIebvedYEvm9R9N3fFYU34EHG9QRxjv4o3IY=;
-        b=NQkgY39wcEwKuoRrZog2y5JuFwqqbnpdU9FOrt/34tzMvD8lBakU9WyC7mudbo7J/Y
-         +sGtKEvzxbByjzEGhsGjxnr45glEVaFbMy1e80lhOSou6VQWzq5cJLREuO2liKYfDa8r
-         OZOlydH/OUYrgXzLet1y6bi2tFyhewbrsp9cUZzF4AXcQvDNKR7gNYdooGEMptEUxxcV
-         C8c6Q2CA+hQEmrOxUrxpcfTcir9jFaZRHUVaVeWQXtoFmf8HC5frOWsDU8HeXHVDENvJ
-         7uxEjCpCpC1hjaOabrpIi4FasrTIMnIuw2UoH/8b1HduTDUKlrIHGf9+dLm7jYs7eH8i
-         AoBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUmw7IBltkB+vmwni0zOreZzdIeKG1h6nfLW/eLzpP0nkpiJfd5E5jdXSdzL1i6Hw7bfxSysbogMJIvXIf0sqoJfhiO/78fD4Oa3WHc
-X-Gm-Message-State: AOJu0YzauOPgiw9rthfYT+WwFIrjJv2bvUGAj9gR34G7WkeixusgCl3u
-	Kxlo26Wia3D+Luuc71Hnz6kPdSsh3d1K74J1PEWu039j+pLPb/cf
-X-Google-Smtp-Source: AGHT+IGbpeqVJZThdkiblEwt3ilFhbSlAjidRzQS+YIwiYxJn6p66YtqNHxmXa/ulBa9vv6UOU0nog==
-X-Received: by 2002:a17:902:d506:b0:1fb:72b4:8775 with SMTP id d9443c01a7336-1ff0489f453mr88974555ad.40.1722322517939;
-        Mon, 29 Jul 2024 23:55:17 -0700 (PDT)
-Received: from localhost.localdomain ([111.48.58.10])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7f1aa18sm94392875ad.190.2024.07.29.23.55.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 23:55:17 -0700 (PDT)
-From: Xueqin Luo <luoxueqin@kylinos.cn>
-To: rafael@kernel.org,
-	pavel@ucw.cz,
-	len.brown@intel.com
-Cc: linux-pm@vger.kernel.org,
-	xiongxin@kylinos.cn,
-	linux-kernel@vger.kernel.org,
-	Xueqin Luo <luoxueqin@kylinos.cn>
-Subject: [RESEND PATCH 2/2] PM: Use sysfs_emit() and sysfs_emit_at() in "show" functions
-Date: Tue, 30 Jul 2024 14:54:54 +0800
-Message-Id: <20240730065454.2096296-3-luoxueqin@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240730065454.2096296-1-luoxueqin@kylinos.cn>
-References: <20240730065454.2096296-1-luoxueqin@kylinos.cn>
+	s=arc-20240116; t=1722323250; c=relaxed/simple;
+	bh=gwmTSGvOxo+bGvT7/nYBCha+FFmwP2BNbHvCdza6hPQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BK3knbAngf8DkP4+rFE66XJ9Hs0Uh7Ii2VGXl8WZvHqOgqEG/u6ZTChKqHWZOKV+gOvG/mNUr8iLFGj8wDvauAq6+xtwhNH1qoxUU1fjEjauu8XIGCvt7dYcuylj0WI5tXU9MqUlyYbJJulKeJht19Yb/q4Qgwup4/NnwOWFjy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I5SZ0Dea; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722323248; x=1753859248;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gwmTSGvOxo+bGvT7/nYBCha+FFmwP2BNbHvCdza6hPQ=;
+  b=I5SZ0DeaaxCZkD6OXUfu/i7tY9wv1BgQ4T5yAjZuqNG2t3VlRLZtONym
+   HUo4lXLix3o5b8D3KjyJqr9m9zC2UR0lvf+3l67i3yW26VAsR71mi0nUy
+   kRiqeLuYMkpG2WQiHGyaInVfYAh53flwpWK91SdMsI1nGUfpUabJ8R/C7
+   h9UUMco5Xf6CaCLtr+GWNMZ2ET/ceq7oGHEBqJCPLoth7KRRSCzmS5ELD
+   6Mjlw5/T5ZjXYWXgrtDBVnw0itFXvHOBO1q4GENReKO41HaB0evbjN51O
+   lmtoLUkZSZxfZ7HRWDmPYA/aIHS8OwlOLrVFl7NIhjzgKwUhr031SBblq
+   w==;
+X-CSE-ConnectionGUID: gLx11rwhTNasaRK7cFQisA==
+X-CSE-MsgGUID: 2aWCNDzJQNKiZXqg6JzBQg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="30705865"
+X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
+   d="scan'208";a="30705865"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2024 00:07:28 -0700
+X-CSE-ConnectionGUID: DBmIUztCQgyB10UQJmjrTw==
+X-CSE-MsgGUID: c/8qpMKQSTCkM+4V8V8jkQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
+   d="scan'208";a="54483710"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 30 Jul 2024 00:07:26 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sYgx9-000sao-2L;
+	Tue, 30 Jul 2024 07:07:23 +0000
+Date: Tue, 30 Jul 2024 15:06:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	lukasz.luba@arm.com, quic_manafm@quicinc.com
+Subject: Re: [PATCH v1 2/7] thermal/core: Add thresholds support
+Message-ID: <202407301457.cOikpFah-lkp@intel.com>
+References: <20240729150259.1089814-3-daniel.lezcano@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240729150259.1089814-3-daniel.lezcano@linaro.org>
 
-As Documentation/filesystems/sysfs.rst suggested,
-show() should only use sysfs_emit() or sysfs_emit_at() when formatting
-the value to be returned to user space.
+Hi Daniel,
 
-No functional change intended.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
----
- kernel/power/main.c | 70 ++++++++++++++++++++++-----------------------
- 1 file changed, 35 insertions(+), 35 deletions(-)
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on linus/master v6.11-rc1 next-20240729]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index a9e0693aaf69..4ea4e2fa4da7 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -115,7 +115,7 @@ int pm_async_enabled = 1;
- static ssize_t pm_async_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			     char *buf)
- {
--	return sprintf(buf, "%d\n", pm_async_enabled);
-+	return sysfs_emit(buf, "%d\n", pm_async_enabled);
- }
- 
- static ssize_t pm_async_store(struct kobject *kobj, struct kobj_attribute *attr,
-@@ -139,8 +139,8 @@ power_attr(pm_async);
- static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			      char *buf)
- {
--	char *s = buf;
- 	suspend_state_t i;
-+	ssize_t sz = 0;
- 
- 	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++) {
- 		if (i >= PM_SUSPEND_MEM && cxl_mem_active())
-@@ -149,17 +149,17 @@ static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			const char *label = mem_sleep_states[i];
- 
- 			if (mem_sleep_current == i)
--				s += sprintf(s, "[%s] ", label);
-+				sz += sysfs_emit_at(buf, sz, "[%s] ", label);
- 			else
--				s += sprintf(s, "%s ", label);
-+				sz += sysfs_emit_at(buf, sz, "%s ", label);
- 		}
- 	}
- 
- 	/* Convert the last space to a newline if needed. */
--	if (s != buf)
--		*(s-1) = '\n';
-+	if (sz)
-+		sz += sysfs_emit_at(buf, sz, "\n");
- 
--	return (s - buf);
-+	return sz;
- }
- 
- static suspend_state_t decode_suspend_state(const char *buf, size_t n)
-@@ -220,7 +220,7 @@ bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC);
- static ssize_t sync_on_suspend_show(struct kobject *kobj,
- 				   struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%d\n", sync_on_suspend_enabled);
-+	return sysfs_emit(buf, "%d\n", sync_on_suspend_enabled);
- }
- 
- static ssize_t sync_on_suspend_store(struct kobject *kobj,
-@@ -257,22 +257,22 @@ static const char * const pm_tests[__TEST_AFTER_LAST] = {
- static ssize_t pm_test_show(struct kobject *kobj, struct kobj_attribute *attr,
- 				char *buf)
- {
--	char *s = buf;
- 	int level;
-+	size_t sz = 0;
- 
- 	for (level = TEST_FIRST; level <= TEST_MAX; level++)
- 		if (pm_tests[level]) {
- 			if (level == pm_test_level)
--				s += sprintf(s, "[%s] ", pm_tests[level]);
-+				sz += sysfs_emit_at(buf, sz, "[%s] ", pm_tests[level]);
- 			else
--				s += sprintf(s, "%s ", pm_tests[level]);
-+				sz += sysfs_emit_at(buf, sz, "%s ", pm_tests[level]);
- 		}
- 
--	if (s != buf)
-+	if (sz)
- 		/* convert the last space to a newline */
--		*(s-1) = '\n';
-+		sz += sysfs_emit_at(buf, sz, "\n");
- 
--	return (s - buf);
-+	return sz;
- }
- 
- static ssize_t pm_test_store(struct kobject *kobj, struct kobj_attribute *attr,
-@@ -390,7 +390,7 @@ static const char * const suspend_step_names[] = {
- static ssize_t _name##_show(struct kobject *kobj,		\
- 		struct kobj_attribute *attr, char *buf)		\
- {								\
--	return sprintf(buf, format_str, suspend_stats._name);	\
-+	return sysfs_emit(buf, format_str, suspend_stats._name);	\
- }								\
- static struct kobj_attribute _name = __ATTR_RO(_name)
- 
-@@ -404,7 +404,7 @@ suspend_attr(max_hw_sleep, "%llu\n");
- static ssize_t _name##_show(struct kobject *kobj,		\
- 		struct kobj_attribute *attr, char *buf)		\
- {								\
--	return sprintf(buf, "%u\n",				\
-+	return sysfs_emit(buf, "%u\n",				\
- 		       suspend_stats.step_failures[step-1]);	\
- }								\
- static struct kobj_attribute _name = __ATTR_RO(_name)
-@@ -428,7 +428,7 @@ static ssize_t last_failed_dev_show(struct kobject *kobj,
- 	index %= REC_FAILED_NUM;
- 	last_failed_dev = suspend_stats.failed_devs[index];
- 
--	return sprintf(buf, "%s\n", last_failed_dev);
-+	return sysfs_emit(buf, "%s\n", last_failed_dev);
- }
- static struct kobj_attribute last_failed_dev = __ATTR_RO(last_failed_dev);
- 
-@@ -442,7 +442,7 @@ static ssize_t last_failed_errno_show(struct kobject *kobj,
- 	index %= REC_FAILED_NUM;
- 	last_failed_errno = suspend_stats.errno[index];
- 
--	return sprintf(buf, "%d\n", last_failed_errno);
-+	return sysfs_emit(buf, "%d\n", last_failed_errno);
- }
- static struct kobj_attribute last_failed_errno = __ATTR_RO(last_failed_errno);
- 
-@@ -456,7 +456,7 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
- 	index %= REC_FAILED_NUM;
- 	step = suspend_stats.failed_steps[index];
- 
--	return sprintf(buf, "%s\n", suspend_step_names[step]);
-+	return sysfs_emit(buf, "%s\n", suspend_step_names[step]);
- }
- static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
- 
-@@ -571,7 +571,7 @@ bool pm_print_times_enabled;
- static ssize_t pm_print_times_show(struct kobject *kobj,
- 				   struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%d\n", pm_print_times_enabled);
-+	return sysfs_emit(buf, "%d\n", pm_print_times_enabled);
- }
- 
- static ssize_t pm_print_times_store(struct kobject *kobj,
-@@ -604,7 +604,7 @@ static ssize_t pm_wakeup_irq_show(struct kobject *kobj,
- 	if (!pm_wakeup_irq())
- 		return -ENODATA;
- 
--	return sprintf(buf, "%u\n", pm_wakeup_irq());
-+	return sysfs_emit(buf, "%u\n", pm_wakeup_irq());
- }
- 
- power_attr_ro(pm_wakeup_irq);
-@@ -620,7 +620,7 @@ EXPORT_SYMBOL_GPL(pm_debug_messages_should_print);
- static ssize_t pm_debug_messages_show(struct kobject *kobj,
- 				      struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%d\n", pm_debug_messages_on);
-+	return sysfs_emit(buf, "%d\n", pm_debug_messages_on);
- }
- 
- static ssize_t pm_debug_messages_store(struct kobject *kobj,
-@@ -668,21 +668,21 @@ struct kobject *power_kobj;
- static ssize_t state_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			  char *buf)
- {
--	char *s = buf;
-+	ssize_t sz = 0;
- #ifdef CONFIG_SUSPEND
- 	suspend_state_t i;
- 
- 	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++)
- 		if (pm_states[i])
--			s += sprintf(s,"%s ", pm_states[i]);
-+			sz += sysfs_emit_at(buf, sz, "%s ", pm_states[i]);
- 
- #endif
- 	if (hibernation_available())
--		s += sprintf(s, "disk ");
--	if (s != buf)
-+		sz += sysfs_emit_at(buf, sz, "disk ");
-+	if (sz)
- 		/* convert the last space to a newline */
--		*(s-1) = '\n';
--	return (s - buf);
-+		sz += sysfs_emit_at(buf, sz, "\n");
-+	return sz;
- }
- 
- static suspend_state_t decode_state(const char *buf, size_t n)
-@@ -782,7 +782,7 @@ static ssize_t wakeup_count_show(struct kobject *kobj,
- 	unsigned int val;
- 
- 	return pm_get_wakeup_count(&val, true) ?
--		sprintf(buf, "%u\n", val) : -EINTR;
-+		sysfs_emit(buf, "%u\n", val) : -EINTR;
- }
- 
- static ssize_t wakeup_count_store(struct kobject *kobj,
-@@ -824,17 +824,17 @@ static ssize_t autosleep_show(struct kobject *kobj,
- 	suspend_state_t state = pm_autosleep_state();
- 
- 	if (state == PM_SUSPEND_ON)
--		return sprintf(buf, "off\n");
-+		return sysfs_emit(buf, "off\n");
- 
- #ifdef CONFIG_SUSPEND
- 	if (state < PM_SUSPEND_MAX)
--		return sprintf(buf, "%s\n", pm_states[state] ?
-+		return sysfs_emit(buf, "%s\n", pm_states[state] ?
- 					pm_states[state] : "error");
- #endif
- #ifdef CONFIG_HIBERNATION
--	return sprintf(buf, "disk\n");
-+	return sysfs_emit(buf, "disk\n");
- #else
--	return sprintf(buf, "error");
-+	return sysfs_emit(buf, "error\n");
- #endif
- }
- 
-@@ -903,7 +903,7 @@ int pm_trace_enabled;
- static ssize_t pm_trace_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			     char *buf)
- {
--	return sprintf(buf, "%d\n", pm_trace_enabled);
-+	return sysfs_emit(buf, "%d\n", pm_trace_enabled);
- }
- 
- static ssize_t
-@@ -940,7 +940,7 @@ power_attr_ro(pm_trace_dev_match);
- static ssize_t pm_freeze_timeout_show(struct kobject *kobj,
- 				      struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%u\n", freeze_timeout_msecs);
-+	return sysfs_emit(buf, "%u\n", freeze_timeout_msecs);
- }
- 
- static ssize_t pm_freeze_timeout_store(struct kobject *kobj,
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Encapsulate-more-handle_thermal_trip/20240730-005842
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20240729150259.1089814-3-daniel.lezcano%40linaro.org
+patch subject: [PATCH v1 2/7] thermal/core: Add thresholds support
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20240730/202407301457.cOikpFah-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 13.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407301457.cOikpFah-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407301457.cOikpFah-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/thermal/thermal_thresholds.c: In function 'thermal_thresholds_init':
+   drivers/thermal/thermal_thresholds.c:22:22: error: implicit declaration of function 'kmalloc'; did you mean 'mm_alloc'? [-Werror=implicit-function-declaration]
+      22 |         thresholds = kmalloc(sizeof(*thresholds), GFP_KERNEL);
+         |                      ^~~~~~~
+         |                      mm_alloc
+>> drivers/thermal/thermal_thresholds.c:22:20: warning: assignment to 'struct thresholds *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+      22 |         thresholds = kmalloc(sizeof(*thresholds), GFP_KERNEL);
+         |                    ^
+   drivers/thermal/thermal_thresholds.c: In function 'thermal_thresholds_exit':
+   drivers/thermal/thermal_thresholds.c:35:9: error: implicit declaration of function 'kfree' [-Werror=implicit-function-declaration]
+      35 |         kfree(tz->thresholds);
+         |         ^~~~~
+   drivers/thermal/thermal_thresholds.c: In function 'thermal_thresholds_add':
+>> drivers/thermal/thermal_thresholds.c:185:19: warning: assignment to 'struct threshold *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     185 |                 t = kmalloc(sizeof(*t), GFP_KERNEL);
+         |                   ^
+   cc1: some warnings being treated as errors
+
+
+vim +22 drivers/thermal/thermal_thresholds.c
+
+    17	
+    18	int thermal_thresholds_init(struct thermal_zone_device *tz)
+    19	{
+    20		struct thresholds *thresholds;
+    21	
+  > 22		thresholds = kmalloc(sizeof(*thresholds), GFP_KERNEL);
+    23		if (!thresholds)
+    24			return -ENOMEM;
+    25	
+    26		INIT_LIST_HEAD(&thresholds->list);
+    27		tz->thresholds = thresholds;
+    28	
+    29		return 0;
+    30	}
+    31	
+    32	void thermal_thresholds_exit(struct thermal_zone_device *tz)
+    33	{
+    34		thermal_thresholds_flush(tz);
+    35		kfree(tz->thresholds);
+    36		tz->thresholds = NULL;
+    37	}
+    38	
+    39	static int __thermal_thresholds_cmp(void *data,
+    40					    const struct list_head *l1,
+    41					    const struct list_head *l2)
+    42	{
+    43		struct threshold *t1 = container_of(l1, struct threshold, list);
+    44		struct threshold *t2 = container_of(l2, struct threshold, list);
+    45	
+    46		return t1->temperature - t2->temperature;
+    47	}
+    48	
+    49	static struct threshold *__thermal_thresholds_find(const struct thresholds *thresholds, int temperature)
+    50	{
+    51		struct threshold *t;
+    52	
+    53		list_for_each_entry(t, &thresholds->list, list)
+    54			if (t->temperature == temperature)
+    55				return t;
+    56	
+    57		return NULL;
+    58	}
+    59	
+    60	static bool __thermal_threshold_is_crossed(struct threshold *threshold, int temperature,
+    61						   int last_temperature, int direction,
+    62						   int *low, int *high)
+    63	{
+    64		if (temperature > threshold->temperature && threshold->temperature > *low &&
+    65		    (THERMAL_THRESHOLD_WAY_DOWN & threshold->direction))
+    66			*low = threshold->temperature;
+    67	
+    68		if (temperature < threshold->temperature && threshold->temperature < *high &&
+    69		    (THERMAL_THRESHOLD_WAY_UP & threshold->direction))
+    70			*high = threshold->temperature;
+    71	
+    72		if (temperature < threshold->temperature &&
+    73		    last_temperature >= threshold->temperature &&
+    74		    (threshold->direction & direction))
+    75			return true;
+    76	
+    77		if (temperature >= threshold->temperature &&
+    78		    last_temperature < threshold->temperature &&
+    79		    (threshold->direction & direction))
+    80			return true;
+    81	
+    82		return false;
+    83	}
+    84	
+    85	static bool thermal_thresholds_handle_raising(struct thresholds *thresholds, int temperature,
+    86						      int last_temperature, int *low, int *high)
+    87	{
+    88		struct threshold *t;
+    89	
+    90		list_for_each_entry(t, &thresholds->list, list) {
+    91			if (__thermal_threshold_is_crossed(t, temperature, last_temperature,
+    92							   THERMAL_THRESHOLD_WAY_UP, low, high))
+    93				return true;
+    94		}
+    95	
+    96		return false;
+    97	}
+    98	
+    99	static bool thermal_thresholds_handle_dropping(struct thresholds *thresholds, int temperature,
+   100						       int last_temperature, int *low, int *high)
+   101	{
+   102		struct threshold *t;
+   103	
+   104		list_for_each_entry_reverse(t, &thresholds->list, list) {
+   105			if (__thermal_threshold_is_crossed(t, temperature, last_temperature,
+   106							   THERMAL_THRESHOLD_WAY_DOWN, low, high))
+   107				return true;
+   108		}
+   109	
+   110		return false;
+   111	}
+   112	
+   113	void thermal_thresholds_flush(struct thermal_zone_device *tz)
+   114	{
+   115		struct thresholds *thresholds = tz->thresholds;
+   116		struct threshold *entry, *tmp;
+   117	
+   118		lockdep_assert_held(&tz->lock);
+   119	
+   120		list_for_each_entry_safe(entry, tmp, &thresholds->list, list) {
+   121			list_del(&entry->list);
+   122			kfree(entry);
+   123		}
+   124	
+   125		__thermal_zone_device_update(tz, THERMAL_THRESHOLD_FLUSHED);
+   126	}
+   127	
+   128	int thermal_thresholds_handle(struct thermal_zone_device *tz, int *low, int *high)
+   129	{
+   130		struct thresholds *thresholds = tz->thresholds;
+   131	
+   132		int temperature = tz->temperature;
+   133		int last_temperature = tz->last_temperature;
+   134		bool notify;
+   135	
+   136		lockdep_assert_held(&tz->lock);
+   137	
+   138		/*
+   139		 * We need a second update in order to detect a threshold being crossed
+   140		 */
+   141		if (last_temperature == THERMAL_TEMP_INVALID)
+   142			return 0;
+   143	
+   144		/*
+   145		 * The temperature is stable, so obviously we can not have
+   146		 * crossed a threshold.
+   147		 */
+   148		if (last_temperature == temperature)
+   149			return 0;
+   150	
+   151		/*
+   152		 * Since last update the temperature:
+   153		 * - increased : thresholds are crossed the way up
+   154		 * - decreased : thresholds are crossed the way down
+   155		 */
+   156		if (temperature > last_temperature)
+   157			notify = thermal_thresholds_handle_raising(thresholds, temperature,
+   158								   last_temperature, low, high);
+   159		else
+   160			notify = thermal_thresholds_handle_dropping(thresholds, temperature,
+   161								    last_temperature, low, high);
+   162	
+   163		if (notify)
+   164			pr_debug("A threshold has been crossed the way %s, with a temperature=%d, last_temperature=%d\n",
+   165				 temperature > last_temperature ? "up" : "down", temperature, last_temperature);
+   166	
+   167		return 0;
+   168	}
+   169	
+   170	int thermal_thresholds_add(struct thermal_zone_device *tz, int temperature, int direction)
+   171	{
+   172		struct thresholds *thresholds = tz->thresholds;
+   173		struct threshold *t;
+   174	
+   175		lockdep_assert_held(&tz->lock);
+   176	
+   177		t = __thermal_thresholds_find(thresholds, temperature);
+   178		if (t) {
+   179			if (t->direction == direction)
+   180				return -EEXIST;
+   181	
+   182			t->direction |= direction;
+   183		} else {
+   184	
+ > 185			t = kmalloc(sizeof(*t), GFP_KERNEL);
+   186			if (!t)
+   187				return -ENOMEM;
+   188	
+   189			INIT_LIST_HEAD(&t->list);
+   190			t->temperature = temperature;
+   191			t->direction = direction;
+   192			list_add(&t->list, &thresholds->list);
+   193			list_sort(NULL, &thresholds->list, __thermal_thresholds_cmp);
+   194		}
+   195	
+   196		__thermal_zone_device_update(tz, THERMAL_THRESHOLD_ADDED);
+   197	
+   198		return 0;
+   199	}
+   200	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
