@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-11629-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11630-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A25894083F
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 08:20:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93206940848
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 08:21:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCC8B1F23E5E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 06:20:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B73211C229A8
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 06:21:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1B0716C86F;
-	Tue, 30 Jul 2024 06:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4352018629C;
+	Tue, 30 Jul 2024 06:21:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JyVRE8Lh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u94Qza5X"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5BF168489;
-	Tue, 30 Jul 2024 06:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B563168489;
+	Tue, 30 Jul 2024 06:21:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722320438; cv=none; b=vCLpXTKjlFn3FUA2utSSZLuo0pOCJFQizQO4ZlR4OLk150WF//McY/jcT8Ir5Ib19x7pTqJci7Y/4/w7XlEo2y9B/S0kGX5YtUZXgHKXhDMo1YYg4FtDvuJ/TGGpB1YIW8WBW2AJirfLhvdpj31honTkNe0XkbLQCWhPfBjKOWc=
+	t=1722320493; cv=none; b=AhkjJ5jbQZYO6faSnjvMVbJNWHTfMnliyzlCvsTNvVCPj67o3e76DsjHg2Aze61j/bRqZETwiUaGCE8jw0cJl8vTwssdODCKdqHNuDnK0EzBGgWySm1HDt+WMinXQdMUknU/nDD+g+QpgSl/vJN0AFLvcqB51LXLyy3tpJNZXOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722320438; c=relaxed/simple;
-	bh=cCEHv3EcRRfR3yMNUwGFtRbviA3JE4aiZjOmJn2agZI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C+75kawQVgD6lqZj1/cREIbZL4A/hdhVAPia7vfyaMlN86uD9GAnU3GeqCOjUj7O17PaZs1wbDlrff/7NkeqVumImw5fEaVt7yy5keirbCHs/3pyqFEIpDJFgWSDHFodYtOyIO5U2O7p3Dtr+ErVlm6BzcmyZAybnPXm1Q0IgGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JyVRE8Lh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879F9C32782;
-	Tue, 30 Jul 2024 06:20:32 +0000 (UTC)
+	s=arc-20240116; t=1722320493; c=relaxed/simple;
+	bh=I8YEZoPXuK/rV+92d5hmzQkGsOnReI5ypdriFlV7UWU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=sw6drzgUDGB+J6ywWRycipK3zsAyV/6xrLCvwzTVhTs/K4gtjBTZmVo24hUN4frwq7jAXE9Zvpfu/qwz1oB3K3ODj6D3u+sdqHnVZGYkQnyR53VYf6APwU76auaWrl6WC4W1aPXzM8T4FtWTeBJrH8qKH0ATn68jedx4K8VTjPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u94Qza5X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F1D1C4AF09;
+	Tue, 30 Jul 2024 06:21:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722320438;
-	bh=cCEHv3EcRRfR3yMNUwGFtRbviA3JE4aiZjOmJn2agZI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JyVRE8LhEWcYNjDKLddLtTE4FVPvkPd7aeXuMnu24HC4bSu17yvsONl0eAEG00s2k
-	 +GbEU82q9ucGSYo0b6dt3AXRuCBKMU6fKXuMpcYwMEWZxSgg4M4xlP8fBkMxRCzcv/
-	 47Y03QApa1VMOuV0jAXTYCLgV3CZcAFin2wz9xDItydbiEeNpXa56dzwq1svkRYO1T
-	 yVkWFzLsfm5C6s4EhL/yLojtsnb3+tlwnsas+O5Ox8Rg4MiM5kqXQJgQQ31QDSFT9Y
-	 g3/4j+v0QiI2Q3S6e3CFVglyIS8zdXIkOBReyn9woBd8bRpGcoDhV/PjAE/zvDRzNP
-	 6XcBGVHbcRgZw==
-Message-ID: <4205c1d0-0d91-4593-bf71-be8f02721ddd@kernel.org>
-Date: Tue, 30 Jul 2024 08:20:30 +0200
+	s=k20201202; t=1722320492;
+	bh=I8YEZoPXuK/rV+92d5hmzQkGsOnReI5ypdriFlV7UWU=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=u94Qza5XRkMfpv8tn8GGGjPEl2SqqlnWaTJfCSJCwKRIH/SdKhSyWmpKV7bycx93t
+	 urgnzWdjgB84w6ityIkZO9zVW2Qb4F89/cKs5DPQh3FEt5rkhPO9B/jvJXb3vxTICA
+	 8js3zd6+wbXsBqm2GfC22Tvr0st3CJGHOcSfRa/Q7pwxqpFWfshuEIrnsgrtgPrnOg
+	 2nlyeT1MbSEH3jRSAIarKYew6pgJPjP8aXRZ7qBO7I6TLzPuxgBXjFNnXsixI2J4fQ
+	 d9+MDc4uTL6qzgbqXypOiETjb/J8JKatvHTjzkelbYJYbqODrRAtI1SFxAlvhPV5qa
+	 f0wXeXxTjd68A==
+Message-ID: <ad2e41f6-05e9-4ded-9e2a-d263e0bfeacc@kernel.org>
+Date: Tue, 30 Jul 2024 08:21:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,9 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/5] dt-bindings: qcom,spmi-temp-alarm: Add compatible for
- lite temp alarm
+Subject: Re: [PATCH 1/5] dt-bindings: qcom,spmi-temp-alarm: Add compatible for
+ GEN2 rev2 temp alarm
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Anjelique Melendez <quic_amelende@quicinc.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, amitk@kernel.org,
  thara.gopinath@gmail.com, andersson@kernel.org
@@ -60,8 +61,8 @@ Cc: quic_collinsd@quicinc.com, rafael@kernel.org, daniel.lezcano@linaro.org,
  linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20240729231259.2122976-1-quic_amelende@quicinc.com>
- <20240729231259.2122976-3-quic_amelende@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20240729231259.2122976-2-quic_amelende@quicinc.com>
+ <e4f17f44-522e-47bd-aafb-f93595298e7b@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -106,72 +107,50 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240729231259.2122976-3-quic_amelende@quicinc.com>
+In-Reply-To: <e4f17f44-522e-47bd-aafb-f93595298e7b@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 30/07/2024 01:12, Anjelique Melendez wrote:
-> Add compatible "qcom,spmi-temp-alarm-lite" for Temp alarm lite
-> peripherals. Temp alarm lite peripherals have two stages: warning and
-> shutdown, and use a pair of registers to configure warning interrupt
-> threshold temperature and an automatic hardware shutdown threshold
-> temperature.
+On 30/07/2024 08:19, Krzysztof Kozlowski wrote:
+> On 30/07/2024 01:12, Anjelique Melendez wrote:
+>> Add compatible "qcom,spmi-temp-alarm-gen2-rev2" for SPMI temp alarm GEN2
+>> revision 2 peripherals. GEN2 rev2 peripherals have individual temp DAC
+>> registers to set temperature thresholds for over-temperature stages 1-3.
+>> Registers are configured based on thermal zone trip definition.
+>>
+>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+>> ---
+>>  .../devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml   | 6 ++++--
+>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml b/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
+>> index 30b22151aa82..f9af88d51c2d 100644
+>> --- a/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
+>> +++ b/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
+>> @@ -12,14 +12,16 @@ maintainers:
+>>  description:
+>>    QPNP temperature alarm peripherals are found inside of Qualcomm PMIC chips
+>>    that utilize the Qualcomm SPMI implementation. These peripherals provide an
+>> -  interrupt signal and status register to identify high PMIC die temperature.
+>> +  interrupt signal and status registers to identify high PMIC die temperature.
+>>  
+>>  allOf:
+>>    - $ref: thermal-sensor.yaml#
+>>  
+>>  properties:
+>>    compatible:
+>> -    const: qcom,spmi-temp-alarm
+>> +    enum:
+>> +      - qcom,spmi-temp-alarm
+>> +      - qcom,spmi-temp-alarm-gen2-rev2
 > 
-> When defining thermal zone trips for a temp alarm lite device the first
-> thermal zone trip is for warning alarm IRQ in HW, the second thermal
-> zone trip is purely for software to perform a controlled shutdown (no HW
-> support) and the third thermal zone trip is for automatic hardware
-> shutdown.
+> Nah, no. I have no clue what is gen2 rev2 and no one would be able to
+> decipher it, even with usermanual. Do not invent some random versions.
+> If you want to use them, document them and make them available for public.
 > 
-> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
-> ---
->  .../thermal/qcom,spmi-temp-alarm.yaml         | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml b/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
-> index f9af88d51c2d..bbf201cad16b 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
-> @@ -22,6 +22,7 @@ properties:
->      enum:
->        - qcom,spmi-temp-alarm
->        - qcom,spmi-temp-alarm-gen2-rev2
-> +      - qcom,spmi-temp-alarm-lite
+> Use SoC compatibles. ONLY.
 
-Uhu, it's growing, now we have "lite". No, this is way too ambiguous.
-
-NAK. Use PMIC compatibles.
-
->  
->    reg:
->      maxItems: 1
-> @@ -84,3 +85,46 @@ examples:
->              };
->          };
->      };
-> +
-> +  - |
-> +
-> +    pmic {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        pm8550b_lite_tz: pm8550b-temp-alarm-lite@c00 {
-
-There is no difference in this example, drop.
-
-> +            compatible = "qcom,spmi-temp-alarm-lite";
-> +            reg = <0xc00>;
-> +            interrupts = <0x1 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
-> +            #thermal-sensor-cells = <0>;
-> +        };
-> +    };
-> +
-> +    thermal-zones {
-> +        pm8550b_lite_temp_alarm: pm8550blite-thermal {
-
-Drop as well.
-
+SoC->PMIC, obviously.
 
 Best regards,
 Krzysztof
