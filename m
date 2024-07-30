@@ -1,315 +1,333 @@
-Return-Path: <linux-pm+bounces-11635-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11636-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2B6A94090E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 09:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A8F3940936
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 09:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 609C41F24179
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 07:07:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 883351F212C5
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 07:14:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 580B181723;
-	Tue, 30 Jul 2024 07:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC3CE190046;
+	Tue, 30 Jul 2024 07:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I5SZ0Dea"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ASowlKQl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C92F374C3
-	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 07:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F5218FC9A;
+	Tue, 30 Jul 2024 07:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722323250; cv=none; b=s6YyMf3Jndx9KI8tkjJdQw+oiiXmhA53k9JYCaJabqNz7yWrps6K5vwmNocwAxOEAmI/EgMGiP/mDXr9vyqgiNtdENxB3q6EVZQQrSvoqFqXDiIE7NNNVkIt0oXZ4YbWpIxDnZ3S4Sr+AMN/bub5GK3KE+WURxk84ql3hnE2PXY=
+	t=1722323611; cv=none; b=MySW6KZo6w2kGcfZ62/ZPCBbpOBi4RvbsMFYxz+LKKhI+eYjkMNrnJD5+5HZhNhGl4ThiiBJcLopzsMnpJBfHECI6qTVFsf0jTWbJMok6SDee56oL+NvPJbebONekSTQz322Vwg86Zo2HvvM4zbWYMwZpv/LMthpxNhNNue1EME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722323250; c=relaxed/simple;
-	bh=gwmTSGvOxo+bGvT7/nYBCha+FFmwP2BNbHvCdza6hPQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BK3knbAngf8DkP4+rFE66XJ9Hs0Uh7Ii2VGXl8WZvHqOgqEG/u6ZTChKqHWZOKV+gOvG/mNUr8iLFGj8wDvauAq6+xtwhNH1qoxUU1fjEjauu8XIGCvt7dYcuylj0WI5tXU9MqUlyYbJJulKeJht19Yb/q4Qgwup4/NnwOWFjy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I5SZ0Dea; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1722323611; c=relaxed/simple;
+	bh=ZXSJnaiDOLYwKSPGpvYw0eQcCUwbnCAuA13/la0NwJo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=PNgMU5kmtUOJhHzAwqgNsAN9NGpVV5ayzcjI0ReHaGwChUW1lou6nlQhmzP0N6ssVLyJ3XntIWBWN/jyPH0Pw0k52mSOAH+aGamgj5cugnGXYvT1TojSkaFgQpyx5PcA2a04BP/p5T9jHSU7KvsfGera9R5U3ON7U3RxnbgfIbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ASowlKQl; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722323248; x=1753859248;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gwmTSGvOxo+bGvT7/nYBCha+FFmwP2BNbHvCdza6hPQ=;
-  b=I5SZ0DeaaxCZkD6OXUfu/i7tY9wv1BgQ4T5yAjZuqNG2t3VlRLZtONym
-   HUo4lXLix3o5b8D3KjyJqr9m9zC2UR0lvf+3l67i3yW26VAsR71mi0nUy
-   kRiqeLuYMkpG2WQiHGyaInVfYAh53flwpWK91SdMsI1nGUfpUabJ8R/C7
-   h9UUMco5Xf6CaCLtr+GWNMZ2ET/ceq7oGHEBqJCPLoth7KRRSCzmS5ELD
-   6Mjlw5/T5ZjXYWXgrtDBVnw0itFXvHOBO1q4GENReKO41HaB0evbjN51O
-   lmtoLUkZSZxfZ7HRWDmPYA/aIHS8OwlOLrVFl7NIhjzgKwUhr031SBblq
-   w==;
-X-CSE-ConnectionGUID: gLx11rwhTNasaRK7cFQisA==
-X-CSE-MsgGUID: 2aWCNDzJQNKiZXqg6JzBQg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="30705865"
+  t=1722323609; x=1753859609;
+  h=date:from:to:cc:subject:message-id;
+  bh=ZXSJnaiDOLYwKSPGpvYw0eQcCUwbnCAuA13/la0NwJo=;
+  b=ASowlKQlfVvQPka7s2nxmAru5uM4TdbQOWPfci9wW9Ptn+GNUCaCBHu8
+   iYx//klGqgexTXFyIzQW9+q9jq+5w42Fdks+vuxzhbnKgSK/h9tZScnHv
+   6oHxIH6OsMZh/SSRdnNHlXkLOPF4LCIvPY9cphkCnosKA/JR/TQTB1BVz
+   6lBouKD0+GU4pKLNGgkt+eZDcEuynkSTx8STmkGBOhR+Q0KcfsJVgBnR/
+   yidhgYvrLPmvMscPq6nzTANlgSa5QjXzoNpaVN87s4MA0dwVxWBpAWGdk
+   1BOlVaovJMNRSMRrlMt+mY0fY3C53VKUFxd3uhWinqjmc6NVC8GS8Tgug
+   g==;
+X-CSE-ConnectionGUID: kGqdJgROS2qdAyp/Qc0u/A==
+X-CSE-MsgGUID: HlJlPS5RS9q/oQcjSegBhA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="19920914"
 X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
-   d="scan'208";a="30705865"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2024 00:07:28 -0700
-X-CSE-ConnectionGUID: DBmIUztCQgyB10UQJmjrTw==
-X-CSE-MsgGUID: c/8qpMKQSTCkM+4V8V8jkQ==
+   d="scan'208";a="19920914"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2024 00:13:28 -0700
+X-CSE-ConnectionGUID: lrikJOL2SuqmQfNr2e/lIA==
+X-CSE-MsgGUID: kHSvAakoRiS7wNm10i7AHQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
-   d="scan'208";a="54483710"
+   d="scan'208";a="77473603"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 30 Jul 2024 00:07:26 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 30 Jul 2024 00:13:27 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sYgx9-000sao-2L;
-	Tue, 30 Jul 2024 07:07:23 +0000
-Date: Tue, 30 Jul 2024 15:06:45 +0800
+	id 1sYh2y-000sbG-3B;
+	Tue, 30 Jul 2024 07:13:24 +0000
+Date: Tue, 30 Jul 2024 15:12:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-	lukasz.luba@arm.com, quic_manafm@quicinc.com
-Subject: Re: [PATCH v1 2/7] thermal/core: Add thresholds support
-Message-ID: <202407301457.cOikpFah-lkp@intel.com>
-References: <20240729150259.1089814-3-daniel.lezcano@linaro.org>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ fc9143fe3439b74733b2030b83ebbf9dcb9f5f3d
+Message-ID: <202407301528.EVsggzPx-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240729150259.1089814-3-daniel.lezcano@linaro.org>
 
-Hi Daniel,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: fc9143fe3439b74733b2030b83ebbf9dcb9f5f3d  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
-kernel test robot noticed the following build warnings:
+Warning ids grouped by kconfigs:
 
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on linus/master v6.11-rc1 next-20240729]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+recent_errors
+`-- arm64-randconfig-051-20240729
+    |-- arch-arm64-boot-dts-freescale-imx8mq-evk.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-hummingboard-pulse.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-kontron-pitx-imx8m.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-librem5-devkit.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-librem5-r2.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-librem5-r3.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-librem5-r4.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-mnt-reform2.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-nitrogen.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-phanbell.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-pico-pi.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-thor96.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-tqma8mq-mba8mx-lvds-tm070jvhg33.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-tqma8mq-mba8mx.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-zii-ultra-rmb3.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx8mq-zii-ultra-zest.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-imx8mq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx93-11x11-evk.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-qoriq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx93-9x9-qsb.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-qoriq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx93-phyboard-segin.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-qoriq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx93-tqma9352-mba93xxca.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-qoriq-tmu
+    |-- arch-arm64-boot-dts-freescale-imx93-tqma9352-mba93xxla.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-qoriq-tmu
+    `-- arch-arm64-boot-dts-freescale-imx93-var-som-symphony.dtb:soc-bus-tmu:failed-to-match-any-schema-with-compatible:fsl-qoriq-tmu
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Encapsulate-more-handle_thermal_trip/20240730-005842
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20240729150259.1089814-3-daniel.lezcano%40linaro.org
-patch subject: [PATCH v1 2/7] thermal/core: Add thresholds support
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20240730/202407301457.cOikpFah-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 13.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407301457.cOikpFah-lkp@intel.com/reproduce)
+elapsed time: 1165m
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407301457.cOikpFah-lkp@intel.com/
+configs tested: 214
+configs skipped: 7
 
-All warnings (new ones prefixed by >>):
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-   drivers/thermal/thermal_thresholds.c: In function 'thermal_thresholds_init':
-   drivers/thermal/thermal_thresholds.c:22:22: error: implicit declaration of function 'kmalloc'; did you mean 'mm_alloc'? [-Werror=implicit-function-declaration]
-      22 |         thresholds = kmalloc(sizeof(*thresholds), GFP_KERNEL);
-         |                      ^~~~~~~
-         |                      mm_alloc
->> drivers/thermal/thermal_thresholds.c:22:20: warning: assignment to 'struct thresholds *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-      22 |         thresholds = kmalloc(sizeof(*thresholds), GFP_KERNEL);
-         |                    ^
-   drivers/thermal/thermal_thresholds.c: In function 'thermal_thresholds_exit':
-   drivers/thermal/thermal_thresholds.c:35:9: error: implicit declaration of function 'kfree' [-Werror=implicit-function-declaration]
-      35 |         kfree(tz->thresholds);
-         |         ^~~~~
-   drivers/thermal/thermal_thresholds.c: In function 'thermal_thresholds_add':
->> drivers/thermal/thermal_thresholds.c:185:19: warning: assignment to 'struct threshold *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     185 |                 t = kmalloc(sizeof(*t), GFP_KERNEL);
-         |                   ^
-   cc1: some warnings being treated as errors
-
-
-vim +22 drivers/thermal/thermal_thresholds.c
-
-    17	
-    18	int thermal_thresholds_init(struct thermal_zone_device *tz)
-    19	{
-    20		struct thresholds *thresholds;
-    21	
-  > 22		thresholds = kmalloc(sizeof(*thresholds), GFP_KERNEL);
-    23		if (!thresholds)
-    24			return -ENOMEM;
-    25	
-    26		INIT_LIST_HEAD(&thresholds->list);
-    27		tz->thresholds = thresholds;
-    28	
-    29		return 0;
-    30	}
-    31	
-    32	void thermal_thresholds_exit(struct thermal_zone_device *tz)
-    33	{
-    34		thermal_thresholds_flush(tz);
-    35		kfree(tz->thresholds);
-    36		tz->thresholds = NULL;
-    37	}
-    38	
-    39	static int __thermal_thresholds_cmp(void *data,
-    40					    const struct list_head *l1,
-    41					    const struct list_head *l2)
-    42	{
-    43		struct threshold *t1 = container_of(l1, struct threshold, list);
-    44		struct threshold *t2 = container_of(l2, struct threshold, list);
-    45	
-    46		return t1->temperature - t2->temperature;
-    47	}
-    48	
-    49	static struct threshold *__thermal_thresholds_find(const struct thresholds *thresholds, int temperature)
-    50	{
-    51		struct threshold *t;
-    52	
-    53		list_for_each_entry(t, &thresholds->list, list)
-    54			if (t->temperature == temperature)
-    55				return t;
-    56	
-    57		return NULL;
-    58	}
-    59	
-    60	static bool __thermal_threshold_is_crossed(struct threshold *threshold, int temperature,
-    61						   int last_temperature, int direction,
-    62						   int *low, int *high)
-    63	{
-    64		if (temperature > threshold->temperature && threshold->temperature > *low &&
-    65		    (THERMAL_THRESHOLD_WAY_DOWN & threshold->direction))
-    66			*low = threshold->temperature;
-    67	
-    68		if (temperature < threshold->temperature && threshold->temperature < *high &&
-    69		    (THERMAL_THRESHOLD_WAY_UP & threshold->direction))
-    70			*high = threshold->temperature;
-    71	
-    72		if (temperature < threshold->temperature &&
-    73		    last_temperature >= threshold->temperature &&
-    74		    (threshold->direction & direction))
-    75			return true;
-    76	
-    77		if (temperature >= threshold->temperature &&
-    78		    last_temperature < threshold->temperature &&
-    79		    (threshold->direction & direction))
-    80			return true;
-    81	
-    82		return false;
-    83	}
-    84	
-    85	static bool thermal_thresholds_handle_raising(struct thresholds *thresholds, int temperature,
-    86						      int last_temperature, int *low, int *high)
-    87	{
-    88		struct threshold *t;
-    89	
-    90		list_for_each_entry(t, &thresholds->list, list) {
-    91			if (__thermal_threshold_is_crossed(t, temperature, last_temperature,
-    92							   THERMAL_THRESHOLD_WAY_UP, low, high))
-    93				return true;
-    94		}
-    95	
-    96		return false;
-    97	}
-    98	
-    99	static bool thermal_thresholds_handle_dropping(struct thresholds *thresholds, int temperature,
-   100						       int last_temperature, int *low, int *high)
-   101	{
-   102		struct threshold *t;
-   103	
-   104		list_for_each_entry_reverse(t, &thresholds->list, list) {
-   105			if (__thermal_threshold_is_crossed(t, temperature, last_temperature,
-   106							   THERMAL_THRESHOLD_WAY_DOWN, low, high))
-   107				return true;
-   108		}
-   109	
-   110		return false;
-   111	}
-   112	
-   113	void thermal_thresholds_flush(struct thermal_zone_device *tz)
-   114	{
-   115		struct thresholds *thresholds = tz->thresholds;
-   116		struct threshold *entry, *tmp;
-   117	
-   118		lockdep_assert_held(&tz->lock);
-   119	
-   120		list_for_each_entry_safe(entry, tmp, &thresholds->list, list) {
-   121			list_del(&entry->list);
-   122			kfree(entry);
-   123		}
-   124	
-   125		__thermal_zone_device_update(tz, THERMAL_THRESHOLD_FLUSHED);
-   126	}
-   127	
-   128	int thermal_thresholds_handle(struct thermal_zone_device *tz, int *low, int *high)
-   129	{
-   130		struct thresholds *thresholds = tz->thresholds;
-   131	
-   132		int temperature = tz->temperature;
-   133		int last_temperature = tz->last_temperature;
-   134		bool notify;
-   135	
-   136		lockdep_assert_held(&tz->lock);
-   137	
-   138		/*
-   139		 * We need a second update in order to detect a threshold being crossed
-   140		 */
-   141		if (last_temperature == THERMAL_TEMP_INVALID)
-   142			return 0;
-   143	
-   144		/*
-   145		 * The temperature is stable, so obviously we can not have
-   146		 * crossed a threshold.
-   147		 */
-   148		if (last_temperature == temperature)
-   149			return 0;
-   150	
-   151		/*
-   152		 * Since last update the temperature:
-   153		 * - increased : thresholds are crossed the way up
-   154		 * - decreased : thresholds are crossed the way down
-   155		 */
-   156		if (temperature > last_temperature)
-   157			notify = thermal_thresholds_handle_raising(thresholds, temperature,
-   158								   last_temperature, low, high);
-   159		else
-   160			notify = thermal_thresholds_handle_dropping(thresholds, temperature,
-   161								    last_temperature, low, high);
-   162	
-   163		if (notify)
-   164			pr_debug("A threshold has been crossed the way %s, with a temperature=%d, last_temperature=%d\n",
-   165				 temperature > last_temperature ? "up" : "down", temperature, last_temperature);
-   166	
-   167		return 0;
-   168	}
-   169	
-   170	int thermal_thresholds_add(struct thermal_zone_device *tz, int temperature, int direction)
-   171	{
-   172		struct thresholds *thresholds = tz->thresholds;
-   173		struct threshold *t;
-   174	
-   175		lockdep_assert_held(&tz->lock);
-   176	
-   177		t = __thermal_thresholds_find(thresholds, temperature);
-   178		if (t) {
-   179			if (t->direction == direction)
-   180				return -EEXIST;
-   181	
-   182			t->direction |= direction;
-   183		} else {
-   184	
- > 185			t = kmalloc(sizeof(*t), GFP_KERNEL);
-   186			if (!t)
-   187				return -ENOMEM;
-   188	
-   189			INIT_LIST_HEAD(&t->list);
-   190			t->temperature = temperature;
-   191			t->direction = direction;
-   192			list_add(&t->list, &thresholds->list);
-   193			list_sort(NULL, &thresholds->list, __thermal_thresholds_cmp);
-   194		}
-   195	
-   196		__thermal_zone_device_update(tz, THERMAL_THRESHOLD_ADDED);
-   197	
-   198		return 0;
-   199	}
-   200	
+tested configs:
+alpha                            alldefconfig   gcc-13.3.0
+alpha                             allnoconfig   gcc-13.2.0
+alpha                            allyesconfig   gcc-13.3.0
+alpha                               defconfig   gcc-13.2.0
+arc                              allmodconfig   gcc-13.2.0
+arc                               allnoconfig   gcc-13.2.0
+arc                              allyesconfig   gcc-13.2.0
+arc                                 defconfig   gcc-13.2.0
+arc                        nsimosci_defconfig   gcc-13.2.0
+arc                   randconfig-001-20240730   gcc-13.2.0
+arc                   randconfig-002-20240730   gcc-13.2.0
+arm                              allmodconfig   gcc-13.2.0
+arm                              allmodconfig   gcc-14.1.0
+arm                               allnoconfig   gcc-13.2.0
+arm                              allyesconfig   gcc-13.2.0
+arm                              allyesconfig   gcc-14.1.0
+arm                                 defconfig   gcc-13.2.0
+arm                            dove_defconfig   gcc-13.3.0
+arm                            hisi_defconfig   gcc-13.2.0
+arm                      integrator_defconfig   gcc-13.3.0
+arm                        keystone_defconfig   gcc-13.2.0
+arm                         nhk8815_defconfig   gcc-13.3.0
+arm                             pxa_defconfig   gcc-13.2.0
+arm                   randconfig-001-20240730   gcc-13.2.0
+arm                   randconfig-002-20240730   gcc-13.2.0
+arm                   randconfig-003-20240730   gcc-13.2.0
+arm                   randconfig-004-20240730   gcc-13.2.0
+arm                        shmobile_defconfig   gcc-13.3.0
+arm                       spear13xx_defconfig   gcc-13.3.0
+arm64                            allmodconfig   clang-20
+arm64                            allmodconfig   gcc-13.2.0
+arm64                             allnoconfig   gcc-13.2.0
+arm64                               defconfig   gcc-13.2.0
+arm64                 randconfig-001-20240730   gcc-13.2.0
+arm64                 randconfig-002-20240730   gcc-13.2.0
+arm64                 randconfig-003-20240730   gcc-13.2.0
+arm64                 randconfig-004-20240730   gcc-13.2.0
+csky                              allnoconfig   gcc-13.2.0
+csky                                defconfig   gcc-13.2.0
+csky                  randconfig-001-20240730   gcc-13.2.0
+csky                  randconfig-002-20240730   gcc-13.2.0
+hexagon                          allmodconfig   clang-20
+hexagon                          allyesconfig   clang-20
+i386                             allmodconfig   clang-18
+i386                             allmodconfig   gcc-13
+i386                              allnoconfig   clang-18
+i386                              allnoconfig   gcc-13
+i386                             allyesconfig   clang-18
+i386                             allyesconfig   gcc-13
+i386         buildonly-randconfig-001-20240729   clang-18
+i386         buildonly-randconfig-001-20240730   gcc-13
+i386         buildonly-randconfig-002-20240729   gcc-13
+i386         buildonly-randconfig-002-20240730   gcc-13
+i386         buildonly-randconfig-003-20240729   clang-18
+i386         buildonly-randconfig-003-20240730   gcc-13
+i386         buildonly-randconfig-004-20240729   gcc-10
+i386         buildonly-randconfig-004-20240730   gcc-13
+i386         buildonly-randconfig-005-20240729   clang-18
+i386         buildonly-randconfig-005-20240730   gcc-13
+i386         buildonly-randconfig-006-20240729   gcc-8
+i386         buildonly-randconfig-006-20240730   gcc-13
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240729   gcc-12
+i386                  randconfig-001-20240730   gcc-13
+i386                  randconfig-002-20240729   clang-18
+i386                  randconfig-002-20240730   gcc-13
+i386                  randconfig-003-20240729   gcc-10
+i386                  randconfig-003-20240730   gcc-13
+i386                  randconfig-004-20240729   gcc-13
+i386                  randconfig-004-20240730   gcc-13
+i386                  randconfig-005-20240729   gcc-8
+i386                  randconfig-005-20240730   gcc-13
+i386                  randconfig-006-20240729   gcc-13
+i386                  randconfig-006-20240730   gcc-13
+i386                  randconfig-011-20240729   gcc-13
+i386                  randconfig-011-20240730   gcc-13
+i386                  randconfig-012-20240729   clang-18
+i386                  randconfig-012-20240730   gcc-13
+i386                  randconfig-013-20240729   gcc-9
+i386                  randconfig-013-20240730   gcc-13
+i386                  randconfig-014-20240729   clang-18
+i386                  randconfig-014-20240730   gcc-13
+i386                  randconfig-015-20240729   gcc-13
+i386                  randconfig-015-20240730   gcc-13
+i386                  randconfig-016-20240729   clang-18
+i386                  randconfig-016-20240730   gcc-13
+loongarch                        allmodconfig   gcc-14.1.0
+loongarch                         allnoconfig   gcc-13.2.0
+loongarch                           defconfig   gcc-13.2.0
+loongarch             randconfig-001-20240730   gcc-13.2.0
+loongarch             randconfig-002-20240730   gcc-13.2.0
+m68k                             allmodconfig   gcc-14.1.0
+m68k                              allnoconfig   gcc-13.2.0
+m68k                             allyesconfig   gcc-14.1.0
+m68k                                defconfig   gcc-13.2.0
+microblaze                       allmodconfig   gcc-14.1.0
+microblaze                        allnoconfig   gcc-13.2.0
+microblaze                       allyesconfig   gcc-14.1.0
+microblaze                          defconfig   gcc-13.2.0
+mips                              allnoconfig   gcc-13.2.0
+mips                     cu1000-neo_defconfig   gcc-13.2.0
+mips                           gcw0_defconfig   gcc-13.2.0
+mips                            gpr_defconfig   gcc-13.2.0
+mips                      maltaaprp_defconfig   gcc-13.2.0
+mips                        qi_lb60_defconfig   gcc-13.3.0
+nios2                         10m50_defconfig   gcc-13.3.0
+nios2                             allnoconfig   gcc-13.2.0
+nios2                               defconfig   gcc-13.2.0
+nios2                 randconfig-001-20240730   gcc-13.2.0
+nios2                 randconfig-002-20240730   gcc-13.2.0
+openrisc                          allnoconfig   gcc-14.1.0
+openrisc                         allyesconfig   gcc-14.1.0
+openrisc                            defconfig   gcc-14.1.0
+parisc                           allmodconfig   gcc-14.1.0
+parisc                            allnoconfig   gcc-14.1.0
+parisc                           allyesconfig   gcc-14.1.0
+parisc                              defconfig   gcc-14.1.0
+parisc                generic-64bit_defconfig   gcc-13.2.0
+parisc                generic-64bit_defconfig   gcc-13.3.0
+parisc                randconfig-001-20240730   gcc-13.2.0
+parisc                randconfig-002-20240730   gcc-13.2.0
+parisc64                            defconfig   gcc-13.2.0
+powerpc                          allmodconfig   gcc-14.1.0
+powerpc                           allnoconfig   gcc-14.1.0
+powerpc                          allyesconfig   clang-20
+powerpc                          allyesconfig   gcc-14.1.0
+powerpc                 canyonlands_defconfig   gcc-13.2.0
+powerpc                       eiger_defconfig   gcc-13.3.0
+powerpc                 mpc834x_itx_defconfig   gcc-13.3.0
+powerpc                     rainier_defconfig   gcc-13.3.0
+powerpc               randconfig-002-20240730   gcc-13.2.0
+powerpc               randconfig-003-20240730   gcc-13.2.0
+powerpc                    sam440ep_defconfig   gcc-13.2.0
+powerpc                     tqm5200_defconfig   gcc-13.3.0
+powerpc                     tqm8541_defconfig   gcc-13.3.0
+powerpc64             randconfig-001-20240730   gcc-13.2.0
+powerpc64             randconfig-002-20240730   gcc-13.2.0
+powerpc64             randconfig-003-20240730   gcc-13.2.0
+riscv                            allmodconfig   clang-20
+riscv                            allmodconfig   gcc-14.1.0
+riscv                             allnoconfig   gcc-14.1.0
+riscv                            allyesconfig   clang-20
+riscv                            allyesconfig   gcc-14.1.0
+riscv                               defconfig   gcc-14.1.0
+riscv                 randconfig-001-20240730   gcc-13.2.0
+riscv                 randconfig-002-20240730   gcc-13.2.0
+s390                             allmodconfig   clang-20
+s390                              allnoconfig   clang-20
+s390                              allnoconfig   gcc-14.1.0
+s390                             allyesconfig   clang-20
+s390                             allyesconfig   gcc-14.1.0
+s390                                defconfig   gcc-14.1.0
+s390                  randconfig-001-20240730   gcc-13.2.0
+s390                  randconfig-002-20240730   gcc-13.2.0
+sh                               allmodconfig   gcc-14.1.0
+sh                                allnoconfig   gcc-13.2.0
+sh                               allyesconfig   gcc-14.1.0
+sh                                  defconfig   gcc-14.1.0
+sh                             espt_defconfig   gcc-13.2.0
+sh                          polaris_defconfig   gcc-13.2.0
+sh                          r7780mp_defconfig   gcc-13.2.0
+sh                    randconfig-001-20240730   gcc-13.2.0
+sh                    randconfig-002-20240730   gcc-13.2.0
+sh                          rsk7269_defconfig   gcc-13.2.0
+sh                          rsk7269_defconfig   gcc-13.3.0
+sh                           se7721_defconfig   gcc-13.2.0
+sparc                            allmodconfig   gcc-14.1.0
+sparc64                             defconfig   gcc-14.1.0
+sparc64               randconfig-001-20240730   gcc-13.2.0
+sparc64               randconfig-002-20240730   gcc-13.2.0
+um                               allmodconfig   clang-20
+um                               allmodconfig   gcc-13.3.0
+um                                allnoconfig   clang-17
+um                                allnoconfig   gcc-14.1.0
+um                               allyesconfig   gcc-13
+um                               allyesconfig   gcc-13.3.0
+um                                  defconfig   gcc-14.1.0
+um                             i386_defconfig   gcc-14.1.0
+um                    randconfig-001-20240730   gcc-13.2.0
+um                    randconfig-002-20240730   gcc-13.2.0
+um                           x86_64_defconfig   gcc-14.1.0
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64       buildonly-randconfig-001-20240730   clang-18
+x86_64       buildonly-randconfig-002-20240730   clang-18
+x86_64       buildonly-randconfig-003-20240730   clang-18
+x86_64       buildonly-randconfig-004-20240730   clang-18
+x86_64       buildonly-randconfig-005-20240730   clang-18
+x86_64       buildonly-randconfig-006-20240730   clang-18
+x86_64                              defconfig   clang-18
+x86_64                              defconfig   gcc-13
+x86_64                randconfig-001-20240730   clang-18
+x86_64                randconfig-002-20240730   clang-18
+x86_64                randconfig-003-20240730   clang-18
+x86_64                randconfig-004-20240730   clang-18
+x86_64                randconfig-005-20240730   clang-18
+x86_64                randconfig-006-20240730   clang-18
+x86_64                randconfig-011-20240730   clang-18
+x86_64                randconfig-012-20240730   clang-18
+x86_64                randconfig-013-20240730   clang-18
+x86_64                randconfig-014-20240730   clang-18
+x86_64                randconfig-015-20240730   clang-18
+x86_64                randconfig-016-20240730   clang-18
+x86_64                randconfig-071-20240730   clang-18
+x86_64                randconfig-072-20240730   clang-18
+x86_64                randconfig-073-20240730   clang-18
+x86_64                randconfig-074-20240730   clang-18
+x86_64                randconfig-075-20240730   clang-18
+x86_64                randconfig-076-20240730   clang-18
+x86_64                          rhel-8.3-rust   clang-18
+xtensa                            allnoconfig   gcc-13.2.0
+xtensa                randconfig-001-20240730   gcc-13.2.0
+xtensa                randconfig-002-20240730   gcc-13.2.0
+xtensa                    smp_lx200_defconfig   gcc-13.2.0
 
 -- 
 0-DAY CI Kernel Test Service
