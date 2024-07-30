@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-11643-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11644-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B225940CDF
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 11:06:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30062940CD6
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 11:05:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9485FB2AF1D
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 09:05:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B03241F22704
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 09:05:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F01194153;
-	Tue, 30 Jul 2024 09:04:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59419194121;
+	Tue, 30 Jul 2024 09:04:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VzXarduY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="meiHJHJg"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E04718FDB5;
-	Tue, 30 Jul 2024 09:04:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F35F442C;
+	Tue, 30 Jul 2024 09:04:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722330269; cv=none; b=A3LX5D8efLc/x9eYqea+fGAvmaHfCA7+HIn86XNFyEdlzT8raw1sXBuBrsGihSgG04ibK0GWhqlBLbjQcKyt49oZBCKeMkyhdEaXk3atUVjg532xP6SKkZatVJORlK+ONC7wSlRo/ZDu4rQIdWvqhnzMwQQfyoqCKbEy2+LioLY=
+	t=1722330281; cv=none; b=FOdPZ6N9zC2k7fQsQzF+UumbXH65WWxgO1LZ+SHFR7bTq9T3fBfN8ATLuzKraCxdutbC5v7VWIeKWdg+/iSzX5oSD+R/47y9/OWGVlsUTKbMkTl1O1eb/kyzI6a53AvUHvt7YRg2j3p4GMlDoKfE55YhQxKRm+kniHVgW09jyyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722330269; c=relaxed/simple;
-	bh=jsch7JPtpAeD3jgd4jb2SjkU7KuzRJ+VLpNi41EpGdk=;
+	s=arc-20240116; t=1722330281; c=relaxed/simple;
+	bh=0dFqeoVRynIAPjN0SKjhssAkyXAvcELUFk6bYVVCODY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q4M5XmEn9cX4pPLmyOVuzNpHFZ4Q1JCDVAuxLO7ZT9EIpt8xvb/O8BFISNpBOLPPaDuFkUNsaXZMPu63/+BMUWmb3mmzIU38obq1UZ3vlDYxlglsNg9YtbR3BsOVaclIy8vyTRxgrEJGZMQ6bzzMvWXK+wwN/vrxwpi603V6QNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VzXarduY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E2C8C4AF09;
-	Tue, 30 Jul 2024 09:04:16 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=V1xraLYb6v3VCOt3k6lH6kO0Ik22Bcq0aKzMJNNUwlq2VZ39oz9AxEaPhIMcRrWt+Ev9CtPk2eW92eetVNZ4mJWPIjyPFdWCujmgq+ApYBuPww+SUdaHpmPu5l11l1XCkR6IwrA37IVty2P1AsYdNpOOdbBznFCAbos6SqhhSMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=meiHJHJg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5CF7C4AF09;
+	Tue, 30 Jul 2024 09:04:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722330268;
-	bh=jsch7JPtpAeD3jgd4jb2SjkU7KuzRJ+VLpNi41EpGdk=;
+	s=k20201202; t=1722330281;
+	bh=0dFqeoVRynIAPjN0SKjhssAkyXAvcELUFk6bYVVCODY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VzXarduY1dmwudc7gk58wSfcMYDc/U7PUd2T6BJZBno1JN7m0hijDg9GqOsEo/XGx
-	 yEvPCuM0ItMykdoX4RV5HYhzNgszGsy6AwsqxPCUp6AqJxL/L0WIt/wTKS72L5cah9
-	 Ew0cfFEEKbgifb7po60gAC1v65t8TeCcwcURWuBgH8Gub6kWq5UQNRrwL20gTS5RrQ
-	 J+LgVtHukDbV/GXMTr9ftiZm2qvmnfXUZn8WThvogCQfl2mKa1LRZOnUND4t1fax7y
-	 dg4lHfa3e7VoflySpuohT/T0LaYwX2RVPQVHI8lNkiGQ3wsJv/43VKCnjTsLPIQRoB
-	 Wvj+rChP+4Peg==
-Message-ID: <96c6d3e8-8ca3-4abc-9b56-d0813e32d07b@kernel.org>
-Date: Tue, 30 Jul 2024 11:04:11 +0200
+	b=meiHJHJgoxCC2H0jSXROcdvrXTSS2FjVgVmFBm5lN1QJFxSbhygZDtBCBmh2Pyd8V
+	 7vcUGIw86v0KWgq0nliQAjPMyUex3+NSFlqlX+WUtOnp25CFXcQW55j2m9I7rVwW3x
+	 ZfRh6bnNhzCLILZVsUEhaHNsUWkqpizvw6R3ikibezEvx6OX2Z3Mz8/80IS8Bn1SjN
+	 cIQo18a1Z2Q+UKoJuv9SUv2VsCYaQsqZ+8BkHQmM0GQoBiVGZ2M9wk8ROFY6cx8XX2
+	 32qLlJf2iUOnJ9gEVKPv/FlTp88hlpOq192W+MKWPB0nSXH5qGkcuD6Xp95U6emQ2E
+	 Ttv6h5bcA1mOQ==
+Message-ID: <e3d845fa-30d4-4c9b-9e4a-d3a97f426c1f@kernel.org>
+Date: Tue, 30 Jul 2024 11:04:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/11] dt-bindings: arm: cpus: Add qcom kryo670 compatible
+Subject: Re: [PATCH 09/11] dt-bindings: vendor-prefixes: Add Nothing
+ Technology Limited
 To: Danila Tikhonov <danila@jiaxyga.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, andersson@kernel.org,
  konrad.dybcio@linaro.org, rafael@kernel.org, viresh.kumar@linaro.org,
@@ -67,7 +68,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-usb@vger.kernel.org, linux-hardening@vger.kernel.org,
  linux@mainlining.org
 References: <20240729201843.142918-1-danila@jiaxyga.com>
- <20240729201843.142918-8-danila@jiaxyga.com>
+ <20240729201843.142918-10-danila@jiaxyga.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,17 +114,15 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240729201843.142918-8-danila@jiaxyga.com>
+In-Reply-To: <20240729201843.142918-10-danila@jiaxyga.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 29/07/2024 22:18, Danila Tikhonov wrote:
-> The Qualcomm Snapdragon 778G/778G+/780G/782G uses CPUs named Kryo 670.
-> Add the compatible string in the documentation.
+> Add entry for Nothing Technology Limited (https://nl.nothing.tech/)
 > 
 > Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 > ---
->  Documentation/devicetree/bindings/arm/cpus.yaml | 1 +
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
