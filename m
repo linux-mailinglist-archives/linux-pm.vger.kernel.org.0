@@ -1,159 +1,123 @@
-Return-Path: <linux-pm+bounces-11616-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11617-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F00794035E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 03:20:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51A389405F6
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 05:33:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C3701F23F07
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 01:20:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83A1C1C22768
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2024 03:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A872C95;
-	Tue, 30 Jul 2024 01:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 476CB161304;
+	Tue, 30 Jul 2024 03:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="V6h3Ovto"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yAQkNdMA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE96442C
-	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 01:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA331494A9
+	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 03:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722302438; cv=none; b=T7CdDNUphqI7o7wOCSOwsM1tY/fxn+IndbS6gKgVikrqwjcUobwYZZ7p6nN/pfDlk/SzfCd2DXACnUR+GJxtgi279HZoF4EjqI1jIxicroUDGglgSuGK5blmGO9UWR1EVr9ExFmzfUvfDvnJsbszN2fvXNyZWgdqkV/wsWRNR5k=
+	t=1722310370; cv=none; b=JXzL+Kaf9I03WA+xgQOWgrjwtbIPC50DDB2N6ayClwiO+xulqX0HYFgyW7vs8BK4xhScAosnQ4xkM/WnVCwbDRHnYSAY0+QUqWSi5S2e4up4HeZMzFD7HtjKIpVhkz5LiKI6GPgUwMv5jnil2E3rqvi6vJDG9U7fjLlzwKAbh1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722302438; c=relaxed/simple;
-	bh=7sFpW7FaITWJsV3JL8gPx+PMEupv+MzEs6hdIq87RFI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 References; b=gHMVLEdjPzENPJ6axDzahmuub01MRfSJvlI9PMxNOaMUjqS4OvzmPFOotx0fCQvVlmy/mKYIBRBDrmPSU+AqhguDqcDlb+pKO6+KSpwqnFWy7Bk3JtKhtPZVuhEAWTyXIQjJ/ALVo0kfs8YaPI7P7Bo1xWY/Q0+MxYw45VO10jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=V6h3Ovto; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240730012029euoutp02aa8a374c751e633fe153d66adce9a4d8~m2O8e2tNV1131111311euoutp02E
-	for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2024 01:20:29 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240730012029euoutp02aa8a374c751e633fe153d66adce9a4d8~m2O8e2tNV1131111311euoutp02E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1722302429;
-	bh=2l/Tm+GJl5Bpguh8RXXKnXyxWbBEPbxWdMDeWf66q1M=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=V6h3OvtoYZJdcTQCuXsYxastm/0qIHRn6ROjN+mnORb/0IcBA9FRDDJWQvBb4PePB
-	 tP/dRBEpEpziJKURJKGFVpVJwj7pj5e/oWNfN4kl4BZHK4kaDgcyG0aUI5eiZqurdp
-	 f6GrJHIXlIlGQWUZ8ZFM4/BYbtSyGlaYsP3tnDJE=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240730012028eucas1p1c7788a9c69a8a91c64a2cf55e9d00fcc~m2O7yh1ly0853308533eucas1p1D;
-	Tue, 30 Jul 2024 01:20:28 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id 73.BD.09620.CDF38A66; Tue, 30
-	Jul 2024 02:20:28 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240730012027eucas1p2882c9c45e4d2203916af28ad86493a9a~m2O7SrMaF1785217852eucas1p2H;
-	Tue, 30 Jul 2024 01:20:27 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240730012027eusmtrp114fd7575832f1901d6807488e14d08ad~m2O7RBonx0370503705eusmtrp1a;
-	Tue, 30 Jul 2024 01:20:27 +0000 (GMT)
-X-AuditID: cbfec7f5-d1bff70000002594-44-66a83fdc538f
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id 06.8B.09010.BDF38A66; Tue, 30
-	Jul 2024 02:20:27 +0100 (BST)
-Received: from AMDC4515.eu.corp.samsungelectronics.net (unknown
-	[106.120.51.28]) by eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240730012026eusmtip251c63c014f4962008b1526e5f2a733b9~m2O6Ue2Qc3180331803eusmtip2G;
-	Tue, 30 Jul 2024 01:20:26 +0000 (GMT)
-From: Mateusz Majewski <m.majewski2@samsung.com>
-To: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Cc: Mateusz Majewski <m.majewski2@samsung.com>, Krzysztof Kozlowski
-	<krzk@kernel.org>, Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, "Rafael
- J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob
-	Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, ALIM AKHTAR
-	<alim.akhtar@samsung.com>, Sam Protsenko <semen.protsenko@linaro.org>, Anand
-	Moon <linux.amoon@gmail.com>
-Subject: [PATCH] MAINTAINERS: thermal: samsung: add myself as maintainer of
- the driver
-Date: Tue, 30 Jul 2024 03:20:18 +0200
-Message-ID: <20240730012019.1680121-1-m.majewski2@samsung.com>
-X-Mailer: git-send-email 2.45.1
+	s=arc-20240116; t=1722310370; c=relaxed/simple;
+	bh=1XeAmzR2V7+9aHSE37LPW+quEIbVxSrVQ9+bwtQsikc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=is/loiJbUYHgf6yGTffugwrW0vehfx0IHprH9u6poVDCJL1XkvtgkwIKPxmvfZ6eTbarPvN80/MXKo5OeTdcz5WQWVqCmGtz863325qazCmtEAjojl9DH+GqhFVsoMMDAQ2lvG3oXVZm0jagm01Ocl3F+bzYS4NAeLYjrIewo0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yAQkNdMA; arc=none smtp.client-ip=209.85.166.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-816d9285ebdso175592039f.0
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2024 20:32:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722310368; x=1722915168; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IZxYjy+8c1DX8w4TRv5DjsopaICxGAlzENWzIqd4frY=;
+        b=yAQkNdMAPcJw4mrjTGnpHaXq58P4jLFAjud7BUtnkpCbZerx4d+7qCHtO8h6TBhFge
+         L9brB5ltQxfmQ96THHBd3AuAwYDK5SRCPfDC6+X8Fz32/3fTKQGw9xWcv2PwTAK5EoxO
+         PIS8JEf6jSrTlMndVkJSyxZ3B1Q57W78inJGyXM242/y4VJYXXR3Dmjx16TXhH3lPcX5
+         pfoc6hGlyPJ9xTjRBkjP5I5gMpP4OIgBNaNXz3AYxMMHWWG5kdbXCdCmQVGW4yCbDxqN
+         UN+K0bp5rr2mIGnZXyEvfM+vvHbnbyvB0j4hKbYZOT7pzYuLrlNxwcxlVKqXH+bTBY9d
+         VsEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722310368; x=1722915168;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IZxYjy+8c1DX8w4TRv5DjsopaICxGAlzENWzIqd4frY=;
+        b=XsqlKTlDTMR/MXdq+yljdlpCvwDMI/1Bi/FxgwYigndXnKXr2cd8jMawyjk6Q6HHcw
+         a+C1bLV7a7jBJ48Ypceue+la1X55XPqjYvvw98E4wDKpRs6bNOU2J6+3KQAUdClgvXzS
+         qUtk7R2SouuwSKOX9YMMuYs4Q7gzEwQjN3fBh+IZC260IXSpvfxeHXSE5uz+i11iAH/3
+         8cuAfbVXdoABxDK7FGUhRPqyPRx9ltXAEgKHPluT7dybs2Uu9P6jEEq4/vZ9MtaTR76s
+         SWcGjGlQ+toIkVqeudFiboGLa/MRi6TptnAjRJHpR9BZu3oHJh18mXt33q1tgrJFR+Si
+         yQ8A==
+X-Forwarded-Encrypted: i=1; AJvYcCVWvM3+0IvsB++B0A4guBROtD3IZYqgDS2sQgCTiYPgapBy660HAKMe1idkutIYOlvh925HJcupOrUyQ52aIf308CxkJ/DWOOw=
+X-Gm-Message-State: AOJu0Yz8CWejpMP3Ogw0UciFgq+9TungjvomBzwO9DVcekVvTUPwdhiW
+	77B/eqnVgz5Aq5IU2YRydkeSkHENlCDHs3VZk0F2phVI7/jXrVmYZExVSmajNTk=
+X-Google-Smtp-Source: AGHT+IHY1oLjH13UjFco6GEaqPBNW80+DzO4U71s2pzOLDm6DDp6LzyR1CoAl6dkFRbHg8xDKgcRwA==
+X-Received: by 2002:a05:6e02:20e9:b0:396:e92:851f with SMTP id e9e14a558f8ab-39aec2d1682mr123103735ab.4.1722310367630;
+        Mon, 29 Jul 2024 20:32:47 -0700 (PDT)
+Received: from localhost ([122.172.84.129])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7a9f817da8bsm7929408a12.27.2024.07.29.20.32.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jul 2024 20:32:46 -0700 (PDT)
+Date: Tue, 30 Jul 2024 09:02:42 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>, Nikunj Kela <nkela@quicinc.com>,
+	Prasad Sodagudi <psodagud@quicinc.com>, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-tegra@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] OPP: Fix support for required OPPs for multiple PM
+ domains
+Message-ID: <20240730033242.4ajotym33bheativ@vireshk-i7>
+References: <20240711131637.opzrayksfadimgq4@vireshk-i7>
+ <CAPDyKFqczrJzHApBOYRSg=MXzzd1_nSgQQ3QwKYLWzgZ+XY32A@mail.gmail.com>
+ <20240718030556.dmgzs24d2bk3hmpb@vireshk-i7>
+ <CAPDyKFqCqDqSz2AGrNvkoWzn8-oYnS2fT1dyiMC8ZP1yqYvLKg@mail.gmail.com>
+ <20240725060211.e5pnfk46c6lxedpg@vireshk-i7>
+ <CAPDyKFpSmZgxtmCtiTrFOwgj7ZpNpkDMhxsK0KnuGsWi1a9U5g@mail.gmail.com>
+ <20240725112519.d6ec7obtclsf3ace@vireshk-i7>
+ <CAPDyKFqTtqYEFfaHq-jbxnp5gD7qm9TbLrah=k=VD2TRArvU8A@mail.gmail.com>
+ <20240729060550.crgrmbnlv66645w2@vireshk-i7>
+ <CAPDyKFosi4dhf36iNaNgGN6RHLDunL1nEwD+A_aW2khxER59nQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPKsWRmVeSWpSXmKPExsWy7djPc7p37FekGezdyWHxYN42NovvW64z
-	WazZe47JYt5nWYv5R86xWpw/v4HdYtPja6wWl3fNYbP43HuE0WLG+X1MFus23mK3WNjUwm4x
-	8dhkZou5X6YyW/zfs4Pd4snDPjaL5337mBwEPdbMW8PosXPWXXaPxXteMnlsWtXJ5nHn2h42
-	j81L6j36tqxi9Pi8SS6AI4rLJiU1J7MstUjfLoEro+vDVraC2awVT2bdZ25g3MfSxcjJISFg
-	InH2TytbFyMXh5DACkaJ5Sd7oZwvjBIv1y9mhnA+M0qcuvyXDablRs9FJojEckaJtrOLoZxW
-	Jonns1+ADWYTMJB48GYZO0hCROAqk8Szp5/AHGaBJ8wSm59MA5slLBAhseX0VXYQm0VAVWL/
-	kxlA3RwcvAJ2Es8vVUCsk5fo3d/HBGLzCghKnJz5BGwBM1C8eetssPskBP5zSJzp+8cE0eAi
-	Mb9vFpQtLPHq+BZ2CFtG4vTkHqi38yVmbH4PtktCoELi7kEvCNNa4uMZZhCTWUBTYv0ufYhi
-	R4nfn28xQlTwSdx4KwhxAJ/EpG3TmSHCvBIdbUIQ1aoSx/dMYoawpSWetNyGOsVD4sS7G2Bv
-	CwnESpy7foFtAqPCLCRvzULy1iyEGxYwMq9iFE8tLc5NTy02zkst1ytOzC0uzUvXS87P3cQI
-	THOn/x3/uoNxxauPeocYmTgYDzFKcDArifDGX1maJsSbklhZlVqUH19UmpNafIhRmoNFSZxX
-	NUU+VUggPbEkNTs1tSC1CCbLxMEp1cCUN91Y2p8l4dTlS2G/YwwDJzd4GF+81d6e+ebHgRdr
-	N7XM5f24L0j57+13HGf00oqDbvJOW7Tt4NHII/PFt0+w3CoV1XthEq/T7QbG6A/5UzTXLlik
-	FHL9EtdK4VMPv1rUxH3mdfj0g7P0VByX2HW9iz93fC7Juub0jLtK+HhxubfXOqUJ+lGnBd5p
-	GF7xjTGJeafROGVLOPuz6dkfbqc/X7G7lJvTa+1Hmb07lkSsExSMlrxmYLfhCd+5zHeTkg/b
-	NHPXTUw9p+mnkv5X/5/ZdgOnTUtevwg6YiKe3rQyt/Zco8UkA4EDTwRuaFZec+v/L578nK2s
-	rOo3x2P/z9MfGKm93vPpq9n7l7ujzffuUmIpzkg01GIuKk4EAKnXCvjiAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOIsWRmVeSWpSXmKPExsVy+t/xe7q37VekGaxboGzxYN42NovvW64z
-	WazZe47JYt5nWYv5R86xWpw/v4HdYtPja6wWl3fNYbP43HuE0WLG+X1MFus23mK3WNjUwm4x
-	8dhkZou5X6YyW/zfs4Pd4snDPjaL5337mBwEPdbMW8PosXPWXXaPxXteMnlsWtXJ5nHn2h42
-	j81L6j36tqxi9Pi8SS6AI0rPpii/tCRVISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/O
-	JiU1J7MstUjfLkEvo+vDVraC2awVT2bdZ25g3MfSxcjJISFgInGj5yJTFyMXh5DAUkaJhe8X
-	MkMkpCUOf5nCDmELS/y51sUGUdTMJHH50xmwBJuAgcSDN8vAbBGBy0wSO2ergBQxC7xjlujq
-	aQBLCAuEScx4380EYrMIqErsfzIDaDUHB6+AncTzSxUQC+Qlevf3gZXwCghKnJz5BOw6ZqB4
-	89bZzBMY+WYhSc1CklrAyLSKUSS1tDg3PbfYSK84Mbe4NC9dLzk/dxMjMMa2Hfu5ZQfjylcf
-	9Q4xMnEwHmKU4GBWEuGNv7I0TYg3JbGyKrUoP76oNCe1+BCjKdB5E5mlRJPzgVGeVxJvaGZg
-	amhiZmlgamlmrCTO61nQkSgkkJ5YkpqdmlqQWgTTx8TBKdXAlKv6+MWjuzskPjGELdmWbBR3
-	XfAee3vnqpOPvYTUboi/PrRoVapKyIUXt9cJ72+ur/P5p7pD8I1nutYDtwudF9f1Ji4rOFE+
-	Q9jqU55NoPqVH50nr/v0PGO+xnO0+fmU3ltnbOSn93Rq8TgL1ki+lNgt1fn27MFuu7w/BxJY
-	3u7jiOVdmTD1wqXoowqva6Pn/p70+HYaW8+Rz0o/ZDgveIfIpz7z3mGu13Nlorau/dU8I5fj
-	ulO9dM62L5JYn5HV4Cmp4GweGBLD1Hrjb0dsmlTv0qmXD+zwYcvYYXz/z+eqN8eN2t4lTD14
-	4lGYsdvKvOKb3bkr1Ba8CXrvKMMlEb1xzffnq0wuBvV+TW9QUWIpzkg01GIuKk4EAIKcqf06
-	AwAA
-X-CMS-MailID: 20240730012027eucas1p2882c9c45e4d2203916af28ad86493a9a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240730012027eucas1p2882c9c45e4d2203916af28ad86493a9a
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240730012027eucas1p2882c9c45e4d2203916af28ad86493a9a
-References: <CGME20240730012027eucas1p2882c9c45e4d2203916af28ad86493a9a@eucas1p2.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFosi4dhf36iNaNgGN6RHLDunL1nEwD+A_aW2khxER59nQ@mail.gmail.com>
 
-As discussed in
-https://lore.kernel.org/lkml/e73e1a14-dfa0-4a36-bc6e-5d6421553788@kernel.org
+On 29-07-24, 22:30, Ulf Hansson wrote:
+> In regards to the clocks, I assume this is handled correctly too, as
+> the clocks are per device clocks that don't belong to the genpd.
 
-Signed-off-by: Mateusz Majewski <m.majewski2@samsung.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+It would be if the clk node is present in the device's node. I was talking about
+a clock node in the genpd's table earlier. If that is ever the case, we will end
+up programming the wrong clk here.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 12b870712da4..9133257a8509 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20247,6 +20247,7 @@ F:	drivers/net/ethernet/samsung/sxgbe/
- SAMSUNG THERMAL DRIVER
- M:	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
- M:	Krzysztof Kozlowski <krzk@kernel.org>
-+M:	Mateusz Majewski <m.majewski2@samsung.com>
- L:	linux-pm@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
+> That's right, but why do we want to call dev_pm_opp_set_opp() for the
+> multiple PM domain case then? It makes the behaviour inconsistent.
+
+To have a common path for all required OPP device types, irrespective of the
+fact that the required OPP device is a genpd or not. And we are talking about a
+required OPP of a separate device here, it must be set via this call only,
+technically speaking.
+
+Genpd makes it a little complex, and I agree to that. But I strongly feel this
+code needs to be generic and not genpd specific. The OPP core should have as
+less genpd specific code as possible. It must handle all device types with a
+single code path.
+
 -- 
-2.45.1
-
+viresh
 
