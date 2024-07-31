@@ -1,134 +1,251 @@
-Return-Path: <linux-pm+bounces-11755-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11756-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04621942F93
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 15:01:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F08B4942F9B
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 15:02:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD67228A15E
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 13:01:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E0D8B25A94
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 13:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B81EC1B29D8;
-	Wed, 31 Jul 2024 12:59:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321971AED3D;
+	Wed, 31 Jul 2024 13:01:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="psCgaXB5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OzcDc3U0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9065C1AB52C;
-	Wed, 31 Jul 2024 12:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.50.220
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B7D1AC43E;
+	Wed, 31 Jul 2024 13:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722430747; cv=none; b=sT/H/f9ieDYOSdGw203iuAztmPencGNFeUhoL2ouB63DiMhxf7utAS7++kV9RsGR/DYMThmEL3fTf8EpeegcZE4dQtAVcUDdfPjaFA+rzyzJtBoMWkcUK4WrGGloszC/J/Fo/MCm8qoWTSv4VYhMVFkfWtzJBI+QoJgO4qM37jc=
+	t=1722430887; cv=none; b=g/d1VJ6zC0wAcfEJSOUb92M7yAj3RIzd69q+Rwc82aCFMND75fTL/Mq/ai0NG5S935dl9ZfrY9VRGDukS2PSqAip0b+N32t9FNj6gwBnNcnw9TLFRvrE1IcxwSKxFM9SBcwdGMrB6mHtuPfWgA3G0cc62rxv0GIX009pFkH+pzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722430747; c=relaxed/simple;
-	bh=iSskvgHd2RV0PGf40AdW5HOVIBJ+OOv5C1Gm+PsLey8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=LebNN4MDuMvlZU+/MTiZkiFVHnPC+Z8ipykfZlYWyQGrh1xMDMIVUAEWp4GRo5RoxkQB7gfraKpClx4cbWvgZW+OoVCsy6tgIDteVtm25dpHO4uG8VRVA9LsZK78nQ6sDlCdu8fhdWjwvrrgUuj3uNiIqAVTRWvmLA5rZ4Q2ETE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=psCgaXB5 reason="signature verification failed"; arc=none smtp.client-ip=45.254.50.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=0h4LaQtBvmiVXs/Hf+P23R81FvK6xyzFgOO+MeKx4mk=; b=p
-	sCgaXB540S9bk2RCFO1xY5k7RTkQBrGDTb2lojNxamDNLVAeWCR7JNRgg9LJE3gy
-	ORUI0Lm7GlGQug9x1gxjOINkPiq1MznlRhxKruVctzCwnt2nwnig9NguYMQqL1Bu
-	A1m/MiqNMgDfGybVXo3kyR0kSPCv4RGcLADwYXMhrs=
-Received: from 00107082$163.com ( [111.35.189.52] ) by
- ajax-webmail-wmsvr-40-133 (Coremail) ; Wed, 31 Jul 2024 20:58:40 +0800
- (CST)
-Date: Wed, 31 Jul 2024 20:58:40 +0800 (CST)
-From: "David Wang" <00107082@163.com>
-To: "Gautham R.Shenoy" <gautham.shenoy@amd.com>
-Cc: perry.yuan@amd.com, Alexander.Deucher@amd.com, Li.Meng@amd.com, 
-	Mario.Limonciello@amd.com, Xiaojian.Du@amd.com, Xinmei.Huang@amd.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	rafael.j.wysocki@intel.com, viresh.kumar@linaro.org
-Subject: Re: [Regression] 6.11.0-rc1: AMD CPU boot with error when CPPC
- feature disabled by BIOS
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2024 www.mailtech.cn 163com
-In-Reply-To: <87zfpxsweb.fsf@BLR-5CG11610CF.amd.com>
-References: <20240730140111.4491-1-00107082@163.com>
- <87zfpxsweb.fsf@BLR-5CG11610CF.amd.com>
-X-NTES-SC: AL_Qu2ZAPiYv08p5iWRZ+kXn0oTju85XMCzuv8j3YJeN500mSXt0QA9Y09JGEbrzsGEKAKMgCiOVDZp48NWcaB9f44c8JlJf7TLehw1lLTj9v3b
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	s=arc-20240116; t=1722430887; c=relaxed/simple;
+	bh=FOc4xL6cnBZKwU0x9lOVB7wH6Wc39+KLGPTn8baEj/g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=F8+FlIxpkMoQH5zYrnTetoyAEn7HcBCOqFsOk0jnnxNc3nBM4PGT6FBKgdYX8VNPEwroE7F4T8u2eAtStNQfrJXWreH+AwO6v/ioXKlOaqLZPMQxPZHg8ErZnC3GjhPea1fE8HcQkhLStsJ4DqjWos+5SdBm8KrRbbLTLlTI8t4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OzcDc3U0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC24C4AF0C;
+	Wed, 31 Jul 2024 13:01:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722430886;
+	bh=FOc4xL6cnBZKwU0x9lOVB7wH6Wc39+KLGPTn8baEj/g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OzcDc3U09RWMQOUwMgxccj1jmTf8CVPmpN6QlzMqPndDDuzOT+V00yOwRv/8VCC+C
+	 xwWFOs+ytJ9CWmc6Mp30fEzzBdPTAYQDPBZtltVy0l1tLMu7TzMbkCgbliN+zuQCIs
+	 7jXvFyO+RipEZgx7g9UPH84Z7xh/MCjFUJh1JQIYM2nw4D9vjHIfjf0BegNbwXEyuB
+	 jliJBcnqnL23sfjuDtEZXu0onWDAScTwvYqQw2V3Lm2ygpVTKYAk/G/sMKlJa9q7Cv
+	 Cm+zT4sTqa2Rf0+H30xqwRUO+O+MqUeuDfyfS42GFkorx0xOZ9tOOPFbEDnRvRIMx3
+	 jawUBB+7KeaFw==
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-70937ddca68so369972a34.1;
+        Wed, 31 Jul 2024 06:01:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXk1TOH8y+K7HTb62R1f9cAXYK+DX+0YF//Twdupnb9VaR6uLa+W9OZRqtqeP1zHAJaOMoqcUa/5Ji/M4knz6nKpyfuPXGKTZBNxvtBnf15bBT32z5TBdZLMNiUkezKhvk5OzxCLyfwgwVsQ0gt/6OSlaTm+KAcOG5qyKCIhzxn3PKr1fPkvjY/G6qFa5oFPE5wDRRuupjphON1
+X-Gm-Message-State: AOJu0YyaI6mwQW0jx3t/Djjpldr9QQd/BoO+WAV0L7/OvYPtbfCln1Ch
+	Gy86PMQp95hMARnEdIwPW/PNJrt73uDNO2vfxXyPjrDKYPBoVkzyvZ6lUIHWlv5m+22le0mUOug
+	BS6lWlQhWv1WIzT0AehdyeEkE1jw=
+X-Google-Smtp-Source: AGHT+IHR7XEcFHPLksjQmwAtEeWHPpKDjYfRSPpiwZBjHMhkVK9+8QlLG6b+zqiWDqo4DwOtnaRCEolaJ1S/c+wwanM=
+X-Received: by 2002:a05:6871:e2d0:b0:261:934:873d with SMTP id
+ 586e51a60fabf-264be1e0f03mr11838413fac.5.1722430885754; Wed, 31 Jul 2024
+ 06:01:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <2f793cc8.a13d.19108df0a58.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:_____wD3v7QBNapmnHJvAA--.13654W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqRctqmVOB4ulsQACsI
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+References: <1922131.tdWV9SEqCh@rjwysocki.net> <9002154.VV5PYv0bhD@rjwysocki.net>
+ <ZqoxXdQRxhfr5cHY@shredder.mtl.com>
+In-Reply-To: <ZqoxXdQRxhfr5cHY@shredder.mtl.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 31 Jul 2024 15:01:14 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h7T27fcL5-Wp5cjxi7mqKVh3_jk-8KwXPGWRbO31sm7Q@mail.gmail.com>
+Message-ID: <CAJZ5v0h7T27fcL5-Wp5cjxi7mqKVh3_jk-8KwXPGWRbO31sm7Q@mail.gmail.com>
+Subject: Re: [PATCH v1 13/17] mlxsw: core_thermal: Use the .should_bind()
+ thermal zone callback
+To: Ido Schimmel <idosch@nvidia.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Zhang Rui <rui.zhang@intel.com>, Petr Machata <petrm@nvidia.com>, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SGksCgpBdCAyMDI0LTA3LTMxIDE4OjEyOjEyLCAiR2F1dGhhbSBSLlNoZW5veSIgPGdhdXRoYW0u
-c2hlbm95QGFtZC5jb20+IHdyb3RlOgo+SGVsbG8gRGF2aWQsCj4KPkRhdmlkIFdhbmcgPDAwMTA3
-MDgyQDE2My5jb20+IHdyaXRlczoKPgo+PiBIaSwKPj4KPj4gSSBub3RpY2Ugc29tZSBrZXJuZWwg
-d2FybmluZyBhbmQgZXJyb3JzIHdoZW4gSSB1cGRhdGUgdG8gNi4xMS4wLXJjMToKPj4KPj4gIGtl
-cm5lbDogWyAgICAxLjAyMjczOV0gYW1kX3BzdGF0ZTogVGhlIENQUEMgZmVhdHVyZSBpcyBzdXBw
-b3J0ZWQgYnV0IGN1cnJlbnRseSBkaXNhYmxlZCBieSB0aGUgQklPUy4KPj4gIGtlcm5lbDogWyAg
-ICAxLjAyMjczOV0gUGxlYXNlIGVuYWJsZSBpdCBpZiB5b3VyIEJJT1MgaGFzIHRoZSBDUFBDIG9w
-dGlvbi4KPj4gIGtlcm5lbDogWyAgICAxLjA5ODA1NF0gYW1kX3BzdGF0ZTogbWluX2ZyZXEoMCkg
-b3IgbWF4X2ZyZXEoMCkgb3Igbm9taW5hbF9mcmVxKDApIHZhbHVlIGlzIGluY29ycmVjdAo+PiAg
-a2VybmVsOiBbICAgIDEuMTEwMDU4XSBhbWRfcHN0YXRlOiBtaW5fZnJlcSgwKSBvciBtYXhfZnJl
-cSgwKSBvciBub21pbmFsX2ZyZXEoMCkgdmFsdWUgaXMgaW5jb3JyZWN0Cj4+ICBrZXJuZWw6IFsg
-ICAgMS4xMjIwNTddIGFtZF9wc3RhdGU6IG1pbl9mcmVxKDApIG9yIG1heF9mcmVxKDApIG9yIG5v
-bWluYWxfZnJlcSgwKSB2YWx1ZSBpcyBpbmNvcnJlY3QKPj4gIGtlcm5lbDogWyAgICAxLjEzNDA2
-Ml0gYW1kX3BzdGF0ZTogbWluX2ZyZXEoMCkgb3IgbWF4X2ZyZXEoMCkgb3Igbm9taW5hbF9mcmVx
-KDApIHZhbHVlIGlzIGluY29ycmVjdAo+PiAga2VybmVsOiBbICAgIDEuMTM0NjQxXSBhbWRfcHN0
-YXRlOiBtaW5fZnJlcSgwKSBvciBtYXhfZnJlcSgwKSBvciBub21pbmFsX2ZyZXEoMCkgdmFsdWUg
-aXMgaW5jb3JyZWN0Cj4+ICBrZXJuZWw6IFsgICAgMS4xMzUxMjhdIGFtZF9wc3RhdGU6IG1pbl9m
-cmVxKDApIG9yIG1heF9mcmVxKDApIG9yIG5vbWluYWxfZnJlcSgwKSB2YWx1ZSBpcyBpbmNvcnJl
-Y3QKPj4gIGtlcm5lbDogWyAgICAxLjEzNTY5M10gYW1kX3BzdGF0ZTogbWluX2ZyZXEoMCkgb3Ig
-bWF4X2ZyZXEoMCkgb3Igbm9taW5hbF9mcmVxKDApIHZhbHVlIGlzIGluY29ycmVjdAo+PiAga2Vy
-bmVsOiBbICAgIDEuMTM2MzcxXSBhbWRfcHN0YXRlOiBtaW5fZnJlcSgwKSBvciBtYXhfZnJlcSgw
-KSBvciBub21pbmFsX2ZyZXEoMCkgdmFsdWUgaXMgaW5jb3JyZWN0Cj4+ICBrZXJuZWw6IFsgICAg
-MS4xMzYzOTBdIGFtZF9wc3RhdGU6IGZhaWxlZCB0byByZWdpc3RlciB3aXRoIHJldHVybiAtMTkK
-Pj4gIGtlcm5lbDogWyAgICAxLjEzODQxMF0gbGVkdHJpZy1jcHU6IHJlZ2lzdGVyZWQgdG8gaW5k
-aWNhdGUgYWN0aXZpdHkgb24gQ1BVcwo+Pgo+Pgo+PiBUaG9zZSB3YXJuaW5nIG1lc3NhZ2Ugd2Fz
-IGludHJvZHVjZWQgYnkgY29tbWl0Ogo+PiAgYmZmN2QxM2MxOTBhZDk4Y2Y0Zjg3NzE4OWIwMjJj
-NzVkZjRjYjM4MyAoImNwdWZyZXE6IGFtZC1wc3RhdGU6IGFkZCBkZWJ1ZyBtZXNzYWdlIHdoaWxl
-IENQUEMgaXMgc3VwcG9ydGVkIGFuZCBkaXNhYmxlZCBieSBTQklPUykKPj4gLCB3aGljaCBtYWtl
-IHNlbnNlLgo+Cj4KPklmIENQUEMgaXMgZGlzYWJlZCBpbiB0aGUgQklPUywgdGhlbiB0aGUgX0NQ
-QyBvYmplY3RzIHNob3VsZG4ndCBoYXZlCj5iZWVuIGNyZWF0ZWQuIEFuZCB0aGUgZXJyb3IgbWVz
-c2FnZSB0aGF0IHlvdSBzaG91bGQgaGF2ZSBzZWVuIGlzCj4idGhlIF9DUEMgb2JqZWN0IGlzIG5v
-dCBwcmVzZW50IGluIFNCSU9TIG9yIEFDUEkgZGlzYWJsZWQiLgo+Cj4KPkNvdWxkIHlvdSBwbGVh
-c2Ugc2hhcmUgdGhlIGZhbWlseSBhbmQgbW9kZWwgbnVtYmVyIG9mIHRoZSBwbGF0Zm9ybSB3aGVy
-ZQo+eW91IGFyZSBvYnNlcnZpbmcgdGhpcyA/CgpNeSBgY2F0IC9wcm9jL2NwdWluZm9gIHNob3dz
-IHNvbWV0aGluZyBhcyBmb2xsb3dpbmc6CnByb2Nlc3Nvcgk6IDAKdmVuZG9yX2lkCTogQXV0aGVu
-dGljQU1ECmNwdSBmYW1pbHkJOiAyMwptb2RlbAkJOiAxMTMKbW9kZWwgbmFtZQk6IEFNRCBSeXpl
-biAzIDMxMDAgNC1Db3JlIFByb2Nlc3NvcgpzdGVwcGluZwk6IDAKbWljcm9jb2RlCTogMHg4NzAx
-MDIxCmNwdSBNSHoJCTogMzYwMC4wMDAKY2FjaGUgc2l6ZQk6IDUxMiBLQgpwaHlzaWNhbCBpZAk6
-IDAKc2libGluZ3MJOiA4CmNvcmUgaWQJCTogMApjcHUgY29yZXMJOiA0CmFwaWNpZAkJOiAwCmlu
-aXRpYWwgYXBpY2lkCTogMApmcHUJCTogeWVzCmZwdV9leGNlcHRpb24JOiB5ZXMKY3B1aWQgbGV2
-ZWwJOiAxNgp3cAkJOiB5ZXMKZmxhZ3MJCTogZnB1IHZtZSBkZSBwc2UgdHNjIG1zciBwYWUgbWNl
-IGN4OCBhcGljIHNlcCBtdHJyIHBnZSBtY2EgY21vdiBwYXQgcHNlMzYgY2xmbHVzaCBtbXggZnhz
-ciBzc2Ugc3NlMiBodCBzeXNjYWxsIG54IG1teGV4dCBmeHNyX29wdCBwZHBlMWdiIHJkdHNjcCBs
-bSBjb25zdGFudF90c2MgcmVwX2dvb2Qgbm9wbCB4dG9wb2xvZ3kgbm9uc3RvcF90c2MgY3B1aWQg
-ZXh0ZF9hcGljaWQgYXBlcmZtcGVyZiByYXBsIHBuaSBwY2xtdWxxZHEgbW9uaXRvciBzc3NlMyBm
-bWEgY3gxNiBzc2U0XzEgc3NlNF8yIG1vdmJlIHBvcGNudCBhZXMgeHNhdmUgYXZ4IGYxNmMgcmRy
-YW5kIGxhaGZfbG0gY21wX2xlZ2FjeSBzdm0gZXh0YXBpYyBjcjhfbGVnYWN5IGFibSBzc2U0YSBt
-aXNhbGlnbnNzZSAzZG5vd3ByZWZldGNoIG9zdncgaWJzIHNraW5pdCB3ZHQgdGNlIHRvcG9leHQg
-cGVyZmN0cl9jb3JlIHBlcmZjdHJfbmIgYnBleHQgcGVyZmN0cl9sbGMgbXdhaXR4IGNwYiBjYXRf
-bDMgY2RwX2wzIGh3X3BzdGF0ZSBzc2JkIG1iYSBpYnBiIHN0aWJwIHZtbWNhbGwgZnNnc2Jhc2Ug
-Ym1pMSBhdngyIHNtZXAgYm1pMiBjcW0gcmR0X2EgcmRzZWVkIGFkeCBzbWFwIGNsZmx1c2hvcHQg
-Y2x3YiBzaGFfbmkgeHNhdmVvcHQgeHNhdmVjIHhnZXRidjEgY3FtX2xsYyBjcW1fb2NjdXBfbGxj
-IGNxbV9tYm1fdG90YWwgY3FtX21ibV9sb2NhbCBjbHplcm8gaXJwZXJmIHhzYXZlZXJwdHIgcmRw
-cnUgd2Jub2ludmQgYXJhdCBucHQgbGJydiBzdm1fbG9jayBucmlwX3NhdmUgdHNjX3NjYWxlIHZt
-Y2JfY2xlYW4gZmx1c2hieWFzaWQgZGVjb2RlYXNzaXN0cyBwYXVzZWZpbHRlciBwZnRocmVzaG9s
-ZCBhdmljIHZfdm1zYXZlX3ZtbG9hZCB2Z2lmIHZfc3BlY19jdHJsIHVtaXAgcmRwaWQgb3ZlcmZs
-b3dfcmVjb3Ygc3VjY29yIHNtY2Egc2V2IHNldl9lcwpidWdzCQk6IHN5c3JldF9zc19hdHRycyBz
-cGVjdHJlX3YxIHNwZWN0cmVfdjIgc3BlY19zdG9yZV9ieXBhc3MgcmV0YmxlZWQgc210X3JzYiBz
-cnNvCmJvZ29taXBzCTogNzE5OS45NQpUTEIgc2l6ZQk6IDMwNzIgNEsgcGFnZXMKY2xmbHVzaCBz
-aXplCTogNjQKY2FjaGVfYWxpZ25tZW50CTogNjQKYWRkcmVzcyBzaXplcwk6IDQzIGJpdHMgcGh5
-c2ljYWwsIDQ4IGJpdHMgdmlydHVhbApwb3dlciBtYW5hZ2VtZW50OiB0cyB0dHAgdG0gaHdwc3Rh
-dGUgY3BiIGVmZl9mcmVxX3JvIFsxM10gWzE0XQoKCgoKPgo+LS0KPlRoYW5rcyBhbmQgUmVnYXJk
-cwo+Z2F1dGhhbS4KCgo=
+On Wed, Jul 31, 2024 at 2:43=E2=80=AFPM Ido Schimmel <idosch@nvidia.com> wr=
+ote:
+>
+> On Tue, Jul 30, 2024 at 08:34:45PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Make the mlxsw core_thermal driver use the .should_bind() thermal zone
+> > callback to provide the thermal core with the information on whether or
+> > not to bind the given cooling device to the given trip point in the
+> > given thermal zone.  If it returns 'true', the thermal core will bind
+> > the cooling device to the trip and the corresponding unbinding will be
+> > taken care of automatically by the core on the removal of the involved
+> > thermal zone or cooling device.
+> >
+> > It replaces the .bind() and .unbind() thermal zone callbacks (in 3
+> > places) which assumed the same trip points ordering in the driver
+> > and in the thermal core (that may not be true any more in the
+> > future).  The .bind() callbacks used loops over trip point indices
+> > to call thermal_zone_bind_cooling_device() for the same cdev (once
+> > it had been verified) and all of the trip points, but they passed
+> > different 'upper' and 'lower' values to it for each trip.
+> >
+> > To retain the original functionality, the .should_bind() callbacks
+> > need to use the same 'upper' and 'lower' values that would be used
+> > by the corresponding .bind() callbacks when they are about about to
+>
+> Nit: s/about about/about/
+
+Yes, thanks!
+
+> > return 'true'.  To that end, the 'priv' field of each trip is set
+> > during the thermal zone initialization to point to the corresponding
+> > 'state' object containing the maximum and minimum cooling states of
+> > the cooling device.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Please see more comments below, but this patch is going to conflict with
+> the series at [1] which is currently under review. How do you want to
+> handle that?
+>
+> https://lore.kernel.org/netdev/cover.1722345311.git.petrm@nvidia.com/
+
+I may be missing something, but I don't see conflicts between this
+patch and the series above that would be hard to resolve at merge
+time.
+
+Anyway, I'll try to apply the above series locally and merge it with
+this patch, thanks for the heads up!
+
+> > ---
+> >
+> > This patch only depends on patch [09/17].
+> >
+> > ---
+> >  drivers/net/ethernet/mellanox/mlxsw/core_thermal.c |  121 +++++-------=
+---------
+> >  1 file changed, 34 insertions(+), 87 deletions(-)
+> >
+> > Index: linux-pm/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+> > +++ linux-pm/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+> > @@ -165,52 +165,22 @@ static int mlxsw_get_cooling_device_idx(
+> >       return -ENODEV;
+> >  }
+> >
+> > -static int mlxsw_thermal_bind(struct thermal_zone_device *tzdev,
+> > -                           struct thermal_cooling_device *cdev)
+> > +static bool mlxsw_thermal_should_bind(struct thermal_zone_device *tzde=
+v,
+> > +                                   const struct thermal_trip *trip,
+> > +                                   struct thermal_cooling_device *cdev=
+,
+> > +                                   struct cooling_spec *c)
+> >  {
+> >       struct mlxsw_thermal *thermal =3D thermal_zone_device_priv(tzdev)=
+;
+> > -     struct device *dev =3D thermal->bus_info->dev;
+> > -     int i, err;
+> > +     const struct mlxsw_cooling_states *state =3D trip->priv;
+> >
+> >       /* If the cooling device is one of ours bind it */
+> >       if (mlxsw_get_cooling_device_idx(thermal, cdev) < 0)
+> > -             return 0;
+> > +             return false;
+> >
+> > -     for (i =3D 0; i < MLXSW_THERMAL_NUM_TRIPS; i++) {
+> > -             const struct mlxsw_cooling_states *state =3D &thermal->co=
+oling_states[i];
+> > +     c->upper =3D state->max_state;
+> > +     c->lower =3D state->min_state;
+> >
+> > -             err =3D thermal_zone_bind_cooling_device(tzdev, i, cdev,
+> > -                                                    state->max_state,
+> > -                                                    state->min_state,
+> > -                                                    THERMAL_WEIGHT_DEF=
+AULT);
+> > -             if (err < 0) {
+> > -                     dev_err(dev, "Failed to bind cooling device to tr=
+ip %d\n", i);
+> > -                     return err;
+> > -             }
+> > -     }
+> > -     return 0;
+> > -}
+> > -
+> > -static int mlxsw_thermal_unbind(struct thermal_zone_device *tzdev,
+> > -                             struct thermal_cooling_device *cdev)
+> > -{
+> > -     struct mlxsw_thermal *thermal =3D thermal_zone_device_priv(tzdev)=
+;
+> > -     struct device *dev =3D thermal->bus_info->dev;
+> > -     int i;
+> > -     int err;
+> > -
+> > -     /* If the cooling device is our one unbind it */
+> > -     if (mlxsw_get_cooling_device_idx(thermal, cdev) < 0)
+> > -             return 0;
+> > -
+> > -     for (i =3D 0; i < MLXSW_THERMAL_NUM_TRIPS; i++) {
+> > -             err =3D thermal_zone_unbind_cooling_device(tzdev, i, cdev=
+);
+> > -             if (err < 0) {
+> > -                     dev_err(dev, "Failed to unbind cooling device\n")=
+;
+> > -                     return err;
+> > -             }
+> > -     }
+> > -     return 0;
+> > +     return true;
+> >  }
+> >
+> >  static int mlxsw_thermal_get_temp(struct thermal_zone_device *tzdev,
+> > @@ -239,59 +209,29 @@ static struct thermal_zone_params mlxsw_
+> >       .no_hwmon =3D true,
+> >  };
+> >
+> > -static struct thermal_zone_device_ops mlxsw_thermal_ops =3D {
+> > -     .bind =3D mlxsw_thermal_bind,
+> > -     .unbind =3D mlxsw_thermal_unbind,
+> > -     .get_temp =3D mlxsw_thermal_get_temp,
+> > -};
+>
+> Is there a reason to move 'mlxsw_thermal_ops' below?
+
+Not really, it can stay here.
+
+> > -
+> > -static int mlxsw_thermal_module_bind(struct thermal_zone_device *tzdev=
+,
+> > -                                  struct thermal_cooling_device *cdev)
+> > +static bool mlxsw_thermal_module_should_bind(struct thermal_zone_devic=
+e *tzdev,
+> > +                                          const struct thermal_trip *t=
+rip,
+> > +                                          struct thermal_cooling_devic=
+e *cdev,
+> > +                                          struct cooling_spec *c)
+> >  {
+> >       struct mlxsw_thermal_module *tz =3D thermal_zone_device_priv(tzde=
+v);
+> >       struct mlxsw_thermal *thermal =3D tz->parent;
+> > -     int i, j, err;
+> > +     const struct mlxsw_cooling_states *state =3D trip->priv;
+>
+> Please place it between 'tz' and 'thermal'. Networking code tries to
+> maintain reverse xmas tree ordering for local variables.
+
+I will.
+
+Thanks for the comments!
 
