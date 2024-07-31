@@ -1,139 +1,158 @@
-Return-Path: <linux-pm+bounces-11768-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11769-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E03FF943539
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 19:59:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4105943614
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 21:13:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E28B1C21486
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 17:59:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 148F61C220CB
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 19:13:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96C743D0A9;
-	Wed, 31 Jul 2024 17:59:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857CB4084E;
+	Wed, 31 Jul 2024 19:13:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CU+kmXz2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="assU+0D1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401563BBF2;
-	Wed, 31 Jul 2024 17:58:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582541396;
+	Wed, 31 Jul 2024 19:13:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722448740; cv=none; b=Djt+fi+HMmoeQJCynGpEnUwIvcxRbA3ISzboWk/VS4eBx2xIq+v7QRXgZaKgiuRJkKMNVUGxZW8diXg0O3QgEZ4JjH2KkWChRwWgP/9SnPVd3aVGlFNKlcbHOOlRE07SV5RCci70wuwqt6FeDXaar8JJMEvlAQR3+4vrK9GjhFw=
+	t=1722453215; cv=none; b=EaEOZ6IUCZVBYLK7OhHRVIQ6Gjz5TC9qXhG1pKfE/9XFBvYxNqQLMWNLf9cBsMAm48LpIzcBdCGJqhUUaTNCEzm8+Xns7toqKvG1V8aFnfmcRV/QzPLlgoRpczOK+kGn8esQ1SsEdIwBDtsVYIpqLRBDpx93i3mwkVEYZ0gAcVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722448740; c=relaxed/simple;
-	bh=dB7F/4syqFoBtfnHnfAcCoqz1SCvMHO7LE6eT6nWs8k=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=of5z88sDhLZPSxyub7VMJ100DaoFPLP1J0KkwHQsWaRYkiP4r1JSEmOmul/B1uaUCF3JVwzh8LgeISOKB317OfsYfTHqq8COy7W3qLY+9s9D96LWkf+zEi13UwEjYzX4kyfUulrgDfyeFZDLkZQ7WdJVyyuUESPE5lAoDb+xvqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CU+kmXz2; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722448737; x=1753984737;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dB7F/4syqFoBtfnHnfAcCoqz1SCvMHO7LE6eT6nWs8k=;
-  b=CU+kmXz2rHpo7j6li3Sy6zd/IWR31xFTQxypM84eIiYs2C3y89474DKU
-   x+f7VFFiAgNIR3C/ZfqLJ790LyQNqiGBVFyJXKHmvoF27D45+AEqzsJN2
-   uIt5RQF7pmkr5lflCQquLvfkWQnfnc0YoC+jDVaUDDoBdyhh+KNQ2hWtr
-   CpmJP+K2UZOi7zNgC5FG/bmXooGRop2uOfBCE0lIcb5Z1xqaTWvIymlxO
-   ocbko7KMJyeqklYRUlBJHidureKH6aMWisIVGENoELZ8Wa/lVpniJWRnv
-   gaskZ8U7OyHP1DifhBC0I0YRSZoiNLfbZO7SPk2Al0jqhFq76gMfpCund
-   g==;
-X-CSE-ConnectionGUID: J+hr+wXzR5efQAo2Z7Bw6Q==
-X-CSE-MsgGUID: Om8RP5CqRnefmgd3rmUNVw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11150"; a="31740429"
-X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="31740429"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 10:58:57 -0700
-X-CSE-ConnectionGUID: FRgKMhlLTLmy2XlLt6TbCQ==
-X-CSE-MsgGUID: Pp9NSZCPQ5Gi81tiM8ndgg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="59597255"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 31 Jul 2024 10:58:55 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sZDbA-000ugm-25;
-	Wed, 31 Jul 2024 17:58:52 +0000
-Date: Thu, 1 Aug 2024 01:58:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:thermal-core-testing 2/28]
- drivers/thermal/hisi_thermal.c:484:29: warning: unused variable 'trip'
-Message-ID: <202408010134.hozVfGEo-lkp@intel.com>
+	s=arc-20240116; t=1722453215; c=relaxed/simple;
+	bh=sXfKPdSvD2xim8678B03Zbrmf3C5NmYf7KYIuKYHsoA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bQlcHCMK4R6kioYji9O4VVATWd5mVKfnXAQ4T/UrybpA3qC979Ki5Ay0I8z59yyLtLUZEjxTA2sKCK3V26tj5SSDt9gb2HCS3TkNiZ7lGD2h3CMm9a24Mk9euf/mvcW1A8trWz0/gZgT6IC+l/pWxZEo9ocNYm7pJWptqWTj03s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=assU+0D1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A3BC116B1;
+	Wed, 31 Jul 2024 19:13:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722453214;
+	bh=sXfKPdSvD2xim8678B03Zbrmf3C5NmYf7KYIuKYHsoA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=assU+0D1YghzXsD+joyjA3vi6CzirGdiekQCGVFCwHkLtRIYEffmPn0VE9pkTLcIf
+	 nGenEgRMNufXPB3RChqIQ14LmpOjfpNdeqnXPegXMIi+3q5cxTjBcGhxpF1/RMRpBn
+	 kWr4HA3112qA6xrchcDYw13HLGcuF5V4f/bpaqatUVN08wHoY0j0LIzoSvXeJG0pOT
+	 Te5mUnjsSF8WhBhx5FHwemCb/2Toeh3ciUXfpeMw2DZg4rtjufftUGiBYK05JlOfz8
+	 vzVOMURc2wrTJSxxVV8Kmv2wn1cV3cCvb7taxlts4AL9SVew0DGzC1aeHhRGETpDPV
+	 QuzoGThOJ9hkw==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Yangtao Li <tiny.windzz@gmail.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev
+Subject: [PATCH] cpufreq: Use of_property_present()
+Date: Wed, 31 Jul 2024 13:12:40 -0600
+Message-ID: <20240731191312.1710417-2-robh@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-core-testing
-head:   c213ec5d265075e670b175f577fc30f12c2bf093
-commit: 09a7303648169c6d8c5f2608b0764a7095a15c21 [2/28] thermal: hisi: Use thermal_zone_for_each_trip() in hisi_thermal_register_sensor()
-config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20240801/202408010134.hozVfGEo-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240801/202408010134.hozVfGEo-lkp@intel.com/reproduce)
+Use of_property_present() to test for property presence rather than
+of_(find|get)_property(). This is part of a larger effort to remove
+callers of of_find_property() and similar functions. of_find_property()
+leaks the DT struct property and data pointers which is a problem for
+dynamically allocated nodes which may be freed.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408010134.hozVfGEo-lkp@intel.com/
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+---
+ drivers/cpufreq/cpufreq-dt.c           | 11 +++--------
+ drivers/cpufreq/pmac64-cpufreq.c       |  2 +-
+ drivers/cpufreq/sti-cpufreq.c          |  2 +-
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c |  2 +-
+ 4 files changed, 6 insertions(+), 11 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
-   drivers/thermal/hisi_thermal.c: In function 'hisi_thermal_register_sensor':
->> drivers/thermal/hisi_thermal.c:484:29: warning: unused variable 'trip' [-Wunused-variable]
-     484 |         struct thermal_trip trip;
-         |                             ^~~~
->> drivers/thermal/hisi_thermal.c:483:18: warning: unused variable 'i' [-Wunused-variable]
-     483 |         int ret, i;
-         |                  ^
-
-
-vim +/trip +484 drivers/thermal/hisi_thermal.c
-
-09a7303648169c Rafael J. Wysocki 2024-07-29  479  
-9a5238a9c6c33d kongxinwei        2015-05-20  480  static int hisi_thermal_register_sensor(struct platform_device *pdev,
-a160a465297362 Kevin Wangtao     2017-10-22  481  					struct hisi_thermal_sensor *sensor)
-9a5238a9c6c33d kongxinwei        2015-05-20  482  {
-9a5238a9c6c33d kongxinwei        2015-05-20 @483  	int ret, i;
-68a306cc839718 Daniel Lezcano    2022-10-03 @484  	struct thermal_trip trip;
-9a5238a9c6c33d kongxinwei        2015-05-20  485  
-5ee7811e9afa4f Daniel Lezcano    2022-08-05  486  	sensor->tzd = devm_thermal_of_zone_register(&pdev->dev,
-49e778d1c750d5 Daniel Lezcano    2018-09-25  487  						    sensor->id, sensor,
-81d7cb7946f03d Daniel Lezcano    2017-10-19  488  						    &hisi_of_thermal_ops);
-9a5238a9c6c33d kongxinwei        2015-05-20  489  	if (IS_ERR(sensor->tzd)) {
-9a5238a9c6c33d kongxinwei        2015-05-20  490  		ret = PTR_ERR(sensor->tzd);
-439dc96811739a Leo Yan           2016-03-29  491  		sensor->tzd = NULL;
-9a5238a9c6c33d kongxinwei        2015-05-20  492  		dev_err(&pdev->dev, "failed to register sensor id %d: %d\n",
-9a5238a9c6c33d kongxinwei        2015-05-20  493  			sensor->id, ret);
-9a5238a9c6c33d kongxinwei        2015-05-20  494  		return ret;
-9a5238a9c6c33d kongxinwei        2015-05-20  495  	}
-9a5238a9c6c33d kongxinwei        2015-05-20  496  
-09a7303648169c Rafael J. Wysocki 2024-07-29  497  	thermal_zone_for_each_trip(sensor->tzd, hisi_trip_walk_cb, sensor);
-9a5238a9c6c33d kongxinwei        2015-05-20  498  
-9a5238a9c6c33d kongxinwei        2015-05-20  499  	return 0;
-9a5238a9c6c33d kongxinwei        2015-05-20  500  }
-9a5238a9c6c33d kongxinwei        2015-05-20  501  
-
-:::::: The code at line 484 was first introduced by commit
-:::::: 68a306cc839718d1875b46ebf73c25c8fa7f704a thermal/drivers/hisi: Use generic thermal_zone_get_trip() function
-
-:::::: TO: Daniel Lezcano <daniel.lezcano@linaro.org>
-:::::: CC: Daniel Lezcano <daniel.lezcano@kernel.org>
-
+diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
+index 6532c4d71338..983443396f8f 100644
+--- a/drivers/cpufreq/cpufreq-dt.c
++++ b/drivers/cpufreq/cpufreq-dt.c
+@@ -69,7 +69,6 @@ static int set_target(struct cpufreq_policy *policy, unsigned int index)
+ static const char *find_supply_name(struct device *dev)
+ {
+ 	struct device_node *np __free(device_node) = of_node_get(dev->of_node);
+-	struct property *pp;
+ 	int cpu = dev->id;
+ 
+ 	/* This must be valid for sure */
+@@ -77,14 +76,10 @@ static const char *find_supply_name(struct device *dev)
+ 		return NULL;
+ 
+ 	/* Try "cpu0" for older DTs */
+-	if (!cpu) {
+-		pp = of_find_property(np, "cpu0-supply", NULL);
+-		if (pp)
+-			return "cpu0";
+-	}
++	if (!cpu && of_property_present(np, "cpu0-supply"))
++		return "cpu0";
+ 
+-	pp = of_find_property(np, "cpu-supply", NULL);
+-	if (pp)
++	if (of_property_present(np, "cpu-supply"))
+ 		return "cpu";
+ 
+ 	dev_dbg(dev, "no regulator for cpu%d\n", cpu);
+diff --git a/drivers/cpufreq/pmac64-cpufreq.c b/drivers/cpufreq/pmac64-cpufreq.c
+index 2cd2b06849a2..c87cd6e0b638 100644
+--- a/drivers/cpufreq/pmac64-cpufreq.c
++++ b/drivers/cpufreq/pmac64-cpufreq.c
+@@ -505,7 +505,7 @@ static int __init g5_pm72_cpufreq_init(struct device_node *cpunode)
+ 			continue;
+ 		if (strcmp(loc, "CPU CLOCK"))
+ 			continue;
+-		if (!of_get_property(hwclock, "platform-get-frequency", NULL))
++		if (!of_property_present(hwclock, "platform-get-frequency"))
+ 			continue;
+ 		break;
+ 	}
+diff --git a/drivers/cpufreq/sti-cpufreq.c b/drivers/cpufreq/sti-cpufreq.c
+index 8e2e703c3865..b15b3142b5fe 100644
+--- a/drivers/cpufreq/sti-cpufreq.c
++++ b/drivers/cpufreq/sti-cpufreq.c
+@@ -267,7 +267,7 @@ static int __init sti_cpufreq_init(void)
+ 		goto skip_voltage_scaling;
+ 	}
+ 
+-	if (!of_get_property(ddata.cpu->of_node, "operating-points-v2", NULL)) {
++	if (!of_property_present(ddata.cpu->of_node, "operating-points-v2")) {
+ 		dev_err(ddata.cpu, "OPP-v2 not supported\n");
+ 		goto skip_voltage_scaling;
+ 	}
+diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+index 95ac8d46c156..293921acec93 100644
+--- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
++++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+@@ -146,7 +146,7 @@ static bool dt_has_supported_hw(void)
+ 		return false;
+ 
+ 	for_each_child_of_node_scoped(np, opp) {
+-		if (of_find_property(opp, "opp-supported-hw", NULL)) {
++		if (of_property_present(opp, "opp-supported-hw")) {
+ 			has_opp_supported_hw = true;
+ 			break;
+ 		}
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
