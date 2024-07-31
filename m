@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-11750-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11751-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8E4B942D7B
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 13:50:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96D41942D8C
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 13:55:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 609801F22895
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 11:50:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5787B283DC7
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 11:55:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B37C1A8BE6;
-	Wed, 31 Jul 2024 11:50:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B171AED50;
+	Wed, 31 Jul 2024 11:54:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PWQdXAoH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YEz7qvau"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75BB6193072
-	for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2024 11:50:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365541AED2E
+	for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2024 11:54:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722426618; cv=none; b=j3JfkLp1UbkWunZM18omfpLbXCBa1vXQmUWA2StyxKTu9m1mX4V2IVhDOd0gQnwEV21DCbL+uIgv8K4UqlbqyltfAoymOrRq/nzO9BwaUCs49KBMITDmG/tY5EmxoDIQwDPKzunC/6GDhHgd6NPw8vugeFbA0mq+keStByFMUqE=
+	t=1722426866; cv=none; b=uN6/tWsii4eWy/dZHMH5mbqs8eHwkTklL/ACWbrXKzjHMjCD7JmRAoGdMQFzbIYk2aYuIDiSPRZaamVtFw7kzE3Ua/EQDsSBzW/WkJLSlXU/FVrwgckEBiGmNzkX7uTkHiSHJDmx8PziIiKQv6n+oGXdzF5SBY0nWR1CnXAAWbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722426618; c=relaxed/simple;
-	bh=o9FBaBGAQnOBGcmp9KMElnaMPPq+wMxBUc79lz7kDCk=;
+	s=arc-20240116; t=1722426866; c=relaxed/simple;
+	bh=geRytPZ3bmY7SAwjrlT9zYM8V3g5xuHo4RxGWea9zz4=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ga+rqqvCV/31kodsOT0PynYiJqZWoBbC0gkH+VCFJWkkR6OPynZWTJLPkYu5mdYa3tSPOKMktI6b1X67sFNjRrFrdCbmpwEMbltiIZqhs//YSP3XGONOMzHe1xNW1DbKLqLeFRpHrQYQr/WBX/Ziz5Hij64QMyEpxz+VPqEFKs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PWQdXAoH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E2BB7C4AF10
-	for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2024 11:50:17 +0000 (UTC)
+	 Content-Type:MIME-Version; b=urM3VuO6HGU6/PP9kt9JezSTEEHMWSFodC4iZ0LZzpuomFo6AHKduRUeVXxZq/EGckty05ihbN2YW7GUlCsglD0Fftp0OIpKYsCPG8+MOj9Libwvb65O0eoUZna9FStS9OZjkmTfza5h7OCRF4My7DO8DuafVIAvEABbI0HQoRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YEz7qvau; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BB092C4AF09
+	for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2024 11:54:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722426617;
-	bh=o9FBaBGAQnOBGcmp9KMElnaMPPq+wMxBUc79lz7kDCk=;
+	s=k20201202; t=1722426865;
+	bh=geRytPZ3bmY7SAwjrlT9zYM8V3g5xuHo4RxGWea9zz4=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=PWQdXAoH7/MQEdXyRZsrEsYfdg5bZ027WexX3Mq2NjH6xlQVFS2rM85udsSJlh8Rs
-	 gpgABKvTRV/8Brnx0rqhWdjrzg3Y7pL40MxWR/xyVQqOota2g2zjDh+xZRpcL8kWTi
-	 xWk4Adntbb2Q3SuVMjrhM+YcFWTwnOGue64wvr2c2wtMgalzLBNurzknnW050p+yby
-	 z6lM5qTCoSDIOSx9tzIeZDWd2mn7lZVR+pmLi60todn0aZ9PTd3bKZT29aU92bRt90
-	 5s7HqkgRY86KNP7hNsZKZrLUmN8gSayzzc1mf1xL2blwMfESJGKMo8kJ7YUgBrJ1Jp
-	 AvknhS46zsSaQ==
+	b=YEz7qvauDMsZqDabenrzasIJb2r1VClAfJ48olTyZ3AEaptu5yOQ5e8ps6R6I5J07
+	 sRcj4aesONiL00127WHDDePU9vIDfv/4UYoewssCXC92eoFpFJbXsmuwVIxaDJ/eaE
+	 w/oquHT5Pr6DGcJhkl9IzpJ2kCdlnlxgX/J7PbI+TyH8YOq1l5mz7HRv0W7NzVlf+W
+	 79cw0xe92mAkpatzHt2caht+THMatH6CsOZUzkExtFPHxCNt08PVlipnBugtLqc835
+	 TC0Rl30fxMO2ELBpyCf5/KT/x5jpL70qu7e7wABeJg3ttP4kBpFHVCT8CMCnh2rdUy
+	 RlCnEP5IgrnLw==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id D7ECDC53BB9; Wed, 31 Jul 2024 11:50:17 +0000 (UTC)
+	id AF2E2C53B7F; Wed, 31 Jul 2024 11:54:25 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: [Bug 218686] Fail to set energy_performance_preference of amd
  processor on asus ga403uv
-Date: Wed, 31 Jul 2024 11:50:17 +0000
+Date: Wed, 31 Jul 2024 11:54:25 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -62,8 +62,8 @@ X-Bugzilla-Resolution: DOCUMENTED
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218686-137361-V0zVRAnGud@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218686-137361-Im57OMNkCg@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
 References: <bug-218686-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,13 +79,35 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
---- Comment #64 from Chema (chemasanchezgarabito@gmail.com) ---
-Created attachment 306645
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306645&action=3Dedit
-CPPC working on windows asus ga403uv
+--- Comment #65 from Chema (chemasanchezgarabito@gmail.com) ---
+(In reply to xiaojian.du from comment #62)
+> (In reply to Chema from comment #61)
+> > (In reply to Chema from comment #60)
+> > > I have the same laptop and also the command outputs are the same.
+> > >=20
+> > > I have updated last week to the last BIOS version, but no changes I h=
+ave
+> > > seen.
+> > >=20
+> > > Is there any updates to this?
+> >=20
+> > Also, if CPPC is working in windows why it cant in linux?
+>=20
+> Not exactly.
+>=20
+> How to check CPPC is used or not on *Windows OS*:
+>     *check Windows Logs -> System, look for "Kernel-Processor-Power" or
+> event ID 55.
+>        ->>If you find ACPI Collaborative Processor Performance Control,
+>            then Windows is using CPPC.
+>        ->>If you find ACPI Performance (P) / Throttle (T) State,
+>            then it is using legacy P-states, and CPPC is disabled.
 
-The windows kernel log are showing that asus ga403uv in windows 11 is using
-CPPC
+I have created and attachment showing that CPPC is working on windows, so is
+this a thing of linux that does not work or is it that windows have a
+workaround for activating it without the bios having it enabled?
+
+Thanks.
 
 --=20
 You may reply to this email to add a comment.
