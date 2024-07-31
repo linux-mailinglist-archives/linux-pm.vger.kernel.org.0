@@ -1,194 +1,143 @@
-Return-Path: <linux-pm+bounces-11760-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11761-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C68A943366
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 17:32:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2A76943370
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 17:35:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E58F528582A
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 15:32:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0154DB23208
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2024 15:34:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 278021CAA9;
-	Wed, 31 Jul 2024 15:32:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 793CA1B3F1A;
+	Wed, 31 Jul 2024 15:34:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="rlZb1Rgb"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="U9KVVQHD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04olkn2062.outbound.protection.outlook.com [40.92.45.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8380017BA7;
-	Wed, 31 Jul 2024 15:32:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.45.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722439964; cv=fail; b=MMUYlNYjxWlIJHtnyNOkPPV9CrRZZDnveI7abNn2FCA+mZCAtcJv2cuwew3u2J3/5jPoKPAMrwxS3a2Jxu1QwjPIGKCwjxK6AoiEuHvgl835z27+Cn92kBTmf3iVRrZojv76A0wXoZECpJMrqMt/kpcKOY7x7M9WtHSr2YytGrc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722439964; c=relaxed/simple;
-	bh=aI8bhLaPzkGtPE96SmvuZt4UsHxXfdyvPbGIlG0cJEU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=QKFVFx7xeRsov3o994hkmCt82pChnJaJYZlvgMwP6OrSZK+oZR5hZDBG5xAXkU2Z80UD21RwzvERaZTxly9hC1HhBmnBMqnY7LeNNj9xBWEdPk83Old08rpXLBTlRxuuyl26HVykw3REBx4Q6R8iTMw0OqW7rPobWWZRw2EY3/Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=hotmail.com; dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b=rlZb1Rgb; arc=fail smtp.client-ip=40.92.45.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CKaMGd4vwV0cQ2G62r/Bp9kD7ZICM7Yg9Uvb61xdGGxkFs1034QoY0WSgESCcEK8IzX/9HqS/ECKbhegLI4TRdsRYNxSFFzdjMI3E3gMN4ndZd3RRuk+MbsnnCdaFE0ipqhWbIACj3FSococQrl5SD46OnyjoBVyIXrRmWHzwipH0leKnKm5VYXohueMEpp9T0/BYKdG7iIuelNC3BnWs8AwAOGU8VX5tY+Pa5VOfsIi1Ar7tAGAKA0gRobWCelR2Kahwqfk+oS5BD5iUVGDal+AvuMDPfzKR3y2nTQo4/GaxblOLWo/2LwnrWUrp0X3toV02hzGPP1xu30GUqBg/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Xto606DjTSXXftNgyG5lr5egQUYx8B5klw5deADgLlw=;
- b=oHHqDXhnebVWdYnA6zLKXY800Z5O0yY/63W9/BoQz2DVpQg9omCNMwAOTBWfH6BagQzvFy2UdFMpX/cP7xmGOETmteTbOCfsJ+OeNTuyO7LQmPDt/qBMF0LWSFgV0io84G3BOltv1LtVZFmqpBlsAPY6WPJLvfedfnZg0WocIea++FKaoPHYQBEB2Z7PQwcX7d6kDJOKYOg32HEVq4/WxAX0UBtjWxVphVNTDJNI3BFB2Fv226rUg9TIe+3Hg1kkQV5q1/UTy+3xGL0hi0yoPm/OofLNZyZtYBVUnnDigkoc81niRRmtZa8Wlx9SM++sY3VUO9POx452K+54JF4y/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Xto606DjTSXXftNgyG5lr5egQUYx8B5klw5deADgLlw=;
- b=rlZb1Rgb8PmvExO/GSJurUb9IsfOmwECSzdtmblfbG1bjNkGLfn6vPGCjZNrzhZsKwxxp7Pn97HSwS62t9o+fvU0p9ue3JZqM6+jdGKv22lFU+mOc9dvrzd9HOkS8zLfMvyT4bbv7gSyyC2Y0KLxgOQuoW2wWCrE2ScgdJe5VguQvBWwJbLXEhzZcoqf3l/5pK2qUPEfT5KR0v5r5MGFrPNf95mxWQkIF2t842WiT07/ZTgqJMtdHFX7BtpXGkpUvSDkzT68SVWDISk2zAMPYKjcvFZBOSIBuQSopi7mUhmVLT3btdqTrYrvK/an9WfQxYZDJqWr9HBg+Ov20jRpCw==
-Received: from MN2PR16MB2941.namprd16.prod.outlook.com (2603:10b6:208:e1::15)
- by CH0PR16MB5253.namprd16.prod.outlook.com (2603:10b6:610:183::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.28; Wed, 31 Jul
- 2024 15:32:39 +0000
-Received: from MN2PR16MB2941.namprd16.prod.outlook.com
- ([fe80::9d62:95ae:c373:c490]) by MN2PR16MB2941.namprd16.prod.outlook.com
- ([fe80::9d62:95ae:c373:c490%4]) with mapi id 15.20.7828.021; Wed, 31 Jul 2024
- 15:32:39 +0000
-Date: Wed, 31 Jul 2024 10:32:36 -0500
-From: Chris Morgan <macromorgan@hotmail.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Chris Morgan <macroalpha82@gmail.com>, sre@kernel.org,
-	linux-pm@vger.kernel.org, jagan@edgeble.ai, jonas@kwiboo.se,
-	heiko@sntech.de, krzk+dt@kernel.org, andyshrk@163.com,
-	conor+dt@kernel.org, devicetree@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, t.schramm@manjaro.org
-Subject: Re: [PATCH 0/5] Add GameForce Ace
-Message-ID:
- <MN2PR16MB29412320A3E3E35D9AEA0643A5B12@MN2PR16MB2941.namprd16.prod.outlook.com>
-References: <20240726194948.109326-1-macroalpha82@gmail.com>
- <172227904756.1346368.2529190213661296274.robh@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <172227904756.1346368.2529190213661296274.robh@kernel.org>
-X-TMN: [eYLGcnw0iJm9MFXdDakv570SUJus8q44+3fif0thCSU=]
-X-ClientProxiedBy: SA9P223CA0022.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:806:26::27) To MN2PR16MB2941.namprd16.prod.outlook.com
- (2603:10b6:208:e1::15)
-X-Microsoft-Original-Message-ID: <ZqpZFB1xsxce0UHW@wintermute.localhost.fail>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CCEE1AE874
+	for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2024 15:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722440090; cv=none; b=u607ENWQFQwRG93uXkRKMSP+d1aGobYsyR5SVuPSGh/rZBVI0DXIkoxPLdQ5aoh5omBrEq9FzHMvrhXPCD/YueJF6Nt7X+x3gb7AJx3bxEw05WTX+vh7h8wA360xD+a2tN4vCbxBX5PAKxp1TU2z3imh5HgbZKexWbs0ESsHxLo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722440090; c=relaxed/simple;
+	bh=YkCUk3rJA5psymhigZShdr5asCljrDpO4/UbuFKnuR0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aEjIJ3yNrtcgfqRe9cI6yNEebUgMQ/IKUump2juPhumdoW+469KctBoq0bt//NifTEG/gjtIvRIJuhu907xnbc93IrEniQSWvTiwxJdTtivUgdh968wi9R/37gn32QXrYYZw4DD/m4s4VwkVl68Z3gn+e3RQbh66tBYWtgFanOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=U9KVVQHD; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5a15692b6f6so9181156a12.0
+        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2024 08:34:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1722440085; x=1723044885; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0haZW6xREx05oo/OttdLfNmKhaLURqoiJ3M1lL9b6hs=;
+        b=U9KVVQHDu/R3rCO81m969mIznEZ5sPHSal5IzGgtfgIAyrdoZ+XEPPg/EGE3+tq5wM
+         AOnO8GH0tf+6ukCj2Unh0G1zQdxWuvpTSC8qT1MZDY3sobj7dwl5MVQ1y31xO2C41Zoq
+         WOvBta3RvU1sLFpgPPRIFduqslbXyoqTXJm1TOv4aJSEidz8iXD9p/dcHMvhQjIiWJOk
+         KyngORTLk3Yz7thFR24QK5x41ebJoCHOvKoosXcGw+lMBy+9OHx6o9DNMt7JNCkzYEjH
+         poAw7nfSBxCFfIn1YRdzhrWYPwC8ZnTQv8xB89p90pmE1r2Yv1iWtxpKCX+wUbllxV7f
+         001Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722440085; x=1723044885;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0haZW6xREx05oo/OttdLfNmKhaLURqoiJ3M1lL9b6hs=;
+        b=wYuX7eZpZEP6cEnljsV0ZjM04DV7DdLo7dd5VA9LvSF9xzh4/VIiytiiggRSETFaOo
+         VFMQBhS14MFh1f/L+dZ0rty2I2z2PWTQDuxZFEhO/Aw3d9A5tJ3fv8muKJbiQR15rpGM
+         QJSYUsmcJP/p0BfE/ogXm3HM76VRUTOMLmrxZTDmLLhM1zaNxZqnlyTJZEAceOElQvtG
+         7/+uKHQQeHtNVuF/wnncO/gOhh9Vne0JhnqKUHe7CwiuSMCrpORBURHzS8JShuQ3MUv6
+         ArdgpIjXOiMEq06NETkXvFTO2q4ayhbaZYxz/2OWx3Hpvhd4sjCeupB6ZiwS4/i4TeK3
+         7Avg==
+X-Forwarded-Encrypted: i=1; AJvYcCUVWksauhhWuhnWnnyE8uzHd7wVnMYdOYps/QP34KFEA+Np5KLFOk+gNdOUKdvPg8QGaS6IZ0VRO5a21K8n51lytM65ltolqLs=
+X-Gm-Message-State: AOJu0YwPdhD5OP/kQdTJ2vH6WJlRQEkUoj849gwWPoU35VXGrnPXSKRo
+	F6FcUepAhthlk8zfVIZGg3RUeEKXhV24dZ9+ibNBy5QeQLD90iGmMCHDvIJ2X60=
+X-Google-Smtp-Source: AGHT+IGEPSvbY32kvTP+Dedi5GlwS7ioq6a9GjXU2i8Z1P0SOaRgOy+7IlOcspRR43306XeEquyROQ==
+X-Received: by 2002:a17:907:7286:b0:a77:f2c5:84a9 with SMTP id a640c23a62f3a-a7d3fffb6f5mr1155473266b.18.1722440085443;
+        Wed, 31 Jul 2024 08:34:45 -0700 (PDT)
+Received: from [192.168.1.68] (120.205.87.79.rev.sfr.net. [79.87.205.120])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acab22bfdsm782913866b.34.2024.07.31.08.34.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Jul 2024 08:34:44 -0700 (PDT)
+Message-ID: <abefa449-c0bc-4b58-89b8-d4272f7774f6@baylibre.com>
+Date: Wed, 31 Jul 2024 17:34:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR16MB2941:EE_|CH0PR16MB5253:EE_
-X-MS-Office365-Filtering-Correlation-Id: 91115bfb-3d66-45f0-b46b-08dcb17602ed
-X-MS-Exchange-SLBlob-MailProps:
-	Z68gl6A5j29eivOTv8WwyzVp/Gk/pryOGmyL7tpr3IZuhz3HYkcoLCe49eNW+WgnNG8kEUg/2cRx+jDc0Hw/k3PacV5yzlKbvvfizgWAyraWzTqN+irB3SYUvW0S3Kc7AcwusYRjlZODd6TiBFSmcf0EG/NqZmyctZ9PtLFwm0jTCZCcGPrkFZrwK02DvUzVAmgwbx0+e/V7nbwREY57jNrxhmiK1rkyJqG6bBzwotNM7OtyCsn0qMkL6uFPzezQRgtAGT4wBWmrVZMO9JISldMxig01BE99Ui4FrlSbL42rMyPn6qjrkQzLbFIcxQOPGc10JXk3WeFuM7xuM+aWJcL2mfmeLfA4y57mAztBgTLxn0f3M6NIiNbH/Evn6CuqrLbHF/RnoRCTpRb3RJS2VmmswlgjMxow8xBGyaPp7Age/cSFEqzQvOuGAMTALzhYGSHqms+PH8MQL+WUNThsdWrcp06IKQqgJT1rWkDk+G/QFE/LJFB5HEePyhDnGQFik98V/sw1higl6a62mT++RKb+OSYqpHDA8AXvjStoCNjWRbR1TzJ5WP3AhMTsaRLRXxshez7GZ/aPBjLmSxgy/D5MT+rMRfygwh8JmyiA7bicVuSLz8z9f7UKvG/M3FR49+dRHLjDaauOUvCN0nrQya75bH02rXSkk2zOtEaAW03rFDSJoDg0MOegCkbzoh1+dmPEXdn0s/iu1JM/SVe72hq1r3BrszjiJ2TRrBbXkouH3B44eA9YW4293pjDOFKoBBCjVOjJCxhuiNmWiN20Jqtk/ZKQnZSf0OVXcPvL3a4qXkgVwsyrubDTUhMRFEjj
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|5072599009|461199028|8060799006|19110799003|440099028|4302099013|3412199025|1602099012;
-X-Microsoft-Antispam-Message-Info:
-	kwUgx8knaQj9MuChzoJAjDKx1xNzASSLoyTM+q9jlKoAE+Wc7Mez1Ea+wSyGTEFUa2KJUPvyyDA3BncB/R5e9NXECTtCfa7H5IbTG4n3tu1OIVMV7FEEpPMTo+s6JcvF521baZgqRrSi5SYuuAWlY4AitsCBXD+sl77zCk0+34kprC5uo6pLeyCHAi+v8KLQAs7wWS4IwgwtVWGLknO+Wmpv6CzR7NR6s4IeKI3R99k9FromIaQ+BrJdh7ewsVkvpWd3dlUte5dGAhnHqcD2Nxy+mZfQyB+WT0Cgnhy/KQ9YsjKnQs25a3AppgEzxFZa3eAtd9M4lh2Enlr2tHz/ZlmG2v55faSz5WfbI9kKfxAT07wbQk1a+7HVWlF9h9rCftSmos0ci6x4XitAhQjCrIQ/Q/gKhwKGtVqbUvApX0Z64JdWz3HpZNT0IWEgx1IV89SsMRxrkg1+1xrohGNurQBWb9y5V46CQ5BVZ92BxrHOuVZ9umoMkcUfbK5CffLiGKy915FPSGRVKxbWu9Yuotb2hv/IyLOTSjwStXXbE6F1iMlmwb3f5ptzoUbW3h8etk2waybm3e+NySC5pvM/lSRZBl/9KbNbnom9J1HAXrAMQ+kSeqx+GxW7vDDP7oYLbNA0EEwBOqHp2ryBZOk1/JVMD421LclZqDkhiI05Jt4XvWYwUEEm7oO7lFU4dN0aHhOkq7YCI4AsPhuA+n9hd+XidnTXNRa3Q1dTmYnZH32bPCfzlSCw7YyRel0M+hwo+j3p0fApvmZn0luh+Z4BLw==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?RabAczMQ4b/KOzf2Rxdl4JjpHKTe/0a6gbbG7dTVypqSzpYpRxnk7ZqkMxTm?=
- =?us-ascii?Q?UrBl9NFT1AUp3KomEYeT4ZTxBPEXycoxpJUvKywjDD3mejdS8mPYET4h3ZtK?=
- =?us-ascii?Q?sfZx3knn9/qv8A38BI09/3qYGpJbs9RtXnuddlTok9OxeHe5vt9WeOh0wvgR?=
- =?us-ascii?Q?QCVQIOLZhZmAkZUWeh7Q4oPCGat6uJAkMqwmiMDaXW/b7ui987VhVAy4C2yS?=
- =?us-ascii?Q?E4Gm0waFgcrhnetxxB1nKHWht6Uwb/d866hN3cFSeLH9NtF506Ud51hh/WgL?=
- =?us-ascii?Q?4PMeBEV6RYIMvWuga5m4tFbD/hRV3o0DKAyhyvCErJ9U++GNSV6bIEB4Ya32?=
- =?us-ascii?Q?B7yx5SiH36aHMN5AUsgBjT4fjkHPIWn34+fD/2OYvjlUGyI0vQJx5IdPI4/L?=
- =?us-ascii?Q?z6HT+JivSudU7BS0JN0wdmjIR434k6tVHB2zjHIisXANgFjBNwN84jybo3p5?=
- =?us-ascii?Q?t1dCjjrBvwqO/uxSF4CHQQ3y4fTHRkvoVaqaKPo3gCHeuBTWYWCbAbCtEjp8?=
- =?us-ascii?Q?j2bhiXPFQsDwX2HwN/3rqJRCw/KAoCQIvYD6qSguui+vtNG5bZEhj8IaOEqN?=
- =?us-ascii?Q?4X0ULNGCCYD72a/BU6w7rTjX4dq0/rL3XUiJzPgiBAZW5rEES6F21e2i6bMd?=
- =?us-ascii?Q?ZphkTblWsOrc5xnbzZmOqRmUSCH+Tvo5tXqUIytutyu3jqo2Tt4sK+1LCAVG?=
- =?us-ascii?Q?N1Ntp9xNLV+WtkaVzevp/W8/ztRutrt6Bx6FnGjLQqB2WwWttZVxhpHu2IlH?=
- =?us-ascii?Q?3VDtgXJCLSns4d01lL4jnV1JlVrl0S0RsTzoczKCcBuhLTxRqN3XiiSqzf5Q?=
- =?us-ascii?Q?egvFQKjSpK9y3l+sWCsh5W7Wgz4Xeu19KDxRupEqtBiewoYp1YxWEjj9nAd2?=
- =?us-ascii?Q?cGOxUQJocH/KJym/6ds0LnxEZBLDCbex4SOHLzokLruecpMd8ELX/N0sX4Ci?=
- =?us-ascii?Q?+nx9GCDs0a/64uwlzAab6jY1qc2Q7/QtPu1CsVbRARxGav9I8Scsx4BIjjQP?=
- =?us-ascii?Q?+zqwlzM2Fjt95EWgwe0kttVr859C0rPxvAOzFiKiaAMYMXFX1dP4CAHiwygg?=
- =?us-ascii?Q?trBX9hmedebBs922VcT1c+962AQ7A/LYBdLJ7g28+aD1QtSJNH1o5bEfnX7k?=
- =?us-ascii?Q?G3QnuqEF6k18+eLt5mmb2ixLx7iSKmg4QXx3VrKZE4Y48I8D7ov7Ha+I24+v?=
- =?us-ascii?Q?V0FrsqSo9SqOj7nXCBbbpEWNuHsU16qY9x251HOKwR3gjpRnRU/YLqo+zdCX?=
- =?us-ascii?Q?Me/0tu/+4mno0bnlfUVDqH4Pw6/xiETk7eTqKX/OAg=3D=3D?=
-X-OriginatorOrg: sct-15-20-7719-20-msonline-outlook-559fc.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91115bfb-3d66-45f0-b46b-08dcb17602ed
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR16MB2941.namprd16.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2024 15:32:39.6866
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR16MB5253
+User-Agent: Mozilla Thunderbird
+Subject: Re: (subset) [PATCH v7 0/6] Mediatek thermal sensor driver support
+ for MT8186 and MT8188
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Nicolas Pitre <npitre@baylibre.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-pm@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+ Conor Dooley <conor.dooley@microchip.com>
+References: <20240603-mtk-thermal-mt818x-dtsi-v7-0-8c8e3c7a3643@baylibre.com>
+ <171826604410.51825.14935271158174620262.b4-ty@collabora.com>
+Content-Language: en-US
+From: Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <171826604410.51825.14935271158174620262.b4-ty@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jul 29, 2024 at 12:52:50PM -0600, Rob Herring (Arm) wrote:
-> 
-> On Fri, 26 Jul 2024 14:49:43 -0500, Chris Morgan wrote:
-> > From: Chris Morgan <macromorgan@hotmail.com>
-> > 
-> > Add support for the GameForce Ace. The GameForce Ace is an RK3588s
-> > based gaming device with a 1080p display, touchscreen, hall effect
-> > joysticks and triggers, 128GB of eMMC, 8GB or 12GB of RAM, WiFi 5,
-> > and support for a 2242 NVME.
-> > 
-> > Chris Morgan (5):
-> >   dt-bindings: power: supply: add dual-cell for cw2015
-> >   power: supply: cw2015: Add support for dual-cell configurations
-> >   arm64: dts: rockchip: Pull up sdio pins on RK3588
-> >   dt-bindings: arm: rockchip: Add GameForce Ace
-> >   arm64: dts: rockchip: Add GameForce Ace
-> > 
-> >  .../devicetree/bindings/arm/rockchip.yaml     |    5 +
-> >  .../bindings/power/supply/cw2015_battery.yaml |    6 +
-> >  arch/arm64/boot/dts/rockchip/Makefile         |    1 +
-> >  .../dts/rockchip/rk3588-base-pinctrl.dtsi     |   10 +-
-> >  .../dts/rockchip/rk3588s-gameforce-ace.dts    | 1315 +++++++++++++++++
-> >  drivers/power/supply/cw2015_battery.c         |    7 +
-> >  6 files changed, 1339 insertions(+), 5 deletions(-)
-> >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
-> > 
-> > --
-> > 2.34.1
-> > 
-> > 
-> > 
-> 
-> 
-> My bot found new DTB warnings on the .dts files added or changed in this
-> series.
-> 
-> Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-> are fixed by another series. Ultimately, it is up to the platform
-> maintainer whether these warnings are acceptable or not. No need to reply
-> unless the platform maintainer has comments.
-> 
-> If you already ran DT checks and didn't see these error(s), then
-> make sure dt-schema is up to date:
-> 
->   pip3 install dtschema --upgrade
-> 
-> 
-> New warnings running 'make CHECK_DTBS=y rockchip/rk3588s-gameforce-ace.dtb' for 20240726194948.109326-1-macroalpha82@gmail.com:
-> 
-> arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dtb: typec-portc@22: 'vbus-supply' is a required property
-> 	from schema $id: http://devicetree.org/schemas/usb/fcs,fusb302.yaml#
-> 
+On 6/13/24 10:07, AngeloGioacchino Del Regno wrote:
+> On Mon, 03 Jun 2024 12:50:47 +0200, Julien Panis wrote:
+>> This is a bunch of patches to support the MT8186 and MT8188 thermal
+>> sensor configurations.
+>>
+>> Since the patches of v3 were applied except those related to the SoC
+>> device trees, this series includes mainly patches for 'mt8186.dtsi'
+>> and 'mt8188.dtsi'. Due to some thermal zone renaming in these 2 device
+>> trees, the related definitions were also renamed in the dt-bindings and
+>> in the driver.
+>>
+>> [...]
+> Applied to v6.10-next/dts64, thanks!
+>
+> [3/6] arm64: dts: mediatek: mt8186: add lvts definitions
+>        commit: 0c598e50e6c823c1057ddad17c546e368a415d6a
+> [4/6] arm64: dts: mediatek: mt8186: add default thermal zones
+>        commit: d7c1bde38bf37a59551cfd52cfdb5bd974b17431
+> [5/6] arm64: dts: mediatek: mt8188: add lvts definitions
+>        commit: 7e3e18f2ed40ea9018590b4533fa148954a725bc
+> [6/6] arm64: dts: mediatek: mt8188: add default thermal zones
+>        commit: 2f950510411a33d98eea28c22d7880eeb48adb61
+>
+> Cheers,
+> Angelo
+>
 
-For the moment this is expected, because the regulator is driven by a
-TI BQ25703 chip that I'm still working on getting supported. Is it
-preferable to either keep it empty (and cause this error) or fill it
-with a dummy regulator for now?
+Hello Angelo,
 
-Thank you.
+About this series, the DT patches were initially applied, but removed
+due to missing dt-bindings in linux-next[1].
 
-> 
-> 
-> 
-> 
+But now the dt-bindings patches are applied in mainline[2].
+
+Would it be possible to re-apply the dts patches please ?
+
+[1] https://lore.kernel.org/all/ZnBn-vSj-ssrJFr2@sirena.org.uk/
+
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
+4262b8d782a7 ("dt-bindings: thermal: mediatek: Fix thermal zone definition for MT8186")
+744ca11f52e5 ("dt-bindings: thermal: mediatek: Fix thermal zone definitions for MT8188")
+
+Julien
 
