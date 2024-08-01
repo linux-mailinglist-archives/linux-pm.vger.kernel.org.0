@@ -1,177 +1,112 @@
-Return-Path: <linux-pm+bounces-11810-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11811-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91167944BA3
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 14:46:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CE1E945013
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 18:07:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA5B4B2679D
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 12:46:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15CA5B27FD4
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 16:07:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D07D170A31;
-	Thu,  1 Aug 2024 12:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 680981B3F21;
+	Thu,  1 Aug 2024 16:05:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ANeUcweW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LrkCFjWd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2050.outbound.protection.outlook.com [40.107.223.50])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B9E14D443;
-	Thu,  1 Aug 2024 12:46:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722516383; cv=fail; b=JXtoq3n42nZ0HRS+FM5vIteBu4p1nan9wLQOeVcPt312Rq0/rHG3wNeJyL2M+LpdmX1LJvqU9xNFTU9XIrwbPdWILMfMS9KyiD9/cB5zI9el+Id0r2NYKgseiT7NNDdYPnwkvPZAdX3XL1qHERQk/zDuY1fjZrjPasnjLWnKsuE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722516383; c=relaxed/simple;
-	bh=l+mdtguRGpCSZTtHzmzl2BjOoygw4Z+ZhQpM/V4gvr8=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XExO0r7Ic9SF8/Yx+reo3JVC3EvVDAWfz26Iz0c3Rj+kRMU1zo+gM4Alyp5Owo2sZXwx1KAEipRxcMy56GqtuCn1SZo8BJ7q32bT9rjBEFKf8x5SSMJ3bM5izVTw6kVjnc2meekmiy2WkAW+kPBwGQrOuxlAIvKJ/vCfkrQmfXo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ANeUcweW; arc=fail smtp.client-ip=40.107.223.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uOigLa4l8ifcoMPU4Kz9Htmcu2nErwPhndzxTYPJyet6Go5pjIUmDQ3FTVsHwL663ZGfNmF/j8gzsUEnS4Uc+v3IIOCUT/Iw4CR8E/04oUDvDmsDZRbFrH6urPPZ+SOjnMYFhaNe/1G3NIqpdqqpioGRqRCHgMJTcM40EnoPLzTWOvhANuv1PYPR10TTHyKw0XPcnZIKAtwikB+uFmjxWgvq5LL6NKAogffolLHYcLkuo+JozahZpI2uusijYbOCeuZviafhCalf7nW8yXFRcyyjLKHqR0regIyUoasM16AiYYlSii+Z/FycpMBsmgQCYdBhLIRUavhY8drb/90Jig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vMmprZ2V52VtcKWNkNTAo4J2JvehRw7NABhCtGzxG9E=;
- b=Qd5bVrAS2vES3G+jNV+txBG8dZ54D6em4QxJAtgvAXXablcU9pXiUG3wj7OYGVp3b6Lg2ECPgwE0USDodNzgp2iSXA5xmT+mXy2oLCwS7hRoM03Oz48wDuY7c0fgUaVFgcxNkGtBE2QP0gZZj4jbFxdYboHtZpyGnAKf7EWvjqlaYjdNQ/xAuJRCIULWwpGRdpKuJFx8QGDv8twnF/2b8y9G8kNZ9NlUUHgmuvf7WUwT3uAsPAI2eYdckzfeHgX6BxLGUbC5rjwlKmsn0fOCrCospvTUvbkCpcMvAN2McIZkkdfF+/BPCZoJKHa5qrjZ8wruEDxly8XfpjUQL2+XUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vMmprZ2V52VtcKWNkNTAo4J2JvehRw7NABhCtGzxG9E=;
- b=ANeUcweWETs6uFPZjrrra2TsLUummmhhvn+I0zqVcwNLU3IyaOCZv9jm8RfJm1mYh8dGKVsZxd2jLzefGumULIsjCnxUpnhqixSZw8shx7qRZWuKXUAzZQd7NmwXudc7NA+8VebvPQRisW+o+VWb3TvwUFtFE0GNDiAXrs9uAU0=
-Received: from BN0PR04CA0065.namprd04.prod.outlook.com (2603:10b6:408:ea::10)
- by BY5PR12MB4082.namprd12.prod.outlook.com (2603:10b6:a03:212::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.23; Thu, 1 Aug
- 2024 12:46:18 +0000
-Received: from BN2PEPF00004FC1.namprd04.prod.outlook.com
- (2603:10b6:408:ea:cafe::8) by BN0PR04CA0065.outlook.office365.com
- (2603:10b6:408:ea::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.35 via Frontend
- Transport; Thu, 1 Aug 2024 12:46:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN2PEPF00004FC1.mail.protection.outlook.com (10.167.243.187) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7828.19 via Frontend Transport; Thu, 1 Aug 2024 12:46:17 +0000
-Received: from shatadru.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 1 Aug
- 2024 07:46:13 -0500
-From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
-To: <ray.huang@amd.com>, <gautham.shenoy@amd.com>,
-	<mario.limonciello@amd.com>, <perry.yuan@amd.com>, <rafael@kernel.org>,
-	<viresh.kumar@linaro.org>, <mingo@kernel.org>, <tglx@linutronix.de>,
-	<kprateek.nayak@amd.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Dhananjay
- Ugwekar" <Dhananjay.Ugwekar@amd.com>
-Subject: [PATCH] cpufreq/amd-pstate: Use topology_logical_package_id() instead of logical_die_id()
-Date: Thu, 1 Aug 2024 12:45:11 +0000
-Message-ID: <20240801124509.3650-1-Dhananjay.Ugwekar@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFE51DA58;
+	Thu,  1 Aug 2024 16:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722528332; cv=none; b=ZwNJIICYChH/AVIoJGXHsC9C2jijUduycBA7SPyf5nwHo+uBR2BvvvvAP0T2j5W0Uou7NlYXUV0jkJfgyLJIIBZavbLddK4JoHvX41LoUnUbO8gO8I5smKEzESLpbm5pe5qnrVbQGjdiZAgJ/DJlnLIRjuLmk01zhRoskmg83no=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722528332; c=relaxed/simple;
+	bh=xpE5ZfVKnxqG5WERp0OB1HLOa7RKYVijxWtgEhj0+Rs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fujlG3n2dBpjuiTvs0szProKp0HO13CZjNzXBkwqrtids4fiei+mtwfa1ai16BYm6r9wLGhqzo10QEu/JomBlcs5IupFEHl8qMts2A4rfZIUFnxYasMRAQ0fRH/NahMXBR0JnZaFVHm1ecqw6mag43Bow9d6DIAFFpzcmAbEV6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LrkCFjWd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C8CC4AF0C;
+	Thu,  1 Aug 2024 16:05:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722528331;
+	bh=xpE5ZfVKnxqG5WERp0OB1HLOa7RKYVijxWtgEhj0+Rs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=LrkCFjWdx0vDUmXDYIB9x6+f44l0222FvnFFDiq7o5fBefmAKYKTsR228tjJnjDmf
+	 kXbxrtf2nWEA+K3PIZOJ/nmjDvZS3e5uZZyyE4wOrvk9gGoGiucL+v8YoOoUgCnyLh
+	 ZYpcKshuvdcD+SNX5rtImPzDdO7ruoNNOSjS3A9nxN8KIzlsqr7EO1p1/ukLV+Z8Zo
+	 7F9OHykWNwo9dNj/HyJGTYIJk/uc9KtGyULFOw0+KH66JshkF1nqf2i+aYpH3C/ozc
+	 nLsASQjcHL4SbugXKvUlZ3hggXyoSp4fqY7uJ34C06nX40PMI7lUTLzWr3DMvMsu4G
+	 cU+d3SEGZPf8g==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-52f00ad303aso11036231e87.2;
+        Thu, 01 Aug 2024 09:05:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXujggnkzX0DqCpG6q6yNBT1EhFUMwdijpcicPf1IlNEqc3CqkumVsP1WgQ+1WtV0xFhUV3CNwR2EZG2LrO2phmZB0uwK/E/7QC7ALLPNX2MeV2PyEXvfkB+5I9GUHkKkqHj48weofbP1IsahIMpqO0bIeXgnljMjR/jz7H2kvy4KgIIq0kpA==
+X-Gm-Message-State: AOJu0Yx0JAAeVEHYoC77QOVdVA/wpgp9uzLVFvK6a8ulYhdRhMQRnG8J
+	FO23dpCMEGlQ9vMX/bytySJiExulvG9Rz/bG7Sf4awZYc4kfQcKSpJ6NiA7axR5UUNcVXIvy9ZH
+	XySXMW5ZLqSCl+yuC/RR9iEbUPw==
+X-Google-Smtp-Source: AGHT+IFSaBHEBx0cPsFVT0dU/9exSRj56/Zithgk5yZPkdk+2bYopgDbA53wywVrQFM+8T64rnpjtlyO3GuTZcOUNLg=
+X-Received: by 2002:a05:6512:39cb:b0:52c:def6:7c97 with SMTP id
+ 2adb3069b0e04-530bb3d43b5mr254230e87.45.1722528330066; Thu, 01 Aug 2024
+ 09:05:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF00004FC1:EE_|BY5PR12MB4082:EE_
-X-MS-Office365-Filtering-Correlation-Id: 23a80e1d-919a-48b4-f051-08dcb227efca
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|376014|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?HiqLi8LQk6P7MThLTWyTiVHZv4QJHqvhhr3jep9veJbUf/M1UrUomqAl8wjE?=
- =?us-ascii?Q?wyQMWi1ZcdSnLPbQRKkPGxVVQq6hda96vc4lOAabo4df5Q/LnzpbAKSKw8nb?=
- =?us-ascii?Q?IyT5HNVkY5F2mAlxhdht4Lw6J3gcgfDWRmlYx295hCbD1/vDvpLnGHf7AnGj?=
- =?us-ascii?Q?2ZlI+2rXRI/CRhgJWjsdJsLZirkjf7+b03IqN0OQqJa7Cq4adEC7Q095sJcm?=
- =?us-ascii?Q?T7+Yzg8Lofwwy6gIBvl3A3j7PbqVRvJh/q83Ff+a83gqvMqWyjfuNlJLzSJ1?=
- =?us-ascii?Q?ELa73QgqT1rIdXavAnIhZA7DVKLUnMgf0Frkkzap6yXvOxv6NLuINFEOW66x?=
- =?us-ascii?Q?MwCp88yCHtWJUDXKNmigud1zrZ8fiEe0KGfKiv8pVRYqMGyoqU7nCE15wgCD?=
- =?us-ascii?Q?1SeoyJ0b2adCgvCIPOR+Xpl8b6/kFPve2uO+oiZTxsXxSufcWLyn/uiBAqoU?=
- =?us-ascii?Q?J9+EITjzgnoKPvntgsvUPgMwM83ojuEg3fICv4WZXtp06MEis62CiVprkgky?=
- =?us-ascii?Q?BWGjaheJFM86NH74xT1KgQ3kT05TfNSusyPbPYRk0GMhzWu64YL/nLHAcBXn?=
- =?us-ascii?Q?wETF0uatre/vaqDiHy7yxyio/ZA5xZ6+ccLY1Noznv+XfCFYiOR8+zBVlHMq?=
- =?us-ascii?Q?wW5Au8dxiyGLlhWVxVM3DYnIxtQ0XvjZnDpfdOFaZY9bxSclkFWk18Nf5Di0?=
- =?us-ascii?Q?nRMw4BohihadNJG7pnuW+woz6022aPKtYZQZYW7ZD42AwLwokoMKUgassuHm?=
- =?us-ascii?Q?rLpOvc/+p6XE7lzwQauZ1/dRRrVf30swjCLwxPYZhJNa1nZi9nYKfWeGPRay?=
- =?us-ascii?Q?gieEzIK9JDpypdIePLfItOeHN1PY9usLqeE8Bw98+bcjiKUZYBtwQhsJVl9Y?=
- =?us-ascii?Q?pMJHnHiG+HdHZWvuKcw1VQ6agpnkoP9yjPsKwXFL8mEA22meuf86pYKvgpcu?=
- =?us-ascii?Q?CQyr4I7X+IgnIBNrjYyzdqtLa5DqOcSiTJ7dduwKm2ty+2fCfZUZjFVF6U6X?=
- =?us-ascii?Q?Y6Au6VosqNAzzJ0XLrRQWpebCrUTZJv21ac7KVJ6QWkGHnUvE6rCTPPtxg+0?=
- =?us-ascii?Q?PO+H93M2UiiqDJ6BvkGmCVpeI2qyrio9Hg39didYXSFyDfPo5Jm4AnMU/o1J?=
- =?us-ascii?Q?0rtZtIsIze4CbU8qb8EhuXI0IZSEGEFPkvYX3qHI2T9q+WJdaF4xSk3mNeL9?=
- =?us-ascii?Q?eGZx7FKyjfztrlaBL8szIWfuO35PUUZt5rPnLne9ZQFa4uJVRX+WqjgVApl5?=
- =?us-ascii?Q?p+kDvfINSOYXms045DJOdq3ZN5l67UuyafoSlmA2IfvMhmGjMm+7tjbsTao9?=
- =?us-ascii?Q?fmu6qFzQuw1G6JpGonHu/TPEmmEKPGot7c0JOdnx2Lu+eEDQRD/kHT0yf0kI?=
- =?us-ascii?Q?4B8tnnxLbZ+2tlgkW3NveR5Hle4KxH0O6lzUdN7nUr3Xn17o1g3hJ79fQk9h?=
- =?us-ascii?Q?a+NL7cm6sLDKAIYJX/h/VDTcZCBUJbx9?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2024 12:46:17.5509
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23a80e1d-919a-48b4-f051-08dcb227efca
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF00004FC1.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4082
+References: <cover.1722334569.git.viresh.kumar@linaro.org> <e0df2db1caa49f15628aa18779b94899dcf37880.1722334569.git.viresh.kumar@linaro.org>
+ <CAL_Jsq+SxdPyb3qQyce7u8Ur=WCd1p+pQxJ+yJrTyS2xk3BF0w@mail.gmail.com> <20240801083119.bwd6k6vimwyhv6cl@vireshk-i7>
+In-Reply-To: <20240801083119.bwd6k6vimwyhv6cl@vireshk-i7>
+From: Rob Herring <robh@kernel.org>
+Date: Thu, 1 Aug 2024 10:05:17 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJe4W4XV1RwkRRhJ4U=TzhgE5vo6aBsXBWjPzU89dWeAQ@mail.gmail.com>
+Message-ID: <CAL_JsqJe4W4XV1RwkRRhJ4U=TzhgE5vo6aBsXBWjPzU89dWeAQ@mail.gmail.com>
+Subject: Re: [PATCH V5 8/8] cpufreq: Add Rust based cpufreq-dt driver
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Stephen Boyd <sboyd@kernel.org>, 
+	Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, 
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, 
+	=?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>, 
+	Joakim Bech <joakim.bech@linaro.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+On Thu, Aug 1, 2024 at 2:31=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
+g> wrote:
+>
+> On 31-07-24, 15:14, Rob Herring wrote:
+> > We don't want anything in Rust based on of_find_property() which this
+> > is. That function assumes a device node and its properties are never
+> > freed which is no longer a valid assumption (since OF_DYNAMIC and then
+> > overlays). There's some work starting to address that, and my plan is
+> > using of_find_property() on dynamic nodes will start warning. The
+> > of_property_* API mostly avoids that issue (string types are an issue)
+>
+> Okay. Migrated to of_property_present() now. Thanks.
+>
+> > Also, it's probably the device property API we want to build Rust
+> > bindings on top of rather than DT and ACPI. OTOH, the device property
+> > API may be missing some features needed with OPP bindings.
+>
+> I am not sure which device properties are you talking about. Are there
+> any OF related examples available there ?
 
-After the commit 63edbaa48a57 ("x86/cpu/topology: Add support for the
-AMD 0x80000026 leaf"), the topolgy_logical_die_id() function returns
-the logical Core Chiplet Die (CCD) ID instead of the logical socket
-ID.
+device_property_*()
 
-Since this is currently used to set MSR_AMD_CPPC_ENABLE, which needs
-to be set on any one of the threads of the socket, it is prudent to
-use topology_logical_package_id() in place of
-topology_logical_die_id().
+Basically a wrapper around fwnode APIs taking struct device rather
+than fwnode. While I think the sharing of properties between DT and
+ACPI is flawed and converting C drivers from of_property_ to
+device_property_ calls is pointless, I think since rust bindings are a
+blank page, using the device_property_ API makes sense.
 
-Fixes: 63edbaa48a57 ("x86/cpu/topology: Add support for the AMD 0x80000026 leaf")
-Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-Tested-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
-Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 68c616b572f2..0039b7114f81 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -321,7 +321,7 @@ static inline int pstate_enable(bool enable)
- 		return 0;
- 
- 	for_each_present_cpu(cpu) {
--		unsigned long logical_id = topology_logical_die_id(cpu);
-+		unsigned long logical_id = topology_logical_package_id(cpu);
- 
- 		if (test_bit(logical_id, &logical_proc_id_mask))
- 			continue;
--- 
-2.34.1
-
+Rob
 
