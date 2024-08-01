@@ -1,130 +1,127 @@
-Return-Path: <linux-pm+bounces-11815-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11816-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FB7F94518C
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 19:34:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3881945378
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 21:42:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B12301C21BA9
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 17:34:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 789A21F22950
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 19:42:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8206C1B4C27;
-	Thu,  1 Aug 2024 17:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 690A314A0AA;
+	Thu,  1 Aug 2024 19:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W0I9y6ay"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF1913D62B;
-	Thu,  1 Aug 2024 17:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747FE1422D0;
+	Thu,  1 Aug 2024 19:42:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722533663; cv=none; b=t5QOlEufSg7hCvg4B+BomDwYntYPEvg3It1aUWbzj5sOvqGpZFt13mZzI2Cd9t0yzpxnH2cug6jnvQq4QYAUv4FPdniJq6o81WjzWibjNiwz14lrFW/JdQn37g5StNZxFwQ5Oh+umBv0sYobahOJ8ZQAmucuvZPhgrunBRIyzJo=
+	t=1722541347; cv=none; b=QVKlCwEVKCql7+8a5z23bRADUvsGyKpjHGP4emlXMMPJfubH4thvee302VgMuAUkMA/Jr7+ahc0D/uTxd/5hKsl6WimySLIY+Crux0rDxD1nnBOL8xxy1tHxvDooS58iAytnGv8PfN8ExTgo72cs/Xl8SBFYwibWe896Ed7/nms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722533663; c=relaxed/simple;
-	bh=QGfv6Mwl2jnbBI5jZ5Gi7DAKze67LLzTrgAtwyJNyr8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=riBDZX4jX/4SAoFTsm6P0ozSp9BXrWF30mfC/dri7VRf0fSlcH7MALSe0FWqqopGEG7dEkpd624hx5JxL41HjAyF9o69/MgoL8/UvpUvvKtxez+/6J3r28fIYc0RM7y9IvPUyvgLNw/AcS+Ul7xvIZ6rGQOUOdqSsaA5WTnPPXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-65f7bd30546so19669137b3.1;
-        Thu, 01 Aug 2024 10:34:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722533659; x=1723138459;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b7RLlBjK6VYDjExx9r5TpBCz781pCBuMFrVQOrMhhBk=;
-        b=rOS26AfyhoiHWFlBodif68+WU/tWDEcOxcT/Y8bT1UCpefpFPdzkY4IimGw+SdsVEU
-         tJGdKDN9xJrc4aI9B9i6GD8aY7XZOq1f2074VZC+69qm8wEmHxAEux68q1j8yIanXzoJ
-         4hzHlA5rEcaQDVUnI6shZ/wZtr/seoiCR5rIs4ZoCjZJWoLqwY4uSrJy9qfDJwlhLj1G
-         HYw0OCCrHl0TJlhea4wwAzbwaUiUbKsW3joi1kkvy/BiaMach5+YVW6vwcxvd/1yFDDt
-         DxF6WgduZw9iogy+7r3J+PSGlhxq7j1R7OB/67k0H8rRXQRfoXmQunqqjCt8M8QJkCSX
-         YlEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW+Hj7SIcGXclvsRxLOcoSn+3aviRApbDc3CiImBe7dFaH/2s/DT4ikzExrkkijIg1ZulSA2/gqPPZ6G5gMOuUERduY6HpvMr1EyzhIqvpk35M5joDAq+J1b7l9XlY0q/dqLZ86++kkKAnV6XpljBNlHxuyqUvrMILEP+q2AXPbCederLfeSl3X2mcLnz+SFKvNbcvQAvE6V0P32kobq6NLLoejcr98lSJcmoncxhVDyIDo9oc7rDiyBqMPoFdYSpY=
-X-Gm-Message-State: AOJu0Yx9wOSwOOGIK/v7BZD2sl7Rxg+eX+qDb6YIv5qjUeeSGon5Vbzq
-	CNO64FOySkm6ybYeZE7IlVn16debbOT+zm/BQsjUCyLAVhogx3bLFyWWlGMU
-X-Google-Smtp-Source: AGHT+IEpDNT2ogMgupDB98BwUhJQZQ61IZB1mOGnyGEmEAwT8R54mpFr8XrFoOgraWpkDIuZTzeI0A==
-X-Received: by 2002:a81:7755:0:b0:66b:c28b:f234 with SMTP id 00721157ae682-689638f35f5mr7412837b3.21.1722533659002;
-        Thu, 01 Aug 2024 10:34:19 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-689af65b26dsm214667b3.7.2024.08.01.10.34.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Aug 2024 10:34:18 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-661d7e68e89so20248157b3.0;
-        Thu, 01 Aug 2024 10:34:18 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVelEtnSLsTPOcBQ4H6g7FJBEakHBGLnpo+bKfhSbq9eqpnKZ2o3kSrKpQhcljb8kF73fYoD+sCEHJAbDRgUIev8LU4PhWCbm2I4XiuO5eC6/kFPSxTEZ1CGuqYMT07FnIcxTVGzfWCEcUETS7K8HfV+vP0RsGepFvI2IlXqV1QLOYhBrJDArzoelGlA8RiL5P78nhtKxAseEVtfxyHO2AJP8TBQvp7TfWkNgaQsLX9TtJWrNqnQqKL1VuRdatrBuQ=
-X-Received: by 2002:a81:7755:0:b0:66b:c28b:f234 with SMTP id
- 00721157ae682-689638f35f5mr7412527b3.21.1722533658194; Thu, 01 Aug 2024
- 10:34:18 -0700 (PDT)
+	s=arc-20240116; t=1722541347; c=relaxed/simple;
+	bh=lvfv0gYAMYXDl4J8LANARZqbPTuzhHPJmdjQybAkBA4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EolfSJWSZxR2qT7G7eoqXn7jsTACQxJTnScV/ZAFX8UK3XHnJ/VlQSbUBFbl2+5NDft8oLgKb1ReGZr6puuzXXpDoo9rk67Ln0t8do0OG1aOia344bSIQ0r0DzDFIyD7rjTcT3Yp4dAOnWVUYyB4/Ndfscpxhr2oWgifpeJZh3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W0I9y6ay; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722541345; x=1754077345;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=lvfv0gYAMYXDl4J8LANARZqbPTuzhHPJmdjQybAkBA4=;
+  b=W0I9y6ayJiE/istCzaNWbvx+6eaVuKrV04paAuW55giBd3lCb5FswiBl
+   3OotlKevOr6WGCeu1azOa/kf5z1VvNDbv/EQar7vEeeC+SQUM0MDPy8kq
+   YYWLrCVeSQ3T3AaNWEAglnmGh/1AUK9semb5L9eUtWsWpmSgKJcqEjSLb
+   Ga/int5mM4ctxZC0+wqdKtfGYV59zOSETeIVb//FZzzgRP3IEamu1faK3
+   g5Zj8XGARvdkZUyM6V214KwNHGHu9EepZeitJ9nNWA1/W5VYztSsOdDqA
+   EhtxkGT4FOF2dQiOSbzusZKXSj1Dy//L4w+uyWG9U+jSvkAtbISzhT3+P
+   Q==;
+X-CSE-ConnectionGUID: MGe6n0/CTaygJvTU9tpKig==
+X-CSE-MsgGUID: B2JkNemaS2O8CLMCL4Gj1A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11151"; a="12838072"
+X-IronPort-AV: E=Sophos;i="6.09,255,1716274800"; 
+   d="scan'208";a="12838072"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 12:42:25 -0700
+X-CSE-ConnectionGUID: Qpx6A42VRyCk6SA14yLBMA==
+X-CSE-MsgGUID: JsSBxWNARnKdEsYeqUAAAw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,255,1716274800"; 
+   d="scan'208";a="55107940"
+Received: from unknown (HELO [10.124.223.52]) ([10.124.223.52])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 12:42:24 -0700
+Message-ID: <c15a8a105308262856ee14bab558d34df8bdf92a.camel@linux.intel.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Update Balance performance EPP
+ for Emerald Rapids
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: Pedro Henrique Kopper <pedro.kopper@canonical.com>, rafael@kernel.org, 
+	lenb@kernel.org, viresh.kumar@linaro.org
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Thu, 01 Aug 2024 12:42:21 -0700
+In-Reply-To: <Zqu6zjVMoiXwROBI@capivara>
+References: <Zqu6zjVMoiXwROBI@capivara>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.0-1build2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240422105355.1622177-1-claudiu.beznea.uj@bp.renesas.com>
- <20240422105355.1622177-9-claudiu.beznea.uj@bp.renesas.com>
- <CAMuHMdWhRRdfoqg_o6bU7jjt5_Di0=z7MJ4fMh=MJ0m8=u4tgg@mail.gmail.com> <80d56236-2499-4c89-8044-6a271e47515d@tuxon.dev>
-In-Reply-To: <80d56236-2499-4c89-8044-6a271e47515d@tuxon.dev>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 1 Aug 2024 19:34:05 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXOztsoKp=9-TDXirJN8voRy0O5mYXcVy=Uz-GX0B2N_Q@mail.gmail.com>
-Message-ID: <CAMuHMdXOztsoKp=9-TDXirJN8voRy0O5mYXcVy=Uz-GX0B2N_Q@mail.gmail.com>
-Subject: Re: [PATCH v4 8/8] arm64: dts: renesas: r9a08g045: Update
- #power-domain-cells = <1>
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: mturquette@baylibre.com, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, magnus.damm@gmail.com, ulf.hansson@linaro.org, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Claudiu,
+On Thu, 2024-08-01 at 13:41 -0300, Pedro Henrique Kopper wrote:
+> On Intel Emerald Rapids machines, we ship the Energy Performance
+> Preference
+> (EPP) default for balance_performance as 128. However, during an
+> internal
+> investigation together with Intel, we have determined that 32 is a
+> more
+> suitable value. This leads to significant improvements in both
+> performance
+> and energy:
+>=20
+> POV-Ray: 32% faster | 12% less energy
+> OpenSSL: 12% faster | energy within 1%
+> Build Linux Kernel: 29% faster | 18% less energy
+>=20
+> Therefore, we should move the default EPP for balance_performance to
+> 32.
+> This is in line with what has already been done for Sapphire Rapids.
+>=20
+> Signed-off-by: Pedro Henrique Kopper <pedro.kopper@canonical.com>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-On Thu, Aug 1, 2024 at 7:28=E2=80=AFPM claudiu beznea <claudiu.beznea@tuxon=
-.dev> wrote:
-> On 01.08.2024 19:13, Geert Uytterhoeven wrote:
-> > On Mon, Apr 22, 2024 at 12:54=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.=
-dev> wrote:
-> >> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> >>
-> >> Update CPG #power-domain-cells =3D <1> and move all the IPs to be part=
- of the
-> >> IP specific power domain as the driver has been modified to support
-> >> multiple power domains.
-> >>
-> >> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> >> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> >
-> > Now the watchdog fixes are in v6.11-rc1, I will queue this in
-> > renesas-devel for v6.12.
->
-> Only the RZ/G3S support has been merged.
->
-> The watchdog fixes that allows us to use this patch were submitted as RFC
-> but got no input from Ulf, yet.
+> ---
+> =C2=A0drivers/cpufreq/intel_pstate.c | 1 +
+> =C2=A01 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/cpufreq/intel_pstate.c
+> b/drivers/cpufreq/intel_pstate.c
+> index 392a8000b238..c0278d023cfc 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -3405,6 +3405,7 @@ static const struct x86_cpu_id
+> intel_epp_default[] =3D {
+> =C2=A0	 */
+> =C2=A0	X86_MATCH_VFM(INTEL_ALDERLAKE_L,
+> HWP_SET_DEF_BALANCE_PERF_EPP(102)),
+> =C2=A0	X86_MATCH_VFM(INTEL_SAPPHIRERAPIDS_X,
+> HWP_SET_DEF_BALANCE_PERF_EPP(32)),
+> +	X86_MATCH_VFM(INTEL_EMERALDRAPIDS_X,
+> HWP_SET_DEF_BALANCE_PERF_EPP(32)),
+> =C2=A0	X86_MATCH_VFM(INTEL_METEORLAKE_L,
+> HWP_SET_EPP_VALUES(HWP_EPP_POWERSAVE,
+> =C2=A0		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 179, 64, 16)),
+> =C2=A0	X86_MATCH_VFM(INTEL_ARROWLAKE,
+> HWP_SET_EPP_VALUES(HWP_EPP_POWERSAVE,
 
-Oops, postponing.
-
-> [1] https://lore.kernel.org/all/20240619120920.2703605-1-claudiu.beznea.u=
-j@bp.renesas.com/
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
