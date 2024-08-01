@@ -1,160 +1,137 @@
-Return-Path: <linux-pm+bounces-11807-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11808-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E01594493E
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 12:24:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADB82944AC2
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 14:02:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FE761C21400
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 10:24:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62F3E1F21323
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 12:02:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA40616F0C6;
-	Thu,  1 Aug 2024 10:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E90187FF8;
+	Thu,  1 Aug 2024 12:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ECi9NtrR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gme98ZNj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E15F446A1;
-	Thu,  1 Aug 2024 10:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5AB616DC20
+	for <linux-pm@vger.kernel.org>; Thu,  1 Aug 2024 12:02:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722507843; cv=none; b=VwH2QtJw3VmWluFn43THqA8s/5VKqpwLmVOOnmziJcaSnApf72f0t7cL7v7oei5qQ8VGQFEUha7G61Xu2fSko/NzvGEvgyvriLlREqXJCb+NlXlNu5En85806D9niN7KI1o30F7xjAr5CT3pQKR4s4lkMjxrHIs9JTYS8V5CJkA=
+	t=1722513753; cv=none; b=l/NCNYqh0nytdwADGElYfyw0rg5eox3UcNJ3JOY2RE5fNVY900OjnBGBFd6mzU39j9TDT806RJM9CPO/C4dsM6HDq95r+GT323V32mXnHHaeLXtwX5hxRGkvEy5ODcToQrC/uHFOXUFH4z2/ApmLYaS4ZhMZarP0C3rX+cTzBdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722507843; c=relaxed/simple;
-	bh=2qqKLa49EvzmM19MRf9Bcfq/xYYI+V8D6kv7dmOhKVY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JmZR2ZaAmGuvcFmTDddjcUyyT7LrVeRWeDg6BwBsiS4GTzscCO1Yb0X71Mj4R3VK4gIPey/ntGy9HsRgYWrWqZBr4wNGySmbxGT7gk9qtFxiWpY+Z/K5F/kfE/45QNxZhdSETCY6mHGuQ2BPG623y8Lp/mPSDd/DTCywWFSLyqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ECi9NtrR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 055C8C4AF0E;
-	Thu,  1 Aug 2024 10:24:02 +0000 (UTC)
+	s=arc-20240116; t=1722513753; c=relaxed/simple;
+	bh=1xtfP63wEUgRE6xxx0Ka20cUQfzt2Jq4cuPC3+Tf/lA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jtCW2ccPOhjNL30WK7XD9aqtvK82tdUz3iuXhihF6YOQhNmgnrrRjGxtbb0Ylpp4NThMa4KoNHzNlmpbmQFhqzlBJMJovNz/57s2IAy6BtSAWp8TTgNHwBGHdHKAp5L5JhEuuhFT2pYdJK6rIbjE4VrX+kWdZlL/ELaqA2/B3t8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gme98ZNj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6CD23C4AF0F
+	for <linux-pm@vger.kernel.org>; Thu,  1 Aug 2024 12:02:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722507843;
-	bh=2qqKLa49EvzmM19MRf9Bcfq/xYYI+V8D6kv7dmOhKVY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ECi9NtrRXeYu40pM7Jmh/4wt2ajtq7MPUdnzean5RfI3hBLLw/von4XF8eMTiCj/b
-	 kcRZie+561VzfExlC6A1o/AQYT7im8AWqGf1CTN+8RdMjTxvHtUOZFPz71so3ZDClc
-	 BrObgHuabYbANJ8jpgQF7I3D7FkoE7hYt6nW3XrvKfbQcs6EJ0oIBlPg86TsQZfiNN
-	 LR96QFYXWXRefSh5u5l6FuVOLxl612AAkaY1hIzhIGa4+3+9GKk5sSN+G+1ItQHMm1
-	 ow0sb6iYdomI+aefOmvne3dTnzxXeFiLMgcZc8xE23Nss1+Dx8nV5Y35mRvjoxWm/g
-	 /FBmS3Ax/zk0A==
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3db3763e924so309075b6e.2;
-        Thu, 01 Aug 2024 03:24:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUy9TqmrxaIKlz2jiEgpNngXFey/RssqfmzJjS1mWZ/BjwY4T65Z9tXMbc/yHyXZyjXnGsENNtXTw==@vger.kernel.org, AJvYcCVWM0AdqiLbT12hrQT7gpfMNLrnKm2lVCFKEDIZs/xSoYnHPGQjrtqnrTHs31nLUkIRUU+RKS5s@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIlEnFuLQRMebU4WYpvDk5YrwtSetTcSCRccI9h5eIN7qIFCWn
-	SLQS4d0afJsuiYdEmxzAGEsMaIDA8JzVvnBrcRkhh7XCQZeHl39Ke4utW75IkDmemUUWyUkC3XW
-	F9n+HcaHVXmyO2CxAQU3I5AiXSE4=
-X-Google-Smtp-Source: AGHT+IFSc0QSvBW/YVrvyVouC9aOFYfVQ5CbvNkJfU37sydbsMcTetupYjsIJy8Su3F3gmHoo8mJXk5LjGMR4RHSaio=
-X-Received: by 2002:a05:6871:3329:b0:258:476d:a781 with SMTP id
- 586e51a60fabf-2687a3cee76mr1163991fac.3.1722507842262; Thu, 01 Aug 2024
- 03:24:02 -0700 (PDT)
+	s=k20201202; t=1722513753;
+	bh=1xtfP63wEUgRE6xxx0Ka20cUQfzt2Jq4cuPC3+Tf/lA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Gme98ZNjRPSbL7n0Vwpb5hT6SJYgXU9mpIYYBGVP3NfheIcvVgU1bIZ8REtM57MfP
+	 2Axm92PXLQuewxyTkGgj2N92mA/mruAaiktXLqaSbplbzT0GkqJxmFMnLkrkont4FV
+	 gAkC7ea7LDA0QUh5JHCO9Nm94MdhNKtrq7Zw5WT9pCikWl0dqw5LATj+JxRt/JKkoi
+	 Eun9JHfoOwhYH1EgVu+rIC+s8TpxEKlSIpZukAgDJlG2XEd+hAJ15hpJ3l3pSvuIJb
+	 H/Go46IpAQCqr1zNC2oxt6N62zIoPB3yjiL56/vCDFXail7YtMR/rjB4HbvWFMq2L8
+	 /cIdawRKJBerw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 5E915C53BB9; Thu,  1 Aug 2024 12:02:33 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218686] Fail to set energy_performance_preference of amd
+ processor on asus ga403uv
+Date: Thu, 01 Aug 2024 12:02:32 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: chemasanchezgarabito@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: DOCUMENTED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218686-137361-vMh9w06wxc@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
+References: <bug-218686-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240801000834.3930818-1-sashal@kernel.org> <20240801000834.3930818-69-sashal@kernel.org>
-In-Reply-To: <20240801000834.3930818-69-sashal@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 1 Aug 2024 12:23:51 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hPDBWZA4zwrnkam=6a5APjviccoEh6gEHEQegpjpnAtA@mail.gmail.com>
-Message-ID: <CAJZ5v0hPDBWZA4zwrnkam=6a5APjviccoEh6gEHEQegpjpnAtA@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 6.10 069/121] thermal: trip: Use READ_ONCE() for
- lockless access to trip properties
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, rafael@kernel.org, daniel.lezcano@linaro.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 1, 2024 at 2:15=E2=80=AFAM Sasha Levin <sashal@kernel.org> wrot=
-e:
->
-> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
->
-> [ Upstream commit a52641bc6293a24f25956a597e7f32148b0e2bb8 ]
->
-> When accessing trip temperature and hysteresis without locking, it is
-> better to use READ_ONCE() to prevent compiler optimizations possibly
-> affecting the read from being applied.
->
-> Of course, for the READ_ONCE() to be effective, WRITE_ONCE() needs to
-> be used when updating their values.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
-This is more of a matter of annotation than practical issue.  That's
-why I haven't even added a Fixes: tag to it.
+--- Comment #68 from Chema (chemasanchezgarabito@gmail.com) ---
+(In reply to Perry Yuan(AMD) from comment #67)
+> https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/
+> programmer-references/55901_B1_pub_053.zip=20
+>=20
+> Page 120.
+>=20
+> CPUID_Fn80000008_EBX [Extended Feature Extensions ID EBX]=20=20
+> Bit 27 CPPC. Read-only. Reset: 1. Collaborative Processor Performance
+> Control.
+>=20
+> sudo cpuid -l 0x80000008 -r
+> CPU 0:
+>    0x80000008 0x00: eax=3D0x00003030 ebx=3D0x111ef257 ecx=3D0x0000400f
+> edx=3D0x00010000
+>=20
+> Bit 27 =3D 0, that means BIOS didn`t enable CPPC capability, OS cannot de=
+tect
+> the CPPC flag on the system,=20
+>=20
+> you can check lscpu output,
+>=20
+> #lscpu |grep cppc.
+>=20
+> Windows maybe don`t depends on this CPUID bit, but Linux detect the CPUID
+> and set cppc flag at kernel booting. no cppc flag, amd-pstate driver cann=
+ot
+> load so far.
 
-Whether or not to take it into "stable" is up to you.  It certainly is
-low-risk in any case.
+Ok, I understand, so ASUS is not doing it in the standard way.
 
-> ---
->  drivers/thermal/thermal_sysfs.c | 6 +++---
->  drivers/thermal/thermal_trip.c  | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sy=
-sfs.c
-> index 88211ccdfbd62..5be6113e7c80f 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -150,7 +150,7 @@ trip_point_temp_show(struct device *dev, struct devic=
-e_attribute *attr,
->         if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip_id) !=3D =
-1)
->                 return -EINVAL;
->
-> -       return sprintf(buf, "%d\n", tz->trips[trip_id].trip.temperature);
-> +       return sprintf(buf, "%d\n", READ_ONCE(tz->trips[trip_id].trip.tem=
-perature));
->  }
->
->  static ssize_t
-> @@ -174,7 +174,7 @@ trip_point_hyst_store(struct device *dev, struct devi=
-ce_attribute *attr,
->         trip =3D &tz->trips[trip_id].trip;
->
->         if (hyst !=3D trip->hysteresis) {
-> -               trip->hysteresis =3D hyst;
-> +               WRITE_ONCE(trip->hysteresis, hyst);
->
->                 thermal_zone_trip_updated(tz, trip);
->         }
-> @@ -194,7 +194,7 @@ trip_point_hyst_show(struct device *dev, struct devic=
-e_attribute *attr,
->         if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip_id) !=3D =
-1)
->                 return -EINVAL;
->
-> -       return sprintf(buf, "%d\n", tz->trips[trip_id].trip.hysteresis);
-> +       return sprintf(buf, "%d\n", READ_ONCE(tz->trips[trip_id].trip.hys=
-teresis));
->  }
->
->  static ssize_t
-> diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_tri=
-p.c
-> index 49e63db685172..b4e7411b2fe74 100644
-> --- a/drivers/thermal/thermal_trip.c
-> +++ b/drivers/thermal/thermal_trip.c
-> @@ -152,7 +152,7 @@ void thermal_zone_set_trip_temp(struct thermal_zone_d=
-evice *tz,
->         if (trip->temperature =3D=3D temp)
->                 return;
->
-> -       trip->temperature =3D temp;
-> +       WRITE_ONCE(trip->temperature, temp);
->         thermal_notify_tz_trip_change(tz, trip);
->
->         if (temp =3D=3D THERMAL_TEMP_INVALID) {
-> --
-> 2.43.0
->
+I have contacted  them and I am waiting for a response, but being more shou=
+ld
+bring more attention, I don't know if you Perry could do something special =
+to
+contact them an press them in some way, as I am aware that they only support
+windows officially, I (and I think all of use in this thread) would be very
+thankful to you.
+
+Also in the case that they didn't want to make the change, what solution we
+could potentially create, I have done system development a few times, I don=
+'t
+know if it is possible to create some kind of driver of module for the kern=
+el
+that modified this behaviour.
+
+Also, if all the others in this thread with the same problem could contact =
+ASUS
+to write a ticket, may catch their attention to this matter.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
