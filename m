@@ -1,206 +1,150 @@
-Return-Path: <linux-pm+bounces-11792-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11793-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85F0C94445D
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 08:23:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED11E9444EB
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 08:55:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B70B288417
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 06:23:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9F812809C6
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 06:55:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A78D152532;
-	Thu,  1 Aug 2024 06:23:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E9C16DC3F;
+	Thu,  1 Aug 2024 06:55:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=grimler.se header.i=@grimler.se header.b="aKxIgCt0"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="pySWYoet"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088CF13D8A6
-	for <linux-pm@vger.kernel.org>; Thu,  1 Aug 2024 06:23:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139D316D9C6
+	for <linux-pm@vger.kernel.org>; Thu,  1 Aug 2024 06:55:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722493410; cv=none; b=pBoOsBEyamufZ5L52+wwZ4lUltHX7HK6pazP5iwAHko2TCDfhuE3Za0QB2npNBJdyXVVYhi3aRBKCglZf9p4Q0GVU4g4A0sByk4r4TRtIE6ufOwksLGishJmwmWjWOWY1PiUejPRasdczAKQNsC7dawDd86aVjAcOXSAb9FZJ8g=
+	t=1722495314; cv=none; b=QzBzfxsU5gzscwc0+FgN0YiL9ENn2gyt4vaR7XzTy+F23+YGnMPlZFzRfhc6AiOAIaaOfPIZ87LKH8pmKnEqBTl8sFnMgbwQeU4tfwlJ0ND1rSzcLLyNqjnAXsP83DXUmP/M/mLI8f26sHBcAbOylAjlk5kRhyudnnkapT8cIzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722493410; c=relaxed/simple;
-	bh=1SwrbJUZHfMzIQKHR3lTTS9SNSFL2B4mHLLktBqi0gA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YeKkwZiW2pyM3MQlXZCVSX/Y1QsMzuTB3oYbIpXv/CUzpYzZ1DADOlTYEtdCTQ+9BU3ihlzxtLGbAdQr+AY6VMGZurN1v7nlYlNj/OcJvNSncQaS3+SfN4oday0Zkf4wlh5W6qEwJxEBQbMg/tDGidNto7qliDkn8LMThWonsdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=grimler.se; spf=pass smtp.mailfrom=grimler.se; dkim=pass (1024-bit key) header.d=grimler.se header.i=@grimler.se header.b=aKxIgCt0; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=grimler.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grimler.se
-Date: Thu, 1 Aug 2024 08:22:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
-	t=1722493403;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uNXO5Sbe1R3I7INxDUElbIWLts6spK8XiLpLcF786pk=;
-	b=aKxIgCt05edjo1D67ATWPa6sDjDircW5G4zgDLOmXhbGRQMxkpIpIStYg2JJUitUVHXrCI
-	ipY9x5t2/JwAtU5+j43e2UjJUQ/74aKXt49A7KceNpI0Aw0T+lkAGv18qX8+Dma3ue3i2f
-	XN9/DCVLWnKWJ1jKZaREYIZPvKdCEhY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Henrik Grimler <henrik@grimler.se>
-To: Artur Weber <aweber.kernel@gmail.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	~postmarketos/upstreaming@lists.sr.ht,
-	Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
-	Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 00/10] power: supply: max77693: Toggle charging/OTG
- based on extcon status
-Message-ID: <20240801062253.GA2681@l14.localdomain>
-References: <20240729-max77693-charger-extcon-v3-0-02315a6869d4@gmail.com>
+	s=arc-20240116; t=1722495314; c=relaxed/simple;
+	bh=G6JbqvP+JzPpaqmI1T0/vuWFUnk1MnN+96gN2QgHM+Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qXzg2RlfsBd2EklzdrlU0epc9IaHe1CgQ9AuAxNmzARzwCtSRIIdHNFISMvDomj1k3suCen1go1JZqb9VpEFJEUJ3nzOj4jdI3fjKbiG5FgqkZTe14ClP4Mtc8o4JJbapvFQ0Iv1niC51+HDDO5VNWGevjUA6diX4nAfz1nnm0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=pySWYoet; arc=none smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C3F933F327
+	for <linux-pm@vger.kernel.org>; Thu,  1 Aug 2024 06:55:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1722495303;
+	bh=G6JbqvP+JzPpaqmI1T0/vuWFUnk1MnN+96gN2QgHM+Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=pySWYoety/aIQC10alFsZI7n5dMGuVtfeBvtOtJupffqZJNYApfDDg1Yy+Xlgn1R4
+	 CFf3o2OrpSTes43KQ0qjP3UzNGKCLULXqJ6zd58xNbfKAvL/JRnT7tOGjAo3cyiHa6
+	 SIaj/EM3FHqasZ7POHDWUGkqx2+SjULejniofPK0mFEbKleOX4MHAtylfUQj4cQlk+
+	 kxruIEBqRkJRJfkVAkK1c5CN7Jy2lbjPtz6IzwOicZdmDFHk0EtXNZViAtn8zfItD6
+	 hxLF9rYQ3KxCcrB4RhYYfOB2BUee1fyLuiszAUwlv7iIqtDl7fzZ0rVlTBsk+uh/8C
+	 4rMoIMYo/Qjmw==
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-70d1d51f3e9so7225606b3a.0
+        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2024 23:55:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722495302; x=1723100102;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G6JbqvP+JzPpaqmI1T0/vuWFUnk1MnN+96gN2QgHM+Q=;
+        b=ggBYJJ1Wzsz2ZuK1k0OXI//xrLlCuaVRevidcH0wyEkLPXXP86cF4E0QxDIlsNsiJQ
+         LjPPt6ZOAY7Mmaf6tsu5kgXzdmWRtWG14VGJxYdXmlAym1y3Yo/h3bEn2d3nQwJazUgi
+         C8jBnpQRDElPUjrfOYR0dy5I36HJXDbyb/4weQdVsr/pudzxqHukQMtbSkgrRfU2/p5O
+         t0z7U6/3Agr1pS6qqU96Pa0zNwWel0c8l6F1D/MDYoAEZ5X/aZqaeAzhMEUAGuILXpNi
+         S/bRqg6JD0i/pOVfNwiB9+21Mdv7/ZL5ERq4MmmKXxD/GjNlwOWkNEm/7eLx9cTGW1Q1
+         TeKA==
+X-Forwarded-Encrypted: i=1; AJvYcCV8ew1FylCnrn3/9HTcHUrsMJkSJ1jfKiHBeFNy22D0DKW0KV9PvZPkvvDq7stNBePriyu12IbLdHj0VJCXfcLe68BV6OZPYIM=
+X-Gm-Message-State: AOJu0Yw6ZYXeM/yctOTTPGhcq1S6O31Ky29Rl/GOzmziGXZfMXmjZLGU
+	NSjMhM/tyKLQJOZuIa+U/GfecHyH9CKZmAw0DAR02ZqQu5CfbhDNTeRdHZqs6eU9A+tEQ3GcH8P
+	7wX/0qqlUHPP1AH7CUxzz4wSzoOYHpeD3LQzLWr1z0IsFnQsLDylC2x5J7LRSnfDkKcWVxggOgZ
+	qcDu6/cSPlBdepmiUiNA+62+FOTUEL9X0KZ8BcDe9TsIGT1Mm3O/3Bcx8yug==
+X-Received: by 2002:a05:6a00:9189:b0:70d:3420:9309 with SMTP id d2e1a72fcca58-7105d6fb620mr1930240b3a.17.1722495302201;
+        Wed, 31 Jul 2024 23:55:02 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHxH4U08W48TiLv/0lYDLI+xjjrYJvSMkNbAHFf/lyYnes9cUnLr9AFBs3sy0zZLo9Ov9Y6WXTTMZ/jAfYoWxA=
+X-Received: by 2002:a05:6a00:9189:b0:70d:3420:9309 with SMTP id
+ d2e1a72fcca58-7105d6fb620mr1930233b3a.17.1722495301765; Wed, 31 Jul 2024
+ 23:55:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240729-max77693-charger-extcon-v3-0-02315a6869d4@gmail.com>
-X-Migadu-Flow: FLOW_OUT
+References: <20240726062601.674078-1-kai.heng.feng@canonical.com>
+ <2048df524f8be7ed200bc92eb1c6efe106f0ed19.camel@intel.com>
+ <CAAd53p5ftAjtfb-uCcVKR8G0JfoGnA_a0Se1E_vPeietgOENOg@mail.gmail.com>
+ <CAJZ5v0i9Qt3OFKCbqkd-q4VKYreV2PZZpQ2Km9az2htANG5zxA@mail.gmail.com>
+ <CAAd53p4macNjQN3i8vaf1s-5vj_7esKw37nqoUN1h+XqjQk71w@mail.gmail.com> <CAJvTdK=wafegpUB-KD=P9KazWngMNQb_rcbwQX_DDwPBtZ9W7w@mail.gmail.com>
+In-Reply-To: <CAJvTdK=wafegpUB-KD=P9KazWngMNQb_rcbwQX_DDwPBtZ9W7w@mail.gmail.com>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date: Thu, 1 Aug 2024 14:54:50 +0800
+Message-ID: <CAAd53p52A7ymkQhFweoy2vRXfkT81pumU6V5Q8tbEBKTnX=ASg@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: Add Jasper Lake and Elkhart Lake support
+To: Len Brown <lenb@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Zhang, Rui" <rui.zhang@intel.com>, 
+	"jacob.jun.pan@linux.intel.com" <jacob.jun.pan@linux.intel.com>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"artem.bityutskiy@linux.intel.com" <artem.bityutskiy@linux.intel.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Artur,
+On Thu, Aug 1, 2024 at 12:28=E2=80=AFAM Len Brown <lenb@kernel.org> wrote:
+>
+> On Wed, Jul 31, 2024 at 2:18=E2=80=AFAM Kai-Heng Feng
+> <kai.heng.feng@canonical.com> wrote:
+> >
+> > The crucial part to make the issue (i.e. slow ethernet) is
+> > ".disable_promotion_to_c1e =3D true".
+>
+> Okay, so the problem statement is that on this machine with some
+> ethernet controller and some workload,
+> performance is better when you use just C1 and not C1E (or deeper) states=
+.
+>
+> And so you want to have the option of accessing C1 without the overhead o=
+f C1E?
 
-On Mon, Jul 29, 2024 at 07:47:34PM +0200, Artur Weber wrote:
-> This patchset does the following:
-> 
-> - Add CURRENT_MAX and INPUT_CURRENT_MAX power supply properties to
->   expose the "fast charge current" (maximum current from charger to
->   battery) and "CHGIN input current limit" (maximum current from
->   external supply to charger).
-> 
-> - Add functions for toggling charging and OTG modes.
-> 
-> - Add an extcon-based handler that enables charging or OTG depending
->   on the cable type plugged in. The extcon device to use for cable
->   detection can be specified in the device tree, and is entirely
->   optional.
-> 
-> The extcon listener implementation is inspired by the rt5033 charger
-> driver (commit 8242336dc8a8 ("power: supply: rt5033_charger: Add cable
-> detection and USB OTG supply")).
+Yes, that's the case here.
 
-Tested on exynos4412-i9305 (after applying the changes in patch 8 - 10
-to exynos4412-midas.dtsi).  It works well, device correctly identifies
-a usb cable connected to charger or a usb cable connected to computer,
-and sets a limit of 1.8 A and 0.5 A in the two cases.
+>
+> Presumably you don't care about the power savings of the deeper states,
+> or you are using PM_QOS to avoid deep c-states at run time?
 
-I did notice that device does not always detect cable insertion, so I
-can occassionally get two de-attach events in a row.  Cable was
-inserted between 428 and 462 in below log snippet:
+I tried to use cpu_latency_qos in the network driver's NAPI poll, but
+only saw marginal improvement to around 830Mbps. Hitting the 940Mbps
+is still the goal here.
 
-[  389.458399] max77693-muic max77693-muic: external connector is attached(chg_type:0x3, prev_chg_type:0x3)
-[  389.469765] max77693-charger max77693-charger: fast charging. connector type: 6
-[  428.151857] max77693-muic max77693-muic: external connector is detached(chg_type:0x3, prev_chg_type:0x0)
-[  428.160319] max77693-charger max77693-charger: not charging. connector type: 13
-[  462.156048] max77693-muic max77693-muic: external connector is detached(chg_type:0x0, prev_chg_type:0x0)
-[  469.881925] max77693-muic max77693-muic: external connector is attached(chg_type:0x3, prev_chg_type:0x3)
-[  469.890049] max77693-charger max77693-charger: fast charging. connector type: 6
+>
+> > Can we use that for EHL and JSL?
+>
+> Yes.
 
-but this is probably an issue in extcon driver though rather than
-charger.
+Is it plausible to disable C1E promotion while using ACPI idle driver?
+Or provide a C-state table in intel_idle and update the states via
+_CST?
 
-I have not tested so that MHL still works, as I do not have access to
-that cable at the moment, will try it in a few days.
+>
+> You may also have a BIOS option to achieve the same goal, depending on
+> the platform.)
 
-Best regards
-Henrik Grimler
+I am seeing three different platforms from different vendors hitting
+the same issue, so it's better to disable C1e for these platforms.
 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> 
-> v3 no longer uses the CHARGER regulator to manage the power status, and
-> that's for two reasons:
-> 
-> - Regulator enable/disable behavior was interfering with how the power
->   supply driver worked (we occasionally got "unbalanced disables"
->   errors when switching charging state, despite checking for the
->   regulator status with regulator_is_enabled() - the CHARGER reg would
->   report as enabled despite the enable count being 0).
->   This broke OTG insertion if the OTG cable was plugged in first, and
->   sometimes caused warnings on unsuspend.
-> 
-> - Changing the charging values directly in the power supply driver is
->   less opaque and lets us avoid bringing in a dependency on regulators.
-> 
-> It also splits the current limits back into two properties:
-> INPUT_CURRENT_LIMIT and CONSTANT_CHARGE_CURRENT_MAX. Again, there are
-> two reasons for this split:
-> 
-> - They are two separate current controls, one for USB->charger and one
->   for charger->battery, and they have different limits (0-2.1A for CC
->   vs 60mA-2.58A for input). Given that the power supply core has the
->   properties for both values separately, it's more logical to present
->   them as such.
-> 
-> - It's safer to keep these separate; CONSTANT_CHARGE_CURRENT_MAX is
->   pretty explicitly only set *once* - at probe time with a safe value
->   specified in the DT. This way, INPUT_CURRENT_LIMIT is safer to modify
->   since in the event of an invalid value the CC current will hold back
->   the extra current thus preventing damage to the battery.
-> 
-> The latter is relevant as I'm working on a follow-up patchset that
-> allows for controlling the charging parameters using power supply
-> properties/sysfs properties rather than the CHARGER regulator.
-> 
-> Note that the CHARGER regulator gets disabled automatically if it's
-> not used, which will disable charging if it was auto-enabled by the
-> extcon code. This can be worked around by re-attaching the cable, or
-> more properly by removing the CHARGER regulator from DT for devices
-> that use the extcon-based charger management, as has been done in the
-> Galaxy Tab 3 8.0 DTSI.
-> 
-> See v1 for old description:
-> 
-> https://lore.kernel.org/r/20240530-max77693-charger-extcon-v1-0-dc2a9e5bdf30@gmail.com
-> ---
-> Changes in v3:
-> - Drop uses of CHARGER regulator, manage registers directly in power
->   supply driver instead
-> - Link to v2: https://lore.kernel.org/r/20240715-max77693-charger-extcon-v2-0-0838ffbb18c3@gmail.com
-> 
-> Changes in v2:
-> - Changed to use monitored-battery for charge current value
-> - Both current limit variables are now set by the CHARGER regulator
-> - Link to v1: https://lore.kernel.org/r/20240530-max77693-charger-extcon-v1-0-dc2a9e5bdf30@gmail.com
-> 
-> ---
-> Artur Weber (10):
->       dt-bindings: power: supply: max77693: Add monitored-battery property
->       dt-bindings: power: supply: max77693: Add maxim,usb-connector property
->       power: supply: max77693: Expose input current limit and CC current properties
->       power: supply: max77693: Set charge current limits during init
->       power: supply: max77693: Add USB extcon detection for enabling charging
->       power: supply: max77693: Add support for detecting and enabling OTG
->       power: supply: max77693: Set up charge/input current according to cable type
->       ARM: dts: samsung: exynos4212-tab3: Add battery node with charge current value
->       ARM: dts: samsung: exynos4212-tab3: Add USB connector node
->       ARM: dts: exynos4212-tab3: Drop CHARGER regulator
-> 
->  .../bindings/power/supply/maxim,max77693.yaml      |  15 +
->  arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi     |  22 +-
->  drivers/power/supply/Kconfig                       |   1 +
->  drivers/power/supply/max77693_charger.c            | 302 ++++++++++++++++++++-
->  include/linux/mfd/max77693-private.h               |  12 +
->  5 files changed, 337 insertions(+), 15 deletions(-)
-> ---
-> base-commit: 0c3836482481200ead7b416ca80c68a29cfdaabd
-> change-id: 20240525-max77693-charger-extcon-9ebb7bad83ce
-> 
-> Best regards,
-> -- 
-> Artur Weber <aweber.kernel@gmail.com>
-> 
+Kai-Heng
+
+>
+> --
+> Len Brown, Intel
+>
 
