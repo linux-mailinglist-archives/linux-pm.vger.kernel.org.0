@@ -1,328 +1,146 @@
-Return-Path: <linux-pm+bounces-11800-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11803-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 878EE9446A7
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 10:32:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3341944727
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 10:56:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8AE2B217C0
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 08:32:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 010BB1C244C1
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 08:56:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD30916D4DF;
-	Thu,  1 Aug 2024 08:32:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D5C2170836;
+	Thu,  1 Aug 2024 08:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="c7DqWxRX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4621396;
-	Thu,  1 Aug 2024 08:32:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B974503A;
+	Thu,  1 Aug 2024 08:55:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722501140; cv=none; b=RLKKOu89JbON1WYatYBdlsKv1LHYmYwDrpHj8YWaYEavOqDe6MFPX36OfFzYGJwwLfgT0QEtePwM9jkgKvGBQbQtvm0647p/CMknBfIC8TWhW9BU4xM+ADwYKsWcSvL3hfPUfMeMnbUYt9KvRTWNSKqX/+xEMke6cNFJ2lKYusE=
+	t=1722502549; cv=none; b=h1LqiGuAfZcRBolb0/ZPDUHEvVBSmKtrjwTE01P2XKnbA7cRjNqlGQR8aynkTB2rVCO84MOgvXLdKHh45Qi35jPa5h4znYv5mFqzKxH9VHXTQv2CF7Mb0fMr/AtCgZpdOi5MtVcb48bt9u3IIzPFy5HKijPb2R9xwUVHpl3k/i8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722501140; c=relaxed/simple;
-	bh=2PJMnmiY0foq0p7zL2SpmDLMW72Ys7eTZYZxEyHF8Eg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DZfOfV/kBZFJM89SaYzCp/k+xGxyeJehV/6HQar7H3grER2wUYZpuVatcoub2p5TTYtDsu7AfYJg1dTDec4kf1BJY7SyLKPqeozCtzUEZPIXIwCyAhOQ0kj9Nua/K9pSPFSoJCSY1XN2zGYOL7Egsex/DB/wsXlYhnvoC49A9zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-1fc4fcbb131so59046695ad.3;
-        Thu, 01 Aug 2024 01:32:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722501138; x=1723105938;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XCq1orT8o9b0MZo32P366JKaOeFvtNO9/K9vJiTqSy8=;
-        b=U6W3W/sIKjHs2HPQ+dsPJfWFMuM8SGR1+c/kLu2E/Rwjf9Z+h0PWUflZ/C9/sCdFIg
-         ta9F286qu7oOC7yimckYxYNQnJy/0Jcg70ug3s3WPLw9AAITBlDqd90lSOGzeUtZ4E8+
-         gzdzouRIWlZb/zAAsFvKGXLNIOG7XNcdmboXYrjZ8L4HAymKw7zhrFPiiBbPbLMTWsfp
-         f8wyLnDMVMP4ZvrWavT1J3BV2nHpEDsxl/zSnGegPbRnX3CgnDukzUxJ0byNTZUKP61C
-         E4onm8Pnr5TwRjuC3tzv95dvA9b8ZjAyQeOcX+HcafDCf+Y6+7rszdkoC95gdFNCR9Mz
-         KzHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUjhyrIPhZ6KpWtSTYRq8gFkjTWf6TCYWJudBqo0vkc+7BgOoxWl+qoBH7N1v4l/PUptwCs5ouhF6CT8mw+1/ifCkpZJlQp5wO7l/gC
-X-Gm-Message-State: AOJu0YwDyvbAXeJjv4ixsHgTRCBFW1dMJTCtCuMK9Ua9xTJFvV0YG7nB
-	n8G3DkGYJ2WI64dt3U0JYinkBGwND6tV46kgx2EzyxJLBrNlsFgDZv7t74rAGgw=
-X-Google-Smtp-Source: AGHT+IHMK9O1lRU2nMPY/V5XcDos4bau2+dJ2hzHxnOLeIuBJVeCTE6Of4+zudXAGqkfoGwANBfplA==
-X-Received: by 2002:a17:903:2304:b0:1fd:93d2:fb76 with SMTP id d9443c01a7336-1ff4cea5725mr22495915ad.31.1722501137825;
-        Thu, 01 Aug 2024 01:32:17 -0700 (PDT)
-Received: from localhost.localdomain ([111.48.58.10])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7c7fb0fsm133288365ad.7.2024.08.01.01.32.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Aug 2024 01:32:17 -0700 (PDT)
-From: Xueqin Luo <luoxueqin@kylinos.cn>
-To: rafael@kernel.org,
-	pavel@ucw.cz,
-	len.brown@intel.com
-Cc: linux-pm@vger.kernel.org,
-	xiongxin@kylinos.cn,
-	linux-kernel@vger.kernel.org,
-	Xueqin Luo <luoxueqin@kylinos.cn>
-Subject: [PATCH v3 2/2] PM: Use sysfs_emit() and sysfs_emit_at() in "show" functions
-Date: Thu,  1 Aug 2024 16:31:56 +0800
-Message-Id: <20240801083156.2513508-3-luoxueqin@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240801083156.2513508-1-luoxueqin@kylinos.cn>
-References: <20240801083156.2513508-1-luoxueqin@kylinos.cn>
+	s=arc-20240116; t=1722502549; c=relaxed/simple;
+	bh=PLUfEgox7CtnZQfwF9dblYIhmu0YYHyX4i6/vkfHk5o=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=R8UG04TPJrpLdjeSNbGZ3/XsgkeTbUExCHxOE3aidvJvmtIYZ7wsdg9kbHqBf0wckWVj3b+Iy1umWs0o4w0uERlXrdA7JkQim/DKaXUSkUhe/ZvTJevRmIfbGXoxtx1T2aVAMXNT7OeGO02xxx4EKDE13ETCo1SoLMPaDSYbIOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=c7DqWxRX; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4717caAg012068;
+	Thu, 1 Aug 2024 08:55:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=lCFv9W/1yqPkptOdArl+Xr
+	DedHPQMb/w80hiU9HehYc=; b=c7DqWxRX8sA4Gv4h2b0I4/vc3laNIZnx7YsFgk
+	jUwQFEmDwIXiKlQcPTdWMbpQS1tYWYw5UtvaIDqat2HL8MFKIY1m3IelRYVx2x4m
+	Wc6E1G5Z6VWKkpX46GNFRjz1rrHvlkzfBYlQAmMEyOfeiqkcpaBnIb390TUXzZC/
+	BGIX0i9es7IWYOi4UFcXE2qJ+UFNa7i/2qA8GWdzp3KJnOG6Uo03a8e51xH0MwOi
+	b154OzkbqWiKyFtqpglfn4LUXjC2wEnTeIGgOGd7GxaSwAg2JPB2Kx6I2FTI54p0
+	BW6SXe+mHRU2/wJ3TYjuDAf47ZcD4brZWx/dzzUSZhX971hg==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40qugahysx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 01 Aug 2024 08:55:30 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4718tB8n003144
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 1 Aug 2024 08:55:11 GMT
+Received: from tengfan-gv.ap.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 1 Aug 2024 01:55:05 -0700
+From: Tengfei Fan <quic_tengfan@quicinc.com>
+Subject: [PATCH v3 0/3] interconnect: qcom: Add SM4450 interconnect
+Date: Thu, 1 Aug 2024 16:54:35 +0800
+Message-ID: <20240801-sm4450_interconnect-v3-0-8e364d0faa99@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAExNq2YC/32NQQ6DIBQFr2JYF/NBwNJV79E0xiDoX4gtUNPGe
+ PeCq666nJfMvI1EG9BGcqk2EuyKERefoTlVxEy9Hy3FITPhwAWcgdE4CyGhQ59sMIv31iTqWi0
+ cDC0oKUk2H8E6fB/V2z3zhDEt4XOcrKyspdeAzkUlBG9rrrTWlNHnC02XrB9d768F0JvaLDMpm
+ ZX/qEwCB8Z1zbRi7K+67/sXCy+ZDegAAAA=
+To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC: <kernel@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        Tengfei Fan <quic_tengfan@quicinc.com>
+X-Mailer: b4 0.15-dev-a66ce
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722502505; l=1520;
+ i=quic_tengfan@quicinc.com; s=20240709; h=from:subject:message-id;
+ bh=PLUfEgox7CtnZQfwF9dblYIhmu0YYHyX4i6/vkfHk5o=;
+ b=VWdFqX4Ksr3WAAfzNWgRbi+/MElAuhobA1LwdCgC+OC5JQOk3S6WF/abT0p2xGD5TMQtB8YfE
+ iSr/1XsrptcAqMkMJBdoNBMqxrgCPa5eJBhKthAlSdCBqc6DpE9H5nY
+X-Developer-Key: i=quic_tengfan@quicinc.com; a=ed25519;
+ pk=4VjoTogHXJhZUM9XlxbCAcZ4zmrLeuep4dfOeKqQD0c=
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: EZ2P_gBkMqeZ_nXS_qEpbLs5zIYTkAjE
+X-Proofpoint-ORIG-GUID: EZ2P_gBkMqeZ_nXS_qEpbLs5zIYTkAjE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-01_06,2024-07-31_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
+ impostorscore=0 mlxscore=0 spamscore=0 malwarescore=0 phishscore=0
+ mlxlogscore=709 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2408010054
 
-As Documentation/filesystems/sysfs.rst suggested,
-show() should only use sysfs_emit() or sysfs_emit_at() when formatting
-the value to be returned to user space.
+Add SM4450 interconnect provider driver and enable it.
 
-No functional change intended.
-
-Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
+Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
 ---
- kernel/power/main.c | 76 +++++++++++++++++++++++----------------------
- 1 file changed, 39 insertions(+), 37 deletions(-)
+Changes in v3:
+- add enable CONFIG_INTERCONNECT_QCOM_SM4450 defconfig patch.
+- remove all _disp related paths in sm4450.c
+- fix patch check issue
 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index a9e0693aaf69..6254814d4817 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -115,7 +115,7 @@ int pm_async_enabled = 1;
- static ssize_t pm_async_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			     char *buf)
- {
--	return sprintf(buf, "%d\n", pm_async_enabled);
-+	return sysfs_emit(buf, "%d\n", pm_async_enabled);
- }
- 
- static ssize_t pm_async_store(struct kobject *kobj, struct kobj_attribute *attr,
-@@ -139,7 +139,7 @@ power_attr(pm_async);
- static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			      char *buf)
- {
--	char *s = buf;
-+	ssize_t count = 0;
- 	suspend_state_t i;
- 
- 	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++) {
-@@ -149,17 +149,17 @@ static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			const char *label = mem_sleep_states[i];
- 
- 			if (mem_sleep_current == i)
--				s += sprintf(s, "[%s] ", label);
-+				count += sysfs_emit_at(buf, count, "[%s] ", label);
- 			else
--				s += sprintf(s, "%s ", label);
-+				count += sysfs_emit_at(buf, count, "%s ", label);
- 		}
- 	}
- 
- 	/* Convert the last space to a newline if needed. */
--	if (s != buf)
--		*(s-1) = '\n';
-+	if (count > 0)
-+		buf[count - 1] = '\n';
- 
--	return (s - buf);
-+	return count;
- }
- 
- static suspend_state_t decode_suspend_state(const char *buf, size_t n)
-@@ -220,7 +220,7 @@ bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC);
- static ssize_t sync_on_suspend_show(struct kobject *kobj,
- 				   struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%d\n", sync_on_suspend_enabled);
-+	return sysfs_emit(buf, "%d\n", sync_on_suspend_enabled);
- }
- 
- static ssize_t sync_on_suspend_store(struct kobject *kobj,
-@@ -257,22 +257,22 @@ static const char * const pm_tests[__TEST_AFTER_LAST] = {
- static ssize_t pm_test_show(struct kobject *kobj, struct kobj_attribute *attr,
- 				char *buf)
- {
--	char *s = buf;
-+	ssize_t count = 0;
- 	int level;
- 
- 	for (level = TEST_FIRST; level <= TEST_MAX; level++)
- 		if (pm_tests[level]) {
- 			if (level == pm_test_level)
--				s += sprintf(s, "[%s] ", pm_tests[level]);
-+				count += sysfs_emit_at(buf, count, "[%s] ", pm_tests[level]);
- 			else
--				s += sprintf(s, "%s ", pm_tests[level]);
-+				count += sysfs_emit_at(buf, count, "%s ", pm_tests[level]);
- 		}
- 
--	if (s != buf)
--		/* convert the last space to a newline */
--		*(s-1) = '\n';
-+	/* Convert the last space to a newline if needed. */
-+	if (count > 0)
-+		buf[count - 1] = '\n';
- 
--	return (s - buf);
-+	return count;
- }
- 
- static ssize_t pm_test_store(struct kobject *kobj, struct kobj_attribute *attr,
-@@ -390,7 +390,7 @@ static const char * const suspend_step_names[] = {
- static ssize_t _name##_show(struct kobject *kobj,		\
- 		struct kobj_attribute *attr, char *buf)		\
- {								\
--	return sprintf(buf, format_str, suspend_stats._name);	\
-+	return sysfs_emit(buf, format_str, suspend_stats._name);\
- }								\
- static struct kobj_attribute _name = __ATTR_RO(_name)
- 
-@@ -404,7 +404,7 @@ suspend_attr(max_hw_sleep, "%llu\n");
- static ssize_t _name##_show(struct kobject *kobj,		\
- 		struct kobj_attribute *attr, char *buf)		\
- {								\
--	return sprintf(buf, "%u\n",				\
-+	return sysfs_emit(buf, "%u\n",				\
- 		       suspend_stats.step_failures[step-1]);	\
- }								\
- static struct kobj_attribute _name = __ATTR_RO(_name)
-@@ -428,7 +428,7 @@ static ssize_t last_failed_dev_show(struct kobject *kobj,
- 	index %= REC_FAILED_NUM;
- 	last_failed_dev = suspend_stats.failed_devs[index];
- 
--	return sprintf(buf, "%s\n", last_failed_dev);
-+	return sysfs_emit(buf, "%s\n", last_failed_dev);
- }
- static struct kobj_attribute last_failed_dev = __ATTR_RO(last_failed_dev);
- 
-@@ -442,7 +442,7 @@ static ssize_t last_failed_errno_show(struct kobject *kobj,
- 	index %= REC_FAILED_NUM;
- 	last_failed_errno = suspend_stats.errno[index];
- 
--	return sprintf(buf, "%d\n", last_failed_errno);
-+	return sysfs_emit(buf, "%d\n", last_failed_errno);
- }
- static struct kobj_attribute last_failed_errno = __ATTR_RO(last_failed_errno);
- 
-@@ -456,7 +456,7 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
- 	index %= REC_FAILED_NUM;
- 	step = suspend_stats.failed_steps[index];
- 
--	return sprintf(buf, "%s\n", suspend_step_names[step]);
-+	return sysfs_emit(buf, "%s\n", suspend_step_names[step]);
- }
- static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
- 
-@@ -571,7 +571,7 @@ bool pm_print_times_enabled;
- static ssize_t pm_print_times_show(struct kobject *kobj,
- 				   struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%d\n", pm_print_times_enabled);
-+	return sysfs_emit(buf, "%d\n", pm_print_times_enabled);
- }
- 
- static ssize_t pm_print_times_store(struct kobject *kobj,
-@@ -604,7 +604,7 @@ static ssize_t pm_wakeup_irq_show(struct kobject *kobj,
- 	if (!pm_wakeup_irq())
- 		return -ENODATA;
- 
--	return sprintf(buf, "%u\n", pm_wakeup_irq());
-+	return sysfs_emit(buf, "%u\n", pm_wakeup_irq());
- }
- 
- power_attr_ro(pm_wakeup_irq);
-@@ -620,7 +620,7 @@ EXPORT_SYMBOL_GPL(pm_debug_messages_should_print);
- static ssize_t pm_debug_messages_show(struct kobject *kobj,
- 				      struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%d\n", pm_debug_messages_on);
-+	return sysfs_emit(buf, "%d\n", pm_debug_messages_on);
- }
- 
- static ssize_t pm_debug_messages_store(struct kobject *kobj,
-@@ -668,21 +668,23 @@ struct kobject *power_kobj;
- static ssize_t state_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			  char *buf)
- {
--	char *s = buf;
-+	ssize_t count = 0;
- #ifdef CONFIG_SUSPEND
- 	suspend_state_t i;
- 
- 	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++)
- 		if (pm_states[i])
--			s += sprintf(s,"%s ", pm_states[i]);
-+			count += sysfs_emit_at(buf, count, "%s ", pm_states[i]);
- 
- #endif
- 	if (hibernation_available())
--		s += sprintf(s, "disk ");
--	if (s != buf)
--		/* convert the last space to a newline */
--		*(s-1) = '\n';
--	return (s - buf);
-+		count += sysfs_emit_at(buf, count, "disk ");
-+
-+	/* Convert the last space to a newline if needed. */
-+	if (count > 0)
-+		buf[count - 1] = '\n';
-+
-+	return count;
- }
- 
- static suspend_state_t decode_state(const char *buf, size_t n)
-@@ -782,7 +784,7 @@ static ssize_t wakeup_count_show(struct kobject *kobj,
- 	unsigned int val;
- 
- 	return pm_get_wakeup_count(&val, true) ?
--		sprintf(buf, "%u\n", val) : -EINTR;
-+		sysfs_emit(buf, "%u\n", val) : -EINTR;
- }
- 
- static ssize_t wakeup_count_store(struct kobject *kobj,
-@@ -824,17 +826,17 @@ static ssize_t autosleep_show(struct kobject *kobj,
- 	suspend_state_t state = pm_autosleep_state();
- 
- 	if (state == PM_SUSPEND_ON)
--		return sprintf(buf, "off\n");
-+		return sysfs_emit(buf, "off\n");
- 
- #ifdef CONFIG_SUSPEND
- 	if (state < PM_SUSPEND_MAX)
--		return sprintf(buf, "%s\n", pm_states[state] ?
-+		return sysfs_emit(buf, "%s\n", pm_states[state] ?
- 					pm_states[state] : "error");
- #endif
- #ifdef CONFIG_HIBERNATION
--	return sprintf(buf, "disk\n");
-+	return sysfs_emit(buf, "disk\n");
- #else
--	return sprintf(buf, "error");
-+	return sysfs_emit(buf, "error\n");
- #endif
- }
- 
-@@ -903,7 +905,7 @@ int pm_trace_enabled;
- static ssize_t pm_trace_show(struct kobject *kobj, struct kobj_attribute *attr,
- 			     char *buf)
- {
--	return sprintf(buf, "%d\n", pm_trace_enabled);
-+	return sysfs_emit(buf, "%d\n", pm_trace_enabled);
- }
- 
- static ssize_t
-@@ -940,7 +942,7 @@ power_attr_ro(pm_trace_dev_match);
- static ssize_t pm_freeze_timeout_show(struct kobject *kobj,
- 				      struct kobj_attribute *attr, char *buf)
- {
--	return sprintf(buf, "%u\n", freeze_timeout_msecs);
-+	return sysfs_emit(buf, "%u\n", freeze_timeout_msecs);
- }
- 
- static ssize_t pm_freeze_timeout_store(struct kobject *kobj,
+Changes in v2:
+- remove DISP related paths
+- make compatible and data of of_device_id in one line
+- add clock patch series dependence
+- redo dt_binding_check
+
+previous discussion here:
+[1] https://lore.kernel.org/linux-arm-msm/20230915020129.19611-1-quic_tengfan@quicinc.com/
+[2] https://lore.kernel.org/linux-arm-msm/20230908064427.26999-1-quic_tengfan@quicinc.com/
+
+---
+Tengfei Fan (3):
+      dt-bindings: interconnect: Add Qualcomm SM4450
+      interconnect: qcom: Add SM4450 interconnect provider driver
+      arm64: defconfig: Enable interconnect for SM4450
+
+ .../bindings/interconnect/qcom,sm4450-rpmh.yaml    |  133 ++
+ arch/arm64/configs/defconfig                       |    1 +
+ drivers/interconnect/qcom/Kconfig                  |    9 +
+ drivers/interconnect/qcom/Makefile                 |    2 +
+ drivers/interconnect/qcom/sm4450.c                 | 1723 ++++++++++++++++++++
+ drivers/interconnect/qcom/sm4450.h                 |  152 ++
+ include/dt-bindings/interconnect/qcom,sm4450.h     |  163 ++
+ 7 files changed, 2183 insertions(+)
+---
+base-commit: 048d8cb65cde9fe7534eb4440bcfddcf406bb49c
+change-id: 20240801-sm4450_interconnect-f794f0d70655
+
+Best regards,
 -- 
-2.25.1
+Tengfei Fan <quic_tengfan@quicinc.com>
 
 
