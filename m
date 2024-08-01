@@ -1,127 +1,213 @@
-Return-Path: <linux-pm+bounces-11816-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11817-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3881945378
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 21:42:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DD8794541C
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 23:24:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 789A21F22950
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 19:42:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53251286198
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 21:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 690A314A0AA;
-	Thu,  1 Aug 2024 19:42:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0009114AD29;
+	Thu,  1 Aug 2024 21:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W0I9y6ay"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E0OFA/Ym"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747FE1422D0;
-	Thu,  1 Aug 2024 19:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254FA1494DD
+	for <linux-pm@vger.kernel.org>; Thu,  1 Aug 2024 21:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722541347; cv=none; b=QVKlCwEVKCql7+8a5z23bRADUvsGyKpjHGP4emlXMMPJfubH4thvee302VgMuAUkMA/Jr7+ahc0D/uTxd/5hKsl6WimySLIY+Crux0rDxD1nnBOL8xxy1tHxvDooS58iAytnGv8PfN8ExTgo72cs/Xl8SBFYwibWe896Ed7/nms=
+	t=1722547468; cv=none; b=I0xCIMUPjs/s7AK2lpcGfOQ3fcbcUciHuo6tfAQrwXm5k77ZUBU/JSjUNx4TnyuKZEMaVM5rSRygmLP7oVxM3kiQZoJ74B8QDRiyu74NAgOtH4BagpjoAEcGX8l6KLceJEDtfItui11fU5Kn7SjOufICkeKTJwOZKY1bGNT0lLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722541347; c=relaxed/simple;
-	bh=lvfv0gYAMYXDl4J8LANARZqbPTuzhHPJmdjQybAkBA4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EolfSJWSZxR2qT7G7eoqXn7jsTACQxJTnScV/ZAFX8UK3XHnJ/VlQSbUBFbl2+5NDft8oLgKb1ReGZr6puuzXXpDoo9rk67Ln0t8do0OG1aOia344bSIQ0r0DzDFIyD7rjTcT3Yp4dAOnWVUYyB4/Ndfscpxhr2oWgifpeJZh3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W0I9y6ay; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722541345; x=1754077345;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=lvfv0gYAMYXDl4J8LANARZqbPTuzhHPJmdjQybAkBA4=;
-  b=W0I9y6ayJiE/istCzaNWbvx+6eaVuKrV04paAuW55giBd3lCb5FswiBl
-   3OotlKevOr6WGCeu1azOa/kf5z1VvNDbv/EQar7vEeeC+SQUM0MDPy8kq
-   YYWLrCVeSQ3T3AaNWEAglnmGh/1AUK9semb5L9eUtWsWpmSgKJcqEjSLb
-   Ga/int5mM4ctxZC0+wqdKtfGYV59zOSETeIVb//FZzzgRP3IEamu1faK3
-   g5Zj8XGARvdkZUyM6V214KwNHGHu9EepZeitJ9nNWA1/W5VYztSsOdDqA
-   EhtxkGT4FOF2dQiOSbzusZKXSj1Dy//L4w+uyWG9U+jSvkAtbISzhT3+P
-   Q==;
-X-CSE-ConnectionGUID: MGe6n0/CTaygJvTU9tpKig==
-X-CSE-MsgGUID: B2JkNemaS2O8CLMCL4Gj1A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11151"; a="12838072"
-X-IronPort-AV: E=Sophos;i="6.09,255,1716274800"; 
-   d="scan'208";a="12838072"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 12:42:25 -0700
-X-CSE-ConnectionGUID: Qpx6A42VRyCk6SA14yLBMA==
-X-CSE-MsgGUID: JsSBxWNARnKdEsYeqUAAAw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,255,1716274800"; 
-   d="scan'208";a="55107940"
-Received: from unknown (HELO [10.124.223.52]) ([10.124.223.52])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 12:42:24 -0700
-Message-ID: <c15a8a105308262856ee14bab558d34df8bdf92a.camel@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Update Balance performance EPP
- for Emerald Rapids
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Pedro Henrique Kopper <pedro.kopper@canonical.com>, rafael@kernel.org, 
-	lenb@kernel.org, viresh.kumar@linaro.org
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 01 Aug 2024 12:42:21 -0700
-In-Reply-To: <Zqu6zjVMoiXwROBI@capivara>
-References: <Zqu6zjVMoiXwROBI@capivara>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.0-1build2 
+	s=arc-20240116; t=1722547468; c=relaxed/simple;
+	bh=xdtpeRge9Vfdbp5i8Q/XmAN/i3Pwj2D4vqQwJevSHV0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BGsxhhKneDkdjHj3RLtk5VDty9ru3TqnV2xJatU2oq4LBya/GhqXSB7x3YesOr7x0zQHBSLxfMiZjwakxgPRHFIGbJ0RiG/2rOvj5eFq4O/XgVrSfBD5ra247xup+54w2gJXw3Z3BWFnWr8ZphDZqgl8yRfXE2/+0ax2Hh+ssMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=E0OFA/Ym; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722547466;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wpsa6WqlLQ24gIkydnwFVlMjHjsVBUqic+yLt9q1x1g=;
+	b=E0OFA/Ymg0Fj374WIIzpPtvQVcsdpyVRbD5Tyw+div3ClEEamGVfqVIeFwT9jyjmKPGwrN
+	naYvIiH3ujEZzi7jBO95WbzzWIIBhwaMo9p4C36pR6VjLneCRpLxGi6MmMSPhNGjFzV4+H
+	X5p1Lr36RGNzKIVwKXBzUSa82F0JQfs=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-642-S-uiHIpGPU28baQoyVRuXw-1; Thu, 01 Aug 2024 17:24:24 -0400
+X-MC-Unique: S-uiHIpGPU28baQoyVRuXw-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7a34e9c8945so70531785a.2
+        for <linux-pm@vger.kernel.org>; Thu, 01 Aug 2024 14:24:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722547463; x=1723152263;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wpsa6WqlLQ24gIkydnwFVlMjHjsVBUqic+yLt9q1x1g=;
+        b=p37urNwrpejKpitt+ipunpUf50kueJ6Sq+LAyYcNvTP7iHsnnQ9Foac5fC6/7cnXIV
+         YKPXqPbOGUm+LmkJtRS6r0iV0HE2Na7qvph0PE58wy5nLl1Im6AN0M6zqOBwyrvPD/NX
+         BA5htxXldHWdCU5UsrF2QpoFe2au2gg/+lIkkkEdO/1RCUE8sJKVmqbvsmda31GqO/VB
+         /m6+x0a50dWOCXKFtQG9SdFcNZMI/eo+D+GQUe9tWTHRAThPxU90D0OnUYftY/19AQxP
+         YT6XDIzeVHRtkDVAotO6/Cikxu+18hyC8H8rEai5zebMXStuQRJr540k4wu6E9if1+JS
+         4liw==
+X-Gm-Message-State: AOJu0Yw7vfpaVqeJeie8RiWGhWoe9PgRq44bzfYgVvEOxMF9AxC/lxCA
+	ShbJG+FmElNFOEfCeX8cv2FHjVIrYYjaT06GKIlI/6awwBXxtQ2TnsS7DoO+orrY62mAAKkM8Ok
+	L9AfAHB0FQ6mvXtQK1S+Qq90syKF9fhzm36HBJOTrrbpPAIc0jYi4CZzQ
+X-Received: by 2002:a05:620a:470b:b0:79f:741:5d56 with SMTP id af79cd13be357-7a34eebf514mr189418785a.6.1722547463397;
+        Thu, 01 Aug 2024 14:24:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGLgxIKUl5hSuXWMg7RVBRx6acPxrsxiknMrKRHCXjMf9jYmXXtYzRDUbZg22fqVMPNEcdFqg==
+X-Received: by 2002:a05:620a:470b:b0:79f:741:5d56 with SMTP id af79cd13be357-7a34eebf514mr189414985a.6.1722547462948;
+        Thu, 01 Aug 2024 14:24:22 -0700 (PDT)
+Received: from hatbackup ([71.217.44.209])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a34f6d8024sm29397185a.10.2024.08.01.14.24.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Aug 2024 14:24:22 -0700 (PDT)
+Date: Thu, 1 Aug 2024 17:24:20 -0400
+From: "John B. Wyatt IV" <jwyatt@redhat.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-pm@vger.kernel.org, Thomas Renninger <trenn@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, John Kacur <jkacur@redhat.com>,
+	Tomas Glozar <tglozar@redhat.com>,
+	"John B. Wyatt IV" <sageofredondo@gmail.com>
+Subject: Re: [PATCH 0/2][RFC] Add SWIG Bindings to libcpupower
+Message-ID: <Zqv9BOjxLAgyNP5B@hatbackup>
+References: <20240724221122.54601-1-jwyatt@redhat.com>
+ <1f5c24b6-f3ee-4863-8b7a-49344a550206@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f5c24b6-f3ee-4863-8b7a-49344a550206@linuxfoundation.org>
 
-On Thu, 2024-08-01 at 13:41 -0300, Pedro Henrique Kopper wrote:
-> On Intel Emerald Rapids machines, we ship the Energy Performance
-> Preference
-> (EPP) default for balance_performance as 128. However, during an
-> internal
-> investigation together with Intel, we have determined that 32 is a
-> more
-> suitable value. This leads to significant improvements in both
-> performance
-> and energy:
->=20
-> POV-Ray: 32% faster | 12% less energy
-> OpenSSL: 12% faster | energy within 1%
-> Build Linux Kernel: 29% faster | 18% less energy
->=20
-> Therefore, we should move the default EPP for balance_performance to
-> 32.
-> This is in line with what has already been done for Sapphire Rapids.
->=20
-> Signed-off-by: Pedro Henrique Kopper <pedro.kopper@canonical.com>
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Addressing the licensing first:
 
-> ---
-> =C2=A0drivers/cpufreq/intel_pstate.c | 1 +
-> =C2=A01 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/cpufreq/intel_pstate.c
-> b/drivers/cpufreq/intel_pstate.c
-> index 392a8000b238..c0278d023cfc 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -3405,6 +3405,7 @@ static const struct x86_cpu_id
-> intel_epp_default[] =3D {
-> =C2=A0	 */
-> =C2=A0	X86_MATCH_VFM(INTEL_ALDERLAKE_L,
-> HWP_SET_DEF_BALANCE_PERF_EPP(102)),
-> =C2=A0	X86_MATCH_VFM(INTEL_SAPPHIRERAPIDS_X,
-> HWP_SET_DEF_BALANCE_PERF_EPP(32)),
-> +	X86_MATCH_VFM(INTEL_EMERALDRAPIDS_X,
-> HWP_SET_DEF_BALANCE_PERF_EPP(32)),
-> =C2=A0	X86_MATCH_VFM(INTEL_METEORLAKE_L,
-> HWP_SET_EPP_VALUES(HWP_EPP_POWERSAVE,
-> =C2=A0		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 179, 64, 16)),
-> =C2=A0	X86_MATCH_VFM(INTEL_ARROWLAKE,
-> HWP_SET_EPP_VALUES(HWP_EPP_POWERSAVE,
+> On Tue, Jul 30, 2024 at 02:48:41PM -0600, Shuah Khan wrote:
+> > On 7/24/24 16:11, John B. Wyatt IV wrote:
+> > Note that while SWIG itself is GPL v3+ licensed; the resulting output, the
+> > bindings code, is permissively licensed. Please see
+> > https://swig.org/legal.html for more details.
+> 
+> Adding Linus and Greg for their feedback and input on this proposal.
+> 
+> What does it mean by "the resulting output, the bindings code is
+> permissively licensed."
+> 
+> I would like to get a better understanding of the licensing angle
+> since this code adds dependency on SWIG which is GPL v3+ to build
+> the proposed python bindings.
+
+Copying and pasting from the link above:
+
+/begin
+
+The intention of the SWIG license is to ensure that the SWIG source code (the
+code that is compiled into the SWIG executable) remains free software by using
+the GPL license on the SWIG source code. SWIG is a code generator and
+the intention of the SWIG license is also to enable distribution of the output
+code under license terms of the user's choice/requirements. 
+
+[snip html license links]
+
+When SWIG is used as it is distributed by the SWIG developers, its output is
+not governed by SWIG's license (including the GPL). SWIG's output contains
+code from three sources:
+
+* code generated by SWIG, which is not governed by copyright;
+* code copied from the SWIG library which is permissively licensed to be
+redistributed without restriction;
+* code derived from the user's input, which may be governed by the license of 
+he code supplied by the user.
+
+So, while the input supplied to SWIG may affect the license of SWIG's output
+(e.g. if the input code is licensed under a copyleft or proprietary license),
+SWIG's license does not affect the license of the output. This is consistent
+with the FSF's FAQ entries on this subject (GPLOutput and 
+WhatCaseIsOutputGPL), because the SWIG code copied into the output by 
+SWIG is not GPL-licensed. 
+
+/end
+
+The output of SWIG depends on SWIG's library which is permissively
+licensed + the license of the .o files used, which is libcpupower, which is
+GPLv2 licensed. Therefore, any bindings generated from libcpupower is GPL v2.
+
+SWIG Library and Examples license:
+
+ The SWIG library and examples, under the Lib and Examples top level 
+ directories, are distributed under the following terms:
+
+  You may copy, modify, distribute, and make derivative works based on
+  this software, in source code or object code form, without
+  restriction. If you distribute the software to others, you may do
+  so according to the terms of your choice. This software is offered as
+  is, without warranty of any kind.
+
+The snipped license links link to the GPL v3, SWIG's declaration of the GPL 3 or
+a later version with the above permissive declaration for output, and a link
+to four university licenses that all look permissive.
+
+https://swig.org/Release/LICENSE-UNIVERSITIES
+
+The resulting generated code can be linked and distributed with GPL v2
+binaries. I am not a lawyer, but this is my understanding of what they
+declare on their website above.
+
+Please let me know if this clarifies this.
+
+>
+> On 7/24/24 16:11, John B. Wyatt IV wrote:
+> > SWIG is a tool packaged in Fedora and other distros that can generate
+> > bindings from C and C++ code for several languages including Python,
+> > Perl, and Go. We at Red Hat are interested in adding binding support to
+> > libcpupower so Python tools like rteval or tuned can make easy use of it.
+> > 
+> 
+> Can you elaborate on the use-case and what rteval currently does and
+> how it could benefit from using libcpupower with the bindings?
+
+rteval is a Python program used to measure realtime performance. We wanted to
+test the effect of enabling some levels of idle-stat to see how it affects
+latency, and didn't want to reinvent the wheel. We thought that the Python
+bindings could be useful to other people as well who might want to call
+cpupower too from Python. I did some testing and was able to achieve this with
+SWIG. We sent the patchset to see what folks thought about this.
+
+> 
+> > 
+> > Another question is do you want more test files like the .py example? Would
+> > this be used as part of a greater test suite?
+> 
+> I would like to see document outlining the dependencies and examples of how
+> this would be used. I see the README which says that
+> 
+> "Next you will need to install SWIG. Using Fedora:"
+> 
+> The document will have to include more than Fedora instructions. Instead
+> of a README I would like to see a document.
+
+Understood. I wanted to get an idea of how we would structure the makefile
+first.
+
+-- 
+Sincerely,
+John Wyatt
+Software Engineer, Core Kernel
+Red Hat
 
 
