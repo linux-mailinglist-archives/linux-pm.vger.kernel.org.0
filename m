@@ -1,63 +1,64 @@
-Return-Path: <linux-pm+bounces-11803-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11802-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3341944727
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 10:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8E0E944724
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 10:56:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 010BB1C244C1
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 08:56:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECA171C244F6
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2024 08:56:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D5C2170836;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E09516FF44;
 	Thu,  1 Aug 2024 08:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="c7DqWxRX"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="iyT+zvjb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B974503A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9836016F910;
 	Thu,  1 Aug 2024 08:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722502549; cv=none; b=h1LqiGuAfZcRBolb0/ZPDUHEvVBSmKtrjwTE01P2XKnbA7cRjNqlGQR8aynkTB2rVCO84MOgvXLdKHh45Qi35jPa5h4znYv5mFqzKxH9VHXTQv2CF7Mb0fMr/AtCgZpdOi5MtVcb48bt9u3IIzPFy5HKijPb2R9xwUVHpl3k/i8=
+	t=1722502549; cv=none; b=r+m1cS27x4NzpAgiDKicnfnkStY4UB+X7hDP6tkaxppwLbkWgwXLxH6RV3v5LA/FzjTe1auyTKJomhYinkp7t78II4aexZ2JJY415aNenln8vxZkwXJrooXDa2+RMCjaP6/pJIysAzvOfefZcX+cprcVzFY/TWC5EfctnbCTXDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1722502549; c=relaxed/simple;
-	bh=PLUfEgox7CtnZQfwF9dblYIhmu0YYHyX4i6/vkfHk5o=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=R8UG04TPJrpLdjeSNbGZ3/XsgkeTbUExCHxOE3aidvJvmtIYZ7wsdg9kbHqBf0wckWVj3b+Iy1umWs0o4w0uERlXrdA7JkQim/DKaXUSkUhe/ZvTJevRmIfbGXoxtx1T2aVAMXNT7OeGO02xxx4EKDE13ETCo1SoLMPaDSYbIOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=c7DqWxRX; arc=none smtp.client-ip=205.220.180.131
+	bh=3pUTHaOizx0Oh7yQhnU+2M6eahFsB0zECmgumnezzpc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=KF1k8Pg9PWmkYpLGI4+CGVo+9TSA5bkuUJ59e9+ix/qh9fzwxefh2Du1yvmLW/FvQYure6sGY4kVbiU49Ln32KVZyvmrj0Mtvz/CBJ8dKR9FFH4q6sx/Tt0Lf+RMVDZEiV9nCi+ZFivG8eP44mU9h/MHk61GtTDdS31oYnV0zu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=iyT+zvjb; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4717caAg012068;
-	Thu, 1 Aug 2024 08:55:30 GMT
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4710hlGA010679;
+	Thu, 1 Aug 2024 08:55:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=lCFv9W/1yqPkptOdArl+Xr
-	DedHPQMb/w80hiU9HehYc=; b=c7DqWxRX8sA4Gv4h2b0I4/vc3laNIZnx7YsFgk
-	jUwQFEmDwIXiKlQcPTdWMbpQS1tYWYw5UtvaIDqat2HL8MFKIY1m3IelRYVx2x4m
-	Wc6E1G5Z6VWKkpX46GNFRjz1rrHvlkzfBYlQAmMEyOfeiqkcpaBnIb390TUXzZC/
-	BGIX0i9es7IWYOi4UFcXE2qJ+UFNa7i/2qA8GWdzp3KJnOG6Uo03a8e51xH0MwOi
-	b154OzkbqWiKyFtqpglfn4LUXjC2wEnTeIGgOGd7GxaSwAg2JPB2Kx6I2FTI54p0
-	BW6SXe+mHRU2/wJ3TYjuDAf47ZcD4brZWx/dzzUSZhX971hg==
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	d8InF542taoivIB/4Jvq/zDDR9hGZKNLhGV37C3jAzc=; b=iyT+zvjb4C4U+KSZ
+	HOnq3RNMHkTCJARAjFYQhneQFZDrhcI1JSFfsPDkQzgYvimrNdPF8qwpxLuJAo+9
+	8IkTtQ402Rz0FybhK0RVi7HT1TpL0RCknxo0vzw8XMxflML72fPn5hLSQr0dBI7I
+	ptQPiREAxA1r/sQ0Y9cKQi2z9CYiws/LoDA81ri9vuIO4KLrpLUU8NC+KqDFNzqA
+	T17tLt4dpzDvepEr57mf/Tb6/au/Jl+nF9aFfQMtvN2xlSz9p4gnnOqxyRRpETFN
+	OiC8IiHxmgNFjZFt1KR2YDs0e1Zz2gWEupD7SbWan/sraEdgI64uftza36D6JlQC
+	qcCcJA==
 Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40qugahysx-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40qnbab8yh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 01 Aug 2024 08:55:30 +0000 (GMT)
+	Thu, 01 Aug 2024 08:55:28 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4718tB8n003144
+	by NALASPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4718tE6C003177
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 1 Aug 2024 08:55:11 GMT
+	Thu, 1 Aug 2024 08:55:14 GMT
 Received: from tengfan-gv.ap.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 1 Aug 2024 01:55:05 -0700
+ 15.2.1544.9; Thu, 1 Aug 2024 01:55:08 -0700
 From: Tengfei Fan <quic_tengfan@quicinc.com>
-Subject: [PATCH v3 0/3] interconnect: qcom: Add SM4450 interconnect
-Date: Thu, 1 Aug 2024 16:54:35 +0800
-Message-ID: <20240801-sm4450_interconnect-v3-0-8e364d0faa99@quicinc.com>
+Date: Thu, 1 Aug 2024 16:54:36 +0800
+Subject: [PATCH v3 1/3] dt-bindings: interconnect: Add Qualcomm SM4450
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,10 +67,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAExNq2YC/32NQQ6DIBQFr2JYF/NBwNJV79E0xiDoX4gtUNPGe
- PeCq666nJfMvI1EG9BGcqk2EuyKERefoTlVxEy9Hy3FITPhwAWcgdE4CyGhQ59sMIv31iTqWi0
- cDC0oKUk2H8E6fB/V2z3zhDEt4XOcrKyspdeAzkUlBG9rrrTWlNHnC02XrB9d768F0JvaLDMpm
- ZX/qEwCB8Z1zbRi7K+67/sXCy+ZDegAAAA=
+Message-ID: <20240801-sm4450_interconnect-v3-1-8e364d0faa99@quicinc.com>
+References: <20240801-sm4450_interconnect-v3-0-8e364d0faa99@quicinc.com>
+In-Reply-To: <20240801-sm4450_interconnect-v3-0-8e364d0faa99@quicinc.com>
 To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
@@ -80,67 +80,347 @@ CC: <kernel@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         Tengfei Fan <quic_tengfan@quicinc.com>
 X-Mailer: b4 0.15-dev-a66ce
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722502505; l=1520;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722502505; l=9129;
  i=quic_tengfan@quicinc.com; s=20240709; h=from:subject:message-id;
- bh=PLUfEgox7CtnZQfwF9dblYIhmu0YYHyX4i6/vkfHk5o=;
- b=VWdFqX4Ksr3WAAfzNWgRbi+/MElAuhobA1LwdCgC+OC5JQOk3S6WF/abT0p2xGD5TMQtB8YfE
- iSr/1XsrptcAqMkMJBdoNBMqxrgCPa5eJBhKthAlSdCBqc6DpE9H5nY
+ bh=3pUTHaOizx0Oh7yQhnU+2M6eahFsB0zECmgumnezzpc=;
+ b=JmDLLy+KF0+x4OxHKVwFWNJzMRZ2Ueid8dk3/cV5SvE6PPuugTVx0HhqQUPar/0QeTbxI56vw
+ IPA4F8bID0tDk/VX9j+08AuPQPFZ7oGnOGketefp4mbyV9NBzuINhkt
 X-Developer-Key: i=quic_tengfan@quicinc.com; a=ed25519;
  pk=4VjoTogHXJhZUM9XlxbCAcZ4zmrLeuep4dfOeKqQD0c=
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: EZ2P_gBkMqeZ_nXS_qEpbLs5zIYTkAjE
-X-Proofpoint-ORIG-GUID: EZ2P_gBkMqeZ_nXS_qEpbLs5zIYTkAjE
+X-Proofpoint-ORIG-GUID: f47_1VsNkEgddrVkv5JrWH4r0rpTsls8
+X-Proofpoint-GUID: f47_1VsNkEgddrVkv5JrWH4r0rpTsls8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-08-01_06,2024-07-31_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
- impostorscore=0 mlxscore=0 spamscore=0 malwarescore=0 phishscore=0
- mlxlogscore=709 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2407110000 definitions=main-2408010054
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 lowpriorityscore=0 mlxlogscore=999 phishscore=0 mlxscore=0
+ impostorscore=0 clxscore=1015 suspectscore=0 adultscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408010054
 
-Add SM4450 interconnect provider driver and enable it.
+The Qualcomm SM4450 SoC has several bus fabrics that could be controlled
+and tuned dynamically according to the bandwidth demand.
 
 Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
 ---
-Changes in v3:
-- add enable CONFIG_INTERCONNECT_QCOM_SM4450 defconfig patch.
-- remove all _disp related paths in sm4450.c
-- fix patch check issue
+ .../bindings/interconnect/qcom,sm4450-rpmh.yaml    | 133 +++++++++++++++++
+ include/dt-bindings/interconnect/qcom,sm4450.h     | 163 +++++++++++++++++++++
+ 2 files changed, 296 insertions(+)
 
-Changes in v2:
-- remove DISP related paths
-- make compatible and data of of_device_id in one line
-- add clock patch series dependence
-- redo dt_binding_check
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm4450-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm4450-rpmh.yaml
+new file mode 100644
+index 000000000000..afbef5124e06
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interconnect/qcom,sm4450-rpmh.yaml
+@@ -0,0 +1,133 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interconnect/qcom,sm4450-rpmh.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm RPMh Network-On-Chip Interconnect on SM4450
++
++maintainers:
++  - Tengfei Fan <quic_tengfan@quicinc.com>
++
++description: |
++  RPMh interconnect providers support system bandwidth requirements through
++  RPMh hardware accelerators known as Bus Clock Manager (BCM).
++
++  See also:: include/dt-bindings/interconnect/qcom,sm4450.h
++
++properties:
++  compatible:
++    enum:
++      - qcom,sm4450-aggre1-noc
++      - qcom,sm4450-aggre2-noc
++      - qcom,sm4450-clk-virt
++      - qcom,sm4450-cnoc2
++      - qcom,sm4450-cnoc3
++      - qcom,sm4450-gem-noc
++      - qcom,sm4450-lpass-ag-noc
++      - qcom,sm4450-mc-virt
++      - qcom,sm4450-mmss-noc
++      - qcom,sm4450-pcie-anoc
++      - qcom,sm4450-system-noc
++      - qcom,sm4450-video-aggre-noc
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++    maxItems: 4
++
++required:
++  - compatible
++
++allOf:
++  - $ref: qcom,rpmh-common.yaml#
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,sm4450-clk-virt
++              - qcom,sm4450-mc-virt
++    then:
++      properties:
++        reg: false
++    else:
++      required:
++        - reg
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,sm4450-pcie-anoc
++    then:
++      properties:
++        clocks:
++          items:
++            - description: aggre-NOC PCIe 0 AXI clock
++            - description: cfg-NOC PCIe a-NOC AHB clock
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,sm4450-aggre1-noc
++    then:
++      properties:
++        clocks:
++          items:
++            - description: aggre USB3 PRIM AXI clock
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,sm4450-aggre2-noc
++    then:
++      properties:
++        clocks:
++          items:
++            - description: RPMH CC IPA clock
++            - description: aggre-NOC USB3 AXI clock
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,sm4450-aggre1-noc
++              - qcom,sm4450-aggre2-noc
++              - qcom,sm4450-pcie-anoc
++    then:
++      required:
++        - clocks
++    else:
++      properties:
++        clocks: false
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,sm4450-gcc.h>
++    #include <dt-bindings/clock/qcom,rpmh.h>
++
++    interconnect-0 {
++        compatible = "qcom,sm4450-clk-virt";
++        #interconnect-cells = <2>;
++        qcom,bcm-voters = <&apps_bcm_voter>;
++    };
++
++    interconnect@1700000 {
++        compatible = "qcom,sm4450-aggre2-noc";
++        reg = <0x01700000 0x31080>;
++        #interconnect-cells = <2>;
++        qcom,bcm-voters = <&apps_bcm_voter>;
++        clocks = <&rpmhcc RPMH_IPA_CLK>,
++                 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
++    };
+diff --git a/include/dt-bindings/interconnect/qcom,sm4450.h b/include/dt-bindings/interconnect/qcom,sm4450.h
+new file mode 100644
+index 000000000000..0aa8fb65f429
+--- /dev/null
++++ b/include/dt-bindings/interconnect/qcom,sm4450.h
+@@ -0,0 +1,163 @@
++/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
++/*
++ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_SM4450_H
++#define __DT_BINDINGS_INTERCONNECT_QCOM_SM4450_H
++
++#define MASTER_QUP_0				0
++#define MASTER_A1NOC_CFG			1
++#define MASTER_SDCC_2				2
++#define SLAVE_A1NOC_SNOC			3
++#define SLAVE_SERVICE_A1NOC			4
++
++#define MASTER_QDSS_BAM				0
++#define MASTER_QUP_1				1
++#define MASTER_A2NOC_CFG			2
++#define MASTER_CNOC_A2NOC			3
++#define MASTER_CRYPTO				4
++#define MASTER_IPA				5
++#define MASTER_WLAN				6
++#define MASTER_QDSS_ETR				7
++#define MASTER_QDSS_ETR_1			8
++#define MASTER_SDCC_1				9
++#define MASTER_UFS_MEM				10
++#define MASTER_USB3_0				11
++#define SLAVE_A2NOC_SNOC			12
++#define SLAVE_SERVICE_A2NOC			13
++
++#define MASTER_QUP_CORE_0			0
++#define MASTER_QUP_CORE_1			1
++#define SLAVE_QUP_CORE_0			2
++#define SLAVE_QUP_CORE_1			3
++
++#define MASTER_CNOC3_CNOC2			0
++#define MASTER_QDSS_DAP				1
++#define SLAVE_AHB2PHY_SOUTH			2
++#define SLAVE_AHB2PHY_NORTH			3
++#define SLAVE_ANOC_THROTTLE_CFG			4
++#define SLAVE_CAMERA_CFG			5
++#define SLAVE_CLK_CTL				6
++#define SLAVE_RBCPR_CX_CFG			7
++#define SLAVE_RBCPR_MX_CFG			8
++#define SLAVE_CRYPTO_0_CFG			9
++#define SLAVE_CX_RDPM				10
++#define SLAVE_DISPLAY_CFG			11
++#define SLAVE_GFX3D_CFG				12
++#define SLAVE_IMEM_CFG				13
++#define SLAVE_IPA_CFG				14
++#define SLAVE_IPC_ROUTER_CFG			15
++#define SLAVE_LPASS				16
++#define SLAVE_CNOC_MSS				17
++#define SLAVE_MX_RDPM				18
++#define SLAVE_PCIE_0_CFG			19
++#define SLAVE_PDM				20
++#define SLAVE_PIMEM_CFG				21
++#define SLAVE_PMU_WRAPPER_CFG			22
++#define SLAVE_PRNG				23
++#define SLAVE_QUP_0				24
++#define SLAVE_QUP_1				25
++#define SLAVE_SDC1				26
++#define SLAVE_SDCC_2				27
++#define SLAVE_TCSR				28
++#define SLAVE_TLMM				29
++#define SLAVE_UFS_MEM_CFG			30
++#define SLAVE_USB3_0				31
++#define SLAVE_VENUS_CFG				32
++#define SLAVE_VSENSE_CTRL_CFG			33
++#define SLAVE_A1NOC_CFG				34
++#define SLAVE_A2NOC_CFG				35
++#define SLAVE_CNOC2_CNOC3			36
++#define SLAVE_CNOC_MNOC_CFG			37
++#define SLAVE_PCIE_ANOC_CFG			38
++#define SLAVE_SNOC_CFG				39
++#define SLAVE_VIDEO_ANOC_CFG			40
++
++#define MASTER_CNOC2_CNOC3			0
++#define MASTER_GEM_NOC_CNOC			1
++#define MASTER_GEM_NOC_PCIE_SNOC		2
++#define SLAVE_AOSS				3
++#define SLAVE_APPSS				4
++#define SLAVE_QDSS_CFG				5
++#define SLAVE_TME_CFG				6
++#define SLAVE_WLAN				7
++#define SLAVE_CNOC3_CNOC2			8
++#define SLAVE_CNOC_A2NOC			9
++#define SLAVE_BOOT_IMEM				10
++#define SLAVE_IMEM				11
++#define SLAVE_PIMEM				12
++#define SLAVE_PCIE_0				13
++#define SLAVE_QDSS_STM				14
++#define SLAVE_TCU				15
++
++#define MASTER_GPU_TCU				0
++#define MASTER_SYS_TCU				1
++#define MASTER_APPSS_PROC			2
++#define MASTER_GFX3D				3
++#define MASTER_MSS_PROC				4
++#define MASTER_MNOC_HF_MEM_NOC			5
++#define MASTER_MNOC_SF_MEM_NOC			6
++#define MASTER_ANOC_PCIE_GEM_NOC		7
++#define MASTER_SNOC_GC_MEM_NOC			8
++#define MASTER_SNOC_SF_MEM_NOC			9
++#define MASTER_WLAN_Q6				10
++#define SLAVE_GEM_NOC_CNOC			11
++#define SLAVE_LLCC				12
++#define SLAVE_MEM_NOC_PCIE_SNOC			13
++#define MASTER_MNOC_HF_MEM_NOC_DISP		14
++#define MASTER_ANOC_PCIE_GEM_NOC_DISP		15
++#define SLAVE_LLCC_DISP				16
++
++#define MASTER_CNOC_LPASS_AG_NOC		0
++#define MASTER_LPASS_PROC			1
++#define SLAVE_LPASS_CORE_CFG			2
++#define SLAVE_LPASS_LPI_CFG			3
++#define SLAVE_LPASS_MPU_CFG			4
++#define SLAVE_LPASS_TOP_CFG			5
++#define SLAVE_LPASS_SNOC			6
++#define SLAVE_SERVICES_LPASS_AML_NOC		7
++#define SLAVE_SERVICE_LPASS_AG_NOC		8
++
++#define MASTER_LLCC				0
++#define SLAVE_EBI1				1
++#define MASTER_LLCC_DISP			2
++#define SLAVE_EBI1_DISP				3
++
++#define MASTER_CAMNOC_HF			0
++#define MASTER_CAMNOC_ICP			1
++#define MASTER_CAMNOC_SF			2
++#define MASTER_MDP				3
++#define MASTER_CNOC_MNOC_CFG			4
++#define MASTER_VIDEO_P0_MMNOC			5
++#define MASTER_VIDEO_PROC_MMNOC			6
++#define SLAVE_MNOC_HF_MEM_NOC			7
++#define SLAVE_MNOC_SF_MEM_NOC			8
++#define SLAVE_SERVICE_MNOC			9
++#define MASTER_MDP_DISP				10
++#define SLAVE_MNOC_HF_MEM_NOC_DISP		11
++
++#define MASTER_PCIE_ANOC_CFG			0
++#define MASTER_PCIE_0				1
++#define SLAVE_ANOC_PCIE_GEM_NOC			2
++#define SLAVE_SERVICE_PCIE_ANOC			3
++
++#define MASTER_GIC_AHB				0
++#define MASTER_A1NOC_SNOC			1
++#define MASTER_A2NOC_SNOC			2
++#define MASTER_LPASS_ANOC			3
++#define MASTER_SNOC_CFG				4
++#define MASTER_PIMEM				5
++#define MASTER_GIC				6
++#define SLAVE_SNOC_GEM_NOC_GC			7
++#define SLAVE_SNOC_GEM_NOC_SF			8
++#define SLAVE_SERVICE_SNOC			9
++
++#define MASTER_VIDEO_ANOC_CFG			0
++#define MASTER_VIDEO_P0				1
++#define MASTER_VIDEO_PROC			2
++#define SLAVE_VIDEO_0_ANOC_MMNOC		3
++#define SLAVE_VIDEO_1_ANOC_MMNOC		4
++#define SLAVE_SERVICE_SRVC_VIDEO_ANOC		5
++
++#endif
 
-previous discussion here:
-[1] https://lore.kernel.org/linux-arm-msm/20230915020129.19611-1-quic_tengfan@quicinc.com/
-[2] https://lore.kernel.org/linux-arm-msm/20230908064427.26999-1-quic_tengfan@quicinc.com/
-
----
-Tengfei Fan (3):
-      dt-bindings: interconnect: Add Qualcomm SM4450
-      interconnect: qcom: Add SM4450 interconnect provider driver
-      arm64: defconfig: Enable interconnect for SM4450
-
- .../bindings/interconnect/qcom,sm4450-rpmh.yaml    |  133 ++
- arch/arm64/configs/defconfig                       |    1 +
- drivers/interconnect/qcom/Kconfig                  |    9 +
- drivers/interconnect/qcom/Makefile                 |    2 +
- drivers/interconnect/qcom/sm4450.c                 | 1723 ++++++++++++++++++++
- drivers/interconnect/qcom/sm4450.h                 |  152 ++
- include/dt-bindings/interconnect/qcom,sm4450.h     |  163 ++
- 7 files changed, 2183 insertions(+)
----
-base-commit: 048d8cb65cde9fe7534eb4440bcfddcf406bb49c
-change-id: 20240801-sm4450_interconnect-f794f0d70655
-
-Best regards,
 -- 
-Tengfei Fan <quic_tengfan@quicinc.com>
+2.25.1
 
 
