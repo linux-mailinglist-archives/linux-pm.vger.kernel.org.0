@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-11820-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11821-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0253294588A
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 09:22:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5900994588E
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 09:22:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FF831F23179
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 07:22:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F44E1F241A7
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 07:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF931BE86C;
-	Fri,  2 Aug 2024 07:22:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8203C1BE87E;
+	Fri,  2 Aug 2024 07:22:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HrzheSp7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxWaTZJx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB38C33991;
-	Fri,  2 Aug 2024 07:22:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5C8481AA;
+	Fri,  2 Aug 2024 07:22:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722583327; cv=none; b=OOXhi25Dvoxjc1e9szYsCfehJ/Af0aGtiuqCjloiSQZCB6lv/XWNiMegoOzzH5H/jJa9FJnC6nd+nO6EfPZaMhq1rQcE/hI/Ra0/p9fpedxYwzPUh0GgF70/YzVdDhN8h3X1O+8LBkc1WASTSc/m15AYB8vetD+RgloaJmXdiF4=
+	t=1722583336; cv=none; b=CEfSZYUtuCBS1CkX3XRGd2QhcRDrmZxe7IjiE9vDEDzI7n1r6A8V9IcL1l0b7hBgy+go5d/zFCXayVYGjoAGiu0O+gv1B2SsD7AEtCl5tsqXHMC0iylOSWGUFK41f/i8IbOTvOIlmV/rNRmhcjY2Iag/EI70pkmA2DBOCOvTnlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722583327; c=relaxed/simple;
-	bh=aq2e9hMWzklb3HWXGpFHwyD5+68vdhtZ55+IM5p4ZUk=;
+	s=arc-20240116; t=1722583336; c=relaxed/simple;
+	bh=eBqw49UcPYPhf7AEOvF+AlnHBTQLYKg8/l4No1WFkqg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GmK1oq5HDrJeT4gxfHBKcjNLyzf5RHdoaBlamIcb4SqNiabk8AebEex8O3NtGcd93Puyki3vqfIyxKwWE7NBiyJf13km3zukntHDjbNd745+BJXNb5MV5KIEVvV1prhTLoOIORMUas5gayIpIab7gjemub8aZoCYurnmpXXenJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HrzheSp7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 936BFC32782;
-	Fri,  2 Aug 2024 07:22:02 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=fh0Hi10x7eqN+LMGHNR4YPGYXnCKfZNiMSjDISksy92mYIvXH9bd8MTYp8u1qbhsuuXnG9qmpHt4XYE4wZgCjMp5CjJsb3xIv+R013eFGyel4GGM7RZBcdN7TWMcRUdK/uJkeHtsgjvEihNgHZKqsIbhIe8MvYwyLvWQi9zlBzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxWaTZJx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E142BC32782;
+	Fri,  2 Aug 2024 07:22:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722583327;
-	bh=aq2e9hMWzklb3HWXGpFHwyD5+68vdhtZ55+IM5p4ZUk=;
+	s=k20201202; t=1722583336;
+	bh=eBqw49UcPYPhf7AEOvF+AlnHBTQLYKg8/l4No1WFkqg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HrzheSp7VfbxIvAbxUCOvGL177ERdkcytetl77liWVdIgHCwaBCpJjtM8HHJoZX/a
-	 w3PHPYUrxVDgnaJ73+UDvjxJtYFgzWXjcqM9zJiWaBKGDfL458lO8uJMikgIdYGc3I
-	 Hsud28EO5tNzQUTHq5v6cMwu+THHWRfHJ8oXO6v7v/twGV2uHP9KEbgz5ORw9pDoUZ
-	 W2AWlT/QE2csmJ84zIVbj1TpWcTV75kOmaaDdm+6T3ymnBIani7X3sr0hC5hDJrqwy
-	 ONNpaYPZB3TZCQMIbXfnUKL9uN6pKsyVqo/VyauS9oSsghP9S5hjM2lncVSJrO+hIk
-	 YvsfY6ExLFKpg==
-Message-ID: <e95c0938-3af3-4ec5-bf23-270ab8823e5e@kernel.org>
-Date: Fri, 2 Aug 2024 09:22:00 +0200
+	b=YxWaTZJx4sAEpAlVt70i1fPTwngQJ8Mm2lDnlzaUywO26X6HkptSZYKOo8P7izJQg
+	 wXVyd4oSh3vYGDzIgeh38/G0+AG1Af2exdxEYKIIO5WcGuRTlhZaQT3+Bu8QYHRHb5
+	 B9T1UFLuTak83wISZWNYS/YaUH7aUjeuI/4iCf16QDT4o9Ses55rSdwaB61Ps5sQo+
+	 njUPYPquagmzJZ8gLKQOyakLp8fgsTyd2ZS4gzgYn5/5zyMKm+t9Fmjhq/NczkxyyP
+	 DltSM5OX5vEpnpGozsDJ8Fmj+T1Ke3EOSPjFk1xgvTGHqY2UnjXPFIRKMnQBUu26v6
+	 MNVCkrzBlDYIg==
+Message-ID: <20f5fa43-280d-4fde-a36f-c66b1f474f7e@kernel.org>
+Date: Fri, 2 Aug 2024 09:22:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/3] interconnect: qcom: Add SM4450 interconnect
+Subject: Re: [PATCH v3 1/3] dt-bindings: interconnect: Add Qualcomm SM4450
 To: Tengfei Fan <quic_tengfan@quicinc.com>, Georgi Djakov
  <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -60,6 +60,7 @@ Cc: kernel@quicinc.com, linux-arm-msm@vger.kernel.org,
  linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20240801-sm4450_interconnect-v3-0-8e364d0faa99@quicinc.com>
+ <20240801-sm4450_interconnect-v3-1-8e364d0faa99@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,27 +106,40 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240801-sm4450_interconnect-v3-0-8e364d0faa99@quicinc.com>
+In-Reply-To: <20240801-sm4450_interconnect-v3-1-8e364d0faa99@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 01/08/2024 10:54, Tengfei Fan wrote:
-> Add SM4450 interconnect provider driver and enable it.
+> The Qualcomm SM4450 SoC has several bus fabrics that could be controlled
+> and tuned dynamically according to the bandwidth demand.
 > 
 > Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
 > ---
-> Changes in v3:
-> - add enable CONFIG_INTERCONNECT_QCOM_SM4450 defconfig patch.
-> - remove all _disp related paths in sm4450.c
-> - fix patch check issue
+>  .../bindings/interconnect/qcom,sm4450-rpmh.yaml    | 133 +++++++++++++++++
+>  include/dt-bindings/interconnect/qcom,sm4450.h     | 163 +++++++++++++++++++++
+>  2 files changed, 296 insertions(+)
 > 
-> Changes in v2:
-> - remove DISP related paths
-> - make compatible and data of of_device_id in one line
-> - add clock patch series dependence
-> - redo dt_binding_check
 
-? Running make is not a change.
+If there were no changes, why skipping my tag?
+
+<form letter>
+This is a friendly reminder during the review process.
+
+It looks like you received a tag and forgot to add it.
+
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tag is "received", when
+provided in a message replied to you on the mailing list. Tools like b4
+can help here. However, there's no need to repost patches *only* to add
+the tags. The upstream maintainer will do that for tags received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+
+If a tag was not added on purpose, please state why and what changed.
+</form letter>
 
 Best regards,
 Krzysztof
