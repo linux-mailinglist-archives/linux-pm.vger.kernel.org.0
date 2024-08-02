@@ -1,165 +1,79 @@
-Return-Path: <linux-pm+bounces-11865-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11866-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFEC19463DF
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 21:24:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F003F9464F6
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 23:21:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67255282C89
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 19:23:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92FEDB21D90
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 21:21:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F63C175D48;
-	Fri,  2 Aug 2024 19:23:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A14E754660;
+	Fri,  2 Aug 2024 21:21:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MFICEZWi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tsjpr+GU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0204216BE17;
-	Fri,  2 Aug 2024 19:23:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F3349634;
+	Fri,  2 Aug 2024 21:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722626585; cv=none; b=m7l+yflIHFhqnvd4CcXHeJfOACW5Ri+YpduYdhTJHYrKQR70M90zcK1LQHL6JSza+meQcGj4idHPlfv7dWc1jWuYt4kldoCl97GCyWynkcuN04jjO6q18RAn+4Bm0BCiAMJ+VgmlhS+PMb5Je0DXXfD5/bT79wSDhEVMrLAwbkc=
+	t=1722633709; cv=none; b=Ozli3b+7KY8mUkt2lU6EjuF5TdMRLrHPVYiaWbtzfYAmBDSQ0b8jo6hIWISZIYJRSFTH79XHEMQUhNu2+gG8rqcXA4RqUzlXU/1b2MXmSsOZrTOkXzhi1jZ3LcnB0hZ8jwc3WerQV49HUy5OqVhR9thUGSS80d4DshLvnE6O2qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722626585; c=relaxed/simple;
-	bh=IGFCSTgJcuoRzGSPK8CuSC3g7DiKhbxO+wXlPg2+FUE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ryCuyTtcwK4pI7E3UPiWA6DzSLLC4ChG+z0FN0X4HoFUAy4C7wkmKaQjsp6YJYgUfAlMvw49XE2IlL9GZF4vDzoA4MVf59xAPPOqONyklqoEKyTPCopSQpBPU5tyCWvCu+IfpsY5ciXhBjH+x7biOeNTR7bDV98ucwGvm4h8J34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MFICEZWi; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3db130a872fso5755512b6e.2;
-        Fri, 02 Aug 2024 12:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722626582; x=1723231382; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6bljFmiJkhPU7BKEtswdXuPsqQ0+QMylW7jPglHY9Uc=;
-        b=MFICEZWimSkBi2PEXf/cO6ADccLuSaUU7uQrmNxIgaXyAD90MiBwKhNTC1rZkNsoyL
-         sM3UW+kgT9fcsQCbXL7AhGg45SldeOCR6BHTc2J3q7aJja8ccoDhrPBsnZBks7BYZx1X
-         b5jg0M1ZXk8T8F+OmkW+KlugIWRHE1ONP+nDxMLnjXcncL5StFnsEIZg/0siDMvdQgIt
-         V2W5Lf30KXi3Ero04wzpSV4Pm/vOdM0gznpfVTt1A0GtenMQXBEwuLHjmJEM1R2Shwja
-         wM3CcDaz6bXu2ORTsH8S186B58IYVd7BccavNPXoQOvMubbeV+POdXUnfG2Tl6Q/41to
-         xLVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722626582; x=1723231382;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6bljFmiJkhPU7BKEtswdXuPsqQ0+QMylW7jPglHY9Uc=;
-        b=w2Sb2dk8WCk5nFs2zKdDN3Sf4Vvj2htLp26NbyrKILGsWnNuazh/m2Zmw40pKI4Zkx
-         y1ou8sAtMLwUlmpkwzZLbZujBhd42VA4cIvhOhmmcdi+5/+U4X8Jz2UcC35WMTaSGilZ
-         eA1uP/kG88XpbX49OFBu3i5nH5eAuCOjQhL+Ni65WaArmkVOgqWfLlTjCZMWOFRPvyhO
-         JOsm+fMauMVCK4OBioe75ogMgjHsJETnMV7ovBOEZjmjmqaNoSlRnTyZ0A34a3Sn7sI9
-         t5sld/T07JE0rv4NpDHpO7HBqrf4SyY+vk7fTuwDnGeCuhu6rPodfMaPkUp6jXQ9NEKn
-         9CZg==
-X-Forwarded-Encrypted: i=1; AJvYcCUcx70Y3Efv5sjH6QXKGGBspzw/tTW6XQBk3v7zmFhTeOHosyfJSf15fqnmzUnZjxI45w5Q4Z0wVfDy@vger.kernel.org, AJvYcCXKupjQFeeDwwAD0nhtL7Ob/zZS8ow104iQSUJs6jfEq9m3PFd0q5eNo2S8m59teC8TrW4nQ6P17fx9@vger.kernel.org
-X-Gm-Message-State: AOJu0YyN539MuOYSvupZ++n1YDz4gU68IlDTrKDj2ZxMgA3OxeXANBwT
-	mIdatjEHudRs+1AN07FnOkb/MDsUdE4JBNgT7rSHeapM0+klRMD5
-X-Google-Smtp-Source: AGHT+IGjBzlQxgg8C+yv67X9RvusG8E8mOEP2cJ31NbvBUQRSj0BF+eewV39CvF2RjsSsdpKP8J97A==
-X-Received: by 2002:a05:6808:23c4:b0:3da:b3b3:191 with SMTP id 5614622812f47-3db5583db96mr4810309b6e.48.1722626582119;
-        Fri, 02 Aug 2024 12:23:02 -0700 (PDT)
-Received: from localhost.localdomain ([2600:1700:fb0:1bcf::54])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3db563b7065sm584592b6e.46.2024.08.02.12.23.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Aug 2024 12:23:01 -0700 (PDT)
-From: Chris Morgan <macroalpha82@gmail.com>
-To: linux-sunxi@lists.linux.dev
-Cc: linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	quentin.schulz@free-electrons.com,
-	mripard@kernel.org,
-	tgamblin@baylibre.com,
-	aidanmacdonald.0x0@gmail.com,
-	u.kleine-koenig@pengutronix.de,
-	lee@kernel.org,
-	samuel@sholland.org,
-	jernej.skrabec@gmail.com,
-	sre@kernel.org,
-	wens@csie.org,
-	conor+dt@kernel.org,
-	krzk+dt@kernel.org,
-	robh@kernel.org,
-	lars@metafoo.de,
-	jic23@kernel.org,
-	Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH V2 15/15] arm64: dts: allwinner: h700: Add charger for Anbernic RG35XX
-Date: Fri,  2 Aug 2024 14:20:26 -0500
-Message-Id: <20240802192026.446344-16-macroalpha82@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240802192026.446344-1-macroalpha82@gmail.com>
-References: <20240802192026.446344-1-macroalpha82@gmail.com>
+	s=arc-20240116; t=1722633709; c=relaxed/simple;
+	bh=SKdIIs7Macq1MZQ/O2qND95jzDozwLExa7KqRHWBvtM=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=BqeAHSkfBJGgtn/zy571w/umrzEsRmeV1Jnu5TLO4Me17sAjpsGFdfdX3oNmK2tf6aKyE7x4M75BpkSWeANR+md+aBN1UwfMVtxNaZQlO1Y8/nCB+uAk2d2/KT5Y66pWc9FMj6wEPs3hyCnFsYN0rLaf8D5D/rzmxeNCn+TyWGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tsjpr+GU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4FCCDC32782;
+	Fri,  2 Aug 2024 21:21:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722633709;
+	bh=SKdIIs7Macq1MZQ/O2qND95jzDozwLExa7KqRHWBvtM=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=tsjpr+GU4fW5Ylp6a+gQjNlG+zDoISJ1A3AQ2WsymAxWiV/DaEaZcJQ9LkPPhg8iA
+	 MGOJ5H7eMcuc2K0rAraCi8y8aD6Yduh6WRX8rvnLy8CEsjPoVwkXMnhbG+IGvjTwXh
+	 MJhf6WVQLjfa5vgehf57O9WwJFNQEV49sF2k3v64PvwARtEvfBvN5nm20ZuJg4aCjF
+	 1SYaP4p+/Q+XBkV0vtLIjDdu7/EdyjIMFE9tyYDm2pdCVX/0zxXPgn9af1VrryAkFR
+	 0KCD2F9gsdWC3RwKMpKB4RpifUF1HYEYei26hi2y4xsaa53TNNwUiMD4AdIzBNlUQu
+	 olP1Xvw6oOFeA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3A1B6D0C60C;
+	Fri,  2 Aug 2024 21:21:49 +0000 (UTC)
+Subject: Re: [GIT PULL] Thermal control fixes for v6.11-rc2
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0izLX1aQNBjAU20O5ZmxU7DnyVHJXf1=teyy5UDoZHmOg@mail.gmail.com>
+References: <CAJZ5v0izLX1aQNBjAU20O5ZmxU7DnyVHJXf1=teyy5UDoZHmOg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0izLX1aQNBjAU20O5ZmxU7DnyVHJXf1=teyy5UDoZHmOg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.11-rc2
+X-PR-Tracked-Commit-Id: a09074228977c24c677c10282f506fa11f88eb93
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d9ef02e56f0fd3668b6d7cb17f9399ea53f12edd
+Message-Id: <172263370922.21514.13054975567836277592.pr-tracker-bot@kernel.org>
+Date: Fri, 02 Aug 2024 21:21:49 +0000
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux PM <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Chris Morgan <macromorgan@hotmail.com>
+The pull request you sent on Fri, 2 Aug 2024 19:50:32 +0200:
 
-Add the necessary nodes to the AXP717 to allow for monitoring the USB
-and battery charger.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.11-rc2
 
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
----
- .../sun50i-h700-anbernic-rg35xx-2024.dts      | 21 +++++++++++++++++++
- 1 file changed, 21 insertions(+)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d9ef02e56f0fd3668b6d7cb17f9399ea53f12edd
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts b/arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
-index afb49e65859f..83b5c03b1bb8 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h700-anbernic-rg35xx-2024.dts
-@@ -21,6 +21,12 @@ aliases {
- 		serial0 = &uart0;
- 	};
- 
-+	battery: battery {
-+		compatible = "simple-battery";
-+		constant-charge-current-max-microamp = <1024000>;
-+		voltage-max-design-microvolt = <4200000>;
-+	};
-+
- 	chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
-@@ -217,6 +223,16 @@ axp717: pmic@3a3 {
- 		vin3-supply = <&reg_vcc5v>;
- 		vin4-supply = <&reg_vcc5v>;
- 
-+		axp_adc: adc {
-+			compatible = "x-powers,axp717-adc";
-+			#io-channel-cells = <1>;
-+		};
-+
-+		battery_power: battery-power {
-+			compatible = "x-powers,axp717-battery-power-supply";
-+			monitored-battery = <&battery>;
-+		};
-+
- 		regulators {
- 			reg_dcdc1: dcdc1 {
- 				regulator-always-on;
-@@ -307,6 +323,11 @@ reg_cpusldo: cpusldo {
- 				/* unused */
- 			};
- 		};
-+
-+		usb_power: usb-power {
-+			compatible = "x-powers,axp717-usb-power-supply";
-+			input-current-limit-microamp = <1500000>;
-+		};
- 	};
- };
- 
+Thank you!
+
 -- 
-2.34.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
