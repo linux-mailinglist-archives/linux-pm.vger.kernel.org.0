@@ -1,48 +1,40 @@
-Return-Path: <linux-pm+bounces-11821-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11822-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5900994588E
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 09:22:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 903D7945B0B
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 11:33:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F44E1F241A7
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 07:22:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1EBA1C2115B
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 09:33:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8203C1BE87E;
-	Fri,  2 Aug 2024 07:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxWaTZJx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D24CF1DAC6E;
+	Fri,  2 Aug 2024 09:32:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5C8481AA;
-	Fri,  2 Aug 2024 07:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27B181C3794;
+	Fri,  2 Aug 2024 09:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722583336; cv=none; b=CEfSZYUtuCBS1CkX3XRGd2QhcRDrmZxe7IjiE9vDEDzI7n1r6A8V9IcL1l0b7hBgy+go5d/zFCXayVYGjoAGiu0O+gv1B2SsD7AEtCl5tsqXHMC0iylOSWGUFK41f/i8IbOTvOIlmV/rNRmhcjY2Iag/EI70pkmA2DBOCOvTnlw=
+	t=1722591159; cv=none; b=hSpqVc38eNM+Hu7kD4h1pLPJxt5mE01SwTC4doxi0Rg+no+vHwnsLkGXtJJNKE6st8RsJsYm9sbNHDKvHo1CLY3tmWayCT7QD93KfnRKam1sApQibT0GU6Oygt7a7LShjyWmoDlVzQER4a3df9Vp4ULF4iFzdTse5YzIuQRWY7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722583336; c=relaxed/simple;
-	bh=eBqw49UcPYPhf7AEOvF+AlnHBTQLYKg8/l4No1WFkqg=;
+	s=arc-20240116; t=1722591159; c=relaxed/simple;
+	bh=RmTFvEP8cQMU+zfTmPKcfKdwqPciPafUo/Qszg1NYWY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fh0Hi10x7eqN+LMGHNR4YPGYXnCKfZNiMSjDISksy92mYIvXH9bd8MTYp8u1qbhsuuXnG9qmpHt4XYE4wZgCjMp5CjJsb3xIv+R013eFGyel4GGM7RZBcdN7TWMcRUdK/uJkeHtsgjvEihNgHZKqsIbhIe8MvYwyLvWQi9zlBzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxWaTZJx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E142BC32782;
-	Fri,  2 Aug 2024 07:22:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722583336;
-	bh=eBqw49UcPYPhf7AEOvF+AlnHBTQLYKg8/l4No1WFkqg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YxWaTZJx4sAEpAlVt70i1fPTwngQJ8Mm2lDnlzaUywO26X6HkptSZYKOo8P7izJQg
-	 wXVyd4oSh3vYGDzIgeh38/G0+AG1Af2exdxEYKIIO5WcGuRTlhZaQT3+Bu8QYHRHb5
-	 B9T1UFLuTak83wISZWNYS/YaUH7aUjeuI/4iCf16QDT4o9Ses55rSdwaB61Ps5sQo+
-	 njUPYPquagmzJZ8gLKQOyakLp8fgsTyd2ZS4gzgYn5/5zyMKm+t9Fmjhq/NczkxyyP
-	 DltSM5OX5vEpnpGozsDJ8Fmj+T1Ke3EOSPjFk1xgvTGHqY2UnjXPFIRKMnQBUu26v6
-	 MNVCkrzBlDYIg==
-Message-ID: <20f5fa43-280d-4fde-a36f-c66b1f474f7e@kernel.org>
-Date: Fri, 2 Aug 2024 09:22:11 +0200
+	 In-Reply-To:Content-Type; b=FVW7ryoHC6l90AGmyn60Z3ztZZYJ4A/PeR2zmrhr+gwu0CMi0SH3WpAqDJvZhri7YgBFRxY7Jte5C0pIZQdx2Y1fla82eD3vpw9IEA1Yjkl5kkHboSe78S7ORjuFKZKY5SnmRlaeQu6HdyX2zHN0njLwioFDjDXgSshRNnTWQfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0C761007;
+	Fri,  2 Aug 2024 02:33:02 -0700 (PDT)
+Received: from [10.57.12.204] (unknown [10.57.12.204])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE29E3F766;
+	Fri,  2 Aug 2024 02:32:35 -0700 (PDT)
+Message-ID: <5a4405dd-cbc5-4178-9fcb-f42676c793fe@arm.com>
+Date: Fri, 2 Aug 2024 10:33:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,98 +42,46 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] dt-bindings: interconnect: Add Qualcomm SM4450
-To: Tengfei Fan <quic_tengfan@quicinc.com>, Georgi Djakov
- <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>
-Cc: kernel@quicinc.com, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20240801-sm4450_interconnect-v3-0-8e364d0faa99@quicinc.com>
- <20240801-sm4450_interconnect-v3-1-8e364d0faa99@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v1] thermal: core: Update thermal zone registration
+ documentation
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Linux Documentation <linux-doc@vger.kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+ Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>
+References: <2767845.mvXUDI8C0e@rjwysocki.net>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240801-sm4450_interconnect-v3-1-8e364d0faa99@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <2767845.mvXUDI8C0e@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 01/08/2024 10:54, Tengfei Fan wrote:
-> The Qualcomm SM4450 SoC has several bus fabrics that could be controlled
-> and tuned dynamically according to the bandwidth demand.
+
+
+On 7/31/24 15:59, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
+> The thermal sysfs API document is outdated.  One of the problems with
+> it is that is still documents thermal_zone_device_register() which
+> does not exit any more and it does not reflect the current thermal
+> zone operations definition.
+> 
+> Replace the thermal_zone_device_register() description in it with
+> a thermal_zone_device_register_with_trips() description, including
+> an update of the thermal zone operations list.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  .../bindings/interconnect/qcom,sm4450-rpmh.yaml    | 133 +++++++++++++++++
->  include/dt-bindings/interconnect/qcom,sm4450.h     | 163 +++++++++++++++++++++
->  2 files changed, 296 insertions(+)
+>   Documentation/driver-api/thermal/sysfs-api.rst |   65 +++++++++++--------------
+>   1 file changed, 30 insertions(+), 35 deletions(-)
 > 
+> Index: linux-pm/Documentation/driver-api/thermal/sysfs-api.rst
+> ===================================================================
+> --- linux-pm.orig/Documentation/driver-api/thermal/sysfs-api.rst
+> +++ linux-pm/Documentation/driver-api/thermal/sysfs-api.rst
 
-If there were no changes, why skipping my tag?
+LGTM
 
-<form letter>
-This is a friendly reminder during the review process.
-
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
-
-If a tag was not added on purpose, please state why and what changed.
-</form letter>
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
