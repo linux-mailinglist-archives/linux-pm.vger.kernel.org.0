@@ -1,71 +1,96 @@
-Return-Path: <linux-pm+bounces-11849-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11850-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9E23946358
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 20:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5173B9463AD
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 21:22:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95B3A2834A6
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 18:49:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18CF3282AE8
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 19:22:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF5601ABECF;
-	Fri,  2 Aug 2024 18:49:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B9DC1547E7;
+	Fri,  2 Aug 2024 19:22:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ij9vxw6u"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rw6R1P8k"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB0513633A;
-	Fri,  2 Aug 2024 18:48:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A078515AC4;
+	Fri,  2 Aug 2024 19:22:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722624540; cv=none; b=NI94OGOAmevPkbBKFSuRnLtXhlgdkS+nx+X5/Smgg89TBz2rYGMAZyBDXbXOnG6qDu+eqGkmi+KdBG+4utb9qeY3cJ5de2J95M53M4NjOVbET3lnWRxkunePuRjmJ4X8n2dTIXcia8ZYNPd2Z4fhuU+Fa47nh19Id5ciJzrf4lA=
+	t=1722626572; cv=none; b=BMOKesa0aTMbKFrCzTp0Ie/244tKKjcWhq0UVTgVfVxCAj+aq/q1rHuRpLII/x9jtrFv4IZfsrRQWlys7RwdKHkrmGaPtCR9VSyYO17H3v6ZfrDKJV6KWSr2tHFJQ7ZGccBV1eS1OTyS80BwlJbfh3BYJGFhaezylGlrF07NERU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722624540; c=relaxed/simple;
-	bh=iWlQYfhW630YQa0Rs6x9F+5yDlG5LmzZ1x/8Ul5aMmk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nm5CfRCJTMBfRnzz5rV9GJIEhU+4fdKTOn/Yhk9nFemkTP8hxbhgNZlGomsleiHpGgklnYv+FzJyVZz2Dj0htxESySRf+gRhwrJXsNToXY5xLdBSOSS5rNLca7pq/xjl3GmU2n1dqAD4nXOV6l+r8WnYCfGJfWOfQQhiX501gsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ij9vxw6u; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722624539; x=1754160539;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iWlQYfhW630YQa0Rs6x9F+5yDlG5LmzZ1x/8Ul5aMmk=;
-  b=ij9vxw6uQlOZvFPPkOlMreyM180weE/KnCPljWsBAXw6gPWA3bgK1eZn
-   O5miQw5AGtb+cM7i3WNjE9Jg1WHKCxusm5VqYjrdLFUMRtRxUTFYxFOue
-   k4TA0Vc7zuycJEoXCI5sK6eTZc9eUDBtwcVqdQJxxX8lCLHPkN//uEMaw
-   rsC45teT7GoE8JKvMSRygGQRTzOD01PAwvJuTgcoDJmFaU9jMIHNsYvck
-   odtrddREtBGPUtCTQq2gbzV3EN2xArskvAPoTuhrwGxZ51fZIIFx6WQLr
-   os617qT/ydNx3qtlB/zoHOUeXUVcOfQgWcOK1WAZDO55ns4+dbBbkwjc/
-   w==;
-X-CSE-ConnectionGUID: uFaWqLiZQfep3r0VOx0cFw==
-X-CSE-MsgGUID: oftHOUx2RsCf2+O0YXcBzw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11152"; a="20792897"
-X-IronPort-AV: E=Sophos;i="6.09,258,1716274800"; 
-   d="scan'208";a="20792897"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2024 11:48:58 -0700
-X-CSE-ConnectionGUID: S0DADqZIT0OrZL/4gIWV0w==
-X-CSE-MsgGUID: C5ET+3VmTCy6Ls92C0axJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,258,1716274800"; 
-   d="scan'208";a="55566368"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.19])
-  by fmviesa010.fm.intel.com with ESMTP; 02 Aug 2024 11:48:57 -0700
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To: srinivas.pandruvada@linux.intel.com,
-	viresh.kumar@linaro.org
+	s=arc-20240116; t=1722626572; c=relaxed/simple;
+	bh=gZz9yj3GXXaj16bFmuLRWhj9n3hpFccCV2NppllFAJg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Qf6DY7MOtT/cFUPLc+54lmR+7xbmIP7td/mbwrm9wZ9ppjWufSutXdPkBJzu2/Qq/ENiKIYHPbc5HeCfx3r5L+DD5fc4ZTURtjjBLriW9ssNAJZxVKX9hGa3peQo1Y8X9EPPbDtWTlzSSkCfAulXLaceIwH610FPd7fvW9CCkl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rw6R1P8k; arc=none smtp.client-ip=209.85.167.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3db1956643bso5321116b6e.3;
+        Fri, 02 Aug 2024 12:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722626569; x=1723231369; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QvMGvJoG9kOmjhl8+GRwEU8yfqrtre7GVJ2bwQWQCa4=;
+        b=Rw6R1P8k6HJyRXJAdCxu3FVSWpSAhOOkT1ZADWEjXfv7iZhj3L2/tjK8wEhtHS6JHb
+         NYD8DqPhLveGvAROUHhxgfP95SKJULBJPs/oGMJtncptt5bE1JGfxxjqyDLpT/YVBu8R
+         UroVvmuRuaXfnlsdr2wCUVUt+3ffHUihmrEjrLZ7yWpGOB6eAy7eeAJrWayGDEvfCy35
+         no1FDbNiwMrGWrYGimfeHuV35f1YPPXmIkVWzDLwkvC+qFOMciVtHY2EUuR7Q+gyOLJp
+         Plwi+bi5aVE5A7X7nlXocdMf4WaXoSfWeO5EvFlIsKJjzZTXbyVLCw4As/MrmwAH/wjP
+         CR9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722626569; x=1723231369;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QvMGvJoG9kOmjhl8+GRwEU8yfqrtre7GVJ2bwQWQCa4=;
+        b=otLsIOdPM3fLducjLJjIBsoSFI5a3h8jtxEEuuXT7660tL149xQeL+2s2IGEmgGza1
+         hcMHdv77dr1YmHro4RfdgJkuM/95wpK3K4c1BOy08qv3cJiMV1Qqu5dDqmIfNLBhjgNE
+         +VLSfHRw3qXjtU+JugymoMPzVSE4Qw+TQC2tQla/ikz1A7sosYHS2jXBul9v0SKj2kbD
+         b60MacbTi2kP8wx6URuhanOy0UpXfR0jtLhH1N0SVjrd0iUr+/+O/BsNw9qjLmcknM83
+         ZgvENTd+uvvRNxXKpij8DdaPWqgBZ14kHRv/vQHi5SDImDC5/4ZeriocRSi3KFZiYePo
+         NglA==
+X-Forwarded-Encrypted: i=1; AJvYcCVlOKrxrrz8PqK3DqwpkTJY9ZkZ0Lk5fre2lqH5Nq+gxOze6ZznWLVG1rAfjHSIwKFpcIJhcxabe2mwp4Yaf/LCAB4yYmJYLD1pNnzdOB2FK7+zE7NkPZkokZ/VODnvYX3rEKkDeQ==
+X-Gm-Message-State: AOJu0YyfsN0Cj2gkMamoyWeOuX8cluADKkoRIEeX4Jch5s5cyp9lBtHj
+	XmNETiWR9kQXKoOQ5XGJseE6hmoE73iAZK4V8JGY1cDKmDZpEel5
+X-Google-Smtp-Source: AGHT+IE97Nhw575gDhtEqYkjlJLadE6szPpld+kIQm5cznFCVLtAkB1/xcfs0mJhHPLUrFXlBjqmiw==
+X-Received: by 2002:a05:6808:bc6:b0:3da:a48b:d1e6 with SMTP id 5614622812f47-3db5580a11amr6332227b6e.16.1722626569544;
+        Fri, 02 Aug 2024 12:22:49 -0700 (PDT)
+Received: from localhost.localdomain ([2600:1700:fb0:1bcf::54])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3db563b7065sm584592b6e.46.2024.08.02.12.22.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Aug 2024 12:22:49 -0700 (PDT)
+From: Chris Morgan <macroalpha82@gmail.com>
+To: linux-sunxi@lists.linux.dev
 Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: intel_pstate: Support Granite Rapids and Sierra Forest OOB mode
-Date: Fri,  2 Aug 2024 11:48:39 -0700
-Message-ID: <20240802184839.1909091-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.45.0
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	quentin.schulz@free-electrons.com,
+	mripard@kernel.org,
+	tgamblin@baylibre.com,
+	aidanmacdonald.0x0@gmail.com,
+	u.kleine-koenig@pengutronix.de,
+	lee@kernel.org,
+	samuel@sholland.org,
+	jernej.skrabec@gmail.com,
+	sre@kernel.org,
+	wens@csie.org,
+	conor+dt@kernel.org,
+	krzk+dt@kernel.org,
+	robh@kernel.org,
+	lars@metafoo.de,
+	jic23@kernel.org,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH V2 00/15] Add Battery and USB Supply for AXP717
+Date: Fri,  2 Aug 2024 14:20:11 -0500
+Message-Id: <20240802192026.446344-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,34 +99,55 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Prevent intel_pstate from loading when OOB (Out Of Band) P-states mode is
-enabled.
+From: Chris Morgan <macromorgan@hotmail.com>
 
-The OOB identifying bits are same as for the prior generation CPUs like
-Emerald Rapids servers. Add Granite Rapids and Sierra Forest CPU models to
-intel_pstate_cpu_oob_ids[].
+Add support for monitoring the USB charger and battery charger on the
+AXP717 PMIC. This required some driver refactoring of the axp20x USB
+and battery charger as the AXP717 is somewhat different but can still
+benefit from some common elements.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/cpufreq/intel_pstate.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Note that as of now the charging current now value may be incorrect as
+the scale and offsets were not documented in the datasheet. I suspect
+the scale is 1 and the offset is somewhere around 450mA though.
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 392a8000b238..79b9c3c27dff 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2425,6 +2425,10 @@ static const struct x86_cpu_id intel_pstate_cpu_oob_ids[] __initconst = {
- 	X86_MATCH(INTEL_ICELAKE_X,		core_funcs),
- 	X86_MATCH(INTEL_SAPPHIRERAPIDS_X,	core_funcs),
- 	X86_MATCH(INTEL_EMERALDRAPIDS_X,	core_funcs),
-+	X86_MATCH(INTEL_GRANITERAPIDS_D,	core_funcs),
-+	X86_MATCH(INTEL_GRANITERAPIDS_X,	core_funcs),
-+	X86_MATCH(INTEL_ATOM_CRESTMONT,		core_funcs),
-+	X86_MATCH(INTEL_ATOM_CRESTMONT_X,	core_funcs),
- 	{}
- };
- #endif
+Changes from V1:
+ - Refactored against mainline to remove BOOST pre-requisite.
+ - Corrected commit subjects for DT bindings.
+ - Split refactoring and AXP717 support into different patches.
+ - Added IRQ for VBUS over voltage. There appears to be a bug
+   with the VBUS fault IRQ because it is assigned IRQ num 0.
+ - Corrected battery driver to report POWER_SUPPLY_PROP_VOLTAGE_MIN
+   and POWER_SUPPLY_PROP_VOLTAGE_MAX instead of *_DESIGN.
+
+Chris Morgan (15):
+  iio: adc: axp20x_adc: Add adc_en1 and adc_en1 to axp_data
+  power: supply: axp20x_battery: Remove design from min and max voltage
+  power: supply: axp20x_battery: Make iio and battery config per device
+  power: supply: axp20x_usb_power: Make VBUS and IIO config per device
+  dt-bindings: power: supply: axp20x: Add input-current-limit-microamp
+  power: supply: axp20x_usb_power: add input-current-limit-microamp
+  dt-bindings: power: supply: axp20x-battery: Add monitored-battery
+  dt-bindings: iio: adc: Add AXP717 compatible
+  dt-bindings: power: supply: axp20x: Add AXP717 compatible
+  dt-bindings: power: supply: axp20x: Add AXP717 compatible
+  mfd: axp20x: Add ADC, BAT, and USB cells for AXP717
+  iio: adc: axp20x_adc: add support for AXP717 ADC
+  power: supply: axp20x_usb_power: Add support for AXP717
+  power: supply: axp20x_battery: add support for AXP717
+  arm64: dts: allwinner: h700: Add charger for Anbernic RG35XX
+
+ .../bindings/iio/adc/x-powers,axp209-adc.yaml |  12 +
+ .../x-powers,axp20x-battery-power-supply.yaml |   7 +
+ .../x-powers,axp20x-usb-power-supply.yaml     |   6 +
+ .../sun50i-h700-anbernic-rg35xx-2024.dts      |  21 +
+ drivers/iio/adc/axp20x_adc.c                  | 182 +++++-
+ drivers/mfd/axp20x.c                          |  25 +-
+ drivers/power/supply/axp20x_battery.c         | 597 ++++++++++++++++--
+ drivers/power/supply/axp20x_usb_power.c       | 353 ++++++++++-
+ include/linux/mfd/axp20x.h                    |  27 +
+ 9 files changed, 1132 insertions(+), 98 deletions(-)
+
 -- 
-2.43.0
+2.34.1
 
 
