@@ -1,107 +1,162 @@
-Return-Path: <linux-pm+bounces-11833-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11834-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 035E3945E0E
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 14:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B1C66945E2F
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 14:57:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84598280FF4
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 12:47:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 686C5284D71
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 12:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DBF61E3CBF;
-	Fri,  2 Aug 2024 12:47:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C08A1E3CC9;
+	Fri,  2 Aug 2024 12:57:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HOPuNjPv"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="e7UhOL0k"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76071E3CA7;
-	Fri,  2 Aug 2024 12:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661FD1E3CC3;
+	Fri,  2 Aug 2024 12:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.60.130.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722602821; cv=none; b=LJ9/Fqg+GW/2zXAZfAmHrYoT2OpB9W+HajPTEsSr64CJ+kmdApNksV8A8ZqzhNjSXdHg4ZYRwL8/r7q957T/i+RdZ8Kg03qOgyKMpAeWnJH033PhCnSf1xetI+5lsDMOtEYMeni6cuz4Slzw/in9a/pDW/toD3TP6Pm+6Q7PShg=
+	t=1722603459; cv=none; b=VxHUgUGJofBcqSpD7yEBkhGcPwaTnnwNaGcf8HoM6khItTqzAqycLhU8hwBr22WA98elbdSY9myI/YQY1rHnkY/WIE7djAvHNfA5Dt2RAUAnCphtpI9dGnE/71zx62l9BH2YS23AE7f4a7j6Dv28JxHLikC2PDb0XdnEXj4pZxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722602821; c=relaxed/simple;
-	bh=1QgdOFHc5UJ7JLTaVxoYYVwQrMYFGF8fQ1SbQIxZkhc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rddlQvwAA9Fs2zGVd3Sv5xVE1pVWkAiG9FkFQwnnP8/go8cnr9okzOMp7lcjIZorok1hVyzBS+YjePWcLg6AP95HVhVda2rPNCjOm07sHsiqf1si4NHr/hVUpQ7FTq3bya4RMMpJNy4OZ/cySu6Gi0SDqq1HbynEwKZ/BpKQx/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HOPuNjPv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B977C4AF0E;
-	Fri,  2 Aug 2024 12:47:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722602820;
-	bh=1QgdOFHc5UJ7JLTaVxoYYVwQrMYFGF8fQ1SbQIxZkhc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HOPuNjPvTZZBsjB3tap/xqosF5SQqQYpnAfbYzS12d+zdYkiM8SP/fcVGUBeqc3HC
-	 lMinvM1uFnU4HZra2cN5wfQlihPihtSBfTfDViH3rmj7nQhlY6S7WA3QZqoWhGTK1d
-	 tq+btNcsaMnEszrxEHUYcedP9A5FKqoLRU7J2bkS5FJk38Op8v/vD+BPaqBs66udDs
-	 HnTHjIQCM/iUXUNA3U8wNWM49K0nW5Mt5AnXisVBfznEoiNeCqudJfa49jbHwyrOz/
-	 h2kMC8TAuykWtLdIkBV6vjeVmkM31QuC9wJiPOO8ftEYrwSXC7XVAeZ5Iejvb3RsSM
-	 RDGqnl3DweuEw==
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3db199ec527so671535b6e.0;
-        Fri, 02 Aug 2024 05:47:00 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW+c0YUmfqvNXhkeg9tDXA94RlU0p0ZiVmXIN1KfnjRVh3pT7kW+0vn5xyrQ0Gc5KtRSqY6/7lmzdGnlzZEwfOD212GXAYacfIlIim2WTBeUpJNX3O/HxLFUns069Q/1gvd8kgbJTVtMR2/EUXMHWnsceFY2RHZ88kz2gSX1h+s9ff29cSGEp8=
-X-Gm-Message-State: AOJu0YxHm0Idt/4K9CXuwKYqpdBheVFtlVFa58PG9ycM+uXpx+BBCVpf
-	8p8F6OIpPJxgqq104CRjtEzJrWCcN0OOcx/gsm6mrXDBgmie8qCBOD16jijwdF+MdToK14ITJEH
-	ywjs7GImJZCxxMAIAJYkMZPzFgvs=
-X-Google-Smtp-Source: AGHT+IFEVv8eZDY5b3H89JJWLVBnt5m9XtSne/AH0CAwtm0pD7to6WgcNrLrHJUClqgyEggleITIiM5TGHtAKB4tRuk=
-X-Received: by 2002:a05:6870:56ab:b0:260:23bb:1087 with SMTP id
- 586e51a60fabf-26891732bc5mr2122828fac.0.1722602819834; Fri, 02 Aug 2024
- 05:46:59 -0700 (PDT)
+	s=arc-20240116; t=1722603459; c=relaxed/simple;
+	bh=zN4LruB2WW9fYu0lzSWZcQ/G13AK+ac0vqzyQpNeGww=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZbgKx51lPVPAxyXzJsrOh3/s0za4+1q8YiNy7z7VxqSqcXmjMsEL6eX6cWegErF4lH03+u5wfiC/ic7lKYwa9TAkbBsBL0sp9vsL2iHqMRsacWcZISpLfIfHmi56xLEMoEVXT0tXqP4tHf93QavA0G7NWEEzDfFpX4ZSjWO7Hug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=e7UhOL0k; arc=none smtp.client-ip=178.60.130.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=WGiVdLtGzbRUhaAOKkQ2ZU2TyB4J4l9CoKO/GNZ2cyg=; b=e7UhOL0kpsNbyNjnABPXe4xMym
+	G4KnsuM3lqj/YSH0+S0yAiTzAXSxfztJmQELIFcaoYUTcZXveyZPjtk6a2769r5Gedg7i/C1pLoht
+	UrS56A7Gub0FIhhOXUqCClTOluIQGysmIfr9oGHnSojcnGomuvj5ex8Gskrt6epN6bqHsQFpuizeS
+	J3UlF93lgmOvKfsSgACUEXkE5Kp5qS/1WlGSNKayoqSvEQqPxaG4YikMRfhS3Q0vgrnqmJWBnAadq
+	dMQMrNBL0ha8eTrqIdDtoarMOUkIIgisysSk7NYweLVCbBM2cYnx64J3HdIfT25HXZ4oipc62M/7Q
+	057oLRXw==;
+Received: from [187.36.213.55] (helo=[192.168.1.212])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1sZrq1-006sbI-Bf; Fri, 02 Aug 2024 14:56:53 +0200
+Message-ID: <6047643f-e1f5-4be4-b55d-f59576999d91@igalia.com>
+Date: Fri, 2 Aug 2024 09:56:42 -0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240722-md-powerpc-drivers-cpufreq-v2-1-bb84d715eb3d@quicinc.com>
- <20240724043941.5wpa5di7ta4fjyl5@vireshk-i7>
-In-Reply-To: <20240724043941.5wpa5di7ta4fjyl5@vireshk-i7>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 2 Aug 2024 14:46:48 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iYDDQkPpnHsuJ_7du7Efg4zuLuhj2RHobJ6UiciuhphQ@mail.gmail.com>
-Message-ID: <CAJZ5v0iYDDQkPpnHsuJ_7du7Efg4zuLuhj2RHobJ6UiciuhphQ@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: powerpc: add missing MODULE_DESCRIPTION() macros
-To: Viresh Kumar <viresh.kumar@linaro.org>, Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 09/16] drm/vc4: v3d: simplify clock retrieval
+To: Stefan Wahren <wahrenst@gmx.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
+ Minas Harutyunyan <hminas@synopsys.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+ Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
+References: <20240728114200.75559-1-wahrenst@gmx.net>
+ <20240728130029.78279-1-wahrenst@gmx.net>
+ <581726ae-dd9c-476f-817d-4140f7217ec7@igalia.com>
+ <b34cc73c-721f-48b6-a7a3-da8190d80dd8@gmx.net>
+Content-Language: en-US
+From: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
+Autocrypt: addr=mcanal@igalia.com; keydata=
+ xjMEZIsaeRYJKwYBBAHaRw8BAQdAGU6aY8oojw61KS5rGGMrlcilFqR6p6ID45IZ6ovX0h3N
+ H01haXJhIENhbmFsIDxtY2FuYWxAaWdhbGlhLmNvbT7CjwQTFggANxYhBDMCqFtIvFKVRJZQ
+ hDSPnHLaGFVuBQJkixp5BQkFo5qAAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQNI+cctoYVW5u
+ GAEAwpaC5rI3wD8zqETKwGVoXd6+AbmGfZuVD40xepy7z/8BAM5w95/oyPsHUqOsg/xUTlNp
+ rlbhA+WWoaOXA3XgR+wCzjgEZIsaeRIKKwYBBAGXVQEFAQEHQGoOK0jgh0IorMAacx6WUUWb
+ s3RLiJYWUU6iNrk5wWUbAwEIB8J+BBgWCAAmFiEEMwKoW0i8UpVEllCENI+cctoYVW4FAmSL
+ GnkFCQWjmoACGwwACgkQNI+cctoYVW6cqwD/Q9R98msvkhgRvi18fzUPFDwwogn+F+gQJJ6o
+ pwpgFkAA/R2zOfla3IT6G3SBoV5ucdpdCpnIXFpQLbmfHK7dXsAC
+In-Reply-To: <b34cc73c-721f-48b6-a7a3-da8190d80dd8@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 24, 2024 at 6:39=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> On 22-07-24, 10:14, Jeff Johnson wrote:
-> > With ARCH=3Dpowerpc, make allmodconfig && make W=3D1 C=3D1 reports:
-> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cpufreq/ppc-c=
-be-cpufreq.o
-> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cpufreq/power=
-nv-cpufreq.o
-> >
-> > Add the missing invocation of the MODULE_DESCRIPTION() macro to all
-> > files which have a MODULE_LICENSE().
-> >
-> > This includes three additional files which, although they did not
-> > produce a warning with the powerpc allmodconfig configuration, may
-> > cause this warning with specific options enabled in the kernel
-> > configuration.
-> >
-> > Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-> > ---
-> > Changes in v2:
-> > - Per Michael Ellerman updated maple-cpufreq.c and powernv-cpufreq.c
-> >   descriptions
-> > - Did not carry forward Viresh Kumar's Acked-by due to this change
-> > - Link to v1: https://lore.kernel.org/r/20240614-md-powerpc-drivers-cpu=
-freq-v1-1-de4034d87fd2@quicinc.com
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Hi Stefan,
 
-Applied as 6.12 material, thanks!
+On 7/31/24 13:41, Stefan Wahren wrote:
+> Hi Maíra,
+> 
+> Am 30.07.24 um 13:23 schrieb Maíra Canal:
+>> On 7/28/24 10:00, Stefan Wahren wrote:
+>>> Common pattern of handling deferred probe can be simplified with
+>>> dev_err_probe() and devm_clk_get_optional(). This results in much
+>>> less code.
+>>>
+>>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+>>> ---
+>>>   drivers/gpu/drm/vc4/vc4_v3d.c | 13 ++-----------
+>>>   1 file changed, 2 insertions(+), 11 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/vc4/vc4_v3d.c
+>>> b/drivers/gpu/drm/vc4/vc4_v3d.c
+>>> index 1ede508a67d3..4bf3a8d24770 100644
+>>> --- a/drivers/gpu/drm/vc4/vc4_v3d.c
+>>> +++ b/drivers/gpu/drm/vc4/vc4_v3d.c
+>>> @@ -441,20 +441,11 @@ static int vc4_v3d_bind(struct device *dev,
+>>> struct device *master, void *data)
+>>>       vc4->v3d = v3d;
+>>>       v3d->vc4 = vc4;
+>>>
+>>> -    v3d->clk = devm_clk_get(dev, NULL);
+>>> +    v3d->clk = devm_clk_get_optional(dev, NULL);
+>>>       if (IS_ERR(v3d->clk)) {
+>>>           int ret = PTR_ERR(v3d->clk);
+>>>
+>>
+>> Super nit: you could delete this line ^
+> Can you please explain? ret is required for dev_err_probe or do you mean
+> the empty line after the declaration?
+
+Just deleting the empty line after the declaration. It is a super small
+nit indeed.
+
+Best Regards,
+- Maíra
+
+>>
+>> Reviewed-by: Maíra Canal <mcanal@igalia.com>
+>>
+>> Best Regards,
+>> - Maíra
+>>
+>>> -        if (ret == -ENOENT) {
+>>> -            /* bcm2835 didn't have a clock reference in the DT. */
+>>> -            ret = 0;
+>>> -            v3d->clk = NULL;
+>>> -        } else {
+>>> -            if (ret != -EPROBE_DEFER)
+>>> -                dev_err(dev, "Failed to get V3D clock: %d\n",
+>>> -                    ret);
+>>> -            return ret;
+>>> -        }
+>>> +        return dev_err_probe(dev, ret, "Failed to get V3D clock\n");
+>>>       }
+>>>
+>>>       ret = platform_get_irq(pdev, 0);
+>>> -- 
+>>> 2.34.1
+>>>
+>>
+> 
 
