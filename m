@@ -1,225 +1,268 @@
-Return-Path: <linux-pm+bounces-11841-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11842-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F160A94602F
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 17:19:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FABB94607D
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 17:26:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8DB9285D71
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 15:19:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8737F1F21B48
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2024 15:26:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD52136336;
-	Fri,  2 Aug 2024 15:17:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7413175D48;
+	Fri,  2 Aug 2024 15:26:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Ik2q30r8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nF5xhe84"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C7C1537D3;
-	Fri,  2 Aug 2024 15:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFAE175D2D;
+	Fri,  2 Aug 2024 15:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722611828; cv=none; b=XgIPRgbSnBRc3TliAF2uFP5HClGJ3X4xMKq6nLxoArwipojHwHRY8O+jhu27fdEL4HA2P5o6iaHdlW+fHHKems77FjDINPjkDrvnpbO+dNpUTIdLvGokqAmDTR9dZ3wvjmA2k1U9oHdLq21tsUcuiYYAlM7C8wvU6hJ/1wRf7Dk=
+	t=1722612368; cv=none; b=SWzj52MJDWJl30g+RTTMvLsi+rDe7d9WYC3wnKmQK4G6QCL4t866zxPd9jLSyy41tORy+iQ7umnMVRrrp+8XR9UxTmk9+jE4TkylsCMkqh2mlC3FPzFetFIZKhSd/YjQMgzq9/kiOiOWxbk2vJLG4+YDn5AorzptKZaFoKB3zJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722611828; c=relaxed/simple;
-	bh=rPddP6jREovZPe2OO1sPfsb89w9mYK2PrVoEMNOcF50=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Wwx5k88W/4x6wE3v5sgd+s35QiJjg2tNNAnYhGpZxedtBAJyFzgh66UCcPdVyHS/+qkT7BSHKzIDeSQA2a5/n7aGinpWbJlTNUoG6lY7TOOU2zc0GQ3ph5Eo/vhvly4LRaxZ4LdODzLmJeUrFwz6xC6XAA2aZzbcsvkQ2TJH0ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Ik2q30r8; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1722611824;
-	bh=rPddP6jREovZPe2OO1sPfsb89w9mYK2PrVoEMNOcF50=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ik2q30r8zWsI3rhpx8v++19WOLOKk31HH6Rj6re9SsMvlVgX6yP/aTkV955l/hSZS
-	 ampalrHEeFyPRogsFbHo5qZtX9wloponMIqk7uDJ2KEMZxTDwR1HQoVUJRmB8HfP33
-	 SCyWAgP4nr9KnUO5lsaBUBKQM0d2y3FCgUhn+ILu8q6WBuXM7Kh+ETs2AKo6e634ia
-	 XWq/yroQq1vB+DWcWUPH0t1++gBSfEbOKPYudgGF8AKhFVAFCeHwZRjAYyWPrRjviy
-	 BrrlggDy49Nu9NnrKwvAeW1cgBGRzSSmYPPXzz3jYTncn96IEwNzNZSBP4C8VakYOH
-	 lMLmJF/anBRQg==
-Received: from trenzalore.hitronhub.home (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	s=arc-20240116; t=1722612368; c=relaxed/simple;
+	bh=m5D3gD/Hy9UKtTCnXqA+30/hEnVScAGJ1UrYeX8hcqE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bsHHQEig5sAgBHz0uShuDzi8GSp5psusgXQA79goemGagTXUibg0FDMUcJ25ntIQf+Z9GcxWITo05Sc/0EFHQ5zwOwjmb2mkWdbIWuLTeg5tgp3Q9aY+RpMdGV48pozUo5UHreOVAWWCg7qUBXikocACKYIqS+LJzCQ1aEOo5B0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nF5xhe84; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722612368; x=1754148368;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=m5D3gD/Hy9UKtTCnXqA+30/hEnVScAGJ1UrYeX8hcqE=;
+  b=nF5xhe84OdmfD7QJi+1ix/kFk1rDzcT/2F5JOUqivUsz9fD5/EvO4t7i
+   fJH1xnMvRI7Erj6FUG4yJQ130ibPSgHtM1FiUpJclHwc++BZPvsUItkSB
+   A0EbghM5sZDDW/F+dLkQw5O3z+mPdCluXpR3H65w27N4hiba67xwwj2tZ
+   h24moStmP2Ix+gC+/DC+zj8XoHRs6wqXKOgSts9AASdeID3W5xObBg8KT
+   NuuOtZ1tv3nLhz9y9SdBG12TyJEB2WZDownuG4yXKr2loli/1Xn142c9J
+   2By7ylHVom6uSSayfxQyKOVjuD36ErNP2IahKctMFtd6HwIaZjeRkZQzT
+   g==;
+X-CSE-ConnectionGUID: dzHrVkPOQz6ji+45wjDtOw==
+X-CSE-MsgGUID: H7FrW9LASd+41O0p5BHBfQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11152"; a="38099843"
+X-IronPort-AV: E=Sophos;i="6.09,258,1716274800"; 
+   d="scan'208";a="38099843"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2024 08:26:07 -0700
+X-CSE-ConnectionGUID: /QFu6Oe4SdS8i5wTlOih5Q==
+X-CSE-MsgGUID: Pmd+rAUTT/uAZirSpnUy8A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,258,1716274800"; 
+   d="scan'208";a="55352789"
+Received: from linux.intel.com ([10.54.29.200])
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2024 08:26:07 -0700
+Received: from [10.212.17.69] (kliang2-mobl1.ccr.corp.intel.com [10.212.17.69])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: detlev)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 6F59B378221B;
-	Fri,  2 Aug 2024 15:17:02 +0000 (UTC)
-From: Detlev Casanova <detlev.casanova@collabora.com>
-To: linux-kernel@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Finley Xiao <finley.xiao@rock-chips.com>,
-	Jagan Teki <jagan@edgeble.ai>,
-	Elaine Zhang <zhangqing@rock-chips.com>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH 3/3] soc: rockchip: power-domain: Add power domain support for rk3576
-Date: Fri,  2 Aug 2024 11:15:00 -0400
-Message-ID: <20240802151647.294307-4-detlev.casanova@collabora.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240802151647.294307-1-detlev.casanova@collabora.com>
-References: <20240802151647.294307-1-detlev.casanova@collabora.com>
+	by linux.intel.com (Postfix) with ESMTPS id 2E51820BF41F;
+	Fri,  2 Aug 2024 08:26:03 -0700 (PDT)
+Message-ID: <3956760b-de6e-4726-ac4f-e03738233f73@linux.intel.com>
+Date: Fri, 2 Aug 2024 11:26:01 -0400
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] perf/x86/rapl: Fix the energy-pkg event for AMD
+ CPUs
+To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>, peterz@infradead.org,
+ mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
+ mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+ irogers@google.com, adrian.hunter@intel.com, tglx@linutronix.de,
+ bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+ rui.zhang@intel.com
+Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, ananth.narayan@amd.com, gautham.shenoy@amd.com,
+ kprateek.nayak@amd.com, ravi.bangoria@amd.com
+References: <20240730044917.4680-1-Dhananjay.Ugwekar@amd.com>
+ <20240730044917.4680-2-Dhananjay.Ugwekar@amd.com>
+Content-Language: en-US
+From: "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20240730044917.4680-2-Dhananjay.Ugwekar@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Finley Xiao <finley.xiao@rock-chips.com>
+Hi Dhananjay,
 
-This driver is modified to support RK3576 SoCs and lists the power domains.
+On 2024-07-30 12:49 a.m., Dhananjay Ugwekar wrote:
+> After commit ("x86/cpu/topology: Add support for the AMD 0x80000026 leaf"),
+> on AMD processors that support extended CPUID leaf 0x80000026, the
+> topology_die_cpumask() and topology_logical_die_id() macros, no longer
+> return the package cpumask and package id, instead they return the CCD
+> (Core Complex Die) mask and id respectively. This leads to the energy-pkg
+> event scope to be modified to CCD instead of package.
+> 
+> For more historical context, please refer to commit 32fb480e0a2c
+> ("powercap/intel_rapl: Support multi-die/package"), which initially changed
+> the RAPL scope from package to die for all systems, as Intel systems
+> with Die enumeration have RAPL scope as die, and those without die
+> enumeration were not affected by it. So, all systems(Intel, AMD, Hygon),
+> worked correctly with topology_logical_die_id() until recently, but this
+> changed after the "0x80000026 leaf" commit mentioned above.
+> 
+> Replacing topology_logical_die_id() with topology_physical_package_id()
+> conditionally only for AMD and Hygon fixes the energy-pkg event.
+> 
+> On a 12 CCD 1 Package AMD Zen4 Genoa machine:
+> 
+> Before:
+> $ cat /sys/devices/power/cpumask
+> 0,8,16,24,32,40,48,56,64,72,80,88.
+> 
+> The expected cpumask here is supposed to be just "0", as it is a package
+> scope event, only one CPU will be collecting the event for all the CPUs in
+> the package.
+> 
+> After:
+> $ cat /sys/devices/power/cpumask
+> 0
+> 
+> Fixes: 63edbaa48a57 ("x86/cpu/topology: Add support for the AMD 0x80000026 leaf")
+> Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+> Reviewed-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+> Changes in v2:
+> * Updated the scope description comment
+> * Dont create rapl_pmu_cpumask and rapl_pmu_idx local variables, as they're
+>   used only once, instead call the get_* functions directly where needed
+> * Check topology_logical_(die/package)_id return value
+> --->  arch/x86/events/rapl.c | 47 +++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 42 insertions(+), 5 deletions(-)
 
-Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
-Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
----
- drivers/pmdomain/rockchip/pm-domains.c | 69 ++++++++++++++++++++++++--
- 1 file changed, 66 insertions(+), 3 deletions(-)
+I just posted a patch set to clean up the hotplug code in perf.
+https://lore.kernel.org/lkml/20240802151643.1691631-1-kan.liang@linux.intel.com/
 
-diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-index 9b76b62869d0d..f0330bb51685f 100644
---- a/drivers/pmdomain/rockchip/pm-domains.c
-+++ b/drivers/pmdomain/rockchip/pm-domains.c
-@@ -33,6 +33,7 @@
- #include <dt-bindings/power/rk3368-power.h>
- #include <dt-bindings/power/rk3399-power.h>
- #include <dt-bindings/power/rk3568-power.h>
-+#include <dt-bindings/power/rk3576-power.h>
- #include <dt-bindings/power/rk3588-power.h>
- 
- struct rockchip_domain_info {
-@@ -50,6 +51,7 @@ struct rockchip_domain_info {
- 	u32 pwr_offset;
- 	u32 mem_offset;
- 	u32 req_offset;
-+	u32 delay_us;
- };
- 
- struct rockchip_pmu_info {
-@@ -144,9 +146,26 @@ struct rockchip_pmu {
- 	.active_wakeup = wakeup,			\
+With the cleanup patch set, the fix may be simplified as below.
+
+diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+index b70ad880c5bc..801697be4118 100644
+--- a/arch/x86/events/rapl.c
++++ b/arch/x86/events/rapl.c
+@@ -646,6 +646,10 @@ static int __init init_rapl_pmus(void)
+ 	rapl_pmus->pmu.module           = THIS_MODULE;
+ 	rapl_pmus->pmu.scope            = PERF_PMU_SCOPE_DIE;
+ 	rapl_pmus->pmu.capabilities     = PERF_PMU_CAP_NO_EXCLUDE;
++
++	if (rapl_pmu_is_pkg_scope())
++		rapl_pmus->pmu.scope = PERF_PMU_SCOPE_PKG;
++
+ 	return 0;
  }
- 
--#define DOMAIN_RK3036(_name, req, ack, idle, wakeup)		\
-+#define DOMAIN_M_O_R_G(_name, p_offset, pwr, status, r_status, r_offset, req, idle, ack, g_mask, delay, wakeup)	\
- {							\
--	.name = _name,				\
-+	.name = _name,					\
-+	.pwr_offset = p_offset,				\
-+	.pwr_w_mask = (pwr) << 16,			\
-+	.pwr_mask = (pwr),				\
-+	.status_mask = (status),			\
-+	.repair_status_mask = (r_status),		\
-+	.req_offset = r_offset,				\
-+	.req_w_mask = (req) << 16,			\
-+	.req_mask = (req),				\
-+	.idle_mask = (idle),				\
-+	.ack_mask = (ack),				\
-+	.delay_us = delay,				\
-+	.active_wakeup = wakeup,			\
-+}
-+
-+#define DOMAIN_RK3036(_name, req, ack, idle, wakeup)	\
-+{							\
-+	.name = _name,					\
- 	.req_mask = (req),				\
- 	.req_w_mask = (req) << 16,			\
- 	.ack_mask = (ack),				\
-@@ -175,6 +194,9 @@ struct rockchip_pmu {
- #define DOMAIN_RK3568(name, pwr, req, wakeup)		\
- 	DOMAIN_M(name, pwr, pwr, req, req, req, wakeup)
- 
-+#define DOMAIN_RK3576(name, p_offset, pwr, status, r_status, r_offset, req, idle, g_mask, delay, wakeup)	\
-+	DOMAIN_M_O_R_G(name, p_offset, pwr, status, r_status, r_offset, req, idle, idle, g_mask, delay, wakeup)
-+
- /*
-  * Dynamic Memory Controller may need to coordinate with us -- see
-  * rockchip_pmu_block().
-@@ -552,7 +574,10 @@ static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
- 			/* if powering up, leave idle mode */
- 			rockchip_pmu_set_idle_request(pd, false);
- 
--			rockchip_pmu_restore_qos(pd);
-+			if (pd->info->delay_us)
-+				udelay(pd->info->delay_us);
-+			else
-+				rockchip_pmu_restore_qos(pd);
- 		}
- 
- 		clk_bulk_disable(pd->num_clks, pd->clks);
-@@ -1106,6 +1131,28 @@ static const struct rockchip_domain_info rk3568_pm_domains[] = {
- 	[RK3568_PD_PIPE]	= DOMAIN_RK3568("pipe", BIT(8), BIT(11), false),
- };
- 
-+static const struct rockchip_domain_info rk3576_pm_domains[] = {
-+	[RK3576_PD_NPU]		= DOMAIN_RK3576("npu",    0x0, BIT(0),  BIT(0), 0,       0x0, 0,       0,       0,       0,    false),
-+	[RK3576_PD_NVM]		= DOMAIN_RK3576("nvm",    0x0, BIT(6),  0,      BIT(6),  0x4, BIT(2),  BIT(18), BIT(2),  0,    false),
-+	[RK3576_PD_SDGMAC]	= DOMAIN_RK3576("sdgmac", 0x0, BIT(7),  0,      BIT(7),  0x4, BIT(1),  BIT(17), 0x6,     0,    false),
-+	[RK3576_PD_AUDIO]	= DOMAIN_RK3576("audio",  0x0, BIT(8),  0,      BIT(8),  0x4, BIT(0),  BIT(16), BIT(0),  0,    false),
-+	[RK3576_PD_PHP]		= DOMAIN_RK3576("php",    0x0, BIT(9),  0,      BIT(9),  0x0, BIT(15), BIT(15), BIT(15), 0,    false),
-+	[RK3576_PD_SUBPHP]	= DOMAIN_RK3576("subphp", 0x0, BIT(10), 0,      BIT(10), 0x0, 0,       0,       0,       0,    false),
-+	[RK3576_PD_VOP]		= DOMAIN_RK3576("vop",    0x0, BIT(11), 0,      BIT(11), 0x0, 0x6000,  0x6000,  0x6000,  15,   false),
-+	[RK3576_PD_VO1]		= DOMAIN_RK3576("vo1",    0x0, BIT(14), 0,      BIT(14), 0x0, BIT(12), BIT(12), 0x7000,  0,    false),
-+	[RK3576_PD_VO0]		= DOMAIN_RK3576("vo0",    0x0, BIT(15), 0,      BIT(15), 0x0, BIT(11), BIT(11), 0x6800,  0,    false),
-+	[RK3576_PD_USB]		= DOMAIN_RK3576("usb",    0x4, BIT(0),  0,      BIT(16), 0x0, BIT(10), BIT(10), 0x6400,  0,    true),
-+	[RK3576_PD_VI]		= DOMAIN_RK3576("vi",     0x4, BIT(1),  0,      BIT(17), 0x0, BIT(9),  BIT(9),  BIT(9),  0,    false),
-+	[RK3576_PD_VEPU0]	= DOMAIN_RK3576("vepu0",  0x4, BIT(2),  0,      BIT(18), 0x0, BIT(7),  BIT(7),  0x280,   0,    false),
-+	[RK3576_PD_VEPU1]	= DOMAIN_RK3576("vepu1",  0x4, BIT(3),  0,      BIT(19), 0x0, BIT(8),  BIT(8),  BIT(8),  0,    false),
-+	[RK3576_PD_VDEC]	= DOMAIN_RK3576("vdec",   0x4, BIT(4),  0,      BIT(20), 0x0, BIT(6),  BIT(6),  BIT(6),  0,    false),
-+	[RK3576_PD_VPU]		= DOMAIN_RK3576("vpu",    0x4, BIT(5),  0,      BIT(21), 0x0, BIT(5),  BIT(5),  BIT(5),  0,    false),
-+	[RK3576_PD_NPUTOP]	= DOMAIN_RK3576("nputop", 0x4, BIT(6),  0,      BIT(22), 0x0, 0x18,    0x18,    0x18,    15,   false),
-+	[RK3576_PD_NPU0]	= DOMAIN_RK3576("npu0",   0x4, BIT(7),  0,      BIT(23), 0x0, BIT(1),  BIT(1),  0x1a,    0,    false),
-+	[RK3576_PD_NPU1]	= DOMAIN_RK3576("npu1",   0x4, BIT(8),  0,      BIT(24), 0x0, BIT(2),  BIT(2),  0x1c,    0,    false),
-+	[RK3576_PD_GPU]		= DOMAIN_RK3576("gpu",    0x4, BIT(9),  0,      BIT(25), 0x0, BIT(0),  BIT(0),  BIT(0),  0,    false),
-+};
-+
- static const struct rockchip_domain_info rk3588_pm_domains[] = {
- 	[RK3588_PD_GPU]		= DOMAIN_RK3588("gpu",     0x0, BIT(0),  0,       0x0, 0,       BIT(1),  0x0, BIT(0),  BIT(0),  false),
- 	[RK3588_PD_NPU]		= DOMAIN_RK3588("npu",     0x0, BIT(1),  BIT(1),  0x0, 0,       0,       0x0, 0,       0,       false),
-@@ -1284,6 +1331,18 @@ static const struct rockchip_pmu_info rk3568_pmu = {
- 	.domain_info = rk3568_pm_domains,
- };
- 
-+static const struct rockchip_pmu_info rk3576_pmu = {
-+	.pwr_offset = 0x210,
-+	.status_offset = 0x230,
-+	.req_offset = 0x110,
-+	.idle_offset = 0x128,
-+	.ack_offset = 0x120,
-+	.repair_status_offset = 0x570,
-+
-+	.num_domains = ARRAY_SIZE(rk3576_pm_domains),
-+	.domain_info = rk3576_pm_domains,
-+};
-+
- static const struct rockchip_pmu_info rk3588_pmu = {
- 	.pwr_offset = 0x14c,
- 	.status_offset = 0x180,
-@@ -1359,6 +1418,10 @@ static const struct of_device_id rockchip_pm_domain_dt_match[] = {
- 		.compatible = "rockchip,rk3568-power-controller",
- 		.data = (void *)&rk3568_pmu,
- 	},
-+	{
-+		.compatible = "rockchip,rk3576-power-controller",
-+		.data = (void *)&rk3576_pmu,
-+	},
- 	{
- 		.compatible = "rockchip,rk3588-power-controller",
- 		.data = (void *)&rk3588_pmu,
--- 
-2.46.0
 
+Could you please take a look at the cleanup patch and give it a try?
+
+Thanks,
+Kan
+> 
+> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+> index b985ca79cf97..7097c0f6a71f 100644
+> --- a/arch/x86/events/rapl.c
+> +++ b/arch/x86/events/rapl.c
+> @@ -103,6 +103,19 @@ static struct perf_pmu_events_attr event_attr_##v = {				\
+>  	.event_str	= str,							\
+>  };
+>  
+> +/*
+> + * RAPL Package energy counter scope:
+> + * 1. AMD/HYGON platforms have a per-PKG package energy counter
+> + * 2. For Intel platforms
+> + *	2.1. CLX-AP is multi-die and its RAPL MSRs are die-scope
+> + *	2.2. Other Intel platforms are single die systems so the scope can be
+> + *	     considered as either pkg-scope or die-scope, and we are considering
+> + *	     them as die-scope.
+> + */
+> +#define rapl_pmu_is_pkg_scope()				\
+> +	(boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||	\
+> +	 boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
+> +
+>  struct rapl_pmu {
+>  	raw_spinlock_t		lock;
+>  	int			n_active;
+> @@ -140,9 +153,25 @@ static unsigned int rapl_cntr_mask;
+>  static u64 rapl_timer_ms;
+>  static struct perf_msr *rapl_msrs;
+>  
+> +/*
+> + * Helper functions to get the correct topology macros according to the
+> + * RAPL PMU scope.
+> + */
+> +static inline unsigned int get_rapl_pmu_idx(int cpu)
+> +{
+> +	return rapl_pmu_is_pkg_scope() ? topology_logical_package_id(cpu) :
+> +					 topology_logical_die_id(cpu);
+> +}
+> +
+> +static inline const struct cpumask *get_rapl_pmu_cpumask(int cpu)
+> +{
+> +	return rapl_pmu_is_pkg_scope() ? topology_core_cpumask(cpu) :
+> +					 topology_die_cpumask(cpu);
+> +}
+> +
+>  static inline struct rapl_pmu *cpu_to_rapl_pmu(unsigned int cpu)
+>  {
+> -	unsigned int rapl_pmu_idx = topology_logical_die_id(cpu);
+> +	unsigned int rapl_pmu_idx = get_rapl_pmu_idx(cpu);
+>  
+>  	/*
+>  	 * The unsigned check also catches the '-1' return value for non
+> @@ -552,7 +581,7 @@ static int rapl_cpu_offline(unsigned int cpu)
+>  
+>  	pmu->cpu = -1;
+>  	/* Find a new cpu to collect rapl events */
+> -	target = cpumask_any_but(topology_die_cpumask(cpu), cpu);
+> +	target = cpumask_any_but(get_rapl_pmu_cpumask(cpu), cpu);
+>  
+>  	/* Migrate rapl events to the new target */
+>  	if (target < nr_cpu_ids) {
+> @@ -565,6 +594,11 @@ static int rapl_cpu_offline(unsigned int cpu)
+>  
+>  static int rapl_cpu_online(unsigned int cpu)
+>  {
+> +	s32 rapl_pmu_idx = get_rapl_pmu_idx(cpu);
+> +	if (rapl_pmu_idx < 0) {
+> +		pr_err("topology_logical_(package/die)_id() returned a negative value");
+> +		return -EINVAL;
+> +	}
+>  	struct rapl_pmu *pmu = cpu_to_rapl_pmu(cpu);
+>  	int target;
+>  
+> @@ -579,14 +613,14 @@ static int rapl_cpu_online(unsigned int cpu)
+>  		pmu->timer_interval = ms_to_ktime(rapl_timer_ms);
+>  		rapl_hrtimer_init(pmu);
+>  
+> -		rapl_pmus->pmus[topology_logical_die_id(cpu)] = pmu;
+> +		rapl_pmus->pmus[rapl_pmu_idx] = pmu;
+>  	}
+>  
+>  	/*
+>  	 * Check if there is an online cpu in the package which collects rapl
+>  	 * events already.
+>  	 */
+> -	target = cpumask_any_and(&rapl_cpu_mask, topology_die_cpumask(cpu));
+> +	target = cpumask_any_and(&rapl_cpu_mask, get_rapl_pmu_cpumask(cpu));
+>  	if (target < nr_cpu_ids)
+>  		return 0;
+>  
+> @@ -675,7 +709,10 @@ static const struct attribute_group *rapl_attr_update[] = {
+>  
+>  static int __init init_rapl_pmus(void)
+>  {
+> -	int nr_rapl_pmu = topology_max_packages() * topology_max_dies_per_package();
+> +	int nr_rapl_pmu = topology_max_packages();
+> +
+> +	if (!rapl_pmu_is_pkg_scope())
+> +		nr_rapl_pmu *= topology_max_dies_per_package();
+>  
+>  	rapl_pmus = kzalloc(struct_size(rapl_pmus, pmus, nr_rapl_pmu), GFP_KERNEL);
+>  	if (!rapl_pmus)
 
