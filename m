@@ -1,140 +1,243 @@
-Return-Path: <linux-pm+bounces-11899-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11900-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 529C8946FA8
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 17:39:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 705CC946FD0
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 18:30:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C50E2816F9
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 15:39:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67FEDB20FE1
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 16:30:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADDAB76048;
-	Sun,  4 Aug 2024 15:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 583CB558BB;
+	Sun,  4 Aug 2024 16:30:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aKFFO7ZB"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="AMrbWufe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1569461;
-	Sun,  4 Aug 2024 15:39:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722785940; cv=none; b=WP1DszvSbZDx+4JXP3VbRoHyd6zvxmzKFA8ckkpGFzOMC4mOSe9D0N50ovz2ExAtT2Q6/mZuM0Oy4M2vQixOTQ3A3uoDibiXDvk5Eyr6A32nBh5IQcyztW0srBu7SIHtYKvxManoTyuE+4MlrmgW0yKtz1nfT0lSIy9tPW4HaYc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722785940; c=relaxed/simple;
-	bh=0RcBONSyvTu2NeDfokbVG8c42Ck7qD/p+n3Ex+8p0Gw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LByHKLMDWp+BuJKgM9WFGTLLOwjZxIFsbg3/mBdXJLGVwv2H1ncVpDaNNwxXS7FelBPO+QfjVpO55dkIJ9pGmO78OLz0OU9QD5emQT2IfmKHCzKssN0GvZt7G1ZJaDO965H7L5p9Z1iKm8ZJ/N1Q67cmGzWT62HFMoV0IiQOIAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aKFFO7ZB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 012DAC32786;
-	Sun,  4 Aug 2024 15:38:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722785940;
-	bh=0RcBONSyvTu2NeDfokbVG8c42Ck7qD/p+n3Ex+8p0Gw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aKFFO7ZBD9S9K33HLZY14nwEBO9VDI7jMf9lwwkzryJOcYZt188WUhDcxkwTdyDgs
-	 zmEY/sP5BD2j8qeIigBhV9DrVUZ53MgtNFOR2OeeHAb8dHpUsolUBrhXpIrNDwCJbR
-	 +4IyGJbD2MHgqfVh7LJ5Izalh2PpCHoX0lX0AnlMDe5V0SmHtvOwR+hNZNUc+9lc90
-	 kmDjEc9Q1ASzmHoeXifSFtw4UFyxoWSou3jtqJI+XvyY2Dmabvxwy1wCgI/AEn5Rsy
-	 iZqkLH9ZlY0eDzePLkjNL4dxtcgrNZ/Y/2NItwoOLkKpIpXOAaLoWyMi5ZhwlJiP5O
-	 iltO27ANSFDRg==
-Message-ID: <6318dd03-c41d-4675-af86-c509f02200f9@kernel.org>
-Date: Sun, 4 Aug 2024 17:38:52 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4831E76025;
+	Sun,  4 Aug 2024 16:30:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722789044; cv=pass; b=KO1x5R8Z2cs2ME7C5B+GVKRKieZd1VN2e6+XOY31sktnczHDv2QnVLckE8fFL1QTUkhv/nINnCIR0mYnAJ791AxHrAY17KvZfPGw6TRG5SczEXDv0Yno7m9i4NM1qnO8dD78yr11EWzJsxtmkMdZ0FANXdtPuMcJA2SmvKxrNhM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722789044; c=relaxed/simple;
+	bh=kQKdMWe3MvPWs/iBEYQoVr58syp150UxqcwavQKQoR8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Oq+OZAC2BzSOAyOVtAClSouKoEsy+0UiSHBpDXoPDXiFRICdkC6SQPqHqmcfaHPyRRQY/0dz2ceigMdJWI0QH04VyypKOSpPFY4zR46/IpxvREYpnwh8hY6Hk3PHUI3SUykPSikJhdMMktJr5tE9fHBstz8toYxC2CLtibnsLPA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=AMrbWufe; arc=pass smtp.client-ip=136.143.188.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1722789006; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=nwje/47x9KaVtqaLL0x9JfB1uyv0xjezjL1JgVw191JI3w3bKebnLgfS1NI8frLPb5pc3a0X5cmnF8vYOrqYPt8JqyNVHyR3ya2WcQcVTa9FI2bveOCgsHI4ZA9F5pwtVB8LKnunM05oT9gJxR7/3cOnvOTfkWqhJT2YN6iicSA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1722789006; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=k83AKgKohjBrZOHcPcl1ds4ciQppXSWeH0BLAv75Agw=; 
+	b=N4LwckCvh1DS36oBCam3In4ZWTiB7Nvp0kLKR5oZvbVj8uHEkv56H5txuTLUMTUzBwzKyJXYvyzsqrMa4d7WZPyroZiuCRG964e3cbAMCJ7I3Pt9n9QBh/vdCgBm3EPQ6w1mEIT6ziWI5iCwpYaU/LmdsilKE4wJEMH+gBjXwtg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1722789006;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=k83AKgKohjBrZOHcPcl1ds4ciQppXSWeH0BLAv75Agw=;
+	b=AMrbWufef61W362zeWt6joY4UHfkcqN8r6+iGgbsMlePkrgRDUA3CPzRfNY4iOgZ
+	CGnuqKI96NKx2E0X8NFOVBOkdi34qci86W4D/aiDioJbhR6ekf6OAYOPlRdt6J5afxz
+	DIqkJTgD653qMtX9NVZODt8R4/185rnW/YO+B+eQ=
+Received: by mx.zohomail.com with SMTPS id 1722789004041478.35275864340895;
+	Sun, 4 Aug 2024 09:30:04 -0700 (PDT)
+Received: by mercury (Postfix, from userid 1000)
+	id 5F8131060930; Sun, 04 Aug 2024 18:29:57 +0200 (CEST)
+Date: Sun, 4 Aug 2024 18:29:57 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Dragan Simic <dsimic@manjaro.org>
+Cc: Chris Morgan <macromorgan@hotmail.com>, 
+	Chris Morgan <macroalpha82@gmail.com>, linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, jagan@edgeble.ai, andyshrk@163.com, jonas@kwiboo.se, 
+	t.schramm@manjaro.org, heiko@sntech.de, conor+dt@kernel.org, krzk+dt@kernel.org, 
+	robh@kernel.org
+Subject: Re: [PATCH 2/5] power: supply: cw2015: Add support for dual-cell
+ configurations
+Message-ID: <3fgf7jyla6gtxqppjjnjb5dgciqqus2iwjunjavlmhy7fxdqv7@a2iycmzlgkbb>
+References: <20240726194948.109326-1-macroalpha82@gmail.com>
+ <20240726194948.109326-3-macroalpha82@gmail.com>
+ <eimocj6mlvo6u4x54heywblwrfnftxelzpvfcogpjp7vjmunor@5eqlqsszk6ni>
+ <MN2PR16MB2941F5FFA92B056533586FBDA5B12@MN2PR16MB2941.namprd16.prod.outlook.com>
+ <2eh5iqwtwlbpg5kpr4lvvhxo2tngw4w7qanelr6filcrru62le@o7cwpsahp2n7>
+ <8c44fcf923c5697ca55c8e32f3938d3b@manjaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 10/15] dt-bindings: power: supply: axp20x: Add AXP717
- compatible
-To: Chris Morgan <macroalpha82@gmail.com>, linux-sunxi@lists.linux.dev
-Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
- quentin.schulz@free-electrons.com, mripard@kernel.org,
- tgamblin@baylibre.com, aidanmacdonald.0x0@gmail.com,
- u.kleine-koenig@pengutronix.de, lee@kernel.org, samuel@sholland.org,
- jernej.skrabec@gmail.com, sre@kernel.org, wens@csie.org,
- conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de,
- jic23@kernel.org, Chris Morgan <macromorgan@hotmail.com>
-References: <20240802192026.446344-1-macroalpha82@gmail.com>
- <20240802192026.446344-11-macroalpha82@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240802192026.446344-11-macroalpha82@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="nr6obygdxvzehgev"
+Content-Disposition: inline
+In-Reply-To: <8c44fcf923c5697ca55c8e32f3938d3b@manjaro.org>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.3.1/222.613.84
+X-ZohoMailClient: External
 
-On 02/08/2024 21:20, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
-> 
-> Add binding information for AXP717.
-> 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> ---
->  .../power/supply/x-powers,axp20x-battery-power-supply.yaml       | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-battery-power-supply.yaml b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-battery-power-supply.yaml
-> index f196bf70b248..5ccd375eb294 100644
-> --- a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-battery-power-supply.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-battery-power-supply.yaml
-> @@ -23,6 +23,7 @@ properties:
->        - const: x-powers,axp202-battery-power-supply
->        - const: x-powers,axp209-battery-power-supply
->        - const: x-powers,axp221-battery-power-supply
-> +      - const: x-powers,axp717-battery-power-supply
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--nr6obygdxvzehgev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+Hi,
 
+On Fri, Aug 02, 2024 at 11:39:24PM GMT, Dragan Simic wrote:
+> On 2024-07-31 19:02, Sebastian Reichel wrote:
+> > On Wed, Jul 31, 2024 at 11:02:11AM GMT, Chris Morgan wrote:
+> > > On Fri, Jul 26, 2024 at 11:06:21PM +0200, Sebastian Reichel wrote:
+> > > > On Fri, Jul 26, 2024 at 02:49:45PM GMT, Chris Morgan wrote:
+> > > > > From: Chris Morgan <macromorgan@hotmail.com>
+> > > > >
+> > > > > The Cellwise cw2015 datasheet reports that it can handle two cells
+> > > > > in a series configuration. Allow a device tree parameter to note
+> > > > > this condition so that the driver reports the correct voltage val=
+ues
+> > > > > to userspace.
+> > > >
+> > > > I found this:
+> > > >
+> > > > http://www.cellwise-semi.com/Public/assests/menu/20230302/640007680=
+6706.pdf
+> > > >
+> > > > Which says:
+> > > >
+> > > >   CW2015 can be used in 2 or more batteries connected in series, or
+> > > >   several cells connected in parallel.
+> > > >
+> > > > So dual-cell seems like a bad property name. Instead the number of
+> > > > serial cells should be provided. This property is then not really
+> > > > specific to the Cellwise fuel gauge and instead a property of the
+> > > > battery pack (i.e. simple-battery.yaml).
+> > >=20
+> > > It's conflicting information (which further confuses me). I see in
+> > > that
+> > > datasheet it says 2 or more, whereas the datasheet found here says
+> > > only
+> > > 2 cells:
+> > >=20
+> > > https://www.lestat.st/_media/informatique/projets/python-cw2015/cw201=
+5-power-management-datasheet.pdf
+> > >=20
+> > > But I agree in principle that we should be setting this as a property
+> > > of a simple-battery rather than a manufacturer specific parameter.
+> > >=20
+> > > >
+> > > > > Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> > > > > ---
+> > > > >  drivers/power/supply/cw2015_battery.c | 7 +++++++
+> > > > >  1 file changed, 7 insertions(+)
+> > > > >
+> > > > > diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/powe=
+r/supply/cw2015_battery.c
+> > > > > index f63c3c410451..b23a6d4fa4fa 100644
+> > > > > --- a/drivers/power/supply/cw2015_battery.c
+> > > > > +++ b/drivers/power/supply/cw2015_battery.c
+> > > > > @@ -77,6 +77,8 @@ struct cw_battery {
+> > > > >  	u32 poll_interval_ms;
+> > > > >  	u8 alert_level;
+> > > > >
+> > > > > +	bool dual_cell;
+> > > > > +
+> > > > >  	unsigned int read_errors;
+> > > > >  	unsigned int charge_stuck_cnt;
+> > > > >  };
+> > > > > @@ -325,6 +327,9 @@ static int cw_get_voltage(struct cw_battery *=
+cw_bat)
+> > > > >  	 */
+> > > > >  	voltage_mv =3D avg * 312 / 1024;
+> > > > >
+> > > > > +	if (cw_bat->dual_cell)
+> > > > > +		voltage_mv *=3D 2;
+> > > >
+> > > > Unfortunately there are no details in the document, but this looks
+> > > > very fishy. Does it only measure the first cell and hope that the
+> > > > other cells have the same voltage?
+> > > >
+> > > > This (unmerged) series also applies to your problem to some degree:
+> > > >
+> > > > https://lore.kernel.org/all/20240416121818.543896-3-mike.looijmans@=
+topic.nl/
+> > >=20
+> > > I think based on the application diagram it is in fact measuring the
+> > > cell voltage.
+> > >=20
+> > > That said, this ultimately boils down to a cosmetic thing
+> > > as not having this property simply means userspace sees the battery
+> > > voltage as 3.8v instead of 7.6v as is written on the side.
+> >=20
+> > With the cells being connected in serial, the voltage of both cells
+> > can be different. There is not "the cell voltage". Instead there is
+> > a voltage for cell 1 and a voltage for cell 2. In a perfect battery
+> > they are the same, but in reality they are not. In the extreme case
+> > one of the cells may be broken while the other is still fine. It
+> > sounds as if this is just measuring the voltage from the first
+> > cell and assumes the second cell has the same voltage.
+> >=20
+> > Ideally the voltage on these platforms is not exposed via the normal
+> > VOLTAGE property and instead uses a new property for telling
+> > userspace the voltage for a single cell. The kernel simply does not
+> > know the voltage of the whole battery pack.
+> >=20
+> > FWIW this is the worst battery measurement system I've seen so far
+> > if my understanding of the hardware design is correct.
+>=20
+> Please note that two facts should be considered here:
+>=20
+>  - The GenBook schematic [1] clearly shows that the individual battery
+>    cells aren't exposed at its internal battery connector and, as a
+>    result, aren't available for individual cell voltage monitoring
+>=20
+>  - The GenBook uses a CW2013 as it fuel gauge, [1] instead of CW2015
+>    as mentioned here a few times, but I haven't went through the CW2013
+>    datasheet(s) yet to see what are the actual differences between it
+>    and the CW2015
+>=20
+> [1] https://wiki.cool-pi.com/notebook/coolpi-genbook-v20.pdf
+
+Ah, thanks for pointing to the schematics. So the fuel gauge can
+only measure the voltage of the whole battery, but VCELL register
+provides the voltage for 1 cell? What is the origin of the dual-cell
+property? Was this something you came up with yourself when noticing
+the wrong voltage?
+
+Based on the above information my guess would be that CW2013 uses a
+different voltage resolution than CW2015 for the VCELL register. The
+datasheet for CW2015 says 14bit ADC with 305uV resolution. Maybe
+the CW2013 simply uses a different ADC. Do you have the datasheet
+for the chip?
+
+-- Sebastian
+
+--nr6obygdxvzehgev
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmavrH0ACgkQ2O7X88g7
++pr/qxAApdbotqU12LgNuKVPIMNCOH7Yh7rvIWQo+T5qKZ02AaK6/KMqHdXEeak6
+zeEpTOYH7It70HVoe04AXVCUxl2Nq1YtKZP1aWoeHbjuE8fQNqyAGk/C/X3Lv5uA
+MbjschmTykXt9iUc/7aQnLUjsKf6Oi1SnhQA6fMlXqZxxaEAaNvRyorx0JLSnNv9
+w13ijDtnhKY45jkYONftZr7KTSOFg8E3YqnG4Rzxmx58m5caL6kGDbiUbi3VksfL
+tooBQgLw6N4kbzY0Egwv6wkDKRmEcsgtm8+CylHa1IO7Pji0BZX1C19HxXp+eR4G
+ATkTXWkdDl4bhA0vuc0gIISLp/H//YzMBqIdd6jYXFxma0BwpWBGdeFdb2oYWea6
+JKmPpX2/XaMF0AQXFY9eckn/GD1Kq/ogvuni4fPHPppOfl6Q3lSl4R1N5Kunuxfy
+sE4Kby5004Eyl+etceuAEOfNvNxDO6HVIDzjVmBumwW2/bdG511zM7BeVX2nz1Jk
+DMXP0BLEHekROWv+vY3JYskD+Iuux0FPMOU8YFEw97nBXAvt7JNIruv4ROO1bMPW
+/Eg1WzAd41kVw1rPYdY+lfCX949L/LlXgPz+EXzynYzR5M8nDtaNIE9IaQ+r1aoX
+5jNA+6qaAtg5r4Jwo5QdHz+XHPS1dkN5qvCJh/kfjOV9341UFxY=
+=82He
+-----END PGP SIGNATURE-----
+
+--nr6obygdxvzehgev--
 
