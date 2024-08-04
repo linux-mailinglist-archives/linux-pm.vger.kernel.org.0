@@ -1,129 +1,155 @@
-Return-Path: <linux-pm+bounces-11892-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11893-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67BB2946DDD
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 11:17:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 338F4946E2D
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 11:56:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 165381F20FD1
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 09:17:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E415128191F
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 09:56:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB6A17588;
-	Sun,  4 Aug 2024 09:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 523DC23775;
+	Sun,  4 Aug 2024 09:56:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IFGsWleN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PSgcKQ7Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB05521345
-	for <linux-pm@vger.kernel.org>; Sun,  4 Aug 2024 09:17:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25EA12374C;
+	Sun,  4 Aug 2024 09:56:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722763033; cv=none; b=Pijnxw+0okqRV+beXkhG7OaHXLyBjlmreus6reoRbmjW5QwUVY6xhsre2FmQh3/HOk6qYx8RBHiCAhi6mkkDLDUeJZOCMwOnF1TTncCfAdf8HwhlV2FMANN20OObMNc6tbjgZ9Gzo7HPYf4EhqdhHUDxZIAe23g0p+IY9iyxka8=
+	t=1722765407; cv=none; b=LZI0wLtq0vcItkwyf9jgE5xjWqwed5swDQghI+3tHChuyLSSbK+iQ9iGmjiLh41lvsy4tIYpSuuTQaXeP4JpW0w2BV7sHzoY5GWHw5r7YLVhqrIe5qCqt6eDOk8TlcVT2dgHwC3ohzhfxTGZM207XdOFKI9IllZuT2eHmX8s6yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722763033; c=relaxed/simple;
-	bh=8t4KkhEqwa8vESWacxIB0ZboE9iO2+3ko0q2paQ4RL4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kRslLGKakdpRs3FNBYySiLTXimlK99Dm2m1hbt8fsBAqSJC7mbS4UqnBMf/vtEl7Z5h0HjWDAtL/sqWKrOLxAd7oaKW/97DB+Stf4elX1+LLenuY6RMjqMePzn9shKJFS+9+dvHQivDgUCeOUWVq/TYVzILYFZt/tA1ox68vpZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IFGsWleN; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6510c0c8e29so77359247b3.0
-        for <linux-pm@vger.kernel.org>; Sun, 04 Aug 2024 02:17:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722763030; x=1723367830; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mwig1T/GI7J6NZajQWaoVMnmbX4imhd/r3iYNF53W6Y=;
-        b=IFGsWleNSnPNpVpwGrPUpZj7iCAzjkklZfxK9bCkcnmS7VB4jf6h+0XjXMGyVl50H6
-         28FAD6whFjSzEY6KEgvQQGHczcFbkpGRh1t3D67v9jrLCTb24QH+M7W6k9WcT6x/uE90
-         d8Z5mnpXCg4JjoqneBomYVpJIJSm0aCVb6IBHiiuBV/eq7oBpd0Q9epWK/1Ff8jNHOyO
-         3W95E01znQh6qCXexkrY2+M+QR77icatJULeYG4IOYleyCcnHVLS6LGPXs+lohLWiWsA
-         /n16I+Y+0n89258pyP8BzS576johplzLIvvbZbHOK4HajdWKBlTpWu/Ak1+DdgKDR4zv
-         KMeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722763030; x=1723367830;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mwig1T/GI7J6NZajQWaoVMnmbX4imhd/r3iYNF53W6Y=;
-        b=DQGJ6e2OBmG8nC4709z9B/e4izR6QCBUEFyryrrwewry8zkVgoZCaJ1BgDj8gSCSAd
-         r4ZI8D+YEdVG/cSvS+UH/WoQbf2w45bOwHeHXRgoYHE7HS6RTVxHDsbsyxnwQQgubyyr
-         YM0clA2jAFbw00heTv5fbUPGOj1AIvV3xI7cJWMM9kS0iovZgnlmQ2FM0MPnN41RjoZm
-         Eal7mliRdGPJXgnTPXaYEo0GmV++jrb6mtOVkcSp4HMBV+uNvETLH12gO+jnjdiLl3Lg
-         Fw2LD9d1fWDBEhHIMkP66Gr0YzH1mymfOFogG6wb00+gBgvsC7TJD96ujFf59MMsKfqk
-         nVPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXl1pNKBa1lRMOQJj1HtSmcq9l5+j0Y8avajHiN/DpQ5S3NOXPxWo0fOHBFE2ehbQ0mwMDMTODKHA7VCuzh99+A0pP7ncevfy8=
-X-Gm-Message-State: AOJu0YzmtYlvj8/tTu2mo3m23Sa9W0wIsEbUMjdS/86Qzg1P8wjQa3Xz
-	Cj8SOFl+h6Gb7O9iUbmRPzNNTINF1dKxJtuIl/dNwpb5FH0YVcj1InPoRgT8O9TOy9oeJ3KI3xc
-	REgXswrOQRH5rLz8YBiKHm0OJkrpHIaIX8aZE7w==
-X-Google-Smtp-Source: AGHT+IEjvRALfHiK20+HqWr/VOyns/i1THpuPrDOhczyqEMfLwxtq9r+VorCam7xfy5I9cowlh1ysHraCKWf6o+C75Q=
-X-Received: by 2002:a0d:c247:0:b0:644:ffb2:5b19 with SMTP id
- 00721157ae682-6895fbdbd45mr94218977b3.9.1722763030652; Sun, 04 Aug 2024
- 02:17:10 -0700 (PDT)
+	s=arc-20240116; t=1722765407; c=relaxed/simple;
+	bh=74iIi3ysijcnAnukqflV6pp71g4JoQ1CiUa4Bpj4IIc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=roUsVAY4peeZLkWxRWJ9rX71Ap8i+sJIorYJUyejL0BFajKhBBFCyYxkNQCcwlS5hQ44mpyWfO0GUSgxgb4p7vodFDqO/iK3ezeUd8jNoAm8SXv0LoTZnAWkl3s+gHLE4jidFwlj8RAle9m/fG+C+wd8top9C1CuC8gAFII78xA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PSgcKQ7Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D386C32786;
+	Sun,  4 Aug 2024 09:56:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722765407;
+	bh=74iIi3ysijcnAnukqflV6pp71g4JoQ1CiUa4Bpj4IIc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PSgcKQ7ZB4ZshMyiGTV/O8PlYFKc0V6MPAFh2OyY4ZRdQmGPQIS3aTuz5+8g0vvQI
+	 E0V/zGS68NRL3HK5e4THJ+vL9DdMpHtsVUHV8YSnIR3vA4fT6t7t0es7gGGE/17VfU
+	 BocaPCXdt0htweCZVkt0bNVyETZUYURAh26gz6aDRtOrHpNq0R+UJaT5lgpBgFssmI
+	 jnLVnnUt8x9vs9jB8jVaExDFEXw/NYDOxQVMLqP/5Eavjkmb0jLvXLqCXB+YnznIAs
+	 eSITWskI+Y4NTOKDnqOLoSoSUBTQE9GwnNYOt5fFivCV4TTikbSAI2wMMh8wl0ehgU
+	 kGw43UYTWfrGw==
+Message-ID: <e04258dc-07c4-45c7-90d4-bc1ed9eb100b@kernel.org>
+Date: Sun, 4 Aug 2024 11:56:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240804-sm8350-fixes-v1-7-1149dd8399fe@linaro.org> <202408041643.qHy043eG-lkp@intel.com>
-In-Reply-To: <202408041643.qHy043eG-lkp@intel.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sun, 4 Aug 2024 12:16:59 +0300
-Message-ID: <CAA8EJppbLUvSyq_AEh4Cw4ZOf2h=2-A3EuG5SPuhc2RDChWMFg@mail.gmail.com>
-Subject: Re: [PATCH 07/11] dt-bindings: interconnect: qcom,sm8450: drop DISP nodes
-To: kernel test robot <lkp@intel.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Jonathan Marek <jonathan@marek.ca>, Robert Foss <rfoss@kernel.org>, 
-	Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>, 
-	Abhinav Kumar <quic_abhinavk@quicinc.com>, Sean Paul <sean@poorly.run>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Mike Tipton <quic_mdtipton@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, oe-kbuild-all@lists.linux.dev, 
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	freedreno@lists.freedesktop.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] dt-bindings: Add power-domain header for RK3576 SoCs
+To: Detlev Casanova <detlev.casanova@collabora.com>,
+ linux-kernel@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Finley Xiao <finley.xiao@rock-chips.com>, Jagan Teki <jagan@edgeble.ai>,
+ Elaine Zhang <zhangqing@rock-chips.com>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-pm@vger.kernel.org
+References: <20240802151647.294307-1-detlev.casanova@collabora.com>
+ <20240802151647.294307-3-detlev.casanova@collabora.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <20240802151647.294307-3-detlev.casanova@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, 4 Aug 2024 at 11:50, kernel test robot <lkp@intel.com> wrote:
->
-> Hi Dmitry,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on 668d33c9ff922c4590c58754ab064aaf53c387dd]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/clk-qcom-dispcc-sm8250-use-CLK_SET_RATE_PARENT-for-branch-clocks/20240804-134328
-> base:   668d33c9ff922c4590c58754ab064aaf53c387dd
-> patch link:    https://lore.kernel.org/r/20240804-sm8350-fixes-v1-7-1149dd8399fe%40linaro.org
-> patch subject: [PATCH 07/11] dt-bindings: interconnect: qcom,sm8450: drop DISP nodes
-> config: arm64-randconfig-051-20240804 (https://download.01.org/0day-ci/archive/20240804/202408041643.qHy043eG-lkp@intel.com/config)
-> compiler: aarch64-linux-gcc (GCC) 14.1.0
-> dtschema version: 2024.6.dev8+gf13c181
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240804/202408041643.qHy043eG-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408041643.qHy043eG-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> Error: arch/arm64/boot/dts/qcom/sm8450.dtsi:3055.31-32 syntax error
->    FATAL ERROR: Unable to parse input tree
+On 02/08/2024 17:14, Detlev Casanova wrote:
+> From: Finley Xiao <finley.xiao@rock-chips.com>
+> 
+> Define power domain IDs as described in the TRM.
 
-I see, I had this patched in my tree. So for sm8450 we have to keep
-backwards compatibility. Please ignore sm8450 patches.
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
 
--- 
-With best wishes
-Dmitry
+> 
+> Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
+> [reword]
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> ---
+>  include/dt-bindings/power/rk3576-power.h | 30 ++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 include/dt-bindings/power/rk3576-power.h
+
+This is part of bindings.
+
+> 
+> diff --git a/include/dt-bindings/power/rk3576-power.h b/include/dt-bindings/power/rk3576-power.h
+
+Missing vendor prefix. This should be named after compatible.
+
+> new file mode 100644
+> index 0000000000000..cb33a32c1aed9
+> --- /dev/null
+> +++ b/include/dt-bindings/power/rk3576-power.h
+> @@ -0,0 +1,30 @@
+> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+
+Weird license.
+
+Best regards,
+Krzysztof
+
 
