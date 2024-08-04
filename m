@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-11884-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11885-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2699946C6B
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 07:42:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8B57946C72
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 07:42:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D61871C214F6
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 05:42:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37EF61F2224B
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 05:42:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 184BF28DCC;
-	Sun,  4 Aug 2024 05:40:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E236F35894;
+	Sun,  4 Aug 2024 05:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EaaUbXZP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oLaVfb7R"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F229224F6
-	for <linux-pm@vger.kernel.org>; Sun,  4 Aug 2024 05:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9BCB25779
+	for <linux-pm@vger.kernel.org>; Sun,  4 Aug 2024 05:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722750031; cv=none; b=BGDzps95ZZkvwOfSgC8rP5ymneKy00m57kMPAnPgbOp1gUGkNBWnh/C0dWFP1+M59qEV0qKdFK+cUXn9rvpf4IB7ZCv2SZ8t3zgUNYEJURI50se+d2Iu9pnaCorSsr9GA6fUuWb+KZZO+acf5a5eB6xCay1R0i9HpAQoyMebyZ8=
+	t=1722750033; cv=none; b=hCmx+PlgR4+PplWl3kQq+Rilbncz9n0EXy3b1OLlguXrS3NIY0kapUYL7aKnzpMaGp+G6pC+FsT2Ga95GmRdFGgaZX5buk8iQMEuSKxcoVlHFvMoJD4B5jcs1zlbrYFue2c+0TZtQ190LDgOLa6wJbJPHnNnAkSfwPycfqwwWQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722750031; c=relaxed/simple;
-	bh=6M151A/97deCg4Tzy6kbdcdNo2uWiEunw9WlWKXXE4A=;
+	s=arc-20240116; t=1722750033; c=relaxed/simple;
+	bh=HqA05YSLsUf+ulIvMnFT+oPDyD4eqTz55YVfBO0RMbk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RYiFVarAhk50f+gAC1DLCMBh3/K0K1S4D0PpMOLoWKY87vtoV6hw7QrzwUZ+Ggzvj5xwe+POV1zsW7vHkSzs/uVs4I16sdjXl6PnIBouziWXzsC1mGvSevLAL5MGBvpiArT4A+H6ZCnBL5aeX5FqYThGBxj9SxFHNU1rjlp2JP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EaaUbXZP; arc=none smtp.client-ip=209.85.208.170
+	 In-Reply-To:To:Cc; b=abO5DOX8AtiPjuocsNDS5IUxab9goJQrhQjie7EDSPUpX3Id811CYorFFAldpFzl78fGPt3tyxc1XX7XBh8LurZm5z+VytUBVy/phqPS5ge7iLjzpzXgxMzGRNUL5+sXT/5gF8Sp10zT2K3Fvw2cXeIGhG9AmOvWcPBaZ3Dxtkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oLaVfb7R; arc=none smtp.client-ip=209.85.167.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2eeb1ba040aso148031211fa.1
-        for <linux-pm@vger.kernel.org>; Sat, 03 Aug 2024 22:40:29 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52efd08e6d9so13699284e87.1
+        for <linux-pm@vger.kernel.org>; Sat, 03 Aug 2024 22:40:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722750028; x=1723354828; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1722750030; x=1723354830; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=D/cm1jjd1/iMw8x+MPa4aHpCJxIMLcu4Yu6VZJrkd+4=;
-        b=EaaUbXZPMZBJsut7Ji/ZgKF66ShKG1B01Hy1HPgZiaR9u454YJRQTlX9cUlGlxloOo
-         0ZuU6Q5JgKvBtExl90n/YZii9YMLkzKvNLAdd44Ck4TRVNV+3Rm32EeyswUmu0/fOEPq
-         edYCrXtFHgj/NdmYp+vWKvQlTwdsN8IS+htrxZs7nleA6MLPEh2cps3d0PxRUgoWtcKZ
-         DojXAFsMzVnqYGgXCEuADUjE5qhDwjFmqkiyDpROxamitAMujcjPNFWgp4SY30F6k2Qh
-         5q+17f6D/bzgWWBq15q2aNxtSosS5LlpTak6B8iwNSx+F9Aux6Eq+TXYnG9rsLqlxh19
-         fHFg==
+        bh=kh5Pprq/CtcmFsRRpKtCskri/dUUv13iwNLegjB0jwk=;
+        b=oLaVfb7RUWf6YQDPmxL6eUc+dnE1hZoZpmxqia8YkcdYS83ukL0wVflKo7uk3XyGIX
+         jkDggZeVQ6YQ8Rq/7i2pvwdDlkLjZae+qP14hTxJqU0UhNx6giLEHJm87+bI0kukaHD9
+         l3k2jnBF8mUubFeAUmZikjYWzV25F7XJ1SABOV2MhizX3fMb2mbY0Bldpp2hle8XKTgw
+         NQ+kj5A8Tzr7M2DYe1oE/69T7kc69LQjmAlMlGWFjK+2ckHcDL5dDQnw7vlqyPWxr9RS
+         tE/JGl6swQVPAOkxwhKEqol1MyVye1vumteq6+prwuMwK/5oqycUilFb/hsSoFcLu4rK
+         Cfxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722750028; x=1723354828;
+        d=1e100.net; s=20230601; t=1722750030; x=1723354830;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D/cm1jjd1/iMw8x+MPa4aHpCJxIMLcu4Yu6VZJrkd+4=;
-        b=BIhTScLlbP59ayWox2Y3PJ4xXRmle0fui1FHNIiWqZJKbWPi1sGhP1ytPS+ExoSudI
-         m1pg1/ic8UKZGnzEVQ8DI4ZenVtmxUFS4WoFbOqINwWSUi2M9ORoSP3lv2JUawaCZ3vA
-         c185ZfuIZPipF0Edup+HWDJqI8g4f/voKxuFlIQXeuxjlVK1vxkzTIaetIPpuMzQ0Wc6
-         LIfmuU42AqR8Twkdnjz/npXY6BOPxP0pL5gVt6KGjsJJi82nyg9pP5iv+TNUp/Y2pogn
-         szX0V7ut+E8RQCcFxo0+JSWQHJ9iAbHQg31wgHiepojumzx3iDDaBIqd3KceyEHbS7di
-         LV9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWiFVpJEccGtCMXFSea3fbOtSE/SYsf6aaX7iRL8fZ69umV9BvDeqlw1CdnHy/JSbMHKi2JnEfRMeAByx7EQs2XHNEK29qLXEs=
-X-Gm-Message-State: AOJu0YxQjOBoEGLDLJPSHB4fOPah/wnatcKsTA5pphiVfbjLVJ62CgXi
-	QBdGOCS4NzQaRL4mZCrL04dTvUcl5tKELnwc++fkWixoSK3q8mGSLjVc9ZhJASY=
-X-Google-Smtp-Source: AGHT+IE6GCHKaYeu075bskYasZyEb1ipCnNJJfXpONn3eXOF68PSgyACnVQniJRme2MpKU/LdTcexg==
-X-Received: by 2002:a05:6512:eaa:b0:52e:be1f:bf8b with SMTP id 2adb3069b0e04-530bb3d42b1mr5422436e87.47.1722750028079;
-        Sat, 03 Aug 2024 22:40:28 -0700 (PDT)
+        bh=kh5Pprq/CtcmFsRRpKtCskri/dUUv13iwNLegjB0jwk=;
+        b=lYNKW9/qUP8ZuBKPcOM8WObEd1k8eg/zIZiXmqfdGUKaQ10Px/I5nIKNo51CsJmYTf
+         O2E0E9N1YrDdI1vTcmyDwN0YyzLBrQe3w8tnKQUIP/P7InRjfsTRi1AwImG0s3rqqe4b
+         7HDLC5HJzd9o8Owm8kmEFcqDcseej7teCcITl8mq+6zkT/LH4AZI2Cn3MMkRDhJNOm83
+         W0r9BK0eGzK0ao3V6MYOHl7M94o9tqPFoOWjqofujSk7EB5L1108Uzbo66DUyq0Uv3rW
+         PNgJHGSmNqhcPYVY5Qx0PPcoyVr/FH5JqzhF0wA7GGrDZVjvswzM5DG/J6sXCYPWZxWf
+         CSpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXFv7jNm4nL1+fVAqD4y3wyHpZHE9AlEuVtl519MSCFZohdPy/Bi8ar+OOXkFBTMkNjhpjqgiySIou8iV2LEYOVH9P7SK5FbQw=
+X-Gm-Message-State: AOJu0Ywhwv/aazywMtVoYorUF+o+a6GR6iooSo+eH/V1ZkerOMOjVna/
+	XHHjZGltZU/pKnU997KDw5wLO9eC5124Op2ujLX9ZKkBaa+TT7WXzULWLNPJDAs=
+X-Google-Smtp-Source: AGHT+IF/r6ICPMs1cY1y1zDA4LrgDq2W/xE+84RLh2kTzHBB0v+PBdUhnePF0ZgzMXwDr3Q0aeg8mw==
+X-Received: by 2002:a05:6512:3baa:b0:52c:ebd0:609 with SMTP id 2adb3069b0e04-530bb3929bcmr5449531e87.7.1722750029774;
+        Sat, 03 Aug 2024 22:40:29 -0700 (PDT)
 Received: from umbar.lan ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9bc3bd7sm292248466b.34.2024.08.03.22.40.26
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9bc3bd7sm292248466b.34.2024.08.03.22.40.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Aug 2024 22:40:27 -0700 (PDT)
+        Sat, 03 Aug 2024 22:40:29 -0700 (PDT)
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sun, 04 Aug 2024 08:40:10 +0300
-Subject: [PATCH 06/11] dt-bindings: interconnect: qcom,sm8350: drop DISP
+Date: Sun, 04 Aug 2024 08:40:11 +0300
+Subject: [PATCH 07/11] dt-bindings: interconnect: qcom,sm8450: drop DISP
  nodes
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -79,7 +79,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240804-sm8350-fixes-v1-6-1149dd8399fe@linaro.org>
+Message-Id: <20240804-sm8350-fixes-v1-7-1149dd8399fe@linaro.org>
 References: <20240804-sm8350-fixes-v1-0-1149dd8399fe@linaro.org>
 In-Reply-To: <20240804-sm8350-fixes-v1-0-1149dd8399fe@linaro.org>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -99,16 +99,16 @@ Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1599;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1618;
  i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=6M151A/97deCg4Tzy6kbdcdNo2uWiEunw9WlWKXXE4A=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBmrxQ/a5ai99IBr5oLB8ihNDDVEDnC6eztQD2HB
- FkuS5H6ISyJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZq8UPwAKCRCLPIo+Aiko
- 1ViwB/9juYoqen35TB+9r5HLnBBlnG536bV8RJOZZNMkwuu/waZjRhGhQ2VDNJczXk5zaGvPOvG
- drisN5/S9gg+LmPxTOxmaCZv1CQWFlrokspmyhOPC+aAksf2Qo2dmfMbTMsGQDYVBKrWtiCsame
- 0gWlHLYx878V+EPtrF/d0XvSJznPWW74EKe90xRKbd5McrDXSsEwIhimLUZH/ZbhbZ+E+LmbGdB
- MagDA5tAYUGDxowGRVXnmmW87XayUf1XbWy6FJqt0XyWJJjHVm6R6ZISzAKPHVNF/95idOh10ON
- v68ACSaDApfvmxV2mBKHgVWLDfKCncRi2s4pDsve1YZjiwDV
+ bh=HqA05YSLsUf+ulIvMnFT+oPDyD4eqTz55YVfBO0RMbk=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBmrxQ/HTA5NQJ6LsRevJYj0C2Pr6D9xtPQQ+WCy
+ eo51Z+HCpmJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZq8UPwAKCRCLPIo+Aiko
+ 1bLBB/48GQBxTDQT00TIgC7oHJTS/6Kx4lfz8o0zy4if5ZYZmMsCSpNneZE72T5mtXQXX6inZsq
+ mV/awunxEK11ZNIGAHAPCaiVDR830NutY8xITX682fXqYHykCguNmUebqk0KR7h17TtOg/Y/g8H
+ H+Sgmi9L7zerOshGe+/1TSEv1ANciFemqiE1ofIQ4BLHPnHOibBUnlwG5lVSgs7s0w5nhWImrg+
+ JnPGJS9BBNDM2XZQJFlLJdPXYddO/qK6pZ8PG7qidYZTsEUgzRb/8dW6JnNkDaknIVDuKl1FYaY
+ ub7CXnRYvPdnNBSrCBuL+/XQrahkCOFnPz7poUvL1Sq5NyL4
 X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
  fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
@@ -119,44 +119,44 @@ trees do not use these indices, drop them for now.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- include/dt-bindings/interconnect/qcom,sm8350.h | 10 ----------
+ include/dt-bindings/interconnect/qcom,sm8450.h | 10 ----------
  1 file changed, 10 deletions(-)
 
-diff --git a/include/dt-bindings/interconnect/qcom,sm8350.h b/include/dt-bindings/interconnect/qcom,sm8350.h
-index c7f7ed315aeb..2282f93607bc 100644
---- a/include/dt-bindings/interconnect/qcom,sm8350.h
-+++ b/include/dt-bindings/interconnect/qcom,sm8350.h
-@@ -119,9 +119,6 @@
- #define SLAVE_SERVICE_GEM_NOC_1		16
- #define SLAVE_SERVICE_GEM_NOC_2		17
- #define SLAVE_SERVICE_GEM_NOC		18
--#define MASTER_MNOC_HF_MEM_NOC_DISP	19
--#define MASTER_MNOC_SF_MEM_NOC_DISP	20
--#define SLAVE_LLCC_DISP			21
+diff --git a/include/dt-bindings/interconnect/qcom,sm8450.h b/include/dt-bindings/interconnect/qcom,sm8450.h
+index 8f3c5e1fb4c4..1fe7839d9f13 100644
+--- a/include/dt-bindings/interconnect/qcom,sm8450.h
++++ b/include/dt-bindings/interconnect/qcom,sm8450.h
+@@ -107,10 +107,6 @@
+ #define SLAVE_GEM_NOC_CNOC			11
+ #define SLAVE_LLCC				12
+ #define SLAVE_MEM_NOC_PCIE_SNOC			13
+-#define MASTER_MNOC_HF_MEM_NOC_DISP		14
+-#define MASTER_MNOC_SF_MEM_NOC_DISP		15
+-#define MASTER_ANOC_PCIE_GEM_NOC_DISP		16
+-#define SLAVE_LLCC_DISP				17
  
- #define MASTER_CNOC_LPASS_AG_NOC	0
- #define SLAVE_LPASS_CORE_CFG		1
-@@ -133,8 +130,6 @@
+ #define MASTER_CNOC_LPASS_AG_NOC		0
+ #define MASTER_LPASS_PROC			1
+@@ -124,8 +120,6 @@
  
- #define MASTER_LLCC			0
- #define SLAVE_EBI1			1
--#define MASTER_LLCC_DISP		2
--#define SLAVE_EBI1_DISP			3
+ #define MASTER_LLCC				0
+ #define SLAVE_EBI1				1
+-#define MASTER_LLCC_DISP			2
+-#define SLAVE_EBI1_DISP				3
  
- #define MASTER_CAMNOC_HF		0
- #define MASTER_CAMNOC_ICP		1
-@@ -149,11 +144,6 @@
- #define SLAVE_MNOC_HF_MEM_NOC		10
- #define SLAVE_MNOC_SF_MEM_NOC		11
- #define SLAVE_SERVICE_MNOC		12
--#define MASTER_MDP0_DISP		13
--#define MASTER_MDP1_DISP		14
--#define MASTER_ROTATOR_DISP		15
--#define SLAVE_MNOC_HF_MEM_NOC_DISP	16
--#define SLAVE_MNOC_SF_MEM_NOC_DISP	17
+ #define MASTER_CAMNOC_HF			0
+ #define MASTER_CAMNOC_ICP			1
+@@ -141,10 +135,6 @@
+ #define SLAVE_MNOC_HF_MEM_NOC			11
+ #define SLAVE_MNOC_SF_MEM_NOC			12
+ #define SLAVE_SERVICE_MNOC			13
+-#define MASTER_MDP_DISP				14
+-#define MASTER_ROTATOR_DISP			15
+-#define SLAVE_MNOC_HF_MEM_NOC_DISP		16
+-#define SLAVE_MNOC_SF_MEM_NOC_DISP		17
  
- #define MASTER_CDSP_NOC_CFG		0
- #define MASTER_CDSP_PROC		1
+ #define MASTER_CDSP_NOC_CFG			0
+ #define MASTER_CDSP_PROC			1
 
 -- 
 2.39.2
