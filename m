@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-11880-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11881-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A94D946C59
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 07:41:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFCF7946C5C
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 07:41:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD6C21F22177
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 05:41:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3E201C211FE
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 05:41:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8561803A;
-	Sun,  4 Aug 2024 05:40:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B556C1BF53;
+	Sun,  4 Aug 2024 05:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Gswo4N3l"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ngwoZELE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E79101C8
-	for <linux-pm@vger.kernel.org>; Sun,  4 Aug 2024 05:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A269014A82
+	for <linux-pm@vger.kernel.org>; Sun,  4 Aug 2024 05:40:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722750025; cv=none; b=AnwmssRVYxSrTl6qQTKKibsOhXp/TU0BQ46AXJntp+gAOzqRwfyFO81VEW0Qyit56J+pkYJip/JnCAVtRdpxQhOrb+w7aOPdUoFdJSoL/8XUyVr/+rrNcsQl204KW6AzZwTNndLPdAfE4eQdPRLLx2N7PZvcJKMYQ6S8p5IGal0=
+	t=1722750026; cv=none; b=Hfj7/WN3BixBeLgZ/wcUg7fU4uHRolOG+hoH2IY66QaVInnDqzkM8T17E+9NsNFR0takUKcFtansUul4xOWwOF6vKh0LQp9ZU1yRYYiWD6yfGCkhzcYfOnC26Y1e66vjxtMz8wkGF9mDffSttAJoyJx/55BQMSAmQqN4ALnJpyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722750025; c=relaxed/simple;
-	bh=jmcv3QZDbF0/FB7C2A1nETsdriKJ1dXxo+mdoIZ+Ot8=;
+	s=arc-20240116; t=1722750026; c=relaxed/simple;
+	bh=ZrQo3KWLh48xJDJlDCJhnd58UA7Hm/hQisnNq+wC8eQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WMFDjXt9PZhBtMAzoRpNg37ew2RSubiwc94B1zEWTx/XBRrpBEM36PUcJOj7O9VOs/R6jmF92g1lSGBB/S1eBj5mStwhx7aoYvpBa2jX1hkDDHvQfxSDGccZ72N9VIjIYQVFOyR2AotNQ6zcpYbBfMl0riwca8096vbBH9CKBy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Gswo4N3l; arc=none smtp.client-ip=209.85.208.48
+	 In-Reply-To:To:Cc; b=n9TtfvcvgURY6qqsoUhQzWA3zIYZaaav0wokpkhgykxe9gPPoz+AkQRrnLz4lN55mQIA7uw9ktH0QbJJmw3rF79xCPSwJJ3x6eRl+KE2KesScHRpMQdt21qEC6rdki1PJR+dUPjbTdKn0iEPn6KPLui6ZYC91lRiWZ0iymw6KfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ngwoZELE; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5afa207b8bfso10075400a12.0
-        for <linux-pm@vger.kernel.org>; Sat, 03 Aug 2024 22:40:23 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5a3b866ebc9so13179742a12.3
+        for <linux-pm@vger.kernel.org>; Sat, 03 Aug 2024 22:40:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722750021; x=1723354821; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1722750023; x=1723354823; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QAmP59CsMg1OmM3gD5Is1pyiJbDBWr21J5h6ZsQbULc=;
-        b=Gswo4N3lA+BuEYX/Eph0AWWldcoclH+qo+zux31SLbtUFr4pjdXiGYD5VTc+J7MGaj
-         0+rb/jlZeemPS7cd1uSc+2AOSbJSMYpqPxk97acYLjhBWkEEeut+dehxp/6fxeI1nAIN
-         WqKYCmADtjrrBVGolSxWdW+VfsP+36oik5u0I96ykNBKkc+ozYvpJkrhb0AYo0aONx80
-         /esgQEew+TlGuONhQXtZ8JkKzW3dS71nN/lEpS9GAVHFUcKret97beJ2Ppew4sBg3SIM
-         ySxUsBf1cdQVZWtUVsAdwH7V8KedCPYrpC7+E14RKno5eIkoJQIxPXFab1y64HsnpPPt
-         K71g==
+        bh=EYBxyQ/YvwiIHaG8jzR0Y70dVbuym8PFNWRpFtHQEf8=;
+        b=ngwoZELE+oofageJ+Jk7kU3B+XlQdxE2snHsdxOPDGbyemKbEYwIEYNNBATA+iuYSU
+         O32EHhkhDrMMTmABzzGbzqiioDZX+q0fUC6qurywgbtgftM9oRRO5LdNrgLNHOl3L5s9
+         yR/4eNVdMmNTtwtIlW6A2IJDz34PMiZhV7YwvGUh/PTsfvzsHEI2FE6UVB30gV7yA0GT
+         jVFNlDXxK8hZ93EQsVgRDmV67ggJPEuTvAzTFf5OlV+qYp6VNd3zboPyDORrl7Z2up6G
+         nV0Ju3qt4eFvl1+muhv9hAK9LyAj/dnmf4K6uhemMJP50lhgSy8fFVm5uLmj8JLK5l8L
+         MuHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722750021; x=1723354821;
+        d=1e100.net; s=20230601; t=1722750023; x=1723354823;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QAmP59CsMg1OmM3gD5Is1pyiJbDBWr21J5h6ZsQbULc=;
-        b=Ii2SBSiOJtTFJIYEteMkoradZBFNAZmx81rlJH0DJM5eTjW17Qp5u7nQWqP7XuIh6t
-         AzqIKCCPH1CRYFQykYTZiTle08qxU1Hv9GMxyUJ0WiKf/H/8Eci4/wTZ8YylQ4oGsSH4
-         L5ad4N/zPm8iYrtenyFpSD9R8Aw/hDT/Jn2hadfS0KnNeWbRj/aZ+bMiqndAEdz7bgQC
-         dBP+6ItI3tR+oC+mmebPJ1xuVxbRZISsRKRj0IproiL7J1YqiTeiCH8yo/EY5XCzPoJT
-         oR/ww33uNcQmW+lSXPRywdVtiOWfgnhNoVN6m8kqVQht8wuRoIJRetW5rnnPdpAu5757
-         zxng==
-X-Forwarded-Encrypted: i=1; AJvYcCWvymQwUWTN7E5KEZNyTuEI36eTfEsOOHCSod0SPAbUXvX7pNVXEnAOqCYtnj6O7sDbXf9IC5MgDQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8NilukjBCg0dSHFH3L+dnVWk9mM/1ANMvIrgqRrc8bFZU0z5H
-	KnBmccm87Dx2X+a7mtQetV5lRFPLKtRZ0cH/zMEqxCAbdKDxnes0XtIYtyLfr6g=
-X-Google-Smtp-Source: AGHT+IFVLTR76CbNV5qahJQoIGpt3Vzypxa8q34XuuIwmITvoXxOKd6/Ru/9TyTfB1g1mcja4mQVgg==
-X-Received: by 2002:a17:907:a096:b0:a7d:d1a6:d943 with SMTP id a640c23a62f3a-a7dd1a6dec8mr392048566b.40.1722750021473;
-        Sat, 03 Aug 2024 22:40:21 -0700 (PDT)
+        bh=EYBxyQ/YvwiIHaG8jzR0Y70dVbuym8PFNWRpFtHQEf8=;
+        b=ZqJgu/q4NpbsYWf4ibvMLF9ZPYdy6nz08iciahNrbQlxdXYR7h7V7IvQ71fGUNVyM6
+         no7Kn+uteZYCliL/V1JHThJGNSqaIwxwDazVe/QvmuGSAKtsKlFBnTHPQ10TmDg+Lg/6
+         /lzFb8mlOLPSSjNMf7McuRR/95IKF7kxt4ZrSp2CKGWhfHhgK9Uv8VxdKR7x4Vl+PNUo
+         VmU2bqSlR5z3A58H4VqIEKJu1wZ6VuV+Kaop4vFHuRiBIeypyXvQes1vpaxbj24ESSva
+         yoS9Pdzxo5e3IaOmupEIrR91i8ZWG58EyM8r6FqFNJxoazRKvOj8I1lupMc0F2GFU8hn
+         +jeA==
+X-Forwarded-Encrypted: i=1; AJvYcCUnoN0BbNmJ0xCo2HRAmh4uHYfDiYTlEe59AluL9tOy5nnRc4uMgUXssU4VVPtMAFmCLbHhnEz3dMPtIlXS9gSeWT/cyXsKWDk=
+X-Gm-Message-State: AOJu0YyK5Sa3JF0JgkFetU2S8mR/Wc5YEaS3f2Ag8nGkipuJ4Q7EFOIs
+	1ASX2OMWQKn1ckalPo+z4HPE9AawS3S9prfaE57R/eDYj3ZzfjQmCC6OlB5OunM=
+X-Google-Smtp-Source: AGHT+IEb56JcXEdp3cHrbP3Zdb4R00iMmwymYCH9bJ87K9H4uB8Y3mr62+YvNqwi5wZXe7TBUA0HwQ==
+X-Received: by 2002:a17:907:7b8d:b0:a7a:97a9:ba28 with SMTP id a640c23a62f3a-a7dc4fb6a93mr575059266b.26.1722750023107;
+        Sat, 03 Aug 2024 22:40:23 -0700 (PDT)
 Received: from umbar.lan ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9bc3bd7sm292248466b.34.2024.08.03.22.40.19
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9bc3bd7sm292248466b.34.2024.08.03.22.40.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Aug 2024 22:40:21 -0700 (PDT)
+        Sat, 03 Aug 2024 22:40:22 -0700 (PDT)
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sun, 04 Aug 2024 08:40:06 +0300
-Subject: [PATCH 02/11] clk: qcom: dispcc-sm8250: use special function for
- Lucid 5LPE PLL
+Date: Sun, 04 Aug 2024 08:40:07 +0300
+Subject: [PATCH 03/11] drm/msm/dsi: correct programming sequence for SM8350
+ / SM8450
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,7 +79,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240804-sm8350-fixes-v1-2-1149dd8399fe@linaro.org>
+Message-Id: <20240804-sm8350-fixes-v1-3-1149dd8399fe@linaro.org>
 References: <20240804-sm8350-fixes-v1-0-1149dd8399fe@linaro.org>
 In-Reply-To: <20240804-sm8350-fixes-v1-0-1149dd8399fe@linaro.org>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -99,128 +99,59 @@ Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4876;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1635;
  i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=jmcv3QZDbF0/FB7C2A1nETsdriKJ1dXxo+mdoIZ+Ot8=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBmrxQ+bL7txinbbvtpaZCB41puWCXaqSR2+yfiX
- +7P7Ff+UomJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZq8UPgAKCRCLPIo+Aiko
- 1c0CCACx/TGWwylNnfimpuNOVKIxADSMA2GbffeGvgGYp+409LFZHjV8RPg5nyWwwhARcdnhDCk
- ZRv9hR4KhHmZF8C/Bmh1c9XxTeaj2mLaH4qwpNgycQavj8ZTli/pQUcCRg+/BEZrxSgsMsVa0F5
- 8QvJInBHia3iHgVKJzoh7P7xCsbCudufusswKl3z27BrrQrNVF8QUeMV8/5fQ23LSvQXFj4P1sL
- wI4itM1zoO5ZnBQeyPPpHU0WuctZTd+0NaskZeZeo3y8Mtv4CHuTuVzDlkZ9HU+3igoyrnneVNP
- gtibXN/1UhcT3R5hnWf7rrhn82vRAV1kkitFhrlW2wYWcNDL
+ bh=ZrQo3KWLh48xJDJlDCJhnd58UA7Hm/hQisnNq+wC8eQ=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBmrxQ+6l4NppYjUOt2B1Mrx0jUAAKAzHN1dYY7o
+ symZsDcsH6JATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZq8UPgAKCRCLPIo+Aiko
+ 1REzB/9ap2qNIrseQCvZa/pTU/KUPvVlida6gouDBjhpuq7T3vUAUBKa74AAqkQOHqraSmgVJ+V
+ SnR9/o7ICUDZaE8E9VS16WvKFpcOOw4OaiaCroRfcqvQLCmu0w+72VZ7YAj+Wyq/JqR7g+asp8D
+ ZDXh/perTUkRZ6OmXanv4Y2J7IxckRnIShcfucpigmfnyPwI3cBaaUiquig/eEBYWGrdmtISth0
+ Hfl9rpFXrXWvTWgAn1OvlDqKbrlNV5liXA2oOAQr2YruWmCjq1+xqTFcHvxuL/CBMwsAHINjojk
+ RUtYD2MMuk4xqwqJvLOJ7w7LtPfbGJ8VzQCKA/PK5N4aWiWG
 X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
  fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
-According to msm-5.10 the lucid 5lpe PLLs have require slightly
-different configuration that trion / lucid PLLs, it doesn't set
-PLL_UPDATE_BYPASS bit. Add corresponding function and use it for the
-display clock controller on Qualcomm SM8350 platform.
+According to the display-drivers, 5nm DSI PLL (v4.2, v4.3) have
+different boundaries for pll_clock_inverters programming. Follow the
+vendor code and use correct values.
 
-Fixes: 205737fe3345 ("clk: qcom: add support for SM8350 DISPCC")
+Fixes: 2f9ae4e395ed ("drm/msm/dsi: add support for DSI-PHY on SM8350 and SM8450")
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/clk/qcom/clk-alpha-pll.c | 52 ++++++++++++++++++++++++++++++++++++++++
- drivers/clk/qcom/clk-alpha-pll.h |  2 ++
- drivers/clk/qcom/dispcc-sm8250.c |  9 +++++--
- 3 files changed, 61 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
-index d87314042528..d0b911499cf9 100644
---- a/drivers/clk/qcom/clk-alpha-pll.c
-+++ b/drivers/clk/qcom/clk-alpha-pll.c
-@@ -1831,6 +1831,58 @@ const struct clk_ops clk_alpha_pll_agera_ops = {
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_agera_ops);
- 
-+/**
-+ * clk_lucid_5lpe_pll_configure - configure the lucid 5lpe pll
-+ *
-+ * @pll: clk alpha pll
-+ * @regmap: register map
-+ * @config: configuration to apply for pll
-+ */
-+void clk_lucid_5lpe_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
-+				  const struct alpha_pll_config *config)
-+{
-+	/*
-+	 * If the bootloader left the PLL enabled it's likely that there are
-+	 * RCGs that will lock up if we disable the PLL below.
-+	 */
-+	if (trion_pll_is_enabled(pll, regmap)) {
-+		pr_debug("Lucid 5LPE PLL is already enabled, skipping configuration\n");
-+		return;
-+	}
-+
-+	clk_alpha_pll_write_config(regmap, PLL_L_VAL(pll), config->l);
-+	regmap_write(regmap, PLL_CAL_L_VAL(pll), TRION_PLL_CAL_VAL);
-+	clk_alpha_pll_write_config(regmap, PLL_ALPHA_VAL(pll), config->alpha);
-+	clk_alpha_pll_write_config(regmap, PLL_CONFIG_CTL(pll),
-+				     config->config_ctl_val);
-+	clk_alpha_pll_write_config(regmap, PLL_CONFIG_CTL_U(pll),
-+				     config->config_ctl_hi_val);
-+	clk_alpha_pll_write_config(regmap, PLL_CONFIG_CTL_U1(pll),
-+				     config->config_ctl_hi1_val);
-+	clk_alpha_pll_write_config(regmap, PLL_USER_CTL(pll),
-+					config->user_ctl_val);
-+	clk_alpha_pll_write_config(regmap, PLL_USER_CTL_U(pll),
-+					config->user_ctl_hi_val);
-+	clk_alpha_pll_write_config(regmap, PLL_USER_CTL_U1(pll),
-+					config->user_ctl_hi1_val);
-+	clk_alpha_pll_write_config(regmap, PLL_TEST_CTL(pll),
-+					config->test_ctl_val);
-+	clk_alpha_pll_write_config(regmap, PLL_TEST_CTL_U(pll),
-+					config->test_ctl_hi_val);
-+	clk_alpha_pll_write_config(regmap, PLL_TEST_CTL_U1(pll),
-+					config->test_ctl_hi1_val);
-+
-+	/* Disable PLL output */
-+	regmap_update_bits(regmap, PLL_MODE(pll),  PLL_OUTCTRL, 0);
-+
-+	/* Set operation mode to OFF */
-+	regmap_write(regmap, PLL_OPMODE(pll), PLL_STANDBY);
-+
-+	/* Place the PLL in STANDBY mode */
-+	regmap_update_bits(regmap, PLL_MODE(pll), PLL_RESET_N, PLL_RESET_N);
-+}
-+EXPORT_SYMBOL_GPL(clk_lucid_5lpe_pll_configure);
-+
- static int alpha_pll_lucid_5lpe_enable(struct clk_hw *hw)
- {
- 	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
-diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
-index df8f0fe15531..e2cf5c7e501d 100644
---- a/drivers/clk/qcom/clk-alpha-pll.h
-+++ b/drivers/clk/qcom/clk-alpha-pll.h
-@@ -208,6 +208,8 @@ void clk_agera_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
- 
- void clk_zonda_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
- 			     const struct alpha_pll_config *config);
-+void clk_lucid_5lpe_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
-+				  const struct alpha_pll_config *config);
- void clk_lucid_evo_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
- 				 const struct alpha_pll_config *config);
- void clk_lucid_ole_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
-diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
-index eb78cd5439d0..884bbd3fb305 100644
---- a/drivers/clk/qcom/dispcc-sm8250.c
-+++ b/drivers/clk/qcom/dispcc-sm8250.c
-@@ -1360,8 +1360,13 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
- 		disp_cc_sm8250_clocks[DISP_CC_MDSS_EDP_GTC_CLK_SRC] = NULL;
+diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
+index 3b59137ca674..031446c87dae 100644
+--- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
++++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
+@@ -135,7 +135,7 @@ static void dsi_pll_calc_dec_frac(struct dsi_pll_7nm *pll, struct dsi_pll_config
+ 			config->pll_clock_inverters = 0x00;
+ 		else
+ 			config->pll_clock_inverters = 0x40;
+-	} else {
++	} else if (pll->phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V4_1) {
+ 		if (pll_freq <= 1000000000ULL)
+ 			config->pll_clock_inverters = 0xa0;
+ 		else if (pll_freq <= 2500000000ULL)
+@@ -144,6 +144,16 @@ static void dsi_pll_calc_dec_frac(struct dsi_pll_7nm *pll, struct dsi_pll_config
+ 			config->pll_clock_inverters = 0x00;
+ 		else
+ 			config->pll_clock_inverters = 0x40;
++	} else {
++		/* 4.2, 4.3 */
++		if (pll_freq <= 1000000000ULL)
++			config->pll_clock_inverters = 0xa0;
++		else if (pll_freq <= 2500000000ULL)
++			config->pll_clock_inverters = 0x20;
++		else if (pll_freq <= 3500000000ULL)
++			config->pll_clock_inverters = 0x00;
++		else
++			config->pll_clock_inverters = 0x40;
  	}
  
--	clk_lucid_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
--	clk_lucid_pll_configure(&disp_cc_pll1, regmap, &disp_cc_pll1_config);
-+	if (of_device_is_compatible(pdev->dev.of_node, "qcom,sm8350-dispcc")) {
-+		clk_lucid_5lpe_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
-+		clk_lucid_5lpe_pll_configure(&disp_cc_pll1, regmap, &disp_cc_pll1_config);
-+	} else {
-+		clk_lucid_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
-+		clk_lucid_pll_configure(&disp_cc_pll1, regmap, &disp_cc_pll1_config);
-+	}
- 
- 	/* Enable clock gating for MDP clocks */
- 	regmap_update_bits(regmap, 0x8000, 0x10, 0x10);
+ 	config->decimal_div_start = dec;
 
 -- 
 2.39.2
