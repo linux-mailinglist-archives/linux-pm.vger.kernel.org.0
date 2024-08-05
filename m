@@ -1,96 +1,148 @@
-Return-Path: <linux-pm+bounces-11923-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11924-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98A3A948339
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 22:21:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0012948575
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 00:36:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 429651F2226A
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 20:21:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 644D41F2397E
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 22:36:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7833214A606;
-	Mon,  5 Aug 2024 20:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QHfICOL/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9713C16F0C6;
+	Mon,  5 Aug 2024 22:36:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sxb1plsmtpa01-05.prod.sxb1.secureserver.net (sxb1plsmtpa01-05.prod.sxb1.secureserver.net [188.121.53.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CEAF13C809;
-	Mon,  5 Aug 2024 20:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74219153800
+	for <linux-pm@vger.kernel.org>; Mon,  5 Aug 2024 22:36:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.121.53.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722889266; cv=none; b=X+EApLl+YKwRYlwpnO1yxJOBNwe1x7bPgnKh62VqK6q3lgN6FfdUujdOq/oey/7HuVplHFsj82AvUPRswpngSvkhm0C9dd/ltjcozxnt3s15mp8PXT/sri6VjuL4G121LK/o7+BVHLM/C23pUCsds0bOARrlaD/hAtVDOcwPDG8=
+	t=1722897385; cv=none; b=C2W2ZopJOzCNCE3XUsUey9+nIfAOlFXkym7MIZMr3R95agFCJqwa5NNtoCraO5UKs7ccVHzXOGjbPbk5krGYxAyTCxfcOynP2qgu277qF3U7lNbxoWQ/LXT2pOyDSzhtOuzcsmN0QHNjD2c72cVXeaepEtCyj6YjgFBNIon9Lss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722889266; c=relaxed/simple;
-	bh=aSsOKcHWrL7OYpaiilqQDg8DY+BVww7YDCEqeu+txpg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f0g8cmXylicOJ3jk4ZeO2Qd8DSKxQVQ08Ae8R6jiNKnzYheLG092LjZIYgyLDNTwkeTs0nm5TmeBzU6nGepCgAypJWz9ARBBYVwhY8NjhUefMOJ8urkuKH3PWPtQ9/KPU0j7lLhPnG2csuYIyu66bGVgncgelZ2XFfuA/V197Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QHfICOL/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE1FC32782;
-	Mon,  5 Aug 2024 20:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722889265;
-	bh=aSsOKcHWrL7OYpaiilqQDg8DY+BVww7YDCEqeu+txpg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=QHfICOL/l0EGSBKfixpcy5rxrg/laYgHcSiWfX9HaY0pYI3nxTTzgQpr6i/2vptjM
-	 f1F4XoLKA917AIWeB2tjmFKL2Qu8Di+3dmBE97A50OaEM+m2QVHxvaxl4qxia1nd4e
-	 EPWBNAFaXMG4ruJBzvDmyOgkzsRn5J7D/r3zDIuyee/x+9dfw67LpGaLcAiyRwRRhx
-	 oA2Up2yOYcN5/jIwpARakN971a8JgpiKv6/mG0/R8B2PsBZjt+F5VYGx2YVTuOFpgd
-	 jFjcuiWeo5lzEIqxcCwb0xVGx4U73Jt5jLFunWAoC2MhSVvEp5hOb8VMldk0D+UmQt
-	 y5wV+/Dv/RNTQ==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: kernel test robot <lkp@intel.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] cpufreq: spear: Fix uninitialized variable "i"
-Date: Mon,  5 Aug 2024 14:20:41 -0600
-Message-ID: <20240805202042.3229190-1-robh@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1722897385; c=relaxed/simple;
+	bh=TtLcqYXwVhu+R2JWp+iyvK/c1zI8jIP13UtKKstNsgk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sAGcc0S5ycxuC9rsW/B1FoslH5Mtxnj8zKyNf5gFm138BTU8z0M6WBRZetU+8zKIerr+sm/SVv2NI8dCPYidb3QmEwDWxgYorBp72PyhHk87M0ztsaBXzGkGX0E1Lmwq3DkSHAw1RemDcGJdXLNEH8vqsksPKM/nGys9zLhGt4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=piie.net; spf=pass smtp.mailfrom=piie.net; arc=none smtp.client-ip=188.121.53.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=piie.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piie.net
+Received: from [192.168.1.27] ([109.90.180.58])
+	by :SMTPAUTH: with ESMTPSA
+	id b5c7sufgD5nw9b5c9sKsOA; Mon, 05 Aug 2024 14:51:38 -0700
+X-CMAE-Analysis: v=2.4 cv=NqsacNdJ c=1 sm=1 tr=0 ts=66b1496b
+ a=ujCVow8R4Y5jPCx6COW8WA==:117 a=ujCVow8R4Y5jPCx6COW8WA==:17
+ a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=pGLkceISAAAA:8 a=QyXUC8HyAAAA:8
+ a=JXrB-i05ymQu8u1lf2kA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SECURESERVER-ACCT: peter@piie.net
+Message-ID: <1bfbbae5-42b0-4c7d-9544-e98855715294@piie.net>
+Date: Mon, 5 Aug 2024 23:51:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 12/17] platform/x86: acerhdf: Use the .should_bind()
+ thermal zone callback
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Linux ACPI <linux-acpi@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba
+ <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
+ Peter Kaestle <peter@piie.net>, platform-driver-x86@vger.kernel.org
+References: <1922131.tdWV9SEqCh@rjwysocki.net>
+ <2242500.C4sosBPzcN@rjwysocki.net>
+ <a0c639d1-4f21-47f1-bb66-92f185e828a9@gmail.com>
+ <CAJZ5v0jDQLJWGCj73DXQe3+k+Zaq9Z71LJbFSvRjcuE85+J+mQ@mail.gmail.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Peter_K=C3=A4stle?= <peter@piie.net>
+In-Reply-To: <CAJZ5v0jDQLJWGCj73DXQe3+k+Zaq9Z71LJbFSvRjcuE85+J+mQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfJWPR2+yiOWfZF1NN1S8YQgNKg47YkfBXB1nfxoLS0fZ3rnhmIi6a5t1zj9QzI4OACJP2WuBqRdHHFEjn4wK14uS9dO/T/x2eLlOv5L1sVMFzEhcP5IU
+ hIn/yHFJYo1svGlnqYa9TkcDG55epHQmXWg36d91MYfdBW0ZLODWbvUJ94qiEMvJmNWFyeERLrmC44A4xTj3DOuWRv1dRItHK9QRicWnosSJslsxnPlXFwRw
+ QUxlszm5dv0kty+bc7+WllK/j+k/mnF8gsxKOOG5GKwaqlAodwTv/8xyK5tovV5CAf5Y6AJwmr7Wt2g4BHrVNszQZTdPAwPog1sQjPbXGlMGRyQPT55LX8Up
+ aPFUMcyS5fG1dCOM4C1So+FLOgx5/6WEY+MoAn493VwP941dKCVQWCOhVNEjUIiiBbtHIqa33yXUgURRMAwcoPXa+uQaqZ5vh00klOOM6wbQQNmi70oeHpKI
+ 8dl8xK69f5gZ9HFWEp8DiQc3PnHuIsKdZoM1OQ==
 
-The refactoring in commit dca2ef2b7d91 ("cpufreq: spear: Use
-of_property_for_each_u32() instead of open coding") left "i"
-uninitialized. Initialize it to 0.
+Hi Rafael,
 
-Note that gcc doesn't detect this, only clang does.
+On 01.08.24 12:14, Rafael J. Wysocki wrote:
+> Hi Peter,
+> 
+> On Wed, Jul 31, 2024 at 10:50 PM Peter Kästle <xypiie@gmail.com> wrote:
+>>
+>> Hi Rafael,
+>>
+>> On 30.07.24 20:33, Rafael J. Wysocki wrote:
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>
+>>> Make the acerhdf driver use the .should_bind() thermal zone
+>>> callback to provide the thermal core with the information on whether or
+>>> not to bind the given cooling device to the given trip point in the
+>>> given thermal zone.  If it returns 'true', the thermal core will bind
+>>> the cooling device to the trip and the corresponding unbinding will be
+>>> taken care of automatically by the core on the removal of the involved
+>>> thermal zone or cooling device.
+>>>
+>>> The previously existing acerhdf_bind() function bound cooling devices
+>>> to thermal trip point 0 only, so the new callback needs to return 'true'
+>>> for trip point 0.  However, it is straightforward to observe that trip
+>>> point 0 is an active trip point and the only other trip point in the
+>>> driver's thermal zone is a critical one, so it is sufficient to return
+>>> 'true' from that callback if the type of the given trip point is
+>>> THERMAL_TRIP_ACTIVE.
+>>>
+>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>
+>> Thanks for including me on the review.
+>> I'm working on it, but unfortunately the refactoring of the thermal layer
+>> around gov_bang_bang.c earlier this year broke acerhdf.
+> 
+> Well, sorry about that.
 
-Fixes: dca2ef2b7d91 ("cpufreq: spear: Use of_property_for_each_u32() instead of open coding")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202408030418.gnJDcCpm-lkp@intel.com/
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- drivers/cpufreq/spear-cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I already fixed the main problem, which caused full malfunction of acerhdf:
 
-diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cpufreq.c
-index 4d28147c23f1..f8c16699a68d 100644
---- a/drivers/cpufreq/spear-cpufreq.c
-+++ b/drivers/cpufreq/spear-cpufreq.c
-@@ -173,7 +173,7 @@ static int spear_cpufreq_probe(struct platform_device *pdev)
- 	struct device_node *np;
- 	struct cpufreq_frequency_table *freq_tbl;
- 	u32 val;
--	int cnt, i, ret;
-+	int cnt, i = 0, ret;
- 
- 	np = of_cpu_device_node_get(0);
- 	if (!np) {
+The new functionality of .trip_crossed in the gov_bang_bang is missing an
+initial check, whether the temperature is below the fanoff temperature
+(trip_point.temperature - hysteresis) and by that it did not turn the
+fan off.  This then caused that the system will never heat up as much to
+cross the upper temperature. As a consequence it could never cross the
+lower temperature to turn the fan off. -> Fan was locked always on.
+And that's obviously not what we want.
+As I didn't find any API call, to ask the governor doing that for me, I
+added an "acerhdf_init_fan()" functionality into acerhdf init function right
+after registering the thermal zone (and on resume from suspend) which turns
+the fan off if the temperature is lower than the fanoff parameter.
+Probably not the nicest solution, but maybe the most pragmatic one without
+touching the thermal layer.
+
+>> This needs some debugging and refactoring.  I think I can finish it on
+>> upcoming weekend.
+> 
+> Thank you!
+
+I'll need some more time to check why other features of acerhdf broke:
+* interval cannot be changed to longer than one second.
+   No idea yet, do you have any idea?  Maybe I'll simply drop this
+   functionality, as there's no big overhead by polling every second.
+* changing /sys/module/acerhdf/parameters/{fanon,fanoff} at runtime
+   to change the trip point settings stopped working.  This needs some
+   restructuring using module_param_cb callbacks.
+
+> I'll be offline next week, so I'll go back to this material in two
+> weeks or so anyway.
+
+I still need some time to fix the remaining part anyhow.  Once this is
+done, I'll check your latest patch series and send my acerhdf rework for
+review / submission.
+
 -- 
-2.43.0
-
+regards,
+--peter;
 
