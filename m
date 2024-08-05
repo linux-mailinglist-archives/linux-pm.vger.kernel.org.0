@@ -1,135 +1,96 @@
-Return-Path: <linux-pm+bounces-11922-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11923-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 273AE948315
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 22:16:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98A3A948339
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 22:21:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A544FB20A8D
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 20:16:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 429651F2226A
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 20:21:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BF2A146A6F;
-	Mon,  5 Aug 2024 20:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7833214A606;
+	Mon,  5 Aug 2024 20:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B2xS/on3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QHfICOL/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6764C13CF86
-	for <linux-pm@vger.kernel.org>; Mon,  5 Aug 2024 20:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CEAF13C809;
+	Mon,  5 Aug 2024 20:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722888989; cv=none; b=JxxVzl059r4qkUbPrJXxiuTVDnWJ9IShtjyekY6A4FJBTUTpxvWJ4imRG7BJlrimGBZxDuImD5BrBB6Pa8n3XMIecvv6rQU6UI2d9pTcfszNBRN//JDh2wgc5g5rsbq6GRTD8vi3rkPf4m1KgQgm7TollLWGCOFks4H2HpOiVlA=
+	t=1722889266; cv=none; b=X+EApLl+YKwRYlwpnO1yxJOBNwe1x7bPgnKh62VqK6q3lgN6FfdUujdOq/oey/7HuVplHFsj82AvUPRswpngSvkhm0C9dd/ltjcozxnt3s15mp8PXT/sri6VjuL4G121LK/o7+BVHLM/C23pUCsds0bOARrlaD/hAtVDOcwPDG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722888989; c=relaxed/simple;
-	bh=liFt3sjRucVnKRT2fhghhw4ZXk8BL4v+giYsmCwKtE8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=J6xbu2zMysy8dvD9gARr+N8f8rXgKSLfb+M32RNdm5OYSxTGw+bJ1LJ8wmbMXBo1HWOWz7Z4+A87griE+Yah04WirIuHw3SV9cP3J4atU346SBlG6AR04WEFAdzY1o85YGSZMdQfdyFbvA0jkhiLsSwiBqOytNo+Q7OcONqg73Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B2xS/on3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E065FC4AF13
-	for <linux-pm@vger.kernel.org>; Mon,  5 Aug 2024 20:16:28 +0000 (UTC)
+	s=arc-20240116; t=1722889266; c=relaxed/simple;
+	bh=aSsOKcHWrL7OYpaiilqQDg8DY+BVww7YDCEqeu+txpg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f0g8cmXylicOJ3jk4ZeO2Qd8DSKxQVQ08Ae8R6jiNKnzYheLG092LjZIYgyLDNTwkeTs0nm5TmeBzU6nGepCgAypJWz9ARBBYVwhY8NjhUefMOJ8urkuKH3PWPtQ9/KPU0j7lLhPnG2csuYIyu66bGVgncgelZ2XFfuA/V197Lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QHfICOL/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE1FC32782;
+	Mon,  5 Aug 2024 20:21:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722888988;
-	bh=liFt3sjRucVnKRT2fhghhw4ZXk8BL4v+giYsmCwKtE8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=B2xS/on34BNGyp3E+IADyws9uiCcpfrNtHM9ILixxmz7ZmdihrsuNkQfDUdG1EDhx
-	 B9xdp6aMpDpqpjqLatwPukBE2YC9kEKltOsVVIea0rUUNTLAHJfQj0Mh5wMuF8jI8D
-	 O2LrOwwp2a37t9NFBoYoO/WFXadrAzQTniDJ28d8tUe9h6ddlkJEzp3YDlgh80ig+g
-	 /Pn9JJuETQfPdWD1v7JGwc+Jw+UR5BRHiLNBUktvHcRHMctqp27nBdbrcap3wwzJDT
-	 TOB/2cO2u9l/F2NB6MYX6nNQULycbAWVgQUDwgdgF678hd4k+JSVwVYpjnZHg44ksN
-	 uBu05jti11jfg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id D2343C53B73; Mon,  5 Aug 2024 20:16:28 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218686] Fail to set energy_performance_preference of amd
- processor on asus ga403uv
-Date: Mon, 05 Aug 2024 20:16:28 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: chemasanchezgarabito@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DOCUMENTED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218686-137361-RAtFaK9Rks@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
-References: <bug-218686-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1722889265;
+	bh=aSsOKcHWrL7OYpaiilqQDg8DY+BVww7YDCEqeu+txpg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=QHfICOL/l0EGSBKfixpcy5rxrg/laYgHcSiWfX9HaY0pYI3nxTTzgQpr6i/2vptjM
+	 f1F4XoLKA917AIWeB2tjmFKL2Qu8Di+3dmBE97A50OaEM+m2QVHxvaxl4qxia1nd4e
+	 EPWBNAFaXMG4ruJBzvDmyOgkzsRn5J7D/r3zDIuyee/x+9dfw67LpGaLcAiyRwRRhx
+	 oA2Up2yOYcN5/jIwpARakN971a8JgpiKv6/mG0/R8B2PsBZjt+F5VYGx2YVTuOFpgd
+	 jFjcuiWeo5lzEIqxcCwb0xVGx4U73Jt5jLFunWAoC2MhSVvEp5hOb8VMldk0D+UmQt
+	 y5wV+/Dv/RNTQ==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: kernel test robot <lkp@intel.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] cpufreq: spear: Fix uninitialized variable "i"
+Date: Mon,  5 Aug 2024 14:20:41 -0600
+Message-ID: <20240805202042.3229190-1-robh@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
+The refactoring in commit dca2ef2b7d91 ("cpufreq: spear: Use
+of_property_for_each_u32() instead of open coding") left "i"
+uninitialized. Initialize it to 0.
 
---- Comment #75 from Chema (chemasanchezgarabito@gmail.com) ---
-(In reply to xiaojian.du from comment #74)
-> I checked on my desktop PC, based on Asus B650M mainboard.
->=20
-> "Advanced option-> CPU option -> PSS disable/enable"is the switch option =
-of
-> CPPC.
-> Disabling *PSS* option will make Win11 OS switch to generic ACPI processor
-> pm management.
->=20
-> Back to this issue, somehow ASUS has enabled CPPC support in bios,as it
-> showes "PSS ENABLED" in this video.=20
->  https://bugzilla.kernel.org/attachment.cgi?id=3D306662
->=20
-> But the key CPUID bit of CPPC func enablement still is not written "1" in
-> this new version BIOS, besides, the dmesg log shows the _cpc obj  in the
-> ACPI table is null,
-> "ACPI CPPC: _CPC in PCC is not supported".
->=20
-> So the conclusion is, CPPC func is enabled in this new version BIOS and W=
-in
-> OS is using it, but it doesn't support Linux OS.
->=20
-> Maybe ASUS didn't put too much notice to the user case on linux os?
+Note that gcc doesn't detect this, only clang does.
 
-Thanks for checking
+Fixes: dca2ef2b7d91 ("cpufreq: spear: Use of_property_for_each_u32() instead of open coding")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202408030418.gnJDcCpm-lkp@intel.com/
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+---
+ drivers/cpufreq/spear-cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It seems that way, asus has made it work in windows but not in the standard=
- way
-needed by linux. But either way the amd pstate driver is working, but the e=
-pp
-change is not working.
+diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cpufreq.c
+index 4d28147c23f1..f8c16699a68d 100644
+--- a/drivers/cpufreq/spear-cpufreq.c
++++ b/drivers/cpufreq/spear-cpufreq.c
+@@ -173,7 +173,7 @@ static int spear_cpufreq_probe(struct platform_device *pdev)
+ 	struct device_node *np;
+ 	struct cpufreq_frequency_table *freq_tbl;
+ 	u32 val;
+-	int cnt, i, ret;
++	int cnt, i = 0, ret;
+ 
+ 	np = of_cpu_device_node_get(0);
+ 	if (!np) {
+-- 
+2.43.0
 
-What could be the easiest to try to solve it from our part, modifying the
-kernel   in some way? If windows is working it should be a workaround to ma=
-ke
-it work maybe disable some checks or something like this
-https://github.com/archlinux/linux/blob/b1bc554e009e3aeed7e4cfd2e717c7a34a9=
-8c683/arch/x86/kernel/acpi/cppc.c#L14
-or this
-https://github.com/archlinux/linux/blob/defaf1a2113a22b00dfa1abc0fd2014820e=
-af065/drivers/acpi/cppc_acpi.c#L1491...?
-
-Cause ASUS has not made any comment about it, I dont know from your part it
-they have internally said something to you.
-
-Thanks
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
 
