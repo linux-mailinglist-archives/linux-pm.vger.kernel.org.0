@@ -1,164 +1,150 @@
-Return-Path: <linux-pm+bounces-11902-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11903-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E68029471D3
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 01:50:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DF06947322
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 03:47:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82AA41F210FF
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Aug 2024 23:50:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F85F1F213C3
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 01:47:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 421DE13AA2A;
-	Sun,  4 Aug 2024 23:50:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64AC52D058;
+	Mon,  5 Aug 2024 01:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E0ubvqGz"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HtgFENTc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C14418046
-	for <linux-pm@vger.kernel.org>; Sun,  4 Aug 2024 23:50:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880A53C0D;
+	Mon,  5 Aug 2024 01:47:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722815406; cv=none; b=GGd03n8/jbHLPjw47LchfZPEuSt9EQ+OEyEklRz+tzqsWQFoyC2nsz0HXWzpOvw1eGarSz2tMJeybzy/Ye6nvDTXIh0RSLsZy7J6QovkDyP5777hFcdCDuC/F03hC912mZBeIhSFsMs5bBzQLowRV0lKFL+mN8ECf0pZoFA6pBk=
+	t=1722822437; cv=none; b=rYsMparhcC4tuTYzMYOQ1DyEITnbZzdIhYLoUkFK8Cbm9issedVssQ80RJWGGZ05LwenzMxlFk0qsLAxI0Kg5IMeD6q2gS+jZy+rVU8VWIvukpE4jKV3itCzFFPJ7lSiG/Nxm0JVQTA6JHLOAqG+sUpOQOMZnsqHFOsFP8zIDu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722815406; c=relaxed/simple;
-	bh=xZPd3blsBsg71p+Zv3I7MV49/finIqEV0OGAxq3L0VU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=G0R0z5QUP/HTbu3FQQK32bzxVN6PKXiezK3Gw5acXeaQqUKlXk6SrSofNMmZCEGiLPw41v6jOV/WNu4q/U4z/elJSs7MCnWEFrxljHvJFfEy9TnbeaGSZtnm5lXNvuLQWYFGyX5hKyf8j1l0hnZUYqFEPCxyD9rueU7RJRms+AE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E0ubvqGz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A70D8C4AF10
-	for <linux-pm@vger.kernel.org>; Sun,  4 Aug 2024 23:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722815405;
-	bh=xZPd3blsBsg71p+Zv3I7MV49/finIqEV0OGAxq3L0VU=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=E0ubvqGzMGdC86iJL+qtjR/IcMtWKH167R7Y7o5e8qJv+TsVTlxjAiLItfgIDHirl
-	 hxa72TCvDxZguBmLFI10yAO2K+igIRhps9FwKsBIfKOiqLRyB8XELrvmqDlpqXQVRL
-	 SgAGgITNY6d8EEYqHKDcJMYmcUy5W+1szXSyHq9ZtMwaJl2YCf0yoztP5/z8uR6/Bu
-	 +fibnpQuOXRfTzw6rQZ5S5r3+jLok3Kh4B7pzCB35PHsgoHTUeyfIvdbJWhAFHSlqD
-	 yJE2cqVO+kk/bZYezUpxNc4J3liBvPeO4poLX075n4eLvOjjFgvo1OVQU1AeGmn9ob
-	 VnRltcJ/sUeKg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 9F489C53B50; Sun,  4 Aug 2024 23:50:05 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218686] Fail to set energy_performance_preference of amd
- processor on asus ga403uv
-Date: Sun, 04 Aug 2024 23:50:04 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: chemasanchezgarabito@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DOCUMENTED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218686-137361-CIYQZMRBV8@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
-References: <bug-218686-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1722822437; c=relaxed/simple;
+	bh=0aE5QFV/70fF80Ssj9SM1HSGsExdjEmyZ+2ITjo5sK8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=NNu7PiR0Kxs0iih/R3q/eX1LQoZl7MOGc4whnaRh8lDTPt3+DR9brCLHg2WQqE1ujYuZFTdrMKuLvVtM1+qgJZ5042FuW3VlffoiCvMHAM2maxsbu/7Yu74KJVdaPGPVC4Jq2YSjmd2NlcPG2nA5YT3tbNJJIpTtsXQxEAhtTWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HtgFENTc; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 474NTDvr019702;
+	Mon, 5 Aug 2024 01:46:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	/7wSTRpSF2Elnm6YhKK3UHNYY4yz250NxKUWtwt149k=; b=HtgFENTcTMIwh40R
+	ibGO/oBxXtGIlIADY919hb5w805YboJZkAIPzwvVQ43yGGv2dmB2m9+F3/po36fP
+	O80OgBIlLzPgk5EufThU8Zrg2ntKOcokPWsHZRhS/1nBQoVk/29ArObkPsx/GYj1
+	lY7M0vt5YbnjSat80p5CcVogduExFZr3x9tW+wFeE/DaD8MFHzwetti0HwW53anr
+	p+hadlVPIHZPi9bIYwKNpbLXuBvtUvu0hOtz46T7Q6WAbLb5iibks9wwAZXOezpQ
+	KKwwg3aUNSwJk3JMUkHxNaYQICY0y4ciw1WraZ88COiv/2tqiT4YpZS7nZ7AiUUB
+	OGKYhw==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40sbgrtjs2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 05 Aug 2024 01:46:54 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 4751krHR021433
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 5 Aug 2024 01:46:53 GMT
+Received: from [10.239.132.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 4 Aug 2024
+ 18:46:47 -0700
+Message-ID: <ef34cf5b-37b5-4450-a05d-fdbbb1ca2567@quicinc.com>
+Date: Mon, 5 Aug 2024 09:46:38 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
-
---- Comment #72 from Chema (chemasanchezgarabito@gmail.com) ---
-Created attachment 306666
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306666&action=3Dedit
-ACPI tables looks ok
-
-Ok, I have done many things since last comment that might shed some light to
-this matter.
-
-
-I have disassembled the ACPI tables of the laptop with latest BIOS (306)
-The attacment is the ACPI table that contains the _CPC objects definition.
-
-As UEFI defines:
--
-https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html=
-?highlight=3Dcppc#collaborative-processor-performance-control
-In the line 381 it defines the _CPC object of the first thread of the proce=
-ssor
-and in the line 522 it defines the CPPC Enable Register as in the ACPI
-specification, and it seems that the register is implemented correctly.
-
-So three questions raises here to me:
-
-  - Why smokeless UAMF is not showing the option?
-  - Why is not linux reading it correctly if it is implemented?
-  - I am reading wrong the ACPI table and this means oher thing?
-
-So to me looks that we cant do nothing in the ACPI tables to enable the
-register as it is already correct in the current tables.
-
-
-Also I have searched through the kernel code implementation of arch to see =
-how
-the CPPC thing is being enabled, and looks like the code of the function
-functions in two ways:
-
-   - Hardcoded condition for some processors to enable by default
-   - Or lastly check the CPUID bit 27 is set to 1
-
-https://github.com/archlinux/linux/blob/b1bc554e009e3aeed7e4cfd2e717c7a34a9=
-8c683/arch/x86/kernel/acpi/cppc.c#L14
-
-I dont know why is it not working the last part as the register is correctly
-implemented. But what I know is that this system configuration has a
-configuration of:
-    -  boot_cpu_data.x86 =3D 25 or 0x19
-    -  boot_cpu_data.x86_model =3D 117 or 0x75
-Done with command (lscpu | grep 'CPU family' && lscpu | grep 'Model:')
-So clearly the hardcoded conditions do not apply to this system configurati=
-on
-
-Given this for me only 2 posible solutions appear:
-
-    - Asus fixes this, but, may not seem probably to me as they do not supp=
-ort
-      linux and also the BIOS seems to correctly implement the ACPI tables.
-      And of course the fact that they didnt say nothing about this matter.
-
-    - We try to debug why the system is not reading/setting correctly the
-      CPPC register or what is really happening
-
-    - We path the linux kernel to include a condition to support this system
-      Should be pretty simple, only add an "&&" to the if confition.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/3] dt-bindings: interconnect: Add Qualcomm SM4450
+To: Krzysztof Kozlowski <krzk@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Catalin Marinas
+	<catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC: <kernel@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+References: <20240801-sm4450_interconnect-v3-0-8e364d0faa99@quicinc.com>
+ <20240801-sm4450_interconnect-v3-1-8e364d0faa99@quicinc.com>
+ <20f5fa43-280d-4fde-a36f-c66b1f474f7e@kernel.org>
+From: Tengfei Fan <quic_tengfan@quicinc.com>
+In-Reply-To: <20f5fa43-280d-4fde-a36f-c66b1f474f7e@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: KxpGsuxELf4Lcv7sBg4LhUqli6iK_kK1
+X-Proofpoint-GUID: KxpGsuxELf4Lcv7sBg4LhUqli6iK_kK1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-04_14,2024-08-02_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 malwarescore=0 suspectscore=0 phishscore=0 mlxscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408050011
 
 
-And I dont know if also a possible solution my be to not implement the CPPC
-Enable Register in the ACPI table so that OSPM enables CPPC by default as s=
-ays
-in this link?
-https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html=
-?highlight=3Dcppc#cppc-enable-register
 
-Of course it would be needed to create the updated table and use intrd to m=
-ake
-the linux kernel
-https://docs.kernel.org/admin-guide/acpi/initrd_table_override.html
+On 8/2/2024 3:22 PM, Krzysztof Kozlowski wrote:
+> On 01/08/2024 10:54, Tengfei Fan wrote:
+>> The Qualcomm SM4450 SoC has several bus fabrics that could be controlled
+>> and tuned dynamically according to the bandwidth demand.
+>>
+>> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
+>> ---
+>>   .../bindings/interconnect/qcom,sm4450-rpmh.yaml    | 133 +++++++++++++++++
+>>   include/dt-bindings/interconnect/qcom,sm4450.h     | 163 +++++++++++++++++++++
+>>   2 files changed, 296 insertions(+)
+>>
+> 
+> If there were no changes, why skipping my tag?
+> 
+> <form letter>
+> This is a friendly reminder during the review process.
+> 
+> It looks like you received a tag and forgot to add it.
+> 
+> If you do not know the process, here is a short explanation:
+> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+> versions, under or above your Signed-off-by tag. Tag is "received", when
+> provided in a message replied to you on the mailing list. Tools like b4
+> can help here. However, there's no need to repost patches *only* to add
+> the tags. The upstream maintainer will do that for tags received on the
+> version they apply.
+> 
+> https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+> 
+> If a tag was not added on purpose, please state why and what changed.
+> </form letter>
+> 
+> Best regards,
+> Krzysztof
+> 
 
---=20
-You may reply to this email to add a comment.
+The V3 patch series is based on the V2 patch series. Your tage also was 
+not added to the V2 binding patch because some modifications were made 
+to the binding patch and dt_binding_check was redone, and not comments 
+were received about your tag, so your tag was not added in the V3 patch 
+series either.
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+I will add your tag to the next version binding patch.
+
+-- 
+Thx and BRs,
+Tengfei Fan
 
