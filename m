@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-11919-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11920-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C74C4947D43
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 16:53:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4363947D59
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 16:58:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2607FB22C0E
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 14:53:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E2331F22270
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 14:58:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1FAF13BC2F;
-	Mon,  5 Aug 2024 14:53:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53FAF13C827;
+	Mon,  5 Aug 2024 14:58:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB34F5381A;
-	Mon,  5 Aug 2024 14:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 430A213C67E;
+	Mon,  5 Aug 2024 14:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722869623; cv=none; b=g3ORmvHFT8rn4RmWTHa+KsQpms2xTzt2RzwTus+oX4wO2XfzdsMl5zUxNyevawvgytdUJ5Ov8KWjst3DPbdfbGXGx5sDVD8Q8b7eYlTs1b1OTIFnr9kYixjUvKzocs/5eA3H8+W0A3PtM15d0hDodqHqbKsKBuSmyxqO7Qk5UyQ=
+	t=1722869897; cv=none; b=j7ueIIzzFMjco/AewjUUYOXSVBnCivK8qWGDyxMT8lopJvNHc2mFddUq1bBLvmwCXOHrw5reLAT0RR25hlSn9nwrJza6FFoFEn4h1tbxu/6FL3Q2GYKg7Yb7cSJF7s5VQGgmmxGmDGlG5ugbP5F2pRXjqucAYEh09n8Wp5HNUfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722869623; c=relaxed/simple;
-	bh=eREV0LKC5JVcgY8+dgImoYFZMUcqU5b2QqWhK7QnD9U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RWPbfrpYz2Z/FLsBIoYrzkWJfynXs4yi1zqs1gSxBFgUhzVPEqXb5yfYYs5eIHPXIst2zICxgbeDYcWI9TBJVpXhW/AsxY9IuOvzcuPFANT0kWhBYAfnDTcIcKHE00eGA108A6wLmWPJeIW1vMvPgDptuzzHF9C4uaZoaQWARro=
+	s=arc-20240116; t=1722869897; c=relaxed/simple;
+	bh=f6oj3279yYwJLfqBf7SnOcMGsAOqP80sDhzbCu3c6Aw=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=u7dYrCEecQTuJoC5eU3+ttHUwABWvcj4ne56BRaoe8cgxX6/Tyhqi1W83ftan87ShFL8eNua4n88pLhc/mUO3vgkUNQU+ylrBpvo5uzjvsa39zmfjTY6Yqu1+zYWQOlGtQcQkVOgwbJrkiovrYkunJpCMDi72bUflNuOjTbcNHM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 68615106F;
-	Mon,  5 Aug 2024 07:54:06 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 66A8A106F;
+	Mon,  5 Aug 2024 07:58:40 -0700 (PDT)
 Received: from [10.1.25.54] (e127648.arm.com [10.1.25.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D92C53F6A8;
-	Mon,  5 Aug 2024 07:53:37 -0700 (PDT)
-Message-ID: <9bbf6989-f41f-4533-a7c8-b274744663cd@arm.com>
-Date: Mon, 5 Aug 2024 15:53:35 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DEDBC3F6A8;
+	Mon,  5 Aug 2024 07:58:11 -0700 (PDT)
+Message-ID: <181bb5c2-5790-41bf-9ed8-3d3164b8697d@arm.com>
+Date: Mon, 5 Aug 2024 15:58:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,8 +42,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv3 0/3] cpuidle: teo: Fixing utilization and intercept
- logic
+Subject: [PATCH 6.1.y] cpuidle: teo: Remove recent intercepts metric
+From: Christian Loehle <christian.loehle@arm.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org
 Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  vincent.guittot@linaro.org, qyousef@layalina.io, peterz@infradead.org,
@@ -52,206 +52,252 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  dietmar.eggemann@arm.com
 References: <20240628095955.34096-1-christian.loehle@arm.com>
  <CAJZ5v0jPyy0HgtQcSt=7ZO-khSGex2uAxL1x6HZFkFbvpbxcmA@mail.gmail.com>
+ <9bbf6989-f41f-4533-a7c8-b274744663cd@arm.com>
 Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <CAJZ5v0jPyy0HgtQcSt=7ZO-khSGex2uAxL1x6HZFkFbvpbxcmA@mail.gmail.com>
+In-Reply-To: <9bbf6989-f41f-4533-a7c8-b274744663cd@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 6/28/24 20:06, Rafael J. Wysocki wrote:
-> On Fri, Jun 28, 2024 at 12:02 PM Christian Loehle
-> <christian.loehle@arm.com> wrote:
->>
->> Hi all,
->> so my investigation into teo lead to the following fixes.
->>
->> 1/3:
->> As discussed the utilization threshold is too high while
->> there are benefits in certain workloads, there are quite a few
->> regressions, too. Revert the Util-awareness patch.
->> This in itself leads to regressions, but part of it can be offset
->> by the later patches.
->> See
->> https://lore.kernel.org/lkml/CAKfTPtA6ZzRR-zMN7sodOW+N_P+GqwNv4tGR+aMB5VXRT2b5bg@mail.gmail.com/
->> 2/3:
->> Remove the 'recent' intercept logic, see my findings in:
->> https://lore.kernel.org/lkml/0ce2d536-1125-4df8-9a5b-0d5e389cd8af@arm.com/
->> I haven't found a way to salvage this properly, so I removed it.
->> The regular intercept seems to decay fast enough to not need this, but
->> we could change it if that turns out that we need this to be faster in
->> ramp-up and decaying.
->> 3/3:
->> The rest of the intercept logic had issues, too.
->> See the commit.
->>
->> Happy for anyone to take a look and test as well.
->>
->> Some numbers for context, comparing:
->> - IO workload (intercept heavy).
->> - Timer workload very low utilization (check for deepest state)
->> - hackbench (high utilization)
->> - Geekbench 5 on Pixel6 (high utilization)
->> Tests 1 to 3 are on RK3399 with CONFIG_HZ=100.
->> target_residencies: 1, 900, 2000
->>
->> 1. IO workload, 5 runs, results sorted, in read IOPS.
->> fio --minimal --time_based --name=fiotest --filename=/dev/nvme0n1 --runtime=30 --rw=randread --bs=4k --ioengine=psync --iodepth=1 --direct=1 | cut -d \; -f 8;
->>
->> teo fixed v2:
->> /dev/nvme0n1
->> [4599, 4658, 4692, 4694, 4720]
->> /dev/mmcblk2
->> [5700, 5730, 5735, 5747, 5977]
->> /dev/mmcblk1
->> [2052, 2054, 2066, 2067, 2073]
->>
->> teo mainline:
->> /dev/nvme0n1
->> [3793, 3825, 3846, 3865, 3964]
->> /dev/mmcblk2
->> [3831, 4110, 4154, 4203, 4228]
->> /dev/mmcblk1
->> [1559, 1564, 1596, 1611, 1618]
->>
->> menu:
->> /dev/nvme0n1
->> [2571, 2630, 2804, 2813, 2917]
->> /dev/mmcblk2
->> [4181, 4260, 5062, 5260, 5329]
->> /dev/mmcblk1
->> [1567, 1581, 1585, 1603, 1769]
->>
->>
->> 2. Timer workload (through IO for my convenience 😉 )
->> Results in read IOPS, fio same as above.
->> echo "0 2097152 zero" | dmsetup create dm-zeros
->> echo "0 2097152 delay /dev/mapper/dm-zeros 0 50" | dmsetup create dm-slow
->> (Each IO is delayed by timer of 50ms, should be mostly in state2, for 5s total)
->>
->> teo fixed v2:
->> idle_state time
->> 2.0     4.807025
->> -1.0    0.219766
->> 0.0     0.072007
->> 1.0     0.169570
->>
->> 3199 cpu_idle total
->> 38 cpu_idle_miss
->> 31 cpu_idle_miss above
->> 7 cpu_idle_miss below
->>
->> teo mainline:
->> idle_state time
->> 1.0     4.897942
->> -1.0    0.095375
->> 0.0     0.253581
->>
->> 3221 cpu_idle total
->> 1269 cpu_idle_miss
->> 22 cpu_idle_miss above
->> 1247 cpu_idle_miss below
->>
->> menu:
->> idle_state time
->> 2.0     4.295546
->> -1.0    0.234164
->> 1.0     0.356344
->> 0.0     0.401507
->>
->> 3421 cpu_idle total
->> 129 cpu_idle_miss
->> 52 cpu_idle_miss above
->> 77 cpu_idle_miss below
->>
->> Residencies:
->> teo mainline isn't in state2 at all, teo fixed is more in state2 than menu, but
->> both are in state2 the vast majority of the time as expected.
->>
->> tldr: overall teo fixed spends more time in state2 while having
->> fewer idle_miss than menu.
->> teo mainline was just way too aggressive at selecting shallow states.
->>
->> 3. Hackbench, 5 runs
->> for i in $(seq 0 4); do hackbench -l 100 -g 100 ; sleep 1; done
->>
->> teo fixed v2:
->> Time: 4.937
->> Time: 4.898
->> Time: 4.871
->> Time: 4.833
->> Time: 4.898
->>
->> teo mainline:
->> Time: 4.945
->> Time: 5.021
->> Time: 4.927
->> Time: 4.923
->> Time: 5.137
->>
->> menu:
->> Time: 4.964
->> Time: 4.847
->> Time: 4.914
->> Time: 4.841
->> Time: 4.800
->>
->> tldr: all comparable, teo mainline slightly worse
->>
->> 4. Geekbench 5 (multi-core) on Pixel6
->> (Device is cooled for each iteration separately)
->> teo mainline:
->> 3113, 3068, 3079
->> mean 3086.66
->>
->> teo revert util-awareness:
->> 2947, 2941, 2952
->> mean 2946.66 (-4.54%)
->>
->> teo fixed v2:
->> 3032, 3066, 3019
->> mean 3039 (-1.54%)
->>
->>
->> Changes since v2:
->> - Reworded commits according to Dietmar's comments
->> - Dropped the KTIME_MAX as hit part from 3/3 according to Dietmar's
->> remark.
->>
->> Changes since v1:
->> - Removed all non-fixes.
->> - Do a full revert of Util-awareness instead of increasing thresholds.
->> - Address Dietmar's comments.
->> https://lore.kernel.org/linux-kernel/20240606090050.327614-2-christian.loehle@arm.com/T/
->>
->> Kind Regards,
->> Christian
->>
->> Christian Loehle (3):
->>   Revert: "cpuidle: teo: Introduce util-awareness"
->>   cpuidle: teo: Remove recent intercepts metric
->>   cpuidle: teo: Don't count non-existent intercepts
->>
->>  drivers/cpuidle/governors/teo.c | 189 +++++---------------------------
->>  1 file changed, 27 insertions(+), 162 deletions(-)
->>
->> --
-> 
-> Patches [1-2/3] have been applied as 6.11 material.
-> 
-> Patch [3/3] looks like it may be improved slightly, see my reply to that patch.
-> 
-> Thanks!
+commit 449914398083148f93d070a8aace04f9ec296ce3 upstream.
 
-Hi Rafael,
-are you fine with this being backported to stable?
-@stable
-4b20b07ce72f cpuidle: teo: Don't count non-existent intercepts
-449914398083 cpuidle: teo: Remove recent intercepts metric
-0a2998fa48f0 Revert: "cpuidle: teo: Introduce util-awareness"
-apply as-is to
-linux-6.10.y
-linux-6.6.y
-for linux-6.1.y only 449914398083 ("cpuidle: teo: Remove recent intercepts metric")
-is relevant, I'll reply with a backport.
+The logic for recent intercepts didn't work, there is an underflow
+of the 'recent' value that can be observed during boot already, which
+teo usually doesn't recover from, making the entire logic pointless.
+Furthermore the recent intercepts also were never reset, thus not
+actually being very 'recent'.
+
+Having underflowed 'recent' values lead to teo always acting as if
+we were in a scenario were expected sleep length based on timers is
+too high and it therefore unnecessarily selecting shallower states.
+
+Experiments show that the remaining 'intercept' logic is enough to
+quickly react to scenarios in which teo cannot rely on the timer
+expected sleep length.
+
+See also here:
+https://lore.kernel.org/lkml/0ce2d536-1125-4df8-9a5b-0d5e389cd8af@arm.com/
+
+Fixes: 77577558f25d ("cpuidle: teo: Rework most recent idle duration values treatment")
+Link: https://patch.msgid.link/20240628095955.34096-3-christian.loehle@arm.com
+Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpuidle/governors/teo.c | 79 ++++++---------------------------
+ 1 file changed, 14 insertions(+), 65 deletions(-)
+
+diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+index d9262db79cae..65475526bb11 100644
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -54,16 +54,12 @@
+  * shallower than the one whose bin is fallen into by the sleep length (these
+  * situations are referred to as "intercepts" below).
+  *
+- * In addition to the metrics described above, the governor counts recent
+- * intercepts (that is, intercepts that have occurred during the last
+- * %NR_RECENT invocations of it for the given CPU) for each bin.
+- *
+  * In order to select an idle state for a CPU, the governor takes the following
+  * steps (modulo the possible latency constraint that must be taken into account
+  * too):
+  *
+  * 1. Find the deepest CPU idle state whose target residency does not exceed
+- *    the current sleep length (the candidate idle state) and compute 3 sums as
++ *    the current sleep length (the candidate idle state) and compute 2 sums as
+  *    follows:
+  *
+  *    - The sum of the "hits" and "intercepts" metrics for the candidate state
+@@ -76,20 +72,15 @@
+  *      idle long enough to avoid being intercepted if the sleep length had been
+  *      equal to the current one).
+  *
+- *    - The sum of the numbers of recent intercepts for all of the idle states
+- *      shallower than the candidate one.
+- *
+- * 2. If the second sum is greater than the first one or the third sum is
+- *    greater than %NR_RECENT / 2, the CPU is likely to wake up early, so look
+- *    for an alternative idle state to select.
++ * 2. If the second sum is greater than the first one the CPU is likely to wake
++ *    up early, so look for an alternative idle state to select.
+  *
+  *    - Traverse the idle states shallower than the candidate one in the
+  *      descending order.
+  *
+- *    - For each of them compute the sum of the "intercepts" metrics and the sum
+- *      of the numbers of recent intercepts over all of the idle states between
+- *      it and the candidate one (including the former and excluding the
+- *      latter).
++ *    - For each of them compute the sum of the "intercepts" metrics over all
++ *      of the idle states between it and the candidate one (including the
++ *      former and excluding the latter).
+  *
+  *    - If each of these sums that needs to be taken into account (because the
+  *      check related to it has indicated that the CPU is likely to wake up
+@@ -114,22 +105,14 @@
+ #define PULSE		1024
+ #define DECAY_SHIFT	3
+ 
+-/*
+- * Number of the most recent idle duration values to take into consideration for
+- * the detection of recent early wakeup patterns.
+- */
+-#define NR_RECENT	9
+-
+ /**
+  * struct teo_bin - Metrics used by the TEO cpuidle governor.
+  * @intercepts: The "intercepts" metric.
+  * @hits: The "hits" metric.
+- * @recent: The number of recent "intercepts".
+  */
+ struct teo_bin {
+ 	unsigned int intercepts;
+ 	unsigned int hits;
+-	unsigned int recent;
+ };
+ 
+ /**
+@@ -137,17 +120,13 @@ struct teo_bin {
+  * @time_span_ns: Time between idle state selection and post-wakeup update.
+  * @sleep_length_ns: Time till the closest timer event (at the selection time).
+  * @state_bins: Idle state data bins for this CPU.
+- * @total: Grand total of the "intercepts" and "hits" mertics for all bins.
+- * @next_recent_idx: Index of the next @recent_idx entry to update.
+- * @recent_idx: Indices of bins corresponding to recent "intercepts".
++ * @total: Grand total of the "intercepts" and "hits" metrics for all bins.
+  */
+ struct teo_cpu {
+ 	s64 time_span_ns;
+ 	s64 sleep_length_ns;
+ 	struct teo_bin state_bins[CPUIDLE_STATE_MAX];
+ 	unsigned int total;
+-	int next_recent_idx;
+-	int recent_idx[NR_RECENT];
+ };
+ 
+ static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
+@@ -216,27 +195,16 @@ static void teo_update(struct cpuidle_driver *drv, struct cpuidle_device *dev)
+ 		}
+ 	}
+ 
+-	i = cpu_data->next_recent_idx++;
+-	if (cpu_data->next_recent_idx >= NR_RECENT)
+-		cpu_data->next_recent_idx = 0;
+-
+-	if (cpu_data->recent_idx[i] >= 0)
+-		cpu_data->state_bins[cpu_data->recent_idx[i]].recent--;
+-
+ 	/*
+ 	 * If the measured idle duration falls into the same bin as the sleep
+ 	 * length, this is a "hit", so update the "hits" metric for that bin.
+ 	 * Otherwise, update the "intercepts" metric for the bin fallen into by
+ 	 * the measured idle duration.
+ 	 */
+-	if (idx_timer == idx_duration) {
++	if (idx_timer == idx_duration)
+ 		cpu_data->state_bins[idx_timer].hits += PULSE;
+-		cpu_data->recent_idx[i] = -1;
+-	} else {
++	else
+ 		cpu_data->state_bins[idx_duration].intercepts += PULSE;
+-		cpu_data->state_bins[idx_duration].recent++;
+-		cpu_data->recent_idx[i] = idx_duration;
+-	}
+ 
+ 	cpu_data->total += PULSE;
+ }
+@@ -289,13 +257,10 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+ 	s64 latency_req = cpuidle_governor_latency_req(dev->cpu);
+ 	unsigned int idx_intercept_sum = 0;
+ 	unsigned int intercept_sum = 0;
+-	unsigned int idx_recent_sum = 0;
+-	unsigned int recent_sum = 0;
+ 	unsigned int idx_hit_sum = 0;
+ 	unsigned int hit_sum = 0;
+ 	int constraint_idx = 0;
+ 	int idx0 = 0, idx = -1;
+-	bool alt_intercepts, alt_recent;
+ 	ktime_t delta_tick;
+ 	s64 duration_ns;
+ 	int i;
+@@ -338,7 +303,6 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+ 		 */
+ 		intercept_sum += prev_bin->intercepts;
+ 		hit_sum += prev_bin->hits;
+-		recent_sum += prev_bin->recent;
+ 
+ 		if (dev->states_usage[i].disable)
+ 			continue;
+@@ -358,7 +322,6 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+ 
+ 		idx_intercept_sum = intercept_sum;
+ 		idx_hit_sum = hit_sum;
+-		idx_recent_sum = recent_sum;
+ 	}
+ 
+ 	/* Avoid unnecessary overhead. */
+@@ -373,42 +336,32 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+ 	 * If the sum of the intercepts metric for all of the idle states
+ 	 * shallower than the current candidate one (idx) is greater than the
+ 	 * sum of the intercepts and hits metrics for the candidate state and
+-	 * all of the deeper states, or the sum of the numbers of recent
+-	 * intercepts over all of the states shallower than the candidate one
+-	 * is greater than a half of the number of recent events taken into
+-	 * account, the CPU is likely to wake up early, so find an alternative
+-	 * idle state to select.
++	 * all of the deeper states a shallower idle state is likely to be a
++	 * better choice.
+ 	 */
+-	alt_intercepts = 2 * idx_intercept_sum > cpu_data->total - idx_hit_sum;
+-	alt_recent = idx_recent_sum > NR_RECENT / 2;
+-	if (alt_recent || alt_intercepts) {
++	if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
+ 		s64 first_suitable_span_ns = duration_ns;
+ 		int first_suitable_idx = idx;
+ 
+ 		/*
+ 		 * Look for the deepest idle state whose target residency had
+ 		 * not exceeded the idle duration in over a half of the relevant
+-		 * cases (both with respect to intercepts overall and with
+-		 * respect to the recent intercepts only) in the past.
++		 * cases in the past.
+ 		 *
+ 		 * Take the possible latency constraint and duration limitation
+ 		 * present if the tick has been stopped already into account.
+ 		 */
+ 		intercept_sum = 0;
+-		recent_sum = 0;
+ 
+ 		for (i = idx - 1; i >= 0; i--) {
+ 			struct teo_bin *bin = &cpu_data->state_bins[i];
+ 			s64 span_ns;
+ 
+ 			intercept_sum += bin->intercepts;
+-			recent_sum += bin->recent;
+ 
+ 			span_ns = teo_middle_of_bin(i, drv);
+ 
+-			if ((!alt_recent || 2 * recent_sum > idx_recent_sum) &&
+-			    (!alt_intercepts ||
+-			     2 * intercept_sum > idx_intercept_sum)) {
++			if (2 * intercept_sum > idx_intercept_sum) {
+ 				if (teo_time_ok(span_ns) &&
+ 				    !dev->states_usage[i].disable) {
+ 					idx = i;
+@@ -508,13 +461,9 @@ static int teo_enable_device(struct cpuidle_driver *drv,
+ 			     struct cpuidle_device *dev)
+ {
+ 	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
+-	int i;
+ 
+ 	memset(cpu_data, 0, sizeof(*cpu_data));
+ 
+-	for (i = 0; i < NR_RECENT; i++)
+-		cpu_data->recent_idx[i] = -1;
+-
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
 
