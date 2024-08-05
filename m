@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-11907-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11908-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97F989474F5
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 08:00:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A635B9474FB
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 08:00:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C926C1C20D78
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 06:00:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5F781C20BC4
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 06:00:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 347471448EF;
-	Mon,  5 Aug 2024 06:00:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2465F147C90;
+	Mon,  5 Aug 2024 06:00:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="suh/guR3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hzVUV5oa"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05481422AB;
-	Mon,  5 Aug 2024 06:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E459B6A01E;
+	Mon,  5 Aug 2024 06:00:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722837608; cv=none; b=FPYLbrG5hwoL6zzAfLwwmvAh/JyFRSrNXOEGxkci4aiQ1HjbDhaSSyMpP4J2xh8ChI6D+K/pJeiEVKnaqQXnNdgR1epG4qO3SRZUecTjjLZiktmFjtKsvuZedLqFfx8zSmW+bQ67qBL9XLRX6whMrUQsomRsqPh3W2H3Hy2ORgQ=
+	t=1722837617; cv=none; b=Lvkjlq0l4cUs2y3pIqeC3oyG3ysOz3a/VUSnOTJhg0h63hSApP7v+c4tz4GyE/cFbQADh5Wqi/flN/3JZpo0dZ9T7BLxs4IqvPdmwXJWiK6EAMFfhsmxeeHPIUfDTe5Ue3dMLveC1cR7BdC9+Ffe44S4RbUXFjAMprDs/kcD+4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722837608; c=relaxed/simple;
+	s=arc-20240116; t=1722837617; c=relaxed/simple;
 	bh=FEJF5Z2MyVBZjrdZZfW9XNluKyInOFfsVL8S4c55ThU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DuIiLagU0nuorxubbklD+TzMWwIUOdk+e3Da7hzyJlABZe4X8YDccduwH5gpEgZOLPadiullnL9qaPBw21RoKb0nIiLW7n6dDxx1t6LE2T8cjR2gs9uXvZH1lv4u1RHGUc/ncFuKV42evRYdh+pJsFEcyPdFJKM9rqj9LgiEy8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=suh/guR3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67247C32782;
-	Mon,  5 Aug 2024 05:59:58 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=r2uxcV6sHkDPdXvLlBXBIIirTyWh6/2SkJuIYzqm0DfFoKby91f1sPijGCDLdZwgh9sJ+9GPcU1vjOo8fYblR1hgZde1blMPphVtmc1vtWhuu7gHnxn2lV+AAB5OXmjVTDpzNZz+KnnvFIY7r0a4cisSnHXDQZc2uA0E+Um4ZkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hzVUV5oa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA49C4AF16;
+	Mon,  5 Aug 2024 06:00:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722837607;
+	s=k20201202; t=1722837616;
 	bh=FEJF5Z2MyVBZjrdZZfW9XNluKyInOFfsVL8S4c55ThU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=suh/guR3rukB66LCk5ztj4b0+W/SOxDfK0jSjcigQDyhLwz7NQgU52h0/T1PLxtV+
-	 FSXxy+qbPIGA9eMHuu/jrBy5QZB8ddoqhzn3RA+RPiHpmRuv6tFcIjJJJjnNqIYffS
-	 KOgg9XeLACn0vtEMp8r8kHY+MFfV7BVXVq/HiIt9X+SdlrkKJ7cq8hiS3R3bxBdAzT
-	 Aup+/PtdURrBz+j9CwS5POzJH5GLsxQpCPg7i2jM788LmUOv4hcKE5MDhecxzefQpL
-	 WrL8C6gxbUU+0MIRqIBaYioBI9e38d6TKIVhvMwUjJ/WKMuHLHe3JDE9NZFzb5VVDp
-	 3sAPFWbaTMeJQ==
-Message-ID: <689b2c3f-b07a-43d4-9273-60339a1d6a23@kernel.org>
-Date: Mon, 5 Aug 2024 07:59:55 +0200
+	b=hzVUV5oa5gXRymdz77Y1RQqsp5dIjsb76ioxGh38fO8FKFb4fS4SkL+ejbLTxjdgO
+	 t8cgP4llqT1HYDipsF2XiR1+SnoolGa1d36efjicgDH8+VqeE6wyquQV80AwjkuHFa
+	 wMh/QYJfIwbFolik0PzBQei+TCnDKrxJx0Frd+MVMYjqUcAHeE87ygtDSCCvIHBRgh
+	 tPI/OC9ivtnCFCcINj/cXMzvckrUfJRd1DEDSfHCC/6kZ9dnUra/atA59P47gPdBz2
+	 ic2gdWrgiFZwd17dVRptqmJ0wuNfm8hyV1SjavEwdcXH0PwAH6CjZYcsv/bmOMu1mf
+	 v8v+cr5gMzldA==
+Message-ID: <59bc4a01-81fc-49c0-9693-4c6c9f2094d7@kernel.org>
+Date: Mon, 5 Aug 2024 08:00:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/11] dt-bindings: interconnect: qcom,sm8350: drop DISP
+Subject: Re: [PATCH 07/11] dt-bindings: interconnect: qcom,sm8450: drop DISP
  nodes
 To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
  Bjorn Andersson <andersson@kernel.org>,
@@ -69,7 +69,7 @@ Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
  freedreno@lists.freedesktop.org, linux-pm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20240804-sm8350-fixes-v1-0-1149dd8399fe@linaro.org>
- <20240804-sm8350-fixes-v1-6-1149dd8399fe@linaro.org>
+ <20240804-sm8350-fixes-v1-7-1149dd8399fe@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -115,7 +115,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240804-sm8350-fixes-v1-6-1149dd8399fe@linaro.org>
+In-Reply-To: <20240804-sm8350-fixes-v1-7-1149dd8399fe@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
