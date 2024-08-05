@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-11908-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11909-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A635B9474FB
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 08:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 299D4947501
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 08:00:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5F781C20BC4
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 06:00:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B4C51C20EC9
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2024 06:00:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2465F147C90;
-	Mon,  5 Aug 2024 06:00:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CD521428FA;
+	Mon,  5 Aug 2024 06:00:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hzVUV5oa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bVaxxgFD"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E459B6A01E;
-	Mon,  5 Aug 2024 06:00:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD226219EA;
+	Mon,  5 Aug 2024 06:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722837617; cv=none; b=Lvkjlq0l4cUs2y3pIqeC3oyG3ysOz3a/VUSnOTJhg0h63hSApP7v+c4tz4GyE/cFbQADh5Wqi/flN/3JZpo0dZ9T7BLxs4IqvPdmwXJWiK6EAMFfhsmxeeHPIUfDTe5Ue3dMLveC1cR7BdC9+Ffe44S4RbUXFjAMprDs/kcD+4s=
+	t=1722837633; cv=none; b=mN36onywxqQHDnMEBgp78MrpkB1s1cg8BpM2S5yekkgqfDNS7vIM5ZAFX1jz+lznlZQQK3gcm4ZCpdYegcgV7PwisiKtG85egsWQCbl9B4U4za6P5ygGN633Cyu+GeT/D46Ysg/BmIJJWLYMv6xrfVPPIth9Df3AdF18MFok1X8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722837617; c=relaxed/simple;
-	bh=FEJF5Z2MyVBZjrdZZfW9XNluKyInOFfsVL8S4c55ThU=;
+	s=arc-20240116; t=1722837633; c=relaxed/simple;
+	bh=bFJ+3aPdN+s1aznR30aPj8yvLBkkGY9WfNq9Bt4xWPY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r2uxcV6sHkDPdXvLlBXBIIirTyWh6/2SkJuIYzqm0DfFoKby91f1sPijGCDLdZwgh9sJ+9GPcU1vjOo8fYblR1hgZde1blMPphVtmc1vtWhuu7gHnxn2lV+AAB5OXmjVTDpzNZz+KnnvFIY7r0a4cisSnHXDQZc2uA0E+Um4ZkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hzVUV5oa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA49C4AF16;
-	Mon,  5 Aug 2024 06:00:07 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=XqbB2VfcQA6bXJQ3X2C/nnQohNSSGR32croNkwra5J+2GeN2u26D2QkgFJDrKX5bq8yM3A/Z9wmoU8d8cJAC02KVNKyh8vfIJEMYX9RFDdHFC+phpYQma+Te7+pBb3VnOgruzb6F7A99Zzn9Y8DbO01JaT/kj+kGsCdOHXEtAiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bVaxxgFD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E64FC4AF0C;
+	Mon,  5 Aug 2024 06:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722837616;
-	bh=FEJF5Z2MyVBZjrdZZfW9XNluKyInOFfsVL8S4c55ThU=;
+	s=k20201202; t=1722837633;
+	bh=bFJ+3aPdN+s1aznR30aPj8yvLBkkGY9WfNq9Bt4xWPY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hzVUV5oa5gXRymdz77Y1RQqsp5dIjsb76ioxGh38fO8FKFb4fS4SkL+ejbLTxjdgO
-	 t8cgP4llqT1HYDipsF2XiR1+SnoolGa1d36efjicgDH8+VqeE6wyquQV80AwjkuHFa
-	 wMh/QYJfIwbFolik0PzBQei+TCnDKrxJx0Frd+MVMYjqUcAHeE87ygtDSCCvIHBRgh
-	 tPI/OC9ivtnCFCcINj/cXMzvckrUfJRd1DEDSfHCC/6kZ9dnUra/atA59P47gPdBz2
-	 ic2gdWrgiFZwd17dVRptqmJ0wuNfm8hyV1SjavEwdcXH0PwAH6CjZYcsv/bmOMu1mf
-	 v8v+cr5gMzldA==
-Message-ID: <59bc4a01-81fc-49c0-9693-4c6c9f2094d7@kernel.org>
-Date: Mon, 5 Aug 2024 08:00:02 +0200
+	b=bVaxxgFD9vOZoUAK0SJO/PuucutMIzgT4foYaZUTS35Bqv6aM/wKAs7nEs2nSlDIb
+	 hQwFGsxPBqj/7RERjALwx9590soQkkYSn5z+5OrDGV3F7rFBPpCwM4ogzBPAbrgMhB
+	 F2GOE6dR8Q66ErlCkD44R3POFdCs+2uSM0Zdi+V7Oz8xd4j4ZVkHFMt0tQlUsRBZXp
+	 Jw5Z/Wt7O24UX9SBIe/eOqt6qcx6hJfUnI3FqE+DC0PD4FOvKEStSw5a0/ahUUFnwp
+	 F5qpsI0/hq58G4HlDeRM+eHPKulCp4FI+/X1hNLmr1cFrIeUMUKEcuNQ1ijcmrAcru
+	 XBxv+W3Syu4vQ==
+Message-ID: <6ab04357-cd27-45f1-8fe2-d50f54de2977@kernel.org>
+Date: Mon, 5 Aug 2024 08:00:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/11] dt-bindings: interconnect: qcom,sm8450: drop DISP
- nodes
+Subject: Re: [PATCH 11/11] arm64: defconfig: build
+ CONFIG_REGULATOR_QCOM_REFGEN as module
 To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
  Bjorn Andersson <andersson@kernel.org>,
  Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
@@ -69,7 +69,7 @@ Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
  freedreno@lists.freedesktop.org, linux-pm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20240804-sm8350-fixes-v1-0-1149dd8399fe@linaro.org>
- <20240804-sm8350-fixes-v1-7-1149dd8399fe@linaro.org>
+ <20240804-sm8350-fixes-v1-11-1149dd8399fe@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -115,19 +115,18 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240804-sm8350-fixes-v1-7-1149dd8399fe@linaro.org>
+In-Reply-To: <20240804-sm8350-fixes-v1-11-1149dd8399fe@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 04/08/2024 07:40, Dmitry Baryshkov wrote:
-> Vendor msm-5.x kernels declared duplicate indices for some of display
-> nodes to be used by separate display RSC and BCM voters. As it is not
-> clear how this separate BCM should be modelled upstream and the device
-> trees do not use these indices, drop them for now.
+> Enable CONFIG_REGULATOR_QCOM_REFGEN and build it as a module. It is an
+> internal supply used by the DSI on SM8350-based platforms (e.g. on the
+> SM8350 HDK device).
 > 
 > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
