@@ -1,118 +1,128 @@
-Return-Path: <linux-pm+bounces-11951-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11952-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E156949545
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 18:08:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03AF69495A0
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 18:33:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4630F287371
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 16:08:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 351031C2130B
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 16:33:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E198FDF71;
-	Tue,  6 Aug 2024 16:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C220F3A268;
+	Tue,  6 Aug 2024 16:33:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+vshGM+"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="AqFJDYCd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B95FF184D;
-	Tue,  6 Aug 2024 16:08:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722960529; cv=none; b=fUAjTFt7i7tGCymNhA/LJ1VeOMsXV/utKIVBcaKuK8ccQrLkbmTDfz0B1u6RCGFA4BhUf7bAhPwAWhYHieOJOSwQ3TuLDgVaFT9w0WJEDQnvUi86NzUsk1E6gj16VG95tkLsnI4/HWsQ09C2E7gxoipxjHYlEyRhpYRGrn4f70Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722960529; c=relaxed/simple;
-	bh=zleTztI71bR1VV4Zd7JrcyASC2gGE5G/CC5AYm4vrpY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Grg4XwlhZlbZBXt7/vtD+A6yF/Fmqc8d5C+usTj0c+hI0WtZ3ZAlkpaE6i4VuDxTZWaC8G0CJWTFDsv6XAr8l5rFePrtYHBUyuvUJ9+EEC2fC9qc9wPpgmk5hQcq3Nliyf5QNA+rwl+g46dszz9YiWw/wDlvZSMoYumCkK/WHxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+vshGM+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 562E9C4AF0E;
-	Tue,  6 Aug 2024 16:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722960529;
-	bh=zleTztI71bR1VV4Zd7JrcyASC2gGE5G/CC5AYm4vrpY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=F+vshGM+0ebvKnXUGkH1sr9W9as/nny881xJ+w6cYDz9EQwStLrtloZNZx2fUWmgh
-	 n0ODDEKbhq/m6Bz6XyuhxgiYdob4AxP7o76DFSTkdIYkwr6jVhH9/2+6ObVEp+yPYZ
-	 RntkplLtMMHrb71L086pvX52+73Cx5NMC0M7Fa3cSLvhU51LL6gfciP7QngozgxVLy
-	 hXBpZW4FFNjOMVvN/z+Mogu/pGTJdj7WC7XZYeaXx8QDEfA5h8TAxP3zJ8RxzwByKc
-	 bNtA2SIc5bhlCSLOA5RGkjtCtMa4/lfQx/cFoIEK437bZFG5Um8l1yTllXz8IXiOpR
-	 6KMtOQJ41IN7g==
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2f183f4fa63so9520611fa.1;
-        Tue, 06 Aug 2024 09:08:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWrU9jzX774KNDkwFxTUj1+MAOQHphLgighFSXiZx76oH/uqDTc2UlWNEBG3jIoWDkqSpLxN3KNwY6fTtBpKHRGC/qeWGw6aYh4UE2S/qS/Dq96Hsbv0retamHWbSb7L8Xis0ge2hY=
-X-Gm-Message-State: AOJu0YwZps0rRlEel3gQFSOFxyOuMxL5Xwq1TRxUPSo+z9dk4D2OXeV3
-	DGHxf1XCpFaEmsbwn0IOFJnKUwc6QOyKoFpoK2cE+e+KnIKAO++9xeodi6LoalwFuhXJDnLAoMA
-	ZmlxEy46IRt8e+mhuaQLxRMdsBg==
-X-Google-Smtp-Source: AGHT+IEEvIvp/KP9FxUMY15tzLmsM9A3gLkk1/eG9Nu8oa6/kQAQeFXGkAT3KG0Ks16DKyBfq45lT3A45Jf4iTbLChQ=
-X-Received: by 2002:a05:651c:10b8:b0:2ee:811e:757c with SMTP id
- 38308e7fff4ca-2f1576ddda5mr45044911fa.21.1722960527685; Tue, 06 Aug 2024
- 09:08:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD982C182;
+	Tue,  6 Aug 2024 16:33:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722962031; cv=pass; b=LlSZPGKKEZoQDd1C0nxe1sh+jSfj4K6C15aOAADgLAwzT7+vJGCDFqiIRvpgxbd3/yjznAa3oT/WTQtbzqCOG/za/3YITc2PN4UOLHW1PCiWg1Kb84qZDJfbN8vNSYDtwtNptvagewGcalNx5I97NThwgFvoDgptyi2SBMHZqlA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722962031; c=relaxed/simple;
+	bh=puiEd1SRm3ADc828HACBfKNH+QKdUIB7UI3diIKs2AA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IHwpMHVRcBoTmQx16ezizbI68nUnFobbKrX/E92WInnfyaw53PWq7VWyCmaLxmqU3KMKoczg1/6XdahN4Itawszkiv4YEOTiGorHnODhAGZrCUgvdz7eDpdge0OnmaXfTqSR2pmuF1xjYF6n8FAQfNAiRGb7nhBL0iAHdgvTx1k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=AqFJDYCd; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1722962010; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=nVmjkx2NYYfGexWUTXG6+br7K+/tYNcm2BTNaHP0pmFRRUF6ugYmgQNdE1Z4TgZeOsBp4IWtKiRsYRVcx4LkEdgW5NMOcFdNYbTecmOXjMHwkj1saTbQw/ng9eOW0VYI7I9+0R3Xa0qXjOLqYMnRZAmrgi5gzUp/2gUkgllXlLc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1722962010; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=l/JHjYFYD5hXu+XbGOm+SC68og+CQ6amBp7xMsiP/Lo=; 
+	b=CsIS/Zd0X+HOmXOqsWJsKqIQT07/9srdSQNwHL6RoqLJaMD9Y7UgQFJDZlOIfmDqWpuGwgErLkyLoDibyGeJbGBU4/MH4oUSKMRMUfT3DV8t98XX8dQFQcQEUv5AgtcB6RaxxkM77B4O7oCmvoyML5/04OYGhINcMrEJWljfpwI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=detlev.casanova@collabora.com;
+	dmarc=pass header.from=<detlev.casanova@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1722962010;
+	s=zohomail; d=collabora.com; i=detlev.casanova@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=l/JHjYFYD5hXu+XbGOm+SC68og+CQ6amBp7xMsiP/Lo=;
+	b=AqFJDYCdobJ60Kpe/ZGzSVKMoNEWj3yVbIBcC+9Q5Pm9KxZG5CRvJ6KdXceQzpe0
+	oTPRGkOL6pPFlfJdmaHXdCx6ZHWo1MpTI8HyNji7wYzk/OsF9zTgIQ861Gn/BzZk1Gc
+	TNyFVoh6ilAbmNIrlRYMu/halSDBLbAqVtm76XCE=
+Received: by mx.zohomail.com with SMTPS id 1722962009873809.7480289049981;
+	Tue, 6 Aug 2024 09:33:29 -0700 (PDT)
+From: Detlev Casanova <detlev.casanova@collabora.com>
+To: linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Finley Xiao <finley.xiao@rock-chips.com>, Jagan Teki <jagan@edgeble.ai>,
+ Elaine Zhang <zhangqing@rock-chips.com>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: Add power-domain header for RK3576 SoCs
+Date: Tue, 06 Aug 2024 12:34:41 -0400
+Message-ID: <3310992.44csPzL39Z@trenzalore>
+In-Reply-To: <e04258dc-07c4-45c7-90d4-bc1ed9eb100b@kernel.org>
+References:
+ <20240802151647.294307-1-detlev.casanova@collabora.com>
+ <20240802151647.294307-3-detlev.casanova@collabora.com>
+ <e04258dc-07c4-45c7-90d4-bc1ed9eb100b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240805202042.3229190-1-robh@kernel.org> <20240806044928.2j6z2ucnzk6lg5y3@vireshk-i7>
-In-Reply-To: <20240806044928.2j6z2ucnzk6lg5y3@vireshk-i7>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 6 Aug 2024 10:08:32 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLVj2sCuQFYFwR8QnB9jHq_9z4axeNzid1d7+ZrWzmgYA@mail.gmail.com>
-Message-ID: <CAL_JsqLVj2sCuQFYFwR8QnB9jHq_9z4axeNzid1d7+ZrWzmgYA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: spear: Fix uninitialized variable "i"
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kernel test robot <lkp@intel.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-ZohoMailClient: External
 
-On Mon, Aug 5, 2024 at 10:49=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> On 05-08-24, 14:20, Rob Herring (Arm) wrote:
-> > The refactoring in commit dca2ef2b7d91 ("cpufreq: spear: Use
-> > of_property_for_each_u32() instead of open coding") left "i"
-> > uninitialized. Initialize it to 0.
-> >
-> > Note that gcc doesn't detect this, only clang does.
-> >
-> > Fixes: dca2ef2b7d91 ("cpufreq: spear: Use of_property_for_each_u32() in=
-stead of open coding")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202408030418.gnJDcCpm-lkp=
-@intel.com/
-> > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+On Sunday, 4 August 2024 05:56:39 EDT Krzysztof Kozlowski wrote:
+> On 02/08/2024 17:14, Detlev Casanova wrote:
+> > From: Finley Xiao <finley.xiao@rock-chips.com>
+> > 
+> > Define power domain IDs as described in the TRM.
+> 
+> Please use subject prefixes matching the subsystem. You can get them for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching. For bindings, the preferred subjects are
+> explained here:
+> https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patche
+> s.html#i-for-patch-submitters
+> > Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
+> > [reword]
+> > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 > > ---
-> >  drivers/cpufreq/spear-cpufreq.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cp=
-ufreq.c
-> > index 4d28147c23f1..f8c16699a68d 100644
-> > --- a/drivers/cpufreq/spear-cpufreq.c
-> > +++ b/drivers/cpufreq/spear-cpufreq.c
-> > @@ -173,7 +173,7 @@ static int spear_cpufreq_probe(struct platform_devi=
-ce *pdev)
-> >       struct device_node *np;
-> >       struct cpufreq_frequency_table *freq_tbl;
-> >       u32 val;
-> > -     int cnt, i, ret;
-> > +     int cnt, i =3D 0, ret;
->
-> We don't increment 'i' anymore, don't we need an i++ in:
->
->         freq_tbl[i].frequency =3D val;
->
-> ?
+> > 
+> >  include/dt-bindings/power/rk3576-power.h | 30 ++++++++++++++++++++++++
+> >  1 file changed, 30 insertions(+)
+> >  create mode 100644 include/dt-bindings/power/rk3576-power.h
+> 
+> This is part of bindings.
+> 
+> > diff --git a/include/dt-bindings/power/rk3576-power.h
+> > b/include/dt-bindings/power/rk3576-power.h
+> Missing vendor prefix. This should be named after compatible.
 
-Sigh. Yes.
+Looks like all other rockchip power bindings use the include/dt-bindings/
+power/rkXXXX.h format. Should I keep that way ?
+
+> > new file mode 100644
+> > index 0000000000000..cb33a32c1aed9
+> > --- /dev/null
+> > +++ b/include/dt-bindings/power/rk3576-power.h
+> > @@ -0,0 +1,30 @@
+> > +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+> 
+> Weird license.
+> 
+> Best regards,
+> Krzysztof
 
 
-Rob
+
+
 
