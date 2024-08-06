@@ -1,183 +1,129 @@
-Return-Path: <linux-pm+bounces-11953-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11954-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C38A99499AD
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 22:56:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61607949A41
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 23:35:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46F911F239EE
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 20:56:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3242B23063
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 21:35:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3639C15B147;
-	Tue,  6 Aug 2024 20:56:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E6DC158DC0;
+	Tue,  6 Aug 2024 21:35:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SKj/n/r4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C5IhPkCC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDFF158DDC
-	for <linux-pm@vger.kernel.org>; Tue,  6 Aug 2024 20:56:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA43382863;
+	Tue,  6 Aug 2024 21:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722977808; cv=none; b=AUrHry39N0V4r/fcJ0imNHtLd2gR5Sr40cs33q4L4NtWtJ1NsR7cKjPW5CTMLjxPwHRueZ2eoOQtNShvutd3wt8JwpgbKKUg7iLLA7ZFl5zz4c/Y2LzCqP3uy8A9FBjJGXaRza5PATbQSE0LmQtT4UJK38cqT2qJaw2q1shqd7E=
+	t=1722980104; cv=none; b=PapRSbqZtL178X3Dx/Bttyh1QDrpnYY5Fp9caL051yDcRCRmAixrb12G8/vXYY4ZTK0rLbAvJIRXV/taeeHlW1AqOF+YEZJqlFTDn8hS/Tb9Lx6UiQq4S9wJQsl1at2LFsMdtoky0oNoD3eHJhFLVSKnQHJ5imVECa067qfw9V0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722977808; c=relaxed/simple;
-	bh=pGi/uxcZi3YrvGaOOaaM8bWfjMaJ4H2RPHu7rzO5+MY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bvD3YJp3lLYKAJOGRnU9pmI9Oz/2GecN+qDlVarCtsfwVMtFzDb88+ppdboLngkMlolC9mbLDvmGAuC+Oi6RgB+GHG4PzILK8MmoG22RvwYNoghKch0M+MrvUmLGEs1sG1IM2uhGwszeQB7z03VRGbkxXra5LwjQqh4H3zs/45w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SKj/n/r4; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722977805;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Qe6VBZJRiQp4qF9WjYWrAkKgoBmgqYQ+VXQlPMeplEU=;
-	b=SKj/n/r49cyjdTh9mb62cNYdxSxaRVq1rajAZbZIRk001qiZE3p1GbPda19NC5vdoLY0Xi
-	yNd5xrN+pfWe8TlxFNOEKUdi23iK24bvmJAvzDNIC8usAZ25RqESozjpEjOMvuQKG1C4CJ
-	JyMxsdVdyVnPsHkNgbW/ivzZ12q1bHc=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-616-6Er3X6z7Mj2GHFh1L52Gzg-1; Tue, 06 Aug 2024 16:56:44 -0400
-X-MC-Unique: 6Er3X6z7Mj2GHFh1L52Gzg-1
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-709561cbf29so1202377a34.2
-        for <linux-pm@vger.kernel.org>; Tue, 06 Aug 2024 13:56:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722977803; x=1723582603;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qe6VBZJRiQp4qF9WjYWrAkKgoBmgqYQ+VXQlPMeplEU=;
-        b=jDx3NMctBiArQJWMJrCl7qsZ0XcJdeDNPhzAwJXhoToatopliMt8uzdghTXeTvcBBw
-         iJMen3M+tMRNDawEdmKh0h08XItDj88Uz6DiCaswDZoyAm2R6noqsNkMPugKCbMhCsL/
-         dbic/7ICn5I3g6EIR707YCNk6bDRXVDxBpryXRheceR9QhvoQ3NukrMmnnhKAvwCQGQ7
-         +0rkBG3Itpg50qv/CUDTSsGnx2zPvaxasHu2kwxfIrbkj//hor5Vw649rLmwHN2LOLkO
-         EbqEkGOpOnnjiZywIyxOo7FRFOLSxMPNBMfQrrCfMi03ssGf+qgqrWkJ+3g1BuxA0L3J
-         XD7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUcu8svcnIOJKNElic6fLhQzbwc3miQjbuvvjzS0xRyx8yztoBtnvQi5GL1Btm0OiSMEw+l0vFU7sQLOXqomEVdA8dV8p4AsLM=
-X-Gm-Message-State: AOJu0YxE6AKtqA7PRUdvAmAWRfkS7DSeZQuKFgvxCs5PII02tg3sJhMR
-	00tNoRGFALVZrfXM3SFZn0lzdG/sgNsYCNfzSnX6cX4TH1UsX1Y3VfEDrI1BKGFFHYCvjs01ye3
-	odcWif9QI54LmBq9VEIvS0/bEFQlY1QMgFeJIFRBhuOMn3IHmzfX5yDoM
-X-Received: by 2002:a05:6358:5906:b0:1af:4626:7e42 with SMTP id e5c5f4694b2df-1af46267f7fmr1799887255d.25.1722977803161;
-        Tue, 06 Aug 2024 13:56:43 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEoGX6vrc5VZiBrLXAafPPUxZlhxnFoJm9EJsMe8SfamL2QQezK4MKx7rVKRflXSY3iRwu4Eg==
-X-Received: by 2002:a05:6358:5906:b0:1af:4626:7e42 with SMTP id e5c5f4694b2df-1af46267f7fmr1799885155d.25.1722977802724;
-        Tue, 06 Aug 2024 13:56:42 -0700 (PDT)
-Received: from fedora.redhat.com ([71.217.44.209])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6bb9c864c87sm50208546d6.115.2024.08.06.13.56.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Aug 2024 13:56:42 -0700 (PDT)
-Date: Tue, 6 Aug 2024 16:56:40 -0400
-From: "John B. Wyatt IV" <jwyatt@redhat.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, linux-pm@vger.kernel.org,
-	Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, John Kacur <jkacur@redhat.com>,
-	Tomas Glozar <tglozar@redhat.com>, Arnaldo Melo <acme@redhat.com>,
-	"John B. Wyatt IV" <sageofredondo@gmail.com>
-Subject: Re: [PATCH 0/2][RFC] Add SWIG Bindings to libcpupower
-Message-ID: <ZrKOCLYvYklsPg1K@fedora.redhat.com>
-References: <20240724221122.54601-1-jwyatt@redhat.com>
- <1f5c24b6-f3ee-4863-8b7a-49344a550206@linuxfoundation.org>
- <Zqv9BOjxLAgyNP5B@hatbackup>
- <2024080405-roundish-casket-2474@gregkh>
+	s=arc-20240116; t=1722980104; c=relaxed/simple;
+	bh=4B0VqZXX8e0Xp86ft/ZY22AsMqEwkyCGIdkBRMWV1yM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=fMv3oz3XHJWEwt+jax8EIZvVbL8rSGk609/rReU06dfjhcZb7alv3/EeWOvZ8Ib+mLRJLAdKMHxUPW3tIT287Xelm6CLvBQ5oc7F2pj3hX7nkRxOPYx/qJ/H0/Bfh6+/JLxwpHynYgp7jYw6Fj01fvRgVJoXvVpTi16kicajjuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C5IhPkCC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30AA0C32786;
+	Tue,  6 Aug 2024 21:35:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722980104;
+	bh=4B0VqZXX8e0Xp86ft/ZY22AsMqEwkyCGIdkBRMWV1yM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=C5IhPkCC73C0WrIXz/uZpToLCxoL49pVnrCdjLjJOS5zvMPETmL1aqNKSR8S/MKHZ
+	 EMSFA2Xf3bh5kxw81z82ULQ6QvThk5SOQl73d35e2U8a8qaq4VZr9vg+zRvG6hwtlV
+	 rfjOKidNAk63H1faNXhfuj9HO5BTr8ZPPVrxF8oyGdZJ1OSVoOYelQmJE0c3XfUeav
+	 Xvq+twhT72wm3/M3gVoMCHGjf/LKiJpUJW/V7LJp5hGZA2gfWOv/r3IHKnj8ZxwmLb
+	 accbqaDkW/TNtwmQxkAtOOp+s5EeTHMzPBlH8YfWvUpfX/QYIggnFepUkrEYUvOE0C
+	 x2ysMP5EO8CSQ==
+Received: by mercury (Postfix, from userid 1000)
+	id 1423B106066C; Tue, 06 Aug 2024 23:35:01 +0200 (CEST)
+Date: Tue, 6 Aug 2024 23:35:01 +0200
+From: Sebastian Reichel <sre@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply changes for 6.11-rc3
+Message-ID: <uw3qk5vbjkonzirjhsrjlkq34sj73g5dtf4uw4yhprf6y6dn3e@umuf6mghw3f6>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ixfyut5kjxo53sav"
+Content-Disposition: inline
+
+
+--ixfyut5kjxo53sav
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2024080405-roundish-casket-2474@gregkh>
 
-Adding Arnaldo to the CC list.
+Hi Linus,
 
-On Sun, Aug 04, 2024 at 10:54:10AM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Aug 01, 2024 at 05:24:20PM -0400, John B. Wyatt IV wrote:
-> > > On 7/24/24 16:11, John B. Wyatt IV wrote:
-> > > > SWIG is a tool packaged in Fedora and other distros that can generate
-> > > > bindings from C and C++ code for several languages including Python,
-> > > > Perl, and Go. We at Red Hat are interested in adding binding support to
-> > > > libcpupower so Python tools like rteval or tuned can make easy use of it.
-> > > > 
-> > > 
-> > > Can you elaborate on the use-case and what rteval currently does and
-> > > how it could benefit from using libcpupower with the bindings?
-> > 
-> > rteval is a Python program used to measure realtime performance. We wanted to
-> > test the effect of enabling some levels of idle-stat to see how it affects
-> > latency, and didn't want to reinvent the wheel. We thought that the Python
-> > bindings could be useful to other people as well who might want to call
-> > cpupower too from Python. I did some testing and was able to achieve this with
-> > SWIG. We sent the patchset to see what folks thought about this.
-> 
-> Is this going to require a built-time dependency on SWIG?  If not, when
-> would it be run
+The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
-It is optional, and based on my conversation with Shuah; the bindings will be
-in a seperate makefile. It would be ran after running cpupower's
-makefile, seperately. (But one can call the other.)
+  Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
 
-> and who will be in charge of running it and updating the bindings?
+are available in the Git repository at:
 
-That would be myself. If I no longer wish to continue I would reassign it to
-another person here on the real-time team at Red Hat. John Kacur (whom I am
-working with on rteval) is fine with being listed as a backup contact.
+  https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.11-rc
 
-The bindings would need to be updated every time one of the functions or data
-structures listed in the .i file changes. But it can be as simple as copying the
-changed declaration from the header file to the .i file to resolve.
+for you to fetch changes up to d6cca7631a4b54a8995e3bc53e5afb11d3b0c8ff:
 
-> And finally, why do we need these at all?
+  power: supply: qcom_battmgr: Ignore extra __le32 in info payload (2024-07-27 00:18:40 +0200)
 
-To provide bindings for Python programs like rteval to easily interface with
-libcpupower. It is very common for userspace programs to include bindings to
-scripting languages.
+----------------------------------------------------------------
+Power Supply Fixes for 6.11 cycle
 
-> You are saying these are new
-> tests that external tools will be using, but why, if external tools are
-> required to run them, are they needed in the kernel tree at all?  Why
-> isn't this just another external test-suite that people who care about
-> measuring this type of thing going to just run on their own if desired?
+* rt5033: fix driver regression causing kernel oops
+* axp288-charger: fix charge voltage setup
+* qcom-battmgr: fix thermal zone spamming errors
+* qcom-battmgr: fix init on Qualcomm X Elite
 
-SWIG the tool requires the .o files compiled from libcpupower to generate
-bindings. Since we need these artifacts from a packaging and usability perspective
-it makes sense to include the bindings source code along in a seperate directory
-with the cpupower source code to generate the builds for them at the same time.
-The source code is: the .i definitions file, any future Python wrapper helpers
-around the bindings needed by SWIG, and the documentation.
+----------------------------------------------------------------
+Hans de Goede (2):
+      power: supply: axp288_charger: Fix constant_charge_voltage writes
+      power: supply: axp288_charger: Round constant_charge_voltage writes down
 
-Why SWIG? It was chosen for this project because of:
+Neil Armstrong (1):
+      power: supply: qcom_battmgr: return EAGAIN when firmware service is not up
 
-1) Many Python bindings generators are strickly Apache2 or GPL v3 licensed; and
-they may inject code into the bindings binary that will create a license conflict
-with the GPL v2. Swig was far more clear about the license status of the
-generated bindings. As described above:
-https://lore.kernel.org/linux-pm/1f5c24b6-f3ee-4863-8b7a-49344a550206@linuxfoundation.org/T/#mb7170232fb429fc242bb45c8d3d4d5ed47f0c59f
+Nikita Travkin (1):
+      power: supply: rt5033: Bring back i2c_set_clientdata
 
-2) It's extensive documentation. This is the Python section:
-https://www.swig.org/Doc4.2/Python.html#Python
+Stephan Gerhold (1):
+      power: supply: qcom_battmgr: Ignore extra __le32 in info payload
 
-3) Support: SWIG has been around since 1996 and had a release 5 months ago. It's
-length of time and the acitvity in it's community makes it unlikely SWIG will
-lose support by it's developers anytime soon.
+ drivers/power/supply/axp288_charger.c | 24 ++++++++++++------------
+ drivers/power/supply/qcom_battmgr.c   | 12 +++++++-----
+ drivers/power/supply/rt5033_battery.c |  1 +
+ 3 files changed, 20 insertions(+), 17 deletions(-)
 
-4) This RFC demonstrates how quickly and with little work you can generate
-bindings for an existing C project with no code changes to that project. :-)
-There were issues getting other Python bindings generators to work as
-described in their documentation.
+--ixfyut5kjxo53sav
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Sincerely,
-John Wyatt
-Software Engineer, Core Kernel
-Red Hat
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmaylwQACgkQ2O7X88g7
++polKA//VycZvY96wXNSB4eLTUJIudH6BWB0n7gypu5ln5d/zM4YAoaFCwy9K0y3
+iBoJopFeX/N1mOhRLhYbNCvAOfj1YSGcC6HJ3NKre5ALMzpVplpOTtxjuPhxxmWL
+ZlLCA2sJNozYySip9jPq6kOgsk/GvEMckoqb/r4l/6lkuMZHva0uM4BUZZ5TgzyQ
+jO3WJxVRtJ/2Gzz7s0Z2CFIVFBiCaoZZzWpWqzJBqYbDd3FfgPbECPFUpxMURgjd
+gpCEmDVF0QdJY5ncksMgWEbk1Xe8vp8ppvo2Usf29x+ohbMpps6nVoO6T+11vc/p
+LQUQtNV9YZpRj1beqzCzNAR3MTNeCXJJC2cK5nTOxa2or5vVGoKnAAb8Da9kvzBJ
+NUTq7b8sx35rOFWr5QFal+f+i3zyfJ7vHyXLoxuubRyXSKp5LW6P0o9YgcRYr2qu
+vTwZY7+XoLf9+tjEg3s3MxNMe4m91ywLT0XSEa/yyk9K5+uVAL5cM8cWrN7hbUqA
+oonKeXd3hUShIhFvyre2LfajEBjmaJJLXvl7Zvzh7FG2GPXOPxedeWTgrJIhchwr
+l3olSw3cLZjaRFRxKxeRkYyxV8PxHbsJQZR01QyFDouVRNiOaLXjgS/kq0G+X4Iy
+jPPMtMr1LKWo0pbo8Th4NLrM1XWrtqIMZ/GOce9Q5yc4kY2gjd0=
+=3gdF
+-----END PGP SIGNATURE-----
+
+--ixfyut5kjxo53sav--
 
