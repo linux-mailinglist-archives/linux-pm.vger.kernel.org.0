@@ -1,83 +1,203 @@
-Return-Path: <linux-pm+bounces-11930-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11931-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E51AF9486DB
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 03:03:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 318F3948707
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 03:37:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2229D1C22390
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 01:03:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0760280D4C
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 01:37:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A2ED12E75;
-	Tue,  6 Aug 2024 01:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="QQ8tldQY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1B406FD5;
+	Tue,  6 Aug 2024 01:37:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gentwo.org (gentwo.org [62.72.0.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AEF59475;
-	Tue,  6 Aug 2024 01:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26B2F14290;
+	Tue,  6 Aug 2024 01:37:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722906218; cv=none; b=OncdVSGjfYi5K3gHPzPA9Oc/PeVQ9Pba3oKPog33BRFx52liSJRAlIiBLzXEzb2lVeBHYsu/O2Rm/lQa8V648jXCbXzHF0+jy7qhxd9d1QFzRSqde7Dl1XHeNPTXKpYtsdgtMXXz51j0DjKuoxX32n+vxSIO8TKY4KOYlC62eV8=
+	t=1722908256; cv=none; b=SNrotNIED9OG6OArbogscj5bO3uCtLZ0k9kiNUrbfZq5vC78d7XMQn0NG0+5pAHZBNLtfJc1Sv7x/69VWl2wVS/veIhuUN8qTlVtqJYf476dj6f5jqSaI+68BFXvpmbXfjF9gjD0k4otM9vgNl7LjafU1wFYVg1glPRrNyBYD7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722906218; c=relaxed/simple;
-	bh=mI9/CNrBD5qXZqkW6Ldkif5sH8/bXop/GckPD/gd55A=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ZuCeJ+FdPyd9bPcDg0mBo9GEpGbC/fx0/xxqkPzEhRrZULw7W1I2MK4UeInaRjoO8Ra5b85qrr8mwUEJoq8DwNRgx4Bugq+1layBDGU5AnonlWo/4vAtPB3PsaDqvEg77abNYoQqDIJi/gE8gI32t3OZX4C5JHPRfl2VXR98aR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=QQ8tldQY; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1722899398;
-	bh=mI9/CNrBD5qXZqkW6Ldkif5sH8/bXop/GckPD/gd55A=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=QQ8tldQYNuBdPn9xY6a20azTd0sdwHKhcR/eapjZTCzSNoTpabS307v8Ygb81en/Z
-	 mat7wjips2JSHK5yyI2pW8jghlQzeBFDTfTZWLdjFQIsgQUURJF6S3GXi0afZPMc+Y
-	 fSNRclbuyOYsljB1FCyCO8BjzSTlkteUdDh/grdY=
-Received: by gentwo.org (Postfix, from userid 1003)
-	id 1DF9840402; Mon,  5 Aug 2024 16:09:58 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id 1AB86401CA;
-	Mon,  5 Aug 2024 16:09:58 -0700 (PDT)
-Date: Mon, 5 Aug 2024 16:09:58 -0700 (PDT)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org, 
-    linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-    catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de, 
-    mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, 
-    x86@kernel.org, hpa@zytor.com, pbonzini@redhat.com, wanpengli@tencent.com, 
-    vkuznets@redhat.com, rafael@kernel.org, daniel.lezcano@linaro.org, 
-    peterz@infradead.org, arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com, 
-    harisokn@amazon.com, mtosatti@redhat.com, sudeep.holla@arm.com, 
-    misono.tomohiro@fujitsu.com, joao.m.martins@oracle.com, 
-    boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v6 02/10] cpuidle: rename ARCH_HAS_CPU_RELAX to
- ARCH_HAS_OPTIMIZED_POLL
-In-Reply-To: <20240726201332.626395-3-ankur.a.arora@oracle.com>
-Message-ID: <43b24caf-2ade-e229-21f4-8c01a47f37ed@gentwo.org>
-References: <20240726201332.626395-1-ankur.a.arora@oracle.com> <20240726201332.626395-3-ankur.a.arora@oracle.com>
+	s=arc-20240116; t=1722908256; c=relaxed/simple;
+	bh=z37a2uOG7QWM/eKp4mRZYSPhU6f3WOb2ij6jfa6lT5k=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=ZhNDfWfy+AKpwOO4ymYhXrdr14BFKtbvcxeA6ASndVud6qIHlKrcK0Cu2/xPj9/zRGbDR66xIt+xvqnJ+FMgv/jmK6Dv863ALAh3sCJZHY8M7M0kB3y334lNI3sIO3Y0+zwcLLV+qXQi8ScSfi2B4szb96H9aXuHNdnn4+NL/zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.62])
+	by gateway (Coremail) with SMTP id _____8Cx+elafrFmXFsIAA--.27986S3;
+	Tue, 06 Aug 2024 09:37:30 +0800 (CST)
+Received: from [10.20.42.62] (unknown [10.20.42.62])
+	by front1 (Coremail) with SMTP id qMiowMDxvmdVfrFmlV4FAA--.12829S3;
+	Tue, 06 Aug 2024 09:37:28 +0800 (CST)
+Subject: Re: [PATCH v6 09/10] arm64: support cpuidle-haltpoll
+To: Ankur Arora <ankur.a.arora@oracle.com>, linux-pm@vger.kernel.org,
+ kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Cc: catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
+ mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+ hpa@zytor.com, pbonzini@redhat.com, wanpengli@tencent.com,
+ vkuznets@redhat.com, rafael@kernel.org, daniel.lezcano@linaro.org,
+ peterz@infradead.org, arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com,
+ harisokn@amazon.com, mtosatti@redhat.com, sudeep.holla@arm.com,
+ cl@gentwo.org, misono.tomohiro@fujitsu.com, joao.m.martins@oracle.com,
+ boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+References: <20240726201332.626395-1-ankur.a.arora@oracle.com>
+ <20240726202134.627514-1-ankur.a.arora@oracle.com>
+ <20240726202134.627514-7-ankur.a.arora@oracle.com>
+From: maobibo <maobibo@loongson.cn>
+Message-ID: <f1a5d666-d236-572b-f9fc-5adeb30be44b@loongson.cn>
+Date: Tue, 6 Aug 2024 09:37:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+In-Reply-To: <20240726202134.627514-7-ankur.a.arora@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMDxvmdVfrFmlV4FAA--.12829S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxXrW7tr1xJw43WrWxAFW8GrX_yoWrXw1xpF
+	WDCwn3KFsrWFW7AayfGws2kFZ8Aws3WFW3Wr43J3yxGFnIvryUKF4rt3W3XF4xXr1kXw40
+	vF1Fq3W5Ka1UJFgCm3ZEXasCq-sJn29KB7ZKAUJUUUU_529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4j6r4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_
+	WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
+	CYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48J
+	MxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI
+	0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y
+	0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
+	IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUeVpB3UUUU
+	U==
 
-On Fri, 26 Jul 2024, Ankur Arora wrote:
-
-> However, recent changes in poll_idle() mean that a higher level
-> primitive -- smp_cond_load_relaxed() is used for polling. This would
-> in-turn use cpu_relax() or an architecture specific implementation.
 
 
-Maybe explain here that smp_cond_load_relaxed will potentially wait for 
-important events such as a cacheline changing. Thereby making the busy 
-poll unnecessary and optimizing power use.
+On 2024/7/27 上午4:21, Ankur Arora wrote:
+> Add architectural support for cpuidle-haltpoll driver by defining
+> arch_haltpoll_*().
+> 
+> Also define ARCH_CPUIDLE_HALTPOLL to allow cpuidle-haltpoll to be
+> selected, and given that we have an optimized polling mechanism
+> in smp_cond_load*(), select ARCH_HAS_OPTIMIZED_POLL.
+> 
+> smp_cond_load*() are implemented via LDXR, WFE, with LDXR loading
+> a memory region in exclusive state and the WFE waiting for any
+> stores to it.
+> 
+> In the edge case -- no CPU stores to the waited region and there's no
+> interrupt -- the event-stream will provide the terminating condition
+> ensuring we don't wait forever, but because the event-stream runs at
+> a fixed frequency (configured at 10kHz) we might spend more time in
+> the polling stage than specified by cpuidle_poll_time().
+> 
+> This would only happen in the last iteration, since overshooting the
+> poll_limit means the governor moves out of the polling stage.
+> 
+> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> ---
+>   arch/arm64/Kconfig                        | 10 ++++++++++
+>   arch/arm64/include/asm/cpuidle_haltpoll.h |  9 +++++++++
+>   arch/arm64/kernel/cpuidle.c               | 23 +++++++++++++++++++++++
+>   3 files changed, 42 insertions(+)
+>   create mode 100644 arch/arm64/include/asm/cpuidle_haltpoll.h
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 5d91259ee7b5..cf1c6681eb0a 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -35,6 +35,7 @@ config ARM64
+>   	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+>   	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+>   	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+> +	select ARCH_HAS_OPTIMIZED_POLL
+>   	select ARCH_HAS_PTE_DEVMAP
+>   	select ARCH_HAS_PTE_SPECIAL
+>   	select ARCH_HAS_HW_PTE_YOUNG
+> @@ -2376,6 +2377,15 @@ config ARCH_HIBERNATION_HEADER
+>   config ARCH_SUSPEND_POSSIBLE
+>   	def_bool y
+>   
+> +config ARCH_CPUIDLE_HALTPOLL
+> +	bool "Enable selection of the cpuidle-haltpoll driver"
+> +	default n
+> +	help
+> +	  cpuidle-haltpoll allows for adaptive polling based on
+> +	  current load before entering the idle state.
+> +
+> +	  Some virtualized workloads benefit from using it.
+> +
+>   endmenu # "Power management options"
+>   
+>   menu "CPU Power Management"
+> diff --git a/arch/arm64/include/asm/cpuidle_haltpoll.h b/arch/arm64/include/asm/cpuidle_haltpoll.h
+> new file mode 100644
+> index 000000000000..65f289407a6c
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/cpuidle_haltpoll.h
+> @@ -0,0 +1,9 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ARCH_HALTPOLL_H
+> +#define _ARCH_HALTPOLL_H
+> +
+> +static inline void arch_haltpoll_enable(unsigned int cpu) { }
+> +static inline void arch_haltpoll_disable(unsigned int cpu) { }
+It is better that guest supports halt poll on more architectures, 
+LoongArch wants this if result is good.
+
+Do we need disable halt polling on host hypervisor if guest also uses 
+halt polling idle method?
+
+Regards
+Bibo Mao
+
+> +
+> +bool arch_haltpoll_want(bool force);
+> +#endif
+> diff --git a/arch/arm64/kernel/cpuidle.c b/arch/arm64/kernel/cpuidle.c
+> index f372295207fb..334df82a0eac 100644
+> --- a/arch/arm64/kernel/cpuidle.c
+> +++ b/arch/arm64/kernel/cpuidle.c
+> @@ -72,3 +72,26 @@ __cpuidle int acpi_processor_ffh_lpi_enter(struct acpi_lpi_state *lpi)
+>   					     lpi->index, state);
+>   }
+>   #endif
+> +
+> +#if IS_ENABLED(CONFIG_HALTPOLL_CPUIDLE)
+> +
+> +#include <asm/cpuidle_haltpoll.h>
+> +
+> +bool arch_haltpoll_want(bool force)
+> +{
+> +	/*
+> +	 * Enabling haltpoll requires two things:
+> +	 *
+> +	 * - Event stream support to provide a terminating condition to the
+> +	 *   WFE in the poll loop.
+> +	 *
+> +	 * - KVM support for arch_haltpoll_enable(), arch_haltpoll_enable().
+> +	 *
+> +	 * Given that the second is missing, allow haltpoll to only be force
+> +	 * loaded.
+> +	 */
+> +	return (arch_timer_evtstrm_available() && false) || force;
+> +}
+> +
+> +EXPORT_SYMBOL_GPL(arch_haltpoll_want);
+> +#endif
+> 
 
 
