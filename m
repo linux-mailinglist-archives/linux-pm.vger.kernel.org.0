@@ -1,91 +1,109 @@
-Return-Path: <linux-pm+bounces-11948-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11949-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AEB5949370
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 16:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DAD9E949517
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 18:02:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D14C1F252A5
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 14:43:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8601C1F2A3CF
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2024 16:02:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0CE1C3F0B;
-	Tue,  6 Aug 2024 14:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t5QlAkhZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07B975339D;
+	Tue,  6 Aug 2024 16:00:16 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2BF1C37AA;
-	Tue,  6 Aug 2024 14:42:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB0AB1F949
+	for <linux-pm@vger.kernel.org>; Tue,  6 Aug 2024 16:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722955331; cv=none; b=E07vccdV5QrPpz+OGxpK0ou1qX9srqbNLh9cZuVayucEL39WQB2SVqy2dAvfPHYc1TjzFMQOPW/RbDiI2Jp2cTqyFaPQcVSDyCWuYFcJvf6o3BWYHT/0qEu4CY4XgIKJJd+YDas+80iPFIm/6Xsmx6jJxiKU9ZTU0ahvFXVNFxQ=
+	t=1722960015; cv=none; b=q5vr0akg+i/byGMvcDUbLi/ndb+FNBLMFbc7VtGC1PgcRt2q6pwnZ6qS3iHfnm/+MccCMGsnIeYflvBrc4tI4QyJaJaJUH7LE5Armn1QM6YHN0eQT2FSM4R9Ph3uzY0cwsr6L7/QtO4JnhHkJl6KU+Qe/zrcG0kdojcHJu3ElIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722955331; c=relaxed/simple;
-	bh=HjNMR+ty9GrU7p91fTdn6RMgP4z5+pj5CYoj3Tjy3wg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bg+7GJqocOtsOOCVIuKLsR/Qv60rQGBqV96TZAzDH2RG/pw2I8sIRwFMCzENaCZs0bBkxAMDjFJ1psbPMyFipcuHgxJ0CegvHUv6aqwsRljuaXXOuSrNDQntCA2nz0jF4WO7G/9Mh9jrcsnvOIutJerFzYOfHxP40ZZ3Mxit9LI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t5QlAkhZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09FA0C32786;
-	Tue,  6 Aug 2024 14:42:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722955330;
-	bh=HjNMR+ty9GrU7p91fTdn6RMgP4z5+pj5CYoj3Tjy3wg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=t5QlAkhZN/pFf1OS2fZT/gSbT5rVivKV5wJtyry/nI/WY26l1sfg/XmFMS4vdqWx6
-	 ptzucE4dHpvJPvE7F+/GLdKcNhMMezQoSMV51h7QmbghNSK5worifm/AB2joFM2fKS
-	 HIvR/x++dJ5Bbq+kJYBGupDrhKo8zynq8TR17f/jI8I1SwxZ48Rev9D7O0IqAK3K+g
-	 wrQve/W2KMWETkhylrH4HshfPYn6RWlsASbNwdE4M+qXGTBOauGvUmcD0fwOHTDaqY
-	 +IAiESng8KuP8C25ZY835oit827T6fdVH+YSFcFlwY/ZmKq05WHzUD8IwGB5/F3NDq
-	 BCtpHH/WA3kLQ==
-Date: Tue, 6 Aug 2024 08:42:08 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Danila Tikhonov <danila@jiaxyga.com>
-Cc: krzk+dt@kernel.org, quic_rjendra@quicinc.com, viresh.kumar@linaro.org,
-	quic_kriskura@quicinc.com, devicetree@vger.kernel.org,
-	heiko.stuebner@cherry.de, linux@mainlining.org,
-	linux-usb@vger.kernel.org, ulf.hansson@linaro.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	macromorgan@hotmail.com, davidwronek@gmail.com,
-	johan+linaro@kernel.org, javier.carrasco.cruz@gmail.com,
-	linux-hardening@vger.kernel.org, fekz115@gmail.com,
-	tony.luck@intel.com, andre.przywara@arm.com, kees@kernel.org,
-	andersson@kernel.org, lpieralisi@kernel.org,
-	dmitry.baryshkov@linaro.org, linus.walleij@linaro.org,
-	conor+dt@kernel.org, rafal@milecki.pl,
-	heikki.krogerus@linux.intel.com, gpiccoli@igalia.com,
-	neil.armstrong@linaro.org, sudeep.holla@arm.com, rafael@kernel.org,
-	gregkh@linuxfoundation.org, linux-arm-msm@vger.kernel.org,
-	konrad.dybcio@linaro.org
-Subject: Re: [PATCH 05/11] dt-bindings: soc: qcom: qcom,pmic-glink: Document
- SM7325 compatible
-Message-ID: <172295532809.1490946.6805112460436096246.robh@kernel.org>
-References: <20240729201843.142918-1-danila@jiaxyga.com>
- <20240729201843.142918-6-danila@jiaxyga.com>
+	s=arc-20240116; t=1722960015; c=relaxed/simple;
+	bh=AJHk99JRG5OpJoSoQueFp2kEW1qBz/ld8n7MnXvLs9E=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=cLDs4tovEJ4yKtlWkj7d+ktLmIawdNeNHdw+a3teEIELENnEZgNdXzZPvU8vLT2iWMzdEEQUpt3TZBQpSAEZqJnI8LUeuDaKTKe0dDS5Blm/L7n8LMWwPxszbit1GyycEQTE2Kl5vLNjRMIh0F2yHuZCl6fozTbc724yrbl5x8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=baylibre.com; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1fc5296e214so7480065ad.0
+        for <linux-pm@vger.kernel.org>; Tue, 06 Aug 2024 09:00:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722960013; x=1723564813;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N0OH1lK0iyrEFjZ+sxfEDU/w6C/qIfjEuNJOJDkGoH0=;
+        b=OSYIwXCEHslLTrmT6qexN0r2myLopVgAoR3ecXFtkdG82pLyocy+Xmb8hFkDuJXHkB
+         n+vOz2YWISulJST7yj/ROQACjnb0gGVAgLxk9HWZ1rHe6aqghsu1JVr3fOYc/6MqpjTu
+         oYaoeyqEqsdkA19WCRH54zqsZyZB+l7jLwA0ug8uUV2CLKBlAkZgfrUtNAkFR9pSfZG4
+         yjdrFqFuAMExGqO2/A1p2xq3lfBBhD6+hhZVjPAGgv171pw/ejdgL9jVJXefQmaxI10V
+         3mxUSQgcw75Nj7aQZVW/cHGjd2fyOKVgtGWKBjAlEM7if0bx7L6pQ3h7UIgJLoObiXNW
+         dKhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVWr5J47lrA0usG1yeEC0eZFG23qcVC76z8XU32mqskrBuWRh23aAdOAg++tjhgHaeOcSwwRQ3gCXz67Y2i32SbPWdd1L1HdSQ=
+X-Gm-Message-State: AOJu0Yxw6WFeiKyOJS/VpITbHmOgoGTOCjNogo9Bh1N8MEKxvEpb1718
+	22NGQ5d41tS9pOlncv60swfNJWCet3Mhl8XXohYhQJ1rjImNAqRxmyur//4JI1tbX1zqVz+yWyF
+	HKqI=
+X-Google-Smtp-Source: AGHT+IHwXaMUruJCX9M/RHqtmhUbj4EyviX70/VCd+gvNCZm8JC044UbL01+TgvDOTnUpG7G2lRLZQ==
+X-Received: by 2002:a17:902:e54f:b0:1fb:9627:b348 with SMTP id d9443c01a7336-1ff57495ca7mr237971045ad.58.1722960012898;
+        Tue, 06 Aug 2024 09:00:12 -0700 (PDT)
+Received: from localhost ([71.212.170.185])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff5905fec0sm89249425ad.149.2024.08.06.09.00.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Aug 2024 09:00:12 -0700 (PDT)
+From: Kevin Hilman <khilman@kernel.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, Andrew Lunn
+ <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian
+ Hesselbarth <sebastian.hesselbarth@gmail.com>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/6] cpufreq: omap: Drop asm includes
+In-Reply-To: <20240806-dt-api-cleanups-v1-2-459e2c840e7d@kernel.org>
+References: <20240806-dt-api-cleanups-v1-0-459e2c840e7d@kernel.org>
+ <20240806-dt-api-cleanups-v1-2-459e2c840e7d@kernel.org>
+Date: Tue, 06 Aug 2024 09:00:12 -0700
+Message-ID: <7h1q313alv.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240729201843.142918-6-danila@jiaxyga.com>
+Content-Type: text/plain
 
+"Rob Herring (Arm)" <robh@kernel.org> writes:
 
-On Mon, 29 Jul 2024 23:18:12 +0300, Danila Tikhonov wrote:
-> Document the SM7325 compatible used to describe the pmic glink on this
-> platform.
-> 
-> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
+> The omap driver doesn't actually need asm/smp_plat.h, so drop it.
+> asm/cpu.h is not needed either as linux/cpu.h is already included.
+>
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+
+Acked-by: Kevin Hilman <khilman@baylibre.com>
+
 > ---
->  Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
-
+>  drivers/cpufreq/omap-cpufreq.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/drivers/cpufreq/omap-cpufreq.c b/drivers/cpufreq/omap-cpufreq.c
+> index 3458d5cc9b7f..de8be0a8932d 100644
+> --- a/drivers/cpufreq/omap-cpufreq.c
+> +++ b/drivers/cpufreq/omap-cpufreq.c
+> @@ -28,9 +28,6 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/regulator/consumer.h>
+>  
+> -#include <asm/smp_plat.h>
+> -#include <asm/cpu.h>
+> -
+>  /* OPP tolerance in percentage */
+>  #define	OPP_TOLERANCE	4
+>  
+>
+> -- 
+> 2.43.0
 
