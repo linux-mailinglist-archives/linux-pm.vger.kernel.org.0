@@ -1,173 +1,161 @@
-Return-Path: <linux-pm+bounces-11968-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11969-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84FDB94A366
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2024 10:51:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC6D994A6D6
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2024 13:21:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D0CE1F216A2
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2024 08:51:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AA001C2163F
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2024 11:21:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BC8F1D27BD;
-	Wed,  7 Aug 2024 08:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF1CC1DD39A;
+	Wed,  7 Aug 2024 11:21:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="cSPqMXr5"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="FD6+mn5Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377FB1D1755
-	for <linux-pm@vger.kernel.org>; Wed,  7 Aug 2024 08:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A761E2129
+	for <linux-pm@vger.kernel.org>; Wed,  7 Aug 2024 11:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723020563; cv=none; b=aSNzwp5xQHQwsUsvlQBr5d1IUSg27F+nKFctbxq9BAWTk4EiN/H5L9FpqI16ydCeWo3cq0pg1d/fq7YcgXMDoegbLCxqFsa2ddv7Z/YoLrY//JE5zXuBGiCOKipSgMkNXhkpLg5A1wUIvvsiaYmmCsekQnbhmCnQpQtzAOfjQeA=
+	t=1723029693; cv=none; b=e0NdE6dLhuXydvhfamnnbCywXX7w38s9tIxnI+RKuv6dzcgkwGNnqqXzMHx3QvWgfzz6NK1bI+VTHwxhXJzcDS8Jj+bT4Tvo0r+/FhEAIiAS390rZdeGh6DKkS4VPp3h3hzaYCWzox2gILTZ7cdEHSOmHzgigKR2PfJeACqDTKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723020563; c=relaxed/simple;
-	bh=6zp2AKjGs39uCt5CueCwmJOX3eOvD7ilpXgKjzFAtWg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=Md2QEkQY91vLz39V2Wfv8eZ+ZOP2Djonp5gBVrii+yZtgdj/gd7UchcNgUzTxE0tqdxslM/osxzT0rAId+RHdaRrLyyLmNFeIwwfPrPtxqbFbsx94s/ni5PvbaxtmGIhsRNfDcLKbP9cNg0Exzc4hQ/6I/WPSyjQ15zHvbQt0RU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=cSPqMXr5; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240807084918euoutp0224928a0a11c9c5633de347b3e0aa5cfd~pZhG4qQLP3051330513euoutp02H
-	for <linux-pm@vger.kernel.org>; Wed,  7 Aug 2024 08:49:18 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240807084918euoutp0224928a0a11c9c5633de347b3e0aa5cfd~pZhG4qQLP3051330513euoutp02H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1723020558;
-	bh=qLPy4vqwS3UYK5ED/m7wWzuPP6EHMShGRR/7bXdjUuk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cSPqMXr5GxOfRCUdfrByGOCJFqIOyT4Mi1m7RPaqXRjGZyiLU33shMPb7x5+CP96Q
-	 N+ARd9OaCcSbIKLta1edj6x/RfykDkE94biqQWDdUmGl6skgXvfUOguokJBZQ/end0
-	 e43t00TYryewiZEd6wwP+3HlQh9V5LzJew7qsIEM=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20240807084918eucas1p2983c6169f3c321294ad5738d1e5ff21f~pZhGm6y3T2755327553eucas1p2K;
-	Wed,  7 Aug 2024 08:49:18 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges2new.samsung.com (EUCPMTA) with SMTP id 65.6D.09875.E0533B66; Wed,  7
-	Aug 2024 09:49:18 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240807084917eucas1p28c675c9da74f0de0bb09689819202c39~pZhGCjcHV2756427564eucas1p2V;
-	Wed,  7 Aug 2024 08:49:17 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240807084917eusmtrp16e830202fa79ded18448cca1cfa911ab~pZhF_hFIP0287102871eusmtrp1a;
-	Wed,  7 Aug 2024 08:49:17 +0000 (GMT)
-X-AuditID: cbfec7f4-131ff70000002693-a7-66b3350e5b33
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id 5B.01.08810.D0533B66; Wed,  7
-	Aug 2024 09:49:17 +0100 (BST)
-Received: from AMDC4515.eu.corp.samsungelectronics.net (unknown
-	[106.120.51.28]) by eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240807084916eusmtip225c4b7cc8c78e2c81c1b8f555d8dab3f~pZhFAmDNl1786617866eusmtip27;
-	Wed,  7 Aug 2024 08:49:16 +0000 (GMT)
-From: Mateusz Majewski <m.majewski2@samsung.com>
-To: linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: Mateusz Majewski <m.majewski2@samsung.com>, Bartlomiej Zolnierkiewicz
-	<bzolnier@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob
-	Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Alim Akhtar
-	<alim.akhtar@samsung.com>, Sam Protsenko <semen.protsenko@linaro.org>, Anand
-	Moon <linux.amoon@gmail.com>
-Subject: [PATCH v3 6/6] dt-bindings: thermal: samsung,exynos: remove
- driver-specific information
-Date: Wed,  7 Aug 2024 10:48:25 +0200
-Message-ID: <20240807084829.1037303-7-m.majewski2@samsung.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240807084829.1037303-1-m.majewski2@samsung.com>
+	s=arc-20240116; t=1723029693; c=relaxed/simple;
+	bh=LDuVR8Q8SBltlZ0Y7R0bvpdndZWmNaepum4NflH3uEs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NR1MfmYHNOzSjn2HFQVyzXKpnluuo9K1RhhG229x1HLhxw8jIcDfjqMHNdia/Q+C981Ca15VH2SfKkjfGdd0ShUl6HOqtm2Mf47EHp4zlf9BymY69sfJkUgRd2H1O3uSUyQcVsIFfb0OLqViFeBREh7jp/wo+cvLsFAjknMZMAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=FD6+mn5Z; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5bba25c1e15so1155445a12.2
+        for <linux-pm@vger.kernel.org>; Wed, 07 Aug 2024 04:21:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1723029690; x=1723634490; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=O63kDKJnx9fmZjMbiNZsuL2wJTTHJuwzpsSd5JTI0e0=;
+        b=FD6+mn5ZHCrD3MxYmmtC0VaBk3LNHgpKvrKG5BG3p7OaFGG7h9rG8czOmjZX4nQImD
+         y5ee6jjh5mbznkAxusuMXeZBaBZwGdBSbi90RAx756W3xWr2Tps20+RC416Ig9BMDolB
+         AZLU7VeCBkhpciT+ZgCXq7YK7axvCZ0IObzUNM5T2fBIsh3pP6O8GIcfNUdRCmUQvV1s
+         KXPMcISCImcynppr/bYpfaysZDx08IXPZnXVMIDkSanxVmvRKgYuoXIrfQlbDYSSIOpV
+         uowFo+3ggvY+8kzhhpGbNZnhfxNB7K8Wq/ciJnod3aoPoeXZ6LnEki3cSHhMLFO563zq
+         /kxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723029690; x=1723634490;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O63kDKJnx9fmZjMbiNZsuL2wJTTHJuwzpsSd5JTI0e0=;
+        b=VZwIQIw3vFTuG7hV4y0Nfz3T6J9ZEXtPaOuLHcMkNfcxnffrM9ioomRa4PfOD6zS05
+         yo+RWZFcdeL/d2YUL1a20As0bjnwi3AcHUBEhCWKWBFrR0ZYwWxmINEwZiEZSKFd5v4D
+         pG2xhp7Fx1ROfE12iQXMBdcFhn3GPmB76C4UiDRITx9xby9iLpSnb2uKEnOL+aRjaBMm
+         JGCetqSNAynFs5nvGF9accAbtXVilBvRO2mjTrQkMKIEEb7quESW9UI84mDFUFxx1rYN
+         DnCsq+FHvlUd8C4eO/AgfrFLWCRwuT4AgSyNXNx0SiYfzyIDUoOmZ4dkbZbNWv7hcp2C
+         NJkQ==
+X-Gm-Message-State: AOJu0YxXdu28vnrpo9N2fLcAIC3e2q7lX6m4BTg5KRXBOdSFZe+qXAPV
+	GoO/xAeSt0PvjEbyy194cKTtgycJw1cBk4vUaIxiwmdvN89B9m+DEdpFa7YpfRkcwdCiM2XJynq
+	G
+X-Google-Smtp-Source: AGHT+IHM3r2bAdSLrg/pmt0OrZB5Bhj5Th6878fNVzaGx5MeOuvAuO1T3w9OQvFHUVXk+68bCP5iCA==
+X-Received: by 2002:a17:906:fe41:b0:a7a:a46e:dc3f with SMTP id a640c23a62f3a-a7dc50a345bmr1206383166b.45.1723029689288;
+        Wed, 07 Aug 2024 04:21:29 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.5])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9c0cc95sm624246766b.85.2024.08.07.04.21.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Aug 2024 04:21:28 -0700 (PDT)
+Message-ID: <201cbbe6-99eb-4622-bc5f-3d298f9e30b4@tuxon.dev>
+Date: Wed, 7 Aug 2024 14:21:25 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHKsWRmVeSWpSXmKPExsWy7djP87p8ppvTDPZ9FrF4MG8bm8X3LdeZ
-	LNbsPcdkMe+zrMX8I+dYLc6f38BusenxNVaLy7vmsFl87j3CaDHj/D4mi3Ubb7FbLGxqYbeY
-	eGwys8XcL1OZLf7v2cFu8eRhH5vF8759TA6CHmvmrWH02DnrLrvH4j0vmTw2repk87hzbQ+b
-	x+Yl9R59W1YxenzeJBfAEcVlk5Kak1mWWqRvl8CV8f7WXaaCPt6Kr0+9Ghifc3UxcnJICJhI
-	rJ/xnqmLkYtDSGAFo8SLjpPsEM4XRokFdxuZIZzPjBKbX25l62LkAGuZOCUHIr6cUaJhwSOo
-	9lYmiT9v7zCCzGUTMJB48GYZ2CgRgcWMEo0/3rGCOMwCT5glfr5aDFYlLJAk8fR2AzuIzSKg
-	KvG/rY8FxOYVsJPoOPyHCeJCeYne/X1gNqeAvcSS7m4miBpBiZMzn4DVMwPVNG+dDXarhMBk
-	TonOc7ugml0kzt/9xQJhC0u8Or6FHcKWkTg9uQcqni8xY/N7FojfKiTuHvSCMK0lPp5hBjGZ
-	BTQl1u/Shyh2lOh6uIMJooJP4sZbQYgD+CQmbZvODBHmlehoE4KoVpU4vmcSM4QtLfGk5TbU
-	WR4SG9ZcYJzAqDgLySuzkLwyC2HvAkbmVYziqaXFuempxUZ5qeV6xYm5xaV56XrJ+bmbGIFJ
-	7vS/4192MC5/9VHvECMTB+MhRgkOZiUR3ubwTWlCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeVVT
-	5FOFBNITS1KzU1MLUotgskwcnFINTGVRxgwSsdzMmaKCP3pi9nVsfXQjulT69jRRRVb7RVOE
-	vBXKnYWNFy/Ki7+uLSn4Krs43mtSy2P155P+L13VNzW8Nur1gTVGP3l502JLu8QtOM4WRaxl
-	jS4rVJ3jJ/tltdcnv90vKtUnrY86zrbl/uYgxuCwr2wSv2JsLR7ESBpNOLJ15v2ThQ903b9a
-	7m58d1RuVuj81TVK4hdM6lOFGV5a32Y4v6PBetbMPns+bfN3YkdbhS/Hhm8WMpScIbMsLPnH
-	QoG2K51+AUk7vYUOb5u13TLmvUXBvKrn3at8ytoqv11jnsXiPmX6bh0v1rj938KOme1aeHG6
-	tCBn3czMj3or/b21XZe1SmS6sDYpsRRnJBpqMRcVJwIAtkV1VeEDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLIsWRmVeSWpSXmKPExsVy+t/xe7q8ppvTDA5eV7N4MG8bm8X3LdeZ
-	LNbsPcdkMe+zrMX8I+dYLc6f38BusenxNVaLy7vmsFl87j3CaDHj/D4mi3Ubb7FbLGxqYbeY
-	eGwys8XcL1OZLf7v2cFu8eRhH5vF8759TA6CHmvmrWH02DnrLrvH4j0vmTw2repk87hzbQ+b
-	x+Yl9R59W1YxenzeJBfAEaVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9n
-	k5Kak1mWWqRvl6CX8f7WXaaCPt6Kr0+9Ghifc3UxcnBICJhITJyS08XIxSEksJRRYsffdUxd
-	jJxAcWmJw1+msEPYwhJ/rnWxQRQ1M0msbH8IlmATMJB48GYZmC0isJxRYnO7B4jNLPCOWaL9
-	vB+ILSyQILHxXS8biM0ioCrxv62PBcTmFbCT6Dj8B2qZvETv/j4wm1PAXmJJdzeYLQRU0/tl
-	JzNEvaDEyZlPWCDmy0s0b53NPIFRYBaS1CwkqQWMTKsYRVJLi3PTc4sN9YoTc4tL89L1kvNz
-	NzEC43HbsZ+bdzDOe/VR7xAjEwfjIUYJDmYlEd7m8E1pQrwpiZVVqUX58UWlOanFhxhNge6e
-	yCwlmpwPTAh5JfGGZgamhiZmlgamlmbGSuK8ngUdiUIC6YklqdmpqQWpRTB9TBycUg1MemEf
-	nO6Z6Qme19wmGzjLfI7pm4iDNkUf3518m9g3rS5FhMvtZmBEQJ9RbIrvsYzV6+8zJFxYcPfo
-	hsVeTaK6JjuYxc83OnNNuOF5e5LM/L5Hv/zKKvp/Na8oD94xY1eJ3hmlKf8f2b9+avMrptCS
-	Sbjuq+fRgPkL7JoyP6Q+N8haKnJ30srJ86p5LplM3lVxMmPm5vzkJ+wNCeoy190/HV2+1e1j
-	57WZN6zX8x5zS//PwRKjEbzw5Lao/LYa+SSxfQsCdi97tnqZtumfXUvn8R+udTuj0/2D41Uh
-	+8mLC72Y3LctuLr405JTzzxuTXecdnJ75acKL4GI23LX94cZ/xOf/VQkKNh69bPsqXWpTEos
-	xRmJhlrMRcWJAIRJbWdQAwAA
-X-CMS-MailID: 20240807084917eucas1p28c675c9da74f0de0bb09689819202c39
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240807084917eucas1p28c675c9da74f0de0bb09689819202c39
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240807084917eucas1p28c675c9da74f0de0bb09689819202c39
-References: <20240807084829.1037303-1-m.majewski2@samsung.com>
-	<CGME20240807084917eucas1p28c675c9da74f0de0bb09689819202c39@eucas1p2.samsung.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 0/3] watchdog: rzg2l_wdt: Enable properly the watchdog
+ clocks and power domain
+Content-Language: en-US
+To: ulf.hansson@linaro.org, wim@linux-watchdog.org, linux@roeck-us.net,
+ rafael@kernel.org
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, geert+renesas@glider.be,
+ linux-renesas-soc@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240619120920.2703605-1-claudiu.beznea.uj@bp.renesas.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <20240619120920.2703605-1-claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The number of supported trip points was only limited by the driver
-implementation at the time, which mapped each trip point defined in the
-devicetree source file to a hardware trip point. An implementation that
-does not have this limitation is possible; indeed, that is how the
-driver works currently. Therefore, this information should be removed
-from the bindings description, which are meant to be independent of
-the details of the driver implementation.
+Hi, Ulf,
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-Signed-off-by: Mateusz Majewski <m.majewski2@samsung.com>
----
-v2 -> v3: reword the commit message to be easier to understand in
-  context of dt-bindings.
-v1 -> v2: remove an unnecessary sentence.
+Please, do you have any input/suggestions on this?
 
- .../devicetree/bindings/thermal/samsung,exynos-thermal.yaml | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Thank you,
+Claudiu Beznea
 
-diff --git a/Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml b/Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml
-index b8c0bb7f4263..b85b4c420cd3 100644
---- a/Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml
-@@ -40,11 +40,7 @@ properties:
-   interrupts:
-     description: |
-       The Exynos TMU supports generating interrupts when reaching given
--      temperature thresholds. Number of supported thermal trip points depends
--      on the SoC (only first trip points defined in DT will be configured)::
--       - most of SoC: 4
--       - samsung,exynos5433-tmu: 8
--       - samsung,exynos7-tmu: 8
-+      temperature thresholds.
-     maxItems: 1
- 
-   reg:
--- 
-2.45.1
-
+On 19.06.2024 15:09, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> 
+> Hi,
+> 
+> Watchdog device available on RZ/G3S SoC is part of a software-controlled
+> power domain. The watchdog driver implements struct
+> watchdog_ops::restart() handler which is called in atomic context via
+> this call chain:
+> 
+> kernel_restart() ->
+>   machine_restart() ->
+>     do_kernel_restart() ->
+>       atomic_notifier_call_chain() ->
+>         watchdog_restart_notifier()
+> 	  rzg2l_wdt_restart()
+> 
+> When the rzg2l_wdt_restart() is called it may happen that the watchdog
+> clocks to be disabled and the associated power domain to be off.
+> Accessing watchdog registers in this state leads to aborts and system
+> blocks.
+> 
+> To solve this issue the series proposes a new API called
+> dev_pm_genpd_resume_restart_dev() that is intended to be called in
+> scenarios like this. In this RFC series the
+> dev_pm_genpd_resume_restart_dev() checks if the system is in
+> SYSTEM_RESTART context and call dev_pm_genpd_resume(). I also wanted to
+> mark the device as a restart device with a new member in struct dev_pm_info
+> (similar to struct dev_pm_info::syscore) and check it in the newly
+> introduced API but then I told myself maybe it would be better to keep it
+> simpler for the moment.
+> 
+> Please let me know how do you consider this.
+> 
+> Along with it, series addresses the usage of clk_prepare_enable() in
+> rzg2l_wdt_restart() reported by Ulf Hansson at [1] and use the
+> dev_pm_genpd_resume_restart_dev() in rzg2l_wdt driver.
+> 
+> Please note that series is built on top of [1].
+> 
+> A similar approach (using directly the dev_pm_genpd_resume() function in
+> rzg2l_wdt was proposed at [2]). This series was posted separatelly to
+> avoid blocking the initial support for the RZ/G3S SoC.
+> 
+> Thank you,
+> Claudiu Beznea
+> 
+> [1] https://lore.kernel.org/all/20240531065723.1085423-1-claudiu.beznea.uj@bp.renesas.com/
+> [2] https://lore.kernel.org/all/20240410134044.2138310-10-claudiu.beznea.uj@bp.renesas.com/
+> 
+> Claudiu Beznea (3):
+>   pmdomain: core: Add a helper to power on the restart devices
+>   watchdog: rzg2l_wdt: Keep the clocks prepared
+>   watchdog: rzg2l_wdt: Power on the PM domain in rzg2l_wdt_restart()
+> 
+>  drivers/pmdomain/core.c      | 18 +++++++++++++++
+>  drivers/watchdog/rzg2l_wdt.c | 43 +++++++++++++++++++++++++++++++-----
+>  include/linux/pm_domain.h    |  2 ++
+>  3 files changed, 58 insertions(+), 5 deletions(-)
+> 
 
