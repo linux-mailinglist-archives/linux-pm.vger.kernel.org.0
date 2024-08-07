@@ -1,93 +1,222 @@
-Return-Path: <linux-pm+bounces-11977-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11978-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2979294B04D
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2024 21:11:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C9D794B23D
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2024 23:35:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC427282281
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2024 19:11:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDED0B235F2
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2024 21:35:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF2D14373F;
-	Wed,  7 Aug 2024 19:11:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A244A1487E3;
+	Wed,  7 Aug 2024 21:35:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35454143729
-	for <linux-pm@vger.kernel.org>; Wed,  7 Aug 2024 19:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
+Received: from spindle.queued.net (spindle.queued.net [45.33.49.30])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCB412C53B;
+	Wed,  7 Aug 2024 21:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.33.49.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723057867; cv=none; b=AhDas6mty0Fm71eFbHgRj5V55P+DHNy6eVb+oTssJeA17Fii5TQtA8z+ACHOUTDcHbyvZg3jeqcp0EYnoMRoIg2D6gEOgdCHe2mrGC+8bferHjf01lflCavg3gaoZcCK+L74ZvAsIrIq5KbV0E1Isw3pIKugUyofqe5I/NMk79M=
+	t=1723066541; cv=none; b=jIWjo/+AIIqlJaHREFTQXM9j4iYgOiLQ7R4aqLofhIT4FE9soeC/hNXMW8eqfDN2Eb63hg9suoS+mpGe8sD0aSOF6D5jR9W74yt3IkLC/wi9fDehUvKqimJWkCgONPn542CqqcRbCDQgk7rvxcGZbTm/n2ENklGElXYG0ux50gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723057867; c=relaxed/simple;
-	bh=edQZY+HEh7NSyqd6PRx48CtqoAKvZmJ9AZfS033ky2M=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=unLz8LHhpM/zb+cgXFC22rA+RlYIx0MyhPBuIdTciDjcHcLyP87AVq/2VHSmNAc7ApyFXbAIZUByojFe8/HYqeG4wgnxxya1fJ1EBEkp9F39usSSFY/188jQSGeZ3iBuJgUDd/yFmF6aHBrETAYZHyw7FPXQlDpipcqCuGjgpdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-8223aed78e2so16185139f.0
-        for <linux-pm@vger.kernel.org>; Wed, 07 Aug 2024 12:11:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723057865; x=1723662665;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZQH4y4wr8mJmKYV1S0IBeKy+LI+j3z2nIoYo5HYB9PU=;
-        b=LXUnWdiLv8zGrzFKXGvFNALbD24mqlwJPzVTOvotyGDBR+34IAE3/b7biXctJUmJaJ
-         zZcgz37jWn1kONtOCyxPrNAdhTn3MU20ByrZJq0TScsADrGSTXtDwOjzpQJtlLqk57m2
-         LE/UeARDRn8zswXidRc3ktgIrZ+svI715q4p5j9kHk4V4NPzxSld0w2f/b86lK2DYurX
-         4Va8I6nZugolFOZ3Hj+b0JW76meyxLMp2Q8ZoZ0FZc2AA6fAsTELxlHKYc8URJy/bqCG
-         pMQUKHQNMOCDfkunaGxKSQH/Vof2x+VgxpZAuKWMKN1HCiAVU1q7rNEGBcWHrxvUHHTh
-         070w==
-X-Forwarded-Encrypted: i=1; AJvYcCVxCoHX/Ps+MlII67RWVPSo+kOcMXmbwlU63wulhvCB68jX7QBn8PoXmiN6mRRSpIIMAZgLxG5NMx4IRFF7ipcMxwazh8cjxAE=
-X-Gm-Message-State: AOJu0YzrgslCiWRyhoEM89rFiFxhSXa3jPAOjU89u0mNZif9IWXWoY36
-	tysg77Akx9G/AwPSF3ogLf/SjNa6DBwgV3wDIylB6D2y2uF8GIzI/+ZuM4k2AeAiifZTis8USbe
-	4Eb6d1MDdSOs2KH2S/AnB0tCGO1+yf+6Vjb+7G3fqUDK5hPORXJ4UceA=
-X-Google-Smtp-Source: AGHT+IEfFm6JcCUR65IkobHJhRNcofCU56lDET385lYMoAw7DMu2C+Zo2AHZEw+5J4RDmbSL9SGc+bA0GjoI/1BvdXb71HfEtAqG
+	s=arc-20240116; t=1723066541; c=relaxed/simple;
+	bh=UJC9323VtPxuiRvjZrtK5nomYm2uVs4GWA1F7lVLzhA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FBtBFWYXFEgxLalu9KwP9E8NO2oT0+uzUZiD7lcssozEwK0Xo7+MEaL+vIL3FNPUN0nF2NcB/6WsEWidwjb/EF31+671D4n5Q3DdA3wlLQn2KmcNmgv814LwzD9DJJczgwIc1XnI6UyfXI0HpqIgNYEgFpUFG2+3RGqfPM8obLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=queued.net; spf=pass smtp.mailfrom=queued.net; arc=none smtp.client-ip=45.33.49.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=queued.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queued.net
+Received: by spindle.queued.net (Postfix, from userid 1001)
+	id 682DC115D13; Wed,  7 Aug 2024 17:28:37 -0400 (EDT)
+Received: from 5400 (unknown [172.56.34.244])
+	by spindle.queued.net (Postfix) with ESMTPSA id 7AE4E115D0E;
+	Wed,  7 Aug 2024 17:28:34 -0400 (EDT)
+Date: Wed, 7 Aug 2024 17:28:32 -0400
+From: Andres Salomon <dilinger@queued.net>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org, Matthew
+ Garrett <mjg59@srcf.ucam.org>, Sebastian Reichel <sre@kernel.org>, Hans de
+ Goede <hdegoede@redhat.com>, Ilpo =?UTF-8?B?SsOkcnZpbmVu?=
+ <ilpo.jarvinen@linux.intel.com>, linux-pm@vger.kernel.org,
+ Dell.Client.Kernel@dell.com
+Subject: Re: [PATCH v2 1/2] platform/x86:dell-laptop: Add knobs to change
+ battery charge settings
+Message-ID: <20240807172832.09040123@5400>
+In-Reply-To: <5cfe4c42-a003-4668-8c3a-f18fb6b7fba6@gmx.de>
+References: <20240723220502.77cb0401@5400>
+	<20240724203403.zcrx2lshbla3o2gp@pali>
+	<20240724204523.xb6rp7ba6yqi5klt@pali>
+	<20240724182318.66578a48@5400>
+	<20240724230158.nsmxdgagfpanjtzi@pali>
+	<20240725162457.34b480e1@5400>
+	<20240725221511.mqb4tlam2r7yheoi@pali>
+	<45c7c4c3-2f99-4ca0-9c85-a96a03ccfae8@gmx.de>
+	<20240726000409.ejnvqkzco664q3zb@pali>
+	<20240726002538.558a4a97@5400>
+	<8fde7bae-b4e3-458e-8edc-22199f8bc7e2@gmx.de>
+	<5cfe4c42-a003-4668-8c3a-f18fb6b7fba6@gmx.de>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2cc9:b0:7fb:ff2b:5116 with SMTP id
- ca18e2360f4ac-81fd43edd24mr52266039f.4.1723057865411; Wed, 07 Aug 2024
- 12:11:05 -0700 (PDT)
-Date: Wed, 07 Aug 2024 12:11:05 -0700
-In-Reply-To: <000000000000795a2506196e7cd5@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fedffc061f1cabdf@google.com>
-Subject: Re: [syzbot] [pm?] INFO: trying to register non-static key in netdev_unregister_kobject
-From: syzbot <syzbot+27c3c57b78da2a0995d8@syzkaller.appspotmail.com>
-To: chao@kernel.org, gregkh@linuxfoundation.org, jaegeuk@kernel.org, 
-	len.brown@intel.com, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	pavel@ucw.cz, rafael@kernel.org, sandeen@redhat.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Bogosity: Ham, tests=bogofilter, spamicity=0.000000, version=1.2.5
 
-syzbot suspects this issue was fixed by commit:
+On Fri, 26 Jul 2024 20:46:22 +0200
+Armin Wolf <W_Armin@gmx.de> wrote:
 
-commit 54f43a10fa257ad4af02a1d157fefef6ebcfa7dc
-Author: Eric Sandeen <sandeen@redhat.com>
-Date:   Sat Jun 29 04:38:17 2024 +0000
+> Am 26.07.24 um 20:42 schrieb Armin Wolf:
+>=20
+> > Am 26.07.24 um 06:25 schrieb Andres Salomon:
+> > =20
+> >> On Fri, 26 Jul 2024 02:04:09 +0200
+> >> Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> >> =20
+> >>> On Friday 26 July 2024 01:48:50 Armin Wolf wrote: =20
+> >>>> Am 26.07.24 um 00:15 schrieb Pali Roh=C3=A1r:
+> >>>> =20
+> >>>>> On Thursday 25 July 2024 16:24:57 Andres Salomon wrote: =20
+> >>>>>> On Thu, 25 Jul 2024 01:01:58 +0200
+> >>>>>> Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> >>>>>> =20
+> >>>>>>> On Wednesday 24 July 2024 18:23:18 Andres Salomon wrote: =20
+> >> [...] =20
+> >>>>>>> The issue here is: how to tell kernel that the particular
+> >>>>>>> dell_battery_hook has to be bound with the primary battery?
+> >>>>>>> =20
+> >>>>>> So from userspace, we've got the expectation that multiple batteri=
+es
+> >>>>>> would show up as /sys/class/power_supply/BAT0,
+> >>>>>> /sys/class/power_supply/BAT1,
+> >>>>>> and so on. =20
+> >>>>> Yes, I hope so.
+> >>>>> =20
+> >>>>>> The current BAT0 entry shows things like 'capacity' even without
+> >>>>>> this
+> >>>>>> patch, and we're just piggybacking off of that to add charge_type
+> >>>>>> and
+> >>>>>> other entries. So there shouldn't be any confusion there, agreed? =
+=20
+> >>>>> I have not looked at the battery_hook_register() code yet (seems
+> >>>>> that I
+> >>>>> would have to properly read it and understand it). But does it
+> >>>>> mean that
+> >>>>> battery_hook_register() is adding hook just for "BAT0"?
+> >>>>>
+> >>>>> What I mean: cannot that hook be registered to "BAT1" too? Because =
+if
+> >>>>> yes then we should prevent it. Otherwise this hook which is for "De=
+ll
+> >>>>> Primary Battery" could be registered also for secondary battery
+> >>>>> "BAT1".
+> >>>>> (I hope that now it is more clear what I mean). =20
+> >>>> Hi,
+> >>>>
+> >>>> the battery hook is being registered to all ACPI batteries present
+> >>>> on a given system,
+> >>>> so you need to do some manual filtering when .add_battery() is calle=
+d. =20
+> >>> Ok. So it means that the filtering based on the primary battery in
+> >>> add_battery callback is needed.
+> >>> =20
+> >> Thanks for the explanations. Seems simple enough to fix that, as some =
+of
+> >> the other drivers are checking battery->desc->name for "BAT0".
+> >>
+> >>
+> >> One thing that I keep coming back to, and was reinforced as I looked at
+> >> include/linux/power_supply.h; the generic power supply charge_type has
+> >> values that are very close to Dells, but with different names. I could
+> >> shoehorn them in, though, with the following mappings:
+> >>
+> >> POWER_SUPPLY_CHARGE_TYPE_FAST,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 =3D> "express" (aka ExpressCharge)
+> >> POWER_SUPPLY_CHARGE_TYPE_STANDARD,=C2=A0=C2=A0=C2=A0=C2=A0 =3D> "stand=
+ard"
+> >> POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE,=C2=A0=C2=A0=C2=A0=C2=A0 =3D> "adapt=
+ive"
+> >> POWER_SUPPLY_CHARGE_TYPE_CUSTOM,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+=3D> "custom"
+> >> POWER_SUPPLY_CHARGE_TYPE_LONGLIFE,=C2=A0=C2=A0=C2=A0=C2=A0 =3D> "prima=
+rily_ac"
+> >>
+> >> The main difference is that Primarily AC is described and documented as
+> >> slightly different than Long Life, but I suspect the result is roughly
+> >> the same thing. And the naming "Fast" and "Long Life" wouldn't match t=
+he
+> >> BIOS naming of "ExpressCharge" and "Primarily AC".
+> >>
+> >> Until now I've opted to match the BIOS naming, but I'm curious what
+> >> others
+> >> think before I send V3 of the patches. =20
+> >
+> > I agree that POWER_SUPPLY_CHARGE_TYPE_FAST should be mapped the
+> > ExpressCharge,
+> > but i think that "primarily_ac" should become a official power supply
+> > charging mode.
+> >
+> > The reason is that for example the wilco-charger driver also supports
+> > such a charging mode
+> > (currently reported as POWER_SUPPLY_CHARGE_TYPE_TRICKLE) and the
+> > charging mode seems to be
+> > both sufficiently different from
+> > POWER_SUPPLY_CHARGE_TYPE_LONGLIFE/POWER_SUPPLY_CHARGE_TYPE_TRICKLE
+> > and sufficiently generic to be supported by a wide array of devices.
+> >
+> > Thanks,
+> > Armin Wolf
+> > =20
+> I just read the documentation regarding the charge_type sysfs attribute a=
+nd it states that:
+>=20
+> Trickle:
+> 	Extends battery lifespan, intended for users who
+> 	primarily use their Chromebook while connected to AC.
+>=20
+> So i think that "primarily_ac" should be mapped to POWER_SUPPLY_CHARGE_TY=
+PE_TRICKLE.
 
-    f2fs: remove unreachable lazytime mount option parsing
+Do you think it's worth keeping around the sysfs-class-power-dell
+file? At this point it's basically just documenting the slight naming
+differences:
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=137e8613980000
-start commit:   e67572cd2204 Linux 6.9-rc6
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d2f00edef461175
-dashboard link: https://syzkaller.appspot.com/bug?extid=27c3c57b78da2a0995d8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=152ab240980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13274a87180000
 
-If the result looks correct, please mark the issue as fixed by replying with:
+                Standard:
+                        Fully charge the battery at a moderate rate.
+                Fast:
+                        Quickly charge the battery using fast-charge
+                        technology. This is harder on the battery than
+                        standard charging and may lower its lifespan.
+                        The Dell BIOS calls this ExpressCharge=E2=84=A2.
+                Trickle:
+                        Users who primarily operate the system while
+                        plugged into an external power source can extend
+                        battery life with this mode. The Dell BIOS calls
+                        this "Primarily AC Use".
+                Adaptive:
+                        Automatically optimize battery charge rate based
+                        on typical usage pattern.
+                Custom:
+                        Use the charge_control_* properties to determine
+                        when to start and stop charging. Advanced users
+                        can use this to drastically extend battery life.
 
-#syz fix: f2fs: remove unreachable lazytime mount option parsing
+                Access: Read, Write
+                Valid values:
+                              "Standard", "Fast", "Trickle",
+                              "Adaptive", "Custom"
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+
+
+
+--=20
+I'm available for contract & employment work, please contact me if
+interested.
 
