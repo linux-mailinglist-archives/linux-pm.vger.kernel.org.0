@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-12008-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12009-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8779D94C4A0
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 20:42:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E39CD94C4A5
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 20:42:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44C4B288BD7
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 18:42:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 993EE282E87
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 18:42:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AD0F158DDD;
-	Thu,  8 Aug 2024 18:41:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD0C515AAD6;
+	Thu,  8 Aug 2024 18:41:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="j7OJFMVX"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="tuRnX+Qa"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp39.i.mail.ru (smtp39.i.mail.ru [95.163.41.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5ED15350B;
-	Thu,  8 Aug 2024 18:41:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93BD155335;
+	Thu,  8 Aug 2024 18:41:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.163.41.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723142494; cv=none; b=rqe2EcnQEyE/5EjFY6EksHj8n7ppFAkf5k52x7fI8xo057YpFBBaiezfdBwoAQ35R6V4N3RYLoE7mTlGXe4F1SBYRTnigigtTl7teGJv5dQ7l/SAQO4DEtZbmVoye6C65kZumy5c8nm8ORXF3L4I2N56vLoVufUfbAP5qhcUwB8=
+	t=1723142500; cv=none; b=TkgicTqzi14kga2uKJlfPG1rvii81L4dnpR2nfHd/s+/HHPGvWL2Mdz8cIoa/erJ5DEB3dY3vLJZHpOGLRJNtCMyOStRuqoP5gEBaeBvymRqz5LQRKYQb6xHjGcqlkFXwwvy/nDecENHMc1yqqMdmxVKlFbl93tvjCeTVCcCxS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723142494; c=relaxed/simple;
-	bh=tH6J7ZrbOS+iKupyOxU+CUkltyoadmFP0RdvNc7tphc=;
+	s=arc-20240116; t=1723142500; c=relaxed/simple;
+	bh=oqRrXJ8CUISiH0+6MUAgBYbuxSjpyVTzwmPq6LFtB1U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kQSc5AmfVBpB/4aaj+WvuoMqyk+9zYO43DN7opGjbd8rMKnDCVAg8lCM71tglHu/x4FQqs1Gzs5KtYOG+MJwzq3r6jFpRvFW3yzGIcOsHmuFWwIx9EPulWI660u9ErDOAoXECjeo0MoEIh+lPIe0wAI4ovmMYl/1uaQYLNUOCaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com; spf=pass smtp.mailfrom=jiaxyga.com; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=j7OJFMVX; arc=none smtp.client-ip=95.163.41.80
+	 MIME-Version; b=uoTu4x8Trdi/+ZHyHjgenO/70n929kCApI0F4iEwgeKc6oMyA3S1n9/emJVnI/G7QGm0cCOd/vJlPM+ZJx6E44R/htAmxXMt8A6nER1DGmhGxehuZz4Ijhzzj9U5RDAtYYxaZLjyNneCZo4b35Y0Teh2fk/jaaefXqal2DQgpC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com; spf=pass smtp.mailfrom=jiaxyga.com; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=tuRnX+Qa; arc=none smtp.client-ip=95.163.41.80
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jiaxyga.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
@@ -38,12 +38,12 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
 	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
 	X-Cloud-Ids:Disposition-Notification-To;
-	bh=onwwrJHtlLia9J6z4xZR7OTS7xIwrBFZ20zq9AEUUvw=; t=1723142492; x=1723232492; 
-	b=j7OJFMVXJACq9Z5fKEqsWTbt4xIV8j4bCnKz16mL3y44vrnstyjlFQnByTiRqaFrryyGX0EiWwP
-	Rw7ryitbUkGgyIntLFNc0bCA1mn6Ii6om0kHBBTvoi1QDiXKL2pYrA2bQQsWG5Pd7S9ADmVJJgHKa
-	/EIN796xSNjxhq5nIkg=;
+	bh=3RWNEzgkflnEQObOJCO+U1GwMf2lZ3z9OpwwVDJJmOM=; t=1723142499; x=1723232499; 
+	b=tuRnX+QaTd2750ZqLN3oQMINtWRrcGP3p4nfVkvQCu0GyKHwqNYCpMrRwm7ApY1YnBdtH+Fb+SD
+	OonjId9gaiEUBT2CzXTPrKC7GNCY1ZX5wS2x46vipFvndS0rLeRmrKSVOwRYvrtLSkdpvuRz1hpzI
+	PF6VTO2uQmu6veHzAlQ=;
 Received: by smtp39.i.mail.ru with esmtpa (envelope-from <danila@jiaxyga.com>)
-	id 1sc84m-00000001fDW-19M0; Thu, 08 Aug 2024 21:41:28 +0300
+	id 1sc84s-00000001fDW-1prM; Thu, 08 Aug 2024 21:41:34 +0300
 From: Danila Tikhonov <danila@jiaxyga.com>
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -78,9 +78,9 @@ Cc: devicetree@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	Danila Tikhonov <danila@jiaxyga.com>
-Subject: [PATCH v2 05/11] dt-bindings: soc: qcom: qcom,pmic-glink: Document SM7325 compatible
-Date: Thu,  8 Aug 2024 21:40:19 +0300
-Message-ID: <20240808184048.63030-6-danila@jiaxyga.com>
+Subject: [PATCH v2 06/11] dt-bindings: nfc: nxp,nci: Document PN553 compatible
+Date: Thu,  8 Aug 2024 21:40:20 +0300
+Message-ID: <20240808184048.63030-7-danila@jiaxyga.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240808184048.63030-1-danila@jiaxyga.com>
 References: <20240808184048.63030-1-danila@jiaxyga.com>
@@ -94,43 +94,35 @@ Content-Transfer-Encoding: 8bit
 Authentication-Results: smtp39.i.mail.ru; auth=pass smtp.auth=danila@jiaxyga.com smtp.mailfrom=danila@jiaxyga.com
 X-Mailru-Src: smtp
 X-4EC0790: 10
-X-7564579A: 646B95376F6C166E
-X-77F55803: 4F1203BC0FB41BD9D9DED0FED0530B21E99D4A78A7C7A01591FF82C61940A2B700894C459B0CD1B99FD0A5C016C6F4813E60E583875EFAA478F2584431C07ABCB940E011F974308A4C6784DEA8096F07
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7370F4F695FFFC24BEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006379428F6EA0D091379EA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38B043BF0FB74779F36DB154CE132E0834CF890E47D01697F561A269424625208ADA471835C12D1D9774AD6D5ED66289B5278DA827A17800CE7ECE82AE7387CF2AD9FA2833FD35BB23D2EF20D2F80756B5F868A13BD56FB6657A471835C12D1D977725E5C173C3A84C3E478A468B35FE767117882F4460429728AD0CFFFB425014E868A13BD56FB6657D81D268191BDAD3DC09775C1D3CA48CF6804EF05EF4ADF2A3AA81AA40904B5D9CF19DD082D7633A0C84D3B47A649675F3AA81AA40904B5D98AA50765F7900637EF1F32DBCCB8E3DECD04E86FAF290E2DB606B96278B59C421DD303D21008E29813377AFFFEAFD269A417C69337E82CC2E827F84554CEF50127C277FBC8AE2E8BA83251EDC214901ED5E8D9A59859A8B658CDF7FFE3EBBCC0089D37D7C0E48F6C5571747095F342E88FB05168BE4CE3AF
-X-C1DE0DAB: 0D63561A33F958A5F890E6E9140F61065002B1117B3ED696A68F4817F676A94D4869453249F34FA4823CB91A9FED034534781492E4B8EEAD528DE7AA5F2BD788C79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF3FED46C3ACD6F73ED3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF693DC40D190BCBCF394932D1BE7238B66D949360FE73BD93B803E75D6A7E91EB1EB2640544212C895CC6C73BB6D1AD5361A7CFE52EB4E1B7A8EF8C92EF10C188DE10B1B5F89DDD1CF3ED94C7A551C90002C26D483E81D6BE72B480F99247062FEE42F474E8A1C6FD34D382445848F2F3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojnAZp9Q+n/0Mbmc8e34QHJA==
-X-Mailru-Sender: 9EB879F2C80682A09F26F806C7394981C177C754692666014825860F061DF2146B5C970B38829161D833FFD16BC388C32C62728BC403A049225EC17F3711B6CF1A6F2E8989E84EC137BFB0221605B344978139F6FA5A77F05FEEDEB644C299C0ED14614B50AE0675
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD9D9DED0FED0530B21D5CEFA8193EAC1B119F3FFB6EDB7E89700894C459B0CD1B9464F0E7320E002DD3E60E583875EFAA40D5072B2037778FFB940E011F974308A60DFE2D95CBACD2B
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7FFA2A8BF6367A61CEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006377F69ABDCCC31D2058638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D823E3A2C365B6759F9889FB57C2C458C239C2F3C65CF289E1CC7F00164DA146DAFE8445B8C89999728AA50765F7900637323E1896550E62E4389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8989FD0BDF65E50FBF6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA73AA81AA40904B5D9A18204E546F3947CCF7CD7A0D5AA5F256136E347CC761E074AD6D5ED66289B523666184CF4C3C14F6136E347CC761E07725E5C173C3A84C3D54606DEFE0495C9BA3038C0950A5D36B5C8C57E37DE458B330BD67F2E7D9AF16D1867E19FE14079C09775C1D3CA48CF3D321E7403792E342EB15956EA79C166A417C69337E82CC275ECD9A6C639B01B78DA827A17800CE71D0063F52110EA4A731C566533BA786AA5CC5B56E945C8DA
+X-C1DE0DAB: 0D63561A33F958A5996FB29906ABFFB95002B1117B3ED696C4D43FF832913BF01BDDAE3D1EA49BEA823CB91A9FED034534781492E4B8EEADEF0AF71940E62277C79554A2A72441328621D336A7BC284946AD531847A6065AED8438A78DFE0A9EBDAD6C7F3747799A
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF3FED46C3ACD6F73ED3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF723E2695F986872089382DE5864B1765F17D2871EE8926992063137CE92F37890505AA998FFA684F5CC6C73BB6D1AD53EEFBBE84FB8522D8A8EF8C92EF10C188E7A7A7C0859ECD61F3ED94C7A551C90002C26D483E81D6BE72B480F99247062FEE42F474E8A1C6FD34D382445848F2F3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojnAZp9Q+n/0NH0pkM0CidFQ==
+X-Mailru-Sender: 9EB879F2C80682A09F26F806C7394981C177C7546926660105E38EDE555C2806BD37446300EF067EB7C1B598849540DF2C62728BC403A049225EC17F3711B6CF1A6F2E8989E84EC137BFB0221605B344978139F6FA5A77F05FEEDEB644C299C0ED14614B50AE0675
 X-Mras: Ok
 
-The SM7325 is the closest SoC to the QCM6490 and is also identical
-to the SC7280. The SM7325 also requires both UCSI_NO_PARTNER_PDOS &
-UCSI_DELAY_DEVICE_PDOS quirks.
-
-Document the PMIC GLINK firmware interface on the SM7325 Platform
-by using the QCM6490 bindings as fallback.
+The PN553 is another NFC chip from NXP, document the compatible in the
+bindings.
 
 Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 ---
- .../devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml        | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/net/nfc/nxp,nci.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-index 4512390f90f0..2d3fe0b54243 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-@@ -30,6 +30,11 @@ properties:
-               - qcom,sm8450-pmic-glink
-               - qcom,sm8550-pmic-glink
-           - const: qcom,pmic-glink
-+      - items:
-+          - enum:
-+              - qcom,sm7325-pmic-glink
-+          - const: qcom,qcm6490-pmic-glink
-+          - const: qcom,pmic-glink
-       - items:
+diff --git a/Documentation/devicetree/bindings/net/nfc/nxp,nci.yaml b/Documentation/devicetree/bindings/net/nfc/nxp,nci.yaml
+index 6924aff0b2c5..364b36151180 100644
+--- a/Documentation/devicetree/bindings/net/nfc/nxp,nci.yaml
++++ b/Documentation/devicetree/bindings/net/nfc/nxp,nci.yaml
+@@ -17,6 +17,7 @@ properties:
            - enum:
-               - qcom,sm8650-pmic-glink
+               - nxp,nq310
+               - nxp,pn547
++              - nxp,pn553
+           - const: nxp,nxp-nci-i2c
+ 
+   enable-gpios:
 -- 
 2.45.2
 
