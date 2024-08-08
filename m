@@ -1,158 +1,104 @@
-Return-Path: <linux-pm+bounces-11986-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11987-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24BC794B6F5
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 08:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3230094B84C
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 09:55:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 77AEBB21C3C
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 06:54:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 70C24B25E6C
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 07:55:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0B32185E7A;
-	Thu,  8 Aug 2024 06:54:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="IaTeITjV";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bJu69KUW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61214188CBA;
+	Thu,  8 Aug 2024 07:55:12 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fhigh8-smtp.messagingengine.com (fhigh8-smtp.messagingengine.com [103.168.172.159])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024FF5228;
-	Thu,  8 Aug 2024 06:53:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E07187848;
+	Thu,  8 Aug 2024 07:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723100040; cv=none; b=eliywxH2Wq1VDw1Fj/99TtfiUVsMa/JnoQQcbItv297vL4EbxV1+ZRJ9SJQzhZ4LRPrUIXqETcEG7FJPV0cyMfrXdenIlUvF6IV62AwfWp3f19/74IGw/oI6YC1888zbVd81o51LyKH+K23ciTEUomS4mO48pD+XY0Q4mdjtNQk=
+	t=1723103712; cv=none; b=VpbgtzrZoCxlC1j4hO79F8lV8ncxtQUo9bZBjphJDqq3sR4mVKg+dIjdDizyL8cpQsbIUn41CxzK+Hx6uJ9qNPD87z1RncaN2/sNXUMk1GRLxsWA+3NGOsoVysv9G9/CTmpMKjb0h440+yFiYE/ftfqeHP8Nubevxz4PZBFNykM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723100040; c=relaxed/simple;
-	bh=tciyC43LBPP6ReuR8JiV299C77gEYtlCSfoeVbeoRFU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=bqmU7rgFJXdPU0pNQWpFZuJZD+vnfl5s7zvemlDSRiszwwHC23zpjgkrVuFqpzlxwyEBth+9EqUT8rro8ZulvIibQJgme9oq8F2qB8UTbIfXc3onZ1cK1m7ufikjmf+g2VdkOZJuSR5LWO9mkTMTTteIcVzUdNcCgJNOWRakmss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=IaTeITjV; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bJu69KUW; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 14AF81151BBE;
-	Thu,  8 Aug 2024 02:53:57 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute4.internal (MEProxy); Thu, 08 Aug 2024 02:53:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1723100037;
-	 x=1723186437; bh=/FT6YYLHJ8Rtqq3tE6sAPdg9+du2pO5FFAdLqh/r+OM=; b=
-	IaTeITjVZ921QuAZEF+s1PYOzQ1zGlIu1R0JdMG1xAzqZ00bzRMBsKhR4Ktxn1Q8
-	UzXe4ugUHBoDtMlgmUZkc79v3SehUTk2cOt4y5kGttCGG6OI4A+xTiEqF7pw7xPh
-	dndDXKAS8gnY9t6t/pq/RqyIDwzP7ohHTvenoIunMbUdLENPWIjt7Adx1wSaExX8
-	yuThMtbs8ty+PFR6HmV51EQST2bJJz8ra8/7CVdNXlS57ynmNuXWp86cbN5RT1+q
-	TV738KTZRB/N/OgaOLECspJJ9yZKVLBWek3Iwu6i2Zrm9NLl7NHX7jcLaMyrkcKQ
-	Xv7D8LYK6cQJZEV2xXHoyA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1723100037; x=
-	1723186437; bh=/FT6YYLHJ8Rtqq3tE6sAPdg9+du2pO5FFAdLqh/r+OM=; b=b
-	Ju69KUWZWfseoEuZCvTltgQXAxi/THXdDPVvxWpq9ZLWiLXfAXNMmZYt11lZwq6q
-	u9QFALVyl81oqXV9vyxzlbcuH6x/mvoCgoa1w9WaZUwsKfBxObxm4groFhm3rsTd
-	ixjBU42nuDXtev6rd2ThkOccpDAGrZmC88XAgnJh3YEZ2/kxXMtucuZdKe4rd2yL
-	LPUb/8I/FcrxYZieesN9kjjqa6K5z8QWfWqNk3h5heyxSO6/OsNqbZD8UmFRX58j
-	Qmv/ufVr6rxV1uUB7l71nYfa/MhEEXTlDGrR8+qeRirLZ2N+6S58pRymG9YsfNgw
-	I+3iU3T/JW9c9jlMvmH+g==
-X-ME-Sender: <xms:hGu0ZpQp4Xkw26iJWp9zgJRTwcy_-WkJGY4tC5RL-oNDycnZlaT2Qw>
-    <xme:hGu0ZizInySN6l-eD8VA_uIvQI12pbAj6zxDJX-ESYZ4vLgOLq4Jz1FWOXHBc9Uwe
-    Kw8nueAp1bK40ReNB0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrledugdduudefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
-    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudej
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegsvghnjhgrmhhinhdrghgrihhgnh
-    grrhgusegtohhllhgrsghorhgrrdgtohhmpdhrtghpthhtohepmhgrrhgvgiesuggvnhig
-    rdguvgdprhgtphhtthhopehgvggvrhhtodhrvghnvghsrghssehglhhiuggvrhdrsggvpd
-    hrtghpthhtohepfhgvshhtvghvrghmsehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhgr
-    khgvvdegsehishgtrghsrdgrtgdrtghnpdhrtghpthhtohepshhhrgifnhhguhhosehkvg
-    hrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdr
-    ohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrih
-    hnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehimhigsehlihhsthhsrdhlihhnuhig
-    rdguvghv
-X-ME-Proxy: <xmx:hGu0Zu0a0M0qb-BPXikGrAVD0SHfsz9kcGVblxSL9MWJ8JL6GQ0T8g>
-    <xmx:hGu0ZhDRKzd5zBaKK1-X7b_-ImWfJYklm8Nzl9SEyX_AtS9LE5MCKg>
-    <xmx:hGu0ZigogLKKqK1AtfuTlbZtqo3Oja_d5TAZjKiibEjxfDH8HNuqgQ>
-    <xmx:hGu0Zlqla1oZzi-Zi8sczt26ZrMJ-qiWjZzsLoP6zoLzoPvd_E2wjA>
-    <xmx:hWu0ZpSEuk8TKyoNXpowJM-vV9D5nvQ19SyhwlxSEfEUKqha79J5QjwJ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id B8C25B6008D; Thu,  8 Aug 2024 02:53:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1723103712; c=relaxed/simple;
+	bh=0EDV+ZA80Nb72boDd5yPoathjXuPDJ0DD/ceNMfmO3U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OMCSF0eMtmaTZNW8Q+c7mui58edR+c+basXkrvxF2xxoGXKdARvCeFyKQJrq4OS0jdElMLZquAaZE2g0lpEzpoEZfp37eW+FDWyB0YI1cQ4i0kKE6HSixA2riwHzxIM7iuPRYYXXIzjB/DgeHaPKKUshW4kbnBZ3guXzdqFC2pQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+Received: from i53875a9f.versanet.de ([83.135.90.159] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1sbxz5-0000Hh-CK; Thu, 08 Aug 2024 09:54:55 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+ Detlev Casanova <detlev.casanova@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Finley Xiao <finley.xiao@rock-chips.com>, Jagan Teki <jagan@edgeble.ai>,
+ Elaine Zhang <zhangqing@rock-chips.com>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: Add power-domain header for RK3576 SoCs
+Date: Thu, 08 Aug 2024 09:54:54 +0200
+Message-ID: <10908017.3WhfQktd6Z@diego>
+In-Reply-To: <3310992.44csPzL39Z@trenzalore>
+References:
+ <20240802151647.294307-1-detlev.casanova@collabora.com>
+ <e04258dc-07c4-45c7-90d4-bc1ed9eb100b@kernel.org>
+ <3310992.44csPzL39Z@trenzalore>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 08 Aug 2024 08:53:35 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Marco Felsch" <m.felsch@pengutronix.de>, "Ma Ke" <make24@iscas.ac.cn>
-Cc: "Ulf Hansson" <ulf.hansson@linaro.org>, "Shawn Guo" <shawnguo@kernel.org>,
- "Sascha Hauer" <s.hauer@pengutronix.de>,
- "Pengutronix Kernel Team" <kernel@pengutronix.de>,
- "Fabio Estevam" <festevam@gmail.com>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>,
- "Peng Fan" <peng.fan@nxp.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- "Marek Vasut" <marex@denx.de>,
- "Benjamin Gaignard" <benjamin.gaignard@collabora.com>, imx@lists.linux.dev,
- stable@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Message-Id: <1b04b8b3-44ca-427f-a5c9-d765ec30ec33@app.fastmail.com>
-In-Reply-To: <20240808061245.szz5lq6hx2qwi2ja@pengutronix.de>
-References: <20240808042858.2768309-1-make24@iscas.ac.cn>
- <20240808061245.szz5lq6hx2qwi2ja@pengutronix.de>
-Subject: Re: [PATCH] soc: imx: imx8m-blk-ctrl: Fix NULL pointer dereference
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu, Aug 8, 2024, at 08:12, Marco Felsch wrote:
->
-> On 24-08-08, Ma Ke wrote:
->> Check bc->bus_power_dev = dev_pm_domain_attach_by_name() return value using
->> IS_ERR_OR_NULL() instead of plain IS_ERR(), and fail if bc->bus_power_dev 
->> is either error or NULL.
->> 
->> In case a power domain attached by dev_pm_domain_attach_by_name() is not
->> described in DT, dev_pm_domain_attach_by_name() returns NULL, which is
->> then used, which leads to NULL pointer dereference.
->
-> Argh.. there are other users of this API getting this wrong too. This
-> make me wonder why dev_pm_domain_attach_by_name() return NULL instead of
-> the error code returned by of_property_match_string().
->
-> IMHO to fix once and for all users we should fix the return code of
-> dev_pm_domain_attach_by_name().
+Hi Detlev,
 
-Agreed, in general any use of IS_ERR_OR_NULL() indicates that there
-is a bad API that should be fixed instead, and this is probably the
-case for genpd_dev_pm_attach_by_id().
+Am Dienstag, 6. August 2024, 18:34:41 CEST schrieb Detlev Casanova:
+> On Sunday, 4 August 2024 05:56:39 EDT Krzysztof Kozlowski wrote:
+> > On 02/08/2024 17:14, Detlev Casanova wrote:
+> > > From: Finley Xiao <finley.xiao@rock-chips.com>
+> > > 
+> > > Define power domain IDs as described in the TRM.
+> > 
+> > Please use subject prefixes matching the subsystem. You can get them for
+> > example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> > your patch is touching. For bindings, the preferred subjects are
+> > explained here:
+> > https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patche
+> > s.html#i-for-patch-submitters
+> > > Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
+> > > [reword]
+> > > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> > > ---
+> > > 
+> > >  include/dt-bindings/power/rk3576-power.h | 30 ++++++++++++++++++++++++
+> > >  1 file changed, 30 insertions(+)
+> > >  create mode 100644 include/dt-bindings/power/rk3576-power.h
+> > 
+> > This is part of bindings.
+> > 
+> > > diff --git a/include/dt-bindings/power/rk3576-power.h
+> > > b/include/dt-bindings/power/rk3576-power.h
+> > Missing vendor prefix. This should be named after compatible.
+> 
+> Looks like all other rockchip power bindings use the include/dt-bindings/
+> power/rkXXXX.h format. Should I keep that way ?
 
-One common use that is widely accepted is returning NULL when
-a subsystem is completely disabled. In this case an IS_ERR()
-check returns false on a NULL pointer and the returned structure
-should be opaque so callers are unable to dereference that
-NULL pointer.
+there is also rockchip,rv1126-power.h , so please follow Krzysztof's
+suggestion. Older header namings need to stay the same of course
+but that shouldn't keep us from updating naming schemes to better
+work in new additions.
 
-genpd_dev_pm_attach_by_{id,name}() is documented to also return
-a NULL pointer when no PM domain is needed, but they return
-a normal 'struct device' that can easily be used in an unsafe
-way after checking for IS_ERR().
 
-Fortunately it seems that there are only a few callers at the
-moment, so coming up with a safer interface is still possible.
-
-       Arnd
 
