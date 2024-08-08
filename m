@@ -1,150 +1,109 @@
-Return-Path: <linux-pm+bounces-11996-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-11997-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61B8C94BE95
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 15:35:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BF6894C2CD
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 18:34:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E46B1F2124C
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 13:35:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF965B28D33
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 16:34:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71CDA18DF7A;
-	Thu,  8 Aug 2024 13:35:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13804190678;
+	Thu,  8 Aug 2024 16:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="W08eMFc3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx.astralinux.ru (mx.astralinux.ru [89.232.161.68])
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38E018B482;
-	Thu,  8 Aug 2024 13:35:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.232.161.68
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723124110; cv=none; b=Fxepq85NAgfTnMrI84+OWbBlmDkFC3b6k3K6WlDsdkvlkb3564jEWp6d7U7hUSi+rafdLuX+XU8Fu0VuPjxklmu5qUA8c/3XhwjmZfUJmntnwst6gBYWKw2JfFVkpiRY3jEswcvAPFhQ1+Iu5K1PCbLSly3dz6tThWncNZGV2bk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723124110; c=relaxed/simple;
-	bh=WXIyTlcdgUzPFu87MyoQWD5cIqEe88qH81lSYORid6E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tXKkcfd5ganzJ8EXMxJ/ZJXzIgWQFBNLlOjVhirLy4DGENRwLsWl8y+gzl0Xrr2KEhq3BGieHjsi0qtMmvixbZe9vpdYW+T1Dr3qdzGNa9FM57yggp7GnG1OifbTVEKQjZC8yzZcajdO4nvq0Fn0LdDHXTKecuhkABOh5eKq2+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru; spf=pass smtp.mailfrom=astralinux.ru; arc=none smtp.client-ip=89.232.161.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
-Received: from [10.177.185.109] (helo=new-mail.astralinux.ru)
-	by mx.astralinux.ru with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <abelova@astralinux.ru>)
-	id 1sc2ru-005DVs-2M; Thu, 08 Aug 2024 16:07:50 +0300
-Received: from [10.198.3.10] (unknown [10.198.3.10])
-	by new-mail.astralinux.ru (Postfix) with ESMTPA id 4WfnRF4zm3zkWKB;
-	Thu,  8 Aug 2024 16:08:25 +0300 (MSK)
-Message-ID: <69c57210-8a48-4ae2-b529-a4cd6dbd0121@astralinux.ru>
-Date: Thu, 8 Aug 2024 16:07:19 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF94190079;
+	Thu,  8 Aug 2024 16:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723134839; cv=pass; b=WQZb/u0MHifgBQysXeyieKqo9tJfNC0ptyIoI4tkUgMm8/Cck6pYzXYWK8j9F86qBlcSW7D80u4yaOjHEnPGMQlyuPsefCKgIsqN5hUTBftlHi20RwJ7WY00TI5I8M7vDwB3ec8IvPhHFtS95zi1RVjH70rKDEbsmEITuJ4Cg+c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723134839; c=relaxed/simple;
+	bh=7chZuhTNmRrjrIC+yqjL8bk0QnvRVNVfEvzzu7jPKYY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RRclCaxzMN9ZkpNfNun73JpaotS65TyA8hiefFLokK/baVXLmhHnErkTfW9Li7Ro8999H9MM1Bxqd25HF3JygEUIjCWiI6aoX4r+3yZ4otUTXI28gjtxdUGm0D7yBJXbad3ltoTHe+lZ55vXjq2twvju+j89ruj3vUfbtu3QLCc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=W08eMFc3; arc=pass smtp.client-ip=136.143.188.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Delivered-To: detlev.casanova@collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1723134816; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=iDPWYWlOfe54Ce5X5GyGC3aRRR4PDVqFhM4E8MpQuGrgTA+/B7Fz8mJPuzvzFQW1vaFbF941UvuAc7pTfmbAw62cNJXHlcqgWVxaSvCKFPJBvhBCMSeP0DpzH9fSNaM6wwcc/HR2fIZCfMhIYlyP6d+W/4ZeP3p411ARR2TXJR4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1723134816; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=NmqcV9imI6SfgcIxSQfScmTXomw4vtotLJTJkgfLYDA=; 
+	b=f6O5ysVa4OLVPFzF34YFfUYIKsG4QskrNH4JxANXVMSZ+712mYZhEAYO1pIr143myYNfavCg0EF6wDqohgW+Xfw43ADQJhEkrXqs6LwMV2JBQfHedBZ7AdZ80JveCNXvuhFLLNQ9ECNfb//d2pVrW21DafSK90zrMj/LueDcVDo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=detlev.casanova@collabora.com;
+	dmarc=pass header.from=<detlev.casanova@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1723134816;
+	s=zohomail; d=collabora.com; i=detlev.casanova@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=NmqcV9imI6SfgcIxSQfScmTXomw4vtotLJTJkgfLYDA=;
+	b=W08eMFc3zFZm/8nWGANJGr7fWFSowSiV30h0usWckR1QpSi6cRqQCFEkM/X8U7Ml
+	rI+ChtmX8xm9XkXQ71V6Y0l0YzjOR76APf2x2OTibbGtYuvsOfS5Y7RlGlF1Sl04rAs
+	RBSeFf4sMNGQ6y5EcsJlYJHAqsWUrYjPNYwTQJOw=
+Received: by mx.zohomail.com with SMTPS id 1723134814543747.8071954226422;
+	Thu, 8 Aug 2024 09:33:34 -0700 (PDT)
+From: Detlev Casanova <detlev.casanova@collabora.com>
+To: linux-kernel@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Finley Xiao <finley.xiao@rock-chips.com>,
+	Jagan Teki <jagan@edgeble.ai>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Elaine Zhang <zhangqing@rock-chips.com>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	kernel@collabora.com
+Subject: [PATCH v2 0/2] Add power-controller support for rk3576
+Date: Thu,  8 Aug 2024 12:31:03 -0400
+Message-ID: <20240808163451.80750-1-detlev.casanova@collabora.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: RuPost Desktop
-Subject: Re: [PATCH] cpufreq: amd-pstate: add check for cpufreq_cpu_get's
- return value
-Content-Language: ru
-To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-Cc: Huang Rui <ray.huang@amd.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Perry Yuan <perry.yuan@amd.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-References: <20240603110741.24818-1-abelova@astralinux.ru>
- <ZmGHqL93i2GDHsWb@BLRRASHENOY1.amd.com>
-From: Anastasia Belova <abelova@astralinux.ru>
-In-Reply-To: <ZmGHqL93i2GDHsWb@BLRRASHENOY1.amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-DrWeb-SpamScore: 0
-X-DrWeb-SpamState: legit
-X-DrWeb-SpamDetail: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgtddvucetufdoteggodetrfcurfhrohhfihhlvgemucfftfghgfeunecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttderjeenucfhrhhomheptehnrghsthgrshhirgcuuegvlhhovhgruceorggsvghlohhvrgesrghsthhrrghlihhnuhigrdhruheqnecuggftrfgrthhtvghrnhepjeefheffjeehtdehvdeugfehiedvleejhfeugeeuhffguefhgffgtdfhgfdvgfegnecuffhomhgrihhnpehlihhnuhigthgvshhtihhnghdrohhrghenucfkphepuddtrdduleekrdefrddutdenucfrrghrrghmpehhvghloheplgdutddrudelkedrfedruddtngdpihhnvghtpedutddrudelkedrfedruddtmeefleeivdekpdhmrghilhhfrhhomheprggsvghlohhvrgesrghsthhrrghlihhnuhigrdhruhdpnhgspghrtghpthhtohepledprhgtphhtthhopehgrghuthhhrghmrdhshhgvnhhohiesrghmugdrtghomhdprhgtphhtthhopehrrgihrdhhuhgrnhhgsegrmhgurdgtohhmpdhrtghpthhtohepmhgrrhhiohdrlhhimhhonhgtihgvlhhlohesrghmugdrtghomhdprhgtphhtthhopehpvghrrhihrdihuhgrnhesrghmugdrtghomhdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvhhirhgvshhhrdhkuh
- hmrghrsehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlvhgtqdhprhhojhgvtghtsehlihhnuhigthgvshhtihhnghdrohhrghenucffrhdrhggvsgcutehnthhishhprghmmecunecuvfgrghhsme
-X-DrWeb-SpamVersion: Dr.Web Antispam 1.0.7.202406240#1723114910#02
-X-AntiVirus: Checked by Dr.Web [MailD: 11.1.19.2307031128, SE: 11.1.12.2210241838, Core engine: 7.00.65.05230, Virus records: 12094220, Updated: 2024-Aug-08 11:40:48 UTC]
+X-ZohoMailClient: External
 
-Hello,
+Add support for the power domain controller on the rk3576 SoC.
+Patches from downstream have been rebased.
 
-06/06/24 12:55, Gautham R. Shenoy пишет:
-> Hello,
->
-> On Mon, Jun 03, 2024 at 02:07:41PM +0300, Anastasia Belova wrote:
->> cpufreq_cpu_get may return NULL. To avoid NULL-dereference check it
->> and return in case of error.
->>
->> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->>
->> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
-> Thank you for the patch. Indeed we should be checking if the policy is
-> valid before dereferencing it.
->
->> ---
->>   drivers/cpufreq/amd-pstate.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
->> index 1b7e82a0ad2e..672cb6c280a4 100644
->> --- a/drivers/cpufreq/amd-pstate.c
->> +++ b/drivers/cpufreq/amd-pstate.c
->> @@ -621,6 +621,8 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
->>   	unsigned long max_perf, min_perf, des_perf,
->>   		      cap_perf, lowest_nonlinear_perf, max_freq;
->>   	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
->> +	if (!policy)
->> +		return;
-> This patch mixes code and declarations. While I personally don't
-> prefer that, since we have moved to using C99, the compiler does
-> not complain, nor does checkpatch complain.
->
-> So is this ok for cpufreq, Rafael?
+Note that the mentioned TRM is not publicly available.
 
-Should I form the second version without mixing code and declarations?
-Or it is better to wait for Rafael's answer?
+Changes since v1:
+- Rename rk3576-power.h to rockchip,rk3576-power.h
+- Add memory reset support
+- Squashed header files with bindings commit
+- Updated license
+- Fix commit messages for subsystem.
 
->
-> Or would you prefer something like:
->
-> 	unsigned long cap_perf, lowest_nonlinear_perf;
-> 	unsigned long max_perf, min_perf, des_perf;
-> 	struct cpufreq_policy *policy;
-> 	struct amd_cpudata *cpudata;
-> 	unsigned int target_freq;
-> 	unsigned long max_freq;
->
-> 	policy = cpufreq_cpu_get(cpu);
-> 	if (!policy)
-> 		return;
->
-> 	cpudata = policy->driver_data;
->
->
->
->>   	struct amd_cpudata *cpudata = policy->driver_data;
->>   	unsigned int target_freq;
->>   
->> @@ -777,6 +779,8 @@ static void amd_pstate_init_prefcore(struct amd_cpudata *cpudata)
->>   static void amd_pstate_update_limits(unsigned int cpu)
->>   {
->>   	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
->> +	if (!policy)
->> +		return;
-> Ditto.
->
->>   	struct amd_cpudata *cpudata = policy->driver_data;
->>   	u32 prev_high = 0, cur_high = 0;
->>   	int ret;
->> -- 
->> 2.30.2
->>
-> --
-> Thanks and Regards
-> gautham.
+Finley Xiao (2):
+  dt-bindings: power: Add support for RK3576 SoC
+  pmdomain: rockchip: Add support for rk3576 SoC
 
-Thanks,
-Anastasia Belova
+ .../power/rockchip,power-controller.yaml      |  1 +
+ drivers/pmdomain/rockchip/pm-domains.c        | 73 ++++++++++++++++++-
+ .../dt-bindings/power/rockchip,rk3576-power.h | 30 ++++++++
+ 3 files changed, 101 insertions(+), 3 deletions(-)
+ create mode 100644 include/dt-bindings/power/rockchip,rk3576-power.h
+
+-- 
+2.46.0
+
 
