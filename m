@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-12012-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12013-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8166A94C4B8
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 20:44:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DE7C94C4BD
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 20:44:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4FE61C255FF
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 18:43:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3851D1F2839D
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2024 18:44:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE6591649A8;
-	Thu,  8 Aug 2024 18:42:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B29A1586DB;
+	Thu,  8 Aug 2024 18:42:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="W0sz8CEm"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="CWmoONqy"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp39.i.mail.ru (smtp39.i.mail.ru [95.163.41.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2976A149E0E;
-	Thu,  8 Aug 2024 18:41:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723A6156F3F;
+	Thu,  8 Aug 2024 18:42:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.163.41.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723142520; cv=none; b=fhMRq3bBu1lHeht5cKG8T1+6Rb4ri4MR9m66yYlhlNJdhLS9sAQV5ybT3vUDlXrmugsqlvcYc6QtrWjEUC4N+Q8G7fn0tKQYcvLRQdx4JbszWn+3hr9KqCYTq1kuUKBC74H0Z6zDU6zQC0p5Nek8EaiZ7f/g4+vITZEdl8gk2aU=
+	t=1723142528; cv=none; b=au3TkDvBS6E8lOCVGd6DUttzyM6gKHLRpCYrh04gzd0okVneWtHt7i2NnNkdjuduAfVTrKzoGrg9MGMCfwAuaZBJzaDMZrty7vzPCM1P3AlClM7F7Md6GUM8BYvMUZO0mkAxCMQv8or1qIhq8FRyQGCOHIVplnz8qv8ujTupYA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723142520; c=relaxed/simple;
-	bh=1XLYndXBqM02MFxgRDHO3eEZqeGZBLBFuUk50LRsZIQ=;
+	s=arc-20240116; t=1723142528; c=relaxed/simple;
+	bh=X+u5WG+Td2fYLPhAKFLaM5WHEY+rMXvkosaXie+Z52g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BHtS8OmajNnDAurywDEEtE0NqpP8RBdyp8EY2K6AvJLTWR85OpGzBeSd2NeRexchI5X8w87xNWYkrkeeRQrEvq+WbA3OkJpys8N9FF/hVLENLla0utH6xGvN57reXVEA55ZSjRtOnC6c2Ib1fN4sn8LMu4xqj0KWMTISe4Zrv9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com; spf=pass smtp.mailfrom=jiaxyga.com; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=W0sz8CEm; arc=none smtp.client-ip=95.163.41.80
+	 MIME-Version; b=GmssQAOOrUaw1twakoWRxQTM2aeFzSU8cnG1/vacs7rsXe4nzwGiafoUhQ1w2leKNG++UrbYaLA5VLemB2EJDiD2jTCuCz+lHMCDJVzGqCqh5jLbsLAcdwOwmpVlJkToLptbu0l4lQw7JOoFDsa+9yTOrjt+z3PVi/9BstsJwj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com; spf=pass smtp.mailfrom=jiaxyga.com; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=CWmoONqy; arc=none smtp.client-ip=95.163.41.80
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jiaxyga.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
@@ -38,12 +38,12 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
 	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
 	X-Cloud-Ids:Disposition-Notification-To;
-	bh=0NtHuzKZvaV7Gk1EsMZW4DBPbGqvfabnlLcHlGeso3M=; t=1723142519; x=1723232519; 
-	b=W0sz8CEmX5estPJJmaH1bEWvq+RHZrIrzrfV5loAzF0Qh5iheSlg7JVnwoW5V0WpoLz2jGC2Kb+
-	tfkEVGG04LmijfS/Hj3TJfr43h+ZXxyePxZMadGL71f/Uwoc5FkHFh+f6xF/6QptvY+AEMdxTdgF4
-	s3D6UoegUFl/0lA3LdU=;
+	bh=mNKAMhaJO30l6wjuFGsVe9p07yv7pN41/KYYTksJ94k=; t=1723142526; x=1723232526; 
+	b=CWmoONqy7wsEHwmrb/Z2i+In8hBCjAOHhoWERHablu6+zLMVIizW65RsdwwBQDW97t0OrZDG1nk
+	dWiTOA5SJE8RJpoLk3fpGdoeq7DK4/R7w3Zxx3IQOTGlN+65qEGGmSnGqBj1acCQkqmshlrlky5Ya
+	o1V5Jb9E2UzbRddZWMI=;
 Received: by smtp39.i.mail.ru with esmtpa (envelope-from <danila@jiaxyga.com>)
-	id 1sc85C-00000001fDW-3Oz6; Thu, 08 Aug 2024 21:41:55 +0300
+	id 1sc85J-00000001fDW-1MN2; Thu, 08 Aug 2024 21:42:02 +0300
 From: Danila Tikhonov <danila@jiaxyga.com>
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -79,9 +79,9 @@ Cc: devicetree@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	Danila Tikhonov <danila@jiaxyga.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 09/11] dt-bindings: vendor-prefixes: Add Nothing Technology Limited
-Date: Thu,  8 Aug 2024 21:40:23 +0300
-Message-ID: <20240808184048.63030-10-danila@jiaxyga.com>
+Subject: [PATCH v2 10/11] dt-bindings: arm: qcom: Add SM7325 Nothing Phone 1
+Date: Thu,  8 Aug 2024 21:40:24 +0300
+Message-ID: <20240808184048.63030-11-danila@jiaxyga.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240808184048.63030-1-danila@jiaxyga.com>
 References: <20240808184048.63030-1-danila@jiaxyga.com>
@@ -95,36 +95,48 @@ Content-Transfer-Encoding: 8bit
 Authentication-Results: smtp39.i.mail.ru; auth=pass smtp.auth=danila@jiaxyga.com smtp.mailfrom=danila@jiaxyga.com
 X-Mailru-Src: smtp
 X-4EC0790: 10
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD9D9DED0FED0530B21D5CEFA8193EAC1B119F3FFB6EDB7E89700894C459B0CD1B91ACC7882E291640C3E60E583875EFAA450133DDA9523467EC5D9A4B825735016406EA159844E9C80
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7BC08626EA5717D14EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637CE6693660FA336BEEA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38B043BF0FB74779F36C60406EC290EF6DCF890E47D01697F567168D70E4AD04A67A471835C12D1D9774AD6D5ED66289B5278DA827A17800CE79FEEBCD9E13F050E9FA2833FD35BB23D2EF20D2F80756B5F868A13BD56FB6657A471835C12D1D977725E5C173C3A84C3ECBEDCEC3CCF9A28117882F4460429728AD0CFFFB425014E868A13BD56FB6657D81D268191BDAD3DC09775C1D3CA48CF9DB465A7E1668C9BBA3038C0950A5D36C8A9BA7A39EFB766D91E3A1F190DE8FDBA3038C0950A5D36D5E8D9A59859A8B66EEF3AC259A6E0D676E601842F6C81A1F004C906525384303E02D724532EE2C3F43C7A68FF6260569E8FC8737B5C2249D082881546D93491E827F84554CEF50127C277FBC8AE2E8BF1175FABE1C0F9B6AAAE862A0553A39223F8577A6DFFEA7CDDB9BF3B882869D543847C11F186F3C59DAA53EE0834AAEE
-X-C1DE0DAB: 0D63561A33F958A58A056814E1438F815002B1117B3ED6962567EB64F38A6D197E0012C66AE17B00823CB91A9FED034534781492E4B8EEAD4ECBDE8281F904F9C79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF3FED46C3ACD6F73ED3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFD8189080F3CFBCFEBB7F65DD2847B325BFB93628550028F143555362380DCB10F6452569441AF3645CC6C73BB6D1AD535E83FCD9AA6E3A00A8EF8C92EF10C188C6E2B09D10CCE3BA5218470B7D3CD69A02C26D483E81D6BE72B480F99247062FEE42F474E8A1C6FD34D382445848F2F3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojnAZp9Q+n/0N8Cp9ZASaT0A==
-X-Mailru-Sender: 9EB879F2C80682A09F26F806C7394981A52D9F19D561BC9E1F93A76BF6F7B0A6BC232D2356491C803CE571DCCFE0A2B32C62728BC403A049225EC17F3711B6CF1A6F2E8989E84EC137BFB0221605B344978139F6FA5A77F05FEEDEB644C299C0ED14614B50AE0675
+X-7564579A: 78E4E2B564C1792B
+X-77F55803: 4F1203BC0FB41BD9D9DED0FED0530B213292B666DFB78E8227A37E5D37071C0700894C459B0CD1B92F9E722CB67397043E60E583875EFAA4437C5C447D4CCA0EC5D9A4B825735016B92CE970A8DCB349
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE74ABD1465354149F7EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F790063726CA83C7ABDB938E8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8FB2A57BFEC02F5B89889FB57C2C458C24060DD37578E69FFCC7F00164DA146DAFE8445B8C89999728AA50765F7900637AD6569683AD07375389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC80839144E5BB460BAF6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA73AA81AA40904B5D9A18204E546F3947CDA7BFA4571439BB2AD7EC71F1DB884274AD6D5ED66289B523666184CF4C3C14F6136E347CC761E07725E5C173C3A84C30F1327A8DDF03E57BA3038C0950A5D36B5C8C57E37DE458B330BD67F2E7D9AF16D1867E19FE14079C09775C1D3CA48CF17B107DEF921CE791DD303D21008E298D5E8D9A59859A8B6D082881546D9349175ECD9A6C639B01B78DA827A17800CE7D699F3A2029486C7731C566533BA786AA5CC5B56E945C8DA
+X-C1DE0DAB: 0D63561A33F958A5512EC0880C9A1BB85002B1117B3ED6967E4EC9C20FEAD2A5E99897350C7C491E823CB91A9FED034534781492E4B8EEAD2B25D9E4C92BC8ACC79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF3FED46C3ACD6F73ED3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF09AA364616DE276E6D643006C7A8724CC894D7139EF7ED7C993AD4A64E37CA66182FB9261F6240E85CC6C73BB6D1AD53DB4D75DB244C7FC1A8EF8C92EF10C1886DA63E0195D1AAC55218470B7D3CD69A02C26D483E81D6BE72B480F99247062FEE42F474E8A1C6FD34D382445848F2F3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojnAZp9Q+n/0NizRHzsVHFHQ==
+X-Mailru-Sender: 9EB879F2C80682A09F26F806C7394981A52D9F19D561BC9E364022C9811FBA4E86DD105C723F0302452E44D03157C12C2C62728BC403A049225EC17F3711B6CF1A6F2E8989E84EC137BFB0221605B344978139F6FA5A77F05FEEDEB644C299C0ED14614B50AE0675
 X-Mras: Ok
 
-Add entry for Nothing Technology Limited (https://nothing.tech/)
+Nothing Phone 1 (nothing,spacewar) is a smartphone based on the SM7325
+SoC.
 
 Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 12033629595a..6f4133e0c604 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1041,6 +1041,8 @@ patternProperties:
-     description: Nokia
-   "^nordic,.*":
-     description: Nordic Semiconductor
-+  "^nothing,.*":
-+    description: Nothing Technology Limited
-   "^novatek,.*":
-     description: Novatek
-   "^novtech,.*":
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 4ef456cefd6c..ea7b51740e64 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -76,6 +76,7 @@ description: |
+         sm6375
+         sm7125
+         sm7225
++        sm7325
+         sm8150
+         sm8250
+         sm8350
+@@ -988,6 +989,11 @@ properties:
+               - fairphone,fp4
+           - const: qcom,sm7225
+ 
++      - items:
++          - enum:
++              - nothing,spacewar
++          - const: qcom,sm7325
++
+       - items:
+           - enum:
+               - microsoft,surface-duo
 -- 
 2.45.2
 
