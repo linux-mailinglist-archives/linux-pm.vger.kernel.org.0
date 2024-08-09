@@ -1,181 +1,125 @@
-Return-Path: <linux-pm+bounces-12033-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12034-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E3CD94CAF2
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 09:09:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 247A294CB25
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 09:21:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BFA11C22152
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 07:08:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A8B8B24B28
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 07:21:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6191816D9B1;
-	Fri,  9 Aug 2024 07:08:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97DC71741D5;
+	Fri,  9 Aug 2024 07:21:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fl/YGOaz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gOAEgNht"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC6C16D9A7
-	for <linux-pm@vger.kernel.org>; Fri,  9 Aug 2024 07:08:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337F117BA2
+	for <linux-pm@vger.kernel.org>; Fri,  9 Aug 2024 07:21:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723187335; cv=none; b=Y8ziVb72Lua7EyDVqrS54XFC9Htxr4PIwpCkEhg2mK5pQ039eNk/iayvorVvQ6Y3xHt5kpGHY9IEUlYaAvjnmEqOO0iAoi4KiHLskicaJKxp6d93ziwI4qgjqonrpAu1uBO08pNLrsUDfI9gPyK23ldPmkWRitoscq1sZIyBw2s=
+	t=1723188075; cv=none; b=QMBgMyGiOJVl3qqXHiVz9vWfastUOUWeFROhfCT1tQCqO1AUZx1hx8ns2XFWbzuZyr3TQ0F4gVU6bIFulQ9Ed8O2hI8cUW5nTJL3f78OJqoBiTJSfq1zDtkuKqtWWojPrUIyoo5s0dbqQxyVxr6KpVaF7VLEHzhFbzy3lInVeME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723187335; c=relaxed/simple;
-	bh=1N26HGLw//R3d32px3tfcAXifr5s/f7rI6nJGtHpe08=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KzRKcqg41Og0SyZOmKOzwsJaIG4BxqiJAn28wZir8CzvJr3xKDGrz7t6nn4qjFPBEwt2e0hHB1cYSfrSQLp1UBAwbQmNsfg2yREUq19NmSri+tRm+wL82T2C4firD3YAAuC/UlCBgYdho8ozTkIBUTP8lvdAaBlY66vzqw+RdX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=fl/YGOaz; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1fd640a6454so16534845ad.3
-        for <linux-pm@vger.kernel.org>; Fri, 09 Aug 2024 00:08:53 -0700 (PDT)
+	s=arc-20240116; t=1723188075; c=relaxed/simple;
+	bh=QxkBQzipU159PB2wyHzE5iFYHTjRi7kwQk+67LpGaiM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Eh+pqJ4F6P8/BWG2OZTUxfVCRxJxhAWwNH+h+zCyzAQfaNkKkWjb2Hue1qcWlxWGi1zR2fLq8TFUu3HefrYI6C74LsZevyOJiY+HPVYfA0RXQ1xb3M1PH1GaHbpgD2G4VLLryJvq+oo1N0WaXhBewUes9vjlIxY8yWhfvcOaKMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gOAEgNht; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1fc66fc35f2so20495125ad.0
+        for <linux-pm@vger.kernel.org>; Fri, 09 Aug 2024 00:21:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1723187333; x=1723792133; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TSZy4qeB9prpZkXZFFSCy09Nr7J/x1zL/3+bFofkJV8=;
-        b=fl/YGOazmUU8dFbFqU21k8RuxP7J+gnZnpKsbEwNqtEMPOhMvjJoVAvEt7vCkNt3NZ
-         zTWgnXORGRooqQ7cloprrqg4/cwPZuTUnDCUk9DCX5I9MHde+1aVgd6hRXtI42IGLp2A
-         OqKwcXDxTGRG+DEFj4IV8TeDoQRL3fFXwyIaY=
+        d=linaro.org; s=google; t=1723188072; x=1723792872; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jJ7sJqSF1TkQHDuuGssihp9fwsv9r97LCZqEA521fL0=;
+        b=gOAEgNhtwTVxYsJFxY/7FDOdzam588mYqPSsCDUrEX4Y/Bp+G6FAgo7EilcuLasT6L
+         HXm6R//DkU59CK2pFivyXtxUvBjeRbsoUoLitnGJdTIkW1aTNz133Nu/pEIYxSdoT4J0
+         Ys1kheZZsQ7mrj89iYldu4qqMFkFKs2m4YLp7l4u1viHtyOinuhpE/ArMyY4lG8V8B2N
+         NFRJFDhrlOTYm2Co5T1v/Hk4NLMRh4GYyOviwIWqiw/c4+c7FhQBv3eiXIB3SWZT9CPQ
+         gPGNV+sf4xgF/fA/VuvUGrjkSiwTeOcscEgx9vozS8FnBvmh7Mw4HfDeQAwmX5aAhAoW
+         xy+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723187333; x=1723792133;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TSZy4qeB9prpZkXZFFSCy09Nr7J/x1zL/3+bFofkJV8=;
-        b=fBZ8z3DMD8iEOQqgqhkbiRgi0Err+SFMqZQoIFJ3Rle8aATR52wlwm/gunNJD4uHf9
-         TRU2uZlBWiUY76wdFKaI5CgxY88HhG4XC+nYaXLA4VrHZofsRMWtX1VKB87hikCVs4RS
-         mtTq4VSrdoo6+6v0S5iS8X4+Rwe9e42pByYFWZXnFEgCA+Q8gr3s1qHbcAo0UBGb2qzt
-         RJhktK+xI2FSIgs2TLuVnRjunoNJ9BcIh7AQIKdE29EcK7mPgES0s5WdP5yWa79LbetJ
-         8nk2ruUR0duqgFUp1aPe7rPUQo4RbP2BgFz36tSOyiM0lIb8isHSUPWrT2L53FR4IGTJ
-         eZCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVqdITg6mVgGi865BbBK5fkJjlg7va4IlHlGNDfxFGG5ZmKM2M/V08O7mMOdBZ5BK79Wt5gMnPuF+sP82+aA1xd8o3NbW0PmeA=
-X-Gm-Message-State: AOJu0Yww3HtmJMamkUURHFZ8YZSisCDdfHCjLMbCAvDr1I1c1xt8P+DR
-	hqBuDqeVSzzDAQHYwDPKFFxnxWlXGvlgv11r9ZO1bbFzZmhxfqazuAdeHPFw9g==
-X-Google-Smtp-Source: AGHT+IEojA8/Dm/IiJ94OPxhJiSpOpo4eMo23qz6LSsMPk8j238AnhJYY+ravisXXY3kEbh0Zu1A8A==
-X-Received: by 2002:a17:903:41ca:b0:1fb:7435:c2cc with SMTP id d9443c01a7336-200ae5e6889mr6909505ad.45.1723187333055;
-        Fri, 09 Aug 2024 00:08:53 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:e48b:2b26:14f9:21cb])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff59294515sm136254215ad.244.2024.08.09.00.08.50
+        d=1e100.net; s=20230601; t=1723188072; x=1723792872;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jJ7sJqSF1TkQHDuuGssihp9fwsv9r97LCZqEA521fL0=;
+        b=R872k0PPXgLGRuxnTJT6zC/O92SkaGNeX/pI3XjSjf4zum6GinfK56qw9iWfxrhxYE
+         Ac//Qayx1LgPqUm6cpUPomls0SueA2YqKeJMGZyCoqYopFIzTg1TkEM0RHtTR7auYymz
+         xK748FO05hLjstkqlZ+btf7xc54mSRZCblJi7cDgFbSl52gDMyPJ24toXkPzOtLkUF5o
+         ZYKLZbjSCw5pQjHz9rTujNUrbqm18ccw80+JpRvTUtumeLNpz4rHuxC0Fq2HabSo1RxP
+         4HjsMfSUTakW+VjvXoCWo4hsHYBIEOuCD03nF3/Ln+5PasFu+LttVCm59vY6oQ9Kju/D
+         SZ0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVQl/XY4QLBZjurMJ4QIepQq9D20u/o0lJWb6kvcTozHRaAqbAxw0lgdwsvK6FyifLIrZLFgd/u75sxOeAILK00KmQQk5BFf/w=
+X-Gm-Message-State: AOJu0YxcCfh8gQ57M5yTzF4y8LpPl5850H8ORKyL/lqB6V9qVxLcXAL3
+	CjtV5G3DxvDtwmGP8/YI8Ne+XYIYkmbTAVhskxYGYFMPyKMPjW/mbG9mBKmkrQY=
+X-Google-Smtp-Source: AGHT+IF1i8beM8uAfXZssupMAVGlCAp1gZOrRbekA77KTQLwPssMRWulWeZsjxYUnURP0YkIw6Sxaw==
+X-Received: by 2002:a17:902:f68c:b0:1fb:9cbf:b4e3 with SMTP id d9443c01a7336-200ae5d85d1mr12384395ad.22.1723188072489;
+        Fri, 09 Aug 2024 00:21:12 -0700 (PDT)
+Received: from localhost ([122.172.84.129])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff59058d20sm136717635ad.175.2024.08.09.00.21.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Aug 2024 00:08:52 -0700 (PDT)
-From: Chen-Yu Tsai <wenst@chromium.org>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>
-Cc: Icenowy Zheng <uwu@icenowy.me>,
-	Mark Brown <broonie@kernel.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	=?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	linux-mediatek@lists.infradead.org,
-	Hsin-Te Yuan <yuanhsinte@chromium.org>,
-	Chen-Yu Tsai <wenst@chromium.org>
-Subject: [PATCH v2] thermal/of: support thermal zones w/o trips subnode
-Date: Fri,  9 Aug 2024 15:08:19 +0800
-Message-ID: <20240809070822.2835371-1-wenst@chromium.org>
-X-Mailer: git-send-email 2.46.0.76.ge559c4bf1a-goog
+        Fri, 09 Aug 2024 00:21:11 -0700 (PDT)
+Date: Fri, 9 Aug 2024 12:51:09 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+Cc: ray.huang@amd.com, gautham.shenoy@amd.com, mario.limonciello@amd.com,
+	perry.yuan@amd.com, rafael@kernel.org, li.meng@amd.com,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] cpufreq/amd-pstate: Add the missing cpufreq_cpu_put()
+Message-ID: <20240809072109.ygel62d4333shkrw@vireshk-i7>
+References: <20240809060815.21518-1-Dhananjay.Ugwekar@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240809060815.21518-1-Dhananjay.Ugwekar@amd.com>
 
-From: Icenowy Zheng <uwu@icenowy.me>
+On 09-08-24, 06:08, Dhananjay Ugwekar wrote:
+> Fix the reference counting of cpufreq_policy object in amd_pstate_update()
+> function by adding the missing cpufreq_cpu_put().
+> 
+> Fixes: e8f555daacd3 ("cpufreq/amd-pstate: fix setting policy current frequency value")
+> Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+> Reviewed-by: Perry Yuan <perry.yuan@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 68c616b572f2..eff039ba49ee 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -554,12 +554,15 @@ static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
+>  	}
+>  
+>  	if (value == prev)
+> -		return;
+> +		goto cpufreq_policy_put;
+>  
+>  	WRITE_ONCE(cpudata->cppc_req_cached, value);
+>  
+>  	amd_pstate_update_perf(cpudata, min_perf, des_perf,
+>  			       max_perf, fast_switch);
+> +
+> +cpufreq_policy_put:
+> +	cpufreq_cpu_put(policy);
+>  }
+>  
+>  static int amd_pstate_verify(struct cpufreq_policy_data *policy)
 
-Although the current device tree binding of thermal zones require the
-trips subnode, the binding in kernel v5.15 does not require it, and many
-device trees shipped with the kernel, for example,
-allwinner/sun50i-a64.dtsi and mediatek/mt8183-kukui.dtsi in ARM64, still
-comply to the old binding and contain no trips subnode.
+Applied. Thanks.
 
-Allow the code to successfully register thermal zones w/o trips subnode
-for DT binding compatibility now.
-
-Furtherly, the inconsistency between DTs and bindings should be resolved
-by either adding empty trips subnode or dropping the trips subnode
-requirement.
-
-Fixes: d0c75fa2c17f ("thermal/of: Initialize trip points separately")
-Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-Reviewed-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
----
-Resurrecting this patch specifically for MediaTek MT8183 Kukui devices.
-
-Changes since v1:
-- set *ntrips at beginning of thermal_of_trips_init()
-- Keep goto out_of_node_put in of_get_child_count(trips) == 0 branch
-- Check return value of thermal_of_trips_init(), if it is -ENXIO, print
-  warning and clear |trips| pointer
-- Drop |mask| change, as the variable was removed
-
-I kept Mark's reviewed-by since the changes are more stylish than
-functional.
----
- drivers/thermal/thermal_of.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index aa34b6e82e26..f237e74c92fc 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -128,16 +128,17 @@ static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *n
- 	struct device_node *trips, *trip;
- 	int ret, count;
- 
-+	*ntrips = 0;
- 	trips = of_get_child_by_name(np, "trips");
- 	if (!trips) {
--		pr_err("Failed to find 'trips' node\n");
--		return ERR_PTR(-EINVAL);
-+		pr_debug("Failed to find 'trips' node\n");
-+		return ERR_PTR(-ENXIO);
- 	}
- 
- 	count = of_get_child_count(trips);
- 	if (!count) {
--		pr_err("No trip point defined\n");
--		ret = -EINVAL;
-+		pr_debug("No trip point defined\n");
-+		ret = -ENXIO;
- 		goto out_of_node_put;
- 	}
- 
-@@ -162,7 +163,6 @@ static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *n
- 
- out_kfree:
- 	kfree(tt);
--	*ntrips = 0;
- out_of_node_put:
- 	of_node_put(trips);
- 
-@@ -490,8 +490,13 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
- 
- 	trips = thermal_of_trips_init(np, &ntrips);
- 	if (IS_ERR(trips)) {
--		pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
--		return ERR_CAST(trips);
-+		if (PTR_ERR(trips) != -ENXIO) {
-+			pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
-+			return ERR_CAST(trips);
-+		}
-+
-+		pr_warn("Failed to find trip points for %pOFn id=%d\n", sensor, id);
-+		trips = NULL;
- 	}
- 
- 	ret = thermal_of_monitor_init(np, &delay, &pdelay);
 -- 
-2.46.0.76.ge559c4bf1a-goog
-
+viresh
 
