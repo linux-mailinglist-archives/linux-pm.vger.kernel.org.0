@@ -1,215 +1,115 @@
-Return-Path: <linux-pm+bounces-12021-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12022-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E19C294C915
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 06:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E4BBC94C983
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 07:15:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18C0F1F2253C
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 04:19:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70FD51F2369D
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 05:15:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 940965FB9C;
-	Fri,  9 Aug 2024 04:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B342216C440;
+	Fri,  9 Aug 2024 05:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="GtcSSH/2"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NXEypYFx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA37182BD;
-	Fri,  9 Aug 2024 04:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1542D16B74D
+	for <linux-pm@vger.kernel.org>; Fri,  9 Aug 2024 05:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723177171; cv=none; b=Rg8CCNQqzHUr8BzIjAdNkaAmyqyX1iydCs2y4BaT7OW0EO0nJrvne+9f0izkXDebdnS9Krj0uUjBCOoDGERle0ruN/NyxLWTmWPb8wyBm06BPqk9Sf/1ZmYIymw0+Vi9iFpmuAIfRJMgR7XdSKx1k74+nj3kZWq2Pj7CLFJOP9o=
+	t=1723180501; cv=none; b=qEC+i5S5J4TyZ9sQmi6jqqqY6uA7pM8fetRN5Ydv2V95XJLFklCTl0CP/kZ4bLZVjFLXVWR901RL6QXuJrjOxdGJZXwajx6XMV2Z2TkHMV80HRR5qE1qwSSjl7Els1c1nLeoFWRWXRuU1VTjzm8gwDkuIokBMvXgOS5iegmWOcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723177171; c=relaxed/simple;
-	bh=T+IR90vCl/ybRqWqiniM0YHXaQXuAi46GttcRjTx16k=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IBLH2AsrTygah8T/9gErzqvNrvrpVIYNuB6EwyXTowdioxXY+pBZciIqF8xAGva80Qv1c0sQpvSZcoyiXHEs5yvZHQB8V5bTZPFSsabQU02w0nLR6T5bBtJe8ePcPR9DZdOjvE9Vrr2s27YzJeoqigCwozm3TJRlidatV1nEf2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=GtcSSH/2; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4794JFNR110853;
-	Thu, 8 Aug 2024 23:19:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1723177155;
-	bh=w0KreaZsLFoMJJTOWogDLvkF2PqIqokxZLI4HI9MM2w=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=GtcSSH/2My2Npq0I4OwELgMmitjpphVRiDDDQlgZi5ZGpwXCEeQtLV+i2MihR3nX8
-	 QaIyi+b1zI18M6cIIG5NnL3n0jBWDmuAJq/m1BG2as2RYzaD0P2hsIieOvLuE5KHN3
-	 pfqzAm6B8XJi8Fp8mVMQFPBDL3xEyrh6hWRaPHu4=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4794JFAu124014
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 8 Aug 2024 23:19:15 -0500
-Received: from lewvowa02.ent.ti.com (10.180.75.80) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 8
- Aug 2024 23:19:15 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by lewvowa02.ent.ti.com
- (10.180.75.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2507.34; Thu, 8 Aug
- 2024 23:19:14 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 8 Aug 2024 23:19:14 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4794JEDR071971;
-	Thu, 8 Aug 2024 23:19:14 -0500
-Date: Fri, 9 Aug 2024 09:49:13 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Dikshita Agarwal <quic_dikshita@quicinc.com>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        "Len
- Brown" <len.brown@intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Stanimir Varbanov
-	<stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio"
-	<konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf
- Hansson <ulf.hansson@linaro.org>,
-        "Bryan O'Donoghue"
-	<bryan.odonoghue@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] PM: domains: add device managed version of
- dev_pm_domain_attach|detach_list()
-Message-ID: <20240809041913.frh4ooo25gfakwia@lcpd911>
-References: <1723014947-15571-1-git-send-email-quic_dikshita@quicinc.com>
- <1723014947-15571-2-git-send-email-quic_dikshita@quicinc.com>
- <20240808104130.3lehlvkcprag2md6@lcpd911>
- <36de7f9c-701f-6650-468b-bf07453e2e21@quicinc.com>
- <9b852bed-0daf-634c-13c9-00c6b8dd327a@quicinc.com>
+	s=arc-20240116; t=1723180501; c=relaxed/simple;
+	bh=TDCPxuODPaukuKZsL8kyvuCYXndR12/ClqxBAqUEu/I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QK1kpr3NS0BnoE/yhf6nFo36c14xRvi/CrODJeiQHx8kEvr05T5tK8KdvqxXsxTRUUkDvcooX/9xcs5zj6cy8GHc4mgc6XxemOkHfP09FUIRQ/p4V8bnOo1fLvHQWtPIOZamdKNhbVmvJRidRdAQ8N2oaJcXIMd2GPCcj8ZeKt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NXEypYFx; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7ae3d7222d4so1210905a12.3
+        for <linux-pm@vger.kernel.org>; Thu, 08 Aug 2024 22:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1723180499; x=1723785299; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ai4n1ojH4BrMxHYhxOPvkGHen4LMeRJtChl2a3se8Cs=;
+        b=NXEypYFx/362L5oG2CgLh6t1L98NQ1EEU8m9GKaVDqfxWQ1lN0M7u5UQBBdXdrtcBw
+         ys2i1NEDi5kKlpNNga2a17t/ikSDt+hfg9kOZi6YeZNHLvs9cwu/ckn4mCuT120b8A+M
+         u2LA/DjJlA2O2UmrGlO9vNs2O7RI0SFrW/ybzPlndq3OgKbxqcS3hgwiQzj6gG1IWixj
+         m/cFTtwD5iQQBrMviP4z/IuGThvyATrJ89GYvc2/86WVbnblS8Yy09Djdw3CypTRBvV2
+         +4v/ZaHTfmYkmO/AoYsOUdhO7o+heUi2yWVAdlGS1RrSpVeu9IZOcpfO6Nq00g372eaw
+         Dnpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723180499; x=1723785299;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ai4n1ojH4BrMxHYhxOPvkGHen4LMeRJtChl2a3se8Cs=;
+        b=VNaebdQLxbDU0MEMPwKFCVGJ8r5duOgRKJjKy0XCVV7JqCk7vbkMdsz5p3qaRGeQ2+
+         ILH3LF0r2Wd4rlUHI8tW6Pf3Jrf3Gbq3s3W4ZG+nESNOe6ASZIs87AvgD2iLkGxHy3mf
+         5gserfZehcazaFF1PYcXzhB6fWvYICHxfC7uqdOdzOnexDrZ18PxzkAssuShPy1v0FuH
+         LJwGLvAU78hMSVJHA/gbpy4wGwz4d6MXeiUcSfUkp8EkTX1enrMeQVmGr2dCiKbl/ONT
+         6ZYzxsRCsi7JTrrNNyhtMFFmlSfyIYnRCPHokyPJLfEYvISn9lQVGdQE/X5ypQgAY6Mq
+         QZaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVhm3KUzTka6XSSkMN3iE1jwZYWJL+OyiBSimpOi/GcmbfqVDFe0gLSIiijxWkNvIjHdIPO/GCULIbcNxbGgjV05AOC1uagtCg=
+X-Gm-Message-State: AOJu0Yz/mX1samHvmmBYdBxqBAe9GGikYixrlf2kCF/6rlHyPoE66A42
+	lUolqn0j7z8/GicmnrCQifqwnqq6xu7W4dC6mBAXqswqYo7a1I0qTFxpH7+kyMY=
+X-Google-Smtp-Source: AGHT+IE/QAvLW2koC535BQ4c0HdzUo6YI0VqTDy0Vl7iBvIPYYqVQatuesL1BwYWFpNjl9gKrC8TPg==
+X-Received: by 2002:a05:6a21:3a4b:b0:1c1:89f8:8609 with SMTP id adf61e73a8af0-1c89f9c0f53mr723935637.0.1723180499370;
+        Thu, 08 Aug 2024 22:14:59 -0700 (PDT)
+Received: from localhost ([122.172.84.129])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d1c9c9d745sm2050554a91.28.2024.08.08.22.14.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Aug 2024 22:14:58 -0700 (PDT)
+Date: Fri, 9 Aug 2024 10:44:55 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+Cc: ray.huang@amd.com, gautham.shenoy@amd.com, mario.limonciello@amd.com,
+	perry.yuan@amd.com, rafael@kernel.org, li.meng@amd.com,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] cpufreq/amd-pstate: Add the missing cpufreq_cpu_put()
+Message-ID: <20240809051455.eswe346caiee6gpp@vireshk-i7>
+References: <20240808123651.3741-1-Dhananjay.Ugwekar@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9b852bed-0daf-634c-13c9-00c6b8dd327a@quicinc.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20240808123651.3741-1-Dhananjay.Ugwekar@amd.com>
 
-Hi,
-
-On Aug 08, 2024 at 16:29:12 +0530, Dikshita Agarwal wrote:
+On 08-08-24, 12:36, Dhananjay Ugwekar wrote:
+> Fix the reference counting of cpufreq_policy object in amd_pstate_update()
+> function by adding the missing cpufreq_cpu_put().
 > 
+> Fixes: e8f555daacd3 ("cpufreq/amd-pstate: fix setting policy current frequency value")
+> Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+> Reviewed-by: Perry Yuan <perry.yuan@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> On 8/8/2024 4:25 PM, Dikshita Agarwal wrote:
-> > 
-> > 
-> > On 8/8/2024 4:11 PM, Dhruva Gole wrote:
-> >> On Aug 07, 2024 at 12:45:46 +0530, Dikshita Agarwal wrote:
-> >>> Add the devres-enabled version of dev_pm_domain_attach|detach_list.
-> >>> If client drivers use devm_pm_domain_attach_list() to attach the
-> >>> PM domains, devm_pm_domain_detach_list() will be invoked implicitly
-> >>> during remove phase.
-> >>>
-> >>> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> >>> ---
-> >>>  drivers/base/power/common.c | 44 ++++++++++++++++++++++++++++++++++++++++++++
-> >>>  include/linux/pm_domain.h   | 13 +++++++++++++
-> >>>  2 files changed, 57 insertions(+)
-> >>>
-> >>> diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
-> >>> index 327d168..729d6c2 100644
-> >>> --- a/drivers/base/power/common.c
-> >>> +++ b/drivers/base/power/common.c
-> >>> @@ -277,6 +277,50 @@ int dev_pm_domain_attach_list(struct device *dev,
-> >>>  EXPORT_SYMBOL_GPL(dev_pm_domain_attach_list);
-> >>>  
-> >>>  /**
-> >>> + * devm_pm_domain_detach_list - devres-enabled version of dev_pm_domain_detach_list.
-> >>> + * @_list: The list of PM domains to detach.
-> >>> + *
-> >>> + * This function reverse the actions from devm_pm_domain_attach_list().
-> >>> + * it will be invoked during the remove phase from drivers implicitly if driver
-> >>> + * uses devm_pm_domain_attach_list() to attach the PM domains.
-> >>> + */
-> >>> +void devm_pm_domain_detach_list(void *_list)
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 804fab4ebb26..36edae40db1a 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -560,6 +560,8 @@ static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
+>  
+>  	amd_pstate_update_perf(cpudata, min_perf, des_perf,
+>  			       max_perf, fast_switch);
+> +
+> +	cpufreq_cpu_put(policy);
 
-My problem is with the type of parameter used being void, why void?
-Why not be explicit about it and call it dev_pm_domain_list *list like
-the non-devres version of the API?
-
-> >>> +{
-> >>> +	struct dev_pm_domain_list *list = _list;
-> >>> +
-> >>> +	dev_pm_domain_detach_list(list);
-> >>> +}
-> >>> +EXPORT_SYMBOL_GPL(devm_pm_domain_detach_list);
-> >>> +
-> >>> +/**
-> >>> + * devm_pm_domain_attach_list - devres-enabled version of dev_pm_domain_attach_list
-> >>> + * @dev: The device used to lookup the PM domains for.
-> >>> + * @data: The data used for attaching to the PM domains.
-> >>> + * @list: An out-parameter with an allocated list of attached PM domains.
-> >>> + *
-> >>> + * NOTE: this will also handle calling devm_pm_domain_detach_list() for
-> >>> + * you during remove phase.
-> >>> + *
-> >>> + * Returns the number of attached PM domains or a negative error code in case of
-> >>> + * a failure.
-> >>> + */
-> >>> +int devm_pm_domain_attach_list(struct device *dev,
-> >>> +			       const struct dev_pm_domain_attach_data *data,
-> >>> +			       struct dev_pm_domain_list **list)
-> >>> +{
-> >>> +	int ret, num_pds = 0;
-> >>
-> >> Do we require this =0? In the very next line you're initing this anyway.
-> >>
-> > That's correct, will fix this. Thanks.
-> >>> +
-> >>> +	num_pds = dev_pm_domain_attach_list(dev, data, list);
-> >>> +
-> >>> +	ret = devm_add_action_or_reset(dev, devm_pm_domain_detach_list, *list);
-> >>> +	if (ret)
-> >>> +		return ret;
-> >>> +
-> >>> +	return num_pds;
-> >>> +}
-> >>> +EXPORT_SYMBOL_GPL(devm_pm_domain_attach_list);
-> >>> +
-> >>> +/**
-> >>>   * dev_pm_domain_detach - Detach a device from its PM domain.
-> >>>   * @dev: Device to detach.
-> >>>   * @power_off: Used to indicate whether we should power off the device.
-> >>> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> >>> index 772d328..efd517017 100644
-> >>> --- a/include/linux/pm_domain.h
-> >>> +++ b/include/linux/pm_domain.h
-> >>> @@ -450,8 +450,12 @@ struct device *dev_pm_domain_attach_by_name(struct device *dev,
-> >>>  int dev_pm_domain_attach_list(struct device *dev,
-> >>>  			      const struct dev_pm_domain_attach_data *data,
-> >>>  			      struct dev_pm_domain_list **list);
-> >>> +int devm_pm_domain_attach_list(struct device *dev,
-> >>> +			       const struct dev_pm_domain_attach_data *data,
-> >>> +			       struct dev_pm_domain_list **list);
-> >>>  void dev_pm_domain_detach(struct device *dev, bool power_off);
-> >>>  void dev_pm_domain_detach_list(struct dev_pm_domain_list *list);
-> >>> +void devm_pm_domain_detach_list(void *list);
-> >>
-> >> Why not just call it dev_pm_domain_list *list? Why make it void? I am a
-> >> bit confused.
-> >>
-> > This comment is not clear to me, could you pls elaborate?
-> Ah! Sorry, pls ignore my below comment. But can you still explain the
-> concern here?
-
-I have explained above near the func definition.
+There is an early return path in this routine, which still doesn't
+perform this action.
 
 -- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+viresh
 
