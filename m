@@ -1,165 +1,113 @@
-Return-Path: <linux-pm+bounces-12041-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12042-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9863F94CDF0
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 12:01:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C5DE94D0A9
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 14:58:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F5F01F22F19
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 10:01:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C1342837BD
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 12:58:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D83E61922DB;
-	Fri,  9 Aug 2024 09:49:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D889C194A40;
+	Fri,  9 Aug 2024 12:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="EjlOaKFD"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="fIGHu2gk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CF01946BC;
-	Fri,  9 Aug 2024 09:49:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723196958; cv=none; b=D3Lz9aKsvtOpZdIddKSvPoRMIC2/NCrvu9YVvHcGB2jyjS5jsPjdiKCv0zFZpR5WuJ9PgQdG7HWzDfuzjHWB0Lau7CE++pQ65NdzoQiciJ2ebHFMgNKsW5GedMoNPshB8TedsYM+Kvrn4Tn7dj+vFaIzvJupvjFR+YqlH5u6Gkc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723196958; c=relaxed/simple;
-	bh=m3nNUq1Sj4RVBOMVUtGmILRYiTnZttmoSx8eySOiKoM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DMgX0jsTEpZHwpvTgrSZlenzX1ngTH9bxMJI421d+PuLjxOdSVyAAe1CzKDaLqy1jJNKUjAZSRw83cbQaXSVUnunsdvtXQsKhtM1bXtRNnokKBDrL5gs2OfuKNryAZNoKM4YlE30Pl/yaXK4KidaRTCQBuWmxZQinmFitOnEyNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=EjlOaKFD; arc=none smtp.client-ip=198.47.19.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4799n1TO020669;
-	Fri, 9 Aug 2024 04:49:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1723196942;
-	bh=hY2Hom1U5rajQJIcxGTIqwywMIol0o2qmrQZlrCSEMs=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=EjlOaKFDnc5wx/aswCwa2KmjMyJtAOLp7TpGelwhj9BYarFZcSx5NmKTFaWGTRLf2
-	 wHMj9Jwj+JV5lSKgo7QVBWBNcFPKHwr4yrrsqA0gMRa9x7RpkhpkeB7An3k+LHGtsN
-	 RoGScAp4cPaqoGPJlcJkCUox4bJGHD4xhgKjyRYM=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4799n1PQ019962
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 9 Aug 2024 04:49:01 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 9
- Aug 2024 04:49:01 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 9 Aug 2024 04:49:01 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4799n0Wr073307;
-	Fri, 9 Aug 2024 04:49:01 -0500
-Date: Fri, 9 Aug 2024 15:19:00 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Dikshita Agarwal <quic_dikshita@quicinc.com>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len
- Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia
-	<quic_vgarodia@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad
- Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab
-	<mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Bryan O'Donoghue"
-	<bryan.odonoghue@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] PM: domains: add device managed version of
- dev_pm_domain_attach|detach_list()
-Message-ID: <20240809094900.j5c2q6gm72ycheeu@lcpd911>
-References: <1723014947-15571-1-git-send-email-quic_dikshita@quicinc.com>
- <1723014947-15571-2-git-send-email-quic_dikshita@quicinc.com>
- <20240808104130.3lehlvkcprag2md6@lcpd911>
- <36de7f9c-701f-6650-468b-bf07453e2e21@quicinc.com>
- <9b852bed-0daf-634c-13c9-00c6b8dd327a@quicinc.com>
- <20240809041913.frh4ooo25gfakwia@lcpd911>
- <b16a25d0-3f39-3231-bc80-d79739dc0168@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5C71E49B;
+	Fri,  9 Aug 2024 12:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723208309; cv=pass; b=Chop2Qd7Hp13aQlH9mpgBUCdIdzJnzcJ+NTcjw2OVgIZ3Isj+tjwLkUtYXQvGmVnxg8pJCfi5TEheMHSNi2qGnprmMaBhds+x2WE81VsnY6c4j1isWwGB4ij2+G8MtCsSOR2KPqBH3I9uNVdvBgYL6HiRiu0K1hYM7zFrH5cA/o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723208309; c=relaxed/simple;
+	bh=B1akwv+Nz2NEkiz/ydKyogdQBAECDgmEFMQcdLxjl3c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V+zFrtp52jWBi+jQGmroiAJb1bY40LO+cgcDbgCh03O9KAKNLPAlQKwcvn6xhmF5OdxER2oSb/GOzvRSFwN0xA3UduhDzSGwxmnWXHU013LgXrhRZ8Jr4v5ruKM5Fw9nnJCIgL3G9UX8JHD1JrGrQK1f7cWbsFtTonF+HaAxBSg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=fIGHu2gk; arc=pass smtp.client-ip=136.143.188.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Delivered-To: detlev.casanova@collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1723208289; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=TFYc5GC2InGK2vJkzxzVWTL9GN3QpNSaShANM3c8hq4SgcO1sj7ZN26EMVdkVgi9WHi/+uGr9eVriYY4F0vUiq6wWIRrHWLQu3oqPvn0J/YvKrKBzHhH8LJFZtBB/JzBefzTGkI/nXpuY28RWtV749aXz0Lm1XJQkqN3FuPzM3Q=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1723208289; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=QgHKMVm9qef45pCQ2A52WWjlGN1Vwr37tZFt+U9C6FE=; 
+	b=FPRT68Kuzo0e0ITTlViZO1K3d6GeY5cFy3axyw9CfuO9gWf3TBiWPnHnlY9t2H1Uv3TwVLNzVAChWPP1UiAa3UqkgbGmo4GXysKHpXG8w6UggkajXAFPcu/xlwa+Onuiq6+JuwIugeeBH4FHJBwvVPu5xmuQsGCM834hptoM1jc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=detlev.casanova@collabora.com;
+	dmarc=pass header.from=<detlev.casanova@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1723208289;
+	s=zohomail; d=collabora.com; i=detlev.casanova@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=QgHKMVm9qef45pCQ2A52WWjlGN1Vwr37tZFt+U9C6FE=;
+	b=fIGHu2gkMWgQrvoFr4Icwf3IrBEmG2HcFbaT1oBi9exQv5l/ODSUYIcTgt8o82n8
+	JQnvdf7a6hdrZ8BRZXDEBC74B7opNzWwO+XH7JzKLw7Nr/RHX99XKhvpUESckFERHOl
+	xGEwM73kr58aJrqEENWKA3YH+XWquhtd2Opf9sLk=
+Received: by mx.zohomail.com with SMTPS id 1723208288516683.9262197649491;
+	Fri, 9 Aug 2024 05:58:08 -0700 (PDT)
+From: Detlev Casanova <detlev.casanova@collabora.com>
+To: linux-kernel@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Finley Xiao <finley.xiao@rock-chips.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Jagan Teki <jagan@edgeble.ai>,
+	Elaine Zhang <zhangqing@rock-chips.com>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	kernel@collabora.com
+Subject: [PATCH v3 0/2] Add power-controller support for rk3576
+Date: Fri,  9 Aug 2024 08:58:03 -0400
+Message-ID: <20240809125925.4295-1-detlev.casanova@collabora.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <b16a25d0-3f39-3231-bc80-d79739dc0168@quicinc.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-Hi,
+Add support for the power domain controller on the rk3576 SoC.
+Patches from downstream have been rebased.
 
-On Aug 09, 2024 at 14:57:11 +0530, Dikshita Agarwal wrote:
-> 
-> 
-> On 8/9/2024 9:49 AM, Dhruva Gole wrote:
-> > Hi,
-> > 
-> > On Aug 08, 2024 at 16:29:12 +0530, Dikshita Agarwal wrote:
-> >>
-> >>
-> >> On 8/8/2024 4:25 PM, Dikshita Agarwal wrote:
-> >>>
-> >>>
-> >>> On 8/8/2024 4:11 PM, Dhruva Gole wrote:
-> >>>> On Aug 07, 2024 at 12:45:46 +0530, Dikshita Agarwal wrote:
-> >>>>> Add the devres-enabled version of dev_pm_domain_attach|detach_list.
-> >>>>> If client drivers use devm_pm_domain_attach_list() to attach the
-> >>>>> PM domains, devm_pm_domain_detach_list() will be invoked implicitly
-> >>>>> during remove phase.
-> >>>>>
-> >>>>> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> >>>>> ---
-> >>>>>  drivers/base/power/common.c | 44 ++++++++++++++++++++++++++++++++++++++++++++
-> >>>>>  include/linux/pm_domain.h   | 13 +++++++++++++
-> >>>>>  2 files changed, 57 insertions(+)
-> >>>>>
-> >>>>> diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
-> >>>>> index 327d168..729d6c2 100644
-> >>>>> --- a/drivers/base/power/common.c
-> >>>>> +++ b/drivers/base/power/common.c
-> >>>>> @@ -277,6 +277,50 @@ int dev_pm_domain_attach_list(struct device *dev,
-> >>>>>  EXPORT_SYMBOL_GPL(dev_pm_domain_attach_list);
-> >>>>>  
-> >>>>>  /**
-> >>>>> + * devm_pm_domain_detach_list - devres-enabled version of dev_pm_domain_detach_list.
-> >>>>> + * @_list: The list of PM domains to detach.
-> >>>>> + *
-> >>>>> + * This function reverse the actions from devm_pm_domain_attach_list().
-> >>>>> + * it will be invoked during the remove phase from drivers implicitly if driver
-> >>>>> + * uses devm_pm_domain_attach_list() to attach the PM domains.
-> >>>>> + */
-> >>>>> +void devm_pm_domain_detach_list(void *_list)
-> > 
-> > My problem is with the type of parameter used being void, why void?
-> > Why not be explicit about it and call it dev_pm_domain_list *list like
-> > the non-devres version of the API?
-> > 
-> devm_add_action_or_reset API expects the argument as void (*)(void *).
-> 
-> Below are code references following the same way:
-> https://elixir.bootlin.com/linux/v6.11-rc2/source/drivers/devfreq/devfreq.c#L1332
-> https://elixir.bootlin.com/linux/v6.11-rc2/source/drivers/clk/clk.c#L1033
-> 
-> If I change the type of argument as you are suggesting, it will throw
-> compilation error.
-> "expected 'void (*)(void *)' but argument is of type 'void (*)(struct
-> dev_pm_domain_list *)'"
+Note that the mentioned TRM is not publicly available.
 
-Ah yes sorry I missed the devm_add_action_or_reset part. Thanks for clarifying!
+Changes since v2:
+- Remove unused delay for npu and vop
 
+Changes since v1:
+- Rename rk3576-power.h to rockchip,rk3576-power.h
+- Add memory reset support
+- Squashed header files with bindings commit
+- Updated license
+- Fix commit messages for subsystem.
+
+Finley Xiao (2):
+  dt-bindings: power: Add support for RK3576 SoC
+  pmdomain: rockchip: Add support for rk3576 SoC
+
+ .../power/rockchip,power-controller.yaml      |  1 +
+ drivers/pmdomain/rockchip/pm-domains.c        | 66 ++++++++++++++++++-
+ .../dt-bindings/power/rockchip,rk3576-power.h | 30 +++++++++
+ 3 files changed, 95 insertions(+), 2 deletions(-)
+ create mode 100644 include/dt-bindings/power/rockchip,rk3576-power.h
 
 -- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+2.46.0
+
 
