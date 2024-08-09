@@ -1,134 +1,234 @@
-Return-Path: <linux-pm+bounces-12037-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12038-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9096E94CB90
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 09:42:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4781394CC68
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 10:37:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 488E0281D0A
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 07:42:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB157282ED7
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 08:37:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FFA917CA19;
-	Fri,  9 Aug 2024 07:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3C7D18DF93;
+	Fri,  9 Aug 2024 08:37:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X+XSFMzL"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="A6gj3Ghd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB8917CA0B
-	for <linux-pm@vger.kernel.org>; Fri,  9 Aug 2024 07:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A6C175D2C;
+	Fri,  9 Aug 2024 08:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723189368; cv=none; b=ujFP55C40y5udZUHpow3khMypyGqYCqa7sAzP9PkmBTHgRJCLstntItVCLm8jIssng1sQ3IjUCadh2k04aPWymlsfsLJN/KMIGWbBOZbT3BAC3H0Aw4hpODW3DOk4y6iXTdph/zmAo67dhgeaCv7039A5/i4fYgrOIwHZ6Xjfug=
+	t=1723192665; cv=none; b=XJsJm4CZ258TFRcrsGpbSrJHL+85iWIELfOfVxoqGSQFVfLaExpeM+Rzq336NAkZbxJnQsaSbbvFqgz/xp6ddQp+hzRPEyKZ52PQYlwLNldrzs+v6vZT0Q0dEpEQXSTEo3+mwBTl3s467I5yYksCjZMkMWyFCC1tGtqJamdEaNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723189368; c=relaxed/simple;
-	bh=iqpqY4Mz02a4XXRlY5NSi535Wlig7PeZ+dkLg0mpRq8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PMtuZoBAEaJzCC9Exv0EOVUc9sBL+yocxnFMFc8cyoqO5AatKdkWwZ1TMFRW6TqCZdGu2khzDpJlA/0osvTv6/QoJh2c+vizfO5rJtpOn5bEtCs/Nbdhb5y80UR90ZOzgiSFHf/5amo44rUkmOaKvPhlmxbr0gGPZffv8k0304U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X+XSFMzL; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1723189365;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3mzbNoONi9GdzgSxgBM7Loyz11zvAii/cozyn0JFv8s=;
-	b=X+XSFMzLZ/N1d9UAQcZo5lFEqHdI5zbFf0exXufmilIWef9PvcQoxDK16APW9s8L8PcHdE
-	KluhjnQryV+5WuOtlGf1S4234YOj1KdSZSM1cLWFCK8rfQpn3sxSUAYT9q5JjdyrI20Nfk
-	mc+TmKFiMzZsDy1O7lwUNYw4tkaWM3Y=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-622-vCwhgRr-M8Wqau77cbMdNQ-1; Fri, 09 Aug 2024 03:42:44 -0400
-X-MC-Unique: vCwhgRr-M8Wqau77cbMdNQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4280a39ecebso13537125e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 09 Aug 2024 00:42:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723189362; x=1723794162;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3mzbNoONi9GdzgSxgBM7Loyz11zvAii/cozyn0JFv8s=;
-        b=t7/gKQCR2K9CVnrLZ7Qq86LiH8Ki2c9WUfb7kuMnlI3mQRftQlkGhhshTHhdeRAl77
-         lXuXQ/w1Zc2ZHBXvNDMp5J4OIGnOp6acI6TM9YStHIcyjAzubUQYz9GYtZrqkpLdNZlw
-         LWp9kJv3/YRaqJeJVj3XjYjOfTA7E6X8wJ3a9MD2wFlMVbVUmb/d54n8uLFCDBI1gc+F
-         dZQqHA2fADWXegTSkISLuMBuELwz+IPRFcC8Qfh7o16B+AgZWDzaeznYOhc5GKfGUm6i
-         xgGdB4PPSaEmIECTPyAwzZ0aihXUHoO2l4bL6qygFdBDGOMo6xl2Zoqqim9ft6ObwYX8
-         pbPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUInFQeEDG0tEC+G5UJ7EfpoobJ1a4F3DzCPhwr2wxl/YWxXqAOgqTRTG1hpanbWuAyMMoVh9G7c3KN3iGx6vSc/VmG38z8Kmw=
-X-Gm-Message-State: AOJu0Yz2uD3NG4qBLk/CsIrJEWK3PifjkNXJH/53jqOd3I3/nKuaMntC
-	zaeztjlpQWmB9yVm8P6YCePpRbAqiJgbcM1tKdOHmBxC1PQktVF50yic30EynbPJsjdl4uEuIbz
-	k7nFfn+D5zz4rIWEvpGQTPbDcDhanKr7QH4sSsf+MkJCcEOgtSCzpFTctd9riksJo
-X-Received: by 2002:a05:600c:3ba1:b0:428:b4a:7001 with SMTP id 5b1f17b1804b1-4290b8ddf1bmr33446955e9.15.1723189362408;
-        Fri, 09 Aug 2024 00:42:42 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE7SDkNhvKREFsyY1hymxa4EHM9XWF0EINXQbTXDvdD7OWRKmOjdwEhS84+VW/DzwLaII9zcQ==
-X-Received: by 2002:a05:600c:3ba1:b0:428:b4a:7001 with SMTP id 5b1f17b1804b1-4290b8ddf1bmr33446755e9.15.1723189361912;
-        Fri, 09 Aug 2024 00:42:41 -0700 (PDT)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.159.67])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36d27208d75sm4399714f8f.85.2024.08.09.00.42.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Aug 2024 00:42:41 -0700 (PDT)
-Date: Fri, 9 Aug 2024 09:42:39 +0200
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Qais Yousef <qyousef@layalina.io>
-Cc: Christian Loehle <christian.loehle@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	linux-pm@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH] sched/cpufreq: Use USEC_PER_SEC for deadline task
-Message-ID: <ZrXIb7BFOWY11DKt@jlelli-thinkpadt14gen4.remote.csb>
-References: <3c726cf5-0c94-4cc6-aff0-a453d840d452@arm.com>
- <20240809012410.marjxrio3sjequnn@airbuntu>
+	s=arc-20240116; t=1723192665; c=relaxed/simple;
+	bh=DbdiK35ZHT81xhZmlHoEBlBPpDomQgJ+O53QLRkanhw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZJg5KdlveJml0HVOubkmMFAbOzpnok4xnUQujRCW2+oO0YzKwXT2tSzGVWp6a3jcac7oDRzhOEnE2XnOZiiu68slTIInYi+7NOzJClwjlVJX08Gzkyv+km+vtLP3gxZXzpyhBiEkeCc/MDTARHIUyA7MymFsO4uk31dyEIhWhU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=A6gj3Ghd; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4793wA2p004168;
+	Fri, 9 Aug 2024 08:37:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=pp1; bh=bdXccOGBFHWMrbokfBqeUhJBKL
+	haWV+1EvEX0h4uN0U=; b=A6gj3GhdqEhurn7bw9q33efnqUazpjApy8wJfPYhq8
+	kueOCKtoMiPVGbMiLpdduXKu/wmqG1bSjtLGcIz9cCh0JKZNFgA+opUZ/ieGWYSy
+	7/D//OWOSH25yO93VNxOAT7AiuNc0ioFgd1AbDQWX/h2EBZmxB7zMlCaFeFxelCL
+	J8CfUdV7z0EafpPwiri+Kr9Y47lgLKv2tZKS34zR9HO38TbxSsb8CfUyl8hcki5y
+	vCAGDA06s6pmR6B/6Qhk2KYYPFxsc5gxlIt9tVtS3VNDtcgSZyulo/wqKoFclyh/
+	9vTMoKfEnjDREHDscPyu+wKtmAJr5DEJL5aL+O2iYA6w==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40vwkcjc1k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 09 Aug 2024 08:37:36 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 47975MpV024212;
+	Fri, 9 Aug 2024 08:37:36 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40syvptp6m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 09 Aug 2024 08:37:36 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4798bWIj20709722
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 9 Aug 2024 08:37:34 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1DB9F20040;
+	Fri,  9 Aug 2024 08:37:32 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8DDF12004B;
+	Fri,  9 Aug 2024 08:37:30 +0000 (GMT)
+Received: from li-34d1fccc-27cd-11b2-a85c-c167793e56f7.ibm.com.com (unknown [9.43.8.213])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  9 Aug 2024 08:37:30 +0000 (GMT)
+From: Aboorva Devarajan <aboorvad@linux.ibm.com>
+To: trenn@suse.com, shuah@kernel.org
+Cc: aboorvad@linux.ibm.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] tools/cpupower: display residency value in idle-info
+Date: Fri,  9 Aug 2024 14:07:28 +0530
+Message-Id: <20240809083728.266697-1-aboorvad@linux.ibm.com>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240809012410.marjxrio3sjequnn@airbuntu>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: SS0vondixuuV1bKYk5yeH-CljjIwIpYe
+X-Proofpoint-GUID: SS0vondixuuV1bKYk5yeH-CljjIwIpYe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-09_05,2024-08-07_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=802 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1011 malwarescore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2408090064
 
-On 09/08/24 02:24, Qais Yousef wrote:
-> Adding more sched folks to CC
-> 
-> On 08/06/24 14:41, Christian Loehle wrote:
-> > Convert the sugov deadline task attributes to use the available
-> > definitions to make them more readable.
-> > No functional change.
-> > 
-> > Signed-off-by: Christian Loehle <christian.loehle@arm.com>
-> > ---
-> >  kernel/sched/cpufreq_schedutil.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > index eece6244f9d2..012b38a04894 100644
-> > --- a/kernel/sched/cpufreq_schedutil.c
-> > +++ b/kernel/sched/cpufreq_schedutil.c
-> > @@ -654,9 +654,9 @@ static int sugov_kthread_create(struct sugov_policy *sg_policy)
-> >  		 * Fake (unused) bandwidth; workaround to "fix"
-> >  		 * priority inheritance.
-> >  		 */
-> > -		.sched_runtime	=  1000000,
-> > -		.sched_deadline = 10000000,
-> > -		.sched_period	= 10000000,
-> > +		.sched_runtime	= USEC_PER_SEC,
-> > +		.sched_deadline = 10 * USEC_PER_SEC,
-> > +		.sched_period	= 10 * USEC_PER_SEC,
-> 
-> I think NSEC_PER_MSEC is the correct one. The units in
-> include/uapi/linux/sched/types.h is not specified. Had to look at
-> sched-deadline.rst to figure it out.
+Update cpuidle tool to display the residency value of cpuidle
+states. This addition provides a clearer and more detailed view
+of idle state information when using cpuidle-info.
 
-In practice it's the same number :). But, you are correct, we want
-1ms/10ms and unit is nanoseconds, so NSEC_PER_MSEC.
+ --------------------------------
+ Before Patch:
+ --------------------------------
+ $ cpupower idle-info
+ CPUidle driver: intel_idle
+ CPUidle governor: menu
+ analyzing CPU 28:
+
+ Number of idle states: 3
+ Available idle states: POLL C1 C1E
+ POLL:
+ Flags/Description: CPUIDLE CORE POLL IDLE
+ Latency: 0
+ Usage: 7448
+ Duration: 207170
+ C1:
+ Flags/Description: MWAIT 0x00
+ Latency: 2
+ Usage: 7023
+ Duration: 3736853
+ C1E:
+ Flags/Description: MWAIT 0x01
+ Latency: 10
+ Usage: 18468
+ Duration: 11396212
+
+ --------------------------------
+ After Patch:
+ --------------------------------
+ $ cpupower idle-info
+ CPUidle driver: intel_idle
+ CPUidle governor: menu
+ analyzing CPU 12:
+
+ Number of idle states: 3
+ Available idle states: POLL C1 C1E
+ POLL:
+ Flags/Description: CPUIDLE CORE POLL IDLE
+ Latency: 0
+ Residency: 0
+ Usage: 1950
+ Duration: 38458
+ C1:
+ Flags/Description: MWAIT 0x00
+ Latency: 2
+ Residency: 2
+ Usage: 10688
+ Duration: 7133020
+ C1E:
+ Flags/Description: MWAIT 0x01
+ Latency: 10
+ Residency: 20
+ Usage: 22356
+ Duration: 15687259
+ --------------------------------
+
+Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+---
+ tools/power/cpupower/lib/cpuidle.c        | 8 ++++++++
+ tools/power/cpupower/lib/cpuidle.h        | 2 ++
+ tools/power/cpupower/utils/cpuidle-info.c | 4 ++++
+ 3 files changed, 14 insertions(+)
+
+diff --git a/tools/power/cpupower/lib/cpuidle.c b/tools/power/cpupower/lib/cpuidle.c
+index 479c5971aa6d..0ecac009273c 100644
+--- a/tools/power/cpupower/lib/cpuidle.c
++++ b/tools/power/cpupower/lib/cpuidle.c
+@@ -116,6 +116,7 @@ enum idlestate_value {
+ 	IDLESTATE_USAGE,
+ 	IDLESTATE_POWER,
+ 	IDLESTATE_LATENCY,
++	IDLESTATE_RESIDENCY,
+ 	IDLESTATE_TIME,
+ 	IDLESTATE_DISABLE,
+ 	MAX_IDLESTATE_VALUE_FILES
+@@ -125,6 +126,7 @@ static const char *idlestate_value_files[MAX_IDLESTATE_VALUE_FILES] = {
+ 	[IDLESTATE_USAGE] = "usage",
+ 	[IDLESTATE_POWER] = "power",
+ 	[IDLESTATE_LATENCY] = "latency",
++	[IDLESTATE_RESIDENCY] = "residency",
+ 	[IDLESTATE_TIME]  = "time",
+ 	[IDLESTATE_DISABLE]  = "disable",
+ };
+@@ -254,6 +256,12 @@ unsigned long cpuidle_state_latency(unsigned int cpu,
+ 	return cpuidle_state_get_one_value(cpu, idlestate, IDLESTATE_LATENCY);
+ }
+ 
++unsigned long cpuidle_state_residency(unsigned int cpu,
++					  unsigned int idlestate)
++{
++	return cpuidle_state_get_one_value(cpu, idlestate, IDLESTATE_RESIDENCY);
++}
++
+ unsigned long cpuidle_state_usage(unsigned int cpu,
+ 					unsigned int idlestate)
+ {
+diff --git a/tools/power/cpupower/lib/cpuidle.h b/tools/power/cpupower/lib/cpuidle.h
+index 2e10fead2e1e..2ab404d40259 100644
+--- a/tools/power/cpupower/lib/cpuidle.h
++++ b/tools/power/cpupower/lib/cpuidle.h
+@@ -8,6 +8,8 @@ int cpuidle_state_disable(unsigned int cpu, unsigned int idlestate,
+ 				   unsigned int disable);
+ unsigned long cpuidle_state_latency(unsigned int cpu,
+ 						unsigned int idlestate);
++unsigned long cpuidle_state_residency(unsigned int cpu,
++						unsigned int idlestate);
+ unsigned long cpuidle_state_usage(unsigned int cpu,
+ 					unsigned int idlestate);
+ unsigned long long cpuidle_state_time(unsigned int cpu,
+diff --git a/tools/power/cpupower/utils/cpuidle-info.c b/tools/power/cpupower/utils/cpuidle-info.c
+index 44126a87fa7a..e0d17f0de3fe 100644
+--- a/tools/power/cpupower/utils/cpuidle-info.c
++++ b/tools/power/cpupower/utils/cpuidle-info.c
+@@ -64,6 +64,8 @@ static void cpuidle_cpu_output(unsigned int cpu, int verbose)
+ 
+ 		printf(_("Latency: %lu\n"),
+ 		       cpuidle_state_latency(cpu, idlestate));
++		printf(_("Residency: %lu\n"),
++		       cpuidle_state_residency(cpu, idlestate));
+ 		printf(_("Usage: %lu\n"),
+ 		       cpuidle_state_usage(cpu, idlestate));
+ 		printf(_("Duration: %llu\n"),
+@@ -115,6 +117,8 @@ static void proc_cpuidle_cpu_output(unsigned int cpu)
+ 		printf(_("promotion[--] demotion[--] "));
+ 		printf(_("latency[%03lu] "),
+ 		       cpuidle_state_latency(cpu, cstate));
++		printf(_("residency[%05lu] "),
++		       cpuidle_state_residency(cpu, cstate));
+ 		printf(_("usage[%08lu] "),
+ 		       cpuidle_state_usage(cpu, cstate));
+ 		printf(_("duration[%020Lu] \n"),
+-- 
+2.39.3
 
 
