@@ -1,176 +1,245 @@
-Return-Path: <linux-pm+bounces-12058-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12059-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4663994D806
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 22:25:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7941194DC61
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2024 13:07:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA490283347
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2024 20:25:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A25BE282595
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2024 11:07:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1CF815FD1B;
-	Fri,  9 Aug 2024 20:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B72E14D430;
+	Sat, 10 Aug 2024 11:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MlITpJiY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JQ/VT7Lv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49BE33D1;
-	Fri,  9 Aug 2024 20:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB1C2BB10;
+	Sat, 10 Aug 2024 11:06:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723235113; cv=none; b=Sr8Dzu0hjvSIKE5xOskcOIJeAdBUx11fWLJ54LxB7/YmAXlccEMAzk+KtYqFpoajFJUmjqoA+sTDA9q416keIWSTHDq1A4eMz5xqn/1IfGuYJ9H6euLR/qhq/BvPnk8iC5/BgEMFiKyvNZl11z+Fbt1SwTOVfTfv4K2ThvckID4=
+	t=1723288019; cv=none; b=MEvd2Uk7GvTw6OVDwdCyfe+Dssnx2SxZ86K3n701/PIoYgGpaeLV65XDY8aNipBcQsB5oSEA9OYQ0vFCYoeov3J+0EX+B7y4Krm4Q/eZMpj9GYvZY7uW3yrOxE3RK3ZialKigpjfVVXXHE5Scz5qbf+xkHXJyY2PePbH9wDgJPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723235113; c=relaxed/simple;
-	bh=JY82VNfX6WQ3JiDjCf+iJqgRRw+TQ7NAv1+7OOcT0Ko=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UGi2pThpuoaq94u1BEOckBBVYDX1qZB07SSZtJj4y8XqieBBv5rRKh3PKDrredvDkrp8HLSas/xEUaVnaCIAdrZNvIM7OI5ukuUH3XMDRaFmaofd0dKllCe3T/n6jCxnatK73yWiRDG/OxHUsLYwk1+bhuDp+IkN7wpft7yWzeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MlITpJiY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1E9AC32782;
-	Fri,  9 Aug 2024 20:25:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723235113;
-	bh=JY82VNfX6WQ3JiDjCf+iJqgRRw+TQ7NAv1+7OOcT0Ko=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MlITpJiYiyLRblAGKhiqlSx/Y8IT99XpN6sZhYnvzOrpLHA6DWAKw7BIwrOXaoVty
-	 RVPDYVs3lZ5zHyaJZrwLGx9EBo9XBTUFy+WrYsPXMJV1w0DRrtgZ4SI8AECTZDr/nl
-	 +/QbJQ7sbBcJIx8bZEHccxl8M1C6iJytQPa2XtB2DYqVKn+OEbJCIt3ED/uoAxD+J/
-	 5bO8tBH81Qcqzi4SuB6GBtvdmgdcuR6tkyH3KpkE8i7demCUlP2Jg5B56YqQ/uc9df
-	 xcVofZ28b8S4L6S4BiUeThPvgc4uYue9rImGdszYDKN8guRi/SMy5I8TeDjk7DPYzq
-	 RaKJydD4UrDgQ==
-Date: Fri, 9 Aug 2024 17:25:10 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "John B. Wyatt IV" <jwyatt@redhat.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-pm@vger.kernel.org,
-	Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, John Kacur <jkacur@redhat.com>,
-	Tomas Glozar <tglozar@redhat.com>,
-	"John B. Wyatt IV" <sageofredondo@gmail.com>
-Subject: Re: [PATCH 0/2][RFC] Add SWIG Bindings to libcpupower
-Message-ID: <ZrZ7JvzGo9QRap8K@x1>
-References: <20240724221122.54601-1-jwyatt@redhat.com>
- <1f5c24b6-f3ee-4863-8b7a-49344a550206@linuxfoundation.org>
- <Zqv9BOjxLAgyNP5B@hatbackup>
- <2024080405-roundish-casket-2474@gregkh>
+	s=arc-20240116; t=1723288019; c=relaxed/simple;
+	bh=Mnx7MQQIC+cXeJ9DoSkpWU8OYplZ9u8hHE5PubZGBnY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=iPnS32WiDPgFTSFI75IN3ndlVNvCBZdP1OAB8a8atsLNY3JHALpebwZBjVD/yyoo/m8acqZ+vTPvV/z6sSWZqgEAdZAZPHVGvFjQoiGUGJbiPTGlIn2jd2a/tauM6VfkAjkFl17KzfhnxYiKSfAIf82PUeCvf8ZXiw94FEqO2zQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JQ/VT7Lv; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723288017; x=1754824017;
+  h=date:from:to:cc:subject:message-id;
+  bh=Mnx7MQQIC+cXeJ9DoSkpWU8OYplZ9u8hHE5PubZGBnY=;
+  b=JQ/VT7Lv/88tkPoXja4vZMMU3aEQ15Iyeyb5Lk5KIec86vdJR4/Luu9u
+   7jhfXvGfbqlVDhIctXkoQntZlX1DUqM1p0MYs3VYW7TwnYkfz5u3+rERr
+   1OhZ1zZjeXlqAEgZrApWTBoFTz1fdiCbpQE/hk9yT2NWePmKUGnaqo/HV
+   /ZSLMMDKFnuKYFMhhrFxdHsYdugOjXv0g1T8Se1nx702SW10aELRw7TJz
+   rNZtKFGPWGdoUAHeQ0y0TJ8JtzTZ9Ti9jSesdfEHVsQ4ts7ajicHBKIIr
+   GdFqgVwokowUqtRy64SOaiQIU59/aDXTM0Wc21y7W4umz45ofylZqBf6o
+   w==;
+X-CSE-ConnectionGUID: EZITK2VER3+QUdgUhtg6Fg==
+X-CSE-MsgGUID: YZcn8d2JSs+VXWNQiR5I7g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11159"; a="21267062"
+X-IronPort-AV: E=Sophos;i="6.09,279,1716274800"; 
+   d="scan'208";a="21267062"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2024 04:06:53 -0700
+X-CSE-ConnectionGUID: CuFc9EFARuu+F2BU/qPYkA==
+X-CSE-MsgGUID: u6dv1Xj6TluaD6//YVCfTA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,279,1716274800"; 
+   d="scan'208";a="62646098"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 10 Aug 2024 04:06:50 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1scjvr-0009rv-2F;
+	Sat, 10 Aug 2024 11:06:47 +0000
+Date: Sat, 10 Aug 2024 19:06:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ a809d5e5c7b50d2c56470e10c7ef27cfef23a374
+Message-ID: <202408101939.YYfTKGEe-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024080405-roundish-casket-2474@gregkh>
 
-On Sun, Aug 04, 2024 at 10:54:10AM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Aug 01, 2024 at 05:24:20PM -0400, John B. Wyatt IV wrote:
-> > > On 7/24/24 16:11, John B. Wyatt IV wrote:
-> > > > SWIG is a tool packaged in Fedora and other distros that can generate
-> > > > bindings from C and C++ code for several languages including Python,
-> > > > Perl, and Go. We at Red Hat are interested in adding binding support to
-> > > > libcpupower so Python tools like rteval or tuned can make easy use of it.
-> > > > 
-> > > 
-> > > Can you elaborate on the use-case and what rteval currently does and
-> > > how it could benefit from using libcpupower with the bindings?
-> > 
-> > rteval is a Python program used to measure realtime performance. We wanted to
-> > test the effect of enabling some levels of idle-stat to see how it affects
-> > latency, and didn't want to reinvent the wheel. We thought that the Python
-> > bindings could be useful to other people as well who might want to call
-> > cpupower too from Python. I did some testing and was able to achieve this with
-> > SWIG. We sent the patchset to see what folks thought about this.
- 
-> Is this going to require a built-time dependency on SWIG?  If not, when
-> would it be run, and who will be in charge of running it and updating
-> the bindings?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: a809d5e5c7b50d2c56470e10c7ef27cfef23a374  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
-> And finally, why do we need these at all?  You are saying these are new
-> tests that external tools will be using, but why, if external tools are
-> required to run them, are they needed in the kernel tree at all?  Why
-> isn't this just another external test-suite that people who care about
-> measuring this type of thing going to just run on their own if desired?
+elapsed time: 1391m
 
-We have a python binding for perf, it was done manually, didn't use
-something like swig, don't recall why I made that decision at the time,
-maybe not to get one extra build dependency, as you mention.
+configs tested: 151
+configs skipped: 6
 
-I did it at the time as another tool developed at Red Hat, tuna, a top
-like tool, using GTK+, could use the perf infrastructure to get
-notifications about new threads and threads exiting, as exemplified by
-test tools in the kernel sources:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-root@number:/home/acme/git/linux# tools/perf/python/twatch.py 
-cpu: 24, pid: 2787405, tid: 2787405 { type: fork, pid: 2787405, ppid: 2787405, tid: 673409, ptid: 2787405, time: 300460407945015}
-cpu: 23, pid: 2787405, tid: 673409 { type: comm, pid: 2787405, tid: 673409, comm: StreamT~s #1624 }
-cpu: 4, pid: 3923381, tid: 3923381 { type: fork, pid: 3923381, ppid: 3923381, tid: 673410, ptid: 3923381, time: 300460862312442}
-cpu: 23, pid: 2787405, tid: 673409 { type: comm, pid: 2787405, tid: 673409, comm: StreamT~s #1624 }
-cpu: 23, pid: 3923381, tid: 673410 { type: comm, pid: 3923381, tid: 673410, comm: StreamT~s #3197 }
-cpu: 23, pid: 3923381, tid: 673410 { type: comm, pid: 3923381, tid: 673410, comm: StreamT~s #3197 }
-cpu: 13, pid: 2787464, tid: 2787464 { type: fork, pid: 2787464, ppid: 2787464, tid: 673411, ptid: 2787464, time: 300461205531219}
-cpu: 26, pid: 2787464, tid: 673411 { type: comm, pid: 2787464, tid: 673411, comm: StreamT~s #1624 }
-cpu: 26, pid: 2787464, tid: 673411 { type: comm, pid: 2787464, tid: 673411, comm: StreamT~s #1624 }
-^CTraceback (most recent call last):
-  File "/home/acme/git/linux/tools/perf/python/twatch.py", line 61, in <module>
-    main()
-  File "/home/acme/git/linux/tools/perf/python/twatch.py", line 33, in main
-    evlist.poll(timeout = -1)
-KeyboardInterrupt
+tested configs:
+alpha                             allnoconfig   gcc-13.3.0
+alpha                            allyesconfig   gcc-13.3.0
+alpha                               defconfig   gcc-13.3.0
+arc                              allmodconfig   gcc-13.2.0
+arc                               allnoconfig   gcc-13.2.0
+arc                              allyesconfig   gcc-13.2.0
+arc                                 defconfig   gcc-13.2.0
+arc                   randconfig-001-20240810   gcc-13.2.0
+arc                   randconfig-002-20240810   gcc-13.2.0
+arm                              allmodconfig   gcc-14.1.0
+arm                               allnoconfig   clang-20
+arm                              allyesconfig   gcc-14.1.0
+arm                                 defconfig   clang-14
+arm                   randconfig-001-20240810   gcc-14.1.0
+arm                   randconfig-002-20240810   clang-20
+arm                   randconfig-003-20240810   gcc-14.1.0
+arm                   randconfig-004-20240810   gcc-14.1.0
+arm64                            allmodconfig   clang-20
+arm64                             allnoconfig   gcc-14.1.0
+arm64                               defconfig   gcc-14.1.0
+arm64                 randconfig-001-20240810   gcc-14.1.0
+arm64                 randconfig-002-20240810   clang-20
+arm64                 randconfig-003-20240810   clang-20
+arm64                 randconfig-004-20240810   gcc-14.1.0
+csky                              allnoconfig   gcc-14.1.0
+csky                                defconfig   gcc-14.1.0
+csky                  randconfig-001-20240810   gcc-14.1.0
+csky                  randconfig-002-20240810   gcc-14.1.0
+hexagon                          allmodconfig   clang-20
+hexagon                           allnoconfig   clang-20
+hexagon                          allyesconfig   clang-20
+hexagon                             defconfig   clang-20
+hexagon               randconfig-001-20240810   clang-20
+hexagon               randconfig-002-20240810   clang-14
+i386                             allmodconfig   gcc-12
+i386                              allnoconfig   gcc-12
+i386                             allyesconfig   gcc-12
+i386         buildonly-randconfig-001-20240810   clang-18
+i386         buildonly-randconfig-002-20240810   clang-18
+i386         buildonly-randconfig-003-20240810   clang-18
+i386         buildonly-randconfig-004-20240810   clang-18
+i386         buildonly-randconfig-005-20240810   gcc-12
+i386         buildonly-randconfig-006-20240810   gcc-12
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240810   clang-18
+i386                  randconfig-002-20240810   gcc-12
+i386                  randconfig-003-20240810   clang-18
+i386                  randconfig-004-20240810   gcc-12
+i386                  randconfig-005-20240810   gcc-12
+i386                  randconfig-006-20240810   clang-18
+i386                  randconfig-011-20240810   gcc-12
+i386                  randconfig-012-20240810   gcc-12
+i386                  randconfig-013-20240810   clang-18
+i386                  randconfig-014-20240810   gcc-12
+i386                  randconfig-015-20240810   gcc-12
+i386                  randconfig-016-20240810   gcc-12
+loongarch                        allmodconfig   gcc-14.1.0
+loongarch                         allnoconfig   gcc-14.1.0
+loongarch                           defconfig   gcc-14.1.0
+loongarch             randconfig-001-20240810   gcc-14.1.0
+loongarch             randconfig-002-20240810   gcc-14.1.0
+m68k                             allmodconfig   gcc-14.1.0
+m68k                              allnoconfig   gcc-14.1.0
+m68k                             allyesconfig   gcc-14.1.0
+m68k                                defconfig   gcc-14.1.0
+microblaze                       allmodconfig   gcc-14.1.0
+microblaze                        allnoconfig   gcc-14.1.0
+microblaze                       allyesconfig   gcc-14.1.0
+microblaze                          defconfig   gcc-14.1.0
+mips                              allnoconfig   gcc-14.1.0
+nios2                             allnoconfig   gcc-14.1.0
+nios2                               defconfig   gcc-14.1.0
+nios2                 randconfig-001-20240810   gcc-14.1.0
+nios2                 randconfig-002-20240810   gcc-14.1.0
+openrisc                          allnoconfig   gcc-14.1.0
+openrisc                         allyesconfig   gcc-14.1.0
+openrisc                            defconfig   gcc-14.1.0
+parisc                           allmodconfig   gcc-14.1.0
+parisc                            allnoconfig   gcc-14.1.0
+parisc                           allyesconfig   gcc-14.1.0
+parisc                              defconfig   gcc-14.1.0
+parisc                randconfig-001-20240810   gcc-14.1.0
+parisc                randconfig-002-20240810   gcc-14.1.0
+parisc64                            defconfig   gcc-14.1.0
+powerpc                          allmodconfig   gcc-14.1.0
+powerpc                           allnoconfig   gcc-14.1.0
+powerpc                          allyesconfig   clang-20
+powerpc64             randconfig-001-20240810   gcc-14.1.0
+powerpc64             randconfig-002-20240810   clang-20
+powerpc64             randconfig-003-20240810   gcc-14.1.0
+riscv                            allmodconfig   clang-20
+riscv                             allnoconfig   gcc-14.1.0
+riscv                            allyesconfig   clang-20
+riscv                               defconfig   clang-20
+riscv                 randconfig-001-20240810   clang-20
+riscv                 randconfig-002-20240810   gcc-14.1.0
+s390                             allmodconfig   clang-20
+s390                              allnoconfig   clang-20
+s390                             allyesconfig   gcc-14.1.0
+s390                                defconfig   clang-20
+s390                  randconfig-001-20240810   gcc-14.1.0
+s390                  randconfig-002-20240810   clang-15
+sh                               allmodconfig   gcc-14.1.0
+sh                                allnoconfig   gcc-14.1.0
+sh                               allyesconfig   gcc-14.1.0
+sh                                  defconfig   gcc-14.1.0
+sh                    randconfig-001-20240810   gcc-14.1.0
+sh                    randconfig-002-20240810   gcc-14.1.0
+sparc                            allmodconfig   gcc-14.1.0
+sparc64                             defconfig   gcc-14.1.0
+sparc64               randconfig-001-20240810   gcc-14.1.0
+sparc64               randconfig-002-20240810   gcc-14.1.0
+um                               allmodconfig   clang-20
+um                                allnoconfig   clang-17
+um                               allyesconfig   gcc-12
+um                                  defconfig   clang-20
+um                             i386_defconfig   gcc-12
+um                    randconfig-001-20240810   gcc-12
+um                    randconfig-002-20240810   gcc-12
+um                           x86_64_defconfig   clang-15
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64       buildonly-randconfig-001-20240810   gcc-12
+x86_64       buildonly-randconfig-002-20240810   clang-18
+x86_64       buildonly-randconfig-003-20240810   clang-18
+x86_64       buildonly-randconfig-004-20240810   clang-18
+x86_64       buildonly-randconfig-005-20240810   clang-18
+x86_64       buildonly-randconfig-006-20240810   clang-18
+x86_64                              defconfig   gcc-11
+x86_64                randconfig-001-20240810   clang-18
+x86_64                randconfig-002-20240810   clang-18
+x86_64                randconfig-003-20240810   gcc-12
+x86_64                randconfig-004-20240810   clang-18
+x86_64                randconfig-005-20240810   clang-18
+x86_64                randconfig-006-20240810   gcc-12
+x86_64                randconfig-011-20240810   clang-18
+x86_64                randconfig-012-20240810   gcc-12
+x86_64                randconfig-013-20240810   clang-18
+x86_64                randconfig-014-20240810   clang-18
+x86_64                randconfig-015-20240810   clang-18
+x86_64                randconfig-016-20240810   clang-18
+x86_64                randconfig-071-20240810   clang-18
+x86_64                randconfig-072-20240810   gcc-12
+x86_64                randconfig-073-20240810   clang-18
+x86_64                randconfig-074-20240810   clang-18
+x86_64                randconfig-075-20240810   gcc-12
+x86_64                randconfig-076-20240810   gcc-12
+x86_64                          rhel-8.3-rust   clang-18
+xtensa                            allnoconfig   gcc-14.1.0
+xtensa                randconfig-001-20240810   gcc-14.1.0
+xtensa                randconfig-002-20240810   gcc-14.1.0
 
-root@number:/home/acme/git/linux# 
-
-root@number:/home/acme/git/linux# head tools/perf/python/twatch.py 
-#! /usr/bin/env python
-# SPDX-License-Identifier: GPL-2.0-only
-# -*- python -*-
-# -*- coding: utf-8 -*-
-#   twatch - Experimental use of the perf python interface
-#   Copyright (C) 2011 Arnaldo Carvalho de Melo <acme@redhat.com>
-#
-
-import perf
-
-root@number:/home/acme/git/linux#
-
-Another
-
-root@number:/home/acme/git/linux# tools/perf/python/tracepoint.py | head -50 | tail
-time 302243176736731 prev_comm=chromium-browse prev_pid=633048 prev_prio=120 prev_state=0x1 ==> next_comm=swapper/8 next_pid=0 next_prio=120
-time 302243177970076 prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=0x0 ==> next_comm=python next_pid=676159 next_prio=120
-time 302243177952044 prev_comm=Compositor prev_pid=660727 prev_prio=120 prev_state=0x1 ==> next_comm=migration/17 next_pid=74 next_prio=0
-time 302243176742113 prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=0x0 ==> next_comm=chromium-browse next_pid=633048 next_prio=120
-time 302243177991642 prev_comm=python prev_pid=676159 prev_prio=120 prev_state=0x1 ==> next_comm=swapper/10 next_pid=0 next_prio=120
-time 302243177962820 prev_comm=migration/17 prev_pid=74 prev_prio=0 prev_state=0x1 ==> next_comm=swapper/17 next_pid=0 next_prio=120
-time 302243176784747 prev_comm=chromium-browse prev_pid=633048 prev_prio=120 prev_state=0x1 ==> next_comm=swapper/8 next_pid=0 next_prio=120
-time 302243177993435 prev_comm=swapper/10 prev_pid=0 prev_prio=120 prev_state=0x0 ==> next_comm=python next_pid=676159 next_prio=120
-time 302243177966620 prev_comm=swapper/17 prev_pid=0 prev_prio=120 prev_state=0x0 ==> next_comm=Compositor next_pid=660727 next_prio=120
-time 302243176999285 prev_comm=swapper/8 prev_pid=0 prev_prio=120 prev_state=0x0 ==> next_comm=chromium-browse next_pid=633048 next_prio=120
-root@number:/home/acme/git/linux#
-
-By now I think there are other tools that use that python binding out in
-the wild and it is packaged by distros as:
-
-root@number:/home/acme/git/linux# dnf search python3-perf
-============================================================================= Name Exactly Matched: python3-perf ==============================================================================
-python3-perf.x86_64 : Python bindings for apps which will manipulate perf events
-root@number:/home/acme/git/linux# 
-
-Having these bindings opens the doors for projects to use these
-libraries provided via the kernel sources, allowing other languages to
-be used than C.
-
-Now we have multiple libraries in the kernel sources, if we could have a
-convenient way to provide those bindings for python, Go, etc, that could
-help more projects while reducing the cost of supporting those bindings
-by having more people capable of fixing up when needed as we would be
-using a common way of providing such bindings.
-
-Cheers,
-
-- Arnaldo
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
