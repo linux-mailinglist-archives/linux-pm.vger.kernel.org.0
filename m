@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-12062-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12063-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5442794E134
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Aug 2024 14:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DD7994E138
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Aug 2024 14:35:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 101DE2817CB
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Aug 2024 12:35:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F321C2817AD
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Aug 2024 12:35:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA32C4D8AE;
-	Sun, 11 Aug 2024 12:35:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 605EC5336B;
+	Sun, 11 Aug 2024 12:35:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OhM7PQMb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BInu8C1H"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721B2EEBA;
-	Sun, 11 Aug 2024 12:35:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6274D8AE;
+	Sun, 11 Aug 2024 12:35:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723379700; cv=none; b=Zes7PagGezoTnBwezL8yrdBRwTr5EKDvOjG0dozQZrzH6OnV8cCtBTQfsX1ENn2ZlQAwdYzuP03XdSM81ae8jOwsQyuu3OcMKTFiRI3OeroUdAPsmusYpF/ZzHZG2J9e3EihhxcqUx9SJdJgLrTvDvKsSPn3EXhZVLAKHyrqwhU=
+	t=1723379725; cv=none; b=jujrzVuF7U6prPxAoWVOOeEJwK8MbICD3f0/4F1KwriYTVU9MQvhJV8ijXq3rcKliepIRsbGtuFfP5RMGJLWNxagVKMBCNRB52wADV+ZorRC16grz9WkPenNZ6zE70pTI2fH9Uj9tX07q+hPNb6A6dzHh5rFESwBiomqCnhct6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723379700; c=relaxed/simple;
-	bh=RwHeKAjDzwBcplkSWMtw0zfwy7BeQh9etcIjnv7irKQ=;
+	s=arc-20240116; t=1723379725; c=relaxed/simple;
+	bh=+SrK9lm6okUOBtPTMErWmS5VBrEJZyjKsdchhtjqI7g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=orr+pF4ZDhgRXnpAYGNGXLgjxkPUMZX4ZfB4XtZC3oSV/oaHSbbCiS/BDKUpOjslyggZDWXAL7z1f53y8KKiXht0XmM1XQWOtJFe/T6lt7OmYfBaHuImakq3QJf5za0EqVWsJrmbmQVpSHQ91U92r7kw54DoSzwsrAvBEpDCQV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OhM7PQMb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2812C32786;
-	Sun, 11 Aug 2024 12:34:54 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=dz4ufHoQLqYSwxNyLnHs9uPPj3zVUYITROcV9VQn9u21PETnC/1+SOOn2YzOZIK6Op3zk3P/iaVMTlJmMAj3LQR10GrYVuCysNlxs4+YqaMiPq5xZeogZg0fuGkCJSYCxBanh+dhfbGnAZdL9Ja8ml1CGeiOOfXby0MD+SO/hkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BInu8C1H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C12C32786;
+	Sun, 11 Aug 2024 12:35:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723379700;
-	bh=RwHeKAjDzwBcplkSWMtw0zfwy7BeQh9etcIjnv7irKQ=;
+	s=k20201202; t=1723379724;
+	bh=+SrK9lm6okUOBtPTMErWmS5VBrEJZyjKsdchhtjqI7g=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OhM7PQMbJmpRaWwgUq+dd3EZBy5N3CZGHCJ6n/65o+AtyyMRIU/EnvBmhRYR0ubf3
-	 19Rxv5wEoobjnAPhmcaMPoyVgmp/8gm0/s2yrQIN61sWgsKMb688q3Rt18lssaV442
-	 YaaDz710aI8ZaTqbfMuD8c9DUaQ2tqXwAUIUADa+YvUBJgJXuEk9C3o8xgxJ0A64Mq
-	 HZL+q+TWliJgoDzqZZ/JkFMK24WcyuFfqHk1jkXa37Bxp+RgK0icqyooRITZKQ02x7
-	 n3L2zKNnvF+etaTCvj8svIg4HH5BE/1OXUJrrYBQ0I0V8WRJA4EtUmiT7edySCZQMt
-	 9N6F4h8OE5BBw==
-Message-ID: <6d3ced61-dc9a-4e1c-9edc-08379196cc71@kernel.org>
-Date: Sun, 11 Aug 2024 14:34:53 +0200
+	b=BInu8C1HnZDd26nRWJSeJeAOtW7TDKhKu0dI0r4+trPyXO6LxQzqtyQDXFhDUj1fE
+	 MPz7swGKBxGKjns+7wq8eP7L3z1/IXxkL6DGDDasAiHNbPY7/1BfD+YsW0NcPMNtjR
+	 xQDW5VayAccxXi172btjfpZvU71HwAlKXUxzVsTPfeuDoAP+hc7ejBem4G6/QdYANt
+	 t2QnFNoKLoj55hb9VJbzEOFbevENztDL+/Fegh1EOnvXV0X/o2PQ4jqlsekE3PkJxp
+	 sddkHz6bKv10SkY/DQmjMx5T44OgUterNo01CqdCT/Hmzf2AYiBZ6lojYoLSHi78uz
+	 QDHqjuK9jxXkA==
+Message-ID: <cc0ea64f-f300-4d66-80f4-af2038a36ba7@kernel.org>
+Date: Sun, 11 Aug 2024 14:35:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/6] dt-bindings: thermal: samsung,exynos: add
- exynos850-tmu string
+Subject: Re: [PATCH v3 6/6] dt-bindings: thermal: samsung,exynos: remove
+ driver-specific information
 To: Mateusz Majewski <m.majewski2@samsung.com>, linux-pm@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
@@ -63,8 +63,8 @@ Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
  Sam Protsenko <semen.protsenko@linaro.org>,
  Anand Moon <linux.amoon@gmail.com>
 References: <20240807084829.1037303-1-m.majewski2@samsung.com>
- <CGME20240807084914eucas1p1948d159c31b0dce8243d84fd43a7d94e@eucas1p1.samsung.com>
- <20240807084829.1037303-5-m.majewski2@samsung.com>
+ <CGME20240807084917eucas1p28c675c9da74f0de0bb09689819202c39@eucas1p2.samsung.com>
+ <20240807084829.1037303-7-m.majewski2@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,18 +110,22 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240807084829.1037303-5-m.majewski2@samsung.com>
+In-Reply-To: <20240807084829.1037303-7-m.majewski2@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 07/08/2024 10:48, Mateusz Majewski wrote:
-> Like most of the SoCs, it requires 1 clock and 1 register.
+> The number of supported trip points was only limited by the driver
+> implementation at the time, which mapped each trip point defined in the
+> devicetree source file to a hardware trip point. An implementation that
+> does not have this limitation is possible; indeed, that is how the
+> driver works currently. Therefore, this information should be removed
+> from the bindings description, which are meant to be independent of
+> the details of the driver implementation.
 > 
 > Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 > Signed-off-by: Mateusz Majewski <m.majewski2@samsung.com>
 > ---
-> v1 -> v2: make the clock required in Exynos850.
-> 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
