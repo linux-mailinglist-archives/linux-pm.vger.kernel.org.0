@@ -1,335 +1,440 @@
-Return-Path: <linux-pm+bounces-12120-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12121-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D61B694FA08
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 00:57:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AF0C94FA68
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 01:48:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D0822819F2
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 22:57:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA3AB1C21FA2
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 23:48:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF29419AD91;
-	Mon, 12 Aug 2024 22:49:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E746187327;
+	Mon, 12 Aug 2024 23:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BUMeIG2s";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ZYTlQqyl"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="t43A0KxR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E6319AD70;
-	Mon, 12 Aug 2024 22:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723502997; cv=fail; b=uzlgXt2xLWXhIqQNRI94PoDGWuYZQ5XYj3Op3OM6CiUZlOInib/0C6PRq8ye1h5WX4Dh0izgRkNkjTlGxJCrGr9+yHurTCtAtmQmlJLhIM1mWr+u00Sb2Z/T2+UtRnNXbUBpVes5hzS294JHj1P+mxjcTZaOiEcRWDd2kCbaCiw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723502997; c=relaxed/simple;
-	bh=9trgygyngn3qK1uPANa3iBOu+NAu0+CBm0x7V8U+1MU=;
-	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
-	 Content-Type:MIME-Version; b=ugWCbQhT+owtyTAd0URpMvpjky+BHemvaITWQ0F5tAjV/P1YP28cGpWkCRla3T7h+aEX5qG/VDco4ez6A/EFy6+QLcpvQJb2ruwXrNidTgVF8oMNUD5mbFnmqeI0mSUoulpZUoPh7tuyjLMKMHiOZZQ8jozLtqvZHL3WHbUlrFk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BUMeIG2s; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ZYTlQqyl; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47CL7KOv002285;
-	Mon, 12 Aug 2024 22:49:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	references:from:to:cc:subject:in-reply-to:date:message-id
-	:content-type:content-transfer-encoding:mime-version; s=
-	corp-2023-11-20; bh=hT5UnLvRn1puLX2oWaeDPbtP/nK7/ppWykwb2nnCmwM=; b=
-	BUMeIG2sqj7mUnCreKAV+pwO15jGHlsW4gn59Sdf3ls/WdW9GdeC8FbziWT+57tq
-	RokbvVn8By0HliSWjyD5wQzzOijvGAwCjo1AL3MkwDZbBHkc5tRuYoBb9DsICyHM
-	uWbWn+sQVF4eV75F8fesLUfzo+LSSpkVUDicqGUjaxpJU2ryd1xqj8rrRxHh+BbF
-	KixTv7yEdzBPywLN8L/IL4iWbuOj+mVrKXCYIryFhDe4qjZ3bjSMBbEZHYdQla0z
-	hyg9V5B+NQwS/5qpVS3Et6ZKJS1H6WjirdvF1GncRNroQ8k12dUctryJGWu3BEWq
-	lIACw1dkq3OheKg0tZeVUg==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 40x0394m82-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 12 Aug 2024 22:49:04 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 47CMbPcJ000621;
-	Mon, 12 Aug 2024 22:49:03 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 40wxn7rww3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 12 Aug 2024 22:49:03 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rMIFXvh/210ilc96nBRnM13yDvIVQCsGgk0U74yt1eHJGJ2h0QmAfehtvukVBDQBuehPzKGRfrbt7WSqiQLIWQqGWn0LvrBoDdcao80+bbfzLHBNlxH1lFSiTPZ0NzEuNoBVjP2VGuGFnocy13tW2RGyvv1TOiPmI5l6jbcEjHa+D1O8bkv1+kKYb3NTPwcyNZ/LadeF6EJ2EWzOC7mxt0hK/MzdXZjQ6oX3OOR2ZlwobTkJ7CNEHd/d8St5Q6DbidIe0KUkVDDiUD58JiSzvBPQckjCTkpXHm78WFFmiWfHuqHyVJULu7KmnoTzBXXXEQNaIkDRP75NfbtyY9ZBLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hT5UnLvRn1puLX2oWaeDPbtP/nK7/ppWykwb2nnCmwM=;
- b=PVrJi0tjOajaiTqKVHWY9YW3oUjBf/IVKwr7Z158se1nKyYXxotRuNE4+xoZruuiBnaf56jEWG9RTC6Ln4jTaA1akvqQacwQXdFWbixrXeJePMqrWDtMNqfu/QTj3iSwNxsn81fysRHGbKcR+k/dhPTYdURQAjRlL83EdyVUcp39XifKf06QeDZaW4qTe3fscp/Gusp3wsr+uyvKHUZLYruk8H3D55kgmPYnL+cHkFvfzQi7jwMeSLmGMHznM39zI8hzYo7/a84q/iQACr7iQBfYvmPXMBLtz2bvldcLiosWRlc+KFeV42dj3zAGXfDudenock9N7Ssc8LzeS16Fdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hT5UnLvRn1puLX2oWaeDPbtP/nK7/ppWykwb2nnCmwM=;
- b=ZYTlQqylhB5nViVVSVWpqFdRS+AehwgGk3oiWm7bUz3ASZFI4YVPA5yzLWfhb7xHFAXN9dNJsNBvcDZBfQe5kfV7wtqBrIiKz0sP4tTbLMH0f3uMCPyGVz5mW3KtD91fLGHMVwmkwffTCO9dRrAGnJ06bkyeEyGqY3yqDCLFJzo=
-Received: from DM8PR10MB5416.namprd10.prod.outlook.com (2603:10b6:8:3f::19) by
- SJ0PR10MB6421.namprd10.prod.outlook.com (2603:10b6:a03:44b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.13; Mon, 12 Aug
- 2024 22:49:00 +0000
-Received: from DM8PR10MB5416.namprd10.prod.outlook.com
- ([fe80::e085:31f:84d1:e51a]) by DM8PR10MB5416.namprd10.prod.outlook.com
- ([fe80::e085:31f:84d1:e51a%4]) with mapi id 15.20.7875.012; Mon, 12 Aug 2024
- 22:48:59 +0000
-References: <20240726201332.626395-1-ankur.a.arora@oracle.com>
- <20240726202134.627514-1-ankur.a.arora@oracle.com>
- <20240726202134.627514-7-ankur.a.arora@oracle.com>
- <f1a5d666-d236-572b-f9fc-5adeb30be44b@loongson.cn>
-User-agent: mu4e 1.4.10; emacs 27.2
-From: Ankur Arora <ankur.a.arora@oracle.com>
-To: maobibo <maobibo@loongson.cn>
-Cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-pm@vger.kernel.org,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, peterz@infradead.org,
-        arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com,
-        harisokn@amazon.com, mtosatti@redhat.com, sudeep.holla@arm.com,
-        cl@gentwo.org, misono.tomohiro@fujitsu.com, joao.m.martins@oracle.com,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v6 09/10] arm64: support cpuidle-haltpoll
-In-reply-to: <f1a5d666-d236-572b-f9fc-5adeb30be44b@loongson.cn>
-Date: Mon, 12 Aug 2024 15:48:56 -0700
-Message-ID: <87plqdqrvr.fsf@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: MW4PR03CA0245.namprd03.prod.outlook.com
- (2603:10b6:303:b4::10) To DM8PR10MB5416.namprd10.prod.outlook.com
- (2603:10b6:8:3f::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7B11804F;
+	Mon, 12 Aug 2024 23:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723506489; cv=none; b=Hchx7y4Ye3cF0PX9tnG5yLCItXCIXpzseNVdTfjbhZn+XW2mhYiCTohybYGjLYRjU3C7LhS8H82mDvbl1STN98MrccKlc8rsdv4HA6ddIES4IdgOz53y9PfJ9ZK0zlHqYGvnrgx8YjtpybhRJLJnajmdoa6UKWgX0iVQzfqGEe4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723506489; c=relaxed/simple;
+	bh=kXZZsX+td27pgCbDF8kbMbDkiLniqjeDNhrdH57CMRY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HH6NDorzMkMMv87Gl7aUJu6Ywt2ptWPMQp+l78PzPj5jyb14tSCHG5FaBln4tf9LE1c0KbjT/XqZ6t5wJLZUsoD5z7b1RzIdunHrzYkR6UQ/PmQ38HmdHaQlC1ZMiuyQbqDcEmokFXQ60RljiZ1t3AmjHAsmaz8grSAZpKDymL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=t43A0KxR; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1723506454; x=1724111254; i=wahrenst@gmx.net;
+	bh=l6OouXenCvAZE1JaCg4HpNacCouIsLa/UOywMg/akPQ=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=t43A0KxRTShwhq51DmI0Hx9L+gPZrgr8r00BkJx0VDqA+AIo08KkR7JQ0dN6tOrH
+	 qovMsbM5X7bSgi2yOq4xKC/IZxVpLd2xejYCjVJPnC6z+gPltVxGfvgxKrR8gXZUt
+	 1Z0ccgiWaaLB6ANTDP8rFNYS4MJOsPDw85eXzompgU1MK5HzTuZ+jBKdDmoRfFdM2
+	 K4P+5acYr+5/PaN+1ZQ0UMhGiBhnW/i1JqxdLMD93A7MQAaDHqDn/lopnaj9jJo5W
+	 NmX9u90FIMpYEZ++rcIbXTcDe0VVs03SbcCReqheJ0paHtnmddE/hJEtyEAETwbEt
+	 J23elkwHdIEPzPmN1A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MzQkK-1sHZZ80T5c-00wJPv; Tue, 13
+ Aug 2024 01:47:34 +0200
+Message-ID: <65de7db8-4f81-4c31-be8d-3a03c9aee989@gmx.net>
+Date: Tue, 13 Aug 2024 01:47:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM8PR10MB5416:EE_|SJ0PR10MB6421:EE_
-X-MS-Office365-Filtering-Correlation-Id: a9aba137-96a9-493d-bdc8-08dcbb20f3e9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NTZSYm9RUGM4dW9LM01URUphVGVyVXJoQjdOT3lRTHhZMVFwVUs0L0VUVzB3?=
- =?utf-8?B?UjhtYXQ0WUkyeU5DRWdwc0JjbmdreWhOTEhvTXlrWmh5S3I5cXl1TXBjMVIw?=
- =?utf-8?B?TExBQTlua1hEWnVUWmVSZ3FZQml6a29IUnB3a0czcWNXU2ZRdms1TU9rRDJj?=
- =?utf-8?B?cmhRR0ZxVHI2eW5POUJubHJVSmtPVWFvRU9iamlPOElLTllza0pwZVB2bXhx?=
- =?utf-8?B?RW9ieVJVNHoxOFdMTDFYY1hpcit5UWZKT0xPR0I2YUFuc09tV3JhMXJZVVZw?=
- =?utf-8?B?blpib042SVZnUUI1aXQ2VUpCVUY4a04xa0d6ZmNFNVhXMEw2OFQ4dEJvQitU?=
- =?utf-8?B?dVR6QjIwN2dFMVBsNDd3bjJvQ3RkMFJOYXU0cEdMK0lqWTFubXQxODNydHpH?=
- =?utf-8?B?MFNYYlp6cVpxZ0txbFdpY1h3Q2Q1ZzB2eTl3TFNrWVYraC9QK1BockE3cEtj?=
- =?utf-8?B?RzdlS3VQMm1qUEpDT3RUdk53S0dSNVF6TmlwUlhZak14V3FONWs4ZklRUWNO?=
- =?utf-8?B?WHpGenRIeDN6NWFJcEJnd1FlYkZIN09vb3loWXJBd0xoOWFqaE1zZGp4ajRy?=
- =?utf-8?B?UituaHEzK2dKZDdZYzVObC9DODV5bEFWelhlWFRjVExBOGJyQ05MRGlJNi9v?=
- =?utf-8?B?YTRGNkxrYktrR05tU3VnYTZ5TVJFTTMrN205elYvNDJYTStEWE9uQUVYTUhq?=
- =?utf-8?B?R1NzZGx5MVZNdm5CRHdPZkZyOFZFZUphRnVoZlYzdWZUNnhBZG1MNEo3RTBC?=
- =?utf-8?B?WjVPT2ZIMTBFWFNxaFdwUkFOTFN2TjNHZnAxQ0x4QUhHTktDRXF0ekF4aFFj?=
- =?utf-8?B?YTdPYzZjK295YlI3eFVLOE01bm9IeHcxWEpNWG5GMkZ6dnpQTVpuaWVYSUhJ?=
- =?utf-8?B?a2RyTEcweHgxRFUvRWpnMmZlTnkwS1lPZWJ6SGVDQ3pZcXRLN3FyMC8zL1VO?=
- =?utf-8?B?ZmxDQW1Cd0dhQkFVZk9UWDRaYVJ4Z2FROEoyOXBlN2dPZDhWSnpLNUQwYThp?=
- =?utf-8?B?ejhsRk5zTXdaZ3VydHQwOVZJTkphUHF3Z1ZRWXN5RkEwOEgxZXRVUWNwQ2hB?=
- =?utf-8?B?WHhSV29FTEZaL2NKcGsxM0QwaVU5dnZOSC9CV0hpdEFBVzgxWnBZRDYvdE9B?=
- =?utf-8?B?QW9pTElkcDFzSzk1MFdNQWZZRFozSGN6K0pVc2lsb252ZFpsVDdtR3FWRmF3?=
- =?utf-8?B?Ti9nWVU4Y0hWSjhlcllibkRzbVdwRjNCbkF2NEJ5R1FIS0VENStrbi90RS80?=
- =?utf-8?B?Nm96VTU1NERxQlh3dm5OYTZtOWFVa21tWGNrSmo4VHNiYXBhNyt4L3JWaDVu?=
- =?utf-8?B?TVd4aitUa3pPc0lZWFNpL0pxZVU2NUFEUjladHYxQmxjQ1ZUSFY3Y0hCUHlM?=
- =?utf-8?B?TjVlYzFRMXJ0UFpBZ0psTEcvbUtzTExXbmpzSGZXYUZMTTFGY3JhU3R4UXBT?=
- =?utf-8?B?T3pPdlZWdENOVlVYdFo2dWlSQkZEQVJKNEQ4clY4RS91eHl6bGFuZ2RLNm9T?=
- =?utf-8?B?WllGcTNPZEhtcGJ5b0NCTXdEZFB3Mlp5K3dXT01rQ2FUWlJnSkQ3b25jOUNy?=
- =?utf-8?B?UzZpeDIramJRZUlZaG1TdWYxdW5ZTzkxamRUYTZCc0Z5b09OdGlmMklMNU8r?=
- =?utf-8?B?S3lGWHkwc2JEdGtHQ3ppdHJpWTZvQU1VdDFBYTFPaGxIN2JrMFJ1UXhuQUJF?=
- =?utf-8?B?dkxKM0xXckJuY3Bhc3hnL1VTYTJGQTN5ZjNBWXVlUDY1QTBvN3laYjdUOE1B?=
- =?utf-8?B?TzNuVEtJaHIxY2FXdHhtRkVUazd4MEp3YTBPcHBNTlo3MUdoRVZKQUNXTGxO?=
- =?utf-8?B?UUZ5M0hTK0R3OExSQms0QT09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR10MB5416.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SWpzdldIOFlPMFJzRG1RckhYOUpBbnZON3V4WHgxakZKZUowMjN2UFFONnlY?=
- =?utf-8?B?ZWtqSm94dVlncjF0WENoMnhyRGFiU0FKZmhmZktZQk51SkFvM2p1OVMzSHRi?=
- =?utf-8?B?YVNMMkJ4MytqSHhrbTZwRkkveUliaGdySkZXWk5Xb1pnY3A2WHVpVWw2MFV6?=
- =?utf-8?B?ZlJCWVNvSUhaZ1dzSU1nWnFxQWpUVklTUVVVSzBYcStFK0FNeVdudHhqU1NM?=
- =?utf-8?B?MkxDODJmLzg5L2ZOUjVhTlJsaGk4ZUgxK3JQb3VBV2hOWEpFQ1J0U0pCQ0hx?=
- =?utf-8?B?Yk1KWUFqWGdjQ1BmY05MZEU0R09OOXVHYm8rS203V1ZFbGVsNjdZSjVZanpD?=
- =?utf-8?B?ZVppcWFWeUNTZHdJa0RMREhTT3pENVNiRGNKLzBxNjdBT2x1cGpsL042ME9K?=
- =?utf-8?B?OEE3QnhlMFZCYWlYWEFvMUpLeHRiRjllOU56SXVBTWdXQ3VKb2ZTWnZJcVpD?=
- =?utf-8?B?UTgzNFRpck5uVkxmbUFtQktwK2Z4djhzcGxXd1QyK1ZZREJVcDZTZThnUUZP?=
- =?utf-8?B?eXJmZDZDV3RQUnI2UmNYOVVoYllnZ1Y3U1JpZW53Y3pKNVF3M1N0d1FoNXBO?=
- =?utf-8?B?bHlKMW8vbW9kS0VCeStZdzE2bENhQWV4VXVKS0crcDFDeE84SzNCQ3RZeVNZ?=
- =?utf-8?B?bTVMcGJMUUVXS05KU3N4TEZRZytGKzAreHlURmxYMmpKZVhSMHhuT0hFZlR3?=
- =?utf-8?B?aHFKbEw0ZVZJWU0xVDRxclhrWGtPZHNXckloNzd1THZoSldSRXBCdndFTU56?=
- =?utf-8?B?VWxuaDV2MDJmQmMydTc2ZXMvWlQ0cTFoVlkwSXJjdy9uV0pnM29XRm0wVlpS?=
- =?utf-8?B?bjNkVjlKRWZlOGoyMkNSaHp6VTdtR3hhVFBNVVh0TEhXNFRUQVE3THJaQm4x?=
- =?utf-8?B?WG9qMldrWk80MkFHWjZOYVlLNWQ0Z2lxZVBkdzNNN2VPSk5uL0M1N3NDRWoz?=
- =?utf-8?B?ODdzdEZiRjl0MldYeFBtQjZJdlh0cEd0bjdqdXQ4Y2VjTG9qYWJhTVFTVVV0?=
- =?utf-8?B?VWZvbk83OEUyN3BESU5VZHNqWUZSOFhKN3ZMT2RQVFRtQ0k0M3hCR3JCUlkx?=
- =?utf-8?B?QjVOT0VnUDNCcWNZaithYjhXOCtvZU9BcE9vT28ycWRDcngzbnhyNjF5bnBD?=
- =?utf-8?B?TWVIOUpybDNDeFEvZ1NWRk1QelZWWlJyZld2aC9QNUpFTnlVRUhKdHZyTVFP?=
- =?utf-8?B?YTUwM01hYS8rWmhpcFBrbjBKaVByOTl0bWxseFFJaUlxWmZYVWhWSTFoR2FU?=
- =?utf-8?B?ZW5QekI2MFdSU1d2bjFSVW5qdVVKZnlFSWJ3SUh1UndCTVBIK21yNDNpWGpj?=
- =?utf-8?B?NUpHZzlHUFRQSVMrcDV2ZUJiUHlQdjlWbWZzL0xtUFZKcXd0Mi81cWUrWlJQ?=
- =?utf-8?B?eXFuZlNOT1dpL01BSGZUYVRzemVRY29VOFJxV2dZZ0FGTG1DTGkzMEZXVS8r?=
- =?utf-8?B?S3dwdUN0Rmg1Y2xMYUdDQmREWkZ2cWVpUFZUbk1NV2ZNVUZjeEFFblVhZVBs?=
- =?utf-8?B?RWpKbWhUY3ZCWHk0VGUvUDhQVW1wVEF4dmpHV2FFN0dMU3R4L2cvV1lieXow?=
- =?utf-8?B?ZjVVdGpDVzdTb2E0Z0duQlVyb2NxRFZicEpPdVNMRFNXTWlNTW1OdkduTDAv?=
- =?utf-8?B?R3FLTUhKN2htNk56SDRXbHdJb09IYk92RnpIVTNsck1yYjRqaVVvakdPVTBJ?=
- =?utf-8?B?Y3ZGQWF0ZCtyWDllZFRZek4rZVF3QjFhQms0ckVEbitmby85SUpVeElLOWU4?=
- =?utf-8?B?blJwN1o0K1FNbVk5bGRFMlZISVVVRmxzdWlQM0w0L1dIUDRvb0dWbjE1R0xq?=
- =?utf-8?B?YjU3MkUwMDhKS1NqeDB4QTZ0cDBHSllseWQ5dnRwdW9jR3F5bDBIWU84R1k2?=
- =?utf-8?B?SUlUanpwYUR1OCt3OE1MSzlvUmVNUzRsVko1aC9RT3pSaHpaMU02RzNVNEJo?=
- =?utf-8?B?YmgwbjNUREVjai9lekN2aUp5UVROU0prYXI3RDE5ckZnSXQ4RVBtc0NkWFNn?=
- =?utf-8?B?Wk9lV0tpcndzOHVsZUcyWERjbHBrRkF1aUFFRTE1YUJuUmphdzFBRU5mZ1Vn?=
- =?utf-8?B?ZXBETlR4OXVqdjdLMURNQzF5UjRiVE9pZnJwMXN3VHNQS0U1K0pzMFd1U1FY?=
- =?utf-8?Q?7+l8p9vI+20hS0yea5QqGkvFZ?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	u3lJLH6uFeQ+Ulde1Tzcq3nKJ24qBbrH1CB5jUBFWRgeyG0HVvq+aBL0Da/0U2NwamoQdX3LbyA6r2VhQdHTLPO4UK6wDutILqCew3hkQ/YRQmZXDKkc/mFMYSAb2NCvmZMqvrY93GFOlnFKuhjIQGotY0MCepQr1gwk5PW8ml2aRDdbn7GEsywve4dmdFYYASlQZ+ipY+/BaFMqneCtKgkPYqznbUKEQExoMizf1rum24drwIxK0eD94+ga4PYD+U+8yxAZP+1jtCGW7Jc96fXNhpwMrx7Gz5nz5wDtyXloHSkHFRRtlUlbbaACDX5B2GeHFBafVx0tlQ8VFhwA/jZrcPxCODoaReyPq8Uf0/x6aBAwHINqGZfKbUKh2AGcp+iATVZswBKv/wP26GZQpa3Ex0lZpMPJrzBDd4xLn4Ib6k7mS+D9LF5k33inkHaCWUqCT/yi1QKUsYuzTwJgZPse6U7cPmcKS40d2anzCZdwVpz3ftxX3/H/99ItVApYtRA+Mct61c+Xwd8zz4aj8OHpPFyC+tAlCtKDfFQn+rWb3gAZ0AI6vg6TyrouIvUtWwF4RIkhDR9XRxuUig2fMungHhNrozzk24heetNuo50=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9aba137-96a9-493d-bdc8-08dcbb20f3e9
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR10MB5416.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2024 22:48:59.5693
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6y2J6fFtu1fm0JujZhoa/+NR3HqmjQNzR9uXowfiYwubrihd1LGCFZL7mVEQncfXCbSaxWjzjIhU8+4TR+/WHjNaLGZQ3Wm9EAV+08lW02E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB6421
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-12_12,2024-08-12_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
- mlxlogscore=999 bulkscore=0 phishscore=0 mlxscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2407110000 definitions=main-2408120168
-X-Proofpoint-ORIG-GUID: VI6L7iyWBY6TqxjXPgh9PoFswwrNAFHj
-X-Proofpoint-GUID: VI6L7iyWBY6TqxjXPgh9PoFswwrNAFHj
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 14/16] WIP: usb: dwc2: Implement recovery after PM
+ domain off
+To: Douglas Anderson <dianders@chromium.org>
+Cc: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
+ Minas Harutyunyan <hminas@synopsys.com>, Ulf Hansson
+ <ulf.hansson@linaro.org>, Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ Scott Branden <sbranden@broadcom.com>, Ray Jui <rjui@broadcom.com>,
+ Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+ Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+ Jiri Slaby <jirislaby@kernel.org>
+References: <20240728114200.75559-1-wahrenst@gmx.net>
+ <20240728130029.78279-1-wahrenst@gmx.net>
+ <20240728130029.78279-6-wahrenst@gmx.net>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <20240728130029.78279-6-wahrenst@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Ik08zjVVUi5qEx5fIPQKnKhjJUj59/tBCsiGz1eN2Pm7Quoj1iB
+ SNlD/gQNZC+VslWH4bG/F4WMdl+kUsV+eZR5HGLwXPDSsYua5jSrb0wMxxwJF3fvDSbd6FT
+ HB0bM/UR6ghRTw2R16IKIywSoWG8yUg48pEenKwPKiTxdr6jNEj3vV7Un2zBIDF+c2rtGeE
+ ewOqTvQZHzg7flD1ehlfg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:NX0Jg3iPZl8=;vEzuC2Ms0J1UDvbMW+dkF3nw9v6
+ QxRDXzBRZ88Xu+UB/MqvguubkOqslla23fyby/q23PArECBFoJWaarYRKhLBMfcQsuWQOmgFO
+ HolMSpEnntoeKW2xxoA3N8xiNTCFhSQRfK7ZTDpvnx2IeUDuGJHNKva99JSE5tGhgrECIAUJn
+ kWoRj+3clw6L+Gjch16MVT14HC3Z3ZxSEqnnjnY4XUaTK61DlkOSbOIBEkRT13XILgGld8geF
+ WIw2kv2mwmLD/mscf0/S8vYoAGMbY9E0GLLiiKcaDqQeJNLYNgiELj3iNEPYGcpPZqcj6pJlP
+ LWJUchihGQf9fccffqoUkmq47mHYsX/BCGUKvgRPvyLp/+7JeyKad0p29iT55Xi2v57bAgz0s
+ MwAxN4f0Kb/YA3RDoF2ZJtc5HPvw89Q1uTnyGrEuCwg4bnL9GG2pwB8lPWPXrg77YMlWNQGTD
+ GLCVlqju1pNSwXxOdUEOEWH6PUP3oGeH2qNInXNkuGhbJAnbK8kg1U9zqk+eW7oS3Fhfnwgmj
+ igtuxme4puuD9cVZJZjHpok5o5HdA3eIk5tICxeB3+cgdNdH3sb02DFmsnByOR3uU3kchJ/Mm
+ ZYj3juRMZawas6N9kBtUmP2CkBqniww9tkOPUtDSq82u58l+puwNazQc4xr9icO3mqDbEoN1K
+ LoNFygfIHNY75rxXJGoUBUJq948Edj0nJG09QpRFCf/4Nrh0BPU6Hrkc7OxWyQ25pmD6uAanJ
+ WWOgvP0dVejplW6rwX9h9gUz3rWxuKnt9HT6cYsZb7W2paYAQs9uf1w7ztYA0wWbCYEbc5oRL
+ +SV9+eiPUC+YpeQ4WL55vhAA==
 
+Hi Doug,
 
-maobibo <maobibo@loongson.cn> writes:
-
-> On 2024/7/27 =E4=B8=8A=E5=8D=884:21, Ankur Arora wrote:
->> Add architectural support for cpuidle-haltpoll driver by defining
->> arch_haltpoll_*().
->> Also define ARCH_CPUIDLE_HALTPOLL to allow cpuidle-haltpoll to be
->> selected, and given that we have an optimized polling mechanism
->> in smp_cond_load*(), select ARCH_HAS_OPTIMIZED_POLL.
->> smp_cond_load*() are implemented via LDXR, WFE, with LDXR loading
->> a memory region in exclusive state and the WFE waiting for any
->> stores to it.
->> In the edge case -- no CPU stores to the waited region and there's no
->> interrupt -- the event-stream will provide the terminating condition
->> ensuring we don't wait forever, but because the event-stream runs at
->> a fixed frequency (configured at 10kHz) we might spend more time in
->> the polling stage than specified by cpuidle_poll_time().
->> This would only happen in the last iteration, since overshooting the
->> poll_limit means the governor moves out of the polling stage.
->> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
->> ---
->>   arch/arm64/Kconfig                        | 10 ++++++++++
->>   arch/arm64/include/asm/cpuidle_haltpoll.h |  9 +++++++++
->>   arch/arm64/kernel/cpuidle.c               | 23 +++++++++++++++++++++++
->>   3 files changed, 42 insertions(+)
->>   create mode 100644 arch/arm64/include/asm/cpuidle_haltpoll.h
->> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->> index 5d91259ee7b5..cf1c6681eb0a 100644
->> --- a/arch/arm64/Kconfig
->> +++ b/arch/arm64/Kconfig
->> @@ -35,6 +35,7 @@ config ARM64
->>   	select ARCH_HAS_MEMBARRIER_SYNC_CORE
->>   	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
->>   	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
->> +	select ARCH_HAS_OPTIMIZED_POLL
->>   	select ARCH_HAS_PTE_DEVMAP
->>   	select ARCH_HAS_PTE_SPECIAL
->>   	select ARCH_HAS_HW_PTE_YOUNG
->> @@ -2376,6 +2377,15 @@ config ARCH_HIBERNATION_HEADER
->>   config ARCH_SUSPEND_POSSIBLE
->>   	def_bool y
->>   +config ARCH_CPUIDLE_HALTPOLL
->> +	bool "Enable selection of the cpuidle-haltpoll driver"
->> +	default n
->> +	help
->> +	  cpuidle-haltpoll allows for adaptive polling based on
->> +	  current load before entering the idle state.
->> +
->> +	  Some virtualized workloads benefit from using it.
->> +
->>   endmenu # "Power management options"
->>     menu "CPU Power Management"
->> diff --git a/arch/arm64/include/asm/cpuidle_haltpoll.h b/arch/arm64/incl=
-ude/asm/cpuidle_haltpoll.h
->> new file mode 100644
->> index 000000000000..65f289407a6c
->> --- /dev/null
->> +++ b/arch/arm64/include/asm/cpuidle_haltpoll.h
->> @@ -0,0 +1,9 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#ifndef _ARCH_HALTPOLL_H
->> +#define _ARCH_HALTPOLL_H
->> +
->> +static inline void arch_haltpoll_enable(unsigned int cpu) { }
->> +static inline void arch_haltpoll_disable(unsigned int cpu) { }
-> It is better that guest supports halt poll on more architectures, LoongAr=
-ch
-> wants this if result is good.
+Am 28.07.24 um 15:00 schrieb Stefan Wahren:
+> DO NOT MERGE
 >
-> Do we need disable halt polling on host hypervisor if guest also uses hal=
-t
-> polling idle method?
+> According to the dt-bindings there are some platforms, which have a
+> dedicated USB power domain for DWC2 IP core supply. If the power domain
+> is switched off during system suspend then all USB register will lose
+> their settings.
+>
+> So use the power on/off notifier in order to save & restore the USB
+> registers during system suspend.
+sorry for bothering you with this DWC2 stuff, but it would great if you
+can gave some feedback about this patch. I was working a lot to get
+suspend to idle working on Raspberry Pi. And this patch is the most
+complex part of the series.
 
-Yes. The intent is to work on that separately from this series. As the comm=
-ent
-below states, until that is available we only allow force loading.
+Would you agree with this approach or did i miss something?
 
->> +
->> +bool arch_haltpoll_want(bool force);
->> +#endif
->> diff --git a/arch/arm64/kernel/cpuidle.c b/arch/arm64/kernel/cpuidle.c
->> index f372295207fb..334df82a0eac 100644
->> --- a/arch/arm64/kernel/cpuidle.c
->> +++ b/arch/arm64/kernel/cpuidle.c
->> @@ -72,3 +72,26 @@ __cpuidle int acpi_processor_ffh_lpi_enter(struct acp=
-i_lpi_state *lpi)
->>   					     lpi->index, state);
->>   }
->>   #endif
->> +
->> +#if IS_ENABLED(CONFIG_HALTPOLL_CPUIDLE)
->> +
->> +#include <asm/cpuidle_haltpoll.h>
->> +
->> +bool arch_haltpoll_want(bool force)
->> +{
->> +	/*
->> +	 * Enabling haltpoll requires two things:
->> +	 *
->> +	 * - Event stream support to provide a terminating condition to the
->> +	 *   WFE in the poll loop.
->> +	 *
->> +	 * - KVM support for arch_haltpoll_enable(), arch_haltpoll_enable().
->> +	 *
->> +	 * Given that the second is missing, allow haltpoll to only be force
->> +	 * loaded.
->> +	 */
->> +	return (arch_timer_evtstrm_available() && false) || force;
->> +}
->> +
->> +EXPORT_SYMBOL_GPL(arch_haltpoll_want);
->> +#endif
->>
+The problem is that the power domain driver acts independent from dwc2,
+so we cannot prevent the USB domain power down except declaring a USB
+device as wakeup source. So i decided to use the notifier approach. This
+has been successful tested on some older Raspberry Pi boards.
 
+Best regards
+>
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> ---
+>
+> Any feedback is appreciated.
+>
+>   drivers/usb/dwc2/core.c     | 16 ++++++++++++
+>   drivers/usb/dwc2/core.h     | 17 +++++++++++++
+>   drivers/usb/dwc2/gadget.c   | 49 +++++++++++++++++++++++++++++++++++++
+>   drivers/usb/dwc2/hcd.c      | 49 +++++++++++++++++++++++++++++++++++++
+>   drivers/usb/dwc2/platform.c | 32 ++++++++++++++++++++++++
+>   5 files changed, 163 insertions(+)
+>
+> diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
+> index 9919ab725d54..a3263cfdedac 100644
+> --- a/drivers/usb/dwc2/core.c
+> +++ b/drivers/usb/dwc2/core.c
+> @@ -391,6 +391,22 @@ int dwc2_exit_hibernation(struct dwc2_hsotg *hsotg,=
+ int rem_wakeup,
+>   		return dwc2_gadget_exit_hibernation(hsotg, rem_wakeup, reset);
+>   }
+>
+> +int dwc2_enter_poweroff(struct dwc2_hsotg *hsotg)
+> +{
+> +	if (dwc2_is_host_mode(hsotg))
+> +		return dwc2_host_enter_poweroff(hsotg);
+> +	else
+> +		return dwc2_gadget_enter_poweroff(hsotg);
+> +}
+> +
+> +int dwc2_exit_poweroff(struct dwc2_hsotg *hsotg)
+> +{
+> +	if (dwc2_is_host_mode(hsotg))
+> +		return dwc2_host_exit_poweroff(hsotg);
+> +	else
+> +		return dwc2_gadget_exit_poweroff(hsotg);
+> +}
+> +
+>   /*
+>    * Do core a soft reset of the core.  Be careful with this because it
+>    * resets all the internal state machines of the core.
+> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+> index 2bd74f3033ed..9ab755cc3081 100644
+> --- a/drivers/usb/dwc2/core.h
+> +++ b/drivers/usb/dwc2/core.h
+> @@ -9,6 +9,7 @@
+>   #define __DWC2_CORE_H__
+>
+>   #include <linux/acpi.h>
+> +#include <linux/notifier.h>
+>   #include <linux/phy/phy.h>
+>   #include <linux/regulator/consumer.h>
+>   #include <linux/usb/gadget.h>
+> @@ -1080,6 +1081,8 @@ struct dwc2_hsotg {
+>   	struct regulator *vbus_supply;
+>   	struct regulator *usb33d;
+>
+> +	struct notifier_block genpd_nb;
+> +
+>   	spinlock_t lock;
+>   	void *priv;
+>   	int     irq;
+> @@ -1316,6 +1319,8 @@ int dwc2_exit_partial_power_down(struct dwc2_hsotg=
+ *hsotg, int rem_wakeup,
+>   int dwc2_enter_hibernation(struct dwc2_hsotg *hsotg, int is_host);
+>   int dwc2_exit_hibernation(struct dwc2_hsotg *hsotg, int rem_wakeup,
+>   		int reset, int is_host);
+> +int dwc2_enter_poweroff(struct dwc2_hsotg *hsotg);
+> +int dwc2_exit_poweroff(struct dwc2_hsotg *hsotg);
+>   void dwc2_init_fs_ls_pclk_sel(struct dwc2_hsotg *hsotg);
+>   int dwc2_phy_init(struct dwc2_hsotg *hsotg, bool select_phy);
+>
+> @@ -1435,6 +1440,8 @@ int dwc2_hsotg_tx_fifo_total_depth(struct dwc2_hso=
+tg *hsotg);
+>   int dwc2_hsotg_tx_fifo_average_depth(struct dwc2_hsotg *hsotg);
+>   void dwc2_gadget_init_lpm(struct dwc2_hsotg *hsotg);
+>   void dwc2_gadget_program_ref_clk(struct dwc2_hsotg *hsotg);
+> +int dwc2_gadget_enter_poweroff(struct dwc2_hsotg *hsotg);
+> +int dwc2_gadget_exit_poweroff(struct dwc2_hsotg *hsotg);
+>   static inline void dwc2_clear_fifo_map(struct dwc2_hsotg *hsotg)
+>   { hsotg->fifo_map =3D 0; }
+>   #else
+> @@ -1482,6 +1489,10 @@ static inline int dwc2_hsotg_tx_fifo_average_dept=
+h(struct dwc2_hsotg *hsotg)
+>   { return 0; }
+>   static inline void dwc2_gadget_init_lpm(struct dwc2_hsotg *hsotg) {}
+>   static inline void dwc2_gadget_program_ref_clk(struct dwc2_hsotg *hsot=
+g) {}
+> +static inline int dwc2_gadget_enter_poweroff(struct dwc2_hsotg *hsotg)
+> +{ return 0; }
+> +static inline int dwc2_gadget_exit_poweroff(struct dwc2_hsotg *hsotg)
+> +{ return 0; }
+>   static inline void dwc2_clear_fifo_map(struct dwc2_hsotg *hsotg) {}
+>   #endif
+>
+> @@ -1505,6 +1516,8 @@ int dwc2_host_exit_partial_power_down(struct dwc2_=
+hsotg *hsotg,
+>   void dwc2_host_enter_clock_gating(struct dwc2_hsotg *hsotg);
+>   void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wak=
+eup);
+>   bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2);
+> +int dwc2_host_enter_poweroff(struct dwc2_hsotg *hsotg);
+> +int dwc2_host_exit_poweroff(struct dwc2_hsotg *hsotg);
+>   static inline void dwc2_host_schedule_phy_reset(struct dwc2_hsotg *hso=
+tg)
+>   { schedule_work(&hsotg->phy_reset_work); }
+>   #else
+> @@ -1544,6 +1557,10 @@ static inline void dwc2_host_exit_clock_gating(st=
+ruct dwc2_hsotg *hsotg,
+>   					       int rem_wakeup) {}
+>   static inline bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
+>   { return false; }
+> +static inline int dwc2_host_enter_poweroff(struct dwc2_hsotg *hsotg)
+> +{ return 0; }
+> +static inline int dwc2_host_exit_poweroff(struct dwc2_hsotg *hsotg)
+> +{ return 0; }
+>   static inline void dwc2_host_schedule_phy_reset(struct dwc2_hsotg *hso=
+tg) {}
+>
+>   #endif
+> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+> index e7bf9cc635be..38f0112970fe 100644
+> --- a/drivers/usb/dwc2/gadget.c
+> +++ b/drivers/usb/dwc2/gadget.c
+> @@ -5710,3 +5710,52 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hs=
+otg *hsotg, int rem_wakeup)
+>   	hsotg->lx_state =3D DWC2_L0;
+>   	hsotg->bus_suspended =3D false;
+>   }
+> +
+> +int dwc2_gadget_enter_poweroff(struct dwc2_hsotg *hsotg)
+> +{
+> +	int ret;
+> +
+> +	dev_dbg(hsotg->dev, "Entering device power off.\n");
+> +
+> +	/* Backup all registers */
+> +	ret =3D dwc2_backup_global_registers(hsotg);
+> +	if (ret) {
+> +		dev_err(hsotg->dev, "%s: failed to backup global registers\n",
+> +			__func__);
+> +		return ret;
+> +	}
+> +
+> +	ret =3D dwc2_backup_device_registers(hsotg);
+> +	if (ret) {
+> +		dev_err(hsotg->dev, "%s: failed to backup device registers\n",
+> +			__func__);
+> +		return ret;
+> +	}
+> +
+> +	dev_dbg(hsotg->dev, "Entering device power off completed.\n");
+> +	return 0;
+> +}
+> +
+> +int dwc2_gadget_exit_poweroff(struct dwc2_hsotg *hsotg)
+> +{
+> +	int ret;
+> +
+> +	dev_dbg(hsotg->dev, "Exiting device power off.\n");
+> +
+> +	ret =3D dwc2_restore_global_registers(hsotg);
+> +	if (ret) {
+> +		dev_err(hsotg->dev, "%s: failed to restore registers\n",
+> +			__func__);
+> +		return ret;
+> +	}
+> +
+> +	ret =3D dwc2_restore_device_registers(hsotg, 0);
+> +	if (ret) {
+> +		dev_err(hsotg->dev, "%s: failed to restore device registers\n",
+> +			__func__);
+> +		return ret;
+> +	}
+> +
+> +	dev_dbg(hsotg->dev, "Exiting device power off completed.\n");
+> +	return 0;
+> +}
+> diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+> index cb54390e7de4..22afdafb474e 100644
+> --- a/drivers/usb/dwc2/hcd.c
+> +++ b/drivers/usb/dwc2/hcd.c
+> @@ -5993,3 +5993,52 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsot=
+g *hsotg, int rem_wakeup)
+>   			  jiffies + msecs_to_jiffies(71));
+>   	}
+>   }
+> +
+> +int dwc2_host_enter_poweroff(struct dwc2_hsotg *hsotg)
+> +{
+> +	int ret;
+> +
+> +	dev_dbg(hsotg->dev, "Entering host power off.\n");
+> +
+> +	/* Backup all registers */
+> +	ret =3D dwc2_backup_global_registers(hsotg);
+> +	if (ret) {
+> +		dev_err(hsotg->dev, "%s: failed to backup global registers\n",
+> +			__func__);
+> +		return ret;
+> +	}
+> +
+> +	ret =3D dwc2_backup_host_registers(hsotg);
+> +	if (ret) {
+> +		dev_err(hsotg->dev, "%s: failed to backup host registers\n",
+> +			__func__);
+> +		return ret;
+> +	}
+> +
+> +	dev_dbg(hsotg->dev, "Entering host power off completed.\n");
+> +	return 0;
+> +}
+> +
+> +int dwc2_host_exit_poweroff(struct dwc2_hsotg *hsotg)
+> +{
+> +	int ret;
+> +
+> +	dev_dbg(hsotg->dev, "Exiting host power off.\n");
+> +
+> +	ret =3D dwc2_restore_global_registers(hsotg);
+> +	if (ret) {
+> +		dev_err(hsotg->dev, "%s: failed to restore registers\n",
+> +			__func__);
+> +		return ret;
+> +	}
+> +
+> +	ret =3D dwc2_restore_host_registers(hsotg);
+> +	if (ret) {
+> +		dev_err(hsotg->dev, "%s: failed to restore host registers\n",
+> +			__func__);
+> +		return ret;
+> +	}
+> +
+> +	dev_dbg(hsotg->dev, "Exiting host power off completed.\n");
+> +	return 0;
+> +}
+> diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+> index 7b84416dfc2b..b97eefc18a6b 100644
+> --- a/drivers/usb/dwc2/platform.c
+> +++ b/drivers/usb/dwc2/platform.c
+> @@ -16,6 +16,7 @@
+>   #include <linux/platform_device.h>
+>   #include <linux/phy/phy.h>
+>   #include <linux/platform_data/s3c-hsotg.h>
+> +#include <linux/pm_domain.h>
+>   #include <linux/reset.h>
+>
+>   #include <linux/usb/of.h>
+> @@ -307,6 +308,8 @@ static void dwc2_driver_remove(struct platform_devic=
+e *dev)
+>   	struct dwc2_gregs_backup *gr;
+>   	int ret =3D 0;
+>
+> +	dev_pm_genpd_remove_notifier(&dev->dev);
+> +
+>   	gr =3D &hsotg->gr_backup;
+>
+>   	/* Exit Hibernation when driver is removed. */
+> @@ -421,6 +424,31 @@ int dwc2_check_core_version(struct dwc2_hsotg *hsot=
+g)
+>   	return 0;
+>   }
+>
+> +static int dwc2_power_notifier(struct notifier_block *nb,
+> +			       unsigned long action, void *data)
+> +{
+> +	struct dwc2_hsotg *hsotg =3D container_of(nb, struct dwc2_hsotg,
+> +						genpd_nb);
+> +	int ret;
+> +
+> +	switch (action) {
+> +	case GENPD_NOTIFY_ON:
+> +		ret =3D dwc2_exit_poweroff(hsotg);
+> +		if (ret)
+> +			dev_err(hsotg->dev, "exit poweroff failed\n");
+> +		break;
+> +	case GENPD_NOTIFY_PRE_OFF:
+> +		ret =3D dwc2_enter_poweroff(hsotg);
+> +		if (ret)
+> +			dev_err(hsotg->dev, "enter poweroff failed\n");
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+>   /**
+>    * dwc2_driver_probe() - Called when the DWC_otg core is bound to the =
+DWC_otg
+>    * driver
+> @@ -620,6 +648,10 @@ static int dwc2_driver_probe(struct platform_device=
+ *dev)
+>   		}
+>   	}
+>   #endif /* CONFIG_USB_DWC2_PERIPHERAL || CONFIG_USB_DWC2_DUAL_ROLE */
+> +
+> +	hsotg->genpd_nb.notifier_call =3D dwc2_power_notifier;
+> +	dev_pm_genpd_add_notifier(&dev->dev, &hsotg->genpd_nb);
+> +
+>   	return 0;
+>
+>   #if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
+> --
+> 2.34.1
+>
 
---
-ankur
 
