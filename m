@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-12078-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12079-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6891894EE72
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 15:37:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40B2A94EE76
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 15:37:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EF6A1F2127F
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 13:37:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE0DBB23B42
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 13:37:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDB59186E59;
-	Mon, 12 Aug 2024 13:34:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC7B2187335;
+	Mon, 12 Aug 2024 13:34:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bGSAJ33P"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RMDLQwpb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD95B1862BD
-	for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2024 13:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E04186E40
+	for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2024 13:34:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723469675; cv=none; b=g/jYpBklvpsK9aZmimsHJ0aqSwRImlI8cxSgg04ukBQUARLhWmSDA1UhruIvpEypioEPEEf1/RTIQJX1/QU67lEf7wilvfNc25S+B93G6Q5LPKyfzpXBbUK97M1JDbjk9dONskIGHP8h3++igxzcw/nwyjnoEQT1Zo4rqeIwuKs=
+	t=1723469676; cv=none; b=rnJAmu6jmCV0ClgyVEj4Z9g4SpYKZ8/m3YxtTP6UEl6IZOMGgbydL+y1mjqtfo8xF2KvDf36OeAe8jXZMTsndOiMQKHwyL1fJezlueCm3lYc5qLLvz6XuGjZCgBCNepKVz3YiDQzlwV+ITgdbtyZ8z9z4/rWsKMQoq9IMI3H/fQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723469675; c=relaxed/simple;
-	bh=Qm8I2XYrN4e568eaRkgeUjoCW+fRdkjecwXHEHRljxk=;
+	s=arc-20240116; t=1723469676; c=relaxed/simple;
+	bh=1y9LIZ3UpOVR4pnvMVqojw1S5Kf9CAK2N1Et998QgxM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aYCfDx4bQddLvVQ+89Xmwp2rLy9k4Wq9W0jSbD0/8LH1MO4bsnNkzVL4QMHNrPn2uXb3zuamlqPnNgQ/397mdSATD9c5s+ZfKL+/z1JaY7mtVV8BqDSKSfB9waSVxzasmtyQYlL7s5gE/LTcBZmNsuvtRaFoNsN5uTyHgzGY4Zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bGSAJ33P; arc=none smtp.client-ip=209.85.208.171
+	 In-Reply-To:To:Cc; b=oUVyMBg78b/Z8kMCQJOA6W0VUhks9XLSvG1v1h2jnJF3yGvEPjquerBBl74ZRqTf5VrxX9eaIQ7Egry6Bu3cXOyqpsKiJ3RFBpw0zFD1HV0b6nj2xTXnJGsj0Jzzmj8t0ysYgnacXUH+UHwDWrjqMXRv1ntqq3ro9aiYgisuaHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RMDLQwpb; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2f025b94e07so50635361fa.0
-        for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2024 06:34:33 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-42809d6e719so33280545e9.3
+        for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2024 06:34:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723469672; x=1724074472; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1723469673; x=1724074473; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oAYRAyLvoG4oyvTDF3Z4505Z3pwRnY5SCeviwv8U1gY=;
-        b=bGSAJ33PZw/ZPt8758fYkBFxGpXdxlWUS9X5ZyXHp0/htCwjHbV7+viaKHAUAjteVX
-         NjWt3BVVAUXk0Am6YtXSRRjPEeWy/remdNj+iVO1iMa7oKbH+b2iVtTxqjucZIkeaHXD
-         Oy3iDwLHj7wBLcd4CmjDQH081gNV2vR7lWc8kiL6AVyMk/mxHZ9Mv6dLJD2kOOGn+wCR
-         mTV/xW0/MYkU27UpKdcvwcCQN2rSkVOQv8gCWbu4uPVUTiXpS9IoPzm1vbFSTiuB00nH
-         wqXeVLfzJlAhsMpS7n6no6Yh/x2BJ7rWtjZ+5u0kOpRZ7s7+dz5rscbX73wrAEm7T+7b
-         C8kA==
+        bh=KDjln6hpCDXYJ0URbIXokRubyMBzSip15NzhUO8TB7c=;
+        b=RMDLQwpbrNYeWvYBBG3wQC6alJ4BkDSartO7T38R+n2++6HF/JN9IsebeYdt53/0cE
+         MQq003aOzYm62OHOPcNt3Vbp48zTXhnfGb7F1+1Ov+58NOD4KJY1hRGuwMhoHq/26LQX
+         12sdBthwH2tNzO9MqElsSbCp0vTgswVlWbeUFTMweXVZIBkj5LCJsHKPMcA8Mime5wD7
+         +85dbPCoX3isZ+o0zpNrZfXiNdDy1UkdAbjdZeAeRJTSAFP5CDHYoL34NQkxyFxBjywS
+         vO6lcpJ1m4rTVFAudr+t9sVTYS/1evWwD9k4cWw2VjpGKuqZwdTVEgq+tOpgzgUa1ZU/
+         aycQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723469672; x=1724074472;
+        d=1e100.net; s=20230601; t=1723469673; x=1724074473;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oAYRAyLvoG4oyvTDF3Z4505Z3pwRnY5SCeviwv8U1gY=;
-        b=EwTcS5xULWqD4uovQAmXuXhUklVHvW3W7b9VqhRypWEFkK4VGKmCYV+o8Qg/tK/k8C
-         9tn+Fj4PDhT3tGBLy6IpKsK6r+cttSnb0GywGR3VYBjup2TDoja7Px/098oo18xODp0+
-         cYzeLqraXMxnNDulYXYSWAd0Ok1DLJdDMUy6cktAd+QOIP1yV7pcZEBQUupw7pyEhJbr
-         hMwKDp7J/FB8oXw0VeigaHMppnGjEXqRf4Qz8pP1vnVphUUuEgSTwZmD9AB7u0dU8jtO
-         Hsx37eWZPQ68NmCee35pYx3dsNW9ZjXiVjKnA8CmSoe7DqRWGa0PGb3TP7aQyIDOUIZL
-         0eSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUp8YsKDwhHotxULRMMhJG8FpOqnB+8yvHtj9v+PKxR7aOmbEqE7qi8W10UuvA66NJQMT+DHphTl9RikseDtVl6AsAC7U6XDwM=
-X-Gm-Message-State: AOJu0YzMDRiDYkhry3ZCgtBdeEF9tVHFOzOnSwDD3TBxa5JHDyBWRAmy
-	YxJ6JGkIO+4pbpJ4tAVMfzYiGGzDSArvY42DRXddCVXoM0RmKdfJMrSzo18M/AQ=
-X-Google-Smtp-Source: AGHT+IF4Zea8h7AbclFyhVQtS9eZT2Tc6EMfJdGvwHFdzc3KpbF32S6sd5GGemZ+KlUJ1S/LzaVfaw==
-X-Received: by 2002:a05:651c:b29:b0:2ef:2281:2158 with SMTP id 38308e7fff4ca-2f2b7132d7dmr2306451fa.1.1723469671912;
-        Mon, 12 Aug 2024 06:34:31 -0700 (PDT)
+        bh=KDjln6hpCDXYJ0URbIXokRubyMBzSip15NzhUO8TB7c=;
+        b=Ya24dajpXE5eOcG7R9q0CvgiZfMDZr9F8EELb+6Aze52c/JK+aCuo5mJswaU+xWagX
+         FMSIjCHgiQ8yEPqyQSrLoiIeYZAGAjW2FrydH8dWIzm2yhCYwaGEdgpxjSmajtF4cZX8
+         vkYbkIbAhC82caMPg4LIFtaigO9UDf+I6ztfGlbVYXcDDyC9fXkn7pBbt6ioUE1K8hXl
+         Z1YBa3oLwJwlU4QxQ233ZVw0fOpCz8eTMosQecq5ivlvziN7kkCuhZTDhl5kllTAmuEY
+         0+4pZG2Bgp2z+LvWvmTDNkIpuEmR7dq2Hkstit9NG/U0vJbXjBFd+DS3Me5qKL5NmQEX
+         xwqA==
+X-Forwarded-Encrypted: i=1; AJvYcCUXxp6Ft6mjKtN+gOGTqm8wbmh32BBzcazkQcgqJHVPZ+tS/RIpzqUqLlcyKjsqaBA/kxDdeuyyAaHqfTb2exY9cZQFv3d/kOg=
+X-Gm-Message-State: AOJu0Yx6H6pQqhPhG8jABtSazMcuhBq3zODYvniccpIheFI0lFEdYkS6
+	D53SZ5wX4UC3jA+v+YVgAgvTJ1bMW8WefqCs/7+jRgezEzr1hAH1/4Rn/JTirjM=
+X-Google-Smtp-Source: AGHT+IGxNdfGFBc2sd+uT8Mshv7zE0iMHxVPPRhCFdm+enI7xTfevgaIs4pdgcrzguVgeuzP0FcuHg==
+X-Received: by 2002:a05:600c:358a:b0:426:5269:9838 with SMTP id 5b1f17b1804b1-429d47f43a1mr3753855e9.4.1723469673377;
+        Mon, 12 Aug 2024 06:34:33 -0700 (PDT)
 Received: from [127.0.1.1] ([178.197.215.209])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429c7737c64sm102733975e9.31.2024.08.12.06.34.30
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429c7737c64sm102733975e9.31.2024.08.12.06.34.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Aug 2024 06:34:31 -0700 (PDT)
+        Mon, 12 Aug 2024 06:34:32 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Date: Mon, 12 Aug 2024 15:34:02 +0200
-Subject: [PATCH 8/9] memory: tegra30-emc: simplify with scoped for each OF
+Date: Mon, 12 Aug 2024 15:34:03 +0200
+Subject: [PATCH 9/9] memory: ti-aemif: simplify with scoped for each OF
  child loop
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -79,7 +79,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240812-cleanup-h-of-node-put-memory-v1-8-5065a8f361d2@linaro.org>
+Message-Id: <20240812-cleanup-h-of-node-put-memory-v1-9-5065a8f361d2@linaro.org>
 References: <20240812-cleanup-h-of-node-put-memory-v1-0-5065a8f361d2@linaro.org>
 In-Reply-To: <20240812-cleanup-h-of-node-put-memory-v1-0-5065a8f361d2@linaro.org>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -97,59 +97,75 @@ Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-stm32@st-md-mailman.stormreply.com, linux-tegra@vger.kernel.org, 
  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1224;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1869;
  i=krzysztof.kozlowski@linaro.org; h=from:subject:message-id;
- bh=Qm8I2XYrN4e568eaRkgeUjoCW+fRdkjecwXHEHRljxk=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBmug9X8NotaoXkCeoFvECQEThprz5ONHsMuzD7b
- NbNcj+DjQaJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCZroPVwAKCRDBN2bmhouD
- 19OvD/94A99rooiagSr1yUUB3q7Tj/0CpbQTlx8GEwagkJMZgezQJ8fSt8lsJRwMBXaisbT1RUu
- /ugtoQOyBWqkLkCZWhr/dt2MLe/xTHkqATxxMe/q3D+SgaGpBqnpb8s3OCcUoLRH2zLUgkSNI/B
- uuVVzd55ascHajpNWi6sBkx/4Ze24W/M4Kzrur9iytpTE0r8vhXx66INDaF8DWK1OKaSFR5C+87
- Xi3jQE9JUlz3sNAXyieSjga2IaM8ORwSZu5uDrQ9H5dih3U5zFbTcVXbvZgWBaehrOS6NJfiCd8
- SzqME8XywWSTxtLCXarn4TdGn3FqnR/O4walESXFoC2LygReE3WiwB/R+ZBHx3iQ7m+4NGDKZK6
- VBpdwrbh0T3/x+HpB1Q1KJZvfqxuUUEOFea5K/1geiiMiFJCWOk3r7PxgZgoHWn4SwuTSHrvFYI
- +219oxZut/xhcq+BqRzL/oR4EZ9TyOFAxpt7eqTU670YOGIom6tb2FG/KaN0L2UuCqlodmYVNsY
- iJbDxcpq4gIrMimT2QT6S+AsS5JZAIV6l0Rg+otm9KBlrSMLK0JFVzGsM/vcvY9suDvqXV0rtwP
- LNsXWOvL2mgzo2mkBI5TGQ0g7g9fhaRALj9GU1rbiyjbDY3dZneug64Vgj4jUmWBINShFwvH3ag
- Y/cmVhGViQKghBw==
+ bh=1y9LIZ3UpOVR4pnvMVqojw1S5Kf9CAK2N1Et998QgxM=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBmug9YQQCkCmD6RWyldjxAxJ+p417Q43d0hTixW
+ dLzROOtWr+JAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCZroPWAAKCRDBN2bmhouD
+ 1+nCD/9WeAq/6x6IjpXwsbY6q4WpzSCuLIsFjo3y8wWVAXieoqOsqOZ33OR2zlrlb5R7xqAmLOk
+ n+hWanKoaIz81P6uaaOV4ADrfzpSGO3F3pljzOFcC5kjgcvvPffYqPKATl5sUjzZNH+GbX+OJRZ
+ 0av395if4QbFFVZNGRncMfCo2pB8HZQQawKOrIVCOPLzN1l5iqgNomvHLRDECCa/i8nCeaWlmi/
+ 9UjCR9X02xh/BxZW74SjO55jI7IqLA9ohbA/OOGySP5UKVr42BoPn58P1GXpkfY6FZA+HZZ3ZxH
+ v+AGb+6rq80Wl7Lz7DM4tVc3RniN66Yw1veXOM5c0CnQcQHGRGJDD0PV1Mm5Y/UEhTzsYmy3srt
+ a2GcSDTHi2UlW11x5nxxS3OqY5xQ0lPmPn3y1UQ34g+x6gZpPZIQ5sRbQBNisH0kkU20pL32Toj
+ vJG2V8EcF8BgyExdqs5VwUIyMk+IGrWmq9XPpedyVUo3qSrUBR657572wxtDIFSOEkJ4sPtKxg0
+ j3AB0xCbvaDIJIE3xaTuD2DMCy2Tqf/EocjX/gF6//BfmKUbuQQUFxqm5UCiuSihYMtB82scL+Q
+ uQzGTpTFXzJKJUPlJUNaBiagiaOp0EoNTtbPKrmqybnQqPkBi7eMW/iiBy5E8nu+QOfyqv/mAoP
+ uWIYBVUyjipVCyQ==
 X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp;
  fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 
-Use scoped for_each_child_of_node_scoped() when iterating over device
-nodes to make code a bit simpler.
+Use scoped for_each_available_child_of_node_scoped() when iterating over
+device nodes to make code a bit simpler.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/memory/tegra/tegra30-emc.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/memory/ti-aemif.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/memory/tegra/tegra30-emc.c b/drivers/memory/tegra/tegra30-emc.c
-index d7b0a23c2d7d..921dce1b8bc6 100644
---- a/drivers/memory/tegra/tegra30-emc.c
-+++ b/drivers/memory/tegra/tegra30-emc.c
-@@ -979,7 +979,6 @@ static int emc_check_mc_timings(struct tegra_emc *emc)
- static int emc_load_timings_from_dt(struct tegra_emc *emc,
- 				    struct device_node *node)
- {
--	struct device_node *child;
- 	struct emc_timing *timing;
- 	int child_count;
- 	int err;
-@@ -998,12 +997,10 @@ static int emc_load_timings_from_dt(struct tegra_emc *emc,
- 	emc->num_timings = child_count;
- 	timing = emc->timings;
- 
--	for_each_child_of_node(node, child) {
-+	for_each_child_of_node_scoped(node, child) {
- 		err = load_one_timing_from_dt(emc, timing++, child);
--		if (err) {
--			of_node_put(child);
-+		if (err)
- 			return err;
--		}
- 	}
- 
- 	sort(emc->timings, emc->num_timings, sizeof(*timing), cmp_timings,
+diff --git a/drivers/memory/ti-aemif.c b/drivers/memory/ti-aemif.c
+index e192db9e0e4b..cd2945d4ec18 100644
+--- a/drivers/memory/ti-aemif.c
++++ b/drivers/memory/ti-aemif.c
+@@ -330,7 +330,6 @@ static int aemif_probe(struct platform_device *pdev)
+ 	int ret = -ENODEV;
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *np = dev->of_node;
+-	struct device_node *child_np;
+ 	struct aemif_device *aemif;
+ 	struct aemif_platform_data *pdata;
+ 	struct of_dev_auxdata *dev_lookup;
+@@ -374,12 +373,10 @@ static int aemif_probe(struct platform_device *pdev)
+ 		 * functions iterate over these nodes and update the cs data
+ 		 * array.
+ 		 */
+-		for_each_available_child_of_node(np, child_np) {
++		for_each_available_child_of_node_scoped(np, child_np) {
+ 			ret = of_aemif_parse_abus_config(pdev, child_np);
+-			if (ret < 0) {
+-				of_node_put(child_np);
++			if (ret < 0)
+ 				goto error;
+-			}
+ 		}
+ 	} else if (pdata && pdata->num_abus_data > 0) {
+ 		for (i = 0; i < pdata->num_abus_data; i++, aemif->num_cs++) {
+@@ -402,13 +399,11 @@ static int aemif_probe(struct platform_device *pdev)
+ 	 * child will be probed after the AEMIF timing parameters are set.
+ 	 */
+ 	if (np) {
+-		for_each_available_child_of_node(np, child_np) {
++		for_each_available_child_of_node_scoped(np, child_np) {
+ 			ret = of_platform_populate(child_np, NULL,
+ 						   dev_lookup, dev);
+-			if (ret < 0) {
+-				of_node_put(child_np);
++			if (ret < 0)
+ 				goto error;
+-			}
+ 		}
+ 	} else if (pdata) {
+ 		for (i = 0; i < pdata->num_sub_devices; i++) {
 
 -- 
 2.43.0
