@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-12088-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12086-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5610E94EF0A
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 15:59:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E98E194EF07
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 15:59:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 012FB1F22F5C
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 13:59:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A2B61C20AC0
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 13:59:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F62217CA1F;
-	Mon, 12 Aug 2024 13:59:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CA4C17C7C3;
+	Mon, 12 Aug 2024 13:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="i94VqTM2"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="ffW/lgyo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B85B17C230;
-	Mon, 12 Aug 2024 13:59:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A47C14D6FE;
+	Mon, 12 Aug 2024 13:59:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723471181; cv=none; b=lHEOBGUfELFW6Tfm58bNpmIS+xgCiUKtCYffZ3KcVGI4l7rk3SK/uViQGYpO5gP1MxnQ0cUHaCUNy7cLFeUQB3nPDPAhmqZV+fc1itJSNrTOuRGLW3z1Of6FvtSGI0Lcsu2Mcf1pdrNqvjuKO4QO8HDj96QiNPD9OophVIE1pAA=
+	t=1723471180; cv=none; b=HVsHBTcQYqfLhmnzT+Z8hAHMihErqchsrBwz6icIQBWG8N7UMKn4oBW+gklVrPeeoMRbIS06CIpatYSMD9iOrqDMdX4DfnZyXVvNp2axX5OKTk43AFzOSHyBoqRO2tPrmqIWgm99Eg4wvPfm+ZuSEjSA16KPcK4J/RUXWqpbAvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723471181; c=relaxed/simple;
-	bh=+LDp9pftu1CyEMR+OQOK9+1vnYCGty270st7d2AvTEc=;
+	s=arc-20240116; t=1723471180; c=relaxed/simple;
+	bh=6dazxTdqRDaxnMfnFIe3JJwYOYmHRGWXxVy/AN2n6nA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gOejxZaxKSoQ7Y9nvUvjIaNCyLuHlzcMTYt9UxlNf+8peHcR5j64yjtMiuQ0iOin1o5ZgVBvPVywN7cDm1QiBkuWx1NyQBkeku7NndBhJHtuEwPrNmQl1KgnGGmHGpfvZ+c8AM/G3x1MZ7mxFgAGjaIRVn/QlgTcqk5noOy3/2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=i94VqTM2 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=JIaUhvdW695OfqDcrteF532X9AGEuu7hgYgZUbEYx6iUeXX6gfxXPJZWYb4cxWCcvNUYRO13nH57nq6Uw9ic3d259ZN1bOiukLxZ6bwWLmEnxM4GJu5M7Rs5jul7tnA10cmwRK+e3m3xvoS0EkBL5FYt1rIuL+m2fjovIAr5BDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=ffW/lgyo reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id 93076ac956817fa7; Mon, 12 Aug 2024 15:59:37 +0200
+ id 80e2f7d5647efa98; Mon, 12 Aug 2024 15:59:36 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 04A216F0D63;
-	Mon, 12 Aug 2024 15:59:37 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 163316F0D63;
+	Mon, 12 Aug 2024 15:59:36 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1723471177;
-	bh=+LDp9pftu1CyEMR+OQOK9+1vnYCGty270st7d2AvTEc=;
+	s=dkim; t=1723471176;
+	bh=6dazxTdqRDaxnMfnFIe3JJwYOYmHRGWXxVy/AN2n6nA=;
 	h=From:Subject:Date;
-	b=i94VqTM2R21uwP8Eaq91y5y4ifOgMBpGDFjv9mlyqMl8nEaIU1qsPJAyOePol5RUE
-	 Jy2nXSt2EPcLzPEVQlZsmNO0RWpLMxzmRUa1cn/NMbBY560f+vT8gKtgJiWq0NzIed
-	 h/Z2xg0k3s61dsbWOS7Ll2XrDvsLi6azXqzHqMvosaCJxzvL/JKUHShE8cFRjnSYt6
-	 5vQ8BmPFCU7T3atwpPHRQdAYOn2Xqoclp1UghEiGvsXWYIfk5f1VRCLEq3KSUOlsML
-	 cTvd/oadEXS6OJ0MpUonqM8HNuZJNmYo2hOpisH+IhZjRcab1UaErC6tPO790ix3TH
-	 ju6GrchvqcGhg==
+	b=ffW/lgyoVNzEbYAKIq4AKaQBwtdiGtSO+GMruZ3/xiMj+fo1jQowgvNyL+OLDJSUD
+	 Y5jACSx9oUlTbzCyXD5kQnE/ESPUaTJregWPrNspX54SxdeUwXy3I5wIT26YZkKUbU
+	 YR/2+zxxI4ErqAEd3BD8JueDyp+br5KQs87ZGYC1PUtV7iEaG4zHO254yBaluhtJbL
+	 zZrrXpS50ITCDWK1B30Pd77Hkbf4Z4f3XxdC4iQMUDJvfNwWxf5qzDf0zLl+mXHVHh
+	 B89gDYj6bK3lGxlXTjJro1PpK94AoZevUlxLumO2q6BWoF96Y557Yta8n6tD6Sq574
+	 /M2973tPU0TaA==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>,
  Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>
 Subject:
- [PATCH v2 03/17] thermal: core: Drop redundant thermal instance checks
-Date: Mon, 12 Aug 2024 15:54:36 +0200
-Message-ID: <2157531.OBFZWjSADL@rjwysocki.net>
+ [PATCH v2 04/17] thermal: core: Clean up cdev binding/unbinding functions
+Date: Mon, 12 Aug 2024 15:56:23 +0200
+Message-ID: <2819322.BEx9A2HvPv@rjwysocki.net>
 In-Reply-To: <114901234.nniJfEyVGO@rjwysocki.net>
 References: <114901234.nniJfEyVGO@rjwysocki.net>
 Precedence: bulk
@@ -78,44 +78,108 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Because the trip and cdev pointers are sufficient to identify a thermal
-instance holding them unambiguously, drop the additional thermal zone
-checks from two loops walking the list of thermal instances in a
-thermal zone.
+Add a new label to thermal_bind_cdev_to_trip() and use it to eliminate
+two redundant !result check from that function, rename a label in
+thermal_unbind_cdev_from_trip() to reflect its actual purpose and
+adjust some white space in these functions.
 
 No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
-v1 -> v2: Fix typo in the changelog
+v1 -> v2: No changes.
 
 ---
- drivers/thermal/thermal_core.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/thermal/thermal_core.c |   32 ++++++++++++++++++--------------
+ 1 file changed, 18 insertions(+), 14 deletions(-)
 
 Index: linux-pm/drivers/thermal/thermal_core.c
 ===================================================================
 --- linux-pm.orig/drivers/thermal/thermal_core.c
 +++ linux-pm/drivers/thermal/thermal_core.c
-@@ -850,7 +850,7 @@ int thermal_bind_cdev_to_trip(struct the
- 	mutex_lock(&tz->lock);
- 	mutex_lock(&cdev->lock);
- 	list_for_each_entry(pos, &tz->thermal_instances, tz_node)
--		if (pos->tz == tz && pos->trip == trip && pos->cdev == cdev) {
-+		if (pos->trip == trip && pos->cdev == cdev) {
- 			result = -EEXIST;
- 			break;
- 		}
-@@ -915,7 +915,7 @@ int thermal_unbind_cdev_from_trip(struct
- 	mutex_lock(&tz->lock);
- 	mutex_lock(&cdev->lock);
- 	list_for_each_entry_safe(pos, next, &tz->thermal_instances, tz_node) {
--		if (pos->tz == tz && pos->trip == trip && pos->cdev == cdev) {
-+		if (pos->trip == trip && pos->cdev == cdev) {
- 			list_del(&pos->tz_node);
- 			list_del(&pos->cdev_node);
+@@ -806,6 +806,7 @@ int thermal_bind_cdev_to_trip(struct the
+ 	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+ 	if (!dev)
+ 		return -ENOMEM;
++
+ 	dev->tz = tz;
+ 	dev->cdev = cdev;
+ 	dev->trip = trip;
+@@ -821,8 +822,7 @@ int thermal_bind_cdev_to_trip(struct the
  
+ 	dev->id = result;
+ 	sprintf(dev->name, "cdev%d", dev->id);
+-	result =
+-	    sysfs_create_link(&tz->device.kobj, &cdev->device.kobj, dev->name);
++	result = sysfs_create_link(&tz->device.kobj, &cdev->device.kobj, dev->name);
+ 	if (result)
+ 		goto release_ida;
+ 
+@@ -849,24 +849,26 @@ int thermal_bind_cdev_to_trip(struct the
+ 
+ 	mutex_lock(&tz->lock);
+ 	mutex_lock(&cdev->lock);
+-	list_for_each_entry(pos, &tz->thermal_instances, tz_node)
++
++	list_for_each_entry(pos, &tz->thermal_instances, tz_node) {
+ 		if (pos->trip == trip && pos->cdev == cdev) {
+ 			result = -EEXIST;
+-			break;
++			goto remove_weight_file;
+ 		}
+-	if (!result) {
+-		list_add_tail(&dev->tz_node, &tz->thermal_instances);
+-		list_add_tail(&dev->cdev_node, &cdev->thermal_instances);
+-		atomic_set(&tz->need_update, 1);
+-
+-		thermal_governor_update_tz(tz, THERMAL_TZ_BIND_CDEV);
+ 	}
++
++	list_add_tail(&dev->tz_node, &tz->thermal_instances);
++	list_add_tail(&dev->cdev_node, &cdev->thermal_instances);
++	atomic_set(&tz->need_update, 1);
++
++	thermal_governor_update_tz(tz, THERMAL_TZ_BIND_CDEV);
++
+ 	mutex_unlock(&cdev->lock);
+ 	mutex_unlock(&tz->lock);
+ 
+-	if (!result)
+-		return 0;
++	return 0;
+ 
++remove_weight_file:
+ 	device_remove_file(&tz->device, &dev->weight_attr);
+ remove_trip_file:
+ 	device_remove_file(&tz->device, &dev->attr);
+@@ -914,6 +916,7 @@ int thermal_unbind_cdev_from_trip(struct
+ 
+ 	mutex_lock(&tz->lock);
+ 	mutex_lock(&cdev->lock);
++
+ 	list_for_each_entry_safe(pos, next, &tz->thermal_instances, tz_node) {
+ 		if (pos->trip == trip && pos->cdev == cdev) {
+ 			list_del(&pos->tz_node);
+@@ -923,15 +926,16 @@ int thermal_unbind_cdev_from_trip(struct
+ 
+ 			mutex_unlock(&cdev->lock);
+ 			mutex_unlock(&tz->lock);
+-			goto unbind;
++			goto free;
+ 		}
+ 	}
++
+ 	mutex_unlock(&cdev->lock);
+ 	mutex_unlock(&tz->lock);
+ 
+ 	return -ENODEV;
+ 
+-unbind:
++free:
+ 	device_remove_file(&tz->device, &pos->weight_attr);
+ 	device_remove_file(&tz->device, &pos->attr);
+ 	sysfs_remove_link(&tz->device.kobj, pos->name);
 
 
 
