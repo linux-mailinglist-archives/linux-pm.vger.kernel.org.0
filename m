@@ -1,67 +1,64 @@
-Return-Path: <linux-pm+bounces-12101-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12100-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01DA594EF9A
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 16:32:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAD7694EF8B
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 16:29:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 546AFB216CD
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 14:32:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFE341C21C6D
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 14:29:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7625B17F4EC;
-	Mon, 12 Aug 2024 14:31:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38189183CB0;
+	Mon, 12 Aug 2024 14:29:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="x4d1SaDQ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="J1hVLX+R"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1295217D354;
-	Mon, 12 Aug 2024 14:31:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACB0180056;
+	Mon, 12 Aug 2024 14:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723473117; cv=none; b=tNGbicwvfyfEt53r2HKu0Q8kjIORCSSkxGdPJCU0BxpLC9wMnT97Ij6LzchWXvwlr93aju6ykafp/KTIjMkQKoaEAL1bTARhmN9xXK9Gf5EPOUnWOq7wx9tIQVkfDR/nF7Ax1rX924wFC1t+EtqOh4PyHdPRZxKS9g5MzM8tTO8=
+	t=1723472948; cv=none; b=Dn/UkgqtCvW2cXI4gJHw2qDVjUfv/leSM+havM9aaqJSXWZ8rhLEf4uhZi3P145p4x7Yd1F3simYF37cRPjxtLkapRB3wiGPEn3b3b3wO7o+cQf5TlEhfwmYP47+M28gLNrD/jQ4hx8lEZdeRKBg5iWTRif1WA/n+3aeWI14Dz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723473117; c=relaxed/simple;
-	bh=XM9aUny7cl5ohqVnexkSJnE7yWEAWxAYqxlaLkipZpw=;
+	s=arc-20240116; t=1723472948; c=relaxed/simple;
+	bh=qQAhtyfVN6MP1zREJj03XkwPz5YjVcJjPrqmDhOLjYE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SuCT5bcIWsMjiUmZ3VC12RWz9aQtn6uDyzeib02ey3wFp30anSp62Ho382jZzKosMP9HiMWyVHl3stmuU6As/6sxjlPDKBpaC+JjLC1lP05o1b1Lt6FhiwhiZ8+my5oujhUucUn00pVZHivY0Zhy80hMMkS2i04eKXM8bnhkHoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=x4d1SaDQ reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=OlIJaX2mRLHa9E/4tROUlUpvACJnORC+BpyHf1ZBqV2lAFPGDe4UGiCNaMZ0uGHm2T2+P9wsqUIKQ1qQ9DYbcXwojWd+qW5MjAi3H796pMNgrU/JPjDJcqmaVhttILF7NyKgYhWo6ZTt9bqvwO8Maob74Zlw5OZkeJcVPWK05R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=J1hVLX+R reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id b71e99379069fb1e; Mon, 12 Aug 2024 16:31:53 +0200
+ id 1171e99b1f940fa7; Mon, 12 Aug 2024 16:29:03 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 842226F0D9C;
-	Mon, 12 Aug 2024 16:31:52 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 6A23F6F0D9C;
+	Mon, 12 Aug 2024 16:29:03 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1723473113;
-	bh=XM9aUny7cl5ohqVnexkSJnE7yWEAWxAYqxlaLkipZpw=;
+	s=dkim; t=1723472943;
+	bh=qQAhtyfVN6MP1zREJj03XkwPz5YjVcJjPrqmDhOLjYE=;
 	h=From:Subject:Date;
-	b=x4d1SaDQsjaXt0o+1KWUuzmLdnuXFY7gbrrN5whNJPGLMmuIV3R7X2HkSAsHySWcf
-	 X089ZLoMfNnFemn/nJCV4RwZz4mnahTZGkLzZPZzTR6N3Z5MIdkXX8F4CUCb+zoqUc
-	 Iisxjh+UWKVnE3O+YYg2lMGLmN1HCrLd6vmfOvYYufHLlDqSK4O5oiLCaYugAqCZcP
-	 QxBJwlclRGk89K80v44h3h7IY3AKPbEUyINUO3vD/aquIbTnlne7UfPT9SbOszKI33
-	 IuXIg62oOxTwTkM/e+/uUw7yCUI/4a69lCFlrDuITFUhu1OvUlKD692B2hafTByhAM
-	 n4pYrvwfrzjuw==
+	b=J1hVLX+Rht4leS5FexFvRxT8mLG7+wzW1S86q1gPmIyUbi+pWTmlpNLn43eH5Emf5
+	 MKhqh5BzgfiIxZqzskqvfZvdAAV5ZysBpO47ZhWzfb0mwDeyggB/dR1FjO7q/2gwDp
+	 6KjivB+rYd/ejzQaP0ZJn3LzKLOOfQVxZnlnnme8woyCmTN8vZ8FNiqZxE3mFtirZn
+	 d9+JsinljDE0PM/9TjAXa7u8R6pVAWDFU4VmKZ1zf4fFzIInbIvIO6/H1fA0meFDUW
+	 Msi/wepC6tkNOI2sQd9hmHl+p8YxSEsX2sN66nBfdUrkvBcdJS8P45obc8pQkasGIC
+	 njjF8ejUFMRig==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>,
- Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
- Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
- netdev@vger.kernel.org
+ Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>
 Subject:
- [PATCH v2 13/17] mlxsw: core_thermal:  Use the .should_bind() thermal zone
- callback
-Date: Mon, 12 Aug 2024 16:23:38 +0200
-Message-ID: <3623933.LM0AJKV5NW@rjwysocki.net>
+ [PATCH v2 14/17] thermal/of:  Use the .should_bind() thermal zone callback
+Date: Mon, 12 Aug 2024 16:25:05 +0200
+Message-ID: <1758256.QkHrqEjB74@rjwysocki.net>
 In-Reply-To: <114901234.nniJfEyVGO@rjwysocki.net>
 References: <114901234.nniJfEyVGO@rjwysocki.net>
 Precedence: bulk
@@ -75,252 +72,294 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: spam:low
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddruddttddgjeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucfuphgrmhfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhl
- vgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehiughoshgthhesnhhvihguihgrrdgtohhmpdhrtghpthhtohepphgvthhrmhesnhhvihguihgrrdgtohhmpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=16 Fuz1=16 Fuz2=16
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddruddttddgjeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucfuphgrmhfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhl
+ vgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Make the mlxsw core_thermal driver use the .should_bind() thermal zone
-callback to provide the thermal core with the information on whether or
-not to bind the given cooling device to the given trip point in the
-given thermal zone.  If it returns 'true', the thermal core will bind
-the cooling device to the trip and the corresponding unbinding will be
+Make the thermal_of driver use the .should_bind() thermal zone callback
+to provide the thermal core with the information on whether or not to
+bind the given cooling device to the given trip point in the given
+thermal zone.  If it returns 'true', the thermal core will bind the
+cooling device to the trip and the corresponding unbinding will be
 taken care of automatically by the core on the removal of the involved
 thermal zone or cooling device.
 
-It replaces the .bind() and .unbind() thermal zone callbacks (in 3
-places) which assumed the same trip points ordering in the driver
-and in the thermal core (that may not be true any more in the
-future).  The .bind() callbacks used loops over trip point indices
-to call thermal_zone_bind_cooling_device() for the same cdev (once
-it had been verified) and all of the trip points, but they passed
-different 'upper' and 'lower' values to it for each trip.
+This replaces the .bind() and .unbind() thermal zone callbacks which
+assumed the same trip points ordering in the driver and in the thermal
+core (that may not be true any more in the future).  The .bind()
+callback would walk the given thermal zone's cooling maps to find all
+of the valid trip point combinations with the given cooling device and
+it would call thermal_zone_bind_cooling_device() for all of them using
+trip point indices reflecting the ordering of the trips in the DT.
 
-To retain the original functionality, the .should_bind() callbacks
-need to use the same 'upper' and 'lower' values that would be used
-by the corresponding .bind() callbacks when they are about to return
-'true'.  To that end, the 'priv' field of each trip is set during the
-thermal zone initialization to point to the corresponding 'state'
-object containing the maximum and minimum cooling states of the
-cooling device.
+The .should_bind() callback still walks the thermal zone's cooling maps,
+but it can use the trip object passed to it by the thermal core to find
+the trip in question in the first place and then it uses the
+corresponding 'cooling-device' entries to look up the given cooling
+device.  To be able to match the trip object provided by the thermal
+core to a specific device node, the driver sets the 'priv' field of each
+trip to the corresponding device node pointer during initialization.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
 v1 -> v2:
-   * Fix typo in the changelog.
-   * Do not move the mlxsw_thermal_ops definition.
-   * Change ordering of local variables in mlxsw_thermal_module_should_bind().
+   * Fix a build issue (undefined symbol).
 
 This patch only depends on patch [08/17] introducing .should_bind():
 
 https://lore.kernel.org/linux-pm/2696117.X9hSmTKtgW@rjwysocki.net/
 
 ---
- drivers/net/ethernet/mellanox/mlxsw/core_thermal.c |  115 +++++----------------
- 1 file changed, 31 insertions(+), 84 deletions(-)
+ drivers/thermal/thermal_of.c |  171 ++++++++++---------------------------------
+ 1 file changed, 41 insertions(+), 130 deletions(-)
 
-Index: linux-pm/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+Index: linux-pm/drivers/thermal/thermal_of.c
 ===================================================================
---- linux-pm.orig/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-+++ linux-pm/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-@@ -165,52 +165,22 @@ static int mlxsw_get_cooling_device_idx(
- 	return -ENODEV;
- }
+--- linux-pm.orig/drivers/thermal/thermal_of.c
++++ linux-pm/drivers/thermal/thermal_of.c
+@@ -20,37 +20,6 @@
  
--static int mlxsw_thermal_bind(struct thermal_zone_device *tzdev,
--			      struct thermal_cooling_device *cdev)
-+static bool mlxsw_thermal_should_bind(struct thermal_zone_device *tzdev,
-+				      const struct thermal_trip *trip,
-+				      struct thermal_cooling_device *cdev,
-+				      struct cooling_spec *c)
- {
- 	struct mlxsw_thermal *thermal = thermal_zone_device_priv(tzdev);
--	struct device *dev = thermal->bus_info->dev;
--	int i, err;
-+	const struct mlxsw_cooling_states *state = trip->priv;
+ /***   functions parsing device tree nodes   ***/
  
- 	/* If the cooling device is one of ours bind it */
- 	if (mlxsw_get_cooling_device_idx(thermal, cdev) < 0)
--		return 0;
+-static int of_find_trip_id(struct device_node *np, struct device_node *trip)
+-{
+-	struct device_node *trips;
+-	struct device_node *t;
+-	int i = 0;
 -
--	for (i = 0; i < MLXSW_THERMAL_NUM_TRIPS; i++) {
--		const struct mlxsw_cooling_states *state = &thermal->cooling_states[i];
--
--		err = thermal_zone_bind_cooling_device(tzdev, i, cdev,
--						       state->max_state,
--						       state->min_state,
--						       THERMAL_WEIGHT_DEFAULT);
--		if (err < 0) {
--			dev_err(dev, "Failed to bind cooling device to trip %d\n", i);
--			return err;
--		}
+-	trips = of_get_child_by_name(np, "trips");
+-	if (!trips) {
+-		pr_err("Failed to find 'trips' node\n");
+-		return -EINVAL;
 -	}
--	return 0;
+-
+-	/*
+-	 * Find the trip id point associated with the cooling device map
+-	 */
+-	for_each_child_of_node(trips, t) {
+-
+-		if (t == trip) {
+-			of_node_put(t);
+-			goto out;
+-		}
+-		i++;
+-	}
+-
+-	i = -ENXIO;
+-out:
+-	of_node_put(trips);
+-
+-	return i;
 -}
 -
--static int mlxsw_thermal_unbind(struct thermal_zone_device *tzdev,
--				struct thermal_cooling_device *cdev)
+ /*
+  * It maps 'enum thermal_trip_type' found in include/linux/thermal.h
+  * into the device tree binding of 'trip', property type.
+@@ -119,6 +88,8 @@ static int thermal_of_populate_trip(stru
+ 
+ 	trip->flags = THERMAL_TRIP_FLAG_RW_TEMP;
+ 
++	trip->priv = np;
++
+ 	return 0;
+ }
+ 
+@@ -290,39 +261,9 @@ static struct device_node *thermal_of_zo
+ 	return tz_np;
+ }
+ 
+-static int __thermal_of_unbind(struct device_node *map_np, int index, int trip_id,
+-			       struct thermal_zone_device *tz, struct thermal_cooling_device *cdev)
 -{
--	struct mlxsw_thermal *thermal = thermal_zone_device_priv(tzdev);
--	struct device *dev = thermal->bus_info->dev;
--	int i;
--	int err;
+-	struct of_phandle_args cooling_spec;
+-	int ret;
+-
+-	ret = of_parse_phandle_with_args(map_np, "cooling-device", "#cooling-cells",
+-					 index, &cooling_spec);
+-
+-	if (ret < 0) {
+-		pr_err("Invalid cooling-device entry\n");
+-		return ret;
+-	}
+-
+-	of_node_put(cooling_spec.np);
+-
+-	if (cooling_spec.args_count < 2) {
+-		pr_err("wrong reference to cooling device, missing limits\n");
+-		return -EINVAL;
+-	}
+-
+-	if (cooling_spec.np != cdev->np)
+-		return 0;
+-
+-	ret = thermal_zone_unbind_cooling_device(tz, trip_id, cdev);
+-	if (ret)
+-		pr_err("Failed to unbind '%s' with '%s': %d\n", tz->type, cdev->type, ret);
+-
+-	return ret;
+-}
+-
+-static int __thermal_of_bind(struct device_node *map_np, int index, int trip_id,
+-			     struct thermal_zone_device *tz, struct thermal_cooling_device *cdev)
++static bool thermal_of_get_cooling_spec(struct device_node *map_np, int index,
++					struct thermal_cooling_device *cdev,
++					struct cooling_spec *c)
+ {
+ 	struct of_phandle_args cooling_spec;
+ 	int ret, weight = THERMAL_WEIGHT_DEFAULT;
+@@ -334,104 +275,75 @@ static int __thermal_of_bind(struct devi
+ 
+ 	if (ret < 0) {
+ 		pr_err("Invalid cooling-device entry\n");
+-		return ret;
++		return false;
+ 	}
+ 
+ 	of_node_put(cooling_spec.np);
+ 
+ 	if (cooling_spec.args_count < 2) {
+ 		pr_err("wrong reference to cooling device, missing limits\n");
+-		return -EINVAL;
++		return false;
+ 	}
+ 
+ 	if (cooling_spec.np != cdev->np)
+-		return 0;
+-
+-	ret = thermal_zone_bind_cooling_device(tz, trip_id, cdev, cooling_spec.args[1],
+-					       cooling_spec.args[0],
+-					       weight);
+-	if (ret)
+-		pr_err("Failed to bind '%s' with '%s': %d\n", tz->type, cdev->type, ret);
+-
+-	return ret;
+-}
+-
+-static int thermal_of_for_each_cooling_device(struct device_node *tz_np, struct device_node *map_np,
+-					      struct thermal_zone_device *tz, struct thermal_cooling_device *cdev,
+-					      int (*action)(struct device_node *, int, int,
+-							    struct thermal_zone_device *, struct thermal_cooling_device *))
+-{
+-	struct device_node *tr_np;
+-	int count, i, trip_id;
+-
+-	tr_np = of_parse_phandle(map_np, "trip", 0);
+-	if (!tr_np)
+-		return -ENODEV;
+-
+-	trip_id = of_find_trip_id(tz_np, tr_np);
+-	if (trip_id < 0)
+-		return trip_id;
+-
+-	count = of_count_phandle_with_args(map_np, "cooling-device", "#cooling-cells");
+-	if (count <= 0) {
+-		pr_err("Add a cooling_device property with at least one device\n");
+-		return -ENOENT;
+-	}
 +		return false;
  
--	/* If the cooling device is our one unbind it */
--	if (mlxsw_get_cooling_device_idx(thermal, cdev) < 0)
--		return 0;
-+	c->upper = state->max_state;
-+	c->lower = state->min_state;
+-	/*
+-	 * At this point, we don't want to bail out when there is an
+-	 * error, we will try to bind/unbind as many as possible
+-	 * cooling devices
+-	 */
+-	for (i = 0; i < count; i++)
+-		action(map_np, i, trip_id, tz, cdev);
++	c->lower = cooling_spec.args[0];
++	c->upper = cooling_spec.args[1];
++	c->weight = weight;
  
--	for (i = 0; i < MLXSW_THERMAL_NUM_TRIPS; i++) {
--		err = thermal_zone_unbind_cooling_device(tzdev, i, cdev);
--		if (err < 0) {
--			dev_err(dev, "Failed to unbind cooling device\n");
--			return err;
--		}
--	}
 -	return 0;
 +	return true;
  }
  
- static int mlxsw_thermal_get_temp(struct thermal_zone_device *tzdev,
-@@ -240,57 +210,27 @@ static struct thermal_zone_params mlxsw_
- };
- 
- static struct thermal_zone_device_ops mlxsw_thermal_ops = {
--	.bind = mlxsw_thermal_bind,
--	.unbind = mlxsw_thermal_unbind,
-+	.should_bind = mlxsw_thermal_should_bind,
- 	.get_temp = mlxsw_thermal_get_temp,
- };
- 
--static int mlxsw_thermal_module_bind(struct thermal_zone_device *tzdev,
--				     struct thermal_cooling_device *cdev)
-+static bool mlxsw_thermal_module_should_bind(struct thermal_zone_device *tzdev,
-+					     const struct thermal_trip *trip,
-+					     struct thermal_cooling_device *cdev,
-+					     struct cooling_spec *c)
+-static int thermal_of_for_each_cooling_maps(struct thermal_zone_device *tz,
+-					    struct thermal_cooling_device *cdev,
+-					    int (*action)(struct device_node *, int, int,
+-							  struct thermal_zone_device *, struct thermal_cooling_device *))
++static bool thermal_of_should_bind(struct thermal_zone_device *tz,
++				   const struct thermal_trip *trip,
++				   struct thermal_cooling_device *cdev,
++				   struct cooling_spec *c)
  {
- 	struct mlxsw_thermal_module *tz = thermal_zone_device_priv(tzdev);
-+	const struct mlxsw_cooling_states *state = trip->priv;
- 	struct mlxsw_thermal *thermal = tz->parent;
--	int i, j, err;
+ 	struct device_node *tz_np, *cm_np, *child;
+-	int ret = 0;
++	bool result = false;
  
- 	/* If the cooling device is one of ours bind it */
- 	if (mlxsw_get_cooling_device_idx(thermal, cdev) < 0)
--		return 0;
--
--	for (i = 0; i < MLXSW_THERMAL_NUM_TRIPS; i++) {
--		const struct mlxsw_cooling_states *state = &tz->cooling_states[i];
+ 	tz_np = thermal_of_zone_get_by_name(tz);
+ 	if (IS_ERR(tz_np)) {
+ 		pr_err("Failed to get node tz by name\n");
+-		return PTR_ERR(tz_np);
 +		return false;
+ 	}
  
--		err = thermal_zone_bind_cooling_device(tzdev, i, cdev,
--						       state->max_state,
--						       state->min_state,
--						       THERMAL_WEIGHT_DEFAULT);
--		if (err < 0)
--			goto err_thermal_zone_bind_cooling_device;
--	}
--	return 0;
--
--err_thermal_zone_bind_cooling_device:
--	for (j = i - 1; j >= 0; j--)
--		thermal_zone_unbind_cooling_device(tzdev, j, cdev);
--	return err;
+ 	cm_np = of_get_child_by_name(tz_np, "cooling-maps");
+ 	if (!cm_np)
+ 		goto out;
+ 
++	/* Look up the trip and the cdev in the cooling maps. */
+ 	for_each_child_of_node(cm_np, child) {
+-		ret = thermal_of_for_each_cooling_device(tz_np, child, tz, cdev, action);
+-		if (ret) {
++		struct device_node *tr_np;
++		int count, i;
++
++		tr_np = of_parse_phandle(child, "trip", 0);
++		if (tr_np != trip->priv) {
+ 			of_node_put(child);
+-			break;
++			continue;
++		}
++
++		/* The trip has been found, look up the cdev. */
++		count = of_count_phandle_with_args(child, "cooling-device", "#cooling-cells");
++		if (count <= 0)
++			pr_err("Add a cooling_device property with at least one device\n");
++
++		for (i = 0; i < count; i++) {
++			result = thermal_of_get_cooling_spec(child, i, cdev, c);
++			if (result)
++				break;
+ 		}
++
++		of_node_put(child);
++		break;
+ 	}
+ 
+ 	of_node_put(cm_np);
+ out:
+ 	of_node_put(tz_np);
+ 
+-	return ret;
 -}
 -
--static int mlxsw_thermal_module_unbind(struct thermal_zone_device *tzdev,
--				       struct thermal_cooling_device *cdev)
+-static int thermal_of_bind(struct thermal_zone_device *tz,
+-			   struct thermal_cooling_device *cdev)
 -{
--	struct mlxsw_thermal_module *tz = thermal_zone_device_priv(tzdev);
--	struct mlxsw_thermal *thermal = tz->parent;
--	int i;
--	int err;
-+	c->upper = state->max_state;
-+	c->lower = state->min_state;
- 
--	/* If the cooling device is one of ours unbind it */
--	if (mlxsw_get_cooling_device_idx(thermal, cdev) < 0)
--		return 0;
+-	return thermal_of_for_each_cooling_maps(tz, cdev, __thermal_of_bind);
+-}
 -
--	for (i = 0; i < MLXSW_THERMAL_NUM_TRIPS; i++) {
--		err = thermal_zone_unbind_cooling_device(tzdev, i, cdev);
--		WARN_ON(err);
--	}
--	return err;
-+	return true;
+-static int thermal_of_unbind(struct thermal_zone_device *tz,
+-			     struct thermal_cooling_device *cdev)
+-{
+-	return thermal_of_for_each_cooling_maps(tz, cdev, __thermal_of_unbind);
++	return result;
  }
  
- static int mlxsw_thermal_module_temp_get(struct thermal_zone_device *tzdev,
-@@ -313,8 +253,7 @@ static int mlxsw_thermal_module_temp_get
- }
+ /**
+@@ -502,8 +414,7 @@ static struct thermal_zone_device *therm
  
- static struct thermal_zone_device_ops mlxsw_thermal_module_ops = {
--	.bind		= mlxsw_thermal_module_bind,
--	.unbind		= mlxsw_thermal_module_unbind,
-+	.should_bind	= mlxsw_thermal_module_should_bind,
- 	.get_temp	= mlxsw_thermal_module_temp_get,
- };
+ 	thermal_of_parameters_init(np, &tzp);
  
-@@ -342,8 +281,7 @@ static int mlxsw_thermal_gearbox_temp_ge
- }
+-	of_ops.bind = thermal_of_bind;
+-	of_ops.unbind = thermal_of_unbind;
++	of_ops.should_bind = thermal_of_should_bind;
  
- static struct thermal_zone_device_ops mlxsw_thermal_gearbox_ops = {
--	.bind		= mlxsw_thermal_module_bind,
--	.unbind		= mlxsw_thermal_module_unbind,
-+	.should_bind	= mlxsw_thermal_module_should_bind,
- 	.get_temp	= mlxsw_thermal_gearbox_temp_get,
- };
- 
-@@ -451,6 +389,7 @@ mlxsw_thermal_module_init(struct device
- 			  struct mlxsw_thermal_area *area, u8 module)
- {
- 	struct mlxsw_thermal_module *module_tz;
-+	int i;
- 
- 	module_tz = &area->tz_module_arr[module];
- 	/* Skip if parent is already set (case of port split). */
-@@ -465,6 +404,8 @@ mlxsw_thermal_module_init(struct device
- 	       sizeof(thermal->trips));
- 	memcpy(module_tz->cooling_states, default_cooling_states,
- 	       sizeof(thermal->cooling_states));
-+	for (i = 0; i < MLXSW_THERMAL_NUM_TRIPS; i++)
-+		module_tz->trips[i].priv = &module_tz->cooling_states[i];
- }
- 
- static void mlxsw_thermal_module_fini(struct mlxsw_thermal_module *module_tz)
-@@ -579,7 +520,7 @@ mlxsw_thermal_gearboxes_init(struct devi
- 	struct mlxsw_thermal_module *gearbox_tz;
- 	char mgpir_pl[MLXSW_REG_MGPIR_LEN];
- 	u8 gbox_num;
--	int i;
-+	int i, j;
- 	int err;
- 
- 	mlxsw_reg_mgpir_pack(mgpir_pl, area->slot_index);
-@@ -606,6 +547,9 @@ mlxsw_thermal_gearboxes_init(struct devi
- 		       sizeof(thermal->trips));
- 		memcpy(gearbox_tz->cooling_states, default_cooling_states,
- 		       sizeof(thermal->cooling_states));
-+		for (j = 0; j < MLXSW_THERMAL_NUM_TRIPS; j++)
-+			gearbox_tz->trips[j].priv = &gearbox_tz->cooling_states[j];
-+
- 		gearbox_tz->module = i;
- 		gearbox_tz->parent = thermal;
- 		gearbox_tz->slot_index = area->slot_index;
-@@ -722,6 +666,9 @@ int mlxsw_thermal_init(struct mlxsw_core
- 	thermal->bus_info = bus_info;
- 	memcpy(thermal->trips, default_thermal_trips, sizeof(thermal->trips));
- 	memcpy(thermal->cooling_states, default_cooling_states, sizeof(thermal->cooling_states));
-+	for (i = 0; i < MLXSW_THERMAL_NUM_TRIPS; i++)
-+		thermal->trips[i].priv = &thermal->cooling_states[i];
-+
- 	thermal->line_cards[0].slot_index = 0;
- 
- 	err = mlxsw_reg_query(thermal->core, MLXSW_REG(mfcr), mfcr_pl);
+ 	ret = of_property_read_string(np, "critical-action", &action);
+ 	if (!ret)
 
 
 
