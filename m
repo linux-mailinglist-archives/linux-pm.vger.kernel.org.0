@@ -1,201 +1,141 @@
-Return-Path: <linux-pm+bounces-12084-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12089-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF83D94EED6
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 15:54:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B36494EF0D
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 16:00:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1E541C2196F
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 13:54:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B59E1C21411
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 14:00:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96C9A17E473;
-	Mon, 12 Aug 2024 13:52:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256F517DE10;
+	Mon, 12 Aug 2024 13:59:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gw7Rwufo"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="gzDCXpcF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E697317C230
-	for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2024 13:52:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D88617C7B9;
+	Mon, 12 Aug 2024 13:59:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723470751; cv=none; b=C0jp1/xoaDnQeGAumQ9Lj8SmB5BetFZJ0PRNWuIF0ApRxy7MB0aFq0IdVtO7IF1Fmu340NtZgDMXwOI2FbFwBiUUHUCGo4tWzi39SScJYSRNOS4RVBaWXZRq/7UdMPg2ult8NxKZo4VRNW8UAiBOJKK7dKGiUdR29Omuv2gSbaI=
+	t=1723471182; cv=none; b=W7NfCRP9XGHcfFkkDbbzbJwqcifFwDfv3/jqGet+4fyoixwRIAb5i3kA9u8lFP92S3vP/WMulxkj+B23wieG9wwaZnhtatsr2iwHJCXP6lpd4YDRHtJImffhVuqBlWK0mQbo4DPIhgbURfXki4uvK73IJ9gohGgQ5fPiYoJzNlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723470751; c=relaxed/simple;
-	bh=U+oTwlABO4oBXd7EEjBWj1WtDC61J7PYbNmt7uiSfe4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ibq+q52x6JgVCHMj1BNr47XRlShwKVxKRY4rlR3A2TwYFqwN1H986oc0d9QaG3WznoitWzlX6lZzm/Vh9+LLhVgoikVoaou0w8lmvg/w6qaiTLhoOU44UFJiuz1ARzIO50ukyeW7EfjwSBNzjnG7+A+wP2GghZI6KDfLca9HdUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gw7Rwufo; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1723470748;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Sd85iCuzkiaHIi9ARC/ZdPTz7M5ce5CxfGu9LxDUHcU=;
-	b=Gw7RwufonbwRMA6SUcr+E827UR12iTf5Xta2n1TaEN7oFVSPQ6VuchuFLP3OkB8I4N0Rj0
-	UcDzGe7dJrcYJnpZrRDXrRpKubqWz9r0aXtGrnS0dys8rUYkw3I20z+DUBcDykdRt4sw8F
-	SyJzpyu6fVmen6KExfm2oJBb00rokg8=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-308-VkgINMGkPoy0V-ryfIZebg-1; Mon, 12 Aug 2024 09:52:27 -0400
-X-MC-Unique: VkgINMGkPoy0V-ryfIZebg-1
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-5bb90be4d87so3422081a12.2
-        for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2024 06:52:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723470746; x=1724075546;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sd85iCuzkiaHIi9ARC/ZdPTz7M5ce5CxfGu9LxDUHcU=;
-        b=YzwcE9vK9P8dahXAz2Aq463GIWMBJdpFBubypBMcJD8iIHRhSIwSDtsUYrfJxNbiQM
-         lyK4DOq4cS9V3OMF8ikGvOZHUcjLNjGczaqcqICxzE5dWtsIKryLvmoIm8fh6Mt8YXAD
-         ph49XONZp3wbXdr8ndAC9FbXIXzt/7fE9zYr09ZujAA/LE70xzNIIlXZ9cvxJAf0nPuk
-         bdrPGT0I9y5UJIELWvHQe82FnmuVtS07DChXqp7HcQUjaaw5PFkMKHEzDiBXiKt8/1H4
-         8KCwJWNKMyoHNn1mHNBQbRxuMxhbDfvZlB2Gsvl4P1bNKz61twxU6zbOtye19yqFLr5F
-         1P7w==
-X-Forwarded-Encrypted: i=1; AJvYcCUGJEQUTKVO6V3MmIY2T0jnzZDaSOY2mx78JxYW1F0/Dn2BfDLi22dpSvwK6GY8EeaJPi4Xke49FQaiRLoikYiOPCn857sI3AQ=
-X-Gm-Message-State: AOJu0YwRhskzV4DKrj0Mmk2kCA9Yk5RSeZXHKhrgc+NebzsLNnTC2oLx
-	JqNAiqKv5xC69NUScgXh3Gu6IFqsJmJyFvI/ixZhO3RALHLMUS0a35vebCvUPMS3vZ0X143sF3p
-	fJTewRUD8mjd/lf4HM85tY0IedDP5bYTLxT7ftuvRvSWbDXlDYX6SoAog
-X-Received: by 2002:a05:6402:2113:b0:5a1:25a5:5dde with SMTP id 4fb4d7f45d1cf-5bd44c38786mr245154a12.17.1723470746022;
-        Mon, 12 Aug 2024 06:52:26 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGxC+wbLxyAluaepNv7rHIg3aENCbMAyBR986wmaPBQbxdXUVRX4wQrPV3+hHy+P3YyLGM58A==
-X-Received: by 2002:a05:6402:2113:b0:5a1:25a5:5dde with SMTP id 4fb4d7f45d1cf-5bd44c38786mr245140a12.17.1723470745478;
-        Mon, 12 Aug 2024 06:52:25 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bd191a1e8esm2123978a12.37.2024.08.12.06.52.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Aug 2024 06:52:25 -0700 (PDT)
-Message-ID: <13d93f79-1209-4071-bf4e-a70703a9a400@redhat.com>
-Date: Mon, 12 Aug 2024 15:52:24 +0200
+	s=arc-20240116; t=1723471182; c=relaxed/simple;
+	bh=PQZfqROqtpDTEWyeo1BsXJCb+xzrICxEm9yickmYEKY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lL4myXs8QFCoBW9a6vf+8gl42z0AxzaeGi6mlWywCkLL2KGm0A075AWEKDq3X3a4iYKd98/cF1ic0mdHjpRCTAvcVM9er6iwHA+KkEdOOQ/qN/jvSyz0fE7bmQg9QSIWpl8DjWZLnbyaE4R5gSa6Yv/XjRcjI930I3/CoXGx2KM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=gzDCXpcF reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id 02ca37e7f5719184; Mon, 12 Aug 2024 15:59:38 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id C0C136F0D63;
+	Mon, 12 Aug 2024 15:59:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1723471178;
+	bh=PQZfqROqtpDTEWyeo1BsXJCb+xzrICxEm9yickmYEKY=;
+	h=From:Subject:Date;
+	b=gzDCXpcFA1e9jQycMZijghwJ/fy0eVez37+T6OnkOhFogBRMbGkREOn5dCcqHPLF/
+	 Xp3CD+tI5gtHlLSwxU1Xq7YZsl1KbIwiz5z8wAhy/JwDlGH4QJ+HeZso0a4h6VhKNU
+	 UlyLCJ/8ezd4U5inFpJ2Ww8qIKGKzm+l2K+F3ywyQ9dGHrksqTBgbVKK1+qoVJ2ulX
+	 wOarn8jLpNbzZo1Pbyox1Ui5m1IaDGvb3qFHlUzs3ZPWb+wUZqtjl2OIaU3eNvBfDz
+	 gec+cm/Bp/OuBcWvueLT2cbuzlDY+8xQnTXMmLc0qRUQnpXabkcMNslxeKyOXPeosy
+	 zDumjmCpv1acA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>
+Subject:
+ [PATCH v2 02/17] thermal: core: Rearrange checks in
+ thermal_bind_cdev_to_trip()
+Date: Mon, 12 Aug 2024 15:53:06 +0200
+Message-ID: <5491953.Sb9uPGUboI@rjwysocki.net>
+In-Reply-To: <114901234.nniJfEyVGO@rjwysocki.net>
+References: <114901234.nniJfEyVGO@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] platform/x86:dell-laptop: Add knobs to change battery
- charge settings
-To: Armin Wolf <W_Armin@gmx.de>, Andres Salomon <dilinger@queued.net>,
- linux-kernel@vger.kernel.org
-Cc: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
- platform-driver-x86@vger.kernel.org, Matthew Garrett <mjg59@srcf.ucam.org>,
- Sebastian Reichel <sre@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- linux-pm@vger.kernel.org, Dell.Client.Kernel@dell.com
-References: <20240720012220.26d62a54@5400>
- <148efb2f-ef26-4759-98d3-5f6687c3cf12@redhat.com>
- <c11ba6f5-5e7d-463d-9b1a-d2e56de21af9@gmx.de>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <c11ba6f5-5e7d-463d-9b1a-d2e56de21af9@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: spam:low
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddruddttddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuufhprghmkfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhr
+ tghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-Hi,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On 7/29/24 6:41 PM, Armin Wolf wrote:
-> Am 29.07.24 um 12:02 schrieb Hans de Goede:
-> 
->> Hi,
->>
->> On 7/20/24 7:22 AM, Andres Salomon wrote:
->>> The Dell BIOS allows you to set custom charging modes, which is useful
->>> in particular for extending battery life. This adds support for tweaking
->>> those various settings from Linux via sysfs knobs. One might, for
->>> example, have their laptop plugged into power at their desk the vast
->>> majority of the time and choose fairly aggressive battery-saving
->>> settings (only charging once the battery drops to 50% and only charging
->>> up to 80%). When leaving for a trip, they might want to switch those
->>> settings to charge to 100% and charge any time power is available;
->>> rebooting into the BIOS to change those settings is a hassle.
->>>
->>> For the Custom charging type mode, we reuse the common
->>> charge_control_{start,end}_threshold sysfs power_supply entries. The
->>> BIOS also has a bunch of other charging modes with varying levels of
->>> usefulness, so this adds a new Dell-specific sysfs entry called
->>> 'charge_type' that's documented in sysfs-class-power-dell (and looks a
->>> lot like sysfs-class-power-wilco).
->>>
->>> This work is based on a patch by Perry Yuan <perry_yuan@dell.com> and
->>> Limonciello Mario <Mario_Limonciello@Dell.com> submitted back in 2020:
->>> https://lore.kernel.org/all/20200729065424.12851-1-Perry_Yuan@Dell.com/
->>> Both of their email addresses bounce, so I'm assuming they're no longer
->>> with the company. I've reworked most of the patch to make it smaller and
->>> cleaner.
->>>
->>> Signed-off-by: Andres Salomon <dilinger@queued.net>
->> Thank you for working on this and it is great to see the discussion
->> to improve the code between you and Pali going on.
->>
->> One concern which I have is that work is underway for both upower
->> and GNOME to add support for
->> /sys/class/power_supply/*/charge_[start|stop]_threshold
->>
->> to gnome-control-center.
->>
->> But if I understand things correctly then these limits will only
->> be honored when the charging-type is set to custom.
->>
->> So we need to do something to avoid userspace exposing those
->> controls when the charging-type is not custom.
->>
->> I think it would be best to not have the charge_[start|stop]_threshold
->> attributes visible when the charging mode is not custom.
->>
->> Regards,
->>
->> Hans
-> 
-> Hi,
-> 
-> the documentation of the "charge_type" sysfs attribute states that:
-> 
->     "Custom" means that the charger uses the charge_control_* properties as
->      configuration for some different algorithm.
-> 
-> So i believe that "charge_[start|stop]_threshold" attributes should not be unregistered
-> if "charge_type" is not "Custom" because:
-> 
-> 1. The power supply subsystem does not allow that for power supplies, and i see little
-> reason to deviate from this behavior here.
-> 
-> 2. It is the responsibility of userspace to also set "charge_type" to "Custom" when using
-> the "charge_[start|stop]_threshold" attributes.
-> 
-> Maybe we could clarify what happens when "charge_[start|stop]_threshold" is written without
-> "charge_type" being "Custom". This might help userspace to correctly switch to custom charging
-> and set the charging thresholds.
-> 
-> Basically, we could define that writes to "charge_[start|stop]_threshold" will get buffered by
-> the driver if two conditions are met:
-> 
-> 1. "charge_type" is not "Custom".
-> 
-> 2. The hardware does not support setting the charging thresholds when "charge_type" is not "Custom".
-> 
-> Userspace can then first set "charge_[start|stop]_threshold" and then switch to custom charging.
-> This prevents any problems should the hardware have no default value for the charging thresholds
-> when switching to custom charging for the first time.
+It is not necessary to look up the thermal zone and the cooling device
+in the respective global lists to check whether or not they are
+registered.  It is sufficient to check whether or not their respective
+list nodes are empty for this purpose.
 
-Ah I did not realize this was already documented in this way. Yes if this is
-already documented this way then the driver does not have to do anything.
+Use the above observation to simplify thermal_bind_cdev_to_trip().  In
+addition, eliminate an unnecessary ternary operator from it.
 
-Instead userspace consumers of the "charge_[start|stop]_threshold" user should
-check (and if necessary / if they want to set) "charge_type" = "Custom" on
-power_supply class devices which have a charge_type.
+Moreover, add lockdep_assert_held() for thermal_list_lock to it because
+that lock must be held by its callers when it is running.
 
-Regards,
+No intentional functional impact.
 
-Hans
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v1 -> v2: No changes
+
+---
+ drivers/thermal/thermal_core.c |   16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -781,25 +781,17 @@ int thermal_bind_cdev_to_trip(struct the
+ {
+ 	struct thermal_instance *dev;
+ 	struct thermal_instance *pos;
+-	struct thermal_zone_device *pos1;
+-	struct thermal_cooling_device *pos2;
+ 	bool upper_no_limit;
+ 	int result;
+ 
+-	list_for_each_entry(pos1, &thermal_tz_list, node) {
+-		if (pos1 == tz)
+-			break;
+-	}
+-	list_for_each_entry(pos2, &thermal_cdev_list, node) {
+-		if (pos2 == cdev)
+-			break;
+-	}
++	lockdep_assert_held(&thermal_list_lock);
+ 
+-	if (tz != pos1 || cdev != pos2)
++	if (list_empty(&tz->node) || list_empty(&cdev->node))
+ 		return -EINVAL;
+ 
+ 	/* lower default 0, upper default max_state */
+-	lower = lower == THERMAL_NO_LIMIT ? 0 : lower;
++	if (lower == THERMAL_NO_LIMIT)
++		lower = 0;
+ 
+ 	if (upper == THERMAL_NO_LIMIT) {
+ 		upper = cdev->max_state;
+
 
 
 
