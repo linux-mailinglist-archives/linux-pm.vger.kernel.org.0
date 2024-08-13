@@ -1,203 +1,232 @@
-Return-Path: <linux-pm+bounces-12147-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12148-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B3E29504DB
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 14:24:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5DBE9504DE
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 14:26:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 501B81C21E5E
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 12:24:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 469891F21B36
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 12:26:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A7C5199392;
-	Tue, 13 Aug 2024 12:24:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09857199392;
+	Tue, 13 Aug 2024 12:25:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VIWR6hhf"
+	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="V+uzBlTq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88BD19925A;
-	Tue, 13 Aug 2024 12:24:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6BF19925A
+	for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 12:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723551849; cv=none; b=XFn30efYp7hdcPaooNNZ9UMIScznl6HVMjr/OqVwtt13goAGvgu4SWnuLekgnqMeOm9TmlMQb15aPBoOWiRC83ThLrdWaZXcPFfUVqzkfcBxjkOUcjHXjY8m4YKr4ItjrJWrj43/Vr9yII2qtl8D/ewGmkSg9udjNw/Y0HPUZYk=
+	t=1723551957; cv=none; b=HTP76nmzD2u9xq7Agka+uP2TlpSpR8UNAYEK6VmK2HfHSuyqgF9qSktSVcclTOArsAeYkQu6V42MRPRKQRwUbOcDlEWrkhXy4okCG1In+kMjivimNqlLOqu2nw3dKIrKN7CrtuZoV0rp0+OhT96mFazIU8RkRtxqDu/BfBljsjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723551849; c=relaxed/simple;
-	bh=1ZDxptwVrneNxu4p5SwrDiUdmUGr3CxbvQsLYPw5+Tg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=G+e72f6H5pG3FJNXwisXX6OLiQoLuaGQh5yGJstSQVJ/oAlUjYRKeuYou6fH2w9VcpjSfWVWZM634DFdDTY6OS7T9KWxiiQXafrxwgXgVy+F49RHZHWZUv28riLA51JJ836jpsHLdIOoKrBt3XG+g0JdHRc6lyGooF8bVs6SuWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VIWR6hhf; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47DCC9Wq008197;
-	Tue, 13 Aug 2024 12:23:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	hZj+vhJGdhHYsx/eUIiC0gHPR7bA9/LNX09lcGIyuvU=; b=VIWR6hhf6O4PnSLG
-	tySLUgG1PimLKg58LpMtdQEJv1icH8wui6Hrufykd2sqzJjsFeI/8KBhpS3x9CMZ
-	QX8IMmugRI29ode0FG7229HW+g5CG6K4KNwpkbBXDZXwxo8thOMtNWUqS1tqbQuK
-	7eOP6/0if3GDqX0QKiNagg9Mjxbyu9+cgby9rSHnU0HZfPN4Q7h9B4Ow0GV2f3Q3
-	wIUZSnDt8vL9vM2Dig/cyZgsGJiC/CGiKguUi1trioIS+hCZQUroIuqUyUBLGrxk
-	O3vnnVLaWVDOTqUv52QGeARtd9w14HRseSXYOfaYQEEatBU7fWI5cf83Sjk5WGcu
-	G/42xg==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40x15e7p8r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Aug 2024 12:23:58 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47DCNwSK031917
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Aug 2024 12:23:58 GMT
-Received: from [10.216.47.3] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 13 Aug
- 2024 05:23:53 -0700
-Message-ID: <efb17431-82a6-bcc9-cade-896d0dca958e@quicinc.com>
-Date: Tue, 13 Aug 2024 17:53:50 +0530
+	s=arc-20240116; t=1723551957; c=relaxed/simple;
+	bh=GuqX40LREmVg4Nqh1G6UJFWuG2NzNdEBbMzn5xStQCY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Fd+tfmHi2ac3rraXkk3tZCgnZGTcJolOFB/zuNhTJYXWJbR/N06kXg5yg9B4SzofgywpMaHqi7Pr7y90St3OyvgSONzlqh04jTnqHjCASJyrG6jPyhmNWzAGjmmbGsyPNOVlDeEPvslkVM8co+4oCayUYL8iB1Oh5DkiHhoRw7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=V+uzBlTq; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-39b4f847a5eso18222515ab.1
+        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 05:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1723551955; x=1724156755; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HlpsPbvSqY1Guepb/+C8Hj4r/YthyFNML6v64qjLHgQ=;
+        b=V+uzBlTqZdSnZ8s7/W1XBqCU3742paqPvYP232W9vaJGK01UwZY29sFYEunnOJQgn3
+         a+8Ph1+Jkygq4y5ngWPVuhE9L2d18PoDm9AgeDPZU2De47utUArxynJWh3KIW8B2V5Cq
+         YxdqNr7edpCmCDaZqAd/jiRHqn3r4xjzZkEypJlq3PSXKwwFd2b8uyfJvFAjidYGSBh4
+         K5PvkVlOznGIV1AjoLp6Jv1FFFUR880+R6ePzI0UCzVNo/rsJYA0pb2Cw5XgBQXm0Pm7
+         Bk2K+YXFPPrliBLn7j9yCF/3H2Ii2FaJsXagok9/q9KE0INZ9VasuX78JVOORsNrdyRf
+         yD2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723551955; x=1724156755;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HlpsPbvSqY1Guepb/+C8Hj4r/YthyFNML6v64qjLHgQ=;
+        b=gfPWlUHE7YBjnx+CGxX0UTnSMgdQzepn6eAKVwvKod/bOj0Sj06gAqJecTnOd4zdNk
+         Q0yAF6KeMYuhUbsL4WVRoAOgtxzzknTHuW83GtrLRka3bgBxRQnDaJj5Zm+u0//P3Ufl
+         h3lxBVRnsuqNvLBIQAvlh9aOzOvOpXJLAc+vCjbd3wsYMrd8DmXqoRjlZ1Sg3Jon7N9x
+         cihP5iCbrwBUVhSVspIDKECWLbJB46iP0xMSHd8IrUVlsP/RaMKXu/fMQ2hMM0os7UYK
+         EjxIm/OpwzvKQHYcQDnqNY5TaylUGlMUr/ebV1A2Ulgwx2Nh6SGdmgDhWMHFtRjX/DSg
+         kgsw==
+X-Forwarded-Encrypted: i=1; AJvYcCWAUb7BM+eidZfXmL7ko+yg7+NE5BtoYnMiTcBy9iMHpSaw4mueI7LPpUXEfu1u2Td5gRB02V7ITqPr9chzr0H+Vg+o898SHSc=
+X-Gm-Message-State: AOJu0YxGnwtLoSuJx+vrQV1jJirs0RiKHps+AM/r+XyXuGdzlNfgWTJP
+	NDLvVqgFNxVQZnkvZUtvL0OxpvhQ9ftvHoSlVHXDauft58zDSQHPZkRsvypbRFkFSDssl90dMhF
+	+04AAYtBwSZGNl8pYaj2I6GYPmd3WRZRY1xMpDA==
+X-Google-Smtp-Source: AGHT+IGfc1hlnSw9m1j0prPgIWYWO3SpEZp9zrnyAvAWqBu+fTcn7+WZsmM/0bL31M4eersVd96dOZoC9Kz1EGd0ycA=
+X-Received: by 2002:a05:6e02:1fce:b0:375:c473:4a78 with SMTP id
+ e9e14a558f8ab-39c478f783emr40305315ab.23.1723551955377; Tue, 13 Aug 2024
+ 05:25:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 1/2] PM: domains: add device managed version of
- dev_pm_domain_attach|detach_list()
-Content-Language: en-US
-To: Ulf Hansson <ulf.hansson@linaro.org>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        "Len
- Brown" <len.brown@intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Stanimir Varbanov
-	<stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio"
-	<konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Bryan
- O'Donoghue <bryan.odonoghue@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-References: <1723014947-15571-1-git-send-email-quic_dikshita@quicinc.com>
- <1723014947-15571-2-git-send-email-quic_dikshita@quicinc.com>
- <CAPDyKFpUMmveKQ2Pi33VwcvG9tsMQHEcAg88icf7v9mzzm+k4Q@mail.gmail.com>
-From: Dikshita Agarwal <quic_dikshita@quicinc.com>
-In-Reply-To: <CAPDyKFpUMmveKQ2Pi33VwcvG9tsMQHEcAg88icf7v9mzzm+k4Q@mail.gmail.com>
+References: <20240813081324.3205944-1-nick.hu@sifive.com>
+In-Reply-To: <20240813081324.3205944-1-nick.hu@sifive.com>
+From: Anup Patel <anup@brainfault.org>
+Date: Tue, 13 Aug 2024 17:55:44 +0530
+Message-ID: <CAAhSdy0W5mSVp79dF63BJkDCE_tMxrxWOxqwaTHghztX6dEm2w@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: riscv-sbi: Allow cpuidle pd used by other devices
+To: Nick Hu <nick.hu@sifive.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, paul.walmsley@sifive.com, 
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, linux-pm@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	greentime.hu@sifive.com, zong.li@sifive.com, 
+	Anup Patel <apatel@ventanamicro.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: aiNbY4KiByPubnaFkBrASBjcMuFkfl35
-X-Proofpoint-ORIG-GUID: aiNbY4KiByPubnaFkBrASBjcMuFkfl35
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-13_04,2024-08-13_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- phishscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999
- clxscore=1015 spamscore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408130089
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Aug 13, 2024 at 1:43=E2=80=AFPM Nick Hu <nick.hu@sifive.com> wrote:
+>
+> To prevent the probe of consumer devices being deferred, create the
+> platform devices for each pd node under '/cpus/power-domains' and move th=
+e
+> driver initailization to the arch_initcall.
 
+To prevent the probe deferral of consumer devices, you can simply use
+fwnode_dev_initialized() instead of creating a dummy platform device.
 
-On 8/13/2024 4:22 PM, Ulf Hansson wrote:
-> On Wed, 7 Aug 2024 at 09:16, Dikshita Agarwal <quic_dikshita@quicinc.com> wrote:
->>
->> Add the devres-enabled version of dev_pm_domain_attach|detach_list.
->> If client drivers use devm_pm_domain_attach_list() to attach the
->> PM domains, devm_pm_domain_detach_list() will be invoked implicitly
->> during remove phase.
->>
->> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
->> ---
->>  drivers/base/power/common.c | 44 ++++++++++++++++++++++++++++++++++++++++++++
->>  include/linux/pm_domain.h   | 13 +++++++++++++
->>  2 files changed, 57 insertions(+)
->>
->> diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
->> index 327d168..729d6c2 100644
->> --- a/drivers/base/power/common.c
->> +++ b/drivers/base/power/common.c
->> @@ -277,6 +277,50 @@ int dev_pm_domain_attach_list(struct device *dev,
->>  EXPORT_SYMBOL_GPL(dev_pm_domain_attach_list);
->>
->>  /**
->> + * devm_pm_domain_detach_list - devres-enabled version of dev_pm_domain_detach_list.
->> + * @_list: The list of PM domains to detach.
->> + *
->> + * This function reverse the actions from devm_pm_domain_attach_list().
->> + * it will be invoked during the remove phase from drivers implicitly if driver
->> + * uses devm_pm_domain_attach_list() to attach the PM domains.
->> + */
->> +void devm_pm_domain_detach_list(void *_list)
->> +{
->> +       struct dev_pm_domain_list *list = _list;
->> +
->> +       dev_pm_domain_detach_list(list);
->> +}
->> +EXPORT_SYMBOL_GPL(devm_pm_domain_detach_list);
-> 
-> I think this function should be internal and hence made static -
-> unless there is a good reason to export it?
-Yeah, it should be static and no need of exporting it.
-Will make the changes.
-> 
->> +
->> +/**
->> + * devm_pm_domain_attach_list - devres-enabled version of dev_pm_domain_attach_list
->> + * @dev: The device used to lookup the PM domains for.
->> + * @data: The data used for attaching to the PM domains.
->> + * @list: An out-parameter with an allocated list of attached PM domains.
->> + *
->> + * NOTE: this will also handle calling devm_pm_domain_detach_list() for
->> + * you during remove phase.
->> + *
->> + * Returns the number of attached PM domains or a negative error code in case of
->> + * a failure.
->> + */
->> +int devm_pm_domain_attach_list(struct device *dev,
->> +                              const struct dev_pm_domain_attach_data *data,
->> +                              struct dev_pm_domain_list **list)
->> +{
->> +       int ret, num_pds = 0;
-> 
-> There is no need to initialize num_pds to 0 here, as the below calls
-> take care of it.
-> 
-Right, will be fixed in next revision.
->> +
->> +       num_pds = dev_pm_domain_attach_list(dev, data, list);
->> +
-> 
-> We should add a check if num_pds is zero here, as in that case there
-> is no reason to add a devres callback for it.
-> 
-Sure, will add the below check.
-if (!num_pds)
-    return 0;
+> The consumer devices that inside the cpu/cluster power domain may registe=
+r
+> the genpd notifier where their power domains are point to the pd nodes
+> under '/cpus/power-domains'. If the cpuidle.off=3D=3D1, the genpd notifie=
+r
+> will fail due to sbi_cpuidle_pd_allow_domain_state is not set. We also
+> need the sbi_cpuidle_cpuhp_up/down to invoke the callbacks. Therefore,
+> add a cpuidle_disabled() check before registering the cpuidle driver to
+> address the issue.
 
-Thanks,
-Dikshita
->> +       ret = devm_add_action_or_reset(dev, devm_pm_domain_detach_list, *list);
->> +       if (ret)
->> +               return ret;
->> +
->> +       return num_pds;
->> +}
->> +EXPORT_SYMBOL_GPL(devm_pm_domain_attach_list);
-> 
-> [...]
-> 
-> Kind regards
-> Uffe
+I think dealing with cpuidle.off=3D=3D1 case should be a separate patch.
+
+>
+> Signed-off-by: Nick Hu <nick.hu@sifive.com>
+> Link: https://lore.kernel.org/lkml/20240226065113.1690534-1-nick.hu@sifiv=
+e.com/
+> Suggested-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  drivers/cpuidle/cpuidle-riscv-sbi.c | 24 +++++++++++++++++++++---
+>  1 file changed, 21 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidl=
+e-riscv-sbi.c
+> index a6e123dfe394..d6b01fc64f94 100644
+> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_platform.h>
+>  #include <linux/slab.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_domain.h>
+> @@ -25,6 +26,7 @@
+>  #include <asm/smp.h>
+>  #include <asm/suspend.h>
+>
+> +#include "cpuidle.h"
+>  #include "dt_idle_states.h"
+>  #include "dt_idle_genpd.h"
+>
+> @@ -336,6 +338,9 @@ static int sbi_cpuidle_init_cpu(struct device *dev, i=
+nt cpu)
+>                 return ret;
+>         }
+>
+> +       if (cpuidle_disabled())
+> +               return 0;
+> +
+>         ret =3D cpuidle_register(drv, NULL);
+>         if (ret)
+>                 goto deinit;
+> @@ -380,20 +385,26 @@ static int sbi_cpuidle_pd_power_off(struct generic_=
+pm_domain *pd)
+>  struct sbi_pd_provider {
+>         struct list_head link;
+>         struct device_node *node;
+> +       struct platform_device *pdev;
+>  };
+>
+>  static LIST_HEAD(sbi_pd_providers);
+>
+>  static int sbi_pd_init(struct device_node *np)
+>  {
+> +       struct platform_device *pdev;
+>         struct generic_pm_domain *pd;
+>         struct sbi_pd_provider *pd_provider;
+>         struct dev_power_governor *pd_gov;
+>         int ret =3D -ENOMEM;
+>
+> +       pdev =3D of_platform_device_create(np, np->name, NULL);
+> +       if (!pdev)
+> +               goto out;
+> +
+>         pd =3D dt_idle_pd_alloc(np, sbi_dt_parse_state_node);
+>         if (!pd)
+> -               goto out;
+> +               goto free_pdev;
+>
+>         pd_provider =3D kzalloc(sizeof(*pd_provider), GFP_KERNEL);
+>         if (!pd_provider)
+> @@ -419,6 +430,7 @@ static int sbi_pd_init(struct device_node *np)
+>                 goto remove_pd;
+>
+>         pd_provider->node =3D of_node_get(np);
+> +       pd_provider->pdev =3D pdev;
+>         list_add(&pd_provider->link, &sbi_pd_providers);
+>
+>         pr_debug("init PM domain %s\n", pd->name);
+> @@ -430,6 +442,8 @@ static int sbi_pd_init(struct device_node *np)
+>         kfree(pd_provider);
+>  free_pd:
+>         dt_idle_pd_free(pd);
+> +free_pdev:
+> +       of_platform_device_destroy(&pdev->dev, NULL);
+>  out:
+>         pr_err("failed to init PM domain ret=3D%d %pOF\n", ret, np);
+>         return ret;
+> @@ -447,6 +461,7 @@ static void sbi_pd_remove(void)
+>                 if (!IS_ERR(genpd))
+>                         kfree(genpd);
+>
+> +               of_platform_device_destroy(&pd_provider->pdev->dev, NULL)=
+;
+>                 of_node_put(pd_provider->node);
+>                 list_del(&pd_provider->link);
+>                 kfree(pd_provider);
+> @@ -548,7 +563,10 @@ static int sbi_cpuidle_probe(struct platform_device =
+*pdev)
+>         /* Setup CPU hotplut notifiers */
+>         sbi_idle_init_cpuhp();
+>
+> -       pr_info("idle driver registered for all CPUs\n");
+> +       if (cpuidle_disabled())
+> +               pr_info("cpuidle is disabled\n");
+> +       else
+> +               pr_info("idle driver registered for all CPUs\n");
+>
+>         return 0;
+>
+> @@ -592,4 +610,4 @@ static int __init sbi_cpuidle_init(void)
+>
+>         return 0;
+>  }
+> -device_initcall(sbi_cpuidle_init);
+> +arch_initcall(sbi_cpuidle_init);
+> --
+> 2.34.1
+>
+
+Regards,
+Anup
 
