@@ -1,107 +1,109 @@
-Return-Path: <linux-pm+bounces-12181-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12185-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CA5C950DBF
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 22:21:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D53B950F1C
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 23:22:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFEF11F23626
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 20:21:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1AE3282AA6
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 21:22:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40ACB1A3BAB;
-	Tue, 13 Aug 2024 20:21:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="uUngCoN6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35DAC1AAE0C;
+	Tue, 13 Aug 2024 21:22:29 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.208])
+Received: from sxb1plsmtpa01-13.prod.sxb1.secureserver.net (sxb1plsmtpa01-13.prod.sxb1.secureserver.net [92.204.81.236])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F809187F;
-	Tue, 13 Aug 2024 20:21:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F801A3BA3
+	for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 21:22:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.204.81.236
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723580494; cv=none; b=igiA8T70tEJJYE9q73RLkic7Xq7A1vPQsJPErUjErNi2m0zxzs4JezZAPvvocCSGBGyMyvooZSYMXkg6o+5EQVzTZWuAy/NQoLTH+2E7oGDiCKYVFo4maxmvvzW7/ICou5grHtAiVSgX5hKhar9WqxSlkOsVkuDqU0U7RMVqK/o=
+	t=1723584149; cv=none; b=HGHLO9BTgv01ZdtDu07yppLhXNsXzeGvS+q6pSvY94AIXQij7AK6IJa0BHhN0xCt6xyj6LWvQNdi5bEAx5to5LnOD8oNKBTWR0V26Ns+g+VldqoLQ/LW+KC7KdK5IlRTDQSNkYzPor1L6vWZfdUb76dSAQi2BuKIsu9fMA4T4J0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723580494; c=relaxed/simple;
-	bh=qj99utWeg4VoBQ0jzJtUxbx4AsS/LQaSgC9lsUkge3M=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Fjoy3ZiYa2iA/csHclDfBWkV8xxoc6nfoq0bO3NjeanGPaAlVtMpvaOh832Dm4GFZyUtW7vIVtd2os1WzRjvUaU+LPX0R4WDNial4f1+gjZqy8RaRmSsBcGSdZZCh26bKNXcsCOxCxz+RNQwyKy3F1C5LodHPeGqmGOu2ls+4yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=uUngCoN6; arc=none smtp.client-ip=192.19.144.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 6A2A8C0000FB;
-	Tue, 13 Aug 2024 13:21:30 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 6A2A8C0000FB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1723580490;
-	bh=qj99utWeg4VoBQ0jzJtUxbx4AsS/LQaSgC9lsUkge3M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uUngCoN6C/slC9Qxh9f6SYlP8G6SdSe29J1ZOaBGNNc7/efQFx6QZa4pYg58RwukN
-	 jVW1yx2BMX2oU9S14MRnjjeSsK9Y+tUnZqHtVorqA87XqmZjPZ+6yZmQeQoOMQEpgl
-	 POKPfcEaSVj+BMs0WaYjd+2ycqCp/66i8XKR9huc=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 73A0418041CAC6;
-	Tue, 13 Aug 2024 13:21:27 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: bcm-kernel-feedback-list@broadcom.com,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	=?iso-8859-1?b?TWHtcmE=?= Canal <mcanal@igalia.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Minas Harutyunyan <hminas@synopsys.com>
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Lukas Wunner <lukas@wunner.de>,
-	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-	Peter Robinson <pbrobinson@gmail.com>,
-	dri-devel@lists.freedesktop.org,
-	linux-pm@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kernel-list@raspberrypi.com
-Subject: Re: [PATCH V2 01/16] firmware: raspberrypi: Improve timeout warning
-Date: Tue, 13 Aug 2024 13:21:29 -0700
-Message-Id: <20240813202129.3856485-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240728114200.75559-2-wahrenst@gmx.net>
-References: <20240728114200.75559-1-wahrenst@gmx.net> <20240728114200.75559-2-wahrenst@gmx.net>
+	s=arc-20240116; t=1723584149; c=relaxed/simple;
+	bh=mbq3NW0pnyyTeab8LcRnhlnEuHcGsvBM3EXVOrAD6/g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RyHV9XzWOvKWU7OUo3733dZZQAtHbsjMjIcy1r4UQwccN7UTUz2erHitmsKLxxJRyvwUiRZJsiCjHY3/1MlloGoUmRkY9jybLAGSyA/JnbGVaz2W4Tm2Ej+grkV/qGjnsc3zFml0no/XD4OhErvGIV8gNhV5B2Fk4OaGduGW8sQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=piie.net; spf=pass smtp.mailfrom=piie.net; arc=none smtp.client-ip=92.204.81.236
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=piie.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piie.net
+Received: from [192.168.1.27] ([109.90.180.58])
+	by :SMTPAUTH: with ESMTPSA
+	id dyfnsVaaUn3BbdyfpsI01x; Tue, 13 Aug 2024 14:03:22 -0700
+X-CMAE-Analysis: v=2.4 cv=AM9iEndf c=1 sm=1 tr=0 ts=66bbca1a
+ a=ujCVow8R4Y5jPCx6COW8WA==:117 a=ujCVow8R4Y5jPCx6COW8WA==:17
+ a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=QyXUC8HyAAAA:8 a=t3YNmgBSAAAA:8
+ a=p0AuB5x_3uX4-FXbu-EA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=ctH_qozkpUrkr3SVbfwb:22
+X-SECURESERVER-ACCT: peter@piie.net
+Message-ID: <626a39f9-f60f-4dab-8330-8cf68ecb7520@piie.net>
+Date: Tue, 13 Aug 2024 23:03:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/4] thermal: gov_bang_bang: Call
+ __thermal_cdev_update() directly
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ =?UTF-8?Q?Peter_K=C3=A4stle?= <peter@piie.net>
+References: <1903691.tdWV9SEqCh@rjwysocki.net>
+ <13583081.uLZWGnKmhe@rjwysocki.net>
+Content-Language: en-US
+From: =?UTF-8?Q?Peter_K=C3=A4stle?= <peter@piie.net>
+In-Reply-To: <13583081.uLZWGnKmhe@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfImXDGwrG2+7isMXPdh5dhYZU30JJWvh6U0alaylkFoI+YHbzq0QMiQRTkGop5fdtYeGFgmP+x7xLDo669CYQX9Kz4ZJWaYAs/azv4fH0lBcb4FzOSSe
+ 6wqx0HbImj+5ZlbNC72Mu2Jv/Uoqu8pYHdcD5WoHSQw+HyZBFh4FLOMlgN6O4hYJ/tvA46XdMUVqYfwLFf3XGHppX1iIZPrgA5hTZhxfyndQs+Xb0Nn7SglQ
+ pNz1BDSbR9m6z/u5SMFu1WvC8b2fiU4vqlhZZmCKeSakKEplkvFf2Q0xg2lWwRshvIwchzxvpgJlLGzdlBcKJ9hxqDUXT5zzECFyjFdM3f9tywDZou5MzX/I
+ MxT+3rZPKSLyzG9YIgJwAaDv0JUEKQ==
 
-From: Florian Fainelli <f.fainelli@gmail.com>
-
-On Sun, 28 Jul 2024 13:41:45 +0200, Stefan Wahren <wahrenst@gmx.net> wrote:
-> Recent work on raspberry-power driver showed that even the
-> stacktrace on firmware property timeout doesn't provide
-> enough information. So add the first tag name to the warning
-> to be in line with a status error.
+On 13.08.24 16:25, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> ---
+> Instead of clearing the "updated" flag for each cooling device
+> affected by the trip point crossing in bang_bang_control() and
+> walking all thermal instances to run thermal_cdev_update() for all
+> of the affected cooling devices, call __thermal_cdev_update()
+> directly for each of them.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!
---
-Florian
+Acked-by: Peter Kästle <peter@piie.net>
+
+> ---
+>   drivers/thermal/gov_bang_bang.c |    5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> Index: linux-pm/drivers/thermal/gov_bang_bang.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/gov_bang_bang.c
+> +++ linux-pm/drivers/thermal/gov_bang_bang.c
+> @@ -71,12 +71,9 @@ static void bang_bang_control(struct the
+>   		dev_dbg(&instance->cdev->device, "target=%ld\n", instance->target);
+>   
+>   		mutex_lock(&instance->cdev->lock);
+> -		instance->cdev->updated = false; /* cdev needs update */
+> +		__thermal_cdev_update(instance->cdev);
+>   		mutex_unlock(&instance->cdev->lock);
+>   	}
+> -
+> -	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+> -		thermal_cdev_update(instance->cdev);
+>   }
+>   
+>   static struct thermal_governor thermal_gov_bang_bang = {
+> 
+> 
+> 
 
