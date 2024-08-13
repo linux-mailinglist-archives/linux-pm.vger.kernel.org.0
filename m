@@ -1,440 +1,211 @@
-Return-Path: <linux-pm+bounces-12121-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12122-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AF0C94FA68
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 01:48:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C4F094FADF
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 02:54:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA3AB1C21FA2
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2024 23:48:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA39B282DE9
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 00:54:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E746187327;
-	Mon, 12 Aug 2024 23:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="t43A0KxR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8E7923A8;
+	Tue, 13 Aug 2024 00:54:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7B11804F;
-	Mon, 12 Aug 2024 23:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85D52EDB;
+	Tue, 13 Aug 2024 00:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723506489; cv=none; b=Hchx7y4Ye3cF0PX9tnG5yLCItXCIXpzseNVdTfjbhZn+XW2mhYiCTohybYGjLYRjU3C7LhS8H82mDvbl1STN98MrccKlc8rsdv4HA6ddIES4IdgOz53y9PfJ9ZK0zlHqYGvnrgx8YjtpybhRJLJnajmdoa6UKWgX0iVQzfqGEe4=
+	t=1723510482; cv=none; b=lSYRHZkYaJfcgAtxR/EyNTW+/CY6yZloaDR/zmutGGr1vfkjywl/5IWYGcY+zYeVDl5UDZD0JVOAC+VBAu66NRZrhmEaRaG9u6OM9b3+qcVttJHgXEWCRi/TQ/UaZbjhE0HY672nQoyms8+lUtU3gPjysMCBgOUOmXWgkXR12Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723506489; c=relaxed/simple;
-	bh=kXZZsX+td27pgCbDF8kbMbDkiLniqjeDNhrdH57CMRY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HH6NDorzMkMMv87Gl7aUJu6Ywt2ptWPMQp+l78PzPj5jyb14tSCHG5FaBln4tf9LE1c0KbjT/XqZ6t5wJLZUsoD5z7b1RzIdunHrzYkR6UQ/PmQ38HmdHaQlC1ZMiuyQbqDcEmokFXQ60RljiZ1t3AmjHAsmaz8grSAZpKDymL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=t43A0KxR; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1723506454; x=1724111254; i=wahrenst@gmx.net;
-	bh=l6OouXenCvAZE1JaCg4HpNacCouIsLa/UOywMg/akPQ=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=t43A0KxRTShwhq51DmI0Hx9L+gPZrgr8r00BkJx0VDqA+AIo08KkR7JQ0dN6tOrH
-	 qovMsbM5X7bSgi2yOq4xKC/IZxVpLd2xejYCjVJPnC6z+gPltVxGfvgxKrR8gXZUt
-	 1Z0ccgiWaaLB6ANTDP8rFNYS4MJOsPDw85eXzompgU1MK5HzTuZ+jBKdDmoRfFdM2
-	 K4P+5acYr+5/PaN+1ZQ0UMhGiBhnW/i1JqxdLMD93A7MQAaDHqDn/lopnaj9jJo5W
-	 NmX9u90FIMpYEZ++rcIbXTcDe0VVs03SbcCReqheJ0paHtnmddE/hJEtyEAETwbEt
-	 J23elkwHdIEPzPmN1A==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MzQkK-1sHZZ80T5c-00wJPv; Tue, 13
- Aug 2024 01:47:34 +0200
-Message-ID: <65de7db8-4f81-4c31-be8d-3a03c9aee989@gmx.net>
-Date: Tue, 13 Aug 2024 01:47:31 +0200
+	s=arc-20240116; t=1723510482; c=relaxed/simple;
+	bh=kszBfYAB2LdjoX7Jt9b2oDEl1R/LmBzHAs+fM+a/r9A=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=f49tAEpCZ9YrJhEm6h6YP6W6FmnCwnUcxNuRko5CnW8hsE7mobk5JuvpcB0LMKzy8pRIrrP777ac3PRVfTWmOBDo6oAra8NUblz2KEEMXHloENnOox9vOTNvJjOvbTJ5IjYNBJpUkFmWoRnup6s91rzlZyb8yE1wM2uuZ7a6jVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.62])
+	by gateway (Coremail) with SMTP id _____8AxjpvMrrpmI6cRAA--.17783S3;
+	Tue, 13 Aug 2024 08:54:36 +0800 (CST)
+Received: from [10.20.42.62] (unknown [10.20.42.62])
+	by front1 (Coremail) with SMTP id qMiowMAxz2fKrrpmjWARAA--.6186S3;
+	Tue, 13 Aug 2024 08:54:35 +0800 (CST)
+Subject: Re: [PATCH v6 09/10] arm64: support cpuidle-haltpoll
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
+ mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+ hpa@zytor.com, pbonzini@redhat.com, wanpengli@tencent.com,
+ vkuznets@redhat.com, rafael@kernel.org, daniel.lezcano@linaro.org,
+ peterz@infradead.org, arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com,
+ harisokn@amazon.com, mtosatti@redhat.com, sudeep.holla@arm.com,
+ cl@gentwo.org, misono.tomohiro@fujitsu.com, joao.m.martins@oracle.com,
+ boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+References: <20240726201332.626395-1-ankur.a.arora@oracle.com>
+ <20240726202134.627514-1-ankur.a.arora@oracle.com>
+ <20240726202134.627514-7-ankur.a.arora@oracle.com>
+ <f1a5d666-d236-572b-f9fc-5adeb30be44b@loongson.cn>
+ <87plqdqrvr.fsf@oracle.com>
+From: maobibo <maobibo@loongson.cn>
+Message-ID: <718b57a9-a605-ce3a-2425-eeed83fa02ef@loongson.cn>
+Date: Tue, 13 Aug 2024 08:54:32 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 14/16] WIP: usb: dwc2: Implement recovery after PM
- domain off
-To: Douglas Anderson <dianders@chromium.org>
-Cc: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
- Minas Harutyunyan <hminas@synopsys.com>, Ulf Hansson
- <ulf.hansson@linaro.org>, Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
- Scott Branden <sbranden@broadcom.com>, Ray Jui <rjui@broadcom.com>,
- Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
- Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
- bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
- Jiri Slaby <jirislaby@kernel.org>
-References: <20240728114200.75559-1-wahrenst@gmx.net>
- <20240728130029.78279-1-wahrenst@gmx.net>
- <20240728130029.78279-6-wahrenst@gmx.net>
+In-Reply-To: <87plqdqrvr.fsf@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <20240728130029.78279-6-wahrenst@gmx.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Ik08zjVVUi5qEx5fIPQKnKhjJUj59/tBCsiGz1eN2Pm7Quoj1iB
- SNlD/gQNZC+VslWH4bG/F4WMdl+kUsV+eZR5HGLwXPDSsYua5jSrb0wMxxwJF3fvDSbd6FT
- HB0bM/UR6ghRTw2R16IKIywSoWG8yUg48pEenKwPKiTxdr6jNEj3vV7Un2zBIDF+c2rtGeE
- ewOqTvQZHzg7flD1ehlfg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:NX0Jg3iPZl8=;vEzuC2Ms0J1UDvbMW+dkF3nw9v6
- QxRDXzBRZ88Xu+UB/MqvguubkOqslla23fyby/q23PArECBFoJWaarYRKhLBMfcQsuWQOmgFO
- HolMSpEnntoeKW2xxoA3N8xiNTCFhSQRfK7ZTDpvnx2IeUDuGJHNKva99JSE5tGhgrECIAUJn
- kWoRj+3clw6L+Gjch16MVT14HC3Z3ZxSEqnnjnY4XUaTK61DlkOSbOIBEkRT13XILgGld8geF
- WIw2kv2mwmLD/mscf0/S8vYoAGMbY9E0GLLiiKcaDqQeJNLYNgiELj3iNEPYGcpPZqcj6pJlP
- LWJUchihGQf9fccffqoUkmq47mHYsX/BCGUKvgRPvyLp/+7JeyKad0p29iT55Xi2v57bAgz0s
- MwAxN4f0Kb/YA3RDoF2ZJtc5HPvw89Q1uTnyGrEuCwg4bnL9GG2pwB8lPWPXrg77YMlWNQGTD
- GLCVlqju1pNSwXxOdUEOEWH6PUP3oGeH2qNInXNkuGhbJAnbK8kg1U9zqk+eW7oS3Fhfnwgmj
- igtuxme4puuD9cVZJZjHpok5o5HdA3eIk5tICxeB3+cgdNdH3sb02DFmsnByOR3uU3kchJ/Mm
- ZYj3juRMZawas6N9kBtUmP2CkBqniww9tkOPUtDSq82u58l+puwNazQc4xr9icO3mqDbEoN1K
- LoNFygfIHNY75rxXJGoUBUJq948Edj0nJG09QpRFCf/4Nrh0BPU6Hrkc7OxWyQ25pmD6uAanJ
- WWOgvP0dVejplW6rwX9h9gUz3rWxuKnt9HT6cYsZb7W2paYAQs9uf1w7ztYA0wWbCYEbc5oRL
- +SV9+eiPUC+YpeQ4WL55vhAA==
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMAxz2fKrrpmjWARAA--.6186S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxZF15Xr4rKryxZw1kCFyfuFX_yoWrtF17pF
+	Wqk3ZxKF4DWFy2yaySqwsFqF13ArZ3WF13Wr43J3yxGrn0vry7KF45tF15uF97Xr48Wr40
+	vr10q3W3WF45JFgCm3ZEXasCq-sJn29KB7ZKAUJUUUU_529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
+	XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l
+	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUShiSDUUUU
 
-Hi Doug,
 
-Am 28.07.24 um 15:00 schrieb Stefan Wahren:
-> DO NOT MERGE
->
-> According to the dt-bindings there are some platforms, which have a
-> dedicated USB power domain for DWC2 IP core supply. If the power domain
-> is switched off during system suspend then all USB register will lose
-> their settings.
->
-> So use the power on/off notifier in order to save & restore the USB
-> registers during system suspend.
-sorry for bothering you with this DWC2 stuff, but it would great if you
-can gave some feedback about this patch. I was working a lot to get
-suspend to idle working on Raspberry Pi. And this patch is the most
-complex part of the series.
 
-Would you agree with this approach or did i miss something?
+On 2024/8/13 上午6:48, Ankur Arora wrote:
+> 
+> maobibo <maobibo@loongson.cn> writes:
+> 
+>> On 2024/7/27 上午4:21, Ankur Arora wrote:
+>>> Add architectural support for cpuidle-haltpoll driver by defining
+>>> arch_haltpoll_*().
+>>> Also define ARCH_CPUIDLE_HALTPOLL to allow cpuidle-haltpoll to be
+>>> selected, and given that we have an optimized polling mechanism
+>>> in smp_cond_load*(), select ARCH_HAS_OPTIMIZED_POLL.
+>>> smp_cond_load*() are implemented via LDXR, WFE, with LDXR loading
+>>> a memory region in exclusive state and the WFE waiting for any
+>>> stores to it.
+>>> In the edge case -- no CPU stores to the waited region and there's no
+>>> interrupt -- the event-stream will provide the terminating condition
+>>> ensuring we don't wait forever, but because the event-stream runs at
+>>> a fixed frequency (configured at 10kHz) we might spend more time in
+>>> the polling stage than specified by cpuidle_poll_time().
+>>> This would only happen in the last iteration, since overshooting the
+>>> poll_limit means the governor moves out of the polling stage.
+>>> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+>>> ---
+>>>    arch/arm64/Kconfig                        | 10 ++++++++++
+>>>    arch/arm64/include/asm/cpuidle_haltpoll.h |  9 +++++++++
+>>>    arch/arm64/kernel/cpuidle.c               | 23 +++++++++++++++++++++++
+>>>    3 files changed, 42 insertions(+)
+>>>    create mode 100644 arch/arm64/include/asm/cpuidle_haltpoll.h
+>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>>> index 5d91259ee7b5..cf1c6681eb0a 100644
+>>> --- a/arch/arm64/Kconfig
+>>> +++ b/arch/arm64/Kconfig
+>>> @@ -35,6 +35,7 @@ config ARM64
+>>>    	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+>>>    	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+>>>    	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>>> +	select ARCH_HAS_OPTIMIZED_POLL
+>>>    	select ARCH_HAS_PTE_DEVMAP
+>>>    	select ARCH_HAS_PTE_SPECIAL
+>>>    	select ARCH_HAS_HW_PTE_YOUNG
+>>> @@ -2376,6 +2377,15 @@ config ARCH_HIBERNATION_HEADER
+>>>    config ARCH_SUSPEND_POSSIBLE
+>>>    	def_bool y
+>>>    +config ARCH_CPUIDLE_HALTPOLL
+>>> +	bool "Enable selection of the cpuidle-haltpoll driver"
+>>> +	default n
+>>> +	help
+>>> +	  cpuidle-haltpoll allows for adaptive polling based on
+>>> +	  current load before entering the idle state.
+>>> +
+>>> +	  Some virtualized workloads benefit from using it.
+>>> +
+>>>    endmenu # "Power management options"
+>>>      menu "CPU Power Management"
+>>> diff --git a/arch/arm64/include/asm/cpuidle_haltpoll.h b/arch/arm64/include/asm/cpuidle_haltpoll.h
+>>> new file mode 100644
+>>> index 000000000000..65f289407a6c
+>>> --- /dev/null
+>>> +++ b/arch/arm64/include/asm/cpuidle_haltpoll.h
+>>> @@ -0,0 +1,9 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>> +#ifndef _ARCH_HALTPOLL_H
+>>> +#define _ARCH_HALTPOLL_H
+>>> +
+>>> +static inline void arch_haltpoll_enable(unsigned int cpu) { }
+>>> +static inline void arch_haltpoll_disable(unsigned int cpu) { }
+>> It is better that guest supports halt poll on more architectures, LoongArch
+>> wants this if result is good.
+>>
+>> Do we need disable halt polling on host hypervisor if guest also uses halt
+>> polling idle method?
+> 
+> Yes. The intent is to work on that separately from this series. As the comment
+> below states, until that is available we only allow force loading.
+Thanks for your explanation. By internal test, it is useful for 
+LoongArch virtmachine on some scenarios. And in late we want to add 
+haltpoll support on LoongArch VM based your series.
 
-The problem is that the power domain driver acts independent from dwc2,
-so we cannot prevent the USB domain power down except declaring a USB
-device as wakeup source. So i decided to use the notifier approach. This
-has been successful tested on some older Raspberry Pi boards.
-
-Best regards
->
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> ---
->
-> Any feedback is appreciated.
->
->   drivers/usb/dwc2/core.c     | 16 ++++++++++++
->   drivers/usb/dwc2/core.h     | 17 +++++++++++++
->   drivers/usb/dwc2/gadget.c   | 49 +++++++++++++++++++++++++++++++++++++
->   drivers/usb/dwc2/hcd.c      | 49 +++++++++++++++++++++++++++++++++++++
->   drivers/usb/dwc2/platform.c | 32 ++++++++++++++++++++++++
->   5 files changed, 163 insertions(+)
->
-> diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
-> index 9919ab725d54..a3263cfdedac 100644
-> --- a/drivers/usb/dwc2/core.c
-> +++ b/drivers/usb/dwc2/core.c
-> @@ -391,6 +391,22 @@ int dwc2_exit_hibernation(struct dwc2_hsotg *hsotg,=
- int rem_wakeup,
->   		return dwc2_gadget_exit_hibernation(hsotg, rem_wakeup, reset);
->   }
->
-> +int dwc2_enter_poweroff(struct dwc2_hsotg *hsotg)
-> +{
-> +	if (dwc2_is_host_mode(hsotg))
-> +		return dwc2_host_enter_poweroff(hsotg);
-> +	else
-> +		return dwc2_gadget_enter_poweroff(hsotg);
-> +}
-> +
-> +int dwc2_exit_poweroff(struct dwc2_hsotg *hsotg)
-> +{
-> +	if (dwc2_is_host_mode(hsotg))
-> +		return dwc2_host_exit_poweroff(hsotg);
-> +	else
-> +		return dwc2_gadget_exit_poweroff(hsotg);
-> +}
-> +
->   /*
->    * Do core a soft reset of the core.  Be careful with this because it
->    * resets all the internal state machines of the core.
-> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-> index 2bd74f3033ed..9ab755cc3081 100644
-> --- a/drivers/usb/dwc2/core.h
-> +++ b/drivers/usb/dwc2/core.h
-> @@ -9,6 +9,7 @@
->   #define __DWC2_CORE_H__
->
->   #include <linux/acpi.h>
-> +#include <linux/notifier.h>
->   #include <linux/phy/phy.h>
->   #include <linux/regulator/consumer.h>
->   #include <linux/usb/gadget.h>
-> @@ -1080,6 +1081,8 @@ struct dwc2_hsotg {
->   	struct regulator *vbus_supply;
->   	struct regulator *usb33d;
->
-> +	struct notifier_block genpd_nb;
-> +
->   	spinlock_t lock;
->   	void *priv;
->   	int     irq;
-> @@ -1316,6 +1319,8 @@ int dwc2_exit_partial_power_down(struct dwc2_hsotg=
- *hsotg, int rem_wakeup,
->   int dwc2_enter_hibernation(struct dwc2_hsotg *hsotg, int is_host);
->   int dwc2_exit_hibernation(struct dwc2_hsotg *hsotg, int rem_wakeup,
->   		int reset, int is_host);
-> +int dwc2_enter_poweroff(struct dwc2_hsotg *hsotg);
-> +int dwc2_exit_poweroff(struct dwc2_hsotg *hsotg);
->   void dwc2_init_fs_ls_pclk_sel(struct dwc2_hsotg *hsotg);
->   int dwc2_phy_init(struct dwc2_hsotg *hsotg, bool select_phy);
->
-> @@ -1435,6 +1440,8 @@ int dwc2_hsotg_tx_fifo_total_depth(struct dwc2_hso=
-tg *hsotg);
->   int dwc2_hsotg_tx_fifo_average_depth(struct dwc2_hsotg *hsotg);
->   void dwc2_gadget_init_lpm(struct dwc2_hsotg *hsotg);
->   void dwc2_gadget_program_ref_clk(struct dwc2_hsotg *hsotg);
-> +int dwc2_gadget_enter_poweroff(struct dwc2_hsotg *hsotg);
-> +int dwc2_gadget_exit_poweroff(struct dwc2_hsotg *hsotg);
->   static inline void dwc2_clear_fifo_map(struct dwc2_hsotg *hsotg)
->   { hsotg->fifo_map =3D 0; }
->   #else
-> @@ -1482,6 +1489,10 @@ static inline int dwc2_hsotg_tx_fifo_average_dept=
-h(struct dwc2_hsotg *hsotg)
->   { return 0; }
->   static inline void dwc2_gadget_init_lpm(struct dwc2_hsotg *hsotg) {}
->   static inline void dwc2_gadget_program_ref_clk(struct dwc2_hsotg *hsot=
-g) {}
-> +static inline int dwc2_gadget_enter_poweroff(struct dwc2_hsotg *hsotg)
-> +{ return 0; }
-> +static inline int dwc2_gadget_exit_poweroff(struct dwc2_hsotg *hsotg)
-> +{ return 0; }
->   static inline void dwc2_clear_fifo_map(struct dwc2_hsotg *hsotg) {}
->   #endif
->
-> @@ -1505,6 +1516,8 @@ int dwc2_host_exit_partial_power_down(struct dwc2_=
-hsotg *hsotg,
->   void dwc2_host_enter_clock_gating(struct dwc2_hsotg *hsotg);
->   void dwc2_host_exit_clock_gating(struct dwc2_hsotg *hsotg, int rem_wak=
-eup);
->   bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2);
-> +int dwc2_host_enter_poweroff(struct dwc2_hsotg *hsotg);
-> +int dwc2_host_exit_poweroff(struct dwc2_hsotg *hsotg);
->   static inline void dwc2_host_schedule_phy_reset(struct dwc2_hsotg *hso=
-tg)
->   { schedule_work(&hsotg->phy_reset_work); }
->   #else
-> @@ -1544,6 +1557,10 @@ static inline void dwc2_host_exit_clock_gating(st=
-ruct dwc2_hsotg *hsotg,
->   					       int rem_wakeup) {}
->   static inline bool dwc2_host_can_poweroff_phy(struct dwc2_hsotg *dwc2)
->   { return false; }
-> +static inline int dwc2_host_enter_poweroff(struct dwc2_hsotg *hsotg)
-> +{ return 0; }
-> +static inline int dwc2_host_exit_poweroff(struct dwc2_hsotg *hsotg)
-> +{ return 0; }
->   static inline void dwc2_host_schedule_phy_reset(struct dwc2_hsotg *hso=
-tg) {}
->
->   #endif
-> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-> index e7bf9cc635be..38f0112970fe 100644
-> --- a/drivers/usb/dwc2/gadget.c
-> +++ b/drivers/usb/dwc2/gadget.c
-> @@ -5710,3 +5710,52 @@ void dwc2_gadget_exit_clock_gating(struct dwc2_hs=
-otg *hsotg, int rem_wakeup)
->   	hsotg->lx_state =3D DWC2_L0;
->   	hsotg->bus_suspended =3D false;
->   }
-> +
-> +int dwc2_gadget_enter_poweroff(struct dwc2_hsotg *hsotg)
-> +{
-> +	int ret;
-> +
-> +	dev_dbg(hsotg->dev, "Entering device power off.\n");
-> +
-> +	/* Backup all registers */
-> +	ret =3D dwc2_backup_global_registers(hsotg);
-> +	if (ret) {
-> +		dev_err(hsotg->dev, "%s: failed to backup global registers\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
-> +	ret =3D dwc2_backup_device_registers(hsotg);
-> +	if (ret) {
-> +		dev_err(hsotg->dev, "%s: failed to backup device registers\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
-> +	dev_dbg(hsotg->dev, "Entering device power off completed.\n");
-> +	return 0;
-> +}
-> +
-> +int dwc2_gadget_exit_poweroff(struct dwc2_hsotg *hsotg)
-> +{
-> +	int ret;
-> +
-> +	dev_dbg(hsotg->dev, "Exiting device power off.\n");
-> +
-> +	ret =3D dwc2_restore_global_registers(hsotg);
-> +	if (ret) {
-> +		dev_err(hsotg->dev, "%s: failed to restore registers\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
-> +	ret =3D dwc2_restore_device_registers(hsotg, 0);
-> +	if (ret) {
-> +		dev_err(hsotg->dev, "%s: failed to restore device registers\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
-> +	dev_dbg(hsotg->dev, "Exiting device power off completed.\n");
-> +	return 0;
-> +}
-> diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-> index cb54390e7de4..22afdafb474e 100644
-> --- a/drivers/usb/dwc2/hcd.c
-> +++ b/drivers/usb/dwc2/hcd.c
-> @@ -5993,3 +5993,52 @@ void dwc2_host_exit_clock_gating(struct dwc2_hsot=
-g *hsotg, int rem_wakeup)
->   			  jiffies + msecs_to_jiffies(71));
->   	}
->   }
-> +
-> +int dwc2_host_enter_poweroff(struct dwc2_hsotg *hsotg)
-> +{
-> +	int ret;
-> +
-> +	dev_dbg(hsotg->dev, "Entering host power off.\n");
-> +
-> +	/* Backup all registers */
-> +	ret =3D dwc2_backup_global_registers(hsotg);
-> +	if (ret) {
-> +		dev_err(hsotg->dev, "%s: failed to backup global registers\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
-> +	ret =3D dwc2_backup_host_registers(hsotg);
-> +	if (ret) {
-> +		dev_err(hsotg->dev, "%s: failed to backup host registers\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
-> +	dev_dbg(hsotg->dev, "Entering host power off completed.\n");
-> +	return 0;
-> +}
-> +
-> +int dwc2_host_exit_poweroff(struct dwc2_hsotg *hsotg)
-> +{
-> +	int ret;
-> +
-> +	dev_dbg(hsotg->dev, "Exiting host power off.\n");
-> +
-> +	ret =3D dwc2_restore_global_registers(hsotg);
-> +	if (ret) {
-> +		dev_err(hsotg->dev, "%s: failed to restore registers\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
-> +	ret =3D dwc2_restore_host_registers(hsotg);
-> +	if (ret) {
-> +		dev_err(hsotg->dev, "%s: failed to restore host registers\n",
-> +			__func__);
-> +		return ret;
-> +	}
-> +
-> +	dev_dbg(hsotg->dev, "Exiting host power off completed.\n");
-> +	return 0;
-> +}
-> diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-> index 7b84416dfc2b..b97eefc18a6b 100644
-> --- a/drivers/usb/dwc2/platform.c
-> +++ b/drivers/usb/dwc2/platform.c
-> @@ -16,6 +16,7 @@
->   #include <linux/platform_device.h>
->   #include <linux/phy/phy.h>
->   #include <linux/platform_data/s3c-hsotg.h>
-> +#include <linux/pm_domain.h>
->   #include <linux/reset.h>
->
->   #include <linux/usb/of.h>
-> @@ -307,6 +308,8 @@ static void dwc2_driver_remove(struct platform_devic=
-e *dev)
->   	struct dwc2_gregs_backup *gr;
->   	int ret =3D 0;
->
-> +	dev_pm_genpd_remove_notifier(&dev->dev);
-> +
->   	gr =3D &hsotg->gr_backup;
->
->   	/* Exit Hibernation when driver is removed. */
-> @@ -421,6 +424,31 @@ int dwc2_check_core_version(struct dwc2_hsotg *hsot=
-g)
->   	return 0;
->   }
->
-> +static int dwc2_power_notifier(struct notifier_block *nb,
-> +			       unsigned long action, void *data)
-> +{
-> +	struct dwc2_hsotg *hsotg =3D container_of(nb, struct dwc2_hsotg,
-> +						genpd_nb);
-> +	int ret;
-> +
-> +	switch (action) {
-> +	case GENPD_NOTIFY_ON:
-> +		ret =3D dwc2_exit_poweroff(hsotg);
-> +		if (ret)
-> +			dev_err(hsotg->dev, "exit poweroff failed\n");
-> +		break;
-> +	case GENPD_NOTIFY_PRE_OFF:
-> +		ret =3D dwc2_enter_poweroff(hsotg);
-> +		if (ret)
-> +			dev_err(hsotg->dev, "enter poweroff failed\n");
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
->   /**
->    * dwc2_driver_probe() - Called when the DWC_otg core is bound to the =
-DWC_otg
->    * driver
-> @@ -620,6 +648,10 @@ static int dwc2_driver_probe(struct platform_device=
- *dev)
->   		}
->   	}
->   #endif /* CONFIG_USB_DWC2_PERIPHERAL || CONFIG_USB_DWC2_DUAL_ROLE */
-> +
-> +	hsotg->genpd_nb.notifier_call =3D dwc2_power_notifier;
-> +	dev_pm_genpd_add_notifier(&dev->dev, &hsotg->genpd_nb);
-> +
->   	return 0;
->
->   #if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
+Regards
+Bibo Mao
+> 
+>>> +
+>>> +bool arch_haltpoll_want(bool force);
+>>> +#endif
+>>> diff --git a/arch/arm64/kernel/cpuidle.c b/arch/arm64/kernel/cpuidle.c
+>>> index f372295207fb..334df82a0eac 100644
+>>> --- a/arch/arm64/kernel/cpuidle.c
+>>> +++ b/arch/arm64/kernel/cpuidle.c
+>>> @@ -72,3 +72,26 @@ __cpuidle int acpi_processor_ffh_lpi_enter(struct acpi_lpi_state *lpi)
+>>>    					     lpi->index, state);
+>>>    }
+>>>    #endif
+>>> +
+>>> +#if IS_ENABLED(CONFIG_HALTPOLL_CPUIDLE)
+>>> +
+>>> +#include <asm/cpuidle_haltpoll.h>
+>>> +
+>>> +bool arch_haltpoll_want(bool force)
+>>> +{
+>>> +	/*
+>>> +	 * Enabling haltpoll requires two things:
+>>> +	 *
+>>> +	 * - Event stream support to provide a terminating condition to the
+>>> +	 *   WFE in the poll loop.
+>>> +	 *
+>>> +	 * - KVM support for arch_haltpoll_enable(), arch_haltpoll_enable().
+>>> +	 *
+>>> +	 * Given that the second is missing, allow haltpoll to only be force
+>>> +	 * loaded.
+>>> +	 */
+>>> +	return (arch_timer_evtstrm_available() && false) || force;
+>>> +}
+>>> +
+>>> +EXPORT_SYMBOL_GPL(arch_haltpoll_want);
+>>> +#endif
+>>>
+> 
+> 
 > --
-> 2.34.1
->
+> ankur
+> 
 
 
