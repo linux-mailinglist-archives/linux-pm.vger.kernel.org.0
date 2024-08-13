@@ -1,128 +1,216 @@
-Return-Path: <linux-pm+bounces-12130-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12131-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE0C994FF1C
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 09:54:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0C6F94FF69
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 10:13:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B8911F23F59
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 07:54:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E787B22B5C
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 08:13:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D23D36A8CF;
-	Tue, 13 Aug 2024 07:54:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D99D136E28;
+	Tue, 13 Aug 2024 08:13:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H288B9Pa"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="TFRY1IKm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54142524B0
-	for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 07:54:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1167137C2A
+	for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 08:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723535661; cv=none; b=umk1h4FlD0NoPd3hvGK+XWpD7kNsbygoZOH9SRCat9YjKo86yTWhzdcy4NgSxsCiQCtA2y9XlF62fuwdrmHFwZwL4wkdUv1uhbdlf03cFjXpak0Tg9i2wkkXRqsQTVhxJANDHeT4RA165e8gH/+zp9kvwxQRRaRi0tHeZkPkhCU=
+	t=1723536812; cv=none; b=FfgimIQbnqhHb0HsIm+KXV239QYxgAVX59MqW/6zKCYZHGTcuhCCngAFUFd+z/hCEAMKoS8QZjooyCxCW7pPpF2rHHKlX0oYjYIfBu2+oeDXCPJvizRVu3lWTctETH/2e/b97sfXCcEjNvmHcgUSdrooiG4T0hyozKdnVjO7vaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723535661; c=relaxed/simple;
-	bh=Tagmd0ZHFfAZHe1r1Mr1oZyeFx8z9898PM42DLkVG04=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s3tqPPmrv9t2h1YLYUxcbaQAfP+oDplj/+rvwTMEavL6Z3DzdAajUPL7YmLPwYop1uRIOsSpdCxH855hBHy1AA1+bGSjyVySM6vMS8asb/q2LXzdrpupIyA3M07W6u4nVGRy9fKRqqIOQuj00b8o4PfT3yMDSCr82UfJFjlvtJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=H288B9Pa; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2cf93dc11c6so4036453a91.1
-        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 00:54:20 -0700 (PDT)
+	s=arc-20240116; t=1723536812; c=relaxed/simple;
+	bh=KI/vFrEyEg5EFIYU/iBV01qglnGbaphkmdipf2rX5jo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gbHBNuMEHSvd+ReOzrpZwAd24jdN4/pm8C5OhzRFWX6jWqin1zJTLcj0KLiQho4Uez5TKIvH7dCWBmysE578+Uzkh08Knew18ppb/Jijdp2rKb+yiXFDiSU8FDNWek4YFWLbP91ldY6DW9nm2UL+UtaXDgQUSJtgMMmI4CdDNWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=TFRY1IKm; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fd640a6454so39544515ad.3
+        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 01:13:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723535660; x=1724140460; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=quunBnpR+uyAazpYXeUKYV/u6uqA7jUaGY1RNyrzJvk=;
-        b=H288B9Pa2ncrbNPkFbSWzfldBmbSIMQmZzXSzvr5jlLsuBUGP4RK97HKVX6XYtzt2p
-         me/kmcVraJqZt3wq9G/p9ya/fwe0vSgbQggYhL21Gj4kZ1+aAoUOsDPonuY3cdc/ssX8
-         i9jZC6033cwkXY3zBsG62Jx4l9luC+E1k3/SFEKt62Qy98hxr2KkCH2GwA0mPWDdSJtq
-         cHlsLA2PFL/gHjRFqRZTV7T0AbJlwoHNlOkLkKsdNhSfROqyjG4BxO87SabE5Wm9Pv5y
-         PpZS+G396f8D4nvp7hFGAwdqsrl4S+jmUf3MpRrvZGgoz6iIu/L/Oj/5WhoPyniCgaNg
-         mV8w==
+        d=sifive.com; s=google; t=1723536810; x=1724141610; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MPwCQlZV6XnO0rlNbX/WsNAZ1kHHhsOKatz4Qfacl5c=;
+        b=TFRY1IKmKrfmoV4Uj0/os8oGPK3sHfDnk8E8Fd03OrC1ijShxK8oKI62ZpDeYcyrm0
+         mXLM4JTJWJMgd0zDrhx/PlXg9TVKCvAvLVmmTCaFJa8KRX/Y9b9cv/bdWMhZ0PLoLpAe
+         qsxh9XUcBC+wZJrSS0uqtKk5uOeUjkeYKqAZ7v/dpNyvtEHYI5RDg4N7A7csKBY/CukU
+         YVahVS/n2+IR99uN/rRy0MgHBhjivRKgdhcLhyMZyQi8F7D/mvSuDI2pEUXUBqQaExPB
+         3duQaqJLCsfgPf9qrUeSco61AsWS9a/TRFlAV+EfEYBmZHldbzNkyYyE2hneg2K4wSkm
+         sbyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723535660; x=1724140460;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1723536810; x=1724141610;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=quunBnpR+uyAazpYXeUKYV/u6uqA7jUaGY1RNyrzJvk=;
-        b=HUTAP8+tH9eX1mAmR9YXAOwAONqFQpBVdcNAhGxWpImtJ3NqgFxpEUD8L7WMIy0bYE
-         mTYCsJBXUPseAQ1sn2xuuSnoLFpGvSXse5Of4uRji8Q3f6uk1VpfWkCrEqzJIFHqBys8
-         Oa0CXMiDKaJINCKrjNJea/tS7aD1Px5iZRhBf1KQahVJ2+FvEWHicpL+JSXPwV3tekeu
-         zkSfBKPBVfi2em2nwU0aFhbdbxtXfPpymfRxJ5Ps72E7QoB3wKqkruMN4SXXfJyCHen0
-         o6OnhTbJsT5FIkYJGzghuDr2pgiE/mALaQKnZ9t44h2OQwRqTtKdu2k8ZexScV7jwZa2
-         5HvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWveVtcm6QzKYswn2SVDY+FO79dD5QUoYWYdlXxe9IaYAUHdpIgYOs281uXWqe3XJE96IYF7Uu7JaJn4JW69jlRi+yzwLTqpKw=
-X-Gm-Message-State: AOJu0YwFBGpUTSsSWFKCv01odOfyESAJJzvZ0KrSr5llc6EUGOPRmKBK
-	fQ5hGTLKpOxkDpyVZtZwwOGI6ZjXHO8K/oRFrledQTGYV7lWY/JhoW2sE8BGW8O7YnWsZEXis2U
-	FHC1fotNXQa5OcSsWDZfEuGDrqlxQzp5AmQeseEfJwq+XTZkQ+S4=
-X-Google-Smtp-Source: AGHT+IGjquCO6vuNugRLHkV98nNv6JV31HDxkHG2BV4oq9FFnH3FXSVBipvECEDVXrTZNgI3x5FxnIOGlvzKaRohCqw=
-X-Received: by 2002:a17:90a:6785:b0:2cb:4bed:ed35 with SMTP id
- 98e67ed59e1d1-2d39269da03mr2808886a91.41.1723535659547; Tue, 13 Aug 2024
- 00:54:19 -0700 (PDT)
+        bh=MPwCQlZV6XnO0rlNbX/WsNAZ1kHHhsOKatz4Qfacl5c=;
+        b=GMryzYT2OvQx+AgJWZ1eWzaA7PVsV9pvkFwVQEvgOiWGD/p3vX7bfR0I+bzJjuucZQ
+         RMb35i9iYgB00XDsGrqQ5teg2aAt8KrCKKhYgMd4A2Jd2S3kWDKgker0bHUi7RtyUUld
+         lZpD/3qwWOSKwVzQngGf640JCxDYflsbwCkyx5KgTKaC5x34mwU4pmOKiZHo+5tileY2
+         RtIhHAJ0pEo3CZdl1pymq+2QasDjRxOvQZN2Im73cceYOIKvXxd7Uy6Cc+bLUVjgV2ZG
+         I4QXAI/LIQ/o04a79KCipT4iyQJtrT40lwvk72BypS3sOPACzuFNQSS6o+O08yex8wLj
+         a9qQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVD4kBW5x24uvB9rbyinrRPqGup6abcAq7tEEL6jnS+SiG2GScXUE94AcjK3GsERbJkfH0mr5KTCAP54Y5kAi+ehd+aBYzInS8=
+X-Gm-Message-State: AOJu0Yx+OoGL/VZUiWrEoAd1XsDiaw8p65JCVuBXN2wzZGvn+xLC2gJe
+	m261UQaWc9+xAoZFJgcmtv/XETP16qBJBV/iZVFz7ogpvS4qOCD6EmYjBC9M+ic=
+X-Google-Smtp-Source: AGHT+IFGyOzsELsbEN5dq5CT9Zf/5PMWDUy7RodzkZu3Mk7cSMnkmo/3cHgdPDhbNHigLjznXjqnXw==
+X-Received: by 2002:a17:902:d487:b0:1ff:39d7:a1b0 with SMTP id d9443c01a7336-201ca1ca41bmr30756345ad.50.1723536809857;
+        Tue, 13 Aug 2024 01:13:29 -0700 (PDT)
+Received: from hsinchu35-syssw01.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201cd1e29afsm8289885ad.309.2024.08.13.01.13.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Aug 2024 01:13:29 -0700 (PDT)
+From: Nick Hu <nick.hu@sifive.com>
+To: anup@brainfault.org,
+	rafael@kernel.org,
+	daniel.lezcano@linaro.org,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	linux-pm@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	greentime.hu@sifive.com,
+	zong.li@sifive.com
+Cc: Nick Hu <nick.hu@sifive.com>,
+	Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH] cpuidle: riscv-sbi: Allow cpuidle pd used by other devices
+Date: Tue, 13 Aug 2024 16:13:24 +0800
+Message-Id: <20240813081324.3205944-1-nick.hu@sifive.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3c726cf5-0c94-4cc6-aff0-a453d840d452@arm.com> <20240809012410.marjxrio3sjequnn@airbuntu>
- <ZrXIb7BFOWY11DKt@jlelli-thinkpadt14gen4.remote.csb>
-In-Reply-To: <ZrXIb7BFOWY11DKt@jlelli-thinkpadt14gen4.remote.csb>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Tue, 13 Aug 2024 09:54:08 +0200
-Message-ID: <CAKfTPtD_QzYVeTbQ-j2mOsKmCcjUaxo403M_HYCWbT2RjjGb7w@mail.gmail.com>
-Subject: Re: [PATCH] sched/cpufreq: Use USEC_PER_SEC for deadline task
-To: Juri Lelli <juri.lelli@redhat.com>
-Cc: Qais Yousef <qyousef@layalina.io>, Christian Loehle <christian.loehle@arm.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org, 
-	Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, 9 Aug 2024 at 09:42, Juri Lelli <juri.lelli@redhat.com> wrote:
->
-> On 09/08/24 02:24, Qais Yousef wrote:
-> > Adding more sched folks to CC
-> >
-> > On 08/06/24 14:41, Christian Loehle wrote:
-> > > Convert the sugov deadline task attributes to use the available
-> > > definitions to make them more readable.
-> > > No functional change.
-> > >
-> > > Signed-off-by: Christian Loehle <christian.loehle@arm.com>
-> > > ---
-> > >  kernel/sched/cpufreq_schedutil.c | 6 +++---
-> > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > > index eece6244f9d2..012b38a04894 100644
-> > > --- a/kernel/sched/cpufreq_schedutil.c
-> > > +++ b/kernel/sched/cpufreq_schedutil.c
-> > > @@ -654,9 +654,9 @@ static int sugov_kthread_create(struct sugov_policy *sg_policy)
-> > >              * Fake (unused) bandwidth; workaround to "fix"
-> > >              * priority inheritance.
-> > >              */
-> > > -           .sched_runtime  =  1000000,
-> > > -           .sched_deadline = 10000000,
-> > > -           .sched_period   = 10000000,
-> > > +           .sched_runtime  = USEC_PER_SEC,
-> > > +           .sched_deadline = 10 * USEC_PER_SEC,
-> > > +           .sched_period   = 10 * USEC_PER_SEC,
-> >
-> > I think NSEC_PER_MSEC is the correct one. The units in
-> > include/uapi/linux/sched/types.h is not specified. Had to look at
-> > sched-deadline.rst to figure it out.
->
-> In practice it's the same number :). But, you are correct, we want
-> 1ms/10ms and unit is nanoseconds, so NSEC_PER_MSEC.
+To prevent the probe of consumer devices being deferred, create the
+platform devices for each pd node under '/cpus/power-domains' and move the
+driver initailization to the arch_initcall.
+The consumer devices that inside the cpu/cluster power domain may register
+the genpd notifier where their power domains are point to the pd nodes
+under '/cpus/power-domains'. If the cpuidle.off==1, the genpd notifier
+will fail due to sbi_cpuidle_pd_allow_domain_state is not set. We also
+need the sbi_cpuidle_cpuhp_up/down to invoke the callbacks. Therefore,
+add a cpuidle_disabled() check before registering the cpuidle driver to
+address the issue.
 
-Yes NSEC_PER_MSEC is the correct unit
+Signed-off-by: Nick Hu <nick.hu@sifive.com>
+Link: https://lore.kernel.org/lkml/20240226065113.1690534-1-nick.hu@sifive.com/
+Suggested-by: Anup Patel <apatel@ventanamicro.com>
+---
+ drivers/cpuidle/cpuidle-riscv-sbi.c | 24 +++++++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
 
->
+diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+index a6e123dfe394..d6b01fc64f94 100644
+--- a/drivers/cpuidle/cpuidle-riscv-sbi.c
++++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+@@ -16,6 +16,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
++#include <linux/of_platform.h>
+ #include <linux/slab.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_domain.h>
+@@ -25,6 +26,7 @@
+ #include <asm/smp.h>
+ #include <asm/suspend.h>
+ 
++#include "cpuidle.h"
+ #include "dt_idle_states.h"
+ #include "dt_idle_genpd.h"
+ 
+@@ -336,6 +338,9 @@ static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
+ 		return ret;
+ 	}
+ 
++	if (cpuidle_disabled())
++		return 0;
++
+ 	ret = cpuidle_register(drv, NULL);
+ 	if (ret)
+ 		goto deinit;
+@@ -380,20 +385,26 @@ static int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
+ struct sbi_pd_provider {
+ 	struct list_head link;
+ 	struct device_node *node;
++	struct platform_device *pdev;
+ };
+ 
+ static LIST_HEAD(sbi_pd_providers);
+ 
+ static int sbi_pd_init(struct device_node *np)
+ {
++	struct platform_device *pdev;
+ 	struct generic_pm_domain *pd;
+ 	struct sbi_pd_provider *pd_provider;
+ 	struct dev_power_governor *pd_gov;
+ 	int ret = -ENOMEM;
+ 
++	pdev = of_platform_device_create(np, np->name, NULL);
++	if (!pdev)
++		goto out;
++
+ 	pd = dt_idle_pd_alloc(np, sbi_dt_parse_state_node);
+ 	if (!pd)
+-		goto out;
++		goto free_pdev;
+ 
+ 	pd_provider = kzalloc(sizeof(*pd_provider), GFP_KERNEL);
+ 	if (!pd_provider)
+@@ -419,6 +430,7 @@ static int sbi_pd_init(struct device_node *np)
+ 		goto remove_pd;
+ 
+ 	pd_provider->node = of_node_get(np);
++	pd_provider->pdev = pdev;
+ 	list_add(&pd_provider->link, &sbi_pd_providers);
+ 
+ 	pr_debug("init PM domain %s\n", pd->name);
+@@ -430,6 +442,8 @@ static int sbi_pd_init(struct device_node *np)
+ 	kfree(pd_provider);
+ free_pd:
+ 	dt_idle_pd_free(pd);
++free_pdev:
++	of_platform_device_destroy(&pdev->dev, NULL);
+ out:
+ 	pr_err("failed to init PM domain ret=%d %pOF\n", ret, np);
+ 	return ret;
+@@ -447,6 +461,7 @@ static void sbi_pd_remove(void)
+ 		if (!IS_ERR(genpd))
+ 			kfree(genpd);
+ 
++		of_platform_device_destroy(&pd_provider->pdev->dev, NULL);
+ 		of_node_put(pd_provider->node);
+ 		list_del(&pd_provider->link);
+ 		kfree(pd_provider);
+@@ -548,7 +563,10 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
+ 	/* Setup CPU hotplut notifiers */
+ 	sbi_idle_init_cpuhp();
+ 
+-	pr_info("idle driver registered for all CPUs\n");
++	if (cpuidle_disabled())
++		pr_info("cpuidle is disabled\n");
++	else
++		pr_info("idle driver registered for all CPUs\n");
+ 
+ 	return 0;
+ 
+@@ -592,4 +610,4 @@ static int __init sbi_cpuidle_init(void)
+ 
+ 	return 0;
+ }
+-device_initcall(sbi_cpuidle_init);
++arch_initcall(sbi_cpuidle_init);
+-- 
+2.34.1
+
 
