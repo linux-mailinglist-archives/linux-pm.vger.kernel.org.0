@@ -1,212 +1,442 @@
-Return-Path: <linux-pm+bounces-12168-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12169-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46788950900
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 17:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C1A695092A
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 17:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0772281781
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 15:26:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D548282CBD
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 15:31:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFE041A00EE;
-	Tue, 13 Aug 2024 15:26:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08C001A0702;
+	Tue, 13 Aug 2024 15:31:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="br6V0BHU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fLzv5Gnx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-fw-52002.amazon.com (smtp-fw-52002.amazon.com [52.119.213.150])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D499B1991BE;
-	Tue, 13 Aug 2024 15:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D0819D886;
+	Tue, 13 Aug 2024 15:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723562777; cv=none; b=fie3bN/PcDTW1Nlwf2jg6zJKU6/nWQ+9FTfvelfY1bdmooo/SWWyPiYUSh9KS//7D0Y0R8Sz+xZiXQ4u9AcgJryDH9kVj18HJfafmpCJNdewT0Y+Lulx/aEKGeObfxJQqUkVKWCFO7ot8jc5XS+hvoJ9l4gdIZ/PcpQqRnmyPhY=
+	t=1723563096; cv=none; b=XptNOO2vubxVQ8hvgxJUyCgFTvT+m3XdcQbIEeJkvQmkusPRPYb3ruBkw2+PJ24ML3OX6LF5/JB9uU20KicoAaSftieZiiHU9s4TUoWufzhGmfiGS0AGP8YQWrV82s1RL0qkndM/UugimoDc1/947Tx77/B+27xHDm4MXLFOJ4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723562777; c=relaxed/simple;
-	bh=/hMt4SvjZSqfHxfRtii8cHre8n+msWXRYZNv7+c628w=;
-	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=sUZH7TcETmUZ0sC1I5KNcQqQEGia06KrmrxIfFCM1ugPfZa6FDnk6eM6CY7Y32RbNPplPpFi17Rf7qVCwgY0LSN+nRLa4WsallJvVGnTc3OxzkPTp5j7QQfSLAcRlCylL8BOa8pHVxQq4/fy0A5j7C1/dN27ods01I1hhvCEJxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=br6V0BHU; arc=none smtp.client-ip=52.119.213.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1723562777; x=1755098777;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version:subject;
-  bh=/hMt4SvjZSqfHxfRtii8cHre8n+msWXRYZNv7+c628w=;
-  b=br6V0BHUmQq3bEEOmuzXTKORk0NV38M/JYFGs+nAA2fCz03PL6/oNF7d
-   XoZ6iePfrcmlOfScVBOmqmFcTsHMXrUPRGOihntUvFMgeTrsPBMe4D5BR
-   vieZxOvvdXcjUlvxWQwF/detLGihFw0AygUYXYM29/KBuG2ChYDTdq8Am
-   E=;
-X-IronPort-AV: E=Sophos;i="6.09,286,1716249600"; 
-   d="scan'208";a="652312371"
-Subject: Re: [PATCH v6 09/10] arm64: support cpuidle-haltpoll
-Thread-Topic: [PATCH v6 09/10] arm64: support cpuidle-haltpoll
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52002.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 15:26:14 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [10.0.7.35:20665]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.3.24:2525] with esmtp (Farcaster)
- id 96bd94f0-695e-4804-9fe5-4063d2b6ecde; Tue, 13 Aug 2024 15:26:12 +0000 (UTC)
-X-Farcaster-Flow-ID: 96bd94f0-695e-4804-9fe5-4063d2b6ecde
-Received: from EX19D001UWA003.ant.amazon.com (10.13.138.211) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Tue, 13 Aug 2024 15:26:12 +0000
-Received: from EX19D001UWA003.ant.amazon.com (10.13.138.211) by
- EX19D001UWA003.ant.amazon.com (10.13.138.211) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Tue, 13 Aug 2024 15:26:12 +0000
-Received: from EX19D001UWA003.ant.amazon.com ([fe80::256a:26de:3ee6:48a2]) by
- EX19D001UWA003.ant.amazon.com ([fe80::256a:26de:3ee6:48a2%7]) with mapi id
- 15.02.1258.034; Tue, 13 Aug 2024 15:26:12 +0000
-From: "Okanovic, Haris" <harisokn@amazon.com>
-To: "ankur.a.arora@oracle.com" <ankur.a.arora@oracle.com>
-CC: "joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "mark.rutland@arm.com"
-	<mark.rutland@arm.com>, "boris.ostrovsky@oracle.com"
-	<boris.ostrovsky@oracle.com>, "x86@kernel.org" <x86@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"konrad.wilk@oracle.com" <konrad.wilk@oracle.com>, "wanpengli@tencent.com"
-	<wanpengli@tencent.com>, "cl@gentwo.org" <cl@gentwo.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "mingo@redhat.com"
-	<mingo@redhat.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "misono.tomohiro@fujitsu.com"
-	<misono.tomohiro@fujitsu.com>, "daniel.lezcano@linaro.org"
-	<daniel.lezcano@linaro.org>, "arnd@arndb.de" <arnd@arndb.de>,
-	"lenb@kernel.org" <lenb@kernel.org>, "will@kernel.org" <will@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>, "peterz@infradead.org"
-	<peterz@infradead.org>, "vkuznets@redhat.com" <vkuznets@redhat.com>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "Okanovic, Haris"
-	<harisokn@amazon.com>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"bp@alien8.de" <bp@alien8.de>, "mtosatti@redhat.com" <mtosatti@redhat.com>,
-	"rafael@kernel.org" <rafael@kernel.org>, "sudeep.holla@arm.com"
-	<sudeep.holla@arm.com>
-Thread-Index: AQHa35mLdhQH4qvBikqC1hweZwAegbIN988AgAAMBQCAF2c4AA==
-Date: Tue, 13 Aug 2024 15:26:11 +0000
-Message-ID: <104d0ec31cb45477e27273e089402d4205ee4042.camel@amazon.com>
-References: <20240726201332.626395-1-ankur.a.arora@oracle.com>
-	 <20240726202134.627514-1-ankur.a.arora@oracle.com>
-	 <20240726202134.627514-7-ankur.a.arora@oracle.com>
-	 <5ba1e9b9bba7cafcd3cc831ff5f2407d81409632.camel@amazon.com>
-	 <87ikwors8p.fsf@oracle.com>
-In-Reply-To: <87ikwors8p.fsf@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6549F0F970A7214B834B61B298F16EFD@amazon.com>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1723563096; c=relaxed/simple;
+	bh=2D5MLlwqy83hI+9CIsIBf24jGbY27cmhAGq9DW9iT/s=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DJHphq5nmaVbhFrG3ddwFDhL6P+1vG6P4ET5DABHc/ijaFMKhymG4kzhDrO3hdwAhsh6wTxFw5MWwslcHJnL32V3AuEnAU4WIrYy8UrXMgxkndPj7A9e9GIuQeltLbU27aw4F+ayquiMafYK1pYL1hBmkfWRSjqunlpMZOK3jBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fLzv5Gnx; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723563095; x=1755099095;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2D5MLlwqy83hI+9CIsIBf24jGbY27cmhAGq9DW9iT/s=;
+  b=fLzv5GnxxCM0X7PwrfLkC2RGZW2YiZV5kAd7PcfS/7G8xO5Zknga1q93
+   nmtLf22ojdDC7oG2uOssBBpmy59gQqRQeRkmuGefwWrhS6+87oAGY7Thg
+   PkCIzZNXMdNJ45PS3vdfXr/g2ndiNrpHoDv1cawRJtL5esBDbkZhWnJjk
+   plfnG/4FPpABV7lz5S+pyjakR+MlHF6+12wiv+lKDhhlo/fEPj9hz8Qal
+   +DPGjaROcth74LLwaRe3zXWdxA9tj3KdZFTuNuRqyrKiv5nNnAfW36L6D
+   Wx80y/lThf/XgYN1K6Jgk0/TkDY/QYGbo6kw56l2+ZNCHE2osTvqCTB3R
+   w==;
+X-CSE-ConnectionGUID: TPhoe3isQBu11giSdVTa/w==
+X-CSE-MsgGUID: 43Gpj0KGShq8xi7UEroJ8w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11163"; a="25599226"
+X-IronPort-AV: E=Sophos;i="6.09,286,1716274800"; 
+   d="scan'208";a="25599226"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 08:31:34 -0700
+X-CSE-ConnectionGUID: rGcoqeHES+CqKnpPwm8AQQ==
+X-CSE-MsgGUID: s/h0F1SDQKmqnqYbA6jmkQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,286,1716274800"; 
+   d="scan'208";a="63640137"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 13 Aug 2024 08:31:30 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sdtUd-0000Y2-2R;
+	Tue, 13 Aug 2024 15:31:27 +0000
+Date: Tue, 13 Aug 2024 23:30:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+	devel@acpica.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 84/99]
+ drivers/thermal/thermal_core.c:1012:13: error: invalid storage class for
+ function 'thermal_zone_cdev_binding'
+Message-ID: <202408132357.AhdAtHMM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-T24gTW9uLCAyMDI0LTA3LTI5IGF0IDExOjAyIC0wNzAwLCBBbmt1ciBBcm9yYSB3cm90ZToNCj4g
-Q0FVVElPTjogVGhpcyBlbWFpbCBvcmlnaW5hdGVkIGZyb20gb3V0c2lkZSBvZiB0aGUgb3JnYW5p
-emF0aW9uLiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91
-IGNhbiBjb25maXJtIHRoZSBzZW5kZXIgYW5kIGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZS4NCj4g
-DQo+IA0KPiANCj4gT2thbm92aWMsIEhhcmlzIDxoYXJpc29rbkBhbWF6b24uY29tPiB3cml0ZXM6
-DQo+IA0KPiA+IE9uIEZyaSwgMjAyNC0wNy0yNiBhdCAxMzoyMSAtMDcwMCwgQW5rdXIgQXJvcmEg
-d3JvdGU6DQo+ID4gPiBDQVVUSU9OOiBUaGlzIGVtYWlsIG9yaWdpbmF0ZWQgZnJvbSBvdXRzaWRl
-IG9mIHRoZSBvcmdhbml6YXRpb24uIERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1l
-bnRzIHVubGVzcyB5b3UgY2FuIGNvbmZpcm0gdGhlIHNlbmRlciBhbmQga25vdyB0aGUgY29udGVu
-dCBpcyBzYWZlLg0KPiA+ID4gDQo+ID4gPiANCj4gPiA+IA0KPiA+ID4gQWRkIGFyY2hpdGVjdHVy
-YWwgc3VwcG9ydCBmb3IgY3B1aWRsZS1oYWx0cG9sbCBkcml2ZXIgYnkgZGVmaW5pbmcNCj4gPiA+
-IGFyY2hfaGFsdHBvbGxfKigpLg0KPiA+ID4gDQo+ID4gPiBBbHNvIGRlZmluZSBBUkNIX0NQVUlE
-TEVfSEFMVFBPTEwgdG8gYWxsb3cgY3B1aWRsZS1oYWx0cG9sbCB0byBiZQ0KPiA+ID4gc2VsZWN0
-ZWQsIGFuZCBnaXZlbiB0aGF0IHdlIGhhdmUgYW4gb3B0aW1pemVkIHBvbGxpbmcgbWVjaGFuaXNt
-DQo+ID4gPiBpbiBzbXBfY29uZF9sb2FkKigpLCBzZWxlY3QgQVJDSF9IQVNfT1BUSU1JWkVEX1BP
-TEwuDQo+ID4gPiANCj4gPiA+IHNtcF9jb25kX2xvYWQqKCkgYXJlIGltcGxlbWVudGVkIHZpYSBM
-RFhSLCBXRkUsIHdpdGggTERYUiBsb2FkaW5nDQo+ID4gPiBhIG1lbW9yeSByZWdpb24gaW4gZXhj
-bHVzaXZlIHN0YXRlIGFuZCB0aGUgV0ZFIHdhaXRpbmcgZm9yIGFueQ0KPiA+ID4gc3RvcmVzIHRv
-IGl0Lg0KPiA+ID4gDQo+ID4gPiBJbiB0aGUgZWRnZSBjYXNlIC0tIG5vIENQVSBzdG9yZXMgdG8g
-dGhlIHdhaXRlZCByZWdpb24gYW5kIHRoZXJlJ3Mgbm8NCj4gPiA+IGludGVycnVwdCAtLSB0aGUg
-ZXZlbnQtc3RyZWFtIHdpbGwgcHJvdmlkZSB0aGUgdGVybWluYXRpbmcgY29uZGl0aW9uDQo+ID4g
-PiBlbnN1cmluZyB3ZSBkb24ndCB3YWl0IGZvcmV2ZXIsIGJ1dCBiZWNhdXNlIHRoZSBldmVudC1z
-dHJlYW0gcnVucyBhdA0KPiA+ID4gYSBmaXhlZCBmcmVxdWVuY3kgKGNvbmZpZ3VyZWQgYXQgMTBr
-SHopIHdlIG1pZ2h0IHNwZW5kIG1vcmUgdGltZSBpbg0KPiA+ID4gdGhlIHBvbGxpbmcgc3RhZ2Ug
-dGhhbiBzcGVjaWZpZWQgYnkgY3B1aWRsZV9wb2xsX3RpbWUoKS4NCj4gPiA+IA0KPiA+ID4gVGhp
-cyB3b3VsZCBvbmx5IGhhcHBlbiBpbiB0aGUgbGFzdCBpdGVyYXRpb24sIHNpbmNlIG92ZXJzaG9v
-dGluZyB0aGUNCj4gPiA+IHBvbGxfbGltaXQgbWVhbnMgdGhlIGdvdmVybm9yIG1vdmVzIG91dCBv
-ZiB0aGUgcG9sbGluZyBzdGFnZS4NCj4gPiA+IA0KPiA+ID4gU2lnbmVkLW9mZi1ieTogQW5rdXIg
-QXJvcmEgPGFua3VyLmEuYXJvcmFAb3JhY2xlLmNvbT4NCj4gPiA+IC0tLQ0KPiA+ID4gIGFyY2gv
-YXJtNjQvS2NvbmZpZyAgICAgICAgICAgICAgICAgICAgICAgIHwgMTAgKysrKysrKysrKw0KPiA+
-ID4gIGFyY2gvYXJtNjQvaW5jbHVkZS9hc20vY3B1aWRsZV9oYWx0cG9sbC5oIHwgIDkgKysrKysr
-KysrDQo+ID4gPiAgYXJjaC9hcm02NC9rZXJuZWwvY3B1aWRsZS5jICAgICAgICAgICAgICAgfCAy
-MyArKysrKysrKysrKysrKysrKysrKysrKw0KPiA+ID4gIDMgZmlsZXMgY2hhbmdlZCwgNDIgaW5z
-ZXJ0aW9ucygrKQ0KPiA+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2FybTY0L2luY2x1ZGUv
-YXNtL2NwdWlkbGVfaGFsdHBvbGwuaA0KPiA+ID4gDQo+ID4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9h
-cm02NC9LY29uZmlnIGIvYXJjaC9hcm02NC9LY29uZmlnDQo+ID4gPiBpbmRleCA1ZDkxMjU5ZWU3
-YjUuLmNmMWM2NjgxZWIwYSAxMDA2NDQNCj4gPiA+IC0tLSBhL2FyY2gvYXJtNjQvS2NvbmZpZw0K
-PiA+ID4gKysrIGIvYXJjaC9hcm02NC9LY29uZmlnDQo+ID4gPiBAQCAtMzUsNiArMzUsNyBAQCBj
-b25maWcgQVJNNjQNCj4gPiA+ICAgICAgICAgc2VsZWN0IEFSQ0hfSEFTX01FTUJBUlJJRVJfU1lO
-Q19DT1JFDQo+ID4gPiAgICAgICAgIHNlbGVjdCBBUkNIX0hBU19OTUlfU0FGRV9USElTX0NQVV9P
-UFMNCj4gPiA+ICAgICAgICAgc2VsZWN0IEFSQ0hfSEFTX05PTl9PVkVSTEFQUElOR19BRERSRVNT
-X1NQQUNFDQo+ID4gPiArICAgICAgIHNlbGVjdCBBUkNIX0hBU19PUFRJTUlaRURfUE9MTA0KPiA+
-ID4gICAgICAgICBzZWxlY3QgQVJDSF9IQVNfUFRFX0RFVk1BUA0KPiA+ID4gICAgICAgICBzZWxl
-Y3QgQVJDSF9IQVNfUFRFX1NQRUNJQUwNCj4gPiA+ICAgICAgICAgc2VsZWN0IEFSQ0hfSEFTX0hX
-X1BURV9ZT1VORw0KPiA+ID4gQEAgLTIzNzYsNiArMjM3NywxNSBAQCBjb25maWcgQVJDSF9ISUJF
-Uk5BVElPTl9IRUFERVINCj4gPiA+ICBjb25maWcgQVJDSF9TVVNQRU5EX1BPU1NJQkxFDQo+ID4g
-PiAgICAgICAgIGRlZl9ib29sIHkNCj4gPiA+IA0KPiA+ID4gK2NvbmZpZyBBUkNIX0NQVUlETEVf
-SEFMVFBPTEwNCj4gPiA+ICsgICAgICAgYm9vbCAiRW5hYmxlIHNlbGVjdGlvbiBvZiB0aGUgY3B1
-aWRsZS1oYWx0cG9sbCBkcml2ZXIiDQo+ID4gPiArICAgICAgIGRlZmF1bHQgbg0KPiA+ID4gKyAg
-ICAgICBoZWxwDQo+ID4gPiArICAgICAgICAgY3B1aWRsZS1oYWx0cG9sbCBhbGxvd3MgZm9yIGFk
-YXB0aXZlIHBvbGxpbmcgYmFzZWQgb24NCj4gPiA+ICsgICAgICAgICBjdXJyZW50IGxvYWQgYmVm
-b3JlIGVudGVyaW5nIHRoZSBpZGxlIHN0YXRlLg0KPiA+ID4gKw0KPiA+ID4gKyAgICAgICAgIFNv
-bWUgdmlydHVhbGl6ZWQgd29ya2xvYWRzIGJlbmVmaXQgZnJvbSB1c2luZyBpdC4NCj4gPiA+ICsN
-Cj4gPiA+ICBlbmRtZW51ICMgIlBvd2VyIG1hbmFnZW1lbnQgb3B0aW9ucyINCj4gPiA+IA0KPiA+
-ID4gIG1lbnUgIkNQVSBQb3dlciBNYW5hZ2VtZW50Ig0KPiA+ID4gZGlmZiAtLWdpdCBhL2FyY2gv
-YXJtNjQvaW5jbHVkZS9hc20vY3B1aWRsZV9oYWx0cG9sbC5oIGIvYXJjaC9hcm02NC9pbmNsdWRl
-L2FzbS9jcHVpZGxlX2hhbHRwb2xsLmgNCj4gPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4g
-PiBpbmRleCAwMDAwMDAwMDAwMDAuLjY1ZjI4OTQwN2E2Yw0KPiA+ID4gLS0tIC9kZXYvbnVsbA0K
-PiA+ID4gKysrIGIvYXJjaC9hcm02NC9pbmNsdWRlL2FzbS9jcHVpZGxlX2hhbHRwb2xsLmgNCj4g
-PiA+IEBAIC0wLDAgKzEsOSBAQA0KPiA+ID4gKy8qIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBH
-UEwtMi4wICovDQo+ID4gPiArI2lmbmRlZiBfQVJDSF9IQUxUUE9MTF9IDQo+ID4gPiArI2RlZmlu
-ZSBfQVJDSF9IQUxUUE9MTF9IDQo+ID4gPiArDQo+ID4gPiArc3RhdGljIGlubGluZSB2b2lkIGFy
-Y2hfaGFsdHBvbGxfZW5hYmxlKHVuc2lnbmVkIGludCBjcHUpIHsgfQ0KPiA+ID4gK3N0YXRpYyBp
-bmxpbmUgdm9pZCBhcmNoX2hhbHRwb2xsX2Rpc2FibGUodW5zaWduZWQgaW50IGNwdSkgeyB9DQo+
-ID4gPiArDQo+ID4gPiArYm9vbCBhcmNoX2hhbHRwb2xsX3dhbnQoYm9vbCBmb3JjZSk7DQo+ID4g
-PiArI2VuZGlmDQo+ID4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9rZXJuZWwvY3B1aWRsZS5j
-IGIvYXJjaC9hcm02NC9rZXJuZWwvY3B1aWRsZS5jDQo+ID4gPiBpbmRleCBmMzcyMjk1MjA3ZmIu
-LjMzNGRmODJhMGVhYyAxMDA2NDQNCj4gPiA+IC0tLSBhL2FyY2gvYXJtNjQva2VybmVsL2NwdWlk
-bGUuYw0KPiA+ID4gKysrIGIvYXJjaC9hcm02NC9rZXJuZWwvY3B1aWRsZS5jDQo+ID4gPiBAQCAt
-NzIsMyArNzIsMjYgQEAgX19jcHVpZGxlIGludCBhY3BpX3Byb2Nlc3Nvcl9mZmhfbHBpX2VudGVy
-KHN0cnVjdCBhY3BpX2xwaV9zdGF0ZSAqbHBpKQ0KPiA+ID4gICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgbHBpLT5pbmRleCwgc3RhdGUpOw0KPiA+ID4gIH0NCj4g
-PiA+ICAjZW5kaWYNCj4gPiA+ICsNCj4gPiA+ICsjaWYgSVNfRU5BQkxFRChDT05GSUdfSEFMVFBP
-TExfQ1BVSURMRSkNCj4gPiA+ICsNCj4gPiA+ICsjaW5jbHVkZSA8YXNtL2NwdWlkbGVfaGFsdHBv
-bGwuaD4NCj4gPiA+ICsNCj4gPiA+ICtib29sIGFyY2hfaGFsdHBvbGxfd2FudChib29sIGZvcmNl
-KQ0KPiA+ID4gK3sNCj4gPiA+ICsgICAgICAgLyoNCj4gPiA+ICsgICAgICAgICogRW5hYmxpbmcg
-aGFsdHBvbGwgcmVxdWlyZXMgdHdvIHRoaW5nczoNCj4gPiA+ICsgICAgICAgICoNCj4gPiA+ICsg
-ICAgICAgICogLSBFdmVudCBzdHJlYW0gc3VwcG9ydCB0byBwcm92aWRlIGEgdGVybWluYXRpbmcg
-Y29uZGl0aW9uIHRvIHRoZQ0KPiA+ID4gKyAgICAgICAgKiAgIFdGRSBpbiB0aGUgcG9sbCBsb29w
-Lg0KPiA+ID4gKyAgICAgICAgKg0KPiA+ID4gKyAgICAgICAgKiAtIEtWTSBzdXBwb3J0IGZvciBh
-cmNoX2hhbHRwb2xsX2VuYWJsZSgpLCBhcmNoX2hhbHRwb2xsX2VuYWJsZSgpLg0KPiA+IA0KPiA+
-IHR5cG86ICJhcmNoX2hhbHRwb2xsX2VuYWJsZSIgYW5kICJhcmNoX2hhbHRwb2xsX2VuYWJsZSIN
-Cj4gPiANCj4gPiA+ICsgICAgICAgICoNCj4gPiA+ICsgICAgICAgICogR2l2ZW4gdGhhdCB0aGUg
-c2Vjb25kIGlzIG1pc3NpbmcsIGFsbG93IGhhbHRwb2xsIHRvIG9ubHkgYmUgZm9yY2UNCj4gPiA+
-ICsgICAgICAgICogbG9hZGVkLg0KPiA+ID4gKyAgICAgICAgKi8NCj4gPiA+ICsgICAgICAgcmV0
-dXJuIChhcmNoX3RpbWVyX2V2dHN0cm1fYXZhaWxhYmxlKCkgJiYgZmFsc2UpIHx8IGZvcmNlOw0K
-PiA+IA0KPiA+IFRoaXMgc2hvdWxkIGFsd2F5cyBldmFsdWF0ZSBmYWxzZSB3aXRob3V0IGZvcmNl
-LiBQZXJoYXBzIHlvdSBtZWFudA0KPiA+IHNvbWV0aGluZyBsaWtlIHRoaXM/DQo+ID4gDQo+ID4g
-YGBgDQo+ID4gLSAgICAgICByZXR1cm4gKGFyY2hfdGltZXJfZXZ0c3RybV9hdmFpbGFibGUoKSAm
-JiBmYWxzZSkgfHwgZm9yY2U7DQo+ID4gKyAgICAgICByZXR1cm4gYXJjaF90aW1lcl9ldnRzdHJt
-X2F2YWlsYWJsZSgpIHx8IGZvcmNlOw0KPiA+IGBgYA0KPiANCj4gTm8uIFRoaXMgd2FzIGludGVu
-dGlvbmFsLiBBcyBJIG1lbml0b24gaW4gdGhlIGNvbW1lbnQgYWJvdmUsIHJpZ2h0IG5vdw0KPiB0
-aGUgS1ZNIHN1cHBvcnQgaXMgbWlzc2luZy4gV2hpY2ggbWVhbnMgdGhhdCB0aGUgZ3Vlc3QgaGFz
-IG5vIHdheSB0bw0KPiB0ZWxsIHRoZSBob3N0IHRvIG5vdCBwb2xsIGFzIHBhcnQgb2YgaG9zdCBo
-YWx0cG9sbC4NCj4gDQo+IFVudGlsIHRoYXQgaXMgYXZhaWxhYmxlLCBvbmx5IGFsbG93IGZvcmNl
-IGxvYWRpbmcuDQoNCkkgc2VlLCBhcm02NCdzIGt2bSBpcyBtaXNzaW5nIHRoZSBwb2xsIGNvbnRy
-b2wgbWVjaGFuaXNtLg0KDQpJJ2xsIGZvbGxvdy11cCB5b3VyIGNoYW5nZXMgd2l0aCBhIHBhdGNo
-IGZvciBBV1MgR3Jhdml0b247IHN0aWxsIHNlZWluZw0KdGhlIHNhbWUgcGVyZm9ybWFuY2UgZ2Fp
-bnMuDQoNClRlc3RlZC1ieTogSGFyaXMgT2thbm92aWMgPGhhcmlzb2tuQGFtYXpvbi5jb20+DQoN
-Cj4gDQo+IC0tDQo+IGFua3VyDQoNCg==
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   c850ea465e36219149e4abe7f2e30ec8bf674862
+commit: 314fb95573c3ab521dfe3a72e1171ce337db20d6 [84/99] thermal: core: Introduce .should_bind() thermal zone callback
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20240813/202408132357.AhdAtHMM-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240813/202408132357.AhdAtHMM-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408132357.AhdAtHMM-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/thermal/thermal_core.c: In function 'thermal_bind_cdev_to_trip':
+   drivers/thermal/thermal_core.c:862:37: error: 'struct thermal_instance' has no member named 'tz_node'; did you mean 'trip_node'?
+     862 |                 list_add_tail(&dev->tz_node, &tz->thermal_instances);
+         |                                     ^~~~~~~
+         |                                     trip_node
+   drivers/thermal/thermal_core.c:862:49: error: 'struct thermal_zone_device' has no member named 'thermal_instances'
+     862 |                 list_add_tail(&dev->tz_node, &tz->thermal_instances);
+         |                                                 ^~
+   In file included from include/linux/linkage.h:7,
+                    from arch/x86/include/asm/cache.h:5,
+                    from include/linux/cache.h:6,
+                    from arch/x86/include/asm/current.h:10,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/thermal/thermal_core.c:12:
+   drivers/thermal/thermal_core.c:906:19: error: non-static declaration of 'thermal_zone_bind_cooling_device' follows static declaration
+     906 | EXPORT_SYMBOL_GPL(thermal_zone_bind_cooling_device);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/export.h:56:28: note: in definition of macro '__EXPORT_SYMBOL'
+      56 |         extern typeof(sym) sym;                                 \
+         |                            ^~~
+   include/linux/export.h:69:41: note: in expansion of macro '_EXPORT_SYMBOL'
+      69 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:906:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
+     906 | EXPORT_SYMBOL_GPL(thermal_zone_bind_cooling_device);
+         | ^~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:886:5: note: previous definition of 'thermal_zone_bind_cooling_device' with type 'int(struct thermal_zone_device *, int,  struct thermal_cooling_device *, long unsigned int,  long unsigned int,  unsigned int)'
+     886 | int thermal_zone_bind_cooling_device(struct thermal_zone_device *tz,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from arch/x86/include/asm/cache.h:5,
+                    from include/linux/cache.h:6,
+                    from arch/x86/include/asm/current.h:10,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/thermal/thermal_core.c:12:
+   drivers/thermal/thermal_core.c:953:19: error: non-static declaration of 'thermal_unbind_cdev_from_trip' follows static declaration
+     953 | EXPORT_SYMBOL_GPL(thermal_unbind_cdev_from_trip);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/export.h:56:28: note: in definition of macro '__EXPORT_SYMBOL'
+      56 |         extern typeof(sym) sym;                                 \
+         |                            ^~~
+   include/linux/export.h:69:41: note: in expansion of macro '_EXPORT_SYMBOL'
+      69 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:953:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
+     953 | EXPORT_SYMBOL_GPL(thermal_unbind_cdev_from_trip);
+         | ^~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:920:5: note: previous definition of 'thermal_unbind_cdev_from_trip' with type 'int(struct thermal_zone_device *, struct thermal_trip *, struct thermal_cooling_device *)'
+     920 | int thermal_unbind_cdev_from_trip(struct thermal_zone_device *tz,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from arch/x86/include/asm/cache.h:5,
+                    from include/linux/cache.h:6,
+                    from arch/x86/include/asm/current.h:10,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/thermal/thermal_core.c:12:
+   drivers/thermal/thermal_core.c:972:19: error: non-static declaration of 'thermal_zone_unbind_cooling_device' follows static declaration
+     972 | EXPORT_SYMBOL_GPL(thermal_zone_unbind_cooling_device);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/export.h:56:28: note: in definition of macro '__EXPORT_SYMBOL'
+      56 |         extern typeof(sym) sym;                                 \
+         |                            ^~~
+   include/linux/export.h:69:41: note: in expansion of macro '_EXPORT_SYMBOL'
+      69 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:972:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
+     972 | EXPORT_SYMBOL_GPL(thermal_zone_unbind_cooling_device);
+         | ^~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:955:5: note: previous definition of 'thermal_zone_unbind_cooling_device' with type 'int(struct thermal_zone_device *, int,  struct thermal_cooling_device *)'
+     955 | int thermal_zone_unbind_cooling_device(struct thermal_zone_device *tz,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:974:13: error: invalid storage class for function 'thermal_release'
+     974 | static void thermal_release(struct device *dev)
+         |             ^~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:998:6: error: invalid storage class for function 'print_bind_err_msg'
+     998 | void print_bind_err_msg(struct thermal_zone_device *tz,
+         |      ^~~~~~~~~~~~~~~~~~
+>> drivers/thermal/thermal_core.c:1012:13: error: invalid storage class for function 'thermal_zone_cdev_binding'
+    1012 | static void thermal_zone_cdev_binding(struct thermal_zone_device *tz,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1071:1: error: invalid storage class for function '__thermal_cooling_device_register'
+    1071 | __thermal_cooling_device_register(struct device_node *np,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from arch/x86/include/asm/cache.h:5,
+                    from include/linux/cache.h:6,
+                    from arch/x86/include/asm/current.h:10,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/thermal/thermal_core.c:12:
+   drivers/thermal/thermal_core.c:1191:19: error: non-static declaration of 'thermal_cooling_device_register' follows static declaration
+    1191 | EXPORT_SYMBOL_GPL(thermal_cooling_device_register);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/export.h:56:28: note: in definition of macro '__EXPORT_SYMBOL'
+      56 |         extern typeof(sym) sym;                                 \
+         |                            ^~~
+   include/linux/export.h:69:41: note: in expansion of macro '_EXPORT_SYMBOL'
+      69 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1191:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
+    1191 | EXPORT_SYMBOL_GPL(thermal_cooling_device_register);
+         | ^~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1186:1: note: previous definition of 'thermal_cooling_device_register' with type 'struct thermal_cooling_device *(const char *, void *, const struct thermal_cooling_device_ops *)'
+    1186 | thermal_cooling_device_register(const char *type, void *devdata,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from arch/x86/include/asm/cache.h:5,
+                    from include/linux/cache.h:6,
+                    from arch/x86/include/asm/current.h:10,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/thermal/thermal_core.c:12:
+   drivers/thermal/thermal_core.c:1215:19: error: non-static declaration of 'thermal_of_cooling_device_register' follows static declaration
+    1215 | EXPORT_SYMBOL_GPL(thermal_of_cooling_device_register);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/export.h:56:28: note: in definition of macro '__EXPORT_SYMBOL'
+      56 |         extern typeof(sym) sym;                                 \
+         |                            ^~~
+   include/linux/export.h:69:41: note: in expansion of macro '_EXPORT_SYMBOL'
+      69 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1215:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
+    1215 | EXPORT_SYMBOL_GPL(thermal_of_cooling_device_register);
+         | ^~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1209:1: note: previous definition of 'thermal_of_cooling_device_register' with type 'struct thermal_cooling_device *(struct device_node *, const char *, void *, const struct thermal_cooling_device_ops *)'
+    1209 | thermal_of_cooling_device_register(struct device_node *np,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1217:13: error: invalid storage class for function 'thermal_cooling_device_release'
+    1217 | static void thermal_cooling_device_release(struct device *dev, void *res)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from arch/x86/include/asm/cache.h:5,
+                    from include/linux/cache.h:6,
+                    from arch/x86/include/asm/current.h:10,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/thermal/thermal_core.c:12:
+   drivers/thermal/thermal_core.c:1264:19: error: non-static declaration of 'devm_thermal_of_cooling_device_register' follows static declaration
+    1264 | EXPORT_SYMBOL_GPL(devm_thermal_of_cooling_device_register);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/export.h:56:28: note: in definition of macro '__EXPORT_SYMBOL'
+      56 |         extern typeof(sym) sym;                                 \
+         |                            ^~~
+   include/linux/export.h:69:41: note: in expansion of macro '_EXPORT_SYMBOL'
+      69 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1264:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
+    1264 | EXPORT_SYMBOL_GPL(devm_thermal_of_cooling_device_register);
+         | ^~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1241:1: note: previous definition of 'devm_thermal_of_cooling_device_register' with type 'struct thermal_cooling_device *(struct device *, struct device_node *, const char *, void *, const struct thermal_cooling_device_ops *)'
+    1241 | devm_thermal_of_cooling_device_register(struct device *dev,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1266:13: error: invalid storage class for function 'thermal_cooling_device_present'
+    1266 | static bool thermal_cooling_device_present(struct thermal_cooling_device *cdev)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from arch/x86/include/asm/cache.h:5,
+                    from include/linux/cache.h:6,
+                    from arch/x86/include/asm/current.h:10,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/thermal/thermal_core.c:12:
+   drivers/thermal/thermal_core.c:1349:19: error: non-static declaration of 'thermal_cooling_device_update' follows static declaration
+    1349 | EXPORT_SYMBOL_GPL(thermal_cooling_device_update);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/export.h:56:28: note: in definition of macro '__EXPORT_SYMBOL'
+      56 |         extern typeof(sym) sym;                                 \
+         |                            ^~~
+   include/linux/export.h:69:41: note: in expansion of macro '_EXPORT_SYMBOL'
+      69 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1349:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
+    1349 | EXPORT_SYMBOL_GPL(thermal_cooling_device_update);
+         | ^~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1288:6: note: previous definition of 'thermal_cooling_device_update' with type 'void(struct thermal_cooling_device *)'
+    1288 | void thermal_cooling_device_update(struct thermal_cooling_device *cdev)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/thermal/thermal_core.c:1351:13: error: invalid storage class for function 'thermal_zone_cdev_unbinding'
+    1351 | static void thermal_zone_cdev_unbinding(struct thermal_zone_device *tz,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from arch/x86/include/asm/cache.h:5,
+                    from include/linux/cache.h:6,
+                    from arch/x86/include/asm/current.h:10,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/thermal/thermal_core.c:12:
+   drivers/thermal/thermal_core.c:1406:19: error: non-static declaration of 'thermal_cooling_device_unregister' follows static declaration
+    1406 | EXPORT_SYMBOL_GPL(thermal_cooling_device_unregister);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/export.h:56:28: note: in definition of macro '__EXPORT_SYMBOL'
+      56 |         extern typeof(sym) sym;                                 \
+         |                            ^~~
+   include/linux/export.h:69:41: note: in expansion of macro '_EXPORT_SYMBOL'
+      69 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1406:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
+    1406 | EXPORT_SYMBOL_GPL(thermal_cooling_device_unregister);
+         | ^~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1380:6: note: previous definition of 'thermal_cooling_device_unregister' with type 'void(struct thermal_cooling_device *)'
+    1380 | void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1408:13: error: invalid storage class for function 'thermal_set_delay_jiffies'
+    1408 | static void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from arch/x86/include/asm/cache.h:5,
+                    from include/linux/cache.h:6,
+                    from arch/x86/include/asm/current.h:10,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/thermal/thermal_core.c:12:
+   drivers/thermal/thermal_core.c:1439:19: error: non-static declaration of 'thermal_zone_get_crit_temp' follows static declaration
+    1439 | EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/export.h:56:28: note: in definition of macro '__EXPORT_SYMBOL'
+      56 |         extern typeof(sym) sym;                                 \
+         |                            ^~~
+   include/linux/export.h:69:41: note: in expansion of macro '_EXPORT_SYMBOL'
+      69 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1439:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
+    1439 | EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
+         | ^~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1415:5: note: previous definition of 'thermal_zone_get_crit_temp' with type 'int(struct thermal_zone_device *, int *)'
+    1415 | int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from arch/x86/include/asm/cache.h:5,
+                    from include/linux/cache.h:6,
+                    from arch/x86/include/asm/current.h:10,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/thermal/thermal_core.c:12:
+   drivers/thermal/thermal_core.c:1641:19: error: non-static declaration of 'thermal_zone_device_register_with_trips' follows static declaration
+    1641 | EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/export.h:56:28: note: in definition of macro '__EXPORT_SYMBOL'
+      56 |         extern typeof(sym) sym;                                 \
+         |                            ^~~
+   include/linux/export.h:69:41: note: in expansion of macro '_EXPORT_SYMBOL'
+      69 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1641:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
+    1641 | EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
+         | ^~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1466:1: note: previous definition of 'thermal_zone_device_register_with_trips' with type 'struct thermal_zone_device *(const char *, const struct thermal_trip *, int,  void *, const struct thermal_zone_device_ops *, const struct thermal_zone_params *, unsigned int,  unsigned int)'
+    1466 | thermal_zone_device_register_with_trips(const char *type,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from arch/x86/include/asm/cache.h:5,
+                    from include/linux/cache.h:6,
+                    from arch/x86/include/asm/current.h:10,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/thermal/thermal_core.c:12:
+   drivers/thermal/thermal_core.c:1652:19: error: non-static declaration of 'thermal_tripless_zone_device_register' follows static declaration
+    1652 | EXPORT_SYMBOL_GPL(thermal_tripless_zone_device_register);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/export.h:56:28: note: in definition of macro '__EXPORT_SYMBOL'
+      56 |         extern typeof(sym) sym;                                 \
+         |                            ^~~
+   include/linux/export.h:69:41: note: in expansion of macro '_EXPORT_SYMBOL'
+      69 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1652:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
+    1652 | EXPORT_SYMBOL_GPL(thermal_tripless_zone_device_register);
+         | ^~~~~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c:1643:29: note: previous definition of 'thermal_tripless_zone_device_register' with type 'struct thermal_zone_device *(const char *, void *, const struct thermal_zone_device_ops *, const struct thermal_zone_params *)'
+    1643 | struct thermal_zone_device *thermal_tripless_zone_device_register(
+
+
+vim +/thermal_zone_cdev_binding +1012 drivers/thermal/thermal_core.c
+
+  1011	
+> 1012	static void thermal_zone_cdev_binding(struct thermal_zone_device *tz,
+  1013					      struct thermal_cooling_device *cdev)
+  1014	{
+  1015		struct thermal_trip_desc *td;
+  1016		int ret;
+  1017	
+  1018		/*
+  1019		 * Old-style binding. The .bind() callback is expected to call
+  1020		 * thermal_bind_cdev_to_trip() under the thermal zone lock.
+  1021		 */
+  1022		if (tz->ops.bind) {
+  1023			ret = tz->ops.bind(tz, cdev);
+  1024			if (ret)
+  1025				print_bind_err_msg(tz, NULL, cdev, ret);
+  1026	
+  1027			return;
+  1028		}
+  1029	
+  1030		if (!tz->ops.should_bind)
+  1031			return;
+  1032	
+  1033		mutex_lock(&tz->lock);
+  1034	
+  1035		for_each_trip_desc(tz, td) {
+  1036			struct thermal_trip *trip = &td->trip;
+  1037			struct cooling_spec c = {
+  1038				.upper = THERMAL_NO_LIMIT,
+  1039				.lower = THERMAL_NO_LIMIT,
+  1040				.weight = THERMAL_WEIGHT_DEFAULT
+  1041			};
+  1042	
+  1043			if (tz->ops.should_bind(tz, trip, cdev, &c)) {
+  1044				ret = thermal_bind_cdev_to_trip(tz, trip, cdev, c.upper,
+  1045								c.lower, c.weight);
+  1046				if (ret)
+  1047					print_bind_err_msg(tz, trip, cdev, ret);
+  1048			}
+  1049		}
+  1050	
+  1051		mutex_unlock(&tz->lock);
+  1052	}
+  1053	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
