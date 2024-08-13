@@ -1,169 +1,205 @@
-Return-Path: <linux-pm+bounces-12144-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12145-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6A85950305
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 12:56:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECFD795030E
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 12:57:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77303285105
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 10:56:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 188E6B24179
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 10:57:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2EC519CD01;
-	Tue, 13 Aug 2024 10:53:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9A7919D89E;
+	Tue, 13 Aug 2024 10:55:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sEdlSNcA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iBmX1UEk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214A619CCF2
-	for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 10:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7E419AD94;
+	Tue, 13 Aug 2024 10:54:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723546412; cv=none; b=e2Onmd5YenAcDoFPp612OnRHJl7VyEovuadYWYuHNb46YBWmjTWIdYNfjONPvZsUPqYtgVHUW0OU+whxOkiKyOSDfByE9bdi4z8nIxj78GEtG4oOdWc1STioFR9HamWUnZuzQBlbmpZi1nYd8i08GQYK+bI/pcdvmB5SzUvmFe8=
+	t=1723546500; cv=none; b=dJdfPewTvO4+J8osPtV+UhESgCoaX+u/zem9UikvnLDYGZoqasqoLzM3KhWbRuXwE/puiMInZX1/DYqNfNlptGZ/6UVPTQmeZNrFiqHpMxi0UcHfcr5yeVN36/Pkf8t+uL5grn9lA2Ehrw80bIznI+O9uZaxqjNsEtGP1wAchuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723546412; c=relaxed/simple;
-	bh=q8pNAgjw9/3tHHnWRFEJHbq63k2GtWgWLWiFMw3DnYg=;
+	s=arc-20240116; t=1723546500; c=relaxed/simple;
+	bh=IgePQwkuTUYdG2arpdESjJXbiRl+BVM8HulpiBO0gCo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z2wHwGTN0F8pboVx07STVJnJt9A1pyW6/v/sFPwIr1cBWjMXqrD81ZgWsAplei1GSzsD4sL37ECsGwMBEKBUJ8ezYfgPXzB81w4n6cunijL6IItLHe20K15j1kiixFJyvzQ4xNL419yyH2E+oa5WXKvkTmKgcvsOvicJrqbQWYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sEdlSNcA; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e1137aafb8fso1374561276.1
-        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 03:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723546410; x=1724151210; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z/XDKrkkMHvWOyw5p4QJtIumEMqEgD/xVT5SgNZelBg=;
-        b=sEdlSNcA8pSYeZNy35Z2d1R7MRMOAVlMv4/gVXeJX1wtken5bplBAjFKLj7tKdfAWC
-         /koFQ1lBpwnPUFM/0ACdAQ8+qi77W+Ww1FS0PYzDigSLy53renVmyyerIu7JwgtIRgrx
-         4/q2xO80uPNHstpCiSzsUh9j7IsvbYDwsnymmJ+wEGTpVJdOlYgqRZwCZNLk8ObU97v1
-         Axvh0XhbtKmKhoOjaONO5bwEkV/3scoW4QOMnLm6J4OdnvtfN9ZGdn8HWTa6O3txUzDa
-         iU++OLVw8k97JY6mxTEMWxT4ucEIdop3BA0kNIyD8bCFYuLZFUN0PhGp4VexqTuCtMCL
-         xYXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723546410; x=1724151210;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z/XDKrkkMHvWOyw5p4QJtIumEMqEgD/xVT5SgNZelBg=;
-        b=Oprq2x/pEaKBzpUtMI+DDZB/A8KirXjB3/FLyqM2kdQb1iDwMvBGmJfweI6NLxnE/4
-         wY264b5z4WZjoZFrFCnOstdt1lF2manxyeJuno+/x0ZywPXg40XmAQU2r9WqkuO4nEh8
-         Jwz3OQ4//H1YyMm3t2Eebq1NwdpP4sapSrKtj0OC4uwzY9nXL2/XotnYGxznB2ijsVQj
-         dRrlKfhx6b2J0n45/zAeLKbVcVG2SHTOmv4B8XjLpEQo9Tl+25Uhdbd1nijGgfMqjAJd
-         IHzQoK9bMlxxlzLR0Cr4YeaNLq4JKVbbBzqUr/FuRIlEPKYPdaKuuC1RZ41cQMTVtrFc
-         ObeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVMRtrCtGd8ak8ycO5b5c1sm6gVPFwLPH/OSJVRg52hkpC9jODzoySnoEmkSNfcvQ6VSGzqWlT1cDT0PBWeT3tNe5/yzWH8eeo=
-X-Gm-Message-State: AOJu0YzLK31jEDfzx/wUDqJzvK9SsmTc2W/knxctUkfNgW9mnyvv0ucU
-	RVTbq9xjQo0Uc0zIxPZB+hBnL5sC25XC/KSE8AXKPwvYqe6xS4lpP15fn1FXBQEtpxdPiuGJvg4
-	UeJjqan7IHsH3+7ogC+Y3AmsqyVf/zmoio1mToA==
-X-Google-Smtp-Source: AGHT+IFItO0D7OclX/S5B/e5ClqeA9JU/P3uqhBqfY7zfqkekKMs8wX80GxMDY1wDSzUbaTJC9QhhNMbySj25mpFIPs=
-X-Received: by 2002:a05:6902:13cf:b0:e0e:cd17:6130 with SMTP id
- 3f1490d57ef6-e113d07894cmr3177420276.37.1723546409963; Tue, 13 Aug 2024
- 03:53:29 -0700 (PDT)
+	 To:Cc:Content-Type; b=bCOt9ozJDNQatGwIwPqZvwuu/788CMM9FJbhnAEuUCz0FmftDTedIb7S5sk3RSbJcA27amu7kguAhbedO6B7KBXIi31/ibeWf7/Mv0Zgld6EquhPTZN7l3GV+EzZKhFSta7gNnWUm+o6OKYOLjdtI2a3Rb1YxPlOX9d7PeuyE+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iBmX1UEk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F466C4AF11;
+	Tue, 13 Aug 2024 10:54:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723546499;
+	bh=IgePQwkuTUYdG2arpdESjJXbiRl+BVM8HulpiBO0gCo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=iBmX1UEkPVnuBWajZkt5bBejMS+d+H1qx7md0Min02BBZQKThGD18PjvnjVnbPuP6
+	 D/BJF4HuzrRxtsSCwNcGNZeaiZvyq2AmH06Z1MfkH3UNE2udlD+Z0K8bXmw87KP4hV
+	 wbFG3tbV5qBfND0Hxyb+1bqFzsuxLLo2NsqlsWd6l9EyUR2tnMTfDfeKqnsUTsd0W9
+	 h1YenruMrWJLu7k0cYtNvLn4EScLd8AoO8RjQ4qaKSqU9ytEbG8BLbYI3WruSmjcKJ
+	 JYauAoVTcOZkIX7aYp1yzLqK0vsOwnDPcGcmpaR0fhRTk+WZMlxBwNquzeO0jk8Roa
+	 ETSwuFjBaT93w==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-2611dcc3941so502851fac.3;
+        Tue, 13 Aug 2024 03:54:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWfwrZal2vuoCySL3buVaS866xoxnG174DxweE6iePyGROjE22n0d9q21IYZBZnXEHDcIFsQ1YiZK6BI6VueMQernsolKlwxYorPH/R
+X-Gm-Message-State: AOJu0Ywo/9Gi5zc897RYW1q4bRE5K+u0RTQi6u4WmMC3MCl50U8RLPzT
+	QCqPA6j4cf9gUpx/EXHB0BdQmCiHuRczCqgdZKibocW76tu3yuPsaF2sQ1uo5tAOVTEvU+eGXzF
+	4TvKUURzWAIALnTAcXzDUt7gltgM=
+X-Google-Smtp-Source: AGHT+IGM9SaPME+aAxWFgSxATRGLzPEepbhd0gutOtgToNENQvg4PwJ9NF7LJRNsNyVA7mNPD7bigd2pctKRk+OvMHE=
+X-Received: by 2002:a05:6871:70b:b0:260:ccfd:1efe with SMTP id
+ 586e51a60fabf-26fd1ad5aa0mr1232086fac.6.1723546498358; Tue, 13 Aug 2024
+ 03:54:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1723014947-15571-1-git-send-email-quic_dikshita@quicinc.com> <1723014947-15571-2-git-send-email-quic_dikshita@quicinc.com>
-In-Reply-To: <1723014947-15571-2-git-send-email-quic_dikshita@quicinc.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 13 Aug 2024 12:52:53 +0200
-Message-ID: <CAPDyKFpUMmveKQ2Pi33VwcvG9tsMQHEcAg88icf7v9mzzm+k4Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] PM: domains: add device managed version of dev_pm_domain_attach|detach_list()
-To: Dikshita Agarwal <quic_dikshita@quicinc.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <114901234.nniJfEyVGO@rjwysocki.net> <2819322.BEx9A2HvPv@rjwysocki.net>
+ <dd7ffe0d8a14bce8975ff66d84f013a249427a15.camel@intel.com>
+In-Reply-To: <dd7ffe0d8a14bce8975ff66d84f013a249427a15.camel@intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 13 Aug 2024 12:54:47 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gyc73QpMHPiYdm0nKMJtrGg25-C=8Ytamt91rSS=0ONQ@mail.gmail.com>
+Message-ID: <CAJZ5v0gyc73QpMHPiYdm0nKMJtrGg25-C=8Ytamt91rSS=0ONQ@mail.gmail.com>
+Subject: Re: [PATCH v2 04/17] thermal: core: Clean up cdev binding/unbinding functions
+To: "Zhang, Rui" <rui.zhang@intel.com>
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "rjw@rjwysocki.net" <rjw@rjwysocki.net>, 
+	"lukasz.luba@arm.com" <lukasz.luba@arm.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 7 Aug 2024 at 09:16, Dikshita Agarwal <quic_dikshita@quicinc.com> wrote:
+On Tue, Aug 13, 2024 at 9:39=E2=80=AFAM Zhang, Rui <rui.zhang@intel.com> wr=
+ote:
 >
-> Add the devres-enabled version of dev_pm_domain_attach|detach_list.
-> If client drivers use devm_pm_domain_attach_list() to attach the
-> PM domains, devm_pm_domain_detach_list() will be invoked implicitly
-> during remove phase.
+> On Mon, 2024-08-12 at 15:56 +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Add a new label to thermal_bind_cdev_to_trip() and use it to
+> > eliminate
+> > two redundant !result check from that function, rename a label in
+> > thermal_unbind_cdev_from_trip() to reflect its actual purpose and
+> > adjust some white space in these functions.
+> >
+> > No intentional functional impact.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > v1 -> v2: No changes.
+> >
+> > ---
+> >  drivers/thermal/thermal_core.c |   32 ++++++++++++++++++------------
+> > --
+> >  1 file changed, 18 insertions(+), 14 deletions(-)
+> >
+> > Index: linux-pm/drivers/thermal/thermal_core.c
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/drivers/thermal/thermal_core.c
+> > +++ linux-pm/drivers/thermal/thermal_core.c
+> > @@ -806,6 +806,7 @@ int thermal_bind_cdev_to_trip(struct the
+> >         dev =3D kzalloc(sizeof(*dev), GFP_KERNEL);
+> >         if (!dev)
+> >                 return -ENOMEM;
+> > +
+> >         dev->tz =3D tz;
+> >         dev->cdev =3D cdev;
+> >         dev->trip =3D trip;
+> > @@ -821,8 +822,7 @@ int thermal_bind_cdev_to_trip(struct the
+> >
+> >         dev->id =3D result;
+> >         sprintf(dev->name, "cdev%d", dev->id);
+> > -       result =3D
+> > -           sysfs_create_link(&tz->device.kobj, &cdev->device.kobj,
+> > dev->name);
+> > +       result =3D sysfs_create_link(&tz->device.kobj, &cdev-
+> > >device.kobj, dev->name);
+> >         if (result)
+> >                 goto release_ida;
+> >
+> > @@ -849,24 +849,26 @@ int thermal_bind_cdev_to_trip(struct the
+> >
+> >         mutex_lock(&tz->lock);
+> >         mutex_lock(&cdev->lock);
+> > -       list_for_each_entry(pos, &tz->thermal_instances, tz_node)
+> > +
+> > +       list_for_each_entry(pos, &tz->thermal_instances, tz_node) {
+> >                 if (pos->trip =3D=3D trip && pos->cdev =3D=3D cdev) {
+> >                         result =3D -EEXIST;
+> > -                       break;
+> > +                       goto remove_weight_file;
 >
-> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> ---
->  drivers/base/power/common.c | 44 ++++++++++++++++++++++++++++++++++++++++++++
->  include/linux/pm_domain.h   | 13 +++++++++++++
->  2 files changed, 57 insertions(+)
+> Need to unlock tz->lock and cdev->lock before quitting?
+
+Yes, of course.
+
+Nice catch, thank you!
+
+I'll drop this patch as it's not worth salvaging IMO.
+
+> >                 }
+> > -       if (!result) {
+> > -               list_add_tail(&dev->tz_node, &tz->thermal_instances);
+> > -               list_add_tail(&dev->cdev_node, &cdev-
+> > >thermal_instances);
+> > -               atomic_set(&tz->need_update, 1);
+> > -
+> > -               thermal_governor_update_tz(tz, THERMAL_TZ_BIND_CDEV);
+> >         }
+> > +
+> > +       list_add_tail(&dev->tz_node, &tz->thermal_instances);
+> > +       list_add_tail(&dev->cdev_node, &cdev->thermal_instances);
+> > +       atomic_set(&tz->need_update, 1);
+> > +
+> > +       thermal_governor_update_tz(tz, THERMAL_TZ_BIND_CDEV);
+> > +
+> >         mutex_unlock(&cdev->lock);
+> >         mutex_unlock(&tz->lock);
+> >
+> > -       if (!result)
+> > -               return 0;
+> > +       return 0;
+> >
+> > +remove_weight_file:
+> >         device_remove_file(&tz->device, &dev->weight_attr);
+> >  remove_trip_file:
+> >         device_remove_file(&tz->device, &dev->attr);
+> > @@ -914,6 +916,7 @@ int thermal_unbind_cdev_from_trip(struct
+> >
+> >         mutex_lock(&tz->lock);
+> >         mutex_lock(&cdev->lock);
+> > +
+> >         list_for_each_entry_safe(pos, next, &tz->thermal_instances,
+> > tz_node) {
+> >                 if (pos->trip =3D=3D trip && pos->cdev =3D=3D cdev) {
+> >                         list_del(&pos->tz_node);
+> > @@ -923,15 +926,16 @@ int thermal_unbind_cdev_from_trip(struct
+> >
+> >                         mutex_unlock(&cdev->lock);
+> >                         mutex_unlock(&tz->lock);
+> > -                       goto unbind;
+> > +                       goto free;
+> >                 }
+> >         }
+> > +
+> >         mutex_unlock(&cdev->lock);
+> >         mutex_unlock(&tz->lock);
+> >
+> >         return -ENODEV;
+> >
+> > -unbind:
+> > +free:
+> >         device_remove_file(&tz->device, &pos->weight_attr);
+> >         device_remove_file(&tz->device, &pos->attr);
+> >         sysfs_remove_link(&tz->device.kobj, pos->name);
+> >
+> >
+> >
 >
-> diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
-> index 327d168..729d6c2 100644
-> --- a/drivers/base/power/common.c
-> +++ b/drivers/base/power/common.c
-> @@ -277,6 +277,50 @@ int dev_pm_domain_attach_list(struct device *dev,
->  EXPORT_SYMBOL_GPL(dev_pm_domain_attach_list);
->
->  /**
-> + * devm_pm_domain_detach_list - devres-enabled version of dev_pm_domain_detach_list.
-> + * @_list: The list of PM domains to detach.
-> + *
-> + * This function reverse the actions from devm_pm_domain_attach_list().
-> + * it will be invoked during the remove phase from drivers implicitly if driver
-> + * uses devm_pm_domain_attach_list() to attach the PM domains.
-> + */
-> +void devm_pm_domain_detach_list(void *_list)
-> +{
-> +       struct dev_pm_domain_list *list = _list;
-> +
-> +       dev_pm_domain_detach_list(list);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pm_domain_detach_list);
-
-I think this function should be internal and hence made static -
-unless there is a good reason to export it?
-
-> +
-> +/**
-> + * devm_pm_domain_attach_list - devres-enabled version of dev_pm_domain_attach_list
-> + * @dev: The device used to lookup the PM domains for.
-> + * @data: The data used for attaching to the PM domains.
-> + * @list: An out-parameter with an allocated list of attached PM domains.
-> + *
-> + * NOTE: this will also handle calling devm_pm_domain_detach_list() for
-> + * you during remove phase.
-> + *
-> + * Returns the number of attached PM domains or a negative error code in case of
-> + * a failure.
-> + */
-> +int devm_pm_domain_attach_list(struct device *dev,
-> +                              const struct dev_pm_domain_attach_data *data,
-> +                              struct dev_pm_domain_list **list)
-> +{
-> +       int ret, num_pds = 0;
-
-There is no need to initialize num_pds to 0 here, as the below calls
-take care of it.
-
-> +
-> +       num_pds = dev_pm_domain_attach_list(dev, data, list);
-> +
-
-We should add a check if num_pds is zero here, as in that case there
-is no reason to add a devres callback for it.
-
-> +       ret = devm_add_action_or_reset(dev, devm_pm_domain_detach_list, *list);
-> +       if (ret)
-> +               return ret;
-> +
-> +       return num_pds;
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pm_domain_attach_list);
-
-[...]
-
-Kind regards
-Uffe
 
