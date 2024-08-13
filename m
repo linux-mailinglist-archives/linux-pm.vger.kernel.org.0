@@ -1,115 +1,186 @@
-Return-Path: <linux-pm+bounces-12170-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12171-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D57F9509C1
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 18:05:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8203F950A18
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 18:26:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB57CB28148
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 16:05:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3762B282BE3
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 16:26:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509C41A2579;
-	Tue, 13 Aug 2024 16:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FhRbnsqg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E99A1A256C;
+	Tue, 13 Aug 2024 16:26:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9BBB1A256B
-	for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 16:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EBCF1A0B05;
+	Tue, 13 Aug 2024 16:26:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723564957; cv=none; b=dFKv83zR2FamrpaSNDnGvy+M1nVnxgvip+N8BrdM5Ba7a5+t1Qroiy98j23qK8LdpG+EYWsjLugIHXSvsUYCYWMvHOzuDG27pCrunIttpw9/YsDdvLfg3VcMdQ/MHudJhkNXk2OEqf+KMvqRNpbpoFZksBQDelpCEP722uNGyEA=
+	t=1723566375; cv=none; b=cPmrn9X5GzNIAFP3cK08oiYm8SbVfAVx5wjhpyIA8hK2fwJpx9sQnYfgeOdVwfDvEp0IRQAoTHShQPRltLKZ50JLkiaGEmocMsmORP9QoPKoPghE3SHmfKCQKHPD5hmQJD6HD7LOxYXIOggIGv+wCcj75zyBnWH+GJaGY7koiCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723564957; c=relaxed/simple;
-	bh=yI4QT6NbkEI2TnpG1DH/ktsdWdj4x/PaPPzhWgaN5nM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cZkVBOPPVua7MsJ6LPtpixVs4CGktS1VToVtDGk+EH0a6zhYhxyNSG5qAeXfBDDdKE66D97NhnwQ79zqX6e2MlTH00nc18waR35/BEKTNJ6D7AU3gOYZIwp+Fzy78yvvNLUfz5iAvOoo3IjP7yEpBisCk+PDIDzyH+odyfWlaLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FhRbnsqg; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1723564952;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=D++Qz8miXiOrQPRHHoq7zKM0nUNq5aQKlQv/1zqdyj8=;
-	b=FhRbnsqgc9U/oQLpeR+eCSrYPv8WWQ3lVhiobKdQgJMoDe0pNVqxImToPsu+hFUZFTUYf0
-	Qk4WcBl5nOnt6ItQgYzfF96l4S1yUOAwgU0xMLlKSB7lET34VniuzIUuNIbKJG9s1RXHGD
-	DSczayoqC9YS8KgSncpf7jyrWBfnIqM=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-17-zS_FJMJJOg2bUsrE-CEkqA-1; Tue, 13 Aug 2024 12:02:31 -0400
-X-MC-Unique: zS_FJMJJOg2bUsrE-CEkqA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4281d0d1c57so31705365e9.1
-        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 09:02:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723564950; x=1724169750;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D++Qz8miXiOrQPRHHoq7zKM0nUNq5aQKlQv/1zqdyj8=;
-        b=Gjxt0uUPEUvDJEaYU4wj1RRH6mCvALLL71pF0uIOBZ7H+w8lqYi5QTwU2qA9vQqoKM
-         pJvskcmuDsaHZTIFiwLelrY8BWtdZSvm1od1pDqCX20NinG73cVBPi/Wk2Foy6z2qtUo
-         RgH0QpirpaA2QC7BWYb43U1Qhg33/tstasY2i5kFzakJDaLYkKXt2pCoXSUAri2NO77h
-         Gdqs2+covMofnnePyPoFotYIrIZMdtVQOb4JNnR/MBhy+x7VuD8Csgj9CJcd+OItXDEQ
-         +rC+mkjr8SMLJ4zcKzffncLnA9fT3xCv1bLPM+n+FPxRgiM3BxLxHcVLOXcCNfMMbbgB
-         ijbA==
-X-Gm-Message-State: AOJu0YylusMi0Fz7T13WpJ2rBmDYGl7UV5+ruM66WNnhhkDymcbZlVxY
-	cpIngmP0/FOxDU78+JSw6Z95XzsQmZQPCygufPw00EwCg4C6Fibn+5maxBuPcA9oOe6GSxQSSUi
-	skyUwpHGfwOPVZRDe5zy2LYJj34LFjxtwxzXUFDBBbL9PCiFjZ6DyelTg
-X-Received: by 2002:a05:600c:3b11:b0:426:62a2:34fc with SMTP id 5b1f17b1804b1-429dd08a9f3mr1464005e9.11.1723564950021;
-        Tue, 13 Aug 2024 09:02:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH3A88gFDYhC58A8Kf9B/0ejJ6yVjHXP8p29e8MFNq/2z0phpryiFnmZRdavxV6qepB75pIXQ==
-X-Received: by 2002:a05:600c:3b11:b0:426:62a2:34fc with SMTP id 5b1f17b1804b1-429dd08a9f3mr1463595e9.11.1723564949521;
-        Tue, 13 Aug 2024 09:02:29 -0700 (PDT)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([2a00:23c6:4a1d:e001:d365:918d:a79e:2a1c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429c7736b05sm150179755e9.29.2024.08.13.09.02.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Aug 2024 09:02:29 -0700 (PDT)
-Date: Tue, 13 Aug 2024 17:02:27 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	rafael@kernel.org, vincent.guittot@linaro.org, qyousef@layalina.io,
-	peterz@infradead.org, daniel.lezcano@linaro.org,
-	rostedt@goodmis.org, dietmar.eggemann@arm.com
-Subject: Re: [PATCH 0/4] sched/deadline: nanoseconds clarifications
-Message-ID: <ZruDkw2XB8iXMepz@jlelli-thinkpadt14gen4.remote.csb>
-References: <20240813144348.1180344-1-christian.loehle@arm.com>
+	s=arc-20240116; t=1723566375; c=relaxed/simple;
+	bh=CIdIywtMybE4qzk2fc4+X7ax6VAHi/2wrUQv7J5GpyM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H0sM340QuQu+BS8mttyKwsWhz7AjoF4ODJaz2mx+a2GZ2oJnxv8ZuVoQ2X2KbAxeS/tmKPoeUbFOb3x9K7JWkhCJKVAZpNADn122O42a0TM+jH3ghqpWuFqZRU2GL/DV2jP4qqcTGCsE4X5SNGeMqHqKvGz+/bGKttGfQ9egzWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A01F12FC;
+	Tue, 13 Aug 2024 09:26:38 -0700 (PDT)
+Received: from [10.57.84.20] (unknown [10.57.84.20])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C00A3F6A8;
+	Tue, 13 Aug 2024 09:26:09 -0700 (PDT)
+Message-ID: <bfcd8175-c6bc-41a2-8ee9-93061e446c40@arm.com>
+Date: Tue, 13 Aug 2024 17:26:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240813144348.1180344-1-christian.loehle@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7] sched: Consolidate cpufreq updates
+To: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Qais Yousef <qyousef@layalina.io>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Juri Lelli <juri.lelli@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
+ <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+ Valentin Schneider <vschneid@redhat.com>, Hongyan Xia
+ <hongyan.xia2@arm.com>, John Stultz <jstultz@google.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240728184551.42133-1-qyousef@layalina.io>
+ <ca6b1db0-37d9-462e-87e4-d3bbd5eec7a3@arm.com>
+ <CAKfTPtBWLe4hMBhJeSqvoW10dAF3Bgj+zcYGMgBfwUhkgytkEQ@mail.gmail.com>
+ <CAKfTPtAJNjUe=4eQxq0M6==6O7dtJrw6rtwE6-xaWMJdSmfKcA@mail.gmail.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAKfTPtAJNjUe=4eQxq0M6==6O7dtJrw6rtwE6-xaWMJdSmfKcA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi,
-
-On 13/08/24 15:43, Christian Loehle wrote:
-> A couple of clarifications about the time units for the deadline
-> parameters uncovered in the discussion around
-> https://lore.kernel.org/lkml/3c726cf5-0c94-4cc6-aff0-a453d840d452@arm.com/
+On 8/13/24 09:27, Vincent Guittot wrote:
+> On Tue, 13 Aug 2024 at 10:25, Vincent Guittot
+> <vincent.guittot@linaro.org> wrote:
+>>
+>> On Mon, 5 Aug 2024 at 17:35, Christian Loehle <christian.loehle@arm.com> wrote:
+>>>
+>>> On 7/28/24 19:45, Qais Yousef wrote:
+>>>> Improve the interaction with cpufreq governors by making the
+>>>> cpufreq_update_util() calls more intentional.
+>>>>
+>>>> At the moment we send them when load is updated for CFS, bandwidth for
+>>>> DL and at enqueue/dequeue for RT. But this can lead to too many updates
+>>>> sent in a short period of time and potentially be ignored at a critical
+>>>> moment due to the rate_limit_us in schedutil.
+>>>>
+>>>> For example, simultaneous task enqueue on the CPU where 2nd task is
+>>>> bigger and requires higher freq. The trigger to cpufreq_update_util() by
+>>>> the first task will lead to dropping the 2nd request until tick. Or
+>>>> another CPU in the same policy triggers a freq update shortly after.
+>>>>
+>>>> Updates at enqueue for RT are not strictly required. Though they do help
+>>>> to reduce the delay for switching the frequency and the potential
+>>>> observation of lower frequency during this delay. But current logic
+>>>> doesn't intentionally (at least to my understanding) try to speed up the
+>>>> request.
+>>>>
+>>>> To help reduce the amount of cpufreq updates and make them more
+>>>> purposeful, consolidate them into these locations:
+>>>>
+>>>> 1. context_switch()
+>>>> 2. task_tick_fair()
+>>>> 3. sched_balance_update_blocked_averages()
+>>>> 4. on sched_setscheduler() syscall that changes policy or uclamp values
+>>>> 5. on check_preempt_wakeup_fair() if wakeup preemption failed
+>>>> 6. on __add_running_bw() to guarantee DL bandwidth requirements.
+>>>>
+>>>> The update at context switch should help guarantee that RT get the right
+>>>> frequency straightaway when they're RUNNING. As mentioned though the
+>>>> update will happen slightly after enqueue_task(); though in an ideal
+>>>> world these tasks should be RUNNING ASAP and this additional delay
+>>>> should be negligible. For fair tasks we need to make sure we send
+>>>> a single update for every decay for the root cfs_rq. Any changes to the
+>>>> rq will be deferred until the next task is ready to run, or we hit TICK.
+>>>> But we are guaranteed the task is running at a level that meets its
+>>>> requirements after enqueue.
+>>>>
+>>>> To guarantee RT and DL tasks updates are never missed, we add a new
+>>>> SCHED_CPUFREQ_FORCE_UPDATE to ignore the rate_limit_us. If we are
+>>>> already running at the right freq, the governor will end up doing
+>>>> nothing, but we eliminate the risk of the task ending up accidentally
+>>>> running at the wrong freq due to rate_limit_us.
+>>>>
+>>>> Similarly for iowait boost, we ignore rate limits. We also handle a case
+>>>> of a boost reset prematurely by adding a guard in sugov_iowait_apply()
+>>>> to reduce the boost after 1ms which seems iowait boost mechanism relied
+>>>> on rate_limit_us and cfs_rq.decayed preventing any updates to happen
+>>>> soon after iowait boost.
+>>>>
+>>>> The new SCHED_CPUFREQ_FORCE_UPDATE should not impact the rate limit
+>>>> time stamps otherwise we can end up delaying updates for normal
+>>>> requests.
+>>>
+>>> Hi Qais,
+>>> the idea of SCHED_CPUFREQ_FORCE_UPDATE and the possiblity of spamming
+>>> freq updates still bothered me so let me share my thoughts even though
+>>> it might be niche enough for us not to care.
+>>>
+>>> 1. On fast_switch systems, assuming they are fine with handling the
+>>> actual updates, we have a bit more work on each context_switch() and
+>>> some synchronisation, too. That should be fine, if anything there's
+>>> some performance regression in a couple of niche cases.
+>>>
+>>> 2. On !fast_switch systems this gets more interesting IMO. So we have
+>>> a sugov DEADLINE task wakeup for every (in a freq-diff resulting)
+>>> update request. This task will preempt whatever and currently will
+>>> pretty much always be running on the CPU it ran last on (so first CPU
+>>> of the PD).
+>>
+>> The !fast_switch is a bit of concern for me too but not for the same
+>> reason and maybe the opposite of yours IIUC your proposal below:
+>>
+>> With fast_switch we have the following sequence:
+>>
+>> sched_switch() to task A
+>> cpufreq_driver_fast_switch -> write new freq target
+>> run task A
+>>
+>> This is pretty straight forward but we have the following sequence
+>> with !fast_switch
+>>
+>> sched_switch() to task A
+>> queue_irq_work -> raise an IPI on local CPU
+>> Handle IPI -> wakeup and queue sugov dl worker on local CPU (always
+>> with 1 CPU per PD)
+>> sched_switch() to sugov dl task
+>> __cpufreq_driver_target() which can possibly block on a lock
+>> sched_switch() to task A
+>> run task A
+>>
 > 
-> While at it I changed the documentation example to chrt instead
-> of the schedtool fork.
+> sent a bit too early
 > 
-> No functional changes.
+>> We can possibly have 2 context switch and one IPi for each "normal"
+>> context switch which is not really optimal
+> 
+> It would be good to find a way to skip the spurious back and forth
+> between the normal task and sugov
 
-Looks good to me!
+Just to confirm I understand your concern correctly, that's more or
+less the behavior without Qais' patch as well though, isn't it?
+Ignoring the move from "This happens at enqueue" vs. "this
+happens at context switch".
+Since sugov doesn't queue any work if the desired frequency doesn't
+change I imagine it's not too bad?
+Or are you more concerned that the work is queued multiple times
+simultaneously for multiple CPUs of the same PD? If so we can
+work around that with the work_in_progress state to at least limit
+that window by a lot.
 
-At least for docs/uapi,
-
-Acked-by: Juri Lelli <juri.lelli@redhat.com>
-
-Thanks,
-Juri
-
+[snip]
 
