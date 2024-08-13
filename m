@@ -1,216 +1,235 @@
-Return-Path: <linux-pm+bounces-12131-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12132-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0C6F94FF69
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 10:13:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2910794FFC8
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 10:25:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E787B22B5C
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 08:13:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89EE0B22F1F
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2024 08:25:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D99D136E28;
-	Tue, 13 Aug 2024 08:13:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F098313A244;
+	Tue, 13 Aug 2024 08:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="TFRY1IKm"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Lf5YwlBR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1167137C2A
-	for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 08:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F73130A54
+	for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 08:25:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723536812; cv=none; b=FfgimIQbnqhHb0HsIm+KXV239QYxgAVX59MqW/6zKCYZHGTcuhCCngAFUFd+z/hCEAMKoS8QZjooyCxCW7pPpF2rHHKlX0oYjYIfBu2+oeDXCPJvizRVu3lWTctETH/2e/b97sfXCcEjNvmHcgUSdrooiG4T0hyozKdnVjO7vaQ=
+	t=1723537552; cv=none; b=AnX+aALOUGTJWryjaQ1aA7aMQk2TsrmbxPKK9J5uCwA8514DN0pE4l5LfI4Ap08sMjPqnuuLmlsDCL8Nm3+LTkiJdlMA/ysWbnP3cPg794AFFe5Hux3efhNbpwi3hnB+IiFk1UKqtToNwj3y5bUhDzSEIVNaRRjNJUF7y/nRx0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723536812; c=relaxed/simple;
-	bh=KI/vFrEyEg5EFIYU/iBV01qglnGbaphkmdipf2rX5jo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gbHBNuMEHSvd+ReOzrpZwAd24jdN4/pm8C5OhzRFWX6jWqin1zJTLcj0KLiQho4Uez5TKIvH7dCWBmysE578+Uzkh08Knew18ppb/Jijdp2rKb+yiXFDiSU8FDNWek4YFWLbP91ldY6DW9nm2UL+UtaXDgQUSJtgMMmI4CdDNWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=TFRY1IKm; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fd640a6454so39544515ad.3
-        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 01:13:30 -0700 (PDT)
+	s=arc-20240116; t=1723537552; c=relaxed/simple;
+	bh=3kVlJQU0BIp2rBktBQ7VmHxx5xBs7qhHp4dNn8b+7kk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mccCbdpICVuNPUgMMUVvMUZWjejCQcEfDzeJALoTDTCxPUJbe+DPnotboSCuEdygYYKuTvp3zBzBATo7Gg4utRUGRUcPZzlz1Wy95ToppkrtrWUmc90KSuVEuydwnMUli27/rzvey2DNzVQrLp+cLFQAhxnXKq2i024ElLKtDAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Lf5YwlBR; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7a130ae7126so3680587a12.0
+        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 01:25:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1723536810; x=1724141610; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MPwCQlZV6XnO0rlNbX/WsNAZ1kHHhsOKatz4Qfacl5c=;
-        b=TFRY1IKmKrfmoV4Uj0/os8oGPK3sHfDnk8E8Fd03OrC1ijShxK8oKI62ZpDeYcyrm0
-         mXLM4JTJWJMgd0zDrhx/PlXg9TVKCvAvLVmmTCaFJa8KRX/Y9b9cv/bdWMhZ0PLoLpAe
-         qsxh9XUcBC+wZJrSS0uqtKk5uOeUjkeYKqAZ7v/dpNyvtEHYI5RDg4N7A7csKBY/CukU
-         YVahVS/n2+IR99uN/rRy0MgHBhjivRKgdhcLhyMZyQi8F7D/mvSuDI2pEUXUBqQaExPB
-         3duQaqJLCsfgPf9qrUeSco61AsWS9a/TRFlAV+EfEYBmZHldbzNkyYyE2hneg2K4wSkm
-         sbyA==
+        d=linaro.org; s=google; t=1723537550; x=1724142350; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bo6QM0sBKGRYLVNN4IyVM/GTsc0sueI/A0itTKYR/es=;
+        b=Lf5YwlBRF20w3YaZgvOyChpSP/WwXdiFOLGFwQupfV06e40rSsF5YfTKY6B7LDILG0
+         DxY2cVSpUNVCTaBw3PbzBBgvDpOyNJ9dY06DZtC0J4GeyQzxc2G5eUFZhdcEDut8YRBT
+         9zqsjTTJwbxuKHldksPJqIKa66CVARoYsQettzzOBUpavGLr8ahuZIG+eraAxW0NOSGa
+         9QnnOxMjmRHWObAmlOWdh6Gj6SVw/KnGSIn4f4Zdtmb5jYdxt0aVaOWslAo49/UL8Wn4
+         Pg5nZbC7G0MYNkArnOutTaR8M5tT6dTDhM5Gh3q9qILbCRoAqvl0GZmElFZ37Z5hpDR6
+         3mPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723536810; x=1724141610;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1723537550; x=1724142350;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MPwCQlZV6XnO0rlNbX/WsNAZ1kHHhsOKatz4Qfacl5c=;
-        b=GMryzYT2OvQx+AgJWZ1eWzaA7PVsV9pvkFwVQEvgOiWGD/p3vX7bfR0I+bzJjuucZQ
-         RMb35i9iYgB00XDsGrqQ5teg2aAt8KrCKKhYgMd4A2Jd2S3kWDKgker0bHUi7RtyUUld
-         lZpD/3qwWOSKwVzQngGf640JCxDYflsbwCkyx5KgTKaC5x34mwU4pmOKiZHo+5tileY2
-         RtIhHAJ0pEo3CZdl1pymq+2QasDjRxOvQZN2Im73cceYOIKvXxd7Uy6Cc+bLUVjgV2ZG
-         I4QXAI/LIQ/o04a79KCipT4iyQJtrT40lwvk72BypS3sOPACzuFNQSS6o+O08yex8wLj
-         a9qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVD4kBW5x24uvB9rbyinrRPqGup6abcAq7tEEL6jnS+SiG2GScXUE94AcjK3GsERbJkfH0mr5KTCAP54Y5kAi+ehd+aBYzInS8=
-X-Gm-Message-State: AOJu0Yx+OoGL/VZUiWrEoAd1XsDiaw8p65JCVuBXN2wzZGvn+xLC2gJe
-	m261UQaWc9+xAoZFJgcmtv/XETP16qBJBV/iZVFz7ogpvS4qOCD6EmYjBC9M+ic=
-X-Google-Smtp-Source: AGHT+IFGyOzsELsbEN5dq5CT9Zf/5PMWDUy7RodzkZu3Mk7cSMnkmo/3cHgdPDhbNHigLjznXjqnXw==
-X-Received: by 2002:a17:902:d487:b0:1ff:39d7:a1b0 with SMTP id d9443c01a7336-201ca1ca41bmr30756345ad.50.1723536809857;
-        Tue, 13 Aug 2024 01:13:29 -0700 (PDT)
-Received: from hsinchu35-syssw01.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201cd1e29afsm8289885ad.309.2024.08.13.01.13.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Aug 2024 01:13:29 -0700 (PDT)
-From: Nick Hu <nick.hu@sifive.com>
-To: anup@brainfault.org,
-	rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	linux-pm@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	greentime.hu@sifive.com,
-	zong.li@sifive.com
-Cc: Nick Hu <nick.hu@sifive.com>,
-	Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH] cpuidle: riscv-sbi: Allow cpuidle pd used by other devices
-Date: Tue, 13 Aug 2024 16:13:24 +0800
-Message-Id: <20240813081324.3205944-1-nick.hu@sifive.com>
-X-Mailer: git-send-email 2.34.1
+        bh=Bo6QM0sBKGRYLVNN4IyVM/GTsc0sueI/A0itTKYR/es=;
+        b=V0v41KEykD7BpCXvwXI3kGdZt08zPBzgBZY/ebZn24tl5Swa/KMovMedRSFsiU5B2s
+         OQkCwwoBTr8FoMUQ+qflYZYmrG5dXfW3mElKszf+0tonJR5al3VeaJYK4nYLSAVB8HV9
+         +gkk1EYm2LLZ23FPMHd72sC02V0xWTNH5WaSwxY4fgx0EY89LjMcpllkB/Jfru4+BQt0
+         NEXRzn+EfBCvbsXXrUwjG/BWdd7p0YHqOMzwriebIVIoM0XIg+8kePtDNAP+NX5acWHO
+         eBy4Z56j5mm07iNwFkpac3JyRB3r+8nD+rC8TOe3NFMS6btt2RgjajbAhX68uC6g4Jlw
+         oVmg==
+X-Forwarded-Encrypted: i=1; AJvYcCXlGejkNgleCO5cI4xckn0GXGc98qReUl93U8j8GEqgOIg/Kq9KeHH03+V0o55fFNOcOfOMaeb9TuTVEzvAsds7RaajC9obAqg=
+X-Gm-Message-State: AOJu0YxLlRFDpAKCxZXY9i6BJb6toBweFCoQGSi7H37zE1AX4AYhB8+w
+	EAM1KtNlORYiU95EJXN4NOFhFP+P4sf9mlPdC9kide+JZupXuLidaaLQBsTWEhEjfom7/4wyRUW
+	k2Ns4uaQWWwYKfkXOAtCTsrAANsrXxfW6aWjj2w==
+X-Google-Smtp-Source: AGHT+IH+JUSUQX/w+WP6cJs+S6/ZzZT4XCqDPnT0rLsrzQJZAvyq0RqmK3imTC9gS9X41NL9e1jPOHmTOl7sVhhJSaw=
+X-Received: by 2002:a17:90a:110f:b0:2ca:d1dc:47e2 with SMTP id
+ 98e67ed59e1d1-2d392652468mr3058025a91.33.1723537550475; Tue, 13 Aug 2024
+ 01:25:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240728184551.42133-1-qyousef@layalina.io> <ca6b1db0-37d9-462e-87e4-d3bbd5eec7a3@arm.com>
+In-Reply-To: <ca6b1db0-37d9-462e-87e4-d3bbd5eec7a3@arm.com>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Tue, 13 Aug 2024 10:25:39 +0200
+Message-ID: <CAKfTPtBWLe4hMBhJeSqvoW10dAF3Bgj+zcYGMgBfwUhkgytkEQ@mail.gmail.com>
+Subject: Re: [PATCH v7] sched: Consolidate cpufreq updates
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Qais Yousef <qyousef@layalina.io>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Ingo Molnar <mingo@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Hongyan Xia <hongyan.xia2@arm.com>, 
+	John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-To prevent the probe of consumer devices being deferred, create the
-platform devices for each pd node under '/cpus/power-domains' and move the
-driver initailization to the arch_initcall.
-The consumer devices that inside the cpu/cluster power domain may register
-the genpd notifier where their power domains are point to the pd nodes
-under '/cpus/power-domains'. If the cpuidle.off==1, the genpd notifier
-will fail due to sbi_cpuidle_pd_allow_domain_state is not set. We also
-need the sbi_cpuidle_cpuhp_up/down to invoke the callbacks. Therefore,
-add a cpuidle_disabled() check before registering the cpuidle driver to
-address the issue.
+On Mon, 5 Aug 2024 at 17:35, Christian Loehle <christian.loehle@arm.com> wrote:
+>
+> On 7/28/24 19:45, Qais Yousef wrote:
+> > Improve the interaction with cpufreq governors by making the
+> > cpufreq_update_util() calls more intentional.
+> >
+> > At the moment we send them when load is updated for CFS, bandwidth for
+> > DL and at enqueue/dequeue for RT. But this can lead to too many updates
+> > sent in a short period of time and potentially be ignored at a critical
+> > moment due to the rate_limit_us in schedutil.
+> >
+> > For example, simultaneous task enqueue on the CPU where 2nd task is
+> > bigger and requires higher freq. The trigger to cpufreq_update_util() by
+> > the first task will lead to dropping the 2nd request until tick. Or
+> > another CPU in the same policy triggers a freq update shortly after.
+> >
+> > Updates at enqueue for RT are not strictly required. Though they do help
+> > to reduce the delay for switching the frequency and the potential
+> > observation of lower frequency during this delay. But current logic
+> > doesn't intentionally (at least to my understanding) try to speed up the
+> > request.
+> >
+> > To help reduce the amount of cpufreq updates and make them more
+> > purposeful, consolidate them into these locations:
+> >
+> > 1. context_switch()
+> > 2. task_tick_fair()
+> > 3. sched_balance_update_blocked_averages()
+> > 4. on sched_setscheduler() syscall that changes policy or uclamp values
+> > 5. on check_preempt_wakeup_fair() if wakeup preemption failed
+> > 6. on __add_running_bw() to guarantee DL bandwidth requirements.
+> >
+> > The update at context switch should help guarantee that RT get the right
+> > frequency straightaway when they're RUNNING. As mentioned though the
+> > update will happen slightly after enqueue_task(); though in an ideal
+> > world these tasks should be RUNNING ASAP and this additional delay
+> > should be negligible. For fair tasks we need to make sure we send
+> > a single update for every decay for the root cfs_rq. Any changes to the
+> > rq will be deferred until the next task is ready to run, or we hit TICK.
+> > But we are guaranteed the task is running at a level that meets its
+> > requirements after enqueue.
+> >
+> > To guarantee RT and DL tasks updates are never missed, we add a new
+> > SCHED_CPUFREQ_FORCE_UPDATE to ignore the rate_limit_us. If we are
+> > already running at the right freq, the governor will end up doing
+> > nothing, but we eliminate the risk of the task ending up accidentally
+> > running at the wrong freq due to rate_limit_us.
+> >
+> > Similarly for iowait boost, we ignore rate limits. We also handle a case
+> > of a boost reset prematurely by adding a guard in sugov_iowait_apply()
+> > to reduce the boost after 1ms which seems iowait boost mechanism relied
+> > on rate_limit_us and cfs_rq.decayed preventing any updates to happen
+> > soon after iowait boost.
+> >
+> > The new SCHED_CPUFREQ_FORCE_UPDATE should not impact the rate limit
+> > time stamps otherwise we can end up delaying updates for normal
+> > requests.
+>
+> Hi Qais,
+> the idea of SCHED_CPUFREQ_FORCE_UPDATE and the possiblity of spamming
+> freq updates still bothered me so let me share my thoughts even though
+> it might be niche enough for us not to care.
+>
+> 1. On fast_switch systems, assuming they are fine with handling the
+> actual updates, we have a bit more work on each context_switch() and
+> some synchronisation, too. That should be fine, if anything there's
+> some performance regression in a couple of niche cases.
+>
+> 2. On !fast_switch systems this gets more interesting IMO. So we have
+> a sugov DEADLINE task wakeup for every (in a freq-diff resulting)
+> update request. This task will preempt whatever and currently will
+> pretty much always be running on the CPU it ran last on (so first CPU
+> of the PD).
 
-Signed-off-by: Nick Hu <nick.hu@sifive.com>
-Link: https://lore.kernel.org/lkml/20240226065113.1690534-1-nick.hu@sifive.com/
-Suggested-by: Anup Patel <apatel@ventanamicro.com>
----
- drivers/cpuidle/cpuidle-riscv-sbi.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+The !fast_switch is a bit of concern for me too but not for the same
+reason and maybe the opposite of yours IIUC your proposal below:
 
-diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-index a6e123dfe394..d6b01fc64f94 100644
---- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-+++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-@@ -16,6 +16,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_platform.h>
- #include <linux/slab.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
-@@ -25,6 +26,7 @@
- #include <asm/smp.h>
- #include <asm/suspend.h>
- 
-+#include "cpuidle.h"
- #include "dt_idle_states.h"
- #include "dt_idle_genpd.h"
- 
-@@ -336,6 +338,9 @@ static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
- 		return ret;
- 	}
- 
-+	if (cpuidle_disabled())
-+		return 0;
-+
- 	ret = cpuidle_register(drv, NULL);
- 	if (ret)
- 		goto deinit;
-@@ -380,20 +385,26 @@ static int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
- struct sbi_pd_provider {
- 	struct list_head link;
- 	struct device_node *node;
-+	struct platform_device *pdev;
- };
- 
- static LIST_HEAD(sbi_pd_providers);
- 
- static int sbi_pd_init(struct device_node *np)
- {
-+	struct platform_device *pdev;
- 	struct generic_pm_domain *pd;
- 	struct sbi_pd_provider *pd_provider;
- 	struct dev_power_governor *pd_gov;
- 	int ret = -ENOMEM;
- 
-+	pdev = of_platform_device_create(np, np->name, NULL);
-+	if (!pdev)
-+		goto out;
-+
- 	pd = dt_idle_pd_alloc(np, sbi_dt_parse_state_node);
- 	if (!pd)
--		goto out;
-+		goto free_pdev;
- 
- 	pd_provider = kzalloc(sizeof(*pd_provider), GFP_KERNEL);
- 	if (!pd_provider)
-@@ -419,6 +430,7 @@ static int sbi_pd_init(struct device_node *np)
- 		goto remove_pd;
- 
- 	pd_provider->node = of_node_get(np);
-+	pd_provider->pdev = pdev;
- 	list_add(&pd_provider->link, &sbi_pd_providers);
- 
- 	pr_debug("init PM domain %s\n", pd->name);
-@@ -430,6 +442,8 @@ static int sbi_pd_init(struct device_node *np)
- 	kfree(pd_provider);
- free_pd:
- 	dt_idle_pd_free(pd);
-+free_pdev:
-+	of_platform_device_destroy(&pdev->dev, NULL);
- out:
- 	pr_err("failed to init PM domain ret=%d %pOF\n", ret, np);
- 	return ret;
-@@ -447,6 +461,7 @@ static void sbi_pd_remove(void)
- 		if (!IS_ERR(genpd))
- 			kfree(genpd);
- 
-+		of_platform_device_destroy(&pd_provider->pdev->dev, NULL);
- 		of_node_put(pd_provider->node);
- 		list_del(&pd_provider->link);
- 		kfree(pd_provider);
-@@ -548,7 +563,10 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
- 	/* Setup CPU hotplut notifiers */
- 	sbi_idle_init_cpuhp();
- 
--	pr_info("idle driver registered for all CPUs\n");
-+	if (cpuidle_disabled())
-+		pr_info("cpuidle is disabled\n");
-+	else
-+		pr_info("idle driver registered for all CPUs\n");
- 
- 	return 0;
- 
-@@ -592,4 +610,4 @@ static int __init sbi_cpuidle_init(void)
- 
- 	return 0;
- }
--device_initcall(sbi_cpuidle_init);
-+arch_initcall(sbi_cpuidle_init);
--- 
-2.34.1
+With fast_switch we have the following sequence:
 
+sched_switch() to task A
+cpufreq_driver_fast_switch -> write new freq target
+run task A
+
+This is pretty straight forward but we have the following sequence
+with !fast_switch
+
+sched_switch() to task A
+queue_irq_work -> raise an IPI on local CPU
+Handle IPI -> wakeup and queue sugov dl worker on local CPU (always
+with 1 CPU per PD)
+sched_switch() to sugov dl task
+__cpufreq_driver_target() which can possibly block on a lock
+sched_switch() to task A
+run task A
+
+We can possibly have 2 context switch and one IPi for each "normal"
+context switch which is not really optimal
+
+>
+> The weirdest case I can think of right now is two FAIR iowait tasks on
+> e.g. CPU1 keep waking up the DEADLINE task on CPU0 (same PD) regardless
+> of what is running there.
+> Potentially that means two fair tasks on one CPU CPU-starving an RT
+> task on another CPU, because it keeps getting preempted by the DEADLINE
+> sugov worker.
+> For this to actually happen we need to ensure the tasks
+> context-switching actually results in a different requested frequency
+> every time, which is a bit unlikely without UCLAMP_MAX, let's say task
+> A has 512, task B 1024, task C (RT on CPU1 should have uclamp_min<=512
+> then too otherwise frequency may be dictated by the RT task anyway.)
+> (Note the entire thing also works with Tasks A & B being lower-prio RT
+> too, instead of FAIR and iowait.)
+>
+> Note that due to the nature of SCHED_DEADLINE and the sugov task having
+> 10s period and 1s runtime this behavior is limited to 1s every 10s.
+> The remaining 9s (replenishment time) we won't see any cpufreq updates
+> for that PD at all though.
+>
+> To reproduce, I have [4,5] being one PD:
+>
+> fio --minimal --time_based --name=cpu5_1024uclamp --filename=/dev/nullb0 --runtime=10 --rw=randread --bs=4k--direct=1 --cpus_allowed=5
+> uclampset -M 512 fio --minimal --time_based --name=cpu5_512uclamp --filename=/dev/nullb0 --runtime=10 --rw=randread --bs=4k--direct=1 --cpus_allowed=5
+> and then your RT task on CPU4.
+>
+> Something like this would mitigate that, I think it makes sense even
+> without your patch to get a more predictable idle pattern, just maybe
+> not exactly this patch of course.
+>
+> -->8--
+>
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 64f614b3db20..c186f8f999fe 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -567,6 +567,8 @@ static void sugov_irq_work(struct irq_work *irq_work)
+>
+>         sg_policy = container_of(irq_work, struct sugov_policy, irq_work);
+>
+> +       /* Try to wake the task here to not preempt or wake up another CPU. */
+> +       sg_policy->worker.task->wake_cpu = smp_processor_id();
+>         kthread_queue_work(&sg_policy->worker, &sg_policy->work);
+>  }
+>
+>
+>
+>
 
