@@ -1,71 +1,72 @@
-Return-Path: <linux-pm+bounces-12190-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12191-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E734B9513FF
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 07:44:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D236B951401
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 07:45:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73CDAB24C86
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 05:44:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 818C31F25408
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 05:45:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49F0B47F4A;
-	Wed, 14 Aug 2024 05:44:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D659377F11;
+	Wed, 14 Aug 2024 05:44:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="TVQ6pF8w"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="AC6/dn7G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC69120B0F
-	for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 05:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5A8745F4
+	for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 05:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723614283; cv=none; b=Yza/izIabkzrzYpOFn0d2tMa+25upp1D3WnjVWaLgwCUNc1imvKd/DbGDg1KL9CGLYuCcJIOytzEhlz8+JiK2fPYQ4OLFZR2KAxwMvUfCw8oFD38YuL7CrUzD/hcGHjcNLc/9BcB5u4XioHoc2x3aK25MStX0nqqI56dF4mB5Wc=
+	t=1723614286; cv=none; b=b4eo2F2tL6ItQN6jSkSeA538EGjt9aXoWwjKNyLHK9Y6OgJE/4s5pZBXM1ZM805FTWMD4JxTqiaiD/X2oU7LQD1I7FZi/TCbFtGhOd/hzJQJW8WVriFiLDOUpszCw93i/uOsHPliGFCBQV0RxNnxtNvIiWfpAK8qzX8fcjCQHOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723614283; c=relaxed/simple;
-	bh=i2+GQ51N56bMZrhkaA13V9HEXxbHxaVwbyOXV0N5Htg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eDNqM94ojXmdrrEnZSGRJPcQbmmV8AXBAz/MVjXcQVNPi8JlQwPPrHOX3AglrSgtRsGJb4AfLa5J0bFBzCmrgGIEK+I/biLYxiXqHkTAizcqmR3xIzqwHHex1cHT6RwvI2Xl9SZ0n8hykl2l6g7nGNxsBnJqt7l/iWaNE6knzsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=TVQ6pF8w; arc=none smtp.client-ip=209.85.215.174
+	s=arc-20240116; t=1723614286; c=relaxed/simple;
+	bh=oz/ZbxOYBYoSaJv71NLT+p3jqnf7AjyeXy1UYDpRuJ0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=cwzaqx8VtloIi4UqBHptseyfs08ZYEigbAi14cCkHmZ346PL587Z6B04E9adBTYGC+QWiDngGrgzXC8nRF2rRxNv+dRaxFSuaZmOWy9F4/3ThXplmCQbuwJBeoZ6j/kF6hhO+Vm52443ceew+hySJ86RsmALZ5toKHBF8I+Q2JU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=AC6/dn7G; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7a103ac7be3so3865758a12.3
-        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 22:44:41 -0700 (PDT)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1fc587361b6so52506115ad.2
+        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2024 22:44:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1723614281; x=1724219081; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iOO7x8iSBvV0De6dCZQ1mV4ufVqP7fre5DuTvGToFgw=;
-        b=TVQ6pF8wWcL9cN/+H9m2ivdpWWNEwWqzvnS8mmCmw4CFsTYbXn5T9x3na23GBMRrqY
-         dyDZaD9ld6CVgdh1N8F4r5/gGU9ZqbBh74a7eGMnm33eifk4nA+F5HbXfBwI/GpcMBBo
-         Ds0RXsiZ/N9yYF3jVDvzQFZ0qbhat6WzgTL+IwVucJEheXMxA0LAPXfes600wB4sWl5r
-         4+0kut25mMjM9tDYcq4flC9tgUX11mbESLfk5KuDbwRfUGb0jMO9QKHWD9wruZ59bjYy
-         5YAbSSdgWIs09CNsfuVWBXRjgzWotv1uGp8D24pWe3sFekTwHWdYV/mzSHi/bJE/Q01Z
-         7Vlw==
+        d=sifive.com; s=google; t=1723614285; x=1724219085; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7//UyL4OxAxRCQ/u8WgruiMwE8g6st4KW8tP9FVdOz4=;
+        b=AC6/dn7GpLsLmbXVIo0MEBsKyD+/dL/Z0sa6Avm9dUtI7s0O0HzPZb3UOIk5MQsPGT
+         iDSLdbPduhUbUMFqjJmkhSxilTyQ8jiRI0b4D0Vet7Zc8hMUNQ5bIk+Cn3Z2RirJrFeY
+         j4pl1FD6d9rg02OXjVj3lZ2m+UqsIWn6a/2ged6J2vJgrEhOzYNd/zthQTCJa+h8keB/
+         aWUMG1NNh3wJTBd7BPSA+W8/lYTAgaL14LbaDhxjWAQHlgw9e24rlSDM/XcQZlokL6Dg
+         1u+AYNoJIF4dvlV5qAipayYLN8WaEBIctju6SSEM6RpRUN9idzMTTDjRs0heMKVOyCVd
+         H/ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723614281; x=1724219081;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iOO7x8iSBvV0De6dCZQ1mV4ufVqP7fre5DuTvGToFgw=;
-        b=mvtl7giLw8SZkUytM6CPVd/tjp0h07OSF7RNS3N7FOuXOLt8QHX+wQEBCLFEbXrqv3
-         cfbr11oXWg7/9TJkRV5kKSs5S5Pjl8K5MOvGUjiwgHDeWLs2x9zTCps9RH6JHinKz0/7
-         2ShY7L7CJPg8WnKu4H+ErWxMXazNumvjocNX9YjcCV6VRD+NH8eeUAYzc+oS7Gg5L/HO
-         kLlsWX0ZLPox5Tkar1O/gSg7VywTfmN0yfBp8qNLHyy5NQlb99dWz1J+votXF5d8PJKa
-         2huvLCvBuJkV6AOcht2xQQ1omxdiJPrhhks7rSNTma783LpUGOia5nWIugFU0k5QLrRr
-         wT8g==
-X-Forwarded-Encrypted: i=1; AJvYcCVOmCMUp29qJShKUrCGpZ2AB80xm7MhQxJmAwIjMX2HnA4khnTn3Hh/AOiKa/JtzqmrYdx4NPMRAVbxDfZX3O6/9TQ1fVN30Qc=
-X-Gm-Message-State: AOJu0Yxsy2qZkHgOmfd606kx5B1I0TQJCBYQGinrQJl2vPvBjTjOlf5q
-	now/kRJ4btktoVGENFTiaA2dk5soF58ykpXlhieuF1ZiTyJVUudYMwpBzZ3Rs5ZqyM0GNd+8lFa
-	kraQ=
-X-Google-Smtp-Source: AGHT+IGuQTz6SVKJdGR7qOzZH2eW0RKBxe5F6pnliwORwQw6IjLS/PZfnZvv68tOCBbgMC5KQYJ5VQ==
-X-Received: by 2002:a05:6a20:d49b:b0:1c6:b364:dbd1 with SMTP id adf61e73a8af0-1c8eae6f450mr2704301637.19.1723614281087;
-        Tue, 13 Aug 2024 22:44:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1723614285; x=1724219085;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7//UyL4OxAxRCQ/u8WgruiMwE8g6st4KW8tP9FVdOz4=;
+        b=C9biLTPIdl+C23w5ixgWa+pYbqZ23Qiz5Lm7hAxUY0VVGOmX01aFVODda73SmL9F1P
+         wiHO22Kd++/LEvx3a8T8oPJuRgqAEY/FStvu01ewIxW2QGf/0EQ0suXToRWie7OciGIj
+         XVKGANQ5Zyq4MmM7pdvk+DBaRCrx0VYolIYuEIO3zYOVwGdiN5MwC7hB0V8Bd7G9Z/oX
+         XWXlHvxvHuvz7GwDDmkDzpOWDASSzItBo7CZ8WG1f3URc9bliuTaHJgTLQPGPQ7ioNP/
+         ctLHeUjfHlS6BvxNYpmr+fgDrPUfBW3QcweXcPDqUiRuzK7uDEc28IfHNFi0sky2K+6t
+         S/PQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVvNQnD15Vr8Z5O3PgaLSMRZ1JkN6UCs0sNq+DoaM58avQMobj+NaMDFaadMoVoK7Nb/IdIsJm9+A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2v3stwWBg96EN3sxq2rGPKN34Bs+DBC5L8JhDZq8PV35Km/5i
+	lGU4lJoHI02Psh/UUw4rEZlX6xFkWSw/OGqD3KEU5tmN6x3naqn8/tUwYXK/ZD8=
+X-Google-Smtp-Source: AGHT+IH2u5Hy7JK9qr9NzQ+z/s4QL68RKujwQoMl1KYw/4mDtUdaVsYGJsQISTuL1RB+J7X1O07FeQ==
+X-Received: by 2002:a17:903:3607:b0:1fb:8f72:d5ea with SMTP id d9443c01a7336-201d64a5b20mr21592635ad.50.1723614284535;
+        Tue, 13 Aug 2024 22:44:44 -0700 (PDT)
 Received: from hsinchu35-syssw01.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201cd1ab486sm22062085ad.150.2024.08.13.22.44.38
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201cd1ab486sm22062085ad.150.2024.08.13.22.44.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Aug 2024 22:44:40 -0700 (PDT)
+        Tue, 13 Aug 2024 22:44:44 -0700 (PDT)
 From: Nick Hu <nick.hu@sifive.com>
 To: anup@brainfault.org,
 	rafael@kernel.org,
@@ -78,11 +79,14 @@ To: anup@brainfault.org,
 	linux-kernel@vger.kernel.org,
 	greentime.hu@sifive.com,
 	zong.li@sifive.com
-Cc: Nick Hu <nick.hu@sifive.com>
-Subject: [PATCH v2 0/2] cpuidle: riscv-sbi: Allow cpuidle pd used by other devices
-Date: Wed, 14 Aug 2024 13:44:32 +0800
-Message-Id: <20240814054434.3563453-1-nick.hu@sifive.com>
+Cc: Nick Hu <nick.hu@sifive.com>,
+	Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v2 1/2] cpuidle: riscv-sbi: Move sbi_cpuidle_init to arch_initcall
+Date: Wed, 14 Aug 2024 13:44:33 +0800
+Message-Id: <20240814054434.3563453-2-nick.hu@sifive.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240814054434.3563453-1-nick.hu@sifive.com>
+References: <20240814054434.3563453-1-nick.hu@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -91,17 +95,26 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add this patchset so the devices that inside the cpu/cluster power domain
-can use the cpuidle pd to register the genpd notifier to handle the PM
-when cpu/cluster is going to enter a deeper sleep state.
+Move the sbi_cpuidle_init to the arch_initcall to prevent the consumer
+devices from being deferred.
 
-Nick Hu (2):
-  cpuidle: riscv-sbi: Move sbi_cpuidle_init to arch_initcall
-  cpuidle: riscv-sbi: Add cpuidle_disabled() check
+Signed-off-by: Nick Hu <nick.hu@sifive.com>
+Link: https://lore.kernel.org/lkml/CAKddAkAOUJSnM=Px-YO=U6pis_7mODHZbmYqcgEzXikriqYvXQ@mail.gmail.com/
+Suggested-by: Anup Patel <apatel@ventanamicro.com>
+---
+ drivers/cpuidle/cpuidle-riscv-sbi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/cpuidle/cpuidle-riscv-sbi.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+index a6e123dfe394..98e7751dbfe8 100644
+--- a/drivers/cpuidle/cpuidle-riscv-sbi.c
++++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+@@ -592,4 +592,4 @@ static int __init sbi_cpuidle_init(void)
+ 
+ 	return 0;
+ }
+-device_initcall(sbi_cpuidle_init);
++arch_initcall(sbi_cpuidle_init);
 -- 
 2.34.1
 
