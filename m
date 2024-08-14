@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-12220-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12221-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 060BD95219E
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 19:57:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 282519521B3
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 20:00:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 289031C219E6
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 17:57:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2125283CEE
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 18:00:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BFE81BD02C;
-	Wed, 14 Aug 2024 17:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35BB1BD025;
+	Wed, 14 Aug 2024 18:00:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RoiFmCzi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xLhnetR5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B00731B8EB4
-	for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 17:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0851BCA19
+	for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 17:59:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723658245; cv=none; b=OseVsc53ncvAxPxFO9/tTMZtEBLTFPmTmZeFsgLQZ1ZHK+tizHVB1VEmmNYxy7XPtSn6g3u84VZBLEe0EUIfupyoD/85raWZvtKaPQ6cvjlQQL7lW0FGEr9L0I6BzMKRuJq7LeCRaWxCa+1i4I++zctpEJ0D0csYBN2Ox/sm+O0=
+	t=1723658400; cv=none; b=OOz86/MeeiJRwrHL0EYA6F5XTvUWUMQq3Tz8xyOlSPE+zM0unOL7e9AbhFCyoKgjMM4DhwtKRT0ATfVlDGk59SkGyat5cDGGzGJugomDlbOj2iW5EhfIsVOQVDY2UI19UDzX0sbMPv1drac8HDu+7pnhyAeaL3MlxdF8uzqUTTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723658245; c=relaxed/simple;
-	bh=qlmarjm4bNR84rbu20fJIQS2A0OemxNPwz2MhN9FDdo=;
+	s=arc-20240116; t=1723658400; c=relaxed/simple;
+	bh=gK4sRcaloHcln7TAZ92Aeomv4OGrsTEcLGBDbt0X824=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G4r/POSIvIjvK2KWLTavgcEZHJ4o1JUt1wx/IKET/8hhyI71sayl13sacs3xL+BS2gn9TdveEkKKxzkcXnph9WyPIlUerUWVBVngibbIa3E494jSJiB9ORO2WUNy8dADABObFGZf70q3kO+QiT6OVFfKutDn9lJpjgm3A/7NR2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RoiFmCzi; arc=none smtp.client-ip=209.85.128.47
+	 In-Reply-To:Content-Type; b=VSBF5UVTPC4oRMaFWc3sYgDNrVoOQiSB+3Pj6PUI1Vcvdlgy5VKXsoTE0S/o0AtQju7Vg3a7IT4npwHviJzJLYary8w29QdPbPKAKkIK3NjnCwePZc0yU4xoWJ7ljm7M2ut9ojhSzCC0iXP77MxK92RFhZwaDWjRRMOoItbPM4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xLhnetR5; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-427fc97a88cso570075e9.0
-        for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 10:57:22 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-42816ca782dso454775e9.2
+        for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 10:59:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723658241; x=1724263041; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1723658397; x=1724263197; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=HnUwdGhfSZGHxuMeMqzleyP++rz6g7MwzjmvPDN+MAg=;
-        b=RoiFmCzi1b2j0+fmnuQgGsaW4TTH0xeHiNXkAyYwfuQD16xk3K7SUvCjQN08nrT9p/
-         xohtWhWsYLFW1kF8Xgz5oxkkdyMyYZsmU04ZzhHUZBlbqkqwnEG2G60p/b/DuspSNn3b
-         mem1S0ExBAy98PDXF7AyjazFIfIVWpC9mtkBH+t7mmobeBD3f84XCYEdElvafURjewlm
-         ab5e6fegC2IVnWdKAc3EzlNwAEPfyPaL+lvCMLuHUCs6giCF2qlm/GTnHjnZAVUb1z3X
-         Py8XyH4CJ2mwbeks0iYQvLj908JGKmnPxQtgJoiJNRMMtlujdQEnbrTgjfjy+upJeB44
-         chtQ==
+        bh=e+0+18kAd1ntL3CjGet64KYdk8UF+VMULzQLsO5d54Y=;
+        b=xLhnetR55buFiABKFeBzWOcMjZ8dTUU/qL86wAkRHXLEl/4PIe4rMXbXDThQJPw+Oe
+         Llovii2JIP7UGH3shLUXZXMauOEiuW+BIbg9ZPB2nMaPEp7iPduCQFCbenZYhtkdNCly
+         0a86I1TiFFjb4xuJvv1fV3j5P4irtDXazo3YJvXRKW2lvcBzmPmthDM/pL3ig75HJmwC
+         GRwRh17Nat0v3HQ3DxwsY2FuniP6T/kxD7gKESugofxEvCFUuTII9EkB+SzNqwKQ3T93
+         NtpU3T5W1Q1ME3+wmIZtNng5S0SOcvYu7HHvfP0RuvoDCGtRFaTSRJg2TZzydOBjWJ1J
+         2zvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723658241; x=1724263041;
+        d=1e100.net; s=20230601; t=1723658397; x=1724263197;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HnUwdGhfSZGHxuMeMqzleyP++rz6g7MwzjmvPDN+MAg=;
-        b=HJTHfHOgcCiwSNyMPYgUiwzhS+jGJJ+1z4C+wdrZxwyMHJZkzF1sh4B0kvHAhHwi7f
-         j2dEikRkPLnpcnUx1u2oxfPUFy2mFCv375wGN+b3seQ/mfuFAqlO7OpS21YF9NAAsakp
-         CL/ar/E4dl0t/oIOSGCtiyLEyqxQ8vk9V6o37UOMw27algUoGEJla4d+PiXJGwa3CTwS
-         JX0/RNzDUa902/v8iAmZLaL51k9HNIG6SlzACu3elXHDdsPKTXTKu12v9uI5Q/pMoWzi
-         HwKtn+NYXPOxwYypSPZdf7nCJuBpJwQM5AZ8opXONRHtX0OeyecfHt9S6pZk4s5K4mOE
-         RoVA==
-X-Forwarded-Encrypted: i=1; AJvYcCUIi7yEa66Zg3TPq1yf1Z9SVRP2IVP1Ym5ZsjDokeNR6id/hRbOrbKvM4THW/mDAeT2uLBpJgCeXNBywN4MQmw5TjKhbL4gdx4=
-X-Gm-Message-State: AOJu0YxdHN3yXSnokPqkZqcCdtdVUPFzNWfvE5ZVTGKc5EBbez5KkjoE
-	OUvvHUKi2r0xx3kUJBmAZJhzPONSn9AjBlECh8NSkyeepbvP9/7QQ+Ymy3Fa4U4=
-X-Google-Smtp-Source: AGHT+IGohuyYGGk60HZbxQ/ROWUPTaq5Wi5UopTp8W5NYw+7mjHHwwWxgpEiJsSVNDzahS1qQVmMhQ==
-X-Received: by 2002:a5d:4850:0:b0:369:b7e3:497c with SMTP id ffacd0b85a97d-3717775fb8fmr2431134f8f.1.1723658240825;
-        Wed, 14 Aug 2024 10:57:20 -0700 (PDT)
+        bh=e+0+18kAd1ntL3CjGet64KYdk8UF+VMULzQLsO5d54Y=;
+        b=r7FfVW7UT/DKL7bKR7ZiYsmv/q5GWSvAW6S0cuPVKE018dzphwTvc/XZGCuiLIGGYY
+         xaIpIKOlhDNNaQpQLMEqHYQ1eHxlXcfsKuYKqHxzzkTSggIAv11jeHodmpOADNtRQZ1D
+         3Ba0gH0a/hDcaRtIHN5vRq3r4sbYrXB0U4C1miCwyGQOjkQjr0TOgLoISdpLt7O0YMNW
+         eqECAcTqiBQ6m1oNtn1eKgN4upREngxGIBSSkNzdy+VIR5N8xq9vvHXh2rWFRYs87tAq
+         /WtnXVSV5J2kGe391xZUPSXWOF+lax3Ak4XHHQDOAkuqay0Lxg3GwjWTk74yG34aln1+
+         kdJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWpF+F0YgM3z1XqlddkxlFH0vZmQ6TTYPJ/PHr+Op3+tMfiARiZekyRq7AAbElql9NSPui1cpVk1NC5fvYY4UxY4WFuJsWb/RI=
+X-Gm-Message-State: AOJu0YyHKdOf6UQyTeh+qNlQ0ob8AhAj+Vf93sC01elV3h8oStRLvkr5
+	L/txUimb+EjwhfYGLXLctWVv7llQb2oahOz8n6TsFZS0GZD7WJnO/u9RHd9t1bI=
+X-Google-Smtp-Source: AGHT+IHv1VcCnmzCbrSFCmf9TtFXDTUTp/2jtxGlOatGsJT2eISwIhRuCQHwm7HglJURgLzYox3Nqg==
+X-Received: by 2002:a7b:c385:0:b0:429:d43e:db9e with SMTP id 5b1f17b1804b1-429dd26701dmr20162985e9.36.1723658396976;
+        Wed, 14 Aug 2024 10:59:56 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.215.209])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3717314e38bsm4654498f8f.97.2024.08.14.10.57.19
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4c93714asm13400232f8f.27.2024.08.14.10.59.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Aug 2024 10:57:20 -0700 (PDT)
-Message-ID: <768894bb-a12a-4919-9b4d-b579c153a556@linaro.org>
-Date: Wed, 14 Aug 2024 19:57:18 +0200
+        Wed, 14 Aug 2024 10:59:56 -0700 (PDT)
+Message-ID: <64af1408-d3c8-495b-a69c-7a0718eadfc4@linaro.org>
+Date: Wed, 14 Aug 2024 19:59:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,8 +77,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/9] memory: samsung: exynos5422-dmc: use scoped device
- node handling to simplify error paths
+Subject: Re: [PATCH 4/9] memory: stm32-fmc2-ebi: simplify with scoped for each
+ OF child loop
 To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>,
  Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -94,8 +94,8 @@ Cc: Krzysztof Kozlowski <krzk@kernel.org>,
  linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
  linux-tegra@vger.kernel.org
 References: <20240812-cleanup-h-of-node-put-memory-v1-0-5065a8f361d2@linaro.org>
- <20240812-cleanup-h-of-node-put-memory-v1-3-5065a8f361d2@linaro.org>
- <20240814174246.00007e4e@Huawei.com>
+ <20240812-cleanup-h-of-node-put-memory-v1-4-5065a8f361d2@linaro.org>
+ <20240814174502.00003b2c@Huawei.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -142,61 +142,51 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240814174246.00007e4e@Huawei.com>
+In-Reply-To: <20240814174502.00003b2c@Huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 14/08/2024 18:42, Jonathan Cameron wrote:
-> On Mon, 12 Aug 2024 15:33:57 +0200
+On 14/08/2024 18:45, Jonathan Cameron wrote:
+> On Mon, 12 Aug 2024 15:33:58 +0200
 > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
->> Obtain the device node reference with scoped/cleanup.h to reduce error
->> handling and make the code a bit simpler.
+>> Use scoped for_each_available_child_of_node_scoped() when iterating over
+>> device nodes to make code a bit simpler.
 >>
 >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Trivial comments inline
+> Might be worth using dev_err_probe() in here. Otherwise LGTM
 > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
 >> ---
->>  drivers/memory/samsung/exynos5422-dmc.c | 31 +++++++++++--------------------
->>  1 file changed, 11 insertions(+), 20 deletions(-)
+>>  drivers/memory/stm32-fmc2-ebi.c | 8 +-------
+>>  1 file changed, 1 insertion(+), 7 deletions(-)
 >>
->> diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
->> index da7ecd921c72..d3ae4d95a3ba 100644
->> --- a/drivers/memory/samsung/exynos5422-dmc.c
->> +++ b/drivers/memory/samsung/exynos5422-dmc.c
->> @@ -4,6 +4,7 @@
->>   * Author: Lukasz Luba <l.luba@partner.samsung.com>
->>   */
->>  
->> +#include <linux/cleanup.h>
->>  #include <linux/clk.h>
->>  #include <linux/devfreq.h>
->>  #include <linux/devfreq-event.h>
->> @@ -1176,10 +1177,10 @@ static int of_get_dram_timings(struct exynos5_dmc *dmc)
+>> diff --git a/drivers/memory/stm32-fmc2-ebi.c b/drivers/memory/stm32-fmc2-ebi.c
+>> index 1c63eeacd071..7167e1da56d3 100644
+>> --- a/drivers/memory/stm32-fmc2-ebi.c
+>> +++ b/drivers/memory/stm32-fmc2-ebi.c
+>> @@ -1573,29 +1573,25 @@ static int stm32_fmc2_ebi_setup_cs(struct stm32_fmc2_ebi *ebi,
+>>  static int stm32_fmc2_ebi_parse_dt(struct stm32_fmc2_ebi *ebi)
 >>  {
->>  	int ret = 0;
->>  	int idx;
->> -	struct device_node *np_ddr;
-> 
-> This would definitely benefit from a
-> struct device *dev = dmc->dev;
-
-True, I'll do it in separate patch.
-
-> 
->>  	u32 freq_mhz, clk_period_ps;
+>>  	struct device *dev = ebi->dev;
+>> -	struct device_node *child;
+>>  	bool child_found = false;
+>>  	u32 bank;
+>>  	int ret;
 >>  
->> -	np_ddr = of_parse_phandle(dmc->dev->of_node, "device-handle", 0);
->> +	struct device_node *np_ddr __free(device_node) = of_parse_phandle(dmc->dev->of_node,
->> +									  "device-handle", 0);
-> Trivial. Maybe consider the wrap suggested in patch 1.
->> +	struct device_node *np_ddr __free(device_node) =
-> 		of_parse_phandle(dmc->dev->of_node, "device-handle", 0);
+>> -	for_each_available_child_of_node(dev->of_node, child) {
+>> +	for_each_available_child_of_node_scoped(dev->of_node, child) {
+>>  		ret = of_property_read_u32(child, "reg", &bank);
+>>  		if (ret) {
+>>  			dev_err(dev, "could not retrieve reg property: %d\n",
+>>  				ret);
+>> -			of_node_put(child);
+>>  			return ret;
+> 			return dev_err_probe(dev, "could not retrieve reg property\n");
+> perhaps?
 
-Ack.
-
-
+New patch for that... but just mind that deferred probe cannot happen
+here, so only part of dev_err_probe() benefits would be used.
 
 Best regards,
 Krzysztof
