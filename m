@@ -1,235 +1,126 @@
-Return-Path: <linux-pm+bounces-12223-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12224-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58053952294
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 21:18:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94EF39522FB
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 21:58:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CD221C20A0C
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 19:18:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2FE1DB21965
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 19:58:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF4621BE254;
-	Wed, 14 Aug 2024 19:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A231BF319;
+	Wed, 14 Aug 2024 19:58:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L+80N21N"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hgmn2X+m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78CE21B9B3B;
-	Wed, 14 Aug 2024 19:18:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C281AED23
+	for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 19:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723663118; cv=none; b=UCb4Bfj8BMLAf1EeNC2WBuRPwMvexoLfkoWZsohp/QvHN8XXgGqRzzgt+B6bfrlwIILsa6gPqlWQcDrmMrCoR/jf9RuYQjI1yaBerSth1VY/cG6pQiZjJK87rcJPNtlZ2q1kkItMaEsrSFVQBpS4ATsRTtZ/yzFLZktg0uVSktY=
+	t=1723665511; cv=none; b=jZLXbJaKINUDyHcUkuAKoBd0dDNGpPn6Lmwcag+ot0sXF4VMEyTrYGcLX+u7ZtajU3SGqP4+py5iDDzxS7SPYlxFFzWXqV+0pZY/7V2MFAX7hUTySHXUxCmCPnO4WRRU6wOUSUIxyyvW8lRf/KZAnhHIGr4S4IOa/KtkjJ5Fgns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723663118; c=relaxed/simple;
-	bh=cQa6M2yYnKaPZN5mMN1d7akIILL1+8k8X8jgMt0zx1o=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=pXJ4BOO4ocijB7ANNloJtZ6Tdy32HZ6mVr+mTQRdmhQUG0C1eAefuShLcq9OdeIOsQzVL1Et1hZGKuvk/6FB/VH6zMFR5IWsGYddGyQd+vzKjnErnnHeUZy4OzUhWtE2XOyh+HVMX1+xvKDwfLNuYjbl10K/Nrj4mGxVk1wEnyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L+80N21N; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723663116; x=1755199116;
-  h=date:from:to:cc:subject:message-id;
-  bh=cQa6M2yYnKaPZN5mMN1d7akIILL1+8k8X8jgMt0zx1o=;
-  b=L+80N21N9kh9eHPn23qQ8BO1fPB7oIzENY3dyMH7xxBkgiJmoxZpcMce
-   PeVFJnfGKLpHVOz5Cn6kg0dW5/Nb/7758BIgUUjyJFzaBd/FyaSNMptR8
-   +FSOzHO+y6avTiTd4MSox2smwRWabxieH9YN21efQBDaLden7il9vE+hl
-   tRg1mafS+3gRX0QjmHFHSIjpdtu7obD9EVmswG4P9Ezs7CLtufn55xGvJ
-   n/sq55Ll+YTIb5S1kLKg02T6b2zpkEVoPd9xvUBnOGWKdOhA2EK5DKzDT
-   93YVc5fhFkR+cVctfOoBZHsLkwKq0cP4vND7uWbk3czPMFfLpHV5Sv3jd
-   A==;
-X-CSE-ConnectionGUID: 9HF7uh71SfONu+ETNevyjg==
-X-CSE-MsgGUID: A5IZUiGCTfqErDjhRdHV8A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11164"; a="22071118"
-X-IronPort-AV: E=Sophos;i="6.10,146,1719903600"; 
-   d="scan'208";a="22071118"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2024 12:18:36 -0700
-X-CSE-ConnectionGUID: PAfo9a3ER+qy5z40IGWR1w==
-X-CSE-MsgGUID: SaMHSnOuSlW36r9VpNRZGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,146,1719903600"; 
-   d="scan'208";a="96618424"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 14 Aug 2024 12:18:34 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1seJVw-0002l8-03;
-	Wed, 14 Aug 2024 19:18:32 +0000
-Date: Thu, 15 Aug 2024 03:17:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 6b6b6fb5ac6f22cb7858ab79e7d93106efaf72a6
-Message-ID: <202408150342.gID3e3PA-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1723665511; c=relaxed/simple;
+	bh=v6yCN++aTWIn2HL04PVf4IrdFZo3E5raTygn8B9Fh9k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HmHo+CufyL3xy6/iJOlIPCO8VY+xYSBLcu6ng2MSR2aXDI6Cp8Gn3uxSqRS90ODmyohZDn3cw9h0Bja2XdQPPE0F12Ne/D18zRmkgI5l26RMWMPHIXg8e1rxFJXdCoEqhtPKmDY2f9Wj3UH3/B0JoggNET8Gr+XL/GfNWjNrq6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Hgmn2X+m; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4281c164408so1019595e9.1
+        for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 12:58:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1723665508; x=1724270308; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/4hCGRVnEuxwiy7oU4DBiRNiiuMGKwjKKo5OtTueCic=;
+        b=Hgmn2X+mgImXg7PDDf71MjzTpzcRO8nSqKN3eXuP1Jfz0NA8MIzG3wyT4Y302KKNGU
+         Yo5/lSjjaCqwMCF27bdvPHheNnh0T0YJsQNlEWfNjxiXY/oKtP2jM6ikFOVjxfCiLqKi
+         xjyZY7PnRT6bi3CpRvsrpFs+v4EZGvPqpNA+WmDoo7tUynKnoyn32z+XLZv+2R/MR/dm
+         AKrD4jvuFUX5K5PUaQdtM3yI0KCNkkxI04/C3OdqtBIfgE34GU5i/nDYBs7mEjHn6yGf
+         w5t9cqjjpEcMuZlBgVzXMvKNUEv+uW19MwnlnfEGv9M/PhdFbiGX5mArzgE+G61bd5rM
+         7RBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723665508; x=1724270308;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/4hCGRVnEuxwiy7oU4DBiRNiiuMGKwjKKo5OtTueCic=;
+        b=lQrwUBU36UOS0VtlT58af/tTUBLgfxB/tGzo+Hp0k60l/MsrFxvyNqF+nUz3P6mRZI
+         g7UKcLjgu1V1w88hO6BBP+YDweZ/fYTHxlT+fL2htAZRfp51CWOo3wSl9jX7ZPxJyQGK
+         gH/t/H/VYixPUJWR6rANtcsJgn36FK8Zoy/e+D7hcGnM/mm4ju2CSeBbbd3BxyOTplPh
+         2jTR1YqPCW3nmdLgCc3EK0QTBxESbuQAOOv+fhQN5EJtLH/ULpbSsYWsh96F0V+dn1pF
+         TbvAgwfcAnhK6Vfo71bM4lihtKzzvqN1DMzU4nns+nBu5NKsRA1sg/LZwwJsung4IZ2i
+         U6dg==
+X-Forwarded-Encrypted: i=1; AJvYcCUgAyHT2cbE96eTuq2zUcmplej6kEgNrqvh73z+o3mNvws6N0Q7sIh7iMslaBY3+wJWj1JDSyvd0P/MphNGPgDgCao6VUXTCvE=
+X-Gm-Message-State: AOJu0YxJQLmv3HrwsP++g0euM+/jDh/6PQQ9Qtg6KoybCuAqY5d3rgws
+	r/UEnhk+rZerZQxKoK9gNhJcAC4jhxAkZtrpfjLz1gfCWzV8O9c+z6UXCy53Yl4=
+X-Google-Smtp-Source: AGHT+IE3BzsR7UafBAgIAWRDl6haElUv/rAMn14EgEbQx6m7ZWfdFr9PhRc5eYrYxjkWsVukGaOw0w==
+X-Received: by 2002:a05:6000:2a7:b0:368:319c:9a77 with SMTP id ffacd0b85a97d-37177783998mr2835327f8f.29.1723665507702;
+        Wed, 14 Aug 2024 12:58:27 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.215.209])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4cfeef76sm13482263f8f.59.2024.08.14.12.58.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Aug 2024 12:58:27 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	stable@vger.kernel.org
+Subject: [PATCH 1/3] thermal: of: Fix OF node leak in thermal_of_trips_init() error path
+Date: Wed, 14 Aug 2024 21:58:21 +0200
+Message-ID: <20240814195823.437597-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 6b6b6fb5ac6f22cb7858ab79e7d93106efaf72a6  Merge branch 'thermal-core-testing' into bleeding-edge
+Terminating for_each_child_of_node() loop requires dropping OF node
+reference, so bailing out after thermal_of_populate_trip() error misses
+this.  Solve the OF node reference leak with scoped
+for_each_child_of_node_scoped().
 
-elapsed time: 1447m
+Fixes: d0c75fa2c17f ("thermal/of: Initialize trip points separately")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/thermal/thermal_of.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-configs tested: 141
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc-13.3.0
-alpha                            allyesconfig   gcc-13.3.0
-arc                              allmodconfig   gcc-13.2.0
-arc                               allnoconfig   gcc-13.2.0
-arc                              allyesconfig   gcc-13.2.0
-arc                   randconfig-001-20240814   gcc-13.2.0
-arc                   randconfig-002-20240814   gcc-13.2.0
-arm                              allmodconfig   gcc-14.1.0
-arm                               allnoconfig   clang-20
-arm                              allyesconfig   gcc-14.1.0
-arm                   randconfig-001-20240814   clang-20
-arm                   randconfig-002-20240814   clang-20
-arm                   randconfig-003-20240814   clang-20
-arm                   randconfig-004-20240814   clang-20
-arm64                            allmodconfig   clang-20
-arm64                             allnoconfig   gcc-14.1.0
-arm64                 randconfig-001-20240814   clang-20
-arm64                 randconfig-002-20240814   gcc-14.1.0
-arm64                 randconfig-003-20240814   gcc-14.1.0
-arm64                 randconfig-004-20240814   clang-20
-csky                              allnoconfig   gcc-14.1.0
-csky                  randconfig-001-20240814   gcc-14.1.0
-csky                  randconfig-002-20240814   gcc-14.1.0
-hexagon                          allmodconfig   clang-20
-hexagon                           allnoconfig   clang-20
-hexagon                          allyesconfig   clang-20
-hexagon               randconfig-001-20240814   clang-16
-hexagon               randconfig-002-20240814   clang-14
-i386                             allmodconfig   gcc-12
-i386                              allnoconfig   gcc-12
-i386                             allyesconfig   gcc-12
-i386         buildonly-randconfig-001-20240814   clang-18
-i386         buildonly-randconfig-002-20240814   clang-18
-i386         buildonly-randconfig-003-20240814   clang-18
-i386         buildonly-randconfig-004-20240814   clang-18
-i386         buildonly-randconfig-005-20240814   gcc-12
-i386         buildonly-randconfig-006-20240814   gcc-12
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240814   clang-18
-i386                  randconfig-002-20240814   gcc-12
-i386                  randconfig-003-20240814   gcc-12
-i386                  randconfig-004-20240814   clang-18
-i386                  randconfig-005-20240814   clang-18
-i386                  randconfig-006-20240814   clang-18
-i386                  randconfig-011-20240814   gcc-12
-i386                  randconfig-012-20240814   gcc-12
-i386                  randconfig-013-20240814   clang-18
-i386                  randconfig-014-20240814   gcc-11
-i386                  randconfig-015-20240814   gcc-12
-i386                  randconfig-016-20240814   gcc-12
-loongarch                        allmodconfig   gcc-14.1.0
-loongarch                         allnoconfig   gcc-14.1.0
-loongarch             randconfig-001-20240814   gcc-14.1.0
-loongarch             randconfig-002-20240814   gcc-14.1.0
-m68k                             allmodconfig   gcc-14.1.0
-m68k                              allnoconfig   gcc-14.1.0
-m68k                             allyesconfig   gcc-14.1.0
-microblaze                       allmodconfig   gcc-14.1.0
-microblaze                        allnoconfig   gcc-14.1.0
-microblaze                       allyesconfig   gcc-14.1.0
-mips                              allnoconfig   gcc-14.1.0
-nios2                             allnoconfig   gcc-14.1.0
-nios2                 randconfig-001-20240814   gcc-14.1.0
-nios2                 randconfig-002-20240814   gcc-14.1.0
-openrisc                          allnoconfig   gcc-14.1.0
-openrisc                         allyesconfig   gcc-14.1.0
-openrisc                            defconfig   gcc-14.1.0
-parisc                           allmodconfig   gcc-14.1.0
-parisc                            allnoconfig   gcc-14.1.0
-parisc                           allyesconfig   gcc-14.1.0
-parisc                              defconfig   gcc-14.1.0
-parisc                randconfig-001-20240814   gcc-14.1.0
-parisc                randconfig-002-20240814   gcc-14.1.0
-powerpc                           allnoconfig   gcc-14.1.0
-powerpc                          allyesconfig   clang-20
-powerpc               randconfig-002-20240814   clang-20
-powerpc               randconfig-003-20240814   gcc-14.1.0
-powerpc64             randconfig-001-20240814   clang-20
-powerpc64             randconfig-002-20240814   clang-15
-powerpc64             randconfig-003-20240814   clang-20
-riscv                            allmodconfig   clang-20
-riscv                             allnoconfig   gcc-14.1.0
-riscv                            allyesconfig   clang-20
-riscv                               defconfig   clang-20
-riscv                 randconfig-001-20240814   gcc-14.1.0
-riscv                 randconfig-002-20240814   clang-20
-s390                             allmodconfig   clang-20
-s390                              allnoconfig   clang-20
-s390                             allyesconfig   gcc-14.1.0
-s390                                defconfig   clang-20
-s390                  randconfig-001-20240814   gcc-14.1.0
-s390                  randconfig-002-20240814   gcc-14.1.0
-sh                               allmodconfig   gcc-14.1.0
-sh                                allnoconfig   gcc-14.1.0
-sh                               allyesconfig   gcc-14.1.0
-sh                                  defconfig   gcc-14.1.0
-sh                    randconfig-001-20240814   gcc-14.1.0
-sh                    randconfig-002-20240814   gcc-14.1.0
-sparc                            allmodconfig   gcc-14.1.0
-sparc64                             defconfig   gcc-14.1.0
-sparc64               randconfig-001-20240814   gcc-14.1.0
-sparc64               randconfig-002-20240814   gcc-14.1.0
-um                               allmodconfig   clang-20
-um                                allnoconfig   clang-17
-um                               allyesconfig   gcc-12
-um                                  defconfig   clang-20
-um                             i386_defconfig   gcc-12
-um                    randconfig-001-20240814   clang-20
-um                    randconfig-002-20240814   clang-20
-um                           x86_64_defconfig   clang-15
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64       buildonly-randconfig-001-20240814   clang-18
-x86_64       buildonly-randconfig-002-20240814   gcc-12
-x86_64       buildonly-randconfig-003-20240814   clang-18
-x86_64       buildonly-randconfig-004-20240814   clang-18
-x86_64       buildonly-randconfig-005-20240814   gcc-12
-x86_64       buildonly-randconfig-006-20240814   clang-18
-x86_64                              defconfig   gcc-11
-x86_64                randconfig-001-20240814   clang-18
-x86_64                randconfig-002-20240814   gcc-12
-x86_64                randconfig-003-20240814   gcc-11
-x86_64                randconfig-004-20240814   gcc-12
-x86_64                randconfig-005-20240814   gcc-12
-x86_64                randconfig-006-20240814   gcc-12
-x86_64                randconfig-011-20240814   clang-18
-x86_64                randconfig-012-20240814   clang-18
-x86_64                randconfig-013-20240814   gcc-11
-x86_64                randconfig-014-20240814   clang-18
-x86_64                randconfig-015-20240814   gcc-12
-x86_64                randconfig-016-20240814   clang-18
-x86_64                randconfig-071-20240814   clang-18
-x86_64                randconfig-072-20240814   clang-18
-x86_64                randconfig-073-20240814   clang-18
-x86_64                randconfig-074-20240814   clang-18
-x86_64                randconfig-075-20240814   gcc-12
-x86_64                randconfig-076-20240814   clang-18
-x86_64                          rhel-8.3-rust   clang-18
-xtensa                            allnoconfig   gcc-14.1.0
-xtensa                randconfig-001-20240814   gcc-14.1.0
-xtensa                randconfig-002-20240814   gcc-14.1.0
-
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index aa34b6e82e26..30f8d6e70484 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -125,7 +125,7 @@ static int thermal_of_populate_trip(struct device_node *np,
+ static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *ntrips)
+ {
+ 	struct thermal_trip *tt;
+-	struct device_node *trips, *trip;
++	struct device_node *trips;
+ 	int ret, count;
+ 
+ 	trips = of_get_child_by_name(np, "trips");
+@@ -150,7 +150,7 @@ static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *n
+ 	*ntrips = count;
+ 
+ 	count = 0;
+-	for_each_child_of_node(trips, trip) {
++	for_each_child_of_node_scoped(trips, trip) {
+ 		ret = thermal_of_populate_trip(trip, &tt[count++]);
+ 		if (ret)
+ 			goto out_kfree;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
