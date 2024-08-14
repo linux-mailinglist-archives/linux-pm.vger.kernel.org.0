@@ -1,143 +1,184 @@
-Return-Path: <linux-pm+bounces-12215-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12216-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 924F295208A
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 18:55:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DE179520F3
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 19:19:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C33CB2290D
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 16:55:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6C4B1F22D32
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 17:18:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07E871BA897;
-	Wed, 14 Aug 2024 16:55:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9447D1BC075;
+	Wed, 14 Aug 2024 17:18:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KQMkLTO+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DA31B1409;
-	Wed, 14 Aug 2024 16:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2FE1BC072;
+	Wed, 14 Aug 2024 17:18:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723654548; cv=none; b=WNX1hD1NWmzGLxOJ65KnIiYHPpMOdOMeUuLI4YygjbgC6GO3ixZ4iuHav1Tsh8Tj7KOj4Qd7wa4eDQEfEO1ADHJJowilQK+M7x8knntsYBHC5HuEEMMyDeFu9k8WXPeQ0ulfFZBphvGx6THKrekUyOy2l08dKJqdfKxNM7nRU4A=
+	t=1723655929; cv=none; b=TUezd+srBGNljdNXZz7hlXRsJVMgixacxC0EujZm8uhJ6e5mKbkt93d3EK/eBk7263CNaUW3dZ+TjifgYxGdoKNL8bwvDcpcpZXIn3lmFqkmxa/cGgPCcq5+9X1sZzmVU/i8IPiJmHiG3+6zI/ZZ7WDJKMr63hLE6Z0r7Gev7uU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723654548; c=relaxed/simple;
-	bh=8ky1iVr+QEbGU+/PZctjOx0svo6AKnLXMM6XA2nqJDc=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YP/cC8ZBgPJDRL/S2fqFTkdjtFiwlwaQb2q5novPk/2xYHPdxPhEjksRAAh2/+oDPvbrftgT83j985if5asVWJY0AC4j/rD5tiUjP40DYst/X0n81HqcY3+ESt5Sq1dBO1UnyoWuX3spKkzcwWf25aXPRqwqEWNy2x/GQmDXfTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WkZ7h5yf1z6K9Jv;
-	Thu, 15 Aug 2024 00:53:04 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7930B1400CD;
-	Thu, 15 Aug 2024 00:55:43 +0800 (CST)
-Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 14 Aug
- 2024 17:55:42 +0100
-Date: Wed, 14 Aug 2024 17:55:41 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC: Krzysztof Kozlowski <krzk@kernel.org>, Nicolas Ferre
-	<nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue
-	<alexandre.torgue@foss.st.com>, Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>, Santosh Shilimkar
-	<ssantosh@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<linux-samsung-soc@vger.kernel.org>,
-	<linux-stm32@st-md-mailman.stormreply.com>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 9/9] memory: ti-aemif: simplify with scoped for each OF
- child loop
-Message-ID: <20240814175541.00002023@Huawei.com>
-In-Reply-To: <20240812-cleanup-h-of-node-put-memory-v1-9-5065a8f361d2@linaro.org>
-References: <20240812-cleanup-h-of-node-put-memory-v1-0-5065a8f361d2@linaro.org>
-	<20240812-cleanup-h-of-node-put-memory-v1-9-5065a8f361d2@linaro.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1723655929; c=relaxed/simple;
+	bh=JAX+m4fppNgSQ/+GhddMYohO4O4t5T3sNGxMKK7zuSc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dqXRZ/5fQq/YGlIUIm4MC48X9/Jve7jP9b/sKCL5IdBhsV13ne+qgzxtOos3wZAeE1Du005QJvFdkFssT6eW1fTEffgB0LgNkVCoMvKcrUdLJ2kApK+xc6FtcCUGD0Uel3t6nuxO5z3E6CgGJLDtXfdq0rcQIwHwyHtMm0l6zw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KQMkLTO+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0C1DC4AF0B;
+	Wed, 14 Aug 2024 17:18:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723655928;
+	bh=JAX+m4fppNgSQ/+GhddMYohO4O4t5T3sNGxMKK7zuSc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=KQMkLTO+GrZza97ONRv7qao/005tKEIOtXRv85kDSL6S2k3RrmjviX1hO1GLa1+kM
+	 wDdbvnH93u2oFc6dnuXGEFt9scwU9PSUAhsprcIfu6qN+hTBNo19RErPvf2/n56+l1
+	 yCv4mR45wIDKykkMRG+k0mrax4qOT/DlKxayB7hdyZh3mXsDpYrN7Nk444vLmqtVCs
+	 dfsZhbc0s3bA0SFm3pqxK3XCYXhRISfyCmvUjL5AK6MCrJJv5J+E1wpAW8XBJX3rDV
+	 qOoKatU1rZDJZY3NEi5WWqyi7R2ZzBf9CVNjzWvOIdo7ZAMH0M9Ze59/LsIJ7UhMEQ
+	 osgUwx4JrEYGA==
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3db165f8211so2572b6e.1;
+        Wed, 14 Aug 2024 10:18:48 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUQrbLaRoEGSGgD6OKI05Hv4pte77OT9GaFCRVx75ZAd9nFUOOgqEAHtSdxOuvCa/PMpg2QbptclUn1B5Y=@vger.kernel.org, AJvYcCWRGbwN80FlCdArMfbVHInecEtdNnB31HxqaySVbHzSBJUzzsOQEyRTZeLcSRaaHCwAfoz/PDJiXNg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWgha0Ib4iGn4j9sayQmwi2BXt3PN3fQj31Iw8NpLKc9BzhTN9
+	Gv1uiw7u9aZh3r+zluJzqCbXMb9aDg0gnD68wCbmjOaYXwD+jLQ7smp6Yk3WEvBg+WQQKuD7HVL
+	K7mECl98DY3lmEoz8Kc9QWB4VQrM=
+X-Google-Smtp-Source: AGHT+IEcPur4ZSNbQqbpwTgvwU44XbV9zRTh9m5di2rNYc+Kr8Hli3o+31uaJek63R9rWQJmXuoHZ9cqVzGZKhITdtU=
+X-Received: by 2002:a05:6870:ac11:b0:25e:dce:491b with SMTP id
+ 586e51a60fabf-26fe59bb7bbmr2475269fac.1.1723655928230; Wed, 14 Aug 2024
+ 10:18:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+References: <1903691.tdWV9SEqCh@rjwysocki.net> <8419356.T7Z3S40VBb@rjwysocki.net>
+ <291044b7-7300-42c2-91e6-fef164482cf3@piie.net>
+In-Reply-To: <291044b7-7300-42c2-91e6-fef164482cf3@piie.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 14 Aug 2024 19:18:36 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h9b2E0meeHGRtRv+=GbsABUs=L4RqAvAZuCksU+uN0cQ@mail.gmail.com>
+Message-ID: <CAJZ5v0h9b2E0meeHGRtRv+=GbsABUs=L4RqAvAZuCksU+uN0cQ@mail.gmail.com>
+Subject: Re: [PATCH v1 3/4] thermal: gov_bang_bang: Add .manage() callback
+To: =?UTF-8?Q?Peter_K=C3=A4stle?= <peter@piie.net>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 12 Aug 2024 15:34:03 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Wed, Aug 14, 2024 at 12:50=E2=80=AFAM Peter K=C3=A4stle <peter@piie.net>=
+ wrote:
+>
+> On 13.08.24 16:27, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > After recent changes, the Bang-bang governor may not adjust the
+> > initial configuration of cooling devices to the actual situation.
+> >
+> > Namely, if a cooling device bound to a certain trip point starts in
+> > the "on" state and the thermal zone temperature is below the threshold
+> > of that trip point, the trip point may never be crossed on the way up
+> > in which case the state of the cooling device will never be adjusted
+> > because the thermal core will never invoke the governor's
+> > .trip_crossed() callback.  [Note that there is no issue if the zone
+> > temperature is at the trip threshold or above it to start with because
+> > .trip_crossed() will be invoked then to indicate the start of thermal
+> > mitigation for the given trip.]
+> >
+> > To address this, add a .manage() callback to the Bang-bang governor
+> > and use it to ensure that all of the thermal instances managed by the
+> > governor have been initialized properly and the states of all of the
+> > cooling devices involved have been adjusted to the current zone
+> > temperature as appropriate.
+> >
+> > Fixes: 530c932bdf75 ("thermal: gov_bang_bang: Use .trip_crossed() inste=
+ad of .throttle()")
+> > Link: https://lore.kernel.org/linux-pm/1bfbbae5-42b0-4c7d-9544-e9885571=
+5294@piie.net/
+> > Cc: 6.10+ <stable@vger.kernel.org> # 6.10+
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> oops, previously sent from wrong email address, here again from correct o=
+ne...
+> Acked-by: Peter K=C3=A4stle <peter@piie.net>
 
-> Use scoped for_each_available_child_of_node_scoped() when iterating over
-> device nodes to make code a bit simpler.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Nothing wrong with this patch, but I think you can add a precusor
-that will make this neater.
+No worries and thanks for the ACKs!
 
-Jonathan
+I gather that they mean that the changes work for you.
 
-> ---
->  drivers/memory/ti-aemif.c | 13 ++++---------
->  1 file changed, 4 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/memory/ti-aemif.c b/drivers/memory/ti-aemif.c
-> index e192db9e0e4b..cd2945d4ec18 100644
-> --- a/drivers/memory/ti-aemif.c
-> +++ b/drivers/memory/ti-aemif.c
-> @@ -330,7 +330,6 @@ static int aemif_probe(struct platform_device *pdev)
->  	int ret = -ENODEV;
->  	struct device *dev = &pdev->dev;
->  	struct device_node *np = dev->of_node;
-> -	struct device_node *child_np;
->  	struct aemif_device *aemif;
->  	struct aemif_platform_data *pdata;
->  	struct of_dev_auxdata *dev_lookup;
-> @@ -374,12 +373,10 @@ static int aemif_probe(struct platform_device *pdev)
->  		 * functions iterate over these nodes and update the cs data
->  		 * array.
->  		 */
-> -		for_each_available_child_of_node(np, child_np) {
-> +		for_each_available_child_of_node_scoped(np, child_np) {
->  			ret = of_aemif_parse_abus_config(pdev, child_np);
-> -			if (ret < 0) {
-> -				of_node_put(child_np);
-> +			if (ret < 0)
->  				goto error;
-I'd precede this patch with use of
-devm_clk_get_enabled()
-
-That would avoid what looks like potential mixed devm and not issues
-and let you return here.
-
-
-> -			}
->  		}
->  	} else if (pdata && pdata->num_abus_data > 0) {
->  		for (i = 0; i < pdata->num_abus_data; i++, aemif->num_cs++) {
-> @@ -402,13 +399,11 @@ static int aemif_probe(struct platform_device *pdev)
->  	 * child will be probed after the AEMIF timing parameters are set.
->  	 */
->  	if (np) {
-> -		for_each_available_child_of_node(np, child_np) {
-> +		for_each_available_child_of_node_scoped(np, child_np) {
->  			ret = of_platform_populate(child_np, NULL,
->  						   dev_lookup, dev);
-> -			if (ret < 0) {
-> -				of_node_put(child_np);
-> +			if (ret < 0)
->  				goto error;
-> -			}
->  		}
->  	} else if (pdata) {
->  		for (i = 0; i < pdata->num_sub_devices; i++) {
-> 
-
+> > ---
+> >   drivers/thermal/gov_bang_bang.c |   30 ++++++++++++++++++++++++++++++
+> >   1 file changed, 30 insertions(+)
+> >
+> > Index: linux-pm/drivers/thermal/gov_bang_bang.c
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/drivers/thermal/gov_bang_bang.c
+> > +++ linux-pm/drivers/thermal/gov_bang_bang.c
+> > @@ -26,6 +26,7 @@ static void bang_bang_set_instance_targe
+> >        * when the trip is crossed on the way down.
+> >        */
+> >       instance->target =3D target;
+> > +     instance->initialized =3D true;
+> >
+> >       dev_dbg(&instance->cdev->device, "target=3D%ld\n", instance->targ=
+et);
+> >
+> > @@ -80,8 +81,37 @@ static void bang_bang_control(struct the
+> >       }
+> >   }
+> >
+> > +static void bang_bang_manage(struct thermal_zone_device *tz)
+> > +{
+> > +     const struct thermal_trip_desc *td;
+> > +     struct thermal_instance *instance;
+> > +
+> > +     for_each_trip_desc(tz, td) {
+> > +             const struct thermal_trip *trip =3D &td->trip;
+> > +
+> > +             if (tz->temperature >=3D td->threshold ||
+> > +                 trip->temperature =3D=3D THERMAL_TEMP_INVALID ||
+> > +                 trip->type =3D=3D THERMAL_TRIP_CRITICAL ||
+> > +                 trip->type =3D=3D THERMAL_TRIP_HOT)
+> > +                     continue;
+> > +
+> > +             /*
+> > +              * If the initial cooling device state is "on", but the z=
+one
+> > +              * temperature is not above the trip point, the core will=
+ not
+> > +              * call bang_bang_control() until the zone temperature re=
+aches
+> > +              * the trip point temperature which may be never.  In tho=
+se
+> > +              * cases, set the initial state of the cooling device to =
+0.
+> > +              */
+> > +             list_for_each_entry(instance, &tz->thermal_instances, tz_=
+node) {
+> > +                     if (!instance->initialized && instance->trip =3D=
+=3D trip)
+> > +                             bang_bang_set_instance_target(instance, 0=
+);
+> > +             }
+> > +     }
+> > +}
+> > +
+> >   static struct thermal_governor thermal_gov_bang_bang =3D {
+> >       .name           =3D "bang_bang",
+> >       .trip_crossed   =3D bang_bang_control,
+> > +     .manage         =3D bang_bang_manage,
+> >   };
+> >   THERMAL_GOVERNOR_DECLARE(thermal_gov_bang_bang);
+> >
+> >
+> >
+>
 
