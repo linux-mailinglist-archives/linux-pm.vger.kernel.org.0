@@ -1,172 +1,327 @@
-Return-Path: <linux-pm+bounces-12237-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12238-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57F37952458
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 22:57:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1221C95248F
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 23:13:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CED171F288BD
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 20:57:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE5C0287EB1
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 21:13:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEC0A1BB6BE;
-	Wed, 14 Aug 2024 20:57:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4551C8233;
+	Wed, 14 Aug 2024 21:13:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BLqbMs3A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sxb1plsmtpa01-03.prod.sxb1.secureserver.net (sxb1plsmtpa01-03.prod.sxb1.secureserver.net [188.121.53.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625721B86C1
-	for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 20:57:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.121.53.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E420210FB;
+	Wed, 14 Aug 2024 21:13:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723669069; cv=none; b=euE4v7ZHQKOhl32sqNVY9+QVy7J66UzgygTwH9+T7AJ2xMDZ17eGCqt3lgqyCsJrZZ5AZ7hi73WRJhUiXqDDJ0Ml8Onh0mDlSYFxDlc+Gc0L3tlLfAExcsdatqi+OYf2I0hbUPLTZpt8xH9UmTuF227z8uVWGEC9DhyAVnzHxvQ=
+	t=1723669986; cv=none; b=R1E9tykLlvCo2DvCdYnD5enDbdL1u/oa9IwviVDKU9cSXFZuIs+sFaK1hBq3azMPUhFLqvvMuYCOLUFmr4Ktp7ml8+L4ckWJsh5frB8gFlDAlUwT7fCJVqml+KGbiok/tTe4lz7IG+3WESqwF3l6N9ZNGJgVsHZvoxo+z9uHatQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723669069; c=relaxed/simple;
-	bh=3LXwlSHa9sQcULrGFCR8yyHdBnsZLnr0aNpVHqdosak=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qsjSDuOE2kEXmcDoFlvZSBMhqsEB7EFgn6QDOOhIkCl41uknh9Uk9AcbhBAisGyaqdxi3gI++DNZNO0e6jaJgbZsx8xU5h4YYICdOptaQlPFo+hBM75OdYzXOZYi2Qbjj13+ZffWUAGR7cu4S/lgGtMaZwnNuwD+AmPJeMZIoWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=piie.net; spf=pass smtp.mailfrom=piie.net; arc=none smtp.client-ip=188.121.53.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=piie.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piie.net
-Received: from [192.168.1.27] ([109.90.180.58])
-	by :SMTPAUTH: with ESMTPSA
-	id eL1ZsURBGQGq8eL1bs0nzo; Wed, 14 Aug 2024 13:55:20 -0700
-X-CMAE-Analysis: v=2.4 cv=Sp9b6+O0 c=1 sm=1 tr=0 ts=66bd19b9
- a=ujCVow8R4Y5jPCx6COW8WA==:117 a=ujCVow8R4Y5jPCx6COW8WA==:17
- a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=t3YNmgBSAAAA:8 a=QyXUC8HyAAAA:8
- a=VwQbUJbxAAAA:8 a=nmDrXcoKSNg3NTg_32oA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=ctH_qozkpUrkr3SVbfwb:22 a=AjGcO6oz07-iQ99wixmX:22
-X-SECURESERVER-ACCT: peter@piie.net
-Message-ID: <f226b45b-b7b7-4004-9d2b-740a52c658d3@piie.net>
-Date: Wed, 14 Aug 2024 22:55:18 +0200
+	s=arc-20240116; t=1723669986; c=relaxed/simple;
+	bh=OWLB4A3W+IkHeRUaO3oHs3PXbpk5OuPFsN4t33tni2A=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m2pJveClGpKa5YamlkMz6gyt0jOfxv5TJDLCMzGiiuOYtanVn6V2Mk9YJMY22DqtfRlE0bPVpX3dbRYccOTDNfNblRok2UHrLX+uQH53VLOLHeZeL+igtKd4DZbfmQA+OlwN28hjGbsQ5jN5IuxT6A9UzePhhmeCbLdfeV07+2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BLqbMs3A; arc=none smtp.client-ip=209.85.167.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3db130a872fso160568b6e.2;
+        Wed, 14 Aug 2024 14:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723669984; x=1724274784; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=E0PsU1V81otLoWVv/G1qLYZtjV9Tg/8agLNzDh9hSwo=;
+        b=BLqbMs3ACGaIs30c0YKnkrTxV/GNz6drVNdjCxMaTTBdAfwhrgnqV5htqwcIAGooqI
+         zMh09DgZ4SpPmdcx6awNYbAJPSFDfhxgtkJtY6qfFF8MorDSnrsDFBluXQudJ8xpZhei
+         tChR0PgmdyEtv5EeafM8RsqrmTgnq3Op69LVKhEsMwbn52nB28mwQ3Ml1SVzc/rp7bJY
+         frkn9nYk3vgmARwq6NRWMplZJ4VV/lDdoNE/5njs04ZsLTLAhJ7SULTWPKRvizpwvZbt
+         6qTaGNYOPN7+s0K0akeyjG0inDUh8dWmHGyTxX5/o7TVaBFi1n1dUEcPZr0pVQDtYMpn
+         EHpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723669984; x=1724274784;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E0PsU1V81otLoWVv/G1qLYZtjV9Tg/8agLNzDh9hSwo=;
+        b=gsZhXtJK0zfLDEq8PvzVnUzNC+yIMd1gFlwNZTAMPpdSZ4zmf+/m3v4qcUj3d23cpk
+         3iSwsjAQdjs8WkwmdWtMxMnRFM92uf7mfodMhxZFLym5zc8ST7dbMisdog8YB+v9Ck2x
+         CJLG7iNsBgbAIW1+LihLr6b6oj/AEA0Z3JiCHEj9gDwKLwIFIpig6eR1eWGrqg6OG0K8
+         AqFFYeJzb/hBdc+gC6BuKNCjPLfkwpOjEQcd3+mbhfmqegaKEmcT0ZJndCa/kLnkO6Mu
+         nhZn6a39wTovbiMgkByA53TTKKdOMpjMzStd6sVLiZcnKzmvfqoEhm1m/8RlQfZ7Y+iK
+         dJ3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWRSvUlsZJtDZg4OWVm3Gx7vHvqgZTfkAtOKWDulXyTYtYi2rDgGMPwYvHgdczhXw+lVnEIaqg+Hk0ybSsL8RQeKg3bi187A9y+a+VGP/8X9mY1X9oEcYinNneaIJwaPWYqLWHokBT7tFfZBDnGIeTAyKge7tmBjtnADblqKevV
+X-Gm-Message-State: AOJu0Yy570hiynBrUpy61VnDgEgbVycsJ4cMWpYh91kTmxRREECva6ak
+	eN/T+6N5yeblmp5wXeo2bn8g6G15jpT3tLuSwByTFuRGzRXiVK7z
+X-Google-Smtp-Source: AGHT+IHPFbvzVVdUw502MWTJGOKLHnC1j3KggFd0N+p5LyKQWM3LNqxF2J0bV4X2lPo9bjtcCBrWNw==
+X-Received: by 2002:a05:6808:1789:b0:3d9:4163:654f with SMTP id 5614622812f47-3dd2997b5camr4570717b6e.32.1723669984114;
+        Wed, 14 Aug 2024 14:13:04 -0700 (PDT)
+Received: from neuromancer. ([2600:1700:fb0:1bcf::54])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3dd060b4e13sm2221748b6e.45.2024.08.14.14.13.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Aug 2024 14:13:03 -0700 (PDT)
+Message-ID: <66bd1ddf.ca0a0220.13e5d4.8871@mx.google.com>
+X-Google-Original-Message-ID: <Zr0d3U5ATHATlSaU@neuromancer.>
+Date: Wed, 14 Aug 2024 16:13:01 -0500
+From: Chris Morgan <macroalpha82@gmail.com>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: linux-sunxi@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-iio@vger.kernel.org, quentin.schulz@free-electrons.com,
+	mripard@kernel.org, tgamblin@baylibre.com,
+	aidanmacdonald.0x0@gmail.com, u.kleine-koenig@pengutronix.de,
+	lee@kernel.org, samuel@sholland.org, jernej.skrabec@gmail.com,
+	sre@kernel.org, wens@csie.org, conor+dt@kernel.org,
+	krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de,
+	Chris Morgan <macromorgan@hotmail.com>,
+	Philippe Simons <simons.philippe@gmail.com>
+Subject: Re: [PATCH V2 14/15] power: supply: axp20x_battery: add support for
+ AXP717
+References: <20240802192026.446344-1-macroalpha82@gmail.com>
+ <20240802192026.446344-15-macroalpha82@gmail.com>
+ <20240803121044.20481897@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/4] thermal: gov_bang_bang: Add .manage() callback
-To: "Rafael J. Wysocki" <rafael@kernel.org>, =?UTF-8?Q?Peter_K=C3=A4stle?=
- <peter@piie.net>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Lukasz Luba <lukasz.luba@arm.com>, Daniel Lezcano
- <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>
-References: <1903691.tdWV9SEqCh@rjwysocki.net>
- <8419356.T7Z3S40VBb@rjwysocki.net>
- <291044b7-7300-42c2-91e6-fef164482cf3@piie.net>
- <CAJZ5v0h9b2E0meeHGRtRv+=GbsABUs=L4RqAvAZuCksU+uN0cQ@mail.gmail.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Peter_K=C3=A4stle?= <peter@piie.net>
-In-Reply-To: <CAJZ5v0h9b2E0meeHGRtRv+=GbsABUs=L4RqAvAZuCksU+uN0cQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfCcAgy2oqo4m+XYoMedubk2Bc9tI4XHeVtmjtRb9yu723Ck4yKRpDw/9UEqYR32Vzm4hx28jyjTRnE5xfHbnyWLHDc79CBZ2CtXGpPoJAguFo5msTVnZ
- MYvpyF15b3Au8X5+wChI9yaeqlN4bIjq9PG2C1NzSkINOxnVJZ9IanSREcSoIv+uvQqvrsjFKQdWs9KzXAU4AJIwIAwDnjZSGc5B5xwotcUULkK4o/B/n4qx
- oS1+kocMXCLxGbPNT8IcxU2lM7bNk/y9CTLkqzB9Wu0pjy1x5C0wVmZyPu2pUdP1czmzzkNEFezMCRoAltUvPgPWlFZyL9ZfnxlYebPdI/2wX2b53q3O8idD
- JSQ3QjTGT4d0dnJpuwV7/bUYFgX7OWF83vFml0rP/C99oJBTx4eafhUNBRvdHs/QViNIAjxN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240803121044.20481897@jic23-huawei>
 
-Hi Rafael,
-
-On 14.08.24 19:18, Rafael J. Wysocki wrote:
-> On Wed, Aug 14, 2024 at 12:50 AM Peter Kästle <peter@piie.net> wrote:
->>
->> On 13.08.24 16:27, Rafael J. Wysocki wrote:
->>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>
->>> After recent changes, the Bang-bang governor may not adjust the
->>> initial configuration of cooling devices to the actual situation.
->>>
->>> Namely, if a cooling device bound to a certain trip point starts in
->>> the "on" state and the thermal zone temperature is below the threshold
->>> of that trip point, the trip point may never be crossed on the way up
->>> in which case the state of the cooling device will never be adjusted
->>> because the thermal core will never invoke the governor's
->>> .trip_crossed() callback.  [Note that there is no issue if the zone
->>> temperature is at the trip threshold or above it to start with because
->>> .trip_crossed() will be invoked then to indicate the start of thermal
->>> mitigation for the given trip.]
->>>
->>> To address this, add a .manage() callback to the Bang-bang governor
->>> and use it to ensure that all of the thermal instances managed by the
->>> governor have been initialized properly and the states of all of the
->>> cooling devices involved have been adjusted to the current zone
->>> temperature as appropriate.
->>>
->>> Fixes: 530c932bdf75 ("thermal: gov_bang_bang: Use .trip_crossed() instead of .throttle()")
->>> Link: https://lore.kernel.org/linux-pm/1bfbbae5-42b0-4c7d-9544-e98855715294@piie.net/
->>> Cc: 6.10+ <stable@vger.kernel.org> # 6.10+
->>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>
->> oops, previously sent from wrong email address, here again from correct one...
->> Acked-by: Peter Kästle <peter@piie.net>
+On Sat, Aug 03, 2024 at 12:10:44PM +0100, Jonathan Cameron wrote:
+> On Fri,  2 Aug 2024 14:20:25 -0500
+> Chris Morgan <macroalpha82@gmail.com> wrote:
 > 
-> No worries and thanks for the ACKs!
+> > From: Chris Morgan <macromorgan@hotmail.com>
+> > 
+> > Add support for the AXP717 PMIC battery charger. The AXP717 differs
+> > greatly from existing AXP battery chargers in that it cannot measure
+> > the discharge current. The datasheet does not document the current
+> > value's offset or scale, so the POWER_SUPPLY_PROP_CURRENT_NOW is left
+> > unscaled.
+> > 
+> > Tested-by: Philippe Simons <simons.philippe@gmail.com>
+> > Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> Hi.
 > 
-> I gather that they mean that the changes work for you.
+> A few drive by comments,
+> 
+> Jonathan
+> 
+> > ---
+> >  drivers/power/supply/axp20x_battery.c | 444 ++++++++++++++++++++++++++
+> >  1 file changed, 444 insertions(+)
+> > 
+> > diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
+> > index c903c588b361..53af4ad0549d 100644
+> > --- a/drivers/power/supply/axp20x_battery.c
+> > +++ b/drivers/power/supply/axp20x_battery.c
+> > @@ -32,9 +32,19 @@
+> >  #include <linux/mfd/axp20x.h>
+> >  
+> >  #define AXP20X_PWR_STATUS_BAT_CHARGING	BIT(2)
+> > +#define AXP717_PWR_STATUS_MASK		GENMASK(6, 5)
+> > +#define AXP717_PWR_STATUS_BAT_STANDBY	(0 << 5)
+> > +#define AXP717_PWR_STATUS_BAT_CHRG	(1 << 5)
+> > +#define AXP717_PWR_STATUS_BAT_DISCHRG	(2 << 5)
+> 
+> Fine to match local style in this patch, but just thought I'd
+> comment that this driver would probably be more readable with
+> use of FIELD_PREP and changing convention to not shift the defined
+> values for contents of each field.
+> 
+> To change to that it would either need to be before this patch,
+> or done as a follow up.
 
-Yes, successfully tested all my use cases and reviewed the code.  Thanks.
-Still working on the acerhdf cleanup, but this will be another patch series.
+I'll take your other comments and apply them, but if it's okay with
+you I'll opt to not use FIELD_PREP/FIELD_GET for the moment, so the
+style remains the same. I will make sure to use those macros for
+other drivers I'm working on though as they seem handy.
 
 > 
->>> ---
->>>    drivers/thermal/gov_bang_bang.c |   30 ++++++++++++++++++++++++++++++
->>>    1 file changed, 30 insertions(+)
->>>
->>> Index: linux-pm/drivers/thermal/gov_bang_bang.c
->>> ===================================================================
->>> --- linux-pm.orig/drivers/thermal/gov_bang_bang.c
->>> +++ linux-pm/drivers/thermal/gov_bang_bang.c
->>> @@ -26,6 +26,7 @@ static void bang_bang_set_instance_targe
->>>         * when the trip is crossed on the way down.
->>>         */
->>>        instance->target = target;
->>> +     instance->initialized = true;
->>>
->>>        dev_dbg(&instance->cdev->device, "target=%ld\n", instance->target);
->>>
->>> @@ -80,8 +81,37 @@ static void bang_bang_control(struct the
->>>        }
->>>    }
->>>
->>> +static void bang_bang_manage(struct thermal_zone_device *tz)
->>> +{
->>> +     const struct thermal_trip_desc *td;
->>> +     struct thermal_instance *instance;
->>> +
->>> +     for_each_trip_desc(tz, td) {
->>> +             const struct thermal_trip *trip = &td->trip;
->>> +
->>> +             if (tz->temperature >= td->threshold ||
->>> +                 trip->temperature == THERMAL_TEMP_INVALID ||
->>> +                 trip->type == THERMAL_TRIP_CRITICAL ||
->>> +                 trip->type == THERMAL_TRIP_HOT)
->>> +                     continue;
->>> +
->>> +             /*
->>> +              * If the initial cooling device state is "on", but the zone
->>> +              * temperature is not above the trip point, the core will not
->>> +              * call bang_bang_control() until the zone temperature reaches
->>> +              * the trip point temperature which may be never.  In those
->>> +              * cases, set the initial state of the cooling device to 0.
->>> +              */
->>> +             list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
->>> +                     if (!instance->initialized && instance->trip == trip)
->>> +                             bang_bang_set_instance_target(instance, 0);
->>> +             }
->>> +     }
->>> +}
->>> +
->>>    static struct thermal_governor thermal_gov_bang_bang = {
->>>        .name           = "bang_bang",
->>>        .trip_crossed   = bang_bang_control,
->>> +     .manage         = bang_bang_manage,
->>>    };
->>>    THERMAL_GOVERNOR_DECLARE(thermal_gov_bang_bang);
->>>
->>>
->>>
->>
+> 
+> >  struct axp20x_batt_ps;
+> >  
+> > @@ -143,6 +176,41 @@ static int axp22x_battery_get_max_voltage(struct axp20x_batt_ps *axp20x_batt,
+> >  	return 0;
+> >  }
+> >  
+> > +static int axp717_battery_get_max_voltage(struct axp20x_batt_ps *axp20x_batt,
+> > +					  int *val)
+> > +{
+> > +	int ret, reg;
+> > +
+> > +	ret = regmap_read(axp20x_batt->regmap, AXP717_CV_CHG_SET, &reg);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	switch (reg & AXP717_CHRG_CV_VOLT_MASK) {
+> > +	case AXP717_CHRG_CV_4_0V:
+> > +		*val = 4000000;
+> > +		break;
+> > +	case AXP717_CHRG_CV_4_1V:
+> > +		*val = 4100000;
+> > +		break;
+> > +	case AXP717_CHRG_CV_4_2V:
+> > +		*val = 4200000;
+> > +		break;
+> > +	case AXP717_CHRG_CV_4_35V:
+> > +		*val = 4350000;
+> > +		break;
+> > +	case AXP717_CHRG_CV_4_4V:
+> > +		*val = 4400000;
+> > +		break;
+> > +	case AXP717_CHRG_CV_5_0V:
+> > +		*val = 5000000;
+> > +		break;
+> > +	default:
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	return 0;
+> Could just return instead of breaking an save reader having to look to see
+> if anything else happens after the switch finishes.
+
+Acknowledged.
+
+> 
+> > +}
+> > +
+> >  static int axp813_battery_get_max_voltage(struct axp20x_batt_ps *axp20x_batt,
+> >  					  int *val)
+> >  {
+> > @@ -188,6 +256,22 @@ static int axp20x_get_constant_charge_current(struct axp20x_batt_ps *axp,
+> >  	return 0;
+> >  }
+> >  
+> > +static int axp717_get_constant_charge_current(struct axp20x_batt_ps *axp,
+> > +					      int *val)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = regmap_read(axp->regmap, AXP717_ICC_CHG_SET, val);
+> Trivial but I'd use a separate local variable for the register value.  
+
+Will do.
+
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	*val &= AXP717_ICC_CHARGER_LIM_MASK;
+> 
+> FIELD_GET() would be much more readable here as we'd not need to go
+> check if LIM_MASK included bit 0 and it could be used directly inline
+> with the below as
+> 
+
+Nack, if that's okay (as mentioned above). If it's not let me know and
+I'll go back and redo this driver.
+
+> 	*val = FIELD_GET(AXP717_IC_CHARGER_LIM_MASK, val) * axp->data->ccc_scale;
+> 
+> > +
+> > +	*val = *val * axp->data->ccc_scale;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int axp20x_battery_get_prop(struct power_supply *psy,
+> >  				   enum power_supply_property psp,
+> >  				   union power_supply_propval *val)
+> > @@ -340,6 +424,175 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
+> >  	return 0;
+> >  }
+> >  
+> > +static int axp717_battery_get_prop(struct power_supply *psy,
+> > +				   enum power_supply_property psp,
+> > +				   union power_supply_propval *val)
+> > +{
+> > +	struct axp20x_batt_ps *axp20x_batt = power_supply_get_drvdata(psy);
+> > +	int ret = 0, reg;
+> > +
+> > +	switch (psp) {
+> > +	case POWER_SUPPLY_PROP_PRESENT:
+> > +	case POWER_SUPPLY_PROP_ONLINE:
+> > +		ret = regmap_read(axp20x_batt->regmap, AXP717_ON_INDICATE,
+> > +				  &reg);
+> > +		if (ret)
+> > +			return ret;
+> > +
+> > +		val->intval = !!(reg & AXP717_PWR_OP_BATT_PRESENT);
+> 
+> FIELD_GET() here would be cleaner.
+> 
+> > +		break;
+> > +
+> >;
+> > +	}
+> > +
+> > +	return 0;
+> 
+> As nothing to do down here, I think early returns would make things more redabel.
+> 
+
+Will do.
+
+> > +}
+> > +
+> >  static int axp20x_battery_set_prop(struct power_supply *psy,
+> >  				   enum power_supply_property psp,
+> >  				   const union power_supply_propval *val)
+> > @@ -492,6 +805,42 @@ static int axp20x_battery_set_prop(struct power_supply *psy,
+> >  	}
+> >  }
+> >  
+> > +static int axp717_battery_set_prop(struct power_supply *psy,
+> > +				   enum power_supply_property psp,
+> > +				   const union power_supply_propval *val)
+> > +{
+> > +	struct axp20x_batt_ps *axp20x_batt = power_supply_get_drvdata(psy);
+> > +
+> > +	switch (psp) {
+> > +	case POWER_SUPPLY_PROP_VOLTAGE_MIN:
+> > +		return axp717_set_voltage_min_design(axp20x_batt, val->intval);
+> > +
+> > +	case POWER_SUPPLY_PROP_VOLTAGE_MAX:
+> > +		return axp20x_batt->data->set_max_voltage(axp20x_batt, val->intval);
+> > +
+> > +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+> > +		return axp717_set_constant_charge_current(axp20x_batt,
+> > +							  val->intval);
+> > +	case POWER_SUPPLY_PROP_STATUS:
+> > +		switch (val->intval) {
+> > +		case POWER_SUPPLY_STATUS_CHARGING:
+> > +			return regmap_update_bits(axp20x_batt->regmap,
+> > +						  AXP717_MODULE_EN_CONTROL_2,
+> > +						  AXP717_CHRG_ENABLE,
+> > +						  AXP717_CHRG_ENABLE);
+> > +
+> > +		case POWER_SUPPLY_STATUS_DISCHARGING:
+> > +		case POWER_SUPPLY_STATUS_NOT_CHARGING:
+> > +			return regmap_update_bits(axp20x_batt->regmap,
+> > +						  AXP717_MODULE_EN_CONTROL_2,
+> > +						  AXP717_CHRG_ENABLE, 0);
+> > +		}
+> > +		fallthrough;
+> Why bother? Just return -EINVAL here.
+> 
+
+Will do.
+
+> > +	default:
+> > +		return -EINVAL;
+> > +	}
+> > +}
+> > +
+
+Thank you for your review,
+Chris
 
