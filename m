@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-12219-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12220-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A160D952197
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 19:56:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 060BD95219E
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 19:57:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5B9C1C21BBF
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 17:56:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 289031C219E6
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2024 17:57:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56CC31BD00F;
-	Wed, 14 Aug 2024 17:56:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BFE81BD02C;
+	Wed, 14 Aug 2024 17:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uvApKgPA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RoiFmCzi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796551BCA19
-	for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 17:56:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B00731B8EB4
+	for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 17:57:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723658206; cv=none; b=WQ1F/JetZeGMI73adCOTAG8G5Kt44o6i7Y64G4ZvbHHIM5rEuo6nqocYtyJe7oz5UD8cf347UHzFJFhmFEMPI/JVWOVSYyquhYSovClysIvfx1Oc8+ymjS5cbIVt8ct+rKSP0pD2oTXdhSDdn9ijKPIS6aKNEzU/ygX987Yg0Bs=
+	t=1723658245; cv=none; b=OseVsc53ncvAxPxFO9/tTMZtEBLTFPmTmZeFsgLQZ1ZHK+tizHVB1VEmmNYxy7XPtSn6g3u84VZBLEe0EUIfupyoD/85raWZvtKaPQ6cvjlQQL7lW0FGEr9L0I6BzMKRuJq7LeCRaWxCa+1i4I++zctpEJ0D0csYBN2Ox/sm+O0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723658206; c=relaxed/simple;
-	bh=d/MSdp3XR7zwtKYXz5Ikpz+56FamxFrWPxRngdr7nz0=;
+	s=arc-20240116; t=1723658245; c=relaxed/simple;
+	bh=qlmarjm4bNR84rbu20fJIQS2A0OemxNPwz2MhN9FDdo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FrljlR4F8/xNX+0h5sT8gdXkflPnez5Q2wv2NVmQXChuVYguyrmqRAoZwELIYRfZKeu11aC6BbahuSOMfqhuoh+bp1OMwqKY2+u6gs9JU+qXrn5fJIBTK65MRSxmHfvk+E5qU4npQiFSO53TzAvLBLuY+RtD/9QrJx+1+s6KA7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uvApKgPA; arc=none smtp.client-ip=209.85.128.50
+	 In-Reply-To:Content-Type; b=G4r/POSIvIjvK2KWLTavgcEZHJ4o1JUt1wx/IKET/8hhyI71sayl13sacs3xL+BS2gn9TdveEkKKxzkcXnph9WyPIlUerUWVBVngibbIa3E494jSJiB9ORO2WUNy8dADABObFGZf70q3kO+QiT6OVFfKutDn9lJpjgm3A/7NR2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RoiFmCzi; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4281ca54fd3so413645e9.2
-        for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 10:56:44 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-427fc97a88cso570075e9.0
+        for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 10:57:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723658203; x=1724263003; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1723658241; x=1724263041; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=nGAlIu8HRdwci3BUYdRQApMszL3LHUSsEB5CKbPjVuA=;
-        b=uvApKgPAxgpOcUl+O0gVnWbB6fiebb7J0X88AfWbsNUgjL/hOsAlzlVzVfVsGygKiO
-         q/BqLO56Tr3B3uuqQvl40xYXrL2RjA5SgGIsaAOrbj7UQFeDICxFBfzpgZCO03Dtza7n
-         7w2LPFiqg1FSHB6HEwZyejuX1xhpY5aVP5LV8/pn0/iyzpgErGmJQkaGNioiLEqe0HMx
-         w4b+yNhVIPEgtOgGmW7/kGBBjjSQQu2FK5UvdtDNLyxv7E9JCN/mKm9G/h4DaDe59S0h
-         FHUkRbZ24hzByNw6py8myzd1qgFQcFRBP1su4CtZn5RO9K3yu3nSutOQ9mQ1cGUAvx/l
-         ud9g==
+        bh=HnUwdGhfSZGHxuMeMqzleyP++rz6g7MwzjmvPDN+MAg=;
+        b=RoiFmCzi1b2j0+fmnuQgGsaW4TTH0xeHiNXkAyYwfuQD16xk3K7SUvCjQN08nrT9p/
+         xohtWhWsYLFW1kF8Xgz5oxkkdyMyYZsmU04ZzhHUZBlbqkqwnEG2G60p/b/DuspSNn3b
+         mem1S0ExBAy98PDXF7AyjazFIfIVWpC9mtkBH+t7mmobeBD3f84XCYEdElvafURjewlm
+         ab5e6fegC2IVnWdKAc3EzlNwAEPfyPaL+lvCMLuHUCs6giCF2qlm/GTnHjnZAVUb1z3X
+         Py8XyH4CJ2mwbeks0iYQvLj908JGKmnPxQtgJoiJNRMMtlujdQEnbrTgjfjy+upJeB44
+         chtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723658203; x=1724263003;
+        d=1e100.net; s=20230601; t=1723658241; x=1724263041;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nGAlIu8HRdwci3BUYdRQApMszL3LHUSsEB5CKbPjVuA=;
-        b=BpUI2UvmiAxpGXz/VCDjSEDIt8I39osoP8UesaDoEMMFQd6WHzAMMqcyuullrSyvow
-         kV+31CE8YN2F7Kr8G2AP0eOqZ1sELbicOW2o1vAh5tnFZj59FeYTUKnSTnNBQR8dvINY
-         4c/p6hhm4mNUnJ/WHUmxIk/1nEiU1/sGx7254ZQG/eBP5647wX8n7lIg8JeDkfBYJlK0
-         69+sHJm2P7JFunU9WW5ex4jnFBm1HoY6bkdHLqnOlgKC2X95Vfwm/UyxzOu8O15/9Qb1
-         IdaaDDmqGcib11qwbl2NOyWQZkjS0NZ3s/LsoHY+ELBqmSQ6BsNpD7p7X8nKYtRzkx9y
-         Sj6A==
-X-Forwarded-Encrypted: i=1; AJvYcCXz75Ks9YakOi/Gp1kD7FkJKDmRW0lDLv3t4g7MALwU65eRhy2utAVqbLECEqTBY/9tIvQ5t3cW+YxD9tEhWsAhPgXIavzaKXo=
-X-Gm-Message-State: AOJu0Yw5omfrtjrNS8yhSBm/oKlbmbPwAqVTmmlyGdvW+kW/cP8DRVqD
-	mkzGFqt14SzLsp6TOx7Ksn4lpD6r/sLB3c20p51znZM4B0nX9qgqq0OCPAmKlzc=
-X-Google-Smtp-Source: AGHT+IHy7MlPKBiE3muUasS7PsbtV4vMEkDoQV8kAmuJW+tCODVoKU4QrStZeUKOymcCcAV8ND7NZw==
-X-Received: by 2002:a05:600c:1f87:b0:428:1e8c:ff75 with SMTP id 5b1f17b1804b1-429dd268f26mr25564275e9.35.1723658202684;
-        Wed, 14 Aug 2024 10:56:42 -0700 (PDT)
+        bh=HnUwdGhfSZGHxuMeMqzleyP++rz6g7MwzjmvPDN+MAg=;
+        b=HJTHfHOgcCiwSNyMPYgUiwzhS+jGJJ+1z4C+wdrZxwyMHJZkzF1sh4B0kvHAhHwi7f
+         j2dEikRkPLnpcnUx1u2oxfPUFy2mFCv375wGN+b3seQ/mfuFAqlO7OpS21YF9NAAsakp
+         CL/ar/E4dl0t/oIOSGCtiyLEyqxQ8vk9V6o37UOMw27algUoGEJla4d+PiXJGwa3CTwS
+         JX0/RNzDUa902/v8iAmZLaL51k9HNIG6SlzACu3elXHDdsPKTXTKu12v9uI5Q/pMoWzi
+         HwKtn+NYXPOxwYypSPZdf7nCJuBpJwQM5AZ8opXONRHtX0OeyecfHt9S6pZk4s5K4mOE
+         RoVA==
+X-Forwarded-Encrypted: i=1; AJvYcCUIi7yEa66Zg3TPq1yf1Z9SVRP2IVP1Ym5ZsjDokeNR6id/hRbOrbKvM4THW/mDAeT2uLBpJgCeXNBywN4MQmw5TjKhbL4gdx4=
+X-Gm-Message-State: AOJu0YxdHN3yXSnokPqkZqcCdtdVUPFzNWfvE5ZVTGKc5EBbez5KkjoE
+	OUvvHUKi2r0xx3kUJBmAZJhzPONSn9AjBlECh8NSkyeepbvP9/7QQ+Ymy3Fa4U4=
+X-Google-Smtp-Source: AGHT+IGohuyYGGk60HZbxQ/ROWUPTaq5Wi5UopTp8W5NYw+7mjHHwwWxgpEiJsSVNDzahS1qQVmMhQ==
+X-Received: by 2002:a5d:4850:0:b0:369:b7e3:497c with SMTP id ffacd0b85a97d-3717775fb8fmr2431134f8f.1.1723658240825;
+        Wed, 14 Aug 2024 10:57:20 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.215.209])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429ded4de91sm27151585e9.34.2024.08.14.10.56.40
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3717314e38bsm4654498f8f.97.2024.08.14.10.57.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Aug 2024 10:56:42 -0700 (PDT)
-Message-ID: <0ad7c0a5-67d5-4a28-ba0c-76e7b96d1a81@linaro.org>
-Date: Wed, 14 Aug 2024 19:56:39 +0200
+        Wed, 14 Aug 2024 10:57:20 -0700 (PDT)
+Message-ID: <768894bb-a12a-4919-9b4d-b579c153a556@linaro.org>
+Date: Wed, 14 Aug 2024 19:57:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,8 +77,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/9] memory: atmel-ebi: use scoped device node handling to
- simplify error paths
+Subject: Re: [PATCH 3/9] memory: samsung: exynos5422-dmc: use scoped device
+ node handling to simplify error paths
 To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>,
  Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -94,8 +94,8 @@ Cc: Krzysztof Kozlowski <krzk@kernel.org>,
  linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
  linux-tegra@vger.kernel.org
 References: <20240812-cleanup-h-of-node-put-memory-v1-0-5065a8f361d2@linaro.org>
- <20240812-cleanup-h-of-node-put-memory-v1-1-5065a8f361d2@linaro.org>
- <20240814173834.000002c8@Huawei.com>
+ <20240812-cleanup-h-of-node-put-memory-v1-3-5065a8f361d2@linaro.org>
+ <20240814174246.00007e4e@Huawei.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -142,111 +142,61 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240814173834.000002c8@Huawei.com>
+In-Reply-To: <20240814174246.00007e4e@Huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 14/08/2024 18:38, Jonathan Cameron wrote:
-> On Mon, 12 Aug 2024 15:33:55 +0200
+On 14/08/2024 18:42, Jonathan Cameron wrote:
+> On Mon, 12 Aug 2024 15:33:57 +0200
 > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
 >> Obtain the device node reference with scoped/cleanup.h to reduce error
 >> handling and make the code a bit simpler.
 >>
 >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Trivial comments inline
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
-> Hi,
-> 
-> Comments inline.
 >> ---
->>  drivers/memory/atmel-ebi.c | 29 ++++++++++-------------------
->>  1 file changed, 10 insertions(+), 19 deletions(-)
+>>  drivers/memory/samsung/exynos5422-dmc.c | 31 +++++++++++--------------------
+>>  1 file changed, 11 insertions(+), 20 deletions(-)
 >>
->> diff --git a/drivers/memory/atmel-ebi.c b/drivers/memory/atmel-ebi.c
->> index e8bb5f37f5cb..fcbfc2655d8d 100644
->> --- a/drivers/memory/atmel-ebi.c
->> +++ b/drivers/memory/atmel-ebi.c
->> @@ -6,6 +6,7 @@
->>   * Copyright (C) 2013 Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+>> diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
+>> index da7ecd921c72..d3ae4d95a3ba 100644
+>> --- a/drivers/memory/samsung/exynos5422-dmc.c
+>> +++ b/drivers/memory/samsung/exynos5422-dmc.c
+>> @@ -4,6 +4,7 @@
+>>   * Author: Lukasz Luba <l.luba@partner.samsung.com>
 >>   */
 >>  
 >> +#include <linux/cleanup.h>
 >>  #include <linux/clk.h>
->>  #include <linux/io.h>
->>  #include <linux/mfd/syscon.h>
->> @@ -517,7 +518,7 @@ static int atmel_ebi_dev_disable(struct atmel_ebi *ebi, struct device_node *np)
->>  static int atmel_ebi_probe(struct platform_device *pdev)
+>>  #include <linux/devfreq.h>
+>>  #include <linux/devfreq-event.h>
+>> @@ -1176,10 +1177,10 @@ static int of_get_dram_timings(struct exynos5_dmc *dmc)
 >>  {
->>  	struct device *dev = &pdev->dev;
->> -	struct device_node *child, *np = dev->of_node, *smc_np;
->> +	struct device_node *child, *np = dev->of_node;
->>  	struct atmel_ebi *ebi;
->>  	int ret, reg_cells;
->>  	struct clk *clk;
->> @@ -541,30 +542,24 @@ static int atmel_ebi_probe(struct platform_device *pdev)
->>  
->>  	ebi->clk = clk;
->>  
->> -	smc_np = of_parse_phandle(dev->of_node, "atmel,smc", 0);
->> +	struct device_node *smc_np __free(device_node) = of_parse_phandle(dev->of_node,
->> +									  "atmel,smc", 0);
-> Trivial:
-> I'd line break this as
->> +	struct device_node *smc_np __free(device_node) =
-> 		of_parse_phandle(dev->of_node, "atmel,smc", 0);
+>>  	int ret = 0;
+>>  	int idx;
+>> -	struct device_node *np_ddr;
+> 
+> This would definitely benefit from a
+> struct device *dev = dmc->dev;
 
-Yeah, I have troubles with this constructor+destructor syntaxes. They
-are way past 80 and 100 column, so maybe indeed should be wrapped at '='.
+True, I'll do it in separate patch.
 
 > 
+>>  	u32 freq_mhz, clk_period_ps;
 >>  
->>  	ebi->smc.regmap = syscon_node_to_regmap(smc_np);
->> -	if (IS_ERR(ebi->smc.regmap)) {
->> -		ret = PTR_ERR(ebi->smc.regmap);
->> -		goto put_node;
->> -	}
->> +	if (IS_ERR(ebi->smc.regmap))
->> +		return PTR_ERR(ebi->smc.regmap);
->>  
->>  	ebi->smc.layout = atmel_hsmc_get_reg_layout(smc_np);
->> -	if (IS_ERR(ebi->smc.layout)) {
->> -		ret = PTR_ERR(ebi->smc.layout);
->> -		goto put_node;
->> -	}
->> +	if (IS_ERR(ebi->smc.layout))
->> +		return PTR_ERR(ebi->smc.layout);
->>  
->>  	ebi->smc.clk = of_clk_get(smc_np, 0);
->>  	if (IS_ERR(ebi->smc.clk)) {
->> -		if (PTR_ERR(ebi->smc.clk) != -ENOENT) {
->> -			ret = PTR_ERR(ebi->smc.clk);
->> -			goto put_node;
->> -		}
->> +		if (PTR_ERR(ebi->smc.clk) != -ENOENT)
->> +			return PTR_ERR(ebi->smc.clk);
->>  
->>  		ebi->smc.clk = NULL;
->>  	}
->> -	of_node_put(smc_np);
-> 
-> The large change in scope is a bit inelegant as it now hangs on to
-> the smc_np much longer than before.
-> 
-> Maybe it's worth pulling out the modified code as a 
-> atem_eb_probe_smc(struct device_node *smc_np, struct atmel_ebi_smc *smc )
-> 
-> or something like with a struct_group to define the atmel_ebi_smc
-> 
-> That would keep the tight scope for the data and generally simplify it
-> a bit.
+>> -	np_ddr = of_parse_phandle(dmc->dev->of_node, "device-handle", 0);
+>> +	struct device_node *np_ddr __free(device_node) = of_parse_phandle(dmc->dev->of_node,
+>> +									  "device-handle", 0);
+> Trivial. Maybe consider the wrap suggested in patch 1.
+>> +	struct device_node *np_ddr __free(device_node) =
+> 		of_parse_phandle(dmc->dev->of_node, "device-handle", 0);
+
+Ack.
 
 
-Are you speaking about any particular code optimization/performance
-concerns or readability? Because scope in the latter, I believe, is not
-the problem here. The entire point of __free() is that you do not care
-about scope of variable or destructor. You know it will be freed, sooner
-or later. If it happens later - no problem, anyway we don't have to
-"think" about this variable or cleaning up because of __free().
 
 Best regards,
 Krzysztof
