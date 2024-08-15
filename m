@@ -1,152 +1,100 @@
-Return-Path: <linux-pm+bounces-12248-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12249-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBBDE9528AF
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2024 06:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 034AE95297B
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2024 08:49:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77B331F226A7
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2024 04:54:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC1681F21364
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2024 06:49:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74BAD40858;
-	Thu, 15 Aug 2024 04:54:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20541791EB;
+	Thu, 15 Aug 2024 06:49:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nSb+lgdN"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ClIPBtss"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAEEE1D52B
-	for <linux-pm@vger.kernel.org>; Thu, 15 Aug 2024 04:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D069178CCA;
+	Thu, 15 Aug 2024 06:48:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723697665; cv=none; b=Sjq07UmYCSGGXnO/RtYSl1KYYv+MPnd1et1yc62L3oe2HGBHqiS5RBZJ6BkV9G+MdHj1nBO3/S09jyLtkeQPFugh7VFz8kF2stsY3uy8wpeynVKsOsAt9QgbyGKvjhwEA/9ZB/oxg2N7icR5+8maFZ+iqbgaiW33rbgzR4gcI/g=
+	t=1723704540; cv=none; b=G4DAcy5RKL5hsQgK9GwGwsAnaMxgDmThHMm8fDhg2CKcV0j/UBkvaAv4Q1puEYie4bdXjH4B2W7edssVGBzzlyVjE4ezlUUPBsUtY4ZWR9qjFgTWQSUZ/Xnw1eJjjdo+TFBsmaLESBMF5C4Bu9paMYVf0hdcyndxdzPTLtOJCmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723697665; c=relaxed/simple;
-	bh=UYyZKOxaHpe4EpB6Hayk4JedhlFajE7Z6yEQXgkKasU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N5Jm4kwljA1EruqRIDTA8Xt5oVki8730ja+pCbZtL4d084N575XtvZck1vajSc/Tj3j+BW1L/lh+Jqrbp5KCrVSXb68XW6D1wVCXIShRwzy+Jq8XU2B6fyCG5dhx+T9k6L92+s6Z9pLq9Aq8BkHKBibvUWOW2/uINyY1FYBp7YY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=nSb+lgdN; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1fc569440e1so5511085ad.3
-        for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2024 21:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1723697663; x=1724302463; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6emxKKtm6uUnETS1KteMYur8SCaMlXe5vmg1oepA5b4=;
-        b=nSb+lgdNkvHCu6tt7L4iMCds4yo2loa/h1LZjV5IgISQz7A5DtT6wL7mFXZJxOfBx3
-         402Ogen81VxaFKAMqw+DtBL8jcBizIFP9Q1193dh8paxjPIJu9IlNJMFUgsatQ23CsZX
-         dw89RaomAHd33kfUjC2DuIclk57fLpv6ZXCEM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723697663; x=1724302463;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6emxKKtm6uUnETS1KteMYur8SCaMlXe5vmg1oepA5b4=;
-        b=fFnD6qj4p0wc9S4lRFeZLptinT4tRhNg3pMJXWwVHY6d/5jlV1APD5JR1sVQY1hB5C
-         MCEiBSFSyxW+Op/k9eatts3GCK+Ibq6/2s7fSp/iCwCA87/YwPJ6Pok1mOupmMCxruYg
-         7/RFNk7SM8Yobn0O3dGNSvMatYh/nZnxKlEti3iE2oRI0Z/0zEFtpGjkaS61FPac0gq4
-         8qkeoe6Rft/vOr9oamn2d2A5eKwJo9goBoEh+EeBwnqjJMP6tW5YMXvp7VLsZ861tZ8/
-         8ZKCyhw8nXIc85RIu8zuYA+snTSFfFB+YCHJPwLJa8JX3C+DHZZPcRio3NJZss21Pd5V
-         B07Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXbGbOtESSzqhu8Z/YzOADczD9qwZpkZ2vGUfgZsPklqcNTVN5G8UyjhRdFABRb6P6RabE0FcSf034iBNb9anLUN5/02snxXjs=
-X-Gm-Message-State: AOJu0YwNPPRfOnU8rO83y2sy7MLT4ax4pb5YY+fmpGgk7iR9UMLo7M4+
-	sOSYGrR4KIikdo3AT4YfWWNr/+5Wh9UiI/OSWMnw/+d991Gf4VTMX2wNqwG8ww==
-X-Google-Smtp-Source: AGHT+IEzYcBX0Rh/SnY38vbMuYJA+fxWetzUM40fw40DypiXm9dq5bKbJUg7z3M3f4YKGO2I4wky9A==
-X-Received: by 2002:a17:903:1104:b0:1fb:415d:81ab with SMTP id d9443c01a7336-201d63ac08dmr66910325ad.20.1723697663300;
-        Wed, 14 Aug 2024 21:54:23 -0700 (PDT)
-Received: from google.com ([2401:fa00:1:10:745d:58f7:b3cd:901f])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201f0300844sm4133125ad.47.2024.08.14.21.54.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Aug 2024 21:54:22 -0700 (PDT)
-Date: Thu, 15 Aug 2024 12:54:19 +0800
-From: Chen-Yu Tsai <wenst@chromium.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 3/3] thermal: of: Fix OF node leak in
- of_thermal_zone_find() error paths
-Message-ID: <20240815045419.GC255011@google.com>
-References: <20240814195823.437597-1-krzysztof.kozlowski@linaro.org>
- <20240814195823.437597-3-krzysztof.kozlowski@linaro.org>
+	s=arc-20240116; t=1723704540; c=relaxed/simple;
+	bh=mWOaouGtbDKsYQdGv0jggBmrDBnJHD8xQ8HL5gUYJ+E=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=fWCBqZSOy/xNFnAyZwm4ADAsbrKcnOpYfI9xUSsw5SQ/7PvmansdmNDIsuQOf29Ikm4knjAB2ven7NlmgwnKjiW+fP3i/9i6TggHs6phVQLKFz3QwDjb4g/QjPfHqyAwPorfvfM0k6CqzpOngb/FNfdZriHtLc0WrudgsWwxSJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ClIPBtss; arc=none smtp.client-ip=212.227.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1723704516; x=1724309316; i=markus.elfring@web.de;
+	bh=mWOaouGtbDKsYQdGv0jggBmrDBnJHD8xQ8HL5gUYJ+E=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=ClIPBtsspNiU++Q2niceSwX2d/fXTyqz088aFWoL32eCb5KQ1phquRlFDxiySpwx
+	 01pCqbka/UPHlVwMZqjvX4OGoQbabSaSpYox5RfbbdiODT3oargUU0TE8q9ys1l6E
+	 fJz9DEyCY9Gby8oUtsvfIRe9clLafIXdi2YqGkPi/O1/YHEB+s2HdaKluUsw+49iV
+	 ZK+9SuFKlUSUHRh1HoWxus3ev3xUoEffBevfyqTbhWakv+pOdIQK7lPBvAMXpVRYh
+	 r2A5wkqjcDXHcp5F0jDzXV7tR5qXcIw8J10kk9WhdcwecOwwtoH2uleVjJXexZ83O
+	 35O1hTre0u4Z/oUpaA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.87.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1N1d7i-1sBnIa0EVk-010QtW; Thu, 15
+ Aug 2024 08:48:36 +0200
+Message-ID: <7309e626-214e-4623-b3dc-2e4e2f68b1e4@web.de>
+Date: Thu, 15 Aug 2024 08:48:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240814195823.437597-3-krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla Thunderbird
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ linux-pm@vger.kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>
+Cc: stable@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Chen-Yu Tsai <wenst@chromium.org>
+References: <20240814195823.437597-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/3] thermal: of: Fix OF node leak in
+ thermal_of_trips_init() error path
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240814195823.437597-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Y4LYm9M+cHdWv5CBLcVL1JI9ZqLYGEXS2CCmJQ2UUH9/pEx+lQq
+ O9oHPY08kqK3EPyhG2ANIVolA7uef7tsdkuy5xJAlh5PCZQWXc0FNOzclM5P+ZukC756pWA
+ oir3rUEEOCGWjY2zgn16cGbZqnKtFEAxQ+WIbP0TYop7HHv5KLord+oyCY0nyFb/JxmiCDQ
+ XmaqzooGFU9lfFeQTN5dg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:PSfSfel47F8=;eIbnGqTUMp7UrIuGfZxudeMcuMh
+ a3njT3AZh9X3QBiVD9w7HVUxjj74TPbOGztAzZmWpI6Fm5+tVOF/ZDyt02v6TyFg1/IVGyqgl
+ GCszqpERF4oVJtVAQpAnm6F3Oc0Wr9HaW5fiTNI2mIcnQCGq+R8xX4YO/vYhxxrjqGjYGxstk
+ 8ClUZsdtMsHPgEYk1FEMAyllp0iHWYXMj2x5NuQIynRR+06a9GZatltKHlEMONda56jgV9OtV
+ I9afxFSyOYFMCV1nwRu7UbqIrBiW7x419f6tYFt7arvrxKoTSnkxuxRnAIypTTCa9eqpRp+nc
+ KrwTmJvWCsTZzDBR/hGHVxL6XD6DbvpBAab1JeSu0TZuUi3a0Mkv3wHRLElrEBmY+SGKj01wm
+ g7WALNsapmHr/hV6wKvqeA9FouL85AyMrUKwYWc3NcGxPdlqRHbqjIpE7uLBuldyhEvva70Xs
+ 8sOYgtCoMF3+YApLZwubmvP1C1ZZ9O2vD7N07nQGjMjimP0zjFqICZw17ez4GY0eg9fk60vMh
+ ve8w9LfU6SzwI+zlsVdsyghqGYVD9wOUrXQbOGft7uB7y/Yj1yb79puTfO1ePaD4ycuYGnRJE
+ vG7DFy7KSHFRGDw3yqdwZmeHQBgWQ25881xs7byZLl9FNJt/+dTGJenZFB+JjQEDfA3RphHQK
+ ysVQ63FhJPkRqYuMOTBGJE+HDX2EPmKDZJwIyJbMBHbGrzE9rZrhS7GbyjWJRhDz+s7y3FxmZ
+ FOg+XVhkUKJncKkbW9fA6HK+3RyN2X2z3CHcejGfruIxENO9tZeO3zM9OJBJHPMVSTEzZu/AM
+ e0geVIMCew4XmIv2GElUTm6w==
 
-On Wed, Aug 14, 2024 at 09:58:23PM +0200, Krzysztof Kozlowski wrote:
-> Terminating for_each_available_child_of_node() loop requires dropping OF
-> node reference, so bailing out on errors misses this.  Solve the OF node
-> reference leak with scoped for_each_available_child_of_node_scoped().
-> 
-> Fixes: 3fd6d6e2b4e8 ("thermal/of: Rework the thermal device tree initialization")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Terminating for_each_child_of_node() loop requires dropping OF node
+=E2=80=A6
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Can a cover letter be helpful for such patch series?
 
-> ---
->  drivers/thermal/thermal_of.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index b08a9b64718d..1f252692815a 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -184,14 +184,14 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
->  	 * Search for each thermal zone, a defined sensor
->  	 * corresponding to the one passed as parameter
->  	 */
-> -	for_each_available_child_of_node(np, tz) {
-> +	for_each_available_child_of_node_scoped(np, child) {
->  
->  		int count, i;
->  
-> -		count = of_count_phandle_with_args(tz, "thermal-sensors",
-> +		count = of_count_phandle_with_args(child, "thermal-sensors",
->  						   "#thermal-sensor-cells");
->  		if (count <= 0) {
-> -			pr_err("%pOFn: missing thermal sensor\n", tz);
-> +			pr_err("%pOFn: missing thermal sensor\n", child);
->  			tz = ERR_PTR(-EINVAL);
->  			goto out;
->  		}
-> @@ -200,18 +200,19 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
->  
->  			int ret;
->  
-> -			ret = of_parse_phandle_with_args(tz, "thermal-sensors",
-> +			ret = of_parse_phandle_with_args(child, "thermal-sensors",
->  							 "#thermal-sensor-cells",
->  							 i, &sensor_specs);
->  			if (ret < 0) {
-> -				pr_err("%pOFn: Failed to read thermal-sensors cells: %d\n", tz, ret);
-> +				pr_err("%pOFn: Failed to read thermal-sensors cells: %d\n", child, ret);
->  				tz = ERR_PTR(ret);
->  				goto out;
->  			}
->  
->  			if ((sensor == sensor_specs.np) && id == (sensor_specs.args_count ?
->  								  sensor_specs.args[0] : 0)) {
-> -				pr_debug("sensor %pOFn id=%d belongs to %pOFn\n", sensor, id, tz);
-> +				pr_debug("sensor %pOFn id=%d belongs to %pOFn\n", sensor, id, child);
-> +				tz = no_free_ptr(child);
->  				goto out;
->  			}
->  		}
-> -- 
-> 2.43.0
-> 
+Regards,
+Markus
 
