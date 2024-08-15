@@ -1,159 +1,124 @@
-Return-Path: <linux-pm+bounces-12256-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12257-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A09219529FF
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2024 09:33:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C9EB952B01
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2024 11:00:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60BD0282DAB
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2024 07:33:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE9AC1C212DF
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2024 09:00:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B7817AE05;
-	Thu, 15 Aug 2024 07:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="H3Ygra5j"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4D91BC06D;
+	Thu, 15 Aug 2024 08:29:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95BB176AA3
-	for <linux-pm@vger.kernel.org>; Thu, 15 Aug 2024 07:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BD9719D886;
+	Thu, 15 Aug 2024 08:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723707201; cv=none; b=lBcVLPPQ4y4Bcq/UW8t7Jf2WglXJhJOsiabWTuE/IbODOKHBxfzv8aeaYgrveuB1nUK+zq0yOf3v9OBDtLP2yyGrtwFcB4FzzEdmQI6p676Vd/fc0qvJVHYZnu4QfNdgJRwqbOfwvN2TR6j4Ec09pm98oMYsXdX4bQRntEYL0ZQ=
+	t=1723710589; cv=none; b=cDrl5mqUYx1ax3HcIY/G81agG8d0eJZHEEijOtg3Uyz6bzc/HxD0ZelgmqflSR3ftwVP9W2jfjnnYviYMH2zgIGgEjmfRL+OEDEA/J3oi8forT05eSShqWMqU6svCjg6RhH5NvEmwJtFxNxm25WS+FTUmqmSP698w/kX/wJgmJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723707201; c=relaxed/simple;
-	bh=LCZqNlothIJ7iUi0FaViXUQV8VMf+8pHOfULUFoQPlg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oRMy8p32ICpaqaacj2vLSw3UjPa45ZjD0Ee7j48mqhg7CGjDOOLpqf9xr9ec51vVJuxRBpG0RFn5Rom+tpxxcm8iCHI8Jbuq3lM843jEw7zHOg1UqAVdjLkeEgU6w0mlOo1ZxqaYQvs6kA44PtLOPg8u24jk0NlLDDw+2Iv1FmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=H3Ygra5j; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-70d18d4b94cso480258b3a.2
-        for <linux-pm@vger.kernel.org>; Thu, 15 Aug 2024 00:33:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1723707199; x=1724311999; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mSVgOh4W3trTwpBrRTkuN1lvc7J54SJDhoOOLbBw+iU=;
-        b=H3Ygra5j6izjFuKBbcoHy/HiVK8e12hsJniFGdD3G3ndnf8qF5w5XCQErswkq0woi0
-         Waj2qJpPLUP8s/gX/YOCaSA9PGFH/46AQsmhUYEzFFl13H+tXjpVYp/RIso9Cj6c/QZB
-         smfKh6oOd36hGUc+fPq3A3cFlM0qfU7vgpeaU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723707199; x=1724311999;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mSVgOh4W3trTwpBrRTkuN1lvc7J54SJDhoOOLbBw+iU=;
-        b=jNBgQ0X3+rxkEk16dQH3BeMfwjREnM0OJqv2Y1pyb2rAFKk/wvELULhd4PkcbRt8KT
-         TJmjOayeahXK+QVAkf88cg13CTp+bgGNJ/ws5SErR/6F74Fumj94gOQ7N83htBZH0cqa
-         s2tSP3Jh8stuD2TaL/fv9pbgRtB5zfiE7O8MZoPGrh6ENy4u9J/9s9nn2W450AonHZZm
-         yZiIlEslwnIYp4N4/xi48QhyDh/dU70AQNKjCIx8ACAeo4pGJpM220aTryOgEpfZSu/o
-         tTq6vbkeAFpNaYUTmaq79tXJ6F4vhvbfQoCXhvOG7Hh35Znxw97TubIV55SZs1Zn1FL1
-         IcDw==
-X-Forwarded-Encrypted: i=1; AJvYcCVlvkDk/uJowBLRocy5tP2j/7VyLPfhY5UhPpdG8715f6Rhcrq/FKSTc08Z507oiqSwStSCJbtx6t6HNOf1Np1PrSSLtDmmeQw=
-X-Gm-Message-State: AOJu0YzyIuPb0AhMUyyZSjXfuHem2rMdKggYElJFnfrfr8cYiPhcW8S8
-	6SEBWWkQx8rdWpA4b8J62FLvRH8xyQqJ9TZR7begtNlQcAsH/cn9LfIZMIsJGw==
-X-Google-Smtp-Source: AGHT+IE+v6e+Df7tQx88UbXmfy+wlQroZUtqBIcjWsCC3V2G6r5uCEDNzWqCeTXlE1H5mKvT4LnM9w==
-X-Received: by 2002:a05:6a00:1394:b0:705:a13b:e740 with SMTP id d2e1a72fcca58-712673abaf0mr5999238b3a.19.1723707199046;
-        Thu, 15 Aug 2024 00:33:19 -0700 (PDT)
-Received: from google.com ([2401:fa00:1:10:745d:58f7:b3cd:901f])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7127aef544csm563951b3a.121.2024.08.15.00.33.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2024 00:33:18 -0700 (PDT)
-Date: Thu, 15 Aug 2024 15:33:14 +0800
-From: Chen-Yu Tsai <wenst@chromium.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Vasily Khoruzhick <anarsoul@gmail.com>,
-	Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 7/7] thermal: sun8i: Use scoped device node handling to
- simplify error paths
-Message-ID: <20240815073314.GG350960@google.com>
-References: <20240814-b4-cleanup-h-of-node-put-thermal-v1-0-7a1381e1627e@linaro.org>
- <20240814-b4-cleanup-h-of-node-put-thermal-v1-7-7a1381e1627e@linaro.org>
+	s=arc-20240116; t=1723710589; c=relaxed/simple;
+	bh=usUJ+ZMdAJKFpHqU9vw+q8ZPHOCj/YT/Au10Vbbq66A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=C3gRGEo3C2iaQa9pz951O7o8mmeApCe7DZ/4wAsFckYJcOsJdkE6Hiu5wvjbkz9x4qf23uMKyZsF+Q20wDWl2Mj5TQWldpofP+hO9DmimsJ2+o6OtWNJOc4gZO8ZaMWxzCh952d0H7mdhI2V27dj79cXWtEBE/r2eOXXT9hQ+OU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97929169E;
+	Thu, 15 Aug 2024 01:30:10 -0700 (PDT)
+Received: from e126645.nice.arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 706C33F6A8;
+	Thu, 15 Aug 2024 01:29:39 -0700 (PDT)
+From: Pierre Gondois <pierre.gondois@arm.com>
+To: linux-kernel@vger.kernel.org
+Cc: Pierre Gondois <pierre.gondois@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Robert Moore <robert.moore@intel.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Danilo Krummrich <dakr@redhat.com>,
+	Thomas Bertschinger <tahbertschinger@gmail.com>,
+	linux-acpi@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	acpica-devel@lists.linux.dev,
+	rust-for-linux@vger.kernel.org
+Subject: [RFC PATCH 0/6] rust: cpufreq: Add cppc_cpufreq driver implementation
+Date: Thu, 15 Aug 2024 10:29:04 +0200
+Message-Id: <20240815082916.1210110-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240814-b4-cleanup-h-of-node-put-thermal-v1-7-7a1381e1627e@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Aug 14, 2024 at 10:17:53PM +0200, Krzysztof Kozlowski wrote:
-> Obtain the device node reference with scoped/cleanup.h to reduce error
-> handling and make the code a bit simpler.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hello,
+This patchset is based on Viresh's Rust cpufreq patchset [1] and
+implements a basic cppc cpufreq driver in Rust. The following features/
+possibilities are not supported yet:
+- vendor specific workarounds
+- Frequency Invariance Engine (FIE)
+- artificial Energy Model (EM)
+- (struct cpufreq_driver).attr field
+- QoS requests
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Testing:
+The patchset was tested on a CPPC based Juno-r2 platform. It was
+checked that the underlying firmware received the freq. requests
+the OS made.
+The platform doesn't support Delivered/Reference Performance Counters
+which are used to infer the current frequency of a perf. domain. The
+.get() function of the driver was thus implemented, but bypassed
+during testing.
 
-> ---
->  drivers/thermal/sun8i_thermal.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-> index 3203d8bd13a8..22674790629a 100644
-> --- a/drivers/thermal/sun8i_thermal.c
-> +++ b/drivers/thermal/sun8i_thermal.c
-> @@ -9,6 +9,7 @@
->   */
->  
->  #include <linux/bitmap.h>
-> +#include <linux/cleanup.h>
->  #include <linux/clk.h>
->  #include <linux/device.h>
->  #include <linux/interrupt.h>
-> @@ -348,19 +349,18 @@ static void sun8i_ths_reset_control_assert(void *data)
->  
->  static struct regmap *sun8i_ths_get_sram_regmap(struct device_node *node)
->  {
-> -	struct device_node *sram_node;
->  	struct platform_device *sram_pdev;
->  	struct regmap *regmap = NULL;
->  
-> -	sram_node = of_parse_phandle(node, "allwinner,sram", 0);
-> +	struct device_node *sram_node __free(device_node) =
-> +		of_parse_phandle(node, "allwinner,sram", 0);
->  	if (!sram_node)
->  		return ERR_PTR(-ENODEV);
->  
->  	sram_pdev = of_find_device_by_node(sram_node);
->  	if (!sram_pdev) {
->  		/* platform device might not be probed yet */
-> -		regmap = ERR_PTR(-EPROBE_DEFER);
-> -		goto out_put_node;
-> +		return ERR_PTR(-EPROBE_DEFER);
->  	}
->  
->  	/* If no regmap is found then the other device driver is at fault */
-> @@ -369,8 +369,7 @@ static struct regmap *sun8i_ths_get_sram_regmap(struct device_node *node)
->  		regmap = ERR_PTR(-EINVAL);
->  
->  	platform_device_put(sram_pdev);
-> -out_put_node:
-> -	of_node_put(sram_node);
-> +
->  	return regmap;
->  }
->  
-> 
-> -- 
-> 2.43.0
-> 
+[1]
+Can be found at:
+- git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/linux.git rust/cpufreq-dt
+- latest commit: 2b6d636d1c7db3b21198105ad3ed5f458f027637
+  ("defconfig: Update Rust and initramfs")
+- Latest version is available at:
+  - https://lore.kernel.org/lkml/cover.1722334569.git.viresh.kumar@linaro.org/
+
+Pierre Gondois (6):
+  ACPI: CPPC: Move struct cppc_cpudata to cppc_cpufreq driver
+  cpufreq: cppc: Remove perf_fb_ctrs field from struct cppc_cpudata
+  rust: module: Allow modules to specify initcall section
+  rust: cpufreq: Add methods to struct Cpufreq
+  rust: bindings: Add bindings for rcppc_cpufreq driver
+  rust: cpufreq: Add rust implementation of cppc_cpufreq driver
+
+ drivers/acpi/cppc_acpi.c         |  26 ++-
+ drivers/cpufreq/Kconfig          |  16 ++
+ drivers/cpufreq/Makefile         |   1 +
+ drivers/cpufreq/cppc_cpufreq.c   |  12 +-
+ drivers/cpufreq/rcppc_cpufreq.rs | 333 +++++++++++++++++++++++++++++++
+ include/acpi/cppc_acpi.h         |  13 +-
+ rust/bindings/bindings_helper.h  |   1 +
+ rust/helpers.c                   |   6 +
+ rust/kernel/cpufreq.rs           |  53 +++++
+ rust/macros/module.rs            |  21 +-
+ 10 files changed, 457 insertions(+), 25 deletions(-)
+ create mode 100644 drivers/cpufreq/rcppc_cpufreq.rs
+
+-- 
+2.25.1
+
 
