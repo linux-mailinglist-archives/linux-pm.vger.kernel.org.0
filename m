@@ -1,122 +1,111 @@
-Return-Path: <linux-pm+bounces-12269-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12270-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 929F9952EC0
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2024 15:04:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6CFA9530C9
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2024 15:46:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43EB71F22760
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2024 13:04:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E979E1C23C03
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2024 13:46:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BF7A19DF63;
-	Thu, 15 Aug 2024 13:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bv7HjBoR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59CFB18D630;
+	Thu, 15 Aug 2024 13:46:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B191619D89D;
-	Thu, 15 Aug 2024 13:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0C5F7DA9E;
+	Thu, 15 Aug 2024 13:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723727083; cv=none; b=poUamoVqiOp0bCZbhXcKsCY1GO0wVcmu1xU45StTw2krgi2uwOCt2T5yKQrZMdqkQ1ahiKtk+fzrIKWG+weY9zZzNOQeU/RG2ViFtyZw5XxyyRJOHGqLZO1EUuDLcTasM+1Uafoq8fXUwLSj5g1Vhw50FK81Iqv2b5ii8X4PE4s=
+	t=1723729590; cv=none; b=gkwCtm1qDnIgYFi1LAeDESUeZUyt5tZdoPfALZa1Z/k6qS5h0Q5zjfWVx2JQkxfTPZvRRcExbG2jkzOxIwqq7U4TK5u5YrbRKXvDuSZdMvhCmxZ3Gmji+sBrVlreNChDeLUUA46D82cFT1FI6f7lKX53IC6aGkpPXBocIDnbbx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723727083; c=relaxed/simple;
-	bh=CDgGq5qU3Wr0Pir/YqVs7Al/PZ/iVw/ki/I4EssR9Gs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Oxh2i9Rki4tB9HqnNUIzTnX64cC0i0ZJR8nNbthAoHD/bwDGO8PGE5xVn37iFspLi6CPDQ1y4zcFxGblVTHXE4RptgdZgKpWif1nnNcfrmWf+0NL1BQP+z2EOHTEBc/45vuJFBrHT9OPKlLHpn7HVTTposuG/qhDYEN4e7BxGUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bv7HjBoR; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2d3c05dc63eso642036a91.0;
-        Thu, 15 Aug 2024 06:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723727081; x=1724331881; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ia3t2Va5NtSu3BetvUd2KwI5mB/axZOmAEnZeyG3umQ=;
-        b=Bv7HjBoRSkwYJp+afAgm6m9wEWXbr+lydKjFjFAa5HCHVOUCx3KwjAblF6ATDo5AP5
-         uXdCWcwcEje2tCelFYELBx2tu9tljmjPvyu8UwUqtgy+eVKJaOr3CCQTjRrIN7ELPCbv
-         2Ry2sBgojVaVT9p0tSBJvFSa8Htk27q693stQ4xMvxh6GWyAGxJJtENnRD84oafH59SY
-         hRdqHXq8v5F6usr6mTG7uC4VL6LnEhMundc3qYuZkf1ZggiouBCH/g/ZiH3q9DelIa/3
-         EhnCpGxXtvpxWKuiVdVnPmFrSGJ0iDvaxMtCbwizePEDPLfzlcXZ7YAU3zLucaHfyuRV
-         mkCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723727081; x=1724331881;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ia3t2Va5NtSu3BetvUd2KwI5mB/axZOmAEnZeyG3umQ=;
-        b=XnKKUyIxCiQn8o/8F5TvfqqXPG22iITBKEbSSkT9jQNXdpbpXAK2PwDJKCreGhqSlz
-         I+3Z/jkuY2Zv5j/4fBWhf42DgOlbtEo9XEVlxucD8gvQz/LB+fiKFiUKCQVAmS9oz4W7
-         NYqzxXs6B9RjUpSPNlUW06YCiptSlU4qLb2yRgz+zXA8MmfB/K8mgTE1fFO4Oa8MXupv
-         GkQxwfKoBeQ4nQEll8ENGWiJr93/JbL2yoscFbJs9MYp7xNRsN6dw64bZEPDbvhkrqwg
-         YjqRAs8lCeQZVvAacjIMjbyY6RFr34rBkQKIBULxgsY1t1kfD3kjx/6hVzTWhvBt/Q8p
-         52ng==
-X-Forwarded-Encrypted: i=1; AJvYcCVO3/J3XugBVcGsbYotU8ZkeeJmM2c9RYCMUaX5ok/0csKBl6wZwezFljuo0v/Np6244SW6BF+S3Ql6YjvCv6F2QTfHaZPlgc9ajOjUdnLzTPhLpJWSNhgV+CNOsc+tydCZsFZA7buLQFEveG+Pge7IKzLHqsDEBtPIrsTeNdhteM3k2CY=
-X-Gm-Message-State: AOJu0YyCMo9iH6K0frof48ic4gF7tsxSbEUzSBclENggs20cj3wvd9Gl
-	VVfFdVu+RhH5++XbC7RADng9z+6GtDaaUbJ8XHxQ7y7uD+JBOGDSN4UNYC/Nt2FebgGpV+iEZ26
-	8d7k8y+MIyGWTrl8+dsf/IrCFZtPTpp2rBwk=
-X-Google-Smtp-Source: AGHT+IGSrLrwuM5RhDoD7uxpi1mK7ij3LB5lI6V4fRyA+cAlhCiR6Vgro+l7Mk/y4jnJPGmGy0vvDkvDt+x+XsPj1nk=
-X-Received: by 2002:a17:90b:4c51:b0:2d3:d0b7:da4 with SMTP id
- 98e67ed59e1d1-2d3d0b70f31mr1146539a91.19.1723727080832; Thu, 15 Aug 2024
- 06:04:40 -0700 (PDT)
+	s=arc-20240116; t=1723729590; c=relaxed/simple;
+	bh=xpa67Wr74Im2iD+qPPKLdhggzJuep5WPCdoIlQ89s5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d6GJSHPtnjZ3jHvpbu0RL/gBE3ODpsm2d1ceGbSSF3aJvxyj2D46Yxa+IYyAV/QyrG4NcBCsBBFEq42e9B9zVhnK7GOJ/Z8CiWDqS9QqmNPQ2Y4oz7UP8GBUMZpFPGwISGv83EvkF3MyMrPg8XpeLu298Uk8xyQz6odjWndZmns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34EF914BF;
+	Thu, 15 Aug 2024 06:46:54 -0700 (PDT)
+Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A72063F6A8;
+	Thu, 15 Aug 2024 06:46:26 -0700 (PDT)
+Date: Thu, 15 Aug 2024 14:46:24 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Sibi Sankar <quic_sibis@quicinc.com>, cristian.marussi@arm.com,
+	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org, quic_rgottimu@quicinc.com,
+	quic_kshivnan@quicinc.com, johan@kernel.org,
+	Sudeep Holla <sudeep.holla@arm.com>, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH] pmdomain: arm: Fix debugfs node creation failure
+Message-ID: <Zr4GsOndEEMI-6ap@bogus>
+References: <20240703110741.2668800-1-quic_sibis@quicinc.com>
+ <ZoZ6Pk7NSUNDB74i@bogus>
+ <064274c4-3783-c59e-e293-dd53a8595d8e@quicinc.com>
+ <Zofvc31pPU23mjnp@bogus>
+ <CAPDyKFrESupeNS4BO8TPHPGpXFLsNqLPrUEw3xzr8oh8FsLHeA@mail.gmail.com>
+ <Zryxrdodn2Y2xsej@bogus>
+ <CAPDyKFqmV7yvMdLjGhDHJN4CFiUun3FXprEk7uGFV_qmn9vA8Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240815082916.1210110-1-pierre.gondois@arm.com> <20240815082916.1210110-7-pierre.gondois@arm.com>
-In-Reply-To: <20240815082916.1210110-7-pierre.gondois@arm.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 15 Aug 2024 15:04:27 +0200
-Message-ID: <CANiq72mjvE7h_aH5tYnuuzdPHAzDUpioMi-h44HNCro8qFfDSw@mail.gmail.com>
-Subject: Re: [RFC PATCH 6/6] rust: cpufreq: Add rust implementation of
- cppc_cpufreq driver
-To: Pierre Gondois <pierre.gondois@arm.com>
-Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Len Brown <lenb@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Robert Moore <robert.moore@intel.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Thomas Bertschinger <tahbertschinger@gmail.com>, 
-	Danilo Krummrich <dakr@redhat.com>, linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, 
-	acpica-devel@lists.linux.dev, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPDyKFqmV7yvMdLjGhDHJN4CFiUun3FXprEk7uGFV_qmn9vA8Q@mail.gmail.com>
 
-On Thu, Aug 15, 2024 at 10:31=E2=80=AFAM Pierre Gondois <pierre.gondois@arm=
-.com> wrote:
->
-> In an effort to add test/support the cpufreq framework in rust,
-> add a rust implementation of the cppc_cpufreq driver named:
-> `rcppc_cpufreq`.
+On Thu, Aug 15, 2024 at 12:46:15PM +0200, Ulf Hansson wrote:
+> On Wed, 14 Aug 2024 at 15:31, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Wed, Aug 14, 2024 at 02:38:24PM +0200, Ulf Hansson wrote:
+> > >
+> > > Sudeep, while I understand your point and I agree with it, it's really
+> > > a simple fix that $subject patch is proposing. As the unique name
+> > > isn't mandated by the SCMI spec, it looks to me that we should make a
+> > > fix for it on the Linux side.
+> > >
+> >
+> > Yes, I did come to the conclusion that this is inevitable but hadn't
+> > thought much on the exact solution. This email and you merging the original
+> > patch made me think a bit quickly now 😉
+> 
+> Alright, great!
+> 
+> >
+> > > I have therefore decided to queue up $subject patch for fixes. Please
+> > > let me know if you have any other proposals/objections moving forward.
+> >
+> > The original patch may not work well with the use case Peng presented.
+> > As the name and id may also match in their case, I was wondering if we
+> > need to add some prefix like perf- or something to avoid the potential
+> > clash across power and perf genpds ? I may be missing something still as
+> > it is hard to visualise all possible case that can happen with variety
+> > of platform and their firmware.
+> >
+> > In short, happy to have some fix for the issue in some form whichever
+> > works for wider set of platforms.
+> 
+> Okay, so I have dropped the $subject patch from my fixes branch for
+> now, to allow us and Sibi to come up with an improved approach.
+> 
+> That said, it looks to me that the proper fix needs to involve
+> pm_genpd_init() in some way, as this problem with unique device naming
+> isn't really limited to SCMI. Normally we use an "ida" to get a unique
+> index that we tag on to the device's name, but maybe there is a better
+> strategy here!?
 
-Similar to what Greg said -- is this intended to be something like a
-"Rust reference driver" [1] for the subsystem?
+Yes using "ida" for unique index might work here as well AFAIU. It can be
+one of the possible solution for sure.
 
-[1] https://rust-for-linux.com/rust-reference-drivers
-
-> +       depends on ACPI_PROCESSOR
-> +       depends on ARM || ARM64 || RISCV
-
-`depends on RUST`?
-
-Also, I imagine you skipped all safety comments etc. since it is an
-RFC, but I thought I would mention it nevertheless.
-
-Thanks for experimenting with Rust!
-
-Cheers,
-Miguel
+-- 
+Regards,
+Sudeep
 
