@@ -1,174 +1,135 @@
-Return-Path: <linux-pm+bounces-12352-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12353-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD0F8954743
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 12:58:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA809954812
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 13:31:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D8B51F24398
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 10:58:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8212C2866C2
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 11:31:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B20D1B9B5A;
-	Fri, 16 Aug 2024 10:55:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59641990A5;
+	Fri, 16 Aug 2024 11:30:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KZRn6+op"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+y2GNCH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F041BB6B9
-	for <linux-pm@vger.kernel.org>; Fri, 16 Aug 2024 10:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B437B13D516;
+	Fri, 16 Aug 2024 11:30:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723805709; cv=none; b=SgF7Y/a2eiTTSxj31Mzia05h9g7QBIw6gdgHi8qSWwusqXeewTbmfFI4xChEQNXPJYkdqrFQKuZh34kmp37zEkW0tep51EAtWFhRKkwAqJyi0WDCok+9FkufPfm3btHNcuzxX9aI2zcf1S14mZX0c+BggSuIIzl6zAO6XSCh59A=
+	t=1723807856; cv=none; b=YfUsNSCb9bUeQeGLjpIxp9c48wlMTdEMdufPVc5snEd1V03syVa4f6Df9Q+rNJWiHyxUZLYSy1QFJFlrKMKx3M9uPjm2GhXgMuF68Ss0aKPWP2SC9gQLLn56M4emy4oMNFzcefSORm3llmExBBaawdOxaQqe2PfBqEnC92ZdYeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723805709; c=relaxed/simple;
-	bh=XVq1bAp1DPzbReC84gkm7B7jCsUc7V7wiEW2r5jKKFs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KXm/1xcGw3rkfiaPhMn8lCDmJmTbq/LZvUKGs+wredMo+oZF+sskSsvRh3XX2EJ8U3QTsn0H3fL50aJ3frxRPSkOJXLBPvaxjH1KxSkdPL4Lo96eFchJJOdvYhtJtgIlw1pTtZmd8nA1XfFeHH83gX9lQkMIB/TP3ATlUKlJsfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KZRn6+op; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-428243f928fso18663105e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 16 Aug 2024 03:55:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723805705; x=1724410505; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xzZC0M9EYFXrRYfn9TDzsNDqOMCKTr68cWUMx7V2XT4=;
-        b=KZRn6+opKv1rX7QwuZfaN4+JWsagBSk88vsI8bSJKVWdhq7c3t4ZPl7bP8tY0hBLD4
-         DCp+KtbrPX2T1aMxr1jKu3Puhb5ff8wOlktdaMHaw32efycibL+qIrib0d3lOdHqhS7X
-         dCSVLTnVTB2Hu7NenfuSE1aKGEXzCHsbvbvHeh3gUWmkMhZCKY178wbxH3WR++hgb2Bz
-         7PwRfg7b3Z3uMYueQBXjArkvvedfAO5LKkUvaX7DG8KgDCafC7ol1eP726Dhy7RYrN9A
-         +TL70pDSmHuz/dtjMxJ44g5nDFuvKS289LbfyInfY4ik/eyXSdg21QaiZfHDbfkpTOLO
-         JpIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723805705; x=1724410505;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xzZC0M9EYFXrRYfn9TDzsNDqOMCKTr68cWUMx7V2XT4=;
-        b=OUZxuR15z7Zt7sM+zB0pFoBtiLyRGCM0Lrpe9XDxMzyj6NhVawXBQEBWstA3rJkCUG
-         UYOnEGFcb61p34ksPROWztXDNR6eFNrasmD8UejZQQOIhSIo5VqqTLglBqN3gVOjmXdH
-         eC8Cg35/UyFIaJQPk95U6hdvnPvpcP8fo28ngyBHc4KVuatQ3eOmeiYrxnHLNSJ/6xl2
-         KpQn6X1banKbbRT2lxCiRXY+/M/7AiLnWOUAQbtL4A8qfnnZUxTu8sQ50rKBwjx2leqm
-         tx01rQi8yG9NPWBWVhPBi3LTngysof4VymzLp96CsiJ5kLT9lo1TUYgdBCoOhKs075mp
-         IrSA==
-X-Forwarded-Encrypted: i=1; AJvYcCVBXs1wkkB8yIR1OmV+yGlfh1E27UbQs+595vG5tOrRnHk628efaXpU3a/oUtbeffqKTM1WvgM6hJkBJslwwItQ64uY+8HNM5Q=
-X-Gm-Message-State: AOJu0Yx9kIwpquyWrTcgRhA5oI6cTV43GRHq4FKlkZ7RZd+jYxMPkn17
-	purVihTjqj29E0Z276yJpb3boz6f550Qt7mUEzA1XHmpisSEjvpUwXfjvUjAwfgDfDEOW7BFb0b
-	tQqQ=
-X-Google-Smtp-Source: AGHT+IHjZHJdqi78iF456VbGb6wR7RxT96NknEiGEFoYeO6BRf1QVX7lFBSfHR9ooukIBdApMHs1NQ==
-X-Received: by 2002:a05:600c:208:b0:426:59fe:ac27 with SMTP id 5b1f17b1804b1-429ed7d6481mr18549855e9.26.1723805705202;
-        Fri, 16 Aug 2024 03:55:05 -0700 (PDT)
-Received: from [127.0.1.1] ([178.197.215.209])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429ed7945cesm19461935e9.40.2024.08.16.03.55.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Aug 2024 03:55:04 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Date: Fri, 16 Aug 2024 12:54:37 +0200
-Subject: [PATCH v2 13/13] memory: ti-aemif: simplify with scoped for each
- OF child loop
+	s=arc-20240116; t=1723807856; c=relaxed/simple;
+	bh=iTKp4GL48Z79wykXvhoQWKuCdyuAxySCPMOzA1kXgjc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IaRGvmgpTSG6OMSnsahv2AM4S5EuxC9/zHyiPW9pCvpi2Wa9V16DQWTraCje6bq8PybSr/Wo7mg/AW1x63LsPxbWtrkakmL0urZ2ubZF4jcHmKns4cPD6KZQ1dsK7nltWyFCR5TpAcuqYWee4/ZxHtidbwqtZpwQB0zQ88MLbO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+y2GNCH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 461DBC4AF09;
+	Fri, 16 Aug 2024 11:30:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723807856;
+	bh=iTKp4GL48Z79wykXvhoQWKuCdyuAxySCPMOzA1kXgjc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=F+y2GNCH+SzibnVJKE+az41UWlMCnq2IGTHTPvj2VJaoFAZ3kaHESrY5uKZjcJ3io
+	 ne8bKy8h+NBJdqhfeTkHuz5ZkaNhOmT0t44Y5oxPUemqeMnv0DgFpUZ5qu2tsHomXy
+	 r3reCIf2NO3Dklh/ordWOrV3ccQiPeyrdGZ3z1brNF/xHp6VfI82bbunzn3b5woBt+
+	 Q5fMyK5/uzMV/DnHP8qMFA5xU9cp3uGWmntMHLjRiuXSZr2PgacntQn2eHos39QRu3
+	 PX1N2mhtkIkrN3DTp9/QxCM8q9Qy8lT54pNZ3Gl207pYNfiwDYAIAUEQcdPPw0/BXB
+	 m3WNXQqA5s60w==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2702920904bso34465fac.0;
+        Fri, 16 Aug 2024 04:30:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX4UcWFUNDDIdqrNW/xU23LsMRespXoKziSrDzClcNPsnIzvV+66YEAty8k/tI/yl1tTFNiVGzJmH9KcIPS@vger.kernel.org, AJvYcCXVFdPURXH4Mr5ZR5JMK5KO3ZuRgB9kYw8WdrD9o781UP6YsDpaaNvWETFL/A0CMtLdw/BgMI9vk5pXdUs=@vger.kernel.org, AJvYcCXVvZwC5mdGzUs+GdcIZxDW9bjhRZbIYuiotrJsuwmc4Wht1ai2KRqd7mPF+Dcg++SIyyjtMOTImnlZCcmy@vger.kernel.org, AJvYcCXpCx94PMK0QAX0tOqA9sncYmidxZGjZEc7mKeiBHTrT2lZdevlqC1RSMgky75o4yXc+R7ciOzvMuk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSwqhjRELifu7axoM/+neWCx+DHHaW3WI1CH8ToBFidrZNfwaa
+	Gvw1ENVO3r5nJwyckqye9/t9db5FNdLsXt6bDpcbYNwAxETAZnRN0t4eNRQ+QBsbSrbbaHiZkKu
+	uVBpWzktUKDpyrAHXRxAE3mH9QkA=
+X-Google-Smtp-Source: AGHT+IGksgxrJE/AET4H4ek77RLxaKWMQtUSxMwVquLrAblG2r4SkuvWW2DDOXFBthaYmRRm7m2Y273sUrVZjRR86Cw=
+X-Received: by 2002:a05:6870:1495:b0:260:f1c4:2fdf with SMTP id
+ 586e51a60fabf-2701c5e26c9mr1514734fac.9.1723807854964; Fri, 16 Aug 2024
+ 04:30:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240816-cleanup-h-of-node-put-memory-v2-13-9eed0ee16b78@linaro.org>
-References: <20240816-cleanup-h-of-node-put-memory-v2-0-9eed0ee16b78@linaro.org>
-In-Reply-To: <20240816-cleanup-h-of-node-put-memory-v2-0-9eed0ee16b78@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, 
- Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
- Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, 
- Santosh Shilimkar <ssantosh@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
- linux-stm32@st-md-mailman.stormreply.com, linux-tegra@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1869;
- i=krzysztof.kozlowski@linaro.org; h=from:subject:message-id;
- bh=XVq1bAp1DPzbReC84gkm7B7jCsUc7V7wiEW2r5jKKFs=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBmvy/yjJOSs+fjUCguca37Fmp1Np6bS/o8AycYV
- q1DSeQLoR6JAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCZr8v8gAKCRDBN2bmhouD
- 1z3+D/4vIO8HONcnYaJfvUTePd6DMbBbn9F/+h5JlkVZ9zuC6/FNYFAdsOVvol0buCd7GaQWZvB
- xkVBikxYPZ/SpZ/juDJ1odkOaVuG+6NFpphe6DNYNdwhio6ejIUqUcPYrgF88Lkc315GuP4WaHh
- LQrpEtjlApG1WaiWbwIyWH2Pe6aYg6XG2Qt5641TUI4xcOu9mdemiA6giWEpFo8OS1fA3vgDolp
- YQWUT5h/oXmzvUoFRt6nTrOWpdPc0cUcectO/1sJxCzVAn6+idbkM/UCEF6dxovgd0Xq1rbtS8Y
- HSlVMFGLgkJ1ujF1QHVdPYR8Ms0Qgsk3cJUMNbvRKw4BWCyPBa9GM+1gp8V+5O4ozHdWYpNwdNJ
- WTVSTv3lSokPa/71tY2WlqDaLwd5Wz/5Cd3NxPrCYKSIti5jI5aF2DkO5fF1NES8LHwVKhwiBPh
- 1GDrE73cb3PgoZQaGrPa8bA6QZNnFoZ0Isw68JLrfs8DvnyGnS0kJmGZsxZvO10+6iu7fv3BMeP
- /yJ5siDXH5HJP4f8bqPef8kK6KkDxp25JKag4raVN91XG1UeuBdgU+0dIOlTfpGHsfvIgcvemJ6
- N8nBHo+dkh0vyPbMITPZEbJASGRHeSS++0db3mzSmkBWtUYQx4Abnd2BV8WH1C0z24W+pTT3FS9
- U08Yg6h2nsqgtDA==
-X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp;
- fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+References: <20240816-b4-cleanup-h-of-node-put-thermal-v2-0-cee9fc490478@linaro.org>
+ <20240816-b4-cleanup-h-of-node-put-thermal-v2-4-cee9fc490478@linaro.org>
+In-Reply-To: <20240816-b4-cleanup-h-of-node-put-thermal-v2-4-cee9fc490478@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 16 Aug 2024 13:30:43 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j9WTzd5qg3bLLB6Y41xu1zoJMy7TV1xhFxEzW-x=b5=w@mail.gmail.com>
+Message-ID: <CAJZ5v0j9WTzd5qg3bLLB6Y41xu1zoJMy7TV1xhFxEzW-x=b5=w@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] thermal: of: Simplify thermal_of_for_each_cooling_maps()
+ with scoped for each OF child loop
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, Chen-Yu Tsai <wenst@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Use scoped for_each_available_child_of_node_scoped() when iterating over
-device nodes to make code a bit simpler.
+On Fri, Aug 16, 2024 at 9:40=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Use scoped for_each_child_of_node_scoped() when iterating over device
+> nodes to make code a bit simpler.
+>
+> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/thermal/thermal_of.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 94cc077ab3a1..ce398fde48bb 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -373,7 +373,7 @@ static int thermal_of_for_each_cooling_maps(struct th=
+ermal_zone_device *tz,
+>                                             int (*action)(struct device_n=
+ode *, int, int,
+>                                                           struct thermal_=
+zone_device *, struct thermal_cooling_device *))
+>  {
+> -       struct device_node *tz_np, *cm_np, *child;
+> +       struct device_node *tz_np, *cm_np;
+>         int ret =3D 0;
+>
+>         tz_np =3D thermal_of_zone_get_by_name(tz);
+> @@ -386,12 +386,10 @@ static int thermal_of_for_each_cooling_maps(struct =
+thermal_zone_device *tz,
+>         if (!cm_np)
+>                 goto out;
+>
+> -       for_each_child_of_node(cm_np, child) {
+> +       for_each_child_of_node_scoped(cm_np, child) {
+>                 ret =3D thermal_of_for_each_cooling_device(tz_np, child, =
+tz, cdev, action);
+> -               if (ret) {
+> -                       of_node_put(child);
+> +               if (ret)
+>                         break;
+> -               }
+>         }
+>
+>         of_node_put(cm_np);
+>
+> --
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/memory/ti-aemif.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+This clashes with
 
-diff --git a/drivers/memory/ti-aemif.c b/drivers/memory/ti-aemif.c
-index bb9c8132d8c0..7b48303f183b 100644
---- a/drivers/memory/ti-aemif.c
-+++ b/drivers/memory/ti-aemif.c
-@@ -330,7 +330,6 @@ static int aemif_probe(struct platform_device *pdev)
- 	int ret = -ENODEV;
- 	struct device *dev = &pdev->dev;
- 	struct device_node *np = dev->of_node;
--	struct device_node *child_np;
- 	struct aemif_device *aemif;
- 	struct aemif_platform_data *pdata;
- 	struct of_dev_auxdata *dev_lookup;
-@@ -366,12 +365,10 @@ static int aemif_probe(struct platform_device *pdev)
- 		 * functions iterate over these nodes and update the cs data
- 		 * array.
- 		 */
--		for_each_available_child_of_node(np, child_np) {
-+		for_each_available_child_of_node_scoped(np, child_np) {
- 			ret = of_aemif_parse_abus_config(pdev, child_np);
--			if (ret < 0) {
--				of_node_put(child_np);
-+			if (ret < 0)
- 				return ret;
--			}
- 		}
- 	} else if (pdata && pdata->num_abus_data > 0) {
- 		for (i = 0; i < pdata->num_abus_data; i++, aemif->num_cs++) {
-@@ -394,13 +391,11 @@ static int aemif_probe(struct platform_device *pdev)
- 	 * child will be probed after the AEMIF timing parameters are set.
- 	 */
- 	if (np) {
--		for_each_available_child_of_node(np, child_np) {
-+		for_each_available_child_of_node_scoped(np, child_np) {
- 			ret = of_platform_populate(child_np, NULL,
- 						   dev_lookup, dev);
--			if (ret < 0) {
--				of_node_put(child_np);
-+			if (ret < 0)
- 				return ret;
--			}
- 		}
- 	} else if (pdata) {
- 		for (i = 0; i < pdata->num_sub_devices; i++) {
+https://lore.kernel.org/linux-pm/1758256.QkHrqEjB74@rjwysocki.net/
 
--- 
-2.43.0
-
+which I would prefer to go in first if you don't mind.
 
