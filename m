@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-12332-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12333-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6D35954625
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 11:50:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAA5F95463F
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 11:55:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97271282BFA
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 09:50:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 499FE1F21ED0
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 09:55:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4507617279E;
-	Fri, 16 Aug 2024 09:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E20FF16BE09;
+	Fri, 16 Aug 2024 09:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XgpIudqF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IDeVTwPb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED6616F29F;
-	Fri, 16 Aug 2024 09:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC00212D773;
+	Fri, 16 Aug 2024 09:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723801783; cv=none; b=EXG2dMc/QeuRd3mzpd2dFwK5EZ4mPVOjELOG9udpDYYvPQyF/weax0pXt75Czq+tW6r50l3bVfdtD+t+dR+vp5RMeBlwmh7NdNfKXuenYVuuA9fRHuoc3L4hoFYHTfxF2et9lfKmyoU2Jvt8TPawCYb1vJZkcI2kfCLVs28ZcxA=
+	t=1723802104; cv=none; b=euO+RiUgNiXvPK/IoM9WviWz1U3Xvrarao6v03dthM/yLlFuN7Ldh6zbImL0F4mSjUr1NDbiS4rPpYQ5K4LCmNjihlRBr+dJHHXSmUaWuzMjjejCHqwhDN6bG1oG+xg9LGabzNxIKpGDZg5Rq0qvQ3gJoGdNoHbr4u5W9K0Wahg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723801783; c=relaxed/simple;
-	bh=TJ37zJG7K+Dh1wIbvBYZ1dG5/BCwMp720tREdfnpZ9s=;
+	s=arc-20240116; t=1723802104; c=relaxed/simple;
+	bh=txY5dNdKYsNGue+2BgJYSuFeOKBcHe3KJqufST9Oka0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ciWLYXBKaR0E5twP4XuAk9cDosO6PCeqx25bV4eNDhrDUI+qVgPFWa3mUHAuETkjkXlRPc2egNejUxyWQy7nkFiN23K7Quz2jewerz3HIlhQCmX1QmE88fchyuyF9jAUC2cIHqi165S1dLFPhVOqzTTWhEHJwNvnG1tMF4hled4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XgpIudqF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF95EC32782;
-	Fri, 16 Aug 2024 09:49:36 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=jQnHi5GJQPkaEjfx6JyK7hMAr7/qf41Xyg4ABQBYS+2PLqK7Sgs44hcq+XoxxoS0me+dm5lN4Jh+PwLYAzrh/lo5V2Fn9e9hb29EFd4627agtUycIvC3ALgNCPmbXi5UrqkoMok+hQVEuNuRaWlMnEOArgPrh2wNpPoguHIMytg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IDeVTwPb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7375FC32782;
+	Fri, 16 Aug 2024 09:54:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723801782;
-	bh=TJ37zJG7K+Dh1wIbvBYZ1dG5/BCwMp720tREdfnpZ9s=;
+	s=k20201202; t=1723802104;
+	bh=txY5dNdKYsNGue+2BgJYSuFeOKBcHe3KJqufST9Oka0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XgpIudqFFps9IGzbr+vf0IeOaVAaJj9UqUN3gYllkhuH98HCH37R42fmX4vz4FvNk
-	 aS0CgPuFuNF7gG8g3SgZxeL3GaU1F0hsocm1Fjh2Z0+/eVnlj8Yohc2piZy+N+c8Es
-	 2dDWFHlPoxTakx+hFGgaknRchE0y6TO/z2VWPkvuCSBHFk/JbiTBGqFvw1myJg/o6Z
-	 NfeKF2Y7YvKpIkpDwPJZPIlYXNcdfYpFTOMnaosi0hfJVXr2fQTLiU2uPi2mqsy5uz
-	 x2UKxxigdLRstYLmDAgjI50hoi3onjvd2Fc307SQjL6Q7uISlDCMVR+g2+26gvY4eD
-	 YMRWn3mKxGCxA==
-Message-ID: <5f89d2b4-413b-4992-af3d-7c58e858ece8@kernel.org>
-Date: Fri, 16 Aug 2024 11:49:34 +0200
+	b=IDeVTwPbZtmiuiJ80+XJqk2v7JCUMtxD85nW3NG7xQHDj0MVzOZQwOGpLMnB3SoQp
+	 rtNqiU0qM9iuzy5I9Dcd0cIOvpTL/pC7mO+o3KU3vfcnaWvfjcuD1c3r7JKE7Ds3Tq
+	 wdiN+q74Usy0lBMPSk3IEEdUCAOZr4P3xQAvbkQf/BMcJaDPQwlXQobs9iqlLsCOic
+	 qbH5DmVK++kk+3vEbpGHiRXbsGoNpzR8rkayLR1vClkorkLxc49t2kMeIWq2ccpPLJ
+	 5jVqzhEXL9mJMGGVJ4ywgq+o6+ged8CwnYphI18Q8WzTJ6MpDweKNbYJagtgC7ihIw
+	 Fk9xIgjaYwzUg==
+Message-ID: <9dbaacdb-5f9c-48d4-a56a-a19ca8809344@kernel.org>
+Date: Fri, 16 Aug 2024 11:54:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 03/10] power: supply: max77693: Expose input current
- limit and CC current properties
+Subject: Re: [PATCH v4 04/10] power: supply: max77693: Set charge current
+ limits during init
 To: Artur Weber <aweber.kernel@gmail.com>,
  Chanwoo Choi <cw00.choi@samsung.com>
 Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -64,7 +64,7 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
 References: <20240816-max77693-charger-extcon-v4-0-050a0a9bfea0@gmail.com>
- <20240816-max77693-charger-extcon-v4-3-050a0a9bfea0@gmail.com>
+ <20240816-max77693-charger-extcon-v4-4-050a0a9bfea0@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,7 +110,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240816-max77693-charger-extcon-v4-3-050a0a9bfea0@gmail.com>
+In-Reply-To: <20240816-max77693-charger-extcon-v4-4-050a0a9bfea0@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -122,14 +122,165 @@ On 16/08/2024 10:19, Artur Weber wrote:
 > - CHGIN input current limit (which controls current going into the
 >   charger through the cable).
 > 
-> Add the necessary functions to retrieve the CHGIN input limit (from CHARGER
-> regulator) and maximum fast charge current values, and expose them as power
-> supply properties.
+> Add functions for setting both of the values, and set them to a
+> safe default value of 500mA at initialization.
 > 
+> The value for the fast charge current limit can be modified by setting
+> the constant-charge-current-max-ua DT property of the battery node
+> specified in the monitored-battery charger DT property; the CHGIN input
+> current limit will be set up later in the charger detection mechanism
+> (in the future, the INPUT_CURRENT_LIMIT property could also be made
+> writeable for userspace control of the current limit, while keeping
+> the actual current limit from the charger to the battery intact
+> so that users don't accidentally blow up their batteries with a bad
+> value).
+> 
+> Acked-by: Lee Jones <lee@kernel.org>
 > Tested-by: Henrik Grimler <henrik@grimler.se>
 > Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+> ---
+> Changes in v3:
+> - Dropped CHARGER reg in favor of managing the registers directly
+> 
+> Changes in v2:
+> - Squashed mfd include register additions into this commit
+> - Changed from custom fast charge current property to monitored-battery
+>   (devm_power_supply_register call has been moved up as it is needed by
+>   the DT init function now)
+> - Changed to adapt to both current limit values being managed by the
+>   CHARGER regulator
+> ---
+>  drivers/power/supply/max77693_charger.c | 82 ++++++++++++++++++++++++++++-----
+>  include/linux/mfd/max77693-private.h    |  2 +
+>  2 files changed, 73 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/power/supply/max77693_charger.c b/drivers/power/supply/max77693_charger.c
+> index 4caac142c428..17975ec69a6a 100644
+> --- a/drivers/power/supply/max77693_charger.c
+> +++ b/drivers/power/supply/max77693_charger.c
+> @@ -26,6 +26,7 @@ struct max77693_charger {
+>  	u32 min_system_volt;
+>  	u32 thermal_regulation_temp;
+>  	u32 batttery_overcurrent;
+> +	u32 fast_charge_current;
+>  	u32 charge_input_threshold_volt;
+>  };
+>  
+> @@ -596,6 +597,48 @@ static int max77693_set_batttery_overcurrent(struct max77693_charger *chg,
+>  			CHG_CNFG_12_B2SOVRC_MASK, data);
+>  }
+>  
+> +static int max77693_set_input_current_limit(struct max77693_charger *chg,
+> +		unsigned int uamp)
+> +{
+> +	unsigned int data;
+> +
+> +	if (uamp < 60000 || uamp > 2540000) {
+> +		dev_err(chg->dev, "Wrong value for input current limit");
+> +		return -EINVAL;
+> +	};
+> +
+> +	data = uamp / 20000; /* 20mA steps */
+> +
+> +	data <<= CHG_CNFG_09_CHGIN_ILIM_SHIFT;
+> +
+> +	dev_dbg(chg->dev, "Input current limit: %u (0x%x)\n", uamp, data);
+> +
+> +	return regmap_update_bits(chg->max77693->regmap,
+> +			MAX77693_CHG_REG_CHG_CNFG_09,
+> +			CHG_CNFG_09_CHGIN_ILIM_MASK, data);
+> +}
+> +
+> +static int max77693_set_fast_charge_current(struct max77693_charger *chg,
+> +		unsigned int uamp)
+> +{
+> +	unsigned int data;
+> +
+> +	if (uamp > 2100000) {
+> +		dev_err(chg->dev, "Wrong value for fast charge current\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	data = uamp / 33300; /* 0.1A/3 steps */
+> +
+> +	data <<= CHG_CNFG_02_CC_SHIFT;
+> +
+> +	dev_dbg(chg->dev, "Fast charge current: %u (0x%x)\n", uamp, data);
+> +
+> +	return regmap_update_bits(chg->max77693->regmap,
+> +			MAX77693_CHG_REG_CHG_CNFG_02,
+> +			CHG_CNFG_02_CC_MASK, data);
+> +}
+> +
+>  static int max77693_set_charge_input_threshold_volt(struct max77693_charger *chg,
+>  		unsigned int uvolt)
+>  {
+> @@ -673,6 +716,15 @@ static int max77693_reg_init(struct max77693_charger *chg)
+>  	if (ret)
+>  		return ret;
+>  
+> +	ret = max77693_set_fast_charge_current(chg, chg->fast_charge_current);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = max77693_set_input_current_limit(chg,
+> +				DEFAULT_FAST_CHARGE_CURRENT);
+> +	if (ret)
+> +		return ret;
+> +
+>  	return max77693_set_charge_input_threshold_volt(chg,
+>  			chg->charge_input_threshold_volt);
+>  }
+> @@ -681,6 +733,7 @@ static int max77693_reg_init(struct max77693_charger *chg)
+>  static int max77693_dt_init(struct device *dev, struct max77693_charger *chg)
+>  {
+>  	struct device_node *np = dev->of_node;
+> +	struct power_supply_battery_info *battery_info;
+>  
+>  	if (!np) {
+>  		dev_err(dev, "no charger OF node\n");
+> @@ -708,11 +761,20 @@ static int max77693_dt_init(struct device *dev, struct max77693_charger *chg)
+>  		chg->charge_input_threshold_volt =
+>  			DEFAULT_CHARGER_INPUT_THRESHOLD_VOLT;
+>  
+> +	if (power_supply_get_battery_info(chg->charger, &battery_info) ||
+> +			!battery_info->constant_charge_current_max_ua)
+> +		chg->fast_charge_current = DEFAULT_FAST_CHARGE_CURRENT;
+> +	else
+> +		chg->fast_charge_current =
+> +			battery_info->constant_charge_current_max_ua;
+> +
+>  	return 0;
+>  }
+>  #else /* CONFIG_OF */
+>  static int max77693_dt_init(struct device *dev, struct max77693_charger *chg)
+>  {
+> +	chg->fast_charge_current = DEFAULT_FAST_CHARGE_CURRENT;
+> +
+>  	return 0;
+>  }
+>  #endif /* CONFIG_OF */
+> @@ -732,6 +794,15 @@ static int max77693_charger_probe(struct platform_device *pdev)
+>  	chg->dev = &pdev->dev;
+>  	chg->max77693 = max77693;
+>  
+> +	psy_cfg.drv_data = chg;
+> +
+> +	chg->charger = devm_power_supply_register(&pdev->dev,
+> +						  &max77693_charger_desc,
+> +						  &psy_cfg);
+> +	if (IS_ERR(chg->charger))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(chg->charger),
+> +				     "failed: power supply register\n");
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This code move is not explained in the commit msg. At least I could not
+find it. Please explain why you need it in the commit msg.
+
+BTW, if you are interested in devices using this driver, have time, in
+general care about the code and want to respond to patches, feel free to
+add yourself to driver's maintainer entry.
+
+
 
 Best regards,
 Krzysztof
