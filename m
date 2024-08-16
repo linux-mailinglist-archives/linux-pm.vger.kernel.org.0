@@ -1,114 +1,125 @@
-Return-Path: <linux-pm+bounces-12302-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12303-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BDE095425A
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 09:07:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E014D9542C4
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 09:28:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7E971F21C20
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 07:07:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64190B2186A
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 07:28:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A65885283;
-	Fri, 16 Aug 2024 07:06:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE71212C465;
+	Fri, 16 Aug 2024 07:28:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kfPWJs8z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dtvn8GAM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DE078C68;
-	Fri, 16 Aug 2024 07:06:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329908563E;
+	Fri, 16 Aug 2024 07:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723792000; cv=none; b=Oou9XUrHZdtHN8tpvQsmo2zg76IqnpYZGwtwcw+RovvlMDP4cTZxVcPtEEKy6LxNREcQYUPLN4rJZsXpkenmWyNhtsYkWRAfQYLV0ORzL6KaDhUEuDHTR4a9WBmJry9P7su/k8VY0YfhaY+4YI4ew3yBJ2WloCK0vLzvCilaBYQ=
+	t=1723793284; cv=none; b=KmVuk9yXV7FVg1iBNf0MPkgAHNI7gTWgI1xFAIHWj0Byla3Z0pUmDEF9/yWPbuEBDMruL1Zchym7bAL0SLGJ19sqgnQjnjcdlatOubCjLQAz9tOT+9RBMYQGJZGsjDYLqJx1ElsfIVzvoDWOMqO2IwRaAyxWSuuWgzD+jDGJHbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723792000; c=relaxed/simple;
-	bh=3J0NRytEsTukDgVOmZIAUw6cxnJT3AnHuFYMxFXR5/4=;
+	s=arc-20240116; t=1723793284; c=relaxed/simple;
+	bh=Yue6WQ830weCdQe8FWjaTaPLieyUHCZqYinYPsMU+u4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JlSoQyu8MuMHxQ2CzQVW3gJNAFcn14mY+CDoyyJhFoUMesv/fjCJ6xawBnQ5veXy6wKf0y5ThfK3WDJpjpvV9/uwiGZ7yzXJpH/ev38bcs94qa0XE8EAFAbourbCR0zUYPh9aieeLJzNKI2sxMQZiAqpH2R7lImLqTDN3BqyRqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=kfPWJs8z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F8D4C32782;
-	Fri, 16 Aug 2024 07:06:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1723791999;
-	bh=3J0NRytEsTukDgVOmZIAUw6cxnJT3AnHuFYMxFXR5/4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kfPWJs8zN3LV+ovFZqYb0GyUraQ71cmPjiIK6tzsmYps0Y3h8KC8jP0BSNEGa85If
-	 PA1nwWfnYzoUpg4qZOog9cj+0KVJ5pan7CmMu9PFVrSCwwleavd29aHezUmAHAezBV
-	 S0637v2hVxRNlGTV4O6/xJtFEo3ERTxShj5VhqMM=
-Date: Fri, 16 Aug 2024 09:06:36 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Pierre Gondois <pierre.gondois@arm.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
-	Robert Moore <robert.moore@intel.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Thomas Bertschinger <tahbertschinger@gmail.com>,
-	Danilo Krummrich <dakr@redhat.com>, linux-acpi@vger.kernel.org,
-	linux-pm@vger.kernel.org, acpica-devel@lists.linux.dev,
-	rust-for-linux@vger.kernel.org, Metin Kaya <metin.kaya@arm.com>
-Subject: Re: [RFC PATCH 6/6] rust: cpufreq: Add rust implementation of
- cppc_cpufreq driver
-Message-ID: <2024081634-excluding-squeezing-c386@gregkh>
-References: <20240815082916.1210110-1-pierre.gondois@arm.com>
- <20240815082916.1210110-7-pierre.gondois@arm.com>
- <CANiq72mjvE7h_aH5tYnuuzdPHAzDUpioMi-h44HNCro8qFfDSw@mail.gmail.com>
- <1605d622-faf5-4535-bd71-ba514ee102dd@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=WgM+SjKepuCbMviX83914bWv5p8NK2yrgQ330RXguS4y1yuOIjHX9qO4CZT3b+ltfw1CvNuNF98+f6RP7JG2x3rdcUaSUs9X/8OrV6aZfZePkuvtzK/P9ssWZV+u0oFRZuQOJCxRyEe7tcP/sz+KrobyScj2uFiKL8AkHsvzKkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dtvn8GAM; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723793282; x=1755329282;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Yue6WQ830weCdQe8FWjaTaPLieyUHCZqYinYPsMU+u4=;
+  b=dtvn8GAMWouohtMDFMStTv5fLOtypvImZxmQ6HWtdDw1S2x7ZCFgaEBN
+   al2BdCvKSZ7VdnCD6nrGPazY8h7R3R/i70nb58lWU1IQ25ft8ZhK4vmIG
+   XY6tUnKeER/PRkfS0TeZoEmbTF2kqYuN/R3BoqDPKIjZXD1bZbNc6Xm2T
+   Q8roy1mEE8D/E5/4Ac+zGTUxaMBcT0TtiwOBllEJvskpCfixCLfgnM1qM
+   y17pB0LVElYvpmLFKFiSJUEe77DEMcOuVqw2L2g4dG1wqAXg2Nq/xhv9q
+   P/AtllparcxybI35Hrn4V4HBfZn14V2dN54ypxLMOGD7t6JvCG1fO5nEW
+   A==;
+X-CSE-ConnectionGUID: 7ezN2LDfS16BFMfpXGC5pw==
+X-CSE-MsgGUID: IT5bdfB6TO2VpW6ikWI8fA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="22225647"
+X-IronPort-AV: E=Sophos;i="6.10,151,1719903600"; 
+   d="scan'208";a="22225647"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2024 00:27:52 -0700
+X-CSE-ConnectionGUID: TMSYtdU0ScSPiqwIoebVxg==
+X-CSE-MsgGUID: pBRXIBB+QAa/o7Ioixu3ig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,151,1719903600"; 
+   d="scan'208";a="59433899"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 16 Aug 2024 00:27:49 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1serND-00066w-1a;
+	Fri, 16 Aug 2024 07:27:47 +0000
+Date: Fri, 16 Aug 2024 15:27:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andres Salomon <dilinger@queued.net>, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	platform-driver-x86@vger.kernel.org,
+	Matthew Garrett <mjg59@srcf.ucam.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	linux-pm@vger.kernel.org, Dell.Client.Kernel@dell.com
+Subject: Re: [PATCH v3 1/2] platform/x86:dell-laptop: Add knobs to change
+  battery charge settings
+Message-ID: <202408161520.j54E147f-lkp@intel.com>
+References: <20240815192848.3489d3e1@5400>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1605d622-faf5-4535-bd71-ba514ee102dd@arm.com>
+In-Reply-To: <20240815192848.3489d3e1@5400>
 
-On Fri, Aug 16, 2024 at 08:59:22AM +0200, Pierre Gondois wrote:
-> Hello Greg, Miguel,
-> 
-> On 8/15/24 15:04, Miguel Ojeda wrote:
-> > On Thu, Aug 15, 2024 at 10:31 AM Pierre Gondois <pierre.gondois@arm.com> wrote:
-> > > 
-> > > In an effort to add test/support the cpufreq framework in rust,
-> > > add a rust implementation of the cppc_cpufreq driver named:
-> > > `rcppc_cpufreq`.
-> > 
-> > Similar to what Greg said -- is this intended to be something like a
-> > "Rust reference driver" [1] for the subsystem?
-> 
-> The initial intent was to review/test Viresh's patchset [1]. I then
-> thought it would be a good idea to implement another cpufreq driver
-> to see if the provided interface would work.
-> As the cpufreq-dt driver is re-implemented in Viresh's patchset,
-> I thought it was also ok to have this driver.
+Hi Andres,
 
-Duplicate drivers for the same hardware are never a good idea, we need
-to learn from our past mistakes when we have done this before (hint, it
-did not work out and we ended up dropping the duplicates.)
+kernel test robot noticed the following build warnings:
 
-However, if the subsystem maintainer agrees, they are free to have
-duplicate drivers, as long as the maintainer of the "new" one will be
-there to help out with all of the confusion and problems that users and
-distros will have :)
+[auto build test WARNING on sre-power-supply/for-next]
+[also build test WARNING on linus/master v6.11-rc3 next-20240816]
+[cannot apply to amd-pstate/linux-next amd-pstate/bleeding-edge]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-good luck!
+url:    https://github.com/intel-lab-lkp/linux/commits/Andres-Salomon/platform-x86-dell-laptop-remove-duplicate-code-w-battery-function/20240816-102156
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20240815192848.3489d3e1%405400
+patch subject: [PATCH v3 1/2] platform/x86:dell-laptop: Add knobs to change  battery charge settings
+reproduce: (https://download.01.org/0day-ci/archive/20240816/202408161520.j54E147f-lkp@intel.com/reproduce)
 
-greg k-h
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408161520.j54E147f-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   Warning: Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+   Warning: Documentation/hwmon/g762.rst references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/g762.txt
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/reserved-memory/qcom
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/display/exynos/
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/misc/fsl,qoriq-mc.txt
+>> Warning: /sys/class/power_supply/<supply_name>/charge_type is defined 2 times:  ./Documentation/ABI/testing/sysfs-class-power-dell:0  ./Documentation/ABI/testing/sysfs-class-power:375
+   Using alabaster theme
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
