@@ -1,618 +1,207 @@
-Return-Path: <linux-pm+bounces-12368-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12369-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4AEB954EEA
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 18:33:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5341954F68
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 18:58:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 653B71F20CFE
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 16:33:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D6FB286CE2
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 16:58:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D9711BD00B;
-	Fri, 16 Aug 2024 16:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC63F1BF320;
+	Fri, 16 Aug 2024 16:58:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aedgjlyy"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="GlsQntRR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62BE81BB68D;
-	Fri, 16 Aug 2024 16:33:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B641BE85C;
+	Fri, 16 Aug 2024 16:58:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723826027; cv=none; b=OodFTasoeOyR1QtnYynaEzVMGWGm1PbceijySt1zmTBtRualqVKlAi65oD9mogj6rux9StSTg6b9kZClBWngroPrjrUlTJZNlPdtTdIeNrsVhUMLkbMnE8gpqw5Dg+aYWEQc/22BbF8KtlmpInUdJNKCJN7+TEmeT9vHN0A8j7A=
+	t=1723827498; cv=none; b=Xg9L0qgXAbbl9aKCt4UE6NxKdi+XJ2eKUv0MAX2zHfgXHqjukpfj5sWfkKeqAsgQCVIUULpKD16V6SjPgr3kgCBLzT7L3tfhQrtDrYyWkRShUaB7E30DVl7liZN8Z8pSatx8m3iiSsWR31mi7is4OASkzVeiFjRQV0lrduvJfrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723826027; c=relaxed/simple;
-	bh=8PegLeA8ICo/unMsE+/5YOIGOrhrPTOLpTobLL0DceQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H7sPFTrg2voeCweQhG6t0DQSAIbO+1yaYHCaCZFI7QCv0BNxpeu12m/NATwfOhtNQsXs6WqDf9iRGP0BqIf90wFUu0VFDo2zb+/qtIUbR80I3j3Wz89BNcHIpamqDU/VKh2136K27mL8bINYBW+RS6UKDaaOwLAHRrQj/WsBMtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aedgjlyy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E77F9C32782;
-	Fri, 16 Aug 2024 16:33:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723826027;
-	bh=8PegLeA8ICo/unMsE+/5YOIGOrhrPTOLpTobLL0DceQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aedgjlyyJPhogO/7GzbHh8EHS5SnWWpowXn8vRAFuGX2WlEEJqpgdXVI/BOgEtFqQ
-	 iewoIQgda0Kbp7emjA+hm4YE0IQiBfkma5ava2PKaVQDrm/JEJ5ucE5Kxb1QHPN7vv
-	 tm+YWLVpOkwlj5Dq4K8rU0sfVejWZzp/nKc61rnbH1+KoQiYQS6pg8+sznQp/pU7mV
-	 4Bpdwa2X//LXFGctvTGLTjOEXqDlH1eJxy6itJb+3ei/GS7Fhwp/7JFEIJ0/Q+n0Tb
-	 aTx6vZVbJ07TPKdFS/kbaC0UcjNEH3YTyL3gO6zzk3zrE+nLvenQigcV33TKjevYDx
-	 73gxjIv1HYVZg==
-Received: by pali.im (Postfix)
-	id 21D037B7; Fri, 16 Aug 2024 18:33:42 +0200 (CEST)
-Date: Fri, 16 Aug 2024 18:33:41 +0200
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc: Andres Salomon <dilinger@queued.net>,
-	LKML <linux-kernel@vger.kernel.org>,
-	platform-driver-x86@vger.kernel.org,
-	Matthew Garrett <mjg59@srcf.ucam.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org,
-	Dell.Client.Kernel@dell.com
-Subject: Re: [PATCH v3 1/2] platform/x86:dell-laptop: Add knobs to change
- battery charge settings
-Message-ID: <20240816163341.fesk7afikv3n3yer@pali>
-References: <20240815192848.3489d3e1@5400>
- <2feb1cf1-7597-9762-0864-87dc9c2c5559@linux.intel.com>
+	s=arc-20240116; t=1723827498; c=relaxed/simple;
+	bh=1n3jBbJPQqCuKXm/cOvjKzuwWNrLdImcAoHrvaKaDeQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H39YTAEx7mAboArvPwrr3oZ4kNA1rRuM58O1UoQJCoEhQfwhVylBm+2+Xy+FccKkR25uf/e8ftHAGw+gObn8I9mjb5O2sdoW7WZFVHhllOcFqptR9tSLj6Hm/OwmmNTO2T8RHXGmv/wuGnlDDV0aMdwgSbSvNDjej9RumYsBIcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=GlsQntRR; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1723827463; x=1724432263; i=wahrenst@gmx.net;
+	bh=1n3jBbJPQqCuKXm/cOvjKzuwWNrLdImcAoHrvaKaDeQ=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=GlsQntRRH5E79PQ4ks2ICsCRiLKuJeXQK7YJa2sMH/QWSW32EmHGRBT0tU2I6vSb
+	 MgMI1cj8HCqg4Nw8eH79IIPnidPHuh6gr+N8ZRFkkXhFczBn0edvTwkeuJ8OG81VT
+	 kNPzi/gF4cDTaDSJVlxizvc92xVaJzcBaNYPer79cAa9pw8g6KYWjomqoKKDRhwEa
+	 ed/kEcmcSSol1ej2UZN9BHRlkoHDE64fbxZX/rrnR+napcQVq1Yy5c5QUl1KaFg/4
+	 TtWnKpMEN3+GJOMWv5Y/ranvcJolVv8PdFIoRlwCmbE+lEquKkJQPEdtTkUyw5+ox
+	 txqczpJ/WuOJI2hDzw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mk0JM-1ruiEh1M1Q-00ogF8; Fri, 16
+ Aug 2024 18:57:43 +0200
+Message-ID: <282f4558-0357-4a8c-983e-b87b50c836a7@gmx.net>
+Date: Fri, 16 Aug 2024 18:57:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2feb1cf1-7597-9762-0864-87dc9c2c5559@linux.intel.com>
-User-Agent: NeoMutt/20180716
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 14/16] WIP: usb: dwc2: Implement recovery after PM
+ domain off
+To: Doug Anderson <dianders@chromium.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Cc: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
+ Minas Harutyunyan <hminas@synopsys.com>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
+ Scott Branden <sbranden@broadcom.com>, Ray Jui <rjui@broadcom.com>,
+ Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+ Peter Robinson <pbrobinson@gmail.com>, dri-devel@lists.freedesktop.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+ Jiri Slaby <jirislaby@kernel.org>
+References: <20240728114200.75559-1-wahrenst@gmx.net>
+ <20240728130029.78279-1-wahrenst@gmx.net>
+ <20240728130029.78279-6-wahrenst@gmx.net>
+ <65de7db8-4f81-4c31-be8d-3a03c9aee989@gmx.net>
+ <CAD=FV=W7sdi1+SHfhY6RrjK32r8iAGe4w+O_u5Sp982vgBU6EQ@mail.gmail.com>
+ <CAPDyKFpj0C1Bifmx=4zH3r8YooOrNfn_iDB+1sfRb0gTaKnT2Q@mail.gmail.com>
+ <51b63ea5-808e-41e4-92a9-50e20afd155b@gmx.net>
+ <CAD=FV=XHnKJT4ubmV8EPRYi-qPFH21tNFzWEWMezY2PGEFEKrw@mail.gmail.com>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <CAD=FV=XHnKJT4ubmV8EPRYi-qPFH21tNFzWEWMezY2PGEFEKrw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:hQgCYaYLhTBZZ+78rEMu0DvJ/325XlhiOI9tGtnfMaYX52Plshn
+ oFdEr5n1FeBjSQmsb8CY2AMCyBZMZp6ejcNwKWE2t/qpqTsbTHL3sEHqHZdM3xLvxnSmZLx
+ 60XTyGgKPSZGFFSTotcO5GAZVUwi7R4MEI2kYk074bgLuXqbydhRNGHIJ6mB4+Npg21ZC6G
+ baSBrM/5yL2YaHOh6VjvA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:KUrtCUdNtMY=;HUSH2Aztj1GRgt7R0Vx7g4hK+0D
+ svWcViDjqj2MZV1EYU/E/E805k0z8FqxhQboa1OBQjcx1koCvPoci5NxK/4abU2mQFO2IdEX1
+ e/XAPyCwwijwhei0B1l/pBQ0Sg5k4ObNcLQCgF2je2kJx+h+PNp/lTWxL5TI6WdJFi3OjSKFb
+ HB0xc4NUF8tIxTy64nUoLO0ekgFhKqVL6UK4ONJrXq+BYZOk3USpyJix8JGo2kxopFPpvqv/U
+ uTy10FS69eyXSaDDBsS6/pI7j6ICJxye6dUg97NYxalOjNWPHnYwvt5uYQWmaPhGnpiDrL8Ro
+ HwiBEgIJrTtS7IbFqCTkFMlYPheiQWSaBOcZ4o7t+smMl8uT6Mb2zZtxvFy4m9aFwNujTGjWb
+ bh78PZQgw0JI4ddnDZRDrHExMK6/vjwpUtfT8GoJZ2dEK5IFv1MpMnm7Xou7JEQrHN/ru4B+h
+ O8iDEX892tZPc8soSPzQyr7xogOUNOKMRY2//EuJatXO4yyPfsP9pCPdEO7PVxW/Bxqb0lqaw
+ eAbOHFnvgAtXXBlXdlKUtWD8ee42Q52IoeHVb/WEC+7FUN/G0m6eeZ7dtoUZJc0UnnBMB13AK
+ KxAlpMtVnBIQ7VT7T1ZH7E8uB3ovNdkW1sVQNNoY/Qp0S8wkLnG6ZlHvGfAbFawMPb5Vr6WCU
+ gukCcC6MRK0mZBp/LiGzYIgs8XLv6MvJg1CnuJgjRyKtZn4+LjSbOmO1aW2Ez5Fkbegkd6nYz
+ qNestUoewQBwflkEOoQOKsjPPjORXUMQax2Jt+rHOkAQL1aYHTuX5HD4H8FFJweA25lXRmVpi
+ NAOdC93yUH3uMikAgDNOVKdA==
 
-On Friday 16 August 2024 16:56:24 Ilpo Järvinen wrote:
-> On Thu, 15 Aug 2024, Andres Salomon wrote:
-> 
-> > The Dell BIOS allows you to set custom charging modes, which is useful
-> > in particular for extending battery life. This adds support for tweaking
-> > those various settings from Linux via sysfs knobs. One might, for
-> > example, have their laptop plugged into power at their desk the vast
-> > majority of the time and choose fairly aggressive battery-saving
-> > settings (eg, only charging once the battery drops below 50% and only
-> > charging up to 80%). When leaving for a trip, it would be more useful
-> > to instead switch to a standard charging mode (top off at 100%, charge
-> > any time power is available). Rebooting into the BIOS to change the
-> > charging mode settings is a hassle.
-> > 
-> > For the Custom charging type mode, we reuse the common
-> > charge_control_{start,end}_threshold sysfs power_supply entries. The
-> > BIOS also has a bunch of other charging modes (with varying levels of
-> > usefulness), so this also adds a 'charge_type' sysfs entry that maps the
-> > standard values to Dell-specific ones and documents those mappings in
-> > sysfs-class-power-dell.
-> > 
-> > This work is based on a patch by Perry Yuan <perry_yuan@dell.com> and
-> > Limonciello Mario <Mario_Limonciello@Dell.com> submitted back in 2020:
-> > https://lore.kernel.org/all/20200729065424.12851-1-Perry_Yuan@Dell.com/
-> > Both of their email addresses bounce, so I'm assuming they're no longer
-> > with the company. I've reworked most of the patch to make it smaller and
-> > cleaner.
-> > 
-> > Signed-off-by: Andres Salomon <dilinger@queued.net>
-> > ---
-> > Changes in v3:
-> >     - switch tokenid and class types
-> >     - be stricter with results from both userspace and BIOS
-> >     - no longer allow failed BIOS reads
-> >     - rename/move dell_send_request_by_token_loc, and add helper function
-> >     - only allow registration for BAT0
-> >     - rename charge_type modes to match power_supply names
-> > Changes in v2, based on extensive feedback from Pali Rohár <pali@kernel.org>:
-> >     - code style changes
-> >     - change battery write API to use token->value instead of passed value
-> >     - stop caching current mode, instead querying SMBIOS as needed
-> >     - drop the separate list of charging modes enum
-> >     - rework the list of charging mode strings
-> >     - query SMBIOS for supported charging modes
-> >     - split dell_battery_custom_set() up
-> > ---
-> >  .../ABI/testing/sysfs-class-power-dell        |  33 ++
-> >  drivers/platform/x86/dell/Kconfig             |   1 +
-> >  drivers/platform/x86/dell/dell-laptop.c       | 316 ++++++++++++++++++
-> >  drivers/platform/x86/dell/dell-smbios.h       |   7 +
-> >  4 files changed, 357 insertions(+)
-> >  create mode 100644 Documentation/ABI/testing/sysfs-class-power-dell
-> > 
-> > diff --git a/Documentation/ABI/testing/sysfs-class-power-dell b/Documentation/ABI/testing/sysfs-class-power-dell
-> > new file mode 100644
-> > index 000000000000..d8c542177558
-> > --- /dev/null
-> > +++ b/Documentation/ABI/testing/sysfs-class-power-dell
-> > @@ -0,0 +1,33 @@
-> > +What:		/sys/class/power_supply/<supply_name>/charge_type
-> > +Date:		August 2024
-> > +KernelVersion:	6.12
-> > +Contact:	linux-pm@vger.kernel.org
-> > +Description:
-> > +		Select the charging algorithm to use for the (primary)
-> > +		battery.
-> > +
-> > +		Standard:
-> > +			Fully charge the battery at a moderate rate.
-> > +		Fast:
-> > +			Quickly charge the battery using fast-charge
-> > +			technology. This is harder on the battery than
-> > +			standard charging and may lower its lifespan.
-> > +			The Dell BIOS calls this ExpressCharge™.
-> > +		Trickle:
-> > +			Users who primarily operate the system while
-> > +			plugged into an external power source can extend
-> > +			battery life with this mode. The Dell BIOS calls
-> > +			this "Primarily AC Use".
-> > +		Adaptive:
-> > +			Automatically optimize battery charge rate based
-> > +			on typical usage pattern.
-> > +		Custom:
-> > +			Use the charge_control_* properties to determine
-> > +			when to start and stop charging. Advanced users
-> > +			can use this to drastically extend battery life.
-> > +
-> > +		Access: Read, Write
-> > +		Valid values:
-> > +			      "Standard", "Fast", "Trickle",
-> > +			      "Adaptive", "Custom"
-> > +
-> > diff --git a/drivers/platform/x86/dell/Kconfig b/drivers/platform/x86/dell/Kconfig
-> > index 85a78ef91182..02405793163c 100644
-> > --- a/drivers/platform/x86/dell/Kconfig
-> > +++ b/drivers/platform/x86/dell/Kconfig
-> > @@ -49,6 +49,7 @@ config DELL_LAPTOP
-> >  	default m
-> >  	depends on DMI
-> >  	depends on BACKLIGHT_CLASS_DEVICE
-> > +	depends on ACPI_BATTERY
-> >  	depends on ACPI_VIDEO || ACPI_VIDEO = n
-> >  	depends on RFKILL || RFKILL = n
-> >  	depends on DELL_WMI || DELL_WMI = n
-> > diff --git a/drivers/platform/x86/dell/dell-laptop.c b/drivers/platform/x86/dell/dell-laptop.c
-> > index 6552dfe491c6..8cc05f0fab91 100644
-> > --- a/drivers/platform/x86/dell/dell-laptop.c
-> > +++ b/drivers/platform/x86/dell/dell-laptop.c
-> > @@ -22,11 +22,13 @@
-> >  #include <linux/io.h>
-> >  #include <linux/rfkill.h>
-> >  #include <linux/power_supply.h>
-> > +#include <linux/sysfs.h>
-> >  #include <linux/acpi.h>
-> >  #include <linux/mm.h>
-> >  #include <linux/i8042.h>
-> >  #include <linux/debugfs.h>
-> >  #include <linux/seq_file.h>
-> > +#include <acpi/battery.h>
-> >  #include <acpi/video.h>
-> >  #include "dell-rbtn.h"
-> >  #include "dell-smbios.h"
-> > @@ -99,6 +101,18 @@ static bool force_rfkill;
-> >  static bool micmute_led_registered;
-> >  static bool mute_led_registered;
-> >  
-> > +static const struct {
-> > +	int token;
-> > +	const char *label;
-> > +} battery_modes[] = {
-> 
-> Please don't try to do this in one go but split it into two (define and 
-> then declaration of the variable).
+Hi Doug,
 
-Why? Splitting definition of this anonymous structure and definition of
-variable would leak definition of anonymous structure of out the scope
-where it is used.
+Am 15.08.24 um 21:37 schrieb Doug Anderson:
+> Hi,
+>
+> On Wed, Aug 14, 2024 at 2:48=E2=80=AFPM Stefan Wahren <wahrenst@gmx.net>=
+ wrote:
+>>>> You're saying that your
+>>>> registers get saved _unless_ the power domain gets turned off, right?
+>> On BCM2835 there is no need to store the registers because there is no
+>> power management supported by USB core except of the power domain. So
+>> DWC2 don't expect a register loss.
+>>>> ...and the device core keeps power domains on for suspended devices i=
+f
+>>>> they are wakeup sources, which makes sense.
+>>>>
+>>>> So with that, your patch sounds like a plausible way to do it. I gues=
+s
+>>>> one other way to do it would be some sort of "canary" approach. You
+>>>> could _always_ save registers and then, at resume time, you could
+>>>> detect if some "canary" register had reset to its power-on default. I=
+f
+>>>> you see this then you can assume power was lost and re-init all the
+>>>> registers. This could be pretty much any register that you know won't
+>>>> be its power on default. In some ways a "canary" approach is uglier
+>>>> but it also might be more reliable across more configurations?
+>> I don't have enough knowledge about DWC2 and i also don't have the
+>> databook to figure out if there is a magic register which could be used
+>> for the canary approach. But all these different platforms, host vs
+>> gadget role, different low modes let me think the resulting solution
+>> would be also fragile and ugly.
+> I won't admit to having a DWC2 databook. ;-)
+you convinced me of the canary approach. I missed one critical point the
+whole time. The used power domain notifier can/will be called while the
+USB clock is disabled. So this worked for the Raspberry Pi because the
+clock is fixed.
+> ...but don't think it's too hard to find a good canary. What about
+> "GAHBCFG_GLBL_INTR_EN" ? From a quick glance it looks like the driver
+> seems to set that bit during driver startup and then it stays on until
+> driver shutdown. The databook that I definitely won't admit to having
+> almost certainly says that this register resets to 0 on all hardware
+> and it's applicable to both host and device. I think you could say
+> that if the register is 0 at resume time that registers must have been
+> lost and you can restore them.
+There are several reason to not use the GAHBCFG_GLBL_INTR_EN. One is the
+fact that the driver disabled this flag at several places, not just on
+shutdown. Another reason is that the register layout of GAHBCFG on
+BCM2835 is customized ( see last page of datasheet [1]).
 
-> > +	{ BAT_STANDARD_MODE_TOKEN, "Standard" },
-> > +	{ BAT_EXPRESS_MODE_TOKEN, "Fast" },
-> > +	{ BAT_PRI_AC_MODE_TOKEN, "Trickle" },
-> > +	{ BAT_ADAPTIVE_MODE_TOKEN, "Adaptive" },
-> > +	{ BAT_CUSTOM_MODE_TOKEN, "Custom" },
-> 
-> I suggest aligning the strings with tabs for better readability.
+I dumped the relevant registers with a unmodified dwc2 driver and the
+outcome is a little bit unexpected (0 =3D PRE_POWER_OFF, 3 =3D POWER_ON):
 
-For aligning something for better readability in "git diff" and
-"git show" (which includes also git format-patch and emails) is better
-to use spaces and not tabs. tab-alignment in git makes worse readability
-(due to name of the token).
-
-> > +};
-> > +static u32 battery_supported_modes;
-> > +
-> >  module_param(force_rfkill, bool, 0444);
-> >  MODULE_PARM_DESC(force_rfkill, "enable rfkill on non whitelisted models");
-> >  
-> > @@ -353,6 +367,32 @@ static const struct dmi_system_id dell_quirks[] __initconst = {
-> >  	{ }
-> >  };
-> >  
-> > +/* -1 is a sentinel value, telling us to use token->value */
-> > +#define USE_TVAL ((u32) -1)
-> > +static int dell_send_request_for_tokenid(struct calling_interface_buffer *buffer,
-> > +					 u16 class, u16 select, u16 tokenid,
-> > +					 u32 val)
-> > +{
-> > +	struct calling_interface_token *token;
-> > +
-> > +	token = dell_smbios_find_token(tokenid);
-> > +	if (!token)
-> > +		return -ENODEV;
-> > +
-> > +	if (val == USE_TVAL)
-> > +		val = token->value;
-> > +
-> > +	dell_fill_request(buffer, token->location, val, 0, 0);
-> > +	return dell_send_request(buffer, class, select);
-> > +}
-> > +
-> > +static inline int dell_set_std_token_value(struct calling_interface_buffer *buffer,
-> > +		u16 tokenid, u32 value)
-> > +{
-> > +	return dell_send_request_for_tokenid(buffer, CLASS_TOKEN_WRITE,
-> > +			SELECT_TOKEN_STD, tokenid, value);
-> > +}
-> > +
-> >  /*
-> >   * Derived from information in smbios-wireless-ctl:
-> >   *
-> > @@ -2183,6 +2223,279 @@ static struct led_classdev mute_led_cdev = {
-> >  	.default_trigger = "audio-mute",
-> >  };
-> >  
-> > +static int dell_battery_set_mode(const u16 tokenid)
-> > +{
-> > +	struct calling_interface_buffer buffer;
-> > +
-> > +	return dell_set_std_token_value(&buffer, tokenid, USE_TVAL);
-> > +}
-> > +
-> > +static int dell_battery_read(const u16 tokenid)
-> > +{
-> > +	struct calling_interface_buffer buffer;
-> > +	int err;
-> > +
-> > +	err = dell_send_request_for_tokenid(&buffer, CLASS_TOKEN_READ,
-> > +			SELECT_TOKEN_STD, tokenid, 0);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	if (buffer.output[1] > INT_MAX)
-> > +		return -EIO;
-> > +
-> > +	return buffer.output[1];
-> > +}
-> > +
-> > +static bool dell_battery_mode_is_active(const u16 tokenid)
-> > +{
-> > +	struct calling_interface_token *token;
-> > +	int ret;
-> > +
-> > +	ret = dell_battery_read(tokenid);
-> > +	if (ret < 0)
-> > +		return false;
-> > +
-> > +	token = dell_smbios_find_token(tokenid);
-> > +	/* token's already verified by dell_battery_read() */
-> > +
-> > +	return token->value == (u16) ret;
-> > +}
-> > +
-> > +/*
-> > + * The rules: the minimum start charging value is 50%. The maximum
-> > + * start charging value is 95%. The minimum end charging value is
-> > + * 55%. The maximum end charging value is 100%. And finally, there
-> > + * has to be at least a 5% difference between start & end values.
-> > + */
-> > +#define CHARGE_START_MIN	50
-> > +#define CHARGE_START_MAX	95
-> > +#define CHARGE_END_MIN		55
-> > +#define CHARGE_END_MAX		100
-> > +#define CHARGE_MIN_DIFF		5
-> > +
-> > +static int dell_battery_set_custom_charge_start(int start)
-> > +{
-> > +	struct calling_interface_buffer buffer;
-> > +	int end;
-> > +
-> > +	if (start < CHARGE_START_MIN)
-> > +		start = CHARGE_START_MIN;
-> > +	else if (start > CHARGE_START_MAX)
-> > +		start = CHARGE_START_MAX;
-> 
-> We have clamp().
-> 
-> > +
-> > +	end = dell_battery_read(BAT_CUSTOM_CHARGE_END);
-> > +	if (end < 0)
-> > +		return end;
-> > +	if ((end - start) < CHARGE_MIN_DIFF)
-> 
-> Extra parenthesis.
-
-I pointed about this in previous version and from the discussion the
-conclusion was that there is no reason to remove extra parenthesis.
-
-> > +		start = end - CHARGE_MIN_DIFF;
-> > +
-> > +	return dell_set_std_token_value(&buffer, BAT_CUSTOM_CHARGE_START,
-> > +			start);
-> > +}
-> > +
-> > +static int dell_battery_set_custom_charge_end(int end)
-> > +{
-> > +	struct calling_interface_buffer buffer;
-> > +	int start;
-> > +
-> > +	if (end < CHARGE_END_MIN)
-> > +		end = CHARGE_END_MIN;
-> > +	else if (end > CHARGE_END_MAX)
-> > +		end = CHARGE_END_MAX;
-> 
-> clamp.
-> 
-> > +	start = dell_battery_read(BAT_CUSTOM_CHARGE_START);
-> > +	if (start < 0)
-> > +		return start;
-> > +	if ((end - start) < CHARGE_MIN_DIFF)
-> 
-> Extra parenthesis.
-> 
-> > +		end = start + CHARGE_MIN_DIFF;
-> > +
-> > +	return dell_set_std_token_value(&buffer, BAT_CUSTOM_CHARGE_END, end);
-> > +}
-> > +
-> > +static ssize_t charge_type_show(struct device *dev,
-> > +		struct device_attribute *attr,
-> > +		char *buf)
-> > +{
-> > +	ssize_t count = 0;
-> > +	int i;
-> > +
-> > +	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
-> > +		bool active;
-> > +
-> > +		if (!(battery_supported_modes & BIT(i)))
-> 
-> Why not store this supported information into battery_modes itself?
-
-Same style is already used in other parts in this driver / source file.
-
-> What's the benefit of obfuscation it with the extra variable & BIT()?
-
-In my opinion, this is not obfuscation but clear and common style how to
-check which values of some enumeration are supported.
-
-Storing this kind of information into battery_modes is not possible
-because battery_modes is constant array with constant data.
-
-> 
-> -- 
->  i.
-> 
-> > +			continue;
-> > +
-> > +		active = dell_battery_mode_is_active(battery_modes[i].token);
-> > +		count += sysfs_emit_at(buf, count, active ? "[%s] " : "%s ",
-> > +				battery_modes[i].label);
-> > +	}
-> > +
-> > +	/* convert the last space to a newline */
-> > +	if (count > 0)
-> > +		count--;
-> > +	count += sysfs_emit_at(buf, count, "\n");
-> > +
-> > +	return count;
-> > +}
-> > +
-> > +static ssize_t charge_type_store(struct device *dev,
-> > +		struct device_attribute *attr,
-> > +		const char *buf, size_t size)
-> > +{
-> > +	bool matched = false;
-> > +	int err, i;
-> > +
-> > +	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
-> > +		if (!(battery_supported_modes & BIT(i)))
-> > +			continue;
-> > +
-> > +		if (sysfs_streq(battery_modes[i].label, buf)) {
-> > +			matched = true;
-> > +			break;
-> > +		}
-> > +	}
-> > +	if (!matched || !(battery_supported_modes & BIT(i)))
-> > +		return -EINVAL;
-> > +
-> > +	err = dell_battery_set_mode(battery_modes[i].token);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	return size;
-> > +}
-> > +
-> > +static ssize_t charge_control_start_threshold_show(struct device *dev,
-> > +		struct device_attribute *attr,
-> > +		char *buf)
-> > +{
-> > +	int start;
-> > +
-> > +	start = dell_battery_read(BAT_CUSTOM_CHARGE_START);
-> > +	if (start < 0)
-> > +		return start;
-> > +
-> > +	if (start > CHARGE_START_MAX)
-> > +		return -EIO;
-> > +
-> > +	return sysfs_emit(buf, "%d\n", start);
-> > +}
-> > +
-> > +static ssize_t charge_control_start_threshold_store(struct device *dev,
-> > +		struct device_attribute *attr,
-> > +		const char *buf, size_t size)
-> > +{
-> > +	int ret, start;
-> > +
-> > +	ret = kstrtoint(buf, 10, &start);
-> > +	if (ret)
-> > +		return ret;
-> > +	if (start < 0 || start > 100)
-> > +		return -EINVAL;
-> > +
-> > +	ret = dell_battery_set_custom_charge_start(start);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	return size;
-> > +}
-> > +
-> > +static ssize_t charge_control_end_threshold_show(struct device *dev,
-> > +		struct device_attribute *attr,
-> > +		char *buf)
-> > +{
-> > +	int end;
-> > +
-> > +	end = dell_battery_read(BAT_CUSTOM_CHARGE_END);
-> > +	if (end < 0)
-> > +		return end;
-> > +
-> > +	if (end > CHARGE_END_MAX)
-> > +		return -EIO;
-> > +
-> > +	return sysfs_emit(buf, "%d\n", end);
-> > +}
-> > +
-> > +static ssize_t charge_control_end_threshold_store(struct device *dev,
-> > +		struct device_attribute *attr,
-> > +		const char *buf, size_t size)
-> > +{
-> > +	int ret, end;
-> > +
-> > +	ret = kstrtouint(buf, 10, &end);
-> > +	if (ret)
-> > +		return ret;
-> > +	if (end < 0 || end > 100)
-> > +		return -EINVAL;
-> > +
-> > +	ret = dell_battery_set_custom_charge_end(end);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	return size;
-> > +}
-> > +
-> > +static DEVICE_ATTR_RW(charge_control_start_threshold);
-> > +static DEVICE_ATTR_RW(charge_control_end_threshold);
-> > +static DEVICE_ATTR_RW(charge_type);
-> > +
-> > +static struct attribute *dell_battery_attrs[] = {
-> > +	&dev_attr_charge_control_start_threshold.attr,
-> > +	&dev_attr_charge_control_end_threshold.attr,
-> > +	&dev_attr_charge_type.attr,
-> > +	NULL,
-> > +};
-> > +ATTRIBUTE_GROUPS(dell_battery);
-> > +
-> > +static int dell_battery_add(struct power_supply *battery,
-> > +		struct acpi_battery_hook *hook)
-> > +{
-> > +	/* this currently only supports the primary battery */
-> > +	if (strcmp(battery->desc->name, "BAT0") != 0)
-> > +		return -ENODEV;
-> > +
-> > +	return device_add_groups(&battery->dev, dell_battery_groups);
-> > +}
-> > +
-> > +static int dell_battery_remove(struct power_supply *battery,
-> > +		struct acpi_battery_hook *hook)
-> > +{
-> > +	device_remove_groups(&battery->dev, dell_battery_groups);
-> > +	return 0;
-> > +}
-> > +
-> > +static struct acpi_battery_hook dell_battery_hook = {
-> > +	.add_battery = dell_battery_add,
-> > +	.remove_battery = dell_battery_remove,
-> > +	.name = "Dell Primary Battery Extension",
-> > +};
-> > +
-> > +static u32 __init battery_get_supported_modes(void)
-> > +{
-> > +	u32 modes = 0;
-> > +	int i;
-> > +
-> > +	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
-> > +		if (dell_smbios_find_token(battery_modes[i].token))
-> > +			modes |= BIT(i);
-> > +	}
-> > +
-> > +	return modes;
-> > +}
-> > +
-> > +static void __init dell_battery_init(struct device *dev)
-> > +{
-> > +	battery_supported_modes = battery_get_supported_modes();
-> > +
-> > +	if (battery_supported_modes != 0)
-> > +		battery_hook_register(&dell_battery_hook);
-> > +}
-> > +
-> > +static void __exit dell_battery_exit(void)
-> > +{
-> > +	if (battery_supported_modes != 0)
-> > +		battery_hook_unregister(&dell_battery_hook);
-> > +}
-> > +
-> >  static int __init dell_init(void)
-> >  {
-> >  	struct calling_interface_token *token;
-> > @@ -2219,6 +2532,7 @@ static int __init dell_init(void)
-> >  		touchpad_led_init(&platform_device->dev);
-> >  
-> >  	kbd_led_init(&platform_device->dev);
-> > +	dell_battery_init(&platform_device->dev);
-> >  
-> >  	dell_laptop_dir = debugfs_create_dir("dell_laptop", NULL);
-> >  	debugfs_create_file("rfkill", 0444, dell_laptop_dir, NULL,
-> > @@ -2293,6 +2607,7 @@ static int __init dell_init(void)
-> >  	if (mute_led_registered)
-> >  		led_classdev_unregister(&mute_led_cdev);
-> >  fail_led:
-> > +	dell_battery_exit();
-> >  	dell_cleanup_rfkill();
-> >  fail_rfkill:
-> >  	platform_device_del(platform_device);
-> > @@ -2311,6 +2626,7 @@ static void __exit dell_exit(void)
-> >  	if (quirks && quirks->touchpad_led)
-> >  		touchpad_led_exit();
-> >  	kbd_led_exit();
-> > +	dell_battery_exit();
-> >  	backlight_device_unregister(dell_backlight_device);
-> >  	if (micmute_led_registered)
-> >  		led_classdev_unregister(&micmute_led_cdev);
-> > diff --git a/drivers/platform/x86/dell/dell-smbios.h b/drivers/platform/x86/dell/dell-smbios.h
-> > index ea0cc38642a2..77baa15eb523 100644
-> > --- a/drivers/platform/x86/dell/dell-smbios.h
-> > +++ b/drivers/platform/x86/dell/dell-smbios.h
-> > @@ -33,6 +33,13 @@
-> >  #define KBD_LED_AUTO_50_TOKEN	0x02EB
-> >  #define KBD_LED_AUTO_75_TOKEN	0x02EC
-> >  #define KBD_LED_AUTO_100_TOKEN	0x02F6
-> > +#define BAT_PRI_AC_MODE_TOKEN	0x0341
-> > +#define BAT_ADAPTIVE_MODE_TOKEN	0x0342
-> > +#define BAT_CUSTOM_MODE_TOKEN	0x0343
-> > +#define BAT_STANDARD_MODE_TOKEN	0x0346
-> > +#define BAT_EXPRESS_MODE_TOKEN	0x0347
-> > +#define BAT_CUSTOM_CHARGE_START	0x0349
-> > +#define BAT_CUSTOM_CHARGE_END	0x034A
-> >  #define GLOBAL_MIC_MUTE_ENABLE	0x0364
-> >  #define GLOBAL_MIC_MUTE_DISABLE	0x0365
-> >  #define GLOBAL_MUTE_ENABLE	0x058C
-> > 
+[=C2=A0 169.101071] dwc2 20980000.usb: dwc2_suspend enter GAHBCFG =3D 0000=
+0031
+[=C2=A0 169.101143] dwc2 20980000.usb: dwc2_suspend enter GUSBCFG =3D 2000=
+1707
+[=C2=A0 169.101172] dwc2 20980000.usb: dwc2_suspend enter GINTMSK =3D f300=
+0806
+[=C2=A0 169.105888] dwc2 20980000.usb: dwc2_power_notifier: 0 GAHBCFG =3D =
+00000031
+[=C2=A0 169.105962] dwc2 20980000.usb: dwc2_power_notifier: 0 GUSBCFG =3D =
+20001707
+[=C2=A0 169.105994] dwc2 20980000.usb: dwc2_power_notifier: 0 GINTMSK =3D =
+f3000806
+[=C2=A0 174.248046] dwc2 20980000.usb: dwc2_power_notifier: 3 GAHBCFG =3D =
+0000001f
+[=C2=A0 174.248118] dwc2 20980000.usb: dwc2_power_notifier: 3 GUSBCFG =3D =
+20402700
+[=C2=A0 174.248148] dwc2 20980000.usb: dwc2_power_notifier: 3 GINTMSK =3D =
+f3000806
+[=C2=A0 174.253086] dwc2 20980000.usb: dwc2_resume enter: GAHBCFG =3D 0000=
+001f
+[=C2=A0 174.253162] dwc2 20980000.usb: dwc2_resume enter: GUSBCFG =3D 2040=
+2700
+[=C2=A0 174.253190] dwc2 20980000.usb: dwc2_resume enter: GINTMSK =3D f300=
+0806
+> I guess if that doesn't work then "GUSBCFG_TOUTCAL" could be used (I
+> think that resets to 0 but must be initted to non-0 by the driver).
+Yes this looks good and match with the trace above. The driver seems to
+initialize this once and a quick test seems to work so far. I will stick
+to this.
+> Yet another register that could probably work as a canary would be
+> "GINTMSK". I believe that inits to all 0 (everything is masked) and
+> obviously to use the device we've got to unmask _some_ interrupts.
+I don't know why but this didn't worked according to trace, but i also
+didn't noticed a interrupt after enabling of the power domain.Thanks [1]
+-
+https://www.raspberrypi.org/app/uploads/2012/02/BCM2835-ARM-Peripherals.pd=
+f
+> I can look for more, if need be.
+>
+> -Doug
+>
 
 
