@@ -1,128 +1,135 @@
-Return-Path: <linux-pm+bounces-12359-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12360-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB038954C52
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 16:25:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B9D7954D54
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 17:09:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD3AD1C232FC
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 14:25:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67AD51C2174D
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 15:09:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0121BCA0B;
-	Fri, 16 Aug 2024 14:25:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F122E1BD02A;
+	Fri, 16 Aug 2024 15:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NwDejNxY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="A7EqRt58"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C97A1BC083;
-	Fri, 16 Aug 2024 14:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32AC21BCA16
+	for <linux-pm@vger.kernel.org>; Fri, 16 Aug 2024 15:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723818352; cv=none; b=lenmJcHLaqZc0LR//BaJh5Imoa+GO05lKW2nVVRSENXCBEf+os5dLxU0XAaVQen2GPfmnH6bILh0m89bifF/YVJpXGCuPZ9HBFskyLNZRdKgv98EzNcCioGaCkMiZ+67XaPJ33DyM1x+Wjfd784/rIxOKzJWN/MzheMJy8U63PI=
+	t=1723820978; cv=none; b=eYcbZz0rd/KChtCTvg0NOp6i833iHRiLRG2wP9LSKC9nE6GvnPqwA7msLRHL54LbDBH/YQB9gg0e67ukv9zrym52f6bFO3i0E/dS0d7+OeMjnGIfE3vLERYszoxsaZjef5Kb0FvIAEtTIEzq5uQO/YpUAUt2Qj8yan/+KiERmy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723818352; c=relaxed/simple;
-	bh=PGPKe9Z2HXEC0gw5dqeKqhDeaAxArswdRASSszm5pnA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=giLzPSUgu78BcWx/kgkFtIEQsvbdiDSAMnye+1AJExjRBoty5OoD9S1LoNa9XdK+1RpaICKwJyy/02CpF5eZVeo4F7uPjo1CwC05OL3wB6gZfjIOJR/ki5mQd9lRP20JxSk6o6YyefBNZvZmcEbYYeY7zf4BZdRq3LoQFxotu24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NwDejNxY; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-52f04b4abdcso2583307e87.2;
-        Fri, 16 Aug 2024 07:25:50 -0700 (PDT)
+	s=arc-20240116; t=1723820978; c=relaxed/simple;
+	bh=XzdvY7dTSy94mw2/rQM0iFi1pa3M0LsbqBKyIiUy9+E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a52hxITVW5TXhhu4AaASBlP7zTwPN8jZoI3m87SZz3XeMEgKVEcbrCujs59ZSrAk2D93rzWRen8AGlELBJKlM4gl39mGs3PvjrLvC/ePNi5FNY0iR1jyYwNXblcawzHmvPHDC/0NnZT/kjNt3Lb7bB+eyDpEFgB0ea+GtiJSSuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=A7EqRt58; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-428e3129851so15427515e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 16 Aug 2024 08:09:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723818348; x=1724423148; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=18z5iNYHQLy9IQXidEg4MX75zOC+06viB9VWsJ8MHWg=;
-        b=NwDejNxYHIV/tLd6M2WnTfvnMHKxhcDG7N2LmdbD7aDuYFGh/xY2QCTRQmkxyRQNgf
-         3WvYPRNQwpQyv1CNgu2EpHp9qMLBhkOsQjhHQU3FmTVzrjBQkREr8GCoS4mGVWBlMDRy
-         E9Lqu1a3FSe65MeaxxYAFTzMSyN79xUGqho1MggV/94T+H2h1yhi/D/rGtS0xjG8/b9J
-         mSksL8gmSOVfgiMD+0Re0S2uMyV9Qfu3BtVBps5K9cO4k/7kOz1jZeupUxk7lpaLYDHG
-         CNgVWlVY0j6dMAdXQQ3Rl+LaoZPOfNvd+++LJRlEvvrzhwHf5KruevifqhtpZHl1SL9d
-         C+wg==
+        d=linaro.org; s=google; t=1723820975; x=1724425775; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q0sK0ufc7qEbd/mn2fdq4hcobz3MRQ2PN+HK1BuFHRw=;
+        b=A7EqRt58KZpuu8L6OoagPNaPAUwSjSK232MEGaoWfylAW460Vb00U5ZlN17Upgg8VW
+         G33U4BBxwNrucuhDozqGE/8FQzNi5NFPnld1Z31K6AFMbJAOayEhK6nI0MvIMjHsyu37
+         D+LFh/Jl2QvqImFpUYU5TvkQHE9nFy+gVkuZ1BhR/PL3tY3iRE+Uz7T3++Qi+pZ8fdlK
+         ywd6SHF++ACZERowTLSQgiWbquKqWgvf04KA9CkSAh37V+BmIM7/gs00KhKcCJk6+gS5
+         9HAF5BZ483yrDepzc/+ejCdWTvtyVf9Ku86V1yV0edj4hefGl+NOgQ9LKYQoN7no6yGX
+         QB4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723818348; x=1724423148;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=18z5iNYHQLy9IQXidEg4MX75zOC+06viB9VWsJ8MHWg=;
-        b=X/bEgm3qeG3k1hGv5A+zsb5uVLdKQf/ZIEVkextz7iY2651ZkeC1zmlULDcplDvoU3
-         7kzNVn9sk1dMQLJxFqWuXoRg0GmnN7JU/qb5ZO5cIBExAlRa7aDfS7o4vunSGq1cgmTZ
-         y8XYOeF9N/THMWJuLiWqe5P1u4hCVXTGilmU4UPq/3T3oUoCgfmxcnMlHnOxOX3TzD4b
-         FNs16/3mOsjOvHw19NXztLCN4QoQYmygs9FM0tuVSzgYP50xuYfajh+l51cPAlo/IXjx
-         r6TJZkz5QxJmOvnYRJ1wj9zcsTt1B8fdJuCDnhlETEvutcpxkEKJzzrCqcxheFBeP4U5
-         U+dg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGtbVVRRWtZgxU6iygSStJW5Y5okxQsDU05Pg9KkT96+F4BSqEGA04bG+EIKMC0yjEZb0z9bGrgak+s9N5L5sncsU=@vger.kernel.org, AJvYcCUjXaYdqmwCCXNG6q1Z7QmPzIjmRbtk85a/9vqR1GsMl/GziSvO2YDTEtmZ/c+EKuBlRr/NJZu2TpcL@vger.kernel.org, AJvYcCV3KHsylzKR5UNMJMCDxv5SOKW6B5itx051hZ8CTnidv0jH5NwTG6lER1YupqvKOucyob+NQGWPOTA=@vger.kernel.org, AJvYcCVo3HYiQ0x0VwyxMMdpoElQGm1/fVkt2rhdhe45BcD/txZ8kVsLaMQ5dkKwUu93zV4xoiTn8pYJz0XZ1yoO@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxbQ1RPpshXJeisXgJloQog5loK8LNiQibjxhUFjCz01dfckr1
-	+e5KtfoiOuaWbYx0Wd2OgeKiSQoLFcw1YMfRUDoEEp4ldnnyY7YqO248sQ==
-X-Google-Smtp-Source: AGHT+IHwlZ63+TDjPwfyTB1uqKHtWzOZKBvQ7+La0DArb8wjIj6kPTSWKuM2IfOtSlb+ALHVhWRtGQ==
-X-Received: by 2002:a05:6512:220b:b0:52e:9b92:4999 with SMTP id 2adb3069b0e04-5331c690ce0mr2188241e87.2.1723818347989;
-        Fri, 16 Aug 2024 07:25:47 -0700 (PDT)
-Received: from [192.168.0.124] (ip-31-0-120-26.multi.internet.cyfrowypolsat.pl. [31.0.120.26])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a838396d5eesm262532566b.225.2024.08.16.07.25.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Aug 2024 07:25:47 -0700 (PDT)
-Message-ID: <021f5a99-bbee-4d4c-b36e-49339030b869@gmail.com>
-Date: Fri, 16 Aug 2024 16:25:45 +0200
+        d=1e100.net; s=20230601; t=1723820975; x=1724425775;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q0sK0ufc7qEbd/mn2fdq4hcobz3MRQ2PN+HK1BuFHRw=;
+        b=YlFGUBUIUPOSH88mBTG9SMIsl88vDoghckJ0fgtTNH3roHQUFDU5WI3vCKE6tGBleo
+         lN5kOcNUrG0qAM/Fe1k2zD1IrjMKUzxhdAW5bKZ+Dp3zqVe5noCphGzE2TBGztuxMt6a
+         Tpaiab8gKkhl1EImLsHbb54o48PTRz/aiqVA3e3+/libQNCGQrrYEKhXIOMo0AaLof4f
+         ziO9tF1O2EqKph1v/SRDW8XAFB99XnSSkKbHcRZKyfBPl2QZa0+4Gl4NT9CUHyCcdmC8
+         aQS49h1/ij0ACywILM7BfanfGGEvq2Ux7iFlE29BeLPSasN/N/B5gCw6pqbaZldygCmL
+         2pSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUztKbTtIlRDtBQAOf46tbOIoyBUb8ePsxUd80dirSztMc+8ZmK6vyd+Oqqb5L51dS+n/M8n0HQpIl0PZG9tU8JFBdcpppXeEs=
+X-Gm-Message-State: AOJu0Yx7aEX+Mz1kp6DEnq806furuIBrtTnc+AmxW+IX6P5aKrmNu7gf
+	/MXaKZ95tuJ4gduLiOAm34nXhJ2BFGPn9IhZkHKAIoPlA+bPsMDUVbVuvvFqWMtwdkLRrjSIqnj
+	F
+X-Google-Smtp-Source: AGHT+IFhP/NIsW9PWfnEcWLqi7chpg87KWhwfD8tKVYrnOj6sJddsAiBh6dq11WCBuqo717hp+HeUw==
+X-Received: by 2002:a05:600c:444b:b0:426:6320:7ddf with SMTP id 5b1f17b1804b1-429ed7f944bmr19485875e9.35.1723820975298;
+        Fri, 16 Aug 2024 08:09:35 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.215.209])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3718984993fsm3808758f8f.31.2024.08.16.08.09.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Aug 2024 08:09:34 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Anup Patel <anup@brainfault.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/4] cpuidle: psci: Simplify with scoped for each OF child loop
+Date: Fri, 16 Aug 2024 17:09:28 +0200
+Message-ID: <20240816150931.142208-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 04/10] power: supply: max77693: Set charge current
- limits during init
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Chanwoo Choi <cw00.choi@samsung.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- ~postmarketos/upstreaming@lists.sr.ht, Henrik Grimler <henrik@grimler.se>,
- Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
- Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
-References: <20240816-max77693-charger-extcon-v4-0-050a0a9bfea0@gmail.com>
- <20240816-max77693-charger-extcon-v4-4-050a0a9bfea0@gmail.com>
- <9dbaacdb-5f9c-48d4-a56a-a19ca8809344@kernel.org>
-Content-Language: en-US
-From: Artur Weber <aweber.kernel@gmail.com>
-In-Reply-To: <9dbaacdb-5f9c-48d4-a56a-a19ca8809344@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Use scoped for_each_child_of_node_scoped() when iterating over device
+nodes to make code a bit simpler.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/cpuidle/cpuidle-psci-domain.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-On 16.08.2024 11:54, Krzysztof Kozlowski wrote:
-> On 16/08/2024 10:19, Artur Weber wrote:
->> @@ -732,6 +794,15 @@ static int max77693_charger_probe(struct platform_device *pdev)
->>   	chg->dev = &pdev->dev;
->>   	chg->max77693 = max77693;
->>   
->> +	psy_cfg.drv_data = chg;
->> +
->> +	chg->charger = devm_power_supply_register(&pdev->dev,
->> +						  &max77693_charger_desc,
->> +						  &psy_cfg);
->> +	if (IS_ERR(chg->charger))
->> +		return dev_err_probe(&pdev->dev, PTR_ERR(chg->charger),
->> +				     "failed: power supply register\n");
-> 
-> This code move is not explained in the commit msg. At least I could not
-> find it. Please explain why you need it in the commit msg.
+diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+index ea28b73ef3fb..146f97068022 100644
+--- a/drivers/cpuidle/cpuidle-psci-domain.c
++++ b/drivers/cpuidle/cpuidle-psci-domain.c
+@@ -142,7 +142,6 @@ static const struct of_device_id psci_of_match[] = {
+ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+-	struct device_node *node;
+ 	bool use_osi = psci_has_osi_support();
+ 	int ret = 0, pd_count = 0;
+ 
+@@ -153,15 +152,13 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+ 	 * Parse child nodes for the "#power-domain-cells" property and
+ 	 * initialize a genpd/genpd-of-provider pair when it's found.
+ 	 */
+-	for_each_child_of_node(np, node) {
++	for_each_child_of_node_scoped(np, node) {
+ 		if (!of_property_present(node, "#power-domain-cells"))
+ 			continue;
+ 
+ 		ret = psci_pd_init(node, use_osi);
+-		if (ret) {
+-			of_node_put(node);
++		if (ret)
+ 			goto exit;
+-		}
+ 
+ 		pd_count++;
+ 	}
+-- 
+2.43.0
 
-This is done because the call to power_supply_get_battery_info in
-max77693_dt_init requires chg->charger to be set. (I was considering
-putting this in the commit message, can't remember why I didn't do it.
-I'll add it in the next version.)
-
-Best regards
-Artur
 
