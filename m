@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-12335-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12336-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6030A95466A
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 12:02:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30B3995466E
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 12:03:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B219BB23024
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 10:02:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1AB02881E0
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 10:03:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D91D01741D2;
-	Fri, 16 Aug 2024 10:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD88170A1F;
+	Fri, 16 Aug 2024 10:02:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dl79Qb7q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQBpDSy8"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A630217335C;
-	Fri, 16 Aug 2024 10:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B3E16F85B;
+	Fri, 16 Aug 2024 10:02:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723802466; cv=none; b=P4vRJ830YDHLelH85Q999UIBQTat3+CQTBs7dMGXqJ5aiT/U0qVWoFanfruBFiRDLkSzPOfRa02xXvMpa214hdAOBXNADXJlhTOPqTSzyWVine+HWqep3zz4QloNlrzN+7bTjROHdNjZ32rAxHei0btKE4RCaBmrCWZxvtUmomw=
+	t=1723802550; cv=none; b=jiQbpL3Jh3vGHvPjuu9BZGtbmeLLUt9F/J6iFxi+FK7SosxtVrElxmGSZPSRuBLJB+nQO3n4yk5f3b/qPtx6X97KMsbFD4q9FAIQa/pY7XzJ0DWtNCwPEKrmbWF9xaLXzlIBQtnauxeULRwWTPvXZm1IuAUhLxPaGbF4jIdaYfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723802466; c=relaxed/simple;
-	bh=QeWVCPKhXV5WY0xeONx29/jL2izZ/08c3nC6IK6z/sI=;
+	s=arc-20240116; t=1723802550; c=relaxed/simple;
+	bh=MFlJHnvHYseegVU9asfWJuXAHoVJw7vayJ9brrBGMvQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IkWqGpeaBueyyFb3N/5i6oxe27WLZyk3iyk0IazZ0PAXrp3t3I6hpKPcu1G2nG4Ir+PSdAxf5R8zIuJLpnTxP0FNTURdKsmxOQ1Zf9wnTOsDFU3BFuEChIIULiJJ+P9RJD//n+nwlv/sxffyjd1Zj1YDedlkQ8kZS5ZlEq4zAw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dl79Qb7q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3792C32782;
-	Fri, 16 Aug 2024 10:01:00 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ldXuur86El7CAVQXJvNIjBz7vwzYIol+eZFqIzK6ZTc0TzNXEhcsvknvmWtks0T08JcQm3dGmlcliL1NB2f6vWT4dco6rlZTzFFiB1SZ3OdOnwFZ0RM8NFe/YJoy4kqzrh4VtwZvmXYaUdOUCDSDlzzTak94H6VNVFrkJGrWPiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQBpDSy8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72425C4AF0C;
+	Fri, 16 Aug 2024 10:02:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723802466;
-	bh=QeWVCPKhXV5WY0xeONx29/jL2izZ/08c3nC6IK6z/sI=;
+	s=k20201202; t=1723802549;
+	bh=MFlJHnvHYseegVU9asfWJuXAHoVJw7vayJ9brrBGMvQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Dl79Qb7qjEtgAMxFBDK8fiwx0MKXsv9qZCukrdDn6atqw1iKohJCrmhd9j7AAR+Ui
-	 Uze6B/iqDov9APrAsqz9sCZ2AgYXCbu52JUW9SNRS6XxTGmCRvR3fLUQwyRPyty9XQ
-	 A2fJr4fgGd151qT2BPkyFEUuF/qItDNL1bnwgW+Luj/kl1oEvxRCblGWcgnKW+yOGP
-	 ONBqcD1ocIcxhTlP8ZhA6iDZvN+6Dd8JNt0R/zEaCG2nK3nvPF4F+d0Q4nFslpuzqJ
-	 cZBUXr+Q1oJzW6JRkm4QDmdw43HZAo+MrutAXrg6Fh8MMwkXG1tuw+IzyOV4k55lBH
-	 z9BOqFGb0ZNsA==
-Message-ID: <d8c5be11-5c5d-459e-8563-d9ca41c31295@kernel.org>
-Date: Fri, 16 Aug 2024 12:00:58 +0200
+	b=gQBpDSy8GSt7dmnuZ07MVSQ0c1k2bE0qysw9OrpApztMYc8ydGa5VOKtUXMvWx6E9
+	 a0V1v6n/XADJbLSb9XzWPlyUNz9NlBoz15w7AwngHsfqnxsNWbC/UEhKNglUmDIGAk
+	 EWG7Vea01nUP9Gzi7mpfuKPSO1L+vRBbeTO84gyR5UrHFW8rfBbEfSvTnZdTGbHSgs
+	 2MokMiMbw23QUZ4+9CQB8hmsXi3KM3W2wIwNmkBS2cBpV39cxkmluS3JyYkILzp5+n
+	 4l4p1oBi3hKNmHhVbs7YPPw2JL0JGodi7SPxeEWgEsFeywHG4GsRlq1qWfkLMWwrk2
+	 LYdLId5JB81ug==
+Message-ID: <5767d188-2b99-4c21-b824-5135cc52b511@kernel.org>
+Date: Fri, 16 Aug 2024 12:02:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 06/10] power: supply: max77693: Add support for
- detecting and enabling OTG
+Subject: Re: [PATCH v4 07/10] power: supply: max77693: Set up charge/input
+ current according to cable type
 To: Artur Weber <aweber.kernel@gmail.com>,
  Chanwoo Choi <cw00.choi@samsung.com>
 Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -64,7 +64,7 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
 References: <20240816-max77693-charger-extcon-v4-0-050a0a9bfea0@gmail.com>
- <20240816-max77693-charger-extcon-v4-6-050a0a9bfea0@gmail.com>
+ <20240816-max77693-charger-extcon-v4-7-050a0a9bfea0@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,81 +110,58 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240816-max77693-charger-extcon-v4-6-050a0a9bfea0@gmail.com>
+In-Reply-To: <20240816-max77693-charger-extcon-v4-7-050a0a9bfea0@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 16/08/2024 10:19, Artur Weber wrote:
-> Building upon the newly added extcon detection support, add detection
-> for USB OTG cables (EXTCON_USB_HOST type), and enable/disable the OTG
-> bits as needed.
+> This behavior was observed on a downstream kernel - for chargers, the
+> current would be set to a fast charge current value, and it would be
+> bumped down for all other cable types.
 > 
-> Acked-by: Lee Jones <lee@kernel.org>
+> If we leave only the fast charge current value applied, peripheral mode
+> stops working. If we stick to 500mA, charging becomes too slow. So, set
+> the charge input current limit accordingly to the cable type.
+> 
 > Tested-by: Henrik Grimler <henrik@grimler.se>
 > Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 > ---
 > Changes in v3:
-> - Dropped CHARGER regulator in favor of enabling charging directly
-> 
-> Changes in v2:
-> - Added CHGIN OTG current limit value
-> - Squashed MFD header register changes into this commit
+> - Re-introduced this commit from v1. It seems to have been accidentally
+>   rolled into the previous commit in v2.
 > ---
->  drivers/power/supply/max77693_charger.c | 53 ++++++++++++++++++++++++++-------
->  include/linux/mfd/max77693-private.h    |  5 ++++
->  2 files changed, 48 insertions(+), 10 deletions(-)
+>  drivers/power/supply/max77693_charger.c | 23 ++++++++++++++++++++---
+>  1 file changed, 20 insertions(+), 3 deletions(-)
 > 
 > diff --git a/drivers/power/supply/max77693_charger.c b/drivers/power/supply/max77693_charger.c
-> index d67857d2aa0b..bf156544fe1b 100644
+> index bf156544fe1b..908fd2a178ee 100644
 > --- a/drivers/power/supply/max77693_charger.c
 > +++ b/drivers/power/supply/max77693_charger.c
-> @@ -692,11 +692,30 @@ static int max77693_set_charging(struct max77693_charger *chg, bool enable)
->  			data);
->  }
->  
-> +static int max77693_set_otg(struct max77693_charger *chg, bool enable)
-> +{
-> +	unsigned int data;
-> +
-> +	if (enable)
-> +		data = CHG_CNFG_00_OTG_MASK | CHG_CNFG_00_BOOST_MASK |
-> +				CHG_CNFG_00_DIS_MUIC_CTRL_MASK;
-> +	else
-> +		data = ~(CHG_CNFG_00_OTG_MASK | CHG_CNFG_00_BOOST_MASK |
-> +				CHG_CNFG_00_DIS_MUIC_CTRL_MASK);
-> +
-> +	return regmap_update_bits(chg->max77693->regmap,
-> +			MAX77693_CHG_REG_CHG_CNFG_00,
-> +			CHG_CNFG_00_OTG_MASK | CHG_CNFG_00_BOOST_MASK |
-> +			CHG_CNFG_00_DIS_MUIC_CTRL_MASK,
-> +			data);
-> +}
-> +
->  static void max77693_charger_extcon_work(struct work_struct *work)
->  {
->  	struct max77693_charger *chg = container_of(work, struct max77693_charger,
+> @@ -716,6 +716,7 @@ static void max77693_charger_extcon_work(struct work_struct *work)
 >  						  cable.work);
 >  	struct extcon_dev *edev = chg->cable.edev;
-> +	bool set_charging, set_otg;
+>  	bool set_charging, set_otg;
+> +	unsigned int input_current;
 >  	int connector, state;
 >  	int ret;
 >  
-> @@ -715,25 +734,39 @@ static void max77693_charger_extcon_work(struct work_struct *work)
->  	case EXTCON_CHG_USB_FAST:
->  	case EXTCON_CHG_USB_SLOW:
->  	case EXTCON_CHG_USB_PD:
-> -		ret = max77693_set_charging(chg, true);
-> -		if (ret) {
-> -			dev_err(chg->dev, "failed to enable charging\n");
-> -			break;
-> -		}
+> @@ -728,19 +729,28 @@ static void max77693_charger_extcon_work(struct work_struct *work)
+>  
+>  	switch (connector) {
+>  	case EXTCON_CHG_USB_SDP:
+> -	case EXTCON_CHG_USB_DCP:
+
+Why do you move it? Wasn't it added in previous patch?
+
+>  	case EXTCON_CHG_USB_CDP:
+> +	case EXTCON_CHG_USB_SLOW:
+> +		input_current = 500000; /* 500 mA */
 > +		set_charging = true;
 > +		set_otg = false;
 > +
->  		dev_info(chg->dev, "charging. connector type: %d\n",
->  			 connector);
-
-Same comments as for other patch - dev_dbg.
+> +		dev_info(chg->dev, "slow charging. connector type: %d\n",
+> +			 connector);
+> +		break;
 
 
 Best regards,
