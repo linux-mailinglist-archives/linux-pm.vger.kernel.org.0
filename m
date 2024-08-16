@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-12291-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12292-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45A2295405C
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 06:09:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59F3195405E
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 06:09:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E32691F24FBD
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 04:09:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D88D1C22A06
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 04:09:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C13770E1;
-	Fri, 16 Aug 2024 04:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B343413D297;
+	Fri, 16 Aug 2024 04:06:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zids3swb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M9rfoDj4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A9C13CFA5;
-	Fri, 16 Aug 2024 04:06:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F45513B587;
+	Fri, 16 Aug 2024 04:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723781194; cv=none; b=ew5PaEonDFLz2Qkst1/BqQ+5NV8G6W8JLhs7LtJue9CPuRR86IKgHMNcan66WKPWru0GwwXWCNMRZUUQ0V5UnpmYbJVJk54AetnfBsdAnjRr+zdedqsZggBhU30u/s3Rk8JILvKgTu92To5CX3wt4MYk2Cm+5qM5sEOgtkKOMNI=
+	t=1723781196; cv=none; b=EHXE+FRyEIJEV5GnwK9QmWBPrR0ZCuiU5y+TE4f5MZ4dHZOWZIyBUxASEo/x2mQG2APPZz53ZPTX+oJWcSGSsecGCJEEKDMnPA7EenzsT1kTx4+k7bYZZ8EHd8ZGVi2l2anz6XRmjH7adsMHUjtOa6Q2QdHBAAyecNJLEHg2Gls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723781194; c=relaxed/simple;
-	bh=Exn6IbYfVXDxGcqCe/b6TH8T+b6+3Z9dfEuR7SuZcsk=;
+	s=arc-20240116; t=1723781196; c=relaxed/simple;
+	bh=rlcnU7I+cacGWnA4n/kNXeF29EoXwvR1r/qmm+tFn3k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FkoxdykL+qU09CsIPkt6bdNH2pfjOMLhb64zv4rGzHO02UNp9vYNcMT/Zg1lccfoKJ6u34WeELvbNjzT+LiV3xNkJLk2RW/P8C1RH6O7NssUZUxxLGouvJx3Z+dHzXWXQbzvq0xE/RRdMgZ2TTggK9X7jInNFbg3TlK7ogEMr4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zids3swb; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=okWOJ34iRI5x3rvV5R1OWciwXYlpbSh4P5IU3vh4qNt7hoRK90g5bQhWbhPPnAPI98vc2qYF3Yi8BPVLK7XRXjkHRvl+Lwek/mW/U7yVhvoDpVhS1nL/WJbSZxnTvaHkb4zeff/1zCpfhDtzG8PnpJtYaf5p6uNB+bOwcz5Yw/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M9rfoDj4; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723781193; x=1755317193;
+  t=1723781195; x=1755317195;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Exn6IbYfVXDxGcqCe/b6TH8T+b6+3Z9dfEuR7SuZcsk=;
-  b=Zids3swbhAjMT6ovUk22KLlNbN/vMv5p0bXPZpl9U0vFa/Q9iZICF+M+
-   HVdJMrHzbHsH0ImVWDz/BfJ07U7sle/79nFoo2EpQVHCZyZ5RtpDAu3mO
-   KuVINGtE6z1A+KPLEGayYjQEcpzAP9/bgSBiaGULF9QoPS9r4XKorUenb
-   iD0bnApfo68J+GF5+HiPZ4w6IjtAczuB3TPA2v0XLgkBg+QwyT18cgtUl
-   CjM5bqImorxNUehYeRYyEyfyC8fCRHoHB6QJ1Spo4nforqBAHdniSZuOQ
-   qJUu55IxLLIYa+RVzU/LsKw7YvauVFVIiVPUNe7bKHeiYR62+Gd8BUDi6
+  bh=rlcnU7I+cacGWnA4n/kNXeF29EoXwvR1r/qmm+tFn3k=;
+  b=M9rfoDj462wsz2inZHdmc1t9tzU2TnffEIaJ7JOd0kYKntP0tShQv+YW
+   ySliYispNRHv29sucNVCftdeHG0NbJdWs1SyzRnt9VTqHYhi21hlCxiry
+   T9upJcFQTM21MiRxwtsIjjZhG2epovURiS9iWczPyD/p/nwx4337EXwqi
+   8Lh8fGwHkWGEqTB0b91Id0qy/739j1NrPYKZQjNYuNIerrcgW5piHBbIM
+   cR95ClP7fYzAQ1eweimkhd9VU2YYjd++yExeBuTgsOLT667m6cATKeALW
+   53p3++xqKojeeyXk9n5YeaGHtEzGrR6SG7yGD5j9BhvX5Q7eBCV39evOT
    A==;
-X-CSE-ConnectionGUID: 3dbHhVOiTuWncs8jA/vmGw==
-X-CSE-MsgGUID: bAcOyMFoTEmHE/Mbiwx+Pg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="39521760"
+X-CSE-ConnectionGUID: POHv7dXSSYeqpucuoP6x/w==
+X-CSE-MsgGUID: wUEowLNOSymlucdYndd9vg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="25826210"
 X-IronPort-AV: E=Sophos;i="6.10,150,1719903600"; 
-   d="scan'208";a="39521760"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 21:06:31 -0700
-X-CSE-ConnectionGUID: 6P8t+7/aSL6pUYpCsJduSw==
-X-CSE-MsgGUID: bEMLXJYgQBuCcQrGIVajrw==
+   d="scan'208";a="25826210"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 21:06:34 -0700
+X-CSE-ConnectionGUID: a+WU7GzRRIG4lbsehIkADA==
+X-CSE-MsgGUID: R6Nfotm0ScyuZb08+M79sw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,150,1719903600"; 
-   d="scan'208";a="97070329"
+   d="scan'208";a="59571757"
 Received: from kerandaa-mobl.amr.corp.intel.com (HELO desk) ([10.125.112.221])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 21:06:26 -0700
-Date: Thu, 15 Aug 2024 21:06:25 -0700
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 21:06:34 -0700
+Date: Thu, 15 Aug 2024 21:06:32 -0700
 From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>,
@@ -75,10 +75,9 @@ Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
 	Brice Goglin <brice.goglin@gmail.com>,
 	Mario Limonciello <mario.limonciello@amd.com>,
 	Perry Yuan <Perry.Yuan@amd.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH v3 03/10] cpufreq: intel_pstate: Use topology_hw_cpu_type()
-Message-ID: <20240815-add-cpu-type-v3-3-234162352057@linux.intel.com>
+	Dapeng Mi <dapeng1.mi@linux.intel.com>
+Subject: [PATCH v3 04/10] perf/x86/intel: Use topology_hw_cpu_type()
+Message-ID: <20240815-add-cpu-type-v3-4-234162352057@linux.intel.com>
 X-Mailer: b4 0.14.1
 References: <20240815-add-cpu-type-v3-0-234162352057@linux.intel.com>
 Precedence: bulk
@@ -91,48 +90,32 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20240815-add-cpu-type-v3-0-234162352057@linux.intel.com>
 
-Intel pstate driver relies on SMP calls to get the cpu-type of a given CPU.
-Replace the SMP calls with more efficient topology_hw_cpu_type(cpu) that
-returns the per-cpu cached value.
+get_this_hybrid_cpu_type() misses a case when cpu-type is populated
+regardless of X86_FEATURE_HYBRID_CPU. This is particularly true for hybrid
+variants that have P or E cores fused off.
+
+Instead use topology_hw_cpu_type() as it does not rely on hybrid feature to
+enumerate cpu-type. This can also help avoid the model-specific fixup
+get_hybrid_cpu_type().
 
 Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 ---
- drivers/cpufreq/intel_pstate.c | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+ arch/x86/events/intel/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index c0278d023cfc..b3df766ef029 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -1971,24 +1971,16 @@ static int knl_get_turbo_pstate(int cpu)
- 	return ret;
- }
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 0c9c2706d4ec..26906e50a06f 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -4884,7 +4884,8 @@ static void intel_pmu_check_hybrid_pmus(struct x86_hybrid_pmu *pmu)
  
--static void hybrid_get_type(void *data)
--{
--	u8 *cpu_type = data;
--
--	*cpu_type = get_this_hybrid_cpu_type();
--}
--
- static int hwp_get_cpu_scaling(int cpu)
+ static struct x86_hybrid_pmu *find_hybrid_pmu_for_cpu(void)
  {
--	u8 cpu_type = 0;
-+	u8 cpu_type = topology_hw_cpu_type(&cpu_data(cpu));
- 
--	smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
- 	/* P-cores have a smaller perf level-to-freqency scaling factor. */
--	if (cpu_type == 0x40)
-+	if (cpu_type == TOPO_HW_CPU_TYPE_INTEL_CORE)
- 		return hybrid_scaling_factor;
- 
- 	/* Use default core scaling for E-cores */
--	if (cpu_type == 0x20)
-+	if (cpu_type == TOPO_HW_CPU_TYPE_INTEL_ATOM)
- 		return core_get_scaling();
+-	u8 cpu_type = get_this_hybrid_cpu_type();
++	struct cpuinfo_x86 *c = &cpu_data(smp_processor_id());
++	u8 cpu_type = topology_hw_cpu_type(c);
+ 	int i;
  
  	/*
 
