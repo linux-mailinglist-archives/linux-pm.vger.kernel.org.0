@@ -1,90 +1,59 @@
-Return-Path: <linux-pm+bounces-12376-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12377-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B9389551B0
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 22:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AA4A4955200
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 22:45:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B81831F229BA
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 20:00:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B7961F2226B
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 20:45:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDE9E1C3F2D;
-	Fri, 16 Aug 2024 20:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9674613A256;
+	Fri, 16 Aug 2024 20:45:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cw0u/3WJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iVD/b/AU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F64E80BFF;
-	Fri, 16 Aug 2024 20:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645BE12A177;
+	Fri, 16 Aug 2024 20:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723838420; cv=none; b=OHqGkWjGrUCDXw1hwYnvbX66c06xBZVnK3VR3VwmRr33fQD/aMQ3PdfqflRH8c2SpGr5uJuIGdO0MZWhztCRDrNN3w33ZdD2CDkCcxAZaz8VXajp5HTmg6RApDMlfM1KO43+a0KMN+SBMda++OyGAvPlcpr5d8AxhMtUODfpcOI=
+	t=1723841142; cv=none; b=lYaHWguifTU5D5L3nbYLu20pHZ9xV5mvOZ2RFyisx7zx5y7Wnm9IxPWa2uHlgGrbE5UZVZTd4nSkuQjW4EC091fAmU56TET1qmKY9wj5wQZJAOUwronrUvvWYl8fzf+zv/Io0amD/PY++oQEeOXeBZxQiSEGPotYDKP0NgiZOeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723838420; c=relaxed/simple;
-	bh=vIqSPXtwEUcd5MPZRu26qi2+4l/3pimxfpMvymEeGyE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iT3rSh3M7hiWLr5NordBE7BODa0I3Mo358uzrPGYyPSCok+jDBlOw+bMkiivY+cZLhGWUetHWI4Qx+U8s9Ic4G6f34g5U45iBqDcAila+4m/LdHQlxay4lo8/7M2X37IyH9NEX7fRgN9T97SelFCF98eDu+B5s2PqYlomBPc3yY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cw0u/3WJ; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723838419; x=1755374419;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vIqSPXtwEUcd5MPZRu26qi2+4l/3pimxfpMvymEeGyE=;
-  b=Cw0u/3WJYe7aSPaZ0J2qaAv2WaZJNuxBqhjGAd5Qm7sjQD2IFC0GypBq
-   bmMZY9Z67Ax2FyqgGgVdPDUy1dX8i49K9QNnsCPqBI0dT2NyaBzwe4mSK
-   1VKM1A26oIetoGke6jvn4b9jd9kYXd4LUSs6naZPwZTObiC1M+6H3dPZA
-   9B/Mt3wKg+7WjGAXWsmqLRKw55ewIleamF8R+oKOF2cdjilHQWP7CxtD8
-   QlWR58hpNUXPKqo40vL6X8IZxlo/97e781JA80gAigTISMpuiDbpm+yk7
-   woa8hUI/jx7n5eQ3vV7CRJZOTSQMrUm9LZ9nFW0/r+S0hnCnB5tSP/tBV
-   w==;
-X-CSE-ConnectionGUID: VSp1KL5vRuyGSh9Ua4pHrA==
-X-CSE-MsgGUID: XrAVTvg1T8iblzlzox0lDg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11166"; a="22319068"
-X-IronPort-AV: E=Sophos;i="6.10,152,1719903600"; 
-   d="scan'208";a="22319068"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2024 13:00:18 -0700
-X-CSE-ConnectionGUID: H+U6fLuOTPWxU6/D8+jBtQ==
-X-CSE-MsgGUID: PKuGJ0MWRI+jXWpVDUX+zg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,152,1719903600"; 
-   d="scan'208";a="64721137"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 16 Aug 2024 13:00:13 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sf37L-0006t8-1N;
-	Fri, 16 Aug 2024 20:00:11 +0000
-Date: Sat, 17 Aug 2024 03:59:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, daniel.sneddon@linux.intel.com,
-	tony.luck@intel.com, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Andrew Cooper <andrew.cooper3@citrix.com>,
-	Brice Goglin <brice.goglin@gmail.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Perry Yuan <Perry.Yuan@amd.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>
-Subject: Re: [PATCH v3 02/10] x86/cpu/topology: Add CPU type to struct
- cpuinfo_topology
-Message-ID: <202408170359.M7BAB0O0-lkp@intel.com>
-References: <20240815-add-cpu-type-v3-2-234162352057@linux.intel.com>
+	s=arc-20240116; t=1723841142; c=relaxed/simple;
+	bh=oey1uJwMO65z17ZUgy7+gOJgyBWHGuTpjRJ7SJ+e0ds=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=TJDTXobiyafsJqzEIutsSu8mUdpAWUyzTfK+t6vLSPcU8D58+oR5L1ea2WkggB7UNb5vj3SRzwGb409U8wBZ6o/IGLjrV+ikdeo7Re6oFRAARaQzknPAf68Or6O0Fiao0IS0LChdWHxhA5dgmRBlve6M2WNmhGAT9uJ4ApbC5jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iVD/b/AU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9797CC32782;
+	Fri, 16 Aug 2024 20:45:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723841141;
+	bh=oey1uJwMO65z17ZUgy7+gOJgyBWHGuTpjRJ7SJ+e0ds=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=iVD/b/AU/aVSErTcqPQk5uiFdEzaEfwj0ij/p0yeOSMopt2jzn8AWwi2nyk0+M82Y
+	 GV//N5U0+9YNyyf0E2pzaxpTC86QBFSQnIrGmW1pV9Z2gCIRtU2sEqN1cZScrROh2Y
+	 pZojj1FvGhS1SNJ/PPSR6BuCXkQicZzwxq9/T3eLPaZQzbuClzgZ+CPCE6Y3rPhhS3
+	 kGnA1RDtBOE2IgIgvSv8QFIYFjsDApm6hdI87BM6cw0UXbC48RHvOUvq1HFMLTVu7Y
+	 IMLEIA8uSI2cmcNJNDXsffs3NE3g3pXasmOE8oSVl0dWHYnWJ4p93eiLrbEtGa5mKq
+	 CTbnLZn/PvhFA==
+Date: Fri, 16 Aug 2024 15:45:39 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
+	quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+	quic_parass@quicinc.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Mayank Rana <quic_mrana@quicinc.com>,
+	Markus Elfring <Markus.Elfring@web.de>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4] PCI: Enable runtime pm of the host bridge
+Message-ID: <20240816204539.GA73302@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -93,51 +62,114 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240815-add-cpu-type-v3-2-234162352057@linux.intel.com>
+In-Reply-To: <20240708-runtime_pm-v4-1-c02a3663243b@quicinc.com>
 
-Hi Pawan,
+[+cc Rafael, Mayank, Markus (when people have commented on previous
+versions, please cc them on new versions).  I'm still hoping Rafael
+will have a chance to chime in]
 
-kernel test robot noticed the following build warnings:
+On Mon, Jul 08, 2024 at 10:19:40AM +0530, Krishna chaitanya chundru wrote:
+> The Controller driver is the parent device of the PCIe host bridge,
+> PCI-PCI bridge and PCIe endpoint as shown below.
+> 
+>         PCIe controller(Top level parent & parent of host bridge)
+>                         |
+>                         v
+>         PCIe Host bridge(Parent of PCI-PCI bridge)
+>                         |
+>                         v
+>         PCI-PCI bridge(Parent of endpoint driver)
+>                         |
+>                         v
+>                 PCIe endpoint driver
+> 
+> Now, when the controller device goes to runtime suspend, PM framework
+> will check the runtime PM state of the child device (host bridge) and
+> will find it to be disabled.
 
-[auto build test WARNING on 7c626ce4bae1ac14f60076d00eafe71af30450ba]
+I guess "will find it to be disabled"  means the child (host bridge)
+has runtime PM disabled, not that the child device is disabled, right?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pawan-Gupta/x86-cpu-Prepend-0x-to-the-hex-values-in-cpu_debug_show/20240816-122157
-base:   7c626ce4bae1ac14f60076d00eafe71af30450ba
-patch link:    https://lore.kernel.org/r/20240815-add-cpu-type-v3-2-234162352057%40linux.intel.com
-patch subject: [PATCH v3 02/10] x86/cpu/topology: Add CPU type to struct cpuinfo_topology
-config: x86_64-randconfig-013-20240816 (https://download.01.org/0day-ci/archive/20240817/202408170359.M7BAB0O0-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240817/202408170359.M7BAB0O0-lkp@intel.com/reproduce)
+> So it will allow the parent (controller
+> device) to go to runtime suspend. Only if the child device's state was
+> 'active' it will prevent the parent to get suspended.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408170359.M7BAB0O0-lkp@intel.com/
+Can we include a hint like the name of the function where the PM
+framework decides this?  Maybe this is rpm_check_suspend_allowed()?
 
-All warnings (new ones prefixed by >>):
+rpm_check_suspend_allowed()  checks ".ignore_children", which sounds
+like it could be related, and AFAICS .ignore_children == false here,
+so .child_count should be relevant.
 
-   In file included from arch/x86/power/cpu.c:25:
->> arch/x86/include/asm/cpu.h:55:12: warning: 'intel_hw_native_model_id' defined but not used [-Wunused-function]
-      55 | static u32 intel_hw_native_model_id(struct cpuinfo_x86 *c)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~
+But I'm still confused about why we can runtime suspend a bridge that
+leads to devices that are not suspended.
 
+> Since runtime PM is disabled for host bridge, the state of the child
+> devices under the host bridge is not taken into account by PM framework
+> for the top level parent, PCIe controller. So PM framework, allows
+> the controller driver to enter runtime PM irrespective of the state
+> of the devices under the host bridge. And this causes the topology
+> breakage and also possible PM issues like controller driver goes to
+> runtime suspend while endpoint driver is doing some transfers.
 
-vim +/intel_hw_native_model_id +55 arch/x86/include/asm/cpu.h
+What does "topology breakage" mean?  Do you mean something other than
+the fact that an endpoint DMA might fail if the controller is
+suspended?
 
-    54	
-  > 55	static u32 intel_hw_native_model_id(struct cpuinfo_x86 *c)
-    56	{
-    57		return 0;
-    58	}
-    59	#endif
-    60	#ifdef CONFIG_IA32_FEAT_CTL
-    61	void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
-    62	#else
-    63	static inline void init_ia32_feat_ctl(struct cpuinfo_x86 *c) {}
-    64	#endif
-    65	
+> So enable runtime PM for the host bridge, so that controller driver
+> goes to suspend only when all child devices goes to runtime suspend.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+IIUC, the one-sentence description here is that previously, the PCI
+host controller could be runtime suspended even while an endpoint was
+active, which caused DMA failures.  And this patch changes that so the
+host controller is only runtime suspended after the entire hierarchy
+below it is runtime suspended?  Is that right?
+
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+> Changes in v4:
+
+(Note: v4 applies cleanly to v6.10-rc1 and to v6.11-rc1 with a small
+offset).
+
+> - Changed pm_runtime_enable() to devm_pm_runtime_enable() (suggested by mayank)
+> - Link to v3: https://lore.kernel.org/lkml/20240609-runtime_pm-v3-1-3d0460b49d60@quicinc.com/
+> Changes in v3:
+> - Moved the runtime API call's from the dwc driver to PCI framework
+>   as it is applicable for all (suggested by mani)
+> - Updated the commit message.
+> - Link to v2: https://lore.kernel.org/all/20240305-runtime_pm_enable-v2-1-a849b74091d1@quicinc.com
+> Changes in v2:
+> - Updated commit message as suggested by mani.
+> - Link to v1: https://lore.kernel.org/r/20240219-runtime_pm_enable-v1-1-d39660310504@quicinc.com
+> ---
+> 
+> ---
+>  drivers/pci/probe.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 8e696e547565..fd49563a44d9 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -3096,6 +3096,10 @@ int pci_host_probe(struct pci_host_bridge *bridge)
+>  	}
+>  
+>  	pci_bus_add_devices(bus);
+> +
+> +	pm_runtime_set_active(&bridge->dev);
+> +	devm_pm_runtime_enable(&bridge->dev);
+> +
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(pci_host_probe);
+> 
+> ---
+> base-commit: 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
+> change-id: 20240708-runtime_pm-978ccbca6130
+> 
+> Best regards,
+> -- 
+> Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> 
 
