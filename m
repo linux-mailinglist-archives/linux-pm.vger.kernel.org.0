@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-12336-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12337-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30B3995466E
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 12:03:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2E08954675
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 12:04:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1AB02881E0
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 10:03:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38DC5B25737
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 10:03:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD88170A1F;
-	Fri, 16 Aug 2024 10:02:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64F7A172BA6;
+	Fri, 16 Aug 2024 10:03:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQBpDSy8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vv+NuVBc"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B3E16F85B;
-	Fri, 16 Aug 2024 10:02:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E4213212B;
+	Fri, 16 Aug 2024 10:03:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723802550; cv=none; b=jiQbpL3Jh3vGHvPjuu9BZGtbmeLLUt9F/J6iFxi+FK7SosxtVrElxmGSZPSRuBLJB+nQO3n4yk5f3b/qPtx6X97KMsbFD4q9FAIQa/pY7XzJ0DWtNCwPEKrmbWF9xaLXzlIBQtnauxeULRwWTPvXZm1IuAUhLxPaGbF4jIdaYfE=
+	t=1723802621; cv=none; b=WzOSdZfMzyrsI2zRjiKdq8rG/sWdHs/hrUo5KNIfrOPb6o29zKbSajYItPNsk8U5MXmAltOlpMskNKv2AvcCCWzkVtbj4V2l4pm5BnsQD5ZFodc9/YYDxjP4MjfAr6R1YVH3hM8KryEfY+iqvDBADn65XvnQZXxx92e4rbylm6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723802550; c=relaxed/simple;
-	bh=MFlJHnvHYseegVU9asfWJuXAHoVJw7vayJ9brrBGMvQ=;
+	s=arc-20240116; t=1723802621; c=relaxed/simple;
+	bh=RGIPzVWl06fJV3uUR3Z44ir/+J0AmSpWgve/PeqCXrI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ldXuur86El7CAVQXJvNIjBz7vwzYIol+eZFqIzK6ZTc0TzNXEhcsvknvmWtks0T08JcQm3dGmlcliL1NB2f6vWT4dco6rlZTzFFiB1SZ3OdOnwFZ0RM8NFe/YJoy4kqzrh4VtwZvmXYaUdOUCDSDlzzTak94H6VNVFrkJGrWPiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQBpDSy8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72425C4AF0C;
-	Fri, 16 Aug 2024 10:02:24 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Dr3SkOZZr5V6AUxAfxjvOJZ4ytiRQo2lrQt4DlKIvmIjmiggQCEkrJVkotMDefop8xjedpa2MKm3vwH240NdftUTaxnIX2RZsDrUqQWdEUxx1cHQFeRXitSpJi9VwSmY139Q8yaFI3E745Dha8BMERGWeRb1l+QyO7WWnGozNs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vv+NuVBc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC0BC4AF09;
+	Fri, 16 Aug 2024 10:03:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723802549;
-	bh=MFlJHnvHYseegVU9asfWJuXAHoVJw7vayJ9brrBGMvQ=;
+	s=k20201202; t=1723802621;
+	bh=RGIPzVWl06fJV3uUR3Z44ir/+J0AmSpWgve/PeqCXrI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gQBpDSy8GSt7dmnuZ07MVSQ0c1k2bE0qysw9OrpApztMYc8ydGa5VOKtUXMvWx6E9
-	 a0V1v6n/XADJbLSb9XzWPlyUNz9NlBoz15w7AwngHsfqnxsNWbC/UEhKNglUmDIGAk
-	 EWG7Vea01nUP9Gzi7mpfuKPSO1L+vRBbeTO84gyR5UrHFW8rfBbEfSvTnZdTGbHSgs
-	 2MokMiMbw23QUZ4+9CQB8hmsXi3KM3W2wIwNmkBS2cBpV39cxkmluS3JyYkILzp5+n
-	 4l4p1oBi3hKNmHhVbs7YPPw2JL0JGodi7SPxeEWgEsFeywHG4GsRlq1qWfkLMWwrk2
-	 LYdLId5JB81ug==
-Message-ID: <5767d188-2b99-4c21-b824-5135cc52b511@kernel.org>
-Date: Fri, 16 Aug 2024 12:02:22 +0200
+	b=Vv+NuVBcCknHh2os6a+XRCj/ab/vbxzLlHyEjtyTvRoaw+CinmNCohIpBprSeYmi8
+	 TSSPG4SjV79+VPs1z4DelrbV3Thrkgg2ivqGNaY4scohGKjlonjlvosjxP/1djEZyJ
+	 jnLrbLuAXRGBkdGqaOUY2Q96pHinNOYBQkBDkZv44bLNcG9uThF/n+iaYl7umL6mwK
+	 Hb3uqJqRGZrKZCBJhojiOcUiYCKvsATLTfTKntsvBMqOd4vFWziu6+/sjn7u0o5L3p
+	 /DsjRDTkB5Pp8VY1amcrOi34XBTrbzrmoMaZJXXAG2vZpJHRqfKFuH4xtFmPgyIfKk
+	 qLa2ZCxJ9/nyQ==
+Message-ID: <f2d19e20-9177-4b30-9781-6904cc1d1638@kernel.org>
+Date: Fri, 16 Aug 2024 12:03:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 07/10] power: supply: max77693: Set up charge/input
- current according to cable type
+Subject: Re: [PATCH v4 08/10] ARM: dts: samsung: exynos4212-tab3: Add battery
+ node with charge current value
 To: Artur Weber <aweber.kernel@gmail.com>,
  Chanwoo Choi <cw00.choi@samsung.com>
 Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -64,7 +64,7 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
 References: <20240816-max77693-charger-extcon-v4-0-050a0a9bfea0@gmail.com>
- <20240816-max77693-charger-extcon-v4-7-050a0a9bfea0@gmail.com>
+ <20240816-max77693-charger-extcon-v4-8-050a0a9bfea0@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,59 +110,31 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240816-max77693-charger-extcon-v4-7-050a0a9bfea0@gmail.com>
+In-Reply-To: <20240816-max77693-charger-extcon-v4-8-050a0a9bfea0@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 16/08/2024 10:19, Artur Weber wrote:
-> This behavior was observed on a downstream kernel - for chargers, the
-> current would be set to a fast charge current value, and it would be
-> bumped down for all other cable types.
+> This value was verified by comparing register dumps of the MAX77693
+> charger with on mainline with a downstream kernel under Android; the
+> value on downstream was set to 1.8 amps when charging with a proper
+> charger.
 > 
-> If we leave only the fast charge current value applied, peripheral mode
-> stops working. If we stick to 500mA, charging becomes too slow. So, set
-> the charge input current limit accordingly to the cable type.
+> Add it to a new battery node and pass it to the MAX77693 charger
+> so that the fast charge current setting can be used for charging.
 > 
 > Tested-by: Henrik Grimler <henrik@grimler.se>
 > Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 > ---
-> Changes in v3:
-> - Re-introduced this commit from v1. It seems to have been accidentally
->   rolled into the previous commit in v2.
+> Changes in v2:
+> - Switched to monitored-battery
 > ---
->  drivers/power/supply/max77693_charger.c | 23 ++++++++++++++++++++---
->  1 file changed, 20 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/power/supply/max77693_charger.c b/drivers/power/supply/max77693_charger.c
-> index bf156544fe1b..908fd2a178ee 100644
-> --- a/drivers/power/supply/max77693_charger.c
-> +++ b/drivers/power/supply/max77693_charger.c
-> @@ -716,6 +716,7 @@ static void max77693_charger_extcon_work(struct work_struct *work)
->  						  cable.work);
->  	struct extcon_dev *edev = chg->cable.edev;
->  	bool set_charging, set_otg;
-> +	unsigned int input_current;
->  	int connector, state;
->  	int ret;
->  
-> @@ -728,19 +729,28 @@ static void max77693_charger_extcon_work(struct work_struct *work)
->  
->  	switch (connector) {
->  	case EXTCON_CHG_USB_SDP:
-> -	case EXTCON_CHG_USB_DCP:
+>  arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-Why do you move it? Wasn't it added in previous patch?
-
->  	case EXTCON_CHG_USB_CDP:
-> +	case EXTCON_CHG_USB_SLOW:
-> +		input_current = 500000; /* 500 mA */
-> +		set_charging = true;
-> +		set_otg = false;
-> +
-> +		dev_info(chg->dev, "slow charging. connector type: %d\n",
-> +			 connector);
-> +		break;
-
+For next version, please split DTS into separate patchset and provide in
+changelog (---) lore link to power supply patchset with bindings. It
+will be easier for Sebastian to apply entire set for psy.
 
 Best regards,
 Krzysztof
