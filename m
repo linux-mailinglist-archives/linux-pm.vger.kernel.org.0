@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-12337-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12338-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2E08954675
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 12:04:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BC2A954677
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 12:04:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38DC5B25737
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 10:03:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D47CB1F21E3B
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 10:04:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64F7A172BA6;
-	Fri, 16 Aug 2024 10:03:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B11B16F0E4;
+	Fri, 16 Aug 2024 10:04:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vv+NuVBc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BoAPaKIj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E4213212B;
-	Fri, 16 Aug 2024 10:03:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5590F12DD90;
+	Fri, 16 Aug 2024 10:04:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723802621; cv=none; b=WzOSdZfMzyrsI2zRjiKdq8rG/sWdHs/hrUo5KNIfrOPb6o29zKbSajYItPNsk8U5MXmAltOlpMskNKv2AvcCCWzkVtbj4V2l4pm5BnsQD5ZFodc9/YYDxjP4MjfAr6R1YVH3hM8KryEfY+iqvDBADn65XvnQZXxx92e4rbylm6g=
+	t=1723802689; cv=none; b=LwHiCMlZktq6VI1UeSw4ZiKuh/oj6RUHkvybXVOQMo25GE9WA7LCK6BDqoXQj8tRohehbwzb/BDZc/3SbxdvfT0KUQ/0PNujZ+lEO0Uv4BvmtieI9Ar8dN4XvQQDtDkq4s21Nb50cA3V1ZgxA1yH2ceZ+BqdxZTc2Y+Ek6L5Vh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723802621; c=relaxed/simple;
-	bh=RGIPzVWl06fJV3uUR3Z44ir/+J0AmSpWgve/PeqCXrI=;
+	s=arc-20240116; t=1723802689; c=relaxed/simple;
+	bh=75ykFYsn6vb7+zjbteiqwrpGk8pWdExh/tRAlBMPX9o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dr3SkOZZr5V6AUxAfxjvOJZ4ytiRQo2lrQt4DlKIvmIjmiggQCEkrJVkotMDefop8xjedpa2MKm3vwH240NdftUTaxnIX2RZsDrUqQWdEUxx1cHQFeRXitSpJi9VwSmY139Q8yaFI3E745Dha8BMERGWeRb1l+QyO7WWnGozNs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vv+NuVBc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC0BC4AF09;
-	Fri, 16 Aug 2024 10:03:34 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=lln7F1B7IZXvWR4xro/f5dbUARZ1eVEbPEhVGjYjsTCTO7k8gW1FXEMbo+fojU3pTYsFvfSUAhziRDXPrpl5wYWM/DP1FzwG0P2MFUc6ONCqVpHzJbD8jwRDWORs4orbQ2pAVOCMYLZVYdrprB+GxKZ7c+vzYoBPQasv71kju58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BoAPaKIj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F69EC32782;
+	Fri, 16 Aug 2024 10:04:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723802621;
-	bh=RGIPzVWl06fJV3uUR3Z44ir/+J0AmSpWgve/PeqCXrI=;
+	s=k20201202; t=1723802688;
+	bh=75ykFYsn6vb7+zjbteiqwrpGk8pWdExh/tRAlBMPX9o=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Vv+NuVBcCknHh2os6a+XRCj/ab/vbxzLlHyEjtyTvRoaw+CinmNCohIpBprSeYmi8
-	 TSSPG4SjV79+VPs1z4DelrbV3Thrkgg2ivqGNaY4scohGKjlonjlvosjxP/1djEZyJ
-	 jnLrbLuAXRGBkdGqaOUY2Q96pHinNOYBQkBDkZv44bLNcG9uThF/n+iaYl7umL6mwK
-	 Hb3uqJqRGZrKZCBJhojiOcUiYCKvsATLTfTKntsvBMqOd4vFWziu6+/sjn7u0o5L3p
-	 /DsjRDTkB5Pp8VY1amcrOi34XBTrbzrmoMaZJXXAG2vZpJHRqfKFuH4xtFmPgyIfKk
-	 qLa2ZCxJ9/nyQ==
-Message-ID: <f2d19e20-9177-4b30-9781-6904cc1d1638@kernel.org>
-Date: Fri, 16 Aug 2024 12:03:32 +0200
+	b=BoAPaKIjYogneHkNbGwZBP09n0m2yrGDBAypAV38lRGt6IO37jQVVBar9n9g8NEMj
+	 Y0XKOXCnCdiJpGrj3Jx5l59LD0y4xR3aFnDbUbTSHboucXfVpqB8yKkOZlQC+K1WAp
+	 3gUwTviDcl+tPpXI8tl0sjdMZ/jYRRa2VRnFag0SkB6Ofqk9QGZxVVC2eOU/wjSFyO
+	 fX3UB2pRCO+QGprZPa5oe3eoB6SVosrhi14eoNx/3kf203NGEB6WGQS4sO4sZJkM6B
+	 iEGFG0we/K8Dsx/LemSjPCVhb5yJxKjQu4z1uGCi2PtlGFr1Y1WM3M+noJC7FMtrFi
+	 UzPfV0TOBRoFQ==
+Message-ID: <17b56e8f-15ed-4442-9975-10c16af02105@kernel.org>
+Date: Fri, 16 Aug 2024 12:04:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 08/10] ARM: dts: samsung: exynos4212-tab3: Add battery
- node with charge current value
+Subject: Re: [PATCH v4 10/10] ARM: dts: samsung: exynos4212-tab3: Drop CHARGER
+ regulator
 To: Artur Weber <aweber.kernel@gmail.com>,
  Chanwoo Choi <cw00.choi@samsung.com>
 Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -64,7 +64,7 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
 References: <20240816-max77693-charger-extcon-v4-0-050a0a9bfea0@gmail.com>
- <20240816-max77693-charger-extcon-v4-8-050a0a9bfea0@gmail.com>
+ <20240816-max77693-charger-extcon-v4-10-050a0a9bfea0@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,31 +110,26 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240816-max77693-charger-extcon-v4-8-050a0a9bfea0@gmail.com>
+In-Reply-To: <20240816-max77693-charger-extcon-v4-10-050a0a9bfea0@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 16/08/2024 10:19, Artur Weber wrote:
-> This value was verified by comparing register dumps of the MAX77693
-> charger with on mainline with a downstream kernel under Android; the
-> value on downstream was set to 1.8 amps when charging with a proper
-> charger.
-> 
-> Add it to a new battery node and pass it to the MAX77693 charger
-> so that the fast charge current setting can be used for charging.
+> We don't use it for managing charging, and it interferes with the
+> extcon-based charging mode switching.
 > 
 > Tested-by: Henrik Grimler <henrik@grimler.se>
 > Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 > ---
-> Changes in v2:
-> - Switched to monitored-battery
+> Changes in v3:
+> - Added this commit
 > ---
->  arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi | 7 -------
+>  1 file changed, 7 deletions(-)
 
-For next version, please split DTS into separate patchset and provide in
-changelog (---) lore link to power supply patchset with bindings. It
-will be easier for Sebastian to apply entire set for psy.
+This probably should be squashed with previous commit. The previous
+commit re-implements charger, right? Or you want to keep it for some
+other release, after driver code reaches Linus' tree?
 
 Best regards,
 Krzysztof
