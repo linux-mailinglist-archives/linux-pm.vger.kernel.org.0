@@ -1,132 +1,118 @@
-Return-Path: <linux-pm+bounces-12300-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12301-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B2DA95422E
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 08:58:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E09A5954233
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 08:59:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4A631F2351C
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 06:58:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73DB9281EC0
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 06:59:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066258289E;
-	Fri, 16 Aug 2024 06:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hZfsVZej"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED38E84A35;
+	Fri, 16 Aug 2024 06:59:38 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3B8A957;
-	Fri, 16 Aug 2024 06:58:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01A383A14;
+	Fri, 16 Aug 2024 06:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723791529; cv=none; b=W2A/80zMZEsCom9wYtW6g/mjYlU911v59y+6r/frxopn/6FP1ZVSxePiOA4IyJbpO/YmGGao0m/IM0iFwiadgNZzeENRel4mXsBMc5PTkKk7FVhsf66+WuwiszHzSqPHuw2Ac/XPMNHENq1x9a+Cc1UOppRS+kTLkm4sfRUw1a0=
+	t=1723791578; cv=none; b=eTF81euMjjeLojevYN03b3S8rT+O5evFj6AoKQ51ChRAtI+L+FjWtr8rjNAWZST+wSn+eV7i2d3UG8mZ4cB29FEJp74UTItWN+7JGrinnaFSgkTv2CKA0892ikw43bNRm1Tsr+FQadO7+d0JlnJlJLC1HXE75QNqCMNXkyFChEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723791529; c=relaxed/simple;
-	bh=zDRM1hzoX9ACvzIE3K0psyIc0oiEJxraUk2CzewLzOk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q8TOnB8cdELWlHgwAVWbFDFrh1v/u9QYvR6GBRXNpRy05wT5nDy/yfGRszdw7NlOVce/3tmLbyVSQSvTiehD9sTpFXwPIcrEv6j0++4WZxSvyeeOsxf0aW72VImvNDrJbtoQSEpUigSKJj9xlMroDqIj/IBse949MUxKHuBaeJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hZfsVZej; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5becdf7d36aso402190a12.1;
-        Thu, 15 Aug 2024 23:58:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723791526; x=1724396326; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1JwamsKksXLvsW0qhopzjl2x+H5y5UpQ08ylf3RpSZM=;
-        b=hZfsVZejiJhmOUjM56Y8GFfjvVogrdceuvOE4I1xHuLdtJoOiu9alEvRJ2jPm+MQLT
-         2s8XZVRDlo/hBcQf4Z2AHTRHbqzD+WOx/q6VjivlXME8T6IAPbHfLW/HcwloiJSqh814
-         33rC0319QUkbY/jBjEh5OufCgwtpSPjozAJfTDGBsoKrjRwg1y13e3Q0Pj+gGmVM1iOY
-         0bdNssMkcHLXDxgm2Dorad09/IN4rba+52CItdWe2QRnT52R2WCx1GlWfPwrXZbHcyfb
-         HWZi8mG2k7ANTCG99t4Dyf6yW255lDyke8ZDeiLA96LC/lu+VnqOk6vbhoLwHfUxz486
-         rVFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723791526; x=1724396326;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1JwamsKksXLvsW0qhopzjl2x+H5y5UpQ08ylf3RpSZM=;
-        b=Nhs6J2HQ4YtspaChIhQ3zk8Ng9OSyy3L7cb15pa8Xlp5hGRMLPnYw/eEsAT4IkSlH+
-         mChXnrdSFeiWBDDaxd75pxu+CEyuIvW0+UaAOOtb/Z3JKaBZFwqX7ibS5PwJP8ew0CQl
-         kpWDeLcoCkTMB8AkjkJKKnL400F+6TBarhKpJE7cAtxWeeLH2mR9+4ZJaxqPzFBTrFEM
-         M6bLeg4DWVPwbbJYXjH672NQZsEhQUxLigTHtIT0sWNxIcUnhvQ6MlTVjM8dGTJWemta
-         F2rXqJVMX+Jj/mG9/qMWdrAyI6h86GD5Evu4TsjMRS4PebZ/hJDj0ACGeoMHcWQrkefr
-         oxxg==
-X-Forwarded-Encrypted: i=1; AJvYcCVY43w/9AMGdyS9OjaYAFiP+wybz6m5vQW1ieQj/+bOPXixCE8nc9XdhWB8L0mSD0O475h4hIUDdRWRIRN+Mph5kE2molIinx4x9nv0MZ0wlJneJ4LjdNrz+MeF+rw50nHqXSn0/xlrKMm2e4lC4xxdvGSCV5HBB3+p7J2HtSro8j87
-X-Gm-Message-State: AOJu0Yy6jf4k/m44cRSOsefkGm2TkgZsCucGAKUhrpKGqSgfmZPRhxem
-	ATvsdwVCe3Ya8kGDRrfMdbsytqrpZOd6Ek8SfZitthsOGddtWhej
-X-Google-Smtp-Source: AGHT+IG5/2L2jkdBfceoeV/MuSblJkCtK6rCRn7E3vZSCNqnFhMc2Btvqv1Mazis6KiaqOHW7jKCaw==
-X-Received: by 2002:a05:6402:1d56:b0:5bb:9ae0:4a41 with SMTP id 4fb4d7f45d1cf-5beca757128mr1109813a12.28.1723791526208;
-        Thu, 15 Aug 2024 23:58:46 -0700 (PDT)
-Received: from standask-GA-A55M-S2HP (lu-nat-113-247.ehs.sk. [188.123.113.247])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bebbe7f3e0sm1830464a12.71.2024.08.15.23.58.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2024 23:58:45 -0700 (PDT)
-Date: Fri, 16 Aug 2024 08:58:43 +0200
-From: Stanislav Jakubek <stano.jakubek@gmail.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: power: supply: sc27xx-fg: add low voltage
- alarm IRQ
-Message-ID: <Zr74o7/4uurJeRnF@standask-GA-A55M-S2HP>
-References: <Zr3SAHlq5A78QvrW@standask-GA-A55M-S2HP>
- <20240815-winnings-waving-1ec5561f90e7@spud>
+	s=arc-20240116; t=1723791578; c=relaxed/simple;
+	bh=oLjXu0BovmzaiWPPZC3G1gHwyZLxFoPoULSAR07tyZc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rbaG633wEvvv/N7QQoNvRUWs/ohLliw8yIEcixXM4QvqcYdA/3YTYXrEZeRcI2gutD0R2gwSfi5xpU3aYADsYS0MH5V07LvP1hticM5gI55GjjzJtO2JaM8FAuJhQhPzTDnXKpCrog0Qtnw99g3FXa/EtDE6n00XpH2pcjpoq/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8C8D143D;
+	Fri, 16 Aug 2024 00:00:01 -0700 (PDT)
+Received: from [192.168.1.13] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 582E23F58B;
+	Thu, 15 Aug 2024 23:59:30 -0700 (PDT)
+Message-ID: <1605d622-faf5-4535-bd71-ba514ee102dd@arm.com>
+Date: Fri, 16 Aug 2024 08:59:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240815-winnings-waving-1ec5561f90e7@spud>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 6/6] rust: cpufreq: Add rust implementation of
+ cppc_cpufreq driver
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Len Brown <lenb@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Robert Moore <robert.moore@intel.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
+ <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>,
+ Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl
+ <aliceryhl@google.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+ Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ FUJITA Tomonori <fujita.tomonori@gmail.com>,
+ Thomas Bertschinger <tahbertschinger@gmail.com>,
+ Danilo Krummrich <dakr@redhat.com>, linux-acpi@vger.kernel.org,
+ linux-pm@vger.kernel.org, acpica-devel@lists.linux.dev,
+ rust-for-linux@vger.kernel.org, Metin Kaya <metin.kaya@arm.com>
+References: <20240815082916.1210110-1-pierre.gondois@arm.com>
+ <20240815082916.1210110-7-pierre.gondois@arm.com>
+ <CANiq72mjvE7h_aH5tYnuuzdPHAzDUpioMi-h44HNCro8qFfDSw@mail.gmail.com>
+Content-Language: en-US
+From: Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <CANiq72mjvE7h_aH5tYnuuzdPHAzDUpioMi-h44HNCro8qFfDSw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Conor,
+Hello Greg, Miguel,
 
-On Thu, Aug 15, 2024 at 03:46:18PM +0100, Conor Dooley wrote:
-> On Thu, Aug 15, 2024 at 12:01:36PM +0200, Stanislav Jakubek wrote:
-> > The SC27XX fuel gauge supports a low voltage alarm IRQ, which is used
-> > for more accurate battery capacity measurements with lower voltages.
-> > 
-> > This was unfortunately never documented in bindings, do so now.
-> > 
-> > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> > ---
-> > Initial Linux driver submission adding this feature:
-> > https://lore.kernel.org/lkml/ee1dd39f126bd03fb88381de9663d32df994d341.1542185618.git.baolin.wang@linaro.org/
-> > 
-> > The only in-tree user (sc2731.dtsi) has had interrupts specified since its
-> > initial fuel-gauge submission:
-> > https://lore.kernel.org/lkml/4f66af3b47ba241380f8092e08879aca6d7c35b3.1548052878.git.baolin.wang@linaro.org/
+On 8/15/24 15:04, Miguel Ojeda wrote:
+> On Thu, Aug 15, 2024 at 10:31 AM Pierre Gondois <pierre.gondois@arm.com> wrote:
+>>
+>> In an effort to add test/support the cpufreq framework in rust,
+>> add a rust implementation of the cppc_cpufreq driver named:
+>> `rcppc_cpufreq`.
 > 
-> This context could go into the commit message I think, as justification
-> for making the interrupt required.
+> Similar to what Greg said -- is this intended to be something like a
+> "Rust reference driver" [1] for the subsystem?
 
-TBH I'm not 100% sure that the interrupt is required, I just looked at
-the Linux driver, and that it returns from probe if it doesn't get the IRQ.
+The initial intent was to review/test Viresh's patchset [1]. I then
+thought it would be a good idea to implement another cpufreq driver
+to see if the provided interface would work.
+As the cpufreq-dt driver is re-implemented in Viresh's patchset,
+I thought it was also ok to have this driver.
 
 > 
-> Also, this binding is odd in that it has several compatibles in an enum,
-> but the driver (added at the same time) only has one compatible in it.
+> [1] https://rust-for-linux.com/rust-reference-drivers
+> 
+>> +       depends on ACPI_PROCESSOR
+>> +       depends on ARM || ARM64 || RISCV
+> 
 
-I think the intent was to document the entire sc27xx series of PMICs, as
-they're supposedly very similar (this is just my guess), while initially
-adding support only for sc2731.
+Yes right
 
-> Are you using the sc2731 in your device?
+> `depends on RUST`?
+> 
+> Also, I imagine you skipped all safety comments etc. since it is an
+> RFC, but I thought I would mention it nevertheless.
 
-No, I do not have any such device.
+Ok, if it is decided not to drop this patchset, I ll add some comments,
+
+> 
+> Thanks for experimenting with Rust!
+> 
+> Cheers,
+> Miguel
+
 
 Regards,
-Stanislav
+Pierre
 
