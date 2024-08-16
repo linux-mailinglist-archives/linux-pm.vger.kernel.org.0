@@ -1,155 +1,134 @@
-Return-Path: <linux-pm+bounces-12366-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12367-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E35D2954E64
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 18:03:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9D0F954E68
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 18:04:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FC7FB2393A
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 16:03:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C919284EC2
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 16:04:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 480271BF309;
-	Fri, 16 Aug 2024 16:02:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E0CB1BDA94;
+	Fri, 16 Aug 2024 16:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6XS9IMV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FJEtdsG0"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F921BB68E;
-	Fri, 16 Aug 2024 16:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FED31BB68D;
+	Fri, 16 Aug 2024 16:04:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723824176; cv=none; b=rfzYoWa6u/hcV39OKDSwoRyQDzSwDi8xEmpdSpzJPAvEqD2ZBMvldnLpWUAb+ts1m9aBJkdmWbVE2Zf0gJAL2oCX+RyneJIivCtlbV6YWymqsrvy1ytaA/tjLObfOFPsxtkgxQrWD42clFbZ80/S+cMac4lmIzQ4OTZHYFFVXqg=
+	t=1723824279; cv=none; b=D7Z/VyEw8+l2bbfHsCUg6XqGee6GaxU0g9wx0hheQfog96DbVGk4ohYjD3RFY3rA5zeGaGz/FPY9KuyaDx0wart/PrUfZurQuwIBK3DQud3pI6D0Bwn8L15IOyoiQ0ysLi4kfu3qcsDb7talWxlIUTm57kr0fo/D+M7dCrD9Ykg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723824176; c=relaxed/simple;
-	bh=ojxinrOLcNbVPPySpuUlMDM4K5NF51Th8jrtqoS20cg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AQ1D3IvDccgXugaXcYO8d6H19Ok6QE9JomNqNsGQNMrBIU5Ynr7OIJr6Y/hXEMAWeys54L/vOg7eM+y3mZEeNVNIz57uMGfj22Y6LlN6Hv3l8OkEjsgX8mjVd+y3yWs1zh2pXkyVsT1Hxa+wGaocqRensXEy82iTxqf+flqsNgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6XS9IMV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C280BC4AF0B;
-	Fri, 16 Aug 2024 16:02:55 +0000 (UTC)
+	s=arc-20240116; t=1723824279; c=relaxed/simple;
+	bh=EPuQ2Nh1roM0N2s8I0Ls0NSMzC1GbSyB3GEWBTBguSE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NoiibVe4oevHWYnjHJ8jEYVBm9dbdVDuAbBhmSqw7lLM+ZBe3ONew/aavzdolL1qE/TWIqKUHsdXAhfj6Pi/XG6fIDSqlQS7tGTrEDSdVS+dTcGIGmVt7LfK53Vy/SJFdf2g2/A0v5zFz33m244bqIFp7/aJRoVqg1DEgVvU+Nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FJEtdsG0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48CFDC32782;
+	Fri, 16 Aug 2024 16:04:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723824175;
-	bh=ojxinrOLcNbVPPySpuUlMDM4K5NF51Th8jrtqoS20cg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=U6XS9IMVKC34MPnxz65HHLOwwDzDPs4pNteWmVXQo2fPky2z5uchrNhUtqKX5EK7h
-	 +sU1R//EFZ0eTQR58kQNLdk0PqUwS1ZojjwsGn0/TpOGvCp4YCEO9i5KhiNGiFr/zN
-	 zh6WuM5cAFleSAlas8PDfIxjS1kOSzxGdMwmCmsRCmbYXZuhydcBiVB5gWYa9JuwRK
-	 b4uD0O+mCaJrWIQqJF1pNHFiUSz6Gbo3gQ4VoftrMjTi8GDGq1USfK50Oj8rLHZcux
-	 qAJSoCGmjIp/LeqmBg3iaqNxTFHrk29CT2YOmOjpP8DPnP90jnmUEXRlh1TYeeU/H2
-	 K80AU49JkwQOg==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2610c095ea1so299616fac.3;
-        Fri, 16 Aug 2024 09:02:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVSPf7tkgyTdw/98ehGJFzNLc7yPTlUSkdTzljf412j+SVJX7UgVM0r2nQkRR7Im0Jcmno5jby37qI=@vger.kernel.org, AJvYcCVuvr7pBxb/FpBstRgazoaxSxAqH6Go4A3YLf6zL4FEMX36rqxPZ+sKWdsy7DSfwFz7F86fcO7kJGJrzOx2@vger.kernel.org, AJvYcCWIhfybxHA+sBNqk3EBlFNybfyIIk6Z9gyvxo3vM7wgQ0X2QnW628Vf9B+6xo2QFEyy4d/7WIZZfh1Ai7PE@vger.kernel.org, AJvYcCXa9xdD8AbA90uMYekMZPRIHJ0mKAXmhJ4gZkTE2F/k+UpAG8OLtAM97mueIm3ZEsheEbRln8/MVdyaNbg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2Y2js8Dd1Lv9VVoh7OT+b4FOyRVrCipscHBnVYQ9rwqlcnzgD
-	HyV9DnE13yx8RmtMQFuPRS63hlfyK/mQKM5DdKa7yZOO/z2jwRwq3Lg4kDp/xq98pWMH2lZuZ1k
-	o9WIEUlLaOjTCX1rQ0vf7kDxEyj0=
-X-Google-Smtp-Source: AGHT+IEDPxTrNj6EFPbZPOKHv1diO/kM3WHBW6ox5eiR/xox4p4nBVhdyxkPOCjWMWDzftuYBn/6jRnxKDNjx57c3Zg=
-X-Received: by 2002:a05:6870:b253:b0:25f:401a:2ec3 with SMTP id
- 586e51a60fabf-2701c0a7b6fmr2095254fac.0.1723824174920; Fri, 16 Aug 2024
- 09:02:54 -0700 (PDT)
+	s=k20201202; t=1723824278;
+	bh=EPuQ2Nh1roM0N2s8I0Ls0NSMzC1GbSyB3GEWBTBguSE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FJEtdsG0vhlBjP+YaxfIfo6ESwYNVAYYNjiDRgScyXLluWnBOQUJmupTpGka3kTCU
+	 eXFOGR6mBmD3PkZnCUThKrCJh89wknjtz3zGsrcoeUojbjcqrfbgBUTBzH1EbyEokm
+	 3HDqNXRvTFhRMnSUh6Zs4AezX+naz+Bt7jMKFjWi6XCwp9zZB0Pj/igN5Pl5h+g6Tn
+	 bWGnCSMHvLNPR7BKfSkc7TfMYfVtmbb3FzqoVpmq6ukWpzDRS0ofmtsMvr37yb20qR
+	 EbfB1nkh5UQVSsZZ4p5VJPLg3iObPIM3MuhiHiIbxqn4iqDQZyVhts5Pt+2gyCK0B8
+	 hUHapenwRazPQ==
+Date: Fri, 16 Aug 2024 17:04:34 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Stanislav Jakubek <stano.jakubek@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: power: supply: sc27xx-fg: add low voltage
+ alarm IRQ
+Message-ID: <20240816-licorice-dealing-b67197d3f88f@spud>
+References: <Zr3SAHlq5A78QvrW@standask-GA-A55M-S2HP>
+ <20240815-winnings-waving-1ec5561f90e7@spud>
+ <Zr74o7/4uurJeRnF@standask-GA-A55M-S2HP>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240816-b4-cleanup-h-of-node-put-thermal-v2-0-cee9fc490478@linaro.org>
- <20240816-b4-cleanup-h-of-node-put-thermal-v2-4-cee9fc490478@linaro.org>
- <CAJZ5v0j9WTzd5qg3bLLB6Y41xu1zoJMy7TV1xhFxEzW-x=b5=w@mail.gmail.com> <3b33d0b0-ae9f-4afe-af2f-9596394bcc4f@linaro.org>
-In-Reply-To: <3b33d0b0-ae9f-4afe-af2f-9596394bcc4f@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 16 Aug 2024 18:02:43 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ix+mJy6snyYuYg711ERmbJ8cNYV6DtmK1WZGur-Pd2-A@mail.gmail.com>
-Message-ID: <CAJZ5v0ix+mJy6snyYuYg711ERmbJ8cNYV6DtmK1WZGur-Pd2-A@mail.gmail.com>
-Subject: Re: [PATCH v2 4/7] thermal: of: Simplify thermal_of_for_each_cooling_maps()
- with scoped for each OF child loop
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, Chen-Yu Tsai <wenst@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="iSN+i34vU373tBO4"
+Content-Disposition: inline
+In-Reply-To: <Zr74o7/4uurJeRnF@standask-GA-A55M-S2HP>
+
+
+--iSN+i34vU373tBO4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 16, 2024 at 2:22=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 16/08/2024 13:30, Rafael J. Wysocki wrote:
-> > On Fri, Aug 16, 2024 at 9:40=E2=80=AFAM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> Use scoped for_each_child_of_node_scoped() when iterating over device
-> >> nodes to make code a bit simpler.
-> >>
-> >> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> ---
-> >>  drivers/thermal/thermal_of.c | 8 +++-----
-> >>  1 file changed, 3 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of=
-.c
-> >> index 94cc077ab3a1..ce398fde48bb 100644
-> >> --- a/drivers/thermal/thermal_of.c
-> >> +++ b/drivers/thermal/thermal_of.c
-> >> @@ -373,7 +373,7 @@ static int thermal_of_for_each_cooling_maps(struct=
- thermal_zone_device *tz,
-> >>                                             int (*action)(struct devic=
-e_node *, int, int,
-> >>                                                           struct therm=
-al_zone_device *, struct thermal_cooling_device *))
-> >>  {
-> >> -       struct device_node *tz_np, *cm_np, *child;
-> >> +       struct device_node *tz_np, *cm_np;
-> >>         int ret =3D 0;
-> >>
-> >>         tz_np =3D thermal_of_zone_get_by_name(tz);
-> >> @@ -386,12 +386,10 @@ static int thermal_of_for_each_cooling_maps(stru=
-ct thermal_zone_device *tz,
-> >>         if (!cm_np)
-> >>                 goto out;
-> >>
-> >> -       for_each_child_of_node(cm_np, child) {
-> >> +       for_each_child_of_node_scoped(cm_np, child) {
-> >>                 ret =3D thermal_of_for_each_cooling_device(tz_np, chil=
-d, tz, cdev, action);
-> >> -               if (ret) {
-> >> -                       of_node_put(child);
-> >> +               if (ret)
-> >>                         break;
-> >> -               }
-> >>         }
-> >>
-> >>         of_node_put(cm_np);
-> >>
-> >> --
-> >
-> > This clashes with
-> >
-> > https://lore.kernel.org/linux-pm/1758256.QkHrqEjB74@rjwysocki.net/
-> >
-> > which I would prefer to go in first if you don't mind.
->
-> My other patchset which fixes bugs here, could go in before:
-> https://lore.kernel.org/all/20240814195823.437597-1-krzysztof.kozlowski@l=
-inaro.org/
+On Fri, Aug 16, 2024 at 08:58:43AM +0200, Stanislav Jakubek wrote:
+> Hi Conor,
+>=20
+> On Thu, Aug 15, 2024 at 03:46:18PM +0100, Conor Dooley wrote:
+> > On Thu, Aug 15, 2024 at 12:01:36PM +0200, Stanislav Jakubek wrote:
+> > > The SC27XX fuel gauge supports a low voltage alarm IRQ, which is used
+> > > for more accurate battery capacity measurements with lower voltages.
+> > >=20
+> > > This was unfortunately never documented in bindings, do so now.
+> > >=20
+> > > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> > > ---
+> > > Initial Linux driver submission adding this feature:
+> > > https://lore.kernel.org/lkml/ee1dd39f126bd03fb88381de9663d32df994d341=
+=2E1542185618.git.baolin.wang@linaro.org/
+> > >=20
+> > > The only in-tree user (sc2731.dtsi) has had interrupts specified sinc=
+e its
+> > > initial fuel-gauge submission:
+> > > https://lore.kernel.org/lkml/4f66af3b47ba241380f8092e08879aca6d7c35b3=
+=2E1548052878.git.baolin.wang@linaro.org/
+> >=20
+> > This context could go into the commit message I think, as justification
+> > for making the interrupt required.
+>=20
+> TBH I'm not 100% sure that the interrupt is required, I just looked at
+> the Linux driver, and that it returns from probe if it doesn't get the IR=
+Q.
+>=20
+> >=20
+> > Also, this binding is odd in that it has several compatibles in an enum,
+> > but the driver (added at the same time) only has one compatible in it.
+>=20
+> I think the intent was to document the entire sc27xx series of PMICs, as
+> they're supposedly very similar (this is just my guess), while initially
+> adding support only for sc2731.
+>=20
+> > Are you using the sc2731 in your device?
+>=20
+> No, I do not have any such device.
 
-Right, but these don't clash significantly if I'm not mistaken.
+No worries.
 
-It may make sense to push them for 6.11-rc even.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-> so it will be backported. Other than that, I am fine with rebasing my
-> changes. There is no point in refactoring the code if it is being
-> removed/reshuffled :)
+--iSN+i34vU373tBO4
+Content-Type: application/pgp-signature; name="signature.asc"
 
-OK
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZr94kgAKCRB4tDGHoIJi
+0vpUAP9/LGLlbZaexYAUrcsXDwmy4v19apWfDrSJIyQ5JkbDUwD/dXPvd5xOVdio
+mNhHQWgiVWlpF6IdZk+8Hu8UlcfVBwM=
+=7TZU
+-----END PGP SIGNATURE-----
+
+--iSN+i34vU373tBO4--
 
