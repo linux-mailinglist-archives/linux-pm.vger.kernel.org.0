@@ -1,175 +1,217 @@
-Return-Path: <linux-pm+bounces-12377-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12378-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA4A4955200
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 22:45:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C26669554ED
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Aug 2024 04:42:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B7961F2226B
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2024 20:45:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 796CA284177
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Aug 2024 02:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9674613A256;
-	Fri, 16 Aug 2024 20:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EA4211713;
+	Sat, 17 Aug 2024 02:42:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iVD/b/AU"
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="FJs1vkA1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645BE12A177;
-	Fri, 16 Aug 2024 20:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3F14653A;
+	Sat, 17 Aug 2024 02:42:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723841142; cv=none; b=lYaHWguifTU5D5L3nbYLu20pHZ9xV5mvOZ2RFyisx7zx5y7Wnm9IxPWa2uHlgGrbE5UZVZTd4nSkuQjW4EC091fAmU56TET1qmKY9wj5wQZJAOUwronrUvvWYl8fzf+zv/Io0amD/PY++oQEeOXeBZxQiSEGPotYDKP0NgiZOeM=
+	t=1723862539; cv=none; b=jsKh31r3HanbGCfD/om6JZX4DzWS9aO/A+t74cq3nLCJKyX1BJr9HATLA0pupV/gubDQWw6vXwhDruCX262N7WGvb0IoJlnXELlvVMZT/GtmSdrFevGzJGI8iXIB/2WKim14dXDMON+jyACZCJnwElcJ4vE4CaffJs3iU1z3ad4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723841142; c=relaxed/simple;
-	bh=oey1uJwMO65z17ZUgy7+gOJgyBWHGuTpjRJ7SJ+e0ds=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=TJDTXobiyafsJqzEIutsSu8mUdpAWUyzTfK+t6vLSPcU8D58+oR5L1ea2WkggB7UNb5vj3SRzwGb409U8wBZ6o/IGLjrV+ikdeo7Re6oFRAARaQzknPAf68Or6O0Fiao0IS0LChdWHxhA5dgmRBlve6M2WNmhGAT9uJ4ApbC5jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iVD/b/AU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9797CC32782;
-	Fri, 16 Aug 2024 20:45:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723841141;
-	bh=oey1uJwMO65z17ZUgy7+gOJgyBWHGuTpjRJ7SJ+e0ds=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=iVD/b/AU/aVSErTcqPQk5uiFdEzaEfwj0ij/p0yeOSMopt2jzn8AWwi2nyk0+M82Y
-	 GV//N5U0+9YNyyf0E2pzaxpTC86QBFSQnIrGmW1pV9Z2gCIRtU2sEqN1cZScrROh2Y
-	 pZojj1FvGhS1SNJ/PPSR6BuCXkQicZzwxq9/T3eLPaZQzbuClzgZ+CPCE6Y3rPhhS3
-	 kGnA1RDtBOE2IgIgvSv8QFIYFjsDApm6hdI87BM6cw0UXbC48RHvOUvq1HFMLTVu7Y
-	 IMLEIA8uSI2cmcNJNDXsffs3NE3g3pXasmOE8oSVl0dWHYnWJ4p93eiLrbEtGa5mKq
-	 CTbnLZn/PvhFA==
-Date: Fri, 16 Aug 2024 15:45:39 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-	quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-	quic_parass@quicinc.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Mayank Rana <quic_mrana@quicinc.com>,
-	Markus Elfring <Markus.Elfring@web.de>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4] PCI: Enable runtime pm of the host bridge
-Message-ID: <20240816204539.GA73302@bhelgaas>
+	s=arc-20240116; t=1723862539; c=relaxed/simple;
+	bh=C286EmAyP/FNAORtOpe5XqhVBh9YZxbtRsVtQFWHtY4=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=CBGfplwC8UTzYsUD54bi8cyA6aONzkNk3KHx9TAAUPhXKWo3HwxFdCvQbXCCD+yUn9rtjLaT/gBXJSU9gK6RN1JuwcTctNK5ncNmitaUR3x0XB5l6AKEL/h9+qoeWUQuofI1WIUwJazmOLgvAPYvAd+JT5Rj6mO6/bJhDkblCDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=FJs1vkA1; arc=none smtp.client-ip=116.203.91.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240708-runtime_pm-v4-1-c02a3663243b@quicinc.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+	t=1723862526;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=t3PBtFS4FGd7SCAA1CPDEsl/8k7nrplme33HqFORp+I=;
+	b=FJs1vkA1ZlGCNKZAgEddbKLErQb+R2TpueJ69yhDSU/8qvqN6yc+rb9cvSRe+hGqQIogQL
+	C531SWWND+q9RZL08oOSEFLg1y1KDiqUv1XmBJk5tftvbhaq5At+MhZ/pF9+Jykv3EsRKB
+	p/KusXYhHVegnH+HI86MJWEUgi3DVGiI1YuTNgwUqfpOB3z0OuaVi1zj6fGS9VJVbSFM+3
+	RoCW1WPhJLbqPdoivlBRqSWHRjzC3ZiWFuhbo3uvhW0QLE8NOZcE+MEVYClMOK9wlbiPc1
+	NDnCFAukjD7cI8cA+oRLGoNp0pmRfRoeKhwX4lAd/IV4djT90xKhpcfUEDgvzA==
+Date: Sat, 17 Aug 2024 04:42:05 +0200
+From: Dragan Simic <dsimic@manjaro.org>
+To: Chen-Yu Tsai <wenst@chromium.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Amit Kucheria
+ <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>, Icenowy Zheng
+ <uwu@icenowy.me>, Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, =?UTF-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Pra?=
+ =?UTF-8?Q?do?= <nfraprado@collabora.com>, AngeloGioacchino Del Regno
+ <angelogioacchino.delregno@collabora.com>, Matthias Brugger
+ <matthias.bgg@gmail.com>, linux-mediatek@lists.infradead.org, Hsin-Te Yuan
+ <yuanhsinte@chromium.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2] thermal/of: support thermal zones w/o trips subnode
+In-Reply-To: <CAGXv+5GQixa389nudKk=U3Rh2jN8VuWQGKb9rsixhvj3KGFQDg@mail.gmail.com>
+References: <20240809070822.2835371-1-wenst@chromium.org>
+ <b00273d65dfc4b48cca474784184c62b@manjaro.org>
+ <CAGXv+5ERoH=jQGzo=mo2K-r3Meh2-5Kgvjf9Eh7bfNgcQYfWoA@mail.gmail.com>
+ <CAGXv+5GQixa389nudKk=U3Rh2jN8VuWQGKb9rsixhvj3KGFQDg@mail.gmail.com>
+Message-ID: <35a2ef84aaa9f650bd63bfc25e336ef3@manjaro.org>
+X-Sender: dsimic@manjaro.org
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-[+cc Rafael, Mayank, Markus (when people have commented on previous
-versions, please cc them on new versions).  I'm still hoping Rafael
-will have a chance to chime in]
+Hello Chen-Yu,
 
-On Mon, Jul 08, 2024 at 10:19:40AM +0530, Krishna chaitanya chundru wrote:
-> The Controller driver is the parent device of the PCIe host bridge,
-> PCI-PCI bridge and PCIe endpoint as shown below.
+On 2024-08-15 06:45, Chen-Yu Tsai wrote:
+> On Mon, Aug 12, 2024 at 12:46 PM Chen-Yu Tsai <wenst@chromium.org> 
+> wrote:
+>> 
+>> On Mon, Aug 12, 2024 at 9:22 AM Dragan Simic <dsimic@manjaro.org> 
+>> wrote:
+>> >
+>> > Hello Chen-Yu,
+>> >
+>> > Thanks for the patch.  Please see one comment below.
+>> >
+>> > On 2024-08-09 09:08, Chen-Yu Tsai wrote:
+>> > > From: Icenowy Zheng <uwu@icenowy.me>
+>> > >
+>> > > Although the current device tree binding of thermal zones require the
+>> > > trips subnode, the binding in kernel v5.15 does not require it, and
+>> > > many
+>> > > device trees shipped with the kernel, for example,
+>> > > allwinner/sun50i-a64.dtsi and mediatek/mt8183-kukui.dtsi in ARM64,
+>> > > still
+>> > > comply to the old binding and contain no trips subnode.
+>> > >
+>> > > Allow the code to successfully register thermal zones w/o trips subnode
+>> > > for DT binding compatibility now.
+>> > >
+>> > > Furtherly, the inconsistency between DTs and bindings should be
+>> > > resolved
+>> > > by either adding empty trips subnode or dropping the trips subnode
+>> > > requirement.
+>> > >
+>> > > Fixes: d0c75fa2c17f ("thermal/of: Initialize trip points separately")
+>> > > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+>> > > Reviewed-by: Mark Brown <broonie@kernel.org>
+>> > > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+>> > > ---
+>> > > Resurrecting this patch specifically for MediaTek MT8183 Kukui devices.
+>> > >
+>> > > Changes since v1:
+>> > > - set *ntrips at beginning of thermal_of_trips_init()
+>> > > - Keep goto out_of_node_put in of_get_child_count(trips) == 0 branch
+>> > > - Check return value of thermal_of_trips_init(), if it is -ENXIO, print
+>> > >   warning and clear |trips| pointer
+>> > > - Drop |mask| change, as the variable was removed
+>> > >
+>> > > I kept Mark's reviewed-by since the changes are more stylish than
+>> > > functional.
+>> > > ---
+>> > >  drivers/thermal/thermal_of.c | 19 ++++++++++++-------
+>> > >  1 file changed, 12 insertions(+), 7 deletions(-)
+>> > >
+>> > > diff --git a/drivers/thermal/thermal_of.c
+>> > > b/drivers/thermal/thermal_of.c
+>> > > index aa34b6e82e26..f237e74c92fc 100644
+>> > > --- a/drivers/thermal/thermal_of.c
+>> > > +++ b/drivers/thermal/thermal_of.c
+>> > > @@ -128,16 +128,17 @@ static struct thermal_trip
+>> > > *thermal_of_trips_init(struct device_node *np, int *n
+>> > >       struct device_node *trips, *trip;
+>> > >       int ret, count;
+>> > >
+>> > > +     *ntrips = 0;
+>> > >       trips = of_get_child_by_name(np, "trips");
+>> > >       if (!trips) {
+>> > > -             pr_err("Failed to find 'trips' node\n");
+>> > > -             return ERR_PTR(-EINVAL);
+>> > > +             pr_debug("Failed to find 'trips' node\n");
+>> > > +             return ERR_PTR(-ENXIO);
+>> > >       }
+>> > >
+>> > >       count = of_get_child_count(trips);
+>> > >       if (!count) {
+>> > > -             pr_err("No trip point defined\n");
+>> > > -             ret = -EINVAL;
+>> > > +             pr_debug("No trip point defined\n");
+>> > > +             ret = -ENXIO;
+>> > >               goto out_of_node_put;
+>> > >       }
+>> > >
+>> > > @@ -162,7 +163,6 @@ static struct thermal_trip
+>> > > *thermal_of_trips_init(struct device_node *np, int *n
+>> > >
+>> > >  out_kfree:
+>> > >       kfree(tt);
+>> > > -     *ntrips = 0;
+>> > >  out_of_node_put:
+>> > >       of_node_put(trips);
+>> >
+>> > It might be a bit cleaner to keep the "*ntrips = 0" assignment
+>> > in the error handling path(s) only, with the positions of the goto
+>> > labels adjusted a bit, and then assign -ENXIO to "ret" and jump
+>> > to the right label when of_get_child_by_name(np, "trips") fails,
+>> > instead of returning from there.
+>> >
+>> > If it's unclear what I'm talking about, please let me know and
+>> > I'll send back the proposed hunk.
+>> 
+>> I think I understand: move "*ntrips = 0" to after of_node_put() in the
+>> error path, and have the "!trips" branch jump to "out_of_node_put" as
+>> well. That works since of_node_put() checks the pointer first.
+>> 
+>> I'll wait a bit and see if there are any more comments.
 > 
->         PCIe controller(Top level parent & parent of host bridge)
->                         |
->                         v
->         PCIe Host bridge(Parent of PCI-PCI bridge)
->                         |
->                         v
->         PCI-PCI bridge(Parent of endpoint driver)
->                         |
->                         v
->                 PCIe endpoint driver
-> 
-> Now, when the controller device goes to runtime suspend, PM framework
-> will check the runtime PM state of the child device (host bridge) and
-> will find it to be disabled.
+> Actually, Krzysztof (+CC) is cleaning up this function using scoped
+> variables. So it might actually make more sense to move "*ntrips = 0"
+> to the top once the error path is completely removed.
 
-I guess "will find it to be disabled"  means the child (host bridge)
-has runtime PM disabled, not that the child device is disabled, right?
+I see, it would make sense to move "*ntrips = 0" to the top, but what
+bugs me with that approach a bit is that we's still have another 
+instance
+of "*ntrips = 0" in the error paths.  Thus, it might be cleaner to have
+only one instance of "*ntrips = 0", in the error paths, and use "ret = 
+..."
+plus "goto ..." pairs instead of single "return ..." statements.
 
-> So it will allow the parent (controller
-> device) to go to runtime suspend. Only if the child device's state was
-> 'active' it will prevent the parent to get suspended.
+That way, we'd keep "*ntrips = 0" in the error pathso only, which would
+clearly show that's part of the error handling only.  Though, I'd be 
+also
+fine with moving "*ntrips = 0" to the top, if you find that cleaner.
 
-Can we include a hint like the name of the function where the PM
-framework decides this?  Maybe this is rpm_check_suspend_allowed()?
-
-rpm_check_suspend_allowed()  checks ".ignore_children", which sounds
-like it could be related, and AFAICS .ignore_children == false here,
-so .child_count should be relevant.
-
-But I'm still confused about why we can runtime suspend a bridge that
-leads to devices that are not suspended.
-
-> Since runtime PM is disabled for host bridge, the state of the child
-> devices under the host bridge is not taken into account by PM framework
-> for the top level parent, PCIe controller. So PM framework, allows
-> the controller driver to enter runtime PM irrespective of the state
-> of the devices under the host bridge. And this causes the topology
-> breakage and also possible PM issues like controller driver goes to
-> runtime suspend while endpoint driver is doing some transfers.
-
-What does "topology breakage" mean?  Do you mean something other than
-the fact that an endpoint DMA might fail if the controller is
-suspended?
-
-> So enable runtime PM for the host bridge, so that controller driver
-> goes to suspend only when all child devices goes to runtime suspend.
-
-IIUC, the one-sentence description here is that previously, the PCI
-host controller could be runtime suspended even while an endpoint was
-active, which caused DMA failures.  And this patch changes that so the
-host controller is only runtime suspended after the entire hierarchy
-below it is runtime suspended?  Is that right?
-
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> ---
-> Changes in v4:
-
-(Note: v4 applies cleanly to v6.10-rc1 and to v6.11-rc1 with a small
-offset).
-
-> - Changed pm_runtime_enable() to devm_pm_runtime_enable() (suggested by mayank)
-> - Link to v3: https://lore.kernel.org/lkml/20240609-runtime_pm-v3-1-3d0460b49d60@quicinc.com/
-> Changes in v3:
-> - Moved the runtime API call's from the dwc driver to PCI framework
->   as it is applicable for all (suggested by mani)
-> - Updated the commit message.
-> - Link to v2: https://lore.kernel.org/all/20240305-runtime_pm_enable-v2-1-a849b74091d1@quicinc.com
-> Changes in v2:
-> - Updated commit message as suggested by mani.
-> - Link to v1: https://lore.kernel.org/r/20240219-runtime_pm_enable-v1-1-d39660310504@quicinc.com
-> ---
-> 
-> ---
->  drivers/pci/probe.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index 8e696e547565..fd49563a44d9 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -3096,6 +3096,10 @@ int pci_host_probe(struct pci_host_bridge *bridge)
->  	}
->  
->  	pci_bus_add_devices(bus);
-> +
-> +	pm_runtime_set_active(&bridge->dev);
-> +	devm_pm_runtime_enable(&bridge->dev);
-> +
->  	return 0;
->  }
->  EXPORT_SYMBOL_GPL(pci_host_probe);
-> 
-> ---
-> base-commit: 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
-> change-id: 20240708-runtime_pm-978ccbca6130
-> 
-> Best regards,
-> -- 
-> Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> 
+>> > > @@ -490,8 +490,13 @@ static struct thermal_zone_device
+>> > > *thermal_of_zone_register(struct device_node *
+>> > >
+>> > >       trips = thermal_of_trips_init(np, &ntrips);
+>> > >       if (IS_ERR(trips)) {
+>> > > -             pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
+>> > > -             return ERR_CAST(trips);
+>> > > +             if (PTR_ERR(trips) != -ENXIO) {
+>> > > +                     pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
+>> > > +                     return ERR_CAST(trips);
+>> > > +             }
+>> > > +
+>> > > +             pr_warn("Failed to find trip points for %pOFn id=%d\n", sensor, id);
+>> > > +             trips = NULL;
+>> > >       }
+>> > >
+>> > >       ret = thermal_of_monitor_init(np, &delay, &pdelay);
 
