@@ -1,131 +1,183 @@
-Return-Path: <linux-pm+bounces-12382-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12383-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10B3395570F
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Aug 2024 12:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4DF5955752
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Aug 2024 12:51:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A17301F21B0B
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Aug 2024 10:00:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37CA01F21BD3
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Aug 2024 10:51:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC9F614900F;
-	Sat, 17 Aug 2024 10:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8BBE144304;
+	Sat, 17 Aug 2024 10:51:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="og6DfgjC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dT7htaDT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73797F507;
-	Sat, 17 Aug 2024 10:00:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0146913AA4C;
+	Sat, 17 Aug 2024 10:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723888800; cv=none; b=HEfiUtJYA5hyNOJK7sM14uFvBfxO0HKYOyRC9R85om3bcJ5dJp0NBlruAc36ZagkIXyZtPDchvTC1tQGfI7AiCvaG2h6YGVWsEnpr7kjdA8J7F7H/oOkBMor27W7IsVaA4zG3e1rTJwcCwf0ZRVtj+ziGrGai6/g5OFJ5fmQDvY=
+	t=1723891884; cv=none; b=aq+XkY9RAKAMNhCJ95ad4/Z4gNVH0PTHCL1MXzdqfigWXZaLzBkuRfv5wvm80/blGbu0Fcm4Q1hSXniSb9H7UJT5tJiW1oEtZ46RIHsACe65pqwgPYtr+/6p/ymoTrUUjBUs6NJ1nWWLYVgtRlcGELP0BV9wKk+mi+IaId/WXO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723888800; c=relaxed/simple;
-	bh=0I3Z/JX3w1vF12YT4+Xa5zhTim9q0NldcHx2aPBgh7o=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mb2HX7ZlsvT8ii87RdgDjXLGQFCf1obPUq+i2LN4yxzwqYeXgIGuSYOQxNiEiKpHbP8Vi4TIrwrNew/5r9e6Vv9UHnruvOGN58KzK5OHuu70dHJQFRK68CRfqndSTDkfxER6GFc92tn8sK0JxQQ6wr4BWi+0ComZGgqyCK1Sgtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=og6DfgjC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DE02C116B1;
-	Sat, 17 Aug 2024 09:59:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723888799;
-	bh=0I3Z/JX3w1vF12YT4+Xa5zhTim9q0NldcHx2aPBgh7o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=og6DfgjCAkZEmiH7KS3to4FVpEC+zIkQb88SO5OmOuYYzGVRKAo/pTrQF0nwOyida
-	 OwV0u9Imi5vpqhNaLrzNfoMgl2JxZsQe5oIjdkF6IcizZHF3+cyvvvLCFvFlBRyrpd
-	 yNjtBvVmk5Dxk95VvEmBmFhCt4RnLG4OjsI2B/+R/UZuCRpYTdm6YiZ88wGlQrFyft
-	 wWDdNK/8JVAOIX57axEMlCpFh89FOOPzRsd27jgZtEU2+1wAfoqwZRvZdsp1NAu+PP
-	 uppHaqFdiopgxWjkrCUDOyDHA6hhTvtnfcetLIaz6Ib67QRDHasYePVnReoWTcQQFh
-	 V2/ZRB6Tewmzw==
-Date: Sat, 17 Aug 2024 10:59:49 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Chris Morgan <macroalpha82@gmail.com>
-Cc: linux-sunxi@lists.linux.dev, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-iio@vger.kernel.org, quentin.schulz@free-electrons.com,
- mripard@kernel.org, tgamblin@baylibre.com, aidanmacdonald.0x0@gmail.com,
- u.kleine-koenig@pengutronix.de, lee@kernel.org, samuel@sholland.org,
- jernej.skrabec@gmail.com, sre@kernel.org, wens@csie.org,
- conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de,
- Chris Morgan <macromorgan@hotmail.com>, Philippe Simons
- <simons.philippe@gmail.com>
-Subject: Re: [PATCH V2 14/15] power: supply: axp20x_battery: add support for
- AXP717
-Message-ID: <20240817105949.2a091d13@jic23-huawei>
-In-Reply-To: <66bd1ddf.ca0a0220.13e5d4.8871@mx.google.com>
-References: <20240802192026.446344-1-macroalpha82@gmail.com>
-	<20240802192026.446344-15-macroalpha82@gmail.com>
-	<20240803121044.20481897@jic23-huawei>
-	<66bd1ddf.ca0a0220.13e5d4.8871@mx.google.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1723891884; c=relaxed/simple;
+	bh=uLoOYzQPRrSIRoGlDl7dOmzB4I4MrNepJEy3xkLy350=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jxckmUD/W+yr2ZaqFE3BUt+20gI3Rt0ow3JvkSG9OUtoBLVm8PxJ95Y6fy3+1tneZLzRoQF+MPQB2ci6eVVdSGO3oT6Oys48mMvIhQXl9sh1tF0vZ41uDc4B3jxSBvKWOgY0EgQaGh/qlOPln99yd/XaKIB9ET0Q/0X/B8Kt1ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dT7htaDT; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4281d812d3eso28457435e9.3;
+        Sat, 17 Aug 2024 03:51:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723891881; x=1724496681; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TK4QaE0PfcJ3+Kl/aP/anltlX14nLiwOatCWazNYV2M=;
+        b=dT7htaDTxM8+A/cvIxgwvaSiNojcXHGlag/swSamS8ytrfDglxcxKJI+KV25mvdWfT
+         yCG4GTX3b/WOEeS0dOxjnucYUXCJnBjERyQLQGyO1acnZNDBZKzQf0xfaY2JK4PtAlHR
+         98IthHoo3eGdwtgeyVN7+Tyk1LfdqMu3oZnBM+yqwo66jLKtBP5rjGaz7VzaP97Yi4W3
+         Q2qZqepFlnwWa+woV9EIwJV8wsY8ydunYXMH9nfETZ9imiExKNXzQBMgxY5qwYa8P7Kc
+         xzgEESzlFByUPMkplzea36Ez9N0fLpLAoL1bLDAY8aourLaxCUWDerlSX7kDQdqEGQMv
+         3oeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723891881; x=1724496681;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TK4QaE0PfcJ3+Kl/aP/anltlX14nLiwOatCWazNYV2M=;
+        b=DYNzhuz50qon2Y6gShH2itYZV4pWf3XyygThetUQL6LCvtjtYNz17g3H1Qi7O1CF++
+         Kwt4zRUq+SlyLpO0Akh1wFkqyG20h27pSYcAOhV6RBF2LhYshLi70UA3YiaEGGQI6FGn
+         B50ng7wUVvc1mtU1zbHmJ43jlBZHYR1UQb7ICckpC4zKHCcCPxBbDvoOivjk0YigJtSm
+         qyHPrAcO/7pUqsinGfwuuQVOonuKfh6KMecdl8wWxqYck51VesHl1WQ3DKPxbiq3pwrX
+         cBu/DSUDVcSdDzJZ1LVgthZJBLJD4bW3srow7KkHw74PF5IiYrPralVNCANb5JSVJ1ki
+         n6iw==
+X-Forwarded-Encrypted: i=1; AJvYcCW8KU6GYDGQ5Z/jqk62op2RFTNnMlZtSnn4gMJHFogrARVGCRyA4MLO7pH7u2q8JpKFEFIbVUqEMEaEjpDDX9Ps8oZGtk/ewnTeGwli77s2yksgE1j6p/TOIsDiBQa66Ii3JJNRu/s=
+X-Gm-Message-State: AOJu0YyCaKhnCLzxkIC1+P666eAB/cCpGj+YL0PUjSiLQGLhINZbHfrZ
+	7IW6012rTHZm7jyDcdoEaUN7c/I4xxSJ6pXOvmLa8/m/+Ilp1bTO
+X-Google-Smtp-Source: AGHT+IFz7OE1r94wpiTFu5fzPtfVegwzx7R9wztJ1meZm1RxrBltZau6Bs/7l9+5qZUMFJd7ELOjfA==
+X-Received: by 2002:a05:600c:4f47:b0:42a:a6b8:f09f with SMTP id 5b1f17b1804b1-42aa6b8f345mr25896865e9.23.1723891880886;
+        Sat, 17 Aug 2024 03:51:20 -0700 (PDT)
+Received: from tablet.my.domain ([37.30.0.60])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429ed648ef5sm46579425e9.10.2024.08.17.03.51.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Aug 2024 03:51:20 -0700 (PDT)
+From: Artur Weber <aweber.kernel@gmail.com>
+Date: Sat, 17 Aug 2024 12:51:14 +0200
+Subject: [PATCH] power: supply: max17042_battery: Fix SOC threshold calc w/
+ no current sense
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20240817-max17042-soc-threshold-fix-v1-1-72b45899c3cc@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAKGAwGYC/x3MSwqAMAwA0atI1gba4P8q4qJotAG10ogI4t0tL
+ t8s5gHlKKzQZQ9EvkQl7Ak2z2D0bl8YZUoGMlSYxta4udvWpiDUMOLpI6sP64Sz3MhtNdvSVUR
+ cQhockVP+5/3wvh/bo/hNbAAAAA==
+To: Hans de Goede <hdegoede@redhat.com>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ Marek Szyprowski <m.szyprowski@samsung.com>, 
+ Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
+ Purism Kernel Team <kernel@puri.sm>, Sebastian Reichel <sre@kernel.org>, 
+ Anton Vorontsov <anton.vorontsov@linaro.org>, 
+ Ramakrishna Pallala <ramakrishna.pallala@intel.com>, 
+ Dirk Brandewie <dirk.brandewie@gmail.com>
+Cc: Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
+ Artur Weber <aweber.kernel@gmail.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2876;
+ i=aweber.kernel@gmail.com; h=from:subject:message-id;
+ bh=uLoOYzQPRrSIRoGlDl7dOmzB4I4MrNepJEy3xkLy350=;
+ b=owEBbQKS/ZANAwAKAbO7+KEToFFoAcsmYgBmwICmJJrC04ndO+rQpaxhYYVhmShdDkYlArCPh
+ Im6MqU9tkiJAjMEAAEKAB0WIQTmYwAOrB3szWrSiQ2zu/ihE6BRaAUCZsCApgAKCRCzu/ihE6BR
+ aNrED/9MAPC2bpEgR/x+kJgAU6uv9CpPeK83J40BctxD7MhYbMXtXrk41yRMnt9ULYfhwRgFKzK
+ 9xqDyevaQeIsKpyieGWJb4lAxeKOwjw99GOAWF+esXDqI5etLIzU2IC7+BTShRXEvhh6m2kCNF/
+ yXa0xDtn7czRWkgLncMth2/71qsM8FxcuLC0X2GJpO0a60czCMYOjzAsEfSOshJGMPcJ8ZuckDl
+ ZIvaAZBHxlTTqan34I4QGDV0Y/6rDdyi8Fc7G9Y+YZxhuidFPYRyx9xYk25Rs5krXldXmUohJii
+ TvcQ8p48XySAjmog9SpTeIOErpaW5p++nsmjlNX0tdC7AELUqS1ihhevv6NNiv2yu7Q9q4T4Zp4
+ FJQlqDAYkL0CJGS3UPLGW+Qh9K8hQraADiWWoQjctc5FBM03A5Jd6hgDkRTHFuS853/K6bu7o64
+ MR/uSBAh+na4PwBripqg6mJ/m6C4o9fUyLxyTvHdv2fvEZKZ2eZ8xlHqEsP+eJQkBnvOBo2xrjB
+ 7TjVSD6ESt9HD8pXYU85hFJ/qbQ6Klmstes3Rj7toyFvgNsY/93eJTi4CegavSgdKT6a7k88qjd
+ 35UHY4RvyoZGu4YbM6tBSV6/BbCcouv6hv7bpL429rorrVXEtYwoIPfw8nyJg86Zkjxv5eFX7Td
+ IvFpoxn7QoY10QA==
+X-Developer-Key: i=aweber.kernel@gmail.com; a=openpgp;
+ fpr=E663000EAC1DECCD6AD2890DB3BBF8A113A05168
 
-On Wed, 14 Aug 2024 16:13:01 -0500
-Chris Morgan <macroalpha82@gmail.com> wrote:
+Commit 223a3b82834f ("power: supply: max17042_battery: use VFSOC for
+capacity when no rsns") made it so that capacity on systems without
+current sensing would be read from VFSOC instead of RepSOC. However,
+the SOC threshold calculation still read RepSOC to get the SOC
+regardless of the current sensing option state.
 
-> On Sat, Aug 03, 2024 at 12:10:44PM +0100, Jonathan Cameron wrote:
-> > On Fri,  2 Aug 2024 14:20:25 -0500
-> > Chris Morgan <macroalpha82@gmail.com> wrote:
-> >   
-> > > From: Chris Morgan <macromorgan@hotmail.com>
-> > > 
-> > > Add support for the AXP717 PMIC battery charger. The AXP717 differs
-> > > greatly from existing AXP battery chargers in that it cannot measure
-> > > the discharge current. The datasheet does not document the current
-> > > value's offset or scale, so the POWER_SUPPLY_PROP_CURRENT_NOW is left
-> > > unscaled.
-> > > 
-> > > Tested-by: Philippe Simons <simons.philippe@gmail.com>
-> > > Signed-off-by: Chris Morgan <macromorgan@hotmail.com>  
-> > Hi.
-> > 
-> > A few drive by comments,
-> > 
-> > Jonathan
-> >   
-> > > ---
-> > >  drivers/power/supply/axp20x_battery.c | 444 ++++++++++++++++++++++++++
-> > >  1 file changed, 444 insertions(+)
-> > > 
-> > > diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
-> > > index c903c588b361..53af4ad0549d 100644
-> > > --- a/drivers/power/supply/axp20x_battery.c
-> > > +++ b/drivers/power/supply/axp20x_battery.c
-> > > @@ -32,9 +32,19 @@
-> > >  #include <linux/mfd/axp20x.h>
-> > >  
-> > >  #define AXP20X_PWR_STATUS_BAT_CHARGING	BIT(2)
-> > > +#define AXP717_PWR_STATUS_MASK		GENMASK(6, 5)
-> > > +#define AXP717_PWR_STATUS_BAT_STANDBY	(0 << 5)
-> > > +#define AXP717_PWR_STATUS_BAT_CHRG	(1 << 5)
-> > > +#define AXP717_PWR_STATUS_BAT_DISCHRG	(2 << 5)  
-> > 
-> > Fine to match local style in this patch, but just thought I'd
-> > comment that this driver would probably be more readable with
-> > use of FIELD_PREP and changing convention to not shift the defined
-> > values for contents of each field.
-> > 
-> > To change to that it would either need to be before this patch,
-> > or done as a follow up.  
-> 
-> I'll take your other comments and apply them, but if it's okay with
-> you I'll opt to not use FIELD_PREP/FIELD_GET for the moment, so the
-> style remains the same. I will make sure to use those macros for
-> other drivers I'm working on though as they seem handy.
-That's fine, though if you are in a position to test, it would be good to follow
-up with a tidy up of this driver as that style is much more compact and
-helps with maintenance longer term.
+Fix this by applying the same conditional to determine which register
+should be read.
 
-Jonathan
+This also seems to be the intended behavior as per the datasheet - SOC
+alert config value in MiscCFG on setups without current sensing is set
+to a value of 0b11, indicating SOC alerts being generated based on
+VFSOC, instead of 0b00 which indicates SOC alerts being generated based
+on RepSOC.
+
+This fixes an issue on the Galaxy S3/Midas boards, where the alert
+interrupt would be constantly retriggered, causing high CPU usage
+on idle (around ~12%-15%).
+
+Fixes: e5f3872d2044 ("max17042: Add support for signalling change in SOC")
+Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+---
+Commit 223a3b82834f ("power: supply: max17042_battery: use VFSOC for
+capacity when no rsns") made it so that capacity on systems without
+current sensing would be read from VFSOC instead of RepSOC. However,
+the SOC threshold calculation still read RepSOC to get the SOC
+regardless of the current sensing option state.
+
+Fix this by applying the same conditional to determine which register
+should be read.
+
+This also seems to be the intended behavior as per the datasheet - SOC
+alert config value in MiscCFG on setups without current sensing is set
+to a value of 0b11, indicating SOC alerts being generated based on
+VFSOC, instead of 0b00 which indicates SOC alerts being generated based
+on RepSOC.
+
+This fixes an issue on the Galaxy S3/Midas boards, where the alert
+interrupt would be constantly retriggered, causing high CPU usage
+on idle (around ~12%-15%).
+---
+ drivers/power/supply/max17042_battery.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
+index e7d37e422c3f..496c3e1f2ee6 100644
+--- a/drivers/power/supply/max17042_battery.c
++++ b/drivers/power/supply/max17042_battery.c
+@@ -853,7 +853,10 @@ static void max17042_set_soc_threshold(struct max17042_chip *chip, u16 off)
+ 	/* program interrupt thresholds such that we should
+ 	 * get interrupt for every 'off' perc change in the soc
+ 	 */
+-	regmap_read(map, MAX17042_RepSOC, &soc);
++	if (chip->pdata->enable_current_sense)
++		regmap_read(map, MAX17042_RepSOC, &soc);
++	else
++		regmap_read(map, MAX17042_VFSOC, &soc);
+ 	soc >>= 8;
+ 	soc_tr = (soc + off) << 8;
+ 	if (off < soc)
+
+---
+base-commit: 0c3836482481200ead7b416ca80c68a29cfdaabd
+change-id: 20240817-max17042-soc-threshold-fix-e96f15a622e5
+
+Best regards,
+-- 
+Artur Weber <aweber.kernel@gmail.com>
+
 
