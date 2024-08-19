@@ -1,127 +1,206 @@
-Return-Path: <linux-pm+bounces-12426-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AF8C956BF0
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 15:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D094956C19
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 15:32:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B21A1C2364A
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 13:28:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 511D51C225A1
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 13:32:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C12716B396;
-	Mon, 19 Aug 2024 13:22:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30F8916C846;
+	Mon, 19 Aug 2024 13:28:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yDk/K3A4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e6C9r52j"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870A516C857
-	for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 13:22:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7BF16C6B0;
+	Mon, 19 Aug 2024 13:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724073778; cv=none; b=LGKZo78yoUMjG0aOL4wCy7CIyHyotQXFm/3sZSg5uldAovG0m+l1ZXi/gIUGmzauRvv1G9igqbdQAcDex8gwFRCmwXDXDuKwCraxkRDG8fVpaQjmro548hXwAQXoK8iMqi5K8OSYqLj4mZZe8Ib1SMelxep6vQ5uSV7+7DmhHIQ=
+	t=1724074084; cv=none; b=TAxcbImtI6xzKJ33suUq9TVqLK8CWx0UBvz5GMuuzIgnpMYzsByn6np9Grav3TuGvyv6MZ08qT7APGUIQc2ytrjiBT0xGNJZKsolqSHz1pouoQmzLGcvVoWYsg5K8/75CNns1iyytKffdyiRF52zIh7l9BowKYWmuvxEgx4I86I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724073778; c=relaxed/simple;
-	bh=O2MwCfLhtuz3WtZXy/MYatQ0Sno9ksR85Gi+1RqITFU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uWXtz27PDvD7WhFgTNUzlVZ0Q1xs07mAuP/42yspu1N54FhSndF6Lg6w7Mp+vFAsVFLL+0EYhdKAk7vZ7liSAbvE+imYKpaPjJr0YP3I4PLtzRWFRUgkiCdju5KmZeUoTlJBPasoLNR7IvcB87Y5oMjMmimSKdBsLQULXec6Vdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yDk/K3A4; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-428243f928fso47739465e9.0
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 06:22:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724073775; x=1724678575; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GuyNk5fVdyh6epV9U4Iq9p9Lvv3ALtYfwMJQqqgo6Yk=;
-        b=yDk/K3A4AZrayhh2VHwN98Zfi9uulq1lRuePuwUVBT92asa1xO/LJXdVWkOy9XUVle
-         g39Tn/s6mXGRNHIgV6hVoLJOBiHkg16ApaSQEi55x2bg/qAwCmcW9UWHzTi1oiS3gppc
-         HUJominY65l9ehZBFDkXuU9UrEDisBKLAs6A95KOerXO9MVVG0UxchEyGawsd95SsubL
-         v4ho8UremKnbYINTxJmtFjreqmrgvcqlCeHqrEbGrPG/rH2uSolLVE67ac+FnxV7jOlX
-         VQ3fvoEwa/x65Zp0OOX+ht4pQL7Sh2DEXlDUGBbH8ZOGFxAuwOvVt+tpbjY3izEkIXtH
-         9QQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724073775; x=1724678575;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GuyNk5fVdyh6epV9U4Iq9p9Lvv3ALtYfwMJQqqgo6Yk=;
-        b=FNIFByMNmXpJ1L+vNxpaa9iS0e1DP9MMyEHu9V1w2neMBWcu7lwg7qrBYdjYFEGQU9
-         oz/F6v0Zae446Ty9xu1TcELOvmlEs3He7YrVBFH30ljr+gPS4F00igyA3B0LKoYwRznb
-         seLEYLkU1ozCZaJIRZls2JK3J05DDvV76ImUmsayIR5oqOzdZfZR0WRr+VgNWrCkfCzS
-         VCQ4kvFRtlJ6Nsfu2q3IQimwAfojuri0xgp273CgwU0w+tGuMdqDtTJCiiULPBkaci3n
-         tMPZqoAIXHVgapTE4+mp4X4SHBxcCihQAygzUV/GSJm+umjsGE4e+z5nbkZNtoa1yCqz
-         mnpA==
-X-Forwarded-Encrypted: i=1; AJvYcCXpqy/Mt9YsW4yiNGE478vjADYTkSWgKQiBQlqg/6+0KR5p72xOJXAF0y7pvtVba1qcv6EI/naFLjQvhEKjar3x8S4ItIqKIMU=
-X-Gm-Message-State: AOJu0Yy+SXLRieGMoUoQVLoTOBScpwMZVFSvQUV0vVUcJzyf2VxVgvUP
-	vTiqQJHjlY9LevOEDufILBJlFCGKQghxAStqPWFM25wRZA1S/aSjjmO04aSdmwA=
-X-Google-Smtp-Source: AGHT+IEPz54Ns7DkJpUWWgC/R1C4JWEbFnoSanERwA9Q7te9U+I6z6L41rY0uwvrgLlKgxD0fLi0cg==
-X-Received: by 2002:a05:600c:4753:b0:426:593c:9359 with SMTP id 5b1f17b1804b1-429ed7ed62fmr88977775e9.32.1724073774440;
-        Mon, 19 Aug 2024 06:22:54 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3718985a6d1sm10654962f8f.57.2024.08.19.06.22.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Aug 2024 06:22:53 -0700 (PDT)
-Message-ID: <9e6d817f-1fcf-4d31-b0c5-d68753e1f949@linaro.org>
-Date: Mon, 19 Aug 2024 15:22:53 +0200
+	s=arc-20240116; t=1724074084; c=relaxed/simple;
+	bh=zk60qwCpwoyAMlYOMZRUAKQf+lxHInyJ2uctVdPTy30=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EQorvR5DTdypl9NWNLDO5PGPJt3eNrTeFpNcO6CBClkCvQXsJGHQWqCE47BMTlq6MsPDIf6HHb35f/0GGRp6LHiXeNCHkUnUaAIW+sBCheTrhQs0MyAgmuF3NPivWO3HYbfSEonf3+6IutaDsAMlHYah8fcBjMeX5zVFMP3lQYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e6C9r52j; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724074082; x=1755610082;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zk60qwCpwoyAMlYOMZRUAKQf+lxHInyJ2uctVdPTy30=;
+  b=e6C9r52jyvLncuvRfn+jc0vbNm9Fg9lyoQJk/T6goN2/7VsGa2XY0I+F
+   /BmzRrLSIMXHExmrshvoOLO6v0qrVYWjVbIs8q4A9jJzSPQr0IaDCMvDj
+   BLaXLSUa4tl9L/AZfzNQeZuQWIhH6MQaU0jJl/NMmJgYAjD937QiUEfAm
+   7DIQVYbnGwdOpP0WVgCvzA0THALr7APhm6o4UH081R2OHcrB3LJ8UjJVu
+   ccNJjf2+1D1dOpgiXMcpx3cHlaieYnStR1AokRUBJIcSd0Q8A7gcP5isg
+   KRdjSvfql5hPan1UBEqXn/0Zw4SUilhcS17cXscnfq/gjPG/nY6RKNjyC
+   A==;
+X-CSE-ConnectionGUID: bEo6rmKFQbKfXQoyL4jgjw==
+X-CSE-MsgGUID: y8nWWc47SZiHsvEeggDarg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="21866901"
+X-IronPort-AV: E=Sophos;i="6.10,159,1719903600"; 
+   d="scan'208";a="21866901"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 06:28:02 -0700
+X-CSE-ConnectionGUID: vZM+LOvuQ0WfPr3xuIGxkQ==
+X-CSE-MsgGUID: fDw++BBnTASU66FSB+U9wg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,159,1719903600"; 
+   d="scan'208";a="60072748"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmviesa007.fm.intel.com with SMTP; 19 Aug 2024 06:27:57 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 19 Aug 2024 16:27:56 +0300
+Date: Mon, 19 Aug 2024 16:27:56 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Chris Lew <quic_clew@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Amit Pundir <amit.pundir@linaro.org>, linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 2/3] usb: typec: ucsi: Move unregister out of atomic
+ section
+Message-ID: <ZsNIXHRvCvWCNk3O@kuha.fi.intel.com>
+References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
+ <20240818-pmic-glink-v6-11-races-v1-2-f87c577e0bc9@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] thermal: of: Fix OF node leak in
- thermal_of_trips_init() error path
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20240814195823.437597-1-krzysztof.kozlowski@linaro.org>
- <f3d2c104-360a-4da0-8d77-59af89ebda2b@linaro.org>
- <CAJZ5v0hiR0sqgfR1WiuT=tXx3XRWgAE-j3biEMMaV5FjiSZwbw@mail.gmail.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0hiR0sqgfR1WiuT=tXx3XRWgAE-j3biEMMaV5FjiSZwbw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240818-pmic-glink-v6-11-races-v1-2-f87c577e0bc9@quicinc.com>
 
-On 19/08/2024 15:20, Rafael J. Wysocki wrote:
-> On Mon, Aug 19, 2024 at 12:12 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 14/08/2024 21:58, Krzysztof Kozlowski wrote:
->>> Terminating for_each_child_of_node() loop requires dropping OF node
->>> reference, so bailing out after thermal_of_populate_trip() error misses
->>> this.  Solve the OF node reference leak with scoped
->>> for_each_child_of_node_scoped().
->>>
->>> Fixes: d0c75fa2c17f ("thermal/of: Initialize trip points separately")
->>> Cc: <stable@vger.kernel.org>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->>
->> Applied, thanks for the fixes
+On Sun, Aug 18, 2024 at 04:17:38PM -0700, Bjorn Andersson wrote:
+> Commit 'caa855189104 ("soc: qcom: pmic_glink: Fix race during
+> initialization")' moved the pmic_glink client list under a spinlock, as
+> it is accessed by the rpmsg/glink callback, which in turn is invoked
+> from IRQ context.
 > 
-> Is there a place from which I can pull these?
+> This means that ucsi_unregister() is now called from IRQ context, which
+> isn't feasible as it's expecting a sleepable context. An effort is under
+> way to get GLINK to invoke its callbacks in a sleepable context, but
+> until then lets schedule the unregistration.
 > 
-> It would be good to include them into 6.11 as they are -stable material.
+> A side effect of this is that ucsi_unregister() can now happen
+> after the remote processor, and thereby the communication link with it, is
+> gone. pmic_glink_send() is amended with a check to avoid the resulting
+> NULL pointer dereference, but it becomes expecting to see a failing send
+> upon shutting down the remote processor (e.g. during a restart following
+> a firmware crash):
 > 
-> Alternatively, I can pick them up from the list.
+>   ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: failed to send UCSI write request: -5
+> 
+> Fixes: caa855189104 ("soc: qcom: pmic_glink: Fix race during initialization")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 
-I'll send a PR for fixes only. Let me double check if there are other 
-fixes to go along with those
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/soc/qcom/pmic_glink.c       | 10 +++++++++-
+>  drivers/usb/typec/ucsi/ucsi_glink.c | 28 +++++++++++++++++++++++-----
+>  2 files changed, 32 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
+> index 58ec91767d79..e4747f1d3da5 100644
+> --- a/drivers/soc/qcom/pmic_glink.c
+> +++ b/drivers/soc/qcom/pmic_glink.c
+> @@ -112,8 +112,16 @@ EXPORT_SYMBOL_GPL(pmic_glink_register_client);
+>  int pmic_glink_send(struct pmic_glink_client *client, void *data, size_t len)
+>  {
+>  	struct pmic_glink *pg = client->pg;
+> +	int ret;
+>  
+> -	return rpmsg_send(pg->ept, data, len);
+> +	mutex_lock(&pg->state_lock);
+> +	if (!pg->ept)
+> +		ret = -ECONNRESET;
+> +	else
+> +		ret = rpmsg_send(pg->ept, data, len);
+> +	mutex_unlock(&pg->state_lock);
+> +
+> +	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(pmic_glink_send);
+>  
+> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> index ac53a81c2a81..a33056eec83d 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> @@ -68,6 +68,9 @@ struct pmic_glink_ucsi {
+>  
+>  	struct work_struct notify_work;
+>  	struct work_struct register_work;
+> +	spinlock_t state_lock;
+> +	unsigned int pdr_state;
+> +	unsigned int new_pdr_state;
+>  
+>  	u8 read_buf[UCSI_BUF_SIZE];
+>  };
+> @@ -244,8 +247,22 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
+>  static void pmic_glink_ucsi_register(struct work_struct *work)
+>  {
+>  	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, register_work);
+> +	unsigned long flags;
+> +	unsigned int new_state;
+> +
+> +	spin_lock_irqsave(&ucsi->state_lock, flags);
+> +	new_state = ucsi->new_pdr_state;
+> +	spin_unlock_irqrestore(&ucsi->state_lock, flags);
+> +
+> +	if (ucsi->pdr_state != SERVREG_SERVICE_STATE_UP) {
+> +		if (new_state == SERVREG_SERVICE_STATE_UP)
+> +			ucsi_register(ucsi->ucsi);
+> +	} else {
+> +		if (new_state == SERVREG_SERVICE_STATE_DOWN)
+> +			ucsi_unregister(ucsi->ucsi);
+> +	}
+>  
+> -	ucsi_register(ucsi->ucsi);
+> +	ucsi->pdr_state = new_state;
+>  }
+>  
+>  static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
+> @@ -269,11 +286,12 @@ static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
+>  static void pmic_glink_ucsi_pdr_notify(void *priv, int state)
+>  {
+>  	struct pmic_glink_ucsi *ucsi = priv;
+> +	unsigned long flags;
+>  
+> -	if (state == SERVREG_SERVICE_STATE_UP)
+> -		schedule_work(&ucsi->register_work);
+> -	else if (state == SERVREG_SERVICE_STATE_DOWN)
+> -		ucsi_unregister(ucsi->ucsi);
+> +	spin_lock_irqsave(&ucsi->state_lock, flags);
+> +	ucsi->new_pdr_state = state;
+> +	spin_unlock_irqrestore(&ucsi->state_lock, flags);
+> +	schedule_work(&ucsi->register_work);
+>  }
+>  
+>  static void pmic_glink_ucsi_destroy(void *data)
+> 
+> -- 
+> 2.34.1
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+heikki
 
