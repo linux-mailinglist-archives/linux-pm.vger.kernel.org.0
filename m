@@ -1,245 +1,160 @@
-Return-Path: <linux-pm+bounces-12471-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12472-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16E329570A6
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 18:45:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87A559570B9
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 18:48:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B56CCB216D9
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 16:45:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACD641C218BF
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 16:48:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FCB813D8B4;
-	Mon, 19 Aug 2024 16:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE7F81779B1;
+	Mon, 19 Aug 2024 16:48:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="JivF0Qld"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bcrRxvpw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF03E1A270;
-	Mon, 19 Aug 2024 16:45:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573E14965B;
+	Mon, 19 Aug 2024 16:48:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724085942; cv=none; b=gYQBn7aalfPxoJklaFHTuOHz87pxnwlqjkdIMur+SFzu6dPFLuHxsOU3AWWe0a/6UZ+i2bjsGGqq57PKzw3QzEVoWS4Q/qnyomj6kPsfo7MqzwWlyhjJWSgHcq/PDs75+sQdmVHu5okAX80n0afGdCNYGQtbFsfKSykhj98TW10=
+	t=1724086124; cv=none; b=apWFG/rhwiC8ScJ+1gejjqfU3LPDsfXl8+m2b19Di5Xm5VzZF2M2qbb5TPOx+cLJhc/V8zBU2HOlZEAiYEynz477MUwd1msbmfNVJy/U+7PNrqGOy5v+z76V7s73uKYmwokEEbXXdlujARqYTFkgJeWfZvMDLQ8ggXSHXm9XVgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724085942; c=relaxed/simple;
-	bh=mLXVcAlBQxesC5mYwH0mrm1yZ0PmpuWB9hCkSUTiLac=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HxpijhpKnDzjHPXNaAN/IHz15L0H9DBW1ao11neHdLwMPgKD3LH0cmqfVlo0rGw5Rb9RB6k+OxFepdwxDEpUG5azYW2JpGhyqr6/npAPisOt5D0B6Npy7BPuGIiN62te3MjnKEejyYs1ab+RY+AGVazt3X6CXnkMW6FC1PAyj4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=JivF0Qld; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47JARZs3032383;
-	Mon, 19 Aug 2024 16:45:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=h0CZ3FbHFgwTCAQ0tC+3gec0
-	WEhxchas++se84DTU1s=; b=JivF0QldgA7iH1mOT4Q1GCy0Lan8Qo2syqJ414FA
-	YAPMlK3G7fL57WVwmwhwt60Xa4uPc7qnWunUcFuZP9Ef3GWC4bmXkNGea1YwXSc7
-	F1CwABuYfhsflAs2bZtC40486lNbXY+t5yhLfQzwUk7PEU2eJIj3H5aLdPQ3JurK
-	SCBPSNTe0WsttMYyfxnQYtqdIATJ3IGOak9mHXTtB6X8DsuoGkZgV/wwpe9Z2ee4
-	FlbYz0+zXdZwoGy80fJDzitduhQNbItqPrPDQ9y7ZiEgEAHCuF+it+5HLOmPi639
-	Rakm0Auwwh/dkGg3At7jkLdLo/hqlo0T+JPAEdajNVTJ4w==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 412m8750xa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 16:45:32 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47JGjVeR002759
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 16:45:31 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 19 Aug 2024 09:45:30 -0700
-Date: Mon, 19 Aug 2024 09:45:29 -0700
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-To: Johan Hovold <johan@kernel.org>
-CC: Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Heikki
- Krogerus" <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Chris Lew <quic_clew@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd
-	<swboyd@chromium.org>,
-        Amit Pundir <amit.pundir@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH 2/3] usb: typec: ucsi: Move unregister out of atomic
- section
-Message-ID: <ZsN2qR3tuXylb2qK@hu-bjorande-lv.qualcomm.com>
-References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
- <20240818-pmic-glink-v6-11-races-v1-2-f87c577e0bc9@quicinc.com>
- <ZsNfkuiRK9VqBSLT@hovoldconsulting.com>
+	s=arc-20240116; t=1724086124; c=relaxed/simple;
+	bh=MBQcwzxFBPjk9Fm00UF7+n+iTFUcUyUcheP/DBInH68=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MGzLRU45dvqmXjMu6Oj1Ov69HLjn+LdgAlNZGk7lcmKohRn59L731r/Wnoe79QOiaZoALW8IWYoBeoGkaDh1wLWFT620bk8u39DlDewaBiQOCjK0JBOIq4CgroUR6QbYfMDQDAnHj/PpJhAGMeuAoYhXl7ECyKaDo7eFR2UUs0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bcrRxvpw; arc=none smtp.client-ip=209.85.210.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-70c9cda7f1cso2031503a34.3;
+        Mon, 19 Aug 2024 09:48:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724086122; x=1724690922; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/e5lsHcVaB+uAytpXe/h2T5BUGUbMv4au3JS+eKlceA=;
+        b=bcrRxvpwdttf3QB8/3mT4dqCqN3mcwK8pkdIsPrsULMTOJ8cdrLKhJ5N2x4Mn4w/ok
+         3Iomby4eHstDzzhZqDE61CHEaVKCcBhAFojRfx3ucSUVH2ebX/NSNL0ZZV1kCfjVUCxW
+         vC+F3vMtywli0/dAIXYiqZvFnUwJpP0FGY5d9p+nFWWl1b2cu7SdhkgH8lofAyROukLU
+         s+8t9JBHwse/bsnmRYiEFPLbk8mM3z+R2Z53VNS25Xefl8CJOhbRJ5JolCTtJDzaeJKI
+         3Nvkc/KhtiARdlAoZT6IYNOI+WsBdkXkIzKFw5LEXyIfSDPSMJMdWduqFanSHgzpR3/7
+         hIDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724086122; x=1724690922;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/e5lsHcVaB+uAytpXe/h2T5BUGUbMv4au3JS+eKlceA=;
+        b=d0+CKyXXEvlAYVo79As5Cd46H2RVAwy5LJ72kEkcFKPQN8ufjYFJHIMpzlZQWr3rQb
+         5/TQ/P5R1Utzm3T2XjDacvUWXda/HCw24mYxVkMbDq9Pb7vNXM7O9Xyue0w6SZacEfv6
+         fDFflpZwyWtq+LU/H1MAHffYSXLpKNttZzlEKLcYneBzU+CK4Yezyv6DkdoEGSFnqXq+
+         yiQYBTs9tsms9WAIvlyePCHtgdTPqrzedLceIkzZchdNY5MIKFXmQMZUoQwTkEab1p0/
+         h7xiu6Bs45l95aYP2qWT7peHXx1VD8GX38blcVGBXiAzEefxYjgAAs6//BFb9gBwkrej
+         cNcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXhFO7KcaFX5qXkcguajZYg4y4M+XiFQToIRDX22XpbrAxURGl+8ylJfJrJQksI85C7zIeP7mHPsjKXmIX4Gecer/ejbmIPs/yLYEqz7TmHzZ33APDiv9pfAj4dl/KCMMTb7uR6IQ==
+X-Gm-Message-State: AOJu0Yw0TXaHqLVjuIOZPYDeQdiuCqFeA898uQN6lqVVWx9P7+N3plsG
+	x9oPUpYgEVSUXlLEJA2DLJjSYOvA3DcV61srTZL8IKAKm/FnxJJ/
+X-Google-Smtp-Source: AGHT+IHUayXAxzAfw8JT4WbVwDnTS2IAPvqLrAz9kWPM8obo31aP1Msh/iEPvQgqi656nkRvCtLl4g==
+X-Received: by 2002:a05:6830:6602:b0:708:d84d:f62a with SMTP id 46e09a7af769-70cac89c004mr15724939a34.22.1724086122192;
+        Mon, 19 Aug 2024 09:48:42 -0700 (PDT)
+Received: from localhost.localdomain ([2600:1700:fb0:1bcf::54])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-70ca649c61csm2332428a34.26.2024.08.19.09.48.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Aug 2024 09:48:42 -0700 (PDT)
+From: Chris Morgan <macroalpha82@gmail.com>
+To: linux-sunxi@lists.linux.dev
+Cc: linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	quentin.schulz@free-electrons.com,
+	mripard@kernel.org,
+	tgamblin@baylibre.com,
+	aidanmacdonald.0x0@gmail.com,
+	u.kleine-koenig@pengutronix.de,
+	lee@kernel.org,
+	samuel@sholland.org,
+	jernej.skrabec@gmail.com,
+	sre@kernel.org,
+	wens@csie.org,
+	conor+dt@kernel.org,
+	krzk+dt@kernel.org,
+	robh@kernel.org,
+	lars@metafoo.de,
+	jic23@kernel.org,
+	jonathan.cameron@huawei.com,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH V3 00/15] Add Battery and USB Supply for AXP717
+Date: Mon, 19 Aug 2024 11:46:04 -0500
+Message-Id: <20240819164619.556309-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZsNfkuiRK9VqBSLT@hovoldconsulting.com>
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8YusWF3djvAyXmCoqzz8j6Q2-ZiAFgNF
-X-Proofpoint-ORIG-GUID: 8YusWF3djvAyXmCoqzz8j6Q2-ZiAFgNF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-19_13,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- mlxlogscore=999 priorityscore=1501 adultscore=0 lowpriorityscore=0
- clxscore=1015 bulkscore=0 suspectscore=0 spamscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408190112
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 19, 2024 at 05:06:58PM +0200, Johan Hovold wrote:
-> On Sun, Aug 18, 2024 at 04:17:38PM -0700, Bjorn Andersson wrote:
-> > Commit 'caa855189104 ("soc: qcom: pmic_glink: Fix race during
-> > initialization")' 
-> 
-> This commit does not exist, but I think you really meant to refer to
-> 
-> 	9329933699b3 ("soc: qcom: pmic_glink: Make client-lock non-sleeping")
-> 
-> and possibly also
-> 
-> 	635ce0db8956 ("soc: qcom: pmic_glink: don't traverse clients list without a lock")
-> 
-> here.
-> 
+From: Chris Morgan <macromorgan@hotmail.com>
 
-Yeah, I copy-pasted the wrong SHA1. Prior to commit 9329933699b3 ("soc:
-qcom: pmic_glink: Make client-lock non-sleeping") the PDR notification
-happened from a worker with only mutexes held.
+Add support for monitoring the USB charger and battery charger on the
+AXP717 PMIC. This required some driver refactoring of the axp20x USB
+and battery charger as the AXP717 is somewhat different but can still
+benefit from some common elements.
 
-> > moved the pmic_glink client list under a spinlock, as
-> > it is accessed by the rpmsg/glink callback, which in turn is invoked
-> > from IRQ context.
-> > 
-> > This means that ucsi_unregister() is now called from IRQ context, which
-> > isn't feasible as it's expecting a sleepable context.
-> 
-> But this is not correct as you say above that the callback has always
-> been made in IRQ context. Then this bug has been there since the
-> introduction of the UCSI driver by commit
-> 
+Note that as of now the charging current now value may be incorrect as
+the scale and offsets were not documented in the datasheet. I suspect
+the scale is 1 and the offset is somewhere around 450mA though.
 
-No, I'm stating that commit 9329933699b3 ("soc: qcom: pmic_glink: Make
-client-lock non-sleeping") was needed because the client list is
-traversed under the separate glink callback, which has always been made
-in IRQ context.
+Changes from V2:
+ - Added constraints for input-current-limit-microamp constraints for
+   x-powers,axp20x-usb-power-supply.yaml.
+ - Used FIELD_GET() and removed unnecessary -EINVAL per comments from
+   Jonathan Cameron.
 
-> 	62b5412b1f4a ("usb: typec: ucsi: add PMIC Glink UCSI driver")
-> 
-> > An effort is under
-> > way to get GLINK to invoke its callbacks in a sleepable context, but
-> > until then lets schedule the unregistration.
-> > 
-> > A side effect of this is that ucsi_unregister() can now happen
-> > after the remote processor, and thereby the communication link with it, is
-> > gone. pmic_glink_send() is amended with a check to avoid the resulting
-> > NULL pointer dereference, but it becomes expecting to see a failing send
-> 
-> Perhaps you can rephrase this bit ("becomes expecting to see").
-> 
+Changes from V1:
+ - Refactored against mainline to remove BOOST pre-requisite.
+ - Corrected commit subjects for DT bindings.
+ - Split refactoring and AXP717 support into different patches.
+ - Added IRQ for VBUS over voltage. There appears to be a bug
+   with the VBUS fault IRQ because it is assigned IRQ num 0.
+ - Corrected battery driver to report POWER_SUPPLY_PROP_VOLTAGE_MIN
+   and POWER_SUPPLY_PROP_VOLTAGE_MAX instead of *_DESIGN.
 
-Sure.
+Chris Morgan (15):
+  iio: adc: axp20x_adc: Add adc_en1 and adc_en1 to axp_data
+  power: supply: axp20x_battery: Remove design from min and max voltage
+  power: supply: axp20x_battery: Make iio and battery config per device
+  power: supply: axp20x_usb_power: Make VBUS and IIO config per device
+  dt-bindings: power: supply: axp20x: Add input-current-limit-microamp
+  power: supply: axp20x_usb_power: add input-current-limit-microamp
+  dt-bindings: power: supply: axp20x-battery: Add monitored-battery
+  dt-bindings: iio: adc: Add AXP717 compatible
+  dt-bindings: power: supply: axp20x: Add AXP717 compatible
+  dt-bindings: power: supply: axp20x: Add AXP717 compatible
+  mfd: axp20x: Add ADC, BAT, and USB cells for AXP717
+  iio: adc: axp20x_adc: add support for AXP717 ADC
+  power: supply: axp20x_usb_power: Add support for AXP717
+  power: supply: axp20x_battery: add support for AXP717
+  arm64: dts: allwinner: h700: Add charger for Anbernic RG35XX
 
-> > upon shutting down the remote processor (e.g. during a restart following
-> > a firmware crash):
-> > 
-> >   ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: failed to send UCSI write request: -5
-> > 
-> > Fixes: caa855189104 ("soc: qcom: pmic_glink: Fix race during initialization")
-> 
-> So this should be
-> 
-> Fixes: 62b5412b1f4a ("usb: typec: ucsi: add PMIC Glink UCSI driver")
-> 
+ .../bindings/iio/adc/x-powers,axp209-adc.yaml |  12 +
+ .../x-powers,axp20x-battery-power-supply.yaml |   7 +
+ .../x-powers,axp20x-usb-power-supply.yaml     |  70 ++-
+ .../sun50i-h700-anbernic-rg35xx-2024.dts      |  21 +
+ drivers/iio/adc/axp20x_adc.c                  | 182 +++++-
+ drivers/mfd/axp20x.c                          |  25 +-
+ drivers/power/supply/axp20x_battery.c         | 590 ++++++++++++++++--
+ drivers/power/supply/axp20x_usb_power.c       | 353 ++++++++++-
+ include/linux/mfd/axp20x.h                    |  27 +
+ 9 files changed, 1186 insertions(+), 101 deletions(-)
 
-I think it should be:
+-- 
+2.34.1
 
-9329933699b3 ("soc: qcom: pmic_glink: Make client-lock non-sleeping")
-
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
->  
-> > diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> > index ac53a81c2a81..a33056eec83d 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> > @@ -68,6 +68,9 @@ struct pmic_glink_ucsi {
-> >  
-> >  	struct work_struct notify_work;
-> >  	struct work_struct register_work;
-> > +	spinlock_t state_lock;
-> > +	unsigned int pdr_state;
-> > +	unsigned int new_pdr_state;
-> 
-> Should these be int to match the notify callback (and enum
-> servreg_service_state)?
-> 
-
-Ohh my. I made it unsigned because I made it unsigned in pmic_glink,
-when I wrote that. But as you point out, the type passed around is an
-enum servreg_service_state and it's mostly handled as a signed int.
-
-That said, pmic_glink actually filters the value space down to UP/DOWN,
-so making this "bool pdr_up" (pd_running?) and "bool ucsi_registered"
-would make this cleaner...
-
-> >  	u8 read_buf[UCSI_BUF_SIZE];
-> >  };
-> > @@ -244,8 +247,22 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
-> >  static void pmic_glink_ucsi_register(struct work_struct *work)
-> >  {
-> >  	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, register_work);
-> > +	unsigned long flags;
-> > +	unsigned int new_state;
-> 
-> Then int here too.
-> 
-
-Yes.
-
-> > +
-> > +	spin_lock_irqsave(&ucsi->state_lock, flags);
-> > +	new_state = ucsi->new_pdr_state;
-> > +	spin_unlock_irqrestore(&ucsi->state_lock, flags);
-> > +
-> > +	if (ucsi->pdr_state != SERVREG_SERVICE_STATE_UP) {
-> > +		if (new_state == SERVREG_SERVICE_STATE_UP)
-> > +			ucsi_register(ucsi->ucsi);
-> > +	} else {
-> > +		if (new_state == SERVREG_SERVICE_STATE_DOWN)
-> > +			ucsi_unregister(ucsi->ucsi);
-> 
-> Do you risk a double deregistration (and UAF/double free) here?
-> 
-
-I believe we're good.
-
-Thank you,
-Bjorn
-
-> > +	}
-> >  
-> > -	ucsi_register(ucsi->ucsi);
-> > +	ucsi->pdr_state = new_state;
-> >  }
-> 
-> Johan
 
