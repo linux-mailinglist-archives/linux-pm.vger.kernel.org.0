@@ -1,109 +1,128 @@
-Return-Path: <linux-pm+bounces-12428-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12429-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0825956C27
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 15:33:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13959956C2D
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 15:34:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7181F1F239D6
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 13:33:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 38B451C22BC5
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 13:34:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E35A116CD2B;
-	Mon, 19 Aug 2024 13:32:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC71916C44A;
+	Mon, 19 Aug 2024 13:33:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RbVpJ6hg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UiwzHSHz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72491B5AA;
-	Mon, 19 Aug 2024 13:32:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1221816D4D8;
+	Mon, 19 Aug 2024 13:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724074320; cv=none; b=fvrmKoz0ipAevGuMACnddLP8a+v3XCekxxYzmA/WaqGDh3ypC5lsrZYJ4xpiitmdhS6yovtQfyOZ32j7HuNS/gGzgF95I8FlA4DV6XchUxEjngo3iKRiA6mKMmyKkHR0lB6MwYB4MCPsNhMNK3g2i+8n930fVNTB1Hpy3R2n0Bc=
+	t=1724074390; cv=none; b=IdKj8c7wDfHG7l6GjLRyBAiNTVAH6NjQ7HaI4TX9D726BhWJJPbU5bDKsmDRe9jMO7AJKg05qXoSl4/+qLACD1ofjrlVYgfKgPklW8PqbtdD5WKQUBKDVWftQwuxZklR8BJ/x84ezeqt4u1uADbzNVcDNMGUl8fJ7idgoR6z2/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724074320; c=relaxed/simple;
-	bh=wDk+/MxwCfdTBOwhmCaGnEGbWArWtSM8qyn0KWOxD70=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BNjcnO1cUuSzRFHwnPLyczsduVH2r2KTjH2DTuuSxmMCx4RUwvFMEllAX3zXBKgvGBj6TazTqIzylSsFkbdnzqlphnDL2QuhC6T3gS0WobNpuAjM8fAg8Iir8Z9jVHoZkSlbRabAJpHVFozd86n22ZTWBneZx7AmBBCD+AcH9b8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RbVpJ6hg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DDFFC32782;
-	Mon, 19 Aug 2024 13:32:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724074320;
-	bh=wDk+/MxwCfdTBOwhmCaGnEGbWArWtSM8qyn0KWOxD70=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=RbVpJ6hgUZvYZNR72yTDU4wwyVIldcEJbKTr1+WWcdSeRTwmgkfEoHQSOmDm4D7CM
-	 sDo2ttHO2wws8WTUrZMhcm0/d052Kf6id+6eJDCF7FwuGgy7zUNpEpn7vJwU/5sSs3
-	 1YY1GPtWeb+XjuxHOAkS/tpaKOL75ni/G5LMUawlGUvtXwYjaw9QosgrIMhHs4XeZI
-	 no8vDJoF0A04uuHkojoYJYLZh8BzaT9rAba1YM0WC+UcZ4AO4LOwcye1eh9/3M45lv
-	 NfNxY3XoljaqeDGdgt0rnTa1x4anBLJrfocIn8F9sCwed9Z6D/pESgOko7RsH49N+F
-	 GHiCEwP40/VVA==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2635abdc742so541697fac.2;
-        Mon, 19 Aug 2024 06:32:00 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUH2GxeMPt3u96zKBssqT6HcqpsixTGXJPc3T2L2XJaB5rgWuY4yzfZd2X1CS9fdQsYIEhoQ52VwcUfcSo=@vger.kernel.org, AJvYcCUk6SVb0Y3MwTDP3CHgnF+uD0pHd5ojQdDm5AQZ+W05BYvv4d+B0DqDMlSzM3KLIuuapFb4l01t@vger.kernel.org, AJvYcCXi6FqWG99ovXhrfrH0D3zgUUiFWF9S0Pr6zwBpr2SAh7VbroSVevlomAQVC9vBD6A3ZlhXjGBUMFQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyS6M5KKcruwg+XW9mTtaIf0++U/FfmO5hoW1J0FcYu5ya49Us5
-	L5hpq/rwAtSOEA8RlIVr8of90P2otI8CAwS7+sf+wThYRZ9EIe0HfNb4xNEh/V1r5o5gWh3XQ7t
-	w8+noMrPhfwTf6s8VjxhtP5L7BhM=
-X-Google-Smtp-Source: AGHT+IGHU4saW8k1R3qAWY8cuDgDmZOFsXDxPE0gh+Gvi3OXMn9y0Eg5XWtiQud2blaw7j7Li+YPopdeKgKqzx88RJg=
-X-Received: by 2002:a05:6870:71d3:b0:260:df6a:28ca with SMTP id
- 586e51a60fabf-2701c50f784mr5673784fac.5.1724074319541; Mon, 19 Aug 2024
- 06:31:59 -0700 (PDT)
+	s=arc-20240116; t=1724074390; c=relaxed/simple;
+	bh=qvGX+ulqTOixz3MeyrqvHy7bTy1mID4m/xJTeYKQM4Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NMSX7ZnpYmRqtZoEBu8cH0NETa+XAHnIXrwH/i29XuoDHPZWf8IHPjK28kLs2hcyzn6lUmCBZN+1UVcLwBOz/42DwJvhzJU7Jh/wnbVelYDhzOKw+OADMdGpIfQ60wxb/PYmq2pTckbLdo2HZgU6dyfDNh6q8m+zC23fiA6/eus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UiwzHSHz; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724074389; x=1755610389;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qvGX+ulqTOixz3MeyrqvHy7bTy1mID4m/xJTeYKQM4Y=;
+  b=UiwzHSHz4CW77ANDe1tgw1H0fCGPcYhxE5ZtV4MWSlAy1IDO5xxKxvGA
+   ke2++A/mLJYVm3OHL01ymz0K3Kz7cvrWtXVqs9KQduOnQWky7PJDUM5S7
+   LmDw4fgkRsvy8OGOsdPq7H88ktkuk6WTE4z+0nRs8r76wCPXapJwqvLcL
+   C5UVZPW4U3ro8DNxOWk2by4nwsnkkltFst8iTdCObfTZ+SSNYzU0ce2RX
+   kH7aQFTpMkW4BOnGHI7xaa69Cap9Tok5SxEQaedJbcvkLd8+t0SR17MgR
+   5JSsC3LnQRvckRSqu6tPDaVdnc/yDewez5QDQn2/3W5v9QMdYR5IBicYy
+   w==;
+X-CSE-ConnectionGUID: PJCn1mcTRmyzZBCDqdbvnQ==
+X-CSE-MsgGUID: Weoy/X+YRMOTuhxuc+U+Ug==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="26189316"
+X-IronPort-AV: E=Sophos;i="6.10,159,1719903600"; 
+   d="scan'208";a="26189316"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 06:33:08 -0700
+X-CSE-ConnectionGUID: jJnY3/6ZSo+akgu+1nAh/g==
+X-CSE-MsgGUID: e5Hkpd3QTFCvB4f9CprT9A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,159,1719903600"; 
+   d="scan'208";a="60950908"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orviesa007.jf.intel.com with SMTP; 19 Aug 2024 06:33:03 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 19 Aug 2024 16:33:02 +0300
+Date: Mon, 19 Aug 2024 16:33:02 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Chris Lew <quic_clew@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Amit Pundir <amit.pundir@linaro.org>, linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 3/3] soc: qcom: pmic_glink: Actually communicate with
+ remote goes down
+Message-ID: <ZsNJju43JyChNoMd@kuha.fi.intel.com>
+References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
+ <20240818-pmic-glink-v6-11-races-v1-3-f87c577e0bc9@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240814195823.437597-1-krzysztof.kozlowski@linaro.org>
- <f3d2c104-360a-4da0-8d77-59af89ebda2b@linaro.org> <CAJZ5v0hiR0sqgfR1WiuT=tXx3XRWgAE-j3biEMMaV5FjiSZwbw@mail.gmail.com>
- <9e6d817f-1fcf-4d31-b0c5-d68753e1f949@linaro.org>
-In-Reply-To: <9e6d817f-1fcf-4d31-b0c5-d68753e1f949@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 19 Aug 2024 15:31:45 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jU4xOwgA8neFVMijV+T9=oiOBoEjD9viaCq=g51wFGkQ@mail.gmail.com>
-Message-ID: <CAJZ5v0jU4xOwgA8neFVMijV+T9=oiOBoEjD9viaCq=g51wFGkQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] thermal: of: Fix OF node leak in thermal_of_trips_init()
- error path
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240818-pmic-glink-v6-11-races-v1-3-f87c577e0bc9@quicinc.com>
 
-On Mon, Aug 19, 2024 at 3:22=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 19/08/2024 15:20, Rafael J. Wysocki wrote:
-> > On Mon, Aug 19, 2024 at 12:12=E2=80=AFPM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 14/08/2024 21:58, Krzysztof Kozlowski wrote:
-> >>> Terminating for_each_child_of_node() loop requires dropping OF node
-> >>> reference, so bailing out after thermal_of_populate_trip() error miss=
-es
-> >>> this.  Solve the OF node reference leak with scoped
-> >>> for_each_child_of_node_scoped().
-> >>>
-> >>> Fixes: d0c75fa2c17f ("thermal/of: Initialize trip points separately")
-> >>> Cc: <stable@vger.kernel.org>
-> >>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>> ---
-> >>
-> >> Applied, thanks for the fixes
-> >
-> > Is there a place from which I can pull these?
-> >
-> > It would be good to include them into 6.11 as they are -stable material=
-.
-> >
-> > Alternatively, I can pick them up from the list.
->
-> I'll send a PR for fixes only. Let me double check if there are other
-> fixes to go along with those
+On Sun, Aug 18, 2024 at 04:17:39PM -0700, Bjorn Andersson wrote:
+> When the pmic_glink state is UP and we either receive a protection-
+> domain (PD) notifcation indicating that the PD is going down, or that
+> the whole remoteproc is going down, it's expected that the pmic_glink
+> client instances are notified that their function has gone DOWN.
+> 
+> This is not what the code does, which results in the client state either
+> not updating, or being wrong in many cases. So let's fix the conditions.
+> 
+> Fixes: 58ef4ece1e41 ("soc: qcom: pmic_glink: Introduce base PMIC GLINK driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 
-Sure, thanks!
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/soc/qcom/pmic_glink.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
+> index e4747f1d3da5..cb202a37e8ab 100644
+> --- a/drivers/soc/qcom/pmic_glink.c
+> +++ b/drivers/soc/qcom/pmic_glink.c
+> @@ -191,7 +191,7 @@ static void pmic_glink_state_notify_clients(struct pmic_glink *pg)
+>  		if (pg->pdr_state == SERVREG_SERVICE_STATE_UP && pg->ept)
+>  			new_state = SERVREG_SERVICE_STATE_UP;
+>  	} else {
+> -		if (pg->pdr_state == SERVREG_SERVICE_STATE_UP && pg->ept)
+> +		if (pg->pdr_state == SERVREG_SERVICE_STATE_DOWN || !pg->ept)
+>  			new_state = SERVREG_SERVICE_STATE_DOWN;
+>  	}
+>  
+> 
+
+-- 
+heikki
 
