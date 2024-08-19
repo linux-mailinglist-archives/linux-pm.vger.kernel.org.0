@@ -1,199 +1,83 @@
-Return-Path: <linux-pm+bounces-12453-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12449-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 431D1956FE7
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 18:13:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9717956FCC
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 18:08:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6744C1C22CA4
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 16:13:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 77571B28753
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 16:07:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D62171E43;
-	Mon, 19 Aug 2024 16:13:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="hxLRArNu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CD8117837D;
+	Mon, 19 Aug 2024 16:03:52 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2CA13B5AF;
-	Mon, 19 Aug 2024 16:12:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B253B8287D;
+	Mon, 19 Aug 2024 16:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724083980; cv=none; b=sm1cknB20NY3SShsTfmlAuF2ZwtLhzKRk+F2BZNodv3nNMklzwbzlhVZWB79jX60NsY0j6JTs17bA6WqO+TCslQn9byTTS40pgBanwVFCOuzqUJSBwI+qj65nBjQBpOAlCZPElWQpvrNNYOn1Kuwvl8Qcy7xXoW9JrfsOIoWTzw=
+	t=1724083432; cv=none; b=iXlwbB+aCEwRd3gegLBxaiOUf8J0FKl5y6PIiYQx8VOATFbR5V+5YjqTYvNAEhEZ1IptliaUMiW0nYlLy18gPo0v8lNSsSamfTmUcQKT3qvwL4LimHAw0iH0S3smG7hJ6XWp24nnUN7EniVzyoT0hX0hKQM4h38H/2FroxtaSN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724083980; c=relaxed/simple;
-	bh=Zb6109j0Bj3H4tOwPJxMq23sSAYxZGF9FEvKaHyjcAg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oo9dcX405wEMNWOOxFe+XW1fj+wxQbXDrmkPTrtHjOWK1b7BPxaaliu4skwgLqLXzMs2gbVRjxozUsgxWwlO6ectIpja67PFA4lthUxigG0ONtOKPg/Nay+4IZ0ZPNrlQmm+wj9A63NGQ+5CYvZYKo4hgNv/g7tfmNE+VdFBWJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=hxLRArNu reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id 506cac52ca7c0934; Mon, 19 Aug 2024 18:12:50 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id B153773B5D4;
-	Mon, 19 Aug 2024 18:12:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1724083970;
-	bh=Zb6109j0Bj3H4tOwPJxMq23sSAYxZGF9FEvKaHyjcAg=;
-	h=From:Subject:Date;
-	b=hxLRArNugnPTs0sA2YHnYp722sz0QoJEgNh/TQU3zVwobZlMTygmRRwxnENqhMRyC
-	 uKSE7rAY5y4KbFoqwnPL8tJwx2zwTZtjJ0XJ5uWSRTvX1fLK0kn4ErOQfelsDWa0Zh
-	 bNCxTHg2/iB0M85nQGD4NqYlS88oCIFo65l4UgTzLTV6GgVWJZNyeDbcGgP6yr36bH
-	 sZXO8vdCP6OPMPRfDTH61ncNieaVTZm1oXQ7Xj8+Ik+jlGzcEt+Lz5wy+3HtqMheDD
-	 JpV/RkeP9gDusQgic3izBRyrFGMhNOlFDajSInoFWS9C3eRiZOOapjaCRIzQM6uR/1
-	 wdmKCCGdM14KA==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>
-Subject:
- [PATCH v3 07/14] thermal: ACPI: Use the .should_bind() thermal zone callback
-Date: Mon, 19 Aug 2024 18:02:44 +0200
-Message-ID: <1812827.VLH7GnMWUR@rjwysocki.net>
-In-Reply-To: <2205737.irdbgypaU6@rjwysocki.net>
-References: <2205737.irdbgypaU6@rjwysocki.net>
+	s=arc-20240116; t=1724083432; c=relaxed/simple;
+	bh=iyVj6t3gLWhrXmv58HXZ8/Xpojru0XhNKSDKvqArBGI=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=P+ocI9IFBMsmkJMAWsO5TITYikU1Qzg53TOyu1EaTNbHcRgDuZiAwjh8SNIksnfIJmkzrpnlPXECce9engLRcFSwAIdJdnaTe5IMzb7hMR/Ztka8ctY7lOF8RNf25oyqLTdtXdipM8/hvHGBWwcX2zYtIoyMuh8A884kEnJWE/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WnclB6RBXz6K5Vy;
+	Tue, 20 Aug 2024 00:00:54 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 6CC99140A87;
+	Tue, 20 Aug 2024 00:03:48 +0800 (CST)
+Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 19 Aug
+ 2024 17:03:47 +0100
+Date: Mon, 19 Aug 2024 17:03:46 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC: Krzysztof Kozlowski <krzk@kernel.org>, Nicolas Ferre
+	<nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue
+	<alexandre.torgue@foss.st.com>, Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>, Santosh Shilimkar
+	<ssantosh@kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<linux-samsung-soc@vger.kernel.org>,
+	<linux-stm32@st-md-mailman.stormreply.com>, <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH v2 03/13] memory: samsung: exynos5422-dmc: simplify
+ dmc->dev usage
+Message-ID: <20240819170346.00004d4b@Huawei.com>
+In-Reply-To: <20240816-cleanup-h-of-node-put-memory-v2-3-9eed0ee16b78@linaro.org>
+References: <20240816-cleanup-h-of-node-put-memory-v2-0-9eed0ee16b78@linaro.org>
+	<20240816-cleanup-h-of-node-put-memory-v2-3-9eed0ee16b78@linaro.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: spam:low
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddruddugedgleekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuufhprghmkfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhr
- tghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Fri, 16 Aug 2024 12:54:27 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Make the ACPI thermal zone driver use the .should_bind() thermal zone
-callback to provide the thermal core with the information on whether or
-not to bind the given cooling device to the given trip point in the
-given thermal zone.  If it returns 'true', the thermal core will bind
-the cooling device to the trip and the corresponding unbinding will be
-taken care of automatically by the core on the removal of the involved
-thermal zone or cooling device.
-
-This replaces the .bind() and .unbind() thermal zone callbacks which
-allows the code to be simplified quite significantly while providing
-the same functionality.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v1 -> v3: No changes (previously [09/17])
-
-This patch only depends on the previous one introducing the .should_bind()
-thermal zone callback.
-
----
- drivers/acpi/thermal.c |   64 ++++++-------------------------------------------
- 1 file changed, 9 insertions(+), 55 deletions(-)
-
-Index: linux-pm/drivers/acpi/thermal.c
-===================================================================
---- linux-pm.orig/drivers/acpi/thermal.c
-+++ linux-pm/drivers/acpi/thermal.c
-@@ -558,77 +558,31 @@ static void acpi_thermal_zone_device_cri
- 	thermal_zone_device_critical(thermal);
- }
- 
--struct acpi_thermal_bind_data {
--	struct thermal_zone_device *thermal;
--	struct thermal_cooling_device *cdev;
--	bool bind;
--};
--
--static int bind_unbind_cdev_cb(struct thermal_trip *trip, void *arg)
-+static bool acpi_thermal_should_bind_cdev(struct thermal_zone_device *thermal,
-+					  const struct thermal_trip *trip,
-+					  struct thermal_cooling_device *cdev,
-+					  struct cooling_spec *c)
- {
- 	struct acpi_thermal_trip *acpi_trip = trip->priv;
--	struct acpi_thermal_bind_data *bd = arg;
--	struct thermal_zone_device *thermal = bd->thermal;
--	struct thermal_cooling_device *cdev = bd->cdev;
- 	struct acpi_device *cdev_adev = cdev->devdata;
- 	int i;
- 
- 	/* Skip critical and hot trips. */
- 	if (!acpi_trip)
--		return 0;
-+		return false;
- 
- 	for (i = 0; i < acpi_trip->devices.count; i++) {
- 		acpi_handle handle = acpi_trip->devices.handles[i];
--		struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
--
--		if (adev != cdev_adev)
--			continue;
- 
--		if (bd->bind) {
--			int ret;
--
--			ret = thermal_bind_cdev_to_trip(thermal, trip, cdev,
--							THERMAL_NO_LIMIT,
--							THERMAL_NO_LIMIT,
--							THERMAL_WEIGHT_DEFAULT);
--			if (ret)
--				return ret;
--		} else {
--			thermal_unbind_cdev_from_trip(thermal, trip, cdev);
--		}
-+		if (acpi_fetch_acpi_dev(handle) == cdev_adev)
-+			return true;
- 	}
- 
--	return 0;
--}
--
--static int acpi_thermal_bind_unbind_cdev(struct thermal_zone_device *thermal,
--					 struct thermal_cooling_device *cdev,
--					 bool bind)
--{
--	struct acpi_thermal_bind_data bd = {
--		.thermal = thermal, .cdev = cdev, .bind = bind
--	};
--
--	return thermal_zone_for_each_trip(thermal, bind_unbind_cdev_cb, &bd);
--}
--
--static int
--acpi_thermal_bind_cooling_device(struct thermal_zone_device *thermal,
--				 struct thermal_cooling_device *cdev)
--{
--	return acpi_thermal_bind_unbind_cdev(thermal, cdev, true);
--}
--
--static int
--acpi_thermal_unbind_cooling_device(struct thermal_zone_device *thermal,
--				   struct thermal_cooling_device *cdev)
--{
--	return acpi_thermal_bind_unbind_cdev(thermal, cdev, false);
-+	return false;
- }
- 
- static const struct thermal_zone_device_ops acpi_thermal_zone_ops = {
--	.bind = acpi_thermal_bind_cooling_device,
--	.unbind	= acpi_thermal_unbind_cooling_device,
-+	.should_bind = acpi_thermal_should_bind_cdev,
- 	.get_temp = thermal_get_temp,
- 	.get_trend = thermal_get_trend,
- 	.hot = acpi_thermal_zone_device_hot,
-
-
-
+> Store 'dmc->dev' in local 'dev' variable, to make several pieces of code
+> using it shorter and easier to read.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
