@@ -1,148 +1,178 @@
-Return-Path: <linux-pm+bounces-12440-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12441-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0B7F956DFE
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 16:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 76023956E34
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 17:07:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACB8028844B
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 14:57:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 322D32816E9
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 15:07:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E705717D341;
-	Mon, 19 Aug 2024 14:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11939176AA3;
+	Mon, 19 Aug 2024 15:07:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VgLslQpO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A+NvMM/j"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E2917AE00;
-	Mon, 19 Aug 2024 14:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AA617622F;
+	Mon, 19 Aug 2024 15:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724079401; cv=none; b=kbkMDkAgwnQDLo1tFFTRomwDhcpyemUMVs/0LDTjSN6D1n47ZHvmB987oJ+cTM4WjLFKvZNwziuPXpIitaKVHu/7o4oEdiBGBW+YqqPGTx4N3miKbPP5nsyTyrgLRIu4KMMh6RyH/N3m5UEQUQdvB9G41Et/y3CnUw9AqpJd5r8=
+	t=1724080022; cv=none; b=nalaRMSVDuxynqTawCojSJWQa+Wt9aSoZm/2Z0qC5GIFADQLmR4bCvgDXnm75XXcE4BEWnI/FW9g6ffnEVmR737lYOokip9tDNWG16MMMf0/xp5+6hvlfOTvHUn91hQm28u1fIr9D4EXeRlED+U27ga1ygbCSmZ1vsK+ib1P+Ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724079401; c=relaxed/simple;
-	bh=lCOxCv40WXDgFR9GjwMDEyPONnrRyqFSij6rZxydBI0=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CKuRTiAUlYAfwANV7GgFkO8NFaqzfpFvRFJw6x+b2WjoXcD9bvuJ8idc0KBRR++yPstX1qLxOpCq4QP9Ufn3OMMTzQvB2YjtADFMFnImo/yw0vGs212LJufiw9KNq4KEGGO/3RFsGUljDc5T/kKRipCxza+o2jr7PRqMibUVnvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VgLslQpO; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47JCLRPB002309;
-	Mon, 19 Aug 2024 14:56:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=QTSFQYZoEceIs8w8FgHAXTc6
-	nwskDsv2GruJCmAcXk8=; b=VgLslQpONX2bKJJ7WP4fdvPACGgQPA3FAmCzy9+B
-	vIzacuV9A1zZUU8zWwoXbkyG1+KJrrfOwpTDSqeKQaXEbitzK90roHmlrccIBmOz
-	rFyhoSKmO6Hi5KxXmna1C8V2ieqGcGC1VHn1Ck/J+fFUZEYe9FFQsoBGnGbfV6TH
-	/03A+GZwIvLSz8XbTDsjik6xzXhocAOYe+uDnVFRIOd3TvYzA/AvFqWpfOhK1HAE
-	qkpaDyxke4x77A0vduuqBH6w/Pn3yJeKjcyz9srMcDb0rMor2p7fucUNwrpIk9wQ
-	eeXCuaqOn4OAocyHtTUJHVN47q1pfmsYR9+R2Yz0XvX+Tw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4145yw8dam-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 14:56:33 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47JEuWm2029307
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 14:56:32 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 19 Aug 2024 07:56:32 -0700
-Date: Mon, 19 Aug 2024 07:56:31 -0700
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Heikki
- Krogerus" <heikki.krogerus@linux.intel.com>,
-        Neil Armstrong
-	<neil.armstrong@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        "Chris
- Lew" <quic_clew@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Amit Pundir <amit.pundir@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, Johan Hovold
-	<johan@kernel.org>,
-        <stable@vger.kernel.org>
-Subject: Re: [PATCH 0/3] soc: qcom: pmic_glink: v6.11-rc bug fixes
-Message-ID: <ZsNdHzlBi0hqwevY@hu-bjorande-lv.qualcomm.com>
+	s=arc-20240116; t=1724080022; c=relaxed/simple;
+	bh=GYtDHER4l36QRbGSz9n1fTQl4KIxcIyyj6NCZNhyrxg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pxOKAUnO0eAE4rWtlvlqNY3U1q+wvmBqTmPr7S++gKZcrT+71+6ZKKohHkyHL4hdzp0QkOilriI6e1PE/2QGDGzU+NrsRP0rkpoOuGNS88z7B/d0yYLd20GVahqS9pNj/3nEvxknco8TO//ba4RNMXKFfJPMczgzLtuzmCII+Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A+NvMM/j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41078C32782;
+	Mon, 19 Aug 2024 15:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724080021;
+	bh=GYtDHER4l36QRbGSz9n1fTQl4KIxcIyyj6NCZNhyrxg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=A+NvMM/j9AVWIdfl4DKGnMElXWkpNPiFw43YwYnU0q3FYA70zKlbSe23ahceuKf2z
+	 Y6DzmQMxoUsh9ICWPAl0oHAbrOwicDumKDX1O/9h95qs5aWycObt57qRrpDUWz9zG8
+	 /vR6JDNIcCECfynJNfD0++4FF1FJ079FQX9UWD36qzhDnwI+VSZSUVwksxdfSUGrtG
+	 Ot6jgqF/6cDf5LvCigzB71UokFA9lPsWSpqIrxHdobmWU5h6ZnsVD4JB8gsqoFUlYQ
+	 wHn6uueqdNrKPA7Mnl338xLhDmmkWnUdirpuUnCeqQ4O8M6ZVutRAAXzl1vIIbP63k
+	 6I8VRQDxUx9QQ==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1sg3yE-000000007do-14Mo;
+	Mon, 19 Aug 2024 17:06:58 +0200
+Date: Mon, 19 Aug 2024 17:06:58 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Chris Lew <quic_clew@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Amit Pundir <amit.pundir@linaro.org>, linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 2/3] usb: typec: ucsi: Move unregister out of atomic
+ section
+Message-ID: <ZsNfkuiRK9VqBSLT@hovoldconsulting.com>
 References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
- <2024081914-exploit-yonder-4d51@gregkh>
+ <20240818-pmic-glink-v6-11-races-v1-2-f87c577e0bc9@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2024081914-exploit-yonder-4d51@gregkh>
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: AzpB0OJMjjSrS4Zpa63Q8oZgoSs6-HRz
-X-Proofpoint-GUID: AzpB0OJMjjSrS4Zpa63Q8oZgoSs6-HRz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-19_13,2024-08-19_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- adultscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=889
- bulkscore=0 phishscore=0 mlxscore=0 impostorscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
- definitions=main-2408190100
+In-Reply-To: <20240818-pmic-glink-v6-11-races-v1-2-f87c577e0bc9@quicinc.com>
 
-On Mon, Aug 19, 2024 at 04:07:41PM +0200, Greg Kroah-Hartman wrote:
-> On Sun, Aug 18, 2024 at 04:17:36PM -0700, Bjorn Andersson wrote:
-> > Amit and Johan both reported a NULL pointer dereference in the
-> > pmic_glink client code during initialization, and Stephen Boyd pointed
-> > out the problem (race condition).
-> > 
-> > While investigating, and writing the fix, I noticed that
-> > ucsi_unregister() is called in atomic context but tries to sleep, and I
-> > also noticed that the condition for when to inform the pmic_glink client
-> > drivers when the remote has gone down is just wrong.
-> > 
-> > So, let's fix all three.
-> > 
-> > As mentioned in the commit message for the UCSI fix, I have a series in
-> > the works that makes the GLINK callback happen in a sleepable context,
-> > which would remove the need for the clients list to be protected by a
-> > spinlock, and removing the work scheduling. This is however not -rc
-> > material...
-> > 
-> > In addition to the NULL pointer dereference, there is the -ECANCELED
-> > issue reported here:
-> > https://lore.kernel.org/all/Zqet8iInnDhnxkT9@hovoldconsulting.com/
-> > I have not yet been able to either reproduce this or convince myself
-> > that this is the same issue.
-> > 
-> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> 
-> What tree are these to go through?  I can take them through mine, but if
-> someone else wants to, feel free to route them some other way.
-> 
+On Sun, Aug 18, 2024 at 04:17:38PM -0700, Bjorn Andersson wrote:
+> Commit 'caa855189104 ("soc: qcom: pmic_glink: Fix race during
+> initialization")' 
 
-It's primarily soc/qcom content, so I can pick them through the qcom soc
-tree.
+This commit does not exist, but I think you really meant to refer to
 
-Regards,
-Bjorn
+	9329933699b3 ("soc: qcom: pmic_glink: Make client-lock non-sleeping")
 
-> thanks,
+and possibly also
+
+	635ce0db8956 ("soc: qcom: pmic_glink: don't traverse clients list without a lock")
+
+here.
+
+> moved the pmic_glink client list under a spinlock, as
+> it is accessed by the rpmsg/glink callback, which in turn is invoked
+> from IRQ context.
 > 
-> greg k-h
+> This means that ucsi_unregister() is now called from IRQ context, which
+> isn't feasible as it's expecting a sleepable context.
+
+But this is not correct as you say above that the callback has always
+been made in IRQ context. Then this bug has been there since the
+introduction of the UCSI driver by commit
+
+	62b5412b1f4a ("usb: typec: ucsi: add PMIC Glink UCSI driver")
+
+> An effort is under
+> way to get GLINK to invoke its callbacks in a sleepable context, but
+> until then lets schedule the unregistration.
 > 
+> A side effect of this is that ucsi_unregister() can now happen
+> after the remote processor, and thereby the communication link with it, is
+> gone. pmic_glink_send() is amended with a check to avoid the resulting
+> NULL pointer dereference, but it becomes expecting to see a failing send
+
+Perhaps you can rephrase this bit ("becomes expecting to see").
+
+> upon shutting down the remote processor (e.g. during a restart following
+> a firmware crash):
+> 
+>   ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: failed to send UCSI write request: -5
+> 
+> Fixes: caa855189104 ("soc: qcom: pmic_glink: Fix race during initialization")
+
+So this should be
+
+Fixes: 62b5412b1f4a ("usb: typec: ucsi: add PMIC Glink UCSI driver")
+
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+ 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> index ac53a81c2a81..a33056eec83d 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> @@ -68,6 +68,9 @@ struct pmic_glink_ucsi {
+>  
+>  	struct work_struct notify_work;
+>  	struct work_struct register_work;
+> +	spinlock_t state_lock;
+> +	unsigned int pdr_state;
+> +	unsigned int new_pdr_state;
+
+Should these be int to match the notify callback (and enum
+servreg_service_state)?
+
+>  	u8 read_buf[UCSI_BUF_SIZE];
+>  };
+> @@ -244,8 +247,22 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
+>  static void pmic_glink_ucsi_register(struct work_struct *work)
+>  {
+>  	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, register_work);
+> +	unsigned long flags;
+> +	unsigned int new_state;
+
+Then int here too.
+
+> +
+> +	spin_lock_irqsave(&ucsi->state_lock, flags);
+> +	new_state = ucsi->new_pdr_state;
+> +	spin_unlock_irqrestore(&ucsi->state_lock, flags);
+> +
+> +	if (ucsi->pdr_state != SERVREG_SERVICE_STATE_UP) {
+> +		if (new_state == SERVREG_SERVICE_STATE_UP)
+> +			ucsi_register(ucsi->ucsi);
+> +	} else {
+> +		if (new_state == SERVREG_SERVICE_STATE_DOWN)
+> +			ucsi_unregister(ucsi->ucsi);
+
+Do you risk a double deregistration (and UAF/double free) here?
+
+> +	}
+>  
+> -	ucsi_register(ucsi->ucsi);
+> +	ucsi->pdr_state = new_state;
+>  }
+
+Johan
 
