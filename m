@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-12411-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12412-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C8AA956698
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 11:16:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37B649566A1
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 11:17:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF8E2B23BDA
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 09:16:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55E481C21951
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 09:17:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1338C15CD6E;
-	Mon, 19 Aug 2024 09:16:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10A2515ECC6;
+	Mon, 19 Aug 2024 09:16:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ivqGWG3R"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jC9Wn8vf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A965415B986
-	for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 09:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917A915E5C9
+	for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 09:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724058983; cv=none; b=t1pAlNTZLtnU89KkY0U4AS3RyrXeqU8an7238PonQ9DaSqu1R1dkqTVmBmUoGaFpzsGRpyIEWk58bTTcAbNDGOGne3TaDQ375D1cCMful3eABggkd2m6lWFtR9rXxLBtWmUqrvRGJWwFM0LUZ50JrIojpqrJCBRD8uZ3GpDDhCw=
+	t=1724058993; cv=none; b=MAaZe6sinuMrgD99ogyI2daDf7uAX8LxXR8PJTeFFh7Ijp7pEP+ARGdCEvXEhlGzK/zXQQwM71hZh1OEsgDJkg/8KWt4FvMvhg9vMmb4EUbR+f9nrPs+HfL4AY6ra6b0kW0+VBavaRgSHXHgTRz5KikEXo404xEWwjqouAQRTJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724058983; c=relaxed/simple;
-	bh=/SJ6cDUryQNt2iMgIu4z5n5nPQDPmfv1hvOf3hfHiaU=;
+	s=arc-20240116; t=1724058993; c=relaxed/simple;
+	bh=M4HxD41AxnpTCiLQTaEKtdJBVGPgtoEks/DEOhlXdr8=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Va3qd7E1iUXxBGG164Qk13ujnXJyUGzMvJ1HD2TA0EdKT2Y0Q24h9o2E5qynqqNyIMzwyTaGCfrJbgq9aOc+ebKQ68FjPJe3JWS08EDbzO3A1tuylROgcpKVO0xWsUwDnTqsmIy434wE2TeXQ5xnCD2BMeCeYwgj2SiEuF202yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ivqGWG3R; arc=none smtp.client-ip=209.85.221.44
+	 In-Reply-To:Content-Type; b=Zd+sAZ95b5zHGvx9L0L7xfE96ArCPx3Gx2eJ6zgWhOd7Iiex/E00KbFKqrH4b6NRiwJjSL1S4BSdZUsITuZu1ISXr3xaMLjijf6WwcRRmqbJfJaCCbBx3UM3cUC1WVc1TLIOXY3t6KIyA/XEx9x0OySSFL5/NxxX5Dr9SrLlvyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jC9Wn8vf; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-371ba7e46easo535689f8f.0
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 02:16:19 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37198a6da58so2067484f8f.0
+        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 02:16:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724058978; x=1724663778; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1724058989; x=1724663789; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:references:cc:to:subject:reply-to:from:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pvl2PaSBcQgUbQ4OytRwa2UWEGEQRSF+ak+EtVFPL7s=;
-        b=ivqGWG3Ri4DBnPfY8K8M1kDbdOFD6dl0bx9hWXKt4PHxhx8T00mwGV6eXbZfhVd4zQ
-         shca4FKrdd168+7q39tSdZJ411F3WU6Mq08ICG2jZqHnCvmDl4Vv8ln+e4EaM9jx7EU9
-         DJPyc2vBmP1RkWsdevuRRt1o1du1EnUNWU1M0VK97ismEIIVn8W7bMvs3QRsGAdYDHZ1
-         ERWE53MX6NoMGm+NZOHZineJqfRjW2jEmrwMPMC40VvZteMnmSYSHKS/ZjCkTETXAer7
-         xfnVRBJt/zSzbyN+dNKmXp+0/++gbT5FhcfNVeoRHDVtG76TOhhf48POpMMLrP6MtivE
-         vBXQ==
+        bh=lhdgRPhROCnX5bLFVFYvhFCrgNIlRk5KqPEmPhOey3g=;
+        b=jC9Wn8vfgzlHlFTqIUo8CQFm0rsu0NK2cdKUlRtgkZzh/dKc+JDgjczkmkSMOmT0fu
+         vZuue28vw+giHI4xr6zFRr9+kOw1XMCR35fDE/u2FPdbfK8iu72PYcY4f33qICOVDR2s
+         jkSasE/6kpW9ue9DkDymAH3SgSfIBMCHPzo9WBDz5TyKqF4nAORfjhHR3PaClqbRF2AC
+         rAKsCBsm+QTWMFdFdNr5QEbk1zfntiWvtUEh41q9/px1y03tvVdS2fiZc7gvZiugQ/yD
+         nRhH25FVm/wBHpFvd/9Ut0KrV9Mk1oiColmI/eZN91C3XHlGL4b+mX9C8Qcnf6/7Yb5V
+         itSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724058978; x=1724663778;
+        d=1e100.net; s=20230601; t=1724058989; x=1724663789;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:references:cc:to:subject:reply-to:from:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=pvl2PaSBcQgUbQ4OytRwa2UWEGEQRSF+ak+EtVFPL7s=;
-        b=iiaF3vvw4ZgBJONdWSUu55HMcjivJUPWD1VLwi6eX6cyw0I/v3Yh3o/xHmM1qMXwWG
-         7LaoxLkbl0JQLtK5S1bb9DU7RIYKz2PQEukLg/e1X3usD5AlG+DKtWBGxSFCxp/NlYwO
-         VOwkxoQvZJNvtN/dVyFdWUnB61fOSA8RGF43ERC+vD3z2GrlRL5CGXoieyqzrdMkbT6C
-         7AVLdhx65wDtBVF3uWNZMT3NPzE9FSQALNtDosmiCA+ihLae9I5gtYEs4+LHNEdORxeP
-         PUxvlVhXb1dSFrswgj4YZNwHmvCol8KOY7fVgND2UKQp02puzA97BamknjMa4tm78RlM
-         DM4A==
-X-Forwarded-Encrypted: i=1; AJvYcCWZBEqfzUuw8/jvU89dFaOSsZETRxEMM4Df/lym7SRPjEi35ILlKbe04lDIRj/0qwOzTujQs5B1fZ8mXC9v3xpzKDK8eDj+GTE=
-X-Gm-Message-State: AOJu0YxDbNUmMJi82UkFPzkOP3L744kcHwVAmrCJYunu4h0LDuejbZqv
-	NbqOAW0bIY77/6S+E1P/ttEtplaosXrTH9V8ImOEpMHU8nFmwfJNAT6JReWHTrA=
-X-Google-Smtp-Source: AGHT+IH9DRRUk43mndDIg0iz3Wbhu0iUr82wYHn15KerrEyOl0OYQJpN0f/P/FFzmBsSLLHR/KSclg==
-X-Received: by 2002:adf:eec8:0:b0:367:9d05:cf1f with SMTP id ffacd0b85a97d-37194327f7fmr5971930f8f.14.1724058977604;
-        Mon, 19 Aug 2024 02:16:17 -0700 (PDT)
+        bh=lhdgRPhROCnX5bLFVFYvhFCrgNIlRk5KqPEmPhOey3g=;
+        b=P8BhHObiSnTwuvIL9A5EG8twi2TzJskvwWVoHGeny+u/BnWwo2bxXdnxfsvZ4dSI8o
+         YrHVqljzQrSwUrk8eE55P9z8OxpF8jqmM4W9lZRN0dxzKuL7j7945YFY+XxBa2O6GOUW
+         g4Iub0rISaLR30yhha6mkyWr9TCZUwv7yAQv16BQgzRSLt6D7Y3mpBPgpwOC9ItYZY7u
+         AC+vRsSROqhJ3jNmI2gHGt9hXrFN1Fi5tkYtCfIe4weBOI8j01HGTyk7/myxBqmr/GIX
+         YYQ7Yx3Wzqt6X5E5KpAT1saqG6QHq0YbrHUqwrV75X1YPU5f+iIb+f0OTtwrBi8tkzPq
+         dKDA==
+X-Forwarded-Encrypted: i=1; AJvYcCXgdq3ZvvSkQ6akmjDizIicaC9wsJc54Thn4N+mYvLH7lJkQBCGqUVZo1+gC9engv8MJC0D7l6wuX3qHFPO1BnVswdRUle4Z5w=
+X-Gm-Message-State: AOJu0YzPEBLWVkyUu90yJOlYXv9KK8ftx+mHk3y74XHOfZ3/7c0ytQY5
+	6wwIdR9TxO2fhOivqVpAlNhb8fJBDf5THeuo2jTEq9sBw1RNTAV94Y3afrjjgq0=
+X-Google-Smtp-Source: AGHT+IGlLNnWnVua3EpqWORlOr9KVT/7tXvAlVwexe5VlvrIqMwXSW6fc2+//ghkrLZ4/+R2Z9303w==
+X-Received: by 2002:a5d:4e42:0:b0:371:8eea:24b7 with SMTP id ffacd0b85a97d-371946a04e6mr7617699f8f.50.1724058988631;
+        Mon, 19 Aug 2024 02:16:28 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:982:cbb0:f54e:4b0a:5175:5727? ([2a01:e0a:982:cbb0:f54e:4b0a:5175:5727])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3718985a347sm10025259f8f.60.2024.08.19.02.16.16
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3718983a397sm9970491f8f.24.2024.08.19.02.16.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Aug 2024 02:16:17 -0700 (PDT)
-Message-ID: <b11d65db-d691-4f5d-b41a-db5b29a8ae01@linaro.org>
-Date: Mon, 19 Aug 2024 11:16:16 +0200
+        Mon, 19 Aug 2024 02:16:28 -0700 (PDT)
+Message-ID: <d84c8f87-5f7c-4f6d-bcc6-d20b05b1755a@linaro.org>
+Date: Mon, 19 Aug 2024 11:16:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -80,8 +80,8 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
 Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 2/3] usb: typec: ucsi: Move unregister out of atomic
- section
+Subject: Re: [PATCH 3/3] soc: qcom: pmic_glink: Actually communicate with
+ remote goes down
 To: Bjorn Andersson <quic_bjorande@quicinc.com>,
  Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
  Konrad Dybcio <konrad.dybcio@linaro.org>,
@@ -94,7 +94,7 @@ Cc: Johan Hovold <johan+linaro@kernel.org>, Chris Lew
  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
  stable@vger.kernel.org
 References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
- <20240818-pmic-glink-v6-11-races-v1-2-f87c577e0bc9@quicinc.com>
+ <20240818-pmic-glink-v6-11-races-v1-3-f87c577e0bc9@quicinc.com>
 Content-Language: en-US, fr
 Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
@@ -121,118 +121,42 @@ Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
  QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
 Organization: Linaro
-In-Reply-To: <20240818-pmic-glink-v6-11-races-v1-2-f87c577e0bc9@quicinc.com>
+In-Reply-To: <20240818-pmic-glink-v6-11-races-v1-3-f87c577e0bc9@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 19/08/2024 01:17, Bjorn Andersson wrote:
-> Commit 'caa855189104 ("soc: qcom: pmic_glink: Fix race during
-> initialization")' moved the pmic_glink client list under a spinlock, as
-> it is accessed by the rpmsg/glink callback, which in turn is invoked
-> from IRQ context.
+> When the pmic_glink state is UP and we either receive a protection-
+> domain (PD) notifcation indicating that the PD is going down, or that
+> the whole remoteproc is going down, it's expected that the pmic_glink
+> client instances are notified that their function has gone DOWN.
 > 
-> This means that ucsi_unregister() is now called from IRQ context, which
-> isn't feasible as it's expecting a sleepable context. An effort is under
-> way to get GLINK to invoke its callbacks in a sleepable context, but
-> until then lets schedule the unregistration.
+> This is not what the code does, which results in the client state either
+> not updating, or being wrong in many cases. So let's fix the conditions.
 > 
-> A side effect of this is that ucsi_unregister() can now happen
-> after the remote processor, and thereby the communication link with it, is
-> gone. pmic_glink_send() is amended with a check to avoid the resulting
-> NULL pointer dereference, but it becomes expecting to see a failing send
-> upon shutting down the remote processor (e.g. during a restart following
-> a firmware crash):
-> 
->    ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: failed to send UCSI write request: -5
-> 
-> Fixes: caa855189104 ("soc: qcom: pmic_glink: Fix race during initialization")
+> Fixes: 58ef4ece1e41 ("soc: qcom: pmic_glink: Introduce base PMIC GLINK driver")
 > Cc: stable@vger.kernel.org
 > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
->   drivers/soc/qcom/pmic_glink.c       | 10 +++++++++-
->   drivers/usb/typec/ucsi/ucsi_glink.c | 28 +++++++++++++++++++++++-----
->   2 files changed, 32 insertions(+), 6 deletions(-)
+>   drivers/soc/qcom/pmic_glink.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-> index 58ec91767d79..e4747f1d3da5 100644
+> index e4747f1d3da5..cb202a37e8ab 100644
 > --- a/drivers/soc/qcom/pmic_glink.c
 > +++ b/drivers/soc/qcom/pmic_glink.c
-> @@ -112,8 +112,16 @@ EXPORT_SYMBOL_GPL(pmic_glink_register_client);
->   int pmic_glink_send(struct pmic_glink_client *client, void *data, size_t len)
->   {
->   	struct pmic_glink *pg = client->pg;
-> +	int ret;
+> @@ -191,7 +191,7 @@ static void pmic_glink_state_notify_clients(struct pmic_glink *pg)
+>   		if (pg->pdr_state == SERVREG_SERVICE_STATE_UP && pg->ept)
+>   			new_state = SERVREG_SERVICE_STATE_UP;
+>   	} else {
+> -		if (pg->pdr_state == SERVREG_SERVICE_STATE_UP && pg->ept)
+> +		if (pg->pdr_state == SERVREG_SERVICE_STATE_DOWN || !pg->ept)
+>   			new_state = SERVREG_SERVICE_STATE_DOWN;
+>   	}
 >   
-> -	return rpmsg_send(pg->ept, data, len);
-> +	mutex_lock(&pg->state_lock);
-> +	if (!pg->ept)
-> +		ret = -ECONNRESET;
-> +	else
-> +		ret = rpmsg_send(pg->ept, data, len);
-> +	mutex_unlock(&pg->state_lock);
-> +
-> +	return ret;
->   }
->   EXPORT_SYMBOL_GPL(pmic_glink_send);
->   
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index ac53a81c2a81..a33056eec83d 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -68,6 +68,9 @@ struct pmic_glink_ucsi {
->   
->   	struct work_struct notify_work;
->   	struct work_struct register_work;
-> +	spinlock_t state_lock;
-> +	unsigned int pdr_state;
-> +	unsigned int new_pdr_state;
->   
->   	u8 read_buf[UCSI_BUF_SIZE];
->   };
-> @@ -244,8 +247,22 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
->   static void pmic_glink_ucsi_register(struct work_struct *work)
->   {
->   	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, register_work);
-> +	unsigned long flags;
-> +	unsigned int new_state;
-> +
-> +	spin_lock_irqsave(&ucsi->state_lock, flags);
-> +	new_state = ucsi->new_pdr_state;
-> +	spin_unlock_irqrestore(&ucsi->state_lock, flags);
-> +
-> +	if (ucsi->pdr_state != SERVREG_SERVICE_STATE_UP) {
-> +		if (new_state == SERVREG_SERVICE_STATE_UP)
-> +			ucsi_register(ucsi->ucsi);
-> +	} else {
-> +		if (new_state == SERVREG_SERVICE_STATE_DOWN)
-> +			ucsi_unregister(ucsi->ucsi);
-> +	}
->   
-> -	ucsi_register(ucsi->ucsi);
-> +	ucsi->pdr_state = new_state;
->   }
->   
->   static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
-> @@ -269,11 +286,12 @@ static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
->   static void pmic_glink_ucsi_pdr_notify(void *priv, int state)
->   {
->   	struct pmic_glink_ucsi *ucsi = priv;
-> +	unsigned long flags;
->   
-> -	if (state == SERVREG_SERVICE_STATE_UP)
-> -		schedule_work(&ucsi->register_work);
-> -	else if (state == SERVREG_SERVICE_STATE_DOWN)
-> -		ucsi_unregister(ucsi->ucsi);
-> +	spin_lock_irqsave(&ucsi->state_lock, flags);
-> +	ucsi->new_pdr_state = state;
-> +	spin_unlock_irqrestore(&ucsi->state_lock, flags);
-> +	schedule_work(&ucsi->register_work);
->   }
->   
->   static void pmic_glink_ucsi_destroy(void *data)
 > 
 
-Looks good, I'll run it on the 8550/8650 platforms
+Good catch!
 
 Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 
