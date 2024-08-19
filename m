@@ -1,175 +1,109 @@
-Return-Path: <linux-pm+bounces-12433-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12434-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CA73956C67
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 15:46:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62F9D956C72
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 15:50:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8014280D98
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 13:46:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A5C51C212B9
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 13:50:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA2CC1662E8;
-	Mon, 19 Aug 2024 13:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864D316C6B5;
+	Mon, 19 Aug 2024 13:50:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oFVRNV2w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aqaRB/he"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964FE1DFEF
-	for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 13:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF7D154C19;
+	Mon, 19 Aug 2024 13:50:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724075204; cv=none; b=Wa8Fx71xfjrq9r/afaXL7vPpDP+4vleMu3VL9vNIiCC1ienXd616Xkw8g8Yof1o+shde70+CPmsd6/lsm4G4cHl9nQh/9Vx8skHGlnX0mwYzznN/ecmzhpiLVKQKD58UQVMy7lDyS68S0TXPSnGI62JZrSOsYxXTekhgqig3nrA=
+	t=1724075408; cv=none; b=Y32XEDKSHp3tmjD2R3Jb8UjhSX3T2K7E+UCIxScKRnvc6CBrLR/KEtFNHtpxbyqNvKKMeKiQx0wynMZy6CubxG2EKMVAmyfv2ntnTg1M30ywfPyecWbaFgn3kFcEouP5bzGbz0CmBjwqIcCrZGH1C7/g3MWFr6eAt8w+a3UxdhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724075204; c=relaxed/simple;
-	bh=RPFX6jE1SiyICtHSpM5y/EC+DcnHRBGmo328BHBt6W8=;
+	s=arc-20240116; t=1724075408; c=relaxed/simple;
+	bh=WjhiTawlAIfuToCLmbnvKr5mf+reukg5NfmPH0NilqY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jTa+ovRyYO0oEeDEemjeK+wDVcXT1HCCwzsTog/kuq9REeHGFW8T67mAnON72+QfRtzCa+owWdc6lg75TtjTqw+85tTcE3VmPhjwLC/HOHg0qZv2gPbqnfrasZKe3xcHVje1we16SFJ0TFGors4ujFsnKDw/EHdXDUNVqgiLxMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oFVRNV2w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5320DC4AF10
-	for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 13:46:44 +0000 (UTC)
+	 To:Cc:Content-Type; b=u+RcM07SVg2s+WGmbzPXJQXR4nzJc5XP/zgoT6/ikhHE5GXKnBPOltvD4CabpysnjyzKbpUmWm7InXnhzh0VH+aN3VhgibBTUZ06dDWBHupnEbFLw880pbKJO8UJE+TD8EVW91kNtIX1porFW5rxoo+D3jW1JMvEkKUWtnuqvko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aqaRB/he; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF5BEC4AF10;
+	Mon, 19 Aug 2024 13:50:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724075204;
-	bh=RPFX6jE1SiyICtHSpM5y/EC+DcnHRBGmo328BHBt6W8=;
+	s=k20201202; t=1724075407;
+	bh=WjhiTawlAIfuToCLmbnvKr5mf+reukg5NfmPH0NilqY=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oFVRNV2wK7WtFxJhFjoAci4WAmxw9+JXKF7DmbyL0nuLjMyCMNYKHQNYNdLKH4jDh
-	 F/H31DyX7Cyl6tymfPOnXUsgrh2P3JybjQueVfI8ZcvH6iAUQbtMPxUAcfZMp/Un8Z
-	 r+ExjjnF/7LkRHNZUmx9JgW8zNXc+FtXAwUHYocwMuzMocuoaAGIy8wPDFKWtmhykI
-	 zj3/pu12L/5kB0jxFUUBlw2XulPQ75s2GKoM7+cifIH+JPMGPxmNDOwnbdkTOgj4nr
-	 r/DizDQWjKIEdoc+lvolXRWGUCTBeGs51AAPEJSzbJWFDdMjdI+vVPQngX2U0X4Bw3
-	 8Ex50+m1v922g==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-268d0979e90so492989fac.3
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 06:46:44 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWyYsV1aaYEjYV6dvxTQYfGqjB+PUetDl211RdZ3+CKKXpP8EAd6hsweSxfKAvxmk8D+7iZaHEKXw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXst+HpnzpIlRwd7zti00iXAKeaY5gO2VbMbt3iahH2jArwTYL
-	8gW+hCUYaRq6rruapCP0NwLjLw8GQtS9m6E8Id+zvsJMfdeX8qP3DOBsViBeHr6HmC66IEy7L1R
-	5eXsMGxC4KRDERkfyU6CDchbzjkI=
-X-Google-Smtp-Source: AGHT+IFbKz8nhyxMMzbk4aJHbUFHOKbNw+zkzZmgMiZX75m05EpiSkq1WebgNpVIgcDf9Larur/vwl+LI6r1co0i6UE=
-X-Received: by 2002:a05:6870:4414:b0:26c:78ce:b0cc with SMTP id
- 586e51a60fabf-2701c5680f8mr5397619fac.8.1724075203635; Mon, 19 Aug 2024
- 06:46:43 -0700 (PDT)
+	b=aqaRB/hew/WcK84AMNulZ6tw3hgHRAwa5MomJWFqpf+VLIr3ZC1NZTek4GTxFvDkO
+	 K+7lWVQCrMeM/nKK3lS9PRmEEcPRnIVd4yUPjWa8w4LBWSpFVpz4CXwfh2xjBQui+C
+	 df3w6iKW2JfHS0Lqu3bSnhRqS3qmvaajF4agH6qtOL7qmyGybgDtd9M36jwgAaQEY0
+	 lXLsY87pOt6mujSay7yfNezkJ9fR6iqJm5ucAhEru53gjKojnjc9H3L6u1mP6z0ixT
+	 1unljzxS2RL3wZb81caw67KTbpILZO/0j1resdvJ41W8xuCod3KwZFqyZMl/Ri736v
+	 j9YV2QFrxNimA==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2635abdc742so544119fac.2;
+        Mon, 19 Aug 2024 06:50:07 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXdD4a/ehijq38KKzBANcyHM5eYOv6nXWB0U7r2TsiWA0ROYB0Tp3nfXOezI7+fUe2j/WFP4vta8EhueF4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk9HGY0N/fT3vnHvyeb1i/KKz0ECxsPiZ69j3ofPP7aJdwqabo
+	5S+Kt6S1h9GtTI938JoUzjdi6VCqn1hS7Wf5XGuwVtnHeLUFRaRPXx4UiJGoMeT64dSPPkk3ZEN
+	OY5Kh5bpbTj7d2x61txAfPC0IWkM=
+X-Google-Smtp-Source: AGHT+IGcxvquucdhiO2i1h1zL1skFlN8Lo10S6HsHc6valnsvoyWSdQxP3XnhACp2aBS+6HQxuJddm5ENowjFXYUEuA=
+X-Received: by 2002:a05:6871:548:b0:25e:b7e1:d20d with SMTP id
+ 586e51a60fabf-2701c09ff65mr5731197fac.0.1724075407157; Mon, 19 Aug 2024
+ 06:50:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240806160310.3719205-1-artem.bityutskiy@linux.intel.com>
-In-Reply-To: <20240806160310.3719205-1-artem.bityutskiy@linux.intel.com>
+References: <6065927.lOV4Wx5bFT@rjwysocki.net>
+In-Reply-To: <6065927.lOV4Wx5bFT@rjwysocki.net>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 19 Aug 2024 15:46:29 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h5zVamKa16ShtgbsC6+TK3U5LNu51pX7ZTG8Qb1sQ0hQ@mail.gmail.com>
-Message-ID: <CAJZ5v0h5zVamKa16ShtgbsC6+TK3U5LNu51pX7ZTG8Qb1sQ0hQ@mail.gmail.com>
-Subject: Re: [PATCH] intel_idle: add Granite Rapids Xeon support
-To: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM Mailing List <linux-pm@vger.kernel.org>, 
-	Artem Bityutskiy <dedekind1@gmail.com>
+Date: Mon, 19 Aug 2024 15:49:53 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i2C2jbYeg=pTOTOwMFh+G4vkYn3tG5TzN+=r-7AYXLAA@mail.gmail.com>
+Message-ID: <CAJZ5v0i2C2jbYeg=pTOTOwMFh+G4vkYn3tG5TzN+=r-7AYXLAA@mail.gmail.com>
+Subject: Re: [PATCH v1] thermal: Introduce a debugfs-based testing facility
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 6, 2024 at 6:03=E2=80=AFPM Artem Bityutskiy
-<artem.bityutskiy@linux.intel.com> wrote:
+On Fri, Aug 2, 2024 at 8:05=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.net=
+> wrote:
 >
-> Add Granite Rapids Xeon C-states, which are C1, C1E, C6, and C6P.
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> Comparing to previous Xeon Generations (e.g., Emerald Rapids), C6 request=
-s end
-> up only in core C6 state, and no package C-state happens (even if all cor=
-es are
-> in core C6). C6P requests also end up in core C6, but if all cores are id=
-le,
-> the SoC enters the package C6 state.
+> Introduce a facility allowing the thermal core functionality to be
+> exercised in a controlled way in order to verify its behavior, without
+> affecting its regular users noticeably.
 >
-> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> It is based on the idea of preparing thermal zone templates along with
+> their trip points by writing to files in debugfs.  When ready, those
+> templates can be used for registering test thermal zones with the
+> thermal core.
+>
+> The temperature of a test thermal zone created this way can be adjusted
+> via debugfs, which also triggers a __thermal_zone_device_update() call
+> for it.  By manipulating the temperature of a test thermal zone, one can
+> check if the thermal core reacts to the changes of it as expected.
+>
+> Concise "howto" documentation is included in one of the source files.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
 >
-> Used 'wult' tool for measuring 'exit_latency', and 'pbe' tool for measuri=
-ng
-> 'target_residency', both tools are part of the the 'wult' project:
-> https://github.com/intel/wult
->
->  drivers/idle/intel_idle.c | 46 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index 9aab7abc2ae9..e20f57ac307e 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -1022,6 +1022,45 @@ static struct cpuidle_state spr_cstates[] __initda=
-ta =3D {
->                 .enter =3D NULL }
->  };
->
-> +static struct cpuidle_state gnr_cstates[] __initdata =3D {
-> +       {
-> +               .name =3D "C1",
-> +               .desc =3D "MWAIT 0x00",
-> +               .flags =3D MWAIT2flg(0x00),
-> +               .exit_latency =3D 1,
-> +               .target_residency =3D 1,
-> +               .enter =3D &intel_idle,
-> +               .enter_s2idle =3D intel_idle_s2idle, },
-> +       {
-> +               .name =3D "C1E",
-> +               .desc =3D "MWAIT 0x01",
-> +               .flags =3D MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
-> +               .exit_latency =3D 4,
-> +               .target_residency =3D 4,
-> +               .enter =3D &intel_idle,
-> +               .enter_s2idle =3D intel_idle_s2idle, },
-> +       {
-> +               .name =3D "C6",
-> +               .desc =3D "MWAIT 0x20",
-> +               .flags =3D MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED |
-> +                                          CPUIDLE_FLAG_INIT_XSTATE,
-> +               .exit_latency =3D 170,
-> +               .target_residency =3D 650,
-> +               .enter =3D &intel_idle,
-> +               .enter_s2idle =3D intel_idle_s2idle, },
-> +       {
-> +               .name =3D "C6P",
-> +               .desc =3D "MWAIT 0x21",
-> +               .flags =3D MWAIT2flg(0x21) | CPUIDLE_FLAG_TLB_FLUSHED |
-> +                                          CPUIDLE_FLAG_INIT_XSTATE,
-> +               .exit_latency =3D 210,
-> +               .target_residency =3D 1000,
-> +               .enter =3D &intel_idle,
-> +               .enter_s2idle =3D intel_idle_s2idle, },
-> +       {
-> +               .enter =3D NULL }
-> +};
-> +
->  static struct cpuidle_state atom_cstates[] __initdata =3D {
->         {
->                 .name =3D "C1E",
-> @@ -1453,6 +1492,12 @@ static const struct idle_cpu idle_cpu_spr __initco=
-nst =3D {
->         .use_acpi =3D true,
->  };
->
-> +static const struct idle_cpu idle_cpu_gnr __initconst =3D {
-> +       .state_table =3D gnr_cstates,
-> +       .disable_promotion_to_c1e =3D true,
-> +       .use_acpi =3D true,
-> +};
-> +
->  static const struct idle_cpu idle_cpu_avn __initconst =3D {
->         .state_table =3D avn_cstates,
->         .disable_promotion_to_c1e =3D true,
-> @@ -1533,6 +1578,7 @@ static const struct x86_cpu_id intel_idle_ids[] __i=
-nitconst =3D {
->         X86_MATCH_VFM(INTEL_ATOM_GRACEMONT,     &idle_cpu_gmt),
->         X86_MATCH_VFM(INTEL_SAPPHIRERAPIDS_X,   &idle_cpu_spr),
->         X86_MATCH_VFM(INTEL_EMERALDRAPIDS_X,    &idle_cpu_spr),
-> +       X86_MATCH_VFM(INTEL_GRANITERAPIDS_X,    &idle_cpu_gnr),
->         X86_MATCH_VFM(INTEL_XEON_PHI_KNL,       &idle_cpu_knl),
->         X86_MATCH_VFM(INTEL_XEON_PHI_KNM,       &idle_cpu_knl),
->         X86_MATCH_VFM(INTEL_ATOM_GOLDMONT,      &idle_cpu_bxt),
-> --
+> In its current form, this is quite limited, but still quite useful at
+> least for me.  In the future, it can be extended to allow "mock" test
+> cooling devices to be registered and bound to trip points in "mock"
+> test thermal zones, so that governor response can be tested at least
+> in some scenarios.  On top of that, a test scripts can be developed
+> for automated testing of the thermal core.  IOW, it's just a start.
 
-Applied as 6.12 material with some edits in the changelog (please
-check), thanks!
+Due to the lack of comments for the last 2 weeks I gather that this is
+not controversial.
+
+Since I want it in, I'll go ahead and put it into my linux-next
+branch, but if there are any comments still, please let me know.
 
