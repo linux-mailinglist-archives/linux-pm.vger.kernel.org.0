@@ -1,169 +1,148 @@
-Return-Path: <linux-pm+bounces-12439-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12440-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB7F1956D30
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 16:27:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0B7F956DFE
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 16:57:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C3AC1C22C38
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 14:27:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACB8028844B
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 14:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B6E816F850;
-	Mon, 19 Aug 2024 14:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E705717D341;
+	Mon, 19 Aug 2024 14:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X6rMFDw+"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VgLslQpO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8285616F0CE
-	for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 14:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E2917AE00;
+	Mon, 19 Aug 2024 14:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724077635; cv=none; b=XSOIRHfBpbDZKSnpDt1MdCQ0dEZO9ANjOlkHpkYVGZ8hSi4nzqd8es9b7NWgMmR58doM9P8uS1+n493CDZJj8hHP+IuduF4b6ZmZYirgMwPkAdNbCGnh1RE152IF1qonnNsMa1tKp7f2CZuMzyeyLO2ypaMEhU/B44pksm6q+Ck=
+	t=1724079401; cv=none; b=kbkMDkAgwnQDLo1tFFTRomwDhcpyemUMVs/0LDTjSN6D1n47ZHvmB987oJ+cTM4WjLFKvZNwziuPXpIitaKVHu/7o4oEdiBGBW+YqqPGTx4N3miKbPP5nsyTyrgLRIu4KMMh6RyH/N3m5UEQUQdvB9G41Et/y3CnUw9AqpJd5r8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724077635; c=relaxed/simple;
-	bh=M60816ytWMrETkM6QM1L+R00UOriHG1lsiQyGY/RYpw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dRdk1SyY5tnSsEA9NQe5lYNe2kUB/tUqE/7sI8iRerg3juVjFux9EeXtt32GfCN4II7s82Wo7FLUpwy/7KlVWkelo3kBP6GErMNWMBYdRv+9q4C7/SF47P6N2mo1f80TbnFE8dqDwrcy6CaJQYRPpjC5oL+hNeWlEAX1LMC30KE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X6rMFDw+; arc=none smtp.client-ip=209.85.166.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-39d32b27f57so879795ab.2
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 07:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724077632; x=1724682432; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gr8L2hcQ7Wkw+B5RpS61bkAXN4QsrXdH+Dd+Y4DXHwo=;
-        b=X6rMFDw+zenvQKYBomsse0wMqvgLtQY5RvAC/lf7ZKswTx0wEJJim8aZ86K+gemUBy
-         nWBnqcHaVb0mkAjzjnzPtr9hwZuV2QJ8cDFqsdPwikvAgJKcCI8JXRtyKP6V4wlD+Xq8
-         TQKg49LjztFbeSJcvpuYqkI6cskToF/q6OX7NHfXmrvrmvJvvx9y0rvThu/8tag+HMGx
-         cDs5mNXj3hUuglikgHRPSM3qV0cpbzumMJRPXYPWJIuDtGOpwM3UswyrWbBDdV7/z+CI
-         X9wYqDaXGAcG/hjiUpT7dNjpRtey9C+WM8A4YP4n+750qDsDQlJ8qpUzdgdjoHE7uSCq
-         IQwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724077632; x=1724682432;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gr8L2hcQ7Wkw+B5RpS61bkAXN4QsrXdH+Dd+Y4DXHwo=;
-        b=uovWgfgQiuNxoCvBDcP+Q9jNDPwviSS2EbWCHDHJhRTpH8r2lh30nwWq5v5GUvJQF5
-         TZzGih02qLIRPFE9erErVgd8CLJrymZxdR9YjXJZCpR24UUWCBlSrjMJUFEWnaQy1FiM
-         H57cbR2UTE28m7BoUTJ3EXx0OW5wwOY0KHJJMQLAAuX7z9KEww7jbnglJMTeton+HXG2
-         KCCNYzYA98Gw7ursUzE6T4PwlnttqK8dO+r+ieNenWgNIeBk2ufGz9iXZbXsHpCuOvtO
-         ho7eqoir8KtemyuLPpi/iA5HmEqQT5LlSDZXX+MgvRsL3W3DLObJs5Y7Wr7+ja4fXGWW
-         cWjA==
-X-Forwarded-Encrypted: i=1; AJvYcCXJjjztIV0WU0LG1u5TkfRImjRaUBa6oTxkl3k1CO6BozoAPsCDi1aiKYTZ8yySvRBj+FKTF+cH9gRtBADvJP1ZqJK8XL9E1w0=
-X-Gm-Message-State: AOJu0Yydao9vW9YmUKzY90v3qWiiKRPYXnCc9POdj6lfafE++KyI4+MM
-	3Oo2UxtBjkbisxCUu+dDU/BwvNuadZxhhhJIabigzVB3qX2A4LvGmyBv3g==
-X-Google-Smtp-Source: AGHT+IFUa2lk37nfyOHT3H42dXde6MkbsnYwyAmTET+4ZMf5EoWn7CIn0GOfZyJZ/ih42mzZPlR4Ww==
-X-Received: by 2002:a05:6e02:1d0e:b0:39a:f126:9d86 with SMTP id e9e14a558f8ab-39d27963062mr70556245ab.0.1724077632448;
-        Mon, 19 Aug 2024 07:27:12 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:9187:7fc0:77bb:926e])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7c6b61c6124sm7610565a12.27.2024.08.19.07.27.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2024 07:27:11 -0700 (PDT)
-From: Fabio Estevam <festevam@gmail.com>
-To: daniel.lezcano@linaro.org
-Cc: rafael@kernel.org,
-	linux-pm@vger.kernel.org,
-	Fabio Estevam <festevam@denx.de>
-Subject: [PATCH 2/2] thermal: imx: Remove __maybe_unused notations
-Date: Mon, 19 Aug 2024 11:27:00 -0300
-Message-Id: <20240819142700.1206586-2-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240819142700.1206586-1-festevam@gmail.com>
-References: <20240819142700.1206586-1-festevam@gmail.com>
+	s=arc-20240116; t=1724079401; c=relaxed/simple;
+	bh=lCOxCv40WXDgFR9GjwMDEyPONnrRyqFSij6rZxydBI0=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CKuRTiAUlYAfwANV7GgFkO8NFaqzfpFvRFJw6x+b2WjoXcD9bvuJ8idc0KBRR++yPstX1qLxOpCq4QP9Ufn3OMMTzQvB2YjtADFMFnImo/yw0vGs212LJufiw9KNq4KEGGO/3RFsGUljDc5T/kKRipCxza+o2jr7PRqMibUVnvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VgLslQpO; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47JCLRPB002309;
+	Mon, 19 Aug 2024 14:56:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=QTSFQYZoEceIs8w8FgHAXTc6
+	nwskDsv2GruJCmAcXk8=; b=VgLslQpONX2bKJJ7WP4fdvPACGgQPA3FAmCzy9+B
+	vIzacuV9A1zZUU8zWwoXbkyG1+KJrrfOwpTDSqeKQaXEbitzK90roHmlrccIBmOz
+	rFyhoSKmO6Hi5KxXmna1C8V2ieqGcGC1VHn1Ck/J+fFUZEYe9FFQsoBGnGbfV6TH
+	/03A+GZwIvLSz8XbTDsjik6xzXhocAOYe+uDnVFRIOd3TvYzA/AvFqWpfOhK1HAE
+	qkpaDyxke4x77A0vduuqBH6w/Pn3yJeKjcyz9srMcDb0rMor2p7fucUNwrpIk9wQ
+	eeXCuaqOn4OAocyHtTUJHVN47q1pfmsYR9+R2Yz0XvX+Tw==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4145yw8dam-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 19 Aug 2024 14:56:33 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47JEuWm2029307
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 19 Aug 2024 14:56:32 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 19 Aug 2024 07:56:32 -0700
+Date: Mon, 19 Aug 2024 07:56:31 -0700
+From: Bjorn Andersson <quic_bjorande@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Heikki
+ Krogerus" <heikki.krogerus@linux.intel.com>,
+        Neil Armstrong
+	<neil.armstrong@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        "Chris
+ Lew" <quic_clew@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Amit Pundir <amit.pundir@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, Johan Hovold
+	<johan@kernel.org>,
+        <stable@vger.kernel.org>
+Subject: Re: [PATCH 0/3] soc: qcom: pmic_glink: v6.11-rc bug fixes
+Message-ID: <ZsNdHzlBi0hqwevY@hu-bjorande-lv.qualcomm.com>
+References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
+ <2024081914-exploit-yonder-4d51@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <2024081914-exploit-yonder-4d51@gregkh>
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: AzpB0OJMjjSrS4Zpa63Q8oZgoSs6-HRz
+X-Proofpoint-GUID: AzpB0OJMjjSrS4Zpa63Q8oZgoSs6-HRz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-19_13,2024-08-19_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ adultscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=889
+ bulkscore=0 phishscore=0 mlxscore=0 impostorscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2408190100
 
-From: Fabio Estevam <festevam@denx.de>
+On Mon, Aug 19, 2024 at 04:07:41PM +0200, Greg Kroah-Hartman wrote:
+> On Sun, Aug 18, 2024 at 04:17:36PM -0700, Bjorn Andersson wrote:
+> > Amit and Johan both reported a NULL pointer dereference in the
+> > pmic_glink client code during initialization, and Stephen Boyd pointed
+> > out the problem (race condition).
+> > 
+> > While investigating, and writing the fix, I noticed that
+> > ucsi_unregister() is called in atomic context but tries to sleep, and I
+> > also noticed that the condition for when to inform the pmic_glink client
+> > drivers when the remote has gone down is just wrong.
+> > 
+> > So, let's fix all three.
+> > 
+> > As mentioned in the commit message for the UCSI fix, I have a series in
+> > the works that makes the GLINK callback happen in a sleepable context,
+> > which would remove the need for the clients list to be protected by a
+> > spinlock, and removing the work scheduling. This is however not -rc
+> > material...
+> > 
+> > In addition to the NULL pointer dereference, there is the -ECANCELED
+> > issue reported here:
+> > https://lore.kernel.org/all/Zqet8iInnDhnxkT9@hovoldconsulting.com/
+> > I have not yet been able to either reproduce this or convince myself
+> > that this is the same issue.
+> > 
+> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> 
+> What tree are these to go through?  I can take them through mine, but if
+> someone else wants to, feel free to route them some other way.
+> 
 
-Replace SET_RUNTIME_PM_OPS()/SET SYSTEM_SLEEP_PM_OPS() with their modern
-RUNTIME_PM_OPS() and SYSTEM_SLEEP_PM_OPS() alternatives.
+It's primarily soc/qcom content, so I can pick them through the qcom soc
+tree.
 
-The combined usage of pm_ptr() and RUNTIME_PM_OPS/SYSTEM_SLEEP_PM_OPS()
-allows the compiler to evaluate if the runtime suspend/resume() functions
-are used at build time or are simply dead code.
+Regards,
+Bjorn
 
-This allows removing __maybe_unused notations from the suspend/resume()
-functions.
-
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
- drivers/thermal/imx_thermal.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index 091fb30dedf3..495ff2eeb0a1 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -773,7 +773,7 @@ static void imx_thermal_remove(struct platform_device *pdev)
- 	imx_thermal_unregister_legacy_cooling(data);
- }
- 
--static int __maybe_unused imx_thermal_suspend(struct device *dev)
-+static int imx_thermal_suspend(struct device *dev)
- {
- 	struct imx_thermal_data *data = dev_get_drvdata(dev);
- 	int ret;
-@@ -792,7 +792,7 @@ static int __maybe_unused imx_thermal_suspend(struct device *dev)
- 	return pm_runtime_force_suspend(data->dev);
- }
- 
--static int __maybe_unused imx_thermal_resume(struct device *dev)
-+static int imx_thermal_resume(struct device *dev)
- {
- 	struct imx_thermal_data *data = dev_get_drvdata(dev);
- 	int ret;
-@@ -804,7 +804,7 @@ static int __maybe_unused imx_thermal_resume(struct device *dev)
- 	return thermal_zone_device_enable(data->tz);
- }
- 
--static int __maybe_unused imx_thermal_runtime_suspend(struct device *dev)
-+static int imx_thermal_runtime_suspend(struct device *dev)
- {
- 	struct imx_thermal_data *data = dev_get_drvdata(dev);
- 	const struct thermal_soc_data *socdata = data->socdata;
-@@ -826,7 +826,7 @@ static int __maybe_unused imx_thermal_runtime_suspend(struct device *dev)
- 	return 0;
- }
- 
--static int __maybe_unused imx_thermal_runtime_resume(struct device *dev)
-+static int imx_thermal_runtime_resume(struct device *dev)
- {
- 	struct imx_thermal_data *data = dev_get_drvdata(dev);
- 	const struct thermal_soc_data *socdata = data->socdata;
-@@ -857,15 +857,15 @@ static int __maybe_unused imx_thermal_runtime_resume(struct device *dev)
- }
- 
- static const struct dev_pm_ops imx_thermal_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(imx_thermal_suspend, imx_thermal_resume)
--	SET_RUNTIME_PM_OPS(imx_thermal_runtime_suspend,
--			   imx_thermal_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(imx_thermal_suspend, imx_thermal_resume)
-+	RUNTIME_PM_OPS(imx_thermal_runtime_suspend,
-+		       imx_thermal_runtime_resume, NULL)
- };
- 
- static struct platform_driver imx_thermal = {
- 	.driver = {
- 		.name	= "imx_thermal",
--		.pm	= &imx_thermal_pm_ops,
-+		.pm	= pm_ptr(&imx_thermal_pm_ops),
- 		.of_match_table = of_imx_thermal_match,
- 	},
- 	.probe		= imx_thermal_probe,
--- 
-2.34.1
-
+> thanks,
+> 
+> greg k-h
+> 
 
