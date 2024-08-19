@@ -1,88 +1,169 @@
-Return-Path: <linux-pm+bounces-12450-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12452-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58FC5956FC6
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 18:08:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD8E2956FE5
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 18:13:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC3011F22B94
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 16:08:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A97B286FBA
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 16:13:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 550F4187FE4;
-	Mon, 19 Aug 2024 16:04:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D66A816C874;
+	Mon, 19 Aug 2024 16:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="abTHxC65"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E84A16D4EA;
-	Mon, 19 Aug 2024 16:04:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E9E8287D;
+	Mon, 19 Aug 2024 16:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724083499; cv=none; b=B+Z47QEtYf/wA0ok7UUopIqziJXUWIEftV7tonhD0RsRLB33BOIbpOwa38seIbApxchryeCT0NtXxO/IFnu8clk78qhh4YxbmsslfGKPDA3IMwhYoiKB/GXsZ5w7rfmC4eKstSA1RZaiork+eIMF5oQZ7T8PUSC4jj0c8AbReh0=
+	t=1724083979; cv=none; b=FtTQ01o9FBZTqVziL+rutm1cfKuJTCMWFXi7pJ1zbd11a2UDAVgksHoiaYHUHORbU3OcSVvtzna21UeAFUlwll0ioIfr7CemrOFRx0q0zVARA9G3PE9FOpiSDPNLvzv/mXNjHVuOCS93EX/CXxcKHus42KUoDZoHiLXlODtrsxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724083499; c=relaxed/simple;
-	bh=ZXbpyHMAGJYx54LmLaj3gRGrRBxIwYHPWlCzt9IM25M=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hdBHiqLrxLHYjTHHu364iA+YRKMpHeVBVlvn82Nhm1nn0zOy9Cc03eahfmoupel68OjbpbPJpH+Xs7C9cO1CYSCY2k2WCbZGuMr9+i84pmkTzFOOHzMo6gZPBn/X9/z1tZGNz0ayBFr1La9j89Rc3CTdwnH05JeH0wQiS3TbO6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WncmT5Zx2z67fBs;
-	Tue, 20 Aug 2024 00:02:01 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4827B1400DD;
-	Tue, 20 Aug 2024 00:04:55 +0800 (CST)
-Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 19 Aug
- 2024 17:04:54 +0100
-Date: Mon, 19 Aug 2024 17:04:53 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC: Krzysztof Kozlowski <krzk@kernel.org>, Nicolas Ferre
-	<nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue
-	<alexandre.torgue@foss.st.com>, Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>, Santosh Shilimkar
-	<ssantosh@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<linux-samsung-soc@vger.kernel.org>,
-	<linux-stm32@st-md-mailman.stormreply.com>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH v2 01/13] memory: atmel-ebi: use scoped device node
- handling to simplify error paths
-Message-ID: <20240819170453.00003da1@Huawei.com>
-In-Reply-To: <20240816-cleanup-h-of-node-put-memory-v2-1-9eed0ee16b78@linaro.org>
-References: <20240816-cleanup-h-of-node-put-memory-v2-0-9eed0ee16b78@linaro.org>
-	<20240816-cleanup-h-of-node-put-memory-v2-1-9eed0ee16b78@linaro.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1724083979; c=relaxed/simple;
+	bh=opnKoOemKF8dn1y+j+0t5VxBvo8rIgVyOiVcsuAwSWI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Fa3HnFIWbXjb1U663NkivWfIMKO/+8OkPG3S22bApZ6Fjd8KaMlEDUyisb26TfK/YOEgMq6ovtYlc0HDN6tEg35GO5wdFT7iAPHgd5Ude+IyZfy4F+Agq0NJQOgHmdbBHrvaZ3163hIlxrKdkgYR7Qdr6SBslRWSbRQWvnz8lEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=abTHxC65 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id af93debbe7a88a5d; Mon, 19 Aug 2024 18:12:49 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id B1AF673B5D4;
+	Mon, 19 Aug 2024 18:12:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1724083969;
+	bh=opnKoOemKF8dn1y+j+0t5VxBvo8rIgVyOiVcsuAwSWI=;
+	h=From:Subject:Date;
+	b=abTHxC65cOPvdoezatpbMEu3eKiRqRgu0YfaCnW0zOp0o1MfPLB5FU5OOXVUeRjQR
+	 xSmb4hSvcnXihzYYNOK8uEeH07lwu677wO3SEZ1IYSmCsrKSiSa10IWvZ1fm0m98Gg
+	 eBAPsu5MPt0naKfxemRp/ZtVUVp5BLwprtmoMWVZ/OktsyH3TYXyMXLI6Ncc0dDC5e
+	 UxuhpljM5IxbMdkAdqm/VAXfkxFAjimdQXx+vWxD9FlzUQdlf9LUI0RaIliW6vIWue
+	 4bzRLZ2mPvcMQ8DaF/rpSMq3fURV5uI6TKnMILbJWHjerPSN0tqsfIi6fqlmA83nLB
+	 39kiCwvkRIVuQ==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>
+Subject:
+ [PATCH v3 08/14] thermal: core: Unexport thermal_bind_cdev_to_trip() and
+ thermal_unbind_cdev_from_trip()
+Date: Mon, 19 Aug 2024 18:05:00 +0200
+Message-ID: <3512161.QJadu78ljV@rjwysocki.net>
+In-Reply-To: <2205737.irdbgypaU6@rjwysocki.net>
+References: <2205737.irdbgypaU6@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: spam:low
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddruddugedgleekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuufhprghmkfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhr
+ tghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-On Fri, 16 Aug 2024 12:54:25 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> Obtain the device node reference with scoped/cleanup.h to reduce error
-> handling and make the code a bit simpler.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-I'm not entirely keen on the increased scope for which the reference
-is held but doesn't really matter.
+Since thermal_bind_cdev_to_trip() and thermal_unbind_cdev_from_trip()
+are only called locally in the thermal core now, they can be static,
+so change their definitions accordingly and drop their headers from
+the global thermal header file.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+No intentional functional impact.
 
->
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v2 -> v3: Rebase after dropping patches [04-05/17] from the series
+
+v1 -> v2: No changes
+
+---
+ drivers/thermal/thermal_core.c |   10 ++++------
+ include/linux/thermal.h        |    8 --------
+ 2 files changed, 4 insertions(+), 14 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -773,7 +773,7 @@ struct thermal_zone_device *thermal_zone
+  *
+  * Return: 0 on success, the proper error value otherwise.
+  */
+-int thermal_bind_cdev_to_trip(struct thermal_zone_device *tz,
++static int thermal_bind_cdev_to_trip(struct thermal_zone_device *tz,
+ 				     const struct thermal_trip *trip,
+ 				     struct thermal_cooling_device *cdev,
+ 				     unsigned long upper, unsigned long lower,
+@@ -877,7 +877,6 @@ free_mem:
+ 	kfree(dev);
+ 	return result;
+ }
+-EXPORT_SYMBOL_GPL(thermal_bind_cdev_to_trip);
+ 
+ int thermal_zone_bind_cooling_device(struct thermal_zone_device *tz,
+ 				     int trip_index,
+@@ -913,9 +912,9 @@ EXPORT_SYMBOL_GPL(thermal_zone_bind_cool
+  *
+  * Return: 0 on success, the proper error value otherwise.
+  */
+-int thermal_unbind_cdev_from_trip(struct thermal_zone_device *tz,
+-				  const struct thermal_trip *trip,
+-				  struct thermal_cooling_device *cdev)
++static int thermal_unbind_cdev_from_trip(struct thermal_zone_device *tz,
++					 const struct thermal_trip *trip,
++					 struct thermal_cooling_device *cdev)
+ {
+ 	struct thermal_instance *pos, *next;
+ 
+@@ -945,7 +944,6 @@ unbind:
+ 	kfree(pos);
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(thermal_unbind_cdev_from_trip);
+ 
+ int thermal_zone_unbind_cooling_device(struct thermal_zone_device *tz,
+ 				       int trip_index,
+Index: linux-pm/include/linux/thermal.h
+===================================================================
+--- linux-pm.orig/include/linux/thermal.h
++++ linux-pm/include/linux/thermal.h
+@@ -247,18 +247,10 @@ const char *thermal_zone_device_type(str
+ int thermal_zone_device_id(struct thermal_zone_device *tzd);
+ struct device *thermal_zone_device(struct thermal_zone_device *tzd);
+ 
+-int thermal_bind_cdev_to_trip(struct thermal_zone_device *tz,
+-			      const struct thermal_trip *trip,
+-			      struct thermal_cooling_device *cdev,
+-			      unsigned long upper, unsigned long lower,
+-			      unsigned int weight);
+ int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
+ 				     struct thermal_cooling_device *,
+ 				     unsigned long, unsigned long,
+ 				     unsigned int);
+-int thermal_unbind_cdev_from_trip(struct thermal_zone_device *tz,
+-				  const struct thermal_trip *trip,
+-				  struct thermal_cooling_device *cdev);
+ int thermal_zone_unbind_cooling_device(struct thermal_zone_device *, int,
+ 				       struct thermal_cooling_device *);
+ void thermal_zone_device_update(struct thermal_zone_device *,
+
+
+
 
