@@ -1,151 +1,160 @@
-Return-Path: <linux-pm+bounces-12492-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12494-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43188957555
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 22:08:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D326C957590
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 22:22:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00C19283970
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 20:08:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 306ECB20BAB
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 20:22:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3E491DF684;
-	Mon, 19 Aug 2024 20:08:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 917F8158556;
+	Mon, 19 Aug 2024 20:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HgAvFGfG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KKWVrB1F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7678E1DD39D;
-	Mon, 19 Aug 2024 20:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF84749627;
+	Mon, 19 Aug 2024 20:21:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724098111; cv=none; b=NfvH/RLRppb+hFOpJFPmFZu58V4fcmCx584nL0l5aT9yrXbBD7M+N3HTXPFtA536t8FlUfdJXLRFd3UOynQ3JqOIwmgj22FX86tOV4hi6P+kq5STuH5qgVOyhCPAQgU+mFGjrqKImnVL9WRrEJ7AWsVSPnDkGV1WyUW57eSfAII=
+	t=1724098921; cv=none; b=KV3OhZQzlFhYeU3GtDp2reMMEfgn4MmnZaloAij3YYryUxK1ouwlplgP35JX0ZDEFxGG6aAcFXfq5ASxBCMx0gQbS48js9sxxA6VHeqmGLFUydsao37NsP1jeFIl59WWfiQn6zMcYU9cMLfSNRbC6cochOijPNLe3j7buNU/xDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724098111; c=relaxed/simple;
-	bh=AzBRnzE5wF8BxaGA/G/dnXeF8ct7PClnoIzeb8NYXKg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=O/GeuotzDh8jw1glI+kHnKFAshRl263YaKh4yJtFNeqMb3u0GsQ4pnAGpc4jt/jyImLbzvuGguyjiwzapapP4qyhM8nD73yFa+1dBnJeA972CcGGJTBxrewKA9biqTsW7hDPCsmk4XCcSGt+gWzdZOhUPyPzU8QLCAk/Fa1Cu0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HgAvFGfG; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47JAon8L025131;
-	Mon, 19 Aug 2024 20:08:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	psX4yoMM8/JkY1r0sAHQnk6Qzp2O5lOgQ4lDw0sU6iE=; b=HgAvFGfGutRGw8S4
-	iWbJMm7+PfO2wyxlkSi0B1YRC7Buzr0EE8sDNIYQRS28DFD8WOwfDxlEt0E6WSKd
-	+ywJFOyPb0Zd9tciRUWYFxnjRh3ZrNVBs6FsX6MbsKV1XfBlYLNQFNeSxS4qAJZn
-	XyIuaD77/uh87GNNRJE5wHpZvnPUI9ovb8+zXu74x6byLa9d+iWzCS+Tp83SouEi
-	Y6bE5VXbnWTBNqDG2pFCSpml3WL6EoIGt1hUR5gyWuGkvK4jzZmsRaj5hseJDfI/
-	4RvvjcBEYcxNsrkaPZJJmYEuz/AceMr49jjzG1RN3CoXanKwZ/A8JockRnT57aZR
-	FCSEGg==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 412jtrwesg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 20:08:24 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47JK8NAR029674
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 20:08:23 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 19 Aug 2024 13:08:22 -0700
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-Date: Mon, 19 Aug 2024 13:07:47 -0700
-Subject: [PATCH v2 3/3] soc: qcom: pmic_glink: Actually communicate with
- remote goes down
+	s=arc-20240116; t=1724098921; c=relaxed/simple;
+	bh=YmPOdBHOOhyh3w2DYhiuqYlTkgCyCKlILJ31UvbzFsg=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=n4UY7wI0oS75qqTlS2F9N1sDvEElvw83tMYCXR92JKQ2GBWDWFi7eH4Z3iAtXuSJf0t0KPQNTai1H2BXqxR6E7nmyHHitAd32fgcHx7ZULsNRZEHgz94N/i7Pgn9PNKO9PKGS9SYrumqvl/ZgzytAEKLTsOE+6+/ywvLds9mGxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KKWVrB1F; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-428141be2ddso36821985e9.2;
+        Mon, 19 Aug 2024 13:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724098918; x=1724703718; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vaS84ttcu/4010Fv9HBj9GzkRV/n79iBXqj2pli8Tbs=;
+        b=KKWVrB1FEIlj9U7Oyffem9qWdu1FBN7wTvTlBJbBEpD++IsFlaO9qQoWxpOXOQlM1b
+         2fbiOyVpUzM7IioqqtgAsyBlRV3Ikp5P0RYg33LPnCqaIRzYO24VuJuBlw/8f7JImiJi
+         2zXBxkTMBWFRx3qmBwr2TF89EUbKTTMmroEMEB8C5PbvZU8E8AenW/TQ9SYTAOEc8z2N
+         7V3clAjJezXi9dSIQhzCLzNkj9spuLcs3FjgjYlG9EFsAt6KaggZ4WXQN0wUmsi20hiO
+         +FdVjVReephwoQhtM2wvwTH7e/yP80jlSS9ToiTgSh3LTnDG/xdKQ0EMzZcDYlzGiabc
+         Pkrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724098918; x=1724703718;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vaS84ttcu/4010Fv9HBj9GzkRV/n79iBXqj2pli8Tbs=;
+        b=h3USDPnAwIWla/OOYOVCnpyFPPaR5wQjcPQApchzjpIhLHPOOkyx6K4a3f/95D7jde
+         V7/PytPonI3EV9gK9fp95VkinvB8GdLhgs40dKM+vrJETYDk5KP/rYC6fkBy/qBSTM4B
+         djxvR0IRrF8rFMBToRgyNIby1VYkB4mFV753wBbUNB0RijcyJPiizYT00lkYBkRPGOks
+         0AB8eC+1PIEdc6sLtLHQYkSpki83NrXf8GDtEWOmzi0pyR8ezZSj+HKrRU4WEvV/ZY29
+         SIXZjE9Ei8AKYHp0pgdZppa4Vx6eFEmMIkeS+HRIzvfv5qEBPNSf29DSEaZonZ8MVVT2
+         hmgg==
+X-Forwarded-Encrypted: i=1; AJvYcCUZW1whbe6HRlkAfxY1H0GyAwdxD25ZyjTjBokR5AV9RJlIE7OZKIIKDchP1Z8db+VGkiS8ndonhyE6@vger.kernel.org, AJvYcCXFSeW++yPzMgqYF2uNKxIowi4HUKctUDpsPcNO98NqasfxyBtc7FaQZddkFsFw/wzSv8FFGtHrOHWSTtEZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzjvgYCbAumgAARdiMc5W8cW0wSjFHDU6LtpwecNbVQQh6CPTp
+	NVUNlSZKWLz0I7h75jBma9AeTp0LmJN22FEqd+KRIXuW6LFB/NC3
+X-Google-Smtp-Source: AGHT+IGSRZAWyt+DnYIwf5njkpB6uItML2uqPjDLE5kTdpFc+m+lKakFrb+klZliHoHggbI0Xsx4Qg==
+X-Received: by 2002:a05:600c:1c0a:b0:429:e6bb:a436 with SMTP id 5b1f17b1804b1-429ed79be6dmr88973655e9.9.1724098917396;
+        Mon, 19 Aug 2024 13:21:57 -0700 (PDT)
+Received: from ?IPV6:2001:861:3385:e20:6384:4cf:52c5:3194? ([2001:861:3385:e20:6384:4cf:52c5:3194])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429ded35991sm173247315e9.21.2024.08.19.13.21.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Aug 2024 13:21:57 -0700 (PDT)
+Message-ID: <85eedb28-c02f-40ef-9d65-e8689b3f7dbd@gmail.com>
+Date: Mon, 19 Aug 2024 22:21:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240819-pmic-glink-v6-11-races-v2-3-88fe3ab1f0e2@quicinc.com>
-References: <20240819-pmic-glink-v6-11-races-v2-0-88fe3ab1f0e2@quicinc.com>
-In-Reply-To: <20240819-pmic-glink-v6-11-races-v2-0-88fe3ab1f0e2@quicinc.com>
-To: Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Heikki
- Krogerus" <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-CC: Johan Hovold <johan+linaro@kernel.org>, Chris Lew <quic_clew@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd
-	<swboyd@chromium.org>,
-        Amit Pundir <amit.pundir@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        Bjorn Andersson
-	<quic_bjorande@quicinc.com>, <stable@vger.kernel.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1724098101; l=1515;
- i=quic_bjorande@quicinc.com; s=20230915; h=from:subject:message-id;
- bh=AzBRnzE5wF8BxaGA/G/dnXeF8ct7PClnoIzeb8NYXKg=;
- b=T1Kps4TJ8SRx5AQtzKZIC9kRu7K+7MInTTRHTHjNHEMxuNwEvHIzPoXhCknRbcPN7j3MUjScU
- bPz7Ok+SzcOByClxpcdMv5AS5MtFVbdXN7JW0aEkC7+nvcLEiO8ep+z
-X-Developer-Key: i=quic_bjorande@quicinc.com; a=ed25519;
- pk=VkhObtljigy9k0ZUIE1Mvr0Y+E1dgBEH9WoLQnUtbIM=
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GNw6EbgvQmreIWRha_L_AjW6nYobysUn
-X-Proofpoint-GUID: GNw6EbgvQmreIWRha_L_AjW6nYobysUn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-19_16,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- suspectscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 impostorscore=0
- malwarescore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408190137
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/2] Add thermal management support for STi platform
+From: =?UTF-8?Q?Rapha=C3=ABl_Gallais-Pou?= <rgallaispou@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Patrice Chotard <patrice.chotard@foss.st.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+References: <20240716-thermal-v4-0-947b327e165c@gmail.com>
+Content-Language: en-US, fr
+In-Reply-To: <20240716-thermal-v4-0-947b327e165c@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-When the pmic_glink state is UP and we either receive a protection-
-domain (PD) notification indicating that the PD is going down, or that
-the whole remoteproc is going down, it's expected that the pmic_glink
-client instances are notified that their function has gone DOWN.
+Hello,
 
-This is not what the code does, which results in the client state either
-not updating, or being wrong in many cases. So let's fix the conditions.
+Le 16/07/2024 à 19:34, Raphael Gallais-Pou a écrit :
+> This patch series enhances the st_thermal driver in order to enable
+> support for thermal zones. The changes include:
+> 
+> 1. Replace deprecated PM runtime macros with their updated counterparts.
+> 2. Implementing devm_* based thermal of zone functions within the driver.
+> 3. Updating the stih418 device-tree.
+> 
+> The device-tree patch depends on an earlier patch sent to the mailing
+> list [1].
+> 
+> As it is currently implemented, an alert threshold of 85°C is set to
+> trigger the CPU throttling, and when the temperature exceeds the
+> critical threshold of 95°C, the system shuts down. There is for now no
+> active cooling device on the platform, which explains the use of the
+> cpufreq framework.
+> 
+> [1] https://lore.kernel.org/lkml/20240320-thermal-v3-2-700296694c4a@gmail.com
+> 
+> Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
+> ---
+> Changes in v4:
+> - [2/2] optimize dependencies
+> - [2/2] do not return devm_* exit code
+> - Link to v3: https://lore.kernel.org/r/20240714-thermal-v3-0-88f2489ef7d5@gmail.com
 
-Fixes: 58ef4ece1e41 ("soc: qcom: pmic_glink: Introduce base PMIC GLINK driver")
-Cc: stable@vger.kernel.org
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Tested-by: Amit Pundir <amit.pundir@linaro.org>
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- drivers/soc/qcom/pmic_glink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Gentle ping on this serie :)
 
-diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-index e4747f1d3da5..cb202a37e8ab 100644
---- a/drivers/soc/qcom/pmic_glink.c
-+++ b/drivers/soc/qcom/pmic_glink.c
-@@ -191,7 +191,7 @@ static void pmic_glink_state_notify_clients(struct pmic_glink *pg)
- 		if (pg->pdr_state == SERVREG_SERVICE_STATE_UP && pg->ept)
- 			new_state = SERVREG_SERVICE_STATE_UP;
- 	} else {
--		if (pg->pdr_state == SERVREG_SERVICE_STATE_UP && pg->ept)
-+		if (pg->pdr_state == SERVREG_SERVICE_STATE_DOWN || !pg->ept)
- 			new_state = SERVREG_SERVICE_STATE_DOWN;
- 	}
- 
+Thanks for your time,
 
--- 
-2.34.1
+Regards,
+Raphaël
 
+> 
+> Changes in v3:
+> - Fix unmet dependency in [2/2]
+> - Remove no more used variable in [2/2]
+> - Remove already merged patch in soc tree
+> - Link to v2: https://lore.kernel.org/r/20240625-thermal-v2-0-bf8354ed51ee@gmail.com
+> 
+> Changes in v2:
+> - Add Patrice's R-b
+> - Edit patch [2/3] to remove unused struct
+> - Link to v1: https://lore.kernel.org/r/20240518-thermal-v1-0-7dfca3ed454b@gmail.com
+> 
+> ---
+> Raphael Gallais-Pou (2):
+>        thermal: st: switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+>        thermal: sti: depend on THERMAL_OF subsystem
+> 
+>   drivers/thermal/Kconfig                |  2 +-
+>   drivers/thermal/st/st_thermal.c        | 32 ++++++++++++--------------------
+>   drivers/thermal/st/st_thermal_memmap.c |  2 +-
+>   drivers/thermal/st/stm_thermal.c       |  8 +++-----
+>   4 files changed, 17 insertions(+), 27 deletions(-)
+> ---
+> base-commit: 4f40be61af99a67d5580c1448acd9b74c0376389
+> change-id: 20240518-thermal-8f625428acf9
+> 
+> Best regards,
 
