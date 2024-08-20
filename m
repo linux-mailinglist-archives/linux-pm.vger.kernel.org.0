@@ -1,91 +1,95 @@
-Return-Path: <linux-pm+bounces-12580-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12581-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61F30958C61
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 18:38:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC811958CFC
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 19:17:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB9EA1F269E5
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 16:38:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 991CC285A5C
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 17:17:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD0484409;
-	Tue, 20 Aug 2024 16:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BFB21BD023;
+	Tue, 20 Aug 2024 17:17:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="Fsybhqe7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gd8RsQLR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747CF1C4631
-	for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 16:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF44818C92C;
+	Tue, 20 Aug 2024 17:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724171816; cv=none; b=QKa5U3sly3cxdJZ+CjT0ruIP+a4pnmKD3BjFPMgTnGZ0Wh9hmc2RctepNapRNyHKbKg8kcct8zpkC1uRqMXkWQ5F9KY3fUFSgYemcUMnsOU66y0NeVT88W3nXGsGrNr5EyRiGLFlYLMBBZvUB96xtF/iPu4SJ3jSiHIcPkuUaFE=
+	t=1724174227; cv=none; b=O5wMHPWnUdyfp67HPI+qR7i0btrGaDByLQnpoWGcSjF/neEVwrfaDUDF+K9WKBsIN+IVsNzOmDVUshtBg97xjakTtyUBuCZFA7JXogcb9Gh9AWLWngxDKLlExoN/s/J1wu1YQf7YyfLqmNHmrk2kTjBgUIL5KPWYfnEQVX6x5Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724171816; c=relaxed/simple;
-	bh=FcQoU+XSuInJQQOSIHfVyJzGsFgsU0Fz0b3FqV2urj0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=oCbAG6WiGjH2cGp4fkNRKyc0QKft/qRcA4KADYl9QykEYzSty5H49o9Ijqzd1v+uDS9YZzOtwz3kNxRBoRzVPGhJGfZtcZREgeqD9BkSMZTMDiP2+6UGJ0EFNJKu09183PWvbKhKinkcSTngv63u+6UpYGYgxyX+jLT++55REMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=Fsybhqe7; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5bef4d9e7f8so3396995a12.2
-        for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 09:36:54 -0700 (PDT)
+	s=arc-20240116; t=1724174227; c=relaxed/simple;
+	bh=K0bgmvxUNrz5vihGLhxf3Ou13m+eII+OugE43qEVdV0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sua/LDxRsW+7jBMG5CnJmv+xn1oXRMDUv+JPoItKHx4TPbAAKNgnhVEx5Fz2cqGtj/kLdvE3+Kohy301H6rbJkg4cfsWogYtv+gBMiLlsdSkqnrmJabynUxdWle4eMmUTkGT3klljKYtBnK7GWDqatxc1wFBXdFcFSdoD6O66so=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gd8RsQLR; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-7cd830e0711so384727a12.0;
+        Tue, 20 Aug 2024 10:17:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1724171813; x=1724776613; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tc420hGJWxSmQzyq9r4KlOxaBiNHLqomnZxiY/aUtfM=;
-        b=Fsybhqe7muuGhbmgEdTCITd2P88EV0KF/kH75xdvPkU8GWKNa07xoXRRDpOMicwFwi
-         vnw0Q2B/jcxC1RuJO/XDYFVkPxJsw/xaCoeRULoBrYZlMW752AMBar6kGPqf6FFNedhL
-         Lu72rWH9TFTi0KkxHwvdyNfht1QcpE/GV6jLq+LKsijg8xXCeG9VVJFUz2dyysQNFAs6
-         5kWy52wB6U6vmT+hkRIJITVzIcGFPQfHxRuWMV9PbqxrGRtmHqYL8Y/i96xKFcEoiDTo
-         KV96gXw6UIQj1afHF05y+JLNaQQpNLM9+ipA9I/wFwlsot+O10899CQnR/nTDqbLry7a
-         EuWg==
+        d=gmail.com; s=20230601; t=1724174225; x=1724779025; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dx99I4gVjE0nKHxOcEFDps9UKSShAk0pVoAeBRskDVw=;
+        b=Gd8RsQLR1zy8qOnxsEwHtnuxYI2h7E3E+976iQHcUsCFFLpgGZvGlaYmOf5zjNXctB
+         1eKEwDLhM0Mkoy4T0+Wc2cQkcEFfNz9Q6l1MH3kyryQ9febO6/j1OTVmbn2cx0/4m8Kd
+         TfgSFcqCPdfxsaIKSCGB7BG2WrhKC7fDPVCJvmx0jLatiC5yvR+mfx4djDGQEgXIqHSQ
+         7o/pILkJmf0PRMyE75WFj61eyvamsTKoihMIZUYGgKHBSkAwPQGOgVPp562qo5tg54QJ
+         0+g3VCmPbTbUIukew9mXhnFCF4gVUJFYHcVc8A4RSDIYCm+7TzqZoHtQe9WngEWis1Vb
+         uSGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724171813; x=1724776613;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tc420hGJWxSmQzyq9r4KlOxaBiNHLqomnZxiY/aUtfM=;
-        b=KqmPXUnZLK/cXK6RviUZ0DDciNzDKqRKQjfR5Evku1pU3HT68Ct6TrBaNaabs32JC2
-         Yi9i/LUAe82lqk5255vFnBD/+pHjI4Zb92+36G3/CZLh8+LA9afV9mJ+EfUughxQ8ZJK
-         OyNx/1cgBic20gvNNsCjVcq1jzVlwsJeRXwCRyagAAdn97auP28Rvj6+nq60zy0ojd0z
-         AlhIUr4yl5i60dlkS3DXqPW1Q6v1hMfoC8WYdU1Ufdx9zTJeq9w5cbZ+VNyozmoUoTjL
-         CNCNvoDg7qML36MFEg6dcCubNzZt2V+tpaQTSPPJexAiAZy4TTLXQ4HwqTdVkqeILWjm
-         84AQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUKoBeINXw6/fOvhopd05GOSFWrBVONoH/eQsvUo2hQBftVBnnn3yZe3eXMQo4Krn0WWDqmjf+MmzYppvgpSaC7bwUGfmDquIY=
-X-Gm-Message-State: AOJu0Yx5B4EarLfCD5EwTN0zqkcabgz7UXqrwIBbZnEblAvnUr+3Kmd+
-	QobGScMNjzBR19uSjZ/stUhfF/hw1UOjDd5zoDHNvzKyg7FrOCtcplHp6ccSMig=
-X-Google-Smtp-Source: AGHT+IFrFBtEWI8G3mIhZShOA/h8coVH75w3HUcYb7DxNvB76QnrvRr68I5ag+1Mh1T6RnbU58v1zg==
-X-Received: by 2002:a17:907:d581:b0:a7a:8cb9:7490 with SMTP id a640c23a62f3a-a8392a15b30mr1057699366b.47.1724171812633;
-        Tue, 20 Aug 2024 09:36:52 -0700 (PDT)
-Received: from airbuntu.. (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838cfb5esm780728766b.59.2024.08.20.09.36.52
+        d=1e100.net; s=20230601; t=1724174225; x=1724779025;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dx99I4gVjE0nKHxOcEFDps9UKSShAk0pVoAeBRskDVw=;
+        b=bzDiQxZ6WGeRhOHLz9wD26uoxjvvI+RNP3LEeLJgqNKJ97Axslg0kw12XjKiu8YWLe
+         Ty4UTooa4MYYnXXk2RUPmdlXd63vZ3/19SvaCKOscnn8AQel26Ei+isPd+g3eCnZe/MI
+         WIJIytDO9RBm1384w3lZ0L2kmjd3WZuQt6xczc+hY5pL0dweA+Z23GLYeLqeR0+9+Vzi
+         lmI3TrY07dVJSUNbEn/oWNSj8MBQbCRhnQvKvacj2W86Wqn5aEnzjm4ZBzfwUANDucQ8
+         wyKYUq1xUa18n8MwaunXAvgCjbWKmjY7PqCg2qZvcIso/Bl/y407VV5PtRVH/onxZEAJ
+         iSrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW4rvCCdaAVfmmR2bql+uhKRBsBH9hcN0w4lsL0i7Kr5tEJfgPSjQs3XLdEgIFseNLTXOtH3ZDNsHhrIV8=@vger.kernel.org, AJvYcCWGRKFkhkxK5Ggz7tirBodD8/MzJzubg7WOD+ymewdKER3Dg6BAx7PYOx1K2lnqTudcI5xZbN2KyPg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpmGEm4/1s5zqZhJfoIyEHYtFRqU/gyClTr5VEZsy2Th9Y22Ky
+	s3q0QdityIHYgAV2VVH73X5PKGKZr+8J33w6odf5vrYAbFm/9B62
+X-Google-Smtp-Source: AGHT+IFqPaVzJwjKdCz+zT/UW2wJpDdZc+xGRDH+xt/ijn6H6ZIBqZtSC9ajtEejlFBlcXFWdHaCwg==
+X-Received: by 2002:a17:90a:ce08:b0:2ab:8324:1b47 with SMTP id 98e67ed59e1d1-2d47327c70bmr5465287a91.15.1724174224643;
+        Tue, 20 Aug 2024 10:17:04 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:bd02:d0ce:e791:dc08:a375])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d3e3171e01sm9721042a91.30.2024.08.20.10.17.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2024 09:36:52 -0700 (PDT)
-From: Qais Yousef <qyousef@layalina.io>
-To: Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
+        Tue, 20 Aug 2024 10:17:04 -0700 (PDT)
+From: Rob Clark <robdclark@gmail.com>
+To: iommu@lists.linux.dev
+Cc: linux-arm-msm@vger.kernel.org,
+	freedreno@lists.freedesktop.org,
+	Mostafa Saleh <smostafa@google.com>,
+	Will Deacon <will@kernel.org>,
+	Rob Clark <robdclark@chromium.org>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	dri-devel@lists.freedesktop.org (open list:DRM DRIVER for Qualcomm Adreno GPUs),
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Joao Martins <joao.m.martins@oracle.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM SMMU DRIVERS),
+	linux-kernel@vger.kernel.org (open list),
+	linux-pm@vger.kernel.org (open list:SUSPEND TO RAM),
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Nicolin Chen <nicolinc@nvidia.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	John Stultz <jstultz@google.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Qais Yousef <qyousef@layalina.io>
-Subject: [RFC PATCH 16/16] sched/fair: Don't mess with util_avg post init
-Date: Tue, 20 Aug 2024 17:35:12 +0100
-Message-Id: <20240820163512.1096301-17-qyousef@layalina.io>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240820163512.1096301-1-qyousef@layalina.io>
-References: <20240820163512.1096301-1-qyousef@layalina.io>
+	Robin Murphy <robin.murphy@arm.com>,
+	Sean Paul <sean@poorly.run>
+Subject: [PATCH v7 0/4] io-pgtable-arm + drm/msm: Extend iova fault debugging
+Date: Tue, 20 Aug 2024 10:16:43 -0700
+Message-ID: <20240820171652.145673-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -94,66 +98,41 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The extrapolation logic for util_avg for newly forked tasks tries to
-crystal ball the task's demand. This has worked well when the system
-didn't have the means to help these tasks otherwise. But now we do have
-util_est that will rampup faster. And uclamp_min to ensure a good
-starting point if they really care.
+From: Rob Clark <robdclark@chromium.org>
 
-Since we really can't crystal ball the behavior, and giving the same
-starting value for all tasks is more consistent behavior for all forked
-tasks, and it helps to preserve system resources for tasks to compete to
-get them if they truly care, set the initial util_avg to be 0 when
-util_est feature is enabled.
+This series extends io-pgtable-arm with a method to retrieve the page
+table entries traversed in the process of address translation, and then
+beefs up drm/msm gpu devcore dump to include this (and additional info)
+in the devcore dump.
 
-This should not impact workloads that need best single threaded
-performance (like geekbench) given the previous improvements introduced
-to help with faster rampup to reach max perf point more coherently and
-consistently across systems.
+This is a respin of https://patchwork.freedesktop.org/series/94968/
+(minus a patch that was already merged)
 
-Signed-off-by: Qais Yousef <qyousef@layalina.io>
----
- kernel/sched/fair.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+v2: Fix an armv7/32b build error in the last patch
+v3: Incorperate Will Deacon's suggestion to make the interface
+    callback based.
+v4: Actually wire up the callback
+v5: Drop the callback approach
+v6: Make walk-data struct pgtable specific and rename
+    io_pgtable_walk_data to arm_lpae_io_pgtable_walk_data
+v7: Re-use the pgtable walker added for arm_lpae_read_and_clear_dirty()
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index ad72db5a266c..45be77d1112f 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1031,6 +1031,19 @@ void init_entity_runnable_average(struct sched_entity *se)
- }
- 
- /*
-+ * When util_est is used, the tasks can rampup much faster by default. And with
-+ * the rampup_multiplier, tasks can ask for faster rampup after fork. And with
-+ * uclamp, they can ensure a min perf requirement. Given all these factors, we
-+ * keep util_avg at 0 as we can't crystal ball the task demand after fork.
-+ * Userspace have enough ways to ensure good perf for tasks after fork. Keeping
-+ * the util_avg to 0 is good way to ensure a uniform start for all tasks. And
-+ * it is good to preserve precious resources. Truly busy forked tasks can
-+ * compete for the resources without the need for initial 'cheat' to ramp them
-+ * up automagically.
-+ *
-+ * When util_est is not present, the extrapolation logic below will still
-+ * apply.
-+ *
-  * With new tasks being created, their initial util_avgs are extrapolated
-  * based on the cfs_rq's current util_avg:
-  *
-@@ -1080,6 +1093,12 @@ void post_init_entity_util_avg(struct task_struct *p)
- 		return;
- 	}
- 
-+	/*
-+	 * Tasks can rampup faster with util_est, so don't mess with util_avg.
-+	 */
-+	if (sched_feat(UTIL_EST))
-+		return;
-+
- 	if (cap > 0) {
- 		if (cfs_rq->avg.util_avg != 0) {
- 			sa->util_avg  = cfs_rq->avg.util_avg * se_weight(se);
+Rob Clark (4):
+  iommu/io-pgtable-arm: Make pgtable walker more generic
+  iommu/io-pgtable-arm: Re-use the pgtable walk for iova_to_phys
+  iommu/io-pgtable-arm: Add way to debug pgtable walk
+  drm/msm: Extend gpu devcore dumps with pgtbl info
+
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c |  10 ++
+ drivers/gpu/drm/msm/msm_gpu.c           |   9 ++
+ drivers/gpu/drm/msm/msm_gpu.h           |   8 ++
+ drivers/gpu/drm/msm/msm_iommu.c         |  22 ++++
+ drivers/gpu/drm/msm/msm_mmu.h           |   3 +-
+ drivers/iommu/io-pgtable-arm.c          | 147 +++++++++++++++---------
+ include/linux/io-pgtable.h              |  15 +++
+ 7 files changed, 158 insertions(+), 56 deletions(-)
+
 -- 
-2.34.1
+2.46.0
 
 
