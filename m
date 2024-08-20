@@ -1,73 +1,93 @@
-Return-Path: <linux-pm+bounces-12518-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12519-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0330D957E5E
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 08:39:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CBC2957E85
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 08:41:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 993641F21E87
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 06:39:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEE4C1C241FA
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 06:41:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 856B21E7A3D;
-	Tue, 20 Aug 2024 06:34:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4D0A18C011;
+	Tue, 20 Aug 2024 06:40:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V86hWq6S"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N5CP4O46"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C69B1E7A2F;
-	Tue, 20 Aug 2024 06:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4029B18C009
+	for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 06:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724135681; cv=none; b=o3+pFwjLu0XWJPRgceENIEYNBLrBOoKAQsIRN9a2N1Fx4C5aqlSh7M2mWHSG2Fvr2x/nGnXtIqbP2rqB9GfUQdLA8EsTvb+gEJ6o5XDNwYxPEof0xJQBIrfCVFFV41Xs7sHlRz1BUblb2SICm3Snqp33YppI+KEi7EDMq3rmJnk=
+	t=1724136035; cv=none; b=m7pmyKzxC9V9QkZH4B6ek2eb5WUGUvdsue92ZjG68b9Gwyealb5BZv+2KovesarBIV5aei1zF3tAQBq6T/1KPNfNpQjsuuQc8W6wgoq2t+TdYeTKV+OYuffegugkhXwC0LLnDv/2pGJHEPo7me9vOePQt0QyvSFtmD5vE/z4B+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724135681; c=relaxed/simple;
-	bh=VYm9fAL+Q+/V8SYgqp/PLQTB8NVxzo9tKEdJNZio6Sw=;
+	s=arc-20240116; t=1724136035; c=relaxed/simple;
+	bh=15UH5N8RvByknQFgvTBOI7zYBxbzOSOr6Znak6JM2sI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OMtoo31i8SKt6fw77bwqarrfaLXBTLBRMmCQ+PcjpkFg0YNez+IC+enh8oEMW+8XHWyqvAphB2OEe9ct7M1ndtVH5AfHKoD8xTO3d4cMPJ0Hg35FXmUhI0p165l1QOKO3ClTh1KRqfeCx7MHM89//WC79TFYPboKxXPS6pnPui0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V86hWq6S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5D66C4AF09;
-	Tue, 20 Aug 2024 06:34:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724135680;
-	bh=VYm9fAL+Q+/V8SYgqp/PLQTB8NVxzo9tKEdJNZio6Sw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=V86hWq6SYbgFePOxGJc1NOOq+AOy+A7HPeQRr2JIaHo817TJAFqli3mIFEAFeGnLb
-	 KvNe2iOK6gZGR6td9Rzrkj9fSVlUAp7QdNT7CvMTRgmVXnBl2EtUCRAu6aF4TTKT6G
-	 6/rkLuxhdaI5oEoShiY3XBHkOHbdUy+JYAlTyvf8DuTAic79TvP7hR1agTfmf4KQAq
-	 Ij8FJnm/OqIeAgzyfBwgFhRTXF56ChXd/8xAAaxH5ELvGVEzSdph64gnXu8YPHDzom
-	 p9sGmyqvaOynyPDTqpM4DxUZhlCOH2fWy+21abTy+NH/BFHI7Cc2bl8i+mrCyPJdb/
-	 FKPwfvFc+7t5g==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1sgIRy-000000002Fl-19mi;
-	Tue, 20 Aug 2024 08:34:38 +0200
-Date: Tue, 20 Aug 2024 08:34:38 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Chris Lew <quic_clew@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Stephen Boyd <swboyd@chromium.org>,
-	Amit Pundir <amit.pundir@linaro.org>, linux-arm-msm@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 2/3] usb: typec: ucsi: Move unregister out of atomic
- section
-Message-ID: <ZsQ4_viDxMVu3Mho@hovoldconsulting.com>
-References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
- <20240818-pmic-glink-v6-11-races-v1-2-f87c577e0bc9@quicinc.com>
- <ZsNfkuiRK9VqBSLT@hovoldconsulting.com>
- <ZsN2qR3tuXylb2qK@hu-bjorande-lv.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ke39L27EaI0aTmYPmJRbhH8YHkZFznBqIZUMo04Ce7YEBlousomxIMZGau6LJhxhVNSVHkYP4EmYi7r8QzMg64cTM0FHJ4n0UkNjSsl3P1VIb0T4xlvfKWlp7bPykO08BDNEk9Qj+uFtAJu0Zs5yYrT4K2uv226yrvaikkkBsm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N5CP4O46; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1724136033;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TTEWIGxuQjibL588vtu8KylgICyjhCyrybpbVqP9eqM=;
+	b=N5CP4O46mV4eO/pWYrlvS6Eem406oTogwN+vAeHzHYuA2FHOkihIWZGLChI8xviDXPFhKJ
+	Z4n4x1anXz92f8WU3/TLOjN09IgvQEObj0K0e5WGKF7kXqRQWMHwG83fR87PQOeI/tSLnk
+	T9LNSWK7NiLyAlOyJExzcsCkI9znA3Y=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-658-HzVvRiF1PjyKU6kVTnp08g-1; Tue, 20 Aug 2024 02:40:31 -0400
+X-MC-Unique: HzVvRiF1PjyKU6kVTnp08g-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6bf6dc40a39so66010746d6.2
+        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 23:40:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724136031; x=1724740831;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TTEWIGxuQjibL588vtu8KylgICyjhCyrybpbVqP9eqM=;
+        b=V8ZsviTputyMo0oFUs5fclz0Hq29BlPfCpX0WopU6SxtXYyARHqYJ1siwg5tMi3vV/
+         wERZM53+2rmu04xpgKDDIeABQJvEft1Kbv0ZmezIVZP8+w2YYd5OryaHEkNTJHf5bozh
+         4GEkh5lZvHvSWq1dpb3nlzCa+hE4OOzOZQXobj2kxOKmBg1DdBWClI9puPDTTRT1O4lX
+         MgSTpuPo+MpjwDbcwjYLUAm1hdpVwKusgvNEVx2SGNzxd+P2FC3oQHhfwP6pN4bXMW3+
+         c0ZHztb0wD2aFitjH0xFFlrZHdiFVuPvLKgifygBYnSwi+rT8idnGdwmGdIsinPNRD9Q
+         XyJw==
+X-Gm-Message-State: AOJu0YzM+t1Ce95mx9l3HB2OVzGZdBQDfYblpyPcyGsyHsIHULA+X8XD
+	hnjoexhx9DRhZ7iaLkpxGg9d46CRNpPz+l7CTN9zK4bD3NHfEZXMNdV/iJQ4oQQrkwX8PmoWs4+
+	JLlNTPHmdudWibv8AW7pGilYg3FQHxxl0anbVm+534xizkLDgFUYNFhj0
+X-Received: by 2002:a05:6214:3d07:b0:6b5:e895:82f0 with SMTP id 6a1803df08f44-6bf7ce5f9c0mr177450866d6.43.1724136031402;
+        Mon, 19 Aug 2024 23:40:31 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG7IXov9rapEYo20mlC1Ac8XNsv4V0P307FJH1DBt4tDq1PP9/jepF/Dveyd/aAdyFYkAPCIg==
+X-Received: by 2002:a05:6214:3d07:b0:6b5:e895:82f0 with SMTP id 6a1803df08f44-6bf7ce5f9c0mr177450726d6.43.1724136031061;
+        Mon, 19 Aug 2024 23:40:31 -0700 (PDT)
+Received: from rhfedora ([71.217.43.75])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6bf6fec603fsm49544726d6.93.2024.08.19.23.40.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Aug 2024 23:40:30 -0700 (PDT)
+Date: Tue, 20 Aug 2024 02:40:28 -0400
+From: "John B. Wyatt IV" <jwyatt@redhat.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-pm@vger.kernel.org, Thomas Renninger <trenn@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, John Kacur <jkacur@redhat.com>,
+	Tomas Glozar <tglozar@redhat.com>, Arnaldo Melo <acme@redhat.com>,
+	"John B. Wyatt IV" <sageofredondo@gmail.com>
+Subject: Re: [PATCH 0/2][RFC] Add SWIG Bindings to libcpupower
+Message-ID: <ZsQ6XKQ4pRFYkGoS@rhfedora>
+References: <20240724221122.54601-1-jwyatt@redhat.com>
+ <1f5c24b6-f3ee-4863-8b7a-49344a550206@linuxfoundation.org>
+ <Zqv9BOjxLAgyNP5B@hatbackup>
+ <2024080405-roundish-casket-2474@gregkh>
+ <ZrKOCLYvYklsPg1K@fedora.redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,50 +96,40 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZsN2qR3tuXylb2qK@hu-bjorande-lv.qualcomm.com>
+In-Reply-To: <ZrKOCLYvYklsPg1K@fedora.redhat.com>
 
-On Mon, Aug 19, 2024 at 09:45:29AM -0700, Bjorn Andersson wrote:
-> On Mon, Aug 19, 2024 at 05:06:58PM +0200, Johan Hovold wrote:
-> > On Sun, Aug 18, 2024 at 04:17:38PM -0700, Bjorn Andersson wrote:
-> > > Commit 'caa855189104 ("soc: qcom: pmic_glink: Fix race during
-> > > initialization")' 
-> > 
-> > This commit does not exist, but I think you really meant to refer to
-> > 
-> > 	9329933699b3 ("soc: qcom: pmic_glink: Make client-lock non-sleeping")
-> > 
-> > and possibly also
-> > 
-> > 	635ce0db8956 ("soc: qcom: pmic_glink: don't traverse clients list without a lock")
-> > 
-> > here.
-> > 
-> 
-> Yeah, I copy-pasted the wrong SHA1. Prior to commit 9329933699b3 ("soc:
-> qcom: pmic_glink: Make client-lock non-sleeping") the PDR notification
-> happened from a worker with only mutexes held.
-> 
-> > > moved the pmic_glink client list under a spinlock, as
-> > > it is accessed by the rpmsg/glink callback, which in turn is invoked
-> > > from IRQ context.
-> > > 
-> > > This means that ucsi_unregister() is now called from IRQ context, which
-                                                           ^^^^^^^^^^^
+I wanted to follow up on this since I am close to sending out the v2 of
+this patchset.
 
-> > > isn't feasible as it's expecting a sleepable context.
-> > 
-> > But this is not correct as you say above that the callback has always
-> > been made in IRQ context. Then this bug has been there since the
-> > introduction of the UCSI driver by commit
-> > 
-> 
-> No, I'm stating that commit 9329933699b3 ("soc: qcom: pmic_glink: Make
-> client-lock non-sleeping") was needed because the client list is
-> traversed under the separate glink callback, which has always been made
-> in IRQ context.
+3 points I wanted to raise:
 
-Ok, got it. But then you meant "atomic context", not "IRQ context", in
-the paragraph above.
+1) Does everyone understand, is okay with the SWIG license, and wants to
+proceed with me sending in a more complete version of this as a candidate for
+upstreaming?
 
-Johan
+2) About maintainership: if I am to be the maintainer of this, how would
+myself and John Kacur be listed? As a CPU POWER MONITORING SUBSYSTEM
+maintainer, a separate category below it called CPU POWER MONITORING SUBSYSTEM
+PYTHON BINDINGS maintainer, or is not needed to be listed at this time?
+
+A quick search for bindings shows what I believe to be all of them for device
+tree. This may establish a new precedent.
+
+If I was to be added, I assume it would be a separate commit in the v2
+submission?
+
+3) I had to comment out powercap_set_enabled
+
+SWIG reported this symbol not being found despite being in powercap.h. I did a
+quick search and was not able to find it's implementation in powercap.c. The
+get equivalent powercap_get_enabled is in powercap.c. Wanted to check on this
+just in case it is a bug or part of future functionality. I am assuming the
+latter; I would send it v2 with that declaration commented out with a note
+explaining it for users if there is no objection.
+-- 
+Sincerely,
+John Wyatt
+Software Engineer, Core Kernel
+Red Hat
+
 
