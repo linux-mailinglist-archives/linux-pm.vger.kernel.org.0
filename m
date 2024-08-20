@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-12574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12575-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5423C958C55
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 18:37:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21641958C57
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 18:37:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B55028511B
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 16:37:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2BB51F2628D
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 16:37:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1174E1BDAA7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D14A61BF31F;
 	Tue, 20 Aug 2024 16:36:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="SEdLHilB"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="fjzVqkVB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE2F1B9B3D
-	for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 16:36:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902DE1B3F33
+	for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 16:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724171810; cv=none; b=G+oZS2XHpB6swagEVKNkIEO5hrk0SZufWBobQoUEGVhWNZmdZLj37UImlTk2sbLeJALTk8/XMk3/D+3FfOv9SL/2mjtq8cIyQv56FLgmnm/2hHu5fBL6J9nB8Fb7FLkYt2xwirloTsphHh4dz3GCbnqGyp6btZgnwsMPESQcGqw=
+	t=1724171811; cv=none; b=CtKz4ThvyGM/QTnqU9qqw1Hos1Ef+othJXZuZm+pITF+GZohVU/2l8rW8x38NlYdu2+ePp1qA2sCchNJzC9eGSvS/C0svKdgJUglx3fpCKqxoVjukK2jZUJPaCaQtMj92qkZ9Gy8tyoF+839i0zvYlquAroJaQ9tHSzMr76tokg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724171810; c=relaxed/simple;
-	bh=H2v4wPkY9/S00PuSqnRFW7BMeliOkRRZuCIYsWw2Xl0=;
+	s=arc-20240116; t=1724171811; c=relaxed/simple;
+	bh=6C3oq3HrJLkJWrLpo+1dSeHCEUbPFUKzQa1BwujeAi0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DlWibJTkKYxwoBgHHROzTMBEwGH2V1IcUA/Zl8QTfq1EbyHF3cKP+6cxxiYoOEeR2nMA5mmxq/GQ30t14ZXYWJuofaOLMxXWdfhYObMqowlU4pAN9lbljjsw9nuGIuh+haHWAR37hELcwGqhq1XZ0mSdDjZ0RFSsSbGTxl5f5AM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=SEdLHilB; arc=none smtp.client-ip=209.85.208.42
+	 MIME-Version; b=Pj33fFRxwuR/zm+Ev2i+rJE/Hxpl2Ljq2rLc0iiKAYiTyE2GLHU1p5aF6nbaNdit6S2KTOEk9UVfZMtJ5YLglPHDewplME7+mFXKLg7MgY8x38R+60bVkG/59E3h8vjNxHhmtTTEExABT5SCE3RAwFbUFXkIOKPXluonSL1ha3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=fjzVqkVB; arc=none smtp.client-ip=209.85.218.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5bec7d380caso4903756a12.3
-        for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 09:36:48 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a8657900fc1so80328866b.1
+        for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 09:36:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1724171807; x=1724776607; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1724171808; x=1724776608; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JT5j0PZ9X9xu3k6v8CfXi6RGxKCSRQvQX4tJvcwiDgI=;
-        b=SEdLHilBdGd+HV3kLIAFgh5Tco/aov6L03RWLcXoDAxxwECbqowStf7e7Nn4W00uNA
-         8ou3G4Dx/Qe935abWpyN261HVj/GzOCQ3TdT5w/Ei88D7RX7h/hPDGY513givXkFJOiL
-         FlhSh8Oqovtucp01VF8KkxGGsubtzyP4MExPV5wMARKfzjNOIg/rNu6Uq2XcVvXM/1Gn
-         NotMSmAekdwHEjUvlRlecHIuTf82M0IC/dNIXbEHRGht3TJroZomTcVEcZ7gFL/bP5aF
-         B309BAeGdVe2jdane30E7qGJcyQLmu1IZuO0fGUiO0esf7UfyDmBCjvU04zCUWbsviB1
-         NlBw==
+        bh=D/d/uli9PIV9KsPRWvcOGLBXbZ0uKNuetYque1eIsGo=;
+        b=fjzVqkVBxMlFXs/sf5pfn83HKxZQ5kmtbDyuCPqCWoT989vqp5FYBgRHckO175VAK6
+         afp5xA1Kt3xPIl/EhBbsiMUTi+KZe3lMFTUMw+wF/gfH0N2Zh3ZBp76G84juM/GieE1P
+         ATcMhYlRgSR49mkGkASHqiIi+kzig0aJhlL0J45kH3IWYiQvLA/z6824GVWUeBy/jwTF
+         OO8c65IReOgiNzWEsfrQUUHkZpYEopWYA3pATdKuwtFZSAj/Hv1olpkpvTw5AUJgVZID
+         hDC8O3YuV0TvVW+0Y/aHZC5FzOTc4xELh9NvIMwBPR0MtX1auZ+ymrHXTFERLFwTi9sp
+         YFRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724171807; x=1724776607;
+        d=1e100.net; s=20230601; t=1724171808; x=1724776608;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JT5j0PZ9X9xu3k6v8CfXi6RGxKCSRQvQX4tJvcwiDgI=;
-        b=u1UChiOcI/tq3fMBSoxD+7ZUja3y6Bwyfp44d2X55gwIJ7SyZvIt28hMR69L/PaDSt
-         6Lx1oCwPjoyFij9e8AS4gFwItbZJR6iil1frs5Bs5vmgICjl849aB51dKC9r58CvQ6Tb
-         SoI6HsoTc7dBRyyJjDFUbECkh2gMscS26sNtLTOEcUl82L4p4HnuHMY1ToK1m6Th+/2s
-         RIrWsa9bbpDG2HW9BczldAmdAp5M91+N/KYRnCvitXdEwlNoRWIjTflu7ah4CZLvpkW4
-         oR7YVp/a73n/j8cSjjqSmz2YBd2+CS2w8AczdKWpDMxJXof18nDWpnx4G5RewkO1os7A
-         8g6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUdzBmgYfllyKVNNFM0Lv8+dwGjNtitdxD4/AYxAj/AAZn/mHt0DWh0C6hHYNxTr6oZcxYEWiot2Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxOd03eL5zPcoPdFxz12ufmNjYKX9Vexb6d1CfiZTIjzHwQCm7
-	njxEQj37hi127VuW8OMEOHRPuBgFePriua3WqPToRV2d1L5eH34gg1fiSBdFMfk=
-X-Google-Smtp-Source: AGHT+IFCqy8udzUPQSToeARc04ldQIgYbEcEvnYLXxCQCr6hah66sD1+LHqReW2Q/Kq1330Y8OrsKQ==
-X-Received: by 2002:a17:907:efc8:b0:a7a:c197:8701 with SMTP id a640c23a62f3a-a83929534e5mr1074429266b.31.1724171807015;
+        bh=D/d/uli9PIV9KsPRWvcOGLBXbZ0uKNuetYque1eIsGo=;
+        b=DgDsVecCpM66CSqmJRVnFEnH5r7NZFH1AT3h8NVX7yysoUBGcjS0BpFywTWLjhwY3x
+         inA3giMJrH14a1+Z1cp9RMRyAkWO6qxOuzxxFYgyYGQc5xpFMFLctRtisVW1z8vlplM3
+         EQOr+96q5xblDgWj1y4T6uvrf1cA3BV4IOmX+yLRMgSIL3x8A8nuR1E1q7BH2pg9EQp5
+         jZNLqnzwZQvishRPV42vfVJjy9hjnStU7l52nO4A7VmM8WMfR+erAu2lFmbo07ls8Fgg
+         fL/4Zk5m1UMS3fUI2Smcl682caWxhtu+bkzocmAHZshan97IgUvPC8rtLNSMsYXLEOlE
+         vuUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV2gD7+ik22bdn9lcQAnLccuRXSiVn+WDb157Vq5Nb5AoJm+0AWLPEhhTRAeFBkbqOKLiYlAFLzqbMZHMBjNTIRr20adcIGEbU=
+X-Gm-Message-State: AOJu0YwHnthTg5oWxSn9VBiPWz6EXRgaR2eP31kstRw4kgyywnvqfKkL
+	Sy19rEE3hFzJSSn8GkRZtUqRWmlvRDmc+H7PaDojTIXUcfm1kY6wNFtHgogwpq4=
+X-Google-Smtp-Source: AGHT+IEZPw2L8xpcAT+hcydRU41CPHFT8ONkE8EI/GuWh2TzpVwCtCSqfce21OS/S3Nt2vjzA7lj8A==
+X-Received: by 2002:a17:907:f193:b0:a80:f893:51bb with SMTP id a640c23a62f3a-a8392a4c515mr1029504866b.68.1724171807827;
         Tue, 20 Aug 2024 09:36:47 -0700 (PDT)
 Received: from airbuntu.. (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838cfb5esm780728766b.59.2024.08.20.09.36.46
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838cfb5esm780728766b.59.2024.08.20.09.36.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2024 09:36:46 -0700 (PDT)
+        Tue, 20 Aug 2024 09:36:47 -0700 (PDT)
 From: Qais Yousef <qyousef@layalina.io>
 To: Ingo Molnar <mingo@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
@@ -80,9 +80,9 @@ Cc: Juri Lelli <juri.lelli@redhat.com>,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Qais Yousef <qyousef@layalina.io>
-Subject: [RFC PATCH 10/16] sched/qos: Add a new sched-qos interface
-Date: Tue, 20 Aug 2024 17:35:06 +0100
-Message-Id: <20240820163512.1096301-11-qyousef@layalina.io>
+Subject: [RFC PATCH 11/16] sched/qos: Add rampup multiplier QoS
+Date: Tue, 20 Aug 2024 17:35:07 +0100
+Message-Id: <20240820163512.1096301-12-qyousef@layalina.io>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240820163512.1096301-1-qyousef@layalina.io>
 References: <20240820163512.1096301-1-qyousef@layalina.io>
@@ -94,253 +94,279 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The need to describe the conflicting demand of various workloads hasn't
-been higher. Both hardware and software have moved rapidly in the past
-decade and system usage is more diverse and the number of workloads
-expected to run on the same machine whether on Mobile or Server markets
-has created a big dilemma on how to better manage those requirements.
+Bursty tasks are hard to predict. To use resources efficiently, the
+system would like to be exact as much as possible. But this poses
+a challenge for these bursty tasks that need to get access to more
+resources quickly.
 
-The problem is that we lack mechanisms to allow these workloads to
-describe what they need, and then allow kernel to do best efforts to
-manage those demands based on the hardware it is running on
-transparently and current system state.
+The new SCHED_QOS_RAMPUP_MULTIPLIER allows userspace to do that. As the
+name implies, it only helps them to transition to a higher performance
+state when they get _busier_. That is perfectly periodic tasks by
+definition are not going through a transition and will run at a constant
+performance level. It is the tasks that need to transition from one
+periodic state to another periodic state that is at a higher level that
+this rampup_multiplier will help with. It also slows down the ewma decay
+of util_est which should help those bursty tasks to keep their faster
+rampup.
 
-Example of conflicting requirements that come across frequently:
+This should work complimentary with uclamp. uclamp tells the system
+about min and max perf requirements which can be applied immediately.
 
-	1. Improve wake up latency for SCHED_OTHER. Many tasks end up
-	   using SCHED_FIFO/SCHED_RR to compensate for this shortcoming.
-	   RT tasks lack power management and fairness and can be hard
-	   and error prone to use correctly and portably.
+rampup_multiplier is about reactiveness of the task to change.
+Specifically to a change for a higher performance level. The task might
+necessary need to have a min perf requirements, but it can have sudden
+burst of changes that require higher perf level and it needs the system
+to provide this faster.
 
-	2. Prefer spreading vs prefer packing on wake up for a group of
-	   tasks. Geekbench-like workloads would benefit from
-	   parallelising on different CPUs. hackbench type of workloads
-	   can benefit from waking on up same CPUs or a CPU that is
-	   closer in the cache hierarchy.
-
-	3. Nice values for SCHED_OTHER are system wide and require
-	   privileges. Many workloads would like a way to set relative
-	   nice value so they can preempt each others, but not be
-	   impact or be impacted by other tasks belong to different
-	   workloads on the system.
-
-	4. Provide a way to tag some tasks as 'background' to keep them
-	   out of the way. SCHED_IDLE is too strong for some of these
-	   tasks but yet they can be computationally heavy. Example
-	   tasks are garbage collectors. Their work is both important
-	   and not important.
-
-	5. Provide a way to improve DVFS/upmigration rampup time for
-	   specific tasks that are bursty in nature and highly
-	   interactive.
-
-Whether any of these use cases warrants an additional QoS hint is
-something to be discussed individually. But the main point is to
-introduce an interface that can be extendable to cater for potentially
-those requirements and more. rampup_multiplier to improve
-DVFS/upmigration for bursty tasks will be the first user in later patch.
-
-It is desired to have apps (and benchmarks!) directly use this interface
-for optimal perf/watt. But in the absence of such support, it should be
-possible to write a userspace daemon to monitor workloads and apply
-these QoS hints on apps behalf based on analysis done by anyone
-interested in improving the performance of those workloads.
+TODO: update the sched_qos docs
 
 Signed-off-by: Qais Yousef <qyousef@layalina.io>
 ---
- Documentation/scheduler/index.rst             |  1 +
- Documentation/scheduler/sched-qos.rst         | 44 ++++++++++++++++++
- include/uapi/linux/sched.h                    |  4 ++
- include/uapi/linux/sched/types.h              | 46 +++++++++++++++++++
- kernel/sched/syscalls.c                       |  3 ++
- .../trace/beauty/include/uapi/linux/sched.h   |  4 ++
- 6 files changed, 102 insertions(+)
- create mode 100644 Documentation/scheduler/sched-qos.rst
+ include/linux/sched.h      |  7 ++++
+ include/uapi/linux/sched.h |  2 ++
+ kernel/sched/core.c        | 66 ++++++++++++++++++++++++++++++++++++++
+ kernel/sched/fair.c        |  6 ++--
+ kernel/sched/syscalls.c    | 38 ++++++++++++++++++++--
+ 5 files changed, 115 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
-index 43bd8a145b7a..f49b8b021d97 100644
---- a/Documentation/scheduler/index.rst
-+++ b/Documentation/scheduler/index.rst
-@@ -21,6 +21,7 @@ Scheduler
-     sched-rt-group
-     sched-stats
-     sched-debug
-+    sched-qos
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 2e8c5a9ffa76..a30ee43a25fb 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -404,6 +404,11 @@ struct sched_info {
+ #endif /* CONFIG_SCHED_INFO */
+ };
  
-     text_files
++struct sched_qos {
++	DECLARE_BITMAP(user_defined, SCHED_QOS_MAX);
++	unsigned int rampup_multiplier;
++};
++
+ /*
+  * Integer metrics need fixed point arithmetic, e.g., sched/fair
+  * has a few: load, load_avg, util_avg, freq, and capacity.
+@@ -882,6 +887,8 @@ struct task_struct {
  
-diff --git a/Documentation/scheduler/sched-qos.rst b/Documentation/scheduler/sched-qos.rst
-new file mode 100644
-index 000000000000..0911261cb124
---- /dev/null
-+++ b/Documentation/scheduler/sched-qos.rst
-@@ -0,0 +1,44 @@
-+.. SPDX-License-Identifier: GPL-2.0
+ 	struct sched_info		sched_info;
+ 
++	struct sched_qos		sched_qos;
 +
-+=============
-+Scheduler QoS
-+=============
-+
-+1. Introduction
-+===============
-+
-+Different workloads have different scheduling requirements to operate
-+optimally. The same applies to tasks within the same workload.
-+
-+To enable smarter usage of system resources and to cater for the conflicting
-+demands of various tasks, Scheduler QoS provides a mechanism to provide more
-+information about those demands so that scheduler can do best-effort to
-+honour them.
-+
-+  @sched_qos_type	what QoS hint to apply
-+  @sched_qos_value	value of the QoS hint
-+  @sched_qos_cookie	magic cookie to tag a group of tasks for which the QoS
-+			applies. If 0, the hint will apply globally system
-+			wide. If not 0, the hint will be relative to tasks that
-+			has the same cookie value only.
-+
-+QoS hints are set once and not inherited by children by design. The
-+rationale is that each task has its individual characteristics and it is
-+encouraged to describe each of these separately. Also since system resources
-+are finite, there's a limit to what can be done to honour these requests
-+before reaching a tipping point where there are too many requests for
-+a particular QoS that is impossible to service for all of them at once and
-+some will start to lose out. For example if 10 tasks require better wake
-+up latencies on a 4 CPUs SMP system, then if they all wake up at once, only
-+4 can perceive the hint honoured and the rest will have to wait. Inheritance
-+can lead these 10 to become a 100 or a 1000 more easily, and then the QoS
-+hint will lose its meaning and effectiveness rapidly. The chances of 10
-+tasks waking up at the same time is lower than a 100 and lower than a 1000.
-+
-+To set multiple QoS hints, a syscall is required for each. This is a
-+trade-off to reduce the churn on extending the interface as the hope for
-+this to evolve as workloads and hardware get more sophisticated and the
-+need for extension will arise; and when this happen the task should be
-+simpler to add the kernel extension and allow userspace to use readily by
-+setting the newly added flag without having to update the whole of
-+sched_attr.
+ 	struct list_head		tasks;
+ #ifdef CONFIG_SMP
+ 	struct plist_node		pushable_tasks;
 diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
-index 3bac0a8ceab2..67ef99f64ddc 100644
+index 67ef99f64ddc..0baba91ba5b8 100644
 --- a/include/uapi/linux/sched.h
 +++ b/include/uapi/linux/sched.h
-@@ -102,6 +102,9 @@ struct clone_args {
- 	__aligned_u64 set_tid_size;
- 	__aligned_u64 cgroup;
+@@ -104,6 +104,8 @@ struct clone_args {
  };
-+
-+enum sched_qos_type {
-+};
+ 
+ enum sched_qos_type {
++	SCHED_QOS_RAMPUP_MULTIPLIER,
++	SCHED_QOS_MAX,
+ };
  #endif
  
- #define CLONE_ARGS_SIZE_VER0 64 /* sizeof first published struct */
-@@ -132,6 +135,7 @@ struct clone_args {
- #define SCHED_FLAG_KEEP_PARAMS		0x10
- #define SCHED_FLAG_UTIL_CLAMP_MIN	0x20
- #define SCHED_FLAG_UTIL_CLAMP_MAX	0x40
-+#define SCHED_FLAG_QOS			0x80
- 
- #define SCHED_FLAG_KEEP_ALL	(SCHED_FLAG_KEEP_POLICY | \
- 				 SCHED_FLAG_KEEP_PARAMS)
-diff --git a/include/uapi/linux/sched/types.h b/include/uapi/linux/sched/types.h
-index 90662385689b..55e4b1e79ed2 100644
---- a/include/uapi/linux/sched/types.h
-+++ b/include/uapi/linux/sched/types.h
-@@ -94,6 +94,48 @@
-  * scheduled on a CPU with no more capacity than the specified value.
-  *
-  * A task utilization boundary can be reset by setting the attribute to -1.
-+ *
-+ * Scheduler QoS
-+ * =============
-+ *
-+ * Different workloads have different scheduling requirements to operate
-+ * optimally. The same applies to tasks within the same workload.
-+ *
-+ * To enable smarter usage of system resources and to cater for the conflicting
-+ * demands of various tasks, Scheduler QoS provides a mechanism to provide more
-+ * information about those demands so that scheduler can do best-effort to
-+ * honour them.
-+ *
-+ *  @sched_qos_type	what QoS hint to apply
-+ *  @sched_qos_value	value of the QoS hint
-+ *  @sched_qos_cookie	magic cookie to tag a group of tasks for which the QoS
-+ *			applies. If 0, the hint will apply globally system
-+ *			wide. If not 0, the hint will be relative to tasks that
-+ *			has the same cookie value only.
-+ *
-+ * QoS hints are set once and not inherited by children by design. The
-+ * rationale is that each task has its individual characteristics and it is
-+ * encouraged to describe each of these separately. Also since system resources
-+ * are finite, there's a limit to what can be done to honour these requests
-+ * before reaching a tipping point where there are too many requests for
-+ * a particular QoS that is impossible to service for all of them at once and
-+ * some will start to lose out. For example if 10 tasks require better wake
-+ * up latencies on a 4 CPUs SMP system, then if they all wake up at once, only
-+ * 4 can perceive the hint honoured and the rest will have to wait. Inheritance
-+ * can lead these 10 to become a 100 or a 1000 more easily, and then the QoS
-+ * hint will lose its meaning and effectiveness rapidly. The chances of 10
-+ * tasks waking up at the same time is lower than a 100 and lower than a 1000.
-+ *
-+ * To set multiple QoS hints, a syscall is required for each. This is a
-+ * trade-off to reduce the churn on extending the interface as the hope for
-+ * this to evolve as workloads and hardware get more sophisticated and the
-+ * need for extension will arise; and when this happen the task should be
-+ * simpler to add the kernel extension and allow userspace to use readily by
-+ * setting the newly added flag without having to update the whole of
-+ * sched_attr.
-+ *
-+ * Details about the available QoS hints can be found in:
-+ * Documentation/scheduler/sched-qos.rst
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index c91e6a62c7ab..54faa845cb29 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -152,6 +152,8 @@ __read_mostly int sysctl_resched_latency_warn_once = 1;
   */
- struct sched_attr {
- 	__u32 size;
-@@ -116,6 +158,10 @@ struct sched_attr {
- 	__u32 sched_util_min;
- 	__u32 sched_util_max;
+ const_debug unsigned int sysctl_sched_nr_migrate = SCHED_NR_MIGRATE_BREAK;
  
-+	__u32 sched_qos_type;
-+	__s64 sched_qos_value;
-+	__u32 sched_qos_cookie;
++unsigned int sysctl_sched_qos_default_rampup_multiplier	= 1;
 +
- };
+ __read_mostly int scheduler_running;
  
- #endif /* _UAPI_LINUX_SCHED_TYPES_H */
+ #ifdef CONFIG_SCHED_CORE
+@@ -4488,6 +4490,47 @@ static int sysctl_schedstats(struct ctl_table *table, int write, void *buffer,
+ #endif /* CONFIG_SCHEDSTATS */
+ 
+ #ifdef CONFIG_SYSCTL
++static void sched_qos_sync_sysctl(void)
++{
++	struct task_struct *g, *p;
++
++	guard(rcu)();
++	for_each_process_thread(g, p) {
++		struct rq_flags rf;
++		struct rq *rq;
++
++		rq = task_rq_lock(p, &rf);
++		if (!test_bit(SCHED_QOS_RAMPUP_MULTIPLIER, p->sched_qos.user_defined))
++			p->sched_qos.rampup_multiplier = sysctl_sched_qos_default_rampup_multiplier;
++		task_rq_unlock(rq, p, &rf);
++	}
++}
++
++static int sysctl_sched_qos_handler(struct ctl_table *table, int write,
++				    void *buffer, size_t *lenp, loff_t *ppos)
++{
++	unsigned int old_rampup_mult;
++	int result;
++
++	old_rampup_mult = sysctl_sched_qos_default_rampup_multiplier;
++
++	result = proc_dointvec(table, write, buffer, lenp, ppos);
++	if (result)
++		goto undo;
++	if (!write)
++		return 0;
++
++	if (old_rampup_mult != sysctl_sched_qos_default_rampup_multiplier) {
++		sched_qos_sync_sysctl();
++	}
++
++	return 0;
++
++undo:
++	sysctl_sched_qos_default_rampup_multiplier = old_rampup_mult;
++	return result;
++}
++
+ static struct ctl_table sched_core_sysctls[] = {
+ #ifdef CONFIG_SCHEDSTATS
+ 	{
+@@ -4534,6 +4577,13 @@ static struct ctl_table sched_core_sysctls[] = {
+ 		.extra2		= SYSCTL_FOUR,
+ 	},
+ #endif /* CONFIG_NUMA_BALANCING */
++	{
++		.procname	= "sched_qos_default_rampup_multiplier",
++		.data           = &sysctl_sched_qos_default_rampup_multiplier,
++		.maxlen         = sizeof(unsigned int),
++		.mode           = 0644,
++		.proc_handler   = sysctl_sched_qos_handler,
++	},
+ };
+ static int __init sched_core_sysctl_init(void)
+ {
+@@ -4543,6 +4593,21 @@ static int __init sched_core_sysctl_init(void)
+ late_initcall(sched_core_sysctl_init);
+ #endif /* CONFIG_SYSCTL */
+ 
++static void sched_qos_fork(struct task_struct *p)
++{
++	/*
++	 * We always force reset sched_qos on fork. These sched_qos are treated
++	 * as finite resources to help improve quality of life. Inheriting them
++	 * by default can easily lead to a situation where the QoS hint become
++	 * meaningless because all tasks in the system have it.
++	 *
++	 * Every task must request the QoS explicitly if it needs it. No
++	 * accidental inheritance is allowed to keep the default behavior sane.
++	 */
++	bitmap_zero(p->sched_qos.user_defined, SCHED_QOS_MAX);
++	p->sched_qos.rampup_multiplier = sysctl_sched_qos_default_rampup_multiplier;
++}
++
+ /*
+  * fork()/clone()-time setup:
+  */
+@@ -4562,6 +4627,7 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
+ 	p->prio = current->normal_prio;
+ 
+ 	uclamp_fork(p);
++	sched_qos_fork(p);
+ 
+ 	/*
+ 	 * Revert to default priority/policy on fork if requested.
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 0c10e2afb52d..3d9794db58e1 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4906,7 +4906,7 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
+ 	if (!task_sleep) {
+ 		if (task_util(p) > task_util_dequeued(p)) {
+ 			ewma &= ~UTIL_AVG_UNCHANGED;
+-			ewma = approximate_util_avg(ewma, p->se.delta_exec / 1000);
++			ewma = approximate_util_avg(ewma, (p->se.delta_exec/1000) * p->sched_qos.rampup_multiplier);
+ 			goto done;
+ 		}
+ 		return;
+@@ -4974,6 +4974,8 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
+ 	 * 0.25, thus making w=1/4 ( >>= UTIL_EST_WEIGHT_SHIFT)
+ 	 */
+ 	ewma <<= UTIL_EST_WEIGHT_SHIFT;
++	if (p->sched_qos.rampup_multiplier)
++		last_ewma_diff /= p->sched_qos.rampup_multiplier;
+ 	ewma  -= last_ewma_diff;
+ 	ewma >>= UTIL_EST_WEIGHT_SHIFT;
+ done:
+@@ -9643,7 +9645,7 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+ 	 * on TICK doesn't end up hurting it as it can happen after we would
+ 	 * have crossed this threshold.
+ 	 *
+-	 * To ensure that invaraince is taken into account, we don't scale time
++	 * To ensure that invariance is taken into account, we don't scale time
+ 	 * and use it as-is, approximate_util_avg() will then let us know the
+ 	 * our threshold.
+ 	 */
 diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
-index ae1b42775ef9..a7d4dfdfed43 100644
+index a7d4dfdfed43..dc7d7bcaae7b 100644
 --- a/kernel/sched/syscalls.c
 +++ b/kernel/sched/syscalls.c
-@@ -668,6 +668,9 @@ int __sched_setscheduler(struct task_struct *p,
+@@ -543,6 +543,35 @@ static void __setscheduler_uclamp(struct task_struct *p,
+ 				  const struct sched_attr *attr) { }
+ #endif
+ 
++static inline int sched_qos_validate(struct task_struct *p,
++				     const struct sched_attr *attr)
++{
++	switch (attr->sched_qos_type) {
++	case SCHED_QOS_RAMPUP_MULTIPLIER:
++		if (attr->sched_qos_cookie)
++			return -EINVAL;
++		if (attr->sched_qos_value < 0)
++			return -EINVAL;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static void __setscheduler_sched_qos(struct task_struct *p,
++				     const struct sched_attr *attr)
++{
++	switch (attr->sched_qos_type) {
++	case SCHED_QOS_RAMPUP_MULTIPLIER:
++		set_bit(SCHED_QOS_RAMPUP_MULTIPLIER, p->sched_qos.user_defined);
++		p->sched_qos.rampup_multiplier = attr->sched_qos_value;
++	default:
++		break;
++	}
++}
++
+ /*
+  * Allow unprivileged RT tasks to decrease priority.
+  * Only issue a capable test if needed and only once to avoid an audit
+@@ -668,8 +697,11 @@ int __sched_setscheduler(struct task_struct *p,
  			return retval;
  	}
  
-+	if (attr->sched_flags & SCHED_FLAG_QOS)
-+		return -EOPNOTSUPP;
-+
+-	if (attr->sched_flags & SCHED_FLAG_QOS)
+-		return -EOPNOTSUPP;
++	if (attr->sched_flags & SCHED_FLAG_QOS) {
++		retval = sched_qos_validate(p, attr);
++		if (retval)
++			return retval;
++	}
+ 
  	/*
  	 * SCHED_DEADLINE bandwidth accounting relies on stable cpusets
- 	 * information.
-diff --git a/tools/perf/trace/beauty/include/uapi/linux/sched.h b/tools/perf/trace/beauty/include/uapi/linux/sched.h
-index 3bac0a8ceab2..67ef99f64ddc 100644
---- a/tools/perf/trace/beauty/include/uapi/linux/sched.h
-+++ b/tools/perf/trace/beauty/include/uapi/linux/sched.h
-@@ -102,6 +102,9 @@ struct clone_args {
- 	__aligned_u64 set_tid_size;
- 	__aligned_u64 cgroup;
- };
+@@ -799,7 +831,9 @@ int __sched_setscheduler(struct task_struct *p,
+ 		__setscheduler_params(p, attr);
+ 		__setscheduler_prio(p, newprio);
+ 	}
 +
-+enum sched_qos_type {
-+};
- #endif
+ 	__setscheduler_uclamp(p, attr);
++	__setscheduler_sched_qos(p, attr);
  
- #define CLONE_ARGS_SIZE_VER0 64 /* sizeof first published struct */
-@@ -132,6 +135,7 @@ struct clone_args {
- #define SCHED_FLAG_KEEP_PARAMS		0x10
- #define SCHED_FLAG_UTIL_CLAMP_MIN	0x20
- #define SCHED_FLAG_UTIL_CLAMP_MAX	0x40
-+#define SCHED_FLAG_QOS			0x80
- 
- #define SCHED_FLAG_KEEP_ALL	(SCHED_FLAG_KEEP_POLICY | \
- 				 SCHED_FLAG_KEEP_PARAMS)
+ 	if (queued) {
+ 		/*
 -- 
 2.34.1
 
