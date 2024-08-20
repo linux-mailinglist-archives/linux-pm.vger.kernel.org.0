@@ -1,134 +1,150 @@
-Return-Path: <linux-pm+bounces-12506-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12507-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8073A957C5D
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 06:20:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCD42957C60
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 06:26:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4FB21C23B54
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 04:20:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 565AB284CC5
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 04:26:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 171A645C14;
-	Tue, 20 Aug 2024 04:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EA184DA14;
+	Tue, 20 Aug 2024 04:26:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="pb5GP14V"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iBrG3K7A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149E52F5E;
-	Tue, 20 Aug 2024 04:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351C02F5E;
+	Tue, 20 Aug 2024 04:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724127607; cv=none; b=q6yhQJ7NPyt2llVoP2m0/QoWpQLo3EalG7EXDGmp2QD/GqfTQNI+aHPUOX3CJ2mw/PFQHR/th1zUnEzHIE3JRn6m1Jcv5QxqQ51raDWpKBXh1YgeOtecLqRdUvBxe0fh9DguR4JwmqlivFRBHIrgmLPQG9pQqZXogr9MYyvlriM=
+	t=1724127985; cv=none; b=S39Hg/+GGjl1lE4H3tjBezQ+x6d3CxXp+YMcIACj/Qg7FbLodNsf19zityygV1WREfU6WxNHT3A9lL1DpGEuldknfGaj/ZsHPjd5J7S76n+31Du0o31TMZEY7Q5w8U/Uxy57iuge8ZDMnaEcYIq/34iVIdj/RL1YcEzQJegARnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724127607; c=relaxed/simple;
-	bh=ZudlhkBfQ0BwjRqg6u+viifztToroejZY1NZzXHOP20=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VSVJwEctZADQ09kobp+1+FRxWWYgw+OEQkDyMVkKLwIN1Our+i8TaPgBzhxDp6DsDL13D/LIesY3+HCBUUpClqubyAoFU6nU5QZ0J4sWuavERchs4OXHzbtWvVLrldp2OA7kECP9eWSBl9yZHb0HdCEpz7hdCm/1ng4TjwS5mLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=pb5GP14V; arc=none smtp.client-ip=185.125.188.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from localhost.localdomain (unknown [10.101.196.174])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id A22153F215;
-	Tue, 20 Aug 2024 04:11:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1724127110;
-	bh=NPnIDwRkzJjOEruOcZJb3i9Ia0ap8ihLS7L3WjqbHZQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
-	b=pb5GP14VL3QJlo0x60EcQTjFzHzksA5Hp4AlqHquAOoVjywLlsscHlmpWBSoQsFK7
-	 1IBwkCprvBZtRZhFEBzwJL6ZMhlV8vpnCFPH5+g61cx+YV2nVVaZrSDGICJwwxPW8H
-	 EYbhm/fjhQz3B2ef9ox2+4OkkItvjjymRsosSZmHOKLhsf0UUv25jUK3HnIqS93zz0
-	 W7JNOAW3Vw2suTKTJM/2gwU0iP6plnrOgoYag/xLEJDmVxdExWykO5DdidwPAkTchI
-	 Zs1rY5un2vipuw6UZtSnQgNTz1lSGmwxcsv1dgV0jr6UMJKeiuTHN8svP+JpsruOc9
-	 TZgNLfNtAI9YA==
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-To: jacob.jun.pan@linux.intel.com,
-	lenb@kernel.org
-Cc: artem.bityutskiy@linux.intel.com,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH v2] intel_idle: Disable C1E on Jasper Lake and Elkhart Lake
-Date: Tue, 20 Aug 2024 12:11:28 +0800
-Message-ID: <20240820041128.102452-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1724127985; c=relaxed/simple;
+	bh=EPhEMjY7bJqv3OgXaq6MdbBJoS9xZMpbdW6dSGjRQqs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SxQ4ti0gkbGNlBYArUZ87jH2locsFnSkVyunEw+8zIQJdiwxrAzSTMa3XfhLjf71jXLoBWo7sge/28Ouhz9KVIrVtFlNyRzC6WtQ5/RKg/jutXjvXuHdeM3POKaFOiZTe4Wz+TIZQ4roJnJkDOYtDLIsuzLyP5ZQ75tkzt5+1cU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iBrG3K7A; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724127982; x=1755663982;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EPhEMjY7bJqv3OgXaq6MdbBJoS9xZMpbdW6dSGjRQqs=;
+  b=iBrG3K7A5D1E/CklMiQ12vUS7a5QE8cGpQ8TxvNnXfZrwt9uwZSVhvw3
+   OEWDv50s1idnyfRXGr8yGc7Fu9gQCyznYsEH2YZn18YjNkFn17C8RRaae
+   oWu8IUl8/sC0F+lHS5NCEbzSaIFR+81Agug/MPUobtmKEdsM5fc3Uajdz
+   MXE/OvMW5RzIx72DrCcr30lV2CUbKhKthaKcd0iPzzZ6Dl2QbE/GRyaLh
+   1gCfRCFNWcmrP46jJoFjLf/nSLpF7vci76mbFmYuTVbbGYq8Kfc4aeM5F
+   gsnzwX8NpKTA59D/PF8Q3ADMkNK3NtnxuwVVzN+ZhqOXH0bt+BDYDhQkg
+   g==;
+X-CSE-ConnectionGUID: OKITTNVIQXKCvtCu1q9+PA==
+X-CSE-MsgGUID: ZZBWsr05QAaBfy9R7dhq1w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="22543924"
+X-IronPort-AV: E=Sophos;i="6.10,161,1719903600"; 
+   d="scan'208";a="22543924"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 21:26:21 -0700
+X-CSE-ConnectionGUID: 5fcy/7axQQSIx4VehcG9EA==
+X-CSE-MsgGUID: fXqC33NVTqWsQaFZeFxYKA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,161,1719903600"; 
+   d="scan'208";a="60284429"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 19 Aug 2024 21:26:15 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sgGRh-0009iQ-1k;
+	Tue, 20 Aug 2024 04:26:13 +0000
+Date: Tue, 20 Aug 2024 12:25:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chris Morgan <macroalpha82@gmail.com>, linux-sunxi@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+	quentin.schulz@free-electrons.com, mripard@kernel.org,
+	tgamblin@baylibre.com, aidanmacdonald.0x0@gmail.com,
+	u.kleine-koenig@pengutronix.de, lee@kernel.org, samuel@sholland.org,
+	jernej.skrabec@gmail.com, sre@kernel.org, wens@csie.org,
+	conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org,
+	lars@metafoo.de, jic23@kernel.org, jonathan.cameron@huawei.com,
+	Chris Morgan <macromorgan@hotmail.com>,
+	Philippe Simons <simons.philippe@gmail.com>
+Subject: Re: [PATCH V3 14/15] power: supply: axp20x_battery: add support for
+ AXP717
+Message-ID: <202408201228.Hee4eSYl-lkp@intel.com>
+References: <20240819164619.556309-15-macroalpha82@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240819164619.556309-15-macroalpha82@gmail.com>
 
-PCIe ethernet throughut is sub-optimal on Jasper Lake and Elkhart Lake.
+Hi Chris,
 
-The CPU can take long time to exit to C0 to handle IRQ and perform DMA
-when C1E is enabled.
+kernel test robot noticed the following build errors:
 
-So adjust intel_idle to use _CST when state_table is absent, and disable
-C1E on those two platforms.
+[auto build test ERROR on sre-power-supply/for-next]
+[also build test ERROR on jic23-iio/togreg lee-mfd/for-mfd-next linus/master v6.11-rc4 next-20240819]
+[cannot apply to lee-mfd/for-mfd-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=219023
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v2:
- - Allow the driver to use _CST when state_table is absent.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Morgan/iio-adc-axp20x_adc-Add-adc_en1-and-adc_en1-to-axp_data/20240820-005144
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20240819164619.556309-15-macroalpha82%40gmail.com
+patch subject: [PATCH V3 14/15] power: supply: axp20x_battery: add support for AXP717
+config: i386-buildonly-randconfig-005-20240820 (https://download.01.org/0day-ci/archive/20240820/202408201228.Hee4eSYl-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240820/202408201228.Hee4eSYl-lkp@intel.com/reproduce)
 
- drivers/idle/intel_idle.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408201228.Hee4eSYl-lkp@intel.com/
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 9aab7abc2ae9..ac1c6f4f9c7f 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -1475,6 +1475,10 @@ static const struct idle_cpu idle_cpu_dnv __initconst = {
- 	.use_acpi = true,
- };
- 
-+static const struct idle_cpu idle_cpu_tmt __initconst = {
-+	.disable_promotion_to_c1e = true,
-+};
-+
- static const struct idle_cpu idle_cpu_snr __initconst = {
- 	.state_table = snr_cstates,
- 	.disable_promotion_to_c1e = true,
-@@ -1538,6 +1542,8 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
- 	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT,	&idle_cpu_bxt),
- 	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT_PLUS,	&idle_cpu_bxt),
- 	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT_D,	&idle_cpu_dnv),
-+	X86_MATCH_VFM(INTEL_ATOM_TREMONT,       &idle_cpu_tmt),
-+	X86_MATCH_VFM(INTEL_ATOM_TREMONT_L,     &idle_cpu_tmt),
- 	X86_MATCH_VFM(INTEL_ATOM_TREMONT_D,	&idle_cpu_snr),
- 	X86_MATCH_VFM(INTEL_ATOM_CRESTMONT,	&idle_cpu_grr),
- 	X86_MATCH_VFM(INTEL_ATOM_CRESTMONT_X,	&idle_cpu_srf),
-@@ -2075,7 +2081,7 @@ static void __init intel_idle_cpuidle_driver_init(struct cpuidle_driver *drv)
- 
- 	drv->state_count = 1;
- 
--	if (icpu)
-+	if (icpu && icpu->state_table)
- 		intel_idle_init_cstates_icpu(drv);
- 	else
- 		intel_idle_init_cstates_acpi(drv);
-@@ -2209,7 +2215,11 @@ static int __init intel_idle_init(void)
- 
- 	icpu = (const struct idle_cpu *)id->driver_data;
- 	if (icpu) {
--		cpuidle_state_table = icpu->state_table;
-+		if (icpu->state_table)
-+			cpuidle_state_table = icpu->state_table;
-+		else if (!intel_idle_acpi_cst_extract())
-+			return -ENODEV;
-+
- 		auto_demotion_disable_flags = icpu->auto_demotion_disable_flags;
- 		if (icpu->disable_promotion_to_c1e)
- 			c1e_promotion = C1E_PROMOTION_DISABLE;
+All errors (new ones prefixed by >>):
+
+>> drivers/power/supply/axp20x_battery.c:266:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     266 |         *val = FIELD_GET(AXP717_ICC_CHARGER_LIM_MASK, *val) *
+         |                ^
+   drivers/power/supply/axp20x_battery.c:439:17: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     439 |                 val->intval = FIELD_GET(AXP717_PWR_OP_BATT_PRESENT, reg);
+         |                               ^
+   2 errors generated.
+
+
+vim +/FIELD_GET +266 drivers/power/supply/axp20x_battery.c
+
+   256	
+   257	static int axp717_get_constant_charge_current(struct axp20x_batt_ps *axp,
+   258						      int *val)
+   259	{
+   260		int ret;
+   261	
+   262		ret = regmap_read(axp->regmap, AXP717_ICC_CHG_SET, val);
+   263		if (ret)
+   264			return ret;
+   265	
+ > 266		*val = FIELD_GET(AXP717_ICC_CHARGER_LIM_MASK, *val) *
+   267			axp->data->ccc_scale;
+   268	
+   269		return 0;
+   270	}
+   271	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
