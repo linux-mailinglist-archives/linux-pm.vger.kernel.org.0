@@ -1,158 +1,231 @@
-Return-Path: <linux-pm+bounces-12562-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12563-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B0E195854C
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 13:00:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84423958B79
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 17:39:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A630282E2E
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 11:00:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3827228253A
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 15:39:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACCBE18DF80;
-	Tue, 20 Aug 2024 11:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB99F1922CE;
+	Tue, 20 Aug 2024 15:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="tYTRN81v"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="tbm1oyua"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B1A18E375
-	for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 10:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE1C29424
+	for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 15:39:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724151601; cv=none; b=n2JLIlZd95WnWUugdwcljDKdPBfJx+NdyD1OewZ/72k9UHhBtbn2Tg5eJaXe6qfnhp1q+nQUNl/0nmUvw1fMHeaeY37WcDWr6OrLu2eVr1rrhAnjdHxIqkPd2aF8ClpzTlidJ/O8VNVK5AuCNH6pfkPaFpPEWc0lYZW9Q38huyQ=
+	t=1724168342; cv=none; b=I/UQO6k1LWkAmE3leX2KyDEp6ZkZyr8VuFueOvqepEfaBFiqZuqvVYqbtsvveqy2uuPqSrJnLnP7fATd61ZuAyMn0HZGjS9KL1JfDHY0UQmEV3fdQy1EpyuAPrkYFWvQmim0/TnmMIf+FxjZF2CQ7pQz9qwBi/7IZ6fKnHb6RdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724151601; c=relaxed/simple;
-	bh=x+cc/NQ4+B/XG1Vu9ua+mQPNBaWEIBcAOi8YcjrS8nI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vu/l08Fsmr0BBSVsf2+pf3rYWyPPem6Y23ALc0GnObt+Jad2+JYVvv0zcVOPQWnlkY6CANVuWAPcgdPRpHM7NzpdSKfkqc588tTXt6xvHEXUamLehGQmZmmFDF6isCoooC8YaQuZnq7NSyjZTpyVwTsCIrjdfHwMXb98Gzn/kLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=tYTRN81v; arc=none smtp.client-ip=209.85.166.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-39b0826298cso18349415ab.2
-        for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 03:59:59 -0700 (PDT)
+	s=arc-20240116; t=1724168342; c=relaxed/simple;
+	bh=3F3rVSXCrKAuNTX6oBs3ahXRw610MZ40UBdmnu7Vx+E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J00Z4dvg9ZPuVR7zc2jyNlab6uz1upRMrxau5AbMAbRRD1fdoAqd/lXcT3Ztn7DOmeWX3O+7TUyejn25IoE98fkyozw5IO6lDnzHguO/7NnlePwe3vjeHBlrbTLpp+PWm2sg8gh8L2S63yhtQHoMl5CuCfSV2e7RmL34UNfGXHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=tbm1oyua; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-428e3129851so46743265e9.3
+        for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 08:39:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1724151599; x=1724756399; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GN+EIjpNUUx5GfQqCYudQRJbl+lPpTDJG3imDxVORnA=;
-        b=tYTRN81vaEB3nbuA1VJ8bg4jU37PWWJMAdUoQfCSaHbYaiJFXUHb0tHPmy9QcbCVCu
-         M7lfmQjdukyX2ttggi58Xqv0WYirWW/LsFYFF01ioS2Fb72fPfpKRRFgW+RbygZqDnZJ
-         dTeGZCq04+9FQ3sd2PIskOMEDqfel7MG+cAg2K8U9PPS9YBEyVSvxmPsQW4tmBGq2L3y
-         rg8Vc84SNInlZxTKVD4oj838Ypa3asbd3SbpnAYzP2X6kifMic7P3r97aTILreoRwVcW
-         zkcZ8Aw1TFuEtd4UKU13GsiLixN7ON/Pj673KkDv/5sLI/yi/2+tmDlZ598I8qTRv96f
-         27+Q==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1724168338; x=1724773138; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pmWrqfFuhQb126F6VuYJoB91tyorexZYrj4qScm7E4o=;
+        b=tbm1oyuaZe4q83S47IUWMq/Ny4SU8cFH3j5uIv86kQZwCjr3UW8Q+v5NntMms8IRKk
+         khadXoNeLHkciV0AosDOKSGtSte14vH+/9P8Ma0EcGx0Ofn7hPgv6ri3C5h5Re0KnNcc
+         aHi9ypkyTZj1bQYQLrgwIvIjMiLG2M+u73F3H/1hVftyvBjI/9jeKtUa9HYssP2d6cSu
+         YPmx6j8PlB61eXn/jAJlI6SoO9+1LN/4YWfyFD5RQsxYMftF2QvGekX9uPgRQ/TGGitf
+         07WEJgjUKM3dbKClOhSnK3IdL46ZIQfMbq0Hfw9XZIwWXjLANimXUufs32qBWHN3XPkK
+         /+gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724151599; x=1724756399;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GN+EIjpNUUx5GfQqCYudQRJbl+lPpTDJG3imDxVORnA=;
-        b=A8bRUUczqxfv4v6LwW5zUx6WdsM7jPVzqB79u5zxGX0xJBol+IJiPTwvPrIN9YLLVV
-         TUfcqzoSUzUn2NHz7P/6QkFrvyYOPjf8YhZc0Iw5I0hMk08A/VCXIaj9gv2Hi7IIG4W/
-         N+fvyHEvtQcRpZh3RQ9yuLpctTF6eOigfl1zoL6OiJ3mALMyYuxkaC9kJmH5bndeHaJi
-         8RFnwIs0Fq5hZNkGbv1jXHqohhdNp61kRlfTl/bBOZl0uZgtH22YUi5EsvqPh/YCZ0K+
-         HjDUOqcqqUB6EjprpVxkQllPKYWb4s5WghQUXJ9yDaMDUoklKz3YmMgiT4XWA/ms1chJ
-         O4xg==
-X-Forwarded-Encrypted: i=1; AJvYcCWeVwrRcBwOyYFHohJwoBp5jrHisexnuR9mPLvs0s5GW1s3einmK3pLpAH7SimIjB4Pe+WUEwjhCaVQehcPiuK5ukLCI9LiVsc=
-X-Gm-Message-State: AOJu0YyNOfCXS+Vo5eieCQJ2iboG2DO7ZU0v8c8+ifExrLATUsJ7lo7/
-	WE/YbGaWEtzz/J9r81iIqgtCDF5yjcrxtRSszrSl7fV/v0QZMp6otJsgHFOpQEL4cGaCpoOh5OU
-	VjQluEGBxCbXAxqdXhnyALXnRjIIY8mdBV0VoTA==
-X-Google-Smtp-Source: AGHT+IHqjjn2UapHpnmuaFhmYQPyeSNmej7VILcZMgUpLXZilMbqo1VtVFSgCamg32GBi9wtyoqu+sC1TyQmb5Inz4w=
-X-Received: by 2002:a05:6e02:152b:b0:39b:2ceb:1a23 with SMTP id
- e9e14a558f8ab-39d26ce6283mr152753085ab.3.1724151599259; Tue, 20 Aug 2024
- 03:59:59 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724168338; x=1724773138;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pmWrqfFuhQb126F6VuYJoB91tyorexZYrj4qScm7E4o=;
+        b=v7FXclXCYiuNfCaIdZ704lOt09NUrB68PKuYuYrNHA8oblSDC7lPzqHWeMbC8bwEgc
+         e+zoBwiNiCJhxxNsVfpr72rdTU/T1k+dtP0IMX8hUIHiASJBVEeqRyYABkrNzeZLRy5o
+         tiwJMXSdzZh/abag1aE8ruGY/mXil79sbW8Z5snXj9qyC1sQ/YL2MHu2Q0vcVr/sML4W
+         iUzAw/GQpzvNiiiO1v7XstJQyUHX0kyOEcauKKH3YiNM8DHpMzGFy+1eRE0abKeZ74d0
+         X74u0u8UDKds+Hxrx+Kmr1OIoVFPL8FKutdSm2gFWtDkkviu0Q3oMH/aLmqKm6JfwoE/
+         OUTA==
+X-Forwarded-Encrypted: i=1; AJvYcCXukQE32+Az25ml41eSO5gUV8ToykuiTsybxWsfTMUFHpOhbOlLoXpYoJh8eSwrVjezsPPB22hVjCiwpVGYjhGNilOJdxrIf5k=
+X-Gm-Message-State: AOJu0Ywl/OV1hAVFLyNJlyGwdY3kX3vx6gnF2kQgVHpk5UgbdrlkMf1v
+	DmD1NyoOcdEacanMHoBTHg4qUpaMppLnpDBGO9CaCXGhM6jnY2MANXH06Zx7PtFaGUYHIkynTRO
+	90vE=
+X-Google-Smtp-Source: AGHT+IGWX7+eVKrGz832pmkLmKocdhlrcgIWlJERL2tWpVpaUuEH1ET2w4rlxwsOimDYeiDWDcI3yQ==
+X-Received: by 2002:a05:600c:138f:b0:428:2502:75b5 with SMTP id 5b1f17b1804b1-429ed7ba9c0mr92827645e9.11.1724168337929;
+        Tue, 20 Aug 2024 08:38:57 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:ddce:8248:19a9:4bf6])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429ed648f4asm146289025e9.5.2024.08.20.08.38.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Aug 2024 08:38:57 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH] Documentation: add a driver API doc for the power sequencing subsystem
+Date: Tue, 20 Aug 2024 17:38:55 +0200
+Message-ID: <20240820153855.75412-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240820094023.61155-1-krzysztof.kozlowski@linaro.org> <20240820094023.61155-2-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240820094023.61155-2-krzysztof.kozlowski@linaro.org>
-From: Anup Patel <anup@brainfault.org>
-Date: Tue, 20 Aug 2024 16:29:48 +0530
-Message-ID: <CAAhSdy00N62pZfMrBTMASaZUqW6L-zEe_BqNZ4ZsOWdEvxHDZA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] cpuidle: riscv-sbi: Simplify with scoped for each
- OF child loop
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Atish Patra <atishp@rivosinc.com>, linux-pm@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 20, 2024 at 3:10=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Use scoped for_each_child_of_node_scoped() when iterating over device
-> nodes to make code a bit simpler.
->
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-LGTM.
+Describe what the subsystem does, how the consumers and providers work
+and add API reference generated from kerneldocs.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ Documentation/driver-api/index.rst  |  1 +
+ Documentation/driver-api/pwrseq.rst | 98 +++++++++++++++++++++++++++++
+ MAINTAINERS                         |  1 +
+ 3 files changed, 100 insertions(+)
+ create mode 100644 Documentation/driver-api/pwrseq.rst
 
-Regards,
-Anup
+diff --git a/Documentation/driver-api/index.rst b/Documentation/driver-api/index.rst
+index f10decc2c14b..7f83e05769b4 100644
+--- a/Documentation/driver-api/index.rst
++++ b/Documentation/driver-api/index.rst
+@@ -124,6 +124,7 @@ Subsystem-specific APIs
+    pps
+    ptp
+    pwm
++   pwrseq
+    regulator
+    reset
+    rfkill
+diff --git a/Documentation/driver-api/pwrseq.rst b/Documentation/driver-api/pwrseq.rst
+new file mode 100644
+index 000000000000..bf82469fcd38
+--- /dev/null
++++ b/Documentation/driver-api/pwrseq.rst
+@@ -0,0 +1,98 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++.. Copyright 2024 Linaro Ltd.
++
++====================
++Power Sequencing API
++====================
++
++:Author: Bartosz Golaszewski
++
++Introduction
++============
++
++This framework is designed to abstract complex power-up sequences that are
++shared between multiple logical devices in the linux kernel.
++
++The intention is to allow consumers to obtain a power sequencing handle
++exposed by the power sequence provider and delegate the actual requesting and
++control of the underlying resources as well as to allow the provider to
++mitigate any potential conflicts between multiple users behind the scenes.
++
++Glossary
++--------
++
++The power sequencing API uses a number of terms specific to the subsystem:
++
++Unit
++
++    A unit is a discreet chunk of a power sequence. For instance one unit may
++    enable a set of regulators, another may enable a specific GPIO. Units can
++    define dependencies in the form of other units that must be enabled before
++    it itself can be.
++
++Target
++
++    A target is a set of units (composed of the "final" unit and its
++    dependencies) that a consumer selects by its name when requesting a handle
++    to the power sequencer. Via the dependency system, multiple targets may
++    share the same parts of a power sequence but ignore parts that are
++    irrelevant.
++
++Descriptor
++
++    A handle passed by the pwrseq core to every consumer that serves as the
++    entry point to the provider layer. It ensures coherence between different
++    users and keeps reference counting consistent.
++
++Consumer interface
++==================
++
++The consumer API is aimed to be as simple as possible. The driver interested in
++getting a descriptor from the power sequencer should call :c:func:`pwrseq_get()`
++and specify the name of the target it wants to reach in the sequence after
++calling :c:func:`pwrseq_power_up()`. The descriptor can be released by calling
++:c:func:`pwrseq_put()` and the consumer can request the powering down of its
++target with :c:func:`pwrseq_power_off()`. Note that there is no guarantee that
++:c:func:`pwrseq_power_off()` will have any effect as there may be multiple users
++of the underlying resources who may keep them active.
++
++Provider interface
++==================
++
++The provider API is admittedly not nearly as straightforward as the one for
++consumers but it makes up for it in flexibility.
++
++Each provider can logically split the power-up sequence into descrete chunks
++(units) and define their dependencies. They can then expose named targets that
++consumers may use as the final point in the sequence that they wish to reach.
++
++To that end the providers fill out a set of configuration structures and
++register with the pwrseq subsystem by calling :c:func:`pwrseq_device_register`.
++
++Dynamic consumer matching
++-------------------------
++
++The main difference between pwrseq and other linux kernel providers is the
++mechanism for dynamic matching of consumers and providers. Every power sequence
++provider driver must implement the `match()` callback and pass it to the pwrseq
++core when registering with the subsystems.
++
++When a client requests a sequencer handle, the core will call this callback for
++every registered provider and let it flexibly figure out whether the proposed
++client device is indeed its consumer. For example: if the provider binds to the
++device-tree node representing a power management unit of a chipset and the
++consumer driver controls one of its modules, the provider driver may parse the
++relevant regulator supply properties in device tree and see if they lead from
++the PMU to the consumer.
++
++API reference
++=============
++
++.. kernel-doc:: include/linux/pwrseq/consumer.h
++   :internal:
++
++.. kernel-doc:: include/linux/pwrseq/provider.h
++   :internal:
++
++.. kernel-doc:: drivers/power/sequencing/core.c
++   :export:
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f328373463b0..5a7500f048bb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18204,6 +18204,7 @@ M:	Bartosz Golaszewski <brgl@bgdev.pl>
+ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
++F:	Documentation/driver-api/pwrseq.rst
+ F:	drivers/power/sequencing/
+ F:	include/linux/pwrseq/
+ 
+-- 
+2.43.0
 
->
-> ---
->
-> Changes in v2:
-> 1. None, only Rb tag.
->
-> Other patches from the set were applied.
-> ---
->  drivers/cpuidle/cpuidle-riscv-sbi.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidl=
-e-riscv-sbi.c
-> index 5bb3401220d2..d228b4d18d56 100644
-> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> @@ -448,7 +448,6 @@ static void sbi_pd_remove(void)
->
->  static int sbi_genpd_probe(struct device_node *np)
->  {
-> -       struct device_node *node;
->         int ret =3D 0, pd_count =3D 0;
->
->         if (!np)
-> @@ -458,13 +457,13 @@ static int sbi_genpd_probe(struct device_node *np)
->          * Parse child nodes for the "#power-domain-cells" property and
->          * initialize a genpd/genpd-of-provider pair when it's found.
->          */
-> -       for_each_child_of_node(np, node) {
-> +       for_each_child_of_node_scoped(np, node) {
->                 if (!of_property_present(node, "#power-domain-cells"))
->                         continue;
->
->                 ret =3D sbi_pd_init(node);
->                 if (ret)
-> -                       goto put_node;
-> +                       goto remove_pd;
->
->                 pd_count++;
->         }
-> @@ -480,8 +479,6 @@ static int sbi_genpd_probe(struct device_node *np)
->
->         return 0;
->
-> -put_node:
-> -       of_node_put(node);
->  remove_pd:
->         sbi_pd_remove();
->         pr_err("failed to create CPU PM domains ret=3D%d\n", ret);
-> --
-> 2.43.0
->
 
