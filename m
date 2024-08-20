@@ -1,105 +1,97 @@
-Return-Path: <linux-pm+bounces-12585-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12586-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13A30958EBB
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 21:45:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B6F6958ECE
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 21:50:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B10CB1F2312F
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 19:45:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 353D3B22960
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 19:50:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CBA41598E3;
-	Tue, 20 Aug 2024 19:44:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF7CE19047D;
+	Tue, 20 Aug 2024 19:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hKtMlnN3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gbVVZmTG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5A318E344;
-	Tue, 20 Aug 2024 19:44:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA8C15FA93;
+	Tue, 20 Aug 2024 19:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724183098; cv=none; b=fXvG10q632PngVcSA3dyksUBTgE2ZpV8AujGzCgpkol91HBEf8yceiFY/4CQ3X2hqYLUu366o8pT4TXIGQZF/GF2A2sydJQ7Q09RGd/n64nowgKxMycHggfBwN9cPAV7cwLlN5gcgvDvdNZ2Q8/UlmcGms21YdTN/Ve1E4R10G8=
+	t=1724183374; cv=none; b=N4J9uwNIDIJQhuqKJbG/+4t7xB/GRqTF2ZMXdAgygMaQevDP0dcKwHdvKoYyNpq+0TJGZqW+L09Aca0l/V76ZJdEjZIaGZ9xyOF7IqmBINcHxhrMoRt/tWXwMTiIjJdIXnwh8RcLw4OvjguGhbw2erH9jtq1pWQHUrxjs/GYS3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724183098; c=relaxed/simple;
-	bh=5zNMj6jOkWngChBd/1xsuHniRvKqUbXx1HRiMAzGvUI=;
+	s=arc-20240116; t=1724183374; c=relaxed/simple;
+	bh=wkf9gsj1XSad7V3Dq8I4UyQtzWEYMfLIFCxAydmaCzw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hnxsrW54OdPE+k2HIbCz2uvEIWysS/TrDasqRykXulKLGD4K5TF+Q6oB9hRGgVg7rQYkCLBGY5ozWaOuncNlnuby5NQIWlb7EjV8fiFa3+ytDAvjKRktaZ+Z2DGVAN3NP/q1SsF/NOpXJNKVZxyUWMtNZttpJ3uBLazvp6Pkn9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hKtMlnN3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57E40C4AF0B;
-	Tue, 20 Aug 2024 19:44:58 +0000 (UTC)
+	 To:Cc:Content-Type; b=H3HPZHagXn4E7Uf5GFqt1iPlNoK4iumusCV4R8iqKOqxPrmRkk6/o3MYeW+fxl37m/7YM8YF3PnRqbIDRiiQ+3Hr8Xv3t+JjeBa6ifL4g2Gyektbu2/elAPlUyZBY0eu5oF1gAFhQ8AC+/N33rHMk38RuosRzc/dMIAGWUjE4f8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gbVVZmTG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 446B3C4AF09;
+	Tue, 20 Aug 2024 19:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724183098;
-	bh=5zNMj6jOkWngChBd/1xsuHniRvKqUbXx1HRiMAzGvUI=;
+	s=k20201202; t=1724183374;
+	bh=wkf9gsj1XSad7V3Dq8I4UyQtzWEYMfLIFCxAydmaCzw=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hKtMlnN3srgkr78qdhVU8x+LRFQioBuWD9xyS5SuiQX5KnBrquFH7C+dtigb6+OdG
-	 tbiYjSzBn2kVjf4NDhkvdgKodu2RPleOBVTsC68LHkthvEOjy38u7X4KQfTD9QJNET
-	 4aWxwvdV3uGuOwSi8WXgPVR8DNinvSffRAVA8V+IpctDWMtbNOfOimr8RM43DaoZQb
-	 4iX3JyU8mII1Tm3xhK5bGXurcJZ/Gb83pHdjfecb0rtB2os1CbBmzzD4kf+yCj7AIv
-	 M5QlhdUNzl7t+r2EiksXEuSzS8Bq71YpUfM1XzC8rpEo6wrh1nCnYfhxVokwrK0yty
-	 r5YwsYS16VDDQ==
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7093d565310so4454037a34.2;
-        Tue, 20 Aug 2024 12:44:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUAct0MqKow3HZqzw/wAsp05+UKf0K57skVj150zacXOXIO3PR6nBc8eHa6G5O32knz1wDllrCVQKj5wIzJ@vger.kernel.org, AJvYcCWgSyhHILkOA8ssFLWWUp1b26Ngr4kPMXC17EfTbVUT9X2VT4mP7kNVbjAIfS2k9Klv7tgfQC6h+dCTK+hruPs=@vger.kernel.org, AJvYcCXgUaNkdOsp+nV6t4NizUxYujsBlDTaOUnaArajQG7r66KTLyEuG7/mv9Z85yDZDmwLpBPV/WdoLhI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YymQPRkVR6NdoQXDTW5u1PpjLaCpvgETHettFbAMP9ou99DHFoY
-	R2Ywmrn1dGMyha9nQP1rrxvCeD5pS6ZZaiNT6CrHI/2h9Ppy6VSaVFA5OvzHm1nOpbYoSaOWsxn
-	f6Qb2YajSRKXaEQFmCUiDkLFpkRE=
-X-Google-Smtp-Source: AGHT+IEv5xnvO58H1asFV+sqhstPmFN30r9iiFj5GLMWIrz4UaJDHnD6zG2CIWOSdjqPqqD8aC30Ankwg/xC7z4VbMI=
-X-Received: by 2002:a05:6871:8a8:b0:260:e2ed:1abe with SMTP id
- 586e51a60fabf-270815de11bmr3621294fac.39.1724183097689; Tue, 20 Aug 2024
- 12:44:57 -0700 (PDT)
+	b=gbVVZmTG/SRnVY6iMRmOJQvuRI/8KIUJ9pBlKlB4oJy9xuRxyKvxK9KDnwJrJuqS4
+	 nHj4l6KqMEwTOgrXd6qbK9glhJnqEYvVTHkujvxDfuESIkstmV8DUxx1Xt8giD9WVy
+	 x03oWr11ujcEfjwoU8BlG4+aYQlbrCOlvISgEGe4t5bTlZ9AlJiILtIpca8J+B8ZOv
+	 1V2tnVWcF/XWAGxIirrrWFVkcCeXvvZIiWasaYMG+uPxq3VqUEsnwAw+QmLUqxrO4s
+	 0pQRSkmPdoV7BYunY5ewYZnjKKSCROZ3DERwwDXCgJV5PKXaAQkbY++BWHdSOxFs3M
+	 Ewi76G9OuiKTw==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-270420e231aso2049316fac.2;
+        Tue, 20 Aug 2024 12:49:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCULeQCeYIgKQx8GdbvFSgywG3gCt156yibpWy09KcCXL9pcqnFDlGSSyid8UoUKQ+vFFdzNrkiejh8VrIA=@vger.kernel.org, AJvYcCUjW3FA80bA0ySYpRI07phruKS0ehqOtFsB+esAtzMSS84PYcaXk7Vp2OIliPLwmpZhwJ7fHWuk@vger.kernel.org, AJvYcCWo/KXj7iL72AD9dRzxy5s7Jo0jC4AgnsQ1uTw/wEWSK3IyVkUtCeUryFV5DqMc2IQO5/wGMs76yCo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4p1XAdfVy958I1n+n5rKjxw811PBYUv9EtDqK6H6/XZ4agdLn
+	kRMFlz+1TR3/4Ld7tW5HNox3Dqitjw5GOJ+wOHxNS29ebRE7qYUvmff6JRbKr/alaeXIMPvc5Y4
+	V1FydHBw9c4XUTk8BTnCKb83+cw4=
+X-Google-Smtp-Source: AGHT+IEROyYPyyUToSOegMz5cgcnQfC+ZGutYEi8+81lPeRqkPLiLkJ6XqDwy11TysehDcz1PmHz7jBrDEzmfk2nO1I=
+X-Received: by 2002:a05:6870:96ab:b0:270:4a9:c369 with SMTP id
+ 586e51a60fabf-2701c349c01mr18298140fac.7.1724183372607; Tue, 20 Aug 2024
+ 12:49:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <86e3a059-504d-4795-a5ea-4a653f3b41f8@stanley.mountain>
-In-Reply-To: <86e3a059-504d-4795-a5ea-4a653f3b41f8@stanley.mountain>
+References: <20240820094023.61155-1-krzysztof.kozlowski@linaro.org> <CAAhSdy3S_QTBzCNtj8kKDpzxtoeyKWvGLtjgSTViieWimpP-JA@mail.gmail.com>
+In-Reply-To: <CAAhSdy3S_QTBzCNtj8kKDpzxtoeyKWvGLtjgSTViieWimpP-JA@mail.gmail.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 20 Aug 2024 21:44:46 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ixtyB4FFEBAUru-hRh5bfCKeCEJw2+_0gvWMiboRrs2Q@mail.gmail.com>
-Message-ID: <CAJZ5v0ixtyB4FFEBAUru-hRh5bfCKeCEJw2+_0gvWMiboRrs2Q@mail.gmail.com>
-Subject: Re: [PATCH] powercap: intel_rapl: Fix off by one in get_rpi()
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Zhang Rui <rui.zhang@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Date: Tue, 20 Aug 2024 21:49:21 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i7kweDVUGw103kq7kPOoh+9vJMU_8xugHA_hqqkRdaNg@mail.gmail.com>
+Message-ID: <CAJZ5v0i7kweDVUGw103kq7kPOoh+9vJMU_8xugHA_hqqkRdaNg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] cpuidle: riscv-sbi: Use scoped device node
+ handling to fix missing of_node_put
+To: Anup Patel <anup@brainfault.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Atish Patra <atishp@rivosinc.com>, linux-pm@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 20, 2024 at 10:41=E2=80=AFAM Dan Carpenter <dan.carpenter@linar=
-o.org> wrote:
+On Tue, Aug 20, 2024 at 12:57=E2=80=AFPM Anup Patel <anup@brainfault.org> w=
+rote:
 >
-> The rp->priv->rpi array is either rpi_msr or rpi_tpmi which have
-> NR_RAPL_PRIMITIVES number of elements.  Thus the > needs to be >=3D
-> to prevent an off by one access.
+> On Tue, Aug 20, 2024 at 3:10=E2=80=AFPM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> >
+> > Two return statements in sbi_cpuidle_dt_init_states() did not drop the
+> > OF node reference count.  Solve the issue and simplify entire error
+> > handling with scoped/cleanup.h.
+> >
+> > Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+> > Cc: <stable@vger.kernel.org>
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >
-> Fixes: 98ff639a7289 ("powercap: intel_rapl: Support per Interface primiti=
-ve information")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> ---
->  drivers/powercap/intel_rapl_common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> LGTM.
 >
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/inte=
-l_rapl_common.c
-> index 8b7a5a31e8c1..67aec73511a7 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -740,7 +740,7 @@ static struct rapl_primitive_info *get_rpi(struct rap=
-l_package *rp, int prim)
->  {
->         struct rapl_primitive_info *rpi =3D rp->priv->rpi;
->
-> -       if (prim < 0 || prim > NR_RAPL_PRIMITIVES || !rpi)
-> +       if (prim < 0 || prim >=3D NR_RAPL_PRIMITIVES || !rpi)
->                 return NULL;
->
->         return &rpi[prim];
-> --
+> Reviewed-by: Anup Patel <anup@brainfault.org>
 
-Applied as 6.12 material, thanks!
+Applied along with the [2/2] as 6.12 material, thanks!
 
