@@ -1,172 +1,215 @@
-Return-Path: <linux-pm+bounces-12504-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12505-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6C88957AE9
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 03:26:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAFE1957BE5
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 05:25:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E16F11C23E4A
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 01:26:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A37C5284D3C
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 03:25:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A48E033FD;
-	Tue, 20 Aug 2024 01:26:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFDF7482FF;
+	Tue, 20 Aug 2024 03:25:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aAGtY0Um"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EQHcXtLg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21620B657
-	for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 01:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347BE4643B;
+	Tue, 20 Aug 2024 03:25:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724117187; cv=none; b=JqAaaiJyrLhDz/eqqr/WEEjieTygjc4LWhIJ1R+Sga2Zj3UeHAGtuVEkLhLTmfU5f32bnvu4oJxH4UoiQgTv81BocOA3NhyLuFlmIvaow0Hcrvgdh5QWu7+bfEu5wjXlRjzgCeTZw59AsAKT7To954yligh2XhEg/dSGktZLe5E=
+	t=1724124316; cv=none; b=gRSGXomB2Gak+PPuzbUyGcZ4gjWfBJrTBPeyI8TkY/cwvGVUajlguLnayUabz6cvWa8aL4IAh4yK0vcB5GbAb8qEnaKJ0QShmxvIPNvIKw9qlpbOJD2cXMGkxbRf6Ewh923VnSF2PHLwVXh3WMOsfRZQwtycQw2tA1LlKyRskIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724117187; c=relaxed/simple;
-	bh=n0ox3inuNJY4PcPhDinLaTHitqCQE4xQYSQhy2E/Ayc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Gpbmg9e3T79QMGBi5OA6PnMYkbaQjzx8V8OFjpwl8Xj+oiMrO0l2+oi+qGIs5tAjUauCDWsUUQ/RN25tOL0gx1ok8Jt2oiMWBa5K/BYJ3KdZcJwMT2PLitbUn5fpLTWMPnxH5A4gd3bTi0RZOCXsn30roSId+8xvR5Q9XdmskxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aAGtY0Um; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-201e2fe323aso2776785ad.2
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 18:26:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724117185; x=1724721985; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ayKww0j5FdJl6Q5VnO6Xfpm8usKnNXSqgVhAkZT6vlQ=;
-        b=aAGtY0UmGc3C6epFVlpfgj3J9QWj7YkN6WTWc2yQ0Dz9Sxtsut7KA6VtFzyco1R4Jx
-         OXKlvBDRnSApiLWHfTiSAK8AQaxvaLkDURVNAjFJGx7TQEZX+BdB2xWhKYnCpq5ZaAu2
-         l1ToDK+aDbDvFN09ElrvBLxHvHJPSg+6NBrvs3KxS9M08FiiHJy6kUDBITmLRURUGO3T
-         x12pM9bEG0SFx2ZL5H4/Y9CAj7q8Noyx7/MxXV8pK4stG78rqBdbnL7ec3vr25zlEg/d
-         sPSRmVABrBF7OAHk8jQxzodGxzMNqLwNaf1TG3RZZxP+Xqs0hvTaUR24vOWt96kjLVUy
-         d8og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724117185; x=1724721985;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ayKww0j5FdJl6Q5VnO6Xfpm8usKnNXSqgVhAkZT6vlQ=;
-        b=E4qHNkwPfapIwedQ8F5G5mYjxZggNtuCf5BMQFUsuCKww5toywE71qpXkMNt8NCkEM
-         HOtVYeylvkEgafVM6uzGqOF6ncGJT3w0M79gINDN0VDlb103+sl9ew+6fXt2zsOfidTH
-         RQOwPRqvw4D28xf1JjMQZteIrXckZLnXQ7+ixzbtzHpULM0N/uj2OkRhWbZB3FhpxQI7
-         bukey+YjmQp30adxm1boay0cwWtiNeYtMYOzK5Vr/QNiYv3kzlUdBBngB8h9apZutvLO
-         61VKXfUMcFTZHOyWEoEFFCNuptY1r5tedQi195NXemg5PKwaZSacIL49v12SwSG7Hob5
-         NY+A==
-X-Forwarded-Encrypted: i=1; AJvYcCWs8/+4AGv7honFJi43ohaXrQ5F0zM257bj1vMciJe0Pla/ULOrcuWkYvsP+a+uswz1FaOC8mm8SfU8K8vDTCRRFb16+MavIjo=
-X-Gm-Message-State: AOJu0Ywv8TsMY77z1iAxRzIvEwtxmTI/pbt2qUw7K2FgkhtiTzNFFbwc
-	kl0ko11dAgLtGSzdsh+9casa+/Olkc4X+pOD6z2LgeL9Mbpq4JJA
-X-Google-Smtp-Source: AGHT+IGZq5FxLK2SRjoF4/bHuJHPHUkFxYTDo4gjtSTg1VWULJAOET1/ZAHgIawRZMptvNH19POjtQ==
-X-Received: by 2002:a17:902:c406:b0:1fb:1ae6:6aa7 with SMTP id d9443c01a7336-202060c4774mr91705755ad.3.1724117185241;
-        Mon, 19 Aug 2024 18:26:25 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:9187:7fc0:77bb:926e])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-202405921e6sm23193785ad.265.2024.08.19.18.26.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2024 18:26:24 -0700 (PDT)
-From: Fabio Estevam <festevam@gmail.com>
-To: daniel.lezcano@linaro.org
-Cc: rafael@kernel.org,
-	linux-pm@vger.kernel.org,
-	Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v2 2/2] thermal: imx: Remove __maybe_unused notations
-Date: Mon, 19 Aug 2024 22:26:16 -0300
-Message-Id: <20240820012616.1449210-2-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240820012616.1449210-1-festevam@gmail.com>
-References: <20240820012616.1449210-1-festevam@gmail.com>
+	s=arc-20240116; t=1724124316; c=relaxed/simple;
+	bh=arXtY8+yaGUrI22wutV9mAq9/y3cKEwah96ncigoBI0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Iw0g2EHmmhOPJNRVavMbVzAeB9RZJOOq8DEyaB4JotnL6JJARpqYrm2cky12XT9kvSB1l9Jl4TnDD3R2RBS61dXCBxkoLas6N4kUtiHOF4nQTVtlambhw6J5zz/GRQgaUbdWbiIjEnI3bO4VdCCL9/51FmR7b95RzFrKE9NqXrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EQHcXtLg; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724124314; x=1755660314;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=arXtY8+yaGUrI22wutV9mAq9/y3cKEwah96ncigoBI0=;
+  b=EQHcXtLgqihDMG8dPYcKrhSY+GC0/lGJ7RLMAhdgIXYNAQL2i8YdK0vs
+   vx9RSTODLGW9LTU0YN5rFlMGyCY30Vj0YgRi20O8Dors4SWjKCyp85svX
+   PwfWXO4gYUf7rjNOscw5UtoIL0prCNqJpbziv4nP6la0v4zRQ3PqWD4DT
+   yBiJ8Nq6qZvJzGgQqbKxLVaTPkva7oTSYYErpGp7SMWBKCzqDjxpSqAh6
+   go5bpDHwqqcXwCTYjElKdgzTX0YfZF9FlcS0rO+MZWrJ2w9P5QMdAL0sL
+   R6Vf8FCAZPr9SQ5DYSoWd5Hw2SX3JpQPcpCSmpS1ttr6hW5IQ1eUz5go2
+   Q==;
+X-CSE-ConnectionGUID: bZssVPFCTcu0FHtZrMKWgA==
+X-CSE-MsgGUID: mGlzBKiiQZGltO713QfNKg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="39859355"
+X-IronPort-AV: E=Sophos;i="6.10,160,1719903600"; 
+   d="scan'208";a="39859355"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 20:25:14 -0700
+X-CSE-ConnectionGUID: gCn0BrekRTuczmvKIWQTdQ==
+X-CSE-MsgGUID: ueTI0RlPRQ+C183K6oyRIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,160,1719903600"; 
+   d="scan'208";a="64759969"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 19 Aug 2024 20:25:12 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sgFUc-0009fY-12;
+	Tue, 20 Aug 2024 03:25:10 +0000
+Date: Tue, 20 Aug 2024 11:24:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+	devel@acpica.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:thermal-core-testing 7/23]
+ drivers/thermal/testing/zone.c:405:31: warning: 'kmalloc_array_noprof' sizes
+ specified with 'sizeof' in the earlier argument and not in the later
+ argument
+Message-ID: <202408201147.hRhwCUcp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Fabio Estevam <festevam@denx.de>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-core-testing
+head:   b7e46a95eece4ca15b1656c3c45323068642d11a
+commit: e89b27c5a79c07b289c3bf1b32bba376f6fa5b7e [7/23] thermal: Introduce a debugfs-based testing facility
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20240820/202408201147.hRhwCUcp-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240820/202408201147.hRhwCUcp-lkp@intel.com/reproduce)
 
-Replace SET_RUNTIME_PM_OPS()/SET SYSTEM_SLEEP_PM_OPS() with their modern
-RUNTIME_PM_OPS() and SYSTEM_SLEEP_PM_OPS() alternatives.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408201147.hRhwCUcp-lkp@intel.com/
 
-The combined usage of pm_ptr() and RUNTIME_PM_OPS/SYSTEM_SLEEP_PM_OPS()
-allows the compiler to evaluate if the runtime suspend/resume() functions
-are used at build time or are simply dead code.
+All warnings (new ones prefixed by >>):
 
-This allows removing __maybe_unused notations from the suspend/resume()
-functions.
+   In file included from include/linux/percpu.h:5,
+                    from include/linux/percpu_counter.h:14,
+                    from include/linux/mm_types.h:21,
+                    from include/linux/mmzone.h:22,
+                    from include/linux/gfp.h:7,
+                    from include/linux/xarray.h:16,
+                    from include/linux/list_lru.h:14,
+                    from include/linux/fs.h:13,
+                    from include/linux/debugfs.h:15,
+                    from drivers/thermal/testing/zone.c:12:
+   drivers/thermal/testing/zone.c: In function 'tt_zone_register_tz':
+>> drivers/thermal/testing/zone.c:405:31: warning: 'kmalloc_array_noprof' sizes specified with 'sizeof' in the earlier argument and not in the later argument [-Wcalloc-transposed-args]
+     405 |         trips = kcalloc(sizeof(*trips), tt_zone->num_trips, GFP_KERNEL);
+         |                               ^
+   include/linux/alloc_tag.h:206:16: note: in definition of macro 'alloc_hooks_tag'
+     206 |         typeof(_do_alloc) _res = _do_alloc;                             \
+         |                ^~~~~~~~~
+   include/linux/slab.h:728:49: note: in expansion of macro 'alloc_hooks'
+     728 | #define kmalloc_array(...)                      alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
+         |                                                 ^~~~~~~~~~~
+   include/linux/slab.h:757:41: note: in expansion of macro 'kmalloc_array'
+     757 | #define kcalloc(n, size, flags)         kmalloc_array(n, size, (flags) | __GFP_ZERO)
+         |                                         ^~~~~~~~~~~~~
+   drivers/thermal/testing/zone.c:405:17: note: in expansion of macro 'kcalloc'
+     405 |         trips = kcalloc(sizeof(*trips), tt_zone->num_trips, GFP_KERNEL);
+         |                 ^~~~~~~
+   drivers/thermal/testing/zone.c:405:31: note: earlier argument should specify number of elements, later size of each element
+     405 |         trips = kcalloc(sizeof(*trips), tt_zone->num_trips, GFP_KERNEL);
+         |                               ^
+   include/linux/alloc_tag.h:206:16: note: in definition of macro 'alloc_hooks_tag'
+     206 |         typeof(_do_alloc) _res = _do_alloc;                             \
+         |                ^~~~~~~~~
+   include/linux/slab.h:728:49: note: in expansion of macro 'alloc_hooks'
+     728 | #define kmalloc_array(...)                      alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
+         |                                                 ^~~~~~~~~~~
+   include/linux/slab.h:757:41: note: in expansion of macro 'kmalloc_array'
+     757 | #define kcalloc(n, size, flags)         kmalloc_array(n, size, (flags) | __GFP_ZERO)
+         |                                         ^~~~~~~~~~~~~
+   drivers/thermal/testing/zone.c:405:17: note: in expansion of macro 'kcalloc'
+     405 |         trips = kcalloc(sizeof(*trips), tt_zone->num_trips, GFP_KERNEL);
+         |                 ^~~~~~~
+>> drivers/thermal/testing/zone.c:405:31: warning: 'kmalloc_array_noprof' sizes specified with 'sizeof' in the earlier argument and not in the later argument [-Wcalloc-transposed-args]
+     405 |         trips = kcalloc(sizeof(*trips), tt_zone->num_trips, GFP_KERNEL);
+         |                               ^
+   include/linux/alloc_tag.h:206:34: note: in definition of macro 'alloc_hooks_tag'
+     206 |         typeof(_do_alloc) _res = _do_alloc;                             \
+         |                                  ^~~~~~~~~
+   include/linux/slab.h:728:49: note: in expansion of macro 'alloc_hooks'
+     728 | #define kmalloc_array(...)                      alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
+         |                                                 ^~~~~~~~~~~
+   include/linux/slab.h:757:41: note: in expansion of macro 'kmalloc_array'
+     757 | #define kcalloc(n, size, flags)         kmalloc_array(n, size, (flags) | __GFP_ZERO)
+         |                                         ^~~~~~~~~~~~~
+   drivers/thermal/testing/zone.c:405:17: note: in expansion of macro 'kcalloc'
+     405 |         trips = kcalloc(sizeof(*trips), tt_zone->num_trips, GFP_KERNEL);
+         |                 ^~~~~~~
+   drivers/thermal/testing/zone.c:405:31: note: earlier argument should specify number of elements, later size of each element
+     405 |         trips = kcalloc(sizeof(*trips), tt_zone->num_trips, GFP_KERNEL);
+         |                               ^
+   include/linux/alloc_tag.h:206:34: note: in definition of macro 'alloc_hooks_tag'
+     206 |         typeof(_do_alloc) _res = _do_alloc;                             \
+         |                                  ^~~~~~~~~
+   include/linux/slab.h:728:49: note: in expansion of macro 'alloc_hooks'
+     728 | #define kmalloc_array(...)                      alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
+         |                                                 ^~~~~~~~~~~
+   include/linux/slab.h:757:41: note: in expansion of macro 'kmalloc_array'
+     757 | #define kcalloc(n, size, flags)         kmalloc_array(n, size, (flags) | __GFP_ZERO)
+         |                                         ^~~~~~~~~~~~~
+   drivers/thermal/testing/zone.c:405:17: note: in expansion of macro 'kcalloc'
+     405 |         trips = kcalloc(sizeof(*trips), tt_zone->num_trips, GFP_KERNEL);
+         |                 ^~~~~~~
+--
+>> drivers/thermal/testing/zone.c:52: warning: Function parameter or struct member 'refcount' not described in 'tt_thermal_zone'
+>> drivers/thermal/testing/zone.c:52: warning: Excess struct member 'refcont' description in 'tt_thermal_zone'
+>> drivers/thermal/testing/zone.c:71: warning: Excess struct member 'tt_zone' description in 'tt_trip'
 
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
-Changes since v1:
-- None.
 
- drivers/thermal/imx_thermal.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+vim +405 drivers/thermal/testing/zone.c
 
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index 091fb30dedf3..495ff2eeb0a1 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -773,7 +773,7 @@ static void imx_thermal_remove(struct platform_device *pdev)
- 	imx_thermal_unregister_legacy_cooling(data);
- }
- 
--static int __maybe_unused imx_thermal_suspend(struct device *dev)
-+static int imx_thermal_suspend(struct device *dev)
- {
- 	struct imx_thermal_data *data = dev_get_drvdata(dev);
- 	int ret;
-@@ -792,7 +792,7 @@ static int __maybe_unused imx_thermal_suspend(struct device *dev)
- 	return pm_runtime_force_suspend(data->dev);
- }
- 
--static int __maybe_unused imx_thermal_resume(struct device *dev)
-+static int imx_thermal_resume(struct device *dev)
- {
- 	struct imx_thermal_data *data = dev_get_drvdata(dev);
- 	int ret;
-@@ -804,7 +804,7 @@ static int __maybe_unused imx_thermal_resume(struct device *dev)
- 	return thermal_zone_device_enable(data->tz);
- }
- 
--static int __maybe_unused imx_thermal_runtime_suspend(struct device *dev)
-+static int imx_thermal_runtime_suspend(struct device *dev)
- {
- 	struct imx_thermal_data *data = dev_get_drvdata(dev);
- 	const struct thermal_soc_data *socdata = data->socdata;
-@@ -826,7 +826,7 @@ static int __maybe_unused imx_thermal_runtime_suspend(struct device *dev)
- 	return 0;
- }
- 
--static int __maybe_unused imx_thermal_runtime_resume(struct device *dev)
-+static int imx_thermal_runtime_resume(struct device *dev)
- {
- 	struct imx_thermal_data *data = dev_get_drvdata(dev);
- 	const struct thermal_soc_data *socdata = data->socdata;
-@@ -857,15 +857,15 @@ static int __maybe_unused imx_thermal_runtime_resume(struct device *dev)
- }
- 
- static const struct dev_pm_ops imx_thermal_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(imx_thermal_suspend, imx_thermal_resume)
--	SET_RUNTIME_PM_OPS(imx_thermal_runtime_suspend,
--			   imx_thermal_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(imx_thermal_suspend, imx_thermal_resume)
-+	RUNTIME_PM_OPS(imx_thermal_runtime_suspend,
-+		       imx_thermal_runtime_resume, NULL)
- };
- 
- static struct platform_driver imx_thermal = {
- 	.driver = {
- 		.name	= "imx_thermal",
--		.pm	= &imx_thermal_pm_ops,
-+		.pm	= pm_ptr(&imx_thermal_pm_ops),
- 		.of_match_table = of_imx_thermal_match,
- 	},
- 	.probe		= imx_thermal_probe,
+   392	
+   393	static int tt_zone_register_tz(struct tt_thermal_zone *tt_zone)
+   394	{
+   395		struct thermal_trip *trips __free(kfree);
+   396		struct thermal_zone_device *tz;
+   397		struct tt_trip *tt_trip;
+   398		int i;
+   399	
+   400		guard(tt_zone)(tt_zone);
+   401	
+   402		if (tt_zone->tz)
+   403			return -EINVAL;
+   404	
+ > 405		trips = kcalloc(sizeof(*trips), tt_zone->num_trips, GFP_KERNEL);
+   406		if (!trips)
+   407			return -ENOMEM;
+   408	
+   409		i = 0;
+   410		list_for_each_entry(tt_trip, &tt_zone->trips, list_node)
+   411			trips[i++] = tt_trip->trip;
+   412	
+   413		tt_zone->tz_temp = tt_zone->temp;
+   414	
+   415		tz = thermal_zone_device_register_with_trips("test_tz", trips, i, tt_zone,
+   416							     &tt_zone_ops, NULL, 0, 0);
+   417		if (IS_ERR(tz))
+   418			return PTR_ERR(tz);
+   419	
+   420		tt_zone->tz = tz;
+   421	
+   422		thermal_zone_device_enable(tz);
+   423	
+   424		return 0;
+   425	}
+   426	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
