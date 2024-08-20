@@ -1,84 +1,84 @@
-Return-Path: <linux-pm+bounces-12507-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12508-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCD42957C60
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 06:26:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81442957CCB
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 07:37:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 565AB284CC5
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 04:26:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 789D31C23567
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 05:37:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EA184DA14;
-	Tue, 20 Aug 2024 04:26:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD31113C81B;
+	Tue, 20 Aug 2024 05:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iBrG3K7A"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OSopL9aC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351C02F5E;
-	Tue, 20 Aug 2024 04:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9EE136672;
+	Tue, 20 Aug 2024 05:37:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724127985; cv=none; b=S39Hg/+GGjl1lE4H3tjBezQ+x6d3CxXp+YMcIACj/Qg7FbLodNsf19zityygV1WREfU6WxNHT3A9lL1DpGEuldknfGaj/ZsHPjd5J7S76n+31Du0o31TMZEY7Q5w8U/Uxy57iuge8ZDMnaEcYIq/34iVIdj/RL1YcEzQJegARnU=
+	t=1724132245; cv=none; b=KhI8E+G4Kpb7sAFo8r2L2NfjKSSKFzxAL80y02IxJ4Gr65d0ECE3HMBhwjpjhdKDnor9oLSleOh6AqgY1KeAxprAjUR0qZef3Y/ZY9Y8r5fMrbabjFkjah7vrVmwFY1rJqpOHQwPKqyMqBrCCE8iC4ZD0sketckHUHDiEXSLYnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724127985; c=relaxed/simple;
-	bh=EPhEMjY7bJqv3OgXaq6MdbBJoS9xZMpbdW6dSGjRQqs=;
+	s=arc-20240116; t=1724132245; c=relaxed/simple;
+	bh=UTDilvLJBoUy3712767wYi1ysEYam3UQ+yO9j2wCBkE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SxQ4ti0gkbGNlBYArUZ87jH2locsFnSkVyunEw+8zIQJdiwxrAzSTMa3XfhLjf71jXLoBWo7sge/28Ouhz9KVIrVtFlNyRzC6WtQ5/RKg/jutXjvXuHdeM3POKaFOiZTe4Wz+TIZQ4roJnJkDOYtDLIsuzLyP5ZQ75tkzt5+1cU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iBrG3K7A; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=uQBU7ou/kCtOXxqg1Aumsf+lGlnjYz+i3cXkTr96ylfGTXZwmwE44tLWOtQ3KRzeL5Ze/tdxHhxSaQlV84nVEX55NH1r4YbreprrgrBAgsHYm543/JfSpktNVHt2UlS5uVDXmm+tdwiqXSo0HXT7KryxJOlsu7Mk45uLGL5IHQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OSopL9aC; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724127982; x=1755663982;
+  t=1724132244; x=1755668244;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=EPhEMjY7bJqv3OgXaq6MdbBJoS9xZMpbdW6dSGjRQqs=;
-  b=iBrG3K7A5D1E/CklMiQ12vUS7a5QE8cGpQ8TxvNnXfZrwt9uwZSVhvw3
-   OEWDv50s1idnyfRXGr8yGc7Fu9gQCyznYsEH2YZn18YjNkFn17C8RRaae
-   oWu8IUl8/sC0F+lHS5NCEbzSaIFR+81Agug/MPUobtmKEdsM5fc3Uajdz
-   MXE/OvMW5RzIx72DrCcr30lV2CUbKhKthaKcd0iPzzZ6Dl2QbE/GRyaLh
-   1gCfRCFNWcmrP46jJoFjLf/nSLpF7vci76mbFmYuTVbbGYq8Kfc4aeM5F
-   gsnzwX8NpKTA59D/PF8Q3ADMkNK3NtnxuwVVzN+ZhqOXH0bt+BDYDhQkg
-   g==;
-X-CSE-ConnectionGUID: OKITTNVIQXKCvtCu1q9+PA==
-X-CSE-MsgGUID: ZZBWsr05QAaBfy9R7dhq1w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="22543924"
+  bh=UTDilvLJBoUy3712767wYi1ysEYam3UQ+yO9j2wCBkE=;
+  b=OSopL9aCFIGgn6sVWZtjdpeGNFkDeQJM93oUZ2x02tkSJTSu5hELQ9SF
+   MUpPzuZuIJ2kMYqIestiHIlUMN7b+xj7pjN/ItJvtQmH5cT8QxMPBtnCQ
+   p/y/fiiMpTLW9wD5YVAs1yiweUNU8ZwBa7vhANcMJEl5YNi16OYOrjNpx
+   hVqJ77dKDFI+uXPT7VYOFmfe3KvVJbdVvCRL3qa/UgZY8OSBlTNLVDTbT
+   /LFBHA+n7qlKd/Mu39BR77MEI7J8/F2V1HLbjPcCyReMAbmPadzZq6o6/
+   YYOkfdi3rW+ZX+HO2mk/fLGPfGY9FqAuZmyYVwa18KHXqMKSptYGUHsnc
+   w==;
+X-CSE-ConnectionGUID: dC2a9wiuQFCc2569mQ65ZA==
+X-CSE-MsgGUID: muN1eP99QwaCziufa35HtA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="26162045"
 X-IronPort-AV: E=Sophos;i="6.10,161,1719903600"; 
-   d="scan'208";a="22543924"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 21:26:21 -0700
-X-CSE-ConnectionGUID: 5fcy/7axQQSIx4VehcG9EA==
-X-CSE-MsgGUID: fXqC33NVTqWsQaFZeFxYKA==
+   d="scan'208";a="26162045"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 22:37:23 -0700
+X-CSE-ConnectionGUID: Y3sTV+jFQUSBHDv1P9yb9w==
+X-CSE-MsgGUID: EyUAhAZNSVWeIzdqbHBRAA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,161,1719903600"; 
-   d="scan'208";a="60284429"
+   d="scan'208";a="60756700"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 19 Aug 2024 21:26:15 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 19 Aug 2024 22:37:18 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sgGRh-0009iQ-1k;
-	Tue, 20 Aug 2024 04:26:13 +0000
-Date: Tue, 20 Aug 2024 12:25:45 +0800
+	id 1sgHYR-0009lQ-26;
+	Tue, 20 Aug 2024 05:37:15 +0000
+Date: Tue, 20 Aug 2024 13:37:02 +0800
 From: kernel test robot <lkp@intel.com>
 To: Chris Morgan <macroalpha82@gmail.com>, linux-sunxi@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-	quentin.schulz@free-electrons.com, mripard@kernel.org,
-	tgamblin@baylibre.com, aidanmacdonald.0x0@gmail.com,
-	u.kleine-koenig@pengutronix.de, lee@kernel.org, samuel@sholland.org,
-	jernej.skrabec@gmail.com, sre@kernel.org, wens@csie.org,
-	conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org,
-	lars@metafoo.de, jic23@kernel.org, jonathan.cameron@huawei.com,
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-iio@vger.kernel.org, quentin.schulz@free-electrons.com,
+	mripard@kernel.org, tgamblin@baylibre.com,
+	aidanmacdonald.0x0@gmail.com, u.kleine-koenig@pengutronix.de,
+	lee@kernel.org, samuel@sholland.org, jernej.skrabec@gmail.com,
+	sre@kernel.org, wens@csie.org, conor+dt@kernel.org,
+	krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de,
+	jic23@kernel.org, jonathan.cameron@huawei.com,
 	Chris Morgan <macromorgan@hotmail.com>,
 	Philippe Simons <simons.philippe@gmail.com>
 Subject: Re: [PATCH V3 14/15] power: supply: axp20x_battery: add support for
  AXP717
-Message-ID: <202408201228.Hee4eSYl-lkp@intel.com>
+Message-ID: <202408201232.lgLOd5Nu-lkp@intel.com>
 References: <20240819164619.556309-15-macroalpha82@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -105,24 +105,22 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Morgan/iio-adc-axp2
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
 patch link:    https://lore.kernel.org/r/20240819164619.556309-15-macroalpha82%40gmail.com
 patch subject: [PATCH V3 14/15] power: supply: axp20x_battery: add support for AXP717
-config: i386-buildonly-randconfig-005-20240820 (https://download.01.org/0day-ci/archive/20240820/202408201228.Hee4eSYl-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240820/202408201228.Hee4eSYl-lkp@intel.com/reproduce)
+config: arc-randconfig-001-20240820 (https://download.01.org/0day-ci/archive/20240820/202408201232.lgLOd5Nu-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240820/202408201232.lgLOd5Nu-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408201228.Hee4eSYl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408201232.lgLOd5Nu-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/power/supply/axp20x_battery.c:266:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/power/supply/axp20x_battery.c: In function 'axp717_get_constant_charge_current':
+>> drivers/power/supply/axp20x_battery.c:266:16: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
      266 |         *val = FIELD_GET(AXP717_ICC_CHARGER_LIM_MASK, *val) *
-         |                ^
-   drivers/power/supply/axp20x_battery.c:439:17: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     439 |                 val->intval = FIELD_GET(AXP717_PWR_OP_BATT_PRESENT, reg);
-         |                               ^
-   2 errors generated.
+         |                ^~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
 vim +/FIELD_GET +266 drivers/power/supply/axp20x_battery.c
