@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-12571-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12572-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A48C958C52
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 18:37:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54E1F958C53
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 18:37:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0F031F25EA9
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 16:37:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BEF328381A
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 16:37:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CB961BB69B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 693D71B3F08;
 	Tue, 20 Aug 2024 16:36:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="wsyA3i1I"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="RXtjyE/P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2596C1B3F33
-	for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 16:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79064962C
+	for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 16:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724171809; cv=none; b=rcc8jr531xUZH/b5chIpCTh6C8Pw/TdjbEUj0Kkpf5lBD+wQyODMIwL8tA4BQlP1X6sqEafMriB0qTpe0qvjhNX3vFmjhDmQsBF6CSdNThdlKEQSm40DWI0rpGj6/HXkgCcLc+0iKJCLjIG5hrRzfUB/y7dOCJ7nQFwQbBjnrbY=
+	t=1724171809; cv=none; b=uzRXJhKVgwhBOc1TFrE0d7oRpkJzsX3REAj3IA2c/aRkPbYZHNSHcItWD0Ebg7uSvfnbxOk4tA+IUiFPfgPixZK16qaHnD714WB7YIb8Xv+0zxqCRj2chyxnng5HKZeEo8weJocwCfr+XVorPe+UeSLN0WvDMkRCJ9rx6nEUD1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1724171809; c=relaxed/simple;
-	bh=ggQ0xHMfPwWR5W6MLhFpsoF3X1RHmOFsfCjj+44KrkY=;
+	bh=NWGl6xmypDOUzvDbdd6/ZYozVxHaZS6LctziiRw3r/4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=W8AlGSN1XpjgGWwCiaCVbvGKZsJ/qkqqCp+T0k7L1zSWD9U50p6CwPjjVarJCaXuuQEiK3hdyfVyVbivmvhde5cRvi3zOHzzvw2ZdhQK+U1OQ5U+trx4DKwRwC7SZVBhKWJLYN4d0K285Q+qNgrqgR/nAQaa9bI2Dr3DREB12OU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=wsyA3i1I; arc=none smtp.client-ip=209.85.218.51
+	 MIME-Version:Content-Type; b=ORxUBjG8Jo5scv0hRw6rgQ0qEe+8eg58MAJK4E0V6/DiqEXk0KWZSZkf5baRHpIsPQbZbNDJKlZiqJ1Utl2fTF6cHLaAIQ0x9vKyDSh7S64VgQmdR8wF/DgTlrQR+OfVPR38f/AydZHvebUtPf7CKpismXhkPZg2R7Gbviyq+N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=RXtjyE/P; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a7ab5fc975dso569566366b.1
-        for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 09:36:45 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5bed68129a7so4960634a12.2
+        for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 09:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1724171804; x=1724776604; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1724171805; x=1724776605; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1wet2+g0g75UUnmsKQrb/VZONF2cRQanUuyFsF+8Vjk=;
-        b=wsyA3i1IbjWoPW9j3p0vNvUGwPtjDlNT45+LMvpLkR7Gh+g1Ft4yn9bcG6cHDY6Fx7
-         EskjTsaMfaEWcarR6Xqt1tnXRL+7pkPpjAlgUab7PvpOrpZbl2ph7izXNPl7oLISini8
-         V4ljBcawl8Sf7NAfs1prsOlVMV9YYOL0v+8HXCSOh1Jr1bnvLd6Ku1IjRgSIUBusiYEp
-         r084fR18jdRdhPY4bsDBe2NmYEqcLYCTg9X4e7/HH2BtfV9GHjqzHR7A6eYyy1REsQRq
-         0wdm6G189GSe9YpKNQ8GF0GCTNPMj8Yt4Zf7NoW335B8v6ZY/TFYj7N1dCKjvlLGo8OY
-         bzvw==
+        bh=MlOaXaSxe4t1PPDAFFFwKxv22YBKt/FKkTrJcGZpyCM=;
+        b=RXtjyE/P3BG/2Se4+wuqZn3Cf+Eru8kvIkt31wZ5fw+B8afAMb7hG0T6xvTJUx7Wbr
+         zoUrFjiJiuXtxr9Z+MqmRYNKrAE33RJh8GhoPs+yEgDPvAU4HjxwxnBEsrBhvm1Op+iB
+         MsqB62OBwp60MSPF6566vcj9AsfrPUInlpHhmjdyA3tAV9AUUITrl1T3f/ZD4SiGfbu/
+         6uWsY2WyLKUEJeUMedut17OPFs4qjrtj+z/bBKEb4YGQrewhdnn2JJwzhLS+6xFmNgbn
+         m2fv1pOjeajBEdvplOIEsRIkAhMWh66E/XSeviooXq6y/lUHoDntlNRhxiwvaPQgOuOb
+         Ek6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724171804; x=1724776604;
+        d=1e100.net; s=20230601; t=1724171805; x=1724776605;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1wet2+g0g75UUnmsKQrb/VZONF2cRQanUuyFsF+8Vjk=;
-        b=jbcH43S+Vbei6a2ua3WZ7LmB/boEIowfXt02L7i0S61mL66D+8UcLB+T78dxbVAi9E
-         JP/wno3u334Izb9x7IIKE3HvuNN92oUeQLEsG/AxoPtLG94mQPSdj3vpmS5vp/LVYprO
-         WAvcDj+/Gpje+g72j/8LgeYcp9ZKDsSn8084ekk27dBmUCuqEn66gI2O/p1b04WA/jlC
-         j5pJtq33QIVUeySLtsTSvqeJg61hWjt0huUOYKWX3kt3UefLYFBnchKYYDalt3bPbRC4
-         S0K+FG+UhBAdjUcFMdEseylvVJs5l59vMpy1gBj5c1FDF4capkbBmsnc6sHcmh99J9oX
-         Czxg==
-X-Forwarded-Encrypted: i=1; AJvYcCWwE41RUN3AWzfy38TVupUvm3Q7uo55nHxriziWw1FLMKXC+qX3JIaUoA5L3mTt9jjCI+G8/GBvx9K4F0gAnTDBxTSeeDwqO5U=
-X-Gm-Message-State: AOJu0YyKg2XrRBHvgHf/CPv6kETAzps0o7oZW70JlTl8Hwo3UOSJczkt
-	l24mLwqDlaJkl1SFB6ILh4HJFV4C4NfR1Mf2+0B/KaOvxPa9R00xcsnj9W4bRaw=
-X-Google-Smtp-Source: AGHT+IFEuSDJpZmH2vuXQPhm8UldWkmv4L2KE1jsWvuj7bhXQKIf0BaaBicVLq/zLot7W5U3e4x0BA==
-X-Received: by 2002:a17:906:d7c7:b0:a7a:bece:6222 with SMTP id a640c23a62f3a-a83928a9f25mr1027872166b.10.1724171804254;
-        Tue, 20 Aug 2024 09:36:44 -0700 (PDT)
+        bh=MlOaXaSxe4t1PPDAFFFwKxv22YBKt/FKkTrJcGZpyCM=;
+        b=o6vHk1sLOYUXOLR6wNrKFKdTvyZW4oJ65U6hoGg1s5IjR4J8z1pFjsXMxZWcWpyJt9
+         9DJZIWfUor6lS9ApDj0pWH7cso30eVA41D5+f0vAN16m7BBLPEF5So+7nWGEH5WaCI/3
+         XNDS5ZHor2SNsJ7oOpsl1FyH4fpMduCVdAR5wBu/d2RrZKyEPNsBTQx7boHL33DABGQL
+         NAufRHpOz2MxkmLgbuD1OeHsdasPAJKJ5lSyhW2T2i96Jjg7hEn0B1D8wTBy5yy7mpVL
+         hEtEkfiBkypoD7NNmsfwEvAk6MGOAg/aXbqR7SNOs8NNxkf/7lpzJ0tMXAZv0jzaDjTk
+         wCkw==
+X-Forwarded-Encrypted: i=1; AJvYcCXvtOdvLDKBLXIx9N/zcdQeI0Vp3t1INzhaUHBoOzr2vWSVCLKI4r4u1myM0f54zWwqbSoGQvGJXg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzjm4Vd69XLM9B3DQL7aSI7eTYnaeRyvOPYVdHBN+G4oVYBw/I7
+	yhcVJAgsZZp1/xatA7YGQTj38x7TsLlbtTs/+Nt+RlTPJG0FLYUCyA1C/5gYANw=
+X-Google-Smtp-Source: AGHT+IGd0lN/68+It+jeiTE+VFnqKtHnby+yBIZv2MbicBv5kJa2yRauuDHdIXSJbNXUDYwoNgDzbA==
+X-Received: by 2002:a17:907:c7d7:b0:a7a:be06:d8e3 with SMTP id a640c23a62f3a-a8392a22287mr1003338666b.46.1724171805332;
+        Tue, 20 Aug 2024 09:36:45 -0700 (PDT)
 Received: from airbuntu.. (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838cfb5esm780728766b.59.2024.08.20.09.35.22
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838cfb5esm780728766b.59.2024.08.20.09.36.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2024 09:36:43 -0700 (PDT)
+        Tue, 20 Aug 2024 09:36:44 -0700 (PDT)
 From: Qais Yousef <qyousef@layalina.io>
 To: Ingo Molnar <mingo@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
@@ -80,9 +80,9 @@ Cc: Juri Lelli <juri.lelli@redhat.com>,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Qais Yousef <qyousef@layalina.io>
-Subject: [RFC PATCH 07/16] sched/pelt: Introduce PELT multiplier boot time parameter
-Date: Tue, 20 Aug 2024 17:35:03 +0100
-Message-Id: <20240820163512.1096301-8-qyousef@layalina.io>
+Subject: [RFC PATCH 08/16] sched/fair: Extend util_est to improve rampup time
+Date: Tue, 20 Aug 2024 17:35:04 +0100
+Message-Id: <20240820163512.1096301-9-qyousef@layalina.io>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240820163512.1096301-1-qyousef@layalina.io>
 References: <20240820163512.1096301-1-qyousef@layalina.io>
@@ -92,154 +92,393 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The param is set as read only and can only be changed at boot time via
+Utilization invariance can cause big delays. When tasks are running,
+accumulate non-invairiant version of utilization to help tasks to settle
+down to their new util_avg values faster.
 
-	kernel.sched_pelt_multiplier=[1, 2, 4]
+Keep track of delta_exec during runnable across activations to help
+update util_est for a long running task accurately. util_est shoudl
+still behave the same at enqueue/dequeue.
 
-PELT has a big impact on the overall system response and reactiveness to
-change. Smaller PELT HF means it'll require less time to reach the
-maximum performance point of the system when the system become fully
-busy; and equally shorter time to go back to lowest performance point
-when the system goes back to idle.
+Before this patch the a busy task tamping up would experience the
+following transitions, running on M1 Mac Mini
 
-This faster reaction impacts both DVFS response and migration time
-between clusters in HMP system.
+                            rampup-6338 util_avg running
+     ┌─────────────────────────────────────────────────────────────────────────┐
+986.0┤                                                               ▄▄▄▄▄▟▀▀▀▀│
+     │                                                        ▗▄▄▟▀▀▀▘         │
+     │                                                    ▗▄▟▀▀                │
+     │                                                 ▄▟▀▀                    │
+739.5┤                                              ▄▟▀▘                       │
+     │                                           ▗▄▛▘                          │
+     │                                         ▗▟▀                             │
+493.0┤                                       ▗▛▀                               │
+     │                                    ▗▄▛▀                                 │
+     │                                  ▄▟▀                                    │
+     │                                ▄▛▘                                      │
+246.5┤                             ▗▟▀▘                                        │
+     │                          ▄▟▀▀                                           │
+     │                      ▗▄▄▛▘                                              │
+     │                 ▗▄▄▄▟▀                                                  │
+  0.0┤  ▗         ▗▄▄▟▀▀                                                       │
+     └┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬┘
+    1.700   1.733   1.767   1.800   1.833   1.867   1.900   1.933   1.967 2.000
 
-Smaller PELT values (higher multiplier) are expected to give better
-performance at the cost of more power. Under-powered systems can
-particularly benefit from faster response time. Powerful systems can
-still benefit from response time if they want to be tuned towards perf
-more and power is not the major concern for them.
+───────────────── rampup-6338 util_avg running residency (ms) ──────────────────
+0.0   ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 5.5
+15.0  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 7.9
+36.0  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 8.0
+57.0  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 8.0
+78.0  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 7.9
+98.0  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 5.0
+117.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 5.0
+137.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 5.0
+156.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 4.0
+176.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3.0
+191.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 4.0
+211.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 4.0
+230.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3.0
+248.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3.0
+266.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+277.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3.0
+294.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.6
+311.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.4
+327.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+340.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3.0
+358.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+371.0 ▇▇▇▇▇▇▇▇▇ 1.0
+377.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+389.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+401.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+413.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3.0
+431.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+442.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+456.0 ▇▇▇▇▇▇▇▇▇ 1.0
 
-This combined with response_time_ms from schedutil should give the user
-and sysadmin a deterministic way to control the triangular power, perf
-and thermals for their system. The default response_time_ms will half
-as PELT HF halves.
+───────────────────────── Sum Time Running on CPU (ms) ─────────────────────────
+CPU0.0 ▇▇▇▇▇ 90.39
+CPU4.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 1156.93
 
-Update approximate_{util_avg, runtime}() to take into account the PELT
-HALFLIFE multiplier.
+                            6338 rampup CPU0.0 Frequency
+    ┌──────────────────────────────────────────────────────────────────────────┐
+2.06┤                                ▛▀▀                                       │
+    │                                ▌                                         │
+    │                                ▌                                         │
+    │                                ▌                                         │
+1.70┤                             ▛▀▀▘                                         │
+    │                             ▌                                            │
+    │                             ▌                                            │
+1.33┤                         ▗▄▄▄▌                                            │
+    │                         ▐                                                │
+    │                         ▐                                                │
+    │                         ▐                                                │
+0.97┤                     ▗▄▄▄▟                                                │
+    │                     ▐                                                    │
+    │                     ▐                                                    │
+    │                     ▐                                                    │
+0.60┤  ▗         ▗▄▄▄▄▄▄▄▄▟                                                    │
+    └┬───────┬───────┬───────┬───────┬────────┬───────┬───────┬───────┬───────┬┘
+   1.700   1.733   1.767   1.800   1.833    1.867   1.900   1.933   1.967 2.000
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-[qyousef: Commit message and boot param]
+                            6338 rampup CPU4.0 Frequency
+    ┌──────────────────────────────────────────────────────────────────────────┐
+3.20┤                                                    ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀│
+    │                                                    ▐                     │
+    │                                                  ▛▀▀                     │
+    │                                                  ▌                       │
+2.78┤                                               ▐▀▀▘                       │
+    │                                             ▗▄▟                          │
+    │                                             ▌                            │
+2.35┤                                          ▗▄▄▌                            │
+    │                                          ▐                               │
+    │                                        ▄▄▟                               │
+    │                                        ▌                                 │
+1.93┤                                     ▗▄▄▌                                 │
+    │                                     ▐                                    │
+    │                                     ▐                                    │
+    │                                     ▐                                    │
+1.50┤                                  ▗▄▄▟                                    │
+    └┬───────┬───────┬───────┬───────┬────────┬───────┬───────┬───────┬───────┬┘
+   1.700   1.733   1.767   1.800   1.833    1.867   1.900   1.933   1.967 2.000
+
+───────────────── 6338 rampup CPU0.0 Frequency residency (ms) ──────────────────
+0.6   ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 37.300000000000004
+0.972 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 15.0
+1.332 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 15.0
+1.704 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 11.0
+2.064 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 12.1
+
+───────────────── 6338 rampup CPU4.0 Frequency residency (ms) ──────────────────
+1.5   ▇▇▇▇▇▇▇▇▇▇ 11.9
+1.956 ▇▇▇▇▇▇▇▇ 10.0
+2.184 ▇▇▇▇▇▇▇▇ 10.0
+2.388 ▇▇▇▇▇▇▇▇▇ 11.0
+2.592 ▇▇▇▇▇▇▇▇ 10.0
+2.772 ▇▇▇▇▇▇▇▇ 10.0
+2.988 ▇▇▇▇▇▇▇▇ 10.0
+3.204 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 85.3
+
+After the patch the response is improved to rampup frequencies faster
+and migrate from little quicker
+
+                           rampup-2234 util_avg running
+   ┌───────────────────────────────────────────────────────────────────────────┐
+984┤                                                                ▗▄▄▄▄▄▛▀▀▀▀│
+   │                                                          ▄▄▟▀▀▀▀          │
+   │                                                     ▄▄▟▀▀                 │
+   │                                                  ▄▟▀▘                     │
+738┤                                               ▄▟▀▘                        │
+   │                                            ▗▟▀▘                           │
+   │                                          ▗▟▀                              │
+492┤                                        ▗▟▀                                │
+   │                                      ▗▟▀                                  │
+   │                                     ▟▀                                    │
+   │                                   ▄▛▘                                     │
+246┤                                 ▗▟▘                                       │
+   │                               ▗▟▀                                         │
+   │                             ▗▟▀                                           │
+   │                           ▗▟▀                                             │
+  0┤                       ▄▄▄▛▀                                               │
+   └┬───────┬───────┬────────┬───────┬───────┬───────┬────────┬───────┬───────┬┘
+  1.700   1.733   1.767    1.800   1.833   1.867   1.900    1.933   1.967 2.000
+
+───────────────── rampup-2234 util_avg running residency (ms) ──────────────────
+0.0   ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 5.6000000000000005
+15.0  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 8.0
+39.0  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 5.0
+61.0  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 4.0
+85.0  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+99.0  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3.0
+120.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3.0
+144.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+160.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+176.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+192.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+210.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+228.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+246.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+263.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+282.0 ▇▇▇▇▇▇▇ 1.0
+291.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+309.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+327.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+344.0 ▇▇▇▇▇▇▇ 1.0
+354.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+373.0 ▇▇▇▇▇▇▇ 1.0
+382.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+400.0 ▇▇▇▇▇▇▇ 1.0
+408.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+425.0 ▇▇▇▇▇▇▇ 1.0
+434.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2.0
+452.0 ▇▇▇▇▇▇▇ 1.0
+
+                            2234 rampup CPU1.0 Frequency
+    ┌──────────────────────────────────────────────────────────────────────────┐
+2.06┤                             ▐▀                                           │
+    │                             ▐                                            │
+    │                             ▐                                            │
+    │                             ▐                                            │
+1.70┤                            ▛▀                                            │
+    │                            ▌                                             │
+    │                            ▌                                             │
+1.33┤                           ▄▌                                             │
+    │                           ▌                                              │
+    │                           ▌                                              │
+    │                           ▌                                              │
+0.97┤                         ▗▄▌                                              │
+    │                         ▐                                                │
+    │                         ▐                                                │
+    │                         ▐                                                │
+0.60┤                      ▗▄▄▟                                                │
+    └┬───────┬───────┬───────┬───────┬────────┬───────┬───────┬───────┬───────┬┘
+   1.700   1.733   1.767   1.800   1.833    1.867   1.900   1.933   1.967 2.000
+
+                            2234 rampup CPU4.0 Frequency
+    ┌──────────────────────────────────────────────────────────────────────────┐
+3.10┤                                                            ▐▀▀▀▀▀▀▀▀▀▀▀▀▀│
+    │                                                 ▛▀▀▀▀▀▀▀▀▀▀▀             │
+    │                                                 ▌                        │
+    │                                            ▐▀▀▀▀▘                        │
+2.70┤                                            ▐                             │
+    │                                        ▐▀▀▀▀                             │
+    │                                        ▐                                 │
+2.30┤                                      ▛▀▀                                 │
+    │                                      ▌                                   │
+    │                                   ▐▀▀▘                                   │
+    │                                   ▐                                      │
+1.90┤                                 ▐▀▀                                      │
+    │                                 ▐                                        │
+    │                               ▗▄▟                                        │
+    │                               ▐                                          │
+1.50┤                              ▗▟                                          │
+    └┬───────┬───────┬───────┬───────┬────────┬───────┬───────┬───────┬───────┬┘
+   1.700   1.733   1.767   1.800   1.833    1.867   1.900   1.933   1.967 2.000
+
+───────────────────────── Sum Time Running on CPU (ms) ─────────────────────────
+CPU1.0 ▇▇▇▇ 32.53
+CPU4.0 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 540.3
+
+───────────────── 2234 rampup CPU1.0 Frequency residency (ms) ──────────────────
+0.6   ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 12.1
+0.972 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 6.5
+1.332 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3.7
+1.704 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 5.5
+2.064 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 4.8
+
+───────────────── 2234 rampup CPU4.0 Frequency residency (ms) ──────────────────
+1.5   ▇▇▇▇▇ 4.0
+1.728 ▇▇▇▇▇▇▇▇▇▇ 8.0
+1.956 ▇▇▇▇▇▇▇▇▇▇▇▇ 9.0
+2.184 ▇▇▇▇▇▇▇▇▇▇▇▇ 9.0
+2.388 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 11.0
+2.592 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 16.0
+2.772 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 18.0
+2.988 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 47.0
+3.096 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 53.4
+
 Signed-off-by: Qais Yousef <qyousef@layalina.io>
 ---
- kernel/sched/pelt.c | 62 ++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 58 insertions(+), 4 deletions(-)
+ include/linux/sched.h |  1 +
+ kernel/sched/core.c   |  1 +
+ kernel/sched/fair.c   | 43 +++++++++++++++++++++++++++++++------------
+ 3 files changed, 33 insertions(+), 12 deletions(-)
 
-diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
-index 06cb881ba582..536575757420 100644
---- a/kernel/sched/pelt.c
-+++ b/kernel/sched/pelt.c
-@@ -24,6 +24,9 @@
-  *  Author: Vincent Guittot <vincent.guittot@linaro.org>
-  */
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 90691d99027e..8db8f4085d84 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -544,6 +544,7 @@ struct sched_entity {
+ 	unsigned int			on_rq;
  
-+static __read_mostly unsigned int sched_pelt_lshift;
-+static unsigned int sched_pelt_multiplier = 1;
-+
- /*
-  * Approximate:
-  *   val * y^n,    where y^32 ~= 0.5 (~1 scheduling period)
-@@ -180,6 +183,7 @@ static __always_inline int
- ___update_load_sum(u64 now, struct sched_avg *sa,
- 		  unsigned long load, unsigned long runnable, int running)
- {
-+	int time_shift;
- 	u64 delta;
+ 	u64				exec_start;
++	u64				delta_exec;
+ 	u64				sum_exec_runtime;
+ 	u64				prev_sum_exec_runtime;
+ 	u64				vruntime;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 7099e40cc8bd..e2b4b87ec2b7 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4318,6 +4318,7 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
  
- 	delta = now - sa->last_update_time;
-@@ -195,12 +199,17 @@ ___update_load_sum(u64 now, struct sched_avg *sa,
- 	/*
- 	 * Use 1024ns as the unit of measurement since it's a reasonable
- 	 * approximation of 1us and fast to compute.
-+	 * On top of this, we can change the half-time period from the default
-+	 * 32ms to a shorter value. This is equivalent to left shifting the
-+	 * time.
-+	 * Merge both right and left shifts in one single right shift
- 	 */
--	delta >>= 10;
-+	time_shift = 10 - sched_pelt_lshift;
-+	delta >>= time_shift;
- 	if (!delta)
- 		return 0;
+ 	p->se.on_rq			= 0;
+ 	p->se.exec_start		= 0;
++	p->se.delta_exec		= 0;
+ 	p->se.sum_exec_runtime		= 0;
+ 	p->se.prev_sum_exec_runtime	= 0;
+ 	p->se.nr_migrations		= 0;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index e5e986af18dc..a6421e4032c0 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -1118,6 +1118,7 @@ static s64 update_curr_se(struct rq *rq, struct sched_entity *curr)
  
--	sa->last_update_time += delta << 10;
-+	sa->last_update_time += delta << time_shift;
+ 	curr->exec_start = now;
+ 	curr->sum_exec_runtime += delta_exec;
++	curr->delta_exec = delta_exec;
  
- 	/*
- 	 * running is a subset of runnable (weight) so running can't be set if
-@@ -468,6 +477,51 @@ int update_irq_load_avg(struct rq *rq, u64 running)
+ 	if (schedstat_enabled()) {
+ 		struct sched_statistics *stats;
+@@ -1126,7 +1127,6 @@ static s64 update_curr_se(struct rq *rq, struct sched_entity *curr)
+ 		__schedstat_set(stats->exec_max,
+ 				max(delta_exec, stats->exec_max));
+ 	}
+-
+ 	return delta_exec;
  }
- #endif /* CONFIG_HAVE_SCHED_AVG_IRQ */
  
-+static int set_sched_pelt_multiplier(const char *val, const struct kernel_param *kp)
-+{
-+	int ret;
-+
-+	ret = param_set_int(val, kp);
-+	if (ret)
-+		goto error;
-+
-+	switch (sched_pelt_multiplier)  {
-+	case 1:
-+		fallthrough;
-+	case 2:
-+		fallthrough;
-+	case 4:
-+		WRITE_ONCE(sched_pelt_lshift,
-+			   sched_pelt_multiplier >> 1);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		goto error;
+@@ -4890,16 +4890,20 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
+ 	if (!sched_feat(UTIL_EST))
+ 		return;
+ 
+-	/*
+-	 * Skip update of task's estimated utilization when the task has not
+-	 * yet completed an activation, e.g. being migrated.
+-	 */
+-	if (!task_sleep)
+-		return;
+-
+ 	/* Get current estimate of utilization */
+ 	ewma = READ_ONCE(p->se.avg.util_est);
+ 
++	/*
++	 * If a task is running, update util_est ignoring utilization
++	 * invariance so that if the task suddenly becomes busy we will rampup
++	 * quickly to settle down to our new util_avg.
++	 */
++	if (!task_sleep) {
++		ewma &= ~UTIL_AVG_UNCHANGED;
++		ewma = approximate_util_avg(ewma, p->se.delta_exec / 1000);
++		goto done;
 +	}
 +
-+	return 0;
-+
-+error:
-+	sched_pelt_multiplier = 1;
-+	return ret;
+ 	/*
+ 	 * If the PELT values haven't changed since enqueue time,
+ 	 * skip the util_est update.
+@@ -4968,6 +4972,14 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
+ 	trace_sched_util_est_se_tp(&p->se);
+ }
+ 
++static inline void util_est_update_running(struct cfs_rq *cfs_rq,
++					   struct task_struct *p)
++{
++	util_est_dequeue(cfs_rq, p);
++	util_est_update(cfs_rq, p, false);
++	util_est_enqueue(cfs_rq, p);
 +}
 +
-+static const struct kernel_param_ops sched_pelt_multiplier_ops = {
-+	.set = set_sched_pelt_multiplier,
-+	.get = param_get_int,
-+};
-+
-+#ifdef MODULE_PARAM_PREFIX
-+#undef MODULE_PARAM_PREFIX
-+#endif
-+/* XXX: should we use sched as prefix? */
-+#define MODULE_PARAM_PREFIX "kernel."
-+module_param_cb(sched_pelt_multiplier, &sched_pelt_multiplier_ops, &sched_pelt_multiplier, 0444);
-+MODULE_PARM_DESC(sched_pelt_multiplier, "PELT HALFLIFE helps control the responsiveness of the system.");
-+MODULE_PARM_DESC(sched_pelt_multiplier, "Accepted value: 1 32ms PELT HALIFE - roughly 200ms to go from 0 to max performance point (default).");
-+MODULE_PARM_DESC(sched_pelt_multiplier, "                2 16ms PELT HALIFE - roughly 100ms to go from 0 to max performance point.");
-+MODULE_PARM_DESC(sched_pelt_multiplier, "                4  8ms PELT HALIFE - roughly  50ms to go from 0 to max performance point.");
-+
- /*
-  * Approximate the new util_avg value assuming an entity has continued to run
-  * for @delta us.
-@@ -482,7 +536,7 @@ unsigned long approximate_util_avg(unsigned long util, u64 delta)
- 	if (unlikely(!delta))
- 		return util;
- 
--	accumulate_sum(delta, &sa, 1, 0, 1);
-+	accumulate_sum(delta << sched_pelt_lshift, &sa, 1, 0, 1);
- 	___update_load_avg(&sa, 0);
- 
- 	return sa.util_avg;
-@@ -494,7 +548,7 @@ unsigned long approximate_util_avg(unsigned long util, u64 delta)
- u64 approximate_runtime(unsigned long util)
+ static inline unsigned long get_actual_cpu_capacity(int cpu)
  {
- 	struct sched_avg sa = {};
--	u64 delta = 1024; // period = 1024 = ~1ms
-+	u64 delta = 1024 << sched_pelt_lshift; // period = 1024 = ~1ms
- 	u64 runtime = 0;
+ 	unsigned long capacity = arch_scale_cpu_capacity(cpu);
+@@ -5164,13 +5176,13 @@ static inline int sched_balance_newidle(struct rq *rq, struct rq_flags *rf)
  
- 	if (unlikely(!util))
+ static inline void
+ util_est_enqueue(struct cfs_rq *cfs_rq, struct task_struct *p) {}
+-
+ static inline void
+ util_est_dequeue(struct cfs_rq *cfs_rq, struct task_struct *p) {}
+-
+ static inline void
+-util_est_update(struct cfs_rq *cfs_rq, struct task_struct *p,
+-		bool task_sleep) {}
++util_est_update(struct cfs_rq *cfs_rq, struct task_struct *p, bool task_sleep) {}
++static inline void
++util_est_update_running(struct cfs_rq *cfs_rq, struct task_struct *p) {}
++
+ static inline void update_misfit_status(struct task_struct *p, struct rq *rq) {}
+ 
+ #endif /* CONFIG_SMP */
+@@ -6906,6 +6918,8 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+ 		rq->next_balance = jiffies;
+ 
+ dequeue_throttle:
++	if (task_sleep)
++		p->se.delta_exec = 0;
+ 	util_est_update(&rq->cfs, p, task_sleep);
+ 	hrtick_update(rq);
+ }
+@@ -8546,6 +8560,9 @@ pick_next_task_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf
+ 		set_next_entity(cfs_rq, se);
+ 	}
+ 
++	if (prev->on_rq)
++		util_est_update_running(&rq->cfs, prev);
++
+ 	goto done;
+ simple:
+ #endif
+@@ -12710,6 +12727,8 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
+ 		entity_tick(cfs_rq, se, queued);
+ 	}
+ 
++	util_est_update_running(&rq->cfs, curr);
++
+ 	if (static_branch_unlikely(&sched_numa_balancing))
+ 		task_tick_numa(rq, curr);
+ 
 -- 
 2.34.1
 
