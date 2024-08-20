@@ -1,364 +1,172 @@
-Return-Path: <linux-pm+bounces-12496-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12498-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91AAF95778F
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 00:36:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36EE3957A30
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 02:01:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46F18284913
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2024 22:36:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB06F1F2249C
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 00:01:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B54D1E2110;
-	Mon, 19 Aug 2024 22:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31F3B15B57B;
+	Tue, 20 Aug 2024 00:00:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="GkS0QsGb"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="bXl4tQxm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984211DF668;
-	Mon, 19 Aug 2024 22:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724106981; cv=pass; b=tL34+KKVwHT/rOCF2UzoEmFp9rJXtXgwP8WfaXcyS/AR9ks2XNThO4rOqZbLM4n+TkDR1/KhsIssv+/jKtcdIYvHIW6c6xPdx+NbhNa3Bcgy6oo6Jc+ECpBWt2De+IPAyTUGPGpRzy/NVt8qx0/WaHWmMjZ9Qx5f4MIS85zi1IU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724106981; c=relaxed/simple;
-	bh=vVYRPMUXwoivmYXruiuClAV2tguKLgXsozynlJt1HEA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rqOEMd0bVjY+F0Znac3oJaGdZVaL2qFJFEGVJ6G8Yejpw4uN1yOcEtI5vA1a2SENKiNjCbDsW/Uox0d/6Y14MMjvha4PKC8e09kdKaN9Xw3cnzszvDVEjC9A0tHi1d0LeccAiYutVo0QpRQ5R7R5YKAIIAPVzBFysQxEb3+hM3s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=GkS0QsGb; arc=pass smtp.client-ip=136.143.188.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1724106968; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=NlWzJXf1IR7ENfgteAZtiAc4MTwl2PMke+2plZH6lKu9iKJcvLgZt7sfc6V/+EHbOpEl/ZblcFglBg9UXqQ8k82XK0+zx7RZZF9pu+fiW1/ujs2CZtv62gEdAtsy+xEXSVyizNvu3wHpTFLPoTKpSVNMUpuuemXNf9ljHVn33zw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1724106968; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=84R4bvv7IZLyjELsDi3Ih0SAs9c0fPyp02siqdBkv0U=; 
-	b=R4C/ysIzn+ZhhRDCih+ARRnICUKtPGvr5dxkjB0kF0jnab9vobmbLgqKU6S9IAF6zRrgi50Ccd0ubkdRwn3Ldyv4Aec12ZyfSJGeVKIcjxZNVQvUJ/+ZTIyt5W72eHZK333heHdrwvcrX9xlWS5YwZIQjqC1kczS/s8DKmMTys0=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724106968;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=84R4bvv7IZLyjELsDi3Ih0SAs9c0fPyp02siqdBkv0U=;
-	b=GkS0QsGbFt2tIfjK7M5BAhnoVRSTqrQen1IkYxiaHeXjUHOeDeFxi2fI/2HiSEHP
-	fKbW2RsZT8zhhJGPapL0kMM99agq4LMZCcG64BsJAkAYqa+grGzvYy8ycwlUsiHzJV5
-	jyOIEyKqwp8uVxbMjtHSh5oCPZYzKKCVh9xoWkBg=
-Received: by mx.zohomail.com with SMTPS id 1724106967349278.4839605441748;
-	Mon, 19 Aug 2024 15:36:07 -0700 (PDT)
-Received: by mercury (Postfix, from userid 1000)
-	id 4D966106045A; Tue, 20 Aug 2024 00:36:01 +0200 (CEST)
-Date: Tue, 20 Aug 2024 00:36:01 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Johan Hovold <johan+linaro@kernel.org>, Chris Lew <quic_clew@quicinc.com>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Stephen Boyd <swboyd@chromium.org>, 
-	Amit Pundir <amit.pundir@linaro.org>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] soc: qcom: pmic_glink: Fix race during
- initialization
-Message-ID: <m7vc5zw2yxswrxnbyqxsq7hj3spz5or26p6ze7x477ggur3vmz@mm24cmj5vran>
-References: <20240819-pmic-glink-v6-11-races-v2-0-88fe3ab1f0e2@quicinc.com>
- <20240819-pmic-glink-v6-11-races-v2-1-88fe3ab1f0e2@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9252F22EF0
+	for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 00:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724112032; cv=none; b=Ak+o0YNTmNucPka1clLYxyOnNOtOWXuOVkhg8xjQA8gKEtic5xcq4zYr8sL6VU4B3bm8sENz8Y6V5ipDa3cp07VIxuz/tr8ffgk6a8qI7n60VhoYmnBBZZMdHeBx7qFWzb7MaEd/mzd2POmPCj8ZL/4LJPpE3IbL7Tt67I9yEW0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724112032; c=relaxed/simple;
+	bh=7sp3VsNcS1ZBdE6slYC/382qTXdje+YxQ0pZ8fy11HI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ltCSp05yMY4CTnN9feu8ZCIbbvFPXHP5/6q/1dmS/Z7lWUUw7hbCEZzaK7MdJUXFSgrEpnQYeVRqe7YKKz4hxmUeicjPdSxPEMFxToae+NPcERuXrYwziY5DRCyEz0wjWCexu1iMnXbxlSGKFW+pO16393/R/Y2jKW5ZM6bWUEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=bXl4tQxm; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-201f2b7fe0dso32139775ad.1
+        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2024 17:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1724112028; x=1724716828; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qYwQZfpXfcofXq/WqC5i1bo4dCZz/4sz9h2uTbcnNtQ=;
+        b=bXl4tQxmwBHPlsbF6JMlIot96KUYoQj51CnPw/JkN8P9iQkf19p0QojemSVsyBo9NU
+         95ejD202iC9LcfSKlazuOTUodOvOqEwEtLtJonSb04On+aiGyI+ZgRrz3FWDVFjqBCuq
+         Q3fROPE910vHTbhYSPBI8K9aMpeBOKzmkai3knPZK7NAv+3YuhfkHzT966Z6qWcoZwtb
+         0Hl/VbWLGbM3o43/QN0ii+RmzuB3R88xrz8zKH0GTGZSq3hVF1NV7jcetRLvvyN/GXiO
+         AAj+YDjDzDOshqdV+SsnUn1XPr1r/jJOY9FqbrAiXFnDIh0giOoBClaAZj9CcY49Kwzo
+         SvLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724112028; x=1724716828;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qYwQZfpXfcofXq/WqC5i1bo4dCZz/4sz9h2uTbcnNtQ=;
+        b=V/kx4Q5C1k5MXXKyhQuPeK2EiRyiwe/GcWp+nJhN2+J6IigrvCy+S8TkL64bcrRTi/
+         uOvjz7/qchgXFicAy3qDaAXm2g/DhHfQ4+bn6iR+EYdackySCIzAvvyUXxDOA802AtX6
+         TRIH7iklfBg9hJ8iB88XWfOhPF6OuSI/DiYMyL5XGIWxE2AqgdCuJ4H4/PJWFMuP5A+Q
+         tV+hwJY13O4hTSQ3UswsPb/qdBMAo1P32ZnQ+edneRPNSuiy6/1s6ZYiIpJxOAGRI4ym
+         4C4gLmwCqPBYEZ61AavQduMGROsKHXJucxV8/IzSMrvcX3JyOXU1W1oMN/fQMFWbQwQX
+         zQww==
+X-Forwarded-Encrypted: i=1; AJvYcCWrPfcTOQCIPn0Szmau4968oz7Cy5B55pftK8FN1nXFhamyW6+UvcuzBZjdGTpSnxDNxTHw8p/FIQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsWT/HIFw4SM3nuWuKI+lIXwGu2+INKTlJIbOie3vsU25CQUR8
+	zS7PaBH/k6hJ2tmaM2DzKtKFXyQUF0rCfP9ZjDNWq/vjgNq024EcLj2eyB6ZMEA=
+X-Google-Smtp-Source: AGHT+IGSXvukX7kbGClstg5grsq7V6LRd/un1ZgvccObqT3cUNKRgFzs02r59XyEcSU29E7zTMcDmw==
+X-Received: by 2002:a17:902:ecc1:b0:201:f83e:c25d with SMTP id d9443c01a7336-20203e4c5f5mr144447395ad.7.1724112027672;
+        Mon, 19 Aug 2024 17:00:27 -0700 (PDT)
+Received: from localhost ([71.212.170.185])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201f031953esm67835405ad.90.2024.08.19.17.00.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Aug 2024 17:00:27 -0700 (PDT)
+From: Kevin Hilman <khilman@baylibre.com>
+Subject: [PATCH v2 0/3] pmdomain: ti_sci: collect and send low-power mode
+ constraints
+Date: Mon, 19 Aug 2024 17:00:10 -0700
+Message-Id: <20240819-lpm-v6-10-constraints-pmdomain-v2-0-461325a6008f@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="knpdcbbcaewcpyeo"
-Content-Disposition: inline
-In-Reply-To: <20240819-pmic-glink-v6-11-races-v2-1-88fe3ab1f0e2@quicinc.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.3.1/224.60.1
-X-ZohoMailClient: External
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIrcw2YC/4WOQQ6CMBBFr0Jm7ZAWsUFX3sO4KHQqk1jAtjYSw
+ t2t6N7dvMnPf3+BQJ4pwKlYwFPiwOOQodoV0PV6uBGyyQyVqGrRiArvk8OkUArsxiFEr3mIASd
+ nRpdPtPu9sQdNtq6PkEsmT5Zfm+By/bKnxzN74vcJrQ6Uu5zjeCqSKqVE30n4hHsOcfTzNi7JL
+ f3bcfi3I0kUaGSjWtUYMnV3bvV859ZTmV1wXdf1Df4dlLz8AAAA
+To: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org
+Cc: Nishanth Menon <nm@ti.com>, Vibhore Vardhan <vibhore@ti.com>, 
+ Dhruva Gole <d-gole@ti.com>, Akashdeep Kaur <a-kaur@ti.com>, 
+ Sebin Francis <sebin.francis@ti.com>, 
+ Markus Schneider-Pargmann <msp@baylibre.com>, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2842; i=khilman@baylibre.com;
+ h=from:subject:message-id; bh=7sp3VsNcS1ZBdE6slYC/382qTXdje+YxQ0pZ8fy11HI=;
+ b=owEBbQKS/ZANAwAKAVk3GJrT+8ZlAcsmYgBmw9ya4MkY3hwzy0pDRAwwyoRlaI8y/D4sC6+mU
+ qP7Z4CqnX+JAjMEAAEKAB0WIQR7h0YOFpJ/qfW/8QxZNxia0/vGZQUCZsPcmgAKCRBZNxia0/vG
+ Zd5nEACbVCHMqTDYdiiOhvkYGOIZPNs/Qp3JJtUfwL5p3kprSf8ELnu4DvmU8lLdepCUZOSAF2z
+ ru6G6P+QjlAr+0YR3gAY11N6DTizTdPPaayzQwVJ/Zb9tPwTqjPgj4AEmbsT3LzSixvyZ3EVfas
+ VCqTzXgQM9silr37Jf++aXZgVpb8ZMb0j3F+17788G1nx8Ni39HMin/xxnnqwZzHXvG1qofthRh
+ UK0feRykXuAJOZkP8HJcSpLcAfo8AAFTA7XTAulrlqBXfVlzfOP1fF4TSqEhujzlzR+9889iLQY
+ HdLkipc4bJuhTqz8FN79h2BgHioz/vxawGM9iI58HW3esfpJgCCElwdF3f4hjWGaUvWcUCavwMp
+ YVhox2FwRAKGeEsk46NrXd9KnP+ucDfoajJAJWTiQu8Dctt52BBdtNvgv0D07KJo88yng8LGzWb
+ nNK4I+c26jAodSRlj8FxFxohLEUzXMPY0wgiYJgi0cL239V3dz0603YNxULpJ9TJ7d+bkQjdWyO
+ BD1KsCailX8omO0AmqiBHF/t2+LiedvVbR1/XYO6KVF2II5C3k/7/1g4wO7dSxl3kC6mxnxVpUu
+ RAgOjBjSdnU3/cVIKoGQwBAU8649lPyw40GvqWOa86KiglP+hKFGI0fiu1UBHbUt2R4248dN3uy
+ p28C+hTfL1PXYEQ==
+X-Developer-Key: i=khilman@baylibre.com; a=openpgp;
+ fpr=7B87460E16927FA9F5BFF10C5937189AD3FBC665
 
+The latest (10.x) version of the firmware for the PM co-processor (aka
+device manager, or DM) adds support for a "managed" mode, where the DM
+firmware will select the specific low power state which is entered
+when Linux requests a system-wide suspend.
 
---knpdcbbcaewcpyeo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In this mode, the DM will always attempt the deepest low-power state
+available for the SoC.
 
-Hi,
+However, Linux (or OSes running on other cores) may want to constrain
+the DM for certain use cases.  For example, the deepest state may have
+a wakeup/resume latency that is too long for certain use cases.  Or,
+some wakeup-capable devices may potentially be powered off in deep
+low-power states, but if one of those devices is enabled as a wakeup
+source, it should not be powered off.
 
-On Mon, Aug 19, 2024 at 01:07:45PM GMT, Bjorn Andersson wrote:
-> As pointed out by Stephen Boyd it is possible that during initialization
-> of the pmic_glink child drivers, the protection-domain notifiers fires,
-> and the associated work is scheduled, before the client registration
-> returns and as a result the local "client" pointer has been initialized.
->=20
-> The outcome of this is a NULL pointer dereference as the "client"
-> pointer is blindly dereferenced.
->=20
-> Timeline provided by Stephen:
->  CPU0                               CPU1
->  ----                               ----
->  ucsi->client =3D NULL;
->  devm_pmic_glink_register_client()
->   client->pdr_notify(client->priv, pg->client_state)
->    pmic_glink_ucsi_pdr_notify()
->     schedule_work(&ucsi->register_work)
->     <schedule away>
->                                     pmic_glink_ucsi_register()
->                                      ucsi_register()
->                                       pmic_glink_ucsi_read_version()
->                                        pmic_glink_ucsi_read()
->                                         pmic_glink_ucsi_read()
->                                          pmic_glink_send(ucsi->client)
->                                          <client is NULL BAD>
->  ucsi->client =3D client // Too late!
->=20
-> This code is identical across the altmode, battery manager and usci
-> child drivers.
->=20
-> Resolve this by splitting the allocation of the "client" object and the
-> registration thereof into two operations.
->=20
-> This only happens if the protection domain registry is populated at the
-> time of registration, which by the introduction of commit '1ebcde047c54
-> ("soc: qcom: add pd-mapper implementation")' became much more likely.
->=20
-> Reported-by: Amit Pundir <amit.pundir@linaro.org>
-> Closes: https://lore.kernel.org/all/CAMi1Hd2_a7TjA7J9ShrAbNOd_CoZ3D87twmO=
-5t+nZxC9sX18tA@mail.gmail.com/
-> Reported-by: Johan Hovold <johan@kernel.org>
-> Closes: https://lore.kernel.org/all/ZqiyLvP0gkBnuekL@hovoldconsulting.com/
-> Reported-by: Stephen Boyd <swboyd@chromium.org>
-> Closes: https://lore.kernel.org/all/CAE-0n52JgfCBWiFQyQWPji8cq_rCsviBpW-m=
-72YitgNfdaEhQg@mail.gmail.com/
-> Fixes: 58ef4ece1e41 ("soc: qcom: pmic_glink: Introduce base PMIC GLINK dr=
-iver")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Tested-by: Amit Pundir <amit.pundir@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
+These kinds of constraints are are already known in Linux by the use
+of existing APIs such as per-device PM QoS and device wakeup APIs, but
+now we need to communicate these constraints to the DM.
 
-I expect this to go through SOC tree:
+For TI SoCs with TI SCI support, all DM-managed devices will be
+connected to a TI SCI PM domain.  So the goal of this series is to use
+the PM domain driver for TI SCI devices to collect constraints, and
+communicate them to the DM via the new TI SCI APIs.
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+This is all managed by TI SCI PM domain code.  No new APIs are needed
+by Linux drivers.  Any device that is managed by TI SCI will be
+checked for QoS constraints or wakeup capability and the constraints
+will be collected and sent to the DM.
 
--- Sebastian
+This series depends on the support for the new TI SCI APIs (v10) and
+was also tested with this series to update 8250_omap serial support
+for AM62x[2].
 
->  drivers/power/supply/qcom_battmgr.c   | 16 ++++++++++------
->  drivers/soc/qcom/pmic_glink.c         | 28 ++++++++++++++++++----------
->  drivers/soc/qcom/pmic_glink_altmode.c | 17 +++++++++++------
->  drivers/usb/typec/ucsi/ucsi_glink.c   | 16 ++++++++++------
->  include/linux/soc/qcom/pmic_glink.h   | 11 ++++++-----
->  5 files changed, 55 insertions(+), 33 deletions(-)
->=20
-> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/q=
-com_battmgr.c
-> index 49bef4a5ac3f..df90a470c51a 100644
-> --- a/drivers/power/supply/qcom_battmgr.c
-> +++ b/drivers/power/supply/qcom_battmgr.c
-> @@ -1387,12 +1387,16 @@ static int qcom_battmgr_probe(struct auxiliary_de=
-vice *adev,
->  					     "failed to register wireless charing power supply\n");
->  	}
-> =20
-> -	battmgr->client =3D devm_pmic_glink_register_client(dev,
-> -							  PMIC_GLINK_OWNER_BATTMGR,
-> -							  qcom_battmgr_callback,
-> -							  qcom_battmgr_pdr_notify,
-> -							  battmgr);
-> -	return PTR_ERR_OR_ZERO(battmgr->client);
-> +	battmgr->client =3D devm_pmic_glink_new_client(dev, PMIC_GLINK_OWNER_BA=
-TTMGR,
-> +						     qcom_battmgr_callback,
-> +						     qcom_battmgr_pdr_notify,
-> +						     battmgr);
-> +	if (IS_ERR(battmgr->client))
-> +		return PTR_ERR(battmgr->client);
-> +
-> +	pmic_glink_register_client(battmgr->client);
-> +
-> +	return 0;
->  }
-> =20
->  static const struct auxiliary_device_id qcom_battmgr_id_table[] =3D {
-> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-> index 9ebc0ba35947..58ec91767d79 100644
-> --- a/drivers/soc/qcom/pmic_glink.c
-> +++ b/drivers/soc/qcom/pmic_glink.c
-> @@ -66,15 +66,14 @@ static void _devm_pmic_glink_release_client(struct de=
-vice *dev, void *res)
->  	spin_unlock_irqrestore(&pg->client_lock, flags);
->  }
-> =20
-> -struct pmic_glink_client *devm_pmic_glink_register_client(struct device =
-*dev,
-> -							  unsigned int id,
-> -							  void (*cb)(const void *, size_t, void *),
-> -							  void (*pdr)(void *, int),
-> -							  void *priv)
-> +struct pmic_glink_client *devm_pmic_glink_new_client(struct device *dev,
-> +						     unsigned int id,
-> +						     void (*cb)(const void *, size_t, void *),
-> +						     void (*pdr)(void *, int),
-> +						     void *priv)
->  {
->  	struct pmic_glink_client *client;
->  	struct pmic_glink *pg =3D dev_get_drvdata(dev->parent);
-> -	unsigned long flags;
-> =20
->  	client =3D devres_alloc(_devm_pmic_glink_release_client, sizeof(*client=
-), GFP_KERNEL);
->  	if (!client)
-> @@ -85,6 +84,18 @@ struct pmic_glink_client *devm_pmic_glink_register_cli=
-ent(struct device *dev,
->  	client->cb =3D cb;
->  	client->pdr_notify =3D pdr;
->  	client->priv =3D priv;
-> +	INIT_LIST_HEAD(&client->node);
-> +
-> +	devres_add(dev, client);
-> +
-> +	return client;
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pmic_glink_new_client);
-> +
-> +void pmic_glink_register_client(struct pmic_glink_client *client)
-> +{
-> +	struct pmic_glink *pg =3D client->pg;
-> +	unsigned long flags;
-> =20
->  	mutex_lock(&pg->state_lock);
->  	spin_lock_irqsave(&pg->client_lock, flags);
-> @@ -95,11 +106,8 @@ struct pmic_glink_client *devm_pmic_glink_register_cl=
-ient(struct device *dev,
->  	spin_unlock_irqrestore(&pg->client_lock, flags);
->  	mutex_unlock(&pg->state_lock);
-> =20
-> -	devres_add(dev, client);
-> -
-> -	return client;
->  }
-> -EXPORT_SYMBOL_GPL(devm_pmic_glink_register_client);
-> +EXPORT_SYMBOL_GPL(pmic_glink_register_client);
-> =20
->  int pmic_glink_send(struct pmic_glink_client *client, void *data, size_t=
- len)
->  {
-> diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmi=
-c_glink_altmode.c
-> index 1e0808b3cb93..e4f5059256e5 100644
-> --- a/drivers/soc/qcom/pmic_glink_altmode.c
-> +++ b/drivers/soc/qcom/pmic_glink_altmode.c
-> @@ -520,12 +520,17 @@ static int pmic_glink_altmode_probe(struct auxiliar=
-y_device *adev,
->  			return ret;
->  	}
-> =20
-> -	altmode->client =3D devm_pmic_glink_register_client(dev,
-> -							  altmode->owner_id,
-> -							  pmic_glink_altmode_callback,
-> -							  pmic_glink_altmode_pdr_notify,
-> -							  altmode);
-> -	return PTR_ERR_OR_ZERO(altmode->client);
-> +	altmode->client =3D devm_pmic_glink_new_client(dev,
-> +						     altmode->owner_id,
-> +						     pmic_glink_altmode_callback,
-> +						     pmic_glink_altmode_pdr_notify,
-> +						     altmode);
-> +	if (IS_ERR(altmode->client))
-> +		return PTR_ERR(altmode->client);
-> +
-> +	pmic_glink_register_client(altmode->client);
-> +
-> +	return 0;
->  }
-> =20
->  static const struct auxiliary_device_id pmic_glink_altmode_id_table[] =
-=3D {
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi=
-/ucsi_glink.c
-> index 16c328497e0b..ac53a81c2a81 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -367,12 +367,16 @@ static int pmic_glink_ucsi_probe(struct auxiliary_d=
-evice *adev,
->  		ucsi->port_orientation[port] =3D desc;
->  	}
-> =20
-> -	ucsi->client =3D devm_pmic_glink_register_client(dev,
-> -						       PMIC_GLINK_OWNER_USBC,
-> -						       pmic_glink_ucsi_callback,
-> -						       pmic_glink_ucsi_pdr_notify,
-> -						       ucsi);
-> -	return PTR_ERR_OR_ZERO(ucsi->client);
-> +	ucsi->client =3D devm_pmic_glink_new_client(dev, PMIC_GLINK_OWNER_USBC,
-> +						  pmic_glink_ucsi_callback,
-> +						  pmic_glink_ucsi_pdr_notify,
-> +						  ucsi);
-> +	if (IS_ERR(ucsi->client))
-> +		return PTR_ERR(ucsi->client);
-> +
-> +	pmic_glink_register_client(ucsi->client);
-> +
-> +	return 0;
->  }
-> =20
->  static void pmic_glink_ucsi_remove(struct auxiliary_device *adev)
-> diff --git a/include/linux/soc/qcom/pmic_glink.h b/include/linux/soc/qcom=
-/pmic_glink.h
-> index fd124aa18c81..aedde76d7e13 100644
-> --- a/include/linux/soc/qcom/pmic_glink.h
-> +++ b/include/linux/soc/qcom/pmic_glink.h
-> @@ -23,10 +23,11 @@ struct pmic_glink_hdr {
-> =20
->  int pmic_glink_send(struct pmic_glink_client *client, void *data, size_t=
- len);
-> =20
-> -struct pmic_glink_client *devm_pmic_glink_register_client(struct device =
-*dev,
-> -							  unsigned int id,
-> -							  void (*cb)(const void *, size_t, void *),
-> -							  void (*pdr)(void *, int),
-> -							  void *priv);
-> +struct pmic_glink_client *devm_pmic_glink_new_client(struct device *dev,
-> +						     unsigned int id,
-> +						     void (*cb)(const void *, size_t, void *),
-> +						     void (*pdr)(void *, int),
-> +						     void *priv);
-> +void pmic_glink_register_client(struct pmic_glink_client *client);
-> =20
->  #endif
->=20
-> --=20
-> 2.34.1
->=20
+[1] https://lore.kernel.org/all/20240801195422.2296347-1-msp@baylibre.com
+[2] https://lore.kernel.org/all/20240807141227.1093006-1-msp@baylibre.com/
 
---knpdcbbcaewcpyeo
-Content-Type: application/pgp-signature; name="signature.asc"
+Signed-off-by: Kevin Hilman <khilman@baylibre.com>
+---
+Changes in v2:
 
------BEGIN PGP SIGNATURE-----
+- To simplify this version a bit, drop the pmdomain ->power_off()
+  changes.  Constraints only sent during ->suspend() path.  The pmdomain
+  path was an optimization that may be added back later.
+- With the above simplification, drop the extra state variables that
+  had been added to keep track of constraint status.
+- Link to v1: https://lore.kernel.org/r/20240805-lpm-v6-10-constraints-pmdomain-v1-0-d186b68ded4c@baylibre.com
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmbDyMkACgkQ2O7X88g7
-+pp5Nw//Uv13QigZP+EGQ5BD0t2vMaiDNi3taRY7bU4yE8WKk2k7GmVRi5Rpgm2F
-kpR+f4tZnXCD6U+xv8dK4sYQ0qK49m4NN7EoxTmblWsCz9/czyu3SzUbTTJqf7kI
-P9ilSWAxEi4K89vZvTOEwrBF8gvCpNpKE1MvNx0W9K+qQlu3heXQpRWjM+22uQyA
-IOWVtvA4+RJUc7skpRxYtmA6OwEMhIOvWGklEUXAl8qqxSrHCy5gWYTMoiLq15cB
-qrdMMqnVd0evBesZeglYTo5AHt5/wflWtIyUDQ38Md4QNHNlT/N+NoMhPYVOetV4
-wBf0Q4dYW1NIhERqow1Ks/ATveZijf0l4d5pBqLo2hfuC3FL8W28U/jGyWRWi1zq
-/2YefcGTYwfRZ273pzimgeZR3MiG9UZk4OgRukZ6ETpsm/v+ZgwEGPddoZSDme1V
-h3Qs9fLW22+mqIPka3GSvevYf8Y/4dhJTmNhDT6elepNs9leB+jxsluI2b+2Fvni
-dKVuNLMRRgJJ+2T5ANBzWAVxYentv1uSpyiqpXbw0A99kNEC6CNZB5Uf+muExHHV
-G5nWNOXi76GER2qFcOkk03qEGpqX4+zaFfz+/CeIMFvN7MpWzAG9NhUMT5eduOnj
-PZFvHWOHvKjpaHvxpZFkEqS93KrRO46mu6bL+4SpZNRvZ7ZFXeA=
-=T2J1
------END PGP SIGNATURE-----
+---
+Kevin Hilman (3):
+      pmdomain: ti_sci: add per-device latency constraint management
+      pmdomain: ti_sci: add wakeup constraint management
+      pmdomain: ti_sci: handle wake IRQs for IO daisy chain wakeups
 
---knpdcbbcaewcpyeo--
+ drivers/pmdomain/ti/ti_sci_pm_domains.c | 76 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+---
+base-commit: ad7eb1b6b92ee0c959a0a6ae846ddadd7a79ea64
+change-id: 20240802-lpm-v6-10-constraints-pmdomain-f33df5aef449
+
+Best regards,
+-- 
+Kevin Hilman <khilman@baylibre.com>
+
 
