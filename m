@@ -1,97 +1,126 @@
-Return-Path: <linux-pm+bounces-12537-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12538-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11C33957FE7
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 09:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A0A60958010
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 09:42:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBEFF1F216B7
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 07:36:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56B731F240A4
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 07:42:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A36189B96;
-	Tue, 20 Aug 2024 07:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NLG8ZfDT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64828188CCB;
+	Tue, 20 Aug 2024 07:42:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225381667ED;
-	Tue, 20 Aug 2024 07:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DBE18E362;
+	Tue, 20 Aug 2024 07:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724139318; cv=none; b=nc+4wyUzSsWJygVwJis4XPpNBemqnaZOXyk9K70TlLS8VKfYDs01E2S2OhZryPGn739Bi2yderjQW8AMuG/y17J7IH+tRTuoPJVK5xRh2s/COgNcgMjiEPlq8XwgKS7altt2dM4T9bmzleg45UCNrb4NKu/rMQD0ghsv5J/+CS8=
+	t=1724139734; cv=none; b=cLlwPT3bF8KtQ9l3LdI1eIE4sLxXYv0GId/rgw0DOmyNlP0sQiAZ7sOH6lAj43OBhLI0Dn2IlUiVUlYm2iHFbMlVxQP4OC/SSSzaeWwgj/NTYjkWheqf5Uqanh8ckgx73iVbIVwTj2JH2m3RTae2Byhh1G1Qo8NE1xap2q8byNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724139318; c=relaxed/simple;
-	bh=VlFp3AV+5ntIAXoC1p5XsTcSavlW4JGSdKmcfmgxiA4=;
+	s=arc-20240116; t=1724139734; c=relaxed/simple;
+	bh=MHqGozFEXa24M1GfNfz8WTKdM2zckoFwL8X6SG2QIm8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I9jagB0+xeQvqzb1gaLpofObqSMjYRtDd/g4e9LDI4tqp7wCoHL/HjJtRHY9m+75VdCGc0DXhhyoBRMWKwfxwafGd+pDX/7bu65e4N1mEI98mSk7wqwwN3yVBW++A8I4DppCfalXPqHTcIAAF9Tc8R8/WmhMi6Y+xPgnkgDi3B8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NLG8ZfDT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E21F6C4AF09;
-	Tue, 20 Aug 2024 07:35:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724139317;
-	bh=VlFp3AV+5ntIAXoC1p5XsTcSavlW4JGSdKmcfmgxiA4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NLG8ZfDTt9MYyQTQ3bqC7GyppuVm23T4iHs6c/gwcMpKcxOdemVUGu26+W6mDF2bu
-	 E3siv6F9F1jTR7H9av0b7G5EfNueVKZWMuaCcz6FCAHjw3FqsfXGgO7DWu5jhfq+u3
-	 QIg4uoHC+L2wt4Pn7hPMg2qNw1vlE/qoeQk6oB6+M2RVEi2+EcO6OmMu33EcJXzUP1
-	 w4MuSHe84DnLpkoj2GMck3hWYZ7SQ2DGnSN8XG+iNfhHHylRfiKHBY+C2E8su092iT
-	 Cl70P842YearIv8oL1wKXb9zIOLSyY5/uraFBRFaZSz4A9Lm9FwrkC/rrwvzNfkstT
-	 w46TW2PzUzDxg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1sgJOe-000000005rZ-1Thw;
-	Tue, 20 Aug 2024 09:35:16 +0200
-Date: Tue, 20 Aug 2024 09:35:16 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Chris Lew <quic_clew@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Stephen Boyd <swboyd@chromium.org>,
-	Amit Pundir <amit.pundir@linaro.org>, linux-arm-msm@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] soc: qcom: pmic_glink: Actually communicate with
- remote goes down
-Message-ID: <ZsRHNIMy7KbCaE7x@hovoldconsulting.com>
-References: <20240819-pmic-glink-v6-11-races-v2-0-88fe3ab1f0e2@quicinc.com>
- <20240819-pmic-glink-v6-11-races-v2-3-88fe3ab1f0e2@quicinc.com>
- <ZsRAnWgsoSHmrFE5@hovoldconsulting.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=R/Qk3f5YGJPGJMQ0aV7FdHDojblmnna8rqwboExLbWNGqlMixX6WY9BmTfc/f7/MrXXxS1IKfmToJ2Otj4QveGb2bDSzZebdQnb2nb+9fvCdU63v9izzKUsovWjxcRhKhJwmlsFE6rURNYiQnOXA52ewYSuLKKiTy+pZBMaR4P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-37182eee02dso2713914f8f.1;
+        Tue, 20 Aug 2024 00:42:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724139731; x=1724744531;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=husHkeFncIg0j+W2GmpnfdIgBa/YY060+/4QysQxy1Y=;
+        b=W7/EkVKDakqc6RmaLwpE/Zn5xILA1ZB6Vr6HKkUCa6GqqJpQp7STetzdpWw+pRoVSx
+         MNIdL6SRtOdSq49kOgLCEcB/1gY7LQHvd17k8DWu1x+iWpAF7vDUAyr/9P07wgwKdBjE
+         +tC/d6cUfi7cth0Ezg+jlCMeiJ7/BCIDWREv1g+vCTllWwRfsLBSbAYS4TvgGI2njuOV
+         g/iZivCbkD7Y+irmhVVVwbe6WSIvzbnvJaKC5BgOV4hmmjedR9WV2dOjh84wI1+hRvbu
+         w69RrKbzDDy7q8WhWVzxKw3YbogVnCkgskF+hPaw9dDEy3ri+kxiUd6rG+ESEXxvDO76
+         p/9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUZYwhBBHpR3PXUNqPIn/xj8coTgPNNVCRCdgd4Gdjfwc/C2omuukMsTUodskpqnSkanasRzKedodPhY+DZliva9ig/CtSCTwEsURGHnMZreyeopnSL9teBhIy7jGV6+roPSLkQWUnUR7Q9lBFk4DoYuNoyoVY6hlosqP4jyf0z
+X-Gm-Message-State: AOJu0YyTmFR5rAJf1vghr0hpjvyg2++64Ybh3nrtYhF2GqdU0OXtDABP
+	YrvM4py24cIXVh799zLEtkQBZSnOTdzm2ZORHlpHZ+v8s9cG1z4Z
+X-Google-Smtp-Source: AGHT+IGD+gm4jvp43Ve4Xgj8RVDK1rAs3wa2ikJ2/8Whk9Gfl50sJMvQGIiLkZdVhsRmZzwD3iub7w==
+X-Received: by 2002:adf:e585:0:b0:36b:5d86:d889 with SMTP id ffacd0b85a97d-371c4a9c310mr1111996f8f.6.1724139730617;
+        Tue, 20 Aug 2024 00:42:10 -0700 (PDT)
+Received: from krzk-bin ([178.197.215.209])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3718985a6ddsm12421688f8f.58.2024.08.20.00.42.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Aug 2024 00:42:09 -0700 (PDT)
+Date: Tue, 20 Aug 2024 09:42:06 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Chris Morgan <macroalpha82@gmail.com>
+Cc: linux-sunxi@lists.linux.dev, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-iio@vger.kernel.org, 
+	quentin.schulz@free-electrons.com, mripard@kernel.org, tgamblin@baylibre.com, 
+	aidanmacdonald.0x0@gmail.com, u.kleine-koenig@pengutronix.de, lee@kernel.org, 
+	samuel@sholland.org, jernej.skrabec@gmail.com, sre@kernel.org, wens@csie.org, 
+	conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de, 
+	jic23@kernel.org, jonathan.cameron@huawei.com, 
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH V3 05/15] dt-bindings: power: supply: axp20x: Add
+ input-current-limit-microamp
+Message-ID: <ro43ccn3w2qsvcnjej7appuasuqphtf54vkyrsex6ypr4dlwhh@vi2jg4nemkvl>
+References: <20240819164619.556309-1-macroalpha82@gmail.com>
+ <20240819164619.556309-6-macroalpha82@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZsRAnWgsoSHmrFE5@hovoldconsulting.com>
+In-Reply-To: <20240819164619.556309-6-macroalpha82@gmail.com>
 
-On Tue, Aug 20, 2024 at 09:07:10AM +0200, Johan Hovold wrote:
-> On Mon, Aug 19, 2024 at 01:07:47PM -0700, Bjorn Andersson wrote:
-> > When the pmic_glink state is UP and we either receive a protection-
-> > domain (PD) notification indicating that the PD is going down, or that
-> > the whole remoteproc is going down, it's expected that the pmic_glink
-> > client instances are notified that their function has gone DOWN.
-> > 
-> > This is not what the code does, which results in the client state either
-> > not updating, or being wrong in many cases. So let's fix the conditions.
+On Mon, Aug 19, 2024 at 11:46:09AM -0500, Chris Morgan wrote:
+> From: Chris Morgan <macromorgan@hotmail.com>
+> 
+> Allow specifying a hard limit of the maximum input current. Some PMICs
+> such as the AXP717 can pull up to 3.25A, so allow a value to be
+> specified that clamps this in the event the hardware is not designed
+> for it.
+> 
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> ---
+>  .../x-powers,axp20x-usb-power-supply.yaml     | 69 ++++++++++++++++++-
+>  1 file changed, 66 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
+> index 34b7959d6772..9cc300e78f60 100644
+> --- a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
+> @@ -15,9 +15,6 @@ maintainers:
+>    - Chen-Yu Tsai <wens@csie.org>
+>    - Sebastian Reichel <sre@kernel.org>
+>  
+> -allOf:
+> -  - $ref: power-supply.yaml#
+> -
+>  properties:
+>    compatible:
+>      oneOf:
+> @@ -31,8 +28,74 @@ properties:
+>            - const: x-powers,axp803-usb-power-supply
+>            - const: x-powers,axp813-usb-power-supply
+>  
+> +  input-current-limit-microamp:
+> +    description:
+> +      Optional value to clamp the maximum input current limit to for
+> +      the device. If omitted, the programmed value from the EFUSE will
+> +      be used.
 
-And I believe you meant
+minimum: 100000
+maximum: 4000000
+(or whatever the values are)
 
-	s/with/when/
+Best regards,
+Krzysztof
 
-in the patch Subject.
-
-Johan
 
