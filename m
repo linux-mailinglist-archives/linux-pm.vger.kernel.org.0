@@ -1,108 +1,288 @@
-Return-Path: <linux-pm+bounces-12535-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12536-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07E7E957FA6
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 09:31:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64B48957FBD
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 09:34:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AE871C22CDC
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 07:31:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9EC21F21FC8
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 07:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E76C12FB34;
-	Tue, 20 Aug 2024 07:31:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YIKbNpsK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53D6B1898F0;
+	Tue, 20 Aug 2024 07:33:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225CF3FB9F;
-	Tue, 20 Aug 2024 07:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from spindle.queued.net (spindle.queued.net [45.33.49.30])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8309B16D313;
+	Tue, 20 Aug 2024 07:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.33.49.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724139097; cv=none; b=CAs7ooFbnKRZB9mcZH+0KszSbmUAmwoF7HudJ9MP8yF5FlGgkCR3qPfNvNZZJUyAvkGSmZnl82wSgY2AqxkCcizfQG9GgUVoUTMYKaxgYtcT0yxKIzUCoent9abBOXDzg11kCofEGbioF4+C7jqTdqTQof6pu4p8MeFtY95YCD8=
+	t=1724139220; cv=none; b=g+rB04zGi5c7s0LtOOsyeslEs9zCB+2WVKlhalbkJtPCjIc+0Tl3RxO+qo2yRlhcPlvMxzYEj42d6fovNW79022Re0KPr6hX1/SNEQTsQLyPWS8kjF+MEx7YvFEv5i2unEAh2Mdz89EP/G4RyFC2Ib84za8Xg3pr2A1ebX3IAtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724139097; c=relaxed/simple;
-	bh=lnVex45HkIbSrdva5jTznQrLVTO/IJ9b3LjfB4dv2tY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FjjPj+qtGpe7maIw+AKIpGASQ/dkPNWwhEEnxAa3tri2a/K8g4UII0mSrofdl1ux640DTvXSoh3I1mFcyEOjr+0zCT3sQizUwAZ0AgPK9RVs0//XzVFsxNxJiOO5Fm5NexDCRJRek9VRR1qDwm818SYetixWDPE8D00FqxfqYRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YIKbNpsK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F39C4AF09;
-	Tue, 20 Aug 2024 07:31:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724139096;
-	bh=lnVex45HkIbSrdva5jTznQrLVTO/IJ9b3LjfB4dv2tY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YIKbNpsKqef0mmWZHrPR6/ZB8Lp0kbqpqBvjxDYuT8iReRhu1cXIUT53QPKlzUqqJ
-	 mU6l+Y8lgvXwWgkeeVbiaLY4mdn6StAqucalxjVgu5janM8gCmcAl1mBoVpMrucU45
-	 DvyHIcPJfzsV9NpaGlOh+fCYWQHrSDLTNEgjG3/0yoPi+2uAOCFPJughZ0VfbdYRaT
-	 lvJT5BteKypflqJWrDO4eM7bsKUcn0zJ0CNVb7QY43kfb0iCbOBTmn9ViL6W6hmbbW
-	 pqFmxGq4pfdA28JBFoY3vigUjsqxf/1YuyzblUNjtJC2I/ye+66n8+FEsC0rLwjc5j
-	 0XibAonJ3IJsQ==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1sgJL5-000000005jS-0IhH;
-	Tue, 20 Aug 2024 09:31:35 +0200
-Date: Tue, 20 Aug 2024 09:31:35 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Chris Lew <quic_clew@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Stephen Boyd <swboyd@chromium.org>,
-	Amit Pundir <amit.pundir@linaro.org>, linux-arm-msm@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 0/3] soc: qcom: pmic_glink: v6.11-rc bug fixes
-Message-ID: <ZsRGV4hplvidpYji@hovoldconsulting.com>
-References: <20240818-pmic-glink-v6-11-races-v1-0-f87c577e0bc9@quicinc.com>
- <ZsNpSt3BtdFIT6ml@hovoldconsulting.com>
- <ZsN4dcErSt3nioWn@hu-bjorande-lv.qualcomm.com>
+	s=arc-20240116; t=1724139220; c=relaxed/simple;
+	bh=JDACkyW1TTrmAWoS65/RBl27s5tJ/g77kCWCBAvBEHc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EIHNlJOTQ21wi5SZjtXHwCeRHokr9azOmBXDPPGeQ4WlwChkNRjStahwHKQGRDfo8ZWcuL63s2/XWXUHr88Z22qm6pN5DnaNWlBavJAwHLL12rMvvri8Ejq2fqw44be0WtNWitaXNagmz64Mr0Dz2n+SOUcCperIAmK8/b4lL4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=queued.net; spf=pass smtp.mailfrom=queued.net; arc=none smtp.client-ip=45.33.49.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=queued.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queued.net
+Received: by spindle.queued.net (Postfix, from userid 1001)
+	id F378010A89A; Tue, 20 Aug 2024 03:33:37 -0400 (EDT)
+Received: from 5400 (unknown [172.56.34.244])
+	by spindle.queued.net (Postfix) with ESMTPSA id CB259108E13;
+	Tue, 20 Aug 2024 03:33:36 -0400 (EDT)
+Date: Tue, 20 Aug 2024 03:33:35 -0400
+From: Andres Salomon <dilinger@queued.net>
+To: linux-kernel@vger.kernel.org
+Cc: Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+ platform-driver-x86@vger.kernel.org, Matthew Garrett <mjg59@srcf.ucam.org>,
+ Sebastian Reichel <sre@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
+ "Ilpo =?UTF-8?B?SsOkcnZpbmVu?=" <ilpo.jarvinen@linux.intel.com>,
+ linux-pm@vger.kernel.org, Dell.Client.Kernel@dell.com
+Subject: [PATCH v3 2/2] platform/x86:dell-laptop: remove duplicate code w/
+ battery function
+Message-ID: <20240820033335.4f68b162@5400>
+In-Reply-To: <20240820033005.09e03af1@5400>
+References: <20240820033005.09e03af1@5400>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZsN4dcErSt3nioWn@hu-bjorande-lv.qualcomm.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Bogosity: Ham, tests=bogofilter, spamicity=0.000000, version=1.2.5
 
-On Mon, Aug 19, 2024 at 09:53:09AM -0700, Bjorn Andersson wrote:
-> On Mon, Aug 19, 2024 at 05:48:26PM +0200, Johan Hovold wrote:
+The dell battery patch added dell_send_request_for_tokenid() and
+dell_set_std_token_value(), which encapsulates a very common pattern
+when SMBIOS queries are addressed to token->location. This calls them
+in various places outside of the dell laptop code, allowing us to delete
+a bunch of code.
 
-> > I can confirm that I still see the -ECANCELED issue with this series
-> > applied:
-> > 
-> > [    8.979329] pmic_glink_altmode.pmic_glink_altmode pmic_glink.altmode.0: failed to send altmode request: 0x10 (-125)
-> > [    9.004735] pmic_glink_altmode.pmic_glink_altmode pmic_glink.altmode.0: failed to request altmode notifications: -125
-> 
-> Could you confirm that you're seeing a call to
-> qcom_glink_handle_intent_req_ack() with granted == 0, leading to the
-> transfer failing.
+Also some very minor cleanups:
+  - mark the kbd init functions as __init
+  - don't read buffer.output unless dell_send_request() was successful.
+  - actually return errors from micmute_led_set/mute_led_set instead of
+    always returning 0.
 
-It appears so:
+Only minor behavior changes; the delayed read of buffer.output and
+actually returning errors for the brightness_set_blocking hooks.
 
-[    9.539415]  30000000.remoteproc:glink-edge: qcom_glink_handle_intent_req_ack - cid = 9, granted = 0
-[    9.561750] qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: failed to request power notifications
+Signed-off-by: Andres Salomon <dilinger@queued.net>
+---
+Changes in v3:
+    - rename some variables & also drop confusing 'state' variable
+Changes in v2:
+    - use renamed and helper functions dell_send_request_for_tokenid()
+      and dell_set_std_token_value().
+    - no longer need to move functions around
+    - document the brightness_set_blocking hook changes
+---
+ drivers/platform/x86/dell/dell-laptop.c | 109 ++++++------------------
+ 1 file changed, 27 insertions(+), 82 deletions(-)
 
-[    9.448945]  30000000.remoteproc:glink-edge: qcom_glink_handle_intent_req_ack - cid = 9, granted = 0
-[    9.461267] pmic_glink_altmode.pmic_glink_altmode pmic_glink.altmode.0: failed to send altmode request: 0x10 (-125)
-[    9.469241] qcom,apr 30000000.remoteproc:glink-edge.adsp_apps.-1.-1: Adding APR/GPR dev: gprsvc:service:2:1
-[    9.478968] pmic_glink_altmode.pmic_glink_altmode pmic_glink.altmode.0: failed to request altmode notifications: -125
+diff --git a/drivers/platform/x86/dell/dell-laptop.c b/drivers/platform/x86/dell/dell-laptop.c
+index 4053af8f7676..a9de19799f01 100644
+--- a/drivers/platform/x86/dell/dell-laptop.c
++++ b/drivers/platform/x86/dell/dell-laptop.c
+@@ -937,43 +937,24 @@ static void dell_cleanup_rfkill(void)
+ static int dell_send_intensity(struct backlight_device *bd)
+ {
+ 	struct calling_interface_buffer buffer;
+-	struct calling_interface_token *token;
+-	int ret;
+-
+-	token = dell_smbios_find_token(BRIGHTNESS_TOKEN);
+-	if (!token)
+-		return -ENODEV;
+-
+-	dell_fill_request(&buffer,
+-			   token->location, bd->props.brightness, 0, 0);
+-	if (power_supply_is_system_supplied() > 0)
+-		ret = dell_send_request(&buffer,
+-					CLASS_TOKEN_WRITE, SELECT_TOKEN_AC);
+-	else
+-		ret = dell_send_request(&buffer,
+-					CLASS_TOKEN_WRITE, SELECT_TOKEN_BAT);
++	u16 select;
+ 
+-	return ret;
++	select = power_supply_is_system_supplied() > 0 ?
++			SELECT_TOKEN_AC : SELECT_TOKEN_BAT;
++	return dell_send_request_for_tokenid(&buffer, CLASS_TOKEN_WRITE,
++			select, BRIGHTNESS_TOKEN, bd->props.brightness);
+ }
+ 
+ static int dell_get_intensity(struct backlight_device *bd)
+ {
+ 	struct calling_interface_buffer buffer;
+-	struct calling_interface_token *token;
+ 	int ret;
++	u16 select;
+ 
+-	token = dell_smbios_find_token(BRIGHTNESS_TOKEN);
+-	if (!token)
+-		return -ENODEV;
+-
+-	dell_fill_request(&buffer, token->location, 0, 0, 0);
+-	if (power_supply_is_system_supplied() > 0)
+-		ret = dell_send_request(&buffer,
+-					CLASS_TOKEN_READ, SELECT_TOKEN_AC);
+-	else
+-		ret = dell_send_request(&buffer,
+-					CLASS_TOKEN_READ, SELECT_TOKEN_BAT);
+-
++	select = power_supply_is_system_supplied() > 0 ?
++			SELECT_TOKEN_AC : SELECT_TOKEN_BAT;
++	ret = dell_send_request_for_tokenid(&buffer, CLASS_TOKEN_READ,
++			select, BRIGHTNESS_TOKEN, 0);
+ 	if (ret == 0)
+ 		ret = buffer.output[1];
+ 
+@@ -1397,20 +1378,11 @@ static int kbd_set_state_safe(struct kbd_state *state, struct kbd_state *old)
+ static int kbd_set_token_bit(u8 bit)
+ {
+ 	struct calling_interface_buffer buffer;
+-	struct calling_interface_token *token;
+-	int ret;
+ 
+ 	if (bit >= ARRAY_SIZE(kbd_tokens))
+ 		return -EINVAL;
+ 
+-	token = dell_smbios_find_token(kbd_tokens[bit]);
+-	if (!token)
+-		return -EINVAL;
+-
+-	dell_fill_request(&buffer, token->location, token->value, 0, 0);
+-	ret = dell_send_request(&buffer, CLASS_TOKEN_WRITE, SELECT_TOKEN_STD);
+-
+-	return ret;
++	return dell_set_std_token_value(&buffer, kbd_tokens[bit], USE_TVAL);
+ }
+ 
+ static int kbd_get_token_bit(u8 bit)
+@@ -1429,11 +1401,10 @@ static int kbd_get_token_bit(u8 bit)
+ 
+ 	dell_fill_request(&buffer, token->location, 0, 0, 0);
+ 	ret = dell_send_request(&buffer, CLASS_TOKEN_READ, SELECT_TOKEN_STD);
+-	val = buffer.output[1];
+-
+ 	if (ret)
+ 		return ret;
+ 
++	val = buffer.output[1];
+ 	return (val == token->value);
+ }
+ 
+@@ -1539,7 +1510,7 @@ static inline int kbd_init_info(void)
+ 
+ }
+ 
+-static inline void kbd_init_tokens(void)
++static inline void __init kbd_init_tokens(void)
+ {
+ 	int i;
+ 
+@@ -1548,7 +1519,7 @@ static inline void kbd_init_tokens(void)
+ 			kbd_token_bits |= BIT(i);
+ }
+ 
+-static void kbd_init(void)
++static void __init kbd_init(void)
+ {
+ 	int ret;
+ 
+@@ -2173,21 +2144,11 @@ static int micmute_led_set(struct led_classdev *led_cdev,
+ 			   enum led_brightness brightness)
+ {
+ 	struct calling_interface_buffer buffer;
+-	struct calling_interface_token *token;
+-	int state = brightness != LED_OFF;
+-
+-	if (state == 0)
+-		token = dell_smbios_find_token(GLOBAL_MIC_MUTE_DISABLE);
+-	else
+-		token = dell_smbios_find_token(GLOBAL_MIC_MUTE_ENABLE);
+-
+-	if (!token)
+-		return -ENODEV;
++	u32 tokenid;
+ 
+-	dell_fill_request(&buffer, token->location, token->value, 0, 0);
+-	dell_send_request(&buffer, CLASS_TOKEN_WRITE, SELECT_TOKEN_STD);
+-
+-	return 0;
++	tokenid = brightness == LED_OFF ?
++			GLOBAL_MIC_MUTE_DISABLE : GLOBAL_MIC_MUTE_ENABLE;
++	return dell_set_std_token_value(&buffer, tokenid, USE_TVAL);
+ }
+ 
+ static struct led_classdev micmute_led_cdev = {
+@@ -2201,21 +2162,11 @@ static int mute_led_set(struct led_classdev *led_cdev,
+ 			   enum led_brightness brightness)
+ {
+ 	struct calling_interface_buffer buffer;
+-	struct calling_interface_token *token;
+-	int state = brightness != LED_OFF;
+-
+-	if (state == 0)
+-		token = dell_smbios_find_token(GLOBAL_MUTE_DISABLE);
+-	else
+-		token = dell_smbios_find_token(GLOBAL_MUTE_ENABLE);
++	u32 tokenid;
+ 
+-	if (!token)
+-		return -ENODEV;
+-
+-	dell_fill_request(&buffer, token->location, token->value, 0, 0);
+-	dell_send_request(&buffer, CLASS_TOKEN_WRITE, SELECT_TOKEN_STD);
+-
+-	return 0;
++	tokenid = brightness == LED_OFF ?
++			GLOBAL_MUTE_DISABLE : GLOBAL_MUTE_ENABLE;
++	return dell_set_std_token_value(&buffer, tokenid, USE_TVAL);
+ }
+ 
+ static struct led_classdev mute_led_cdev = {
+@@ -2492,7 +2443,7 @@ static void dell_battery_exit(void)
+ 
+ static int __init dell_init(void)
+ {
+-	struct calling_interface_token *token;
++	struct calling_interface_buffer buffer;
+ 	int max_intensity = 0;
+ 	int ret;
+ 
+@@ -2554,16 +2505,10 @@ static int __init dell_init(void)
+ 	if (acpi_video_get_backlight_type() != acpi_backlight_vendor)
+ 		return 0;
+ 
+-	token = dell_smbios_find_token(BRIGHTNESS_TOKEN);
+-	if (token) {
+-		struct calling_interface_buffer buffer;
+-
+-		dell_fill_request(&buffer, token->location, 0, 0, 0);
+-		ret = dell_send_request(&buffer,
+-					CLASS_TOKEN_READ, SELECT_TOKEN_AC);
+-		if (ret == 0)
+-			max_intensity = buffer.output[3];
+-	}
++	ret = dell_send_request_for_tokenid(&buffer, CLASS_TOKEN_READ,
++			SELECT_TOKEN_AC, BRIGHTNESS_TOKEN, 0);
++	if (ret == 0)
++		max_intensity = buffer.output[3];
+ 
+ 	if (max_intensity) {
+ 		struct backlight_properties props;
+-- 
+2.39.2
 
-> It would also be nice, just for completeness sake to rule out that you
-> do not get a call to qcom_glink_intent_req_abort() here.
 
-And I'm not seeing this function being called.
 
-Johan
+-- 
+I'm available for contract & employment work, please contact me if
+interested.
 
