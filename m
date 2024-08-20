@@ -1,148 +1,150 @@
-Return-Path: <linux-pm+bounces-12501-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12502-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68050957A96
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 02:48:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9EB0957ACE
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 03:13:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BD311C2355F
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 00:48:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7CE9284C00
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2024 01:13:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D098A94F;
-	Tue, 20 Aug 2024 00:48:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EAC134D1;
+	Tue, 20 Aug 2024 01:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KmEVsdRH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d3+aYTou"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CA3A92D;
-	Tue, 20 Aug 2024 00:48:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5FB1C6A1
+	for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2024 01:13:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724114930; cv=none; b=rocjG5TsGhH0/KHC4CS0br7hyTcEcOdyZLipb9c9O8nxag+cV6CL/u1x2GuaxkPaLYfvZZ5YSCvf6c/NAV2t07oxBPs5hW02jkQJO/hFeqWrE89kvnaSOhL/fYm8l5l5UYBnhvIjQLGBi7BlW/WFSQjd1vQhtgVVlyUKsLRB16o=
+	t=1724116394; cv=none; b=N/945GWILTpsN6ieRfWm/6JS5y2JrBQmv7zUHFVFyy9H5d1rMjWHQ4Whfkeqs5zckbsjlaJpcOUhYDaO+qhQ2BCrvWwVEMkJrsvjLyscYvFKHj0kGoZk04QnFLjn0pdTY84nN7r0cvKHEHU48CM95YU2W9AsZxi2XOJv8Al0BRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724114930; c=relaxed/simple;
-	bh=S1yD5jjtloQRCRz1+d0jr0pqgFXrBjkSHQAMv9YOMiA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=smPT4vgowuXDwaUfrzw2PF+X2g104MEo/fAbo1beKb8THsZsqwC1byCu/k3n+Fg+c8XWRRRLKboplI4BMxcQ0uwUXEHiiEDuAawbsGQVzl0uIR+Z0qMV7p4DSXWr3q18atwerKJg2Bs5xNpdmO/yIztavJJSCLvoMzB9zDJslsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KmEVsdRH; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a7d89bb07e7so524641966b.3;
-        Mon, 19 Aug 2024 17:48:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724114927; x=1724719727; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Aak847kfGgqL39Kc/QBpkJh3q9r3EfbJoDakBsppDnM=;
-        b=KmEVsdRHGlghGxICz21Zjrwi4eq1M80N2cOEcxNYV5G67bK8vifjZpJ4Ol23IhvMko
-         LoQQXnvl28CrnauUHyxv382nlW1m5FsTJCahU/+W1w87FxX319r6WaHrrlB0cP33it6N
-         hhFtfUD/Rcrkov/A9nuMUwTEPfp0VVd+nOzXeJERhIlM8bHwf0BX1kvbC5quM1yTbXfm
-         dSj7jS5yfWAiw9nKP9e5eQBDKmMl6xG5+48AKCUFvm3TXn8s3ajWXTAnMQSOkhPnvolE
-         eXFVyIRnaBpjJq3HTBNtQE4LRz6k+5XJWc7wBAnElDwTyDm+/QLLe2qcCC0CBHE3sIhH
-         bbUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724114927; x=1724719727;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aak847kfGgqL39Kc/QBpkJh3q9r3EfbJoDakBsppDnM=;
-        b=lOziogqXz05WQHnSKXkH/6qEeFRTUNPmVQduSJ12WKfrpR/BrUamwYzRsQDLoIFXHP
-         UzYKb3mciqXfifQuLr2zLH7wReExdrWWlBEdvllLSYgnHe9K7R0HbBt6RdDAV/lHGpDe
-         q+9ECFq7hhoFpjp9Y9ozSk0+YN9RzEKXsPFYCv4ijuyuQtmEESXVHm1Jh0UjM5fxfnhV
-         nhUh00tOKI15roCJjR9/X3hfCtdNYmcwMkgvu/Ahjh+YYxy9LbT5h9xiZEV0if7sRo6T
-         laC7jV0zsXLdZpEF1ihzuc2MkpOz7ZKNZn5NOdK516wAbMs0ZgC8QCimDktdkYT8dX5G
-         WKhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUHBcmlXikwcbfTq4Bzhhh5+52FuISesBbni2T06uEg5KhegpxA0iSaiZ9MzYRIWo4HDR3znVJnhnucO5V9@vger.kernel.org, AJvYcCUnkpOM8LNxcbkYuQeleySdGv8swvW6BBO/QIkAWVne63Elp9DYEeOJrWO/cQwar90fb99ALQ3xbf73hlP0@vger.kernel.org, AJvYcCUsygNu3QTAXLzCXXnUgHsj8oMnCKDV+n6XQu3WnMtB/ft5RgwgMtuNQcR4fEFUaEAVrDjIyQRP@vger.kernel.org, AJvYcCW4qS5PU+OtM4zE94GG6N4jgZXsRBXP/89ViXuvePsyBx0AIeV464WQ+vwSkffurnZrHnmfzSCLmRMKTF1VEKab@vger.kernel.org, AJvYcCXYwnUyOeYRf4+KkCbAq2xJeIG8cKJ8kL8SjD2SBy8FFXwInT3t2dPdSqeJpmbm1VLEWzM+fDb6Ixg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYnC0db6pLpcZLJs6s9i6WvwOo9//gQ0PHLiwWbtkBRxGiTuQ0
-	4XwWRs8xYrIcWidy75dCC5Zm5Oo301UNVa8xc8SNjcJMaPvt5pGA
-X-Google-Smtp-Source: AGHT+IEUbNzyKkL8AD794LCfaPtnP6kDKp9OUrsiw25fkzayVlzgeUWcLK6D0mUSHIMPsExRLInG/g==
-X-Received: by 2002:a17:907:f169:b0:a7a:acae:3420 with SMTP id a640c23a62f3a-a8392a11c05mr869163566b.49.1724114926168;
-        Mon, 19 Aug 2024 17:48:46 -0700 (PDT)
-Received: from [192.168.105.194] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83839344b5sm696714266b.118.2024.08.19.17.48.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Aug 2024 17:48:45 -0700 (PDT)
-Message-ID: <90a95443-65c5-44e8-8737-26145cda1e35@gmail.com>
-Date: Tue, 20 Aug 2024 02:48:40 +0200
+	s=arc-20240116; t=1724116394; c=relaxed/simple;
+	bh=CMpDjLI7/Cy8hgOixYvnKLnwW1x2ElCY4I6FZSCKG7I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kKuR+alRmI/ee0IdLK6M2lm0Dyw9PosYLBOnA/7rICJKTGQt7uxcZ0P4bEEYgnIrgJQFMOtiIDeKBtHPi2ZrHtT56+XcLJaltiNs24V7jxoHYMnOteoRAFtOCpyR0g2vFGZwZx4ksSqBqd9ooyOoKyqpR/kuyejcWAPRVA1LEss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d3+aYTou; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724116392; x=1755652392;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CMpDjLI7/Cy8hgOixYvnKLnwW1x2ElCY4I6FZSCKG7I=;
+  b=d3+aYTouMhfAzXxuqA+SpmdxgqMukh/j9/OfuYhSJ2JWIlW7xkFA5q4f
+   uaWx+LnJ9j3BDGSBKXNuam6tB7oxg42lM+oCfdq/N80LnSqIxXNhKJAFP
+   sb7pn3HHdmhgqY6B4duKZUraPlJNp7KQvxm3PrPKcddoZmB8fcpB/W5zi
+   Wbz4nz+xci/CloB9thWn9BFJyp/Bpv6IpDOuvYuesKgzHR4MjLjpWq1yB
+   zaRMrjONkrKEJWLgt/wiTy73rl5eVxaXOsCWJCIViLxtZicnx1KwxeIpi
+   4qOVwAHuEwDXTXbwYiDeR0pXnVzML6q9ucBiJBQI+3tMYq5tNRQtPZQbD
+   g==;
+X-CSE-ConnectionGUID: tTzu/9v0TEKnYFvgCZs3wQ==
+X-CSE-MsgGUID: C26mctwVSFKhUdypeY1zkQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="39898043"
+X-IronPort-AV: E=Sophos;i="6.10,160,1719903600"; 
+   d="scan'208";a="39898043"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 18:13:12 -0700
+X-CSE-ConnectionGUID: rqS1tkNKRRyM9FD/KiQBoQ==
+X-CSE-MsgGUID: yHevFzlkTmyR4uee2Fg7Lw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,160,1719903600"; 
+   d="scan'208";a="60874508"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 19 Aug 2024 18:13:10 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sgDQp-0009aa-1x;
+	Tue, 20 Aug 2024 01:13:07 +0000
+Date: Tue, 20 Aug 2024 09:12:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fabio Estevam <festevam@gmail.com>, daniel.lezcano@linaro.org
+Cc: oe-kbuild-all@lists.linux.dev, rafael@kernel.org,
+	linux-pm@vger.kernel.org, Fabio Estevam <festevam@denx.de>
+Subject: Re: [PATCH 1/2] thermal: qoriq: Remove __maybe_unused notations
+Message-ID: <202408200829.1ywCKDAw-lkp@intel.com>
+References: <20240819142700.1206586-1-festevam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 08/11] arm64: dts: qcom: Add SM7325 device tree
-To: Danila Tikhonov <danila@jiaxyga.com>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, andersson@kernel.org,
- konradybcio@kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, rafael@kernel.org,
- viresh.kumar@linaro.org, kees@kernel.org, tony.luck@intel.com,
- gpiccoli@igalia.com, ulf.hansson@linaro.org, andre.przywara@arm.com,
- quic_rjendra@quicinc.com, davidwronek@gmail.com, neil.armstrong@linaro.org,
- heiko.stuebner@cherry.de, rafal@milecki.pl, macromorgan@hotmail.com,
- linus.walleij@linaro.org, lpieralisi@kernel.org,
- dmitry.baryshkov@linaro.org, fekz115@gmail.com
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20240808184048.63030-1-danila@jiaxyga.com>
- <20240808184048.63030-9-danila@jiaxyga.com>
-Content-Language: en-US
-From: Konrad Dybcio <konradybcio@gmail.com>
-In-Reply-To: <20240808184048.63030-9-danila@jiaxyga.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240819142700.1206586-1-festevam@gmail.com>
 
-On 8.08.2024 8:40 PM, Danila Tikhonov wrote:
-> From: Eugene Lepshy <fekz115@gmail.com>
-> 
-> The Snapdragon 778G (SM7325) / 778G+ (SM7325-AE) / 782G (SM7325-AF)
-> is software-wise very similar to the Snapdragon 7c+ Gen 3 (SC7280).
-> 
-> It uses the Kryo670.
-> 
-> Signed-off-by: Eugene Lepshy <fekz115@gmail.com>
-> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm7325.dtsi | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sm7325.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm7325.dtsi b/arch/arm64/boot/dts/qcom/sm7325.dtsi
-> new file mode 100644
-> index 000000000000..5b4574484412
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sm7325.dtsi
-> @@ -0,0 +1,17 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2024, Eugene Lepshy <fekz115@gmail.com>
-> + * Copyright (c) 2024, Danila Tikhonov <danila@jiaxyga.com>
-> + */
-> +
-> +#include "sc7280.dtsi"
-> +
-> +/* SM7325 uses Kryo 670 */
-> +&CPU0 { compatible = "qcom,kryo670"; };
-> +&CPU1 { compatible = "qcom,kryo670"; };
-> +&CPU2 { compatible = "qcom,kryo670"; };
-> +&CPU3 { compatible = "qcom,kryo670"; };
-> +&CPU4 { compatible = "qcom,kryo670"; };
-> +&CPU5 { compatible = "qcom,kryo670"; };
-> +&CPU6 { compatible = "qcom,kryo670"; };
-> +&CPU7 { compatible = "qcom,kryo670"; };
+Hi Fabio,
 
-This is a meaningless marketing name. As you mentioned in your
-reply, cpu0-3 and cpu4-7 are wholly different (maybe cpu7 even
-has a different MIDR part num?), we should do something about it :/
+kernel test robot noticed the following build warnings:
 
-Please post the output of `dmesg | grep "Booted secondary processor"`
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on linus/master v6.11-rc4 next-20240819]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Konrad
+url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-Estevam/thermal-imx-Remove-__maybe_unused-notations/20240819-222757
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20240819142700.1206586-1-festevam%40gmail.com
+patch subject: [PATCH 1/2] thermal: qoriq: Remove __maybe_unused notations
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20240820/202408200829.1ywCKDAw-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 13.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240820/202408200829.1ywCKDAw-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408200829.1ywCKDAw-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/thermal/qoriq_thermal.c:364:12: warning: 'qoriq_tmu_resume' defined but not used [-Wunused-function]
+     364 | static int qoriq_tmu_resume(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~
+>> drivers/thermal/qoriq_thermal.c:350:12: warning: 'qoriq_tmu_suspend' defined but not used [-Wunused-function]
+     350 | static int qoriq_tmu_suspend(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~~
+
+
+vim +/qoriq_tmu_resume +364 drivers/thermal/qoriq_thermal.c
+
+   349	
+ > 350	static int qoriq_tmu_suspend(struct device *dev)
+   351	{
+   352		struct qoriq_tmu_data *data = dev_get_drvdata(dev);
+   353		int ret;
+   354	
+   355		ret = regmap_update_bits(data->regmap, REGS_TMR, TMR_ME, 0);
+   356		if (ret)
+   357			return ret;
+   358	
+   359		clk_disable_unprepare(data->clk);
+   360	
+   361		return 0;
+   362	}
+   363	
+ > 364	static int qoriq_tmu_resume(struct device *dev)
+   365	{
+   366		int ret;
+   367		struct qoriq_tmu_data *data = dev_get_drvdata(dev);
+   368	
+   369		ret = clk_prepare_enable(data->clk);
+   370		if (ret)
+   371			return ret;
+   372	
+   373		/* Enable monitoring */
+   374		return regmap_update_bits(data->regmap, REGS_TMR, TMR_ME, TMR_ME);
+   375	}
+   376	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
