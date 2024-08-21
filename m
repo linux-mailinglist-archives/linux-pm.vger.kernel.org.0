@@ -1,215 +1,173 @@
-Return-Path: <linux-pm+bounces-12600-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12601-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54344959435
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 07:42:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C42579594C4
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 08:38:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB2C91F22288
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 05:41:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 813D828397A
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 06:38:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DF37166F28;
-	Wed, 21 Aug 2024 05:41:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E999B16DC2E;
+	Wed, 21 Aug 2024 06:38:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="aE6v5/IL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PWytuUB+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2061.outbound.protection.outlook.com [40.107.94.61])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD061547CB;
-	Wed, 21 Aug 2024 05:41:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724218908; cv=fail; b=tdBncG7igumOQMceB3EU1SYGDN6zH8cADQHgyMyFjH9G9Tjf0xnZLehguDl0dSCg3a2fboXmwxNNRiC5SSRmwTORMS+8ErSHj59vLba6pTn36JMfMR/YE81g0z3JeNEyu6wbCwSswUPkGZ52JjvnOWn0cgeTnHUGjPoZ7MRF//M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724218908; c=relaxed/simple;
-	bh=jvMSAMAdSheznXb/K4X8oWIQK09olZFngUgSf8DmmGs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=eeTawC/GvnYU4sAfpkqOV9VovqPZ6WHpMt6Xu6N1q1cS/4WY97ZgKdJML5QJHo2xagQDAjUfy4bgnl0gQKj0wir2ZpglimSkVfu3eBVlUV3F3wNZnhxL13zFicRFQT7pdjBgYsdUhPHAL3rsAkswq9OmSLwWMuO1JNrPP7Oxhzc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=aE6v5/IL; arc=fail smtp.client-ip=40.107.94.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TVFnhhShWxetlX9sLl9+j45x5Y0ErgY+pO9/C3+6zBBjKzyvdRzHnR4CPXlIJZXKa/bYtk/GUj9Yh5+2ZmhI1AOFmjVJNDuRc7y0oYq73YzE8OTHlrbnjD/WzkLSNZIq/eAjap9LeNeF+2wc5+kyft8VNi2ymS4pkfz+clGkZ8cFfeyqRM+I/TKccpLvz7hS9C+9hArtvVN9lgJ4pF/2rhR0xmqIfWq8ilzCsu/cmub66avchd5k6+nxSbPO6msDV7pwIVeDX9aCDzxOAZZlFtxHIG8eKLDTZ7OSgLr7fMQAMkbLS50zr/JO4aEnBJe/jzKPEAYuOwTV5x0jVLfaZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wpu1jWovat4uHhYEUOB2DtoraGMnVgqBJAwB4v4OUnE=;
- b=FCU1eWnmry/LlfXcnwD3kEL0lCE/9y2r6GGQ02ko//WR9JedtJwCSpXO0rh6NncEbDxxiomgNG5cWaDERbwq2V+uZiQRihhKvFkrIuYgF3a4HgaWnOkDpiU3EOFD6ZPaNcEtBUFcWKN2rQwYKrxJaX6pmwNlH5EnNkHrvZ0Bj+7mvaFIZx1BGde6wDGLVjDWBbGd6MfHvvlOjg/7Dni1vn6gbf0vT3svXyOKnpuEC+9VmS3Z0zloxVgj6XmZ2YKvtMCVEQ0Jo0bVWezh83b9B1S50oNu+RStPNz6EJqiKkR74uxKrf7TdNkMO5GNThg7IMwRZgwI3q3lJPY6HQhj3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wpu1jWovat4uHhYEUOB2DtoraGMnVgqBJAwB4v4OUnE=;
- b=aE6v5/IL+jEHdNoEamENgLuclqCLfCpZYdUP6P3NxWMfjp4tthdcRJStYZIs8iRMRmvQLkE0OXcWD0T+X33oGtLpjTUiJcVGSnvW8od2t4qwAjIw3lyOnOyC2Ffuh3K1GI7bggEYBSYNVb0oxlFnYXvnA5vk85qummzSGWNY3xw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
- MN0PR12MB6080.namprd12.prod.outlook.com (2603:10b6:208:3c8::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21; Wed, 21 Aug
- 2024 05:41:44 +0000
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7%4]) with mapi id 15.20.7875.019; Wed, 21 Aug 2024
- 05:41:44 +0000
-Date: Wed, 21 Aug 2024 11:11:32 +0530
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: Xiaojian Du <xiaojidu@amd.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Huang Rui <ray.huang@amd.com>, Perry Yuan <perry.yuan@amd.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
-	David Wang <00107082@163.com>
-Subject: Re: [PATCH 3/3] cpufreq/amd-pstate: Remove warning for
- X86_FEATURE_CPPC on Zen1 and Zen2
-Message-ID: <ZsV+DI4IxQCSTWGY@BLRRASHENOY1.amd.com>
-References: <20240813095115.2078-3-gautham.shenoy@amd.com>
- <20240813095459.2122-1-gautham.shenoy@amd.com>
- <9ca4054e-a130-b65b-d2f3-3ef84c997dfd@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ca4054e-a130-b65b-d2f3-3ef84c997dfd@amd.com>
-X-ClientProxiedBy: PN2PR01CA0207.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e9::18) To DS7PR12MB8252.namprd12.prod.outlook.com
- (2603:10b6:8:ee::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B279015C157;
+	Wed, 21 Aug 2024 06:38:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724222290; cv=none; b=k+71oJJaILMrCfWprc4dkQJWaNQglyIIUi4Pl9qutbrHNOUUdUU4grFEK4vIJIkNRiEpZw3ZA5P9fx4cvb2nwhYyIvjGkd7d6kItJZdA3ymVDEs3GkMNwa99eEB3nwTHGtRwPqscNZdP9l2Fpr9k8Vy1+kHtegw3l7t7yeSD1xo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724222290; c=relaxed/simple;
+	bh=xVRhAQ9bT5Qo2E6sPCbDp3obzvw4LNK3id11C4MN8ww=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dWM2eNBZyycWjVtTZUc+J7vCZ3pnPun897d4N3U2Og0mKlAJzjG1jxG3Agp86KX4bimI02Fd3i7gFFHxyE9X2xHMpf03oikoj+bYvvAyF9c8NfasM4fQvKGuGpy8UAYes2TnyIpagA0y8YdWEtszzcrCFsUK9ku/NZUeLOmYLUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PWytuUB+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFCFDC32782;
+	Wed, 21 Aug 2024 06:38:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724222289;
+	bh=xVRhAQ9bT5Qo2E6sPCbDp3obzvw4LNK3id11C4MN8ww=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PWytuUB+G7K9oHNXrWZFNBsc0fLgJBsuskY70YOG5/fWd3Lwq+sNRx5v4m4/5D05A
+	 xw9tQOTWRETdrPxhkc5CJPYeBcPXhEN9GESWRJXLommhGF4hA+8igpW0ptjbtaXUXF
+	 W9G6agqwnXILo4xIvjYz2PfUHQu2u7YBZwgFKnO9aoQLDV027v9ENAmPkMPRFuc2XX
+	 ENhYrDnh6tLj1A9sbSJQAawgePvo+Q3nO25arRP1FDEzKS4e3D7pofKxoLguEHSMH8
+	 ilL8ihMZFZvxwDGFIMifASe8L98Do+IQPBpnZs0yqVPR9XvuMWLP3z0rNzsS8/GMGP
+	 p3cy5/dmUkH3g==
+Message-ID: <6b9e528f-e9fc-453c-a024-1cf812cffd0d@kernel.org>
+Date: Wed, 21 Aug 2024 08:37:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|MN0PR12MB6080:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4434dfa2-fee5-42be-3170-08dcc1a3f0a0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?vC81a88PIW5463Vz0vhNRCJd4TejqpAty2j1LooORRy1cumD+zO2MJDFiOZr?=
- =?us-ascii?Q?1lAC8SvrCDQ7pXnDdwuCfH14CbdVonWl2ZlqfZhuxOrNwE0CfzznliCzNJeb?=
- =?us-ascii?Q?4KMJ1BMfNL+wI1lhLgqBN/1iWFdsO8rueeNvWKKFwdQ/0hhPH2FLJuPWy5Ub?=
- =?us-ascii?Q?nFRn1GH/d27rUXIEuxfKkfxFKbgn+ddq468BWIe5onHU8bA7zMvrJaQRl1Ay?=
- =?us-ascii?Q?S+sXJjdHbNFzjevECEI+IAOBBM384VB2k63WBcMygD2da1luiCqEDyf8c+sn?=
- =?us-ascii?Q?yZFzaGXSOjL6bx9ubGxqC4vvS3mfARkFKWBQ4KTRgqgqLrDhyinglVVGYHRI?=
- =?us-ascii?Q?zJ8FysIMUD6JbFSIqPc6bB5HXhx+/QKQP6tGI0gsGEwa1OmTEQR625o6Jz7G?=
- =?us-ascii?Q?gtFwa+33mnHw7Oo25JiEhigyWevGHX0N+9ZoTAm181VMTSxLb9zl/o0Iy60E?=
- =?us-ascii?Q?76XcJ/I5DL7XJXNWIT0spsvBpYRRV3tSeb17mOHDepHrRP6xi+ZX8QLD6h4e?=
- =?us-ascii?Q?ZG9BccRQZ1I1Q4tQ3VsSbHpLuK/hCufcoNeLeRsHIOu3Q7phoUPyRNyECYnu?=
- =?us-ascii?Q?O0cguubFWcdZAkN4W3SiLDTQSlw6S2/uVcxLXPayp6ekYUQ+9K0MrfvzvX2v?=
- =?us-ascii?Q?Dxn0Oo6NFJ/JykJ9LQVsoOS7HEiUyGTxEjPXJuWDblk2CBEXwpeeio42orJY?=
- =?us-ascii?Q?Y7CA6s9ddRhn8SEvehCZhYZ4R8f7RkCfSVVvTZZRYD6I71xn1n2mWZRB/CZ5?=
- =?us-ascii?Q?9xg7x41i4ktCvTxcgyf6CIWPgG/wYM8n/XXaT5AtML7juylhA8O7mdzm0DoI?=
- =?us-ascii?Q?FNiGwrRwDlGg4cOzgZYC8ZujRTKzRjyO7LjEoLubsIj/sEVewlDXlshqM44C?=
- =?us-ascii?Q?ktUR8hCCmAUDqGu5NPqXGqnx9O1sHRvw4zxlmZbnc8akAY1Q/3F90arilAQT?=
- =?us-ascii?Q?e3MnTVxpLUYT7Ebj87m/fV6NllvwIVIeZ91mKIAxC4CTkOU15QhqLftowGwW?=
- =?us-ascii?Q?kucXJRZtwZ8rySeFHO7vw8SZaXeVfF819lcTfA+Vjf7/oiOUKMK3Kq6jnN/y?=
- =?us-ascii?Q?y+PGirkzA/ks3mRcqFxBQn+Hxjdc7Tu7iHz45NuHqWxyJQlgppW/A7JpYcUd?=
- =?us-ascii?Q?5YnfZHuh2zBol9hE89pNv4+C34PhfNJvULgznEOJqVSSEYpGAloKLB+VYPly?=
- =?us-ascii?Q?yShti0xYeSBRYcB9/q1NdHuk3J5SkSvDE7kAv9kPgm6zbFvXySceqAUdOfCt?=
- =?us-ascii?Q?1YP+Zv0Dt4+xqFCydPqqlJEpKQpVlepqPTw1GZiEMLbKgWkiKiACUfRZxS8r?=
- =?us-ascii?Q?KZ2AdR/uySpxCab3KyPWSms9?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?6sfgG0+NtNhsyuoV3Cgr3wXhPMuMvphcUA81sk8/DL1lmCmLEC3sNDwY6Ufj?=
- =?us-ascii?Q?yOBoY95pMtm3XjvYbyaWEf/dWhXcXfDTxHlTRbYDw2y07FDmSGaz/AKRu9Bv?=
- =?us-ascii?Q?Rtnr/X4Zv6Ybb2oRUXIh1n90ZvOuL4HiYrn60/oo8MSqTvSFZy6T1mzbtL+g?=
- =?us-ascii?Q?E/TsfPJoBEhGE6V7CxE5m9qXttGP3DSVqxL/5adMyMQC6kmOv3kzFRPmEth1?=
- =?us-ascii?Q?xxNKcCdWU5s23l30lyDeBk7UhXG0v3mqJcmWU4nM60aZInBW504l+SO3sgia?=
- =?us-ascii?Q?qSS/aeTG9Jeb6JK6JZxcFkmMEJehak0CDyIKNOWggYUg8xd7akQiU5HsrBTG?=
- =?us-ascii?Q?kE9Nj4qVn//Exw1SmZ2ibwlJv6EIQv0DsLzMlLwstZhxpXuQUmCu5yMdHnMm?=
- =?us-ascii?Q?UeP+vYB3Rdhs3ZVUCKVppFz/BN6mFny0E3DANidd8WRyueIrJfWNd1iVELLB?=
- =?us-ascii?Q?Azv/g9VMuHkN67dFfY9qf4xUd6HxfBPFrPQAA4BQBgVQlAPQ5IKAenN12Arx?=
- =?us-ascii?Q?VRgEKhXkB9vkOyspDo7zmB5lzhdEDFWHepKVL/vrwMY8OfSYk+xG4Qc03DDq?=
- =?us-ascii?Q?1tqGHOQVkI/gmop4JYxlNNEjLg3dZc9P3T2DY7g90ynQQt0AInmem1KWJA0Q?=
- =?us-ascii?Q?YTLvr+A80kDD6n69joZlAklIZQpV0Nt59pOpwbRjIPdAXP//oim+1gKgpEZI?=
- =?us-ascii?Q?g17vgkuZKPXnYmZb1DKAMPuJFlS/iUHtIIlBj8EXQm2Yo9b7+EVB9r+OZUlQ?=
- =?us-ascii?Q?oGqsJH/gzQR2ZCQyVdTronWbnVuKFNdAT7iJPzKd9U5PdBUoruqhloBvS6Xq?=
- =?us-ascii?Q?Dq+o/j4HllTD+1jSjuTTutLsBozxKpslxXzDvsx7Bh8SESlidGv7UmJelb6s?=
- =?us-ascii?Q?a048ozbftSHLD5DK0FkGaxJnFNnT74jE+cpyLz9urf0q01jc3w/uV7/g++o/?=
- =?us-ascii?Q?ujaLE+8Mn8WFTNnYcsR98cgolY5JuyZ6IFGTXt+grpqyMcnaYPhU7qw0QfoF?=
- =?us-ascii?Q?MiJuSgUsMqsXHqL4Xsa+x+Nfrjgj2OLkYeZ7irtMhVhoKZyld19nQvKMwDTd?=
- =?us-ascii?Q?y22k+bpZUL1C9jpUe7G3u4ZLi3miV4vBhzfeb1suD/RSS8Xni+twZe7pqjI/?=
- =?us-ascii?Q?kh3BYx1695i/moO6m1C5hboHYVUr1HpVonelvxrtHWKfzTJkwpGALo1oF002?=
- =?us-ascii?Q?Y03Rc3WlUhj8jmCY3Q8tSxKcmdDYZWVa3duqIfnCT6HMMJrZZsWdY2y83dBq?=
- =?us-ascii?Q?SKQdY5YF3OU+oiA2AJkPyRw9tuMTFD+CBWe9F8ztOTZ+Am0s6K/VTTnGq0Ws?=
- =?us-ascii?Q?5hY2wjWi01t6HoEAsE/azXpty3S1wOFUo6k092rNQ2kIEX6ODOFijL1P3/bP?=
- =?us-ascii?Q?xtitRPLxLnnxffqlvEj6MarHAAL8XBAea59b84tFEezodiPLsOiwLYm8Yjh8?=
- =?us-ascii?Q?C8KUdZy1drNr2j29kTij3ZMWOMLYfV3fsQZxA0SsjwrMl7L29EHJ//4Fr8/H?=
- =?us-ascii?Q?02ePgLhNZG8KTnZaqXFHvo1mOWspNwZyZ9SsFHDL7Hm92BWm0nmLE8D8r0K3?=
- =?us-ascii?Q?BjKP4php5EWIpvBKy3556aDChn23eK9to8eUxm1F?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4434dfa2-fee5-42be-3170-08dcc1a3f0a0
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2024 05:41:44.4689
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sl0RC3qTB1jKiL0ck/BlodWKRm6NinoH1LNJxWNLZoKXxFbzHp68ixF+LYoOOWIscZdWlYYls3TNyTxFRsrWEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6080
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 05/15] dt-bindings: power: supply: axp20x: Add
+ input-current-limit-microamp
+To: Chris Morgan <macromorgan@hotmail.com>
+Cc: Chris Morgan <macroalpha82@gmail.com>, linux-sunxi@lists.linux.dev,
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+ quentin.schulz@free-electrons.com, mripard@kernel.org,
+ tgamblin@baylibre.com, aidanmacdonald.0x0@gmail.com,
+ u.kleine-koenig@pengutronix.de, lee@kernel.org, samuel@sholland.org,
+ jernej.skrabec@gmail.com, sre@kernel.org, wens@csie.org,
+ conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de,
+ jic23@kernel.org, jonathan.cameron@huawei.com
+References: <20240819164619.556309-1-macroalpha82@gmail.com>
+ <20240819164619.556309-6-macroalpha82@gmail.com>
+ <ro43ccn3w2qsvcnjej7appuasuqphtf54vkyrsex6ypr4dlwhh@vi2jg4nemkvl>
+ <MN2PR16MB2941EF5AF5C003640B20CDFFA58D2@MN2PR16MB2941.namprd16.prod.outlook.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <MN2PR16MB2941EF5AF5C003640B20CDFFA58D2@MN2PR16MB2941.namprd16.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello Xiaojian,
-
-On Wed, Aug 14, 2024 at 05:29:04PM +0800, Xiaojian Du wrote:
-> Hi Gautham,
+On 20/08/2024 22:15, Chris Morgan wrote:
+> On Tue, Aug 20, 2024 at 09:42:06AM +0200, Krzysztof Kozlowski wrote:
+>> On Mon, Aug 19, 2024 at 11:46:09AM -0500, Chris Morgan wrote:
+>>> From: Chris Morgan <macromorgan@hotmail.com>
+>>>
+>>> Allow specifying a hard limit of the maximum input current. Some PMICs
+>>> such as the AXP717 can pull up to 3.25A, so allow a value to be
+>>> specified that clamps this in the event the hardware is not designed
+>>> for it.
+>>>
+>>> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+>>> ---
+>>>  .../x-powers,axp20x-usb-power-supply.yaml     | 69 ++++++++++++++++++-
+>>>  1 file changed, 66 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
+>>> index 34b7959d6772..9cc300e78f60 100644
+>>> --- a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
+>>> +++ b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
+>>> @@ -15,9 +15,6 @@ maintainers:
+>>>    - Chen-Yu Tsai <wens@csie.org>
+>>>    - Sebastian Reichel <sre@kernel.org>
+>>>  
+>>> -allOf:
+>>> -  - $ref: power-supply.yaml#
+>>> -
+>>>  properties:
+>>>    compatible:
+>>>      oneOf:
+>>> @@ -31,8 +28,74 @@ properties:
+>>>            - const: x-powers,axp803-usb-power-supply
+>>>            - const: x-powers,axp813-usb-power-supply
+>>>  
+>>> +  input-current-limit-microamp:
+>>> +    description:
+>>> +      Optional value to clamp the maximum input current limit to for
+>>> +      the device. If omitted, the programmed value from the EFUSE will
+>>> +      be used.
+>>
+>> minimum: 100000
+>> maximum: 4000000
+>> (or whatever the values are)
 > 
-> On 2024/8/13 17:54, Gautham R. Shenoy wrote:
-> > ...
-> > 
-> > This feature bit corresponds to CPUID 0x80000008.ebx[27] which is a
-> > reserved bit on the Zen1 and Zen2 platforms, and is expected to be
-> > cleared on these platforms. Thus printing the warning message for Zen1
-> > and Zen2 models when X86_FEATURE_CPPC is incorrect. Fix this.
-> > 
-> > ...
-> >   	if (!cpu_feature_enabled(X86_FEATURE_CPPC)) {
-> > -		if (cpu_feature_enabled(X86_FEATURE_ZEN1) || cpu_feature_enabled(X86_FEATURE_ZEN2)) {
-> > -			if (c->x86_model > 0x60 && c->x86_model < 0xaf)
-> > -				warn = true;
-> 
-> Some models of ZEN2 APU/CPU require this warning info, like Renoir (Ryzen 7
-> 4800H mobile APU/4750G desktop APU,
-> Ryzen 5 4600 desktop CPU), Lucienne (Ryzen 5 5500U mobile APU) and Aerith
-> (APU of Steam Deck console).
-> 
-> So it has to use model ID to narrow down the coverage.
-> 
+> It varies based on the compatible string. I've added all of the
+> restrictions below. Basically all but the axp717 have a table
+> of values available (as an enum), and the axp717 which is added
+> in a subsequent commit gets added as a minimum/maximum with a
+> description noting that steps are in values of 50000.
 
-I checked the publicly available PPRs of the Family 17h models 0x60
-(Renoir) [1] and Family 17h model 0x71 (Matisse) [2]. In both these
-PPRs, CPUID 0x80000008 EBX[27] is a reserved bit.
+And you still need widest constraints here, because there is no final
+"else" for all not-matched ifs, right?
 
-In fact, David reported this issue on Matisse system.
+Best regards,
+Krzysztof
 
-I am happy to retain the warnings for specific models which are known
-to have support for the CPPC MSRs (which is what CPUID 0x80000008
-EBX[27] advertises). Could you please share the model numbers of those
-that you are aware of?
-
-
-[1] PPR Family 17h Model 0x60 : https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/programmer-references/55922-A1-PUB.zip
-[2] PPR Family 17h Model 0x71 : https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/programmer-references/56176_ppr_Family_17h_Model_71h_B0_pub_Rev_3_06.zip
-
-> For ZEN1 APU/CPU, this warning can be removed completely, because ZEN1
-> doesn't support CPPC.
-
-Agreed.
-
-> 
-> Thanks,
-> Xiaojian
-
---
-Thanks and Regards
-gautham.
 
