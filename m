@@ -1,135 +1,143 @@
-Return-Path: <linux-pm+bounces-12688-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12689-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2BDA95A7DC
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 00:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A2A595A851
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 01:31:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EF4F1F219DD
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 22:37:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 261BC1F21CF6
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 23:31:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C3617C200;
-	Wed, 21 Aug 2024 22:37:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F2791741CB;
+	Wed, 21 Aug 2024 23:31:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="JHkqdqGR"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UiBdbbfS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DBD14B96A;
-	Wed, 21 Aug 2024 22:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B95726ACB;
+	Wed, 21 Aug 2024 23:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724279855; cv=none; b=O6JqmfxRA5mMNY+WwGj7bIV/G8mn68FT7XmkvfPvYe2rtN5eAx2GfLxn9PExn3dJgr7P1spIygUNHg1v08k9xHWL3P+ikMiVRPm7yXKFvfbiqJmtzEC1basu71lW7r4FtuPsr2dFxof9MdPgxDWjLzER2gSU7MxiIlzom+P55RU=
+	t=1724283106; cv=none; b=eJAGM1HVg5ozfO/hXjPS2SofdqB64NV7qKAnffU9ZQciKYX05m06ZVYGlBnlcnoU/ClNuX++omyCnpA38KlBcVt4o95Q1FkcM23F7HfgFdtCr0nuzEQtiKNgHlNe28+qjvj4njQ2K15P6Y+KKsBYhSMsQKFisXEukvAmzLP0ltc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724279855; c=relaxed/simple;
-	bh=EIb/0BVQLAIWTGsSf2exEUrI6S97uVc10LsFQOB7HdM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JMaS5bfg/NIEDUFBnhIV4NOEevGK4KXo06sMBOUXzUXbrkGBFTdFmcOVDPMEkqWBsv/tCqenPVPmLu6r1RfiNl8UySB/YTdh+2txFv/KY1so2fPXPna9KFAhd2LVo1lmzfg8PGD7gx8wUXohxAgFZKB1nlu5sxAsbVVVkm0vrZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=JHkqdqGR; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1724279797; x=1724884597; i=wahrenst@gmx.net;
-	bh=EIb/0BVQLAIWTGsSf2exEUrI6S97uVc10LsFQOB7HdM=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=JHkqdqGRqxXptrhoBHbrJVGrueYDkdRTkXvvvI/0tqRxGBuzKR5I2iP3ur6Z7vR8
-	 iFCmwl7Df0pmL3/wU0joN7sbefZk02nRgok7bLuWlCg7Q8sXnty3eVMWIrJqVuY11
-	 u2qc9c8Ssl+V/fLMgrk4Q1FtcnkyHJQz4eDETWwom4GGAWXXbN02IUtQ6f85XMnwh
-	 x3v1JJi+dgi/mtVTcdCFiK6fo7d7ajKzUE3EK7m+3UOCc8ncwdtEvKfxSTgD6+ZG1
-	 B3BiMQq94ZTH4XmZNEv1+8PW8xHfipr5Nh+0jkqABL3Rh3AVbN9lDQwzAn8h5yWXa
-	 7Nlhen3VGExLj3wbCQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mt757-1rsdbg2LZB-00wVwf; Thu, 22
- Aug 2024 00:36:37 +0200
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Russell King <linux@armlinux.org.uk>,
-	Doug Anderson <dianders@chromium.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Minas Harutyunyan <hminas@synopsys.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Lukas Wunner <lukas@wunner.de>,
-	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-	Peter Robinson <pbrobinson@gmail.com>,
-	dri-devel@lists.freedesktop.org,
-	bcm-kernel-feedback-list@broadcom.com,
-	linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kernel-list@raspberrypi.com,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V3 9/9] ARM: bcm2835_defconfig: Enable SUSPEND
-Date: Thu, 22 Aug 2024 00:36:29 +0200
-Message-Id: <20240821223629.10705-1-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240821214052.6800-1-wahrenst@gmx.net>
-References: <20240821214052.6800-1-wahrenst@gmx.net>
+	s=arc-20240116; t=1724283106; c=relaxed/simple;
+	bh=/1ierzCrV2XHO5Z7bfegHIj87yjQormZfA1vFPqNJmw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c2ZfoQGT7CLrS2jFy24BwLiGXFcgQpL7SNvG4AXGVAMkZ3+VwUatGkj2rf0ZS7qDeo/KrKXfaL+PdkV2FDdtphwanLo9PnAVKiVIob+Ju6YXnT500xXEMMmn5PiLSddotTSQMm1GftnqRcOJ1Xssr10wUyg45UkXlHInShicFWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UiBdbbfS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7538CC32781;
+	Wed, 21 Aug 2024 23:31:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1724283105;
+	bh=/1ierzCrV2XHO5Z7bfegHIj87yjQormZfA1vFPqNJmw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UiBdbbfSVhsZsX5dpZtj3qeu6sFXK+al5rhwWRYHfiVbP2Qn+/YxX5fPQ8bTQvsbr
+	 kwDe4vMTtRBJA8Tux5Nqz0XjTs622Ty/WiOewwgT2IQFff2cUwNJcW5HgUc5H9BeNl
+	 OEdgiiGlATgqW3xPugQVk9SIfhvslDZI2wel94N8=
+Date: Thu, 22 Aug 2024 07:31:43 +0800
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mathias Nyman <mathias.nyman@intel.com>
+Subject: Re: USB-C adapter like Dell DA300 using > 5 W
+Message-ID: <2024082207-foothill-swirl-0ad0@gregkh>
+References: <38b871f7-8583-4b9a-940b-ee33a1b6206d@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:gQN251ySqY5cRStUBE3mudZO0tnWy/NNvjYZYSjAaFKeYHdSO59
- 8ddPx7Fzew9NTHP7BngfDEPdSCG+ic1IXU/viHfItdUeFF8+9srqpPxS9xyuy0hs6swPDXp
- Rc0xAbsIhmnPfOHmG3fPjXsDewlYgPtaFSXG1d2kz+eCavIGrLdTIo4nYR9PgajRBisxZ4g
- KHkvqUDcVG2Ku4gckOwWg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:hlhASlEjUh4=;dOqaNRRLVUaN8ZDiJ6dGymnW7X2
- 3cw4kKjsrj2JcyUVRiBrPgEcltGWM2C9MG6vYdUgWFZWAjZrdPvovgjnwKDZB6dVmM/IYIysU
- 4OJGj6Oo0GSk6iIj8vFqBNShLe/b2FBCtW6vLks6hHW9KtlD7HTuaZJXQDva8opyukUNm9HwF
- lboiCVSKGlPViAIvD45p4z6jvtn42gcRQTfCL/5YUk1x6tl2OWIy/dm/aUT+AwBMjpD6fOmPw
- sngKt0SDvNQewOFrN0WsoB4ZBoGUfzFfPwgL7eqoU4FrmV+czd17SIoJpEVf6QHCquBLS9pUD
- 2hdE3iApQOxWlj5WNFFVjK36fnrk6AsOXDQuTBFDgFw3/r02GVWUaWBkdmTgKYs92bm2ThqJs
- l8a0hzqlrvl9+9OTWx+S4qsQoBgYpznZ7vo9UW8zZeYcdyyMSiqAZ4E5Y/fuwTp04p0lQjOqi
- Qb721hWY8pQECRFrF/jmH8HxOC5rE1FH3vGO4l8Lx0v9RbuP0GXr5Jmynw3ne3G3P5NTgzv1m
- X7ZfqC/1p49/x4F6AWwJTOh/Cz3GbLzJGc6TDssV0ZHa2lzx1tJDB7XG5UfmUOAs7LvCdDugx
- XW4jZ/w4fm5ItWtc2ojhTTenJJil27LsehaKlyUYEVwzRZHiNgnNQ/iFcMc6p8/PJGrekbRTY
- B5YY0WyKTa7Wwv5c6v3r1HjYtWyTD7nnxBgBNwOYcguJFpyExsjqQCEICMcihKUIISzsk2SjN
- muJHpFZDy2tEJKZYgxicFHYOwDzNpJmrAZmbx53KkKtR8B1VHvMv8BWxFG2l+c5vSgSgcM2Rd
- uZCWzUOhOHw/Ob+gCv81XUpA==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <38b871f7-8583-4b9a-940b-ee33a1b6206d@molgen.mpg.de>
 
-Since the Raspberry Pi supports Suspend-To-Idle now, this option
-should be enabled. This should make power management testing easier.
+On Wed, Aug 21, 2024 at 11:32:04PM +0200, Paul Menzel wrote:
+> Dear Linux folks,
+> 
+> 
+> On the Intel Kaby Lake laptop Dell XPS 13 9360 with Debian sid/unstable and
+> *powertop* 2.15-3, connecting a USB-C adapter like Dell DA300 or LMP USB-C
+> mini Dock (P/N 15954) [1] and connecting only an Ethernet cable (module
+> r8152 is used), the adapter gets very hot, and according to PowerTOP it uses
+> over 5 Watts – almost more as the laptop idling.
+> 
+>     $ lsusb
+>     Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+>     Bus 001 Device 002: ID 0cf3:e300 Qualcomm Atheros Communications QCA61x4
+> Bluetooth 4.0
+>     Bus 001 Device 003: ID 04f3:2234 Elan Microelectronics Corp. Touchscreen
+>     Bus 001 Device 004: ID 0c45:670c Microdia Integrated Webcam HD
+>     Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+>     Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+>     Bus 003 Device 002: ID 2109:2820 VIA Labs, Inc. VL820 Hub
+>     Bus 003 Device 003: ID 06c4:c412 Bizlink International Corp. DELL DA300
+>     Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+>     Bus 004 Device 002: ID 2109:0820 VIA Labs, Inc. VL820 Hub
+>     Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153
+> Gigabit Ethernet Adapter
+> 
+> With `LANG= sudo powertop --auto-tune` it stays high.
+> 
+> PowerTOP:
+> 
+> ```
+> The battery reports a discharge rate of 6.01 W
+> The energy consumed was 146 J
+> The estimated remaining time is 3 hours, 51 minutes
+> 
+> Summary: 384.6 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and
+> 8.5% CPU use
+> 
+> Power est.              Usage       Events/s    Category       Description
+>   5.94 W      0.0%                      Device         Display backlight
+>   5.23 W    100.0%                      Device         USB device: USB
+> Optical Mouse (Logitech)
+>   4.62 W     66.1%                      Device         USB device: USB
+> 10/100/1000 LAN (Realtek)
+>   205 mW    100.0%                      Device         USB device: Fujitsu
+> Keyboard (Fujitsu)
+>  14.1 mW     13.5 ms/s       0.9        kWork intel_atomic_commit_work
+> ```
+> 
+> At another time:
+> 
+> ```
+> The battery reports a discharge rate of 10.5 W
+> The energy consumed was 235 J
+> The estimated remaining time is 2 hours, 20 minutes
+> 
+> Summary: 395.8 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and
+> 23.8% CPU use
+> 
+> Power est.              Usage       Events/s    Category       Description
+>   7.13 W    100.0%                      Device         USB device: USB
+> 10/100/1000 LAN (Realtek)
+>   3.92 W     15.8%                      Device         Display backlight
+>   320 mW      0.0 us/s      0.00        Process        [PID 1349]
+> /usr/bin/pipewire
+>  63.6 mW     65.4 ms/s       0.5        Process        [PID 4982]
+> /usr/lib/thunderbird/thunderbird
+>  24.9 mW     25.6 ms/s       6.7        Process        [PID 37753]
+> /usr/lib/firefox-nightly/firefox-bin -contentproc -isForBrowser -prefsLen
+> 36793 -prefMapSize 265654 -jsInitLe
+>  14.7 mW     15.1 ms/s       0.5        kWork intel_atomic_commit_work
+> ```
+> 
+> The heat of the USB-C adapter might suggest, that it draws that much power.
+> What is your experience? Can you suggest something?
 
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-=2D--
- arch/arm/configs/bcm2835_defconfig | 2 --
- 1 file changed, 2 deletions(-)
+Buy a different adapter?  That seems like something is really wrong with
+it.  Does other devices also suck that much power from that port on the
+laptop?
 
-diff --git a/arch/arm/configs/bcm2835_defconfig b/arch/arm/configs/bcm2835=
-_defconfig
-index b5f0bd8dd536..97632dee1ab3 100644
-=2D-- a/arch/arm/configs/bcm2835_defconfig
-+++ b/arch/arm/configs/bcm2835_defconfig
-@@ -38,8 +38,6 @@ CONFIG_CPU_FREQ_GOV_ONDEMAND=3Dy
- CONFIG_CPUFREQ_DT=3Dy
- CONFIG_ARM_RASPBERRYPI_CPUFREQ=3Dy
- CONFIG_VFP=3Dy
--# CONFIG_SUSPEND is not set
--CONFIG_PM=3Dy
- CONFIG_JUMP_LABEL=3Dy
- CONFIG_MODULES=3Dy
- CONFIG_MODULE_UNLOAD=3Dy
-=2D-
-2.34.1
+thanks,
 
+greg k-h
 
