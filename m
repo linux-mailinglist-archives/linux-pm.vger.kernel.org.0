@@ -1,232 +1,170 @@
-Return-Path: <linux-pm+bounces-12668-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12670-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DABC95A6E9
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 23:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7999495A736
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 23:57:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 874331C227DB
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 21:42:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC6731C2221C
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 21:57:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5196717BB3F;
-	Wed, 21 Aug 2024 21:41:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A91C917B4E2;
+	Wed, 21 Aug 2024 21:57:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="NshBRw3T"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FLSzE0ke"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4265B17B401;
-	Wed, 21 Aug 2024 21:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 036B217BB08;
+	Wed, 21 Aug 2024 21:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724276501; cv=none; b=c6k84ng89E9maZfXdnIaKrJ8RaHWUOVI0sadeeoSoB++1gN+CkUkUkO5GW5+rjIM1ljVWOJtH1lF4r7RKpeBlijPdSjKYk7EbjH50hQboX+SPL7+Q6qUbM4y2CZgVAe3lavzbrXfeHSn1fpjF/M/JvW3zMR0WZXSQ8PyO1jg0Wg=
+	t=1724277451; cv=none; b=e3gLy63jGkeV5xQhbviXVfJb44LMLsDXvDTq8kOWgHakgEjdmZKnxEifTOYUv8E+cNZna+YcPCqvsnBq8ymTnsMqc8dLzFfRylUf1s2XKXpS2jBVeTl0qvQ3ZJwCd0T0uCqtTqfS6D7v6sEK7G+GSpeLOTW4a0CuQDyxB0SvYu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724276501; c=relaxed/simple;
-	bh=0v9qE4lkYnnCA+4R+GRscfPwc8RZxDEslorDbB7CM5k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rH8rVqD415GWXVmYOi+dMepRQ/nXQ/DtmQeoK6NWYRn7hQCIsHOimT1pRPaMRyVY/8gMtLf7BqU3OCgVek29fEXXRwVR5qwYMCK12iUZXDtpwin3wOCUIo+uHKGSEtppQixl/bDMmYexh5/NptvvcrowBqCaAOkQgQGKWYCGlY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=NshBRw3T; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1724276472; x=1724881272; i=wahrenst@gmx.net;
-	bh=9GWd0CDe/k2CUFdixtyjcH7jeuIirHODxoQWdavAcRk=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=NshBRw3TDEyl3VKqKrXuPhfv/CrBnboNCdcUVvAFb8EXqXUscz/3McrYlVDs4SET
-	 7MtUrX1i+Q9FxbTW4SEB7YI95TCLiOcdaOIlFHOwbsfF/swq69jGd8b9AfLj8xI4p
-	 /NzN/KOQO8g4xtTCU/YHPchAMHGW+jN/L9kcgBI5u8pwSBbJ3YFaJZnXovPRcr2YG
-	 HH6LjzNIAAq5eNs3tZ9kVtA+1KFZ8BnJxhwt5N3nAz2qQk8bCSnfArGwZc6AXi57B
-	 MqZuQMp6f/JZdrCyAFKbpGZGQiVfWjE2I1WR2piKXMVSAtt9hhZIKfyCrHvxsUsSD
-	 CrVHiDs30j20tSdjkw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MmlT2-1sF0Iw1o7q-00ixXE; Wed, 21
- Aug 2024 23:41:12 +0200
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Russell King <linux@armlinux.org.uk>,
-	Doug Anderson <dianders@chromium.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Minas Harutyunyan <hminas@synopsys.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Lukas Wunner <lukas@wunner.de>,
-	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-	Peter Robinson <pbrobinson@gmail.com>,
-	dri-devel@lists.freedesktop.org,
-	bcm-kernel-feedback-list@broadcom.com,
-	linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
+	s=arc-20240116; t=1724277451; c=relaxed/simple;
+	bh=DF+6ztCHnueO2fFvYCDJnNILxxWQTXSnam8WP7wX6DA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XdKue9NCj8O4Mo1sHtnCPBoC21t3KXVk24SHH9spGIKnUdZKhDs6BA51ZRPosSJ9+LbSSx7UrDYCR95PRIebXlNqKTdDLqJoAe4UtGvuIQW9HM3ioYfRRp9rXE7WJ4HOFvpHS3p47gk28QLOLRUi3EGEGOLNBv99A3pX84+9aI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FLSzE0ke; arc=none smtp.client-ip=209.85.167.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3dc16d00ba6so92443b6e.0;
+        Wed, 21 Aug 2024 14:57:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724277449; x=1724882249; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ipbjvqWXvqQumm5VIkPHpXVLhtH/jP49GHIISjFlUrc=;
+        b=FLSzE0keaCfNrRdeZ9pfiAC3YJxJ5zrwMWajxBh03rD1mQwZySNxT4lVYFIkEllaY8
+         oQV2X+VFXovIE3ph6b13WKTLFCDtXt35I0uoM+4JFTIZ5p7DhJ8kdaQVg6ANR8+8eRZO
+         IETUzzUO4iS1GBMJNVB2xwuYbXFh6fsIrl7vBcIh4zFTGLFr8qtAvkfNCSqv15g+ad4V
+         FYveOVjBYlsVmYRu3tAL9hiECn/X4z4JryEXIkTh0vwoZfmUOALpNi39DCYLCAa3Ck7p
+         6WPna1qX/Y1+Bfn+DsMp/lb1S1NbXbIW27IhpCJ6C3Niy7GrPUuVMHtc0oAQoceAsTNP
+         1IEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724277449; x=1724882249;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ipbjvqWXvqQumm5VIkPHpXVLhtH/jP49GHIISjFlUrc=;
+        b=izSxcXxa8bMKjiXf+Z/GSg8IwWc+tN8KPcjNW+NZNB9mq5m2ibwvB/KjwropqSVZat
+         pJltEGP/hgKLXQ7MVRoiKtHtE8XSNEycfa31NTwxY/0wLvhmZ3n/rhNnd1Dh0q84esNU
+         otQnuk3fi/hwoRi0jdzNPOpB3Qod7DMmldk89C51JLfxopZe4SXpP5hy8x8cZV8F5u9v
+         99qonl2A7G0uYrCCpnIicsdj+IQiZ6Tm2YtgvFriOcSlF6i00YP8wWbEUe7bKzHkyKqP
+         v+DW23KrE1X3GW2sflPSk7aqn+BDESJihZvweTi7Hoyr6hGJ54akpeLi0qzpa1gtujcB
+         NFOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVbMz1gw7wzlvwbXwQy+zOcoyMyOdhJlOZdPp68zQN6W+BOKDl4cE813vto7urnqIw4Ojiw8ZC4bWLx@vger.kernel.org, AJvYcCVpQFMMeMPVxagDlCmKM8vHUHEPXDqi0svLowlAHakPA8rIyN4ZmiZc08cuAjEu2R4XW0N247YFTIHj@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfK5tY/sDYcoTyartbfQC50/5vhleS3AFGDjPROVg7dgEVsqwT
+	49nIAw5XfRfwSix6Wy68yAK9LUDI33M1nNCzm+CZ0bmUD2dYE/ICchUoyQ==
+X-Google-Smtp-Source: AGHT+IGxf0cuHBjy0JYk5Bv3rXMuAB9YU9MSytP3soFOCKx+/dalE+sypyFQjmXlf1pjlVYXtYy/lw==
+X-Received: by 2002:a05:6808:f15:b0:3d9:ad9d:622f with SMTP id 5614622812f47-3de1951632bmr4259723b6e.27.1724277448797;
+        Wed, 21 Aug 2024 14:57:28 -0700 (PDT)
+Received: from localhost.localdomain ([2600:1700:fb0:1bcf:81a9:2325:e0f7:7376])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3de225555b6sm47070b6e.17.2024.08.21.14.57.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Aug 2024 14:57:28 -0700 (PDT)
+From: Chris Morgan <macroalpha82@gmail.com>
+To: linux-sunxi@lists.linux.dev
+Cc: linux-pm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	kernel-list@raspberrypi.com,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V3 RFC 8/9] usb: dwc2: Implement recovery after PM domain off
-Date: Wed, 21 Aug 2024 23:40:51 +0200
-Message-Id: <20240821214052.6800-9-wahrenst@gmx.net>
+	devicetree@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	quentin.schulz@free-electrons.com,
+	mripard@kernel.org,
+	tgamblin@baylibre.com,
+	aidanmacdonald.0x0@gmail.com,
+	u.kleine-koenig@pengutronix.de,
+	lee@kernel.org,
+	samuel@sholland.org,
+	jernej.skrabec@gmail.com,
+	sre@kernel.org,
+	wens@csie.org,
+	conor+dt@kernel.org,
+	krzk+dt@kernel.org,
+	robh@kernel.org,
+	lars@metafoo.de,
+	jic23@kernel.org,
+	jonathan.cameron@huawei.com,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH V4 00/15] Add Battery and USB Supply for AXP717
+Date: Wed, 21 Aug 2024 16:54:41 -0500
+Message-Id: <20240821215456.962564-1-macroalpha82@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240821214052.6800-1-wahrenst@gmx.net>
-References: <20240821214052.6800-1-wahrenst@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:6GhQJP0mhRKQTTBEbTOBSW1NEgbWA/13VOs3a68rCTmoqSj4WBe
- rn5I6PYYiZk4a/yOwbon7thCpQ3BnZo+EVl62AjhyLdlh78JMKryErHj1aqdOeQvAkl3YAf
- PB0ilN5Rlu1RMLx63tw2utDkuhqtjFmAC4fBlPTNFe8xnIZjbqZocR0OaBWUnm6fHFjYKAV
- yxXhFWTcS1HvPGBG7ViXw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:w/kI+/BAp9k=;m4OZVQZJvj3E/pqkWti+4ZncyUq
- 8wcSVEa6OtFdaJaTpDRZcg1U92SO+nnfSnA7baxfR7YR0HrCUPem3fC/fhG859nto0YTrDMqN
- xRgdt6yYn92HcCHLUoA7HPp/SoQPi2S1wAygTDEeUyl/IhNmfOaYSWgWTNDKaCVe7ss9jQ6NG
- TUo4AFz4RK0BUZRTnB38L72VSocPV2CAtXHsOsoZr/9BmMZdtFqLb83CIs0WWuv8v2NRR7NPv
- 1mJfI1R6rlM3Vd9wUexpeVUNS4IqXk7yxDkPRRMzGaNvpEUsIBlDPxAKLlBKjnlSEXpeVPNdX
- s/LMdyvcV5CQ2EszrHQgWMYjOPv5BZl7xFuXXnGfg0jfZM7H+4RJtoMx+ysB2SO/jyGESFOk0
- Tr71QiNAIQg+fGqvZWerd7Me7ygRrYF0aXedc/cwuiIpadCsg++63bjoOJOGMDY7aj4CAJB65
- Xe43nZZd8xfQ0ZIyEW9N1RH+JblsMqRh/RNLqw8T9apWdzGE9ABMsTnILsPByPgN6LJ4J4b8v
- Fr1NnGuaLd2X89L0mEQWuGSuQgv01jVU/CXjksPxkw+hg6n2kkA9W/ArN0sCOiAVfvBPTeVHp
- ABWlC6VcbLj5ZJmqXmrjMSFZ/V7+kXoXwuaErbWFao/P3uCro3CP4naVa+Myq6YdMZ8J+bwHm
- F49mxNz2I0ranYqOuu/r2Cp7D9pHtjn6KZwHNVwnBltSd0N9+dzu5l+YZqEHRGsH9zubWCf9M
- 8xxcaSa2yiHeksjb7VinxovWymu63mQcXkWakUbvji11BIQWXOn4Z61jsgU93OzB5dtfQvoNz
- qnR+tUwHZtsroFihMJ55pblQ==
+Content-Transfer-Encoding: 8bit
 
-According to the dt-bindings there are some platforms, which have a
-dedicated USB power domain for DWC2 IP core supply. If the power domain
-is switched off during system suspend then all USB register will lose
-their settings.
+From: Chris Morgan <macromorgan@hotmail.com>
 
-Use GUSBCFG_TOUTCAL as a canary to detect that the power domain has
-been powered off during suspend. Since the GOTGCTL_CURMODE_HOST doesn't
-match on all platform with the current mode, additionally backup
-GINTSTS. This works reliable to decide which registers should be
-restored.
+Add support for monitoring the USB charger and battery charger on the
+AXP717 PMIC. This required some driver refactoring of the axp20x USB
+and battery charger as the AXP717 is somewhat different but can still
+benefit from some common elements.
 
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-=2D--
- drivers/usb/dwc2/core.c     |  1 +
- drivers/usb/dwc2/core.h     |  2 ++
- drivers/usb/dwc2/platform.c | 38 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 41 insertions(+)
+Note that as of now the charging current now value may be incorrect as
+the scale and offsets were not documented in the datasheet. I suspect
+the scale is 1 and the offset is somewhere around 450mA though.
 
-Hi, would be nice to get some feedback about the approach and
-test results on other DWC2 platforms.
+Changes from V3:
+ - Remove accidental AXP717_BOOST regulator in header file, as it is
+   not part of this patch series.
+ - Add an absolute min/max constraint for input-current-limit-microamp
+   in device tree documentation.
+ - Correct an issue found by kernel test robot <lkp@intel.com> by
+   explicitly adding linux/bitfield.h include. Details here:
+   https://lore.kernel.org/oe-kbuild-all/202408201228.Hee4eSYl-lkp@intel.com/
 
-diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
-index 9919ab725d54..c3d24312db0f 100644
-=2D-- a/drivers/usb/dwc2/core.c
-+++ b/drivers/usb/dwc2/core.c
-@@ -43,6 +43,7 @@ int dwc2_backup_global_registers(struct dwc2_hsotg *hsot=
-g)
- 	/* Backup global regs */
- 	gr =3D &hsotg->gr_backup;
+Changes from V2:
+ - Added constraints for input-current-limit-microamp constraints for
+   x-powers,axp20x-usb-power-supply.yaml.
+ - Used FIELD_GET() and removed unnecessary -EINVAL per comments from
+   Jonathan Cameron.
 
-+	gr->gintsts =3D dwc2_readl(hsotg, GINTSTS);
- 	gr->gotgctl =3D dwc2_readl(hsotg, GOTGCTL);
- 	gr->gintmsk =3D dwc2_readl(hsotg, GINTMSK);
- 	gr->gahbcfg =3D dwc2_readl(hsotg, GAHBCFG);
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 81e8632f29ed..e65a74853bb0 100644
-=2D-- a/drivers/usb/dwc2/core.h
-+++ b/drivers/usb/dwc2/core.h
-@@ -667,6 +667,7 @@ struct dwc2_hw_params {
- /**
-  * struct dwc2_gregs_backup - Holds global registers state before
-  * entering partial power down
-+ * @gintsts:		Backup of GINTSTS register
-  * @gotgctl:		Backup of GOTGCTL register
-  * @gintmsk:		Backup of GINTMSK register
-  * @gahbcfg:		Backup of GAHBCFG register
-@@ -683,6 +684,7 @@ struct dwc2_hw_params {
-  * @valid:		True if registers values backuped.
-  */
- struct dwc2_gregs_backup {
-+	u32 gintsts;
- 	u32 gotgctl;
- 	u32 gintmsk;
- 	u32 gahbcfg;
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index 7b84416dfc2b..39e9064b6cfe 100644
-=2D-- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -683,6 +683,14 @@ static int __maybe_unused dwc2_suspend(struct device =
-*dev)
- 		regulator_disable(dwc2->usb33d);
- 	}
+Changes from V1:
+ - Refactored against mainline to remove BOOST pre-requisite.
+ - Corrected commit subjects for DT bindings.
+ - Split refactoring and AXP717 support into different patches.
+ - Added IRQ for VBUS over voltage. There appears to be a bug
+   with the VBUS fault IRQ because it is assigned IRQ num 0.
+ - Corrected battery driver to report POWER_SUPPLY_PROP_VOLTAGE_MIN
+   and POWER_SUPPLY_PROP_VOLTAGE_MAX instead of *_DESIGN.
 
-+	if (is_device_mode)
-+		ret =3D dwc2_gadget_backup_critical_registers(dwc2);
-+	else
-+		ret =3D dwc2_host_backup_critical_registers(dwc2);
-+
-+	if (ret)
-+		return ret;
-+
- 	if (dwc2->ll_hw_enabled &&
- 	    (is_device_mode || dwc2_host_can_poweroff_phy(dwc2))) {
- 		ret =3D __dwc2_lowlevel_hw_disable(dwc2);
-@@ -692,6 +700,24 @@ static int __maybe_unused dwc2_suspend(struct device =
-*dev)
- 	return ret;
- }
 
-+static int dwc2_restore_critical_registers(struct dwc2_hsotg *hsotg)
-+{
-+	struct dwc2_gregs_backup *gr;
-+
-+	gr =3D &hsotg->gr_backup;
-+
-+	if (!gr->valid) {
-+		dev_err(hsotg->dev, "%s: no registers to restore\n",
-+			__func__);
-+		return -EINVAL;
-+	}
-+
-+	if (gr->gintsts & GINTSTS_CURMODE_HOST)
-+		return dwc2_host_restore_critical_registers(hsotg);
-+
-+	return dwc2_gadget_restore_critical_registers(hsotg);
-+}
-+
- static int __maybe_unused dwc2_resume(struct device *dev)
- {
- 	struct dwc2_hsotg *dwc2 =3D dev_get_drvdata(dev);
-@@ -704,6 +730,18 @@ static int __maybe_unused dwc2_resume(struct device *=
-dev)
- 	}
- 	dwc2->phy_off_for_suspend =3D false;
+Chris Morgan (15):
+  iio: adc: axp20x_adc: Add adc_en1 and adc_en2 to axp_data
+  power: supply: axp20x_battery: Remove design from min and max voltage
+  power: supply: axp20x_battery: Make iio and battery config per device
+  power: supply: axp20x_usb_power: Make VBUS and IIO config per device
+  dt-bindings: power: supply: axp20x: Add input-current-limit-microamp
+  power: supply: axp20x_usb_power: add input-current-limit-microamp
+  dt-bindings: power: supply: axp20x-battery: Add monitored-battery
+  dt-bindings: iio: adc: Add AXP717 compatible
+  dt-bindings: power: supply: axp20x: Add AXP717 compatible
+  dt-bindings: power: supply: axp20x: Add AXP717 compatible
+  mfd: axp20x: Add ADC, BAT, and USB cells for AXP717
+  iio: adc: axp20x_adc: add support for AXP717 ADC
+  power: supply: axp20x_usb_power: Add support for AXP717
+  power: supply: axp20x_battery: add support for AXP717
+  arm64: dts: allwinner: h700: Add charger for Anbernic RG35XX
 
-+	/*
-+	 * During suspend it's possible that the power domain for the
-+	 * DWC2 controller is disabled and all register values get lost.
-+	 * In case the GUSBCFG register is not initialized, it's clear the
-+	 * registers must be restored.
-+	 */
-+	if (!(dwc2_readl(dwc2, GUSBCFG) & GUSBCFG_TOUTCAL_MASK)) {
-+		ret =3D dwc2_restore_critical_registers(dwc2);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	if (dwc2->params.activate_stm_id_vb_detection) {
- 		unsigned long flags;
- 		u32 ggpio, gotgctl;
-=2D-
+ .../bindings/iio/adc/x-powers,axp209-adc.yaml |  12 +
+ .../x-powers,axp20x-battery-power-supply.yaml |   7 +
+ .../x-powers,axp20x-usb-power-supply.yaml     |  72 ++-
+ .../sun50i-h700-anbernic-rg35xx-2024.dts      |  21 +
+ drivers/iio/adc/axp20x_adc.c                  | 182 +++++-
+ drivers/mfd/axp20x.c                          |  25 +-
+ drivers/power/supply/axp20x_battery.c         | 591 ++++++++++++++++--
+ drivers/power/supply/axp20x_usb_power.c       | 353 ++++++++++-
+ include/linux/mfd/axp20x.h                    |  26 +
+ 9 files changed, 1188 insertions(+), 101 deletions(-)
+
+-- 
 2.34.1
 
 
