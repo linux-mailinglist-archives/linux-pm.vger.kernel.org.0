@@ -1,138 +1,129 @@
-Return-Path: <linux-pm+bounces-12610-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12611-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39D4295984F
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 12:49:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 449A795985E
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 12:51:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB0551F22252
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 10:49:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 778551C20805
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 10:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 165DC1B1D5C;
-	Wed, 21 Aug 2024 08:59:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fDBI58+B"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEA951C2DAF;
+	Wed, 21 Aug 2024 09:02:38 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1651A7AE5
-	for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 08:59:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A89D1A7AEE;
+	Wed, 21 Aug 2024 09:02:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724230780; cv=none; b=F/9/2nqP76l2zi9uaaAzHxggmCZa+kHQH9gHIKZCki7Gt1KCH+PeoweXm1c9Y7k3mdskhtou+vtr9SMhROWDdgKq3avAO75phs/R4e2pW2GtwReSQiu7MzjVwV+HsHU0GR81u19USSbMzB2hnBS3lLlRkQYLXTMoIG1Pr9BIc7E=
+	t=1724230958; cv=none; b=pi12j2if3fofGLxFm4IacKnTnh431ma70ISubipiak4CRYsyojgn1/ZTLn2Vz1RPaLwII3jTD5pBu+HaPLTVTYnvzWnQjEhBiLEEjFaGfH2qxqN2yf/ArL/l/r2g/BaYIKj6+JxjqmCkavIY3tVq6t+YIEyoKaW1JwfMA/q78bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724230780; c=relaxed/simple;
-	bh=s9ykuWWKcIzYSLhEcZ+7Y4Hgz3fhKuaaWdhkvIE3Vr4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l2dh4VUA32ZOKaheLBvkksfL7mbglOWL4UjoOlHbnJyHX8z5SkMzSBibqBuFaDIj5pLcNrVXuHUy830nUDXnytb2CmE6F8RWWAvLfumdqhk2fi9ZjZq6Th0yUgh/T9qRlAvljwc16TVjSmdG5HnzEnJ7fvDAztKLedP8rEq6Pqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fDBI58+B; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e04196b7603so6994254276.0
-        for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 01:59:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724230777; x=1724835577; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DZLdwMEs9e97Ffbpr5sQWKeFKLgx/5QLihyfu1wCHdE=;
-        b=fDBI58+BHQuhvC7WpH8a6BCGrEs/cHEl1EU6xLeOda9YpanIuZi5MrcIysmii4liNF
-         hfV9YMwgU+4snAdT0nCHnwGm5X+am1i0p0jI0uHdZwwPf9XtvRxeqHN0MC0++wllnsQd
-         drnfhVUX8cNiLvo4e7GeaNy6XSyM0nF5Fvuylajrd+BR3EUg3HBFTrDzEKOeBzcLac7D
-         dvUTHkk+fX8rSPyzmOD+TOGKLm+AfLPzFRqHYfRElTEeFFHoFTFlUdmw5EOjZJ0OnYqB
-         YJz185qyp0cgo95SvlLuvIDLM5Oi+1QhJ6s4CLm/QZA83K+QO5tVmz9mJ7BDLUiweWe8
-         v8Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724230777; x=1724835577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DZLdwMEs9e97Ffbpr5sQWKeFKLgx/5QLihyfu1wCHdE=;
-        b=mP7ghXlKq0/Rmb1SdePdGW2lIK85To3YCsqyO6GUqrtvQecznpGzYIpkfV6S7o3Oxh
-         Yu9vaMrn3YXNctLARDTjrxSj+pwq8prki1PCoxEidDs358D07BN2vJPMPNNfeCX0Hqh3
-         EEXMw1EDDXVaAu38rD+Rz8xlH6/AK6JPSRG3BwcyTEtCXKOUbeRmHHvLv9BK8mXA6koy
-         w350iyVVgBg1uZNW4HoKCwrcFs7RXTzHCnYPgscPQc18Ri2gEjQqOTT0Zh9dITU9C6hg
-         AikOzRew2YqQReZJYFp9QPMoF5R9kIUj69bbZihXdXECWBQDOnnBu8ZR2KD+78rZLWt7
-         PBIw==
-X-Forwarded-Encrypted: i=1; AJvYcCVwhTlGz7KpsqXi2aCcnmdYNkZwFascAG4b0d/1PSC8DrwQ6SBBHvkq4yX1e2NmD5TnQik0ex3qrw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOAVaXwuLQZFqYJmJjaq2n4erlAybkvwEmE4IlZrDxLhwSLnhR
-	YAgxTrwBEtUtm8Tz/ZN2s68nxX09Iened1EpJsNnxvS6ND6GE11IsELZAf7otukCWwi8gCE+CQi
-	+8wE0kbgx08seup4JWncFZOwqVBF6LQ8tpQGN/A==
-X-Google-Smtp-Source: AGHT+IHCal/De+SEUKvHz6W9y7R33FpC1amVSgjxjWHDOYJi7w75J2qZuI5FPiGbNGA5CdRLRwf6TZKiBh3F5efpwPY=
-X-Received: by 2002:a05:6902:e0f:b0:e11:7f99:f76a with SMTP id
- 3f1490d57ef6-e16655627f8mr1731952276.50.1724230777443; Wed, 21 Aug 2024
- 01:59:37 -0700 (PDT)
+	s=arc-20240116; t=1724230958; c=relaxed/simple;
+	bh=FrYcorIHvoa4md3aogbTMt4d91LhPHFeYqxcGHX59iI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=mYe25FRweTy3UoXO24f0S741ursRPKzSftveBJSUC8+EMV9MktpYAciMgxYqdH87wqxl15I6zJ9OARknsnmve/6R1hkNfDuSoGan0U5FkjtEsSSovcXceyYPumz2U7huqsIOZ9Vz+6gNrKmHnsP+ZBegSZcGhm8cIZaVXDqrQAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4WpgG74ldhz20lxd;
+	Wed, 21 Aug 2024 16:57:51 +0800 (CST)
+Received: from kwepemm600004.china.huawei.com (unknown [7.193.23.242])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3CC151400CA;
+	Wed, 21 Aug 2024 17:02:33 +0800 (CST)
+Received: from [10.67.121.59] (10.67.121.59) by kwepemm600004.china.huawei.com
+ (7.193.23.242) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 21 Aug
+ 2024 17:02:32 +0800
+Message-ID: <93639d68-e396-a782-410c-f7827dbd54f5@huawei.com>
+Date: Wed, 21 Aug 2024 17:02:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240723144610.564273-1-ulf.hansson@linaro.org>
- <20240723144610.564273-3-ulf.hansson@linaro.org> <0af670ae-8c8f-4e78-b1e0-e9ccb4fba2c9@gmail.com>
- <CAPDyKFr5xjE867rHRZxtKPr0iKh9B6_Ckyu=B4Jzn-ExDpQjVQ@mail.gmail.com>
-In-Reply-To: <CAPDyKFr5xjE867rHRZxtKPr0iKh9B6_Ckyu=B4Jzn-ExDpQjVQ@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 21 Aug 2024 10:58:59 +0200
-Message-ID: <CAPDyKFrhFHn0Z4PV1hG7ZtthzqFzdekO0vd39KXAPiD_0jR4zw@mail.gmail.com>
-Subject: Re: [PATCH 2/4] media: venus: Use dev_pm_domain_attach|detach_list()
- for OPP PM domain
-To: Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Mikko Perttunen <mperttunen@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Vikash Garodia <quic_vgarodia@quicinc.com>, linux-media@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3 05/14] thermal: core: Move thermal zone locking out of
+ bind/unbind functions
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
+	<linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, Daniel
+ Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, Zhang
+ Rui <rui.zhang@intel.com>
+References: <2205737.irdbgypaU6@rjwysocki.net>
+ <3837835.kQq0lBPeGt@rjwysocki.net>
+ <6bf771b0-d57d-5a8c-ec36-6f8a041695d9@huawei.com>
+ <CAJZ5v0i_Z43bLWsa9gg_SZFBURi1XrZn4Cnxurm8KCawAWqtUA@mail.gmail.com>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <CAJZ5v0i_Z43bLWsa9gg_SZFBURi1XrZn4Cnxurm8KCawAWqtUA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
 
-On Wed, 21 Aug 2024 at 10:56, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Tue, 20 Aug 2024 at 22:48, Stanimir Varbanov
-> <stanimir.k.varbanov@gmail.com> wrote:
-> >
-> > Hi Ulf,
-> >
-> > Thank you for the patch!
-> >
-> > On 23.07.24 =D0=B3. 17:46 =D1=87., Ulf Hansson wrote:
-> > > Rather than hooking up the PM domains through devm_pm_opp_attach_genp=
-d()
-> > > and manage the device-link, let's avoid the boilerplate-code by conve=
-rting
-> > > into dev_pm_domain_attach|detach_list.
-> > >
-> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > ---
-> > >   drivers/media/platform/qcom/venus/core.c      |  8 ++---
-> > >   drivers/media/platform/qcom/venus/core.h      |  6 +---
-> > >   .../media/platform/qcom/venus/pm_helpers.c    | 31 ++++++----------=
----
-> > >   3 files changed, 14 insertions(+), 31 deletions(-)
-> > >
-> >
-> > Acked-by: Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
->
-> Thanks!
->
-> >
-> > I'll pick it through linux-media.
->
-> Please don't.
->
-> I should have stated that this depends on another series [1] - and
-> they need either to go together or we need to defer $subject patch
-> until the next release cycle.
->
-> Kind regards
-> Uffe
 
-Forgot the link, here it is:
-[1]
-https://lore.kernel.org/all/20240718234319.356451-1-ulf.hansson@linaro.org/
+在 2024/8/20 18:27, Rafael J. Wysocki 写道:
+> On Tue, Aug 20, 2024 at 10:27 AM lihuisong (C) <lihuisong@huawei.com> wrote:
+>>
+>> 在 2024/8/19 23:58, Rafael J. Wysocki 写道:
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>
+>>> Since thermal_bind_cdev_to_trip() and thermal_unbind_cdev_from_trip()
+>>> acquire the thermal zone lock, the locking rules for their callers get
+>>> complicated.  In particular, the thermal zone lock cannot be acquired
+>>> in any code path leading to one of these functions even though it might
+>>> be useful to do so.
+>>>
+>>> To address this, remove the thermal zone locking from both these
+>>> functions, add lockdep assertions for the thermal zone lock to both
+>>> of them and make their callers acquire the thermal zone lock instead.
+>>>
+>>> No intentional functional impact.
+>>>
+>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>> ---
+>>>
+>>> v2 -> v3: Rebase after dropping patches [04-05/17] from the series
+>>>
+>>> v1 -> v2: No changes
+>>>
+>>> ---
+>>>    drivers/acpi/thermal.c         |    2 +-
+>>>    drivers/thermal/thermal_core.c |   30 ++++++++++++++++++++++--------
+>>>    2 files changed, 23 insertions(+), 9 deletions(-)
+>>>
+>>> Index: linux-pm/drivers/thermal/thermal_core.c
+>>> ===================================================================
+>>> --- linux-pm.orig/drivers/thermal/thermal_core.c
+>>> +++ linux-pm/drivers/thermal/thermal_core.c
+>>> @@ -785,6 +785,7 @@ int thermal_bind_cdev_to_trip(struct the
+>>>        int result;
+>>>
+>> <snip>
+>>> Index: linux-pm/drivers/acpi/thermal.c
+>>> ===================================================================
+>>> --- linux-pm.orig/drivers/acpi/thermal.c
+>>> +++ linux-pm/drivers/acpi/thermal.c
+>>> @@ -609,7 +609,7 @@ static int acpi_thermal_bind_unbind_cdev
+>>>                .thermal = thermal, .cdev = cdev, .bind = bind
+>>>        };
+>>>
+>>> -     return for_each_thermal_trip(thermal, bind_unbind_cdev_cb, &bd);
+>>> +     return thermal_zone_for_each_trip(thermal, bind_unbind_cdev_cb, &bd);
+>> If so, it seems that the for_each_thermal_trip() can be removed or no
+>> need to export.
+> I beg to differ:
+>
+> $ git grep for_each_thermal_trip | head -1
+> drivers/net/wireless/intel/iwlwifi/mvm/tt.c:
+> for_each_thermal_trip(mvm->tz_device.tzone, iwl_trip_temp_cb, &twd);
+Can we modify it for tt.c?
+It doesn't seem to keep two interfaces. I'm a little confused for that.
+> .
 
