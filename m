@@ -1,108 +1,115 @@
-Return-Path: <linux-pm+bounces-12631-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12632-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 989AA959A62
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 13:43:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2197959A76
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 13:45:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B0BA1F21715
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 11:43:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4A5F1C22530
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 11:45:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC721CC149;
-	Wed, 21 Aug 2024 11:12:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s87CmyuL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E7211BFDF3;
+	Wed, 21 Aug 2024 11:23:03 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27BC81CBEB8;
-	Wed, 21 Aug 2024 11:12:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 258231B1D59;
+	Wed, 21 Aug 2024 11:22:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724238734; cv=none; b=FuocEfxA5s9McCGgPUjNe9pyFy1h1huVnH/biO/0K2eiRpBy8SBIsKP31rWU8j7L68rUYR82ph3p3qcEuKHYAtMdlfmAxLnTUolfdacEdklqDMH1fUS/XOqg+xTH5OgwepQajbXMi/IqyTcB4lYj/z8YESKaKZ0CCC1XDm9s3/U=
+	t=1724239383; cv=none; b=ZjD2H0OHkbSkuqCZg7pJgle6sMRivU4huYLa3MSA+hB44wFSRwA+hDgQHWF//nsy0cPtG/ZnDM4LpjLeC/EdD0dOqopeniwXJc7zgB2azoPdZUN3tUh4RTEhv0g7Jq560F7zrSfVRlpOkCQ+ZzOZWvPkePrSsj6mW+tuxuQrIgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724238734; c=relaxed/simple;
-	bh=bLlqmmcKTvxSCNFyT7zEcxQpRYILiepU5/eNGMgehlQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IAQ7yQh2NrGhmm/hW6cFYYaYH6Gh2I6PUrqprcDcG0Zg/pGU76X/6l+j7gUDatSBwaTEwJbd7pCr0/OWbXDobKDL9P5ld6gd2NOmhVfr82ATyiLDj/bRrAXRdi467Ny4zZw2YjKXdLxvFBwn4PQZOn5tQBy2pzeVmLZ+U24Ubjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s87CmyuL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F05C4AF13;
-	Wed, 21 Aug 2024 11:12:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724238733;
-	bh=bLlqmmcKTvxSCNFyT7zEcxQpRYILiepU5/eNGMgehlQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=s87CmyuLwVAR28Z9lfq5sMCL/jIxX5drk2H199T4qmgqG9Nucjw1j5YEEGdScRA1H
-	 bxv1FGMW9gYhTFoAjSx2SkXnTxfJgZyFyuKD53ccYRMMBSwMZBLd+SrJIAVlRCs4/5
-	 aUGvHoQ9VQ5NitT/b1MMp7TizUuKGXuP+I6+9FdsID8ALutF5jeEyRHyxdS/jIXiAF
-	 Z551VMhz9ps470eKqAdiJQ1185jVOLYTYRE+qEl7ohmDVtvzWbplSnogA9Dwi95/FA
-	 xWP+nvpOm9k0Yb8zL4Tep6sxXdWomK5nZzLiBGl38TMyNBvba8y7ATX1T1ckE9WTs2
-	 ARHKZCCOJ0WiA==
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3db18c4927bso3653762b6e.1;
-        Wed, 21 Aug 2024 04:12:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWBxzU+R6JJIoXpG3lYkcbknIZm0WdcGuDUlYs47JFRBqL1RSoX4oPu67rOZ7DLyh7Zo7oO4Uypzf+HiVY=@vger.kernel.org, AJvYcCWh6O7WP8qiZ5FmRxla35tRcm8UhgRDYxzjGb45JKD2a3/Ecu+S6qlSmJLdKJBRsGvEStixyiDYOvc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+MlfSFzauczFmIe9iUzkrGezqJEk/HlXnQw7n36abTEIAdAPY
-	5Zi9dMvhzo4SmF88UEplJC4+o/zMJV7p74lsacyep7LEexYj4GR0yP+/Ma5Fsxax6KJtE3NKkM/
-	UrWdDYvF5ba2bxDsDIZhIXStczck=
-X-Google-Smtp-Source: AGHT+IFOKFfphfq5UCfyFfrZ6n6DO942WHJH7BQ93zflusJ6VS2K2D+jGDWG45QN8CFqh0WUKzkS8uU2XQ9tPTYjvIw=
-X-Received: by 2002:a05:6870:d69c:b0:260:f6c3:7d1f with SMTP id
- 586e51a60fabf-2737ef47facmr2066548fac.21.1724238732975; Wed, 21 Aug 2024
- 04:12:12 -0700 (PDT)
+	s=arc-20240116; t=1724239383; c=relaxed/simple;
+	bh=Hdmp5u6r2ZCBG5/1/JMr2LDYkecTKqDHT17FSeTqD0E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=blSmfGYJO3a+z0qfl3+IQKxWZBHutdKSOcnJHPxqD5MlRLlxk3KMNvajTrdB61dSkXYuyDSd8KFBy2jCSI0s9KO7e2vkL6+3F9NUBs6g6HNth3IfkgbiP5ONzx3n89pewWp1ikkXLC2aq9Sb1AAx/6uBgtus6vtO4t5HvNaRXlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4WpkTS68F5z1S8Pn;
+	Wed, 21 Aug 2024 19:22:52 +0800 (CST)
+Received: from kwepemm600004.china.huawei.com (unknown [7.193.23.242])
+	by mail.maildlp.com (Postfix) with ESMTPS id C016F1400C9;
+	Wed, 21 Aug 2024 19:22:55 +0800 (CST)
+Received: from [10.67.121.59] (10.67.121.59) by kwepemm600004.china.huawei.com
+ (7.193.23.242) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 21 Aug
+ 2024 19:22:55 +0800
+Message-ID: <c54858ed-e263-fe80-96aa-9ac8b6f85b1c@huawei.com>
+Date: Wed, 21 Aug 2024 19:22:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2205737.irdbgypaU6@rjwysocki.net> <3324214.44csPzL39Z@rjwysocki.net>
- <68ed6185-a602-c0fc-721e-b5d68fea83f8@huawei.com> <66bb19a0-00ba-40a5-91ef-73368659b30a@linaro.org>
- <8744a789-0424-0cc6-7cb1-b7c9b17f56cc@huawei.com>
-In-Reply-To: <8744a789-0424-0cc6-7cb1-b7c9b17f56cc@huawei.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 21 Aug 2024 13:12:01 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jHs41Xswdk+g_=mT6NGWL47tzUnHECFgo5TCp7i7ZZUw@mail.gmail.com>
-Message-ID: <CAJZ5v0jHs41Xswdk+g_=mT6NGWL47tzUnHECFgo5TCp7i7ZZUw@mail.gmail.com>
-Subject: Re: [PATCH v3 02/14] thermal: core: Rearrange checks in thermal_bind_cdev_to_trip()
-To: "lihuisong (C)" <lihuisong@huawei.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3 02/14] thermal: core: Rearrange checks in
+ thermal_bind_cdev_to_trip()
+To: Daniel Lezcano <daniel.lezcano@linaro.org>, "Rafael J. Wysocki"
+	<rjw@rjwysocki.net>
+CC: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
 	Zhang Rui <rui.zhang@intel.com>, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <2205737.irdbgypaU6@rjwysocki.net>
+ <3324214.44csPzL39Z@rjwysocki.net>
+ <68ed6185-a602-c0fc-721e-b5d68fea83f8@huawei.com>
+ <66bb19a0-00ba-40a5-91ef-73368659b30a@linaro.org>
+ <8744a789-0424-0cc6-7cb1-b7c9b17f56cc@huawei.com>
+ <c90b53af-1641-4c8a-97d9-27feed7b2a7d@linaro.org>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <c90b53af-1641-4c8a-97d9-27feed7b2a7d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
 
-On Wed, Aug 21, 2024 at 1:11=E2=80=AFPM lihuisong (C) <lihuisong@huawei.com=
-> wrote:
->
->
-> =E5=9C=A8 2024/8/21 17:28, Daniel Lezcano =E5=86=99=E9=81=93:
-> > On 21/08/2024 10:49, lihuisong (C) wrote:
-> >
-> > [ ... ]
-> >
-> >>> -    list_for_each_entry(pos2, &thermal_cdev_list, node) {
-> >>> -        if (pos2 =3D=3D cdev)
-> >>> -            break;
-> >>> -    }
-> >>> +    lockdep_assert_held(&thermal_list_lock);
-> >>> -    if (tz !=3D pos1 || cdev !=3D pos2)
-> >>> +    if (list_empty(&tz->node) || list_empty(&cdev->node))
-> >> The old verification is ensure that tz and cdev already add to
-> >> thermal_tz_list and thermal_cdev_list=EF=BC=8Crespectively.
-> >> Namely, tz and cdev are definitely registered and intialized.
-> >> The check is ok for all untizalized thermal_zone_device and cooling
-> >> device.
-> >> But the new verification doesn't seem to do that.
-> >
-> > If the tz or the cdev are registered then their "->node" is not empty
-> > because they are linked with the thermal_list and cdev_list
-> >
-> > So either way is browsing the lists to find the tz/cdev or just check
-> > "->node" is not empty. The latter the faster.
-> Assume that tz/cdev isn't intiazlized and registered to thermal_tz_list
-> or thermal_cdev_list. And then directly call this interface.
 
-Who does this?
+在 2024/8/21 18:49, Daniel Lezcano 写道:
+> On 21/08/2024 11:44, lihuisong (C) wrote:
+>>
+>> 在 2024/8/21 17:28, Daniel Lezcano 写道:
+>>> On 21/08/2024 10:49, lihuisong (C) wrote:
+>>>
+>>> [ ... ]
+>>>
+>>>>> -    list_for_each_entry(pos2, &thermal_cdev_list, node) {
+>>>>> -        if (pos2 == cdev)
+>>>>> -            break;
+>>>>> -    }
+>>>>> +    lockdep_assert_held(&thermal_list_lock);
+>>>>> -    if (tz != pos1 || cdev != pos2)
+>>>>> +    if (list_empty(&tz->node) || list_empty(&cdev->node))
+>>>> The old verification is ensure that tz and cdev already add to 
+>>>> thermal_tz_list and thermal_cdev_list，respectively.
+>>>> Namely, tz and cdev are definitely registered and intialized.
+>>>> The check is ok for all untizalized thermal_zone_device and cooling 
+>>>> device.
+>>>> But the new verification doesn't seem to do that.
+>>>
+>>> If the tz or the cdev are registered then their "->node" is not 
+>>> empty because they are linked with the thermal_list and cdev_list
+>>>
+>>> So either way is browsing the lists to find the tz/cdev or just 
+>>> check "->node" is not empty. The latter the faster.
+>> Assume that tz/cdev isn't intiazlized and registered to 
+>> thermal_tz_list or thermal_cdev_list. And then directly call this 
+>> interface.
+>
+> Then there is a bug in the internal code because the 
+> thermal_zone_device_register*() and cooling_device_device_register() 
+> allocate and initialize those structures.
+>
+> The caller of the function is supposed to use the API provided by the 
+> thermal framework. It is not possible to plan every stupid things a 
+> driver can do. In this particular case, very likely the kernel will 
+> crash immediately which is a sufficient test for me and coercive 
+> enough to have the API user to put its code in question ;)
+
+A good point. Agree.
+
 
