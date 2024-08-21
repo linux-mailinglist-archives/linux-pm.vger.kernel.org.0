@@ -1,121 +1,184 @@
-Return-Path: <linux-pm+bounces-12651-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12652-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32B6495A4D1
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 20:42:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97BE295A50C
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 21:07:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A06A5B21216
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 18:42:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8DB91C224E4
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 19:07:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F1581B2503;
-	Wed, 21 Aug 2024 18:42:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CC4A15C12B;
+	Wed, 21 Aug 2024 19:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iMTru04H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G3jihrZ1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458771D131A;
-	Wed, 21 Aug 2024 18:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C1816DEB5
+	for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 19:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724265726; cv=none; b=qKRwvzsO2mVYGGuy1MQI4NC0lhjJzEKpdviQndyKWQW7L57iGtjDXjCmJTM3uEV8V3Yp/inTz/4n/ZNcCEM2tt/8pcZ2z7s6tN5gyGAAay1pdGaefUJbHAJQVCCwMvh5IYWeJN/+HCNYvo1PPqPgF2D+Ca3A6xc4F4YHqSssYeQ=
+	t=1724267229; cv=none; b=IrHbVx4tFVvTM3veRvdNB0FyW9+68INakW6p80fC5CShEyPj6NsPT+H7vHOzbMh/zomE0IEKpm3nKTOlmQO84z8XXbKQ9tB/zbic2R3GJHt+VpMX4vvUbKmn0E4SSBhwrUQB5NzJiC07RrVjT5IRn5uhG+BD6cg1gtSylxZDO2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724265726; c=relaxed/simple;
-	bh=PCzwycnQ68FnAihEnpURA+cP62Lf4j+4rNmVTJmIjzY=;
+	s=arc-20240116; t=1724267229; c=relaxed/simple;
+	bh=LdRcg5wd6A0aunU43GxYGYIfen+s/tQuENycbZhHv2g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fBpFVhTAAdw1Lm48GrxM2Z4LYihpMZkY10/9veAsexJ3wkwnjA86vtsabT8w4L4ecmOD2gnAYnkNyHUW4/ndvfg845FOz/uMahFF5Lh2ibyYUKc/MC1YTCb6/fwvDZMayv3gE1a7mV8iQ0g/0Wkswi2SA1jAZHGEioA8Of218n8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iMTru04H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3799C4AF0E;
-	Wed, 21 Aug 2024 18:42:05 +0000 (UTC)
+	 To:Cc:Content-Type; b=qH3sg7C8kPBqsLtBHUod18PwDqb1C/oTgy3pACzrBh3AI9GKoiOwKeEzpC77VtA3KjRAqN8eVerO8Fj1cRCFV2HdTUT4ot1q5TaUEoNbMEysZqUIpJijFEODakIWVvUSlD2UGh+PJl2q15thLLxPQnsrVlBYk5D8dj6pRJEa1UM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G3jihrZ1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5CD1C4AF10
+	for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 19:07:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724265725;
-	bh=PCzwycnQ68FnAihEnpURA+cP62Lf4j+4rNmVTJmIjzY=;
+	s=k20201202; t=1724267228;
+	bh=LdRcg5wd6A0aunU43GxYGYIfen+s/tQuENycbZhHv2g=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iMTru04Hh9bmSxfYycLcitK89VnZw7FwF+aOGrDjyUP3OZTk67uc8Fjje7iFru/qf
-	 gr/uqCPceHKigAxBJXGUl6ZrD+Ty+5JVmqdSPmTEYsWAmcidQoaRUL9hVejwHGKZzz
-	 VIoL0HMolbaJ5jKP9Dw4mjTat+aWB6CkIt9OJxgI9cJXYTPrse4dHq1sFtegrbNlCe
-	 XnXYBfY1IRnApi8t1tdP0WFUukgnIOVf/dd07biUlqg54YI+VGTCC2qJHH1QqYRGP0
-	 zNu077cWAg/2G0wIuBAD2z4ZXTWh0hu7uz94fqKqkQx0Gnw8g/3OxFwHpkYJLAx4yy
-	 hWYJcUh8IkxHw==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2704d461058so2506331fac.0;
-        Wed, 21 Aug 2024 11:42:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUYNL8n9I897/+Hy/ctH/kc7YJSo3hASf0LRHnAr6jwp+ApPyWL+Nl6VxxUTC8noPgQg8W+z7pA/SxnFGQ=@vger.kernel.org, AJvYcCUtJjupyZ23PIF38klrBJIOH7tM2bcNs3d8J/8u9QVqt693gsatwiJl0eO5nDups9mGjBYhd/S1+Wg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFiyDKxn+naomccf7IvzV/3Vok0f8QgZT4iWCTn/OFzNZr0uyE
-	JJgSM9cbEAH0u/a4SpD8k6WhD13uAkyxjaBGzkfGgDg7YU3+uh8+/Rijx4B4Wq35zCQ51rjui3l
-	KVqnogG08Ur2y/y8pGLBU3Hex8A4=
-X-Google-Smtp-Source: AGHT+IEW4+QE6jrLQfnnAK8xiews+yZgmyZbloPzgNPMruNN0gbTIxN27K0jnMMaCJdrg6m9IzsJwkIVaBFLM3L+2/Q=
-X-Received: by 2002:a05:6870:b52a:b0:270:2691:5ad5 with SMTP id
- 586e51a60fabf-2737eeaa528mr3732322fac.7.1724265725130; Wed, 21 Aug 2024
- 11:42:05 -0700 (PDT)
+	b=G3jihrZ1CghxZk3oO5nsKihkBVs01oB08g1NQz6PBZVShdaOx/dLO5VvWadOgboU1
+	 hSEAqs+YqcuZt6sZnNhUmpuoItxndLIjhDF6EgjAT0BwqIA6gKUkwf+7Hfvz1yvq7t
+	 KJNCPU/Sun5BOaQ/a+pEItRDyZdWPBnCkgmV3hMgE9ufkRQtWm980ejyb0xhgUK7js
+	 jctgrwQqhHfEiKMlkfy6gzfdVcstOcerNIC7h8eRLw2n0Iv6ym2pL7JcRqJWzgPVmQ
+	 /ObdhLCEMkh68uyp9NKlKQoI0e7jIgWgm/47uhi+go6rTqJ/8oXGy1cwWJ7V9GXRsr
+	 SMe2TSaTryKRw==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-26ff21d8382so4730fac.1
+        for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 12:07:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUFQP+/1ephUfREHDqmk3U98Y3B0pbOJjiCh7GD7ZutmqL+d+D5mdh8YalJtnBOCNvyIijIo4yJZg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywfsj8WjXFIZcB7kLzf6KXk+JmbPtIlWyl/S1OgQdHEG0U0OYSg
+	m2vdU2x44cQXIyogi7k/TQpcQeaVT8IzWZcuiWktZdSrF4WZZhREaPDEL8QydhWjYDYZNoEADxP
+	ol2w+SrKUNzOD+ID2XTzJGG9ZcjE=
+X-Google-Smtp-Source: AGHT+IFFZRqL8idndy+eKSyQpynG/fwcFWVV8IYR0HfzggyzTnO2cl8KxzN2CVgOkhjl0nklcNTf+gTudsxVNFJPjSo=
+X-Received: by 2002:a05:6871:894:b0:268:a074:39cf with SMTP id
+ 586e51a60fabf-2737eeac73emr3565615fac.8.1724267228043; Wed, 21 Aug 2024
+ 12:07:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240821075934.12145-1-11162571@vivo.com>
-In-Reply-To: <20240821075934.12145-1-11162571@vivo.com>
+References: <20240816081241.1925221-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20240816081241.1925221-1-daniel.lezcano@linaro.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 21 Aug 2024 20:41:54 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jLaZqbJw-DXjFD983sW0j_adrGjK5U97h49+9bh28e=w@mail.gmail.com>
-Message-ID: <CAJZ5v0jLaZqbJw-DXjFD983sW0j_adrGjK5U97h49+9bh28e=w@mail.gmail.com>
-Subject: Re: [PATCH v1] drivers:thermal:Fix the NULL vs IS_ERR() bug for debugfs_create_dir()
-To: Yang Ruibin <11162571@vivo.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
+Date: Wed, 21 Aug 2024 21:06:56 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jt6m9GLLpDhFd7e1mnbbDxcA0FC1Mm3x85ASRQkAwS_A@mail.gmail.com>
+Message-ID: <CAJZ5v0jt6m9GLLpDhFd7e1mnbbDxcA0FC1Mm3x85ASRQkAwS_A@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] Add thermal thresholds support
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org, lukasz.luba@arm.com, 
+	quic_manafm@quicinc.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 21, 2024 at 9:59=E2=80=AFAM Yang Ruibin <11162571@vivo.com> wro=
-te:
+On Fri, Aug 16, 2024 at 10:12=E2=80=AFAM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> The debugfs_create_dir() function returns error pointers.
-> It never returns NULL. So use IS_ERR() to check it.
+> The trip points are a firmware description of the temperature limits
+> of a specific thermal zone where we associate an action which is done
+> by the kernel. The time resolution is low.
 >
-> Signed-off-by: Yang Ruibin <11162571@vivo.com>
-> ---
->  drivers/thermal/thermal_debugfs.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> The userspace has to deal with a more complex thermal management based
+> on heuristics from different information coming from different
+> places. The logic is much more complex but based on a bigger time
+> resolution, usually one second based.
 >
-> diff --git a/drivers/thermal/thermal_debugfs.c b/drivers/thermal/thermal_=
-debugfs.c
-> index 7dd67bf48571..939d3e5f1817 100644
-> --- a/drivers/thermal/thermal_debugfs.c
-> +++ b/drivers/thermal/thermal_debugfs.c
-> @@ -178,11 +178,11 @@ struct thermal_debugfs {
->  void thermal_debug_init(void)
->  {
->         d_root =3D debugfs_create_dir("thermal", NULL);
-> -       if (!d_root)
-> +       if (IS_ERR(d_root))
->                 return;
+> The purpose of the userspace is to monitor the temperatures from
+> different places and take actions. However, it can not be constantly
+> reading the temperature to detect when a temperature threshold has
+> been reached. This is especially bad for mobile or embedded system as
+> that will lead to an unacceptable number of wakeup to check the
+> temperature with nothing to do.
 >
->         d_cdev =3D debugfs_create_dir("cooling_devices", d_root);
-> -       if (!d_cdev)
-> +       if (IS_ERR(d_cdev))
->                 return;
+> On the other side, the sensors are now most of the time interrupt
+> driven. That means the thermal framework will use the temperature trip
+> points to program the sensor to trigger an interrupt when a
+> temperature limit is crossed.
 >
->         d_tz =3D debugfs_create_dir("thermal_zones", d_root);
-> @@ -202,7 +202,7 @@ static struct thermal_debugfs *thermal_debugfs_add_id=
-(struct dentry *d, int id)
->         snprintf(ids, IDSLENGTH, "%d", id);
+> Unfortunately, the userspace can not benefit this feature and current
+> solutions found here and there, iow out-of-tree, are to add fake trip
+> points in the firmware and enable the writable trip points.
 >
->         thermal_dbg->d_top =3D debugfs_create_dir(ids, d);
-> -       if (!thermal_dbg->d_top) {
-> +       if (IS_ERR(thermal_dbg->d_top)) {
->                 kfree(thermal_dbg);
->                 return NULL;
->         }
-> --
+> This is bad for different reasons, the trip points are for in-kernel
+> actions, the semantic of their types is used by the thermal framework
+> and by adding trip points in the device tree is a way to overcome the
+> current limitation but tampering with how the thermal framework is
+> supposed to work. The writable trip points is a way to adjust a
+> temperature limit given a specific platform if the firmware is not
+> accurate enough and TBH it is more a debug feature from my POV.
+>
+> The thresholds mechanism is a way to have the userspace to tell
+> thermal framework to send a notification when a temperature limit is
+> crossed. There is no id, no hysteresis, just the temperature and the
+> direction of the limit crossing. That means we can be notified when a
+> threshold is crossed the way up only, or the way down only or both
+> ways. That allows to create hysteresis values if it is needed.
 
-Good catch!
+First off, I'd prefer these things to be referred to as "user
+thresholds" to avoid confusion with trip thresholds.
 
-Applied as 6.11-rc material with some edits in the subject and changelog.
+> A threshold can be added, deleted or flushed. The latter means all
+> thresholds belonging to a thermal zone will be deleted.
+>
+> When a threshold is added:
+>
+>  - if the same threshold (temperature and direction) exists, an error
+>    is returned
 
-Thanks!
+Why is it useful to return an error in this case?  It appears that the
+existing threshold could be used just fine.
+
+>  - if a threshold is specified with the same temperature but a
+>    different direction, the specified direction is added
+>
+>  - if there is no threshold with the same temperature then it is
+>    created
+>
+> When a threshold is deleted:
+>
+>  - if the same threshold (temperature and direction) exists, it is
+>    deleted
+>
+>  - if a threshold is specified with the same temperature but a
+>    different direction, the specified direction is removed
+>
+>  - if there is no threshold with the same temperature, then an error
+>    is returned
+>
+> When the threshold are flushed:
+>
+>  - All thresholds related to a thermal zone are deleted
+>
+> When a threshold is crossed:
+>
+>  - the userspace does not need to know which threshold(s) have been
+>    crossed, it will be notified with the thermal zone identifier, the
+>    current temperature and the previous temperature
+
+This has a bit of a warm-up issue when the zone temperature is above a
+threshold to start with.
+
+Or is it not a problem because thresholds can only be added when the
+zone temperature is known?
+
+>  - if multiple thresholds have been crossed between two updates only
+>    one notification will be send to the userspace, it is pointless to
+>    send a notification per thresholds crossed as the userspace can
+>    handle that easily when it has the temperature delta information
+
+That's clever.
+
+> All aforementioned actions and events lead to a notification to the
+> userspace. A threshold change (add, delete and flush) is notified to
+> the userspace with the process id responsible of the action.
+>
+> Along with the kernel changes, the thermal library has been extended
+> to provide the different API to deal with the new threshold netlink
+> events and commands.
+>
+> In addition, the thermal-engine skeleton uses these new API by
+> flushing and adding thresholds as well as getting the notification
+> about these actions.
+>
+> Overall the series has been tested with the thermal-engine skeleton
+> and some selftests which are not part of this series.
 
