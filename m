@@ -1,116 +1,147 @@
-Return-Path: <linux-pm+bounces-12635-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12636-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D4B5959B1B
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 14:02:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F172959AF9
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 13:58:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55A6AB26BFE
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 11:57:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BB6E282233
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 11:58:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB2E1B7905;
-	Wed, 21 Aug 2024 11:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="K4AT/enS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0EFE1A4AB8;
+	Wed, 21 Aug 2024 11:48:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9BF61B7903;
-	Wed, 21 Aug 2024 11:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743EB189907;
+	Wed, 21 Aug 2024 11:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724240624; cv=none; b=rUvowvp3yJAwtszy120WLN+YHY8tYevFSJgiHH0qjka1Uua55zJapkn0Fc+xO+kG76FKmscDL00pivm6rcU4NqC/Ck1dH+HLLMh/uFqDYSVUMikYgt04e/13/OJ4CciKKeZaB/XtjM9y5sMlvuKwMq8zDWKa+cDn24SXivtXWSc=
+	t=1724240888; cv=none; b=iTCscWvhDLnzYzqm392Se46DarUnIlGP7E+Cd5Uq02TME1BKvPhPDU8L5b3OKWQ45eHOhAvT4yiJL1acnuE/uclt75i48vTmC9YqTGLmXdYi9hJ5ziyUQF8y37UmyPxyyk/BfXs+0FIHPKxv7jh4+HCm4vuR/waDCUTaF/M11oI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724240624; c=relaxed/simple;
-	bh=bsw35sWFxwfXUbsfrVrmQzI4hOlh95GIVDem8rGh9EI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MdiH10Y8YkSST/uZEhMAMQDJytlFy5p34WAFSsrPAXD7/dUY6lSg5ZlnZiFP7EAXBkFwZxh3NzrLTtB4vudSuZ8fmtEnwcgNDA8c5xEcaYCt4C/stuTkXBQacsKHFjzM/ZUSpbpCdsLaHYMjaGiiQH3g/3EZ8uFqm3EkdmN5rOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=K4AT/enS; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 47LBhcjf036956;
-	Wed, 21 Aug 2024 06:43:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1724240618;
-	bh=FAFFeDTLUC+SlZtqLcU0vN05qtHka4e5KwhNhbs7JOU=;
-	h=From:To:CC:Subject:Date;
-	b=K4AT/enShGszP1m163n2x5zpmU9erpPw9j5ksmISE15HdqSEq/R+JPXvZVspK1eKi
-	 86hMrvPXkRd4Qt6wVvx8puG4rsvwk0/aWduiQr7Vkrg7J8NrJEC+SfkWm98iY7YZC7
-	 XBQXRPbJ+DKD9nLyC2gAGMTO7/aEXZtAYFjrGwm0=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 47LBhctL025017
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 21 Aug 2024 06:43:38 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 21
- Aug 2024 06:43:37 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 21 Aug 2024 06:43:38 -0500
-Received: from lcpd911.dhcp.ti.com (lcpd911.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 47LBhZ2B033647;
-	Wed, 21 Aug 2024 06:43:35 -0500
-From: Dhruva Gole <d-gole@ti.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano
-	<daniel.lezcano@linaro.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Kevin Hilman
-	<khilman@baylibre.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Dhruva
- Gole <d-gole@ti.com>
-Subject: [PATCH] cpuidle: remove dead code in cpuidle_enter_state
-Date: Wed, 21 Aug 2024 17:12:50 +0530
-Message-ID: <20240821114250.1416421-1-d-gole@ti.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1724240888; c=relaxed/simple;
+	bh=5UJza2ct5uFviMUue2skQT9c6gKWFscFOlvH1a6cUCo=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KE5PSZPuV+sW3ddNKOPeNIalsjZY0J3dFrOM8NmT3ZbSMPQOWfUbV9qrT1gYZA4Xlk/hJIL/kL8r7+0fYwOMkP0539R39nZHkBLdhqP44UPb90waRW+sf6FSgQuJcFzrD08FOETXebpwLTpfpVjSUSwN7Q5mKgobycjVDI5es6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wpkyx6hvRz6J7nH;
+	Wed, 21 Aug 2024 19:44:57 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id C2AA1140119;
+	Wed, 21 Aug 2024 19:48:03 +0800 (CST)
+Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 21 Aug
+ 2024 12:48:03 +0100
+Date: Wed, 21 Aug 2024 12:48:02 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Anup Patel
+	<anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, "Palmer
+ Dabbelt" <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+	<linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH 2/4] cpuidle: riscv-sbi: Use scoped device node handling
+ to simplify error paths
+Message-ID: <20240821124802.00000c35@Huawei.com>
+In-Reply-To: <e006aa3d-3ec1-415f-a8d2-8aee6847a698@linaro.org>
+References: <20240816150931.142208-1-krzysztof.kozlowski@linaro.org>
+	<20240816150931.142208-2-krzysztof.kozlowski@linaro.org>
+	<20240819171313.00004677@Huawei.com>
+	<20240819171954.0000600d@Huawei.com>
+	<e006aa3d-3ec1-415f-a8d2-8aee6847a698@linaro.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Checking for index < 0 is useless because the find_deepest_state
-function never really returns a negative value. Since this code hasn't
-been reported in over 9 years it's dead code. Hence, remove it.
+On Tue, 20 Aug 2024 11:36:32 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
----
+> On 19/08/2024 18:19, Jonathan Cameron wrote:
+> > On Mon, 19 Aug 2024 17:13:13 +0100
+> > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+> >   
+> >> On Fri, 16 Aug 2024 17:09:29 +0200
+> >> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> >>  
+> >>> Obtain the device node reference with scoped/cleanup.h to reduce error
+> >>> handling and make the code a bit simpler.
+> >>>
+> >>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>    
+> >> The original code looks suspect. See below.  
+> > 
+> > Whilst here...  Why not do similar for state_node to avoid
+> > the delayed return check.
+> > Existing code
+> > 	{
+> > 		state_node = of_get_cpu_state_node(cpu_node, i - 1);
+> > 		if (!state_node)
+> > 			break;  
+> 
+> I don't see how __free() helps here. You can return regardless of __free().
+> 
+> > 
+> > 		ret = sbi_dt_parse_state_node(state_node, &states[i]);
+> > 		of_node_put(state_node);  
+> 
+> ... and this code is quite easy to read: you get reference and
+> immediately release it.
+> 
+> > 
+> > 		if (ret)
+> > 			//another bug here on holding cpu_node btw.
+> > 			return ret;
+> > 		pr_debug("sbi-state %#x index %d\n", states[i], i);
+> > 	}
+> > //I think only path to this is is early break above.
+> > 	if (i != state_count) {
+> > 		ret = -ENODEV;
+> > 		goto fail;
+> > 	}
+> > Can be something like
+> > 
+> > 	{
+> > 		struct device_node *state_node __free(device_node) =
+> > 			= of_get-cpu_State_nod(cpu_node, i - 1);
+> > 	
+> > 		if (!state_node)
+> > 			return -ENODEV;
+> > 
+> > 		ret = sbi_dt_parse_state_node(state_node, &states[i]);
+> > 		if (ret)
+> > 			return ret;
+> > 
+> > 		pr_debug("sbi-state %#x index %d\n", states[i], i);
+> > 	}
+> > 		  
+> 
+> Maybe I miss something, but I do not see how the __free() simplifies
+> here anything.
 
-Discussions on the original series that added this code:
-https://lore.kernel.org/linux-pm/20240821095105.xuf2a5xe3yxqqewj@lcpd911/T/#u
+Personal preference.  To my eyes, it does, but indeed not a huge
+advantage.
 
- drivers/cpuidle/cpuidle.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Jonathan
 
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index 02e40fd7d948..9e418aec1755 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -228,10 +228,7 @@ noinstr int cpuidle_enter_state(struct cpuidle_device *dev,
- 	if (broadcast && tick_broadcast_enter()) {
- 		index = find_deepest_state(drv, dev, target_state->exit_latency_ns,
- 					   CPUIDLE_FLAG_TIMER_STOP, false);
--		if (index < 0) {
--			default_idle_call();
--			return -EBUSY;
--		}
-+
- 		target_state = &drv->states[index];
- 		broadcast = false;
- 	}
-
-base-commit: bb1b0acdcd66e0d8eedee3570d249e076b89ab32
--- 
-2.34.1
+> 
+> Best regards,
+> Krzysztof
+> 
 
 
