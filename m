@@ -1,181 +1,232 @@
-Return-Path: <linux-pm+bounces-12621-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12622-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2D25959956
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 13:16:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E31BA959996
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 13:23:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E63D11C213BC
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 11:16:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 982F2280CF2
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 11:23:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 866661CEAAF;
-	Wed, 21 Aug 2024 09:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FFDB20DB6A;
+	Wed, 21 Aug 2024 10:08:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="e8hFzcFT"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="acjE0Evw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4501CEAA8;
-	Wed, 21 Aug 2024 09:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68F0D20DB6B
+	for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 10:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724233932; cv=none; b=lAax2HpvxzxdIYPtll1Xgx5WL54o9UAhMet2lFYdY1GNuq5TKVA1v9k8zpWARtgYQCCdGot3SawXB2Iqa9aVs2/cA/gBh+nJ3QyERn6OFJUvXgmkY2wkssezIxz4Zo6JCP7P7kDdlvkq/8sz/LiWdt+g/E6BclV/FK/E/nN2HOk=
+	t=1724234906; cv=none; b=flcy91ioC53DEf7vHOLbspFtTrg5u1n8qXEizkoLvrGBFWYjCxpS0aNtvJWabBHC9fD+Lx3vDfcGBokOQltJz/JkdbuKf+hAuAVHjwfRpjYop1/Gd7UA8p1NXBRNJ20/v9Fw9LtYOUExNTSfFkAawRHyv4B/hqU5JetL0H0xZgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724233932; c=relaxed/simple;
-	bh=oX5Y70PeZSV3FnIe5Qe50n57CiaewuBdW2S9LxKusGU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QOIYWXLVjpugg3hXlztQxhqogIxn4I+M5Su+Fiz378EI1u9bOZatQx72ygK5JsCDWO9/DlKNizlJIvvOKjMPR25QD5DleQGz1K0i7+zpNCG/+nnn0w/l4ZjTFvbQ65lY7k8UmLw2j9vt7jzCMDM9OmQzQNCcXjL9sDvdqcz+/zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=e8hFzcFT; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 47L9p7Tu016774;
-	Wed, 21 Aug 2024 04:51:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1724233867;
-	bh=H7rReYITgrUtmdZwgpSvcFNTCUfWweG/KI6cfIfwQdA=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=e8hFzcFTgf0zsEftdMITEA0451Egc41z72EY29SJRk5GYYpue1gNlzoaIJGoexYQw
-	 pRSPZDfR5Eo5YcwcgZAqFbLgxoNfMtDIV+A/QZiTJH5+Q+S2RfdaMGmYccBIZU/hLR
-	 dcAmCDsz0KduaO3d59hz0YrVeQXNEYwaLouR0Fgg=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 47L9p7HL027706
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 21 Aug 2024 04:51:07 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 21
- Aug 2024 04:51:06 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 21 Aug 2024 04:51:06 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 47L9p6Vt065443;
-	Wed, 21 Aug 2024 04:51:06 -0500
-Date: Wed, 21 Aug 2024 15:21:05 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-CC: Preeti U Murthy <preeti@linux.vnet.ibm.com>, <peterz@infradead.org>,
-        <rlippert@google.com>, <daniel.lezcano@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linus.walleij@linaro.org>,
-        <rafael.j.wysocki@intel.com>, <linux-kernel@vger.kernel.org>,
-        <mingo@redhat.com>, <sudeep.holla@arm.com>, <tglx@linutronix.de>,
-        <linuxppc-dev@lists.ozlabs.org>, <khilman@ti.com>,
-        Ulf Hansson
-	<ulf.hansson@linaro.org>
-Subject: Re: [PATCH 3/3] cpuidle: Select a different state on
- tick_broadcast_enter() failures
-Message-ID: <20240821095105.xuf2a5xe3yxqqewj@lcpd911>
-References: <20150508073418.28491.4150.stgit@preeti.in.ibm.com>
- <3161640.llJtBoKCBr@vostro.rjw.lan>
- <8965830.CMQzZzsqm0@vostro.rjw.lan>
- <4652506.tkuQIhnkdH@vostro.rjw.lan>
+	s=arc-20240116; t=1724234906; c=relaxed/simple;
+	bh=e/cSTFrVwMB05MYJMAq6GAYYFmQpuxJbbbVHPAj6IrQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pxs+ymIK02w4syzBQ+1YQ0o9jiTo8sLZ6ixLMvztDt+90nNKHo0wr0ktKJn0SmGUicapw0sWmBjHy+jILBhuXW0ZV9DZXF4jhzbNoNl54UeBBfgJ1A8Bx4N5g6N5BJMCYTwrUm6xw13x80d1cCgMljWvnnc+yPa/htxf8H9gVDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=acjE0Evw; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4280b3a7efaso51729555e9.0
+        for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 03:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1724234902; x=1724839702; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WUeIsnerQaorjXQFndw9qkOG9GKtYwp+MnhzTNyNwl4=;
+        b=acjE0EvwzM5+1yxYQTd84dpl4lpXPpSEyzqcZ0snBm0CPTCV5NrVqJTydwsMI4FJuQ
+         f84oWYL1j4oqv4fUpoWo0ancM22tgxMHW2+esUH00ARQ5a5SWTH1iVb/Tu+Ax4AYU+Sg
+         tJezid5O5YQQe3VaEDjdsnpJe3kadjVlUX4WEugZzGxcKEn7lmWM+SDpVU6cz5KrTniR
+         mvlJNg3dZSNlRlmib9MgeGEWUN4wVURAlfqkz8ooJ3qcjnGApmvXTCs91FYFFbclyyAs
+         3eHEhVMvItPTVlYHTV0dULqa8cmBK/F0/b6bjUGRaN8isb/qzPY3UrXzzRLyrxJ9LCof
+         dQIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724234902; x=1724839702;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WUeIsnerQaorjXQFndw9qkOG9GKtYwp+MnhzTNyNwl4=;
+        b=rmpbnRUaoNZpRougW8YQkI0nEqnFJ7BAmLvpN8IjmHYHZkblqR1MUEOPq3rKM7l0r9
+         pZYJzc3O8OE0o2/F550dIeRp1viAhlh36ILmitvHx5rVVS4O2F4lrg0UaVQjHEcGWO/u
+         h5b+778J+XfjRWUcEH3YFrgL5gdRl2wn6R28Lrw/Y9gI71ODpFzgOKpnrfvMDvwpmDJH
+         7cJhjhcAlU6D2MJoGtDL7QKV2J4qBSn/+MKyHL6qqhBzrGKCmptexIdfsyrHlIosDPNc
+         L9yz/a2N/EYuRcWqCuKbhJ7aYPMMIlUxcOimU+7/Lcbx4iFC09jwBpLah0RAppez3ePI
+         5pTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVm/NTnVv64vIcOI5Ckx3OJmD+X4phlqaqsgDdMs2JsuO+txFrSE0f1VZ4yjYQKj0MEaI9PjQlOHg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvosRvYxJcuJygd8JpSdznGcZhbt6XZgagCBJBwkiWXIUMtMsw
+	+dDTje8SDFfoRnDwNWelId9OfS1XhQHpAmT5tsIbyLes+IMXXVhrToFQ1GSN9zc=
+X-Google-Smtp-Source: AGHT+IFhpK1sg/ss/0bIG2NwKsTNlLwTZWTvRAOXwus/YZwPLyDrzYlLym6NHPi/7TO58UNUO/Wduw==
+X-Received: by 2002:a5d:4e45:0:b0:371:8e3c:59 with SMTP id ffacd0b85a97d-372fd5ba7a9mr992553f8f.5.1724234900998;
+        Wed, 21 Aug 2024 03:08:20 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:42a6:b34f:6c18:3851])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42abefc626fsm20071325e9.31.2024.08.21.03.08.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Aug 2024 03:08:20 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v2] Documentation: add a driver API doc for the power sequencing subsystem
+Date: Wed, 21 Aug 2024 12:08:18 +0200
+Message-ID: <20240821100818.13763-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <4652506.tkuQIhnkdH@vostro.rjw.lan>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-On May 10, 2015 at 01:19:52 +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> If tick_broadcast_enter() fails in cpuidle_enter_state(),
-> try to find another idle state to enter instead of invoking
-> default_idle_call() immediately and returning -EBUSY which
-> should increase the chances of saving some energy in those
-> cases.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
+Describe what the subsystem does, how the consumers and providers work
+and add API reference generated from kerneldocs.
 
-Found this during code review, hence dug up this old thread again,
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+Changes since v1:
+- drop unneeded :c:func: directives
+- don't include linux/pwrseq/consumer.h as there are no kerneldocs in it
+  which results in a sphinx warning
 
->  drivers/cpuidle/cpuidle.c |   20 +++++++++++++++-----
->  1 file changed, 15 insertions(+), 5 deletions(-)
-> 
-> Index: linux-pm/drivers/cpuidle/cpuidle.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpuidle/cpuidle.c
-> +++ linux-pm/drivers/cpuidle/cpuidle.c
-> @@ -73,7 +73,10 @@ int cpuidle_play_dead(void)
->  }
->  
->  static int find_deepest_state(struct cpuidle_driver *drv,
-> -			      struct cpuidle_device *dev, bool freeze)
-> +			      struct cpuidle_device *dev,
-> +			      unsigned int max_latency,
-> +			      unsigned int forbidden_flags,
-> +			      bool freeze)
->  {
->  	unsigned int latency_req = 0;
->  	int i, ret = freeze ? -1 : CPUIDLE_DRIVER_STATE_START - 1;
-> @@ -83,6 +86,8 @@ static int find_deepest_state(struct cpu
->  		struct cpuidle_state_usage *su = &dev->states_usage[i];
->  
->  		if (s->disabled || su->disable || s->exit_latency <= latency_req
-> +		    || s->exit_latency > max_latency
-> +		    || (s->flags & forbidden_flags)
->  		    || (freeze && !s->enter_freeze))
->  			continue;
->  
-> @@ -100,7 +105,7 @@ static int find_deepest_state(struct cpu
->  int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
->  			       struct cpuidle_device *dev)
->  {
-> -	return find_deepest_state(drv, dev, false);
-> +	return find_deepest_state(drv, dev, UINT_MAX, 0, false);
->  }
->  
->  static void enter_freeze_proper(struct cpuidle_driver *drv,
-> @@ -139,7 +144,7 @@ int cpuidle_enter_freeze(struct cpuidle_
->  	 * that interrupts won't be enabled when it exits and allows the tick to
->  	 * be frozen safely.
->  	 */
-> -	index = find_deepest_state(drv, dev, true);
-> +	index = find_deepest_state(drv, dev, UINT_MAX, 0, true);
->  	if (index >= 0)
->  		enter_freeze_proper(drv, dev, index);
->  
-> @@ -168,8 +173,13 @@ int cpuidle_enter_state(struct cpuidle_d
->  	 * CPU as a broadcast timer, this call may fail if it is not available.
->  	 */
->  	if (broadcast && tick_broadcast_enter()) {
-> -		default_idle_call();
-> -		return -EBUSY;
-> +		index = find_deepest_state(drv, dev, target_state->exit_latency,
-> +					   CPUIDLE_FLAG_TIMER_STOP, false);
-> +		if (index < 0) {
+ Documentation/driver-api/index.rst  |  1 +
+ Documentation/driver-api/pwrseq.rst | 95 +++++++++++++++++++++++++++++
+ MAINTAINERS                         |  1 +
+ 3 files changed, 97 insertions(+)
+ create mode 100644 Documentation/driver-api/pwrseq.rst
 
-Would this condition ever meet?
-If you see, the ret inside find_deepest_state is always starting with a 0 and
-then nobody is ever really making it negative again. So the func either
-returns a 0 or some positive value right?
-
-Since nobody has probably raised an issue about this in 9 years, is this
-basically dead code inside the if?
-Let me know what needs to be done here, I'd be happy to patch this up.
-
-> +			default_idle_call();
-> +			return -EBUSY;
-> +		}
-> +		target_state = &drv->states[index];
->  	}
->  
->  	/* Take note of the planned idle state. */
-> 
-
+diff --git a/Documentation/driver-api/index.rst b/Documentation/driver-api/index.rst
+index f10decc2c14b6..7f83e05769b4a 100644
+--- a/Documentation/driver-api/index.rst
++++ b/Documentation/driver-api/index.rst
+@@ -124,6 +124,7 @@ Subsystem-specific APIs
+    pps
+    ptp
+    pwm
++   pwrseq
+    regulator
+    reset
+    rfkill
+diff --git a/Documentation/driver-api/pwrseq.rst b/Documentation/driver-api/pwrseq.rst
+new file mode 100644
+index 0000000000000..a644084ded17a
+--- /dev/null
++++ b/Documentation/driver-api/pwrseq.rst
+@@ -0,0 +1,95 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++.. Copyright 2024 Linaro Ltd.
++
++====================
++Power Sequencing API
++====================
++
++:Author: Bartosz Golaszewski
++
++Introduction
++============
++
++This framework is designed to abstract complex power-up sequences that are
++shared between multiple logical devices in the linux kernel.
++
++The intention is to allow consumers to obtain a power sequencing handle
++exposed by the power sequence provider and delegate the actual requesting and
++control of the underlying resources as well as to allow the provider to
++mitigate any potential conflicts between multiple users behind the scenes.
++
++Glossary
++--------
++
++The power sequencing API uses a number of terms specific to the subsystem:
++
++Unit
++
++    A unit is a discreet chunk of a power sequence. For instance one unit may
++    enable a set of regulators, another may enable a specific GPIO. Units can
++    define dependencies in the form of other units that must be enabled before
++    it itself can be.
++
++Target
++
++    A target is a set of units (composed of the "final" unit and its
++    dependencies) that a consumer selects by its name when requesting a handle
++    to the power sequencer. Via the dependency system, multiple targets may
++    share the same parts of a power sequence but ignore parts that are
++    irrelevant.
++
++Descriptor
++
++    A handle passed by the pwrseq core to every consumer that serves as the
++    entry point to the provider layer. It ensures coherence between different
++    users and keeps reference counting consistent.
++
++Consumer interface
++==================
++
++The consumer API is aimed to be as simple as possible. The driver interested in
++getting a descriptor from the power sequencer should call pwrseq_get() and
++specify the name of the target it wants to reach in the sequence after calling
++pwrseq_power_up(). The descriptor can be released by calling pwrseq_put() and
++the consumer can request the powering down of its target with
++pwrseq_power_off(). Note that there is no guarantee that pwrseq_power_off()
++will have any effect as there may be multiple users of the underlying resources
++who may keep them active.
++
++Provider interface
++==================
++
++The provider API is admittedly not nearly as straightforward as the one for
++consumers but it makes up for it in flexibility.
++
++Each provider can logically split the power-up sequence into descrete chunks
++(units) and define their dependencies. They can then expose named targets that
++consumers may use as the final point in the sequence that they wish to reach.
++
++To that end the providers fill out a set of configuration structures and
++register with the pwrseq subsystem by calling pwrseq_device_register().
++
++Dynamic consumer matching
++-------------------------
++
++The main difference between pwrseq and other linux kernel providers is the
++mechanism for dynamic matching of consumers and providers. Every power sequence
++provider driver must implement the `match()` callback and pass it to the pwrseq
++core when registering with the subsystems.
++
++When a client requests a sequencer handle, the core will call this callback for
++every registered provider and let it flexibly figure out whether the proposed
++client device is indeed its consumer. For example: if the provider binds to the
++device-tree node representing a power management unit of a chipset and the
++consumer driver controls one of its modules, the provider driver may parse the
++relevant regulator supply properties in device tree and see if they lead from
++the PMU to the consumer.
++
++API reference
++=============
++
++.. kernel-doc:: include/linux/pwrseq/provider.h
++   :internal:
++
++.. kernel-doc:: drivers/power/sequencing/core.c
++   :export:
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a7cb909ffa1d6..6da6d8ae951a1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18315,6 +18315,7 @@ M:	Bartosz Golaszewski <brgl@bgdev.pl>
+ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
++F:	Documentation/driver-api/pwrseq.rst
+ F:	drivers/power/sequencing/
+ F:	include/linux/pwrseq/
+ 
 -- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+2.43.0
+
 
