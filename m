@@ -1,48 +1,56 @@
-Return-Path: <linux-pm+bounces-12601-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12602-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C42579594C4
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 08:38:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1B9095950F
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 08:49:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 813D828397A
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 06:38:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00CE21C22694
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 06:49:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E999B16DC2E;
-	Wed, 21 Aug 2024 06:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E7CA18661C;
+	Wed, 21 Aug 2024 06:49:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PWytuUB+"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="tkkCjqKk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B279015C157;
-	Wed, 21 Aug 2024 06:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4661865FF;
+	Wed, 21 Aug 2024 06:49:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724222290; cv=none; b=k+71oJJaILMrCfWprc4dkQJWaNQglyIIUi4Pl9qutbrHNOUUdUU4grFEK4vIJIkNRiEpZw3ZA5P9fx4cvb2nwhYyIvjGkd7d6kItJZdA3ymVDEs3GkMNwa99eEB3nwTHGtRwPqscNZdP9l2Fpr9k8Vy1+kHtegw3l7t7yeSD1xo=
+	t=1724222991; cv=none; b=AvzTusw5Mn9TyPGQkKFENEJgKeqkQe4+M2elzRHHv8iX06nuxYiih0W3AKVIO3PZEK39x6o/Zmdnj4UmCHuz7dJ5OYjKsvM0hdpUSsFein0n52jzvCYaKPKTxYrwYt2FjZHVHssxbT7o+DvfW6p+75toJBTMG6TbtAafJRSqz7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724222290; c=relaxed/simple;
-	bh=xVRhAQ9bT5Qo2E6sPCbDp3obzvw4LNK3id11C4MN8ww=;
+	s=arc-20240116; t=1724222991; c=relaxed/simple;
+	bh=BqvEjNaBLPixdJTzZ/B6t5WySxm2QEG9jD9TzfsRKHk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dWM2eNBZyycWjVtTZUc+J7vCZ3pnPun897d4N3U2Og0mKlAJzjG1jxG3Agp86KX4bimI02Fd3i7gFFHxyE9X2xHMpf03oikoj+bYvvAyF9c8NfasM4fQvKGuGpy8UAYes2TnyIpagA0y8YdWEtszzcrCFsUK9ku/NZUeLOmYLUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PWytuUB+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFCFDC32782;
-	Wed, 21 Aug 2024 06:38:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724222289;
-	bh=xVRhAQ9bT5Qo2E6sPCbDp3obzvw4LNK3id11C4MN8ww=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PWytuUB+G7K9oHNXrWZFNBsc0fLgJBsuskY70YOG5/fWd3Lwq+sNRx5v4m4/5D05A
-	 xw9tQOTWRETdrPxhkc5CJPYeBcPXhEN9GESWRJXLommhGF4hA+8igpW0ptjbtaXUXF
-	 W9G6agqwnXILo4xIvjYz2PfUHQu2u7YBZwgFKnO9aoQLDV027v9ENAmPkMPRFuc2XX
-	 ENhYrDnh6tLj1A9sbSJQAawgePvo+Q3nO25arRP1FDEzKS4e3D7pofKxoLguEHSMH8
-	 ilL8ihMZFZvxwDGFIMifASe8L98Do+IQPBpnZs0yqVPR9XvuMWLP3z0rNzsS8/GMGP
-	 p3cy5/dmUkH3g==
-Message-ID: <6b9e528f-e9fc-453c-a024-1cf812cffd0d@kernel.org>
-Date: Wed, 21 Aug 2024 08:37:59 +0200
+	 In-Reply-To:Content-Type; b=mIR56YdtUwEtGFn/HjqR0coQR/lmkPtJasgtFAxxnUcthdSrcSHLO1d8TJqJXag/7XXGpcq3r+jUVVB9VfP7kuLb2PYxIHPr8NmU/bgvSF3nqpNSaTelZqI5vkr6fLnqzw3Fltp/Vupvw9LgLDJolT++sXmibeuKs73Nt2t3/fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=tkkCjqKk; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1724222975; x=1724827775; i=markus.elfring@web.de;
+	bh=BqvEjNaBLPixdJTzZ/B6t5WySxm2QEG9jD9TzfsRKHk=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=tkkCjqKkUdS10Y5oModBEchGIL9OZpGZ8YnQfaVUPWav/aHljNJumMbwLJsjyG+N
+	 iuzUbkiwF7eUAXF0RETYDGLqB9LomN1uTwBBSK0XmXA9mE+I71yFs4xSORIE5rRlv
+	 bJ/boc2kJwFmTpb1auOW0TATGYND9BWIaMW0PuPG/qWwL4D7m6gMXFp0851A8TvxV
+	 LSKxSx6VPJKzrqoK/8U4APQpVtazthptgmUGy9J+U1mEjNhxM50VQJYRUB7O3SKaR
+	 aGXQsVxVo90bhOPo6G5k2marFX7F9o4GNYGWgWg1VngRDQzToqvpKjXsWOzn1g+Ch
+	 M8BwsVIo2Or4qAe4JA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.81.95]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MMp8Y-1sO1oR2Xqu-00U7iB; Wed, 21
+ Aug 2024 08:49:35 +0200
+Message-ID: <8059d887-b765-4d62-8367-614fe0a0a462@web.de>
+Date: Wed, 21 Aug 2024 08:49:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,124 +58,50 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 05/15] dt-bindings: power: supply: axp20x: Add
- input-current-limit-microamp
-To: Chris Morgan <macromorgan@hotmail.com>
-Cc: Chris Morgan <macroalpha82@gmail.com>, linux-sunxi@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
- quentin.schulz@free-electrons.com, mripard@kernel.org,
- tgamblin@baylibre.com, aidanmacdonald.0x0@gmail.com,
- u.kleine-koenig@pengutronix.de, lee@kernel.org, samuel@sholland.org,
- jernej.skrabec@gmail.com, sre@kernel.org, wens@csie.org,
- conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de,
- jic23@kernel.org, jonathan.cameron@huawei.com
-References: <20240819164619.556309-1-macroalpha82@gmail.com>
- <20240819164619.556309-6-macroalpha82@gmail.com>
- <ro43ccn3w2qsvcnjej7appuasuqphtf54vkyrsex6ypr4dlwhh@vi2jg4nemkvl>
- <MN2PR16MB2941EF5AF5C003640B20CDFFA58D2@MN2PR16MB2941.namprd16.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <MN2PR16MB2941EF5AF5C003640B20CDFFA58D2@MN2PR16MB2941.namprd16.prod.outlook.com>
+Subject: Re: [v3] HID: corsair-void: Add Corsair Void headset family driver
+To: Stuart Hayhurst <stuart.a.hayhurst@gmail.com>,
+ linux-input@vger.kernel.org, linux-pm@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>
+References: <20240820002210.54014-3-stuart.a.hayhurst@gmail.com>
+ <577e96df-5535-4530-ac62-edc53881a443@web.de>
+ <CALTg27mK9wPC_1sRzk-Z-NCm7a+25KrEYwB8=JQN62RrCASOOw@mail.gmail.com>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <CALTg27mK9wPC_1sRzk-Z-NCm7a+25KrEYwB8=JQN62RrCASOOw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:W6HQPTJTd9h/3szQ3mScOiF4oLKbiPaHTYGvV4QuIj4XBuR3Z4O
+ VKWXtY814lJ0OC1dvkthh0VUJYrznL01jEzOv2sBlboRabaYyLWPaOv8trWkUM/10jvHlvZ
+ u5JfaZnaBT14v1nlqZWMvA+gium4k7bnUB1RMxtCVV92BV1l2d0vCLznBc31akb155IgX5d
+ WeDTZugbSxSQumpnERYng==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:f8rMYqyFe6k=;oGvMK8+LwCc1ohzOK6PtcHHeHtn
+ +BHCJqe6SbaQEfYWN9Li30uYhHjC21eDdfiauSH1QOIlAhvp0GoqX/0/vhNf+ovZRzJFRTw7g
+ A77I6EcmrDo1GMsX3H4EronMLWSX9Nn5fmcMHoJphpykpsx/Z8y2ViBdDEGyf14zGzkUdpRXe
+ aFLvsvSCOPWl6/POTrqDHJZAmx/tHd1Dx9wtrBKthrFnqgCgCYled2x5+u3cS/SQOlP0PbOVZ
+ F+WI9oMhGmfHyF8jYOAa3/517J7z7qZNvbiIm6kzQhwehKDndsG29bcI19/cgahV5OdqJCltb
+ PVyVP5p8bPu8NjO3pHqdF7rjspkyfB7Jmp0NZumHIsEgQ8V2NQyCzUN1Ccf2OXDdV3Tbprkaq
+ hDGujsNhSXYfk0QNHXrzOMsG1XLgzg5efc6LVlkPa54a9tk/1BVHBAEmmOMJzEmU2k+feqdzP
+ V0W9/WnqprK/KIwAm2OoEdOgSxltmXCEMtXZO5eQzwPE77DnLj3C0X7sEZERbBP5Y9xmEJ5iR
+ wNDfmCD65kct5s+6OWM1FewVYkX5a80CvqwuMbCnq1caYXSJGGYhM9J66c3GmDp9bbhH6gwsa
+ XvUhz9HqlD1wd9h1jMaGZcDTqaXwol6NZWwh9j6Q+thn56l8uCyZhWDhwLekgh/WHVStpbQtT
+ wFCV1Su3WgzwhH2gZlcZGm+JGRzOQcFJc2IdgrFQntkqGS5PGplC2G4WjkR5Ri42G7dAxdef7
+ MNEj15V0YY+5s+qIGpzpLRVSdj5F7FZZnuhKshHffT4kVHzLFpsuQhiUKb6CVDAU2aHYMmGVF
+ ZQ3nGWgcwh3/6CDf3DEADO4Q==
 
-On 20/08/2024 22:15, Chris Morgan wrote:
-> On Tue, Aug 20, 2024 at 09:42:06AM +0200, Krzysztof Kozlowski wrote:
->> On Mon, Aug 19, 2024 at 11:46:09AM -0500, Chris Morgan wrote:
->>> From: Chris Morgan <macromorgan@hotmail.com>
->>>
->>> Allow specifying a hard limit of the maximum input current. Some PMICs
->>> such as the AXP717 can pull up to 3.25A, so allow a value to be
->>> specified that clamps this in the event the hardware is not designed
->>> for it.
->>>
->>> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
->>> ---
->>>  .../x-powers,axp20x-usb-power-supply.yaml     | 69 ++++++++++++++++++-
->>>  1 file changed, 66 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
->>> index 34b7959d6772..9cc300e78f60 100644
->>> --- a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
->>> +++ b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-usb-power-supply.yaml
->>> @@ -15,9 +15,6 @@ maintainers:
->>>    - Chen-Yu Tsai <wens@csie.org>
->>>    - Sebastian Reichel <sre@kernel.org>
->>>  
->>> -allOf:
->>> -  - $ref: power-supply.yaml#
->>> -
->>>  properties:
->>>    compatible:
->>>      oneOf:
->>> @@ -31,8 +28,74 @@ properties:
->>>            - const: x-powers,axp803-usb-power-supply
->>>            - const: x-powers,axp813-usb-power-supply
->>>  
->>> +  input-current-limit-microamp:
->>> +    description:
->>> +      Optional value to clamp the maximum input current limit to for
->>> +      the device. If omitted, the programmed value from the EFUSE will
->>> +      be used.
->>
->> minimum: 100000
->> maximum: 4000000
->> (or whatever the values are)
-> 
-> It varies based on the compatible string. I've added all of the
-> restrictions below. Basically all but the axp717 have a table
-> of values available (as an enum), and the axp717 which is added
-> in a subsequent commit gets added as a minimum/maximum with a
-> description noting that steps are in values of 50000.
+>> Would you like to choose a corresponding name for such an enumeration?
+>
+> I'm not entirely convinced it needs one, as the value names are fairly d=
+escriptive
+>
+>> Can any other data type be reused for this purpose?
+>
+> I'm not sure what you're asking
 
-And you still need widest constraints here, because there is no final
-"else" for all not-matched ifs, right?
+I imagine that more advanced programming interfaces can be applied for
+the management of batteries together with some devices.
 
-Best regards,
-Krzysztof
-
+Regards,
+Markus
 
