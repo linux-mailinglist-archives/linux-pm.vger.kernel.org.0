@@ -1,56 +1,70 @@
-Return-Path: <linux-pm+bounces-12602-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12603-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1B9095950F
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 08:49:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E61595955F
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 09:08:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00CE21C22694
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 06:49:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 484CC1F24E08
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 07:08:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E7CA18661C;
-	Wed, 21 Aug 2024 06:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E246A1A2861;
+	Wed, 21 Aug 2024 07:08:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="tkkCjqKk"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IIUNDe8t"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4661865FF;
-	Wed, 21 Aug 2024 06:49:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C241A2859
+	for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 07:08:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724222991; cv=none; b=AvzTusw5Mn9TyPGQkKFENEJgKeqkQe4+M2elzRHHv8iX06nuxYiih0W3AKVIO3PZEK39x6o/Zmdnj4UmCHuz7dJ5OYjKsvM0hdpUSsFein0n52jzvCYaKPKTxYrwYt2FjZHVHssxbT7o+DvfW6p+75toJBTMG6TbtAafJRSqz7w=
+	t=1724224113; cv=none; b=kcMNcvdGarCpQdZ41pkRBgz9S07jAijTf//1bJYzLoG5XkWObRUyis1JKGmFhzfjgBweZYostaqGtm8MGwYJmpNxNohSfD/ZzDm6nLd3jqOOOExb2PjFdGsz+TJdCrlsJv0jhY6X6UWoBJImENqnLhpFuPgviZ45Psx7+z+0DCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724222991; c=relaxed/simple;
-	bh=BqvEjNaBLPixdJTzZ/B6t5WySxm2QEG9jD9TzfsRKHk=;
+	s=arc-20240116; t=1724224113; c=relaxed/simple;
+	bh=CLEdfv65cmZ7yOiRS4fBiMrgUE1o5HGN+bVab4VE4Dw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mIR56YdtUwEtGFn/HjqR0coQR/lmkPtJasgtFAxxnUcthdSrcSHLO1d8TJqJXag/7XXGpcq3r+jUVVB9VfP7kuLb2PYxIHPr8NmU/bgvSF3nqpNSaTelZqI5vkr6fLnqzw3Fltp/Vupvw9LgLDJolT++sXmibeuKs73Nt2t3/fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=tkkCjqKk; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1724222975; x=1724827775; i=markus.elfring@web.de;
-	bh=BqvEjNaBLPixdJTzZ/B6t5WySxm2QEG9jD9TzfsRKHk=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=tkkCjqKkUdS10Y5oModBEchGIL9OZpGZ8YnQfaVUPWav/aHljNJumMbwLJsjyG+N
-	 iuzUbkiwF7eUAXF0RETYDGLqB9LomN1uTwBBSK0XmXA9mE+I71yFs4xSORIE5rRlv
-	 bJ/boc2kJwFmTpb1auOW0TATGYND9BWIaMW0PuPG/qWwL4D7m6gMXFp0851A8TvxV
-	 LSKxSx6VPJKzrqoK/8U4APQpVtazthptgmUGy9J+U1mEjNhxM50VQJYRUB7O3SKaR
-	 aGXQsVxVo90bhOPo6G5k2marFX7F9o4GNYGWgWg1VngRDQzToqvpKjXsWOzn1g+Ch
-	 M8BwsVIo2Or4qAe4JA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.81.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MMp8Y-1sO1oR2Xqu-00U7iB; Wed, 21
- Aug 2024 08:49:35 +0200
-Message-ID: <8059d887-b765-4d62-8367-614fe0a0a462@web.de>
-Date: Wed, 21 Aug 2024 08:49:06 +0200
+	 In-Reply-To:Content-Type; b=gU0tyERaL13mr23it8NiLSC2kpuNXlw+qombUTW0hMCeZIjSLjorBPvPmfk1mpDKiT9EdUiDDi+2Dow/mQ2JWuyTaTNzcYCmtK37Y5OzGQOwUxr+I603qnKxL+rO8pRETbpdsHW7lUTjwUMi2VcUa8JAPOFM/MKh7/sEu0YASpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IIUNDe8t; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2021c08b95cso3588595ad.0
+        for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 00:08:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1724224110; x=1724828910; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XMySUmxyXV0NOwpl4IYLel9pKasMWHD/SNyRw5xpg6U=;
+        b=IIUNDe8tnfZRDi7sAWxlsPZwOxyflrIy+4Vx/U1tWU0Y7aVuEUA/SW71zXr+/RdR8y
+         xTUDmVVmCOQNntWXFlt5jutWXXknZr6UU4c24ZtHwL39KzcUS0qlDdgEnSCDzTrkBTuY
+         QckW9INcdw5BbyOBQXi5WSoxmh+CZsaMGlyYI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724224110; x=1724828910;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XMySUmxyXV0NOwpl4IYLel9pKasMWHD/SNyRw5xpg6U=;
+        b=Pxvc8K0Co4TfV/MTs1gSeyJ7/JdoKw0Ut5D3PybPuO+KNUOWPNcwSj9D2rLLIkkDE6
+         isQdedY1dtbzjhPiz/PpDKpVHjDZUd8tG0Xbuy+g3yfznD30jXaQFpX9Iz19MBfAbVxo
+         2vgUNVjXn2Sz+BlzobeFwizPmk6BIoGtBBxwowfB4qg4q9HZjqSxahiL40QPYTsmGGyx
+         cVE8QAMmMJEx5wZz2in2GcqsGhmR2nm0LDhqYxb5j5Gg7mdJjSxDpSQx0s5RhSZwFRhR
+         pjtIq2Rq2NuYdeLWHnQAa2wLvWQzxTcsRNWe8bS16F1o9ZHoQuPDzkR0Vhzz90rxYt+Z
+         CNDg==
+X-Gm-Message-State: AOJu0YzL4GPUX0UmAV668zxGlLQXTljvKmhwVKyxfiFY2X6fcZ1/pMP6
+	PouOWDYpUcFcD2dB/jIE9EpUlzEJPiJelut/gMnOa7f+m71pOqBn6Dehb57a7PE=
+X-Google-Smtp-Source: AGHT+IHrSweQAP5MHApPfx8uzHjaXvrxcGV1j8LFNsPci/5pjmOxrBTZPRenC8Fnbcs7qh+Tk05sYg==
+X-Received: by 2002:a17:903:2352:b0:1fd:70a6:ffbf with SMTP id d9443c01a7336-20367ac9444mr30836105ad.2.1724224110169;
+        Wed, 21 Aug 2024 00:08:30 -0700 (PDT)
+Received: from [172.20.0.208] ([218.188.70.188])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201f0302e84sm87841825ad.32.2024.08.21.00.08.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Aug 2024 00:08:29 -0700 (PDT)
+Message-ID: <c7259d79-4e66-48c2-922c-f6ab88b3af69@linuxfoundation.org>
+Date: Wed, 21 Aug 2024 01:08:25 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,50 +72,57 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [v3] HID: corsair-void: Add Corsair Void headset family driver
-To: Stuart Hayhurst <stuart.a.hayhurst@gmail.com>,
- linux-input@vger.kernel.org, linux-pm@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>
-References: <20240820002210.54014-3-stuart.a.hayhurst@gmail.com>
- <577e96df-5535-4530-ac62-edc53881a443@web.de>
- <CALTg27mK9wPC_1sRzk-Z-NCm7a+25KrEYwB8=JQN62RrCASOOw@mail.gmail.com>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <CALTg27mK9wPC_1sRzk-Z-NCm7a+25KrEYwB8=JQN62RrCASOOw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:W6HQPTJTd9h/3szQ3mScOiF4oLKbiPaHTYGvV4QuIj4XBuR3Z4O
- VKWXtY814lJ0OC1dvkthh0VUJYrznL01jEzOv2sBlboRabaYyLWPaOv8trWkUM/10jvHlvZ
- u5JfaZnaBT14v1nlqZWMvA+gium4k7bnUB1RMxtCVV92BV1l2d0vCLznBc31akb155IgX5d
- WeDTZugbSxSQumpnERYng==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:f8rMYqyFe6k=;oGvMK8+LwCc1ohzOK6PtcHHeHtn
- +BHCJqe6SbaQEfYWN9Li30uYhHjC21eDdfiauSH1QOIlAhvp0GoqX/0/vhNf+ovZRzJFRTw7g
- A77I6EcmrDo1GMsX3H4EronMLWSX9Nn5fmcMHoJphpykpsx/Z8y2ViBdDEGyf14zGzkUdpRXe
- aFLvsvSCOPWl6/POTrqDHJZAmx/tHd1Dx9wtrBKthrFnqgCgCYled2x5+u3cS/SQOlP0PbOVZ
- F+WI9oMhGmfHyF8jYOAa3/517J7z7qZNvbiIm6kzQhwehKDndsG29bcI19/cgahV5OdqJCltb
- PVyVP5p8bPu8NjO3pHqdF7rjspkyfB7Jmp0NZumHIsEgQ8V2NQyCzUN1Ccf2OXDdV3Tbprkaq
- hDGujsNhSXYfk0QNHXrzOMsG1XLgzg5efc6LVlkPa54a9tk/1BVHBAEmmOMJzEmU2k+feqdzP
- V0W9/WnqprK/KIwAm2OoEdOgSxltmXCEMtXZO5eQzwPE77DnLj3C0X7sEZERbBP5Y9xmEJ5iR
- wNDfmCD65kct5s+6OWM1FewVYkX5a80CvqwuMbCnq1caYXSJGGYhM9J66c3GmDp9bbhH6gwsa
- XvUhz9HqlD1wd9h1jMaGZcDTqaXwol6NZWwh9j6Q+thn56l8uCyZhWDhwLekgh/WHVStpbQtT
- wFCV1Su3WgzwhH2gZlcZGm+JGRzOQcFJc2IdgrFQntkqGS5PGplC2G4WjkR5Ri42G7dAxdef7
- MNEj15V0YY+5s+qIGpzpLRVSdj5F7FZZnuhKshHffT4kVHzLFpsuQhiUKb6CVDAU2aHYMmGVF
- ZQ3nGWgcwh3/6CDf3DEADO4Q==
+Subject: Re: [PATCH 0/2][RFC] Add SWIG Bindings to libcpupower
+To: "John B. Wyatt IV" <jwyatt@redhat.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-pm@vger.kernel.org, Thomas Renninger <trenn@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Linus Torvalds
+ <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ John Kacur <jkacur@redhat.com>, Tomas Glozar <tglozar@redhat.com>,
+ Arnaldo Melo <acme@redhat.com>, "John B. Wyatt IV"
+ <sageofredondo@gmail.com>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240724221122.54601-1-jwyatt@redhat.com>
+ <1f5c24b6-f3ee-4863-8b7a-49344a550206@linuxfoundation.org>
+ <Zqv9BOjxLAgyNP5B@hatbackup> <2024080405-roundish-casket-2474@gregkh>
+ <ZrKOCLYvYklsPg1K@fedora.redhat.com> <ZsQ6XKQ4pRFYkGoS@rhfedora>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <ZsQ6XKQ4pRFYkGoS@rhfedora>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
->> Would you like to choose a corresponding name for such an enumeration?
->
-> I'm not entirely convinced it needs one, as the value names are fairly d=
-escriptive
->
->> Can any other data type be reused for this purpose?
->
-> I'm not sure what you're asking
+On 8/20/24 00:40, John B. Wyatt IV wrote:
+> I wanted to follow up on this since I am close to sending out the v2 of
+> this patchset.
+> 
+> 3 points I wanted to raise:
+> 
+> 1) Does everyone understand, is okay with the SWIG license, and wants to
+> proceed with me sending in a more complete version of this as a candidate for
+> upstreaming?
+> 
+> 2) About maintainership: if I am to be the maintainer of this, how would
+> myself and John Kacur be listed? As a CPU POWER MONITORING SUBSYSTEM
+> maintainer, a separate category below it called CPU POWER MONITORING SUBSYSTEM
+> PYTHON BINDINGS maintainer, or is not needed to be listed at this time?
+> 
+> A quick search for bindings shows what I believe to be all of them for device
+> tree. This may establish a new precedent.
+> 
+> If I was to be added, I assume it would be a separate commit in the v2
+> submission?
+> 
+> 3) I had to comment out powercap_set_enabled
+> 
+> SWIG reported this symbol not being found despite being in powercap.h. I did a
+> quick search and was not able to find it's implementation in powercap.c. The
+> get equivalent powercap_get_enabled is in powercap.c. Wanted to check on this
+> just in case it is a bug or part of future functionality. I am assuming the
+> latter; I would send it v2 with that declaration commented out with a note
+> explaining it for users if there is no objection.
 
-I imagine that more advanced programming interfaces can be applied for
-the management of batteries together with some devices.
+Yes please send a complete version for review.
 
-Regards,
-Markus
+thanks,
+-- Shuah
 
