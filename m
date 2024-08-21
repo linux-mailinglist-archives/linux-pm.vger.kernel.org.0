@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-12666-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12665-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 263CF95A6E5
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 23:41:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E21AA95A6E4
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 23:41:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2CF81F23960
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 21:41:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20C7C1C22781
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 21:41:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F036D17B50D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C8217B508;
 	Wed, 21 Aug 2024 21:41:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="Cvg0iNSD"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="Z/MX8qAZ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E86CE17967F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E872A17994F;
 	Wed, 21 Aug 2024 21:41:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724276499; cv=none; b=fxjQDJvsaScEd7MbY4hbqASetXfTQvH2DdsUFZTYCvgIq8+ec8sbq0pd6keCRkEWi3V0GobHoGHJZ95stDqB/zUf45skQUvjIXAxXAfFgUBDFfTG49HOiluwdXRs3XkQ9AgSkph8Kka9kD6Ib+HgefwYklU0UwgxroAj83bMRD4=
+	t=1724276499; cv=none; b=afroiOn9Y72DCePzOoLMP4Ft7nOp+gabAibvlAxwGSVTkgXmhq68vwCmOS4ET11VaNSS72wZ97vXAlXcXHZk5DXZfkjri36TNqVxqwaJU0JALdcGi4ZVkxXc1KU0PGnb7MkI1xphhzPcRbt4KdTvXahd7F0uAukPAOfh9Y2vNLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1724276499; c=relaxed/simple;
-	bh=MM8bCrHr3sp1qPuqI9phx9Elttw36dc+mou3lvRBSJs=;
+	bh=ibj0CC9kYkZBo2Ogqtrzi7iedyDjmLgyq1IbcoPK8Ww=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BgEjnSuaClZ9ybFifWg/Ltz2dZ1PtQaHMXDvoml/RUd0OVA43A1H1jscA8X+R9RBtyF3SthCzYp7snWhBXa7Vz3XY953K0I2LNAacdW+FeYCrIOdoLgC4hGxnlr1HL5i6MrnK2PdRMYtx9/wzabv/4/SX+wgJYi4Ya9m1xDTH48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=Cvg0iNSD; arc=none smtp.client-ip=212.227.15.19
+	 MIME-Version; b=gTenJPuHPqueO4ak7ufMTCaSlFU++otCe9UfPzzPe/xg8lCxfOhqOCjJp6Iv2vHfcGMoULJCsxktymphnMGW/1fgxgX7QIHxU2J8YWFUt35YnorouhBj+8obJrVaq89XdGxvtNZspbXN+bGJqBSg8ETCYqej9/v7k/TLS8OAWmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=Z/MX8qAZ; arc=none smtp.client-ip=212.227.15.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1724276469; x=1724881269; i=wahrenst@gmx.net;
-	bh=CYaxw6OqWnumzsOX4pTskLMeKldjXRkPxVS7XND9ynA=;
+	s=s31663417; t=1724276470; x=1724881270; i=wahrenst@gmx.net;
+	bh=xtr9kBJY4X3MX0Mx9EKJ4hQqPNtFCg//q2jcoGycQkI=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
-	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=Cvg0iNSD3lobwyOQRxY3291ZvZ3RzXe8nCiwTo+VaSa+C2WrqN41eduqE3ScOQq/
-	 Soz+iMTaoNbAT+n5tia/IPtaPCi+xQxhR36xtlwq4rh3nJ8iYm2wz0hT4aT8X2Mkg
-	 ogUTSXaMQUpvRfKYTK97HMxbh0iuEq9cAIJMFb2+RGLrtWrBV+c1gknboUS2fmCHO
-	 Ba/+tmlqXlNR0VLfVGBmThLT/SiE2/toGRaajt6BhwtMRM5M969XVx4xikoVNO45f
-	 YJ+1hAfOKYp3sImcq+7hRi2bw4z/HnYYEF5ZflBT1cUZadm4VJXVisoer5L33ITEM
-	 4Pc6c4ePXzwBVypdxA==
+	b=Z/MX8qAZtZxMtXrj8ZQNRCPMocCvwxqyKFs7ZMt2FgG2h5/bAoOt9ITT31AArOpe
+	 Nxv32eCf4IYW2JoLIBHyqqNgE7DEClsj4subF5bQ8j4P7lPdd9gydte3yF4OcM5Ze
+	 FBEgH4UUw4er9PJTxXzhxjmx7tljCA/iDkYOjcCUbp9PmXDS16zOLK3O6eExze9P2
+	 8IhQHqdXjQnenNoyW8Ozz4r6+3d0OVeWbZPiTpAiIqLJASK0i8tBbx8KTZ+3QEf0y
+	 Iyt/5XvRnu1UydlbRB6wNtlapW7HTaDTdnQ3238m54Rlw3qm39ZXZ5Z4fTIiuMtQu
+	 is3RtH64Nz7oDvqhCQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M2O2W-1shQF919va-0034DI; Wed, 21
- Aug 2024 23:41:09 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MUowV-1sYKTH1bSD-00RZdv; Wed, 21
+ Aug 2024 23:41:10 +0200
 From: Stefan Wahren <wahrenst@gmx.net>
 To: Russell King <linux@armlinux.org.uk>,
 	Doug Anderson <dianders@chromium.org>,
@@ -74,9 +74,9 @@ Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	linux-arm-kernel@lists.infradead.org,
 	kernel-list@raspberrypi.com,
 	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V3 5/9] drm/vc4: v3d: simplify clock retrieval
-Date: Wed, 21 Aug 2024 23:40:48 +0200
-Message-Id: <20240821214052.6800-6-wahrenst@gmx.net>
+Subject: [PATCH V3 6/9] drm/vc4: v3d: add PM suspend/resume support
+Date: Wed, 21 Aug 2024 23:40:49 +0200
+Message-Id: <20240821214052.6800-7-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240821214052.6800-1-wahrenst@gmx.net>
 References: <20240821214052.6800-1-wahrenst@gmx.net>
@@ -86,68 +86,49 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:h/VZtsIWcUY12L1wpbcwbKWJ694UX0+mLRWUIBBvEgAAesXyQrv
- 1s3VjliBqbjqDa7UOwwHdMamlBfrLd8f1xAnXbC8rBDV6XiJrIrMkSaY5cX6o/LXt4Kq7+R
- RCqB8+/HahurNItDvIwMTOy5x36m8UgUNUD2J0bPyDoI7F1jNYD1w3ozSBFpIpnOay0M26X
- QIJ5OdwUtJCb15T5xWk7g==
+X-Provags-ID: V03:K1:iSPaP7dVaCfkDnoT7GUAk9j0q0tyJQzM/rwNmg7Z2xfsMGZbqOo
+ VA+mt/reSmfRFLwT7nzqjzhmpYuv2iNAFU0WrfbBRh7oygmtYRDCPwt7gzZNz6178FYqj1Z
+ MhwPj6dN/mZ8UP96bfTEYBY5VD/DtsNRcl8lZDGyqK1i02+LbIIVb5IdZZbYqrYTNVp/pfL
+ DwJc9SCFAdLRdZf8Ue0RA==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:Fc0XG+t8WVo=;0+sC399aSpdqdN6OijPXgeXP1lM
- 37ojsJGp+Or4UHep3zHle090l7QrITFyo28t/VW1ePLPcOuMcNJPHBONnn3DMeZkovivi/71s
- xmuCe043h+oXZANUaOi9rKuMXHfpaUXfCqJjQwN5d3n0sgTiGAHLx2m7FFyDMLqEP6PR3BLBU
- J6cxTMM00Jex/qAqkD7cqI9ruwzt7GdFqlQIFJ3OZTJZesaJZtZYcztR63sKl7xOqUzGMY7Mu
- XJhjRKzPmk7KQXWAGBkWNv8TW+wCH/v7wFZkqDaM/c1+q7BNwa3ixs5+a5IuwKIL9JPZnrUBd
- ZXhFVY5K/viwOuSOMCVWR44YPXDdGcx3iAOmLdJpJeOTLIxcogLrulESd5aRE/WF2zQFsc3Tw
- Vr0m4IBxFiVS3V0MkLN5wvGMvtcWhsw2IBHmr6atzE96p23mL8LSn9FrdRdl49UPtSwT48eFr
- 9kQL4fQvObVhxoAsH2v0miTqqywBQxIwleOKEP/giUQ7nDyobOk4+TMy/4Th0Bu8fQOYPoH4r
- i3KSutvsSH7N6kb+tD2Wf1PQOk12/FRO9oUQL/hbfgzMQzDY43ieCwTgJQ6mdkZDrwHNP4rhC
- /l8kgE37R4POrxo5/uA8WvBYssaBtKX1Ot3pErcyOySLra+7hPwFcdD7Hq/3fDzv/2HntXw/J
- AiSklyGe8UK7Q5OFC27NHsEA65DLJJlHmkBKRnhvLhdaSI9HoL9NZQBpqivv7QApfoMpxIV76
- 2d5+fleTg3XGCcTP0cW/flpTX26aXEIgKeJY9oSYvUcMcRbG4J8SkFl66mfEDJEUtz+5KGp06
- mQcgX0o1fLnCqQ1f526evBEA==
+UI-OutboundReport: notjunk:1;M01:P0:4UDfCApTLZQ=;aJrzXp9h9WhNB+elsrHTYRy3Md2
+ r9kE2lmHUV26gNoEIb1tt2s2fVD7YJ1Ukbh8ty+TWHFUAUetbn1/b7VgoSHIaogfuASIOD/L3
+ HKFJLnB0hFjf05wlawN39Z5waRP1p1s0o+BIEmXn9QUx4432EsU24dBw13sbs62BKqGxrNKcq
+ RqxdVAFQmb+HSWbcwMj40CcWiT0ov+Cqmzza6G0ERu0skiGZYYCWTr4MGh76HPSiSBEAtcqYH
+ 1DU+gnxHAms6+5FjFxDdXigwG6kPlqTy3pu7ghG63eU65hQH5R4bLz6V7cUoBaua4sN/gr09S
+ YS1POifAXIafYl2zp6jYhFv7BU2/XtC3u7ziHR9xkBLgsbLl7vBpTv0Y+PaTuMJwWRvaGyDdR
+ mzl+eas2HYBd8k0Yg39hkG0auRrZGyYrKyYlBlhG+14wHYIGnH+YeJIuKWWQv8Xcizc+meqJF
+ GrwjfWoI1xKeSQvEoPwf08BiOWwgJJ4tBjDuDgYDvqzu7uDv33KhR2//IjATUAN0a7Zw0rUvH
+ rxAbX4dyoXrwGHj9dO0VxzvX9VTq2SglgGDpeCDVRjTk+grVpmXxFEXomR8Z08RzLEtYosBY/
+ gKGlDXmj7UvWk3XskMzplcnOSIuYslJj8DTdltw6EaZctK8JDyROs13+HZbpyHqDA6T9QKa9c
+ qeIlX1faYECptTsqdbSOnfaqSr2DLpQ8JM7PJhz0B1V11L6RV/UedmFfHR593FVUla3x54nDI
+ 5axOARxueG0DQHPDpBa3KCIbBbKUZQAYlcMH5mS9/pDnM105mM7acw/Uw51M70xtHZ6zDQAMy
+ cRjssMTKltIdFrd2ZuQh0EJQ==
 
-Common pattern of handling deferred probe can be simplified with
-dev_err_probe() and devm_clk_get_optional(). This results in much
-less code.
+Add suspend/resume support for the VC4 V3D component in order
+to handle suspend to idle properly.
 
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-Reviewed-by: Ma=C3=ADra Canal <mcanal@igalia.com>
 =2D--
- drivers/gpu/drm/vc4/vc4_v3d.c | 18 +++---------------
- 1 file changed, 3 insertions(+), 15 deletions(-)
+ drivers/gpu/drm/vc4/vc4_v3d.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/gpu/drm/vc4/vc4_v3d.c b/drivers/gpu/drm/vc4/vc4_v3d.c
-index 6e566584afbf..bf5c4e36c94e 100644
+index bf5c4e36c94e..03c790f7ffc6 100644
 =2D-- a/drivers/gpu/drm/vc4/vc4_v3d.c
 +++ b/drivers/gpu/drm/vc4/vc4_v3d.c
-@@ -441,21 +441,9 @@ static int vc4_v3d_bind(struct device *dev, struct de=
-vice *master, void *data)
- 	vc4->v3d =3D v3d;
- 	v3d->vc4 =3D vc4;
+@@ -508,6 +508,8 @@ static void vc4_v3d_unbind(struct device *dev, struct =
+device *master,
 
--	v3d->clk =3D devm_clk_get(dev, NULL);
--	if (IS_ERR(v3d->clk)) {
--		int ret =3D PTR_ERR(v3d->clk);
--
--		if (ret =3D=3D -ENOENT) {
--			/* bcm2835 didn't have a clock reference in the DT. */
--			ret =3D 0;
--			v3d->clk =3D NULL;
--		} else {
--			if (ret !=3D -EPROBE_DEFER)
--				dev_err(dev, "Failed to get V3D clock: %d\n",
--					ret);
--			return ret;
--		}
--	}
-+	v3d->clk =3D devm_clk_get_optional(dev, NULL);
-+	if (IS_ERR(v3d->clk))
-+		return dev_err_probe(dev, PTR_ERR(v3d->clk), "Failed to get V3D clock\n=
-");
+ static const struct dev_pm_ops vc4_v3d_pm_ops =3D {
+ 	SET_RUNTIME_PM_OPS(vc4_v3d_runtime_suspend, vc4_v3d_runtime_resume, NULL=
+)
++	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
++				pm_runtime_force_resume)
+ };
 
- 	ret =3D platform_get_irq(pdev, 0);
- 	if (ret < 0)
+ static const struct component_ops vc4_v3d_ops =3D {
 =2D-
 2.34.1
 
