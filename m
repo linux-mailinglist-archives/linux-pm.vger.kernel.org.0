@@ -1,101 +1,119 @@
-Return-Path: <linux-pm+bounces-12619-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12620-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70E4D95993B
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 13:13:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE46D959946
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 13:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 272BD282B15
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 11:13:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65C8FB25C86
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 11:14:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4ADB2034CB;
-	Wed, 21 Aug 2024 09:44:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B32D1CDFA0;
+	Wed, 21 Aug 2024 09:46:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EUSCZApj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F802034BA;
-	Wed, 21 Aug 2024 09:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F4622049FC
+	for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 09:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724233452; cv=none; b=fRo01+A+Fu2jAdBDYHSgmme8f0X7m/giDeGfc8Y1JNjONxOZzTu5ZUbxXgHHn2nT4luOuTW/qPqWJ4TXPMrEticFhGZEQzu9+gakwgc9Tv0AxPnlTp/WC0a/BsH6OdIK7tA7dnd7jHZCt7CxQKZ7GedSQxAlStF2+u2LlUJRWlI=
+	t=1724233601; cv=none; b=dh3G1XbI2v4J0t8sHG6NtqLY1LA2eQgE8X2EarbqUuue6kQEooEUqhlXAT/xuCQ4G39xf0GtVakksWsP+aDc/X2iCZwhUHBXmaRTqL5ERco1ALi5hrgdUP60S2HnGaBaEFqUOsciQ2XQNz0CpzVyqzKY+p/XSfaIdDXzBHsg7dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724233452; c=relaxed/simple;
-	bh=Zka2nUbhX8rAlsL9boNe6OWXAy8Hqq9Riz4Gon1WzIQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=EsGSdk0HnyQSxYJMg2u9y0YyHF7aylX0GxtUTiuQZKiO46j1y0h5wlxRPxJ+OhaMpjZ8fNhzXb755xV3rffVLzIWdNfDsGDlVRMd/zVO2wwlT6FcuI1LBpM78rYijXb6/kBqnHRrEAqOcpW7NsBGrv95aL6QanHVt5TmhlRGZ9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4WphHS5Srwz2Cn70;
-	Wed, 21 Aug 2024 17:44:04 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (unknown [7.193.23.242])
-	by mail.maildlp.com (Postfix) with ESMTPS id 067781400CA;
-	Wed, 21 Aug 2024 17:44:07 +0800 (CST)
-Received: from [10.67.121.59] (10.67.121.59) by kwepemm600004.china.huawei.com
- (7.193.23.242) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 21 Aug
- 2024 17:44:06 +0800
-Message-ID: <8744a789-0424-0cc6-7cb1-b7c9b17f56cc@huawei.com>
-Date: Wed, 21 Aug 2024 17:44:05 +0800
+	s=arc-20240116; t=1724233601; c=relaxed/simple;
+	bh=BeUoU194BZUhvcq1kg/E3j+ujWEBXrWE0L6BlKD9NrI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MORlt1pA/ul2begvEtSYD1EFlRIcMtSHeqgysflvNSdWweFUA3aZnrGicmDOnPcJQCqFEefkVMZ8C8VqzTEn8FVhBD9mjSXnA4tJUqGuQpaBFdkFU+X7sZxXUpZtDA1XNERZkSJ+y7vzEmMEFdiCFr3buOqBi8Wp8fHp6Iqqogc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EUSCZApj; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3719398eafcso3398435f8f.1
+        for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 02:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724233598; x=1724838398; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dc6gXl7afmiTMHEcwYKOq3h83oQ7HnViCn1ZWHpe8CI=;
+        b=EUSCZApj/3+rHNDsg/cdL+EFl+ApZuH0a6fL737JGX1LU3BmfeXYsLALGMeqZPdm8c
+         xPSmd3tqj0ERSl4Xh1hJd8GDwZes1a8zRpmHb2IfXucG0OnansrjArSD7IwXnJR39t/t
+         msLwXe2NcuJrnm0LhnR6vig1GParesgYuF8FpMTIIjE4QNQ4MFPqzxDbbGUj9LSgMRzf
+         RiP1n7WhAbCR6HOgcc1aEd1gngL7RGI4nKavGOHzEEl/cE00nqejtl/U+KA/bq7hT1b8
+         ML4MFUJME2WQz1oSfF/K8iFILHF2FPYu1s8s/0Usgo/8XU16u4v6gQ5elO5GwToZ+RUy
+         yujg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724233598; x=1724838398;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dc6gXl7afmiTMHEcwYKOq3h83oQ7HnViCn1ZWHpe8CI=;
+        b=WPqhF+Mqu9cz0vReXxnGmKvQe7ZO9KGJN8Hsb4WK3dce9AttcbIXd3EEttNHNnRE+z
+         kIMSZyAXgxURWP6QIte8Be29FVtRFT6Z2CfhwacWcZigrp002f84yIfvoe1tBm9VCAJZ
+         t93WIyzL5WocO10zNi7tn29gn7q49xu19FCb3yQJzl9uWy+MxQCYNNkMr0FKg/CsUNun
+         HUpA1Q5YqjV0/PXF/J7uf6i0AOPTl2/vSvDVlitKJGQ5Zf2XH1mLHtP1V399C6hZhfCb
+         cCbDTax5rr59jNUXXNf1jVmI0AXpm8y8kM1AhiXl4q5glcs9xVMTT8QOJhhi4YUkvBj6
+         ap/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUpFjS+z89NUgPVzU5n+tKsSSHAFSNRkwAWbs5tiDm+Vljtly5LgrGmZ0zDp8UvEHEeeRD1aeEUGQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdT5E5Ngxjc/XQIq3lYleZCSBVivT6olxJ1XnOwplIIh+2b8GY
+	Ldl0aNWyOPZwweOuiPTL3P0W71iiItN+aNjttfmT2siNW4nOnNoQdR1apND73JA=
+X-Google-Smtp-Source: AGHT+IF+Gf25/pZkkWXOobGnXP58MOyKd9peUCyMEC1yOv70kxFdseHl6o0ZoJalCfu73J0VdYKV0w==
+X-Received: by 2002:a5d:5263:0:b0:34d:ae98:4e7 with SMTP id ffacd0b85a97d-372fd71deedmr984879f8f.41.1724233598029;
+        Wed, 21 Aug 2024 02:46:38 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-371898aac62sm15128026f8f.101.2024.08.21.02.46.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Aug 2024 02:46:37 -0700 (PDT)
+Message-ID: <da144002-f1bf-4463-a626-00a97615990c@linaro.org>
+Date: Wed, 21 Aug 2024 11:46:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v3 02/14] thermal: core: Rearrange checks in
- thermal_bind_cdev_to_trip()
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, "Rafael J. Wysocki"
-	<rjw@rjwysocki.net>
-CC: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
-	Zhang Rui <rui.zhang@intel.com>, Linux PM <linux-pm@vger.kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 05/14] thermal: core: Move thermal zone locking out of
+ bind/unbind functions
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Zhang Rui <rui.zhang@intel.com>
 References: <2205737.irdbgypaU6@rjwysocki.net>
- <3324214.44csPzL39Z@rjwysocki.net>
- <68ed6185-a602-c0fc-721e-b5d68fea83f8@huawei.com>
- <66bb19a0-00ba-40a5-91ef-73368659b30a@linaro.org>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <66bb19a0-00ba-40a5-91ef-73368659b30a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+ <3837835.kQq0lBPeGt@rjwysocki.net>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <3837835.kQq0lBPeGt@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600004.china.huawei.com (7.193.23.242)
 
+On 19/08/2024 17:58, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Since thermal_bind_cdev_to_trip() and thermal_unbind_cdev_from_trip()
+> acquire the thermal zone lock, the locking rules for their callers get
+> complicated.  In particular, the thermal zone lock cannot be acquired
+> in any code path leading to one of these functions even though it might
+> be useful to do so.
+> 
+> To address this, remove the thermal zone locking from both these
+> functions, add lockdep assertions for the thermal zone lock to both
+> of them and make their callers acquire the thermal zone lock instead.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 
-在 2024/8/21 17:28, Daniel Lezcano 写道:
-> On 21/08/2024 10:49, lihuisong (C) wrote:
->
-> [ ... ]
->
->>> -    list_for_each_entry(pos2, &thermal_cdev_list, node) {
->>> -        if (pos2 == cdev)
->>> -            break;
->>> -    }
->>> +    lockdep_assert_held(&thermal_list_lock);
->>> -    if (tz != pos1 || cdev != pos2)
->>> +    if (list_empty(&tz->node) || list_empty(&cdev->node))
->> The old verification is ensure that tz and cdev already add to 
->> thermal_tz_list and thermal_cdev_list，respectively.
->> Namely, tz and cdev are definitely registered and intialized.
->> The check is ok for all untizalized thermal_zone_device and cooling 
->> device.
->> But the new verification doesn't seem to do that.
->
-> If the tz or the cdev are registered then their "->node" is not empty 
-> because they are linked with the thermal_list and cdev_list
->
-> So either way is browsing the lists to find the tz/cdev or just check 
-> "->node" is not empty. The latter the faster.
-Assume that tz/cdev isn't intiazlized and registered to thermal_tz_list 
-or thermal_cdev_list. And then directly call this interface.
->
-> Did I misunderstood your comment ?
->
-> [ ... ]
->
+Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
