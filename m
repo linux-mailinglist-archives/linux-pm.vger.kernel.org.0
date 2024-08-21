@@ -1,361 +1,140 @@
-Return-Path: <linux-pm+bounces-12659-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12660-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57CC195A636
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 22:55:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3343E95A6AB
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 23:32:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04C3528748B
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 20:55:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA2B8B224D7
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2024 21:32:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571CD1741CB;
-	Wed, 21 Aug 2024 20:54:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="WLoE6q+z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDEA178CE2;
+	Wed, 21 Aug 2024 21:32:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CB1171089
-	for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 20:54:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D7317B501;
+	Wed, 21 Aug 2024 21:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724273698; cv=none; b=cWllaAVnMLIavjN9+eeafx5LnUMrXYVx1oiTbyTAQ01Q7cTj3ISlDnahMP6ypU6QoURmGrrRuGbgS9z15k+m8fa+ip++3BdOqLCmCvF78knQ5qSQz3KOB2bXvesfujakTwiwGh6m62hghQRCbgpEkuytRmxF88kYG+WajC/1Dh8=
+	t=1724275941; cv=none; b=TxH9r2iVgcXtNJH9hugnCzE14ltzTQcc7DCkslKebaj7qEWLL7YlmOW6uPWT9UIKFkp+MMBeCc2L/RJm2NWICziPJacXK82Km6HVeNuVi4qwy2xXa9ujHMH5B7JP+g16Y2OuK8YNIKQS0Ups+fmiyASKk9IWS0maDR71TYdzPfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724273698; c=relaxed/simple;
-	bh=S9SKo+pke1l2/Ufw+DboCFrR2att7AQBPsujnfwmAS4=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=ZDz0YleI2fLJfz6vrS0DFUB3fXR6DCqJnwuZ/wAZxFigEcbs7RbYPs4p8kQmDS//iT9+OgQzHBzf59fOAs0DZ/XwpfqnSiwfziJsRl2sHDR2CkIdUs+jIVsPXyNNw/w6nZSZySWB8VUIk4p7aGnbNC01lwikI3gcrrz+6h3r3nQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=WLoE6q+z; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-39d47a9ffb9so370765ab.1
-        for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2024 13:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1724273695; x=1724878495; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=MYR3FZrbm7ZbECMDVKfBOotCzlugr9vc0sg5bZEeoTg=;
-        b=WLoE6q+zwSVW6K5dQvsFZs4FGphg20snYmJ/u62HB4IinQOruGI9BIsZv1sfHuwdHx
-         esF7zkG/okAs0XW9uX6QYs9FeoxZamt1N1qiznGgYm4pXUp847HUNdptQDJn0YVT98GM
-         BOIz1U05kKp+PS4KjxjJYb0GnOnWof0cNdiiCPYhXsd8gHbRSCupM+J9pggBcC0goIzy
-         kEM6jTCeFc1hv2wT9mWR9zfWs0Z+PmAmR17/dftAUF5C6jgGkBzS0FcyFzpS6HQOMi3Q
-         88PGyzWvj9dlwrPINOOHqglBRMWOofFRGiyEeBKR4IrNWqolyj4D9zL/7ZtNz2gFI+X2
-         19gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724273695; x=1724878495;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MYR3FZrbm7ZbECMDVKfBOotCzlugr9vc0sg5bZEeoTg=;
-        b=u5p5FQa/wu6z4oOYZe/462hJGYDDdZM6pd6QSeAuLrFHOBAbCMLtDRbRp0mUNAlBwN
-         /V1jdnBH1LAEQX20XTnJfQ+GL6S40XD1FpjVAbR1EG13oTIyUBIhSFAUaqvSm2EfPibz
-         zYkKJezwL0JW5IdjyuM2GAjpcDTYCu09DvI36+o7iOYRKPg2CdIlvQ+kR7E+QNczPcDX
-         1UMf91ZWXhUnKqhi0AHIof92vRPJXMK6kbc+Rw+nNAIwUrZ506QIi4jF4eN44eCXEwzk
-         UC27jIbkIgnR9QD3+ooauI7QmqJYVPow4idOO4RYBDKtLada3to9GWuJAsGIrGclT98p
-         oczQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWZRfwYMkaXUVUwvX21thCqwxDfWv5HVazKV1AI4uUqTJmdehFPhhPWFq8J9rwAn2a+TsfV1dhEVw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUjRmE4MLcTcFLqbZFa3cHLXZk+Z1f1ZTFEtGIusbFbM1tGPL9
-	PYumzuh+SE86vy9R4L6oaK3TDioUdnx6qw0hV8HwRZ087CHuNJ6O0vTqIbm9me4=
-X-Google-Smtp-Source: AGHT+IFUaAdzt/add6u9EwFHB5BHmpvuFlYHDmToeaXOqs/XB3RmMJ6w9x07tyhqJFSb+qOtOkCotQ==
-X-Received: by 2002:a05:6e02:20c2:b0:39d:113d:71e6 with SMTP id e9e14a558f8ab-39d6c3586f8mr40590135ab.3.1724273695292;
-        Wed, 21 Aug 2024 13:54:55 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7cd9acabbf3sm39098a12.29.2024.08.21.13.54.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2024 13:54:54 -0700 (PDT)
-Message-ID: <66c6541e.650a0220.12a61d.045f@mx.google.com>
-Date: Wed, 21 Aug 2024 13:54:54 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1724275941; c=relaxed/simple;
+	bh=x7G1HPWBcIlhyvYZes/Omld/2DwH+wIwRenyzvJjB2A=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=cGOddxHloePxhkwoEzykl8Xz87j21oby2CNhffcjhF1qZva3xNcf0PNV+PYBtFUPEdTQJmjkh1lbWmBpI6YCJct2GmbI504xi0erCRzdXos95gibjiw4T0CGYVDxeDchUBB+i3fZzRw+hSNQqv0l+GZqE3PMU+Nk8brtPMPLTtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.2] (ip5f5af4d2.dynamic.kabel-deutschland.de [95.90.244.210])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id E569161E5FE07;
+	Wed, 21 Aug 2024 23:32:05 +0200 (CEST)
+Message-ID: <38b871f7-8583-4b9a-940b-ee33a1b6206d@molgen.mpg.de>
+Date: Wed, 21 Aug 2024 23:32:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.11-rc4-64-gd59a2908cfee3
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing baseline: 32 runs,
- 7 regressions (v6.11-rc4-64-gd59a2908cfee3)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
-
-pm/testing baseline: 32 runs, 7 regressions (v6.11-rc4-64-gd59a2908cfee3)
-
-Regressions Summary
--------------------
-
-platform                     | arch  | lab         | compiler | defconfig |=
- regressions
------------------------------+-------+-------------+----------+-----------+=
-------------
-imx8mp-evk                   | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-imx8mp-verdin-nonwifi-dahlia | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-meson-g12b-a3...libretech-cc | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-meson-sm1-s90...libretech-cc | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-rk3399-roc-pc                | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-sun50i-a64-pine64-plus       | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.11-rc=
-4-64-gd59a2908cfee3/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.11-rc4-64-gd59a2908cfee3
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      d59a2908cfee32b60bd9891f81d2c0afce265795 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig |=
- regressions
------------------------------+-------+-------------+----------+-----------+=
-------------
-imx8mp-evk                   | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66c64e569124ff02d4c8687c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66c64e569124ff02d4c86=
-87d
-        failing since 0 day (last pass: v6.11-rc4-45-g5807af07cb47b, first =
-fail: v6.11-rc4-62-g96051083f54ab) =
-
- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig |=
- regressions
------------------------------+-------+-------------+----------+-----------+=
-------------
-imx8mp-verdin-nonwifi-dahlia | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66c64b19bc23ea98b7c86855
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-imx8mp-verdin-nonwifi-=
-dahlia.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-imx8mp-verdin-nonwifi-=
-dahlia.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66c64b19bc23ea98b7c86=
-856
-        failing since 0 day (last pass: v6.11-rc4-45-g5807af07cb47b, first =
-fail: v6.11-rc4-62-g96051083f54ab) =
-
- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig |=
- regressions
------------------------------+-------+-------------+----------+-----------+=
-------------
-meson-g12b-a3...libretech-cc | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66c64b4abc23ea98b7c8685e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-meson-g12b-a311d-libre=
-tech-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-meson-g12b-a311d-libre=
-tech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66c64b4abc23ea98b7c86=
-85f
-        failing since 0 day (last pass: v6.11-rc4-45-g5807af07cb47b, first =
-fail: v6.11-rc4-62-g96051083f54ab) =
-
- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig |=
- regressions
------------------------------+-------+-------------+----------+-----------+=
-------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66c64b94e2a7e49c74c86855
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-meson-gxl-s905x-libret=
-ech-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-meson-gxl-s905x-libret=
-ech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66c64b94e2a7e49c74c86=
-856
-        failing since 0 day (last pass: v6.11-rc4-45-g5807af07cb47b, first =
-fail: v6.11-rc4-62-g96051083f54ab) =
-
- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig |=
- regressions
------------------------------+-------+-------------+----------+-----------+=
-------------
-meson-sm1-s90...libretech-cc | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66c64c62a5f91b8d48c86855
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-meson-sm1-s905d3-libre=
-tech-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-meson-sm1-s905d3-libre=
-tech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66c64c62a5f91b8d48c86=
-856
-        failing since 0 day (last pass: v6.11-rc4-45-g5807af07cb47b, first =
-fail: v6.11-rc4-62-g96051083f54ab) =
-
- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig |=
- regressions
------------------------------+-------+-------------+----------+-----------+=
-------------
-rk3399-roc-pc                | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66c64b36bc23ea98b7c8685a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-rk3399-roc-pc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-rk3399-roc-pc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66c64b36bc23ea98b7c86=
-85b
-        failing since 0 day (last pass: v6.11-rc1-12-g7a7f6947f545, first f=
-ail: v6.11-rc4-62-g96051083f54ab) =
-
- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig |=
- regressions
------------------------------+-------+-------------+----------+-----------+=
-------------
-sun50i-a64-pine64-plus       | arm64 | lab-broonie | gcc-12   | defconfig |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66c64c313bd1358245c86856
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-sun50i-a64-pine64-plus=
-.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.11-rc4-64-gd59a2=
-908cfee3/arm64/defconfig/gcc-12/lab-broonie/baseline-sun50i-a64-pine64-plus=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/66c64c313bd1358245c86=
-857
-        failing since 0 day (last pass: v6.11-rc4-45-g5807af07cb47b, first =
-fail: v6.11-rc4-62-g96051083f54ab) =
-
- =20
+User-Agent: Mozilla Thunderbird
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: USB-C adapter like Dell DA300 using > 5 W
+Content-Language: en-US
+To: linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Dear Linux folks,
+
+
+On the Intel Kaby Lake laptop Dell XPS 13 9360 with Debian sid/unstable 
+and *powertop* 2.15-3, connecting a USB-C adapter like Dell DA300 or LMP 
+USB-C mini Dock (P/N 15954) [1] and connecting only an Ethernet cable 
+(module r8152 is used), the adapter gets very hot, and according to 
+PowerTOP it uses over 5 Watts – almost more as the laptop idling.
+
+     $ lsusb
+     Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+     Bus 001 Device 002: ID 0cf3:e300 Qualcomm Atheros Communications 
+QCA61x4 Bluetooth 4.0
+     Bus 001 Device 003: ID 04f3:2234 Elan Microelectronics Corp. 
+Touchscreen
+     Bus 001 Device 004: ID 0c45:670c Microdia Integrated Webcam HD
+     Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+     Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+     Bus 003 Device 002: ID 2109:2820 VIA Labs, Inc. VL820 Hub
+     Bus 003 Device 003: ID 06c4:c412 Bizlink International Corp. DELL DA300
+     Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+     Bus 004 Device 002: ID 2109:0820 VIA Labs, Inc. VL820 Hub
+     Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. 
+RTL8153 Gigabit Ethernet Adapter
+
+With `LANG= sudo powertop --auto-tune` it stays high.
+
+PowerTOP:
+
+```
+The battery reports a discharge rate of 6.01 W
+The energy consumed was 146 J
+The estimated remaining time is 3 hours, 51 minutes
+
+Summary: 384.6 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and 
+8.5% CPU use
+
+Power est.              Usage       Events/s    Category       Description
+   5.94 W      0.0%                      Device         Display backlight
+   5.23 W    100.0%                      Device         USB device: USB 
+Optical Mouse (Logitech)
+   4.62 W     66.1%                      Device         USB device: USB 
+10/100/1000 LAN (Realtek)
+   205 mW    100.0%                      Device         USB device: 
+Fujitsu Keyboard (Fujitsu)
+  14.1 mW     13.5 ms/s       0.9        kWork intel_atomic_commit_work
+```
+
+At another time:
+
+```
+The battery reports a discharge rate of 10.5 W
+The energy consumed was 235 J
+The estimated remaining time is 2 hours, 20 minutes
+
+Summary: 395.8 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and 
+23.8% CPU use
+
+Power est.              Usage       Events/s    Category       Description
+   7.13 W    100.0%                      Device         USB device: USB 
+10/100/1000 LAN (Realtek)
+   3.92 W     15.8%                      Device         Display backlight
+   320 mW      0.0 us/s      0.00        Process        [PID 1349] 
+/usr/bin/pipewire
+  63.6 mW     65.4 ms/s       0.5        Process        [PID 4982] 
+/usr/lib/thunderbird/thunderbird
+  24.9 mW     25.6 ms/s       6.7        Process        [PID 37753] 
+/usr/lib/firefox-nightly/firefox-bin -contentproc -isForBrowser 
+-prefsLen 36793 -prefMapSize 265654 -jsInitLe
+  14.7 mW     15.1 ms/s       0.5        kWork 
+intel_atomic_commit_work
+```
+
+The heat of the USB-C adapter might suggest, that it draws that much 
+power. What is your experience? Can you suggest something?
+
+
+Kind regards,
+
+Paul
+
+
+[1]: 
+https://lmp-adapter.com/product/lmp-usb-c-mini-dock/?attribute_pa_color=silver
+      "LMP USB-C mini Dock (P/N 15954)"
 
