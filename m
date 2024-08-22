@@ -1,136 +1,116 @@
-Return-Path: <linux-pm+bounces-12744-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12745-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD9B495BA75
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 17:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F43795BAFB
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 17:51:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07A1D1C236FC
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 15:33:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E4231C23747
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 15:51:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED741D1F65;
-	Thu, 22 Aug 2024 15:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93B1C1CCB33;
+	Thu, 22 Aug 2024 15:50:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="eNET13nc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uRMaQutq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D27C1D1F47
-	for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 15:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD9D1CCB31;
+	Thu, 22 Aug 2024 15:50:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724340533; cv=none; b=K5pQWOWzRms0oDCG5VfvvBDOqHarghLPHIwdiGJQyOzc5Mv7woRClFwaXssrnam1ZZbdlAHXEq9xr1xBcygYQHWNesaGTfS4/e1L5sNIkrJB/TKuVyyTzj3wIJyRQkqIVl7GGaQAb78yueyasWwhUdWdxXiZfDnm5Kuf4RIs0V4=
+	t=1724341837; cv=none; b=rETusxHTJQ5Kkqxyw4pdvbe/W3KDHEnCPXuF0sxxdoDXzcDiLZKK2Vi4Z6FhkPH9T8LnjllEzjKraR7OZ9o2INj2Uk0iDc5esiNBbwPBWIbUXIjut7EKEgXz71e0iyeZ/yzqttGn/2WAtlmjWcM/ZYCnZgB9fB3kPtb+7SFZiJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724340533; c=relaxed/simple;
-	bh=EuKZSKvEQCXDCZNoMj0d43yKeS+Y83/X3kJnCx6rqMY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Zw44P873qSBtS76C2dx92pfxXSR2NOH8MElfKoLJDFlnY+5wvK5jLI+T43YZldrDC3r7Be9Smdj3JfMXFgSE6KPGfG2PqTO7uxZ9+1osk3Qj+RL7m1qxng/m6/Mvdny3mCtzGy9sTr7uUJcozGyxirzBkvBHSr5fgnqEUt+ROOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=eNET13nc; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-37198a6da58so581023f8f.0
-        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 08:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1724340530; x=1724945330; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YzzVJZseYqmAj3uluQhRMecpWI1dTsj4zEH1FZKD0d4=;
-        b=eNET13ncH98OLgbcdG0m6G74QdeBkl8ixJZo/ljhZqeBccGQmKVF2xjxOfTCK9JqF6
-         jskjXJaLSX7pARiTsCNZstW3xjf2GH+X03ldyAeJjGcAc5nUkmOy/mBnGw1utLurYAkS
-         du7Rt4CBkpic6xozXZ6BCihFhHIHyfzVGS2u3PZghi9I7RI9OUHy8hAxENHmVmwZFFNC
-         wpCTHMj97ffi4DP6tpXp34qtdAke1+gnCtc88qDa+74iGJCcSqaXI32t/7PDWlkTJIaG
-         Qt2Px8RBAoaWVk72CUoWckj5vp6z5z0m1AE37fhec+fuSEdOy8R8oTCIfy31Tb/bF1Kw
-         3uFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724340530; x=1724945330;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YzzVJZseYqmAj3uluQhRMecpWI1dTsj4zEH1FZKD0d4=;
-        b=hHUnQdZWkPyLu8AEWezsFG1b2d0uTKxgZOfLA0C+bSrVa7ZA41/jGwHWU/rAhY4WSu
-         J66u1ZyBZXLMcz1e8fJ2511UjPLym6hXjD5zDhtr1biH3oJ1JSercne/wMwxz86euDxP
-         YFzbmICXugwxjqpzlNRE9zM4MUwHggZlrAyzXsaEO1sUHZqqGy52Qzi5z7vFYTrE5ck4
-         EPiDTCdMXHaqzDuGUL76pBJp1UxgnKNUg+qUaXIwdS60hNC2l81HGYccguRMgqtDzL8b
-         YZTsKz5Gif9UdoeN82VPprFlhzKQoxKg4dE3XcnjfvuCMLv0sIkgfp15zH1xdH/a9Znn
-         DFdw==
-X-Forwarded-Encrypted: i=1; AJvYcCURGdgO0z7Bf6MLWEdJvxGNJyjXZTayE2RQ9oZYHvBgl926ZZqYIm0xKLwEfmBCTV/gPHTmM6ND4Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmJEXGCkf+rh/Tn8AX7EnYPwi29ydUHtZ5dPA/1evGJa0icPmb
-	1EVmmGK/3g2kkY636tTZBPnHqbDi9DgfQpEDpuStB5ht6W9ctG79dQgmdJGalN3JjILnwStyz2k
-	/
-X-Google-Smtp-Source: AGHT+IHCUCn+biQIAnOUlxWOCjXAVeKX8ey9d7uY1NWlOsuugSxvOZNpC2pcgsn0KfGk8KOYuf8lZQ==
-X-Received: by 2002:adf:a416:0:b0:36b:3395:5363 with SMTP id ffacd0b85a97d-37308c1826emr1937317f8f.16.1724340529907;
-        Thu, 22 Aug 2024 08:28:49 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.177])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a868f484dc5sm134189166b.171.2024.08.22.08.28.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2024 08:28:49 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: vkoul@kernel.org,
-	kishon@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	p.zabel@pengutronix.de,
-	geert+renesas@glider.be,
-	magnus.damm@gmail.com,
-	gregkh@linuxfoundation.org,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	yoshihiro.shimoda.uh@renesas.com,
-	biju.das.jz@bp.renesas.com,
-	ulf.hansson@linaro.org
-Cc: linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH 16/16] arm64: defconfig: Enable RZ/G3S SYSC reset driver
-Date: Thu, 22 Aug 2024 18:28:01 +0300
-Message-Id: <20240822152801.602318-17-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1724341837; c=relaxed/simple;
+	bh=j8BItr8qFtlFL1i1wA14p7v59VTidcPk+3dA1wLsBGs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Qnm9UTSW6Xr0X8fgfAh2Fy57ydPS+CG+4gHlM9J3HW+z+XeLB9OVKbowSLg3koQ8gC5XaVoklCRt23XVSZH6D4Dqe3LO4E7sYainphyhJ2vO8mCEWDkA0rFFx9UCz/b3ydfQ+n12qMYJ4nyLHcumodOGIW8Nd55Lsyl796C6jj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uRMaQutq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5757C4AF0F;
+	Thu, 22 Aug 2024 15:50:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724341836;
+	bh=j8BItr8qFtlFL1i1wA14p7v59VTidcPk+3dA1wLsBGs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=uRMaQutqD5WYFpv4feT6N9WxoNflY2zLsR6qScI6+8mpt7U+3aOC5FzdfXtAtOP/0
+	 8O4PFkoFzLCbgJ8066FAhR04P3zQuXZTe2+f91/NYls0v9lCcWCBM9AhDy3oOu1CcR
+	 2fc4ubI8NooFvaySUQwp6+xG8DvbtP8TLl73g3URb6g7UYSTkg0bNARU1Y3CiDEZu/
+	 JNFKK9TMBk+wZUVd0muGnQZmszchzfTLBrG1INisXEoINFDe72Z/ncjfHYF5ZAFXdd
+	 0CEV5UnIHRAtknLPT/Iq6rY2Ek3UPONkqC18JJQaJcZXw3/ykGYj4vlUDFguBW7eKM
+	 XcJ7ZVQzFGvPg==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-270263932d5so650211fac.2;
+        Thu, 22 Aug 2024 08:50:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUklm1dLjATZZ6HRt6idUObsM79bXiLs+cc+lTvYMuTsgEps1Emvut1PEJiYA6CtqYnf8QSm4MTpgDkQpk=@vger.kernel.org, AJvYcCWSABJyhHZkTB1b8PulWmSThV7JhNfGpBHvvCHDJVk8/L9TFZYQRBf90jjC7RSX2DgGbk0p0tOz7iA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8iGqpPLFU90KG3zkF+vP+KTDF8ImQGCGMhi17/0r80W7y+gyT
+	bQ93rnzAZLoN7Pvbeu3Z7pDF9WgnbTio7RykGBp5tzJKS8JkMRya3QKWnjEpTiANCMvCpLs20fN
+	4pCpTx1D8EK8QTWvvjfda3GZmhw8=
+X-Google-Smtp-Source: AGHT+IEjEtp8txbNTSVDAbESD159H3Xu4niXJ19/74sWzyDg/UqldA1uz+kuK2FvIRx8CoFpw4jJGKn2F6acQ3ReYOE=
+X-Received: by 2002:a05:6870:9123:b0:25d:8d4:68ab with SMTP id
+ 586e51a60fabf-273cff4655dmr2938204fac.40.1724341836263; Thu, 22 Aug 2024
+ 08:50:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240822012903.57986-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20240822012903.57986-1-yang.lee@linux.alibaba.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 22 Aug 2024 17:50:24 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gtvcH4ukBxwyPYOqGxJ5zKwLiuedFwGmquzm1DmGBvGg@mail.gmail.com>
+Message-ID: <CAJZ5v0gtvcH4ukBxwyPYOqGxJ5zKwLiuedFwGmquzm1DmGBvGg@mail.gmail.com>
+Subject: Re: [PATCH -next] thermal: Correct typo in thermal zone documentation
+To: Yang Li <yang.lee@linux.alibaba.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Thu, Aug 22, 2024 at 3:29=E2=80=AFAM Yang Li <yang.lee@linux.alibaba.com=
+> wrote:
+>
+> The term '@refcont' was corrected to '@refcount', ensuring clarity and
+> accuracy in the code comments.
+> Additionally, an obsolete comment regarding '@tt_zone' was removed, as
+> it was commented out in the code.
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D9797
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/thermal/testing/zone.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/thermal/testing/zone.c b/drivers/thermal/testing/zon=
+e.c
+> index fcee12b152da..173d86bcc4e2 100644
+> --- a/drivers/thermal/testing/zone.c
+> +++ b/drivers/thermal/testing/zone.c
+> @@ -35,7 +35,7 @@
+>   * @temp: Temperature value.
+>   * @tz_temp: Current thermal zone temperature (after registration).
+>   * @num_trips: Number of trip points in the @trips list.
+> - * @refcont: Reference counter for usage and removal synchronization.
+> + * @refcount: Reference counter for usage and removal synchronization.
+>   */
+>  struct tt_thermal_zone {
+>         struct list_head list_node;
+> @@ -60,7 +60,6 @@ DEFINE_GUARD(tt_zone, struct tt_thermal_zone *, mutex_l=
+ock(&_T->lock), mutex_unl
+>   * during the registration of a thermal zone based on a given zone templ=
+ate.
+>   *
+>   * @list_node: Node in the list of all trip template in @tt_zone.
+> - * @tt_zone: Zone template this trip template belongs to.
+>   * @trip: Trip point data to use for thernal zone registration.
+>   * @id: The ID of this trip template for the debugfs interface.
+>   */
+> --
 
-Enable RZ/G3S SYSC reset driver. This exports the control to 2 signals
-(one for USB, one for PCI).
-
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7d32fca64996..4720367a41ea 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1510,6 +1510,7 @@ CONFIG_RESET_IMX7=y
- CONFIG_RESET_QCOM_AOSS=y
- CONFIG_RESET_QCOM_PDC=m
- CONFIG_RESET_RZG2L_USBPHY_CTRL=y
-+CONFIG_RESET_RZG3S_SYSC=y
- CONFIG_RESET_TI_SCI=y
- CONFIG_PHY_XGENE=y
- CONFIG_PHY_CAN_TRANSCEIVER=m
--- 
-2.39.2
-
+Thanks for reporting this, I've fixed up the original patch and recommitted=
+ it.
 
