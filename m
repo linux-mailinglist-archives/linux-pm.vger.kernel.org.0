@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-12754-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12755-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4D8195BC44
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 18:46:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57C8695BC4B
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 18:46:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FE021F27813
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 16:46:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 873591C23669
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 16:46:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 625661CCEC5;
-	Thu, 22 Aug 2024 16:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF5451CDA27;
+	Thu, 22 Aug 2024 16:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YypZl2RC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GvxWs3Tq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8E7EAC0;
-	Thu, 22 Aug 2024 16:46:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A1FA19995D;
+	Thu, 22 Aug 2024 16:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724345163; cv=none; b=MlMvDjXrXPX5A4VW0ZeYzxVGb2ADua9M3d0uk1yAtOWWMHw8Y+E0YA+5m7tdA4g5p537+BlXdpKnvLGPCW4I6geTgp4f06QT55MZMSdYXzalGmgZ9z1c8JS9Wpzi7iIyr1OSD1EQDDLREGZmfOydQMk6j28TtgxH8olh03WVYMI=
+	t=1724345182; cv=none; b=LueaASm+e/tzkIuV/yTG2TMlPlOtVgQJ6ACqAh35QoqUcE/wQCxFx0xwogijbLwrSOdLzW2MHTpYgCL+jKzzabOB5HpDOaoZOnbY0dE/UTH7/x6GTtuZ6z0lHUpe/NpUxYZUUS7h4y8K2sKp7bRyv9atKe8leEZrKdhXx/HQASA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724345163; c=relaxed/simple;
-	bh=cMfaa0B/xMQ0ls5dtOkTDegOrA7pKxwTaEWGp6g/86Q=;
+	s=arc-20240116; t=1724345182; c=relaxed/simple;
+	bh=at2jGYed94rBd41ln5QjqjDRA9cbMcgERaHl5UP9H88=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iQIN0768v+suQv5j9j3qK2qBprMKSLq+TPiWCZr+pscslR6rtnmd5PMnMKhwiR7sSGCA6ccJGQdtkXiEHX1cvFpMuu/IEJPqJVuNj8/52hveLMFd9jrENCPuXGM++EWXRmoUmTt9rIksC4jOl8rPV//JKA+YJ0m27nikfbSa1QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YypZl2RC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F311C32782;
-	Thu, 22 Aug 2024 16:45:58 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=j3lig7Zww42NaOPS1XP+20Fc/rirg8igCPO6HIOhqjQpiAFxzjJN85iMxNjaPaLh5e2oKUVl24K2e2R1pbUmdb5zl7WNQTF+Q6DnXBw3CwUh89zopNKLeQppiksNTya2B/mtBVxMRWLezEFesSscy/wy5rdfeK+gSGSnyuiWHVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GvxWs3Tq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A083AC4AF0B;
+	Thu, 22 Aug 2024 16:46:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724345162;
-	bh=cMfaa0B/xMQ0ls5dtOkTDegOrA7pKxwTaEWGp6g/86Q=;
+	s=k20201202; t=1724345182;
+	bh=at2jGYed94rBd41ln5QjqjDRA9cbMcgERaHl5UP9H88=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YypZl2RCrZDJU1uXHF95jWfYJyUn9bJRhFJYiAt7bOr0b8sgt+rq76wlTXGOfwGPY
-	 S46DV8XAXYO+XUvMq+KrOcrbnKvzceTfbU7BevvCWYdmL7iv6giaVtVaGey11fSnny
-	 sNc2F1YVgtvDmzQ2tvqvXA27ELtCfGK0UdHFEDjkUlvNqDg48fbwSr65CVHGYSAWy6
-	 7xFoWsGSiLlZZNWsaLdBoiDQs+O9t+ONzuP0MzdcSDNrr3cXbopYonZmGbvlyDslbj
-	 vtYHPgGd5HCF7oZafeao6eRwhkfByJoexlnfhBNjiL7TyUuHo+fhlWNZkRLaaBaQKo
-	 OqgjhBCkajHFw==
-Date: Thu, 22 Aug 2024 17:45:56 +0100
+	b=GvxWs3Tq4IT0UVfWQiSFtzytZ94M0iLcK4Wgkz5Xmr2vOTGsVf2NR5mBrLtTSTeiW
+	 WdDum80RaXSldqLfPyKs4yfYjMqfBiiIgxXLNTgOy/AU2fTqUBKZUbe6yKBedy9ayq
+	 Sytb8FozfLXBUKvLhIe/v3pfw2iZsnDIMhwzozIFX+FBkNa8lVLjYRwxErH4UbjqaK
+	 rCvnPzHK/KXg1fCuALp2Xfcaz7czlAHguqtgQJR7jj0Xpbmb8R6DCFwQiCJaOjanlX
+	 lexCshb2deERus9lTlgrIlV+3hp9F7nDU+Klum4ZixyOrWSOtYuzse7pwmwhniwg4H
+	 f69gq5K570aaA==
+Date: Thu, 22 Aug 2024 17:46:15 +0100
 From: Conor Dooley <conor@kernel.org>
 To: Claudiu <claudiu.beznea@tuxon.dev>
 Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
@@ -55,11 +55,11 @@ Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
 	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH 06/16] dt-bindings: reset: renesas,rzg2l-usbphy-ctrl:
- Document RZ/G3S SoC
-Message-ID: <20240822-emoticon-draw-0cf557c425f7@spud>
+Subject: Re: [PATCH 09/16] dt-bindings: usb: renesas,usbhs: Document RZ/G3S
+ SoC
+Message-ID: <20240822-encrypt-putdown-cc8770aa781d@spud>
 References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
- <20240822152801.602318-7-claudiu.beznea.uj@bp.renesas.com>
+ <20240822152801.602318-10-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,38 +67,36 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="wpAA43Alk9pJpKUy"
+	protocol="application/pgp-signature"; boundary="5UGYhxQz8p7q9/9a"
 Content-Disposition: inline
-In-Reply-To: <20240822152801.602318-7-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240822152801.602318-10-claudiu.beznea.uj@bp.renesas.com>
 
 
---wpAA43Alk9pJpKUy
+--5UGYhxQz8p7q9/9a
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 22, 2024 at 06:27:51PM +0300, Claudiu wrote:
+On Thu, Aug 22, 2024 at 06:27:54PM +0300, Claudiu wrote:
 > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >=20
-> Document the Renesas RZ/G3S USB PHY Control IP. This is similar with the
-> one found on the RZ/G2L SoC the exception being that the SYSC USB specific
-> signal need to be configured before accessing the USB area. This is
-> done though a reset signal.
+> The USBHS IP block on RZ/G3S SoC is identitcal to the one found on the
+> RZ/G2L device. Document the RZ/G3S USBHS IP block.
 >=20
 > Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
---wpAA43Alk9pJpKUy
+--5UGYhxQz8p7q9/9a
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZsdrRAAKCRB4tDGHoIJi
-0mS1AQDOIrI5V4Tm1BHqGgW2bvAyeS79T3se/WkG3OlitsuXywD/fdNyGMita+TO
-xHGCrO2/4SSpNJhIxpNEFnRSFoyHHAY=
-=Z/RQ
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZsdrVwAKCRB4tDGHoIJi
+0qBlAQCdmgDx2vSq44d6AZcY/EME/mmHOP2w0IAW97mAF6MKJQEA7fBLbHgGSw8b
+n5k//O/k2RK4u2MfswfPY9B40HEOUwM=
+=L2pF
 -----END PGP SIGNATURE-----
 
---wpAA43Alk9pJpKUy--
+--5UGYhxQz8p7q9/9a--
 
