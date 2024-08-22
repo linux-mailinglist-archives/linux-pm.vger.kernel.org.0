@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-12786-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12787-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2436995C117
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 00:48:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1C0695C11A
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 00:48:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEA9A282195
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 22:48:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29F15B24998
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 22:48:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2401D414E;
-	Thu, 22 Aug 2024 22:46:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E01331D417D;
+	Thu, 22 Aug 2024 22:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="h4tVCANt"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="b9Y8KOdX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABCAF1D1743
-	for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 22:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6B41D4143
+	for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 22:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724366780; cv=none; b=IAlcXvq5NN6qr9QxBXYMxMCFwX46Z+ODWk9jHIi1bjD4g2tNx4eguJ27YWdFnD1G1U1AJ3rHw6sdzVQPbGdh94mOrc2bgppdHj5jMLFJr61mVZs08DRRERW1iAqcBmz0gxgrcm1EKecmm7mMJAd8BSr18NbCfWSrXgAOYQPLA3o=
+	t=1724366782; cv=none; b=MbelgxA06MPLh2abOkvZmVfq7i0eYySXZOBOPWlh1GFgjBCZAz5xVb3kXvvQaA7xajpLK4/iyAsIRHEvVzzM8KXmdL1ZZV6oUiK69HkHfb7AegEsjiDpfLGpSZeiR5VlYUpMKGjJlTyPiIQtKRBsZn+gJhbUMG+JHmWeiHFXUsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724366780; c=relaxed/simple;
-	bh=fzv2Qhm8qkbuiNawozPPsMhWU0ubmi4ni4I/TKeUmdc=;
+	s=arc-20240116; t=1724366782; c=relaxed/simple;
+	bh=B+QYo/05J+LjG9pa7GZRM+j5LasnoK0b6yQeAZz29bc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YBK+osurjkqnAU/IFLRAczaVl2bb26L12M5q+wZ/r0Lua0K34vRDRCLx2FF0YPPonUG5w/dPCtZRHzlhHk7gzjGwURtbQw9ROr8+C+xIgZOfL4/fLhWcNKdfCjVKvsn3yKL9RYctKssA7SpjMbYZ0HeDWyntKiaC524Wx5clg90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=h4tVCANt; arc=none smtp.client-ip=209.85.167.53
+	 MIME-Version; b=o9eszDm0ENXTdkxt+DDpXN5VLUdDEVl3cGZP6KeOrLdOJq1uis8rdJ/5zKV1mpp+eJN1IEZBdAgKmmptqNiX4JR0nvkVWPnej/gW/vBfgJO3X0dWtUM109CrDpnDtmIBJFPTemhxYFdi6IPCKPaPzfCzmdIhGYwtsiQTQGd+zpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=b9Y8KOdX; arc=none smtp.client-ip=209.85.167.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5334c4d6829so1754956e87.2
-        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 15:46:18 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-53349d3071eso1671254e87.2
+        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 15:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724366777; x=1724971577; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1724366778; x=1724971578; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iksFSJ//26ReVaxAnVHvTDyArAC4NnchBY2BZAJDBow=;
-        b=h4tVCANtLg/Hai7zD3IRKcelktZ8/qw4aWtj6JFt6o0Uu+wuK/g4mO9M82r8KzfeSN
-         Tsnnf6sNMlrRVGvWbrXsHceLbucnQmJAyckQSoWYDAoipRSWqyMsLtU1GOyIzz2LX7pe
-         PM1qe3oL1nuGzckGy2HLizataa7AHiZ4qTjGP6sxEJ4N58xuqkWFo/OPmfM7GTkvF56d
-         oM7EGprVswx/WIZJvHzJo3sgCpbRh+5cgyoaQOmFn/ejN4MvjKGhsT0KY5irnO2IpxHw
-         uxZJf+DztaHY3BKECZ75Bxa7jk9F3sp2wfA2i3INKMvjxC2EpsMlqXl5YkJmemCDGjKk
-         PVRA==
+        bh=VphURB1Gan/55uptQu3RfCpWor8wG0jCnNbpjQVr+aE=;
+        b=b9Y8KOdXYy2tEkdyjH9tI726n/QiCiErvdulB+h9r6tYpFzkWrGEm5JvLYEL95snBH
+         tpmbdy4zvRZbswbjoFvBCRUVgTY5wRidF6050EHmVNzLWZlDIpZnNIn3tSwpGMSKzUKj
+         0tWuAKQo7LJo3tlCz70VOdrTyo8fw+rNmZbDl/KWQSfGIkqq4MKT0VPah4g3ysxu2Rml
+         S9x6VRR6/jh/vU4fptgo5LDTAiSwslYwvUsR7+MBkL/iZHf/FA1mGoS6u27LhkpH2dTg
+         MEUY/OvUEdBDkfGeT7Fe9RtZMMwdTy+dX4Vxtf+AG+4PG9Q8jWQ1+nbyvzjRawlaG4yI
+         2ivw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724366777; x=1724971577;
+        d=1e100.net; s=20230601; t=1724366778; x=1724971578;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iksFSJ//26ReVaxAnVHvTDyArAC4NnchBY2BZAJDBow=;
-        b=UG9JgJA/TT5wMU/2YU8QiW0vihWhAmT+91TSre29BYRA+Dr+5czv2BD/CYX6Zfp88t
-         DVXoTijqBCnqvIH8qLZWjAVhutldg552Ek0dH/Ru5R48Xt3w7C80d4RUFmyPnpj212sI
-         S5bHDfaRbe7yn744gpnO1dwZI7Gva6aif8TUkqt0YoxMvJcOo9Sj14TCixtZWIytAfVa
-         HMaBaCwhMR//t4ym+Q5Z10bNh1MotG46MBMhBA62SHmQg6G0Bq+rd8cPdmDBpjJAVrGM
-         XA0Yf4hQ63b+w/V26IEovyNhqtivLZ2QRFSR6NWvwUSV0w9lGRCmTLX+0b0wgzhXWoSR
-         IDbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW6gFsDcvCLS1GsNoWw+sUGnl6+g4UcKpUizureBwJZZS06qe9hbqavtV9UWSsc8YyOEMrG3oj2ow==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLy/TWbVNZFcRcVAk3UAExoGeAYEBbKwhNvOE5j47ziTuAe+eg
-	QdyRbfw4TYZNJiQwT+MlqjaGihK/KLaFkWjludTt2DhmnWu5F+TeK64NG0lLdL0=
-X-Google-Smtp-Source: AGHT+IFqYnnUrUddlV2VzJzkFcuvSxGz0XMOiVMuzx0Kw0HD/D4q6JeKW5PZ8PIU3LGdvGhnAFZwtQ==
-X-Received: by 2002:a05:6512:15a2:b0:530:ba4b:f65d with SMTP id 2adb3069b0e04-534387852e1mr179442e87.28.1724366776756;
-        Thu, 22 Aug 2024 15:46:16 -0700 (PDT)
+        bh=VphURB1Gan/55uptQu3RfCpWor8wG0jCnNbpjQVr+aE=;
+        b=DuHOBbUvNZyo+DAh6CHnRqyDP51TBYsu0xjPD1vD+hN664FchxhYyQVCM6Ogs/yi5e
+         2fqhq7f3bpkWhrt6SVUwq0IjXg/8qBkkmYJ3dSRRULpk1OT5vTssinc76V+4VXwvJEy6
+         O0sRRa9S2p6gEbAuxNcEGrxVFEoTctB6DXi6htOGZLFvD+/IXpIXTBI1Du00IBQuPMcO
+         5+vqEWJ1mf15rj/3MI240nQudrTvpKgoOpDwPhHusCKlBCsQJn4QOxc1bKqYZpdiLs8Z
+         sMcHb09uAOc0Cm4qyeG/T0vvCk6cjerHSYaCQp9RqnmU7CMOjPw1CIogBOb9Fh4d3vE5
+         aQqA==
+X-Forwarded-Encrypted: i=1; AJvYcCVEq2j5T59nD+dxrQrtdAnjMkUDgejCeFJPvXlAwIJiNi8vXs6L1amVz3hht1R426X5NZY4rZv95A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjhGgXlcwqMhpLWbbafjNS3Orr9+UPxjheDl/4jUIDRF6FVmC0
+	+zWHGnIjo7xrXRNzEcg88W0pV6grhHqdRDgGeIQheF1WygevGotUtFfoMJ3HaPM=
+X-Google-Smtp-Source: AGHT+IFXpNYl8qtj2IvlPSDp3CA4+6RBm9vf/UbMJ3jZi+owQVOFOxqR3Yik2fhh9EMH6VdRLWKJ4g==
+X-Received: by 2002:a05:6512:31c4:b0:52e:f950:31f3 with SMTP id 2adb3069b0e04-53438785441mr234491e87.35.1724366778108;
+        Thu, 22 Aug 2024 15:46:18 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5334ea362a4sm379443e87.66.2024.08.22.15.46.15
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5334ea362a4sm379443e87.66.2024.08.22.15.46.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2024 15:46:16 -0700 (PDT)
+        Thu, 22 Aug 2024 15:46:17 -0700 (PDT)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: Viresh Kumar <vireshk@kernel.org>,
 	Nishanth Menon <nm@ti.com>,
@@ -86,9 +86,9 @@ Cc: Bjorn Andersson <andersson@kernel.org>,
 	linux-pm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 09/10] cpufreq: qcom-nvmem: Convert to dev_pm_domain_attach|detach_list()
-Date: Fri, 23 Aug 2024 00:45:46 +0200
-Message-Id: <20240822224547.385095-10-ulf.hansson@linaro.org>
+Subject: [PATCH v3 10/10] OPP: Drop redundant _opp_attach|detach_genpd()
+Date: Fri, 23 Aug 2024 00:45:47 +0200
+Message-Id: <20240822224547.385095-11-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240822224547.385095-1-ulf.hansson@linaro.org>
 References: <20240822224547.385095-1-ulf.hansson@linaro.org>
@@ -100,10 +100,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Rather than hooking up the PM domains through _opp_attach_genpd() and
-manually manage runtime PM for the corresponding virtual devices created by
-genpd during attach, let's avoid the boilerplate-code by converting into
-dev_pm_domain_attach|detach_list.
+All users of _opp_attach|detach_genpd(), have been converted to use
+dev|devm_pm_domain_attach|detach_list(), hence let's drop it along with its
+corresponding exported functions.
 
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
@@ -112,175 +111,209 @@ Changes in v3:
 	- None.
 
 ---
- drivers/cpufreq/qcom-cpufreq-nvmem.c | 79 +++++++++-------------------
- 1 file changed, 26 insertions(+), 53 deletions(-)
+ drivers/opp/core.c     | 96 +-----------------------------------------
+ drivers/opp/opp.h      |  3 +-
+ include/linux/pm_opp.h | 38 +----------------
+ 3 files changed, 3 insertions(+), 134 deletions(-)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-index 939702dfa73f..6ba8c8378384 100644
---- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-@@ -52,12 +52,13 @@ struct qcom_cpufreq_match_data {
- 			   struct nvmem_cell *speedbin_nvmem,
- 			   char **pvs_name,
- 			   struct qcom_cpufreq_drv *drv);
--	const char **genpd_names;
-+	const char **pd_names;
-+	unsigned int num_pd_names;
- };
- 
- struct qcom_cpufreq_drv_cpu {
- 	int opp_token;
--	struct device **virt_devs;
-+	struct dev_pm_domain_list *pd_list;
- };
- 
- struct qcom_cpufreq_drv {
-@@ -395,8 +396,6 @@ static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
- 	return 0;
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index cad7e84c9ad3..66cac7a1d9db 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -2360,86 +2360,6 @@ static void _opp_put_config_regulators_helper(struct opp_table *opp_table)
+ 		opp_table->config_regulators = NULL;
  }
  
--static const char *generic_genpd_names[] = { "perf", NULL };
+-static void _opp_detach_genpd(struct opp_table *opp_table)
+-{
+-	int index;
 -
- static const struct qcom_cpufreq_match_data match_data_kryo = {
- 	.get_version = qcom_cpufreq_kryo_name_version,
- };
-@@ -407,13 +406,13 @@ static const struct qcom_cpufreq_match_data match_data_krait = {
- 
- static const struct qcom_cpufreq_match_data match_data_msm8909 = {
- 	.get_version = qcom_cpufreq_simple_get_version,
--	.genpd_names = generic_genpd_names,
-+	.pd_names = (const char *[]) { "perf" },
-+	.num_pd_names = 1,
- };
- 
--static const char *qcs404_genpd_names[] = { "cpr", NULL };
+-	for (index = 0; index < opp_table->required_opp_count; index++) {
+-		if (!opp_table->required_devs[index])
+-			continue;
 -
- static const struct qcom_cpufreq_match_data match_data_qcs404 = {
--	.genpd_names = qcs404_genpd_names,
-+	.pd_names = (const char *[]) { "cpr" },
-+	.num_pd_names = 1,
- };
- 
- static const struct qcom_cpufreq_match_data match_data_ipq6018 = {
-@@ -428,28 +427,16 @@ static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
- 	.get_version = qcom_cpufreq_ipq8074_name_version,
- };
- 
--static void qcom_cpufreq_suspend_virt_devs(struct qcom_cpufreq_drv *drv, unsigned int cpu)
-+static void qcom_cpufreq_suspend_pd_devs(struct qcom_cpufreq_drv *drv, unsigned int cpu)
- {
--	const char * const *name = drv->data->genpd_names;
-+	struct dev_pm_domain_list *pd_list = drv->cpus[cpu].pd_list;
- 	int i;
- 
--	if (!drv->cpus[cpu].virt_devs)
-+	if (!pd_list)
- 		return;
- 
--	for (i = 0; *name; i++, name++)
--		device_set_awake_path(drv->cpus[cpu].virt_devs[i]);
+-		dev_pm_domain_detach(opp_table->required_devs[index], false);
+-	}
 -}
 -
--static void qcom_cpufreq_put_virt_devs(struct qcom_cpufreq_drv *drv, unsigned int cpu)
+-/*
+- * Multiple generic power domains for a device are supported with the help of
+- * virtual genpd devices, which are created for each consumer device - genpd
+- * pair. These are the device structures which are attached to the power domain
+- * and are required by the OPP core to set the performance state of the genpd.
+- * The same API also works for the case where single genpd is available and so
+- * we don't need to support that separately.
+- *
+- * This helper will normally be called by the consumer driver of the device
+- * "dev", as only that has details of the genpd names.
+- *
+- * This helper needs to be called once with a list of all genpd to attach.
+- * Otherwise the original device structure will be used instead by the OPP core.
+- *
+- * The order of entries in the names array must match the order in which
+- * "required-opps" are added in DT.
+- */
+-static int _opp_attach_genpd(struct opp_table *opp_table, struct device *dev,
+-			const char * const *names, struct device ***virt_devs)
 -{
--	const char * const *name = drv->data->genpd_names;
--	int i;
+-	struct device *virt_dev;
+-	int index = 0, ret = -EINVAL;
+-	const char * const *name = names;
 -
--	if (!drv->cpus[cpu].virt_devs)
--		return;
+-	if (!opp_table->required_devs) {
+-		dev_err(dev, "Required OPPs not available, can't attach genpd\n");
+-		return -EINVAL;
+-	}
 -
--	for (i = 0; *name; i++, name++)
--		pm_runtime_put(drv->cpus[cpu].virt_devs[i]);
-+	for (i = 0; i < pd_list->num_pds; i++)
-+		device_set_awake_path(pd_list->pd_devs[i]);
- }
- 
- static int qcom_cpufreq_probe(struct platform_device *pdev)
-@@ -503,7 +490,6 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
- 	}
- 
- 	for_each_possible_cpu(cpu) {
--		struct device **virt_devs = NULL;
- 		struct dev_pm_opp_config config = {
- 			.supported_hw = NULL,
- 		};
-@@ -522,12 +508,7 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
- 				config.prop_name = pvs_name;
- 		}
- 
--		if (drv->data->genpd_names) {
--			config.genpd_names = drv->data->genpd_names;
--			config.virt_devs = &virt_devs;
+-	/* Genpd core takes care of propagation to parent genpd */
+-	if (opp_table->is_genpd) {
+-		dev_err(dev, "%s: Operation not supported for genpds\n", __func__);
+-		return -EOPNOTSUPP;
+-	}
+-
+-	/* Checking only the first one is enough ? */
+-	if (opp_table->required_devs[0])
+-		return 0;
+-
+-	while (*name) {
+-		if (index >= opp_table->required_opp_count) {
+-			dev_err(dev, "Index can't be greater than required-opp-count - 1, %s (%d : %d)\n",
+-				*name, opp_table->required_opp_count, index);
+-			goto err;
 -		}
 -
--		if (config.supported_hw || config.genpd_names) {
-+		if (config.supported_hw) {
- 			drv->cpus[cpu].opp_token = dev_pm_opp_set_config(cpu_dev, &config);
- 			if (drv->cpus[cpu].opp_token < 0) {
- 				ret = drv->cpus[cpu].opp_token;
-@@ -536,25 +517,17 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
- 			}
- 		}
- 
--		if (virt_devs) {
--			const char * const *name = config.genpd_names;
--			int i, j;
+-		virt_dev = dev_pm_domain_attach_by_name(dev, *name);
+-		if (IS_ERR_OR_NULL(virt_dev)) {
+-			ret = virt_dev ? PTR_ERR(virt_dev) : -ENODEV;
+-			dev_err(dev, "Couldn't attach to pm_domain: %d\n", ret);
+-			goto err;
+-		}
 -
--			for (i = 0; *name; i++, name++) {
--				ret = pm_runtime_resume_and_get(virt_devs[i]);
--				if (ret) {
--					dev_err(cpu_dev, "failed to resume %s: %d\n",
--						*name, ret);
-+		if (drv->data->pd_names) {
-+			struct dev_pm_domain_attach_data attach_data = {
-+				.pd_names = drv->data->pd_names,
-+				.num_pd_names = drv->data->num_pd_names,
-+				.pd_flags = PD_FLAG_DEV_LINK_ON,
-+			};
- 
--					/* Rollback previous PM runtime calls */
--					name = config.genpd_names;
--					for (j = 0; *name && j < i; j++, name++)
--						pm_runtime_put(virt_devs[j]);
+-		index++;
+-		name++;
+-	}
 -
--					goto free_opp;
--				}
--			}
--			drv->cpus[cpu].virt_devs = virt_devs;
-+			ret = dev_pm_domain_attach_list(cpu_dev, &attach_data,
-+							&drv->cpus[cpu].pd_list);
-+			if (ret < 0)
-+				goto free_opp;
- 		}
+-	if (virt_devs)
+-		*virt_devs = opp_table->required_devs;
+-
+-	return 0;
+-
+-err:
+-	_opp_detach_genpd(opp_table);
+-	return ret;
+-
+-}
+-
+ static int _opp_set_required_dev(struct opp_table *opp_table,
+ 				 struct device *dev,
+ 				 struct device *required_dev,
+@@ -2516,9 +2436,6 @@ static void _opp_clear_config(struct opp_config_data *data)
+ {
+ 	if (data->flags & OPP_CONFIG_REQUIRED_DEV)
+ 		_opp_put_required_dev(data->opp_table, data->index);
+-	else if (data->flags & OPP_CONFIG_GENPD)
+-		_opp_detach_genpd(data->opp_table);
+-
+ 	if (data->flags & OPP_CONFIG_REGULATOR)
+ 		_opp_put_regulators(data->opp_table);
+ 	if (data->flags & OPP_CONFIG_SUPPORTED_HW)
+@@ -2630,18 +2547,7 @@ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config)
+ 		data->flags |= OPP_CONFIG_REGULATOR;
  	}
  
-@@ -570,7 +543,7 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
+-	/* Attach genpds */
+-	if (config->genpd_names) {
+-		if (config->required_dev)
+-			goto err;
+-
+-		ret = _opp_attach_genpd(opp_table, dev, config->genpd_names,
+-					config->virt_devs);
+-		if (ret)
+-			goto err;
+-
+-		data->flags |= OPP_CONFIG_GENPD;
+-	} else if (config->required_dev && config->required_opp_table) {
++	if (config->required_dev && config->required_opp_table) {
+ 		ret = _opp_set_required_dev(opp_table, dev,
+ 					    config->required_dev,
+ 					    config->required_opp_table);
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 5b5a4bd89c9e..318a4ecbabf1 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -34,8 +34,7 @@ extern struct list_head opp_tables;
+ #define OPP_CONFIG_REGULATOR_HELPER	BIT(2)
+ #define OPP_CONFIG_PROP_NAME		BIT(3)
+ #define OPP_CONFIG_SUPPORTED_HW		BIT(4)
+-#define OPP_CONFIG_GENPD		BIT(5)
+-#define OPP_CONFIG_REQUIRED_DEV		BIT(6)
++#define OPP_CONFIG_REQUIRED_DEV		BIT(5)
  
- free_opp:
- 	for_each_possible_cpu(cpu) {
--		qcom_cpufreq_put_virt_devs(drv, cpu);
-+		dev_pm_domain_detach_list(drv->cpus[cpu].pd_list);
- 		dev_pm_opp_clear_config(drv->cpus[cpu].opp_token);
- 	}
- 	return ret;
-@@ -584,7 +557,7 @@ static void qcom_cpufreq_remove(struct platform_device *pdev)
- 	platform_device_unregister(cpufreq_dt_pdev);
- 
- 	for_each_possible_cpu(cpu) {
--		qcom_cpufreq_put_virt_devs(drv, cpu);
-+		dev_pm_domain_detach_list(drv->cpus[cpu].pd_list);
- 		dev_pm_opp_clear_config(drv->cpus[cpu].opp_token);
- 	}
+ /**
+  * struct opp_config_data - data for set config operations
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index 5fade5c4de40..451a7465a605 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -62,11 +62,7 @@ typedef int (*config_clks_t)(struct device *dev, struct opp_table *opp_table,
+  * @supported_hw: Array of hierarchy of versions to match.
+  * @supported_hw_count: Number of elements in the array.
+  * @regulator_names: Array of pointers to the names of the regulator, NULL terminated.
+- * @genpd_names: Null terminated array of pointers containing names of genpd to
+- *		attach. Mutually exclusive with required_dev.
+- * @virt_devs: Pointer to return the array of genpd virtual devices. Mutually
+- *		exclusive with required_dev.
+- * @required_dev: Required OPP device. Mutually exclusive with genpd_names/virt_devs.
++ * @required_dev: Required OPP device.
+  * @required_opp_table: The corresponding required OPP table for @required_dev.
+  *
+  * This structure contains platform specific OPP configurations for the device.
+@@ -80,8 +76,6 @@ struct dev_pm_opp_config {
+ 	const unsigned int *supported_hw;
+ 	unsigned int supported_hw_count;
+ 	const char * const *regulator_names;
+-	const char * const *genpd_names;
+-	struct device ***virt_devs;
+ 	struct device *required_dev;
+ 	struct opp_table *required_opp_table;
+ };
+@@ -677,36 +671,6 @@ static inline void dev_pm_opp_put_config_regulators(int token)
+ 	dev_pm_opp_clear_config(token);
  }
-@@ -595,7 +568,7 @@ static int qcom_cpufreq_suspend(struct device *dev)
- 	unsigned int cpu;
  
- 	for_each_possible_cpu(cpu)
--		qcom_cpufreq_suspend_virt_devs(drv, cpu);
-+		qcom_cpufreq_suspend_pd_devs(drv, cpu);
- 
- 	return 0;
- }
+-/* genpd helpers */
+-static inline int dev_pm_opp_attach_genpd(struct device *dev,
+-					  const char * const *names,
+-					  struct device ***virt_devs)
+-{
+-	struct dev_pm_opp_config config = {
+-		.genpd_names = names,
+-		.virt_devs = virt_devs,
+-	};
+-
+-	return dev_pm_opp_set_config(dev, &config);
+-}
+-
+-static inline void dev_pm_opp_detach_genpd(int token)
+-{
+-	dev_pm_opp_clear_config(token);
+-}
+-
+-static inline int devm_pm_opp_attach_genpd(struct device *dev,
+-					   const char * const *names,
+-					   struct device ***virt_devs)
+-{
+-	struct dev_pm_opp_config config = {
+-		.genpd_names = names,
+-		.virt_devs = virt_devs,
+-	};
+-
+-	return devm_pm_opp_set_config(dev, &config);
+-}
+-
+ /* prop-name helpers */
+ static inline int dev_pm_opp_set_prop_name(struct device *dev, const char *name)
+ {
 -- 
 2.34.1
 
