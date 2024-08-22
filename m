@@ -1,95 +1,112 @@
-Return-Path: <linux-pm+bounces-12764-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12765-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8005195BEA5
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 21:05:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52A1395BEA8
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 21:06:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 364D91F23E6C
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 19:05:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 108D52854B6
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 19:06:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A409F1CCB2B;
-	Thu, 22 Aug 2024 19:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F70B13D50E;
+	Thu, 22 Aug 2024 19:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qUwwgfam"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="isMdo474"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D4C13D8B2;
-	Thu, 22 Aug 2024 19:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB55776025;
+	Thu, 22 Aug 2024 19:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724353550; cv=none; b=YJpvrPmj7u+P7vEz/xmET+Q/Uu+dcx82rcCDPzmepaZxNlSOz+OTiuiQh3lj8E4Na/TC80JD7Iic0kGRD7f0s2IEuDzj8XjuWtUR1G4TdR/OKZppQo6PrSYVqcUGkuk9mPmebXGZ7zWTV6trxCtttm50qUDokEQALdRlwjnHqM4=
+	t=1724353598; cv=none; b=NcLENd4J5r4VGaIOveHN7u/zx0CJaQxMsYhWLyHvQ4XY4PrRoN9FrLxfeXHqlxGq9LXsA9ilbZVfvvurXeS0rSjUsB1Ixbbjjcn/XrBVyINsrjZGFDRE53SfiT9fY9uoOgur2upSG1IpUAiZazTzabXryDJk6f7oW8luala/0bU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724353550; c=relaxed/simple;
-	bh=8kmKkdKB+bP/XDJ3bbKnBGeMf6mSdYD+LNXsB5C09D8=;
+	s=arc-20240116; t=1724353598; c=relaxed/simple;
+	bh=feTkFSqWfs3CXLcx29p18Jk6iFxe6j57z99XalVaVIk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ymoo2KNNvu2vHR2y1GIs85yF4PmulAxBYgUUmWSIwopHNeUGY3lq0/knrP02hB4/jN4ic5eoZgGRWYyKF2Lua2XPXxss6ThZRmVwOd8aTN3r79U+pCC6qgMFGfsAbKEtgjn46EX1Faux0hZtaGFDVqt0svA2IeHrWkifQ+vJKPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qUwwgfam; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13059C4AF0F;
-	Thu, 22 Aug 2024 19:05:50 +0000 (UTC)
+	 To:Cc:Content-Type; b=VTZ2UdcUaXFjq58E9uHPxMrDlvMNHqGfwUuJ825t8JllgYSb9O9gROZPt2DKuu/wgoy3RjOCTLe+Vp4WXLs6njBFBW/B020ZLPQXT2+/m8G5BUVnB5oqsX662fsN7X4tucGwAp2S+MRYFbQqZdq1D8PDAn7SoSlmoLpqnxc0/BI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=isMdo474; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C90BC4AF0C;
+	Thu, 22 Aug 2024 19:06:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724353550;
-	bh=8kmKkdKB+bP/XDJ3bbKnBGeMf6mSdYD+LNXsB5C09D8=;
+	s=k20201202; t=1724353597;
+	bh=feTkFSqWfs3CXLcx29p18Jk6iFxe6j57z99XalVaVIk=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qUwwgfamPVYfMtqESx6bSCybae1p5QmsQGWag8+PozaZIcwOywAiByfblKAXno8nC
-	 IRd+HPOsNQjnkHiHyY6BrUqwibP0RMKw3EpVAjrUS2Xnm1GJGJLW0Bq7gaCI2GkPuF
-	 JIcfyiDZtBkVbGH8q1StiL3Vxlp35VtBkGRRCwjSsCpb1ybposUxNfm8wkX601/hZw
-	 pPJTz5Hs1jf2H/58PLzuASTAcpWj1+NIHmZZNqM9SoUoeZRikMG9Msq8aZOhSQCnaT
-	 O4UpagMJxZZzpfijE/Z4t21dmCdHhsRr4JejyrNBLNwuN0OwjJGNAcettjuhT3+sUL
-	 R3ZM7qDTJZtvg==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-270263932d5so831683fac.2;
-        Thu, 22 Aug 2024 12:05:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUPoRSMfxVJqWLJ2pyxlgvkuhwt4iLH7w4AbiL1hTDL+byiChaXmbAUCWQl0PNu1f1FZg7TWku6@vger.kernel.org, AJvYcCUQiZ+1XvjItpB/ln3WfiQF52HGsAKCnpXmmfdArv1tPk0mbg2hur4QyLuAryK2TN8IqZVZ1BTNiMwOCv8=@vger.kernel.org, AJvYcCVAebGK46my0QF9TAf/K7iwiy0EN0GIYRGTTXmXlWrJjIhKR0ltswBl0TylXVAGjS1mNWUEZbJ8amE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/LquK70AO8oP0yPTOX7cCnih/jxBMLPjKLfI2Sdmqf/FsHi39
-	ozdrP0FbHbohLrzy+lPqfVZIHtETYHkUEv8ORP2wEFrzqiWLk0Tq1XbzHXEsc2t7aLmZ0f1Y8ys
-	dOvCcmaiqM4QC7MCnXYQS9TQiEug=
-X-Google-Smtp-Source: AGHT+IGsx9MlDIqyZirN99gmnxGl5XE4O19AIzi2CakpohYGGZpr+FqqWk/yIZ1gsBeMm0skdNnTRtffCrhYTx9fNIk=
-X-Received: by 2002:a05:6870:d10d:b0:260:fdd5:4147 with SMTP id
- 586e51a60fabf-273cfc55bdemr3593483fac.15.1724353549379; Thu, 22 Aug 2024
- 12:05:49 -0700 (PDT)
+	b=isMdo474FbCVmd2bM0bcZQ3jV0IK7Z/wpryNyMmGmAiFxfcdJfQaK8zv6N3Vk7Jdl
+	 7n7U7UuohC4wHe9V5dlMSEFgNHga64Idwdm3VG2IR9ENa1d3A0CFkB7M9J26Zlo401
+	 QGl7EZQLNpNh/yP3o+azpdccTGkiCyw+q+1EHb1u52PcZBwHyvM7cyMehp87G5qvwr
+	 Fgbl3M2fWjx582j5w82lYdfZ+F4iCqokNcAMlzTzb41uTkLJ3W7aqWRl90pYSDi3zo
+	 Dcn7+0lwpVxVBJ8V6wR0A0Aqb/7ouezccorHBdUHhRIh65k0GVsv2eCpDP8Xj0u7nc
+	 6AhuzOJVp1XsQ==
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-260e6298635so1073561fac.1;
+        Thu, 22 Aug 2024 12:06:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVlUKrVesGHegF4Enx62HZWb3yIpiJsXfM7yGHZCxn5vaz7Mei5u5trcUR4DNN5iRnz4fU27JzcW38=@vger.kernel.org, AJvYcCWHo7XYNaKfpm1sqnynVDTphzaY6rIWO71Q705Fn1Q/zX7/2F+L1LqNKyalTPxkSbnqpqhb+3yWdUgTnTU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywj4CFygU3VfcQzRjo78wjt0yvVN5x41gUBOOpNsndubB2A74X9
+	IMyc6mZEXkyJwWuzkdBKpeLjlrQ34OXi/YL4AjR9c0ajWsF8eJghnVVUDUSwe2lcxFSQYuZgiIv
+	B8ad99rvsh92PpkgL/RGgxWWzaXw=
+X-Google-Smtp-Source: AGHT+IH/HKBN5igbPFNU99AA1KJRnfZNzj0StZ8X7J8FV6NzPUxoxR4vOuL//DmDrXwS8vi7uNKxvV6Gah1QATspB4g=
+X-Received: by 2002:a05:6870:46ac:b0:260:26f4:58b3 with SMTP id
+ 586e51a60fabf-273e45526b8mr11202fac.6.1724353596669; Thu, 22 Aug 2024
+ 12:06:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240814195823.437597-1-krzysztof.kozlowski@linaro.org>
- <20240814195823.437597-3-krzysztof.kozlowski@linaro.org> <fcee1000-9f8d-40c6-8974-06e3c1722645@linaro.org>
-In-Reply-To: <fcee1000-9f8d-40c6-8974-06e3c1722645@linaro.org>
+References: <20240821114250.1416421-1-d-gole@ti.com>
+In-Reply-To: <20240821114250.1416421-1-d-gole@ti.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 22 Aug 2024 21:05:38 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hMLVGpw+Mrso=6kpL+wMn=6UCrCykGk7nG55uidfkrAw@mail.gmail.com>
-Message-ID: <CAJZ5v0hMLVGpw+Mrso=6kpL+wMn=6UCrCykGk7nG55uidfkrAw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] thermal: of: Fix OF node leak in of_thermal_zone_find()
- error paths
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date: Thu, 22 Aug 2024 21:06:25 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gVE=05+Yp9rVg55oFQdPQoooKYOeJmr5_-u238x0b8jg@mail.gmail.com>
+Message-ID: <CAJZ5v0gVE=05+Yp9rVg55oFQdPQoooKYOeJmr5_-u238x0b8jg@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: remove dead code in cpuidle_enter_state
+To: Dhruva Gole <d-gole@ti.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Kevin Hilman <khilman@baylibre.com>, Markus Schneider-Pargmann <msp@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 22, 2024 at 6:12=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Wed, Aug 21, 2024 at 1:43=E2=80=AFPM Dhruva Gole <d-gole@ti.com> wrote:
 >
-> On 14/08/2024 21:58, Krzysztof Kozlowski wrote:
-> > Terminating for_each_available_child_of_node() loop requires dropping O=
-F
-> > node reference, so bailing out on errors misses this.  Solve the OF nod=
-e
-> > reference leak with scoped for_each_available_child_of_node_scoped().
-> >
-> > Fixes: 3fd6d6e2b4e8 ("thermal/of: Rework the thermal device tree initia=
-lization")
-> > Cc: <stable@vger.kernel.org>
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Checking for index < 0 is useless because the find_deepest_state
+> function never really returns a negative value. Since this code hasn't
+> been reported in over 9 years it's dead code. Hence, remove it.
 >
-> Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> ---
+>
+> Discussions on the original series that added this code:
+> https://lore.kernel.org/linux-pm/20240821095105.xuf2a5xe3yxqqewj@lcpd911/=
+T/#u
+>
+>  drivers/cpuidle/cpuidle.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 02e40fd7d948..9e418aec1755 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -228,10 +228,7 @@ noinstr int cpuidle_enter_state(struct cpuidle_devic=
+e *dev,
+>         if (broadcast && tick_broadcast_enter()) {
+>                 index =3D find_deepest_state(drv, dev, target_state->exit=
+_latency_ns,
+>                                            CPUIDLE_FLAG_TIMER_STOP, false=
+);
+> -               if (index < 0) {
+> -                       default_idle_call();
+> -                       return -EBUSY;
+> -               }
+> +
+>                 target_state =3D &drv->states[index];
+>                 broadcast =3D false;
+>         }
+>
 
-Applied along with the rest of the series as fixes for 6.11-rc, thanks!
+Applied as 6.12 material, thanks!
 
