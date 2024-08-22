@@ -1,261 +1,166 @@
-Return-Path: <linux-pm+bounces-12715-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12716-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B92B95B3D9
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 13:30:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AD8095B4BA
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 14:11:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A00D31C22EF4
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 11:30:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 144B21F234AA
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 12:11:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C13391C8FC9;
-	Thu, 22 Aug 2024 11:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04EAF1C9431;
+	Thu, 22 Aug 2024 12:11:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KKrveZOh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ioZcH+WU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D57C1836D5
-	for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 11:30:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8E11AAE36;
+	Thu, 22 Aug 2024 12:11:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724326225; cv=none; b=YUOdYgg0zXViTaMzwHVNJM5uiXi0nYtTillkGNNA7sxXyOS/zQtVOF4Mv8odVwvfugKTWmy+AYe228MJt2WHhcBhw0GSAmy4ftf9vnw1qGL59mdIHX5C8N4LV5fIqj/jc4W4oqnu3iHXdtiSQ0lZReYaIIINUooUNIsYyxXnF18=
+	t=1724328674; cv=none; b=Eqf0TydPJA/NwplahAgISjCGaO1zOoAtOzzSQx31XnOd9gTwzGh3KV9ig8cfiNztz8gXk1C3qaVcebyfECAYC/6HWO3IaVYao28OW8Llz1aXIJpZ/cZGFSkXhMGT2ZH9MaiwwGKgoXAFSkXKYvEq/0OU4ZO4mZlxCGc4w24V/nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724326225; c=relaxed/simple;
-	bh=b7pQe5okhvL0o1YKBycfCakJN7rb+c0+xQvK8NC8DP4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qlSSHcI6r7ukQs/cTMShX5oMIBsOqmT3wmbfpl5FIfYFlorzgZv/g27iNLGGIwtXfXsz7xXdmAWIOOtGXcdtPX/tjigOaNcx+Vv4chIjDlybL+xfauIZqJNdX5fMMvLeW2Wh+kQjZMYBuyLqe/Palq/cpve0xua9IkzBFzJhLEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KKrveZOh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D222C4AF0C
-	for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 11:30:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724326225;
-	bh=b7pQe5okhvL0o1YKBycfCakJN7rb+c0+xQvK8NC8DP4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=KKrveZOhjG3j24+V6Nl4YuMmJB6k51Z1KVZkCASCrB3tGQDsB3NhtPD5nWPH/AIQZ
-	 EIo5ZrmzaTUPNNDAAmaocQkkLM++IyDusCMN2CmERGtTFhOcLNj+MLNOUGMrC4Y/Xd
-	 SQxREvbzrJOIdVJgI6yEsMiOA4WvYGHl6n4JYI75oqv1/2ybTNI0rz7FFUsbPCUhgh
-	 VuiwPNuaNSaRowncxApOM7f7+M6uc1iAKP4Oa8yKGngUSr7/+FN9Yy6RHm3eRzkjGt
-	 J7uBbrVbWGwvNv0u6IP7lRTb0GbzEBb9FIgIGL0jNghm8cDIIl3T8L4d4rotHAqdKL
-	 Gfu66SIdbvC6Q==
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5d608060241so459037eaf.1
-        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 04:30:25 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzZXVsnkWVNFXl2iBWHe7MMtHV6PFTA9B2Y6b1QxvbRMLZmLjrW
-	bvb756D/QOg+VWjbQ8x+OnGcm5YPH2iUmBp1HrzDan4qe0hH5CweoDGz23XaS8R3jsUvyAzcaZn
-	P/KND7fPiB7fcN8hGPorL4IzMy5E=
-X-Google-Smtp-Source: AGHT+IFKGCNT6PHRjZ5PEDYcemKQQwXN/1A+VmXRZHAIzCbtzLQF9bJHQGNnBnCOVwTvU1NbUYPtgoe2LoPG6LJhy+4=
-X-Received: by 2002:a05:6870:4996:b0:270:463e:4b72 with SMTP id
- 586e51a60fabf-2737ef1d5ccmr5674375fac.20.1724326224821; Thu, 22 Aug 2024
- 04:30:24 -0700 (PDT)
+	s=arc-20240116; t=1724328674; c=relaxed/simple;
+	bh=wBl1r1iyvYDMVZtv8y/QM6cGPiMA+r+kJ9USad8vmoA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HgcIwOjatvAnkpQ0uDqkgqNdQyRdMOxpnAvE3mFMBX1RyOdixixcIuG3m95+gF+LsLg0y9ToUGdoKRtJ6e7oRpzB8M412fZWtLOlJz/pLwol3wfBkwbMM2NuAvDsVQ3g9I/juFXpcdIzCAFNVnlZkBKkqPE4hXk5URJmCYwWQvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ioZcH+WU; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724328672; x=1755864672;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wBl1r1iyvYDMVZtv8y/QM6cGPiMA+r+kJ9USad8vmoA=;
+  b=ioZcH+WUR+NDHscS7T2iCzRPkYvGnDvFZqwZhGs32/QJBGGvNPf/2oVM
+   eNjzw/pJv5/Jf2S5gjSelv190PpFQoyL7KqapAO+ppWuyfQ7h6ix2qNRl
+   7/W58/P3tjZZpD2VDVxMNT7lu9lgeIZg0UkIQMRIZP9oZGjrmLDCywsNx
+   0xS6I/sjsPrb3OaPRGxvgr90spgabTk5PxWDbwNKkT4e0AkJ86A2hmV+H
+   dE1wkwz/8lAljboET8Vz7/lxxGpzgIMHgmipENTHELfZ2JKsCGUsUTQSC
+   JRPMPCWzqF11E8cY0gfkhkL/v1ZK+ksa7IKCuEcURLUAjQ/wiXmVLLaqT
+   A==;
+X-CSE-ConnectionGUID: XT1TkJ+1QBea9Q3962+k4w==
+X-CSE-MsgGUID: tspb34sWT/yEnGo7PdXHjw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="45260381"
+X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
+   d="scan'208";a="45260381"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 05:11:11 -0700
+X-CSE-ConnectionGUID: /PjncfjhS2K+vMx1/qUUeg==
+X-CSE-MsgGUID: Fv/q/DKJQ4WtGUg+Dfv/uA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
+   d="scan'208";a="61089547"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 22 Aug 2024 05:11:05 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sh6ed-000Cjg-0x;
+	Thu, 22 Aug 2024 12:11:03 +0000
+Date: Thu, 22 Aug 2024 20:10:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stefan Wahren <wahrenst@gmx.net>, Russell King <linux@armlinux.org.uk>,
+	Doug Anderson <dianders@chromium.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Minas Harutyunyan <hminas@synopsys.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Lukas Wunner <lukas@wunner.de>,
+	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+	Peter Robinson <pbrobinson@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kernel-list@raspberrypi.com, Stefan Wahren <wahrenst@gmx.net>
+Subject: Re: [PATCH V3 4/9] drm/vc4: hdmi: add PM suspend/resume support
+Message-ID: <202408221940.t4pWjzvz-lkp@intel.com>
+References: <20240821214052.6800-5-wahrenst@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240816081241.1925221-1-daniel.lezcano@linaro.org>
- <20240816081241.1925221-3-daniel.lezcano@linaro.org> <CAJZ5v0iY4jgnMEJeS97JYWa+DSwLk=feTDJCdKmJmF6UzWaYHw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iY4jgnMEJeS97JYWa+DSwLk=feTDJCdKmJmF6UzWaYHw@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 22 Aug 2024 13:30:13 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h=DgBSiFbdmnzSFjEJd6sdBffCODspxmM-G92FN2HGiA@mail.gmail.com>
-Message-ID: <CAJZ5v0h=DgBSiFbdmnzSFjEJd6sdBffCODspxmM-G92FN2HGiA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] thermal/core: Add thresholds support
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-pm@vger.kernel.org, lukasz.luba@arm.com, quic_manafm@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240821214052.6800-5-wahrenst@gmx.net>
 
-On Wed, Aug 21, 2024 at 10:05=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
->
-> On Fri, Aug 16, 2024 at 10:12=E2=80=AFAM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
+Hi Stefan,
 
-[cut]
+kernel test robot noticed the following build warnings:
 
-> > --- /dev/null
-> > +++ b/drivers/thermal/thermal_thresholds.c
-> > @@ -0,0 +1,241 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright 2024 Linaro Limited
-> > + *
-> > + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > + *
-> > + * Thermal thresholds
-> > + */
-> > +#include <linux/list.h>
-> > +#include <linux/list_sort.h>
-> > +#include <linux/slab.h>
-> > +
-> > +#include "thermal_core.h"
->
-> +#include "thermal_thresholds.h"
->
-> > +
-> > +struct thresholds {
-> > +       struct list_head list;
-> > +};
->
-> This duplicates the definition in the header file.
->
-> Besides, why is the wrapper struct needed?
+[auto build test WARNING on linus/master]
+[also build test WARNING on arm/for-next arm/fixes v6.11-rc4 next-20240822]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On second thought, it can hold a pointer to the first threshold that
-was strictly above the zone temperature when
-thermal_thresholds_handle() ran last time, so something like:
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Wahren/mailbox-bcm2835-Fix-timeout-during-suspend-mode/20240822-063725
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240821214052.6800-5-wahrenst%40gmx.net
+patch subject: [PATCH V3 4/9] drm/vc4: hdmi: add PM suspend/resume support
+config: arc-allmodconfig (https://download.01.org/0day-ci/archive/20240822/202408221940.t4pWjzvz-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408221940.t4pWjzvz-lkp@intel.com/reproduce)
 
-struct thresholds {
-      struct list_head list;
-      struct user_threhold *first_above;
-};
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408221940.t4pWjzvz-lkp@intel.com/
 
-and first_above =3D=3D NULL would mean that the zone temperature was above
-all of the threshold or at the highest one.
+All warnings (new ones prefixed by >>):
 
-Then thermal_thresholds_handle() could do something like:
+>> drivers/gpu/drm/vc4/vc4_hdmi.c:3118:12: warning: 'vc4_hdmi_resume' defined but not used [-Wunused-function]
+    3118 | static int vc4_hdmi_resume(struct device *dev)
+         |            ^~~~~~~~~~~~~~~
+>> drivers/gpu/drm/vc4/vc4_hdmi.c:3107:12: warning: 'vc4_hdmi_suspend' defined but not used [-Wunused-function]
+    3107 | static int vc4_hdmi_suspend(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~
 
-tr =3D tz->user_thresholds.first_above;
 
-if (tr && tz->temperature >=3D tr->temperature) {
-    do {
-        if (tr->direction & THERMAL_THRESHOLD_WAY_UP)
-            notify =3D true;
+vim +/vc4_hdmi_resume +3118 drivers/gpu/drm/vc4/vc4_hdmi.c
 
-        if (tr->list_node.next !=3D &tz->user_thresholds.list) {
-            tr =3D list_next_entry(tr, list_node);
-        else
-            tr =3D NULL;
-    } while (tr && tz->temperature >=3D tr->temperature);
-} else {
-    if (!tr)
-        tr =3D list_last_entry(&tz->user_thresholds.list,
-                     struct user_threshold, list_node);
+  3106	
+> 3107	static int vc4_hdmi_suspend(struct device *dev)
+  3108	{
+  3109		struct vc4_hdmi *vc4_hdmi = dev_get_drvdata(dev);
+  3110		struct drm_device *drm = vc4_hdmi->connector.dev;
+  3111	
+  3112		if (drm && drm->mode_config.poll_enabled)
+  3113			drm_kms_helper_poll_disable(drm);
+  3114	
+  3115		return pm_runtime_force_suspend(dev);
+  3116	}
+  3117	
+> 3118	static int vc4_hdmi_resume(struct device *dev)
+  3119	{
+  3120		struct vc4_hdmi *vc4_hdmi = dev_get_drvdata(dev);
+  3121		struct drm_device *drm = vc4_hdmi->connector.dev;
+  3122		int ret;
+  3123	
+  3124		ret = pm_runtime_force_resume(dev);
+  3125	
+  3126		if (drm && drm->mode_config.poll_enabled)
+  3127			drm_kms_helper_poll_enable(drm);
+  3128	
+  3129		return ret;
+  3130	}
+  3131	
 
-    while (tz->temperature < tr->temperature)
-        if (tr->direction & THERMAL_THRESHOLD_WAY_DOWN)
-            notify =3D true;
-
-        if (tr->list_node.prev !=3D &tz->user_thresholds.list) {
-            tr =3D list_prev_entry(tr, list_node);
-        else
-            break;
-    }
-    if (tz->temperature >=3D tr->temperature)
-        tr =3D NULL;
-}
-tz->user_thresholds.first_above =3D tr;
-
-which is a bit simpler than the code in the current patch.
-
-> > +
-> > +int thermal_thresholds_init(struct thermal_zone_device *tz)
-> > +{
-> > +       struct thresholds *thresholds;
-> > +
-> > +       thresholds =3D kmalloc(sizeof(*thresholds), GFP_KERNEL);
-> > +       if (!thresholds)
-> > +               return -ENOMEM;
-> > +
-> > +       INIT_LIST_HEAD(&thresholds->list);
-> > +       tz->thresholds =3D thresholds;
-> > +
-> > +       return 0;
-> > +}
->
-> I'd rather embed "thresholds" in struct thermal_zone_device and avoid
-> allocating memory separately for it.  Less code, less complexity.
->
-> > +
-> > +void thermal_thresholds_exit(struct thermal_zone_device *tz)
-> > +{
-> > +       thermal_thresholds_flush(tz);
-> > +       kfree(tz->thresholds);
-> > +       tz->thresholds =3D NULL;
-> > +}
-> > +
-> > +static int __thermal_thresholds_cmp(void *data,
-> > +                                   const struct list_head *l1,
-> > +                                   const struct list_head *l2)
-> > +{
-> > +       struct threshold *t1 =3D container_of(l1, struct threshold, lis=
-t);
-> > +       struct threshold *t2 =3D container_of(l2, struct threshold, lis=
-t);
-> > +
-> > +       return t1->temperature - t2->temperature;
-> > +}
-> > +
-> > +static struct threshold *__thermal_thresholds_find(const struct thresh=
-olds *thresholds, int temperature)
-> > +{
-> > +       struct threshold *t;
-> > +
-> > +       list_for_each_entry(t, &thresholds->list, list)
-> > +               if (t->temperature =3D=3D temperature)
-> > +                       return t;
-> > +
-> > +       return NULL;
-> > +}
-> > +
-> > +static bool __thermal_threshold_is_crossed(struct threshold *threshold=
-, int temperature,
-> > +                                          int last_temperature, int di=
-rection,
-> > +                                          int *low, int *high)
-> > +{
-> > +       if (temperature > threshold->temperature && threshold->temperat=
-ure > *low &&
-> > +           (THERMAL_THRESHOLD_WAY_DOWN & threshold->direction))
-> > +               *low =3D threshold->temperature;
-> > +
-> > +       if (temperature < threshold->temperature && threshold->temperat=
-ure < *high &&
-> > +           (THERMAL_THRESHOLD_WAY_UP & threshold->direction))
-> > +               *high =3D threshold->temperature;
-> > +
-> > +       if (temperature < threshold->temperature &&
-> > +           last_temperature >=3D threshold->temperature &&
-> > +           (threshold->direction & direction))
-> > +               return true;
-> > +
-> > +       if (temperature >=3D threshold->temperature &&
-> > +           last_temperature < threshold->temperature &&
-> > +           (threshold->direction & direction))
-> > +               return true;
->
-> I would combine the checks, so something like this
->
-> if (temperature >=3D threshold->temperature) {
->         if (threshold->temperature > *low &&
-> THERMAL_THRESHOLD_WAY_DOWN & threshold->direction)
->                 *low =3D threshold->temperature;
->
->         if (last_temperature < threshold->temperature &&
-> threshold->direction & direction)
->                 return true;
-> } else {
->         if (threshold->temperature < *high && THERMAL_THRESHOLD_WAY_UP
-> & threshold->direction)
->               *high =3D threshold->temperature;
->
->         if (last_temperature >=3D threshold->temperature &&
-> threshold->direction & direction)
->                 return true;
-> }
-
-Also, I'm not sure why "high" and "low" are needed at all.
-
-The current and last zone temperature could be included in the
-notification just fine and user space should be able to figure out
-which thresholds are affected.
-
-> > +
-> > +       return false;
-> > +}
-> > +
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
