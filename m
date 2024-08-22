@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-12736-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12737-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9474195BA40
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 17:30:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 223F995BA4B
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 17:31:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C46911C23411
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 15:30:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDE5E2861FC
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 15:31:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCEDC1CEAD6;
-	Thu, 22 Aug 2024 15:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDB8A1CF2AF;
+	Thu, 22 Aug 2024 15:28:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="nbD3wSrD"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="TALQ1WPf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB0B1CEAA8
-	for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 15:28:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21CAA1CF286
+	for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 15:28:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724340515; cv=none; b=jqm6S4Fix2b3ma10HW/GqavKGCbRu22INLLoW0Ww3klgwJdEo6oWf+J5WLPMYNRPwueDX05LCp/BmkbK4p6/Nh+HVUUd+N/w1V+TB6i2euCrYlsw1WtN5GcfvvtacYNSL4GcMKOr4dHjATfKMREvZr27dkXLBOAESZdf5yB5omA=
+	t=1724340517; cv=none; b=FYIOoicFyCkcGrYEz0Bo3LCAGIRbku21MMy0HWjXCOIv8zjTmdRlBR+CBlYDffONPDe5Cgcpksd85uVEGqSB1FoENuUOYHsj7uwZHOl3xY4kSQGh0bmM48fBcEzZppE2nNaE3elkN/j6Ky0E67YW1qM6eXM/+7+tCrvLCGzcl0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724340515; c=relaxed/simple;
-	bh=hwOPs3VjSqv+5Z5VfJP9Z8BIWsDCu8awKAb11KLvGp0=;
+	s=arc-20240116; t=1724340517; c=relaxed/simple;
+	bh=mG2HhfWd8qCb8fqq+XG4F4xVuNxXzEDJIM8/ycCUv/E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kxTljN6gsOwJ3VQaSzLzRUyVtuoeVSG8EIHpI2zwLEFKszLItsI6K4QRXGoNmmgGL1RkDRBFBCSSpM47ITX+K87xCi/PckSe+opy0OXDzXSfjycBdBgZSOBYzpq09ehBDl9aKqHLy8qR2p2MDshDOw9q/eqduDG0aQ1T1E6oIiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=nbD3wSrD; arc=none smtp.client-ip=209.85.218.46
+	 MIME-Version; b=aconfUEjp1RcIO0IXNlwaJtPkDxK0kFDTODy2fF0wP75Ngwp+bJz7eBOmHhXo2nnZcEZZgCD2kki8hecwqA2sMUV36yEcizWv/XuH91SoeUT03OR9o0MG/b23W0qhuqLi86g2E4fHysYnoOnNOTkrh6fd0uuSMdYVBjhyt1Ojx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=TALQ1WPf; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a83562f9be9so119115966b.0
-        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 08:28:33 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a7a81bd549eso91760866b.3
+        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 08:28:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1724340512; x=1724945312; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1724340514; x=1724945314; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gkWgitHhldKdeisz33EiZdlfuv0bPsRGbcOFCT+k5gc=;
-        b=nbD3wSrDmsDg6iwBHl98KBRcXrkXuv9bk0T33rtiyr0E+YQD+/Dp9bI2YgBrEj/GSJ
-         AV7dasG/x9B1OPIdaiJ4WePATHqQ/xLQUN9kMrz4O3v+UqBJveYqR80uo9yagMYkmy+S
-         dPXXDnCE4XtB9xr5Gr6FdHLDqwzoRzUC+/REiU88a+cpjHAxboR/L2sVMNwi3Pat+Zsa
-         MfWyemeoLB3B6dN1RSV/dHonudhBsvFF+ICTyn68w2j12cTKuLh/e6soTnt4pN+ZN6Vf
-         y1i7IE0tX4kwM1atst8ZfxkOYFpHb5DaeUltWiHA6BSXz9rl7HQ1QchHIj2hxcrHxkqf
-         hryw==
+        bh=mGjGXMgxdEYAGo1GbGD2zE9hgBaB/Zwy6Dj9nf1BYt0=;
+        b=TALQ1WPfsGlwnkAcUoHj25P9VKpYFU+aShb4VqPEViLtKjkDktCDKkujlRbazFzGh1
+         rJrB9FsJ0frIrXfCw5BxgDbCwI904Z+3cg0ISE/ZIsLYWFaJW8rzMu/SIAMXUcRp5ZT8
+         +pGkiBKnhlCbiIjiyl+rn4vtN4Jh8WCBaCpi+6CB5ubtAaXCf9/L8QqRn8TT9knwphwu
+         a384FK2gmqWDdeSMb+7DRB8sTH9equo624fxXNZvIwpiA0aYZJ7n4dDbAmDkIbeex7QN
+         4pANwMKr7a2weQdFgZua7+0NdbXJxxYpHDjZW3UOZX2Io776w76AkeLRS03twigAEPpq
+         CRNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724340512; x=1724945312;
+        d=1e100.net; s=20230601; t=1724340514; x=1724945314;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gkWgitHhldKdeisz33EiZdlfuv0bPsRGbcOFCT+k5gc=;
-        b=TZn6FBo5cNqahAf3hW3+OljhIQK4t7XkQSiwLZop0fZH+6NY4RUqDLzLMc6jd3CLQg
-         i1LMnKzGIgncoJMqQzz+bri4oMCI7NxVZPO3R/2GKMDMw9SwC5z6rciWEnIBo8+aNSyM
-         O5fb5ZBUPlItYlTAGmry/Qx8Jx9y0r9VDLsTl9uWzwqQqRaKCeO/NVbpRkaUz0y+ogvU
-         r3Q7yCmHdCpH5nE53fevpuNA4CbJu11BWDB+PbgrDL5gdI4eHdU5xvIbhAhwHUE1y9T/
-         gtuA+Xl/npdEMKhNsFdAIqph+ZGkRUGwrZBHOb1J+oLGx1eh/31EwiI9GMlMHvoBLF3p
-         PqSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXP4xvgj10801YJhXPuzb4rr6DnX/GTleaFRs+tAV+LJwxw9TfJEAX8d4kd6gFfezdm0mVIuR0/Lg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOAxMXIi9Ws5UDjP49gtGfmjT0UgEYfbmvfFE5d0DaZZbfxuQO
-	JgDo2e2pjGQCrCE4nGjsxKMxvg7UbyNV2x9B/oIqdpeiiGehCwnDjO8ZNeaykws=
-X-Google-Smtp-Source: AGHT+IFEWPJ3HqQL/w0KWFEJhV07xF/eMg4mv7Lejm46+5JkTivmt8Z+5f8B5VhGhYYih3FlUFQvOQ==
-X-Received: by 2002:a17:907:980e:b0:a86:9258:aeed with SMTP id a640c23a62f3a-a869258b023mr191608966b.61.1724340512413;
-        Thu, 22 Aug 2024 08:28:32 -0700 (PDT)
+        bh=mGjGXMgxdEYAGo1GbGD2zE9hgBaB/Zwy6Dj9nf1BYt0=;
+        b=MtSkygzaAf2SaPTYcX6+LknVZ47N1eGTHnH9VzAQN1q6rmgNMIre/V31lq8GZ2w4lv
+         1K5/Rie0BFBIxFNGV/NuKpFBLrAH7ikhfrN54HRQFo5GXw2KHu70/lKsRI6uNWkRaKec
+         6PpFLWWbQNjt1aQdAxpjoXmFCS7lp4B2jC4iY07dBrnk3YZl7sIBHBjbVWcBD24iKzZR
+         6wLBwPZPGf8Bfgjjhr6QMGVUDN51NvqGx4C6sXhdd9KaOCh6NsYSVY0KboXhAuqjYmVY
+         6voU+QbPBDECf1USDCHnKP8GCsipBwQ4xCwZYWcXqAkDFWECyLIPRI7yj1jBCX4R+a89
+         gQew==
+X-Forwarded-Encrypted: i=1; AJvYcCWZlbqIn4WbNaOFNFJx2ciKp9eBwASF5ry18afrXPGrIf07DBXst0uFtIUcCHKx+fcAof3U90YnrA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7mRUP6qq1MJvvyd3wKWczcuw3Lk7wCEieOX+a/fw6rR/K8xPQ
+	FSuAoxfRrs/pqzn+AS3Pe/8McxEtjkh3rvxmX345QdzVyxNhXWE4RsgAB9OMcIw=
+X-Google-Smtp-Source: AGHT+IGJeJoxOq1tlRUs+MCEa5uz16WViXX/h9LB3VGUBluXlsLHOcyR6hbTFMMPgE0Rs2wdaLi06w==
+X-Received: by 2002:a17:907:f74f:b0:a72:40b4:c845 with SMTP id a640c23a62f3a-a866f70378emr511233066b.51.1724340514344;
+        Thu, 22 Aug 2024 08:28:34 -0700 (PDT)
 Received: from claudiu-X670E-Pro-RS.. ([82.78.167.177])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a868f484dc5sm134189166b.171.2024.08.22.08.28.30
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a868f484dc5sm134189166b.171.2024.08.22.08.28.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2024 08:28:32 -0700 (PDT)
+        Thu, 22 Aug 2024 08:28:33 -0700 (PDT)
 From: Claudiu <claudiu.beznea@tuxon.dev>
 X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
 To: vkoul@kernel.org,
@@ -93,9 +93,9 @@ Cc: linux-phy@lists.infradead.org,
 	linux-pm@vger.kernel.org,
 	claudiu.beznea@tuxon.dev,
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH 08/16] reset: rzg2l-usbphy-ctrl: Add support for RZ/G3S
-Date: Thu, 22 Aug 2024 18:27:53 +0300
-Message-Id: <20240822152801.602318-9-claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH 09/16] dt-bindings: usb: renesas,usbhs: Document RZ/G3S SoC
+Date: Thu, 22 Aug 2024 18:27:54 +0300
+Message-Id: <20240822152801.602318-10-claudiu.beznea.uj@bp.renesas.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
 References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
@@ -109,29 +109,34 @@ Content-Transfer-Encoding: 8bit
 
 From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Add support for RZ/G3S SoC. It needs its own compatible as it uses 2
-reset signals and it cannot work w/o both of them. To be able to
-fully validate this on DT schema, too, the RZ/G3S uses it's own compatible
-w/o a fallback (as if the fallback will be used the RZ/G3S will not work
-anyway).
+The USBHS IP block on RZ/G3S SoC is identitcal to the one found on the
+RZ/G2L device. Document the RZ/G3S USBHS IP block.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 ---
- drivers/reset/reset-rzg2l-usbphy-ctrl.c | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/usb/renesas,usbhs.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/reset/reset-rzg2l-usbphy-ctrl.c b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
-index 8b64c12f3bec..08b18d7de7ad 100644
---- a/drivers/reset/reset-rzg2l-usbphy-ctrl.c
-+++ b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
-@@ -93,6 +93,7 @@ static int rzg2l_usbphy_ctrl_status(struct reset_controller_dev *rcdev,
+diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+index c63db3ebd07b..0f84cba872ce 100644
+--- a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
++++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+@@ -26,6 +26,7 @@ properties:
+               - renesas,usbhs-r9a07g043 # RZ/G2UL and RZ/Five
+               - renesas,usbhs-r9a07g044 # RZ/G2{L,LC}
+               - renesas,usbhs-r9a07g054 # RZ/V2L
++              - renesas,usbhs-r9a08g045 # RZ/G3S
+           - const: renesas,rzg2l-usbhs
  
- static const struct of_device_id rzg2l_usbphy_ctrl_match_table[] = {
- 	{ .compatible = "renesas,rzg2l-usbphy-ctrl" },
-+	{ .compatible = "renesas,r9a08g045-usbphy-ctrl" },
- 	{ /* Sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, rzg2l_usbphy_ctrl_match_table);
+       - items:
+@@ -126,6 +127,7 @@ allOf:
+               - renesas,usbhs-r9a07g043
+               - renesas,usbhs-r9a07g044
+               - renesas,usbhs-r9a07g054
++              - renesas,usbhs-r9a08g045
+     then:
+       properties:
+         interrupts:
 -- 
 2.39.2
 
