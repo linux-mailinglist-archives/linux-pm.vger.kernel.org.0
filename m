@@ -1,194 +1,203 @@
-Return-Path: <linux-pm+bounces-12708-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12709-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE62A95B14B
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 11:17:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DAD695B20A
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 11:45:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5609C285AC0
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 09:17:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 42872B26624
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 09:45:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31AD817C7BF;
-	Thu, 22 Aug 2024 09:17:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44C3E18309B;
+	Thu, 22 Aug 2024 09:40:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EfIJUEwz"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="VF5+pTbx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2053.outbound.protection.outlook.com [40.107.255.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2961414EC5E;
-	Thu, 22 Aug 2024 09:17:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724318229; cv=none; b=K0YUK7B+vitgOOTUkALVTsAXyYwWGFtU2xdXgea/Uv/PGzmE8LkO/1+skA7xwxyHkSqgp+CFJfmlt4XT17hdIra0LtZTVP6f+P6UbDz5UFnun0zMf1hIaXjWljCZ80E/L9/wnZngi5O70xXKihLb5ExHrZPFkEdDS28MqJYR5UI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724318229; c=relaxed/simple;
-	bh=a5Snna/TCExFOBfUIFiYvqGHUQEeHIaNkMpIs4WHu8A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nadxenfgYBD1Qld5nGUOQu3e8Ty1dfs7XsQDvN8hl7g6wmS04sWZBNvT7k48yBNHLBWn2XHCY876ydyQwbf0vM741VVYfLRSVW3k41hnPMuErTjksmILa9yGrCWo92iZ/93KMCd+0Gwx/K5dASxbgUFquyO/h7a/JSeSyimtaIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EfIJUEwz; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724318227; x=1755854227;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=a5Snna/TCExFOBfUIFiYvqGHUQEeHIaNkMpIs4WHu8A=;
-  b=EfIJUEwzlkMAinuQCWyEPjS1gMj2GTY2jbtjwi8VYqImC0I7p/1gtD2a
-   hbMlav1lteFVfH0fegdjf4ZcaiMFMUyfgZMizIicFWqeMHEMGrOn1nLWN
-   ABSlSk6g8KYILtm37UCJG6mNlzjJcAZdl0EmAy+A+yZIMR6eyGHrWT3fG
-   p/yjc2i75jXRcQ2d1bQSwOd6OCpmuWvuma3EK59dgn2eimDJy4pAfTvP+
-   Yh8Y4+dBp0mwJJ6BYijjJQbaK3Oo/Gdud1nMoIxph7I1njNjxrg9JndPR
-   cDc4t1EQzge6uBQ1ij5QCx1hatO8KuJhBljabAZr69ZDswUwhcZNWECyc
-   g==;
-X-CSE-ConnectionGUID: tvX7+ivzTom8L8a0BhbAdA==
-X-CSE-MsgGUID: +tr8jDRBRouHrPEWC7tsIw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="22873220"
-X-IronPort-AV: E=Sophos;i="6.10,166,1719903600"; 
-   d="scan'208";a="22873220"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 02:17:06 -0700
-X-CSE-ConnectionGUID: zS7NKeLJSZSG3G3mv54SEQ==
-X-CSE-MsgGUID: 07cnPwn5Q6OwHFPvUiRG7A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,166,1719903600"; 
-   d="scan'208";a="66267241"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 22 Aug 2024 02:17:00 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sh3w9-000Cd0-1m;
-	Thu, 22 Aug 2024 09:16:57 +0000
-Date: Thu, 22 Aug 2024 17:16:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stefan Wahren <wahrenst@gmx.net>, Russell King <linux@armlinux.org.uk>,
-	Doug Anderson <dianders@chromium.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Minas Harutyunyan <hminas@synopsys.com>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Lukas Wunner <lukas@wunner.de>,
-	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-	Peter Robinson <pbrobinson@gmail.com>,
-	dri-devel@lists.freedesktop.org,
-	bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kernel-list@raspberrypi.com, Stefan Wahren <wahrenst@gmx.net>
-Subject: Re: [PATCH V3 7/9] usb: dwc2: Refactor backup/restore of registers
-Message-ID: <202408221629.jv9AgCrF-lkp@intel.com>
-References: <20240821214052.6800-8-wahrenst@gmx.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD31183CAE;
+	Thu, 22 Aug 2024 09:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724319648; cv=fail; b=OYgdxZ1PEhS1wzHdG8pm0O+R/4MrJUeSjTHejWgQ1B5zurNKDvZsmWqvatTgNpWOW2b0t34mkzQ4UJd0052XxpneJdSwN3S411KlCd3U5FZbPhoPdldozeEuN2CxOtzc0GHQgFE8C8cRKrHzZyXxZTJaPADenCwJFqWRjRjti5c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724319648; c=relaxed/simple;
+	bh=poOHqFJnYUFOfwMitL/CyRXcmb0RlDsF6UBFj+Pi9iA=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=sxq7QfoayXoMWJQ+ZlTkP0nphKvNsIPb63FfZyGgxGJWtWOCASmpzxSsExnM+OelSkeY/NkZrhQGoEQ+TL4GxdVRGCNHyHKGTvs08t8VmjUlJV84qFJ+bcPKUzlEfPPaZvN9//zWdYRjg5oAn0I7qLIcNLrTMCNIWNzJOpG4tRk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=VF5+pTbx; arc=fail smtp.client-ip=40.107.255.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hgpYfzytTrP3zPg2eIzCEPpv/NHalG9GtkZbzmfShqSk96ipnJEvCiRoecSGBfiAjMdbzHx1CiM4U46nDoA6jpbZnFwGtkGlIRgN7By16Z/aaYh6VfX8nCGBI55LgK5wgHi9mSaq5CLwQhXXogDA/FjRNi/g+c9rXqI+60rN1O5hr14OKtGdYomo2Pj6HyKQ6MoBGE3DPnYk3XMzeLyi9u8+ByovXjjTjTNmol/MxbisuN/zRhqhEdFBavgBqmo3k5VcoTvV+lYGPEejmNh6D3PcB8Z4uOM8ODCmIcBsLC2vIj1K2hcPUkZmGw1d6ld326Z7+IrtE8iGgzPX/c6y6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5TonWXyMsKM2usgPZiHxczldsCTxjKnRkLfhgtiCRT4=;
+ b=zCoAfarhv9r1yv2rsu5l7OOUiTtvKbAlWeAZ6zL7JBkjAW0OSVaNfd4zP1HEaI5T7YrwknYI9oqfKxEbofE1wQwiSaLonbUukYMPJqH3z/PYKzNv3+PUEI9KbacJey894MuH0lfqu/ard0GqCe8eFisWFEb/63dhgQ70739YfgsFflBH80AN/AVDWjNnxi1Jm12PfuB04YMX6H6GElhbFPnMTLbXuyiYGkZj4h+SGtckqTAtAhjlPkBP3BCh4wKYCTKmkdpjAFeldLbsg19oK2j/gjFgn6KuwVCklolxfLqyGWQ3StO6VelTd8R7C4VjAs0+2zBHLCfkDItcGRiBKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5TonWXyMsKM2usgPZiHxczldsCTxjKnRkLfhgtiCRT4=;
+ b=VF5+pTbxrVhpRXLRUESpBNagTs0M62AfsLzrcDbwMF4VapTd7zO2jGPDlSwDTdKrr6WPxzIEIT0mOPGsjoXZGTVgT1M4KKgWvSyqBMOxn9G2JvrJ5+BOMLxl/VtwPbKH1zEdM3ht52rqFDUodOtsphRDKK8AQ4S7NHZ2Z+7WUxjj37hN1WNBqjhDR/R5c7CZURDBJ45MRR3ek3LnypaZfRisSrCGqbJvZffovcQgunP1Nd6qoTEYZqx4AV/XlH/FEOxgNUw7/FlPJy9enXJe/fYNrry/VtXZ2RYoWocvPW/tmtg+iAEy7o+dAz1au+F4gAoudbkRgP/g5bVx+dG4IA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6263.apcprd06.prod.outlook.com (2603:1096:400:33d::14)
+ by TYZPR06MB5122.apcprd06.prod.outlook.com (2603:1096:400:1c2::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21; Thu, 22 Aug
+ 2024 09:40:43 +0000
+Received: from TYZPR06MB6263.apcprd06.prod.outlook.com
+ ([fe80::bd8:d8ed:8dd5:3268]) by TYZPR06MB6263.apcprd06.prod.outlook.com
+ ([fe80::bd8:d8ed:8dd5:3268%6]) with mapi id 15.20.7875.019; Thu, 22 Aug 2024
+ 09:40:43 +0000
+Message-ID: <2c55fb07-b29e-43e0-8697-f75d1f0df89a@vivo.com>
+Date: Thu, 22 Aug 2024 17:40:41 +0800
+User-Agent: Mozilla Thunderbird
+Reply-To: 11162571@vivo.com
+Subject: Re: [PATCH v1] drivers:cpufreq:Use max macro
+To: Andrew Lunn <andrew@lunn.ch>,
+ Gregory Clement <gregory.clement@bootlin.com>,
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: opensource.kernel@vivo.com
+References: <20240822074548.1365390-1-11162571@vivo.com>
+From: Yang Ruibin <11162571@vivo.com>
+In-Reply-To: <20240822074548.1365390-1-11162571@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: TYAPR01CA0064.jpnprd01.prod.outlook.com
+ (2603:1096:404:2b::28) To TYZPR06MB6263.apcprd06.prod.outlook.com
+ (2603:1096:400:33d::14)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240821214052.6800-8-wahrenst@gmx.net>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6263:EE_|TYZPR06MB5122:EE_
+X-MS-Office365-Filtering-Correlation-Id: dc481521-0527-4c82-2125-08dcc28e7e12
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016|81742002;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RWlLQis5c2FZUGtrMDZBVkZwTlhlTk1XMkU5WC80ZXNpQ3VmTHk5LzlmaGEz?=
+ =?utf-8?B?Vk5sbnVaU1VYcjJSNXpNN01JVFRhd0tjWnJpMnFpQW5RRUpXOGxkeVA2TEJU?=
+ =?utf-8?B?dXZzd1pIV2FoQmhDek44TTVjYVUrNGRXUTZWZUM1SjRBMCtCYWdOeFNadWRT?=
+ =?utf-8?B?Ty81UVJXUHVHY0dYK1BpUnIya3h2WGtUZ2hZenFRSmsxemJSVzE5bTFLa0FE?=
+ =?utf-8?B?T2lYdWVaQWFzWmNCdUpJSWJXWklUWUQ0R2NNdmVVRnBXRVNJczdYOEhURFUy?=
+ =?utf-8?B?cmo3a3Y4azFlR2t6T2R4TUpOcTFMV2FhOWVGRFRtRXRsdm5vLzVDZ2lRN21p?=
+ =?utf-8?B?NWR6b0l3WER0R3NJS1MzTUMyUTlROHhPMGdRRkd3bEluZU1IOFgwQWFkTVJl?=
+ =?utf-8?B?S1U3SHByQWRJYnhtd2U5QWZ6SDNKT0xHamNpVmhXZVRacHFRemwzZjRvQjBP?=
+ =?utf-8?B?V211ZzFXSU1jNFFTTmxXTnlqWUh0T1pOS2pGd2Q2K2FPT1d5bEdIWVdjVkdo?=
+ =?utf-8?B?Vko1RUt6K2hQMzEyd0R4RHhqSnpBRDlEUS9rcVdEY2I5aGJXcitaNEE3YjhP?=
+ =?utf-8?B?YU1KVzdkeHZXT3REbWJqV3pPUU1QeXR5MktqMzNTVDdJd096aVIxam9TZVBq?=
+ =?utf-8?B?VzBHQW1HbWMvNzg4UGMxQ202VEYybC8xVE1KTVpsbXNIUUdoYTlPd1FJb2pQ?=
+ =?utf-8?B?YVFYSDVJTEZlTS9DRGlIUFAydHZQWnVhYVA3dXE1UEtmaVJtWFpqTjBJcUFU?=
+ =?utf-8?B?RWZoRWRTa3FjSVlWS21qcUxVNitTL2M2RzdvOElzV0NYK05oYiswZUNaWXpp?=
+ =?utf-8?B?MDh1N1VtWmV4TXBpMHp4OEVMOHQzVWw3M0NTTi9tZXJxUDlpRDhnaUMranVW?=
+ =?utf-8?B?N1RqajlMdk8yejdDZWpUOEhvb1IwMUhYRUVNQStSd21JTGdIMmFsS2ljT1kx?=
+ =?utf-8?B?dGw5ZmxvNjVmL3p4cTJ6Z3J4VjJ6a21LWkNIc1AzOE9IalZCd21HZkI3b2ZF?=
+ =?utf-8?B?L3UxWHUxRjhnemY2RTA3L3pmQnNualRhQkdVd3V2Y0hVZEtSc25QNHlBSG1X?=
+ =?utf-8?B?VGNlZWVIandaQkY5VDI5UHpIQzB2VHpUTlJmMDk0eDBRKy84ZHZaUEZpRVZw?=
+ =?utf-8?B?WVhOQzBncnFIUnVNNk1uTzFYdUNWVGJ2U3JlNFNiVlRRbzRuRUxqZW5Pbmln?=
+ =?utf-8?B?ZmxMWHY0MjBqSVh1SnJQbldrdEpuVERLVmdFNmMrNkJyc0E3aURZMGpWbXJH?=
+ =?utf-8?B?ZVdjeXZEM1h3VGU3djVlM0FMb0Fab1hNN0kwTy9zYnN2Y0s3TXdUdDI0VnNi?=
+ =?utf-8?B?c3Vkc1crajJHbndlek1CZzJPZnNOSW91U1BwK2dXRTNQK1ZmcGFhREE4U2Rw?=
+ =?utf-8?B?bm84SFY2MURyNVlrR0FJSjJoTlQzRDNjUzdld2NlY0ZIaUlIcXUzR3hvaGlG?=
+ =?utf-8?B?VjBOYlc1RWhPM01Lb0VqdkE3WTVkRlhHVUdqbDFMbzR4KzM4NjZQOTlwR1Jx?=
+ =?utf-8?B?WVc1RSs0R3FNQ2xZUGIxeEc3RWw1V2Z1UzU4aXlHb0dKeGk1cFFQQ2QvTU1k?=
+ =?utf-8?B?TmxvR3FxSWxFa2xTV2NUcnNuQmNpekQ1cmMzRlNPNU5JalJmd2E0bnhTUDl2?=
+ =?utf-8?B?Y2ZiN2JlZWdNcms4eEZ3Uit1WmhZMkJxcnVBTHBmdWxRbVZJSmpYanMzYngv?=
+ =?utf-8?B?NEp3OU1SK0tvUVdvdlFPYjhFV0FmMlRJZVdmUjZSdWJ2dklYYld6TkEwMUdC?=
+ =?utf-8?B?ZzZoZGo3US9zTFdSTGdmT09LeU1jcXZXK1JPRy9PWnN0YjZMT05qYkdBeFFI?=
+ =?utf-8?B?bmlKbUxIY1gvRmZTV2pOWTByUGxlOFRsVnQ3L0hQSFRsME55dDE2UTN3TG55?=
+ =?utf-8?B?endLNDd0dzZYTXBTdjU1dUJmUWhtNGIvZjQwYnZqemxEZGc9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6263.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(81742002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ck5UUjVRQ2M0MEwwTzB2L1Z5TVV1REZHNGpQTk52ZWwwTzBqQy9FZ1RJZy9W?=
+ =?utf-8?B?cFArcWN2SEduazRBL3VUeDFKZi9iTWw4WkowL09EeEhlVFpaWCs1SXdwQmIy?=
+ =?utf-8?B?a1VOMCtNeHpFN0JkV0NyaFlMSmh3azZ1VW9oL2JGUFcxSmh1WjZNQ1B2RVo1?=
+ =?utf-8?B?NDVvNTdpRXJPYU9nL3VBVTlHQSt6UnFlN0J1UkdsMXUycTc4dTlhdFNkV0J1?=
+ =?utf-8?B?d3VkOXR4cjRkYTRqeVdoWkFoNjFrdTBqbThsMUU0SlVKeWwvOU1LaUtUZ0l5?=
+ =?utf-8?B?OVgvL0RieEg0ZGhjcFptdEFwZytYSzJlYkF1V2NUeWQyWVUySnVCTk1NaGFv?=
+ =?utf-8?B?enhFR25kWSs5YUU4YXM1SkdEdWoxU3N3alVRUXhDYkpCM2hXSnJJcUtkVTNj?=
+ =?utf-8?B?aEFNZDhINFJheXRReFNkWHNSNkcrVVBCQkxmTHg1ZDRqMEVHTEhiRlFTS3Fp?=
+ =?utf-8?B?TFBxM3Yya2dwSXY5dStjQ1BmY0x2ZWN5UlZRcGtrN3R4bWRHYzFJdEVFN3VN?=
+ =?utf-8?B?aExSekFxL1VsdDhYT25NVUxKL1NOc1NQRFhqRFExYnp0aE5SejZNaWp1RmJR?=
+ =?utf-8?B?OUJYTkg2RjdyUUdFQ0NsNDBzSTlYMkhEN0Q0RkxwcURVOHh0N2VWT0RBdXJ3?=
+ =?utf-8?B?cEZRVFpNZnZ5dnArTHR2L3hhd2V2SENkcGh4a21HSldWQ3o1T1E4cS9YdHpa?=
+ =?utf-8?B?RmdKam5GeUpNb2w0TjM2N0RYcFIrV1EzS2ROelVDY2FFZXhiTjU3bHN1VVJx?=
+ =?utf-8?B?UXdTZ205U1VmTWo1dWNQR2EyWHBHSWlMbHNmc0RCV1lsWnpxSkpLWHNXVHlo?=
+ =?utf-8?B?cDhaeGN2SDZVdG5taE5rdlY2bDZTUUtHZDhFdGUxZVI5alR1WmYyNG9mSzFJ?=
+ =?utf-8?B?TGcwRHl4SnJuRlQ2OFBCZnJTWWFCT29iRkc4bjBsaVRVV2lFTE9zZy9kbDQv?=
+ =?utf-8?B?N0ZNcklHZW1XOUtTanBucDBPWGJVQ0xqRGIzNHEwMEdjVTJBK2NxZEtHdHp6?=
+ =?utf-8?B?UXBUWXNLcERGbktCNE5ZV05xZlc5aFhyTTU5MXA2UXFmWlJkazdBL3ZUMTU3?=
+ =?utf-8?B?OEYwYzMrSENsYmNGc3JRc05QT1Nvb2V0eTdMRE5DclhPR0N2V0RFL1RBVEVJ?=
+ =?utf-8?B?NFJGR3gzcjdKUmJBeWl3YVVPN0k0S0JOQTN6RUtjRDBPVkJ4aWFSTEhGclUv?=
+ =?utf-8?B?czZOUW1kczZlNGNqVVZpbWVLOFRYR2p4WGJ3bHdEK0pOWHBsS1dYQzhxcTFy?=
+ =?utf-8?B?U2gxYWlJMnhPMHJodEl1SFZlNmZKVExjempQdkdocU8wbTF0TEh3bGhZakQ2?=
+ =?utf-8?B?LzVjSnJ0aUJwallWZ1MzMGd5ZHFuWnFyaGc1Q1MxVWpBUi94U2V5RTlUQ0tS?=
+ =?utf-8?B?ZEhRMDc1TjdHQzRUV0piTUdxUkRnRUFNODRGc2cvcWdzTC85M080SWxDcXIw?=
+ =?utf-8?B?dm5wQ2FuTlZUOGRnQTlOYlZHSmY2UDVXSzBoZkJHZWlLUzgyWmNwbS9adTd4?=
+ =?utf-8?B?bjVQSnBSL1Z5MVlHemZ5dGlHN0JjaGpzbkdmdkkxN1ZiazVobjUwRjRhUUtJ?=
+ =?utf-8?B?NkNzMmxtSk96VWJSZGpBUzZDaGdleWxwRXZGTXhnZjVnM1huLy9ITEY3VU5i?=
+ =?utf-8?B?ZG4rNkx2SEhKV3NiTmtRNERzMDdoT1Rwb3JHclpUWWdWN2Z6YVpmcGtlb1do?=
+ =?utf-8?B?K2U3a1hSNDhkaDF4SlhXZXM4R3JTV3lzaUVjY2x6OW1Xd3Z3ejlRYTlzaVlt?=
+ =?utf-8?B?S0F4V3Z5V0FQbVpXYVVJNXBoM0xPMm1ueEdHRkx1RjV0M1pUVjhwS1ExdERn?=
+ =?utf-8?B?eGY5Qmk3S2pFMW8vTnVERExpbDAwTzRxR3huOURRRmdkamVtMHBpLzNMZXdP?=
+ =?utf-8?B?SkNWaTZVci9kVDZBaEowQjZycDduMUFxR1VtWG5sNWRxOHRYZ21XWGZQUEcr?=
+ =?utf-8?B?NEZ4K1BaeFdXQ2NzK1dEWE5wUENYamttS2t5T2lJN2ZiRDdTcnpXb0E2NVBH?=
+ =?utf-8?B?Wjlzbm40QWVUQkh2eW1ESmNEeEM1RmxKYkZUSktCTG9sT1RmVUlPTzZLUTdv?=
+ =?utf-8?B?bDhubFZDUEVFcGUzanNLWlcyeVU5ZmtObDJrK3hod0llUUVNbkE1eTlFREFt?=
+ =?utf-8?Q?zriH3lfk/1MoHqDzI2A+vtoRo?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc481521-0527-4c82-2125-08dcc28e7e12
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6263.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2024 09:40:43.7075
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Qx8ynRDUwQbjYZF+pgINA1o2CMARko9/vnMJzgZdEJ1rP30mX/DD2g9zs+rN6jNLgk+uyqmQJ0FU/qtjfwP1UQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB5122
 
-Hi Stefan,
+Sorry, please ignore this patch.
+Because the corresponding header file is not included, there may be 
+compilation errors.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on arm/for-next arm/fixes v6.11-rc4 next-20240822]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Wahren/mailbox-bcm2835-Fix-timeout-during-suspend-mode/20240822-063725
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240821214052.6800-8-wahrenst%40gmx.net
-patch subject: [PATCH V3 7/9] usb: dwc2: Refactor backup/restore of registers
-config: x86_64-randconfig-161-20240822 (https://download.01.org/0day-ci/archive/20240822/202408221629.jv9AgCrF-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408221629.jv9AgCrF-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408221629.jv9AgCrF-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/dwc2/gadget.c:5605:28: warning: variable 'dr' set but not used [-Wunused-but-set-variable]
-    5605 |         struct dwc2_dregs_backup *dr;
-         |                                   ^
-   1 warning generated.
-
-
-vim +/dr +5605 drivers/usb/dwc2/gadget.c
-
-be2b960e57154a Artur Petrosyan 2021-04-08  5588  
-be2b960e57154a Artur Petrosyan 2021-04-08  5589  /*
-be2b960e57154a Artur Petrosyan 2021-04-08  5590   * dwc2_gadget_exit_partial_power_down() - Exit controller from device partial
-be2b960e57154a Artur Petrosyan 2021-04-08  5591   * power down.
-be2b960e57154a Artur Petrosyan 2021-04-08  5592   *
-be2b960e57154a Artur Petrosyan 2021-04-08  5593   * @hsotg: Programming view of the DWC_otg controller
-be2b960e57154a Artur Petrosyan 2021-04-08  5594   * @restore: indicates whether need to restore the registers or not.
-be2b960e57154a Artur Petrosyan 2021-04-08  5595   *
-be2b960e57154a Artur Petrosyan 2021-04-08  5596   * Return: non-zero if failed to exit device partial power down.
-be2b960e57154a Artur Petrosyan 2021-04-08  5597   *
-be2b960e57154a Artur Petrosyan 2021-04-08  5598   * This function is for exiting from device mode partial power down.
-be2b960e57154a Artur Petrosyan 2021-04-08  5599   */
-be2b960e57154a Artur Petrosyan 2021-04-08  5600  int dwc2_gadget_exit_partial_power_down(struct dwc2_hsotg *hsotg,
-be2b960e57154a Artur Petrosyan 2021-04-08  5601  					bool restore)
-be2b960e57154a Artur Petrosyan 2021-04-08  5602  {
-be2b960e57154a Artur Petrosyan 2021-04-08  5603  	u32 pcgcctl;
-be2b960e57154a Artur Petrosyan 2021-04-08  5604  	u32 dctl;
-be2b960e57154a Artur Petrosyan 2021-04-08 @5605  	struct dwc2_dregs_backup *dr;
-be2b960e57154a Artur Petrosyan 2021-04-08  5606  	int ret = 0;
-be2b960e57154a Artur Petrosyan 2021-04-08  5607  
-be2b960e57154a Artur Petrosyan 2021-04-08  5608  	dr = &hsotg->dr_backup;
-be2b960e57154a Artur Petrosyan 2021-04-08  5609  
-be2b960e57154a Artur Petrosyan 2021-04-08  5610  	dev_dbg(hsotg->dev, "Exiting device partial Power Down started.\n");
-be2b960e57154a Artur Petrosyan 2021-04-08  5611  
-be2b960e57154a Artur Petrosyan 2021-04-08  5612  	pcgcctl = dwc2_readl(hsotg, PCGCTL);
-be2b960e57154a Artur Petrosyan 2021-04-08  5613  	pcgcctl &= ~PCGCTL_STOPPCLK;
-be2b960e57154a Artur Petrosyan 2021-04-08  5614  	dwc2_writel(hsotg, pcgcctl, PCGCTL);
-be2b960e57154a Artur Petrosyan 2021-04-08  5615  
-be2b960e57154a Artur Petrosyan 2021-04-08  5616  	pcgcctl = dwc2_readl(hsotg, PCGCTL);
-be2b960e57154a Artur Petrosyan 2021-04-08  5617  	pcgcctl &= ~PCGCTL_PWRCLMP;
-be2b960e57154a Artur Petrosyan 2021-04-08  5618  	dwc2_writel(hsotg, pcgcctl, PCGCTL);
-be2b960e57154a Artur Petrosyan 2021-04-08  5619  
-be2b960e57154a Artur Petrosyan 2021-04-08  5620  	pcgcctl = dwc2_readl(hsotg, PCGCTL);
-be2b960e57154a Artur Petrosyan 2021-04-08  5621  	pcgcctl &= ~PCGCTL_RSTPDWNMODULE;
-be2b960e57154a Artur Petrosyan 2021-04-08  5622  	dwc2_writel(hsotg, pcgcctl, PCGCTL);
-be2b960e57154a Artur Petrosyan 2021-04-08  5623  
-be2b960e57154a Artur Petrosyan 2021-04-08  5624  	udelay(100);
-be2b960e57154a Artur Petrosyan 2021-04-08  5625  	if (restore) {
-78c09c66698a77 Stefan Wahren   2024-08-21  5626  		ret = dwc2_gadget_restore_critical_registers(hsotg);
-78c09c66698a77 Stefan Wahren   2024-08-21  5627  		if (ret)
-be2b960e57154a Artur Petrosyan 2021-04-08  5628  			return ret;
-be2b960e57154a Artur Petrosyan 2021-04-08  5629  	}
-be2b960e57154a Artur Petrosyan 2021-04-08  5630  
-be2b960e57154a Artur Petrosyan 2021-04-08  5631  	/* Set the Power-On Programming done bit */
-be2b960e57154a Artur Petrosyan 2021-04-08  5632  	dctl = dwc2_readl(hsotg, DCTL);
-be2b960e57154a Artur Petrosyan 2021-04-08  5633  	dctl |= DCTL_PWRONPRGDONE;
-be2b960e57154a Artur Petrosyan 2021-04-08  5634  	dwc2_writel(hsotg, dctl, DCTL);
-be2b960e57154a Artur Petrosyan 2021-04-08  5635  
-be2b960e57154a Artur Petrosyan 2021-04-08  5636  	/* Set in_ppd flag to 0 as here core exits from suspend. */
-be2b960e57154a Artur Petrosyan 2021-04-08  5637  	hsotg->in_ppd = 0;
-be2b960e57154a Artur Petrosyan 2021-04-08  5638  	hsotg->lx_state = DWC2_L0;
-be2b960e57154a Artur Petrosyan 2021-04-08  5639  
-be2b960e57154a Artur Petrosyan 2021-04-08  5640  	dev_dbg(hsotg->dev, "Exiting device partial Power Down completed.\n");
-be2b960e57154a Artur Petrosyan 2021-04-08  5641  	return ret;
-be2b960e57154a Artur Petrosyan 2021-04-08  5642  }
-012466fc8ccc01 Artur Petrosyan 2021-04-13  5643  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+在 2024/8/22 15:45, Yang Ruibin 写道:
+> Instead of using the max() implementation of
+> the ternary operator, use real macros.
+>
+> Signed-off-by: Yang Ruibin <11162571@vivo.com>
+> ---
+>   drivers/cpufreq/armada-37xx-cpufreq.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c b/drivers/cpufreq/armada-37xx-cpufreq.c
+> index bea41ccab..f4aa3e84d 100644
+> --- a/drivers/cpufreq/armada-37xx-cpufreq.c
+> +++ b/drivers/cpufreq/armada-37xx-cpufreq.c
+> @@ -269,7 +269,7 @@ static void __init armada37xx_cpufreq_avs_configure(struct regmap *base,
+>   	 */
+>   
+>   	target_vm = avs_map[l0_vdd_min] - 100;
+> -	target_vm = target_vm > MIN_VOLT_MV ? target_vm : MIN_VOLT_MV;
+> +	target_vm = max(target_vm, MIN_VOLT_MV);
+>   	dvfs->avs[1] = armada_37xx_avs_val_match(target_vm);
+>   
+>   	/*
 
