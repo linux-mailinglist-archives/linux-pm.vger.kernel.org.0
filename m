@@ -1,85 +1,64 @@
-Return-Path: <linux-pm+bounces-12726-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12727-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64BA495B6AD
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 15:30:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4619795B7C0
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 15:58:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FA701F24D0A
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 13:30:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3B5D284AE3
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 13:58:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8834E1C9440;
-	Thu, 22 Aug 2024 13:30:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8EFB1CB301;
+	Thu, 22 Aug 2024 13:54:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="F1B7hyyy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XBxMu/Qq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C297F1C944B
-	for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 13:30:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B7F1C9449;
+	Thu, 22 Aug 2024 13:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724333422; cv=none; b=RAjeuwOPYM7t8FoLB3wQK4rApStO0ZDFmPuL3e52RpVc9HsYdNOFfMiHz45ldoRs8IW60SVqg5u1ZIIOqSF6KjyLi13eTdr9T+qYnwi5v+NS9P56lzs+LF/ZI+3yIl2+XOxtlVYd1oTc35+fKg35fPjvt4EBAzdCuNk7Gg7KwK8=
+	t=1724334858; cv=none; b=uJnxiqDdIa1sLeh02Fd5qsFpXLBATUBn5uq7zrFN+vLgx81fp9Lw+WprpFQqkDszoF3PefjZDXovr4LSdumbL/MWHppRD/UpfFCOZi0GO9C75dwfO0PIAHs98TAsW48PVZWf0UXtJzX5ajPyM2DpY11SGEbmUhd3vm3dnK4fbew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724333422; c=relaxed/simple;
-	bh=6uixaA1bOPbEnG+jiXt7A8JornGFwFdjfUFAjLRH2EY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NZBsBuZR2l5sGGtqvhXbabLnq0EpJN2KS5FJFnP0+RTh+J7xQ4bIcP0LLU7PT0A+YCGSzM7ci3nKJ+BjykiYOBLfpWh43pRASwl5UpAPVtsZ5pcpL0i3DwRICErSlzZybZON7E4O9vIgEDkYk65/HRJTGXri441cw3IgRzOs8jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=F1B7hyyy; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-36d2a601c31so428873f8f.0
-        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2024 06:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1724333419; x=1724938219; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sow4oJ1Jg0NDdR25xAMQ/COQ7rWcnilFzdDGv7rWYss=;
-        b=F1B7hyyyQHMitx5K0P5zu5z7pN0wcPyTuQyj3pk0nae4aKv0xf4Pj+gVt864LagolK
-         PH+LB/cyZn3rFTkWUm+R74Tl4DUhEjP0uAyuzuqwrPmEEEFKSN9l61NPMQ4luqpObrfY
-         mYBpcswcP8K2Q/VJhfMOFOqvJ+0smtlx2FnNJWEaQESdpTBXfwCD/gFK0J9GNQ4mS6k6
-         4aEpjMuar/pXWx53uyJshumRJUj89PhlFwdnxwetA2wv2tpyrUHe01nEBwn5cozIRXu1
-         drV+IejapoUrKQ8raiknh8nSko7llbxOdOmK74aly878HGi0YQs5ZmxYTU4xfvj4KZlw
-         EupA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724333419; x=1724938219;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sow4oJ1Jg0NDdR25xAMQ/COQ7rWcnilFzdDGv7rWYss=;
-        b=TZZybkV+U/krUtVOhHWCCXHwDj1MrCoRf2Zomizep8bLioiT30voKnyvUh5/UYkB56
-         DJdzdSdYXvP2uJ6YNibDj0aA7YP+u0MH2lvBJe37WT7TbuHa5p3fV15TGjzz3QeL2yuZ
-         VlhN1I8PV4dK18dOfs02O4XT/Sr6c74vTcfxLwosEgZ1cUnov7nU8UcX6hN3WckdElrH
-         nbMCqoYluClXH5f0cR2mBHsh4pdxYGRaNPN27g9lMxpsM74dCsqJKiHfXoIccwOUK2Xn
-         goE9XkCBL44S/pmVHRPyca5kUYABlbCiqeoWOwfY3HNwm0qqZAxHOX590G2kJcPBb16E
-         Js/g==
-X-Forwarded-Encrypted: i=1; AJvYcCUxH9rWFqMRv4ngFzR3BfYEQaoKSakMLKAySw8g75SI/WDo8ytU3ycaoVimvsvU8MfM7+9iULtyBg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxG4vFY8ZUaalLD1FlYZsfaNaPlhgNPbTz7R/w4OfEaIuY5J7Yv
-	KMbawRfX8Y8gM4IpsnQb9L8nSXCVTCXdpBifSgD0m6Nr2/DIHWRkSGoJ8XQU1Cg=
-X-Google-Smtp-Source: AGHT+IGUf6uLXVvibGKBn18YUjYGGvG9tobdZE/ovA1c/SHbPaxXsAPGDRGyV+P+LRK9TkEArUVlsg==
-X-Received: by 2002:a05:6000:124e:b0:371:8277:6649 with SMTP id ffacd0b85a97d-372fd5bb0e7mr3605771f8f.2.1724333418430;
-        Thu, 22 Aug 2024 06:30:18 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:1e6:1bb3:7777:498e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-373081ff633sm1699552f8f.77.2024.08.22.06.30.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2024 06:30:18 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Jonathan Corbet <corbet@lwn.net>,
-	Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] Documentation: add a driver API doc for the power sequencing subsystem
-Date: Thu, 22 Aug 2024 15:30:16 +0200
-Message-ID: <172433341423.27429.12007142599226863583.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240821100818.13763-1-brgl@bgdev.pl>
-References: <20240821100818.13763-1-brgl@bgdev.pl>
+	s=arc-20240116; t=1724334858; c=relaxed/simple;
+	bh=6WD4597q5Hvbt9P6xZ0ON6oN0TTnndPGmI59xwiWKqc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=JulUHf1smT3jBDRx3LqL6ZHQiKMscxbMrF6USi1FaM76dLM8gza1ofNHZ3ZOtlYzbwlUsI8F5kQPt/t4kFtcw2uiBv73PGiMgkd4FjmVSHNgW2ybNAPIRRTEqBambPBBLiDh9OqRcYiw2crVPRfM2dLTIaz6FP0bUG//a5Y4/rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XBxMu/Qq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E107C32782;
+	Thu, 22 Aug 2024 13:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724334858;
+	bh=6WD4597q5Hvbt9P6xZ0ON6oN0TTnndPGmI59xwiWKqc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=XBxMu/QqDQ4cGB8jQFs1IuSkBYSIxCFS3goNt5UkG1qfywV9HMJKJn3vGjSfSmUfl
+	 IhHn6hRwgI8+BpGkioxnq2VTS5iuilqM/YBZ1PPJuluU9hrm2hQ8CNXkWAAEe8V3Dt
+	 B3alQjdqHvQPf40OzSHlmvHpVTbG/TZx5l0z7Ah5NeX6oXVSOXm7a8zx7uuHDdSWBt
+	 FDaM9kEKQ6NYtMzjaF8GJ2JXA/BCggqwpzq6Ah6zIRzd7DmT3BH4pl4GKAIHkiv3Oi
+	 sNLndTaZdVtCWsXn2U8OdkO8HrkUV1HD2oPtMLEwcWu6Ft3him2oste9xccH+cwUBy
+	 Siz3hYaYy5PVQ==
+From: Lee Jones <lee@kernel.org>
+To: linux-sunxi@lists.linux.dev, Chris Morgan <macroalpha82@gmail.com>
+Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-iio@vger.kernel.org, 
+ quentin.schulz@free-electrons.com, mripard@kernel.org, 
+ tgamblin@baylibre.com, aidanmacdonald.0x0@gmail.com, 
+ u.kleine-koenig@pengutronix.de, lee@kernel.org, samuel@sholland.org, 
+ jernej.skrabec@gmail.com, sre@kernel.org, wens@csie.org, 
+ conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de, 
+ jic23@kernel.org, jonathan.cameron@huawei.com, 
+ Chris Morgan <macromorgan@hotmail.com>
+In-Reply-To: <20240821215456.962564-12-macroalpha82@gmail.com>
+References: <20240821215456.962564-1-macroalpha82@gmail.com>
+ <20240821215456.962564-12-macroalpha82@gmail.com>
+Subject: Re: (subset) [PATCH V4 11/15] mfd: axp20x: Add ADC, BAT, and USB
+ cells for AXP717
+Message-Id: <172433485381.1334876.7027428905035727559.b4-ty@kernel.org>
+Date: Thu, 22 Aug 2024 14:54:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -88,22 +67,21 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13.0
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-
-
-On Wed, 21 Aug 2024 12:08:18 +0200, Bartosz Golaszewski wrote:
-> Describe what the subsystem does, how the consumers and providers work
-> and add API reference generated from kerneldocs.
+On Wed, 21 Aug 2024 16:54:52 -0500, Chris Morgan wrote:
+> Add support for the AXP717 PMIC to utilize the ADC (for reading
+> voltage, current, and temperature information from the PMIC) as well
+> as the USB charger and battery.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] Documentation: add a driver API doc for the power sequencing subsystem
-      commit: 8b7e0a6c443e855374a426dcdfd0a19912d70df3
+[11/15] mfd: axp20x: Add ADC, BAT, and USB cells for AXP717
+        commit: e1043ad46060c181ffb8f981ccb25d9f698b2f09
 
-Best regards,
--- 
-Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+--
+Lee Jones [李琼斯]
+
 
