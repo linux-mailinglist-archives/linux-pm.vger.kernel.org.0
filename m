@@ -1,237 +1,157 @@
-Return-Path: <linux-pm+bounces-12766-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12772-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AB9F95BEE9
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 21:30:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B10F195BF61
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 22:03:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 089B51F2210C
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 19:30:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F9241F26DEE
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 20:03:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED5D71D0DF8;
-	Thu, 22 Aug 2024 19:28:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADC9A13B2B0;
+	Thu, 22 Aug 2024 20:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="yGElwiAx"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="Vn8jP0Ii"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2087.outbound.protection.outlook.com [40.107.92.87])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41FE61D0DE8;
-	Thu, 22 Aug 2024 19:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.87
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724354880; cv=fail; b=CvaVgk8Qshq0v1qX/kzJ9qxiENsdnHMOdqMCQFhnKsEmZqPs4gXuqcDWV518olMndyyiAEjrcTuBEkNCWRHPBc6GOxpmMugz7myavixtj85RZVHw6PYi6hbynyLcgZXJWbpnpYQZWqtE0ZOVJsWOXd3JpqULhAHLyDdUGMWPhb8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724354880; c=relaxed/simple;
-	bh=J/21KWgebescv2lND9PrMftXnignm7VabRGxMmkO/MI=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=fnH/2kns+TlHpqdFjQE8k877yo2ksQcre8TLH4dGPN+HuEG8HKXegbS/jxygr3pmndqoF9/asuJxz4cEjEfzZQKwGJn4Sf4vp8fJwn7rrcxJNTpGHC1u6O2bfMN/jbeawuTZPetMhMtSBWYjp8A/A2tpEnzok7wYlzRtXoHsz40=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=yGElwiAx; arc=fail smtp.client-ip=40.107.92.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hQYrCr8jh1ZYDOZ6yTWRQhuT61v0q4XZPtO/eyiPLyAH6OV5ydXqFHRVqohJDtWnQT3BvGClJGtRQWqGMpdLnnwzCuybdr3rGxgeCUc3SpNkXwpNz2TYtIqnN8TfbsRJD6IFOG1EhOmuDUscO03nz7JcLbMNS5/FvJYcp8cD8zyda1w7jBldHoN3GH8T9y/IG5AWs7EA8lAZM+9drf0ijmqj/lqIxEe2mzM4tef9TKmqIKATVPIfomLduyE6aG0ygkxZ8NJF/UxKQ0BUCgDDNOx35mYhoKBL94+9nvyVSgsWQzyPLtPHVU9xzw8CD3MhTKq10TWE6R2Yavj24+wcHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=olO+At1XU7EihUrcRXHe64vQW6eX69WC0aURbYFZulY=;
- b=nVZA0QrN8P/K3M3gjAa5tFzT9JtVUORvQuN0BdETh2Su46PoskiIve2ElT0JoXfclgTqj9MidWRfqIst+ziN+VlNDYkz23RTmIbKa8ubYt6vvFI+04+Kk84PoIbYbvnAY4zw4jYgf5xohRp/a3XmOdDEnSGicX/8KhuZBamXyRAhAPc0kkDIaRgRXkKZWoSTUMxsxtOrz3E1fohAwWLCMNHdZsEysfuJqogU6PuSemOM3Kn2UE+3rjVmBw61NbgvqJXNem9K9K7RgxNeAhhzAm8cS/hGuy/KRg9eemwpIv6LJIX5+oHEEcJIPC3XU9wsiEOx0xS5mJ4FF3ENuNRVgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=olO+At1XU7EihUrcRXHe64vQW6eX69WC0aURbYFZulY=;
- b=yGElwiAxmqZomD40igHFpj8hJswB4B9DZw5vPhEPdn0VMMBIJxm5jDIJlzaO2mb8/xmhcGx8tbp3j7/CVy6RK/EUf6zECfT3v3sviaEG8MEew2xMkqbklu2jqXrem2ADbIxBKMkg641H/pm+0rSsuiB7wricNugheeL60bWHTs8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DM6PR12MB4297.namprd12.prod.outlook.com (2603:10b6:5:211::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.18; Thu, 22 Aug
- 2024 19:27:56 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%7]) with mapi id 15.20.7875.016; Thu, 22 Aug 2024
- 19:27:56 +0000
-Message-ID: <6685e124-4a7d-44bb-80a9-fc5fa51269a9@amd.com>
-Date: Thu, 22 Aug 2024 14:28:05 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] PCI/PM: Put devices to low power state on shutdown
-To: Kai-Heng Feng <kai.heng.feng@canonical.com>, bhelgaas@google.com
-Cc: mika.westerberg@linux.intel.com, linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240712062411.35732-1-kai.heng.feng@canonical.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20240712062411.35732-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN4PR0501CA0058.namprd05.prod.outlook.com
- (2603:10b6:803:41::35) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA41E37700;
+	Thu, 22 Aug 2024 20:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724357003; cv=none; b=ljbjSAEfKw7lkOgsztBKWOK51HwHEWuSICb+t/JGV4jowxNYIkUPIlwV/1ZGS9CRunYnhOab+peh8IMZc1GeMgwztlnsk+WomZKt/hbqPtXO0nDPtc4h1tNx2vwBhw0ug4MAulvMOvPPVchon8GEttwlQJ7aU10giDFWadsp7z8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724357003; c=relaxed/simple;
+	bh=hMjv0kTTbhd2cvKuxFBqLRC4XzRw5Tl4Y3UveP6Z2ys=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fUB3Kk20zBh17XjNucwhUXY+Co/Aarek8q5UjcObiU1zOyXj4MPopvmQoD9S8I27gXIQt6H3KHy4xQZlXhhD3d2a0GLUP6LX77q1iBAL3JtvUx2IoDuaIhN80W8o7LirrtUdHxTvkxGwlGyLGTW20oLuqMt4qYS/i8hXNNvGDXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=Vn8jP0Ii; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id 62ed68ab59bf30e8; Thu, 22 Aug 2024 22:03:19 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 1838C6F0E2D;
+	Thu, 22 Aug 2024 22:03:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1724356999;
+	bh=hMjv0kTTbhd2cvKuxFBqLRC4XzRw5Tl4Y3UveP6Z2ys=;
+	h=From:Subject:Date;
+	b=Vn8jP0IiDiYGt/YdrE+aJuHy7ZVk7bNxDhAX/2oJt4GHmROksTTwC1Dt+MpDFSL4h
+	 pVSWu9KEpPrjMTVOTjf1vJAl1zgDwrR/Vo3bqpg8AYD3Alzs3c20eKQEF1txrCu/Os
+	 e80NS8IaXG2YG3HsbFZjO8lmjSe8/qaHOoRwo6mpoSwuhPcyXKJd2+cx188b5bAK8Q
+	 u6dBn74sgJ5h6DrWlxWJqwrQ0akVf5MBB3NVvuC+u+h8MGQJ1OOB65rS5PG71V07e1
+	 l1MEyJ3i8Bv8M1AAxR5HTkfMlDBqd0H4S8LRtwaG1Cr9RaktjNvmYUpPnmEzYCFWcm
+	 9cg/IPfl5CnDw==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Peter =?ISO-8859-1?Q?K=E4stle?= <peter@piie.net>
+Subject: [PATCH v1 1/2] thermal: core: Fix rounding of delay jiffies
+Date: Thu, 22 Aug 2024 21:47:36 +0200
+Message-ID: <1994438.PYKUYFuaPT@rjwysocki.net>
+In-Reply-To: <3331194.44csPzL39Z@rjwysocki.net>
+References: <3331194.44csPzL39Z@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM6PR12MB4297:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6c8fdabf-7f6d-40a3-1f6f-08dcc2e08626
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?amkvWkkyMjA3MjU0bW1PaUh1RFI4cG9xK1c3aUhvQi9NbUFTTHZBTGdUejVs?=
- =?utf-8?B?RFVKRTdJZjJ6aEpDdUM3N1NzNlN0anN5M2dsZ3F5VlhlaERtT054N1Y3YjlM?=
- =?utf-8?B?cEp4elA1VEZZc1hVQWlDekEwNW0zVldlYk5yUFd4dGRoVExpdkI2UjI5OEVu?=
- =?utf-8?B?NkxBZjhWQ3o0eGZNbmFPVUxJQkhGWCszQW1jaTNlRFI3RFlXenBOTzBJS3dW?=
- =?utf-8?B?QlE5YkFmWUZQcGpvUGhUSTZXNSt2YndmeHowc0R1dXpUWG8yTXdLZlVyekZy?=
- =?utf-8?B?TVJDSHFEcnJIUk4zTTBVcXBzMTExZHYwTjlLZFp6ODlxN1h5Mm1iYldqVVZV?=
- =?utf-8?B?M05NYSthems3N1pacWs0TXhFYXNscklvcFpHekQ4TmdVZHdQUjl4UHFiR21Q?=
- =?utf-8?B?WUxJcmFxQmRuRCtucnVmUE5maXE1QU5ZS3pBQUFHOXZaQXFOMmk0akxPVFVu?=
- =?utf-8?B?OG5NYWRtc0lLdEd5ODNqb2FyU20zTFEyWjZsZ1lwRTJRUXBEd0owM0lRbThI?=
- =?utf-8?B?RldTczJXdVhwRmF4YUI2UjNQYlQyOXlqKysxTlJLZGZJb0s3SnRmWkxtT0Zn?=
- =?utf-8?B?MlV0bjl0ME05enhac28reUpZN1JBN2o0UVEzUytYRmNNMjc2bzRSZTloemFk?=
- =?utf-8?B?eS8xRm1DNDBQRlhEaTBzVWFmRmZyZThyUmJlSzJ0dFQ5SnE4SGF6WTMvT2Qv?=
- =?utf-8?B?b01DWjNjekp0YmtJL3Y0ckdUc25IUzkzUlhSZXhrbEVOeUdVQzlqMHBET3BE?=
- =?utf-8?B?U0JJNVcrd2g3TkFtdjNJc1dCNjJ1bWtzVkROUHB6YUk3aGhFOGx3UWRmd2hS?=
- =?utf-8?B?VlplOFlGOExSQTVLZW53OHd4blJpbWNoaDhVS2R6WlZ2aVpiRFJRRitqZjVo?=
- =?utf-8?B?dktqclBLakZyQ1N1WXhNaDBpbnltZjQ3NUc2L2tuOVpnUDd4U3NCdzd3dE5i?=
- =?utf-8?B?eEN1ZTBoKzcxQkFQNUpBckFFMzdVck9xT3FGTTE1RmZPQWR4MjNmNWdxYkJF?=
- =?utf-8?B?aGpPMTlRNjZaZFZJQjg4aHZnS1lOQlpLcDlSODBBVVROS0hFejJaQXU3OXZz?=
- =?utf-8?B?NHpqcThldXNOS2pGaUlNOXNTck54bXlvOEFseXNRN1B1Zi90RWZ0Tkt4cHV1?=
- =?utf-8?B?Yk04NjJjYVppUTU5VnIyY2J0NzVIckR3b3J0bjdzaHNONUVONHAwVnkyZ2Ja?=
- =?utf-8?B?OFNLYlpsb0lGNlRKYlBCRkwyUmhTbXB4ZUFhbmZUS2V0SzFFZGFjdzVFMS9W?=
- =?utf-8?B?cWU5cjZzalFlTmdQUmxweWdTeHBvMjZjaUNBU2JKS0hocUxvNjYybEdnQU5T?=
- =?utf-8?B?dWU2eVdwcWVxMFZ4L0NNWFNkS29vRFBaZmFhRlFUM0R3STZVZ2xDTXhldUJ0?=
- =?utf-8?B?enNFdGtEQ2hJcWFteEkrZG5uTDIwWWsrNE5xcjNOSUJMeEF3blM1Y2VKd2x4?=
- =?utf-8?B?TW9pZFZCZ1Ruakl4SWRQWTNLWG03cldNV0xQWDF6ZkdabERYMHpXZysvMmxP?=
- =?utf-8?B?Y0I0TVJTV2Vnb2Y0a2xlZEdUSnZnaTZBVHY1VTkwZmRCQVRuSmhldENnUXIr?=
- =?utf-8?B?TjVEU1h5SXJlMDREcEpRVnBnaXB0K0JBYVZUWWZrbjFNUVVpcnBNWG4rT3FV?=
- =?utf-8?B?NEdibEJoYk9VTVVkR0RjamtpeXBxckJSbkR2TExDRjdCMjhOQXJJS2w2TUlY?=
- =?utf-8?B?cEZxT0VvQUluQmRyYUFHWmdqOFdEYU15ZjhWWmhLMzUwTTN1UmtyamhlTWpn?=
- =?utf-8?Q?oJ6OWD8XYTwDFovG/g1zn/8wwpgHyZEopO9ZX7v?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cmVrcVUwSnJDQ2g5VjZSeXlqZStYdDVPYStGZHlXaytBaVVYRkw5clpNb3M4?=
- =?utf-8?B?ZDEyejBTc0QrMnBDblcyVlU3azRhNGN1bmtkM1Uxc25MMVNkQTk3K1B5SW90?=
- =?utf-8?B?bVBtQ1VpcG4xbXR6QTZEbE9jS0dTNm0vUWN6OXpUeGNuWGVTdks4Skd4VDRx?=
- =?utf-8?B?c0h0Q3grTTdYN01udXNDelQ3SXp1WitrT3NwcmpIcmF6MXMrVFhBN1dhL0k0?=
- =?utf-8?B?TmJzQmVxTFJqRFNWU2lzd01mNEc3T0wyYjYwMEM2aEJsZ3pLR3c5ZUMzK0Jv?=
- =?utf-8?B?V0xURnNaM1Iva0JSOE0rWnhncHliaXc3a3Fyd2JEZTZwRWlkOC96SjM2QlZT?=
- =?utf-8?B?RFB1MEtMZmtJU0h3N045RkdkbWJCNm5MaXpaM2d5V2NTblhwRUFCOTlTMjhM?=
- =?utf-8?B?MFhrd2s1aXQ4UU51Y2NUclJiUXZmdUIrQjRKMjJoYWwyTnNibm85R082SE02?=
- =?utf-8?B?Nk9Ga2ZPeVVadjNBZlZIQWQxUTFlaXVEYllJMHB1L090a3hLTkVlQjJOWUlr?=
- =?utf-8?B?a0FuSU02Mk1qMlJCdGNiMEdTcW1FQ0diZWRMV0VyN3l6S0tVcjNaVEtKekpS?=
- =?utf-8?B?WWRXb1RNaFdzU3IwVElMd0NJbmdvQnhJK3A2RU83NkZpK2NBTjBweHdYcnZn?=
- =?utf-8?B?ODFkc2ZBTGpmQU82STIrUU9vNmUxeEJad3ZQNXcvNWVnN3luT2lsTWtyaEQ2?=
- =?utf-8?B?Q0x0MkJ6elVac3FBdGw3RCtFMWxvQ3NKeDVJQ0prb2xFVXR5Z21SajZIZXZ1?=
- =?utf-8?B?UFNYR0ZheENZVXdndU5zNHoxdHVzejg5TmRDVXlnVDloL3Z3dHhCVUI5b0Ur?=
- =?utf-8?B?R2MraXI2SHl2UnBzYmhyODI3QStVYzUvVGxDTXJ0TGUzR0k0SW8vdTdUaHJ1?=
- =?utf-8?B?ZHMvL0F5WFpOMjFGekNQQkZPZkNWRC9LUXFObFlYRmZ6WTN6dFNTNnVxdmJs?=
- =?utf-8?B?YnZNSVE3QThiakp5c2NjS2lsY3Rib1ZxZ01EbmxuU3lhWDdpSUY2b3NPQXZR?=
- =?utf-8?B?bXdyeUxiQ2FDT3ZEMzVRbVBkbk5SSnNUMzdmYSt2NU9icFFjU2tjUnA3WWRG?=
- =?utf-8?B?cjNoMzA3enFrSW1qN1RnVllYZGxkM1VUSWwxcHFmOWF1UTJZcVU1cHh4UDZr?=
- =?utf-8?B?VUZLd1VoSDNGSkVJNDJzUDIzeUN4d1NPbUVTOW1DV01kY3ArNisrNGtWN2Fi?=
- =?utf-8?B?OTcwRy9WVUdlRllEZEsvdGNKMGJFcllaeGxYYXVwbG1EMXAyYkNKMU9qY1Er?=
- =?utf-8?B?amRlOTVUYjBVTjFZT2E0U0d1STR0UnYzS1dIODRwdjcyRVhNWERRZGVHTTdx?=
- =?utf-8?B?UERQUFZldUVjSHN4MndlQmdZSy96bWdua3hhQTRHQlNiWjV4eE54L0pITEQ2?=
- =?utf-8?B?ZVZRQzh0NmJqTHh2djRvSDA2b01SaFVudnFKTFVzbFlmdFBHZEhUSjZsSDFX?=
- =?utf-8?B?N2pTMTBzbmtYSXQ1S2VNNE1XNUxVR1E5MmZJRnBqOWpFenZFNVQ0RXhVWlhV?=
- =?utf-8?B?ajB5dGZEL1BGYi9ENUNZc3dabk15aC9NQzFvZXR5VitoVzBaMXRFQkRmRWtz?=
- =?utf-8?B?dmYrd1BabGJSOEJQSDVGcEhoRmxrdENyZGJjQ1FaSDF1UzVRaDBDdmY0SDNI?=
- =?utf-8?B?TEhRK21UUTdFamZub3RVOGVLeHVTM1pzRTdpc2FYcUY3aGpSR3FrQllhTDRK?=
- =?utf-8?B?aHJtUW9xWmIwc3cxVitUNEpJUGdneTQ1SnZDZVRMY0hORDdCRmxlOThaY3dN?=
- =?utf-8?B?aHgyWWt4Mmc3R0t4UUk3aFpWenl4MXFLZUJ5anUxc2tpR1kvV3RPRDNOa3Ev?=
- =?utf-8?B?QnJld0ZNRUtBemxmcHJrWXk0NlhDNUhObmNzdmpuR2ZXblhReWFobDFqaXpF?=
- =?utf-8?B?OHZaT3Z5REV5YUZlckE1SXhXZW83THlET2orYUpYbk4vdmViYnl3ZERyWnV0?=
- =?utf-8?B?Wk1SNEhNdVpydmMyb2dPSE1aaG1iNjFhU2NRVUN0N0thcXk4aGpoZXV2cXlR?=
- =?utf-8?B?UityOEp3VjBLY2dxMDRxQnEraHFQbytpVG8xMmNPaFUrbUMzY3V6UFBzb2k0?=
- =?utf-8?B?SWFLMXppRTRwa1lMRjc4SjJUTjJqUzMwOVdqT3ZyclViUXNmQ2ZwU0J6M0lx?=
- =?utf-8?Q?J5vB+OayCes0WuICj3LQYrbnu?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c8fdabf-7f6d-40a3-1f6f-08dcc2e08626
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2024 19:27:56.0177
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OycQVcZHqxpCIqOOomoks2QNXiYx9xILkSitD5P420coPihWAX03PlfaN+K+ZxOqWfubIRzpNF6OBz266HCxpQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4297
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: spam:low
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddruddvtddgudegvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegoufhprghmkfhpucdlfedttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucfuphgrmhfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthho
+ pegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehpvghtvghrsehpihhivgdrnhgvth
+X-DCC--Metrics: v370.home.net.pl 1024; Body=12 Fuz1=12 Fuz2=12
 
-On 7/12/2024 01:24, Kai-Heng Feng wrote:
-> Some laptops wake up after poweroff when HP Thunderbolt Dock G4 is
-> connected.
-> 
-> The following error message can be found during shutdown:
-> pcieport 0000:00:1d.0: AER: Correctable error message received from 0000:09:04.0
-> pcieport 0000:09:04.0: PCIe Bus Error: severity=Correctable, type=Data Link Layer, (Receiver ID)
-> pcieport 0000:09:04.0:   device [8086:0b26] error status/mask=00000080/00002000
-> pcieport 0000:09:04.0:    [ 7] BadDLLP
-> 
-> Calling aer_remove() during shutdown can quiesce the error message,
-> however the spurious wakeup still happens.
-> 
-> The issue won't happen if the device is in D3 before system shutdown, so
-> putting device to low power state before shutdown to solve the issue.
-> 
-> I don't have a sniffer so this is purely guesswork, however I believe
-> putting device to low power state it's the right thing to do.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-KH,
+Using round_jiffies() in thermal_set_delay_jiffies() is invalid because
+its argument should be time in the future in absolute jiffies and it
+computes the result with respect to the current jiffies value at the
+invocation time.  Fortunately, in the majority of cases it does not
+make any difference due to the time_is_after_jiffies() check in
+round_jiffies_common().
 
-I did testing with your patch along with a few others, and found that it 
-does the best job to put a majority of devices into a low power state 
-properly.
+While using round_jiffies_relative() instead of round_jiffies() might
+reflect the intent a bit better, it still would not be defensible
+because that function should be called when the timer is about to be
+set and it is not suitable for pre-computation of delay values.
 
-I have the details of what happens at S5 outlined on this Gist:
-https://gist.github.com/superm1/f8f81e52f5b1d55b64493fdaec38e31c
+Accordingly, drop thermal_set_delay_jiffies() altogether, simply
+convert polling_delay and passive_delay to jiffies during thermal
+zone initialization and make thermal_zone_device_set_polling() call
+round_jiffies_relative() on the delay if it is greather than 1 second.
 
-* KH column is this patch.
-* ML column is 
-https://lore.kernel.org/linux-usb/43594a1c-c0dd-4ae1-b2c4-f5198e3fe951@amd.com/T/#m03d0b36f86fb4722009b24a8ee547011128db80b
-* FS column is 0fab972eef49 being applied again
+Fixes: 17d399cd9c89 ("thermal/core: Precompute the delays from msecs to jiffies")
+Fixes: e5f2cda61d06 ("thermal/core: Move thermal_set_delay_jiffies to static")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_core.c |   23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
 
-I also have power testing data from an OEM's system that shows that it 
-improves things well enough that a previously failing energy star 
-certification is now passing.
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -323,11 +323,15 @@ static void thermal_zone_broken_disable(
+ static void thermal_zone_device_set_polling(struct thermal_zone_device *tz,
+ 					    unsigned long delay)
+ {
+-	if (delay)
+-		mod_delayed_work(system_freezable_power_efficient_wq,
+-				 &tz->poll_queue, delay);
+-	else
++	if (!delay) {
+ 		cancel_delayed_work(&tz->poll_queue);
++		return;
++	}
++
++	if (delay > HZ)
++		delay = round_jiffies_relative(delay);
++
++	mod_delayed_work(system_freezable_power_efficient_wq, &tz->poll_queue, delay);
+ }
+ 
+ static void thermal_zone_recheck(struct thermal_zone_device *tz, int error)
+@@ -1312,13 +1316,6 @@ void thermal_cooling_device_unregister(s
+ }
+ EXPORT_SYMBOL_GPL(thermal_cooling_device_unregister);
+ 
+-static void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms)
+-{
+-	*delay_jiffies = msecs_to_jiffies(delay_ms);
+-	if (delay_ms > 1000)
+-		*delay_jiffies = round_jiffies(*delay_jiffies);
+-}
+-
+ int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp)
+ {
+ 	const struct thermal_trip_desc *td;
+@@ -1465,8 +1462,8 @@ thermal_zone_device_register_with_trips(
+ 		td->threshold = INT_MAX;
+ 	}
+ 
+-	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
+-	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
++	tz->polling_delay_jiffies = msecs_to_jiffies(polling_delay);
++	tz->passive_delay_jiffies = msecs_to_jiffies(passive_delay);
+ 	tz->recheck_delay_jiffies = THERMAL_RECHECK_DELAY;
+ 
+ 	/* sys I/F */
 
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Tested-by: Mario Limonciello <mario.limonciello@amd.com>
 
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=219036
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->   drivers/pci/pci-driver.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> index af2996d0d17f..4c6f66f3eb54 100644
-> --- a/drivers/pci/pci-driver.c
-> +++ b/drivers/pci/pci-driver.c
-> @@ -510,6 +510,14 @@ static void pci_device_shutdown(struct device *dev)
->   	if (drv && drv->shutdown)
->   		drv->shutdown(pci_dev);
->   
-> +	/*
-> +	 * If driver already changed device's power state, it can mean the
-> +	 * wakeup setting is in place, or a workaround is used. Hence keep it
-> +	 * as is.
-> +	 */
-> +	if (!kexec_in_progress && pci_dev->current_state == PCI_D0)
-> +		pci_prepare_to_sleep(pci_dev);
-> +
->   	/*
->   	 * If this is a kexec reboot, turn off Bus Master bit on the
->   	 * device to tell it to not continue to do DMA. Don't touch
 
 
