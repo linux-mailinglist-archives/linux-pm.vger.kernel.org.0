@@ -1,244 +1,184 @@
-Return-Path: <linux-pm+bounces-12704-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12705-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C61895AE6A
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 09:06:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C79A95AF93
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 09:46:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3CB7282CE6
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 07:06:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FCC01F2179B
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2024 07:46:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 109B313C9CA;
-	Thu, 22 Aug 2024 07:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A424716B750;
+	Thu, 22 Aug 2024 07:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="dPdyGXr/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2071.outbound.protection.outlook.com [40.107.215.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9AA13A3FD;
-	Thu, 22 Aug 2024 07:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724310390; cv=none; b=jtryaIEF2nA6PmYtB26plqFqN1OcNAkrzLUzRe4P4lVRh4NAk6VCejxdnJBHQB9a/MQ3+5yhzSRFCoPN33cMVu0RBA7g7KUjwXezyqU5zItsw5AWHT+n9unlJgeyIhhnaieMUisW0N/dg8S3Nu6rB5VqW/fO1oyFFuwWDOU5bXE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724310390; c=relaxed/simple;
-	bh=FLilspV2tZ+qW+2d8uObAeKfCmFZIti9Wu0nFfRYwgs=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KckoehFEaEb4eDzx0EHzLtH/N7EhNivSIl7W6fr2Q8uk5IzhVFtepCsKgHDo2MasQCABXbwulcwVqynGswg6UQrRvN3mO6HUeuqe0mxMbWvbzWP7lk4hkqLm5HPjmBnhiGSUzPJD9olkDbyHZnrG54bgTrHAuLz0CGKJlEDOcU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.3] (ip5f5af532.dynamic.kabel-deutschland.de [95.90.245.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id D9E2E61E5FE05;
-	Thu, 22 Aug 2024 09:06:12 +0200 (CEST)
-Message-ID: <8092403e-cc8a-45ce-982a-c954e7428c32@molgen.mpg.de>
-Date: Thu, 22 Aug 2024 09:06:12 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC979166F3D;
+	Thu, 22 Aug 2024 07:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724312764; cv=fail; b=qYhqRIizoRHsIfGtQs6V87xpQdbLi6bIjpirL7n/9YakorbeyoOwXHlQ28ghmcUyhcwogIkly1ttflEKwlulhKRzewQBhcTECv5gg20605j7z86A7kGtq9wOY+olSpPbpC3zAIYAiyyCh+J17Xikk3gxKxx+mgdMsYwe+mb4RaE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724312764; c=relaxed/simple;
+	bh=uMvtEmXebRwhAtNimt2Dh+jzXOvfEE9+6fgrBsufHY8=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=toGT78J/0TSK2k4Eb+BiuZYnEX+U5oPDrIT8AbonsoPLbcSgf0ADq+7X4/jYvVv3eWgKaVfOVbOoD8bX3MEgBtFSa+ZolRLj9WWQrNzL98xLrdf0tBevYIEOMx82jQ1k7gpgCkXtspOJ0DpfB05zQxshBN3PQYcAMvMhaiBMIos=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=dPdyGXr/; arc=fail smtp.client-ip=40.107.215.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pESfIyur8iPLV5w3VeKw2x1tLTx1VrzNpBKvNDYkG9tn8K9u+KJ/2+3Bt4OytgGYRUsDOLdDhfu1mC2mrUBuHZKRrDPGSKInU6kRn+XdwaZ3w4F48eI39VqhUBwlwTjlVKSAq5jQolk0QnN0FOhcTutkmI74rFltF3tdQ14YS6e8WlXRNfsgvI+KJ62FnXT702HZrf8BLgClDk8NZLV5i5KWCX4qlY4L49aA1XJcxS8jUKicQn0ZtUF20oVevIOeAhXRT0JFOPKpXD9ShVPHs/Xy8FxAXX9+d7OvHkR3rcjfUtj8v6PYdcGMn+WelIv+5V8J1LxyWzkqOyVQ3MWLBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OmiKKt8tHHGJlM4tjABkx9wxhxJ/65PnMgNFmmYhqkI=;
+ b=NsW5v82FmhZDcjAEBQX15y2nxk2fZPglg4ojIzI8F5RH8803pd8KQ1Swafn0NlupdwcnmT1MK09/BtJJT2NL4O8GCKTYJoVIRnl1VgRfAbZmG59PZyHuc5quTLp40QJz51rFbknVdc05AA1w9kWsdPvK6sPXAgdbPIEEVbMyS/ZWJTl4XA93umST4OyEmqMtIwzXQWhaoJcReglW37OdJC1h6pRVmHDSR6/+PoQa4HGdAi211FFu022amrYbOIfWQ+2SOZEPpboM2rfetzu0XyJuuHfd0qT5bkmwp6yd9tTqoORq7Ykhd50br7TTsDvja0NXh6dxjD5p7iKoLfGLBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OmiKKt8tHHGJlM4tjABkx9wxhxJ/65PnMgNFmmYhqkI=;
+ b=dPdyGXr/WzxBfQsROMDtZJ+Fb1i4HRntmgNTxO8m18ZJLhh0iQ8f3SvKFhZdgp/gOBaNIx2NG31pN0E/yMxxNxGscnfIXVZGGbT87ViGdeUTc2a0kqqZNX5X8eW7e4Gh9D3m01o+GnsaUuaQmWrujOMxYix61u/Y21QaxiGCOHhuiRAeMg3EHo0XdaPso58B+pYnzJMzdU77HMRNUckngLdooX8kPh/aPa1GzwPMZYRL4RBrmBQEt+M9Bl7+KCZJooChynlHDYYHnYNxTo5Lo4mjIw3OAa33Y3WUikjei9IB+dpo7QhmZSLUcRZmiVNFk2S/FL5PsiP/n8faihvMQA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6263.apcprd06.prod.outlook.com (2603:1096:400:33d::14)
+ by TY0PR06MB5777.apcprd06.prod.outlook.com (2603:1096:400:270::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.18; Thu, 22 Aug
+ 2024 07:45:58 +0000
+Received: from TYZPR06MB6263.apcprd06.prod.outlook.com
+ ([fe80::bd8:d8ed:8dd5:3268]) by TYZPR06MB6263.apcprd06.prod.outlook.com
+ ([fe80::bd8:d8ed:8dd5:3268%6]) with mapi id 15.20.7875.019; Thu, 22 Aug 2024
+ 07:45:58 +0000
+From: Yang Ruibin <11162571@vivo.com>
+To: Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: opensource.kernel@vivo.com,
+	Yang Ruibin <11162571@vivo.com>
+Subject: [PATCH v1] drivers:cpufreq:Use max macro
+Date: Thu, 22 Aug 2024 15:45:48 +0800
+Message-Id: <20240822074548.1365390-1-11162571@vivo.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYCP286CA0163.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:383::10) To TYZPR06MB6263.apcprd06.prod.outlook.com
+ (2603:1096:400:33d::14)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Re: USB-C adapter like Dell DA300 using > 5 W
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-References: <38b871f7-8583-4b9a-940b-ee33a1b6206d@molgen.mpg.de>
- <2024082207-foothill-swirl-0ad0@gregkh>
-Content-Language: en-US
-In-Reply-To: <2024082207-foothill-swirl-0ad0@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6263:EE_|TY0PR06MB5777:EE_
+X-MS-Office365-Filtering-Correlation-Id: c1a56a65-1c97-45be-9c76-08dcc27e75d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|38350700014|81742002;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?043rtx/v2KlnfYu2KNbl/YI+Z3pyLonQ8q5sSSVwcGmaYfMxi4fFEbsofdiF?=
+ =?us-ascii?Q?a8oxcJC/th+847GNcNjPWZCzDY/Dpa3f9J0VynmTKC8SH59SddGkAl30M4Y6?=
+ =?us-ascii?Q?/xHwkZCYNUfMgEePVI08SpWPAOMpQqaiBQCOtGhlFiXGTkxG5hkUVXamLHwP?=
+ =?us-ascii?Q?uPHlwAHgYmUFTphTCAqCAQmtEcUPK6KJvv/VBwevqO1PERHvExMnKLS6KqJR?=
+ =?us-ascii?Q?pFPMNaRxchN+e1fw/POyC9MNC5sXXslC9GlZKSHXowiRAo+XzdrclhhB1d7c?=
+ =?us-ascii?Q?ZEPEDuf5NRO9ou6vyIfEykbptmrMfytBDvEx9v7kJcNt/zC4ruMDz9MS0zNO?=
+ =?us-ascii?Q?6yHAJdqiNpMwsJUciuoJ7bzrHc4kwqLOxTbbfI157ZZZvRtppZUtxgvBD/Bv?=
+ =?us-ascii?Q?GMzi7ZMXKhjKPAmlzJqVp80vdgjsk4xeF6NWXZnMqPv0ezVjtYjUGMBywCBa?=
+ =?us-ascii?Q?CLaju0fWeaNm9cGtgvwMh77nQ4/oqDdkhI5j7Za3p8rqKd4q125P1APhlS7G?=
+ =?us-ascii?Q?v7okpH9lelFfx5QZNZXoNSs1ZsYOaATip5qSCoz9ASzCYhg+kyQdd5FZq7gh?=
+ =?us-ascii?Q?eeE9AQzopueLe5uTCO7gjlg/da039hPMcz4vuHorTpcQ7ENtkPchInAs8uU2?=
+ =?us-ascii?Q?/siaGFmVcv/GK/3r5wBRiWZVPCkK6MHI7yYnAMv+ukWgE6tcymHIGt7SGvmT?=
+ =?us-ascii?Q?agqZGD+DoFUJ6XEBqdNVsF0OzMg/1dS4p9zrAhGMpXqwRjVKOPixn5fOBr/b?=
+ =?us-ascii?Q?rBml0/21ylKhAmIkVkqO8KVIres0gS6ze6OMiobGoqFWAnBDYC4Fvm+cWWR4?=
+ =?us-ascii?Q?acSkzutgH7b3Sws/+qWpBIBQaaTnRUqsRCr0vLMoO5xuYPnPZmmwID3VGvzR?=
+ =?us-ascii?Q?xbUvGDmUUseCjPkfAjGRqkV95Vd6WgQhyP3YBF9fMdvLG2PP/1kHRpBcNPbH?=
+ =?us-ascii?Q?a4yI9FT8bDzA4kRKxweBKciG/8Mu+7iJNrWZoCGahsDtVX7MtXbbX8LD/wwC?=
+ =?us-ascii?Q?97Eg8atuVCvIXa14t/s+vEQNWHGa+2DZh7GOTyomm6V3f9+/lR+5r2ldPFzN?=
+ =?us-ascii?Q?kSv1MkOZxfuXiDo5/crYkTnVzfT0gYo/tncAP29HDb5+tEixlvBygjhpNaO/?=
+ =?us-ascii?Q?va5XD2cfYEg8LiFCzFgBKx3YBO4LFAAyY30+g35YP22Y5M9JuoffjMtGHEbq?=
+ =?us-ascii?Q?qToBqBtB+BCHA3cx27UV7qLQzK+iPZ5ioKK/ONri+//NfA00VaBeI4aqD5oj?=
+ =?us-ascii?Q?X6KhgWdR4o8j7Xzoh8yxZAn76CP326QJvR/UVU4Q6c8qPnIaEv4G0zD2iipa?=
+ =?us-ascii?Q?kZ77JZcNv5ycvHOfXMWjx/kax2JO25zOs4dDa+CkoOFhtH/aKcfa5EiXgpNg?=
+ =?us-ascii?Q?VeudwJ5m5Cer0k/j6rdogQ8Sop6fyIvRRrMAozmyBUB4bvny/Pvaqdj31rwq?=
+ =?us-ascii?Q?iFEybthvtVM=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6263.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(38350700014)(81742002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?+SqMtAn0EapD8+zrAuDG7OrwynDsyT6ZwIJy8ln8xXVj8CxZrwZrxWyzsu0Y?=
+ =?us-ascii?Q?DjMEsS2cn+hAbESpQODK+TNfAkDFhULLZH+7Gmrx18vajvzzldActj4euKUD?=
+ =?us-ascii?Q?fSEdtAniUPpDlv+FFzG1wVVW7f6ioE4weFVdw1iYYxCybtqiUP513PWHt3V7?=
+ =?us-ascii?Q?T6mDvXQqbOvKmCnTdnnXk5y2rJH57139Qie4uAHU6XXSlRd9Cy3UGcVdb6z9?=
+ =?us-ascii?Q?BfFHy7J4fcsutiHOUazWUnCC5iEEYp8d/rD/GVXdXTon7WneH82qhXbeVQlh?=
+ =?us-ascii?Q?o7FLkMr1lutMtKeU7zOwwN/erTo6JrMbREsJatgDbVV0AImvfIrUsDBmS6KU?=
+ =?us-ascii?Q?Mpwwtj+9EScHZU+3Sup+n07rPHaVHnTC+hj2wKBDn9jJR6R2/j3n1SOZDjNS?=
+ =?us-ascii?Q?fEX4UKwaq4vKUkzNYahcX886uC0VFee7VndJxxbE74+5gU6TxFhnOGVVIy2c?=
+ =?us-ascii?Q?J/Vur22uzBR2LaaQZ9F6MptaNOhhDavyRmzQNN0yO/4QrYJurxMFvRUasDvg?=
+ =?us-ascii?Q?rR9FhB07C+sXmHvlbwfJrCej8wCALnZk5yY8boy/bm8lPK9hcT9Vi096Lpxe?=
+ =?us-ascii?Q?HMgfNXWJevNeHKi0FEieZyfxiwylWqv0dFpbx8ABRdarC09K5onFWGwsIky4?=
+ =?us-ascii?Q?R9Eo908csHqtl/ppq8sDRldKy6lRApPrz6G973yJYYR3Q2pgN9KXyaWfMqKJ?=
+ =?us-ascii?Q?KvmbE5AFJGIvImKoVNiPguUH9muH5qACgNNY1heWApW56bJF9PTAyifTS9Ju?=
+ =?us-ascii?Q?Uyq1ouzf6yROmBQjSt5GonT1xGQaiSg/E7pOwRo1xOIMbKm7P8pyIlj6o6fb?=
+ =?us-ascii?Q?yiKOZ1vk/Z6q9iijJvr0FGz+jbxpNyvcX4N9JVo/7Xt52j7cAfURmFtb95H7?=
+ =?us-ascii?Q?B+hw9C3Z4gEHp7M5BMPBsN/qJvim+QxGAzVVAVsK5Ww8CUtQ+OpjUnOqYeNt?=
+ =?us-ascii?Q?IC+aIXMEGjmuK3N8O1+QiJewG8NbSSZtw01M3MEn+M+aHZ7uYbV+EOkwpZmc?=
+ =?us-ascii?Q?Db42XsWKwXU33GwxJaR6nQg3Y492jsx4TgV4N1BW5mODgxmj0/8oZ5Dw2cHX?=
+ =?us-ascii?Q?VKe1jeOHHdt5OHN2yknjCackxbTKwJ6GzMKsl5Wo+1Mz7Cjkjr64bzYs2HRn?=
+ =?us-ascii?Q?7l4gXzWAfwCVgqIQd1if4A46mr1LQG7O5sGC/dveNZenuddAUzh1egAFtjIG?=
+ =?us-ascii?Q?SxB05l7ClLYwP/LaIL5wzbcFPSC+jqCeaGRY89/MB8UnpupnoZf5aLfdBS3/?=
+ =?us-ascii?Q?hsBCVlI78dBYkmk80zGaFvj6yuEPID/aNWq9S9IVVdBX5bmBAttvIH4jsviu?=
+ =?us-ascii?Q?90QZXb5nRkZ0dIToQiQ5OCzCZV7LG/tFbK146EanRp8i8Rq2ePpGk7QU8sKF?=
+ =?us-ascii?Q?awMA+0iLv1KApC68H9K9HtfSJWgerT8rJGOcc4u38n8OEUkpBqdoAlOtyBLa?=
+ =?us-ascii?Q?otAEBgGFTfq3gGeiInbA03HTSAKa7DXT9jxp3zur69wl0WuNBg0QYh7yL1Ik?=
+ =?us-ascii?Q?EmeHN6UI0/u2zTCiyoC8x5rRpzT/TVpGij2CzSNdOsGPWttnpIgzQ7m2cG99?=
+ =?us-ascii?Q?gusRIsO4Wj2Y/RrNWBOK8BY9J+Gcgi6ZAULUbD+G?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1a56a65-1c97-45be-9c76-08dcc27e75d5
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6263.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2024 07:45:58.0760
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vwaMeR0RXT26iH23zsYwSbBYY65vji92Qi9a/qNDSWwhDava3VGfte2+IfkwIVUxz24K24q62r9e+xCcYIS+vg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5777
 
-Dear Greg,
+Instead of using the max() implementation of
+the ternary operator, use real macros.
 
+Signed-off-by: Yang Ruibin <11162571@vivo.com>
+---
+ drivers/cpufreq/armada-37xx-cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thank you for your quick response.
+diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c b/drivers/cpufreq/armada-37xx-cpufreq.c
+index bea41ccab..f4aa3e84d 100644
+--- a/drivers/cpufreq/armada-37xx-cpufreq.c
++++ b/drivers/cpufreq/armada-37xx-cpufreq.c
+@@ -269,7 +269,7 @@ static void __init armada37xx_cpufreq_avs_configure(struct regmap *base,
+ 	 */
+ 
+ 	target_vm = avs_map[l0_vdd_min] - 100;
+-	target_vm = target_vm > MIN_VOLT_MV ? target_vm : MIN_VOLT_MV;
++	target_vm = max(target_vm, MIN_VOLT_MV);
+ 	dvfs->avs[1] = armada_37xx_avs_val_match(target_vm);
+ 
+ 	/*
+-- 
+2.34.1
 
-Am 22.08.24 um 01:31 schrieb Greg KH:
-> On Wed, Aug 21, 2024 at 11:32:04PM +0200, Paul Menzel wrote:
-
->> On the Intel Kaby Lake laptop Dell XPS 13 9360 with Debian sid/unstable and
->> *powertop* 2.15-3, connecting a USB-C adapter like Dell DA300 or LMP USB-C
->> mini Dock (P/N 15954) [1] and connecting only an Ethernet cable (module
->> r8152 is used), the adapter gets very hot, and according to PowerTOP it uses
->> over 5 Watts – almost more as the laptop idling.
->>
->>      $ lsusb # Dell DA300
->>      Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
->>      Bus 001 Device 002: ID 0cf3:e300 Qualcomm Atheros Communications QCA61x4 Bluetooth 4.0
->>      Bus 001 Device 003: ID 04f3:2234 Elan Microelectronics Corp. Touchscreen
->>      Bus 001 Device 004: ID 0c45:670c Microdia Integrated Webcam HD
->>      Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
->>      Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
->>      Bus 003 Device 002: ID 2109:2820 VIA Labs, Inc. VL820 Hub
->>      Bus 003 Device 003: ID 06c4:c412 Bizlink International Corp. DELL DA300
->>      Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
->>      Bus 004 Device 002: ID 2109:0820 VIA Labs, Inc. VL820 Hub
->>      Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
->>
->> With `LANG= sudo powertop --auto-tune` it stays high.
->>
->> PowerTOP:
->>
->> ```
->> The battery reports a discharge rate of 6.01 W
->> The energy consumed was 146 J
->> The estimated remaining time is 3 hours, 51 minutes
->>
->> Summary: 384.6 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and
->> 8.5% CPU use
->>
->> Power est.              Usage       Events/s    Category       Description
->>    5.94 W      0.0%                      Device         Display backlight
->>    5.23 W    100.0%                      Device         USB device: USB Optical Mouse (Logitech)
->>    4.62 W     66.1%                      Device         USB device: USB 10/100/1000 LAN (Realtek)
->>    205 mW    100.0%                      Device         USB device: Fujitsu Keyboard (Fujitsu)
->>   14.1 mW     13.5 ms/s       0.9        kWork intel_atomic_commit_work
->> ```
->>
->> At another time:
->>
->> ```
->> The battery reports a discharge rate of 10.5 W
->> The energy consumed was 235 J
->> The estimated remaining time is 2 hours, 20 minutes
->>
->> Summary: 395.8 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and 23.8% CPU use
->>
->> Power est.              Usage       Events/s    Category       Description
->>    7.13 W    100.0%                      Device         USB device: USB 10/100/1000 LAN (Realtek)
->>    3.92 W     15.8%                      Device         Display backlight
->>    320 mW      0.0 us/s      0.00        Process        [PID 1349] /usr/bin/pipewire
->>   63.6 mW     65.4 ms/s       0.5        Process        [PID 4982] /usr/lib/thunderbird/thunderbird
->>   24.9 mW     25.6 ms/s       6.7        Process        [PID 37753] /usr/lib/firefox-nightly/firefox-bin -contentproc -isForBrowser -prefsLen 36793 -prefMapSize 265654 -jsInitLe
->>   14.7 mW     15.1 ms/s       0.5        kWork intel_atomic_commit_work
->> ```
->>
->> The heat of the USB-C adapter might suggest, that it draws that much power.
->> What is your experience? Can you suggest something?
-> 
-> Buy a different adapter?  That seems like something is really wrong with
-> it.  Does other devices also suck that much power from that port on the
-> laptop?
-
-It happens with two Dell DA300 adapters and two LMP USB-C mini Dock (P/N 
-15954, 12-22 Rev. 3):
-
-     $ lsusb # LMP USB-C
-     Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-     Bus 001 Device 002: ID 0cf3:e300 Qualcomm Atheros Communications 
-QCA61x4 Bluetooth 4.0
-     Bus 001 Device 003: ID 04f3:2234 Elan Microelectronics Corp. 
-Touchscreen
-     Bus 001 Device 004: ID 0c45:670c Microdia Integrated Webcam HD
-     Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-     Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-     Bus 003 Device 002: ID 2109:2817 VIA Labs, Inc. USB2.0 Hub
-     Bus 003 Device 003: ID 2109:2817 VIA Labs, Inc. USB2.0 Hub
-     Bus 003 Device 005: ID 2109:8817 VIA Labs, Inc. USB Billboard Device
-     Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-     Bus 004 Device 002: ID 2109:0817 VIA Labs, Inc. USB3.0 Hub
-     Bus 004 Device 003: ID 2109:0817 VIA Labs, Inc. USB3.0 Hub
-     Bus 004 Device 004: ID 058f:8468 Alcor Micro Corp. Mass Storage Device
-     Bus 004 Device 005: ID 0bda:8153 Realtek Semiconductor Corp. 
-RTL8153 Gigabit Ethernet Adapter
-
-Both use a Realtek RTL8153 Ethernet adapter.
-
-### LMP device
-
-With *no* auto-tuning:
-
-```
- >> Bad           VM writeback timeout 
-
-    Bad           NMI watchdog should be turned off
-    Bad           Autosuspend for USB device USB Billboard Device 
-[VIA Labs, Inc.         ]
-    Bad           Autosuspend for USB device Mass Storage Device [Generic]
-    Bad           Autosuspend for USB device Touchscreen [ELAN]
-    Bad           Autosuspend for USB device USB 10/100/1000 LAN [Realtek]
-    Bad           Runtime PM for PCI Device SK hynix PC300 NVMe Solid 
-State Drive 512GB
-    Bad           Runtime PM for disk sda
-    Bad           Runtime PM for disk sdb
-    Bad           Runtime PM for PCI Device Intel Corporation Sunrise 
-Point-LP PCI Express Root Port #1
-    Bad           Runtime PM for PCI Device Qualcomm Atheros QCA6174 
-802.11ac Wireless Network Adapter
-    Bad           Runtime PM for PCI Device Intel Corporation DSL6340 
-Thunderbolt 3 Bridge [Alpine Ridge 2C 2015]
-    Bad           Runtime PM for PCI Device Intel Corporation Sunrise 
-Point-LP LPC Controller
-    Bad           Runtime PM for PCI Device Intel Corporation DSL6340 
-Thunderbolt 3 Bridge [Alpine Ridge 2C 2015]
-```
-
-```
-The battery reports a discharge rate of 8.89 W
-The energy consumed was 243 J
-The estimated remaining time is 0 hours, 42 minutes
-
-Summary: 572.3 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and 
-54.8% CPU use
-
-Power est.              Usage       Events/s    Category       Description
-   6.00 W      5.9%                      Device         Display backlight
-   2.33 W    100.0%                      Device         USB device: USB 
-Billboard Device    (VIA Labs, Inc.         )
-```
-
-After `powertop --auto-tune`:
-
-```
-The battery reports a discharge rate of 8.58 W
-The energy consumed was 213 J
-The estimated remaining time is 0 hours, 39 minutes
-
-Summary: 509.3 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and 
-34.3% CPU use
-
-Power est.              Usage       Events/s    Category       Description
-   8.23 W      5.9%                      Device         Display backlight
-   6.21 W     7938 pkts/s                Device         Network 
-interface: enx00e04ceabb21 (r8152)
-```
-
-But it also shows:
-
-```
-The battery reports a discharge rate of 9.54 W
-The energy consumed was 189 J
-The estimated remaining time is 0 hours, 33 minutes
-
-Summary: 509.0 wakeups/second,  0.0 GPU ops/seconds, 0.0 VFS ops/sec and 
-44.0% CPU use
-
-Power est.              Usage       Events/s    Category       Description
-   7.39 W      5.9%                      Device         Display backlight
-   776 mW    12391 pkts/s                Device         Network 
-interface: enx00e04ceabb21 (r8152)
-   210 mW    357.9 ms/s       0.4        kWork 
-intel_atomic_commit_work
-```
-
-So measuring energy consumption, and attributing it to devices, also 
-seems to be hard and sometimes unreliable.
-
-Therefore, I’d be interested, it what numbers to expect, and also, if 
-the developers have other methods and tools for measuring this.
-
-
-
-Kind regards,
-
-Paul
 
