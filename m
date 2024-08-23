@@ -1,121 +1,148 @@
-Return-Path: <linux-pm+bounces-12816-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12817-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7975B95CBC2
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 13:55:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DE2B95CCD2
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 14:51:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 363BB283526
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 11:55:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E9F11F21DE0
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 12:51:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67F94187847;
-	Fri, 23 Aug 2024 11:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F608185B66;
+	Fri, 23 Aug 2024 12:51:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="dulkqBj7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fnyncHNy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B78017E01E
-	for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2024 11:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB0B178372
+	for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2024 12:51:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724414108; cv=none; b=kid2sOYpkozgoVMMBWreyzRpL9sYMAoH9a7hklU1rAFYzz+CWgdfnDoGmINLXhH6oyB8XUJDqqUZrhxSatOA1oSNWBiEgVgrpF9sN9PNdcx90+b8Y0pl6s8rAPvjZVWt5r/oIQC73Tzo52lL6//s4lRPj2jDAFpKmncaSLsNfNg=
+	t=1724417491; cv=none; b=RASCn3iMCwBNR4I8dQdSfRwgZ+o+mrijhGmTh6RWWpkDF1e3g6mprW09LFwItdFFRq1/sxpw//K27+Jy5IpvvM5B0Ofof2x/XFJA6lM9s2NEBrxaG9W2H8s0JBfQLmslDzPlg/zMKy34PpydP1lsrM4EeUeqirta4BIFlNe++KY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724414108; c=relaxed/simple;
-	bh=mE30tFPerVjz1hMQD19dglrF4v8Mc86tY8LTYlGryUc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NoScFdzbDy/uHXvBTm+a7gE4TZQdnaDhACWSpF2E01kk/wp2V+oo/KJSBhk+7+EiLyb1QZmwz1DJvVefUK73meugfgcvTEnFzcakN0tATqnhso12QFvl5VT+cg3STMc8EcDTK+uOmv1DDFnm4uTOO+eUs659sxi5X7Vv9zWTJSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=dulkqBj7; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-428243f928cso14838675e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2024 04:55:05 -0700 (PDT)
+	s=arc-20240116; t=1724417491; c=relaxed/simple;
+	bh=doKufXAKMRNCsn5SPLoA4KKhEyeldEXGGKtTRg28kUg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DnFkB3PE68KLKPI2J3RAz50KlFZoYcRLCEs38Ds/9zxjcZqwApBpEvqp7B6ttUhrdthl8sS0mNrYvcPbN7PtsncRkqXljwLOeMCImlYNL5ZrmwJAo0cc03/ZODxpRGPQuuhAqpP4lNyrSldYFJCYuVp2ogrJAN0OFbojFjBIcZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fnyncHNy; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5beccb39961so292878a12.3
+        for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2024 05:51:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1724414104; x=1725018904; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YjB6qUCGKHWMxKbWr+1XyaIhur+Dx/TBgKbSsSEgQwo=;
-        b=dulkqBj7b54ntJkancNh0uAse5tQaVUnVs/4KEzw11vZjuPulbcX8QQuVhMGadeEv7
-         cZRTESBu4R31IYoyMJEJKwcUIEAC/IolejPieW7hwmbgJir8kAkDxhjlF+aVVgut6t7a
-         ujtb/cMID4j/PqFENrxiSm4LD8aMqsxhbYj/csMk0yu/ZYIa49mN8t4JEalVrGvrB36h
-         M3K3rINju1Y1WwfCPyHzWTSDxxn1spdvfa7WoTu9JttUZaL5XNeW1QqHaJ5eHmj5K7Xo
-         VfPG3zrRgj3uZRZRgX/I+l5gkrZ9Ewh/qkD3jbzCY7c5rEfInPfE5koXI2WE3T8g2bwH
-         SImQ==
+        d=linaro.org; s=google; t=1724417488; x=1725022288; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=v6VRAUboa3WzQTgQJ0jIxMCacKDHDbO46atHYsrK+XI=;
+        b=fnyncHNyPBRielxqZM3wZE5hhWkmxXWrDU9XahsJRtlswq6+2RAe6v6Sbp8DStEAGR
+         y8lYd3Lnj3IFDVh4kPocLR6t5/tIB7cKHTcZ3K+Ri8omQNvPzJPLFSAZ48ZJZVcZPH6e
+         OZNZlCSm9ND+G/DcOefdeiA/sFhTiOSqQbTchziz14XLaxQM6qdyMyMXgnjuXbO8B4pW
+         TF/2mGTwRG8k6OLfXoJsaaqlA7U3sgtgnwNJPU/ttnWSfoFp1WT31MfwUxZZ+MGgERMR
+         OE0js51PmQ1qzk3i9RP07l6YCygE/JL21H0gaulyMkWRQ0kR9mQZPbte0JtPt1dYcwx2
+         6Cug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724414104; x=1725018904;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1724417488; x=1725022288;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YjB6qUCGKHWMxKbWr+1XyaIhur+Dx/TBgKbSsSEgQwo=;
-        b=r9Ff2AXABaOoMbAlLEWg/pusAD71+ObJf/HkSchEa7j2gsU/Fgj7/UjGUEpIvfe/QA
-         CYHv7aBRBYmAHpGvJzdATl0F9gBI0N0rLMi6MZvj1FghCUvgzYS9Vrw0zikc0Vqh3DB1
-         WhSfWmX9tnK9PoE1yH7X7hS4Ju7CMTzjAfbwpLdJoS4oxJsjLq2GuSA1j8OP9bH36Yh/
-         N8Xt45xt47OwSC2OXSGnV2VIsUiDwFoUnEDtSXix4cP7mCAAlUnKKXux9z6KuL8yWVXB
-         3eyBLqSXQ71YsHYFnrpL2axyqzFKXpBclVHLbxsjt5GwakJhlJJZiF9cV5LD49x0ozdw
-         XilA==
-X-Gm-Message-State: AOJu0Yx+d2muTAgX2FTI8CViOAkT3b7d+8mbgOTsYdlUIWacOOdLQ+h6
-	Xjg+yHFaqWhNeVdJ2M/IOiBsVSvp98LgYbKhNHPGDPkRPyWRpCRt+VZfeYBAUsJzOesNQ3qSHX3
-	iYtg=
-X-Google-Smtp-Source: AGHT+IFPtmh/Kb0AOFMbjOIF6PgocrhpRJr53++YPtKB/vcg+SaeiqCVHtwg7xr7/7n7cgCix1DrFA==
-X-Received: by 2002:adf:efc7:0:b0:367:8e53:7fd7 with SMTP id ffacd0b85a97d-373118b9961mr1489598f8f.28.1724414103149;
-        Fri, 23 Aug 2024 04:55:03 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:58fc:2464:50b0:90c5])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42abef81a5esm93423695e9.28.2024.08.23.04.55.02
+        bh=v6VRAUboa3WzQTgQJ0jIxMCacKDHDbO46atHYsrK+XI=;
+        b=WRdf/RLywq8aGnUQpe3kgi6DERecvlCu4aqdMYBRT6U7QNcQ8LMBx9i7oJs72Cn8qN
+         rvJHc1b7WUOjCiimKiuz5gJimqA1X8PEO46vksri0SqX7+XsMFrJBEB9oMbd/XspLSsm
+         4yGrfwZtmpK+l+WtVDuzE5ZsGIMQKIm2ySlTr6TrI0HKrPROAuGm68bSPcva+Kr9OtrZ
+         aHVN11jobzFTOomZdBWtfUx89tnf9NYJsDxIOD6fiihM5ZbM9NOanpdYV8AZIymkTSYK
+         geZFWlQo8atsjEId/fPxmNMAep7wTQ5k5+dADt8jMwRxXwpgoWLMXp8fzrtc8RGjStFO
+         hJtQ==
+X-Gm-Message-State: AOJu0YwmQXU7BHL0v8dri3BJyZt+jLLFiDlkHdWpIc8IN3Ii+ZNxoXAd
+	aiLlAnGlCZp3AvT7JfMn+W81mu7kcQbqcMO4OHk+njQSWrfvYN2xKqoRSwC5MLU=
+X-Google-Smtp-Source: AGHT+IFIw4ZV5rZ6uPAb4nJL/OhmF0EN2Y+olYkcjQZWRyRIZCTqIZuXXX1ufsuaXoLSxxzdDu3Uwg==
+X-Received: by 2002:a17:907:9724:b0:a7a:9f0f:ab1b with SMTP id a640c23a62f3a-a86a54bb7e9mr71228766b.7.1724417487610;
+        Fri, 23 Aug 2024 05:51:27 -0700 (PDT)
+Received: from [127.0.1.1] ([178.197.222.82])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a868f4f384bsm255931666b.192.2024.08.23.05.51.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Aug 2024 04:55:02 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Neil Armstrong <neil.armstrong@linaro.org>,
-	Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH] power: sequencing: qcom-wcn: set the wlan-enable GPIO to output
-Date: Fri, 23 Aug 2024 13:55:00 +0200
-Message-ID: <20240823115500.37280-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.43.0
+        Fri, 23 Aug 2024 05:51:27 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 00/10] pmdomain: Simplify with cleanup.h
+Date: Fri, 23 Aug 2024 14:51:04 +0200
+Message-Id: <20240823-cleanup-h-guard-pm-domain-v1-0-8320722eaf39@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALiFyGYC/x3MTQqAIBBA4avErBsof6C6SrSwHGugTJQiCO+et
+ PwW772QKDIlGKoXIt2c+PQFbV3Bshm/ErItBtEI1XRC4rKT8VfADdfLRIvhQHsehj1KTbPqWye
+ 166H0IZLj53+PU84f0fUIrmsAAAA=
+To: Ulf Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>, 
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Magnus Damm <magnus.damm@gmail.com>
+Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ imx@lists.linux.dev, linux-arm-msm@vger.kernel.org, 
+ linux-renesas-soc@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1576;
+ i=krzysztof.kozlowski@linaro.org; h=from:subject:message-id;
+ bh=doKufXAKMRNCsn5SPLoA4KKhEyeldEXGGKtTRg28kUg=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBmyIXBrIW/SnJDYANEVfUZJeHlBLPHoJYAFcIls
+ LKf1yo7+J2JAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCZsiFwQAKCRDBN2bmhouD
+ 10UID/9Be979xbWnI1yNlRdhU3gmdGm2uSL6tdqrVpXd81h6X7rzBxahTfI/Hzqbt97F/oueKjk
+ j2CZtKc4mia7EB0naYB6Y2kYe/UYMX7hzF5nBqcZm3y8GaKUiS5Hnkf6osuRobTRmTavNDPc55M
+ tYm6P+KvXABS/esDPWw5kNpcjN2MuvAY7oZXwM8/pJ4VFAzVuH8agIayXftS3DQHLjfiLkSKlVo
+ HJs0moMNU2y8bXR1TQyyLdYvVFSBD4Nf9qtEzxkZmsJkqwRx5z2JZd6dS+Pm8JzFVG51YgNHvfK
+ dRT7vceacHyYZm3q/1e+eHlU0u78Ap9USdAlPpoqIlXOq1qkZ0v4vGyfYM2TIMp2i9Mc8qfUAyN
+ sjrpEmfY3Torcb4TTe0BI4EZAGKS9MOAKUNjZpyM9bZpM/hJAwFMaa7aTzHjt/qgQn4Rt9mtWTF
+ U7YDazP9uDvq7Xy7sbYqPtLVBXnth2hn0+XPGjcgaq3UU8gPz2rfpxEQX0t9UiKyrtsHAbdtH/y
+ n5ggehcfh76LOc2Qr/lQErudzXIqhDm4SibFNAsH24bNzONwGdSJHQ0xx6WxWr7MpHEqG0XxOUd
+ AgbTG2xDIIdB7MXeKSlddcEt6AG/9fcfCaJ9ejr7c4rYlUL+9RdquPPiuJUcqy+/SEGpr7bbC93
+ DHJTA1zS+8Bow6g==
+X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp;
+ fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Simplify the code with scoped loops, guards and __free().
 
-Commit a9aaf1ff88a8 ("power: sequencing: request the WLAN enable GPIO
-as-is") broke WLAN on boards on which the wlan-enable GPIO enabling the
-wifi module isn't in output mode by default. We need to set direction to
-output while retaining the value that was already set to keep the ath
-module on if it's already started.
+Best regards,
+Krzysztof
 
-Fixes: a9aaf1ff88a8 ("power: sequencing: request the WLAN enable GPIO as-is")
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- drivers/power/sequencing/pwrseq-qcom-wcn.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Krzysztof Kozlowski (10):
+      pmdomain: rockchip: Simplify with scoped for each OF child loop
+      pmdomain: rockchip: Simplify locking with guard()
+      pmdomain: imx: gpc: Simplify with scoped for each OF child loop
+      pmdomain: imx: gpcv2: Simplify with scoped for each OF child loop
+      pmdomain: qcom: cpr: Simplify with dev_err_probe()
+      pmdomain: qcom: cpr: Simplify locking with guard()
+      pmdomain: qcom: rpmhpd: Simplify locking with guard()
+      pmdomain: qcom: rpmpd: Simplify locking with guard()
+      pmdomain: renesas: rcar-gen4-sysc: Use scoped device node handling to simplify error paths
+      pmdomain: renesas: rcar-sysc: Use scoped device node handling to simplify error paths
 
-diff --git a/drivers/power/sequencing/pwrseq-qcom-wcn.c b/drivers/power/sequencing/pwrseq-qcom-wcn.c
-index d786cbf1b2cd..700879474abf 100644
---- a/drivers/power/sequencing/pwrseq-qcom-wcn.c
-+++ b/drivers/power/sequencing/pwrseq-qcom-wcn.c
-@@ -288,6 +288,13 @@ static int pwrseq_qcom_wcn_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, PTR_ERR(ctx->wlan_gpio),
- 				     "Failed to get the WLAN enable GPIO\n");
- 
-+	/*
-+	 * Set direction to output but keep the current value in order to not
-+	 * disable the WLAN module accidentally if it's already powered on.
-+	 */
-+	gpiod_direction_output(ctx->wlan_gpio,
-+			       gpiod_get_value_cansleep(ctx->wlan_gpio));
-+
- 	ctx->clk = devm_clk_get_optional(dev, NULL);
- 	if (IS_ERR(ctx->clk))
- 		return dev_err_probe(dev, PTR_ERR(ctx->clk),
+ drivers/pmdomain/imx/gpc.c                | 14 +++-----
+ drivers/pmdomain/imx/gpcv2.c              |  8 ++---
+ drivers/pmdomain/qcom/cpr.c               | 58 ++++++++++++-------------------
+ drivers/pmdomain/qcom/rpmhpd.c            | 11 +++---
+ drivers/pmdomain/qcom/rpmpd.c             | 20 ++++-------
+ drivers/pmdomain/renesas/rcar-gen4-sysc.c | 26 ++++++--------
+ drivers/pmdomain/renesas/rcar-sysc.c      | 28 ++++++---------
+ drivers/pmdomain/rockchip/pm-domains.c    | 25 ++++---------
+ 8 files changed, 68 insertions(+), 122 deletions(-)
+---
+base-commit: e188fd67a69319f3d105d9b90e424b8d1ff9580c
+change-id: 20240823-cleanup-h-guard-pm-domain-35eb491f35f9
+
+Best regards,
 -- 
-2.43.0
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
