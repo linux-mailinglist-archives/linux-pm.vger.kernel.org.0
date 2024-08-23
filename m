@@ -1,180 +1,154 @@
-Return-Path: <linux-pm+bounces-12839-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12840-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7721E95D392
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 18:33:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A910F95D3AA
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 18:40:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31923283BA9
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 16:33:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 537791F21F12
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 16:40:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5479218BC02;
-	Fri, 23 Aug 2024 16:33:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EF5F18C354;
+	Fri, 23 Aug 2024 16:39:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sYTG5Reg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IRQfkGbP"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EFE618858B;
-	Fri, 23 Aug 2024 16:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356C218C337;
+	Fri, 23 Aug 2024 16:39:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724430820; cv=none; b=YIgrauT1TOHY7O7+k2xamUzKHI+Hftx6rdjHa1tmPa/CItppWkEq9dPVX33v2jmSMoFdKv28jQgsE5ayesTta7eWi/Ec4Cv2QLlVV5BnRur7NZ7/olcPMwRaM05ztSddSjozl10BrdfcrFqzqD8JxnkHOn7SCUwX180+y93y048=
+	t=1724431193; cv=none; b=S4FEUa+J82ehiF+8uxdp6oz/BXacvh6E01T4GVrXOly8PjzWlH3FpxBCL6e59SVPrn203OKXs7sMdkcyisP4r+WffZVqJeQFB9HCYIEfkLM1UVHsHEST2anXYRK+WWx2lUwDO/6YpMCP1gcbfmFOye1MOUuL50huyuOlmmIc47s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724430820; c=relaxed/simple;
-	bh=WSH4rUm+bcwJjBbvm5rtjbFA5J4F0JTq05nNX35iUV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SpWpqLQvARg+JRRWo+sKBPKLvKW+tV8YI4aqputQVfD7PZA08x7dVxMPiqUQYAX+ijxzRTPppuxHPkrNREp4WyDU9tSlYWKWzTfiZQNtQizM+Pk2He7/GooGcnDVaunON9MOzPiSLWmDzcRF7r32W2YzlUNv3YxIbVabgSsIOQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sYTG5Reg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 277BAC32786;
-	Fri, 23 Aug 2024 16:33:34 +0000 (UTC)
+	s=arc-20240116; t=1724431193; c=relaxed/simple;
+	bh=ld3rxlPAOgQZpn5csg8dC+UyB1soJOGSEerVByE6LBg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=J8zvNVZ6AGSKIkbeZi9t4Tk7AV4BJPbzFTvrdh6TDo0Pj9qu518R6gwgznL3FF0zALQSDrT3KDblFRBamc7UmcBAIP597J/ZEnwmYLVJNURI7+hBbHk8pVSddmIAYQ29C9kmr0Va+pb+hlXvBDgbIjkembNzPbC2u0dmXUejyDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IRQfkGbP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4925C32786;
+	Fri, 23 Aug 2024 16:39:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724430819;
-	bh=WSH4rUm+bcwJjBbvm5rtjbFA5J4F0JTq05nNX35iUV0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sYTG5RegZzLko0cKmECk+1jIcHjw7gFO2WvdCtHif+pORMKYzT8tC9WzFlKs1FlaN
-	 UwhG0vqVsJm7sGX8DKRpyucDaJxJibDXg55bauuigXDLMK3ML6xMWKgZRjbhXttZcv
-	 xmUQ4ebQSXFJsM1QD/dhLALw0CQY+sSFNE+0KCNN/za2Zpr3+KK4gZ9sD6jbeIWrj5
-	 TmWJRNi6/SofZ76q6Scy3B1nI9WQFhAIgw07UM6eYQNuHu4I+IdeRL56g3D7IAEnmD
-	 kytHd15OE9JXfOsZhgrjEfbHAL5rngqSfm9p10rLt6lvyybNcC2EF4gC4XlwGh2X3o
-	 ZMGkHbIvJXo+A==
-Date: Fri, 23 Aug 2024 17:33:33 +0100
-From: Conor Dooley <conor@kernel.org>
-To: claudiu beznea <claudiu.beznea@tuxon.dev>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de,
-	geert+renesas@glider.be, magnus.damm@gmail.com,
-	gregkh@linuxfoundation.org, mturquette@baylibre.com,
-	sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com,
-	biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org,
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH 02/16] dt-bindings: soc: renesas: renesas,rzg2l-sysc: Add
- #reset-cells for RZ/G3S
-Message-ID: <20240823-dilute-juggle-7e2d43b8b630@spud>
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
- <20240822152801.602318-3-claudiu.beznea.uj@bp.renesas.com>
- <20240822-vanilla-enigmatic-f0b05ecca4b6@spud>
- <0d8b1322-cf15-4ed9-b958-06516bbb64c7@tuxon.dev>
- <20240823-plywood-unfixed-d8d8a2d93f14@spud>
- <5eae2ddb-2a7b-4c1d-a7f7-41fb39058de1@tuxon.dev>
+	s=k20201202; t=1724431192;
+	bh=ld3rxlPAOgQZpn5csg8dC+UyB1soJOGSEerVByE6LBg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=IRQfkGbPa03FfneSInllZGqbvUrvqAaPeF6Zvq4Pd+SAIVcoMbmBI2V8FthvxswZa
+	 FyHSGpYazedOXjD4MUwSXPuxvMIlKXv/hWFJumWz3pxMZwAEK0erPaZgWfW16vkRkN
+	 R8LFFCov5AC/XbY4kyFQ2hGj6v6YmnmH2bXPQti01hCOewzB4yKdO0+uEOHd+2LJrp
+	 p8mILqKoD6bg9YM98OBta5J8t5KBYskMOdq86oTMblrb2vH5spp4EYPGo9pVL+2roA
+	 U8evuS3YM06ZZ2hyL0jEb/5Bk6iqHWokE3tRCNw17fOia2qU9UrOfFSLUGY0BKt9hP
+	 wwNQXqejx9stg==
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5d5b22f97b7so2196675eaf.2;
+        Fri, 23 Aug 2024 09:39:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWWRl6NibHrBxJtuu3KlJwi3oVJXQ1pidLw5D3eClvGxS/e9VXKKD57gVv70NXpJKNTDEAmXPfoqcE=@vger.kernel.org, AJvYcCX/7pDDxo3Wm9pSVbtJawPKt9VOwxzNm7MZuTBkMNjZ4TiL0ibdPdXzjatNdGwGCHpWDX2cyCkG7qHLlRc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWnRg1z3m+5/Zd4tR3NRpUQuRaUBR+vEep5J6zoevWrXrijnga
+	opNFHIlPMmmbc526jL2GfMxx6v8Inxsyn24wpptHbRwXg/xyXFh4SCaUO3vaW4cWNAuJw9KJluC
+	GnPzM6QnjTXQ7FQGbrR2z7crUjF0=
+X-Google-Smtp-Source: AGHT+IEthGR/m8pIykKiw5PE+bN9rXgA0bDFoAXdo1JmaQWp1gcncXt84BQhCWz4i1dC2r15In+D4kr3DwX5XwRUqG8=
+X-Received: by 2002:a05:6870:b4aa:b0:261:290:a089 with SMTP id
+ 586e51a60fabf-273e64e5ee5mr3265264fac.28.1724431192036; Fri, 23 Aug 2024
+ 09:39:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="n5mdGyWbSuHiQTuz"
-Content-Disposition: inline
-In-Reply-To: <5eae2ddb-2a7b-4c1d-a7f7-41fb39058de1@tuxon.dev>
-
-
---n5mdGyWbSuHiQTuz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <3331194.44csPzL39Z@rjwysocki.net> <7719509.EvYhyI6sBW@rjwysocki.net>
+ <cb8bbde9-1b13-4c63-960d-5846a319f5ea@linaro.org>
+In-Reply-To: <cb8bbde9-1b13-4c63-960d-5846a319f5ea@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 23 Aug 2024 18:39:40 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0g-NNKeXh_m-O+mAL=w3Roae_EMUWA5fbBvi49jhZM07A@mail.gmail.com>
+Message-ID: <CAJZ5v0g-NNKeXh_m-O+mAL=w3Roae_EMUWA5fbBvi49jhZM07A@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] thermal: sysfs: Add sanity checks for trip
+ temperature and hysteresis
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, =?UTF-8?Q?Peter_K=C3=A4stle?= <peter@piie.net>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 23, 2024 at 07:26:42PM +0300, claudiu beznea wrote:
-> On 23.08.2024 19:18, Conor Dooley wrote:
-> > On Fri, Aug 23, 2024 at 10:54:06AM +0300, claudiu beznea wrote:
-> >> Hi, Conor,
-> >>
-> >> On 22.08.2024 19:42, Conor Dooley wrote:
-> >>> On Thu, Aug 22, 2024 at 06:27:47PM +0300, Claudiu wrote:
-> >>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> >>>>
-> >>>> The RZ/G3S System controller has registers to control signals that n=
-eed
-> >>>> to be de-asserted/asserted before/after different SoC areas are power
-> >>>> on/off. This signals are implemented as reset signals. For this docu=
-ment
-> >>>> the #reset-cells property.
-> >>>>
-> >>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> >>>> ---
-> >>>>  .../bindings/soc/renesas/renesas,rzg2l-sysc.yaml | 16 +++++++++++++=
-+++
-> >>>>  1 file changed, 16 insertions(+)
-> >>>>
-> >>>> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas,r=
-zg2l-sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2=
-l-sysc.yaml
-> >>>> index 4386b2c3fa4d..6b0bb34485d9 100644
-> >>>> --- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sy=
-sc.yaml
-> >>>> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sy=
-sc.yaml
-> >>>> @@ -42,12 +42,28 @@ properties:
-> >>>>        - const: cm33stbyr_int
-> >>>>        - const: ca55_deny
-> >>>> =20
-> >>>> +  "#reset-cells":
-> >>>> +    const: 1
-> >>>> +
-> >>>>  required:
-> >>>>    - compatible
-> >>>>    - reg
-> >>>> =20
-> >>>>  additionalProperties: false
-> >>>> =20
-> >>>> +allOf:
-> >>>> +  - if:
-> >>>> +      properties:
-> >>>> +        compatible:
-> >>>> +          contains:
-> >>>> +            const: renesas,r9a08g045-sysc
-> >>>> +    then:
-> >>>> +      required:
-> >>>> +        - "#reset-cells"
-> >>>
-> >>> Given this is new required property on an existing platform, I'd expe=
-ct
-> >>> some mention of why it used to be okay to not have this but is now
-> >>> required. Did firmware or a bootloader stage take things out of reset?
-> >>
-> >> On previous SoCs the SYS controller has no support for controlling the
-> >> signals going to different peripherals (USB, PCIE in case of RZ/G3S).
-> >> I'll add a note about this on next version.
-> >=20
-> > My initial thought here wasn't about previous SoCs though, it was
-> > because you didn't add the compatible in this series for /this/ SoC.
->=20
-> RZ/G3S compatible is already present in this file:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/D=
-ocumentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml#n26
+On Fri, Aug 23, 2024 at 5:26=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 22/08/2024 21:48, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Add sanity checks for new trip temperature and hysteresis values to
+> > trip_point_temp_store() and trip_point_hyst_store() to prevent trip
+> > point thresholds from falling below THERMAL_TEMP_INVALID.
+> >
+> > However, still allow user space to pass THERMAL_TEMP_INVALID as the
+> > new trip temperature value to invalidate the trip if necessary.
+> >
+> > Fixes: be0a3600aa1e ("thermal: sysfs: Rework the handling of trip point=
+ updates")
+> > Cc: 6.8+ <stable@vger.kernel.org> # 6.8+
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >   drivers/thermal/thermal_sysfs.c |   38 ++++++++++++++++++++++++++----=
+--------
+> >   1 file changed, 26 insertions(+), 12 deletions(-)
+> >
+> > Index: linux-pm/drivers/thermal/thermal_sysfs.c
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
+> > +++ linux-pm/drivers/thermal/thermal_sysfs.c
+> > @@ -111,18 +111,25 @@ trip_point_temp_store(struct device *dev
+> >
+> >       mutex_lock(&tz->lock);
+> >
+> > -     if (temp !=3D trip->temperature) {
+> > -             if (tz->ops.set_trip_temp) {
+> > -                     ret =3D tz->ops.set_trip_temp(tz, trip, temp);
+> > -                     if (ret)
+> > -                             goto unlock;
+> > -             }
+> > +     if (temp =3D=3D trip->temperature)
+> > +             goto unlock;
+> >
+> > -             thermal_zone_set_trip_temp(tz, trip, temp);
+> > +     if (temp !=3D THERMAL_TEMP_INVALID &&
+> > +         temp <=3D trip->hysteresis + THERMAL_TEMP_INVALID) {
+>
+> It seems to me the condition is hard to understand.
 
-I know, first thing I did when I read the original patch was open the
-file ;)
-I don't care about the old SoCs, cos you're not applying the property to
-them, so what's changed between SoCs isn't really relevant. It's a mention
-of why, on this SoC, it is safe to add new required properties that I want.
+That's not the key consideration here though.
 
-AFAIU the answer is that no consumer of the resets existed before, so
-there's not some special state there, and I am guessing that the new
-sysc driver you're adding isn't going to fail to probe if there are no
-resets, it just won't register a reset controller? Which is fine, cos all
-devicetrees that have the new peripherals will have #reset-cells etc.
+>
+>    temp <=3D trip->hysteresis + THERMAL_TEMP_INVALID
 
-> > What's worth noting isn't about the prior SoCs, it is about what makes
-> > it okay for this one.
+This cannot overflow because trip->hysteresis is non-negative.
 
---n5mdGyWbSuHiQTuz
-Content-Type: application/pgp-signature; name="signature.asc"
+>
+>           =3D=3D>
+>
+>    temp - trip->hysteresis <=3D THERMAL_TEMP_INVALID
 
------BEGIN PGP SIGNATURE-----
+But this can.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZsi53AAKCRB4tDGHoIJi
-0oJNAP92c9ehJZq5fmnv1qleJEN3MobM8LhjI5S5pogRzACmrgD8C8AbjitXRcYG
-U53c5w0n+oi1+4Eu53GCqNNU/LSCmgc=
-=GFYM
------END PGP SIGNATURE-----
+>
+>
+> Could be the test below simpler to understand ?
+>
+>         if (trip->hysteresis &&
+>             temp - trip->hysteresis < THERMAL_TEMP_INVALID))
+>
+> I think more sanity check may be needed also.
+>
+>         if (temp < THERMAL_TEMP_INVALID)
 
---n5mdGyWbSuHiQTuz--
+With my version of the check above this is not necessary (unless I'm
+missing something}.
+
+> > +             ret =3D -EINVAL;
+> > +             goto unlock;
+> > +     }
 
