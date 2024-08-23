@@ -1,264 +1,169 @@
-Return-Path: <linux-pm+bounces-12837-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12838-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8805E95D312
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 18:20:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1A0A95D344
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 18:26:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F05D28A9F9
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 16:20:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A47B1F22D7D
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 16:26:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A872D18A6C0;
-	Fri, 23 Aug 2024 16:19:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34A2B18BB80;
+	Fri, 23 Aug 2024 16:26:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="f5YU8PC2"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="VFlzcOjW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2043.outbound.protection.outlook.com [40.107.212.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06AC1865FC;
-	Fri, 23 Aug 2024 16:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724429957; cv=fail; b=fwMErFKKCwlQRkxVzSmQtFvkNPEHUD+P+qQv1P3WwMRhmbGjWHlgZKyEk1X4uXjFwvoQypXOUMDGGeQNPlOTcCCY6PV9qWzL8X6t3U9m7On8QcDboI57IjvfOPLu4LNFYRIN37yKzlBPyhyxsPYEZliB5Oq2vmUn08OiZg0Jewk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724429957; c=relaxed/simple;
-	bh=hsnKJTWyBSlrX6G4iZzu0uWOzKO/4bcZzhCerxX9ihM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Dxuj+gzFnwvk/p8CXGP5FsZn3zmjYaoNDIdpe6JGVfA9OhM/v3+vDA0fF+ojIL5w8bWo6qGHGAnuWN31GUsS6MtEhAgapx4lkjYSdkZEz2fCDXwCJYFe2t74UgUZWP5zkhblvn8yJ2bzS7xvWj1cAQjuLwxq5c+EYqO76mwkgI4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=f5YU8PC2; arc=fail smtp.client-ip=40.107.212.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SiwixXGnEfvGmlC59xVtb3sEzwmnqtTgZ+f3p+p1YT2jcpuXt2LzM+8GyCaNpQfhqz3YZ6viM5wrr8rXZzwA7XQYrMvVdK1/NUX85iFKWO00hSwo8fZQdkETDho1O3HjxsNpV4fc3jTfHyeaQX6ECyv42AvLqiiKyEew6B/dZISwkVf+MLr7aNpaUgp7EDSdJWmmt4ympE4ilv/IwDgsq6gFI8sZQtzp6apjNnEvq+zZsA8scJvBjCc/77FAZW97au1MIHehruMg793pLSnysSbBunPj0iJgD4Uq2KHAaz7PT11DbgBqv2y8k8qli7MeTnkLuaAXTicK8nKzFYS19Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TJW2caVptZHIpGiZT2xAdL3fk2rEByp5//brtGYylUw=;
- b=GZT8bE0xf0wDVez+Tkf0EpL5RcSju0Pi5i4tloj1lRH5Vs5MyxLClfrRr5VvlhLC4ZRrHMZ5ooD9ArUZdBj+iXg3xAw6DPF23wnjcvxMYdJzPEf9gRwGfUzTgaeYo5OMFM9HEN9uHW5jA5iqW+yQmPFYFsLMmKqLwZBoxoGrQy3wVT6nuPHSD7uD2KnMyynZZM4zgM9Nw0OH1P0R3xbQJLr5qVQbHN5/TP/tN5nJJDErfTWFYmHYCBihL9AvEJq2yDDFPr5sV7FZq26uS8aEAn4B4Kx7XQFdX8xvMC10Iq28ng8HPZzhH0rT3Ve3QE/6Gln7s5L666DCbcYL43LQyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TJW2caVptZHIpGiZT2xAdL3fk2rEByp5//brtGYylUw=;
- b=f5YU8PC2RUkZIQO2lzrdlPXh5xXcsmgJpZJ6ZUK4zw9TncZUUApU3UihqU26/7VikgZPF1OhFbH08mqE4RSHXNUk9s5o+xtie4oKG1CnrPezrrWe8wGlZyufZS+PknghQTlklHJ2qjFB7IGjfCD9+YXZOAhxjKVVquTQj2m18ZQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by SJ2PR12MB8782.namprd12.prod.outlook.com (2603:10b6:a03:4d0::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.19; Fri, 23 Aug
- 2024 16:19:11 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%7]) with mapi id 15.20.7875.016; Fri, 23 Aug 2024
- 16:19:11 +0000
-Message-ID: <d112c64c-b7d6-4aa3-ba78-8031bb7d1e1a@amd.com>
-Date: Fri, 23 Aug 2024 11:19:19 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: amd-pstate: add check for cpufreq_cpu_get's
- return value
-To: Anastasia Belova <abelova@astralinux.ru>,
- "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-Cc: Huang Rui <ray.huang@amd.com>, Perry Yuan <perry.yuan@amd.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-References: <20240603110741.24818-1-abelova@astralinux.ru>
- <ZmGHqL93i2GDHsWb@BLRRASHENOY1.amd.com>
- <69c57210-8a48-4ae2-b529-a4cd6dbd0121@astralinux.ru>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <69c57210-8a48-4ae2-b529-a4cd6dbd0121@astralinux.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA9PR13CA0095.namprd13.prod.outlook.com
- (2603:10b6:806:24::10) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1A018A6C7
+	for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2024 16:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724430410; cv=none; b=S1ptmv5zriM9I+wpskD83bf5ovjd2+uB+SEcJN/JmNz+CiF5+3NSRQ3rpOm2YMpSMC93LBjuiDgwNtJyAm4ax/57Iq2hND2ZzvflNCq4IWT23dxX/UTC9wdarJUWcBgPHL0REX98inGJVpd1GHEl8bi+8MkN8GHb0upQogNj7ps=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724430410; c=relaxed/simple;
+	bh=n8ZGaQpMVmAooqMlUbx9CPaYIP1qo2CpAVV9NzwgAek=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KK5H6bzTi8+2RChz445nKTH7m8cLMGaGrAcOtkT+x0oSCwWyRRX74l+1Qb0PGGZShJfMUReHfba507mlP9Kzo7kLj64E2odeyDOH1+k3uUq4c2ZVhB3SFQl9HqXovO5Wep+hObsbU0KYez6GPV3Kj9+b55JhddKFiVFf1L/f4wM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=VFlzcOjW; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2f3f90295a9so23036511fa.0
+        for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2024 09:26:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1724430406; x=1725035206; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZWSBeG+QwbjFSDvLyDhLEv05keKw5jJM6jqldDdTU5o=;
+        b=VFlzcOjW/uHGZCpOk3JJ34p935zH3b2AIvvKPRkHSI7LdThpBMwcNTibmN5DZfbT8P
+         hzWewDPMl0EyQ9Fv71GKcYcm7OS/NPJSWh8e4AdosCPvnjJcQOzWPju+338y/1bLKMJe
+         MI17+LzIVUDt2SaKDr/Fz1+mBoauwVhaUj9mMxMw8umSV7ms0FkjScPGFcN/fWj2YoRo
+         H0WnD+i8t9oIWBTae44omGcdAv+YPjiV77LRPIHTRZVjsVabOk4Qoo59x86EVoOpxvkv
+         Tsj6ak3a/+oehUefI9xcoLdf9ENb+K+YeG5b/0NFLsIH97vS4bhCHJcljBPH/hzr5ufC
+         VZEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724430406; x=1725035206;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZWSBeG+QwbjFSDvLyDhLEv05keKw5jJM6jqldDdTU5o=;
+        b=QfTXCCsm3n46DT3Jff4NH6yeUTQPi97uKo5r2POBGOP7KCFW0qzudBBE71MHDz27QC
+         6dZpSzK7vaLxHlAisvXI/a3EtRXnD+tcmBmCmXvddVZy+D61zjSQvQ2OeuJkQvgyM6WC
+         02dCS2I8dIBBJXAvZLqVLCokfNrNPrODBxwUqnRNiGqXUC0Ri0yeP0a0fZeN+BBD5If8
+         Em/E4NUY2cAaWZnu/Z+3ipT2PgHqvbbaaKW20Oqvf+ivTf+1YBnrT/UDX+Ur62o7NefA
+         0r2lXDiwlP6uZ/hoatMKYkMip73Cpt2Ih5IaMqXMFl+p+7hcKCO8wWuNvvVr8ilI4EHW
+         8I6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXExpPB5DmQwwPqqZiQrRV9OmyyChh8vGXp6ieoxTSWkGlBmEpQIL1X0nQGGUeuU5AmLG3SzeVSEg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzA0d4yNB3Lgrt3+VDwbbqVppQTEAYMBaxfDdgnN0Ospn0SzNS7
+	sDk6cv87CB3q+lmbBxPT4l/O4k/SX0uOh30lgZWdjTnv6F+dBZiDtBZYo83kgRg=
+X-Google-Smtp-Source: AGHT+IGq9Z87mcKzdsOfA4Kh7hIWO8zyssaqdNEEpmiVif++gK9Zdc/x8LpKsPD+5iPCumWhJubVcQ==
+X-Received: by 2002:a2e:9996:0:b0:2f2:9a2e:c257 with SMTP id 38308e7fff4ca-2f4f4941e50mr16465901fa.41.1724430405344;
+        Fri, 23 Aug 2024 09:26:45 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.177])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c04a3ea610sm2309974a12.51.2024.08.23.09.26.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Aug 2024 09:26:44 -0700 (PDT)
+Message-ID: <5eae2ddb-2a7b-4c1d-a7f7-41fb39058de1@tuxon.dev>
+Date: Fri, 23 Aug 2024 19:26:42 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SJ2PR12MB8782:EE_
-X-MS-Office365-Filtering-Correlation-Id: 035740f0-0d6a-43e5-c34d-08dcc38f52a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YVJSbitpRW5TbmtaL3hBb2NsTU91UzdkeE03SzJuMjF6S3RQdG1ySWdQODFQ?=
- =?utf-8?B?VTh5Ui9LOUU3ajNtZnJWaGw1aFhpWjFTM1c5YzRXMkJEZTljMlZZdXFPb05F?=
- =?utf-8?B?bDFQaUZBRkRSQjMwTVJzbVl4N3l6enFmOUNpbnRWQjBlWVMwTXRUSW85a3Fr?=
- =?utf-8?B?N2ZPMnRNOS9CUGlLK0RZYkhkN3BiZjEzaG92UjZodngvb05NZjl1LzM3NGRs?=
- =?utf-8?B?NUZWNWtUZURWdHRxeW5BNGttTTRMWkUybkFpK1VHYlQ1OHdRNFdTZTY1OTRo?=
- =?utf-8?B?dXd3ZVVGYlVkbHlQRUJ6M2dQL0h3RTVuMi9iNmpBN3pDejVmSDkzNjUrQkVT?=
- =?utf-8?B?M3lWTlJ1bDByWGVzS1B1MUNSZFE4eStGZHF2T3dsTHBjQ1l0T3ZvR1ZWZUVy?=
- =?utf-8?B?VkF2K3FNbW94MGhHY0RvRDZFRzV5L0hpUlhoalBWbHJqRGFuaytIb05ZOVU2?=
- =?utf-8?B?Y3hHUnVCQjBRd3VKZjl0N1FmdDdyd2NMNjZhRkF2Mm5rVURtZ0VaK0pUdVFi?=
- =?utf-8?B?Uk5UNmVrVXQzSEpVd1ZqSE82VFUyUWVoK1hPNzZIaXpBV2lUb1VHdjY1MUdV?=
- =?utf-8?B?czgzcnl5cmNTTituTGw0eVB2d1dreUJwWE9IRjg3MlgxY2Frek8rK0Z0aUJN?=
- =?utf-8?B?cGcvZWM5VlZwaWNVQ0RXR0hNcjFyaFVTb0JGbStsOTViSThnMkVyVm0yZkdv?=
- =?utf-8?B?YnFsTm92KzlPQUpmWndUL1I5dC82ZUZiSnRQZEZtSEFnL1U3ZHVBSXRmeDRJ?=
- =?utf-8?B?NW13WEdWM1hrNy80bUplYXZDTnpaUzN5QThNcEY0QWtOVWdOeXFQcXhTbkVn?=
- =?utf-8?B?K0Q5UVhnZXZ6M2ZlalFuV1FmZlErSmNCMGIxN2lNQVhWNkNqRGtOMTFobnR0?=
- =?utf-8?B?aWNKalk1dUZhMGtQVVREY0NnNmFkVU1Yemc3WkhqZHAyQStNSEpxT1BBQlhz?=
- =?utf-8?B?MXU2UmdQdGVTL2t0UzQ2TWJxTVIxdnBGMTQzNWk3TDBtTTM3blNrMmE0SGY4?=
- =?utf-8?B?cHZaNEdpUmJaTWJuV1pvTWZkK2Vvb3dDN0RLUFhiTVFreG1mY1lnNzVIdmNE?=
- =?utf-8?B?dmgzM3J0cWNXbnJmS2tqY2dpcEJDSlljM1ZsdmRJakxiVS9PTUYzdzd3ZXds?=
- =?utf-8?B?WVp1eDVLbGVDczkzZGZhV29HcnNWVGY0RWFuM3R0YnVVTFRoZlN2MHlYSStm?=
- =?utf-8?B?WVBvK0RHUDdFN1VjbjJ0NEpIZWx4aDE4QjFqQU1IMjN0ZHI5RTlKNnQ3a3p1?=
- =?utf-8?B?cjR2T3ZjYzgxNUNIRVUwc1FKWEpqZmdKU05DSFpJUmdiL1J4Qnl1MHUxcUdO?=
- =?utf-8?B?QkR1bmRsOTVmR3ZmQW5xYU8ra256Z2tWbzdGVkN4TTUrOUZhd1Rmc2Y0OVdj?=
- =?utf-8?B?U2pCNkZReDl5U1U2cGhveG5VRG9mN21YMmlvOVRSYncyWnk5YWtqMlJTb2dn?=
- =?utf-8?B?c0wvQnMvS0J5Zk5lcTk2TFRna0ltM1dIZU5NRGU4ZXFzQzR3eXA2b0N3ditB?=
- =?utf-8?B?U0VvQmk4aHBGK1Q5WFdsWEloNUxiemZnd1NJVjlxZHFZY1BRaHU2SXZSUVlW?=
- =?utf-8?B?T2pCdjRxdzlEYmZkdzV0UVVCdCszM01pRStyb0J6cTB4d0dMK2JUVmVMZGlS?=
- =?utf-8?B?bU5XNWdadXZDbFNsdk9hOWxzZUdoZk52SnJXUXNuMHJDcGRvLy94WWRqYzRu?=
- =?utf-8?B?QzlTdmZyQ0M3OHpqS2d3aTVyTnpHOG9SL0M3cm5NcXRpMTRsZFU3N3FVRUN2?=
- =?utf-8?B?bG4rQzdWT0VCVHdhMW5XY3E2aHFFaXo3MElWSzRhN203RXJOL2l1N0hDOHFt?=
- =?utf-8?B?UG9TWGIvTVozbzFsTGJIQT09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aFUxeHZ5YXA4RmZZbmNHZU01SkdsQUFFQkc1Nmhic25QVnlzcHNBOFZBODZx?=
- =?utf-8?B?cGJ1Vnp2K1ZYenR4cm9iQks5SGduM3lvMUVVa3YrODg4d0dpb05iaEswUEMy?=
- =?utf-8?B?bG1hYkR5M21WejEwN3VnNFVaTzhLSXBSYlFJZnVYODdqNU9nVDUxV1pkeUdj?=
- =?utf-8?B?RnFOaFg4WVF0b1JkTmtFY05CMm1CS0lDQjAxeng1a2F3VGdFckhidTh6eXBJ?=
- =?utf-8?B?dHZlMENyM253RlZ2WXJFNmhTUFJtN3JzZldYdUxEdVF6QXZRRkNxaVNadUt2?=
- =?utf-8?B?RTlMVlQ4UVhrOEZWZnFnemZRN2hWdmJsQ3BXYXlBenYrUFg3VGhEMWU1WTVS?=
- =?utf-8?B?UzhjWkNFTWpJUVNzZFJ2bXhYUTZOR3czdHhLbExWc3FaT2c1aU9kNEoxZVRU?=
- =?utf-8?B?TS9CRkdjdVdoZnR1L3lSenpJblhZV3dlTFdEeEdwQVcyeU9jVE1UNmJ2S1I1?=
- =?utf-8?B?anF5bXFROEYyTko1aUVBeklRaHlBRGdZcHpBVEw0NWMwVEVtWTRuT0xNMERx?=
- =?utf-8?B?RXlNMzBDMkVzTE9qa0tDY1oyWlpGM0JpS3Z1emdjYmNpV2hmeXA4TXI2QmVt?=
- =?utf-8?B?YzJoZzlBNGg0eWdXQldiVXpEVFRLOFBMV0J3a0J1ak8zYkVaeUJOeEl1UWRm?=
- =?utf-8?B?Mlc5NDZteFRjMWRjK0NtQUNvV214YlVSd0FoZGV0ZHdMQi9yQTRoTVlvWVla?=
- =?utf-8?B?UEVEUCtvenVCMm41YVoxdUIyWFNGdU5YSHBPRFFURE5ONVVEVVRxOVRyaHpL?=
- =?utf-8?B?dkppK2RyOWZZRGdvc1hWdkRKU1ZlQldxRGJ6TW1BWk1JYndiaDRDZ0tOOSsr?=
- =?utf-8?B?SFNiWkF4MjdoTXdrVjg3Q0cxT3pGend0MDZsZjRIMEY4d1ljMDBxSndRSzdL?=
- =?utf-8?B?cGtmQ2pnQzZ2KzBHa1ZVeHFla3lvTEVBay9rZEdwc25LdHpQUmp6dE5ZZWwy?=
- =?utf-8?B?KzExSEVHdW5mY2FYYW5kZkx2dm40QWtmKzlYME9vWUIvSU1Wdy9JZzluYzRI?=
- =?utf-8?B?SUlqbHlPcGJ6bGhLTElId2FESXFPeENJVmdpRU53YnN4cW5xbW82TENsTVlw?=
- =?utf-8?B?UEZzc2FLd25tVHBkeGlvcmJ0N09UWUhMcXBIQit3VWwySytJdURDRkdQbXFH?=
- =?utf-8?B?bzBhYTNXZ1ZDYjlBZ0RPb21zVDBTMjBLeVBUQWpMWXlqb0h2OEU0SVNhQU54?=
- =?utf-8?B?cFMwUHRVSlVHL0xDdU1ZcFNtZUtFS0pQMXQ2NzFObEk4WTRwcTRIaXdiSzc1?=
- =?utf-8?B?Zm9pbCtwQmcxTjF1eDhMSHJhOGxWbldqSVUwbWxvTitQSU45VC9hOG92ZWFR?=
- =?utf-8?B?SW96M01zK0E5OVdjbXVzcEcrZEZwTnJSUXNvMmtjKzRDUCtKUWYyczE0T1Bz?=
- =?utf-8?B?cFQvYXhlS216bzBhcUlyL05kTFRDeWVuamR3RHhrRzhGWXF6YWNUQzduYmxE?=
- =?utf-8?B?dnJRTDJ4ZVhTVjNUZ2dTckwrWEZVd3VHSUFTUlozK29YazM0Y3Z2dFBDUTFq?=
- =?utf-8?B?MXdUdHFzcUtzLzc4UTdTR3ZHcDlRbmkvODNVSUdVeU9zbmtxbEhURkk0NDZ4?=
- =?utf-8?B?ODNPWm9zQU1VOGdHVDdLd1d5OWZkZzNmYVZ5bHhxcFVlRjdXdTUySmVMZUph?=
- =?utf-8?B?ZVA3R05yb3hyc2NaOHVGYW5UaDZ6cXpIN1BZZlVuM1E0VzliT1dnQlBNMW9V?=
- =?utf-8?B?RHVFNVhrVW1GeXJlWHFNTG5IdHMxczVYdzB4bTNZYW5qYmw2b3JVWm8vZ2h1?=
- =?utf-8?B?QXV1ZXI3S09Gbi96RUlqR1Q5RGV1VVloMjlMMXJEQURpdnJHRS84OU1SMmtm?=
- =?utf-8?B?aHFWWVE1TlJaZnF1ZzR5Q0psekM0cmVZUkFMQnlZM3ZTVTVXRGswNGcrbTlj?=
- =?utf-8?B?d3VZMGdIUFhHb2p6eWZKSnd2Rm5TSlJrS0VTTUNQSXIrejVnaFB6T3RJWVJ6?=
- =?utf-8?B?OWRIWXNpNmQ1YmlsaWsxMTZ2WGxnWnRnWUZZZGlsYU05Sk1FVXh4cHdSZE13?=
- =?utf-8?B?dHMwNTIvajBqSjV3Z014Z3BDZXlkWE4wOG1zQ01qd0ZzNUx4VmZGWm80aDk1?=
- =?utf-8?B?dzJFY2V5dHFONWcvRTg5c05wSmdJaTFYMUZ3bndFdUNMQkxtODRqV0xWWkU2?=
- =?utf-8?Q?ZeK1AZNwKl2xxdX5m+73sHono?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 035740f0-0d6a-43e5-c34d-08dcc38f52a1
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2024 16:19:11.5228
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: suIqhov09mcnoLQzrl4B+NUekYjJyaT45/mvzafonHGddSLRIRpAVVlKGqs4U7eCiXMkP5OyJdAS9MbQaS4k1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8782
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/16] dt-bindings: soc: renesas: renesas,rzg2l-sysc: Add
+ #reset-cells for RZ/G3S
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be,
+ magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com,
+ sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com,
+ biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org,
+ linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240822152801.602318-3-claudiu.beznea.uj@bp.renesas.com>
+ <20240822-vanilla-enigmatic-f0b05ecca4b6@spud>
+ <0d8b1322-cf15-4ed9-b958-06516bbb64c7@tuxon.dev>
+ <20240823-plywood-unfixed-d8d8a2d93f14@spud>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <20240823-plywood-unfixed-d8d8a2d93f14@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 8/8/2024 08:07, Anastasia Belova wrote:
-> Hello,
-> 
-> 06/06/24 12:55, Gautham R. Shenoy пишет:
->> Hello,
+
+
+On 23.08.2024 19:18, Conor Dooley wrote:
+> On Fri, Aug 23, 2024 at 10:54:06AM +0300, claudiu beznea wrote:
+>> Hi, Conor,
 >>
->> On Mon, Jun 03, 2024 at 02:07:41PM +0300, Anastasia Belova wrote:
->>> cpufreq_cpu_get may return NULL. To avoid NULL-dereference check it
->>> and return in case of error.
+>> On 22.08.2024 19:42, Conor Dooley wrote:
+>>> On Thu, Aug 22, 2024 at 06:27:47PM +0300, Claudiu wrote:
+>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>
+>>>> The RZ/G3S System controller has registers to control signals that need
+>>>> to be de-asserted/asserted before/after different SoC areas are power
+>>>> on/off. This signals are implemented as reset signals. For this document
+>>>> the #reset-cells property.
+>>>>
+>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>> ---
+>>>>  .../bindings/soc/renesas/renesas,rzg2l-sysc.yaml | 16 ++++++++++++++++
+>>>>  1 file changed, 16 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+>>>> index 4386b2c3fa4d..6b0bb34485d9 100644
+>>>> --- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+>>>> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+>>>> @@ -42,12 +42,28 @@ properties:
+>>>>        - const: cm33stbyr_int
+>>>>        - const: ca55_deny
+>>>>  
+>>>> +  "#reset-cells":
+>>>> +    const: 1
+>>>> +
+>>>>  required:
+>>>>    - compatible
+>>>>    - reg
+>>>>  
+>>>>  additionalProperties: false
+>>>>  
+>>>> +allOf:
+>>>> +  - if:
+>>>> +      properties:
+>>>> +        compatible:
+>>>> +          contains:
+>>>> +            const: renesas,r9a08g045-sysc
+>>>> +    then:
+>>>> +      required:
+>>>> +        - "#reset-cells"
 >>>
->>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->>>
->>> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
->> Thank you for the patch. Indeed we should be checking if the policy is
->> valid before dereferencing it.
+>>> Given this is new required property on an existing platform, I'd expect
+>>> some mention of why it used to be okay to not have this but is now
+>>> required. Did firmware or a bootloader stage take things out of reset?
 >>
->>> ---
->>>   drivers/cpufreq/amd-pstate.c | 4 ++++
->>>   1 file changed, 4 insertions(+)
->>>
->>> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
->>> index 1b7e82a0ad2e..672cb6c280a4 100644
->>> --- a/drivers/cpufreq/amd-pstate.c
->>> +++ b/drivers/cpufreq/amd-pstate.c
->>> @@ -621,6 +621,8 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
->>>       unsigned long max_perf, min_perf, des_perf,
->>>                 cap_perf, lowest_nonlinear_perf, max_freq;
->>>       struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
->>> +    if (!policy)
->>> +        return;
->> This patch mixes code and declarations. While I personally don't
->> prefer that, since we have moved to using C99, the compiler does
->> not complain, nor does checkpatch complain.
->>
->> So is this ok for cpufreq, Rafael?
+>> On previous SoCs the SYS controller has no support for controlling the
+>> signals going to different peripherals (USB, PCIE in case of RZ/G3S).
+>> I'll add a note about this on next version.
 > 
-> Should I form the second version without mixing code and declarations?
-> Or it is better to wait for Rafael's answer?
+> My initial thought here wasn't about previous SoCs though, it was
+> because you didn't add the compatible in this series for /this/ SoC.
 
-FWIW, I don't really like it either.  As it's amd-pstate code I'd say 
-Gautham and I should make the call.
+RZ/G3S compatible is already present in this file:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml#n26
 
-Can you please change it to avoid mixing code and declarations?
+Thank you,
+Claudiu Beznea
 
-> 
->>
->> Or would you prefer something like:
->>
->>     unsigned long cap_perf, lowest_nonlinear_perf;
->>     unsigned long max_perf, min_perf, des_perf;
->>     struct cpufreq_policy *policy;
->>     struct amd_cpudata *cpudata;
->>     unsigned int target_freq;
->>     unsigned long max_freq;
->>
->>     policy = cpufreq_cpu_get(cpu);
->>     if (!policy)
->>         return;
->>
->>     cpudata = policy->driver_data;
->>
->>
->>
->>>       struct amd_cpudata *cpudata = policy->driver_data;
->>>       unsigned int target_freq;
->>> @@ -777,6 +779,8 @@ static void amd_pstate_init_prefcore(struct 
->>> amd_cpudata *cpudata)
->>>   static void amd_pstate_update_limits(unsigned int cpu)
->>>   {
->>>       struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
->>> +    if (!policy)
->>> +        return;
->> Ditto.
->>
->>>       struct amd_cpudata *cpudata = policy->driver_data;
->>>       u32 prev_high = 0, cur_high = 0;
->>>       int ret;
->>> -- 
->>> 2.30.2
->>>
->> -- 
->> Thanks and Regards
->> gautham.
-> 
-> Thanks,
-> Anastasia Belova
-
+> What's worth noting isn't about the prior SoCs, it is about what makes
+> it okay for this one.
 
