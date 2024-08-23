@@ -1,74 +1,74 @@
-Return-Path: <linux-pm+bounces-12804-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12805-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30F1295C82E
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 10:36:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D264295C842
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 10:41:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1E2B1F21E47
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 08:36:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 038511C233EE
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2024 08:41:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E931B143C7B;
-	Fri, 23 Aug 2024 08:36:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2A99149C50;
+	Fri, 23 Aug 2024 08:40:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iVojy20Q"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="ESSgLe3x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A98836AEC
-	for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2024 08:36:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F251236AEC
+	for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2024 08:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724402202; cv=none; b=Bl8yH2VOxgAEl6jOLMiSDbm6X60cQ5Oz8oMitIY6y0Aa5NdvhIR7XkZmLRgzMv2jCgFY6OiXUA3WQDX1k4RCayW4QkqXAXF836MpuCF2EHA6U8Kg+/jvBMSNuKDSdqiPTQJ/857re3Y1W4rh54GWiusfG9X27BAbjJkxWMlRmmg=
+	t=1724402444; cv=none; b=h4s/k+pk/KhLOyNb6DsmgIpcWrnm5t8dHLDS6xWEqPexsh1pjIkgSwGAKcgP4WFtLubxJxU6NJ145PPy6WkxlL144mn4n4fUOoJ4PODo2HLqTLssLgJYazblo9YxyGDJdzXz7wOLYW8UlIJ0UsdHWeRhPXwbGVrRwKFge3jxnyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724402202; c=relaxed/simple;
-	bh=CQO6aXjYTgho99xY55I8pTEOCfz+/1IGlcZ3POMdPBk=;
+	s=arc-20240116; t=1724402444; c=relaxed/simple;
+	bh=3Lu0q5LE4JQFeJoFtGj8FZCKVCJ+bPdGS586sH9yOco=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hMad/ru7KPRep+tFeP3HuhMhfmJC4BJT+W3u37Z51SH96/wNZBPQp7IINL7eC9vdWyDnOcRWWbtre2EjPlFR5Q9goZtz5VGt0eXGRoBUhbCcOVMN0J/MrkfmZPxWs3R3NJRSpXTlR5YcwDF3bWNr9lBHIpLwYOxFLp+todNEHjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iVojy20Q; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-428243f928cso13110755e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2024 01:36:40 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=XR9YXsh5b/dTL3dH9qaSQSS7voIfG3pnRFe+NG4m+PEwYshPXVKuaVn89cF5wBLWyHl8K6RCIa1/EBJU7J74oUbcNmBlEGVa/VbTc3GA+hwbI+plb63kPErtrByWw+/9WUy+o6zWabl+G+VfEqL0i/wtxJrKwB0pelIEsKBlQa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=ESSgLe3x; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a866cea40c4so211511166b.0
+        for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2024 01:40:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724402199; x=1725006999; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=tuxon.dev; s=google; t=1724402441; x=1725007241; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5F0w0rHOjjiCZiykd3yhyISp4GHhaztXbtuC1mBZoDs=;
-        b=iVojy20QhEaRjRPHSYcGXMBzK/zTsIvyWiylBUyQIzFM07fK8o1D4VYLr9dibxG696
-         aqVEuLYfnGUpibcUgbQiviUXAOLQUqqhEV5l8MuneBE/os8W+2gAM3UMHjZZmurw14mY
-         Gyp153E5OPetIjtjJCRqyw1HCMtcAVT3A5B3WIJuYN5y22FqLae32g+CWlJHg9wyGA6g
-         1zYpBp/lgU5UMvG6qi8627H2QBRYJZXHG8NopDHeSrywHyqQyfGNx/FDJGMqyhWU/P9b
-         /AzDfCKfLs/L9qGuy1G7xflW8NJZG8hp+eLt/8bcjJfj942lnwII6mnhGA9Rc82euAlD
-         T2Jw==
+        bh=fG9KNjBoDmO8zW0C42AiccF/rKtpUpUCjugH/PuwWu0=;
+        b=ESSgLe3xxgMVsQDzDEOkRtpf6Utu7PkuRRdKUktTtrTApdTkyk7/yLAEFm6KtkmsgA
+         QMEJjwGEBpPDrBRT1TeKtkiYPOAbEaM4ayqQYBpgYXwSJRigcTDIemd0PTn6/thWUHAR
+         EsNRBIta/y81CqHbkY2G3LgyNmfwVGV6ovbd871h+cuOIgBGnJuf9aJYQ8h/Yqd7DYSL
+         p1VEuZhVu8AkVE11tE6Jdk/mh1d2EmPT5eKOcbwyqs8LLEhgfgJJl3OPxElYg9xz9nKZ
+         NYSmNXgZwCegojNsxGDL4AmVLcvz/De12W/FH8jIzwdwHINwFsfzaMZ7vrgZuu+xMVXI
+         5Rsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724402199; x=1725006999;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1724402441; x=1725007241;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5F0w0rHOjjiCZiykd3yhyISp4GHhaztXbtuC1mBZoDs=;
-        b=FCVm3nbXeXuWEcLZCmW+zx598vG8E7SADWyBiN5mBy0U8H4cws0grECjAQMTQmLzRd
-         hW848+7M4vgA9qWGzhu2Mg+tj05rQ3GzM4VUHnO167WIW4s8Hmewprd8RyQFpdGz8480
-         PqGhRPTPVFN6ww8X8oNQykiCRr0L334/Mv1LrrdB0Qb/td8Mv/2GAjH5ArrlXUYeXmKw
-         ijacL4nNZNj3qfK1AJpUAQluVHkPeU4W1fLvRhI5SIVOJPqYbQ+1889jaRriMPayJYgb
-         zKaf/NyH7EAvkfft3ebWyBxJemWKK9W3DyTcUJGcnCbik7JwinE3aZqo2sylecO4rG6i
-         Slpg==
-X-Forwarded-Encrypted: i=1; AJvYcCVooHpHOUY82sJzw5LW8/0fvhbnVMosyF22/LVIKs96ivB9J7/JWySB8No2wWmFVuKtEnIY4rHxfQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgB4fVtwlKm7Wjsjy3P+kliKQwuacoZGikFVtIHdrDbDonJK1P
-	UfRAnBeesHtFO+0DfTPH4dvLnb0LnTnld3GnJBR+M7Wv3walZpKakis7kJ88Bps=
-X-Google-Smtp-Source: AGHT+IFA8GFJN/inu8iTynQOajzCqNNDfchrNyRND/DMhG7RXZZKklf2s7maVtLWaQoZ/pxYPfTMDw==
-X-Received: by 2002:adf:b304:0:b0:367:8f81:f9fc with SMTP id ffacd0b85a97d-373119195c8mr983429f8f.50.1724402198776;
-        Fri, 23 Aug 2024 01:36:38 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-373081ffb7csm3592211f8f.82.2024.08.23.01.36.38
+        bh=fG9KNjBoDmO8zW0C42AiccF/rKtpUpUCjugH/PuwWu0=;
+        b=I358687dFRgy/xIzyGVqUVCf79efhtL3tKOLPhycjxNIVmfs9Iub1lOgeLAShvIdoi
+         pBbrCAYCei67zOpiaHTjb//fiuj/IozSIilDybmy4SpEIU5ejPppqC30hzTGuCnzbUjS
+         9/tyXIvN3o6e1RNaZhMrJsTnq3RCR1EhIgmqHYSAxWzNdBkHRPCNayDDx/XEijH17A6j
+         yehA3cj8vX5ZBsddhL0Rj2QHZDoh4ikhbAQRPZiR5S9CYQofodofn9uTsTrytcFDOVYw
+         zNfJynaQTCg5zrcLh7RkU/wwBj+qPDgAO5EGNVYyvtYwvm+QUn5YPh4vcup1VixPjUFK
+         KjuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXhCmMmNzUpv/8tp1yyzUuW6c99gDaFeudBXN/kjmnxL7qlrd9Uy3QWKWHGXdCXxAMUJUpvXYaj3g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwONj1bQKHDi9YzZ3A64s09PoWLZ4MdRMfn/0oVAkHn/joU/1Xq
+	jb1JcKXlA/RBKzKN86L4XByvIFHg6+ULNQhkxpXmIYFDU/4wXMLYCAHyr7jpzpE=
+X-Google-Smtp-Source: AGHT+IELJdt9NWz1Qyq2a+tw+U6RVfRhf7Xtr1odkIop07urXH/CbabXuHZJspnO7+6yMIrduwa9BA==
+X-Received: by 2002:a17:906:da82:b0:a77:dc70:b35f with SMTP id a640c23a62f3a-a86a54b694dmr101050966b.58.1724402440963;
+        Fri, 23 Aug 2024 01:40:40 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.177])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a868f29004csm229783366b.46.2024.08.23.01.40.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Aug 2024 01:36:38 -0700 (PDT)
-Message-ID: <6893580d-53b2-4738-b49b-748f9310cb74@linaro.org>
-Date: Fri, 23 Aug 2024 10:36:37 +0200
+        Fri, 23 Aug 2024 01:40:40 -0700 (PDT)
+Message-ID: <59f4d28b-5b9b-427a-baca-739fc03a5cc1@tuxon.dev>
+Date: Fri, 23 Aug 2024 11:40:37 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,127 +76,96 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] thermal: core: Fix rounding of delay jiffies
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, =?UTF-8?Q?Peter_K=C3=A4stle?=
- <peter@piie.net>
-References: <3331194.44csPzL39Z@rjwysocki.net>
- <1994438.PYKUYFuaPT@rjwysocki.net>
+Subject: Re: [PATCH 08/16] reset: rzg2l-usbphy-ctrl: Add support for RZ/G3S
 Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <1994438.PYKUYFuaPT@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To: Biju Das <biju.das.jz@bp.renesas.com>, "vkoul@kernel.org"
+ <vkoul@kernel.org>, "kishon@kernel.org" <kishon@kernel.org>,
+ "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+ <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "geert+renesas@glider.be" <geert+renesas@glider.be>,
+ "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "mturquette@baylibre.com" <mturquette@baylibre.com>,
+ "sboyd@kernel.org" <sboyd@kernel.org>,
+ Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+ "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
+Cc: "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240822152801.602318-9-claudiu.beznea.uj@bp.renesas.com>
+ <TY3PR01MB11346B5C5D9AA883B7736A5C3868F2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <TY3PR01MB11346B5C5D9AA883B7736A5C3868F2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 22/08/2024 21:47, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi, Biju,
+
+On 22.08.2024 19:59, Biju Das wrote:
+> Hi Claudiu,
 > 
-> Using round_jiffies() in thermal_set_delay_jiffies() is invalid because
-> its argument should be time in the future in absolute jiffies and it
-> computes the result with respect to the current jiffies value at the
-> invocation time.  Fortunately, in the majority of cases it does not
-> make any difference due to the time_is_after_jiffies() check in
-> round_jiffies_common().
+>> -----Original Message-----
+>> From: Claudiu <claudiu.beznea@tuxon.dev>
+>> Sent: Thursday, August 22, 2024 4:28 PM
+>> Subject: [PATCH 08/16] reset: rzg2l-usbphy-ctrl: Add support for RZ/G3S
+>>
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> Add support for RZ/G3S SoC. It needs its own compatible as it uses 2 reset signals and it cannot work
+>> w/o both of them. To be able to fully validate this on DT schema, too, the RZ/G3S uses it's own
+>> compatible w/o a fallback (as if the fallback will be used the RZ/G3S will not work anyway).
 > 
-> While using round_jiffies_relative() instead of round_jiffies() might
-> reflect the intent a bit better, it still would not be defensible
-> because that function should be called when the timer is about to be
-> set and it is not suitable for pre-computation of delay values.
+> Other than reset/ power domain approach for handling USBPWRRDY signal
 > 
-> Accordingly, drop thermal_set_delay_jiffies() altogether, simply
-> convert polling_delay and passive_delay to jiffies during thermal
-> zone initialization and make thermal_zone_device_set_polling() call
-> round_jiffies_relative() on the delay if it is greather than 1 second.
+> Can't USBPWRRDY signal handled in SYSC driver directly? Since SYSC driver init happens at very early boot stage
+> Check for USBPHY control device availability and handle USBPWRRDY signal there??
 
-For the record:
+In theory, it can be done this way, too.  The downside I see at the moment
+with this approach would be that the USB, PCIe drivers will not be in
+charge with handling their signals, there will be no direct dependency
+available b/w SYSC and USB drivers.
 
-In the history, the code was:
-
-+       if (delay > 1000)
-+               schedule_delayed_work(&(tz->poll_queue),
-+ 
-round_jiffies(msecs_to_jiffies(delay)));
-+       else
-+               schedule_delayed_work(&(tz->poll_queue),
-+                                     msecs_to_jiffies(delay));
+The HW manual doesn't mention anything about the power consumption of the
+USB, PCI areas based on the state of the signals from SYSC, so, I don't
+know if there will be any implication on this if the signals will be just
+de-asserted from the SYSC driver.
 
 
-And the initial commit 21bc42ab852549f4a547d18d77e0e4d1b24ffd96:
-
-"ACPI: thermal: use round_jiffies when thermal zone polling is enabled"
-
-Good catch !
-
-Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Thank you,
+Claudiu Beznea
 
 
-> Fixes: 17d399cd9c89 ("thermal/core: Precompute the delays from msecs to jiffies")
-> Fixes: e5f2cda61d06 ("thermal/core: Move thermal_set_delay_jiffies to static")
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->   drivers/thermal/thermal_core.c |   23 ++++++++++-------------
->   1 file changed, 10 insertions(+), 13 deletions(-)
+> Cheers,
+> Biju
 > 
-> Index: linux-pm/drivers/thermal/thermal_core.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -323,11 +323,15 @@ static void thermal_zone_broken_disable(
->   static void thermal_zone_device_set_polling(struct thermal_zone_device *tz,
->   					    unsigned long delay)
->   {
-> -	if (delay)
-> -		mod_delayed_work(system_freezable_power_efficient_wq,
-> -				 &tz->poll_queue, delay);
-> -	else
-> +	if (!delay) {
->   		cancel_delayed_work(&tz->poll_queue);
-> +		return;
-> +	}
-> +
-> +	if (delay > HZ)
-> +		delay = round_jiffies_relative(delay);
-> +
-> +	mod_delayed_work(system_freezable_power_efficient_wq, &tz->poll_queue, delay);
->   }
->   
->   static void thermal_zone_recheck(struct thermal_zone_device *tz, int error)
-> @@ -1312,13 +1316,6 @@ void thermal_cooling_device_unregister(s
->   }
->   EXPORT_SYMBOL_GPL(thermal_cooling_device_unregister);
->   
-> -static void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms)
-> -{
-> -	*delay_jiffies = msecs_to_jiffies(delay_ms);
-> -	if (delay_ms > 1000)
-> -		*delay_jiffies = round_jiffies(*delay_jiffies);
-> -}
-> -
->   int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp)
->   {
->   	const struct thermal_trip_desc *td;
-> @@ -1465,8 +1462,8 @@ thermal_zone_device_register_with_trips(
->   		td->threshold = INT_MAX;
->   	}
->   
-> -	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
-> -	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
-> +	tz->polling_delay_jiffies = msecs_to_jiffies(polling_delay);
-> +	tz->passive_delay_jiffies = msecs_to_jiffies(passive_delay);
->   	tz->recheck_delay_jiffies = THERMAL_RECHECK_DELAY;
->   
->   	/* sys I/F */
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>> ---
+>>  drivers/reset/reset-rzg2l-usbphy-ctrl.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/reset/reset-rzg2l-usbphy-ctrl.c b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+>> index 8b64c12f3bec..08b18d7de7ad 100644
+>> --- a/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+>> +++ b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+>> @@ -93,6 +93,7 @@ static int rzg2l_usbphy_ctrl_status(struct reset_controller_dev *rcdev,
+>>
+>>  static const struct of_device_id rzg2l_usbphy_ctrl_match_table[] = {
+>>  	{ .compatible = "renesas,rzg2l-usbphy-ctrl" },
+>> +	{ .compatible = "renesas,r9a08g045-usbphy-ctrl" },
+>>  	{ /* Sentinel */ }
+>>  };
+>>  MODULE_DEVICE_TABLE(of, rzg2l_usbphy_ctrl_match_table);
+>> --
+>> 2.39.2
 > 
-> 
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
