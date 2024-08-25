@@ -1,161 +1,111 @@
-Return-Path: <linux-pm+bounces-12854-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12855-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F49895E035
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Aug 2024 00:02:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75D5695E2E6
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Aug 2024 11:54:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E81B1C20B7C
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Aug 2024 22:02:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E4F0281FE4
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Aug 2024 09:54:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12A7684E18;
-	Sat, 24 Aug 2024 22:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5659874C1B;
+	Sun, 25 Aug 2024 09:54:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P/5llR0S"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J0fmVaC/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3934728E0F;
-	Sat, 24 Aug 2024 22:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC756A59;
+	Sun, 25 Aug 2024 09:54:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724536941; cv=none; b=PRJ5oQL0TrqwAX9fBAAoY0L/bSOr3uofUvEsCjb6a0JBf/eFq9rp53Wtb0QUFGijNAaApwu/d7qlgDOU58Xl0wuVjzTKyL03MM1qXVdgyYR47WV0kEY2tM9f52J80poUBmpTTIbtiWjxHKKy2VgTtRY/bxPFdjctalO9DUWKZNM=
+	t=1724579683; cv=none; b=Oxl4ZyofSaeIZwx+UygybcK6lMCEduPAAKfX3TRq2pEf9J/ICbTcGuxJDN4i3Weh4xn92qkhEzyMRsUR0v/qQsap15w7GZZB2Q/fNoKdKa/VMSgsAVoWT12JS9LTgKveMH2SC2hHT0qZVtGAhFhm6R165mm3gA+wbw5h/o98au0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724536941; c=relaxed/simple;
-	bh=MmxaIE2PueHguE0gCbMZQWUzdtg69INhZhqLCKuzG8Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YfGkhCgVuTQOkdFyOHBN9p+iI9rDmDzVinfF/9ikuE1EK8tWVpwf7C+FO4xyoRfs7qz9FvYqnT+TnLAuGHFhvpPAvapIxqV1Y+Ncqh/mjqdA/XrcsAv0hswfIsLcCiXZAQGArKNVexFtWXH2JMQ7aXy08U0kj0Jy6Gs+OFwHyeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P/5llR0S; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724536939; x=1756072939;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MmxaIE2PueHguE0gCbMZQWUzdtg69INhZhqLCKuzG8Y=;
-  b=P/5llR0S/IDw6VCuHwBFPvozS/NRmtbrY28mh7cTMswNV1k+KOvhNXkF
-   Y2J8nm3pm3XOseVymrnsodFXdaplsnJtOPIwTxzu+DAK7WD+IbJv4KUxi
-   tNjOzsXRv3UWBBjXkpHCdhizV8Mgld2eaPtnL9aWeTjfcR4ExypQG2+TI
-   hK5dUXVnKPgoMOCR3YcHjTNbEyAiB/c+aWxZy6Q51HLxa1tuVrlEhWuQy
-   xOqcq7caooc2lq0Afv76sATXt4YsQiMzJMM5XrAv9gccGLiFpVbrsE+9r
-   IiYARcKuLmXTSVq50CkKNNwC4iFbukjBldyRfXy2uaOJRJ/BauwSkL57P
-   w==;
-X-CSE-ConnectionGUID: FOwDzxq4TQuAF4ibCC/3GQ==
-X-CSE-MsgGUID: 63mHpBkjTFKQkW7kGBPyCg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="45511025"
-X-IronPort-AV: E=Sophos;i="6.10,174,1719903600"; 
-   d="scan'208";a="45511025"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 15:02:19 -0700
-X-CSE-ConnectionGUID: 4RSaj7S5Smqh6zu7TAaaBw==
-X-CSE-MsgGUID: tUVB7kDTQzG/IqO6gvMc3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,174,1719903600"; 
-   d="scan'208";a="61828874"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 24 Aug 2024 15:02:15 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1shypp-000ElT-1s;
-	Sat, 24 Aug 2024 22:02:13 +0000
-Date: Sun, 25 Aug 2024 06:01:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yang Ruibin <11162571@vivo.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	opensource.kernel@vivo.com
-Subject: Re: [PATCH v1] drivers:testing:Handle possible memory leaks
-Message-ID: <202408250520.ZWvQ82gO-lkp@intel.com>
-References: <20240822032108.1223332-1-11162571@vivo.com>
+	s=arc-20240116; t=1724579683; c=relaxed/simple;
+	bh=1mBkGNFlDFxDWfPDkvYSxSHFHU6QkD9OAkyQG8G6pzE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RzQdCm8X36PFOqVA8pCRN4rAGgOI+wwQ87qMsNMUR5tr8QHSCyfL7BHIiQpG/qynscmpl9RpkDLeu77+KpegwGOJz0TERDOqUXmGcNoO5kQuP8hPln3Cs4RpRmsjT6mJG5AHYcC76KV22UsFQCn8+aZ7Gk/N8nxqNyi8UcxuZ+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J0fmVaC/; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2d3da6d3f22so2578495a91.0;
+        Sun, 25 Aug 2024 02:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724579681; x=1725184481; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ki9s/U4Sut/kkvy/DZiEXTPLLw1z1KDsCl7bqzPU3h4=;
+        b=J0fmVaC/PQkmek+IbE3UOtcKUr5O2FmYJA4aOP7+400Cge0IMyfclnlD2rTLKeM1bx
+         tau3fOd75UmVfxy6ayaII4LfEIpGjvJqUzBka9n0ndAAxxMmIBogriRwzEHK111v8uDH
+         vZlh6uJ3V1ifKns1QfsoZqASvu84prxM4nOan50E+39x/k/ig/iHUcuxPA+9x84MtNUq
+         LsU3AWcW04CFJRPbdd4IE0GtjNhht6uWUfkfnsDnoLVFkUamvvbGh/P8FW4WkK1v0660
+         ZKbAuoKMvRWUDqL21lzpV8oZnFt06cBI/mjZnRhvhaKnP0rh4TQWQH3Z7Gm/397OG2Vw
+         cN4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724579681; x=1725184481;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ki9s/U4Sut/kkvy/DZiEXTPLLw1z1KDsCl7bqzPU3h4=;
+        b=wB0KWtiADUvF9IHfUGO8oZWXU2yKNgbuFITWUIUmH4JZTuONoVxxoa2y1d52EZbc98
+         loyyFqxSJvVzIm3L8T88eC+oBYcJliTdZweC6GhoUyr+d6xZ2/9Y99DO5ssdxVNbKDRi
+         ENYlMFYFpC4n0RdVJiaD1VtgpYCRBY7PkZZVFAJPMi49UpE3o37h93p3c9oRg2gLEWXD
+         kgiyrGDPzZXD/P3GVTqj5SvUhrQg2muUPKjl5joHaBP56RL8e6t0kCpcfS1COateEckf
+         n95yUA+HhiRN4KeI42otM4EO+yMZzr8YYtZ2rkhV1bKQd8xftGOMm+URyJpCJ65KPyit
+         5Tag==
+X-Forwarded-Encrypted: i=1; AJvYcCVS/OL7YmINkEBA/DmnKJIPCMreNVCrqKUsrWEAN+x3fX/NN2XwiNy3BBcGTNNqEo1x3p4IkB3yuNw=@vger.kernel.org, AJvYcCX1AMC5UgVsG2b/s2kH+96SKo47muARpMys6C0m0gyiN6tY+gzM/s4CDPwFIKsP5D0cwqQL68Vv2UfirWY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz03nrCsBNARkuRaTcbFaaT6eI/qRPEB3Aty5uk47iBk9G7WgAw
+	Gupu5mBOVJFKGKyCFXtomR8WOXdGgssH8G+zScA+fpNvhSq6Eej1
+X-Google-Smtp-Source: AGHT+IGKDKyuEjDmKJ2HrlrT1n9OAVS1IkrqVYeL/JSUzQu9Op5OuYi5ifOBX9DZtCv3vpe88REJ7A==
+X-Received: by 2002:a17:90a:39c2:b0:2d3:c088:9c54 with SMTP id 98e67ed59e1d1-2d646bcd8a3mr7648841a91.6.1724579681173;
+        Sun, 25 Aug 2024 02:54:41 -0700 (PDT)
+Received: from 0x7f800001.. (2001-b400-e2db-5f0d-8150-1fac-9fab-d218.emome-ip6.hinet.net. [2001:b400:e2db:5f0d:8150:1fac:9fab:d218])
+        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-2d613b1cb38sm7454970a91.50.2024.08.25.02.54.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Aug 2024 02:54:40 -0700 (PDT)
+From: "Yo-Jung (Leo) Lin" <0xff07@gmail.com>
+To: 
+Cc: linux-kernel-mentees@lists.linuxfoundation.org,
+	ricardo@marliere.net,
+	skhan@linuxfoundation.org,
+	0xff07@gmail.com,
+	Todd E Brandt <todd.e.brandt@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH] pm-graph: ignore sleepgraph.py artifacts
+Date: Sun, 25 Aug 2024 17:53:50 +0800
+Message-Id: <20240825095353.7578-1-0xff07@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240822032108.1223332-1-11162571@vivo.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Yang,
+By default, sleepgraph.py creates suspend-{date}-{time} directories
+to store artifacts, or suspend-{date}-{time}-xN if the --multi option
+is used. Ignore those directories by adding a .gitignore file.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Yo-Jung (Leo) Lin <0xff07@gmail.com>
+---
+ tools/power/pm-graph/.gitignore | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 tools/power/pm-graph/.gitignore
 
-[auto build test WARNING on next-20240821]
-[cannot apply to rafael-pm/thermal v6.11-rc4 v6.11-rc3 v6.11-rc2 linus/master v6.11-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yang-Ruibin/drivers-testing-Handle-possible-memory-leaks/20240822-112305
-base:   next-20240821
-patch link:    https://lore.kernel.org/r/20240822032108.1223332-1-11162571%40vivo.com
-patch subject: [PATCH v1] drivers:testing:Handle possible memory leaks
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240825/202408250520.ZWvQ82gO-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240825/202408250520.ZWvQ82gO-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408250520.ZWvQ82gO-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/thermal/testing/command.c:155:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-     155 |                 return -EFAULT;
-         |                 ^
-   drivers/thermal/testing/command.c:153:2: note: previous statement is here
-     153 |         if (copy_from_user(buf, user_buf, count))
-         |         ^
-   1 warning generated.
-
-
-vim +/if +155 drivers/thermal/testing/command.c
-
-7801e360656c57 Rafael J. Wysocki 2024-08-02  141  
-7801e360656c57 Rafael J. Wysocki 2024-08-02  142  static ssize_t tt_command_process(struct dentry *dentry, const char __user *user_buf,
-7801e360656c57 Rafael J. Wysocki 2024-08-02  143  				  size_t count)
-7801e360656c57 Rafael J. Wysocki 2024-08-02  144  {
-7801e360656c57 Rafael J. Wysocki 2024-08-02  145  	char *buf __free(kfree);
-7801e360656c57 Rafael J. Wysocki 2024-08-02  146  	char *arg;
-7801e360656c57 Rafael J. Wysocki 2024-08-02  147  	int i;
-7801e360656c57 Rafael J. Wysocki 2024-08-02  148  
-7801e360656c57 Rafael J. Wysocki 2024-08-02  149  	buf = kmalloc(count + 1, GFP_KERNEL);
-7801e360656c57 Rafael J. Wysocki 2024-08-02  150  	if (!buf)
-7801e360656c57 Rafael J. Wysocki 2024-08-02  151  		return -ENOMEM;
-7801e360656c57 Rafael J. Wysocki 2024-08-02  152  
-7801e360656c57 Rafael J. Wysocki 2024-08-02  153  	if (copy_from_user(buf, user_buf, count))
-98706c6ade7c2e Yang Ruibin       2024-08-22  154  		kfree(buf);
-7801e360656c57 Rafael J. Wysocki 2024-08-02 @155  		return -EFAULT;
-7801e360656c57 Rafael J. Wysocki 2024-08-02  156  
-7801e360656c57 Rafael J. Wysocki 2024-08-02  157  	buf[count] = '\0';
-7801e360656c57 Rafael J. Wysocki 2024-08-02  158  	strim(buf);
-7801e360656c57 Rafael J. Wysocki 2024-08-02  159  
-7801e360656c57 Rafael J. Wysocki 2024-08-02  160  	arg = strstr(buf, ":");
-7801e360656c57 Rafael J. Wysocki 2024-08-02  161  	if (arg) {
-7801e360656c57 Rafael J. Wysocki 2024-08-02  162  		*arg = '\0';
-7801e360656c57 Rafael J. Wysocki 2024-08-02  163  		arg++;
-7801e360656c57 Rafael J. Wysocki 2024-08-02  164  	}
-7801e360656c57 Rafael J. Wysocki 2024-08-02  165  
-7801e360656c57 Rafael J. Wysocki 2024-08-02  166  	for (i = 0; i < ARRAY_SIZE(tt_command_strings); i++) {
-7801e360656c57 Rafael J. Wysocki 2024-08-02  167  		if (!strcmp(buf, tt_command_strings[i]))
-7801e360656c57 Rafael J. Wysocki 2024-08-02  168  			return tt_command_exec(i, arg);
-7801e360656c57 Rafael J. Wysocki 2024-08-02  169  	}
-7801e360656c57 Rafael J. Wysocki 2024-08-02  170  
-7801e360656c57 Rafael J. Wysocki 2024-08-02  171  	return -EINVAL;
-7801e360656c57 Rafael J. Wysocki 2024-08-02  172  }
-7801e360656c57 Rafael J. Wysocki 2024-08-02  173  
-
+diff --git a/tools/power/pm-graph/.gitignore b/tools/power/pm-graph/.gitignore
+new file mode 100644
+index 000000000000..37762a8a06d6
+--- /dev/null
++++ b/tools/power/pm-graph/.gitignore
+@@ -0,0 +1,3 @@
++# sleepgraph.py artifacts
++suspend-[0-9]*-[0-9]*
++suspend-[0-9]*-[0-9]*-x[0-9]*
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
