@@ -1,81 +1,97 @@
-Return-Path: <linux-pm+bounces-12866-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12867-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE49895E4BC
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Aug 2024 20:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 81CA695E72E
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 05:06:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04CE21C20991
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Aug 2024 18:51:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B07DD1C20FC0
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 03:06:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68E4616C6AB;
-	Sun, 25 Aug 2024 18:51:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="Rh8yo5Wz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 894FA22071;
+	Mon, 26 Aug 2024 03:06:55 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168FF4778C;
-	Sun, 25 Aug 2024 18:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A828443D;
+	Mon, 26 Aug 2024 03:06:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724611897; cv=none; b=Py93Lwxq7P+doDgK5Supa9nW4eL4XYlv6HsI3Dmanv2BFSKM+RNKYCDmus3T9CdKVPhnpzuvWTBn57Z3oOKS6yp4dktsmbiIURxSOVrY+q7PqwsKaWQ9yL2WlrcNkOH70ujNdkgQSvnGRuk+c/qNVogv127jLePmkzvXdm+CqBk=
+	t=1724641615; cv=none; b=qlR6wWQsRTRvyFF7Bt5ta0FImX4kZ75GIR8A1U7UuGSiHIMY2NZTYBC4JnCiUJ3zBz3vVV/Q6PdLQC4Z05R8N/+itibo9tSNXJoV3q4MyIsoTM6AmiICJ7Tf+NpwvKgLUf4SbmndiNpgHmzoUz6WY2Lt9HwIwUQxtNnFqwbiKw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724611897; c=relaxed/simple;
-	bh=5cTbhky7YFrpL+RevDm6rybDE7zSEzYgqdVDOFzKi5E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GvyZvfQc6+SpASmHaIHgmiQcCznjjVAdJ3VDyvEfcvXF1FoP9sUBjoWNoXD+c6b03IWGkSwqTo7j22LKrHLQrgQQiJs9TUdpCZYDV7WI8Do/E1wGqdR4KyTj9f17uw1Y8I6hiK8rBh4zRUSgc6bkHQ61F/9ELXBAnW3APgGFH3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=Rh8yo5Wz; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=4Tf919g5pjHDA2tr82ZwJYUnCMczwQw53R+x8hlGhrU=; b=Rh8yo5WzRO2pcALV+TShKqmqFx
-	EedVbP0R9DH0In+YtURIyzpiD52JJMuDYBQU5//E1DSsZC8GYnmvnF+Jr+FD6wMunFwJt42jAxqmv
-	L5l2fl5Q3FA+HtSF+MtYZYZ8oQEJQdKw0GZr3mMxzge02BEoh0I0CHaG7PwSQ1OpQ5bBJ9ZLK1irS
-	i9HuiMGGL1KdIlnYljPzN6v1zjaBt0F6O0swGnbE29yzxry+kCPySX30DKkx2noxuyNT7teJwEmbE
-	EFOc6FTIUCOGngDtHrP8rnxL/4jwa/FhhikgUd2LKEEWNTavaZzp59wavuSGy19h3PLZsKReJEO7M
-	5bp096oQ==;
-Received: from i53875a40.versanet.de ([83.135.90.64] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1siIKj-00019f-9Y; Sun, 25 Aug 2024 20:51:25 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] pmdomain: rockchip: Simplify dropping OF node reference
-Date: Sun, 25 Aug 2024 20:52:20 +0200
-Message-ID: <1931675.GKX7oQKdZx@diego>
-In-Reply-To: <20240825183116.102953-1-krzysztof.kozlowski@linaro.org>
-References: <20240825183116.102953-1-krzysztof.kozlowski@linaro.org>
+	s=arc-20240116; t=1724641615; c=relaxed/simple;
+	bh=+PLulXwt0k1tJ7Qzo36D8hm7d8wBUiQ+9Aj7EPQ/x8o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n2G40PglFOC1kjNAueGuf4+Z+YFNcgk4bIcFhGVvV3vmopEN+xyhN/o/+NymGo00MhqF0WsWrliRTDmgP24piTArUF3NEiXapMDw2XJNOjqXc8fG9RlxYpkoW+uV42tWLglBS7XquoUEE10oZCu7YFVhiJCnZFtgz5DM/MLiRb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id C27EB300000A0;
+	Mon, 26 Aug 2024 05:06:47 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 9F51F35623B; Mon, 26 Aug 2024 05:06:47 +0200 (CEST)
+Date: Mon, 26 Aug 2024 05:06:47 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Kenneth Crudup <kenny@panix.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	linux-usb@vger.kernel.org
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	linux-usb@vger.kernel.org
+Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
+ Thunderbolt additions when coming out of suspend or hibernate
+Message-ID: <ZsvxR-dQAZtwNi0g@wunner.de>
+References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
 
-Am Sonntag, 25. August 2024, 20:31:16 CEST schrieb Krzysztof Kozlowski:
-> Drop OF node reference immediately after using it in
-> syscon_node_to_regmap(), which is both simpler and typical/expected
-> code pattern.
+[cc += Mika, linux-usb]
+
+On Wed, Aug 21, 2024 at 03:05:59PM -0700, Kenneth Crudup wrote:
+> Subject says it all, but to recap my laptop doesn't detect Thunderbolt
+> topology changes when resuming or coming out of hibernate; i.e., the only
+> time a TB topology change happens is if a TB cable is disconnected while
+> suspended or hibernated, but if one is connected, or a different TB setup
+> altogether is connected when the system resumes it doesn't notice the
+> topology change until I disconnect and reconnect.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> I'm currently running 6.10.6, but this has been going on for a while.
+> 
+> [    0.000000] DMI: Dell Inc. XPS 9320/0KNXGD, BIOS 2.12.0 04/11/2024
+> ...
+> [    0.136807] smpboot: CPU0: 12th Gen Intel(R) Core(TM) i7-1280P (family:
+> 0x6, model: 0x9a, stepping: 0x3)
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+This commit went into v6.11-rc1 and will at least detect replacement
+of PCI devices (to a certain extent):
 
+https://git.kernel.org/linus/9d573d19547b
 
+However PCI is layered on top of (tunneled through) the Thunderbolt
+switching fabric and that's where the real problem likely is here.
+
+Maybe you can open a bug at bugzilla.kernel.org and attach full dmesg
+and lspci -vvv output in the working case (device attachment at runtime)
+and the non-working case (device attachment during system sleep).
+
+Does the machine wake up if you attach devices during system sleep?
+Are you suspending to ACPI S0ix, S3 or S4?
+
+Thanks,
+
+Lukas
 
