@@ -1,140 +1,130 @@
-Return-Path: <linux-pm+bounces-12877-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12878-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 272B795F09C
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 14:08:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01B8595F117
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 14:16:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3E941F23D29
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 12:08:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 691D8B23001
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 12:16:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FFAD18D65A;
-	Mon, 26 Aug 2024 12:06:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB71184525;
+	Mon, 26 Aug 2024 12:14:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YoMNI9JN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bl4JKknE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E0F1862B9
-	for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2024 12:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D831714BE;
+	Mon, 26 Aug 2024 12:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724673961; cv=none; b=DdWFfUVoGWdwfk1sYG5eaGRZ0FkY2VQz0gTMEy1NCn1Fu+MiL9//lg5k0TMlAygS03yiV0T0XxjVK5WsJsO0ke2aoIDTWsKS00EHS4YgQmoMOBp/j1TC0045ePlwTnROPXDGqpAoWzjWyVtmY2WpGW7I9DUrBuPHWGkj1WKfiWQ=
+	t=1724674469; cv=none; b=Ijs/JbXeEbGZjzc6gqGXbBetuul0xmLu1470107zR8lJnjb98Lfbyl0L+DqVQ4gYTOzmJ31/XCFrVZxneW9KtDJEmB93lYFofoA8mreMw9MyRUcgpqxyrjPBUQxz7dzzi873MoDdCZpYw6n1bWoDI9dfdNQIiR5/X2CUM/xdiRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724673961; c=relaxed/simple;
-	bh=Fcy2G6PG7vXHR6Sg3oDL7cs8EvvwDoYJrT5MdvBcnIo=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=iFyvD9QvBga9vWcPSja3qoISsFTe09fVUS2BUrKo9xW0gacrQkOJluNrnKlXUcrAm2ej9OvWhdm7pGcvvI1qeUY2InW9dGX737SIKM9PqIt8bHfW4Kjsb+rVf+mAeXHT2JzC6TY5hvFHbKqmLJZ11ef2ixv+hrNJFv04rHn9PcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YoMNI9JN; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1724673958;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=bplQPZquovtBOTv/+G4caO1NimffFmAf+IthOJubP1o=;
-	b=YoMNI9JNSEVF9lH3aqJ9bT4wg9NXkyEdpbm6I9RQgJyXNFNKjoTlWfbpJ6pzpovBs9LC6v
-	k5BWfCr1PAXtgBiuRMpPT6x/STgdRHMcdC3INUkVLFeJ5H8uPb7R3cJYflj76evz/m31UX
-	I0Z3Toy/qs4Zp3JAUaTOR74o6lXVQOk=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-257-jeBuXtV_N0epQw46sevDCg-1; Mon, 26 Aug 2024 08:05:57 -0400
-X-MC-Unique: jeBuXtV_N0epQw46sevDCg-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-5bee85b49c7so3459626a12.0
-        for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2024 05:05:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724673956; x=1725278756;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bplQPZquovtBOTv/+G4caO1NimffFmAf+IthOJubP1o=;
-        b=V/tWoX/Ih1S2Sf2uL1tvHiPNvr66SuU0a5tMYJF1WUobEe3V0DIbWRR91Xt3E+IY0V
-         CpuA01peZqlnxvcwzG/Ubm7Yvx1pE+RBrOFhsfyx5qnP0sbCs+4Io79oqcVrezTcIiVS
-         FxE7nIwIByOdVzibZjUTy1ZLR5UWGIT5S4EFRduP6rIOtCgPFbR4HDDBgzxGXOuyIhjJ
-         1XXLLjUL2iYj1SxpEJYkX7+TxlIeq8kWsQGp6FxT7RmKSQdJWFhka5KJmC/XejkGSoL/
-         GejgwCk4/g5vaTGZ3U7tdWUz3m6nl5ig5S0eerexKXI6gY8RKrR1kN5IhXV6RzpowxDH
-         SfGQ==
-X-Gm-Message-State: AOJu0YyWcUpdvHpFxCriV7PHvuYv554YlHWbX02fhw4LSTV/28q6Lb7Y
-	svkaGMkxfd4K6Y7mQ02FvNI0aq1YNU1WAFplALlSmlHQ5HW44UaFfRsw0ExO/9HCbW/V5+neWle
-	ipxdItRpKV8ypGtvIbCpJCIAYaYilIazYZPdOVYD62t2v+7pccbPyyg0zD0fKDatJKBk=
-X-Received: by 2002:a05:6402:27d4:b0:5c0:ad76:f6bc with SMTP id 4fb4d7f45d1cf-5c0ad76f754mr1604971a12.33.1724673955769;
-        Mon, 26 Aug 2024 05:05:55 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEJFJEnQjFJs3vK2qwlTWB5SgmaLJA63vqVvLPjslVx+FKv4TLQZ4dr8T81H/5M7q4/ZODVgw==
-X-Received: by 2002:a05:6402:27d4:b0:5c0:ad76:f6bc with SMTP id 4fb4d7f45d1cf-5c0ad76f754mr1604942a12.33.1724673955143;
-        Mon, 26 Aug 2024 05:05:55 -0700 (PDT)
-Received: from [10.40.98.157] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c044ddc6afsm5427632a12.14.2024.08.26.05.05.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Aug 2024 05:05:54 -0700 (PDT)
-Message-ID: <49993a42-aa91-46bf-acef-4a089db4c2db@redhat.com>
-Date: Mon, 26 Aug 2024 14:05:54 +0200
+	s=arc-20240116; t=1724674469; c=relaxed/simple;
+	bh=fPunrM8wQmioX20CPKHx2jmPcu0ptHjNsZuRqPqcdBY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P5c/Yxg/LN9EZUpEl4axzh7/sJgL+QAerY8rt83GOL9Pib83nn3AkyVd671WZSlL/r3GxGen8KjkbKmS1QCGQj6k+bJ7D01L/QegdbV+2Cuux3G8Lc8JU32vzcEGMz39mXATwI2CMM2CYHOONL71bH/Ykq84bqpgBzZnCxbGDiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bl4JKknE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 121FCC5676E;
+	Mon, 26 Aug 2024 12:14:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724674469;
+	bh=fPunrM8wQmioX20CPKHx2jmPcu0ptHjNsZuRqPqcdBY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=bl4JKknExI0/Akf8Pn3jp1o9ioLn7g0g/I6y8kRHDH/vsIfFbvl9zkTyKrNM/cSD5
+	 CN82TM87IycmdUHF/mr1n17OMtptMN+HIVNk+ORpFp0v0Kah/TWzPlCmzLCbCrtBCY
+	 djaYhIDWrbgJDjsZNua0QfA3JUVnA/jkpoHm4KYTdxRlKpUue0J4igVCMvvG4LPsD+
+	 NrLP8e0auODuAhko+atjos9/k+8c+GJ6L3yAvOWpuRUvPsUtgUaKbKBcMYKYlOd4Wm
+	 lglFBZpXZDalLSznIb/iEMa66QSW6xABX8CPqmYrS8wPkyzbJ7GdHGfhB7GUhjN9B3
+	 SSTYl5RPU9SSQ==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-27028b2cf22so2144438fac.1;
+        Mon, 26 Aug 2024 05:14:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV/RMalkyV4I+wJ9USs5gbG2gm8eAuEK1eCqwl8DDJbHo3Ul6Hx67gSzdB6nQmWhmbAlTV3dc1PUVZMa5Y=@vger.kernel.org, AJvYcCV8sXJG6GERn1x/qaVLLBAnvt04WEw8LPizzVNK9rjaAM2jHe8eiKFIwO5Ksf8VPU4yQ4Ammn1RI174LzVtVA9Dx9g=@vger.kernel.org, AJvYcCVkZlNv8RctiKke9nGzZ4v/Y5+o7uXFxt7znFmOaPiUL+HJas+QVN+T0typju5Hdegff4AzKfsuRfc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyY79Ec3zJR2GzWeccHDfNltBiiZuOBmITJqz0lADzLA6FewPHF
+	ElU16RckBe7Fz8JG9Mz5W6zMc6rc3rCuBei3OUPUxbsdx/Jn93ik5QfUQk98+Wz9AoEzHCONHks
+	w6TeJtA0zg219A84qMvhPp3stm9Q=
+X-Google-Smtp-Source: AGHT+IHHIxz6xXD0eumhtaQ76KUnOsLvK/0jHEg0Pa8eJhhrxY2DehTK1l7SfWk+MDuetN59VRcDB1RzH8KdDg1MoWw=
+X-Received: by 2002:a05:6870:a11e:b0:260:26a2:68e8 with SMTP id
+ 586e51a60fabf-273e44fafabmr4131563fac.4.1724674468431; Mon, 26 Aug 2024
+ 05:14:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Hans de Goede <hdegoede@redhat.com>
-Subject: RFC: Extending charge_type power-supply property to show valid values
-To: Sebastian Reichel <sre@kernel.org>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>, Jelle van der Waa <jelle@vdwaa.nl>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <2205737.irdbgypaU6@rjwysocki.net> <CGME20240826113153eucas1p110e90b4cd98aa70601770fe93d7aa1e5@eucas1p1.samsung.com>
+ <2236794.NgBsaNRSFp@rjwysocki.net> <ef729a47-b7f9-48b6-a14d-692565ef1d38@samsung.com>
+In-Reply-To: <ef729a47-b7f9-48b6-a14d-692565ef1d38@samsung.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 26 Aug 2024 14:14:17 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gOqNi+-Hi8uyeEJ9dHzhwU6GyL6t_7Xjt5Knf2yJmH-w@mail.gmail.com>
+Message-ID: <CAJZ5v0gOqNi+-Hi8uyeEJ9dHzhwU6GyL6t_7Xjt5Knf2yJmH-w@mail.gmail.com>
+Subject: Re: [PATCH v3 12/14] thermal/of: Use the .should_bind() thermal zone callback
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>, 
+	Mateusz Majewski <m.majewski2@samsung.com>, linux-amlogic@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-<resend with Thomas who implemented the charge-behavior code added to the Cc>
+On Mon, Aug 26, 2024 at 1:32=E2=80=AFPM Marek Szyprowski
+<m.szyprowski@samsung.com> wrote:
+>
+> On 19.08.2024 18:30, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Make the thermal_of driver use the .should_bind() thermal zone callback
+> > to provide the thermal core with the information on whether or not to
+> > bind the given cooling device to the given trip point in the given
+> > thermal zone.  If it returns 'true', the thermal core will bind the
+> > cooling device to the trip and the corresponding unbinding will be
+> > taken care of automatically by the core on the removal of the involved
+> > thermal zone or cooling device.
+> >
+> > This replaces the .bind() and .unbind() thermal zone callbacks which
+> > assumed the same trip points ordering in the driver and in the thermal
+> > core (that may not be true any more in the future).  The .bind()
+> > callback would walk the given thermal zone's cooling maps to find all
+> > of the valid trip point combinations with the given cooling device and
+> > it would call thermal_zone_bind_cooling_device() for all of them using
+> > trip point indices reflecting the ordering of the trips in the DT.
+> >
+> > The .should_bind() callback still walks the thermal zone's cooling maps=
+,
+> > but it can use the trip object passed to it by the thermal core to find
+> > the trip in question in the first place and then it uses the
+> > corresponding 'cooling-device' entries to look up the given cooling
+> > device.  To be able to match the trip object provided by the thermal
+> > core to a specific device node, the driver sets the 'priv' field of eac=
+h
+> > trip to the corresponding device node pointer during initialization.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> This patch landed recently in linux-next as commit 6d71d55c3b12
+> ("thermal/of: Use the .should_bind() thermal zone callback")
 
-Hi Sebastian,
+It has been fixed since and it is commit  94c6110b0b13c6416146 now.
 
-Jelle (in the Cc) is looking into adding a UI to GNOME to allow users to
-enable battery long-life mode. The initial plan was to use the charge
-start and stop thresholds but not all laptop models support these,
-some only have a single toggle to turn long-life mode on/off.
+Bottom line is that it was calling of_node_put() too many times due to
+a coding mistake.
 
-At first look it seems that charge_type is the right userspace API to use
-for these single toggle only laptop models, offering "Standard" and
-"Long Life" as valid options.
+> In my tests I found that it breaks booting some on my test boars: Exynos-=
+based
+> (OdroidXU4 with ARM32 bit kernel from multi_v7_defconfig) and Amlogic
+> Meson based boards (OdroidC4, VIM3 with ARM64 defconfig+some debug
+> options). Reverting $subject on top of next-20240823 together with
+> c1ee6e1f68f5 ("thermal: core: Clean up trip bind/unbind functions") and
+> 526954900465 ("thermal: core: Drop unused bind/unbind functions and
+> callbacks") due to compile dependencies fixes the issue.
 
-However we don't want userspace to have to write charge_type just to
-find out which values are supported.
-
-My proposal for this is to have a new POWER_SUPPLY_PROP_CHARGE_TYPES
-properties which behaves like USB_TYPE / CHARGE_BEHAVIOR, e.g. :
-
-[hans@x1 linux]$ cat /sys/class/power_supply/ucsi-source-psy-USBC000\:001/usb_type 
-[C] PD PD_PPS
-
-The idea would be to copy the charge_behavior model and add
-a charge_types bitmask to struct power_supply_desc mirroring
-the u8 charge_behaviours; bitmask. This will also allow re-using
-power_supply_charge_behaviour_show() turning it into a generic
-show function for usb_type / charge_behavior style properties.
-
-Other then having the usb_type / charge_behavior style show()
-output the new charge_types which I'm suggesting would behave
-exactly the same as the old charge_type and drivers can use the
-same code paths to implement both.  To get support for the new
-charge_types drivers just need to set a power_supply_desc.charge_types
-bitmap and add POWER_SUPPLY_PROP_CHARGE_TYPES to their list of
-supported properties.
-
-The idea is for charge_types to basically superseed charge_type
-offering the same functionality while advertising which values
-are valid for writing, while keeping charge_type around for
-backward compatibility.
-
-If this sounds good to you I can write a patch-set implementing
-the suggestion, + converting one or 2 drivers which already
-support writing charge_type atm.
-
-Regards,
-
-Hans
-
+Thanks for the report!
 
