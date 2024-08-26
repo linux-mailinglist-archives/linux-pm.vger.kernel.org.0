@@ -1,377 +1,210 @@
-Return-Path: <linux-pm+bounces-12869-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12870-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0937295EDD6
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 11:58:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2AF295EE42
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 12:15:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 888DC1F21E0D
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 09:58:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2282B1C217F8
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 10:15:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A6A61465A9;
-	Mon, 26 Aug 2024 09:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 676A71474A4;
+	Mon, 26 Aug 2024 10:15:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gxx5HHHI"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="OEI+JDxC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6154114659C;
-	Mon, 26 Aug 2024 09:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CC612CDAE
+	for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2024 10:15:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724666307; cv=none; b=DJNo/YxXO0uWzpLOAuwj4YxP2SIDa0Zkf4mScJzh/MHqgOjSt5dya2fbzZnfOvDtQcvU4N3N/1nRKK015VB1LQRkDGjB8e/rkioWoxZaqLIO6zUU9MzDZ8pL4FVmNpRG3q8hxvdaZoDOtYgGErL0/HJwYuSDqSjOY/eeNvf0KB8=
+	t=1724667351; cv=none; b=vGhRaOE8WESrsvZUz9slzsjSdnuNCsqrt85IhymfbLADYNz17wugYvcSe6juPuijn3E9hmU8w/yBWpINtGKZuI1MfYwZwB7HbQjCDqqDmyAjbEX1QOhpMr+dBRMDQ+hWVj0DC+Q7Yxm6Km6gI9JMQBaDRhZlX5yeFGxNUGADJJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724666307; c=relaxed/simple;
-	bh=3tJR/usZRWFc6I1sKQuKhNPlp5OZs0UlKa+WjgSjJzM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OlHGq0XbQhuHDjKVGXhroD9ZLQLLcFwm8o/gAT9zje2WEPCetiUhFJUh/dXPvhXVaY5bMMEBIjnmzxZwmUlUMokMQVrwnqVmgfC59MZ0amuH6aNAqCPCSrK1aV4K9DwcHjpxKef2Tizchny7YCUeorU4KjiP64S+NJo47Cy/mrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gxx5HHHI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D06ACC51404;
-	Mon, 26 Aug 2024 09:58:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724666306;
-	bh=3tJR/usZRWFc6I1sKQuKhNPlp5OZs0UlKa+WjgSjJzM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Gxx5HHHIgeHg+3w0jtG2B+fgi9D3+GJppTiU/ckNp0EYDLvaZp1z/VLmIhq2H6rRV
-	 TD3i/FJbIZ8drsCYktYdwJB1qQ7OYUi1l3LlCXb01fF+g3MsyNQaxizsSSBq0XVKjP
-	 lkMeOeiWb9JZ4S37qZ+o8BSmJcW7ZmKXaow26sTfZB2hqATLrJZ27UGyOmqn2pHbkU
-	 AE9979FG01XGOswTrPppslBhegNFWjTMW+CHkyWQiof7jzxQUrvScpgx+pDunBaJgz
-	 k5s0VwXgqGLURHkfVNTMnG4k5nlYlzqFpsR16agT7SdrR+s9yfYIxSdJ07fi3AUkW9
-	 69OupUhLOUymw==
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7093b53f315so2538831a34.2;
-        Mon, 26 Aug 2024 02:58:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWO9DfuIT4NJh1Mn5zLQtbvNZ1Jd+cw0BxIAhohmMQ+NFw7QmPQ7LPbw3AWlFc7GwGJ+1A8ijeHn0zmqEg=@vger.kernel.org, AJvYcCXJCLr5fw258t6WIwGZoYH9+RbqniwGHGS2f+YToPQ1fbGBwccqRL8DXR9QhUS8WPA5TrwTADzT2Wg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8i1gkVxFPWoXANYSl9PScCnJ9CaBHmXLx7H7cn4yR6GVAPclE
-	6x3rXsACvU3LBb0p3Z7UyZfqWFMCu3xlOVNWtcGuHIE6xCRfnmz3NojfUJ6rKYD90dwFc5GEdIB
-	SiJ6WKjzQLaZLi8P7Qc2XES3pwUc=
-X-Google-Smtp-Source: AGHT+IEiBfBr6hnM5d2zLao9ZBJo6E+dVkNFr05a1RwXsbZioEGVN/T0oYb89eHC7trmZL4iHGUVp599AMeNHjn5O4M=
-X-Received: by 2002:a05:6870:4409:b0:255:1819:b458 with SMTP id
- 586e51a60fabf-273e63d6acbmr11205203fac.8.1724666305980; Mon, 26 Aug 2024
- 02:58:25 -0700 (PDT)
+	s=arc-20240116; t=1724667351; c=relaxed/simple;
+	bh=dqF9qz6t/GVpGmum6vuUYfrUMXNhwX8AG3M4+n1M7ZI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VrReNy9dwApXlU2kmSG+1yxjYm8WUsWk3zhUOZV+8sL17ULxtB1hu8p1AhTq4qXj0OIBQzLzFaACCsILTmdVhqb0WFXO3a4ffXpC/sVl7kDDEjRiWFK89QKG25eJ07GTNvPbkuHZIF5KC7v0mrK2+5nys56RXVKa6+PPOzSQrYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=OEI+JDxC; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2f50966c478so10676661fa.1
+        for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2024 03:15:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1724667347; x=1725272147; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nXSb7P5yQsC6ZA7aZwkzK/D+oEX3tz1a/6VEPbOOF1M=;
+        b=OEI+JDxC340hJbyzaELF9aZjkFT4nnaE1jma3SYSKf8FaDgA8sj2hzwybWxynxWA5X
+         MgON+hpgEbKzURuwi8d3MBJ0Kt82nbfI8ZlyoqEmQozz3gmDJAuM64rbD2K3aR77C3AV
+         eROpf5Q0KDSSNQMz4xScqqIHp9FFyA4M/Up6zMLY9HVH0RuZUzVuRa0hsik+ixO52Tyb
+         jetbHtnX/vAHZjZMenomQw3dxEYAAjaz9+PnG4E7GEpg+ZincehP7SFzQyccplWrKTjc
+         1bLx8Tu+9B23afbvzr66tCsDhNQ02DqmhgGeviPjyhL+fxBZ16refNaKBCLPFxI8Ftsz
+         O9Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724667347; x=1725272147;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nXSb7P5yQsC6ZA7aZwkzK/D+oEX3tz1a/6VEPbOOF1M=;
+        b=C7ajFBhtyWRqanZ+NqUDQXc1C/9Oe5C5itQgURmWMPUIh21oi0JypaIx2NNcLRNBoP
+         I5bT5ccuHn7fMp41+n9Upwtn1eVISnsIVofhGRKyj8YB+ssppMp8xnuB0wXTETQ38api
+         SWOcVvvbWP+BUDRVCxYAR553HWmdi5ejPcA6a6+vorMQwxXjh6QimG1NhDvybEVIzVjD
+         C70XTLlze8miM/vkJ/d+tmoKthkz1ULobjHtwqQUaz98FlH+ZbE0lxipnXJG8/zv86J4
+         YnGYMapoYg2rQv//Rdti42TUk76kqaG93UFBZYCIHL/nqlMZU5Y/v59dNjUFymQ86STa
+         WJew==
+X-Forwarded-Encrypted: i=1; AJvYcCVY5Ysy4He6fgcDQrllSQDL/HHtXbDMlDh+W/dQAKEye++Pd+gp4e3gwzBlqujDNZrlGX1jb3qTow==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5xp/xDxCsvVsG/lqH5vICnYdVJO0g7j+0xPJBxKmhDu0aeywD
+	+OLQmd6+AVT560ioDjuQrNk9mjJZAlJ1oxPIaIEQtCfpAGCV0Pf/4535kcNM6Ak=
+X-Google-Smtp-Source: AGHT+IGnOO+pYmBeCnoRQo4bouYucQfop3nBZsepSSurhHBVuFJ58XyC2lvaGwZIfEzC6OWNRHTbyQ==
+X-Received: by 2002:a05:651c:198b:b0:2f0:1a19:f3f1 with SMTP id 38308e7fff4ca-2f4f48f0feamr66567071fa.7.1724667346682;
+        Mon, 26 Aug 2024 03:15:46 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.144])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c04a3e8f88sm5421649a12.42.2024.08.26.03.15.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Aug 2024 03:15:46 -0700 (PDT)
+Message-ID: <7b16791b-0d7b-49a1-82aa-c4db99ff2bfd@tuxon.dev>
+Date: Mon, 26 Aug 2024 13:15:43 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2205737.irdbgypaU6@rjwysocki.net> <ff528ebb-2c09-4b03-a641-4a306b31ff62@notapiano>
-In-Reply-To: <ff528ebb-2c09-4b03-a641-4a306b31ff62@notapiano>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 26 Aug 2024 11:58:12 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gjt3ptZ8=qJcXagZfXrJbpcz7nDwZxRvg50PytdNScRQ@mail.gmail.com>
-Message-ID: <CAJZ5v0gjt3ptZ8=qJcXagZfXrJbpcz7nDwZxRvg50PytdNScRQ@mail.gmail.com>
-Subject: Re: [PATCH v3 00/14] thermal: Rework binding cooling devices to trip points
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>, regressions@lists.linux.dev, 
-	kernelci@lists.linux.dev, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Sat, Aug 24, 2024 at 8:45=E2=80=AFPM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
->
-> On Mon, Aug 19, 2024 at 05:49:07PM +0200, Rafael J. Wysocki wrote:
-> > Hi Everyone,
-> >
-> > This is one more update of
-> >
-> > https://lore.kernel.org/linux-pm/3134863.CbtlEUcBR6@rjwysocki.net/#r
-> >
-> > the cover letter of which was sent separately by mistake:
-> >
-> > https://lore.kernel.org/linux-pm/CAJZ5v0jo5vh2uD5t4GqBnN0qukMBG_ty33PB=
-=3DNiEqigqxzBcsw@mail.gmail.com/
-> >
-> > and it has been updated once already:
-> >
-> > https://lore.kernel.org/linux-pm/114901234.nniJfEyVGO@rjwysocki.net/
-> >
-> > Relative to the v2 above it drops 3 patches, one because it was broken =
-([04/17
-> > in the v2), and two more that would need to be rebased significantly, e=
-ither
-> > because of dropping the other broken patch or because of the recent Ban=
-g-bang
-> > governor fixes:
-> >
-> > https://lore.kernel.org/linux-pm/1903691.tdWV9SEqCh@rjwysocki.net/
-> >
-> > The remaining 14 patches, 2 of which have been slightly rebased and the=
- rest
-> > is mostly unchanged (except for some very minor subject and changelog f=
-ixes),
-> > is not expected to be controversial and are targeting 6.12, on top of t=
-he
-> > current linux-next material.
-> >
-> > The original motivation for this series quoted below has not changed:
-> >
-> >  The code for binding cooling devices to trip points (and unbinding the=
-m from
-> >  trip point) is one of the murkiest pieces of the thermal subsystem.  I=
-t is
-> >  convoluted, bloated with unnecessary code doing questionable things, a=
-nd it
-> >  works backwards.
-> >
-> >  The idea is to bind cooling devices to trip points in accordance with =
-some
-> >  information known to the thermal zone owner (thermal driver).  This in=
-formation
-> >  is not known to the thermal core when the thermal zone is registered, =
-so the
-> >  driver needs to be involved, but instead of just asking the driver whe=
-ther
-> >  or not the given cooling device should be bound to a given trip point,=
- the
-> >  thermal core expects the driver to carry out all of the binding proces=
-s
-> >  including calling functions specifically provided by the core for this
-> >  purpose which is cumbersome and counter-intuitive.
-> >
-> >  Because the driver has no information regarding the representation of =
-the trip
-> >  points at the core level, it is forced to walk them (and it has to avo=
-id some
-> >  locking traps while doing this), or it needs to make questionable assu=
-mptions
-> >  regarding the ordering of the trips in the core.  There are drivers do=
-ing both
-> >  these things.
-> >
-> > The first 5 patches in the series are preliminary.
-> >
-> > Patch [06/14] introduces a new .should_bind() callback for thermal zone=
-s and
-> > patches [07,09-12/14] modifies drivers to use it instead of the .bind()=
- and
-> > .unbind() callbacks which allows them to be simplified quite a bit.
-> >
-> > The other patches [08,13-14/14] get rid of code that becomes unused aft=
-er the
-> > previous changes and do some cleanups on top of that.
-> >
-> > The entire series along with 2 patches on top of it (that were present =
-in the
-> > v2 of this set of patches) is available in the thermal-core-testing git=
- branch:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log=
-/?h=3Dthermal-core-testing
-> >
-> > (note that this branch is going to be rebased shortly on top of 6.11-rc=
-4
-> > and the thermal control material in linux-next).
-> >
-> > Thanks!
->
-> Hi,
->
-> KernelCI has identified a boot regression originating from this series. I=
-'ve
-> verified that reverting the series fixes the issue.
-
-Thanks for the report!
-
-There was a bug in the original patch [12/14] that would cause
-symptoms like what you are observing to appear, which was reported on
-Friday and has since been fixed in the tree.  Please see:
-
-https://lore.kernel.org/linux-pm/CAJZ5v0iw7uXE_cfU5VXOjFDg9GM8Hu0+hKxqfzU3v=
-0OM5KK9oQ@mail.gmail.com/
-
-You probably have not tested the fixed tree yet, so please let
-kernelci run again on it and if the issue is still there, please let
-me know.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/16] dt-bindings: soc: renesas: renesas,rzg2l-sysc: Add
+ #reset-cells for RZ/G3S
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be,
+ magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com,
+ sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com,
+ biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org,
+ linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240822152801.602318-3-claudiu.beznea.uj@bp.renesas.com>
+ <20240822-vanilla-enigmatic-f0b05ecca4b6@spud>
+ <0d8b1322-cf15-4ed9-b958-06516bbb64c7@tuxon.dev>
+ <20240823-plywood-unfixed-d8d8a2d93f14@spud>
+ <5eae2ddb-2a7b-4c1d-a7f7-41fb39058de1@tuxon.dev>
+ <20240823-dilute-juggle-7e2d43b8b630@spud>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <20240823-dilute-juggle-7e2d43b8b630@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-> Affected platforms:
-> * mt8195-cherry-tomato-r2
-> * mt8192-asurada-spherion-r0
-> * mt8183-kukui-jacuzzi-juniper-sku16
-> * mt8186-corsola-steelix-sku131072
-> * sc7180-trogdor-kingoftown
-> * sc7180-trogdor-lazor-limozeen
->
-> Relevant log from mt8195-cherry-tomato-r2 (with additional debug configs
-> enabled):
->
-> [   11.326726] BUG: sleeping function called from invalid context at kern=
-el/locking/rwsem.c:1578
-> [   11.335294] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 165=
-, name: udevd
-> [   11.342944] preempt_count: 1, expected: 0
-> [   11.346943] RCU nest depth: 0, expected: 0
-> [   11.351028] 4 locks held by udevd/165:
-> [   11.354766]  #0: ffff4dc8825db0f8 (&dev->mutex){....}-{3:3}, at: __dri=
-ver_attach+0x130/0x4a8
-> [   11.363207]  #1: ffffc208f386c3c8 (thermal_list_lock){+.+.}-{3:3}, at:=
- thermal_zone_device_register_with_trips+0x85c/0xcd8
-> [   11.374248]  #2: ffff4dc7dc3586f0 (&tz->lock){+.+.}-{3:3}, at: thermal=
-_zone_cdev_binding.part.0+0x98/0x280
-> [   11.383896]  #3: ffffc208f39b7b78 (devtree_lock){....}-{2:2}, at: of_g=
-et_next_child+0x2c/0xc4
-> [   11.392418] irq event stamp: 173740
-> [   11.395895] hardirqs last  enabled at (173739): [<ffffc208ecde804c>] _=
-raw_spin_unlock_irqrestore+0x84/0x90
-> [   11.405537] hardirqs last disabled at (173740): [<ffffc208ecde6f7c>] _=
-raw_spin_lock_irqsave+0xe0/0xf4
-> [   11.414742] softirqs last  enabled at (172404): [<ffffc208e978bb20>] h=
-andle_softirqs+0x534/0x874
-> [   11.423517] softirqs last disabled at (172393): [<ffffc208e961097c>] _=
-_do_softirq+0x14/0x20
-> [   11.431857] CPU: 5 UID: 0 PID: 165 Comm: udevd Not tainted 6.11.0-rc4-=
-next-20240822-00002-gfbbbf9faa56a #628
-> [   11.441670] Hardware name: Acer Tomato (rev2) board (DT)
-> [   11.446970] Call trace:
-> [   11.449407]  dump_backtrace+0x98/0xf0
-> [   11.453059]  show_stack+0x18/0x24
-> [   11.456364]  dump_stack_lvl+0x90/0xd0
-> [   11.460018]  dump_stack+0x1c/0x28
-> [   11.463322]  __might_resched+0x358/0x570
-> [   11.467234]  __might_sleep+0xa4/0x16c
-> [   11.470885]  down_write+0x8c/0x21c
-> [   11.474277]  kernfs_remove+0x64/0x98
-> [   11.477844]  sysfs_remove_dir+0xa8/0xe8
-> [   11.481669]  __kobject_del+0xb0/0x27c
-> [   11.485321]  kobject_release+0xfc/0x134
-> [   11.489146]  kobject_put+0xb0/0x130
-> [   11.492624]  of_node_put+0x18/0x28
-> [   11.496016]  of_get_next_child+0x64/0xc4
-> [   11.499929]  thermal_of_should_bind+0x154/0x390
-> [   11.504449]  thermal_zone_cdev_binding.part.0+0x174/0x280
-> [   11.509836]  thermal_zone_device_register_with_trips+0x914/0xcd8
-> [   11.515831]  thermal_of_zone_register+0x284/0x464
-> [   11.520523]  devm_thermal_of_zone_register+0x80/0xf4
-> [   11.525476]  lvts_domain_init+0x500/0x760 [lvts_thermal]
-> [   11.530785]  lvts_probe+0x1b4/0x3ac [lvts_thermal]
-> [   11.535565]  platform_probe+0xc4/0x214
-> [   11.539303]  really_probe+0x188/0x5d0
-> [   11.542954]  __driver_probe_device+0x160/0x2e8
-> [   11.547386]  driver_probe_device+0x5c/0x298
-> [   11.551558]  __driver_attach+0x13c/0x4a8
-> [   11.555470]  bus_for_each_dev+0xf8/0x180
-> [   11.559383]  driver_attach+0x3c/0x58
-> [   11.562947]  bus_add_driver+0x1c4/0x458
-> [   11.566772]  driver_register+0xf4/0x3c0
-> [   11.570598]  __platform_driver_register+0x60/0x88
-> [   11.575291]  lvts_driver_init+0x20/0x1000 [lvts_thermal]
-> [   11.580593]  do_one_initcall+0xcc/0x284
-> [   11.584418]  do_init_module+0x278/0x740
-> [   11.588244]  load_module+0xed8/0x1434
-> [   11.591897]  init_module_from_file+0xdc/0x1fc
-> [   11.596243]  idempotent_init_module+0x2bc/0x604
-> [   11.600762]  __arm64_sys_finit_module+0xac/0x100
-> [   11.605368]  invoke_syscall+0x6c/0x258
-> [   11.609107]  el0_svc_common.constprop.0+0xac/0x230
-> [   11.613886]  do_el0_svc+0x40/0x58
-> [   11.617190]  el0_svc+0x48/0xb8
-> [   11.620234]  el0t_64_sync_handler+0x100/0x12c
-> [   11.624580]  el0t_64_sync+0x190/0x194
-> [   11.628233]
-> [   11.629713] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> [   11.633708] [ BUG: Invalid wait context ]
-> [   11.637705] 6.11.0-rc4-next-20240822-00002-gfbbbf9faa56a #628 Tainted:=
- G        W
-> [   11.645953] -----------------------------
-> [   11.649950] udevd/165 is trying to lock:
-> [   11.653859] ffff4dc880881148 (&root->kernfs_rwsem){++++}-{3:3}, at: ke=
-rnfs_remove+0x64/0x98
-> [   11.662200] other info that might help us debug this:
-> [   11.667238] context-{4:4}
-> [   11.669846] 4 locks held by udevd/165:
-> [   11.673582]  #0: ffff4dc8825db0f8 (&dev->mutex){....}-{3:3}, at: __dri=
-ver_attach+0x130/0x4a8
-> [   11.682009]  #1: ffffc208f386c3c8 (thermal_list_lock){+.+.}-{3:3}, at:=
- thermal_zone_device_register_with_trips+0x85c/0xcd8
-> [   11.693041]  #2: ffff4dc7dc3586f0 (&tz->lock){+.+.}-{3:3}, at: thermal=
-_zone_cdev_binding.part.0+0x98/0x280
-> [   11.702684]  #3: ffffc208f39b7b78 (devtree_lock){....}-{2:2}, at: of_g=
-et_next_child+0x2c/0xc4
-> [   11.711199] stack backtrace:
-> [   11.714067] CPU: 5 UID: 0 PID: 165 Comm: udevd Tainted: G        W    =
-      6.11.0-rc4-next-20240822-00002-gfbbbf9faa56a #628
-> [   11.725355] Tainted: [W]=3DWARN
-> [   11.728310] Hardware name: Acer Tomato (rev2) board (DT)
-> [   11.733608] Call trace:
-> [   11.736041]  dump_backtrace+0x98/0xf0
-> [   11.739692]  show_stack+0x18/0x24
-> [   11.742994]  dump_stack_lvl+0x90/0xd0
-> [   11.746645]  dump_stack+0x1c/0x28
-> [   11.749948]  __lock_acquire+0x10f8/0x2710
-> [   11.753948]  lock_acquire.part.0+0x218/0x518
-> [   11.758206]  lock_acquire+0x90/0xb4
-> [   11.761683]  down_write+0xb4/0x21c
-> [   11.765074]  kernfs_remove+0x64/0x98
-> [   11.768637]  sysfs_remove_dir+0xa8/0xe8
-> [   11.772461]  __kobject_del+0xb0/0x27c
-> [   11.776111]  kobject_release+0xfc/0x134
-> [   11.779935]  kobject_put+0xb0/0x130
-> [   11.783413]  of_node_put+0x18/0x28
-> [   11.786803]  of_get_next_child+0x64/0xc4
-> [   11.790714]  thermal_of_should_bind+0x154/0x390
-> [   11.795231]  thermal_zone_cdev_binding.part.0+0x174/0x280
-> [   11.800617]  thermal_zone_device_register_with_trips+0x914/0xcd8
-> [   11.806609]  thermal_of_zone_register+0x284/0x464
-> [   11.811301]  devm_thermal_of_zone_register+0x80/0xf4
-> [   11.816253]  lvts_domain_init+0x500/0x760 [lvts_thermal]
-> [   11.821553]  lvts_probe+0x1b4/0x3ac [lvts_thermal]
-> [   11.826332]  platform_probe+0xc4/0x214
-> [   11.830069]  really_probe+0x188/0x5d0
-> [   11.833719]  __driver_probe_device+0x160/0x2e8
-> [   11.838150]  driver_probe_device+0x5c/0x298
-> [   11.842320]  __driver_attach+0x13c/0x4a8
-> [   11.846230]  bus_for_each_dev+0xf8/0x180
-> [   11.850141]  driver_attach+0x3c/0x58
-> [   11.853704]  bus_add_driver+0x1c4/0x458
-> [   11.857529]  driver_register+0xf4/0x3c0
-> [   11.861352]  __platform_driver_register+0x60/0x88
-> [   11.866043]  lvts_driver_init+0x20/0x1000 [lvts_thermal]
-> [   11.871342]  do_one_initcall+0xcc/0x284
-> [   11.875166]  do_init_module+0x278/0x740
-> [   11.878990]  load_module+0xed8/0x1434
-> [   11.882641]  init_module_from_file+0xdc/0x1fc
-> [   11.886986]  idempotent_init_module+0x2bc/0x604
-> [   11.891504]  __arm64_sys_finit_module+0xac/0x100
-> [   11.896109]  invoke_syscall+0x6c/0x258
-> [   11.899846]  el0_svc_common.constprop.0+0xac/0x230
-> [   11.904624]  do_el0_svc+0x40/0x58
-> [   11.907927]  el0_svc+0x48/0xb8
-> [   11.910969]  el0t_64_sync_handler+0x100/0x12c
-> [   11.915314]  el0t_64_sync+0x190/0x194
-> [   36.261761] watchdog: Watchdog detected hard LOCKUP on cpu 0
-> [   36.267414] Modules linked in: cbmem cros_ec_lid_angle cros_ec_sensors=
-(+) cros_ec_sensors_core pcie_mediatek_gen3 sbs_battery cros_kbd_led_backli=
-ght industrialio_triggered_buffer kfifo_buf cros_ec_chardev cros_ec_rpmsg l=
-vts_thermal(+) cros_ec_typec leds_cros_ec mtk_svs snd_sof_mt8195 mtk_adsp_c=
-ommon snd_sof_xtensa_dsp snd_sof_of mt6577_auxadc snd_soc_mt8195_afe snd_so=
-f snd_sof_utils mtk_scp mtk_rpmsg mtk_scp_ipi pwm_bl mtk_wdt coreboot_table=
- backlight mt8195_mt6359 ramoops reed_solomon
-> [   36.310414] irq event stamp: 197347
-> [   36.313890] hardirqs last  enabled at (197347): [<ffffc208ecdc994c>] e=
-xit_to_kernel_mode+0x38/0x118
-> [   36.322923] hardirqs last disabled at (197346): [<ffffc208ecdcac44>] e=
-l1_interrupt+0x24/0x54
-> [   36.331347] softirqs last  enabled at (197268): [<ffffc208e978bb20>] h=
-andle_softirqs+0x534/0x874
-> [   36.340117] softirqs last disabled at (197263): [<ffffc208e961097c>] _=
-_do_softirq+0x14/0x20
->
-> Full log at http://0x0.st/XyID.txt
->
-> Let me know if you need any more information.
->
-> #regzbot introduced: next-20240821..next-20240822
-> #regzbot title: Hang during boot in sysfs_remove_dir() called by thermal_=
-of_zone_register()
->
-> Thanks,
-> N=C3=ADcolas
->
+
+On 23.08.2024 19:33, Conor Dooley wrote:
+> On Fri, Aug 23, 2024 at 07:26:42PM +0300, claudiu beznea wrote:
+>> On 23.08.2024 19:18, Conor Dooley wrote:
+>>> On Fri, Aug 23, 2024 at 10:54:06AM +0300, claudiu beznea wrote:
+>>>> Hi, Conor,
+>>>>
+>>>> On 22.08.2024 19:42, Conor Dooley wrote:
+>>>>> On Thu, Aug 22, 2024 at 06:27:47PM +0300, Claudiu wrote:
+>>>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>>>
+>>>>>> The RZ/G3S System controller has registers to control signals that need
+>>>>>> to be de-asserted/asserted before/after different SoC areas are power
+>>>>>> on/off. This signals are implemented as reset signals. For this document
+>>>>>> the #reset-cells property.
+>>>>>>
+>>>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>>> ---
+>>>>>>  .../bindings/soc/renesas/renesas,rzg2l-sysc.yaml | 16 ++++++++++++++++
+>>>>>>  1 file changed, 16 insertions(+)
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+>>>>>> index 4386b2c3fa4d..6b0bb34485d9 100644
+>>>>>> --- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+>>>>>> @@ -42,12 +42,28 @@ properties:
+>>>>>>        - const: cm33stbyr_int
+>>>>>>        - const: ca55_deny
+>>>>>>  
+>>>>>> +  "#reset-cells":
+>>>>>> +    const: 1
+>>>>>> +
+>>>>>>  required:
+>>>>>>    - compatible
+>>>>>>    - reg
+>>>>>>  
+>>>>>>  additionalProperties: false
+>>>>>>  
+>>>>>> +allOf:
+>>>>>> +  - if:
+>>>>>> +      properties:
+>>>>>> +        compatible:
+>>>>>> +          contains:
+>>>>>> +            const: renesas,r9a08g045-sysc
+>>>>>> +    then:
+>>>>>> +      required:
+>>>>>> +        - "#reset-cells"
+>>>>>
+>>>>> Given this is new required property on an existing platform, I'd expect
+>>>>> some mention of why it used to be okay to not have this but is now
+>>>>> required. Did firmware or a bootloader stage take things out of reset?
+>>>>
+>>>> On previous SoCs the SYS controller has no support for controlling the
+>>>> signals going to different peripherals (USB, PCIE in case of RZ/G3S).
+>>>> I'll add a note about this on next version.
+>>>
+>>> My initial thought here wasn't about previous SoCs though, it was
+>>> because you didn't add the compatible in this series for /this/ SoC.
+>>
+>> RZ/G3S compatible is already present in this file:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml#n26
+> 
+> I know, first thing I did when I read the original patch was open the
+> file ;)
+> I don't care about the old SoCs, cos you're not applying the property to
+> them, so what's changed between SoCs isn't really relevant. It's a mention
+> of why, on this SoC, it is safe to add new required properties that I want.
+
+
+> 
+> AFAIU the answer is that no consumer of the resets existed before, so
+
+That's true.
+
+> there's not some special state there, and I am guessing that the new
+> sysc driver you're adding isn't going to fail to probe if there are no
+> resets, 
+
+That's true.
+
+it just won't register a reset controller?
+
+It will register it but,
+
+the new sysc driver is going to probe only for this SoC (RZ/G3S). On RZ/G3S
+we have 2 resets. These well be registered unconditionally, currently, only
+for RZ/G3S. If there will be no DT users for it then it should be no
+problem, AFAICT.
+
+SYSC variants have common features b/w different SoC variants (one of them
+being chip identification). The feature implemented though reset controller
+in this series is not common but particular to RZ/G3S.
+
+When the SYSC will be extended for other SoCs the reset driver registration
+would have to be adapted to not be registered. At the moment, as the SYC is
+compatible only with RZ/G3S and the reset driver is registered on auxiliary
+bus though SYSC there is no restriction, reset is registered all the time,
+but SYSC is only compatible with RZ/G3S.
+
+> Which is fine, cos all
+> devicetrees that have the new peripherals will have #reset-cells etc.
+> 
+>>> What's worth noting isn't about the prior SoCs, it is about what makes
+>>> it okay for this one.
 
