@@ -1,296 +1,132 @@
-Return-Path: <linux-pm+bounces-12871-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12872-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3007695EEFA
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 12:54:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD37695EF38
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 12:58:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 557891C2255C
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 10:54:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C6CA281A76
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 10:58:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD51C181337;
-	Mon, 26 Aug 2024 10:51:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1352D153BEE;
+	Mon, 26 Aug 2024 10:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gWjfcoYu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CK4rT2NN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4E4155320;
-	Mon, 26 Aug 2024 10:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580C214B08E
+	for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2024 10:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724669466; cv=none; b=eAbesUoFCA1VIS0Tj0EfBflBxCwIL+hW6HNYJrqhL1Ru/HotiFbOrBEdnigQM2FBRkVt1sit92yuFEPJD+ZbjvpuuZU8w5HMgI6YMJHhjVP2vToJLln3He/T6rDyeYpv9L+Pb09e69Lkte0XkmDlFGLdrTDzXxhz/KC4q+uTt/c=
+	t=1724669893; cv=none; b=UeWlljVhZ0ROCeNKIiXUkmkyRlJUoTZOj2BWS/N4L7axNT4pKigXw1CzKqjVKnKRazQtf07P6kIxx561+c0LCSv1dc7MO8SrvUR83EmkmE6IZAHZJsXLc9FN36BDbc/WqroFMY84mMI+7nQB/DaKncuPqzk4u4jQBZixJs9eyLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724669466; c=relaxed/simple;
-	bh=9XyQq7hdN4dGzn1MtGZZojRBMFR+oodXbd34LMBXDIs=;
+	s=arc-20240116; t=1724669893; c=relaxed/simple;
+	bh=QC7VwQuJB/5l0CU6BD48w6gCoD7W0PbSBPqplj4TQWw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sCmdHmkb4vj0nqkIUW/4vfQ5ruBYYxVIX9kCUPLP5CThOXOLFhqPLPzAClVpGqJs1BoMMvf0vJUNxDSIxj6Wdc2ZLfqe6d740phAhAhWXghFVZNBiOtRMEL+RCrAXvAVgtXXJCwvdKq8aG7zdcjCe8MmaHq+jusDTwQQpI5rfIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gWjfcoYu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3CCCC51430;
-	Mon, 26 Aug 2024 10:51:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724669466;
-	bh=9XyQq7hdN4dGzn1MtGZZojRBMFR+oodXbd34LMBXDIs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gWjfcoYu6ixbrHVQjLtZOWbTPo6MCryVZBz1KT7SPK5k6+TpmPBvO7SM1R02ax7Pl
-	 V510tLNe9PxYcP9LzKn2LM1ke2JGrPYH+ou84VYZ7sK+VjChmQ4Vgy6BByYvEntBf2
-	 pxZ7zIPJ/sOpcp1gpBewrUZtbrFTNGm8u752zo/laS10FVwzcx+HwVLdi3U7NjIGpD
-	 AhKilOM9ZfLjrxuFgHew4Ajq0vpoel6s/cLpGgf47aftDOvoMQn4VxzpkfPuDpkBKP
-	 L6uJfmeoU4ACyca19YVlXBwuNS4EDaB2APqGBfiF82yFK8rso7soDEaKTNe2uhZf8o
-	 +5pbD9fTbgMTw==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-27012aa4a74so2655667fac.0;
-        Mon, 26 Aug 2024 03:51:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU7/DkG5BuLoai2Vf44BD3iygXAtSdfYf4v6KNrpgLGR9UaMKonBLt+eXSEueA7iZK6oV72rQF50jrPzCY=@vger.kernel.org, AJvYcCVhGCChZEcKYK7312S+7BdgFqf0UjlzByqXPrH36USKKsPqabcmR7PfsRqihr8dGDRyy5mi9TtBin0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuyNVkVipBxiHeDHhh7v5n8mRZaEfr4U+ZesTrw4RlzTG0b1gT
-	qW4AqfKOydyaTyUawPGJrQy+DBNTHGxDteZYeFGoy3C/Y/egDMa5lNoAoO2oN/vJhjlg3loT8rj
-	xTf0PMjJgPva4TYgNpWBwjMNJSEM=
-X-Google-Smtp-Source: AGHT+IG/B0nHhfbw6Kn8YVjXqkuGvBovBzk1DNUWe6U/NOEIulbu0M6i4Zl+zEUFYMMQFsI53zmuwal55fsqTrOwINk=
-X-Received: by 2002:a05:6870:700f:b0:25d:f0ba:eab7 with SMTP id
- 586e51a60fabf-273e6472850mr11131650fac.18.1724669465070; Mon, 26 Aug 2024
- 03:51:05 -0700 (PDT)
+	 To:Cc:Content-Type; b=hPwPbey06wG7n+1eL7yXTonQr+G3pJDtTR89bGw1Sm9jjtyvaAk2emseDCtjOgKpilDgk8L01KE39kCxgMyNviIkuKgT3hdYwx9w3LBMw+SAonpASNzysSnWn76r1ZIIfZHUscrYdmlXirAPoJIlOqmDjVyupA+dE0imcFiVs0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CK4rT2NN; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e02b79c6f21so4372262276.2
+        for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2024 03:58:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724669890; x=1725274690; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tZZKCO21at5/MyqKMMDZApnx5/eMSgR7MnutvBDvLdo=;
+        b=CK4rT2NN8R0IqB0s/dIC2CIcmCguOm8j55tpsluSbXYnf7pXMPcywLC1lztD0cWUxs
+         p9TssGpwvOSrVtdzl1++vk7pbI/biJfk09y8ZQG3SHnWeMvi5uophoZF+iFPbF6ru5xV
+         U/Tz69BSTs4b+d0aYOgthX6eHKmTX+oMby3jxiEgx18cFE5tIf4KzJlfi/9ygafuTm1B
+         mlTHJz8nFfOIAVzVcExbLL77D/133vnbvl4ziWsa4CWAlSUeOJXiD8UM8HGrpRNSdhYR
+         DKaEz4bv3zMilmVf9DMES5COFzw0L4zlK3ETPhAfJDBm5z/CCv/8Hj+bSFkIhVS8q6Ot
+         ileQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724669890; x=1725274690;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tZZKCO21at5/MyqKMMDZApnx5/eMSgR7MnutvBDvLdo=;
+        b=LIJVUlxGNkdjc6Ummb0hxl8a0JXfeT6wQBqQu6sJxMaOUVDBmJ0tB71h0jlI+h9HYO
+         RzhNaOowQCdzNkoZF3XLDUF+wLuTpJgU+v8txsCCoqf5TT3HtYSvkYSYMg64XIdczJ8R
+         D015E7Ngi9tvqAjJJNiEpwEeKFuw3J9T6cWLKOy/WYIWvMuhf9X/M9rqUI5c3NlFcgFU
+         K0LaFQiiiBRG6JLC2oVdR4KOsLttxGvvTg/DJqoO4Lbn8bAAk6jRNGbqQIfNNRQ6yx4W
+         R1r1BOAgbcqYSw3e/X9/X8LDxYjASihaQ+dGtWiFtvazOs6stuOV8gsm2Yu0rJjO6A5v
+         56iw==
+X-Forwarded-Encrypted: i=1; AJvYcCU5mHscbiU/H20nIj6wKKN3YrZVy0cdtzYoplg0m/j9zbghr5HT/TVmnjSh199matZtBBPmzxfzcQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxrr+qWg17Po7xXrM+jYokolNfXaWXypt1xKixHSLfrInNRDuup
+	Il4Qwnk3Lp7lcGKpbNXEzkYstVaJ50jiAwwOGgni/QLJPVaqHgmhBKlCqVW67fIpTE0kZ/Fl9nM
+	B6osXT5tZPCDdOi6BHgr7UF7sI+JAG4AB4QqqXg==
+X-Google-Smtp-Source: AGHT+IF3U+OFtU37FMAav4du6kr3FKMf6WtkQ2PxskoPtPB7hhdtoR6+l20HZetYnYGy2JfwFY9nMJrD7s1BlWFutpU=
+X-Received: by 2002:a05:6902:1617:b0:e11:7246:9632 with SMTP id
+ 3f1490d57ef6-e17a88bdcf2mr11272219276.4.1724669890377; Mon, 26 Aug 2024
+ 03:58:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240823154245.1553458-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20240823154245.1553458-1-daniel.lezcano@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 26 Aug 2024 12:50:53 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ikXJrKyHm-texq1ZnWSBqSdi-bi0NCRQ2jPTu8mJ8izA@mail.gmail.com>
-Message-ID: <CAJZ5v0ikXJrKyHm-texq1ZnWSBqSdi-bi0NCRQ2jPTu8mJ8izA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] thermal/core: Use thermal_zone_device_param
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org, 
-	=?UTF-8?B?SsOpcsOpbWllIEdhcmNpYQ==?= <jgarcia@baylibre.com>, 
-	Alexandre Bailon <abailon@baylibre.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, open list <linux-kernel@vger.kernel.org>
+References: <20240822224547.385095-1-ulf.hansson@linaro.org>
+ <20240822224547.385095-8-ulf.hansson@linaro.org> <kg3gfmh4vd5lgnglk7wzzullu7s3b7lpnh3czinmvpds2it7cm@bowytsfbzzvi>
+In-Reply-To: <kg3gfmh4vd5lgnglk7wzzullu7s3b7lpnh3czinmvpds2it7cm@bowytsfbzzvi>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 26 Aug 2024 12:57:33 +0200
+Message-ID: <CAPDyKFqZ9XXi5_-essaGbdWBDLX8uR5nO9vDJCExBGV+10KqZA@mail.gmail.com>
+Subject: Re: [PATCH v3 07/10] drm/tegra: gr3d: Convert into devm_pm_domain_attach_list()
+To: Thierry Reding <thierry.reding@gmail.com>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <quic_kdybcio@quicinc.com>, 
+	Nikunj Kela <nkela@quicinc.com>, "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, 
+	Mikko Perttunen <mperttunen@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Stephan Gerhold <stephan@gerhold.net>, Ilia Lin <ilia.lin@kernel.org>, 
+	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 23, 2024 at 5:43=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Fri, 23 Aug 2024 at 13:53, Thierry Reding <thierry.reding@gmail.com> wrote:
 >
-> The function thermal_zone_device_register_*() have now a significant
-> number of parameters.
-
-Which may or may not be regarded as a problem.
-
-To me, there are two arguments for doing a change like this:
-
-(a) A struct initialization is less error-prone than passing a long
-list of arguments to a function.  In the particular case of
-thermal_zone_device_register_with_trips(), the last two arguments are
-easy to mishandle because they are of the same type and similar
-meaning.
-
-(b) It gets rid of multiline function invocations that are hard to read.
-
-> Simplify the parameters by extending the thermal_zone_device_param
-> structure with the parameters usually used when registering the
-> thermal zone.
+> On Fri, Aug 23, 2024 at 12:45:44AM GMT, Ulf Hansson wrote:
+> > Rather than hooking up the PM domains through devm_pm_opp_attach_genpd()
+> > and manage the device-link, let's avoid the boilerplate-code by converting
+> > into devm_pm_domain_attach_list().
+> >
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >
+> > Changes in v3:
+> >       - Updated commitmsg.
+> >       - Converted to devm mangaged version of dev_pm_domain_attach_list()
+> >
+> > ---
+> >  drivers/gpu/drm/tegra/gr3d.c | 38 +++++++-----------------------------
+> >  1 file changed, 7 insertions(+), 31 deletions(-)
 >
-> With that change we have a simpler function:
+> I'm not very familiar with most of the OPP bits in this driver, but it
+> looks like the corresponding code is now in the core, so this seems
+> fine:
 >
->      thermal_zone_device_register()
+> Acked-by: Thierry Reding <treding@nvidia.com>
+
+Thanks!
+
 >
-> which can be reused in the different drivers and replace the
-> duplicate thermal_zone_device_register_with_trips() and
-> thermal_zone_device_register_tripless() functions.
+> On a related note: we have two other case on Tegra where we attach to
+> multiple PM domains (drivers/usb/host/xhci-tegra.c and
+> drivers/usb/gadget/udc/tegra-xudc.c). Both of those don't use OPP, but
+> I wonder if they could also be simplified using the new
+> devm_pm_domain_attach_list() function?
 
-I actually think that having a special helper for registering a
-tripless zone is useful because it makes it super easy to find the
-code paths doing that.
+Yes, they certainly can!
 
-> Cc: J=C3=A9r=C3=A9mie Garcia <jgarcia@baylibre.com>
-> Cc: Alexandre Bailon <abailon@baylibre.com>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/thermal_core.c |  9 +++++++
->  include/linux/thermal.h        | 43 ++++++++++++++++++++++++++++++++++
->  2 files changed, 52 insertions(+)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
-e.c
-> index e6669aeda1ff..5869562caf9e 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1390,6 +1390,15 @@ int thermal_zone_get_crit_temp(struct thermal_zone=
-_device *tz, int *temp)
->  }
->  EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
->
-> +struct thermal_zone_device *thermal_zone_device_register(const char *typ=
-e,
-> +                                                        const struct the=
-rmal_zone_params *tzp)
-> +{
-> +       return thermal_zone_device_register_with_trips(type, tzp->trips, =
-tzp->num_trips,
-> +                                                      tzp->devdata, tzp-=
->ops,
-> +                                                      tzp, tzp->passive_=
-delay,
-> +                                                      tzp->polling_delay=
-);
+I was planning to send a couple of patches simplifying a couple of
+more drivers here and there (including those on Tegra), but I haven't
+yet made it to it. If you do it before me, feel free to keep me on cc.
 
-My basic concern with this approach is the copying of pointers that
-may become invalid going forward to tzp.
-
-Generally speaking, it is less than useful to hold on to copies of all
-data that is only used during thermal zone registration (like a
-pointer to the trips table for one example).
-
-I would define a new struct type to hold all of the current
-thermal_zone_device_register_with_trips() parameters:
-
-struct thermal_zone_data {
-        const char *type,
-        const struct thermal_trip *trips;
-        int num_trips;
-        void *devdata;
-        const struct thermal_zone_device_ops *ops,
-        const struct thermal_zone_params *tzp;
-        unsigned int passive_delay;
-        unsigned int polling_delay;
-};
-
-and pass that to a wrapper function:
-
-int thermal_zone_register(struct thermal_zone_data *tzdata)
-{
-        return thermal_zone_device_register_with_trips(tzdata->type,
-tzdata->trips, tzdata->num_trips,
-
-              tzdata->devdata, tzdata->ops, tzdata->tzp,
-
-              tzdata->passiva_delay, tzdata->polling_delay);
-}
-
-BTW, I don't think that the "device" part of the function name adds
-any value, so I wouldn't use it.
-
-A similar thing can be done for the tripless case:
-
-struct thermal_tripless_zone_data {
-        const char *type,
-        void *devdata;
-        const struct thermal_zone_device_ops *ops,
-        bool no_hwmon;
-};
-
-int thermal_tripless_zone_register(thermal_tripless_zone_data *tzdata)
-{
-        struct thermal_zone_params tzp =3D { .no_hwmon =3D tzdata->no_hwmon=
- };
-
-        return thermal_zone_device_register_with_trips(tzdata->type, NULL, =
-0,
-
-              tzdata->devdata, tzdata->ops, &tzp,
-
-              0, 0);
-
-}
-
-And yes, I would do it so that the users of tripless thermal zones
-don't need to use a full struct thermal_zone_params just in order to
-pass the no_hwmon value.
-
-> +}
-> +
->  /**
->   * thermal_zone_device_register_with_trips() - register a new thermal zo=
-ne device
->   * @type:      the thermal zone device type
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index b86ddca46b9e..1681b9ddd890 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -174,11 +174,45 @@ struct thermal_zone_params {
->          *              Used by thermal zone drivers.
->          */
->         int slope;
-> +
->         /*
->          * @offset:     offset of a linear temperature adjustment curve.
->          *              Used by thermal zone drivers (default 0).
->          */
->         int offset;
-> +
-> +       /*
-> +        * @trips:      a pointer to an array of thermal trips
-> +        */
-> +       const struct thermal_trip *trips;
-> +
-> +       /*
-> +        * @num_trips:  the number of trip points the thermal zone suppor=
-t
-> +        */
-> +       int num_trips;
-> +
-> +       /*
-> +        * @devdata:    private device data
-> +        */
-> +       void *devdata;
-> +
-> +       /*
-> +        * @ops:        standard thermal zone device callbacks
-> +        */
-> +       const struct thermal_zone_device_ops *ops;
-> +
-> +       /*
-> +        * @passive_delay:      number of milliseconds to wait between po=
-lls when
-> +        *                      performing passive cooling
-> +        */
-> +       unsigned int passive_delay;
-> +
-> +       /*
-> +        * @polling_delay:      number of milliseconds to wait between po=
-lls when checking
-> +        *                      whether trip points have been crossed (0 =
-for interrupt
-> +        *                      driven systems)
-> +        */
-> +       unsigned int polling_delay;
->  };
->
->  /* Function declarations */
-> @@ -218,6 +252,10 @@ void thermal_zone_set_trip_temp(struct thermal_zone_=
-device *tz,
->  int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp=
-);
->
->  #ifdef CONFIG_THERMAL
-> +
-> +struct thermal_zone_device *thermal_zone_device_register(const char *typ=
-e,
-> +                                                        const struct the=
-rmal_zone_params *tzp);
-> +
->  struct thermal_zone_device *thermal_zone_device_register_with_trips(
->                                         const char *type,
->                                         const struct thermal_trip *trips,
-> @@ -281,6 +319,11 @@ int thermal_zone_device_enable(struct thermal_zone_d=
-evice *tz);
->  int thermal_zone_device_disable(struct thermal_zone_device *tz);
->  void thermal_zone_device_critical(struct thermal_zone_device *tz);
->  #else
-> +static inline struct thermal_zone_device *thermal_zone_device_register(
-> +       const char *type,
-> +       const struct thermal_zone_params *tzp)
-> +{ return ERR_PTR(-ENODEV); }
-> +
->  static inline struct thermal_zone_device *thermal_zone_device_register_w=
-ith_trips(
->                                         const char *type,
->                                         const struct thermal_trip *trips,
-> --
-> 2.43.0
->
+Kind regards
+Uffe
 
