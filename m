@@ -1,181 +1,137 @@
-Return-Path: <linux-pm+bounces-12875-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12876-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5028795F057
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 14:03:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13E6D95F05F
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 14:04:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F351B283023
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 12:03:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDB711F2181D
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 12:04:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06B1E16B385;
-	Mon, 26 Aug 2024 12:03:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A0FD158D79;
+	Mon, 26 Aug 2024 12:04:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="LOqaI10a"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eIG0FMBC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A608715539F
-	for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2024 12:03:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD50078C73
+	for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2024 12:04:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724673814; cv=none; b=kL9PQe9CAoTQo8fwDfQddqFwbLUBsxeALpT3UdpF6PzAmNVZdobghRAZ+zMjMCfj0OAHI6robyJWxhifGXzo5pFYYV/qzaVtdVwCreanv3f9RB8NBId5qCFQ91AnOC+AihV07YsmsV3WHVecdHVcm4HPSPx+JdZIoOt1MUYkZS4=
+	t=1724673886; cv=none; b=Icp78/VjhdmHx/sNiKg+hcxj8DMu3tH+0khLOqWQJ67I8fiMsSUY8dtyghfNqd3psgMJJ13iqPaPqnoq0heXjSJ8mT0mYywMauBdTD1FIrXaqzjKZIXW6grqw8IufUgtDnLYzxvymiUu6PRe/+sot4gyQsdUWbXjgZ6m7Rd+GF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724673814; c=relaxed/simple;
-	bh=snM5Rm0gMzlD08AvqsH0+c3YOt73h0syTAjhL8mg4zU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GgOkC/UepIMo6sWT62TRPzuCiN1/KQ7ex5PnhXkCS5XPE3m94Jiq2NlA/q2F3RS68Aall0lqCzoSFGuezBsvTSDZ02RI80iJcqruHlUOwYZAe4yj9+Iq+VgqxSrcjWPkx649uLlnIC2EarfLcL+UPnUqsBTsPUOsVNYUUZG1ffY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=LOqaI10a; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D86A83F6B5
-	for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2024 12:03:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1724673810;
-	bh=ajfaokdeZHRMyKn6mvHqNgguJUu0Q4E54DToJ/+4STQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=LOqaI10aEotQy1QRuaf7c20vHbkBW2mlzuqv9O5/Wzpcy1FgzV0KURM1oI2HGg+kV
-	 s9YfZ6eD2j8G9Fy/W+bWkhI/aKzftg/ptie3cmDfJOiThO17N5/5/gjf2mgL6kTG9v
-	 YDCdpN7mj/ABVDvbFECmP87V9kmqcztJ3xHlTi2zQ6li3bUSkV7RdvPO/sjyqKq1hB
-	 WaD35XNFQ7/NInO9Six0JW/5xyBjIt+ZfOuKbf23C7OTA7lz9qhZ9DspGStfQnwjks
-	 NVWSYjMG7c/rQnNmepoMgWBWnRWOO6T5v08wxaRaIwEKtoSqiLOeBoHf2LWdFySZ8K
-	 hFW1kyblwgkCQ==
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2d5dafe951eso4742052a91.3
-        for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2024 05:03:30 -0700 (PDT)
+	s=arc-20240116; t=1724673886; c=relaxed/simple;
+	bh=+LqDRYpJSbREFNO3JdZNLM6ZFjXI/PEK0cLopfkW1l8=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=bHnBycF2BRIX+WD2T9jFnb+0Bp6tIuOpBtDt8eIR5+Tj80exoxb2WGLER8bpGc0YWdmAoCzKEAvjXOurYWTj+EC3PJSdms/qlwweEhhg/Fpa02mNLUt+m4ZjhWKGLj/U761dp/5hVLSwhNMlanVDuxWW8j0GOSoRA0GWwPMYWWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eIG0FMBC; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1724673883;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vsltA9sNVyhNplX4ouF7J/Il4KV1kBvGQZWvHwO4JPo=;
+	b=eIG0FMBCcTedpPH3g5YKZuqTBv1J/GjZdJ1jD4AJbRZuDf4V/rhlkNa1bslOTAiqivRGX3
+	focTORAsCyPv3tL4pXggYLtd6xV2jxqW0f8cGzKMYzShLMmpAzCUrqL9hw2C7UocICioA0
+	Qazap4INQXx5r3jIZrwjl+tSTzjK0+A=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-159-w81hpFYVPP6Wz63BC-SngA-1; Mon, 26 Aug 2024 08:04:42 -0400
+X-MC-Unique: w81hpFYVPP6Wz63BC-SngA-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-a868403dbdeso307014666b.1
+        for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2024 05:04:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724673809; x=1725278609;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ajfaokdeZHRMyKn6mvHqNgguJUu0Q4E54DToJ/+4STQ=;
-        b=rv0IeBGo3guDVieF/zyTxu8jJjLA1zACQa/2nsI1K7zXYOvLOqeMm90YIoD+cP+r65
-         U4u3GCj2VbMBI79c4MhNfbMs7iadbKWaFCN9yU1MtT6hTOng4/gi/Djwb+ZRmJnKtljN
-         tLFohVr7ogPhgVS40KN48hDswR5dd2w8PZTivEZVuGNAX3FfIpXfu3Cy6Us0O7TFgIE/
-         iswptj6vZDSGJQwBv7vgrFLOajupUYoLMzLOmJKJ7vXWqSfJPluTSmeBB8wS0lFFh0sX
-         7ecWTZHnIMVznk8KfrpviDNVnQkRZ/khcJtnpCOi4jQAmkWy6dztcz6YoqlySFbhxO9U
-         JYtA==
-X-Forwarded-Encrypted: i=1; AJvYcCV1drTf3Z3YX7CQ32ED3liqeKmh94qz9DqgdXb+dRRqjbmnTB0Y5YfZRMEz/bIs69wTCWLZez4thw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya9VeBexjjt2uPN9dyBgPrlEZ9aS4rH1suax11LtTPBJNvJAim
-	BwixEgCpBlP6NaCzb8SomZIBpvWCqL0hE63mEvcPiuOoymeMcSIpmUsxTBoML43ZYxL7xAUTWH8
-	HtNYIkugixYBqh/3myCeCXlajRmZaf4u6GlDfy4ONno7DjYQNN9xZowXpWcA/SCEftFgei4r2Ec
-	4A7zCHH/f5/hyNr271KrNzA+npaBKolwwMdtEYG48lsRqzxBo=
-X-Received: by 2002:a17:90b:3144:b0:2d3:c8ed:f0be with SMTP id 98e67ed59e1d1-2d646d0ae37mr8318609a91.28.1724673807973;
-        Mon, 26 Aug 2024 05:03:27 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFxdSvdFt9fVbKAhweGqLpVEbbex/kMjEPiDlJ1rpZiXNZAj2f5L37oaVUXyQSovQsgnz8J0WOkVwo6b700X+g=
-X-Received: by 2002:a17:90b:3144:b0:2d3:c8ed:f0be with SMTP id
- 98e67ed59e1d1-2d646d0ae37mr8318575a91.28.1724673807557; Mon, 26 Aug 2024
- 05:03:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724673881; x=1725278681;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vsltA9sNVyhNplX4ouF7J/Il4KV1kBvGQZWvHwO4JPo=;
+        b=B4+VcYSU3EUHwGc5yxD+YlqDYtv3CmxbOQrr5DCM31XTVm9eg8tXhki1ZvQH6BqmwE
+         /rrLLWXBqCIgiirWjC/Fvcwp/iW8H6qDgKD+zqMzY5+s0AB1/2svwGq/eWq5mnn0WM5w
+         LhOkZ/W5gpGQ8zeqc3gPwVyOphl2RQYcyYc+6Lpq7Dwa0vAaa0t4RJKZNx0wogd8U1In
+         oE21BTX+32Hxbc8WxDLWPDypXlw8/WOvUeXhEIIv6512lql0JHafM/xQgEJaJD+ZS9Ql
+         VvLVrVZ7uY+HI87CvlIh5wkDHVnGhQrkR0eGt931J5CRgp3Yr5/rbKCzBpRUxB9cLloK
+         bBOA==
+X-Gm-Message-State: AOJu0YytL8LqFdPEX1zt968Z6ygUjsWGehKCqfXu71qxQEyEsSa/L0gu
+	VHHNwxYpyVnkgTM0hlwLLDyJ4E8VJkhSYA/V83YbnaK4FoGksBlNiyQ4SyhKwR0JbwOxH+wCz/u
+	KWZ7Rr6bzrYACkJmdbmbzi5KHQBSKDYnXFT5SsobNfRfEm0wr0OkS0deB0EfVdA+hR1E=
+X-Received: by 2002:a17:907:e253:b0:a7a:b73f:7584 with SMTP id a640c23a62f3a-a86a52de58dmr697667266b.34.1724673880834;
+        Mon, 26 Aug 2024 05:04:40 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFCFGqDeRfvb2P763LGTfXtHuBjg/xNPSRKv7tXZ5dvM1Pw12PhquSQ+qhn49JkvfgTiAmpHA==
+X-Received: by 2002:a17:907:e253:b0:a7a:b73f:7584 with SMTP id a640c23a62f3a-a86a52de58dmr697665266b.34.1724673880361;
+        Mon, 26 Aug 2024 05:04:40 -0700 (PDT)
+Received: from [10.40.98.157] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a868f223596sm651125866b.28.2024.08.26.05.04.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Aug 2024 05:04:39 -0700 (PDT)
+Message-ID: <74aae97b-530f-4578-9dc8-d9b2100b6c64@redhat.com>
+Date: Mon, 26 Aug 2024 14:04:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240712062411.35732-1-kai.heng.feng@canonical.com> <6685e124-4a7d-44bb-80a9-fc5fa51269a9@amd.com>
-In-Reply-To: <6685e124-4a7d-44bb-80a9-fc5fa51269a9@amd.com>
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date: Mon, 26 Aug 2024 20:03:15 +0800
-Message-ID: <CAAd53p5d6=m9MzC5pRS8HJSP54tiTxMBLR-Nd=fE2Tf2Sf+mpQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI/PM: Put devices to low power state on shutdown
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: bhelgaas@google.com, mika.westerberg@linux.intel.com, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Sebastian Reichel <sre@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, Jelle van der Waa <jelle@vdwaa.nl>
+From: Hans de Goede <hdegoede@redhat.com>
+Subject: RFC: Extending charge_type power-supply property to show valid values
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 23, 2024 at 3:28=E2=80=AFAM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> On 7/12/2024 01:24, Kai-Heng Feng wrote:
-> > Some laptops wake up after poweroff when HP Thunderbolt Dock G4 is
-> > connected.
-> >
-> > The following error message can be found during shutdown:
-> > pcieport 0000:00:1d.0: AER: Correctable error message received from 000=
-0:09:04.0
-> > pcieport 0000:09:04.0: PCIe Bus Error: severity=3DCorrectable, type=3DD=
-ata Link Layer, (Receiver ID)
-> > pcieport 0000:09:04.0:   device [8086:0b26] error status/mask=3D0000008=
-0/00002000
-> > pcieport 0000:09:04.0:    [ 7] BadDLLP
-> >
-> > Calling aer_remove() during shutdown can quiesce the error message,
-> > however the spurious wakeup still happens.
-> >
-> > The issue won't happen if the device is in D3 before system shutdown, s=
-o
-> > putting device to low power state before shutdown to solve the issue.
-> >
-> > I don't have a sniffer so this is purely guesswork, however I believe
-> > putting device to low power state it's the right thing to do.
->
-> KH,
->
-> I did testing with your patch along with a few others, and found that it
-> does the best job to put a majority of devices into a low power state
-> properly.
->
-> I have the details of what happens at S5 outlined on this Gist:
-> https://gist.github.com/superm1/f8f81e52f5b1d55b64493fdaec38e31c
->
-> * KH column is this patch.
-> * ML column is
-> https://lore.kernel.org/linux-usb/43594a1c-c0dd-4ae1-b2c4-f5198e3fe951@am=
-d.com/T/#m03d0b36f86fb4722009b24a8ee547011128db80b
-> * FS column is 0fab972eef49 being applied again
->
-> I also have power testing data from an OEM's system that shows that it
-> improves things well enough that a previously failing energy star
-> certification is now passing.
+Hi Sebastian,
 
-Thanks a lot for the testing.
+Jelle (in the Cc) is looking into adding a UI to GNOME to allow users to
+enable battery long-life mode. The initial plan was to use the charge
+start and stop thresholds but not all laptop models support these,
+some only have a single toggle to turn long-life mode on/off.
 
-Bjorn, do you think this patch is in good form to get included in next -rc1=
-?
+At first look it seems that charge_type is the right userspace API to use
+for these single toggle only laptop models, offering "Standard" and
+"Long Life" as valid options.
 
-Kai-Heng
+However we don't want userspace to have to write charge_type just to
+find out which values are supported.
 
->
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
->
-> >
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D219036
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
-> >   drivers/pci/pci-driver.c | 8 ++++++++
-> >   1 file changed, 8 insertions(+)
-> >
-> > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> > index af2996d0d17f..4c6f66f3eb54 100644
-> > --- a/drivers/pci/pci-driver.c
-> > +++ b/drivers/pci/pci-driver.c
-> > @@ -510,6 +510,14 @@ static void pci_device_shutdown(struct device *dev=
-)
-> >       if (drv && drv->shutdown)
-> >               drv->shutdown(pci_dev);
-> >
-> > +     /*
-> > +      * If driver already changed device's power state, it can mean th=
-e
-> > +      * wakeup setting is in place, or a workaround is used. Hence kee=
-p it
-> > +      * as is.
-> > +      */
-> > +     if (!kexec_in_progress && pci_dev->current_state =3D=3D PCI_D0)
-> > +             pci_prepare_to_sleep(pci_dev);
-> > +
-> >       /*
-> >        * If this is a kexec reboot, turn off Bus Master bit on the
-> >        * device to tell it to not continue to do DMA. Don't touch
->
+My proposal for this is to have a new POWER_SUPPLY_PROP_CHARGE_TYPES
+properties which behaves like USB_TYPE / CHARGE_BEHAVIOR, e.g. :
+
+[hans@x1 linux]$ cat /sys/class/power_supply/ucsi-source-psy-USBC000\:001/usb_type 
+[C] PD PD_PPS
+
+The idea would be to copy the charge_behavior model and add
+a charge_types bitmask to struct power_supply_desc mirroring
+the u8 charge_behaviours; bitmask. This will also allow re-using
+power_supply_charge_behaviour_show() turning it into a generic
+show function for usb_type / charge_behavior style properties.
+
+Other then having the usb_type / charge_behavior style show()
+output the new charge_types which I'm suggesting would behave
+exactly the same as the old charge_type and drivers can use the
+same code paths to implement both.  To get support for the new
+charge_types drivers just need to set a power_supply_desc.charge_types
+bitmap and add POWER_SUPPLY_PROP_CHARGE_TYPES to their list of
+supported properties.
+
+The idea is for charge_types to basically superseed charge_type
+offering the same functionality while advertising which values
+are valid for writing, while keeping charge_type around for
+backward compatibility.
+
+If this sounds good to you I can write a patch-set implementing
+the suggestion, + converting one or 2 drivers which already
+support writing charge_type atm.
+
+Regards,
+
+Hans
+
 
