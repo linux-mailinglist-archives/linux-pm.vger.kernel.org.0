@@ -1,133 +1,131 @@
-Return-Path: <linux-pm+bounces-12959-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12960-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9347A96090E
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 13:41:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A93E4960945
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 13:49:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B8A9285123
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 11:41:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 556BA1F240FC
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 11:49:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607C51A0729;
-	Tue, 27 Aug 2024 11:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A40231A01C6;
+	Tue, 27 Aug 2024 11:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YKhx1CcT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SvllLxzg"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330FC17C69;
-	Tue, 27 Aug 2024 11:39:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0D5199926;
+	Tue, 27 Aug 2024 11:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724758789; cv=none; b=btjaatJy/1fLW7YYS97tCEFYaUDDEE+Y2rKSveRvAImj048Ff040dMFFDVgaXalrXKqVwsZ+OhikLoQvbzIslaHX12wdrpo0zkIFflVDOcAfGcFhNfxOW9KFm0YWAlHi1PJYnjRQ0hozDt3YZE4muoGS7zVkkjR55ltbZ/ER/EE=
+	t=1724759371; cv=none; b=lJVLtC0R4DF4c7r1tOhCcx19E7YKkKVfC8HBRstJ75ClJUPE9/mshqrU2nUSwNzmx8jl081gcfMg2dQ9yOSoBffsSUpDmZJWuDt2nG6MS81NOWCkvxvMLlsYSwms1l8+Y+r5q3jjwyCwkEnNRNT4QqoaAcRX9o7OMnck3IMBe6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724758789; c=relaxed/simple;
-	bh=5aiCA1KifFkP5iaGWPQMv96TRmb7TG8TWiOnSHnr4Kw=;
+	s=arc-20240116; t=1724759371; c=relaxed/simple;
+	bh=q8fat2cHBmCFbst/4767sxbNMOrAnZzY/bgzJE0Z8ZU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A57ecCJOIR7HmpL0C/Mznp9JQ71V0Ssm7VCXYIlylIdR//3+Sv4ZWXRhWUnBA/uVEgg5bY6sDkEkPHFVka19gOkUIxmpLIW9GFTZ2zk2/X3nZr1fHdeHGCofBtL/EMjhjqfwr871ilAs6BPZfq1etl8htTXGiy2kLy58k+mF8uE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YKhx1CcT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F47C4CB0E;
-	Tue, 27 Aug 2024 11:39:48 +0000 (UTC)
+	 To:Cc:Content-Type; b=fvtyBn9w2rDUws19up/+K3OtREAw6ZA1vi0WPILljqpbGcJHFvXJCsM/YF/xE5SRCHX9Q3LTeMDssHWwvHBCzfLcUC5gq9DZUJ70tSnrAggZinEoO5ZqLISHNmoJCVyftMbxU3ZWJBrljkgZ0Mo92EoAVs4nSpdUhZMaNKNVAPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SvllLxzg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9A0DC4D04D;
+	Tue, 27 Aug 2024 11:49:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724758788;
-	bh=5aiCA1KifFkP5iaGWPQMv96TRmb7TG8TWiOnSHnr4Kw=;
+	s=k20201202; t=1724759370;
+	bh=q8fat2cHBmCFbst/4767sxbNMOrAnZzY/bgzJE0Z8ZU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YKhx1CcTr13AVlW0lGluSP/OG0ne45wnDwcoKh8pDLTC0OIk+BAsyIUXH9ItJe4t8
-	 t1ZpjPPAeOA+ppxDYHyXDRye0UcGIc3txxzQvZCV5tSKUJZUzNpr2i/BD0MRz19pMR
-	 TV5SBzTc6CmNVfWHfwkDtO7AzFh0S4McBfL/bW6qA/ERj24Tqwt+CpGLj8EATxTibM
-	 dKLGdtQLm/kM/utcSOUjycu1NYjbmzCRJkeGMtzz8PEDTiBOwaAO8dVOhScTd7gUlz
-	 9YZtq+saUkSTu/cGyYUKAuqA9RyFRFEr80QDkJNCHo5Ez7vsq/9b1A/C3LUWfTEFVi
-	 KFEEzgc10Ct5A==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-27045e54272so3511423fac.0;
-        Tue, 27 Aug 2024 04:39:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUEbRHJilkQcYWG4siwt/uVIoJc8zP7Ib/u6Tku6zGZtiRTCb5vnYNZ7hubVXt3k/2xu9fK1BpzxqIF+98=@vger.kernel.org, AJvYcCUU+lWfBrvS2boZQgYeKVja8nGvUYnsIMxoXMs/op0VHc66KT+g7Blp1vCh1YTZ9S07Gm61pBJmUpO/8bGI534vBWI=@vger.kernel.org, AJvYcCWRY6s8wwSx4/I6gV7JIfKkjcREFl+GAqXmsh0PsNw6KcbYN+eVB6Z1iy6Eedp/6HTuc9BBpIVDhNY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmUFjSuCY1+2NnRPpTT7cHHsLfPiwhVQnjTWLIGYSltZUmRH4G
-	Zf4KdW6lty4b0+fsQ2SeNM+mFVKpV2SP7B0nnFQYs/yN4tIeVWCsPcmIv9+B19+xeHyH5q4nQFg
-	TZkV8qqceoYYzSlWo6SUKJweRUdA=
-X-Google-Smtp-Source: AGHT+IF/Xn74FPzWxUMpobK5eYPXxi3H+e7CiAt/e1busK+TNSBvd20Vw3Rlp2wN4ZY8to/DMozxHrLIKv+WBrNjWJ4=
-X-Received: by 2002:a05:6870:e249:b0:270:4637:40fa with SMTP id
- 586e51a60fabf-273e675c7a1mr13625626fac.48.1724758787990; Tue, 27 Aug 2024
- 04:39:47 -0700 (PDT)
+	b=SvllLxzg08LQfpUpPIVkUuqR/vUIVc4CzE55y0mTVYTpYMPiXfMNS9F8vE1IPfGbj
+	 jSkyal5Tht/D/jNNImeTsXJZk5X/CmLweNHMkdG86WLGmo1atThW48c6h4R+g0YaGN
+	 V1hv0qUaQq7So1vomuqFahVLcVuROj3LCtM3yF77NmxCDml5GIODxtWAlyY/WLjdWL
+	 TEexoytpzg9AEkA9UzEbMww/qGWDgNfxl4Q9lpf6okFbscX3dwot3hB5kVPnPHDV8r
+	 YmEA6R1lANeghi9WLcAmLZb84bBQ4EgB7t/cGlv/HqbNuMS5JerB3oWz5OAdCyvj4G
+	 BzaSwHH1q56yA==
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-70944d76a04so3816525a34.0;
+        Tue, 27 Aug 2024 04:49:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUmVsS6fNOLB3ghb5buLhLFNcVbLjz1PJnpeCWEfVAh/dhMVM3PKYLZv9rwmwugV7EKP2ehB189p7OA8gQ=@vger.kernel.org, AJvYcCWEC4y+V7PbPj4c+gAJhbGtOS7rhdtsNFWYBAS+8b2Z3kUtI6WJV4M+dMJQta8oFIAYKtjkhxpLSmg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkJCSpwTcsAPTqRa69z8hzyFoi5bg/cxzMu9p656NjT4AKsWAq
+	FtPMaSSNMCRDhAwWf90kWUiDrpqAoUkv+Tt0rZOS3/dX5V7Y5mWXJMU7Wu2wBEmJs2gVDZEETwV
+	3oWc7b/bt1oYno2l0h2RObvSCHGU=
+X-Google-Smtp-Source: AGHT+IE36XhiYJ2H724axgI4XwB6FfmDGnCfm2PQ028NCZUMo3q753Wj2wjuyDMs5VwFtDOxS+I14wbr7vjD1wb700g=
+X-Received: by 2002:a05:6830:2112:b0:703:6b11:33a4 with SMTP id
+ 46e09a7af769-70f47ac60fbmr989902a34.9.1724759370153; Tue, 27 Aug 2024
+ 04:49:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2205737.irdbgypaU6@rjwysocki.net> <CGME20240826113153eucas1p110e90b4cd98aa70601770fe93d7aa1e5@eucas1p1.samsung.com>
- <2236794.NgBsaNRSFp@rjwysocki.net> <ef729a47-b7f9-48b6-a14d-692565ef1d38@samsung.com>
- <CAJZ5v0gOqNi+-Hi8uyeEJ9dHzhwU6GyL6t_7Xjt5Knf2yJmH-w@mail.gmail.com> <0e710ff1-4ff4-403a-b85d-b1e51c03378a@samsung.com>
-In-Reply-To: <0e710ff1-4ff4-403a-b85d-b1e51c03378a@samsung.com>
+References: <4941491.31r3eYUQgx@rjwysocki.net> <3311190.44csPzL39Z@rjwysocki.net>
+ <20240826230742.GA7773@ranerica-svr.sc.intel.com>
+In-Reply-To: <20240826230742.GA7773@ranerica-svr.sc.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 27 Aug 2024 13:39:36 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h2pF3E_Ni1D7_6jB0NpQrkhcZ6tCCmww8CX02-5qAYEw@mail.gmail.com>
-Message-ID: <CAJZ5v0h2pF3E_Ni1D7_6jB0NpQrkhcZ6tCCmww8CX02-5qAYEw@mail.gmail.com>
-Subject: Re: [PATCH v3 12/14] thermal/of: Use the .should_bind() thermal zone callback
-To: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Zhang Rui <rui.zhang@intel.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>, 
-	Mateusz Majewski <m.majewski2@samsung.com>, linux-amlogic@lists.infradead.org
+Date: Tue, 27 Aug 2024 13:49:18 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hiNxLsX2ExT8QphkTev4-i++4xo4CuG3rVkLqTZsiBgA@mail.gmail.com>
+Message-ID: <CAJZ5v0hiNxLsX2ExT8QphkTev4-i++4xo4CuG3rVkLqTZsiBgA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] cpufreq: intel_pstate: Set asymmetric CPU capacity
+ on hybrid systems
+To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, x86 Maintainers <x86@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Ricardo Neri <ricardo.neri@intel.com>, Tim Chen <tim.c.chen@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 26, 2024 at 10:49=E2=80=AFPM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
+On Tue, Aug 27, 2024 at 1:00=E2=80=AFAM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
 >
-> On 26.08.2024 14:14, Rafael J. Wysocki wrote:
-> > On Mon, Aug 26, 2024 at 1:32=E2=80=AFPM Marek Szyprowski
-> > <m.szyprowski@samsung.com> wrote:
-> >> On 19.08.2024 18:30, Rafael J. Wysocki wrote:
-> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>
-> >>> Make the thermal_of driver use the .should_bind() thermal zone callba=
-ck
-> >>> to provide the thermal core with the information on whether or not to
-> >>> bind the given cooling device to the given trip point in the given
-> >>> thermal zone.  If it returns 'true', the thermal core will bind the
-> >>> cooling device to the trip and the corresponding unbinding will be
-> >>> taken care of automatically by the core on the removal of the involve=
-d
-> >>> thermal zone or cooling device.
-> >>>
-> >>> This replaces the .bind() and .unbind() thermal zone callbacks which
-> >>> assumed the same trip points ordering in the driver and in the therma=
-l
-> >>> core (that may not be true any more in the future).  The .bind()
-> >>> callback would walk the given thermal zone's cooling maps to find all
-> >>> of the valid trip point combinations with the given cooling device an=
-d
-> >>> it would call thermal_zone_bind_cooling_device() for all of them usin=
-g
-> >>> trip point indices reflecting the ordering of the trips in the DT.
-> >>>
-> >>> The .should_bind() callback still walks the thermal zone's cooling ma=
-ps,
-> >>> but it can use the trip object passed to it by the thermal core to fi=
-nd
-> >>> the trip in question in the first place and then it uses the
-> >>> corresponding 'cooling-device' entries to look up the given cooling
-> >>> device.  To be able to match the trip object provided by the thermal
-> >>> core to a specific device node, the driver sets the 'priv' field of e=
-ach
-> >>> trip to the corresponding device node pointer during initialization.
-> >>>
-> >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >> This patch landed recently in linux-next as commit 6d71d55c3b12
-> >> ("thermal/of: Use the .should_bind() thermal zone callback")
-> > It has been fixed since and it is commit  94c6110b0b13c6416146 now.
+> On Mon, Aug 12, 2024 at 02:44:30PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> [...]
+> > @@ -3143,6 +3341,20 @@ static int intel_pstate_register_driver(
+> >
+> >       global.min_perf_pct =3D min_perf_pct_min();
+> >
+> > +     /*
+> > +      * On hybrid systems, use asym capacity instead of ITMT, but beca=
+use
+> > +      * the capacity of SMT threads is not deterministic even approxim=
+ately,
+> > +      * do not do that when SMT is in use.
+> > +      */
+> > +     if (hwp_is_hybrid && !sched_smt_active() &&
+> > +         arch_enable_hybrid_capacity_scale()) {
+> > +             sched_clear_itmt_support();
+> > +
+> > +             hybrid_init_cpu_scaling();
+> > +
+> > +             arch_rebuild_sched_domains();
 >
->
-> Confirmed. Thanks for fixing it and sorry for the noise.
+> sched_clear_itmt_support() also calls arch_rebuild_sched_domains(). The
+> latter is also called earlier via sched_set_itmt_support(), totaling 3
+> calls, two of which are wasted.
 
-Thank you!
+Not necessarily two because arch_enable_hybrid_capacity_scale() may
+return "false".
 
-And it wasn't noise.  You reported the problem as soon as you saw it
-and before you could see the fix.  Somebody else saw it earlier, but
-there's nothing wrong with that.
+But you have a point.
+
+> Perhaps at minimum hybrid_init_cpu_scaling() can be before
+> sched_clear_itmt_support().
+
+It can.
+
+I'll send a new version of the patch with this change.
+
+> The changes made by these two functions will
+> be picked up in a single call of arch_rebuild_sched_domains().
+>
+> Moreover, ITMT can be not enabled at all if so we wish. By the time
+> intel_pstate_set_itmt_prio() is called, the value of hwp_is_hybrid is
+> already known.
+
+But at that time it is not known whether or not
+arch_enable_hybrid_capacity_scale() will succeed.
+
+Thanks!
 
