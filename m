@@ -1,136 +1,138 @@
-Return-Path: <linux-pm+bounces-12937-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12938-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23E969603B1
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 09:55:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA9A096048C
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 10:35:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D28AE282932
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 07:55:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1D4A2841B1
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 08:35:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6953158218;
-	Tue, 27 Aug 2024 07:55:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7994019342E;
+	Tue, 27 Aug 2024 08:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="PYCGkb1K"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E728F156F28;
-	Tue, 27 Aug 2024 07:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36ED914A90;
+	Tue, 27 Aug 2024 08:35:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724745340; cv=none; b=KUhKVz6ERKqMRF/LPVtG5qGFlP79BSgCo8qSaBaTzh0ezJAFuygo4CpCS9QcFSno2cvCizxTWZDPkt1MHQPkgXS5uxsklgca880u5hEXifqZB3z7TIi4LvjWRbUIa9iD6glA1uGkDoxeUhIIewn6CZauO2ebhFvQ5gwsCZgSjuQ=
+	t=1724747752; cv=none; b=BZuoM1U6pOQ17eyIJhUHhnJNUv95ZDHSuI+iJIHgnFi6fh+FGycpLZs9o3T+6FarzmsWZG/CnBkiDIybgRdUt0wAJlFfY0op0Yv/uwiANAQluZZHjJ0gUidXkWXNgWSZp+CBYfLBiBNa96aD0P4GxCRwEIlNNnvb3d1uHwESggw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724745340; c=relaxed/simple;
-	bh=hB7ZwdMBPkDMj4TZ0j8Pz1hCtIfwUxbSGIFo0L0U7yQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MLQ9mY+ja7eqgLOsKzECPyBBCYVnHDOCn2TNxqhKWLQkj6TC94wxEd5E29iPyuyZr19DqjWVDGpJisZBboZkf3jsW8ljov6EYfuJVm/LQHsP/jnUspnX/V9GRo5u3TjtJay0nddUqoY2OOTa4eMHvVmazQG515za10uKl2y5r0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6c0ac97232bso42956117b3.1;
-        Tue, 27 Aug 2024 00:55:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724745336; x=1725350136;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P4JN30GN77x4NUy5z6yHPloDIcCANz9yHy+MUlnyZj4=;
-        b=UVQJW1qKCIapMAvCNrfXUSlau7Hsmx1T+455dMAeiLH7apw9zCMZxa6Q7mmvp8YkL+
-         Kl4XW1kE+2YZaTo4ainvB7rvVzk5cr1RRMBBIK0N/tw6OckZ9Xz9InLaRjlqleMTFxJ2
-         rwE+DJZGqKVxB0NIp6QCrO7Ti/33Z9zssx9FMtiL54n9rXrbwYmTqromHTU9pLr+klV4
-         rqWM2JwP23t7feqc9P4mUpf6VQQIGFrNZGthoJAewAXlTjxLZYsjq4v0rYCMEfYKWeHk
-         Bm/HTyUDr1l3mBDZ5I1Me0chf5XJfibviCeEV19e72TRJFmmnavSglY/koEiGnXcNBRT
-         yjpA==
-X-Forwarded-Encrypted: i=1; AJvYcCV5iAyGN4ELNyBHfoTfgeckXd+6XfLYEDmbsxVLBeBvh8svz2JPV7viNVFuq1/wpvIP+JT9TQg4/WXm1QOC@vger.kernel.org, AJvYcCVMs2HCRxKkZJkxSAT07OuRvmpfFKa50dEuLvcGlYzsSp8zX4zBuNDE+9PdiLIXyGzIvORMkLJ5wY5+yhgF2pX0iB8=@vger.kernel.org, AJvYcCW1W/RxCICE/xZBShw6Yk8xo2qTm8GJJWnB2iB4D4FcTvCATxUMQT/Uuaz9RzoKg6BgLrLn2J8RHBA=@vger.kernel.org, AJvYcCWNhVIE5NUqAOIqoUBCtmAwsX1DvO9UYv7ogo8NTtFJTBHoA5FTXdEZdx4Tsg6QfVd7PulLMQAqGUczq1Gt@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNDjSR/El14GN2BVgbCyvk4kCFzYTzb7RHI9PNAh+AVIGKd7DB
-	dgkmKGK9Dyky4QCzt2BToxro+VnWz1YA4rPx0EFmM+5E9wtnre6MszZIm4l/
-X-Google-Smtp-Source: AGHT+IEO4ABYY/ILHfI9+ZyCGCz7so1nuk8lMph+lgiyFPzGmlvALrUWZgz1gO7bywGHhjNArT4Hsg==
-X-Received: by 2002:a05:690c:10d:b0:64a:791b:60ce with SMTP id 00721157ae682-6c6286b93fcmr126703237b3.30.1724745336660;
-        Tue, 27 Aug 2024 00:55:36 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6c39d3a9f90sm18399347b3.96.2024.08.27.00.55.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Aug 2024 00:55:36 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6b747f2e2b7so48821937b3.3;
-        Tue, 27 Aug 2024 00:55:35 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUFydUKDcDk2d3BSoq17yPcG5GhnhY+qE8TI1NJs/UTJWflsNajtRXWCNp2IrwPE5f51dM/bgR3sB/ijv4O@vger.kernel.org, AJvYcCVgWjAhV1NQLdRQg7Nwx3VZPRBNvXZqfP+WH0pxgOWim0xWwu1TA+Vm09kCMe15fKoP8f05CMB3NiM=@vger.kernel.org, AJvYcCVkptfvL4Q59Ig9s5xFBMZzDPszjOaDSblia91AZz+nemGgrBzbZ2ehWmACh0DEU57YUPhk24laLJsb/nd0MKTv5y8=@vger.kernel.org, AJvYcCW82EuplG0JKwEY7ibng+8e5sf2rGcI+CzulBFdwnMKbnR3QIFJQRcHipt+PitKqesiTV/FnH00cup8NLrw@vger.kernel.org
-X-Received: by 2002:a05:690c:d8c:b0:643:aef1:fb9d with SMTP id
- 00721157ae682-6c624229802mr164962817b3.4.1724745335406; Tue, 27 Aug 2024
- 00:55:35 -0700 (PDT)
+	s=arc-20240116; t=1724747752; c=relaxed/simple;
+	bh=xEUpYp0je7oKMTEnx48I9vtTKW4Nuu8Lt0HeCRT52vA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YMxho+R/QyENMflrfH4hK9yXZdO6IEE/nolGbb8Dmpr2Nv41AQpCfFy7ZRmC4NrpgzshSIfKGtYIMWBAaEp6DW9Ep+lQM91XQPv27BWADx/7rkDMN5h3eUnKJvfMRozlgjNnKYxn0+CGn/mYmsbNi1SYK/+GY6aJUmI4Y3nmjSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=PYCGkb1K; arc=none smtp.client-ip=115.124.30.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1724747747; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=XVjKbCb21liJy2wBYvTC4xS7sjOXiQNSn4t/bSACcxo=;
+	b=PYCGkb1Khhdv2ix+Kk3N4SeL+gOZURSbl+6ng2uJOzRuOV1rieQ8h0eaGx4579aF/pYzgPr3pXnuxAgLYocylYub6RJDEftc1kFKL2f7D/LKqxHq4CwVxV/Qnyk8oK6s2NVofc+uiO4ksHOM8GXqHoiDkXUJERKpzQcxw6lQkkA=
+Received: from 30.97.56.57(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0WDm-lXk_1724747745)
+          by smtp.aliyun-inc.com;
+          Tue, 27 Aug 2024 16:35:46 +0800
+Message-ID: <d335fd2a-9ab6-4f91-aa11-559deb419433@linux.alibaba.com>
+Date: Tue, 27 Aug 2024 16:35:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240823-cleanup-h-guard-pm-domain-v1-0-8320722eaf39@linaro.org> <20240823-cleanup-h-guard-pm-domain-v1-10-8320722eaf39@linaro.org>
-In-Reply-To: <20240823-cleanup-h-guard-pm-domain-v1-10-8320722eaf39@linaro.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 27 Aug 2024 09:55:23 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXCPJz=bNZppMExGdhCdzuTVOV-EcvnkZfBYCGnT7A7ZA@mail.gmail.com>
-Message-ID: <CAMuHMdXCPJz=bNZppMExGdhCdzuTVOV-EcvnkZfBYCGnT7A7ZA@mail.gmail.com>
-Subject: Re: [PATCH 10/10] pmdomain: renesas: rcar-sysc: Use scoped device
- node handling to simplify error paths
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	imx@lists.linux.dev, linux-arm-msm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal: sprd: Use devm_clk_get_enabled() helpers
+To: Huan Yang <link@vivo.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Orson Zhai <orsonzhai@gmail.com>,
+ Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: opensource.kernel@vivo.com
+References: <20240820094450.101976-1-link@vivo.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20240820094450.101976-1-link@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof,
 
-On Fri, Aug 23, 2024 at 2:51=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> Obtain the device node reference with scoped/cleanup.h to reduce error
-> handling and make the code a bit simpler.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks for your patch!
+On 2024/8/20 17:44, Huan Yang wrote:
+> The devm_clk_get_enabled() helpers:
+>      - call devm_clk_get()
+>      - call clk_prepare_enable() and register what is needed in order to
+>       call clk_disable_unprepare() when needed, as a managed resource.
+> 
+> This simplifies the code and avoids the calls to clk_disable_unprepare().
+> 
+> Signed-off-by: Huan Yang <link@vivo.com>
 
-> --- a/drivers/pmdomain/renesas/rcar-sysc.c
-> +++ b/drivers/pmdomain/renesas/rcar-sysc.c
-> @@ -348,12 +349,12 @@ static int __init rcar_sysc_pd_init(void)
->         const struct rcar_sysc_info *info;
->         const struct of_device_id *match;
->         struct rcar_pm_domains *domains;
-> -       struct device_node *np;
->         void __iomem *base;
->         unsigned int i;
->         int error;
->
-> -       np =3D of_find_matching_node_and_match(NULL, rcar_sysc_matches, &=
-match);
-> +       struct device_node *np __free(device_node) =3D
-> +               of_find_matching_node_and_match(NULL, rcar_sysc_matches, =
-&match);
+Thanks. LGTM.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-Same comment as on [PATCH 9/10].
-
->         if (!np)
->                 return -ENODEV;
->
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+> ---
+>   drivers/thermal/sprd_thermal.c | 14 +++-----------
+>   1 file changed, 3 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
+> index 874192546548..dfd1d529c410 100644
+> --- a/drivers/thermal/sprd_thermal.c
+> +++ b/drivers/thermal/sprd_thermal.c
+> @@ -359,21 +359,17 @@ static int sprd_thm_probe(struct platform_device *pdev)
+>   		return -EINVAL;
+>   	}
+>   
+> -	thm->clk = devm_clk_get(&pdev->dev, "enable");
+> +	thm->clk = devm_clk_get_enabled(&pdev->dev, "enable");
+>   	if (IS_ERR(thm->clk)) {
+>   		dev_err(&pdev->dev, "failed to get enable clock\n");
+>   		return PTR_ERR(thm->clk);
+>   	}
+>   
+> -	ret = clk_prepare_enable(thm->clk);
+> -	if (ret)
+> -		return ret;
+> -
+>   	sprd_thm_para_config(thm);
+>   
+>   	ret = sprd_thm_cal_read(np, "thm_sign_cal", &val);
+>   	if (ret)
+> -		goto disable_clk;
+> +		return ret;
+>   
+>   	if (val > 0)
+>   		thm->ratio_sign = -1;
+> @@ -382,7 +378,7 @@ static int sprd_thm_probe(struct platform_device *pdev)
+>   
+>   	ret = sprd_thm_cal_read(np, "thm_ratio_cal", &thm->ratio_off);
+>   	if (ret)
+> -		goto disable_clk;
+> +		return ret;
+>   
+>   	for_each_child_of_node(np, sen_child) {
+>   		sen = devm_kzalloc(&pdev->dev, sizeof(*sen), GFP_KERNEL);
+> @@ -439,8 +435,6 @@ static int sprd_thm_probe(struct platform_device *pdev)
+>   
+>   of_put:
+>   	of_node_put(sen_child);
+> -disable_clk:
+> -	clk_disable_unprepare(thm->clk);
+>   	return ret;
+>   }
+>   
+> @@ -526,8 +520,6 @@ static void sprd_thm_remove(struct platform_device *pdev)
+>   		devm_thermal_of_zone_unregister(&pdev->dev,
+>   						thm->sensor[i]->tzd);
+>   	}
+> -
+> -	clk_disable_unprepare(thm->clk);
+>   }
+>   
+>   static const struct of_device_id sprd_thermal_of_match[] = {
 
