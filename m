@@ -1,225 +1,249 @@
-Return-Path: <linux-pm+bounces-13003-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13004-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 205149617A2
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 21:02:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 251259617A5
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 21:04:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 970FA1F26301
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 19:02:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45BFF1C20349
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 19:04:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E711D2F47;
-	Tue, 27 Aug 2024 19:02:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBB6F1CDA3C;
+	Tue, 27 Aug 2024 19:04:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Fn4C3U4O"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cpweFfaV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2046.outbound.protection.outlook.com [40.107.220.46])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8669146590;
-	Tue, 27 Aug 2024 19:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724785351; cv=fail; b=UYBt9YUd2vCZs+fvbMbsQOcGeAU0cJ5wn9w8NM2KG8350PjtnV8enE16SYU5+M7lMFSBuVJrel10tCEq5ufx6hK+OnSsqfX4LRePZafez2bfc3QxE+7uG2fC/b3j9Ukz670lK0L6WC3uy1cLWPMUu+TC7eE6h62FRVbo2BogRWw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724785351; c=relaxed/simple;
-	bh=sRQxn/tBerOCoB2lqwvfcpnKxzJIOdBZyR0/khy3VmE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=p5VcYdwRjjHF110PB191Rc3rRVBESgY8iqAsYSIu2AZZFtyHYXXhy4YYK8yrWb/vbhKtCH/TF5nngo5KB+BbOkd6l+A3bWKVkjpryVb0mJmd4HKqoY2doQiGUnFZAiHIlfBRbA6q8kDsMXyDdknlq+wZubey6KfFDzqUadgksOs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Fn4C3U4O; arc=fail smtp.client-ip=40.107.220.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Y+rm8RwIqDFcnoF0O2NOncfnxjSDzeV7lrDc1jYdjLeTAAKDC83R/w7a32Ne6Wx28layTBcjiLy7H3kMaQBTMY9sBwd6usafF/qPBnIfEulwa/ua2nFjMQnCUfkbNNnQ2JHmExEcO0Hss9mysRZxRd7n6VLga0WSukJ5C+8mBJ7a3LFv6lf7W0d6rIac8LfZKI7pOSyGFXUXTJNMWwdxsSS8VOc4AUey0UGXKNJf5fSVRBuuCnjCuYRMvV9I9CsFzz8z5tZTlcrZrIZkJRADiQo33CSLE6C9zkxsgWbH877mi+GXeQJBY7JesMZX/qB+yQyvqnpJx1QZ4B6AOVjsBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n47N3Y8I1SbvPk1o//hH/rIqQhHwjpvFCLokk+9vJXg=;
- b=HeXjHxUALQDQBUlJPbNcs6771IVUllwOd/wJCi/KoZuK+j5WOWd8FIrvmNl6C8FI8TUrj54khFH+INYHee0HNL0chqhFXD4JS9h91i/7kO56zUc0CaMjpxlICRj3mFFVL1PSoW24xYZ7MKKYIYdklXpvm3I2247cZntmsBWbF8+WxmNHJowxYRTq+NCPcjFoDXHMY927o+QLGwK05rABC0KyVNDsb4XeYXHQppt3gJme0OYuTpQlMNKv0nrU6jH6lh9iRuK8Mi5Q3YxzE9daknhNdcFZtCbzBrjURjdnC8l43mQ3U6Th3uM/ym4dGCxEQiNVcPq4FKH/bRTL33aAHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n47N3Y8I1SbvPk1o//hH/rIqQhHwjpvFCLokk+9vJXg=;
- b=Fn4C3U4OHJx3nZzP0/gZpfVH/YP03RoDcuAWK8n21ycoQhNlY7ZQML/V9IVDndlUc6ASHYVcCdfkr+TML8VehFi7E/+qOSWbzoKIf5W1qMaeCPSIRKRDAfc0K9lRoWFhKNDItvIpiYKDuFscpg6jni7C1V/29u9GoRL0HlNDJAc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DS0PR12MB6390.namprd12.prod.outlook.com (2603:10b6:8:ce::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7897.26; Tue, 27 Aug 2024 19:02:27 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%7]) with mapi id 15.20.7875.016; Tue, 27 Aug 2024
- 19:02:27 +0000
-Message-ID: <8acd43d7-3eb6-4cba-b962-e6b32c620b51@amd.com>
-Date: Tue, 27 Aug 2024 14:02:25 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7/8] cpufreq: amd-pstate: Optimize
- amd_pstate_update_limits()
-To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
- Mario Limonciello <superm1@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>, Perry Yuan <perry.yuan@amd.com>,
- "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
- <linux-kernel@vger.kernel.org>, "open list:ACPI"
- <linux-acpi@vger.kernel.org>,
- "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>
-References: <20240826211358.2694603-1-superm1@kernel.org>
- <20240826211358.2694603-8-superm1@kernel.org>
- <Zs4FaUoKzlKpoCDV@BLRRASHENOY1.amd.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <Zs4FaUoKzlKpoCDV@BLRRASHENOY1.amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7P220CA0030.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:806:123::35) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19B3B677
+	for <linux-pm@vger.kernel.org>; Tue, 27 Aug 2024 19:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724785468; cv=none; b=mq9jc5G6wZWDyz9dQiSdHZ6xJJl7WHQZ40+caajXwS3pD/QY/A1KJFX2O/kvXYUCphi1OvdG4QKzgIVrSBeyIS5m69W2mOep1WcK4rO4Wzj2gfm9OrwqM4qnmBBYxKuLapunzscRX4t+FHKfICgJ7LTCUGyAYm1pLrWAZDKs0S4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724785468; c=relaxed/simple;
+	bh=xB+tRyst4h/JkZ6zWo+HspsZwigVOpyOfVR2Meo+9zo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=agJp+An2L2zYZkQMKV5jDQihTU461bwmdB/HxZEJwGmfoa0UAmIGEnCtgqFAUzaNF25Y0PTx+5Uw2rk/mZ/KLxKE1xEgoX2qPWzO3eObw6usxzLcVCzjIj6CQU6vG6wxQ4WM9MHcxP3JOjnqb9BVrizVXc5dVUl1LMcPl+vrr6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cpweFfaV; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1724785466;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HkWCAaDqu2XZmQMkoLU93xiUV6PoV/L38xqUed5LNOs=;
+	b=cpweFfaVZCKCMEa+NU4qICQ4hlcG7A/qca/G5khysnq/8YV43PS4BIly2g0WeOrtZ9BXNe
+	zn9jZ3BKmmT8w44OJDzH0DN+efGutu95lREy6v7KOrdslLcHcavJEcI9rHk8ojxRu9F7d5
+	wcubaYWCwOMQUj5dadYg5yw8TaEy0Ws=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-626-fZSZZb8VNzez89_m6_jNhQ-1; Tue, 27 Aug 2024 15:04:24 -0400
+X-MC-Unique: fZSZZb8VNzez89_m6_jNhQ-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-428207daff2so53394295e9.0
+        for <linux-pm@vger.kernel.org>; Tue, 27 Aug 2024 12:04:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724785463; x=1725390263;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HkWCAaDqu2XZmQMkoLU93xiUV6PoV/L38xqUed5LNOs=;
+        b=K5d0sU/xvtvO8NHizFOkpmzoGPtD0e17GoGhyT8n3nac+DGBOFrtHAgo0xWoLKb9Fs
+         OfxtR381JbO+rlQ9QR5Qrab0n00THpVoo06sv1De+pQFlIgzO/aNUWUDv9LqWiizdgIh
+         1QdKbR485d4VsVj3mBEUoHq2s/ayIcm5t+ep22G9GZOpMgrn2o9LdnK9DSN+MGVDskM+
+         DyMcemuQIw6hG2I8eGHcYQR+/uKGnXyHD4T6svjEULWZwYZp0/0vbjvmuYX66xw8cESQ
+         c/vrnrLZwbkAxocHkP0gHP7Ddt7Toku3m3OAf/sC73h6DGwtc4vtU0nW5anWG3LTbixS
+         pAHw==
+X-Forwarded-Encrypted: i=1; AJvYcCXHtRADuvyfO+vf8VysVp32q3Z+k2wRhtExNbfG6Yrr9oeMO+ZJCbl69a0aC3Bjx+yfRpvFU02pVw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLyn30m2BJXET5AovW0EQHLEHamar5FAwFCEEIe6p0twm+iOr3
+	yx+pTK6GkiEQXeMwIFX4Ud4WvnwLGxTYDKykk9tW3yjbLt3SRqe72WpH45TSwnbgEipsIiyzOH6
+	b+t9OtuAxcmI3CnRVwgVbJsGLDviCb99WTcflF2iTVbPDZCj9cBHdgY7a
+X-Received: by 2002:a05:6000:400f:b0:371:8f19:bff5 with SMTP id ffacd0b85a97d-37311857877mr11933157f8f.3.1724785463437;
+        Tue, 27 Aug 2024 12:04:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF1i/xHwfH62KeEf74CXSi1HrJpaaxieMRJplttOqZqnN5NHZ0E2WbImpYcSF+/j2WB6c89uQ==
+X-Received: by 2002:a05:6000:400f:b0:371:8f19:bff5 with SMTP id ffacd0b85a97d-37311857877mr11933128f8f.3.1724785462851;
+        Tue, 27 Aug 2024 12:04:22 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c0bb20a5a4sm1305368a12.42.2024.08.27.12.04.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Aug 2024 12:04:22 -0700 (PDT)
+Message-ID: <a0bfd438-6d18-4334-aa79-b35aed43f3c7@redhat.com>
+Date: Tue, 27 Aug 2024 21:04:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS0PR12MB6390:EE_
-X-MS-Office365-Filtering-Correlation-Id: f241634a-b37c-44d6-8aee-08dcc6cacb02
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cEREbHRKMXI2bW1seFpGNEttRFAvOTJOTHZ2OEdrS0ZNL0htbjlua0orK2Q2?=
- =?utf-8?B?Wkxqd2dtTWtRa0pSRmUvSUtZSFlFUnVwMWpzSTVjcHBoV0hveGx0YzYwU2M1?=
- =?utf-8?B?UWFKQnJ0bk12Rzdkamx6TG5EMWpUKzlPVmhuc1BLeXF1MVpXTGxjWW51NjFr?=
- =?utf-8?B?SVFXeUNSM2o3UkZydFZ1OThQK1dyY09vdkZ5MG5MSDljamhzUWtSbUU5eWN0?=
- =?utf-8?B?QVRsQjJraysyZjlMQkxlN1hiNXNUSXY3Umg1Y1RSYW55NFFjYUhQRWlQejlk?=
- =?utf-8?B?SE5nL2NsTlJEc0pIeVdlRStrRHpmeWljcHMvS0FiZFIydG5saTBiNDMxblhy?=
- =?utf-8?B?MkRKSTU3UENNZHZlRk1CRVNZNzg1d2ZnR3F6d0RiOE9Qc0wyQVBZdld3Zllx?=
- =?utf-8?B?ZnloNktJOThIT29vZWJ2WmVwOVl5K29tQVhuV2FsUk84cGRIclJuSThmb1JH?=
- =?utf-8?B?ZzYyaHJSUEt3OXhWc29jUlYrT0J2RnAwVlRNKzBoMlh6UmRRTXdhTHViMXRG?=
- =?utf-8?B?MUpIeTFvcDNpNVk1MFVCakp0YVZlVlJyNm50dXpjSGxTTG9KaGROR2tSMzhI?=
- =?utf-8?B?cElnS3ZzUVMrWTduaG4wYUNWbWRESEVLSDVLYUsybXorYzNQdUNFUUplVC9J?=
- =?utf-8?B?TkRYRC92V2oxeWNvZWZ1bHY2NWt3VFlFTFNJOHFySEYvNnRNdldncTh3bm1i?=
- =?utf-8?B?QnFvbjRBamNsazJlNTBZQ0NjcVhLSHdSa1NWKzArNmkwblR4blplSGJDTVgr?=
- =?utf-8?B?M1c3R2diRWtwZ1NMa2Zxd1E5YnphYURnMUVQQkREbUdHZUVLVUFzaXljNyty?=
- =?utf-8?B?SHVXaWk2TURXUEtWbGQ0QUJpMU03RGZETi9YQmRVWUIwYWpCYk1JQWFidUZZ?=
- =?utf-8?B?ZDNDRzVYeWhkRU40TEFsQS90OCtQRFF5VnV6NmdUL054SFNNbUUwdFpaYkFp?=
- =?utf-8?B?bmlPZUxMQ1pBQzBnUzVhZzZhb09TUTl5YXFtY0JXSHd5VjdiTCtIRlpCUTl6?=
- =?utf-8?B?MnNvbTA1ems2WUVyRVNGdzdpejhtTkdaU0tKdk5QRUZqL2M4bzJlV1VYVjZi?=
- =?utf-8?B?QStDTHBRcG5OeCtaUnB6bUxuMmVKMk96R2FuUlFoeGhKUlVobkNBM3c1dE1L?=
- =?utf-8?B?T240SnFHclZIMU04MGRhRWdRVGFnRUhzOUtNRXV5eVYwdDZFRXJYdXZKZXhv?=
- =?utf-8?B?UndMdzBlMDNwOVBWRWVrWlhFVTFyQ3JDTTZvVzlWSFN3SUxnKzNCVGNKOHBH?=
- =?utf-8?B?cE0xUk4yaC9taXA0NFcvbWVscUxTWFIrcElyYk1HK0xCOXlCcGh3aSt0Qith?=
- =?utf-8?B?MVp6ejhVVDFaVHpwMGVaZ1dWUlM1cXYyRkQ2MVRVMFFmR1BEbDJSbFRCVU5u?=
- =?utf-8?B?c2pidHdLT2FmM0haUUtqZVdFTkpidWdwODEzNkdEbFhiYVoyS1JnTHFuYTYv?=
- =?utf-8?B?Y2EzeGtJaHA3VW9UUWFybnZyb0ZZbnU2djY4cVl3a0VrZm5BQkI0aFNkbkor?=
- =?utf-8?B?Z2NTM3NqRE9aQ0E2UFZwcXJFampRcjJDZ1RncUNTNnZEWUFBK1dPYlpVd1Y4?=
- =?utf-8?B?OUI4L0J1VG9IcmZDQVlHVlp3alpzN2pHQUtSZDg3QmM5Nk5MY3lSQndKTDIx?=
- =?utf-8?B?Q0tkNXVJYk1QN1pFbUxvaG1OUThnYXc4UW0xdmxkOTJNUUw2cXZVd1JjTDd0?=
- =?utf-8?B?RXljTVRtV2x1ZUZNWjhtQTRiV1VkdGxyZWhEN01LaDVkWXRVVThPNk1nSnY3?=
- =?utf-8?B?M1FGS2JFdmhEOTRQVk5OVVF6WlhpQ29OU1FaN25INkRnMitWMm55aWhRUnVF?=
- =?utf-8?B?YW95STlJYXNDSHRiemxkZz09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZTdxblArRjV6aXJoQW4wcTFqQTRmTk9oSWsybnA5TU9NQWVNek9LcmhZbFBU?=
- =?utf-8?B?d2s5d21wTll0SlNlaFZjcXMvZ05SWTNObW5tRThWSFdURWl5RHdqY1ZlK3Jw?=
- =?utf-8?B?cVFFV0tkRXVOWlFTcm04b2l5MnBrSDBlSHpqVkFPUFJEcFkyWDlJaG1Obytt?=
- =?utf-8?B?ZDl2ZG9jc2FXTWlCbnBRc0VMWWZkb0xNWjVPN3NzZFJCOXVDYWpmYzRFcS83?=
- =?utf-8?B?elhUSkZPdTVSRmtXY251SktuTVRXSG1zaUg4MjhDMUFjVHlGSlpjeitIL2ds?=
- =?utf-8?B?WXZDU2JoN29LRWhXcUI1aXVRZjlJU3k5OThFayt5dkp0KzQxSHRmNGxud3J2?=
- =?utf-8?B?QzRpT3ZVUENZSHRSK0hoZmNnejk2bDgwQVcwR1FkSUJXNXlYc0QvVTF0OGRF?=
- =?utf-8?B?OTk1L0lhUkV1VG13SXc1Y0V4am5Rd3Rkb210L0o4OFd0SXVTZXlVdWpQNlNU?=
- =?utf-8?B?TDI3ekxYLzAxUVQ3TWRJY25QbFhMUHB4aDVxMkxYaUZiV2xaZlYwRlVvWFhB?=
- =?utf-8?B?NmdiODREWDR6UlNsMVd5VndzUVlSRURPNGl0TkpvOE1Ub1NKVTRQZXBUOFdz?=
- =?utf-8?B?N0JHd3V0QzJIK1g4Q1M5Yi94ekh5bGNpN3NNd3VqSkh2ejJvMlBscHp2akVE?=
- =?utf-8?B?V042UWZmKzZ6eXUwRy80R0N6ZHZncWh3d01BY01FVmxRVUNFR3RaOXNITlJ5?=
- =?utf-8?B?Ni9vUVRnMHNVU213dWZCbHpMZm9Nd2l6L2VsOE9SNzJtcFhNaFBJSEdqejBo?=
- =?utf-8?B?cjlNcHRuZ2FoQTFZWjBBQWVLdWswZHdHSGVaTkxHbDdmMm9GQ3pOSTFGY3py?=
- =?utf-8?B?OHd3dU5DQzk3bGprNmtLR0tlTXRYWk5TZk1tNUJtaWEybHJjVkpjQWFwUmVX?=
- =?utf-8?B?aitpcGtaaGtCTGhSeVVpVy9aNkNiWWl4QnRPcnUwbXBLQTFFaTVxczZTQjdi?=
- =?utf-8?B?KzZwSHR1SGRVTVRJcHIrNUd5SFNtbStIQ2dROE9uNzBhZXdoREREM2hSVFRj?=
- =?utf-8?B?NWlkenUrVHhMKzNHWVRQMTQ0QTNmRTdKbDIwdEVlYkowKytBTXdLbVJ6WWow?=
- =?utf-8?B?blVEYW1iMDRaN3huaCtlOWZYM0NySDNvSG5jVEFwSUNNTXFhdThpN3BUUFFr?=
- =?utf-8?B?Rkx2c2s2OUF1NGdaYk01dDNVWUd2ZGh1b3hrY2YwY05kRndrY1krZjZSSXFa?=
- =?utf-8?B?QnNkUUlHQUI4RDAwV3dqTW9UL2RmeU5yUHY5aW1sZUlydkRhNXVhdW0wTXpw?=
- =?utf-8?B?MWFUNzRiTGVDOVYvcUtkRWh0UFFhSDJha1l3aWZ2WGdkMnNFM3dFZG5ZdG9Y?=
- =?utf-8?B?WlBKbnBJUkZIeHoxK1ArNWdyd0tpeDN3Ymh3V0tIMG9uWnRrRGdZU1pxbVpy?=
- =?utf-8?B?cVNPMWZaajlQVU5TVUlwSm5rMExTU1UwRjlrNFEraXVnYjdrVStzMjRTUWc4?=
- =?utf-8?B?OW5yL2VzWjdXU2tMSGxDelFrSUFKeGtZUVQyOXM1b2dNWk5WdzFlNnFNV2hx?=
- =?utf-8?B?T0I3TXBJam8rZUZSN2UrNkZ5bkpUVGJnekJJSnNaMGVBZ20xbEc1YWw5QUNr?=
- =?utf-8?B?YzBvbFdZZHhFWVJQaEZuVWRhL3pTSEhxOGgybHBncHhpT1hsTmFvWGk0V3JF?=
- =?utf-8?B?MGlVek9CK1k1eTBZZDcyU2xpK1NNdG12NHpWTkZOZjNZRVZqS2VQUjRYc0sr?=
- =?utf-8?B?a0Z1ZHczUW9rSi9PRXRUWFNpbE1zNzZjYTBHVTFOYXR0L1NrblU4dWRJL0Ry?=
- =?utf-8?B?SDl5c01Ed01wV0x0N3Z3cnhUQXBzMWdHN2tDeGduTE5rU0dyU1pXdUNOcVJH?=
- =?utf-8?B?VVdhYU9QdjZGMG5GNUQ3OXJzdnN6Y2lQMjRqeFlWaGkxWEsvVDBRejJuaFN1?=
- =?utf-8?B?TWp1eGlpZFpMR0ZJZ0x2bWlVMzRGZ05TalBhd1hSZ3J6V0lxMEEwL0E3MXQ0?=
- =?utf-8?B?Ly9CR01qQXJWL2RYVm5kejJ2QWdudzNVZ0NWajY2S0c3N1Z0NWpFdnJ4Tk10?=
- =?utf-8?B?SmlhTVFrcXN4b1NKQnpONDgrUEQ2eUlZZERCQTJsK0pjbzAwbFEwM2NMb0hV?=
- =?utf-8?B?OTg3N2NTbmJDaGp5VnZRZ1d4MElCczMyb2ZrZkxTV3VYRzZndndnYnpOWDFY?=
- =?utf-8?Q?Fh74ka+BWhb79C7644VKLo0q8?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f241634a-b37c-44d6-8aee-08dcc6cacb02
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 19:02:27.2660
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yVbfByu4u8wfEVNsS6o80IUHcDwrvXOVSxdZVaYuMtydZHH22jwyay3GAb0GkaestEGNRUtkSFD+6gk7bU4vGQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6390
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] platform/x86:dell-laptop: Add knobs to change
+ battery charge settings
+To: Andres Salomon <dilinger@queued.net>
+Cc: linux-kernel@vger.kernel.org, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>, =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ platform-driver-x86@vger.kernel.org, Matthew Garrett <mjg59@srcf.ucam.org>,
+ Sebastian Reichel <sre@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ linux-pm@vger.kernel.org, Dell.Client.Kernel@dell.com
+References: <20240820033005.09e03af1@5400>
+ <04d48a7c-cad1-4490-bbcd-ceb332c740bd@redhat.com>
+ <20240827142408.0748911f@5400>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20240827142408.0748911f@5400>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 8/27/2024 11:57, Gautham R. Shenoy wrote:
-> On Mon, Aug 26, 2024 at 04:13:57PM -0500, Mario Limonciello wrote:
->> From: Mario Limonciello <mario.limonciello@amd.com>
+Hi,
+
+On 8/27/24 8:24 PM, Andres Salomon wrote:
+> On Mon, 26 Aug 2024 16:44:35 +0200
+> Hans de Goede <hdegoede@redhat.com> wrote:
+> 
+>> Hi Andres,
 >>
->> Don't take and release the mutex when prefcore isn't present and
->> avoid initialization of variables that will be initially set
->> in the function.
+>> On 8/20/24 9:30 AM, Andres Salomon wrote:
+> [...]
+>>> +
+>>> +static ssize_t charge_type_show(struct device *dev,
+>>> +		struct device_attribute *attr,
+>>> +		char *buf)
+>>> +{
+>>> +	ssize_t count = 0;
+>>> +	int i;
+>>> +
+>>> +	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
+>>> +		bool active;
+>>> +
+>>> +		if (!(battery_supported_modes & BIT(i)))
+>>> +			continue;
+>>> +
+>>> +		active = dell_battery_mode_is_active(battery_modes[i].token);
+>>> +		count += sysfs_emit_at(buf, count, active ? "[%s] " : "%s ",
+>>> +				battery_modes[i].label);
+>>> +	}  
 >>
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> 
->> ---
->>   drivers/cpufreq/amd-pstate.c | 10 +++++-----
->>   1 file changed, 5 insertions(+), 5 deletions(-)
+>> If you look at the way how charge_type is shown by the power_supply_sysfs.c
+>> file which is used for power-supply drivers which directly register
+>> a power-supply themselves rather then extending an existing driver, this
+>> is not the correct format.
 >>
->> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
->> index 75568d0f84623..ed05d7a0add10 100644
->> --- a/drivers/cpufreq/amd-pstate.c
->> +++ b/drivers/cpufreq/amd-pstate.c
->> @@ -798,17 +798,17 @@ static void amd_pstate_update_limits(unsigned int cpu)
->>   	int ret;
->>   	bool highest_perf_changed = false;
->>   
->> -	mutex_lock(&amd_pstate_driver_lock);
->> -	if ((!amd_pstate_prefcore) || (!cpudata->hw_prefcore))
->> -		goto free_cpufreq_put;
->> +	if (!amd_pstate_prefcore)
->> +		return;
+>> drivers/power/supply/power_supply_sysfs.c
+>>
+>> lists charge_type as:
+>>
+>>         POWER_SUPPLY_ENUM_ATTR(CHARGE_TYPE),
+>>
+>> and ENUM type properties use the following for show() :
+>>
+>> 	default:
+>> 		if (ps_attr->text_values_len > 0 &&
+>> 				value.intval < ps_attr->text_values_len && value.intval >= 0) {
+>> 			ret = sysfs_emit(buf, "%s\n", ps_attr->text_values[value.intval]);
+>> 		} else {
+>> 			ret = sysfs_emit(buf, "%d\n", value.intval);
+>> 		}
+>> 	}
+>>
+>> with in this case text_values pointing to:
+>>
+>> static const char * const POWER_SUPPLY_CHARGE_TYPE_TEXT[] = {
+>> 	[POWER_SUPPLY_CHARGE_TYPE_UNKNOWN]	= "Unknown",
+>> 	[POWER_SUPPLY_CHARGE_TYPE_NONE]		= "N/A",
+>> 	[POWER_SUPPLY_CHARGE_TYPE_TRICKLE]	= "Trickle",
+>> 	[POWER_SUPPLY_CHARGE_TYPE_FAST]		= "Fast",
+>> 	[POWER_SUPPLY_CHARGE_TYPE_STANDARD]	= "Standard",
+>> 	[POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE]	= "Adaptive",
+>> 	[POWER_SUPPLY_CHARGE_TYPE_CUSTOM]	= "Custom",
+>> 	[POWER_SUPPLY_CHARGE_TYPE_LONGLIFE]	= "Long Life",
+>> 	[POWER_SUPPLY_CHARGE_TYPE_BYPASS]	= "Bypass",
+>> };
+>>
+>> So value.intval will be within the expected range hitting:
+>>
+>> 			ret = sysfs_emit(buf, "%s\n", ps_attr->text_values[value.intval]);
+>>
+>> IOW instead of outputting something like this:
+>>
+>> Fast [Standard] Long Life
+>>
+>> which is what your show() function does it outputs only
+>> the active value as a string, e.g.:
+>>
+>> Standard
+>>
+>> Yes not being able to see the supported values is annoying I actually
+>> wrote an email about that earlier today:
+>>
+>> https://lore.kernel.org/linux-pm/49993a42-aa91-46bf-acef-4a089db4c2db@redhat.com/
+>>
+>> but we need to make sure that the output is consistent between drivers otherwise
+>> userspace can never know how to use the API, so for charge_type the dell
+>> driver should only output the active type, not all the options.
 > 
-> Looks good to me.
-> 
-> Wondering if it is worth maintaining a static key for
-> amd_pstate_prefcore. Anyway it doesn't change after boot.
+> So should I just wait to make any changes until you hear back in that
+> thread?
 
-As there is a kernel command line option how would you pass the early 
-param parsing result over without a static variable?
+Yes that might be best.
 
+> I'm not overly excited about changing it to use the current
+> charge_type API, given that the only way to get a list of modes that the
+> hardware supports is to try setting them all and seeing what fails.
 > 
-> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> 
-Thanks!
+> I suppose another option is to rename it to charge_types in the dell
+> driver under the assumption that your proposed charge_types API (or
+> something like it) will be added..
 
+Right, if we get a favorable reaction to my charge_types suggestion
+then we can go ahead with the dell-laptop changes using charge_types
+instead of charge_type. I was already thinking along those lines
+myself too.
+
+So if my RFC gets a favorable response lets do that.
+
+In that case you don't even need to send a new version just
+renaming charge_type to charge_types is something which I can do
+while merging this.
+
+>> This reminds me that there was a patch-series to allow battery extension drivers
+>> like this one to actually use the power-supply core code for show()/store()
+>> Thomas IIRC that series was done by you ?  What is the status of that ?
+>>
+>> Also looking at the userspace API parts of this again I wonder
+>> if mapping  BAT_PRI_AC_MODE_TOKEN -> "Trickle" is the right thing do
+>> maybe "Long Life" would be a better match ?  That depends on what the option
+>> actually does under the hood I guess. Is this known ?
+>>
 > 
-> --
-> Thanks and Regards
-> gautham.
+> I originally thought to use Long Life rather than Trickle. We discussed
+> it here:
+> 
+> https://lore.kernel.org/linux-pm/5cfe4c42-a003-4668-8c3a-f18fb6b7fba6@gmx.de/
+> 
+> Based on the existing documentation and the fact that the wilco driver
+> already mapped it, it was decided to stick with the existing precedent
+> of using Trickle.
+
+Ok, I was just wondering if this was discussed already, since it was
+lets stick with "Trickle".
+
+> That said, Armin at first suggested creating a new "Primarily AC" entry.
+> That's personally my favorite option, though I understand if we don't
+> have to have 50 CHARGE_TYPE entries that just slightly different
+> variations. :)
+
+Right.
+
+Regards,
+
+Hans
+
+
 
 
