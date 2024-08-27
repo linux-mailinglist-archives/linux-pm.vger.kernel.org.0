@@ -1,216 +1,272 @@
-Return-Path: <linux-pm+bounces-12969-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12970-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63DAD960E9D
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 16:50:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EB16960F3A
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 16:57:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D511281333
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 14:50:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60E251C2040D
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 14:57:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AEAF1C5792;
-	Tue, 27 Aug 2024 14:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A4291C8228;
+	Tue, 27 Aug 2024 14:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uoaIz2JN"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="h8WiyQwq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6808744C8C;
-	Tue, 27 Aug 2024 14:50:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.81
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724770227; cv=fail; b=Y6clGtpf+QaCcRpNZSa/0iukPLeN3ZGHUpSeOp5CBYJ6iNfQgOjxgFOD+Ng/fzXe++MOt6afmuSCxKgUkhplwsUDhhGiFz1Z3BMFqoipoQ0i8XgHHyDO1ymgDZGRCtrk1OszMNKGNCSeir/I0ISQ05yBm7Rss9Iu/2ac3M4R21M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724770227; c=relaxed/simple;
-	bh=k0El7fquPEdevqQbx8RTDKX5HeIG/IwDLjg53YqqisE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Kzzmt6yriF6yvMmOAVDMmhLJ6F7QYABIDdtxTpEq4+Zgg/KycTKjEZ/i+2YwFHoyca2M1ZsKg+3qspX3PSq/o1JyRCLNAZxWcOQ9pToJj/CYfVM2LTwfzptK2korcnKCSY0hKW+FWGfOcCv1bgzG6DhCSbnXQqhC0l1OgYY4ibg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=uoaIz2JN; arc=fail smtp.client-ip=40.107.94.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sOBjpwNjXkdJvh4X7xZIHennROAnb5IHImNYf1qL/nSDG/s0NvSsZPbQMlT79MEdTdMvzFFU/iOvbGpbTVZeYNz5NMed4EwL9kYcv9mkve1C60hyKhjHgz5gMbkvtC6J0bZU268fwqIfAIdupGaFi6Gud0/6VCeKf1aFOrAf7yanUYMfFpIJIYcTCzbyy1EyG7u8kItKdwukY2+0ND/1Dp1sRrq3WdosBUVDw+pMCdw1qkzrDBn7eCM2JPZtc0+um2jb2Cu2tNaDAlX2qUKsMpt5Qpp2sLF/p7dun5nqy/C2qhtXP9ho58cGR0dlxQwgj7MS1ElcPAmqNIbksUUOdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NAcNLjsHIcAUvU3Jbi5+H6mtk6CtHiXYslu0lgQkMYI=;
- b=WnDnRyoaqkbiUzRLDSZXv3Cxj8qJ99IW3UigcQFx7D3J2u6tShrvAKv3vY8xKZ8BFARXb2vIJ4S2JPi2qv+P+TEgSWZnqshwg+JhddCll2J1n8fvWQmLn6wsHaWWEixDnsDR7LfftZKY2eiRWEDJNy40oGtFYxjd3G0+UbRNe2Qiy3KSpZUDL2XtPqPs56m76xtriPu7mdpF1E1BXz42gnnaiIINqhij5cqmkVXMiM7ojyQ4vbulmRyktL73HcOZDv7K4P9gKMjHnRp0zKv4PB4T72fDZinusarRzeTIQe+sDfTTltxYE4ZPaDf/ObmYRU43dHl4/m/lPyopoBVFAg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NAcNLjsHIcAUvU3Jbi5+H6mtk6CtHiXYslu0lgQkMYI=;
- b=uoaIz2JNS4ASxFmELYtKT6N6JU8oN5k7BwzLT52b9wDnEeb33K14VZ6iwPPALADdIY1lAH34tK4X2iCdg/TrZXGO3zi66Td8Vu54Xghw8FlLpf8ytUtbOkm5LMKi03THyEHBNv1nIZC7NTDtFNdn/RSrkbZNUeDMj6Aa9dJe1FI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
- DS0PR12MB8786.namprd12.prod.outlook.com (2603:10b6:8:149::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7897.25; Tue, 27 Aug 2024 14:50:24 +0000
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7%4]) with mapi id 15.20.7897.021; Tue, 27 Aug 2024
- 14:50:24 +0000
-Date: Tue, 27 Aug 2024 20:20:15 +0530
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>, Perry Yuan <perry.yuan@amd.com>,
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	"open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
-	"open list:ACPI" <linux-acpi@vger.kernel.org>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH 3/8] ACPI: CPPC: Adjust debug messages in
- amd_set_max_freq_ratio() to warn
-Message-ID: <Zs3np8AeARzbMVSB@BLRRASHENOY1.amd.com>
-References: <20240826211358.2694603-1-superm1@kernel.org>
- <20240826211358.2694603-4-superm1@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240826211358.2694603-4-superm1@kernel.org>
-X-ClientProxiedBy: PN3PR01CA0108.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:9b::12) To DS7PR12MB8252.namprd12.prod.outlook.com
- (2603:10b6:8:ee::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393021C4603
+	for <linux-pm@vger.kernel.org>; Tue, 27 Aug 2024 14:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724770555; cv=none; b=HitSnyMvgqRX/kbz5SQ9Q90fMicI6qxDleZtMuqeSAHJ5o+qdmnAZwetcNRILNpPOVP7sn4v7Cw8d4gbvgSYG0MAyiir1w+DU0U++ROZM7Genx4cpMointmkyWcA4SmUpguq5whiiFFP/lTZNfo7FgTQZaiT6a6A7AsZbS8vkSc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724770555; c=relaxed/simple;
+	bh=Sl+lytS7Zu8gwWxTTu3Xk5khSwchZ0woG+J3IHzbO8k=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=BUDt17LCKPkClvTI2anhwfyNosGfrF6hwqkqfIMiEWCiswKNWDIdVScd+PV/9lYlUjHZke2MKe8OWNsmpasYCNa/Dt2Q6qHIPlvXHsusRKHeaqtQFr8jKNcMxZ2Keaknd0Oc5h7jd+CybZ8IkM1MU6GrRLA7aJ26+X3vsSpXb9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=h8WiyQwq; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-71433096e89so4777154b3a.3
+        for <linux-pm@vger.kernel.org>; Tue, 27 Aug 2024 07:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1724770552; x=1725375352; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=M6lqQLYS8kbINmgyJCP6HJciLMoj/lpAyiYBmtYy9eI=;
+        b=h8WiyQwqHPY3hXI+IrWaLULp4w5s0xKwbvmtkv5aHxo34utPnFpWXGPHSacBUaMyh2
+         gpma9Cwoks8VSTo8jdUeOWf/VgryRQdQF0HUgS8EDXdy+aRZgwC1Xkh1Ey5xDZFH2Pkx
+         gVipYz64S5BHXyhph2V005NJLw10cITz1cD/dIDJT5TG1ilEppcqU1oSuHPwquIRbL5l
+         +4lyngireFJpZtHLr3i0mVW7oGkWrTIfwA3R/lAoL+U3VnuIGiXXDWYtjbKxs02uu8GW
+         ANexIRLGSmJBu6pvSW66qga+/BiZfykucBNpja53cLwZE3dA33YlvN7Xwu5Oq78lXX68
+         EbDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724770552; x=1725375352;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M6lqQLYS8kbINmgyJCP6HJciLMoj/lpAyiYBmtYy9eI=;
+        b=rWxRcD6QTSuBL0c1lcVkfeJUlGG3W4HwSFulDUnvBD0TYMCzBRpshNcZ5unx+KhwZv
+         ob7u/+u8EqnBGSDqizpeiD/uKpC6xJwA4N9yqsljdjc0G0wiJ0ZniMOjLFVG+7TDER6b
+         nzuSiL9wG4E3lezjIulJ6FmYtf5QxmXoDo4GcenlRRaGVjsVps0UGQDAGVp2nmQU/NIw
+         dj0Fvi8JU7VN5nIprsnD+JRSe820GYJawSy5W6xDxib0JccOYxCoamFhAXORCCH0LLSA
+         NsPqzk7X3EK6jfkkXKyuGnolNGXYILattpRWcoJsd6L5rVdbBpMNpAZ+jGDEWfJO9Tuq
+         KpCw==
+X-Forwarded-Encrypted: i=1; AJvYcCVrD5cCKSWVLPQkQ39TdkxD2petwXDWpIRKPR0xFZms8/of111mEwhcAYuUhuIjNZl6Ywx3rE8UaQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1z3LiIMJgULiimrDh2rbtlP190YU1HqRjuW6GLB7vz83X3rwu
+	9UDgUA6aWF/uTZmxES6IM+4UoiS8FwrgxyAP+1f5LhtC483Xb62z91UK2BP/enY=
+X-Google-Smtp-Source: AGHT+IHKYtDDEl7YQweNtch2nyYOO3TpTilWzAypFBcyJysRfbuPFH5utg0VLKV5+h7XOOgNdfh4tA==
+X-Received: by 2002:a05:6a00:928c:b0:70e:a524:6490 with SMTP id d2e1a72fcca58-715bff5686fmr3815859b3a.1.1724770552356;
+        Tue, 27 Aug 2024 07:55:52 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-714342540a7sm8633248b3a.83.2024.08.27.07.55.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2024 07:55:51 -0700 (PDT)
+Message-ID: <66cde8f7.050a0220.3216db.15aa@mx.google.com>
+Date: Tue, 27 Aug 2024 07:55:51 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|DS0PR12MB8786:EE_
-X-MS-Office365-Filtering-Correlation-Id: f246928b-d77b-43e2-0724-08dcc6a794ca
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?UPgmXQjQ/6i+QITo/4LxMd6XgbrTcG7Z3nnVwl8RA/uBvj7LO9B0H/iY8qfh?=
- =?us-ascii?Q?Tm57ipj8evvyVYyLv57kt5ndUu7UXA48G/xgRk3k6lUGrBRh4/SEXwM4OvBb?=
- =?us-ascii?Q?PeRbC+hFnUU3OORd+X8pmADf5nCUU/S0nCDqLoGFToq2xy4bhLVvD1MGrkEh?=
- =?us-ascii?Q?wH99tzqDNq4VnOh0U9ezGMFOWPUIE9ZyHkcLhtDlj4aLborg+lcjf+D0Ii/Y?=
- =?us-ascii?Q?+t01ocus5TnuTx55ZmmCIy4UBZ+djH/3nekpUACQOrx4HHDwt3QU0FGT8zvZ?=
- =?us-ascii?Q?zEcOXssUYgWgGd2e+N11NKM5TtLS/Ijz1Zo403KfqWBv57sPt8PKgMYa7UUL?=
- =?us-ascii?Q?jnwwBdfvyGSiKueFBgOslyoRKvOTUtvtF0dSwblhRv9w9XaCCGAqQVinK/u8?=
- =?us-ascii?Q?tA5qVHjeALfaH5W3Oh1RQd9yw1jzV9akhKSM7mOohUFGyoNVewv9tO5Mg6wm?=
- =?us-ascii?Q?S5Hn2fjg+lTks99qD3WDFjwaD1eGYCt58kxo4CT+8SyM2fmntGd3BPr0LNRy?=
- =?us-ascii?Q?YSU0L3moG5RgH9gO/ZQJRDRDTX2fZulXNRRbtuun7YISmANsRmR+KxvG9RQy?=
- =?us-ascii?Q?K3fl4Zyv/t6rn4q2VGBoiDsODV8QLrKAf4zv0AilBExZA86CJB2yGIqLW4X6?=
- =?us-ascii?Q?jIpqX2CJTJ2+vjbpLLCypRGSk0ScK9jmOnNCRXzvOTaOm8Gpw+aCGmrfTdr9?=
- =?us-ascii?Q?mFZkln684LOGW+xTDGVeIspPks695sk2EeYLB0JsIMDiyOOXSibZ054sUduH?=
- =?us-ascii?Q?gTEz3ELxdzBSRZA937jAWYhEBzZRDnv0L7kTTBdKFjSG0h9L8nYQi6OTd3LE?=
- =?us-ascii?Q?vn5E8rFUGDZSFlHDOS4dFNGIJOhfLDVtTN91pmXtPwCWtt7zn16FNbrs8bIb?=
- =?us-ascii?Q?UqC9XtpkHsTdPXKV4n37pCMLw9peEEvphoSMjZwD8y8kxRSyWcMaYLz+d0iZ?=
- =?us-ascii?Q?ccOiCUMaHjG0A8zjymMxpdEOrZDVz2dtLPA/A162R9IrCIYO6tq1lwjGSl06?=
- =?us-ascii?Q?zPXfPJfdQKXlF4hRBaum/cwy5kMJjHOd5dpmDFhpQc5eBMuKvly7N8CtQfXn?=
- =?us-ascii?Q?P4ph7nmf7R5Mic3ynl86/yL0uxyGZyC6p/65rw7ZiG8B3gB1jDdkdUhTjuZP?=
- =?us-ascii?Q?Af9O3wxDQ+oUo8N0rqgWG0b+af2vrD6JlZPo2N7Mz/Fmgq/ELp8c/ONrY0So?=
- =?us-ascii?Q?XGxbCYNKCcEZdjiEBWCfTIiuP6ZvryqaW5kHvrFNlx0o1yc1ZdyjKn0L+B91?=
- =?us-ascii?Q?lnihCVgakou5PONKFHUKLM5qee3D+olLRLTjE7sgPwtn8LMQPK305VghGG2Q?=
- =?us-ascii?Q?AeIhuXaW3EfhcmMf74gUoZcd4oa8fXxB9XgFE+Yma7e7FQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?1RcZq3geMDlIeNXTWhEcuIrquTL9eEMi+mmPoscqHdRLvk4sdOxi/C3FZWXv?=
- =?us-ascii?Q?EQkpcmbf/55R6xAl3omK70g3J4PgcWw3H0YhQbNN0C0azJC/iAy2YvMSRipr?=
- =?us-ascii?Q?mIpBJE+rqcCAAZbPIZmQ6QihYtxTzyrBm3L8mrNgm9ZLyLmTmBt7Ij+d5Ny8?=
- =?us-ascii?Q?ilWcQXXWUWeDJJ+DYs/4soWxC9BJm5YVzmSNKj6AP2Yi6GFgcmUdLXwGZOU8?=
- =?us-ascii?Q?177GkIF3pWhPa5/oxY56rGxIas3m7bYPtfCci6OOCorJDFHjlQymqt99SAqQ?=
- =?us-ascii?Q?ThFCgeu3ZBFIWt+0pniKyDKYxldb/f926J/MA68qYXCSVGSwi8uELo2LKjJb?=
- =?us-ascii?Q?Y0dnk6mMpH4KkjItrIdzWaaM4n5FKJ/ZnHxxZ6iJcnvrGzl9I0oN1rO8IuNM?=
- =?us-ascii?Q?P386W+YslXH0GQIc0uPUJnV7wRJOHoIQfSjyOueAPIr/7REoftP9Mc+cFiDY?=
- =?us-ascii?Q?EmVhring9sffPYPmj8JcMzDd9u6yxogn2y5wDXVp3ljq8bH5ruEb/mDP+Szz?=
- =?us-ascii?Q?klQSjpUt5MpyoFFkGyfw4MTQ2AevV6HkXvE8aCCBLFzGUp+tjUO21QuvlB2U?=
- =?us-ascii?Q?rRd68GXI43R33a7TMDZ4xqU/IXvuVH6Re7Y2Gfd7NcJ0RVeu+cppAZkeyn4Q?=
- =?us-ascii?Q?Ili97IbVEGxNKNnwF8KWvvyCJt7xptfRtJwkVwaiJTO1/P6/Uxt0Ia2dIM49?=
- =?us-ascii?Q?/zSYIX1tw+qHDxFENI6ekzQDSCPy8GneHWOjamazvnhvB6Iyxbu/4Psae5HA?=
- =?us-ascii?Q?Vv/ZD4SDs1T35oicpPz7ln6d/vxKdDOhixItK/LwmDkBThM7JwY7edIGpoG1?=
- =?us-ascii?Q?++3PsfNwEq3zrkymNNm97qaV2q/plHy86y6IBrUQ2OmXPHcxx8NGZZ7GCHcs?=
- =?us-ascii?Q?rnacrYLmZVhfDG4/kHlaydd7RP6Yru+m+ckVk7pETg715vacQTuKt5Q7trww?=
- =?us-ascii?Q?p0J4k2l4U/bfZSbGmw6Ip0uVF8XuH5peqBdhWDyiOkHok/9s4yVqX+aoLBRj?=
- =?us-ascii?Q?pllD36NPCIfinqK2JyWnsz6iL4ZTyKe5Wee9moqCjFj6KRPMFh0vgDLACB+y?=
- =?us-ascii?Q?NUC5opcInk5et7JhyaBSc14sdqKookNJjWsNTZblj4opZxI23hVfIJ+4LGHZ?=
- =?us-ascii?Q?9P/dmBUEckK5aVTWpq2vceqKDsyw8ZhVd74I7Cw5T5nRI/Teu0iPYsyyKibg?=
- =?us-ascii?Q?hhhXFCoe2RMhUD3giPkX0/8/uOyoyaNua+KJRMSJlfpMOCxEdZdKSF30Ro98?=
- =?us-ascii?Q?GrtZN8EPxZgkhII8Da5FEDUnNiBkjsomdo5JC5rAI1SiVPY4KYc2HKpQ27kE?=
- =?us-ascii?Q?WCtcdBuvHT4TsCH6dYOIPXqlkkizSaHfHEDfTzz5Ecb8RLupjhiwk76YNZbx?=
- =?us-ascii?Q?VF6ljXteQEY/2n6loxhzIKuvDiDidMf+Ry9aoJlCWHGqzQdJb9deKNVRGYIF?=
- =?us-ascii?Q?OEvShEuBn6o/wntd99xBlusJvrg54lkYJY2yRrcU4tGy/sQDKtJ1c2bJNFk8?=
- =?us-ascii?Q?xQP5pDv7CyxDl0Ehsuf3HObJjc4BcgyIbc/YitfgP1lUkRGc5ZMU0O2X3BFW?=
- =?us-ascii?Q?SON792LtIJ79xo7eRZf47hIncR7V+LBejhAVfo18?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f246928b-d77b-43e2-0724-08dcc6a794ca
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 14:50:24.1432
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M1z99cX/Ti758sQ8VIFd5tcJjYs45lxA6yr/MSKa5yqu0orrkvAkWdgR5bqFIiZS334MgRZ8JbwPleKVpA8/kg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8786
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.11-rc5-64-g653eb0ff905f6
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 23 warnings (v6.11-rc5-64-g653eb0ff905f6)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Mon, Aug 26, 2024 at 04:13:53PM -0500, Mario Limonciello wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> If the boost ratio isn't calculated properly for the system for any
-> reason this can cause other problems that are non-obvious.
-> 
-> Raise all messages to warn instead.
-> 
-> Suggested-by: Perry Yuan <Perry.Yuan@amd.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  arch/x86/kernel/acpi/cppc.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/acpi/cppc.c b/arch/x86/kernel/acpi/cppc.c
-> index 1d631ac5ec328..e94507110ca24 100644
-> --- a/arch/x86/kernel/acpi/cppc.c
-> +++ b/arch/x86/kernel/acpi/cppc.c
-> @@ -75,17 +75,17 @@ static void amd_set_max_freq_ratio(void)
->  
->  	rc = cppc_get_perf_caps(0, &perf_caps);
->  	if (rc) {
-> -		pr_debug("Could not retrieve perf counters (%d)\n", rc);
-> +		pr_warn("Could not retrieve perf counters (%d)\n", rc);
->  		return;
->  	}
->  
->  	rc = amd_get_boost_ratio_numerator(0, &highest_perf);
->  	if (rc)
-> -		pr_debug("Could not retrieve highest performance\n");
-> +		pr_warn("Could not retrieve highest performance\n");
->  	nominal_perf = perf_caps.nominal_perf;
->  
->  	if (!nominal_perf) {
-> -		pr_debug("Could not retrieve nominal performance\n");
-> +		pr_warn("Could not retrieve nominal performance\n");
->  		return;
->  	}
->  
-> @@ -93,7 +93,7 @@ static void amd_set_max_freq_ratio(void)
->  	/* midpoint between max_boost and max_P */
->  	perf_ratio = (perf_ratio + SCHED_CAPACITY_SCALE) >> 1;
->  	if (!perf_ratio) {
-> -		pr_debug("Non-zero highest/nominal perf values led to a 0 ratio\n");
-> +		pr_warn("Non-zero highest/nominal perf values led to a 0 ratio\n");
->  		return;
+pm/testing build: 8 builds: 0 failed, 8 passed, 23 warnings (v6.11-rc5-64-g=
+653eb0ff905f6)
 
-Aside:
-perf_ratio is a u64, and SCHED_CAPACITY_SCALE is (1L << 10). Thus, is
-it even possible to have !perf_ratio?
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+11-rc5-64-g653eb0ff905f6/
 
-Otherwise, I am ok with this promotion of pr_debug to pr_warn.
+Tree: pm
+Branch: testing
+Git Describe: v6.11-rc5-64-g653eb0ff905f6
+Git Commit: 653eb0ff905f61695029787e61e69be88ad6ccab
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+Warnings Detected:
 
---
-Thanks and Regards
-gautham.
+arc:
+    haps_hs_smp_defconfig (gcc-12): 2 warnings
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-12): 3 warnings
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-12): 18 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    kernel/fork.c:3091:2: warning: #warning clone3() entry point is mi=
+ssing, please fix [-Wcpp]
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    3091 | #warning clone3() entry point is missing, please fix
+    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o:=
+ missing .note.GNU-stack section implies executable stack
+    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missin=
+g .note.GNU-stack section implies executable stack
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
+ls' found, but node is not an interrupt provider
+    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
+ is not an interrupt provider
+    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
+rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
+ provider
+    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
+ot an interrupt provider
+    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
+ound, but node is not an interrupt provider
+    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 18 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
+te.GNU-stack section implies executable stack
+    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
+ing .note.GNU-stack section implies executable stack
+    kernel/fork.c:3091:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3091 | #warning clone3() entry point is missing, please fix
+    kernel/fork.c:3091:2: warning: #warning clone3() entry point is missing=
+, please fix [-Wcpp]
+    3091 | #warning clone3() entry point is missing, please fix
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 
