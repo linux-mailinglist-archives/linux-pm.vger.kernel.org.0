@@ -1,52 +1,44 @@
-Return-Path: <linux-pm+bounces-12982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12980-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85E419613F2
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 18:25:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5717D9613ED
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 18:25:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41DC3284AB6
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 16:25:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB65B1F245CF
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 16:25:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F2451CDA32;
-	Tue, 27 Aug 2024 16:25:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBED41CBE8F;
+	Tue, 27 Aug 2024 16:25:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D261C7B6F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24F6481CD;
 	Tue, 27 Aug 2024 16:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724775933; cv=none; b=MuOSUTRD4Ppq7aTYaZQ8O87sT+qDD/QGYf1XV/ooF6qZ0hwLOsqceZ8Ufb/X1pYXDYyfdgCyTZPMy6V36PODBIdBMv6UlcGi6UqwL0R49ENt5RNL78rtj/iH4tyhDLotBy4lUyc7UQQGPUqiVnn70wXS8Cv+7g6nip6w8zsbrjQ=
+	t=1724775933; cv=none; b=MbwCk/4eT9jpuE7sc4tX8DZ7M8x3iW3Ak+Eo+xWrM75wPXz6J8ZTtbOsnxDrfEEo8Bbw+hVLE/urjlCjGTGXedrTtmPsLExhT6QAvPKtoxeWAoork0ZzutOc5JqUAz3/tXNCNx/oHna5cRlnNuYmQXai5dHMUH9aGDZt0bkTzxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1724775933; c=relaxed/simple;
-	bh=KAp4JjBV/i2vUfDdcuS9arjrIYL8u1wNNy7Y+gvZPwE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=DyMYzBdviGQyM+5lXhfQGzlE7ZDbMp0D4eeLRVclg40XFD2w+33P0NCOCuH+ia4eMnQkGH6kNs8t9K83n+xSQ1heTg4bb+F/mb+IDKiYHeNmtOwBTR9DrasB8Kw1je1ZTQwnucYKn497WgkEfKgkgABJSdUCfhMEfwqhWS1uL2A=
+	bh=4F2tol9y9eYw43ntC//87m+C1GKsivtXS88fE4HJ/cY=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=tVqOIUm616GQors59tsJ2b3/kHKUz6jyRTNmBTdsZn7vZr3uu0E0Gk8O2zi1bHQs7/wPc0OhwemdbUkLOzZ8KHOPBCEYNimaysW9foWZPL0bubpgGtAFiry0COcdyy6FyebGN60e2aH81+uWDPgm01ikA27MsxSD4bGOIwGZ03Y=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87644C8B7B3;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A744C8B7C2;
 	Tue, 27 Aug 2024 16:25:33 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 4BE03106053B; Tue, 27 Aug 2024 18:25:31 +0200 (CEST)
+	id 357391060501; Tue, 27 Aug 2024 18:25:31 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: linux-sunxi@lists.linux.dev, Chris Morgan <macroalpha82@gmail.com>
-Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-iio@vger.kernel.org, 
- quentin.schulz@free-electrons.com, mripard@kernel.org, 
- tgamblin@baylibre.com, aidanmacdonald.0x0@gmail.com, 
- u.kleine-koenig@pengutronix.de, lee@kernel.org, samuel@sholland.org, 
- jernej.skrabec@gmail.com, sre@kernel.org, wens@csie.org, 
- conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de, 
- jic23@kernel.org, jonathan.cameron@huawei.com, 
- Chris Morgan <macromorgan@hotmail.com>
-In-Reply-To: <20240821215456.962564-1-macroalpha82@gmail.com>
-References: <20240821215456.962564-1-macroalpha82@gmail.com>
-Subject: Re: (subset) [PATCH V4 00/15] Add Battery and USB Supply for
- AXP717
-Message-Id: <172477593130.353499.14090062100249712137.b4-ty@collabora.com>
+To: sre@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <20240819040831.2801543-1-ruanjinjie@huawei.com>
+References: <20240819040831.2801543-1-ruanjinjie@huawei.com>
+Subject: Re: [PATCH -next] power: supply: max8998_charger: Fix module
+ autoloading
+Message-Id: <172477593120.353499.1390821900975624059.b4-ty@collabora.com>
 Date: Tue, 27 Aug 2024 18:25:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -59,30 +51,16 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.1
 
 
-On Wed, 21 Aug 2024 16:54:41 -0500, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
+On Mon, 19 Aug 2024 12:08:31 +0800, Jinjie Ruan wrote:
+> Add MODULE_DEVICE_TABLE(), so modules could be properly autoloaded
+> based on the alias from of_device_id table.
 > 
-> Add support for monitoring the USB charger and battery charger on the
-> AXP717 PMIC. This required some driver refactoring of the axp20x USB
-> and battery charger as the AXP717 is somewhat different but can still
-> benefit from some common elements.
 > 
-> [...]
 
 Applied, thanks!
 
-[02/15] power: supply: axp20x_battery: Remove design from min and max voltage
-        commit: 61978807b00f8a1817b0e5580981af1cd2f428a5
-[03/15] power: supply: axp20x_battery: Make iio and battery config per device
-        commit: db97fecb55cee4eed2f8dcdc17c4831719cbfe4d
-[04/15] power: supply: axp20x_usb_power: Make VBUS and IIO config per device
-        commit: ae640fc690353f6181740b50a0d6761bc67ebaa9
-[05/15] dt-bindings: power: supply: axp20x: Add input-current-limit-microamp
-        commit: 6f5cdb7ec8836bb5e5ab221c2f49e2b170d5a978
-[06/15] power: supply: axp20x_usb_power: add input-current-limit-microamp
-        commit: 6934da720aac7b0feb99d08ff27fd245a962d8d2
-[07/15] dt-bindings: power: supply: axp20x-battery: Add monitored-battery
-        commit: dc123a1a80933b7fba1cf53cec77c2425268ff85
+[1/1] power: supply: max8998_charger: Fix module autoloading
+      commit: 7b2e5b9f1d5ea84802ae5ff531ae1739acd97c54
 
 Best regards,
 -- 
