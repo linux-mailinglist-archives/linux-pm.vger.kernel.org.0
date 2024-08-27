@@ -1,272 +1,268 @@
-Return-Path: <linux-pm+bounces-12970-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12971-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EB16960F3A
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 16:57:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16F39960F91
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 17:00:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60E251C2040D
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 14:57:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2E012848F6
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 15:00:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A4291C8228;
-	Tue, 27 Aug 2024 14:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DFE11C7B7B;
+	Tue, 27 Aug 2024 14:59:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="h8WiyQwq"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GpuWg140"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2048.outbound.protection.outlook.com [40.107.93.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393021C4603
-	for <linux-pm@vger.kernel.org>; Tue, 27 Aug 2024 14:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724770555; cv=none; b=HitSnyMvgqRX/kbz5SQ9Q90fMicI6qxDleZtMuqeSAHJ5o+qdmnAZwetcNRILNpPOVP7sn4v7Cw8d4gbvgSYG0MAyiir1w+DU0U++ROZM7Genx4cpMointmkyWcA4SmUpguq5whiiFFP/lTZNfo7FgTQZaiT6a6A7AsZbS8vkSc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724770555; c=relaxed/simple;
-	bh=Sl+lytS7Zu8gwWxTTu3Xk5khSwchZ0woG+J3IHzbO8k=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=BUDt17LCKPkClvTI2anhwfyNosGfrF6hwqkqfIMiEWCiswKNWDIdVScd+PV/9lYlUjHZke2MKe8OWNsmpasYCNa/Dt2Q6qHIPlvXHsusRKHeaqtQFr8jKNcMxZ2Keaknd0Oc5h7jd+CybZ8IkM1MU6GrRLA7aJ26+X3vsSpXb9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=h8WiyQwq; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-71433096e89so4777154b3a.3
-        for <linux-pm@vger.kernel.org>; Tue, 27 Aug 2024 07:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1724770552; x=1725375352; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=M6lqQLYS8kbINmgyJCP6HJciLMoj/lpAyiYBmtYy9eI=;
-        b=h8WiyQwqHPY3hXI+IrWaLULp4w5s0xKwbvmtkv5aHxo34utPnFpWXGPHSacBUaMyh2
-         gpma9Cwoks8VSTo8jdUeOWf/VgryRQdQF0HUgS8EDXdy+aRZgwC1Xkh1Ey5xDZFH2Pkx
-         gVipYz64S5BHXyhph2V005NJLw10cITz1cD/dIDJT5TG1ilEppcqU1oSuHPwquIRbL5l
-         +4lyngireFJpZtHLr3i0mVW7oGkWrTIfwA3R/lAoL+U3VnuIGiXXDWYtjbKxs02uu8GW
-         ANexIRLGSmJBu6pvSW66qga+/BiZfykucBNpja53cLwZE3dA33YlvN7Xwu5Oq78lXX68
-         EbDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724770552; x=1725375352;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M6lqQLYS8kbINmgyJCP6HJciLMoj/lpAyiYBmtYy9eI=;
-        b=rWxRcD6QTSuBL0c1lcVkfeJUlGG3W4HwSFulDUnvBD0TYMCzBRpshNcZ5unx+KhwZv
-         ob7u/+u8EqnBGSDqizpeiD/uKpC6xJwA4N9yqsljdjc0G0wiJ0ZniMOjLFVG+7TDER6b
-         nzuSiL9wG4E3lezjIulJ6FmYtf5QxmXoDo4GcenlRRaGVjsVps0UGQDAGVp2nmQU/NIw
-         dj0Fvi8JU7VN5nIprsnD+JRSe820GYJawSy5W6xDxib0JccOYxCoamFhAXORCCH0LLSA
-         NsPqzk7X3EK6jfkkXKyuGnolNGXYILattpRWcoJsd6L5rVdbBpMNpAZ+jGDEWfJO9Tuq
-         KpCw==
-X-Forwarded-Encrypted: i=1; AJvYcCVrD5cCKSWVLPQkQ39TdkxD2petwXDWpIRKPR0xFZms8/of111mEwhcAYuUhuIjNZl6Ywx3rE8UaQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1z3LiIMJgULiimrDh2rbtlP190YU1HqRjuW6GLB7vz83X3rwu
-	9UDgUA6aWF/uTZmxES6IM+4UoiS8FwrgxyAP+1f5LhtC483Xb62z91UK2BP/enY=
-X-Google-Smtp-Source: AGHT+IHKYtDDEl7YQweNtch2nyYOO3TpTilWzAypFBcyJysRfbuPFH5utg0VLKV5+h7XOOgNdfh4tA==
-X-Received: by 2002:a05:6a00:928c:b0:70e:a524:6490 with SMTP id d2e1a72fcca58-715bff5686fmr3815859b3a.1.1724770552356;
-        Tue, 27 Aug 2024 07:55:52 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-714342540a7sm8633248b3a.83.2024.08.27.07.55.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2024 07:55:51 -0700 (PDT)
-Message-ID: <66cde8f7.050a0220.3216db.15aa@mx.google.com>
-Date: Tue, 27 Aug 2024 07:55:51 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE331E487;
+	Tue, 27 Aug 2024 14:59:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724770768; cv=fail; b=SLzxfv3ej++gZbE19GAzXp1W0U3slJcwhCeYLicoImZ8JJArbF0Nnx8EuFH0us3fPNEOo/LIs1JcGR2DhxrCVPEz2EwuLHkvIXCTErb3A/dNA944R9aLcZ5bECfudWpD2nznk+l5ioAjPrR04DuO3LBkfGUWm+QtDLfa1C88Ek4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724770768; c=relaxed/simple;
+	bh=Bft9i+I74jA7+ciXtbmRBrc23Xvq8qP47FwhiCuoE8I=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=QjHD/IoH2RZXp5UfbB1rReHYpm0Cgaa3p3nen4eaJuGBidd25iJbqpUc3LoeepnLlFdfS438x1APR5d3OAl63fvqpaulWcXAtBKs7cPoyqbnHFoGqbbmLGQkt3XODxVgZvQQswXfvDYD3wcEfUByZfojLFnsLHfpdod6WnnxbgI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GpuWg140; arc=fail smtp.client-ip=40.107.93.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TK5/SlHHTj1jAwde/zVmjT5HoYOm8rbFGadSpCzt/jNTuRJN7kqODmFnBm/tvbzyA9TEzhVfKY3GOFXOks4tOvUWPQ0XaMtFh6YAZ9PP5ed7Z2fNIYSN9p8vKeCvBA/cbUsiAMJHlshtXn4OKVYdivgTnqlDOYw3VMUiaCecWyQ/cESrg7ZnyQ4m+UO5iXE8yk1NLRI8lvhT/MVM80QzWi+Qk7A3CZvNNOKwyxA9IufZgbyJoeH8tZslGwr23J/O7DZsvI8CMUZs7i0Xuy4N5DrrublTXHwerBDvT/DtEETLtkvYlhpEHGPiXy5Awxjx8k9q0fDyUrzZFtCdhdK3Rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=adv9YwmDO0wpQBdj1mbs0GLC37UH1DW4pFxpOVXbEIg=;
+ b=XLYaPGJwQSgWe6DCQLUVHCpiN7mL52dbXtn3PAKtpovWaRO7M6Atq09r66eDOJLwNxQD/IroA4+nBD6jaDhFnbsmE0SetBg/xjX7VnhpC37v9QCHNZhcyetpYHSGvjp9fx146mluNAmkEpQndIb0erYbsE0e0gkzbbcOhgfdZRWB/pFWIs9FJbC84WkVPnRZIS8p6zumzy/lbeeCAn4QqhIL57WZA+TBRj/KKnFtzMneAcUr/EWuAJgsa5PhT84l+wXDBWgvo33vlC8HoPsCeUlv3pVwoT41Jx7alZUFaURO0e/KGCbJ5itgyPoQgDZC3CaKMcLVRqwk7HT2SuBGTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=adv9YwmDO0wpQBdj1mbs0GLC37UH1DW4pFxpOVXbEIg=;
+ b=GpuWg140qN0qn3d0qO8sX/IzPziqN/c4eQYA3ehPj3hwuU+DkyEBzO0PHefcqRCLhRhhBNw7DZO0Wl1QcReL7hVG1Hx/qB4Ma8WX/knUmwcm9jbZeotR56Se35cGU/Rc0APZh7tVlVKHLKZ8g/xIRBFQXgrysQ4VMzwUCiXeYFlYMiAaNQ8DEfzDHz1q8i+MBe80pasBaIsyoZKy5psCFGz/NgmuRVwX2eOV2OLFhaYsi6YMvkkCddtaujkDGjPHrqPZH9MJOQKvfhkIvinmI15C5GE3MqEwI39/UOYdFTo83X591MITYcTpvlpi4Jq1yQpNRavjnosCYGeKZ8vm1Q==
+Received: from CH3PR12MB7738.namprd12.prod.outlook.com (2603:10b6:610:14e::9)
+ by IA1PR12MB7616.namprd12.prod.outlook.com (2603:10b6:208:427::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.25; Tue, 27 Aug
+ 2024 14:59:23 +0000
+Received: from CH3PR12MB7738.namprd12.prod.outlook.com
+ ([fe80::fad1:1acb:f5eb:98ee]) by CH3PR12MB7738.namprd12.prod.outlook.com
+ ([fe80::fad1:1acb:f5eb:98ee%4]) with mapi id 15.20.7875.019; Tue, 27 Aug 2024
+ 14:59:23 +0000
+From: Asmaa Mnebhi <asmaa@nvidia.com>
+To: "sebastian.reichel@collabora.com" <sebastian.reichel@collabora.com>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+CC: David Thompson <davthompson@nvidia.com>
+Subject: RE: [PATCH v2 1/1] power: reset: pwr-mlxbf: support graceful shutdown
+Thread-Topic: [PATCH v2 1/1] power: reset: pwr-mlxbf: support graceful
+ shutdown
+Thread-Index: AQHavAVnSip1teEVHEWRQznyc68BkbIfuw5wgBvwPhA=
+Date: Tue, 27 Aug 2024 14:59:22 +0000
+Message-ID:
+ <CH3PR12MB7738609DDDF1A9FDD5338362D7942@CH3PR12MB7738.namprd12.prod.outlook.com>
+References: <20240611134327.30975-1-asmaa@nvidia.com>
+ <CH3PR12MB7738B275AEBE6B167CFFA308D7BA2@CH3PR12MB7738.namprd12.prod.outlook.com>
+In-Reply-To:
+ <CH3PR12MB7738B275AEBE6B167CFFA308D7BA2@CH3PR12MB7738.namprd12.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR12MB7738:EE_|IA1PR12MB7616:EE_
+x-ms-office365-filtering-correlation-id: 57cd33e1-19d8-48f9-089d-08dcc6a8d62a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?8p22h1k+euAxAnI2jxvjgi0FrebynGmcok24bXw1nmV+5yIR0IkZCsuQ1H6e?=
+ =?us-ascii?Q?eEkGbujhGpEOgGRH99gseBdci7hlaJN4s2MPpT4OGuP9GbOLTR3TS+0g9SLB?=
+ =?us-ascii?Q?RCERkgsddYsALUEXKaAFKGw7ecOQUSTivhRuIPD12ZIRKendjvnuMBP/jdA3?=
+ =?us-ascii?Q?1UpSv7tHjccOLHde88KZ39SNYQUEMr3sFd/Mz4Wd5zMY38yz0DRbYZaxagtE?=
+ =?us-ascii?Q?jQE9yTobg36MihOc1mKgGr4JjmZtgWe9vGGt/LP/UXaT23FOx6L6mMiYT4F5?=
+ =?us-ascii?Q?i/rHGpXmx/Bqxx8zb9XOQxvjWl+UtAb0BAN2eJ4oWSxk1phCPmMzuMwV8hfX?=
+ =?us-ascii?Q?O5ldNEH3cRNLANEJh77dScVDVeJZBH7tcDAd2XW7JP+nZgibV0XSGMsrmc5m?=
+ =?us-ascii?Q?ZTihisZvBnq8ehetvauQZXNrRovw0vWwB9YpFfR7QvZNUkl+i32c0IdosMs0?=
+ =?us-ascii?Q?LOlRd5qmSJ70KsWwW86CfLgoG0xttYnnOyh82sILESjL4Fj+c0CXI81XJOrq?=
+ =?us-ascii?Q?Pdz5L62YZrEihvhK3n0NutBOMi+K6uMB/c4jHVJBBXAJKBdSwydrHy0bQPf2?=
+ =?us-ascii?Q?xYqxefvpzr8sE5nC+1mCwUOV7fhJ6D7RUlx2YdLmBpZ5b5qyXwKJTCOXjr9c?=
+ =?us-ascii?Q?o8G+t8qslCeeNB1vn4Pj/7wrnHhp6bdQ6ypcmKu15MNrwfrPass+9/XICarc?=
+ =?us-ascii?Q?WVGe6OePRJEb/uERjuJaaWreuLs3Hau1EgRZ3d7wJ+IP61TTMM29R4K2i1Mf?=
+ =?us-ascii?Q?Af9XSJPrOgITsJAPib0Bhf+r+X/yjb/SyeIKTYdTwk0ohDBBz0nbN8S59dlK?=
+ =?us-ascii?Q?a7Nlq5EkUQGiqttbn+AIEEdKxxr3JjY+9UWa5NP0sHLwL27Emabuc7dk3052?=
+ =?us-ascii?Q?w+lsiGqK97yy0UGbLoUam86tf38WA4xkmS8fm1xiAtPUe+t68N8nFGrzJ1EU?=
+ =?us-ascii?Q?IEvGIY+Ay/b+RTc92G7Lzta5PgJ4K6agaQ0qLLU4qaglcHntYtZV+9416+rB?=
+ =?us-ascii?Q?ai6JejMcuHu6PD3SM6JacLeQR0B0CFE5bHgLUrSPJDav9yuQ7DpbmAiorspX?=
+ =?us-ascii?Q?dZr8Q1akb2iYtL/XLCCKwTW0KazKOT5XrlSWVR4jlMADfufdLa9SQFlm1gA2?=
+ =?us-ascii?Q?7xzwgXo9AKXA0VW/hTZqF7IBDROQMkZM0yLQ9uNW2osJIlgiu3dVXyH/No99?=
+ =?us-ascii?Q?kRHed+QsWS9A0KtJDf2/SbGnBLkUsc1rvB0MMr5wepAUmDnp4KqjVIOFucyu?=
+ =?us-ascii?Q?EJdpE+NKUQtG0xpGDvBkd99F3M7pyikBebEvFLO/cqLXP1LeV4VkvESpbvNC?=
+ =?us-ascii?Q?Xji3WqQVX9ODyjwOUXt6sqZLB+P/SN+pTHa71Vv6FWpI01Hcm6VYRYWmFWHR?=
+ =?us-ascii?Q?w/gihqxGSPNbppFFyobpQ3B0TPnVlLBf8iAFV6yhv/3mzcuU3w=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB7738.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?PhbcS0EglfAtfD8qpYmBejVR4cJK5A+gx3JADMsu5Fk33d7Bn9wAm5UXHpog?=
+ =?us-ascii?Q?mebAQYhVl8VJp0vptgSHbRIQnpB/K0n7B8DFSVtF/gWiq9unH/co36tKA0H6?=
+ =?us-ascii?Q?VrrZGkvbZ7wgQGVT3gDn5TUPKR/peUh9QkgR6HroBpAQEtRl84SqH19rhpR0?=
+ =?us-ascii?Q?oP5gs3PSMD0l7wWrcsoIf+mnDbn0fR+2zA7gkCxl9k8rC7vZLSSQtkKyV7/Y?=
+ =?us-ascii?Q?VDKFqEU8AgMKxjUxEeb3dwVPVAkv7mkWy++Ouvi779/jM11ymLVigJufUDfz?=
+ =?us-ascii?Q?p+JhpOiTSU6nUDN9Kfw5OuKXyZy2i6OsTFvdiSnHQHNr9T1nyIN5Gv53nsN+?=
+ =?us-ascii?Q?HcqswRkookt+XJoxft76Mhky1rdMBbVW8eimTDHipNJV5xcARWwdGBrUTlDj?=
+ =?us-ascii?Q?/fi3FxrwzMxw7SpaO9ZczXDgV+DqxoByasmaXz2Q9hz47S7bkUMZLkOfTVbt?=
+ =?us-ascii?Q?LFpdhUtskH11ZRwn+9plmGVoyB0vn4XWT7N5DGDZq/P0ddZATW6eC1SAqnXt?=
+ =?us-ascii?Q?EJAOJch59TAMJQvsOwjCo0W6hBTMVaJEdL4lMKvawH030YenYC3Pt8kj7CbD?=
+ =?us-ascii?Q?+UNFWcrNeI6ByJ5XeoagNbGVweiR4IRdfw/8fcbetcYZOxMGfrbke93x1O8q?=
+ =?us-ascii?Q?R5quujXqc1bqDZWp9nP5SVGbTZm2B6mvfRN2m4E3GbQ2apkLgHfBZyRkwr1z?=
+ =?us-ascii?Q?VfF+zEhgAj2c7DLspduy8SwgWD1R4kIroXEKY0KjeQKZo7lOUxguJioTVzD1?=
+ =?us-ascii?Q?Qp4uQX+H1vqPo2y8S2sIgw8CneTnP0pMPOfZyGo+auCuxV1Nx3B3Va+lGlwp?=
+ =?us-ascii?Q?e9vq6Sm+xyJiqLwNbhqnzE8XRy9rhPct7ak/2tGGHDDkQAjGPB9OPB8dI5tV?=
+ =?us-ascii?Q?BCeGkrf3gaXXACjh7A7ceSxpWqC0wu1a6Z5hQwLtG6jXPcQEc3WAlgN7wcO+?=
+ =?us-ascii?Q?cxFgmct1yEog0jV12es89qkC9HSZ5yKmP8rAGlbRuOB0l/pO4ZbKVZQTBJeE?=
+ =?us-ascii?Q?VmHE/qC+AAwarmnbGj1c28rXMFpeuBS32n7LYq3gMLnTiUcixUuWQlroiAe+?=
+ =?us-ascii?Q?roqzhgXo8oirqJjKB/hxlpOnEchWi2K4WyByChOlKEBFEZOfeb9x5AVenKhs?=
+ =?us-ascii?Q?2qp+IrJ67nuUAaK2dtFZ+uISkfV0FpNoyKfKI6dAvsFOYkgYZN3tvfDrECTT?=
+ =?us-ascii?Q?Gh7n2SbdLIQJanMuJDSpzsLsIKrBTRCr9rZAV8qPG1mD/7H3upW7BazXZ5aP?=
+ =?us-ascii?Q?R3BBprpWDSOXHYcrPHhSPHYDpOtLdCiZvWBHIKXXiV94YTu9fG8chzuF0380?=
+ =?us-ascii?Q?elyogOOi6rCVSQK17nLSO/LU/hdzzHtpf9+ky8vAtA1OW83PP4Fsi7T/KDq/?=
+ =?us-ascii?Q?J5JPvOtEI2ek/SmZ3QLz8PMeNkoNBSiDoIBsQHIRbWoOeQR8NfgoM98JEREK?=
+ =?us-ascii?Q?x7VJnk3dordjaM11Pv98YY4lbWGBb2R0465wMy169uJsSEPqKAMzH6ZFlRyq?=
+ =?us-ascii?Q?jUSiq3sRJb/1JGr4ISgzg6+eLHKNJkTfHUKWV7AwMPXJXC5+i0msICE8aV8V?=
+ =?us-ascii?Q?KrOVphfCdORyCDxg/n1B/S9JeqS4qYa95R5gxaleFTMvL+1cVpZg/HrA3bXl?=
+ =?us-ascii?Q?WCNJdQ4wIMSUbBxJlXNSynI=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.11-rc5-64-g653eb0ff905f6
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 23 warnings (v6.11-rc5-64-g653eb0ff905f6)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB7738.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57cd33e1-19d8-48f9-089d-08dcc6a8d62a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Aug 2024 14:59:22.9085
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bhXdLBP3fKz/WbN9BybIY1+axuEHdU5IWn0NA3dx+X4u8Yu8leZIktTUHrTgz5it8LrBhVPAn/TfWdbexaiUOw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7616
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 23 warnings (v6.11-rc5-64-g=
-653eb0ff905f6)
+Hello,
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-11-rc5-64-g653eb0ff905f6/
+Kind reminder.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.11-rc5-64-g653eb0ff905f6
-Git Commit: 653eb0ff905f61695029787e61e69be88ad6ccab
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Thank you.
+Asmaa
 
-Warnings Detected:
+> -----Original Message-----
+> From: Asmaa Mnebhi <asmaa@nvidia.com>
+> Sent: Friday, August 9, 2024 4:21 PM
+> To: sebastian.reichel@collabora.com; linux-pm@vger.kernel.org; linux-
+> acpi@vger.kernel.org
+> Cc: David Thompson <davthompson@nvidia.com>
+> Subject: RE: [PATCH v2 1/1] power: reset: pwr-mlxbf: support graceful
+> shutdown
+>=20
+> Hi Sebastian,
+>=20
+> Did you get a chance to review this second patch?
+>=20
+> Thank you!
+> Asmaa
+>=20
+> > -----Original Message-----
+> > From: Asmaa Mnebhi <asmaa@nvidia.com>
+> > Sent: Tuesday, June 11, 2024 9:43 AM
+> > To: sebastian.reichel@collabora.com; linux-pm@vger.kernel.org; linux-
+> > acpi@vger.kernel.org
+> > Cc: Asmaa Mnebhi <asmaa@nvidia.com>; David Thompson
+> > <davthompson@nvidia.com>
+> > Subject: [PATCH v2 1/1] power: reset: pwr-mlxbf: support graceful
+> > shutdown
+> >
+> > The OCP board used a BlueField's GPIO pin for entering low power mode.
+> > That board was not commercialized and has been dropped from
+> production
+> > so all its code is unused.
+> > The new hardware requirement is to trigger a graceful shutdown when
+> > that GPIO pin is toggled. So replace the unused low power mode with a
+> > graceful shutdown.
+> >
+> > Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+> > Reviewed-by: David Thompson <davthompson@nvidia.com>
+> > ---
+> >  drivers/power/reset/pwr-mlxbf.c | 16 +++-------------
+> >  1 file changed, 3 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/drivers/power/reset/pwr-mlxbf.c
+> > b/drivers/power/reset/pwr- mlxbf.c index 1775b318d0ef..4f1cd1c0018c
+> > 100644
+> > --- a/drivers/power/reset/pwr-mlxbf.c
+> > +++ b/drivers/power/reset/pwr-mlxbf.c
+> > @@ -18,7 +18,6 @@
+> >
+> >  struct pwr_mlxbf {
+> >  	struct work_struct reboot_work;
+> > -	struct work_struct shutdown_work;
+> >  	const char *hid;
+> >  };
+> >
+> > @@ -27,22 +26,17 @@ static void pwr_mlxbf_reboot_work(struct
+> > work_struct *work)
+> >  	acpi_bus_generate_netlink_event("button/reboot.*", "Reboot
+> Button",
+> > 0x80, 1);  }
+> >
+> > -static void pwr_mlxbf_shutdown_work(struct work_struct *work) -{
+> > -	acpi_bus_generate_netlink_event("button/power.*", "Power
+> > Button", 0x80, 1);
+> > -}
+> > -
+> >  static irqreturn_t pwr_mlxbf_irq(int irq, void *ptr)  {
+> >  	const char *rst_pwr_hid =3D "MLNXBF24";
+> > -	const char *low_pwr_hid =3D "MLNXBF29";
+> > +	const char *shutdown_hid =3D "MLNXBF29";
+> >  	struct pwr_mlxbf *priv =3D ptr;
+> >
+> >  	if (!strncmp(priv->hid, rst_pwr_hid, 8))
+> >  		schedule_work(&priv->reboot_work);
+> >
+> > -	if (!strncmp(priv->hid, low_pwr_hid, 8))
+> > -		schedule_work(&priv->shutdown_work);
+> > +	if (!strncmp(priv->hid, shutdown_hid, 8))
+> > +		orderly_poweroff(true);
+> >
+> >  	return IRQ_HANDLED;
+> >  }
+> > @@ -70,10 +64,6 @@ static int pwr_mlxbf_probe(struct platform_device
+> > *pdev)
+> >  	if (irq < 0)
+> >  		return dev_err_probe(dev, irq, "Error getting %s irq.\n", priv-
+> > >hid);
+> >
+> > -	err =3D devm_work_autocancel(dev, &priv->shutdown_work,
+> > pwr_mlxbf_shutdown_work);
+> > -	if (err)
+> > -		return err;
+> > -
+> >  	err =3D devm_work_autocancel(dev, &priv->reboot_work,
+> > pwr_mlxbf_reboot_work);
+> >  	if (err)
+> >  		return err;
+> > --
+> > 2.30.1
 
-arc:
-    haps_hs_smp_defconfig (gcc-12): 2 warnings
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-12): 3 warnings
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-12): 18 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    kernel/fork.c:3091:2: warning: #warning clone3() entry point is mi=
-ssing, please fix [-Wcpp]
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    2    3091 | #warning clone3() entry point is missing, please fix
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o:=
- missing .note.GNU-stack section implies executable stack
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missin=
-g .note.GNU-stack section implies executable stack
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
-ls' found, but node is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
- is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
-rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
- provider
-    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
-ot an interrupt provider
-    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
-ound, but node is not an interrupt provider
-    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
-er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
-ider
-    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 18 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
-te.GNU-stack section implies executable stack
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
-ing .note.GNU-stack section implies executable stack
-    kernel/fork.c:3091:2: warning: #warning clone3() entry point is missing=
-, please fix [-Wcpp]
-    3091 | #warning clone3() entry point is missing, please fix
-    kernel/fork.c:3091:2: warning: #warning clone3() entry point is missing=
-, please fix [-Wcpp]
-    3091 | #warning clone3() entry point is missing, please fix
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
 
