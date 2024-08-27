@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-12985-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12986-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45777961412
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 18:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5229B9614A5
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 18:53:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5321B219D2
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 16:30:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7F64B235C2
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 16:53:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1560B1C86FF;
-	Tue, 27 Aug 2024 16:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B84551CF2B8;
+	Tue, 27 Aug 2024 16:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="XQVsRIU2"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="OpKB9Yrm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6953A1C3F1D;
-	Tue, 27 Aug 2024 16:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51E81CE6E7;
+	Tue, 27 Aug 2024 16:52:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.14
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724776229; cv=pass; b=BF1AJ/FphGvw/VIP7F0Fq5LHU30AnoOKucB8AcfxfP5hiNmJQUJN/EC6k5mRDAXOONDdrzKnssnCCwGatalD+ZolsxnS8NxwCVffAg9KLhjUWG9AtSngv1ZI2e+XPHHH/fGmpkEt7swNDABl6kdx9wPG/7JNxWP5Og2btu3DiRs=
+	t=1724777543; cv=pass; b=bHVMWJsY+ltma7LX5i8fSN/dgr6jkGHT3UZkIPjOfs3uouGf0w374fpL+t3Yd/XLn6pLK1YkfBky7XJ7E3uPibVTvWSG6KPKF/ElSWBOrvbY3SRFtcC+xDugtrIr7qj6GTSqeE9FUMdoyayLpl9HvoSgu5fRY7t0RcZ23Dzg6SI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724776229; c=relaxed/simple;
-	bh=/kzx1RinYKgOz2UtzB5CMAvZLHO7c3+nz/XEbSShg2M=;
+	s=arc-20240116; t=1724777543; c=relaxed/simple;
+	bh=SdgFpzzLedIEKAkguxPGHN9/qwQWneX547RqSrqEkJk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P5lW/Qr+rSOoca3SicQW9X44PuQwyo51VIZJnB9ISGLJg9DscOZhSKaacj3u6m9M0aCIXhY4eyKuzreCK3nnXig1TcpC0m8fmZIhoddznE+6r0o2DDo8iYB0bndw+h9OeN7yuicUSCbMT6IuPZs/7MgFuicR37tS8g9l6BwM4Ps=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=XQVsRIU2; arc=pass smtp.client-ip=136.143.188.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=RpAKAc2SScICnh3K4Uk5taI9FZGjsoCyePsYhm9h0d90tUd76UGoS0TDz04PxQLE6fRzsV60UwDFC0oHrZGy03zTK3jwcy5Hlz7hqhj5tDOpB5ttWapxxDvKf85EgfkGYfFSpb+0GOOAwF0UuVuTPwEv6TRk1U46F4u/f9L1VPY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=OpKB9Yrm; arc=pass smtp.client-ip=136.143.188.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1724776187; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1724777519; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=dV4yUuRMtkdlYes9lilFVNqwvEbmoZXh7AQpd/lmRuUyjWd8oo9apnBqjTSFAyMrUWU+fgkCoFX20QihOIER3MuCn19wrdnQIdbAR8ocBpVBB4h2U1BICd1rDO4gIJgEUFrgEVkR3LyPHq2ISoKG0l7pmFJ5GtpjCuik4BmjjYQ=
+	b=bwIumnAotVC8L8yTnDIJ27UUlcC1PksE78uao2ODkkufl04cSH8JCCogCmrlG5qYZ4bqXwpAq86gVwzplDnQcLzVtc1FxhP1AdtkfI8+IHmNHJhNDDHDaNPXYNQ7kNt5ix099nvgkp6nPRuXGeI29KXMiKbIhSJsdSv4b3yAWlk=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1724776187; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=yIZ4tokYIs1ihPKr07xclM5JUdjc2mCvibla5fSMoXc=; 
-	b=gCdaq9fP/CZclQ5+WAVBOkAf3gS5ADwAvE1BkfygmsgiBeolk5AQieQ4mT2WlcGNO3PG/VRlDmSD6YlBmDkCLvYMV6sMb0Hl3csz71unFMifaCWK31ilC2J5epAiF8I/Yir35NeZxdBhyrP7N6+l6Es6p+Yvgz+/PRcn4RGrqpg=
+	t=1724777519; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=bYimh/iNRBlXEJfDnSGl77olRxlPtpIHOnaA2x9TrmI=; 
+	b=RD1pKMmVbmawE7lCeTfRZtyqt8TXqLOYOEXBxSgTVShiubYZ4b+DoygxqYbjyQevJ9Q/iuG975SzoBiA5+e4mNJh3BjOvE5V5v8RkTjAeURbXe3YHEx0QM2nb4jKPzUFWX76+r+4tpMJxw/pZwi41Cy5ghydDXkWyCf2S97ZPhA=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
 	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724776187;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724777519;
 	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
 	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=yIZ4tokYIs1ihPKr07xclM5JUdjc2mCvibla5fSMoXc=;
-	b=XQVsRIU2208eGNpDbDh5z/5tfN0pYZhYpuzg0qdFyAXuVEph/ODawx3xP+MDZ464
-	U9DXYVkywRqb9Jr0JIHTWucJ0S5R7mxJrwFL/VQU5+X9Po3ki0b4NitodbBqRFRt3mp
-	fcsgMRES7zn6dgUjME8ZqxrdDzaVpzk/zAjNv12I=
-Received: by mx.zohomail.com with SMTPS id 1724776186585449.4642360121936;
-	Tue, 27 Aug 2024 09:29:46 -0700 (PDT)
+	bh=bYimh/iNRBlXEJfDnSGl77olRxlPtpIHOnaA2x9TrmI=;
+	b=OpKB9YrmWW3ouB1HwEkLL4oUqdqaKrXgi1GZEm5DD+wiVoAl3NquUSWmuh/JxPcO
+	1ELuWZ5FEZKOjF2CCzxuQp9ptPNzLbbdEFBX/1SCJjnAlb0kpVLHd+948hgHE+3L8mF
+	52nTZraLSb5xTQvtsNl0NC/ieYRVoCBXdgz/azKE=
+Received: by mx.zohomail.com with SMTPS id 1724777517787364.44684154521156;
+	Tue, 27 Aug 2024 09:51:57 -0700 (PDT)
 Received: by mercury (Postfix, from userid 1000)
-	id 16A8610604BD; Tue, 27 Aug 2024 18:29:41 +0200 (CEST)
-Date: Tue, 27 Aug 2024 18:29:40 +0200
+	id 010D010604BD; Tue, 27 Aug 2024 18:51:52 +0200 (CEST)
+Date: Tue, 27 Aug 2024 18:51:52 +0200
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Lee Jones <lee@kernel.org>, linux-sunxi@lists.linux.dev, 
-	Chris Morgan <macroalpha82@gmail.com>, linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-iio@vger.kernel.org, quentin.schulz@free-electrons.com, 
-	mripard@kernel.org, tgamblin@baylibre.com, aidanmacdonald.0x0@gmail.com, 
-	u.kleine-koenig@pengutronix.de, samuel@sholland.org, jernej.skrabec@gmail.com, wens@csie.org, 
-	conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de, 
-	jonathan.cameron@huawei.com, Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: (subset) [PATCH V4 11/15] mfd: axp20x: Add ADC, BAT, and USB
- cells for AXP717
-Message-ID: <fv4ukscke4hoyso4vprtrx2pzqy5lkwkuhnd5wywfxe4burlr4@2dgxbhqpol7t>
-References: <20240821215456.962564-1-macroalpha82@gmail.com>
- <20240821215456.962564-12-macroalpha82@gmail.com>
- <172433485381.1334876.7027428905035727559.b4-ty@kernel.org>
- <20240826120342.503bef41@jic23-huawei>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Artur Weber <aweber.kernel@gmail.com>, 
+	Chanwoo Choi <cw00.choi@samsung.com>, Rob Herring <robh@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	~postmarketos/upstreaming@lists.sr.ht, Henrik Grimler <henrik@grimler.se>, 
+	Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>, Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
+Subject: Re: [PATCH v4 08/10] ARM: dts: samsung: exynos4212-tab3: Add battery
+ node with charge current value
+Message-ID: <ekqydclwg6dx6ydqcm3tanyho636hxtwpx3cnpj7c4dwpdxa2d@bbzaqvkoajrg>
+References: <20240816-max77693-charger-extcon-v4-0-050a0a9bfea0@gmail.com>
+ <20240816-max77693-charger-extcon-v4-8-050a0a9bfea0@gmail.com>
+ <f2d19e20-9177-4b30-9781-6904cc1d1638@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,75 +77,71 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="72vwrvvbohscblme"
+	protocol="application/pgp-signature"; boundary="2ugqlblyosjqwmlb"
 Content-Disposition: inline
-In-Reply-To: <20240826120342.503bef41@jic23-huawei>
+In-Reply-To: <f2d19e20-9177-4b30-9781-6904cc1d1638@kernel.org>
 X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.3.1/224.285.20
+X-Zoho-AV-Stamp: zmail-av-1.3.1/224.300.3
 X-ZohoMailClient: External
 
 
---72vwrvvbohscblme
+--2ugqlblyosjqwmlb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Aug 26, 2024 at 12:03:42PM GMT, Jonathan Cameron wrote:
-> On Thu, 22 Aug 2024 14:54:13 +0100
-> Lee Jones <lee@kernel.org> wrote:
->=20
-> > On Wed, 21 Aug 2024 16:54:52 -0500, Chris Morgan wrote:
-> > > Add support for the AXP717 PMIC to utilize the ADC (for reading
-> > > voltage, current, and temperature information from the PMIC) as well
-> > > as the USB charger and battery.
-> > >=20
-> > >  =20
+On Fri, Aug 16, 2024 at 12:03:32PM GMT, Krzysztof Kozlowski wrote:
+> On 16/08/2024 10:19, Artur Weber wrote:
+> > This value was verified by comparing register dumps of the MAX77693
+> > charger with on mainline with a downstream kernel under Android; the
+> > value on downstream was set to 1.8 amps when charging with a proper
+> > charger.
 > >=20
-> > Applied, thanks!
+> > Add it to a new battery node and pass it to the MAX77693 charger
+> > so that the fast charge current setting can be used for charging.
 > >=20
-> > [11/15] mfd: axp20x: Add ADC, BAT, and USB cells for AXP717
-> >         commit: e1043ad46060c181ffb8f981ccb25d9f698b2f09
-> >=20
-> Hi Lee, patch 12 is dependent on this because of the header
-> additions.
+> > Tested-by: Henrik Grimler <henrik@grimler.se>
+> > Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+> > ---
+> > Changes in v2:
+> > - Switched to monitored-battery
+> > ---
+> >  arch/arm/boot/dts/samsung/exynos4212-tab3.dtsi | 6 ++++++
+> >  1 file changed, 6 insertions(+)
 >=20
-> If you don't mind can you pick up 1, 8 and 12
-> (all the IIO ones)?  Otherwise they'll have to wait for next
-> cycle. Guessing too late to ask for an IB?
->=20
-> I haven't checked but the later power supply ones may have
-> the same block.
+> For next version, please split DTS into separate patchset and provide in
+> changelog (---) lore link to power supply patchset with bindings. It
+> will be easier for Sebastian to apply entire set for psy.
 
-Yes, patches 13 + 14 are also blocked by the MFD patch adding
-register defines. I merged the other power-supply patches before
-noticing this, so patches 13 + 14 need to wait a cycle without
-an immutable branch.
-
-Greetings,
+I'm fine with a splitted series of course, but I am also perfectly
+fine with applying partial patchsets. I know at least some SoC
+maintainers like this style of a combined patch series, since they
+basically get an automatic push notification that the dependencies
+have been merged. It also makes testing easier of course :)
 
 -- Sebastian
 
---72vwrvvbohscblme
+--2ugqlblyosjqwmlb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmbN/vQACgkQ2O7X88g7
-+pr/qA//Z47zpsYNHymEJyhzZ0+KvDR6LxviBoQRMkhNZNmbjQVA1OEZOXbMm6Np
-AP3B6ifwXDdRGV0dv4wUSYbL95QnZ3BW2tWBrblZOSPzy6fs2p3yKvGamIlxaWUf
-0VQSsV+j5sZjeF2NCv6NiP+y4mpMI02VOphcXjX3b9Qb/9E6JXlEK8rS6ONHxjsh
-+czXqGougXwybTW2pDeIHmmjA9YPjd/NL1FJ9wTDxbcNLieuuU06yh29YRVQhAVi
-fqRL262HNQv6zBJzSqusggdpMY01u2Dm2i5ySUXNG0KOXEkC5In5t+o9SjC5Ft6f
-poQC8NRXUR/h4nIOo8v9jFBEE3zxO2cR2fgn2EGv9TH9QeBGQ3343vqCu+nsDR0P
-KGexs6RFiDxTJEigSlQ/oPEoV7MCims5vAR/SyEzCLerDN+pHDmc3Bi3zKjcmq3B
-g3PqyPhD8uh4rB0Jr9rYyWg4G/7DfvIwKFwqAzqvx4L76v1C5dtqgziYkjTCc9r7
-2hZWU7L6oGxgEgkRdtQy26a6JB8NBNvIR5Xn12zirVsaIk5kLl2SLftTXJPp4md3
-uRFWJOnLjnZnhDt0F+Me7TXOdNzfftWjK2BZ71EYCs8rDUmrNHMZRe92D0d5OduS
-JpgeBYL91p04T3HPOiQX4FQ75/jLmWL15fvgnJKgIZV2x7OYgDo=
-=uRJ7
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmbOBCIACgkQ2O7X88g7
++pqhmRAAj/YUAksIichzuOKkEA9JWrEqtvZqm9QMWiY8zHymBBNObZKbUjHa+OBZ
+jsx8GMQ1+4lnap1Llsyq9MJTQuaICNaNChUd+gAsnAbXW0Fsf+BumCD8Kd0Wu6U9
+BugLOA/kYnaMd5nSeclaE+BshGj6wxySqkBvEU2dyFaVmBygHAx+6XAgJT8Q4682
+a4gntdDDh3m8x44b1rg6frZoXR0TSome93wGIQGAYWpmuan49kAf1rt9/wFXWMys
+79VOMPX57pIVl0kKYFFWefrqsTM/faMyzxxbyx980DB1GzvpEbMW/C3dX9vHhqlX
+uKbBW18dkWGIKCfO95ZPVhXjpg+HiTpcN3GTW4O6IoOi+buq5Y/pg8wWk740f7Ck
+7bKbmE7ay480qnjVGq/pdu6XVdTyoBr+vifztJYiD78JuQgrP2sHWBShmAEa/fU3
+iicuyYE6txTYaEocVrWjVFr4k2eZYA6B4ELeeyAONgIsvIFJe3QK6Ui///lXovSL
+Z4jYdo8TQV4WDKgLIQzJNk5EG/HGQFKrcDkcnbzQX442xmXMqEY5KQVeNeeceSwN
+PsCop9CbI11zJ40LPP/ydENbhzmG2bgQyEAgAmrZ85YxtBS4wH5b7uVSJfQK4l7h
+Aui4+8U3tPCiE/h6ovxqV5pN/CebJ/LOSeDJyp7kcvmOUgs6gco=
+=5DI8
 -----END PGP SIGNATURE-----
 
---72vwrvvbohscblme--
+--2ugqlblyosjqwmlb--
 
