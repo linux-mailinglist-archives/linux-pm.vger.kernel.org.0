@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-12953-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12954-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13CF9960779
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 12:31:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B075896078F
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 12:35:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 858641F22F62
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 10:31:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62599283A43
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 10:35:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C953219DFB3;
-	Tue, 27 Aug 2024 10:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91ABA19DFB3;
+	Tue, 27 Aug 2024 10:35:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="eHwo8Ude"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="QeIhBcnX"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7564A17BEA1;
-	Tue, 27 Aug 2024 10:30:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6D919D896;
+	Tue, 27 Aug 2024 10:35:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724754653; cv=none; b=TyqvN26jWWR2xWTCGfc2wNTEtx3+w5MZjkMtBnXdCpuAmFY6QBYUI+uKZLh0b4dBwHjsqv74ilVf033t0ZF8QXmsNLNHzmEliYt5Kxn5WVcDU2XJqrCLRZg+7wMIl35fVSd5KBjQGq7pQRT2uxpcq28DZbMnHrG7OEO5hHIhDsA=
+	t=1724754927; cv=none; b=MkP915Jui9iTuevYi+wGJYTywOkkDWh0E8RaxKdrcVbzaK+kSpa4PGqjGWSsapRWs+56mkXg4KEEBgwHxUBthF3FYLUej6kO2qXTio1bNgKQ1Zdv2zMNlcYCJWdlbWgts9XW5mFneweGiNmvBu+3Kv3Wao49UmQfuyyY0OC+9nQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724754653; c=relaxed/simple;
-	bh=l9izztVExtAUrD6YpzmSThcoQLAFPh5B9SUAyjBtIXw=;
+	s=arc-20240116; t=1724754927; c=relaxed/simple;
+	bh=pZPXWcOy01lpuwGBdeqJDgo45WVXSPUvzk8hasW6cAA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=t15Ag7Uk62KtgQSZbbJ8sTaFNo6CgfR0z0dUB6XoqyY6yY1OTckU6NcxVSX8j2qIQOEhTwXDjXmk7LV4M9NyaFMwl5klTqJLU2fYoHrMQgChIA7A+BlNPZngNAKfjs8zxa+vvdgdKB3Ct+4MaED7c347FvR4CMKXEeFjaB2joLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=eHwo8Ude; arc=none smtp.client-ip=68.232.153.233
+	 In-Reply-To:Content-Type; b=H7oS8f9R1olBO8kmupZ+oL8si9jyI3jckxwxrrb+qIZWMzKjb2jtfLoc5bqDgODx0kUUQVmuPZxu4tP0U+e7NzV5ds+se/nPMjmwsEeWP2WRAxtIETSVssOIoyTf0aybPI3XnbvTzS7tS53mC3FfBUnFUX86JFWRU4B+sEgS6PU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=QeIhBcnX; arc=none smtp.client-ip=68.232.153.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1724754652; x=1756290652;
+  t=1724754926; x=1756290926;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=l9izztVExtAUrD6YpzmSThcoQLAFPh5B9SUAyjBtIXw=;
-  b=eHwo8Udez1hdAQtmOKJAEevW4dnfPBSlJlvtQ3Pf1KUnWy40yt+ho++8
-   KnjVNXgBWda5QX3mzKyI3GWHyUvfrnY//UefY40XE7Qeb7pQQ4AIrqjZJ
-   NJr6B3mP2EB4gHIm3OEyTGev4k4dJKlC4b1fMjcRDNByaB+9+UD78rO+d
-   Q+7r1RhyhZz4ruXqIfzDeZQPXvN8MipaAcMidITYdCdcQNKXOwvyhx52Y
-   eRSgd67tQBlzCTZUTVY6J/D0ycBEPzyvUkvC7VwW0U47WIxgupPt/eT8c
-   r+93VdRlU/pRxEeK9BCS6HtO0dVhEJalJD2NcRdxG183eYmNxcCVbOwDy
+  bh=pZPXWcOy01lpuwGBdeqJDgo45WVXSPUvzk8hasW6cAA=;
+  b=QeIhBcnXiahd/CtrgJuNLfPHWHmbsSl/DrXp1sLlpg8mESd/thEzZmmh
+   Wgo+kP2XgYlzTmyXbuwZbPdGKZTcCKgBDkwG2ExCMjNF8Pq5I53zYfWZT
+   am5/5nOGKNuW80HUVOKGbrlceqJPTvOXgV3JPP1WD/32jfJ21xyaGvG1r
+   bHcFclIfkQ1hBlEeB4Sxb/e+6Be7mBA3/SVRZ9qtok3wYRoBqqvDppXJv
+   Eiu33SHWryGtS0DtsyIFx9yxXaGeMwE2PKMn6OeZIPyv+jt2KJh3Mi79M
+   zTOoCUk2JB0UNO2npC2fE348QRsWrmmThAm7bbBU8D0Sv0XMZ5dGhZDYZ
    Q==;
-X-CSE-ConnectionGUID: nmYP+ln5QmKnTOldkUy+bQ==
-X-CSE-MsgGUID: t266nJc+TxiW+F+ZHE4JWg==
+X-CSE-ConnectionGUID: R2qFGaLOSkOwtUni+ImZrQ==
+X-CSE-MsgGUID: nXp9GURrQrquSXTIux4rPw==
 X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
-   d="scan'208";a="30945822"
+   d="scan'208";a="261882356"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Aug 2024 03:30:51 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Aug 2024 03:35:25 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 27 Aug 2024 03:30:14 -0700
-Received: from [10.159.224.217] (10.10.85.11) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Tue, 27 Aug 2024 03:30:11 -0700
-Message-ID: <18f714f9-1369-4029-b036-3c176377374e@microchip.com>
-Date: Tue, 27 Aug 2024 12:30:34 +0200
+ 15.1.2507.35; Tue, 27 Aug 2024 03:34:42 -0700
+Received: from [10.159.224.217] (10.10.85.11) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
+ Transport; Tue, 27 Aug 2024 03:34:45 -0700
+Message-ID: <323aa755-8684-4de0-9582-df8449eeb124@microchip.com>
+Date: Tue, 27 Aug 2024 12:35:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/13] memory: atmel-ebi: simplify with scoped for each
- OF child loop
+Subject: Re: [PATCH v2 01/13] memory: atmel-ebi: use scoped device node
+ handling to simplify error paths
 Content-Language: en-US, fr-FR
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Krzysztof Kozlowski
 	<krzk@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu
@@ -79,66 +79,105 @@ To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Krzysztof Kozlowski
 	<jonathanh@nvidia.com>, Santosh Shilimkar <ssantosh@kernel.org>
 CC: <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-pm@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>,
-	<linux-stm32@st-md-mailman.stormreply.com>, <linux-tegra@vger.kernel.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+	<linux-stm32@st-md-mailman.stormreply.com>, <linux-tegra@vger.kernel.org>
 References: <20240816-cleanup-h-of-node-put-memory-v2-0-9eed0ee16b78@linaro.org>
- <20240816-cleanup-h-of-node-put-memory-v2-2-9eed0ee16b78@linaro.org>
+ <20240816-cleanup-h-of-node-put-memory-v2-1-9eed0ee16b78@linaro.org>
 From: Nicolas Ferre <nicolas.ferre@microchip.com>
 Organization: microchip
-In-Reply-To: <20240816-cleanup-h-of-node-put-memory-v2-2-9eed0ee16b78@linaro.org>
+In-Reply-To: <20240816-cleanup-h-of-node-put-memory-v2-1-9eed0ee16b78@linaro.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 16/08/2024 at 12:54, Krzysztof Kozlowski wrote:
-> Use scoped for_each_available_child_of_node_scoped() when iterating over
-> device nodes to make code a bit simpler.
+> Obtain the device node reference with scoped/cleanup.h to reduce error
+> handling and make the code a bit simpler.
 > 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Thanks!
-Regards,
+Best regards,
    Nicolas
 
+> 
 > ---
->   drivers/memory/atmel-ebi.c | 8 +++-----
->   1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> Changes in v2:
+> 1. Wrap line before of_parse_phandle()
+> ---
+>   drivers/memory/atmel-ebi.c | 29 ++++++++++-------------------
+>   1 file changed, 10 insertions(+), 19 deletions(-)
 > 
 > diff --git a/drivers/memory/atmel-ebi.c b/drivers/memory/atmel-ebi.c
-> index 8f5b3302ee30..8db970da9af9 100644
+> index e8bb5f37f5cb..8f5b3302ee30 100644
 > --- a/drivers/memory/atmel-ebi.c
 > +++ b/drivers/memory/atmel-ebi.c
-> @@ -518,7 +518,7 @@ static int atmel_ebi_dev_disable(struct atmel_ebi *ebi, struct device_node *np)
+> @@ -6,6 +6,7 @@
+>    * Copyright (C) 2013 Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+>    */
+> 
+> +#include <linux/cleanup.h>
+>   #include <linux/clk.h>
+>   #include <linux/io.h>
+>   #include <linux/mfd/syscon.h>
+> @@ -517,7 +518,7 @@ static int atmel_ebi_dev_disable(struct atmel_ebi *ebi, struct device_node *np)
 >   static int atmel_ebi_probe(struct platform_device *pdev)
 >   {
 >          struct device *dev = &pdev->dev;
-> -       struct device_node *child, *np = dev->of_node;
-> +       struct device_node *np = dev->of_node;
+> -       struct device_node *child, *np = dev->of_node, *smc_np;
+> +       struct device_node *child, *np = dev->of_node;
 >          struct atmel_ebi *ebi;
 >          int ret, reg_cells;
 >          struct clk *clk;
-> @@ -592,7 +592,7 @@ static int atmel_ebi_probe(struct platform_device *pdev)
+> @@ -541,30 +542,24 @@ static int atmel_ebi_probe(struct platform_device *pdev)
 > 
->          reg_cells += val;
+>          ebi->clk = clk;
 > 
-> -       for_each_available_child_of_node(np, child) {
-> +       for_each_available_child_of_node_scoped(np, child) {
->                  if (!of_property_present(child, "reg"))
->                          continue;
+> -       smc_np = of_parse_phandle(dev->of_node, "atmel,smc", 0);
+> +       struct device_node *smc_np __free(device_node) =
+> +               of_parse_phandle(dev->of_node, "atmel,smc", 0);
 > 
-> @@ -602,10 +602,8 @@ static int atmel_ebi_probe(struct platform_device *pdev)
->                                  child);
+>          ebi->smc.regmap = syscon_node_to_regmap(smc_np);
+> -       if (IS_ERR(ebi->smc.regmap)) {
+> -               ret = PTR_ERR(ebi->smc.regmap);
+> -               goto put_node;
+> -       }
+> +       if (IS_ERR(ebi->smc.regmap))
+> +               return PTR_ERR(ebi->smc.regmap);
 > 
->                          ret = atmel_ebi_dev_disable(ebi, child);
-> -                       if (ret) {
-> -                               of_node_put(child);
-> +                       if (ret)
->                                  return ret;
-> -                       }
->                  }
+>          ebi->smc.layout = atmel_hsmc_get_reg_layout(smc_np);
+> -       if (IS_ERR(ebi->smc.layout)) {
+> -               ret = PTR_ERR(ebi->smc.layout);
+> -               goto put_node;
+> -       }
+> +       if (IS_ERR(ebi->smc.layout))
+> +               return PTR_ERR(ebi->smc.layout);
+> 
+>          ebi->smc.clk = of_clk_get(smc_np, 0);
+>          if (IS_ERR(ebi->smc.clk)) {
+> -               if (PTR_ERR(ebi->smc.clk) != -ENOENT) {
+> -                       ret = PTR_ERR(ebi->smc.clk);
+> -                       goto put_node;
+> -               }
+> +               if (PTR_ERR(ebi->smc.clk) != -ENOENT)
+> +                       return PTR_ERR(ebi->smc.clk);
+> 
+>                  ebi->smc.clk = NULL;
+>          }
+> -       of_node_put(smc_np);
+>          ret = clk_prepare_enable(ebi->smc.clk);
+>          if (ret)
+>                  return ret;
+> @@ -615,10 +610,6 @@ static int atmel_ebi_probe(struct platform_device *pdev)
 >          }
 > 
+>          return of_platform_populate(np, NULL, NULL, dev);
+> -
+> -put_node:
+> -       of_node_put(smc_np);
+> -       return ret;
+>   }
+> 
+>   static __maybe_unused int atmel_ebi_resume(struct device *dev)
 > 
 > --
 > 2.43.0
