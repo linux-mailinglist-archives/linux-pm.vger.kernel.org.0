@@ -1,173 +1,133 @@
-Return-Path: <linux-pm+bounces-12958-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12959-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FB749608AB
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 13:29:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9347A96090E
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 13:41:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4CEE1C2259E
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 11:29:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B8A9285123
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 11:41:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 012FD19EED8;
-	Tue, 27 Aug 2024 11:29:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607C51A0729;
+	Tue, 27 Aug 2024 11:39:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="puV1QpwR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YKhx1CcT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73C315535A;
-	Tue, 27 Aug 2024 11:29:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330FC17C69;
+	Tue, 27 Aug 2024 11:39:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724758152; cv=none; b=BvPzpOEgCyn4IqrydiYwDeDnhLYC72dRqPtxpWX1pETyS/2AC4jsWgY/GTbqwHkrQ8MP8nLTEzu3sFCIT8JZCh9dtEkp5qoC4qJm/w/z65MGsox0HW8V8m+Izbfb5O1USFVENlpu48ajsrn7CMUrLjrYk49SH2804z+thOIUshI=
+	t=1724758789; cv=none; b=btjaatJy/1fLW7YYS97tCEFYaUDDEE+Y2rKSveRvAImj048Ff040dMFFDVgaXalrXKqVwsZ+OhikLoQvbzIslaHX12wdrpo0zkIFflVDOcAfGcFhNfxOW9KFm0YWAlHi1PJYnjRQ0hozDt3YZE4muoGS7zVkkjR55ltbZ/ER/EE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724758152; c=relaxed/simple;
-	bh=7hG0IYA1h2hw7SvTKbJ20PPbF9uHd2tn3lDRrv/IAX8=;
+	s=arc-20240116; t=1724758789; c=relaxed/simple;
+	bh=5aiCA1KifFkP5iaGWPQMv96TRmb7TG8TWiOnSHnr4Kw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OYwIteYMuQWzjfyO8rEtZY9ZsOnjWIwomnRTxzCGFmoQDHeObXHtFUGmbD6uIvZvkfFPKlK4Lx4QCqhbMzQEsuAw5g7Ry+VmQh+iwLvyl4MWRnsVg0QoxxPQXpPoaKNc+4pYJ3jDKOw/+S2YK+vGXUXrQsuWmQax8PobjSSg7V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=puV1QpwR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B55AC58282;
-	Tue, 27 Aug 2024 11:29:12 +0000 (UTC)
+	 To:Cc:Content-Type; b=A57ecCJOIR7HmpL0C/Mznp9JQ71V0Ssm7VCXYIlylIdR//3+Sv4ZWXRhWUnBA/uVEgg5bY6sDkEkPHFVka19gOkUIxmpLIW9GFTZ2zk2/X3nZr1fHdeHGCofBtL/EMjhjqfwr871ilAs6BPZfq1etl8htTXGiy2kLy58k+mF8uE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YKhx1CcT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F47C4CB0E;
+	Tue, 27 Aug 2024 11:39:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724758152;
-	bh=7hG0IYA1h2hw7SvTKbJ20PPbF9uHd2tn3lDRrv/IAX8=;
+	s=k20201202; t=1724758788;
+	bh=5aiCA1KifFkP5iaGWPQMv96TRmb7TG8TWiOnSHnr4Kw=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=puV1QpwRLkXJWyL/TTeIrYISl/Lb67ZLV10fHXiwc6YbxzTDFPzhWZOylvmTkxycm
-	 5aqIC2m1iatFIFOejCAKb1qVL6UkY4giFq0PQgV1lyhDir/q7SlOX07P7V+nvdBj9N
-	 ks6C1S496BpufxwVYMSMH3I35Nu50TlaC1jYFZCt5uT1S2oyEmh6rZdIdVllnCYIP7
-	 UZlDRGwmId+wCvbKGX4tojGsn3s8jsQQECdNULbWhKUEiKa6Se3TUL4EXfwYqCac0E
-	 0+mIsa7WSDGnpLvn8umW1pd+kDClbVKApotcoX5ojl8eFAEt1uRXDyJkuZY25PMg3/
-	 tJNYU8ztVo7Iw==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-27018df4ff3so4170999fac.1;
-        Tue, 27 Aug 2024 04:29:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWISJIhe1Zn2yj8Xq/ntEnb+w+vmGh9j9MNxrx/bUG3bRQKQ2Mu9fRGFbboPqnJ9BLd38m1YP2ifiWv@vger.kernel.org, AJvYcCWkfdxR8idPeBkrh6Xo9k85eCVI/R27jZk0+Q06XmN7zWnHJUR8CeTh2YLD9euwyuWqq933LBGgftCSpPY0@vger.kernel.org, AJvYcCXJMnqBtZWxvb+bQgDFwnQS0GGA2xlMin+luLTzJ17atfbgo5LRym5L1YjHXbJ81sdLO+04Y64L4PY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0xzVCdW+4qodctTmeZGg4APq1SdFXxhwTKzns9YsmsbLt1fGv
-	39FAW1WJhHvpQecdoguFfcn7dAdtGiVk1+uXyt8Efs0zS/mCDkha94F9FtiQAK+3r62ZGqo9ZDl
-	3hkFlx/IB5P/cPfAc5BtBY8O+LiA=
-X-Google-Smtp-Source: AGHT+IGluB8OUXeTRU3WcYxq/C0TwAoctiKqmpfkrFvtB9qB6quMRK/TPKl3uIB6H0P84Ellf2rtm+5yWQAKmr67UFc=
-X-Received: by 2002:a05:6870:8993:b0:254:994b:5e6b with SMTP id
- 586e51a60fabf-273e66f290fmr14818695fac.44.1724758151783; Tue, 27 Aug 2024
- 04:29:11 -0700 (PDT)
+	b=YKhx1CcTr13AVlW0lGluSP/OG0ne45wnDwcoKh8pDLTC0OIk+BAsyIUXH9ItJe4t8
+	 t1ZpjPPAeOA+ppxDYHyXDRye0UcGIc3txxzQvZCV5tSKUJZUzNpr2i/BD0MRz19pMR
+	 TV5SBzTc6CmNVfWHfwkDtO7AzFh0S4McBfL/bW6qA/ERj24Tqwt+CpGLj8EATxTibM
+	 dKLGdtQLm/kM/utcSOUjycu1NYjbmzCRJkeGMtzz8PEDTiBOwaAO8dVOhScTd7gUlz
+	 9YZtq+saUkSTu/cGyYUKAuqA9RyFRFEr80QDkJNCHo5Ez7vsq/9b1A/C3LUWfTEFVi
+	 KFEEzgc10Ct5A==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-27045e54272so3511423fac.0;
+        Tue, 27 Aug 2024 04:39:48 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUEbRHJilkQcYWG4siwt/uVIoJc8zP7Ib/u6Tku6zGZtiRTCb5vnYNZ7hubVXt3k/2xu9fK1BpzxqIF+98=@vger.kernel.org, AJvYcCUU+lWfBrvS2boZQgYeKVja8nGvUYnsIMxoXMs/op0VHc66KT+g7Blp1vCh1YTZ9S07Gm61pBJmUpO/8bGI534vBWI=@vger.kernel.org, AJvYcCWRY6s8wwSx4/I6gV7JIfKkjcREFl+GAqXmsh0PsNw6KcbYN+eVB6Z1iy6Eedp/6HTuc9BBpIVDhNY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmUFjSuCY1+2NnRPpTT7cHHsLfPiwhVQnjTWLIGYSltZUmRH4G
+	Zf4KdW6lty4b0+fsQ2SeNM+mFVKpV2SP7B0nnFQYs/yN4tIeVWCsPcmIv9+B19+xeHyH5q4nQFg
+	TZkV8qqceoYYzSlWo6SUKJweRUdA=
+X-Google-Smtp-Source: AGHT+IF/Xn74FPzWxUMpobK5eYPXxi3H+e7CiAt/e1busK+TNSBvd20Vw3Rlp2wN4ZY8to/DMozxHrLIKv+WBrNjWJ4=
+X-Received: by 2002:a05:6870:e249:b0:270:4637:40fa with SMTP id
+ 586e51a60fabf-273e675c7a1mr13625626fac.48.1724758787990; Tue, 27 Aug 2024
+ 04:39:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2803b89021f991662b000f50e45dbaebdcca438a.1724729626.git.len.brown@intel.com>
-In-Reply-To: <2803b89021f991662b000f50e45dbaebdcca438a.1724729626.git.len.brown@intel.com>
+References: <2205737.irdbgypaU6@rjwysocki.net> <CGME20240826113153eucas1p110e90b4cd98aa70601770fe93d7aa1e5@eucas1p1.samsung.com>
+ <2236794.NgBsaNRSFp@rjwysocki.net> <ef729a47-b7f9-48b6-a14d-692565ef1d38@samsung.com>
+ <CAJZ5v0gOqNi+-Hi8uyeEJ9dHzhwU6GyL6t_7Xjt5Knf2yJmH-w@mail.gmail.com> <0e710ff1-4ff4-403a-b85d-b1e51c03378a@samsung.com>
+In-Reply-To: <0e710ff1-4ff4-403a-b85d-b1e51c03378a@samsung.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 27 Aug 2024 13:29:00 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jcOUoN6gDDFkufu8xWF-BHXaSKnXqraHsTkq8JanJXuQ@mail.gmail.com>
-Message-ID: <CAJZ5v0jcOUoN6gDDFkufu8xWF-BHXaSKnXqraHsTkq8JanJXuQ@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: Remove msleep() bloat from acpi_os_sleep()
-To: Len Brown <lenb@kernel.org>
-Cc: rjw@rjwysocki.net, linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>, 
-	Arjan van de Ven <arjan@linux.intel.com>, Todd Brandt <todd.e.brandt@intel.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+Date: Tue, 27 Aug 2024 13:39:36 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h2pF3E_Ni1D7_6jB0NpQrkhcZ6tCCmww8CX02-5qAYEw@mail.gmail.com>
+Message-ID: <CAJZ5v0h2pF3E_Ni1D7_6jB0NpQrkhcZ6tCCmww8CX02-5qAYEw@mail.gmail.com>
+Subject: Re: [PATCH v3 12/14] thermal/of: Use the .should_bind() thermal zone callback
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Zhang Rui <rui.zhang@intel.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>, 
+	Mateusz Majewski <m.majewski2@samsung.com>, linux-amlogic@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-First, let me add a few people who know more about timers than I do.
-
-On Tue, Aug 27, 2024 at 5:42=E2=80=AFAM Len Brown <lenb@kernel.org> wrote:
+On Mon, Aug 26, 2024 at 10:49=E2=80=AFPM Marek Szyprowski
+<m.szyprowski@samsung.com> wrote:
 >
-> From: Len Brown <len.brown@intel.com>
+> On 26.08.2024 14:14, Rafael J. Wysocki wrote:
+> > On Mon, Aug 26, 2024 at 1:32=E2=80=AFPM Marek Szyprowski
+> > <m.szyprowski@samsung.com> wrote:
+> >> On 19.08.2024 18:30, Rafael J. Wysocki wrote:
+> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>>
+> >>> Make the thermal_of driver use the .should_bind() thermal zone callba=
+ck
+> >>> to provide the thermal core with the information on whether or not to
+> >>> bind the given cooling device to the given trip point in the given
+> >>> thermal zone.  If it returns 'true', the thermal core will bind the
+> >>> cooling device to the trip and the corresponding unbinding will be
+> >>> taken care of automatically by the core on the removal of the involve=
+d
+> >>> thermal zone or cooling device.
+> >>>
+> >>> This replaces the .bind() and .unbind() thermal zone callbacks which
+> >>> assumed the same trip points ordering in the driver and in the therma=
+l
+> >>> core (that may not be true any more in the future).  The .bind()
+> >>> callback would walk the given thermal zone's cooling maps to find all
+> >>> of the valid trip point combinations with the given cooling device an=
+d
+> >>> it would call thermal_zone_bind_cooling_device() for all of them usin=
+g
+> >>> trip point indices reflecting the ordering of the trips in the DT.
+> >>>
+> >>> The .should_bind() callback still walks the thermal zone's cooling ma=
+ps,
+> >>> but it can use the trip object passed to it by the thermal core to fi=
+nd
+> >>> the trip in question in the first place and then it uses the
+> >>> corresponding 'cooling-device' entries to look up the given cooling
+> >>> device.  To be able to match the trip object provided by the thermal
+> >>> core to a specific device node, the driver sets the 'priv' field of e=
+ach
+> >>> trip to the corresponding device node pointer during initialization.
+> >>>
+> >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >> This patch landed recently in linux-next as commit 6d71d55c3b12
+> >> ("thermal/of: Use the .should_bind() thermal zone callback")
+> > It has been fixed since and it is commit  94c6110b0b13c6416146 now.
 >
-> Optimize acpi_os_sleep(ms) using usleep_range(floor, ceiling).
-> The floor of the range is the exact requested ms,
-> with an additional 1ms of slack for sleeps above 20ms.
 >
-> This reduces  the kernel resume time of the Dell 9300
-> to 1,124 ms from 2,471 ms.
->
-> The ACPI AML Sleep(ms) method calls acpi_os_sleep(ms),
-> which has invoked msleep(ms) since 2013.
->
-> But msleep(ms) is based on jiffies, and the rounding-up
-> logic to convert to jiffies on a HZ=3D250 system causes
-> msleep(5) to bloat to a minimum of a 12ms delay.
-> msleep(5) typically takes over 15ms!
->
-> As a result, AML delay loops with small Sleep() inside
-> magnify the entire loop.  A particularly painful example
-> is ACPI support for powering-on ICL and TGL
-> thunderbolt/pcie_ports during system resume.
->
-> Regarding jiffy-based msleep() being inexpensive
-> and hrtimer-based usleep_range() being expensive.
-> ACPI AML timer invocations are rare, and so it
-> is unlikely the hrtimer cost will be noticible,
-> or even measurable.  At the same time, the msleep()
-> timer duration bloat is significant enough to
-> be noticed by end users.
+> Confirmed. Thanks for fixing it and sorry for the noise.
 
-I'm not sure why you are refusing to follow the implementation of
-fsleep() and Documentation/timers/timers-howto.rst and still use
-msleep() for sleep durations longer than 20 ms.
+Thank you!
 
-Why should usleep_range() be used for 100 ms sleeps, for instance?
-This goes against the recommendation in the above document, so is
-there a particular reason?
-
-> Regarding usleep_range() timer coalescing.
-> It virtually never works during ACPI flows, which
-> commonly run when there are few coalescing
-> opportunities. As a result, the timers almost
-> always expire at the maximum end of their specified range.
-
-I don't think that's the main point of using a nonzero range in
-usleep_range().  AFAICS, this is about letting the timekeeping
-subsystem know how much you care about timer precision so it can
-arrange things to meet everyone's needs.
-
-> It was tempting to use usleep_range(us, us)
-> for all values of us.  But 1 ms is added to the
-> range for timers over 20ms on the reasoning that
-> the AML Sleep interface has a granularity of 1ms,
-> most costly loops use duration under 20ms inside,
-> and singular long sleeps are unlitly to notice an
-> additiona 1ms, so why not allow some coalescing...
-
-So again, why not use msleep() for sleeps longer than 20 ms?
-
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D216263
-> Signed-off-by: Len Brown <len.brown@intel.com>
-> Suggested-by: Arjan van de Ven <arjan@linux.intel.com>
-> Tested-by: Todd Brandt <todd.e.brandt@intel.com>
-> ---
->  drivers/acpi/osl.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
-> index 70af3fbbebe5..c4c76f86cd7a 100644
-> --- a/drivers/acpi/osl.c
-> +++ b/drivers/acpi/osl.c
-> @@ -607,7 +607,13 @@ acpi_status acpi_os_remove_interrupt_handler(u32 gsi=
-, acpi_osd_handler handler)
->
->  void acpi_os_sleep(u64 ms)
->  {
-> -       msleep(ms);
-> +       u64 us =3D ms * 1000;
-> +
-> +       if (us <=3D 20000)
-> +               usleep_range(us, us);
-> +       else
-> +               usleep_range(us, us + 1000);
-> +
->  }
->
->  void acpi_os_stall(u32 us)
-> --
-
-While I agree with using usleep_range() for sleeps up to 20 ms in
-acpi_os_sleep(), I disagree with the patch as is.
-
-Thanks!
+And it wasn't noise.  You reported the problem as soon as you saw it
+and before you could see the fix.  Somebody else saw it earlier, but
+there's nothing wrong with that.
 
