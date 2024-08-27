@@ -1,120 +1,152 @@
-Return-Path: <linux-pm+bounces-12921-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12922-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 417E095FDA4
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 01:01:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4A5395FFDD
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 05:35:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 758F91C22279
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2024 23:01:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 231DA1C2218D
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 03:35:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF26C1494AB;
-	Mon, 26 Aug 2024 23:00:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEF651803D;
+	Tue, 27 Aug 2024 03:35:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FZKEdDZ7"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="mhejfn4D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BAE487A5;
-	Mon, 26 Aug 2024 23:00:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C648617D2;
+	Tue, 27 Aug 2024 03:35:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724713247; cv=none; b=CsPHOWdW10TWyG6Ay1lmqDQKMTtyEv6yFF4O/rfs9lwpiiLVJmeZMcZlksltuN2mstXY8yB/9BTpZYtyNYq9BIomqLGXCnrQFYqKFU5Als7DWvG9tu36CSb1F6PNwbkBeJcerisUKIfBqEeqCwWmIfd3pqGxHksiKOAdUAhFjfI=
+	t=1724729747; cv=none; b=ixUl0ugiGh3ATUBmCNj3IvcTHLHNZNEV+fgFlGoJ+Ts121X5Aw+UJT3m4Hp2760sqcSuAb58+jD0Im3gkgjUG/9iqlT+REYRcRVBHJ0m5arqIFBj0qyLmzl9yICnXZoshM1wkbp/zqJiUENW951kxfZzhErPQAJOy80XnTa7bgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724713247; c=relaxed/simple;
-	bh=rsW3FuTSU9Hd0/Ixqri1uU9UjBMBX0oRwPSLiLLbOss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CwyVVogj2VtMh+66Amj61eMVB7bVefrpXlw6nDEgBdLSgw4/+vmlweUFbSf+1UdjzLJpDaQgbaLQbiMe7xC9QMdhjQSgyBPgXqPGYp/BAIvfEa80lDgLFjHiqlJUR9jQb28TTKgy2en5ksFpAKzWkHGLWkDeDpbMsGUVz9rUXjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FZKEdDZ7; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724713246; x=1756249246;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rsW3FuTSU9Hd0/Ixqri1uU9UjBMBX0oRwPSLiLLbOss=;
-  b=FZKEdDZ7bKIVxEzVYX0bNDTzVxwL4Wuq/3Qw5axvrAMNwtrqR1Ndx6gR
-   aMMOlaKEcGiRGTsIOW0V9vO59+lNYdPJBaj5lf9AUlNeC8epF4pi3uU6X
-   ZFtNSk+cdY3KLotkcUqjuznl5ZCJCkmz4ttSZZ+IIqEaHiUlcNVpqt4qI
-   5vBGfByShpXqilfTNKjuXrSS/e3BjF650a2TvnyYd3Cjz+QmO6go+qTa+
-   0vgqAiBPYVtE0J2W3dA94oZXg68weldUM3qhub2cTOc0Eh/zhhmoOvVu7
-   7Rvjh8zjKFbvmksaxyFPriuJbOnDdpGaAM6ExJ5LT3O2iG1zxpm/PKgW+
-   g==;
-X-CSE-ConnectionGUID: H1RdixpURNy13sd7WzYyAA==
-X-CSE-MsgGUID: NByRm+TETtGgjltalqQcKQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="23047280"
-X-IronPort-AV: E=Sophos;i="6.10,178,1719903600"; 
-   d="scan'208";a="23047280"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 16:00:46 -0700
-X-CSE-ConnectionGUID: 45HimrjyQhqOeQ2kHp3hLg==
-X-CSE-MsgGUID: gXJDuSo7SB6UOk1KYgOYOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,178,1719903600"; 
-   d="scan'208";a="93454540"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 16:00:45 -0700
-Date: Mon, 26 Aug 2024 16:07:42 -0700
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: x86 Maintainers <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ricardo Neri <ricardo.neri@intel.com>,
-	Tim Chen <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 3/3] cpufreq: intel_pstate: Set asymmetric CPU
- capacity on hybrid systems
-Message-ID: <20240826230742.GA7773@ranerica-svr.sc.intel.com>
-References: <4941491.31r3eYUQgx@rjwysocki.net>
- <3311190.44csPzL39Z@rjwysocki.net>
+	s=arc-20240116; t=1724729747; c=relaxed/simple;
+	bh=JxOOw3I8hM8McboYblBC9AuhxVq0E8rfFp3biyQnsSg=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=de/yF5J/wHxmxFjxMiwZwsJHLyWpnUGqm+m6p0sg5RaJMIbiaLy+edksvq1MidKHvtWtNjCyUMcWdnI7/36ZKYU5tLXT6LFTwkjKQ5pnWkGCbJg9HHyhwkckYS13ybp6a6aeUtImOaelP0R9khcHlsfhYQXnlwMzqP8R7oBNfWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=mhejfn4D; arc=none smtp.client-ip=162.62.57.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1724729739; bh=6mdDp6P8g3MUmwup0fCL42gvss1KTTQoo2H9D0IBPFo=;
+	h=From:To:Cc:Subject:Date;
+	b=mhejfn4DL6LjoxNVeGzOPDL06kxY86StNKmPq6Pm9wjIbcN7opSVCC18eKRI3ToAD
+	 +ayiSS0Y7jAEROX7YV3CSLC0P6SBfOoLgankxQ2aNAZQ3t7v9QBVkNv0YIRs+4gfi8
+	 Ypscy2tUG6HOGtQoLjeM/GHuoStWtb+JmqbssQxY=
+Received: from iZ2ze0ccts00nkjy9wuyo6Z.localdomain ([101.201.76.96])
+	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
+	id 68AAC261; Tue, 27 Aug 2024 11:26:10 +0800
+X-QQ-mid: xmsmtpt1724729170tmbqb2psx
+Message-ID: <tencent_65D10BAC9579867D29B79F44D999AED1E506@qq.com>
+X-QQ-XMAILINFO: Nd//4bIXhHdblwXXSM2RepgMK+NRSGkdF6VKULRYDdCpUJg0sJ+v7FlfJp5fdS
+	 /WFPHfVibXsNVcyuGPgke193vtFmA49du/P5MjPDQbPa5wO8ccAfszDhCDHtJhjfX3iGNZ2eNlRD
+	 ntNXAY3gmdPYPYfpGH0jdVEmW1hRsgCVXGQ7xnagSJbVqFmU2sJ25J25tPvqTQDzpm3QNlEYhm5y
+	 wCqllSCLA/QiM2NnYINQUUJZ84gfIIMiQJaRXHb+KTNGL5b/DrpDsNgNTtVsDNUcFoK7wIwkLPLz
+	 3RJgQujvnViRRvD67E3hT+SF7ZzmGONQ1nCWNqmIKXdi5TqcOaWSf5wNDlvpCPyHB1TCLsgNOMDs
+	 LhsS8DVd/moN6vuv3TjZzy0S3FFboQTtZiQKyU9fZeNJsoetSPvVpACCMO4xencOvbHe2bqwuX/P
+	 8jBRdqkXhV5f/7LTeNnkCl0NqV3/MUj7NE5Ltl2ZPTJ7wYDKrdIqhPmaEaiz2KvhFFwB2H9brFSD
+	 /lFHoBcSzB3H1M2d7LKUn74tvXR35jQpzZf4IyPB+KdrvMvlbg9e80Qu7RDUP73+Jb0ukxLddwN1
+	 t8v1P5wCOTjRT+P24tUGgjqScc3c3CN+PBOOEi7oPmaS2woLf7GGZ34wV/yIK0vlFErsNkrLOyia
+	 Qby9AXfnLGOEfU+tXxlIZF006TmGaPgkNB5EagG2NiEXeF9qFOYeExaRBW27yuYi8eV94VaIpdM5
+	 Eq0l/I8iKbMpgrCXVUWZtOPZFoddglYr188GMir+d+lkBmd9y/tvLf6Ud6pmfX23xgz16+eBVUT5
+	 c8NtLm66AC0sL8LMJOlsCMRsvQCIuDyUbpNr9O0pQ/Ls/XweCjIQbZm60gt+2Xpyp/Dg/ewh6TQA
+	 /Xq2FlUL69ddOldzcrcDb9kxdNzF30vf2uZm0CzeHdOzv5yRxpCMw=
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+From: Yanhao Dong <570260087@qq.com>
+To: rafael@kernel.org
+Cc: daniel.lezcano@linaro.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	ysaydong@gmail.com
+Subject: [PATCH] cpuidle: haltpoll: Fix guest_halt_poll_ns failed to take effect
+Date: Tue, 27 Aug 2024 11:26:09 +0800
+X-OQ-MSGID: <20240827032609.531946-1-570260087@qq.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3311190.44csPzL39Z@rjwysocki.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 12, 2024 at 02:44:30PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-[...]
-> @@ -3143,6 +3341,20 @@ static int intel_pstate_register_driver(
->  
->  	global.min_perf_pct = min_perf_pct_min();
->  
-> +	/*
-> +	 * On hybrid systems, use asym capacity instead of ITMT, but because
-> +	 * the capacity of SMT threads is not deterministic even approximately,
-> +	 * do not do that when SMT is in use.
-> +	 */
-> +	if (hwp_is_hybrid && !sched_smt_active() &&
-> +	    arch_enable_hybrid_capacity_scale()) {
-> +		sched_clear_itmt_support();
-> +
-> +		hybrid_init_cpu_scaling();
-> +
-> +		arch_rebuild_sched_domains();
+From: ysay <ysaydong@gmail.com>
 
-sched_clear_itmt_support() also calls arch_rebuild_sched_domains(). The
-latter is also called earlier via sched_set_itmt_support(), totaling 3
-calls, two of which are wasted.
+When guest_halt_poll_allow_shrink=N,setting guest_halt_poll_ns
+from a large value to 0 does not reset the CPU polling time,
+despite guest_halt_poll_ns being intended as a mandatory maximum
+time limit.
 
-Perhaps at minimum hybrid_init_cpu_scaling() can be before
-sched_clear_itmt_support(). The changes made by these two functions will
-be picked up in a single call of arch_rebuild_sched_domains().
+The problem was situated in the adjust_poll_limit() within
+drivers/cpuidle/governors/haltpoll.c:79.
 
-Moreover, ITMT can be not enabled at all if so we wish. By the time
-intel_pstate_set_itmt_prio() is called, the value of hwp_is_hybrid is
-already known.
+Specifically, when guest_halt_poll_allow_shrink was set to N,
+resetting guest_halt_poll_ns to zero did not lead to executing any
+section of code that adjusts dev->poll_limit_ns.
+
+The issue has been resolved by relocating the check and assignment for
+dev->poll_limit_ns outside of the conditional block.
+This ensures that every modification to guest_halt_poll_ns
+properly influences the CPU polling time.
+
+Signed-off-by: ysay <ysaydong@gmail.com>
+Fixes: 2cffe9f6b96f ("cpuidle: add haltpoll governor")
+---
+ drivers/cpuidle/governors/haltpoll.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
+index 663b7f164..99c6260d7 100644
+--- a/drivers/cpuidle/governors/haltpoll.c
++++ b/drivers/cpuidle/governors/haltpoll.c
+@@ -78,26 +78,22 @@ static int haltpoll_select(struct cpuidle_driver *drv,
+ 
+ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
+ {
+-	unsigned int val;
++	unsigned int val = dev->poll_limit_ns;
+ 
+ 	/* Grow cpu_halt_poll_us if
+ 	 * cpu_halt_poll_us < block_ns < guest_halt_poll_us
+ 	 */
+ 	if (block_ns > dev->poll_limit_ns && block_ns <= guest_halt_poll_ns) {
+-		val = dev->poll_limit_ns * guest_halt_poll_grow;
++		val *= guest_halt_poll_grow;
+ 
+ 		if (val < guest_halt_poll_grow_start)
+ 			val = guest_halt_poll_grow_start;
+-		if (val > guest_halt_poll_ns)
+-			val = guest_halt_poll_ns;
+ 
+ 		trace_guest_halt_poll_ns_grow(val, dev->poll_limit_ns);
+-		dev->poll_limit_ns = val;
+ 	} else if (block_ns > guest_halt_poll_ns &&
+ 		   guest_halt_poll_allow_shrink) {
+ 		unsigned int shrink = guest_halt_poll_shrink;
+ 
+-		val = dev->poll_limit_ns;
+ 		if (shrink == 0) {
+ 			val = 0;
+ 		} else {
+@@ -108,8 +104,12 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
+ 		}
+ 
+ 		trace_guest_halt_poll_ns_shrink(val, dev->poll_limit_ns);
+-		dev->poll_limit_ns = val;
+ 	}
++
++	if (val > guest_halt_poll_ns)
++		val = guest_halt_poll_ns;
++
++	dev->poll_limit_ns = val;
+ }
+ 
+ /**
+-- 
+2.43.5
+
 
