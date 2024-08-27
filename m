@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-12976-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12977-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54359961266
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 17:30:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3A4E9612BD
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 17:34:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 797B91C23A62
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 15:30:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BC4E2839EF
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 15:34:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0285F1D0DC6;
-	Tue, 27 Aug 2024 15:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E5D91CE6EF;
+	Tue, 27 Aug 2024 15:32:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K8hpQD4Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oWIGSLw4"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEEC1D04AE;
-	Tue, 27 Aug 2024 15:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB131C9EB0;
+	Tue, 27 Aug 2024 15:32:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724772513; cv=none; b=oP7SEpmGmK8WL32/IFlKStfTkUT2hkMx9lkA8ygDdLWEdZfeUCnnCmruNHp3iDGMi7pFNle5H9mL8XGMX6hzq4+8y1irjgLTxR8pL3lzemOc0waqP+o8DlePcOJdnlqBc9bB8xtfLHqOR1vG4PI4fWtiLVBXFKYXqS4hrq7zsxQ=
+	t=1724772749; cv=none; b=fehyIYmpqJjbzDoc0gEv7fpXofK4dCpZzh8sVgA+ebfNuykWlGxjuHMtvUHRDluI74CEF+Ol3mQib5DRby/zz/Oma4br+x8xWfsVVWZAjhcqcYZtOKP7Jvffhql4UNiDtl+lvwENaQG5zyt54iLWZBhmLD0u/7o4fDnZrD12s38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724772513; c=relaxed/simple;
-	bh=fn5j9ZR25l0oZRDac0NSTmcWW1ek3HYMWOkG0ltBoK8=;
+	s=arc-20240116; t=1724772749; c=relaxed/simple;
+	bh=oMFIrjpb/wL45DA40NAqPybmEnDxPFSUlGpynz4wF2U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BIu9GwueKDh/5t10QTeJ9uSVXG2SfZY9/WG68DOI9h4qfpqnLpLdNqq/R32qbT1Ak2L1kgXnMTXT5Zso2mV2PYfgUXhD8KziOUoheigtgjxDaygJS7KtB3Nts9edZsXfyWee7+Xt8KatCW+39cWBYoJZHMaHrFh5kRu+86GqjO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K8hpQD4Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3407C61067;
-	Tue, 27 Aug 2024 15:28:26 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=iSIcHAodlY/6QQ3CK+prrKPezO+pKalQ352eTCYbt+c/jTzd5HeZR5uWVgwoClpVHn1jphzOF2lqOuEG2tokhBy4JJjL4VcKICLBQVJLLRUFMvNSbVZGIK0kPFkWUqA+BPvsTTZEy6bVZvxsjc6XbD8T+ofF1nKogU2S+DYWec4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oWIGSLw4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9116FC61050;
+	Tue, 27 Aug 2024 15:32:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724772513;
-	bh=fn5j9ZR25l0oZRDac0NSTmcWW1ek3HYMWOkG0ltBoK8=;
+	s=k20201202; t=1724772749;
+	bh=oMFIrjpb/wL45DA40NAqPybmEnDxPFSUlGpynz4wF2U=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=K8hpQD4ZD5VFFLaZ3/leE2A6eyP5+aGJ7P2XvufcXK2/5cK9AkIdKwc2P5rNyIBLx
-	 gDwjjAJG0ANQAlRAOMxJNJPp2rmoSU3xJrYVX0g/DpkjKxpUpweGxlGn1OXi5JxFrW
-	 ddjpzwlaROV2tLE3Tuq6anejwjOpJXIdF7CTTr8ZF3k4wq8xkGcIyuCzOH5EhxTPHB
-	 uhnsdH7smdL6MVQv4t8+RCMOXEka7nfNwXt2OiCElqz3Hd7htIhaSIlVb/f3Y1VLOz
-	 Pf5SpMxcIYnzE+dR70hBBYKh5boKBGUt/4IMRqgUh1WwoP5bf7tK24Sp2AwFxqljZo
-	 O17iAmcmh4v7g==
-Message-ID: <498fc1c9-9ade-4443-b64c-0d8fc9b7931b@kernel.org>
-Date: Tue, 27 Aug 2024 17:28:23 +0200
+	b=oWIGSLw4QDsK1C4sX7KEzHUMXx8j9mdnaVnI1OjJpyVgki0h5/1WiPp7WlXZsNktQ
+	 y9HGWclovKpm66xhwasgajNbN0EaDTRPg9tIc3K5Pmpw2aSPi7+i1J/rD6RQgIw29h
+	 gUeG39EF3q26wlyR9xeTjeS8y5FRiI2ofHhBjWolpMqkmUC/xX+q2NHaDZIuDQ42ek
+	 G32QJpdljjZb9FNd0dZKEFd24juPkEGCa82o5Tzg71JqJmwfPUuKZMR8UR+fLbxxnF
+	 TiTDqEhgRJZI8X95EgtZBTOs8Dd2Rx63pprmC6kj+OZjXOgvsIdozqvKWObdAHO0YT
+	 8eWXXKr1Ha5vw==
+Message-ID: <2221d0dd-e7ed-4ac8-a3c8-905ad8037fb6@kernel.org>
+Date: Tue, 27 Aug 2024 17:32:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] interconnect: qcom: add QCS8300 interconnect provider
- driver
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm QCS8300 DT
+ bindings
 To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
  Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
@@ -67,7 +67,7 @@ Cc: Konrad Dybcio <konradybcio@kernel.org>,
  linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
  quic_okukatla@quicinc.com
 References: <20240827151622.305-1-quic_rlaggysh@quicinc.com>
- <20240827151622.305-3-quic_rlaggysh@quicinc.com>
+ <20240827151622.305-2-quic_rlaggysh@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,34 +113,78 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240827151622.305-3-quic_rlaggysh@quicinc.com>
+In-Reply-To: <20240827151622.305-2-quic_rlaggysh@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/08/2024 17:16, Raviteja Laggyshetty wrote:
-> Add driver for the Qualcomm interconnect buses found in QCS8300
-> based platforms. The topology consists of several NoCs that are
-> controlled by a remote processor that collects the aggregated
-> bandwidth for each master-slave pairs.
+> The Qualcomm QCS8300 SoC has several bus fabrics that could be
+> controlled and tuned dynamically according to the bandwidth demand.
 > 
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+> ---
 
+A nit, subject: drop second/last, redundant "DT bindings". The
+"dt-bindings" prefix is already stating that these are bindings.
+See also:
+https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+
+And you do not add "Qualcomm QCS8300" here. QCS8300 is a SoC. You add
+here specific device, right?
+
+
+>  .../interconnect/qcom,qcs8300-rpmh.yaml       |  50 +++++
+>  .../interconnect/qcom,qcs8300-rpmh.h          | 189 ++++++++++++++++++
+>  2 files changed, 239 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs8300-rpmh.yaml
+>  create mode 100644 include/dt-bindings/interconnect/qcom,qcs8300-rpmh.h
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,qcs8300-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,qcs8300-rpmh.yaml
+> new file mode 100644
+> index 000000000000..ac75eeb6a6b4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,qcs8300-rpmh.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/qcom,qcs8300-rpmh.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +static struct qcom_icc_node *nspa_noc_nodes[] = {
-> +	[MASTER_CDSP_NOC_CFG] = &qhm_nsp_noc_config,
-> +	[MASTER_CDSP_PROC] = &qxm_nsp,
-> +	[SLAVE_HCP_A] = &qns_hcp,
-> +	[SLAVE_CDSP_MEM_NOC] = &qns_nsp_gemnoc,
-> +	[SLAVE_SERVICE_NSP_NOC] = &service_nsp_noc,
-> +};
+> +title: Qualcomm Technologies, Inc. RPMh Network-On-Chip Interconnect on QCS8300
 > +
-> +static struct qcom_icc_desc qcs8300_nspa_noc = {
+> +maintainers:
+> +  - Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+> +
+> +description: |
+> +  RPMh interconnect providers support system bandwidth requirements through
+> +  RPMh hardware accelerators known as Bus Clock Manager (BCM).
+> +
+> +  See also:: include/dt-bindings/interconnect/qcom,qcs8300.h
 
-Sorry, but no. Start from scratch from MAINLINE driver so you won't
-repeat all the issues we fixed last years. Everything was fixed but then
-you send one more driver with exact same issues. EXACT.
+Just one ':'
 
-This applies to all QCS8300 submissions... actually this applies to all
-contributions to Linux kernel. Don't send your downstream code.
+
+> +required:
+> +  - compatible
+> +
+> +allOf:
+> +  - $ref: qcom,rpmh-common.yaml#
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    gem_noc: interconnect-gem-noc {
+> +        compatible = "qcom,qcs8300-gem-noc";
+
+Hm, no reg?
+
+Where is your DTS? Please follow standard upstream process, which means
+you send DTS separately. Your internal guideline already should cover
+that. If it does not, please look at upstreaming of SM8650, update your
+guideline and then follow SM8650 process. That way we can verify that
+what you send is true.
 
 Best regards,
 Krzysztof
