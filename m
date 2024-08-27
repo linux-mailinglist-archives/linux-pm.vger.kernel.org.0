@@ -1,152 +1,166 @@
-Return-Path: <linux-pm+bounces-12922-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-12923-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4A5395FFDD
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 05:35:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47F9495FFE3
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 05:36:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 231DA1C2218D
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 03:35:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA2E3B22115
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2024 03:36:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEF651803D;
-	Tue, 27 Aug 2024 03:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96ABA1B978;
+	Tue, 27 Aug 2024 03:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="mhejfn4D"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dPOgMgtb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C648617D2;
-	Tue, 27 Aug 2024 03:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECCC417D2;
+	Tue, 27 Aug 2024 03:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724729747; cv=none; b=ixUl0ugiGh3ATUBmCNj3IvcTHLHNZNEV+fgFlGoJ+Ts121X5Aw+UJT3m4Hp2760sqcSuAb58+jD0Im3gkgjUG/9iqlT+REYRcRVBHJ0m5arqIFBj0qyLmzl9yICnXZoshM1wkbp/zqJiUENW951kxfZzhErPQAJOy80XnTa7bgM=
+	t=1724729806; cv=none; b=K+i8U6t5ltQ8lT2zSQtDZjgggvtE89QG1pRHy9ml0EtCjAB806bZqn+aJ6mxVitK3ISmWPN6R1u6W7CtI/2LEUm/IyUrwbEGIQX7N9NF6j0Kix7UbK/uc99typJI/vb9arkT/HkS9KYF+cHuGGsEBULJ7vKtPDb8/YWoxawBje0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724729747; c=relaxed/simple;
-	bh=JxOOw3I8hM8McboYblBC9AuhxVq0E8rfFp3biyQnsSg=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=de/yF5J/wHxmxFjxMiwZwsJHLyWpnUGqm+m6p0sg5RaJMIbiaLy+edksvq1MidKHvtWtNjCyUMcWdnI7/36ZKYU5tLXT6LFTwkjKQ5pnWkGCbJg9HHyhwkckYS13ybp6a6aeUtImOaelP0R9khcHlsfhYQXnlwMzqP8R7oBNfWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=mhejfn4D; arc=none smtp.client-ip=162.62.57.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1724729739; bh=6mdDp6P8g3MUmwup0fCL42gvss1KTTQoo2H9D0IBPFo=;
-	h=From:To:Cc:Subject:Date;
-	b=mhejfn4DL6LjoxNVeGzOPDL06kxY86StNKmPq6Pm9wjIbcN7opSVCC18eKRI3ToAD
-	 +ayiSS0Y7jAEROX7YV3CSLC0P6SBfOoLgankxQ2aNAZQ3t7v9QBVkNv0YIRs+4gfi8
-	 Ypscy2tUG6HOGtQoLjeM/GHuoStWtb+JmqbssQxY=
-Received: from iZ2ze0ccts00nkjy9wuyo6Z.localdomain ([101.201.76.96])
-	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
-	id 68AAC261; Tue, 27 Aug 2024 11:26:10 +0800
-X-QQ-mid: xmsmtpt1724729170tmbqb2psx
-Message-ID: <tencent_65D10BAC9579867D29B79F44D999AED1E506@qq.com>
-X-QQ-XMAILINFO: Nd//4bIXhHdblwXXSM2RepgMK+NRSGkdF6VKULRYDdCpUJg0sJ+v7FlfJp5fdS
-	 /WFPHfVibXsNVcyuGPgke193vtFmA49du/P5MjPDQbPa5wO8ccAfszDhCDHtJhjfX3iGNZ2eNlRD
-	 ntNXAY3gmdPYPYfpGH0jdVEmW1hRsgCVXGQ7xnagSJbVqFmU2sJ25J25tPvqTQDzpm3QNlEYhm5y
-	 wCqllSCLA/QiM2NnYINQUUJZ84gfIIMiQJaRXHb+KTNGL5b/DrpDsNgNTtVsDNUcFoK7wIwkLPLz
-	 3RJgQujvnViRRvD67E3hT+SF7ZzmGONQ1nCWNqmIKXdi5TqcOaWSf5wNDlvpCPyHB1TCLsgNOMDs
-	 LhsS8DVd/moN6vuv3TjZzy0S3FFboQTtZiQKyU9fZeNJsoetSPvVpACCMO4xencOvbHe2bqwuX/P
-	 8jBRdqkXhV5f/7LTeNnkCl0NqV3/MUj7NE5Ltl2ZPTJ7wYDKrdIqhPmaEaiz2KvhFFwB2H9brFSD
-	 /lFHoBcSzB3H1M2d7LKUn74tvXR35jQpzZf4IyPB+KdrvMvlbg9e80Qu7RDUP73+Jb0ukxLddwN1
-	 t8v1P5wCOTjRT+P24tUGgjqScc3c3CN+PBOOEi7oPmaS2woLf7GGZ34wV/yIK0vlFErsNkrLOyia
-	 Qby9AXfnLGOEfU+tXxlIZF006TmGaPgkNB5EagG2NiEXeF9qFOYeExaRBW27yuYi8eV94VaIpdM5
-	 Eq0l/I8iKbMpgrCXVUWZtOPZFoddglYr188GMir+d+lkBmd9y/tvLf6Ud6pmfX23xgz16+eBVUT5
-	 c8NtLm66AC0sL8LMJOlsCMRsvQCIuDyUbpNr9O0pQ/Ls/XweCjIQbZm60gt+2Xpyp/Dg/ewh6TQA
-	 /Xq2FlUL69ddOldzcrcDb9kxdNzF30vf2uZm0CzeHdOzv5yRxpCMw=
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
-From: Yanhao Dong <570260087@qq.com>
-To: rafael@kernel.org
-Cc: daniel.lezcano@linaro.org,
+	s=arc-20240116; t=1724729806; c=relaxed/simple;
+	bh=Ho1s9vK6WS5ven3f+MOaOZfoDticBN/hl5aZNrTSOik=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J7IGzjpvIuB4DFpcLIZGuEskmH7QoJaJvTeBJbz8wSq0hOKAcZr0hqA4GvKfDwYI7ikwiHvMxdv92h8PlnylLYgMpVv5+nMoRveeGoM9K+UpWovfNWhjhOZ9qzSReF1wBbgA6RzS5bOK+WwfS9Ydbc8ZLFkwQh2oYRWhScJECGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dPOgMgtb; arc=none smtp.client-ip=209.85.166.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-39d4161c398so20876785ab.3;
+        Mon, 26 Aug 2024 20:36:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724729804; x=1725334604; darn=vger.kernel.org;
+        h=content-transfer-encoding:organization:reply-to:mime-version
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vn0NLpEW1bw02AkAxFS5IlEL/ge7VBPrGJvvCAfuQds=;
+        b=dPOgMgtb93g6xfblisNBcOol8Bq6mC6tBlKVgP81CIV4JRKrb4IC+6lDdOk6hw51B3
+         cV/4L8qkUXUVsr9L1YXa3m4J5TbjKlIbJclq0qvb7qrQZeVMeEneJs21wp3LskuxaqDA
+         b5FowLmU4o/iCHuVLuwUE3v4tIa+DjPNkkv4qGxltwAk5O4en6Yt4SNAXvIxGnoARR5g
+         CpNQkP64lsOPMVWPMmMLOKABHMcypqZCDnJO90Q3F/6OiP0I8YXFsypc/g6t5EMiBNru
+         VHHbVu/IeVx3NUhasbk2H3yRdKurZ45xvIfqcNO6ZGjIHVIhfcxAdU6HQDTChZX9HwMD
+         vqWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724729804; x=1725334604;
+        h=content-transfer-encoding:organization:reply-to:mime-version
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Vn0NLpEW1bw02AkAxFS5IlEL/ge7VBPrGJvvCAfuQds=;
+        b=cVHHgaQcfXuW/UqdxEqr3rFMuiSUGfeqU0J63qIOv0BEvSMrIk+o0UchGrHOcEVoHt
+         aG1uD30vHn30YLJ/yboTBgp/R1IrBY+GC1DRSJNVw+YdN1i2w8JUtOC48P77Zq3vf+1/
+         8B49dinXVmqbz/4sDEjcllzLZAjsvt1wE+Nc3V17Lq3dnWJimpYfdEdL5K3/dfVrrSxQ
+         wdKp8AYfxrGjskdLoyjbphX7ocx8BePGdVXL/iYs3ZXUkECShYKkZHJTOHiy1xhMrHxw
+         v1s3PxUW6AqG1QDStSBJ5H3NQF/GRP5Fgfelg71OnF14orQccrStogFb/kqykRtNDp94
+         agFA==
+X-Forwarded-Encrypted: i=1; AJvYcCW9w2T9g0GZo/en0D2hAR0bYo8YjMJne8PFcOIJ5D4x9YpTgl3QMLChCFXv8VKbuOZbmKyxfI5hsk0=@vger.kernel.org, AJvYcCXaZNjURMq8q84R4rtizLNh4lCuu+me3hxEQVMAgnnBXVbVK8JgNmjvtBYCQbUHyeoJrVngnf5TfbD+q3U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKPvGdSVSgGroIcVSyftCKX+PSmUpBXLsZ/Mx4aw/Nn28fHJVk
+	gYqur66y/Vl23wsVuxMeAb6kcr7zIvL66UYmAfNS0rp092akCWTi
+X-Google-Smtp-Source: AGHT+IF0TZOLF1C0ImuoTX6dAmT09pp9NxxO4tGq4K0QSXsUlhCDWz+2GZxDBkSU5ZjTpy6nzB7g0Q==
+X-Received: by 2002:a92:c261:0:b0:39a:ea4c:8c26 with SMTP id e9e14a558f8ab-39e63dd8ee2mr19389265ab.1.1724729803867;
+        Mon, 26 Aug 2024 20:36:43 -0700 (PDT)
+Received: from lenb-intel-nuc8i7hvkva.. (h75-100-80-185.cntcnh.broadband.dynamic.tds.net. [75.100.80.185])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-39d73e7c20csm37054335ab.40.2024.08.26.20.36.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Aug 2024 20:36:43 -0700 (PDT)
+Sender: Len Brown <lenb417@gmail.com>
+From: Len Brown <lenb@kernel.org>
+To: rjw@rjwysocki.net
+Cc: linux-acpi@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	ysaydong@gmail.com
-Subject: [PATCH] cpuidle: haltpoll: Fix guest_halt_poll_ns failed to take effect
-Date: Tue, 27 Aug 2024 11:26:09 +0800
-X-OQ-MSGID: <20240827032609.531946-1-570260087@qq.com>
-X-Mailer: git-send-email 2.43.5
+	Len Brown <len.brown@intel.com>,
+	Arjan van de Ven <arjan@linux.intel.com>,
+	Todd Brandt <todd.e.brandt@intel.com>
+Subject: [PATCH] ACPI: Remove msleep() bloat from acpi_os_sleep()
+Date: Mon, 26 Aug 2024 23:35:18 -0400
+Message-ID: <2803b89021f991662b000f50e45dbaebdcca438a.1724729626.git.len.brown@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Reply-To: Len Brown <lenb@kernel.org>
+Organization: Intel Open Source Technology Center
 Content-Transfer-Encoding: 8bit
 
-From: ysay <ysaydong@gmail.com>
+From: Len Brown <len.brown@intel.com>
 
-When guest_halt_poll_allow_shrink=N,setting guest_halt_poll_ns
-from a large value to 0 does not reset the CPU polling time,
-despite guest_halt_poll_ns being intended as a mandatory maximum
-time limit.
+Optimize acpi_os_sleep(ms) using usleep_range(floor, ceiling).
+The floor of the range is the exact requested ms,
+with an additional 1ms of slack for sleeps above 20ms.
 
-The problem was situated in the adjust_poll_limit() within
-drivers/cpuidle/governors/haltpoll.c:79.
+This reduces  the kernel resume time of the Dell 9300
+to 1,124 ms from 2,471 ms.
 
-Specifically, when guest_halt_poll_allow_shrink was set to N,
-resetting guest_halt_poll_ns to zero did not lead to executing any
-section of code that adjusts dev->poll_limit_ns.
+The ACPI AML Sleep(ms) method calls acpi_os_sleep(ms),
+which has invoked msleep(ms) since 2013.
 
-The issue has been resolved by relocating the check and assignment for
-dev->poll_limit_ns outside of the conditional block.
-This ensures that every modification to guest_halt_poll_ns
-properly influences the CPU polling time.
+But msleep(ms) is based on jiffies, and the rounding-up
+logic to convert to jiffies on a HZ=250 system causes
+msleep(5) to bloat to a minimum of a 12ms delay.
+msleep(5) typically takes over 15ms!
 
-Signed-off-by: ysay <ysaydong@gmail.com>
-Fixes: 2cffe9f6b96f ("cpuidle: add haltpoll governor")
+As a result, AML delay loops with small Sleep() inside
+magnify the entire loop.  A particularly painful example
+is ACPI support for powering-on ICL and TGL
+thunderbolt/pcie_ports during system resume.
+
+Regarding jiffy-based msleep() being inexpensive
+and hrtimer-based usleep_range() being expensive.
+ACPI AML timer invocations are rare, and so it
+is unlikely the hrtimer cost will be noticible,
+or even measurable.  At the same time, the msleep()
+timer duration bloat is significant enough to
+be noticed by end users.
+
+Regarding usleep_range() timer coalescing.
+It virtually never works during ACPI flows, which
+commonly run when there are few coalescing
+opportunities. As a result, the timers almost
+always expire at the maximum end of their specified range.
+
+It was tempting to use usleep_range(us, us)
+for all values of us.  But 1 ms is added to the
+range for timers over 20ms on the reasoning that
+the AML Sleep interface has a granularity of 1ms,
+most costly loops use duration under 20ms inside,
+and singular long sleeps are unlitly to notice an
+additiona 1ms, so why not allow some coalescing...
+
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=216263
+Signed-off-by: Len Brown <len.brown@intel.com>
+Suggested-by: Arjan van de Ven <arjan@linux.intel.com>
+Tested-by: Todd Brandt <todd.e.brandt@intel.com>
 ---
- drivers/cpuidle/governors/haltpoll.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/acpi/osl.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
-index 663b7f164..99c6260d7 100644
---- a/drivers/cpuidle/governors/haltpoll.c
-+++ b/drivers/cpuidle/governors/haltpoll.c
-@@ -78,26 +78,22 @@ static int haltpoll_select(struct cpuidle_driver *drv,
+diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
+index 70af3fbbebe5..c4c76f86cd7a 100644
+--- a/drivers/acpi/osl.c
++++ b/drivers/acpi/osl.c
+@@ -607,7 +607,13 @@ acpi_status acpi_os_remove_interrupt_handler(u32 gsi, acpi_osd_handler handler)
  
- static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
+ void acpi_os_sleep(u64 ms)
  {
--	unsigned int val;
-+	unsigned int val = dev->poll_limit_ns;
- 
- 	/* Grow cpu_halt_poll_us if
- 	 * cpu_halt_poll_us < block_ns < guest_halt_poll_us
- 	 */
- 	if (block_ns > dev->poll_limit_ns && block_ns <= guest_halt_poll_ns) {
--		val = dev->poll_limit_ns * guest_halt_poll_grow;
-+		val *= guest_halt_poll_grow;
- 
- 		if (val < guest_halt_poll_grow_start)
- 			val = guest_halt_poll_grow_start;
--		if (val > guest_halt_poll_ns)
--			val = guest_halt_poll_ns;
- 
- 		trace_guest_halt_poll_ns_grow(val, dev->poll_limit_ns);
--		dev->poll_limit_ns = val;
- 	} else if (block_ns > guest_halt_poll_ns &&
- 		   guest_halt_poll_allow_shrink) {
- 		unsigned int shrink = guest_halt_poll_shrink;
- 
--		val = dev->poll_limit_ns;
- 		if (shrink == 0) {
- 			val = 0;
- 		} else {
-@@ -108,8 +104,12 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
- 		}
- 
- 		trace_guest_halt_poll_ns_shrink(val, dev->poll_limit_ns);
--		dev->poll_limit_ns = val;
- 	}
+-	msleep(ms);
++	u64 us = ms * 1000;
 +
-+	if (val > guest_halt_poll_ns)
-+		val = guest_halt_poll_ns;
++	if (us <= 20000)
++		usleep_range(us, us);
++	else
++		usleep_range(us, us + 1000);
 +
-+	dev->poll_limit_ns = val;
  }
  
- /**
+ void acpi_os_stall(u32 us)
 -- 
-2.43.5
+2.43.0
 
 
