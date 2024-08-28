@@ -1,44 +1,45 @@
-Return-Path: <linux-pm+bounces-13081-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13079-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EC00963481
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 00:17:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F3F896347F
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 00:17:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E88001F2463A
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2024 22:17:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3340D284CA4
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2024 22:17:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E0941AD9D3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DCE31AC8AB;
 	Wed, 28 Aug 2024 22:17:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA7D1AD411;
-	Wed, 28 Aug 2024 22:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2257E1ABEC4;
+	Wed, 28 Aug 2024 22:17:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724883463; cv=none; b=ibWd0ekGeSYXPqtKXiNAwG8Z1dh4e5UdzZwKdwHHfrcInZRBI50vPry+mWLqADTSgG7BEnPUSbnV7mY1A9FqmF5SolKJ2gv0KL6ut5HVL8sBcgYHN9PfhS8erAHrc7pgfP6dMQnxVoczuMi7x/FFov5m6wIeEs+MawNSEkst+ug=
+	t=1724883463; cv=none; b=S7QIDUM/MOYivky0oXWIzf4uE6sCGvTEN460X0+Pvi2YdNFavtz9EvFpJ8GDaez4AdJo3BX6fn+TWmaIAF6Nh00RACOaoapgdkgI8841a4OcgxALHpoiuOYJ+PlU8jPNpvyzJerRbCEw/C2WZAwzMrqCG+v+g+6BZFyZXfAgoqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1724883463; c=relaxed/simple;
-	bh=58NufC17oHNTIQLxcHe3OwIRzN0rETV+vP2MaMr2KgI=;
+	bh=xy4g412hpADC8QifL9eJoRK/pCq3SSV4cCSudLV8OEc=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=panGaZU+KwobhZuYHvxAud6PHGsZ0Ha5YpsdzSutantk8tn2h5LvYoYkhnFAyggZrT1BYpgahKYCLoMqMiiHNsRiNDranvZENyVoJMFoxzy4u+sdB82C3U3pa/1vXvZvQyLfzytFsvwkX+QDfJNozZJk2rfD/C7LW4cQJ26iF28=
+	 MIME-Version:Content-Type; b=Q/Hi8B+UvC3gsmPOjlwBBo6L7G6IaiDM38aOoWWdEqyJe2B6hYaJBILJ3LYKkAPQDih7Zx54hGz5snM0DH36oLTOm/GjPiqfSi52F+YMKoz0s9mMtKWuIOE3WCFTwV/4TiBSdWKGLeKqtIBeOUgEXTJOiuGKYqA5HBEgTgA9+YE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD36AC4CEC9;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A929BC4CEC6;
 	Wed, 28 Aug 2024 22:17:42 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 452CE10604BD; Thu, 29 Aug 2024 00:17:40 +0200 (CEST)
+	id 480781060533; Thu, 29 Aug 2024 00:17:40 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: sre@kernel.org, Chen Ni <nichen@iscas.ac.cn>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240710032023.2003742-1-nichen@iscas.ac.cn>
-References: <20240710032023.2003742-1-nichen@iscas.ac.cn>
-Subject: Re: [PATCH] power: supply: cpcap-charger: Convert comma to
- semicolon
-Message-Id: <172488346023.466860.16678342111160245545.b4-ty@collabora.com>
+To: linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, 
+ Asmaa Mnebhi <asmaa@nvidia.com>
+Cc: David Thompson <davthompson@nvidia.com>
+In-Reply-To: <20240611134327.30975-1-asmaa@nvidia.com>
+References: <20240611134327.30975-1-asmaa@nvidia.com>
+Subject: Re: [PATCH v2 1/1] power: reset: pwr-mlxbf: support graceful
+ shutdown
+Message-Id: <172488346028.466860.15092209246524178878.b4-ty@collabora.com>
 Date: Thu, 29 Aug 2024 00:17:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -51,15 +52,20 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.1
 
 
-On Wed, 10 Jul 2024 11:20:23 +0800, Chen Ni wrote:
-> Replace a comma between expression statements by a semicolon.
+On Tue, 11 Jun 2024 09:43:27 -0400, Asmaa Mnebhi wrote:
+> The OCP board used a BlueField's GPIO pin for entering
+> low power mode. That board was not commercialized and
+> has been dropped from production so all its code is unused.
+> The new hardware requirement is to trigger a graceful shutdown
+> when that GPIO pin is toggled. So replace the unused low power
+> mode with a graceful shutdown.
 > 
-> 
+> [...]
 
 Applied, thanks!
 
-[1/1] power: supply: cpcap-charger: Convert comma to semicolon
-      commit: 50f74b785059453b4f10fe53241c2f612ebf9028
+[1/1] power: reset: pwr-mlxbf: support graceful shutdown
+      commit: 292fe42c34a9e9eea07f58a691813e077e9ca86f
 
 Best regards,
 -- 
