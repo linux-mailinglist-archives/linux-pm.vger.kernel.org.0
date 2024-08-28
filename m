@@ -1,85 +1,150 @@
-Return-Path: <linux-pm+bounces-13016-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13017-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC08C961FA9
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2024 08:25:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDD85962002
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2024 08:51:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 795362861A3
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2024 06:25:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B466B232A8
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2024 06:51:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF8A11448E6;
-	Wed, 28 Aug 2024 06:25:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B62915855C;
+	Wed, 28 Aug 2024 06:50:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZTE1V5Jq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC171BC2F;
-	Wed, 28 Aug 2024 06:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4C1158555
+	for <linux-pm@vger.kernel.org>; Wed, 28 Aug 2024 06:50:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724826319; cv=none; b=UXhGF3WoeZ1AKwX1opLIzezqMjWxZsGlmnkm9p0+1ZDgjGPcO0H5m7CRW3Rj+9G4yrYzm6B1RlFv2p0eRbRkqtBirGJaWp37qb/OKgvzvrEL8s1MtLs9uMfHefux+HAa0avTroonZH9x29NIgfETeCnCW/LxVu9OrCqY1WY2b9Y=
+	t=1724827847; cv=none; b=Cp5dcjkN+EpsNF7/yrxKBQsuSNJWP8rGU3/dH8P1npqWI4exAgSHg9J8XEAwgm9ABMxs5jrRxRdKqT6TE1zOq2HZCwuFNRfE8HICxNoItW5Qfat5g6Itk6654vB0TRH2ET9rdQCce3HjqjMHDqiPTlGxqcN5ZZV3RtSofMQwU3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724826319; c=relaxed/simple;
-	bh=MEuMtdmGcnCXCBbyeF3r94mGLyQW7MccMHMw4Wd22i4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uTpj7RQbWXq4hg5gXBC6laiPxKEzCznW+4e9P4rpzuK1qKgzW0YoQDJg84hMtuAYhV7ktyPdl1l/C7v5WBsa3kBAARYYVIGTbjS4TcjBwm3O4HJMHj4EqyiAdXrQvBRF7izjwYd+iRlLVin6BIQkCumrDyCICJi/taDhUAgZ3nE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92576C5813C;
-	Wed, 28 Aug 2024 06:25:16 +0000 (UTC)
-From: Huacai Chen <chenhuacai@loongson.cn>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Huacai Chen <chenhuacai@kernel.org>
-Cc: loongarch@lists.linux.dev,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Xuerui Wang <kernel@xen0n.name>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Xi Ruoyao <xry111@xry111.site>,
-	Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH] cpufreq: loongson3: Use raw_smp_processor_id() in do_service_request()
-Date: Wed, 28 Aug 2024 14:24:59 +0800
-Message-ID: <20240828062459.1853837-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.43.5
+	s=arc-20240116; t=1724827847; c=relaxed/simple;
+	bh=VSaozPMjQSh8Z+AMMpHxbFPbADM9T5C78i7brPcAMNg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RfChvCvQDO/AG4PK4fa0XVCAimQNIqPqeI6Xmx9Z5rJfUZIYrO/E6DA8vFn00ntJtbFuCpDvVWdlYp9TG2nxX+RiKTBE7Jh7A2U7gCRKYJRb1PclRL6/xROOFKlnw/14fb8Jh7le3QG/PvY84uCP3DwUG1CsW2uFaHQ3GJ169ME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZTE1V5Jq; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2023dd9b86aso50711275ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 27 Aug 2024 23:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724827845; x=1725432645; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iYQ+ilkeaMwW+FMWFhvIJ0I6JjOEVk4IWvO+V0FIO5w=;
+        b=ZTE1V5JqrMmMVz3RtFVQZNPnMrhjdhJJXwAtj5QpfD6tfo0jgV3XbfJxvqXZcMFVqH
+         VSgXh69p0PB3fp9huzboXEfsIwHANeIifshomh9H016tYi5UeEZBSIIiCkNHYGewuJyT
+         wAnZ4/Lhb61ATSmhc1XCZeZWstP0vprRllhEhn2Ibc/84Um2pRvld6vOD8LEfHjbKH7x
+         Yl6n3LrN4gvRtOtA50/Q8fJMN8xXIiDC9ebRHqioPePWZL8kosnIb29slgkYg3+XgR9J
+         64GIA8skRAc7K73OncFzWPj1tnrqnL12BPLt/onFxD/XUnmhRiE9mW8OEKQ65fcwmHom
+         khBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724827845; x=1725432645;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iYQ+ilkeaMwW+FMWFhvIJ0I6JjOEVk4IWvO+V0FIO5w=;
+        b=eDu8LBxGkzgy+BZ4PPCiP+gjjkNi8gx6VhWL1v/tVH/nouHfmEq3Ae2s4pqGmSvb/G
+         gsHtrWReWEvAusLUkD8pn5q3n1K+BYBsM4h241HSKXLFLQZXcvFkLNUxPBXlDZZxS81s
+         cznq/V+tTjdnb90PhvWiPYnPp3McGTL/oHwHwJDiKpuPeCZWEaYMpbhVXJh54O4vSugu
+         ET57jbXPnQni/5ZEDyfESZPV0E1g20hGKv2naKfXnKVp5hMg4vs3GFmZFO501CL9OTm2
+         SfszkIYmtzkiC2PVt4i7pH7q7Ntes4w5zEucwIUHzmabyBLCGVCDwbcNBHADDAl60wlS
+         /s4g==
+X-Forwarded-Encrypted: i=1; AJvYcCVzUl1sz3SNxpt6wPSvA/bgq/13GphIWyoq2yrg45jy+QoB8+9ndj5LciInzioi8wHkWerWHRh/lQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMhI6ALXw4XE8ROhHHNq62i9OFF0R6eqLFGttUsXQZqznttoMP
+	m3mArrk7ruCvZXywBTCywMey7VZGMH3DFhDxnRHuLX1lwfsbvqduAVAp5jdeVrA=
+X-Google-Smtp-Source: AGHT+IGt4pGEHijdX0P/ukNUThZCoMBLg7a93UO62jadaOtNfGpmBEw5TDCiC/MbI3bFxmYb43CjTQ==
+X-Received: by 2002:a17:902:f710:b0:201:fac8:ff67 with SMTP id d9443c01a7336-2039e47ab66mr206812765ad.17.1724827845037;
+        Tue, 27 Aug 2024 23:50:45 -0700 (PDT)
+Received: from localhost ([122.172.84.129])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-203855664b3sm92842375ad.21.2024.08.27.23.50.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2024 23:50:44 -0700 (PDT)
+Date: Wed, 28 Aug 2024 12:20:41 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Jie Zhan <zhanjie9@hisilicon.com>,
+	Beata Michalska <beata.michalska@arm.com>, ionela.voinescu@arm.com
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linuxarm@huawei.com, liaochang1@huawei.com, wanghuiqiang@huawei.com,
+	prime.zeng@hisilicon.com, fanghao11@huawei.com,
+	jonathan.cameron@huawei.com
+Subject: Re: [PATCH] cpufreq: CPPC: Return desired perf in ->get() if
+ feedback counters are 0
+Message-ID: <20240828065041.xf4csybut3csl5mn@vireshk-i7>
+References: <20240819035147.2239767-1-zhanjie9@hisilicon.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240819035147.2239767-1-zhanjie9@hisilicon.com>
 
-Use raw_smp_processor_id() instead of plain smp_processor_id() in
-do_service_request(), otherwise we may get some errors with the driver
-enabled:
+Cc'd few developers.
 
- BUG: using smp_processor_id() in preemptible [00000000] code: (udev-worker)/208
- caller is loongson3_cpufreq_probe+0x5c/0x250 [loongson3_cpufreq]
+On 19-08-24, 11:51, Jie Zhan wrote:
+> The CPPC performance feedback counters could return 0 when the target cpu
+> is in a deep idle state (e.g. powered off) and those counters are not
+> powered.  cppc_cpufreq_get_rate() returns 0 in this case, triggering two
+> problems:
+> 
+> 1. cpufreq_online() gets a false error and doesn't generate a cpufreq
+> policy, which happens in cpufreq_add_dev() when a new cpu device is added.
+> 2. 'cpuinfo_cur_freq' shows '<unknown>'
+> 
+> Don't take it as an error and return the frequency corresponding to the
+> desired perf when the feedback counters are 0.
+> 
+> Fixes: 6a4fec4f6d30 ("cpufreq: cppc: cppc_cpufreq_get_rate() returns zero in all error cases.")
+> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index bafa32dd375d..1c5eb12c1a5a 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -748,18 +748,25 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+>  
+>  	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+>  	if (ret)
+> -		return 0;
+> +		goto out_err;
+>  
+>  	udelay(2); /* 2usec delay between sampling */
+>  
+>  	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+>  	if (ret)
+> -		return 0;
+> +		goto out_err;
+>  
+>  	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+>  					       &fb_ctrs_t1);
+>  
+>  	return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
+> +
+> +out_err:
+> +	if (ret == -EFAULT)
+> +		return cppc_perf_to_khz(&cpu_data->perf_caps,
+> +					cpu_data->perf_ctrls.desired_perf);
+> +
+> +	return 0;
+>  }
+>  
+>  static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
+> -- 
+> 2.33.0
+> 
 
-Reported-by: Xi Ruoyao <xry111@xry111.site>
-Tested-by: Binbin Zhou <zhoubinbin@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- drivers/cpufreq/loongson3_cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/loongson3_cpufreq.c b/drivers/cpufreq/loongson3_cpufreq.c
-index 5f79b6de127c..6b5e6798d9a2 100644
---- a/drivers/cpufreq/loongson3_cpufreq.c
-+++ b/drivers/cpufreq/loongson3_cpufreq.c
-@@ -176,7 +176,7 @@ static DEFINE_PER_CPU(struct loongson3_freq_data *, freq_data);
- static inline int do_service_request(u32 id, u32 info, u32 cmd, u32 val, u32 extra)
- {
- 	int retries;
--	unsigned int cpu = smp_processor_id();
-+	unsigned int cpu = raw_smp_processor_id();
- 	unsigned int package = cpu_data[cpu].package;
- 	union smc_message msg, last;
- 
 -- 
-2.43.5
-
+viresh
 
