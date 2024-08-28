@@ -1,90 +1,165 @@
-Return-Path: <linux-pm+bounces-13032-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13033-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B617D962682
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2024 14:04:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6F5E96287B
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2024 15:19:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7454D28224E
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2024 12:04:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9F2F1C23713
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2024 13:19:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73876173355;
-	Wed, 28 Aug 2024 12:04:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9848B1862B7;
+	Wed, 28 Aug 2024 13:19:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="uO2hbxXk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11ECD166F37
-	for <linux-pm@vger.kernel.org>; Wed, 28 Aug 2024 12:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B45167D98;
+	Wed, 28 Aug 2024 13:19:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724846673; cv=none; b=h4DJdL7YmJQTT3B+uukRRCLhXVlByBqypYMsB+0II2ZfU39w1CRtlAzCrHT3R439HOIWadH/nUdYWy3INHvQEgviHLYbcNPCMYwgGS8azYknmtx1sBDzNvC4RCcLYCYUXWV8te7B2ztVRkOJ2zYk2rTG95FfeH1TJVhPw2SdJF8=
+	t=1724851177; cv=none; b=iHChsD4DOiuopxA8ujlAqPyxnfh1LHgLofRVM3L3g/OaeACDahRk1iXY+yrFp7jBjXPRAxfwBBWxNfw7iSkzKBLL3XY3Dp18OyfXvbxNqlG5Z4Ppys3WfXlBO0mwYygPix/Yxor24Y5ZBoQXSGmLc1iWs6AGxsWUceWz1cqiFf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724846673; c=relaxed/simple;
-	bh=QS+Jrc2+e2EYG0o89FRQIIoVx+VmvkoL5TDXERv9lLA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qM4ILBo7xS+lICKUQFnja1scxLXu2meMS9b0x5E/VT0XaNnOs3eqgA4b3NIbrZt9t75D+p4V8ljRm1eMu0gVt4cGk2zRhEbIYBld9ykVQKfmGX+eoxtLVTPS7yxx1NuRR8qXiW6G1pylgFIMK6i1xaMFca82xI4yYw37pikmsVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Wv2yf3nplzQqtV;
-	Wed, 28 Aug 2024 19:59:38 +0800 (CST)
-Received: from dggpeml500022.china.huawei.com (unknown [7.185.36.66])
-	by mail.maildlp.com (Postfix) with ESMTPS id 62B2C14022E;
-	Wed, 28 Aug 2024 20:04:28 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpeml500022.china.huawei.com
- (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 28 Aug
- 2024 20:04:28 +0800
-From: Hongbo Li <lihongbo22@huawei.com>
-To: <matthias.bgg@gmail.com>, <angelogioacchino.delregno@collabora.com>,
-	<ulf.hansson@linaro.org>
-CC: <linux-pm@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-	<lihongbo22@huawei.com>
-Subject: [PATCH -next] pmdomain: mediatek: make use of dev_err_cast_probe()
-Date: Wed, 28 Aug 2024 20:12:30 +0800
-Message-ID: <20240828121230.3696315-1-lihongbo22@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1724851177; c=relaxed/simple;
+	bh=WOQTo/tVkWrdyJHM/THbfe/9fRfnwlow5K3HxKzpS4Q=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uirWVzsdVfUbafppt+N4Y/tURqiFWicspRMAxpeD9SJwwyibDl5DKMcsW9WVwGzoCgIMGBzhONV+NmpOsth46H4mKq8nPDuYqynaOjRzOwLtvQauEWp4515t2X1J1ZIEdk0YpTgoO4+NWsnrgTS8PLdaRVTDEvNXyGo7LnrlP/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=uO2hbxXk; arc=none smtp.client-ip=198.47.19.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 47SDJGNf013362;
+	Wed, 28 Aug 2024 08:19:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1724851156;
+	bh=BIpKAz3kkXbpey+hBxhouNix1B02tMnfBmgxImMjQlQ=;
+	h=From:To:CC:Subject:Date;
+	b=uO2hbxXk5n0gKtl055Dp8bJ44zAGTCWjg89kZnQo+Xn53X7n/zu/PowA3UCfDOWyo
+	 aTDQign79+FmQzjmMJbFdPcXpp14Rx9OF6xYJ1cwaLNJN5Y+O0cBFadTPWpzWXWURV
+	 +DlYbkZ3M5NBiEymfEC0t/2VKCj4161NfU3DjGHE=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 47SDJGIR119989
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 28 Aug 2024 08:19:16 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 28
+ Aug 2024 08:19:16 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 28 Aug 2024 08:19:16 -0500
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 47SDJGLs005762;
+	Wed, 28 Aug 2024 08:19:16 -0500
+From: Nishanth Menon <nm@ti.com>
+To: "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Viresh Kumar
+	<viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Kevin Hilman <khilman@kernel.org>, Tony Lindgren <tony@atomide.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-omap@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <bb@ti.com>, <d-gole@ti.com>, Nishanth Menon <nm@ti.com>
+Subject: [PATCH] cpufreq: ti-cpufreq: Introduce quirks to handle syscon fails appropriately
+Date: Wed, 28 Aug 2024 08:19:15 -0500
+Message-ID: <20240828131915.3198081-1-nm@ti.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Organization: Texas Instruments, Inc.
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500022.china.huawei.com (7.185.36.66)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Using dev_err_cast_probe() to simplify the code.
+Commit b4bc9f9e27ed ("cpufreq: ti-cpufreq: add support for omap34xx
+and omap36xx") introduced special handling for OMAP3 class devices
+where syscon node may not be present. However, this also creates a bug
+where the syscon node is present, however the offset used to read
+is beyond the syscon defined range.
 
-Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
+Fix this by providing a quirk option that is populated when such
+special handling is required. This allows proper failure for all other
+platforms when the syscon node and efuse offsets are mismatched.
+
+Fixes: b4bc9f9e27ed ("cpufreq: ti-cpufreq: add support for omap34xx and omap36xx")
+Signed-off-by: Nishanth Menon <nm@ti.com>
 ---
- drivers/pmdomain/mediatek/mtk-pm-domains.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-index e274e3315fe7..88406e9ac63c 100644
---- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-+++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-@@ -398,12 +398,10 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
- 		scpsys->dev->of_node = node;
- 		pd->supply = devm_regulator_get(scpsys->dev, "domain");
- 		scpsys->dev->of_node = root_node;
--		if (IS_ERR(pd->supply)) {
--			dev_err_probe(scpsys->dev, PTR_ERR(pd->supply),
-+		if (IS_ERR(pd->supply))
-+			return dev_err_cast_probe(scpsys->dev, pd->supply,
- 				      "%pOF: failed to get power supply.\n",
- 				      node);
--			return ERR_CAST(pd->supply);
--		}
- 	}
+NOTE: this combined with https://lore.kernel.org/r/20240828121008.3066002-1-nm@ti.com
+has created a bunch of un-intended bugs on other TI SoCs such
+as seen in https://lore.kernel.org/all/20240826-opp-v3-1-0934f8309e13@ti.com/
+https://lore.kernel.org/all/20240827131342.6wrielete3yeoinl@bryanbrattlof.com/
+etc.
+
+ drivers/cpufreq/ti-cpufreq.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+index 220fff7a302e..804329e81eb8 100644
+--- a/drivers/cpufreq/ti-cpufreq.c
++++ b/drivers/cpufreq/ti-cpufreq.c
+@@ -90,6 +90,9 @@ struct ti_cpufreq_soc_data {
+ 	unsigned long efuse_shift;
+ 	unsigned long rev_offset;
+ 	bool multi_regulator;
++/* Backward compatibility hack: Might have missing syscon */
++#define TI_QUIRK_SYSCON_MAY_BE_MISSING	0x1
++	u8 quirks;
+ };
  
- 	pd->infracfg = syscon_regmap_lookup_by_phandle_optional(node, "mediatek,infracfg");
+ struct ti_cpufreq_data {
+@@ -254,6 +257,7 @@ static struct ti_cpufreq_soc_data omap34xx_soc_data = {
+ 	.efuse_mask = BIT(3),
+ 	.rev_offset = OMAP3_CONTROL_IDCODE - OMAP3_SYSCON_BASE,
+ 	.multi_regulator = false,
++	.quirks = TI_QUIRK_SYSCON_MAY_BE_MISSING,
+ };
+ 
+ /*
+@@ -281,6 +285,7 @@ static struct ti_cpufreq_soc_data omap36xx_soc_data = {
+ 	.efuse_mask = BIT(9),
+ 	.rev_offset = OMAP3_CONTROL_IDCODE - OMAP3_SYSCON_BASE,
+ 	.multi_regulator = true,
++	.quirks = TI_QUIRK_SYSCON_MAY_BE_MISSING,
+ };
+ 
+ /*
+@@ -295,6 +300,7 @@ static struct ti_cpufreq_soc_data am3517_soc_data = {
+ 	.efuse_mask = 0,
+ 	.rev_offset = OMAP3_CONTROL_IDCODE - OMAP3_SYSCON_BASE,
+ 	.multi_regulator = false,
++	.quirks = TI_QUIRK_SYSCON_MAY_BE_MISSING,
+ };
+ 
+ static struct ti_cpufreq_soc_data am625_soc_data = {
+@@ -340,7 +346,7 @@ static int ti_cpufreq_get_efuse(struct ti_cpufreq_data *opp_data,
+ 
+ 	ret = regmap_read(opp_data->syscon, opp_data->soc_data->efuse_offset,
+ 			  &efuse);
+-	if (ret == -EIO) {
++	if (opp_data->soc_data->quirks & TI_QUIRK_SYSCON_MAY_BE_MISSING && ret == -EIO) {
+ 		/* not a syscon register! */
+ 		void __iomem *regs = ioremap(OMAP3_SYSCON_BASE +
+ 				opp_data->soc_data->efuse_offset, 4);
+@@ -381,7 +387,7 @@ static int ti_cpufreq_get_rev(struct ti_cpufreq_data *opp_data,
+ 
+ 	ret = regmap_read(opp_data->syscon, opp_data->soc_data->rev_offset,
+ 			  &revision);
+-	if (ret == -EIO) {
++	if (opp_data->soc_data->quirks & TI_QUIRK_SYSCON_MAY_BE_MISSING && ret == -EIO) {
+ 		/* not a syscon register! */
+ 		void __iomem *regs = ioremap(OMAP3_SYSCON_BASE +
+ 				opp_data->soc_data->rev_offset, 4);
+
 -- 
-2.34.1
+2.43.0
 
 
