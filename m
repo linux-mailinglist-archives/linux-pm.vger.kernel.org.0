@@ -1,140 +1,206 @@
-Return-Path: <linux-pm+bounces-13162-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13163-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42EB9964435
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 14:18:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11A01964489
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 14:33:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F16592825C2
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 12:18:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 856C21F263F7
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 12:33:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84E191922F6;
-	Thu, 29 Aug 2024 12:17:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B8xHVF6X"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07E51A3BAA;
+	Thu, 29 Aug 2024 12:33:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495E018D63A;
-	Thu, 29 Aug 2024 12:17:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA05E1A38F0;
+	Thu, 29 Aug 2024 12:33:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724933874; cv=none; b=Mfp8WAfBINWWi22DQ758KTn7ymgrkNIwmSu6uj7xie1J1m3qv+xuna+L6PbzNgjB7DUHHhiUwd7+oCkIC6YNnFza3RLXOB+mSZpnyu9jqfZLwADbAqh/LprOm+QpJhx/a76BEL20AVBOjlU8clMh/eVp2OoZgbdLJevZZjRbjIU=
+	t=1724934785; cv=none; b=Wq6fql1DZcKZ2/7/i/0/z/MuHmw0/H4yAW2o1tN0ShzQuP7v8S5tq0gKiGz21iKUhcM/RardOcAAAmSLVbSpv36AnKgZYVrQDNdcVfhXZOCvfKrTDifkE7nUAuORemB+n5w4JIJD3vtuXhmC8tnPPaFzaPdXHMAo6D8sN0FdynI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724933874; c=relaxed/simple;
-	bh=2HmjvO3I63oTxuLi3YmKG7PkAMJTgnJlaCqIEZRVxbc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JsPVtSPBeWcT4c9p8s1fJ1Quqyd1qaZm7/QJyt3jw2lmH7VTcIsSO1i/S/f8/Qgvo2TaYLchMPwNbOIMlr8CiQV3eHXFWeR1r/ykaT6s74mSxcLkgr2etd+Qm4QHNiTBiqkMXkf+GLdBiW66xM8PTBY/Yavvc22mextrTG7ZKr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B8xHVF6X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE18C4CEC1;
-	Thu, 29 Aug 2024 12:17:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724933873;
-	bh=2HmjvO3I63oTxuLi3YmKG7PkAMJTgnJlaCqIEZRVxbc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B8xHVF6XNOgtUnEf//lcAGtR/uzDwBDLmMZazA5+4wJsvh5ZflONth3CES3tQDzBw
-	 GEMViDWyt5v/4ocRxT6mjY1NRxuzg0NqFo3ortixgnD4+1oTCMNmroHlNILyAeb9Gl
-	 g/7rMtdoypDCowLn2Y1fEnUq8TKr27fENgXWF513dH6VpP4Qs21rZnBwM9wfLmelJd
-	 eMP2ft2hF3GU4D6H+QlZcXUbuOXBOzy7HYOy52DFwcOG8/Rr5B022ZERrgPu2KsrXO
-	 Ki4QoM8/zy352SXrl4tjj3KZWP0e1gpfV2vY0YPoDiHHgk+7Iqd0GVHbNDUkR1M7hy
-	 z/3tS3lF3C+4Q==
-Date: Thu, 29 Aug 2024 13:17:46 +0100
-From: Lee Jones <lee@kernel.org>
-To: Chris Morgan <macroalpha82@gmail.com>
-Cc: linux-sunxi@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-iio@vger.kernel.org, quentin.schulz@free-electrons.com,
-	mripard@kernel.org, tgamblin@baylibre.com,
-	aidanmacdonald.0x0@gmail.com, u.kleine-koenig@pengutronix.de,
-	samuel@sholland.org, jernej.skrabec@gmail.com, sre@kernel.org,
-	wens@csie.org, conor+dt@kernel.org, krzk+dt@kernel.org,
-	robh@kernel.org, lars@metafoo.de, jic23@kernel.org,
-	jonathan.cameron@huawei.com, Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH V4 00/15] Add Battery and USB Supply for AXP717
-Message-ID: <20240829121746.GP6858@google.com>
-References: <20240821215456.962564-1-macroalpha82@gmail.com>
+	s=arc-20240116; t=1724934785; c=relaxed/simple;
+	bh=xut1B75Copn1UQMc3oOTgZsdXNP6Xy8ddJQStmm+73U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m+t54aTMpxUYU0NEdczaf5rpYdjev8z8lgNcBQoZZ/rnZfZL2i3GPRBsWHMAxvk00elNpfauKeLaW+d6+J4k2nTJyxlSxg8x+rYzcCwv00JMCa+S/lbejaA4a7FoqniC1v5+ykEpqjcgEam23KwtSk8YVaocAzb1SEY03I9nzFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6c130ffa0adso6323567b3.3;
+        Thu, 29 Aug 2024 05:33:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724934782; x=1725539582;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fBoF3+XOHG34nWFsOj1vD6Tq0LtW/x7+eoI1HvREX4A=;
+        b=VBsmrcgycDa1uxzAsQZqwNRbI5fCKZEJvb6wFNabzi768gBGKdV+8ubYtWpb4NdZdJ
+         2qAXkVHsSNEvtGOx93Y2TBxHrslrNkXXRWaTog37Wn3ZFT75EUaX3bvIGBCy5Lmq6q4w
+         lYcQ1JHNS0kaNZouK3k2Rh3OcEsPA6eFWhffxMJjbnyfnmYUWjg9Ff2Xw6k16REW07bz
+         qWtp3c84BbcLRU1d8zuPp0PnCmkibJ6HQfgdy9AW9qJJAsGWOekiW+OKEv4g7UUF0b7x
+         lGj8MCice/cND/U0Sl2smJqrvywhIliuwDcXtgj3aNsgqnnaj/rB7slV4TN+jWlEYyeS
+         2X9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCURgnorinCplGHSN+FHQRIBgnQXLDYKUibmdgGJzSbUVOO5mCDewp5RqDDSFRJw+KdWzs0ivfNXqZrknljdykc=@vger.kernel.org, AJvYcCUZxa07shkFQ/aOZeeU8J6IgXA0nBDM4IMi9E+G6cqOPgnOMWZBb6uUV7ZjiAwUuDGMRX/J+Q30xBU=@vger.kernel.org, AJvYcCWHmcBClnhmoqMQyiMc+QsOW0A7Y3Jwm0BPSXYOBDO2da+PlC5Hl026rJpMxR4718evcfS4jBOy6kRl/MGkgAD3ors=@vger.kernel.org, AJvYcCWoqqVcKKv0Xv8SIlE9tnQHy/Kvl+KhNW18PAONBilHxsY41w4L795HeGUpCGJOCqHdNjWDfJBLthmvPsN0@vger.kernel.org, AJvYcCXiXPBoXPgOPH+tTgqD1PdVQIjpRzJ0s69eQTYPD00aOHJHxBNmXvLyIEOZVOoI+WeObU8qT/If7Nw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzStHEQXMwxTyPnOBrNgfCI4WNwU8wu/SXyYns8Iwo0BQOd/XuI
+	Z5nlNOiDty37SJWqo2/FNXeTXZ6oc0HunG7TPCehfz8SgdAbUdTHH23FZ/t2
+X-Google-Smtp-Source: AGHT+IGTG6xYFya3Nt+/gww/itAi9HETKsLFYYu4TFE47IKn3Vh9Y9BZ1reE+e8HjyLFDamv3UxAug==
+X-Received: by 2002:a05:690c:6903:b0:6b2:7c54:51d with SMTP id 00721157ae682-6d2769e1f05mr31492557b3.23.1724934782487;
+        Thu, 29 Aug 2024 05:33:02 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6d2d40a7427sm2246717b3.56.2024.08.29.05.33.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Aug 2024 05:33:02 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6c3f1939d12so5664657b3.2;
+        Thu, 29 Aug 2024 05:33:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUV92UKyoPn+oOjdSX9nv72Yrx1eTxQZ06wX5ykVFJV0VwQTNjrM2Uux4VFEURwpCAiJZyoL2nOhnKE86xtz9RbQa4=@vger.kernel.org, AJvYcCVKIiK2YztirlsLFYGYkc5vPfaHeXOERDsTu04p+o7MkzO2qUw8nBjRRLLtVLVSCklq3sY8N4UqXtQ=@vger.kernel.org, AJvYcCVPsyJ9Od0ebkXbzS4gtSQRL/LMfc3G5bSMmLZWMsX4fRjuriVYsQriw6LoZMxw33uejn1PRPNBzCthEOTCtSs=@vger.kernel.org, AJvYcCVgDCVlOgrROZ1me8BTj0aRmzXNV9WOVLoS1yjtu2yVesbUwaEHmvCHT9QX9nyh/NlXExEdBp8qrwc=@vger.kernel.org, AJvYcCXL3KOa38KvSqREbcEyd4eGG+SkUw0/1shInMbo1gX/MXQ4dTZI3ZCkswN4BKtn+eF1hsBerpBt3NWzurQ3@vger.kernel.org
+X-Received: by 2002:a05:690c:338f:b0:6b1:3bf8:c161 with SMTP id
+ 00721157ae682-6d276404cd2mr31558997b3.13.1724934782077; Thu, 29 Aug 2024
+ 05:33:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240821215456.962564-1-macroalpha82@gmail.com>
+References: <20240828140602.1006438-1-claudiu.beznea.uj@bp.renesas.com> <20240828140602.1006438-2-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240828140602.1006438-2-claudiu.beznea.uj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 29 Aug 2024 14:32:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX+Q99MvQRZcwGbk8F8SiAUzRU_t2QmRuO_6etAqqXskg@mail.gmail.com>
+Message-ID: <CAMuHMdX+Q99MvQRZcwGbk8F8SiAUzRU_t2QmRuO_6etAqqXskg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] clk: renesas: rzg2l-cpg: Use GENPD_FLAG_* flags
+ instead of local ones
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org, 
+	linux@roeck-us.net, ulf.hansson@linaro.org, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 21 Aug 2024, Chris Morgan wrote:
+Hi Claudiu,
 
-> From: Chris Morgan <macromorgan@hotmail.com>
-> 
-> Add support for monitoring the USB charger and battery charger on the
-> AXP717 PMIC. This required some driver refactoring of the axp20x USB
-> and battery charger as the AXP717 is somewhat different but can still
-> benefit from some common elements.
-> 
-> Note that as of now the charging current now value may be incorrect as
-> the scale and offsets were not documented in the datasheet. I suspect
-> the scale is 1 and the offset is somewhere around 450mA though.
-> 
-> Changes from V3:
->  - Remove accidental AXP717_BOOST regulator in header file, as it is
->    not part of this patch series.
->  - Add an absolute min/max constraint for input-current-limit-microamp
->    in device tree documentation.
->  - Correct an issue found by kernel test robot <lkp@intel.com> by
->    explicitly adding linux/bitfield.h include. Details here:
->    https://lore.kernel.org/oe-kbuild-all/202408201228.Hee4eSYl-lkp@intel.com/
-> 
-> Changes from V2:
->  - Added constraints for input-current-limit-microamp constraints for
->    x-powers,axp20x-usb-power-supply.yaml.
->  - Used FIELD_GET() and removed unnecessary -EINVAL per comments from
->    Jonathan Cameron.
-> 
-> Changes from V1:
->  - Refactored against mainline to remove BOOST pre-requisite.
->  - Corrected commit subjects for DT bindings.
->  - Split refactoring and AXP717 support into different patches.
->  - Added IRQ for VBUS over voltage. There appears to be a bug
->    with the VBUS fault IRQ because it is assigned IRQ num 0.
->  - Corrected battery driver to report POWER_SUPPLY_PROP_VOLTAGE_MIN
->    and POWER_SUPPLY_PROP_VOLTAGE_MAX instead of *_DESIGN.
-> 
-> 
-> Chris Morgan (15):
->   iio: adc: axp20x_adc: Add adc_en1 and adc_en2 to axp_data
->   power: supply: axp20x_battery: Remove design from min and max voltage
->   power: supply: axp20x_battery: Make iio and battery config per device
->   power: supply: axp20x_usb_power: Make VBUS and IIO config per device
->   dt-bindings: power: supply: axp20x: Add input-current-limit-microamp
->   power: supply: axp20x_usb_power: add input-current-limit-microamp
->   dt-bindings: power: supply: axp20x-battery: Add monitored-battery
->   dt-bindings: iio: adc: Add AXP717 compatible
->   dt-bindings: power: supply: axp20x: Add AXP717 compatible
->   dt-bindings: power: supply: axp20x: Add AXP717 compatible
->   mfd: axp20x: Add ADC, BAT, and USB cells for AXP717
->   iio: adc: axp20x_adc: add support for AXP717 ADC
->   power: supply: axp20x_usb_power: Add support for AXP717
->   power: supply: axp20x_battery: add support for AXP717
->   arm64: dts: allwinner: h700: Add charger for Anbernic RG35XX
-> 
->  .../bindings/iio/adc/x-powers,axp209-adc.yaml |  12 +
->  .../x-powers,axp20x-battery-power-supply.yaml |   7 +
->  .../x-powers,axp20x-usb-power-supply.yaml     |  72 ++-
->  .../sun50i-h700-anbernic-rg35xx-2024.dts      |  21 +
->  drivers/iio/adc/axp20x_adc.c                  | 182 +++++-
->  drivers/mfd/axp20x.c                          |  25 +-
->  drivers/power/supply/axp20x_battery.c         | 591 ++++++++++++++++--
->  drivers/power/supply/axp20x_usb_power.c       | 353 ++++++++++-
->  include/linux/mfd/axp20x.h                    |  26 +
->  9 files changed, 1188 insertions(+), 101 deletions(-)
+On Wed, Aug 28, 2024 at 4:06=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
+wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> For watchdog PM domain it is necessary to provide GENPD_FLAG_IRQ_SAFE fla=
+g
+> to be able to power on the watchdog PM domain from atomic context. For
+> this, adjust the current infrastructure to be able to provide GENPD_FLAG_=
+*
+> for individual PM domains.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Note to self: Send ib-mfd-for-iio-power-6.12 once tested
+Thanks for your patch!
 
--- 
-Lee Jones [李琼斯]
+> --- a/drivers/clk/renesas/rzg2l-cpg.c
+> +++ b/drivers/clk/renesas/rzg2l-cpg.c
+> @@ -1680,11 +1680,13 @@ static int rzg2l_cpg_power_off(struct generic_pm_=
+domain *domain)
+>         return 0;
+>  }
+>
+> -static int __init rzg2l_cpg_pd_setup(struct rzg2l_cpg_pd *pd, bool alway=
+s_on)
+> +static int __init rzg2l_cpg_pd_setup(struct rzg2l_cpg_pd *pd, u32 genpd_=
+flags,
+> +                                    bool always_on)
+
+You don't need always_on, as that should already be reflected in
+genpd_flags.
+
+Also, you could do without passing genpd_flags, if the caller would have
+initialized pd->genpd.flags (it already initializes pd->genpd.name).
+
+>  {
+>         struct dev_power_governor *governor;
+>
+> -       pd->genpd.flags |=3D GENPD_FLAG_PM_CLK | GENPD_FLAG_ACTIVE_WAKEUP=
+;
+> +       pd->genpd.flags |=3D GENPD_FLAG_PM_CLK | GENPD_FLAG_ACTIVE_WAKEUP=
+ |
+> +                          genpd_flags;
+
+Change not needed if the caller would have initialized flags.
+
+>         pd->genpd.attach_dev =3D rzg2l_cpg_attach_dev;
+>         pd->genpd.detach_dev =3D rzg2l_cpg_detach_dev;
+>         if (always_on) {
+
+The next line is
+
+    pd->genpd.flags |=3D GENPD_FLAG_ALWAYS_ON;
+
+which should already be the case if always_on is true, so it can
+be removed.
+
+> @@ -1712,7 +1714,7 @@ static int __init rzg2l_cpg_add_clk_domain(struct r=
+zg2l_cpg_priv *priv)
+>
+>         pd->genpd.name =3D np->name;
+
+pd->genpd.flags =3D GENPD_FLAG_ALWAYS_ON;
+
+>         pd->priv =3D priv;
+> -       ret =3D rzg2l_cpg_pd_setup(pd, true);
+> +       ret =3D rzg2l_cpg_pd_setup(pd, 0, true);
+
+s/0/GENPD_FLAG_ALWAYS_ON/, FWIW ;-)
+
+>         if (ret)
+>                 return ret;
+>
+> @@ -1777,7 +1779,8 @@ static int __init rzg2l_cpg_add_pm_domains(struct r=
+zg2l_cpg_priv *priv)
+>                 return ret;
+>
+>         for (unsigned int i =3D 0; i < info->num_pm_domains; i++) {
+> -               bool always_on =3D !!(info->pm_domains[i].flags & RZG2L_P=
+D_F_ALWAYS_ON);
+> +               u32 genpd_flags =3D info->pm_domains[i].genpd_flags;
+> +               bool always_on =3D !!(genpd_flags & GENPD_FLAG_ALWAYS_ON)=
+;
+>                 struct rzg2l_cpg_pd *pd;
+>
+>                 pd =3D devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
+> @@ -1789,7 +1792,7 @@ static int __init rzg2l_cpg_add_pm_domains(struct r=
+zg2l_cpg_priv *priv)
+
+You can add
+
+    pd->genpd.flags =3D info->pm_domains[i].genpd_flags;
+
+above.
+
+>                 pd->id =3D info->pm_domains[i].id;
+>                 pd->priv =3D priv;
+>
+> -               ret =3D rzg2l_cpg_pd_setup(pd, always_on);
+> +               ret =3D rzg2l_cpg_pd_setup(pd, genpd_flags, always_on);
+>                 if (ret)
+>                         return ret;
+
+What about moving the conditional call to rzg2l_cpg_power_on()
+below to rzg2l_cpg_pd_setup()? Then this function no longer needs
+the always_on flag.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
