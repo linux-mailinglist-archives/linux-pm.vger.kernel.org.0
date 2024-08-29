@@ -1,63 +1,74 @@
-Return-Path: <linux-pm+bounces-13180-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13181-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90F17964A41
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 17:40:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05334964A49
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 17:40:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C45371C244E1
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 15:40:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A44711F24149
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 15:40:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A2541B3F3E;
-	Thu, 29 Aug 2024 15:39:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 728691B1418;
+	Thu, 29 Aug 2024 15:40:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cz5wRa62"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UM2WsyeF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B05251B3733;
-	Thu, 29 Aug 2024 15:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37C71B0126;
+	Thu, 29 Aug 2024 15:40:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724945986; cv=none; b=hNH/4HMq9JM2T/C5CmxLW0bCiy5MV4aOVRXTkvXoWXhkPTph0388r6ambWc7rQHTxiebpsazF6xtLmQhHjNzn5zAh/xgfPnf03qo9vc5XdiIoPUB9GQRrxd+ucLY2pG/RiHXcnek6BCasVkmQ3DgLgbZNDyMjO/LTF/+vTUzj8M=
+	t=1724946015; cv=none; b=a+1SK7PKvwm0Ez5EeaZtslRlhq16iEStIYQi0mkqEHFEWX+mpmcJB1jWCf57+9/TY9U/0qHN6BEPHc1veH5AMwWr9KptFfoQNP98l5e0HDD1Nzf+I8WtKgcPP2c5C8SC+y6PP+FY4XLd5dnvOoV6HBMYxMvIngaPIpSLxh2XOfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724945986; c=relaxed/simple;
-	bh=irlj6udq+ajkTOZDEaMhoHi3gHxomUq9PIygsVw5x/E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Bvsa4IZr59UdvwpDD0uOjwNRP8xVoV05P1WFdYVDlkmJKglwkd+bZu/vW/dh1G8CahqSnfT1xS1MQX4Zs2osGaiNbesdLuCMh9LzKboxjkyr2awY9vZ/8aj5sBhYZEAEC9rnRYwZFcPHVQ9UlB4ncdmifY90m5ksbMcSODaQDtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=cz5wRa62; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47T8iLKF019432;
-	Thu, 29 Aug 2024 15:39:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	+oZZN423x3H8FcKjymhNN5um5bqyqXeBRwGPv3NzEfU=; b=cz5wRa62qjH8a5jV
-	7KkORyfpxFDnzfftfFP/PECkCs+D//aVBf0ez7mtdGCRq/4bA3izvRuLicMgvraT
-	/pr4/nmcAMeRtgCYgHQ6tQQ3hBLiITAsyGMf3cfewFd/Q4SNWAURhUa0QgJzxrIu
-	5nnCBuY2xq2OcniNEtDhG8efy3lG3OUMjG8hFikG+x46D5jDTbBXb69CccXEReTY
-	LDLB55/ztC0UrTN/3ZwjAac+zWWDeAUrxtJP4kMRB2U4wjWrVg2lOfiw6QNWuA1q
-	TYfbpTsi0NI7wicV6EA3efdjs84QBnVeGjqUy+QUHUOQf8znKuSs14Vy/GTDbNFk
-	+acI+Q==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419putntxy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 29 Aug 2024 15:39:11 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47TFdAdg021485
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 29 Aug 2024 15:39:10 GMT
-Received: from [10.110.28.107] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 29 Aug
- 2024 08:39:06 -0700
-Message-ID: <e8e9cdcf-63c8-4bfa-aacc-d99338c7f8fa@quicinc.com>
-Date: Thu, 29 Aug 2024 08:39:06 -0700
+	s=arc-20240116; t=1724946015; c=relaxed/simple;
+	bh=mH2rEXcYLokvtjpXqlc/MQUGfhQnvTOEGEj2uujm/pA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mfyLn8CcgC/0qgZfCSw+dDNNYkpfoTnfxrKPNdXakNm88x9QWqW9Cm4Gyvhc1biG2BhWhnp0wIvJ8UNrW9XXynIe9bviF5jZnm1zRuadBpS1lK7WSDVaErg8NXBPRRSsASJg6aunBXDP4hJypq/rcuuqxpr7q+J2DemPGZm+7d8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UM2WsyeF; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5334c4d6829so1008456e87.2;
+        Thu, 29 Aug 2024 08:40:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724946012; x=1725550812; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EsA+QeBqlMd+ZMZVRwX7jVSf7mJKK5fJqXnWQ1MmfMo=;
+        b=UM2WsyeFTaXEKgqpYn4PAoaGb25PthN4GLfB83SCJfuBNjxjZLrBo0feaHxFrtrJfi
+         P6PNqJTb4leUVMw372O3i69ujy1U8G4UQptEe/8vXAvQMECdDhG1PkA9Pz8fNqlHdwjG
+         nace7FpzXiFD1FAxmQUftL8KTttlFRk5ybromFVKo8mWPTNA1aOENS7khckqoZlvsUH/
+         WQJqI1SdeEn8Te/vMRF7xbhEWZd/JpOYhQ3RlQrghE8bixI+wFui0Kj8q5sW59mbDreg
+         x/+239jTMgl1ZIPB8M4giEws8v7ePOwkF6HRsB+DzkkUw7NPDVDZiFvTfjMVAOgkWlPj
+         ipMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724946012; x=1725550812;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EsA+QeBqlMd+ZMZVRwX7jVSf7mJKK5fJqXnWQ1MmfMo=;
+        b=X4QbpJPK/9qDyjy3icafsnxhWUrldw9DtkxufFimqaQOYVmTaxHGlrctdQ6mRgbWDI
+         MLvCeR9hgn5g3c6y5Z0Mb3GQs3CnmihJl+k4h7HfDNdHd2n2P8VhnbJ3pwVLI+BMjKZk
+         NkIX3yd/ZcoEbLW7/dBYChKmsWoIrw5otvoNJlkTKEDwZTPQdz5GFolGCdog2JQ8b02P
+         3igOULA85Zn9GxylMCb0Y+2zWzHSIlLwW8+83mGK00DuD3AeyvaJyDURwkeqB3XOmd5u
+         XnddpzSx+x+Ne6yDbppZ7Q3jnuU8QnIMX8xOKz3bU45f+FR4oppBEQcKLIqLshA2F9yp
+         hjWg==
+X-Forwarded-Encrypted: i=1; AJvYcCUK3GHH50AxAcS+6Q2viwhhQOSwwVJC92aGiC1sa1sqgNYRqlGAgEvs9UikYKVcKPd4mA/yCzbuVw==@vger.kernel.org, AJvYcCWua3ycBBI7+SkG6nOjNfJXM6YhisD+mA3ag1RyfuZNWk+H3MZVQKB+bUI0cXdAKD/bju2Mc0LHCtbHb5s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzM6NeEQSD/MhTyU6hnerC/D/VqsZwVr7QaoPwOtfEtyK33XM1o
+	sssJXuT/mrOCGrVt1n9wOfx6n8Qc9OjqipG0o9sC9Mmz9otHpozU
+X-Google-Smtp-Source: AGHT+IEz1wYfl89c3pelxlDjUkASXHrsq6MXqhkZIECNRF4tGrNzn1Th0GrBTN6NvPNh/Y6r9QTc2A==
+X-Received: by 2002:a05:6512:68c:b0:533:901:e441 with SMTP id 2adb3069b0e04-5353e540b79mr2264022e87.10.1724946010856;
+        Thu, 29 Aug 2024 08:40:10 -0700 (PDT)
+Received: from [192.168.2.146] (109-252-153-126.dynamic.spd-mgts.ru. [109.252.153.126])
+        by smtp.googlemail.com with ESMTPSA id 2adb3069b0e04-535407ab8adsm182721e87.63.2024.08.29.08.40.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Aug 2024 08:40:10 -0700 (PDT)
+Message-ID: <408f07f6-00e4-4646-be9b-ea2402a62c82@gmail.com>
+Date: Thu, 29 Aug 2024 18:40:09 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,80 +76,35 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 14/22] dt-bindings: arm-smmu: document the support on
- SA8255p
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
-        <tglx@linutronix.de>, <will@kernel.org>, <joro@8bytes.org>,
-        <jassisinghbrar@gmail.com>, <lee@kernel.org>,
-        <linus.walleij@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
-        <wim@linux-watchdog.org>, <linux@roeck-us.net>, <robin.murphy@arm.com>,
-        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
-        <lukasz.luba@arm.com>, <vkoul@kernel.org>, <quic_gurus@quicinc.com>,
-        <agross@kernel.org>, <bartosz.golaszewski@linaro.org>,
-        <quic_rjendra@quicinc.com>, <robimarko@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
-        <quic_psodagud@quicinc.com>, <quic_tsoni@quicinc.com>,
-        <quic_shazhuss@quicinc.com>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240828203721.2751904-15-quic_nkela@quicinc.com>
- <ompfueg7civ5spjdumkhd7qgx4cnvjcftznf3z3q5duuxppt5d@fao7zx4oxfm3>
+Subject: Re: [PATCH -next] PM / devfreq: tegra30: Add missing
+ clk_disable_unprepare in devm_tegra_devfreq_init_hw
+To: Thierry Reding <thierry.reding@gmail.com>,
+ Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc: myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+ cw00.choi@samsung.com, jonathanh@nvidia.com, linux-pm@vger.kernel.org,
+ linux-tegra@vger.kernel.org
+References: <20240803063748.325133-1-cuigaosheng1@huawei.com>
+ <5vuj7r3wxiqa2nr46tdafe3zf4ru56ja2dz742lt6yfmv7ft5d@26rhlgfleqsx>
 Content-Language: en-US
-From: Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <ompfueg7civ5spjdumkhd7qgx4cnvjcftznf3z3q5duuxppt5d@fao7zx4oxfm3>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SpEicdg2VgDAFzoy96fzPwPyuZgqW6b8
-X-Proofpoint-ORIG-GUID: SpEicdg2VgDAFzoy96fzPwPyuZgqW6b8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-29_04,2024-08-29_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 phishscore=0 adultscore=0 priorityscore=1501
- impostorscore=0 malwarescore=0 suspectscore=0 spamscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408290109
+From: Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <5vuj7r3wxiqa2nr46tdafe3zf4ru56ja2dz742lt6yfmv7ft5d@26rhlgfleqsx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-
-On 8/29/2024 12:36 AM, Krzysztof Kozlowski wrote:
-> On Wed, Aug 28, 2024 at 01:37:13PM -0700, Nikunj Kela wrote:
->> Add compatible for smmu representing support on SA8255p.
+29.08.2024 17:54, Thierry Reding пишет:
+> On Sat, Aug 03, 2024 at 02:37:48PM GMT, Gaosheng Cui wrote:
+>> Add the missing clk_disable_unprepare() before return in
+>> devm_tegra_devfreq_init_hw().
 >>
->> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+>> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 >> ---
->>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 3 +++
->>  1 file changed, 3 insertions(+)
->>
-> Your subjects contain quite redundant/excessive information. In the same
-> time they lack information about device. 
->
-> 1. s/document the support on/add/
-> 2. s/SA8255p/SA8255p SMMU-or-whatever-device-it-is/
->
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> Best regards,
-> Krzysztof
+>>  drivers/devfreq/tegra30-devfreq.c | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> Acked-by: Thierry Reding <treding@nvidia.com>
 
-Okay. I thought arm-smmu tag already indicate which device this patch is
-for but would put SMMU explicitly in the subject.
-
-Thanks,
-
--Nikunj
+devm_tegra_devfreq_deinit_hw() is invoked when
+devm_add_action_or_reset() fails, disabling the clock. There is no
+missing clk_disable_unprepare(). Patch is wrong :)
 
 
