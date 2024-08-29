@@ -1,198 +1,107 @@
-Return-Path: <linux-pm+bounces-13163-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13164-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11A01964489
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 14:33:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98FAF9644DC
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 14:41:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 856C21F263F7
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 12:33:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 329ACB25075
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 12:41:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07E51A3BAA;
-	Thu, 29 Aug 2024 12:33:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 819391B5818;
+	Thu, 29 Aug 2024 12:35:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA05E1A38F0;
-	Thu, 29 Aug 2024 12:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C98A1B531E;
+	Thu, 29 Aug 2024 12:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724934785; cv=none; b=Wq6fql1DZcKZ2/7/i/0/z/MuHmw0/H4yAW2o1tN0ShzQuP7v8S5tq0gKiGz21iKUhcM/RardOcAAAmSLVbSpv36AnKgZYVrQDNdcVfhXZOCvfKrTDifkE7nUAuORemB+n5w4JIJD3vtuXhmC8tnPPaFzaPdXHMAo6D8sN0FdynI=
+	t=1724934920; cv=none; b=A560xqqgHaHIud2KrrTCKlvsaTa8eY/kA+g2YkxLo5FCS4htpI9RpNtbdRGFkVVgkzFHX7Ab0Y3cueGAgl/Wpk8BZT1Sz5jTaUg6yF4IepvZ8IOmf3Wf6E+NjQwEsWAI/O20faciqbAr194oCQz6QC+pzDdRMAjVf2MiQyhNwy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724934785; c=relaxed/simple;
-	bh=xut1B75Copn1UQMc3oOTgZsdXNP6Xy8ddJQStmm+73U=;
+	s=arc-20240116; t=1724934920; c=relaxed/simple;
+	bh=vGBKFDpY/2JZ7XatxShXTPt4YW1ZJUjOUZm4m0b9ue8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m+t54aTMpxUYU0NEdczaf5rpYdjev8z8lgNcBQoZZ/rnZfZL2i3GPRBsWHMAxvk00elNpfauKeLaW+d6+J4k2nTJyxlSxg8x+rYzcCwv00JMCa+S/lbejaA4a7FoqniC1v5+ykEpqjcgEam23KwtSk8YVaocAzb1SEY03I9nzFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.170
+	 To:Cc:Content-Type; b=IQlzi269Ag+1cSIyws1ptJXHBg80H+VKpjw6GkIHbPLw9Yvh3DZrYKfbDhP5lqrhMbLKAYvnLoekDKkgkmb6vyNDvyIdQyt5UmFnyoWksLA51R69U+VpINR9ryWTqPwe5MABRBYjKF/cbuxyBA4hcXkUQUI8g5EnCJjPKsVdcX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6c130ffa0adso6323567b3.3;
-        Thu, 29 Aug 2024 05:33:03 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6c130ffa0adso6339977b3.3;
+        Thu, 29 Aug 2024 05:35:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724934782; x=1725539582;
+        d=1e100.net; s=20230601; t=1724934915; x=1725539715;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fBoF3+XOHG34nWFsOj1vD6Tq0LtW/x7+eoI1HvREX4A=;
-        b=VBsmrcgycDa1uxzAsQZqwNRbI5fCKZEJvb6wFNabzi768gBGKdV+8ubYtWpb4NdZdJ
-         2qAXkVHsSNEvtGOx93Y2TBxHrslrNkXXRWaTog37Wn3ZFT75EUaX3bvIGBCy5Lmq6q4w
-         lYcQ1JHNS0kaNZouK3k2Rh3OcEsPA6eFWhffxMJjbnyfnmYUWjg9Ff2Xw6k16REW07bz
-         qWtp3c84BbcLRU1d8zuPp0PnCmkibJ6HQfgdy9AW9qJJAsGWOekiW+OKEv4g7UUF0b7x
-         lGj8MCice/cND/U0Sl2smJqrvywhIliuwDcXtgj3aNsgqnnaj/rB7slV4TN+jWlEYyeS
-         2X9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCURgnorinCplGHSN+FHQRIBgnQXLDYKUibmdgGJzSbUVOO5mCDewp5RqDDSFRJw+KdWzs0ivfNXqZrknljdykc=@vger.kernel.org, AJvYcCUZxa07shkFQ/aOZeeU8J6IgXA0nBDM4IMi9E+G6cqOPgnOMWZBb6uUV7ZjiAwUuDGMRX/J+Q30xBU=@vger.kernel.org, AJvYcCWHmcBClnhmoqMQyiMc+QsOW0A7Y3Jwm0BPSXYOBDO2da+PlC5Hl026rJpMxR4718evcfS4jBOy6kRl/MGkgAD3ors=@vger.kernel.org, AJvYcCWoqqVcKKv0Xv8SIlE9tnQHy/Kvl+KhNW18PAONBilHxsY41w4L795HeGUpCGJOCqHdNjWDfJBLthmvPsN0@vger.kernel.org, AJvYcCXiXPBoXPgOPH+tTgqD1PdVQIjpRzJ0s69eQTYPD00aOHJHxBNmXvLyIEOZVOoI+WeObU8qT/If7Nw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzStHEQXMwxTyPnOBrNgfCI4WNwU8wu/SXyYns8Iwo0BQOd/XuI
-	Z5nlNOiDty37SJWqo2/FNXeTXZ6oc0HunG7TPCehfz8SgdAbUdTHH23FZ/t2
-X-Google-Smtp-Source: AGHT+IGTG6xYFya3Nt+/gww/itAi9HETKsLFYYu4TFE47IKn3Vh9Y9BZ1reE+e8HjyLFDamv3UxAug==
-X-Received: by 2002:a05:690c:6903:b0:6b2:7c54:51d with SMTP id 00721157ae682-6d2769e1f05mr31492557b3.23.1724934782487;
-        Thu, 29 Aug 2024 05:33:02 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6d2d40a7427sm2246717b3.56.2024.08.29.05.33.02
+        bh=14V/EDucvcd+1DCus2mW3U6ZJ9nuoR181aW3vtTOiJw=;
+        b=UKKJvlVKNdESUsphIxmP2CYj6RpltrG1UMiezGilmMEWC+vMPgyIBjuOEHb83A0YJj
+         FxitSk4goLMc3JjfQNJ0AdsbGzrLxLDPc18Qa2kKyJr1K6zoFdamD+p8SiF7/uhNxFGe
+         XfBnlR7t8XsFYFmZVMuQ8x0kQ08wkuTfpI6k3Eqs69jMQALpHva2m5y5DIjr0FnlGN4b
+         e3aNRSN1hd1jHB0hSgB7vfMNBBSa3Yt+L7xSmeJpeGKELxXFyGyPODTtsSn88Ns5sn/1
+         2iOuHZKdkM7770nlAWTKyvoX87l8UWmuoQHpQwSdcYY1caIJu5gmI50/fTeirVjrXXBd
+         CKaw==
+X-Forwarded-Encrypted: i=1; AJvYcCVJ0NaQcbpLjrNuh9+zG6dw7YnBjGQUmOkwSnM5Mh8xqHLaxb/riJT/+HqvZwA89VtuhNN+QZwYooM=@vger.kernel.org, AJvYcCVcHzHUA+n3ttI91mRttWC5Py4d7cd+9NWQSkf9rkA5Pimp7hTZyA1jkAPXxKhnzwYy98fQVH+Og+2Uxt0o@vger.kernel.org, AJvYcCWKf/otsz4IGKbnCP8bDlrXkeXhXNzXJEbJIJYx50LEe5TWDnD9eleyj7ByGRT1XZ5wARNMC3xWwVwp@vger.kernel.org, AJvYcCWy0sypPuLxI19662Obso9QRLRoAxqzfqzj8Q0YWgbfrMpsFJNv7pbs9dvuv1KmP7TIotYZ9ZJo/+ly@vger.kernel.org, AJvYcCXM1qAQM+qHBLHljL79NRd9p4yf3yEXFknPspEDQXnubASqcw0mF7g7MEZagAqWIxYJOss5qWSkt41J@vger.kernel.org, AJvYcCXogCRiQ00d6VPIgPE8DTQJUJpbJAsI5TDTsMrcm7DBSX6AT1htPWoNXOjGbRFkg4D3wg7aZ56hZ/WluSJIe31eVSg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywe/L9eqtiST5a1GwTs74NpPRB5RScgr0EO+PvMPkgRathl2XzZ
+	sjJ/wOIcaorAE161UA3Cgu40LHqga8QpTZ0KtsyPE6Iy4VpbrTZc5Pa8CtWo
+X-Google-Smtp-Source: AGHT+IERzRtchaBopoGY4O+dwP13M32hvM5ouD8tZiGGaaILo9FWDYiCfoYRKJBp9V9B3U1GZV8TKw==
+X-Received: by 2002:a05:690c:4a06:b0:66a:d93b:3047 with SMTP id 00721157ae682-6d2769e32fdmr30944877b3.25.1724934914591;
+        Thu, 29 Aug 2024 05:35:14 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6d2d438e169sm2200147b3.61.2024.08.29.05.35.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Aug 2024 05:33:02 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6c3f1939d12so5664657b3.2;
-        Thu, 29 Aug 2024 05:33:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUV92UKyoPn+oOjdSX9nv72Yrx1eTxQZ06wX5ykVFJV0VwQTNjrM2Uux4VFEURwpCAiJZyoL2nOhnKE86xtz9RbQa4=@vger.kernel.org, AJvYcCVKIiK2YztirlsLFYGYkc5vPfaHeXOERDsTu04p+o7MkzO2qUw8nBjRRLLtVLVSCklq3sY8N4UqXtQ=@vger.kernel.org, AJvYcCVPsyJ9Od0ebkXbzS4gtSQRL/LMfc3G5bSMmLZWMsX4fRjuriVYsQriw6LoZMxw33uejn1PRPNBzCthEOTCtSs=@vger.kernel.org, AJvYcCVgDCVlOgrROZ1me8BTj0aRmzXNV9WOVLoS1yjtu2yVesbUwaEHmvCHT9QX9nyh/NlXExEdBp8qrwc=@vger.kernel.org, AJvYcCXL3KOa38KvSqREbcEyd4eGG+SkUw0/1shInMbo1gX/MXQ4dTZI3ZCkswN4BKtn+eF1hsBerpBt3NWzurQ3@vger.kernel.org
-X-Received: by 2002:a05:690c:338f:b0:6b1:3bf8:c161 with SMTP id
- 00721157ae682-6d276404cd2mr31558997b3.13.1724934782077; Thu, 29 Aug 2024
- 05:33:02 -0700 (PDT)
+        Thu, 29 Aug 2024 05:35:14 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6ca1d6f549eso7250127b3.0;
+        Thu, 29 Aug 2024 05:35:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUYfn/xwPmzKIMcAxHfsaCe1adeutv+BALeQ24Awz6WSNAhxiyZNSVSSSRJ9YY8fSzuu4epjoEZ7tA=@vger.kernel.org, AJvYcCUZOTG4NELOkZvLYJowl8k8+MPKcQSN285OEY9NrKpsY/UsBAuQwHTzgHxVM5kVDyOl22xXnugD8GEu@vger.kernel.org, AJvYcCWG8WpccfFVRyICzDYrKIJGDl95cibF5z29Qc7Iq058rPBG49GJCYq4eqhiJdSDcoSTD2jFdggpt68p@vger.kernel.org, AJvYcCWNPe/CSHv2NT1gbKt/E7nA/eJL/q3WbZaZCrnhsT8T4Ue2T978nlOVXnZBC8oEdY23GqUg35CbC5wRYv1iIYPzdgY=@vger.kernel.org, AJvYcCX1bxYNRxkW/Z77N9eNj4L0V8q8d2wpte9SKW/sMkx7ive8oLo/ZiqjwLjKRLYoty3E3cKKRUXbPezV@vger.kernel.org, AJvYcCX8gjc6Fv1debg1B9BI8bQ2c00ClN5g/jQdO9UOwkjNP6PArnWu80TusOwyCe9zJXNjLRIlYqsb+wyHoN/M@vger.kernel.org
+X-Received: by 2002:a05:690c:fc4:b0:62f:4149:7604 with SMTP id
+ 00721157ae682-6d275e33545mr31207767b3.4.1724934912929; Thu, 29 Aug 2024
+ 05:35:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240828140602.1006438-1-claudiu.beznea.uj@bp.renesas.com> <20240828140602.1006438-2-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20240828140602.1006438-2-claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com> <20240822152801.602318-2-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240822152801.602318-2-claudiu.beznea.uj@bp.renesas.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 29 Aug 2024 14:32:49 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX+Q99MvQRZcwGbk8F8SiAUzRU_t2QmRuO_6etAqqXskg@mail.gmail.com>
-Message-ID: <CAMuHMdX+Q99MvQRZcwGbk8F8SiAUzRU_t2QmRuO_6etAqqXskg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] clk: renesas: rzg2l-cpg: Use GENPD_FLAG_* flags
- instead of local ones
+Date: Thu, 29 Aug 2024 14:35:01 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUV04PO2Rak9fLxWNFSEoqVp+gAKj36NcHhEKhqqRRL=Q@mail.gmail.com>
+Message-ID: <CAMuHMdUV04PO2Rak9fLxWNFSEoqVp+gAKj36NcHhEKhqqRRL=Q@mail.gmail.com>
+Subject: Re: [PATCH 01/16] clk: renesas: r9a08g045: Add clocks, resets and
+ power domains for USB
 To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org, 
-	linux@roeck-us.net, ulf.hansson@linaro.org, linux-renesas-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, p.zabel@pengutronix.de, magnus.damm@gmail.com, 
+	gregkh@linuxfoundation.org, mturquette@baylibre.com, sboyd@kernel.org, 
+	yoshihiro.shimoda.uh@renesas.com, biju.das.jz@bp.renesas.com, 
+	ulf.hansson@linaro.org, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Claudiu,
-
-On Wed, Aug 28, 2024 at 4:06=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
+On Thu, Aug 22, 2024 at 5:28=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
 wrote:
 > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >
-> For watchdog PM domain it is necessary to provide GENPD_FLAG_IRQ_SAFE fla=
-g
-> to be able to power on the watchdog PM domain from atomic context. For
-> this, adjust the current infrastructure to be able to provide GENPD_FLAG_=
-*
-> for individual PM domains.
+> Add clocks, resets and power domains for USB modules available on the
+> Renesas RZ/G3S SoC.
 >
 > Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Thanks for your patch!
-
-> --- a/drivers/clk/renesas/rzg2l-cpg.c
-> +++ b/drivers/clk/renesas/rzg2l-cpg.c
-> @@ -1680,11 +1680,13 @@ static int rzg2l_cpg_power_off(struct generic_pm_=
-domain *domain)
->         return 0;
->  }
->
-> -static int __init rzg2l_cpg_pd_setup(struct rzg2l_cpg_pd *pd, bool alway=
-s_on)
-> +static int __init rzg2l_cpg_pd_setup(struct rzg2l_cpg_pd *pd, u32 genpd_=
-flags,
-> +                                    bool always_on)
-
-You don't need always_on, as that should already be reflected in
-genpd_flags.
-
-Also, you could do without passing genpd_flags, if the caller would have
-initialized pd->genpd.flags (it already initializes pd->genpd.name).
-
->  {
->         struct dev_power_governor *governor;
->
-> -       pd->genpd.flags |=3D GENPD_FLAG_PM_CLK | GENPD_FLAG_ACTIVE_WAKEUP=
-;
-> +       pd->genpd.flags |=3D GENPD_FLAG_PM_CLK | GENPD_FLAG_ACTIVE_WAKEUP=
- |
-> +                          genpd_flags;
-
-Change not needed if the caller would have initialized flags.
-
->         pd->genpd.attach_dev =3D rzg2l_cpg_attach_dev;
->         pd->genpd.detach_dev =3D rzg2l_cpg_detach_dev;
->         if (always_on) {
-
-The next line is
-
-    pd->genpd.flags |=3D GENPD_FLAG_ALWAYS_ON;
-
-which should already be the case if always_on is true, so it can
-be removed.
-
-> @@ -1712,7 +1714,7 @@ static int __init rzg2l_cpg_add_clk_domain(struct r=
-zg2l_cpg_priv *priv)
->
->         pd->genpd.name =3D np->name;
-
-pd->genpd.flags =3D GENPD_FLAG_ALWAYS_ON;
-
->         pd->priv =3D priv;
-> -       ret =3D rzg2l_cpg_pd_setup(pd, true);
-> +       ret =3D rzg2l_cpg_pd_setup(pd, 0, true);
-
-s/0/GENPD_FLAG_ALWAYS_ON/, FWIW ;-)
-
->         if (ret)
->                 return ret;
->
-> @@ -1777,7 +1779,8 @@ static int __init rzg2l_cpg_add_pm_domains(struct r=
-zg2l_cpg_priv *priv)
->                 return ret;
->
->         for (unsigned int i =3D 0; i < info->num_pm_domains; i++) {
-> -               bool always_on =3D !!(info->pm_domains[i].flags & RZG2L_P=
-D_F_ALWAYS_ON);
-> +               u32 genpd_flags =3D info->pm_domains[i].genpd_flags;
-> +               bool always_on =3D !!(genpd_flags & GENPD_FLAG_ALWAYS_ON)=
-;
->                 struct rzg2l_cpg_pd *pd;
->
->                 pd =3D devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
-> @@ -1789,7 +1792,7 @@ static int __init rzg2l_cpg_add_pm_domains(struct r=
-zg2l_cpg_priv *priv)
-
-You can add
-
-    pd->genpd.flags =3D info->pm_domains[i].genpd_flags;
-
-above.
-
->                 pd->id =3D info->pm_domains[i].id;
->                 pd->priv =3D priv;
->
-> -               ret =3D rzg2l_cpg_pd_setup(pd, always_on);
-> +               ret =3D rzg2l_cpg_pd_setup(pd, genpd_flags, always_on);
->                 if (ret)
->                         return ret;
-
-What about moving the conditional call to rzg2l_cpg_power_on()
-below to rzg2l_cpg_pd_setup()? Then this function no longer needs
-the always_on flag.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk for v6.12.
 
 Gr{oetje,eeting}s,
 
                         Geert
+
 
 --
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
