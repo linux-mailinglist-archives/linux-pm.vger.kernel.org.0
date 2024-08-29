@@ -1,143 +1,172 @@
-Return-Path: <linux-pm+bounces-13130-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13131-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A9D7963DD8
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 09:58:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E485963DE2
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 09:59:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F7CE1C20A64
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 07:58:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3EC11F24053
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 07:59:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6066518A6D2;
-	Thu, 29 Aug 2024 07:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA0BF189B9D;
+	Thu, 29 Aug 2024 07:59:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c2cimbev"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="CZtfE2m1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0714E1B813;
-	Thu, 29 Aug 2024 07:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB2A14B96F
+	for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 07:59:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724918285; cv=none; b=nDZ5sERqZXUwLVc6NgAdVYNsqD9Ed/pO4ZwZvjXPAasfV0U9IVeM3W4kntiYw/lrzriyqz27uz/MNTNYe+0wtmOhUPVZb/KtJlL/JvlfdVVl7qIjIRr4NZcckJB2O83yFNu/eDIbtnXbESARVnXBp7CGvVeglJcbJriBvqJzqSs=
+	t=1724918350; cv=none; b=tkDYU9mnYNb3st1cKAWRRtIAi5XZg4OrQUL1qxJorSxJT0WKuqv3r6lL77Df9nPD/w/gqT3UtWDk6Q6ZOglkVRmoTbaM3mBHDbpR98GSb7zdrEGx/ateFIqr9gbDIEQSfjB1wM6gC8oiDZVUTaEzJns9GVRR4Pst+6SCXWzIfOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724918285; c=relaxed/simple;
-	bh=xxaLtv0q8WiO22sQEm0ulKg7KPVsl9z0GngcTOmfnXo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ToXypwPasHKSGzK2/e1aGQINpq6dQzIiT7kA9S7FI7V5mdxOK1s3py2GpG/aXNZBoUakBs1jbNCOFDHku5xQ0YNIVsrM0S2p5xK6+CaUSn/Qd401J60eBnvr2PBPxrfzh+v6TOLrQVBP5IKpre9BaSRmIkfFM3paK6OcCuV/qas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c2cimbev; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55287C4CEC1;
-	Thu, 29 Aug 2024 07:57:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724918284;
-	bh=xxaLtv0q8WiO22sQEm0ulKg7KPVsl9z0GngcTOmfnXo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=c2cimbevF8UQ8GLpaB0G5GGZz3Vi4r0CXj5nxuxOWbEMi9HqKxloOM+fldlyFIh6d
-	 Sqk64XiHSNlK73PHI4yfg9L94pje7akTIE1gJTqeUbr6fsDu6nYWtfpKAou3o5s+jD
-	 f8U8FB/4G+9Ji/n/Hfm5ExoVJ4wrJH8bqlAqCA2fMYsF8trznpd9nHORfOOnzJoG5c
-	 sLpPzXKcDH1w5zIdYV967zFFVcKodJeUibp7vM259IC/GSHbfxcbjb0uksg3n2EOjV
-	 YMCgQTT+CXRqUIrHSzBpNReYFzdbZ7YzwhkxTcuCGajwRbBdDmobHrRqZF9OuTvRJV
-	 hs3NIMhFuop1g==
-Message-ID: <11c897d7-ea9c-4474-81f6-1fc2198d289d@kernel.org>
-Date: Thu, 29 Aug 2024 09:57:43 +0200
+	s=arc-20240116; t=1724918350; c=relaxed/simple;
+	bh=ISm5ntBSyRBtS44vfURV3RiQumBNWuZaV6guM8smmW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AFcmMDrb7+CA9sEdwZotoae91hhplyjytsEce2sfaszZz9xwDXpIHrw5TTstd1FNCbn1ej/KyMticcec0VpN++2jlnddMt5S3atiRJ+9X6Bx5EJUW0oisLCZ27YICqauzs51Ai3YwFdGUFWq41AJ3PrpAcRCBJH563KM4Cb6f4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=CZtfE2m1; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2f3eabcd293so3975641fa.2
+        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 00:59:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1724918347; x=1725523147; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6elqEmMP4Fqdb/aWp7gByX3m8OcBQtHxRmlqmcr7txg=;
+        b=CZtfE2m1jwNh6+FsnH+oZnpR2Ya96oguOsWuPl2SBenkV2wTFqD5Bb2oevEylbbD9+
+         k0BbHfTG7XmhUdQ6CEeFf72IgYxwWgx6MmSLLxIvtgsK61QpcLA/E5diX17E6IYBlD4K
+         PXNCn5T+tm9YN5Smc5gSJCpjUPF7i8oEp+Jkqv7zaoBq9gvJPV4RKXdGvOSE/+ZWAvtT
+         c7gZgSn0x/9QoG1f11tcGgTAmZ+9+HHU8BV9MWKyUv+oFdRvUj+XX1Xv2kZgCNsIqPZc
+         lr/KrAKBwipmCvq7wFPBn37kkeeXyFMyCYTEPWlgIv2yC2I4l49NBpGXMC9KB05uQmCp
+         tyUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724918347; x=1725523147;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6elqEmMP4Fqdb/aWp7gByX3m8OcBQtHxRmlqmcr7txg=;
+        b=oQ6McYyV64J5NgLR6G5oQaUJcEidMpikZ1catH2O/y/4mWFYoAauZYv6lAiWDS1j8z
+         XJrTFrKXYVxEAU3DRR8tBBEOJLqLfOCUlFYZbDQB3p1aT8RGv9v8du0YwWBSQSylJN1X
+         2hRWaJwjx/XkMzxCrwza4c/ev/ITEnwkgDm/fdonrRjj1XpUn/0X4k/tDCzm+JWlvl6r
+         ol4pXu8wHvEpWO0WPOKFGHgI3Z/94ThYDS+wVtjpiDatkW7AZ0m2bmTqVrnv29TCGfbv
+         pU7yg4x6Rad3kR8IDQetm5Z15hEZu0lq6IefQsV0NX6bvzzc4J7TJAVYYOhsrK5vMmEq
+         bDYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV4u66mOYrINUnsSzSJjuUUeOpla/Xqvq6sLqyNl+sYfi+pNVvYoIr2+oAwv8KvFWT+Uu9o/PVgzg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2MyPcHSbDtlDp4JDaFWwr6G6MNmpo4ieLzR1Az0T8sBiqOkHd
+	3kuWRLqaGGxJ7zmMvjg4h+8/CeqCv40yegl9ngeLClnZnZOIuawD0RQplrmEPpU=
+X-Google-Smtp-Source: AGHT+IEknpoiPwNIZCUWqC5wlzEu9yh+Rxh2v4jcs1wvi/j58/8VhBs0RUuviEJZYalHd8CSAHV62w==
+X-Received: by 2002:a05:651c:1990:b0:2ef:2b05:2ab3 with SMTP id 38308e7fff4ca-2f610392703mr13785621fa.10.1724918346154;
+        Thu, 29 Aug 2024 00:59:06 -0700 (PDT)
+Received: from localhost (cst2-173-13.cust.vodafone.cz. [31.30.173.13])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c226c7c2aesm382119a12.51.2024.08.29.00.59.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2024 00:59:05 -0700 (PDT)
+Date: Thu, 29 Aug 2024 09:59:04 +0200
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Nick Hu <nick.hu@sifive.com>
+Cc: greentime.hu@sifive.com, zong.li@sifive.com, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Conor Dooley <conor.dooley@microchip.com>, 
+	Samuel Holland <samuel.holland@sifive.com>, Sunil V L <sunilvl@ventanamicro.com>, linux-pm@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] riscv: Add stimecmp save and restore
+Message-ID: <20240829-fb7bda6b46302b65b2f89d20@orel>
+References: <20240829033904.477200-1-nick.hu@sifive.com>
+ <20240829033904.477200-2-nick.hu@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/22] arm64: qcom: Introduce SA8255p Ride platform
-To: Nikunj Kela <quic_nkela@quicinc.com>, andersson@kernel.org,
- konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
- herbert@gondor.apana.org.au, davem@davemloft.net, sudeep.holla@arm.com,
- andi.shyti@kernel.org, tglx@linutronix.de, will@kernel.org, joro@8bytes.org,
- jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
- amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
- wim@linux-watchdog.org, linux@roeck-us.net
-Cc: robin.murphy@arm.com, cristian.marussi@arm.com, rui.zhang@intel.com,
- lukasz.luba@arm.com, vkoul@kernel.org, quic_gurus@quicinc.com,
- agross@kernel.org, bartosz.golaszewski@linaro.org, quic_rjendra@quicinc.com,
- robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
- arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
- linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
- kernel@quicinc.com, quic_psodagud@quicinc.com, quic_tsoni@quicinc.com,
- quic_shazhuss@quicinc.com
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240828203721.2751904-1-quic_nkela@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240829033904.477200-2-nick.hu@sifive.com>
 
-On 28/08/2024 22:36, Nikunj Kela wrote:
-> This series enables the support for SA8255p Qualcomm SoC and Ride
-> platform. This platform uses SCMI power, reset, performance, sensor
-> protocols for resources(e.g. clocks, regulator, interconnect, phy etc.)
-> management. SA8255p is a virtual platforms that uses Qualcomm smc/hvc
-> transport driver.
+On Thu, Aug 29, 2024 at 11:38:59AM GMT, Nick Hu wrote:
+> If the HW support the SSTC extension, we should save and restore the
+> stimecmp register while cpu non retention suspend.
 > 
+> Signed-off-by: Nick Hu <nick.hu@sifive.com>
+> ---
+>  arch/riscv/include/asm/suspend.h |  4 ++++
+>  arch/riscv/kernel/suspend.c      | 13 +++++++++++++
+>  2 files changed, 17 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
+> index 4ffb022b097f..ffaac2efabb5 100644
+> --- a/arch/riscv/include/asm/suspend.h
+> +++ b/arch/riscv/include/asm/suspend.h
+> @@ -16,6 +16,10 @@ struct suspend_context {
+>  	unsigned long envcfg;
+>  	unsigned long tvec;
+>  	unsigned long ie;
+> +#if __riscv_xlen < 64
+> +	unsigned long stimecmph;
+> +#endif
 
-Who is supposed to merge it? The Cc-list is quite enormous and I got now
-20 bounces:
+I'm not sure the reduction in struct size is worth the #ifdeffery. If we
+just always add stimecmph, then we can also change the #ifdef's below to
+if's, i.e. if (__riscv_xlen < 64), which should still remove the code from
+64-bit builds.
 
-"    Too many recipients to the message"
+Or maybe we need something like
 
-at least drop some non-maintainer related, I counted 5-7 Qualcomm ones
-which should not be needed.
+#if __riscv_xlen < 64
+#define csrh_write(r, v) csr_write(r, v)
+#else
+#define csrh_write(r, v)
+#endif
 
-Best regards,
-Krzysztof
+in asm/csr.h and then use it for all the *h csrs, but keep the #if in
+the struct.
 
+Thanks,
+drew
+
+> +	unsigned long stimecmp;
+>  #ifdef CONFIG_MMU
+>  	unsigned long satp;
+>  #endif
+> diff --git a/arch/riscv/kernel/suspend.c b/arch/riscv/kernel/suspend.c
+> index c8cec0cc5833..3afd86e1abf7 100644
+> --- a/arch/riscv/kernel/suspend.c
+> +++ b/arch/riscv/kernel/suspend.c
+> @@ -19,6 +19,12 @@ void suspend_save_csrs(struct suspend_context *context)
+>  	context->tvec = csr_read(CSR_TVEC);
+>  	context->ie = csr_read(CSR_IE);
+>  
+> +	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SSTC)) {
+> +		context->stimecmp = csr_read(CSR_STIMECMP);
+> +#if __riscv_xlen < 64
+> +		context->stimecmph = csr_read(CSR_STIMECMPH);
+> +#endif
+> +	}
+>  	/*
+>  	 * No need to save/restore IP CSR (i.e. MIP or SIP) because:
+>  	 *
+> @@ -42,6 +48,13 @@ void suspend_restore_csrs(struct suspend_context *context)
+>  	csr_write(CSR_TVEC, context->tvec);
+>  	csr_write(CSR_IE, context->ie);
+>  
+> +	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SSTC)) {
+> +		csr_write(CSR_STIMECMP, context->stimecmp);
+> +#if __riscv_xlen < 64
+> +		csr_write(CSR_STIMECMPH, context->stimecmph);
+> +#endif
+> +	}
+> +
+>  #ifdef CONFIG_MMU
+>  	csr_write(CSR_SATP, context->satp);
+>  #endif
+> -- 
+> 2.34.1
+> 
 
