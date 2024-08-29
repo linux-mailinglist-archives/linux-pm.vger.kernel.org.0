@@ -1,207 +1,638 @@
-Return-Path: <linux-pm+bounces-13155-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13156-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F260964399
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 13:55:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE2C29643C2
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 14:03:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 917CD1F23286
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 11:55:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74385283A05
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 12:03:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD7EE19408D;
-	Thu, 29 Aug 2024 11:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0F1193078;
+	Thu, 29 Aug 2024 12:03:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="tRj9f0pp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y9LS+ItJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16A0192B9C;
-	Thu, 29 Aug 2024 11:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BBB18CC08;
+	Thu, 29 Aug 2024 12:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724932521; cv=none; b=pW5l20gmhoo2xzzTvIAaddsFYDtafyOTaT3pG/YRuGL3hLOekgSwA3GGrncEi3vuoms4unz2HFzbd1nQQbtOe21eF6bcOR1u70y1GAyh04w7hXkLxBFg5OzuwRV3KIPkVWGNaXuPy8hp23lGQt01pPqih3lxSHcOYH6mq36etUQ=
+	t=1724932984; cv=none; b=cEiaO+1vPfKrsIA8E5ux1wFaY798L2x9GQ6MhGVETcmYnxZ/5xfkOyhBJn4NjL8o3hS5ut4/goXt/M7AOqfWhfgH01v0SwGFtdP3BSCN0LRG6ZdYCIbSAZ3NC+U+p/vT2IrhkMYJyNmV51MKSUpt9WJnwaOImRNV9YPYN3ZLqvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724932521; c=relaxed/simple;
-	bh=18MFg0ZU0gWEGTSRmJyGi2UXhCSkBRuo2F5V7lvrFW4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H4TgUTK87c2AazD5gizjA3dbY2rdNreMNxmqc+WhWSO7FHFvhLdOeE5k3S+DWqOjFut1TFlGt9C99vNR+TsRU7o1PlBy/eYYQnp8eosEzWowkTVlP+mrmxdUnbhpU0Zl6isdV49MCZXj+5r6zjkdgMaQ+99q0JNpMGt221oSWOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=tRj9f0pp; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from [192.168.88.20] (91-156-87-48.elisa-laajakaista.fi [91.156.87.48])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 223CF6B5;
-	Thu, 29 Aug 2024 13:54:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1724932444;
-	bh=18MFg0ZU0gWEGTSRmJyGi2UXhCSkBRuo2F5V7lvrFW4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tRj9f0ppVRM5zv7lpEUb0256T7/Lqiu56m0Jkr5rbA+WvCipDUkeg6EPm9pJp1vcc
-	 q0qKU/2mpqC5B68d1d8cx0ayjq7VVlBlq6HRInS+kpLeV2jPimqGQarAk10kfZBa2B
-	 P4cQ+UveA0/rE9DuKn2wTwb9s04VKSBOpYIIS4ZM=
-Message-ID: <bb9d4495-ada4-446a-80e3-6b9ddc676f48@ideasonboard.com>
-Date: Thu, 29 Aug 2024 14:55:07 +0300
+	s=arc-20240116; t=1724932984; c=relaxed/simple;
+	bh=yD3f0TETOl9dt0agxov5ujJdKb+t8xyBpIgTwGLOiEw=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=heWCOIO6bAZC3ofaN7cHRWGeMjK2jBhmUfQzRjRGoWf8k0fsxrFKB/K4S14tZB6NzAHD/oqay79a2eVbkbT2/PQGcY69+gihBAJG/TF/72zqY9vIgbLWMl7u+PLxpSlnzO5sRF3AZK6gCLHzuUIJVissuKvWz80dlnLZf7RZ5Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y9LS+ItJ; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724932982; x=1756468982;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=yD3f0TETOl9dt0agxov5ujJdKb+t8xyBpIgTwGLOiEw=;
+  b=Y9LS+ItJpFRvtpn44bVXejTkYFwylUz/bLBa8P4RjSt04eBMGjetCViI
+   efndb4sawASuXLwAZgq9/o78qSWQhQKokYw7TbRcyUi0Wa8I+ntD70hoo
+   Y+9D4SMou7qCCHm64aQnGZvUlzLLg4NxUW75iMSiUOCJX2SDQuncKlayf
+   C6UY7UZRq0F1fb09Vhi8j8CRCjFjuFVfd3UYPlt4r0QJA37DHY6Pl6Szs
+   KjMMjbyY6KiAhcWJbymaGfQYm64uT3OwXx8YTmXsEl3ZDE84AdgCg4lbN
+   TKcAgDY36iuVUZbVmCniwc7z6AhcEniPuH9Y0SRZiwxK+/NqR1znWL1HY
+   Q==;
+X-CSE-ConnectionGUID: ZLzW9gZOS5OCikXWEflGJQ==
+X-CSE-MsgGUID: CTzPzn0dQwqbp0mdW13lwg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="23094223"
+X-IronPort-AV: E=Sophos;i="6.10,185,1719903600"; 
+   d="scan'208";a="23094223"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 05:03:01 -0700
+X-CSE-ConnectionGUID: dQEbS6BaQwqYkNz4xQaHmg==
+X-CSE-MsgGUID: jGwqX16sQu20Mhz5JSymDw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,185,1719903600"; 
+   d="scan'208";a="64047544"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.245.59])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 05:02:58 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 29 Aug 2024 15:02:53 +0300 (EEST)
+To: Xi Pardee <xi.pardee@linux.intel.com>
+cc: irenic.rajneesh@gmail.com, david.e.box@linux.intel.com, 
+    Hans de Goede <hdegoede@redhat.com>, platform-driver-x86@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 08/11] platform/x86:intel/pmc: Create Intel PMC SSRAM
+ Telemetry driver
+In-Reply-To: <20240828222932.1279508-9-xi.pardee@linux.intel.com>
+Message-ID: <42aee315-7c15-5fac-6141-b87bdb83a9c7@linux.intel.com>
+References: <20240828222932.1279508-1-xi.pardee@linux.intel.com> <20240828222932.1279508-9-xi.pardee@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 2/2] pmdomain: ti-sci: Support retaining PD boot time
- state
-To: Ulf Hansson <ulf.hansson@linaro.org>, Abel Vesa <abel.vesa@linaro.org>,
- Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>
-Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
- Santosh Shilimkar <ssantosh@kernel.org>, Dave Gerlach <d-gerlach@ti.com>,
- J Keerthy <j-keerthy@ti.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Santosh Shilimkar <santosh.shilimkar@oracle.com>,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Devarsh Thakkar <devarsht@ti.com>
-References: <20240415-ti-sci-pd-v1-0-a0e56b8ad897@ideasonboard.com>
- <20240415-ti-sci-pd-v1-2-a0e56b8ad897@ideasonboard.com>
- <d4cd0323-4792-49b0-a4e2-0bc92068e7f0@ideasonboard.com>
- <CAPDyKFqShuq98qV5nSPzSqwLLUZ7LxLvp1eihGRBkU4qUKdWwQ@mail.gmail.com>
-Content-Language: en-US
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
- 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
-In-Reply-To: <CAPDyKFqShuq98qV5nSPzSqwLLUZ7LxLvp1eihGRBkU4qUKdWwQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Ulf,
+On Wed, 28 Aug 2024, Xi Pardee wrote:
 
-On 03/05/2024 16:45, Ulf Hansson wrote:
-> + Abel, Saravanna, Stephen
+> Convert ssram device related functionalities to a new driver named Intel
+> PMC SSRAM Telemetry driver. Modify PMC Core driver to use API exported by
+> the driver to discover and achieve devid and PWRMBASE address information
+> for each available PMC. PMC Core driver needs to get PCI device when
+> reading from telemetry regions.
 > 
-> On Mon, 15 Apr 2024 at 19:17, Tomi Valkeinen
-> <tomi.valkeinen@ideasonboard.com> wrote:
->>
->> On 15/04/2024 19:00, Tomi Valkeinen wrote:
->>> Add a new flag, TI_SCI_PD_KEEP_BOOT_STATE, which can be set in the dts
->>> when referring to power domains. When this flag is set, the ti-sci
->>> driver will check if the PD is currently enabled in the HW, and if so,
->>> set the GENPD_FLAG_ALWAYS_ON flag so that the PD will stay enabled.
->>>
->>> The main issue I'm trying to solve here is this:
->>>
->>> If the Display Subsystem (DSS) has been enabled by the bootloader, the
->>> related PD has also been enabled in the HW. When the tidss driver
->>> probes, the driver framework will automatically enable the PD. While
->>> executing the probe function it is very common for the probe to return
->>> EPROBE_DEFER, and, in rarer cases, an actual error. When this happens
->>> (probe() returns an error), the driver framework will automatically
->>> disable the related PD.
->>>
->>> Powering off the PD while the DSS is enabled and displaying a picture
->>> will cause the DSS HW to enter a bad state, from which (afaik) it can't
->>> be woken up except with full power-cycle. Trying to access the DSS in
->>> this state (e.g. when retrying the probe) will usually cause the board
->>> to hang sooner or later.
->>>
->>> Even if we wouldn't have this board-hangs issue, it's nice to be able to
->>> keep the DSS PD enabled: we want to keep the DSS enabled when the
->>> bootloader has enabled the screen. If, instead, we disable the PD at the
->>> first EPROBE_DEFER, the screen will (probably) go black.
->>
->> A few things occurred to me. The driver is supposed to clear the
->> GENPD_FLAG_ALWAYS_ON when the driver has probed successfully. There are
->> two possible issues with that:
->>
->> - Afaics, there's no API to do that, and currently I just clear the bit
->> in genpd->flags. There's a clear race there, so some locking would be
->> required.
->>
->> - This uses the GENPD_FLAG_ALWAYS_ON flag to say "PD is always on, until
->> the driver has started". If the PD would have GENPD_FLAG_ALWAYS_ON set
->> for other reasons, the driver would still go and clear the flag, which
->> might break things.
->>
->> Also, unrelated to the above and not a problem in practice at the very
->> moment, but I think clocks should also be dealt with somehow. Something,
->> at early-ish boot stage, should mark the relevant clocks as in use, so
->> that there's no chance they would be turned off when the main kernel has
->> started (the main display driver is often a module).
->>
->> It would be nice to deal with all the above in a single place. I wonder
->> if the tidss driver itself could somehow be split into two parts, an
->> early part that would probe with minimal dependencies, mainly to reserve
->> the core resources without doing any kind of DRM init. And a main part
->> which would (somehow) finish the initialization at a later point, when
->> we have the filesystem (for firmware) and the other bridge/panel drivers
->> have probed.
->>
->> That can be somewhat achieved with simplefb or simpledrm, though, but we
->> can't do any TI DSS specific things there, and it also creates a
->> requirement to have either of those drivers built-in, and the related DT
->> nodes to be added.
+> The new SSRAM driver binds to the SSRAM device and provides the following
+> functionalities:
+> 1. Look for and register telemetry regions available in SSRAM device.
+> 2. Provide devid and PWRMBASE address information for the corresponding
+>    PMCs.
 > 
-> Without going into too much detail, this and similar problems have
-> been discussed in the past. With the fw_devlink and the ->sync_state()
-> callback we are getting closer to a solution, but for genpd a solution
-> is still pending.
+> Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
+> ---
+>  drivers/platform/x86/intel/pmc/Kconfig        |  11 ++
+>  drivers/platform/x86/intel/pmc/Makefile       |   8 +-
+>  drivers/platform/x86/intel/pmc/arl.c          |  14 ++-
+>  drivers/platform/x86/intel/pmc/core.c         |  59 ++++++---
+>  drivers/platform/x86/intel/pmc/core.h         |   6 +-
+>  drivers/platform/x86/intel/pmc/mtl.c          |  14 ++-
+>  .../platform/x86/intel/pmc/ssram_telemetry.c  | 118 +++++++++++-------
+>  .../platform/x86/intel/pmc/ssram_telemetry.h  |  45 +++++++
+>  8 files changed, 200 insertions(+), 75 deletions(-)
+>  create mode 100644 drivers/platform/x86/intel/pmc/ssram_telemetry.h
 > 
-> If you want to read up on earlier discussions and join us moving
-> forward, that would be great. The last attempt for genpd to move this
-> forward was posted by Abel Vesa:
-> https://lore.kernel.org/linux-pm/20230621144019.3219858-1-abel.vesa@linaro.org/
+> diff --git a/drivers/platform/x86/intel/pmc/Kconfig b/drivers/platform/x86/intel/pmc/Kconfig
+> index d2f651fbec2c..c2ccd48fe266 100644
+> --- a/drivers/platform/x86/intel/pmc/Kconfig
+> +++ b/drivers/platform/x86/intel/pmc/Kconfig
+> @@ -8,6 +8,7 @@ config INTEL_PMC_CORE
+>  	depends on PCI
+>  	depends on ACPI
+>  	depends on INTEL_PMT_TELEMETRY
+> +	depends on INTEL_PMC_SSRAM_TELEMETRY || !INTEL_PMC_SSRAM_TELEMETRY
+>  	help
+>  	  The Intel Platform Controller Hub for Intel Core SoCs provides access
+>  	  to Power Management Controller registers via various interfaces. This
+> @@ -24,3 +25,13 @@ config INTEL_PMC_CORE
+>  		- SLPS0 Debug registers (Cannonlake/Icelake PCH)
+>  		- Low Power Mode registers (Tigerlake and beyond)
+>  		- PMC quirks as needed to enable SLPS0/S0ix
+> +
+> +config INTEL_PMC_SSRAM_TELEMETRY
+> +	tristate "Intel PMC SSRAM Telemetry driver"
+> +	depends on INTEL_VSEC
+> +	help
+> +	  The PMC SSRAM device contains counters structured in Intel Platform
+> +	  Monitoring Techology (PMT) telemetry regions. This driver looks for
+> +	  and register these telemetry regions so they would be available for
+> +	  read through sysfs and Intel PMT API. The driver also provides API to
+> +	  expose information of PMCs available in the platform.
+> \ No newline at end of file
+> diff --git a/drivers/platform/x86/intel/pmc/Makefile b/drivers/platform/x86/intel/pmc/Makefile
+> index 4dd9fa93f873..e935602af2a3 100644
+> --- a/drivers/platform/x86/intel/pmc/Makefile
+> +++ b/drivers/platform/x86/intel/pmc/Makefile
+> @@ -3,8 +3,12 @@
+>  # Intel x86 Platform-Specific Drivers
+>  #
+>  
+> -intel_pmc_core-y			:= core.o ssram_telemetry.o spt.o cnp.o \
+> -					   icl.o tgl.o adl.o mtl.o arl.o lnl.o
+> +intel_pmc_core-y			:= core.o spt.o cnp.o icl.o \
+> +					   tgl.o adl.o mtl.o arl.o lnl.o
+>  obj-$(CONFIG_INTEL_PMC_CORE)		+= intel_pmc_core.o
+>  intel_pmc_core_pltdrv-y			:= pltdrv.o
+>  obj-$(CONFIG_INTEL_PMC_CORE)		+= intel_pmc_core_pltdrv.o
+> +
+> +# Intel PMC SSRAM driver
+> +intel_pmc_ssram_telemetry-y		+= ssram_telemetry.o
+> +obj-$(CONFIG_INTEL_PMC_SSRAM_TELEMETRY)	+= intel_pmc_ssram_telemetry.o
+> \ No newline at end of file
+
+Two files above are missing the last newline.
+
+> diff --git a/drivers/platform/x86/intel/pmc/arl.c b/drivers/platform/x86/intel/pmc/arl.c
+> index 0460715c58f4..25268b1fdf97 100644
+> --- a/drivers/platform/x86/intel/pmc/arl.c
+> +++ b/drivers/platform/x86/intel/pmc/arl.c
+> @@ -700,11 +700,13 @@ int arl_core_init(struct pmc_dev *pmcdev)
+>  	pmcdev->resume = arl_resume;
+>  	pmcdev->regmap_list = arl_pmc_info_list;
+>  
+> -	/*
+> -	 * If ssram init fails use legacy method to at least get the
+> -	 * primary PMC
+> -	 */
+> -	ret = pmc_core_ssram_init(pmcdev, func);
+> +	ret = pmc_core_ssram_get_reg_base(pmcdev);
+> +
+> +	/* Try again later after Intel PMC SSRAM Telemetry driver finishes probe */
+> +	if (ret == -EAGAIN)
+> +		return -EPROBE_DEFER;
+> +
+> +	/* If regbase not assigned, set map and discover using legacy method */
+>  	if (ret) {
+>  		ssram_init = false;
+>  		pmc->map = &arl_socs_reg_map;
+> @@ -718,7 +720,7 @@ int arl_core_init(struct pmc_dev *pmcdev)
+>  	pmc_core_punit_pmt_init(pmcdev, ARL_PMT_DMU_GUID);
+>  
+>  	if (ssram_init)	{
+> -		ret = pmc_core_ssram_get_lpm_reqs(pmcdev);
+> +		ret = pmc_core_ssram_get_lpm_reqs(pmcdev, func);
+>  		if (ret)
+>  			return ret;
+>  	}
+> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+> index 8984041f35f4..19256c5570ab 100644
+> --- a/drivers/platform/x86/intel/pmc/core.c
+> +++ b/drivers/platform/x86/intel/pmc/core.c
+> @@ -28,6 +28,7 @@
+>  #include <asm/tsc.h>
+>  
+>  #include "core.h"
+> +#include "ssram_telemetry.h"
+>  #include "../pmt/telemetry.h"
+>  
+>  /* Maximum number of modes supported by platfoms that has low power mode capability */
+> @@ -1613,11 +1614,12 @@ static u32 pmc_core_find_guid(struct pmc_info *list, const struct pmc_reg_map *m
+>  	return 0;
+>  }
+>  
+> -static int pmc_core_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc)
+> +static int pmc_core_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc, int func)
+>  {
+>  	struct telem_endpoint *ep;
+>  	const u8 *lpm_indices;
+>  	int num_maps, mode_offset = 0;
+> +	struct pci_dev *pcidev;
+>  	int ret, mode, i;
+>  	int lpm_size;
+>  	u32 guid;
+> @@ -1630,11 +1632,16 @@ static int pmc_core_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc)
+>  	if (!guid)
+>  		return -ENXIO;
+>  
+> -	ep = pmt_telem_find_and_register_endpoint(pmcdev->ssram_pcidev, guid, 0);
+> +	pcidev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(20, func));
+> +	if (!pcidev)
+> +		return -ENODEV;
+> +
+> +	ep = pmt_telem_find_and_register_endpoint(pcidev, guid, 0);
+>  	if (IS_ERR(ep)) {
+>  		dev_dbg(&pmcdev->pdev->dev, "couldn't get telem endpoint %ld",
+>  			PTR_ERR(ep));
+> -		return -EPROBE_DEFER;
+> +		ret = -EPROBE_DEFER;
+> +		goto release_dev;
+>  	}
+>  
+>  	pmc->lpm_req_regs = devm_kzalloc(&pmcdev->pdev->dev,
+> @@ -1710,23 +1717,22 @@ static int pmc_core_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc)
+>  
+>  unregister_ep:
+>  	pmt_telem_unregister_endpoint(ep);
+> +release_dev:
+> +	pci_dev_put(pcidev);
+>  
+>  	return ret;
+>  }
+>  
+> -int pmc_core_ssram_get_lpm_reqs(struct pmc_dev *pmcdev)
+> +int pmc_core_ssram_get_lpm_reqs(struct pmc_dev *pmcdev, int func)
+>  {
+>  	unsigned int i;
+>  	int ret;
+>  
+> -	if (!pmcdev->ssram_pcidev)
+> -		return -ENODEV;
+> -
+>  	for (i = 0; i < ARRAY_SIZE(pmcdev->pmcs); ++i) {
+>  		if (!pmcdev->pmcs[i])
+>  			continue;
+>  
+> -		ret = pmc_core_get_lpm_req(pmcdev, pmcdev->pmcs[i]);
+> +		ret = pmc_core_get_lpm_req(pmcdev, pmcdev->pmcs[i], func);
+>  		if (ret)
+>  			return ret;
+>  	}
+> @@ -1743,14 +1749,22 @@ const struct pmc_reg_map *pmc_core_find_regmap(struct pmc_info *list, u16 devid)
+>  	return NULL;
+>  }
+>  
+> -int pmc_core_pmc_add(struct pmc_dev *pmcdev, u64 pwrm_base,
+> -		     const struct pmc_reg_map *reg_map, unsigned int pmc_index)
+> +static int pmc_core_pmc_add(struct pmc_dev *pmcdev, unsigned int pmc_index)
+>  {
+> -	struct pmc *pmc = pmcdev->pmcs[pmc_index];
+> +	struct pmc_ssram_telemetry pmc_ssram_telemetry;
+> +	const struct pmc_reg_map *map;
+> +	struct pmc *pmc;
+> +	int ret;
+> +
+> +	ret = pmc_ssram_telemetry_get_pmc_info(pmc_index, &pmc_ssram_telemetry);
+> +	if (ret)
+> +		return ret;
+>  
+> -	if (!pwrm_base)
+> +	map = pmc_core_find_regmap(pmcdev->regmap_list, pmc_ssram_telemetry.devid);
+> +	if (!map)
+>  		return -ENODEV;
+>  
+> +	pmc = pmcdev->pmcs[pmc_index];
+>  	/* Memory for primary PMC has been allocated in core.c */
+>  	if (!pmc) {
+>  		pmc = devm_kzalloc(&pmcdev->pdev->dev, sizeof(*pmc), GFP_KERNEL);
+> @@ -1758,8 +1772,8 @@ int pmc_core_pmc_add(struct pmc_dev *pmcdev, u64 pwrm_base,
+>  			return -ENOMEM;
+>  	}
+>  
+> -	pmc->map = reg_map;
+> -	pmc->base_addr = pwrm_base;
+> +	pmc->map = map;
+> +	pmc->base_addr = pmc_ssram_telemetry.base_addr;
+>  	pmc->regbase = ioremap(pmc->base_addr, pmc->map->regmap_length);
+>  
+>  	if (!pmc->regbase) {
+> @@ -1772,6 +1786,23 @@ int pmc_core_pmc_add(struct pmc_dev *pmcdev, u64 pwrm_base,
+>  	return 0;
+>  }
+>  
+> +int pmc_core_ssram_get_reg_base(struct pmc_dev *pmcdev)
+> +{
+> +	int ret;
+> +
+> +	if (!pmcdev->regmap_list)
+> +		return -ENOENT;
+> +
+> +	ret = pmc_core_pmc_add(pmcdev, PMC_IDX_MAIN);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pmc_core_pmc_add(pmcdev, PMC_IDX_IOE);
+> +	pmc_core_pmc_add(pmcdev, PMC_IDX_PCH);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct acpi_device_id pmc_core_acpi_ids[] = {
+>  	{"INT33A1", 0}, /* _HID for Intel Power Engine, _CID PNP0D80*/
+>  	{ }
+> diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
+> index 5af1d41a83f7..2d62a71ec100 100644
+> --- a/drivers/platform/x86/intel/pmc/core.h
+> +++ b/drivers/platform/x86/intel/pmc/core.h
+> @@ -594,7 +594,7 @@ extern const struct pmc_bit_map *arl_pchs_lpm_maps[];
+>  extern const struct pmc_reg_map arl_pchs_reg_map;
+>  
+>  extern void pmc_core_get_tgl_lpm_reqs(struct platform_device *pdev);
+> -extern int pmc_core_ssram_get_lpm_reqs(struct pmc_dev *pmcdev);
+> +extern int pmc_core_ssram_get_lpm_reqs(struct pmc_dev *pmcdev, int func);
+>  int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value, int ignore);
+>  
+>  int pmc_core_resume_common(struct pmc_dev *pmcdev);
+> @@ -603,10 +603,8 @@ extern void pmc_core_get_low_power_modes(struct pmc_dev *pmcdev);
+>  extern void pmc_core_punit_pmt_init(struct pmc_dev *pmcdev, u32 guid);
+>  extern void pmc_core_set_device_d3(unsigned int device);
+>  
+> -extern int pmc_core_ssram_init(struct pmc_dev *pmcdev, int func);
+>  extern const struct pmc_reg_map *pmc_core_find_regmap(struct pmc_info *list, u16 devid);
+> -extern int pmc_core_pmc_add(struct pmc_dev *pmcdev, u64 pwrm_base,
+> -			    const struct pmc_reg_map *reg_map, unsigned int pmc_index);
+> +extern int pmc_core_ssram_get_reg_base(struct pmc_dev *pmcdev);
+>  
+>  int spt_core_init(struct pmc_dev *pmcdev);
+>  int cnp_core_init(struct pmc_dev *pmcdev);
+> diff --git a/drivers/platform/x86/intel/pmc/mtl.c b/drivers/platform/x86/intel/pmc/mtl.c
+> index e7f5b650902d..6ac52625a029 100644
+> --- a/drivers/platform/x86/intel/pmc/mtl.c
+> +++ b/drivers/platform/x86/intel/pmc/mtl.c
+> @@ -1000,11 +1000,13 @@ int mtl_core_init(struct pmc_dev *pmcdev)
+>  	pmcdev->resume = mtl_resume;
+>  	pmcdev->regmap_list = mtl_pmc_info_list;
+>  
+> -	/*
+> -	 * If ssram init fails use legacy method to at least get the
+> -	 * primary PMC
+> -	 */
+> -	ret = pmc_core_ssram_init(pmcdev, func);
+> +	ret = pmc_core_ssram_get_reg_base(pmcdev);
+> +
+> +	/* Try again later after Intel PMC SSRAM Telemetry driver finishes probe */
+> +	if (ret == -EAGAIN)
+> +		return -EPROBE_DEFER;
+> +
+> +	/* If regbase not assigned, set map and discover using legacy method */
+>  	if (ret) {
+>  		ssram_init = false;
+>  		dev_warn(&pmcdev->pdev->dev,
+> @@ -1019,7 +1021,7 @@ int mtl_core_init(struct pmc_dev *pmcdev)
+>  	pmc_core_punit_pmt_init(pmcdev, MTL_PMT_DMU_GUID);
+>  
+>  	if (ssram_init)
+> -		return pmc_core_ssram_get_lpm_reqs(pmcdev);
+> +		return pmc_core_ssram_get_lpm_reqs(pmcdev, func);
+>  
+>  	return 0;
+>  }
+> diff --git a/drivers/platform/x86/intel/pmc/ssram_telemetry.c b/drivers/platform/x86/intel/pmc/ssram_telemetry.c
+> index f625d39d1aa3..1c6cc95bfefa 100644
+> --- a/drivers/platform/x86/intel/pmc/ssram_telemetry.c
+> +++ b/drivers/platform/x86/intel/pmc/ssram_telemetry.c
+> @@ -1,20 +1,19 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+> - * This file contains functions to handle discovery of PMC metrics located
+> - * in the PMC SSRAM PCI device.
+> + * Intel PMC SSRAM TELEMETRY PCI Driver
+>   *
+>   * Copyright (c) 2023, Intel Corporation.
+>   * All Rights Reserved.
+>   *
+>   */
+>  
+> -#include <linux/cleanup.h>
+>  #include <linux/pci.h>
+> +#include <linux/types.h>
+>  #include <linux/io-64-nonatomic-lo-hi.h>
+>  
+>  #include "core.h"
+> +#include "ssram_telemetry.h"
+>  #include "../vsec.h"
+> -#include "../pmt/telemetry.h"
+>  
+>  #define SSRAM_HDR_SIZE		0x100
+>  #define SSRAM_PWRM_OFFSET	0x14
+> @@ -24,12 +23,14 @@
+>  #define SSRAM_IOE_OFFSET	0x68
+>  #define SSRAM_DEVID_OFFSET	0x70
+>  
+> -DEFINE_FREE(pmc_core_iounmap, void __iomem *, iounmap(_T));
+> +static struct pmc_ssram_telemetry *pmc_ssram_telems;
+> +static bool device_probed;
+> +
+> +DEFINE_FREE(pmc_ssram_telemetry_iounmap, void __iomem *, iounmap(_T));
+>  
+>  static void
+> -pmc_add_pmt(struct pmc_dev *pmcdev, u64 ssram_base, void __iomem *ssram)
+> +pmc_ssram_telemetry_add_pmt(struct pci_dev *pcidev, u64 ssram_base, void __iomem *ssram)
+>  {
+> -	struct pci_dev *pcidev = pmcdev->ssram_pcidev;
+>  	struct intel_vsec_platform_info info = {};
+>  	struct intel_vsec_header *headers[2] = {};
+>  	struct intel_vsec_header header;
+> @@ -58,7 +59,7 @@ pmc_add_pmt(struct pmc_dev *pmcdev, u64 ssram_base, void __iomem *ssram)
+>  	info.caps = VSEC_CAP_TELEMETRY;
+>  	info.headers = headers;
+>  	info.base_addr = ssram_base;
+> -	info.parent = &pmcdev->pdev->dev;
+> +	info.parent = &pcidev->dev;
+>  
+>  	intel_vsec_register(pcidev, &info);
+>  }
+> @@ -69,19 +70,14 @@ static inline u64 get_base(void __iomem *addr, u32 offset)
+>  }
+>  
+>  static int
+> -pmc_core_ssram_get_pmc(struct pmc_dev *pmcdev, unsigned int pmc_idx, u32 offset)
+> +pmc_ssram_telemetry_get_pmc(struct pci_dev *pcidev, unsigned int pmc_idx, u32 offset)
+>  {
+> -	struct pci_dev *ssram_pcidev = pmcdev->ssram_pcidev;
+> -	void __iomem __free(pmc_core_iounmap) *tmp_ssram = NULL;
+> -	void __iomem __free(pmc_core_iounmap) *ssram = NULL;
+> -	const struct pmc_reg_map *map;
+> +	void __iomem __free(pmc_ssram_telemetry_iounmap) * tmp_ssram = NULL;
+> +	void __iomem __free(pmc_ssram_telemetry_iounmap) * ssram = NULL;
+>  	u64 ssram_base, pwrm_base;
+>  	u16 devid;
+>  
+> -	if (!pmcdev->regmap_list)
+> -		return -ENOENT;
+> -
+> -	ssram_base = ssram_pcidev->resource[0].start;
+> +	ssram_base = pcidev->resource[0].start;
+>  	tmp_ssram = ioremap(ssram_base, SSRAM_HDR_SIZE);
+>  
+>  	if (!tmp_ssram)
+> @@ -105,46 +101,82 @@ pmc_core_ssram_get_pmc(struct pmc_dev *pmcdev, unsigned int pmc_idx, u32 offset)
+>  	devid = readw(ssram + SSRAM_DEVID_OFFSET);
+>  
+>  	/* Find and register and PMC telemetry entries */
+> -	pmc_add_pmt(pmcdev, ssram_base, ssram);
+> +	pmc_ssram_telemetry_add_pmt(pcidev, ssram_base, ssram);
+> +
+> +	pmc_ssram_telems[pmc_idx].devid = devid;
+> +	pmc_ssram_telems[pmc_idx].base_addr = pwrm_base;
+> +
+> +	return 0;
+> +}
+>  
+> -	map = pmc_core_find_regmap(pmcdev->regmap_list, devid);
+> -	if (!map)
+> +int pmc_ssram_telemetry_get_pmc_info(unsigned int pmc_idx,
+> +				     struct pmc_ssram_telemetry *pmc_ssram_telemetry)
+> +{
+> +	/*
+> +	 * PMCs are discovered in probe function. If this function is called before
+> +	 * probe function complete, the result would be invalid. Use device_probed
+> +	 * variable to avoid this case. Return -EAGAIN to inform the user to call
+> +	 * again later.
+> +	 */
+> +	if (!device_probed)
+> +		return -EAGAIN;
+
+I'm very very skeptical this is safe. Without barriers, nothing guarantees 
+you'll get the desired ordering. As is, device_probed could appear set 
+before something else you depend on below this.
+
+> +
+> +	if (pmc_idx >= MAX_NUM_PMC)
+> +		return -EINVAL;
+> +
+> +	if (!pmc_ssram_telems || !pmc_ssram_telems[pmc_idx].devid)
+>  		return -ENODEV;
+>  
+> -	return pmc_core_pmc_add(pmcdev, pwrm_base, map, pmc_idx);
+> +	pmc_ssram_telemetry->devid = pmc_ssram_telems[pmc_idx].devid;
+> +	pmc_ssram_telemetry->base_addr = pmc_ssram_telems[pmc_idx].base_addr;
+> +	return 0;
+>  }
+> +EXPORT_SYMBOL_GPL(pmc_ssram_telemetry_get_pmc_info);
+>  
+> -int pmc_core_ssram_init(struct pmc_dev *pmcdev, int func)
+> +static int intel_pmc_ssram_telemetry_probe(struct pci_dev *pcidev, const struct pci_device_id *id)
+>  {
+> -	struct pci_dev *pcidev;
+>  	int ret;
+>  
+> -	pcidev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(20, func));
+> -	if (!pcidev)
+> -		return -ENODEV;
+> +	pmc_ssram_telems = devm_kzalloc(&pcidev->dev, sizeof(*pmc_ssram_telems) * MAX_NUM_PMC,
+> +					GFP_KERNEL);
+> +	if (!pmc_ssram_telems) {
+> +		ret = -ENOMEM;
+> +		goto probe_finish;
+> +	}
+>  
+>  	ret = pcim_enable_device(pcidev);
+> -	if (ret)
+> -		goto release_dev;
+> -
+> -	pmcdev->ssram_pcidev = pcidev;
+> +	if (ret) {
+> +		dev_dbg(&pcidev->dev, "failed to enable PMC SSRAM device\n");
+> +		goto probe_finish;
+> +	}
+>  
+> -	ret = pmc_core_ssram_get_pmc(pmcdev, PMC_IDX_MAIN, 0);
+> +	ret = pmc_ssram_telemetry_get_pmc(pcidev, PMC_IDX_MAIN, 0);
+>  	if (ret)
+> -		goto disable_dev;
+> +		goto probe_finish;
+>  
+> -	pmc_core_ssram_get_pmc(pmcdev, PMC_IDX_IOE, SSRAM_IOE_OFFSET);
+> -	pmc_core_ssram_get_pmc(pmcdev, PMC_IDX_PCH, SSRAM_PCH_OFFSET);
+> -
+> -	return 0;
+> -
+> -disable_dev:
+> -	pmcdev->ssram_pcidev = NULL;
+> -	pci_disable_device(pcidev);
+> -release_dev:
+> -	pci_dev_put(pcidev);
+> +	pmc_ssram_telemetry_get_pmc(pcidev, PMC_IDX_IOE, SSRAM_IOE_OFFSET);
+> +	pmc_ssram_telemetry_get_pmc(pcidev, PMC_IDX_PCH, SSRAM_PCH_OFFSET);
+>  
+> +probe_finish:
+> +	device_probed = true;
+>  	return ret;
+>  }
+> +
+> +static const struct pci_device_id intel_pmc_ssram_telemetry_pci_ids[] = {
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PMC_DEVID_MTL_SOCM) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PMC_DEVID_ARL_SOCS) },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(pci, intel_pmc_ssram_telemetry_pci_ids);
+> +
+> +static struct pci_driver intel_pmc_ssram_telemetry_driver = {
+> +	.name = "intel_pmc_ssram_telemetry",
+> +	.id_table = intel_pmc_ssram_telemetry_pci_ids,
+> +	.probe = intel_pmc_ssram_telemetry_probe,
+> +};
+> +module_pci_driver(intel_pmc_ssram_telemetry_driver);
+> +
+>  MODULE_IMPORT_NS(INTEL_VSEC);
+> -MODULE_IMPORT_NS(INTEL_PMT_TELEMETRY);
+> +MODULE_AUTHOR("Xi Pardee <xi.pardee@intel.com>");
+> +MODULE_DESCRIPTION("Intel PMC SSRAM TELEMETRY driver");
+
+Telemetry ?
+
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/platform/x86/intel/pmc/ssram_telemetry.h b/drivers/platform/x86/intel/pmc/ssram_telemetry.h
+> new file mode 100644
+> index 000000000000..938d0baf50be
+> --- /dev/null
+> +++ b/drivers/platform/x86/intel/pmc/ssram_telemetry.h
+> @@ -0,0 +1,45 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Intel PMC SSRAM TELEMETRY PCI Driver Header File
+
+Telemetry ?
+
+> + *
+> + * Copyright (c) 2024, Intel Corporation.
+> + * All Rights Reserved.
+> + *
+
+Extra new line.
+
+-- 
+ i.
+
+> + */
+> +
+> +#ifndef PMC_SSRAM_H
+> +#define PMC_SSRAM_H
+> +
+> +/**
+> + * struct pmc_ssram_telemetry - Structure to keep pmc info in ssram device
+> + * @devid:		device id of the pmc device
+> + * @base_addr:		contains PWRM base address
+> + */
+> +struct pmc_ssram_telemetry {
+> +	u16 devid;
+> +	u64 base_addr;
+> +};
+> +
+> +#if IS_REACHABLE(CONFIG_INTEL_PMC_SSRAM_TELEMETRY)
+> +/**
+> + * pmc_ssram_telemetry_get_pmc_info() - Get a PMC devid and base_addr information
+> + * @pmc_idx:               Index of the PMC
+> + * @pmc_ssram_telemetry:   pmc_ssram_telemetry structure to store the PMC information
+> + *
+> + * Return:
+> + * * 0           - Success
+> + * * -EAGAIN     - Probe function has not finished yet. Try again.
+> + * * -EINVAL     - Invalid pmc_idx
+> + * * -ENODEV     - PMC device is not available
+> + */
+> +int pmc_ssram_telemetry_get_pmc_info(unsigned int pmc_idx,
+> +				     struct pmc_ssram_telemetry *pmc_ssram_telemetry);
+> +#else /* !CONFIG_INTEL_PMC_SSRAM_TELEMETRY */
+> +static inline int pmc_ssram_telemetry_get_pmc_info(int pmc_idx,
+> +						   struct pmc_ssram_telemetry *pmc_ssram_telemetry)
+> +{
+> +	return -ENODEV;
+> +}
+> +#endif /* CONFIG_INTEL_PMC_SSRAM_TELEMETRY */
+> +
+> +#endif /* PMC_SSRAM_H */
 > 
-> Beyond that, we have also discussed various solutions at the last LPC
-> in Richmond. I think the consensus at that point was that Saravana
-> targeted to post something for clocks - and when that was done, we
-> should do the similar thing for genpd. Anyway, I have looped them into
-> this thread, so they can share any updates on their side of the
-> matter.
-
-Do you know if there's been any recent work related to this? I tried to 
-look around on the lists, but nothing caught my eye.
-
-  Tomi
-
 
