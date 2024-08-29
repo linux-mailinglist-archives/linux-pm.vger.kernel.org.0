@@ -1,69 +1,72 @@
-Return-Path: <linux-pm+bounces-13100-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13101-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E1499638DB
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 05:39:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 486459638DD
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 05:39:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C51E31F23235
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 03:39:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BA911C2242A
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 03:39:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B3FC5C8EF;
-	Thu, 29 Aug 2024 03:39:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD0949637;
+	Thu, 29 Aug 2024 03:39:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="Pcxy6/Eh"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="QqROOwUh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2F65338D
-	for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 03:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8F44962C
+	for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 03:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724902770; cv=none; b=pCnxwlbDqnW7Pkmx+KlU96hgvE3ZKjzvrpqBSIAd8R75jCMmh0JF0tgGDTlLqcYoYq0XJQWOTWmp4Y0nVjAvKHLPOnmqC9Q7KD8dvA/sYr59gktuChxuoeoyhmuwe9SR+m3YZxw3huDHQmdbDwKevD/86ZoPjhrDMvU59pIbomg=
+	t=1724902778; cv=none; b=P+Tx9YE1qePG9+WtUws3TuT9r3CwafrEWIgUsm9IE03jy6d9zqzeJvJoXITTSPOJOg4CElGj8sTV4/16O3z9c32EqvtVtYGGVdrsgblV435fqOe9uqwuFUgvxV1ZPcezE6dVf/Rv4Mr0pWaqfmDIJOqsCQ90FJ1mQYMbcKfw34M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724902770; c=relaxed/simple;
-	bh=U/z2Ry2HbymX6DysxD7lszwnCGQ9QsdFYg6KidWVkoQ=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=rYoyTvcs7VarRB1fOJ8wn48vwXHVFWq2N7yYdYdIgCc72RvZLnS4ZxH5vfgXQTQgrvgYb0DlG567mMop2odUHKPSkEvNkKfTgOKv1AkBZ4z/xr5s3mluVO+z9WCGfkzYC969GnvzBmQ3lTyc7TnSv+u6mv4KCuvvLWEpJciNqPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=Pcxy6/Eh; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1724902778; c=relaxed/simple;
+	bh=EbBEvc0PKXsSnG7+GH+yqgj1djjwXCeEDQP2lGPTKew=;
+	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=NDpXAY+9S9jn9bx/X3CmZIQDlSJWxPvSSQ8zj533DUaOVjqJ7vxQA1NS9vFpQOMn4Ywtpusq1D0iHF1lrbcX5chlOeoUGNI+Ok/yBpt7MhHlT+hL+W6/b5gBV6suPy5hIYQ0pgmH+xSAhzgRnqKG2LTLG6v1cqmtjW2WhQBIDq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=QqROOwUh; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2021c03c13aso1652795ad.1
-        for <linux-pm@vger.kernel.org>; Wed, 28 Aug 2024 20:39:28 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2023dd9b86aso1257255ad.1
+        for <linux-pm@vger.kernel.org>; Wed, 28 Aug 2024 20:39:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1724902768; x=1725507568; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BAQT0Tw9Rk30mAgD9ZQwkMJ4XScbb1aQuooCJT7sX3w=;
-        b=Pcxy6/EhOUouB8BbH/j+4fAgUAfArq0et7vpYF33LlKtOKaHkQ0Q7RJ87ulfFppfzO
-         o4F2Q9Alhc68Vu1Esmx9Mr+XEKp+8w/AR61wPmI9W3rdUlZX7uRDxNtVFO/xV9yYNARk
-         axsw+ur4L7tpQ+d8u7DHC/+CXtz/e0q2wIofAivbwlRRrhzdhngchZh5k6RYn5LHQ5wh
-         LnY0QaTfdlKFYaRbjjQYyedXjh1AAlDdqtvkmFIJKafrbw99OPkpNjsqe9KNki17/rlN
-         nMZXcizNXfDihRiBBWnRnO654RW5iSq3UTtN2Iv4nFavCLxukzMa9nbNUfGm3nCRQROi
-         ePMA==
+        d=sifive.com; s=google; t=1724902776; x=1725507576; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W3GAnBxuP0k13UOo0B/EnxeGCQ0ew6a+lFlFL3wfeVM=;
+        b=QqROOwUhd5EyI5k97vdfTkdEbkoipbTIKQcIHtHtNtqnh3kcM0V7/I4b1QclvIfoqz
+         h0ISggYy6MbUl1T5KqsdNOGETszwXJCVl4LuOr8BbUkL6Hk+EuCAiUvMEo2APzKgCLDl
+         ATDqmdAzDUsq48LjyWozoSSkXIEWegS852/EneBDlnJfzeF1WeZJXPtMq28hlKhLhv/1
+         YInDuysa6n90K98yGymmduRaCcRLqQk3vnZuh2sQK8+kzqrjgR1HWSrapuHl6qIQJ64x
+         jRr29aMM8XgcpIkZhNark9BJVRLj/Tvh5qj8GNo5IQRZUmTTiu079v++CQYl+aMOU+2e
+         08dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724902768; x=1725507568;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BAQT0Tw9Rk30mAgD9ZQwkMJ4XScbb1aQuooCJT7sX3w=;
-        b=TwjObkkWDHcqCyWgkb+n88iXUIfi7S3sUm/ERNNprJW4EClhBoM7DzOiX4NNHN6zyG
-         waS+/XYLpFxnItVTF0Qlyqfdlc5rYu8O8o/sJeX4Z73SwhxaQ1qf9Ih32BLgzAkF+e1e
-         V9TzzxKpY9c7pO28wFpop+jxkew2ci6uYYIZuExAaMQLoLD/nEi2asfunnnUqN5hg/Bl
-         mkxzOffBnby25nbsfZfoAKgNiGjsv8Mzbp5tqES2qD+YgQgwQePM91vgFXwIvBrGwDij
-         K/2h4BvIjKIDB2eq+G/0ntyyURc46mMwH1aNfcSn03o7+VlXQwrzsqhQqvKF2ucaw+E+
-         S92Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVyra4/s511cCvy0LFyDxfqYTY2qNKvwsXDfo95r/h907d+AvGInWpDmSpvzJM8UmXuZrDAO7UwPQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkCGljo22Jx2epJSljbK2l7FBm0b6GyX7wvgq3yzON+jg1St6U
-	2Rhodpi2Eld2CYPlTRtijlET/nb/xCHBfj9PR7XytSM13po5Q2CmprV438ec9FY=
-X-Google-Smtp-Source: AGHT+IFzR3mo/xxAAKksCuseQ/Fe4/G2ieJWnxXB9IsXXS2RcfaqgejY2ZMhA5ktYXe+Hc36rdRCSQ==
-X-Received: by 2002:a17:903:1c9:b0:1fd:8b77:998e with SMTP id d9443c01a7336-205168cec40mr3886715ad.29.1724902767587;
-        Wed, 28 Aug 2024 20:39:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724902776; x=1725507576;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W3GAnBxuP0k13UOo0B/EnxeGCQ0ew6a+lFlFL3wfeVM=;
+        b=JFd6qhtobw0pbR8g+sS+Ke2iz0L9X3lv5xxjeF6Ywimozi1Yy+WvFLh1lxn6QLl1M0
+         npSZL9HzL3Xm3YsVaj22jlSloL+bScbn6Jw6WA7eibvsBRNxbjIqmwtqXWgLuMF2e83K
+         MhVUzibyJCG2JdDDBMzvlfR2chWrHGxDbehfk4+b0sernuKmX+H54GNkJI68RdkYS5Fh
+         7Oy9U/lopMMUmzN8H2MMAILd1/e/JGjPrcZcAvjPuTOEUOKL6LvbwjiCYRma+hfDHLSS
+         gufVqgOmt8v7kF/3aw5Fzc4fgoJhRESehcgKtwKSIBbZFCPAsAN3YBigCgzcqSt1KpJv
+         P/RA==
+X-Forwarded-Encrypted: i=1; AJvYcCVRsUNiGrcSI2PjJmXuuDVWM/rtwethi42ppFiZmOwkWf8U7m6BlMT+VIxYcwtxucYb+GEF+kmg2A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQaYq/zwiMlpHywez4V8hagozaFZ2UmKcQSkjfMOdUNg3f+6xF
+	DNjfzGiV3LkAiWBdp7blS2OxtWzSgCYUbcYLCg9Ly92cQDPqgu+hUQZeZXk1eUI=
+X-Google-Smtp-Source: AGHT+IH/8fsuBgr/qoojKI4pyRmSBKKLvKU8OllZIsbVlPHRLEjgz17SXXEQ34o9DYQ5ZzKFjsFW3Q==
+X-Received: by 2002:a17:902:d50d:b0:202:5075:428d with SMTP id d9443c01a7336-2050c4b6ca4mr16399455ad.64.1724902775824;
+        Wed, 28 Aug 2024 20:39:35 -0700 (PDT)
 Received: from hsinchu35-syssw01.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20515542498sm2056065ad.188.2024.08.28.20.39.24
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20515542498sm2056065ad.188.2024.08.28.20.39.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 20:39:27 -0700 (PDT)
+        Wed, 28 Aug 2024 20:39:35 -0700 (PDT)
 From: Nick Hu <nick.hu@sifive.com>
 To: greentime.hu@sifive.com,
 	zong.li@sifive.com,
@@ -75,17 +78,19 @@ To: greentime.hu@sifive.com,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Andrew Jones <ajones@ventanamicro.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
 	Conor Dooley <conor.dooley@microchip.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
 	Sunil V L <sunilvl@ventanamicro.com>,
 	Nick Hu <nick.hu@sifive.com>,
 	linux-pm@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] Support SSTC while PM operations
-Date: Thu, 29 Aug 2024 11:38:58 +0800
-Message-Id: <20240829033904.477200-1-nick.hu@sifive.com>
+Subject: [PATCH 1/2] riscv: Add stimecmp save and restore
+Date: Thu, 29 Aug 2024 11:38:59 +0800
+Message-Id: <20240829033904.477200-2-nick.hu@sifive.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240829033904.477200-1-nick.hu@sifive.com>
+References: <20240829033904.477200-1-nick.hu@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -94,20 +99,61 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When the cpu is going to be hotplug, stop the stimecmp to prevent pending
-interrupt.
-When the cpu is going to be suspended, save the stimecmp before entering
-the suspend state and restore it in the resume path.
+If the HW support the SSTC extension, we should save and restore the
+stimecmp register while cpu non retention suspend.
 
-Nick Hu (2):
-  riscv: Add stimecmp save and restore
-  time-riscv: Stop stimecmp when cpu hotplug
+Signed-off-by: Nick Hu <nick.hu@sifive.com>
+---
+ arch/riscv/include/asm/suspend.h |  4 ++++
+ arch/riscv/kernel/suspend.c      | 13 +++++++++++++
+ 2 files changed, 17 insertions(+)
 
- arch/riscv/include/asm/suspend.h  |  4 ++++
- arch/riscv/kernel/suspend.c       | 13 +++++++++++++
- drivers/clocksource/timer-riscv.c | 22 +++++++++++++++-------
- 3 files changed, 32 insertions(+), 7 deletions(-)
-
+diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
+index 4ffb022b097f..ffaac2efabb5 100644
+--- a/arch/riscv/include/asm/suspend.h
++++ b/arch/riscv/include/asm/suspend.h
+@@ -16,6 +16,10 @@ struct suspend_context {
+ 	unsigned long envcfg;
+ 	unsigned long tvec;
+ 	unsigned long ie;
++#if __riscv_xlen < 64
++	unsigned long stimecmph;
++#endif
++	unsigned long stimecmp;
+ #ifdef CONFIG_MMU
+ 	unsigned long satp;
+ #endif
+diff --git a/arch/riscv/kernel/suspend.c b/arch/riscv/kernel/suspend.c
+index c8cec0cc5833..3afd86e1abf7 100644
+--- a/arch/riscv/kernel/suspend.c
++++ b/arch/riscv/kernel/suspend.c
+@@ -19,6 +19,12 @@ void suspend_save_csrs(struct suspend_context *context)
+ 	context->tvec = csr_read(CSR_TVEC);
+ 	context->ie = csr_read(CSR_IE);
+ 
++	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SSTC)) {
++		context->stimecmp = csr_read(CSR_STIMECMP);
++#if __riscv_xlen < 64
++		context->stimecmph = csr_read(CSR_STIMECMPH);
++#endif
++	}
+ 	/*
+ 	 * No need to save/restore IP CSR (i.e. MIP or SIP) because:
+ 	 *
+@@ -42,6 +48,13 @@ void suspend_restore_csrs(struct suspend_context *context)
+ 	csr_write(CSR_TVEC, context->tvec);
+ 	csr_write(CSR_IE, context->ie);
+ 
++	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SSTC)) {
++		csr_write(CSR_STIMECMP, context->stimecmp);
++#if __riscv_xlen < 64
++		csr_write(CSR_STIMECMPH, context->stimecmph);
++#endif
++	}
++
+ #ifdef CONFIG_MMU
+ 	csr_write(CSR_SATP, context->satp);
+ #endif
 -- 
 2.34.1
 
