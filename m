@@ -1,130 +1,190 @@
-Return-Path: <linux-pm+bounces-13178-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13179-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E3A39649F8
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 17:27:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55A33964A2D
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 17:37:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C033828291A
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 15:27:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDCE1B21ECB
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 15:37:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEBE21B2ED4;
-	Thu, 29 Aug 2024 15:26:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB461B2505;
+	Thu, 29 Aug 2024 15:37:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iLk138Dm"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MlbTH8aE";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Evby9xhJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FB71B29B5
-	for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 15:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D171AE020;
+	Thu, 29 Aug 2024 15:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724945206; cv=none; b=nEh9vj3dA90nJVd5020cqg5F5uT3RfQzxoiw9N1G4j/hV09+uPvhNe3W/gI+ZoO5DLKg4PLqzUaAHDKGPinrt9LdKN0bkGYy8tYfDxZklMtIxIyIvSr5FpjPtjhlx0xwN1fnZ09XAz6BnmEDA4QN1BvD6JFt91pCumVeGP26tJ4=
+	t=1724945823; cv=none; b=Tc+xm1PijzMxbuTzhrIwVmeqJFlfHJVBghNIEYwuPt+Pvh4m4bFR1AK77rsdXQVOe5ECUE7OaL5IRRGA507UqTAsv5ksWLD9ZSER65ckI2wd33o6pQoGv4bTxNRM9lcNboxRgfgQigw2DF2TKMH2a68l/19ipSn8oX/n14D98Zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724945206; c=relaxed/simple;
-	bh=4dvJdY5K5kxOqoCC7pXRpqwFhdbAnaNKbX4E/D+enOY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LF6zi/LDJdYUk1q7boNI9jAdXyJAUc/sd3k04jKc55piFbIYZ3V/iSm8WBCNFmMft/hDegcA6mUsEHs37U3pqc1Vd+ZtrVVeitWfadNuxQfMDVheddm1fNksm6PEF7FffLOhRvJ7bQbsq4IAqJRbGck1DjkGrq5M8O4NRQILf1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iLk138Dm; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a8696e9bd24so103467666b.0
-        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 08:26:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724945203; x=1725550003; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IIVRFaFvh25kJ2shkW0d6LgWcnTu2JPMWtkC2wxiE8c=;
-        b=iLk138DmuUR/gMoYbr0SRJadehtWKOy07A3t4/MS4xnlhm1Fsz7e1JxSkvVK01qO+w
-         KiaVHPTY9k1sJ3IufZZNtAdKdTezn5LYjB3Sk/yxwX/a+37NW75hpxKSZgzpf4M+nhMp
-         r5n7amg+em3PwlXIypgGviQVM1SLcm+VuBFrpc57kIFeEOhCmib2JcrXgEATVMojGACU
-         R8t0Mx48+cx1AqUn5rEXjHA0ypfXGDCYgM1Fz2m0gfN1fz3HZNxpufi4TbWzkfmELc7b
-         LD88e2Z2U11bSOXqwF7u5ZIYoiPH63yWpDINWFo+MZ2iqafnmr+2SCag8V+5K1fOGSzb
-         +n7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724945203; x=1725550003;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IIVRFaFvh25kJ2shkW0d6LgWcnTu2JPMWtkC2wxiE8c=;
-        b=tsAiLoMK2nw8T5AYDoLACO7446NCv6agxRrnJb4AR2+wMi2iRorpLeLc/681vO2HY8
-         Xmb9XAGtvotaANXkNoy562Ylq5w1ZxQl1omQ0l0aE3DOTQ3pswHkPIpfLXeymdFJRw9a
-         bc0vwSBB4205PYcrbJGa3UK/U//LPXU9UAvTxbMM6j5iwZ6/1WNBk1asG2gBWrxVgBuM
-         cHKOYQ5I31aKDkkQp7Xw8zmYp2XkWceYwXsFvSF+AFleYQjz1YIlu68dTTukrXEKlAG8
-         o/JG98BcFzZchrwY0NfDDm6yfHwPK5PdNHnIuN8yG885lqFydjdZkSYoo8B1nvvIjV7V
-         mYiw==
-X-Forwarded-Encrypted: i=1; AJvYcCU0cMsIfKDkCaZS5ar4VsWjvF2tRF1bn1h9SaexaciF6ozgMzKT0hW4by95TAwXv/0FxMvL8wcDPQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyC0ceQl6Sa/CyznmifBletmGsfCVJ9ZvpQfGtH1PRTEIYn8em8
-	5HRvEEA8+pPwumH2AjvgxlX/KHa0qOp3Xo1Kyd1eoP7DJghe1DQI1VWvP2uJqiPfnc+UPEoSlN6
-	5uZknXBvUnqT6yhW+U1ptyFTX9+piDSnuNL/l5w==
-X-Google-Smtp-Source: AGHT+IH2kueLQc5TRgnqFrkLjrGvJRIK/BMurN2noHpa1MBrWwQdN5e//Oya3AbhSVY9odHODdUMQtzGctXu6ADcfvk=
-X-Received: by 2002:a17:907:970f:b0:a86:894e:cd09 with SMTP id
- a640c23a62f3a-a897f78bdb5mr287428066b.9.1724945202995; Thu, 29 Aug 2024
- 08:26:42 -0700 (PDT)
+	s=arc-20240116; t=1724945823; c=relaxed/simple;
+	bh=uNMSD59SIdrbcpakpTpWGElsEhFT76kgcDZpVA4jhVE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=fljGx4ktdrmP0dh2LEKiWlChvpNhq78YOlor3SH7GEawrwUVpqoP1dL1AEvbjAPWcJfJrP8u1e4mudaJLA7FaDvw+EkGTSa6edfdO+K8xQx/4cuOxgH9GEP6obhjgNz/PE2POt6b8zNSKMqVC69a0y4d57JNfluqPKzeOQIggrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MlbTH8aE; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Evby9xhJ; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Anna-Maria Behnsen <anna-maria@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1724945820;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BpuW8ERx6pekJ0kb9zGktKKn7BCYgNyQb7nanzclB/w=;
+	b=MlbTH8aERbLDsllOgpy55rlb+UvAliHBidCVJ0keQBP/S99pjGa3WM/dBC2iQa+nwl2NXW
+	O6iY0+mzezokE1CYLx63U6RqZz+v9qkIB2u+7cg+F7x+FWBrhDNHxz2EWS2EeCFKX72xU7
+	WSAdVWfymE8LYTK9Y9yQjjk4FLJ8TdVNuAxVbdDEHSbREXSMhVMaQF/GpBcOIBjSqZZkr1
+	Ofcdrf1+Mb9r7OY5x3hcdw+/h5McJipmsyiLQRJ4upkH0Kw3ZW4JqqdRpALaUq7EX8lizl
+	LpStVSXSykFIJJEunSyWhUBDCzYqEWYx298tL6B4Hbh+RjwdCRS6SfGHxcvZmw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1724945820;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BpuW8ERx6pekJ0kb9zGktKKn7BCYgNyQb7nanzclB/w=;
+	b=Evby9xhJRWcmm0x5YSARZIjI7ynYWux5KuIUH2kzFqD1LNDXSKgSuOZCxHcBtcB1aJBrr7
+	n0WMFhioNpsxkaAQ==
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, linux-acpi@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Frederic
+ Weisbecker <frederic@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>
+Subject: Re: [PATCH] ACPI: Remove msleep() bloat from acpi_os_sleep()
+In-Reply-To: <CAJZ5v0gTfhTQ4AMZ+ukuJZEG=RRo-wbPsf7NPbWA0snDeA5ivQ@mail.gmail.com>
+References: <2803b89021f991662b000f50e45dbaebdcca438a.1724729626.git.len.brown@intel.com>
+ <CAJZ5v0jcOUoN6gDDFkufu8xWF-BHXaSKnXqraHsTkq8JanJXuQ@mail.gmail.com>
+ <CAJvTdKkucaRVDZm6EVeUxwyrQexyuYd7ECUBSkpP0nC9PwzspA@mail.gmail.com>
+ <CAJZ5v0jvYitb7DLyLkqTRv0TT=6yBHDvEvb8tJLzAOVKa3hqnQ@mail.gmail.com>
+ <CAJZ5v0gxVqrASiuJq=UX9jyZsG=XvriFn2=7CPmG6-1sKbmPEQ@mail.gmail.com>
+ <CAJvTdK=-ETniiwzwLYH14+TeU0kA49gvTnqyRxH7-Hc6tzTBUw@mail.gmail.com>
+ <CAJvTdKmpfs_nh4J0R8T=1P9WaAJ-nJ+mKj=rT3tqMpmvpUTisA@mail.gmail.com>
+ <87frqoig98.fsf@somnus>
+ <CAJZ5v0gTfhTQ4AMZ+ukuJZEG=RRo-wbPsf7NPbWA0snDeA5ivQ@mail.gmail.com>
+Date: Thu, 29 Aug 2024 17:36:59 +0200
+Message-ID: <878qwf9w84.fsf@somnus>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 29 Aug 2024 17:26:04 +0200
-Message-ID: <CAPDyKFrS4Dhd7DZa2zz=oPro1TiTJFix0awzzzp8Qatm-8Z2Ug@mail.gmail.com>
-Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be, 
-	magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com, 
-	biju.das.jz@bp.renesas.com, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-On Thu, 22 Aug 2024 at 17:28, Claudiu <claudiu.beznea@tuxon.dev> wrote:
->
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> Hi,
->
-> Series adds initial USB support for the Renesas RZ/G3S SoC.
->
-> Series is split as follows:
->
-> - patch 01/16           - add clock reset and power domain support for USB
-> - patch 02-04/16        - add reset control support for a USB signal
->                           that need to be controlled before/after
->                           the power to USB area is turned on/off.
->
->                           Philipp, Ulf, Geert, all,
->
->                           I detailed my approach for this in patch
->                           04/16, please have a look and let me know
->                           your input.
+Hi,
 
-I have looked briefly. Your suggested approach may work, but I have a
-few thoughts, see below.
-
-If I understand correctly, it is the consumer driver for the device
-that is attached to the USB power domain that becomes responsible for
-asserting/de-asserting this new signal. Right?
-
-In this regard, please note that the consumer driver doesn't really
-know when the power domain really gets powered-on/off. Calling
-pm_runtime_get|put*() is dealing with the reference counting. For
-example, a call to pm_runtime_get*() just makes sure that the PM
-domain gets-or-remains powered-on. Could this be a problem from the
-reset-signal point of view?
+"Rafael J. Wysocki" <rafael@kernel.org> writes:
 
 [...]
 
-Kind regards
-Uffe
+> The main difficulty is that acpi_os_sleep() really works on behalf of
+> AML code (it is called when the Sleep() operator is evaluated in AML)
+> and it is hard to say what behavior is intended there.
+>
+> We know that the msleep() precision is not sufficient at least in some
+> cases (for example, a high-count loop in AML that sleeps for 5 ms in
+> every iteration), but we don't really know what precision is needed.
+>
+> IMV it generally is reasonable to assume that firmware developers
+> would not expect the exact sleep time (and the ACPI specification is
+> not very precise regarding this either), but they wouldn't also expect
+> sleep times much longer (in relative terms) than requested.  So
+> roughly speaking they probably assume something between t and t + t/4,
+> where t is the requested sleep time in milliseconds, regardless of the
+> HZ value.
+>
+> Also, you said above that hrtimers were more expensive than the timer
+> wheel timers, which we all agree with, but it is not clear to me what
+> exactly the difference is.  For example, if there is a loop of 1000
+> iterations in AML that each sleep for 5 ms, how much more overhead
+> from using hrtimers would be there relative to using timer-wheel
+> timers?
+
+The general differences are:
+- hrtimers are using a rbtree instead of hasing, which is more expensive
+- in case the new hrtimer is the new first hrtimer, hardware has to be
+  programmed, which is expensive too
+- the timer wheel uses batching. hrtimers not. They might get an
+  own interrupt for every hrtimer when they do not have the exact same
+  expiry time.
+- because of the above it is a lot more expensive to use hrtimers when
+  hrtimers are cancelled and requeued with a new expiry time (like
+  e.g. network timeouts do it)
+
+It's hard to measure, because it depends... I briefly talked to Thomas
+and his opinion is, that there is an overhead but it should be in a
+range of ok.
+
+> Generally speaking, Len's idea of using usleep_range() for all sleep
+> lengths in acpi_os_sleep() is compelling because it leads to simple
+> code, but it is not clear to me how much more it would cost relative
+> to msleep() (or what issues it may provoke for that matter) and what
+> delta value to use in there.  One idea is to derive the delta from the
+> sleep length (say, take 1/4 of it like I did above), but the
+> counter-argument is that this would cause the loops in AML in question
+> to take measurably more time and there may be no real reason for it.
+
+I created a patch for fsleep() - only complie tested - which should make
+sure that the slack is maximum 25%. What do you think about it? Might it
+be helpful?
+
+---8<---
+--- a/include/linux/delay.h
++++ b/include/linux/delay.h
+@@ -78,15 +78,36 @@ static inline void ssleep(unsigned int s
+ 	msleep(seconds * 1000);
+ }
+ 
+-/* see Documentation/timers/timers-howto.rst for the thresholds */
++/**
++ * fsleep - flexible sleep which autoselects the best mechanism
++ * @usecs:	requested sleep duration in microseconds
++ *
++ * flseep() selects the best mechanism that will provide maximum 25% slack
++ * to the requested sleep duration. Therefore it uses:
++ *
++ * - udelay() loop for sleep durations <= 10 microseconds to avoid hrtimer
++ *   overhead for really short sleep durations.
++ *
++ * - usleep_range() for sleep durations which would lead with the usage of
++ *   msleep() to a slack larger than 25%. This depends on the granularity of
++ *   jiffies.
++ *
++ * - msleep() for all other sleep durations.
++ *
++ * Note: When CONFIG_HIGH_RES_TIMERS is not set, all sleeps are processed with
++ * the granularity of jiffies and the slack might exceed 25% especially for
++ * short sleep durations.
++ */
+ static inline void fsleep(unsigned long usecs)
+ {
++	const unsigned int max_slack_shift = 2;
++
+ 	if (usecs <= 10)
+ 		udelay(usecs);
+-	else if (usecs <= 20000)
+-		usleep_range(usecs, 2 * usecs);
++	else if (usecs < ((TICK_NSEC << max_slack_shift) / NSEC_PER_USEC))
++		usleep_range(usecs, usecs + (usecs >> max_slack_shift));
+ 	else
+-		msleep(DIV_ROUND_UP(usecs, 1000));
++		msleep(DIV_ROUND_UP(usecs, USEC_PER_MSEC));
+ }
+ 
+ #endif /* defined(_LINUX_DELAY_H) */
+---8<----
+
+Thanks,
+
+	Anna-Maria
+
 
