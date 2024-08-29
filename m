@@ -1,272 +1,207 @@
-Return-Path: <linux-pm+bounces-13154-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13155-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 378009642B5
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 13:08:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F260964399
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 13:55:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E46E3286E2E
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 11:08:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 917CD1F23286
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 11:55:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40188192B8F;
-	Thu, 29 Aug 2024 11:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD7EE19408D;
+	Thu, 29 Aug 2024 11:55:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="L18RR6My"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="tRj9f0pp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C9CF192B77
-	for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 11:07:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16A0192B9C;
+	Thu, 29 Aug 2024 11:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724929660; cv=none; b=Bq3vqCpgZw8Qom5MoqsCHy+jVJd40dTyP6SIkoO753ufFffB9um1F1gkX6mEB1ceGk+iQWipXRgViiJgzUsLi0wXvzJI/UUtuTjLPcCEf07ew2UuvAYheqOhDlhRUK1l0eQd0we8KA3zIyjyCyyjtu4+eIWtUlMIId4NS3GkBgc=
+	t=1724932521; cv=none; b=pW5l20gmhoo2xzzTvIAaddsFYDtafyOTaT3pG/YRuGL3hLOekgSwA3GGrncEi3vuoms4unz2HFzbd1nQQbtOe21eF6bcOR1u70y1GAyh04w7hXkLxBFg5OzuwRV3KIPkVWGNaXuPy8hp23lGQt01pPqih3lxSHcOYH6mq36etUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724929660; c=relaxed/simple;
-	bh=OmSCWNk3DF7kM4HB7drl0L06K3HxSa5XRbzIRbiMB9k=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=KQ/lVGLVGBUu+1Vr0LQvRAeYFGIt/OACDdmEwCjc1+9PUajW2CVRjqdrC3/Ms/uyGb65MYUj/5m1+GgEKicrhUP+SFyuNwuz7n8H8d1Lr537HXSpaM59rvRINWyYR4wxaYQRsgf5QPOZ98YV20anp2T/IUfDjw/pWmJFyliBzhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=L18RR6My; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2d3e44b4613so378962a91.3
-        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 04:07:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1724929657; x=1725534457; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=mwQQnufnn+IPi5O+BB0V0QEdjq02K/IcNH5bIH2uCVM=;
-        b=L18RR6MyOwuyDlSltfAs6g/yhxIC3Cdu/LMSiUpxofyySdC1j6NL2LYRGqlqdyBjcP
-         Z53G6JU+hzdYETCEDYRmI2CuSQOYkOj6JIQyeS8okFuL7XseDWnPl+X2jLfY+iflKLEy
-         Vr8EAUOGdXC9f5+YrixKZRr/Abhp5FPx2oOgoxHW29kHqdrCRcr2hnR3aM5TIVOYNoBA
-         zg97olStnYd9tjikHUmUmIvyhV3PImBdup+6AkjfT00HCkgUxatG65kvJ03IZ3Y/2J8T
-         B+ZqLMirPLwZm29N3K5ozKnZndlDFSnTPrkWQEb0O6SeBVYDfUk//nel/O/dSugaW3Ju
-         cZzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724929657; x=1725534457;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mwQQnufnn+IPi5O+BB0V0QEdjq02K/IcNH5bIH2uCVM=;
-        b=VXTQdVPTeaAkEZ+bACqPPSNQuR3AnKIPXCqv7OdCBq5+Qo6od+qXsEerc2Hs0XBjAK
-         TrUEQOO+9cOAvbW0NNRGLNcVZ7bu9OABLcqjd6MEkQfUKtwbGyhvjw55G0QCJaHq/5UI
-         b5NKeZzeWjsLxjzAoFuhh6PhlVjuG2wehxtom+g83MGVDcYzGhILVOxhw8kKHZJqLCaQ
-         AUV/YK9B5avzNCQaqIwp7VpUqqrVpUXLwv47YlHQ+EJKueITQ+Rf607ll3/u6FwVnWaX
-         RO8qkdk8v89/61ROPx9FPJ5hasy+7s38EPjIDqbBSc7fDEymQbCCoWYSPVhHfXleeuQ6
-         eGrw==
-X-Forwarded-Encrypted: i=1; AJvYcCXyr71Je4VLF2cjSlIGrK18cBDP/7v3LPypP48WjNKRjfQ0Vl5AzlfQQByYOPG0ML+sK6TxABEk7Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEasVtlR4jPrzTYJHJNR12amzOQEpHesrT+a60AXqsZMaVlCpy
-	tXqemAN9Hbg3KF3/DLQypZA5fQVaCR0naHJdtyQLYrZ+YvaVHyqx5agfGzm1JTo=
-X-Google-Smtp-Source: AGHT+IHqFfQ+r5UCri/f/lTUl8RNaAuhltiB9f01lvJ0LHeqPEJARNY2m0IFYYXnS5+zSGXoOQz4Cw==
-X-Received: by 2002:a17:90b:3795:b0:2cc:f538:7cf0 with SMTP id 98e67ed59e1d1-2d85618a4f7mr2423722a91.4.1724929656710;
-        Thu, 29 Aug 2024 04:07:36 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20515555fbfsm9047105ad.263.2024.08.29.04.07.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2024 04:07:36 -0700 (PDT)
-Message-ID: <66d05678.170a0220.31321b.1e83@mx.google.com>
-Date: Thu, 29 Aug 2024 04:07:36 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1724932521; c=relaxed/simple;
+	bh=18MFg0ZU0gWEGTSRmJyGi2UXhCSkBRuo2F5V7lvrFW4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H4TgUTK87c2AazD5gizjA3dbY2rdNreMNxmqc+WhWSO7FHFvhLdOeE5k3S+DWqOjFut1TFlGt9C99vNR+TsRU7o1PlBy/eYYQnp8eosEzWowkTVlP+mrmxdUnbhpU0Zl6isdV49MCZXj+5r6zjkdgMaQ+99q0JNpMGt221oSWOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=tRj9f0pp; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from [192.168.88.20] (91-156-87-48.elisa-laajakaista.fi [91.156.87.48])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 223CF6B5;
+	Thu, 29 Aug 2024 13:54:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1724932444;
+	bh=18MFg0ZU0gWEGTSRmJyGi2UXhCSkBRuo2F5V7lvrFW4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=tRj9f0ppVRM5zv7lpEUb0256T7/Lqiu56m0Jkr5rbA+WvCipDUkeg6EPm9pJp1vcc
+	 q0qKU/2mpqC5B68d1d8cx0ayjq7VVlBlq6HRInS+kpLeV2jPimqGQarAk10kfZBa2B
+	 P4cQ+UveA0/rE9DuKn2wTwb9s04VKSBOpYIIS4ZM=
+Message-ID: <bb9d4495-ada4-446a-80e3-6b9ddc676f48@ideasonboard.com>
+Date: Thu, 29 Aug 2024 14:55:07 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.11-rc5-78-ge793a0d5bd6d
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 23 warnings (v6.11-rc5-78-ge793a0d5bd6d)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/2] pmdomain: ti-sci: Support retaining PD boot time
+ state
+To: Ulf Hansson <ulf.hansson@linaro.org>, Abel Vesa <abel.vesa@linaro.org>,
+ Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>
+Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+ Santosh Shilimkar <ssantosh@kernel.org>, Dave Gerlach <d-gerlach@ti.com>,
+ J Keerthy <j-keerthy@ti.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Devarsh Thakkar <devarsht@ti.com>
+References: <20240415-ti-sci-pd-v1-0-a0e56b8ad897@ideasonboard.com>
+ <20240415-ti-sci-pd-v1-2-a0e56b8ad897@ideasonboard.com>
+ <d4cd0323-4792-49b0-a4e2-0bc92068e7f0@ideasonboard.com>
+ <CAPDyKFqShuq98qV5nSPzSqwLLUZ7LxLvp1eihGRBkU4qUKdWwQ@mail.gmail.com>
+Content-Language: en-US
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
+ xsFNBE6ms0cBEACyizowecZqXfMZtnBniOieTuFdErHAUyxVgtmr0f5ZfIi9Z4l+uUN4Zdw2
+ wCEZjx3o0Z34diXBaMRJ3rAk9yB90UJAnLtb8A97Oq64DskLF81GCYB2P1i0qrG7UjpASgCA
+ Ru0lVvxsWyIwSfoYoLrazbT1wkWRs8YBkkXQFfL7Mn3ZMoGPcpfwYH9O7bV1NslbmyJzRCMO
+ eYV258gjCcwYlrkyIratlHCek4GrwV8Z9NQcjD5iLzrONjfafrWPwj6yn2RlL0mQEwt1lOvn
+ LnI7QRtB3zxA3yB+FLsT1hx0va6xCHpX3QO2gBsyHCyVafFMrg3c/7IIWkDLngJxFgz6DLiA
+ G4ld1QK/jsYqfP2GIMH1mFdjY+iagG4DqOsjip479HCWAptpNxSOCL6z3qxCU8MCz8iNOtZk
+ DYXQWVscM5qgYSn+fmMM2qN+eoWlnCGVURZZLDjg387S2E1jT/dNTOsM/IqQj+ZROUZuRcF7
+ 0RTtuU5q1HnbRNwy+23xeoSGuwmLQ2UsUk7Q5CnrjYfiPo3wHze8avK95JBoSd+WIRmV3uoO
+ rXCoYOIRlDhg9XJTrbnQ3Ot5zOa0Y9c4IpyAlut6mDtxtKXr4+8OzjSVFww7tIwadTK3wDQv
+ Bus4jxHjS6dz1g2ypT65qnHen6mUUH63lhzewqO9peAHJ0SLrQARAQABzTBUb21pIFZhbGtl
+ aW5lbiA8dG9taS52YWxrZWluZW5AaWRlYXNvbmJvYXJkLmNvbT7CwY4EEwEIADgWIQTEOAw+
+ ll79gQef86f6PaqMvJYe9QUCX/HruAIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRD6
+ PaqMvJYe9WmFD/99NGoD5lBJhlFDHMZvO+Op8vCwnIRZdTsyrtGl72rVh9xRfcSgYPZUvBuT
+ VDxE53mY9HaZyu1eGMccYRBaTLJSfCXl/g317CrMNdY0k40b9YeIX10feiRYEWoDIPQ3tMmA
+ 0nHDygzcnuPiPT68JYZ6tUOvAt7r6OX/litM+m2/E9mtp8xCoWOo/kYO4mOAIoMNvLB8vufi
+ uBB4e/AvAjtny4ScuNV5c5q8MkfNIiOyag9QCiQ/JfoAqzXRjVb4VZG72AKaElwipiKCWEcU
+ R4+Bu5Qbaxj7Cd36M/bI54OrbWWETJkVVSV1i0tghCd6HHyquTdFl7wYcz6cL1hn/6byVnD+
+ sR3BLvSBHYp8WSwv0TCuf6tLiNgHAO1hWiQ1pOoXyMEsxZlgPXT+wb4dbNVunckwqFjGxRbl
+ Rz7apFT/ZRwbazEzEzNyrBOfB55xdipG/2+SmFn0oMFqFOBEszXLQVslh64lI0CMJm2OYYe3
+ PxHqYaztyeXsx13Bfnq9+bUynAQ4uW1P5DJ3OIRZWKmbQd/Me3Fq6TU57LsvwRgE0Le9PFQs
+ dcP2071rMTpqTUteEgODJS4VDf4lXJfY91u32BJkiqM7/62Cqatcz5UWWHq5xeF03MIUTqdE
+ qHWk3RJEoWHWQRzQfcx6Fn2fDAUKhAddvoopfcjAHfpAWJ+ENc7BTQROprNHARAAx0aat8GU
+ hsusCLc4MIxOQwidecCTRc9Dz/7U2goUwhw2O5j9TPqLtp57VITmHILnvZf6q3QAho2QMQyE
+ DDvHubrdtEoqaaSKxKkFie1uhWNNvXPhwkKLYieyL9m2JdU+b88HaDnpzdyTTR4uH7wk0bBa
+ KbTSgIFDDe5lXInypewPO30TmYNkFSexnnM3n1PBCqiJXsJahE4ZQ+WnV5FbPUj8T2zXS2xk
+ 0LZ0+DwKmZ0ZDovvdEWRWrz3UzJ8DLHb7blPpGhmqj3ANXQXC7mb9qJ6J/VSl61GbxIO2Dwb
+ xPNkHk8fwnxlUBCOyBti/uD2uSTgKHNdabhVm2dgFNVuS1y3bBHbI/qjC3J7rWE0WiaHWEqy
+ UVPk8rsph4rqITsj2RiY70vEW0SKePrChvET7D8P1UPqmveBNNtSS7In+DdZ5kUqLV7rJnM9
+ /4cwy+uZUt8cuCZlcA5u8IsBCNJudxEqBG10GHg1B6h1RZIz9Q9XfiBdaqa5+CjyFs8ua01c
+ 9HmyfkuhXG2OLjfQuK+Ygd56mV3lq0aFdwbaX16DG22c6flkkBSjyWXYepFtHz9KsBS0DaZb
+ 4IkLmZwEXpZcIOQjQ71fqlpiXkXSIaQ6YMEs8WjBbpP81h7QxWIfWtp+VnwNGc6nq5IQDESH
+ mvQcsFS7d3eGVI6eyjCFdcAO8eMAEQEAAcLBXwQYAQIACQUCTqazRwIbDAAKCRD6PaqMvJYe
+ 9fA7EACS6exUedsBKmt4pT7nqXBcRsqm6YzT6DeCM8PWMTeaVGHiR4TnNFiT3otD5UpYQI7S
+ suYxoTdHrrrBzdlKe5rUWpzoZkVK6p0s9OIvGzLT0lrb0HC9iNDWT3JgpYDnk4Z2mFi6tTbq
+ xKMtpVFRA6FjviGDRsfkfoURZI51nf2RSAk/A8BEDDZ7lgJHskYoklSpwyrXhkp9FHGMaYII
+ m9EKuUTX9JPDG2FTthCBrdsgWYPdJQvM+zscq09vFMQ9Fykbx5N8z/oFEUy3ACyPqW2oyfvU
+ CH5WDpWBG0s5BALp1gBJPytIAd/pY/5ZdNoi0Cx3+Z7jaBFEyYJdWy1hGddpkgnMjyOfLI7B
+ CFrdecTZbR5upjNSDvQ7RG85SnpYJTIin+SAUazAeA2nS6gTZzumgtdw8XmVXZwdBfF+ICof
+ 92UkbYcYNbzWO/GHgsNT1WnM4sa9lwCSWH8Fw1o/3bX1VVPEsnESOfxkNdu+gAF5S6+I6n3a
+ ueeIlwJl5CpT5l8RpoZXEOVtXYn8zzOJ7oGZYINRV9Pf8qKGLf3Dft7zKBP832I3PQjeok7F
+ yjt+9S+KgSFSHP3Pa4E7lsSdWhSlHYNdG/czhoUkSCN09C0rEK93wxACx3vtxPLjXu6RptBw
+ 3dRq7n+mQChEB1am0BueV1JZaBboIL0AGlSJkm23kw==
+In-Reply-To: <CAPDyKFqShuq98qV5nSPzSqwLLUZ7LxLvp1eihGRBkU4qUKdWwQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 23 warnings (v6.11-rc5-78-g=
-e793a0d5bd6d)
+Hi Ulf,
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-11-rc5-78-ge793a0d5bd6d/
+On 03/05/2024 16:45, Ulf Hansson wrote:
+> + Abel, Saravanna, Stephen
+> 
+> On Mon, 15 Apr 2024 at 19:17, Tomi Valkeinen
+> <tomi.valkeinen@ideasonboard.com> wrote:
+>>
+>> On 15/04/2024 19:00, Tomi Valkeinen wrote:
+>>> Add a new flag, TI_SCI_PD_KEEP_BOOT_STATE, which can be set in the dts
+>>> when referring to power domains. When this flag is set, the ti-sci
+>>> driver will check if the PD is currently enabled in the HW, and if so,
+>>> set the GENPD_FLAG_ALWAYS_ON flag so that the PD will stay enabled.
+>>>
+>>> The main issue I'm trying to solve here is this:
+>>>
+>>> If the Display Subsystem (DSS) has been enabled by the bootloader, the
+>>> related PD has also been enabled in the HW. When the tidss driver
+>>> probes, the driver framework will automatically enable the PD. While
+>>> executing the probe function it is very common for the probe to return
+>>> EPROBE_DEFER, and, in rarer cases, an actual error. When this happens
+>>> (probe() returns an error), the driver framework will automatically
+>>> disable the related PD.
+>>>
+>>> Powering off the PD while the DSS is enabled and displaying a picture
+>>> will cause the DSS HW to enter a bad state, from which (afaik) it can't
+>>> be woken up except with full power-cycle. Trying to access the DSS in
+>>> this state (e.g. when retrying the probe) will usually cause the board
+>>> to hang sooner or later.
+>>>
+>>> Even if we wouldn't have this board-hangs issue, it's nice to be able to
+>>> keep the DSS PD enabled: we want to keep the DSS enabled when the
+>>> bootloader has enabled the screen. If, instead, we disable the PD at the
+>>> first EPROBE_DEFER, the screen will (probably) go black.
+>>
+>> A few things occurred to me. The driver is supposed to clear the
+>> GENPD_FLAG_ALWAYS_ON when the driver has probed successfully. There are
+>> two possible issues with that:
+>>
+>> - Afaics, there's no API to do that, and currently I just clear the bit
+>> in genpd->flags. There's a clear race there, so some locking would be
+>> required.
+>>
+>> - This uses the GENPD_FLAG_ALWAYS_ON flag to say "PD is always on, until
+>> the driver has started". If the PD would have GENPD_FLAG_ALWAYS_ON set
+>> for other reasons, the driver would still go and clear the flag, which
+>> might break things.
+>>
+>> Also, unrelated to the above and not a problem in practice at the very
+>> moment, but I think clocks should also be dealt with somehow. Something,
+>> at early-ish boot stage, should mark the relevant clocks as in use, so
+>> that there's no chance they would be turned off when the main kernel has
+>> started (the main display driver is often a module).
+>>
+>> It would be nice to deal with all the above in a single place. I wonder
+>> if the tidss driver itself could somehow be split into two parts, an
+>> early part that would probe with minimal dependencies, mainly to reserve
+>> the core resources without doing any kind of DRM init. And a main part
+>> which would (somehow) finish the initialization at a later point, when
+>> we have the filesystem (for firmware) and the other bridge/panel drivers
+>> have probed.
+>>
+>> That can be somewhat achieved with simplefb or simpledrm, though, but we
+>> can't do any TI DSS specific things there, and it also creates a
+>> requirement to have either of those drivers built-in, and the related DT
+>> nodes to be added.
+> 
+> Without going into too much detail, this and similar problems have
+> been discussed in the past. With the fw_devlink and the ->sync_state()
+> callback we are getting closer to a solution, but for genpd a solution
+> is still pending.
+> 
+> If you want to read up on earlier discussions and join us moving
+> forward, that would be great. The last attempt for genpd to move this
+> forward was posted by Abel Vesa:
+> https://lore.kernel.org/linux-pm/20230621144019.3219858-1-abel.vesa@linaro.org/
+> 
+> Beyond that, we have also discussed various solutions at the last LPC
+> in Richmond. I think the consensus at that point was that Saravana
+> targeted to post something for clocks - and when that was done, we
+> should do the similar thing for genpd. Anyway, I have looped them into
+> this thread, so they can share any updates on their side of the
+> matter.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.11-rc5-78-ge793a0d5bd6d
-Git Commit: e793a0d5bd6d72816378e7e6e87a066cdd89b7d1
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Do you know if there's been any recent work related to this? I tried to 
+look around on the lists, but nothing caught my eye.
 
-Warnings Detected:
+  Tomi
 
-arc:
-    haps_hs_smp_defconfig (gcc-12): 2 warnings
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-12): 3 warnings
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-12): 18 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    kernel/fork.c:3091:2: warning: #warning clone3() entry point is mi=
-ssing, please fix [-Wcpp]
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    2    3091 | #warning clone3() entry point is missing, please fix
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o:=
- missing .note.GNU-stack section implies executable stack
-    1    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missin=
-g .note.GNU-stack section implies executable stack
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
-ls' found, but node is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
-_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
- is not an interrupt provider
-    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
-rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
- provider
-    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
- prerequisite 'interrupt_provider'
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
-ot an interrupt provider
-    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
-ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
-ound, but node is not an interrupt provider
-    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
-er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
-ider
-    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
-equisite 'interrupt_provider'
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-12) =E2=80=94 PASS, 0 errors, 18 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing .no=
-te.GNU-stack section implies executable stack
-    sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso32/vdso-note.o: miss=
-ing .note.GNU-stack section implies executable stack
-    kernel/fork.c:3091:2: warning: #warning clone3() entry point is missing=
-, please fix [-Wcpp]
-    3091 | #warning clone3() entry point is missing, please fix
-    kernel/fork.c:3091:2: warning: #warning clone3() entry point is missing=
-, please fix [-Wcpp]
-    3091 | #warning clone3() entry point is missing, please fix
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
 
