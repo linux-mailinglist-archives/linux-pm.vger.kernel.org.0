@@ -1,144 +1,120 @@
-Return-Path: <linux-pm+bounces-13186-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13187-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFC25964EFF
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 21:33:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DCF0965043
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 21:56:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B4AA1F240B6
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 19:33:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C21A28B2C5
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 19:56:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB51A1B9B3A;
-	Thu, 29 Aug 2024 19:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390901BE873;
+	Thu, 29 Aug 2024 19:49:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QzW2R68/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SOMCQ/VQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDCC01B7906
-	for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 19:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A68E1BE868;
+	Thu, 29 Aug 2024 19:49:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724960026; cv=none; b=ncf6Psh59GJS7xLX6mCOnDjs3KiHeuHIlCUdPcYcJcMuT/eu0sAeyGkaqVtag5/FOpKAI96HcQSdEAi3u9omX8IUOuZwYFDcjqhYTyH6Whsjy4HmObF4Qa/eE1Bsm9OnMgUO8M9dOcV0LsVWijdeUP7iV28+A2YBGMDEHFPAdW8=
+	t=1724960955; cv=none; b=GX4cXAVIMfwgkbpjo5TnrrXVWDSsMaKJiMMA5YHxTT2gDkj4+ERIThdDHhklsOaJoPq/xHnfd9jE4xRM2U6s6KOkvxxxwoPzPAipGLZU+0ibff1iEWazoSoRrXcQacIKSNl9mGTYiH1MlYI2ThmuuxewiTsmoUSXeZW4OiFC0Sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724960026; c=relaxed/simple;
-	bh=PrBn1mpQDMnlrgLBKDe4p8Ampi+IFTnW39FupGagWho=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S4RRi8e/IwROtX9c+0LdARhTR6HI5hPBfCjXMk4EZz1GjCQJhMSiR7BkeQXATlagJP12CfX1CHGNvnbjgDGjd7Im+8AitSKAmjW6+9jndvBL/A6iNgmpmrwOzOpeehmVXxBaDlGxy4eoTxfpJ4Gg+I0JV6RZskFEekhNCteo8rE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QzW2R68/; arc=none smtp.client-ip=209.85.161.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5df9433ac0cso612803eaf.3
-        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 12:33:43 -0700 (PDT)
+	s=arc-20240116; t=1724960955; c=relaxed/simple;
+	bh=VQFkfIt1ZFmvcgrZPQB4L0rRyNlBeXoAfBINrTFokH8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B2cE+T6ETKdV6HDKWoROeiEuB/RXcnwMCd1voDT0ZxW79QS6I4ie7h5yrMgwmXXX8rm+2ZyDNpDBvYpyF/inZUTg34rqPXU3fkJhGz2SHd9PJMZYgwepPojj3/N5OiXALstjhC3m14hFG77WW7oIryyhPFIBdKZTYHgx/siQyFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SOMCQ/VQ; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5bed72ff2f2so1241471a12.2;
+        Thu, 29 Aug 2024 12:49:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1724960023; x=1725564823; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+89V/Pkw0eErHNWTJZLzdCFWIv36uJ87GHJgsJod6mk=;
-        b=QzW2R68/NYdjaOXf0mQbv6augq7I0xl4QRW9ekcjvXW+nfPNgWk1yIOVel42LlPTS5
-         PSUAHF/BUe2Z70bD4cEq4AbpMMyj4Fx18/H1cc737mUxRrYSTUSWe34HQU7uu/QNz4Ks
-         RoP1tzAHwJs8xfv2Ut85EThLNhZW1KB30vJH0=
+        d=gmail.com; s=20230601; t=1724960952; x=1725565752; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C6zTyRy44LbsV/er+6Rmmr7d7exqhqQ5s8Va18uvln0=;
+        b=SOMCQ/VQpSXbRGvD4QN4FFC4PBjB6PFtgwQXM19lDbBTZhg5GeSPldyo0kBQb447Aa
+         KKZkp3UBQMNAXp/eN8GK8GGXHfT3sjePnK+wUPi8mGJwaSYDxcSdzGfk1KsgTtBO4Wvu
+         sgKOnMNkzaGmEhF2IHYqAqGLG07F/KhML7vfBNvZcb3DIyoiMeSxEUMtsbY9nhXXYZO9
+         19KnU2uEuJVVyGQ3OBIiMIymrFxK34o7SMnsbXKCs0fBle9lycaEIs41xXog2mt1U3/+
+         Xx8tJMp7/VG2rbkgv6bpCwmIHYVCTx/oIq3dRBouWeYbjRXSNH6VtLLJ6yVa0qLWWtD+
+         Z/YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724960023; x=1725564823;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+89V/Pkw0eErHNWTJZLzdCFWIv36uJ87GHJgsJod6mk=;
-        b=oLsYTqJDRKLEBsr18Pf09G/RRJz0dNdjtFdLJyx8Gc1+mneL40ovgD5h4/LWkxDAew
-         KkYgux8mj/JPNzAaX6L/ss2gjYpTyqBf7iyKt89D3vMFvgoiAxDQXz2mGQ5Bt0SH8B0B
-         j8EceJ9wDVfFOjdvZWLNQfQEUJq5yxDor+IsIIHOQgjN8/ZGYuJ1K9pgAcWSTWLNxCRy
-         FTHQIwtapQIcbVCDfvTICK31Yn7VOAJRB8j5FYw4DziJ53ZM+kI9JdLgHRVtLGoHziUk
-         070kRZLGbSKpFUtjP/C5qDOqp4lcdl04FAggUb5uKpY1g92Jk9LvNQ97O3SfJYc/pdlq
-         LfQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUkcpiqaZ7vbY/0CU9si08tLfQy3pvHVGj3ow2EnEiZ+51jNaXn+Zp49pjhBwKoIM7U97hAb+URCA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGUrsPl+LxaAe6eepICo3fNE5wDBIQfFl/EsmU0lKzY6y6Fisj
-	vAjf5//8yYmNFgYDwSssvUrr5Ecdu2QAosMZTLbSuJU9GxsxG+eD9u6V1wGsQ73elcvzE9WSvpc
-	=
-X-Google-Smtp-Source: AGHT+IFXPRHYk6+0ejypmgvH57xyyPG/AhLIDZ6lBpPF4xkf7WIUP15Z12OO+hwHnfkaa3/SR0aEuw==
-X-Received: by 2002:a05:6871:e264:b0:270:4dbb:195a with SMTP id 586e51a60fabf-277900c729cmr3789226fac.15.1724960022928;
-        Thu, 29 Aug 2024 12:33:42 -0700 (PDT)
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com. [209.85.210.46])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-70f67156623sm47556a34.26.2024.08.29.12.33.42
-        for <linux-pm@vger.kernel.org>
+        d=1e100.net; s=20230601; t=1724960952; x=1725565752;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C6zTyRy44LbsV/er+6Rmmr7d7exqhqQ5s8Va18uvln0=;
+        b=TdGfwPdVxU1XVe70IvKAiT5r9/KNtEpPBtXG/KNzJqYPQAC/QzTsvEATq0VnMDzkFe
+         Rivq1QVZ94MRQXit7W4sPvM+0Pe5zwvWIVnH1PKZJtKntrXRjRnbVsVKBdMXQ9o0PpTJ
+         2yMfKd3yjR6ZFbBGXl5SdqT9jei5wi3xDDfAWdrdme0RDrZsgtp+5Uxq0OGn7CcDhm0N
+         XpGoV2c1pVgNW/yJgIycavDKLTR4DMWW5gyfYka07fYwpRMbEDOu996T5dYMK77e9A7c
+         4P2gwd6ou/VZFg71bqK1BgyPdfcyReGjk1Tql5BuhM2woNmaYFNiIvj2JhNFpJ+mWAKK
+         QpuA==
+X-Forwarded-Encrypted: i=1; AJvYcCUkY72gpC5F6BuQ3egZttU3tU/A0iMvh/xMQue3iL002fr1pPjhZpthK55ANzjN096Sy16LAJWbDDVYHHpS@vger.kernel.org, AJvYcCUt5zX7klMtj+Obdhb9RpEVDHc0CiPhgzibAESo1tnF26sivqyClcSRHieHA3jOGLewZpHErKIJRWKl@vger.kernel.org, AJvYcCV5HqpylIqjZYOqj6hAGntG8amjdnhzmDb5U4rwKxs38hZVY/PjRrvX/NnwbE5vVjStoHDrxlolgUE=@vger.kernel.org, AJvYcCW4jO7zBX6P3nMaIwN8QMcqOssdOHT/MrD5slHHl93DBJO9ut/M/2sgA52y1vaFIvyr9Mqw1MCel+w6jYTDbQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSjroT426onmSIErHLFNpxezt9blzJVqBXAv2drdUbH9p+Axu4
+	9x9W4rgNiHoARYCVp5Qi9OrzQuwZ4UsJ15XMUWGUviYpUk72xeuw
+X-Google-Smtp-Source: AGHT+IEG6BreU15tWsvDqXfz+6NfLSYPAoFtBNvZap0mdBrmPnCL4g6PIPExiJh2Sz2VysaWO/gXoQ==
+X-Received: by 2002:a17:907:7292:b0:a86:a909:4f67 with SMTP id a640c23a62f3a-a897fa759c4mr273076266b.52.1724960951288;
+        Thu, 29 Aug 2024 12:49:11 -0700 (PDT)
+Received: from [192.168.105.194] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8988feb9f7sm114184666b.42.2024.08.29.12.49.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Aug 2024 12:33:42 -0700 (PDT)
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-70f63afb792so354204a34.1
-        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 12:33:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVVZgqPuA/D1sV1SPIJwNK3KGFoFRZKwwoxyD0yhIfKclnDAgs0Z5vsi4cMZUitXK3wJhfecGpqJA==@vger.kernel.org
-X-Received: by 2002:a05:6830:b85:b0:70c:aceb:c6c4 with SMTP id
- 46e09a7af769-70f5c21e47dmr4373135a34.0.1724960022060; Thu, 29 Aug 2024
- 12:33:42 -0700 (PDT)
+        Thu, 29 Aug 2024 12:49:10 -0700 (PDT)
+Message-ID: <159df608-e52c-4317-a1f2-d0f94ebfc25a@gmail.com>
+Date: Thu, 29 Aug 2024 21:49:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240821214052.6800-1-wahrenst@gmx.net> <20240821214052.6800-9-wahrenst@gmx.net>
-In-Reply-To: <20240821214052.6800-9-wahrenst@gmx.net>
-From: Doug Anderson <dianders@chromium.org>
-Date: Thu, 29 Aug 2024 12:33:25 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X+VbFmzMk8mHy6HGf5+W-7YQjTEDPqiJXs0hecbZ_T9Q@mail.gmail.com>
-Message-ID: <CAD=FV=X+VbFmzMk8mHy6HGf5+W-7YQjTEDPqiJXs0hecbZ_T9Q@mail.gmail.com>
-Subject: Re: [PATCH V3 RFC 8/9] usb: dwc2: Implement recovery after PM domain off
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: Russell King <linux@armlinux.org.uk>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
-	Maxime Ripard <mripard@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>, 
-	=?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Minas Harutyunyan <hminas@synopsys.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>, 
-	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>, Peter Robinson <pbrobinson@gmail.com>, 
-	dri-devel@lists.freedesktop.org, bcm-kernel-feedback-list@broadcom.com, 
-	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] interconnect: qcom: add QCS8300 interconnect provider
+ driver
+To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+ Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: Konrad Dybcio <konradybcio@kernel.org>,
+ Danila Tikhonov <danila@jiaxyga.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Vladimir Lypak <vladimir.lypak@gmail.com>,
+ Adam Skladowski <a39.skl@gmail.com>, Sibi Sankar <quic_sibis@quicinc.com>,
+ Rohit Agarwal <quic_rohiagar@quicinc.com>,
+ Rajendra Nayak <quic_rjendra@quicinc.com>,
+ Andrew Halaney <ahalaney@redhat.com>, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
+ quic_okukatla@quicinc.com
+References: <20240827151622.305-1-quic_rlaggysh@quicinc.com>
+ <20240827151622.305-3-quic_rlaggysh@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konradybcio@gmail.com>
+In-Reply-To: <20240827151622.305-3-quic_rlaggysh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi,
-
-On Wed, Aug 21, 2024 at 2:41=E2=80=AFPM Stefan Wahren <wahrenst@gmx.net> wr=
-ote:
->
-> According to the dt-bindings there are some platforms, which have a
-> dedicated USB power domain for DWC2 IP core supply. If the power domain
-> is switched off during system suspend then all USB register will lose
-> their settings.
->
-> Use GUSBCFG_TOUTCAL as a canary to detect that the power domain has
-> been powered off during suspend. Since the GOTGCTL_CURMODE_HOST doesn't
-> match on all platform with the current mode, additionally backup
-> GINTSTS. This works reliable to decide which registers should be
-> restored.
->
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+On 27.08.2024 5:16 PM, Raviteja Laggyshetty wrote:
+> Add driver for the Qualcomm interconnect buses found in QCS8300
+> based platforms. The topology consists of several NoCs that are
+> controlled by a remote processor that collects the aggregated
+> bandwidth for each master-slave pairs.
+> 
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 > ---
->  drivers/usb/dwc2/core.c     |  1 +
->  drivers/usb/dwc2/core.h     |  2 ++
->  drivers/usb/dwc2/platform.c | 38 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 41 insertions(+)
-> +static int dwc2_restore_critical_registers(struct dwc2_hsotg *hsotg)
-> +{
-> +       struct dwc2_gregs_backup *gr;
-> +
-> +       gr =3D &hsotg->gr_backup;
-> +
-> +       if (!gr->valid) {
-> +               dev_err(hsotg->dev, "%s: no registers to restore\n",
-> +                       __func__);
 
-nit: IMO "__func__" should not be in dev_err() messages. The message
-plus the device should be enough. If __func__ should have been in
-dev_err() messages then the Linux kernel would have automatically put
-it there.
+[...]
 
-Aside from that, this looks reasonable to me and discussed previously.
+> +static struct qcom_icc_bcm *dc_noc_bcms[] = {
+> +};
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Please drop such empty nodes
+
+Konrad
 
