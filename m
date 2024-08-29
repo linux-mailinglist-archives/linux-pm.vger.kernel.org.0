@@ -1,128 +1,161 @@
-Return-Path: <linux-pm+bounces-13176-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13177-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D6E496492E
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 16:54:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA35F9649A8
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 17:17:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3036B26254
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 14:54:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EB9E1F2374C
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 15:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A38331B14FA;
-	Thu, 29 Aug 2024 14:54:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F0691B0107;
+	Thu, 29 Aug 2024 15:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EnTWMlW4"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h4B65G2B"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02371B1414;
-	Thu, 29 Aug 2024 14:54:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351013D97A
+	for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 15:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724943272; cv=none; b=m/Dwjho3kFF4ghxXPcjWKtMBjOjTP3H5bOS85dnspeTwsDu4bVFHEecIb+JOBKygowWQ5G0qiv4xEEMVZMING9S0BTCml/Bv44U7LrbR3kkJimLW7Cb6btZ7wEZKp+aiWEz4PKuy6jcmI+OrnrU9QfoED5aDamIXlU84Dy6FZho=
+	t=1724944624; cv=none; b=DrsAiGZpyZ5deTPgmPYE6UPebOrbT3wZKXu1H5rUm7tyqaVMTnbga1g38eXI/ytrAvuXpP6CQtX1r5Tw3JEfv12QYqpIiy4LOsBOYYw0o6fgozctiUagrPyU7YxVdodo6nHUGbLP4VOpBec6JQLFybK5n3uHDY8eGXdvmpDqZjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724943272; c=relaxed/simple;
-	bh=FaCb4F5WVY3FLk9+Oak4LuOKMiyfZkaWU3vPnoYA7B4=;
+	s=arc-20240116; t=1724944624; c=relaxed/simple;
+	bh=umXi7o6r5DtojGlpVGMWHvYSw9XLm0jedNBDdM0VDFw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cs1fJ4r51r7zVDQNbSXwxQps+FDxts05x20qyjzY37CK5nMtpOaWZAYPnuS/qx9dBhH82NrQVOH+DNg6dgPfpWxZfdWmdoQbY0q/vtSI4bGemvSsbsnDfjyc190pnNQfsZBIG7lI0WGy1VQ59gT71PUX8cqTSLrKjoc2bh1xaAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EnTWMlW4; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-429da8b5feaso8777335e9.2;
-        Thu, 29 Aug 2024 07:54:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724943269; x=1725548069; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1RvHnm+3SHXcwDriTXTVCIgrco9MOYfTgil1a/kVBbU=;
-        b=EnTWMlW4MSyRt4mtksANrZQLFvUr0Z10NU555/cmaGa5zjcQTKW54swUhSHhArOKza
-         m70KH/aN+8vnQXD23L3rHynoRqmNmL8ZUnzOCFvjh6uwNzdBhmMpf4ts0X6+FtYceFT7
-         DqJmzcWaOq6JU4X880CVqc7YKQ9qd/Ffep5GirM/PBGfyPbW6Ju8nkx/zoj6iZRGWF5E
-         oZLm4dZrKkWowapSVqwQacN9FPSuhE21lZUdS8AdWH2TIH+5lHuTEpI/LU+6m4s5ZtSx
-         DXJeLpC8ekIy5oSMXEGsjo8n0iTPAzM7F6J3OhaimbH13XHyCgG5mM0dh1WhaNPO4jOA
-         uFrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724943269; x=1725548069;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1RvHnm+3SHXcwDriTXTVCIgrco9MOYfTgil1a/kVBbU=;
-        b=dCgLPGKdDBnnWaOi3nA8sdVwhEUe/NvVXq0L02ViFaOm9vB/OVknLc68WkBfBfbmrV
-         OIvxvyF4WCDzpmglLCCrD1bMxWW4uASQsVu847A3yxW2n2MzExv4dRF2GhRh4IhSANRo
-         D6b6kUfFoIVTc40veEh9urwZTW20fWRTiq+CIFb/KJm56s6b+hbcM6e3XMBHHTqfIDsI
-         pxrCt+WCb2QKZIo/XW4NL1Dxs7w/NY/NPvrcv5O4L8dbpc9MZauT/R6Thd3QUE8mYCh6
-         bKSky3pTWSDp46sCC9mznoKyRmY4nyAxCjOfA+bmIC1wgBaW4uB7IanH7Ofa29yhdzhu
-         MYjA==
-X-Forwarded-Encrypted: i=1; AJvYcCUbadY7WHFjVyMKPxL5Iy1WNrhBzczhvGnJ201MOVDK65/C2kizjOlW2obKbFqXspv4I0xsQtujIk6LjrY=@vger.kernel.org, AJvYcCXx6YtH3e7QdGLt2s9cCMMcAymiZR7ctJFdKf8+DWO6WT/ntrD34e8slMESqy5o9JLXv0xptQc51A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqtzVPDhNOBw8bIG9veFUM429trJ6ulRBTICwAbLqEwnLfG2Cp
-	lSVmLPGMSYfn3YYyIGGakzsN8bH8fDqk4HKBoq6L/A2wGFNFudbx
-X-Google-Smtp-Source: AGHT+IEPLCpekV/0oFK0K++9ZKbbV8Mvl/fcHb+h9oB2OFRyYNoSj2kCBKYooopQ1WUrfkSCee3Qng==
-X-Received: by 2002:a05:600c:45c4:b0:425:64c5:5780 with SMTP id 5b1f17b1804b1-42bb01ae2d7mr31296905e9.1.1724943268412;
-        Thu, 29 Aug 2024 07:54:28 -0700 (PDT)
-Received: from orome (p200300e41f29d300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f29:d300:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42ba639d440sm54374335e9.13.2024.08.29.07.54.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2024 07:54:28 -0700 (PDT)
-Date: Thu, 29 Aug 2024 16:54:26 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Gaosheng Cui <cuigaosheng1@huawei.com>
-Cc: digetx@gmail.com, myungjoo.ham@samsung.com, kyungmin.park@samsung.com, 
-	cw00.choi@samsung.com, jonathanh@nvidia.com, linux-pm@vger.kernel.org, 
-	linux-tegra@vger.kernel.org
-Subject: Re: [PATCH -next] PM / devfreq: tegra30: Add missing
- clk_disable_unprepare in devm_tegra_devfreq_init_hw
-Message-ID: <5vuj7r3wxiqa2nr46tdafe3zf4ru56ja2dz742lt6yfmv7ft5d@26rhlgfleqsx>
-References: <20240803063748.325133-1-cuigaosheng1@huawei.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oOJcFa9jzdsAKnv4AK5mjW3+J5lnUgQBo1u3zpK8ENdsOKS9hjdOGFw4PL/UlqEvOYs/BtORS30GY3Jgbi9P/BhEKMmXEPTWWt3Z++OzK9j5BVhP1z3e37hpZaExv2qTrEMSP/+PxZ4qUSkHN5qP35CalrTZP+oM/7h45lVmHn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h4B65G2B; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Thu, 29 Aug 2024 17:16:57 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1724944620;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9N3q5TzPU80O98ibN8yUzqkgODNoqP8ou42r0Lcqe20=;
+	b=h4B65G2BuB3Zsg8/pQAKUSujyH6tDjcEONs0pe2OXp8SLcfsmUrm+7uMUO8PYvFVFHZ5UD
+	+VjX54mnygNrhjuabOL3DG71RL1jobQfkb7U4FYGWgN28kYxtI+m2zkRK8h0SN9ctvHZdn
+	8MVgaIeGECD/clgsQJY/UflEC6WhFWg=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Andrea Righi <andrea.righi@linux.dev>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+	Mario Limonciello <superm1@kernel.org>,
+	Borislav Petkov <bp@alien8.de>, Perry Yuan <perry.yuan@amd.com>,
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	"open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
+	"open list:ACPI" <linux-acpi@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	changwoo@igalia.com, David Vernet <void@manifault.com>,
+	Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH 8/8] cpufreq: amd-pstate: Drop some uses of
+ cpudata->hw_prefcore
+Message-ID: <ZtCQ6Z2LdzHyKdkz@gpd3>
+References: <20240826211358.2694603-1-superm1@kernel.org>
+ <20240826211358.2694603-9-superm1@kernel.org>
+ <Zs4G084+7MmzdYjU@BLRRASHENOY1.amd.com>
+ <61b96549-2969-4b64-a40d-f91f614ec3ab@amd.com>
+ <Zs6w3RktAb6fJrJ+@BLRRASHENOY1.amd.com>
+ <Zs7Bwh6T3HCGlR9C@gpd3>
+ <Zs866Myvbs0ByoAK@BLRRASHENOY1.amd.com>
+ <ZtBvJk4MMCcF2SI8@gpd3>
+ <39b25272-83e9-442c-9cc3-185c4e5cd277@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="sut5e6g7ajzxwlz6"
-Content-Disposition: inline
-In-Reply-To: <20240803063748.325133-1-cuigaosheng1@huawei.com>
-
-
---sut5e6g7ajzxwlz6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <39b25272-83e9-442c-9cc3-185c4e5cd277@amd.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Sat, Aug 03, 2024 at 02:37:48PM GMT, Gaosheng Cui wrote:
-> Add the missing clk_disable_unprepare() before return in
-> devm_tegra_devfreq_init_hw().
->=20
-> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-> ---
->  drivers/devfreq/tegra30-devfreq.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+On Thu, Aug 29, 2024 at 08:01:48AM -0500, Mario Limonciello wrote:
+> On 8/29/2024 07:52, Andrea Righi wrote:
+> > On Wed, Aug 28, 2024 at 08:27:44PM +0530, Gautham R. Shenoy wrote:
+> > > Hello Andrea,
+> > > 
+> > > On Wed, Aug 28, 2024 at 08:20:50AM +0200, Andrea Righi wrote:
+> > > > On Wed, Aug 28, 2024 at 10:38:45AM +0530, Gautham R. Shenoy wrote:
+> > > > ...
+> > > > > > I had thought this was a malfunction in the behavior that it reflected the
+> > > > > > current status, not the hardware /capability/.
+> > > > > > 
+> > > > > > Which one makes more sense for userspace?  In my mind the most likely
+> > > > > > consumer of this information would be something a sched_ext based userspace
+> > > > > > scheduler.  They would need to know whether the scheduler was using
+> > > > > > preferred cores; not whether the hardware supported it.
+> > > > > 
+> > > > > The commandline parameter currently impacts only the fair sched-class
+> > > > > tasks since the preference information gets used only during
+> > > > > load-balancing.
+> > > > > 
+> > > > > IMO, the same should continue with sched-ext, i.e. if the user has
+> > > > > explicitly disabled prefcore support via commandline, the no sched-ext
+> > > > > scheduler should use the preference information to make task placement
+> > > > > decisions. However, I would like to see what the sched-ext folks have
+> > > > > to say. Adding some of them to the Cc list.
+> > > > 
+> > > > IMHO it makes more sense to reflect the real state of prefcore support
+> > > > from a "system" perspective, more than a "hardware" perspective, so if
+> > > > it's disabled via boot command line it should show disabled.
+> > > > 
+> > > >  From a user-space scheduler perspective we should be fine either way, as
+> > > > long as the ABI is clearly documented, since we also have access to
+> > > > /proc/cmdline and we would be able to figure out if the user has
+> > > > disabled it via cmdline (however, the preference is still to report the
+> > > > actual system status).
+> > > 
+> > > Thank you for confirming this.
+> > > 
+> > > > 
+> > > > Question: having prefcore enabled affects also the value of
+> > > > scaling_max_freq? Like an `lscpu -e`, for example, would show a higher
+> > > > max frequency for the specific preferred cores? (this is another useful
+> > > > information from a sched_ext scheduler perspective).
+> > > 
+> > > Since the scaling_max_freq is computed based on the boost-numerator,
+> > > at least from this patchset, the numerator would be the same across
+> > > all kinds of cores, and thus the scaling_max_freq reported will be the
+> > > same across all the cores.
+> > 
+> > I see, so IIUC from user-space the most reliable way to detect the
+> > fastest cores is to check amd_pstate_highest_perf / amd_pstate_max_freq,
+> > right? I'm trying to figure out a way to abstract and generalize the
+> > concept of "fast cores" in sched_ext.
+> 
+> Right now the best way to do this is to look at the
+> amd_pstate_precore_ranking file.
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Ok.
 
---sut5e6g7ajzxwlz6
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> In this series there has been some discussion of dropping it though in favor
+> of looking at the highest perf file.  I don't believe we're concluded one
+> way or another on it yet though.
+> 
+> > 
+> > Also, is this something that has changed recently? I see this on an
+> > AMD Ryzen Threadripper PRO 7975WX 32-Cores running a 6.8 kernel:
+> > 
+> > $ uname -r
+> > 6.8.0-40-generic
+> 
+> You're missing the preferred core patches on this kernel.  They landed in
+> 6.9, it's better to upgrade to 6.10.y or 6.11-rc.
 
------BEGIN PGP SIGNATURE-----
+So, if I move to 6.9+ I should see the same max frequency across all the
+CPUs and I can use amd_pstate_precore_ranking to determine the subset of
+fast cores.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmbQi54ACgkQ3SOs138+
-s6HkfBAAogvpzmkjnZheaoSrMYwuM/l5MZpdrAdKsbdQyoVwHG4N/krzIcJXCi/O
-tq6dyJ1gTUZlo9x6mczat4X3jFKIJYhq5hfVxCqeNetoVaszJl1i46+F8vH6mmsg
-x6L/ioDI1OIu9zLMP/vyROfKm8c2NzwLi+mv8zPG+K0U2tn/SNR49NW/ETxNvKvy
-GFASUtY5wO1rDXtdXH6By73+b4F4LznPOZ6W6pjvPRm2wnATzqiyxXdofl0CrLAS
-M72eftABhlncMCk6dyGUZ1RAUeOpVFI2Zlu5FLv3suf0Dpm0uS1sHM1GIy4qebs1
-Nkwr1koMe9LXEgB/JtdviCdrJPz/8IM0fQc4qCDAhViFWwyUCS2LhtFtzQAf2LWT
-dhfre6HZXLwruwVjnD4hsGuDpRHzOJcI/GCr835cqtsBCqXaihSZlAemAUI04uel
-Wafj6zublJq6UstqaE2OtW7qMt/9U/E2IS9n1zFnC2fmDegKfYgr20sFQ/XBioN1
-rfS5cIJDcVsFIx6f7dsQbXKfVhKiXND89FDhSEwMABgbZg9pBfhh3UUDdn4B3IuU
-mlXomOd85T6Ib9NW4YGEtT8u2/9yVvjUGbW/hlw/4miGYZ95WJmBzSuuRHc4SnY8
-19Ehp7hLKzgAvD8r7NyTJjSrUJUX6747OYF/INV1z/s0uIl5gk0=
-=GGiR
------END PGP SIGNATURE-----
+Thanks for the clarification.
 
---sut5e6g7ajzxwlz6--
+-Andrea
 
