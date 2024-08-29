@@ -1,143 +1,194 @@
-Return-Path: <linux-pm+bounces-13174-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13175-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 233D096487D
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 16:33:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D44399648F4
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 16:48:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C16A51F278A3
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 14:33:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FF081F21B3C
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2024 14:48:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D59631AED52;
-	Thu, 29 Aug 2024 14:32:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 352001B1514;
+	Thu, 29 Aug 2024 14:47:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pUIn2GP9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sCUb42z8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472941A76B7;
-	Thu, 29 Aug 2024 14:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480FF1946DF
+	for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 14:47:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724941977; cv=none; b=dkI6EZJi2FMFRY35fFxQZr0HdpACUlpOtBU4lxgftw9Lc6T/Y2gJWXJiMw+pL6SBSkDeflbL38pT2+gkg77kNMaVcMqQT8RXyPLgS/ZeLVtBipaSi/ixmQn6Gej+uqjo/FWxDCybUG5ruOCAg1tYdm4zABme2mZ3Q2l9C+Cc18Y=
+	t=1724942848; cv=none; b=QfaJwVOy8Pxa33YB5XXjppi40ZIgXoefwJR4yy8Y1EU3Q5c0AtieqUckiLLda4e+veFE4zQklqjVCYPnIhc+FhKENyG10lHDC0GCqgrAmySgyEmnvw8WxagrlnJgMA4Aih1Se6jOyAKmEWbOL5NdhNu2ND95W3DAPZPGVSJBsFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724941977; c=relaxed/simple;
-	bh=Eb2ZPuL+3koYo3fJiQg7r+u2ELH+/JY4bfYIJUUyklQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=PM66MnWmM2MU+RigcYj5UkO6MJaNRxzocFXkS9c8pdfGutOI6Dp6B8+bcJz6ieP12HE0FmrKOp3jACKBxXrPMNyGs0STdI/wxGs1h/hGBXl6S7+O8aHjsJBus/gXCRikXegUgvLhPIfzhwk9MNAXxb9zB6i3TCPblLyzNysSi/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pUIn2GP9; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47T8OgEF010887;
-	Thu, 29 Aug 2024 14:32:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	zqodGm77Krj1I3ICwjAgMZxw71umf4G4EfC6q1kQGnc=; b=pUIn2GP9ddnHQMb4
-	T2kX9Iqau3GZVC3a1ozrr4tFfUrgabfm+3+wAGdeP5QVJSSAGQnR7i6mRTiM7laZ
-	fyOpIFF+8NbM7EwE5mWqAcOMPx31DasKVQJSR6mc0st9dwYqzZHbugtrQfgptnYP
-	uLRcmPmzIl6SeMJfsTHakblCSOb1fPj040sgiC/7RqQdMaAE+/V97UYzcxNga84x
-	eU4GY0imdLwyQmiqV6/GQrPbaXO2Wpo+8fwbl/0YVTaz97VQ3Ypq/5Raz3bwVyfv
-	qC/kSEpO64eDMPm1AytzMMHI5Kw3YrV8rGhozJUbK9QQSJ+T01ifJmTOm5bPzwK6
-	YS7fFA==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419pv0nkr7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 29 Aug 2024 14:32:22 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47TEWLm9000806
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 29 Aug 2024 14:32:21 GMT
-Received: from [10.110.28.107] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 29 Aug
- 2024 07:32:17 -0700
-Message-ID: <b263cd16-b5c2-4dd8-a6fc-7d6861338bcb@quicinc.com>
-Date: Thu, 29 Aug 2024 07:32:16 -0700
+	s=arc-20240116; t=1724942848; c=relaxed/simple;
+	bh=2wEme4/XiIxv+XC7IKX+UEP3LoIr+uA9GwuBXw2L62Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jDvohWSEvOhUaYinZvdFlxcYWia9CSoD07jykhmQWf0bBswQdhRrpU85FDfCfThXM3CJq9Lbrm1Jln5Lz8pEzR3kFTgdnwZCenl8oPXDIlWXsukF/ch4rJGXLJw5fE84uwD/ljmD88sZ/j1rUncJHkxQS0+dHZDpsqhGJlg7RVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sCUb42z8; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-68d30057ae9so7223297b3.1
+        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2024 07:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724942845; x=1725547645; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=P/vkim+xummqOk2H9b+74Hhqn660ITeM09qY2Omx2bI=;
+        b=sCUb42z8vNA3J5MeggF6wBq5FlGHw3OoHnWXuf+tZ4KAckNpJ+VQ8rT2/EwQPJw0Gk
+         O2RGjkGTazpYQqV7Uld0/mv4z0bwdAEB30rTQW9iN/CBsDxxCmyyTJvv3dVILPWmOI1K
+         OSH/Bs5LCkDuyuSbMHM7PGWda3tOlSaxa1LJfVxywlQAZY+yCgKV2ZIgrjUjXhiNOImE
+         OSQoC6mD2wQf4I2fSA06D8w1LhJYjVudqqwuvwfhbse/hg0RCBcB/ykqH84lr32nwDVz
+         gpKYvej8qQxCQLMebIvTtkYGiteKT0wWxIoIrUVqzufLKnk7+YpHcCmAKTWF6ohyAI52
+         NOTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724942845; x=1725547645;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P/vkim+xummqOk2H9b+74Hhqn660ITeM09qY2Omx2bI=;
+        b=updz3WyCvr2rSPfLDLEmOhL4pJwwGCA3dNwrFQXoUVe/hT/v/ezrdU9icLmSxRGanE
+         uWkPO5pPLejB2XRhKH50ltYWpZKmAgiQEezub8PuiHL8OI8hAwm3v/oYOQw3mBPlO7QS
+         3V+BUjJ/hh5XEKZpuuxkOHycm7ADTblKSx3NBrXxUxgct6IgCi3H2vCxFptQNMeEkQv+
+         YlTzl8QH9eAPJnyEmr5N2/OIYAQifP9mZ8guTWtFg4Av+td992tb81MRQoW3PC5IL3Nh
+         EWwRNiDNUQBuIjCxhxURZkUy5de6eWF1XV7fImJf3rQEz79hM4BLld5mHdBTwDL9XtKY
+         rTMw==
+X-Forwarded-Encrypted: i=1; AJvYcCXqhL6DK8+KpVFZVTRDgxitNGBS6101CYWBAuxuEnS8NHvqQfpcfSyFi+II4KIuNe4iklK3PClj/A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOJC6Al1FNpp3dWYg11nDvxdM8tGiETDxGf9IHVlBvswol/odZ
+	xAgAdQdAeB8fCd9JlNLWZSxwRy9NFZryoYda8FKWJeXK+SkCZr4QnkVunvrkMDP3G2QGeKYgCDd
+	teuCsLoq3snTHngWIgIZfTzhGS18IPOWuVFNOwg==
+X-Google-Smtp-Source: AGHT+IFHAtMxCb+GcwQvbb/tvHuVYvN/sUzIggHVFuoFNFPiNhIN+TbyVH/OKH+M77ZtiY09qXR7uD8wMI4GqyNRYMQ=
+X-Received: by 2002:a05:690c:7604:b0:6d3:98b1:e3bc with SMTP id
+ 00721157ae682-6d398b1e4e3mr2993127b3.32.1724942845200; Thu, 29 Aug 2024
+ 07:47:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/22] arm64: qcom: Introduce SA8255p Ride platform
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <sudeep.holla@arm.com>, <andi.shyti@kernel.org>, <tglx@linutronix.de>,
-        <will@kernel.org>, <joro@8bytes.org>, <jassisinghbrar@gmail.com>,
-        <lee@kernel.org>, <linus.walleij@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
-        <wim@linux-watchdog.org>, <linux@roeck-us.net>
-CC: <robin.murphy@arm.com>, <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
-        <lukasz.luba@arm.com>, <vkoul@kernel.org>, <quic_gurus@quicinc.com>,
-        <agross@kernel.org>, <bartosz.golaszewski@linaro.org>,
-        <quic_rjendra@quicinc.com>, <robimarko@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
-        <quic_psodagud@quicinc.com>, <quic_tsoni@quicinc.com>,
-        <quic_shazhuss@quicinc.com>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <11c897d7-ea9c-4474-81f6-1fc2198d289d@kernel.org>
-From: Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <11c897d7-ea9c-4474-81f6-1fc2198d289d@kernel.org>
+References: <20240828140602.1006438-1-claudiu.beznea.uj@bp.renesas.com> <20240828140602.1006438-4-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240828140602.1006438-4-claudiu.beznea.uj@bp.renesas.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 29 Aug 2024 16:46:49 +0200
+Message-ID: <CAPDyKFrGGKU034C81Q_1AvwVLobKXrwbkgGXL83HgJW68-h+Sg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] watchdog: rzg2l_wdt: Power on the watchdog domain
+ in the restart handler
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org, 
+	wim@linux-watchdog.org, linux@roeck-us.net, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fv5TpYAMjB7nkZE4j2aSXpV4D3dEfStr
-X-Proofpoint-ORIG-GUID: fv5TpYAMjB7nkZE4j2aSXpV4D3dEfStr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-29_03,2024-08-29_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 bulkscore=0 impostorscore=0 phishscore=0 clxscore=1015
- mlxscore=0 spamscore=0 suspectscore=0 malwarescore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408290100
 
-
-On 8/29/2024 12:57 AM, Krzysztof Kozlowski wrote:
-> On 28/08/2024 22:36, Nikunj Kela wrote:
->> This series enables the support for SA8255p Qualcomm SoC and Ride
->> platform. This platform uses SCMI power, reset, performance, sensor
->> protocols for resources(e.g. clocks, regulator, interconnect, phy etc.)
->> management. SA8255p is a virtual platforms that uses Qualcomm smc/hvc
->> transport driver.
->>
-> Who is supposed to merge it? The Cc-list is quite enormous and I got now
-> 20 bounces:
+On Wed, 28 Aug 2024 at 16:06, Claudiu <claudiu.beznea@tuxon.dev> wrote:
 >
-> "    Too many recipients to the message"
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >
-> at least drop some non-maintainer related, I counted 5-7 Qualcomm ones
-> which should not be needed.
+> On RZ/G3S the watchdog can be part of a software-controlled PM domain. In
+> this case, the watchdog device need to be powered on in
+> struct watchdog_ops::restart API. This can be done though
+> pm_runtime_resume_and_get() API if the watchdog PM domain and watchdog
+> device are marked as IRQ safe. We mark the watchdog PM domain as IRQ safe
+> with GENPD_FLAG_IRQ_SAFE when the watchdog PM domain is registered and the
+> watchdog device though pm_runtime_irq_safe().
 >
-> Best regards,
-> Krzysztof
+> Before commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
+> context'") pm_runtime_get_sync() was used in watchdog restart handler
+> (which is similar to pm_runtime_resume_and_get() except the later one
+> handles the runtime resume errors).
+>
+> Commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
+> context'") dropped the pm_runtime_get_sync() and replaced it with
+> clk_prepare_enable() to avoid invalid wait context due to genpd_lock()
+> in genpd_runtime_resume() being called from atomic context. But
+> clk_prepare_enable() doesn't fit for this either (as reported by
+> Ulf Hansson) as clk_prepare() can also sleep (it just not throw invalid
+> wait context warning as it is not written for this).
+>
+> Because the watchdog device is marked now as IRQ safe (though this patch)
+> the irq_safe_dev_in_sleep_domain() call from genpd_runtime_resume() returns
+> 1 for devices not registering an IRQ safe PM domain for watchdog (as the
+> watchdog device is IRQ safe, PM domain is not and watchdog PM domain is
+> always-on), this being the case for RZ/G3S with old device trees and
+> the rest of the SoCs that use this driver, we can now drop also the
+> clk_prepare_enable() calls in restart handler and rely on
+> pm_runtime_resume_and_get().
+>
+> Thus, drop clk_prepare_enable() and use pm_runtime_resume_and_get() in
+> watchdog restart handler.
+>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Hi Krzysztof,
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-I ran maintainers script to get all the emails. I kept maintainers,
-reviewers and "in file" ones in addition to some Qualcomm leads. I will
-drop "in file" and Qualcomm leads in next version.
+Kind regards
+Uffe
 
-Thanks,
-
--Nikunj
-
+> ---
+>
+> Changes in v2:
+> - adjusted patch description and comment from code
+> - collected tags
+>
+> Changes since RFC:
+> - use pm_runtime_resume_and_get() and pm_runtime_irq_safe()
+> - drop clock prepare in probe
+>
+>  drivers/watchdog/rzg2l_wdt.c | 20 ++++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+> index 2a35f890a288..11bbe48160ec 100644
+> --- a/drivers/watchdog/rzg2l_wdt.c
+> +++ b/drivers/watchdog/rzg2l_wdt.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/reset.h>
+>  #include <linux/units.h>
+> @@ -166,8 +167,22 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
+>         struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+>         int ret;
+>
+> -       clk_prepare_enable(priv->pclk);
+> -       clk_prepare_enable(priv->osc_clk);
+> +       /*
+> +        * In case of RZ/G3S the watchdog device may be part of an IRQ safe power
+> +        * domain that is currently powered off. In this case we need to power
+> +        * it on before accessing registers. Along with this the clocks will be
+> +        * enabled. We don't undo the pm_runtime_resume_and_get() as the device
+> +        * need to be on for the reboot to happen.
+> +        *
+> +        * For the rest of SoCs not registering a watchdog IRQ safe power
+> +        * domain it is safe to call pm_runtime_resume_and_get() as the
+> +        * irq_safe_dev_in_sleep_domain() call in genpd_runtime_resume()
+> +        * returns non zero value and the genpd_lock() is avoided, thus, there
+> +        * will be no invalid wait context reported by lockdep.
+> +        */
+> +       ret = pm_runtime_resume_and_get(wdev->parent);
+> +       if (ret)
+> +               return ret;
+>
+>         if (priv->devtype == WDT_RZG2L) {
+>                 ret = reset_control_deassert(priv->rstc);
+> @@ -275,6 +290,7 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
+>
+>         priv->devtype = (uintptr_t)of_device_get_match_data(dev);
+>
+> +       pm_runtime_irq_safe(&pdev->dev);
+>         pm_runtime_enable(&pdev->dev);
+>
+>         priv->wdev.info = &rzg2l_wdt_ident;
+> --
+> 2.39.2
+>
 
