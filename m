@@ -1,132 +1,160 @@
-Return-Path: <linux-pm+bounces-13239-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13240-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4F0C966380
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 15:57:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B4419663B9
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 16:08:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2313A1C221BB
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 13:57:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 508C6284213
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 14:08:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A5AA1AF4F9;
-	Fri, 30 Aug 2024 13:57:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A09A1B1D5A;
+	Fri, 30 Aug 2024 14:08:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sKWlfmLq"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="QHAQMDDh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DCA415852C;
-	Fri, 30 Aug 2024 13:57:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF231B1505
+	for <linux-pm@vger.kernel.org>; Fri, 30 Aug 2024 14:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725026230; cv=none; b=fPvpSbaBvYZgep/Dr4WLwn9fNxdpn3WAgxG6ux7IvBtSR0PTI9803DlHEFSXRR7mcinsXxfdYUNBEkFC/ofCULEdjopy/3zrzWVSc6Ef8h3NM4QYlqpCR7YOnbmFVlJSiy7L/q6NSZskcAnlqlHR/AxOXVA4CD8MavUK9q5nfBA=
+	t=1725026880; cv=none; b=MA1xhOqPO/iiJlG+357XlIAFM7myY9b393YXEyNTAxqzcomcEXBlTcLJn0SUIlKRyUg5Z8kJ/9WzF+/o/KsQzeCk+LCBoMzRRXZmo6NLZMQoN9h5TK5MX0NLZT23KkCw8pbuRVeUvDXYrl2ex5hZuWW0cEUqcsgNb+wm0ToGxJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725026230; c=relaxed/simple;
-	bh=PUtTNLbt6A2sNCbjzHkOLHcI/puW7x5xKfmRvOTpgso=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HxINPjPGLT4I9C1D9C2zYecxvBazxryoaYZZ1vMYL4U1MasLLzf1FkMsLG5pPBao3cIPqiHJcyPZjr+SVhwnWKPA5+z+tEmFkGbRE/wB+/UPqkeT/lWzxkkXVxcq4Pzxt0uZ85h9N4/839FG2uogS4kBVwACw2zkvryg0JEJbNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sKWlfmLq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91CBCC4CEC5;
-	Fri, 30 Aug 2024 13:57:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725026229;
-	bh=PUtTNLbt6A2sNCbjzHkOLHcI/puW7x5xKfmRvOTpgso=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=sKWlfmLqZNMT4KeOaoblI7EzuUpx7SpaeCfGCVJiEV9D/O96U5vcES0Qw0U3ZawTc
-	 nLXs9G/RUCzEKK5cKN469V7pT2NpG6C8/C7oT4FUFVcf9jdQFjyZoRr+j2qE9T3NmX
-	 gY7erPfv2Clj7IcuQSV+xcc9JLFN2JpVRP2SZ+th3zilEGBr4s0M1HwTVsbmayg+vD
-	 N4EbQzm3EMKg7ERHM4EjhwsrmZpNCitZHqxjRzWjrzHY2pBuw6amhEwfdJ+ADRMwNc
-	 pTugsPmjgKXmLfMdUSVNgVMc8pokrB/FCxXPKsaqOnWpH7MH3SLzlc436NOm7PnOKd
-	 4l18usHE4niPQ==
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5d5c7f24372so1107942eaf.0;
-        Fri, 30 Aug 2024 06:57:09 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVb9VpFe2O+0uzIJa3U/UF5ljnwWLPWhfUQcpcv1MIMLVxqmSHmfIzsjA3upFOy60o2XWnbM/TSKYE=@vger.kernel.org, AJvYcCXI9ld2hLr0gUi3+rxUNvvZjE/3NaCGNF5WN3O+ILrTfCEANQwNZeB4ixxo/xXjPt6udRT9emtTsk5CVSiV@vger.kernel.org, AJvYcCXoyrBAHt/1HwrmboHKxNb8FAO8oWKyv7cFDRygVscYhpRGwM12A9N3wv8S9P4LXNoHjW/gIl78WpNo@vger.kernel.org
-X-Gm-Message-State: AOJu0YwO1+EScUlC9rXyYwQ1GfdEJifvK1X0pTDyi3HHsanXmetN6fmx
-	vuXKHTA/YNYQ3XsnVZWfVL1izmLdy4HwsBnpm4m5SiEfkmpEUCZ4vnJHa10oj/ltXn3P6ADkEFS
-	j1w/0nGYuG6BPYq38FcALrcG4o1k=
-X-Google-Smtp-Source: AGHT+IEJSjNl67ew/kPaMpct4NgygqQiWkyvtbM7YadAynGTKeolN8FmwqNdGcIY5gfAP4/ZbIo37K3xsytT3gP5a9s=
-X-Received: by 2002:a05:6820:2707:b0:5d5:d7fc:955c with SMTP id
- 006d021491bc7-5dfacf88d18mr2406264eaf.5.1725026228895; Fri, 30 Aug 2024
- 06:57:08 -0700 (PDT)
+	s=arc-20240116; t=1725026880; c=relaxed/simple;
+	bh=I5aIqy/UEUXMFE8Rh7I4MruLQD76lvWIbdNAtEzLSTY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Zeuuc+rALjh0LDGrACat7N/oOoHYVaqVGrH4Hf25fSnFXuVKyiajAslMD2L8DN91YpIWB6X2MmmzWUo3Jqtq73dRlHcM1aOvF95+Oys9H30n99E0pF9U0Gix9M+DsfaL7LnY5PHQIUn4BRvZjT0bRjGqlhbTFjm8/IQ3J25oXM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=QHAQMDDh; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4281ca54fd3so17007285e9.2
+        for <linux-pm@vger.kernel.org>; Fri, 30 Aug 2024 07:07:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1725026876; x=1725631676; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gUsIK727D/kMhMjVhqwKF/thJUrDUXU728kGFQYDRt0=;
+        b=QHAQMDDh9sP7oU/yicPk+N7M9Q/ILeBwyqXHcz5uD30yyveV1zoLC3xDTwet+IgXLh
+         rfSxkfrLuGLM7O3Dte4gfXq7eiUh7+by8rtCxXTaaVCYi4HYAEksQwkNXSfZYxokz4XI
+         ak0cCHS+8xiBv8zNUWRzGujsw8THsUlNZZFn3GqdZL44C0YBbIXPn3rG6k14Cob0f4iy
+         xFpSzE2c/r+Ny2ZV4twSVK+KqPal0fJzXoiaPWRGe7Qa8GOdZHi/2g28ForJVUGmM/I1
+         NwqGjqTkWcykGt1+fgMp3IsgGfp3KmgmHWhUu/UTYYadq2kjViOaZ2iq7Ro174RfawUL
+         7Tpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725026876; x=1725631676;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gUsIK727D/kMhMjVhqwKF/thJUrDUXU728kGFQYDRt0=;
+        b=JCQL4rllvU1Vat3zL/UvQZ8sfeSW8RW/ZZdlAG7uxjHMAszpYseCLk3JCSjwzwXBNj
+         H8OLDfb0K3guljvQoTYHljnQb5hFAN4xgj5VqxuiPF98r8jM8GDEh5CoDS/XYtJFG+CD
+         qVUcnxVaUvUJ18KSpGr5/Y0t/T5HzhS3McEAyVLytASh9dkXdLAhg/5kAC3gf1PsGQti
+         1GFXt1x/jdw6zPC7SsaeBh82n+XTqJZuVbI2v2NevYSWPDCNOuy1IQE/DR4QML6WxWNq
+         sE2HKZDBy3Ini1fskbGI6RxvI2KyrBkFaMWjzANw0gWBON1uN+BzSv+O+7F2+nSMprPU
+         V0DA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOkTMw5lAyM1ByXQhfq/6wnkUrhZPAgueRg3cpl/5awinAd5XiTaBtVci6LKmHh0L5xnKv/mqUeQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgiPVPrU8QutI0PKxqo0uD1H6N5kpkwhMXjd7sNlLsqanrgktk
+	VhrNywVGdi37ojbEnXWe4sxvhGzuRLcmzgmMmEPi/Sospj53NuAeB4a9jUdfwn0=
+X-Google-Smtp-Source: AGHT+IHsi38bxWb3DH0GTQLefA8NeqM/+Q0cudI7v+QLxZSUlm4s1VrNogfvm84TLbAlA8m3jS0TQA==
+X-Received: by 2002:a05:600c:699b:b0:426:5269:9824 with SMTP id 5b1f17b1804b1-42bb0229f05mr55125795e9.0.1725026876131;
+        Fri, 30 Aug 2024 07:07:56 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.144])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42ba63965dbsm82864085e9.6.2024.08.30.07.07.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Aug 2024 07:07:55 -0700 (PDT)
+Message-ID: <194e87f4-7eab-4bfb-833a-27fabd2d5205@tuxon.dev>
+Date: Fri, 30 Aug 2024 17:07:54 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2803b89021f991662b000f50e45dbaebdcca438a.1724729626.git.len.brown@intel.com>
- <CAJZ5v0jcOUoN6gDDFkufu8xWF-BHXaSKnXqraHsTkq8JanJXuQ@mail.gmail.com>
- <CAJvTdKkucaRVDZm6EVeUxwyrQexyuYd7ECUBSkpP0nC9PwzspA@mail.gmail.com>
- <CAJZ5v0jvYitb7DLyLkqTRv0TT=6yBHDvEvb8tJLzAOVKa3hqnQ@mail.gmail.com>
- <CAJZ5v0gxVqrASiuJq=UX9jyZsG=XvriFn2=7CPmG6-1sKbmPEQ@mail.gmail.com>
- <CAJvTdK=-ETniiwzwLYH14+TeU0kA49gvTnqyRxH7-Hc6tzTBUw@mail.gmail.com>
- <CAJvTdKmpfs_nh4J0R8T=1P9WaAJ-nJ+mKj=rT3tqMpmvpUTisA@mail.gmail.com>
- <87frqoig98.fsf@somnus> <CAJZ5v0gTfhTQ4AMZ+ukuJZEG=RRo-wbPsf7NPbWA0snDeA5ivQ@mail.gmail.com>
- <878qwf9w84.fsf@somnus> <CAJvTdKmbwtrUmCAJxXb7UVJuVAyMLec2AF--AHbiy+YNhOg5-Q@mail.gmail.com>
-In-Reply-To: <CAJvTdKmbwtrUmCAJxXb7UVJuVAyMLec2AF--AHbiy+YNhOg5-Q@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 30 Aug 2024 15:56:57 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gE07+Nin5Weji20M-xOmjyWrixQU5PUnzZt=YWeH+-YA@mail.gmail.com>
-Message-ID: <CAJZ5v0gE07+Nin5Weji20M-xOmjyWrixQU5PUnzZt=YWeH+-YA@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: Remove msleep() bloat from acpi_os_sleep()
-To: Len Brown <lenb@kernel.org>
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] clk: renesas: rzg2l-cpg: Use GENPD_FLAG_* flags
+ instead of local ones
+Content-Language: en-US
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org,
+ linux@roeck-us.net, ulf.hansson@linaro.org,
+ linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240828140602.1006438-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240828140602.1006438-2-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdX+Q99MvQRZcwGbk8F8SiAUzRU_t2QmRuO_6etAqqXskg@mail.gmail.com>
+ <8b6fc67d-5e07-4403-ac07-6ad0b9d61882@tuxon.dev>
+ <CAMuHMdUqVcojRoPAEuZ8a9Y-iHm4b185StD73FpQoRFsEiZ8oQ@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAMuHMdUqVcojRoPAEuZ8a9Y-iHm4b185StD73FpQoRFsEiZ8oQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 30, 2024 at 7:55=E2=80=AFAM Len Brown <lenb@kernel.org> wrote:
->
-> On Thu, Aug 29, 2024 at 11:37=E2=80=AFAM Anna-Maria Behnsen
-> <anna-maria@linutronix.de> wrote:
->
-> > I created a patch for fsleep() - only complie tested - which should mak=
-e
-> > sure that the slack is maximum 25%. What do you think about it? Might i=
-t
-> > be helpful?
->
-> If the purpose of using msleep instead of usleep_range is to lower
-> the cost of the timer sub-system....
->
-> then I'm not sure that choosing to do an msleep instead of a usleep_range
-> based on the timer duration makes any sense.
->
-> The lighter overhead of the msleep is something that is more important
-> when there are more timers.  More timers is not the same as longer timers=
-.
+Hi, Geert,
 
-My understanding is that when a new timer is added, it is not actually
-known how many timers there are overall in use in the system, so it is
-generally better to use a more lightweight variant in case there are
-many of them.
+On 30.08.2024 11:06, Geert Uytterhoeven wrote:
+> Hi Claudiu,
+> 
+> On Fri, Aug 30, 2024 at 9:46 AM claudiu beznea <claudiu.beznea@tuxon.dev> wrote:
+>> On 29.08.2024 15:32, Geert Uytterhoeven wrote:
+>>> On Wed, Aug 28, 2024 at 4:06 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>
+>>>> For watchdog PM domain it is necessary to provide GENPD_FLAG_IRQ_SAFE flag
+>>>> to be able to power on the watchdog PM domain from atomic context. For
+>>>> this, adjust the current infrastructure to be able to provide GENPD_FLAG_*
+>>>> for individual PM domains.
+>>>>
+>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> 
+>>>> --- a/drivers/clk/renesas/rzg2l-cpg.c
+>>>> +++ b/drivers/clk/renesas/rzg2l-cpg.c
+> 
+>>>
+>>>>                 pd->id = info->pm_domains[i].id;
+>>>>                 pd->priv = priv;
+>>>>
+>>>> -               ret = rzg2l_cpg_pd_setup(pd, always_on);
+>>>> +               ret = rzg2l_cpg_pd_setup(pd, genpd_flags, always_on);
+>>>>                 if (ret)
+>>>>                         return ret;
+>>>
+>>> What about moving the conditional call to rzg2l_cpg_power_on()
+>>> below to rzg2l_cpg_pd_setup()? Then this function no longer needs
+>>> the always_on flag.
+>>
+>> That could be done but I think it will involve an extra power on/power off
+>> cycle for the unused domains.
+> 
+> Still only to be done for the always-on domain, of course.
+> Anyway, up to you.
 
-However, the more lightweight variant is not suitable for short sleep
-durations because it adds bloat of 2 jiffies (after the recent change
-from Anna-Maria), so the idea is to start using msleep() at the point
-when the bloat added by it starts to be comparable to the delta
-between the usleep_range() arguments (used for short sleeps).
+I checked your proposal. If unconditional power on is going to be done for
+all the registered domains it may happen to register domains for which
+there are no enabled nodes in device tree and thus the domains to remain on
+(because the driver enables it under the hood and the genpd core doesn't
+know about it).
 
-Now, because it is not known exactly what timer precision is required,
-some assumptions need to be made and IMV it is reasonable to assume
-that the actual sleep duration is expected to be somewhat greater than
-requested, but it is also not expected to be much greater than
-requested, so using a fraction of the requested sleep time as the
-usleep_range() makes sense to me.
+With unconditional power on and the current DTSes the following domains
+remain on after booting with r9a08g045s33-smarc.dtb:
+- sdhi2
+- i2c2
+- i2c3
 
-Of course, you can argue that in the ACPI case there are those
-high-count loops and so more exact sleep durations are better, but
-realistically this is mostly about system suspend/resume times and the
-difference is not something that cannot be tolerated in that case IMV.
-Also it would be better to avoid running those high-count loops in the
-first place.
+as the domains are registered and powered (while registered) but the nodes
+are not enabled in DT.
 
-Overall, if my understanding is correct, I generally agree with
-Anna-Maria's approach.
+Thank you,
+Claudiu Beznea
+
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
