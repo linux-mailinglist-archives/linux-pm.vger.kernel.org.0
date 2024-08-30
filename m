@@ -1,117 +1,128 @@
-Return-Path: <linux-pm+bounces-13257-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13258-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A3099669E9
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 21:35:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDBE6966A33
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 22:08:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5286B2493D
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 19:35:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 511101F23055
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 20:08:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B04671BBBD8;
-	Fri, 30 Aug 2024 19:35:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3475F1BF32A;
+	Fri, 30 Aug 2024 20:08:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FPP3dL57"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="iKRAcafK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14411B9B5A;
-	Fri, 30 Aug 2024 19:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282FE1BD00B;
+	Fri, 30 Aug 2024 20:08:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725046536; cv=none; b=Ny/3x9ena9YqX484k4mywfFcJlcdc308yzw+UV7q6Ce+cgmC/5cbiD8RkunG+VF1Y1j1mh0xJQj1aQeHn+scmkfcuEz8hcNEyj9g/woczIFUD8K3RZSiaPQMPzIq7x5wznvpMsDcRq/JU099QLHsnPHtpELNVOpAns5Be837bUg=
+	t=1725048491; cv=none; b=s0FwnFljfAz94ZQbW/hN7S5QyOBrLD1dsdvbR7nA/Zdkfj01BGW3RX0iaPRW8KCzsRc6MXdoEzQ+uixE0Wq5D3eTbBYPssFH6YDWvtuORzDE0JvsGSsV/lTaQCnIlw3OX9TQ16zJupun4VF35gwXWXf4AKprw1YB86tGmUOjLbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725046536; c=relaxed/simple;
-	bh=+w56fZU/eoYZPtFEPoXmUXs53h0iyOlCZoPIkGdvgB8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sdfB6efxKhAkhN/rKpwZoAUKI3C6Dfpi8GQ0wW8UH6PrBoSR8bU/z5IZU5eOb9Y83Jw1N2azTx4gCaZZ1K6En0qYA3B5yRTNr0ymjOHLv/wD6tj3ImgUi+KZ5W4EoXXk6P97y540S8K/3LHGlJ2AD56UC+gJHs1lg2geOOL7pMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FPP3dL57; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725046535; x=1756582535;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+w56fZU/eoYZPtFEPoXmUXs53h0iyOlCZoPIkGdvgB8=;
-  b=FPP3dL57wDXGIALxMkGv985d6747NTJiIcdKjBS1UGZGtUTqv4LiyZB0
-   IKn6n1gPwOEDhCdXl64p2zf6Jb8Im9Fk/brWM2PQdnjmxVLa+R7k8Wk/S
-   QT62ORcMsw/ZtzkOwIGdN9Q9cJ/0U8te+AxdlFHj04bt34BB8qO6NgscM
-   KPfr9eDFZat11n1OwUe5zFZ+fPn3oYH31vhDTypHcHhnDCe6be2jAj9Ue
-   L07rh5IXy5tFltQy8Slt1jSXGQPdzH5yMMdknUog94Cvgm07VKDH1ULl2
-   KnVqVy+gUGma24+oVWxpURALRYSG3/Om/q7mqBhS2Jjzb/LDMXh09pa4A
-   A==;
-X-CSE-ConnectionGUID: brFhk2FTTuqxZx9UhvKArw==
-X-CSE-MsgGUID: cUevVmNtQu6NNw/N4KSzJw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="35109094"
-X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="35109094"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 12:35:34 -0700
-X-CSE-ConnectionGUID: PETXZLFISgGbXbcmQPKcDA==
-X-CSE-MsgGUID: XedcahG3TE6abaYsBlhxjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="64490190"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 30 Aug 2024 12:35:33 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sk7P8-0001za-2P;
-	Fri, 30 Aug 2024 19:35:30 +0000
-Date: Sat, 31 Aug 2024 03:34:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Len Brown <len.brown@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-acpi@vger.kernel.org
-Subject: [acpi:acpi 2/2] drivers/acpi/osl.c:609:14: sparse: sparse: symbol
- 'one_ms_timer_hack' was not declared. Should it be static?
-Message-ID: <202408310347.Gl65LSbs-lkp@intel.com>
+	s=arc-20240116; t=1725048491; c=relaxed/simple;
+	bh=/3fz10zRJVpyXK6sRaezWJ1/uIlBgVuX5fdAmisj53k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jRt/O0cJGXJKLFONYcqA4gpF5W1mcnnylzafqUTJEk10kMgos9OhHmvxqmPNRWQbpglQk1QUxPLFzuLLbmfRfEcBdovhgICggY3q7cx2kcKTTPSREgx7UNxe0dy+O/cc8OzbTt9ZCabKAP+qh+M5ih62Pj+d/D1SiyKzonP4C98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=iKRAcafK; arc=none smtp.client-ip=166.84.1.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
+	(No client certificate requested)
+	by l2mail1.panix.com (Postfix) with ESMTPS id 4WwTMx2CCTzDSJ;
+	Fri, 30 Aug 2024 15:53:01 -0400 (EDT)
+Received: from [192.168.126.122] (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4WwTMn4Cpfzjym;
+	Fri, 30 Aug 2024 15:52:53 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1725047574; bh=/3fz10zRJVpyXK6sRaezWJ1/uIlBgVuX5fdAmisj53k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=iKRAcafK4SaOBv2EPbDHbwl2KZVb9FeS4GFDBoI8J4yLkhIdaCbn0wK9eMY1fhbmt
+	 5orAaoy9ORkB9v17k/gdpzUPLuQakEifTN+ZjRrfg+l+7guquZREAE/EIuaCfJto0O
+	 SMx83jbe9saV+bFr836WCqA2BCq/0aHeCquTNeOc=
+Message-ID: <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
+Date: Fri, 30 Aug 2024 12:52:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
+ Thunderbolt additions when coming out of suspend or hibernate
+To: Lukas Wunner <lukas@wunner.de>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>, linux-usb@vger.kernel.org
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ Me <kenny@panix.com>
+References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
+ <ZsvxR-dQAZtwNi0g@wunner.de>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <ZsvxR-dQAZtwNi0g@wunner.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git acpi
-head:   4b12d579d736e75908699afe6e4950f651c4f5f6
-commit: 4b12d579d736e75908699afe6e4950f651c4f5f6 [2/2] acpi_os_sleep debug patch
-config: x86_64-randconfig-123-20240830 (https://download.01.org/0day-ci/archive/20240831/202408310347.Gl65LSbs-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240831/202408310347.Gl65LSbs-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408310347.Gl65LSbs-lkp@intel.com/
+Huh. So I checked out Linus' master (currently up to 6.11-rc5) and it 
+seems to be doing the right thing now; I left a USB-C ALT monitor setup 
+plugged in when I suspended, then came back to my 4K monitor setup via 
+TB and it came up in the right resolution and everything.
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/acpi/osl.c:378:17: sparse: sparse: cast removes address space '__iomem' of expression
->> drivers/acpi/osl.c:609:14: sparse: sparse: symbol 'one_ms_timer_hack' was not declared. Should it be static?
-   drivers/acpi/osl.c:1666:20: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *rv @@     got void [noderef] __iomem * @@
-   drivers/acpi/osl.c:1666:20: sparse:     expected void *rv
-   drivers/acpi/osl.c:1666:20: sparse:     got void [noderef] __iomem *
-   drivers/acpi/osl.c:720:1: sparse: sparse: context imbalance in 'acpi_os_read_memory' - wrong count at exit
-   drivers/acpi/osl.c:753:1: sparse: sparse: context imbalance in 'acpi_os_write_memory' - wrong count at exit
+Excellent news, so I'll keep using Linus' master until 6.11 is released.
 
-vim +/one_ms_timer_hack +609 drivers/acpi/osl.c
+Oh, and to answer your question, no, my system doesn't (perceptively) 
+wake up when suspended if I connect/disconnect USB/TB cables.
 
-   603	
-   604	/*
-   605	 * Running in interpreter thread context, safe to sleep
-   606	 */
-   607	
-   608	#include <linux/moduleparam.h>
- > 609	unsigned int one_ms_timer_hack;
-   610	module_param(one_ms_timer_hack, uint, 0644);
-   611	
+... and unfortunately all I have now is (power-hungry) s0ix sleep.
+
+-Kenny
+
+On 8/25/24 20:06, Lukas Wunner wrote:
+> [cc += Mika, linux-usb]
+> 
+> On Wed, Aug 21, 2024 at 03:05:59PM -0700, Kenneth Crudup wrote:
+>> Subject says it all, but to recap my laptop doesn't detect Thunderbolt
+>> topology changes when resuming or coming out of hibernate; i.e., the only
+>> time a TB topology change happens is if a TB cable is disconnected while
+>> suspended or hibernated, but if one is connected, or a different TB setup
+>> altogether is connected when the system resumes it doesn't notice the
+>> topology change until I disconnect and reconnect.
+>>
+>> I'm currently running 6.10.6, but this has been going on for a while.
+>>
+>> [    0.000000] DMI: Dell Inc. XPS 9320/0KNXGD, BIOS 2.12.0 04/11/2024
+>> ...
+>> [    0.136807] smpboot: CPU0: 12th Gen Intel(R) Core(TM) i7-1280P (family:
+>> 0x6, model: 0x9a, stepping: 0x3)
+> 
+> This commit went into v6.11-rc1 and will at least detect replacement
+> of PCI devices (to a certain extent):
+> 
+> https://git.kernel.org/linus/9d573d19547b
+> 
+> However PCI is layered on top of (tunneled through) the Thunderbolt
+> switching fabric and that's where the real problem likely is here.
+> 
+> Maybe you can open a bug at bugzilla.kernel.org and attach full dmesg
+> and lspci -vvv output in the working case (device attachment at runtime)
+> and the non-working case (device attachment during system sleep).
+> 
+> Does the machine wake up if you attach devices during system sleep?
+> Are you suspending to ACPI S0ix, S3 or S4?
+> 
+> Thanks,
+> 
+> Lukas
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
