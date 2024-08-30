@@ -1,209 +1,434 @@
-Return-Path: <linux-pm+bounces-13247-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13248-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 546579664C7
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 16:59:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB6069665C0
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 17:37:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78C031C23BC2
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 14:59:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 662231F21C32
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 15:37:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 640971B3B0C;
-	Fri, 30 Aug 2024 14:59:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC40A1BDA92;
+	Fri, 30 Aug 2024 15:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="JW+UgMY0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p9qaZLeM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B695A1917E2;
-	Fri, 30 Aug 2024 14:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0661BD51C;
+	Fri, 30 Aug 2024 15:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725029978; cv=none; b=nRhW74K60H1ldr8B+RAl+gUxhCI9/AOWuASXzcBvr/45aIT+nS6nkRZwSNCyk42QB9GPzSebvh98yXt0xk/uXbRaidbHek0grvdVnEIF0cObo6G1pAargzpD2T9HZcy09Wt42hKh+b/r9eNmn5RGQzK3IxBXJle3YHji6CommO4=
+	t=1725032025; cv=none; b=aHHgI6kcGADiCCMD0Mpts77g+pDrSMPap5G5rBkrFqF8XEXoVg8PA/vxUVT1bskZLYYUwHaJ676Z7Deu6Kd53+49mFqBRPbLhXGyopYUKw57F42QmLAoJIKLBdQ/IAjCAV3ApdTKCmV64KfqZUvQqBMLUDAqcD86z+zK3KYNATw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725029978; c=relaxed/simple;
-	bh=ZNinG2P8QRlT1ahrPp1CbuKepet2IrmxrveZ7JQJiWw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Wt0JXrLRnlmCSj3rpJfLkuKsXT9b6x4ZC6X2JkEwqkHmeSpJ/sc70WLgb++oNsPhQxeqZ/V/NF9HM9ildOweM9hnNrhZPZjVKOTq5h604F9NMZHakehxFaEgx+8BiYGDwS5vAfuqqHB9ep9hZJbIdG20fsYcytFccZC6PCzhAls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=JW+UgMY0; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47U80U5h017955;
-	Fri, 30 Aug 2024 14:59:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	LgF5ZYD5IR1SwpOQJWoYZ0vhtIBCV/uVX/Uy6jMvB+U=; b=JW+UgMY0WG7cYPxh
-	h5qbUmrcF7dtTxFEkfIeAqxlqBgxYcB+3CZny67trU3LOtF+0U4HIpspMGfzcOhq
-	msC1wvhSlwj8bpmjQ/Tx+Gmc2P2XwrixJ2abHLWGTV2V+mjBVoNI4jPgIB84/6F9
-	25Az8Tx0hT92YLi3vrSd2cTMoSUyzlfR+w7D5Q9y82On5OgO9C4F4VkLGgoi89xc
-	DhYo9p18OVlaEX4o56acMPom2eulqSSvGMtkGCvBAiWSOMs6zao8l0CHKTmVcMyq
-	RHawE0M2mn2qdcjMXxSqmkWQFSpRi6RsTP31Dv58UYgGmZptMM7CpgAhaCGnDrDu
-	e/jQsg==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419puts9dj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 30 Aug 2024 14:58:59 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47UEwwPD011056
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 30 Aug 2024 14:58:58 GMT
-Received: from [10.110.28.107] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 30 Aug
- 2024 07:58:55 -0700
-Message-ID: <9befe692-a05d-4fa0-9ff9-8d6030e4cb66@quicinc.com>
-Date: Fri, 30 Aug 2024 07:58:54 -0700
+	s=arc-20240116; t=1725032025; c=relaxed/simple;
+	bh=4I1SF9MlKPLJEAdurQCU+q1uEFvlwjJbG9qMUIIDxvM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QO0Q6YOoPnOpm0ljsJ0nFKwUOn6hpEKANaUSqwWTZwEITfixGnq0CV+nKoCXGs2wr3CWO5MojXBlXTF+IzBx95TQwdBYpwPeB3HhC9ogZD9rdmPcV2owZA0dp94/8/mQRInRG8Pgid+dIdGVA6yaCCoGlsB4joZjRl0Kt4LNKIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p9qaZLeM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0043C4CEC5;
+	Fri, 30 Aug 2024 15:33:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725032025;
+	bh=4I1SF9MlKPLJEAdurQCU+q1uEFvlwjJbG9qMUIIDxvM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=p9qaZLeMzRtO4nSWAaulicPoRXBOiYa0PuN9kGLl1fjH13XCgNavYSxe5CILoZ6N7
+	 OA5TXnbxcdlR3SgCd2w9sYHQ3y9hHKAfxtei1fVHBGZzf879Px6qy5PNimRdlAuA1l
+	 9mKTqLYG6MrR1qyNMtiCRcyTZaMSiTUTLTuXODkaX3cGikMMli/8BgUsrPrgx/cHsc
+	 3Supb1AWFrc0AGsWxFAxZTcp4zwgdiawvKVvGWNHWsipwj4G2UEQ0zOit23064NL5i
+	 egv3vBfBXxc0WGo+qoNhUWLfTFInfJVi1rMAaSr2ZYvD13MT2QdHbvmX3hbiPvr19t
+	 D7IWVRtp58OtA==
+Date: Fri, 30 Aug 2024 10:33:43 -0500
+From: Rob Herring <robh@kernel.org>
+To: Macpaul Lin <macpaul.lin@mediatek.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-leds@vger.kernel.org,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Sean Wang <sean.wang@mediatek.com>,
+	Lee Jones <lee@kernel.org>,
+	Alexandre Mergnat <amergnat@baylibre.com>,
+	Flora Fu <flora.fu@mediatek.com>,
+	Bear Wang <bear.wang@mediatek.com>,
+	Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
+	Sen Chu <sen.chu@mediatek.com>,
+	Chris-qj chen <chris-qj.chen@mediatek.com>,
+	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
+	devicetree@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH v2 2/7] dt-bindings: mfd: mediatek: mt6397: Convert to DT
+ schema format
+Message-ID: <20240830153343.GA4175444-robh@kernel.org>
+References: <20240830110732.30080-1-macpaul.lin@mediatek.com>
+ <20240830110732.30080-2-macpaul.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 22/22] arm64: dts: qcom: Add reduced functional DT for
- SA8255p Ride platform
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <sudeep.holla@arm.com>, <andi.shyti@kernel.org>, <tglx@linutronix.de>,
-        <will@kernel.org>, <joro@8bytes.org>, <jassisinghbrar@gmail.com>,
-        <lee@kernel.org>, <linus.walleij@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
-        <wim@linux-watchdog.org>, <linux@roeck-us.net>
-CC: <robin.murphy@arm.com>, <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
-        <lukasz.luba@arm.com>, <vkoul@kernel.org>, <quic_gurus@quicinc.com>,
-        <agross@kernel.org>, <bartosz.golaszewski@linaro.org>,
-        <quic_rjendra@quicinc.com>, <robimarko@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
-        <quic_psodagud@quicinc.com>, <quic_tsoni@quicinc.com>,
-        <quic_shazhuss@quicinc.com>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240828203721.2751904-23-quic_nkela@quicinc.com>
- <746be896-8798-44b0-aa86-e77cf34655e1@kernel.org>
- <57eee144-cdc4-48e7-838b-103cda6ec1dd@quicinc.com>
- <095f5048-5c39-438d-b5a9-7519199a8e9f@kernel.org>
-From: Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <095f5048-5c39-438d-b5a9-7519199a8e9f@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SkQErJ6yG1XnlEy5h9kGSvc-Bpyu79A9
-X-Proofpoint-ORIG-GUID: SkQErJ6yG1XnlEy5h9kGSvc-Bpyu79A9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-30_09,2024-08-30_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 phishscore=0 adultscore=0 priorityscore=1501
- impostorscore=0 malwarescore=0 suspectscore=0 spamscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408300114
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240830110732.30080-2-macpaul.lin@mediatek.com>
+
+On Fri, Aug 30, 2024 at 07:07:27PM +0800, Macpaul Lin wrote:
+> Convert the mfd: mediatek: mt6397 binding to DT schema format.
+> 
+> MT6323/MT6358/MT6397 are PMIC devices with multiple function of
+> subdevices. They have some variant of the combinations of subdevices
+> but share a common PMIC design.
+> 
+> New updates in this conversion:
+>  - RTC:
+>   - Convert rtc-mt6397.txt and add it into parent's mt6397 PMIC DT schema.
+>  - regulators:
+>   - Align generic names "regulators" instead of origin names.
+>   - mt6323-regulator: Replace "txt" reference with mt6323-regulaotr.yaml
+>   - mt6358-regulator: Replace "txt" reference with mt6358-regulator.yaml
+>   - mt6397-regulator: Replace "txt" reference with mt6397-reuglator.yaml
+>  - audio-codec:
+>   - Align generic name "audio-codec" for codec and sound subdevices.
+>   - Add "mediatek,dmic-mode" and "Avdd-supply".
+>  - clocks:
+>   - Align generic name "clocks" for clockbuffer subdevices.
+>  - leds:
+>   - Convert leds-mt6323.txt and add it into parent's mt6397 PMIC DT schema.
+>  - keys:
+>   - Add more specific descriptions for power and home keys.
+>   - Add compatible: mediatek,mt6358-keys
+>  - power-controller:
+>   - Add property #power-domain-cells for fixing dt-binding check error.
+>   - Add "Baseband power up" as the explaination of abbrevitation "BBPU".
+>  - pinctrl:
+>   - Align generic name "pinctrl" instead of "pin-controller".
+> 
+> Signed-off-by: Sen Chu <sen.chu@mediatek.com>
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> ---
+>  .../bindings/mfd/mediatek,mt6397.yaml         | 1026 +++++++++++++++++
+>  .../devicetree/bindings/mfd/mt6397.txt        |  110 --
+>  2 files changed, 1026 insertions(+), 110 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/mt6397.txt
+> 
+> Changes for v1:
+>  - This patch depends on conversion of mediatek,mt6397-regulator.yaml
+>    [1] https://lore.kernel.org/lkml/20240807091738.18387-1-macpaul.lin@mediatek.com/T/
+> 
+> Changes for v2:
+>  - This patch has been made base on linux-next/master git repo.
+>  - Keep the parent and child relationship with mediatek,pwrap in description.
+>    [2] https://lore.kernel.org/all/20240826-slurp-earphone-0d5173923ae8@spud/
+>  - Keep the $ref for regulators since dt_binding_check didn't report any issue
+>    based on linux-next/master repo.  
+>  - Fix description of mt6397/mt6323 devices, use "power management chip"
+>    instead of "multifunction device"
+>  - Drop unnecessary comments or description according to the review.
+>  - Convert sub-modules to DT Schema:
+>   - RTC, LEDs, power-controllers, regulators
+>  - Drop duplicate sub node name and description for sub-modules
+>   - RTC, Keys
+>  - examples: 
+>   - drop parent pwrap node
+>   - Add examples from mediatek,mt6323-regulator.yaml
+>   - Add examples from mediatek,mt6358-regulator.yaml
+>   - Add examples from mediatek,mt6397-regulator.yaml
+>   - Complete the examples as could as possible.
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+> new file mode 100644
+> index 0000000..f5bea33
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+> @@ -0,0 +1,1026 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/mediatek,mt6397.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek MT6397/MT6323 Multifunction Device (PMIC)
+> +
+> +maintainers:
+> +  - Sen Chu <sen.chu@mediatek.com>
+> +  - Macpaul Lin <macpaul.lin@mediatek.com>
+> +
+> +description: |
+> +  MT6397/MT6323 is a power management system chip.
+> +  Please see the sub-modules below for supported features.
+> +
+> +  MT6397/MT6323 is a multifunction device with the following sub modules:
+> +  - Regulators
+> +  - RTC
+> +  - Audio codec
+> +  - GPIO
+> +  - Clock
+> +  - LED
+> +  - Keys
+> +  - Power controller
+> +
+> +  It is interfaced to host controller using SPI interface by a proprietary hardware
+> +  called PMIC wrapper or pwrap. MT6397/MT6323 PMIC is a child device of pwrap.
+> +  See the following for pwrap node definitions:
+> +  Documentation/devicetree/bindings/soc/mediatek/mediatek,pwrap.yaml
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - mediatek,mt6323
+> +          - mediatek,mt6331 # "mediatek,mt6331" for PMIC MT6331 and MT6332.
+> +          - mediatek,mt6357
+> +          - mediatek,mt6358
+> +          - mediatek,mt6359
+> +          - mediatek,mt6397
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt6366
+> +          - const: mediatek,mt6358
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +
+> +  rtc:
+> +    type: object
+> +    $ref: /schemas/rtc/rtc.yaml#
+> +    unevaluatedProperties: false
+> +    description:
+> +      MT6397 Real Time Clock.
+
+Blank line
+
+> +    properties:
+> +      compatible:
+> +        oneOf:
+> +          - enum:
+> +              - mediatek,mt6323-rtc
+> +              - mediatek,mt6331-rtc
+> +              - mediatek,mt6358-rtc
+> +              - mediatek,mt6397-rtc
+> +          - items:
+> +              - enum:
+> +                  - mediatek,mt6366-rtc
+> +              - const: mediatek,mt6358-rtc
+
+Blank line between DT properties
+
+> +      start-year: true
+> +    required:
+> +      - compatible
+> +
+> +  regulators:
+> +    type: object
+> +    oneOf:
+> +      - $ref: /schemas/regulator/mediatek,mt6323-regulator.yaml
+> +      - $ref: /schemas/regulator/mediatek,mt6358-regulator.yaml
+> +      - $ref: /schemas/regulator/mediatek,mt6397-regulator.yaml
+> +    unevaluatedProperties: false
+> +    description:
+> +      List of child nodes that specify the regulators.
+> +    properties:
+> +      compatible:
+> +        oneOf:
+> +          - enum:
+> +              - mediatek,mt6323-regulator
+> +              - mediatek,mt6358-regulator
+> +              - mediatek,mt6397-regulator
+> +          - items:
+> +              - enum:
+> +                  - mediatek,mt6366-regulator
+> +              - const: mediatek,mt6358-regulator
+
+You need the references or compatible, but not both. It's more efficient 
+if you list the compatibles along with a 'additionalProperties: true'. 
+Otherwise, the referenced schemas have to all be applied and the 
+matching one will be applied twice.
+
+Also, for compatible here, just use 'contains' and list all possible 
+compatibles. The exact combinations are enforced in the regulator 
+schemas.
 
 
-On 8/30/2024 2:51 AM, Krzysztof Kozlowski wrote:
-> On 29/08/2024 21:06, Nikunj Kela wrote:
->> On 8/29/2024 12:49 AM, Krzysztof Kozlowski wrote:
->>> On 28/08/2024 22:37, Nikunj Kela wrote:
->>>> SA8255p Ride platform is an automotive virtual platform. This platform
->>>> abstracts resources such as clocks, regulators etc. in the firmware VM.
->>>> The device drivers request resources operations over SCMI using power,
->>>> performance, reset and sensor protocols.
->>>>
->>>> Multiple virtual SCMI instances are being employed for greater parallelism.
->>>> These instances are tied to devices such that devices can have dedicated
->>>> SCMI channel. Firmware VM (runs SCMI platform stack) is SMP enabled and
->>>> can process requests from agents in parallel. Qualcomm smc transport is
->>>> used for communication between SCMI agent and platform.
->>>>
->>>> Let's add the reduced functional support for SA8255p Ride board.
->>>> Subsequently, the support for PCIe, USB, UFS, Ethernet will be added.
->>>>
->>>> Co-developed-by: Shazad Hussain <quic_shazhuss@quicinc.com>
->>>> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
->>>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
->>>> ---
->>>>  arch/arm64/boot/dts/qcom/Makefile           |    1 +
->>>>  arch/arm64/boot/dts/qcom/sa8255p-pmics.dtsi |   80 +
->>>>  arch/arm64/boot/dts/qcom/sa8255p-ride.dts   |  149 ++
->>>>  arch/arm64/boot/dts/qcom/sa8255p-scmi.dtsi  | 2312 ++++++++++++++++++
->>>>  arch/arm64/boot/dts/qcom/sa8255p.dtsi       | 2405 +++++++++++++++++++
->>>>  5 files changed, 4947 insertions(+)
->>>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-pmics.dtsi
->>>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-ride.dts
->>>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-scmi.dtsi
->>>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p.dtsi
->>>>
->>> ...
->>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/sa8255p-ride.dts b/arch/arm64/boot/dts/qcom/sa8255p-ride.dts
->>>> new file mode 100644
->>>> index 000000000000..1dc03051ad92
->>>> --- /dev/null
->>>> +++ b/arch/arm64/boot/dts/qcom/sa8255p-ride.dts
->>>> @@ -0,0 +1,149 @@
->>>> +// SPDX-License-Identifier: BSD-3-Clause
->>>> +/*
->>>> + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
->>>> + */
->>>> +
->>>> +/dts-v1/;
->>>> +
->>>> +#include <dt-bindings/gpio/gpio.h>
->>>> +
->>>> +#include "sa8255p.dtsi"
->>>> +#include "sa8255p-pmics.dtsi"
->>>> +#include "sa8255p-scmi.dtsi"
->>>> +
->>>> +/ {
->>>> +	model = "Qualcomm Technologies, Inc. SA8255P Ride";
->>>> +	compatible = "qcom,sa8255p-ride", "qcom,sa8255p";
->>>> +
->>>> +	aliases {
->>>> +		i2c11 = &i2c11;
->>>> +		i2c18 = &i2c18;
->>>> +		serial0 = &uart10;
->>>> +		serial1 = &uart4;
->>>> +		spi16 = &spi16;
->>>> +		scmichannels = &scmichannels;
->>> Nothing parses this.
->>>
->> We are using this alias in bootloader to speed up the parsing. Since we
-> Then please provide link to the bindings in this open-source upstream
-> bootloader.
->
-> Otherwise it is a clear no-go for me. We don't add properties because
-> some downstream wants them. Imagine what would happen if we opened that
-> can of worms...
+> +
+> +  audio-codec:
+> +    type: object
+> +    additionalProperties: false
+> +    description:
+> +      Audio codec support with MT6397 and MT6358.
+> +    properties:
+> +      compatible:
+> +        oneOf:
+> +          - enum:
+> +              - mediatek,mt6397-codec
+> +              - mediatek,mt6358-sound
+> +          - items:
+> +              - enum:
+> +                  - mediatek,mt6366-sound
+> +              - const: mediatek,mt6358-sound
+> +
+> +      mediatek,dmic-mode:
+> +        description: |
+> +          Indicates how many data pins are used to transmit two channels of PDM
+> +          signal.
+> +          0 - two wires;
+> +          1 - one wire;
+> +          Default value is 0.
+> +        enum: [0, 1]
+> +        default: 0
+> +
+> +      Avdd-supply:
+> +        description: Power source of AVDD.
+> +
+> +    required:
+> +      - compatible
+> +
+> +  clocks:
+> +    type: object
+> +    additionalProperties: false
+> +    description:
+> +      This is a clock buffer node for mt6397. However, there are no sub nodes
+> +      or any public document exposed in public.
+> +    properties:
+> +      compatible:
+> +        const: mediatek,mt6397-clk
+> +      '#clock-cells':
+> +        const: 1
+> +    required:
+> +      - compatible
+> +
+> +  leds:
+> +    type: object
+> +    additionalProperties: false
+> +    description:
 
-Point taken! I will remove this alias and label from DT in next version.
-We can add it back if/once the bootloader changes are upstreamed. Thanks!
+You need '|' or '>' to preserve line breaks.
 
+> +      MT6323 LED controller is subfunction provided by MT6323 PMIC, so the LED
+> +      controllers are defined as the subnode of the function node provided by MT6323
+> +      PMIC controller that is being defined as one kind of Muti-Function Device (MFD)
+> +      using shared bus called PMIC wrapper for each subfunction to access remote
+> +      MT6323 PMIC hardware.
+> +
+> +      Each led is represented as a child node of the mediatek,mt6323-led that
+> +      describes the initial behavior for each LED physically and currently only four
+> +      LED child nodes can be supported.
+> +
+> +    properties:
+> +      compatible:
+> +        oneOf:
 
->> are using 64 SCMI instances and SCMI smc transport driver for
->> Qualcomm(drivers/firmware/arm_scmi/transports/smc.c) expects
->> cap-id(created by hypervisor at boot time), our bootloader gets those
->> cap-id for each channel and populate them. This alias is an optimization
->> to save boottime as in automotive, boot KPIs are critical.
-> I will refrain about commenting on KPIs...
->
->
->
-> Best regards,
-> Krzysztof
->
+Only 1 entry, don't need oneOf.
+
+> +          - enum:
+> +              - mediatek,mt6323-led
+> +              - mediatek,mt6331-led
+> +              - mediatek,mt6332-led
+> +      "#address-cells":
+> +        const: 1
+
+blank line
+
+> +      "#size-cells":
+> +        const: 0
+
+blank line. And so on...
+
+> +      reg:
+> +        description:
+> +          LED channel number (0..3)
+> +        minimum: 0
+> +        maximum: 3
+
+Doesn't use the led binding?
+
+> +
+> +  keys:
+> +    type: object
+> +    $ref: /schemas/input/mediatek,pmic-keys.yaml
+> +    unevaluatedProperties: false
+> +    description:
+> +      Power and Home keys.
+> +    properties:
+> +      compatible:
+> +        oneOf:
+> +          - enum:
+> +              - mediatek,mt6323-keys
+> +              - mediatek,mt6331-keys
+> +              - mediatek,mt6358-keys
+> +              - mediatek,mt6397-keys
+> +
+> +  power-controller:
+> +    type: object
+> +    additionalProperties: false
+> +    description:
+> +      The power controller which could be found on PMIC is responsible for
+> +      externally powering off or on the remote MediaTek SoC through the
+> +      circuit BBPU (baseband power up).
+> +    properties:
+> +      compatible:
+> +        const: mediatek,mt6323-pwrc
+> +      '#power-domain-cells':
+> +        const: 0
+> +
+> +  pinctrl:
+> +    type: object
+> +    $ref: /schemas/pinctrl/mediatek,mt65xx-pinctrl.yaml
+> +    unevaluatedProperties: false
+> +    description:
+> +      Pin controller
+> +    properties:
+> +      compatible:
+> +        const: mediatek,mt6397-pinctrl
+> +
+> +required:
+> +  - compatible
+> +  - regulators
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    mt6323_pmic: pmic {
+
+Drop unused labels.
+
+> +        compatible = "mediatek,mt6323";
+> +        interrupt-parent = <&pio>;
+> +        interrupts = <150 IRQ_TYPE_LEVEL_HIGH>;
+> +        interrupt-controller;
+> +        #interrupt-cells = <2>;
+> +
+> +        mt6323_leds: leds {
+> +                compatible = "mediatek,mt6323-led";
+> +                #address-cells = <1>;
+> +                status = "disabled";
+
+Examples shouldn't be disabled.
+
+> +        };
+> +
+> +        mt6323_regulator: regulators {
+> +            compatible = "mediatek,mt6323-regulator";
+> +            mt6323_vproc_reg: buck_vproc {
+> +                regulator-name = "vproc";
+> +                regulator-min-microvolt = < 700000>;
+> +                regulator-max-microvolt = <1350000>;
+> +                regulator-ramp-delay = <12500>;
+> +                regulator-always-on;
+> +                regulator-boot-on;
+> +            };
 
