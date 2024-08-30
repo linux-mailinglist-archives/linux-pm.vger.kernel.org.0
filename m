@@ -1,142 +1,99 @@
-Return-Path: <linux-pm+bounces-13206-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13207-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85835965979
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 10:07:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA3596599A
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 10:11:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A2A01F23A89
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 08:07:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F148B22DEB
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 08:11:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A10B167DA4;
-	Fri, 30 Aug 2024 08:06:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21711167DA4;
+	Fri, 30 Aug 2024 08:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nx8CkU61"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22B93165EEB;
-	Fri, 30 Aug 2024 08:06:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09AD16D302;
+	Fri, 30 Aug 2024 08:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725005208; cv=none; b=JFFF0YxCILWqDxpVfjA+9uxH9OupefjI1HkdjB+VR9w9nUwWHFCiE0eBRi0KjgK2XhvGZUoHNw5ZBxGCMZbt3x66lyMq5JgWMNCdw5OMnDKRcJtU6qnJtFzPv9ZytuUkCReWtUhnBSEoFSgsNOZoqHP3ilMRRbf660Tq3Xv9InY=
+	t=1725005457; cv=none; b=cpTHIgbT7ABziX1R8959i1A8JPH03ISwO+gM2QS3+mn6mLuGh52EQg0pKYmHLT0XMVtxJNoBJsB5vr06qJ1SoBdCIFGGb3+9EIHW0TWNWTPIbFS4N0FOD+9TVWYshwxblmL0gKn7IlbdyTrDIEpl803s7Q8I4thGMBeYWbZZ/4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725005208; c=relaxed/simple;
-	bh=VteBl1ktda+owSutLUfZmZK8Yr6JwgOtGs4JdVObDYE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e9Mbbfx8AWmljLmeTny7aRokDsF/LsTdl53O3LJ+3DEA50tXqM3DQA/qruR87w9TkHKX+jnLy7RfjWl6N1Fib37qd64M1tJNCHjME9ECC/bMXBV8rvGv5Qsbg/7AFLOza/23kiYY7wVs5Jhd8qGwhOL41rq8xCxshuR3F68BQt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6d3f017f80eso4517077b3.1;
-        Fri, 30 Aug 2024 01:06:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725005204; x=1725610004;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9iPS+SBt3nBt176C4U0ae1o6YJDXC/Hy1m/tM/oZV58=;
-        b=C5MoMGr8p8Un/uoqUsCfFSaPFLg8fOdK4C4XWomVnI6iHF6Qdgw02rZzndm4g4sRlL
-         HWLjhFTje1Vt5uea4/r7ixriYAtcle7hmWJtyeAHJDlu9d0L4gtVmYHWjx+LNCIs89K0
-         aS6aH7lzqhFqV9EJuBUFKEz0gsGLtxBoVfuN+F7eBVy7QPaPwU6VGre1c/BYjuddiD6Y
-         tYp0SRYe/KNKTajj7DFtQ7gO6D9io9VZSnDqkvjTCC/c65HxcFjeGZNEGSTEIpDmurAR
-         Zpdb/qJG3+TIfkDJ5RbJA0falr/MHxLaW0+oAduFhw6YmGMfYqfAowpJSbFYxrLyf0/f
-         jXrg==
-X-Forwarded-Encrypted: i=1; AJvYcCVB04eAD2+ANjMRF7QtzzPRs0OdypjGbRmCCisoOLaVpxcCBzwtmGSr7Cprytrk8YJ4/Xnfd0JdVsMTdZ7o@vger.kernel.org, AJvYcCVqfppLrAzbl109tqSLIDDU1bnlb/z111dKp213JkgsPJQYg67kzS5+KAvA7huDSqQqzjO4OOhAb60=@vger.kernel.org, AJvYcCWVu+qwTst5CxlchESZZEfmbGo4M5XBUBB3R80fTVM6vG9Mdxzlw6fMm6FZVHsZ1QZ2oqRlkkr/vlYxBrU0GMA=@vger.kernel.org, AJvYcCWe7Mc02cxFeG0rdjZHmAHzh0+2Hz/8xDTkWN4ojz+57JPx1f5XvnP40neMPFL5qOXT2nLzO2jurYjBhfBrGWT4Y94=@vger.kernel.org, AJvYcCXtaWindIMWOlOvdexdpNBytuTe+HNWSenn/4bWrxrNOHwhOICAZoID4Ej/44UbA9zxjtsT6HhW/Pc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzy4VAb0POH1nNrRU4rxhEUGeqkbkeiAfGilSafqMoL5CbCtkj2
-	TUQOq2qhFW7t+2xX6hPF2bF8we/ZCqvYoxYBRFWBU36QV1hrXKXVAaqYHOPB
-X-Google-Smtp-Source: AGHT+IGxpgLU4nf0irLKtvdfMa8v9GP6OPyz8uV1M8xYZJEwr9W/gFaJ9MkyuKRsVvoObMR3JTpq6w==
-X-Received: by 2002:a05:690c:81:b0:6af:eaa:3dd4 with SMTP id 00721157ae682-6d40f3421a9mr15071557b3.13.1725005203789;
-        Fri, 30 Aug 2024 01:06:43 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6d47b06daabsm308897b3.142.2024.08.30.01.06.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Aug 2024 01:06:42 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6d3f017f80eso4516557b3.1;
-        Fri, 30 Aug 2024 01:06:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU1zMuDwuGnWkv+ANov4LYAzQPHFTH2T4vaRC/GUUL32j6JGxAAZzYXRv6hMb8R3rprKROvNacgPp0kbHBhqRqUmJU=@vger.kernel.org, AJvYcCWm0BUudjIoia4FYMzgYTxErIPJ351lVo53z3q+Z1HTCMo2I+H4IPc64587yxpDBqA1tV49jbA3uaQ=@vger.kernel.org, AJvYcCX3+j4worpGlRLkNbXDiXb0TB0N62ex5Hdp60WhlD6V8w/Qc42VfYOSXUYY+js+82lu95nTaRhh2Tny/BLB@vger.kernel.org, AJvYcCXrp8AZvuKo8CMEcY09u+/nCiXXCHRr+vDLhGZGoBQCZioM6kbG6DjcuA9jOBa5rehnXw4fks2Ue1I=@vger.kernel.org, AJvYcCXyx17iePm1irvdsP1t8VHHpCEiZZ/2/Mcq65ScPwiNAUgy7QHiJcJSlfpm4o+T1/ZPL7JYzCgwgfVGGyLusRw=@vger.kernel.org
-X-Received: by 2002:a05:690c:81:b0:6af:eaa:3dd4 with SMTP id
- 00721157ae682-6d40f3421a9mr15070947b3.13.1725005202277; Fri, 30 Aug 2024
- 01:06:42 -0700 (PDT)
+	s=arc-20240116; t=1725005457; c=relaxed/simple;
+	bh=3ydTwNGyIXL6fFISp1v27alYYBcjKlkwV1nvJ+LgMmQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=nnxfIPSAYX/lDpUqB+D35hQhIHDJ4gU4/jiexAz4Bv4qv5Ie05PJsbt3Y4gX4epBYfJqBmbdoTl0wNW6mla9/2k4Qfx392hsL2SSqStXgcy/iLyplDDyeVCYhTppwsLtLkxc6jZw/yu60V1awUcHetsgR+IGEJpQRmvcPNsYVWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nx8CkU61; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E7EC4CEC2;
+	Fri, 30 Aug 2024 08:10:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725005456;
+	bh=3ydTwNGyIXL6fFISp1v27alYYBcjKlkwV1nvJ+LgMmQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=nx8CkU61PYK7Ada7KKWaqejI8FCF8TStl2f+Lw5+1n4UDd90SM5ZBa3jvhEHSaR75
+	 KdGvTylNPwJRnzbGXeaBtrK6ruDB289UA0oHbFmAP0TNeWHoZp3uSW3b/LSkvNEBYp
+	 VJ4q/jMCAnOZ1UMBUlpS00GJ0iJVQWH0wunSHU8zK/mIE2QJ3XwN0tHd7KrVphxUxO
+	 kvTAjnQTR1j8louOu9sUpRx/2B0jVU//KySTJ8fl/qd4UdmBTpitZM+bL9oWT1gw7a
+	 85fp//ihugYz2QqYkXOKyFNwEHYg0ghd19VjmGf3BEkjBwUkIIBA8Ymp3RfgoqV0OB
+	 oKHX9w1cnrk/g==
+From: Vinod Koul <vkoul@kernel.org>
+To: kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+ conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be, 
+ magnus.damm@gmail.com, gregkh@linuxfoundation.org, mturquette@baylibre.com, 
+ sboyd@kernel.org, yoshihiro.shimoda.uh@renesas.com, 
+ biju.das.jz@bp.renesas.com, ulf.hansson@linaro.org, 
+ Claudiu <claudiu.beznea@tuxon.dev>
+Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: (subset) [PATCH 00/16] Add initial USB support for the Renesas
+ RZ/G3S SoC
+Message-Id: <172500545045.434293.2799164142138573835.b4-ty@kernel.org>
+Date: Fri, 30 Aug 2024 13:40:50 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240828140602.1006438-1-claudiu.beznea.uj@bp.renesas.com>
- <20240828140602.1006438-2-claudiu.beznea.uj@bp.renesas.com>
- <CAMuHMdX+Q99MvQRZcwGbk8F8SiAUzRU_t2QmRuO_6etAqqXskg@mail.gmail.com> <8b6fc67d-5e07-4403-ac07-6ad0b9d61882@tuxon.dev>
-In-Reply-To: <8b6fc67d-5e07-4403-ac07-6ad0b9d61882@tuxon.dev>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 30 Aug 2024 10:06:30 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUqVcojRoPAEuZ8a9Y-iHm4b185StD73FpQoRFsEiZ8oQ@mail.gmail.com>
-Message-ID: <CAMuHMdUqVcojRoPAEuZ8a9Y-iHm4b185StD73FpQoRFsEiZ8oQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] clk: renesas: rzg2l-cpg: Use GENPD_FLAG_* flags
- instead of local ones
-To: claudiu beznea <claudiu.beznea@tuxon.dev>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org, 
-	linux@roeck-us.net, ulf.hansson@linaro.org, linux-renesas-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-Hi Claudiu,
 
-On Fri, Aug 30, 2024 at 9:46=E2=80=AFAM claudiu beznea <claudiu.beznea@tuxo=
-n.dev> wrote:
-> On 29.08.2024 15:32, Geert Uytterhoeven wrote:
-> > On Wed, Aug 28, 2024 at 4:06=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.d=
-ev> wrote:
-> >> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> >>
-> >> For watchdog PM domain it is necessary to provide GENPD_FLAG_IRQ_SAFE =
-flag
-> >> to be able to power on the watchdog PM domain from atomic context. For
-> >> this, adjust the current infrastructure to be able to provide GENPD_FL=
-AG_*
-> >> for individual PM domains.
-> >>
-> >> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Thu, 22 Aug 2024 18:27:45 +0300, Claudiu wrote:
+> Series adds initial USB support for the Renesas RZ/G3S SoC.
+> 
+> Series is split as follows:
+> 
+> - patch 01/16		- add clock reset and power domain support for USB
+> - patch 02-04/16	- add reset control support for a USB signal
+> 			  that need to be controlled before/after
+> 			  the power to USB area is turned on/off.
+> 
+> [...]
 
-> >> --- a/drivers/clk/renesas/rzg2l-cpg.c
-> >> +++ b/drivers/clk/renesas/rzg2l-cpg.c
+Applied, thanks!
 
-> >
-> >>                 pd->id =3D info->pm_domains[i].id;
-> >>                 pd->priv =3D priv;
-> >>
-> >> -               ret =3D rzg2l_cpg_pd_setup(pd, always_on);
-> >> +               ret =3D rzg2l_cpg_pd_setup(pd, genpd_flags, always_on)=
-;
-> >>                 if (ret)
-> >>                         return ret;
-> >
-> > What about moving the conditional call to rzg2l_cpg_power_on()
-> > below to rzg2l_cpg_pd_setup()? Then this function no longer needs
-> > the always_on flag.
->
-> That could be done but I think it will involve an extra power on/power of=
-f
-> cycle for the unused domains.
+[10/16] phy: renesas: rcar-gen3-usb2: Add support to initialize the bus
+        commit: 4eae16375357a2a7e8501be5469532f7636064b3
+[11/16] dt-bindings: phy: renesas,usb2-phy: Document RZ/G3S phy bindings
+        commit: f3c8498551146dfb014be0d85d3a7df98be16aa2
+[12/16] phy: renesas: rcar-gen3-usb2: Add support for the RZ/G3S SoC
+        commit: 3c2ea12a625dbf5a864f4920235fa1c739d06e7d
 
-Still only to be done for the always-on domain, of course.
-Anyway, up to you.
+Best regards,
+-- 
+~Vinod
 
-Gr{oetje,eeting}s,
 
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
