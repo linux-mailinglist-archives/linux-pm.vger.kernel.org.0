@@ -1,148 +1,138 @@
-Return-Path: <linux-pm+bounces-13230-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13233-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB80B966035
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 13:11:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE972966051
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 13:14:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 678811F22254
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 11:11:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E9191C22FF2
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 11:14:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D502B1A255C;
-	Fri, 30 Aug 2024 11:08:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ACD71B2504;
+	Fri, 30 Aug 2024 11:11:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="A3p4XWMw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AL8MXJdV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5259A1AD5D6;
-	Fri, 30 Aug 2024 11:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61EAD1B2502;
+	Fri, 30 Aug 2024 11:11:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725016126; cv=none; b=FcgKVYJK6qFZalaS3crCrZxLpEW10X79g8bv+fkm0eExPSQbPVOuRZhlLVXn54+Gx3HaHwl2hYEYTSY4sY+QpY00HpvdLmOISwWkvFR1GNiWBpHASYhR8EL62/AII0wmOOaWHUZ4XahgeMpi2GLZbaxGgqRHCgCxH/5mdY07TPg=
+	t=1725016268; cv=none; b=ncHWBqvTWR4qLeqxR6+r4U4YHX0D8BlNXQdh3PbMrUTrzCT0UgE4lGgrLAOUgQrx2qD19q0v30n6/bxoczVqb3GFDQZmKgnQSroRBJioIGLy54B4GZHjnSEvgbXLmw3x3l8sVNvrAxLdCI2bFuqUeMfXaMhHyd/hfGEyLYDBDDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725016126; c=relaxed/simple;
-	bh=/Fb5pZToC3tAN1tu7MCACdn0yLrFT2nb9lJ4ahlghS0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OhdUjkz1PTZDxJFgs/EemmxgT3g11zmWBlS7b1t3wua7w0W9f/u5RwFMYOLcAtpqWnsqnw7PS7HXCqhXj0p1KQdVpRVJ3yqRG5mYxDg8SMt5IY9+hpYUA0GcK97nSxshtt+i8GYmv+S0sVWV7rjdLQmjS37fpz+u8L5Lo7NTfHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=A3p4XWMw; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 2ff440d866c011ef8593d301e5c8a9c0-20240830
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=DipCJgAWyMm6MFO6I1vTU2aLQjwa5Kl2TSY0FW5qvoQ=;
-	b=A3p4XWMw4d04ZQtqSGgDGifhf7iZ7Wlitat9b3ylOuR3mGSCy0/Mxe97kT52qAzBl3ZAFdc5jL1lM7KgvIPcNDP/DkPqMVhXZYTqX+zM11RtflObYS3NT/dKghW5mdpWRxY4VsaEj+8BTbJNJs3Pikt3K0tJUJOJxUFZhrxeU6Q=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:1af36010-1799-43d8-a43b-af36f01b5a9a,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:35356fcf-7921-4900-88a1-3aef019a55ce,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
-	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 2ff440d866c011ef8593d301e5c8a9c0-20240830
-Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw01.mediatek.com
-	(envelope-from <macpaul.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 510421618; Fri, 30 Aug 2024 19:08:29 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 30 Aug 2024 04:08:29 -0700
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 30 Aug 2024 19:08:29 +0800
-From: Macpaul Lin <macpaul.lin@mediatek.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	<linux-leds@vger.kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
-	<broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>, Pavel Machek
-	<pavel@ucw.cz>, Sean Wang <sean.wang@mediatek.com>, Lee Jones
-	<lee@kernel.org>, Alexandre Mergnat <amergnat@baylibre.com>, Flora Fu
-	<flora.fu@mediatek.com>
-CC: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
-	Macpaul Lin <macpaul.lin@mediatek.com>, Macpaul Lin <macpaul@gmail.com>, Sen
- Chu <sen.chu@mediatek.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
-	MediaTek Chromebook Upstream
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<linux-rtc@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, Chen-Yu Tsai <wenst@chromium.org>
-Subject: [PATCH v2 7/7] dt-bindings: sound: mt6358: merge to MFD mediatek,mt6397 DT schema
-Date: Fri, 30 Aug 2024 19:07:32 +0800
-Message-ID: <20240830110732.30080-7-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20240830110732.30080-1-macpaul.lin@mediatek.com>
-References: <20240830110732.30080-1-macpaul.lin@mediatek.com>
+	s=arc-20240116; t=1725016268; c=relaxed/simple;
+	bh=+G3+tmoqKkeMmJ3pmWviq3g+M4BKq/ZOkhZqClXQlIo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GHZv/D/X77QfCYsfMSLkje4fUU/oU8KXTGq3l/0T0904ACZ2589uDDBwBK0dDkU07M5vx7EnDnJthsFbOGYQiFAX+AdXgYXSN1TWXoQ5Z9lLT3hBqqO7RlFsJPo/Ujt5cnEgjkgaURLytkvVtMrsu7MDtCwPK4eyDillSfrmxBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AL8MXJdV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4132C4CEC4;
+	Fri, 30 Aug 2024 11:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725016267;
+	bh=+G3+tmoqKkeMmJ3pmWviq3g+M4BKq/ZOkhZqClXQlIo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=AL8MXJdV3MVFXRQ30vZJM3cVMNt/UnCiuQaJOE8NuLWb0LaqohZRs4R2VQsgPOAI2
+	 3Gg/ftaXubbrh74GJoSEBvdjOj3U5iI9iMhRlm1GLhQ8t8lElupmS4Oxw4FBxeu0d7
+	 tITLhy2xqPVuiTitvkhDrJv3bEEXeCUt7ujcaZoH6zg8AsmzJuehzqxyYQvJPnKviL
+	 COCm3VAi6uhK5y+Msft5/BJA3I+fksVqaYvHnIJXPQpPojgVHcU1YoEZ/dxW688JP7
+	 J8N1eb29urynvof3XSAL0Bdj1jud0e4R9y8oJ5qCu8psY8d07ZQyzC3aMKbfly/PHj
+	 U076GaOZv3W9w==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5dfb53d4b13so146302eaf.2;
+        Fri, 30 Aug 2024 04:11:07 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXlKw0y4OqvUem6QbwU6uMi74Z/yTiVSh69uvxnaA3RQjKftGzN54fOf4lbYm3oOv4wACC9yybICac=@vger.kernel.org, AJvYcCXlObWRvQVCEj1S+6UC8VxP4qgRcvyaLBzVZKK7Zx9noL3G30WnXRln9eEXa1Ao+fk5HT5kuZbo6oTlgZo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMO6xkFiGMh7ZgkVXqsQzlf7qPLHvuE+xHq/g6hUiKWNWzyBf+
+	FgM7Zc2M8HjS0Xy7bzpL2U2GLi4efe18oekCxOxnkqD+H1wzrMH6xiWPE2Xp0iA7rbLQYNeo9sT
+	e2ng8ny/GIwE1vcIlTpgV60hYEms=
+X-Google-Smtp-Source: AGHT+IHFOblILYz/GlezAcJ1ZaRStQV8XJXFMOi6YK5c9GJxSnC1raeJLqL2AzPYwvaFIRCvmIA9jAjtqA/qbuIO98Y=
+X-Received: by 2002:a05:6820:168d:b0:5da:a06b:c405 with SMTP id
+ 006d021491bc7-5dfacc1c89cmr2251224eaf.0.1725016267252; Fri, 30 Aug 2024
+ 04:11:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+References: <3310447.aeNJFYEL58@rjwysocki.net> <1979653.PYKUYFuaPT@rjwysocki.net>
+ <6961a047-979b-40c2-bfc6-d8eddd96694c@linux.ibm.com>
+In-Reply-To: <6961a047-979b-40c2-bfc6-d8eddd96694c@linux.ibm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 30 Aug 2024 13:10:55 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hUiWFcu17tJfQcrNra6edBQ2tXTfP8rg7ZjHTdCDoMfw@mail.gmail.com>
+Message-ID: <CAJZ5v0hUiWFcu17tJfQcrNra6edBQ2tXTfP8rg7ZjHTdCDoMfw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] cpufreq: intel_pstate: Set asymmetric CPU capacity
+ on hybrid systems
+To: Shrikanth Hegde <sshegde@linux.ibm.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, x86 Maintainers <x86@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Ricardo Neri <ricardo.neri@intel.com>, Tim Chen <tim.c.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Convert "sound/mt6358.txt" to be compatible with the DT schema.
-Since this is a simple audio codec device node, merge it into the
-parent file mediatek,mt6397.yaml. Subsequently, remove mt6358.txt
-with a separate patch.
+On Fri, Aug 30, 2024 at 10:30=E2=80=AFAM Shrikanth Hegde <sshegde@linux.ibm=
+.com> wrote:
+>
+>
+>
+> On 8/28/24 17:18, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> [...]
+> >
+> > +static void hybrid_update_capacity(struct cpudata *cpu)
+> > +{
+> > +     unsigned int max_cap_perf;
+> > +
+> > +     mutex_lock(&hybrid_capacity_lock);
+> > +
+> > +     if (!hybrid_max_perf_cpu)
+> > +             goto unlock;
+> > +
+> > +     /*
+> > +      * The maximum performance of the CPU may have changed, but assum=
+e
+> > +      * that the performance of the other CPUs has not changed.
+> > +      */
+> > +     max_cap_perf =3D hybrid_max_perf_cpu->capacity_perf;
+> > +
+> > +     intel_pstate_get_hwp_cap(cpu);
+> > +
+> > +     hybrid_get_capacity_perf(cpu);
+> > +     /* Should hybrid_max_perf_cpu be replaced by this CPU? */
+> > +     if (cpu->capacity_perf > max_cap_perf) {
+> > +             hybrid_max_perf_cpu =3D cpu;
+> > +             hybrid_set_capacity_of_cpus();
+> > +             goto unlock;
+> > +     }
+> > +
+> > +     /* If this CPU is hybrid_max_perf_cpu, should it be replaced? */
+> > +     if (cpu =3D=3D hybrid_max_perf_cpu && cpu->capacity_perf < max_ca=
+p_perf) {
+> > +             hybrid_update_cpu_scaling();
+> > +             goto unlock;
+> > +     }
+>
+> I assume this CPU capacity is based on freq. It doesnt change based on
+> irq, any upper scheduler classes such dl, rt right?
 
-Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
----
- .../devicetree/bindings/sound/mt6358.txt      | 26 -------------------
- 1 file changed, 26 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/sound/mt6358.txt
+Right.
 
-Changes for v1 and v2:
- - This is the first version of converting "sound/mt6358.txt".
-   This is because converting sound/mt6358.txt together
-   with mfd/mediatek,mt6397.yaml, so we've create a patch set
-   instead of submitting single patch for each subdevice.
- - This patch has been made base on linux-next/master git repo.
+It is based on how many instructions per cycle the CPU can execute,
+which does not change at all, and what its maximum possible frequency
+is.
 
-diff --git a/Documentation/devicetree/bindings/sound/mt6358.txt b/Documentation/devicetree/bindings/sound/mt6358.txt
-deleted file mode 100644
-index fbe9e55..0000000
---- a/Documentation/devicetree/bindings/sound/mt6358.txt
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Mediatek MT6358 Audio Codec
--
--The communication between MT6358 and SoC is through Mediatek PMIC wrapper.
--For more detail, please visit Mediatek PMIC wrapper documentation.
--
--Must be a child node of PMIC wrapper.
--
--Required properties:
--
--- compatible - "string" - One of:
--    "mediatek,mt6358-sound"
--    "mediatek,mt6366-sound"
--- Avdd-supply : power source of AVDD
--
--Optional properties:
--- mediatek,dmic-mode : Indicates how many data pins are used to transmit two
--	channels of PDM signal. 0 means two wires, 1 means one wire. Default
--	value is 0.
--
--Example:
--
--mt6358_snd {
--	compatible = "mediatek,mt6358-sound";
--	Avdd-supply = <&mt6358_vaud28_reg>;
--	mediatek,dmic-mode = <0>;
--};
--- 
-2.45.2
+> can capacity_perf change slightly or it can change such that it always
+> changes to next possible level? The reason, if it can change slightly,
+> but cpu is still hybrid_max_perf_cpu, it would end up accessing all the
+> percpu structures and change it, that would be costly on larger systems.
 
+This should only change when the maximum voltage that can be supplied
+to the CPU changes, so always to the next level.
 
