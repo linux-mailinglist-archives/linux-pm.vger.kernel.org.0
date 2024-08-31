@@ -1,220 +1,186 @@
-Return-Path: <linux-pm+bounces-13282-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13283-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 831279670EF
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 12:39:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29ADE967211
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 16:21:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 399A8283947
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 10:39:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D59F92835C5
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 14:21:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF70F1791ED;
-	Sat, 31 Aug 2024 10:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7A91CD16;
+	Sat, 31 Aug 2024 14:21:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dYBsE6ke"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hIrVex8G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C6F8468;
-	Sat, 31 Aug 2024 10:39:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C164CB658
+	for <linux-pm@vger.kernel.org>; Sat, 31 Aug 2024 14:21:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725100792; cv=none; b=fTrMuEsitDL7dlTAZ1sSUnyODLzOsDCcy6QQF7VvFUc5WWoY3lKCbB75hbm5TavPJOdihuN8I0UOJ+HVUh4jwOdWqHteD/NHNTJRR/PU8W5qbHLzkcMgZX/J05xb+QH0s1dd5ENdvtCHGniGV3/2WvPQiRpisege8vXvqPyvD0U=
+	t=1725114062; cv=none; b=L0qlBpnOQ0+6ykdgXcwGZQhUdm2ofm9CSgY6bZQL1y0A25J0MLZxZoCHOCm2vBDt4yDEynLceW7mXeMNyY6chA/mqKM9LMbouD4kx8Ml5isNo6jMvUlW0nq4Wk6CZcuFA60QoXlCoBX727We3iTilLl1oqb9xzZEq7iJoZw3Pn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725100792; c=relaxed/simple;
-	bh=3JaCn21nFQK/Kzo5qVa/PvsXary6cYEISAcg8Nnd0o8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lInpL0n/uHYGXXse+i4/Oq18psd5k9ocEsOC8Adp8OJ0SbPN2FSW8Eh3wbJRgEbPSf5qKCJAuloXbgr2Xze3/dY/j+lsEZ37CPNEW1G7xaa2fQYzC4XdjPIvkaEfPt+EJpuJr7X+Z/1jXB/M7neHMvg7RLMqlTVw+hskJf2wWAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dYBsE6ke; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67848C4CEC0;
-	Sat, 31 Aug 2024 10:39:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725100792;
-	bh=3JaCn21nFQK/Kzo5qVa/PvsXary6cYEISAcg8Nnd0o8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dYBsE6kecY8k4eZZo/jtqdC7KnYYFG5zPsSch1LaTg1SvRm0WO0QGy9z3AmAz72oX
-	 brGt57z9byZyAfaEwbuqE8PzCKb78Roy3k4FwSsBwIvHBv/pJS0xfbuhAtuLSyGtYg
-	 HEZ1J6qtcBXtACcjhBDNBSAud8JZchbXUaM4j/Yg0JTm8VrhOk/oOzeQxmsDvfghGw
-	 MSJWZNofH8ABkZscSkz0vdYwGX1xZ3RDZqWtzty6/LuTQK1ztKZ2/G6wpbUzd0VJnm
-	 mLoCS0ysKJ+bf+BLMm4BogzPmMHr/97eGWayW23y545tX0MddR3k0d40ZcSTcTIo9X
-	 ezuCa23AgZT8A==
-Message-ID: <a6e3b17c-048e-4a66-b1ac-0aa04a5f14cf@kernel.org>
-Date: Sat, 31 Aug 2024 12:39:44 +0200
+	s=arc-20240116; t=1725114062; c=relaxed/simple;
+	bh=lbityyGP4xdCPcfLsCBTHYFt9GdQygLpiJlwf6xaapk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SXbhR4AblUQNSwyy6cnLv2oVHlewuvOV4vkoT7owSqtHdcppdeGBpwHdf55TDGq5bdC/IOLow4nKVIB6/Ci9x+/pDsnHRgd7m8DRBtCdlYRTkGa43vmH3VPAlMl/jVDX0ZSH/V+iNkN0CZ+7S2Iq2JlrjnTw57rfzLDSjRuudSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hIrVex8G; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1725114059;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=G4fRU4GXiLRr9tyWkx+zPFkdV4614FpRfFryE8h7iDU=;
+	b=hIrVex8Gtep4Q3O+F3FIBEl4AdVti8lnHeLs1V/vNnb3c9gby6K17T1h/TSS1uZc/JCl4J
+	9LwNH5wAGcpJiL3cHZVi5xKnRZxHdv6kLesHYC4u1Fasu/fj5MXPG05YVW2zhRDoVMsIqC
+	K1n+Ub5puRXvdfOtDTGPdIRZMQ7er24=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-519-5oMSUygFNq6SBHUQxEOdqg-1; Sat,
+ 31 Aug 2024 10:20:54 -0400
+X-MC-Unique: 5oMSUygFNq6SBHUQxEOdqg-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8F6B41955BEF;
+	Sat, 31 Aug 2024 14:20:50 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.192.42])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5DC7F30001A4;
+	Sat, 31 Aug 2024 14:20:45 +0000 (UTC)
+From: Hans de Goede <hdegoede@redhat.com>
+To: Sebastian Reichel <sre@kernel.org>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	Enric Balletbo Serra <enric.balletbo@collabora.com>,
+	Andrey Smirnov <andrew.smirnov@gmail.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-phy@lists.infradead.org
+Subject: [PATCH 0/6] power: supply: Change usb_types from an array into a bitmask
+Date: Sat, 31 Aug 2024 16:20:33 +0200
+Message-ID: <20240831142039.28830-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 5/5] arm64: dts: rockchip: Add USB and charger to Gameforce
- Ace
-To: Chris Morgan <macroalpha82@gmail.com>, linux-pm@vger.kernel.org
-Cc: linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
- broonie@kernel.org, lgirdwood@gmail.com, sre@kernel.org, heiko@sntech.de,
- conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lee@kernel.org,
- Chris Morgan <macromorgan@hotmail.com>
-References: <20240829213102.448047-1-macroalpha82@gmail.com>
- <20240829213102.448047-6-macroalpha82@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240829213102.448047-6-macroalpha82@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 29/08/2024 23:31, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
-> 
-> Add support for the BQ25703 charger manager and boost regulator to
-> the Gameforce Ace. This also allows us to add the USB Type-C port
-> manager which has a dependency on the boost regulator.
-> 
-> This specific patch has a dependency on the following series:
-> https://lore.kernel.org/linux-rockchip/20240829204517.398669-1-macroalpha82@gmail.com/
-> 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> ---
->  .../dts/rockchip/rk3588s-gameforce-ace.dts    | 120 ++++++++++++++++++
->  1 file changed, 120 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts b/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
-> index 91efb9dafc89..371f84d5ba6b 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
-> @@ -575,6 +575,56 @@ &i2c6 {
->  	pinctrl-0 = <&i2c6m3_xfer>;
->  	status = "okay";
->  
-> +	fusb302: typec-portc@22 {
+Hi All,
 
-typec@
+When support for the "charge_behaviour" property was added the list of
+available values was made a bitmask in power_supply_desc.
+
+"usb_types" is very similar in that:
+1. It is an enum
+2. The list of available values is stored in power_supply_desc
+3. When shown it shows all available values, with the active one surrounded
+   by square brackets.
+
+But "usb_types" uses an array with valid enum values instead of a bitmask.
+This uses more memory then the bitmap approach and it makes it impossible
+to have a shared generic show() function for properties which show
+available values, with the active one surrounded by square brackets.
+
+This patch-set moves "usb_types" over to a bitmask in power_supply_desc
+to indicate the available values.
+
+Patches 1 - 3:
+
+It turns out that the ucs1002-power driver contained a surprise in that
+it supports writing to "usb_type" even though the ABI doc says it is
+read-only. Since we cannot break shipped userspace API, the ship has sailed
+on this one. The first patch documents that writing "usb_type" is allowed,
+but only for power-supply devices which provide USB power rather then
+consume it.
+
+Enum properties accept writing the FOO_TEXT[] string values, passing
+the enum value matching the FOO_TEXT entry to set_property(), the second
+patch adjusts ucs1002_set_usb_type() to directly accept enum values.
+
+The rt9467 driver was another driver which allowed writing to "usb_type"
+but there the use made no sense, so it is simply dropped.
+
+Patches 4 - 6:
+
+These patches implement the actual moving of usb_types to a bitmask.
+
+Patch 6 is a bit of a bigbang patch moving all drivers over in one go,
+touching a couple of drivers outside drivers/power/supply: 1 in
+drivers/extcon/ 1 in drivers/phy/ and 5 in drivers/usb/typec/ since
+the changes outside of drivers/power/supply are small I've chosen to
+make all the changes in one go rather then have some sort of
+intermediate state where both ways are supported.
+
+For merging this I believe it would be best for an immutable branch / tag
+to be created on the linux-power-supply tree and then send a pull-request
+to the extcon, phy and usb-typec maintainers to merge the tag.
+
+extcon, phy and typec maintainers can you please give your Acked-by for
+patch 6/6 for merging these changes through the linux-power-supply tree?
+
+This set is based on top of the latest linux-power-supply/for-next.
+
+Regards,
+
+Hans
 
 
-> +		compatible = "fcs,fusb302";
-> +		reg = <0x22>;
-> +		interrupt-parent = <&gpio0>;
-> +		interrupts = <RK_PC7 IRQ_TYPE_LEVEL_LOW>;
-> +		pinctrl-0 = <&usbc0_int>;
-> +		pinctrl-names = "default";
-> +		vbus-supply = <&usb_otg_vbus>;
-> +
-> +		connector {
-> +			compatible = "usb-c-connector";
-> +			data-role = "dual";
-> +			label = "USB-C";
-> +			op-sink-microwatt = <1000000>;
-> +			power-role = "dual";
-> +			self-powered;
-> +			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
-> +				     PDO_FIXED(9000, 3000, PDO_FIXED_USB_COMM)
-> +				     PDO_FIXED(12000, 3000, PDO_FIXED_USB_COMM)>;
-> +			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
-> +			try-power-role = "sink";
-> +
-> +			ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@0 {
-> +					reg = <0>;
-> +					usbc0_orien_sw: endpoint {
-> +						remote-endpoint = <&usbdp_phy0_orientation_switch>;
-> +					};
-> +				};
-> +
-> +				port@1 {
-> +					reg = <1>;
-> +					usbc0_role_sw: endpoint {
-> +						remote-endpoint = <&dwc3_0_role_switch>;
-> +					};
-> +				};
-> +
-> +				port@2 {
-> +					reg = <2>;
-> +					dp_altmode_mux: endpoint {
-> +						remote-endpoint = <&usbdp_phy0_dp_altmode_mux>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	rtc_hym8563: rtc@51 {
->  		compatible = "haoyu,hym8563";
->  		reg = <0x51>;
-> @@ -603,8 +653,40 @@ cw2015@62 {
->  			 0x2F 0x00 0x64 0xA5 0xB5 0x1C 0xF0 0x49>;
->  		cellwise,monitor-interval-ms = <5000>;
->  		monitored-battery = <&battery>;
-> +		power-supplies = <&bq25703>;
->  		status = "okay";
->  	};
-> +
-> +	bq25703: bq25703@6b {
+Hans de Goede (6):
+  power: supply: "usb_type" property may be written to
+  power: supply: ucs1002: Adjust ucs1002_set_usb_type() to accept string
+    values
+  power: supply: rt9467-charger: Remove "usb_type" property write
+    support
+  power: supply: sysfs: Add power_supply_show_enum_with_available()
+    helper
+  power: supply: sysfs: Move power_supply_show_enum_with_available() up
+  power: supply: Change usb_types from an array into a bitmask
 
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+ Documentation/ABI/testing/sysfs-class-power   |  7 +-
+ drivers/extcon/extcon-intel-cht-wc.c          | 15 ++---
+ drivers/phy/ti/phy-tusb1210.c                 | 11 +---
+ drivers/power/supply/axp20x_usb_power.c       | 13 ++--
+ drivers/power/supply/bq256xx_charger.c        | 15 ++---
+ drivers/power/supply/cros_usbpd-charger.c     | 22 +++----
+ .../power/supply/lenovo_yoga_c630_battery.c   |  7 +-
+ drivers/power/supply/mp2629_charger.c         | 15 ++---
+ drivers/power/supply/mt6360_charger.c         | 13 ++--
+ drivers/power/supply/mt6370-charger.c         | 13 ++--
+ drivers/power/supply/power_supply_core.c      |  4 --
+ drivers/power/supply/power_supply_sysfs.c     | 66 ++++++-------------
+ drivers/power/supply/qcom_battmgr.c           | 37 ++++++-----
+ drivers/power/supply/qcom_pmi8998_charger.c   | 13 ++--
+ drivers/power/supply/rk817_charger.c          |  9 +--
+ drivers/power/supply/rn5t618_power.c          | 13 ++--
+ drivers/power/supply/rt9467-charger.c         | 16 ++---
+ drivers/power/supply/rt9471.c                 | 15 ++---
+ drivers/power/supply/ucs1002_power.c          | 26 ++++----
+ drivers/usb/typec/anx7411.c                   | 11 +---
+ drivers/usb/typec/rt1719.c                    | 11 +---
+ drivers/usb/typec/tcpm/tcpm.c                 | 11 +---
+ drivers/usb/typec/tipd/core.c                 |  9 +--
+ drivers/usb/typec/ucsi/psy.c                  | 11 +---
+ include/linux/power_supply.h                  |  3 +-
+ 25 files changed, 132 insertions(+), 254 deletions(-)
 
-e.g. charger@
-
-> +		compatible = "ti,bq25703a";
-> +		reg = <0x6b>;
-> +		interrupt-parent = <&gpio0>;
-> +		interrupts = <RK_PD5 IRQ_TYPE_LEVEL_LOW>;
-> +		pinctrl-0 = <&charger_int_h>;
-> +		pinctrl-names = "default";
-> +		power-supplies = <&fusb302>;
-
-
-
-Best regards,
-Krzysztof
+-- 
+2.46.0
 
 
