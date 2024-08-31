@@ -1,56 +1,48 @@
-Return-Path: <linux-pm+bounces-13279-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13280-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 152BE967072
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 11:19:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C68F39670A6
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 12:01:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E29CB2294F
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 09:19:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40C8B1F22F3C
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 10:01:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E63E170A15;
-	Sat, 31 Aug 2024 09:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1616317B427;
+	Sat, 31 Aug 2024 10:01:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="lOCgYrI3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VNdAUUS9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5964919BB7;
-	Sat, 31 Aug 2024 09:19:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB13D8468;
+	Sat, 31 Aug 2024 10:01:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725095988; cv=none; b=aD7+VuM+z0/t9MNZcjUF9tddvY0020d23zBztlDOhI8kNQqejJjgYWoRuPc1e+9iDtbt41SWic6HkFxXCMoXdqcd95x3W4vhLmiMRIyYGrSysmNGzQqyrViuG6QX3D34wY3KRsfns3PIUkT66q9J2mz8DY5wiET82+JbKgukSMw=
+	t=1725098483; cv=none; b=rCOOF5ZM/nzg9Lit4qNANiD+MdxGlB4XFb3B4vec3VqMIwDShuN/AchRiTg+7wKbSp8SrqHKhDB1x4UJdcXf3K8WZiBll1EfvysSaDIh2a2sNeh9OgrgvM9oSY9kVsmIy5SOiFQsKpAERoCAW27I9Fcim/clEbSNgoXSu8Qs9E0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725095988; c=relaxed/simple;
-	bh=b5NU5go9SW9B7eo/ea+mH/zJwnL2pA1ziUG+9/WC+9k=;
+	s=arc-20240116; t=1725098483; c=relaxed/simple;
+	bh=nrEkWt81J6H3ttTmKA+t6pIm9o90tetoQINzh4TM3TU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wrq12Wz+5uzY6KRu3y0VGvc2MIZFT3DSxWcMd4y3I5lWCNP/WX88hpZSAc4A7MfskkjH+LtB43s+3YJudZMJcIUvhF27CGvZmOPBUy2WPfcdCd6/7czhK0/o7FjzB0pkOAyN/Mp3CPepuAkNDjDEMjTyA3a/BEuMHKGyMjyU8K4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=lOCgYrI3; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1725095953; x=1725700753; i=wahrenst@gmx.net;
-	bh=DCJM6CMJUU62uUqG060BsY+UBF9LmX3KRYG14zeCN44=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=lOCgYrI399GLa63LDSPh5EW2elI/NgrymunA7/8s8tAxhpVoW+3noM+EYCtv+eIZ
-	 BR08UBUpFfQzpV5hGx0nAtqAqEbvRnaeYxrsuT996nzjmQrhjZ4gVJWk5jRZbYAof
-	 w1PGH4vNU4c48mswNprIh7nGkcWcSZtfxRyuReDd25FcEK0VIHLePrjDXh4zgmtbH
-	 m1svDgwAygZVP8o6I13bHkgrXaENuqyR/14dO6wM1sEDa4AFVb2xD/w24/ebHbmVM
-	 fOs5HhznSB3hv5Md3HqElYOfy6arteqkGwhi9WSpkhRPUhNnM8et3OJL3o0gwb7Xz
-	 HGcrgeOy4alVQNmWDA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MYvY2-1sX2bg3y6a-00WVDP; Sat, 31
- Aug 2024 11:19:13 +0200
-Message-ID: <7ba14fe2-38e0-414c-bc3d-62c1e70741ad@gmx.net>
-Date: Sat, 31 Aug 2024 11:19:08 +0200
+	 In-Reply-To:Content-Type; b=VnRKdtd1SgSaZ4Y9oD9n8HPGWiwsTFZjSllIk3qeBCFxMPj+Pvrj4/Od1yP+nBWvGT7ngLiNnXOjP9MTJKWod7Xj4G8mgIYzPQRHEtEJ7uL7EbkIaX9EGsoIdWM69PWE65WeKp3fKfgM68SL+zsRV5hVzBQIaTkpVH/vesI4M4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VNdAUUS9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75A29C4CEC0;
+	Sat, 31 Aug 2024 10:01:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725098482;
+	bh=nrEkWt81J6H3ttTmKA+t6pIm9o90tetoQINzh4TM3TU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=VNdAUUS9uGGiplHGjiXOEfZLqtZyV+j2RVOZALlAGdykjBkFAUxUxBAsLWwx0LS0m
+	 5dTjdfxs+bP9aiza71yBfMGcJcj/jd6j0IuuyFQgWYXR34Fe2MRBdSo8UalR1UvSnB
+	 kw0FrZUBJSgsXty8aCXv4Wd2e8vaVepDk4D9JLeL2dl7okmHfJyzRnR2H008OAbGkd
+	 6YMWhdojXpXSo2dUvQPG8Tu7zq/AdDSyFS3hbT4w7SvZg54lveC6nJ5W1uoE9klGG2
+	 wHtZDKSozOR+89bIriht6cmFwZxulF7l59faD9Pv+ktA4mB+VGLjZPVO77WfkY+Hsp
+	 D7kADDeqdbiRw==
+Message-ID: <18399b69-235e-47f9-b876-45fb2a4766e4@kernel.org>
+Date: Sat, 31 Aug 2024 12:01:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,120 +50,100 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 1/9] mailbox: bcm2835: Fix timeout during suspend mode
-To: Jassi Brar <jassisinghbrar@gmail.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Doug Anderson <dianders@chromium.org>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
- Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
- Peter Robinson <pbrobinson@gmail.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Maxime Ripard <mripard@kernel.org>, dri-devel@lists.freedesktop.org,
- bcm-kernel-feedback-list@broadcom.com, =?UTF-8?Q?Ma=C3=ADra_Canal?=
- <mcanal@igalia.com>, Russell King <linux@armlinux.org.uk>,
- Minas Harutyunyan <hminas@synopsys.com>, linux-pm@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kernel-list@raspberrypi.com, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20240821214052.6800-1-wahrenst@gmx.net>
- <20240821214052.6800-2-wahrenst@gmx.net>
+Subject: Re: [PATCH v5 3/8] dt-bindings: clock: add Qualcomm IPQ5332 NSSCC
+ clock and reset definitions
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
+ mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, konradybcio@kernel.org,
+ catalin.marinas@arm.com, will@kernel.org, djakov@kernel.org,
+ richardcochran@gmail.com, geert+renesas@glider.be,
+ neil.armstrong@linaro.org, arnd@arndb.de, nfraprado@collabora.com,
+ linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ netdev@vger.kernel.org, Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+References: <20240829082830.56959-1-quic_varada@quicinc.com>
+ <20240829082830.56959-4-quic_varada@quicinc.com>
+ <gomm5yozebwfuhmgziajmkflbj6knmbwae4mls5kuwl5ngcbrx@mndpiktfken2>
+ <CAA8EJpoSZwqw7_UVVXzwOd77Xh6j5LzKus-ZfuL_f5yrc8AYkg@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <20240821214052.6800-2-wahrenst@gmx.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <CAA8EJpoSZwqw7_UVVXzwOd77Xh6j5LzKus-ZfuL_f5yrc8AYkg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:LHmw1KfsSaItuLqhBtv7gcE2AE8rQOkuLoH3Y1mUAtW48KNCQ6H
- +zxuSDUOD3/UQ0MsI3HZwFJTu/WyaZn3+j6xUw8k421h56WyzSJDZTBfGHxrvEkkw8KYWEM
- SKc8hJT3sBmz0KJ5Su+4fh+g3DbZ3tirJGHiCV6LrLEtok4VRnYVciZUbzOnfuGO77V8plW
- Qr29fYuTJIZMw+eeFw90w==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:GCjBaRtpmXg=;K7QcE9qCs2b8RuGubAZxIcNWAvp
- Wtb4OuvQ/77mPUc7Ynl+S+De8oF8dxA1QusqUi9hqvE5ZkXh7zxx5VpwT5SV/fififXJ+7T1t
- ACRCVNbU2lXyryXh/+JuzTMIJsCe3Ycmim25oRf+kPp/2a6XXItpyb97qoLAOEwoapBBfsxfT
- XBsMQ36wrDwe8AqRqTz5++WQIBRQoUmqisu0XjAdRT0IRC5otUhlZuAXrn1IJIaO/Kjum1VU8
- BnM7ID6EHU1KgND74TQknPT3K8LnPocgQsQHB5i88abm3k6lqG+ZvFEDRMyY0NMozU344u2fc
- dPWoRt3ECcGhzwGCFk0wS5BkJEz7JvhCYvYPuiRgove1qiRBadDa1I3UhmEs1NrXsuoVKGXmx
- oUsZ27hQbRs7Gf/XZlCvrQRtfpqk9UPmi+hkGQWRtBEN8ddf14zZOfm0u5WsMPRwl7xppJ0R8
- AbB+ibHpCAeNWkfeRuTNUnIjwXSFeQrkZ9HRBpmrR5BBh2HwEzCtax9hXcUaLWlvHVBaWQ93u
- CRyuaPZ8LYt8/VE2iC1QVZUCTk5c9gKhmO5fjODuqpw2id0YkSYNSv/GKsuUQP8HsWI1Xlwqa
- WBt+5qeFTb3yA3xVhXbx16/kj5/NGgVbki6ecOR4x9Qo/ekHEKgM4AZCHUl0J3fZw4ebUpYyY
- 1mom1slF7ofeeZ2wPEzsIBbI0Fe7zoAMUPWSmJWAzbW2MpIcrjuGdhgdfuao+j9vQctG1eSRR
- thgWZpbAgev3jPnSAmvs5OU/YxsRWR2An4OJ9EQOo3KSJdDiBjj/l0jxS8jr+ixLqHKRExGT5
- WU9G5J4kuK8b+c9KlLlm7pXA==
 
-Hi Jassi,
+On 31/08/2024 08:56, Dmitry Baryshkov wrote:
+> On Sat, 31 Aug 2024 at 09:11, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>
+>> On Thu, Aug 29, 2024 at 01:58:25PM +0530, Varadarajan Narayanan wrote:
+>>> From: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+>>>
+>>> Add NSSCC clock and reset definitions for Qualcomm IPQ5332.
+>>> Enable interconnect provider ability for use by the ethernet
+>>> driver.
+>>>
+>>> Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>> ---
+>>> v5: Marked #power-domain-cells as false
+>>>     Included #interconnect-cells
+>>
+>> Then this might not be GCC-like clock controller or gcc.yaml
+>> should not include power-domain-cells.
+> 
+> qcom,gcc.yaml already doesn't mark #power-domain-cells as required, so
+> it should be fine. See qcom,gcc-apq8064.yaml or qcom,gcc-ipq4019.yaml.
+> 
 
-Am 21.08.24 um 23:40 schrieb Stefan Wahren:
-> During noirq suspend phase the Raspberry Pi power driver suffer of
-> firmware property timeouts. The reason is that the IRQ of the underlying
-> BCM2835 mailbox is disabled and rpi_firmware_property_list() will always
-> run into a timeout [1].
->
-> Since the VideoCore side isn't consider as a wakeup source, set the
-> IRQF_NO_SUSPEND flag for the mailbox IRQ in order to keep it enabled
-> during suspend-resume cycle.
->
-> [1]
-> PM: late suspend of devices complete after 1.754 msecs
-> WARNING: CPU: 0 PID: 438 at drivers/firmware/raspberrypi.c:128
->   rpi_firmware_property_list+0x204/0x22c
-> Firmware transaction 0x00028001 timeout
-> Modules linked in:
-> CPU: 0 PID: 438 Comm: bash Tainted: G         C         6.9.3-dirty #17
-> Hardware name: BCM2835
-> Call trace:
-> unwind_backtrace from show_stack+0x18/0x1c
-> show_stack from dump_stack_lvl+0x34/0x44
-> dump_stack_lvl from __warn+0x88/0xec
-> __warn from warn_slowpath_fmt+0x7c/0xb0
-> warn_slowpath_fmt from rpi_firmware_property_list+0x204/0x22c
-> rpi_firmware_property_list from rpi_firmware_property+0x68/0x8c
-> rpi_firmware_property from rpi_firmware_set_power+0x54/0xc0
-> rpi_firmware_set_power from _genpd_power_off+0xe4/0x148
-> _genpd_power_off from genpd_sync_power_off+0x7c/0x11c
-> genpd_sync_power_off from genpd_finish_suspend+0xcc/0xe0
-> genpd_finish_suspend from dpm_run_callback+0x78/0xd0
-> dpm_run_callback from device_suspend_noirq+0xc0/0x238
-> device_suspend_noirq from dpm_suspend_noirq+0xb0/0x168
-> dpm_suspend_noirq from suspend_devices_and_enter+0x1b8/0x5ac
-> suspend_devices_and_enter from pm_suspend+0x254/0x2e4
-> pm_suspend from state_store+0xa8/0xd4
-> state_store from kernfs_fop_write_iter+0x154/0x1a0
-> kernfs_fop_write_iter from vfs_write+0x12c/0x184
-> vfs_write from ksys_write+0x78/0xc0
-> ksys_write from ret_fast_syscall+0x0/0x54
-> Exception stack(0xcc93dfa8 to 0xcc93dff0)
-> [...]
-> PM: noirq suspend of devices complete after 3095.584 msecs
->
-> Link: https://github.com/raspberrypi/firmware/issues/1894
-> Fixes: 0bae6af6d704 ("mailbox: Enable BCM2835 mailbox support")
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-gentle ping
-> ---
->   drivers/mailbox/bcm2835-mailbox.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/mailbox/bcm2835-mailbox.c b/drivers/mailbox/bcm2835-mailbox.c
-> index fbfd0202047c..ea12fb8d2401 100644
-> --- a/drivers/mailbox/bcm2835-mailbox.c
-> +++ b/drivers/mailbox/bcm2835-mailbox.c
-> @@ -145,7 +145,8 @@ static int bcm2835_mbox_probe(struct platform_device *pdev)
->   	spin_lock_init(&mbox->lock);
->
->   	ret = devm_request_irq(dev, irq_of_parse_and_map(dev->of_node, 0),
-> -			       bcm2835_mbox_irq, 0, dev_name(dev), mbox);
-> +			       bcm2835_mbox_irq, IRQF_NO_SUSPEND, dev_name(dev),
-> +			       mbox);
->   	if (ret) {
->   		dev_err(dev, "Failed to register a mailbox IRQ handler: %d\n",
->   			ret);
-> --
-> 2.34.1
->
+I know, I am not saying whether code is correct or not, but whether it
+makes sense. If it does not have power domains, but instead interconnect
+cells, maybe it should not be considered a "GCC" like block.
+
+Best regards,
+Krzysztof
 
 
