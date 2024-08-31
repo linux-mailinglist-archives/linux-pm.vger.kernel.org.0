@@ -1,117 +1,136 @@
-Return-Path: <linux-pm+bounces-13276-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13277-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C46B1966FE1
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 08:57:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AF52966FF1
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 09:06:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BA6A1F22A0D
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 06:57:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AF8A1C20D9E
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 07:06:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9234816D9C2;
-	Sat, 31 Aug 2024 06:56:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A266217CA12;
+	Sat, 31 Aug 2024 07:05:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ipA2EL28"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="edQ7Gt8m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA4216B750
-	for <linux-pm@vger.kernel.org>; Sat, 31 Aug 2024 06:56:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84AA16D4FF;
+	Sat, 31 Aug 2024 07:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725087418; cv=none; b=k0zODn0dVnITFXR9vKGpjeqjRP1qN+RYWCtb8G3MWyGn+z/0DZRTYxaighrR5uvb7Ni+RKHF8az6nKqkPe1q2m4Rd+w4ckQqaii2cf5yTdqRrza53t/I3o5SWP4i9Pw6/1kD8LqkJt7kKPlbiOnv+tyP4miN1beLtG0qahysY/o=
+	t=1725087901; cv=none; b=iGBIg0GU/M398RzNBNYunXK9PdNx8vK9REmFZfgfg0Pa2A4pV+xHu9YfohU0iNwPcGFHYduqUX/ExTZF6jtNQ93HgdW01pYOhjGI+dH0bi3aHLRGwWgWjjNmHftBmzezayFKYftDX+yLEFjIfr8L+NXjN1PP4zSHpFU6kqr6wRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725087418; c=relaxed/simple;
-	bh=8+xb/c5q8Te81bywgznH7epprrs+vus2sJDb/zrAqlI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DmG1T2N9h4TaMZWjujoXs5GxIagH9fEsdH7cmgEgkzB6nEWxz8To0dQ6Hkux3OaRbDk0AtE5pG5dIOAf5yrs7cmsbXtWXOFSnGah4d31425dyX3ZHEQz78L0hEi2KpTrmx9j5E42LXiD44pN2B2FIWFYaaAfoylGh0b15idk37A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ipA2EL28; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e115c8aa51fso2686496276.1
-        for <linux-pm@vger.kernel.org>; Fri, 30 Aug 2024 23:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725087416; x=1725692216; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=35/Cpco2p2doBWBoqkU/4WZL7A9fRuozoOMEP5DhBlM=;
-        b=ipA2EL28NfkHMF7Bu1AE1NRHUWJcX3Jg1VVzfgrd6xD/g/xekeEJULFMdm5ZNaVbnw
-         spp67cqXt7EZZrUaj8yk80QL6M5R2lzkRRRtdg4/F5NH2gh/kCu3E2NdOTQwube2J6NI
-         cDvDsZa1cemjGvwLj2MOgrk1/kFlE+IJq6LVi5vwqRn0iXio46lFvKKBR+AXTv862xdj
-         1/zeYScrc/34ICH/mWL9lEJogDtZ5TjTqG7oWmdzGuLmh2EkE5m39wAB/IFQUJ1ipCVu
-         IrkqFE2FuG+/gO7R6IiKnfQCbATqLRq3xLy2pZyk9GzkN/MsMCFmQ5XfAgML4RJfp47N
-         trIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725087416; x=1725692216;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=35/Cpco2p2doBWBoqkU/4WZL7A9fRuozoOMEP5DhBlM=;
-        b=p+yS89nddOcVKa4LaFqrsCzwC0zCxDjquCtCAPC+QNQZ0oiC5o7m8USk67A9sf3cYu
-         lMQwHS7UwN7mUbVrjBjTCfckxUHDnbf9ynvo7lC7TeESGuF4LNABNgJNL2KzcxeTOkpx
-         9dtLWpZ4QvgSSDp7XIq42zaaxETiVi+lIAQ25Ke4/8e7IcKS6FOXgDazBqK0IonDQYx3
-         WieLApOSQeAm9WbJgKdCesFh+FJxRtALwUF4AfwnPeSeygfecNni6Z2231C1vl+hO+1h
-         /0u0mVMX9Lljpo7WuQ51jXWYjhR4qVX+3sXX3/z8NYJUkIiTKwpiJt6s1MOg6bvxBE6H
-         yxQg==
-X-Forwarded-Encrypted: i=1; AJvYcCWmKKf7o+cDEAF3ofRi2eaBelPhvxYnkvQ8GmQeSBOZKRXkk5Cb3P0WTUjXLtUZVTuzS0+VxNN8jA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpFVq92IGasWvIZyTYavVrMhgFIC+9bF61jCnWi6MKtKyI8VeK
-	74V9EUW7DS6h+vghEHhMWU0eF1ukBhqSAwopEbjp0yyxHthK2KJPK5UvUkfC8tK/OcRcpFHO6Au
-	DJrDg3NkTNKqP4+EIWwFszHi4ZNHHvJNMx3pH/g==
-X-Google-Smtp-Source: AGHT+IFWbLWA4IjXvF5bKeQh1lJtnNOkDsN8Sdtsfq95rr64K/eYP6o6HPpIf8dFbQYhHTulhF5MoAz7eON8AeOpAgw=
-X-Received: by 2002:a05:690c:d81:b0:6cf:8d6f:2bef with SMTP id
- 00721157ae682-6d40eb67be1mr51383017b3.7.1725087415578; Fri, 30 Aug 2024
- 23:56:55 -0700 (PDT)
+	s=arc-20240116; t=1725087901; c=relaxed/simple;
+	bh=2MIvjife9TxEOVM4N//TXAhsxKXULju5kqrwtaSFDZI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MlSWikrWS/P96BIo92EMU07/hwntbHvWLeBEXD1WPRf9dznPfwh4lb5qJzhbW+g1fFq+4VlvKv2dzUA6oD5+C4V8i85SUTWy1qv38pD2Y1WG8NsfZ7Lf/D4T23H4jCU72YhPxwGfDT6QOHCdTJqVZmmFSlR1eBaG8KBkDl2u29o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=edQ7Gt8m; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725087897; x=1756623897;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2MIvjife9TxEOVM4N//TXAhsxKXULju5kqrwtaSFDZI=;
+  b=edQ7Gt8mmXBpdXS9M/rn/3IwDMuaaSnCpuiz4eJEPB9rRkL5FPvCnoo5
+   lTSK1r3E/Hrshovh9++k5y8xbV8JGP+5LYX51+K/iqEvL4QvFNVS0BITY
+   BuieiZWpTGXH2hrVCx3AHsa/YrkVaMQxnhK5AtOyqp9+RD7CRKHTYY4fY
+   FLMHC3GrJ3b4PIq/h+zeWc5WzQYLoNY1m3XlEykh5P1YyR9FAr7/01Ms8
+   yebvpIqB8ze8h1yINOONHoG5uU8ELn0g3qr65ONOrVSGp9IarO8eK1B7k
+   hZTpnE1AJYHKf83mdcwLNjKMy6a0e2UacyinreffO0XpSBdsVL4WQxUbv
+   Q==;
+X-CSE-ConnectionGUID: 9DsinZPPTMGN9Fwb6WQmUQ==
+X-CSE-MsgGUID: QIXGcIBHRRqI5hgpLNw4Gw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="35142355"
+X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
+   d="scan'208";a="35142355"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2024 00:04:56 -0700
+X-CSE-ConnectionGUID: pBaWsdrATdClvQIISpIntA==
+X-CSE-MsgGUID: PGOW7AjMQ2qLPMI3JEsoQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
+   d="scan'208";a="64160004"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 31 Aug 2024 00:04:50 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1skIAC-0002Ps-0A;
+	Sat, 31 Aug 2024 07:04:48 +0000
+Date: Sat, 31 Aug 2024 15:04:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Macpaul Lin <macpaul.lin@mediatek.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-leds@vger.kernel.org,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Sean Wang <sean.wang@mediatek.com>,
+	Lee Jones <lee@kernel.org>,
+	Alexandre Mergnat <amergnat@baylibre.com>,
+	Flora Fu <flora.fu@mediatek.com>
+Cc: oe-kbuild-all@lists.linux.dev, Bear Wang <bear.wang@mediatek.com>,
+	Pablo Sun <pablo.sun@mediatek.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>,
+	Sen Chu <sen.chu@mediatek.com>,
+	Chris-qj chen <chris-qj.chen@mediatek.com>,
+	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
+	devicetree@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH v2 2/7] dt-bindings: mfd: mediatek: mt6397: Convert to DT
+ schema format
+Message-ID: <202408311453.Ui9YGyJc-lkp@intel.com>
+References: <20240830110732.30080-2-macpaul.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240829082830.56959-1-quic_varada@quicinc.com>
- <20240829082830.56959-4-quic_varada@quicinc.com> <gomm5yozebwfuhmgziajmkflbj6knmbwae4mls5kuwl5ngcbrx@mndpiktfken2>
-In-Reply-To: <gomm5yozebwfuhmgziajmkflbj6knmbwae4mls5kuwl5ngcbrx@mndpiktfken2>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sat, 31 Aug 2024 09:56:44 +0300
-Message-ID: <CAA8EJpoSZwqw7_UVVXzwOd77Xh6j5LzKus-ZfuL_f5yrc8AYkg@mail.gmail.com>
-Subject: Re: [PATCH v5 3/8] dt-bindings: clock: add Qualcomm IPQ5332 NSSCC
- clock and reset definitions
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	konradybcio@kernel.org, catalin.marinas@arm.com, will@kernel.org, 
-	djakov@kernel.org, richardcochran@gmail.com, geert+renesas@glider.be, 
-	neil.armstrong@linaro.org, arnd@arndb.de, nfraprado@collabora.com, 
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
-	netdev@vger.kernel.org, Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240830110732.30080-2-macpaul.lin@mediatek.com>
 
-On Sat, 31 Aug 2024 at 09:11, Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> On Thu, Aug 29, 2024 at 01:58:25PM +0530, Varadarajan Narayanan wrote:
-> > From: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-> >
-> > Add NSSCC clock and reset definitions for Qualcomm IPQ5332.
-> > Enable interconnect provider ability for use by the ethernet
-> > driver.
-> >
-> > Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> > v5: Marked #power-domain-cells as false
-> >     Included #interconnect-cells
->
-> Then this might not be GCC-like clock controller or gcc.yaml
-> should not include power-domain-cells.
+Hi Macpaul,
 
-qcom,gcc.yaml already doesn't mark #power-domain-cells as required, so
-it should be fine. See qcom,gcc-apq8064.yaml or qcom,gcc-ipq4019.yaml.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on broonie-regulator/for-next]
+[also build test WARNING on lee-mfd/for-mfd-next robh/for-next lee-mfd/for-mfd-fixes linus/master v6.11-rc5 next-20240830]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Macpaul-Lin/dt-bindings-mfd-mediatek-mt6397-Convert-to-DT-schema-format/20240830-191309
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+patch link:    https://lore.kernel.org/r/20240830110732.30080-2-macpaul.lin%40mediatek.com
+patch subject: [PATCH v2 2/7] dt-bindings: mfd: mediatek: mt6397: Convert to DT schema format
+reproduce: (https://download.01.org/0day-ci/archive/20240831/202408311453.Ui9YGyJc-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408311453.Ui9YGyJc-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/mt6397.txt
+   Warning: Documentation/devicetree/bindings/leds/leds-mt6323.txt references a file that doesn't exist: Documentation/devicetree/bindings/mfd/mt6397.txt
+   Warning: Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml references a file that doesn't exist: Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
+   Warning: Documentation/devicetree/bindings/power/wakeup-source.txt references a file that doesn't exist: Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
+   Warning: Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+   Warning: Documentation/hwmon/g762.rst references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/g762.txt
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
