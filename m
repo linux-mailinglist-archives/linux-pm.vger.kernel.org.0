@@ -1,655 +1,279 @@
-Return-Path: <linux-pm+bounces-13271-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13272-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A881B966CBB
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 00:52:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49870966F59
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 07:14:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD8761C2201C
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2024 22:52:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9CC81F23552
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2024 05:14:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D0F918C91F;
-	Fri, 30 Aug 2024 22:52:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0AB913B285;
+	Sat, 31 Aug 2024 05:13:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="t+JOF9gW"
+	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="PDojM8N8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OS0P286CU011.outbound.protection.outlook.com (mail-japanwestazon11010037.outbound.protection.outlook.com [52.101.228.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55FA165F0B
-	for <linux-pm@vger.kernel.org>; Fri, 30 Aug 2024 22:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725058334; cv=none; b=q+wKxs7Vk0+GfEaQW3Xx9y9KTrp8HuWavRAZMId+NFe3os/E+rj8lmhfufxWyB6k+o+4J9rrieXS83GWWdssruI3Kr2L0Gui3k+T43Z/zSmgCbdF6hWATEHu37we1QM+vnUO7/lz8bOz2CUKQ5sUPUhw+ya/lUE7O4H1CH4+Xs0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725058334; c=relaxed/simple;
-	bh=gxOxhYBDbajQXeDcm4+m410j7vqMfY9SlJyavj7ERpc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HppoM6HkmKtpHYlD4Z/71JiaIsykST/q5Qt8yllkbvCan+LUBPIeApAGu8xe356xc2+BeRSj1zAZrDs/9qII7NR5pa7FgjYTPOQFxpdJ27VEUqb29yLJR7yh0aVYKh2atXL/aVlrKC6m8Si1L81J0MvLslqKeIUT08WyqsoyX4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=t+JOF9gW; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5c2443b2581so2134a12.0
-        for <linux-pm@vger.kernel.org>; Fri, 30 Aug 2024 15:52:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1725058329; x=1725663129; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cH9IXkuD7yeaJ2XxyqB5qRHFsRijGF7vwxcwESC9IPc=;
-        b=t+JOF9gWayqvsa7RY/nLmJLqTSFW2bED9JGrDP+ol0XF/5hZ87kC8Fw+55Sv5g0c66
-         BJMZhBiSfWtuxo3Qv2wIgKHgpAyK49qzbC52a1IQnoObwXf5FhzSMTWsmponCnk20oeW
-         Q9VrOk8L0PhBae6F29P53cqGdnCuN+rycqEYpsjlp7SzcA+kAkHB837iDu2SQzS/vP4C
-         KWJ+/HVUcbCkuiK7fqzw/E2A7KZBOeYegBJ3NkiUnCvJHT8VXGovoSbwSfdnLF7+TUsF
-         Nh1d5OonCMy30uSrW2K2KIcFNZEN/DIRodusqX1zc2fuaj2kj/VfrwvDc0pyaFj4pt5u
-         1ZBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725058329; x=1725663129;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cH9IXkuD7yeaJ2XxyqB5qRHFsRijGF7vwxcwESC9IPc=;
-        b=dU4JFmcH+BbbV7hngHifQ0t1htvDgVpnIegYYKzAuf/Ea5eaRYnEgluTWckPAdSNkp
-         KpZdtqRcSC8FXBhcUC8IW7sNAGR+SacunYc1Y+v6i4MVHQRfRqAf4KkAjvphBDu6P4Ks
-         w+LNHYj0J+7OZl4YXg0KJ7fVnCXG2s6mqryI9eeCjp2djCP2SlIeDVULmwRC0Q0xSfCL
-         8U4v1MPRikAi5nFcI8cx/Y9yWnhUEax1IebAOPMiULKT2ANOqKRav78jMfSz/vVf1UB4
-         0649XLIRqK5Z27FPkFrtHpjMEmjLvFrBfOGNxPRAoZ/VE4exrmZlMPhq6KgyauA1rkUq
-         e5vw==
-X-Forwarded-Encrypted: i=1; AJvYcCVOXMMcqFFKdwnkN2F4bQSUl2I5PkDmqXzqOLwPrRqgWzC8BzKfDfyy0uogF6qijunRscNWIMr6kw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXKAy5s6fQdDOOYNe4VEObA97m1AQrFY+yhD6zgHu1SoIl4435
-	mt2jZC+OQ0ohf+yevzmjWqiBQpqyjMZatt7eCougYZyI/M3udJG/J1eCoKuNuO9CeJDQUk6wsfK
-	D+NdqpsVhRAQzaDLtoPs5oq/r4s4rHB3poWTI
-X-Google-Smtp-Source: AGHT+IGopOqpvD2/VK6IZTdKr8pK7dF9i94/MKTfilLc6SgVH38AqvTz0xg5bG+cxlriW0ez3Ui9ngIcmvDO2Jgaf58=
-X-Received: by 2002:a05:6402:2113:b0:5be:c28a:97cf with SMTP id
- 4fb4d7f45d1cf-5c245b707camr26940a12.5.1725058328465; Fri, 30 Aug 2024
- 15:52:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70C91D12E8;
+	Sat, 31 Aug 2024 05:13:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.228.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725081236; cv=fail; b=Nv8jMJLYNyg4Lig/a0SZn+1F0cIusPR760jZIJ+IKwemDL5tzv+C4KhbSOab6iu0VYOvwdxX/cDrpRl9lgWsWWR4IV1MKoTLMusP5y+Uvi1fxdWen3DoygED+DRXrh36WvpJ7CNCL3w518FACu1rs1T6WNwxiHp7qF1ocnlOv6w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725081236; c=relaxed/simple;
+	bh=R5AIjk5NF+2Lk+wTugrXLvm7rfnYCz4Og0ydGMtueeM=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=JHG0mYnCEZc3pQuYMYXAE1SgPpjwfnl+jwhbtFrQ2gR1dFU4/Ag+SoChFRkiX7eUQPrNmXvdofoFiboBAM3Muc4yLXJk0xBzuiiJh0rbPV2hTooNHQ9PIOShyyPuVdJBufyH3iMDjjrD3LobZPieI6p4RBYE0Pooj1li9UE05To=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=PDojM8N8; arc=fail smtp.client-ip=52.101.228.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NqXEx558x8P5koDIjRvmqcs1d3g7CF9F+TAXIPDuSO5W0ZPXSCzYtkCXlQ4esZY+a2jmY4cXprEZf7xqL4CqDUsZYtLXSBvgdFZVzXGBaITfmjXxMZy133POQqse3Bp7+cSynUJFgrJGC7ctxG9i3LNIspoPR33M7VNQj+YHFm05NbeQbVl5w7M36l/9zMiQESbniDJKyzxh+70ISCJp90aQdSZPonsYDznKFrOTX8R306O+nH1NU8LC9fn0/b6nVsLGgAgS+NvYRXs3E9VMlfH48845ZT2FMRaxswmDEeZiWrh/p0VQJsFMHAw25GJeGRAV/ok2o8RW9U0NHsvPug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=R5AIjk5NF+2Lk+wTugrXLvm7rfnYCz4Og0ydGMtueeM=;
+ b=pCeWyDtxz5LiG8ZKtecFh+14KlEsDj8hBGwbbM/x0sAc9LS7Qi/Zws7SZ2QNSVAcRX8KOgYcbYULmGLfT32XmqmY/Vo6eSh/s6Ca5mVKUhhgigV2Qs9Kd+HppQhhiUWniqpvfqnw4mM8aCUfasjUpDlkR073Gc9+LpCQ0vvntdh+nxOAAVgN0SZUHoOQ9NPkPEBcUjPxeB47GW9a8ui8OUgp7F9l5R5ypxebesoqWOREwaqEL1iH1D4DWoeiHGC28699y6h5Dvy4h3igBKaASMV8P7aaVdpQK7Kv1MYyep/NxaWsMoJDLuGw0gfHMBMtaGvJXopY6LwhCh/V8inf+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=R5AIjk5NF+2Lk+wTugrXLvm7rfnYCz4Og0ydGMtueeM=;
+ b=PDojM8N855mqlKncbaFWMAbFWRT1+iBy6fBGbwsJBN9+cBKnEiXt/ofF8bxH1niaDAFl4vLMFAmGAtAWQ3swZloC7F+GaSu3kdLD+0jsgWnkb7MxBD+vSOl49YGKNhzzaaNIqHQ9d7BTzjWYgogsJlPs8mY5axGwW2JXSH/6shw=
+Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
+ by OS3PR01MB6674.jpnprd01.prod.outlook.com (2603:1096:604:10c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.21; Sat, 31 Aug
+ 2024 05:13:46 +0000
+Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
+ ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
+ ([fe80::86ef:ca98:234d:60e1%6]) with mapi id 15.20.7918.020; Sat, 31 Aug 2024
+ 05:13:39 +0000
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Claudiu.Beznea <claudiu.beznea@tuxon.dev>, Ulf Hansson
+	<ulf.hansson@linaro.org>
+CC: "vkoul@kernel.org" <vkoul@kernel.org>, "kishon@kernel.org"
+	<kishon@kernel.org>, "robh@kernel.org" <robh@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
+	<conor+dt@kernel.org>, "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+	"geert+renesas@glider.be" <geert+renesas@glider.be>, "magnus.damm@gmail.com"
+	<magnus.damm@gmail.com>, "gregkh@linuxfoundation.org"
+	<gregkh@linuxfoundation.org>, "mturquette@baylibre.com"
+	<mturquette@baylibre.com>, "sboyd@kernel.org" <sboyd@kernel.org>, Yoshihiro
+ Shimoda <yoshihiro.shimoda.uh@renesas.com>, "linux-phy@lists.infradead.org"
+	<linux-phy@lists.infradead.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-renesas-soc@vger.kernel.org"
+	<linux-renesas-soc@vger.kernel.org>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-clk@vger.kernel.org"
+	<linux-clk@vger.kernel.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: RE: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
+Thread-Topic: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
+Thread-Index: AQHa9KfrLpE8CCuWg0uaPyaAgZR3ArI+ZjUAgAEcCoCAAVgqEA==
+Date: Sat, 31 Aug 2024 05:13:38 +0000
+Message-ID:
+ <TY3PR01MB1134652F9587CFA0ADE851CA486902@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <CAPDyKFrS4Dhd7DZa2zz=oPro1TiTJFix0awzzzp8Qatm-8Z2Ug@mail.gmail.com>
+ <99bef301-9f6c-4797-b47e-c83e56dfbda9@tuxon.dev>
+In-Reply-To: <99bef301-9f6c-4797-b47e-c83e56dfbda9@tuxon.dev>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|OS3PR01MB6674:EE_
+x-ms-office365-filtering-correlation-id: 3928cf53-0d7c-4972-d837-08dcc97bac69
+x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|7416014|376014|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?UGFyOWIydkd3aU9HR3d0SWlLdUE5M1VuSU9paFJSZEtOdmY1TE42S0cvTUR3?=
+ =?utf-8?B?ZisxT3J0U08wRzIvS216M0txTksvbWRwNVdicWd5WkV3LzFzd1VRY3Vic2lL?=
+ =?utf-8?B?UE9rLy96cWFINjd2RzlBTUY3Wkl4ZXpucHJpMDc2c1VEbldEM3hmKzk2Mjdq?=
+ =?utf-8?B?NDc3SHg4N0VWZHBYWC9LZ1VZalFNU2VNSFNHalFYelM0ak5pei9DM29vSVJP?=
+ =?utf-8?B?T1hFSGJpeHI5bzhodlRiK0lTbWlSUGN1Y25EelYrbXZ5OGhveHUvZlkwcHJp?=
+ =?utf-8?B?aS80ZnFpREdwTzRhTVpRSWp1MEU4QjU4UWlEYXdydm12K2k0cTMzTjExRzl1?=
+ =?utf-8?B?WkVaU09YQzlWNUovKzRvVnRIdUJ3TW8wTjBUT291TzZnM1ZFU1ZQTzZTL0or?=
+ =?utf-8?B?RXFXVzRFM3RvRG1aTTBvTVBnT0g3azY1T2NXNmJ2cWRCZmVxcm12d2RDbGMx?=
+ =?utf-8?B?Zk5PS3BZcE1pWlplN0liSUFpZDNOc3M0R0g2TGx6ZUFHZlBuZ2Vpa0J5dGxi?=
+ =?utf-8?B?a21ST3d6K1k2SG9HaHpaaVQ2QXBETk1XaTBxY0Q0SitUczUzZ2xsbGRoVmNQ?=
+ =?utf-8?B?Qy9oZk5UcXhYcWVMSWNRK3ZtWFdndUY0YzQ0dEpxdm84Z3VVbVlReTV2eDYr?=
+ =?utf-8?B?ZXlQcHhoVHBOSFJ1bW1pTWFPL3R0N0dIZzFCZWxxbi9ERC9FcktlZzFwYk1k?=
+ =?utf-8?B?cUVRVWxjMTFmRGRydmxaUVdUKzYxSi9SNEdCaURlNVZVcXhic1R5L2wzdE5N?=
+ =?utf-8?B?L2V3OFpUaEZtUmh0UldHVE5IK3Mwbit5QjlEeVNNVi9kS21JWEt6dEl5VFZP?=
+ =?utf-8?B?cUtYYWZucW1SaHFlUzZZMlN2R1hSdXUySTZiNGJIK0NaeEhFdldTVlJWWmh2?=
+ =?utf-8?B?LzREWno2Y0xlSzJaUWJlalM0Yk04cVZTRkdTUXAxM0M3bXM3TWhxMWpNVVQr?=
+ =?utf-8?B?YzdmQlJhR01Ma3h6Qlp3TGxlQU9yQkxKZzZ6b1VBV3dhMTlsUGVDVlpDT25u?=
+ =?utf-8?B?MkFDdWQrYVpKRlZ3NVhKU3l4VklqUnlQR0pubmF3YldxZHVUMDBRakwyMXpQ?=
+ =?utf-8?B?bjFPeC9UY1Q4eXI3OS9EaW53dCtBa01Zdlk5LzFzN0RCSDlKU1JNNFdoWU9I?=
+ =?utf-8?B?TTV3ZE5XZC9TenpKVjlMQ0dJd0YzS3hWMW5HOThoYmFncDBLR3FzWkp1NWJT?=
+ =?utf-8?B?aHgrdGtNUUg5c21Sd2NDMXNCRVBzazhxeXRuS1crbkFyREdTSFNCbWRhVDFa?=
+ =?utf-8?B?bFBNZjM2VUNZN1NVckE1ekQ3TnZBdzQvNGxMSkl2OFBlNS85Y2N5QkhoZHNo?=
+ =?utf-8?B?cE43aWdKWWpYeXBwbXVldFRzUXNVaG8xSitWU2FKb05LT1lwdE5xcG15VFVM?=
+ =?utf-8?B?VEVDUW5rYisxZlA3OUxvMDVWUmxJbnoxUU1ZUmRqVTdWNTV2SVdPUVp0OHRK?=
+ =?utf-8?B?dmtGQTJwTzY2VGJpQzdGZjRVdFdrVnR6RWNSK1gwTnNURHVPdnJ5VVlRZFZR?=
+ =?utf-8?B?WEorSkNGR3hBc09wSkNaNU9wcXJsWGo0VjNXN1FpczJDa0Z0Sm44akJOOHBm?=
+ =?utf-8?B?U08vb0k5Z2tFMGc5L3RQa0pPQS83aGVsUm1ENVZtRnhMbGVsS0Z2N0dOd2py?=
+ =?utf-8?B?WjRmNTRVdlFxdjdmM2dDL0ZjV3BUT0VhMXpORlA3ZFhFeGJtMUJQQVVsbkV6?=
+ =?utf-8?B?UXRWY3ZXS0hacC9xR2NrK255NWR0MXB2Z0o3T1BIUXFrbGR2SlYzbWkvLytZ?=
+ =?utf-8?B?WGwxZDVQSHRTUFYzazljdHNINU9uci84K0xLNkljNUErczRjVER1bUF1RWNL?=
+ =?utf-8?B?VGFSV3FFVTE5cWpGT1FZcnp0WHBSOVAydU9kMy91d2h5RDJWeUE4ZS82ank2?=
+ =?utf-8?B?alVkWkYzSWN6d2JORklLaGhWOFhieHZqc1g1Z2xKdFY0aUE9PQ==?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?Q2FVL05ycWEvS2FhRUJqa1o2TkNjcG5FRVU4Z1B0ZTJOL29lUUlPT3Z6NkFv?=
+ =?utf-8?B?VDRaZjEwWExob0Voa2t0QnFJMzBYNTUrcnl6N0t6L0hEWkpjWjloa1JiYzZq?=
+ =?utf-8?B?U0ZBYWdET3VPL2h6SjZCSDZ6VHAvTnFCeG5oTW5pSU0rYTBMSTlzY1RwZzNm?=
+ =?utf-8?B?RkkvdGdRVWFPMmgzdEcveG5vWit6elA2b0cxNkRQVzlkRDZKUHVMMlE1T3FB?=
+ =?utf-8?B?OGVCMzhzSElRTVRSZU1NREVha3g1eUtBZEtzT2FoU0FYR2FoaFZmNy9zRFIx?=
+ =?utf-8?B?TWhLS0VZcGxlNWRzdEtKaWNVdlVMRmx3d1VnMEJzNHkydkVJZUE5bG5DM1RN?=
+ =?utf-8?B?RkRjTU5SVFQ0RlBVR2VvblhhOHlZZG82MGZVdUZJMTJXazR2VFM5NnNqTFhU?=
+ =?utf-8?B?M0duL1plbzhvTkdYRFI0b2xHd1JSbDMyQmNBT3BSOExrcnMrQ2JXMTVjV2xF?=
+ =?utf-8?B?bEZ4WjJua1hIdGR3elJyNHJuVE5VM2I0ZUFrRzlqWjZLYWJpTXlLWWpCL0xq?=
+ =?utf-8?B?a055SHJkQ1NjVnc4Mldvc2xHaUxQLzF0TGFHcElNKy9FbkV0S3hhQTBWdHdo?=
+ =?utf-8?B?VitRbWgxb01NV2QrV3FvK0cvWGhxVmFWYUVsRUpvZDhab2pUWmJYaGZTc0hz?=
+ =?utf-8?B?ejZpbWNMQ0Yxd3I2TTBPeE0rZ3h0YmpFOG15Nm1GSi9ueFhnSUVhNDJTQ0p5?=
+ =?utf-8?B?WStCdHBiRUVuRnZEWFdValc2QnFQZ3Q4RURWM0M3VzBBZlUwMHVSWW9PR2xw?=
+ =?utf-8?B?NXYrWlp4S2ZwcHYzTEZDMVVjZUlyaUNTdThwMXBwMU9yK2xWcjB4Q1FiTVRM?=
+ =?utf-8?B?c0wwZUpqZEQ3ZlJmbW5yK3RTaHY5RW9WNmZlZkFNemdDQnVEU3BGZm02TE9k?=
+ =?utf-8?B?WXhQRWRubVptaG84ZmV0M3dUUXpyMFg4cEx5d3I1RUJaUzJObm9FbmRzM0ZG?=
+ =?utf-8?B?MEtzOHR4dFdud0g5RDJua2NIMjhpalFFYlh3UDJYckU1RVFDYWNtZFNqbWFP?=
+ =?utf-8?B?S2ZIcUhKVXN6L1FxQWhFV2RKQlhZZk1DdjBDYi9nL3dXYkQ2T08yeEJuMW1t?=
+ =?utf-8?B?V3dhb1JVNy8xNkYvVFlHMENNa05zV3F0Y2RsSldBVkR3SGhTVVpIbk9vcDhE?=
+ =?utf-8?B?bmZwa2ZzNktqNzdGcHlMd3BMMCtmVU9YSWVrZFd1QmJlS3JyNlJLc1g2ekRC?=
+ =?utf-8?B?OGRZUURXc1hrOTFKQlJNWlRWaVBnYlE1RXUrNTJTd2dYNGQ5LzVmVFl0RHJP?=
+ =?utf-8?B?S3hodXo5L0p4QXJySzNMdEd2RHNqcHBjSmpaSU56Qm1TRmdGcXdNbHhZQTVh?=
+ =?utf-8?B?eDdQOTdDZ0pBY3lPL1lvWEY0ZE9URm5OOUQ0Z1F6WXJBSmpSK2pxUmxoTjdF?=
+ =?utf-8?B?V3R0T3d2dnhrRlQrMDBsVUNvUVZhOHVpRjFnNGlQL2xFWjNDVEY5QmdCdVJO?=
+ =?utf-8?B?K2ZQbWpuV0JTU0lDUkNvdlBMeVMvUEdCdGpSc3VYL2FMTnh1RDBZa1Y4UHJn?=
+ =?utf-8?B?dCs2ZjVmRFVSN3lvOHpFNE5JVDhWREROTWJHOGluM0doaGNSUFRCcGs1S1pa?=
+ =?utf-8?B?aC8vL3A5Wkp0eVo0Q0Q1aE1XRHBlUzkrMnBkRnV2dkFldXduMUd5VmVhcUhE?=
+ =?utf-8?B?cksxY2lQZTZaaXJPM3hJRWwyZit3dWdKLzJkelJOcldVUzRTalVaWEZjY1gr?=
+ =?utf-8?B?NHR4MUladnR3SURMSmF3dVhoMmRTRi8yVFptb3VJb01mMCtTakpiRUQrc2lq?=
+ =?utf-8?B?Q1lydllWYWJRZjRFakVCVlBkYlBiTDdXamkwaEU1cEZtalVFcjRzUXdVUVlz?=
+ =?utf-8?B?UmFwbWRkZTFKazM4U2Q4OXBjcFVPcEdPcTBYTjNLdkltYXNjUHJvMlM0TmVY?=
+ =?utf-8?B?eEFEMmk1N050QWVoQkU1d1FkWVFiTnBRM0VLWWtWU1h6aXRDQldOWUJTRUY4?=
+ =?utf-8?B?U2hWMkZLQ29pM0ZNY01oajhxdFhKWEN5K1N6TldBcGY1NG1CUngwSlkvYllU?=
+ =?utf-8?B?MWpibVhOc3RxS3RodWUwdWh0amJWamZ0Qjk0RHJ0RDJRK2hHNWVmN0FoM0cw?=
+ =?utf-8?B?V205Ym5nK25jcXc0S3pzK3YrK2RPdERUbEFlT21rbFVIUFo5YWlmZ3hOTTA3?=
+ =?utf-8?B?QlpGMzA3eVUyWHNMY1o2bWs0UEFjU3RZdC9acGx0UDBteGNuN1h4Zk00SzVr?=
+ =?utf-8?B?VFE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240521043102.2786284-1-davidai@google.com> <20240521043102.2786284-3-davidai@google.com>
- <CABN1KCKirjdVxF7Mc38tToB9OKH3n2kdN6k1tJbC-cyUtsVAFA@mail.gmail.com>
- <CAJZ5v0jcZW92zm916VAD2a9_CMusuG-K968hWBS+tS1BL-Lspw@mail.gmail.com> <CAGETcx9jDaTcTu38s2WEmgWQaj=RSUvHMRQJLApa4b8z1_8vfQ@mail.gmail.com>
-In-Reply-To: <CAGETcx9jDaTcTu38s2WEmgWQaj=RSUvHMRQJLApa4b8z1_8vfQ@mail.gmail.com>
-From: David Dai <davidai@google.com>
-Date: Fri, 30 Aug 2024 15:51:57 -0700
-Message-ID: <CABN1KC+L=ag088FO5HxdbR4a_S5XNt3ipJ_0hq19jVPHw+fM6w@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] cpufreq: add virtual-cpufreq driver
-To: Saravana Kannan <saravanak@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Quentin Perret <qperret@google.com>, 
-	Masami Hiramatsu <mhiramat@google.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Pavan Kondeti <quic_pkondeti@quicinc.com>, 
-	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>, kernel-team@android.com, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3928cf53-0d7c-4972-d837-08dcc97bac69
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Aug 2024 05:13:39.0164
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WG4dz2F+O1cXHlgJmUP5/U29sq7esH7yx6PdC5SIXcA0pC151ol9RTQ+X++95n8qPqySTaQhsgLFC8nSG868CnK+ITxTNJXLdX85VIWY8W0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB6674
 
-On Tue, Jul 9, 2024 at 5:08=E2=80=AFPM Saravana Kannan <saravanak@google.co=
-m> wrote:
->
-> On Fri, Jun 28, 2024 at 5:01=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
-> >
-> > Hi,
-> >
-> > On Thu, Jun 27, 2024 at 11:22=E2=80=AFPM David Dai <davidai@google.com>=
- wrote:
-> > >
-> > > Hi folks,
-> > >
-> > > Gentle nudge on this patch to see if there's any remaining concerns?
-> >
-> > Yes, there are.
-> >
-> > The dependency of OF is pretty much a no-go from my perspective.
->
-> If you are talking about the "depends on OF" I think that can and
-> should be dropped.
->
-> There's nothing really OF specific about this driver except the probe
-> function being for a platform device/driver. We can easily write an
-> ACPI driver variant of the probe function and have the same driver
-> work for both OF and ACPI versions of the device. We don't have any
-> ACPI experience or a test set up to test the ACPI variant. That's why
-> we haven't added it. We are more than happy to accept tested patches
-> on top of this that'll enable this for ACPI variants too.
->
-> If we drop the "depends on OF", will you accept this patch? If not,
-> can you give some guidance on what you are looking for?
-
-Hi Rafael,
-
-Just wanted to follow up and see what your thoughts are on this?
-
-Thanks,
-David
-
->
-> Thanks,
-> Saravana
->
->
->
->
-> >
-> > Thanks!
-> >
-> >
-> > > On Mon, May 20, 2024 at 10:32=E2=80=AFPM David Dai <davidai@google.co=
-m> wrote:
-> > > >
-> > > > Introduce a virtualized cpufreq driver for guest kernels to improve
-> > > > performance and power of workloads within VMs.
-> > > >
-> > > > This driver does two main things:
-> > > >
-> > > > 1. Sends the frequency of vCPUs as a hint to the host. The host use=
-s the
-> > > > hint to schedule the vCPU threads and decide physical CPU frequency=
-.
-> > > >
-> > > > 2. If a VM does not support a virtualized FIE(like AMUs), it querie=
-s the
-> > > > host CPU frequency by reading a MMIO region of a virtual cpufreq de=
-vice
-> > > > to update the guest's frequency scaling factor periodically. This e=
-nables
-> > > > accurate Per-Entity Load Tracking for tasks running in the guest.
-> > > >
-> > > > Co-developed-by: Saravana Kannan <saravanak@google.com>
-> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > > > Signed-off-by: David Dai <davidai@google.com>
-> > > > ---
-> > > >  drivers/cpufreq/Kconfig           |  14 ++
-> > > >  drivers/cpufreq/Makefile          |   1 +
-> > > >  drivers/cpufreq/virtual-cpufreq.c | 335 ++++++++++++++++++++++++++=
-++++
-> > > >  include/linux/arch_topology.h     |   1 +
-> > > >  4 files changed, 351 insertions(+)
-> > > >  create mode 100644 drivers/cpufreq/virtual-cpufreq.c
-> > > >
-> > > > diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-> > > > index 94e55c40970a..9aa86bec5793 100644
-> > > > --- a/drivers/cpufreq/Kconfig
-> > > > +++ b/drivers/cpufreq/Kconfig
-> > > > @@ -217,6 +217,20 @@ config CPUFREQ_DT
-> > > >
-> > > >           If in doubt, say N.
-> > > >
-> > > > +config CPUFREQ_VIRT
-> > > > +       tristate "Virtual cpufreq driver"
-> > > > +       depends on OF && GENERIC_ARCH_TOPOLOGY
-> > > > +       help
-> > > > +         This adds a virtualized cpufreq driver for guest kernels =
-that
-> > > > +         read/writes to a MMIO region for a virtualized cpufreq de=
-vice to
-> > > > +         communicate with the host. It sends performance requests =
-to the host
-> > > > +         which gets used as a hint to schedule vCPU threads and se=
-lect CPU
-> > > > +         frequency. If a VM does not support a virtualized FIE suc=
-h as AMUs,
-> > > > +         it updates the frequency scaling factor by polling host C=
-PU frequency
-> > > > +         to enable accurate Per-Entity Load Tracking for tasks run=
-ning in the guest.
-> > > > +
-> > > > +         If in doubt, say N.
-> > > > +
-> > > >  config CPUFREQ_DT_PLATDEV
-> > > >         tristate "Generic DT based cpufreq platdev driver"
-> > > >         depends on OF
-> > > > diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-> > > > index 8d141c71b016..eb72ecdc24db 100644
-> > > > --- a/drivers/cpufreq/Makefile
-> > > > +++ b/drivers/cpufreq/Makefile
-> > > > @@ -16,6 +16,7 @@ obj-$(CONFIG_CPU_FREQ_GOV_ATTR_SET)   +=3D cpufre=
-q_governor_attr_set.o
-> > > >
-> > > >  obj-$(CONFIG_CPUFREQ_DT)               +=3D cpufreq-dt.o
-> > > >  obj-$(CONFIG_CPUFREQ_DT_PLATDEV)       +=3D cpufreq-dt-platdev.o
-> > > > +obj-$(CONFIG_CPUFREQ_VIRT)             +=3D virtual-cpufreq.o
-> > > >
-> > > >  # Traces
-> > > >  CFLAGS_amd-pstate-trace.o               :=3D -I$(src)
-> > > > diff --git a/drivers/cpufreq/virtual-cpufreq.c b/drivers/cpufreq/vi=
-rtual-cpufreq.c
-> > > > new file mode 100644
-> > > > index 000000000000..59ce2bda3913
-> > > > --- /dev/null
-> > > > +++ b/drivers/cpufreq/virtual-cpufreq.c
-> > > > @@ -0,0 +1,335 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > +/*
-> > > > + * Copyright (C) 2024 Google LLC
-> > > > + */
-> > > > +
-> > > > +#include <linux/arch_topology.h>
-> > > > +#include <linux/cpufreq.h>
-> > > > +#include <linux/init.h>
-> > > > +#include <linux/sched.h>
-> > > > +#include <linux/kernel.h>
-> > > > +#include <linux/module.h>
-> > > > +#include <linux/of_address.h>
-> > > > +#include <linux/of_platform.h>
-> > > > +#include <linux/platform_device.h>
-> > > > +#include <linux/slab.h>
-> > > > +
-> > > > +/*
-> > > > + * CPU0..CPUn
-> > > > + * +-------------+-------------------------------+--------+-------=
-+
-> > > > + * | Register    | Description                   | Offset |   Len =
-|
-> > > > + * +-------------+-------------------------------+--------+-------=
-+
-> > > > + * | cur_perf    | read this register to get     |    0x0 |   0x4 =
-|
-> > > > + * |             | the current perf (integer val |        |       =
-|
-> > > > + * |             | representing perf relative to |        |       =
-|
-> > > > + * |             | max performance)              |        |       =
-|
-> > > > + * |             | that vCPU is running at       |        |       =
-|
-> > > > + * +-------------+-------------------------------+--------+-------=
-+
-> > > > + * | set_perf    | write to this register to set |    0x4 |   0x4 =
-|
-> > > > + * |             | perf value of the vCPU        |        |       =
-|
-> > > > + * +-------------+-------------------------------+--------+-------=
-+
-> > > > + * | perftbl_len | number of entries in perf     |    0x8 |   0x4 =
-|
-> > > > + * |             | table. A single entry in the  |        |       =
-|
-> > > > + * |             | perf table denotes no table   |        |       =
-|
-> > > > + * |             | and the entry contains        |        |       =
-|
-> > > > + * |             | the maximum perf value        |        |       =
-|
-> > > > + * |             | that this vCPU supports.      |        |       =
-|
-> > > > + * |             | The guest can request any     |        |       =
-|
-> > > > + * |             | value between 1 and max perf  |        |       =
-|
-> > > > + * |             | when perftbls are not used.   |        |       =
-|
-> > > > + * +---------------------------------------------+--------+-------=
-+
-> > > > + * | perftbl_sel | write to this register to     |    0xc |   0x4 =
-|
-> > > > + * |             | select perf table entry to    |        |       =
-|
-> > > > + * |             | read from                     |        |       =
-|
-> > > > + * +---------------------------------------------+--------+-------=
-+
-> > > > + * | perftbl_rd  | read this register to get     |   0x10 |   0x4 =
-|
-> > > > + * |             | perf value of the selected    |        |       =
-|
-> > > > + * |             | entry based on perftbl_sel    |        |       =
-|
-> > > > + * +---------------------------------------------+--------+-------=
-+
-> > > > + * | perf_domain | performance domain number     |   0x14 |   0x4 =
-|
-> > > > + * |             | that this vCPU belongs to.    |        |       =
-|
-> > > > + * |             | vCPUs sharing the same perf   |        |       =
-|
-> > > > + * |             | domain number are part of the |        |       =
-|
-> > > > + * |             | same performance domain.      |        |       =
-|
-> > > > + * +-------------+-------------------------------+--------+-------=
-+
-> > > > + */
-> > > > +
-> > > > +#define REG_CUR_PERF_STATE_OFFSET 0x0
-> > > > +#define REG_SET_PERF_STATE_OFFSET 0x4
-> > > > +#define REG_PERFTBL_LEN_OFFSET 0x8
-> > > > +#define REG_PERFTBL_SEL_OFFSET 0xc
-> > > > +#define REG_PERFTBL_RD_OFFSET 0x10
-> > > > +#define REG_PERF_DOMAIN_OFFSET 0x14
-> > > > +#define PER_CPU_OFFSET 0x1000
-> > > > +
-> > > > +#define PERFTBL_MAX_ENTRIES 64U
-> > > > +
-> > > > +static void __iomem *base;
-> > > > +static DEFINE_PER_CPU(u32, perftbl_num_entries);
-> > > > +
-> > > > +static void virt_scale_freq_tick(void)
-> > > > +{
-> > > > +       int cpu =3D smp_processor_id();
-> > > > +       u32 max_freq =3D (u32)cpufreq_get_hw_max_freq(cpu);
-> > > > +       u64 cur_freq;
-> > > > +       unsigned long scale;
-> > > > +
-> > > > +       cur_freq =3D (u64)readl_relaxed(base + cpu * PER_CPU_OFFSET
-> > > > +                       + REG_CUR_PERF_STATE_OFFSET);
-> > > > +
-> > > > +       cur_freq <<=3D SCHED_CAPACITY_SHIFT;
-> > > > +       scale =3D (unsigned long)div_u64(cur_freq, max_freq);
-> > > > +       scale =3D min(scale, SCHED_CAPACITY_SCALE);
-> > > > +
-> > > > +       this_cpu_write(arch_freq_scale, scale);
-> > > > +}
-> > > > +
-> > > > +static struct scale_freq_data virt_sfd =3D {
-> > > > +       .source =3D SCALE_FREQ_SOURCE_VIRT,
-> > > > +       .set_freq_scale =3D virt_scale_freq_tick,
-> > > > +};
-> > > > +
-> > > > +static unsigned int virt_cpufreq_set_perf(struct cpufreq_policy *p=
-olicy,
-> > > > +                                         unsigned int target_freq)
-> > > > +{
-> > > > +       writel_relaxed(target_freq,
-> > > > +                      base + policy->cpu * PER_CPU_OFFSET + REG_SE=
-T_PERF_STATE_OFFSET);
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static unsigned int virt_cpufreq_fast_switch(struct cpufreq_policy=
- *policy,
-> > > > +                                            unsigned int target_fr=
-eq)
-> > > > +{
-> > > > +       virt_cpufreq_set_perf(policy, target_freq);
-> > > > +       return target_freq;
-> > > > +}
-> > > > +
-> > > > +static u32 virt_cpufreq_get_perftbl_entry(int cpu, u32 idx)
-> > > > +{
-> > > > +       writel_relaxed(idx, base + cpu * PER_CPU_OFFSET +
-> > > > +                      REG_PERFTBL_SEL_OFFSET);
-> > > > +       return readl_relaxed(base + cpu * PER_CPU_OFFSET +
-> > > > +                            REG_PERFTBL_RD_OFFSET);
-> > > > +}
-> > > > +
-> > > > +static int virt_cpufreq_target(struct cpufreq_policy *policy,
-> > > > +                              unsigned int target_freq,
-> > > > +                              unsigned int relation)
-> > > > +{
-> > > > +       struct cpufreq_freqs freqs;
-> > > > +       int ret =3D 0;
-> > > > +
-> > > > +       freqs.old =3D policy->cur;
-> > > > +       freqs.new =3D target_freq;
-> > > > +
-> > > > +       cpufreq_freq_transition_begin(policy, &freqs);
-> > > > +       ret =3D virt_cpufreq_set_perf(policy, target_freq);
-> > > > +       cpufreq_freq_transition_end(policy, &freqs, ret !=3D 0);
-> > > > +
-> > > > +       return ret;
-> > > > +}
-> > > > +
-> > > > +static int virt_cpufreq_get_sharing_cpus(struct cpufreq_policy *po=
-licy)
-> > > > +{
-> > > > +       u32 cur_perf_domain, perf_domain;
-> > > > +       struct device *cpu_dev;
-> > > > +       int cpu;
-> > > > +
-> > > > +       cur_perf_domain =3D readl_relaxed(base + policy->cpu *
-> > > > +                                       PER_CPU_OFFSET + REG_PERF_D=
-OMAIN_OFFSET);
-> > > > +
-> > > > +       for_each_possible_cpu(cpu) {
-> > > > +               cpu_dev =3D get_cpu_device(cpu);
-> > > > +               if (!cpu_dev)
-> > > > +                       continue;
-> > > > +
-> > > > +               perf_domain =3D readl_relaxed(base + cpu *
-> > > > +                                           PER_CPU_OFFSET + REG_PE=
-RF_DOMAIN_OFFSET);
-> > > > +
-> > > > +               if (perf_domain =3D=3D cur_perf_domain)
-> > > > +                       cpumask_set_cpu(cpu, policy->cpus);
-> > > > +       }
-> > > > +
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static int virt_cpufreq_get_freq_info(struct cpufreq_policy *polic=
-y)
-> > > > +{
-> > > > +       struct cpufreq_frequency_table *table;
-> > > > +       u32 num_perftbl_entries, idx;
-> > > > +
-> > > > +       num_perftbl_entries =3D per_cpu(perftbl_num_entries, policy=
-->cpu);
-> > > > +
-> > > > +       if (num_perftbl_entries =3D=3D 1) {
-> > > > +               policy->cpuinfo.min_freq =3D 1;
-> > > > +               policy->cpuinfo.max_freq =3D virt_cpufreq_get_perft=
-bl_entry(policy->cpu, 0);
-> > > > +
-> > > > +               policy->min =3D policy->cpuinfo.min_freq;
-> > > > +               policy->max =3D policy->cpuinfo.max_freq;
-> > > > +
-> > > > +               policy->cur =3D policy->max;
-> > > > +               return 0;
-> > > > +       }
-> > > > +
-> > > > +       table =3D kcalloc(num_perftbl_entries + 1, sizeof(*table), =
-GFP_KERNEL);
-> > > > +       if (!table)
-> > > > +               return -ENOMEM;
-> > > > +
-> > > > +       for (idx =3D 0; idx < num_perftbl_entries; idx++)
-> > > > +               table[idx].frequency =3D virt_cpufreq_get_perftbl_e=
-ntry(policy->cpu, idx);
-> > > > +
-> > > > +       table[idx].frequency =3D CPUFREQ_TABLE_END;
-> > > > +       policy->freq_table =3D table;
-> > > > +
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static int virt_cpufreq_cpu_init(struct cpufreq_policy *policy)
-> > > > +{
-> > > > +       struct device *cpu_dev;
-> > > > +       int ret;
-> > > > +
-> > > > +       cpu_dev =3D get_cpu_device(policy->cpu);
-> > > > +       if (!cpu_dev)
-> > > > +               return -ENODEV;
-> > > > +
-> > > > +       ret =3D virt_cpufreq_get_freq_info(policy);
-> > > > +       if (ret) {
-> > > > +               dev_warn(cpu_dev, "failed to get cpufreq info\n");
-> > > > +               return ret;
-> > > > +       }
-> > > > +
-> > > > +       ret =3D virt_cpufreq_get_sharing_cpus(policy);
-> > > > +       if (ret) {
-> > > > +               dev_warn(cpu_dev, "failed to get sharing cpumask\n"=
-);
-> > > > +               return ret;
-> > > > +       }
-> > > > +
-> > > > +       /*
-> > > > +        * To simplify and improve latency of handling frequency re=
-quests on
-> > > > +        * the host side, this ensures that the vCPU thread trigger=
-ing the MMIO
-> > > > +        * abort is the same thread whose performance constraints (=
-Ex. uclamp
-> > > > +        * settings) need to be updated. This simplifies the VMM (V=
-irtual
-> > > > +        * Machine Manager) having to find the correct vCPU thread =
-and/or
-> > > > +        * facing permission issues when configuring other threads.
-> > > > +        */
-> > > > +       policy->dvfs_possible_from_any_cpu =3D false;
-> > > > +       policy->fast_switch_possible =3D true;
-> > > > +
-> > > > +       /*
-> > > > +        * Using the default SCALE_FREQ_SOURCE_CPUFREQ is insuffici=
-ent since
-> > > > +        * the actual physical CPU frequency may not match requeste=
-d frequency
-> > > > +        * from the vCPU thread due to frequency update latencies o=
-r other
-> > > > +        * inputs to the physical CPU frequency selection. This add=
-itional FIE
-> > > > +        * source allows for more accurate freq_scale updates and o=
-nly takes
-> > > > +        * effect if another FIE source such as AMUs have not been =
-registered.
-> > > > +        */
-> > > > +       topology_set_scale_freq_source(&virt_sfd, policy->cpus);
-> > > > +
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static int virt_cpufreq_cpu_exit(struct cpufreq_policy *policy)
-> > > > +{
-> > > > +       topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_VIRT, po=
-licy->related_cpus);
-> > > > +       kfree(policy->freq_table);
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static int virt_cpufreq_online(struct cpufreq_policy *policy)
-> > > > +{
-> > > > +       /* Nothing to restore. */
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static int virt_cpufreq_offline(struct cpufreq_policy *policy)
-> > > > +{
-> > > > +       /* Dummy offline() to avoid exit() being called and freeing=
- resources. */
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static int virt_cpufreq_verify_policy(struct cpufreq_policy_data *=
-policy)
-> > > > +{
-> > > > +       if (policy->freq_table)
-> > > > +               return cpufreq_frequency_table_verify(policy, polic=
-y->freq_table);
-> > > > +
-> > > > +       cpufreq_verify_within_cpu_limits(policy);
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static struct cpufreq_driver cpufreq_virt_driver =3D {
-> > > > +       .name           =3D "virt-cpufreq",
-> > > > +       .init           =3D virt_cpufreq_cpu_init,
-> > > > +       .exit           =3D virt_cpufreq_cpu_exit,
-> > > > +       .online         =3D virt_cpufreq_online,
-> > > > +       .offline        =3D virt_cpufreq_offline,
-> > > > +       .verify         =3D virt_cpufreq_verify_policy,
-> > > > +       .target         =3D virt_cpufreq_target,
-> > > > +       .fast_switch    =3D virt_cpufreq_fast_switch,
-> > > > +       .attr           =3D cpufreq_generic_attr,
-> > > > +};
-> > > > +
-> > > > +static int virt_cpufreq_driver_probe(struct platform_device *pdev)
-> > > > +{
-> > > > +       u32 num_perftbl_entries;
-> > > > +       int ret, cpu;
-> > > > +
-> > > > +       base =3D devm_platform_ioremap_resource(pdev, 0);
-> > > > +       if (IS_ERR(base))
-> > > > +               return PTR_ERR(base);
-> > > > +
-> > > > +       for_each_possible_cpu(cpu) {
-> > > > +               num_perftbl_entries =3D readl_relaxed(base + cpu * =
-PER_CPU_OFFSET +
-> > > > +                                                   REG_PERFTBL_LEN=
-_OFFSET);
-> > > > +
-> > > > +               if (!num_perftbl_entries || num_perftbl_entries > P=
-ERFTBL_MAX_ENTRIES)
-> > > > +                       return -ENODEV;
-> > > > +
-> > > > +               per_cpu(perftbl_num_entries, cpu) =3D num_perftbl_e=
-ntries;
-> > > > +       }
-> > > > +
-> > > > +       ret =3D cpufreq_register_driver(&cpufreq_virt_driver);
-> > > > +       if (ret) {
-> > > > +               dev_err(&pdev->dev, "Virtual CPUFreq driver failed =
-to register: %d\n", ret);
-> > > > +               return ret;
-> > > > +       }
-> > > > +
-> > > > +       dev_dbg(&pdev->dev, "Virtual CPUFreq driver initialized\n")=
-;
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static int virt_cpufreq_driver_remove(struct platform_device *pdev=
-)
-> > > > +{
-> > > > +       cpufreq_unregister_driver(&cpufreq_virt_driver);
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static const struct of_device_id virt_cpufreq_match[] =3D {
-> > > > +       { .compatible =3D "qemu,virtual-cpufreq", .data =3D NULL},
-> > > > +       {}
-> > > > +};
-> > > > +MODULE_DEVICE_TABLE(of, virt_cpufreq_match);
-> > > > +
-> > > > +static struct platform_driver virt_cpufreq_driver =3D {
-> > > > +       .probe =3D virt_cpufreq_driver_probe,
-> > > > +       .remove =3D virt_cpufreq_driver_remove,
-> > > > +       .driver =3D {
-> > > > +               .name =3D "virt-cpufreq",
-> > > > +               .of_match_table =3D virt_cpufreq_match,
-> > > > +       },
-> > > > +};
-> > > > +
-> > > > +static int __init virt_cpufreq_init(void)
-> > > > +{
-> > > > +       return platform_driver_register(&virt_cpufreq_driver);
-> > > > +}
-> > > > +postcore_initcall(virt_cpufreq_init);
-> > > > +
-> > > > +static void __exit virt_cpufreq_exit(void)
-> > > > +{
-> > > > +       platform_driver_unregister(&virt_cpufreq_driver);
-> > > > +}
-> > > > +module_exit(virt_cpufreq_exit);
-> > > > +
-> > > > +MODULE_DESCRIPTION("Virtual cpufreq driver");
-> > > > +MODULE_LICENSE("GPL");
-> > > > diff --git a/include/linux/arch_topology.h b/include/linux/arch_top=
-ology.h
-> > > > index b721f360d759..d5d848849408 100644
-> > > > --- a/include/linux/arch_topology.h
-> > > > +++ b/include/linux/arch_topology.h
-> > > > @@ -49,6 +49,7 @@ enum scale_freq_source {
-> > > >         SCALE_FREQ_SOURCE_CPUFREQ =3D 0,
-> > > >         SCALE_FREQ_SOURCE_ARCH,
-> > > >         SCALE_FREQ_SOURCE_CPPC,
-> > > > +       SCALE_FREQ_SOURCE_VIRT,
-> > > >  };
-> > > >
-> > > >  struct scale_freq_data {
-> > > > --
-> > > > 2.45.0.215.g3402c0e53f-goog
-> > > >
-> > >
+SGkgQ2xhdWRpdSwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBjbGF1
+ZGl1IGJlem5lYSA8Y2xhdWRpdS5iZXpuZWFAdHV4b24uZGV2Pg0KPiBTZW50OiBGcmlkYXksIEF1
+Z3VzdCAzMCwgMjAyNCA5OjIzIEFNDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMDAvMTZdIEFkZCBp
+bml0aWFsIFVTQiBzdXBwb3J0IGZvciB0aGUgUmVuZXNhcyBSWi9HM1MgU29DDQo+IA0KPiBIaSwg
+VWxmLA0KPiANCj4gT24gMjkuMDguMjAyNCAxODoyNiwgVWxmIEhhbnNzb24gd3JvdGU6DQo+ID4g
+T24gVGh1LCAyMiBBdWcgMjAyNCBhdCAxNzoyOCwgQ2xhdWRpdSA8Y2xhdWRpdS5iZXpuZWFAdHV4
+b24uZGV2PiB3cm90ZToNCj4gPj4NCj4gPj4gRnJvbTogQ2xhdWRpdSBCZXpuZWEgPGNsYXVkaXUu
+YmV6bmVhLnVqQGJwLnJlbmVzYXMuY29tPg0KPiA+Pg0KPiA+PiBIaSwNCj4gPj4NCj4gPj4gU2Vy
+aWVzIGFkZHMgaW5pdGlhbCBVU0Igc3VwcG9ydCBmb3IgdGhlIFJlbmVzYXMgUlovRzNTIFNvQy4N
+Cj4gPj4NCj4gPj4gU2VyaWVzIGlzIHNwbGl0IGFzIGZvbGxvd3M6DQo+ID4+DQo+ID4+IC0gcGF0
+Y2ggMDEvMTYgICAgICAgICAgIC0gYWRkIGNsb2NrIHJlc2V0IGFuZCBwb3dlciBkb21haW4gc3Vw
+cG9ydCBmb3IgVVNCDQo+ID4+IC0gcGF0Y2ggMDItMDQvMTYgICAgICAgIC0gYWRkIHJlc2V0IGNv
+bnRyb2wgc3VwcG9ydCBmb3IgYSBVU0Igc2lnbmFsDQo+ID4+ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgdGhhdCBuZWVkIHRvIGJlIGNvbnRyb2xsZWQgYmVmb3JlL2FmdGVyDQo+ID4+ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgdGhlIHBvd2VyIHRvIFVTQiBhcmVhIGlzIHR1cm5lZCBvbi9v
+ZmYuDQo+ID4+DQo+ID4+ICAgICAgICAgICAgICAgICAgICAgICAgICAgUGhpbGlwcCwgVWxmLCBH
+ZWVydCwgYWxsLA0KPiA+Pg0KPiA+PiAgICAgICAgICAgICAgICAgICAgICAgICAgIEkgZGV0YWls
+ZWQgbXkgYXBwcm9hY2ggZm9yIHRoaXMgaW4gcGF0Y2gNCj4gPj4gICAgICAgICAgICAgICAgICAg
+ICAgICAgICAwNC8xNiwgcGxlYXNlIGhhdmUgYSBsb29rIGFuZCBsZXQgbWUga25vdw0KPiA+PiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHlvdXIgaW5wdXQuDQo+ID4NCj4gPiBJIGhhdmUgbG9v
+a2VkIGJyaWVmbHkuIFlvdXIgc3VnZ2VzdGVkIGFwcHJvYWNoIG1heSB3b3JrLCBidXQgSSBoYXZl
+IGENCj4gPiBmZXcgdGhvdWdodHMsIHNlZSBiZWxvdy4NCj4gPg0KPiA+IElmIEkgdW5kZXJzdGFu
+ZCBjb3JyZWN0bHksIGl0IGlzIHRoZSBjb25zdW1lciBkcml2ZXIgZm9yIHRoZSBkZXZpY2UNCj4g
+PiB0aGF0IGlzIGF0dGFjaGVkIHRvIHRoZSBVU0IgcG93ZXIgZG9tYWluIHRoYXQgYmVjb21lcyBy
+ZXNwb25zaWJsZSBmb3INCj4gPiBhc3NlcnRpbmcvZGUtYXNzZXJ0aW5nIHRoaXMgbmV3IHNpZ25h
+bC4gUmlnaHQ/DQo+IA0KPiBSaWdodCENCj4gDQo+ID4NCj4gPiBJbiB0aGlzIHJlZ2FyZCwgcGxl
+YXNlIG5vdGUgdGhhdCB0aGUgY29uc3VtZXIgZHJpdmVyIGRvZXNuJ3QgcmVhbGx5DQo+ID4ga25v
+dyB3aGVuIHRoZSBwb3dlciBkb21haW4gcmVhbGx5IGdldHMgcG93ZXJlZC1vbi9vZmYuIENhbGxp
+bmcNCj4gPiBwbV9ydW50aW1lX2dldHxwdXQqKCkgaXMgZGVhbGluZyB3aXRoIHRoZSByZWZlcmVu
+Y2UgY291bnRpbmcuIEZvcg0KPiA+IGV4YW1wbGUsIGEgY2FsbCB0byBwbV9ydW50aW1lX2dldCoo
+KSBqdXN0IG1ha2VzIHN1cmUgdGhhdCB0aGUgUE0NCj4gPiBkb21haW4gZ2V0cy1vci1yZW1haW5z
+IHBvd2VyZWQtb24uIENvdWxkIHRoaXMgYmUgYSBwcm9ibGVtIGZyb20gdGhlDQo+ID4gcmVzZXQt
+c2lnbmFsIHBvaW50IG9mIHZpZXc/DQo+IA0KPiBJdCBzaG91bGQgYmUgc2FmZS4gRnJvbSB0aGUg
+SFcgbWFudWFsIEkgdW5kZXJzdGFuZCB0aGUgaGFyZHdhcmUgYmxvY2sgaXMgc29tZXRoaW5nIGxp
+a2UgdGhlIGZvbGxvd2luZzoNCj4gDQo+IA0KPiAgICAgICAgICAgICAgICAgICBVU0IgYXJlYQ0K
+PiAgICAgICAgICArLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSsNCj4gICAgICAgICAgfCAgICAg
+ICAgICAgICAgICAgICAgICAgICB8DQo+ICAgICAgICAgIHwgUEhZIC0tLT5VU0IgY29udHJvbGxl
+ciAgfA0KPiBTWVNDIC0tPiB8ICBeICAgICAgICAgICAgICAgICAgICAgIHwNCj4gICAgICAgICAg
+fCAgfCAgICAgICAgICAgICAgICAgICAgICB8DQo+ICAgICAgICAgIHwgUEhZIHJlc2V0ICAgICAg
+ICAgICAgICAgfA0KPiAgICAgICAgICArLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSsNCg0KSG93
+IFVTQiBQV1JSRFkgc2lnbmFsIGlzIGNvbm5lY3RlZCB0byBVU0I/IA0KDQpVU0IgYmxvY2sgY29u
+c2lzdHMgb2YgUEhZIGNvbnRyb2wsIFBIWSwgVVNCIEhPU1QgYW5kIFVTQiBPVEcgQ29udHJvbGxl
+ciBJUHMuDQoNCklzIGl0IGNvbm5lY3RlZCB0byB0b3AgbGV2ZWwgYmxvY2sgb3IgY29ubmVjdGVk
+IHRvIGVhY2ggSVAncyBmb3IgdHVybmluZyBvZmYgdGhlIFVTQiByZWdpb24gcG93ZXI/DQoNCj8g
+T3IgSnVzdCBQSFkgKEhXIG1hbnVhbCBtZW50aW9ucyBmb3IgQVdPLCB0aGUgVVNCIFBXUlJEWSBz
+aWduYWwtPlVTQiBQSFkgUFdSUkRZIHNpZ25hbCBjb250cm9sKT8gDQoNCklmIHRoZSBVU0JQV1JS
+RFkgc2lnbmFsIGlzIGNvbm5lY3RlZCBhY3Jvc3MgbW9kdWxlcyB3aXRoIHRoaXMgcmVzZXQgc2ln
+bmFsIGFwcHJvYWNoDQp0aGVuIHlvdSBtYXkgbmVlZCB0byB1cGRhdGUgYmluZGluZ3MgWzFdIHdp
+dGggdGhhdCByZXNldCBzaWduYWwNCg0KWzFdIGh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcv
+cHJvamVjdC9saW51eC1yZW5lc2FzLXNvYy9wYXRjaC8yMDI0MDgyMjE1MjgwMS42MDIzMTgtMTIt
+Y2xhdWRpdS5iZXpuZWEudWpAYnAucmVuZXNhcy5jb20vDQogDQoNCkNoZWVycywNCkJpanUNCg0K
+PiANCj4gV2hlcmU6DQo+IC0gU1lTQyBpcyB0aGUgc3lzdGVtIGNvbnRyb2xsZXIgdGhhdCBjb250
+cm9scyB0aGUgbmV3IHNpZ25hbCBmb3Igd2hpY2gNCj4gICBJJ20gcmVxdWVzdGluZyBvcGluaW9u
+cyBpbiB0aGlzIHNlcmllcw0KPiAtIFBIWSByZXNldDogaXMgdGhlIGJsb2NrIGNvbnRyb2xsaW5n
+IHRoZSBQSFlzDQo+IC0gUEhZOiBpcyB0aGUgYmxvY2sgY29udHJvbGxpbmcgdGhlIFVTQiBQSFlz
+DQo+IC0gVVNCIGNvbnRyb2xsZXI6IGlzIHRoZSBVU0IgY29udHJvbGxlcg0KPiANCj4gQ3VycmVu
+dGx5LCBJIHBhc3NlZCB0aGUgU1lTQyBzaWduYWwgaGFuZGxpbmcgdG8gdGhlIFBIWSByZXNldCBk
+cml2ZXI7IHcvbyBQSFkgcmVzZXQgdGhlIHJlc3Qgb2YgdGhlDQo+IFVTQiBsb2dpYyBjYW5ub3Qg
+d29yayAobmVpdGhlciBQSFkgYmxvY2sgbm9yIFVTQiBjb250cm9sbGVyKS4NCj4gDQo+IEN1cnJl
+bnRseSwgdGhlIFBIWSByZXNldCBkcml2ZXIgY2FsbCBwbV9ydW50aW1lX3Jlc3VtZV9hbmRfZ2V0
+KCkgaW4gcHJvYmUgYW5kIHBtX3J1bnRpbWVfcHV0KCkgaW4NCj4gcmVtb3ZlLiBUaGUgc3RydWN0
+IHJlc2V0X2NvbnRyb2xfb3BzOjp7YXNzZXJ0LCBkZWFzc2VydH0gb25seSBzZXQgc3BlY2lmaWMg
+Yml0cyBpbiByZWdpc3RlcnMgKG5vDQo+IHBtX3J1bnRpbWUqIGNhbGxzKS4NCj4gDQo+IFRoZSBQ
+SFkgZHJpdmVyIGlzIHRha2luZyBpdHMgUEhZIHJlc2V0IGluIHByb2JlIGFuZCByZWxlYXNlIGl0
+IGluIHJlbW92ZSgpLg0KPiBXaXRoIHRoaXMgYXBwcm9hY2ggdGhlIG5ld2x5IGludHJvZHVjZWQg
+U1lTQyBzaWduYWwgd2lsbCBiZSBkZS1hc3NlcnRlZC9hc3NlcnRlZCBvbmx5IGluIHRoZSBQSFkg
+cmVzZXQNCj4gcHJvYmUvcmVtb3ZlIChlaXRoZXIgaWYgaXQgaXMgaGFuZGxlZCB0aG91Z2ggUE0g
+ZG9tYWluIG9yIHJlc2V0IGNvbnRyb2wgc2lnbmFsKS4NCj4gDQo+IElmIHRoZSBTWVNDIHNpZ25h
+bCB3b3VsZCBiZSBwYXNzZWQgdG8gYWxsIHRoZSBibG9ja3MgaW4gdGhlIFVTQiBhcmVhIChhbmQg
+aXQgd291bGQgYmUgaGFuZGxlZCB0aG91Z2gNCj4gUE0gZG9tYWlucykgaXQgc2hvdWxkIGJlIG5v
+IHByb2JsZW0gZWl0aGVyLCBBRkFJQ1QsIGJlY2F1c2Ugb2YgcmVmZXJlbmNlIGNvdW50aW5nIHRo
+ZQ0KPiBwbV9ydW50aW1lX2dldHxwdXQqKCkgaXMgdGFraW5nIGNhcmUgb2YuIEFzIHRoZSBQSFkg
+cmVzZXQgaXMgdGhlIHJvb3Qgbm9kZSB0aGUgaW4gdGhlIGRldmljZXMgbm9kZQ0KPiB0cmVlIGZv
+ciBVU0IgdGhlIHJlZmVyZW5jZSBjb3VudGluZyBzaG91bGQgd29yaywgdG9vIChJIG1heSBtaXNz
+IHNvbWV0aGluZyB0aG91Z2gsIHBsZWFzZSBjb3JyZWN0IG1lDQo+IGlmIEknbSB3cm9uZykuDQo+
+IA0KPiBJZiB0aGUgU1lTQyBzaWduYWwgd291bGQgYmUgaGFuZGxlZCB0aG91Z2ggYSByZXNldCBj
+b250cm9sIGRyaXZlciAoYXMgcHJvcG9zZWQgaW4gdGhpcyBzZXJpZXMpIGFuZCB3ZQ0KPiB3YW50
+IHRvIHBhc3MgdGhpcyByZWZlcmVuY2UgdG8gYWxsIHRoZSBibG9ja3MgaW4gdGhlIFVTQiBhcmVh
+IHRoZW4gd2UgY2FuIHJlcXVlc3QgdGhlIHJlc2V0IHNpZ25hbCBhcw0KPiBzaGFyZWQgYW5kLCBB
+RkFJSywgdGhpcyBpcyBhbHNvIHJlZmVyZW5jZSBjb3VudGVkLiBUaGUgZGV2aWNlcyBub2RlIHRy
+ZWUgc2hvdWxkIGhlbHAgd2l0aCB0aGUgb3JkZXIsDQo+IHRvbywgaWYgSSdtIG5vdCB3cm9uZy4N
+Cj4gDQo+IFRoYW5rIHlvdSBmb3IgbG9va2luZyBhdCB0aGlzLA0KPiBDbGF1ZGl1IEJlem5lYQ0K
+PiANCj4gPg0KPiA+IFsuLi5dDQo+ID4NCj4gPiBLaW5kIHJlZ2FyZHMNCj4gPiBVZmZlDQo=
 
