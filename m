@@ -1,171 +1,156 @@
-Return-Path: <linux-pm+bounces-13308-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13309-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C529967B9B
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2024 20:01:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B8F3967C19
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2024 22:26:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E983E281EDE
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2024 18:01:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09E4A1F21671
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2024 20:26:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2399F17E919;
-	Sun,  1 Sep 2024 18:01:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28C1E745F2;
+	Sun,  1 Sep 2024 20:26:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="C5a7o7RK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJ47yieC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F63827713
-	for <linux-pm@vger.kernel.org>; Sun,  1 Sep 2024 18:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B316F2F3;
+	Sun,  1 Sep 2024 20:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725213675; cv=none; b=Q205KLPCwXVj64nKmtIfFqoGQwJYLBnI3f2DbEb6oT7mlH9eIc4aLzST4DELKso1SYgVRoeCqObQisUhEyQJi73VeRwGIEu1ierLQfjy2xcGtHssmIKl13iuftHXI2ZqNoRbpLej0yiOfd9CNgKeIoUsejYoG2qUhc3vY6bopsc=
+	t=1725222409; cv=none; b=N8eoYnt7CexjrxDhKjMC5UiwRVA04fqhlS4/miBHxWs5xBh+viQ0+7DIY7ne7Nilr+bA0f6ug62kMixmfXa+tKxXBLdLgZNyB+xYSclyICkOJnCvqVh2tdc14qMBr+EnrgTmY5cGKChcFMuInYemdVpPfou+jY5F9YpGeXNtgXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725213675; c=relaxed/simple;
-	bh=oEo8ZMYGVwRLV4zPkeTF7nlpuqkAvjIleDFWxbKsMw4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=er2x6GlY5chC/WBi0lO/hXbqpNszXzTGhzfkzYi7vry9b7yxJfSCoku2GZWndcdR4hQ4IsyNMOoWORB/P1SpKTY7SzCbmH1jUGiz6W0k2NDraZKfmGzuKGl4k48fwbff9ha2Xf27Dt1tyGPjemh+SeOw6KiNyQrfjv4iwTA01o8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=C5a7o7RK; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5becd359800so3491678a12.0
-        for <linux-pm@vger.kernel.org>; Sun, 01 Sep 2024 11:01:13 -0700 (PDT)
+	s=arc-20240116; t=1725222409; c=relaxed/simple;
+	bh=c59MGgto4aVmJUWAfO2g4iRJenZr7VQVJAufo+1a7wA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qYsi1X4usvIQzoUB576bqkkBwSescq8Vm+4a+v+A1siR5BgvdmMGl+gwkecgsd/pN4Eux5O/lkbaBbMMnDs/Kq0dsnB2WreT/lrjGmkLFhbzYteAq/se0va0r90k19QcsRnAS0Whlv+7npZ+VAmj6OvCSa9EbLC+70CPG7a6UKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BJ47yieC; arc=none smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3df13906bcdso1365321b6e.0;
+        Sun, 01 Sep 2024 13:26:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1725213672; x=1725818472; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mkg7uL0slKF2tnvKNsdIOWdMQ5c3Le9QMStE2DbR0pc=;
-        b=C5a7o7RKEzVQmVntbFDu9WNiIxbaMYdFYg7ERH345x9NMubaf/ExvOdUUMcmlvBKJh
-         Z1ncMAr3pwrQic6nGYtOoJnR8OluA3I0M3WoVO2Ahc2pvVNYwNmEt/99+0hYCFmCMDeZ
-         FfcPe2FYbhbaKQaIeWn1wXP5E8rH5lkgJamgwqhpn4F+QG8uzZPXTQmXLh4Rpw6V3Pir
-         kePL8CKk3zZWlwodT/OTG4JrqZ4v2p8uxb7CC90otd+DPHIoUSpAEyksCvPtrhmxp6Ul
-         CtUPsgi73DgsqJQdh7xzvUSSRa+yApP9GnWL+DOQr+XcZFHE01in+5yGEf2FD3t9AnMr
-         ZbjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725213672; x=1725818472;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1725222406; x=1725827206; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mkg7uL0slKF2tnvKNsdIOWdMQ5c3Le9QMStE2DbR0pc=;
-        b=O6PpIULymBZ3iTFL4cG5kpE18kZ3yCjxSrrIxNX0GB0aN4FS+W7TINMpFH/qKd8gmd
-         NueUdVBFhxwa6EufEmHCNTpaSN6mEuK3wnVer1+2V9+CQNW9UaKE6rZvGFeIzFDRYKbr
-         z/2pJi/+5TH0GR7lRSqrKNfx/Yl/JIm1dceUq0Xa8izWrHS8HabDzwF1vS3dQ/LUPIsT
-         ylpbhcWSx7IDlCpd2slsHn7dbvHPpXTlJv52R/wgopGIXA8k9cO2m7LD+zWZ4r7LF5Eo
-         Te93xlyI4+eBR4OoiekWWNm1k63KyCtG/690vjIZvuQMO9w0W7RQ3HDo2VRplfrIN/tI
-         Zq6A==
-X-Forwarded-Encrypted: i=1; AJvYcCWXbS24KS8Hwk9yXFA34gRdsdVYiFtZEol5tv7j59Ib6KdEHxWVCUQyW/yyCiisedUfCJG2MarOwQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQQqDAku0+WdPvB6AYSo7pEnMqBFDmIuH3mOgB2OIlYH65RUqd
-	FrYNvUcRIRAvXlWFgzp6m0KuQgRFltVn6Ys6llpqyPk+eaNwtLEplxezdbCslhY=
-X-Google-Smtp-Source: AGHT+IGT5AyPhsmzSXVOxiitmS907DPKxIB7vmU+zeTaBmXmrVB48INX2SRDNaz9lLzb0C0ONDQnKA==
-X-Received: by 2002:a05:6402:449a:b0:5be:e01c:6b5e with SMTP id 4fb4d7f45d1cf-5c243781e24mr2819633a12.35.1725213671783;
-        Sun, 01 Sep 2024 11:01:11 -0700 (PDT)
-Received: from airbuntu ([176.29.222.46])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c226c6a3easm4320678a12.6.2024.09.01.11.01.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Sep 2024 11:01:11 -0700 (PDT)
-Date: Sun, 1 Sep 2024 19:01:09 +0100
-From: Qais Yousef <qyousef@layalina.io>
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Loehle <christian.loehle@arm.com>,
-	Hongyan Xia <hongyan.xia2@arm.com>,
-	John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7] sched: Consolidate cpufreq updates
-Message-ID: <20240901180109.bqcgujqpdjsult5i@airbuntu>
-References: <20240728184551.42133-1-qyousef@layalina.io>
- <CAKfTPtBxFTxZQT=w6iexLEciHD736+ubLOd_PJnvXge09h-rXw@mail.gmail.com>
+        bh=3oymSihQ9xNkijCwVP8jhm5tPehtP5i+SU6Q/ZWpPuQ=;
+        b=BJ47yieCXKrO7rWTVPf6qKhPp2RVC9VYfCELewgEWTQ5KVw9mszLdue90TXQGYCOy8
+         LLVH/Rv62LPUBtaASfE8j5HqPMzutCxr15urszWOqa2zeTNwT63vg6f3y8fWeRvpgToz
+         YHrLWaqOeAJw0mfhKR7/3hDBNzIynpRk45T32dXHd8caUt0Ua44cNf85ety+PzXvbPzL
+         8GQF9wofODQBXojnjg93yK72yP5Ks82H23X2FwMpejoyLeX3bws2m38Hjm7ulC4euTbi
+         9WFMElE8aL4dOv725hD0ndc7XVQyQT1dXJXjsG0OhxepkPLSls51cr0xGUFuRSO4eaZ4
+         92JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725222406; x=1725827206;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3oymSihQ9xNkijCwVP8jhm5tPehtP5i+SU6Q/ZWpPuQ=;
+        b=brUco8bhPd3Wmblint/kCuLNbDx8G3W8iMldN9wQcyjfIJ/pgkkYc172WE+hmnnH43
+         8mt1sfh2jkFjnszSQdM4ZsAFzgCJcMowkG8t6toDKMNO/xW0kV3+01frzofbcJJHuoxe
+         DdCSuSWovctntdmatFYWuwucTJAYet1ezTsu9K5If1ahLat6pVcicJth30bYF7GHOuMl
+         McgFym+NlTSyhGQrjYDvYFel2aJg0OL0OPcEXt0OxW6dl5nMKFhxyD44KVT1UacAeuEm
+         gOGFUkDTz6emKyaG+R8254QZwL5AyWvvN4lk/TVYpZEy0+yatFGFDzdX4DxKbHBNh7Cq
+         UeZg==
+X-Forwarded-Encrypted: i=1; AJvYcCVw/itYefMbAViE2p7JkcSgLoq6W68PllU667WoJ9Id/3VlLXk0iGrS9NutDsywh/bSAilof29Xm/LY@vger.kernel.org, AJvYcCXlkn4o4VCHHPllRGrzBpQDJHSF4T54hoQUrR+NHdMxo6MIV8wrLv9hBrIuVFGG2XTg9jLLHIGQ3A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiEdzlUv3N9n0aZxtDiWb9c7S3gNyKquURpyIt/5Jd0aJ+qQxt
+	FlQzbVlszcd6K7g6H3MzrzHcqknqAaUpmqSNnhaKBfJI02oKA/EbcN/5hQgoYbOT6OHjcCoQk54
+	FimUZ7nXGtfJfNQ6MPc9g+qVcujlK8BCd
+X-Google-Smtp-Source: AGHT+IH5GQdRNg1XGvX1KjmwgNI1LydskMNdRNslrqa2X95W8gIwQ/fT9HHeAKtApyH2Fd34HjEZC1WzxJH9QOo7yiY=
+X-Received: by 2002:a05:6871:284:b0:261:146b:b105 with SMTP id
+ 586e51a60fabf-277c824756fmr5590521fac.41.1725222406534; Sun, 01 Sep 2024
+ 13:26:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtBxFTxZQT=w6iexLEciHD736+ubLOd_PJnvXge09h-rXw@mail.gmail.com>
+References: <20240821214052.6800-1-wahrenst@gmx.net> <20240821214052.6800-2-wahrenst@gmx.net>
+ <7ba14fe2-38e0-414c-bc3d-62c1e70741ad@gmx.net>
+In-Reply-To: <7ba14fe2-38e0-414c-bc3d-62c1e70741ad@gmx.net>
+From: Jassi Brar <jassisinghbrar@gmail.com>
+Date: Sun, 1 Sep 2024 15:26:35 -0500
+Message-ID: <CABb+yY2ay47mNzMQB0DasvnP-_EZJ7VTSoJFHtiKUySGRCXvWA@mail.gmail.com>
+Subject: Re: [PATCH V3 1/9] mailbox: bcm2835: Fix timeout during suspend mode
+To: Stefan Wahren <wahrenst@gmx.net>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Doug Anderson <dianders@chromium.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Lukas Wunner <lukas@wunner.de>, Artur Petrosyan <Arthur.Petrosyan@synopsys.com>, 
+	Peter Robinson <pbrobinson@gmail.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Maxime Ripard <mripard@kernel.org>, dri-devel@lists.freedesktop.org, 
+	bcm-kernel-feedback-list@broadcom.com, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
+	Russell King <linux@armlinux.org.uk>, Minas Harutyunyan <hminas@synopsys.com>, linux-pm@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kernel-list@raspberrypi.com, Ray Jui <rjui@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 08/13/24 12:02, Vincent Guittot wrote:
-> >  void wakeup_preempt(struct rq *rq, struct task_struct *p, int flags)
-> > @@ -4913,6 +4923,93 @@ static inline void __balance_callbacks(struct rq *rq)
+On Sat, Aug 31, 2024 at 4:19=E2=80=AFAM Stefan Wahren <wahrenst@gmx.net> wr=
+ote:
+>
+> Hi Jassi,
+>
+> Am 21.08.24 um 23:40 schrieb Stefan Wahren:
+> > During noirq suspend phase the Raspberry Pi power driver suffer of
+> > firmware property timeouts. The reason is that the IRQ of the underlyin=
+g
+> > BCM2835 mailbox is disabled and rpi_firmware_property_list() will alway=
+s
+> > run into a timeout [1].
 > >
-> >  #endif
+> > Since the VideoCore side isn't consider as a wakeup source, set the
+> > IRQF_NO_SUSPEND flag for the mailbox IRQ in order to keep it enabled
+> > during suspend-resume cycle.
 > >
-> > +static __always_inline void
-> > +__update_cpufreq_ctx_switch(struct rq *rq, struct task_struct *prev)
-> > +{
-> > +#ifdef CONFIG_CPU_FREQ
-> > +       if (prev && prev->dl.flags & SCHED_FLAG_SUGOV) {
-> > +               /* Sugov just did an update, don't be too aggressive */
-> > +               return;
-> > +       }
-> > +
-> > +       /*
-> > +        * RT and DL should always send a freq update. But we can do some
-> > +        * simple checks to avoid it when we know it's not necessary.
-> > +        *
-> > +        * iowait_boost will always trigger a freq update too.
-> > +        *
-> > +        * Fair tasks will only trigger an update if the root cfs_rq has
-> > +        * decayed.
-> > +        *
-> > +        * Everything else should do nothing.
-> > +        */
-> > +       switch (current->policy) {
-> > +       case SCHED_NORMAL:
-> > +       case SCHED_BATCH:
-> > +       case SCHED_IDLE:
-> > +               if (unlikely(current->in_iowait)) {
-> > +                       cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT | SCHED_CPUFREQ_FORCE_UPDATE);
-> > +                       return;
-> > +               }
-> > +
-> > +#ifdef CONFIG_SMP
-> > +               /*
-> > +                * Send an update if we switched from RT or DL as they tend to
-> > +                * boost the CPU and we are likely able to reduce the freq now.
-> > +                */
-> > +               rq->cfs.decayed |= prev && (rt_policy(prev->policy) || dl_policy(prev->policy));
-> > +
-> > +               if (unlikely(rq->cfs.decayed)) {
-> 
-> My previous use case of a task non preempting current with large
-> util_est is fixed with this version but I'm facing a new one a bit
-> similar because of waiting for the context switch and the decay to try
-> to update the frequency.
-> 
-> When the task wakes up on an idle cpu, you wait for the decay to
-> update the freq but if the freq is low and the pelt has been updated
-> recently (less than 1024us) you can wait a long time before the next
-> decay and the freq update. This is a problem if the task's util_est is
-> large because you can stay several ms at low frequency before taking
-> into account task's util_est
+> > [1]
+> > PM: late suspend of devices complete after 1.754 msecs
+> > WARNING: CPU: 0 PID: 438 at drivers/firmware/raspberrypi.c:128
+> >   rpi_firmware_property_list+0x204/0x22c
+> > Firmware transaction 0x00028001 timeout
+> > Modules linked in:
+> > CPU: 0 PID: 438 Comm: bash Tainted: G         C         6.9.3-dirty #17
+> > Hardware name: BCM2835
+> > Call trace:
+> > unwind_backtrace from show_stack+0x18/0x1c
+> > show_stack from dump_stack_lvl+0x34/0x44
+> > dump_stack_lvl from __warn+0x88/0xec
+> > __warn from warn_slowpath_fmt+0x7c/0xb0
+> > warn_slowpath_fmt from rpi_firmware_property_list+0x204/0x22c
+> > rpi_firmware_property_list from rpi_firmware_property+0x68/0x8c
+> > rpi_firmware_property from rpi_firmware_set_power+0x54/0xc0
+> > rpi_firmware_set_power from _genpd_power_off+0xe4/0x148
+> > _genpd_power_off from genpd_sync_power_off+0x7c/0x11c
+> > genpd_sync_power_off from genpd_finish_suspend+0xcc/0xe0
+> > genpd_finish_suspend from dpm_run_callback+0x78/0xd0
+> > dpm_run_callback from device_suspend_noirq+0xc0/0x238
+> > device_suspend_noirq from dpm_suspend_noirq+0xb0/0x168
+> > dpm_suspend_noirq from suspend_devices_and_enter+0x1b8/0x5ac
+> > suspend_devices_and_enter from pm_suspend+0x254/0x2e4
+> > pm_suspend from state_store+0xa8/0xd4
+> > state_store from kernfs_fop_write_iter+0x154/0x1a0
+> > kernfs_fop_write_iter from vfs_write+0x12c/0x184
+> > vfs_write from ksys_write+0x78/0xc0
+> > ksys_write from ret_fast_syscall+0x0/0x54
+> > Exception stack(0xcc93dfa8 to 0xcc93dff0)
+> > [...]
+> > PM: noirq suspend of devices complete after 3095.584 msecs
+> >
+> > Link: https://github.com/raspberrypi/firmware/issues/1894
+> > Fixes: 0bae6af6d704 ("mailbox: Enable BCM2835 mailbox support")
+> > Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> > Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> gentle ping
 
-It is a symptom of the same problem. It seems we don't decay and we omit the
-cpufreq update.
+This sounds like a fix but also a part of 9 patches update. Do you
+want this merged as a bugfix now or into the next window.
 
-Why this was not a problem before? AFAICT we only send an update before my
-patch if we had a decay and I didn't change this condition. Were we just
-getting more lucky or did I change some behavior unwittingly?
-
-The problem with my patch is that I do this unconditional only if we failed
-preemption check. But looks like I must enforce a cpufreq update after every
-enqueue. I think the overhead of not checking rq->cfs.decayed would be high if
-we always call a cpufreq update.
-
-I'll just set rq->cfs.decayaed in util_est_enqueue() which should address both
-use cases.
-
-Thanks!
+thanks
 
