@@ -1,204 +1,115 @@
-Return-Path: <linux-pm+bounces-13303-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13304-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 367FB96757E
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2024 09:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E93B6967810
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2024 18:27:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8721CB21813
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2024 07:59:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84709B21208
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2024 16:27:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B763D143879;
-	Sun,  1 Sep 2024 07:59:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20730183CB1;
+	Sun,  1 Sep 2024 16:27:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kx4SsqIS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ObAanHGz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E237E101;
-	Sun,  1 Sep 2024 07:59:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776EA33987;
+	Sun,  1 Sep 2024 16:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725177583; cv=none; b=RR+pXKxoYWd2UoWUFE4HS//rLdo+bJrb5XuuxKVBciRl+BH5WnE5gPxfRPOlV4xGgY3cdt/54Iexg26VaVKryPfL5NkA+ObCbAtEY0wO3LEqzbwZCL9zhL8snYazgLpafs/XF71ayol0L8sRIrmyDkr3CxMhHrBjdCJZKRwW2Yg=
+	t=1725208044; cv=none; b=Wds3WF8egsQn0PRaB9GTkm+AAEe0uPvM92ZGG9AO18KwObjSsYs4y1dbqgSQ1EfS8/Z8JJxVcQ50oS+b5XJwnmGMLd3Brr6VxRciZRGxbEdJ6PcSf0GiPrW0jpclnnQVlCR13GAL6jfiySiN8/D432sKAjp00Orsq4Y0Yqt7E24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725177583; c=relaxed/simple;
-	bh=wvu12Ehzrk6KRlsZVBTLs0SKfiBW/rXovg7gQdDlHHQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QOMLave1NJV5nt2FZ7u7/w35vT1HSNzlDTcWXvP+iCuWCdyb4nTKI9WY7/YNMN/DNnTJkFseSKunJJQPjMs3XE6uFrj7nQSvO/GZGHwIvJE+qyznVtTKXqOVVZF4WqRafK52KAlJEy9J2V1jdHcbV0sb17bollVu+bG06IT52hA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kx4SsqIS; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725177580; x=1756713580;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wvu12Ehzrk6KRlsZVBTLs0SKfiBW/rXovg7gQdDlHHQ=;
-  b=kx4SsqISt+qFlaudkMhuyBWZ1kwVsTM1q6BogY5Hnphv7X1dt/muK5+b
-   Pvtzk9Ezl9bAIoVRmj7ryCLffaFO/r/iq1pkHP4OF11raj3O04Buk+90M
-   FbAp6ZLpXykfr63Zr5TIUdYYkNwPRuKVR4RCXMWCTZiPKZ0d/vc1HhWh0
-   EcknxnTfufwS3X/I9qQsYbdNj4sjzcBH894mGvdH09stwPdux+tMEOsPK
-   16TKE4bbm4DPJ1ALJ74GerhNjCEFTwwrWNipm3AAXcxss3Jn2Kh6soHMx
-   yLZIWcNoNO20iW1sYaqoWE/HDvlhGRGDllR+q4CwYxDoBMnCOOpnhm1KE
-   w==;
-X-CSE-ConnectionGUID: QATY+5YOTlOt/KMz3Uuu3g==
-X-CSE-MsgGUID: U3UATUbeSeGWwjZ0xFcXSQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11181"; a="23939676"
-X-IronPort-AV: E=Sophos;i="6.10,193,1719903600"; 
-   d="scan'208";a="23939676"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2024 00:59:39 -0700
-X-CSE-ConnectionGUID: Gq8oKVflShm0/ar2W4jMwg==
-X-CSE-MsgGUID: 4rROlkngSSWdM32NdPJk4Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,193,1719903600"; 
-   d="scan'208";a="95010277"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 01 Sep 2024 00:59:38 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1skfUl-0003Ww-33;
-	Sun, 01 Sep 2024 07:59:35 +0000
-Date: Sun, 1 Sep 2024 15:59:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: [rafael-pm:bleeding-edge 161/190] drivers/acpi/cppc_acpi.c:1141:3-4:
- Unneeded semicolon
-Message-ID: <202409011554.KG79Y5xu-lkp@intel.com>
+	s=arc-20240116; t=1725208044; c=relaxed/simple;
+	bh=e/LKTV7hMZEHn95toU81B+LDFOUu3I/CSU0QsKDRkTY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=EmAgL64EbDTgzs2gR5cwkQLeoT5GPVs3ivqHJhXlpYGncSlA34OJk0NodFc8EpYl/YvHSeX5n5lENqarRkIfAyrjhb3KUIZJBEE8Ec/l1k/ZEm4dAdghonNxmkTc53cLRiTzBXCmU5+VurGiVERMPojq11eX2pqBkxgtQIJYdig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ObAanHGz; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a869332c2c2so715811966b.0;
+        Sun, 01 Sep 2024 09:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725208041; x=1725812841; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WYkCsoCLWLw24xCZo4xi+SGoWPofV3x//tQ3lm2KoZw=;
+        b=ObAanHGzjcbcup/WE4wItwGjmP8KONktM1v75/IC1WB3bwKaDCAGQWUdY3RuqE5Sku
+         E4o0HfoIukGtrXtU1HdqC9Vbmipe2XRpX9YRXayi/4oeJa6T99kx4dS3raUmqwKZWtyV
+         nlQsaOgoUMmkGCx0YUyuEcwbhg3hdm1DKoL7HpYTx6fbYHs7GQMmw04+tZ16ZqtSHrQU
+         rLLgj5eEOHPOMqPB/pHhgsMREC+nM2v8iNL+A0RaEhNUH5xqNis+uUHPgX1sJaO0OeIO
+         DYf1SfEsQ4TtrC+d8e7ptfKMd3ytO8+gahYzXiqCwzWiSkNapeEXJfj5YRQ2QsM7YOt1
+         svIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725208041; x=1725812841;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WYkCsoCLWLw24xCZo4xi+SGoWPofV3x//tQ3lm2KoZw=;
+        b=JKQ9bRAgjVGGCqpZoiR0iE5a3MowMNafWMV6POQWUZNg01zt8oXcLlVFraZO1oWW77
+         mMLYmiIhq/5ZEoJqRyuZVv3xVVi0d3a5EOZThxYl+f9EZ1tHX9ytSnOwAjYg8MKLi8Ys
+         YZ11Iqmgv4bGH65DzSsv50aWwAsg4VeTw1tdWt0sRZuGuRKgvIt/93g14TQw9VaGJcz5
+         g1spqL8sutmaDSddE9R72ZnZ6h3fiAy5vaHkxCqDIEexBy8Wi4F/fHoRgysf9jm/GhiW
+         I78tv/XdL/gqsAWsT8YveqyNxY95EJddU9Uqks/T+gcMk2XbXeYhMUuG0/MflIUhyvwK
+         37hg==
+X-Forwarded-Encrypted: i=1; AJvYcCUBFUv9WZv3emegbqTdWjB88ogSfQTZy+sIR4v7uGWZWrfGfpLdCVtEr7jcCeqBStPKlqFMpu2kbPnVBc8=@vger.kernel.org, AJvYcCX7/3fIcd8ywh1ZZziONLBu7JVLeaEYHLzLxhFe9Mh1A8MQDAmgtVsaKKb7L4JHvVxEBsbBevPUdA+uLZUUhzT4YvM=@vger.kernel.org, AJvYcCXJ86F/ty9D5k8lO/ECOBJAGUjOU03hWVnzM03VRM6oOWqSBqfFW5szFrHsY1QsUhl/46KXHF29LH4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzahfWo9c9iKczCSJuoJsUtyqVXWUNT+ajVJKdj7d2B1DfFjVfj
+	n4QoG+qQLrbQ0WrZtFyeo4BbRRpr1/eOtcMD6Zt7k6hcYyenJKVt
+X-Google-Smtp-Source: AGHT+IFWkGvJc84SLUoPtIrjnB5r9CffAAjDGAjDj4l24UeHZVQNZST9WvvOPNlCX/91/n8v2sc1OQ==
+X-Received: by 2002:a17:906:d265:b0:a86:91a5:4d09 with SMTP id a640c23a62f3a-a89a2927b2fmr854988366b.26.1725208040548;
+        Sun, 01 Sep 2024 09:27:20 -0700 (PDT)
+Received: from localhost (craw-09-b2-v4wan-169726-cust2117.vm24.cable.virginm.net. [92.238.24.70])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8988fefb60sm454888366b.43.2024.09.01.09.27.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Sep 2024 09:27:19 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	linux-renesas-soc@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH][next] thermal/drivers/renesas: Remove trailing space after \n newline
+Date: Sun,  1 Sep 2024 17:27:19 +0100
+Message-Id: <20240901162719.144406-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   d683340e443e46fafe40b050b5dedb64924bf6c8
-commit: d837dbba610b1219f626af9578518ae066ed0571 [161/190] ACPI: CPPC: Fix MASK_VAL() usage
-config: x86_64-randconfig-103-20240901 (https://download.01.org/0day-ci/archive/20240901/202409011554.KG79Y5xu-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+There is a extraneous space after a newline in a dev_err message.
+Remove it.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409011554.KG79Y5xu-lkp@intel.com/
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/thermal/renesas/rcar_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-cocci warnings: (new ones prefixed by >>)
->> drivers/acpi/cppc_acpi.c:1141:3-4: Unneeded semicolon
-
-vim +1141 drivers/acpi/cppc_acpi.c
-
-  1075	
-  1076	static int cpc_write(int cpu, struct cpc_register_resource *reg_res, u64 val)
-  1077	{
-  1078		int ret_val = 0;
-  1079		int size;
-  1080		u64 prev_val;
-  1081		void __iomem *vaddr = NULL;
-  1082		int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
-  1083		struct cpc_reg *reg = &reg_res->cpc_entry.reg;
-  1084		struct cpc_desc *cpc_desc;
-  1085	
-  1086		size = GET_BIT_WIDTH(reg);
-  1087	
-  1088		if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_IO) {
-  1089			acpi_status status;
-  1090	
-  1091			status = acpi_os_write_port((acpi_io_address)reg->address,
-  1092						    (u32)val, size);
-  1093			if (ACPI_FAILURE(status)) {
-  1094				pr_debug("Error: Failed to write SystemIO port %llx\n",
-  1095					 reg->address);
-  1096				return -EFAULT;
-  1097			}
-  1098	
-  1099			return 0;
-  1100		} else if (reg->space_id == ACPI_ADR_SPACE_PLATFORM_COMM && pcc_ss_id >= 0) {
-  1101			/*
-  1102			 * For registers in PCC space, the register size is determined
-  1103			 * by the bit width field; the access size is used to indicate
-  1104			 * the PCC subspace id.
-  1105			 */
-  1106			size = reg->bit_width;
-  1107			vaddr = GET_PCC_VADDR(reg->address, pcc_ss_id);
-  1108		}
-  1109		else if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY)
-  1110			vaddr = reg_res->sys_mem_vaddr;
-  1111		else if (reg->space_id == ACPI_ADR_SPACE_FIXED_HARDWARE)
-  1112			return cpc_write_ffh(cpu, reg, val);
-  1113		else
-  1114			return acpi_os_write_memory((acpi_physical_address)reg->address,
-  1115					val, size);
-  1116	
-  1117		if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
-  1118			cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-  1119			if (!cpc_desc) {
-  1120				pr_debug("No CPC descriptor for CPU:%d\n", cpu);
-  1121				return -ENODEV;
-  1122			}
-  1123	
-  1124			spin_lock(&cpc_desc->rmw_lock);
-  1125			switch (size) {
-  1126			case 8:
-  1127				prev_val = readb_relaxed(vaddr);
-  1128				break;
-  1129			case 16:
-  1130				prev_val = readw_relaxed(vaddr);
-  1131				break;
-  1132			case 32:
-  1133				prev_val = readl_relaxed(vaddr);
-  1134				break;
-  1135			case 64:
-  1136				prev_val = readq_relaxed(vaddr);
-  1137				break;
-  1138			default:
-  1139				spin_unlock(&cpc_desc->rmw_lock);
-  1140				return -EFAULT;
-> 1141			};
-  1142			val = MASK_VAL_WRITE(reg, prev_val, val);
-  1143			val |= prev_val;
-  1144		}
-  1145	
-  1146		switch (size) {
-  1147		case 8:
-  1148			writeb_relaxed(val, vaddr);
-  1149			break;
-  1150		case 16:
-  1151			writew_relaxed(val, vaddr);
-  1152			break;
-  1153		case 32:
-  1154			writel_relaxed(val, vaddr);
-  1155			break;
-  1156		case 64:
-  1157			writeq_relaxed(val, vaddr);
-  1158			break;
-  1159		default:
-  1160			if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
-  1161				pr_debug("Error: Cannot write %u bit width to system memory: 0x%llx\n",
-  1162					size, reg->address);
-  1163			} else if (reg->space_id == ACPI_ADR_SPACE_PLATFORM_COMM) {
-  1164				pr_debug("Error: Cannot write %u bit width to PCC for ss: %d\n",
-  1165					size, pcc_ss_id);
-  1166			}
-  1167			ret_val = -EFAULT;
-  1168			break;
-  1169		}
-  1170	
-  1171		if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY)
-  1172			spin_unlock(&cpc_desc->rmw_lock);
-  1173	
-  1174		return ret_val;
-  1175	}
-  1176	
-
+diff --git a/drivers/thermal/renesas/rcar_thermal.c b/drivers/thermal/renesas/rcar_thermal.c
+index 1e93f60b6d74..ddc8341e5c3f 100644
+--- a/drivers/thermal/renesas/rcar_thermal.c
++++ b/drivers/thermal/renesas/rcar_thermal.c
+@@ -447,7 +447,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+ 		ret = devm_request_irq(dev, irq, rcar_thermal_irq,
+ 				       IRQF_SHARED, dev_name(dev), common);
+ 		if (ret) {
+-			dev_err(dev, "irq request failed\n ");
++			dev_err(dev, "irq request failed\n");
+ 			goto error_unregister;
+ 		}
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
 
