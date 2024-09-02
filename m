@@ -1,174 +1,110 @@
-Return-Path: <linux-pm+bounces-13310-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13311-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06789967C42
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2024 22:58:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E68EA967E11
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 05:11:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B37E028188E
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2024 20:58:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49531B22A8B
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 03:11:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 322A98174E;
-	Sun,  1 Sep 2024 20:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62EE43A1C9;
+	Mon,  2 Sep 2024 03:11:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="hYyDFNEd"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="jDQkMdQc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D674D8AF;
-	Sun,  1 Sep 2024 20:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB66479C0;
+	Mon,  2 Sep 2024 03:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725224309; cv=none; b=GO9rSYZjtVMdigblvY3sQSFABejJud6+UW5bSYrMdL6QlYbcMYdZMrMLtqWb9pW/+Jlw59Qx+EV7th1ziTCHaCa2fCHwuZSXGoS4Vw7haf4ZLsDxBH+qOdPzwJam+xCwW2YWK/3qm1dfO0iLik9p5/DGR5ujjyWkSxpaJfI8hR8=
+	t=1725246673; cv=none; b=YIi9E82p68XN5QbqzRyennMqqpNmOrqjKTvqu1krFvWudgtaUwRUQmhQNgI9xWu5OUUWpjdAsr3t+15Vb/2ZtKybauK95exvrHkuSq4KTjAgb4oeyRqV9sVCPwE8A6JeFIZTN1C94jF4mWrda56riVvzg6CY3PrvyB1evc7u2Pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725224309; c=relaxed/simple;
-	bh=DDJEyEHc1AyA0ekYw2Uk0thrqJ7aFGl0BA/6aFGQJ6k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XH1VqTf8doBbYKnbdrTP1r0HqRl4xSQ7zKrMULxPJzLZcoSrPBiHXrQr1E9b53FuzlgfQiZ/it4qCjG9oD7Xz7z74WuOw+zV/NnkBwvSjae83KNHuzqyEDZmow+yzdXMH0YLC7lYkRopJoYgbiP0dZQsdt/oYVXK8v19q5jAiMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=hYyDFNEd; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1725224269; x=1725829069; i=wahrenst@gmx.net;
-	bh=bGCy0KWFrbS3RM769BUfD63uKrTNw6zmGzCkzsxXqko=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=hYyDFNEdiPXLf146BNTvvu/0Xn7bkbZuduRDjTFmsKvjYfaHcgZUTY+fiPn1yWwj
-	 fIL5jU4HCL3sMsNk/EtSuAg5I9lbkaHqQSRDJj0PD+vMix8Ou6Xj4vbdVArdrKTLc
-	 9UN+8CUykY2LIJQVMsLTQPdvBWNwv5DTVZC/HKUreNIApcuT2qNdY0Z8KPv28PXjW
-	 f+nxs+MG3yLV4HGQpalTwhkwjqeWyGPgVyeNbpN1Fy+cH0Bbm8NyTQ7SAZbIHKMzs
-	 5tk/Nzyalb8dNakUMgPNWSjLuxj24je37igpR/eY9Lup9DawxtigOneNEAjd9WIS5
-	 7M3Pig9JQQw23W8gZw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXp9Y-1sYiYL2a8C-00QnVj; Sun, 01
- Sep 2024 22:57:49 +0200
-Message-ID: <4e211aaf-3380-4039-a1ca-ea800bb30a82@gmx.net>
-Date: Sun, 1 Sep 2024 22:57:41 +0200
+	s=arc-20240116; t=1725246673; c=relaxed/simple;
+	bh=hMAhG4HQfZuE2iWAvAPKvQciL3MaBKed+Mk9j5o2opw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=M8Mw5cz8rM1Myu6v1Neo9l3uKVLaIU9N92ajf7PRsOL2qX/dANPfJXFz8mE8pgDzZi5xxcyPrV7YkC//eJ9q4Tduajhmhj3hB+56D2L7BSJlYEZ43mFg8NauUhalbN9LpaglS2tP9APLKBfd5MnrEIVzOK2M9Ezw8lO//tdsNsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=jDQkMdQc; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: f9bc208868d811ef8593d301e5c8a9c0-20240902
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=2nK5QbU5dkc5U5TwQYN/wO/nlEp/eum7zig0Mq8CzQA=;
+	b=jDQkMdQcGG2LNgty19i+pWnsKbV1A91GCIS1UN5ZZgAX/rql+fuKVibbSDjkun4wt9xMwISmNe8niwEV2AErE1RzJTheMyQ1y1/0I1sdcLNNig5UbEu9BejYtyEvkbCHJnFJ3Hpllwn0bvqIOqxOLLdD/ZLHDpfGlBrK+mo1OSw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:8250548f-e42f-44b3-a2cc-6767e3472b09,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:6dc6a47,CLOUDID:56a849bf-d7af-4351-93aa-42531abf0c7b,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: f9bc208868d811ef8593d301e5c8a9c0-20240902
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
+	(envelope-from <yenchia.chen@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 109499073; Mon, 02 Sep 2024 11:10:58 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 2 Sep 2024 11:10:55 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 2 Sep 2024 11:10:55 +0800
+From: Yenchia Chen <yenchia.chen@mediatek.com>
+To: <stable@vger.kernel.org>
+CC: yenchia.chen <yenchia.chen@mediatek.com>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown
+	<len.brown@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>
+Subject: [PATCH 5.15 0/1] pm, restore async device resume optimization
+Date: Mon, 2 Sep 2024 11:10:44 +0800
+Message-ID: <20240902031047.9865-1-yenchia.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 1/9] mailbox: bcm2835: Fix timeout during suspend mode
-To: Jassi Brar <jassisinghbrar@gmail.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Doug Anderson <dianders@chromium.org>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Lukas Wunner <lukas@wunner.de>,
- Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
- Peter Robinson <pbrobinson@gmail.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Maxime Ripard <mripard@kernel.org>, dri-devel@lists.freedesktop.org,
- bcm-kernel-feedback-list@broadcom.com, =?UTF-8?Q?Ma=C3=ADra_Canal?=
- <mcanal@igalia.com>, Russell King <linux@armlinux.org.uk>,
- Minas Harutyunyan <hminas@synopsys.com>, linux-pm@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kernel-list@raspberrypi.com, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20240821214052.6800-1-wahrenst@gmx.net>
- <20240821214052.6800-2-wahrenst@gmx.net>
- <7ba14fe2-38e0-414c-bc3d-62c1e70741ad@gmx.net>
- <CABb+yY2ay47mNzMQB0DasvnP-_EZJ7VTSoJFHtiKUySGRCXvWA@mail.gmail.com>
-Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <CABb+yY2ay47mNzMQB0DasvnP-_EZJ7VTSoJFHtiKUySGRCXvWA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Bh/buYHNIBiGCz0TONsKXhoxCMEqwPL9rLjnseV8VMfIiEU0XgF
- gmDWhFBRx/a3ps/BLIcL6rlGcTown/Gau/vOJIhG+PIKbdX1SRW4sFEQGKTBLqaZIlL98Gn
- Zqy2dQPYGHtUtXAiR3QqmuzQ6xkOoKwvIvmDe6d0XiIC7DtSQTfLU8+r2KDWE/2QOLJZ1dF
- 9OO8dmQeHdH8MvrpnjCqA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:mcyVvPMkpeM=;pDQqNOMgE11z4dIVh5CWwkY9wJq
- VQGD7Cz2L4ShgfXaYgwC557mDZ82dBvvQ4ND5fO5wroaXwJgPWDQVFGk62+96Rt31MkBJe6sx
- DthF/irds0hQAGDjylcYhweepA+nMQC+oRVcrGm+5sVBQzWk/pv3Dr7VOQDTRaOQmjHXbofIq
- N+UJeJ52mnlibAmGVUDn+dDm49VBpI+bmTFqiy0a8Mzk9iJ7sWEVQNP+33Gdm6N8UFbzsKLMC
- e5hmCnRBtDoJvtwrzt6iRtLixhsmnqec8eTC2D1qi++HyDWPmXk3voTvMPIAp71i/vtfg+EUT
- I1nXtGjXAwTQis/+NfAENLkTJpqliuAl2aVmGnhDDl38WN9Dl7AsONxSg+gBJ7iOachQINXcC
- mk1/ScCa810ucSuFv5KZNwTXTXmtbi9KUTqejSX9OMe1DhGxnlmwcrnYQBBdCM8iBqMvjknDq
- W9p/hVwapEEMZci7qwssmRog3JUj5ZvILao1qmBYvqfPOUXZ9RN02+aNCUXW69VpkKzEZTgBz
- h1aR7kXc2TogxdkbhSJxPU4Zm56ydxOidF8FYyyEIB/QOWphdbD87SFOLJNeRUlJZwJ/dEIjm
- GjRqT7wZZiTBjCoTDABg7jrkM4KdGJEIpAG6+umqXA0E1yApZkuwCHX54JKCTbAwaHhSXD+8Z
- cq2MB633kIbwlbug96nBxw0Dy5xCdIT2nV97NWIDNUwR3FmUedGRVRTw1IjHZRanwaJipA4NH
- hOnnyq5P3ciQmjOr8DwiAtvWFjGzE14IQw3hSBMXkR1P8Vl1cF80p2Bg40GNNIwQZlmU8nWpb
- wNX5SNK3PqF295PNIduHkRzQ==
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--3.129900-8.000000
+X-TMASE-MatchedRID: JLcFkSgMIWN2Rany8ZWn3tOEZs/2oH3cCt59Uh3p/NWCsBeCv8CM/WAd
+	cSpevRjQiHW59WKjt/cKqKe3zUn9YqPoJzzb7KzWhK8o4aoss8pKPIx+MJF9o5soi2XrUn/J8m+
+	hzBStanvCLNfu05PakAtuKBGekqUpOlxBO2IcOBbEyMTWd4/m6PO/B9+EIe5KemHOHsKuv6TiRL
+	HA99IRmBkGY5qDZgwhHFrKplBIbYwx59TrzsqD5L8cT6DUrvrGOPVhQvN7rWbBkGBTIlURuXoXD
+	z8+lMxFpW+aIDJ4DaRzkxJ+SIkUjmncuUSUEdOX
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--3.129900-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP: 3C10582E582375B77A6D1BA0557EB6A54834D49EE7523CB6CA1E816963D448C32000:8
 
-Hi Jassi,
+From: "yenchia.chen" <yenchia.chen@mediatek.com>
 
-Am 01.09.24 um 22:26 schrieb Jassi Brar:
-> On Sat, Aug 31, 2024 at 4:19=E2=80=AFAM Stefan Wahren <wahrenst@gmx.net>=
- wrote:
->> Hi Jassi,
->>
->> Am 21.08.24 um 23:40 schrieb Stefan Wahren:
->>> During noirq suspend phase the Raspberry Pi power driver suffer of
->>> firmware property timeouts. The reason is that the IRQ of the underlyi=
-ng
->>> BCM2835 mailbox is disabled and rpi_firmware_property_list() will alwa=
-ys
->>> run into a timeout [1].
->>>
->>> Since the VideoCore side isn't consider as a wakeup source, set the
->>> IRQF_NO_SUSPEND flag for the mailbox IRQ in order to keep it enabled
->>> during suspend-resume cycle.
->>>
->>> [1]
->>> PM: late suspend of devices complete after 1.754 msecs
->>> WARNING: CPU: 0 PID: 438 at drivers/firmware/raspberrypi.c:128
->>>    rpi_firmware_property_list+0x204/0x22c
->>> Firmware transaction 0x00028001 timeout
->>> Modules linked in:
->>> CPU: 0 PID: 438 Comm: bash Tainted: G         C         6.9.3-dirty #1=
-7
->>> Hardware name: BCM2835
->>> Call trace:
->>> unwind_backtrace from show_stack+0x18/0x1c
->>> show_stack from dump_stack_lvl+0x34/0x44
->>> dump_stack_lvl from __warn+0x88/0xec
->>> __warn from warn_slowpath_fmt+0x7c/0xb0
->>> warn_slowpath_fmt from rpi_firmware_property_list+0x204/0x22c
->>> rpi_firmware_property_list from rpi_firmware_property+0x68/0x8c
->>> rpi_firmware_property from rpi_firmware_set_power+0x54/0xc0
->>> rpi_firmware_set_power from _genpd_power_off+0xe4/0x148
->>> _genpd_power_off from genpd_sync_power_off+0x7c/0x11c
->>> genpd_sync_power_off from genpd_finish_suspend+0xcc/0xe0
->>> genpd_finish_suspend from dpm_run_callback+0x78/0xd0
->>> dpm_run_callback from device_suspend_noirq+0xc0/0x238
->>> device_suspend_noirq from dpm_suspend_noirq+0xb0/0x168
->>> dpm_suspend_noirq from suspend_devices_and_enter+0x1b8/0x5ac
->>> suspend_devices_and_enter from pm_suspend+0x254/0x2e4
->>> pm_suspend from state_store+0xa8/0xd4
->>> state_store from kernfs_fop_write_iter+0x154/0x1a0
->>> kernfs_fop_write_iter from vfs_write+0x12c/0x184
->>> vfs_write from ksys_write+0x78/0xc0
->>> ksys_write from ret_fast_syscall+0x0/0x54
->>> Exception stack(0xcc93dfa8 to 0xcc93dff0)
->>> [...]
->>> PM: noirq suspend of devices complete after 3095.584 msecs
->>>
->>> Link: https://github.com/raspberrypi/firmware/issues/1894
->>> Fixes: 0bae6af6d704 ("mailbox: Enable BCM2835 mailbox support")
->>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
->>> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
->> gentle ping
-> This sounds like a fix but also a part of 9 patches update. Do you
-> want this merged as a bugfix now or into the next window.
-there is no dependency to the rest of the series. Since this is late in
-the 6.11 cycle, i'm fine with merging it for the next window.
+We have met a deadlock issue on our device when resuming.
+After applying this patch which is picked from mainline, issue solved.
+We'd like to backport to 5.15.y and could you help to review? thanks.
 
-Thanks
->
-> thanks
+[ Upstream commit 3e999770ac1c7c31a70685dd5b88e89473509e9c ]
+
+Rafael J. Wysocki (1):
+  PM: sleep: Restore asynchronous device resume optimization
+
+ drivers/base/power/main.c | 117 +++++++++++++++++++++-----------------
+ include/linux/pm.h        |   1 +
+ 2 files changed, 65 insertions(+), 53 deletions(-)
+
+-- 
+2.18.0
 
 
