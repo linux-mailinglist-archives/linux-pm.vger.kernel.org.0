@@ -1,172 +1,199 @@
-Return-Path: <linux-pm+bounces-13347-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13348-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09F069687BC
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 14:43:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E2489687EA
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 14:50:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BAC41C21824
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 12:43:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A558E1F22F13
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 12:50:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22CF3187342;
-	Mon,  2 Sep 2024 12:43:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25D4F1D61A1;
+	Mon,  2 Sep 2024 12:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wPt4PGPJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YuFQT7k1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF2318595A
-	for <linux-pm@vger.kernel.org>; Mon,  2 Sep 2024 12:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CD9185947
+	for <linux-pm@vger.kernel.org>; Mon,  2 Sep 2024 12:50:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725281000; cv=none; b=oOjXis7cY4ozx1RyvPetrilk6pC/DvmZx5jk3wTBj8n5ZJQOXHtZiCyi/udtDJSAWZG4bLcDarxMNQY0cAO4SRsPnMxHWqfIJMNN1sIjmfygisP4Wkw1RkyZzznkdiS5uok28YkK9BFw4eXntH6SB7KCNTCHcWdVmcmctFWqmQg=
+	t=1725281429; cv=none; b=EcFiHIKVhI9lbQP4IYYS2mBVJ63EZ4AuWhnTZS1fu2KWGjmWWxoazYx1GD4zsHgz4ibPgb7huoeyFiYxpqri4fpEYo2/0+h4TujQ/AcDSIlG9YLOr6dwlbbnwj7j+ZWJSbTVHYxq19+WBi8DiFn1sforLMXGxVPoBrcRCfVr6VE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725281000; c=relaxed/simple;
-	bh=XmtoA1dxOzDS6roQ6BNIs04PwekYRQD9RJ6htg3/v6I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IbUJF9z7CcFvy4tZHjnvbBUJtYdC8/+V5SoiaYd1Hk696auKX8OmJEZbLadU3TNjAfxWC+Odjh4WxI6z9eOu+Q+MpMd/Sp1Arh5HMEHhEAPwUHZGoeEUGcdsCLydRD20ySQctnoys/BYpj7BCo3yopP48nwX57gOTNuCUOmHsSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wPt4PGPJ; arc=none smtp.client-ip=209.85.216.46
+	s=arc-20240116; t=1725281429; c=relaxed/simple;
+	bh=oOLgdqKaqIoYmrt80N2TWv861dQVRS2CRaQHLQS7ngs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bewfKoSVDHZGoIRBIF4uANXcsm9oOKiDdyIsTBW9QgpjLTUwHu1z6BwaxokSuof7d4gocNw8KNy2RHbOGxJAGJUtTVNe+XvsXVJxGEw76JrjjwqGl/RtbRtfMdO+BF0iZDUuKN/C/Pq7oU9BzK+nAX4JmrtFxzZEYZRHGXtxGVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YuFQT7k1; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2d88c5d76eeso1330022a91.2
-        for <linux-pm@vger.kernel.org>; Mon, 02 Sep 2024 05:43:18 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-371ba7e46easo2799762f8f.0
+        for <linux-pm@vger.kernel.org>; Mon, 02 Sep 2024 05:50:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725280998; x=1725885798; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XmtoA1dxOzDS6roQ6BNIs04PwekYRQD9RJ6htg3/v6I=;
-        b=wPt4PGPJRvBxUgSLs3i8A5Tu98Y0IvbWPQHKJdTxk+RwYoxYS9kMkvROVH8C4uL2vD
-         TXABtVhxPJzdR//P6r3YJBByUliNjIHd9wtZ6P+g/zdOuu2D62laXRpxPzo/SbJlAkaw
-         CDRfEdQkiUyY0L/KAhXEI82L0pOJctErhxDNLMhkdcrAgRhO3mY4rk1vXP0Lg728akyw
-         ljKnBFN4+6YzeFKpcpViXiK1+vp395xGPw9WPmJQtII6e8dv8wd/uFqqlfVs8tbZ/XLN
-         nDKxSHqJcCYDyD69dFJDG4O5c5ugHKRls9jrWHIMYp6/wRGLkzHvrgB7aLaC8Cvd3mBZ
-         cUFQ==
+        d=linaro.org; s=google; t=1725281425; x=1725886225; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v4zZp0vvL8qAqOWFo0YibynCaMgnBEJ9RqtvAY0A5+A=;
+        b=YuFQT7k1WfcQ4nlU6Xl6MymfndYQ7zEWslxkoyW5lDk7C+LQ+CpU5DYQmkKwRvfJ7T
+         brHBe0ziZ0AMK2ri0IxhQQeJ73cVE85PYV3M1YJheE3u2tZ05AnrG4ngOxY5ysfk9emA
+         dXK/pLxGrkIjfbxyQO0HMuSrM5vJPYkq2zwfIHumHWlbzf15UyprdUthazrgzUWLskJK
+         Hc8b/uHIkAWlkW3ikRAOAxtiAcsyYAqK37vHQfdXi0RPfzoiJZ9AysfctL6lU4Iv0Iz3
+         Iuzyr3ur/3ycDKetqI4i9zG2FS+68xDtNYX2ma+9u3XCzM8bceyiiNShQZ7avWSC5Uri
+         Tj0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725280998; x=1725885798;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XmtoA1dxOzDS6roQ6BNIs04PwekYRQD9RJ6htg3/v6I=;
-        b=gRKniR2s4rqPK9dgwyvaSL/z3kkEU5iR2VG2rOSjG1D9Rd+o4Q+c5u73/pjWZ1cZqZ
-         4hsBS6B491m0VkEbF5vu9ByR8hrBNgcOqE7rRDHbpaKDu7oBAgHQN7DOtZIuPZUhDeOM
-         XzTfVHzL/dW5qESc6QBgQn0Vudk8Q+Mk90uN7d5T0Xlw8XeoXtpY63TqPVSFH7ruEeb3
-         IACytwm5gL3qRmzmSeLgo345Kevtzg33iTks3zt1ATLAygEixgqynH+EQLKklKBatdLD
-         +SbHuns/dx+hMPbPKG+H0LhNK0tYnk69LswcwA+UxB5vyLlbPddkIRUndVRbzzF21OlC
-         LIgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXw9EAfo54SQZgd2IZ85XeE2zCQJzi+lokhRRRMCceZdWh9RjuPrxKT5ypbiB0XAq5fTjitMJtzDQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDSxGQHrYge7Qkbn0OQBdn5YJYdODgsn0qUKpiLZ6YxHmlefCi
-	asiNG8wd/m1XpuzXuABc1TGbR796N/MjA2TgtptQdxZD2TIfLVH8aQ/Ig/JyCOw+cff60ABT5Kv
-	VWTvNlnXnFbjviU1fNu6ygAMinkINDCKD3ZSvMg==
-X-Google-Smtp-Source: AGHT+IEtSBzuiPn8cwPFsnMtjISfPJE3LhaEPiYOtkJUA/snvFWxhOgQplzmnq8OTq6PPWXLEpJ7D5AgzgWDNRQ3Psc=
-X-Received: by 2002:a17:90a:67cc:b0:2cf:2bf6:b030 with SMTP id
- 98e67ed59e1d1-2d8564cb306mr12854219a91.33.1725280997722; Mon, 02 Sep 2024
- 05:43:17 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725281425; x=1725886225;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v4zZp0vvL8qAqOWFo0YibynCaMgnBEJ9RqtvAY0A5+A=;
+        b=rr5A/UwYjmpIPbAi5aS3YOr4RYIAmS+KI2tLntou47DtOJSEwLB+kIN7J/vvgUxgXx
+         fkLQspd3q/7yFL5EcvYB7GeA0IBHLGjDb7lS5ZhSnOMEZVLIRW0fOxjzBqblx1v0xtFe
+         RQvpz1PCr52XbazvoNyIOR17X5aZ63IlWNRocdDyQD2gc5Tx/pf52xcLsEdgO9BZkQ+z
+         Df20izaY/IhB/ApS1OUKn71pN4wzmF+N92ZKjUx8aOeiLujGSruFqvPB87PlFdzS68RN
+         Cu/AOv/P2WT1o8GlDuTTGj8Txmr5yn2P5rx8lmBu4ch5zrDdkvg//6VyHLoY0XuvzrdA
+         WX2g==
+X-Forwarded-Encrypted: i=1; AJvYcCXSjRauVLOwiZ0UvU4XiWXsLGuNrfwerpVo1gZBNhvgPH8iFk4htXYQda6mS1F6j6wuT2zgGfhg+w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWh0A5Te8VLm3j7F2g/tGs84UaBnCH22C2FwzhW30xQE79KhEn
+	KanB2/HrUFjJq7ddz0YZQKB+Tc2/nCSYxq1qpQ5lN5hDgP5fxCztA+TC6dobmZE=
+X-Google-Smtp-Source: AGHT+IHFfdhySS3bPqgfC/v2cGnExHRAs4Obow5fte98bTQ+aBzvgmgBl+9odUWSSlOqKZmpiyXt7Q==
+X-Received: by 2002:adf:f550:0:b0:368:48e6:5056 with SMTP id ffacd0b85a97d-374bcead8cemr5185465f8f.22.1725281425119;
+        Mon, 02 Sep 2024 05:50:25 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3749ee40d5asm11399232f8f.11.2024.09.02.05.50.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Sep 2024 05:50:24 -0700 (PDT)
+Message-ID: <664344db-5a60-46c4-b108-38ca1b4e1a13@linaro.org>
+Date: Mon, 2 Sep 2024 14:50:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240728184551.42133-1-qyousef@layalina.io> <ca6b1db0-37d9-462e-87e4-d3bbd5eec7a3@arm.com>
- <CAKfTPtBWLe4hMBhJeSqvoW10dAF3Bgj+zcYGMgBfwUhkgytkEQ@mail.gmail.com>
- <CAKfTPtAJNjUe=4eQxq0M6==6O7dtJrw6rtwE6-xaWMJdSmfKcA@mail.gmail.com>
- <20240901175149.46yfk335niccmfq4@airbuntu> <CAKfTPtBahrD5L8CbB4BijAvnwq=yG375TWDUuEvNipyTDYGQTA@mail.gmail.com>
- <24a4a74f-0d46-420a-894c-9aa01ea4abcc@arm.com>
-In-Reply-To: <24a4a74f-0d46-420a-894c-9aa01ea4abcc@arm.com>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Mon, 2 Sep 2024 14:43:06 +0200
-Message-ID: <CAKfTPtBjJ4uN5CgBjCEPL198ME_TKgQu6bpVVU4-DKY6CNm4BQ@mail.gmail.com>
-Subject: Re: [PATCH v7] sched: Consolidate cpufreq updates
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: Qais Yousef <qyousef@layalina.io>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Ingo Molnar <mingo@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Hongyan Xia <hongyan.xia2@arm.com>, 
-	John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/6] drivers/thermal/exynos: improve
+ sanitize_temp_error
+To: Mateusz Majewski <m.majewski2@samsung.com>, linux-pm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
+ Sam Protsenko <semen.protsenko@linaro.org>,
+ Anand Moon <linux.amoon@gmail.com>
+References: <20240807084829.1037303-1-m.majewski2@samsung.com>
+ <CGME20240807084912eucas1p20af043b96b6d741a0c7d7ae36efe5ac5@eucas1p2.samsung.com>
+ <20240807084829.1037303-4-m.majewski2@samsung.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20240807084829.1037303-4-m.majewski2@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2 Sept 2024 at 14:35, Christian Loehle <christian.loehle@arm.com> wrote:
->
-> On 9/2/24 13:30, Vincent Guittot wrote:
-> > On Sun, 1 Sept 2024 at 19:51, Qais Yousef <qyousef@layalina.io> wrote:
-> >>
-> >> On 08/13/24 10:27, Vincent Guittot wrote:
-> >>> On Tue, 13 Aug 2024 at 10:25, Vincent Guittot
-> >>> <vincent.guittot@linaro.org> wrote:
-> >>>>
-> >>>> On Mon, 5 Aug 2024 at 17:35, Christian Loehle <christian.loehle@arm.com> wrote:
-> >>>>> Hi Qais,
-> >>>>> the idea of SCHED_CPUFREQ_FORCE_UPDATE and the possiblity of spamming
-> >>>>> freq updates still bothered me so let me share my thoughts even though
-> >>>>> it might be niche enough for us not to care.
-> >>>>>
-> >>>>> 1. On fast_switch systems, assuming they are fine with handling the
-> >>>>> actual updates, we have a bit more work on each context_switch() and
-> >>>>> some synchronisation, too. That should be fine, if anything there's
-> >>>>> some performance regression in a couple of niche cases.
-> >>>>>
-> >>>>> 2. On !fast_switch systems this gets more interesting IMO. So we have
-> >>>>> a sugov DEADLINE task wakeup for every (in a freq-diff resulting)
-> >>>>> update request. This task will preempt whatever and currently will
-> >>>>> pretty much always be running on the CPU it ran last on (so first CPU
-> >>>>> of the PD).
-> >>>>
-> >>>> The !fast_switch is a bit of concern for me too but not for the same
-> >>>> reason and maybe the opposite of yours IIUC your proposal below:
-> >>>>
-> >>>> With fast_switch we have the following sequence:
-> >>>>
-> >>>> sched_switch() to task A
-> >>>> cpufreq_driver_fast_switch -> write new freq target
-> >>>> run task A
-> >>>>
-> >>>> This is pretty straight forward but we have the following sequence
-> >>>> with !fast_switch
-> >>>>
-> >>>> sched_switch() to task A
-> >>>> queue_irq_work -> raise an IPI on local CPU
-> >>>> Handle IPI -> wakeup and queue sugov dl worker on local CPU (always
-> >>>> with 1 CPU per PD)
-> >>>> sched_switch() to sugov dl task
-> >>>> __cpufreq_driver_target() which can possibly block on a lock
-> >>>> sched_switch() to task A
-> >>>> run task A
-> >>>>
-> >>>
-> >>> sent a bit too early
-> >>>
-> >>>> We can possibly have 2 context switch and one IPi for each "normal"
-> >>>> context switch which is not really optimal
-> >>>
-> >>> It would be good to find a way to skip the spurious back and forth
-> >>> between the normal task and sugov
-> >>
-> >> Hmm I think we use affinity to keep the sugov running on policy->related_cpus.
-> >> Relaxing this will make it less of a problem, but won't eliminate it.
-> >
-> > yes, but it's not a problem of relaxing affinity here
-> >
-> > The problem is that the 1st switch to task A will be preempted by
-> > sugov so the 1st switch is useless. You should call cpufreq_update
-> > before switching to A so that we skip the useless switch to task A and
-> > directly switch to sugov 1st then task A
->
-> Not necessarily, if you relax them to all CPUs the sugov tasks for all PDs
-> can run on CPU0, no matter which CPU task A is on.
+On 07/08/2024 10:48, Mateusz Majewski wrote:
+> There are two minor issues regarding this function.
+> 
+> One is that it attempts to calculate the second calibration value even
+> if 1-point trimming is being used; in this case, the calculated value is
+> probably not useful and is never used anyway. Changing this also
+> requires a minor reordering in Exynos5433 initialization function, so
+> that we know which type of trimming is used before we call
+> sanitize_temp_error.
+> 
+> The second issue is that the function is not very consistent when it
+> comes to the use of Exynos7-specific parameters. This seems to not be an
+> issue in practice, in part because some of these issues are related to
+> the mentioned calculation of the second calibration value. However,
+> fixing this makes the code a bit less confusing, and will be required
+> for Exynos850 which has 9-bit temperature values and uses 2-point
+> trimming.
 
-You can't always run sugov on other CPUs than those impacted by the freq change
+May I suggest to convert this function to a specific soc ops to be put 
+in the struct exynos_tmu_data ?
 
->
-> There is some benefit on having all sugov threads on the littles for many
-> platforms (i.e. restricting them), making a good mainline policy out of
-> it isn't quite so obvious to me.
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Signed-off-by: Mateusz Majewski <m.majewski2@samsung.com>
+> ---
+> v1 -> v2: reworked to change shift instead of only mask and to also fix
+>    the 2-point trimming issue.
+> 
+>   drivers/thermal/samsung/exynos_tmu.c | 23 ++++++++++++++---------
+>   1 file changed, 14 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+> index b68e9755c933..087a09628e23 100644
+> --- a/drivers/thermal/samsung/exynos_tmu.c
+> +++ b/drivers/thermal/samsung/exynos_tmu.c
+> @@ -111,6 +111,7 @@
+>   #define EXYNOS7_TMU_REG_EMUL_CON		0x160
+>   
+>   #define EXYNOS7_TMU_TEMP_MASK			0x1ff
+> +#define EXYNOS7_TMU_TEMP_SHIFT			9
+>   #define EXYNOS7_PD_DET_EN_SHIFT			23
+>   #define EXYNOS7_TMU_INTEN_RISE0_SHIFT		0
+>   #define EXYNOS7_EMUL_DATA_SHIFT			7
+> @@ -234,20 +235,23 @@ static void sanitize_temp_error(struct exynos_tmu_data *data, u32 trim_info)
+>   	u16 tmu_temp_mask =
+>   		(data->soc == SOC_ARCH_EXYNOS7) ? EXYNOS7_TMU_TEMP_MASK
+>   						: EXYNOS_TMU_TEMP_MASK;
+> +	int tmu_85_shift =
+> +		(data->soc == SOC_ARCH_EXYNOS7) ? EXYNOS7_TMU_TEMP_SHIFT
+> +						: EXYNOS_TRIMINFO_85_SHIFT;
+>   
+>   	data->temp_error1 = trim_info & tmu_temp_mask;
+> -	data->temp_error2 = ((trim_info >> EXYNOS_TRIMINFO_85_SHIFT) &
+> -				EXYNOS_TMU_TEMP_MASK);
+> -
+>   	if (!data->temp_error1 ||
+>   	    (data->min_efuse_value > data->temp_error1) ||
+>   	    (data->temp_error1 > data->max_efuse_value))
+> -		data->temp_error1 = data->efuse_value & EXYNOS_TMU_TEMP_MASK;
+> +		data->temp_error1 = data->efuse_value & tmu_temp_mask;
+>   
+> -	if (!data->temp_error2)
+> -		data->temp_error2 =
+> -			(data->efuse_value >> EXYNOS_TRIMINFO_85_SHIFT) &
+> -			EXYNOS_TMU_TEMP_MASK;
+> +	if (data->cal_type == TYPE_TWO_POINT_TRIMMING) {
+> +		data->temp_error2 = (trim_info >> tmu_85_shift) & tmu_temp_mask;
+> +		if (!data->temp_error2)
+> +			data->temp_error2 =
+> +				(data->efuse_value >> tmu_85_shift) &
+> +				tmu_temp_mask;
+> +	}
+>   }
+>   
+>   static int exynos_tmu_initialize(struct platform_device *pdev)
+> @@ -510,7 +514,6 @@ static void exynos5433_tmu_initialize(struct platform_device *pdev)
+>   	int sensor_id, cal_type;
+>   
+>   	trim_info = readl(data->base + EXYNOS_TMU_REG_TRIMINFO);
+> -	sanitize_temp_error(data, trim_info);
+>   
+>   	/* Read the temperature sensor id */
+>   	sensor_id = (trim_info & EXYNOS5433_TRIMINFO_SENSOR_ID_MASK)
+> @@ -532,6 +535,8 @@ static void exynos5433_tmu_initialize(struct platform_device *pdev)
+>   		break;
+>   	}
+>   
+> +	sanitize_temp_error(data, trim_info);
+> +
+>   	dev_info(&pdev->dev, "Calibration type is %d-point calibration\n",
+>   			cal_type ?  2 : 1);
+>   }
 
-This is a particular case whereas we want this to work in all cases
 
->
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
