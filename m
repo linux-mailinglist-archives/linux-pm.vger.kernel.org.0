@@ -1,362 +1,175 @@
-Return-Path: <linux-pm+bounces-13335-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13336-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65E7796834F
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 11:33:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44E9F9684FC
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 12:40:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 870751C225E1
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 09:33:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC36A284828
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 10:40:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5D1D1D417C;
-	Mon,  2 Sep 2024 09:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E57BF156F33;
+	Mon,  2 Sep 2024 10:40:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="So8XPv4l"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="S8TbJHrg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E57F1D415B;
-	Mon,  2 Sep 2024 09:33:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500BD13B2A8
+	for <linux-pm@vger.kernel.org>; Mon,  2 Sep 2024 10:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725269582; cv=none; b=FdnP+jTo8W2ekdfzScqbKqjzTxm261tDUY852riMhB1JFh0iWZlxPNefUC3nDzd/PgudxJ2ywr1Te7PXNOm9Pg268ZhnMzJPOBQ+bDmeS1hN/zm0W22uXMX+9C9Datgz9b+G/FfosI/C+45CThyJfN0l5jznCt8uHlMZJHdsdgU=
+	t=1725273647; cv=none; b=s/r5GzsESSpi2uz9Ot2moDQkwGhB0iWDqGCsne0l2HySd+0gdMGTsfMLiuR9shhf1L45XNcy6x60AkK/w6wnoqNzmS/5vmHaTUau0cK+hGEltIkPSj5Y3Ic5J0nVVwsT9seVXs9bai+64tlpCUj85o7K5dZVEqKHASiaGGgR+UY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725269582; c=relaxed/simple;
-	bh=YcdA+s1MA1liFZDn9WPllshJguevDqI4JGq93Sjld2s=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OhU+2p+px9IaO2S7zHB3y4LPAlVjQ9/y+Ds5FNLJFfKvwIAoiRAmeIwMQzX+FFIPjax0Aeq8G6SsWZ6fMQzDJ65egMVPbMwHS7aalyK9S2mSDGxokuv0SiV6lMRIVmVRcnZXR6vOEBLF26hAJd2gDo70b4pgvYuVxk/zEXgeRcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=So8XPv4l; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 54073b6a690e11ef8b96093e013ec31c-20240902
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=L9Wu6rx3KCGAWq6ekbxjZ5jLmdlzmC0KjoOowIWL+gw=;
-	b=So8XPv4lHYShcaFMcrn+gJXNZvvd4bjyjPAHa1ROo0f6gYO1dfn2JgYR/kjAV/zlwYsuxiFS76mBb3wNJcrOq0/LBUV3v4eWbmv5tI7BjslSG+6F6x8GjcKqcT8vvItQ4o6ayEGq1imbFLfvnKDDravCSPvqTD0A8uun0sYSv5g=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:e3ecc288-8cfd-4311-9141-9335f6563c92,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:81c94fbf-d7af-4351-93aa-42531abf0c7b,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
-	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 54073b6a690e11ef8b96093e013ec31c-20240902
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
-	(envelope-from <yenchia.chen@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1066174418; Mon, 02 Sep 2024 17:32:53 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 2 Sep 2024 17:32:53 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 2 Sep 2024 17:32:53 +0800
-From: Yenchia Chen <yenchia.chen@mediatek.com>
-To: <stable@vger.kernel.org>
-CC: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Yenchia Chen
-	<yenchia.chen@mediatek.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Len
- Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>
-Subject: [PATCH 6.6 1/1] PM: sleep: Restore asynchronous device resume optimization
-Date: Mon, 2 Sep 2024 17:32:48 +0800
-Message-ID: <20240902093249.17275-2-yenchia.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20240902093249.17275-1-yenchia.chen@mediatek.com>
-References: <20240902093249.17275-1-yenchia.chen@mediatek.com>
+	s=arc-20240116; t=1725273647; c=relaxed/simple;
+	bh=47vSY6vmvmkSDuROpFda+zITfrN4O5qGLeQeAbPCJDU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dyf6ETMXOHIg8bh0rKvhQZPCg6GLswC0aRmPVOLvSECSj6Juf1s450WPlsFNAWs+PPGpMHFj+ZpNKBkDYQ8A0/TVtYcf0+hKPtiXhwTtsRmoV2SaMmjBDrHumsoBkX5EfZkAzKX/lBaiyUfG35kQSnAueLbY4AjlfJnna17/Pb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=S8TbJHrg; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42bb4f8a4bfso21809915e9.1
+        for <linux-pm@vger.kernel.org>; Mon, 02 Sep 2024 03:40:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1725273645; x=1725878445; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zWWCgOPtFspoggG7+OMLKZKpBUJ4rokojwECnjcrCcM=;
+        b=S8TbJHrgVB1hgt7sk5T7DX6S2wKJCMGSRH4A6SH9BKi/VWQG10s4AWxAGU1qCcb8P/
+         UyJkPifkhXpmAELkPch5YHq7z5vME4TTtJYwYfE7jNpVb3UDJpIi70/PxuyYc/OiuOzj
+         VoxoKpsIOSIPIUCXJqw/vf+ZGpceT0XMjjvISKGmMoYpm9dc2hqVchPLoHM4vqre5D4t
+         uS3htSn3ahEgwAJuBRWKvIyk58MSSnrxC3tL11Yqh7Q0UuQr2Gey4pcbOXc7hM48SEct
+         IghOl6iWtNnujWB7kr8S1KHaeUXzNWZh3Z3ZFXP/LQqAA0b48ungsbR7z5+ytn/waima
+         PgDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725273645; x=1725878445;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zWWCgOPtFspoggG7+OMLKZKpBUJ4rokojwECnjcrCcM=;
+        b=Qv4AzXFfVF8DUQOk8Cfn+WdPcaxH+TDmDKvWhf7aPTP9XjOWVOp1pKrccUsigjm/eh
+         BGX6MkETxRI/obrIfo7aqBjGZKuphHG2Y4OmjKFs1vQO38i+GkD0HdP7Z9x2SynqRK/c
+         TQCaSp7CVCpEmV7mF3y4Gel3k6mkr9mJ0t1LVH/sgyRT1QO/vBfgiFLeaF6PjkykGT/W
+         M8j6GB0Ejac8eRjeqzJgqB9+9q7YcqI+GDJM84BdROBghyMvkAStpabj/ZfzGlxbh7G7
+         mWGwXD9ZNCwU8ba54Jp+DwBvW3LvYQaI54gHb7XGLPQgVSwzI1FP5kUUn+U5KFb7XcR2
+         g9WA==
+X-Forwarded-Encrypted: i=1; AJvYcCXi4RPKQBrinemws8VEuoJuQ8oJ3oPy4WmCr8Gz8TapMKF/1bMQXdwIms6fmUY6EF0xnKz3W/U2dQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUYbXYVL53tINCkGfTRgHOF4korfMmZP2kwFA5K2RmyyAuo13Y
+	xFoAPrH1DsNBvYlFqqNygdnFqDHGh5GQXv5/q+UAFOIdWL7xhAjxm9nynBIOHUg=
+X-Google-Smtp-Source: AGHT+IEniJ2zOfbNHplbZjwpzuwiNjNlpRHzMFPmgRBRzmpJXPHJZQY3Y0Tn4zQKdT5Es5pJWppmSw==
+X-Received: by 2002:a05:600c:1c18:b0:424:a7f1:ba2 with SMTP id 5b1f17b1804b1-42bb4e9f61bmr76021345e9.17.1725273644573;
+        Mon, 02 Sep 2024 03:40:44 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.144])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bbc127ec5sm105407055e9.19.2024.09.02.03.40.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Sep 2024 03:40:44 -0700 (PDT)
+Message-ID: <35dc7414-f5bd-4ed4-bfa1-f723f4f0078c@tuxon.dev>
+Date: Mon, 2 Sep 2024 13:40:41 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
+Content-Language: en-US
+To: Biju Das <biju.das.jz@bp.renesas.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "vkoul@kernel.org" <vkoul@kernel.org>,
+ "kishon@kernel.org" <kishon@kernel.org>, "robh@kernel.org"
+ <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "geert+renesas@glider.be" <geert+renesas@glider.be>,
+ "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "mturquette@baylibre.com" <mturquette@baylibre.com>,
+ "sboyd@kernel.org" <sboyd@kernel.org>,
+ Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+ "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <CAPDyKFrS4Dhd7DZa2zz=oPro1TiTJFix0awzzzp8Qatm-8Z2Ug@mail.gmail.com>
+ <99bef301-9f6c-4797-b47e-c83e56dfbda9@tuxon.dev>
+ <TY3PR01MB1134652F9587CFA0ADE851CA486902@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <TY3PR01MB113467275C519B729FCAB1ACB86922@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <5556d176-cca7-492c-ba21-48256d5d6338@tuxon.dev>
+ <TY3PR01MB113464D53083F4C8A5DBBA36586922@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <590a4fb2-24b2-432b-92db-534c5a52ed0b@tuxon.dev>
+ <TY3PR01MB11346505565B81AD2894E035586922@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <TY3PR01MB11346505565B81AD2894E035586922@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-commit 3e999770ac1c7c31a70685dd5b88e89473509e9c upstream.
 
-Before commit 7839d0078e0d ("PM: sleep: Fix possible deadlocks in core
-system-wide PM code"), the resume of devices that were allowed to resume
-asynchronously was scheduled before starting the resume of the other
-devices, so the former did not have to wait for the latter unless
-functional dependencies were present.
+On 02.09.2024 12:18, Biju Das wrote:
+>>>>> Do you have any plan to control this power transitions(ALL_ON to AWO and vice versa) in linux?
+>>>> As you know, the RZ/G3S USB PM code is already prepared. This is also
+>>>> configuring these signals when going to suspend/exiting from resume.
+>>>> W/o configuring properly these signals the USB is not working after a suspend/resume cycle.
+>>> One option is to handle SYSC USB PWRRDY signal in TF-A, if you plan to handle system transitions
+>> there??
+>>
+>> As I mentioned, the settings in these registers may be changed by intermediary booting applications.
+>> Depending on that, Linux need to control it also on probe for USB to work (it should be the same with
+>> PCIe, these signals seems similar from HW manual description).
+> You mean system transition settings will be override by U-boot, so Linux needs to restore it back??
 
-Commit 7839d0078e0d removed that optimization in order to address a
-correctness issue, but it can be restored with the help of a new device
-power management flag, so do that now.
+It was talking about booting...
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Signed-off-by: Yenchia Chen <yenchia.chen@mediatek.com>
----
- drivers/base/power/main.c | 117 +++++++++++++++++++++-----------------
- include/linux/pm.h        |   1 +
- 2 files changed, 65 insertions(+), 53 deletions(-)
+You proposed to handle SYSC signals from TF-A in a discussion about system
+power transitions:
 
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index 9c5a5f4dba5a..fadcd0379dc2 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -579,7 +579,7 @@ bool dev_pm_skip_resume(struct device *dev)
- }
- 
- /**
-- * __device_resume_noirq - Execute a "noirq resume" callback for given device.
-+ * device_resume_noirq - Execute a "noirq resume" callback for given device.
-  * @dev: Device to handle.
-  * @state: PM transition of the system being carried out.
-  * @async: If true, the device is being resumed asynchronously.
-@@ -587,7 +587,7 @@ bool dev_pm_skip_resume(struct device *dev)
-  * The driver of @dev will not receive interrupts while this function is being
-  * executed.
-  */
--static void __device_resume_noirq(struct device *dev, pm_message_t state, bool async)
-+static void device_resume_noirq(struct device *dev, pm_message_t state, bool async)
- {
- 	pm_callback_t callback = NULL;
- 	const char *info = NULL;
-@@ -674,16 +674,22 @@ static bool dpm_async_fn(struct device *dev, async_func_t func)
- {
- 	reinit_completion(&dev->power.completion);
- 
--	if (!is_async(dev))
--		return false;
--
--	get_device(dev);
-+	if (is_async(dev)) {
-+		dev->power.async_in_progress = true;
- 
--	if (async_schedule_dev_nocall(func, dev))
--		return true;
-+		get_device(dev);
- 
--	put_device(dev);
-+		if (async_schedule_dev_nocall(func, dev))
-+			return true;
- 
-+		put_device(dev);
-+	}
-+	/*
-+	 * Because async_schedule_dev_nocall() above has returned false or it
-+	 * has not been called at all, func() is not running and it is safe to
-+	 * update the async_in_progress flag without extra synchronization.
-+	 */
-+	dev->power.async_in_progress = false;
- 	return false;
- }
- 
-@@ -691,18 +697,10 @@ static void async_resume_noirq(void *data, async_cookie_t cookie)
- {
- 	struct device *dev = data;
- 
--	__device_resume_noirq(dev, pm_transition, true);
-+	device_resume_noirq(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
--static void device_resume_noirq(struct device *dev)
--{
--	if (dpm_async_fn(dev, async_resume_noirq))
--		return;
--
--	__device_resume_noirq(dev, pm_transition, false);
--}
--
- static void dpm_noirq_resume_devices(pm_message_t state)
- {
- 	struct device *dev;
-@@ -712,18 +710,28 @@ static void dpm_noirq_resume_devices(pm_message_t state)
- 	mutex_lock(&dpm_list_mtx);
- 	pm_transition = state;
- 
-+	/*
-+	 * Trigger the resume of "async" devices upfront so they don't have to
-+	 * wait for the "non-async" ones they don't depend on.
-+	 */
-+	list_for_each_entry(dev, &dpm_noirq_list, power.entry)
-+		dpm_async_fn(dev, async_resume_noirq);
-+
- 	while (!list_empty(&dpm_noirq_list)) {
- 		dev = to_device(dpm_noirq_list.next);
--		get_device(dev);
- 		list_move_tail(&dev->power.entry, &dpm_late_early_list);
- 
--		mutex_unlock(&dpm_list_mtx);
-+		if (!dev->power.async_in_progress) {
-+			get_device(dev);
- 
--		device_resume_noirq(dev);
-+			mutex_unlock(&dpm_list_mtx);
- 
--		put_device(dev);
-+			device_resume_noirq(dev, state, false);
- 
--		mutex_lock(&dpm_list_mtx);
-+			put_device(dev);
-+
-+			mutex_lock(&dpm_list_mtx);
-+		}
- 	}
- 	mutex_unlock(&dpm_list_mtx);
- 	async_synchronize_full();
-@@ -747,14 +755,14 @@ void dpm_resume_noirq(pm_message_t state)
- }
- 
- /**
-- * __device_resume_early - Execute an "early resume" callback for given device.
-+ * device_resume_early - Execute an "early resume" callback for given device.
-  * @dev: Device to handle.
-  * @state: PM transition of the system being carried out.
-  * @async: If true, the device is being resumed asynchronously.
-  *
-  * Runtime PM is disabled for @dev while this function is being executed.
-  */
--static void __device_resume_early(struct device *dev, pm_message_t state, bool async)
-+static void device_resume_early(struct device *dev, pm_message_t state, bool async)
- {
- 	pm_callback_t callback = NULL;
- 	const char *info = NULL;
-@@ -820,18 +828,10 @@ static void async_resume_early(void *data, async_cookie_t cookie)
- {
- 	struct device *dev = data;
- 
--	__device_resume_early(dev, pm_transition, true);
-+	device_resume_early(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
--static void device_resume_early(struct device *dev)
--{
--	if (dpm_async_fn(dev, async_resume_early))
--		return;
--
--	__device_resume_early(dev, pm_transition, false);
--}
--
- /**
-  * dpm_resume_early - Execute "early resume" callbacks for all devices.
-  * @state: PM transition of the system being carried out.
-@@ -845,18 +845,28 @@ void dpm_resume_early(pm_message_t state)
- 	mutex_lock(&dpm_list_mtx);
- 	pm_transition = state;
- 
-+	/*
-+	 * Trigger the resume of "async" devices upfront so they don't have to
-+	 * wait for the "non-async" ones they don't depend on.
-+	 */
-+	list_for_each_entry(dev, &dpm_late_early_list, power.entry)
-+		dpm_async_fn(dev, async_resume_early);
-+
- 	while (!list_empty(&dpm_late_early_list)) {
- 		dev = to_device(dpm_late_early_list.next);
--		get_device(dev);
- 		list_move_tail(&dev->power.entry, &dpm_suspended_list);
- 
--		mutex_unlock(&dpm_list_mtx);
-+		if (!dev->power.async_in_progress) {
-+			get_device(dev);
- 
--		device_resume_early(dev);
-+			mutex_unlock(&dpm_list_mtx);
- 
--		put_device(dev);
-+			device_resume_early(dev, state, false);
- 
--		mutex_lock(&dpm_list_mtx);
-+			put_device(dev);
-+
-+			mutex_lock(&dpm_list_mtx);
-+		}
- 	}
- 	mutex_unlock(&dpm_list_mtx);
- 	async_synchronize_full();
-@@ -876,12 +886,12 @@ void dpm_resume_start(pm_message_t state)
- EXPORT_SYMBOL_GPL(dpm_resume_start);
- 
- /**
-- * __device_resume - Execute "resume" callbacks for given device.
-+ * device_resume - Execute "resume" callbacks for given device.
-  * @dev: Device to handle.
-  * @state: PM transition of the system being carried out.
-  * @async: If true, the device is being resumed asynchronously.
-  */
--static void __device_resume(struct device *dev, pm_message_t state, bool async)
-+static void device_resume(struct device *dev, pm_message_t state, bool async)
- {
- 	pm_callback_t callback = NULL;
- 	const char *info = NULL;
-@@ -975,18 +985,10 @@ static void async_resume(void *data, async_cookie_t cookie)
- {
- 	struct device *dev = data;
- 
--	__device_resume(dev, pm_transition, true);
-+	device_resume(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
--static void device_resume(struct device *dev)
--{
--	if (dpm_async_fn(dev, async_resume))
--		return;
--
--	__device_resume(dev, pm_transition, false);
--}
--
- /**
-  * dpm_resume - Execute "resume" callbacks for non-sysdev devices.
-  * @state: PM transition of the system being carried out.
-@@ -1006,16 +1008,25 @@ void dpm_resume(pm_message_t state)
- 	pm_transition = state;
- 	async_error = 0;
- 
-+	/*
-+	 * Trigger the resume of "async" devices upfront so they don't have to
-+	 * wait for the "non-async" ones they don't depend on.
-+	 */
-+	list_for_each_entry(dev, &dpm_suspended_list, power.entry)
-+		dpm_async_fn(dev, async_resume);
-+
- 	while (!list_empty(&dpm_suspended_list)) {
- 		dev = to_device(dpm_suspended_list.next);
- 
- 		get_device(dev);
- 
--		mutex_unlock(&dpm_list_mtx);
-+		if (!dev->power.async_in_progress) {
-+			mutex_unlock(&dpm_list_mtx);
- 
--		device_resume(dev);
-+			device_resume(dev, state, false);
- 
--		mutex_lock(&dpm_list_mtx);
-+			mutex_lock(&dpm_list_mtx);
-+		}
- 
- 		if (!list_empty(&dev->power.entry))
- 			list_move_tail(&dev->power.entry, &dpm_prepared_list);
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index 629c1633bbd0..943b553720f8 100644
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -681,6 +681,7 @@ struct dev_pm_info {
- 	bool			wakeup_path:1;
- 	bool			syscore:1;
- 	bool			no_pm_callbacks:1;	/* Owned by the PM core */
-+	bool			async_in_progress:1;	/* Owned by the PM core */
- 	unsigned int		must_resume:1;	/* Owned by the PM core */
- 	unsigned int		may_skip_resume:1;	/* Set by subsystems */
- #else
--- 
-2.18.0
+"One option is to handle SYSC USB PWRRDY signal in TF-A,  if you plan to
+handle system transitions"
 
+(I was guessing the "system transition" statement there refers to power
+states transitions, ALL_ON <-> AWO/VBAT)
+
+and I gave the booting process as a counter example: if we handle it in
+TF-A it may not be enough as these signals might be changed by intermediary
+booting applications (e.g., U-Boot).
+
+To conclude, there are 3 scenarios I see where these signals need to be
+handled:
+1/ booting
+2/ suspend to RAM
+3/ driver unbind/bind
+
+In case of booting: if we have TF-A to set signals there might be
+intermediary booting applications (e.g. U-Boot) that set these signals
+also. If it leaves it in improper state and Linux wants to use USB then the
+USB will not work (if Linux doesn't handle it).
+
+In case of suspend to RAM: as TF-A is the only application in the suspend
+to RAM chain, it should work handling it in TF-A.
+
+In case of unbind/bind: currently we don't know if these signals introduces
+any kind of power saving so asserting/de-asserting them in Linux may be
+useful from this perspective, if any.
+
+Either way, I think Linux should handle all that it can to make the devices
+work and not rely on third party applications.
+
+Thank you,
+Claudiu Beznea
+
+> 
+> Cheers,
+> Biju
 
