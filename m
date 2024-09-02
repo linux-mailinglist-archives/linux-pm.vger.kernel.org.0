@@ -1,307 +1,122 @@
-Return-Path: <linux-pm+bounces-13367-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13368-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AFBF968FE0
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 00:48:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0D2A969072
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 01:35:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5FA2AB21FD5
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 22:48:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 987571F229BB
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 23:35:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E49418890C;
-	Mon,  2 Sep 2024 22:48:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EF5E14A092;
+	Mon,  2 Sep 2024 23:35:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d/PZwawo"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="gAugWOpv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A48187340
-	for <linux-pm@vger.kernel.org>; Mon,  2 Sep 2024 22:48:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D37136D;
+	Mon,  2 Sep 2024 23:35:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725317308; cv=none; b=k6FLvACcSQoidrzF7o9AHl9qnSb4AXFHFRbG62pJUketSGgkVuq4rbGyn/YziRwNiRYwosIA6ngJ1phKzWT5HMX1pGgEtlbLwOWbEBkGga4XaajCWE3bRd28epFf5zdUjd54pGuM3z9yz+pRNr0m1B9C37zfhDHA/UJxlz9BF44=
+	t=1725320103; cv=none; b=Uow+vEUL3yA6YwlO369Nazn2eCP9Uuepp0tMjyvH1+DAT8Xi2qCRHE6+A/nEAiB6d/F/QyXGdW15hpNI7o/giOryg7HaDJ54vm+/wrhxI7ajKNYntL2qFwhnVSmE72pLlahDgRqnzjipML4+5BJHmjDqbdD4orXXbm+z/B1ycVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725317308; c=relaxed/simple;
-	bh=LzUWQdGTlvvxerr/3ylQ+v75vLm4W6aDvWTRLNpxhCA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Q/dkk1JG1x/3QVLoCrVvYIJ79wbSA29MD1Oq4v0fBoVaNu6X1FSCt7+CPgRDtnADcO9e5eZmyTGw7NFbBLWEgQEvqJgckIKdNlnAkMUV2jBR+5PkZGSi3GPdBBW7ugeJnZgLOioCGYhWua9nUxd8N2DwR7LIksp7rQE0xRZD5WI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d/PZwawo; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-53560b2b444so143414e87.1
-        for <linux-pm@vger.kernel.org>; Mon, 02 Sep 2024 15:48:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725317305; x=1725922105; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ILko9GrGSTEsXrXVZflQuhfBdNy2+GsUHO1RFuWf+V0=;
-        b=d/PZwawozXkdIZW5PhCclNpY61oTSNzHLZyfglktd8rnGUv6wXZffuMxa2mQnY//8W
-         bruw57jGkeZz27s3oyJeuyJGdsNG0Mh0PhXCggeMMctj3UCXyQBC+QkcMrHmXYb+4Xym
-         Ryp5ys9gPvvuTG3iiAy/AfiBGPBOFVD5bl1E310+MY/KDfkM2hn9DL51AO3R0Lp9t45O
-         FluUxKcJefmvfbUCzjTVuqavDIMDVdk9gv21z32Jcrr7+QdXp/sKoXXz6K8yiPwfHtgI
-         FAT2SMhj9GLyMDPlumijruf/21VXP0xzNL/8gwIe2lw2kCkBaOWudsieGjrxHAAza9Of
-         4U0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725317305; x=1725922105;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ILko9GrGSTEsXrXVZflQuhfBdNy2+GsUHO1RFuWf+V0=;
-        b=nDX2kcxoHztOLizcangwuYUCs4qCmQig/rZaN8dsl3zuwwQx8jDZSr1JW23d6I6BGE
-         MuLqtzD5382XcGKO0FTjc8iBYGdx9WElOi8gSTx7YDxbpVl+YjHMlRVYGqZJ55okr4qL
-         65X87JQvd7pIwXcQDncM8EUayHtz4EYNWiztpH14IZMIp0UuVjUB1rGmFQtEKRApQ9sV
-         HFoUxnrQGcwPuA9DF7EZf2lDbNrKnjh3cWUco4Vzj/jrSV+t1eEyitH8QUxGbFPLD7UI
-         YPSJ3mjaOBIPnHZ13tSdaLLZkVLhjkD8vV6EFmc2ktzBizw4JMFgimBaBvJkzaVMoEZj
-         XkwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWlBx8qq/v3fiA2tvnrZGA4Ld870kHBiH4lPKPmmxUy9aVr+6huiO1iUg52CAy5Zly3LBoLKBA28A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEQcgesUHL/dFYezM5ewJGu61ID3TMKfAunvm33zLAxCZe6mwC
-	ETr/oNkMVJW88e4Rw2p4SgncqHD0fYMh/l1wpQEBtONYerZR7sJpRfk6sGyPCaI=
-X-Google-Smtp-Source: AGHT+IFum6vAI4M7Ifv5kv5ZZ8Ww55Gm2DB955sOcPDG5+CQnwdg/OMQzsSkUUI+7Z9IA063dZuH2g==
-X-Received: by 2002:a05:6512:3088:b0:52c:dc06:d4ad with SMTP id 2adb3069b0e04-535462ee5demr3891202e87.6.1725317304291;
-        Mon, 02 Sep 2024 15:48:24 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5354079bbf2sm1790646e87.20.2024.09.02.15.48.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2024 15:48:23 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Dikshita Agarwal <quic_dikshita@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <quic_kdybcio@quicinc.com>,
-	Nikunj Kela <nkela@quicinc.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Mikko Perttunen <mperttunen@nvidia.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Ilia Lin <ilia.lin@kernel.org>,
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] OPP/pmdomain: Fix the assignment of the required-devs
-Date: Tue,  3 Sep 2024 00:48:15 +0200
-Message-Id: <20240902224815.78220-3-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240902224815.78220-1-ulf.hansson@linaro.org>
-References: <20240902224815.78220-1-ulf.hansson@linaro.org>
+	s=arc-20240116; t=1725320103; c=relaxed/simple;
+	bh=RYDMyGqz9zahG15EoJTKPIKmn7xMLA+UZItnWz0xoZI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mFdQqIlGJVDv/49/Yaoq+1MRF7ddcya8s+qyFQFFyNOR3qFhYsl7jja5nCgjIATINR2a0eleydM1U+DlyT9ENkmlF4ivPY94+qg3qmKAcJIac+I+eiDPYigaeZhxg2vWqo1h+TOvkFOmriqDnywEdD8i57C2mpBaocrA+NEbhbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=gAugWOpv; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 482NYd48047223;
+	Mon, 2 Sep 2024 18:34:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1725320079;
+	bh=/wfMYXCVgFOUz9ObTrkeq3S4B+T5tceen76AFBjlnWw=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=gAugWOpvTlt8KqxUYzlYnJr2vAs4YrckpakBLbOF0kL/uk4012jrond09xKh248ef
+	 3Ah/AwdoCq6Sq5J4BQCab8z3MljeRXZQw+wXz7v/nybwnSGEVZPbIIRR9grpcPnO88
+	 gekDJemPZ3+PahsrjAMOKvVZJWw4xXF5Qr5P9xbg=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 482NYdsF116611;
+	Mon, 2 Sep 2024 18:34:39 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 2
+ Sep 2024 18:34:39 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 2 Sep 2024 18:34:39 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 482NYdtl003525;
+	Mon, 2 Sep 2024 18:34:39 -0500
+Date: Mon, 2 Sep 2024 18:34:39 -0500
+From: Bryan Brattlof <bb@ti.com>
+To: Dhruva Gole <d-gole@ti.com>
+CC: "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar
+	<viresh.kumar@linaro.org>,
+        Tero Kristo <kristo@kernel.org>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra
+	<vigneshr@ti.com>, <vibhore@ti.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 2/2] cpufreq: ti-cpufreq: Make the AM625 efuse_offset 0
+Message-ID: <20240902233439.z5kpszcwaswkch6q@bryanbrattlof.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+References: <20240902093222.2828345-1-d-gole@ti.com>
+ <20240902093222.2828345-3-d-gole@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20240902093222.2828345-3-d-gole@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-The recent attempt to make genpd first lookup an OPP table for a device
-that has been attached to it and then let the OPP core validate whether the
-OPP table is correct, fails for some configurations.
+On September  2, 2024 thus sayeth Dhruva Gole:
+> Since the efuse_offset is basically derived from the syscon node, we no
+> longer need to use any efuse_offset for AM625. This is in line with how
+> the AM62Ax and AM62Px are already doing.
+> 
+> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> ---
+>  drivers/cpufreq/ti-cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+> index ba621ce1cdda..98e320832f78 100644
+> --- a/drivers/cpufreq/ti-cpufreq.c
+> +++ b/drivers/cpufreq/ti-cpufreq.c
+> @@ -313,7 +313,7 @@ static const struct soc_device_attribute k3_cpufreq_soc[] = {
+>  
+>  static struct ti_cpufreq_soc_data am625_soc_data = {
+>  	.efuse_xlate = am625_efuse_xlate,
+> -	.efuse_offset = 0x0018,
+> +	.efuse_offset = 0x0,
+>  	.efuse_mask = 0x07c0,
+>  	.efuse_shift = 0x6,
+>  	.rev_offset = 0x0014,
 
-More precisely, if a device has multiple power-domains, which all has an
-OPP table associated, doesn't necessarily mean that the device's OPP table
-needs multiple phandles specified in the required-opps. Instead it's
-perfectly possible to use a single phandle in the required-opps, which is
-typically where the current code fails to assign the correct required-dev.
+This may work but it really shouldn't. Unfortunately when I sent out the 
+am62ax and am62px support I missed the .rev_offset and now it's pointed 
+to some random spot in the WKUP_CTRL_MMR space. How it worked on my 
+bench was complete luck (or bad luck depending on how we view this).
 
-To fix this problem, let's instead start by letting the OPP core find the
-device node for the required OPP table and then let genpd search for a
-corresponding OPP table, allowing us the find the correct required-dev to
-assign for it.
+We'll need to pull out a OMAP3 chip and try to separate the OMAP and K3 
+OPN decoding before we can move the .efuse_offset
 
-Reported-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-Fixes: f0d2dcc9b087 ("OPP/pmdomain: Set the required_dev for a required OPP during genpd attach")
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/opp/core.c      | 15 +++++++-----
- drivers/pmdomain/core.c | 52 +++++++++++++++++++++++------------------
- include/linux/pm_opp.h  |  7 ++++--
- 3 files changed, 43 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 66cac7a1d9db..538612886446 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -2363,7 +2363,7 @@ static void _opp_put_config_regulators_helper(struct opp_table *opp_table)
- static int _opp_set_required_dev(struct opp_table *opp_table,
- 				 struct device *dev,
- 				 struct device *required_dev,
--				 struct opp_table *required_opp_table)
-+				 config_required_dev_t config_required_dev)
- {
- 	int i;
- 
-@@ -2380,6 +2380,7 @@ static int _opp_set_required_dev(struct opp_table *opp_table,
- 
- 	for (i = 0; i < opp_table->required_opp_count; i++) {
- 		struct opp_table *table = opp_table->required_opp_tables[i];
-+		struct opp_table *required_opp_table;
- 
- 		/*
- 		 * The OPP table should be available at this point. If not, it's
-@@ -2396,7 +2397,9 @@ static int _opp_set_required_dev(struct opp_table *opp_table,
- 		 * We need to compare the nodes for the OPP tables, rather than
- 		 * the OPP tables themselves, as we may have separate instances.
- 		 */
--		if (required_opp_table->np == table->np) {
-+		required_opp_table = config_required_dev(required_dev,
-+							 table->np);
-+		if (required_opp_table) {
- 			/*
- 			 * The required_opp_tables parsing is not perfect, as
- 			 * the OPP core does the parsing solely based on the DT
-@@ -2422,8 +2425,8 @@ static int _opp_set_required_dev(struct opp_table *opp_table,
- 		}
- 	}
- 
--	dev_err(dev, "Missing OPP table, unable to set the required dev\n");
--	return -ENODEV;
-+	/* No matching OPP table found for the required_dev. */
-+	return -ERANGE;
- }
- 
- static void _opp_put_required_dev(struct opp_table *opp_table,
-@@ -2547,10 +2550,10 @@ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config)
- 		data->flags |= OPP_CONFIG_REGULATOR;
- 	}
- 
--	if (config->required_dev && config->required_opp_table) {
-+	if (config->required_dev && config->config_required_dev) {
- 		ret = _opp_set_required_dev(opp_table, dev,
- 					    config->required_dev,
--					    config->required_opp_table);
-+					    config->config_required_dev);
- 		if (ret < 0)
- 			goto err;
- 
-diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index edef1a520110..0ff0b513b2a1 100644
---- a/drivers/pmdomain/core.c
-+++ b/drivers/pmdomain/core.c
-@@ -2874,20 +2874,21 @@ static void genpd_dev_pm_sync(struct device *dev)
- 	genpd_queue_power_off_work(pd);
- }
- 
--static struct opp_table *genpd_find_opp_table(struct generic_pm_domain *genpd,
--					      unsigned int depth)
-+static struct opp_table *_genpd_find_opp_table(struct generic_pm_domain *genpd,
-+					       struct device_node *np,
-+					       unsigned int depth)
- {
--	struct opp_table *opp_table;
-+	struct opp_table *opp_table = genpd->opp_table;
- 	struct gpd_link *link;
- 
--	if (genpd->opp_table)
--		return genpd->opp_table;
-+	if (opp_table && (dev_pm_opp_table_to_of_node(opp_table) == np))
-+		return opp_table;
- 
- 	list_for_each_entry(link, &genpd->child_links, child_node) {
- 		struct generic_pm_domain *parent = link->parent;
- 
- 		genpd_lock_nested(parent, depth + 1);
--		opp_table = genpd_find_opp_table(parent, depth + 1);
-+		opp_table = _genpd_find_opp_table(parent, np, depth + 1);
- 		genpd_unlock(parent);
- 
- 		if (opp_table)
-@@ -2897,12 +2898,27 @@ static struct opp_table *genpd_find_opp_table(struct generic_pm_domain *genpd,
- 	return NULL;
- }
- 
--static int genpd_set_required_opp_dev(struct device *dev,
--				      struct device *base_dev)
-+static struct opp_table *genpd_find_opp_table(struct device *dev,
-+					      struct device_node *np)
- {
- 	struct generic_pm_domain *genpd = dev_to_genpd(dev);
- 	struct opp_table *opp_table;
--	int ret = 0;
-+
-+	genpd_lock(genpd);
-+	opp_table = _genpd_find_opp_table(genpd, np, 0);
-+	genpd_unlock(genpd);
-+
-+	return opp_table;
-+}
-+
-+static int genpd_set_required_opp_dev(struct device *dev,
-+				      struct device *base_dev)
-+{
-+	struct dev_pm_opp_config config = {
-+		.required_dev = dev,
-+		.config_required_dev = genpd_find_opp_table,
-+	};
-+	int ret;
- 
- 	/* Limit support to non-providers for now. */
- 	if (of_property_present(base_dev->of_node, "#power-domain-cells"))
-@@ -2911,20 +2927,10 @@ static int genpd_set_required_opp_dev(struct device *dev,
- 	if (!dev_pm_opp_of_has_required_opp(base_dev))
- 		return 0;
- 
--	genpd_lock(genpd);
--	opp_table = genpd_find_opp_table(genpd, 0);
--	genpd_unlock(genpd);
--
--	if (opp_table) {
--		struct dev_pm_opp_config config = {
--			.required_dev = dev,
--			.required_opp_table = opp_table,
--		};
--
--		ret = devm_pm_opp_set_config(base_dev, &config);
--		if (ret < 0)
--			dev_err(dev, "failed to set opp config %d\n", ret);
--	}
-+	ret = devm_pm_opp_set_config(base_dev, &config);
-+	ret = ret == -ERANGE ? 0 : ret;
-+	if (ret < 0)
-+		dev_err(dev, "failed to set opp config %d\n", ret);
- 
- 	return ret;
- }
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index 7894e631cded..0ada4a5057c8 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -53,6 +53,9 @@ typedef int (*config_regulators_t)(struct device *dev,
- typedef int (*config_clks_t)(struct device *dev, struct opp_table *opp_table,
- 			struct dev_pm_opp *opp, void *data, bool scaling_down);
- 
-+typedef struct opp_table *(*config_required_dev_t)(struct device *dev,
-+			struct device_node *opp_table_np);
-+
- /**
-  * struct dev_pm_opp_config - Device OPP configuration values
-  * @clk_names: Clk names, NULL terminated array.
-@@ -63,7 +66,7 @@ typedef int (*config_clks_t)(struct device *dev, struct opp_table *opp_table,
-  * @supported_hw_count: Number of elements in the array.
-  * @regulator_names: Array of pointers to the names of the regulator, NULL terminated.
-  * @required_dev: Required OPP device.
-- * @required_opp_table: The corresponding required OPP table for @required_dev.
-+ * @config_required_dev: Custom helper to find the required OPP table for $required_dev.
-  *
-  * This structure contains platform specific OPP configurations for the device.
-  */
-@@ -77,7 +80,7 @@ struct dev_pm_opp_config {
- 	unsigned int supported_hw_count;
- 	const char * const *regulator_names;
- 	struct device *required_dev;
--	struct opp_table *required_opp_table;
-+	config_required_dev_t config_required_dev;
- };
- 
- #define OPP_LEVEL_UNSET			U32_MAX
--- 
-2.34.1
-
+~Bryan
 
