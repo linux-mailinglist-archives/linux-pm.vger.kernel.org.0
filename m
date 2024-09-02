@@ -1,153 +1,257 @@
-Return-Path: <linux-pm+bounces-13363-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13364-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28015968EEA
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 22:43:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32203968F57
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 23:57:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11BDE1C21AAA
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 20:43:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 573461C212C5
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 21:57:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDDB5185B70;
-	Mon,  2 Sep 2024 20:43:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 351C0187356;
+	Mon,  2 Sep 2024 21:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="jIPbssxT"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="EFS05vGK";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="h44q7Bon"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from a7-42.smtp-out.eu-west-1.amazonses.com (a7-42.smtp-out.eu-west-1.amazonses.com [54.240.7.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2651A4E7F
-	for <linux-pm@vger.kernel.org>; Mon,  2 Sep 2024 20:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A72187344;
+	Mon,  2 Sep 2024 21:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.7.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725309788; cv=none; b=M7l1RAeS8/T3qDL2dOPPOQyaTaJ0I1sdd6srJLk3BjoPfoCp0HZk/Ofc33fpmXnstlO8x+W6V+P1yv/cZE980/zzLk08DZ5hPnsdbqcqOT6k6c8xxojZl6CofvsdHOJf55MX5/aMxi6jJISsLzrQc+uTHYklFfwz+RwF6fWNJ+k=
+	t=1725314146; cv=none; b=dU0u2rnKKZAeQYJFowc29G/9Ge1XxH2auXdrUVrHAjQ7hrw2NtZZz1w1hCrnEkbpX+lslUzNMUSExBPnpIwgF0H79oerkOxZvfvE9wIO6OQZPzINuq3pLeN2bmbz/SMgPWVK8ivijkT+iMZ0oNRTcT3BzddWTvlaFcHU8jJYJno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725309788; c=relaxed/simple;
-	bh=2pzx0cEcSe4li1KrxmXMQ9xUtR2Ujpwtv1QhY4L6EBM=;
+	s=arc-20240116; t=1725314146; c=relaxed/simple;
+	bh=k7aKxeQmEkM1y7ybGawqN1iDsl7azjOv3PpczXOhmzU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AdKqX3Ri8jBttFGRItOROnnvYhhLk6xAu71LQu+HXpzsjzSE1pxKyAuXf5PTW1sr1f1Ez1QerSSSxJvCCBOKz4/ONwMx7M3U2QEq2YAPeAYfjlsl11qbna698//EbFsgtJr74NwDMRdqbja1kZ4JiK+0Dup+imEnRJQeV59jG3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=jIPbssxT; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5353cd2fa28so5991427e87.3
-        for <linux-pm@vger.kernel.org>; Mon, 02 Sep 2024 13:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1725309785; x=1725914585; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZL7FkBuEHp0RB7JLTPCHyfRNqy0CmQ95XZXKOkuvJT0=;
-        b=jIPbssxTTI1NLCAgu/Q79ruZCCP70kfTRkbTSmvchLp8gO1ai1Cmc4c9NWxXw83sIO
-         xB4Q8aHbJyZiKU99BFGQqxV5XZRNDukhWilgz6TWj80lr6h16FWNrjkUq2Oh0j02er7n
-         jLfRTDpGz2FXrkr0BoG7v3xSYs4ZwQSDADSXuN9z1Z+CpyL4Va8YX5mAQnnjzrdCq4If
-         dzT9MDry6fPz6Fx/4PkoaWRvXa2N047EjbxmJLFFf/qhWlMaxlSOVXPvRJVWDV/MtzAy
-         dmbzMDKP85dnpOB8zymrsd1jSxKRmiNQYIfBHAuwdwG12F1JtYF4zDk3Zk/E/GFC56t3
-         m13A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725309785; x=1725914585;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZL7FkBuEHp0RB7JLTPCHyfRNqy0CmQ95XZXKOkuvJT0=;
-        b=brI1QjiHdO4QNHrMM3QuCWoFhcVC6sq8UzT3nRENmFc+Mnq5k9U4UmEurGUA9kzcDZ
-         HBUmsJN77wiwjwWKLGb97lfZfItMvW/puI6qNTfhNFROvOZV033LQq4miE9g3I0YuGdx
-         jBVWh4aEXTgB7q98n4esXc8eXOa/CDyjHjQ3Xp6AlHD0rTaVSM2sXIt5moqnT1Q6Zrzn
-         8e/ocpkmWbniT/TSfjr4UpQ1XHBmOp3PvUXaquI+7NPCMm13vRBqiHFo79LkIgY+QuM/
-         7wtnsgmzElQMqez9IsjFPpQo3eRhF36EwRd3XJ643yTTyS9zTfsYVotZHxPYgA0fRQXF
-         +bJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVWkSvstdHUbcGxhOa4TPbUI72qw7v1ewdAXne8n5pAY+wiQK9KHKsuEaY02+h8NyhvwU9z66CKKw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUWRHGS/FiyuNFuTkPCb2Y5I4oofWjc6JR3mI/nNpCxfLDEf6d
-	5fO3f8V4oEn5TGBkt9o8lcUUkshemJ3ZVCUmW/NOHblrUk8QTyX8Eb1nOCO9hyg=
-X-Google-Smtp-Source: AGHT+IFkOkpk8BJOobO5aqLxZe3h+clvdhm1jvoZFktYDp896OY0KvlM1qPoTYygnoA3KOmfuPJbPQ==
-X-Received: by 2002:a05:6512:3054:b0:52e:7542:f471 with SMTP id 2adb3069b0e04-53546b34bb6mr9317552e87.29.1725309784653;
-        Mon, 02 Sep 2024 13:43:04 -0700 (PDT)
-Received: from airbuntu ([176.29.222.46])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8989215cb5sm597380366b.191.2024.09.02.13.43.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2024 13:43:04 -0700 (PDT)
-Date: Mon, 2 Sep 2024 21:43:01 +0100
-From: Qais Yousef <qyousef@layalina.io>
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Christian Loehle <christian.loehle@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Hongyan Xia <hongyan.xia2@arm.com>,
-	John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7] sched: Consolidate cpufreq updates
-Message-ID: <20240902204301.v55w7id3d2kw64qy@airbuntu>
-References: <20240728184551.42133-1-qyousef@layalina.io>
- <ca6b1db0-37d9-462e-87e4-d3bbd5eec7a3@arm.com>
- <CAKfTPtBWLe4hMBhJeSqvoW10dAF3Bgj+zcYGMgBfwUhkgytkEQ@mail.gmail.com>
- <CAKfTPtAJNjUe=4eQxq0M6==6O7dtJrw6rtwE6-xaWMJdSmfKcA@mail.gmail.com>
- <20240901175149.46yfk335niccmfq4@airbuntu>
- <CAKfTPtBahrD5L8CbB4BijAvnwq=yG375TWDUuEvNipyTDYGQTA@mail.gmail.com>
- <20240902125815.vu3s25ciib34eu3a@airbuntu>
- <CAKfTPtDr5nEHYJ0=_-3a6wVZ25TPoiohBNmhGBaZMCrYHydh8w@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=FC76R1qGT6+lG5kQhspkdL3rnedehdI8rE4VN+PMN38MBSWOHVcpCOU1+T12GWxkRzXx2p9qQbBcxHVGoMvU09FBTk81DRoiDvkTtItPNrxYnrSjfvZ9pjudRcYHiy5NLbCk0p40vU09/SF5dIiI0FB6EQBga7gumBdOE3jLnEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=amazonses.collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=EFS05vGK; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=h44q7Bon; arc=none smtp.client-ip=54.240.7.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=4232tfv5ebdrjdwkr5zzm7kytdkokgug; d=collabora.com; t=1725314142;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To;
+	bh=k7aKxeQmEkM1y7ybGawqN1iDsl7azjOv3PpczXOhmzU=;
+	b=EFS05vGK7/OYS8ClPD5BssuHd9lEwTyOQOIjgkCQqIjw2AAJr8Im0i1vUJNRJJYy
+	wrnFu5aoUCWjhTN/+n0KLoWsENUkaLWPrsINqUGlXOLSzrknEUEHF5VMkx4e0T6PFAe
+	AMIEfmuqUidiqtYySvjN+GN2SUDXBWzsn1wOmtPSLP9B+I320jQsCE/6ASP3DBxOwka
+	KvlWJO3siZJE8Llk/7mSZVmMFXBCaWvz1KvrJA9t5L/awiigrC0uxRZzYmjLh+Y9kyK
+	D2mhuIzulZ9KPdtV4zUJkCSfTpwNJ/H0/0lLV+H/OK9kSSKPPY9J5eeog54pqOHaY7N
+	byDjJ5rcMA==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=uku4taia5b5tsbglxyj6zym32efj7xqv; d=amazonses.com; t=1725314142;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Feedback-ID;
+	bh=k7aKxeQmEkM1y7ybGawqN1iDsl7azjOv3PpczXOhmzU=;
+	b=h44q7Bon45QsvSKu3Nt2A6JQyXYs2RfgRA8WZ5yVbjfPIwXdD3cMbrfT6szOwJHU
+	dLIeAXW78B/dsL81+coA2wEZtF1WAs23jbuLPYYl2r9bKkTmv8zEhZMg01Yfllv78mt
+	5WQV5r4ihsMJxXxodd707snQF+6PNl5Y+VTsgZME=
+Date: Mon, 2 Sep 2024 21:55:42 +0000
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Dimitri Fedrau <dima.fedrau@gmail.com>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] power: supply: max1720x: add read support for nvmem
+Message-ID: <01020191b4bc8ff0-e7e8d909-4802-4076-9caf-cee0296fd10d-000000@eu-west-1.amazonses.com>
+References: <20240831182145.11589-1-dima.fedrau@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ggta6jjiwxntt2pw"
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtDr5nEHYJ0=_-3a6wVZ25TPoiohBNmhGBaZMCrYHydh8w@mail.gmail.com>
+In-Reply-To: <20240831182145.11589-1-dima.fedrau@gmail.com>
+Feedback-ID: ::1.eu-west-1.YpP9ZbxnARFfy3Cb5pfsLd/pdsXBCNK0KEM7HforL4k=:AmazonSES
+X-SES-Outgoing: 2024.09.02-54.240.7.42
 
-On 09/02/24 15:36, Vincent Guittot wrote:
 
-> > If we have 1 CPU per PD, then relaxing affinity will allow it to run anywhere.
-> > I am just this will be safe on all platforms of course.
-> >
-> > But yeah, I don't think this is a solution anyway but the simplest thing to
-> > make it harder to hit.
-> >
-> > > The problem is that the 1st switch to task A will be preempted by
-> > > sugov so the 1st switch is useless. You should call cpufreq_update
-> > > before switching to A so that we skip the useless switch to task A and
-> > > directly switch to sugov 1st then task A
-> >
-> > Can we do this safely after we pick task A, but before we do the actual context
-> > switch? One of the reasons I put this too late is because there's a late call
-> > to balance_calbacks() that can impact the state of the rq and important to take
-> > into account based on my previous testing and analysis.
-> 
-> I don't have all cases in mind and it would need more thinking but
-> this should be doable
-> 
-> >
-> > Any reason we need to run the sugov worker as DL instead for example being
-> > a softirq?
-> 
-> sugov can sleep
+--ggta6jjiwxntt2pw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hmm. I thought the biggest worry is about this operation requires synchronous
-operation to talk to hw/fw to change the frequency which can be slow and we
-don't want this to happen from the scheduler fast path with all the critical
-locks held.
+Hi,
 
-If we sleep, then the sugov DL task will experience multiple context switches
-to perform its work. So it is very slow anyway.
+On Sat, Aug 31, 2024 at 08:21:45PM GMT, Dimitri Fedrau wrote:
+> ModelGauge m5 and device configuration values are stored in nonvolatile
+> memory to prevent data loss if the IC loses power. Add read support for
+> the nonvolatile memory on MAX1720X devices.
+>=20
+> Signed-off-by: Dimitri Fedrau <dima.fedrau@gmail.com>
+> ---
+>=20
+> Based on:
+> 479b6d04964b "power: supply: add support for MAX1720x standalone fuel gau=
+ge"
+> in branch for-next
+>=20
+> Changes in V2:
+>   - remove function max1720x_remove and use devm_add_action_or_reset() to
+>     unregister info->ancillary to avoid race condition during module remo=
+ve
 
-IMO refactoring the code so we allow drivers that don't sleep to run from
-softirq context to speed things up and avoid any context switches is the
-sensible optimization to do.
+Thanks, but the transformation is quite incomplete. You probably
+should have a look what device managed resource actually means :)
 
-Drivers that sleep will experience significant delays and I'm not seeing the
-point of optimizing an additional context switch. I don't see we need to get
-out of our way to accommodate these slow platforms. But give them the option to
-move to something better if they manage to write their code to avoid sleeps.
+> ---
+>  drivers/power/supply/max1720x_battery.c | 220 ++++++++++++++++++++++--
+>  1 file changed, 205 insertions(+), 15 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/max1720x_battery.c b/drivers/power/supp=
+ly/max1720x_battery.c
+> index edc262f0a62f..d27c94bdb835 100644
+> --- a/drivers/power/supply/max1720x_battery.c
+> +++ b/drivers/power/supply/max1720x_battery.c
 
-Would this be a suitable option to move forward?
+[...]
 
-FWIW I did test this on pixel 6 which !fast_switch and benchmark scores are
-either the same or better (less frame drops in UI particularly).
+> +static int max1720x_probe_nvmem(struct i2c_client *client,
+> +				struct max1720x_device_info *info)
+>  {
+>  	struct device *dev =3D &client->dev;
+> -	struct i2c_client *ancillary;
+> +	struct nvmem_config nvmem_config =3D {
+
+As noticed by the build bot: you need to add this include for the
+struct:
+
+#include <linux/nvmem-provider.h>
+
+> +		.dev =3D dev,
+> +		.name =3D "max1720x_nvmem",
+> +		.cells =3D max1720x_nvmem_cells,
+> +		.ncells =3D ARRAY_SIZE(max1720x_nvmem_cells),
+> +		.read_only =3D true,
+> +		.root_only =3D true,
+> +		.reg_read =3D max1720x_nvmem_reg_read,
+> +		.size =3D ARRAY_SIZE(max1720x_nvmem_cells) * 2,
+> +		.word_size =3D 2,
+> +		.stride =3D 2,
+> +		.priv =3D info,
+> +	};
+> +	struct nvmem_device *nvmem;
+> +	unsigned int val;
+>  	int ret;
+> =20
+> -	ancillary =3D i2c_new_ancillary_device(client, "nvmem", 0xb);
+> -	if (IS_ERR(ancillary)) {
+> +	info->ancillary =3D i2c_new_ancillary_device(client, "nvmem", 0xb);
+> +	if (IS_ERR(info->ancillary)) {
+>  		dev_err(dev, "Failed to initialize ancillary i2c device\n");
+> -		return PTR_ERR(ancillary);
+> +		return PTR_ERR(info->ancillary);
+>  	}
+> =20
+> -	ret =3D i2c_smbus_read_word_data(ancillary, MAX1720X_NRSENSE);
+> -	i2c_unregister_device(ancillary);
+> -	if (ret < 0)
+> -		return ret;
+> +	ret =3D devm_add_action_or_reset(dev, max1720x_unregister_ancillary, in=
+fo);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to add unregister callback\n");
+> +		goto err;
+> +	}
+> =20
+> -	info->rsense =3D ret;
+> +	info->regmap_nv =3D devm_regmap_init_i2c(info->ancillary,
+> +					       &max1720x_nvmem_regmap_cfg);
+> +	if (IS_ERR(info->regmap_nv)) {
+> +		dev_err(dev, "regmap initialization of nvmem failed\n");
+> +		ret =3D PTR_ERR(info->regmap_nv);
+> +		goto err;
+> +	}
+> +
+> +	ret =3D regmap_read(info->regmap_nv, MAX1720X_NRSENSE, &val);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to read sense resistor value\n");
+> +		goto err;
+> +	}
+> +
+> +	info->rsense =3D val;
+>  	if (!info->rsense) {
+>  		dev_warn(dev, "RSense not calibrated, set 10 mOhms!\n");
+>  		info->rsense =3D 1000; /* in regs in 10^-5 */
+>  	}
+> =20
+> +	nvmem =3D devm_nvmem_register(dev, &nvmem_config);
+> +	if (IS_ERR(nvmem)) {
+> +		dev_err(dev, "Could not register nvmem!");
+> +		ret =3D PTR_ERR(nvmem);
+> +		goto err;
+> +	}
+> +
+>  	return 0;
+> +err:
+> +	i2c_unregister_device(info->ancillary);
+
+devm_add_action_or_reset() already unregisters on failure, so this
+results in a double unregister. Please also simplify 'goto err'
+with 'return ret;'.
+
+> +
+> +	return ret;
+>  }
+> =20
+>  static const struct power_supply_desc max1720x_bat_desc =3D {
+> @@ -299,20 +487,22 @@ static int max1720x_probe(struct i2c_client *client)
+> =20
+>  	psy_cfg.drv_data =3D info;
+>  	psy_cfg.fwnode =3D dev_fwnode(dev);
+> +	i2c_set_clientdata(client, info);
+>  	info->regmap =3D devm_regmap_init_i2c(client, &max1720x_regmap_cfg);
+>  	if (IS_ERR(info->regmap))
+>  		return dev_err_probe(dev, PTR_ERR(info->regmap),
+>  				     "regmap initialization failed\n");
+> =20
+> -	ret =3D max1720x_probe_sense_resistor(client, info);
+> +	ret =3D max1720x_probe_nvmem(client, info);
+>  	if (ret)
+> -		return dev_err_probe(dev, ret,
+> -				     "Failed to read sense resistor value\n");
+> +		return dev_err_probe(dev, ret, "Failed to probe nvmem\n");
+> =20
+>  	bat =3D devm_power_supply_register(dev, &max1720x_bat_desc, &psy_cfg);
+> -	if (IS_ERR(bat))
+> +	if (IS_ERR(bat)) {
+> +		i2c_unregister_device(info->ancillary);
+
+This is also already handled by devm and must be removed.
+
+>  		return dev_err_probe(dev, PTR_ERR(bat),
+>  				     "Failed to register power supply\n");
+> +	}
+> =20
+>  	return 0;
+>  }
+
+-- Sebastian
+
+--ggta6jjiwxntt2pw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmbWNFkACgkQ2O7X88g7
++prnKw/7BvyloO8T23jJijuCuMrDU7wMGOVNh4D+Ij/WrJ6UmhOqD5KBqXt0h0Hy
+GPIHrmnDGSXwjtIc1WuulmP6Ka0ZpeMsiidNr2vihWLixEEXMw6ZtiCpFuC3X9OM
+KqBGWPHPz32HlTZu2BBPEjKRkAWdpIlXKeXHCpmEWHHrF+MnC7tkglJanSNuYmD1
+/jCvMkM8MwVpiK9wVeSvVh7klZiEcrvNVWy9qCO6U5/ZVYf/Rw9DOVko2K7Wt+Tx
+HzrkYmrGUPp379ZlP3K/j16KK9g9NpoYpfsvT5jKPZQo80KhKHOQQ02hGnnDTKxF
+gIxamttKfNudVy3IZz2AFzkS03f123H6xjCvXfkjG7EvqY9S6EkLljS6pAwNzF6/
+xrQGUsfWTIHBsXNeLpctxLZxYFtJx2HSFNt9TicsNBIYWH3Aq+hrs3T/zzdA0H7H
+Uf/ZnL1DwqUstyCW7a69u9QGaz9cJd6lBmohw6oCa1E/L+X4h8C4gG2YC0GpNL/W
+TiARhxwkKOgnCgYDJOR+G06ACtl97fTSC+6uLZP4bd9IdtSmvotYia08lsl/scLO
+BjWRpELGQV97aD011TVNzmM4Lk9ElownNMCRKqyLHCU5+q8h9MNHlZ6wUJ7hBXAk
+zq7re8TaaXfmT1/Mqr1IQmlmIdno3AeZ3p1JKfwunTEyZr1qBIk=
+=VGt2
+-----END PGP SIGNATURE-----
+
+--ggta6jjiwxntt2pw--
 
