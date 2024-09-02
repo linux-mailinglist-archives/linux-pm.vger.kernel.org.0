@@ -1,102 +1,81 @@
-Return-Path: <linux-pm+bounces-13361-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13362-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F79D968E63
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 21:19:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13C8C968E6E
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 21:21:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1D711C22F92
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 19:19:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD14C1F23B67
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2024 19:21:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDD501A2644;
-	Mon,  2 Sep 2024 19:19:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5845919CC3E;
+	Mon,  2 Sep 2024 19:21:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aiH15ebP"
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="IwtmzsYC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-43167.protonmail.ch (mail-43167.protonmail.ch [185.70.43.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B351A3AB6;
-	Mon,  2 Sep 2024 19:19:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487B51A3A9C
+	for <linux-pm@vger.kernel.org>; Mon,  2 Sep 2024 19:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725304782; cv=none; b=Gm7vJTTSNLfO0FUWoETwjUFduGoPJITi6qvovAGr2MbFlpwzq2NAP9VXEn0NvsT2Pr+Twm4bLWhyZbyUMS21nN19uTcHoqiW43PNWvNRZWHODoIFQKEgKGx9BLMduOia/WhjKxUzm6RLPkV+vtouoz5r09FLu2s79oUEqyscR40=
+	t=1725304901; cv=none; b=EqM/6h/h+ywLZUkXG3Vu36TjrHGtQTpkjtURguE7XpAxZUc53Xm6SywVp9URVQw5V1uueqcN5MnOZW0cSy0WcltNX5xg/sKkcj0wwIuQqqgoG5SNHppBHJwOBvX7UKYByrbtm8i71xs10LI/ysX1INGQNVLH+mMf98gmVKUIAT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725304782; c=relaxed/simple;
-	bh=CSG42c0Zza6vQ2aeIZ0JWOH/0VvsfGO1cv6kMXBDw6U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=AbcyhXHswgO327doaJNlMN31bJ/66vINjC+jTEBkY2BEiDS3vp+zxv46AjutYAoORQXrfR4/SQXtP5Plg1lMFyMXmLyDg5ac47Xs/o7OW7uptLvgIMNjB70EXl0/tHlaq7M2k1UVMynRMqWhaumTSSuTXvmzuGQ1CrtbImJGqK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aiH15ebP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD8B6C4CEC8;
-	Mon,  2 Sep 2024 19:19:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725304781;
-	bh=CSG42c0Zza6vQ2aeIZ0JWOH/0VvsfGO1cv6kMXBDw6U=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=aiH15ebPMb+BTMSWl1RX4qe0PycRIQbNRQToY6db+26jTPBqCFdgFvktJdpRNQWmt
-	 5PoM+81kb8Q5tVXb7lzZZzXwFntFrX7959Lb8wNl5sNizqB0ZcIbjhRkPZnmmCbpYJ
-	 7Eghso8DNUif2f4LbBt7CcZkDYohImO46sSpo2CqpySPKQnge2vjnpdLLbI8RGNs8r
-	 nwmVGbEpi4Nc3lawsCs6nWOLCQF9d0cj4ouLErWVM3sroS0qlFGiCze2rf18nrFjW1
-	 PUFDWy44/PlKnmiVm+r1HOdD11OgicewSFl1TJX79hBRxjUqa+UsBlBvI5mao3MX87
-	 igNaukAwdmJdQ==
-Message-ID: <815b7445-3113-4ef7-ab36-b4a216308dd6@kernel.org>
-Date: Mon, 2 Sep 2024 22:19:34 +0300
+	s=arc-20240116; t=1725304901; c=relaxed/simple;
+	bh=LuE9mRYXcbYgc7yUuEmieQnltwYni1kd/AdQPOr8aXk=;
+	h=Date:To:From:Subject:Message-ID:MIME-Version:Content-Type; b=eWHwhwYyaQQDN02OmSGJZk75tff+DoD9roDbNvSp7Sueh234332d0DNtEJVtZPh1nWLG+ZlYzDmvqKDj/3yBWwhGccu/d8Q2aBupVhL4WWWH6YpWX+5XeA/E5HO4+GcXHzJ/VpMLmU9XvQRWCwFLHfgsmZwZHjIytq0Q1JIzaAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=IwtmzsYC; arc=none smtp.client-ip=185.70.43.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1725304892; x=1725564092;
+	bh=/cxje7cWITxsAyELVRDqwEMAnBWLI0sSrL0z2LlvtHk=;
+	h=Date:To:From:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=IwtmzsYCBR7JePSgqoLk4rRMOSezUyu+27cxoT5L6HrJqQ33LJHYeKBG7fdmYjaZS
+	 2KfXBvW8MMqYgpZtPZj5qGn9oNvDTrFg88YJe8+4JRarO1G+IdsLW/XyWLzhkmS98e
+	 K4Z9GD7wLsFy2emAavBSxmj4075Y1D7KeLrezM2gM9wTUWMEo5IijVS6ApmK8k3RNI
+	 3MAJneH9XZY6PPFMSvldR76g0k7HdP2bxG9FIsFhicFJFjgrTfh5YpFXHfqYqqp/9L
+	 Uzm3vFSAT7qWzBBX0cv/1Ea1fugM9X5m/kb0B/O2YcG8TYXhsCL/SCy52Rx4y11ZER
+	 aa0l4ZixEb55g==
+Date: Mon, 02 Sep 2024 19:21:27 +0000
+To: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+From: John <therealgraysky@proton.me>
+Subject: amd-pstate-epp: CPU freq never hits minimum level booted into OpenWrt but does under Arch
+Message-ID: <rc3yUl_FpebZCJhCPscpyJ2UtuKGSwB7B4E4mr4OjdrJFIkftiWJvWrRBwXzMfqICV_NZWqMvyey5Iw3XqyhIhQ3k9beU2p_V8NARfUdQ-M=@proton.me>
+Feedback-ID: 47473199:user:proton
+X-Pm-Message-ID: 6ab83f79991b4a1de15ebb3699e0c3f6219cac8b
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/8] dt-bindings: interconnect: Update master/slave id
- list
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
- mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, konradybcio@kernel.org,
- catalin.marinas@arm.com, will@kernel.org, richardcochran@gmail.com,
- geert+renesas@glider.be, dmitry.baryshkov@linaro.org,
- neil.armstrong@linaro.org, arnd@arndb.de, nfraprado@collabora.com,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- netdev@vger.kernel.org
-References: <20240829082830.56959-1-quic_varada@quicinc.com>
- <20240829082830.56959-5-quic_varada@quicinc.com>
-Content-Language: en-US
-From: Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20240829082830.56959-5-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 29.08.24 11:28, Varadarajan Narayanan wrote:
-> Update the GCC master/slave list to include couple of
-> more interfaces needed by the Network Subsystem Clock
-> Controller (NSSCC)
-> 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+I have a mini PC based on an AMD Ryzen 7 5800U APU dual booting Arch Linux =
+and OpenWrt (snapshot).  When booted into Arch, the cores idle at the minim=
+um frequency of 400 MHz with amd-pstate-epp/active.  When I boot into OpenW=
+rt with amd-pstate-epp/active however, the lowest frequency the cores will =
+drop down to is 1,383 MHz.
 
-Acked-by: Georgi Djakov <djakov@kernel.org>
+As a test, while booted into OpenWrt, I stopped every running daemon and st=
+opped all network interfaces.  Checking CPU% in htop showed more or less no=
+thing using the CPU that might be keeping it from reaching 400 MHz.
 
-> ---
->   include/dt-bindings/interconnect/qcom,ipq5332.h | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/include/dt-bindings/interconnect/qcom,ipq5332.h b/include/dt-bindings/interconnect/qcom,ipq5332.h
-> index 16475bb07a48..5c08dd3c4f47 100644
-> --- a/include/dt-bindings/interconnect/qcom,ipq5332.h
-> +++ b/include/dt-bindings/interconnect/qcom,ipq5332.h
-> @@ -28,6 +28,10 @@
->   #define SLAVE_NSSNOC_TIMEOUT_REF	23
->   #define MASTER_NSSNOC_XO_DCD		24
->   #define SLAVE_NSSNOC_XO_DCD		25
-> +#define MASTER_SNOC_NSSNOC_1_CLK	26
-> +#define SLAVE_SNOC_NSSNOC_1_CLK		27
-> +#define MASTER_SNOC_NSSNOC_CLK		28
-> +#define SLAVE_SNOC_NSSNOC_CLK		29
->   
->   #define MASTER_NSSNOC_PPE		0
->   #define SLAVE_NSSNOC_PPE		1
+The kernel version for both distros are in parity (currently 6.6.48), but d=
+o differ in their respective configs.  I am wondering if kernel config opti=
+ons might be to causing this or if there is something else that can be chec=
+ked.
 
+# cat /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+powersave
+# cat /sys/devices/system/cpu/amd_pstate/status
+active
+# cat /sys/devices/system/cpu/cpufreq/policy0/scaling_driver
+amd-pstate-epp
 
