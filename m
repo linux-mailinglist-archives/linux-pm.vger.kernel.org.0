@@ -1,86 +1,97 @@
-Return-Path: <linux-pm+bounces-13385-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13386-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74F0D969660
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 10:00:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8432969692
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 10:10:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32319285B76
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 08:00:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85EF7285E09
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 08:10:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D333D20011F;
-	Tue,  3 Sep 2024 08:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02D8B20012B;
+	Tue,  3 Sep 2024 08:10:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YPTLyNgY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CU9O97hx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46B11CE6F5;
-	Tue,  3 Sep 2024 08:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C831C1D6786;
+	Tue,  3 Sep 2024 08:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725350428; cv=none; b=odO911eBdzOPVixeCXMaxvr0Zp/uQbOSL7st19ACdqSQ3yf8awoQzgjCknwlzGZzI6VLwXDXLtfBVIEINRLRkKQ9vg4tSjDB3t4uyUQKezD0kG4BJdnd/DN42f4OhVKL1CVD8FgsNsZLOW9L6fce9ky46SZIBUFXlnIvn4bXJ/c=
+	t=1725351049; cv=none; b=cxVXo9tMXJkfYmuuMWFs+G8bSN61sMNMCiyzuIEbGezkaPwJWxn/NQVLV1Z+wHJMmV+Kcd7ji/F8b/epf/ZA4n/zqqQFJ2azgA1f2YenpNoehmSgPRY/GdUtjIVJcQS1iYhTZHvN1yqT1HqIPVD0EjfFRs0UMjM58D01z38GRkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725350428; c=relaxed/simple;
-	bh=mA70czq8ZW7v8o7kobVGuEeWJ9rCiSAnx+0VK13LKKA=;
+	s=arc-20240116; t=1725351049; c=relaxed/simple;
+	bh=jP6CX882VxUoMUs+GUcg6yOBw6YsE2JXPKi3ng1ReiU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fvSH0N2TdsAFvhBBNdMcJLCmabYZnReGkdFdMKLHEfQ2s2rMtbuGk6cuq0Zw81ic6kqsolV2OO1DaDL5iMeehkGOq0NGLjwxRAuPOzLLahNvtIS9Y9oXjxcjAQJOzcBJajwnpQyz577/HafPmLBlUWzw15sb1fh+cXrJj/v9VQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YPTLyNgY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 144ACC4CEC6;
-	Tue,  3 Sep 2024 08:00:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725350428;
-	bh=mA70czq8ZW7v8o7kobVGuEeWJ9rCiSAnx+0VK13LKKA=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sv4BKFL/NlX6VNHTFxgm43XKpPz8mTHZdgWmjciqEyCsVeflE2WxKKVptWUvJOkAaNZFr06EEbwT66M2V/2TMB4YlVzcClGHjcDT5BEXUpa2wa99Nhn14Zb3gM/TyLZtZckjQDI08s0JybDDQD+QTOGobp7BQDwyKBckIFzVAwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CU9O97hx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 593E8C4CEC5;
+	Tue,  3 Sep 2024 08:10:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725351049;
+	bh=jP6CX882VxUoMUs+GUcg6yOBw6YsE2JXPKi3ng1ReiU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YPTLyNgYApP/rr4Cve02omhp0Nr3FodZpTuoMPWnSVmFClIYxZbSUSUONy3a9ivGB
-	 FmYvpM2H9taVIQy+eXhd0PGFwZ+qztPr0bfJ4RFz7VELauvgOCNdCOqjoePWMl0KOS
-	 q0nkXc3k8h32ovdmDZuqU/EtECbJ5Aq66ofO7Qt4=
-Date: Tue, 3 Sep 2024 10:00:25 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: yi'bin ding <yibin.ding01@gmail.com>
-Cc: Yibin Ding <Yibin.Ding@unisoc.com>, djakov@kernel.org,
-	rafael@kernel.org, niuzhiguo84@gmail.com, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Hao_hao.Wang@unisoc.com,
-	Ke.Wang@unisoc.com
-Subject: Re: [PATCH 1/2] interconnect: Add character pointer initialization
-Message-ID: <2024090346-frame-scanner-8f61@gregkh>
-References: <20240830102244.409058-1-Yibin.Ding@unisoc.com>
- <2024083004-laptop-outrank-9710@gregkh>
- <CAC6ZDY_V1w92gg=ZugbHhWfBJpVqNpuTdgvURk0WYVnzqMKkjA@mail.gmail.com>
- <2024090244-showpiece-backboned-4aa5@gregkh>
- <CAC6ZDY8KuBV5YDFJayCELkPEf6w_cMttEfa5fgQW85Zs9UnQtQ@mail.gmail.com>
+	b=CU9O97hxiMgO7eIIqr5vC9vCZxkYczZLVMeONL0PqcVOq/kUmPFLybgYnWtqIw4Ci
+	 6uQnRcCRtaee6+sq6Wv4C3huAa+0NeYcZdGDr3un03PxMHAiwNqh4q7rI9mGS46vkD
+	 cf2CGqOQ3OK4ZjeLTj4ICaB2vwWCjQ5gEC9hPmf88Tz3ghDElRm2BJ5qxlpHOc0NHK
+	 xQLNonEsrud1rVETW1SLTAYmnXJtnlj43AwPxu+djRVRw4r0w1V3hP2uliB683z5yo
+	 L80DW8bBoiqVmSigdRGJfZar9F9lJXNybZXZQ2T2khUVElvnLBjsUw+OcfK4vHxmmc
+	 bS2HxT5jhnzUQ==
+Date: Tue, 3 Sep 2024 09:10:40 +0100
+From: Will Deacon <will@kernel.org>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	catalin.marinas@arm.com, tglx@linutronix.de, mingo@redhat.com,
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+	hpa@zytor.com, pbonzini@redhat.com, wanpengli@tencent.com,
+	vkuznets@redhat.com, rafael@kernel.org, daniel.lezcano@linaro.org,
+	peterz@infradead.org, arnd@arndb.de, lenb@kernel.org,
+	mark.rutland@arm.com, harisokn@amazon.com, mtosatti@redhat.com,
+	sudeep.holla@arm.com, cl@gentwo.org, misono.tomohiro@fujitsu.com,
+	maobibo@loongson.cn, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v7 07/10] arm64: define TIF_POLLING_NRFLAG
+Message-ID: <20240903081040.GA12270@willie-the-truck>
+References: <20240830222844.1601170-1-ankur.a.arora@oracle.com>
+ <20240830222844.1601170-8-ankur.a.arora@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAC6ZDY8KuBV5YDFJayCELkPEf6w_cMttEfa5fgQW85Zs9UnQtQ@mail.gmail.com>
+In-Reply-To: <20240830222844.1601170-8-ankur.a.arora@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Again, please do not top-post, please fix your email client.
-
-On Tue, Sep 03, 2024 at 03:23:13PM +0800, yi'bin ding wrote:
-> Thanks in advance，
+On Fri, Aug 30, 2024 at 03:28:41PM -0700, Ankur Arora wrote:
+> From: Joao Martins <joao.m.martins@oracle.com>
 > 
-> That happens if you write to the file, but what happens if you never write
-> to the file?  What happens when you remove the driver/module,shouldn't you
-> free the memory then as well?
+> Commit 842514849a61 ("arm64: Remove TIF_POLLING_NRFLAG") had removed
+> TIF_POLLING_NRFLAG because arm64 only supported non-polled idling via
+> cpu_do_idle().
 > 
-> answer:If no write operation is performed on the node, this part of the
-> memory will not be released before shutdown. The initialization operation
-> of this module is performed by the swapper process, so this part of the
-> memory will be released when the swapper process is terminated during
-> shutdown.
+> To add support for polling via cpuidle-haltpoll, we want to use the
+> standard poll_idle() interface, which sets TIF_POLLING_NRFLAG while
+> polling.
+> 
+> Reuse the same bit to define TIF_POLLING_NRFLAG.
+> 
+> Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
+> Signed-off-by: Mihai Carabas <mihai.carabas@oracle.com>
+> Reviewed-by: Christoph Lameter <cl@linux.com>
+> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> ---
+>  arch/arm64/include/asm/thread_info.h | 2 ++
+>  1 file changed, 2 insertions(+)
 
-What "swapper process" are you talking about here?  Specifics please.
+Acked-by: Will Deacon <will@kernel.org>
 
-confused,
-
-greg k-h
+Will
 
