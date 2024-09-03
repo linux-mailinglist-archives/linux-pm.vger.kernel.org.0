@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-13401-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13402-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FC0A969A2B
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 12:30:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 106A0969A30
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 12:31:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0905284783
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 10:30:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83F26B22D30
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 10:31:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40D491AB6E7;
-	Tue,  3 Sep 2024 10:30:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 776771C62D1;
+	Tue,  3 Sep 2024 10:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="vdEf0L2p"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="JYtcVU6h"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588981A0BEC;
-	Tue,  3 Sep 2024 10:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA43619F404;
+	Tue,  3 Sep 2024 10:30:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725359449; cv=none; b=Xm7bv1mM+pw9RjJF166ARmMcTxfqWlOipEMi3zmvJGc3RNG/wm6c9hA+e9MxPk0X4yEdELnr2IY2Tf51R0Dy1WLRTBiWZg1TMOPdyB6z5GamGrBV12k2s6BBjw4w2eGx8ZhxB0v0C2rfdDnHousajPmfXfFzaaIdfih1AMuKCHA=
+	t=1725359452; cv=none; b=vEeTwbSJuYhsqrnGfPm1Xaoda5PN8EdYLUIGajwEJJLRah01gpGYjODbmAcnBQnxNHzefslcX6S/Zuofiimp5YKhUybbjqzzWgI9TujejdAHuFgTa5Eypg2h2G3XlMX3dDHWEt6fV/ZPLHyFT9MIHBYC6bmXC+z1espA8G0kwsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725359449; c=relaxed/simple;
-	bh=LOR0Zp7NxGvrm+QVjkcnA81zrYiOZkUdYoVIhRNDWe0=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=d/FaL3opZ9XHHUG8CPq2RhrF2PKrzyvuD5WGCyL9rmnR6okUgNEif8Z0mfk3LN1eEwBIaG3+X+/K5bTR5izEY5/4YCyoaoB7JIYwEFEZ+FdYqfqwFgju0gYnEFc7Psd8qIct7Sj2mvZm7GVugypLLbAkGqHJXvNcO4DVw2gMl74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=vdEf0L2p; arc=none smtp.client-ip=198.47.19.141
+	s=arc-20240116; t=1725359452; c=relaxed/simple;
+	bh=04BRrrWr2ZJKTFcyOeUq09xeVMNJ9nb6AYlKDZHpPdc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=km59mYcC/YXcWIxZURXmeNN1yAn+m/oHRp0RGA22VtBTFmCjBCU82R3UOdmd+mNr97b6eY0TdB2FKfXBrDiw0pArgSgaNLgWObN2hPVuVTgVQlBfTf6lxietMiyj5hGkG7OCRYZA8iL4i6gOdnhSex4b8ADXhEUwhEIEjW17DKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=JYtcVU6h; arc=none smtp.client-ip=198.47.19.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 483AUgwN085078;
-	Tue, 3 Sep 2024 05:30:42 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 483AUjdL044512;
+	Tue, 3 Sep 2024 05:30:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1725359442;
-	bh=GUVgHwhBPbcKPFtgunm6MFljLDZyTo0fx7zWbkx9FIM=;
-	h=From:Subject:Date:To:CC;
-	b=vdEf0L2pD3rN2Apdwna+IsP3M+9QMi6ZnNVkXRGTZYFpI24LD+BknuTtBU75qdQur
-	 VM5WFKFRLeMwm0fm+VWGRfpOK3cuUNZXaUY9w9Q0qEuYAlE9oJEB0XqFiE980A6ceb
-	 n9jlogmMr1VT9EDGF9WMW39E/MUaoFUvRRkk6ABQ=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 483AUfWL014075
+	s=ti-com-17Q1; t=1725359445;
+	bh=e9a445VSklRmZ8kpkTA4CFnEaYQX8TT0dfBkdFG/Jq0=;
+	h=From:Date:Subject:References:In-Reply-To:To:CC;
+	b=JYtcVU6h7UHXaH9pX51LodNK+4nG4ZTxCmtSXkjbBA5jV69o61Sab1Tp2lGGWLpes
+	 egEtVAq5NtMOUyOawsqpoXfccT1lU9QRSvEisfWOU95B5P0rKqKnYR5PeOIG+Dg2sV
+	 3MQVGq6BcJWhhKiWsfifCDNq8WvFFRmi2hvSLAx0=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 483AUjxx003285
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 3 Sep 2024 05:30:42 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+	Tue, 3 Sep 2024 05:30:45 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 3
- Sep 2024 05:30:42 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ Sep 2024 05:30:45 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 3 Sep 2024 05:30:41 -0500
+ Frontend Transport; Tue, 3 Sep 2024 05:30:45 -0500
 Received: from [127.0.1.1] (lcpd911.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 483AUb67012445;
-	Tue, 3 Sep 2024 05:30:38 -0500
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 483AUb68012445;
+	Tue, 3 Sep 2024 05:30:42 -0500
 From: Dhruva Gole <d-gole@ti.com>
-Subject: [PATCH 0/2] dt-bindings: opp: operating-points-v2-ti-cpu: Describe
+Date: Tue, 3 Sep 2024 16:00:07 +0530
+Subject: [PATCH 1/2] dt-bindings: opp: operating-points-v2-ti-cpu: Describe
  opp-supported-hw
-Date: Tue, 3 Sep 2024 16:00:06 +0530
-Message-ID: <20240903-b4-opp-dt-binding-fix-v1-0-f7e186456d9f@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,9 +68,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAC7l1mYC/x2MywqAIBAAfyX23IJp71+JDpVb7cVEIwLx31s6z
- sBMgkiBKcJYJAj0cOTLCVRlAdu5uIOQrTBopWs1KINrjZf3aG9c2Vl2B+78Yme2ttdD11RWg7Q
- +kOj/O805f8/IseFnAAAA
+Message-ID: <20240903-b4-opp-dt-binding-fix-v1-1-f7e186456d9f@ti.com>
+References: <20240903-b4-opp-dt-binding-fix-v1-0-f7e186456d9f@ti.com>
+In-Reply-To: <20240903-b4-opp-dt-binding-fix-v1-0-f7e186456d9f@ti.com>
 To: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen
  Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -84,36 +84,45 @@ CC: Viresh Kumar <viresh.kumar@linaro.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Dhruva Gole <d-gole@ti.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725359437; l=760;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1725359437; l=1302;
  i=d-gole@ti.com; s=20240902; h=from:subject:message-id;
- bh=LOR0Zp7NxGvrm+QVjkcnA81zrYiOZkUdYoVIhRNDWe0=;
- b=j1dNqwftlTS8Z90COpkUgQK1Jeq0l8II9VVeY0P0q+6MOxJzT60Fy786CLgG+1OCgSsuIgMzp
- NLV5Rb+OKrKDZedJR7yU6zpu7F2kIzc6s+C/c54oPuePD0erCu8A5bs
+ bh=04BRrrWr2ZJKTFcyOeUq09xeVMNJ9nb6AYlKDZHpPdc=;
+ b=nxSM/9osq9SPVi0vZXpseIuuF3jm6BmXC2rBb0bo2s6oNzIl9RtVXvViWa6MUHIYHG1EDL6qT
+ WZ3Cb/alNrvCYgyo8qbs2HxBsVErIWcTmeVfzeF82L4JOAugu7aOr6d
 X-Developer-Key: i=d-gole@ti.com; a=ed25519;
  pk=yOC9jqVaW3GN10oty8eZJ20dN4jcpE8JVoaODDmyZvA=
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-dt-bindings: opp: operating-points-v2-ti-cpu: Describe opp-supported-hw
+It seems like we missed migrating the complete information from the old
+DT binding where we had described what the opp-supported-hw is supposed
+to describe. Hence, bring back the exact description from the previous
+binding to the current one.
 
-This series tries to bring back the description about what goes into
-opp-supported-hw from the older binding.
-
-While at it, also updating the maintainers entry.
-
+Fixes: e576a9a8603f ("dt-bindings: cpufreq: Convert ti-cpufreq to json schema")
 Signed-off-by: Dhruva Gole <d-gole@ti.com>
 ---
-Dhruva Gole (2):
-      dt-bindings: opp: operating-points-v2-ti-cpu: Describe opp-supported-hw
-      dt-bindings: opp: operating-points-v2-ti-cpu: Update maintainers
+ .../devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml         | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
- .../devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml       | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
----
-base-commit: ecc768a84f0b8e631986f9ade3118fa37852fef0
-change-id: 20240903-b4-opp-dt-binding-fix-73c6829751d2
+diff --git a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+index 02d1d2c17129..90855009cb81 100644
+--- a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
++++ b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+@@ -45,7 +45,11 @@ patternProperties:
+       clock-latency-ns: true
+       opp-hz: true
+       opp-microvolt: true
+-      opp-supported-hw: true
++      opp-supported-hw:
++        description: |
++          Two bitfields indicating:
++            1. Which revision of the SoC the OPP is supported by
++            2. Which eFuse bits indicate this OPP is available
+       opp-suspend: true
+       turbo-mode: true
+ 
 
-Best regards,
 -- 
-Dhruva Gole <d-gole@ti.com>
+2.34.1
 
 
