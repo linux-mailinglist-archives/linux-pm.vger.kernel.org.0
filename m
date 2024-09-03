@@ -1,45 +1,52 @@
-Return-Path: <linux-pm+bounces-13473-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13475-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9500596AAB4
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 23:58:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9715B96AAB9
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 23:58:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6F8C1C2174F
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 21:58:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5564C283F0D
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 21:58:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238D21D0DD3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52A441D5895;
 	Tue,  3 Sep 2024 21:58:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059BF1CDFA6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CD51D223A;
 	Tue,  3 Sep 2024 21:58:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725400681; cv=none; b=PaSu4R41hM/EnImooaKH3p+u7Rzjttg0vfbGpAWPbz6VhgnXkoFxkzZQyn4Lc9yXzKaln9qcYjBQ29HEcgcKQpMWlyD0L2smmC8lWVnGLBVC6ZPs4cJGdB/Mj7dvOBOsjDBGwEj9QglDBCvKtgxh9b7dvHHHhcqvBHhFaaELVqY=
+	t=1725400681; cv=none; b=JhS6uWp0/HDU/cZBbbCfCHldZWKz+0Vnar58WMyKA+Ne6WjkooQuzlI1tR1JNRGD036cgTLUHai04KWGXBLh2vqPf3pIegzRU1qF78vjPRMCZiy9SXuJ1fdu0Lfq9UlHjGpaCuNDKLfWbbPGnWhyIdPoIuTOPvBpArZjfQaERKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1725400681; c=relaxed/simple;
-	bh=OakaC+PH97oUs9+9AHdeNOYVuqIu4Hdcrt8QFiZ12Mo=;
+	bh=bfkASTT+Az0WHoeeWuQspysfBtzPVt+pivV/Wg/6HLk=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=tFkiHcN52EUcsc9/liMhM8yMuJfvXtRpHFt8aVY29gChdCcsqT1jj9lobLTPPTzyKy3jbUbtNly6Re2NokOkoFhuPANAmI8VLOPe7ooxQ5RugOSPee1YvQQmxRM3DlRVZxtMpStfkrmnceY+iAbjCnZnuHmmvCNEg/G/43BWFng=
+	 MIME-Version:Content-Type; b=B6cwA6V3rDlEj+EcxpNojgtiYdWyBrzyJxhugjN156A3NYW3LCrgz5YejIccuq1pLunyFgMs4TFBn112fENH8QkpiZO6eFuDTrNUa4kT1RqU8Y5toEneqLDadCgfnCA/HQTta8EYE+gHNkap45x7tZP8mAHmRB5/qgmnnfXq1AU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0E5C4CEC8;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CD69C4CEC9;
 	Tue,  3 Sep 2024 21:58:00 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 308A0106044E; Tue, 03 Sep 2024 23:57:58 +0200 (CEST)
+	id 473811060534; Tue, 03 Sep 2024 23:57:58 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Dimitri Fedrau <dima.fedrau@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>, 
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240903063526.222890-1-dima.fedrau@gmail.com>
-References: <20240903063526.222890-1-dima.fedrau@gmail.com>
-Subject: Re: [PATCH v3] power: supply: max1720x: add read support for nvmem
-Message-Id: <172540067814.972525.8957465635834036597.b4-ty@collabora.com>
+To: linux-sunxi@lists.linux.dev, Chris Morgan <macroalpha82@gmail.com>
+Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-iio@vger.kernel.org, 
+ quentin.schulz@free-electrons.com, mripard@kernel.org, 
+ tgamblin@baylibre.com, aidanmacdonald.0x0@gmail.com, 
+ u.kleine-koenig@pengutronix.de, lee@kernel.org, samuel@sholland.org, 
+ jernej.skrabec@gmail.com, sre@kernel.org, wens@csie.org, 
+ conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de, 
+ jic23@kernel.org, jonathan.cameron@huawei.com, 
+ Chris Morgan <macromorgan@hotmail.com>
+In-Reply-To: <20240821215456.962564-1-macroalpha82@gmail.com>
+References: <20240821215456.962564-1-macroalpha82@gmail.com>
+Subject: Re: (subset) [PATCH V4 00/15] Add Battery and USB Supply for
+ AXP717
+Message-Id: <172540067828.972525.2485048078454932049.b4-ty@collabora.com>
 Date: Tue, 03 Sep 2024 23:57:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -52,17 +59,26 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.1
 
 
-On Tue, 03 Sep 2024 08:35:26 +0200, Dimitri Fedrau wrote:
-> ModelGauge m5 and device configuration values are stored in nonvolatile
-> memory to prevent data loss if the IC loses power. Add read support for
-> the nonvolatile memory on MAX1720X devices.
+On Wed, 21 Aug 2024 16:54:41 -0500, Chris Morgan wrote:
+> From: Chris Morgan <macromorgan@hotmail.com>
 > 
+> Add support for monitoring the USB charger and battery charger on the
+> AXP717 PMIC. This required some driver refactoring of the axp20x USB
+> and battery charger as the AXP717 is somewhat different but can still
+> benefit from some common elements.
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] power: supply: max1720x: add read support for nvmem
-      commit: 47271a9356192bf911a9f32de9236425063ed6d7
+[09/15] dt-bindings: power: supply: axp20x: Add AXP717 compatible
+        commit: e44c5691822962dc6f50793029bef5e71f5b0a62
+[10/15] dt-bindings: power: supply: axp20x: Add AXP717 compatible
+        commit: e44c5691822962dc6f50793029bef5e71f5b0a62
+[13/15] power: supply: axp20x_usb_power: Add support for AXP717
+        commit: 75098176d17fab88c06120b453b4b0d1641e2a41
+[14/15] power: supply: axp20x_battery: add support for AXP717
+        commit: 6625767049c2e0960ba9835392a6ef9143170be6
 
 Best regards,
 -- 
