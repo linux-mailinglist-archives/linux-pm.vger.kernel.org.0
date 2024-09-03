@@ -1,101 +1,161 @@
-Return-Path: <linux-pm+bounces-13411-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13412-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92F14969BB4
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 13:27:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29043969C39
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 13:43:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 022BCB20ABE
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 11:27:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F0C3285912
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 11:43:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81BE31A0BE3;
-	Tue,  3 Sep 2024 11:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2675E1AD246;
+	Tue,  3 Sep 2024 11:43:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="gwCbYHnL"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y/cqvHR4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D35195;
-	Tue,  3 Sep 2024 11:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9361A42C2
+	for <linux-pm@vger.kernel.org>; Tue,  3 Sep 2024 11:43:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725362840; cv=none; b=CvLXY8CGsmwv/8amVf7KaByVfpvwCrpDjmUJBPL5+ebYr082h0uIx1xTOfXBagnpM4AFVE3eqSMGvjnD7wxCwVAUDp03P6zjj7qpJ9Sl0QFMSyN88TngiD9tj1SByVRmV697s4ECwhYqDWUTY85B7BtuDOrjfPZfFdkKWDu6QKE=
+	t=1725363824; cv=none; b=KEb5Sajv3LyDagAxdfoqdlTkAafoxlW7RYk4NflStPI23KCY8XZQWfnVVsCnqMkKQ9ZCS9JtebIn8w2HrW/0odSfMVlmF3Q63Tq2RQtdTwVGJAC46EJG7Xp+ZwOcythDDnkgNzOiBeiJk7Ry/2XljefxvN+wTkhDq7s6tuTcOQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725362840; c=relaxed/simple;
-	bh=UrhhHWFReJHjjnu/JLe7WxRLG5V0ZxwtyFjI7bs912A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=qr5wXZRFPe4fF4TQ1RhOvYXFsoPb9Hsyj2+WHTFY1KhzAFd+IW4u7AYK0YK9IxVtjKhpEfyBLYR9Q4Q9Xp0cIJW9GQf/5R7EIxMuPrGWnjqbittFCn2uPybdCi+aE2FnC9EFykOkrvAmsRIdeBeeWOhfP4HQ1jRnAXVWFpK6yaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=gwCbYHnL reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=j1RcWAvsKdHSlutlkkpQ3uMJa7lkq98Rrsn9w1ALegE=; b=g
-	wCbYHnL6HDKXmgITlUS7dKBrFMYb++gsU+V6TbpGW0WfDT41GfA5TJCHcq5QcIim
-	KoUIVHo4ZlMpi2ANSl9IJFyAXt9TIUYsv6YF9GLszHtX8xX4GvLnrAXI5S0CWgmf
-	/l23vVCPorZtyMmw78SRmzBxS5ixXE5lrOQ/M4QHwk=
-Received: from 00107082$163.com ( [111.35.190.113] ) by
- ajax-webmail-wmsvr-40-112 (Coremail) ; Tue, 3 Sep 2024 19:26:27 +0800 (CST)
-Date: Tue, 3 Sep 2024 19:26:27 +0800 (CST)
-From: "David Wang" <00107082@163.com>
-To: "Greg KH" <gregkh@linuxfoundation.org>
-Cc: rafael@kernel.org, pavel@ucw.cz, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pm: sleep: do not set is_prepared when no_pm_callbacks
- is set
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
- Copyright (c) 2002-2024 www.mailtech.cn 163com
-In-Reply-To: <2024090347-latter-collide-772a@gregkh>
-References: <20240902125933.5742-1-00107082@163.com>
- <2024090347-latter-collide-772a@gregkh>
-X-NTES-SC: AL_Qu2ZB/+dvU8j4SeYZ+kZnEYQheY4XMKyuPkg1YJXOp80oSTixAceb3lxO2Lx09CXJSq9th6ofwJ/+8pCT4dze4atHEIKzzLK20iGYBTlPtVj
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	s=arc-20240116; t=1725363824; c=relaxed/simple;
+	bh=TxBUswhpUFjD2PIh0U8XQayS/jnbn9rUdr1/vY8JI/U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cOXPmIMGkoiW67KKM/RionKdSFNcv1rsWNrW4Z5lB3+gRWqjJlNsIHNTV8ohPNFAHkrCJyIzN/vRkGf7VHYyYSDV19yb2eETa7TVYcnQ1wtXuMSUNDvuWKigmwA8hVXA3qNBjd/MeU0k69Ry+h7WSlQ7u0psgjzAqFML7ms1i2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Y/cqvHR4; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e1a9dc3f0a3so2670364276.0
+        for <linux-pm@vger.kernel.org>; Tue, 03 Sep 2024 04:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1725363820; x=1725968620; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HdF9MVtCXj0ldBEZbIYs+MFigsWqijFAoDRsuv3Mur4=;
+        b=Y/cqvHR4veWm2roLuwqWuhxKJcw9fbUsm7UK57BkRtyOeOV7KPTOCU//YQsmtac2dB
+         +y2mtzXap2baMVmyy7VZGH3lRzdFi0tH+0Dl9+a0w9qsR1+FBPY4S1fg3//WtYcYG+Vc
+         1FPvgSWe8rrsVuPtITJv1JR5JOTlnWhnKqjntLPWHM5lXMPlL6Xg80mJtyslOD45qgI9
+         ppMZIxNgIVy+sAHqxqWP1hL9m6WhUwZeX8qFyRufiAIVWJfpyc4JB1JSihJdsR7I7Yw9
+         Dm4f2EAfL50kK7p3atxJbpM24glloIZPUaJyopI5TDBIyv4/qdgAg5njDpdbBHABG5gV
+         9cwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725363820; x=1725968620;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HdF9MVtCXj0ldBEZbIYs+MFigsWqijFAoDRsuv3Mur4=;
+        b=cKEf3XbHs6RNPWU2EgsXSF9gb1XRFfju+gaQ9E3uhglIgs5Udnz8b36PEC20RZKWik
+         lq485N+DfZ3URkd0KBHf8oL5Yg2G77FOvz6SusXc6UbdmAWSBu46b3/HQi+69tVTaAM4
+         A+qL5c+S1GjWMd79hX6R3mOIEkbi4aU2AmQp1R3Pjp36qL3e9sylUdsqoP5NQsRRRFTf
+         EbaOyN/3nIXRmCqFJ41PH2mJtk3B2ucMMJRrI5Y0lAcMWzOe8lOLFFvyZ1Ey2nSYgAR3
+         uJwodsTEd3RT2SF1hlhb0P6B8I7wHfnh9b1RJVou8uQ4j6XcGz1Csx1/uTbHA0G3YeP9
+         HXDw==
+X-Forwarded-Encrypted: i=1; AJvYcCWOFWPVq29ztlJ0gduYNRuV3py8tPvOjKOqxh9FXLgGTyBzUeL/9XNGUwhV+i8b3mSSj8KPLMXROw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVOMHMXk+8NWRn8nMnXrMVsvuVJkQPd8qJMB7eDXG47cFoECdx
+	dohcUXsi23Burh1HkLs486vesg4uRiuFL2qD4w5CGZe3LVtcBP+OtlRpTx8kXdlobdhFUf4IEuP
+	q4FO9AgXrfboN5i7k/jwwDYCAjRa+bMLgVBCQbQ==
+X-Google-Smtp-Source: AGHT+IHsDuH/TAqeHRCZZGOx6eleOYg0y+sTS5+zHNDOJ0N1S7gTa6ofslpNrt9a/ru5VN98gCbAFZhY32ZtaiDskgE=
+X-Received: by 2002:a05:6902:2493:b0:e11:8088:3a5f with SMTP id
+ 3f1490d57ef6-e1a7a19de6emr15605038276.48.1725363820330; Tue, 03 Sep 2024
+ 04:43:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <2d012670.aff7.191b7a2d57c.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:_____wD3_3tk8tZm10gfAA--.7876W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/xtbB0hFPqmWX0IqbZQADsz
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+References: <20240902224815.78220-1-ulf.hansson@linaro.org>
+ <20240902224815.78220-3-ulf.hansson@linaro.org> <20240903071638.bedt3gllqdacf43a@vireshk-i7>
+ <CAPDyKFoqEAHns0nrXT6dJR3sRd5VWidK_rzXGHzJiZtk_p0cKw@mail.gmail.com> <20240903105321.suosbhkkkylfw4bv@vireshk-i7>
+In-Reply-To: <20240903105321.suosbhkkkylfw4bv@vireshk-i7>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 3 Sep 2024 13:43:04 +0200
+Message-ID: <CAPDyKFrh4VASFzMxEg3Q8SrhVbt1vH8QJM0rCdfxo+-L1+CN_g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] OPP/pmdomain: Fix the assignment of the required-devs
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Dikshita Agarwal <quic_dikshita@quicinc.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <quic_kdybcio@quicinc.com>, Nikunj Kela <nkela@quicinc.com>, 
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Mikko Perttunen <mperttunen@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Stephan Gerhold <stephan@gerhold.net>, Ilia Lin <ilia.lin@kernel.org>, 
+	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-SEksIAoKQXQgMjAyNC0wOS0wMyAxODoyMzo1NSwgIkdyZWcgS0giIDxncmVna2hAbGludXhmb3Vu
-ZGF0aW9uLm9yZz4gd3JvdGU6Cj5PbiBNb24sIFNlcCAwMiwgMjAyNCBhdCAwODo1OTozM1BNICsw
-ODAwLCBEYXZpZCBXYW5nIHdyb3RlOgo+PiBXaGVuIHJlc3VtZSwgYSBwYXJlbnQgZGV2aWNlIHdp
-dGggbm8gcG0gY2FsbGJhY2tzCj4+IHdvdWxkIGhhdmUgImlzX3ByZXBhcmVkIiBhbmQgImRpcmVj
-dF9jb21wbGV0ZSIgYml0Cj4+IHNldCwgYW5kIHNraXAgdGhlICJmaWIiIGNoYW5jZSB0byB1bnNl
-dCAiaXNfcHJlcGFyZWQiCj4+IGluIGRldmljZV9yZXN1bWUgYmVjYXVzZSBvZiB0aGUgZGlyZWN0
-X2NvbXBsZXRlIGJpdC4KPj4gVGhpcyB3aWxsIHRyaWdnZXIgYSBrZXJuZWwgd2FybmluZyB3aGVu
-IHJlc3VtZSBpdHMgY2hpbGQKPj4gRm9yIGV4YW1wbGUsIHdoZW4gc3VzcGVuZCBzeXN0ZW0gd2l0
-aCBhbiBVU0Igd2ViY2FtCj4+IG9wZW5lZCwgZm9sbG93aW5nIHdhcm5pbmcgd291bGQgc2hvdyB1
-cCBkdXJpbmcgcmVzdW1lOgo+PiAKPj4gID51c2IgMy0xLjE6IHJlc2V0IGhpZ2gtc3BlZWQgVVNC
-IGRldmljZSBudW1iZXIgNCB1c2luZyB4aGNpX2hjZAo+PiAgPi4uCj4+ICA+ZXBfODE6IFBNOiBw
-YXJlbnQgMy0xLjE6MS4xIHNob3VsZCBub3QgYmUgc2xlZXBpbmcKPj4gCj4+IFRoZSBkZXZpY2Ug
-cGFyZW50aW5nIHJlbGF0aW9uc2hpcHMgYXJlOgo+PiBbdXNiIDMtMS4xXSA8PCBbdXZjdmlkZW8g
-My0xLjE6MS4xXSA8PCBbZXBfODFdLgo+PiBXaGVuIHJlc3VtZSwgc2luY2UgdGhlIHZpcnR1YWwg
-W3V2Y3ZpZGVvIDMtMS4xOjEuMV0gZGV2aWNlCj4+IGhhcyBubyBwbSBjYWxsYmFja3MsIGl0IHdv
-dWxkIG5vdCBjbGVhciAiaXNfcHJlcGFyZWQiCj4+IG9uY2Ugc2V0LiAgVGhlbiwgd2hlbiByZXN1
-bWUgW2VwXzgxXSwgcG0gbW9kdWxlIHdvdWxkCj4+IHlpZWxkIGEgd2FybiBzZWVpbmcgW2VwXzgx
-XSdzIHBhcmVudCBbdXZjdmlkZW8gMy0xLjE6MS4xXQo+PiBoYXZpbmcgImlzX3ByZXBhcmVkIi4K
-Pj4gCj4+IERvIG5vdCBzZXQgImlzX3ByZXBhcmVkIiBmb3IgdmlydHVhbCBkZXZpY2VzIGhhdmlu
-Zwo+PiBubyBwbSBjYWxsYmFja3MgY2FuIGNsZWFyIHRob3NlIGtlcm5lbCB3YXJuaW5ncy4KPj4g
-Cj4+IFNpZ25lZC1vZmYtYnk6IERhdmlkIFdhbmcgPDAwMTA3MDgyQDE2My5jb20+Cj4+IC0tLQo+
-PiAgZHJpdmVycy9iYXNlL3Bvd2VyL21haW4uYyB8IDMgKystCj4+ICAxIGZpbGUgY2hhbmdlZCwg
-MiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4KPldoYXQgY29tbWl0IGlkIGRvZXMgdGhp
-cyBmaXg/CgpXZWxsLCB0aGUgc3RhdGUgbWFuYWdlbWVudCBvZiBQTSBkZXZpY2VzIGlzIHF1aXRl
-IGNvbXBsaWNhdGVkIHRvIG1lLCBsb3RzIG9mIGNvbW1pdHMgbWFrZSBzbWFsbCBjaGFuZ2VzIAph
-bmQgIEkgY2Fubm90IGlkZW50aWZ5IGEgc2luZ2xlIGNvbW1pdCB0aGF0IHNvbGVseSBpbnRyb2R1
-Y2VkIHRoZSBrZXJuZWwgd2FybmluZyB3aGVuIHN1c3BlbmQgYW4gb3BlbmVkIFVTQiB3ZWJjYW0u
-CgpNb3N0IG9idmlvdXMgY29tbWl0IHNlZW1zIHRvIGJlIAphYThlNTRiNTU5NDc5ZDBjYjdlYjYz
-MmJhNDQzYjhjYWNkMjBjZDRiICIgIlBNIC8gc2xlZXA6IEdvIGRpcmVjdF9jb21wbGV0ZSBpZiBk
-cml2ZXIgaGFzIG5vIGNhbGxiYWNrcyIKYzYyZWM0NjEwYzQwYmNjNDRmMmQzZDVlZDFjMzEyNzM3
-Mjc5ZTJmMyAiUE0gLyBjb3JlOiBGaXggZGlyZWN0X2NvbXBsZXRlIGhhbmRsaW5nIGZvciBkZXZp
-Y2VzIHdpdGggbm8gY2FsbGJhY2tzIgoKYW5kIEkgd2lsbCB0cnkgcmV2ZXJ0IHRob3NlIGxvZ2lj
-IGFuZCB1cGRhdGUgbGF0ZXIuCiAgCiAKPgo+dGhhbmtzLAo+Cj5ncmVnIGstaAoKCkRhdmlk
+On Tue, 3 Sept 2024 at 12:53, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 03-09-24, 11:54, Ulf Hansson wrote:
+> > Let me try to elaborate a bit more.
+> >
+> > In the current code, genpd_find_opp_table() tries to find an OPP table
+> > for the genpd that the device is getting attached to. Then genpd
+> > passes that OPP table via devm_pm_opp_set_config(), to let the OPP
+> > core to hook up a required-dev for it. This was a naive approach, as
+> > that OPP table may not be the one that actually corresponds to a
+> > required-opps for the required-dev. Consider the below in DT.
+> >
+> >         opp_table_devA: opp-table-devA {
+> >                 compatible = "operating-points-v2";
+> >
+> >                 opp-devA-50 {
+> >                         opp-hz = /bits/ 64 <2500>;
+> >                         required-opps = <&opp_pd_50>; //corresponds to
+> > pd_perf1's OPP table
+> >                 };
+> >                ....
+> >
+> >         devA {
+> >                 compatible = "foo,bar";
+> >                 power-domains = <&pd_perf0>, <&pd_perf1>; //both
+> > pd_perf0 and pd_perf1 has OPP tables.
+> >                 power-domain-names = "perf0", "perf1";
+> >                 operating-points-v2 = <&opp_table_devA>;
+> >         };
+>
+> I think another way forward would be to send an index along with
+> required-dev information (now that you do it one by one). That index
+> would be the index of the genpd in the genpd-list for the device. That
+> would make it work, isn't it ?
+
+I am not sure how that index will be much helpful, but maybe I am not
+fully understanding what you propose.
+
+Please note that the index of the power-domain doesn't need to match
+the index of the required-opps.
+
+It's only the phandle of the required-opps, at some index, that can
+point out to which power-domain (and thus what required-dev) it
+belongs to.
+
+>
+> I would like to avoid (another) callback from the OPP core, we already
+> have few of them and I don't like them a lot. Moreover, genpd should
+> be able to get the right required opp, with an index. Unless I am
+> mistaken and this still doesn't solve it :)
+
+Sorry, but I couldn't figure out a better option.
+
+>
+> > To make sure we assign the correct required-dev for cases like the
+> > above, we need to let the OPP core to iterate through the available
+> > required-opps and see if some of them are corresponding to the OPP
+> > table for the genpd the required-dev belongs too.
+> >
+> > To manage this in a non-genpd specific way, I added another callback
+> > in struct dev_pm_opp_config. In this way, it should work for any
+> > future possible required-devs types too, I think.
+>
+> --
+> viresh
+
+Kind regards
+Uffe
 
