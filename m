@@ -1,95 +1,271 @@
-Return-Path: <linux-pm+bounces-13474-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13498-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ECBC96AAB5
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 23:58:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A80E096ABD3
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 00:12:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 80278B220BC
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 21:58:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDA4A1C23198
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 22:12:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286811D2230;
-	Tue,  3 Sep 2024 21:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62AD91DA608;
+	Tue,  3 Sep 2024 22:08:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="JcmyexsI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059701CB52A;
-	Tue,  3 Sep 2024 21:58:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D441DA30F;
+	Tue,  3 Sep 2024 22:08:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725400681; cv=none; b=crbR/TzPUT+IQPp/QKjzwTYon485jlIVPYL5PGKpT34GUfIiegLM3p4xg3GnasTpXoItBb75JqoVGHWnWmwgHe5CXxBvd1osiJcrvR9Kf82oBNnCoGO3uJm7cDR9f4IMdt0kXMUk/aKnDiLzku+PyN/pUIcS9goh82piBGsGrgo=
+	t=1725401318; cv=none; b=ScMzUW803REi2y4bFL2Gyo3pXf5GMjhf/0EqiLyZeDhKXTplHu6COCAgfFOeqJI6kmATFQCdQ+UYO91RHrYM3HDMKHx64L9UZM4OP3D0KkU2HwW6Oyo3Kn6mYAd2rjKO4kl+W/o3hjxOZtSnNcjYfzH3P3kiwg4sfsyZMwDM6fA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725400681; c=relaxed/simple;
-	bh=7ay6BnCa/B67NWwvPBMg48FH7M8hObG2QEGAY191p0M=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=gINBOjOHXDL2+gLTd2aL1D5/yuaUbsD8mGQ0tqHA5msacrFjlAdsYmpOZ5li7p5Mhx6kfpuepSpZLh26YwHLAgY8e3E4uAuMRFCAhJpfgQfbhmHptltauZ56BaTukEMXKq++ASJtxkjalHFa+oFgLz/jJXo6OIVE57taBaKgrQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BF40C4CEC5;
-	Tue,  3 Sep 2024 21:58:00 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id 37B6B10604AA; Tue, 03 Sep 2024 23:57:58 +0200 (CEST)
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- MyungJoo Ham <myungjoo.ham@samsung.com>, 
- Chanwoo Choi <cw00.choi@samsung.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
- Hans de Goede <hdegoede@redhat.com>
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-phy@lists.infradead.org, 
- Enric Balletbo i Serra <eballetbo@kernel.org>
-In-Reply-To: <20240831142039.28830-1-hdegoede@redhat.com>
-References: <20240831142039.28830-1-hdegoede@redhat.com>
-Subject: Re: [PATCH 0/6] power: supply: Change usb_types from an array into
- a bitmask
-Message-Id: <172540067821.972525.3472424402904819549.b4-ty@collabora.com>
-Date: Tue, 03 Sep 2024 23:57:58 +0200
+	s=arc-20240116; t=1725401318; c=relaxed/simple;
+	bh=vyrhUKou0XD4nZWQsn66DthQrAeicawTIpdpcWCMhr4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qtIBHug9YEg1FqDaiN4/L6HmlaTyY3JlGcXNr/puSc9M5gRPWc8MCO3RT0yRhTTKZhZBh5qBpxMTqbQwyq5uKFWl0L+sg0HjcYrU7m35LqQ4nC2xAcVOCnmNQjeMTN+7+K7thQV3x/jaIXzT0qdRo7smtbDg77HM/SKUGooVZU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=JcmyexsI; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 483LhYK1004948;
+	Tue, 3 Sep 2024 22:03:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	VJ5ksTVw82HBrOjZW1RnoU3D+LfVJFMZlBTSgU8rxyA=; b=JcmyexsIdEgimOW+
+	ENNWT0ZlPkhARdzfxHLV9UWXNFbAcnunV3oR5pcI4mnE8Srq9PumvHAUNBjLIFbt
+	95ecofD5nXhPSgUeSB/2dupYz2RPhLChitp94y0FSv4OZOygdyb8JN9qMITXbVrp
+	BLORZp4Iqhm31g3zuPKvXGjBgqdG/Q/q73r/RHv3tq5ahOU2ihQ8BK2Y8REIFOv7
+	aBWNpXMOao1qzC4slqTVYAS5HRhKkOAJGwdeVH9bfr/y4A7oxNDWp1SuNBUK5sQ6
+	+NYtrs2D6NfjGeKYZBnT24L0OfBkWmyFkdS4Q3nB6hPePFJyYuZW/FKxn1STbPGZ
+	KYFm7Q==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41drqe3444-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 03 Sep 2024 22:03:01 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 483M2x0u002338
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 3 Sep 2024 22:02:59 GMT
+Received: from hu-nkela-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 3 Sep 2024 15:02:55 -0700
+From: Nikunj Kela <quic_nkela@quicinc.com>
+To: <quic_nkela@quicinc.com>
+CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
+        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
+        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
+        <linus.walleij@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
+        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
+        <quic_psodagud@quicinc.com>
+Subject: [PATCH v2 00/21] arm64: qcom: Introduce SA8255p Ride platform
+Date: Tue, 3 Sep 2024 15:02:19 -0700
+Message-ID: <20240903220240.2594102-1-quic_nkela@quicinc.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rr1wmp4df3_Phh0IuAStRJcDv9BszwT_
+X-Proofpoint-ORIG-GUID: rr1wmp4df3_Phh0IuAStRJcDv9BszwT_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-03_10,2024-09-03_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ phishscore=0 adultscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
+ impostorscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2409030177
+
+This series enables the support for SA8255p Qualcomm SoC and Ride
+platform. This platform uses SCMI power, reset, performance, sensor
+protocols for resources(e.g. clocks, regulator, interconnect, phy etc.)
+management. SA8255p is a virtual platforms that uses Qualcomm smc/hvc
+transport driver.
+
+Multiple virtual SCMI instances are being used to achieve the parallelism.
+SCMI platform stack runs in SMP enabled VM hence allows platform to service
+multiple resource requests in parallel. Each device is assigned its own
+dedicated SCMI channel and Tx/Rx doorbells.
+
+Resource operations are grouped together to achieve better abstraction
+and to reduce the number of requests being sent to SCMI platform(server)
+thus improving boot time KPIs. This design approach was presented during
+LinaroConnect 2024 conference[1].
+
+Architecture:
+------------
+                                                          +--------------------+
+                                                          |   Shared Memory    |
+                                                          |                    |
+                                                          | +----------------+ |                +----------------------------------+
+     +----------------------------+                     +-+->  ufs-shmem     <-+---+            |            Linux VM              |
+     |        Firmware VM         |                     | | +----------------+ |   |            |   +----------+   +----------+    |
+     |                            |                     | |                    |   |            |   |   UFS    |   |   PCIe   |    |
+     | +---------+ f +----------+ |                     | |                    |   |            |   |  Driver  |   |  Driver  |    |
+     | |Drivers  <---+  SCMI    | |        e            | |         |          |   |            |   +--+----^--+   +----------+    |
+     | | (clks,  | g | Server   +-+---------------------+ |                    |   |            |      |    |                      |
+     | |  vreg,  +--->          | |        h              |         |          |  b|k           |     a|   l|                      |
+     | |  gpio,  |   +--^-----+-+ |                       |                    |   |            |      |    |                      |
+     | |  phy,   |      |     |   |                       |         |          |   |            |  +---v----+----+  +----------+   |
+     | |  etc.)  |      |     |   |                       |                    |   +------------+--+  UFS SCMI   |  | PCIe SCMI|   |
+     | +---------+      |     |   |                       |                    |                |  |  INSTANCE   |  | INSTANCE |   |
+     |                  |     |   |                       |  +---------------+ |                |  +-^-----+-----+  +----------+   |
+     |                  |     |   |                       |  |  pcie-shmem   | |                |    |     |                       |
+     +------------------+-----+---+                       |  +---------------+ |                +----+-----+-----------------------+
+                        |     |                           |                    |                     |     |
+                        |     |                           +--------------------+                     |     |
+                       d|IRQ i|HVC                                                                  j|IRQ c|HVC
+                        |     |                                                                      |     |
+                        |     |                                                                      |     |
++-----------------------+-----v----------------------------------------------------------------------+-----v------------------------------+
+|                                                                                                                                         |
+|                                                                                                                                         |
+|                                                                                                                                         |
+|                                                               HYPERVISOR                                                                |
+|                                                                                                                                         |
+|                                                                                                                                         |
++-----------------------------------------------------------------------------------------------------------------------------------------+
+
+        +--------+   +--------+                                                                         +----------+  +-----------+
+        | CLOCK  |   |  PHY   |                                                                         |   UFS    |  |   PCIe    |
+        +--------+   +--------+                                                                         +----------+  +-----------+
 
 
-On Sat, 31 Aug 2024 16:20:33 +0200, Hans de Goede wrote:
-> When support for the "charge_behaviour" property was added the list of
-> available values was made a bitmask in power_supply_desc.
-> 
-> "usb_types" is very similar in that:
-> 1. It is an enum
-> 2. The list of available values is stored in power_supply_desc
-> 3. When shown it shows all available values, with the active one surrounded
->    by square brackets.
-> 
-> [...]
+This series is based on next-20240903.
 
-Applied, thanks!
+[1]: https://resources.linaro.org/en/resource/wfnfEwBhRjLV1PEAJoDDte
 
-[1/6] power: supply: "usb_type" property may be written to
-      commit: 0d9af1e1c93b6a89f3fb6dcbafa5bc78892cb94f
-[2/6] power: supply: ucs1002: Adjust ucs1002_set_usb_type() to accept string values
-      commit: 83a4c42df75e8f6ff671fa9fbe7d4c79b98626de
-[3/6] power: supply: rt9467-charger: Remove "usb_type" property write support
-      commit: 03ec41c1670aedfbd126f541c4acbb8e69d4cd0c
-[4/6] power: supply: sysfs: Add power_supply_show_enum_with_available() helper
-      commit: a6456d43e9abebb5d7866e5edae3024188273306
-[5/6] power: supply: sysfs: Move power_supply_show_enum_with_available() up
-      commit: 322900ac7d82be0475466f81946b6484cd1936bd
-[6/6] power: supply: Change usb_types from an array into a bitmask
-      commit: 364ea7ccaef917a3068236a19a4b31a0623b561a
+---
+Changes in v2:
+  - Patch 1/21 - 11/21
+    - Added Reviewed-by tag
 
-Best regards,
+  - Patch 12/21
+    - Already applied in the maintainers tree
+
+  - Patch 13/21
+    - Modified subject line
+    - Fixed schema to include fallback
+
+  - Patch 14/21
+    - Added constraints
+
+  - Patch 15/21
+    - Modified schema to remove useless text
+   
+  - Patch 16/21
+    - Modified schema formatting
+    - Amended schema definition as advised
+
+  - Patch 17/21
+    - Moved allOf block after required
+    - Fixed formatting
+    - Modified schema to remove useless text
+
+  - Patch 18/21
+    - Fixed clock property changes
+
+  - Patch 19/21
+    - Fixed scmi nodename pattern
+
+  - Patch 20/21
+    - Modified subject line and description
+    - Added EPPI macro
+
+  - Patch 21/21
+    - Removed scmichannels label and alias
+    - Modified scmi node name to conform to schema
+    - Moved status property to be the last one in scmi instances
+    - Changed to lower case for cpu labels
+    - Added fallback compatible for tlmm node
+
+Nikunj Kela (21):
+  dt-bindings: arm: qcom: add the SoC ID for SA8255P
+  soc: qcom: socinfo: add support for SA8255P
+  dt-bindings: arm: qcom: add SA8255p Ride board
+  dt-bindings: firmware: qcom,scm: document support for SA8255p
+  dt-bindings: mailbox: qcom-ipcc: document the support for SA8255p
+  dt-bindings: watchdog: qcom-wdt: document support on SA8255p
+  dt-bindings: crypto: qcom,prng: document support for SA8255p
+  dt-bindings: interrupt-controller: qcom-pdc: document support for
+    SA8255p
+  dt-bindings: soc: qcom: aoss-qmp: document support for SA8255p
+  dt-bindings: arm-smmu: document the support on SA8255p
+  dt-bindings: mfd: qcom,tcsr: document support for SA8255p
+  dt-bindings: thermal: tsens: document support on SA8255p
+  dt-bindings: pinctrl: Add SA8255p TLMM
+  dt-bindings: cpufreq: qcom-hw: document support for SA8255p
+  dt-bindings: i2c: document support for SA8255p
+  dt-bindings: spi: document support for SA8255p
+  dt-bindings: serial: document support for SA8255p
+  dt-bindings: qcom: geni-se: document support for SA8255P
+  dt-bindings: firmware: arm,scmi: allow multiple virtual instances
+  dt-bindings: arm: GIC: add ESPI and EPPI specifiers
+  arm64: dts: qcom: Add reduced functional DT for SA8255p Ride platform
+
+ .../devicetree/bindings/arm/qcom.yaml         |    6 +
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml     |   16 +
+ .../devicetree/bindings/crypto/qcom,prng.yaml |    1 +
+ .../bindings/firmware/arm,scmi.yaml           |    2 +-
+ .../bindings/firmware/qcom,scm.yaml           |    2 +
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml      |   33 +-
+ .../interrupt-controller/qcom,pdc.yaml        |    1 +
+ .../devicetree/bindings/iommu/arm,smmu.yaml   |    3 +
+ .../bindings/mailbox/qcom-ipcc.yaml           |    1 +
+ .../devicetree/bindings/mfd/qcom,tcsr.yaml    |    1 +
+ .../bindings/pinctrl/qcom,sa8775p-tlmm.yaml   |    8 +-
+ .../serial/qcom,serial-geni-qcom.yaml         |   53 +-
+ .../bindings/soc/qcom/qcom,aoss-qmp.yaml      |    1 +
+ .../bindings/soc/qcom/qcom,geni-se.yaml       |   45 +-
+ .../bindings/spi/qcom,spi-geni-qcom.yaml      |   60 +-
+ .../bindings/thermal/qcom-tsens.yaml          |    1 +
+ .../bindings/watchdog/qcom-wdt.yaml           |    1 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ arch/arm64/boot/dts/qcom/sa8255p-pmics.dtsi   |   80 +
+ arch/arm64/boot/dts/qcom/sa8255p-ride.dts     |  148 +
+ arch/arm64/boot/dts/qcom/sa8255p-scmi.dtsi    | 2312 ++++++++++++++++
+ arch/arm64/boot/dts/qcom/sa8255p.dtsi         | 2405 +++++++++++++++++
+ drivers/soc/qcom/socinfo.c                    |    1 +
+ include/dt-bindings/arm/qcom,ids.h            |    1 +
+ .../interrupt-controller/arm-gic.h            |    2 +
+ 25 files changed, 5169 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-pmics.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-ride.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-scmi.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sa8255p.dtsi
+
+
+base-commit: 6804f0edbe7747774e6ae60f20cec4ee3ad7c187
 -- 
-Sebastian Reichel <sebastian.reichel@collabora.com>
+2.34.1
 
 
