@@ -1,252 +1,150 @@
-Return-Path: <linux-pm+bounces-13428-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13429-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C829969F94
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 15:57:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A458969FB2
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 16:02:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F29D1C21569
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 13:57:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AAFD5B2198C
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 14:02:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B6CF4A3E;
-	Tue,  3 Sep 2024 13:57:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 282DF1803A;
+	Tue,  3 Sep 2024 14:02:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="N3WWkJQx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lQbrtLlc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93428817;
-	Tue,  3 Sep 2024 13:57:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BCB1CA6B5;
+	Tue,  3 Sep 2024 14:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725371858; cv=none; b=f8M4qM4oKWrfU+LP9c5IEnmMGAAfXe7mhVThW97km1Hoi6PTFMn9S/dprNIRrM8ve70bjYrGR+NfF3A2ilXd4EApE2ek260XgVQNH7RM4GMMJqBCjmbc7t5N7F6m9hKjko6GU1/fmK22ZbCRVOdrmbq5Z65R1u8kvzezhQOrVkM=
+	t=1725372153; cv=none; b=SrcT7G/Jgb/BewJJlI+6QjIhC9I89r5egLlBNexR1f2Cl9vxjNp/+5bSYHI3t4alP1Xkjb124mICgKX3wIcFotIEr/Ub7bRTDNo5V7x4Sbobix5Lgi3xNxmfzTNbQ0p4hfq4uLZ+cuvOd1Pf7xAKq3EYiysWaT+saRARijagaHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725371858; c=relaxed/simple;
-	bh=0A66mT8r9YoaYUyW9ONA676xXy6aMTuyDw8oDq6HUM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iZ3tVSC186uDMEufCFN0fMb/skufCbz1LRbkdc+SnOXNDmzZwTa7ppAgQf8ufXfeJrZqhsGCMmObuoeh/GuGLfkl1wqJvKmzVFWKputA9re930H8azGh2+r1wITPeH38oJDPri7HTwNXHhmmaLuf6b9GlGNIZVuUU9pBaIrX6T4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=N3WWkJQx; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=VLo6LDGE+KsW/QUB23qEvFKA62MSYEGqSUVWTjDNnEQ=; b=N3WWkJQxGUOv7HQjdVxBCvrTwd
-	ISAcQ61tk7JfZysghPuL6kMz1uO1VlEnAa1b1ojnAjdgLxciLiYBb2xg/OV5Go7iw2A/rziHvcvTw
-	WQdZpzszsTKf4d2e5oXmF4P3BkhAJANoCtWPNUBQVE/p9ZvWAyx19azYqe0Rd947R6F54iKATQLRO
-	NRndRJlv8Dl1YvrpOm9jqQhQGDWs1JV97W5NGAqO02BEpPEITWTNi6aC2OFHabB4RMlnX14JPNAYp
-	XYKgEvacLR7LSVP739Ik96x9Ks+cJbFi+/eahLrEW67YcQoUv7edVn0GWHYADyeUC7sEg+2E7ftQc
-	aGi8pR5Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1slU2C-0000000CLFM-1txR;
-	Tue, 03 Sep 2024 13:57:28 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 18FDA30050D; Tue,  3 Sep 2024 15:57:28 +0200 (CEST)
-Date: Tue, 3 Sep 2024 15:57:28 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: x86 Maintainers <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ricardo Neri <ricardo.neri@intel.com>,
-	Tim Chen <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 1/2] x86/sched: Add basic support for CPU capacity
- scaling
-Message-ID: <20240903135728.GY4723@noisy.programming.kicks-ass.net>
-References: <3310447.aeNJFYEL58@rjwysocki.net>
- <10523497.nUPlyArG6x@rjwysocki.net>
+	s=arc-20240116; t=1725372153; c=relaxed/simple;
+	bh=ISEPiyuW5HpWwnRmZ2TxcXfpXbOWpUrDh3u1r9u6zYM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ghdIrWdSg6FAuOmwSch5rhhh2qUOJF5MggqHf/qDEqvF9O12DH9liU5xKVupgOKk5kMIqxk2UsO6NrG+4RwSXhCySQu1D2q/dvcUE/yJZjHDMGi6hdkqXmjXpE3ymLPq72vfGG4UBHsl2SguItYMXeRSnQTIEZKYTlL6460iCDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lQbrtLlc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6B9BC4CED0;
+	Tue,  3 Sep 2024 14:02:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725372152;
+	bh=ISEPiyuW5HpWwnRmZ2TxcXfpXbOWpUrDh3u1r9u6zYM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=lQbrtLlcW9ICfUMaj/zhYwPRIurwZCpLyv/YF4PQjdawRjF20Gd02tEPTIUY28Zy6
+	 VRhBBPEM/cYTyRIwsNXleZaOQiZaUJBAr2i7SbRI3554Hwa1V7qu7M2gyMiNRfy5xk
+	 6ArpHsOt4wizacmbEr85taTAbW2dj+iLbdJj6vR1Cgl5ipoqHVGk/fPjsxoENcVNaW
+	 UttbttRqyhwLpg10InLEqhabK3Zj8PBL5mP+TryTtEYxVCdcGKcj9ONRqSCoGGCfzf
+	 p8fIDB84tQWteze56ZoppQ3pVXKEoeUhHaysF7xZTww4ZaocH0zav9dgZ4nkvb9h5D
+	 ENYMdIkVJU60A==
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5e172cc6d97so1058262eaf.1;
+        Tue, 03 Sep 2024 07:02:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWdYaDWa0GCjJ9viq0qD89D/ZyRYuhDgGR92eAN7Msbmf76tFV/lYQZUBp96uZ2xW03il2jJKVn+7RMkqM=@vger.kernel.org, AJvYcCXvBF48M5NYaRZdMXyrI1rBRIjzTCiCzGKmhdYePxqntdz4llaFB3I0HAvnqRBbD+DTZaPKuaqw2Jo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyf9+dX4jEUtbz8x09V+NmCF04CIE4pu28/fI1saAJs4TdSRs5K
+	yp8c19s4ZiBycnu5uJAZt7RwYe6T2oQCUysUWlauR6LJiXRkl+Jxw9dFrS+z4A8jff3dekI/5N/
+	VScyX0H5+AvVHjHDOv2M+0xz6BEs=
+X-Google-Smtp-Source: AGHT+IFf2DBDKS65tIQFLlU5VpFjsDfIqRxNn8mDJQyYoNTfaBwsAmEvaa2hTrEUkMwd8an5t150Tgkh6hcyPFWpUr0=
+X-Received: by 2002:a05:6870:c186:b0:260:71c4:f33a with SMTP id
+ 586e51a60fabf-277902b2663mr18497038fac.39.1725372152062; Tue, 03 Sep 2024
+ 07:02:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <10523497.nUPlyArG6x@rjwysocki.net>
+References: <3310447.aeNJFYEL58@rjwysocki.net> <1979653.PYKUYFuaPT@rjwysocki.net>
+ <20240903135502.GX4723@noisy.programming.kicks-ass.net>
+In-Reply-To: <20240903135502.GX4723@noisy.programming.kicks-ass.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 3 Sep 2024 16:02:20 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jWAfvSXkiQfg5yRaZRwT6gWAjDN=jqwnhDuE=UwcFsKw@mail.gmail.com>
+Message-ID: <CAJZ5v0jWAfvSXkiQfg5yRaZRwT6gWAjDN=jqwnhDuE=UwcFsKw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] cpufreq: intel_pstate: Set asymmetric CPU capacity
+ on hybrid systems
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, x86 Maintainers <x86@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Ricardo Neri <ricardo.neri@intel.com>, Tim Chen <tim.c.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 28, 2024 at 01:47:25PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> In order be able to compute the sizes of tasks consistently across all
-> CPUs in a hybrid system, it is necessary to provide CPU capacity scaling
-> information to the scheduler via arch_scale_cpu_capacity().  Moreover,
-> the value returned by arch_scale_freq_capacity() for the given CPU must
-> correspond to the arch_scale_cpu_capacity() return value for it, or
-> utilization computations will be inaccurate.
-> 
-> Add support for it through per-CPU variables holding the capacity and
-> maximum-to-base frequency ratio (times SCHED_CAPACITY_SCALE) that will
-> be returned by arch_scale_cpu_capacity() and used by scale_freq_tick()
-> to compute arch_freq_scale for the current CPU, respectively.
-> 
-> In order to avoid adding measurable overhead for non-hybrid x86 systems,
-> which are the vast majority in the field, whether or not the new hybrid
-> CPU capacity scaling will be in effect is controlled by a static key.
-> This static key is set by calling arch_enable_hybrid_capacity_scale()
-> which also allocates memory for the per-CPU data and initializes it.
-> Next, arch_set_cpu_capacity() is used to set the per-CPU variables
-> mentioned above for each CPU and arch_rebuild_sched_domains() needs
-> to be called for the scheduler to realize that capacity-aware
-> scheduling can be used going forward.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Sep 3, 2024 at 3:55=E2=80=AFPM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+> On Wed, Aug 28, 2024 at 01:48:10PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Make intel_pstate use the HWP_HIGHEST_PERF values from
+> > MSR_HWP_CAPABILITIES to set asymmetric CPU capacity information
+> > via the previously introduced arch_set_cpu_capacity() on hybrid
+> > systems without SMT.
+> >
+> > Setting asymmetric CPU capacity is generally necessary to allow the
+> > scheduler to compute task sizes in a consistent way across all CPUs
+> > in a system where they differ by capacity.  That, in turn, should help
+> > to improve scheduling decisions.  It is also necessary for the scheduti=
+l
+> > cpufreq governor to operate as expected on hybrid systems where tasks
+> > migrate between CPUs of different capacities.
+> >
+> > The underlying observation is that intel_pstate already uses
+> > MSR_HWP_CAPABILITIES to get CPU performance information which is
+> > exposed by it via sysfs and CPU performance scaling is based on it.
+> > Thus using this information for setting asymmetric CPU capacity is
+> > consistent with what the driver has been doing already.  Moreover,
+> > HWP_HIGHEST_PERF reflects the maximum capacity of a given CPU including
+> > both the instructions-per-cycle (IPC) factor and the maximum turbo
+> > frequency and the units in which that value is expressed are the same
+> > for all CPUs in the system, so the maximum capacity ratio between two
+> > CPUs can be obtained by computing the ratio of their HWP_HIGHEST_PERF
+> > values.  Of course, in principle that capacity ratio need not be
+> > directly applicable at lower frequencies, so using it for providing the
+> > asymmetric CPU capacity information to the scheduler is a rough
+> > approximation, but it is as good as it gets.  Also, measurements
+> > indicate that this approximation is not too bad in practice.
+> >
+> > If the given system is hybrid and non-SMT, the new code disables ITMT
+> > support in the scheduler (because it may get in the way of asymmetric C=
+PU
+> > capacity code in the scheduler that automatically gets enabled by setti=
+ng
+> > asymmetric CPU capacity) after initializing all online CPUs and finds
+> > the one with the maximum HWP_HIGHEST_PERF value.  Next, it computes the
+> > capacity number for each (online) CPU by dividing the product of its
+> > HWP_HIGHEST_PERF and SCHED_CAPACITY_SCALE by the maximum HWP_HIGHEST_PE=
+RF.
+> >
+> > When a CPU goes offline, its capacity is reset to SCHED_CAPACITY_SCALE
+> > and if it is the one with the maximum HWP_HIGHEST_PERF value, the
+> > capacity numbers for all of the other online CPUs are recomputed.  This
+> > also takes care of a cleanup during driver operation mode changes.
+> >
+> > Analogously, when a new CPU goes online, its capacity number is updated
+> > and if its HWP_HIGHEST_PERF value is greater than the current maximum
+> > one, the capacity numbers for all of the other online CPUs are
+> > recomputed.
+> >
+> > The case when the driver is notified of a CPU capacity change, either
+> > through the HWP interrupt or through an ACPI notification, is handled
+> > similarly to the CPU online case above, except that if the target CPU
+> > is the current highest-capacity one and its capacity is reduced, the
+> > capacity numbers for all of the other online CPUs need to be recomputed
+> > either.
+> >
+> > If the driver's "no_trubo" sysfs attribute is updated, all of the CPU
+>
+> Trubo :-)
 
-Looks about right; would be good to hear from the AMD folks if they can
-use it as is, but if not, it should be simple enough to fix up later.
+Thanks, will fix before applying.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
-> ---
->  arch/x86/include/asm/topology.h  |   13 +++++
->  arch/x86/kernel/cpu/aperfmperf.c |   89 ++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 100 insertions(+), 2 deletions(-)
-> 
-> Index: linux-pm/arch/x86/include/asm/topology.h
-> ===================================================================
-> --- linux-pm.orig/arch/x86/include/asm/topology.h
-> +++ linux-pm/arch/x86/include/asm/topology.h
-> @@ -282,9 +282,22 @@ static inline long arch_scale_freq_capac
->  }
->  #define arch_scale_freq_capacity arch_scale_freq_capacity
->  
-> +bool arch_enable_hybrid_capacity_scale(void);
-> +void arch_set_cpu_capacity(int cpu, unsigned long cap, unsigned long max_cap,
-> +			   unsigned long cap_freq, unsigned long base_freq);
-> +
-> +unsigned long arch_scale_cpu_capacity(int cpu);
-> +#define arch_scale_cpu_capacity arch_scale_cpu_capacity
-> +
->  extern void arch_set_max_freq_ratio(bool turbo_disabled);
->  extern void freq_invariance_set_perf_ratio(u64 ratio, bool turbo_disabled);
->  #else
-> +static inline bool arch_enable_hybrid_capacity_scale(void) { return false; }
-> +static inline void arch_set_cpu_capacity(int cpu, unsigned long cap,
-> +					 unsigned long max_cap,
-> +					 unsigned long cap_freq,
-> +					 unsigned long base_freq) { }
-> +
->  static inline void arch_set_max_freq_ratio(bool turbo_disabled) { }
->  static inline void freq_invariance_set_perf_ratio(u64 ratio, bool turbo_disabled) { }
->  #endif
-> Index: linux-pm/arch/x86/kernel/cpu/aperfmperf.c
-> ===================================================================
-> --- linux-pm.orig/arch/x86/kernel/cpu/aperfmperf.c
-> +++ linux-pm/arch/x86/kernel/cpu/aperfmperf.c
-> @@ -349,9 +349,89 @@ static DECLARE_WORK(disable_freq_invaria
->  DEFINE_PER_CPU(unsigned long, arch_freq_scale) = SCHED_CAPACITY_SCALE;
->  EXPORT_PER_CPU_SYMBOL_GPL(arch_freq_scale);
->  
-> +static DEFINE_STATIC_KEY_FALSE(arch_hybrid_cap_scale_key);
-> +
-> +struct arch_hybrid_cpu_scale {
-> +	unsigned long capacity;
-> +	unsigned long freq_ratio;
-> +};
-> +
-> +static struct arch_hybrid_cpu_scale __percpu *arch_cpu_scale;
-> +
-> +/**
-> + * arch_enable_hybrid_capacity_scale - Enable hybrid CPU capacity scaling
-> + *
-> + * Allocate memory for per-CPU data used by hybrid CPU capacity scaling,
-> + * initialize it and set the static key controlling its code paths.
-> + *
-> + * Must be called before arch_set_cpu_capacity().
-> + */
-> +bool arch_enable_hybrid_capacity_scale(void)
-> +{
-> +	int cpu;
-> +
-> +	if (static_branch_unlikely(&arch_hybrid_cap_scale_key)) {
-> +		WARN_ONCE(1, "Hybrid CPU capacity scaling already enabled");
-> +		return true;
-> +	}
-> +
-> +	arch_cpu_scale = alloc_percpu(struct arch_hybrid_cpu_scale);
-> +	if (!arch_cpu_scale)
-> +		return false;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		per_cpu_ptr(arch_cpu_scale, cpu)->capacity = SCHED_CAPACITY_SCALE;
-> +		per_cpu_ptr(arch_cpu_scale, cpu)->freq_ratio = arch_max_freq_ratio;
-> +	}
-> +
-> +	static_branch_enable(&arch_hybrid_cap_scale_key);
-> +
-> +	pr_info("Hybrid CPU capacity scaling enabled\n");
-> +
-> +	return true;
-> +}
-> +
-> +/**
-> + * arch_set_cpu_capacity - Set scale-invariance parameters for a CPU
-> + * @cpu: Target CPU.
-> + * @cap: Capacity of @cpu at its maximum frequency, relative to @max_cap.
-> + * @max_cap: System-wide maximum CPU capacity.
-> + * @cap_freq: Frequency of @cpu corresponding to @cap.
-> + * @base_freq: Frequency of @cpu at which MPERF counts.
-> + *
-> + * The units in which @cap and @max_cap are expressed do not matter, so long
-> + * as they are consistent, because the former is effectively divided by the
-> + * latter.  Analogously for @cap_freq and @base_freq.
-> + *
-> + * After calling this function for all CPUs, call arch_rebuild_sched_domains()
-> + * to let the scheduler know that capacity-aware scheduling can be used going
-> + * forward.
-> + */
-> +void arch_set_cpu_capacity(int cpu, unsigned long cap, unsigned long max_cap,
-> +			   unsigned long cap_freq, unsigned long base_freq)
-> +{
-> +	if (static_branch_likely(&arch_hybrid_cap_scale_key)) {
-> +		WRITE_ONCE(per_cpu_ptr(arch_cpu_scale, cpu)->capacity,
-> +			   div_u64(cap << SCHED_CAPACITY_SHIFT, max_cap));
-> +		WRITE_ONCE(per_cpu_ptr(arch_cpu_scale, cpu)->freq_ratio,
-> +			   div_u64(cap_freq << SCHED_CAPACITY_SHIFT, base_freq));
-> +	} else {
-> +		WARN_ONCE(1, "Hybrid CPU capacity scaling not enabled");
-> +	}
-> +}
-> +
-> +unsigned long arch_scale_cpu_capacity(int cpu)
-> +{
-> +	if (static_branch_unlikely(&arch_hybrid_cap_scale_key))
-> +		return READ_ONCE(per_cpu_ptr(arch_cpu_scale, cpu)->capacity);
-> +
-> +	return SCHED_CAPACITY_SCALE;
-> +}
-> +EXPORT_SYMBOL_GPL(arch_scale_cpu_capacity);
-> +
->  static void scale_freq_tick(u64 acnt, u64 mcnt)
->  {
-> -	u64 freq_scale;
-> +	u64 freq_scale, freq_ratio;
->  
->  	if (!arch_scale_freq_invariant())
->  		return;
-> @@ -359,7 +439,12 @@ static void scale_freq_tick(u64 acnt, u6
->  	if (check_shl_overflow(acnt, 2*SCHED_CAPACITY_SHIFT, &acnt))
->  		goto error;
->  
-> -	if (check_mul_overflow(mcnt, arch_max_freq_ratio, &mcnt) || !mcnt)
-> +	if (static_branch_unlikely(&arch_hybrid_cap_scale_key))
-> +		freq_ratio = READ_ONCE(this_cpu_ptr(arch_cpu_scale)->freq_ratio);
-> +	else
-> +		freq_ratio = arch_max_freq_ratio;
-> +
-> +	if (check_mul_overflow(mcnt, freq_ratio, &mcnt) || !mcnt)
->  		goto error;
->  
->  	freq_scale = div64_u64(acnt, mcnt);
-> 
-> 
-> 
+> > capacity information is computed from scratch to reflect the new turbo
+> > status.
 
