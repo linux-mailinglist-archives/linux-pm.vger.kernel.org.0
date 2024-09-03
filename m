@@ -1,170 +1,256 @@
-Return-Path: <linux-pm+bounces-13371-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13372-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A81B969368
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 08:07:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B6F89693B6
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 08:33:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26154B20A20
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 06:07:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0E9C1F22243
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 06:33:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4127B1CDA2F;
-	Tue,  3 Sep 2024 06:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C62A81D1748;
+	Tue,  3 Sep 2024 06:33:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="uDOAyzKr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kF4mSJLz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2352D15575F;
-	Tue,  3 Sep 2024 06:07:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71E91CF28D;
+	Tue,  3 Sep 2024 06:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725343631; cv=none; b=kWOy2EDavv6l2q4ytwfj+ZeBWMCa/xCLqNM1r+EM+KTyNloR5l6FG4JnvnMNnzV0yPtatA9Zlzs2c6tYbu44PqEEc+waOVhFVSHpIN7UrbZmv3s9G6boFaMu7bTqnmiLfBSoeINvWlrqUtARnn1tSldWUUfHnbhaBEAOXwtDeuc=
+	t=1725345216; cv=none; b=IGm20OTWznVrhw54sDzdjRlGNejiFgmZkxHOAna3NA3Nr+9//GHhY6KbLVORISTz+XuIEflKTi83mVrWet+l/AbUJqFCMJiqX+myzsimRjGEGChar9QFTUcf5XFRJwkXr+ilODnOE139uKZZ42SBpGA0GytoKpi8cjyQEjSZYv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725343631; c=relaxed/simple;
-	bh=539kkzcGlo+tQAl0gprzgy3D6qKVOHdlY2W1Lc3T/fI=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=szBzYWrKvaVgSQeYPT2SH0P0jSqK2w23K7Uzc30Mk2SJ3g2pJxppyWhGpiQPffB7ImbTJ/Leoi+cfIUKlfPTEbdF8mSAyuDOtPf6fiXXAt7G+h/9Zwou3YVL21jFxjtwN/tqJxZocyMNYgbMiQR+tDPNcyE4gNzT/BKOAqlQOzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=uDOAyzKr; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 483672CP012825;
-	Tue, 3 Sep 2024 01:07:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1725343622;
-	bh=o7Y13VcXEhTIeT0XZuF16cMK0itSnKkJa+trfAbeC1c=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=uDOAyzKrEFaeNaFdN0W8z2/aSsEnutN2I1Ie3wu06ikl612NBqzfZ5Y0KOhnzcT7U
-	 NhPclyxEI92ZqJidApqsA0tcPG5RrKoJTySbI/ZwvHXHojOwXJMoQnVenl1jxbYO4A
-	 t/gbEwsx3Kr2MPbU7TTILMcMu3sAq7PtNeiD/+Hg=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 483672je069231
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 3 Sep 2024 01:07:02 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 3
- Sep 2024 01:07:01 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 3 Sep 2024 01:07:01 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 483671mW063507;
-	Tue, 3 Sep 2024 01:07:01 -0500
-Date: Tue, 3 Sep 2024 11:37:00 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Bryan Brattlof <bb@ti.com>
-CC: "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar
-	<viresh.kumar@linaro.org>,
-        Tero Kristo <kristo@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra
-	<vigneshr@ti.com>, <vibhore@ti.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 2/2] cpufreq: ti-cpufreq: Make the AM625 efuse_offset 0
-Message-ID: <20240903060700.ekytq3rj3wz3yw4k@lcpd911>
-References: <20240902093222.2828345-1-d-gole@ti.com>
- <20240902093222.2828345-3-d-gole@ti.com>
- <20240902233439.z5kpszcwaswkch6q@bryanbrattlof.com>
+	s=arc-20240116; t=1725345216; c=relaxed/simple;
+	bh=/ETU4Zg+gZbDCijJZh+v1f83eNoEuhOTttHyhGA5MI8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UgPsGPG8y6htRaysziXVjyPMkzAUIAaICszRdk0e+/DxzVBx85vY5n9QwVBTtX6cXHM/Et1h0tJKrXUkMExru4nbwUJC68g7WHRr6qdTxzZtkR1nX7eIwrUMAtZxOuzqq0WOZsocX94Khj4A/E8a09mFzadn8egVnf50KsfiuAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kF4mSJLz; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4280ca0791bso42364555e9.1;
+        Mon, 02 Sep 2024 23:33:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725345213; x=1725950013; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9Jkw8wh5XcYHCUVel8oCflwMwuY/DKbg13rPtqVXJAM=;
+        b=kF4mSJLzE80eg3sHEiRfo5vjydzDDPoOZtaI8fKNZK7hg3k3p34gVm/y5u9ZX4BmQe
+         +JpfmqsX9250F2XzHLmJZMFvnqmRvVlygGg9/BmFj14meD2uJpW170SGnLEXTbXiG7CB
+         11DqhiIQuCTuWF/T9HapKrAuyrqmjtzFG6J39IlRiOvUCAbrvNY3wkLq5SihuUMBX7I6
+         TvAfopGCvjn2LlyOwIwota3+3OWby8Z/HWIHMGabsRCnfxQahCDT7sO9e33FbNNkx3y1
+         iR1gz54y9La4HT+g9wySH6qReM7qa65QYk6NsLh7uQInrvCEOvy4aU6qbl0KD5uWrtwB
+         U3jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725345213; x=1725950013;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9Jkw8wh5XcYHCUVel8oCflwMwuY/DKbg13rPtqVXJAM=;
+        b=o7+81WF5VMufXso4PexAXHlOOiP722M/mdnFJB+fPA9VBVl4/ZXwH2+vqx35AiBp63
+         /sZsPFbfBasA2jiyEgnX8S5DpsyiSXk481UTezvLzfNNO+Hg3gEUDIbi6lnPOeFfb04P
+         fB2fArMojF/QV8xZgQzzhOK+8hXbdDVsqjoj1FkfYHyZhGKo78z8682Al9NO5EqHZ6t6
+         38O7YGjiD1VVZrF1MTU2hTVn6zT6O/Rya06KkJW81Jo6+xWH44/wlWcNH2fgz0e4cTB7
+         sENAE4o1XSR94jeX35STYxJyAEvegzRDccNMFr/+GHmg/m5FbuXrlIga2yqrrxLdO7d1
+         mQSg==
+X-Forwarded-Encrypted: i=1; AJvYcCU8n4ShW+dkbcJ9ooJAlcNdAxNW0sv1n1dV2rd51t4oq25Kd9fxdqgrabi81vuC8g1gTE2hoPhcc1cmMYM=@vger.kernel.org, AJvYcCWqOn5AwjMAAU2wOXom+bLojLg9OnHgFuP9hjvtnBR7eNyNQjpOw9mP9ACGPWA/HjwkL5U5nfU9UGo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIqvtbmsLf3/92ejuIHSZ68tbkl7wu5DVEGHJIMhUGAB++TCtE
+	sy/grBunPrTplja6z5ECjkVrAT0pOPN814/1wf9Ikq9k1E4oMaTtfVC0Tg==
+X-Google-Smtp-Source: AGHT+IEkCFuBfPSKgwsHbasQVM89OhrDkrPZn/oya7O3TwEC75nr81BWBc7/oAXhGnZajgDC873NWQ==
+X-Received: by 2002:a05:600c:3b97:b0:426:59aa:e2fe with SMTP id 5b1f17b1804b1-42bb01c2071mr110788775e9.19.1725345212412;
+        Mon, 02 Sep 2024 23:33:32 -0700 (PDT)
+Received: from debian ([2a00:79c0:634:9a00:303:6c5b:4b07:6715])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bb6deb2dcsm160157605e9.1.2024.09.02.23.33.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Sep 2024 23:33:31 -0700 (PDT)
+Date: Tue, 3 Sep 2024 08:33:29 +0200
+From: Dimitri Fedrau <dima.fedrau@gmail.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] power: supply: max1720x: add read support for nvmem
+Message-ID: <20240903063329.GA222264@debian>
+References: <20240831182145.11589-1-dima.fedrau@gmail.com>
+ <01020191b4bc8ff0-e7e8d909-4802-4076-9caf-cee0296fd10d-000000@eu-west-1.amazonses.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240902233439.z5kpszcwaswkch6q@bryanbrattlof.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <01020191b4bc8ff0-e7e8d909-4802-4076-9caf-cee0296fd10d-000000@eu-west-1.amazonses.com>
 
-Hi Bryan,
-
-On Sep 02, 2024 at 18:34:39 -0500, Bryan Brattlof wrote:
-> On September  2, 2024 thus sayeth Dhruva Gole:
-> > Since the efuse_offset is basically derived from the syscon node, we no
-> > longer need to use any efuse_offset for AM625. This is in line with how
-> > the AM62Ax and AM62Px are already doing.
+Am Mon, Sep 02, 2024 at 09:55:42PM +0000 schrieb Sebastian Reichel:
+> Hi,
+> 
+> On Sat, Aug 31, 2024 at 08:21:45PM GMT, Dimitri Fedrau wrote:
+> > ModelGauge m5 and device configuration values are stored in nonvolatile
+> > memory to prevent data loss if the IC loses power. Add read support for
+> > the nonvolatile memory on MAX1720X devices.
 > > 
-> > Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> > Signed-off-by: Dimitri Fedrau <dima.fedrau@gmail.com>
 > > ---
-> >  drivers/cpufreq/ti-cpufreq.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > > 
-> > diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
-> > index ba621ce1cdda..98e320832f78 100644
-> > --- a/drivers/cpufreq/ti-cpufreq.c
-> > +++ b/drivers/cpufreq/ti-cpufreq.c
-> > @@ -313,7 +313,7 @@ static const struct soc_device_attribute k3_cpufreq_soc[] = {
+> > Based on:
+> > 479b6d04964b "power: supply: add support for MAX1720x standalone fuel gauge"
+> > in branch for-next
+> > 
+> > Changes in V2:
+> >   - remove function max1720x_remove and use devm_add_action_or_reset() to
+> >     unregister info->ancillary to avoid race condition during module remove
+> 
+> Thanks, but the transformation is quite incomplete. You probably
+> should have a look what device managed resource actually means :)
+>
+
+Yes, I noticed shortly after sending V2, that I missed to remove all
+i2c_unregister_device calls in the error path. Already prepared V3
+handling this and also the missing header "linux/nvmem-provider.h".
+Thanks for reviewing so quickly, I just hoped to get away with this by
+sending V3 before you notice. :)
+
+> > ---
+> >  drivers/power/supply/max1720x_battery.c | 220 ++++++++++++++++++++++--
+> >  1 file changed, 205 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/drivers/power/supply/max1720x_battery.c b/drivers/power/supply/max1720x_battery.c
+> > index edc262f0a62f..d27c94bdb835 100644
+> > --- a/drivers/power/supply/max1720x_battery.c
+> > +++ b/drivers/power/supply/max1720x_battery.c
+> 
+> [...]
+> 
+> > +static int max1720x_probe_nvmem(struct i2c_client *client,
+> > +				struct max1720x_device_info *info)
+> >  {
+> >  	struct device *dev = &client->dev;
+> > -	struct i2c_client *ancillary;
+> > +	struct nvmem_config nvmem_config = {
+> 
+> As noticed by the build bot: you need to add this include for the
+> struct:
+> 
+> #include <linux/nvmem-provider.h>
+>
+Will fix it.
+
+> > +		.dev = dev,
+> > +		.name = "max1720x_nvmem",
+> > +		.cells = max1720x_nvmem_cells,
+> > +		.ncells = ARRAY_SIZE(max1720x_nvmem_cells),
+> > +		.read_only = true,
+> > +		.root_only = true,
+> > +		.reg_read = max1720x_nvmem_reg_read,
+> > +		.size = ARRAY_SIZE(max1720x_nvmem_cells) * 2,
+> > +		.word_size = 2,
+> > +		.stride = 2,
+> > +		.priv = info,
+> > +	};
+> > +	struct nvmem_device *nvmem;
+> > +	unsigned int val;
+> >  	int ret;
 > >  
-> >  static struct ti_cpufreq_soc_data am625_soc_data = {
-> >  	.efuse_xlate = am625_efuse_xlate,
-> > -	.efuse_offset = 0x0018,
-> > +	.efuse_offset = 0x0,
-> >  	.efuse_mask = 0x07c0,
-> >  	.efuse_shift = 0x6,
-> >  	.rev_offset = 0x0014,
+> > -	ancillary = i2c_new_ancillary_device(client, "nvmem", 0xb);
+> > -	if (IS_ERR(ancillary)) {
+> > +	info->ancillary = i2c_new_ancillary_device(client, "nvmem", 0xb);
+> > +	if (IS_ERR(info->ancillary)) {
+> >  		dev_err(dev, "Failed to initialize ancillary i2c device\n");
+> > -		return PTR_ERR(ancillary);
+> > +		return PTR_ERR(info->ancillary);
+> >  	}
+> >  
+> > -	ret = i2c_smbus_read_word_data(ancillary, MAX1720X_NRSENSE);
+> > -	i2c_unregister_device(ancillary);
+> > -	if (ret < 0)
+> > -		return ret;
+> > +	ret = devm_add_action_or_reset(dev, max1720x_unregister_ancillary, info);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to add unregister callback\n");
+> > +		goto err;
+> > +	}
+> >  
+> > -	info->rsense = ret;
+> > +	info->regmap_nv = devm_regmap_init_i2c(info->ancillary,
+> > +					       &max1720x_nvmem_regmap_cfg);
+> > +	if (IS_ERR(info->regmap_nv)) {
+> > +		dev_err(dev, "regmap initialization of nvmem failed\n");
+> > +		ret = PTR_ERR(info->regmap_nv);
+> > +		goto err;
+> > +	}
+> > +
+> > +	ret = regmap_read(info->regmap_nv, MAX1720X_NRSENSE, &val);
+> > +	if (ret < 0) {
+> > +		dev_err(dev, "Failed to read sense resistor value\n");
+> > +		goto err;
+> > +	}
+> > +
+> > +	info->rsense = val;
+> >  	if (!info->rsense) {
+> >  		dev_warn(dev, "RSense not calibrated, set 10 mOhms!\n");
+> >  		info->rsense = 1000; /* in regs in 10^-5 */
+> >  	}
+> >  
+> > +	nvmem = devm_nvmem_register(dev, &nvmem_config);
+> > +	if (IS_ERR(nvmem)) {
+> > +		dev_err(dev, "Could not register nvmem!");
+> > +		ret = PTR_ERR(nvmem);
+> > +		goto err;
+> > +	}
+> > +
+> >  	return 0;
+> > +err:
+> > +	i2c_unregister_device(info->ancillary);
 > 
-> This may work but it really shouldn't. Unfortunately when I sent out the 
-> am62ax and am62px support I missed the .rev_offset and now it's pointed 
-> to some random spot in the WKUP_CTRL_MMR space. How it worked on my 
+> devm_add_action_or_reset() already unregisters on failure, so this
+> results in a double unregister. Please also simplify 'goto err'
+> with 'return ret;'.
+>
+Will fix it.
 
-Thanks for taking the time to review.
-
-If by "this" you mean the rev offset, then it's anyway unused. I have
-mentioned the dependency [1] in the cover letter where I am using the
-revision info based on the socinfo driver.
-
-I have also applied the AM62Ax [2] patches that you'd sent and
-tested it here on AM62A [3].
-
-> bench was complete luck (or bad luck depending on how we view this).
+> > +
+> > +	return ret;
+> >  }
+> >  
+> >  static const struct power_supply_desc max1720x_bat_desc = {
+> > @@ -299,20 +487,22 @@ static int max1720x_probe(struct i2c_client *client)
+> >  
+> >  	psy_cfg.drv_data = info;
+> >  	psy_cfg.fwnode = dev_fwnode(dev);
+> > +	i2c_set_clientdata(client, info);
+> >  	info->regmap = devm_regmap_init_i2c(client, &max1720x_regmap_cfg);
+> >  	if (IS_ERR(info->regmap))
+> >  		return dev_err_probe(dev, PTR_ERR(info->regmap),
+> >  				     "regmap initialization failed\n");
+> >  
+> > -	ret = max1720x_probe_sense_resistor(client, info);
+> > +	ret = max1720x_probe_nvmem(client, info);
+> >  	if (ret)
+> > -		return dev_err_probe(dev, ret,
+> > -				     "Failed to read sense resistor value\n");
+> > +		return dev_err_probe(dev, ret, "Failed to probe nvmem\n");
+> >  
+> >  	bat = devm_power_supply_register(dev, &max1720x_bat_desc, &psy_cfg);
+> > -	if (IS_ERR(bat))
+> > +	if (IS_ERR(bat)) {
+> > +		i2c_unregister_device(info->ancillary);
 > 
-> We'll need to pull out a OMAP3 chip and try to separate the OMAP and K3 
-> OPN decoding before we can move the .efuse_offset
+> This is also already handled by devm and must be removed.
+>
+Will fix it.
+> >  		return dev_err_probe(dev, PTR_ERR(bat),
+> >  				     "Failed to register power supply\n");
+> > +	}
+> >  
+> >  	return 0;
+> >  }
 > 
-> ~Bryan
+> -- Sebastian
 
-The efuse part of this driver is completely fine, and IMHO doesn't need
-any playing with. What does need MAJOR fixing is the rev part of it. I
-am wondering if we even really use the revision info to determine what
-OPP the devices support in most cases (I am confident that it's useless
-for AM62, 62A and 62P). In such cases we should rather even make the
-get_revision part optional. I am open to suggestions if there's another
-way to do it than what I have done in this series and in the dependency[1].
-
-Looking at `drivers/cpufreq/sti-cpufreq.c`: If they fail to obtain a
-version then they simply do version[0] = BIT(major);
-If that's acceptable for devices that have revision as _don't care_ then I
-can do that as well.
-
-I am also open to the idea of moving the new K3 devices into a
-new ti-k3-cpufreq driver if required, to avoid over complicating in this driver itself
-with more quirks and legacy vs new SoC differences which exist at
-a both SW and HW layer.
-
-Perhaps Viresh/ Nishanth can comment on what they think is the best way
-to move forward.
-
-But otherwise,
-I don't think these patches are fundamentally wrong or that they won't
-work, unless there's something I've missed.
-
-[1] https://lore.kernel.org/all/20240902092135.2826470-1-d-gole@ti.com
-[2] https://lore.kernel.org/all/20240826-opp-v3-1-0934f8309e13@ti.com/
-[3] https://gist.github.com/DhruvaG2000/d0c360b0bd7e43d0fd28cfe3eab941d2
-
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+Best regards
+Dimitri Fedrau
 
