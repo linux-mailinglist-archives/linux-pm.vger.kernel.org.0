@@ -1,193 +1,178 @@
-Return-Path: <linux-pm+bounces-13415-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13417-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20F5D969D6C
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 14:26:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D00B969DA1
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 14:31:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDAF32854D6
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 12:26:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 326A91C22B51
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 12:31:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBE2C1C9867;
-	Tue,  3 Sep 2024 12:26:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5450E188001;
+	Tue,  3 Sep 2024 12:31:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="ba6EToGn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p9Cwt331"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CBC1B12F0
-	for <linux-pm@vger.kernel.org>; Tue,  3 Sep 2024 12:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF521B12F2;
+	Tue,  3 Sep 2024 12:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725366361; cv=none; b=F2m2umum8VFiNoDkOsgTsjmIj2s+cP3+A1Oa7hMeuWXIQ6F/i696lK4Z5xoGp8+WDmOsSliQYOIxIRejx4xA5UG6rvLQ87A96xB5AaW1Y/WIN8+qpZae5KzpaFnYNROdAtK9XD53CIXh4VEAGtfJdMSRMmeEzaz52vKFCc45wUs=
+	t=1725366677; cv=none; b=dMzl7sQXWUxXqg00fa+89FmAYpQc7Z7/rAqTwH6ziLNqaDxNUx61b/Gjt/+k/zr0JnFyZ7na+hM2Rum5fUhM2RZE3f2UQBcPj/LZtunsZ9697OC4r4yybcQM84gQ8+MKsmSEQ3AXdEEBqRiZNnoanl4AJThf7YpJ1vVS/HSo9HM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725366361; c=relaxed/simple;
-	bh=a0Dd4JWmM7haDwR0iXBE1kfomv0PSlhhIKArOk1RZzg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nImq6Y13jXxcFyhattodTcK35gIrfrqZhoni8ZkCTvB10xQcvnETyWIDGVYcsbLu5oRSSo3OUft3WLEOb5sV7SnjUsi3m+VzS4qGosq+32v0/VspXXfWinG9XMO6Xp7hOsYM2WWmP8VHfrn9hPjIkBt5gH2K25BFaPEAs/6TVdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=ba6EToGn; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5c255e3c327so2502934a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 03 Sep 2024 05:25:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1725366358; x=1725971158; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+cdIRXo5VTqWR2KdDzO1DTS+Vt8PiHUf2RGCvnaGFsQ=;
-        b=ba6EToGnZTcjtlxOZnx4KqVxMNNTjMd9eK/EiS3OXuLybDIRe/EAOXmxjOAyakw0qL
-         Y4TUlOKJEv4sKlfLgwyBCBSCoGYrLNIRgYT0R3Zpj39eTIylWHzinbHFa/6hmWuKU6sZ
-         KMaCSCvyFLzagyJKL+yjieGzCBVbu09BMr3FnJtbyAyKh0TTGhTkg/EErV63OnZPli8b
-         TIhWCDyBFFHHc3H0DQALOhttviHm2xd/Fsf4XYgTaP6lPdfr7YZVZPJ2hVBH54xYe/Vt
-         /9XBaakV8wZuG7WtCMeRTrQ8YWgAoDUypyOU2Ye/JIZpkQbnG284zwgT7dm4RFT/JNSv
-         vrPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725366358; x=1725971158;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+cdIRXo5VTqWR2KdDzO1DTS+Vt8PiHUf2RGCvnaGFsQ=;
-        b=CSl1l2JRPO8QhueewgK/BituiRlc7LpP8B6FIVE1KTCfFm/8pUNNOIZd7o9Kywv2yO
-         b7cYR/lLL8mEvHFmyQvlt/8jyygwdSZXmHoTRqz+ykoGsvqCR15RfcEyzLxZn8FB8Kp7
-         bgVv385oc+kqXcXWvc8ZQY3xPVoZO49Tnf8eRRKV+14cjshMEZwQKO0eoBXxl1EYWzcx
-         /mjcwtoL6iDoaXr+Q6ywf7CxuHuArFVIavFG+U9V7lHOfVv1/AQRHKORJl3kcQBrcpbF
-         nIIdpxsgtAcyVwMpQ8bNFkgfA5IGQJRV1IkRqju0lqRiaVnMG9xJMac1LVzybuY6fqHd
-         8oEw==
-X-Forwarded-Encrypted: i=1; AJvYcCVV3qcShd8SITcv12FwHGbxzj9mYjjm/GAkiZxJKkAR4Ri/JRMHDer6xY1L6jCLOG6nK6sJLNWd/A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZikiaM+Nw+rfgkFYNfNtxrN3rGllYS3D43V/2MSh/JTNjynZK
-	nhzZ0asumJpIixXgFgsq/d0flkp/fvbovbGxZ8hVMMg4N6HgzxWB6qi4f2zmzg8=
-X-Google-Smtp-Source: AGHT+IGCJSAfsQxh53LJgcY+qGaZ+a7jTX6q5V6OFCLQvyiQ7yrxNllyp0cepO9Zz23djK5zaAK9PQ==
-X-Received: by 2002:a05:6402:4310:b0:5a2:2654:7fc4 with SMTP id 4fb4d7f45d1cf-5c25c3a717amr5389144a12.8.1725366357788;
-        Tue, 03 Sep 2024 05:25:57 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.144])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c226c6a3cdsm6412278a12.12.2024.09.03.05.25.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Sep 2024 05:25:57 -0700 (PDT)
-Message-ID: <0b73544b-0253-43b9-b631-6578b48eaca8@tuxon.dev>
-Date: Tue, 3 Sep 2024 15:25:55 +0300
+	s=arc-20240116; t=1725366677; c=relaxed/simple;
+	bh=qd3YxyjMYJ2bCJ1Cx0VsMYa5IKT9E+IfmiTj9DCPMgA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=G9NnwcC2AWwWqmyLF6ZDJewj8cooijITXmV9gKUxpMKul9AhMBdj+q71GisT6oVzGxIcwVZlU8Eas6ecfjtod7mK8H/CCRnwLL0yPxPdjW/+uXrAQxdcJIEwQZf2ktAWvc+PS7lpP+vWuAQgtPkqUNH2f0hkZ0EOgvRnxRVErxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p9Cwt331; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE55C4CECA;
+	Tue,  3 Sep 2024 12:31:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725366676;
+	bh=qd3YxyjMYJ2bCJ1Cx0VsMYa5IKT9E+IfmiTj9DCPMgA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=p9Cwt331oTsaBNNrEypvf8b/uEF69M+RFSUX9uXcNrYfWJwDNCbrQfL3m8DThVSAl
+	 b3xwH0H91TVS8haXoVVe47qPwvXlze90hFuZWNhzAUhrC6+SuDm6G+7yfDe7n1aC8M
+	 oQgduVcD7wHXryQNOU7oVoSyXYUFhbovZF+IniPUUB4WQufgLugkScpnFnaplx0sb7
+	 UgTP9qp8Qwwvk+SIsZ3Bg03I7YSGkdtGMBBSyIe3U67AOjz6f3LGlxbxTn4tit7wSR
+	 Sf3gTURGWu3c0QVVeXV53F1pjtzBhXHG6PlT2/bejy5vkQ9DUfzJPonN34eFkM4/jg
+	 2m+EyXqZCPTaA==
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3df0dc53ec1so3040433b6e.1;
+        Tue, 03 Sep 2024 05:31:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUGZSerFs3xsky+yKqtsjR4hp4hWM1u+XDHtAbfa6vS0IG+LiTZGM8TnRmSLUGZh5StukJLmdD5PoI=@vger.kernel.org, AJvYcCUfKZGOg6KohIWCG/oxfoXvuep6gJIVhLn/3kqUHonGFs0FOXzSUShGEoVP0yETx6cu6T73tuheJhYWjio=@vger.kernel.org
+X-Gm-Message-State: AOJu0YweraKT1n/Hfky+yI4tseL0TpL/qZsLefAFurlaE5Eqh5ZPKTBc
+	ogC8hnrFZjvQsLKteWpdpQ6zK07l7OSRhNrTzWYhGxLwfMaOWe9C4FnTLkxQ8b9/YdDpDN4/ZWy
+	Wna5C+xJwtopqB+FgbA5w2eLjZ1U=
+X-Google-Smtp-Source: AGHT+IHvp5rsI7Bt85qzdXZ81AuCvRx2LxFL/Zu5C1K0ZMKZAS7lysa3cHAw5xVEHBIQXAYgRKzPVlbJLjZifH3WEk8=
+X-Received: by 2002:a05:6808:1892:b0:3d9:2c7b:26d4 with SMTP id
+ 5614622812f47-3df1d66126dmr13542701b6e.28.1725366675807; Tue, 03 Sep 2024
+ 05:31:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
-Content-Language: en-US
-To: Biju Das <biju.das.jz@bp.renesas.com>,
- Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "vkoul@kernel.org" <vkoul@kernel.org>,
- "kishon@kernel.org" <kishon@kernel.org>, "robh@kernel.org"
- <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
- "geert+renesas@glider.be" <geert+renesas@glider.be>,
- "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "mturquette@baylibre.com" <mturquette@baylibre.com>,
- "sboyd@kernel.org" <sboyd@kernel.org>,
- Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
- "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
- <TY3PR01MB113467275C519B729FCAB1ACB86922@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <5556d176-cca7-492c-ba21-48256d5d6338@tuxon.dev>
- <TY3PR01MB113464D53083F4C8A5DBBA36586922@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <590a4fb2-24b2-432b-92db-534c5a52ed0b@tuxon.dev>
- <TY3PR01MB11346505565B81AD2894E035586922@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <35dc7414-f5bd-4ed4-bfa1-f723f4f0078c@tuxon.dev>
- <TY3PR01MB11346A4814F83FE296A1DED8886922@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <TY3PR01MB1134648BF51F1B52BFE34DD6D86932@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <fbfa9179-2f52-429f-8b69-f7f4064e796b@tuxon.dev>
- <TYCPR01MB11332EF1A8D064C491D8F261286932@TYCPR01MB11332.jpnprd01.prod.outlook.com>
- <f7c57e76-b890-491f-880d-62d060b7b31e@tuxon.dev>
- <TYCPR01MB11332BE2EDB318950B9C7B54C86932@TYCPR01MB11332.jpnprd01.prod.outlook.com>
- <TY3PR01MB113469FC8A9F49D9B1FA432FD86932@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <TY3PR01MB113469FC8A9F49D9B1FA432FD86932@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240902125933.5742-1-00107082@163.com>
+In-Reply-To: <20240902125933.5742-1-00107082@163.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 3 Sep 2024 14:31:04 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hMnnDjKJLMgcT_p1nnejyyAyaqaA_AF5t+_=PsSMfceQ@mail.gmail.com>
+Message-ID: <CAJZ5v0hMnnDjKJLMgcT_p1nnejyyAyaqaA_AF5t+_=PsSMfceQ@mail.gmail.com>
+Subject: Re: [PATCH] pm: sleep: do not set is_prepared when no_pm_callbacks is set
+To: David Wang <00107082@163.com>
+Cc: rafael@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: multipart/mixed; boundary="000000000000d1c4a80621363b96"
 
+--000000000000d1c4a80621363b96
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Sep 2, 2024 at 2:59=E2=80=AFPM David Wang <00107082@163.com> wrote:
+>
+> When resume, a parent device with no pm callbacks
+> would have "is_prepared" and "direct_complete" bit
+> set, and skip the "fib" chance to unset "is_prepared"
+> in device_resume because of the direct_complete bit.
 
-On 03.09.2024 15:00, Biju Das wrote:
-> 
-> 
->> -----Original Message-----
->> From: Biju Das <biju.das.jz@bp.renesas.com>
->> Sent: Tuesday, September 3, 2024 12:07 PM
->> To: Claudiu.Beznea <claudiu.beznea@tuxon.dev>; Ulf Hansson <ulf.hansson@linaro.org>
->> Cc: vkoul@kernel.org; kishon@kernel.org; robh@kernel.org; krzk+dt@kernel.org; conor+dt@kernel.org;
->> p.zabel@pengutronix.de; geert+renesas@glider.be; magnus.damm@gmail.com; gregkh@linuxfoundation.org;
->> mturquette@baylibre.com; sboyd@kernel.org; Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>;
->> linux-phy@lists.infradead.org; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
->> renesas-soc@vger.kernel.org; linux-usb@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
->> clk@vger.kernel.org; linux-pm@vger.kernel.org; Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->> Subject: RE: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
->>
->> Hi Claudiu,
->>
->>> -----Original Message-----
->>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
->>> Sent: Tuesday, September 3, 2024 12:00 PM
->>> Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas
->>> RZ/G3S SoC
->>>
->>>
->>>
->>> On 03.09.2024 13:31, Biju Das wrote:
->>>>>> During boot clr USB PWR READY signal in TF-A.
->>>>>> STR case, suspend set USB PWR READY signal in TF-A.
->>>>>> STR case, resume clr USB PWR READY signal in TF-A.
->>>>> As I said previously, it can be done in different ways. My point
->>>>> was to let Linux set what it needs for all it's devices to work. I
->>>>> think the way to go forward is a
->>> maintainer decision.
->>>>
->>>> I agree, there can be n number of solution for a problem.
->>>>
->>>> Since you modelled system state signal (USB PWRRDY) as reset control
->>>> signal, it is reset/DT maintainer's decision to say the final word
->>>> whether this signal fits in reset
->>> system framework or not?
->>>
->>> I was thinking:
->>> 1/ Geert would be the best to say if he considers it OK to handle this
->>>    in Linux
->>
->> I agree Geert is the right person for taking SYSTEM decisions, since the signal is used only during
->> state transitions (Table 41.6.4 AWO to ALL_ON and 41.6.3 ALL_ON to AWO)
-> 
-> One more info, as per [1], this USB PWRRDY signal setting to be before Linux kernel boots.
+Sure, but is_prepared will be cleared in device_complete() AFAICS.
 
-The "controlled by" column mentions CA-55 on PWRRDY signal control line and
-it is b/w steps "DDR exits from retention mode" and  "clock start settings
-for system bus and peripheral modules". AFAICT, after DDR exists retention
-mode Linux is ready to run.
+> This will trigger a kernel warning when resume its child
+> For example, when suspend system with an USB webcam
+> opened, following warning would show up during resume:
+>
+>  >usb 3-1.1: reset high-speed USB device number 4 using xhci_hcd
+>  >..
+>  >ep_81: PM: parent 3-1.1:1.1 should not be sleeping
 
-E.g. on resume Linux doesn't sets the clocks of all peripheral in sequence
-and then runs the rest of settings for each peripheral, in turn it sets the
-clock of one peripheral along with all the other necessary peripheral
-settings and then continues with the rest of peripherals (including their
-clocks).
+This is printed in device_pm_add(), so apparently something new has
+appeared under the parent while it's between "resume" and "prepare".
 
-> 
-> All clocks/reset happens after setting USB PWRRDY signal
-> 
-> https://pasteboard.co/qbz021q7KPyi.png
-> 
-> Cheers,
-> Biju
+The parent is actually still regarded as "suspended" because any
+resume callbacks have not been called for it, but new children can be
+added under it at this point because doing so does not break the
+dpm_list ordering and all of its ancestors have been already resumed.
+
+> The device parenting relationships are:
+> [usb 3-1.1] << [uvcvideo 3-1.1:1.1] << [ep_81].
+> When resume, since the virtual [uvcvideo 3-1.1:1.1] device
+> has no pm callbacks, it would not clear "is_prepared"
+> once set.  Then, when resume [ep_81], pm module would
+> yield a warn seeing [ep_81]'s parent [uvcvideo 3-1.1:1.1]
+> having "is_prepared".
+>
+> Do not set "is_prepared" for virtual devices having
+> no pm callbacks can clear those kernel warnings.
+>
+> Signed-off-by: David Wang <00107082@163.com>
+> ---
+>  drivers/base/power/main.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index 934e5bb61f13..e2149ccf2c3e 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -1880,7 +1880,8 @@ int dpm_prepare(pm_message_t state)
+>                 mutex_lock(&dpm_list_mtx);
+>
+>                 if (!error) {
+> -                       dev->power.is_prepared =3D true;
+> +                       if (!dev->power.no_pm_callbacks)
+> +                               dev->power.is_prepared =3D true;
+
+This is not the way to address the issue IMV.
+
+power.is_prepared set means that the device is in dpm_prepared_list
+and I wouldn't depart from that even for devices without PM callbacks.
+
+>                         if (!list_empty(&dev->power.entry))
+>                                 list_move_tail(&dev->power.entry, &dpm_pr=
+epared_list);
+>                 } else if (error =3D=3D -EAGAIN) {
+> --
+
+It would be better to add a power.no_pm_callbacks check for the parent
+to device_pm_add(), but this would still suppress the warning is some
+cases in which it should be printed (for example, the new device's
+parent is a "virtual" device without PM callbacks, but its grandparent
+is a regular device that has PM callbacks and is suspended).
+
+Something like the attached patch (untested) might work, though.
+
+--000000000000d1c4a80621363b96
+Content-Type: text/x-patch; charset="US-ASCII"; name="pm-sleep-pm-add.patch"
+Content-Disposition: attachment; filename="pm-sleep-pm-add.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_m0mepvtg0>
+X-Attachment-Id: f_m0mepvtg0
+
+LS0tCiBkcml2ZXJzL2Jhc2UvcG93ZXIvbWFpbi5jIHwgICAxNiArKysrKysrKysrKysrLS0tCiAx
+IGZpbGUgY2hhbmdlZCwgMTMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCkluZGV4OiBs
+aW51eC1wbS9kcml2ZXJzL2Jhc2UvcG93ZXIvbWFpbi5jCj09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KLS0tIGxpbnV4LXBt
+Lm9yaWcvZHJpdmVycy9iYXNlL3Bvd2VyL21haW4uYworKysgbGludXgtcG0vZHJpdmVycy9iYXNl
+L3Bvd2VyL21haW4uYwpAQCAtMTI3LDYgKzEyNyw4IEBAIHZvaWQgZGV2aWNlX3BtX3VubG9jayh2
+b2lkKQogICovCiB2b2lkIGRldmljZV9wbV9hZGQoc3RydWN0IGRldmljZSAqZGV2KQogeworCXN0
+cnVjdCBkZXZpY2UgKmFuY2VzdG9yOworCiAJLyogU2tpcCBQTSBzZXR1cC9pbml0aWFsaXphdGlv
+bi4gKi8KIAlpZiAoZGV2aWNlX3BtX25vdF9yZXF1aXJlZChkZXYpKQogCQlyZXR1cm47CkBAIC0x
+MzQsMTIgKzEzNiwyMCBAQCB2b2lkIGRldmljZV9wbV9hZGQoc3RydWN0IGRldmljZSAqZGV2KQog
+CXByX2RlYnVnKCJBZGRpbmcgaW5mbyBmb3IgJXM6JXNcbiIsCiAJCSBkZXYtPmJ1cyA/IGRldi0+
+YnVzLT5uYW1lIDogIk5vIEJ1cyIsIGRldl9uYW1lKGRldikpOwogCWRldmljZV9wbV9jaGVja19j
+YWxsYmFja3MoZGV2KTsKKwogCW11dGV4X2xvY2soJmRwbV9saXN0X210eCk7Ci0JaWYgKGRldi0+
+cGFyZW50ICYmIGRldi0+cGFyZW50LT5wb3dlci5pc19wcmVwYXJlZCkKLQkJZGV2X3dhcm4oZGV2
+LCAicGFyZW50ICVzIHNob3VsZCBub3QgYmUgc2xlZXBpbmdcbiIsCi0JCQlkZXZfbmFtZShkZXYt
+PnBhcmVudCkpOworCisJYW5jZXN0b3IgPSBkZXYtPnBhcmVudDsKKwl3aGlsZSAoYW5jZXN0b3Ig
+JiYgYW5jZXN0b3ItPnBvd2VyLm5vX3BtX2NhbGxiYWNrcykKKwkJYW5jZXN0b3IgPSBhbmNlc3Rv
+ci0+cGFyZW50OworCisJaWYgKGFuY2VzdG9yICYmIGFuY2VzdG9yLT5wb3dlci5pc19wcmVwYXJl
+ZCkKKwkJZGV2X3dhcm4oZGV2LCAiYW5jZXN0b3IgJXMgc2hvdWxkIG5vdCBiZSBzbGVlcGluZ1xu
+IiwKKwkJCSBkZXZfbmFtZShhbmNlc3RvcikpOworCiAJbGlzdF9hZGRfdGFpbCgmZGV2LT5wb3dl
+ci5lbnRyeSwgJmRwbV9saXN0KTsKIAlkZXYtPnBvd2VyLmluX2RwbV9saXN0ID0gdHJ1ZTsKKwog
+CW11dGV4X3VubG9jaygmZHBtX2xpc3RfbXR4KTsKIH0KIAo=
+--000000000000d1c4a80621363b96--
 
