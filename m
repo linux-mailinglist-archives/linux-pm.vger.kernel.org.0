@@ -1,171 +1,140 @@
-Return-Path: <linux-pm+bounces-13395-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13396-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01141969856
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 11:09:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E145696998E
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 11:55:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 839061F244B4
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 09:09:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B5941C22B51
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 09:55:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95F5419F10D;
-	Tue,  3 Sep 2024 09:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFF5E1A3036;
+	Tue,  3 Sep 2024 09:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QzB2GG0g"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FWQLHUpO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B461C769F
-	for <linux-pm@vger.kernel.org>; Tue,  3 Sep 2024 09:09:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397A01A0BC6
+	for <linux-pm@vger.kernel.org>; Tue,  3 Sep 2024 09:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725354590; cv=none; b=XsSC2geRuFFQeSX6/dd0oAKNQGJVwyNBhBl0uySbuKEzlGGToDMN6w2K29r84TigcKIEkvPhT1v2cEgaSxmq0vVgse5oRe/lIyXOUoHZFnvZzB0t7S33/E8u3PGqZwxp0t4QNG1ajUYEZyFXZTBLitW7aY+I4V8Tl1SJVQkvuVY=
+	t=1725357309; cv=none; b=rWfTnKJRfK+ER5sOAhDVfUzhpZBMxLkj4Idi+Z35JgHS42DlgG2sxl+jcA+aaRDSawQID2NRBbCWwT3Fscjw8r8V9hpx7mEbU6Sh8sJXyHzuOl0w0Q7VSF2Fyl9j1olMPHbtGnxosOt47SIFNYWrjhf/XunRI4t9Mzzz1qNgAcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725354590; c=relaxed/simple;
-	bh=mhNCMdmXQx/9BVSzjWgtTpeJaKJ+WCbfwr+Rv9a8SRw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KyCwizw76PqGZYbnVp8aQZ01NXBJBGvV24k2bqnOEQO96JwA0hm8pVaTE03XUkDwz10a2EoKqzxK73hbXWYGtzBYv1SJrbwcAHsZepxrs2/iwOzQtjZztknCj9QRpt71DvRtIb38mdTGOZgkh6O4NRqoqpz7G3nuq6KMF/yFRr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QzB2GG0g; arc=none smtp.client-ip=209.85.210.169
+	s=arc-20240116; t=1725357309; c=relaxed/simple;
+	bh=r/D2XT9csu2hRnKwa7lr4pddgJFqYkNRTZD+HvrK5yY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Zbm1RvMVz9lF+1wM+t44rIe0bAToPy9XG53VtqOKypRAYmmrdrZDW7408c6bAnOa6hBOK5Zy+PqW5ViMK+e9khrwyTuJWGBAG4e2ky2y5Z8zshXK9dTibtxex011l+ByWh2aNj2b12a9mO95iIhfTYWp7jWdubzr21vu3N+O4L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FWQLHUpO; arc=none smtp.client-ip=209.85.219.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7143165f23fso3980597b3a.1
-        for <linux-pm@vger.kernel.org>; Tue, 03 Sep 2024 02:09:48 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e1a80979028so3832151276.1
+        for <linux-pm@vger.kernel.org>; Tue, 03 Sep 2024 02:55:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725354588; x=1725959388; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wsV4q8d8HmroiyzNZA3zkvPM2YEa9w2l7UOPrHHxXY0=;
-        b=QzB2GG0g+Kk6F7PplBRpO3yZXgbuTNJRCUqhzD2LJBDJOP43iF/mk+IpY7trQ5NL4I
-         c42fqJvIFzjnZL0fIGW3467kb0/bJL2Ftsc6XmF+AmAIyeeNzp64uzzRetEQQTQ0deZ3
-         FPe8t+shdIpvcMT2UpciZgb8aYs8uWhstkwjDG8GIVT/2dBnH6NMj+2Umk8aL2xN9VYc
-         P00M3alHiJCOMNe0hOL2rFY9WLvxE81thOz1IPFOIXV/213/PSep3Nmu5gjuAOvMAXSQ
-         nsEMNhukZEX/0T+os0ee7/z9a7q2AiI1/2BHivc/HIBQEAyNltyOufoDa/WfQ9uuuvaF
-         pbIg==
+        d=linaro.org; s=google; t=1725357307; x=1725962107; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cFqqyo1243gLC8lCdcnS069gRZejGhzhqXUGlqO3d/I=;
+        b=FWQLHUpO39uToecSQdsk7vlCb0xkyRpSb0COBxCyy3BGLftVXO3K9624zyCqWHgWlM
+         6myKdEgRNH2O0OynsP+4dulNFeMGe9eHK+hxY6tbFIL82/xglOq0kSR8LOI4kqpxjCpP
+         meB11FoRFTIoVOYaud/TCllqed/bsC6yCt7oXc0i3fQQes2mHR1B0k//3Ootyowo0bSx
+         l8Fcgf00K6dxfHj2N5LrqhnSTYRXKkmbyTvjjeyzo76RUfrxHYfzvi7t+kQUwJIqRYOj
+         GY21wwWqNn4x3fSTvxDUXT1ZIigZulPolYVT47equ7HCQiJpA0WqhESQAHDHMAVy1ZbY
+         u+Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725354588; x=1725959388;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wsV4q8d8HmroiyzNZA3zkvPM2YEa9w2l7UOPrHHxXY0=;
-        b=UcaPbuGA4z46Nb0ydQDIU6NdlFFPNsEznsZ9QosB0d4hNJR3o04tN4WZFb8x7hbNIW
-         xMVoXHuYY+G8UKDiIbcC2W3Q3osxKmvQA6E4oolQVH9EYHSSINxJAeICzwdPGlLzpDDW
-         rdonR8BFP+r34CARvEUzUt1/xIXho72p+lD0pZmP8edGj5mxCHhGja2x6Ch9/P7+7DFr
-         CwFsLQ3uFZeaXzncSF9oyCOPn0/ZQOpLUu6qUxNxYAyeG8khsMAK0b/jQ4DYn2BU0DrQ
-         iivpmfmEN0Pd1afHY//PKTZzK/OGGaxkNk4CstW435Yq1UwAkNnTmBkSOLtZPOnpQ7U8
-         5HkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXhoQyJc95bceNjviKM7zz6S6gqzY96Suv5/ncTXuIntbIbFUWdkOf5BovjS/CY3qmFKAn3f9mROA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO+cseSBvvXx4UINfL03PlqW7H4FFyQXD100dVbpqR7PdPuAGZ
-	ize1OBGQCJYD5X/IzcfgHJZt2CB5MvJ/6Js9IVSl141YHNF2vpUadceOGTdqxDc=
-X-Google-Smtp-Source: AGHT+IGY28JAMIxy1PxU63Bxh8OG0t6izbnuuuNEdXt9/cEqJkJ1IBW0Kp2isWZ1Io52De4YznvI7Q==
-X-Received: by 2002:a05:6300:41:b0:1cc:be05:ffe2 with SMTP id adf61e73a8af0-1ced0468f79mr8699300637.18.1725354588232;
-        Tue, 03 Sep 2024 02:09:48 -0700 (PDT)
-Received: from localhost ([122.172.83.237])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2058456e121sm22602085ad.111.2024.09.03.02.09.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2024 02:09:47 -0700 (PDT)
-Date: Tue, 3 Sep 2024 14:39:45 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Dhruva Gole <d-gole@ti.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Vibhore Vardhan <vibhore@ti.com>, Bryan Brattlof <bb@ti.com>
-Subject: Re: [PATCH] cpufreq: ti-cpufreq: Use socinfo to get revision in AM62
- family
-Message-ID: <20240903090945.rqqqrchwadustegn@vireshk-i7>
-References: <20240902092135.2826470-1-d-gole@ti.com>
+        d=1e100.net; s=20230601; t=1725357307; x=1725962107;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cFqqyo1243gLC8lCdcnS069gRZejGhzhqXUGlqO3d/I=;
+        b=FK3fSELHfpMALMqTKR4tsVDp6EtjcsWFmpMxUNh/Pvi4Dz5+LjTrY/Ms9ieYpjyJUh
+         SVrSs57t0oRmTJlP9BDwDvsdn9wq8/0QWqzocbpJyctmSEXXGwKyn50QPFwHaosGBYWu
+         4pMpYV8MiZCzKs0C/Gxt1vhX2P6JqFw8UB0Z5YQabkbgOfGMTB6oVazom58YWbKsDJqC
+         eyuAiEzR48b1b4+1mhr8icT5p81yCKzcdFnqGHXrwDCERB29xMQF2kwONn21jWEbPhJ1
+         qSyIaCtSjbezu66WOrppajMKLkcoLzsExgy1lWiIRV0ohpUshaDwDhqMsQ0gSXVCzdaf
+         xfVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXY6ja3FDAbtJHrSxwlVtNCuEFbpP1EdD8wjRP2J/GjW0pASfrPCwH4s8SsgznTCKM0b4of3q7E0g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/sw7Wv+xI+6YRJDDp8q9o1yVswW8VuTKjKAP9aDvRWne1ONEW
+	y4cXjIgrefekw1S9zqXdfBQY5CyI0s64unvRveu38e5TVkwMEdazm6DJbZyPOs71hAF7OtR6h+A
+	DkM8rt6WgGhC2Fng6b53At2pMmSr45v/C1EiN3A==
+X-Google-Smtp-Source: AGHT+IH+1PDql0ueQ/ES8PwB2F7M/INUIUGvNZZEUFj51QsjECCxPIJAbbiizLcpEvWmhRUegd7BueLrC0lx7UTd+48=
+X-Received: by 2002:a05:6902:723:b0:e13:cb77:5fda with SMTP id
+ 3f1490d57ef6-e1a79ff67d7mr15832832276.12.1725357307286; Tue, 03 Sep 2024
+ 02:55:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240902092135.2826470-1-d-gole@ti.com>
+References: <20240902224815.78220-1-ulf.hansson@linaro.org>
+ <20240902224815.78220-3-ulf.hansson@linaro.org> <20240903071638.bedt3gllqdacf43a@vireshk-i7>
+In-Reply-To: <20240903071638.bedt3gllqdacf43a@vireshk-i7>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 3 Sep 2024 11:54:30 +0200
+Message-ID: <CAPDyKFoqEAHns0nrXT6dJR3sRd5VWidK_rzXGHzJiZtk_p0cKw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] OPP/pmdomain: Fix the assignment of the required-devs
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Dikshita Agarwal <quic_dikshita@quicinc.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <quic_kdybcio@quicinc.com>, Nikunj Kela <nkela@quicinc.com>, 
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Mikko Perttunen <mperttunen@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Stephan Gerhold <stephan@gerhold.net>, Ilia Lin <ilia.lin@kernel.org>, 
+	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 02-09-24, 14:51, Dhruva Gole wrote:
-> In the AM62x, AM62Ax, and AM62Px devices, we already have the revision
-> info within the k3-socinfo driver. Hence, re-use this information from
-> there instead of re using the offset for 2 drivers trying to get the
-> same information ie. revision.
-> 
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> ---
-> 
-> Hi,
-> This patch depends on [1] and if someone wants to test, can use my
-> github branch [2]. I was able to test this on SK-AM625 [3].
-> 
-> [1] https://lore.kernel.org/linux-arm-kernel/20240828131915.3198081-1-nm@ti.com/
-> [2] https://github.com/DhruvaG2000/v-linux/tree/ti-cpufreq-revision-fix
-> [3] https://gist.github.com/DhruvaG2000/d0c360b0bd7e43d0fd28cfe3eab941d2
-> 
-> Cc: Nishanth Menon <nm@ti.com>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: Vibhore Vardhan <vibhore@ti.com>
-> Cc: Bryan Brattlof <bb@ti.com>
-> 
-> ---
->  drivers/cpufreq/ti-cpufreq.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
-> index 804329e81eb8..ba621ce1cdda 100644
-> --- a/drivers/cpufreq/ti-cpufreq.c
-> +++ b/drivers/cpufreq/ti-cpufreq.c
-> @@ -16,6 +16,7 @@
->  #include <linux/pm_opp.h>
->  #include <linux/regmap.h>
->  #include <linux/slab.h>
-> +#include <linux/sys_soc.h>
->  
->  #define REVISION_MASK				0xF
->  #define REVISION_SHIFT				28
-> @@ -303,6 +304,13 @@ static struct ti_cpufreq_soc_data am3517_soc_data = {
->  	.quirks = TI_QUIRK_SYSCON_MAY_BE_MISSING,
->  };
->  
-> +static const struct soc_device_attribute k3_cpufreq_soc[] = {
-> +	{ .family = "AM62X", .revision = "SR1.0" },
-> +	{ .family = "AM62AX", .revision = "SR1.0" },
-> +	{ .family = "AM62PX", .revision = "SR1.0" },
-> +	{ /* sentinel */ }
-> +};
-> +
->  static struct ti_cpufreq_soc_data am625_soc_data = {
->  	.efuse_xlate = am625_efuse_xlate,
->  	.efuse_offset = 0x0018,
-> @@ -384,6 +392,16 @@ static int ti_cpufreq_get_rev(struct ti_cpufreq_data *opp_data,
->  	struct device *dev = opp_data->cpu_dev;
->  	u32 revision;
->  	int ret;
-> +	if (soc_device_match(k3_cpufreq_soc)) {
-> +		/*
-> +		 * Since the SR is 1.0, hard code the revision_value as
-> +		 * 0x1 here. This way we avoid re using the same register
-> +		 * that is giving us required information inside socinfo
-> +		 * anyway.
-> +		 */
-> +		*revision_value = 0x1;
-> +		goto done;
-> +	}
->  
->  	ret = regmap_read(opp_data->syscon, opp_data->soc_data->rev_offset,
->  			  &revision);
-> @@ -406,6 +424,7 @@ static int ti_cpufreq_get_rev(struct ti_cpufreq_data *opp_data,
->  
->  	*revision_value = BIT((revision >> REVISION_SHIFT) & REVISION_MASK);
->  
-> +done:
->  	return 0;
->  }
+On Tue, 3 Sept 2024 at 09:16, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 03-09-24, 00:48, Ulf Hansson wrote:
+> > To fix this problem, let's instead start by letting the OPP core find the
+> > device node for the required OPP table and then let genpd search for a
+> > corresponding OPP table, allowing us the find the correct required-dev to
+> > assign for it.
+>
+> Why was doing this necessary ?
 
-Applied. Thanks.
+Let me try to elaborate a bit more.
 
--- 
-viresh
+In the current code, genpd_find_opp_table() tries to find an OPP table
+for the genpd that the device is getting attached to. Then genpd
+passes that OPP table via devm_pm_opp_set_config(), to let the OPP
+core to hook up a required-dev for it. This was a naive approach, as
+that OPP table may not be the one that actually corresponds to a
+required-opps for the required-dev. Consider the below in DT.
+
+        opp_table_devA: opp-table-devA {
+                compatible = "operating-points-v2";
+
+                opp-devA-50 {
+                        opp-hz = /bits/ 64 <2500>;
+                        required-opps = <&opp_pd_50>; //corresponds to
+pd_perf1's OPP table
+                };
+               ....
+
+        devA {
+                compatible = "foo,bar";
+                power-domains = <&pd_perf0>, <&pd_perf1>; //both
+pd_perf0 and pd_perf1 has OPP tables.
+                power-domain-names = "perf0", "perf1";
+                operating-points-v2 = <&opp_table_devA>;
+        };
+
+To make sure we assign the correct required-dev for cases like the
+above, we need to let the OPP core to iterate through the available
+required-opps and see if some of them are corresponding to the OPP
+table for the genpd the required-dev belongs too.
+
+To manage this in a non-genpd specific way, I added another callback
+in struct dev_pm_opp_config. In this way, it should work for any
+future possible required-devs types too, I think.
+
+Kind regards
+Uffe
 
