@@ -1,243 +1,289 @@
-Return-Path: <linux-pm+bounces-13431-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13432-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 428C696A07A
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 16:27:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 502F896A109
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 16:47:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6FD81F27158
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 14:27:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6FBA1F2661B
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 14:47:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29D0B16C6A7;
-	Tue,  3 Sep 2024 14:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1447718800D;
+	Tue,  3 Sep 2024 14:46:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MHLi79f5"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="JHyIPsv5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3614156F34;
-	Tue,  3 Sep 2024 14:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E11154BE9
+	for <linux-pm@vger.kernel.org>; Tue,  3 Sep 2024 14:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725373605; cv=none; b=odMlU4jMvdktbF2+JOA68BiuCfg3JY+wGqTXZuBubscyUhIIiyYvcRYcqzKmoduEB19M0vRafumkwFaMGDt4xTj2LFJIJCGZWPSE+obySI+8snTYgHcgATzu9BilRbhsQrFITUbKFE5Zjj61CXoiaDFJ+i5lN5kQ2yo/qd/5Lzw=
+	t=1725374771; cv=none; b=Y5K1N/REgkFAytvRC9ijx5v7hs1hcQaULPc4jvNEgjmm5qdx1t9nf3imSVhDEaZmvymRvg6rZdtqkmcUdYdipEkH6rCfYktBjRoxP/ynkcFt8BZgMbEbx0dlxJduOZdmBe2Lgm/n3nQg6xviK2wiwMDqk3mHtZK8ablWoVEl30w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725373605; c=relaxed/simple;
-	bh=yEnhxpK2qUIZRhx8Zu3VqARXJsBeqeIDb4k6g1k29w8=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=egpor79GeHMTp0CI6VXv09UH/DESb8obVI8pY6tM0OBfG0MmX33FRfTH2LK1NEzBqNsItMU+Mbfbi2Z/Stew0TyWkAGckuEjSkwaoSj2MWvNWPNPvs1EvpKgzpEctOQH/2h9u6PKpwUfCtTdDclxr9tjmmZqgKms32C/EFIQwvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MHLi79f5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FE97C4CECB;
-	Tue,  3 Sep 2024 14:26:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725373604;
-	bh=yEnhxpK2qUIZRhx8Zu3VqARXJsBeqeIDb4k6g1k29w8=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=MHLi79f5BQT7Z5L8G5zMvHKmHRo5E63aloovaXYGlcJiEi7oDXMeFQfHhrc1oEmTG
-	 nXiwyn3akxdqox4ln01UoV08dGHWr5/A+7PEyr2MRCUWDzV3LRL8Oi14WZ7jqFo/PJ
-	 48WWS2Q/twt4cJMvsLiNOT6y+4T5KTGlyu+hpxdC0FhkNG+/I3JVPM6l68Ho1ytnLU
-	 fqTvUaocBHeKF6UrS0N9CuoqH2JSFUPPu9ulw2/U5XT6bq3G+JR5xl9l1XME39T5D1
-	 C5At1NA4HFApB1yXf2k6DBdORRgLBC2dIh66cV68RrBZ34jmpI8btjqArcRO5UOlYH
-	 5RCMV0YrA+z9Q==
-Date: Tue, 03 Sep 2024 09:26:43 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1725374771; c=relaxed/simple;
+	bh=Z4BjGtamMnnJf4aAKLMsPWYV6C8APwGl9my/5sXf9NI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=luxWCSupWFSOGiyAjrnqZPEGhtMWzimAiSX8gZu/5YsPSbOpVoMuBZrX4/cfs6LC9g9C1Tkulq9PQGf18jicx6wYIN7Pp2QT0aVoXKFCWy4QAHBI3j2bIWn73XxPBx3X1GMfDGjxDI19ELd2ilV/iKR7bZTs812e/4BU+wQilOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=JHyIPsv5; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2f3f07ac2dcso60884741fa.2
+        for <linux-pm@vger.kernel.org>; Tue, 03 Sep 2024 07:46:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1725374767; x=1725979567; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=10RLo6vQI16ZQLY55PJnQinuqmPpyY7pcz6lIln/dYk=;
+        b=JHyIPsv5kMj2R2fk38yqLy96tMjyWMBNMh+wNeh9a6vDgO7Gj4n2csTjZPoCmVP63L
+         tC70m7VXjdgudChbPhas/xJH/RnAWZVCeyQ4AQPi6bXJJ9wMIkPYbMev8klcMfOu/SE7
+         XTM2ZwJXPt5iyGVGMkkgM+ZnhcazNfNUoCp+V6qbC01m9+P3w2Ta4O1TotLDjrO7Tkpt
+         diyuLUsfvnztZAnsuX19BsBouWG4T81Bt2IHfdamQE9THnWL4CjMPsYWg9QWa+Lq28FK
+         vPIei3CRtDKRrTC8cVc06NASPdvcamyvjD22fZRn0ZKR2gncd/R4L0n8kKJX1yu2j0s0
+         LEJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725374767; x=1725979567;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=10RLo6vQI16ZQLY55PJnQinuqmPpyY7pcz6lIln/dYk=;
+        b=UB0lvfrE/pSsqWTNMpVJCavkbyJnfmxORi0sFsTjDciIOB6lGmFO4NbJxx/r4KEqmt
+         alZLhN4lQtLQrTgETPNirXR1E6JGMRyUFYX4T6ca/pBHh2ZJx3cen8hLwFR/2Jf6UOuQ
+         GpKRIgS1cyazlbJXq1KMIgtDMuldeTps/oFgnpFCydJr+JUMVGgr043MvpzhdyW7qymQ
+         pSl+fOJemAM3N2zEW804e8Vf97siajMudYrnjh+W5oGijRK7BcfXTRKUPH4mGDlzSx29
+         7xm88JZlXVQc6YMPhcATvU0VtbUKfrm47Z9apH0prMYDo5ZpSDC/jSKE1w7Ect3s6hw1
+         3HXg==
+X-Forwarded-Encrypted: i=1; AJvYcCUIRmS3PjkibBmNSB2t2jWhDwruZGYQnSGcUsL+/Mp3y0faeNgF6hY9C6MS0UGI9cpZ4vUCe9yG3A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRFkqYVanlPZp9ebk8AggR6RqkFXysqddIxSVRHIzNdVOD+VUB
+	hvcGHfe99PDoQMAYx88NN4JPgHLGYhFPT+5j50p2/tqAgmoT1be/ov1/TyIf6Ro=
+X-Google-Smtp-Source: AGHT+IHBF7/z9fE2IIPqXvT2mCPSoKoEFEBXPrIEjkmEaUhTM3epbcIR3W3mZTjeBzvwo0J9N98xnA==
+X-Received: by 2002:a2e:a99b:0:b0:2f1:59ed:879d with SMTP id 38308e7fff4ca-2f61038cbe8mr134852401fa.1.1725374766668;
+        Tue, 03 Sep 2024 07:46:06 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.144])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c226c6a46esm6583009a12.3.2024.09.03.07.46.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Sep 2024 07:46:05 -0700 (PDT)
+Message-ID: <7ffb6419-b8f0-4940-99d9-7779eec9bbb7@tuxon.dev>
+Date: Tue, 3 Sep 2024 17:46:03 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Varshini Rajendran <varshini.rajendran@microchip.com>
-Cc: mihai.sain@microchip.com, krzk+dt@kernel.org, dharma.b@microchip.com, 
- alexandre.belloni@bootlin.com, andrei.simion@microchip.com, 
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- tglx@linutronix.de, conor+dt@kernel.org, sre@kernel.org, 
- claudiu.beznea@tuxon.dev, devicetree@vger.kernel.org, 
- p.zabel@pengutronix.de, nicolas.ferre@microchip.com, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20240903063913.48307-1-varshini.rajendran@microchip.com>
-References: <20240903063913.48307-1-varshini.rajendran@microchip.com>
-Message-Id: <172537334915.874870.10281133063167664702.robh@kernel.org>
-Subject: Re: [PATCH v7 00/12] Add support for sam9x7 SoC family
-
-
-On Tue, 03 Sep 2024 12:09:13 +0530, Varshini Rajendran wrote:
-> This patch series adds support for the new SoC family - sam9x7.
->  - The device tree, configs and drivers are added
->  - Clock driver for sam9x7 is added
->  - Support for basic peripherals is added
->  - Target board SAM9X75 Curiosity is added
-> 
->  Changes in v7:
->  --------------
-> 
->  - Addressed all the review comments in the patches
->  - Dropped patches that are applied from the series
->  - Removed sfr node from the DT to add it later after creating the right
->    DT documentation for microchip sfr IPs.
->  - All the specific changes are captured in the corresponding patches
-> 
->  Changes in v6:
->  --------------
-> 
->  - Addressed all the review comments in the patches
->  - Picked up all Acked-by and Reviewed-by tags
->  - Reverted the IRQ patch to that of version 3 of the same series
->  - All the specific changes are captured in the corresponding patches
-> 
->  Changes in v5:
->  --------------
-> 
->  - Addressed all the review comments in the patches
->  - Picked up all Acked-by and Reviewed-by tags
->  - Dropped applied patches from the series
->  - Addressed the ABI breakage reported in the IRQ patch
->  - All the specific changes are captured in the corresponding patches
-> 
->  Changes in v4:
->  --------------
-> 
->  - Addressed all the review comments in the patches
->  - Picked up all Acked-by and Reviewed-by tags
->  - Dropped applied patches from the series
->  - Added pwm node and related dt binding documentation
->  - Added support for exporting some clocks to DT
->  - Dropped USB related patches and changes. See NOTE.
->  - All the specific changes are captured in the corresponding patches
-> 
->  NOTE: Owing to the discussion here
->  https://lore.kernel.org/linux-devicetree/CAL_JsqJ9PrX6fj-EbffeJce09MXs=B7t+KS_kOinxaRx38=WxA@mail.gmail.com/
->  the USB related changes are dropped from this series in order to enable
->  us to work on the mentioned issues before adding new compatibles as
->  said. The issues/warnings will be addressed in subsequent patches.
->  After which the USB related support for sam9x7 SoCs will be added. Hope
->  this works out fine.
-> 
->  Changes in v3:
->  --------------
-> 
->  - Fixed the DT documentation errors pointed out in v2.
->  - Dropped Acked-by tag in tcb DT doc patch as it had to be adapted
->    according to sam9x7 correctly.
->  - Picked by the previously missed tags.
->  - Dropped this patch "dt-bindings: usb: generic-ehci: Document clock-names
->    property" as the warning was not found while validating DT-schema for
->    at91-sam9x75_curiosity.dtb.
->  - Dropped redundant words in the commit message.
->  - Fixed the CHECK_DTBS warnings validated against
->    at91-sam9x75_curiosity.dtb.
->  - Renamed dt nodes according to naming convention.
->  - Dropped unwanted status property in dts.
->  - Removed nodes that are not in use from the board dts.
->  - Removed spi DT doc patch from the series as it was already applied
->    and a fix patch was applied subsequently. Added a patch to remove the
->    compatible to adapt sam9x7.
->  - Added sam9x7 compatibles in usb dt documentation.
-> 
-> 
->  Changes in v2:
->  --------------
-> 
->  - Added sam9x7 specific compatibles in DT with fallbacks
->  - Documented all the newly added DT compatible strings
->  - Added device tree for the target board sam9x75 curiosity and
->    documented the same in the DT bindings documentation
->  - Removed the dt nodes that are not supported at the moment
->  - Removed the configs added by previous version that are not supported
->    at the moment
->  - Fixed all the corrections in the commit message
->  - Changed all the instances of copyright year to 2023
->  - Added sam9x7 flag in PIT64B configuration
->  - Moved macro definitions to header file
->  - Added another divider in mck characteristics in the pmc driver
->  - Fixed the memory leak in the pmc driver
->  - Dropped patches that are no longer needed
->  - Picked up Acked-by and Reviewed-by tags
-> 
-> Hari Prasath (1):
->   irqchip/atmel-aic5: Add support for sam9x7 aic
-> 
-> Varshini Rajendran (11):
->   dt-bindings: atmel-ssc: add microchip,sam9x7-ssc
->   dt-bindings: microchip: atmel,at91rm9200-tcb: add sam9x7 compatible
->   dt-bindings: interrupt-controller: Add support for sam9x7 aic
->   power: reset: at91-poweroff: lookup for proper pmc dt node for sam9x7
->   power: reset: at91-reset: add reset support for sam9x7 SoC
->   power: reset: at91-reset: add sdhwc support for sam9x7 SoC
->   dt-bindings: reset: atmel,at91sam9260-reset: add sam9x7
->   dt-bindings: power: reset: atmel,sama5d2-shdwc: add sam9x7
->   ARM: dts: at91: sam9x7: add device tree for SoC
->   dt-bindings: arm: add sam9x75 curiosity board
->   ARM: dts: microchip: sam9x75_curiosity: add sam9x75 curiosity board
-> 
->  .../devicetree/bindings/arm/atmel-at91.yaml   |    6 +
->  .../interrupt-controller/atmel,aic.yaml       |    1 +
->  .../devicetree/bindings/misc/atmel-ssc.txt    |    1 +
->  .../power/reset/atmel,sama5d2-shdwc.yaml      |    3 +
->  .../reset/atmel,at91sam9260-reset.yaml        |    4 +
->  .../soc/microchip/atmel,at91rm9200-tcb.yaml   |   20 +-
->  arch/arm/boot/dts/microchip/Makefile          |    3 +
->  .../dts/microchip/at91-sam9x75_curiosity.dts  |  324 +++++
->  arch/arm/boot/dts/microchip/sam9x7.dtsi       | 1220 +++++++++++++++++
->  drivers/irqchip/irq-atmel-aic5.c              |    9 +
->  drivers/power/reset/Kconfig                   |    4 +-
->  drivers/power/reset/at91-sama5d2_shdwc.c      |    1 +
->  12 files changed, 1587 insertions(+), 9 deletions(-)
->  create mode 100644 arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dts
->  create mode 100644 arch/arm/boot/dts/microchip/sam9x7.dtsi
-> 
-> --
-> 2.25.1
-> 
-> 
-> 
-
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y microchip/at91-sam9x75_curiosity.dtb' for 20240903063913.48307-1-varshini.rajendran@microchip.com:
-
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /ahb/mmc@80000000: failed to match any schema with compatible: ['microchip,sam9x7-sdhci', 'microchip,sam9x60-sdhci']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /ahb/mmc@80000000: failed to match any schema with compatible: ['microchip,sam9x7-sdhci', 'microchip,sam9x60-sdhci']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /ahb/mmc@90000000: failed to match any schema with compatible: ['microchip,sam9x7-sdhci', 'microchip,sam9x60-sdhci']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /ahb/mmc@90000000: failed to match any schema with compatible: ['microchip,sam9x7-sdhci', 'microchip,sam9x60-sdhci']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/dma-controller@f0008000: failed to match any schema with compatible: ['microchip,sam9x7-dma', 'atmel,sama5d4-dma']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/dma-controller@f0008000: failed to match any schema with compatible: ['microchip,sam9x7-dma', 'atmel,sama5d4-dma']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/ssc@f0010000: failed to match any schema with compatible: ['microchip,sam9x7-ssc', 'atmel,at91sam9g45-ssc']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/ssc@f0010000: failed to match any schema with compatible: ['microchip,sam9x7-ssc', 'atmel,at91sam9g45-ssc']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f0028000: failed to match any schema with compatible: ['microchip,sam9x7-pit64b', 'microchip,sam9x60-pit64b']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f0028000: failed to match any schema with compatible: ['microchip,sam9x7-pit64b', 'microchip,sam9x60-pit64b']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f0040000: failed to match any schema with compatible: ['microchip,sam9x7-pit64b', 'microchip,sam9x60-pit64b']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/timer@f0040000: failed to match any schema with compatible: ['microchip,sam9x7-pit64b', 'microchip,sam9x60-pit64b']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/matrix@ffffde00: failed to match any schema with compatible: ['microchip,sam9x7-matrix', 'atmel,at91sam9x5-matrix', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/matrix@ffffde00: failed to match any schema with compatible: ['microchip,sam9x7-matrix', 'atmel,at91sam9x5-matrix', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/ecc-engine@ffffe000: failed to match any schema with compatible: ['microchip,sam9x7-pmecc', 'atmel,at91sam9g45-pmecc']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/ecc-engine@ffffe000: failed to match any schema with compatible: ['microchip,sam9x7-pmecc', 'atmel,at91sam9g45-pmecc']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/mpddrc@ffffe800: failed to match any schema with compatible: ['microchip,sam9x7-ddramc', 'atmel,sama5d3-ddramc']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/mpddrc@ffffe800: failed to match any schema with compatible: ['microchip,sam9x7-ddramc', 'atmel,sama5d3-ddramc']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/smc@ffffea00: failed to match any schema with compatible: ['microchip,sam9x7-smc', 'atmel,at91sam9260-smc', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/smc@ffffea00: failed to match any schema with compatible: ['microchip,sam9x7-smc', 'atmel,at91sam9260-smc', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/syscon@fffffe60: failed to match any schema with compatible: ['microchip,sam9x7-gpbr', 'atmel,at91sam9260-gpbr', 'syscon']
-arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dtb: /apb/syscon@fffffe60: failed to match any schema with compatible: ['microchip,sam9x7-gpbr', 'atmel,at91sam9260-gpbr', 'syscon']
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
+Content-Language: en-US
+To: Biju Das <biju.das.jz@bp.renesas.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "vkoul@kernel.org" <vkoul@kernel.org>,
+ "kishon@kernel.org" <kishon@kernel.org>, "robh@kernel.org"
+ <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "geert+renesas@glider.be" <geert+renesas@glider.be>,
+ "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "mturquette@baylibre.com" <mturquette@baylibre.com>,
+ "sboyd@kernel.org" <sboyd@kernel.org>,
+ Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+ "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240822152801.602318-1-claudiu.beznea.uj@bp.renesas.com>
+ <TY3PR01MB11346505565B81AD2894E035586922@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <35dc7414-f5bd-4ed4-bfa1-f723f4f0078c@tuxon.dev>
+ <TY3PR01MB11346A4814F83FE296A1DED8886922@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <TY3PR01MB1134648BF51F1B52BFE34DD6D86932@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <fbfa9179-2f52-429f-8b69-f7f4064e796b@tuxon.dev>
+ <TYCPR01MB11332EF1A8D064C491D8F261286932@TYCPR01MB11332.jpnprd01.prod.outlook.com>
+ <f7c57e76-b890-491f-880d-62d060b7b31e@tuxon.dev>
+ <TYCPR01MB11332BE2EDB318950B9C7B54C86932@TYCPR01MB11332.jpnprd01.prod.outlook.com>
+ <TY3PR01MB113469FC8A9F49D9B1FA432FD86932@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <0b73544b-0253-43b9-b631-6578b48eaca8@tuxon.dev>
+ <TY3PR01MB1134689573A785E91A9041E1886932@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <5bcdc677-e61e-4312-a19b-57b4600685d3@tuxon.dev>
+ <TY3PR01MB11346FAC6022C81ED8B9B2DC386932@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <TY3PR01MB11346FAC6022C81ED8B9B2DC386932@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
 
+On 03.09.2024 16:09, Biju Das wrote:
+> Hi Claudiu,
+> 
+>> -----Original Message-----
+>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>> Sent: Tuesday, September 3, 2024 1:57 PM
+> -
+>> clk@vger.kernel.org; linux-pm@vger.kernel.org; Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>> Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas RZ/G3S SoC
+>>
+>>
+>>
+>> On 03.09.2024 15:37, Biju Das wrote:
+>>>
+>>>
+>>>> -----Original Message-----
+>>>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>>>> Sent: Tuesday, September 3, 2024 1:26 PM
+>>>> To: Biju Das <biju.das.jz@bp.renesas.com>; Ulf Hansson
+>>>> <ulf.hansson@linaro.org>
+>>>> Cc: vkoul@kernel.org; kishon@kernel.org; robh@kernel.org;
+>>>> krzk+dt@kernel.org; conor+dt@kernel.org; p.zabel@pengutronix.de;
+>>>> geert+renesas@glider.be; magnus.damm@gmail.com;
+>>>> gregkh@linuxfoundation.org; mturquette@baylibre.com;
+>>>> sboyd@kernel.org; Yoshihiro Shimoda
+>>>> <yoshihiro.shimoda.uh@renesas.com>;
+>>>> linux-phy@lists.infradead.org; devicetree@vger.kernel.org;
+>>>> linux-kernel@vger.kernel.org; linux- renesas-soc@vger.kernel.org;
+>>>> linux-usb@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+>>>> linux- clk@vger.kernel.org; linux-pm@vger.kernel.org; Claudiu Beznea
+>>>> <claudiu.beznea.uj@bp.renesas.com>
+>>>> Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas
+>>>> RZ/G3S SoC
+>>>>
+>>>>
+>>>>
+>>>> On 03.09.2024 15:00, Biju Das wrote:
+>>>>>
+>>>>>
+>>>>>> -----Original Message-----
+>>>>>> From: Biju Das <biju.das.jz@bp.renesas.com>
+>>>>>> Sent: Tuesday, September 3, 2024 12:07 PM
+>>>>>> To: Claudiu.Beznea <claudiu.beznea@tuxon.dev>; Ulf Hansson
+>>>>>> <ulf.hansson@linaro.org>
+>>>>>> Cc: vkoul@kernel.org; kishon@kernel.org; robh@kernel.org;
+>>>>>> krzk+dt@kernel.org; conor+dt@kernel.org; p.zabel@pengutronix.de;
+>>>>>> geert+renesas@glider.be; magnus.damm@gmail.com;
+>>>>>> gregkh@linuxfoundation.org; mturquette@baylibre.com;
+>>>>>> sboyd@kernel.org; Yoshihiro Shimoda
+>>>>>> <yoshihiro.shimoda.uh@renesas.com>;
+>>>>>> linux-phy@lists.infradead.org; devicetree@vger.kernel.org;
+>>>>>> linux-kernel@vger.kernel.org; linux- renesas-soc@vger.kernel.org;
+>>>>>> linux-usb@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+>>>>>> linux- clk@vger.kernel.org; linux-pm@vger.kernel.org; Claudiu
+>>>>>> Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>>> Subject: RE: [PATCH 00/16] Add initial USB support for the Renesas
+>>>>>> RZ/G3S SoC
+>>>>>>
+>>>>>> Hi Claudiu,
+>>>>>>
+>>>>>>> -----Original Message-----
+>>>>>>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>>>>>>> Sent: Tuesday, September 3, 2024 12:00 PM
+>>>>>>> Subject: Re: [PATCH 00/16] Add initial USB support for the Renesas
+>>>>>>> RZ/G3S SoC
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> On 03.09.2024 13:31, Biju Das wrote:
+>>>>>>>>>> During boot clr USB PWR READY signal in TF-A.
+>>>>>>>>>> STR case, suspend set USB PWR READY signal in TF-A.
+>>>>>>>>>> STR case, resume clr USB PWR READY signal in TF-A.
+>>>>>>>>> As I said previously, it can be done in different ways. My point
+>>>>>>>>> was to let Linux set what it needs for all it's devices to work.
+>>>>>>>>> I think the way to go forward is a
+>>>>>>> maintainer decision.
+>>>>>>>>
+>>>>>>>> I agree, there can be n number of solution for a problem.
+>>>>>>>>
+>>>>>>>> Since you modelled system state signal (USB PWRRDY) as reset
+>>>>>>>> control signal, it is reset/DT maintainer's decision to say the
+>>>>>>>> final word whether this signal fits in reset
+>>>>>>> system framework or not?
+>>>>>>>
+>>>>>>> I was thinking:
+>>>>>>> 1/ Geert would be the best to say if he considers it OK to handle this
+>>>>>>>    in Linux
+>>>>>>
+>>>>>> I agree Geert is the right person for taking SYSTEM decisions,
+>>>>>> since the signal is used only during state transitions (Table
+>>>>>> 41.6.4 AWO to ALL_ON and 41.6.3 ALL_ON to AWO)
+>>>>>
+>>>>> One more info, as per [1], this USB PWRRDY signal setting to be before Linux kernel boots.
+>>>>
+>>>> The "controlled by" column mentions CA-55 on PWRRDY signal control
+>>>> line and it is b/w steps "DDR exits from retention mode" and  "clock
+>>>> start settings for system bus and peripheral modules". AFAICT, after DDR exists retention mode
+>> Linux is ready to run.
+>>>
+>>> DDR retention exit happens in TF-A and it jumps into reset code where it executes BL2 in TF_A. Bl2
+>> checks for warm or cold reset.
+>>> If it is warm reset, it sets required minimal clocks/resets and pass
+>>> the control to linux by calling the SMC callback handler. Which in turn calls resume(step 11-->14)
+>> path.
+>>
+>> Is this from HW manual or some specific documentation? I'm referring at "resume" == "steps 11-->14"
+
+You branched the discussion, there was at least this question that I've
+asked you above that interested me.
+
+>>
+>>>
+>>> Step 8, Cortex-A55 Exit from DDR retention mode (when using) Setting
+>>> for exiting form DDR retention mode Step 9, Cortex-A55 USB PHY PWRRDY
+>>> signal control (if use USB) SYS_USB_PWRRDY Step 10, Cortex-A55 PCIe
+>>> RST_RSM_B signal control (if use PCIe) SYS_PCIE_RST_RSM_B
+>>
+>> Note *if use*: how does the TF-A know if USB/PCIe is used by Linux? The documentation mention to set
+>> it *if use*. Same note is on ALL_ON to VBATT transition documentation (namely "if using USB", "if
+>> using PCIe"). If TF-A will do this it should set this signals unconditionally. It will not be
+>> something wrong though. We don't know at the moment what this involves in terms of power consumption,
+>> if it means something...
+> 
+> You mean, you modelled this as reset signal just to reduce power consumption by calling runtime PM
+> calls to turn on/off this signal??
+
+In this series it is though a reset control driver.
+
+The internal BSP propose the control of this signal though SMC calls in
+each individual USB driver; I think the hardware team was checked for this;
+I may be wrong, as I don't have this insight.
+
+As you know, the initial control of these bits in the BSP was though SMC
+calls and you propose to have a separate Linux driver to control this after
+finding that these registers are accessible in normal world. As a result,
+this series, with reset approach, which you were against, but I felt this
+was the best way (I know) to describe the hardware and the relation b/w
+hardware blocks. To conclude, you initially proposed me internally to have
+it in Linux.
+
+To answer your question, the answer is no, I didn't try to just model
+something fancy just to be fancy. I did it based on what is proposed in BSP
+as this may have been checked with hardware team and I did tests around
+this. And considering this best describes the HW and the relation b/w
+individual hardware blocks and in this way Linux can have at its hand all
+the resources it needs w/o relying on third parties. And from the HW manual
+description my understanding was that this is possible. I never said that
+this solution is the best. I'm just adding information here as I requested
+help from maintainers to guide on the proper direction.
+
+You were adding information to sustain your TF-A idea, too.
+
+> 
+> Does will it have any system stability issue as hardware manual says to do it at very early stage
+> before starting any clocks/resets?? Have you checked with hardware team?
+
+All the implementation of this is based on what has been proposed on BSP,
+the same approach was proposed there, meaning the control of these signals
+was done on probe/remove, suspend/resume in Linux.
 
 
+> 
+> Cheers,
+> Biju
 
