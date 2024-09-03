@@ -1,85 +1,115 @@
-Return-Path: <linux-pm+bounces-13442-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13443-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3F3396A40B
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 18:17:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F77496A436
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 18:24:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 540AFB29962
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 16:17:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6626DB2A0BE
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 16:24:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BD8D18A6AC;
-	Tue,  3 Sep 2024 16:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA94818B47C;
+	Tue,  3 Sep 2024 16:24:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="D/Y2JiiJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PIyd3Fj1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 028F926ACC;
-	Tue,  3 Sep 2024 16:17:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8146B2A1BF;
+	Tue,  3 Sep 2024 16:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725380227; cv=none; b=nLFIcnWwUILZfb889IIxr9rdMkk3yap39CSzkoDuv3+15KuOJG0B024lC/z7YsPKjnhIG7TN0ujjOUE8+lZz4EBG1ELYCClukxHwQZiJZfM+wa4jKv80q3HRkNprhZSYTMjL6tNnEuriCnPb0cMwW8UTw/mEmnJmfp31TfiUATU=
+	t=1725380649; cv=none; b=CB1ctUzSUQlqr+AixN0WVh40NqtbFechAk2lMKIRbd7yLBiWfxUB808YGiymAyvAZhUu7ihf0MzIIhMNzoyoDPExMdWT/HVH5v1fylGbWzhtxgKS19Alaw2s/FYgtJ673ajUdJseDBuxOhN1KCACgiUfU0mTKikUpd/LCii3Yt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725380227; c=relaxed/simple;
-	bh=ybz1Oo+4mfh4Ny3r0ptMOoF47R/WIq99bZzaWePM+sc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=scv4wCj3zxZ8vVp2hwTlNMyGc1ZfC4sDc6ByPYxwFrIOR82YdQe1KcnqUc57OwV6VMvaMP/Vcr3IxMT2XoSbYoAi8sGEIWl4jEg5IgAi6Earl8avreL8OXWeCwl/wcRLfuxSJqCOxtDOLkt4P9sr40hTmOhvM4Dk01f8xkoWV3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=D/Y2JiiJ reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=KwK4ua8dyD8+BVRinKjXFoQ4sPizUkipw0ydVwYNosE=; b=D
-	/Y2JiiJ1OJjowT2tN50sqTWwbJBmogfGOoeLg7LNxdjdwV00mHuSbnXF+VygvRTM
-	yOgMuTy/pSkBYXJYjNGx4iDtTjJTeQqtCrEhYwUPnssOH4DIXdHwIPCCimQ+rLxr
-	w9fCHrsBh0umN1Pm6r8kiFGsErHO0mr2s9XFDLIMTQ=
-Received: from 00107082$163.com ( [111.35.190.113] ) by
- ajax-webmail-wmsvr-40-107 (Coremail) ; Wed, 4 Sep 2024 00:16:09 +0800 (CST)
-Date: Wed, 4 Sep 2024 00:16:09 +0800 (CST)
-From: "David Wang" <00107082@163.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: len.brown@intel.com, pavel@ucw.cz, gregkh@linuxfoundation.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PM: add: move warn message out of mutex lock.
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
- Copyright (c) 2002-2024 www.mailtech.cn 163com
-In-Reply-To: <CAJZ5v0itLuorOY-4PyDL5eFkWTf2s9JX++oBkzqi1cYcaHYdmA@mail.gmail.com>
-References: <20240902054959.28073-1-00107082@163.com>
- <CAJZ5v0gZ9oAByawssaARFN1_crTuMZ-CnU5Fy9D1sWv+Moo-sg@mail.gmail.com>
- <CAJZ5v0itLuorOY-4PyDL5eFkWTf2s9JX++oBkzqi1cYcaHYdmA@mail.gmail.com>
-X-NTES-SC: AL_Qu2ZB/+Tv0kt7yOYYukXn0oTju85XMCzuv8j3YJeN500uSTH1Q45T1FJFnf51MefLBmmnja8eQFL5c9Rf6dzRKJwFtRwDIU85RrSKgjlpCMU
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1725380649; c=relaxed/simple;
+	bh=3V5UAV3qrzsjjrbeRFb6IMor9fxYQ0KupVcRounHnp4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ccQXy9t158lMx2J8J6oxwez6NcKmr+BrwoXHk+fHasJ6UVcoYKxbG6aQoG8mBYi3OSCKL46Vg3HyR3WhipeUmhgYSo32BdIP7mQs2bCjwAmuXeLk42fqYFZVq7XsDEkFHf7h7GR3Bc/m/lgYpes5Waj/Sj1W+INgKKj+8huTinM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PIyd3Fj1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0479CC4CECC;
+	Tue,  3 Sep 2024 16:24:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725380649;
+	bh=3V5UAV3qrzsjjrbeRFb6IMor9fxYQ0KupVcRounHnp4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=PIyd3Fj10xrmUgywMfbhVi8IYXfMGB6J2oj6Dczs+yl8UQR7jEsMMX7g9CBg4HQ4P
+	 jzEr8Zt51KPCeJ85sfJSe8cayzzY6FHzr5NA/UwkwBmiPsaA2/YREtTyF0iwuVbRXR
+	 yuSz2fAZ414s7XzKnWhl+THFR5Z517W/FmT+KYSpdqwI+B5pFClAJF7+3eXgUWksKG
+	 BVuxX4iR4IeWq+DoPb5yJ/pjBL2bt8TOAsybgbaLG75ebb8asZ37Se4Eo/mfHSWKg2
+	 R6+4FNC9Lf1hPxutpg3qASpK3sxPTelIaJvsgU4jDNBQpzk2G8rf+nOzhG1HHEWHQB
+	 LVTPHY96uQcog==
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5de8b17db8dso3303794eaf.2;
+        Tue, 03 Sep 2024 09:24:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV6A+i4WdbNtz9au/ybvwl5K+fyVmHeHv2SZzL19OHYtLxi0jI8mGZRz5hN/CD44b2k1TW/KxkKfTM=@vger.kernel.org, AJvYcCVty5h4irjeAIoW20e0hdHIQThlsDbjIg6IAvu72KYrbEc/i/a9KhWegRs1ESvGghAzeaXGda3j17ScyYw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAYRAF5oIX7HPcUgytOMnLRgor4pJK5DxVZzMJ0Msbzvrt2+UY
+	lygFY1Ai7V+eSWN9GIinDj94maBtSW64xHwifTW6lvZrEkh4GiuK1/J6UozKFypZAVcMuqLG6cS
+	Q5JD9Qt9OCa3uJ6OFIgB1SCwfksM=
+X-Google-Smtp-Source: AGHT+IG/P/qyT0Fjzyu27zYv+VWMRDXaH1H9JEoqvSRz2HDgEWC9OIATibQ9Z5RpM62r61gADsz/vDdOHnz9dZGGP8Q=
+X-Received: by 2002:a05:6870:2253:b0:277:df58:1647 with SMTP id
+ 586e51a60fabf-277df582090mr10519281fac.35.1725380648337; Tue, 03 Sep 2024
+ 09:24:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <408f4579.bfd0.191b8ac0e66.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:_____wD3P7tKNtdmiGsfAA--.64750W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/xtbB0gRPqmWX0I5sjQACs8
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+References: <20240902054959.28073-1-00107082@163.com> <CAJZ5v0gZ9oAByawssaARFN1_crTuMZ-CnU5Fy9D1sWv+Moo-sg@mail.gmail.com>
+ <CAJZ5v0itLuorOY-4PyDL5eFkWTf2s9JX++oBkzqi1cYcaHYdmA@mail.gmail.com> <408f4579.bfd0.191b8ac0e66.Coremail.00107082@163.com>
+In-Reply-To: <408f4579.bfd0.191b8ac0e66.Coremail.00107082@163.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 3 Sep 2024 18:23:57 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gFnHX982G96aU51tirmdQPiQAYExS5CFcjQc4vgXHAtQ@mail.gmail.com>
+Message-ID: <CAJZ5v0gFnHX982G96aU51tirmdQPiQAYExS5CFcjQc4vgXHAtQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: add: move warn message out of mutex lock.
+To: David Wang <00107082@163.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, len.brown@intel.com, pavel@ucw.cz, 
+	gregkh@linuxfoundation.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SGksCgpBdCAyMDI0LTA5LTAzIDIyOjEwOjE2LCAiUmFmYWVsIEouIFd5c29ja2kiIDxyYWZhZWxA
-a2VybmVsLm9yZz4gd3JvdGU6Cj5PbiBUdWUsIFNlcCAzLCAyMDI0IGF0IDM6MDHigK9QTSBSYWZh
-ZWwgSi4gV3lzb2NraSA8cmFmYWVsQGtlcm5lbC5vcmc+IHdyb3RlOgo+Pgo+PiBPbiBNb24sIFNl
-cCAyLCAyMDI0IGF0IDc6NTDigK9BTSBEYXZpZCBXYW5nIDwwMDEwNzA4MkAxNjMuY29tPiB3cm90
-ZToKPj4gPgo+PiA+IGRwbV9saXN0X210eCBkb2VzIG5vdCBwcm90ZWN0IGFueSBkYXRhIHVzZWQg
-YnkKPj4gPiBkZXZfd2FybiBmb3IgY2hlY2tpbmcgcGFyZW50J3MgcG93ZXIsIG1vdmUKPj4gPiBk
-ZXZfd2FybiBvdXQgb2YgbXV0ZXggbG9jayBibG9jayBtYWtlIHRoZQo+PiA+IGxvY2sgbW9yZSBl
-ZmZpY2llbnQsIGVzcGVjaWFsbHkgd2hlbiB0aGUgd2Fybgo+PiA+IGlzIHRyaWdnZXJlZC4KPj4K
-Pj4gSXQgZG9lcyBwcm90ZWN0IHRoZSBwb3dlci5pc19wcmVwYXJlZCBmbGFnIG9mIHRoZSBwYXJl
-bnQuCj4KPkluIGZhY3QsIHRoZSB1cGRhdGUgb2YgaXQgaW4gZGV2aWNlX3Jlc3VtZSgpIGlzIHJh
-Y3kgd2l0aCByZXNwZWN0IHRvCj50aGUgY2hlY2sgaW4gZGV2aWNlX3BtX2FkZCgpLCBidXQgdGhl
-IHB1cnBvc2Ugb2YgaXQgaXMgbW9zdGx5IHRvIGFsbG93Cj50aGUgZGV2aWNlIGRyaXZlcidzIHJl
-c3VtZSBjYWxsYmFjayB0byBhZGQgY2hpbGRyZW4gd2l0aG91dCB0cmlnZ2VyaW5nCj50aGUgd2Fy
-bmluZy4KCgpLaW5kIG9mIGNvbmZ1c2VkIGJ5IHRoaXMuLi4gaWYgZHBtX2xpc3RfbXR4IGNvdWxk
-IHByb3RlY3QgcG93ZXIuaXNfcHJlcGFyZWQsIAp0aGVuIGNvZGVzIHRoYXQgY2hhbmdlIHBvd2Vy
-LmlzX3ByZXBhcmVkIHNob3VsZCBhbHNvIGhvbGQgdGhpcyBsb2NrLCBidXQgbm9ybWFsbHkKdGhl
-eSBvbmx5IHVzZSBkZXZpY2VfbG9jayhkZXYpOwoKCkRhdmlk
+On Tue, Sep 3, 2024 at 6:16=E2=80=AFPM David Wang <00107082@163.com> wrote:
+>
+> Hi,
+>
+> At 2024-09-03 22:10:16, "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> >On Tue, Sep 3, 2024 at 3:01=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
+org> wrote:
+> >>
+> >> On Mon, Sep 2, 2024 at 7:50=E2=80=AFAM David Wang <00107082@163.com> w=
+rote:
+> >> >
+> >> > dpm_list_mtx does not protect any data used by
+> >> > dev_warn for checking parent's power, move
+> >> > dev_warn out of mutex lock block make the
+> >> > lock more efficient, especially when the warn
+> >> > is triggered.
+> >>
+> >> It does protect the power.is_prepared flag of the parent.
+> >
+> >In fact, the update of it in device_resume() is racy with respect to
+> >the check in device_pm_add(), but the purpose of it is mostly to allow
+> >the device driver's resume callback to add children without triggering
+> >the warning.
+>
+>
+> Kind of confused by this... if dpm_list_mtx could protect power.is_prepar=
+ed,
+> then codes that change power.is_prepared should also hold this lock, but =
+normally
+> they only use device_lock(dev);
+
+It is confusing, sorry about that.
+
+The bottom line though is that you want to get rid of the spurious
+warning in device_pm_add() AFAICS.
+
+To that end, can you please try the patch I sent in the other thread:
+
+https://lore.kernel.org/linux-pm/CAJZ5v0hMnnDjKJLMgcT_p1nnejyyAyaqaA_AF5t+_=
+=3DPsSMfceQ@mail.gmail.com/
 
