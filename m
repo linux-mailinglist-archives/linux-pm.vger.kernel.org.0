@@ -1,147 +1,193 @@
-Return-Path: <linux-pm+bounces-13397-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13398-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 344E896999B
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 11:57:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D76489699CD
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 12:14:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D831B22EAB
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 09:57:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 083C51C2154A
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 10:14:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C0D1A3ABA;
-	Tue,  3 Sep 2024 09:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 826771AD25D;
+	Tue,  3 Sep 2024 10:13:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="K/tyJwrp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="M+2mwKQI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A680819F41D;
-	Tue,  3 Sep 2024 09:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64AD61A4E88
+	for <linux-pm@vger.kernel.org>; Tue,  3 Sep 2024 10:13:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725357437; cv=none; b=G6GwThVWCxXFaFa0XzQz0YevrsJGThPOigmaMQ1vyHNZvBCTWH8s8bhzp3mn+8XckC+RGAfX7ta0wZBg7B08Yr5jNonQvRidSI9xanKRGXsEAQoXj1JlneG6uy++nHPmrIBXQYNV4oUhbkQdFlPbwz4TYxXQuH9haYQ2xXhTf9w=
+	t=1725358439; cv=none; b=n0hQEf4X5Vh5Y/pfnbz3PngbXBRYXa4onIfptnVh1R1VLYVeeaAhLcUbpUYALn+iHIahKZwCczFo8Uujos+tJM1jGpUgOKebWSRZR6m3SiXeAWbagt4mE239WjlWvkQJ5bg6dgMsT1hpFPyOKdlAdckvFtRSbxvGf/RDpG039xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725357437; c=relaxed/simple;
-	bh=cqubLfVw5UF9H8tDMBrJ76paRmwHooWjgakm0+GPp+w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ic17SDXQV1Pfl81OrkkbLIuL4zfTOBcRgNofkBZOOH7Z7jBVXmUWUDsKb6a4ZGbUBPlleTKsIUmpeXjM3Ma5NSxipvIidfxm60h/KniOAYlEbZWY4kOA4Sy1egqsvQto+VoceSCVTl2iKYIgbn1kDTFEWux2PIAK4kAnsK5GFAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=K/tyJwrp; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 482Kc3pX010165;
-	Tue, 3 Sep 2024 09:57:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	UtMY7o5mMRRxzHSIdYCWRT7xTQgNbrg7biRIrNK54Qs=; b=K/tyJwrpxvHfsLkX
-	3TqhsThlyKw6QKR6jbyjHBLOusq6f0KmI3DIMdRkKKY4SAuHcd3MBKKCRlfqcacU
-	QY5YdUXf9EZIM1Kh/anL4PbIkSHH2Gc65SWzZgsznMZwW58NY/cM7ERyIco5/y0A
-	HV1cQSm7L5lt8Bpc7vVfl8KrKRR9ZTQn/B6lZSJ1e2Cx9TbHRneT+jPENHCud2Jq
-	pWEAtCqXmqRbXLOHFOQ/2ISgDJKb9s0dwLYzzXHxmUElDJoxpwCxNkf42GY7Ou9D
-	vHBKm2uL3i46gWYdvU72qCyBQ4rdGQ6svHvvvyHunHYwKggLkv+Hln+ZvsTaw9n5
-	KF22vQ==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41buj6xwx1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Sep 2024 09:57:10 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4839v9qv023866
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 3 Sep 2024 09:57:09 GMT
-Received: from [10.218.15.248] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 3 Sep 2024
- 02:57:05 -0700
-Message-ID: <a9425927-c9d8-4988-8bdb-2def8d9668ca@quicinc.com>
-Date: Tue, 3 Sep 2024 15:27:02 +0530
+	s=arc-20240116; t=1725358439; c=relaxed/simple;
+	bh=7NVt0WI8WonQFSQD2fP3AW5DISeaYMFJR8bC6SEE49o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BPZqK1+HOUnP6Bc/ygrTPPfL3hDr9/iAPJRKS/fAymmfainakgzmseSIJ8X+sFh+Vs6yQDaPRjHrGMf4AycnqJFTgl+vfraX2ywmydWQhVFp4qrxSIl+eifGR39+VY7bFvM4mrSUjk4F28iUY9ng2kOF1W1CS+SDPWe34D16JWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=M+2mwKQI; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e1ce8a675f7so1453661276.3
+        for <linux-pm@vger.kernel.org>; Tue, 03 Sep 2024 03:13:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1725358435; x=1725963235; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KTyRAP6ldYm/RIrG1GDBeY32AFoUsfEcUDOM5nLfoPM=;
+        b=M+2mwKQIaXRLptTXV2JJfosYmBdAxJ9+PVfb6fiI2ubcvm0djFRzzzBAZC8ar2GNgj
+         wkLGGyAxNIWTukb2MeFjUru68iDMdqifQFQzJPLExnDV413EGmBrHmKnTlZw0UNud5Rw
+         tulSKFk4H5SYBaNmLnXML4qw3dbmWRbq3Xw+Bhoy2ZPyfujQ2Eg+TiD12t3iYuUy5wp0
+         JELtzKHiXjnaw8BEvtANmhHu3pPDmZu8IlxiT52UsgamwSptap7dXnQlhK1skIuvfZuh
+         X4nxarDipONLNOdzPr9qJInhh3nwBT9a8W8QydWYLHUyeX+S/7M1ypgLDnA5kg9B3btR
+         BvuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725358435; x=1725963235;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KTyRAP6ldYm/RIrG1GDBeY32AFoUsfEcUDOM5nLfoPM=;
+        b=IaoAIMfX+8ur8INup8HTTk96AqApCGqL8bnI6h3u4izWu0qAmWIMo5+YcXF0Nn7oqg
+         SCGYlZs9zCXprEVIIzuTnRmKu31g+MDYwJsfvTmY0dmBiM3fokQ7nZSc2i7IwC1UXZtZ
+         jV3t9t2xM0FATsZLcyk9x+QKlgvNNV6LTo2ok7zntOz43BcMuucTzfnqxdFbW9/bh+t1
+         mI9+wew8D+Zh5qJKiv7/GurrgISISeWCXhXK4UpdTlR47R2tp0elOv0UUbbfkUkt81+n
+         gkLG06KXtnJmle9F/F31+0Ax7VMqhpkyipQuCadg8kQpTz2gadE2QX7eihhcWLYg5SCT
+         uHYA==
+X-Forwarded-Encrypted: i=1; AJvYcCVFIk2dkNvqvGjx9EO5UTL75FOA65Iv6JkO1ChmAL41V7dfOHzUKII7PbUniEuUPm1diEYuOdt5EQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCyPGy1uNKToUZiS5/CH478+D7LJscDJ3ujQc36DxxlXtQ3ukn
+	aG7QsJfhDJq0reH2rWiT00tF9oXaiLPKdNfbgkl7oZHUrsvO0Zpb+XvvIMkCuuBRaw7gxE8zLA4
+	4KHWopaBm0BU/3BSm0ok1kC6X9Yaz2/CpLO4R7w==
+X-Google-Smtp-Source: AGHT+IGmBgAMdjyJQyb7ftI6XxxA+1QlmiUelprGDLPAvCd56X4ObgoWFCUQwy4jbPJIBtOUmXURC4/vS8qRlSXuSmY=
+X-Received: by 2002:a05:6902:1021:b0:e1a:7033:73a3 with SMTP id
+ 3f1490d57ef6-e1a79ffa19emr15943149276.27.1725358435204; Tue, 03 Sep 2024
+ 03:13:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] interconnect: qcom: icc-rpmh: probe defer incase of
- missing QoS clock dependency
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: Georgi Djakov <djakov@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>, <quic_mdtipton@quicinc.com>,
-        <quic_okukatla@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>
-References: <20240827172524.89-1-quic_rlaggysh@quicinc.com>
- <xny4v2twbt5sjjtc5yoffpnymryfd6da6pirlmiii5txyz7rl5@xy7wdrzi5auc>
-Content-Language: en-US
-From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-In-Reply-To: <xny4v2twbt5sjjtc5yoffpnymryfd6da6pirlmiii5txyz7rl5@xy7wdrzi5auc>
+References: <20240527142557.321610-1-ulf.hansson@linaro.org>
+ <20240527142557.321610-4-ulf.hansson@linaro.org> <CAMuHMdUoZBJewA6nQZLhnbebZuoZo85UCCfwuOv8or_N_e-0qg@mail.gmail.com>
+ <CAPDyKFqcpxUJWL7FoRSXLXVhS5B9PjcTY5ryG8HAY_E1Btgwag@mail.gmail.com>
+ <CAMuHMdWB2zjF1jajkQzFpt2=4oj25myG1CJ5i6450gkUVX19+g@mail.gmail.com> <CAMuHMdXM2qHGzcLDfZQNC1Zqj_vh72S9+rV6-xuM+p=w7-oHyQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdXM2qHGzcLDfZQNC1Zqj_vh72S9+rV6-xuM+p=w7-oHyQ@mail.gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 3 Sep 2024 12:13:19 +0200
+Message-ID: <CAPDyKFo=GP+uBhGDkYWsLTf+XBmyZpmuu123SGMGeeyOge5x4w@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] pmdomain: core: Use dev_name() instead of
+ kobject_get_path() in debugfs
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org, 
+	Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>, Nikunj Kela <nkela@quicinc.com>, 
+	Prasad Sodagudi <psodagud@quicinc.com>, Maulik Shah <quic_mkshah@quicinc.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, linux-rt-users@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	"open list:TI ETHERNET SWITCH DRIVER (CPSW)" <linux-omap@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: L4yRlhVVoIAB9FGOgQgChBMjTWJ4RazC
-X-Proofpoint-GUID: L4yRlhVVoIAB9FGOgQgChBMjTWJ4RazC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-02_06,2024-09-03_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- mlxlogscore=999 impostorscore=0 suspectscore=0 clxscore=1011
- lowpriorityscore=0 phishscore=0 bulkscore=0 priorityscore=1501
- adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2407110000 definitions=main-2409030080
+Content-Transfer-Encoding: quoted-printable
 
-
-On 8/29/2024 3:09 PM, Dmitry Baryshkov wrote:
-> On Tue, Aug 27, 2024 at 05:25:24PM GMT, Raviteja Laggyshetty wrote:
->> Return -EPROBE_DEFER from interconnect provider incase probe defer is
->> received from devm_clk_bulk_get_all(). This would help in reattempting
->> the inteconnect driver probe, once the required QoS clocks are
->> available.
->> Rename qos_clks_required flag to qos_requires_clocks in qcom_icc_desc
->> structure. This flag indicates that interconnect provider requires
->> clocks for programming QoS.
-> Two separate commits, please.
-
-Thanks for the review, I will address the comment in next patch revision.  I will post a new patch for renaming "qos_clks_required" flag.
-
+On Mon, 2 Sept 2024 at 16:43, Geert Uytterhoeven <geert@linux-m68k.org> wro=
+te:
 >
->> Suggested-by: Bjorn Andersson <andersson@kernel.org>
->> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->> ---
->>  drivers/interconnect/qcom/icc-rpmh.c | 10 +++++++---
->>  drivers/interconnect/qcom/icc-rpmh.h |  2 +-
->>  drivers/interconnect/qcom/sc7280.c   |  4 ++--
->>  3 files changed, 10 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
->> index f49a8e0cb03c..5417abf59e28 100644
->> --- a/drivers/interconnect/qcom/icc-rpmh.c
->> +++ b/drivers/interconnect/qcom/icc-rpmh.c
->> @@ -311,9 +311,13 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
->>  		}
->>  
->>  		qp->num_clks = devm_clk_bulk_get_all(qp->dev, &qp->clks);
->> -		if (qp->num_clks < 0 || (!qp->num_clks && desc->qos_clks_required)) {
->> -			dev_info(dev, "Skipping QoS, failed to get clk: %d\n", qp->num_clks);
->> -			goto skip_qos_config;
->> +		if (qp->num_clks < 0 || (!qp->num_clks && desc->qos_requires_clocks)) {
->> +			if (qp->num_clks != -EPROBE_DEFER) {
-> if (qp->num_clks == -EPROBE_DEFER)
->     return dev_err_probe(....)
-Will address this comment in next patch revision.
-> if (qp->num_clks < 0 || ....)
->     ....
+> Hi Ulf,
 >
->> +				dev_info(dev, "Skipping QoS, failed to get clk: %d\n",
->> +						qp->num_clks);
->> +				goto skip_qos_config;
->> +			}
->> +			return qp->num_clks;
+> On Fri, Aug 30, 2024 at 5:50=E2=80=AFPM Geert Uytterhoeven <geert@linux-m=
+68k.org> wrote:
+> > On Tue, Aug 20, 2024 at 10:58=E2=80=AFAM Ulf Hansson <ulf.hansson@linar=
+o.org> wrote:
+> > > On Tue, 20 Aug 2024 at 10:55, Geert Uytterhoeven <geert@linux-m68k.or=
+g> wrote:
+> > > > On Mon, May 27, 2024 at 4:27=E2=80=AFPM Ulf Hansson <ulf.hansson@li=
+naro.org> wrote:
+> > > > > Using kobject_get_path() means a dynamic memory allocation gets d=
+one, which
+> > > > > doesn't work on a PREEMPT_RT based configuration while holding ge=
+npd's raw
+> > > > > spinlock.
+> > > > >
+> > > > > To fix the problem, let's convert into using the simpler dev_name=
+(). This
+> > > > > means the information about the path doesn't get presented in deb=
+ugfs, but
+> > > > > hopefully this shouldn't be an issue.
+> > > > >
+> > > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > > ---
+> > > > > Changes in v2:
+> > > > >         - New patch.
+> > > >
+> > > > Thanks for your patch, which is now commit 9094e53ff5c86ebe ("pmdom=
+ain:
+> > > > core: Use dev_name() instead of kobject_get_path() in debugfs")
+> > > > in pmdomain/next.
+> > > >
+> > > > > --- a/drivers/pmdomain/core.c
+> > > > > +++ b/drivers/pmdomain/core.c
+> > > > > @@ -3215,16 +3214,9 @@ static int genpd_summary_one(struct seq_fi=
+le *s,
+> > > > >         }
+> > > > >
+> > > > >         list_for_each_entry(pm_data, &genpd->dev_list, list_node)=
+ {
+> > > > > -               kobj_path =3D kobject_get_path(&pm_data->dev->kob=
+j,
+> > > > > -                               genpd_is_irq_safe(genpd) ?
+> > > > > -                               GFP_ATOMIC : GFP_KERNEL);
+> > > > > -               if (kobj_path =3D=3D NULL)
+> > > > > -                       continue;
+> > > > > -
+> > > > > -               seq_printf(s, "\n    %-50s  ", kobj_path);
+> > > > > +               seq_printf(s, "\n    %-50s  ", dev_name(pm_data->=
+dev));
+> > > >
+> > > > While some of the old names didn't even fit in 50 characters, the n=
+ew
+> > > > names need much less space, so perhaps this is a good opportunity t=
+o
+> > > > decrease the table width?
+> > >
+> > > Sure, it seems reasonable! Do you want to send a patch?
+> >
+> > I started looking into it.  Then I noticed that on some systems
+> > (e.g. TI am335x) the device names may have a longer format than
+> > the typical <unit-address>.<nodename>. So I wanted to verify on
+> > BeagleBone Black, but recent kernels crash during early boot.
+> > Apparently that platform was broken between v6.8 and v6.9-rc1.
+> > And during bisection, I encountered 3 different failure modes...
+> >
+> > To be continued...
 >
+> The longest generic node names documented in the Devicetree
+> Specification are "air-pollution-sensor" and "interrupt-controller"
+> (both counting 20 characters), so a typical device name needs 8
+> (32-bit unit address) + 1 (dot) + 20 =3D 29 characters.
+> However, I assume some devices lie outside the 32-bit address space,
+> and thus need more space?
+>
+> With the BeagleBone Black boot issue fixed:
+> "/devices/platform/ocp/5600fe00.target-module"
+> resp. "/devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:=
+segment@200000/44e3e074.target-module"
+> are now shortened to "5600fe00.target-module" resp. "44e3e074.target-modu=
+le".
+> However, "/devices/platform/ocp/48000000.interconnect/48000000.interconne=
+ct:segment@200000/48000000.interconnect:segment@200000:target-module@0"
+> is shortened to "48000000.interconnect:segment@200000:target-module@0",
+> which is still longer than the old column width...
+
+Should we really care about those silly long names? And are those
+really a problem from genpd debugfs point of view?
+
+That said, I don't have a suggestion for a new value of the table
+width, but I am certainly open to adjusting it to whatever you
+propose.
+
+Kind regards
+Uffe
 
