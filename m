@@ -1,140 +1,147 @@
-Return-Path: <linux-pm+bounces-13396-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13397-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E145696998E
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 11:55:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 344E896999B
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 11:57:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B5941C22B51
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 09:55:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D831B22EAB
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2024 09:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFF5E1A3036;
-	Tue,  3 Sep 2024 09:55:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C0D1A3ABA;
+	Tue,  3 Sep 2024 09:57:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FWQLHUpO"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="K/tyJwrp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397A01A0BC6
-	for <linux-pm@vger.kernel.org>; Tue,  3 Sep 2024 09:55:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A680819F41D;
+	Tue,  3 Sep 2024 09:57:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725357309; cv=none; b=rWfTnKJRfK+ER5sOAhDVfUzhpZBMxLkj4Idi+Z35JgHS42DlgG2sxl+jcA+aaRDSawQID2NRBbCWwT3Fscjw8r8V9hpx7mEbU6Sh8sJXyHzuOl0w0Q7VSF2Fyl9j1olMPHbtGnxosOt47SIFNYWrjhf/XunRI4t9Mzzz1qNgAcQ=
+	t=1725357437; cv=none; b=G6GwThVWCxXFaFa0XzQz0YevrsJGThPOigmaMQ1vyHNZvBCTWH8s8bhzp3mn+8XckC+RGAfX7ta0wZBg7B08Yr5jNonQvRidSI9xanKRGXsEAQoXj1JlneG6uy++nHPmrIBXQYNV4oUhbkQdFlPbwz4TYxXQuH9haYQ2xXhTf9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725357309; c=relaxed/simple;
-	bh=r/D2XT9csu2hRnKwa7lr4pddgJFqYkNRTZD+HvrK5yY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zbm1RvMVz9lF+1wM+t44rIe0bAToPy9XG53VtqOKypRAYmmrdrZDW7408c6bAnOa6hBOK5Zy+PqW5ViMK+e9khrwyTuJWGBAG4e2ky2y5Z8zshXK9dTibtxex011l+ByWh2aNj2b12a9mO95iIhfTYWp7jWdubzr21vu3N+O4L0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FWQLHUpO; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e1a80979028so3832151276.1
-        for <linux-pm@vger.kernel.org>; Tue, 03 Sep 2024 02:55:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725357307; x=1725962107; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cFqqyo1243gLC8lCdcnS069gRZejGhzhqXUGlqO3d/I=;
-        b=FWQLHUpO39uToecSQdsk7vlCb0xkyRpSb0COBxCyy3BGLftVXO3K9624zyCqWHgWlM
-         6myKdEgRNH2O0OynsP+4dulNFeMGe9eHK+hxY6tbFIL82/xglOq0kSR8LOI4kqpxjCpP
-         meB11FoRFTIoVOYaud/TCllqed/bsC6yCt7oXc0i3fQQes2mHR1B0k//3Ootyowo0bSx
-         l8Fcgf00K6dxfHj2N5LrqhnSTYRXKkmbyTvjjeyzo76RUfrxHYfzvi7t+kQUwJIqRYOj
-         GY21wwWqNn4x3fSTvxDUXT1ZIigZulPolYVT47equ7HCQiJpA0WqhESQAHDHMAVy1ZbY
-         u+Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725357307; x=1725962107;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cFqqyo1243gLC8lCdcnS069gRZejGhzhqXUGlqO3d/I=;
-        b=FK3fSELHfpMALMqTKR4tsVDp6EtjcsWFmpMxUNh/Pvi4Dz5+LjTrY/Ms9ieYpjyJUh
-         SVrSs57t0oRmTJlP9BDwDvsdn9wq8/0QWqzocbpJyctmSEXXGwKyn50QPFwHaosGBYWu
-         4pMpYV8MiZCzKs0C/Gxt1vhX2P6JqFw8UB0Z5YQabkbgOfGMTB6oVazom58YWbKsDJqC
-         eyuAiEzR48b1b4+1mhr8icT5p81yCKzcdFnqGHXrwDCERB29xMQF2kwONn21jWEbPhJ1
-         qSyIaCtSjbezu66WOrppajMKLkcoLzsExgy1lWiIRV0ohpUshaDwDhqMsQ0gSXVCzdaf
-         xfVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXY6ja3FDAbtJHrSxwlVtNCuEFbpP1EdD8wjRP2J/GjW0pASfrPCwH4s8SsgznTCKM0b4of3q7E0g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/sw7Wv+xI+6YRJDDp8q9o1yVswW8VuTKjKAP9aDvRWne1ONEW
-	y4cXjIgrefekw1S9zqXdfBQY5CyI0s64unvRveu38e5TVkwMEdazm6DJbZyPOs71hAF7OtR6h+A
-	DkM8rt6WgGhC2Fng6b53At2pMmSr45v/C1EiN3A==
-X-Google-Smtp-Source: AGHT+IH+1PDql0ueQ/ES8PwB2F7M/INUIUGvNZZEUFj51QsjECCxPIJAbbiizLcpEvWmhRUegd7BueLrC0lx7UTd+48=
-X-Received: by 2002:a05:6902:723:b0:e13:cb77:5fda with SMTP id
- 3f1490d57ef6-e1a79ff67d7mr15832832276.12.1725357307286; Tue, 03 Sep 2024
- 02:55:07 -0700 (PDT)
+	s=arc-20240116; t=1725357437; c=relaxed/simple;
+	bh=cqubLfVw5UF9H8tDMBrJ76paRmwHooWjgakm0+GPp+w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ic17SDXQV1Pfl81OrkkbLIuL4zfTOBcRgNofkBZOOH7Z7jBVXmUWUDsKb6a4ZGbUBPlleTKsIUmpeXjM3Ma5NSxipvIidfxm60h/KniOAYlEbZWY4kOA4Sy1egqsvQto+VoceSCVTl2iKYIgbn1kDTFEWux2PIAK4kAnsK5GFAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=K/tyJwrp; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 482Kc3pX010165;
+	Tue, 3 Sep 2024 09:57:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	UtMY7o5mMRRxzHSIdYCWRT7xTQgNbrg7biRIrNK54Qs=; b=K/tyJwrpxvHfsLkX
+	3TqhsThlyKw6QKR6jbyjHBLOusq6f0KmI3DIMdRkKKY4SAuHcd3MBKKCRlfqcacU
+	QY5YdUXf9EZIM1Kh/anL4PbIkSHH2Gc65SWzZgsznMZwW58NY/cM7ERyIco5/y0A
+	HV1cQSm7L5lt8Bpc7vVfl8KrKRR9ZTQn/B6lZSJ1e2Cx9TbHRneT+jPENHCud2Jq
+	pWEAtCqXmqRbXLOHFOQ/2ISgDJKb9s0dwLYzzXHxmUElDJoxpwCxNkf42GY7Ou9D
+	vHBKm2uL3i46gWYdvU72qCyBQ4rdGQ6svHvvvyHunHYwKggLkv+Hln+ZvsTaw9n5
+	KF22vQ==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41buj6xwx1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 03 Sep 2024 09:57:10 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4839v9qv023866
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 3 Sep 2024 09:57:09 GMT
+Received: from [10.218.15.248] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 3 Sep 2024
+ 02:57:05 -0700
+Message-ID: <a9425927-c9d8-4988-8bdb-2def8d9668ca@quicinc.com>
+Date: Tue, 3 Sep 2024 15:27:02 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240902224815.78220-1-ulf.hansson@linaro.org>
- <20240902224815.78220-3-ulf.hansson@linaro.org> <20240903071638.bedt3gllqdacf43a@vireshk-i7>
-In-Reply-To: <20240903071638.bedt3gllqdacf43a@vireshk-i7>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 3 Sep 2024 11:54:30 +0200
-Message-ID: <CAPDyKFoqEAHns0nrXT6dJR3sRd5VWidK_rzXGHzJiZtk_p0cKw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] OPP/pmdomain: Fix the assignment of the required-devs
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Dikshita Agarwal <quic_dikshita@quicinc.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <quic_kdybcio@quicinc.com>, Nikunj Kela <nkela@quicinc.com>, 
-	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Mikko Perttunen <mperttunen@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Stephan Gerhold <stephan@gerhold.net>, Ilia Lin <ilia.lin@kernel.org>, 
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] interconnect: qcom: icc-rpmh: probe defer incase of
+ missing QoS clock dependency
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Georgi Djakov <djakov@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>, <quic_mdtipton@quicinc.com>,
+        <quic_okukatla@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>
+References: <20240827172524.89-1-quic_rlaggysh@quicinc.com>
+ <xny4v2twbt5sjjtc5yoffpnymryfd6da6pirlmiii5txyz7rl5@xy7wdrzi5auc>
+Content-Language: en-US
+From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+In-Reply-To: <xny4v2twbt5sjjtc5yoffpnymryfd6da6pirlmiii5txyz7rl5@xy7wdrzi5auc>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: L4yRlhVVoIAB9FGOgQgChBMjTWJ4RazC
+X-Proofpoint-GUID: L4yRlhVVoIAB9FGOgQgChBMjTWJ4RazC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-02_06,2024-09-03_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ mlxlogscore=999 impostorscore=0 suspectscore=0 clxscore=1011
+ lowpriorityscore=0 phishscore=0 bulkscore=0 priorityscore=1501
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2409030080
 
-On Tue, 3 Sept 2024 at 09:16, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+
+On 8/29/2024 3:09 PM, Dmitry Baryshkov wrote:
+> On Tue, Aug 27, 2024 at 05:25:24PM GMT, Raviteja Laggyshetty wrote:
+>> Return -EPROBE_DEFER from interconnect provider incase probe defer is
+>> received from devm_clk_bulk_get_all(). This would help in reattempting
+>> the inteconnect driver probe, once the required QoS clocks are
+>> available.
+>> Rename qos_clks_required flag to qos_requires_clocks in qcom_icc_desc
+>> structure. This flag indicates that interconnect provider requires
+>> clocks for programming QoS.
+> Two separate commits, please.
+
+Thanks for the review, I will address the comment in next patch revision.  I will post a new patch for renaming "qos_clks_required" flag.
+
 >
-> On 03-09-24, 00:48, Ulf Hansson wrote:
-> > To fix this problem, let's instead start by letting the OPP core find the
-> > device node for the required OPP table and then let genpd search for a
-> > corresponding OPP table, allowing us the find the correct required-dev to
-> > assign for it.
+>> Suggested-by: Bjorn Andersson <andersson@kernel.org>
+>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+>> ---
+>>  drivers/interconnect/qcom/icc-rpmh.c | 10 +++++++---
+>>  drivers/interconnect/qcom/icc-rpmh.h |  2 +-
+>>  drivers/interconnect/qcom/sc7280.c   |  4 ++--
+>>  3 files changed, 10 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+>> index f49a8e0cb03c..5417abf59e28 100644
+>> --- a/drivers/interconnect/qcom/icc-rpmh.c
+>> +++ b/drivers/interconnect/qcom/icc-rpmh.c
+>> @@ -311,9 +311,13 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+>>  		}
+>>  
+>>  		qp->num_clks = devm_clk_bulk_get_all(qp->dev, &qp->clks);
+>> -		if (qp->num_clks < 0 || (!qp->num_clks && desc->qos_clks_required)) {
+>> -			dev_info(dev, "Skipping QoS, failed to get clk: %d\n", qp->num_clks);
+>> -			goto skip_qos_config;
+>> +		if (qp->num_clks < 0 || (!qp->num_clks && desc->qos_requires_clocks)) {
+>> +			if (qp->num_clks != -EPROBE_DEFER) {
+> if (qp->num_clks == -EPROBE_DEFER)
+>     return dev_err_probe(....)
+Will address this comment in next patch revision.
+> if (qp->num_clks < 0 || ....)
+>     ....
 >
-> Why was doing this necessary ?
-
-Let me try to elaborate a bit more.
-
-In the current code, genpd_find_opp_table() tries to find an OPP table
-for the genpd that the device is getting attached to. Then genpd
-passes that OPP table via devm_pm_opp_set_config(), to let the OPP
-core to hook up a required-dev for it. This was a naive approach, as
-that OPP table may not be the one that actually corresponds to a
-required-opps for the required-dev. Consider the below in DT.
-
-        opp_table_devA: opp-table-devA {
-                compatible = "operating-points-v2";
-
-                opp-devA-50 {
-                        opp-hz = /bits/ 64 <2500>;
-                        required-opps = <&opp_pd_50>; //corresponds to
-pd_perf1's OPP table
-                };
-               ....
-
-        devA {
-                compatible = "foo,bar";
-                power-domains = <&pd_perf0>, <&pd_perf1>; //both
-pd_perf0 and pd_perf1 has OPP tables.
-                power-domain-names = "perf0", "perf1";
-                operating-points-v2 = <&opp_table_devA>;
-        };
-
-To make sure we assign the correct required-dev for cases like the
-above, we need to let the OPP core to iterate through the available
-required-opps and see if some of them are corresponding to the OPP
-table for the genpd the required-dev belongs too.
-
-To manage this in a non-genpd specific way, I added another callback
-in struct dev_pm_opp_config. In this way, it should work for any
-future possible required-devs types too, I think.
-
-Kind regards
-Uffe
+>> +				dev_info(dev, "Skipping QoS, failed to get clk: %d\n",
+>> +						qp->num_clks);
+>> +				goto skip_qos_config;
+>> +			}
+>> +			return qp->num_clks;
+>
 
