@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-13552-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13553-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C85396B70F
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 11:42:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3829796B824
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 12:20:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0AA428172A
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 09:42:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BFD31C245A8
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 10:20:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DACA1CCEEF;
-	Wed,  4 Sep 2024 09:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A496E1CF7DA;
+	Wed,  4 Sep 2024 10:19:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qfk2exhR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uYVOEWkp"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9E018784F;
-	Wed,  4 Sep 2024 09:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E6D14658C;
+	Wed,  4 Sep 2024 10:19:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725442934; cv=none; b=GrlQ+aFx0x7iYqTpzGdON66uKzun1Ybt3IsXwDw6Idmny1SxZK9nOPFQqgXKHUOulh21NlZEZMv37Q6BQf+vsqLU2UYVRuor8fJJ03LauuJ4RJSjcyzNRdKwJQWram462cFkYp7zzFhWkeWx3i13YkNCrZ557mefjBbPuAehYoA=
+	t=1725445176; cv=none; b=lgwNsGX+Mgh/pkExg8n6GuitrhdXxYaH9DLPtnFON8FAqjNoxUEqBcKAhmiOe7yzXUFR2UhviZyqVqLR4gvPvUILac8qjY5Jr+VS0z17Insogz4H4EBbKUWUQoypqElVWanGYuROxdU/7WDK5lUjscvA3s1i92r3b+UaKzqAgi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725442934; c=relaxed/simple;
-	bh=Oec9l7s17IwaiLXgNR1SWtJBoMzsunOXYZarsJi44os=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oRySbpIB/IiRdJQ2CKciW4cbMPpkh2wdE2elxjxgfQQ/iHqgtchC0n2+zNbKyOQu/UpqbGQ24ynTZjRplgJJ5QQOQclg+xbrjrz5aPZdcHzG5lcChzR9EA+osTD1rYvk/RYYyhAhlsIDn2/TdhbmB1iApHkMntoRhE4b0eNVt64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qfk2exhR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E2CC4CEC2;
-	Wed,  4 Sep 2024 09:41:59 +0000 (UTC)
+	s=arc-20240116; t=1725445176; c=relaxed/simple;
+	bh=zlaZcOaZM0dFAhQZuIhuVd2ZdREG27vDZ8dz/g7nXL4=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=L5/utgZ+umU0Cc5LgFPPfKiCuF4VMGkGCAPAbkVILSZTzThCtsL9X1AXQ0kre3bEhOUBg+UOWvTfk7yYSu/jNZdAfLAC6xsF4B/JxM+yDe2qNqjUeCr7h6cLvEBtjVwwijN+GpwH3h2nv6uZCDDMdibntPKs09drR8yvUFKbOvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uYVOEWkp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 008A9C4CEC2;
+	Wed,  4 Sep 2024 10:19:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725442933;
-	bh=Oec9l7s17IwaiLXgNR1SWtJBoMzsunOXYZarsJi44os=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qfk2exhRilb/mDb5zkdMxVssIApdDdkN2OtWR1nYcYQ45/z39ErsKaKq8E2tMY7bL
-	 f4Jvq64hJNR3KOOwwhwYEPIjFi5ZPQINEyvpkHkXLNZW2HYMdCaaDL68yxbm7Lqzwq
-	 UyHZQha2LpoNaaCu8UvhhVoKi8Df1XsmtHGA0qXm1xjzExfh8wgzKiRFpqoAVHlAUT
-	 R0lxSPeLDNqHgdVnDN1GPfA0k8HiCUGE6CqGSOWL4XJEH8VVUBZWynki5HbZTY/+tX
-	 2H+rSxdJt7UPMjkedReYhshriapkRBUU5PaY7lQZbGPvfBwRHbpu53wjEWhR5c3c6r
-	 ZvK8u57wDIxxw==
-Message-ID: <be8b573c-db4e-4eec-a9a6-3cd83d04156d@kernel.org>
-Date: Wed, 4 Sep 2024 11:41:56 +0200
+	s=k20201202; t=1725445176;
+	bh=zlaZcOaZM0dFAhQZuIhuVd2ZdREG27vDZ8dz/g7nXL4=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=uYVOEWkpqETakooK2/HOVDqhaXgvcvfW5LXQB7Eya90zPhhAiP61p0sjkmecSJ9H+
+	 rI8LHkD2POHt8IN3KC2hR7cMqtPEeFU//AL5L1s+oMPQoKYBoCvYsIxq9TnnBXOSB+
+	 Wqgy1e5kq4juehbhYYXpUfYqtwJtzVbTtmvm1IsyDLHnRTZBBk6IIHBZCJbknyoXaz
+	 LndSPQao15U2+i0OT9K2Sancv4wSpgjK0ypos5OdhJ2qIYzN7tv5Eq8VTRrO8diOMQ
+	 dKayNvpbInuOlBeVS33eiwEehui8PpvaQKUQDrX2A+Y6Nod7Un0g6t6hcdSaQnHzVd
+	 MbOyDlWtzA1Uw==
+Message-ID: <3535a897-8708-463d-b931-fa344a967f18@kernel.org>
+Date: Wed, 4 Sep 2024 12:19:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,35 +50,38 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 18/19] arm64: dts: qcom: add initial support for QCS8300
- DTSI
-To: Jingyi Wang <quic_jingyw@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
- Bart Van Assche <bvanassche@acm.org>, Andy Gross <agross@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
- Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
- Joerg Roedel <joro@8bytes.org>, Konrad Dybcio <konradybcio@kernel.org>,
- Robert Marko <robimarko@gmail.com>, Das Srinagesh <quic_gurus@quicinc.com>,
- Jassi Brar <jassisinghbrar@gmail.com>, Lee Jones <lee@kernel.org>,
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- iommu@lists.linux.dev, Zhenhua Huang <quic_zhenhuah@quicinc.com>,
- Xin Liu <quic_liuxin@quicinc.com>, Kyle Deng <quic_chunkaid@quicinc.com>,
- Tingguo Cheng <quic_tingguoc@quicinc.com>,
- Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-References: <20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com>
- <20240904-qcs8300_initial_dtsi-v1-18-d0ea9afdc007@quicinc.com>
+Subject: Re: [PATCH 00/19] Add initial support for QCS8300
 From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: Kishon Vijay Abraham I <kishon@kernel.org>,
+ Jassi Brar <jassisinghbrar@gmail.com>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>, Will Deacon <will@kernel.org>,
+ Jingyi Wang <quic_jingyw@quicinc.com>,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Das Srinagesh
+ <quic_gurus@quicinc.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Andy Gross <agross@kernel.org>,
+ Bart Van Assche <bvanassche@acm.org>, linux-arm-msm@vger.kernel.org,
+ Robert Marko <robimarko@gmail.com>, Joerg Roedel <joro@8bytes.org>,
+ linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+ linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
+ linux-pm@vger.kernel.org,
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+ linux-arm-kernel@lists.infradead.org,
+ Catalin Marinas <catalin.marinas@arm.com>, iommu@lists.linux.dev,
+ Xin Liu <quic_liuxin@quicinc.com>, Shazad Hussain
+ <quic_shazhuss@quicinc.com>, Tingguo Cheng <quic_tingguoc@quicinc.com>,
+ Zhenhua Huang <quic_zhenhuah@quicinc.com>,
+ Kyle Deng <quic_chunkaid@quicinc.com>,
+ Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>, Lee Jones
+ <lee@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Avri Altman <avri.altman@wdc.com>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Vinod Koul <vkoul@kernel.org>
+References: <20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com>
+ <fcfaeed3-8544-4e98-9f95-f43346dc83e8@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -123,102 +126,65 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240904-qcs8300_initial_dtsi-v1-18-d0ea9afdc007@quicinc.com>
+In-Reply-To: <fcfaeed3-8544-4e98-9f95-f43346dc83e8@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 04/09/2024 10:33, Jingyi Wang wrote:
-> Add initial DTSI for QCS8300 SoC.
+On 04/09/2024 11:34, Krzysztof Kozlowski wrote:
+> On 04/09/2024 10:33, Jingyi Wang wrote:
+>> Add initial support for QCS8300 SoC and QCS8300 RIDE board.
+>>
+>> This revision brings support for:
+>> - CPUs with cpu idle
+>> - interrupt-controller with PDC wakeup support
+>> - gcc
+>> - TLMM
+>> - interconnect
+>> - qup with uart
+>> - smmu
+>> - pmic
+>> - ufs
+>> - ipcc
+>> - sram
+>> - remoteprocs including ADSP,CDSP and GPDSP
+>>
+>> Signed-off-by: Jingyi Wang <quic_jingyw@quicinc.com>
+>> ---
+>> patch series organized as:
+>> - 1-2: remoteproc binding and driver
+>> - 3-5: ufs binding and driver
+>> - 6-7: rpmhpd binding and driver
+>> - 8-15: bindings for other components found on the SoC
 > 
-> This revision brings support for:
-> - CPUs with cpu idle
-> - interrupt-controller with PDC wakeup support
-> - gcc
-> - TLMM
-> - interconnect
-> - qup with uart
-> - smmu
-> - pmic
-> - ufs
-> - ipcc
-> - sram
-> - remoteprocs including ADSP,CDSP and GPDSP
+> Limit your CC list. I found like 8 unnecessary addresses for already
+> huge Cc list. Or organize your patches per subsystem, as we usually expect.
 > 
-> [Zhenhua: added the smmu node]
-> Co-developed-by: Zhenhua Huang <quic_zhenhuah@quicinc.com>
-> Signed-off-by: Zhenhua Huang <quic_zhenhuah@quicinc.com>
-> [Xin: added ufs/adsp/gpdsp nodes]
-> Co-developed-by: Xin Liu <quic_liuxin@quicinc.com>
-> Signed-off-by: Xin Liu <quic_liuxin@quicinc.com>
-> [Kyle: added the aoss_qmp node]
-> Co-developed-by: Kyle Deng <quic_chunkaid@quicinc.com>
-> Signed-off-by: Kyle Deng <quic_chunkaid@quicinc.com>
-> [Tingguo: added the pmic nodes]
-> Co-developed-by: Tingguo Cheng <quic_tingguoc@quicinc.com>
-> Signed-off-by: Tingguo Cheng <quic_tingguoc@quicinc.com>
-> [Raviteja: added interconnect nodes]
-> Co-developed-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-> Signed-off-by: Jingyi Wang <quic_jingyw@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/qcs8300.dtsi | 1282 +++++++++++++++++++++++++++++++++
->  1 file changed, 1282 insertions(+)
+>> - 16-19: changes to support the device tree
+>>
+>> dependencies:
+>> tlmm: https://lore.kernel.org/linux-arm-msm/20240819064933.1778204-1-quic_jingyw@quicinc.com/
+>> gcc: https://lore.kernel.org/all/20240820-qcs8300-gcc-v1-0-d81720517a82@quicinc.com/
+>> interconnect: https://lore.kernel.org/linux-arm-msm/20240827151622.305-1-quic_rlaggysh@quicinc.com/
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/qcs8300.dtsi b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
-> new file mode 100644
-> index 000000000000..244fa8bf97d9
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
-> @@ -0,0 +1,1282 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <dt-bindings/clock/qcom,qcs8300-gcc.h>
-> +#include <dt-bindings/clock/qcom,rpmh.h>
-> +#include <dt-bindings/interconnect/qcom,icc.h>
-> +#include <dt-bindings/interconnect/qcom,qcs8300-rpmh.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/mailbox/qcom-ipcc.h>
-> +#include <dt-bindings/power/qcom,rpmhpd.h>
-> +#include <dt-bindings/power/qcom-rpmpd.h>
-> +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
-> +
-> +/ {
-> +	interrupt-parent = <&intc>;
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	clocks {
-> +		sleep_clk: sleep-clk {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <32000>;
+> Why? UFS cannot depend on pinctrl for example.
+> 
+> This blocks testing and merging.
+> 
+> Please organize properly (so decouple) your patches, so that there is no
+> fake dependency.
 
-Are you sure that sleep clock is physically part of the SoC?
+Let me also add here one more thought. That's like fourth or fifth
+QCS/SA patchset last two weeks from Qualcomm and they repeat the same
+mistakes. Not correctly organized, huge cc list, same problems with
+bindings or drivers.
 
-> +		};
-> +	};
-> +
-> +	cpus {
-> +		#address-cells = <2>;
-> +		#size-cells = <0>;
-> +
+I am giving much more comments to fix than review/ack tags.
 
-...
+I am not going to review this. I will also slow down with reviewing
+other Qualcomm patches. Why? Because you post simultaneously, apparently
+you do not learn from other review, so I have to keep repeating the same.
 
-> +
-> +	soc: soc@0 {
-> +		compatible = "simple-bus";
-> +
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges = <0 0 0 0 0x10 0>;
-
-ranges follow compatible, so it is the second property.
-
-
+I am overwhelmed with this, so please expect two week review time from me.
 
 Best regards,
 Krzysztof
