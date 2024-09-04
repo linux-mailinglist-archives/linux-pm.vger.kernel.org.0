@@ -1,186 +1,195 @@
-Return-Path: <linux-pm+bounces-13632-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13633-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 893CC96C812
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 21:59:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE7AA96C824
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 22:06:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4268D281645
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 19:59:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6206F2811DF
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 20:06:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68FA61E8B68;
-	Wed,  4 Sep 2024 19:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7CF81E6DE7;
+	Wed,  4 Sep 2024 20:06:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U/I+jOk6"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XyJO9RYG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2042.outbound.protection.outlook.com [40.107.237.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37021E7677
-	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 19:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725479949; cv=none; b=guEoqbHny16wycUhNQxZ7QINrMj438o4Fbgpimfw760xuP/fEQEeYaC+bi2J82pe2+IaCcPSgqe6Y+JTp1ieROYhRnjzs5pkSGuNS2nCTSQWnys+HR942Nc8/pcMsCxxprrgb6oW05/J8OW9dqv+gCBm5jvrcZ2qhu54HUWIXVw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725479949; c=relaxed/simple;
-	bh=q4Zx2I3Gi9EYhBHmJYx0PYPLfRI02GuBKpR7J2sbZuU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YeN3MhSpiyxfT+FYQjaKSnHTEBZm/ToaXQJP0CnKzOjRjQcxOrs2FHfLYy3VedTLGo84D5GZBz8Z7Y0kUSLWTDQH/uutq6Vl4QtoM77T6Ow7OdXr5cBxHJ3tjyipx02EMFX8pdJAuarH4g5lrCIQufWxotn4J6SnVAIr9iapwho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U/I+jOk6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1725479946;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FVc6JRTF1durtkuxn7+CXSDcgneG4y9FqqasPGYLMFI=;
-	b=U/I+jOk6X/iXSlAfEhYCPt8/0jvQ2x+b0pQXsyb2/IQjrnR+ny+icQjQEMiCB0GXNRvfLc
-	ywSq6XBrqe6d1SeCwAme3TFA1cXJiBYE0pEvv9rGta+vSYdPCXLrzAnsBa0xFc4P7StEZ1
-	wzcz/lGgEplT5DXrmqH18vbOxuY9Ddk=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-645-jZX4qDG6MzWT-9IXXNazuA-1; Wed, 04 Sep 2024 15:59:05 -0400
-X-MC-Unique: jZX4qDG6MzWT-9IXXNazuA-1
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-5c24b4a57b4so3093998a12.2
-        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2024 12:59:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725479940; x=1726084740;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FVc6JRTF1durtkuxn7+CXSDcgneG4y9FqqasPGYLMFI=;
-        b=UmU3e1AvI+pIgpXDPArnEsETld4km7H+oZW0/nQoG9+1haK7nSyInMFnGXTuCLOz78
-         03E19+spXcyqs7Ge+tj+O50acq9KJaJ9RS29bNOl/fCimM3phdz6oi0sz/+ii5LNsbqp
-         jWeKh8Q4ywvej4rD8cgKzRALBIax8dfUXtjGqy4Ctr6uzDtJYg1UFtDdAEOnw04fKokL
-         hAHlYlmHtEhonSO9+gCO7Fi7jzcNmc2os4RRThDrQ0QSozmeU9PMBA9+KxQ/0B6DdwGI
-         o9zI+OwsFDR17vOhukauneBvlCRYQiI2fX3q68DHwLIMawal4m+mXSi/VivGPu+tF0ot
-         /KKw==
-X-Gm-Message-State: AOJu0YzDpBIbfjWMw+HNLQtcVZB1Mah5Nc/zxZterdq4vgPKP7CDUzr3
-	B1Da2FryZK4hsJwaTQI+YAUSetiVmQz+/fJZLF0yRBbwZvPaot1q6a2mXSC6RbsUMZtepmJ80BV
-	WMbW8ZK7EQflf+ATE1npVh04A8uT14D/U4ooINO5miqB+8puc/brVLfL/
-X-Received: by 2002:a17:907:3ea6:b0:a86:95ff:f3a0 with SMTP id a640c23a62f3a-a897f77ef10mr1757507966b.3.1725479940565;
-        Wed, 04 Sep 2024 12:59:00 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFgDwNRq0AbKATIeRJchwrsuYhAK9IGlpgF1YxJRkZZpzO5Ek1cAhmzW/UQMzonzWzKDKaFsg==
-X-Received: by 2002:a17:907:3ea6:b0:a86:95ff:f3a0 with SMTP id a640c23a62f3a-a897f77ef10mr1757504666b.3.1725479939992;
-        Wed, 04 Sep 2024 12:58:59 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8a62038d6fsm31568966b.61.2024.09.04.12.58.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2024 12:58:59 -0700 (PDT)
-Message-ID: <e2ed8a03-7973-4ab9-9b9d-d1c23616de86@redhat.com>
-Date: Wed, 4 Sep 2024 21:58:59 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA401E6DC0
+	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 20:06:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725480392; cv=fail; b=U7jHoMVHVY4gaLmhzdR2/BoMaPVJSxGyqiUge8xIpY7CVS2dZAAQlQGncnpWJ57S9nBs7C7xwHtQku4G4b3oTPkL88P3GyWxviW00FOXA0BtUlPePLFHp8as+aKvjY74qx5uZvctSCy1A8uvxRzgxxSXRyKnqzY6PNl6y+vF2+s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725480392; c=relaxed/simple;
+	bh=eI1mNLgwZIOlq3E+9szeMiDf32WzDe0zojE2YguHS3U=;
+	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=KXRVq5h1WyJoPplSxiq9ihf9slYHb0U6YFxawG3eJUn4zXl4RRmlShSRCzHT3csY7EVGU18pD+12LBELczOdpImrau0EaseVe4/vkp9mWo8PWoOxTTOJmd/AOxUpiKHqZhikIgywWp8MV+mLDIwm64fYsgCgdJ8EW29Ki0VK7g0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=XyJO9RYG; arc=fail smtp.client-ip=40.107.237.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=y/zP/wjFfX9fwu+gGhb4KCHTotlaFUY1m44XXH1WrQ81brcLuEfaj88lf5GHMP/J6KXuAQ7+IkZ2wrF/FC9D+IvxK6NWEZKBAUYygn6h2C6UYdgLxFLot/vhoogHQaGqtVpBdUOatvkYi/NupHCQLEmWRZZBUtBKVFxHeKNAHQpu4viSm3Me3b9itXPPYeTVPqJv9F6Nk3wrMWzf3YNSXJYltHHv1wPsf1jH7VPSWN6EEeuapda9l1rWhMY/I8R+QRsj5xhIBykmv6O0X3ksijhKs128rrTGUm6itI1m3VRTNC4BMpyW9VeTvM2ODnMLTYxb39FBEG0LNH+DqQb/tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=krVR9mnwS5MNgtWgBJPPXz7pRbLxKn61gCUnSYqL4R8=;
+ b=VXJFqWwKYK3+2k+sIlyaoMAwXsg+V+1vzxtE0BYuTGvZnS9Olp1Q/nY0q+/qn3I5S9Dfh2IjGU7zNioSIGqXfRIYtY0dAHokPcDUcv8FRdhbze9mb/rhofmsAHKT8oNofQfa3DTtbLfKeFTtcAe1dXvnBnGPpoV4thAngHKIKwl0AI1cxOcg7mos9s0dZ7FMkePhG0ZDzDFMz34VBbREypAgtN0sAX4rNN/ED5I5jlHg6riWM5wTbds4gwo002Y9+BkEVglO1ZU2wnGeWkISGJP0yw36JTgu6kd8NBFxmKvUdet0P9cx4DIbGTf3zrwkCSO77Fyog0XlalrjOG2FpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=krVR9mnwS5MNgtWgBJPPXz7pRbLxKn61gCUnSYqL4R8=;
+ b=XyJO9RYG7+9mEJzanVvzhLxgL4B68fJjhchyXTQ37wwytjuFOeAbICUZGYKltreUpRec4IpKouJTCT5LDxzkJevvKxO5XbL8X4aAte5lWttHNWmwQQ01lHX1vD3P6FoobMsS6ntsYTm7f9Zjj2Ei+MCfDJHvM/b3F9v4m/U4oqA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DM3PR12MB9435.namprd12.prod.outlook.com (2603:10b6:0:40::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7918.25; Wed, 4 Sep 2024 20:06:26 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%7]) with mapi id 15.20.7918.024; Wed, 4 Sep 2024
+ 20:06:26 +0000
+Message-ID: <a5980dad-c409-40ea-8442-3584c0441018@amd.com>
+Date: Wed, 4 Sep 2024 15:06:24 -0500
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>
+From: Mario Limonciello <mario.limonciello@amd.com>
+Subject: amd-pstate changes for 6.11-rc
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA1PR05CA0009.namprd05.prod.outlook.com
+ (2603:10b6:806:2d2::11) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v3 5/9] power: supply: sysfs: rework uevent property
- loop
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Sebastian Reichel <sre@kernel.org>, Armin Wolf <W_Armin@gmx.de>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240904-power-supply-extensions-v3-0-62efeb93f8ec@weissschuh.net>
- <20240904-power-supply-extensions-v3-5-62efeb93f8ec@weissschuh.net>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240904-power-supply-extensions-v3-5-62efeb93f8ec@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM3PR12MB9435:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3e92b432-1a43-4138-a3e9-08dccd1d0e94
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Q2VuZ0FCczI1RGRwbWJ4WjV5Y1FNSnAyUzNzN2lQVFBFdzZBVUZTUGdQRUpD?=
+ =?utf-8?B?NlQ0dU8zUWVQZG1ISW5BY1owd3FwSGJPUjYydUVJWUU1Yk9nVysybEFNaE5a?=
+ =?utf-8?B?bUVvRDI4SGJTZjNJK0tKcDk5ME93dGFiQWcyK05QWDFFblRkYXBBbkR2RWlw?=
+ =?utf-8?B?ZHU0K2s0VjlMRGxlYVZtY01NSFJCQy9uRFhRU1pqMkhLRmF4eUg0S0QwVFpT?=
+ =?utf-8?B?MGVaaEFTN3J4RGZJenhsQ1krWjZwSXg4ZG4yL0puR2MzczQydk9UZ3VZc1dM?=
+ =?utf-8?B?YWdBMGJ5YW05U2xoRk8ySy9IcGloWVZ0YXlCOW5tNG5kdWZzdzgrVjJ4elB3?=
+ =?utf-8?B?bmw0YVdxSmRQN0NZV1RIcEc0bE0ra2RCeS9xdXBvSDFGdkVNcUphSFNLZS9Y?=
+ =?utf-8?B?VVJkQWZoZmppWms5UDhTWXloL0ZGL1hFWFUyTHRTeVQxNU9aaFozYjhrVkw5?=
+ =?utf-8?B?NGw3UmwySWV2Q2t4NEt1ZG1DcWFpSUtUQWlqbWU4SFJzTHB0dW1taVpONlpZ?=
+ =?utf-8?B?WGVxOVhVQkd1QTB4V2h2VU5NTW5kZlc5N2VGMGlGdlR4TVpKbWRYRzFFcVNN?=
+ =?utf-8?B?anhHcmN0ODRYUnc4TEhlT01Xb2c1RDNjTnoraVIxVzlOWmVCSWRyZE9uWEVi?=
+ =?utf-8?B?T3pNVmJLTC95eU1iSGRZaU5WalUxTmxTQ0w3anVxODBpVzNUQnAzS20wcUdE?=
+ =?utf-8?B?M3ZFQ1ZXV2NFREI5RHFncVc2WEVkeEdkWXR0SVNMYTkvOXRDVi9DL0Z4Rjh2?=
+ =?utf-8?B?UmdjL2dUcWR0elk3OStxQ3JlYmc5QXJWM3h2YUpJRXZJV0NlTHBCNG1YaWVT?=
+ =?utf-8?B?cU5sOWpXcTVzek8zMFI1U1p1cTJISjRGb1FwTjk3Tnk0MSs3NWZCYks3K2hn?=
+ =?utf-8?B?QWN6KzM5TU1aT0pnNHRMY004MmwyMXpHUTE5QXpSUWhYbnVPalJBZkROb3Vn?=
+ =?utf-8?B?bnVVTGdhQkZYamhabDRoRTE4clh3ZHh6eFlnR0hCenZ4ZDAwM2dkaUhXTldu?=
+ =?utf-8?B?NTBxWTVKaWV3cFR5WjNVVlJPQzVDeVpvQnBySTM5QmZhdDJZYXlMNm1vd2tT?=
+ =?utf-8?B?TmYvbDM2dHZuYlNVZHNiWUpyWnV1d2djMWNkWFowTW5QRm4vZTBsaWJtSTdJ?=
+ =?utf-8?B?bGZta01tTmhXQUE1YVpCWmxuT2FIemZYTWl5amRJWm1UdENBeVlOeUg2SDV2?=
+ =?utf-8?B?R0c4N25yWUNYQzZ1OUpkSVJ5S0ZHUlNPVllKNmJkbTFUZEkydTJuZHBZeGdP?=
+ =?utf-8?B?d1RPTXVyMitpN2JTTlIzUmc1WFIxZGw4ejB3SHQ0b2NCU3VJbzVvUTVJRCtG?=
+ =?utf-8?B?cDRNMXdhOTN0YXJvcjRaSFdaQkNqZlVwaE13ZmhJMnpHYlhwVDdIUHdaOWhw?=
+ =?utf-8?B?TFpXdG5HMGpsd0dQZjdNVDV2UUlYV2doVlZBSTdyYzNrYXVhL3ZjK1Rtd2JY?=
+ =?utf-8?B?R1JPQTdVWVpDdHpWYTNmaGQvd2FZSUFySGFFSnAyakZKR25mSCt0aWF0YVZH?=
+ =?utf-8?B?bmZNdjVxU25jMTRhZ2xWOTdSNkdLVk85ajNZRituNFZtTHFVeFdadStiK05X?=
+ =?utf-8?B?UU9Ob0dmMzgzbG5KVEV6Y1Z4YnV0V2luRTVrRzkvT00wK290eVRaRGpOa0ZP?=
+ =?utf-8?B?djUrMytRQmpQbTlLNnJ2SU5TbjFVeVE4dWxQRVhPRzYxdjhZaDRuSzFvekUz?=
+ =?utf-8?B?SWMwNGc3ajQzcHdWTDBTUzdKUm1nM3NRRllrQVc2cnZDRnBBQ3NkMVRDcGxD?=
+ =?utf-8?B?ZmZHNm5pZFRYLy9IY2F6NTFqWGtwSkhTOVg3UGRLK2RhVnZydkViOXQ3Wmtl?=
+ =?utf-8?B?eDdEazJ5aVVRaFlXWTVNdz09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?U1hjT3h0ME9nREllZTBiNlYxZk82ZThjNjNCV2pFekM5Znd5YTRoK3VZbVh3?=
+ =?utf-8?B?azlOaCsyOFltZUJkeDUvc3VZcktHL05MdTZEMXF0SVBLZzRLaW9OSlhtd0t0?=
+ =?utf-8?B?UjROT0F4SVVncmthT2M4ZitNU21ZbnZjQ0RCN2drK2w0NGZNcVZRTFlpRzEx?=
+ =?utf-8?B?cTVmSFhycjM4OGRxczBTKzA0RGRZL2tsdlYxTHpBbVVDQ0xDeExiclUyb1VO?=
+ =?utf-8?B?NWlQQThPdnQ5VU1XN3VOcWcybFNFd1I5UThiQWo5SVZCcWVVY2l5dHQ3dGV0?=
+ =?utf-8?B?anZyN1dvbVd4YXNGUzhQZUMxQUFGVFd4aytod09jN2ZDZk95QnNDTUFrK0dV?=
+ =?utf-8?B?ODcxcEZyN2Rha3VzQ2hmK0dlamxXSXdwenF3S2plNGRwNUMydEprVGxpTnA2?=
+ =?utf-8?B?a1BYNXRTaEFIVW1WOEk4YnhOc0dJakhjTjNCNFpxeXR3Tkc4cXlydFFUbkpX?=
+ =?utf-8?B?aEdZNm9ycGRmeHlJMTFNaDdkTVczNG5qN0Nld3BobnFZZWViS3lLSWxhRURR?=
+ =?utf-8?B?Wk0vbC8xRDIzY2N3cVpkWkxXSHRqaTAwMU03NVloYVZKM21MRnQyaGZlQzJ4?=
+ =?utf-8?B?VGxiNWxiajdxeFRUK1pHZ280c0tYTHFML1Nyd3kzV3laWWVuOFhpOU1MOG1V?=
+ =?utf-8?B?WWN2OFdhZk9CazZYODVyYjNxUGlDeFZmNUJMdjZiRytFcFNxYitLYXRxSTN5?=
+ =?utf-8?B?NXdRN05KZjBlMC9nZjdtL0dRdmZvdXp6NW5XMEJEN0J1OEEvcHhZaFU4cTlB?=
+ =?utf-8?B?bDdQYWhZN1A5djRyWm42RThsSjFqMEhTZUtnMm94dHJxOUxZL2NhWFZpR29S?=
+ =?utf-8?B?b2psdnRVQTM5ckRncVJrd0owMEpqYUgzdHV2VncwSU9yYXFWTTNEaEdLdSt1?=
+ =?utf-8?B?UXAxcE1zaVQveU5MUDlpNHZ4azY2ZllIeml4ZUIzeDVPdi8vbm1JZDFucGRm?=
+ =?utf-8?B?UWZUY21kOTJadGpHem1OU1VWQVJLNnhsSHFyRTZyMHNNUytjcExjMnhnemU3?=
+ =?utf-8?B?NmdrWURHWkxxMXJGbXIvTis3clhQRXBEUTNPRURrek1QYmsyYkxNRHZiU2hM?=
+ =?utf-8?B?anpXa3Z0OXZLVko3TFc0UTJNZ1ZFcW45Qm0wNkw0ZXFBMG1XZk1QM0gyQmdr?=
+ =?utf-8?B?UnBxY2ppa1drNVpWNXRSSTZPV2syTEpVRkVLcDlXZVlyZjcvQnR4NkM1dEwy?=
+ =?utf-8?B?b2ZFSHRYSlhBV1VzWStSNDZCWTQzWkZUUXcrQ1RnemgvWktJcDBqcU4xWVdt?=
+ =?utf-8?B?NUtEK0U0aUNGNXRFN3Q1UnVmOFlmc1lOeUE0cEtkTlR3ZSt4NElHcVhMZnZ0?=
+ =?utf-8?B?bjRrelZGOXFlTTRqdTI4SHhsdzdFQWhZOXVRbVl1SCtJdmFIUWlWb0s5VE9l?=
+ =?utf-8?B?clM1N2htVEpsUWFKUmM0aWRKNjhoNXk0MlplVFg5Nm50U1F1RGJUb0RaUlUv?=
+ =?utf-8?B?V1RXR2RaSGJWUzVaZWhOZVdHVzlMaGtrcC9WYnZwUEUxYi9nVXVzblVZNFg2?=
+ =?utf-8?B?Y3VmNGNvMkRtM2x0R0MxSEV5a0dZWXp4bGlkSEpYMVlZekpHRHI4SHRiQWVs?=
+ =?utf-8?B?Qm1SY0VsQ3hCS2xOYy9LT1N1L2JhL0UyWTl2cnJKQ1dJL3BGdHF4VHphM0do?=
+ =?utf-8?B?Qkt3a201TWJBUzVDbWEzTE54VkhvL3UyMGRBd1RKNlRjVlR5MkxZTVU5dmJn?=
+ =?utf-8?B?MzRnWEFydnV3dzdFaklqK1ZHajZYTzVQVEQ5eGt4UEpQbHg4U1dMdzR6dkdP?=
+ =?utf-8?B?KzNWR01Ed0dIVWJKRFVlNWhka0VDelcyREtTMjlmWFZvM01KR05UR21DMThj?=
+ =?utf-8?B?bHhHSTJ1U0VTbFBvWWg0MlZmVmx6eFNvRDllRmp5NzBScDVwWmV5ZCtQM3Q4?=
+ =?utf-8?B?TEQyaHhVSWxFR1dwa0F0NlloS1RZeDJWQzA3NEliSE0vRmZvN0lwSTJtQXJH?=
+ =?utf-8?B?b09FODhiY2NYS0J1Nis2ekU1ZURqMHorUXJCNSs2UWk5YmloQkwxM0xKTW5E?=
+ =?utf-8?B?SUEyaGFONVozQkxnMVRDREhEei92dHArRjFrMXhEVU5jcW1yWWdjMHQyYytU?=
+ =?utf-8?B?T3kyRnRGQjg3MDdQalF6V0RFcGdyZW9YbDcxVmtFbVhuMEllbHFrRTFuK21y?=
+ =?utf-8?Q?kUE7RbHywmU/InNy/jw8Gg06m?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e92b432-1a43-4138-a3e9-08dccd1d0e94
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2024 20:06:26.3741
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qWVYmsNB5ZXlWa1H2VgiIy4by9D1NT0MZppCsP1vuTu51zXuyLVABBPDjb1s5E6C5uxeRLO/7906J6T0vbXkmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9435
 
-Hi,
+The following changes since commit 9983a9cd4d429dc9ca01770083c4c1f366214b65:
 
-On 9/4/24 9:25 PM, Thomas Weißschuh wrote:
-> Instead of looping through all properties known to be supported by the
-> psy, loop over all known properties and decide based on the return value
-> of power_supply_get_property() whether the property existed.
-> 
-> This makes the code shorter now and even more so when power supply
-> extensions are added.
-> It also simplifies the locking, as it can all happen inside
-> power_supply_get_property().
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+   cpufreq/amd-pstate-ut: Don't check for highest perf matching on 
+prefcore (2024-08-23 11:07:58 -0500)
 
-Thanks, patch looks good to me:
+are available in the Git repository at:
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+ 
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git 
+tags/amd-pstate-v6.11-2024-09-04
 
-Regards,
+for you to fetch changes up to 9c68a3b03e8109f3917fd35f39043499897d4a79:
 
-Hans
+   cpufreq/amd-pstate: Remove warning for X86_FEATURE_CPPC on certain 
+Zen models (2024-08-28 10:15:00 -0500)
 
+----------------------------------------------------------------
+second round of amd-pstate fixes for 6.11:
 
-p.s.
+* Fix an incorrect warning emitted on processors that don't
+   support X86_FEATURE_CPPC.
 
-Last review for me in this set. I'm afraid I don't have the bandwidth
-atm to also review the actual extension API.
+----------------------------------------------------------------
+Gautham R. Shenoy (1):
+       cpufreq/amd-pstate: Remove warning for X86_FEATURE_CPPC on 
+certain Zen models
 
-
-
-
-
-> ---
->  drivers/power/supply/power_supply_sysfs.c | 26 +++++---------------------
->  1 file changed, 5 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index 4ab08386bcb7..915a4ba62258 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -290,6 +290,8 @@ static ssize_t power_supply_show_property(struct device *dev,
->  				dev_dbg_ratelimited(dev,
->  					"driver has no data for `%s' property\n",
->  					attr->attr.name);
-> +			else if (ret == -EINVAL) /* property is not supported */
-> +				return -ENODATA;
->  			else if (ret != -ENODEV && ret != -EAGAIN)
->  				dev_err_ratelimited(dev,
->  					"driver failed to report `%s' property: %zd\n",
-> @@ -451,11 +453,7 @@ static int add_prop_uevent(const struct device *dev, struct kobj_uevent_env *env
->  
->  int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	const struct power_supply *psy = dev_get_drvdata(dev);
-> -	const enum power_supply_property *battery_props =
-> -		power_supply_battery_info_properties;
-> -	unsigned long psy_drv_properties[POWER_SUPPLY_ATTR_CNT /
-> -					 sizeof(unsigned long) + 1] = {0};
-> +	struct power_supply *psy = dev_get_drvdata(dev);
->  	int ret = 0, j;
->  	char *prop_buf;
->  
-> @@ -483,22 +481,8 @@ int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  	if (ret)
->  		goto out;
->  
-> -	for (j = 0; j < psy->desc->num_properties; j++) {
-> -		set_bit(psy->desc->properties[j], psy_drv_properties);
-> -		ret = add_prop_uevent(dev, env, psy->desc->properties[j],
-> -				      prop_buf);
-> -		if (ret)
-> -			goto out;
-> -	}
-> -
-> -	for (j = 0; j < power_supply_battery_info_properties_size; j++) {
-> -		if (test_bit(battery_props[j], psy_drv_properties))
-> -			continue;
-> -		if (!power_supply_battery_info_has_prop(psy->battery_info,
-> -				battery_props[j]))
-> -			continue;
-> -		ret = add_prop_uevent(dev, env, battery_props[j],
-> -			      prop_buf);
-> +	for (j = 0; j < POWER_SUPPLY_ATTR_CNT; j++) {
-> +		ret = add_prop_uevent(dev, env, j, prop_buf);
->  		if (ret)
->  			goto out;
->  	}
-> 
-
+  drivers/cpufreq/amd-pstate.c | 34 ++++++++++++++++++++++++----------
+  1 file changed, 24 insertions(+), 10 deletions(-)
 
