@@ -1,147 +1,159 @@
-Return-Path: <linux-pm+bounces-13554-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13555-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1F8396B960
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 12:56:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C561896BA8B
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 13:28:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6FD31C2504F
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 10:56:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80804285A3A
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 11:28:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EBB61D0162;
-	Wed,  4 Sep 2024 10:55:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 775FC1D5888;
+	Wed,  4 Sep 2024 11:24:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yU3R7Tst"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HNufZ6Re"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6DE1D014E
-	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 10:55:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DFB01D0DC5;
+	Wed,  4 Sep 2024 11:24:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725447341; cv=none; b=D0Ii6UYgwOna98VO2CgVWyiYe3sAnN8Yx/QeHba2ZUcLBb+75XcVkWXzRBW3xPGpcjVgTmB0cvh8JSjyiJUGw/uRrQ+KeXSG5l4mLiCz366Z1zY5IgIObJgxTYNYEgwwtzZVYoVR7p7GFaX9tChlMRq6LOtkW/kb3k37CeTEfk0=
+	t=1725449062; cv=none; b=Xv40ptJJ0kCcj3PXQbEZTtxBfJ04BV9DiBZ/GwZGjY5aA/uGGzGexUL6IjJuUesBwWebLbMH5AZSHlUz3ed6fJ/rXD3BYSV8p6fJGmtcc9kNCMEl9jf5jC6n55mZfRSvl1UNmbdzDYHFBima1WbctiKt2dcZdVV/NK7PFOuE7Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725447341; c=relaxed/simple;
-	bh=cOKW7NUKZZI6Wp4SVULd/68D6NarWm5qu7B4EWb1yQ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R1CDXha4Ss1+u+YX7GvtJdKUWZZ271Togs3VFtK83J9l6FzM1vF0gzRTc0Xv9WJI8mmjvcoNHbWZi4DSi2Ih7BisaHzFeau2Ince+9u1EvZukMwiVCMiZHzCOSZhF5lun1gODKZ4hfSVb69pGGO0wLPcm0zE4Rk+HnbucU0ccac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yU3R7Tst; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2f50f1d864fso75063241fa.1
-        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2024 03:55:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725447338; x=1726052138; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1+7OAyLujGbFYszTADm1Fbnglj5tVVPCg8cnH8d6UNw=;
-        b=yU3R7TstScONgqbu0F9jaQG+Pp1iizzmQ4b/9+4XQi+EQ+/n33Kuk0tdjtBzeBl8Ih
-         ky2HWUkw1g/cqlsL1KgTxb4Wzut20NCZT+hXtIIeW3yUFVLS7Da4DqTM4KfE8k2/4nwH
-         ZsKZ4PHwf0hBRk+XegCVyBhd7LTTYGEFM9PxLSQDATy+kuLekYAXqJHq69k1zMk/QVGO
-         cMJkfw2Nnb+M8ge1dcW4UsLSB1E7Tv2xxjGJ3JxfTYCCCKWgI4tpS3FbwnUzJ5oaMRmK
-         kcc9b+Zfkv+xZ+ScnEnSHUGa6RGpek/QqCrErjOo8IM4zEUEbfKxMi0gTl07DS7XQA9L
-         BmAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725447338; x=1726052138;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1+7OAyLujGbFYszTADm1Fbnglj5tVVPCg8cnH8d6UNw=;
-        b=k/IJ8HILzQ3zzexDYjetFG4qgybnVJDWQ4104SrjvQpnykwo3kfP+L2vry60a83Cc8
-         qChkoI21DIkB0tJxtSSgEDatDFhCx9xKEr0XrEdzER3Tt+il172YxCcx4odQwySSvxQl
-         OMEzShuwNToFWmLJEititsNcqaR/Q3LmyE3Q4hpRwfzN+29UOJhYlXaxBw+0tIE9YLi8
-         x9yPAq9+v1gECgA+ksMbN0IjJztfvQflMxCuWjdyh52WfQcmQYomgSfa4QGxbL2ABP87
-         6f600kEC4XEU/Xj2LF45kASlODmdvzGDvtJbcNQ6iXMBqAHmGgUhzFYI0WmuyFCOTWVH
-         1p7g==
-X-Forwarded-Encrypted: i=1; AJvYcCXnu1m99Dd0VRrF2y4JvM+I/hyBp+OvYfV092a3J7ml0hfxW0W4NWgA+JC/VIEE6fLJ23/xJDBdWw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxP5MQqhymkrcahqJmBL0eJIjCaKHuQEyRQ2HMGO/c4WiAR2vQP
-	ipZjFbmc2LfK5ua/xdDNXadeUTtHwZmuJjKyhHRRZUaSx0LN3+WvBtZOXi3b3Xc=
-X-Google-Smtp-Source: AGHT+IFE66IwvXATV2zxxNEOIEdbkl9lbKAFhzct/n7RvYANLBHuO6JOsOi5ySMCjoe65faREHS88Q==
-X-Received: by 2002:a05:651c:220a:b0:2f0:20cd:35fc with SMTP id 38308e7fff4ca-2f62902e264mr101506221fa.7.1725447336786;
-        Wed, 04 Sep 2024 03:55:36 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f6151881dcsm25498841fa.124.2024.09.04.03.55.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 03:55:36 -0700 (PDT)
-Date: Wed, 4 Sep 2024 13:55:34 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Jingyi Wang <quic_jingyw@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>, 
-	Bart Van Assche <bvanassche@acm.org>, Andy Gross <agross@kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
-	Joerg Roedel <joro@8bytes.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Robert Marko <robimarko@gmail.com>, Das Srinagesh <quic_gurus@quicinc.com>, 
-	Jassi Brar <jassisinghbrar@gmail.com>, Lee Jones <lee@kernel.org>, 
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev, 
-	Xin Liu <quic_liuxin@quicinc.com>
-Subject: Re: [PATCH 03/19] dt-bindings: phy: Add QMP UFS PHY comptible for
- QCS8300
-Message-ID: <e7qsuk3xoqgywubrkejoy3dztae2comlfn3mu6t226mvfvpfof@mlnj5s2xcsjf>
-References: <20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com>
- <20240904-qcs8300_initial_dtsi-v1-3-d0ea9afdc007@quicinc.com>
+	s=arc-20240116; t=1725449062; c=relaxed/simple;
+	bh=x9Wj3NKCBVX2Jxy+RPYDCpkZ8gGV9skmqyYCNT65hyo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=okf6gaySS+3VvioZNQBUuK5EC0+CEuK/y6ZfxO9fnb8dZWTzYtkhGPUV7WFgns+tFU1iBeBK7ePhDXrpGc8J2miVY3i4A14AsTjqo2SZz56gj9y2CbQSY+qRcCFWr2LTn3JsqI+zU/tm8kVnvtV6VhZSvRREXhwT90cPsbjurEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HNufZ6Re; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA52FC4CECE;
+	Wed,  4 Sep 2024 11:24:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725449061;
+	bh=x9Wj3NKCBVX2Jxy+RPYDCpkZ8gGV9skmqyYCNT65hyo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=HNufZ6Rezk2QAruWxNn00mlXlHMSnLTHdhZIstQJI/Hm+2DgXyTIt8tfrTbxoMOnw
+	 XGuvufzMfZFgWKNvBln3zaGABAYIva3Ew+ZJZTHACNhzS/s/d329+re8ofbAIILRJ+
+	 f37z4k0qtFoECigUTAkiYFYIhnOsmlAN/M3A/nJgU1Qx+zkqmLC09iKgJ7BdnRrSFk
+	 DkzKGzMktLNdTEQjT3iGgD+H9DmMjo7Hne2zAIMe7xEpCEUMu4wymyZ1fXsQ23SeDL
+	 FqlCiZ/QmOsy0rUKhprvvtX1a+oSpC8HNDZ1sD+JFhRLDVQcZaDHO0P3wS3TlChS9O
+	 4FAGwIfXSwqsA==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-260e6298635so288671fac.1;
+        Wed, 04 Sep 2024 04:24:21 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVW4xSY5HQsoV2qCqpluuhYwYs6WyOiObfe7o8I13ztP6E6bTe7WWZ3QAHpuAqUCdXnvkfxE6+uoKcIEfk=@vger.kernel.org, AJvYcCW6R5b//RGHRDni283YH3tlOCdgSJAwtO4jMusc4yRK3LRMISySE9w6ndPOTSLWw1A9mfib5IKNbLc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqiS++7F4Vy4XJ/5Ci2DQEtjYQ019m3zLCxDflclRpF0NIKH1G
+	1ESnWtow46iktR/gTLuIzU8A2ywfQRbavx4/D31MXHdMUMMt0pjNmHBNkgnqjxrRb8axYDccHXE
+	72hzaSxlp2+X1C+yVDbiZS3hFgjk=
+X-Google-Smtp-Source: AGHT+IFiW4HnFOm6hpTX9f9KiC1lu44dAHa+myos7dCCBdRDEe6xaVJ+kEGpB1ixNFpqP1Py9u5oWiWBZxOtYrBXuyk=
+X-Received: by 2002:a05:6870:e24a:b0:278:a71:2659 with SMTP id
+ 586e51a60fabf-27b4a00b184mr742386fac.14.1725449061104; Wed, 04 Sep 2024
+ 04:24:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240904-qcs8300_initial_dtsi-v1-3-d0ea9afdc007@quicinc.com>
+References: <3310447.aeNJFYEL58@rjwysocki.net> <10523497.nUPlyArG6x@rjwysocki.net>
+ <20240904062244.GA3614@ranerica-svr.sc.intel.com>
+In-Reply-To: <20240904062244.GA3614@ranerica-svr.sc.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 4 Sep 2024 13:24:09 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hh=anBCtCFEfxQ0WJ5Zm8XuXA4UHFWZNhm9m7NSYNCQA@mail.gmail.com>
+Message-ID: <CAJZ5v0hh=anBCtCFEfxQ0WJ5Zm8XuXA4UHFWZNhm9m7NSYNCQA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] x86/sched: Add basic support for CPU capacity scaling
+To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, x86 Maintainers <x86@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Ricardo Neri <ricardo.neri@intel.com>, Tim Chen <tim.c.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 04, 2024 at 04:33:44PM GMT, Jingyi Wang wrote:
-> From: Xin Liu <quic_liuxin@quicinc.com>
-> 
-> Document the QMP UFS PHY compatible for QCS8300 to support physical
-> layer functionality for USB found on the SoC.
+On Wed, Sep 4, 2024 at 8:17=E2=80=AFAM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
+>
+> On Wed, Aug 28, 2024 at 01:47:25PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > In order be able to compute the sizes of tasks consistently across all
+> > CPUs in a hybrid system, it is necessary to provide CPU capacity scalin=
+g
+> > information to the scheduler via arch_scale_cpu_capacity().  Moreover,
+> > the value returned by arch_scale_freq_capacity() for the given CPU must
+> > correspond to the arch_scale_cpu_capacity() return value for it, or
+> > utilization computations will be inaccurate.
+> >
+> > Add support for it through per-CPU variables holding the capacity and
+> > maximum-to-base frequency ratio (times SCHED_CAPACITY_SCALE) that will
+> > be returned by arch_scale_cpu_capacity() and used by scale_freq_tick()
+> > to compute arch_freq_scale for the current CPU, respectively.
+> >
+> > In order to avoid adding measurable overhead for non-hybrid x86 systems=
+,
+> > which are the vast majority in the field, whether or not the new hybrid
+> > CPU capacity scaling will be in effect is controlled by a static key.
+> > This static key is set by calling arch_enable_hybrid_capacity_scale()
+> > which also allocates memory for the per-CPU data and initializes it.
+> > Next, arch_set_cpu_capacity() is used to set the per-CPU variables
+> > mentioned above for each CPU and arch_rebuild_sched_domains() needs
+> > to be called for the scheduler to realize that capacity-aware
+> > scheduling can be used going forward.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > v2 -> v3:
+> >    * Rebase after dropping patch [1/3].
+> >    * Rename arch_set_cpu_capacity() arguments.
+> >    * Add empty line to arch_enable_hybrid_capacity_scale().
+> >    * Declare local variables in scale_freq_tick() on one line.
+> >
+> > v1 -> v2:
+> >    * Replaces WARN_ON_ONCE() with WARN_ONCE() (2 places)
+> >    * Fix arch_enable_hybrid_capacity_scale() return value when hybrid
+> >      capacity scaling is already enabled.
+> >    * Allow arch_enable_hybrid_capacity_scale() to succeed when
+> >      frequency-invariance is not enabled.
+> >    * Fix arch_set_cpu_capacity() kerneldoc comment
+> >    * Do not disable capacity scaling in disable_freq_invariance_workfn(=
+).
+> >    * Relocate arch_hybrid_cap_scale_key definition.
+> >
+> > ---
+>
+> Only one minor comment below...
+>
+> FWIW:
+> Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> Tested-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com> # scale i=
+nvariance
 
-So this is talking about USB, but the patch changes UFS. Please adjust.
+Thanks!
 
-> 
-> Signed-off-by: Xin Liu <quic_liuxin@quicinc.com>
-> Signed-off-by: Jingyi Wang <quic_jingyw@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
-> index f9cfbd0b2de6..a3540f7a8ef8 100644
-> --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
-> @@ -18,6 +18,7 @@ properties:
->      enum:
->        - qcom,msm8996-qmp-ufs-phy
->        - qcom,msm8998-qmp-ufs-phy
-> +      - qcom,qcs8300-qmp-ufs-phy
->        - qcom,sa8775p-qmp-ufs-phy
->        - qcom,sc7180-qmp-ufs-phy
->        - qcom,sc7280-qmp-ufs-phy
-> @@ -85,6 +86,7 @@ allOf:
->            contains:
->              enum:
->                - qcom,msm8998-qmp-ufs-phy
-> +              - qcom,qcs8300-qmp-ufs-phy
->                - qcom,sa8775p-qmp-ufs-phy
->                - qcom,sc7180-qmp-ufs-phy
->                - qcom,sc7280-qmp-ufs-phy
-> 
-> -- 
-> 2.25.1
-> 
+> [...]
+>
+> > +
+> > +static struct arch_hybrid_cpu_scale __percpu *arch_cpu_scale;
+> > +
+> > +/**
+> > + * arch_enable_hybrid_capacity_scale - Enable hybrid CPU capacity scal=
+ing
+>
+> This looks to me like a kernel-doc comment. The function name should have=
+ ().
 
--- 
-With best wishes
-Dmitry
+Well, there are quite a few function kerneldoc comments without the
+parens at the end of the name, but sure.
+
+> [...]
+> > +/**
+> > + * arch_set_cpu_capacity - Set scale-invariance parameters for a CPU
+>
+> Same here.
 
