@@ -1,87 +1,119 @@
-Return-Path: <linux-pm+bounces-13503-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13504-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BB6296AD99
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 03:06:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C246996AE13
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 03:50:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B2081C2101D
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 01:06:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7ED502820DD
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 01:50:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1E31FC8;
-	Wed,  4 Sep 2024 01:06:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2094F9D6;
+	Wed,  4 Sep 2024 01:50:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jsadccl/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC68663D
-	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 01:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D6A3211;
+	Wed,  4 Sep 2024 01:50:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725411986; cv=none; b=F5BrPQiCNt+d8mxW9GUzsWihnXw4Q5DMgW/mDDtY0NSRoQ/SY4jtt+WStxhwujpodRrFr866z066twIOPF2ClkY5Qub3UhfAYpHf5uB6nFBNm/flfBmaKhdNmqzYGbmxrm7TmO+BXluL27kortfK/46sTnQ7YT3lJ3ecLxL4BGU=
+	t=1725414608; cv=none; b=P/ngmW3zT49Xqd2PnAeBwkh+ve5BVICmDE1NTYJJdge74KefuwVaHAus5pnukVrZSS2SSLiCWPVFgajGbLhQmUgfgv7Maiu2IiHL7mIEzJCKeaKEm22D8AYgHVw20feYYaYE8TzUddHTEotVZfuAFLz1TJFNODzCZo2g5GsHyL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725411986; c=relaxed/simple;
-	bh=dCzaI+VZE0wr3Mw6c7h41JriJizcQxuZuGWbEPaj7bk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hrznxrUV0BE8LZ3c1BBRBJc4UQiatBEFg+ShPacadnM/uX/ovhQS6g0IavsBLug4KxUCaDSx8ej+K2NVHjipKt8zS1fDF9qiDKE9aNR9SsizfpMt0W5Dfg8BhK6BMzmyMttmAOwcFMoZAYgR/FX8H0Sm9jcrIN3J/StsJRVJkWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Wz46X3JZwzyRVH;
-	Wed,  4 Sep 2024 09:05:24 +0800 (CST)
-Received: from dggpeml500022.china.huawei.com (unknown [7.185.36.66])
-	by mail.maildlp.com (Postfix) with ESMTPS id 175CA1403D2;
-	Wed,  4 Sep 2024 09:06:02 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpeml500022.china.huawei.com
- (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 4 Sep
- 2024 09:06:01 +0800
-From: Hongbo Li <lihongbo22@huawei.com>
-To: <linus.walleij@linaro.org>, <sre@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <lihongbo22@huawei.com>
-Subject: [PATCH -next] power: supply: Constify struct kobj_type
-Date: Wed, 4 Sep 2024 09:14:34 +0800
-Message-ID: <20240904011434.2010118-1-lihongbo22@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1725414608; c=relaxed/simple;
+	bh=4AQxlfwksI8M0lXuPBfgDWfUUeO7Xwm6/Q69FGEDaqE=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=Bf07VAvSoWJ+nAeiW8MfCQS4ADKdpvknOTWLeIM8dFcLjGGXZAONCiXaRg7qZNZ2BiKBX2f3e3TFVIpfhMebThfTvG/O8+fTMhxTGCR3iI+i/Qg1FonPxKcOSLwCsAI0s53+Zpasrty0f5gmxRpP7ePt9KgKuoto+FQ0/NAIxqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jsadccl/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 853F8C4CEC4;
+	Wed,  4 Sep 2024 01:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725414607;
+	bh=4AQxlfwksI8M0lXuPBfgDWfUUeO7Xwm6/Q69FGEDaqE=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=jsadccl/9E+PbXaq+qBmbPd7/PjPSWuCGCCzZgXrCdzxotTCt+t4Jh4/bmoJd9CVw
+	 H8TFVkWCnT6PO3N5msofWRplIEzvDa/Eg5k4rOBS65A+0zhdG8IyexgNbEl8PJPjw+
+	 IPqvsG8xcWU4KoDxTm0aKsnESTEtPBfW/2JJhC2yZ7oNtXlbcdYda/gKsGnl9kjiks
+	 zYIezEibBc9qTHTav6i6r2l9PCUv9D8lgvmxWdNEEHSR/qOB+sf1qlb4hUUhVYAkeY
+	 sRh9O478wwJmKVRY2p7fE4R/AvzwSGarhGRI5N4ZYyVZuwxFz3ZGhNiy/K7VPANfL9
+	 HopuyFoAQZ++g==
+Date: Tue, 03 Sep 2024 20:50:06 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500022.china.huawei.com (7.185.36.66)
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: devicetree@vger.kernel.org, cristian.marussi@arm.com, 
+ rui.zhang@intel.com, linux-spi@vger.kernel.org, lee@kernel.org, 
+ krzk+dt@kernel.org, will@kernel.org, linux-arm-msm@vger.kernel.org, 
+ linus.walleij@linaro.org, joro@8bytes.org, linux-kernel@vger.kernel.org, 
+ robin.murphy@arm.com, quic_psodagud@quicinc.com, conor+dt@kernel.org, 
+ kernel@quicinc.com, sudeep.holla@arm.com, linux-serial@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, herbert@gondor.apana.org.au, 
+ konradybcio@kernel.org, jassisinghbrar@gmail.com, 
+ linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org, andersson@kernel.org, 
+ lukasz.luba@arm.com, iommu@lists.linux.dev, linux-watchdog@vger.kernel.org, 
+ broonie@kernel.org, rafael@kernel.org, davem@davemloft.net, 
+ arm-scmi@vger.kernel.org, thara.gopinath@gmail.com, viresh.kumar@linaro.org, 
+ linux@roeck-us.net, amitk@kernel.org, wim@linux-watchdog.org, 
+ andi.shyti@kernel.org, linux-arm-kernel@lists.infradead.org, 
+ tglx@linutronix.de, linux-crypto@vger.kernel.org
+In-Reply-To: <20240903220240.2594102-14-quic_nkela@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-14-quic_nkela@quicinc.com>
+Message-Id: <172541460656.3237041.12121704663662726692.robh@kernel.org>
+Subject: Re: [PATCH v2 13/21] dt-bindings: pinctrl: Add SA8255p TLMM
 
-This 'struct kobj_type' is not modified. It is only used in
-kobject_init_and_add() which takes a 'const struct kobj_type *ktype'
-parameter.
 
-Constifying this structure and moving it to a read-only section,
-and can increase over all security.
+On Tue, 03 Sep 2024 15:02:32 -0700, Nikunj Kela wrote:
+> Add compatible for TLMM block representing support on SA8255p.
+> 
+> SA8255p uses the same TLMM block as SA8775p however the ownership
+> of pins are split between Firmware VM and Linux VM on SA8255p. For
+> example, pins used by UART are owned and configured by Firmware VM
+> while pins used by ethernet are owned and configured by Linux VM.
+> Therefore, adding a sa8255p specific compatible to mark the difference.
+> 
+> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+> ---
+>  .../devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml    | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
 
-Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
----
- drivers/power/supply/ab8500_fg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+My bot found errors running 'make dt_binding_check' on your patch:
 
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 270874eeb934..a71903b1bf78 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -2531,7 +2531,7 @@ static struct attribute *ab8500_fg_attrs[] = {
- };
- ATTRIBUTE_GROUPS(ab8500_fg);
- 
--static struct kobj_type ab8500_fg_ktype = {
-+static const struct kobj_type ab8500_fg_ktype = {
- 	.sysfs_ops = &ab8500_fg_sysfs_ops,
- 	.default_groups = ab8500_fg_groups,
- };
--- 
-2.34.1
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml:22:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+./Documentation/devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml:23:11: [warning] wrong indentation: expected 12 but found 10 (indentation)
+./Documentation/devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml:26:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+
+dtschema/dtc warnings/errors:
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240903220240.2594102-14-quic_nkela@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
