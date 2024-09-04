@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-13592-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13593-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FB9696C090
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 16:31:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E8D596C096
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 16:32:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DED01289E38
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 14:31:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D73C61F268CE
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 14:32:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12F691DC72A;
-	Wed,  4 Sep 2024 14:31:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FF951DEFC5;
+	Wed,  4 Sep 2024 14:31:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5DC1DC07F
-	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 14:30:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.90
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB571DCB2C
+	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 14:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725460263; cv=none; b=CxHyepFS2+wvDhiy6wL4uuRNC9aZZhdaOFfOVGptGog+4uJSbACDf/finVcBSoDnUCkWpfnyTkoy7TMx3QtqDEBJxjy3yCiBNG5HTeJlf3Gc/mbxOrv+g0iQkIuZeK0IX5Kg/6k43OCxY7UJV0YkKESW/IIMBRZKKjyLot6LIWI=
+	t=1725460268; cv=none; b=KXXFEtNEwDm11Ebjd8is/dwxdbYYHBAJDDdXvSikVquH2FLdBEGjZBlEg14Qq6mv7Fi2CA1/WRoL2s1xs7efC+Q6zVUBFXwxRwZ2d9mNqzbVqs+UfLPOVMdoOu/qedXZQdjMa+hgR7zd4sNsh9yWN1Ut4QpD19F3u4vXuJPe2ck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725460263; c=relaxed/simple;
-	bh=ck5HEjZevSTu8uCue2LCvHvhdo2sBkHkQBl5O3C9hmc=;
+	s=arc-20240116; t=1725460268; c=relaxed/simple;
+	bh=PvIExtq/8JZw+HWVjYfMbNbIIf4VpurgjJG5pvlFfk8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VjT2jDsnI//2Y2Lx2TrDxMHVgXD57SzelijHrkrfwbZCpMJGveFlTDs7EvwKBvkkOZOsMGTHS925Fp7FPraoczgmHbuhsY9aXoapPsie9FGTf2/ppaXxEOyUcu0zNzOe2koUxqFvmedpsbYSs20OKJF/bouNdo+gq8zs17JCyWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.90
+	 MIME-Version; b=q1zyS93tYp0s9ZAu0S4KOtVz9GushvCSkpOv/a3wqxZT6AhQh3IqnQCW0YVrdLLsNzTIGCzgJXD6xWivsHOuU+yQmRBNGoCRgSIOOd5OvpNEx1PQ0s9IcTFlOmawgiL3LW7j7LTcwNyUD7G3bBrRp4CkcLow6cBLZllXVeH3GNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:ef52:68c5:eac1:f6b5])
-	by albert.telenet-ops.be with cmsmtp
-	id 8EWv2D00C3m5in106EWvSM; Wed, 04 Sep 2024 16:30:57 +0200
+	by baptiste.telenet-ops.be with cmsmtp
+	id 8EWv2D00A3m5in101EWv7F; Wed, 04 Sep 2024 16:30:58 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1slr24-0028JP-Hu;
+	id 1slr24-0028JT-If;
 	Wed, 04 Sep 2024 16:30:55 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1slr27-004MyD-8m;
+	id 1slr27-004MyI-AF;
 	Wed, 04 Sep 2024 16:30:55 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Ulf Hansson <ulf.hansson@linaro.org>,
@@ -54,9 +54,9 @@ Cc: linux-pm@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 2/4] pmdomain: core: Fix "managed by" alignment in debug summary
-Date: Wed,  4 Sep 2024 16:30:46 +0200
-Message-Id: <e004f9d2a75e9a49c269507bb8a4514001751e85.1725459707.git.geert+renesas@glider.be>
+Subject: [PATCH 3/4] pmdomain: core: Move mode_status_str()
+Date: Wed,  4 Sep 2024 16:30:47 +0200
+Message-Id: <18ed6fb2bb92860f3af1bc7e5e4a01e9dacf2126.1725459707.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1725459707.git.geert+renesas@glider.be>
 References: <cover.1725459707.git.geert+renesas@glider.be>
@@ -68,41 +68,44 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The "performance" column contains variable-width values.  Hence when
-their printed values contain more than one digit, all values in
-successive columns become misaligned.
+Move mode_status_str() below perf_status_str(), to make declaration
+order match calling order of the various *_status_str() helpers.
 
-Fix this by formatting it as a fixed-width field.  Adjust successive
-spaces and field widths to retain the exiting layout.
+While at it, add a blank line for consistency among the three helpers.
 
-Fixes: 0155aaf95a2a09ba ("PM: domains: Add the domain HW-managed mode to the summary")
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
-Tested by printing pseudo-random numbers instead of the actual
-performance_state, as the latter is always zero for me.
----
- drivers/pmdomain/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/pmdomain/core.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index afa4e75863a40b49..912bdc131fc0e2b1 100644
+index 912bdc131fc0e2b1..2233daaa4168be14 100644
 --- a/drivers/pmdomain/core.c
 +++ b/drivers/pmdomain/core.c
-@@ -3317,7 +3317,7 @@ static void mode_status_str(struct seq_file *s, struct device *dev)
- 
- 	gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
- 
--	seq_printf(s, "%20s", gpd_data->hw_mode ? "HW" : "SW");
-+	seq_printf(s, "%9s", gpd_data->hw_mode ? "HW" : "SW");
+@@ -3311,21 +3311,22 @@ static void rtpm_status_str(struct seq_file *s, struct device *dev)
+ 	seq_printf(s, "%-25s  ", p);
  }
  
- static void perf_status_str(struct seq_file *s, struct device *dev)
-@@ -3325,7 +3325,7 @@ static void perf_status_str(struct seq_file *s, struct device *dev)
+-static void mode_status_str(struct seq_file *s, struct device *dev)
++static void perf_status_str(struct seq_file *s, struct device *dev)
+ {
  	struct generic_pm_domain_data *gpd_data;
  
  	gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
--	seq_put_decimal_ull(s, "", gpd_data->performance_state);
+ 
+-	seq_printf(s, "%9s", gpd_data->hw_mode ? "HW" : "SW");
 +	seq_printf(s, "%-10u  ", gpd_data->performance_state);
+ }
+ 
+-static void perf_status_str(struct seq_file *s, struct device *dev)
++static void mode_status_str(struct seq_file *s, struct device *dev)
+ {
+ 	struct generic_pm_domain_data *gpd_data;
+ 
+ 	gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
+-	seq_printf(s, "%-10u  ", gpd_data->performance_state);
++
++	seq_printf(s, "%9s", gpd_data->hw_mode ? "HW" : "SW");
  }
  
  static int genpd_summary_one(struct seq_file *s,
