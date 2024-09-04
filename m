@@ -1,70 +1,63 @@
-Return-Path: <linux-pm+bounces-13565-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13570-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFA0596BC9B
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 14:41:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A432196BD2A
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 14:55:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A919328580C
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 12:41:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B67B280EE5
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 12:55:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D7631D9344;
-	Wed,  4 Sep 2024 12:41:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 909371DA2F2;
+	Wed,  4 Sep 2024 12:52:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XWRTP3xp"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pVerrnM/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255221D9337
-	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 12:41:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AF71D9337;
+	Wed,  4 Sep 2024 12:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725453679; cv=none; b=Opa5zaA6PVASL22bHQHf5R8WWBb9O+JXZj16gcwgwFVMVaNwZxfFa9kMOoaGfI14gmZefgcV1S/MMcaDTd/9JzV4lbo4ssswG1Yy8+TMD474KsS2mpUsmhofMOhPc6bO7dJF5WbNGPmTs17k+yBSWBcLmyPEhG3HzJ0n3u16GAE=
+	t=1725454356; cv=none; b=ppT2mymD125xQg8CtCVAKN0xEkty9tiabkcnlA3znIAjVv6xLBUJgi/Yzy4oLgjrcG3iSu6N9WKEZIjswYaFcsm2mJ9ttTRkwtynXYmWCIbwG7bocvjzxjUFqM/wjnsGiaYDRgS61q9bRummN7pQMkNWTkC5wX3J/7gy4bu89K0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725453679; c=relaxed/simple;
-	bh=1UISgvlWcv2Y7+TxNQcrzQtP8EfA+ViBiYZQ6iNHTfA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k0SClYlqOGZ4i0c/Y9JESq3JKmB26tBqY+khmMq8JK0juStkLpR7yX5Bd9+XpB8lePX8CwsoF5gLMvKOSOEKS3T9Xu1UMXrekrP1XbhGDkf0YIDnomu7rRLFA7RXMI4VVmqu8Rq1qGnZyZR3US9IzzuLoIAq5SaAj/xVY2plCbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XWRTP3xp; arc=none smtp.client-ip=209.85.166.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-82a1dadc2d2so263669339f.1
-        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2024 05:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1725453676; x=1726058476; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qcq1FEBxbDWBsgRl9Is3K+I7b8WqhaMddxDrtzjKeh4=;
-        b=XWRTP3xpjnxCaL/kXZFPEpzYXiETBamAyfeQVmZu0JDZmIwgIVHa7zH07XfdamXfYt
-         YQ/9EiFm8+TIsRjTsjynbKZZjyW04ktmwiu1Xh+sbJE+3/vbXozqEmLNZTUXYXd6gn0c
-         iu/sBIfbWIRutqu2p0xCMhs/N205TviFv49Z4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725453676; x=1726058476;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qcq1FEBxbDWBsgRl9Is3K+I7b8WqhaMddxDrtzjKeh4=;
-        b=UQ0PRjrsm9MDuyDjuYnDU0VhqgC6g3bRm/2fsz0ar9I5JqXgNitYCFsiSZERSwzTGB
-         zBqnXUexMfGMTHA3VcStw4b2aY/rPeSjvM3n0hdnVlbaca/L/iYcGD9ZhSZ6TNC8FAlV
-         +j59F2F88Jm8P/QZ6Bk5PKsXIrOs5EvTsBY2jlyOmk8gwfhLpRGgc+JSmQ26XjOQfzUS
-         DIAxCd52DtptY2UTKtBRW1rFicFvwdxGHziLzoJdi29HnMlQNsBxktJxNzsA8sGogTBR
-         qyZ/TT5JxYQMRpGVEm7f/A/TNUhIHMUFv/+lfBiFR3BaLarjR6cam0oBVaqpyFfuzCU0
-         n6fA==
-X-Gm-Message-State: AOJu0YydTk8+jqj34OKdTWwkpnPXseRknuBRQ2QkEb7yCURcpAEk3zyA
-	2D66543/DuoGBUuqpStXtSxdSGj/mh76EspNYZTvKatfwmG8uG8F+VSnSzgLIKE=
-X-Google-Smtp-Source: AGHT+IFSTJiOA1xhZqwjBQpQ3S0Ug1iDsLyH/VoJmMKqMb92HEU0RD9+LXZdHya9APtp2pz3k3Stjg==
-X-Received: by 2002:a05:6602:1609:b0:824:d9d1:e67b with SMTP id ca18e2360f4ac-82a3428cd59mr1922511739f.8.1725453676078;
-        Wed, 04 Sep 2024 05:41:16 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ced2dcd722sm3160524173.27.2024.09.04.05.41.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2024 05:41:15 -0700 (PDT)
-Message-ID: <ab9e3727-9978-4a30-8bff-e366fa5defc1@linuxfoundation.org>
-Date: Wed, 4 Sep 2024 06:41:14 -0600
+	s=arc-20240116; t=1725454356; c=relaxed/simple;
+	bh=2FI7kUugQ8AZNyDv48uoku3rUnL9chur7kuEfnt2whs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=kGU7+VBqHOpzdcvjBhtRMYO0hvjtI118/zBAydiJ0J8DSPh8igXl7jaS5+XXsxsstObFynMsoCcqVclwYR/xTSj6jRfCTEWSnccFrw3/ydvGYN4mg9ug/pI05RP6KUxbBvMS6wByopRJHw21DL9AGdxpI0hcNsBqG5+FQoAHdWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pVerrnM/; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4849hvk9031157;
+	Wed, 4 Sep 2024 12:45:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	2FI7kUugQ8AZNyDv48uoku3rUnL9chur7kuEfnt2whs=; b=pVerrnM/J4KZjcOE
+	/hnl/13e5yz0GENRYaQ/u2vhLTLsMLqlEhq6CeHU7KYupbYeO3csiuFcSXQZhvvs
+	hSj8JHX7d6OPemM1nwFnWy6ww1vxL56TOVKNxxCgr4aAutdr21eKEmkDLB+IS+OQ
+	1M2NtoSf4ZHgu2sqH+vuLlfyXulXDI4Ae0bQ5IFkfOlUJ5wIGI8GkD0vnwhcmBDG
+	9s4fMeweWXqwlDly96iTh/AAhbPEBnmTV0mgHKhvFDNI1nyLDK4ojV7dNo0cO120
+	rzrC9eA9zHXe7ooiOh7/IdSinlBK50h7cgPjPT/lx016nCtQK8pQB2U/xI/MIkoG
+	tHxrng==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41bvbkjkq2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Sep 2024 12:45:10 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 484Cj9hC013102
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 4 Sep 2024 12:45:09 GMT
+Received: from [10.110.120.207] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 4 Sep 2024
+ 05:45:05 -0700
+Message-ID: <24d4676f-4385-406d-9728-54afc3144e17@quicinc.com>
+Date: Wed, 4 Sep 2024 05:45:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -72,106 +65,66 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] Add SWIG Bindings to libcpupower
-To: "John B. Wyatt IV" <jwyatt@redhat.com>
-Cc: linux-pm@vger.kernel.org, Thomas Renninger <trenn@suse.com>,
- Shuah Khan <shuah@kernel.org>, Linus Torvalds
- <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org,
- John Kacur <jkacur@redhat.com>, Tomas Glozar <tglozar@redhat.com>,
- Arnaldo Melo <acme@redhat.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "John B. Wyatt IV" <sageofredondo@gmail.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240827062438.71809-1-jwyatt@redhat.com>
+Subject: Re: [PATCH v2 15/21] dt-bindings: i2c: document support for SA8255p
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240827062438.71809-1-jwyatt@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski
+	<krzk@kernel.org>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <sudeep.holla@arm.com>, <andi.shyti@kernel.org>, <tglx@linutronix.de>,
+        <will@kernel.org>, <robin.murphy@arm.com>, <joro@8bytes.org>,
+        <jassisinghbrar@gmail.com>, <lee@kernel.org>,
+        <linus.walleij@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
+        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
+        <quic_psodagud@quicinc.com>,
+        Praveen Talari
+	<quic_ptalari@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-16-quic_nkela@quicinc.com>
+ <7fc1e4c3-ca09-4a0a-b072-0c4f1d21e44f@kernel.org> <ZtgSd_SLndvLLVYF@shikoro>
+From: Nikunj Kela <quic_nkela@quicinc.com>
+In-Reply-To: <ZtgSd_SLndvLLVYF@shikoro>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: GfWhUZz5Jq0_pwPHu9T0QF37Le3YywI6
+X-Proofpoint-GUID: GfWhUZz5Jq0_pwPHu9T0QF37Le3YywI6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-04_10,2024-09-04_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
+ impostorscore=0 malwarescore=0 bulkscore=0 spamscore=0 clxscore=1011
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2409040096
 
-On 8/27/24 00:24, John B. Wyatt IV wrote:
-> SWIG is a tool packaged in Fedora and other distros that can generate
-> bindings from C and C++ code for several languages including Python,
-> Perl, and Go. Providing bindings for scripting languages is a common feature
-> to make use of libraries more accessible to more users and programs. My team
-> specifically wants to expand the features of rteval. rteval is a Python program
-> used to measure real time performance. We wanted to test the effect of enabling
-> some levels of idle-stat to see how it affects latency, and didn't want to
-> reinvent the wheel. Since SWIG requires the .o files created by libcpupower at
-> compilation it makes sense to include this in the cpupower directory so that
-> others can make use of them.
-> 
-> The V2 of this patchset includes:
-> * the full definition of libcpupower headers that is needed for the bindings
-> * dummy implementation in C of a function listed in the header of libcpupower
-> (requested by Shuah Khan)
-> * test_raw_pylibcpupower.py demonstrates an example of using the bindings
-> * adding myself and John Kacur to the cpupower section of the maintainers file
-> (requested by Shuah Khan)
-> * addressed review comments about doc, makefile, and maintainers file
-> * small style and other fixes
-> 
-> The name raw_pylibcpupower is used because a wrapper `pylibcpupower` may be
-> needed to make the bindings more 'pythonic' in the future. The bindings folder
-> is used because Go or Perl bindings may be useful for other users in the
-> future.
-> 
-> Note that while SWIG itself is GPL v3+ licensed; the resulting output, the
-> bindings code, has the same license as the .o files used to generate the
-> bindings (GPL v2 only). Please see
-> https://swig.org/legal.html
-> and
-> https://lore.kernel.org/linux-pm/Zqv9BOjxLAgyNP5B@hatbackup/#t
-> for more details on the license.
-> 
-> Sincerely,
-> John Wyatt
-> Software Engineer, Core Kernel
-> Red Hat
-> 
-> John B. Wyatt IV (4):
->    Add SWIG bindings files for libcpupower
->    Implement dummy function for SWIG to accept the full library
->      definitions
->    Include test_raw_pylibcpupower.py
->    MAINTAINERS: Add Maintainers for SWIG Python bindings
-> 
->   MAINTAINERS                                   |   3 +
->   .../power/cpupower/bindings/python/.gitignore |   8 +
->   tools/power/cpupower/bindings/python/Makefile |  31 +++
->   tools/power/cpupower/bindings/python/README   |  59 +++++
->   .../bindings/python/raw_pylibcpupower.i       | 247 ++++++++++++++++++
->   .../bindings/python/test_raw_pylibcpupower.py |  42 +++
->   tools/power/cpupower/lib/powercap.c           |   8 +
->   7 files changed, 398 insertions(+)
->   create mode 100644 tools/power/cpupower/bindings/python/.gitignore
->   create mode 100644 tools/power/cpupower/bindings/python/Makefile
->   create mode 100644 tools/power/cpupower/bindings/python/README
->   create mode 100644 tools/power/cpupower/bindings/python/raw_pylibcpupower.i
->   create mode 100755 tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
-> 
 
-Couple of things to address:
+On 9/4/2024 12:55 AM, Wolfram Sang wrote:
+>> Just to clarify to I2C maintainers:
+>> This is incomplete. Missing driver changes.
+> Thanks, Krzysztof!
 
-1. I noticed none of the patches have the subsystem prefix:
-   pm:cpupower is the right prefix for patch subject for all
-   the patches except the MAINTAINERS file
+Driver changes are going through internal review and will soon be
+posted. For your reference, we have pushed driver changes in CodeLinaro
+git branch(nkela/sa8255p_v6_11_rc2)  in kernel-qcom repo [1]. You can
+take a look at the changes that are in pipeline and will follow soon.
 
-I will pull the fix  "Implement dummy function for SWIG to accept
-the full library" Patch 2 in your series.
+[1]:
+https://git.codelinaro.org/clo/linux-kernel/kernel-qcom/-/tree/nkela/sa8255p_v6_11_rc2?ref_type=heads
 
-I want this subject changed to just fix as it is a problem irrespective
-of SWIG - we have a missing function. Subject would be as follows:
-
-""pm:cpupower: Add missing powercap_set_enabled() stub function"
-
-Make this the first patch in the series. I will send this up for
-Linux 6.11-rc7 or Linux 6.12-rc1
-
-Depending on how the timelines for merge window work, expect the
-series to land in Linux 6.13-rc1. I would prefer to delay it anyway
-so we can get some soaking in next.
-
-thanks,
--- Shuah
 
