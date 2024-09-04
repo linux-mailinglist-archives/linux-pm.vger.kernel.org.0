@@ -1,162 +1,184 @@
-Return-Path: <linux-pm+bounces-13572-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13573-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC7FE96BD5A
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 14:58:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 265D496BD6D
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 14:59:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04E59B26D72
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 12:58:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E6C51F215AB
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 12:59:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A641DB523;
-	Wed,  4 Sep 2024 12:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C8941DA607;
+	Wed,  4 Sep 2024 12:57:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="O0QF9M3E"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YcDSA0P8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844C91D88CC;
-	Wed,  4 Sep 2024 12:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56AAA1DA31F
+	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 12:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725454620; cv=none; b=WkH+tw2YC1cHOghKwUdgdSciMsVbpnOn+vL9M4DxM+DB+pidsIOr6yITmEbbdJr5NidJz5ZsU4u2xPVphDDvl3GiHTYIypV41T+S1CWQ3a1sAwX1YEsUOl0ayc1FEvppK5axgOuVztw44RfNtjmollg8KvQER45QX5Z/DUhqVCE=
+	t=1725454667; cv=none; b=TEo/2cUs0U06uds47j4PYC4k2YiWmL1OUbTxN0i+uS2hUKBGANNmjcsnU1ZM9+huYi7uZoC+ZMOblh0KQ/7VeZGFJ6K42EU6yohvr/kw2pUUJxEHJhx1/VcrDPJfb9j3EZKXK5BNPsklynidpBTCtLLA2IU8sS0kTigwU9IFmZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725454620; c=relaxed/simple;
-	bh=wMuz/yHSOeQnGRwmUte07k6KL4Jpdqqu0VGa+SJw7oE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=DJ+VnPrPYbOOX76c+0G5RBLQnXECMYANjN+aaKG7miuPG5T/poPJjNG2NKnf4EuHfHfIyNLdFR9TrHoZFoBgVxctNqdc8bJhporQIDoU/KloFYdGtWNUxnmQ+rLZp2hG82dSS9W5vltxi7cuhW4VsxtdwqEaRVa8AugikaHzhqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=O0QF9M3E; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 484B7eIB010562;
-	Wed, 4 Sep 2024 12:56:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	lWsJOKrtYOtMLpjkVEgXvDSjNg2OYftc4eM9GT6EFA4=; b=O0QF9M3EzEzUZbiD
-	rTJNm4LIoyFbfqffGMGLp4bzgnpN+YpCj91Xlo4SX08yqB0Hg1Yy0V4WjRgQXIUV
-	4rqM5BKUe9toE0VC98jzD2NbjRXAsGj9xLhZAWFxDJsNKlbNj5geNPhDwejrSAMU
-	D6asEzx3erjLzvnG7cqYrjdodcF4v229a36moT2hZKFTQ+yHTDJJTPf01rjDo3GY
-	8pHItxVHkv/oXO+esnZl9Tc+QzJlMqqMVBFCj/kFhWvABEjQZpiCCtqJUgGlyPqf
-	t5XrzfapwOasIeNqsk84mXXxoyfOBOxzHZCkfIlNrf0ah4GqIg6UHbeVKNkIaIn/
-	WTVvMQ==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41buxfakpe-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Sep 2024 12:56:29 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 484CuSmB017921
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 4 Sep 2024 12:56:28 GMT
-Received: from [10.110.120.207] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 4 Sep 2024
- 05:56:24 -0700
-Message-ID: <634ab05e-3b8c-4cc1-bf23-0c68c1d28484@quicinc.com>
-Date: Wed, 4 Sep 2024 05:56:23 -0700
+	s=arc-20240116; t=1725454667; c=relaxed/simple;
+	bh=9E2sEOIlaoNEZOy1HfVJKJTyT/pV/HhU4SufJHG+JU8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XMhBwIHYY2/fjP+RY5DscVC+XwlIyPG8tnsTh2kpn9JXfiQuy6PoZkgXCvuQ7eUegn5kQaI1fe5PBtfzEg0hiI+LVEvCvFc4NAbZKLOLTO9Z0tMrSARPGhFhogxOcIcrWATFOiUDTTXkg/t7S/ypwpJUL44SYb6bUTC0AR7RmDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YcDSA0P8; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e04196b7603so7105375276.0
+        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2024 05:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1725454665; x=1726059465; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=40ANBPXcSCxw7uCvibaj/PvGGL8rKu8dFRasC4YYI2c=;
+        b=YcDSA0P8o5/ChCRz/K16Tld4GpmWAAQxTEa0RKgAlW/PNrSwupEVZhr7F9T8KB/qXE
+         avCQjo4W2RNHDKnLKtTAXK7ZEa2YWcvHOeHT7fPIYCUfrwi3FYup2DRf7G1+lSUPOzt3
+         xLeEZF/3OLq2EZKUW1EMnYnvt3EHPyZDWRPo+xDTJyoTO3/8BXRK7mKezuLsSzgDrKa5
+         WvcTRxFBd+sgzzbwZIo2kNGsfHqmyC7jZF71Moqfq/h7fXotL8HbiM0x2c9FKZKhp6ao
+         qB1mqpaDQ260P2/d84PzLKSgKhlA8R9FHs70eDRTOIcWQMrec9bxd72EypFg07PSAKt7
+         Zuzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725454665; x=1726059465;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=40ANBPXcSCxw7uCvibaj/PvGGL8rKu8dFRasC4YYI2c=;
+        b=rUFR4ioxXoHO6xot6zjU7kWXKANtdjwf3qEDhOhOeOGccu9pQTOwwq5UaASfE+tUj0
+         aZGnFMpRdg7Qx7xKAZ6qdrEG6qn/KIj6DBy+esHyd4smfukheIeCtjJ15ZJaqYgYdJ5Q
+         xL+ZOlCzytGb9XO44gnECS7ncTw05RTpXfnB5AULJDbP1GyxENj5oKVlJBp+GVu7QS5Y
+         WfzUM5ZXN3ZYHXGIrNWjfVrfAaRTW5YknB4nmaAvzPvp+neGm7ay3w18Pz1VSjzTvZxO
+         TpgAhv0NGTQCeU7C72GcvKZ6KbsFM1mBQ7C12TsmLr9ZRM0V4WYl1LLdHE6J9KDusm17
+         QCrA==
+X-Forwarded-Encrypted: i=1; AJvYcCX5wrLe6V5Cr8Yvad9JL/iQfhS/059C062Si4/vUQ99ThUDFdW7YLZQ7h9tKjq9gdX1GTyrKQwM6A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0OkeFHJpFyj5BVDgb3/eFa0DPYwAO2XsHAftiabWRNsm3kGPk
+	OnpnMd5q+wKWch1Ymf4gn775h5VIV5MplAK0fhrfUDMwmuUFaeGaqQyya1OQ7RHqF/RfFIdoduF
+	3dXIKmS+6LV1nGXqt4nxk9AdWU4J6A1RXH7cDqA==
+X-Google-Smtp-Source: AGHT+IFTNPkgqyCMw8p07kCpHFqTvauPXMIZuzWkhMd/PM7xx1hGw4E57ep2OyllbBVqADQ37gs88S2PSvWUS9JDFQ8=
+X-Received: by 2002:a05:6902:f89:b0:e16:52ea:832a with SMTP id
+ 3f1490d57ef6-e1a7a02a4e5mr20050130276.27.1725454665208; Wed, 04 Sep 2024
+ 05:57:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 17/21] dt-bindings: serial: document support for
- SA8255p
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
-        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
-        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
-        <linus.walleij@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
-        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
-        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
-        <quic_psodagud@quicinc.com>, Praveen Talari <quic_ptalari@quicinc.com>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-18-quic_nkela@quicinc.com>
- <db4cb31f-b219-4ee8-b519-fdec7f7b8760@kernel.org>
-From: Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <db4cb31f-b219-4ee8-b519-fdec7f7b8760@kernel.org>
+References: <20240902224815.78220-1-ulf.hansson@linaro.org>
+ <20240902224815.78220-3-ulf.hansson@linaro.org> <20240903071638.bedt3gllqdacf43a@vireshk-i7>
+ <CAPDyKFoqEAHns0nrXT6dJR3sRd5VWidK_rzXGHzJiZtk_p0cKw@mail.gmail.com>
+ <20240903105321.suosbhkkkylfw4bv@vireshk-i7> <CAPDyKFrh4VASFzMxEg3Q8SrhVbt1vH8QJM0rCdfxo+-L1+CN_g@mail.gmail.com>
+ <20240904064004.7hwfom4nrqzfkvlo@vireshk-i7>
+In-Reply-To: <20240904064004.7hwfom4nrqzfkvlo@vireshk-i7>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 4 Sep 2024 14:57:08 +0200
+Message-ID: <CAPDyKFqZiX=F4oNa3H+fUCO9cRzapxMaAphdx+JFXuR-Tgv3Cw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] OPP/pmdomain: Fix the assignment of the required-devs
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Dikshita Agarwal <quic_dikshita@quicinc.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <quic_kdybcio@quicinc.com>, Nikunj Kela <nkela@quicinc.com>, 
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Mikko Perttunen <mperttunen@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Stephan Gerhold <stephan@gerhold.net>, Ilia Lin <ilia.lin@kernel.org>, 
+	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 56I2SLtd3gnT1WeUGucUYjLKMtSJHPRc
-X-Proofpoint-ORIG-GUID: 56I2SLtd3gnT1WeUGucUYjLKMtSJHPRc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-04_10,2024-09-04_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- adultscore=0 clxscore=1015 mlxlogscore=999 lowpriorityscore=0 phishscore=0
- bulkscore=0 mlxscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
- definitions=main-2409040098
 
-
-On 9/4/2024 12:47 AM, Krzysztof Kozlowski wrote:
-> On 04/09/2024 00:02, Nikunj Kela wrote:
->> Add compatibles representing UART support on SA8255p.
->>
->> Clocks and interconnects are being configured in the firmware VM
->> on SA8255p platform, therefore making them optional.
->>
->> CC: Praveen Talari <quic_ptalari@quicinc.com>
->> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
->> ---
->>  .../serial/qcom,serial-geni-qcom.yaml         | 53 ++++++++++++++++---
->>  1 file changed, 47 insertions(+), 6 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->> index dd33794b3534..b63c984684f3 100644
->> --- a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->> +++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->> @@ -10,14 +10,13 @@ maintainers:
->>    - Andy Gross <agross@kernel.org>
->>    - Bjorn Andersson <bjorn.andersson@linaro.org>
->>  
->> -allOf:
->> -  - $ref: /schemas/serial/serial.yaml#
->> -
->>  properties:
->>    compatible:
->>      enum:
->>        - qcom,geni-uart
->>        - qcom,geni-debug-uart
->> +      - qcom,sa8255p-geni-uart
->> +      - qcom,sa8255p-geni-debug-uart
+On Wed, 4 Sept 2024 at 08:40, Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Anyway, the entire patchset is organized wrong. Or you sent only subset.
+> On 03-09-24, 13:43, Ulf Hansson wrote:
+> > On Tue, 3 Sept 2024 at 12:53, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > On 03-09-24, 11:54, Ulf Hansson wrote:
+> > > > In the current code, genpd_find_opp_table() tries to find an OPP table
+> > > > for the genpd that the device is getting attached to. Then genpd
+> > > > passes that OPP table via devm_pm_opp_set_config(), to let the OPP
+> > > > core to hook up a required-dev for it. This was a naive approach, as
+> > > > that OPP table may not be the one that actually corresponds to a
+> > > > required-opps for the required-dev. Consider the below in DT.
+> > > >
+> > > >         opp_table_devA: opp-table-devA {
+> > > >                 compatible = "operating-points-v2";
+> > > >
+> > > >                 opp-devA-50 {
+> > > >                         opp-hz = /bits/ 64 <2500>;
+> > > >                         required-opps = <&opp_pd_50>; //corresponds to
+> > > > pd_perf1's OPP table
+> > > >                 };
+> > > >                ....
+> > > >
+> > > >         devA {
+> > > >                 compatible = "foo,bar";
+> > > >                 power-domains = <&pd_perf0>, <&pd_perf1>; //both
+> > > > pd_perf0 and pd_perf1 has OPP tables.
+> > > >                 power-domain-names = "perf0", "perf1";
+> > > >                 operating-points-v2 = <&opp_table_devA>;
+> > > >         };
+> > >
+> > > I think another way forward would be to send an index along with
+> > > required-dev information (now that you do it one by one). That index
+> > > would be the index of the genpd in the genpd-list for the device. That
+> > > would make it work, isn't it ?
+> >
+> > I am not sure how that index will be much helpful, but maybe I am not
+> > fully understanding what you propose.
+> >
+> > Please note that the index of the power-domain doesn't need to match
+> > the index of the required-opps.
 >
-> Where is the driver change? This cannot work. To remind bindings go with
-> the driver (nothing new here).
+> Yeah, I missed that, it doesn't happen via DT but by platform code. I
+> do see problems where situation would be a bit ambiguous. Your example
+> with a minor change to your code:
 >
-> Best regards,
-> Krzysztof
+>         opp_table_devA: opp-table-devA {
+>                 compatible = "operating-points-v2";
+>
+>                 opp-devA-50 {
+>                         opp-hz = /bits/ 64 <2500>;
+>                         required-opps = <&opp_pd_50, &opp_pd_51>; //corresponds to pd_perf1 and pd_perf0 (in reverse order)
+>                 };
+>                ....
+>
+>         devA {
+>                 compatible = "foo,bar";
+>                 power-domains = <&pd_perf0>, <&pd_perf1>; //both
+> pd_perf0 and pd_perf1 has OPP tables.
+>                 power-domain-names = "perf0", "perf1";
+>                 operating-points-v2 = <&opp_table_devA>;
+>         };
+>
+> Here, I don't think there is a way for us to know which genpd does
+> opp_pd_50 belongs to and to which one opp_pd_51 does.
+>
+> We solve this by sending clock_names and regulator_names in OPP
+> config structure. That gives the ordering in which required_opps are
+> present. The same needs to be done for genpd, and then genpd core
+> would be able to attach the right genpd with right required opp.
 
-The driver changes will soon be posted. They are being reviewed
-internally. For a quick look on what is coming next, you can refer to
-CodeLinaro git repo[1]
+No, we don't need this for gend as $subject patch is addressing this
+problem too. Let me elaborate.
 
-[1]:
-https://git.codelinaro.org/clo/linux-kernel/kernel-qcom/-/tree/nkela/sa8255p_v6_11_rc2?ref_type=heads
+The OPP core holds the information about the devA's required-opps and
+to what OPP table each required-opps belongs to
+(opp_table->required_opp_tables[n]).
 
+The genpd core holds the information about the allocated virtual
+devices that it creates when it attached devA to its power-domains.
+The virtual device(s) gets a genpd attached to it and that genpd also
+has an OPP table associated with it (genpd->opp_table).
 
+By asking the OPP core to walk through the array of allocated
+required-opps for devA and to match it against a *one* of the virtual
+devices' genpd->opp_table, we can figure out at what index we should
+assign the virtual device to in the opp_table->required_devs[index].
+
+Kind regards
+Uffe
 
