@@ -1,96 +1,177 @@
-Return-Path: <linux-pm+bounces-13586-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13587-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A53F96C023
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 16:22:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2EA196C05B
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 16:26:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17AA3B28669
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 14:22:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E70E28EE2C
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 14:26:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE9951DEFDC;
-	Wed,  4 Sep 2024 14:19:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1832D1DB936;
+	Wed,  4 Sep 2024 14:25:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VsxZhY4V"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OZ/aWonB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2AEA1D0495;
-	Wed,  4 Sep 2024 14:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0361DA611;
+	Wed,  4 Sep 2024 14:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725459579; cv=none; b=jlp6sJwpoeNIPANdv2n+XS1tAgeFFeEqnJGEOmsyU2b/s0RYDnAk62M9Wfgb88kHE5jqyXRtJhw8F112qwi4rdy6CVMR5/q2IxtMCe2E4cfskizDZ91BNCKwMJylfAp2mia3udg7bAznBMZFwUP4Wm5U+xF3rUeF2pepRbRQwos=
+	t=1725459935; cv=none; b=UgbZdhI5z3lAUCIUPnqnHmXQD1WTtAtmy1Pdswcg6WHWzIsNdWQkoBoQ61fCSv3yE6psVEnFIaZOUxMTFyOm//OrB/U0OmTGm8l2305aHUKeAYGFou7lboH9S+nu3DZ0MFTAbWskT1WnhIh58gQvQy8LsFsM3efd+tROB7SNJ5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725459579; c=relaxed/simple;
-	bh=oJyojKlM/C+yToRnqM61qH45uf5mvwOG2dI32gxQlVY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cJ740AkyS+kM+X5c3Pu3aIutnr7yDAB0moQXk51ZseGAQeYTO/sbdvmvTFxJ3w5yExhxO1DuJI2/2LBxMoUzynGUfP8q2jsw9G+48A9uiMvFsdS4JzGfaj1AHbieKrMxsB6NbwAFCo7JagWDcpgsDZi0i4HvRX5dZvJTxkUi5JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VsxZhY4V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69EBAC4CEC2;
-	Wed,  4 Sep 2024 14:19:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725459579;
-	bh=oJyojKlM/C+yToRnqM61qH45uf5mvwOG2dI32gxQlVY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VsxZhY4V0mf3a2d/nphDZnpSQbeATEFV2iWzKcgNiqFq3MK1wzCFozOuuM96c+hfO
-	 o5xvwTy/ZprJM0nwFKHBACbxX33x87jALH/yvWjl/JpEDx0J0AyOOWfqqn5F+ganVO
-	 24aZScIodimjbkN4WpJpj+dDukoEyVutGRdBOM0U=
-Date: Wed, 4 Sep 2024 16:19:36 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Yenchia Chen <yenchia.chen@mediatek.com>
-Cc: stable@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 6.6 1/1] PM: sleep: Restore asynchronous device resume
- optimization
-Message-ID: <2024090420-protozoan-clench-cca7@gregkh>
-References: <20240902093249.17275-1-yenchia.chen@mediatek.com>
- <20240902093249.17275-2-yenchia.chen@mediatek.com>
+	s=arc-20240116; t=1725459935; c=relaxed/simple;
+	bh=yId2XFcDum53FDLUrvJJqxl53SGALFaHo7PGfKocJpA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=T27GqZ/gtVGQw8Bcl4lvU+804WIZ+pM38ElJWEhLx9AYWjY/z6peNWzw8r72QHyPiMbkGjvNd+c6kBrDvsGonZyhVbqbwvqm+fRiMyGz/7pfiURuuqSG8S24WnFMwlodKy2Y//ox8WAFOmeIvP8S0utaxULjxqHKHVgDlKUcaTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OZ/aWonB; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48479q8J021795;
+	Wed, 4 Sep 2024 14:19:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	r+HWRwR//pa8nxnPX/XXNKjHo7VyGMD3KsrkE9xrHQ8=; b=OZ/aWonBk+wqOZrE
+	rVBOE33PX7sgoLNRXFUJrywo6mqjOsyT6hK1zRby/g2IM0zHh67VfBo+IKAsIfuO
+	6Xi7dfLgfLpM/ofFVXImR0qO2frbBQJ6yA4kajMvC0hBPU1N4YPNyBEw5qBsXrJs
+	2uYFq7wTQfZ8j0XjiJI/jXoq8t0+UnKHs73QJYUP3xsFYTJRfb+Eb/BbpXe5nutQ
+	oeX+tsq5kr2xId75Uub7bgnnJM9NwBWE0vfdDEzHQ0PRBb4+82gJcTqDTdBkSWGG
+	tSyM2sKheoI7p5bIFVUBZ+UXjZPz/vPUdBjRYEJfgVk0Wf5XX2ZfXbGzfBtV9e3B
+	5oNZkg==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41dxy24ddn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Sep 2024 14:19:57 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 484EJuD9018659
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 4 Sep 2024 14:19:56 GMT
+Received: from [10.110.120.207] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 4 Sep 2024
+ 07:19:52 -0700
+Message-ID: <c163149b-bdf1-423b-ab51-f734d00277fe@quicinc.com>
+Date: Wed, 4 Sep 2024 07:19:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240902093249.17275-2-yenchia.chen@mediatek.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 14/21] dt-bindings: cpufreq: qcom-hw: document support
+ for SA8255p
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
+        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
+        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
+        <linus.walleij@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
+        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
+        <quic_psodagud@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-15-quic_nkela@quicinc.com>
+ <odg5ssqu2soaqp6m4rambj7qhqiyp7othkvu4v6fu6xtuhbdho@vccya6qcwgoz>
+ <1b831fc1-9360-4038-91b2-b2c0cea513ed@quicinc.com>
+ <baf00e50-10b2-410b-9c56-713564a2d1b9@kernel.org>
+Content-Language: en-US
+From: Nikunj Kela <quic_nkela@quicinc.com>
+In-Reply-To: <baf00e50-10b2-410b-9c56-713564a2d1b9@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ehT9Yu2c61CM5jE4p6KmfozbRKh_7JF8
+X-Proofpoint-ORIG-GUID: ehT9Yu2c61CM5jE4p6KmfozbRKh_7JF8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-04_11,2024-09-04_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ lowpriorityscore=0 mlxlogscore=941 spamscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2409040108
 
-On Mon, Sep 02, 2024 at 05:32:48PM +0800, Yenchia Chen wrote:
-> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> 
-> commit 3e999770ac1c7c31a70685dd5b88e89473509e9c upstream.
-> 
-> Before commit 7839d0078e0d ("PM: sleep: Fix possible deadlocks in core
-> system-wide PM code"), the resume of devices that were allowed to resume
-> asynchronously was scheduled before starting the resume of the other
-> devices, so the former did not have to wait for the latter unless
-> functional dependencies were present.
-> 
-> Commit 7839d0078e0d removed that optimization in order to address a
-> correctness issue, but it can be restored with the help of a new device
-> power management flag, so do that now.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> Signed-off-by: Yenchia Chen <yenchia.chen@mediatek.com>
-> ---
->  drivers/base/power/main.c | 117 +++++++++++++++++++++-----------------
->  include/linux/pm.h        |   1 +
->  2 files changed, 65 insertions(+), 53 deletions(-)
 
-Why does this need to be backported?  What bug is it fixing?
+On 9/4/2024 6:17 AM, Krzysztof Kozlowski wrote:
+> On 04/09/2024 14:27, Nikunj Kela wrote:
+>> On 9/3/2024 11:26 PM, Krzysztof Kozlowski wrote:
+>>> On Tue, Sep 03, 2024 at 03:02:33PM -0700, Nikunj Kela wrote:
+>>>> Add compatible for the cpufreq engine representing support on SA8255p.
+>>>>
+>>>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+>>>> ---
+>>>>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml        | 16 ++++++++++++++++
+>>>>  1 file changed, 16 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>>>> index 1e9797f96410..84865e553c8b 100644
+>>>> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>>>> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>>>> @@ -34,6 +34,7 @@ properties:
+>>>>          items:
+>>>>            - enum:
+>>>>                - qcom,qdu1000-cpufreq-epss
+>>>> +              - qcom,sa8255p-cpufreq-epss
+>>>>                - qcom,sa8775p-cpufreq-epss
+>>>>                - qcom,sc7280-cpufreq-epss
+>>>>                - qcom,sc8280xp-cpufreq-epss
+>>>> @@ -206,6 +207,21 @@ allOf:
+>>>>          interrupt-names:
+>>>>            minItems: 2
+>>>>  
+>>>> +  - if:
+>>>> +      properties:
+>>>> +        compatible:
+>>>> +          contains:
+>>>> +            enum:
+>>>> +              - qcom,sa8255p-cpufreq-epss
+>>>> +    then:
+>>>> +      properties:
+>>>> +        reg:
+>>>> +          minItems: 2
+>>>> +          maxItems: 2
+>>>> +
+>>>> +        reg-names:
+>>>> +          minItems: 2
+>>>> +          maxItems: 2
+>>> What about interrupts? You need to constrain each of such lists.
+>>>
+>>> Best regards,
+>>> Krzysztof
+>> Interrupts are not required, I still need to put constraints for
+> It's irrelevant whether they are required or not. Each property should
+> be narrowed.
 
-confused,
+So evenif we don't use interrupts property in our DT(patch#21), we need
+to mention interrupts here? You suggest we put interrupts with maxItems: 0?
 
-greg k-h
+I wonder why SA8775p compatible is not in constraint list..
+
+>> interrupts? BTW, there is no if block for SA8775p binding in this file.
+>
+>
+> Best regards,
+> Krzysztof
+>
 
