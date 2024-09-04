@@ -1,63 +1,70 @@
-Return-Path: <linux-pm+bounces-13566-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13565-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64F7F96BCA6
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 14:42:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFA0596BC9B
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 14:41:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A3D81C223EE
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 12:42:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A919328580C
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 12:41:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F39F1D9D60;
-	Wed,  4 Sep 2024 12:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D7631D9344;
+	Wed,  4 Sep 2024 12:41:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NwSW2uSS"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XWRTP3xp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDFB1D88C0;
-	Wed,  4 Sep 2024 12:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255221D9337
+	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 12:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725453705; cv=none; b=YyUbcdXkEbdzDQN5O7MsKElKrgjP5frkNaFexX0PNnDOYCaYrBaUgk+24rlobxazT4HaFICny6HccKkDoVrjkuG9OlHWU+1oIXuRvsxmo6s8VXFCMOl/M73BIMUz0/p8lm/OClqONiUH93cOcXbPX5DBFM/pyDbBGAn0GwD0yGA=
+	t=1725453679; cv=none; b=Opa5zaA6PVASL22bHQHf5R8WWBb9O+JXZj16gcwgwFVMVaNwZxfFa9kMOoaGfI14gmZefgcV1S/MMcaDTd/9JzV4lbo4ssswG1Yy8+TMD474KsS2mpUsmhofMOhPc6bO7dJF5WbNGPmTs17k+yBSWBcLmyPEhG3HzJ0n3u16GAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725453705; c=relaxed/simple;
-	bh=uN5W47xKqiofsiRvLQO9FgZG32WsSONW8PUWzSbP6NI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=TEFNLN5/eBSULhPU/9l86dgT5peHEF5hFMqeCrmuGNmAFcQcW8MC9g5flIEUBP4NFozikc9cfvVV75osRcR++Qtk8r1+EaD1aHuqlATNIdQkfY3bw+KfTNDX6RvNbnVcHcNTreDa2ivvo4V2JeORXOMtWw94zGN0sMowzrriu38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=NwSW2uSS; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 484C1A6Q015388;
-	Wed, 4 Sep 2024 12:41:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	vvnHrvOk02BNsBCgS1kD4aYGDPo30suEFW3uLxKtM4c=; b=NwSW2uSSUuAG7akB
-	Q3GJEiSZMlKd963W2n9NL5Q3cctGTTLPe8zYwIrVyqOQv4Ih335M/gBDRkzkDZAi
-	b0Q7oakZt7XUYN11S9Z4KSAyd+JYGEj4yXwUKxTK3WpLJmqO+XaROd01biwIB/YN
-	eHlZZtK4xfz+SNXzr4ifPeE8Zv8xlAwq+LqBgeV1PRrWC+MuRHQgz3o1j/XT96cH
-	/OmJXQBFJiBhyUz45vrGbJ7mqeWJi4s9jaTqyfWQf9k8ibPVY0cUi8/A578sJxUA
-	VRTGzLqM5WAp91JFqIhFEnk1CebrvmaqHMya0qRA2Lte3OaPJzaW2aoS1HMPiN3L
-	Jof2aQ==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41dt69cuj5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Sep 2024 12:41:06 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 484Cf4LT023068
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 4 Sep 2024 12:41:05 GMT
-Received: from [10.110.120.207] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 4 Sep 2024
- 05:41:01 -0700
-Message-ID: <06968d9d-0428-4fe8-8526-c91db3d9f0e7@quicinc.com>
-Date: Wed, 4 Sep 2024 05:41:01 -0700
+	s=arc-20240116; t=1725453679; c=relaxed/simple;
+	bh=1UISgvlWcv2Y7+TxNQcrzQtP8EfA+ViBiYZQ6iNHTfA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k0SClYlqOGZ4i0c/Y9JESq3JKmB26tBqY+khmMq8JK0juStkLpR7yX5Bd9+XpB8lePX8CwsoF5gLMvKOSOEKS3T9Xu1UMXrekrP1XbhGDkf0YIDnomu7rRLFA7RXMI4VVmqu8Rq1qGnZyZR3US9IzzuLoIAq5SaAj/xVY2plCbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XWRTP3xp; arc=none smtp.client-ip=209.85.166.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-82a1dadc2d2so263669339f.1
+        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2024 05:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1725453676; x=1726058476; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qcq1FEBxbDWBsgRl9Is3K+I7b8WqhaMddxDrtzjKeh4=;
+        b=XWRTP3xpjnxCaL/kXZFPEpzYXiETBamAyfeQVmZu0JDZmIwgIVHa7zH07XfdamXfYt
+         YQ/9EiFm8+TIsRjTsjynbKZZjyW04ktmwiu1Xh+sbJE+3/vbXozqEmLNZTUXYXd6gn0c
+         iu/sBIfbWIRutqu2p0xCMhs/N205TviFv49Z4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725453676; x=1726058476;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qcq1FEBxbDWBsgRl9Is3K+I7b8WqhaMddxDrtzjKeh4=;
+        b=UQ0PRjrsm9MDuyDjuYnDU0VhqgC6g3bRm/2fsz0ar9I5JqXgNitYCFsiSZERSwzTGB
+         zBqnXUexMfGMTHA3VcStw4b2aY/rPeSjvM3n0hdnVlbaca/L/iYcGD9ZhSZ6TNC8FAlV
+         +j59F2F88Jm8P/QZ6Bk5PKsXIrOs5EvTsBY2jlyOmk8gwfhLpRGgc+JSmQ26XjOQfzUS
+         DIAxCd52DtptY2UTKtBRW1rFicFvwdxGHziLzoJdi29HnMlQNsBxktJxNzsA8sGogTBR
+         qyZ/TT5JxYQMRpGVEm7f/A/TNUhIHMUFv/+lfBiFR3BaLarjR6cam0oBVaqpyFfuzCU0
+         n6fA==
+X-Gm-Message-State: AOJu0YydTk8+jqj34OKdTWwkpnPXseRknuBRQ2QkEb7yCURcpAEk3zyA
+	2D66543/DuoGBUuqpStXtSxdSGj/mh76EspNYZTvKatfwmG8uG8F+VSnSzgLIKE=
+X-Google-Smtp-Source: AGHT+IFSTJiOA1xhZqwjBQpQ3S0Ug1iDsLyH/VoJmMKqMb92HEU0RD9+LXZdHya9APtp2pz3k3Stjg==
+X-Received: by 2002:a05:6602:1609:b0:824:d9d1:e67b with SMTP id ca18e2360f4ac-82a3428cd59mr1922511739f.8.1725453676078;
+        Wed, 04 Sep 2024 05:41:16 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ced2dcd722sm3160524173.27.2024.09.04.05.41.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Sep 2024 05:41:15 -0700 (PDT)
+Message-ID: <ab9e3727-9978-4a30-8bff-e366fa5defc1@linuxfoundation.org>
+Date: Wed, 4 Sep 2024 06:41:14 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,176 +72,106 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 15/21] dt-bindings: i2c: document support for SA8255p
+Subject: Re: [PATCH v2 0/4] Add SWIG Bindings to libcpupower
+To: "John B. Wyatt IV" <jwyatt@redhat.com>
+Cc: linux-pm@vger.kernel.org, Thomas Renninger <trenn@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Linus Torvalds
+ <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ John Kacur <jkacur@redhat.com>, Tomas Glozar <tglozar@redhat.com>,
+ Arnaldo Melo <acme@redhat.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "John B. Wyatt IV" <sageofredondo@gmail.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240827062438.71809-1-jwyatt@redhat.com>
 Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
-        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
-        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
-        <linus.walleij@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
-        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
-        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
-        <quic_psodagud@quicinc.com>, Praveen Talari <quic_ptalari@quicinc.com>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-16-quic_nkela@quicinc.com>
- <xtguaoof7iblrtd2idsa2k4ml64qkttgliyijbeqw5thkdcbx3@jnm75a4wmbqd>
-From: Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <xtguaoof7iblrtd2idsa2k4ml64qkttgliyijbeqw5thkdcbx3@jnm75a4wmbqd>
-Content-Type: text/plain; charset="UTF-8"
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240827062438.71809-1-jwyatt@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: CmrIEOmtqvMg8k9u_x-TRH3ehu6PryTp
-X-Proofpoint-ORIG-GUID: CmrIEOmtqvMg8k9u_x-TRH3ehu6PryTp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-04_10,2024-09-04_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
- phishscore=0 priorityscore=1501 malwarescore=0 adultscore=0 spamscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2409040095
 
+On 8/27/24 00:24, John B. Wyatt IV wrote:
+> SWIG is a tool packaged in Fedora and other distros that can generate
+> bindings from C and C++ code for several languages including Python,
+> Perl, and Go. Providing bindings for scripting languages is a common feature
+> to make use of libraries more accessible to more users and programs. My team
+> specifically wants to expand the features of rteval. rteval is a Python program
+> used to measure real time performance. We wanted to test the effect of enabling
+> some levels of idle-stat to see how it affects latency, and didn't want to
+> reinvent the wheel. Since SWIG requires the .o files created by libcpupower at
+> compilation it makes sense to include this in the cpupower directory so that
+> others can make use of them.
+> 
+> The V2 of this patchset includes:
+> * the full definition of libcpupower headers that is needed for the bindings
+> * dummy implementation in C of a function listed in the header of libcpupower
+> (requested by Shuah Khan)
+> * test_raw_pylibcpupower.py demonstrates an example of using the bindings
+> * adding myself and John Kacur to the cpupower section of the maintainers file
+> (requested by Shuah Khan)
+> * addressed review comments about doc, makefile, and maintainers file
+> * small style and other fixes
+> 
+> The name raw_pylibcpupower is used because a wrapper `pylibcpupower` may be
+> needed to make the bindings more 'pythonic' in the future. The bindings folder
+> is used because Go or Perl bindings may be useful for other users in the
+> future.
+> 
+> Note that while SWIG itself is GPL v3+ licensed; the resulting output, the
+> bindings code, has the same license as the .o files used to generate the
+> bindings (GPL v2 only). Please see
+> https://swig.org/legal.html
+> and
+> https://lore.kernel.org/linux-pm/Zqv9BOjxLAgyNP5B@hatbackup/#t
+> for more details on the license.
+> 
+> Sincerely,
+> John Wyatt
+> Software Engineer, Core Kernel
+> Red Hat
+> 
+> John B. Wyatt IV (4):
+>    Add SWIG bindings files for libcpupower
+>    Implement dummy function for SWIG to accept the full library
+>      definitions
+>    Include test_raw_pylibcpupower.py
+>    MAINTAINERS: Add Maintainers for SWIG Python bindings
+> 
+>   MAINTAINERS                                   |   3 +
+>   .../power/cpupower/bindings/python/.gitignore |   8 +
+>   tools/power/cpupower/bindings/python/Makefile |  31 +++
+>   tools/power/cpupower/bindings/python/README   |  59 +++++
+>   .../bindings/python/raw_pylibcpupower.i       | 247 ++++++++++++++++++
+>   .../bindings/python/test_raw_pylibcpupower.py |  42 +++
+>   tools/power/cpupower/lib/powercap.c           |   8 +
+>   7 files changed, 398 insertions(+)
+>   create mode 100644 tools/power/cpupower/bindings/python/.gitignore
+>   create mode 100644 tools/power/cpupower/bindings/python/Makefile
+>   create mode 100644 tools/power/cpupower/bindings/python/README
+>   create mode 100644 tools/power/cpupower/bindings/python/raw_pylibcpupower.i
+>   create mode 100755 tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
+> 
 
-On 9/3/2024 11:31 PM, Krzysztof Kozlowski wrote:
-> On Tue, Sep 03, 2024 at 03:02:34PM -0700, Nikunj Kela wrote:
->> Add compatible representing i2c support on SA8255p.
->>
->> Clocks and interconnects are being configured in Firmware VM
->> on SA8255p, therefore making them optional.
->>
->> CC: Praveen Talari <quic_ptalari@quicinc.com>
->> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
->> ---
->>  .../bindings/i2c/qcom,i2c-geni-qcom.yaml      | 33 +++++++++++++++++--
->>  1 file changed, 31 insertions(+), 2 deletions(-)
->>
-> I don't know what to do with this patch. Using specific compatibles next
-> to generic compatible is just wrong, although mistake was probably
-> allowing generic compatible. The patch does not explain the differences
-> in interface which would explain why devices are not compatible.
+Couple of things to address:
 
-I mentioned in the description that clocks and interconnects on this
-platform are configured in Firmware VM(over SCMI using power and perf
-domains) therefore this is not compatible with existing generic compatible.
+1. I noticed none of the patches have the subsystem prefix:
+   pm:cpupower is the right prefix for patch subject for all
+   the patches except the MAINTAINERS file
 
+I will pull the fix  "Implement dummy function for SWIG to accept
+the full library" Patch 2 in your series.
 
->  In the
-> same time my advice of separate binding was not followed, because maybe
-> these devices are compatible? But then it should be expressed...
+I want this subject changed to just fix as it is a problem irrespective
+of SWIG - we have a missing function. Subject would be as follows:
 
-Sorry, I missed that. You want me to use 'oneOf' expression with this
-compatible?
+""pm:cpupower: Add missing powercap_set_enabled() stub function"
 
+Make this the first patch in the series. I will send this up for
+Linux 6.11-rc7 or Linux 6.12-rc1
 
->
-> You have entire commit msg to explain what and why.
+Depending on how the timelines for merge window work, expect the
+series to land in Linux 6.13-rc1. I would prefer to delay it anyway
+so we can get some soaking in next.
 
-Will put more details in description.
-
-
->> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->> index 9f66a3bb1f80..b477fae734b6 100644
->> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->> @@ -15,6 +15,7 @@ properties:
->>      enum:
->>        - qcom,geni-i2c
->>        - qcom,geni-i2c-master-hub
->> +      - qcom,sa8255p-geni-i2c
->>  
->>    clocks:
->>      minItems: 1
->> @@ -69,8 +70,6 @@ properties:
->>  required:
->>    - compatible
->>    - interrupts
->> -  - clocks
->> -  - clock-names
->>    - reg
->>  
->>  allOf:
->> @@ -81,6 +80,10 @@ allOf:
->>            contains:
->>              const: qcom,geni-i2c-master-hub
->>      then:
->> +      required:
->> +        - clocks
->> +        - clock-names
->
-> So it is required here?
-
-We are removing clocks from generic required list and enforcing rules
-for all compatibles other than sa8255p.
-
-
->> +
->>        properties:
->>          clocks:
->>            minItems: 2
->> @@ -100,7 +103,21 @@ allOf:
->>            items:
->>              - const: qup-core
->>              - const: qup-config
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: qcom,sa8255p-geni-i2c
->> +    then:
->> +      required:
->> +        - power-domains
->> +
-> And possible here? I assume with the same clocks? The same for
-> interconnects - same values are valid?
-
-I guess I need to put here the same description as in the cover letter
-to make it more clear. We are not using clocks and interconnects in this
-platform in Linux. Instead, sending request to Firmware VM over
-SCMI(using power and perf protocols)
-
-
->
->>      else:
->> +      required:
->> +        - clocks
->> +        - clock-names
-> And clocks are required again?
-Explained above.
->> +
->>        properties:
->>          clocks:
->>            maxItems: 1
-> Eeee? So now all other variants have max 1 clock?
-
-I will make if block for sa8255p up so else is not applied to rest of
-the platforms.
-
-
->
-> Nope, this wasn't ever tested on real DTS.
-
-This is tested on SA8255p DTS and I ran DT schema check on SA8775p DT as
-well.
-
-
->
-> Best regards,
-> Krzysztof
->
+thanks,
+-- Shuah
 
