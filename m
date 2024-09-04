@@ -1,48 +1,70 @@
-Return-Path: <linux-pm+bounces-13580-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13581-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2687396BE5D
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 15:24:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 969D596BE71
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 15:26:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D11C428157F
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 13:24:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96FEC1C2033F
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 13:26:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F261A1DA10F;
-	Wed,  4 Sep 2024 13:24:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9571DB557;
+	Wed,  4 Sep 2024 13:26:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EaZA3Zoc"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="S2QJk5dq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4601441D;
-	Wed,  4 Sep 2024 13:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863F11DA2E4
+	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 13:26:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725456279; cv=none; b=TYiZEJgQbe8VKIBQ6JL3TyFvN7pWohxe3sDbUZEdgMLJC7MnLxdgWjp/W2qjacWtQDMVzFyNjLa408jwiknJZ+DDC7jEzpWtom6xsh8JemdYmxE5o/WNqQxvgDcNjbfRTkjwzyT5tV9Io5Xq0hZc8NrzCpAKh1NTtHy3yEvOCtc=
+	t=1725456368; cv=none; b=dayRjqV4m1XbRmXpSaA03LkcrFHccQFc9xJk3wLAus3GNA8jzO6YFCLoECUccD+yeuaDxsTFr24Oz9Zj0dxqdGm8buHqXAMmYbyf+oiaq55EUb2XkhNfrbeuJhZ+ndZbqmihGhbWLZGVUfs30lW14xmlHULpu0stxd22puXfE9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725456279; c=relaxed/simple;
-	bh=VD4Uy7oAc+nT7ov65tbrV4jCOunVuSnuaZX67sZ/AD8=;
+	s=arc-20240116; t=1725456368; c=relaxed/simple;
+	bh=+UzTOrwTfi1Ek1kSR/0pA7oqP/WQdFFaxGxcdMcbzYg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m/k9WmPo6ukG+AyIYsZePL1fC2ZYXADdg9QaVGncD/XT68LmNvbF3TcOaVn1FjdMAujXRCXhL3gtPGnFbE1dE0q+5lGD3ADTX+/yCMhiSgeqLNDGh1evwEQoUIExOxkb7pWcY3XP5q47NirJvajzrD1SXvmhXzImeq+O3fekVxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EaZA3Zoc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF76C4CEC2;
-	Wed,  4 Sep 2024 13:24:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725456279;
-	bh=VD4Uy7oAc+nT7ov65tbrV4jCOunVuSnuaZX67sZ/AD8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=EaZA3ZocO9yeFcLWnQAMtGEkip86DBt1O5MM3Zi+MIiWlMApYGZLT71+bvGX4QX0s
-	 GzBGd9kEpW3E4pKUA6YDOPUgHm3Z81C/b18Nzgg4oT+G1LWPjiAYum78+jItZd72EO
-	 gj5xBz5Fk2ts+TNEta4t0cTkDj1paLqxjCXH040xSXtye+xXtm3faE8B8mXAIXeP0A
-	 FyKLBPpFTpPW1iJ5Ugh9taN9x2d9+U+iJNEx7VD+99J7IOCNCQLjofSBU7olyHNeaH
-	 QP+Z1eaYSJlC4gLKcNSgQB4hLoiQBfsDEE/jS43+FQ46wAXjppCl3vz+VpvLPmM3um
-	 ClLE8oJQvyGDA==
-Message-ID: <e352a836-82ef-4031-ac46-3ac7e0cb77ec@kernel.org>
-Date: Wed, 4 Sep 2024 15:24:18 +0200
+	 In-Reply-To:Content-Type; b=XCP4t7N0INBTPECVZsAk/MsQK7CuhDHexrjTL2kRl7l9gvxw15lOKThFGWVPo/97Cf/yDNirAWr5er6e302ogvLcRcQ6y5XyqTbhOg8GIbLpQJcZj0mAFX/oJZCHRf3G1OXuaKpqZukBkv0OZ+mTI4FecidCgcQRUUAl3hkbOPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=S2QJk5dq; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-82a20593ec1so239331139f.2
+        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2024 06:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1725456365; x=1726061165; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CICro7vkXrs8sHD3fUI2iQ4lanIBBnekvLD7hab6AoY=;
+        b=S2QJk5dqmEW1oLiHBKzUjzGiDoUx7aInp0FNakMjaBdQyBygfUzYSXeu7KrKRTOuFR
+         1qLtKiJw7oEc1ESqHxuj7/XYkd50J578KtQm90kTIRv4q+9072w2g7I4Acl8LxH22dxH
+         rV6fideE2XrJA28uO9+DdLy8AJ6NORPmCG4eI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725456365; x=1726061165;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CICro7vkXrs8sHD3fUI2iQ4lanIBBnekvLD7hab6AoY=;
+        b=Wd2oGDvuuV4ier+P4ZUb5o1edzeUIWBU70V7AyHooAacu7uTQq5/LzTgDVoUuVFENs
+         APgmGVpRaZLjD+QMti0nUSUcv5IK7mwlYVdESOng5nDUloR/n5IYg+0lCKXbnnsVp40Z
+         ziXk/GvRZBqQoDB+0sf3nklF8XIjZLwHh1oFTF77kOMaPWUfYbxla2c8xGcDOywWPxn4
+         am7ZPs8wy3kSDAs3yDwD8g+qsUEbJNJ0OJlHijpsqoIBo4fjNWyO9wgElWDIMdy53N1Q
+         o1CRfp7656H4fhYxIXr+iX2vpYAKPSOUb8+8gc4YlJxEC+E05FSP2p3dhYNcqRaAJJok
+         cZww==
+X-Gm-Message-State: AOJu0YwaDCsb+M0ptoK97rAkDF16WtRVuDr7e6FENVPCYAfMkm5Hgv9E
+	r4x/M3bseqBDiY7Wt2WINOrCP61u0AVHVjItRAPQMy4e597vkTwoGMsvXN27wo0=
+X-Google-Smtp-Source: AGHT+IEluXNl214CW5UNS9t+LtCX+oeGGsC/N5xGJbSzupQnxzp+YC8JdWd11rKuUcXNRSJSOawNjg==
+X-Received: by 2002:a05:6602:29cf:b0:803:f97f:59d8 with SMTP id ca18e2360f4ac-82a10d7d132mr2645960039f.0.1725456365606;
+        Wed, 04 Sep 2024 06:26:05 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-82a1a499535sm362048339f.41.2024.09.04.06.26.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Sep 2024 06:26:05 -0700 (PDT)
+Message-ID: <6db4d860-e72e-424b-8463-c82bff08a6c6@linuxfoundation.org>
+Date: Wed, 4 Sep 2024 07:26:04 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,151 +72,117 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 17/21] dt-bindings: serial: document support for
- SA8255p
-To: Nikunj Kela <quic_nkela@quicinc.com>
-Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
- viresh.kumar@linaro.org, herbert@gondor.apana.org.au, davem@davemloft.net,
- sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
- will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
- jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
- amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
- cristian.marussi@arm.com, rui.zhang@intel.com, lukasz.luba@arm.com,
- wim@linux-watchdog.org, linux@roeck-us.net, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
- arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
- linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
- kernel@quicinc.com, quic_psodagud@quicinc.com,
- Praveen Talari <quic_ptalari@quicinc.com>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-18-quic_nkela@quicinc.com>
- <jzpx66l4tesnyszmpc3nt5h7mezbvdhtcbls5rbwlmpveb6d6y@i3jf7jsajjjd>
- <6fed4714-5239-473b-b4a0-886d83c459c3@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v2 0/4] Add SWIG Bindings to libcpupower
+To: "John B. Wyatt IV" <jwyatt@redhat.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, Thomas Renninger <trenn@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Linus Torvalds
+ <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ John Kacur <jkacur@redhat.com>, Tomas Glozar <tglozar@redhat.com>,
+ Arnaldo Melo <acme@redhat.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "John B. Wyatt IV" <sageofredondo@gmail.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240827062438.71809-1-jwyatt@redhat.com>
+ <ab9e3727-9978-4a30-8bff-e366fa5defc1@linuxfoundation.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <6fed4714-5239-473b-b4a0-886d83c459c3@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <ab9e3727-9978-4a30-8bff-e366fa5defc1@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 04/09/2024 14:54, Nikunj Kela wrote:
-> 
-> On 9/3/2024 11:36 PM, Krzysztof Kozlowski wrote:
->> On Tue, Sep 03, 2024 at 03:02:36PM -0700, Nikunj Kela wrote:
->>> Add compatibles representing UART support on SA8255p.
->>>
->>> Clocks and interconnects are being configured in the firmware VM
->>> on SA8255p platform, therefore making them optional.
->>>
->>> CC: Praveen Talari <quic_ptalari@quicinc.com>
->>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
->>> ---
->>>  .../serial/qcom,serial-geni-qcom.yaml         | 53 ++++++++++++++++---
->>>  1 file changed, 47 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->>> index dd33794b3534..b63c984684f3 100644
->>> --- a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->>> +++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->>> @@ -10,14 +10,13 @@ maintainers:
->>>    - Andy Gross <agross@kernel.org>
->>>    - Bjorn Andersson <bjorn.andersson@linaro.org>
->>>  
->>> -allOf:
->>> -  - $ref: /schemas/serial/serial.yaml#
->>> -
->>>  properties:
->>>    compatible:
->>>      enum:
->>>        - qcom,geni-uart
->>>        - qcom,geni-debug-uart
->>> +      - qcom,sa8255p-geni-uart
->>> +      - qcom,sa8255p-geni-debug-uart
->> Why devices are not compatible? What changed in programming model?
-> 
-> The cover-letter explains what is changed for devices in this platform.
-> I will add the description in this patch too.
-
-Many of us do not read cover letters. They don't really matter,
-especially that serial tree will not include it. Each commit must stand
-on its own.
-
-> 
-> 
+On 9/4/24 06:41, Shuah Khan wrote:
+> On 8/27/24 00:24, John B. Wyatt IV wrote:
+>> SWIG is a tool packaged in Fedora and other distros that can generate
+>> bindings from C and C++ code for several languages including Python,
+>> Perl, and Go. Providing bindings for scripting languages is a common feature
+>> to make use of libraries more accessible to more users and programs. My team
+>> specifically wants to expand the features of rteval. rteval is a Python program
+>> used to measure real time performance. We wanted to test the effect of enabling
+>> some levels of idle-stat to see how it affects latency, and didn't want to
+>> reinvent the wheel. Since SWIG requires the .o files created by libcpupower at
+>> compilation it makes sense to include this in the cpupower directory so that
+>> others can make use of them.
 >>
->>>  
->>>    clocks:
->>>      maxItems: 1
->>> @@ -51,18 +50,49 @@ properties:
->>>        - const: sleep
->>>  
->>>    power-domains:
->>> -    maxItems: 1
->>> +    minItems: 1
->>> +    maxItems: 2
->>> +
->>> +  power-domain-names:
->> This does not match power-domains anymore.
+>> The V2 of this patchset includes:
+>> * the full definition of libcpupower headers that is needed for the bindings
+>> * dummy implementation in C of a function listed in the header of libcpupower
+>> (requested by Shuah Khan)
+>> * test_raw_pylibcpupower.py demonstrates an example of using the bindings
+>> * adding myself and John Kacur to the cpupower section of the maintainers file
+>> (requested by Shuah Khan)
+>> * addressed review comments about doc, makefile, and maintainers file
+>> * small style and other fixes
+>>
+>> The name raw_pylibcpupower is used because a wrapper `pylibcpupower` may be
+>> needed to make the bindings more 'pythonic' in the future. The bindings folder
+>> is used because Go or Perl bindings may be useful for other users in the
+>> future.
+>>
+>> Note that while SWIG itself is GPL v3+ licensed; the resulting output, the
+>> bindings code, has the same license as the .o files used to generate the
+>> bindings (GPL v2 only). Please see
+>> https://swig.org/legal.html
+>> and
+>> https://lore.kernel.org/linux-pm/Zqv9BOjxLAgyNP5B@hatbackup/#t
+>> for more details on the license.
+>>
+>> Sincerely,
+>> John Wyatt
+>> Software Engineer, Core Kernel
+>> Red Hat
+>>
+>> John B. Wyatt IV (4):
+>>    Add SWIG bindings files for libcpupower
+>>    Implement dummy function for SWIG to accept the full library
+>>      definitions
+>>    Include test_raw_pylibcpupower.py
+>>    MAINTAINERS: Add Maintainers for SWIG Python bindings
+>>
+>>   MAINTAINERS                                   |   3 +
+>>   .../power/cpupower/bindings/python/.gitignore |   8 +
+>>   tools/power/cpupower/bindings/python/Makefile |  31 +++
+>>   tools/power/cpupower/bindings/python/README   |  59 +++++
+>>   .../bindings/python/raw_pylibcpupower.i       | 247 ++++++++++++++++++
+>>   .../bindings/python/test_raw_pylibcpupower.py |  42 +++
+>>   tools/power/cpupower/lib/powercap.c           |   8 +
+>>   7 files changed, 398 insertions(+)
+>>   create mode 100644 tools/power/cpupower/bindings/python/.gitignore
+>>   create mode 100644 tools/power/cpupower/bindings/python/Makefile
+>>   create mode 100644 tools/power/cpupower/bindings/python/README
+>>   create mode 100644 tools/power/cpupower/bindings/python/raw_pylibcpupower.i
+>>   create mode 100755 tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
+>>
 > 
-> Single power domain doesn't need to use power-domain-names binding as it
-> is not needed however for multiple(in this case 2), you need to provide
-> names. I will add this property to if block and only keep maxItems here.
 
-The xxx and xxx-names properties always go in sync. Otherwise we do not
-really know what is the power domain for other variants.
+Noticed Rafael isn't on this thread. Adding now to keep him
+in the loop.
 
-You are allowed to be unspecific about power domain (so maxItems: 1) if
-it is obvious. You now made it non-obvious, so above flexibility does
-not apply anymore.
+cpupower pull request go through Rafael's tree.
 
-Best regards,
-Krzysztof
+> Couple of things to address:
+> 
+> 1. I noticed none of the patches have the subsystem prefix:
+>    pm:cpupower is the right prefix for patch subject for all
+>    the patches except the MAINTAINERS file
+> 
+> I will pull the fix  "Implement dummy function for SWIG to accept
+> the full library" Patch 2 in your series.
+> 
+> I want this subject changed to just fix as it is a problem irrespective
+> of SWIG - we have a missing function. Subject would be as follows:
+> 
+> ""pm:cpupower: Add missing powercap_set_enabled() stub function"
+> 
+> Make this the first patch in the series. I will send this up for
+> Linux 6.11-rc7 or Linux 6.12-rc1
+> 
+> Depending on how the timelines for merge window work, expect the
+> series to land in Linux 6.13-rc1. I would prefer to delay it anyway
+> so we can get some soaking in next.
+> 
+
+thanks,
+-- Shuah
 
 
