@@ -1,129 +1,203 @@
-Return-Path: <linux-pm+bounces-13558-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13559-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A27E96BB3A
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 13:49:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 807B696BB62
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 14:00:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 483D9281740
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 11:49:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2E391F24F40
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 12:00:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49BFD1D0DD2;
-	Wed,  4 Sep 2024 11:49:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E2F01D460A;
+	Wed,  4 Sep 2024 12:00:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="QhU2CU5O";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="RW47dMR4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IrgAySpb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AD91D04B3;
-	Wed,  4 Sep 2024 11:49:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8838B1D094E
+	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 12:00:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725450547; cv=none; b=hZBJcbE2Fus9PRldhH+itVZlBaB99EyOdxzoRMiJBY/kc/bwL7Am+q5Z3JtwjH0J81FRI02JB8phiDz55NqdzRF7VYMq5OhUdD4Vsig3XoD3zlF3nJVbA6IEcM1uTnSXZRWHcPytU4/BCEGUBQmOi3uPdfLfIi/liB6/1OtNWwU=
+	t=1725451217; cv=none; b=BUPiM5W4D/khuX2YVLwrctoFyUUSuQUmzigJjRgmyf+JVpyJIKA9+Y5QV6ITgxQ3lNM5jLNTBraWLVRtd++9Z5+MxzzM7/KRnRj4l7DfM1ONPO90uemt7l+/qyXuVLW5WJDPv/TpPCjBzUAtPNiqHC8vo3ikhmlG6rMhqTPOzH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725450547; c=relaxed/simple;
-	bh=2gOlhhRV2C/00MxCV/AqhWoEpYeVgT9ATkmcgljMQMc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=V2kuvYEGrYsOkWpHkvtYsJhgirWWtyTCNGUy12DFMx+TMOYlrEdi+osaTLZ2mHywgFEdyL/01CvyN9b1BlTZm5puBhpHcQPmvlSlNo7wKKfsu8GmZZSz6nEY1l4XN/yDgnH/Zh4icCWH2EKI7c+q5mDGljZjVmJB9fx00ZoC+Vg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=QhU2CU5O; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=RW47dMR4 reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1725450544; x=1756986544;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PzRpGWmOUix4GzvJgR42aKUg/d33bVXixR5pEp0iclU=;
-  b=QhU2CU5OtGuQN2c7kb3WXmDF2xY/Ea+D5MTozwqAlvXBKXzfQGNrdQCG
-   NEn6nFYtpWk7BQLU8oPrdNxVuX+z3G3rwarHeEQyEeBjmQYyAX4IjJoNi
-   +t286k7i+vuhsTGJbju+2mHhFg8Lj/7/3PwBqzGpsQ0v+VQWOIfOof4dS
-   qp5mBC39aVbgvyynHIK9zbtRC/xd/aQAM3OGkEoRibfLbAvkjy+2T3xy0
-   bBiu/qebM10wHr0MWyyZ8NtWxqDakiRMwUNQLDZjYzjH8ZTHlWeC4fDeN
-   Y4O94VNhb+fya78pTUq27Cs00iWY4Y5dy+B5IM4ZzZ0IvS0CUkBHNxMkQ
+	s=arc-20240116; t=1725451217; c=relaxed/simple;
+	bh=4++1cMhxBFl84HGErRpqlQZjN0L55ZcqgklYJrss5kQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Y5S4tOMHMc+FqPcJVPkJeUkJv/AGoPM2POreP6GF26E6zH7j4tUpKIZzPMuIgB7oJglpDWysjhdDgm03O0rofmF0I2bvSNW//szwsiPe8bs80NiJTtGaze8GNykVd1nCsw5JZwU2c/AcJOX3aceZj5gk0HjDhSDPt9iQrlSwopg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IrgAySpb; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725451215; x=1756987215;
+  h=date:from:to:cc:subject:message-id;
+  bh=4++1cMhxBFl84HGErRpqlQZjN0L55ZcqgklYJrss5kQ=;
+  b=IrgAySpbFBr9zmTLUd/KJT6n7+XQk9F+oHBsuOVsocnbdkDUfi78XcNr
+   45RzfPYCq7Wx0PN86LgEojsDcSWWrnGSIBTh4th7dQxDySxdoaHvcJGvy
+   mlIPqfVy97z73EF9l2hmNqSej3+ZdwIMYIlNq0ez4T+HszNrCcQldrUW/
+   2TqVg+0YGnX/YRoOgUstOWQd5PpeEEGMY24kz6kCo1SHKxRZt2u16j1mP
+   p4+kA04iQka+I46hVGdSYrrQRFlueY4VepQTaYBOXZ7NzmcMsJq+lSSzK
+   N36I8Qq+lDX0ArsqOcSHD/AYJiJ0Mzy8mpXNaAfCnVF3o0e/gCTB7eYI6
    Q==;
-X-CSE-ConnectionGUID: 9/WIsxHeSR2jvPm7H/3/kg==
-X-CSE-MsgGUID: sap4pEGZRByHLhM8G9AR7g==
-X-IronPort-AV: E=Sophos;i="6.10,201,1719871200"; 
-   d="scan'208";a="38761957"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 04 Sep 2024 13:49:01 +0200
-X-CheckPoint: {66D8492D-2E-5FF8EC80-F6CEE9F8}
-X-MAIL-CPID: FAD731A5A9D3F1B35E470B14FF3F3207_0
-X-Control-Analysis: str=0001.0A782F24.66D8492D.0165,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CEE15168F91;
-	Wed,  4 Sep 2024 13:48:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1725450537;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=PzRpGWmOUix4GzvJgR42aKUg/d33bVXixR5pEp0iclU=;
-	b=RW47dMR4CCCZ6YbXSUgNtokRaSoNQb0UAB6xzuEfd3TxrUPNps1B3PI+dbYayXq2QwRRtZ
-	32roHomfmXWZcoKFDZ0Dh06NvEEdbCMaDIyEMrMPfamxMRQ40I3aDbZFLBWktgP2jE1Jqo
-	QrE3u+AgGmXZi+atF+wisomNM9mgCOYBtU9WaaRtwse75qkHni+WkTyABW8SOQi2Ve7JqD
-	8iQTkUW+1COaBFyTnlpFxthng6s7mngHuGlrLHctW338i8jp7vYNViPHJ6uTfn/6EREZ+X
-	iHeUtCKunTlMyOVC7Mi0DOLeu60AwPZuSnvU8wxeIdtLgAQIBU38A7+KGxLBew==
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>
-Cc: linux-pm@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] thermal/drivers/imx_sc_thermal: Use dev_err_probe
-Date: Wed, 04 Sep 2024 13:48:55 +0200
-Message-ID: <8423953.T7Z3S40VBb@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20240717085517.3333385-1-alexander.stein@ew.tq-group.com>
-References: <20240717085517.3333385-1-alexander.stein@ew.tq-group.com>
+X-CSE-ConnectionGUID: n3pHoDQCQQK0vSABfu7DKg==
+X-CSE-MsgGUID: q2EeiK+9QZO4M5GkVN/ZaA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="34768017"
+X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
+   d="scan'208";a="34768017"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 05:00:15 -0700
+X-CSE-ConnectionGUID: 1BcM1H4gTfW1WAq6OuzVTA==
+X-CSE-MsgGUID: 6yfq+IgPRbGQoB/+I+t26g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
+   d="scan'208";a="70117207"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 04 Sep 2024 05:00:12 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1slogC-0007w7-2z;
+	Wed, 04 Sep 2024 12:00:08 +0000
+Date: Wed, 04 Sep 2024 19:59:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: linux-pm@vger.kernel.org
+Subject: [amd-pstate:bleeding-edge] BUILD SUCCESS
+ aa9b87e442c0f457aba83ab6421a3d19a2821c30
+Message-ID: <202409041912.sc9WcsNl-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
+branch HEAD: aa9b87e442c0f457aba83ab6421a3d19a2821c30  cpufreq/amd-pstate: Catch failures for amd_pstate_epp_update_limit()
 
-Am Mittwoch, 17. Juli 2024, 10:55:16 CEST schrieb Alexander Stein:
-> This adds the error code to the error message and also stores that
-> message in case of probe deferral.
->=20
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->  drivers/thermal/imx_sc_thermal.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_th=
-ermal.c
-> index 7224f8d21db97..88558ce588807 100644
-> --- a/drivers/thermal/imx_sc_thermal.c
-> +++ b/drivers/thermal/imx_sc_thermal.c
-> @@ -111,8 +111,7 @@ static int imx_sc_thermal_probe(struct platform_devic=
-e *pdev)
->  			if (ret =3D=3D -ENODEV)
->  				continue;
-> =20
-> -			dev_err(&pdev->dev, "failed to register thermal zone\n");
-> -			return ret;
-> +			return dev_err_probe(&pdev->dev, ret, "failed to register thermal zon=
-e\n");
->  		}
-> =20
->  		devm_thermal_add_hwmon_sysfs(&pdev->dev, sensor->tzd);
->=20
+elapsed time: 1220m
 
-Ping! Any feedback?
+configs tested: 110
+configs skipped: 4
 
-Thanks,
-Alexander
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+alpha                             allnoconfig   gcc-14.1.0
+alpha                            allyesconfig   clang-20
+alpha                               defconfig   gcc-14.1.0
+arc                              allmodconfig   clang-20
+arc                               allnoconfig   gcc-14.1.0
+arc                              allyesconfig   clang-20
+arc                                 defconfig   gcc-14.1.0
+arm                              allmodconfig   clang-20
+arm                               allnoconfig   gcc-14.1.0
+arm                              allyesconfig   clang-20
+arm                                 defconfig   gcc-14.1.0
+arm                        neponset_defconfig   gcc-14.1.0
+arm                         socfpga_defconfig   gcc-14.1.0
+arm64                            allmodconfig   clang-20
+arm64                             allnoconfig   gcc-14.1.0
+arm64                               defconfig   gcc-14.1.0
+csky                             alldefconfig   gcc-14.1.0
+csky                              allnoconfig   gcc-14.1.0
+csky                                defconfig   gcc-14.1.0
+hexagon                          allmodconfig   clang-20
+hexagon                           allnoconfig   gcc-14.1.0
+hexagon                          allyesconfig   clang-20
+hexagon                             defconfig   gcc-14.1.0
+i386                             allmodconfig   clang-18
+i386                              allnoconfig   clang-18
+i386                             allyesconfig   clang-18
+i386         buildonly-randconfig-001-20240904   gcc-12
+i386         buildonly-randconfig-002-20240904   gcc-12
+i386         buildonly-randconfig-003-20240904   gcc-12
+i386         buildonly-randconfig-004-20240904   gcc-12
+i386         buildonly-randconfig-005-20240904   gcc-12
+i386         buildonly-randconfig-006-20240904   gcc-12
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240904   gcc-12
+i386                  randconfig-002-20240904   gcc-12
+i386                  randconfig-004-20240904   gcc-12
+i386                  randconfig-005-20240904   gcc-12
+i386                  randconfig-006-20240904   gcc-12
+i386                  randconfig-011-20240904   gcc-12
+i386                  randconfig-012-20240904   gcc-12
+i386                  randconfig-013-20240904   gcc-12
+i386                  randconfig-014-20240904   gcc-12
+i386                  randconfig-015-20240904   gcc-12
+i386                  randconfig-016-20240904   gcc-12
+loongarch                        allmodconfig   gcc-14.1.0
+loongarch                         allnoconfig   gcc-14.1.0
+loongarch                           defconfig   gcc-14.1.0
+m68k                             allmodconfig   gcc-14.1.0
+m68k                              allnoconfig   gcc-14.1.0
+m68k                             allyesconfig   gcc-14.1.0
+m68k                                defconfig   gcc-14.1.0
+m68k                          multi_defconfig   gcc-14.1.0
+microblaze                       allmodconfig   gcc-14.1.0
+microblaze                        allnoconfig   gcc-14.1.0
+microblaze                       allyesconfig   gcc-14.1.0
+microblaze                          defconfig   gcc-14.1.0
+mips                              allnoconfig   gcc-14.1.0
+mips                           gcw0_defconfig   gcc-14.1.0
+mips                           ip28_defconfig   gcc-14.1.0
+mips                           jazz_defconfig   gcc-14.1.0
+nios2                             allnoconfig   gcc-14.1.0
+nios2                               defconfig   gcc-14.1.0
+openrisc                          allnoconfig   clang-20
+openrisc                         allyesconfig   gcc-14.1.0
+openrisc                            defconfig   gcc-12
+openrisc                 simple_smp_defconfig   gcc-14.1.0
+parisc                           allmodconfig   gcc-14.1.0
+parisc                            allnoconfig   clang-20
+parisc                           allyesconfig   gcc-14.1.0
+parisc                              defconfig   gcc-12
+parisc64                            defconfig   gcc-14.1.0
+powerpc                     akebono_defconfig   gcc-14.1.0
+powerpc                          allmodconfig   gcc-14.1.0
+powerpc                           allnoconfig   clang-20
+powerpc                          allyesconfig   gcc-14.1.0
+powerpc                      ep88xc_defconfig   gcc-14.1.0
+powerpc                          g5_defconfig   gcc-14.1.0
+powerpc                    ge_imp3a_defconfig   gcc-14.1.0
+powerpc                 xes_mpc85xx_defconfig   gcc-14.1.0
+riscv                            allmodconfig   gcc-14.1.0
+riscv                             allnoconfig   clang-20
+riscv                            allyesconfig   gcc-14.1.0
+riscv                               defconfig   gcc-12
+s390                             allmodconfig   gcc-14.1.0
+s390                              allnoconfig   clang-20
+s390                             allyesconfig   gcc-14.1.0
+s390                                defconfig   gcc-12
+s390                                defconfig   gcc-14.1.0
+sh                               allmodconfig   gcc-14.1.0
+sh                                allnoconfig   gcc-14.1.0
+sh                               allyesconfig   gcc-14.1.0
+sh                                  defconfig   gcc-12
+sh                          sdk7786_defconfig   gcc-14.1.0
+sh                           se7724_defconfig   gcc-14.1.0
+sparc                            allmodconfig   gcc-14.1.0
+sparc                       sparc32_defconfig   gcc-14.1.0
+sparc64                             defconfig   gcc-12
+um                               allmodconfig   clang-20
+um                                allnoconfig   clang-20
+um                               allyesconfig   clang-20
+um                                  defconfig   gcc-12
+um                             i386_defconfig   gcc-12
+um                           x86_64_defconfig   gcc-12
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64                              defconfig   clang-18
+x86_64                                  kexec   gcc-12
+x86_64                          rhel-8.3-rust   clang-18
+x86_64                               rhel-8.3   gcc-12
+xtensa                            allnoconfig   gcc-14.1.0
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
