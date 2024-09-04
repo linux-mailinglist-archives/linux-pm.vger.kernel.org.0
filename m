@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-13610-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13611-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CD2596C642
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 20:22:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1D3D96C646
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 20:23:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2C6F287824
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 18:22:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 766461F2553A
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 18:23:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AEC81E2036;
-	Wed,  4 Sep 2024 18:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAEB61E1A04;
+	Wed,  4 Sep 2024 18:23:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k7ru79Ku"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nXafei3N"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A711E2032;
-	Wed,  4 Sep 2024 18:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B09E1E132C;
+	Wed,  4 Sep 2024 18:23:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725474139; cv=none; b=FIY89iZJ0aDVRqYvv0vBV4gJ5sFF/zGKhswrcDtgD6HRyek1qqcNhZKQcNYXbsdZbKxUQEzH89mXBN1Gb4slmSVXyDeou62i25u00BxmYM1suc78Fx7Y2NwlT/3RAmvUbHv5lkjXd1RepQ/Mi/5u3UsGWtg/B5QM5Kayuh5NTCw=
+	t=1725474191; cv=none; b=m1eci6FQ/F/H3YuMUUPym06bk/c4EG/sLC+cS4VDRCI7z8+kuMV8KOTwOQs7ETnMjaxq68MPRnjAjw+h0jKpjDewscUyOd3VQICMV+VMhFaCt3WQldh34U4GDl5mxlLUhG9TTcgGBUJX9Uzi4J+mEMWCCxu9Uzj/b8Sk3ZfsuuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725474139; c=relaxed/simple;
-	bh=QmFZVfZDVaORt+Bm1h6YKbMQW7lnHExaFKvFCcc4BgI=;
+	s=arc-20240116; t=1725474191; c=relaxed/simple;
+	bh=TTwRvU34CHb+ugQ5eoeWqunypcSj31/DtmbNpZuUN/I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W/8zOrQG84mey/5stBTx+P1ndZKopqtLW21OmUELKmduK9R17KxoeS0UxuKJUIg/hebNyFgKzVyYuNIK0NOJvX1kw7VdW7e8t7A16TnRc9R7BJkChhm6PJbSJ9ApdEmFJ8NwUTOIPTkic9IBH9jWYPPR6zGA/cteeSN9LOeL/jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k7ru79Ku; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDD92C4CEC5;
-	Wed,  4 Sep 2024 18:22:14 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Ez5TrsApBr8VraKMHJtauDO4NfLErt35f6n1u7asqNYdNWlaEILB8IVqpS4HPp7PgIjIaKL6DZpJrEBKE4lisw58HIOHF8qvjcf2uqv99Yz7W+kCAgpYwb/GqoLdFocbbFDie0coEyhhi0vRExUQXy7+/V/5l/AIfw4Sq3LxEv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nXafei3N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AA48C4CEC2;
+	Wed,  4 Sep 2024 18:23:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725474138;
-	bh=QmFZVfZDVaORt+Bm1h6YKbMQW7lnHExaFKvFCcc4BgI=;
+	s=k20201202; t=1725474191;
+	bh=TTwRvU34CHb+ugQ5eoeWqunypcSj31/DtmbNpZuUN/I=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=k7ru79KucKu5rSCzg7ss3t5IK89Gu/7I4h/HI4hIThgUssWZ0WDk6NL2j6qKwlcMZ
-	 lQcX0B1IRwLKXogtW5gUiqCFBRjy+OLSuNGOUiKmyRYnUnuhqplJPFJeyrAncJgZdo
-	 b8KWM4ILYF4fnyOrs204mOA/NTqA3CpMXiyLAJYCP2Ei67MIxy6J2sTgT5q259j/83
-	 m1D2/nPC41CI5TWcSKHrrBzlfLOB6Iuv9O2f3rY9ofI26Syfm852+lro13Yr8cfLF/
-	 kfkZAXZW8k9VjXPUquvE8mHpzgb/57Yje7eqnjwl+29s5PJhS3Bx0mQrEAtz3zYBqk
-	 DAizaW4iR0uGA==
-Message-ID: <c3efb01d-2138-4b79-97a1-653b7bd531d0@kernel.org>
-Date: Wed, 4 Sep 2024 20:22:11 +0200
+	b=nXafei3NQIkr/i/Nu61DfTje1nHOw61D8Y8MFn1/Qg8bNmrsSzeSHwRPq767XMjC5
+	 wa1IIFcC+8ogXFjAlsLwkbNPp3xP9hXOSiMbs/lW4DTARJocL7/17UrWRXFLEOwC2T
+	 wmAAQ7SaTvUwp9wvlh/MHEM0Vsw1cIL1omuK74bb9d/JlGqXxDMXAjSxQnvx6mzFta
+	 /ThlrA+jUkptCdcsyAWLxX2nym94aBlpvzs8YtG9XvxJij0VzVh/zvEn/WO4rhyMq4
+	 WM2/Avs/SDwE32tZVJFtShfPw5UGFd8RltbjIGq/XTPLulkXMBqay4BdHCvf+x2aeH
+	 iROyhl2pQhUCg==
+Message-ID: <86fad872-ccfe-4aa2-906c-c938946af8b7@kernel.org>
+Date: Wed, 4 Sep 2024 20:23:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] interconnect: qcom: Add EPSS L3 support on SA8775P
+Subject: Re: [PATCH 1/3] dt-bindings: interconnect: Add EPSS L3 compatible for
+ SA8775P
 To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
  Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -61,7 +62,7 @@ Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
  linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20240904171209.29120-1-quic_rlaggysh@quicinc.com>
- <20240904171209.29120-4-quic_rlaggysh@quicinc.com>
+ <20240904171209.29120-2-quic_rlaggysh@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,23 +108,35 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240904171209.29120-4-quic_rlaggysh@quicinc.com>
+In-Reply-To: <20240904171209.29120-2-quic_rlaggysh@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 04/09/2024 19:12, Raviteja Laggyshetty wrote:
-> +
->  static const struct qcom_osm_l3_desc epss_l3_l3_vote = {
->  	.nodes = epss_l3_nodes,
->  	.num_nodes = ARRAY_SIZE(epss_l3_nodes),
-> @@ -284,6 +307,10 @@ static const struct of_device_id osm_l3_of_match[] = {
->  	{ .compatible = "qcom,sm8150-osm-l3", .data = &osm_l3 },
->  	{ .compatible = "qcom,sc8180x-osm-l3", .data = &osm_l3 },
->  	{ .compatible = "qcom,sm8250-epss-l3", .data = &epss_l3_perf_state },
-> +	{ .compatible = "qcom,sa8775p-epss-l3-cl0",
-> +	  .data = &epss_l3_perf_state },
+> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on
+> SA8775P SoCs.
+> 
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> index 21dae0b92819..de2c59ddc94a 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> @@ -33,6 +33,8 @@ properties:
+>                - qcom,sm6375-cpucp-l3
+>                - qcom,sm8250-epss-l3
+>                - qcom,sm8350-epss-l3
+> +              - qcom,sa8775p-epss-l3-cl0
+> +              - qcom,sa8775p-epss-l3-cl1
 
-Don't grow it but express compatibility.
+Your device driver change suggests that cl0 is compatible with other
+variants.
+
+And what about generic fallback here? Can it be used and device will be
+operating correctly?
 
 Best regards,
 Krzysztof
