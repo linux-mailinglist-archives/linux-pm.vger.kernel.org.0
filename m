@@ -1,194 +1,129 @@
-Return-Path: <linux-pm+bounces-13557-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13558-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BA8B96BAB5
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 13:31:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A27E96BB3A
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 13:49:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D3F01C21033
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 11:31:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 483D9281740
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 11:49:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0471B1D04AA;
-	Wed,  4 Sep 2024 11:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49BFD1D0DD2;
+	Wed,  4 Sep 2024 11:49:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cuOR3rqP"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="QhU2CU5O";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="RW47dMR4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0EDF1CCB43;
-	Wed,  4 Sep 2024 11:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AD91D04B3;
+	Wed,  4 Sep 2024 11:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725449433; cv=none; b=pFaAxYpEBXGBgkbp8WuCjRstk1y31WADbHUxYnvGAyzgWMUpY/WThRAcp1lAEZA0D2QCUrDkNq36if6LKk+wXOuvTJ4CLWnFPEzc0C7XJgCVPaUtbrYRMWyg91gLuNxWbcW2D6Jx3gGrjnysL9s3fsTI4TgpBnugxdPIeDZv9y0=
+	t=1725450547; cv=none; b=hZBJcbE2Fus9PRldhH+itVZlBaB99EyOdxzoRMiJBY/kc/bwL7Am+q5Z3JtwjH0J81FRI02JB8phiDz55NqdzRF7VYMq5OhUdD4Vsig3XoD3zlF3nJVbA6IEcM1uTnSXZRWHcPytU4/BCEGUBQmOi3uPdfLfIi/liB6/1OtNWwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725449433; c=relaxed/simple;
-	bh=itUGG95aN10wugANZlkU+uGqNckP3W7TN0vexPcZYYc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bmp8rIY+2nQkyBSxfCPUFEyNvmtGR0yOh3wvC2ta3Lmdh5zxRaAtqJ1SZbhapuKvzeeFaMmIgH8CwmQeyrCca53JfKvhWS/jetGjVTW5+Y9Nmj7h92LPQhuZ1hwcZwT0mUsa/QDhTqhRwmIf3+uZNeizQnObfKNvY4F314liDLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cuOR3rqP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E768C4CECC;
-	Wed,  4 Sep 2024 11:30:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725449433;
-	bh=itUGG95aN10wugANZlkU+uGqNckP3W7TN0vexPcZYYc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cuOR3rqPx0VQg7p2/Uu4fLlFbaorTBnep8Sf+nDG7MPXSUKfGfD8Dbx5DgAJTA/Ke
-	 N/RNx1/4EuLGZ24i+WHLJaXkmSFlUv6RldFX8d0tkWvxblSq2+tFQNrZRboe3jUo24
-	 tdHgz5dBCSTdtNy1yyu0EvKdZseT9AyrSNCAclvqTHp+ldIwIWky5dpT94xcobLrqY
-	 6QL4syBj6BC7g2B14DS2d/QrXJTDFEza2/UhPcBEMMc6JYfPKMWBD77FEiys1t2SVr
-	 7VdbqoWXp8TfYKeSpc30CiP7imQhvDl62BaH6KqSLHtKU6l+NQwrzKY6LdRDaGgJrJ
-	 3RY+WAh6Tqkhw==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-277dd761926so2017096fac.2;
-        Wed, 04 Sep 2024 04:30:33 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUtdJ82lYrfzPIwIX7y3W5IAMVfvrcMo64JNyxwJnJp/xX/mne4Pnqxt3E36FAYY/WoMe4zK14I8UW7z9k=@vger.kernel.org, AJvYcCXtX+/87RXuD1we2BmAVRJ+Piop/Qbrx0u7zqocdo72eoVoRYTVSlJpp3AH1Vt/I+GgKoHRPY4ZCU4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcKMtIfsRgh2Jx9vkhpZKBq+3GsiY1Wcz8vLm4X2zkkaJxKZbx
-	rkb15IPNfYm287RYIxTK8tHoKQrGN4Ed9BLlfgPkjMwGx9SoazY1RAHP+yl4IwWNRaeuyT1HIcX
-	Qt94JulGq4/h8tjZ+y2artFJc60w=
-X-Google-Smtp-Source: AGHT+IFKQanbSbooGfnlwSfSEyVI63MtGmis2Mavrf/1tvOwEIAEhes8TZJBPXiaMPlbMXm8kuQCtVJueQf5xrvLm6s=
-X-Received: by 2002:a05:6870:b491:b0:260:eb3a:1b2 with SMTP id
- 586e51a60fabf-277d032ef4dmr14329296fac.7.1725449432782; Wed, 04 Sep 2024
- 04:30:32 -0700 (PDT)
+	s=arc-20240116; t=1725450547; c=relaxed/simple;
+	bh=2gOlhhRV2C/00MxCV/AqhWoEpYeVgT9ATkmcgljMQMc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=V2kuvYEGrYsOkWpHkvtYsJhgirWWtyTCNGUy12DFMx+TMOYlrEdi+osaTLZ2mHywgFEdyL/01CvyN9b1BlTZm5puBhpHcQPmvlSlNo7wKKfsu8GmZZSz6nEY1l4XN/yDgnH/Zh4icCWH2EKI7c+q5mDGljZjVmJB9fx00ZoC+Vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=QhU2CU5O; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=RW47dMR4 reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1725450544; x=1756986544;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PzRpGWmOUix4GzvJgR42aKUg/d33bVXixR5pEp0iclU=;
+  b=QhU2CU5OtGuQN2c7kb3WXmDF2xY/Ea+D5MTozwqAlvXBKXzfQGNrdQCG
+   NEn6nFYtpWk7BQLU8oPrdNxVuX+z3G3rwarHeEQyEeBjmQYyAX4IjJoNi
+   +t286k7i+vuhsTGJbju+2mHhFg8Lj/7/3PwBqzGpsQ0v+VQWOIfOof4dS
+   qp5mBC39aVbgvyynHIK9zbtRC/xd/aQAM3OGkEoRibfLbAvkjy+2T3xy0
+   bBiu/qebM10wHr0MWyyZ8NtWxqDakiRMwUNQLDZjYzjH8ZTHlWeC4fDeN
+   Y4O94VNhb+fya78pTUq27Cs00iWY4Y5dy+B5IM4ZzZ0IvS0CUkBHNxMkQ
+   Q==;
+X-CSE-ConnectionGUID: 9/WIsxHeSR2jvPm7H/3/kg==
+X-CSE-MsgGUID: sap4pEGZRByHLhM8G9AR7g==
+X-IronPort-AV: E=Sophos;i="6.10,201,1719871200"; 
+   d="scan'208";a="38761957"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 04 Sep 2024 13:49:01 +0200
+X-CheckPoint: {66D8492D-2E-5FF8EC80-F6CEE9F8}
+X-MAIL-CPID: FAD731A5A9D3F1B35E470B14FF3F3207_0
+X-Control-Analysis: str=0001.0A782F24.66D8492D.0165,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CEE15168F91;
+	Wed,  4 Sep 2024 13:48:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1725450537;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=PzRpGWmOUix4GzvJgR42aKUg/d33bVXixR5pEp0iclU=;
+	b=RW47dMR4CCCZ6YbXSUgNtokRaSoNQb0UAB6xzuEfd3TxrUPNps1B3PI+dbYayXq2QwRRtZ
+	32roHomfmXWZcoKFDZ0Dh06NvEEdbCMaDIyEMrMPfamxMRQ40I3aDbZFLBWktgP2jE1Jqo
+	QrE3u+AgGmXZi+atF+wisomNM9mgCOYBtU9WaaRtwse75qkHni+WkTyABW8SOQi2Ve7JqD
+	8iQTkUW+1COaBFyTnlpFxthng6s7mngHuGlrLHctW338i8jp7vYNViPHJ6uTfn/6EREZ+X
+	iHeUtCKunTlMyOVC7Mi0DOLeu60AwPZuSnvU8wxeIdtLgAQIBU38A7+KGxLBew==
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>
+Cc: linux-pm@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] thermal/drivers/imx_sc_thermal: Use dev_err_probe
+Date: Wed, 04 Sep 2024 13:48:55 +0200
+Message-ID: <8423953.T7Z3S40VBb@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20240717085517.3333385-1-alexander.stein@ew.tq-group.com>
+References: <20240717085517.3333385-1-alexander.stein@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3310447.aeNJFYEL58@rjwysocki.net> <20240904072521.GA3757@ranerica-svr.sc.intel.com>
-In-Reply-To: <20240904072521.GA3757@ranerica-svr.sc.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 4 Sep 2024 13:30:21 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iX6cGhzoOUK6A0nv7z5uHWkfqtzGE6xhKtKKpZbSUk_g@mail.gmail.com>
-Message-ID: <CAJZ5v0iX6cGhzoOUK6A0nv7z5uHWkfqtzGE6xhKtKKpZbSUk_g@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] x86 / intel_pstate: Set asymmetric CPU capacity on
- hybrid systems
-To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, x86 Maintainers <x86@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Ricardo Neri <ricardo.neri@intel.com>, Tim Chen <tim.c.chen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, Sep 4, 2024 at 9:19=E2=80=AFAM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
->
-> On Wed, Aug 28, 2024 at 01:45:00PM +0200, Rafael J. Wysocki wrote:
-> > Hi Everyone,
-> >
-> > This is an update of
-> >
-> > https://lore.kernel.org/linux-pm/4941491.31r3eYUQgx@rjwysocki.net/
-> >
-> > which was an update of
-> >
-> > https://lore.kernel.org/linux-pm/4908113.GXAFRqVoOG@rjwysocki.net/
-> >
-> > It addresses Ricardo's review comments and fixes an issue with intel_ps=
-tate
-> > operation mode changes that would cause it to attempt to enable hybrid =
-CPU
-> > capacity scaling after it has been already enabled during initializatio=
-n.
-> >
-> > The most visible difference with respect to the previous version is tha=
-t
-> > patch [1/3] has been dropped because it is not needed any more after us=
-ing
-> > the observation that sched_clear_itmt_support() would cause sched domai=
-ns
-> > to be rebuilt.
-> >
-> > Other than this, there are cosmetic differences in patch [1/2] (previou=
-sly [2/3])
-> > and the new code in intel_pstate_register_driver() in patch [2/2] (prev=
-iously [3/3])
-> > has been squashed into hybrid_init_cpu_scaling() which now checks wheth=
-er or
-> > not to enable hybrid CPU capacity scaling (as it may have been enabled =
-already).
-> >
-> > This series is available from the following git branch:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log=
-/?h=3Dintel_pstate-testing
-> >
-> > (with an extra debug commit on top).
-> >
-> > The original cover letter quoted below still applies:
-> >
-> > The purpose of this series is to provide the scheduler with asymmetric =
-CPU
-> > capacity information on x86 hybrid systems based on Intel hardware.
-> >
-> > The asymmetric CPU capacity information is important on hybrid systems =
-as it
-> > allows utilization to be computed for tasks in a consistent way across =
-all
-> > CPUs in the system, regardless of their capacity.  This, in turn, allow=
-s
-> > the schedutil cpufreq governor to set CPU performance levels consistent=
-ly
-> > in the cases when tasks migrate between CPUs of different capacities.  =
-It
-> > should also help to improve task placement and load balancing decisions=
- on
-> > hybrid systems and it is key for anything along the lines of EAS.
-> >
-> > The information in question comes from the MSR_HWP_CAPABILITIES registe=
-r and
-> > is provided to the scheduler by the intel_pstate driver, as per the cha=
-ngelog
-> > of patch [3/3].  Patch [2/3] introduces the arch infrastructure needed =
-for
-> > that (in the form of a per-CPU capacity variable) and patch [1/3] is a
-> > preliminary code adjustment.
-> >
-> > This is based on an RFC posted previously
-> >
-> > https://lore.kernel.org/linux-pm/7663799.EvYhyI6sBW@kreacher/
-> >
-> > but differs from it quite a bit (except for the first patch).  The most
-> > significant difference is based on the observation that frequency-
-> > invariance needs to adjusted to the capacity scaling on hybrid systems
-> > for the complete scale-invariance to work as expected.
-> >
-> > Thank you!
->
-> Tested-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com> # scale i=
-nvariance
->
-> You can look at the scaling invariance these patches achieve here
->
-> https://pasteboard.co/dhBAUjfr36Tx.png
->
-> I tested these patches on an Meteor Lake system. It has CPUs with three
-> levels of capacity (Pcore, Ecore, and Lcore)
->
-> The "Requested work" plot shows a sawtooth pattern of the amount of work
-> requested as a percentage of the maximum amount of work that can be
-> obtained from the biggest CPU running at its maximum frequency. The work
-> is continuously calling getcpu() in a time window of constant duration
-> with varying percentages of work.
->
-> The "Achieved work" plot shows that the Ecore and Lcore cannot complete
-> as much work as the PCore even when fully busy (see the "Busy %" plot).
-> Also, bigger CPUs have more idle time.
->
-> The "Scale freq capacity" plot shows the current frequency of each CPU
-> is now scaled to 1024 by their respective max frequencies. It no longer
-> uses the single arch_max_freq_ratio value. Capacity now scales correctly:
-> when running at its maximum frequency, the current capacity (see
-> "Current capacity" plot and refer to cap_scale()) now matches the value
-> from arch_scale_cpu_capacity() (see "CPU capacity" plot).
->
-> The "Task utilization" plot shows that task->util_avg is now invariant
-> across CPUs.
+Hi,
 
-Thank you!
+Am Mittwoch, 17. Juli 2024, 10:55:16 CEST schrieb Alexander Stein:
+> This adds the error code to the error message and also stores that
+> message in case of probe deferral.
+>=20
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+>  drivers/thermal/imx_sc_thermal.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_th=
+ermal.c
+> index 7224f8d21db97..88558ce588807 100644
+> --- a/drivers/thermal/imx_sc_thermal.c
+> +++ b/drivers/thermal/imx_sc_thermal.c
+> @@ -111,8 +111,7 @@ static int imx_sc_thermal_probe(struct platform_devic=
+e *pdev)
+>  			if (ret =3D=3D -ENODEV)
+>  				continue;
+> =20
+> -			dev_err(&pdev->dev, "failed to register thermal zone\n");
+> -			return ret;
+> +			return dev_err_probe(&pdev->dev, ret, "failed to register thermal zon=
+e\n");
+>  		}
+> =20
+>  		devm_thermal_add_hwmon_sysfs(&pdev->dev, sensor->tzd);
+>=20
+
+Ping! Any feedback?
+
+Thanks,
+Alexander
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
+
 
