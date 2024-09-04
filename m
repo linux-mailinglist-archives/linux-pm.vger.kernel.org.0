@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-13550-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13551-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A937496B738
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 11:45:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66DE096B6FE
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 11:39:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A2546B25FED
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 09:38:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFE001F21E75
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 09:39:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 203FA1CF28E;
-	Wed,  4 Sep 2024 09:38:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 204081CCECB;
+	Wed,  4 Sep 2024 09:39:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gIgGZin4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fIEaRZP1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88A41CCB4D;
-	Wed,  4 Sep 2024 09:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAEA145B35;
+	Wed,  4 Sep 2024 09:39:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725442701; cv=none; b=uTjif0YhrXASblHb6QlXhZu91FJMvizFF2VoRlkghKfZKfSGLpyACsp0g43qAY0+GAkHE1NYtimYZBwpTsJw9gFKwxETUouxUWsd8VrrHrT6IImSvm9JDsVxsFFyj49GAPpblvjmslvSm6drN6QYU9sQ2cVKR1wdTQFXsSPPaQQ=
+	t=1725442767; cv=none; b=Aj2RVPZcDxWNNiqzFuCy8izAV8fKYufwQAgOuQQDN2God8rwtTjVQQhsnx3gTUqDyfNWMPIyT1/5uG9hs+hyW+bON01rqnT//3WRzIoGjxxaV8kilBsyCUQC6wZYdSA/zQW4tAwszTsaMvVRetoAtaiJSui1p2dRUFw/zukLoQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725442701; c=relaxed/simple;
-	bh=4Oxz02UXsHvMi4PosHxXi44tWRFHjOAIO+C8WFCBS5g=;
+	s=arc-20240116; t=1725442767; c=relaxed/simple;
+	bh=KYJzv/JgvF+3JCuKxVNSBMqfNqctJKRJIYxK6Z9pzek=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m9xYeLIhfjZ2rlfT4HBJJFFBEMoWg47NVmXhjCVYjleiDKV9MI9nsoyCoc54LD2ZHUtJ9/8RBd7WotsJij36cOrkggQb/6Q1qDpzZCD7aEnNow4N68lkbXSBZ3tio0Xa9D5Segb8fQk3gf1gA3j4aXe1jeIBr22XdAD8KcrvK3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gIgGZin4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BA4EC4CEC9;
-	Wed,  4 Sep 2024 09:38:10 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=jH9q44xduCetRK3PRiphzlpmZvJXhqsmvcG8G5moOooV1ZGb/un1TWy4PU/QPsAQpkxNXf2+CDGaxtlyuMVIY1xfBrkqJ26SkBBVY6fdv+Jg4ecwHYBwSCrrcIjmUW6SmRPwYL9kmwsUWNULYiFTUILqJGBYAFcb1Z3s83Df6i0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fIEaRZP1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9B04C4CEC6;
+	Wed,  4 Sep 2024 09:39:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725442700;
-	bh=4Oxz02UXsHvMi4PosHxXi44tWRFHjOAIO+C8WFCBS5g=;
+	s=k20201202; t=1725442766;
+	bh=KYJzv/JgvF+3JCuKxVNSBMqfNqctJKRJIYxK6Z9pzek=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gIgGZin4OpMLlQQjFhOvjm4u1uA4dUZv0rJ65H2rREYsG1NrlfX/IFKlbAzPVKCFx
-	 YFFrbOQaIauuCGiQ08OUIQfk/hS1RnnKodmHk+AJyPQ8UICD32XsV9YQQ0F0xr2jNr
-	 3zhB2s/I5i7obEN731r/0Co7LeOjRNNW1Pv8Ll9qCp6sTtT3trcAc2Q/Z0AoxBQu25
-	 gZ4VSqhehxPZStkYjNcYxc5UTCxPbWLrDjxRD2R0K0F+6GcfPPCMu4WdHZgRdvT7nX
-	 dw6mfAp01e9EvRmiob3peDLbBCGh4HL7Lv9HeqwCzvjE6Z+4wPjVf9GpzWA9G+z4U6
-	 TkN2ZypA/NOTA==
-Message-ID: <0627fd69-f7d8-48ae-bbba-3a2d9bbaa5b1@kernel.org>
-Date: Wed, 4 Sep 2024 11:38:08 +0200
+	b=fIEaRZP1IZ5ZNKKaO5mjiWzy4/1MuwpOV8O761wu/XbQu8rAmK7KUXx+pBWdFbPbe
+	 5fMsVH2rpZc1cF1K2G7XXLoSM7AfkKcrV8klWur6EkKUc7bYUep0fjyRB+B37ZvoVo
+	 hydyFJPpc6YIBSs8MaQKva8MIBM9KjF7ItvyUOth41eBaVe3bXW/dEItJoOvuVtjPo
+	 Nhh2mIlIbQ0KwDh+l1wy7+Dlquwk7pjG7cIB3zQOc/gxbV4pzc6ppAit1PBQjK2khT
+	 rfcpBSSeiJyACV5jN50LD8D6qrQXPjibmBZNgK/nWUNK2P5tjM5DaP0AO0m1//leh4
+	 NWDdneF19HQaA==
+Message-ID: <851566fe-4802-41c7-bb35-d6d1e9cf9bdf@kernel.org>
+Date: Wed, 4 Sep 2024 11:39:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 16/19] dt-bindings: arm: qcom: document QCS8275/QCS8300
- SoC and reference board
+Subject: Re: [PATCH 17/19] arm64: defconfig: enable clock controller,
+ interconnect and pinctrl for QCS8300
 To: Jingyi Wang <quic_jingyw@quicinc.com>,
  Bjorn Andersson <andersson@kernel.org>,
  Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>,
@@ -74,7 +74,7 @@ Cc: linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  iommu@lists.linux.dev
 References: <20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com>
- <20240904-qcs8300_initial_dtsi-v1-16-d0ea9afdc007@quicinc.com>
+ <20240904-qcs8300_initial_dtsi-v1-17-d0ea9afdc007@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -120,43 +120,52 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240904-qcs8300_initial_dtsi-v1-16-d0ea9afdc007@quicinc.com>
+In-Reply-To: <20240904-qcs8300_initial_dtsi-v1-17-d0ea9afdc007@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 04/09/2024 10:33, Jingyi Wang wrote:
-> Document the QCS8275/QCS8300 SoC and its reference board QCS8300 RIDE.
-> QCS8300 is an Industrial Safe SoC, while QCS8275 is the Industrial
-> Non-Safe version which can share the same SoC dtsi and board DTS.
+> Enable clock controller, interrconnect and pinctrl for QCS8300.
+
+NXP QCS8300? What is QCS8300? Which products use it? That's a defconfig
+for entire kernel, not your Qualcomm one.
+
+> It needs to be built-in for UART to provide a console.
 > 
 > Signed-off-by: Jingyi Wang <quic_jingyw@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  arch/arm64/configs/defconfig | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index c0529486810f..ccf9a166368f 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -42,6 +42,8 @@ description: |
->          msm8996
->          msm8998
->          qcs404
-> +        qcs8275
-> +        qcs8300
->          qcs8550
->          qcm2290
->          qcm6490
-> @@ -895,6 +897,12 @@ properties:
->            - const: qcom,qcs404-evb
->            - const: qcom,qcs404
->  
-> +      - items:
-> +          - enum:
-> +              - qcom,qcs8300-ride
-> +          - const: qcom,qcs8275
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 81ca46e3ab4b..a9ba6b25a0ed 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -606,6 +606,7 @@ CONFIG_PINCTRL_MSM8996=y
+>  CONFIG_PINCTRL_MSM8998=y
+>  CONFIG_PINCTRL_QCM2290=y
+>  CONFIG_PINCTRL_QCS404=y
+> +CONFIG_PINCTRL_QCS8300=y
+>  CONFIG_PINCTRL_QDF2XXX=y
+>  CONFIG_PINCTRL_QDU1000=y
+>  CONFIG_PINCTRL_SA8775P=y
+> @@ -1317,6 +1318,7 @@ CONFIG_MSM_MMCC_8998=m
+>  CONFIG_QCM_GCC_2290=y
+>  CONFIG_QCM_DISPCC_2290=m
+>  CONFIG_QCS_GCC_404=y
+> +CONFIG_QCS_GCC_8300=y
+>  CONFIG_QDU_GCC_1000=y
+>  CONFIG_SC_CAMCC_8280XP=m
+>  CONFIG_SC_DISPCC_7280=m
+> @@ -1618,6 +1620,7 @@ CONFIG_INTERCONNECT_QCOM_MSM8996=y
+>  CONFIG_INTERCONNECT_QCOM_OSM_L3=m
+>  CONFIG_INTERCONNECT_QCOM_QCM2290=y
+>  CONFIG_INTERCONNECT_QCOM_QCS404=m
+> +CONFIG_INTERCONNECT_QCOM_QCS8300=y
 
-So the qcs8300 ride comes with non-safe SoC?
+Why this cannot be a module?
+
+
 
 Best regards,
 Krzysztof
