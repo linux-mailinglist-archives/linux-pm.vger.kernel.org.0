@@ -1,180 +1,165 @@
-Return-Path: <linux-pm+bounces-13519-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13521-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3B3296B2AC
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 09:19:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AFC696B341
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 09:48:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC7A8282520
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 07:19:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33D34281284
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 07:48:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE6A83CDB;
-	Wed,  4 Sep 2024 07:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25CE014A09F;
+	Wed,  4 Sep 2024 07:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ceuc2Y0t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kIj+oy0x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC026BFA3;
-	Wed,  4 Sep 2024 07:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF4611482E7;
+	Wed,  4 Sep 2024 07:47:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725434391; cv=none; b=hPrUPxj72Gw3SbHHj1WcZxWYYsLTmegFMarFf5WTCmWODXrml2twkNv8bX7AoWZq1/IHOgyJ0GmZvkcg0IEEoX10abEL6VuvhYI4o5IQuFo5svpYfCS7/NBzXNqHYIFhxHs268h5G516ASdBrDfXwHoFnoaWCNkblZEiwTXw0E8=
+	t=1725436072; cv=none; b=LKMOt1biQ8i156GhT/tatD6YU9vPZ+t9624ky7vLGaqeIM8wv1z6zkvHdpG0e8arSJaIEeXAwcGF0jADdl6Ff45udgLBt0xciEFHgsIlD2SEW0seH6hwbacVc9daMxi8yMb/y1heF2gmaT+OjqD0/44I89vQXuRBYObIU+IpAtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725434391; c=relaxed/simple;
-	bh=6/0kN+PdIoKIhYAPwW3m9WLHBECcU7HjeWWLYgFJdLk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HpyyqLDvCqr0hk5tgWtGEK+NUDI5aQscxJvOv6cx424/1tF8HqgvyjiPrI5N5GBARiFwktLxnR8hzXc3rrfpN5Mp+W3xcs6TIVTmtZsEcQ2PaFYYEYqqlBt6NI2OhKUI3DOR10fajXgx0zDsO7q3MQmlJrYByN9acYtTe8LGb04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ceuc2Y0t; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725434390; x=1756970390;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6/0kN+PdIoKIhYAPwW3m9WLHBECcU7HjeWWLYgFJdLk=;
-  b=ceuc2Y0tkiEq017xjVkN65/7PQFF0UF4K9+4F3mySKKiDvAe1sz9MRWB
-   lmAuDIv/i7USwUx4Tosz8qE9IL8LEVhudbYVJNEnong8ZYEjjLSmAu8FK
-   8F7HA1Wjm1UXYjMiWaKcakBNJQ25OBggYgDvQyHe9Uun3nf8rqFQbR9TZ
-   QIQxV5h3GItMpAFzf0mG2cDIraucl03QvtvzppWbATgXJ0ouVSiqvXAmb
-   VeyHmRIJ7HvHcROYV/T983s+xX88Dh3s/1ZvxE79sphy9MREuQh9U1Gy4
-   3rdxdz7pROY0cDeG0YuHqvxBYd0ZMKdVrvv3XrBKbLvvLiOekMB4Bnmf5
-   w==;
-X-CSE-ConnectionGUID: y0JUjgwQSpKr7xYgDJxl2A==
-X-CSE-MsgGUID: wrb1Q/NSSmm8j7r6z4osAQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="23951180"
-X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
-   d="scan'208";a="23951180"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 00:19:35 -0700
-X-CSE-ConnectionGUID: fFcvEoGVQV2cPP7W3TWGXg==
-X-CSE-MsgGUID: A3eARBvSRW2zvVNSl5axkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
-   d="scan'208";a="65901057"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 00:19:34 -0700
-Date: Wed, 4 Sep 2024 00:25:21 -0700
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: x86 Maintainers <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ricardo Neri <ricardo.neri@intel.com>,
-	Tim Chen <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 0/2] x86 / intel_pstate: Set asymmetric CPU capacity
- on hybrid systems
-Message-ID: <20240904072521.GA3757@ranerica-svr.sc.intel.com>
-References: <3310447.aeNJFYEL58@rjwysocki.net>
+	s=arc-20240116; t=1725436072; c=relaxed/simple;
+	bh=eIKr8cAo4XHci2u7+szz00vb8bkmDe1laUVSo8kbitM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IvtoVSOWBQ/1Izd0umuBxu02LjyHQgNDPgG6MrDjQ7578K5zPxOUUS6TGfCU0u2srOjSdrETzXZR4lQ71r1O6ZugALkyvrs7WeOrIr2Fw1x+7W/bivfWcRGQsVxy1zpZG/CvUJk2xj/mU/AKU0L2R9NoSawNXUt3rZ5tqoU/+yM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kIj+oy0x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C708DC4CEC8;
+	Wed,  4 Sep 2024 07:47:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725436071;
+	bh=eIKr8cAo4XHci2u7+szz00vb8bkmDe1laUVSo8kbitM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=kIj+oy0xywVYlEUt1FPAKZEIbvjbWV7hk9mI8N4Mic+IL0QO0ob9XYDk+saKva8dv
+	 tllMyQdDS/2QqMOR2u80cxl9+6qD5CspOE+4ZEqMwwl2UjmeYCKV9/Lnz7+MfWzP6p
+	 N9hKTDiiA6HmeVtxuGZapuATd7S2EiMc1YnhFX/CsifFWoMXhRd/ZvkDcMJlrWzIle
+	 wj3lKayasljlQ6QGL5dCdPD5j8Tiog4sYsluE3046xO4M13REYdlMHOBKNSxeDsJQ5
+	 EEurUwQX+VHpPwLDRGLPq3UC230jmdkgbPhtxjGzhPL3VbgBIrLW5QqH3Fjz4tO/fn
+	 kbrcX98yIQbqA==
+Message-ID: <db4cb31f-b219-4ee8-b519-fdec7f7b8760@kernel.org>
+Date: Wed, 4 Sep 2024 09:47:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3310447.aeNJFYEL58@rjwysocki.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 17/21] dt-bindings: serial: document support for
+ SA8255p
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
+ viresh.kumar@linaro.org, herbert@gondor.apana.org.au, davem@davemloft.net,
+ sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
+ will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
+ jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+ amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
+ cristian.marussi@arm.com, rui.zhang@intel.com, lukasz.luba@arm.com,
+ wim@linux-watchdog.org, linux@roeck-us.net, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+ arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
+ linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ kernel@quicinc.com, quic_psodagud@quicinc.com,
+ Praveen Talari <quic_ptalari@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-18-quic_nkela@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <20240903220240.2594102-18-quic_nkela@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 28, 2024 at 01:45:00PM +0200, Rafael J. Wysocki wrote:
-> Hi Everyone,
+On 04/09/2024 00:02, Nikunj Kela wrote:
+> Add compatibles representing UART support on SA8255p.
 > 
-> This is an update of
+> Clocks and interconnects are being configured in the firmware VM
+> on SA8255p platform, therefore making them optional.
 > 
-> https://lore.kernel.org/linux-pm/4941491.31r3eYUQgx@rjwysocki.net/
+> CC: Praveen Talari <quic_ptalari@quicinc.com>
+> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+> ---
+>  .../serial/qcom,serial-geni-qcom.yaml         | 53 ++++++++++++++++---
+>  1 file changed, 47 insertions(+), 6 deletions(-)
 > 
-> which was an update of
-> 
-> https://lore.kernel.org/linux-pm/4908113.GXAFRqVoOG@rjwysocki.net/
-> 
-> It addresses Ricardo's review comments and fixes an issue with intel_pstate
-> operation mode changes that would cause it to attempt to enable hybrid CPU
-> capacity scaling after it has been already enabled during initialization.
-> 
-> The most visible difference with respect to the previous version is that
-> patch [1/3] has been dropped because it is not needed any more after using
-> the observation that sched_clear_itmt_support() would cause sched domains
-> to be rebuilt.
-> 
-> Other than this, there are cosmetic differences in patch [1/2] (previously [2/3])
-> and the new code in intel_pstate_register_driver() in patch [2/2] (previously [3/3])
-> has been squashed into hybrid_init_cpu_scaling() which now checks whether or
-> not to enable hybrid CPU capacity scaling (as it may have been enabled already).
-> 
-> This series is available from the following git branch:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=intel_pstate-testing
-> 
-> (with an extra debug commit on top).
-> 
-> The original cover letter quoted below still applies:
-> 
-> The purpose of this series is to provide the scheduler with asymmetric CPU
-> capacity information on x86 hybrid systems based on Intel hardware.
-> 
-> The asymmetric CPU capacity information is important on hybrid systems as it
-> allows utilization to be computed for tasks in a consistent way across all
-> CPUs in the system, regardless of their capacity.  This, in turn, allows
-> the schedutil cpufreq governor to set CPU performance levels consistently
-> in the cases when tasks migrate between CPUs of different capacities.  It
-> should also help to improve task placement and load balancing decisions on
-> hybrid systems and it is key for anything along the lines of EAS.
-> 
-> The information in question comes from the MSR_HWP_CAPABILITIES register and
-> is provided to the scheduler by the intel_pstate driver, as per the changelog
-> of patch [3/3].  Patch [2/3] introduces the arch infrastructure needed for
-> that (in the form of a per-CPU capacity variable) and patch [1/3] is a
-> preliminary code adjustment.
-> 
-> This is based on an RFC posted previously
-> 
-> https://lore.kernel.org/linux-pm/7663799.EvYhyI6sBW@kreacher/
-> 
-> but differs from it quite a bit (except for the first patch).  The most
-> significant difference is based on the observation that frequency-
-> invariance needs to adjusted to the capacity scaling on hybrid systems
-> for the complete scale-invariance to work as expected.
-> 
-> Thank you!
+> diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+> index dd33794b3534..b63c984684f3 100644
+> --- a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+> +++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+> @@ -10,14 +10,13 @@ maintainers:
+>    - Andy Gross <agross@kernel.org>
+>    - Bjorn Andersson <bjorn.andersson@linaro.org>
+>  
+> -allOf:
+> -  - $ref: /schemas/serial/serial.yaml#
+> -
+>  properties:
+>    compatible:
+>      enum:
+>        - qcom,geni-uart
+>        - qcom,geni-debug-uart
+> +      - qcom,sa8255p-geni-uart
+> +      - qcom,sa8255p-geni-debug-uart
 
-Tested-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com> # scale invariance
 
-You can look at the scaling invariance these patches achieve here
+Anyway, the entire patchset is organized wrong. Or you sent only subset.
 
-https://pasteboard.co/dhBAUjfr36Tx.png
+Where is the driver change? This cannot work. To remind bindings go with
+the driver (nothing new here).
 
-I tested these patches on an Meteor Lake system. It has CPUs with three
-levels of capacity (Pcore, Ecore, and Lcore)
+Best regards,
+Krzysztof
 
-The "Requested work" plot shows a sawtooth pattern of the amount of work
-requested as a percentage of the maximum amount of work that can be
-obtained from the biggest CPU running at its maximum frequency. The work
-is continuously calling getcpu() in a time window of constant duration
-with varying percentages of work.
-
-The "Achieved work" plot shows that the Ecore and Lcore cannot complete
-as much work as the PCore even when fully busy (see the "Busy %" plot).
-Also, bigger CPUs have more idle time.
-
-The "Scale freq capacity" plot shows the current frequency of each CPU
-is now scaled to 1024 by their respective max frequencies. It no longer
-uses the single arch_max_freq_ratio value. Capacity now scales correctly:
-when running at its maximum frequency, the current capacity (see
-"Current capacity" plot and refer to cap_scale()) now matches the value
-from arch_scale_cpu_capacity() (see "CPU capacity" plot).
-
-The "Task utilization" plot shows that task->util_avg is now invariant
-across CPUs.
-> 
-> 
-> 
 
