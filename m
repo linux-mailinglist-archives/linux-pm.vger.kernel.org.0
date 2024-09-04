@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-13624-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13625-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D231096C7C6
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 21:42:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1C6096C7C9
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 21:43:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D963B22E61
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 19:42:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CC7A287640
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 19:43:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E65011E6DFD;
-	Wed,  4 Sep 2024 19:42:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7313E1E766D;
+	Wed,  4 Sep 2024 19:42:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="pzXcfKn/"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="IH36xYp/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1EE11E1A34
-	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 19:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF251E6DE7
+	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 19:42:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725478957; cv=none; b=FbivNDk86H/Hxs8COekXnwT2/C7AzzuNy4F2ayq7A8z4+12Imr1VLcR4QDPWt/ipRZW0JMFWe/vJ4i9oRfO3vrSDvyE6oSsUXfmMcVptcsf6A2sn0/uNY63dThHA/Y1oxZVWfCtONitJx0xE9wvgas4VvJr+qNU9vvai4qjmMJ4=
+	t=1725478960; cv=none; b=LDaN83dSZ8aSHGcxjEId8fgTy1L2sWn3mT72dpmDtbaSlD4rnjPL0Z1y2egeA+1JzAQZ1RpgWzGMD3q9ioA/HSLFaSR1s6hUlTTehnJ2Mrt4QWy3tDP+uhJnXpX4jfmc2exgyf4YDVpgvJy99Irq2CmKI0OC0XJSbN9pzWtSOII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725478957; c=relaxed/simple;
-	bh=FYHeT28zz4duuhpxsBx++N1ZTkN35YM7LBrBqHavKOw=;
+	s=arc-20240116; t=1725478960; c=relaxed/simple;
+	bh=m8TbqpJyYnwjmVaS0KzdLgPL4B9eUMpP8GnX5BLffZI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=grslgAddnKzovQ8bAdZk/CGSJG8MDERcJzVhO1vlFD4br6eAGyy3Jz41LBMO5CKHPuj4RxJucaxf/Gy2f5yxZeHXxrzvL1qsN9xyvjH0PBhfG7q3G7oHabXhCZ7P3v/4G840XNSUMrDtIuvLymefGafnMBQTAaz3REInML2QBNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=pzXcfKn/; arc=none smtp.client-ip=209.85.128.50
+	 MIME-Version; b=oeUY+cOkQ3mQK7PNx+Zq4NMslc0T769T+08qOHGLzvxmjkZtf/DDj8hsXZEvOFEO2Ucc4Sp3JFnrmIosaRJPig2DOsdNrcMzOD7jO/kDOblyYnErfJR0DMQPgF/p6Wlm0zEtC3DrTvg4D1IbvRYmz1l1kXlCeSvBcWkL6EPKMag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=IH36xYp/; arc=none smtp.client-ip=209.85.208.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-428e0d184b4so57481375e9.2
-        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2024 12:42:35 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2f4f2868621so46361fa.0
+        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2024 12:42:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725478954; x=1726083754; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725478955; x=1726083755; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MO5Rgqfe+XL1ianyGMrb5IryC3voMqtp1YHgBG6UnZM=;
-        b=pzXcfKn/PCSHDdSJ2/e4hQByVl7XHtOwPtPN5WYaimVrMiH1q3e3UF0QxGibs1bOXo
-         RB6SXr8cx2QUDmDKHLaS6GmK5liOdB026tLpFfq2fVHe8ulo82iihxcd8RPghZIB8mds
-         O31uDEJtK/Ztx5/3Ool2pd8A6Vrq57SUeYsX3LziVOBXvg4dMmSuCHF7Yu3grZfyoPcn
-         iaUyKG7BpWR5gPk7+jFw2HMLu6z1vSprXmYPqW/dIvaZoUJNJRvj+tTJK3eRKezfScvc
-         /hvMBHst0P7OwzLc6L1O/6HYpZDm9hnSNqTfe/C87+ozVyKNBKaXajVSFnBeg3IeUTzx
-         iMOw==
+        bh=AyEPqKEEzwxYMbo04JHyHI4KyBrB65sqnJfNs9+wSJU=;
+        b=IH36xYp/YQmmxAdJWkdqbp2bYd5EKN5mxbZixVOjsH3U8xiEvXaHRh07Oxx1g5MIR9
+         8N7/CuqJ9xRHjnxgUEtIpW7eDmpqIt2yAPAYS07a0qsIQjmoouhGmSPdi00FXqusRysm
+         1RVxKO1gj/k6MRiMK8pxYE/lGoXRNlBvl3zZ5TP4LfztQNzmS74bNCcpbDR2lkubCybO
+         hbZYHIfbcCx5dxly7iK5F6BAXuaFXoABk1bEvcwlgg/kiX/WkFnBIT4UwToBuOkQo7S/
+         eacmnmniaOMvyPMFUZ5CDImEnALLDkaReSTeW93X3a27e7+Xyi30QM37+WXxKJQ4T24S
+         G6TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725478954; x=1726083754;
+        d=1e100.net; s=20230601; t=1725478955; x=1726083755;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MO5Rgqfe+XL1ianyGMrb5IryC3voMqtp1YHgBG6UnZM=;
-        b=kUh+Apc/+1zWr0A2Qk/g4jva0LJRgWUAGvI3ZpS6l0VPXlHbUojlNYcveFxFHlhiIm
-         uVTuaoZZicQjiFgaALA6hZF+Qjin2DtFW9SJ+JG/jv4npMPtS+AyE4KC7eTe/H/27NgX
-         R1Apl7tINcWximUZhLK4vquThBZYVYY1+to6YvBDOR6TKU/UEQn8er+YeUEguycDQhLx
-         bfCjzBEGg6LzJlKW7BSKFyjy0b/a8Hb8cVLa8LwTMsLa387Vfo0nEPtcNb7auVcqAVfF
-         Yuf4PxauHnJxrKXxaqa9uOW8PrBE5WYCLicCwH9vMlITq0S7lCpc/qVQOobhxWmiN6qp
-         qClA==
-X-Forwarded-Encrypted: i=1; AJvYcCVTO6IvxsKUIwL+61R6RXiiVdCoeLuFfpZpwZtoGOxvdz0L631Fr1tsq1oZn8V+symTRWYjPjsSWg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMw1lN2vAFhQcvLCsPp/rA9b1T9CunMocVtQ6qXneU+zg0GmgN
-	70doC0Fne+2Rf0bok+QXR7jj8Jiqw+4P6kL/vzFDrSeR0EdYaQdinTU46/LpbjY=
-X-Google-Smtp-Source: AGHT+IGkKB08aumSpzNaWW32uZif/5E30MF7X6byCu8oKAoEQjqOt0VQDnEzLiH4I7ZvQSwmirG/Qw==
-X-Received: by 2002:a05:600c:1c95:b0:426:64a2:5362 with SMTP id 5b1f17b1804b1-42c7b59e7dfmr97812125e9.8.1725478954042;
-        Wed, 04 Sep 2024 12:42:34 -0700 (PDT)
+        bh=AyEPqKEEzwxYMbo04JHyHI4KyBrB65sqnJfNs9+wSJU=;
+        b=qGpJxcVM1rk1vmvTNJcmPjOZPfbJ7LCrRgqy1PjX7CsUWVyBsWSjmBhO5bOQMcj/Qx
+         wolpJGd6Dshaf3qCjhKM/bgbjKHbNL5Jl2siNXX+r+f4kFsqnLpzj+gbQvYyq77Hv6Fd
+         s0CUvcgdKMDPE+TYLnCDM+r8YcPInsyre5xo5Svd+VJ6HfJf8l28I8BjgcCWoNtWnFxQ
+         KCQvJZYOLO52OqhBS0peS/fK4Qoze3iwAHZ0kG8XaneFKGFNf/E3d3yqvjUpdZEU/HaE
+         WRdZzH2GLXb4WfZevmne46p2BMrMePIQruRoiEw+Sq2D1v8aGUEP0BtoGnDG5v9Kld80
+         v7Iw==
+X-Forwarded-Encrypted: i=1; AJvYcCX1y202p5wXh+VBRMbtI1uKebRyj78dcYHsFXxuFpZp8FsiybeRnxxBRWpk9D1nDCGoPxoj+oF52g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjAlXxpesUEaWbZrfeZSvIidcdTYBkLi6iODa1TQ/h4odf5pmv
+	M1Xab3jgcy9lPaDiruVyE1+Tn5xAEIRK975R4sB6yU66+H8iXtafBVeN+3DceXg=
+X-Google-Smtp-Source: AGHT+IEB+LGnOg+u7CZgSuityP57rAgUqAWzAULFLW8ZdM2shWwSBgoZINRH8q+KbcNfzzYPXtua7Q==
+X-Received: by 2002:a05:6512:2511:b0:535:645b:fb33 with SMTP id 2adb3069b0e04-535645bfe39mr3079882e87.2.1725478955157;
+        Wed, 04 Sep 2024 12:42:35 -0700 (PDT)
 Received: from blmsp.fritz.box ([2001:4091:a247:83d8:caa7:e645:3612:56b6])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-374c03595fcsm12473625f8f.98.2024.09.04.12.42.33
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-374c03595fcsm12473625f8f.98.2024.09.04.12.42.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 12:42:33 -0700 (PDT)
+        Wed, 04 Sep 2024 12:42:34 -0700 (PDT)
 From: Markus Schneider-Pargmann <msp@baylibre.com>
 To: Nishanth Menon <nm@ti.com>,
 	Tero Kristo <kristo@kernel.org>,
@@ -81,11 +81,12 @@ Cc: Vibhore Vardhan <vibhore@ti.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
+	Dave Gerlach <d-gerlach@ti.com>,
 	Georgi Vlaev <g-vlaev@ti.com>,
 	Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v12 2/5] firmware: ti_sci: Add support for querying the firmware caps
-Date: Wed,  4 Sep 2024 21:42:26 +0200
-Message-ID: <20240904194229.109886-3-msp@baylibre.com>
+Subject: [PATCH v12 3/5] firmware: ti_sci: Add system suspend and resume call
+Date: Wed,  4 Sep 2024 21:42:27 +0200
+Message-ID: <20240904194229.109886-4-msp@baylibre.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240904194229.109886-1-msp@baylibre.com>
 References: <20240904194229.109886-1-msp@baylibre.com>
@@ -97,19 +98,25 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Georgi Vlaev <g-vlaev@ti.com>
+From: Vibhore Vardhan <vibhore@ti.com>
 
-Add support for the TISCI_MSG_QUERY_FW_CAPS message, used to retrieve
-the firmware capabilities of the currently running system firmware. The
-message belongs to the TISCI general core message API [1] and is
-available in SysFW version 08.04.03 and above. Currently, the message is
-supported on devices with split architecture of the system firmware (DM
-+ TIFS) like AM62x. Old revisions or not yet supported platforms will
-NACK this request.
+Introduce system suspend call that enables the ti_sci driver to support
+low power mode when the user space issues a suspend to mem.
 
-We're using this message locally in ti_sci.c to get the low power
-features of the FW/SoC. As there's no other kernel consumers yet, this
-is not added to struct ti_sci_core_ops.
+The following power management operations defined in the TISCI
+Low Power Mode API [1] are implemented to support suspend and resume:
+
+1) TISCI_MSG_PREPARE_SLEEP
+Prepare the SOC for entering into a low power mode and
+provide details to firmware about the state being entered.
+
+2) TISCI_MSG_SET_IO_ISOLATION
+Control the IO isolation for Low Power Mode.
+
+Also, write a ti_sci_prepare_system_suspend call to be used in the driver
+suspend handler to allow the system to identify the low power mode being
+entered and if necessary, send TISCI_MSG_PREPARE_SLEEP with information
+about the mode being entered.
 
 Sysfw version >= 10.00.04 support LPM_DM_MANAGED capability [2], where
 Device Mgr firmware now manages which low power mode is chosen. Going
@@ -117,79 +124,68 @@ forward, this is the default configuration supported for TI AM62 family
 of devices. The state chosen by the DM can be influenced by sending
 constraints using the new LPM constraint APIs.
 
-[1] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/general/core.html
-[2] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/general/core.html#tisci-msg-query-fw-caps
+In case the firmware does not support LPM_DM_MANAGED mode, the mode
+selection logic can be extended as needed. If no suspend-to-RAM modes
+are supported, return without taking any action.
 
+We're using "pm_suspend_target_state" to map the kernel's target suspend
+state to SysFW low power mode. Make sure this is available only when
+CONFIG_SUSPEND is enabled.
+
+Suspend has to be split into two parts, ti_sci_suspend() will send
+the prepare sleep message to prepare suspend. ti_sci_suspend_noirq()
+sets IO isolation which needs to be done as late as possible to avoid
+any issues. On resume this has to be done as early as possible.
+
+[1] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/pm/lpm.html
+
+Co-developed-by: Dave Gerlach <d-gerlach@ti.com>
+Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
 Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
-[vibhore@ti.com: Support for LPM_DM_MANAGED mode]
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
 Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
 Signed-off-by: Kevin Hilman <khilman@baylibre.com>
 Tested-by: Dhruva Gole <d-gole@ti.com>
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-Acked-by: Dhruva Gole <d-gole@ti.com>
 ---
- drivers/firmware/ti_sci.c | 73 ++++++++++++++++++++++++++++++++++++++-
- drivers/firmware/ti_sci.h | 22 ++++++++++++
- 2 files changed, 94 insertions(+), 1 deletion(-)
+ drivers/firmware/ti_sci.c              | 196 +++++++++++++++++++++++++
+ drivers/firmware/ti_sci.h              |  45 +++++-
+ include/linux/soc/ti/ti_sci_protocol.h |   4 +
+ 3 files changed, 244 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
-index 160968301b1f..d53192607709 100644
+index d53192607709..55e855f83340 100644
 --- a/drivers/firmware/ti_sci.c
 +++ b/drivers/firmware/ti_sci.c
-@@ -2,7 +2,7 @@
- /*
-  * Texas Instruments System Control Interface Protocol Driver
-  *
-- * Copyright (C) 2015-2022 Texas Instruments Incorporated - https://www.ti.com/
-+ * Copyright (C) 2015-2024 Texas Instruments Incorporated - https://www.ti.com/
-  *	Nishanth Menon
-  */
- 
 @@ -24,6 +24,7 @@
  #include <linux/slab.h>
  #include <linux/soc/ti/ti-msgmgr.h>
  #include <linux/soc/ti/ti_sci_protocol.h>
-+#include <linux/sys_soc.h>
++#include <linux/suspend.h>
+ #include <linux/sys_soc.h>
  #include <linux/reboot.h>
  
- #include "ti_sci.h"
-@@ -98,6 +99,7 @@ struct ti_sci_desc {
-  * @minfo:	Message info
-  * @node:	list head
-  * @host_id:	Host ID
-+ * @fw_caps:	FW/SoC low power capabilities
-  * @users:	Number of users of this instance
-  */
- struct ti_sci_info {
-@@ -114,6 +116,7 @@ struct ti_sci_info {
- 	struct ti_sci_xfers_info minfo;
- 	struct list_head node;
- 	u8 host_id;
-+	u64 fw_caps;
- 	/* protected by ti_sci_list_mutex */
- 	int users;
- };
-@@ -1651,6 +1654,67 @@ static int ti_sci_cmd_clk_get_freq(const struct ti_sci_handle *handle,
+@@ -1654,6 +1655,68 @@ static int ti_sci_cmd_clk_get_freq(const struct ti_sci_handle *handle,
  	return ret;
  }
  
 +/**
-+ * ti_sci_msg_cmd_query_fw_caps() - Get the FW/SoC capabilities
-+ * @handle:		Pointer to TI SCI handle
-+ * @fw_caps:		Each bit in fw_caps indicating one FW/SOC capability
-+ *
-+ * Check if the firmware supports any optional low power modes.
-+ * Old revisions of TIFS (< 08.04) will NACK the request which results in
-+ * -ENODEV being returned.
++ * ti_sci_cmd_prepare_sleep() - Prepare system for system suspend
++ * @handle:		pointer to TI SCI handle
++ * @mode:		Device identifier
++ * @ctx_lo:		Low part of address for context save
++ * @ctx_hi:		High part of address for context save
++ * @debug_flags:	Debug flags to pass to firmware
 + *
 + * Return: 0 if all went well, else returns appropriate error value.
 + */
-+static int ti_sci_msg_cmd_query_fw_caps(const struct ti_sci_handle *handle,
-+					u64 *fw_caps)
++static int ti_sci_cmd_prepare_sleep(const struct ti_sci_handle *handle, u8 mode,
++				    u32 ctx_lo, u32 ctx_hi, u32 debug_flags)
 +{
 +	struct ti_sci_info *info;
++	struct ti_sci_msg_req_prepare_sleep *req;
++	struct ti_sci_msg_hdr *resp;
 +	struct ti_sci_xfer *xfer;
-+	struct ti_sci_msg_resp_query_fw_caps *resp;
 +	struct device *dev;
 +	int ret = 0;
 +
@@ -201,15 +197,20 @@ index 160968301b1f..d53192607709 100644
 +	info = handle_to_ti_sci_info(handle);
 +	dev = info->dev;
 +
-+	xfer = ti_sci_get_one_xfer(info, TI_SCI_MSG_QUERY_FW_CAPS,
++	xfer = ti_sci_get_one_xfer(info, TI_SCI_MSG_PREPARE_SLEEP,
 +				   TI_SCI_FLAG_REQ_ACK_ON_PROCESSED,
-+				   sizeof(struct ti_sci_msg_hdr),
-+				   sizeof(*resp));
++				   sizeof(*req), sizeof(*resp));
 +	if (IS_ERR(xfer)) {
 +		ret = PTR_ERR(xfer);
 +		dev_err(dev, "Message alloc failed(%d)\n", ret);
 +		return ret;
 +	}
++
++	req = (struct ti_sci_msg_req_prepare_sleep *)xfer->xfer_buf;
++	req->mode = mode;
++	req->ctx_lo = ctx_lo;
++	req->ctx_hi = ctx_hi;
++	req->debug_flags = debug_flags;
 +
 +	ret = ti_sci_do_xfer(info, xfer);
 +	if (ret) {
@@ -217,16 +218,74 @@ index 160968301b1f..d53192607709 100644
 +		goto fail;
 +	}
 +
-+	resp = (struct ti_sci_msg_resp_query_fw_caps *)xfer->xfer_buf;
++	resp = (struct ti_sci_msg_hdr *)xfer->xfer_buf;
 +
 +	if (!ti_sci_is_response_ack(resp)) {
-+		dev_err(dev, "Failed to get capabilities\n");
++		dev_err(dev, "Failed to prepare sleep\n");
 +		ret = -ENODEV;
++	}
++
++fail:
++	ti_sci_put_one_xfer(&info->minfo, xfer);
++
++	return ret;
++}
++
+ /**
+  * ti_sci_msg_cmd_query_fw_caps() - Get the FW/SoC capabilities
+  * @handle:		Pointer to TI SCI handle
+@@ -1715,6 +1778,61 @@ static int ti_sci_msg_cmd_query_fw_caps(const struct ti_sci_handle *handle,
+ 	return ret;
+ }
+ 
++/**
++ * ti_sci_cmd_set_io_isolation() - Enable IO isolation in LPM
++ * @handle:		Pointer to TI SCI handle
++ * @state:		The desired state of the IO isolation
++ *
++ * Return: 0 if all went well, else returns appropriate error value.
++ */
++static int ti_sci_cmd_set_io_isolation(const struct ti_sci_handle *handle,
++				       u8 state)
++{
++	struct ti_sci_info *info;
++	struct ti_sci_msg_req_set_io_isolation *req;
++	struct ti_sci_msg_hdr *resp;
++	struct ti_sci_xfer *xfer;
++	struct device *dev;
++	int ret = 0;
++
++	if (IS_ERR(handle))
++		return PTR_ERR(handle);
++	if (!handle)
++		return -EINVAL;
++
++	info = handle_to_ti_sci_info(handle);
++	dev = info->dev;
++
++	xfer = ti_sci_get_one_xfer(info, TI_SCI_MSG_SET_IO_ISOLATION,
++				   TI_SCI_FLAG_REQ_ACK_ON_PROCESSED,
++				   sizeof(*req), sizeof(*resp));
++	if (IS_ERR(xfer)) {
++		ret = PTR_ERR(xfer);
++		dev_err(dev, "Message alloc failed(%d)\n", ret);
++		return ret;
++	}
++	req = (struct ti_sci_msg_req_set_io_isolation *)xfer->xfer_buf;
++	req->state = state;
++
++	ret = ti_sci_do_xfer(info, xfer);
++	if (ret) {
++		dev_err(dev, "Mbox send fail %d\n", ret);
 +		goto fail;
 +	}
 +
-+	if (fw_caps)
-+		*fw_caps = resp->fw_caps;
++	resp = (struct ti_sci_msg_hdr *)xfer->xfer_buf;
++
++	if (!ti_sci_is_response_ack(resp)) {
++		dev_err(dev, "Failed to set IO isolation\n");
++		ret = -ENODEV;
++	}
 +
 +fail:
 +	ti_sci_put_one_xfer(&info->minfo, xfer);
@@ -237,60 +296,183 @@ index 160968301b1f..d53192607709 100644
  static int ti_sci_cmd_core_reboot(const struct ti_sci_handle *handle)
  {
  	struct ti_sci_info *info;
-@@ -3390,6 +3454,13 @@ static int ti_sci_probe(struct platform_device *pdev)
- 		goto out;
- 	}
+@@ -3326,6 +3444,83 @@ static int tisci_reboot_handler(struct sys_off_data *data)
+ 	return NOTIFY_BAD;
+ }
  
-+	ti_sci_msg_cmd_query_fw_caps(&info->handle, &info->fw_caps);
-+	dev_dbg(dev, "Detected firmware capabilities: %s%s%s\n",
-+		info->fw_caps & MSG_FLAG_CAPS_GENERIC ? "Generic" : "",
-+		info->fw_caps & MSG_FLAG_CAPS_LPM_PARTIAL_IO ? " Partial-IO" : "",
-+		info->fw_caps & MSG_FLAG_CAPS_LPM_DM_MANAGED ? " DM-Managed" : ""
-+	);
++static int ti_sci_prepare_system_suspend(struct ti_sci_info *info)
++{
++	/*
++	 * Map and validate the target Linux suspend state to TISCI LPM.
++	 * Default is to let Device Manager select the low power mode.
++	 */
++	switch (pm_suspend_target_state) {
++	case PM_SUSPEND_MEM:
++		if (info->fw_caps & MSG_FLAG_CAPS_LPM_DM_MANAGED) {
++			/*
++			 * For the DM_MANAGED mode the context is reserved for
++			 * internal use and can be 0
++			 */
++			return ti_sci_cmd_prepare_sleep(&info->handle,
++							TISCI_MSG_VALUE_SLEEP_MODE_DM_MANAGED,
++							0, 0, 0);
++		} else {
++			/* DM Managed is not supported by the firmware. */
++			dev_err(info->dev, "Suspend to memory is not supported by the firmware\n");
++			return -EOPNOTSUPP;
++		}
++		break;
++	default:
++		/*
++		 * Do not fail if we don't have action to take for a
++		 * specific suspend mode.
++		 */
++		return 0;
++	}
 +
- 	ti_sci_setup_ops(info);
- 
- 	ret = devm_register_restart_handler(dev, tisci_reboot_handler, info);
++	return 0;
++}
++
++static int __maybe_unused ti_sci_suspend(struct device *dev)
++{
++	struct ti_sci_info *info = dev_get_drvdata(dev);
++	int ret;
++
++	ret = ti_sci_prepare_system_suspend(info);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int __maybe_unused ti_sci_suspend_noirq(struct device *dev)
++{
++	struct ti_sci_info *info = dev_get_drvdata(dev);
++	int ret = 0;
++
++	ret = ti_sci_cmd_set_io_isolation(&info->handle, TISCI_MSG_VALUE_IO_ENABLE);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int __maybe_unused ti_sci_resume_noirq(struct device *dev)
++{
++	struct ti_sci_info *info = dev_get_drvdata(dev);
++	int ret = 0;
++
++	ret = ti_sci_cmd_set_io_isolation(&info->handle, TISCI_MSG_VALUE_IO_DISABLE);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static const struct dev_pm_ops ti_sci_pm_ops = {
++#ifdef CONFIG_PM_SLEEP
++	.suspend = ti_sci_suspend,
++	.suspend_noirq = ti_sci_suspend_noirq,
++	.resume_noirq = ti_sci_resume_noirq,
++#endif
++};
++
+ /* Description for K2G */
+ static const struct ti_sci_desc ti_sci_pmmc_k2g_desc = {
+ 	.default_host_id = 2,
+@@ -3494,6 +3689,7 @@ static struct platform_driver ti_sci_driver = {
+ 		   .name = "ti-sci",
+ 		   .of_match_table = of_match_ptr(ti_sci_of_match),
+ 		   .suppress_bind_attrs = true,
++		   .pm = &ti_sci_pm_ops,
+ 	},
+ };
+ module_platform_driver(ti_sci_driver);
 diff --git a/drivers/firmware/ti_sci.h b/drivers/firmware/ti_sci.h
-index 5846c60220f5..73ca9503606b 100644
+index 73ca9503606b..8efe4d0e61fb 100644
 --- a/drivers/firmware/ti_sci.h
 +++ b/drivers/firmware/ti_sci.h
-@@ -19,6 +19,7 @@
- #define TI_SCI_MSG_WAKE_REASON	0x0003
- #define TI_SCI_MSG_GOODBYE	0x0004
- #define TI_SCI_MSG_SYS_RESET	0x0005
-+#define TI_SCI_MSG_QUERY_FW_CAPS	0x0022
+@@ -6,7 +6,7 @@
+  * The system works in a message response protocol
+  * See: https://software-dl.ti.com/tisci/esd/latest/index.html for details
+  *
+- * Copyright (C)  2015-2016 Texas Instruments Incorporated - https://www.ti.com/
++ * Copyright (C)  2015-2024 Texas Instruments Incorporated - https://www.ti.com/
+  */
  
- /* Device requests */
- #define TI_SCI_MSG_SET_DEVICE_STATE	0x0200
-@@ -132,6 +133,27 @@ struct ti_sci_msg_req_reboot {
- 	struct ti_sci_msg_hdr hdr;
+ #ifndef __TI_SCI_H
+@@ -36,6 +36,10 @@
+ #define TI_SCI_MSG_QUERY_CLOCK_FREQ	0x010d
+ #define TI_SCI_MSG_GET_CLOCK_FREQ	0x010e
+ 
++/* Low Power Mode Requests */
++#define TI_SCI_MSG_PREPARE_SLEEP	0x0300
++#define TI_SCI_MSG_SET_IO_ISOLATION	0x0307
++
+ /* Resource Management Requests */
+ #define TI_SCI_MSG_GET_RESOURCE_RANGE	0x1500
+ 
+@@ -567,6 +571,45 @@ struct ti_sci_msg_resp_get_clock_freq {
+ 	u64 freq_hz;
  } __packed;
  
 +/**
-+ * struct ti_sci_msg_resp_query_fw_caps - Response for query firmware caps
-+ * @hdr:	Generic header
-+ * @fw_caps:	Each bit in fw_caps indicating one FW/SOC capability
-+ *		MSG_FLAG_CAPS_GENERIC: Generic capability (LPM not supported)
-+ *		MSG_FLAG_CAPS_LPM_PARTIAL_IO: Partial IO in LPM
-+ *		MSG_FLAG_CAPS_LPM_DM_MANAGED: LPM can be managed by DM
++ * struct tisci_msg_req_prepare_sleep - Request for TISCI_MSG_PREPARE_SLEEP.
 + *
-+ * Response to a generic message with message type TI_SCI_MSG_QUERY_FW_CAPS
-+ * providing currently available SOC/firmware capabilities. SoC that don't
-+ * support low power modes return only MSG_FLAG_CAPS_GENERIC capability.
++ * @hdr				TISCI header to provide ACK/NAK flags to the host.
++ * @mode			Low power mode to enter.
++ * @ctx_lo			Low 32-bits of physical pointer to address to use for context save.
++ * @ctx_hi			High 32-bits of physical pointer to address to use for context save.
++ * @debug_flags			Flags that can be set to halt the sequence during suspend or
++ *				resume to allow JTAG connection and debug.
++ *
++ * This message is used as the first step of entering a low power mode. It
++ * allows configurable information, including which state to enter to be
++ * easily shared from the application, as this is a non-secure message and
++ * therefore can be sent by anyone.
 + */
-+struct ti_sci_msg_resp_query_fw_caps {
-+	struct ti_sci_msg_hdr hdr;
-+#define MSG_FLAG_CAPS_GENERIC		TI_SCI_MSG_FLAG(0)
-+#define MSG_FLAG_CAPS_LPM_PARTIAL_IO	TI_SCI_MSG_FLAG(4)
-+#define MSG_FLAG_CAPS_LPM_DM_MANAGED	TI_SCI_MSG_FLAG(5)
-+#define MSG_MASK_CAPS_LPM		GENMASK_ULL(4, 1)
-+	u64 fw_caps;
++struct ti_sci_msg_req_prepare_sleep {
++	struct ti_sci_msg_hdr	hdr;
++
++#define TISCI_MSG_VALUE_SLEEP_MODE_DM_MANAGED				0xfd
++	u8			mode;
++	u32			ctx_lo;
++	u32			ctx_hi;
++	u32			debug_flags;
 +} __packed;
 +
++/**
++ * struct tisci_msg_set_io_isolation_req - Request for TI_SCI_MSG_SET_IO_ISOLATION.
++ *
++ * @hdr:	Generic header
++ * @state:	The deseared state of the IO isolation.
++ *
++ * This message is used to enable/disable IO isolation for low power modes.
++ * Response is generic ACK / NACK message.
++ */
++struct ti_sci_msg_req_set_io_isolation {
++	struct ti_sci_msg_hdr hdr;
++	u8 state;
++} __packed;
++
+ #define TI_SCI_IRQ_SECONDARY_HOST_INVALID	0xff
+ 
  /**
-  * struct ti_sci_msg_req_set_device_state - Set the desired state of the device
-  * @hdr:		Generic header
+diff --git a/include/linux/soc/ti/ti_sci_protocol.h b/include/linux/soc/ti/ti_sci_protocol.h
+index bd0d11af76c5..1f1871e23f76 100644
+--- a/include/linux/soc/ti/ti_sci_protocol.h
++++ b/include/linux/soc/ti/ti_sci_protocol.h
+@@ -195,6 +195,10 @@ struct ti_sci_clk_ops {
+ 			u64 *current_freq);
+ };
+ 
++/* TISCI LPM IO isolation control values */
++#define TISCI_MSG_VALUE_IO_ENABLE			1
++#define TISCI_MSG_VALUE_IO_DISABLE			0
++
+ /**
+  * struct ti_sci_resource_desc - Description of TI SCI resource instance range.
+  * @start:	Start index of the first resource range.
 -- 
 2.45.2
 
