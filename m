@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-13551-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13552-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66DE096B6FE
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 11:39:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C85396B70F
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 11:42:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFE001F21E75
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 09:39:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0AA428172A
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 09:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 204081CCECB;
-	Wed,  4 Sep 2024 09:39:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DACA1CCEEF;
+	Wed,  4 Sep 2024 09:42:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fIEaRZP1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qfk2exhR"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAEA145B35;
-	Wed,  4 Sep 2024 09:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9E018784F;
+	Wed,  4 Sep 2024 09:42:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725442767; cv=none; b=Aj2RVPZcDxWNNiqzFuCy8izAV8fKYufwQAgOuQQDN2God8rwtTjVQQhsnx3gTUqDyfNWMPIyT1/5uG9hs+hyW+bON01rqnT//3WRzIoGjxxaV8kilBsyCUQC6wZYdSA/zQW4tAwszTsaMvVRetoAtaiJSui1p2dRUFw/zukLoQE=
+	t=1725442934; cv=none; b=GrlQ+aFx0x7iYqTpzGdON66uKzun1Ybt3IsXwDw6Idmny1SxZK9nOPFQqgXKHUOulh21NlZEZMv37Q6BQf+vsqLU2UYVRuor8fJJ03LauuJ4RJSjcyzNRdKwJQWram462cFkYp7zzFhWkeWx3i13YkNCrZ557mefjBbPuAehYoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725442767; c=relaxed/simple;
-	bh=KYJzv/JgvF+3JCuKxVNSBMqfNqctJKRJIYxK6Z9pzek=;
+	s=arc-20240116; t=1725442934; c=relaxed/simple;
+	bh=Oec9l7s17IwaiLXgNR1SWtJBoMzsunOXYZarsJi44os=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jH9q44xduCetRK3PRiphzlpmZvJXhqsmvcG8G5moOooV1ZGb/un1TWy4PU/QPsAQpkxNXf2+CDGaxtlyuMVIY1xfBrkqJ26SkBBVY6fdv+Jg4ecwHYBwSCrrcIjmUW6SmRPwYL9kmwsUWNULYiFTUILqJGBYAFcb1Z3s83Df6i0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fIEaRZP1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9B04C4CEC6;
-	Wed,  4 Sep 2024 09:39:15 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=oRySbpIB/IiRdJQ2CKciW4cbMPpkh2wdE2elxjxgfQQ/iHqgtchC0n2+zNbKyOQu/UpqbGQ24ynTZjRplgJJ5QQOQclg+xbrjrz5aPZdcHzG5lcChzR9EA+osTD1rYvk/RYYyhAhlsIDn2/TdhbmB1iApHkMntoRhE4b0eNVt64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qfk2exhR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E2CC4CEC2;
+	Wed,  4 Sep 2024 09:41:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725442766;
-	bh=KYJzv/JgvF+3JCuKxVNSBMqfNqctJKRJIYxK6Z9pzek=;
+	s=k20201202; t=1725442933;
+	bh=Oec9l7s17IwaiLXgNR1SWtJBoMzsunOXYZarsJi44os=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fIEaRZP1IZ5ZNKKaO5mjiWzy4/1MuwpOV8O761wu/XbQu8rAmK7KUXx+pBWdFbPbe
-	 5fMsVH2rpZc1cF1K2G7XXLoSM7AfkKcrV8klWur6EkKUc7bYUep0fjyRB+B37ZvoVo
-	 hydyFJPpc6YIBSs8MaQKva8MIBM9KjF7ItvyUOth41eBaVe3bXW/dEItJoOvuVtjPo
-	 Nhh2mIlIbQ0KwDh+l1wy7+Dlquwk7pjG7cIB3zQOc/gxbV4pzc6ppAit1PBQjK2khT
-	 rfcpBSSeiJyACV5jN50LD8D6qrQXPjibmBZNgK/nWUNK2P5tjM5DaP0AO0m1//leh4
-	 NWDdneF19HQaA==
-Message-ID: <851566fe-4802-41c7-bb35-d6d1e9cf9bdf@kernel.org>
-Date: Wed, 4 Sep 2024 11:39:13 +0200
+	b=qfk2exhRilb/mDb5zkdMxVssIApdDdkN2OtWR1nYcYQ45/z39ErsKaKq8E2tMY7bL
+	 f4Jvq64hJNR3KOOwwhwYEPIjFi5ZPQINEyvpkHkXLNZW2HYMdCaaDL68yxbm7Lqzwq
+	 UyHZQha2LpoNaaCu8UvhhVoKi8Df1XsmtHGA0qXm1xjzExfh8wgzKiRFpqoAVHlAUT
+	 R0lxSPeLDNqHgdVnDN1GPfA0k8HiCUGE6CqGSOWL4XJEH8VVUBZWynki5HbZTY/+tX
+	 2H+rSxdJt7UPMjkedReYhshriapkRBUU5PaY7lQZbGPvfBwRHbpu53wjEWhR5c3c6r
+	 ZvK8u57wDIxxw==
+Message-ID: <be8b573c-db4e-4eec-a9a6-3cd83d04156d@kernel.org>
+Date: Wed, 4 Sep 2024 11:41:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 17/19] arm64: defconfig: enable clock controller,
- interconnect and pinctrl for QCS8300
+Subject: Re: [PATCH 18/19] arm64: dts: qcom: add initial support for QCS8300
+ DTSI
 To: Jingyi Wang <quic_jingyw@quicinc.com>,
  Bjorn Andersson <andersson@kernel.org>,
  Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>,
@@ -72,9 +72,12 @@ Cc: linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- iommu@lists.linux.dev
+ iommu@lists.linux.dev, Zhenhua Huang <quic_zhenhuah@quicinc.com>,
+ Xin Liu <quic_liuxin@quicinc.com>, Kyle Deng <quic_chunkaid@quicinc.com>,
+ Tingguo Cheng <quic_tingguoc@quicinc.com>,
+ Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 References: <20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com>
- <20240904-qcs8300_initial_dtsi-v1-17-d0ea9afdc007@quicinc.com>
+ <20240904-qcs8300_initial_dtsi-v1-18-d0ea9afdc007@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -120,50 +123,100 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240904-qcs8300_initial_dtsi-v1-17-d0ea9afdc007@quicinc.com>
+In-Reply-To: <20240904-qcs8300_initial_dtsi-v1-18-d0ea9afdc007@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 04/09/2024 10:33, Jingyi Wang wrote:
-> Enable clock controller, interrconnect and pinctrl for QCS8300.
-
-NXP QCS8300? What is QCS8300? Which products use it? That's a defconfig
-for entire kernel, not your Qualcomm one.
-
-> It needs to be built-in for UART to provide a console.
+> Add initial DTSI for QCS8300 SoC.
 > 
+> This revision brings support for:
+> - CPUs with cpu idle
+> - interrupt-controller with PDC wakeup support
+> - gcc
+> - TLMM
+> - interconnect
+> - qup with uart
+> - smmu
+> - pmic
+> - ufs
+> - ipcc
+> - sram
+> - remoteprocs including ADSP,CDSP and GPDSP
+> 
+> [Zhenhua: added the smmu node]
+> Co-developed-by: Zhenhua Huang <quic_zhenhuah@quicinc.com>
+> Signed-off-by: Zhenhua Huang <quic_zhenhuah@quicinc.com>
+> [Xin: added ufs/adsp/gpdsp nodes]
+> Co-developed-by: Xin Liu <quic_liuxin@quicinc.com>
+> Signed-off-by: Xin Liu <quic_liuxin@quicinc.com>
+> [Kyle: added the aoss_qmp node]
+> Co-developed-by: Kyle Deng <quic_chunkaid@quicinc.com>
+> Signed-off-by: Kyle Deng <quic_chunkaid@quicinc.com>
+> [Tingguo: added the pmic nodes]
+> Co-developed-by: Tingguo Cheng <quic_tingguoc@quicinc.com>
+> Signed-off-by: Tingguo Cheng <quic_tingguoc@quicinc.com>
+> [Raviteja: added interconnect nodes]
+> Co-developed-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 > Signed-off-by: Jingyi Wang <quic_jingyw@quicinc.com>
 > ---
->  arch/arm64/configs/defconfig | 3 +++
->  1 file changed, 3 insertions(+)
+>  arch/arm64/boot/dts/qcom/qcs8300.dtsi | 1282 +++++++++++++++++++++++++++++++++
+>  1 file changed, 1282 insertions(+)
 > 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 81ca46e3ab4b..a9ba6b25a0ed 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -606,6 +606,7 @@ CONFIG_PINCTRL_MSM8996=y
->  CONFIG_PINCTRL_MSM8998=y
->  CONFIG_PINCTRL_QCM2290=y
->  CONFIG_PINCTRL_QCS404=y
-> +CONFIG_PINCTRL_QCS8300=y
->  CONFIG_PINCTRL_QDF2XXX=y
->  CONFIG_PINCTRL_QDU1000=y
->  CONFIG_PINCTRL_SA8775P=y
-> @@ -1317,6 +1318,7 @@ CONFIG_MSM_MMCC_8998=m
->  CONFIG_QCM_GCC_2290=y
->  CONFIG_QCM_DISPCC_2290=m
->  CONFIG_QCS_GCC_404=y
-> +CONFIG_QCS_GCC_8300=y
->  CONFIG_QDU_GCC_1000=y
->  CONFIG_SC_CAMCC_8280XP=m
->  CONFIG_SC_DISPCC_7280=m
-> @@ -1618,6 +1620,7 @@ CONFIG_INTERCONNECT_QCOM_MSM8996=y
->  CONFIG_INTERCONNECT_QCOM_OSM_L3=m
->  CONFIG_INTERCONNECT_QCOM_QCM2290=y
->  CONFIG_INTERCONNECT_QCOM_QCS404=m
-> +CONFIG_INTERCONNECT_QCOM_QCS8300=y
+> diff --git a/arch/arm64/boot/dts/qcom/qcs8300.dtsi b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
+> new file mode 100644
+> index 000000000000..244fa8bf97d9
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
+> @@ -0,0 +1,1282 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <dt-bindings/clock/qcom,qcs8300-gcc.h>
+> +#include <dt-bindings/clock/qcom,rpmh.h>
+> +#include <dt-bindings/interconnect/qcom,icc.h>
+> +#include <dt-bindings/interconnect/qcom,qcs8300-rpmh.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/mailbox/qcom-ipcc.h>
+> +#include <dt-bindings/power/qcom,rpmhpd.h>
+> +#include <dt-bindings/power/qcom-rpmpd.h>
+> +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> +
+> +/ {
+> +	interrupt-parent = <&intc>;
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	clocks {
+> +		sleep_clk: sleep-clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <32000>;
 
-Why this cannot be a module?
+Are you sure that sleep clock is physically part of the SoC?
+
+> +		};
+> +	};
+> +
+> +	cpus {
+> +		#address-cells = <2>;
+> +		#size-cells = <0>;
+> +
+
+...
+
+> +
+> +	soc: soc@0 {
+> +		compatible = "simple-bus";
+> +
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges = <0 0 0 0 0x10 0>;
+
+ranges follow compatible, so it is the second property.
 
 
 
