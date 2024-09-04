@@ -1,135 +1,98 @@
-Return-Path: <linux-pm+bounces-13507-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13508-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5884796AFC3
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 06:23:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7B4C96B0C0
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 07:57:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3AF8B2310D
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 04:23:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32237B22E48
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 05:57:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5212A80C13;
-	Wed,  4 Sep 2024 04:23:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8221129A78;
+	Wed,  4 Sep 2024 05:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="gLGC1CAC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="og1oklMK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B4043152;
-	Wed,  4 Sep 2024 04:23:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675DC84FA0;
+	Wed,  4 Sep 2024 05:54:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725423829; cv=none; b=eLtx9RhVvHsN/PEtwGN8TQ1wEMAovgO7zlemEPS9D6CQpO5IDvo6PWZy5BGprmr4Mf7QtJ+iG/rCj4T8e8qDSkSLkGeHjocqwwf6LUDyiMfyQmGz+h496R0lcku8CPQY8qJYnzt4+QS+eCOE4v42fj0dpPLCeBTbFomuzo1IPL4=
+	t=1725429292; cv=none; b=KD9YkzKJcFrz4q69DBB/sj3uOa7LP/kItNtgtyy+NXWRiEYXhZvaeRoJbuxramEYQUm+JOqMQrNFoNBRtKlbRVuVyXXUQK2eWluPVgEHC41QZqJ/RdbL09jRErMfA4Egjr8ZAdWhVgOWgvWXeKVTLjkiFT2C8So8k3UocKYcRZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725423829; c=relaxed/simple;
-	bh=QMi6ilXI/bMW7raOG2X00t6hnRUkX1YeyruxgMUexRI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SacOp+OrWeWfhLkwSAaKr/ocayq+ZmSPXcGgupAjwhoVVrccifAc1sH+iUjjUwNViPhEStO9qwwWbBJ9C/Tn7q74MHKrEymtZuTTPHSuRWD2inbCeamyFZyGp2MWq6BC+KqZ9nBxwuizdLNU208bjqHvtaAugpEnsTbFnd5oBTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=gLGC1CAC; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 483J0x9T009621;
-	Wed, 4 Sep 2024 04:23:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	QMi6ilXI/bMW7raOG2X00t6hnRUkX1YeyruxgMUexRI=; b=gLGC1CACLUH5BHeX
-	lLg/lBKdmdckR/WIentL9L+3bJb/zhexinV8qIf1VDVGkqCafuRgLvr7hd9w2hec
-	qb7G+4aALk7akvRxtivNhlhrp5+RXs+VEtPwdztvk7qi0haBPMMiv8tbuwBP//GG
-	oCNV4hPNViRC0tN7cyqsGyrAxMm7a/BKFqpnUn5bToCdPrzf/IjzJ8WFHSeFgSLZ
-	pUBLFWBoS6hwGK3PMV6iy5/pP5DYVS70GgCZMFCK32mTIcYtaO7vvBHlCxP/g3ck
-	RrBuVtorUFyR6grQp/vs3m7pBMGSsqZlSZeuxni3etjpGGDx2gPM4gkmTwFZiF0S
-	ufqDog==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41e0bhjpmm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Sep 2024 04:23:39 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4844NcEw029174
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 4 Sep 2024 04:23:38 GMT
-Received: from [10.218.15.248] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 3 Sep 2024
- 21:23:26 -0700
-Message-ID: <1924fdb7-4c09-4996-accb-cae6628e83c7@quicinc.com>
-Date: Wed, 4 Sep 2024 09:53:23 +0530
+	s=arc-20240116; t=1725429292; c=relaxed/simple;
+	bh=pDZcotIHkEE1L9COrUn/fnSB2fVdzH08tCumXOdDPKQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KS6kErx2EgAWB01ysKteKx7RhCNLtFcRHdNJXGsqZ/V3StVjUjF9lqVCIL4bvWA8HcaFPnrLuYEZQFveuHVbQWm6ukw+SeZGb6UImDoSETZ1xeLhNwGDRW0hPG4hChG02tRI36zZ2MOqrq+LaoqSU0nR+e4C5ioTJwpjMaLXP9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=og1oklMK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D45A6C4CEC2;
+	Wed,  4 Sep 2024 05:54:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725429291;
+	bh=pDZcotIHkEE1L9COrUn/fnSB2fVdzH08tCumXOdDPKQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=og1oklMK64rQw2DhxZjdNOpmuXJN+eI32oSS1J/ZqbWHobqxlgwp4Q4TSYVXbtqS3
+	 0oyMBQSUdSRxnCPYUrK6AW4+Tr4yLLwSXpB1IHpZEjB1s/Y8rt3aXi3WcY9O1/Uqiy
+	 9RRJoIkdJ/ak0v4gCP4UwGunORkmGWSPaF5eqm6kqyCBDUY9rZgMNy0qvCndpJZG56
+	 ZYxjnS/5QqViNZym19UtdOpE1pvVP+eniYBfFUBjTIQnf77OVJZ84BYWSErJ2Kz7Qc
+	 gR6DXf7NvMoiKYFAeBb2oZo4Tx8mYQSouLkqUrepK2B2uYn6t4CT6WU36m9FX24Lks
+	 4R5qIWL7OFXXA==
+Date: Wed, 4 Sep 2024 07:54:48 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, sudeep.holla@arm.com, andi.shyti@kernel.org, 
+	tglx@linutronix.de, will@kernel.org, robin.murphy@arm.com, joro@8bytes.org, 
+	jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org, amitk@kernel.org, 
+	thara.gopinath@gmail.com, broonie@kernel.org, cristian.marussi@arm.com, 
+	rui.zhang@intel.com, lukasz.luba@arm.com, wim@linux-watchdog.org, linux@roeck-us.net, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org, arm-scmi@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel@quicinc.com, quic_psodagud@quicinc.com
+Subject: Re: [PATCH v2 00/21] arm64: qcom: Introduce SA8255p Ride platform
+Message-ID: <glo34r35r2jqypeureu5dzoe6udkniqbma627jnv55ihfoatfu@ujvsxcsrhhdc>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] interconnect: qcom: add QCS8300 interconnect provider
- driver
-To: Konrad Dybcio <konradybcio@gmail.com>, Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC: Konrad Dybcio <konradybcio@kernel.org>,
-        Danila Tikhonov
-	<danila@jiaxyga.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        "Vladimir
- Lypak" <vladimir.lypak@gmail.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        "Sibi
- Sankar" <quic_sibis@quicinc.com>,
-        Rohit Agarwal <quic_rohiagar@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Andrew Halaney
-	<ahalaney@redhat.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
-        <quic_okukatla@quicinc.com>
-References: <20240827151622.305-1-quic_rlaggysh@quicinc.com>
- <20240827151622.305-3-quic_rlaggysh@quicinc.com>
- <159df608-e52c-4317-a1f2-d0f94ebfc25a@gmail.com>
-Content-Language: en-US
-From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-In-Reply-To: <159df608-e52c-4317-a1f2-d0f94ebfc25a@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: iYW4WaNr5DIcS6dWW0L_1chKhaGrJMY-
-X-Proofpoint-GUID: iYW4WaNr5DIcS6dWW0L_1chKhaGrJMY-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-04_02,2024-09-03_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 suspectscore=0 adultscore=0 bulkscore=0 malwarescore=0
- spamscore=0 lowpriorityscore=0 clxscore=1011 impostorscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2409040030
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240903220240.2594102-1-quic_nkela@quicinc.com>
 
+On Tue, Sep 03, 2024 at 03:02:19PM -0700, Nikunj Kela wrote:
+> This series enables the support for SA8255p Qualcomm SoC and Ride
+> platform. This platform uses SCMI power, reset, performance, sensor
+> protocols for resources(e.g. clocks, regulator, interconnect, phy etc.)
+> management. SA8255p is a virtual platforms that uses Qualcomm smc/hvc
+> transport driver.
+> 
+> Multiple virtual SCMI instances are being used to achieve the parallelism.
+> SCMI platform stack runs in SMP enabled VM hence allows platform to service
+> multiple resource requests in parallel. Each device is assigned its own
+> dedicated SCMI channel and Tx/Rx doorbells.
+> 
 
-On 8/30/2024 1:19 AM, Konrad Dybcio wrote:
-> On 27.08.2024 5:16 PM, Raviteja Laggyshetty wrote:
->> Add driver for the Qualcomm interconnect buses found in QCS8300
->> based platforms. The topology consists of several NoCs that are
->> controlled by a remote processor that collects the aggregated
->> bandwidth for each master-slave pairs.
->>
->> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->> ---
-> [...]
->
->> +static struct qcom_icc_bcm *dc_noc_bcms[] = {
->> +};
-> Please drop such empty nodes
+Do not attach (thread) your patchsets to some other threads (unrelated
+or older versions). This buries them deep in the mailbox and might
+interfere with applying entire sets.
 
-Thanks Konrad!
+It does not look like you tested the bindings, at least after quick
+look. Please run  (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Maybe you need to update your dtschema and yamllint.
 
-Sure,I will remove all the empty nodes in next patch revision.
+Best regards,
+Krzysztof
 
->
-> Konrad
 
