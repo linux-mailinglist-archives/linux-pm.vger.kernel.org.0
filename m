@@ -1,364 +1,300 @@
-Return-Path: <linux-pm+bounces-13621-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13622-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDF6096C780
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 21:27:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 969AF96C7C4
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 21:42:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30FFDB24E86
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 19:27:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F5061F26629
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2024 19:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22AF11E9754;
-	Wed,  4 Sep 2024 19:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9511E1E6DEA;
+	Wed,  4 Sep 2024 19:42:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="sz9VChhl"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="tj/4/nJY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D42301E766F;
-	Wed,  4 Sep 2024 19:25:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6CA78286A
+	for <linux-pm@vger.kernel.org>; Wed,  4 Sep 2024 19:42:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725477958; cv=none; b=RIZfBWMEzW0mJAkCBl10Hh1sm5U0hj6k5pc+7L+ldbMhnHx+sTWvau1YqdzpauG6svF6RCqpNMyI42/zjJ5Hg7E3tIKSg6Y5knWnLCDw3Gt8063urjc9o/voQL7YkWi+bSPMyzfUihPPniWhMW9yVJIYC11uA7B61xaYypX0G34=
+	t=1725478957; cv=none; b=U6TWxouUDfxFhrQlbNcjLdn9cSQhUYSFopD3jXzfwowGzW2j0YMuBN1yVqrsc5TpbrHeWp+NR3r8bxKRj+JrnUPKOThojfMoisqMcxcQ2/xbzsKOFbzv9H+VgA/pxiC82jUollOE0Oj8gHuAoa823J7TZT5aW6sLsT6rHK8Cyy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725477958; c=relaxed/simple;
-	bh=I85wCUmCzAyQhRIqum8155x0h1PMiQC3CXIyjhbPiJ0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=paLTYwW6l0FA2lvgFxAkoMJQmb+XWHEV0Phdf6hODbFUJRQDJ0VSC8cLzmwXsFZ8SWbi4Tcj6RtnLrSeRzozeqOAy1iuFrzuHhwgdj9ztLfmYboK6UbRhd6AEXjb+ZltJfMwz7ha9ppeE27CZKj4EweoCDOUyZKOgFHyQlgIYD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=sz9VChhl; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1725477950;
-	bh=I85wCUmCzAyQhRIqum8155x0h1PMiQC3CXIyjhbPiJ0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=sz9VChhlx6qVOF15zII4e53JOGDau/HSlbADRZS83apgOvxfdV5ap/x63S1/yUBFg
-	 l+XV6Ta8hiYlPNPs6qQYsdZNIvCyz6VMbAlKYOvWYPoE+Cd75iVN1huCL/tSn6gABQ
-	 SRKq3V5fV5SNJgjZeYEGbazj4ClqoE3c/KiE+lBg=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 04 Sep 2024 21:25:42 +0200
-Subject: [PATCH RFC v3 9/9] power: supply: cros_charge-control: use
- power_supply extensions
+	s=arc-20240116; t=1725478957; c=relaxed/simple;
+	bh=m6WtAER+1F11MfUMWmg5KEdZ9iGcA3C6UAVzQuGSz54=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pk802v08F2uKCWrfVrRlbyd4LW5WHHexKI7WuuIOZYpQGN+pb+JC/fYDtsewhh8cdaa8vnh5WN4KkcxwZepzMdYxyN9w3ZUMAGRZZkJFktu0uKAkT7te59oi+nvEBCxNj/pGmPdHk5tdMJpBr/QjHBgfYyes1bRP/mc5kAxAcKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=tj/4/nJY; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42bbe809b06so45606525e9.1
+        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2024 12:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725478952; x=1726083752; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CyLYto3aL8kOgp9Zk91CMri0QQCLg48XeOPUXir002c=;
+        b=tj/4/nJYlFVyg/b1gRZIBEBLFUQMKjuNnMHPUVfwX8eQUYs5S3HsZWaLJKvs6L5Ty0
+         eG4bwvMX1/s5a79qJ/0p4gcFIfiNkdrw+70LkyCVt9Yx4G8syEKOEqlT49O28rAxbvTG
+         8JPGa4h67SCS2mDE47gT13A0riRumapr0MmhVCOTy0FmwYNXPewX6iEsoiuypqS8Ckvp
+         DQ7kAK9V+PXU+fu7MiM2Fgn4WvgSEJ5GR5QaY+9KFSWkDczj3i1U7RZqjmLLZRoon/Yq
+         jvHcrCRvRjSUBF2HGIwvaDpkyNPA2uVWYURpQHSfH8CoQYxMpzyS5ZSnX/+wPxicy0Lr
+         Y17g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725478952; x=1726083752;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CyLYto3aL8kOgp9Zk91CMri0QQCLg48XeOPUXir002c=;
+        b=vpQXUEzlAIl3mvDNYOmD3S+BLAhSgsgmTaMr6RwTey54i3GR4GoN75UiYWKKWifXd6
+         +TZwlxsHfnsk9a//oN+MTZTy8GHhFN+0+wAIRRky9NU4PNXbP6BGHl91UN6qHQtZE+vM
+         JPItyD68CI5wZDboB2XIxXCq/wkHs2MomslJBawZSPF28AnE2J3sWuZefqj4OKFa2Suz
+         jY9idAQ3kI7NouD4kkA9UuZ/JAOJmH69FpwgC+TFJR+izP+A3dBo3puoE9xtjh86Yfts
+         mEttp13Wodh5XacFnsYpZByenVHl1PizYDQBlE/dUarz7fJkJ+YayFOUdJxsOlNYjpxO
+         ZXIg==
+X-Forwarded-Encrypted: i=1; AJvYcCW8myb4dcT2jcP/1VtULMPS4EdPJs8pN9VJEyH9TCggeCNHLEKMk2Cfhd/P72xvntTaiJAgKSh0cw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6acFrBDN/quH3Hswiux1Cx5FvQ48aF/EOSmZxYEipEDJBcSyw
+	m7I1jYSdzYNuc2jO4j2fiZm5qCXEfDKkFSynabMlijk0JLcOhRV4ozr59ggGAJY=
+X-Google-Smtp-Source: AGHT+IHj+X7o9/Siz24ePquVbJTJ8zl9B2u4l/XgtNSjVWj00QZ3pu8obGFuoMfmE4qXqtR0cVwLpg==
+X-Received: by 2002:a05:600c:5110:b0:42b:afe3:e9f4 with SMTP id 5b1f17b1804b1-42bb02c10b2mr166953895e9.3.1725478952007;
+        Wed, 04 Sep 2024 12:42:32 -0700 (PDT)
+Received: from blmsp.fritz.box ([2001:4091:a247:83d8:caa7:e645:3612:56b6])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-374c03595fcsm12473625f8f.98.2024.09.04.12.42.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Sep 2024 12:42:31 -0700 (PDT)
+From: Markus Schneider-Pargmann <msp@baylibre.com>
+To: Nishanth Menon <nm@ti.com>,
+	Tero Kristo <kristo@kernel.org>,
+	Santosh Shilimkar <ssantosh@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Vibhore Vardhan <vibhore@ti.com>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Dhruva Gole <d-gole@ti.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH v12 0/5] firmware: ti_sci: Introduce system suspend support
+Date: Wed,  4 Sep 2024 21:42:24 +0200
+Message-ID: <20240904194229.109886-1-msp@baylibre.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240904-power-supply-extensions-v3-9-62efeb93f8ec@weissschuh.net>
-References: <20240904-power-supply-extensions-v3-0-62efeb93f8ec@weissschuh.net>
-In-Reply-To: <20240904-power-supply-extensions-v3-0-62efeb93f8ec@weissschuh.net>
-To: Sebastian Reichel <sre@kernel.org>, Armin Wolf <W_Armin@gmx.de>, 
- Hans de Goede <hdegoede@redhat.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725477949; l=10831;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=I85wCUmCzAyQhRIqum8155x0h1PMiQC3CXIyjhbPiJ0=;
- b=1JkghiKquNkJ5fqd5PBa1fM0w7b/XqGuuzQNcj7TdMkmJw5BRkFSITensasnFAAFLSQ80sC/x
- 5DKM7ASy8+hB8/BudeecqME+JkGGEQdh8Z/MoxlxdK14vmkiUIyQfuK
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Power supply extensions provide an easier mechanism to implement
-additional properties for existing power supplies.
-Use that instead of reimplementing the sysfs attributes manually.
+Abstract
+********
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- drivers/power/supply/cros_charge-control.c | 207 +++++++++++------------------
- 1 file changed, 78 insertions(+), 129 deletions(-)
+This series introduces necessary ti_sci driver functionality to support
+various Suspend-to-RAM modes on TI AM62 family of devices. These Low
+Power Modes include Deep Sleep and MCU Only as described in section
+"6.2.4 Power Modes" of the AM62P Technical Reference Manual [0].
 
-diff --git a/drivers/power/supply/cros_charge-control.c b/drivers/power/supply/cros_charge-control.c
-index 17c53591ce19..dbfd87f8eb1d 100644
---- a/drivers/power/supply/cros_charge-control.c
-+++ b/drivers/power/supply/cros_charge-control.c
-@@ -18,13 +18,6 @@
- 					 BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)   | \
- 					 BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE))
- 
--enum CROS_CHCTL_ATTR {
--	CROS_CHCTL_ATTR_START_THRESHOLD,
--	CROS_CHCTL_ATTR_END_THRESHOLD,
--	CROS_CHCTL_ATTR_CHARGE_BEHAVIOUR,
--	_CROS_CHCTL_ATTR_COUNT
--};
--
- /*
-  * Semantics of data *returned* from the EC API and Linux sysfs differ
-  * slightly, also the v1 API can not return any data.
-@@ -41,13 +34,7 @@ struct cros_chctl_priv {
- 	struct power_supply *hooked_battery;
- 	u8 cmd_version;
- 
--	/* The callbacks need to access this priv structure.
--	 * As neither the struct device nor power_supply are under the drivers
--	 * control, embed the attributes within priv to use with container_of().
--	 */
--	struct device_attribute device_attrs[_CROS_CHCTL_ATTR_COUNT];
--	struct attribute *attributes[_CROS_CHCTL_ATTR_COUNT];
--	struct attribute_group group;
-+	struct power_supply_ext psy_ext;
- 
- 	enum power_supply_charge_behaviour current_behaviour;
- 	u8 current_start_threshold, current_end_threshold;
-@@ -114,123 +101,86 @@ static int cros_chctl_configure_ec(struct cros_chctl_priv *priv)
- 	return cros_chctl_send_charge_control_cmd(priv->cros_ec, priv->cmd_version, &req);
- }
- 
--static struct cros_chctl_priv *cros_chctl_attr_to_priv(struct attribute *attr,
--						       enum CROS_CHCTL_ATTR idx)
--{
--	struct device_attribute *dev_attr = container_of(attr, struct device_attribute, attr);
-+static const enum power_supply_property cros_chctl_psy_ext_props[] = {
-+	POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD,
-+	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD,
-+	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
-+};
- 
--	return container_of(dev_attr, struct cros_chctl_priv, device_attrs[idx]);
--}
-+static const enum power_supply_property cros_chctl_psy_ext_props_v1[] = {
-+	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
-+};
- 
--static ssize_t cros_chctl_store_threshold(struct device *dev, struct cros_chctl_priv *priv,
--					  int is_end_threshold, const char *buf, size_t count)
-+static int cros_chctl_psy_ext_get_prop(struct power_supply *psy,
-+				       const struct power_supply_ext *ext,
-+				       void *data,
-+				       enum power_supply_property psp,
-+				       union power_supply_propval *val)
- {
--	int ret, val;
-+	struct cros_chctl_priv *priv = data;
- 
--	ret = kstrtoint(buf, 10, &val);
--	if (ret < 0)
--		return ret;
--	if (val < 0 || val > 100)
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD:
-+		val->intval = priv->current_start_threshold;
-+		return 0;
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
-+		val->intval = priv->current_end_threshold;
-+		return 0;
-+	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-+		val->intval = priv->current_behaviour;
-+		return 0;
-+	default:
- 		return -EINVAL;
--
--	if (is_end_threshold) {
--		if (val <= priv->current_start_threshold)
--			return -EINVAL;
--		priv->current_end_threshold = val;
--	} else {
--		if (val >= priv->current_end_threshold)
--			return -EINVAL;
--		priv->current_start_threshold = val;
--	}
--
--	if (priv->current_behaviour == POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO) {
--		ret = cros_chctl_configure_ec(priv);
--		if (ret < 0)
--			return ret;
- 	}
--
--	return count;
--}
--
--static ssize_t charge_control_start_threshold_show(struct device *dev,
--						   struct device_attribute *attr,
--						   char *buf)
--{
--	struct cros_chctl_priv *priv = cros_chctl_attr_to_priv(&attr->attr,
--							       CROS_CHCTL_ATTR_START_THRESHOLD);
--
--	return sysfs_emit(buf, "%u\n", (unsigned int)priv->current_start_threshold);
--}
--
--static ssize_t charge_control_start_threshold_store(struct device *dev,
--						    struct device_attribute *attr,
--						    const char *buf, size_t count)
--{
--	struct cros_chctl_priv *priv = cros_chctl_attr_to_priv(&attr->attr,
--							       CROS_CHCTL_ATTR_START_THRESHOLD);
--
--	return cros_chctl_store_threshold(dev, priv, 0, buf, count);
--}
--
--static ssize_t charge_control_end_threshold_show(struct device *dev, struct device_attribute *attr,
--						 char *buf)
--{
--	struct cros_chctl_priv *priv = cros_chctl_attr_to_priv(&attr->attr,
--							       CROS_CHCTL_ATTR_END_THRESHOLD);
--
--	return sysfs_emit(buf, "%u\n", (unsigned int)priv->current_end_threshold);
--}
--
--static ssize_t charge_control_end_threshold_store(struct device *dev, struct device_attribute *attr,
--						  const char *buf, size_t count)
--{
--	struct cros_chctl_priv *priv = cros_chctl_attr_to_priv(&attr->attr,
--							       CROS_CHCTL_ATTR_END_THRESHOLD);
--
--	return cros_chctl_store_threshold(dev, priv, 1, buf, count);
- }
- 
--static ssize_t charge_behaviour_show(struct device *dev, struct device_attribute *attr, char *buf)
--{
--	struct cros_chctl_priv *priv = cros_chctl_attr_to_priv(&attr->attr,
--							       CROS_CHCTL_ATTR_CHARGE_BEHAVIOUR);
--
--	return power_supply_charge_behaviour_show(dev, EC_CHARGE_CONTROL_BEHAVIOURS,
--						  priv->current_behaviour, buf);
--}
- 
--static ssize_t charge_behaviour_store(struct device *dev, struct device_attribute *attr,
--				      const char *buf, size_t count)
-+static int cros_chctl_psy_ext_set_prop(struct power_supply *psy,
-+				       const struct power_supply_ext *ext,
-+				       void *data,
-+				       enum power_supply_property psp,
-+				       const union power_supply_propval *val)
- {
--	struct cros_chctl_priv *priv = cros_chctl_attr_to_priv(&attr->attr,
--							       CROS_CHCTL_ATTR_CHARGE_BEHAVIOUR);
-+	struct cros_chctl_priv *priv = data;
- 	int ret;
- 
--	ret = power_supply_charge_behaviour_parse(EC_CHARGE_CONTROL_BEHAVIOURS, buf);
--	if (ret < 0)
--		return ret;
--
--	priv->current_behaviour = ret;
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD:
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
-+		if (val->intval < 0 || val->intval > 100)
-+			return -EINVAL;
- 
--	ret = cros_chctl_configure_ec(priv);
--	if (ret < 0)
--		return ret;
-+		if (psp == POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD) {
-+			if (val->intval <= priv->current_start_threshold)
-+				return -EINVAL;
-+			priv->current_end_threshold = val->intval;
-+		} else {
-+			if (val->intval >= priv->current_end_threshold)
-+				return -EINVAL;
-+			priv->current_start_threshold = val->intval;
-+		}
-+
-+		if (priv->current_behaviour == POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO) {
-+			ret = cros_chctl_configure_ec(priv);
-+			if (ret < 0)
-+				return ret;
-+		}
- 
--	return count;
-+		return 0;
-+	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-+		priv->current_behaviour = val->intval;
-+		return cros_chctl_configure_ec(priv); /* FIXME > 0 */
-+	default:
-+		return -EINVAL;
-+	}
- }
- 
--static umode_t cros_chtl_attr_is_visible(struct kobject *kobj, struct attribute *attr, int n)
-+static int cros_chctl_psy_prop_is_writeable(struct power_supply *psy,
-+					    const struct power_supply_ext *ext,
-+					    void *data,
-+					    enum power_supply_property psp)
- {
--	struct cros_chctl_priv *priv = cros_chctl_attr_to_priv(attr, n);
--
--	if (priv->cmd_version < 2) {
--		if (n == CROS_CHCTL_ATTR_START_THRESHOLD)
--			return 0;
--		if (n == CROS_CHCTL_ATTR_END_THRESHOLD)
--			return 0;
--	}
--
--	return attr->mode;
-+	return true;
- }
- 
- static int cros_chctl_add_battery(struct power_supply *battery, struct acpi_battery_hook *hook)
-@@ -241,7 +191,7 @@ static int cros_chctl_add_battery(struct power_supply *battery, struct acpi_batt
- 		return 0;
- 
- 	priv->hooked_battery = battery;
--	return device_add_group(&battery->dev, &priv->group);
-+	return power_supply_register_extension(battery, &priv->psy_ext, priv);
- }
- 
- static int cros_chctl_remove_battery(struct power_supply *battery, struct acpi_battery_hook *hook)
-@@ -249,7 +199,7 @@ static int cros_chctl_remove_battery(struct power_supply *battery, struct acpi_b
- 	struct cros_chctl_priv *priv = container_of(hook, struct cros_chctl_priv, battery_hook);
- 
- 	if (priv->hooked_battery == battery) {
--		device_remove_group(&battery->dev, &priv->group);
-+		power_supply_unregister_extension(battery, &priv->psy_ext);
- 		priv->hooked_battery = NULL;
- 	}
- 
-@@ -275,7 +225,6 @@ static int cros_chctl_probe(struct platform_device *pdev)
- 	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
- 	struct cros_ec_device *cros_ec = ec_dev->ec_dev;
- 	struct cros_chctl_priv *priv;
--	size_t i;
- 	int ret;
- 
- 	ret = cros_chctl_fwk_charge_control_versions(cros_ec);
-@@ -305,23 +254,23 @@ static int cros_chctl_probe(struct platform_device *pdev)
- 	dev_dbg(dev, "Command version: %u\n", (unsigned int)priv->cmd_version);
- 
- 	priv->cros_ec = cros_ec;
--	priv->device_attrs[CROS_CHCTL_ATTR_START_THRESHOLD] =
--		(struct device_attribute)__ATTR_RW(charge_control_start_threshold);
--	priv->device_attrs[CROS_CHCTL_ATTR_END_THRESHOLD] =
--		(struct device_attribute)__ATTR_RW(charge_control_end_threshold);
--	priv->device_attrs[CROS_CHCTL_ATTR_CHARGE_BEHAVIOUR] =
--		(struct device_attribute)__ATTR_RW(charge_behaviour);
--	for (i = 0; i < _CROS_CHCTL_ATTR_COUNT; i++) {
--		sysfs_attr_init(&priv->device_attrs[i].attr);
--		priv->attributes[i] = &priv->device_attrs[i].attr;
--	}
--	priv->group.is_visible = cros_chtl_attr_is_visible;
--	priv->group.attrs = priv->attributes;
- 
- 	priv->battery_hook.name = dev_name(dev);
- 	priv->battery_hook.add_battery = cros_chctl_add_battery;
- 	priv->battery_hook.remove_battery = cros_chctl_remove_battery;
- 
-+	if (priv->cmd_version == 1) {
-+		priv->psy_ext.properties = cros_chctl_psy_ext_props_v1;
-+		priv->psy_ext.num_properties = ARRAY_SIZE(cros_chctl_psy_ext_props_v1);
-+	} else {
-+		priv->psy_ext.properties = cros_chctl_psy_ext_props;
-+		priv->psy_ext.num_properties = ARRAY_SIZE(cros_chctl_psy_ext_props);
-+	}
-+	priv->psy_ext.charge_behaviours = EC_CHARGE_CONTROL_BEHAVIOURS;
-+	priv->psy_ext.get_property = cros_chctl_psy_ext_get_prop;
-+	priv->psy_ext.set_property = cros_chctl_psy_ext_set_prop;
-+	priv->psy_ext.property_is_writeable = cros_chctl_psy_prop_is_writeable;
-+
- 	priv->current_behaviour = POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
- 	priv->current_start_threshold = 0;
- 	priv->current_end_threshold = 100;
+Summary
+*******
+
+This series is a restructuring and rebase of the patch series by
+Dave Gerlach [1] and Dhruva Gole [2]. It applies on top of Linux
+6.11-rc1.
+
+The kernel triggers entry to Low Power Mode through the mem suspend
+transition with the following:
+
+* At the  bootloader stage, one is  expected to package the  TIFS stub
+  which then gets  pulled into the Tightly coupled memory  of the Device
+  Mgr  (DM) R5  when it  starts up.  If using  U-Boot, then  it requires
+  tispl.bin to contain the TIFS stub. Refer to documentation in upstream
+  u-boot[3] for further details. The  supported firmware version is from
+  TI Processor SDK >= 10.00 ie. tag 10.00.04 from ti-linux-firmware [4].
+
+* Use a TF-A binary that supports PSCI_SYSTEM_SUSPEND call. This causes
+  system to use PSCI system suspend as last step of mem sleep.
+
+* We add support for the TISCI_MSG_QUERY_FW_CAPS message, used to retrieve
+  the firmware capabilities of the currently running system firmware [6].
+  Sysfw version >= 10.00.04 support LPM_DM_MANAGED capability, where
+  Device Mgr firmware now manages which low power mode is chosen. Going
+  forward, this is the default configuration supported for TI AM62 family
+  of devices. The state chosen by the DM can be influenced by sending
+  constraints using the new LPM constraint APIs. (Patch 1)
+
+* The firmware requires that the OS sends a TISCI_MSG_PREPARE_SLEEP
+  message in order to provide details about suspend. The ti_sci driver
+  must send this message to firmware with the above information
+  included, which it does during the driver suspend handler when
+  PM_MEM_SUSPEND is the determined state being entered. The mode being
+  sent depends on whether firmware capabilities have support for
+  LPM_DM_MANAGED feature. Legacy firmware or those supporting other
+  modes can extend the mode selection logic as needed. (Patch 2)
+
+* We also add the remaining TISCI Low Power Mode messages required for
+  inquiring wake reason and managing LPM constraints as part of a new PM
+  ops. These messages are part of the TISCI PM Low Power Mode API [5].
+  (Patch 3)
+
+* Finally if any CPUs have PM QoS resume latency constraints set, we
+  aggregate these and set the TISCI system-wide latency constraint.
+  (Patch 4)
+
+Testing
+*******
+
+This series can for example be tested with a am62a-lp-sk board.
+
+For am62a-lp-sk all usb nodes have to be disabled at the moment (usbss0,
+usb0, usbss1 and usb1). There is currently an issue with USB Link Power
+Management and turning off the USB device which is being worked on.
+
+Once booted suspend/resume can be tested with rtcwake:
+  $ rtcwake -m mem -s 10 -d /dev/rtc0
+
+Make sure /dev/rtc0 corresponds to rtc-ti-k3:
+  $ dmesg | grep rtc-ti-k3
+  rtc-ti-k3 2b1f0000.rtc: registered as rtc0
+
+Base commit:
+************
+
+v6.11-rc1
+
+Changelog:
+**********
+v12:
+- Add patch to add an export for dev_pm_qos_read_value() to fix module
+  build on KEYSTONE
+- Remove include of linux/dev_printk.h
+
+v11:
+- Add dev_err() in many error cases
+- Fix a typo in the commit message of 'firmware: ti_sci: Add support for
+  querying the firmware caps'
+- Fix URL in commit message
+- Unify error handling and printing over the added ti_sci_cmd_*
+  functions
+- Use dev_* instead of pr_*
+- Add a debug message listing the capabilities the firmware returned
+- Add a small comment describing why context address is 0x0
+- Removed unnecessary debug prints
+- Restructure the ifdefs for pm ops as suggested
+- Only print the wake reason if there was no error. If there is an
+  error, the ti_sci_cmd_lpm_wake_reason already printed an error. As a
+  missing reason is not critical, the error is ignored and the system
+  continues to resume
+- Remove wakeup source macros from sci_protocol.h
+
+v10:
+- add "wake reason" handling which is also supported by 10.x
+  firmware update, but was mistakenly left out of v9
+- fix debug print of which CPU caused max CPU latency
+- update TRM pointer[0] to point to AM62P TRM which has better
+  description of low-power modes shared across AM62P family
+- update u-boot documentaion pointer to point to upstream u-boot
+  commit.
+
+v9:
+- Include Kevin's patch to add CPU latency constraint management into
+  this series. Posted here in v3:
+  https://lore.kernel.org/lkml/20240802214220.3472221-1-khilman@baylibre.com/
+- reorder patches to avoid any build warnings
+- ti_sci_cmd_prepare_sleep was moved into the patch that adds suspend
+  and resume calls
+- pmops wake_reason is now only set if the capabilities exist
+- Use pmops pointer instead of full path
+
+v8:
+- Restructuring of code to include all TISCI PM LPM ops
+- Removing malloc related to TIFS Stub as it is managed by DM
+- Dropping has_lpm check as suggested by Nishanth
+- Using LPM_DM_MANAGED capability for mode selection
+- Updating the suspend and resume callback handlers
+
+v7:
+- Address Andrew's concerns on SYSFW fw_caps API
+- Remove all the unused functions and variables including
+  set_io_isolation and wake_reason calls
+- use dma_free_attrs
+- remove IO isolation related code from linux side,
+
+v6:
+- link to v6 [5]
+- Loading of FS Stub from linux no longer needed, hence drop that patch,
+- Drop 1/6 and 5/6 from the previous series [4].
+- Add system suspend resume callbacks which were removed in
+commit 9225bcdedf16297a346082e7d23b0e8434aa98ed ("firmware: ti_sci: Use
+system_state to determine polling")
+- Use IO isolation while putting the system in suspend to RAM
+
+v5:
+- Add support (patch 3) for detecting the low power modes (LPM) of the
+  FW/SoC with a recently introduced core TISCI_MSG_QUERY_FW_CAPS message.
+- Use TISCI_MSG_QUERY_FW_CAPS instead of misusing the
+  TISCI_MSG_PREPARE_SLEEP to detect the FW/SoC low power caps (patch 4).
+- Take into account the supported LPMs in ti_sci_prepare_system_suspend()
+  and handle the case when CONFIG_SUSPEND is not enabled (patch 6) that
+  was reported by Roger Quadros and LKP.
+- Pick up Rob Herring's "Reviewed-by" tag for the binding patch.
+
+v4:
+- Fix checkpacth warnings in patches 2 and 3.
+- Drop the links with anchors in patch 2.
+
+v3:
+- Fix the compile warnings on 32-bit platforms reported by the kernel
+  test robot in patches (3,5).
+- Pick up Roger's "Tested-by" tags.
+
+v2:
+- Addressed comments received for v1 series [1].
+- Updated v1 patch 5 to use pm notifier to avoid firmware loading
+  issues.
+- Dropped the reserved region requirement and allocate DMA memory
+  instead. The reserved region binding patch is also removed.
+- Introduce two more TISCI LPM messages that are supported in SysFW.
+- Fixes in error handling.
+
+References:
+***********
+
+[0] https://www.ti.com/lit/pdf/spruiv7
+[1] https://lore.kernel.org/lkml/20220421203659.27853-1-d-gerlach@ti.com
+[2] https://lore.kernel.org/lkml/20230804115037.754994-1-d-gole@ti.com
+[3] https://source.denx.de/u-boot/u-boot/-/commit/962f60abca82bb11501bc0c627abacda15bed076
+[4] https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/commit/?h=10.00.06&id=193f7d7570583a41ddc50a221e37c32be6be583e
+[5] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/pm/lpm.html
+[6] https://downloads.ti.com/tisci/esd/latest/2_tisci_msgs/general/core.html#tisci-msg-query-fw-caps
+
+Dave Gerlach (1):
+  firmware: ti_sci: Introduce Power Management Ops
+
+Georgi Vlaev (1):
+  firmware: ti_sci: Add support for querying the firmware caps
+
+Kevin Hilman (1):
+  firmware: ti_sci: add CPU latency constraint management
+
+Markus Schneider-Pargmann (1):
+  PM: QoS: Export dev_pm_qos_read_value
+
+Vibhore Vardhan (1):
+  firmware: ti_sci: Add system suspend and resume call
+
+ drivers/base/power/qos.c               |   1 +
+ drivers/firmware/ti_sci.c              | 489 ++++++++++++++++++++++++-
+ drivers/firmware/ti_sci.h              | 143 +++++++-
+ include/linux/soc/ti/ti_sci_protocol.h |  30 ++
+ 4 files changed, 661 insertions(+), 2 deletions(-)
 
 -- 
-2.46.0
+2.45.2
 
 
