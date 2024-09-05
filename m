@@ -1,162 +1,103 @@
-Return-Path: <linux-pm+bounces-13679-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13680-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB6C696D69A
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 13:01:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDA0E96D6C5
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 13:09:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94DA02890F4
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 11:01:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2AE641C232F8
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 11:09:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B2521990D0;
-	Thu,  5 Sep 2024 11:01:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dAYCwFX+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F481991D7;
+	Thu,  5 Sep 2024 11:09:52 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680E719882C
-	for <linux-pm@vger.kernel.org>; Thu,  5 Sep 2024 11:01:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1782F197A95;
+	Thu,  5 Sep 2024 11:09:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725534096; cv=none; b=cD0pgNkmB4VBzRAW+R82cUmGdj5vbJbTf/2d6iH+9HhGKpkBIwaITMd/mSjiXPadLP5UmqL9+As30WqLScOe7b4PTFBKxWu3Gs0HCTSIrkg8MVWkSqNOg8gSSMAGf7+upoh8GnDVcbjgCSnuf3Lp+MkbdWxXX7LqjPSC5hOZ+ew=
+	t=1725534592; cv=none; b=FcIVj5lqjkFdLTPJ6gdQKchfAyTrDBIbIHzoGfHLrZgZzxEQM+AYnzsXMkbR8nWLFqMddJybQ0chDQ210JNNpkzX68qQiGaQt8GIMXslZTFrkQvAcCnJv+PBGIUQxrBNZUjlJrM1dlxb/FFA8nEomfoUokrgKbP8jbglwa3CiOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725534096; c=relaxed/simple;
-	bh=JgHWmEdFW5z3HkM4HSGAm74ONvRDhRCNMRmZO+WBYyw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Za4z/ETsfra6W1GpN2iksAe+iZwlQTVY+SXVeM6mZAZxQDf6LMN+cnKD2B4xP37lfw/cGwkwvxaSLGRi2uTa0ni/MJXU8BBw+jefIZL9uAyG3fAQsV7u18L46hUpv6cwbvg8lZdWdyJKwSrlgNR+um8/mnnHB4JPae/SI1j3ILA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dAYCwFX+; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e1cf1a4865aso626560276.2
-        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2024 04:01:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725534094; x=1726138894; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=C6/VyCawGPR4Tyr2HItJUWfFrk+UdniGuvNz3Sm7eyQ=;
-        b=dAYCwFX+/DSUOhAgLhmmySdh9gNU3MvLED0rUqGxLA4Ni3yyPAz3f88KGVfxEWRh3N
-         avq/pDcTIqGCSca7zJ41gVRmRgEyIi78B92IWI9lqQTVzmguEMGDdEQtSBBEsekaRsfr
-         FGsQ0dj0OT4YADtHKZa2SGQNCncFuiNQr1+PrLuQ3pGqkONsJ+UbUCaZApcdEcVRqag4
-         c9iUjuY5gMkRrXhFJchAoANHrS9RZ/ohsl0lXdQP4WHJ3z3jRS+HRfpS7/hYkNrUbKPP
-         IYHoo2fthGu7xPL9pDWx2gO0uM7cF03SGhs2rgGdvgDdJjG838zGVlzyv1mZ6rvvBBLD
-         MXMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725534094; x=1726138894;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C6/VyCawGPR4Tyr2HItJUWfFrk+UdniGuvNz3Sm7eyQ=;
-        b=pVMrzOQSyXjqtK9Aw22aAodz4ir+e0NGpIioRAqxtksL2TsModRNvXntLXfSyzh3+4
-         56VI2G0q7xaE2U/IOXqHZ+F2Ox/Rkffut3Gtr13G1pVlynnjwycEw54KI+5qsBoex+ZE
-         DJIjQYzm3t+GIPDOUpWRZZQygOb9hbL+cwFbpgq/W/3xKVz1gZQgdcfGt17G7pTnoYR9
-         ngItGSvlZVxPQ4rKbACQKToZjg6wj8SFz9k/5gAIZvNmKc3FX5vacYSu/gVk54F0BXlJ
-         gq74rV/dTDKi6SRe0UddrYW1bpCykaxvvF8/fvCJ2o6fJdA5VfDeOLkvwT510NMtIbrk
-         qblw==
-X-Forwarded-Encrypted: i=1; AJvYcCWtqlS8a/TEbH1SfpB33poNS7snZf0+WBCIEedLGjBYoxRieekaWMXMOiXTrgf9bdGjAuGyUYCmag==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzePULglmyphOZY2eyEJQLbX7cpOszIjDS7jgHNO0Jq/WZSKYRZ
-	SOZ5FIjO8Bfzw25MzjFgY6Jc7jRhLFcecvKEEBfCG3nKqwzcPoRK5NmvBYURuZY3YHWbiUWUTID
-	HdCtGVdX0fhzbZSeRfzLkiYlntnNirmRrXyLfvQ==
-X-Google-Smtp-Source: AGHT+IGjKTK3wpnOajjw2EZiT/LHB7MtbeSOSePCGgXYg1P1DVmGgHJiCauYYaxBabeuh5ndjKAzsRhaaMz4bajl7ps=
-X-Received: by 2002:a05:6902:1683:b0:e1d:542:ba8f with SMTP id
- 3f1490d57ef6-e1d0542bc31mr8719953276.6.1725534094123; Thu, 05 Sep 2024
- 04:01:34 -0700 (PDT)
+	s=arc-20240116; t=1725534592; c=relaxed/simple;
+	bh=A2hc+vsL27uqFzsXHm/VUr96bo32AqMtbs3ZDihMcLY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GDxwz/ApK1CcK3/zzMD7RGuUE29FHUx49FFJZmkh4KmmYXIFuvicyOkMgJ1Uw7kcYw2s4ibt7xLLJAlzNmA7sf9baZ/caykkck2M/dbBQpL8yXZnc40mVUW7mKXLIFr6aQuSv5WKHkU+0ZMhAooWGS4zzdnjirMXgZ/dlutofTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC988FEC;
+	Thu,  5 Sep 2024 04:10:16 -0700 (PDT)
+Received: from [10.1.32.66] (e127648.arm.com [10.1.32.66])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B16F33F73B;
+	Thu,  5 Sep 2024 04:09:48 -0700 (PDT)
+Message-ID: <e4aa650b-707b-4ba4-91b5-8cd021054b12@arm.com>
+Date: Thu, 5 Sep 2024 12:09:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240708-topic-cpr3h-v15-0-5bc8b8936489@linaro.org>
-In-Reply-To: <20240708-topic-cpr3h-v15-0-5bc8b8936489@linaro.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 5 Sep 2024 13:00:58 +0200
-Message-ID: <CAPDyKFpo+nr+jSVZoxVVhLwi_FZfwg3cPTGfQOpjOG5np_cMPQ@mail.gmail.com>
-Subject: Re: [PATCH v15 00/10] Add support for Core Power Reduction v3, v4 and Hardened
-To: Konrad Dybcio <konradybcio@kernel.org>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Andy Gross <agross@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Viresh Kumar <vireshk@kernel.org>, 
-	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Niklas Cassel <nks@flawful.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Jeffrey Hugo <quic_jhugo@quicinc.com>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, 
-	Varadarajan Narayanan <quic_varada@quicinc.com>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHSET v6 0/4] Split iowait into two states
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+ linux-kernel@vger.kernel.org, tglx@linutronix.de, daniel.lezcano@linaro.org,
+ linux-pm@vger.kernel.org
+References: <20240819154259.215504-1-axboe@kernel.dk>
+ <20240904142841.GL4723@noisy.programming.kicks-ass.net>
+ <CAJZ5v0iZqKGG+wCZYrA1t7mXvrW6Fo-Zb3d17Bofg3NSb2kPEg@mail.gmail.com>
+ <CAJZ5v0hVghgKgv0zqabL1m2FT6wou8-tW_9Mm-_9=0-3yhMb3A@mail.gmail.com>
+ <20240905093607.GB15400@noisy.programming.kicks-ass.net>
+ <3efadac3-1aa0-4747-b140-3fb6f267586e@arm.com>
+ <20240905110006.GF15400@noisy.programming.kicks-ass.net>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20240905110006.GF15400@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 8 Jul 2024 at 14:22, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> Changes in v15:
-> - Rebase (incl. genpd -> pmdomain rename)
-> - Change the maintainer to myself
-> - Drop tested-bys
-> - Rewrite some commit messages
-> - Temporarily drop CPR3 support (easy to add back, adds complexity and
->   requires more testing.. unnecessarily slowing down this already 3+
->   years old series)
-> - Boring style changes (fix indentation etc.)
-> - Sprinkle a lot of dev_err_probe to make failures meaningful at all
-> - Fix some misleading comments
-> - Rename the "cprh" power domain to "perf"
-> - Allow and mark the CPR OPPs as shared
-> - Include fixes equivalent to Varadarajan's (over at:
->   https://github.com/quic-varada/cpr/commit/f025f13a2e64b13c8e7866bedc3bfa73f2aaf162)
+On 9/5/24 12:00, Peter Zijlstra wrote:
+> On Thu, Sep 05, 2024 at 11:31:09AM +0100, Christian Loehle wrote:
+>> On 9/5/24 10:36, Peter Zijlstra wrote:
+>>> On Wed, Sep 04, 2024 at 05:18:57PM +0200, Rafael J. Wysocki wrote:
+>>>
+>>>> To be more precise, there are two different uses of "iowait" in PM.
+>>>>
+>>>> One is the nr_iowait_cpu() call in menu_select() and the result of it
+>>>> is used for two purposes: (1) select different sets of statistics
+>>>> depending on whether or not this number is zero and (2) set a limit
+>>>> for the idle state's exit latency that depends on this number (but
+>>>> note that it only takes effect when the "iowait" statistics are used
+>>>> in the first place).  Both of these are arguably questionable and it
+>>>> is unclear to me whether or not they actually help and how much.
+>>>
+>>> So this one is very dubious, it relies on tasks getting back on the CPU
+>>> they went to sleep on -- not guaranteed at all.
+>>>
+>>>> The other use is boosting CPU frequency in schedutil and intel_pstate
+>>>> if SCHED_CPUFREQ_IOWAIT is passed to them which in turn depends on the
+>>>> p->in_iowait value in enqueue_task_fair().
+>>>
+>>> This one is fine and makes sense. At this point we know that p is going
+>>> to run and where it is going to run.
+>>
+>> On any even remotely realistic scenario and hardware though the boost
+>> isn't effective until the next enqueue-dequeue-cycle, so if your above
+>> objection is based on that, I would object here too, using your argument.
+> 
+> That is a quality of implementation issue with schedutil no?
 
-[...]
-
-> AngeloGioacchino Del Regno (6):
->       dt-bindings: soc: qcom: cpr3: Add bindings for CPR3+ driver
->       soc: qcom: cpr: Move common functions to new file
->       soc: qcom: cpr-common: Add support for flat fuse adjustment
->       soc: qcom: cpr-common: Add threads support
->       soc: qcom: Add a driver for CPR3+
->       arm64: dts: qcom: msm8998: Configure CPRh
->
-> Konrad Dybcio (4):
->       MAINTAINERS: Include new Qualcomm CPR drivers in the file list
->       dt-bindings: opp: v2-qcom-level: Document CPR3 open/closed loop volt adjustment
->       dt-bindings: opp: v2-qcom-level: Allow opp-shared
->       soc: qcom: cpr: Use u64 for frequency
->
-
-I have done a quick review of this series and looked a bit more at
-patch9. Nothing that I found really stands out, so overall this looks
-okay to me. Anyway, allow me to have a closer look, in particular at
-patch9 in the next submitted version too.
-
-One nitpick though, please update the prefix to "pmdomain: qcom*", for
-those patches that belong to the pmdomain subsystem.
-
->  .../devicetree/bindings/opp/opp-v2-qcom-level.yaml |   16 +
->  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    |  286 +++
->  MAINTAINERS                                        |    5 +-
->  arch/arm64/boot/dts/qcom/msm8998.dtsi              |  760 ++++++
->  drivers/pmdomain/qcom/Kconfig                      |   22 +
->  drivers/pmdomain/qcom/Makefile                     |    2 +
->  drivers/pmdomain/qcom/cpr-common.c                 |  362 +++
->  drivers/pmdomain/qcom/cpr-common.h                 |  109 +
->  drivers/pmdomain/qcom/cpr.c                        |  394 +--
->  drivers/pmdomain/qcom/cpr3.c                       | 2711 ++++++++++++++++++++
->  include/soc/qcom/cpr.h                             |   17 +
->  11 files changed, 4314 insertions(+), 370 deletions(-)
-> ---
-> base-commit: 0b58e108042b0ed28a71cd7edf5175999955b233
-> change-id: 20230217-topic-cpr3h-de232bfb47ec
->
-> Best regards,
-> --
-> Konrad Dybcio <konrad.dybcio@linaro.org>
->
-
-Kind regards
-Uffe
+Is it? So there is a latency from requesting a new frequency and actually
+running on it, for both x86 and arm platforms out there that should still
+be a few usecs at least during which the task is running. The task will
+dequeue quite soon (otherwise it will build up utilization and then it's
+not one we consider problematic wrt to this io utilization problem anyway).
+Just to be clear, I'm assuming fast_switch here and then I think schedutil's
+implementation isn't the problem, rather the premise of the underlying
+problem is.
+I have tried to elaborate on that in the RFC I've posted and linked though.
 
