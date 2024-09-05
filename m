@@ -1,207 +1,200 @@
-Return-Path: <linux-pm+bounces-13712-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13713-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D134196DF44
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 18:11:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8F2996DF59
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 18:16:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07C171F24C02
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 16:11:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81DC4287F13
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 16:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5272F19F498;
-	Thu,  5 Sep 2024 16:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4975119F485;
+	Thu,  5 Sep 2024 16:16:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BzZ+RA3o"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wwMRaXp3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2043.outbound.protection.outlook.com [40.107.212.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A82101DE;
-	Thu,  5 Sep 2024 16:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725552680; cv=fail; b=m7VFjV+TwAXyJ1VqQEG1uhHOdwYrh/VTu4OixySwRV0t//tByA5/krJYPfeqg45xZUbG4vQG+894JuYaDdKH6QmmnJg/TDG48oVvYbdO0YrlTtVdxDtNwKqvKPyB/PulifYut+18bQ11ZCBsTSobaaQd7venB9m4l3RPApSV82Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725552680; c=relaxed/simple;
-	bh=wtu0Gq4iqMxV7H9ePxUJCpel0Ye63q2DSPaU7w01KrM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=FNTmUpHgZ95Ob3U2lOZhnVHvj32sgBwuCfdrbPTaRwKkjlGZ9l3vqY+OGydgbm5jlrRflWpZIk2l/CehevTRdmCUps5J2GiDowqjIOI0WbHUh0146svU2sdUVOTzJ6BNNuGlTrqQmkUXXvToFXv0CuVXkV1qwI2b4Tj7SdrQZpQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=BzZ+RA3o; arc=fail smtp.client-ip=40.107.212.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CLIzHN0oiXZapH4ZfQnDgEUTO9ZoK4tcG9tvhS4P3PHrRhoKoxmFBPo7q73Cxeg8yr7oqpBfR/UqpGx+H+cUHTno1FAxEBpXxaDFVbO6sC4OZoxtEy2XVBrDZIEwBfirN9AqXsdWqeYLgx8ba80iDrZ6S+VQDEnB/7M5XiDxQs/2VJrUthtOqfxVfZymkzsQstZsfDjtm3ntBT1cbRxH95qZxyCF9Ql6DLs106n0wK54vKn9CMCRSLtvvWSmJyie13Hb1L5cstEeTM+GOzIXeQDVXsNDewCR1tAmjhyA588ajifxZ7BV8ueHA2SrrTk0rhfnsfbLmtVQBTe7jJpigw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lXoxbMoE1FPjhzowstzAZltAJ7HjPaxsV6xmZq6sR4k=;
- b=FRTgU1Fte7ngT8B2SnwXY32W42w0eJKvDtc15E/8MghXGpx/8j31PWAGCyvpd9Tj/vhQtCWl2fH9RYCvNweHUC9ovYcsqjStQNqyyLc9itKdiAYvASZ5JkhkroW9mxi50mY5uoygRybJh0GNwXeJePg3Dw+DEhIGCinw3ur2PQ259EZndAQRindwPXA3xmX3/xZutsg5TqNv49mPnG0UrAlIipkV5OHQAVbnQDqM0Wq/qcrDkjHUrr82RxxUybVeVeXjZISzUuVX04fGQ6EJido7yYXvNawwFsqhJz+dSRWSW12Fqn5yQb5VrZtlE74D27DnVKLIkk6AtvEb8tIVvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lXoxbMoE1FPjhzowstzAZltAJ7HjPaxsV6xmZq6sR4k=;
- b=BzZ+RA3oYY9GbQ8h8Ysg0vlu9BKDM1nqD3/n07ihnwqa8K9Rb6+aFzuAFShiktDLcaHeQAHAt7Q4ZHRnH/sffEORqLRxJa9qS6faA1FzXNRI3hflqmPfii7z0PS77qblDls9eQXhbTXJOgmhwtC0BZ5avBTThvHb2DhJSohsuvk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
- PH8PR12MB7134.namprd12.prod.outlook.com (2603:10b6:510:22d::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27; Thu, 5 Sep
- 2024 16:11:15 +0000
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7%4]) with mapi id 15.20.7918.024; Thu, 5 Sep 2024
- 16:11:15 +0000
-Date: Thu, 5 Sep 2024 21:41:04 +0530
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>, Perry Yuan <perry.yuan@amd.com>,
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	"open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
-	"open list:ACPI" <linux-acpi@vger.kernel.org>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v2 11/11] amd-pstate: Add missing documentation for
- `amd_pstate_prefcore_ranking`
-Message-ID: <ZtnYGFNzMTOEBtH3@BLRRASHENOY1.amd.com>
-References: <20240903203701.2695040-1-superm1@kernel.org>
- <20240903203701.2695040-12-superm1@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240903203701.2695040-12-superm1@kernel.org>
-X-ClientProxiedBy: MAXP287CA0011.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a00:49::24) To DS7PR12MB8252.namprd12.prod.outlook.com
- (2603:10b6:8:ee::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B0EB7DA92
+	for <linux-pm@vger.kernel.org>; Thu,  5 Sep 2024 16:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725552998; cv=none; b=lumv9OSvLSWKWaPd0ogy7gPZKwSAPmZiO/dnJ+ouGWqjWxVouMHgxAYcvMHEV5DrO1RvBuO5DyXfLFd+lSbj/i1mGkowesOSrfcIPzrrgOdGq9IGP//SZvG4XC+2iRhuq5bni/Wobf3r0UprE5QgTRUrQjSNKnVXBqebLjmWsEU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725552998; c=relaxed/simple;
+	bh=XbT1YCH8SqWz/eTmMsIAXlLpeVmIpBn9oe+hrkLvpv4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SFQeViYonMbCtfb+SLPshoLqrHEUdUiwktX3cJMiswuojbvUshzahWkgg+VDcCw/TusmIz6kWlBIm4M8ydZz7KMPZncBLoZb+2s15YZpSErRN4nQ00HqIX/QbpArfEHiBCbS0isrs/Mk7QJoDX86kHlxW1zxj2cVtGRGoRsKehU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wwMRaXp3; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6cdae28014dso7705737b3.1
+        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2024 09:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1725552995; x=1726157795; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PjXtA67NkTqAhDw+xk2sd8wVjIX4v9yriXRxfqRD17k=;
+        b=wwMRaXp3D0pfhxs6kI06VCpVnTjEHBNSheaRD4QaVBteBSHAzbUGezoU3PTC0P+fd8
+         b9y2FJujU2DXRy7rkj6+EraD74exe5k50Cxv+A9qVA8r6S2m8NWKQUC1RebEc2oHgt4m
+         6bH0afomWlz1+oOkrCwslPV30OTFy/yS7LfL3sA2Um88eONH6a8kIhPX11UYCg88YXZj
+         YXyKP6Sn+RGbquCvWl8oJDd0Uf1IMsQS7XadKPcd9xJJbdj5KBpYK3LVO5d24vtPivcr
+         gOZDr/A4VZuz0s3HmtYx0Od2mmhtP5faPbHGQF06v0GPFV8E3iM9TO3yf9XWH6P1LjEc
+         1I+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725552995; x=1726157795;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PjXtA67NkTqAhDw+xk2sd8wVjIX4v9yriXRxfqRD17k=;
+        b=P6jSGRi76I7nboLUwKSeHifrfLSpqJW+HoF15J7BVwzpNNIyEcdNLtxoh0eDw9LT/U
+         TErHFDi1QZDIfF5wO9Ua/E79nUTpr2IVtlxXJNK8WmSUmA054SndRddH6my7NsvuEz12
+         iOYttg7bOeqCFXL8Bp7vnhS7+jAcN15iWJtFi5lZcjnntRSSwRsYE+VBex0kZJsV8oSV
+         58aRjiSErp45uDi/OT9ikkIO6E0Z6UGXMUhok0kcVdMf057JbcgdQYmqQtskjFkSg/vp
+         rpetYRc+9bDKSFj//g1EWEZcelSnUWx7Ok1eWqL4W0ojsgEQI0RO97YLuA/nlN49af9F
+         vN2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVbUjJmzOrHN3W2Rin8zadWl5xjM22ZjfviKHLj9AWf1XYQOHoMyB5bfZ4SSiHcdm6Cos9EZj1tKQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyEAel3J7JV76f6p1s9SiPTd/Z4AdYwC46eVODJeZUa6UPNWjX
+	IhBC/ibGMTlm8sEGFeWvDxV8w/r91XM4tOX1rSpwgx0xXvwQVsITlSwZyvLLnBxdd6y66jmVIyA
+	qgEnJsDDDAohySpimjIi2m4kvC6kdR8YGy6xYYw==
+X-Google-Smtp-Source: AGHT+IHF4JIHvjV5ZU5Sri1yZmo/2IQpX2mnsVMjFO6aJcUWOMDD1IaSX23mBNNsT/EI52Q3fe8hXyMFeVoPQnvlm3E=
+X-Received: by 2002:a05:690c:fc2:b0:666:f7f:a05b with SMTP id
+ 00721157ae682-6db2583e3cemr61709927b3.0.1725552995374; Thu, 05 Sep 2024
+ 09:16:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|PH8PR12MB7134:EE_
-X-MS-Office365-Filtering-Correlation-Id: 21634a86-67f3-42d4-85b6-08dccdc55e3f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?7PgAGQiZ8bO/utAsL7HOTu4iF7IHQ2DW71bfgtNNs34/U+6dKPHNYpDK2Lu+?=
- =?us-ascii?Q?HJnLAGo2X4kC1w5qlzdVuYTQMxv1e12j8UY8emC0b3fSWmm505d++DF0OM2s?=
- =?us-ascii?Q?5C6TfS34fn0Y46mdmvjFvqaTWilNqLz7Trc/oI3nq8BDPsh0Qcpek0nCw8nF?=
- =?us-ascii?Q?CIb5uIfZLWhEuEN70h/s/QD4/uMvuBiFNkdwxoDqrsXIvslt9j2v7UUuFNsw?=
- =?us-ascii?Q?PPvy0OyRlOE+AnLOJfnSW3YzYscAM66QiO4dMuHhR0CcsNHA9A686FLhJJU3?=
- =?us-ascii?Q?Dp/JvVmut45Te7Pf8DhQ98Ofm+gPjIAPw9/lkcqDothyxdi41Z1vvQqyfZxX?=
- =?us-ascii?Q?39A0uUCeWFbZwvSeMqv/Jd0pzz1yXm6cB03zgE5QvtnFo8ZvDjcmaF3Gesph?=
- =?us-ascii?Q?7GHX6jMafKyKmtUq4psnvGN9z/wtpPxG+O+ekzAXBW8v6ypxEen6NYiFs2Wl?=
- =?us-ascii?Q?OGZIS8ySTA6Qpt6vbnkCYXKyxr3JxlKnuCVhrY8e46r5PE4LazB2szhbIiBX?=
- =?us-ascii?Q?mSqEK7QoylaMeX9bRc1OFUluYLMVpe36R6y2fgPGJmVnYB+oULLm07iw+5KZ?=
- =?us-ascii?Q?PsKLd6qBh4DgSAWf7zo06hoTnA20sBuA9HkgDotOV9w4tRAGNi2ugtqwNWtl?=
- =?us-ascii?Q?I5/8z+8DwKs4hJg1HvyfnYpt9nzatWnRFOfLpdHtTXk74ITnOjOgBnVLKeJj?=
- =?us-ascii?Q?I6h3TA9nb2T1HlfAxwLiWDtj/PCn3vlSFu0f0SulPn9kDmTUvkz4t4Nyb46B?=
- =?us-ascii?Q?oCoeJZbiMsRv79ptZb7hqkkLUN3e4/pLjueiLuyALBr3ex1svPjE7lfnWSaj?=
- =?us-ascii?Q?1JxM9urFYUjJ6Pbrla9ee1tsg39JHjMT3B4mImtQE8nqXASYu8T9MCtljbGV?=
- =?us-ascii?Q?2o6hWcvEOlgO++boPWKu0dqOrC9UTmqJwVloMgIWDbo6rm5JgHmraaRCpUfT?=
- =?us-ascii?Q?Cw3DuIQEIAOICgm1xv92lJ/VpWLFJ27xmz8pn/ezo5fR8YMWBiTvnlCo3Hyo?=
- =?us-ascii?Q?oWeAnd7NUZjWfTeq5k5i9bcpUs1AhJHRjXlf69A6GQ50BSvQm3Ws2k8zfpZx?=
- =?us-ascii?Q?IMpFvwml9khz+tVxPqkpqaV7UrYOI0mQBRZ/1jhbwfddPPgkm3IZvWWLPK/x?=
- =?us-ascii?Q?jykzzQOcyYoZiDxnQnlrczQZRiPYCLfcwNkykcjdTwMcpJ9x3DIH3vFd+sX4?=
- =?us-ascii?Q?6uulwDqlJ5qe8zj8cpnzI0kq42wHwnXslhq6xTtcM+JwB/45pKnrUoLwUbOC?=
- =?us-ascii?Q?u/VtD7mQU4/qI+CuxD641WSwWSc+tmNDXU+IWc/MwzZUQbTFvTDjlwmUSsxj?=
- =?us-ascii?Q?S8jP5FcKKm3CGPaZeHxqsdtSXp8FIaHIt8pR9M+1dbIkfQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?vJwotzFsd197MuisjPlr17J08M8BBdfuTKHA/P4dHS7S9lyMptmGrMJcc3Sl?=
- =?us-ascii?Q?kJ2f4G82cmSwsjPQgvtKU+jxpUvmKadvrnp7C1npnq8wzjyFQ7MWFd/lJzYF?=
- =?us-ascii?Q?005+qO6Ir1dMZm2/n4hUX0A3jMCawzcOHQPiDd1gv0f+6gisALBPWeHKUiv0?=
- =?us-ascii?Q?lKD2n9RUG7o6Y2yx/4b0dW3m5miMvug7mINsgz+xFcUAHWhuFAjnzxJvb5nl?=
- =?us-ascii?Q?JeFtQS41Ww7ZRTYOoS2gzutzB7WzQwD3ybkIMHfsEQX/ZW7DeBND23Z0bAx0?=
- =?us-ascii?Q?RQGkpB8s9r6TjsD1rxQD5H9Txn/Kc45tj8hC5cB4U3dmhkqYclv6umCQBNdK?=
- =?us-ascii?Q?HfGf2tn089sDSaL+Y71nSRQhokoUm/9aeavfqd/YNvk0JeETfCf/7rQaAJvP?=
- =?us-ascii?Q?+zXGgZdNabZD9I7Sb3X5X+bpDWfVzpXTlYLyE8Oxp6e0j/PeIIWzVP1g1h8x?=
- =?us-ascii?Q?fYYm1n0ZbdzEg3XYSCbAuGzNK89DRU4ocdSGXTrSxowQ5vFpvxrXL2KjiHiB?=
- =?us-ascii?Q?ggCW/Ed6/xWjG0H+XSS/We/cEQrz0+y2L9co+Sx2KMGWJBjz1BJZrt+e+aeO?=
- =?us-ascii?Q?Ruo4wDD+Ov3DfvCl/Z5HsPzhsgpiaTvPjNFsXIU+va3a4iN3APbfQE/D10SS?=
- =?us-ascii?Q?oTcG1Qmj10mNnZ+SeJXXAfGrSvrP2Yr52g+bfbTaiHTuSI6ZGThmIWTs3Wd3?=
- =?us-ascii?Q?L8lBScbpO196sHCm6vDRK8D0o/knm3j8wwNxnnv2dHi57cgZRDF5m4Fm8qf2?=
- =?us-ascii?Q?cMrT4xFslgy26kP4er7ZL8tKb5yw70H32eDSF/pK5pnwhkug3V7JbX5Mxr1y?=
- =?us-ascii?Q?CIGlwVeWqponDxqocSdGfOfQOMlqhVLsF7gRf3HcY0XxAVAiK00bYXXVktnC?=
- =?us-ascii?Q?BqPuLRbn1vCL+fNsy09evFMJZXYQDKiO/dmIv4AcTMi/HW8c0NNpy9XTUT6A?=
- =?us-ascii?Q?vmTeaIj/sxDCQceakTQXXbB1Go+kUFj2ui3pOCWJo4+bQDP2EDpPrSIxajxC?=
- =?us-ascii?Q?YNXgXJUq78ud7JlINdGCc+9wjSRVhtVxXRvaaOd5rv3DK7oJHXK+xcCnylp9?=
- =?us-ascii?Q?okKwonf2zxnu+FdKLE7eYlgy+6VDFGHx0Hg/rgWyWJnPoTfkEBWa2xXs5Miq?=
- =?us-ascii?Q?MjBTkzJONkivk2Ukm+DDVSzSi0dX55ZoCcv2A5etVhhrhh65ToAY2R1RMPwm?=
- =?us-ascii?Q?YkW7fx5A3BOQh+DnUM8x5rKEuj0OOT1+jLrcod0ij0BxEddUedsL0EOBKNzy?=
- =?us-ascii?Q?cS/fLkNulvtMzaG4xsuYH040S4tMNsD2Q4wLGiHZJfs13hdxjUpyHXI5p4RU?=
- =?us-ascii?Q?2zjIIF+YZxoKfeJ/h1XpFs5JkzMycFSaGtlFMC2OQCyhxfQPjqpPbhtXyA9U?=
- =?us-ascii?Q?vrqpqInmDfTDkGGQqq3/11nRx5F0nN7drlsHI3b65crYzFB9BgOJbZwbF2ZX?=
- =?us-ascii?Q?oPQOXRL8Rcf0BJVluwYXnTgSaJQ7riLzLkJiU399BPxAbmsiIpu4jyewl64n?=
- =?us-ascii?Q?6VHKdkaCmjPGAtkasdFp3r9kkBPyRcwtuEga5i/464w9p/x3ybIAkL19Awrw?=
- =?us-ascii?Q?DVSKtcT57NGwJdao4fdE4qUr4RLotW2e1Svz59Dr?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21634a86-67f3-42d4-85b6-08dccdc55e3f
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 16:11:15.4190
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Cus3PdLd+MLXBBLHt1RqcARM+6aOc6pxHDc7ypMoDWmxDT4Y/x6bXoDumsQ1G+vH9j/Y0llpniszFI84DQUv8w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7134
+References: <20240823095319.3917639-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20240823095319.3917639-1-peng.fan@oss.nxp.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 5 Sep 2024 18:15:58 +0200
+Message-ID: <CAPDyKFpYgZwNvVnpS0fjmhcEq+yiBizxDTw9nJEyQF287miFJA@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: imx: imx93-blk-ctrl: fix power up domain fail
+ during early noriq resume
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc: shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+	festevam@gmail.com, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, victor.liu@nxp.com, 
+	Dong Aisheng <aisheng.dong@nxp.com>, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Sep 03, 2024 at 03:37:01PM -0500, Mario Limonciello wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> `amd_pstate_prefcore_ranking` reflects the dynamic rankings of a CPU
-> core based on platform conditions.  Explicitly include it in the
-> documentation.
+On Fri, 23 Aug 2024 at 11:44, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Dong Aisheng <aisheng.dong@nxp.com>
+>
+> After disabling PXP and having no displays connected, we met the following
+> suspend/resume hang issue on MX93 EVK board.
+>
+>  Enabling non-boot CPUs ...
+>  Detected VIPT I-cache on CPU1
+>  GICv3: CPU1: found redistributor 100 region 0:0x0000000048060000
+>  CPU1: Booted secondary processor 0x0000000100 [0x412fd050]
+>  CPU1 is up
+>  imx93-blk-ctrl 4ac10000.system-controller: failed to power up domain: -13
+>  imx93-blk-ctrl 4ac10000.system-controller: failed to power up domain: -13
+>  imx93-blk-ctrl 4ac10000.system-controller: failed to power up domain: -13
+> ...
+>
+> The issue was introduced since the commit c24efa673278
+> ("PM: runtime: Capture device status before disabling runtime PM")
+> which will also check the power.last_status must be RPM_ACTIVE before
+> pm_runtime_get_sync() can return 1 (means already active) even pm_runtime
+> is disabled during no_irq resume stage.
+>
+> However, the pm_runtime_set_active() we called ahead of
+> pm_runtime_get_sync() will not update power.last_status which probably like
+> a upstream kernel issue. But that's another issue which may worth an
+> extra fix.
 
-Thanks for adding this.
+I think this is confusing, I don't see any calls to
+pm_runtime_set_active() anywhere? Are you referring to some old code?
 
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-
+>
+> This patch refers to the solution in the exist similar imx8m blkctrl
+> driver[1] that it will power up upstream domains during blkctl suspend
+> first in order to make sure the power.last_status to be RPM_ACTIVE. Then we
+> can support calling pm_runtime_get_sync in noirq resume stage.
+>
+> After fixing, no need extra calling of pm_runtime_set_active() ahead.
+>
+> 1. drivers/pmdomain/imx/imx8m-blk-ctrl.c
+>
+> Fixes: e9aa77d413c9 ("soc: imx: add i.MX93 media blk ctrl driver")
+> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  Documentation/admin-guide/pm/amd-pstate.rst | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-> index d5c050ea390dc..210a808b74ec2 100644
-> --- a/Documentation/admin-guide/pm/amd-pstate.rst
-> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-> @@ -252,7 +252,8 @@ In some ASICs, the highest CPPC performance is not the one in the ``_CPC``
->  table, so we need to expose it to sysfs. If boost is not active, but
->  still supported, this maximum frequency will be larger than the one in
->  ``cpuinfo``. On systems that support preferred core, the driver will have
-> -different values for some cores than others.
-> +different values for some cores than others and this will reflect the values
-> +advertised by the platform at bootup.
->  This attribute is read-only.
->  
->  ``amd_pstate_lowest_nonlinear_freq``
-> @@ -268,6 +269,12 @@ This attribute is read-only.
->  Whether the platform supports the preferred core feature and it has been
->  enabled. This attribute is read-only.
->  
-> +``amd_pstate_prefcore_ranking``
+>  drivers/pmdomain/imx/imx93-blk-ctrl.c | 29 +++++++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>
+> diff --git a/drivers/pmdomain/imx/imx93-blk-ctrl.c b/drivers/pmdomain/imx/imx93-blk-ctrl.c
+> index 904ffa55b8f4..34ac7b722b90 100644
+> --- a/drivers/pmdomain/imx/imx93-blk-ctrl.c
+> +++ b/drivers/pmdomain/imx/imx93-blk-ctrl.c
+> @@ -424,6 +424,34 @@ static const struct imx93_blk_ctrl_data imx93_media_blk_ctl_dev_data = {
+>         .reg_access_table = &imx93_media_blk_ctl_access_table,
+>  };
+>
+> +static int imx93_blk_ctrl_suspend(struct device *dev)
+> +{
+> +       struct imx93_blk_ctrl *bc = dev_get_drvdata(dev);
 > +
-> +The performance ranking of the core. This number doesn't have any unit, but
-> +larger numbers are preferred at the time of reading. This can change at
-> +runtime based on platform conditions. This attribute is read-only.
+> +       /*
+> +        * This may look strange, but is done so the generic PM_SLEEP code
+> +        * can power down our domains and more importantly power them up again
+> +        * after resume, without tripping over our usage of runtime PM to
+> +        * control the upstream GPC domains. Things happen in the right order
+> +        * in the system suspend/resume paths due to the device parent/child
+> +        * hierarchy.
+> +        */
+> +       return pm_runtime_resume_and_get(bc->dev);
+
+The reason why we *don't* use a regular parent/child setup of the PM
+domains (genpds) to control power-on/off, is because there seems to be
+a specific sequence that needs to be followed. So, instead we are
+using runtime PM to control the power for the parent PM domain.  See
+the comment in imx93_blk_ctrl_probe().
+
+I have to admit, it all looks strange to me and seems also very fragile.
+
+That said, why doesn't the sequence matter any longer during system
+suspend/resume. Or maybe the sequence doesn't really matter after all?
+
+> +}
 > +
->  ``energy_performance_available_preferences``
->  
->  A list of all the supported EPP preferences that could be used for
-> -- 
-> 2.43.0
-> 
+> +static int imx93_blk_ctrl_resume(struct device *dev)
+> +{
+> +       struct imx93_blk_ctrl *bc = dev_get_drvdata(dev);
+> +
+> +       pm_runtime_put(bc->dev);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct dev_pm_ops imx93_blk_ctrl_pm_ops = {
+> +       SYSTEM_SLEEP_PM_OPS(imx93_blk_ctrl_suspend, imx93_blk_ctrl_resume)
+> +};
+> +
+>  static const struct of_device_id imx93_blk_ctrl_of_match[] = {
+>         {
+>                 .compatible = "fsl,imx93-media-blk-ctrl",
+> @@ -439,6 +467,7 @@ static struct platform_driver imx93_blk_ctrl_driver = {
+>         .remove_new = imx93_blk_ctrl_remove,
+>         .driver = {
+>                 .name = "imx93-blk-ctrl",
+> +               .pm = pm_sleep_ptr(&imx93_blk_ctrl_pm_ops),
+>                 .of_match_table = imx93_blk_ctrl_of_match,
+>         },
+>  };
+> --
+> 2.37.1
+>
+
+Kind regards
+Uffe
 
