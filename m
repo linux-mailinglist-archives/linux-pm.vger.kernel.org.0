@@ -1,130 +1,126 @@
-Return-Path: <linux-pm+bounces-13671-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13672-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CFF796D34A
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 11:31:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A821696D36E
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 11:34:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41FF21F28473
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 09:31:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6580A28A25B
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 09:34:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A184199231;
-	Thu,  5 Sep 2024 09:29:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3D36194AD9;
+	Thu,  5 Sep 2024 09:34:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="t2VoHsTM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C432C1991DB;
-	Thu,  5 Sep 2024 09:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C19E192B94;
+	Thu,  5 Sep 2024 09:34:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725528573; cv=none; b=V07OI52YfonlD9E9ASotoq7Du5kzaXw4h8R6/YTWepu1Lwh9E53ne2F3VSd7Xad8xXqIukQ/MH/klZn7HyNxvEPI0seQnG8zGEoR4SMXL0LZJUSIRDjyHBr8BxmEL0A6RpnlqtOU9oU8AN6KkdX+B6APiskcYm+trl5M8WrUshI=
+	t=1725528881; cv=none; b=MGXmicvQ4QEB8Pk6hQrzAKoiyV+Aw4sv6+tG0JXiUf2Th27diSg5nFgrnIitLzKOPu9qVyORfYM7GimlB9NzYgUcvw4z5uqR1FgF8qAxP9FVJUJAttxTZ7piL0QuRIMcNttnQNLapJoPG5akUbd6MZfWihY9IDvC51SQ8hQ3jkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725528573; c=relaxed/simple;
-	bh=29QhhdAW9yVD66jVVFY2TLQ8yKn+5ciS2Z14YFd/33A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qLXE/XBOWtYVlNUKRs1THHq9KvF/WyY1Hw59J0SfLNgb3OyZ7n9pOlIYQOEm6IlV89L2q+8/BqpefFYiCFHcfVTIs21K8QvhE9SU78Stm6Ntr6HhZVq/pK6nnyQhClxhxeVfVipXYliR0/dgDLCDPecZC7IsiNZf/1aee/jMx2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 13CD8FEC;
-	Thu,  5 Sep 2024 02:29:58 -0700 (PDT)
-Received: from [10.57.75.86] (unknown [10.57.75.86])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB6873F73F;
-	Thu,  5 Sep 2024 02:29:29 -0700 (PDT)
-Message-ID: <0e37c349-7076-4a02-bfbc-577e50090172@arm.com>
-Date: Thu, 5 Sep 2024 10:29:27 +0100
+	s=arc-20240116; t=1725528881; c=relaxed/simple;
+	bh=IkSNWXMT7ELTSE8Xuk7SvHDOSBbMhJFwNUOAwKhQJ/k=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IaCGeCRQQyT5eS2pN3/9vShfWzGn8Uf5giF0K1tUUCjAGh9tsQ0M2AVIcOziFeHrneNRJUg9+8YgnXlExgH5w9XyiF7cYn0TkKySAYMMvSmdBFxF8kaSzewXdeiVbCZPcICzwqcxaFq2Qdy8zqAVU/nTdDvGYfHtUnCvKtbsReA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=t2VoHsTM; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 0f7cc0ba6b6a11ef8593d301e5c8a9c0-20240905
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=4kGH80ordyv20AcZCJJKyTo4JdPjwcej8QohhqZgdvY=;
+	b=t2VoHsTMZ4CWxVCvLzLnAlcQ0LFjqwR+TK9nnZcVxLw4efD21oh817RTue6OtnHi9o/R31fDUgx/c0vwAEe7yx51vm11qTFi99yKmkBYkkuJQpPisaduZnyXxtzXso6kNB66BVzFQdpNeTST47vFWmfSx+hm6k3bfVnXN5j3Ylw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:431400ad-4aa8-4d44-9e81-535fac55d622,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6dc6a47,CLOUDID:08f03b05-42cd-428b-a1e3-ab5b763cfa17,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:817|102,TC:nil,Content:0|-5,EDM:-3,I
+	P:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+	,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 1,FCT|NGT
+X-CID-BAS: 1,FCT|NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 0f7cc0ba6b6a11ef8593d301e5c8a9c0-20240905
+Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw01.mediatek.com
+	(envelope-from <yenchia.chen@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 254534137; Thu, 05 Sep 2024 17:34:34 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 5 Sep 2024 02:34:33 -0700
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 5 Sep 2024 17:34:33 +0800
+From: Yenchia Chen <yenchia.chen@mediatek.com>
+To: <gregkh@linuxfoundation.org>
+CC: <angelogioacchino.delregno@collabora.com>, <len.brown@intel.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<matthias.bgg@gmail.com>, <pavel@ucw.cz>, <rafael.j.wysocki@intel.com>,
+	<rafael@kernel.org>, <stable@vger.kernel.org>, <yenchia.chen@mediatek.com>
+Subject: Re: [PATCH 6.6 1/1] PM: sleep: Restore asynchronous device resume optimization
+Date: Thu, 5 Sep 2024 17:34:33 +0800
+Message-ID: <20240905093433.4798-1-yenchia.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <2024090420-protozoan-clench-cca7@gregkh>
+References: <2024090420-protozoan-clench-cca7@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHSET v6 0/4] Split iowait into two states
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Jens Axboe <axboe@kernel.dk>
-Cc: linux-kernel@vger.kernel.org, tglx@linutronix.de,
- daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
-References: <20240819154259.215504-1-axboe@kernel.dk>
- <20240904142841.GL4723@noisy.programming.kicks-ass.net>
- <CAJZ5v0iZqKGG+wCZYrA1t7mXvrW6Fo-Zb3d17Bofg3NSb2kPEg@mail.gmail.com>
- <CAJZ5v0hVghgKgv0zqabL1m2FT6wou8-tW_9Mm-_9=0-3yhMb3A@mail.gmail.com>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <CAJZ5v0hVghgKgv0zqabL1m2FT6wou8-tW_9Mm-_9=0-3yhMb3A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 9/4/24 16:18, Rafael J. Wysocki wrote:
-> On Wed, Sep 4, 2024 at 4:42 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>
->> On Wed, Sep 4, 2024 at 4:28 PM Peter Zijlstra <peterz@infradead.org> wrote:
->>>
->>> On Mon, Aug 19, 2024 at 09:39:45AM -0600, Jens Axboe wrote:
->>>> Hi,
->>>>
->>>> This is v6 of the patchset where the current in_iowait state is split
->>>> into two parts:
->>>>
->>>> 1) The "task is sleeping waiting on IO", and would like cpufreq goodness
->>>>    in terms of sleep and wakeup latencies.
->>>> 2) The above, and also accounted as such in the iowait stats.
->>>>
->>>> The current ->in_iowait covers both, this series splits it into two types
->>>> of state so that each can be controlled seperately.
->>>
->>> Yeah, but *WHY* !?!? I have some vague memories from last time around,
->>> but patches should really keep this information.
->>>
->>>> Patches 1..3 are prep patches, changing the type of
->>>> task_struct->nr_iowait and adding helpers to manipulate the iowait counts.
->>>>
->>>> Patch 4 does the actual splitting.
->>>>
->>>> This has been sitting for a while, would be nice to get this queued up
->>>> for 6.12. Comments welcome!
->>>
->>> Ufff, and all this because menu-governor does something insane :-(
->>>
->>> Rafael, why can't we simply remove this from menu?
->>
->> Same reason as before: people use it and refuse to stop.
->>
->> But this is mostly about the schedutil cpufreq governor that uses
->> iowait boosting.
-> 
-> To be more precise, there are two different uses of "iowait" in PM.
-> 
-> One is the nr_iowait_cpu() call in menu_select() and the result of it
-> is used for two purposes: (1) select different sets of statistics
-> depending on whether or not this number is zero and (2) set a limit
-> for the idle state's exit latency that depends on this number (but
-> note that it only takes effect when the "iowait" statistics are used
-> in the first place).  Both of these are arguably questionable and it
-> is unclear to me whether or not they actually help and how much.
+>> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+>> 
+>> commit 3e999770ac1c7c31a70685dd5b88e89473509e9c upstream.
+>> 
+>> Before commit 7839d0078e0d ("PM: sleep: Fix possible deadlocks in core
+>> system-wide PM code"), the resume of devices that were allowed to resume
+>> asynchronously was scheduled before starting the resume of the other
+>> devices, so the former did not have to wait for the latter unless
+>> functional dependencies were present.
+>> 
+>> Commit 7839d0078e0d removed that optimization in order to address a
+>> correctness issue, but it can be restored with the help of a new device
+>> power management flag, so do that now.
+>> 
+>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+>> Signed-off-by: Yenchia Chen <yenchia.chen@mediatek.com>
+>> ---
+>>  drivers/base/power/main.c | 117 +++++++++++++++++++++-----------------
+>>  include/linux/pm.h        |   1 +
+>>  2 files changed, 65 insertions(+), 53 deletions(-)
 
-So from my perspective it doesn't, not significantly to justify it's
-existence anyway. Either it doesn't actually matter for menu, or teo
-is able to compete / outperform without relying on it.
-Some caution is advised though this really depends on:
-- Which idle states are available for the kernel to select.
-- How accurate the kernel's view of the idle states is.
+>Why does this need to be backported?  What bug is it fixing?
 
-Both varies wildly.
+>confused,
 
-> 
-> The other use is boosting CPU frequency in schedutil and intel_pstate
-> if SCHED_CPUFREQ_IOWAIT is passed to them which in turn depends on the
-> p->in_iowait value in enqueue_task_fair().
-> 
-> AFAICS, the latter makes a major difference.
+>greg k-h
 
+Below is the scenario we met the issue:
+1) use command 'echo 3 > /proc/sys/vm/drop_caches'
+   and enter suspending stage immediately.
+2) power on device, our driver try to read mmc after leaving resume callback
+   and got stucked.
 
-Indeed, fortunately the impact is quite limited here.
-But please, Rafael, Jens and Peter, feel free to share your comments
-over here too:
+We found if we did not drop caches, mmc_blk_resume will be called and
+system works fine.
 
-https://lore.kernel.org/lkml/20240905092645.2885200-1-christian.loehle@arm.com/
+If we drop caches before suspending, there is a high possibility that
+mmc_blk_resume not be called and our driver stucked at filp_open.
+
+We still try to find the root casue is but with this patch, it works.
+
+Since it has been merged in mainline, we'd like to know it is ok to merge to stable.
+
 
