@@ -1,214 +1,149 @@
-Return-Path: <linux-pm+bounces-13653-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13654-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8FD596CE3D
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 06:57:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05FA696CE55
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 07:15:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF20B1C223DA
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 04:57:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B857C1F24328
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 05:15:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51FA4155392;
-	Thu,  5 Sep 2024 04:57:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F7D815624C;
+	Thu,  5 Sep 2024 05:14:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Z9zWq9BC"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="oj8Fx0C1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1211494DB;
-	Thu,  5 Sep 2024 04:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5712F149013;
+	Thu,  5 Sep 2024 05:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725512225; cv=none; b=CFVuhTdFWb8F4Guqyr59vOn41hF/MuNkx38wIoyg6fx3W5CIDgCV5jxyMp810m9XxZMbURXw0VLu/DW6fI6aWlZxXcY+Qd6edKfn7KHXorStwkSUfoaf3vlZ5G2oWt24/sKdhFcfuijzTcTMF047dgbI26gbpLxqnaOgO532/40=
+	t=1725513295; cv=none; b=ECj7exbqQqEYIEhtZP+m4Qk7P5EmZI84BvIh4j5to7BwcYxxGTOKOrY381fm9uO07X7RAteXJrV3hcKccMNscleSrM5CnPXuBb74obTVz4zubmbfkdfVWhCROEErtD6S38Ysu/qBSPBTTv1ygQR8g/K04e7ZkiPwKFK/jKzAtj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725512225; c=relaxed/simple;
-	bh=jfqZ4v57X1c9BWCxzq3aePc2Qe5N7iUbzE7Oyhqe4qY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ca4kOjPFpt3RqxgHLU4uv44ZgIRPZCoJrJTLhBZsgRveTomoAHuahwwAhS4A37Dry6QYaXSEDl0hFKRb4ZBH23YQqBM0sFm6UdmwrtxA5IeBP870XJonfBORGo1SKtv9HiEziPpMy/0T+l0JZfAoiv8ZD0Ctz+fb+dFNxLqtjyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Z9zWq9BC; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4852EqE1015388;
-	Thu, 5 Sep 2024 04:56:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	mOI+1G/E3cTVM/8GPl8IKCuvmh9k+a4Z5APBAsAGRrk=; b=Z9zWq9BC9+bKwiEQ
-	f5YfXTEtCRKFCdyYq6lrAL2NBo0Nk2vb2+gCm2moiKTolLnFJRB37yH00umOPlyR
-	FeGNpkfzhk7V8WC/PiFN09nSrS0qvOz9FhQj1BDzsfAVT9pUU5bALLv1x+K0+qvA
-	hRVTtS0IzTsaVHtlg5x5orUuphEyUsdZP/rp9H7igErJtYki3LYkLCrDvaVFnZpd
-	92ct+kvTwt/io2FDS3Koe7/XwrmREeq8HVcRcEF9peYLsOXtDqlrL4WibJUW2KNt
-	BiB9qMhLWSOixoscDZJP2jH12N1kGR6C4glKSWrVVVCqYA9JJ+s6dMr6EX777wlD
-	ScOyxg==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41dt69exqu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Sep 2024 04:56:57 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4854utwO007152
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 5 Sep 2024 04:56:55 GMT
-Received: from [10.233.21.53] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 4 Sep 2024
- 21:56:51 -0700
-Message-ID: <0c7790b8-fcfc-43cc-a2af-5096522b1dec@quicinc.com>
-Date: Thu, 5 Sep 2024 12:56:49 +0800
+	s=arc-20240116; t=1725513295; c=relaxed/simple;
+	bh=aG+evR3+/5qIXwTAJgFCZS/zyQH8AV2X8iY2rmN/CA0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=HMCkZM8VsDrdd8OEd2AiqZCx9S7cb3JDFuo3Ju/OFEzoThddkS/lmYUnJhNYI22t9fwRdnPqN9y8jtu55fDOFbuOsLc6h2HrSNJ1qn4GGypg5gCiFhIzWWHEn4lKGYnjjTWnns0Tj5kHNtKm98IefCEj82T2/XhkSg1Dm71Kt4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=oj8Fx0C1; arc=none smtp.client-ip=198.47.23.248
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4855Em5a109414;
+	Thu, 5 Sep 2024 00:14:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1725513288;
+	bh=T/EmD+I0Gk0axmSOCLnZzBv2wRZ3H10IZiSBl3yeiWs=;
+	h=From:Date:Subject:To:CC;
+	b=oj8Fx0C1GDa1Y8zWdBZ5mWWRgOI5i6/PD4vxLq2R7SlF2FsCxvwqEXmBM2xVQBsTK
+	 vmigXpGm6y7QW0/Gycnzr/tdk/7sFKBMKJvqK3qFgqZ6oM/zsDa33O6BgYGAdQwZZq
+	 PfUEhRa92J0TlbesPF50shuhZ3f3vuDIaJveTkl4=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4855EmNH037404;
+	Thu, 5 Sep 2024 00:14:48 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 5
+ Sep 2024 00:14:48 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 5 Sep 2024 00:14:48 -0500
+Received: from [127.0.1.1] (lcpd911.dhcp.ti.com [172.24.227.68] (may be forged))
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4855EiKw040071;
+	Thu, 5 Sep 2024 00:14:45 -0500
+From: Dhruva Gole <d-gole@ti.com>
+Date: Thu, 5 Sep 2024 10:44:32 +0530
+Subject: [PATCH v2] dt-bindings: opp: operating-points-v2-ti-cpu: Describe
+ opp-supported-hw
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 18/19] arm64: dts: qcom: add initial support for QCS8300
- DTSI
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Rob
- Herring" <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-        "Bartosz
- Golaszewski" <bartosz.golaszewski@linaro.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        "Zhenhua
- Huang" <quic_zhenhuah@quicinc.com>,
-        Xin Liu <quic_liuxin@quicinc.com>,
-        "Kyle
- Deng" <quic_chunkaid@quicinc.com>,
-        Tingguo Cheng <quic_tingguoc@quicinc.com>
-References: <20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com>
- <20240904-qcs8300_initial_dtsi-v1-18-d0ea9afdc007@quicinc.com>
- <be8b573c-db4e-4eec-a9a6-3cd83d04156d@kernel.org>
-Content-Language: en-US
-From: Jingyi Wang <quic_jingyw@quicinc.com>
-In-Reply-To: <be8b573c-db4e-4eec-a9a6-3cd83d04156d@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4xHw51o4RZeAhvOIFvs4YUVISUWlqqPZ
-X-Proofpoint-ORIG-GUID: 4xHw51o4RZeAhvOIFvs4YUVISUWlqqPZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-05_04,2024-09-04_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
- phishscore=0 priorityscore=1501 malwarescore=0 adultscore=0 spamscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2409050034
+Message-ID: <20240905-b4-opp-dt-binding-fix-v2-1-1e3d2a06748d@ti.com>
+X-B4-Tracking: v=1; b=H4sIADc+2WYC/4WNSw7CIBRFt9K8sc8ApT9H7sN0YAu0byAQIETTs
+ HexG3B4TnLPPSDqQDrCrTkg6EyRnK0gLg2s+9NuGklVBsGEZBNrcZHovEeVcCGryG5o6I1Du/a
+ jmIaOKwF164Ou+uw+5so7xeTC57zJ/Gf/FTNHhmbQfOxl16vJ3BNdV/eCuZTyBQJ9Fue3AAAA
+To: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen
+ Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC: Viresh Kumar <viresh.kumar@linaro.org>,
+        Vignesh Raghavendra
+	<vigneshr@ti.com>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Dhruva Gole <d-gole@ti.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1725513284; l=2568;
+ i=d-gole@ti.com; s=20240902; h=from:subject:message-id;
+ bh=aG+evR3+/5qIXwTAJgFCZS/zyQH8AV2X8iY2rmN/CA0=;
+ b=LkCqPjg3unfYAuZU/6ZBUvp8D3NacezwVDYTn8T2pqvDNKDcGULhOtIu5JR0sep0MtqgTLcV7
+ gwDhndcGsuiAgsehtB9pFBwuS7uip3ZeTwZ5DU5hPywWM1DrZAlQ9ni
+X-Developer-Key: i=d-gole@ti.com; a=ed25519;
+ pk=yOC9jqVaW3GN10oty8eZJ20dN4jcpE8JVoaODDmyZvA=
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
+It seems like we missed migrating the complete information from the old
+DT binding where we had described what the opp-supported-hw is supposed
+to describe. Hence, bring back the description from the previous binding
+to the current one along with a bit more context on what the values are
+supposed to be.
 
+Fixes: e576a9a8603f ("dt-bindings: cpufreq: Convert ti-cpufreq to json schema")
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
+---
+Changes in v2:
+- Drop the patch where I updated Maintainers since it's already picked
+  by Viresh.
+- Add more details of how to populate the property based on device
+  documents like TRM/ datasheet.
+- Link to v1: https://lore.kernel.org/r/20240903-b4-opp-dt-binding-fix-v1-0-f7e186456d9f@ti.com
+---
+ .../bindings/opp/operating-points-v2-ti-cpu.yaml         | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-On 9/4/2024 5:41 PM, Krzysztof Kozlowski wrote:
-> On 04/09/2024 10:33, Jingyi Wang wrote:
->> Add initial DTSI for QCS8300 SoC.
->>
->> This revision brings support for:
->> - CPUs with cpu idle
->> - interrupt-controller with PDC wakeup support
->> - gcc
->> - TLMM
->> - interconnect
->> - qup with uart
->> - smmu
->> - pmic
->> - ufs
->> - ipcc
->> - sram
->> - remoteprocs including ADSP,CDSP and GPDSP
->>
->> [Zhenhua: added the smmu node]
->> Co-developed-by: Zhenhua Huang <quic_zhenhuah@quicinc.com>
->> Signed-off-by: Zhenhua Huang <quic_zhenhuah@quicinc.com>
->> [Xin: added ufs/adsp/gpdsp nodes]
->> Co-developed-by: Xin Liu <quic_liuxin@quicinc.com>
->> Signed-off-by: Xin Liu <quic_liuxin@quicinc.com>
->> [Kyle: added the aoss_qmp node]
->> Co-developed-by: Kyle Deng <quic_chunkaid@quicinc.com>
->> Signed-off-by: Kyle Deng <quic_chunkaid@quicinc.com>
->> [Tingguo: added the pmic nodes]
->> Co-developed-by: Tingguo Cheng <quic_tingguoc@quicinc.com>
->> Signed-off-by: Tingguo Cheng <quic_tingguoc@quicinc.com>
->> [Raviteja: added interconnect nodes]
->> Co-developed-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->> Signed-off-by: Jingyi Wang <quic_jingyw@quicinc.com>
->> ---
->>  arch/arm64/boot/dts/qcom/qcs8300.dtsi | 1282 +++++++++++++++++++++++++++++++++
->>  1 file changed, 1282 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/qcs8300.dtsi b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
->> new file mode 100644
->> index 000000000000..244fa8bf97d9
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
->> @@ -0,0 +1,1282 @@
->> +// SPDX-License-Identifier: BSD-3-Clause
->> +/*
->> + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +#include <dt-bindings/clock/qcom,qcs8300-gcc.h>
->> +#include <dt-bindings/clock/qcom,rpmh.h>
->> +#include <dt-bindings/interconnect/qcom,icc.h>
->> +#include <dt-bindings/interconnect/qcom,qcs8300-rpmh.h>
->> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->> +#include <dt-bindings/mailbox/qcom-ipcc.h>
->> +#include <dt-bindings/power/qcom,rpmhpd.h>
->> +#include <dt-bindings/power/qcom-rpmpd.h>
->> +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
->> +
->> +/ {
->> +	interrupt-parent = <&intc>;
->> +	#address-cells = <2>;
->> +	#size-cells = <2>;
->> +
->> +	clocks {
->> +		sleep_clk: sleep-clk {
->> +			compatible = "fixed-clock";
->> +			#clock-cells = <0>;
->> +			clock-frequency = <32000>;
-> 
-> Are you sure that sleep clock is physically part of the SoC?
-> 
-Have checked that and will move it to board.dts
->> +		};
->> +	};
->> +
->> +	cpus {
->> +		#address-cells = <2>;
->> +		#size-cells = <0>;
->> +
-> 
-> ...
-> 
->> +
->> +	soc: soc@0 {
->> +		compatible = "simple-bus";
->> +
->> +		#address-cells = <2>;
->> +		#size-cells = <2>;
->> +		ranges = <0 0 0 0 0x10 0>;
-> 
-> ranges follow compatible, so it is the second property.
-> 
-> 
-Well noted, thanks for review.
-> 
-> Best regards,
-> Krzysztof
-> 
-Thanks,
-Jingyi
+diff --git a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+index 02d1d2c17129..fd260b20c59c 100644
+--- a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
++++ b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+@@ -45,7 +45,21 @@ patternProperties:
+       clock-latency-ns: true
+       opp-hz: true
+       opp-microvolt: true
+-      opp-supported-hw: true
++      opp-supported-hw:
++        description: |
++          Two bitfields indicating:
++            1. Which revision of the SoC the OPP is supported by.
++            This can be easily obtained from the datasheet of the
++            part being ordered/used. For eg. it will be 0x01 for SR1.0
++            2. Which eFuse bits indicate this OPP is available.
++            The device datasheet has a table talking about Device Speed Grades.
++            If one were to sort this table and only retain the unique elements
++            of the MAXIMUM OPERATING FREQUENCY starting from the first row
++            which tells the lowest OPP, to the highest. The corresponding bits
++            need to be set based on N elements of speed grade the device supports.
++            So, if there are 3 possible unique MAXIMUM OPERATING FREQUENCY
++            in the table, then BIT(0), (1) and (2) will be set, which means
++            the value shall be 0x7.
+       opp-suspend: true
+       turbo-mode: true
+ 
+
+---
+base-commit: ecc768a84f0b8e631986f9ade3118fa37852fef0
+change-id: 20240903-b4-opp-dt-binding-fix-73c6829751d2
+
+Best regards,
+-- 
+Dhruva Gole <d-gole@ti.com>
 
 
