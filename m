@@ -1,126 +1,94 @@
-Return-Path: <linux-pm+bounces-13672-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13673-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A821696D36E
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 11:34:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B6FA96D373
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 11:36:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6580A28A25B
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 09:34:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADC9F1C25A91
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 09:36:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3D36194AD9;
-	Thu,  5 Sep 2024 09:34:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C102194AF3;
+	Thu,  5 Sep 2024 09:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="t2VoHsTM"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="aE1XIjPT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C19E192B94;
-	Thu,  5 Sep 2024 09:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164AD2107;
+	Thu,  5 Sep 2024 09:36:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725528881; cv=none; b=MGXmicvQ4QEB8Pk6hQrzAKoiyV+Aw4sv6+tG0JXiUf2Th27diSg5nFgrnIitLzKOPu9qVyORfYM7GimlB9NzYgUcvw4z5uqR1FgF8qAxP9FVJUJAttxTZ7piL0QuRIMcNttnQNLapJoPG5akUbd6MZfWihY9IDvC51SQ8hQ3jkY=
+	t=1725528973; cv=none; b=XEJ00WQ5WwoMAXS62ROLcy/HvIb0gGu6KCKuTlEIwxh8n8BJPHvnY3Kijgq+VwjRg2fy/vzjK9rlMdPlgjy60UOPIHeocPxFuzmXmw3j+c2AGBBvGFTnJtCEpy912LKeitq5d+pfmdprv0b+lwOb+2Br9HRkaaJrCe8665QXif4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725528881; c=relaxed/simple;
-	bh=IkSNWXMT7ELTSE8Xuk7SvHDOSBbMhJFwNUOAwKhQJ/k=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IaCGeCRQQyT5eS2pN3/9vShfWzGn8Uf5giF0K1tUUCjAGh9tsQ0M2AVIcOziFeHrneNRJUg9+8YgnXlExgH5w9XyiF7cYn0TkKySAYMMvSmdBFxF8kaSzewXdeiVbCZPcICzwqcxaFq2Qdy8zqAVU/nTdDvGYfHtUnCvKtbsReA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=t2VoHsTM; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 0f7cc0ba6b6a11ef8593d301e5c8a9c0-20240905
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=4kGH80ordyv20AcZCJJKyTo4JdPjwcej8QohhqZgdvY=;
-	b=t2VoHsTMZ4CWxVCvLzLnAlcQ0LFjqwR+TK9nnZcVxLw4efD21oh817RTue6OtnHi9o/R31fDUgx/c0vwAEe7yx51vm11qTFi99yKmkBYkkuJQpPisaduZnyXxtzXso6kNB66BVzFQdpNeTST47vFWmfSx+hm6k3bfVnXN5j3Ylw=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:431400ad-4aa8-4d44-9e81-535fac55d622,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:08f03b05-42cd-428b-a1e3-ab5b763cfa17,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:817|102,TC:nil,Content:0|-5,EDM:-3,I
-	P:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-	,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 1,FCT|NGT
-X-CID-BAS: 1,FCT|NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 0f7cc0ba6b6a11ef8593d301e5c8a9c0-20240905
-Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw01.mediatek.com
-	(envelope-from <yenchia.chen@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 254534137; Thu, 05 Sep 2024 17:34:34 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 5 Sep 2024 02:34:33 -0700
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 5 Sep 2024 17:34:33 +0800
-From: Yenchia Chen <yenchia.chen@mediatek.com>
-To: <gregkh@linuxfoundation.org>
-CC: <angelogioacchino.delregno@collabora.com>, <len.brown@intel.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<matthias.bgg@gmail.com>, <pavel@ucw.cz>, <rafael.j.wysocki@intel.com>,
-	<rafael@kernel.org>, <stable@vger.kernel.org>, <yenchia.chen@mediatek.com>
-Subject: Re: [PATCH 6.6 1/1] PM: sleep: Restore asynchronous device resume optimization
-Date: Thu, 5 Sep 2024 17:34:33 +0800
-Message-ID: <20240905093433.4798-1-yenchia.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <2024090420-protozoan-clench-cca7@gregkh>
-References: <2024090420-protozoan-clench-cca7@gregkh>
+	s=arc-20240116; t=1725528973; c=relaxed/simple;
+	bh=TsX4HNYJRYQ3b4miU4bbbI2kC1l3WTu/SURXtvFNfWI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jFzyJwNC7ibH8dDkdxf3crFr+IgOBGDRKoLn2uHRk1T+di+BaUrzxvhCHv1nFMgaHDhDGERfk4qYIMiiyclNVOGlJ4kej2tDqF/Zbeor44+ugMD9M7A0QDvHl66R+PN0OSGZtVrwPHHHYDXqXddiTbssm5XIjmaZmtT8a9rZo1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=aE1XIjPT; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=FNW3preQti8XyoWg/zqU1z7ONAVaLVpYxz3a9sBv3TA=; b=aE1XIjPT/Mnz3cccqMVbPbksX4
+	gN+PcvP7ILMx8km+itTNCcauMNhaGekVRQ+oHukD23I/Gxuvi9/jmEIhXF8dgPvAeABXFaOqq+Wc5
+	Cqfdccshjx3zeBLSuygSLcQWEsR8VopXcKb/hvXB26Yh5Ar1/2Ilsn5d+nIaxqB6o1NZASzBizpzV
+	iFOK0x1Pee0Wvg00apnN+kjShyPsLiDozODUYQhO+Z/juvAtetnyOFbq+PoT1OK63ZWsKNLa5xHh7
+	+GERdEF7DQJ9yUij8Z6qxZw7hlMqlaSClQ90MMsf76wQ2/cSlC8c81UELq/O4cVU3Sv/AsVKdgT3V
+	pevt6JJQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1sm8uM-00000002B3V-215u;
+	Thu, 05 Sep 2024 09:36:07 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 63270300599; Thu,  5 Sep 2024 11:36:07 +0200 (CEST)
+Date: Thu, 5 Sep 2024 11:36:07 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+	tglx@linutronix.de, daniel.lezcano@linaro.org,
+	linux-pm@vger.kernel.org,
+	Christian Loehle <christian.loehle@arm.com>
+Subject: Re: [PATCHSET v6 0/4] Split iowait into two states
+Message-ID: <20240905093607.GB15400@noisy.programming.kicks-ass.net>
+References: <20240819154259.215504-1-axboe@kernel.dk>
+ <20240904142841.GL4723@noisy.programming.kicks-ass.net>
+ <CAJZ5v0iZqKGG+wCZYrA1t7mXvrW6Fo-Zb3d17Bofg3NSb2kPEg@mail.gmail.com>
+ <CAJZ5v0hVghgKgv0zqabL1m2FT6wou8-tW_9Mm-_9=0-3yhMb3A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hVghgKgv0zqabL1m2FT6wou8-tW_9Mm-_9=0-3yhMb3A@mail.gmail.com>
 
->> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
->> 
->> commit 3e999770ac1c7c31a70685dd5b88e89473509e9c upstream.
->> 
->> Before commit 7839d0078e0d ("PM: sleep: Fix possible deadlocks in core
->> system-wide PM code"), the resume of devices that were allowed to resume
->> asynchronously was scheduled before starting the resume of the other
->> devices, so the former did not have to wait for the latter unless
->> functional dependencies were present.
->> 
->> Commit 7839d0078e0d removed that optimization in order to address a
->> correctness issue, but it can be restored with the help of a new device
->> power management flag, so do that now.
->> 
->> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
->> Signed-off-by: Yenchia Chen <yenchia.chen@mediatek.com>
->> ---
->>  drivers/base/power/main.c | 117 +++++++++++++++++++++-----------------
->>  include/linux/pm.h        |   1 +
->>  2 files changed, 65 insertions(+), 53 deletions(-)
+On Wed, Sep 04, 2024 at 05:18:57PM +0200, Rafael J. Wysocki wrote:
 
->Why does this need to be backported?  What bug is it fixing?
+> To be more precise, there are two different uses of "iowait" in PM.
+> 
+> One is the nr_iowait_cpu() call in menu_select() and the result of it
+> is used for two purposes: (1) select different sets of statistics
+> depending on whether or not this number is zero and (2) set a limit
+> for the idle state's exit latency that depends on this number (but
+> note that it only takes effect when the "iowait" statistics are used
+> in the first place).  Both of these are arguably questionable and it
+> is unclear to me whether or not they actually help and how much.
 
->confused,
+So this one is very dubious, it relies on tasks getting back on the CPU
+they went to sleep on -- not guaranteed at all.
 
->greg k-h
+> The other use is boosting CPU frequency in schedutil and intel_pstate
+> if SCHED_CPUFREQ_IOWAIT is passed to them which in turn depends on the
+> p->in_iowait value in enqueue_task_fair().
 
-Below is the scenario we met the issue:
-1) use command 'echo 3 > /proc/sys/vm/drop_caches'
-   and enter suspending stage immediately.
-2) power on device, our driver try to read mmc after leaving resume callback
-   and got stucked.
-
-We found if we did not drop caches, mmc_blk_resume will be called and
-system works fine.
-
-If we drop caches before suspending, there is a high possibility that
-mmc_blk_resume not be called and our driver stucked at filp_open.
-
-We still try to find the root casue is but with this patch, it works.
-
-Since it has been merged in mainline, we'd like to know it is ok to merge to stable.
-
+This one is fine and makes sense. At this point we know that p is going
+to run and where it is going to run.
 
