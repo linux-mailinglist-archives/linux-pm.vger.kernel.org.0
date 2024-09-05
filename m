@@ -1,213 +1,146 @@
-Return-Path: <linux-pm+bounces-13684-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13685-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04EED96D718
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 13:31:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32D7296D71B
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 13:31:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0BAB287640
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 11:31:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF5B51F24184
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 11:31:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A410F199938;
-	Thu,  5 Sep 2024 11:30:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39672199E94;
+	Thu,  5 Sep 2024 11:31:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BEL/tg1X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X7GKr78v"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93809198856
-	for <linux-pm@vger.kernel.org>; Thu,  5 Sep 2024 11:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC827199E88;
+	Thu,  5 Sep 2024 11:31:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725535859; cv=none; b=XSv+8X3/h/BkxjbKhElj7uUdgaqqHgGIfIGwS0GAnQLJXu+Ib3cy85rcZmlp4Ill2VQVl0V9kEblBM0Qo0YYKcWy8+o2jn/TbITRh1VWpaDMJJlbA/29/i9CLqEFNolEsOXo3w5/YWZlh7IAdtRbQKBCaXSssuQ5VhoIpvofbG0=
+	t=1725535861; cv=none; b=P3iGQPd6weBtBghUi3vOJRrsovJaddphKTdrq6R+AibnbMafsA82ojtyQ+GBKPQUDjDzHYDyM0Gv3uph/sbIbi3g3Kq5SK5ZRE8hg5HGKZfE/Dj0bQKFbDVzsSCBfwwya6CviSF+Xg/LJs2rskaCCVxd8cZENfqiczMAegNYAg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725535859; c=relaxed/simple;
-	bh=cZ2Wx8fvaET/7JxQTjEgWR4ZohNvUR3xeq5khiLj2os=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GFyS78mCltyxy8xWmhTRatMzux/MEaQbLO+y+cczjToz5ZUG0KAy7IfPx1F/EBjkusTRN2W0r41Cwj3CQgJFubQYjTiADhWP2ZOh4BL6/g56tosB/8LJZ4yRn9DC4wr04Vb+MYzZKTV8bGPADzU3wZG/rfLhP6Su9w4ZsEnMXEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BEL/tg1X; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e1a7d43a226so776346276.3
-        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2024 04:30:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725535855; x=1726140655; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XO3SHERgjVtdUY92f/1GsvMnaAL4bpA7+aeJ5dWueio=;
-        b=BEL/tg1X2o8LpfKZYbFJCOwHGahGqVQhDjew+VUB6fgrcHuCQ4AhDos39fG29PWgbO
-         vlfLRVMvILqZZt6CA7oqQXUJ1dYqyczLu4Hf65GtH7gQ4eZh/Qjxv7T/K66CcNRS4IUk
-         dgztp1ZavihG/er9EHpOMESsCNO223YZZz+ALac+2tQvUZTsmwlTQqJWHBQPyCCRTLfv
-         BsAK3bCh8TjWJXvsaioHIAq/FoQ6+zDvArwZ8G6aYpivPB65YFkfm6W1wSsM6Inp9JxW
-         O0w4AdwKuZuwCBy1vVkEGb+bWussOOWEw1XMuD4jJffNaTNbTXIvmGH+jQwy3GNMXY4J
-         ejew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725535855; x=1726140655;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XO3SHERgjVtdUY92f/1GsvMnaAL4bpA7+aeJ5dWueio=;
-        b=aKqaOOP3jVnqDJEORBTL/pZfq8fCNnmQYTkEUxadtpxcP9GtcJzNRfHV9RD7f0fVU2
-         eJII0edb9phnPTBQC3wQU6VvH8rqAh7dsvEGb0Mhzwji6AcAXpZxRlyK1QbN3v8uKYRJ
-         Ofl+SKzLeAF2IPvqM8sP5BpeXACVN6bK8zNPaYDhGTgFM1PzFWB6BVNyHv9xleA+BbRo
-         nYVBGButpaM0hxLAkmXLc90wA4wbSYNTh1jbMwaITbr2S8ilDtFs6n+kh7OH5sRbeSe2
-         Xtr++YJnl7RuauB7vJiFw//95uwsKTNbF5KS9yN5wPfnsGEmqpnzMTcsai3Ub6JX0VHs
-         uuIw==
-X-Gm-Message-State: AOJu0YyAodhnSEJwjSdrpZmN1TYlNYb/KIltOvD0OBzV4TKHhAdNV73+
-	/6j7DtFQxznR2xeNPhEesBVQ1xWh5T1F6BuQ30Pjx4/G0PmZNcGrjO74I5cMbhz67DzQ2ilVvrX
-	kugR1yZ4ktBAz/UbTII95w9g7IbiXvTN4R5OIpw==
-X-Google-Smtp-Source: AGHT+IHV34c7EEOOI3qO09nipDkXPQmHy+t5wyoFib/rFaG11CrIUkeU2FoaK9HyFVSRXWcO/a+E0H5PLgECkn89HQk=
-X-Received: by 2002:a05:6902:2204:b0:e1a:a86b:8ebd with SMTP id
- 3f1490d57ef6-e1aa86b9b77mr16971362276.17.1725535855449; Thu, 05 Sep 2024
- 04:30:55 -0700 (PDT)
+	s=arc-20240116; t=1725535861; c=relaxed/simple;
+	bh=aTcY6lnCeCXuN+hBR/lTjApexCcG5nl9Skw7Ca45bF0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NxM+GTcKCpfZZQRk46TPSy+x5CAnSQyk9C+mGLA7QzJQ1tmWAKVSDQEwah3IvS176UztJZ2qG2k29bCn6NpIBSaoz3KpAPpZz53vrLGyw/wL4QKkbWXsPOIpHVTW8Umm+FZDlfizfY8bDvAjqyLC+OgqbuG1qyzaGue6FJJYL4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X7GKr78v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E207C4CEC3;
+	Thu,  5 Sep 2024 11:30:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725535860;
+	bh=aTcY6lnCeCXuN+hBR/lTjApexCcG5nl9Skw7Ca45bF0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=X7GKr78v0KZSNjtPief4MGOvOX4Z7dQlMmWRBIpTU1p13LSzit5Su1pTaielep1O7
+	 nFVcp3oxh6jjpSMAIINYxPiRmE+AKjLiCo1KluI7uRmpH8IM8bjm+5uOgWvRRrW34Q
+	 SEIl6tqmJE+99KgmZZBjoJXm5YYjbvB9/+xlkE6SVOSYibxY33HZlmGVFMhg/ePM25
+	 AqHzGdkKE2cumqW4AGDK7UMY1dK/zM/1MfbPQGBPXFfTi/LMxxRJ22WQ+u97zxcsUS
+	 PT/P9fsSxWW9VT8MvPSPcrSawtpyg+Eaqh7U5bZdYSpr5RcoMaiZaDa94gU6n0rCC2
+	 J4BIvJw8awzOQ==
+Message-ID: <d5e338fe-bd38-49f7-b69f-fc27f9f87495@kernel.org>
+Date: Thu, 5 Sep 2024 13:30:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240819-lpm-v6-10-constraints-pmdomain-v2-0-461325a6008f@baylibre.com>
- <20240819-lpm-v6-10-constraints-pmdomain-v2-1-461325a6008f@baylibre.com>
-In-Reply-To: <20240819-lpm-v6-10-constraints-pmdomain-v2-1-461325a6008f@baylibre.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 5 Sep 2024 13:30:19 +0200
-Message-ID: <CAPDyKFrCyvSLYh9DoC661M-2D33oU9x5tFOe+Oem04V5KfqG3A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] pmdomain: ti_sci: add per-device latency
- constraint management
-To: Kevin Hilman <khilman@baylibre.com>
-Cc: linux-pm@vger.kernel.org, Nishanth Menon <nm@ti.com>, Vibhore Vardhan <vibhore@ti.com>, 
-	Dhruva Gole <d-gole@ti.com>, Akashdeep Kaur <a-kaur@ti.com>, Sebin Francis <sebin.francis@ti.com>, 
-	Markus Schneider-Pargmann <msp@baylibre.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/19] dt-bindings: power: rpmpd: Add QCS8300 power
+ domains
+To: Jingyi Wang <quic_jingyw@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Bart Van Assche <bvanassche@acm.org>, Andy Gross <agross@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Joerg Roedel <joro@8bytes.org>, Konrad Dybcio <konradybcio@kernel.org>,
+ Robert Marko <robimarko@gmail.com>, Das Srinagesh <quic_gurus@quicinc.com>,
+ Jassi Brar <jassisinghbrar@gmail.com>, Lee Jones <lee@kernel.org>,
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+ Catalin Marinas <catalin.marinas@arm.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ iommu@lists.linux.dev, Shazad Hussain <quic_shazhuss@quicinc.com>,
+ Tingguo Cheng <quic_tingguoc@quicinc.com>
+References: <20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com>
+ <20240904-qcs8300_initial_dtsi-v1-6-d0ea9afdc007@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konradybcio@kernel.org>
+In-Reply-To: <20240904-qcs8300_initial_dtsi-v1-6-d0ea9afdc007@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, 20 Aug 2024 at 02:00, Kevin Hilman <khilman@baylibre.com> wrote:
->
-> For each device in a TI SCI PM domain, check whether the device has
-> any resume latency constraints set via per-device PM QoS.  If
-> constraints are set, send them to DM via the new SCI constraints API.
->
-> Checking for constraints happen for each device before system-wide
-> suspend (via ->suspend() hook.)
->
-> An important detail here is that the PM domain driver inserts itself
-> into the path of both the ->suspend() and ->resume() hook path
-> of *all* devices in the PM domain.  This allows generic PM domain code
-> to handle the constraint management and communication with TI SCI.
->
-> Further, this allows device drivers to use existing PM QoS APIs to
-> add/update constraints.
->
-> DM firmware clears constraints during its resume, so Linux has
-> to check/update/send constraints each time system suspends.
->
-> Co-developed-by: Vibhore Vardhan <vibhore@ti.com>
-> Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
-> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+On 4.09.2024 10:33 AM, Jingyi Wang wrote:
+> From: Shazad Hussain <quic_shazhuss@quicinc.com>
+> 
+> Add compatible and constants for the power domains exposed by the RPMH
+> in the Qualcomm QCS8300 platform.
+> 
+> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+> Signed-off-by: Tingguo Cheng <quic_tingguoc@quicinc.com>
+> Signed-off-by: Jingyi Wang <quic_jingyw@quicinc.com>
 > ---
->  drivers/pmdomain/ti/ti_sci_pm_domains.c | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
->
-> diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> index 1510d5ddae3d..963272fa387b 100644
-> --- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> +++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> @@ -13,6 +13,8 @@
->  #include <linux/platform_device.h>
->  #include <linux/pm_domain.h>
->  #include <linux/slab.h>
-> +#include <linux/pm_qos.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/soc/ti/ti_sci_protocol.h>
->  #include <dt-bindings/soc/ti,sci_pm_domain.h>
->
-> @@ -51,6 +53,29 @@ struct ti_sci_pm_domain {
->
->  #define genpd_to_ti_sci_pd(gpd) container_of(gpd, struct ti_sci_pm_domain, pd)
->
-> +static inline bool ti_sci_pd_is_valid_constraint(s32 val)
-> +{
-> +       return val != PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
-> +}
+>  .../devicetree/bindings/power/qcom,rpmpd.yaml         |  1 +
+>  include/dt-bindings/power/qcom-rpmpd.h                | 19 +++++++++++++++++++
+>  2 files changed, 20 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+> index 929b7ef9c1bc..be1a9cb71a9b 100644
+> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+> @@ -32,6 +32,7 @@ properties:
+>            - qcom,msm8998-rpmpd
+>            - qcom,qcm2290-rpmpd
+>            - qcom,qcs404-rpmpd
+> +          - qcom,qcs8300-rpmhpd
+>            - qcom,qdu1000-rpmhpd
+>            - qcom,qm215-rpmpd
+>            - qcom,sa8155p-rpmhpd
+> diff --git a/include/dt-bindings/power/qcom-rpmpd.h b/include/dt-bindings/power/qcom-rpmpd.h
+> index 608087fb9a3d..7dd7b9ebc480 100644
+> --- a/include/dt-bindings/power/qcom-rpmpd.h
+> +++ b/include/dt-bindings/power/qcom-rpmpd.h
+> @@ -4,6 +4,25 @@
+>  #ifndef _DT_BINDINGS_POWER_QCOM_RPMPD_H
+>  #define _DT_BINDINGS_POWER_QCOM_RPMPD_H
+>  
+> +/* QCS8300 Power Domain Indexes */
+> +#define QCS8300_CX	0
+> +#define QCS8300_CX_AO	1
+> +#define QCS8300_DDR	2
+> +#define QCS8300_EBI	3
+> +#define QCS8300_GFX	4
+> +#define QCS8300_LCX	5
+> +#define QCS8300_LMX	6
+> +#define QCS8300_MMCX	7
+> +#define QCS8300_MMCX_AO	8
+> +#define QCS8300_MSS	9
+> +#define QCS8300_MX	10
+> +#define QCS8300_MX_AO	11
+> +#define QCS8300_MXC	12
+> +#define QCS8300_MXC_AO	13
+> +#define QCS8300_NSP0	14
+> +#define QCS8300_NSP1	15
+> +#define QCS8300_XO	16
 
-Should we perhaps add a generic helper function for this? Seems like a
-similar check is done at other places in the kernel too.
+Some time ago we moved RPM*h*pd to common defines.. we should
+definitely do the same here. Please reuse the RPMPD_xxx definitions
+from [1] and credit Rohit in the commit message, as he did some
+processing on that to make sure they're ordered based on usage
 
-> +
-> +static int ti_sci_pd_set_lat_constraint(struct device *dev, s32 val)
-> +{
+Konrad
 
-Looks like you may want to turn this into a static void rather than
-static int. At least the caller, below, doesn't care about the return
-value.
-
-> +       struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
-> +       struct ti_sci_pm_domain *pd = genpd_to_ti_sci_pd(genpd);
-> +       const struct ti_sci_handle *ti_sci = pd->parent->ti_sci;
-> +       int ret;
-> +
-> +       ret = ti_sci->ops.pm_ops.set_latency_constraint(ti_sci, val, TISCI_MSG_CONSTRAINT_SET);
-> +       if (ret)
-> +               dev_err(dev, "ti_sci_pd: set latency constraint failed: ret=%d\n",
-> +                       ret);
-> +       else
-> +               dev_dbg(dev, "ti_sci_pd: ID:%d set latency constraint %d\n",
-> +                       pd->idx, val);
-> +
-> +       return ret;
-> +}
-> +
->  /*
->   * ti_sci_pd_power_off(): genpd power down hook
->   * @domain: pointer to the powerdomain to power off
-> @@ -79,6 +104,22 @@ static int ti_sci_pd_power_on(struct generic_pm_domain *domain)
->                 return ti_sci->ops.dev_ops.get_device(ti_sci, pd->idx);
->  }
->
-> +static int ti_sci_pd_suspend(struct device *dev)
-> +{
-> +       int ret;
-> +       s32 val;
-> +
-> +       ret = pm_generic_suspend(dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       val = dev_pm_qos_read_value(dev, DEV_PM_QOS_RESUME_LATENCY);
-> +       if (ti_sci_pd_is_valid_constraint(val))
-> +               ti_sci_pd_set_lat_constraint(dev, val);
-> +
-> +       return 0;
-> +}
-> +
->  /*
->   * ti_sci_pd_xlate(): translation service for TI SCI genpds
->   * @genpdspec: DT identification data for the genpd
-> @@ -188,6 +229,13 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
->                                 pd->pd.power_on = ti_sci_pd_power_on;
->                                 pd->idx = args.args[0];
->                                 pd->parent = pd_provider;
-> +                               /*
-> +                                * If SCI constraint functions are present, then firmware
-> +                                * supports the constraints API.
-> +                                */
-> +                               if (pd_provider->ti_sci->ops.pm_ops.set_device_constraint &&
-> +                                   pd_provider->ti_sci->ops.pm_ops.set_latency_constraint)
-> +                                       pd->pd.domain.ops.suspend = ti_sci_pd_suspend;
->
->                                 pm_genpd_init(&pd->pd, NULL, true);
->
->
-> --
-> 2.46.0
->
-
-Other than the minor things above, this looks good to me.
-
-Kind regards
-Uffe
+[1] https://lore.kernel.org/all/1688647793-20950-2-git-send-email-quic_rohiagar@quicinc.com/
 
