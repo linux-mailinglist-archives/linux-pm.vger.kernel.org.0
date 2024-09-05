@@ -1,113 +1,148 @@
-Return-Path: <linux-pm+bounces-13693-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13694-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65E8296DA4A
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 15:29:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E51A696DB15
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 16:04:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D60D2850C5
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 13:29:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B9E3B20E97
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 14:04:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A33719D07C;
-	Thu,  5 Sep 2024 13:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18E3519E7E2;
+	Thu,  5 Sep 2024 14:04:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FEybFqNL"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="mf9j8cWM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D141527B4
-	for <linux-pm@vger.kernel.org>; Thu,  5 Sep 2024 13:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE5819DF68;
+	Thu,  5 Sep 2024 14:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725542947; cv=none; b=tElHivBbem6CtQRCeRmyAdYP1ZATOaDGdIxhLl95TgBWPbM4hqG8mqei14jwV7zkl0Z3z/r4I1UIduzBorW0iESPhaCV1N/iFNXIN0WLJ1M4f3amW3nsgQUR0MdfPPT60eyRDdVgAGz2WB9UBVO8SHOzbswrV300g6MhNC2J3EY=
+	t=1725545074; cv=none; b=UsnUjrdPmrmGzKRZWH6It85NDvRCcSqZrknujlK192QqkjXNsCmZTQW8LzIK+MTWYvB0deGcxI54Kmt1QjomI9x0TtqevQX+qCquWYS8bbZE1yY4Nfo9+32JazVhZRoTGn7NKhbgkdoiIiywX3gFsSy64WRC9rFmbiSuvKBMg6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725542947; c=relaxed/simple;
-	bh=5evTdunuLhVAJcs/+kUduc/E4egJQadthe4kW1wlI3E=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=etjMsvb+idvl0ywyOTTUS8PxTiTgX7/Qf3RqwVxDbVZKeZF1qCis6r3pVbloQ32199Zvn//x2Z/4ejWE+X4usP93HrWeMH181242/rtGTEwsNo3SKzj4wNOP0KQHUkMU08N3kjoXdgMJK9iMhauvNeV6RwAFTxuJI0DY/STeKqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FEybFqNL; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-42ba9b47f4eso4541755e9.1
-        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2024 06:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725542944; x=1726147744; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mmo44zFx8mrvsxCT8MsK26g0o98DN2eXGHyiYlsG/6k=;
-        b=FEybFqNLjPU3DSuy++aT6kG/iP1oegSY5KCdeqqtpy1yBIZqKmg4BBKbqHb5qOifpi
-         1bGJq63JCO5uq6BKdnPveSslvcPp7/9ABiu9lFM6+A+dBuzBPY5j+4SoZqPyb0geF4sH
-         ODh4ZMDycG+Ui0zyPBAQ92c0VZW2/akNGxnOTCnld/PIFvR+nobySiw22C2ZFtpp1Oj4
-         fPsg9eTZTkJBdXmdYHbj+V3K3nYDmCemIUeF4aLKcWMSXCL/C18PDWGmTkpaE9b+iVAh
-         0S8iywz3b+aPu4GfrCiqSXbBBo/sgvmrJiCTjaoMAAl452ljdMU4JzJmTbwU4YW2fEWm
-         KtvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725542944; x=1726147744;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mmo44zFx8mrvsxCT8MsK26g0o98DN2eXGHyiYlsG/6k=;
-        b=C1O6K7geZpSRRlm0lelJvy5WK8W9JJt4XwnfK8XFylYy3XnCP4zp0d0SmTp3HUBw+m
-         WNy1uoNwoxNAWqvAvtcGkLjeuWDDKiK2JxrACJqxqf9nC23NhSfovgKLr9BOk9CL0Dmb
-         hNIPqIbNL7inKdgtuaoTgDm9DN7Q6NXEdRBgQ4hYh46kYqUSoipWnC1hincLK0nEaGeJ
-         nqTsIze1MZhmZJD5ljg0kulHQtvq+cXQsR0HFdOeZKOfruCBmgiNOZoETmPBUbgebYqJ
-         Ghgm0BNoccWpRABd9ql4kQK/1sM4mdGWghepgUL3yHkEl70xdgvCilR4oBtB/7sFijuX
-         Voxg==
-X-Forwarded-Encrypted: i=1; AJvYcCUm7jAdXbDt/rELgUNaEnRa/SBf6TPaUhXl7GfeDPtujnNeDJzEkL/GXvEG2bzWuJVJG8sqU5vK4g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaULcStuhYzhHTHdiIM2MO2naS8ZPlgeZ4hpL/SqqGiyqedzfJ
-	ISRnhTwBoNnj3W6MrBCYZdjTGmOOgxRsuuIWleMRo2puBTWo7/epphHbfFFL8Mo=
-X-Google-Smtp-Source: AGHT+IFsWenqoAd2RFaGr+OZ74a6/40O2rid0oEltUVZXpv8n2OTkZHPQAC4DFZMtytig8GfX00Tew==
-X-Received: by 2002:a05:600c:3ba0:b0:42b:b016:70ce with SMTP id 5b1f17b1804b1-42c95ac1978mr35442465e9.1.1725542944053;
-        Thu, 05 Sep 2024 06:29:04 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-374b9859486sm16167785f8f.111.2024.09.05.06.29.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2024 06:29:03 -0700 (PDT)
-Date: Thu, 5 Sep 2024 16:28:59 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Dimitri Fedrau <dima.fedrau@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH next] power: supply: fix a double free on error in probe()
-Message-ID: <9c2f76e7-5679-473b-9b9c-e11b492b96ac@stanley.mountain>
+	s=arc-20240116; t=1725545074; c=relaxed/simple;
+	bh=BAJ9VYyEmanS+PFfwXykRirtRNrrIcKiKS3ue6Ie4zk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=l54jJFVMTZvCGf4o3LbHqUQVLuW90CpA1DsXR/C46H8K/BivGK0oi/NpvVmj2gxQutuZxWv/eNCVg7CdpXmYSPtzemgyXOxrcRxqN4s5yplu9SKAiBlZWnAGV1Elovn0EWZhTbsrzqllrNBWjceUJMz8HAQoUFs575OiW9E3aZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=mf9j8cWM; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 485973fZ025924;
+	Thu, 5 Sep 2024 14:03:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	BAJ9VYyEmanS+PFfwXykRirtRNrrIcKiKS3ue6Ie4zk=; b=mf9j8cWMLIJg7Vzi
+	P/QGp0SO0uvpdkTf7R+8JCimi6sSEwJ4sRkcq971+j6cL+IxNOoVavaepeuNjt/R
+	dbyHKYw1FNfutJ3QdBqzfjtPiThziBjxR+BV5yKsKdX1oOs7+d8SXzZPHsnmAFl2
+	qaMYdx7/yo0RR5qMi5M6NKqq+sojkbeNaR1IIlFw0Ugj56kV2PffM8m4goOw1JSJ
+	dCGXB1bcIuKENWstC3jRYMzo2sO31kSBOzFjvExpIqCnCoAYiBMH4vJjqt2ttkQ8
+	rEtiWQszqEDBI+/mLXHJA8jDj6k9f1XKf/y6Vnrgj9GZNZ0NA0zP+3FVXa2sE3+i
+	FuEnRg==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41drqe8g2m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 05 Sep 2024 14:03:52 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 485E3pZa014887
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 5 Sep 2024 14:03:51 GMT
+Received: from [10.110.102.234] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 5 Sep 2024
+ 07:03:47 -0700
+Message-ID: <75768451-4c85-41fa-82b0-8847a118ea0a@quicinc.com>
+Date: Thu, 5 Sep 2024 07:03:46 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
+To: Krzysztof Kozlowski <krzk@kernel.org>, Andrew Lunn <andrew@lunn.ch>
+CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
+        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
+        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
+        <linus.walleij@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
+        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
+        <quic_psodagud@quicinc.com>, Praveen Talari <quic_ptalari@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-17-quic_nkela@quicinc.com>
+ <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
+ <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
+ <9a655c1c-97f6-4606-8400-b3ce1ed3c8bf@kernel.org>
+ <516f17e6-b4b4-4f88-a39f-cc47a507716a@quicinc.com>
+ <2f11f622-1a00-4558-bde9-4871cdc3d1a6@lunn.ch>
+ <204f5cfe-d1ed-40dc-9175-d45f72395361@quicinc.com>
+ <70c75241-b6f1-4e61-8451-26839ec71317@kernel.org>
+Content-Language: en-US
+From: Nikunj Kela <quic_nkela@quicinc.com>
+In-Reply-To: <70c75241-b6f1-4e61-8451-26839ec71317@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: mfOtKa7pytGj7RGF-VZlk3L-_P3fsu10
+X-Proofpoint-ORIG-GUID: mfOtKa7pytGj7RGF-VZlk3L-_P3fsu10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-05_09,2024-09-04_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ phishscore=0 adultscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
+ impostorscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2409050104
 
-In this code, if devm_add_action_or_reset() fails, it will call
-max1720x_unregister_ancillary() which in turn calls
-i2c_unregister_device().  Thus the call to i2c_unregister_device() on the
-following line is not required and is a double unregister.  Delete it.
 
-Fixes: 47271a935619 ("power: supply: max1720x: add read support for nvmem")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
-From code review, not tested.
+On 9/5/2024 1:04 AM, Krzysztof Kozlowski wrote:
+> On 04/09/2024 23:06, Nikunj Kela wrote:
+>> On 9/4/2024 9:58 AM, Andrew Lunn wrote:
+>>>> Sorry, didn't realize SPI uses different subject format than other
+>>>> subsystems. Will fix in v3. Thanks
+>>> Each subsystem is free to use its own form. e.g for netdev you will
+>>> want the prefix [PATCH net-next v42] net: stmmac: dwmac-qcom-ethqos:
+>> of course they are! No one is disputing that.
+>>> This is another reason why you should be splitting these patches per
+>>> subsystem, and submitting both the DT bindings and the code changes as
+>>> a two patch patchset. You can then learn how each subsystem names its
+>>> patches.
+>> Qualcomm QUPs chips have serial engines that can be configured as
+>> UART/I2C/SPI so QUPs changes require to be pushed in one series for all
+>> 3 subsystems as they all are dependent.
+> No, they are not dependent. They have never been. Look how all other
+> upstreaming process worked in the past.
 
- drivers/power/supply/max1720x_battery.c | 1 -
- 1 file changed, 1 deletion(-)
+Top level QUP node(patch#18) includes i2c,spi,uart nodes.
+soc/qcom/qcom,geni-se.yaml validate those subnodes against respective
+yaml. The example that is added in YAML file for QUP node will not find
+sa8255p compatibles if all 4 yaml(qup, i2c, spi, serial nodes) are not
+included in the same series.
 
-diff --git a/drivers/power/supply/max1720x_battery.c b/drivers/power/supply/max1720x_battery.c
-index 3e84e70340e4..2bc3dce963a3 100644
---- a/drivers/power/supply/max1720x_battery.c
-+++ b/drivers/power/supply/max1720x_battery.c
-@@ -427,7 +427,6 @@ static int max1720x_probe_nvmem(struct i2c_client *client,
- 
- 	ret = devm_add_action_or_reset(dev, max1720x_unregister_ancillary, info);
- 	if (ret) {
--		i2c_unregister_device(info->ancillary);
- 		dev_err(dev, "Failed to add unregister callback\n");
- 		return ret;
- 	}
--- 
-2.45.2
 
+>
+> Best regards,
+> Krzysztof
+>
 
