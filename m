@@ -1,82 +1,80 @@
-Return-Path: <linux-pm+bounces-13734-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13735-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D33896E4A7
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 23:09:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CD8896E4B2
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 23:14:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 077EC280217
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 21:09:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3F1D1F2372D
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 21:14:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00EC190055;
-	Thu,  5 Sep 2024 21:09:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9901A7275;
+	Thu,  5 Sep 2024 21:14:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=viasat.com header.i=@viasat.com header.b="k90h41/Z"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="WsvKZLnt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0f-0085b301.gpphosted.com (mx0f-0085b301.gpphosted.com [67.231.155.199])
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2062.outbound.protection.outlook.com [40.107.101.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF66A165F0E;
-	Thu,  5 Sep 2024 21:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.155.199
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725570575; cv=none; b=OOREFdQmKq0exyM8RyLyTvFL8w8UXai1qp2OqONDXXPowEm3tcBZJVDYdGXDJcKguFmIOiLPKtMDzK/rke90ihiFyXcqO4yNovz5rl4R3Nr24EkYjluUgJUmnhwV2gpdfAeFHTj6HpQLuRaSLTBtlKBKlT0UgHA9tjMlLTjnF1Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725570575; c=relaxed/simple;
-	bh=YEo1o6Da+GwcHd+Zdww7y+YJnhNBcrYiF6y1nDv9Bzs=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=KOW2uRbvf+cIicwtZQuDbpUdW2FxXKG53ltblrxMEIHrFB3nl6ZPUW6zjb/pUAJ1+2N5BErMfofKJitjnmvLfEf1OjOLQDw8FLgXMlpY0/PLWTNtfIGANhY7pUJ5AH+wcSMrGYPmmwgz3duESTGomlK3bB8yMsacrLX/NAAf7sI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=viasat.com; spf=pass smtp.mailfrom=viasat.com; dkim=pass (2048-bit key) header.d=viasat.com header.i=@viasat.com header.b=k90h41/Z; arc=none smtp.client-ip=67.231.155.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=viasat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=viasat.com
-Received: from pps.filterd (m0351330.ppops.net [127.0.0.1])
-	by mx0f-0085b301.gpphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 485IOUFY029865;
-	Thu, 5 Sep 2024 21:09:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=viasat.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=YEo1o6Da+GwcHd+Zdww7y+YJnhNBcrYiF6y1nDv9Bzs=;
- b=k90h41/Z64npPDDE9RWfinCaYyoZ6hklZTU0ijPbKgK9yvr4oGO8YmllQqRkz8GI0w65
- 1InWLIX/fpfDOl86k+UvJ3hSgNCJ9DmtU1CaQcgcvYlXUWbNeVaYEgK8wfTigjBuSuQh
- 3GWAW1E+sGIe10+FLOZrg7JMhSkTF0w8bSEi8s7o19lDD0yf/0jyS9HVxDzD6Qy9b70D
- /Tzn25sB52uHf4YVPD6yPRpSMW5TK0xx2Y7jt2vaa9elM0rcv1b8NSFuqsNEBQMhJRtK
- 2X+jHHeiYhA/HTTOyBK1G2YI8yIlYb1dSv5duXpjgEpRLCPTh/AuJeL0RqqM2FpuTTOB uA== 
-Received: from wdc1exchp02.hq.corp.viasat.com ([8.37.104.42])
-	by mx0f-0085b301.gpphosted.com (PPS) with ESMTPS id 41fhw6h0cr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 05 Sep 2024 21:09:12 +0000
-Received: from WDC1EXCHP05.hq.corp.viasat.com (10.228.7.145) by
- WDC1EXCHP02.hq.corp.viasat.com (10.228.7.142) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 5 Sep 2024 15:09:10 -0600
-Received: from WDC1EXCHP05.hq.corp.viasat.com ([fe80::e59e:1518:91aa:55e9]) by
- WDC1EXCHP05.hq.corp.viasat.com ([fe80::e59e:1518:91aa:55e9%23]) with mapi id
- 15.01.2507.039; Thu, 5 Sep 2024 15:09:10 -0600
-From: "Jones, Morgan" <Morgan.Jones@viasat.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        David Arcari
-	<darcari@redhat.com>,
-        Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "viresh.kumar@linaro.org"
-	<viresh.kumar@linaro.org>,
-        "gautham.shenoy@amd.com" <gautham.shenoy@amd.com>,
-        "perry.yuan@amd.com" <perry.yuan@amd.com>,
-        "skhan@linuxfoundation.org"
-	<skhan@linuxfoundation.org>,
-        "li.meng@amd.com" <li.meng@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>
-Subject: RE: [EXTERNAL] Re: [PATCH v2 2/2] cpufreq/amd-pstate: Fix the
- scaling_max_freq setting on shared memory CPPC systems
-Thread-Topic: [EXTERNAL] Re: [PATCH v2 2/2] cpufreq/amd-pstate: Fix the
- scaling_max_freq setting on shared memory CPPC systems
-Thread-Index: AQHTmcEn27fAHGT7pNe1jAQ3Ww8GHAMI4eQEAR3OYjGyM+kx8IAAZwsA//+b9MCAAInhgIAAC7yA//+1HeCAAWldgIABpycA///+NiA=
-Date: Thu, 5 Sep 2024 21:09:10 +0000
-Message-ID: <f9085ef60f4b42c89b72c650a14db29c@viasat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2DC6165F0E;
+	Thu,  5 Sep 2024 21:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.62
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725570873; cv=fail; b=Hi6TKERZTsQkeWrVBwFWjEBpYQAaZe83w1j0HK3i788U6QwDp72HmZVlgEyOerQUO5bNkDE1MHwFjLMK+4Vn5gjlY2wDcSqaEtEaVxcRMNTAcxiMJWc/7+D+q3OAXNdLuJZE5MrhTd+FvdwV408bySqgm8u4RzW82TCqcJwdDns=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725570873; c=relaxed/simple;
+	bh=TpVYGzflAHQttFJr+5LHrx58iMYRTtFkzVuycCpZ/BY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=sOktws3PKdKO1iWxp5DdvRrGoUZmoTef9z7Ed++CSTeamNx++mu3veDbPccqYMOzSrZr1zFPb556saku5H4Ig7W80r7IEOAilwg/gJVK8JOXKw24GjvImurLSXEaYdOS2ntNNspETj6Stz4NKr29zWgZI468L+kdIRaWbPlw7uA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=WsvKZLnt; arc=fail smtp.client-ip=40.107.101.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=WTlO69fbXJZg6OZZi7bMIY/3er8W40EDMPm+FQCYv8IkdPj15xwMD6Omsv/qMBcO+vyS9oSkp80tF/MpOZJ/vRekqvArZSvUDAwcMrjeHT+2Mb8tINHrd8uHAwpwAR3Y7S4cd3Ba45InJNk8YsKxm2AEEe8GQC7y7Z06g87xxiHYXmxsIOzy0aDZ3tGVAsbTBG/9ltoeaG0rXcd0T0eopIrHWxiUsbLKysoSXN/W7cWcKH45qPtnfgIDVQRSpP1KIila2x4HdOVi1HRjJNselmQWl8SlIjTiTwizB5tpLIxDDiO5LLcAgNdx/SKfp4dmP8tWUrU7UIVZ1tLlheZOlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ez1ZU456IITWhUKH+MSTFDh1+Qn0sPmfcHg7ORsYlIs=;
+ b=Zkq6/DYL0jsD3fT798pJsZqHPJBv6YyYq6jXzFMPdwIGnZ2tPVrCT0XszLdHV+NgvL7Tkiq4yJs72IEUZejErDudX5OjWG7YbrwURW2d0P3XpjfknmcT1anEfTm8gx3Fq3s47ecMTLSjqEyadjt/hdGowgcRzjRhu3C6tSwCgMwzbimyBZf3SI+OfUsg7t1cP61vS+wbPqkX2gF424RDE3SRPCmFcycoAXWGEhQ2c4VThtJDmXPcIopQk0W+AUV42oG0EfGXu36JBEpYi/tDdLmGrtcMOYr8cIZ2Eq2stPm8P3xGZpDoqxkUnUjkLhZKX4ifN1yw/0xiDeQa7nBmtQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ez1ZU456IITWhUKH+MSTFDh1+Qn0sPmfcHg7ORsYlIs=;
+ b=WsvKZLnt51Kzlva+oQS0m1CaKyOWQq9M7HF49Y1UxHXmE5f7NVJvl3bbskf8Tzur80oLZWDMjCKTCAa0EEPHSC+dvxipUxMbzsaadHvRiB6iKAyNxgmNB+yY6TlNAVDMU0BPv5deQiGqwEVSu5t5j6jG+RZWygbKrnS+Y1Fx1Sg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DS0PR12MB7770.namprd12.prod.outlook.com (2603:10b6:8:138::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Thu, 5 Sep
+ 2024 21:14:29 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%7]) with mapi id 15.20.7918.024; Thu, 5 Sep 2024
+ 21:14:29 +0000
+Message-ID: <be2d96b0-63a6-42ea-a13b-1b9cf7f04694@amd.com>
+Date: Thu, 5 Sep 2024 16:14:26 -0500
+User-Agent: Mozilla Thunderbird
+Subject: linux-6.6.y regression on amd-pstate
+To: "Jones, Morgan" <Morgan.Jones@viasat.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Sasha Levin <sashal@kernel.org>
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ David Arcari <darcari@redhat.com>,
+ Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
+ "rafael@kernel.org" <rafael@kernel.org>,
+ "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+ "gautham.shenoy@amd.com" <gautham.shenoy@amd.com>,
+ "perry.yuan@amd.com" <perry.yuan@amd.com>,
+ "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+ "li.meng@amd.com" <li.meng@amd.com>, "ray.huang@amd.com"
+ <ray.huang@amd.com>, "stable@vger.kernel.org" <stable@vger.kernel.org>,
+ Linux kernel regressions list <regressions@lists.linux.dev>
 References: <20240702081413.5688-1-Dhananjay.Ugwekar@amd.com>
  <20240702081413.5688-3-Dhananjay.Ugwekar@amd.com>
  <bb09e7e8-5824-4bc1-9697-1929a4cf717e@amd.com>
@@ -88,100 +86,219 @@ References: <20240702081413.5688-1-Dhananjay.Ugwekar@amd.com>
  <d6477bd059df414d85cd825ac8a5350d@viasat.com>
  <d6808d8e-acaf-46ac-812a-0a3e1df75b09@amd.com>
  <7f50abf9-e11a-4630-9970-f894c9caee52@amd.com>
-In-Reply-To: <7f50abf9-e11a-4630-9970-f894c9caee52@amd.com>
-Accept-Language: en-US
+ <f9085ef60f4b42c89b72c650a14db29c@viasat.com>
 Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <f9085ef60f4b42c89b72c650a14db29c@viasat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SN6PR04CA0105.namprd04.prod.outlook.com
+ (2603:10b6:805:f2::46) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-GUID: 02yJOrcwAQlNHhHv_3ai58yh1plLqyPr
-X-Proofpoint-ORIG-GUID: 02yJOrcwAQlNHhHv_3ai58yh1plLqyPr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-05_16,2024-09-05_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- priorityscore=1501 mlxlogscore=999 impostorscore=0 bulkscore=0
- phishscore=0 spamscore=0 clxscore=1015 suspectscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2408220000 definitions=main-2409050157
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS0PR12MB7770:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3e340b05-95c9-41c8-94a8-08dccdefbab0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?aWlRMlc3bXp1L0dXZFo5NTNmSUFCOUhXMEpFREEzZUpIeTZuZFFBY0hxVDdi?=
+ =?utf-8?B?TE1XZk9EWUpCSXZWU0g3Tkd2dXdzaWdZSXgrRU55clN2dmFIVVZBdytJV3Nv?=
+ =?utf-8?B?bnBBSlZrc2VHT2JMbnFCTVFscmxlbjBJMGJ1WmRQcWEyOVc4anlsaUhHOUha?=
+ =?utf-8?B?dHlCdlM2RUk1Y2pIemZ1QkRiamRIVS9yUEpTVmcydlhTdjlQYmFCejF2WVRQ?=
+ =?utf-8?B?d0J3OHRNaHV2a3M3NDQrT2tFNWY5TWR1bVVvYTBrVGxFK1B5VEYxOHZRMVlt?=
+ =?utf-8?B?WkJQRlB2TlNvNS9nRlJzTTkybDdNQ05aZFl4STNHdWJIeXVGQnRRZGJEZlhz?=
+ =?utf-8?B?cTczb0JhVVlKb1dnc1BUVjFXOFRCOHJONE1VSTRvaUIzRFRDRzBOTGliMXFs?=
+ =?utf-8?B?OUJpSDBCL3E2TEdKYjd1VGlTZW9mS1FlbU1kUmJMNGhhRHFmbExyQk1pd0J1?=
+ =?utf-8?B?NXpUenRhZm9vWVdkTldPVHdDK3hSRmRQSkZWb204ZnVONWZoTEtIYnBqWW5G?=
+ =?utf-8?B?T2RSNFVVNFpsZFpldzNnd1FRM2p5YkZ2TmVIV3NuRHMwaVlNWGt3d2kyRktH?=
+ =?utf-8?B?RFBiNmMzWkZ4aDFXUlIzYXVYblV3RUlpRG5LbW5ocW1oY2xrL09YY1NOWjd2?=
+ =?utf-8?B?ZmZDaHRoOEpFZTRMdVNiKzdvUlpxakFFc082cXdlcHRNK0RSbU1XdTJDM29L?=
+ =?utf-8?B?bEUvTGZqSWVUMGZ6MjFsbmF4ZE9LUXVXOE5LMTY0UEpaMHdPaFhGU1VCNThv?=
+ =?utf-8?B?Q1dYMGZDdE1JSXpiaFVVeDNrbVNHYnZYYUdpb1BtaWRUWGIyaEgwU2NVSHcw?=
+ =?utf-8?B?NkoxTzZIN0pJSGhKUU8xdUxRdlAzNFhpdmNVVlNENWRMQm8rUVBuTENuMnJn?=
+ =?utf-8?B?VjV5c0cxK3JPQmVpam9aZVdMVGJnR1FrNXBNRk1rYlZRVFBUOWdJVlRsSkkv?=
+ =?utf-8?B?cjRvTU1GNmRKZ0h4L21BZHBGRU1kOXZTYmlKRmdqdjBDa2QwRWxHV256RmYz?=
+ =?utf-8?B?Y0xvdFBlTGlrREhQUmNyQzdLeUQ2N283bG41d2RhSm9HcFJqTERHMGkvUVh6?=
+ =?utf-8?B?RFZoUmJWZmRGNm12OGZDMkdkYzhVMkgwZndkR3NMZ29LNW84OFlJR09acEY5?=
+ =?utf-8?B?aVcyUmIyYnlyUU5oRWZNa1RoV1RmUTdKWW82RkUxRFVOYm9LUHByYUJFdzZS?=
+ =?utf-8?B?bGZ4cW9obU1RVnhrY0VWUjIrSUFJSStGckdrNzRjbnZEemZiVlhzRlZrcWtO?=
+ =?utf-8?B?V1d3bVNsTUtqSmF1cU4yaDhvd1FuMzRSSHZNRXZJb3VodEh4UGpMajg4aHdT?=
+ =?utf-8?B?TmZMQllYR3BRUFdYR2N5bHFZOFVaU0NaMDZYblR6dW9IOEllQWQybHAxRlBw?=
+ =?utf-8?B?SDlmNnBhS1BBdGFIVmdrWG11cTFmbU5qeDhZaFpXOU4wN3R4Uld4ZzZEMGQ1?=
+ =?utf-8?B?SDFoQnBFejljaGRmNzVCMmJTTjV2emZJWUtLWjFidTBVZmZYOVBHcjdmWml3?=
+ =?utf-8?B?M2tLN3lvY09PaUlmVDV2eW9TQW92RkpBb0l6ZC9TdFdjbjlBYWdJNWw3R0F5?=
+ =?utf-8?B?UTFaYUhpSi9TS0dUZ2xCUStsVXZjcndUbHlPaC9VVnRJeHFJajB6TS8zaHRr?=
+ =?utf-8?B?TFdWRy9HK0NDcFo3Ynl4QVBnVE1UQ0dmRkVjQUhleVNzNjNvQUk5N0o0VGp1?=
+ =?utf-8?B?SmN3MmMrS21kT3Z0VXNNUlpxdVVqV3hjOWNpUTV4RzhWVzdmNS9neEthRzJZ?=
+ =?utf-8?Q?LmMGcuhMCl6jawbgxs=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?U0R0TmhMc1hKZUx3UXMyZnRhbWFWb1pjcE9aNHUvWktBY0h0V05RRDNVUzNi?=
+ =?utf-8?B?QXJNRnN3Q2J6WncrSnpVMkdsZjVjVFhHbnpPYkZDZVp4aFdqYlNUSVVQU3Vp?=
+ =?utf-8?B?aDRKbEtNWXg5U3lER21VZzNDSm5UM0dRMFRHQlZNM1liM0JOVVUwZk9aNXRM?=
+ =?utf-8?B?d3FGblFKeUx3YnoxcjdwYW91SjlickxhampjY3U3SmZPcG5kc0t3ZndLNzRL?=
+ =?utf-8?B?UUJLTHFPdlEvbUxVQit6dHhaZmRmRW1DVWxFK2ZxNkFtS0NLeGxCQXRLS0VY?=
+ =?utf-8?B?UEd0TlB6VUpGSm9aWTE5alNqMDZFbGtXMkhYTVB1cGdIYnA0VU5kQlJUclNq?=
+ =?utf-8?B?WGlFYUtGYk96YmZzMnNyMjh5dWYyYzBNenFkN1ZmZHFJZ0RYNThQb2xibXN0?=
+ =?utf-8?B?Q1VITjZyaWtGd1JXeUpQWVBYK0R3eWdKVXFUZk9BV01SQjJtN2J3WklwL1oz?=
+ =?utf-8?B?QmdkbXRDcHcxNjRhcUVDOGVXK1BwdS9ydFJOR0FWend3eE1Da3B5SXNncDhm?=
+ =?utf-8?B?VXJobDRyTWdGU3FGc1YvM0dpaXV1TCtMMDdldk9WM2RMOVYrcDJhTlVPUWly?=
+ =?utf-8?B?aXFXOTJ1OStkbmpUa25SdjY1dVdWQWtrSG5zSk1ETHEzVE9TcUpUNUUwY25P?=
+ =?utf-8?B?aEpxeGVTY252N3dzWnFITGNmQjR2bmdnYmg1UE5mcVVCMzZObTdIM0RqajRZ?=
+ =?utf-8?B?Tzk2TVJxZm9oZ1YxbFpDU0ZlZTlXTitIMUFZQ3BsdFNmS05FbnZ5RDFSclJI?=
+ =?utf-8?B?SkQwdE5nb0NLS0Q0Q2ZlWng3RHNNOVpHeXFCaWxZcW1DYWMvTVFjaC9rY3E3?=
+ =?utf-8?B?aml1K0ZGSEVkbXdhblQ3Mld5M3ljbzlFN0xvaVRjTXpzb3pEV2JncHA2ZmZB?=
+ =?utf-8?B?ZDgwN2dEME5EU0h6Q0FmZVR6Syt4ZldpbkhlMnNnYlhjTHpvSC9uc3orcnlH?=
+ =?utf-8?B?V1Zlc0FRWGVGY2dKZG5pNTh6emVFcDFYVnc1QldEUGJQd2kwQnFIcW1kZnJV?=
+ =?utf-8?B?NCtHNVBKZHQ3c2JDZklOWGRwS1lOdStSQmtYWE5ya0x1S0U3TEV5YjR0Zmor?=
+ =?utf-8?B?d3hzRmhUMndPQUF6cis3UmJ3Z0ZPS2dndjgrOHhqL3JMYjJXZFZjVFhRZXNn?=
+ =?utf-8?B?QS90c0JxSnZPYVJVditEUDJ0M2hod2JKZzZmTmlyOWVHRFk2eW5aUlE3ZkdK?=
+ =?utf-8?B?Q1NhWldTWEl5L2x0UDVLZUNnK1FBSzlzQWtMeVJYdGRnd3M4K1p0cjFQcVps?=
+ =?utf-8?B?ek94Rm9jeHhra1NMOWlxRUE2bGlQOGxmdCttL21VcWpHYkVVZ1pBb0tBQUUx?=
+ =?utf-8?B?UFRCL3dxRnNRTmNwbUJud0d3dTRLaHcrOTlRUnNGemJ0WkhaeitYdFpEbGkw?=
+ =?utf-8?B?WlByOTdkT2N0UTY3L1dZdWJpWXJiQkVuc0oxWFREL2lBNWNhWHJ2WCs4L2ZE?=
+ =?utf-8?B?M1FGbzFXVmEwdk9id1l6Q0djalpXbjBhMkg1WVUvTitDZ3NNTEZUanlZcVMz?=
+ =?utf-8?B?TTNzWWNVYVV5dGxTV3BGSExIYmMxR1pQL3ZWTC9tLy92T0oxRG9ubWhyM21y?=
+ =?utf-8?B?aVM3Y2R6cCsySm1JVWdPV2JURnhKelo4Q3B1emxQTzY2UEJEbEl0YU5GT0VI?=
+ =?utf-8?B?RTJKcWs5TjkwdzNRUHk0bk9pM3IvNDd0M2wreFR3L0hHY3hNclE1TUhxbm1H?=
+ =?utf-8?B?NllML01RYWprOWhPT3M0R0IveGZ1Wmh2MkRhVFpWVHBwSVpFMERlcXNscG5K?=
+ =?utf-8?B?M0VDVCtLdi9BRitkdXhwWUtkTjFwZEplS2RqYW94RFhIaUVDSmI0Vlczbi9n?=
+ =?utf-8?B?OHVDQm91Q3Jremlzdzh4UmJjWUZId2VKcGxhak9OUU9YWnFRSnptYkRCa3BH?=
+ =?utf-8?B?NjNtLy9BS01TenNsZGJPN3JQQjFjVDFYTHZiMjZrS3FyQUxiaDR4NEF2UUIr?=
+ =?utf-8?B?OSt5VFp5ME5aR3l6REJ0SzkrVUNiSjlEcG9pWnVxeVRyU1pvcWR5Q2tqeVV1?=
+ =?utf-8?B?bFhKaGdtakMwb0E2WUgrRkZrZ3drVDBqeTdaS3BDMkcvdEE4VlhPMyswTVFl?=
+ =?utf-8?B?YWY5dU5Ua1FpNTUwaHhLMTF2SUhnN21ZdVViMzZGYXdyN1lJeWk2NldHZVl3?=
+ =?utf-8?Q?DCN3WR1eSWidlEtU8rNmxiXJe?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e340b05-95c9-41c8-94a8-08dccdefbab0
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 21:14:29.4353
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bXEiaisDxeE0yr5OhLWRDABS8xmLtedsBw6PXvT8kk2WU7UW6Pn/41EV4VhuzwUmsla9kJvQxsIfqX8mOw9wCg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7770
 
-TWFyaW8sDQoNCkNvbmZpcm1lZC4gVGhhbmsgeW91IGZvciB0aGUgaGVscCEgU2xpZ2h0bHkgZGlm
-ZmVyZW50IHJlZnMgb24gbXkgZW5kOg0KDQpSZW1vdGVzOg0KDQpuZXh0ICAgIGh0dHBzOi8vZ2l0
-Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L25leHQvbGludXgtbmV4dC5naXQg
-KGZldGNoKQ0KbmV4dCAgICBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2Vy
-bmVsL2dpdC9uZXh0L2xpbnV4LW5leHQuZ2l0IChwdXNoKQ0Kb3JpZ2luICBnaXQ6Ly9naXQua2Vy
-bmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc3RhYmxlL2xpbnV4LmdpdCAoZmV0Y2gp
-DQpvcmlnaW4gIGdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9z
-dGFibGUvbGludXguZ2l0IChwdXNoKQ0Kc3VwZXJtMSBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1
-Yi9zY20vbGludXgva2VybmVsL2dpdC9zdXBlcm0xL2xpbnV4LmdpdC8gKGZldGNoKQ0Kc3VwZXJt
-MSBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9zdXBlcm0x
-L2xpbnV4LmdpdC8gKHB1c2gpDQp0b3J2YWxkcyAgICAgICAgZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcv
-cHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdCAoZmV0Y2gpDQp0b3J2
-YWxkcyAgICAgICAgZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0
-L3RvcnZhbGRzL2xpbnV4LmdpdCAocHVzaCkNCg0KUGF0Y2hlczoNCg0KZ2l0IGZvcm1hdC1wYXRj
-aCAxMjc1M2Q3MWU4YzVeLi4xMjc1M2Q3MWU4YzUNCmdpdCBmb3JtYXQtcGF0Y2ggZjNhMDUyMzkx
-ODIyYjc3MmI0ZTI3ZjI1OTQ1MjZjZjFlYjEwM2NhYl4uLmYzYTA1MjM5MTgyMmI3NzJiNGUyN2Yy
-NTk0NTI2Y2YxZWIxMDNjYWINCmdpdCBmb3JtYXQtcGF0Y2ggYmYyMDJlNjU0YmZhNTdmYjhjZjlk
-OTNkNGM2ODU1ODkwYjcwYjljNF4uLmJmMjAyZTY1NGJmYTU3ZmI4Y2Y5ZDkzZDRjNjg1NTg5MGI3
-MGI5YzQNCg0KUmVzdWx0czoNCg0KTGludXggcmVkYWN0IDYuNi40OCAjMS1OaXhPUyBTTVAgUFJF
-RU1QVF9EWU5BTUlDIFR1ZSBKYW4gIDEgMDA6MDA6MDAgVVRDIDE5ODAgeDg2XzY0IEdOVS9MaW51
-eA0KDQphbmFseXppbmcgQ1BVIDU2Og0KICBkcml2ZXI6IGFtZC1wc3RhdGUtZXBwDQogIENQVXMg
-d2hpY2ggcnVuIGF0IHRoZSBzYW1lIGhhcmR3YXJlIGZyZXF1ZW5jeTogNTYNCiAgQ1BVcyB3aGlj
-aCBuZWVkIHRvIGhhdmUgdGhlaXIgZnJlcXVlbmN5IGNvb3JkaW5hdGVkIGJ5IHNvZnR3YXJlOiA1
-Ng0KICBtYXhpbXVtIHRyYW5zaXRpb24gbGF0ZW5jeTogIENhbm5vdCBkZXRlcm1pbmUgb3IgaXMg
-bm90IHN1cHBvcnRlZC4NCiAgaGFyZHdhcmUgbGltaXRzOiA0MDAgTUh6IC0gMy4zNSBHSHoNCiAg
-YXZhaWxhYmxlIGNwdWZyZXEgZ292ZXJub3JzOiBwZXJmb3JtYW5jZSBwb3dlcnNhdmUNCiAgY3Vy
-cmVudCBwb2xpY3k6IGZyZXF1ZW5jeSBzaG91bGQgYmUgd2l0aGluIDQwMCBNSHogYW5kIDMuMzUg
-R0h6Lg0KICAgICAgICAgICAgICAgICAgVGhlIGdvdmVybm9yICJwZXJmb3JtYW5jZSIgbWF5IGRl
-Y2lkZSB3aGljaCBzcGVlZCB0byB1c2UNCiAgICAgICAgICAgICAgICAgIHdpdGhpbiB0aGlzIHJh
-bmdlLg0KICBjdXJyZW50IENQVSBmcmVxdWVuY3k6IFVuYWJsZSB0byBjYWxsIGhhcmR3YXJlDQog
-IGN1cnJlbnQgQ1BVIGZyZXF1ZW5jeTogMi4wOSBHSHogKGFzc2VydGVkIGJ5IGNhbGwgdG8ga2Vy
-bmVsKQ0KICBib29zdCBzdGF0ZSBzdXBwb3J0Og0KICAgIFN1cHBvcnRlZDogeWVzDQogICAgQWN0
-aXZlOiB5ZXMNCiAgICBBTUQgUFNUQVRFIEhpZ2hlc3QgUGVyZm9ybWFuY2U6IDI1NS4gTWF4aW11
-bSBGcmVxdWVuY3k6IDMuMzUgR0h6Lg0KICAgIEFNRCBQU1RBVEUgTm9taW5hbCBQZXJmb3JtYW5j
-ZTogMTUyLiBOb21pbmFsIEZyZXF1ZW5jeTogMi4wMCBHSHouDQogICAgQU1EIFBTVEFURSBMb3dl
-c3QgTm9uLWxpbmVhciBQZXJmb3JtYW5jZTogMTE1LiBMb3dlc3QgTm9uLWxpbmVhciBGcmVxdWVu
-Y3k6IDEuNTEgR0h6Lg0KICAgIEFNRCBQU1RBVEUgTG93ZXN0IFBlcmZvcm1hbmNlOiAzMS4gTG93
-ZXN0IEZyZXF1ZW5jeTogNDAwIE1Iei4NCg0KQW5kIG91ciBidWlsZHMgYXJlIGJhY2sgdG8gYmVp
-bmcgZmFzdCB3aXRoIGBhbWRfcHN0YXRlPWFjdGl2ZSBhbWRfcHJlZmNvcmU9ZW5hYmxlIGFtZF9w
-c3RhdGUuc2hhcmVkX21lbT0xYC4NCg0KTW9yZ2FuDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0t
-LS0tDQpGcm9tOiBNYXJpbyBMaW1vbmNpZWxsbyA8bWFyaW8ubGltb25jaWVsbG9AYW1kLmNvbT4g
-DQpTZW50OiBUaHVyc2RheSwgU2VwdGVtYmVyIDUsIDIwMjQgODoxMiBBTQ0KVG86IEpvbmVzLCBN
-b3JnYW4gPE1vcmdhbi5Kb25lc0B2aWFzYXQuY29tPg0KQ2M6IGxpbnV4LXBtQHZnZXIua2VybmVs
-Lm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgRGF2aWQgQXJjYXJpIDxkYXJjYXJp
-QHJlZGhhdC5jb20+OyBEaGFuYW5qYXkgVWd3ZWthciA8RGhhbmFuamF5LlVnd2VrYXJAYW1kLmNv
-bT47IHJhZmFlbEBrZXJuZWwub3JnOyB2aXJlc2gua3VtYXJAbGluYXJvLm9yZzsgZ2F1dGhhbS5z
-aGVub3lAYW1kLmNvbTsgcGVycnkueXVhbkBhbWQuY29tOyBza2hhbkBsaW51eGZvdW5kYXRpb24u
-b3JnOyBsaS5tZW5nQGFtZC5jb207IHJheS5odWFuZ0BhbWQuY29tDQpTdWJqZWN0OiBSZTogW0VY
-VEVSTkFMXSBSZTogW1BBVENIIHYyIDIvMl0gY3B1ZnJlcS9hbWQtcHN0YXRlOiBGaXggdGhlIHNj
-YWxpbmdfbWF4X2ZyZXEgc2V0dGluZyBvbiBzaGFyZWQgbWVtb3J5IENQUEMgc3lzdGVtcw0KDQpI
-aSBNb3JnYW4sDQoNClBsZWFzZSBhcHBseSB0aGVzZSAzIGNvbW1pdHM6DQoNCmNvbW1pdCAxMjc1
-M2Q3MWU4YzUgKCJBQ1BJOiBDUFBDOiBBZGQgaGVscGVyIHRvIGdldCB0aGUgaGlnaGVzdCBwZXJm
-b3JtYW5jZSB2YWx1ZSIpIGNvbW1pdCBlZDQyOWM2ODZiNzkgKCJjcHVmcmVxOiBhbWQtcHN0YXRl
-OiBFbmFibGUgYW1kLXBzdGF0ZSBwcmVmZXJyZWQgY29yZSBzdXBwb3J0IikgY29tbWl0IDNkMjkx
-ZmU0N2ZlMSAoImNwdWZyZXE6IGFtZC1wc3RhdGU6IGZpeCB0aGUgaGlnaGVzdCBmcmVxdWVuY3kg
-aXNzdWUgd2hpY2ggbGltaXRzIHBlcmZvcm1hbmNlIikNCg0KVGhlIGZpcnN0IHR3byBzaG91bGQg
-aGVscCB5b3VyIHN5c3RlbSwgdGhlIHRoaXJkIHdpbGwgcHJldmVudCBpbnRyb2R1Y2luZyBhIHJl
-Z3Jlc3Npb24gb24gYSBkaWZmZXJlbnQgb25lLg0KDQpBc3N1bWluZyB0aGF0IHdvcmtzIHdlIHNo
-b3VsZCBhc2sgQHN0YWJsZSB0byBwdWxsIGFsbCAzIGluIHRvIGZpeCB0aGlzIHJlZ3Jlc3Npb24u
-DQoNClRoYW5rcywNCg0KT24gOS80LzIwMjQgMDg6NTcsIE1hcmlvIExpbW9uY2llbGxvIHdyb3Rl
-Og0KPiBNb3JnYW4sDQo+IA0KPiBJIHdhcyByZWZlcnJpbmcgc3BlY2ZpaWNhbGx5IHRvIHRoZSB2
-ZXJzaW9uIHRoYXQgbGFuZGVkIGluIExpbnVzJyB0cmVlOg0KPiBodHRwczovL3VybGRlZmVuc2Uu
-dXMvdjMvX19odHRwczovL2dpdC5rZXJuZWwub3JnL3RvcnZhbGRzL2MvODE2NGY3NDMzDQo+IDI2
-NF9fOyEhQzVBc204dVJuWlFtbFJsbiFhSVpFREViSVVLRDdPcnhOMGIwS2pvcUtZREwyeU1rd2s0
-RUs3eF9vU255SFENCj4gNk1FcTd5dDZKSGpkMFREOURnRVlFV0RjRjU4T0tMOGM3RzExYlQzZFNx
-TDhlTSQNCj4gDQo+IEJ1dCB5ZWFoIGl0J3MgZWZmZWN0aXZlbHkgdGhlIHNhbWUgdGhpbmcuwqAg
-SW4gYW55IGNhc2UsIGl0J3Mgbm90IHRoZSANCj4gc29sdXRpb24uDQo+IA0KPiBXZSBoYWQgc29t
-ZSBpbnRlcm5hbCBkaXNjdXNzaW9uIGFuZCBzdXNwZWN0IHRoaXMgaXMgZHVlIHRvIG1pc3Npbmcg
-DQo+IHByZWZjb3JlIHBhdGNoZXMgaW4gNi42IGFzIHRoYXQgZmVhdHVyZSBsYW5kZWQgaW4gNi45
-LsKgIFdlJ2xsIHRyeSB0byANCj4gcmVwcm9kdWNlIHRoaXMgb24gYSBSb21lIHN5c3RlbSBhbmQg
-Y29tZSBiYWNrIHdpdGggb3VyIGZpbmRpbmdzIGFuZCANCj4gc3VnZ2VzdGlvbnMgd2hhdCB0byBk
-by4NCj4gDQo+IFRoYW5rcywNCj4gDQoNCg==
++ stable
++ regressions
+New subject
+
+Great news.
+
+Greg, Sasha,
+
+Can you please pull in these 3 commits specifically to 6.6.y to fix a 
+regression that was reported by Morgan in 6.6.y:
+
+commit 12753d71e8c5 ("ACPI: CPPC: Add helper to get the highest 
+performance value")
+commit ed429c686b79 ("cpufreq: amd-pstate: Enable amd-pstate preferred 
+core support")
+commit 3d291fe47fe1 ("cpufreq: amd-pstate: fix the highest frequency 
+issue which limits performance")
+
+Further details are below.
+
+Thanks!
+
+On 9/5/2024 16:09, Jones, Morgan wrote:
+> Mario,
+> 
+> Confirmed. Thank you for the help! Slightly different refs on my end:
+> 
+> Remotes:
+> 
+> next    https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git (fetch)
+> next    https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git (push)
+> origin  git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git (fetch)
+> origin  git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git (push)
+> superm1 https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/ (fetch)
+> superm1 https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/ (push)
+> torvalds        git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git (fetch)
+> torvalds        git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git (push)
+> 
+> Patches:
+> 
+> git format-patch 12753d71e8c5^..12753d71e8c5
+> git format-patch f3a052391822b772b4e27f2594526cf1eb103cab^..f3a052391822b772b4e27f2594526cf1eb103cab
+> git format-patch bf202e654bfa57fb8cf9d93d4c6855890b70b9c4^..bf202e654bfa57fb8cf9d93d4c6855890b70b9c4
+> 
+> Results:
+> 
+> Linux redact 6.6.48 #1-NixOS SMP PREEMPT_DYNAMIC Tue Jan  1 00:00:00 UTC 1980 x86_64 GNU/Linux
+> 
+> analyzing CPU 56:
+>    driver: amd-pstate-epp
+>    CPUs which run at the same hardware frequency: 56
+>    CPUs which need to have their frequency coordinated by software: 56
+>    maximum transition latency:  Cannot determine or is not supported.
+>    hardware limits: 400 MHz - 3.35 GHz
+>    available cpufreq governors: performance powersave
+>    current policy: frequency should be within 400 MHz and 3.35 GHz.
+>                    The governor "performance" may decide which speed to use
+>                    within this range.
+>    current CPU frequency: Unable to call hardware
+>    current CPU frequency: 2.09 GHz (asserted by call to kernel)
+>    boost state support:
+>      Supported: yes
+>      Active: yes
+>      AMD PSTATE Highest Performance: 255. Maximum Frequency: 3.35 GHz.
+>      AMD PSTATE Nominal Performance: 152. Nominal Frequency: 2.00 GHz.
+>      AMD PSTATE Lowest Non-linear Performance: 115. Lowest Non-linear Frequency: 1.51 GHz.
+>      AMD PSTATE Lowest Performance: 31. Lowest Frequency: 400 MHz.
+> 
+> And our builds are back to being fast with `amd_pstate=active amd_prefcore=enable amd_pstate.shared_mem=1`.
+> 
+> Morgan
+> 
+> -----Original Message-----
+> From: Mario Limonciello <mario.limonciello@amd.com>
+> Sent: Thursday, September 5, 2024 8:12 AM
+> To: Jones, Morgan <Morgan.Jones@viasat.com>
+> Cc: linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; David Arcari <darcari@redhat.com>; Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>; rafael@kernel.org; viresh.kumar@linaro.org; gautham.shenoy@amd.com; perry.yuan@amd.com; skhan@linuxfoundation.org; li.meng@amd.com; ray.huang@amd.com
+> Subject: Re: [EXTERNAL] Re: [PATCH v2 2/2] cpufreq/amd-pstate: Fix the scaling_max_freq setting on shared memory CPPC systems
+> 
+> Hi Morgan,
+> 
+> Please apply these 3 commits:
+> 
+> commit 12753d71e8c5 ("ACPI: CPPC: Add helper to get the highest performance value") commit ed429c686b79 ("cpufreq: amd-pstate: Enable amd-pstate preferred core support") commit 3d291fe47fe1 ("cpufreq: amd-pstate: fix the highest frequency issue which limits performance")
+> 
+> The first two should help your system, the third will prevent introducing a regression on a different one.
+> 
+> Assuming that works we should ask @stable to pull all 3 in to fix this regression.
+> 
+> Thanks,
+> 
+> On 9/4/2024 08:57, Mario Limonciello wrote:
+>> Morgan,
+>>
+>> I was referring specfiically to the version that landed in Linus' tree:
+>> https://urldefense.us/v3/__https://git.kernel.org/torvalds/c/8164f7433
+>> 264__;!!C5Asm8uRnZQmlRln!aIZEDEbIUKD7OrxN0b0KjoqKYDL2yMkwk4EK7x_oSnyHQ
+>> 6MEq7yt6JHjd0TD9DgEYEWDcF58OKL8c7G11bT3dSqL8eM$
+>>
+>> But yeah it's effectively the same thing.  In any case, it's not the
+>> solution.
+>>
+>> We had some internal discussion and suspect this is due to missing
+>> prefcore patches in 6.6 as that feature landed in 6.9.  We'll try to
+>> reproduce this on a Rome system and come back with our findings and
+>> suggestions what to do.
+>>
+>> Thanks,
+>>
+> 
+
 
