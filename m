@@ -1,69 +1,69 @@
-Return-Path: <linux-pm+bounces-13813-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13814-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77D8396FB8E
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 20:56:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CAAC96FBA2
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 20:58:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31BEE28E6C0
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 18:56:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 427F01F2AA0D
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 18:58:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D56691420D8;
-	Fri,  6 Sep 2024 18:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B281D9328;
+	Fri,  6 Sep 2024 18:57:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XrzrkcFu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MJU9skAz"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B149A82499
-	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 18:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF9713D24E
+	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 18:57:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725648986; cv=none; b=Y0dHzx6wzSyg/v2JpsnBLWKOGB8Qwlm+3vFhgpCu8r2lW4mAcVOW77q0oYdXLbz/mZhXXDFbnDN468AihqmzJ+mEhZqbw24eil722G5oVsfJE1j3o9nyr0cKrbG/h5aoSosz3yKlFe8IXC4WaCfnawMw0pE8nEibm9PpKmD/o18=
+	t=1725649021; cv=none; b=O3BC0rW5dzC1EPOwAmWeoGO5o3TMGsw3yT6nXBjAwnKcnTYffZ3OUvcj67DEAES11PYjbH2LoRmNNfM+pE04f6RVPYZ+swo8UkSXeRHgc8uY+Hixf3o/gfCe2z3XP0Q5YbT3UtkAuS7RH9uKWCsMd+rfzzrVPLuVPfhvmyqkzCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725648986; c=relaxed/simple;
-	bh=1zCebmlkYz3qjKyRHDpACq0ofTCSJl2bSCUy+PjA9mg=;
+	s=arc-20240116; t=1725649021; c=relaxed/simple;
+	bh=M3ML4WU7CJgDPj2J3PizEsQJWR/rMehwxrpGfq19TYM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WMc3Ll54x/KsS1vAwxTABAmkXEcwY6JjPWd6O/8fwbRHphE58O6GUzRDY+mh8vQpXFWbAbZDkIWnkj3nFoZ4fm6UchxmHNeGXP0B9K1FGXwQ7wItFZ139Q0iT3wyJ1Ie6VjPMQlaUVVwpy+o2jW6UHJTZPq46mYbm6KRJeAOCC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XrzrkcFu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F6D7C4CEC7
-	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 18:56:26 +0000 (UTC)
+	 To:Cc:Content-Type; b=UN59YSfTq6cqenuFVujJUSppn20RHKmj/5TYSvFghdBid0PT1OZwTo4u7VQHO35l3jRwXrO/E+uYh2ZxHSnacYg98HkEPUr87Vu17IgyPBnq3qYKlfUjaSRusbQSlqvev7BZXLTntBOeFlWxIzEQCbngwZrydnzpe6lS+LGLu9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MJU9skAz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40BADC4CEC7
+	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 18:57:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725648986;
-	bh=1zCebmlkYz3qjKyRHDpACq0ofTCSJl2bSCUy+PjA9mg=;
+	s=k20201202; t=1725649021;
+	bh=M3ML4WU7CJgDPj2J3PizEsQJWR/rMehwxrpGfq19TYM=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XrzrkcFu+gBbXMLHz509DcL04U+Vi8hD+RtJ0DfHpVJLUPFE9UnkujiG0+eeq5UMi
-	 SQcVGo0cSBAYFsCBgnOeEVaYf1E/2uNLAasXrqT9XXGuX22201KuzUssLxc/K3DPOg
-	 O2ka3yG9qBll8p6pkPlXS28A+Kak5Qk/jDnKsc/gvRhx8oPTjRoE4HOfva2LZ8Ct2b
-	 elk+Ax6jJVDc1Qx8wFZ6CYJFEi1qHg7H0f8SXTb3yKgS4GNTLLnAEodMKYK9j/2Ifc
-	 93JAjubRg8jiRWGm8rYNjlUSS+3NqfowJx2Em9XlVeQ2O6Wsg/jDFNGfMcHBGlYTnl
-	 8QSHeb8iGQp2w==
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-277c861d9f6so1401872fac.2
-        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2024 11:56:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXEWU/0+tmgEzcw49b9EMW0VStvCOEddhfHrA1GjzAQNKK90Z+gHDW1EesjElBwerB7Ll5kfWAADg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnxUh0/aLyCR1B7/A13WIPXzxZiPITwmm4YcxZyOqgzCBM2HOc
-	0bKOojFuQDDS8a4lJU5WpdjLaX8DBRhc5wMQcdlZR5CucvpNAxFiZBPgcsLlOptnbEg8cFT09FA
-	qzGFx0GS1g9gAoa0Qg75gvXKDRms=
-X-Google-Smtp-Source: AGHT+IHFOB+HnGDKoOh9GO0fP58+0kGUND0hyKXVAWHlvKafCX7nyQeTFWnGGejSoYewP9KhNUQv7t4GZ0UwLfmkUqw=
-X-Received: by 2002:a05:6870:9111:b0:25e:940:e934 with SMTP id
- 586e51a60fabf-27b8302d160mr3823961fac.47.1725648985620; Fri, 06 Sep 2024
- 11:56:25 -0700 (PDT)
+	b=MJU9skAzP+HLrWSkQnm97kQCJUSpAWXht3EirhxNHySDsSEk7FFEx3Rv3eFOVAlUC
+	 8ZrVEM55zOvKjsHXZpc0+OoxUOgTigUXoTLqUBuFcHg8NCKOGLWUxwQFKfn9YwkzoH
+	 wgxdk/lynxMMkUvO0Qcle02/5g8o2asnFhoR201wq8eNY8bwcm6bsz2X0csb3ndiVa
+	 kiTRYiWWMzZKhEbA1P5vtJgfLxZt5lCBthB+9pXuvuYJFEI+5UqmkI454kPlfps72s
+	 N7ffgUkFN577TS+p9zBxx2iCyLVNGITJTav+cxwi9uWKjpXRCdiPbKlpzG9MbtZEDm
+	 sb36fWNeBJPuw==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5dca9cc71b2so1442491eaf.2
+        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2024 11:57:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWhrj7Kr8QPCLmGbzyOQSjX7s0B8NO7wSL0KulbJnRVSh0yw7O5OASdh56BLX2L1jTo/EueUiluTg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx39/t3Jue6/seER4xVSavHWZI7MXqaCB1Uyni2YrMyYRgD2nRC
+	cUT9DeWaVX3qUi5zK7kww/ChhTNWRRJLKkfWS6bsHtmD6ZH6lfBUbSRgEN9et8Y6bGupndWE8Zi
+	KcEfaXQcOyHKAGGhhv8vf3le8QVA=
+X-Google-Smtp-Source: AGHT+IGUIEulByp2qLxt2SWHWENLzpbowzSov6WBM66RHNGUNcP/UbQy6oZ7Dt0aWS+QbeGH/PqPIfA+ipHBpDQF0iI=
+X-Received: by 2002:a05:6870:1590:b0:277:f5d8:b77b with SMTP id
+ 586e51a60fabf-27b9dd81873mr253694fac.32.1725649020675; Fri, 06 Sep 2024
+ 11:57:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240906054735.cbsjpwvpelgukppq@vireshk-i7>
-In-Reply-To: <20240906054735.cbsjpwvpelgukppq@vireshk-i7>
+References: <20240906055246.exjgfkrqesllh45z@vireshk-i7>
+In-Reply-To: <20240906055246.exjgfkrqesllh45z@vireshk-i7>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 6 Sep 2024 20:56:13 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i=3UU-m0EGCiShqfoRKFLy2yz_Wva6inkcAnAQ2DE9ag@mail.gmail.com>
-Message-ID: <CAJZ5v0i=3UU-m0EGCiShqfoRKFLy2yz_Wva6inkcAnAQ2DE9ag@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm updates for 6.12
+Date: Fri, 6 Sep 2024 20:56:49 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iWUvRnmY-NKMFOpPA=yMKJFN0oLSCHMELccNVXVrdqOQ@mail.gmail.com>
+Message-ID: <CAJZ5v0iWUvRnmY-NKMFOpPA=yMKJFN0oLSCHMELccNVXVrdqOQ@mail.gmail.com>
+Subject: Re: [GIT PULL] OPP updates for 6.12
 To: Viresh Kumar <viresh.kumar@linaro.org>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -71,7 +71,7 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi Viresh,
 
-On Fri, Sep 6, 2024 at 7:47=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
+On Fri, Sep 6, 2024 at 7:52=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
 g> wrote:
 >
 > Hi Rafael,
@@ -83,86 +83,33 @@ g> wrote:
 >
 > are available in the Git repository at:
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufr=
-eq-arm-updates-6.12
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-u=
+pdates-6.12
 >
-> for you to fetch changes up to 6b612d1bac67b0f483fde7779a45f6310274d4eb:
+> for you to fetch changes up to a84372012e9329daba8082efac98f3bc0b443aa2:
 >
->   cpufreq: ti-cpufreq: Use socinfo to get revision in AM62 family (2024-0=
-9-04 20:43:59 +0530)
->
-> ----------------------------------------------------------------
-> ARM cpufreq updates for 6.12
->
-> - Several OF related cleanups in cpufreq drivers (Rob Herring).
->
-> - Enable COMPILE_TEST for ARM drivers (Rob Herrring).
->
-> - Introduce quirks for syscon failures and use socinfo to get revision
->   for TI cpufreq driver (Dhruva Gole and Nishanth Menon).
->
-> - Minor cleanups in amd-pstate driver (Anastasia Belova and Dhananjay
->   Ugwekar).
->
-> - Minor cleanups for loongson, cpufreq-dt and powernv cpufreq drivers
->   (Danila Tikhonov, Huacai Chen, and Liu Jing).
+>   dt-bindings: opp: operating-points-v2-ti-cpu: Update maintainers (2024-=
+09-04 20:43:43 +0530)
 >
 > ----------------------------------------------------------------
-> Anastasia Belova (1):
->       cpufreq: amd-pstate: add check for cpufreq_cpu_get's return value
+> OPP Updates for 6.12
 >
-> Danila Tikhonov (1):
->       cpufreq: Add SM7325 to cpufreq-dt-platdev blocklist
+> - Update maintainers for operating-points-v2-ti-cpu file (Dhruva Gole).
 >
-> Dhananjay Ugwekar (1):
->       cpufreq/amd-pstate: Add the missing cpufreq_cpu_put()
+> - Drop unnecessary of_match_ptr() for TI driver (Rob Herring).
 >
+> ----------------------------------------------------------------
 > Dhruva Gole (1):
->       cpufreq: ti-cpufreq: Use socinfo to get revision in AM62 family
+>       dt-bindings: opp: operating-points-v2-ti-cpu: Update maintainers
 >
-> Huacai Chen (1):
->       cpufreq: loongson3: Use raw_smp_processor_id() in do_service_reques=
-t()
+> Rob Herring (Arm) (1):
+>       opp: ti: Drop unnecessary of_match_ptr()
 >
-> Liu Jing (1):
->       cpufreq: Fix the cacography in powernv-cpufreq.c
->
-> Nishanth Menon (1):
->       cpufreq: ti-cpufreq: Introduce quirks to handle syscon fails approp=
-riately
->
-> Rob Herring (Arm) (8):
->       cpufreq: Use of_property_present()
->       cpufreq: spear: Use of_property_for_each_u32() instead of open codi=
-ng
->       cpufreq: qcom: Add explicit io.h include for readl/writel_relaxed
->       cpufreq: omap: Drop asm includes
->       cpufreq: armada-8k: Avoid excessive stack usage
->       cpufreq: Enable COMPILE_TEST on Arm drivers
->       cpufreq: Drop CONFIG_ARM and CONFIG_ARM64 dependency on Arm drivers
->       cpufreq: Fix warning on unused of_device_id tables for !CONFIG_OF
->
->  drivers/cpufreq/Kconfig                |  2 --
->  drivers/cpufreq/Kconfig.arm            | 50 ++++++++++++++++++++++++++++=
-++--------------------
->  drivers/cpufreq/amd-pstate.c           | 19 ++++++++++++++++---
->  drivers/cpufreq/apple-soc-cpufreq.c    |  2 +-
->  drivers/cpufreq/armada-8k-cpufreq.c    |  2 +-
->  drivers/cpufreq/cpufreq-dt-platdev.c   |  1 +
->  drivers/cpufreq/cpufreq-dt.c           | 11 +++--------
->  drivers/cpufreq/loongson3_cpufreq.c    |  2 +-
->  drivers/cpufreq/mediatek-cpufreq.c     |  2 +-
->  drivers/cpufreq/omap-cpufreq.c         |  3 ---
->  drivers/cpufreq/pmac64-cpufreq.c       |  2 +-
->  drivers/cpufreq/powernv-cpufreq.c      |  2 +-
->  drivers/cpufreq/qcom-cpufreq-hw.c      |  1 +
->  drivers/cpufreq/qcom-cpufreq-nvmem.c   |  2 +-
->  drivers/cpufreq/spear-cpufreq.c        | 18 +++++++-----------
->  drivers/cpufreq/sti-cpufreq.c          |  2 +-
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c |  2 +-
->  drivers/cpufreq/ti-cpufreq.c           | 31 ++++++++++++++++++++++++++++=
----
->  18 files changed, 95 insertions(+), 59 deletions(-)
+>  Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml | =
+2 +-
+>  drivers/opp/ti-opp-supply.c                                           | =
+2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 >
 > --
 
