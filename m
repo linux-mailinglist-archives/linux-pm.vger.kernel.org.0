@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-13773-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13774-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63DA496EFA3
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:39:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2C3496EFA9
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:39:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E749F1F2247D
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 09:39:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 424AFB20950
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 09:39:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451741CB135;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 848BA1CB149;
 	Fri,  6 Sep 2024 09:38:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="C/7qhqBM"
+	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="IW16Shis"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from classfun.cn (unknown [129.204.178.38])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4851E1C9DFE;
-	Fri,  6 Sep 2024 09:38:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 603AE1C9EC9;
+	Fri,  6 Sep 2024 09:38:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.204.178.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725615489; cv=none; b=YfICfaywVQoVrp9LSb00+uzqdJ2iWXv2bOVyBKfQ7T29OSMbTpm2+REhJxNdxVROTCE5+Y8fQWNGoPJJ2LJo9Z9oB5+nVFltM05pVHbaH+q477Fg8yIF4y932d86e1DK/i1iCT0Latal2GKw/CDE5qkdBob9y+GjY29AudbDkPI=
+	t=1725615489; cv=none; b=puEpLY6pVVL0LS/CEEFr4BG0SzjLS6S+M0fTzaaFxLjWY/e5o+U5Tv/1zI8ojoXFqaXsPFDWP/ae5vmt1Yuy7BylqGm6UX3f3x4KcVW6MTig27bRDFXJSnpuqRiH5YtlYCzv4TKLwrjILrL/1NbVvCFnCJNzdGbKfRn8wURIuUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1725615489; c=relaxed/simple;
-	bh=ZDalrpwEdV0Qxr1hRJF8/Uw2c77gU75IvuJskdvWmIo=;
+	bh=cPe1l/N2Y4GytOpRXevXAgco60FS3vlGfaHoXL772Pw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HUQdf+onAXcOQqsfT1w5Lep6yPnXX/b2iWAPPMFWCRJ8/qxyZ2ZQGMHzu7fjFvqkwMyIrKffai8xzDUrsqF7pfT0MERsKJEMolUAETcLpTzXS2KLx143bhKz87U1lqjaNq92HBqvBuux9zt1Ae9KRnnr4IC+XPBW9xtfS/Xsy9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=C/7qhqBM; arc=none smtp.client-ip=129.204.178.38
+	 MIME-Version; b=I8yKqfuH+KqfMFQlMFgYCc5LsywmspkrcBVoNAH/tUuzLldkV8nknaKl2HX8mdQuxFGWvJsECVUHl1esjn7LWr8fJrjrmd8BIwaDNtCQK3g57wn68j2NgS77OIYuQ8bSlEhXuoHW33uNM8pXj0C7j8k7zWtgsHviwYPwj3Cu0Fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=IW16Shis; arc=none smtp.client-ip=129.204.178.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=classfun.cn
 Received: from bigfoot-server-storage.classfun.cn (unknown [124.72.163.35])
 	(Authenticated sender: bigfoot)
-	by classfun.cn (Postfix) with ESMTPSA id 0936078A03;
-	Fri,  6 Sep 2024 17:38:03 +0800 (CST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn 0936078A03
+	by classfun.cn (Postfix) with ESMTPSA id 4D17B78A04;
+	Fri,  6 Sep 2024 17:38:05 +0800 (CST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn 4D17B78A04
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=classfun.cn;
-	s=default; t=1725615485;
-	bh=YQ6dfBwyAAugUzhApDOCUWBWXXsLha14N6rXzvxlRLk=;
+	s=default; t=1725615486;
+	bh=xBIuGqHHQKbj1aEL07HdEcSje5Cmnydbi71SAu4uHH8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=C/7qhqBMMoDhCuEwhTLpqO9/NNtx+QAbpHZ7XlBHXQWF4DIAIBfmvqYEDnM13mLS/
-	 gZm8AuWipJ5pawuqbs+SgbHRhXKnRjZSaobhnenwK5+RlA/O36OtQG2ehZIbBN3E7A
-	 uIFDYxeC7RFBXtzOoYPgsNvR8AUS61D3OgtdMuLU=
+	b=IW16ShisTcPT/5bUhzlGahPqRntDnIUdGDjNnaJ41T2fCyUOEOWLajtl+agYo9JU6
+	 1Muz4OnsolNeir1WSIuEPz1wqBw7muXWysmc4Q0s5cXS0cd5hrvu2lCkJ4xzns/O67
+	 AGxvySiFHHcHPOy9HNORmIopzcifr+OY24DrtTBU=
 From: Junhao Xie <bigfoot@classfun.cn>
 To: devicetree@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
@@ -64,9 +64,9 @@ Cc: Jean Delvare <jdelvare@suse.com>,
 	Heiko Stuebner <heiko@sntech.de>,
 	Chukun Pan <amadeus@jmu.edu.cn>,
 	Junhao Xie <bigfoot@classfun.cn>
-Subject: [PATCH 5/9] rtc: Add Photonicat PMU real-time clock
-Date: Fri,  6 Sep 2024 17:36:26 +0800
-Message-ID: <20240906093630.2428329-6-bigfoot@classfun.cn>
+Subject: [PATCH 6/9] hwmon: Add support for Photonicat PMU board temperature sensor
+Date: Fri,  6 Sep 2024 17:36:27 +0800
+Message-ID: <20240906093630.2428329-7-bigfoot@classfun.cn>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240906093630.2428329-1-bigfoot@classfun.cn>
 References: <20240906093630.2428329-1-bigfoot@classfun.cn>
@@ -79,248 +79,183 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Photonicat PMU MCU will send status reports regularly,
-including the MCU RTC date time.
-
-Use command 0x09 to update the RTC date time of MCU.
+including board temperature.
 
 Signed-off-by: Junhao Xie <bigfoot@classfun.cn>
 ---
- drivers/rtc/Kconfig          |  12 +++
- drivers/rtc/Makefile         |   1 +
- drivers/rtc/rtc-photonicat.c | 190 +++++++++++++++++++++++++++++++++++
- 3 files changed, 203 insertions(+)
- create mode 100644 drivers/rtc/rtc-photonicat.c
+ drivers/hwmon/Kconfig            |  10 +++
+ drivers/hwmon/Makefile           |   1 +
+ drivers/hwmon/photonicat-hwmon.c | 129 +++++++++++++++++++++++++++++++
+ 3 files changed, 140 insertions(+)
+ create mode 100644 drivers/hwmon/photonicat-hwmon.c
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 2a95b05982ad..3403ba3f5643 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -516,6 +516,18 @@ config RTC_DRV_PCF8583
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index b60fe2e58ad6..b345e4856bcf 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1781,6 +1781,16 @@ config SENSORS_PT5161L
  	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-pcf8583.
+ 	  will be called pt5161l.
  
-+config RTC_DRV_PHOTONICAT_PMU
-+	tristate "Photonicat PMU RTC"
++config SENSORS_PHOTONICAT_PMU_HWMON
++	tristate "Photonicat PMU temperature sensor"
 +	depends on MFD_PHOTONICAT_PMU
 +	help
-+	  Photonicat PMU MCU will send status reports regularly,
-+	  including the MCU RTC date time.
-+
-+	  If you say yes here you get support for the Photonicat PMU RTC.
++	  If you say yes here you get support for temperature sensor on the
++	  Photonicat PMU.
 +
 +	  This driver can also be built as a module. If so, the module
-+	  will be called rtc-photonicat.
++	  will be called photonicat-hwmon.
 +
- config RTC_DRV_M41T80
- 	tristate "ST M41T62/65/M41T80/81/82/83/84/85/87 and compatible"
- 	help
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 3004e372f25f..f050a134da1f 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -129,6 +129,7 @@ obj-$(CONFIG_RTC_DRV_PCF8523)	+= rtc-pcf8523.o
- obj-$(CONFIG_RTC_DRV_PCF85363)	+= rtc-pcf85363.o
- obj-$(CONFIG_RTC_DRV_PCF8563)	+= rtc-pcf8563.o
- obj-$(CONFIG_RTC_DRV_PCF8583)	+= rtc-pcf8583.o
-+obj-$(CONFIG_RTC_DRV_PHOTONICAT_PMU)	+= rtc-photonicat.o
- obj-$(CONFIG_RTC_DRV_PIC32)	+= rtc-pic32.o
- obj-$(CONFIG_RTC_DRV_PL030)	+= rtc-pl030.o
- obj-$(CONFIG_RTC_DRV_PL031)	+= rtc-pl031.o
-diff --git a/drivers/rtc/rtc-photonicat.c b/drivers/rtc/rtc-photonicat.c
+ config SENSORS_PWM_FAN
+ 	tristate "PWM fan"
+ 	depends on PWM || COMPILE_TEST
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index b1c7056c37db..a30658acb093 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -183,6 +183,7 @@ obj-$(CONFIG_SENSORS_OXP) += oxp-sensors.o
+ obj-$(CONFIG_SENSORS_PC87360)	+= pc87360.o
+ obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
+ obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
++obj-$(CONFIG_SENSORS_PHOTONICAT_PMU_HWMON)	+= photonicat-hwmon.o
+ obj-$(CONFIG_SENSORS_POWERZ)	+= powerz.o
+ obj-$(CONFIG_SENSORS_POWR1220)  += powr1220.o
+ obj-$(CONFIG_SENSORS_PT5161L)	+= pt5161l.o
+diff --git a/drivers/hwmon/photonicat-hwmon.c b/drivers/hwmon/photonicat-hwmon.c
 new file mode 100644
-index 000000000000..2e3115fb5c38
+index 000000000000..f1e3ee5f5781
 --- /dev/null
-+++ b/drivers/rtc/rtc-photonicat.c
-@@ -0,0 +1,190 @@
++++ b/drivers/hwmon/photonicat-hwmon.c
+@@ -0,0 +1,129 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (c) 2024 Junhao Xie <bigfoot@classfun.cn>
 + */
 +
-+#include <linux/kernel.h>
++#include <linux/completion.h>
++#include <linux/hwmon.h>
 +#include <linux/mfd/photonicat-pmu.h>
 +#include <linux/module.h>
 +#include <linux/of.h>
 +#include <linux/platform_device.h>
-+#include <linux/rtc.h>
 +
-+struct pcat_data_cmd_startup {
-+	struct pcat_data_cmd_date_time time;
-+	union {
-+		u8 value;
-+		struct {
-+			bool year : 1;
-+			bool month : 1;
-+			bool day : 1;
-+			bool hour : 1;
-+			bool minute : 1;
-+			bool second : 1;
-+		} __packed;
-+	} match;
-+} __packed;
-+
-+struct pcat_rtc {
++struct pcat_hwmon {
 +	struct device *dev;
 +	struct pcat_pmu *pmu;
 +	struct notifier_block nb;
-+	struct rtc_device *rtc;
-+	struct pcat_data_cmd_date_time time;
++	struct device *hwmon;
++	int temperature;
 +	struct completion initial_report;
 +};
 +
-+static bool pcat_time_to_rtc_time(const struct pcat_data_cmd_date_time *time,
-+				  struct rtc_time *tm)
++static ssize_t temp1_input_show(struct device *dev,
++				struct device_attribute *devattr, char *buf)
 +{
-+	if (time->second >= 60 || time->minute >= 60 || time->hour >= 24 ||
-+	    time->day <= 0 || time->day > 31 || time->month <= 0 ||
-+	    time->month > 12 || time->year < 1900 || time->year > 9999)
-+		return false;
++	struct pcat_hwmon *hwmon = dev_get_drvdata(dev);
 +
-+	tm->tm_sec = time->second;
-+	tm->tm_min = time->minute;
-+	tm->tm_hour = time->hour;
-+	tm->tm_mday = time->day;
-+	tm->tm_mon = time->month - 1;
-+	tm->tm_year = time->year - 1900;
-+	tm->tm_yday = rtc_year_days(tm->tm_mday, tm->tm_mon, time->year);
-+	tm->tm_wday = ((time->year * (365 % 7)) + ((time->year - 1) / 4) -
-+		       ((time->year - 1) / 100) + ((time->year - 1) / 400) +
-+		       tm->tm_yday) % 7;
-+
-+	return true;
++	return sprintf(buf, "%d\n", hwmon->temperature * 1000);
 +}
 +
-+static void pcat_time_from_rtc_time(struct pcat_data_cmd_date_time *time,
-+				    const struct rtc_time *tm)
-+{
-+	time->year = tm->tm_year + 1900;
-+	time->month = tm->tm_mon + 1;
-+	time->day = tm->tm_mday;
-+	time->hour = tm->tm_hour;
-+	time->minute = tm->tm_min;
-+	time->second = tm->tm_sec;
-+}
++static DEVICE_ATTR_RO(temp1_input);
 +
-+static int pcat_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct pcat_rtc *rtc = dev_get_drvdata(dev);
-+
-+	memset(tm, 0, sizeof(*tm));
-+	if (!pcat_time_to_rtc_time(&rtc->time, tm))
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int pcat_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	int ret;
-+	struct pcat_rtc *rtc = dev_get_drvdata(dev);
-+	struct pcat_data_cmd_date_time time;
-+
-+	pcat_time_from_rtc_time(&time, tm);
-+
-+	ret = pcat_pmu_write_data(rtc->pmu, PCAT_CMD_DATE_TIME_SYNC,
-+				  &time, sizeof(time));
-+	if (ret)
-+		return ret;
-+
-+	memcpy(&rtc->time, &time, sizeof(rtc->time));
-+
-+	return 0;
-+}
-+
-+static const struct rtc_class_ops pcat_rtc_ops = {
-+	.read_time = pcat_rtc_read_time,
-+	.set_time = pcat_rtc_set_time,
++static struct attribute *pcat_pmu_temp_attrs[] = {
++	&dev_attr_temp1_input.attr,
++	NULL
 +};
 +
-+static int pcat_rtc_notify(struct notifier_block *nb, unsigned long action,
-+			   void *data)
++ATTRIBUTE_GROUPS(pcat_pmu_temp);
++
++static int pcat_hwmon_notify(struct notifier_block *nb, unsigned long action,
++			     void *data)
 +{
-+	struct pcat_rtc *rtc = container_of(nb, struct pcat_rtc, nb);
++	struct pcat_hwmon *hwmon = container_of(nb, struct pcat_hwmon, nb);
 +	struct pcat_data_cmd_status *status = pcat_data_get_data(data);
 +
 +	if (action != PCAT_CMD_STATUS_REPORT)
 +		return NOTIFY_DONE;
 +
-+	memcpy(&rtc->time, &status->time, sizeof(rtc->time));
-+	complete(&rtc->initial_report);
++	hwmon->temperature = status->temp - 40;
++	complete(&hwmon->initial_report);
 +
 +	return NOTIFY_DONE;
 +}
 +
-+static int pcat_rtc_probe(struct platform_device *pdev)
++static int pcat_hwmon_probe(struct platform_device *pdev)
 +{
-+	struct device *dev = &pdev->dev;
-+	struct pcat_rtc *rtc;
 +	int ret;
++	struct device *dev = &pdev->dev;
++	struct pcat_hwmon *hwmon;
++	const char *label;
 +
-+	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
-+	if (!rtc)
++	hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
++	if (!hwmon)
 +		return -ENOMEM;
 +
-+	rtc->dev = dev;
-+	rtc->pmu = dev_get_drvdata(dev->parent);
-+	rtc->nb.notifier_call = pcat_rtc_notify;
-+	init_completion(&rtc->initial_report);
-+	platform_set_drvdata(pdev, rtc);
++	hwmon->dev = dev;
++	hwmon->pmu = dev_get_drvdata(dev->parent);
++	hwmon->nb.notifier_call = pcat_hwmon_notify;
++	init_completion(&hwmon->initial_report);
++	platform_set_drvdata(pdev, hwmon);
 +
-+	ret = pcat_pmu_register_notify(rtc->pmu, &rtc->nb);
++	ret = of_property_read_string(dev->of_node, "label", &label);
++	if (ret)
++		return dev_err_probe(dev, ret, "No label property\n");
++
++	ret = pcat_pmu_register_notify(hwmon->pmu, &hwmon->nb);
 +	if (ret)
 +		return ret;
 +
-+	if (!wait_for_completion_timeout(&rtc->initial_report,
++	if (!wait_for_completion_timeout(&hwmon->initial_report,
 +					 msecs_to_jiffies(3000))) {
 +		ret = dev_err_probe(dev, -ETIMEDOUT,
 +				    "timeout waiting for initial report\n");
 +		goto error;
 +	}
 +
-+	dev_info(dev, "RTC Time: %04d/%02d/%02d %02d:%02d:%02d\n",
-+		 rtc->time.year, rtc->time.month, rtc->time.day, rtc->time.hour,
-+		 rtc->time.minute, rtc->time.second);
++	dev_info(dev, "Board Temprature: %d degress C\n", hwmon->temperature);
 +
-+	rtc->rtc = devm_rtc_device_register(&pdev->dev, "pcat-rtc",
-+					    &pcat_rtc_ops, THIS_MODULE);
-+	if (IS_ERR(rtc->rtc)) {
-+		ret = PTR_ERR(rtc->rtc);
++	hwmon->hwmon = devm_hwmon_device_register_with_groups(
++		dev, label, hwmon, pcat_pmu_temp_groups);
++
++	if (IS_ERR(hwmon->hwmon)) {
++		ret = PTR_ERR(hwmon->hwmon);
 +		dev_err_probe(&pdev->dev, ret,
-+			      "Failed to register RTC device\n");
++			      "Failed to register hwmon device\n");
 +		goto error;
 +	}
 +
 +	return 0;
 +error:
-+	pcat_pmu_unregister_notify(rtc->pmu, &rtc->nb);
++	pcat_pmu_unregister_notify(hwmon->pmu, &hwmon->nb);
 +	return ret;
 +}
 +
-+static void pcat_rtc_remove(struct platform_device *pdev)
++static void pcat_hwmon_remove(struct platform_device *pdev)
 +{
-+	struct pcat_rtc *rtc = platform_get_drvdata(pdev);
++	struct pcat_hwmon *hwmon = platform_get_drvdata(pdev);
 +
-+	pcat_pmu_unregister_notify(rtc->pmu, &rtc->nb);
++	pcat_pmu_unregister_notify(hwmon->pmu, &hwmon->nb);
 +}
 +
-+static const struct of_device_id pcat_rtc_dt_ids[] = {
-+	{ .compatible = "ariaboard,photonicat-pmu-rtc", },
++static const struct of_device_id pcat_hwmon_dt_ids[] = {
++	{ .compatible = "ariaboard,photonicat-pmu-hwmon", },
 +	{ /* sentinel */ }
 +};
-+MODULE_DEVICE_TABLE(of, pcat_rtc_dt_ids);
++MODULE_DEVICE_TABLE(of, pcat_hwmon_dt_ids);
 +
-+static struct platform_driver pcat_rtc_driver = {
++static struct platform_driver pcat_hwmon_driver = {
 +	.driver = {
-+		.name = "rtc-photonicat",
-+		.of_match_table = pcat_rtc_dt_ids,
++		.name = "photonicat-hwmon",
++		.of_match_table = pcat_hwmon_dt_ids,
 +	},
-+	.probe = pcat_rtc_probe,
-+	.remove = pcat_rtc_remove,
++	.probe = pcat_hwmon_probe,
++	.remove = pcat_hwmon_remove,
 +};
-+module_platform_driver(pcat_rtc_driver);
++module_platform_driver(pcat_hwmon_driver);
 +
 +MODULE_AUTHOR("Junhao Xie <bigfoot@classfun.cn>");
-+MODULE_DESCRIPTION("Photonicat PMU RTC");
++MODULE_DESCRIPTION("Photonicat PMU Hardware Monitor");
 +MODULE_LICENSE("GPL");
 -- 
 2.46.0
