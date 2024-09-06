@@ -1,147 +1,120 @@
-Return-Path: <linux-pm+bounces-13765-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13766-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8312796EEBD
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:01:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3566996EEDF
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:14:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39E531F2578C
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 09:01:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7179289253
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 09:14:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ADA01C242B;
-	Fri,  6 Sep 2024 09:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C31C1C7B98;
+	Fri,  6 Sep 2024 09:14:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="paxnb1a2"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qI7WYMhK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F320F1C2328
-	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 09:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2EF1C7B82
+	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 09:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725613311; cv=none; b=jPrqJrmlU3wQAsf/YZGztsd9ZkE5SujJgutx/S+4I6CbOt5VUexgUGyZ591uj7hrFU3kq3cjlwF6jNvfogMPgKLKQAUkHNjdC30/L904PNREMVMZBIGjqh8rINjOd1xczuZmNV6V/YkOJEeHsmwzOJ1p0CkUY7+fRPl45CVel6Q=
+	t=1725614071; cv=none; b=mcjzxOm1WKYvnqFOgubRrSo475xcGOMcp9t8O9SYoLZGOhFDZukdmE0UKkub+X/5jJfup9cD06w0pXutnyC8eTQOgonOBT+6aoxnd8OCGM7iMOfqTmlZrEw2d1glxaMWcFarP6pe/tR5DhDMVqAVOuda0lnqY2zelgmuRrYTAxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725613311; c=relaxed/simple;
-	bh=AK1DjOpyBmg6MrZsgyycLtZEyblkfcxZ3xEStXmD5Sk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C74r93MEPpLzWRDBtC02MQgJ9Z3Y7w51Ky1Bjf4IZfcKDexweyhR2AzxRIgEbw4Q+qoVPm/G6bZS0Fq0RkDLEkeZ91DjRg+wjCL2MmTLWlhN5GoudMs5xIWiPuwzxKVJ5Dc8aRRA3zcWFxq0n8V3AY9g2KFT5UJo8+LYDM0iHDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=paxnb1a2; arc=none smtp.client-ip=209.85.219.172
+	s=arc-20240116; t=1725614071; c=relaxed/simple;
+	bh=BAk63GNH7zv2eCZ6zJQ4aSyrV+JmqJBYJazqvBs7yok=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=R9ULCXLz2MwGNVOcZpJmuWdwMzbQ2RrX9UDvbFgb2+GnRcHQYFy8an172PUslhLlJ9GwDeWiEvVGi3hJvIBql/2PDoK5I2Z3zT4kQj8rLr9XqBX4/wNZwgdXY48c26Y87u44ZZBRxqXliQRgwiUP2pe80XgagfBsp7T3YxRcwwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qI7WYMhK; arc=none smtp.client-ip=209.85.208.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e05f25fb96eso1931775276.1
-        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2024 02:01:49 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2f4f2868783so19512551fa.2
+        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2024 02:14:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725613309; x=1726218109; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=naafd9NQdL7c0TVHJHZyeDroIpmJmtpt2mzXoi2uMhw=;
-        b=paxnb1a2Ha1yT4jQNLC3ma595OoNDdyFiUjMbsBFa7qcq4INetdoEfMSXOt/kjiuBu
-         HpKdXhjN7f7nfeW5pSEOThfAxqpn6IQKelaAicKCQYKiMje+O7ecdBLnkHu5YKfJi2U4
-         wuFVLeppYMB+wkrQUpVOqC3oCuOaYh9Z/Ut+FFNPiHZ3ugyQC2aTCSL7kOl/NRTAAyul
-         I34J/3Q/TK+594y7zJWXNJJDBBFo3hkwIMSSuMVOihJdTHhqQMtZLHtGVu9uvt2BaSW0
-         BENZWBZXV9+AGmidDpEe3HB2Y2d6HJC2VTAYvCXDHcIzhdnGB4vbB6ZS0vXWALM6C7uy
-         d/yw==
+        d=linaro.org; s=google; t=1725614067; x=1726218867; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U+e87R7FGYS1kSpMh90TGIRaqFWfWTQZT+9IVNpQkCg=;
+        b=qI7WYMhKNw7TbwC41FER6OK0thud/cNdYUMNRlfWRMg9SOB2GaGn0tRPlJR4Yj1Hrs
+         2vXZA1Y383vKW5blVf5Od8YaCrxVpkGLP0sykHMSnNrBYAjK2W3M0BjtOmaAyvBPP6OZ
+         xJAP7iN77Om6zOnLip9H8bXOstcsJX1OH2JYcdIxfJzo3/sFY5FWyjSs7az8QTnMIFWK
+         7by2RgwGxvgw23tnFEhRYgI+cyBcYQ8wpTH75CW9pvYsHrmEJW2Q/37ZmDtUJr9GhUW0
+         29A9JFsqHGGO8Rq+Bgu6cB2OinPuQBLUqwn7cJrasnfss2iXKNrcabuSYk/53mCoYIR6
+         oWhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725613309; x=1726218109;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1725614067; x=1726218867;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=naafd9NQdL7c0TVHJHZyeDroIpmJmtpt2mzXoi2uMhw=;
-        b=RbKoab99lJViNhc0TjlEcPr+F2tnpxi5XScAUXWK71idBtTDGaioEOJcT+s2++D85n
-         PVg+f+zZ4gN6btKnAJxnMuvm2SWtyBCa/xY7Suk5NNEILtBhEEFJ6JOKVozhHXQa05Rm
-         HahcmdVTuN+YcUjjzSylrcoq8RP7cZcmnbGMfDH2pddl3VDSooZ17AtjgoCFn4E+8sNS
-         v8ntN7oIu4ek1Z6pCJF7usTKadZ24WbkdMTk+dJwkHnalCM+mmvCprC5xvvdlWJSW/Hk
-         wLwNXinCoeccoYRRuCbFoqy/eslR0wgg3FfvY0HbdY5pKhq36eD2O8CFr7r1ElrS9EyL
-         ZVtw==
-X-Gm-Message-State: AOJu0Yx5Nmz7DAzR+197Hp1Mfnj3oXH7cIts85yvIFXTKbqy/rTpH2SI
-	N3lj+r2LsPkSysc8Rvs9Ps4rdEqdNWcJvxAaxGsJlrbVZEHrkwMSBlQ4CwnCXLvlFnoqqkv0GB7
-	wu+0647IkVag9AS1jePtzAAPhFG47ikmGegkcBQ==
-X-Google-Smtp-Source: AGHT+IFGQXdRZWy9RIvR/NJ/1402FeLabmNEa/IgMAE8xXJL7U/I48UXtAHrMD5jwlbUTFr/jlclZyUQEZZyPK0rr4M=
-X-Received: by 2002:a05:6902:2e11:b0:e0b:db06:18cc with SMTP id
- 3f1490d57ef6-e1d34875b85mr2345005276.12.1725613308963; Fri, 06 Sep 2024
- 02:01:48 -0700 (PDT)
+        bh=U+e87R7FGYS1kSpMh90TGIRaqFWfWTQZT+9IVNpQkCg=;
+        b=njmABEwjKBxUOmfwva618G5PZf4/meXZnY3gf64Poh46hefdgs3px+n1Mb/n4p0Oka
+         qtOdhRgGF4SheIsAGnRIvyjSSzjAw7/260PDrzHKsHK6AQLwaVJzBg/CEs15IQ7GgCbY
+         qaGcf2SE7zBnueqTIAPHO7EBhCdNYFinXqr7s7Exbe6K9uICsGO2g3CLprkSIgsdWXt5
+         eGOuQeYFaTlaCvoT2i4JQIfNg4jNNMjZ06qQgEosQkFnAIRLJH1y4RaCb4U7O/lbCcm4
+         Nk0HgaBf7nlc4AboGDMdwdyM2GBWBllOnXPw/qp7h/7P9AxJj03KXPDpUmLq2/myGPJF
+         x6ww==
+X-Forwarded-Encrypted: i=1; AJvYcCVUNKXd3MPWs7BWeVfO8aAc1n7xMOjCS+yUr3rOzICjTqekvw4tHMz6OmDUBrOLkAMfUb9pNCkYlQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4I91KO4MNiYPFU0ubARcA4bHpUshYApAuki6QgkMok8v3wm/I
+	zEWnqqCAAhwmOo7Z7idUgoL7gZOjobScQD26LYkt/L9Qkr1IMEk9+7TXEztUeg0=
+X-Google-Smtp-Source: AGHT+IFEUhV1ciV9jyrK+eJJBbqBxS2WmmWYbLgdbNMBbisCr7UEYpC48Ax91t9tYCtSTb2NRtqaPw==
+X-Received: by 2002:a05:6512:3088:b0:535:6892:3be6 with SMTP id 2adb3069b0e04-5365880bf79mr972206e87.54.1725614066879;
+        Fri, 06 Sep 2024 02:14:26 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53568035c30sm648770e87.81.2024.09.06.02.14.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Sep 2024 02:14:26 -0700 (PDT)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Linus <torvalds@linux-foundation.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] pmdomain fixes for v6.11-rc7
+Date: Fri,  6 Sep 2024 11:14:25 +0200
+Message-Id: <20240906091425.194581-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240905-lpm-v6-10-constraints-pmdomain-v3-0-e359cbb39654@baylibre.com>
- <20240905-lpm-v6-10-constraints-pmdomain-v3-2-e359cbb39654@baylibre.com>
-In-Reply-To: <20240905-lpm-v6-10-constraints-pmdomain-v3-2-e359cbb39654@baylibre.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 6 Sep 2024 11:01:13 +0200
-Message-ID: <CAPDyKFq=z8QQ3BLHd=sdJUcP+ZuekUzaBEt5PLARgJWD=PBMpA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] pmdomain: ti_sci: add wakeup constraint management
-To: Kevin Hilman <khilman@baylibre.com>
-Cc: linux-pm@vger.kernel.org, Nishanth Menon <nm@ti.com>, Vibhore Vardhan <vibhore@ti.com>, 
-	Dhruva Gole <d-gole@ti.com>, Akashdeep Kaur <a-kaur@ti.com>, Sebin Francis <sebin.francis@ti.com>, 
-	Markus Schneider-Pargmann <msp@baylibre.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, 6 Sept 2024 at 00:03, Kevin Hilman <khilman@baylibre.com> wrote:
->
-> During system-wide suspend, check all devices connected to PM domain
-> to see if they are wakeup-enabled.  If so, set a TI SCI device
-> constraint.
->
-> Note: DM firmware clears all constraints on resume.
->
-> Co-developed-by: Vibhore Vardhan <vibhore@ti.com>
-> Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
-> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+Hi Linus,
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Here's a PR with a OPP/pmdomain fix intended for v6.11-rc7. Details about the
+highlights are as usual found in the signed tag.
+
+Please pull this in!
 
 Kind regards
-Uffe
+Ulf Hansson
 
-> ---
->  drivers/pmdomain/ti/ti_sci_pm_domains.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->
-> diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> index bb95c40ab3ea..1ab1e46924ab 100644
-> --- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> +++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> @@ -74,6 +74,21 @@ static void ti_sci_pd_set_lat_constraint(struct device *dev, s32 val)
->                         pd->idx, val);
->  }
->
-> +static inline void ti_sci_pd_set_wkup_constraint(struct device *dev)
-> +{
-> +       struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
-> +       struct ti_sci_pm_domain *pd = genpd_to_ti_sci_pd(genpd);
-> +       const struct ti_sci_handle *ti_sci = pd->parent->ti_sci;
-> +       int ret;
-> +
-> +       if (device_may_wakeup(dev)) {
-> +               ret = ti_sci->ops.pm_ops.set_device_constraint(ti_sci, pd->idx,
-> +                                                              TISCI_MSG_CONSTRAINT_SET);
-> +               if (!ret)
-> +                       dev_dbg(dev, "ti_sci_pd: ID:%d set device constraint.\n", pd->idx);
-> +       }
-> +}
-> +
->  /*
->   * ti_sci_pd_power_off(): genpd power down hook
->   * @domain: pointer to the powerdomain to power off
-> @@ -115,6 +130,8 @@ static int ti_sci_pd_suspend(struct device *dev)
->         if (ti_sci_pd_is_valid_constraint(val))
->                 ti_sci_pd_set_lat_constraint(dev, val);
->
-> +       ti_sci_pd_set_wkup_constraint(dev);
-> +
->         return 0;
->  }
->
->
-> --
-> 2.46.0
->
+
+The following changes since commit 52dd070c62e4ae2b5e7411b920e3f7a64235ecfb:
+
+  pmdomain: imx: wait SSAR when i.MX93 power domain on (2024-08-15 12:47:09 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.11-rc2-2
+
+for you to fetch changes up to 9ec87c5957ea9bf68d36f5e098605b585b2571e4:
+
+  OPP: Fix support for required OPPs for multiple PM domains (2024-08-23 11:57:44 +0200)
+
+----------------------------------------------------------------
+OPP/pmdomain core:
+ - Fix support for required OPPs for multiple PM domains
+
+----------------------------------------------------------------
+Ulf Hansson (1):
+      OPP: Fix support for required OPPs for multiple PM domains
+
+ drivers/opp/core.c | 56 +++++++++++++++++++++---------------------------------
+ 1 file changed, 22 insertions(+), 34 deletions(-)
 
