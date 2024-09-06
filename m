@@ -1,48 +1,73 @@
-Return-Path: <linux-pm+bounces-13786-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13787-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6885296F1AB
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 12:39:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3E1196F2FE
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 13:24:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28498284664
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 10:39:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD5631C21C70
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:24:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9D761C9ED1;
-	Fri,  6 Sep 2024 10:39:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B9E1C9EC2;
+	Fri,  6 Sep 2024 11:24:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="FNFMKHya"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HV3/bb3D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from classfun.cn (unknown [129.204.178.38])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 356BB1C8FC7;
-	Fri,  6 Sep 2024 10:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.204.178.38
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6267A1C9EAB
+	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 11:24:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725619141; cv=none; b=R4oT5lTdZpy49s7vr9QH/Jfy1ZLirtqpY1tdhSL/60cDPzjfBrJJlOY8fatpg+R16u8lgwW7e8QhcXATaNi00YpIaTU2LozaMP8XRryNpooJxWehBNmsww4Pg1oMXqFvSWXDUdf5AmrGHP0sB3bj/hI1ZnOpMdgiThJjJR6z6Vk=
+	t=1725621894; cv=none; b=JiFmhHZvMJ2JElOoJlWQEZydzE1g18wb+m+tvW1y/cy//tqGdvY8BdaEnkKoQtAcfqyTzLLXcv7+J3LVtYoqWsF8oT4OgUYLwE4j8mL6xQxAm0AwmhiS8/tm6bT1QcAfrXERaLbjrgGusf3xIII/7uwWfKwK1csAlRbLi/6g98A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725619141; c=relaxed/simple;
-	bh=05KjF2XPr/hICg9p1IUhg3U7t26HXoWZBUdtqY6Tsx0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=o2Pn0fLh0MjFzmH/Wkaj1eO6djF+FSEDSQZLgm5TbVTnFjOCFX/Z9G/bPPSVLoeE5nVziYBwao+UeGtWi0sM5gO21w1X/bHyNeoXrv3+9CSgvr8HD6w+oq0L24gFlC2nnn6lh+7SveumjvxttONuF0r7bNW4t14pk37Ht4dcU54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=FNFMKHya; arc=none smtp.client-ip=129.204.178.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=classfun.cn
-Received: from [192.168.0.160] (unknown [14.155.100.110])
-	(Authenticated sender: bigfoot)
-	by classfun.cn (Postfix) with ESMTPSA id B0B1F78A00;
-	Fri,  6 Sep 2024 18:38:55 +0800 (CST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn B0B1F78A00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=classfun.cn;
-	s=default; t=1725619136;
-	bh=8rF690V9mxP9B5MKXF/MRXog3KWCE9DsM6auRSLOXzk=;
-	h=Date:Subject:To:References:Cc:From:In-Reply-To:From;
-	b=FNFMKHyau1cg/FaXUCYgUv0fzbUE2FHQRJlL5jYLYwVzGyaJ2vRMQXyt61NzmpH8v
-	 PCpi1+bahB9oEv0ktn1DEbTVKpfrumG60lLdvBjqbyRa3ptauqaQd4//b+cr/Ox1I4
-	 vsMjjLL+oFDBXc1aPncIrFVsMZB4udQ3HeB2DL4o=
-Message-ID: <f538ee4b-82ed-4ee1-b4e8-768a4500283e@classfun.cn>
-Date: Fri, 6 Sep 2024 18:40:23 +0800
+	s=arc-20240116; t=1725621894; c=relaxed/simple;
+	bh=ZQH92TpQyFl4gv+OD7v5l1D5rCQFmhiRf28AHtFoQXk=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=grleihCFTYS9FyoG8SCYuJZ1/gpGT7NEQv5ZrpvRcxB3rFz0fJOQN4yCnYEOI9RZzijq+z5tkQwIKdnglI9WegxQa9wjx79Djapku1D5goRkb968i3VVwEP7DB0IYgukq7eQ5MWY7AK4Yg8yp5tmLh1mynNkk4bAzq/X6SgnCQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HV3/bb3D; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-42ca573fd5aso2763545e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2024 04:24:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1725621888; x=1726226688; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MYynHc0UzBO2p8b5rM/GQnlMJh3kzhjnj092w1bNgx0=;
+        b=HV3/bb3Df5R7rBGgkoSTfxtS+z444QLp6XzmD+VCMiv/OCKBTncLPojSO6HwvAFgTg
+         Nh9QFvj7Yb8JBrYu+DUFeKnZiSg6h40lYL96kfWWF3LXIC5wdgOBq1p9VKmhZUw0lGqK
+         VrIH1r5u/J86SKW/SL3PPEDNihWFDOHGWtQTu/Ak3bmvYxIUXlw+ldmrmmNVZ2pzshpB
+         mWOii25nOZv+Q8RW4EcWAr2zBrx1jOGLcAAEb05QLl6Oue8/6ByK5fCemvApjlfcQ+ch
+         C3XhFXnpRiJX5u5s9SREIRac7n/y6vCApAAwh8sg938FizHQsx8pH1WLymbfOyjlyYGQ
+         vSeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725621888; x=1726226688;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MYynHc0UzBO2p8b5rM/GQnlMJh3kzhjnj092w1bNgx0=;
+        b=ePzX/ZpQgA3Jm817UXzjR2tQYlSH8eRmpItfGElKNoInI4PnzEFoKjFgWdDD0lrqAe
+         N6O7ACPsUfWpq2HFGVGUE3TGJfAtUw960RZN49rFwH/ITfu5dgTq4TxZ/HpArV9S7MEj
+         xNPeFcd6TI+o5iqXMErX+Eyivm89vgskpbc+c2XhzQqfnjT9+yf6GLSWnHtWIDSDC8UR
+         qoa7+6jwCAXx3eaomU0A/WGPHnPYWG7LmZLGdy5T6Z77A/JGKhjVgiufNapxCS9tR7sq
+         5/gz30JtJfKZ9JL3EjeiefTyriYLaQgHDTVn/u0nIIJHdM3FiShzMfQMtcWvNw5GWTsx
+         +W6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXodXM/Z33IydYxUg8uLUnKE0MyqMYqg//DpJP1viNAqBPDGq3mMeR4mJMIgYijoI6ZSsC4qAwxYg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPQ8sXmehEflrfbnJtpS4VRYpYhgKbG2BLX1eqPg/aqWapnp1s
+	nQR3+j5HTMyCKh+x4EhEFOlsjD/I93NxeYliFQqisSV9MfTlF5l85mQBesYs+y0=
+X-Google-Smtp-Source: AGHT+IE14b7rOn+qEeyShlsYLKxm7ePNnNmthwLTsPtIn7xL+yauvm0pLZ7yQGBxisbgHVdoce4pAQ==
+X-Received: by 2002:a05:600c:5125:b0:426:6696:9e50 with SMTP id 5b1f17b1804b1-42c9f98467emr16257125e9.14.1725621887156;
+        Fri, 06 Sep 2024 04:24:47 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-42ca05cfa42sm17376815e9.25.2024.09.06.04.24.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Sep 2024 04:24:46 -0700 (PDT)
+Message-ID: <3a7fa69f-9cee-48f0-a932-7362f600b6a6@linaro.org>
+Date: Fri, 6 Sep 2024 13:24:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,90 +75,126 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/9] mfd: Add driver for Photonicat power management MCU
-To: Krzysztof Kozlowski <krzk@kernel.org>
-References: <20240906093630.2428329-1-bigfoot@classfun.cn>
- <20240906093630.2428329-2-bigfoot@classfun.cn>
- <e4ee504b-98a8-4b35-9e1a-195395cdacf8@kernel.org>
 Content-Language: en-US
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, "Conor Dooley,"
- <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
- Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Heiko Stuebner <heiko@sntech.de>,
- Chukun Pan <amadeus@jmu.edu.cn>, Junhao Xie <bigfoot@classfun.cn>
-From: Junhao Xie <bigfoot@classfun.cn>
-In-Reply-To: <e4ee504b-98a8-4b35-9e1a-195395cdacf8@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Raphael Gallais-Pou <rgallaispou@gmail.com>,
+ George Stark <gnstark@salutedevices.com>, Yan Zhen <yanzhen@vivo.com>,
+ Fabio Estevam <festevam@denx.de>, Zhang Zekun <zhangzekun11@huawei.com>,
+ Alexander Stein <alexander.stein@ew.tq-group.com>,
+ Lukasz Luba <Lukasz.Luba@arm.com>,
+ Linux PM mailing list <linux-pm@vger.kernel.org>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal drivers changes for v6.12-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 2024/9/6 17:43, Krzysztof Kozlowski wrote:
-> On 06/09/2024 11:36, Junhao Xie wrote:
->> Add a driver for Photonicat power management MCU, which
-[...]>> +void *pcat_data_get_data(struct pcat_data *data)
->> +{
->> +	if (!data)
->> +		return NULL;
->> +	return data->data;
->> +}
->> +EXPORT_SYMBOL_GPL(pcat_data_get_data);
-> 
-> You need kerneldoc... or just drop it. Looks a bit useless as an
-> export... Is it because you want to hide from your own driver pcat_data?
-> What for? It's your driver...
 
-Now struct pcat_data is in mfd-photonicat.c,
-I will move it to photonicat-pmu.h and remove pcat_data_get_data.
+Hi Rafael,
 
-> 
-[...]
->> +void pcat_pmu_unregister_notify(struct pcat_pmu *pmu, struct notifier_block *nb)
-> 
-> You need kerneldoc.
+please consider pulling the following changes. This cycle has been quite 
+quiescent and the changes are mostly related to code cleanups and DT 
+bindings.
 
-I will add missing kernel documentation for all exported functions.
+Thanks
 
-> 
-[...]
->> +
->> +static const struct of_device_id pcat_pmu_dt_ids[] = {
->> +	{ .compatible = "ariaboard,photonicat-pmu", },
-> 
-> Undocumented compatible.
-> 
-> Remember about correct order of patches. ABI documentation is before users.
-> 
 
-I will adjust order of patches.
+The following changes since commit f5c05974349c8e3d80e125b71bd80695807d8528:
 
-> 
-[...]
->> +
->> +MODULE_ALIAS("platform:photonicat-pmu");
-> 
-> You should not need MODULE_ALIAS() in normal cases. If you need it,
-> usually it means your device ID table is wrong (e.g. misses either
-> entries or MODULE_DEVICE_TABLE()). MODULE_ALIAS() is not a substitute
-> for incomplete ID table.
-> 
-> And it is not even correct. This is not a platform driver!
-> 
+   Merge branch 'thermal-core' (2024-08-29 11:45:08 +0200)
 
-Yes, I will remove MODULE_ALIAS line
+are available in the Git repository at:
 
-> 
-> Best regards,
-> Krzysztof
-> 
+  
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v6.12-rc1
 
-Thanks for your review, I will fix all problems in next version!
+for you to fetch changes up to 7d8abc5f3b5ce0f53d499279d8defc0f72bf7557:
 
-Best regards,
-Junhao
+   thermal/drivers/imx_sc_thermal: Use dev_err_probe (2024-09-04 
+15:31:29 +0200)
+
+----------------------------------------------------------------
+- Add power domain DT bindings for new Amlogic SoCs (Georges Stark)
+
+- Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr() in the ST
+   driver and add a Kconfig dependency on THERMAL_OF subsystem for the
+   STi driver (Raphael Gallais-Pou)
+
+- Simplify with dev_err_probe() the error code path in the probe
+   functions for the brcmstb driver (Yan Zhen)
+
+- Remove trailing space after \n newline in the Renesas driver (Colin
+   Ian King)
+
+- Add DT binding compatible string for the SA8255p with the tsens
+   driver (Nikunj Kela)
+
+- Use the devm_clk_get_enabled() helpers to simplify the init routine
+   in the sprd driver (Huan Yang)
+
+- Remove __maybe_unused notations for the functions by using the new
+   RUNTIME_PM_OPS() and SYSTEM_SLEEP_PM_OPS() macros on the IMx and
+   Qoriq drivers (Fabio Estevam)
+
+- Remove unused declarations in the header file as the functions were
+   removed in a previous change on the ti-soc-thermal driver (Zhang
+   Zekun)
+
+- Simplify with dev_err_probe()	the error code path in the probe
+   functions for the imx_sc_thermal driver (Alexander Stein)
+
+----------------------------------------------------------------
+Alexander Stein (1):
+       thermal/drivers/imx_sc_thermal: Use dev_err_probe
+
+Colin Ian King (1):
+       thermal/drivers/renesas: Remove trailing space after \n newline
+
+Fabio Estevam (2):
+       thermal/drivers/qoriq: Remove __maybe_unused notations
+       thermal/drivers/imx: Remove __maybe_unused notations
+
+George Stark (1):
+       dt-bindings: thermal: amlogic,thermal: add optional power-domains
+
+Huan Yang (1):
+       thermal/drivers/sprd: Use devm_clk_get_enabled() helpers
+
+Nikunj Kela (1):
+       dt-bindings: thermal: tsens: document support on SA8255p
+
+Raphael Gallais-Pou (2):
+       thermal/drivers/st: Switch from CONFIG_PM_SLEEP guards to 
+pm_sleep_ptr()
+       thermal/drivers/sti: Depend on THERMAL_OF subsystem
+
+Yan Zhen (1):
+       thermal/drivers/brcmstb_thermal: Simplify with dev_err_probe()
+
+Zhang Zekun (1):
+       thermal/drivers/ti-soc-thermal: Remove unused declarations
+
+  .../bindings/thermal/amlogic,thermal.yaml          |  3 ++
+  .../devicetree/bindings/thermal/qcom-tsens.yaml    |  1 +
+  drivers/thermal/Kconfig                            |  2 +-
+  drivers/thermal/broadcom/brcmstb_thermal.c         | 15 ++++------
+  drivers/thermal/imx_sc_thermal.c                   |  3 +-
+  drivers/thermal/imx_thermal.c                      | 16 +++++------
+  drivers/thermal/qoriq_thermal.c                    | 10 +++----
+  drivers/thermal/renesas/rcar_thermal.c             |  2 +-
+  drivers/thermal/sprd_thermal.c                     | 14 ++--------
+  drivers/thermal/st/st_thermal.c                    | 32 
+++++++++--------------
+  drivers/thermal/st/st_thermal_memmap.c             |  2 +-
+  drivers/thermal/st/stm_thermal.c                   |  8 ++----
+  drivers/thermal/ti-soc-thermal/ti-bandgap.h        |  4 ---
+  13 files changed, 45 insertions(+), 67 deletions(-)
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
