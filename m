@@ -1,187 +1,142 @@
-Return-Path: <linux-pm+bounces-13743-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13744-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AA7996E713
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 03:03:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3E1A96E7FE
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 05:06:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C0ADB22287
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 01:03:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E44C1F248E3
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 03:06:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7679C179BC;
-	Fri,  6 Sep 2024 01:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="c+0xw3Ez"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D83D22334;
+	Fri,  6 Sep 2024 03:06:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 718A5186A
-	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 01:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AC11805A;
+	Fri,  6 Sep 2024 03:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725584588; cv=none; b=BP7OCmoaBLSCqs76iqR5mIX014p1mUnPm0cK3mSgieEE6YReFvCsu0SGXtFww74tnJ69usNZm9LrOu9hC8ZVzm9OJLp5ClNEw2QEKMS9jrfeau9P47byY18OHF+btIwYjNdqXTmDlt9QluzqfNUP8t+kwMjlJueqvH1nTpznpp4=
+	t=1725592008; cv=none; b=Ti9GcLWQAuLa54sz9SVJUNq29YNR1UhMZMfShH2s8KA6Bm8fLBC77Ekpjk8Nm6V8HEqzx1qxH5xK8d/eV9xflZCr7GlDqCC8Zx47YkT0OikI5DNjraVaVzQCcDKmuqRWMtlxnqOMDhFGcpjlO5ebu3fo5Ny/7VuwtzpD3ojXLkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725584588; c=relaxed/simple;
-	bh=z4m4o2/drN603NiUF70RgY7/WIJvRfsJfDnzeGXC0qo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PDgHUb2oVWBSsUNg/Zt7bMCYKwHLGmFeBE2lPm/9oiB6CUqGJVVZM2Hxo1+iI3RYYQ2AZQiNAarbSnTgVwQMAubnZxPjjEjzX2/bgY23OnL4KI2GG6k9X+8fFxk9CthF5ihO7PR5hHqPgRiVX/DNW4/ugL4O0Bq/J2TtQfpkg7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=c+0xw3Ez; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2068acc8a4fso15955645ad.1
-        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2024 18:03:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1725584585; x=1726189385; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dOGqKcCZS3m+coWkXftBCip2jTDTfVTP0RKG8IcdHp8=;
-        b=c+0xw3EzIQpfKnDqnjyAQkd4MqwN8bJHtuntHwTTjH3O0zzt4bQ4qRq6VYouowktxR
-         P4nDEsyJNQ8TYg8UyhniRwyvKvK18vHFVnzqbyC6yn0kmQPH3aL+xq70JqXSCEVwpmI4
-         E9Gs03Ax7YB0LfM5yPN9cioKkObDE6HBYxXsI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725584585; x=1726189385;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dOGqKcCZS3m+coWkXftBCip2jTDTfVTP0RKG8IcdHp8=;
-        b=EWcyUS76hjdQKeBWhDeCci9b3WMruVCyEneRBEN/DndpiOGo8HL7AnNeTHCpGXG3mL
-         ivpA2WZhPvWx9fs5bBmM1l1N8UyzvXJdTJUEph3fCQVZwAXOa0bwzPUnRKEy6VV7xtIA
-         CFQpJppNBItQLsEIqNTWxHfmfff1cctoJh/9mEF5nXeXYW7koUq0itOTtlfY8dnDVZ9G
-         9r1fSPSut2W0UZZMHebPbBl3IVV+rW/6wIQaEJMpJmJ2M/NIVFhiSDQFDY4QZJel0H0F
-         E/x3x+H1kpG2kSEjuYT9NUgvcOJVF+5mH7jURgHaKGcIU6tia2wPQ7XiarsejYrR76k0
-         nc1A==
-X-Gm-Message-State: AOJu0Yz/6dagt5W87fdAbW78kaWaE+4JN5HSFyaA7UPOlGFkjfhLXM/G
-	NI1OPVdrva+mOa/OtJ+ZLyTQYnFvmMB5lcmIj9h+SPtmP57SbIGHa8oXoCpROF8=
-X-Google-Smtp-Source: AGHT+IGQS+zlVQH8e863up19r0CoJnbE9Az0nr/PClGUOKV1rszxTZ+R67nI2CgGD6MOFohQXJrtIw==
-X-Received: by 2002:a17:902:d4cd:b0:206:96ae:dc57 with SMTP id d9443c01a7336-20696aee0a4mr135653185ad.48.1725584584485;
-        Thu, 05 Sep 2024 18:03:04 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-206aea37ccdsm34167785ad.168.2024.09.05.18.03.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Sep 2024 18:03:03 -0700 (PDT)
-Message-ID: <428a42ef-2a3b-41ec-b1a0-7886d52d621f@linuxfoundation.org>
-Date: Thu, 5 Sep 2024 19:03:02 -0600
+	s=arc-20240116; t=1725592008; c=relaxed/simple;
+	bh=b1tjpeyOK9mQG3APi9N8ElGJuuJJDMoUoJ6UWqqFFfE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=D4kkPGPpze0Guw1abdMJ+P3J4HEcn6Z1w0SJX/WcC/K2FyZLYT2rKVZBjni+6ScI0XVDmcf7CFsxCl037aMsZ3i3MmNETW2udBEoBkw3WNfNbQO+YRhR6xCyD5LAZ9+Gd4gG6SWRWGUGLrQcje5nuJdQenxKx0umUTL/wc3GoFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 0526b2866bfd11efa216b1d71e6e1362-20240906
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_UNTRUSTED, SA_UNFAMILIAR
+	SN_UNTRUSTED, SN_UNFAMILIAR, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
+	ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:b7458673-1f35-4cd1-824b-bb1b443d8abe,IP:10,
+	URL:0,TC:0,Content:0,EDM:-25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:-20
+X-CID-INFO: VERSION:1.1.38,REQID:b7458673-1f35-4cd1-824b-bb1b443d8abe,IP:10,UR
+	L:0,TC:0,Content:0,EDM:-25,RT:0,SF:-5,FILE:0,BULK:0,RULE:EDM_GE969F26,ACTI
+	ON:release,TS:-20
+X-CID-META: VersionHash:82c5f88,CLOUDID:2c00f2f9f017478b15ea7a3b45cd0dee,BulkI
+	D:240906110635Q3J4J70O,BulkQuantity:0,Recheck:0,SF:44|66|38|24|72|19|102,T
+	C:nil,Content:0,EDM:1,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,
+	COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
+X-UUID: 0526b2866bfd11efa216b1d71e6e1362-20240906
+X-User: duanchenghao@kylinos.cn
+Received: from chenghao.. [(223.70.160.255)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 747009131; Fri, 06 Sep 2024 11:06:32 +0800
+From: Duan Chenghao <duanchenghao@kylinos.cn>
+To: gregkh@linuxfoundation.org,
+	pavel@ucw.cz,
+	linux-pm@vger.kernel.org
+Cc: niko.mauno@vaisala.com,
+	stanley_chang@realtek.com,
+	tj@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	duanchenghao@kylinos.cn
+Subject: [PATCH] USB: Fix the issue of task recovery failure caused by USB status when S4 wakes up
+Date: Fri,  6 Sep 2024 11:05:48 +0800
+Message-Id: <20240906030548.845115-1-duanchenghao@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/4] Add SWIG Bindings to libcpupower
-To: "John B. Wyatt IV" <jwyatt@redhat.com>
-Cc: linux-pm@vger.kernel.org, Thomas Renninger <trenn@suse.com>,
- Shuah Khan <shuah@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- linux-kernel@vger.kernel.org, John Kacur <jkacur@redhat.com>,
- Tomas Glozar <tglozar@redhat.com>, Arnaldo Melo <acme@redhat.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "John B. Wyatt IV" <sageofredondo@gmail.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240905021916.15938-1-jwyatt@redhat.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240905021916.15938-1-jwyatt@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/4/24 20:19, John B. Wyatt IV wrote:
-> SWIG is a tool packaged in Fedora and other distros that can generate
-> bindings from C and C++ code for several languages including Python,
-> Perl, and Go. Providing bindings for scripting languages is a common feature
-> to make use of libraries more accessible to more users and programs. My team
-> specifically wants to expand the features of rteval. rteval is a Python program
-> used to measure real time performance. We wanted to test the effect of enabling
-> some levels of idle-stat to see how it affects latency, and didn't want to
-> reinvent the wheel. Since SWIG requires the .o files created by libcpupower at
-> compilation it makes sense to include this in the cpupower directory so that
-> others can make use of them.
-> 
-> The V3 of this patchset includes:
-> * renaming header messages as requested and adding people to Cc as
-> requested
-> * moving the stub (dummy) commit to the front of the patchset
-> * small punctuation fixes
-> 
-> The V2 of this patchset includes:
-> * the full definition of libcpupower headers that is needed for the bindings
-> * dummy implementation in C of a function listed in the header of libcpupower
-> (requested by Shuah Khan)
-> * test_raw_pylibcpupower.py demonstrates an example of using the bindings
-> * adding myself and John Kacur to the cpupower section of the maintainers file
-> (requested by Shuah Khan)
-> * addressed review comments about doc, makefile, and maintainers file
-> * small style and other fixes
-> 
-> The name raw_pylibcpupower is used because a wrapper `pylibcpupower` may be
-> needed to make the bindings more 'pythonic' in the future. The bindings folder
-> is used because Go or Perl bindings may be useful for other users in the
-> future.
-> 
-> Note that while SWIG itself is GPL v3+ licensed; the resulting output, the
-> bindings code, has the same license as the .o files used to generate the
-> bindings (GPL v2 only). Please see
-> https://swig.org/legal.html
-> and
-> https://lore.kernel.org/linux-pm/Zqv9BOjxLAgyNP5B@hatbackup/#t
-> for more details on the license.
-> 
-> Sincerely,
-> John Wyatt
-> Software Engineer, Core Kernel
-> Red Hat
-> 
-> John B. Wyatt IV (4):
->    pm:cpupower: Add missing powercap_set_enabled() stub function
->    pm:cpupower: Add SWIG bindings files for libcpupower
->    pm:cpupower: Include test_raw_pylibcpupower.py
->    MAINTAINERS: Add Maintainers for SWIG Python bindings
-> 
->   MAINTAINERS                                   |   3 +
->   .../power/cpupower/bindings/python/.gitignore |   8 +
->   tools/power/cpupower/bindings/python/Makefile |  31 +++
->   tools/power/cpupower/bindings/python/README   |  59 +++++
->   .../bindings/python/raw_pylibcpupower.i       | 247 ++++++++++++++++++
->   .../bindings/python/test_raw_pylibcpupower.py |  42 +++
->   tools/power/cpupower/lib/powercap.c           |   8 +
->   7 files changed, 398 insertions(+)
->   create mode 100644 tools/power/cpupower/bindings/python/.gitignore
->   create mode 100644 tools/power/cpupower/bindings/python/Makefile
->   create mode 100644 tools/power/cpupower/bindings/python/README
->   create mode 100644 tools/power/cpupower/bindings/python/raw_pylibcpupower.i
->   create mode 100755 tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
-> 
+When a device is inserted into the USB port and an S4 wakeup is initiated,
+after the USB-hub initialization is completed, it will automatically enter suspend mode.
+Upon detecting a device on the USB port, it will proceed with resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state.
+During the S4 wakeup process, peripherals are put into suspend mode, followed by task recovery.
+However, upon detecting that the hcd is in the HCD_FLAG_WAKEUP_PENDING state,
+it will return an EBUSY status, causing the S4 suspend to fail and subsequent task recovery to not proceed.
 
-Applied the series for Linux 6.12-rc1 to
+This patch makes two modifications in total:
+1. The set_bit and clean_bit operations for the HCD_FLAG_WAKEUP_PENDING flag of Hcd,
+which were previously split between the top half and bottom half of the interrupt,
+are now unified and executed solely in the bottom half of the interrupt.
+This prevents the bottom half tasks from being frozen during the S4 process,
+ensuring that the clean_bit process can proceed without interruption.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git cpupower branch
+2. Add a condition to the set_bit operation for the hcd status HCD_FLAG_WAKEUP_PENDING.
+When the hcd status is HC_STATE_SUSPENDED, perform the setting of the aforementioned status bit.
+This prevents a subsequent set_bit from occurring after the clean_bit if the hcd is in the resuming process.
 
-I chose to walk through the steps without installing SWIG
-to see what make would do.
+Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
+---
+ drivers/usb/core/hcd.c | 1 -
+ drivers/usb/core/hub.c | 3 +++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Some things to improve:
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 1ff7d901fede..a6bd0fbd82f4 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -2389,7 +2389,6 @@ void usb_hcd_resume_root_hub (struct usb_hcd *hcd)
+ 	spin_lock_irqsave (&hcd_root_hub_lock, flags);
+ 	if (hcd->rh_registered) {
+ 		pm_wakeup_event(&hcd->self.root_hub->dev, 0);
+-		set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
+ 		queue_work(pm_wq, &hcd->wakeup_work);
+ 	}
+ 	spin_unlock_irqrestore (&hcd_root_hub_lock, flags);
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 4b93c0bd1d4b..7f847c4afc0d 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3835,11 +3835,14 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
+ 
+ int usb_remote_wakeup(struct usb_device *udev)
+ {
++	struct usb_hcd  *hcd = bus_to_hcd(udev->bus);
+ 	int	status = 0;
+ 
+ 	usb_lock_device(udev);
+ 	if (udev->state == USB_STATE_SUSPENDED) {
+ 		dev_dbg(&udev->dev, "usb %sresume\n", "wakeup-");
++		if (hcd->state == HC_STATE_SUSPENDED)
++			set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
+ 		status = usb_autoresume_device(udev);
+ 		if (status == 0) {
+ 			/* Let the drivers do their thing, then... */
+-- 
+2.34.1
 
-Running make in tools/power/cpupower/bindings/python directory without
-installing SWIG gives me the following errors:
-
-make: python-config: No such file or directory
-swig -python raw_pylibcpupower.i
-make: swig: No such file or directory
-make: *** [Makefile:27: raw_pylibcpupower_wrap.c] Error 127
-
-I think it would be good to provide better help message walking
-user through installing the dependencies.
-
-Documentation/Makefile is a good example to look at for useful
-message on the dependencies to be installed.
-
-You can send me patch on top of
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git cpupower branch
-
-thanks,
--- Shuah
 
