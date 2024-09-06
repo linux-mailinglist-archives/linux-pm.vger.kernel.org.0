@@ -1,162 +1,156 @@
-Return-Path: <linux-pm+bounces-13767-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13768-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1543B96EF63
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:36:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE32296EF7F
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:38:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28A281C23EDD
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 09:36:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB15C28486E
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 09:38:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7811C86FF;
-	Fri,  6 Sep 2024 09:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587501C8FA2;
+	Fri,  6 Sep 2024 09:38:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TD/XxqRe"
+	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="drSg8Fhk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203EC1C86F6
-	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 09:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+Received: from classfun.cn (unknown [129.204.178.38])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 481241C870B;
+	Fri,  6 Sep 2024 09:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.204.178.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725615394; cv=none; b=mFf0yyXUzEMO6yfPJ7otM+OgHnHovqkgtODXuP/Dyq3WOVjTcCuRcRHWpa2lNdaa4rUgaFGxxoQxikoXh/3E8xMEq/xaPrLT/GmfFMZ8dfgFwSj3LyRj10Sf7PocwlpH+CvMbhu3IL4bEloKm5zu4GR+B3VnjYUtUf7Sje1ajxE=
+	t=1725615485; cv=none; b=XWOizhqOdW73iniJP62hXN8uMORcIBEk1kkt8Eayvvm+ZIz3gLQD/tSMDhonKRrslgEJJ0eyKAdFw0oZYhNL7tIiAU4t6hU0ziPAwOND5d93cQH99qL9sUp4VOFROkgBx6ucWs5UePmGqe97WC4phfJ+RlKOrlal2vM0U7hdOu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725615394; c=relaxed/simple;
-	bh=p8TKYd9n7gZAwbCnrosjFG2oQ1QDhkATvk+6BeIB7G0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WM/rZNt8ZKs2Wwtib/Vu4X5bnCySWlCN/dZp2Ha3G6QKIvxMw/jGLEcYlficTJwQodw1MF+o2RWH+wfJ9z1tqJjZmZqj1fkY9GEbH771C3t/wbyA4da0zgxXK7Gaw+jsuC6odvJAuDVBpAuHcST6p2NPmQsnpgZq4mOTdPhOzrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TD/XxqRe; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6d4f1d9951fso16971137b3.1
-        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2024 02:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725615392; x=1726220192; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t9RjLyHC8jLYAxkxwbHI+OlYMfMmm4fKIBxKkIZmylA=;
-        b=TD/XxqRevEegPir2KTkccOWjqLlL4N4JzawlLxDwXg+o9pN9FM5tA51NZW9MGu5yGY
-         pgMa5kjLAo2/3XSSgvdlGdV7qTOtrD2Y3vvpdjU/Hg6CH7B2prte0L0mOw+YChEPB7X0
-         NxSoCu7r6/TCoiJN/0AOFi8wNDCNHaeQl7I685g4YjclTFj10ZR6rWsx74+nfHceeMkl
-         zCU1ttY0x6T+Nxrd3ME6sLhV58QLYNzHadh/oeKihnIzEI3VWKwhPm4vvBLZ7I66f5cv
-         R94JdjaE7V7+7jMMJk+po0pheWso7tZUFnQX1Hf51ErivXsFlQKLY22HNo2xAg/Xr4QD
-         dXpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725615392; x=1726220192;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t9RjLyHC8jLYAxkxwbHI+OlYMfMmm4fKIBxKkIZmylA=;
-        b=E1r6yx05MsQi+0MF5yJgDllH2JO4QxJGlIk4rebPyVjJZ+NUOQZQLkNv9pMzltGfcc
-         qEJ9PWfw14Wav4UKhcPjypPXledODgzciCGjJ5aZ3LE/aJKFA3+2sC3MKZkJroVWtCYv
-         ZiJDyn/8ol7jraM6lhFpggmy+vcRUhSoV2klMDv4Jw6uGtT5JRZcyXqo8MajidkT9Uif
-         UmbN5n27KKERuC0+V5228E+8uqMT1+PGY7Xj4vSzJ18227WQg3ipbK98Xus6b3XLQQmj
-         Nh2Qszvjdgv4tMf3tJHPIGd0l8a58GAhbIzoOiVh0YS1Jo+QBdyn4Ii2Zy9AT0szSUPn
-         JmXg==
-X-Forwarded-Encrypted: i=1; AJvYcCXTFC4yqcNj2fPUmau4zeo6kW2fNGen8xd8tQ/C9B8jaUf5w0CSRMZ0pbPGFLcqu833VSc6iFVc/w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5vrmd2YdJnnH/IibmbMkY1Vmm/jaTM1V2u+UbGbZOj2PXC2Jg
-	hzaxqwFEnjT0U86izjiMRM6HLeqYovyzc+39sxEv+5uzAKMrkp/bx+2DG4EKTEWlzrA97VcejOu
-	j/kWV8quMHBXZMIVAz1f6GtsEpa8O501Whx5DRnlucbIGpKWA
-X-Google-Smtp-Source: AGHT+IEAXuLLtOrs6st8U8IFlSA7Hb1+mq58uwmSQKom7Bg9TkfvbOQJ9tJHSpVM8ugPgTF4bhcibOWF88qjBAWpuH0=
-X-Received: by 2002:a05:690c:ec6:b0:6db:31f6:a812 with SMTP id
- 00721157ae682-6db44d6249amr27514547b3.4.1725615391941; Fri, 06 Sep 2024
- 02:36:31 -0700 (PDT)
+	s=arc-20240116; t=1725615485; c=relaxed/simple;
+	bh=0cWAEMyIHMK5hKqCiTZBW3Hcb6kQYvI3HtqeHMi2no4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CdDCt7uXIqD4QC9/cvrm0Uu8++2BAxM5+GcDt0p6chN0HMS6EuoVNdy3n5+eKQppkyWGj3lvQlYDYmN183ScjcmrCDt9WpquzkgxYEJSbK8cz6ubg8ZM7qTvJ4Ab4dtvWYcOadryVIx+ahX2ZmxOp77g0SQQyLCFWTYSZm/s2aI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=drSg8Fhk; arc=none smtp.client-ip=129.204.178.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=classfun.cn
+Received: from bigfoot-server-storage.classfun.cn (unknown [124.72.163.35])
+	(Authenticated sender: bigfoot)
+	by classfun.cn (Postfix) with ESMTPSA id 1447F789FD;
+	Fri,  6 Sep 2024 17:37:42 +0800 (CST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn 1447F789FD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=classfun.cn;
+	s=default; t=1725615473;
+	bh=tyBtwkNnhg6jrvb3pwGGUkiw4PdPR9/Ska2BS2U9HwQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=drSg8FhkBGDvt0ogiXR5j9FZTpSiNbJJ0Vg4jDlDzlUVLImcJFq6oI7EFl/IyaB6Q
+	 UI4/HSsbUgIfntf02tMCCIX6gZHsoPotBcIOKeo2h08l6hD4qIF7a9GNG0udfQ9mGu
+	 E1L9SlY3LJFxoFLLIej8DpWdiqUQsUeClziaoHZE=
+From: Junhao Xie <bigfoot@classfun.cn>
+To: devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Chukun Pan <amadeus@jmu.edu.cn>,
+	Junhao Xie <bigfoot@classfun.cn>
+Subject: [PATCH 0/9] Introduce Photonicat power management MCU driver
+Date: Fri,  6 Sep 2024 17:36:21 +0800
+Message-ID: <20240906093630.2428329-1-bigfoot@classfun.cn>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com>
- <20240904-qcs8300_initial_dtsi-v1-17-d0ea9afdc007@quicinc.com>
- <851566fe-4802-41c7-bb35-d6d1e9cf9bdf@kernel.org> <d5b13f14-ce66-496c-8182-aad840e0d5cb@quicinc.com>
- <wzjv6xvthoz3z4fimxfc6gzm6ptepkuwlzjm6xy3klmtpr3bvf@k7yxdc7hryju> <c674b8ff-6fdb-419d-86f4-69a940eccc2f@quicinc.com>
-In-Reply-To: <c674b8ff-6fdb-419d-86f4-69a940eccc2f@quicinc.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 6 Sep 2024 12:36:20 +0300
-Message-ID: <CAA8EJpoxEZEZD3hhfpS6MeizqDVDDBjJOGo3X2BrLiEoZHDuoQ@mail.gmail.com>
-Subject: Re: [PATCH 17/19] arm64: defconfig: enable clock controller,
- interconnect and pinctrl for QCS8300
-To: Jingyi Wang <quic_jingyw@quicinc.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org, 
-	linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, 6 Sept 2024 at 09:15, Jingyi Wang <quic_jingyw@quicinc.com> wrote:
->
-> Hi Dmitry,
->
-> On 9/6/2024 11:18 AM, Dmitry Baryshkov wrote:
-> > On Thu, Sep 05, 2024 at 12:54:35PM GMT, Jingyi Wang wrote:
-> >>
-> >>
-> >> On 9/4/2024 5:39 PM, Krzysztof Kozlowski wrote:
-> >>> On 04/09/2024 10:33, Jingyi Wang wrote:
-> >>>> Enable clock controller, interrconnect and pinctrl for QCS8300.
-> >>>
-> >>> NXP QCS8300? What is QCS8300? Which products use it? That's a defconfig
-> >>> for entire kernel, not your Qualcomm one.
-> >>>
-> >> Will describe it in more detail.
-> >>>> It needs to be built-in for UART to provide a console.
-> >>>>
-> >>>> Signed-off-by: Jingyi Wang <quic_jingyw@quicinc.com>
-> >>>> ---
-> >>>>  arch/arm64/configs/defconfig | 3 +++
-> >>>>  1 file changed, 3 insertions(+)
-> >>>>
-> >>>> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> >>>> index 81ca46e3ab4b..a9ba6b25a0ed 100644
-> >>>> --- a/arch/arm64/configs/defconfig
-> >>>> +++ b/arch/arm64/configs/defconfig
-> >>>> @@ -606,6 +606,7 @@ CONFIG_PINCTRL_MSM8996=y
-> >>>>  CONFIG_PINCTRL_MSM8998=y
-> >>>>  CONFIG_PINCTRL_QCM2290=y
-> >>>>  CONFIG_PINCTRL_QCS404=y
-> >>>> +CONFIG_PINCTRL_QCS8300=y
-> >>>>  CONFIG_PINCTRL_QDF2XXX=y
-> >>>>  CONFIG_PINCTRL_QDU1000=y
-> >>>>  CONFIG_PINCTRL_SA8775P=y
-> >>>> @@ -1317,6 +1318,7 @@ CONFIG_MSM_MMCC_8998=m
-> >>>>  CONFIG_QCM_GCC_2290=y
-> >>>>  CONFIG_QCM_DISPCC_2290=m
-> >>>>  CONFIG_QCS_GCC_404=y
-> >>>> +CONFIG_QCS_GCC_8300=y
-> >>>>  CONFIG_QDU_GCC_1000=y
-> >>>>  CONFIG_SC_CAMCC_8280XP=m
-> >>>>  CONFIG_SC_DISPCC_7280=m
-> >>>> @@ -1618,6 +1620,7 @@ CONFIG_INTERCONNECT_QCOM_MSM8996=y
-> >>>>  CONFIG_INTERCONNECT_QCOM_OSM_L3=m
-> >>>>  CONFIG_INTERCONNECT_QCOM_QCM2290=y
-> >>>>  CONFIG_INTERCONNECT_QCOM_QCS404=m
-> >>>> +CONFIG_INTERCONNECT_QCOM_QCS8300=y
-> >>>
-> >>> Why this cannot be a module?
-> >>>
-> >>>
-> >> I think the commit-msg "It needs to be built-in for UART to provide a console." can
-> >> explain that, could you please help to share your insights on that?
-> >
-> > Unless loading these modules from initramfs doesn't work, please use =m.
-> > The drivers that are enabled here are going to be enabled for everybody
-> > using arm64 defconfig, taking up memory on their platforms, etc.
-> >
-> We had previous discussion here about why these drivers needs to be built-in to support
-> debug-uart:
-> https://lore.kernel.org/linux-arm-msm/c11fd3c2-770a-4d40-8cf3-d8bc81f7c480@kernel.org/
-> I will mention more details in the commit message of this patch.
+Initial support for the power management MCU in the Ariaboard Photonicat
+This patch series depends on Add support for Ariaboard Photonicat RK3568 [1]
 
-Yes, please. Explicitly mention that this is required to get UART to work.
+Currently implemented features:
+  Implement serial communication protocol with MCU [2].
+  Support watchdog in MCU.
+  Shutdown by power button and system notifies MCU to power-off.
+  Read charger and battery supply voltage and simply calculate capacity.
+  Read board temperature sensor.
+  Set status of the network status LED.
+  Read and set the MCU real-time clock date time.
+
+[1] https://lore.kernel.org/linux-arm-kernel/20240906045706.1004813-1-bigfoot@classfun.cn/
+[2] https://photonicat.com/wiki/PMU_Protocol
+
+Junhao Xie (9):
+  mfd: Add driver for Photonicat power management MCU
+  power: reset: add Photonicat PMU poweroff driver
+  watchdog: Add Photonicat PMU watchdog driver
+  power: supply: photonicat-supply: Add Photonicat PMU battery and
+    charger
+  rtc: Add Photonicat PMU real-time clock
+  hwmon: Add support for Photonicat PMU board temperature sensor
+  leds: add Photonicat PMU LED driver
+  dt-bindings: Add documentation for Photonicat PMU
+  arm64: dts: rockchip: add Photonicat PMU support for Ariaboard
+    Photonicat
+
+ .../hwmon/ariaboard,photonicat-pmu-hwmon.yaml |  40 ++
+ .../leds/ariaboard,photonicat-pmu-leds.yaml   |  41 ++
+ .../mfd/ariaboard,photonicat-pmu.yaml         | 107 ++++
+ .../ariaboard,photonicat-pmu-poweroff.yaml    |  34 ++
+ .../ariaboard,photonicat-pmu-supply.yaml      |  55 ++
+ .../rtc/ariaboard,photonicat-pmu-rtc.yaml     |  37 ++
+ .../ariaboard,photonicat-pmu-watchdog.yaml    |  37 ++
+ .../boot/dts/rockchip/rk3568-photonicat.dts   |  43 ++
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/photonicat-hwmon.c              | 129 +++++
+ drivers/leds/Kconfig                          |  11 +
+ drivers/leds/Makefile                         |   1 +
+ drivers/leds/leds-photonicat.c                |  75 +++
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/photonicat-pmu.c                  | 501 ++++++++++++++++++
+ drivers/power/reset/Kconfig                   |  12 +
+ drivers/power/reset/Makefile                  |   1 +
+ drivers/power/reset/photonicat-poweroff.c     |  95 ++++
+ drivers/power/supply/Kconfig                  |  12 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/photonicat-supply.c      | 250 +++++++++
+ drivers/rtc/Kconfig                           |  12 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-photonicat.c                  | 190 +++++++
+ drivers/watchdog/Kconfig                      |  12 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/photonicat-wdt.c             | 124 +++++
+ include/linux/mfd/photonicat-pmu.h            |  86 +++
+ 30 files changed, 1933 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ariaboard,photonicat-pmu-hwmon.yaml
+ create mode 100644 Documentation/devicetree/bindings/leds/ariaboard,photonicat-pmu-leds.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/ariaboard,photonicat-pmu.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/reset/ariaboard,photonicat-pmu-poweroff.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/ariaboard,photonicat-pmu-supply.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/ariaboard,photonicat-pmu-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/ariaboard,photonicat-pmu-watchdog.yaml
+ create mode 100644 drivers/hwmon/photonicat-hwmon.c
+ create mode 100644 drivers/leds/leds-photonicat.c
+ create mode 100644 drivers/mfd/photonicat-pmu.c
+ create mode 100644 drivers/power/reset/photonicat-poweroff.c
+ create mode 100644 drivers/power/supply/photonicat-supply.c
+ create mode 100644 drivers/rtc/rtc-photonicat.c
+ create mode 100644 drivers/watchdog/photonicat-wdt.c
+ create mode 100644 include/linux/mfd/photonicat-pmu.h
 
 -- 
-With best wishes
-Dmitry
+2.46.0
+
 
