@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-13770-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13771-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A14F996EF91
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:38:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5411896EF8E
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:38:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 02C5AB223CA
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 707551C23FC0
 	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 09:38:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDA231C9DDE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D75E71C9DE8;
 	Fri,  6 Sep 2024 09:38:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="fOCTWDz1"
+	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="cOWjLARj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from classfun.cn (unknown [129.204.178.38])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F4D51C86EE;
-	Fri,  6 Sep 2024 09:38:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9086F1C86F6;
+	Fri,  6 Sep 2024 09:38:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.204.178.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725615485; cv=none; b=aQEDNVP+tT5jNIjbbNAK0dv56g7asML9esGluGy5HrGzUTa3vZo71N4S4mr4C6e+S4H1nR1YB0+M7WrplhJ3LEFJkVn33Gl9bofPbJeuvH3ytYprNlCxut1FuaIj9364FPSeUN4cpo5gGIzHTtFPlidZxyy+WeIlFjdMDjurA2o=
+	t=1725615485; cv=none; b=kT7Dcnmh9ZTFDNWsDnbTglEU7bYfM/ATmPOlQQl4p9cWhrdFhCQXhNpP5I5EYyFSDBsBewL9syznm1PjuaqdL1jT14RsaQhqaHTHNnp7DS4oz3HUWQYUgMsmb2VASl54bvAZBbQeWY9MdUi7R3AXRm56Dgi/Pk7uXNTMeLiDjcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1725615485; c=relaxed/simple;
-	bh=uWE1HU+5tZUDSzRHvf0ewTtU7idX70QGnTnxQha4bLk=;
+	bh=LfPgJ9L7ipnqXTC1RE0Chy7mvYPec7F2PG4Ztb0NhtA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dR7vcIsvwxDrwVs7Yf5s6yRWhPBNx6DV6kJoSBvoAhAYxbXGjl+N92lV0+bqvowsqsnsLQpSXOGKx7zN3WwWF4hr6V17wjRO+nBmX5QR6xej9Fq6V5wyev9q6vPu4BZ8w2urJXM5eYZOvXeG8fKVCKkT/mKdTWBRbUV9jRH7AD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=fOCTWDz1; arc=none smtp.client-ip=129.204.178.38
+	 MIME-Version; b=DZIXRFgdSDaWOB9Hg92/KG3K93GTXo+DPejAHkI3AtCu0BFYTYfefAa3fNaBOgOD2bBpTzgc/AafHC+TJGEc1Bfa0xBG+HKwNL2oyIiti9nhYBlvUk4uRKe34lM66g5lR/jHp7SumHsGU89zPS+pmWe9IESzy657QD1R1KBbobY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=cOWjLARj; arc=none smtp.client-ip=129.204.178.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=classfun.cn
 Received: from bigfoot-server-storage.classfun.cn (unknown [124.72.163.35])
 	(Authenticated sender: bigfoot)
-	by classfun.cn (Postfix) with ESMTPSA id 2F61778A00;
-	Fri,  6 Sep 2024 17:38:00 +0800 (CST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn 2F61778A00
+	by classfun.cn (Postfix) with ESMTPSA id 7478E78A01;
+	Fri,  6 Sep 2024 17:38:01 +0800 (CST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn 7478E78A01
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=classfun.cn;
-	s=default; t=1725615481;
-	bh=fPuodRfmaTupdvzBrA91yFT2O0NMhuRwoRu03bUlJyU=;
+	s=default; t=1725615482;
+	bh=/BoOWIWGCb24d6nKmXmJ9+eWvMhDf9jlRmzVWBVGxXQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fOCTWDz11oAmKxyxl7ZNdmbpva9MP9akIqev1VahbWt5bdWFmUOdYMGm5+0qeuoCr
-	 iMxQgOnQriG+LMDiyffm9a8iHxRXGAYQH2vamqlladTL19ZKsyiSvXitrd+IdvKqsG
-	 uxac2OsEj2ioQgmi4Ol8BKjc62ppZ0lwqU6AG76I=
+	b=cOWjLARj/yCmcU4XoKmi9pd17fR2pQn017YQRLfZnjNNFdtVg+/NxX8N/wGLQgqBV
+	 +6F7mi4pWMpY9tNkv4vo886Hnh2wna5hr+BsqTMhRHDv27oGf0jhw1aIsxP59Z2qQb
+	 Ig42NdTjLQF+pv67M8nvmHgVkL9M7v/BXRao4204=
 From: Junhao Xie <bigfoot@classfun.cn>
 To: devicetree@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
@@ -64,9 +64,9 @@ Cc: Jean Delvare <jdelvare@suse.com>,
 	Heiko Stuebner <heiko@sntech.de>,
 	Chukun Pan <amadeus@jmu.edu.cn>,
 	Junhao Xie <bigfoot@classfun.cn>
-Subject: [PATCH 2/9] power: reset: add Photonicat PMU poweroff driver
-Date: Fri,  6 Sep 2024 17:36:23 +0800
-Message-ID: <20240906093630.2428329-3-bigfoot@classfun.cn>
+Subject: [PATCH 3/9] watchdog: Add Photonicat PMU watchdog driver
+Date: Fri,  6 Sep 2024 17:36:24 +0800
+Message-ID: <20240906093630.2428329-4-bigfoot@classfun.cn>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240906093630.2428329-1-bigfoot@classfun.cn>
 References: <20240906093630.2428329-1-bigfoot@classfun.cn>
@@ -78,67 +78,57 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This driver implements the shutdown function of Photonicat PMU:
-
-- Host notifies PMU to shutdown:
-  When powering off, a shutdown command (0x0F) needs to be sent
-  to the MCU.
-
-- PMU notifies host to shutdown:
-  If the power button is long pressed, the MCU will send a shutdown
-  command (0x0D) to the system.
-  If system does not shutdown within 60 seconds,
-  the power will be turned off directly.
+This driver provides access to Photonicat PMU watchdog functionality.
 
 Signed-off-by: Junhao Xie <bigfoot@classfun.cn>
 ---
- drivers/power/reset/Kconfig               | 12 +++
- drivers/power/reset/Makefile              |  1 +
- drivers/power/reset/photonicat-poweroff.c | 95 +++++++++++++++++++++++
- 3 files changed, 108 insertions(+)
- create mode 100644 drivers/power/reset/photonicat-poweroff.c
+ drivers/watchdog/Kconfig          |  12 +++
+ drivers/watchdog/Makefile         |   1 +
+ drivers/watchdog/photonicat-wdt.c | 124 ++++++++++++++++++++++++++++++
+ 3 files changed, 137 insertions(+)
+ create mode 100644 drivers/watchdog/photonicat-wdt.c
 
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index fece990af4a7..c59529ce25a2 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -148,6 +148,18 @@ config POWER_RESET_ODROID_GO_ULTRA_POWEROFF
- 	help
- 	  This driver supports Power off for Odroid Go Ultra device.
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index bae1d97cce89..4094216a1c09 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -300,6 +300,18 @@ config MENZ069_WATCHDOG
+ 	  This driver can also be built as a module. If so the module
+ 	  will be called menz069_wdt.
  
-+config POWER_RESET_PHOTONICAT_POWEROFF
-+	tristate "Photonicat PMU power-off driver"
++config PHOTONICAT_PMU_WDT
++	tristate "Photonicat PMU Watchdog"
 +	depends on MFD_PHOTONICAT_PMU
++	select WATCHDOG_CORE
 +	help
-+	  This driver supports Power off for Photonicat PMU device.
++	  This driver provides access to Photonicat PMU watchdog functionality.
 +
-+	  Supports operations:
-+	    Host notifies PMU to shutdown
-+	    PMU notifies host to shutdown
++	  Say Y here to include support for the Photonicat PMU Watchdog.
 +
-+	  Say Y if you have a Photonicat board.
++	  This driver can also be built as a module. If so the module
++	  will be called photonicat-wdt.
 +
- config POWER_RESET_PIIX4_POWEROFF
- 	tristate "Intel PIIX4 power-off driver"
- 	depends on PCI
-diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-index a95d1bd275d1..339b36812b95 100644
---- a/drivers/power/reset/Makefile
-+++ b/drivers/power/reset/Makefile
-@@ -17,6 +17,7 @@ obj-$(CONFIG_POWER_RESET_MT6323) += mt6323-poweroff.o
- obj-$(CONFIG_POWER_RESET_QCOM_PON) += qcom-pon.o
- obj-$(CONFIG_POWER_RESET_OCELOT_RESET) += ocelot-reset.o
- obj-$(CONFIG_POWER_RESET_ODROID_GO_ULTRA_POWEROFF) += odroid-go-ultra-poweroff.o
-+obj-$(CONFIG_POWER_RESET_PHOTONICAT_POWEROFF) += photonicat-poweroff.o
- obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) += piix4-poweroff.o
- obj-$(CONFIG_POWER_RESET_LTC2952) += ltc2952-poweroff.o
- obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
-diff --git a/drivers/power/reset/photonicat-poweroff.c b/drivers/power/reset/photonicat-poweroff.c
+ config WDAT_WDT
+ 	tristate "ACPI Watchdog Action Table (WDAT)"
+ 	depends on ACPI
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index b51030f035a6..14375af84039 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -234,6 +234,7 @@ obj-$(CONFIG_ZIIRAVE_WATCHDOG) += ziirave_wdt.o
+ obj-$(CONFIG_SOFT_WATCHDOG) += softdog.o
+ obj-$(CONFIG_MENF21BMC_WATCHDOG) += menf21bmc_wdt.o
+ obj-$(CONFIG_MENZ069_WATCHDOG) += menz69_wdt.o
++obj-$(CONFIG_PHOTONICAT_PMU_WDT) += photonicat-wdt.o
+ obj-$(CONFIG_RAVE_SP_WATCHDOG) += rave-sp-wdt.o
+ obj-$(CONFIG_STPMIC1_WATCHDOG) += stpmic1_wdt.o
+ obj-$(CONFIG_SL28CPLD_WATCHDOG) += sl28cpld_wdt.o
+diff --git a/drivers/watchdog/photonicat-wdt.c b/drivers/watchdog/photonicat-wdt.c
 new file mode 100644
-index 000000000000..f9f1ea179247
+index 000000000000..1e758fcfb49f
 --- /dev/null
-+++ b/drivers/power/reset/photonicat-poweroff.c
-@@ -0,0 +1,95 @@
++++ b/drivers/watchdog/photonicat-wdt.c
+@@ -0,0 +1,124 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (c) 2024 Junhao Xie <bigfoot@classfun.cn>
@@ -148,91 +138,120 @@ index 000000000000..f9f1ea179247
 +#include <linux/module.h>
 +#include <linux/of.h>
 +#include <linux/platform_device.h>
-+#include <linux/reboot.h>
++#include <linux/watchdog.h>
 +
-+struct pcat_poweroff {
++struct pcat_watchdog {
 +	struct device *dev;
 +	struct pcat_pmu *pmu;
-+	struct notifier_block nb;
++	struct watchdog_device wdd;
++	u8 timeout;
++	bool started;
 +};
 +
-+static int pcat_do_poweroff(struct sys_off_data *data)
-+{
-+	struct pcat_poweroff *poweroff = data->cb_data;
++static const struct watchdog_info pcat_wdt_info = {
++	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
++	.identity = "Photonicat PMU Watchdog",
++};
 +
-+	dev_info(poweroff->dev, "Host request PMU shutdown\n");
-+	pcat_pmu_write_data(poweroff->pmu, PCAT_CMD_HOST_REQUEST_SHUTDOWN,
-+			    NULL, 0);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int pcat_poweroff_notify(struct notifier_block *nb, unsigned long action,
-+				void *data)
-+{
-+	struct pcat_poweroff *poweroff =
-+		container_of(nb, struct pcat_poweroff, nb);
-+
-+	if (action != PCAT_CMD_PMU_REQUEST_SHUTDOWN)
-+		return NOTIFY_DONE;
-+
-+	dev_info(poweroff->dev, "PMU request host shutdown\n");
-+	orderly_poweroff(true);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int pcat_poweroff_probe(struct platform_device *pdev)
++static int pcat_wdt_setup(struct pcat_watchdog *data, int timeout)
 +{
 +	int ret;
-+	struct device *dev = &pdev->dev;
-+	struct pcat_poweroff *poweroff;
++	u8 time = 0;
++	u8 times[3] = { 60, 60, 0 };
 +
-+	poweroff = devm_kzalloc(dev, sizeof(*poweroff), GFP_KERNEL);
-+	if (!poweroff)
++	time = MIN(255, MAX(0, timeout));
++
++	ret = pcat_pmu_write_data(data->pmu, PCAT_CMD_WATCHDOG_TIMEOUT_SET,
++				  times, sizeof(times));
++	if (!ret)
++		data->started = timeout != 0;
++
++	return ret;
++}
++
++static int pcat_wdt_start(struct watchdog_device *wdev)
++{
++	struct pcat_watchdog *data = watchdog_get_drvdata(wdev);
++
++	return pcat_wdt_setup(data, data->timeout);
++}
++
++static int pcat_wdt_stop(struct watchdog_device *wdev)
++{
++	struct pcat_watchdog *data = watchdog_get_drvdata(wdev);
++
++	return pcat_wdt_setup(data, 0);
++}
++
++static int pcat_wdt_ping(struct watchdog_device *wdev)
++{
++	struct pcat_watchdog *data = watchdog_get_drvdata(wdev);
++
++	return pcat_pmu_send(data->pmu, PCAT_CMD_HEARTBEAT, NULL, 0);
++}
++
++static int pcat_wdt_set_timeout(struct watchdog_device *wdev, unsigned int val)
++{
++	int ret = 0;
++	struct pcat_watchdog *data = watchdog_get_drvdata(wdev);
++
++	data->timeout = val;
++	if (data->started)
++		ret = pcat_wdt_setup(data, data->timeout);
++
++	return ret;
++}
++
++static const struct watchdog_ops pcat_wdt_ops = {
++	.owner = THIS_MODULE,
++	.start = pcat_wdt_start,
++	.stop = pcat_wdt_stop,
++	.ping = pcat_wdt_ping,
++	.set_timeout = pcat_wdt_set_timeout,
++};
++
++static int pcat_watchdog_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct pcat_watchdog *watchdog;
++
++	watchdog = devm_kzalloc(dev, sizeof(*watchdog), GFP_KERNEL);
++	if (!watchdog)
 +		return -ENOMEM;
 +
-+	poweroff->dev = dev;
-+	poweroff->pmu = dev_get_drvdata(dev->parent);
-+	poweroff->nb.notifier_call = pcat_poweroff_notify;
-+	platform_set_drvdata(pdev, poweroff);
++	watchdog->dev = dev;
++	watchdog->pmu = dev_get_drvdata(dev->parent);
++	watchdog->wdd.info = &pcat_wdt_info;
++	watchdog->wdd.ops = &pcat_wdt_ops;
++	watchdog->wdd.timeout = 60;
++	watchdog->wdd.max_timeout = U8_MAX;
++	watchdog->wdd.min_timeout = 0;
++	watchdog->wdd.parent = dev;
 +
-+	ret = devm_register_sys_off_handler(&pdev->dev,
-+					    SYS_OFF_MODE_POWER_OFF,
-+					    SYS_OFF_PRIO_DEFAULT,
-+					    pcat_do_poweroff,
-+					    poweroff);
-+	if (ret)
-+		return ret;
++	watchdog_stop_on_reboot(&watchdog->wdd);
++	watchdog_set_drvdata(&watchdog->wdd, watchdog);
++	platform_set_drvdata(pdev, watchdog);
 +
-+	return pcat_pmu_register_notify(poweroff->pmu, &poweroff->nb);
++	return devm_watchdog_register_device(dev, &watchdog->wdd);
 +}
 +
-+static void pcat_poweroff_remove(struct platform_device *pdev)
-+{
-+	struct pcat_poweroff *poweroff = platform_get_drvdata(pdev);
-+
-+	pcat_pmu_unregister_notify(poweroff->pmu, &poweroff->nb);
-+}
-+
-+static const struct of_device_id pcat_poweroff_dt_ids[] = {
-+	{ .compatible = "ariaboard,photonicat-pmu-poweroff", },
++static const struct of_device_id pcat_watchdog_dt_ids[] = {
++	{ .compatible = "ariaboard,photonicat-pmu-watchdog", },
 +	{ /* sentinel */ }
 +};
-+MODULE_DEVICE_TABLE(of, pcat_poweroff_dt_ids);
++MODULE_DEVICE_TABLE(of, pcat_watchdog_dt_ids);
 +
-+static struct platform_driver pcat_poweroff_driver = {
++static struct platform_driver pcat_watchdog_driver = {
 +	.driver = {
-+		.name = "photonicat-poweroff",
-+		.of_match_table = pcat_poweroff_dt_ids,
++		.name = "photonicat-watchdog",
++		.of_match_table = pcat_watchdog_dt_ids,
 +	},
-+	.probe = pcat_poweroff_probe,
-+	.remove = pcat_poweroff_remove,
++	.probe = pcat_watchdog_probe,
 +};
-+module_platform_driver(pcat_poweroff_driver);
++module_platform_driver(pcat_watchdog_driver);
 +
 +MODULE_AUTHOR("Junhao Xie <bigfoot@classfun.cn>");
-+MODULE_DESCRIPTION("Photonicat PMU Poweroff");
++MODULE_DESCRIPTION("Photonicat PMU watchdog");
 +MODULE_LICENSE("GPL");
 -- 
 2.46.0
