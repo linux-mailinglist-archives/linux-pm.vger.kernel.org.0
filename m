@@ -1,170 +1,176 @@
-Return-Path: <linux-pm+bounces-13749-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13750-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 910B196E9CF
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 08:14:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D770096E9ED
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 08:16:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 481A4286B51
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 06:14:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 910E0289608
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 06:16:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DF513C3D6;
-	Fri,  6 Sep 2024 06:14:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B934314831F;
+	Fri,  6 Sep 2024 06:15:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NZ/YyJi1"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="nFs5R4G1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6310C12CDBF
-	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 06:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A2A84A2F;
+	Fri,  6 Sep 2024 06:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725603249; cv=none; b=skBsJCT5pwsKaZMo7b4tlLhJPe7dPdbocoDWY2tGPPxvY3lZZi2mCgBR4Q2ffBB2R4I/UUrr5IK0Gn/j2cD072eR5fe+KiypI5TQfafMr2RZ08NOKKDS4Tg2pWfBuiGJgxWMJIrY6a6K0+HcXS01KVemcNTUAM1AUGQer62psuQ=
+	t=1725603353; cv=none; b=ZASt0Y4Y1tk+KffHi+BPXy8N2USK5H7wovxfqjPxbOhExrbUUH/eGro/NsUlD0WNNVi9bgf9ugNG+rFygO/UwWY7LMrtSRPrNHVjHnlh2QFVg5NzxbpLaeBT4iPJGYF1YltCJ9+AhfdDWaouSKOe+QkQQnSUmst7xVrNna+y5B8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725603249; c=relaxed/simple;
-	bh=Lx32bnxrpbPjpbgt4VkUy3hGsX6dXtQ2o97E8V7hN9k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=knMMZBcKBFs9ujVlwbW6dOWH3SCGSETQI2DUh1PTrXaHpZU3lyGTNBe2ppjBkncAEQkcBEdMA7H0B1OJGJC1JuBS482matA59q3n/avrIHk1FFRLMyyObOwJpNjQH6HlR6HoSdhfjZ6TvfjFKN/H2TDsSRnxRWTWMy0VabRf+s8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NZ/YyJi1; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2d8818337a5so2018950a91.1
-        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2024 23:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725603248; x=1726208048; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/gz2DTDYFcWkZtaamsL1Ksg5rPTpuMwBQtW5iRfsoQE=;
-        b=NZ/YyJi1M1wMgBVacnszYV/hOwk3lwKmgpA2Lx+8IhpPNiPZZxdcSfvZvRfk70XWg+
-         IXLmja8QIb3psg8KkA3KHuzYrOqfQ7/3ec4nKaamqWqW8NjGY4BqvmKvhGXd205cRTqP
-         9WWPKEOMvUEZ5qDDWNiWH8gtkYPRNU48A/Y+enfSds8N3+TSSxzzY+7IE816vobkh8ea
-         kMi+/ycrjPiiPd6V0u5BnZQkt48hIp0xZR4hKPihpbSnYmt54hzWAAytagOQYKHn8qbj
-         Ikk/CoTbQK+aFli+786wo2YiBLFDpSFgUHFfHHp+N0RMw63bpT39FDbteaj3yECMV5MH
-         I0RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725603248; x=1726208048;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/gz2DTDYFcWkZtaamsL1Ksg5rPTpuMwBQtW5iRfsoQE=;
-        b=a3H8f05sjytSrpVBMOHFFd0PQWqTrL782kXCel17KQ2/gg6SzJSDrI/KSTS+2cCkOP
-         Vd1meM7wdJZ6uYfA96XIcJqqDPs1oYY5C8GJjm+pKtEAXAkXb/+jm6+fu4lSdQ/reAZM
-         xtmY6UiAAUo0kj8d6uVVEa9sMIWqTPImCHrKFXaYX0R8EnFYMZ6+1BqLa3n4GhyJrYnv
-         XSCq+4gGsDESJyUHaEI18Zs5R3VF0AO8z5PiNAeS1jU6PYSDXBErMYHXvjdjyqzu7LBT
-         WzDtzysPF4X9vYQ7tOkTqGKRZkrjQIkhrz6mn+ppkMbJjNEBREgHR59kOngfDb+nJmP9
-         0UvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWEk+z70j8IeKRTl0qtqkeWRgRLG+TFnEvZP+I+AqpnGJuTOJqDK9Q7f12xemKgPmxfo+gdaZtyHw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVpjM0GYIz7c9Rn95NIPIAmWmZnZuUmncW+Vx0NtiI7slFLsP2
-	5hXa81CM+1pgtubQKcd8QGiI1c7bGOAXeHgmdGXhoZJ/HZT9SM47osQDfqsI6kg=
-X-Google-Smtp-Source: AGHT+IHWGzm1aGaGO65+kelTFwC3pwYDkPl5A6OUnpU5ik9G44Sdbn90nWC3l7WB4gmF0230bNlwPw==
-X-Received: by 2002:a17:90a:470f:b0:2d8:7445:7ab2 with SMTP id 98e67ed59e1d1-2dad516fb0bmr2331868a91.20.1725603247595;
-        Thu, 05 Sep 2024 23:14:07 -0700 (PDT)
-Received: from localhost ([122.172.83.237])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dadc0a694fsm658756a91.47.2024.09.05.23.14.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2024 23:14:07 -0700 (PDT)
-Date: Fri, 6 Sep 2024 11:44:05 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Dikshita Agarwal <quic_dikshita@quicinc.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <quic_kdybcio@quicinc.com>,
-	Nikunj Kela <nkela@quicinc.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Mikko Perttunen <mperttunen@nvidia.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Ilia Lin <ilia.lin@kernel.org>,
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] OPP/pmdomain: Fix the assignment of the required-devs
-Message-ID: <20240906061405.bz7y3erlz4v5fvvd@vireshk-i7>
-References: <20240902224815.78220-1-ulf.hansson@linaro.org>
- <20240902224815.78220-3-ulf.hansson@linaro.org>
- <20240903071638.bedt3gllqdacf43a@vireshk-i7>
- <CAPDyKFoqEAHns0nrXT6dJR3sRd5VWidK_rzXGHzJiZtk_p0cKw@mail.gmail.com>
- <20240903105321.suosbhkkkylfw4bv@vireshk-i7>
- <CAPDyKFrh4VASFzMxEg3Q8SrhVbt1vH8QJM0rCdfxo+-L1+CN_g@mail.gmail.com>
- <20240904064004.7hwfom4nrqzfkvlo@vireshk-i7>
- <CAPDyKFqZiX=F4oNa3H+fUCO9cRzapxMaAphdx+JFXuR-Tgv3Cw@mail.gmail.com>
+	s=arc-20240116; t=1725603353; c=relaxed/simple;
+	bh=79bP+9tenPT4X0zt0R10ccVUIVlPRZl8Fv567FS8JjM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=uiIMmglm5l41KER4qRF11fDSgX/jP/k3w9WRjEz0F6jXaR7MtegO+PGN6sjuJjZh/ycfI8eW7CSpoZ2PKmPLLnJm/Wa1s54pJz0FBOBU6rduc0tgHPr29oXAJhZCj4fsy4Cd3a0zkOzrs6oVBaclGatpXe9rj43pUHS4uLM8ve8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=nFs5R4G1; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 485IQ5JF021772;
+	Fri, 6 Sep 2024 06:15:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	dYIfT0L1Gyqdy6+UGfAcsvvhKADQqx8n0cQq/HMS2ys=; b=nFs5R4G1TxawjxbT
+	4lndhX6mST0QBgdRZK1///T7cMQHtFxIV4/iKrcOF5RGBEOef/1rBZeIfi1ijEgN
+	fNaKblQwzCs5PkrMMeF2XQUTrBiojB0I0rsOReUovo+B71yftdubdilKWgNk4c0m
+	Zj4DiggA1QjyzAC7JTBpwkKwnKPX/N/ZHQKbbZ4KQmQUVhMNEAbRZbTlk/SWIdJm
+	La7dLDS2Kq47i/HFTs+1VJOTLioyyDZw7VRxJul6MCSSq01VX5tPPVy357ydP1VJ
+	vg12m25pc13hyu4u3EDfdB/MoK4LeyqpYZcnKauVEsL1UfvB4QuuodoZ6r7Xz/Dg
+	HUhkqQ==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41fhwu195q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 06 Sep 2024 06:15:44 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4866FiCZ026158
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 6 Sep 2024 06:15:44 GMT
+Received: from [10.233.21.53] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 5 Sep 2024
+ 23:15:41 -0700
+Message-ID: <c674b8ff-6fdb-419d-86f4-69a940eccc2f@quicinc.com>
+Date: Fri, 6 Sep 2024 14:15:38 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFqZiX=F4oNa3H+fUCO9cRzapxMaAphdx+JFXuR-Tgv3Cw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 17/19] arm64: defconfig: enable clock controller,
+ interconnect and pinctrl for QCS8300
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Krzysztof Kozlowski <krzk@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob
+ Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+        Bartosz
+ Golaszewski <bartosz.golaszewski@linaro.org>,
+        Konrad Dybcio
+	<konradybcio@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+References: <20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com>
+ <20240904-qcs8300_initial_dtsi-v1-17-d0ea9afdc007@quicinc.com>
+ <851566fe-4802-41c7-bb35-d6d1e9cf9bdf@kernel.org>
+ <d5b13f14-ce66-496c-8182-aad840e0d5cb@quicinc.com>
+ <wzjv6xvthoz3z4fimxfc6gzm6ptepkuwlzjm6xy3klmtpr3bvf@k7yxdc7hryju>
+Content-Language: en-US
+From: Jingyi Wang <quic_jingyw@quicinc.com>
+In-Reply-To: <wzjv6xvthoz3z4fimxfc6gzm6ptepkuwlzjm6xy3klmtpr3bvf@k7yxdc7hryju>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: WEk1eTDzyk_2E7aKgddkZQNpWt8FuMpZ
+X-Proofpoint-ORIG-GUID: WEk1eTDzyk_2E7aKgddkZQNpWt8FuMpZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-05_17,2024-09-05_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
+ priorityscore=1501 bulkscore=0 mlxscore=0 phishscore=0 suspectscore=0
+ impostorscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2408220000 definitions=main-2409060045
 
-On 04-09-24, 14:57, Ulf Hansson wrote:
-> > Yeah, I missed that, it doesn't happen via DT but by platform code. I
-> > do see problems where situation would be a bit ambiguous. Your example
-> > with a minor change to your code:
-> >
-> >         opp_table_devA: opp-table-devA {
-> >                 compatible = "operating-points-v2";
-> >
-> >                 opp-devA-50 {
-> >                         opp-hz = /bits/ 64 <2500>;
-> >                         required-opps = <&opp_pd_50, &opp_pd_51>; //corresponds to pd_perf1 and pd_perf0 (in reverse order)
-> >                 };
-> >                ....
-> >
-> >         devA {
-> >                 compatible = "foo,bar";
-> >                 power-domains = <&pd_perf0>, <&pd_perf1>; //both
-> > pd_perf0 and pd_perf1 has OPP tables.
-> >                 power-domain-names = "perf0", "perf1";
-> >                 operating-points-v2 = <&opp_table_devA>;
-> >         };
-> >
-> > Here, I don't think there is a way for us to know which genpd does
-> > opp_pd_50 belongs to and to which one opp_pd_51 does.
-> >
-> > We solve this by sending clock_names and regulator_names in OPP
-> > config structure. That gives the ordering in which required_opps are
-> > present. The same needs to be done for genpd, and then genpd core
-> > would be able to attach the right genpd with right required opp.
+Hi Dmitry,
+
+On 9/6/2024 11:18 AM, Dmitry Baryshkov wrote:
+> On Thu, Sep 05, 2024 at 12:54:35PM GMT, Jingyi Wang wrote:
+>>
+>>
+>> On 9/4/2024 5:39 PM, Krzysztof Kozlowski wrote:
+>>> On 04/09/2024 10:33, Jingyi Wang wrote:
+>>>> Enable clock controller, interrconnect and pinctrl for QCS8300.
+>>>
+>>> NXP QCS8300? What is QCS8300? Which products use it? That's a defconfig
+>>> for entire kernel, not your Qualcomm one.
+>>>
+>> Will describe it in more detail.
+>>>> It needs to be built-in for UART to provide a console.
+>>>>
+>>>> Signed-off-by: Jingyi Wang <quic_jingyw@quicinc.com>
+>>>> ---
+>>>>  arch/arm64/configs/defconfig | 3 +++
+>>>>  1 file changed, 3 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+>>>> index 81ca46e3ab4b..a9ba6b25a0ed 100644
+>>>> --- a/arch/arm64/configs/defconfig
+>>>> +++ b/arch/arm64/configs/defconfig
+>>>> @@ -606,6 +606,7 @@ CONFIG_PINCTRL_MSM8996=y
+>>>>  CONFIG_PINCTRL_MSM8998=y
+>>>>  CONFIG_PINCTRL_QCM2290=y
+>>>>  CONFIG_PINCTRL_QCS404=y
+>>>> +CONFIG_PINCTRL_QCS8300=y
+>>>>  CONFIG_PINCTRL_QDF2XXX=y
+>>>>  CONFIG_PINCTRL_QDU1000=y
+>>>>  CONFIG_PINCTRL_SA8775P=y
+>>>> @@ -1317,6 +1318,7 @@ CONFIG_MSM_MMCC_8998=m
+>>>>  CONFIG_QCM_GCC_2290=y
+>>>>  CONFIG_QCM_DISPCC_2290=m
+>>>>  CONFIG_QCS_GCC_404=y
+>>>> +CONFIG_QCS_GCC_8300=y
+>>>>  CONFIG_QDU_GCC_1000=y
+>>>>  CONFIG_SC_CAMCC_8280XP=m
+>>>>  CONFIG_SC_DISPCC_7280=m
+>>>> @@ -1618,6 +1620,7 @@ CONFIG_INTERCONNECT_QCOM_MSM8996=y
+>>>>  CONFIG_INTERCONNECT_QCOM_OSM_L3=m
+>>>>  CONFIG_INTERCONNECT_QCOM_QCM2290=y
+>>>>  CONFIG_INTERCONNECT_QCOM_QCS404=m
+>>>> +CONFIG_INTERCONNECT_QCOM_QCS8300=y
+>>>
+>>> Why this cannot be a module?
+>>>
+>>>
+>> I think the commit-msg "It needs to be built-in for UART to provide a console." can
+>> explain that, could you please help to share your insights on that?
 > 
-> No, we don't need this for gend as $subject patch is addressing this
-> problem too. Let me elaborate.
-> 
-> The OPP core holds the information about the devA's required-opps and
-> to what OPP table each required-opps belongs to
-> (opp_table->required_opp_tables[n]).
-> 
-> The genpd core holds the information about the allocated virtual
-> devices that it creates when it attached devA to its power-domains.
-> The virtual device(s) gets a genpd attached to it and that genpd also
-> has an OPP table associated with it (genpd->opp_table).
-> 
-> By asking the OPP core to walk through the array of allocated
-> required-opps for devA and to match it against a *one* of the virtual
-> devices' genpd->opp_table, we can figure out at what index we should
-> assign the virtual device to in the opp_table->required_devs[index].
+> Unless loading these modules from initramfs doesn't work, please use =m.
+> The drivers that are enabled here are going to be enabled for everybody
+> using arm64 defconfig, taking up memory on their platforms, etc.
+>
+We had previous discussion here about why these drivers needs to be built-in to support
+debug-uart:
+https://lore.kernel.org/linux-arm-msm/c11fd3c2-770a-4d40-8cf3-d8bc81f7c480@kernel.org/
+I will mention more details in the commit message of this patch.
 
-How do we differentiate between two cases where the required-opps can
-be defined as either of these:
+Thanks,
+Jingyi
 
-required-opps = <&opp_pd_50, &opp_pd_51>; //corresponds to pd_perf1 and pd_perf0 (in reverse order)
+ 
 
-OR
-
-required-opps = <&opp_pd_51, &opp_pd_50>; //corresponds to pd_perf0 and pd_perf1
-
-I thought this can't be fixed without some platform code telling how
-the DT is really configured, i.e. order of the power domains in the
-required-opps.
-
--- 
-viresh
 
