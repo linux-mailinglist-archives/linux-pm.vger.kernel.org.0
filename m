@@ -1,179 +1,187 @@
-Return-Path: <linux-pm+bounces-13742-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13743-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 185EA96E596
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 00:07:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AA7996E713
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 03:03:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DDBB1C2343D
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2024 22:07:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C0ADB22287
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 01:03:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8D11991D9;
-	Thu,  5 Sep 2024 22:07:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7679C179BC;
+	Fri,  6 Sep 2024 01:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="f56qms4f"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="c+0xw3Ez"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C3619538D
-	for <linux-pm@vger.kernel.org>; Thu,  5 Sep 2024 22:07:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 718A5186A
+	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 01:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725574048; cv=none; b=cVYV4X2CZ7Xry0eMo6wRea6d/ZBmtb/+wpwUpqQNORquMFOBF1PhkCtVzAPZ//7l3Bv4d40qiqtFf3+Qm32mb9Osli24Vl9XpqZgAV1pcQCorpu2AX6LQl9ktaZ48LmTl9237fUSRjxMLelrGdqv1ThhIuQX+tSlj7YGM17ThP4=
+	t=1725584588; cv=none; b=BP7OCmoaBLSCqs76iqR5mIX014p1mUnPm0cK3mSgieEE6YReFvCsu0SGXtFww74tnJ69usNZm9LrOu9hC8ZVzm9OJLp5ClNEw2QEKMS9jrfeau9P47byY18OHF+btIwYjNdqXTmDlt9QluzqfNUP8t+kwMjlJueqvH1nTpznpp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725574048; c=relaxed/simple;
-	bh=hhxAdERSDtm2YMNAv9tC9+fZCN+vEHBPgrmtZVRb+Ok=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=g3u45Ezs52XgyWk/VJQ5Jp32P3h+EThnRpnP/j/o64FvpIosVz4ZqUigTYvJXODj7HYZTZGUrBFXj65jWPxY9q4E16bEcfqvOiqTtb2aQiP9+SYFkCJq9bx8jrI/PdpVfyL9wd1ucsTQzLjsusP9tQUHfFwisHdX/szy6Va/kSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=f56qms4f; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7d4f85766f0so1108996a12.2
-        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2024 15:07:25 -0700 (PDT)
+	s=arc-20240116; t=1725584588; c=relaxed/simple;
+	bh=z4m4o2/drN603NiUF70RgY7/WIJvRfsJfDnzeGXC0qo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PDgHUb2oVWBSsUNg/Zt7bMCYKwHLGmFeBE2lPm/9oiB6CUqGJVVZM2Hxo1+iI3RYYQ2AZQiNAarbSnTgVwQMAubnZxPjjEjzX2/bgY23OnL4KI2GG6k9X+8fFxk9CthF5ihO7PR5hHqPgRiVX/DNW4/ugL4O0Bq/J2TtQfpkg7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=c+0xw3Ez; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2068acc8a4fso15955645ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2024 18:03:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725574045; x=1726178845; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WxCoJ4d7AGkUckvbkcsYkJvEDQd98iS8I6ecIyIUBWQ=;
-        b=f56qms4fCGntiFBxE5u9rIl008c7GMxTaH9/sOR+9mhaNyso+jV7Z7pgQoxH6b+YuW
-         UOes3hhRkuEVZyPROtzZdJqslhwUe4s3qZAJyqAjFJYYn3kuiaY/g7dOy53ci/0falG8
-         bs2jIwB0eDTa6RpUyqctV8ns1wQxTA7JkOEed5R1vJ62mrpm/ZNmVsipotZ8ZMjGCSur
-         sGhXtZP5Qv0RgmVgifdi3h4QGJBReED6rXDTdC5KVrvrmbbOxOaAl1qeUv71VrwMd/Q9
-         X2SbPNuysSjBcVLggaqXNxr8AOfV0ft/UmcS4mwlZHj6JHNF67BWEjJyRixHV0Mn4msA
-         Ox/A==
+        d=linuxfoundation.org; s=google; t=1725584585; x=1726189385; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dOGqKcCZS3m+coWkXftBCip2jTDTfVTP0RKG8IcdHp8=;
+        b=c+0xw3EzIQpfKnDqnjyAQkd4MqwN8bJHtuntHwTTjH3O0zzt4bQ4qRq6VYouowktxR
+         P4nDEsyJNQ8TYg8UyhniRwyvKvK18vHFVnzqbyC6yn0kmQPH3aL+xq70JqXSCEVwpmI4
+         E9Gs03Ax7YB0LfM5yPN9cioKkObDE6HBYxXsI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725574045; x=1726178845;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WxCoJ4d7AGkUckvbkcsYkJvEDQd98iS8I6ecIyIUBWQ=;
-        b=nenqRREsx9DS6D10oLhYhUEfBz2oXBcfUFKyAY4YFGfU/XGLnMYw3AN5I19Qn/OnbV
-         BNS58+ryHriVFwfXFQ+3XWYmh0QY8J8rnhnTrTJwzVGRYHfQJ3mxVTXeiSkfE5bX6qVN
-         LCvlmTIlzlZ44US2kPGoGzFrzBkPDmf/OoQuMd/qWOiINvd/GFwRNzjrxIboCi9OPr3z
-         L3d92kzZMsal7UL5OOVTylPlIMswmThODVq1aSRrN+aW5XY9e0XBTGMMzL7wsh4FWKXi
-         mIO4X4SLSw2zThtBVCDiaEcXbSEM9CHzPa/0tgYIQOiOylemekbmnW1j4SZJDpFVg5RV
-         tu9A==
-X-Gm-Message-State: AOJu0YwxeNt7NidWrvmd0pcNhK7IOWuSViwdwh22H0QL9cgo7aGdYtak
-	HlrWDlQvqaOdUqUdwlIO+lqIPsuCqoOLF8bbsH9ArRqzagXm6DSUwe4ZT8OPl7E=
-X-Google-Smtp-Source: AGHT+IH4wynbAkE58c46Y2j9xwqdI2xq2ZpegRrBUsA7WgnctZ7I/TqzM7iUt/Xmue7/tKSritBwAw==
-X-Received: by 2002:a17:90a:788e:b0:2da:8e9b:f37b with SMTP id 98e67ed59e1d1-2da8e9bf63amr7752455a91.24.1725574045447;
-        Thu, 05 Sep 2024 15:07:25 -0700 (PDT)
-Received: from localhost ([71.212.170.185])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d4fbd8538dsm3802879a12.9.2024.09.05.15.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2024 15:07:24 -0700 (PDT)
-From: Kevin Hilman <khilman@baylibre.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: linux-pm@vger.kernel.org, Nishanth Menon <nm@ti.com>, Vibhore Vardhan
- <vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>, Akashdeep Kaur
- <a-kaur@ti.com>, Sebin Francis <sebin.francis@ti.com>, Markus
- Schneider-Pargmann <msp@baylibre.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] pmdomain: ti_sci: collect and send low-power
- mode constraints
-In-Reply-To: <CAPDyKFrFX_UeYWuZtQPoxHbZb0CwpLRA=QcMFsALwuiFTY3T5Q@mail.gmail.com>
-References: <20240819-lpm-v6-10-constraints-pmdomain-v2-0-461325a6008f@baylibre.com>
- <CAPDyKFrFX_UeYWuZtQPoxHbZb0CwpLRA=QcMFsALwuiFTY3T5Q@mail.gmail.com>
-Date: Thu, 05 Sep 2024 15:07:23 -0700
-Message-ID: <7hplphah5w.fsf@baylibre.com>
+        d=1e100.net; s=20230601; t=1725584585; x=1726189385;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dOGqKcCZS3m+coWkXftBCip2jTDTfVTP0RKG8IcdHp8=;
+        b=EWcyUS76hjdQKeBWhDeCci9b3WMruVCyEneRBEN/DndpiOGo8HL7AnNeTHCpGXG3mL
+         ivpA2WZhPvWx9fs5bBmM1l1N8UyzvXJdTJUEph3fCQVZwAXOa0bwzPUnRKEy6VV7xtIA
+         CFQpJppNBItQLsEIqNTWxHfmfff1cctoJh/9mEF5nXeXYW7koUq0itOTtlfY8dnDVZ9G
+         9r1fSPSut2W0UZZMHebPbBl3IVV+rW/6wIQaEJMpJmJ2M/NIVFhiSDQFDY4QZJel0H0F
+         E/x3x+H1kpG2kSEjuYT9NUgvcOJVF+5mH7jURgHaKGcIU6tia2wPQ7XiarsejYrR76k0
+         nc1A==
+X-Gm-Message-State: AOJu0Yz/6dagt5W87fdAbW78kaWaE+4JN5HSFyaA7UPOlGFkjfhLXM/G
+	NI1OPVdrva+mOa/OtJ+ZLyTQYnFvmMB5lcmIj9h+SPtmP57SbIGHa8oXoCpROF8=
+X-Google-Smtp-Source: AGHT+IGQS+zlVQH8e863up19r0CoJnbE9Az0nr/PClGUOKV1rszxTZ+R67nI2CgGD6MOFohQXJrtIw==
+X-Received: by 2002:a17:902:d4cd:b0:206:96ae:dc57 with SMTP id d9443c01a7336-20696aee0a4mr135653185ad.48.1725584584485;
+        Thu, 05 Sep 2024 18:03:04 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-206aea37ccdsm34167785ad.168.2024.09.05.18.03.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Sep 2024 18:03:03 -0700 (PDT)
+Message-ID: <428a42ef-2a3b-41ec-b1a0-7886d52d621f@linuxfoundation.org>
+Date: Thu, 5 Sep 2024 19:03:02 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/4] Add SWIG Bindings to libcpupower
+To: "John B. Wyatt IV" <jwyatt@redhat.com>
+Cc: linux-pm@vger.kernel.org, Thomas Renninger <trenn@suse.com>,
+ Shuah Khan <shuah@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ linux-kernel@vger.kernel.org, John Kacur <jkacur@redhat.com>,
+ Tomas Glozar <tglozar@redhat.com>, Arnaldo Melo <acme@redhat.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "John B. Wyatt IV" <sageofredondo@gmail.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240905021916.15938-1-jwyatt@redhat.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240905021916.15938-1-jwyatt@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Ulf Hansson <ulf.hansson@linaro.org> writes:
+On 9/4/24 20:19, John B. Wyatt IV wrote:
+> SWIG is a tool packaged in Fedora and other distros that can generate
+> bindings from C and C++ code for several languages including Python,
+> Perl, and Go. Providing bindings for scripting languages is a common feature
+> to make use of libraries more accessible to more users and programs. My team
+> specifically wants to expand the features of rteval. rteval is a Python program
+> used to measure real time performance. We wanted to test the effect of enabling
+> some levels of idle-stat to see how it affects latency, and didn't want to
+> reinvent the wheel. Since SWIG requires the .o files created by libcpupower at
+> compilation it makes sense to include this in the cpupower directory so that
+> others can make use of them.
+> 
+> The V3 of this patchset includes:
+> * renaming header messages as requested and adding people to Cc as
+> requested
+> * moving the stub (dummy) commit to the front of the patchset
+> * small punctuation fixes
+> 
+> The V2 of this patchset includes:
+> * the full definition of libcpupower headers that is needed for the bindings
+> * dummy implementation in C of a function listed in the header of libcpupower
+> (requested by Shuah Khan)
+> * test_raw_pylibcpupower.py demonstrates an example of using the bindings
+> * adding myself and John Kacur to the cpupower section of the maintainers file
+> (requested by Shuah Khan)
+> * addressed review comments about doc, makefile, and maintainers file
+> * small style and other fixes
+> 
+> The name raw_pylibcpupower is used because a wrapper `pylibcpupower` may be
+> needed to make the bindings more 'pythonic' in the future. The bindings folder
+> is used because Go or Perl bindings may be useful for other users in the
+> future.
+> 
+> Note that while SWIG itself is GPL v3+ licensed; the resulting output, the
+> bindings code, has the same license as the .o files used to generate the
+> bindings (GPL v2 only). Please see
+> https://swig.org/legal.html
+> and
+> https://lore.kernel.org/linux-pm/Zqv9BOjxLAgyNP5B@hatbackup/#t
+> for more details on the license.
+> 
+> Sincerely,
+> John Wyatt
+> Software Engineer, Core Kernel
+> Red Hat
+> 
+> John B. Wyatt IV (4):
+>    pm:cpupower: Add missing powercap_set_enabled() stub function
+>    pm:cpupower: Add SWIG bindings files for libcpupower
+>    pm:cpupower: Include test_raw_pylibcpupower.py
+>    MAINTAINERS: Add Maintainers for SWIG Python bindings
+> 
+>   MAINTAINERS                                   |   3 +
+>   .../power/cpupower/bindings/python/.gitignore |   8 +
+>   tools/power/cpupower/bindings/python/Makefile |  31 +++
+>   tools/power/cpupower/bindings/python/README   |  59 +++++
+>   .../bindings/python/raw_pylibcpupower.i       | 247 ++++++++++++++++++
+>   .../bindings/python/test_raw_pylibcpupower.py |  42 +++
+>   tools/power/cpupower/lib/powercap.c           |   8 +
+>   7 files changed, 398 insertions(+)
+>   create mode 100644 tools/power/cpupower/bindings/python/.gitignore
+>   create mode 100644 tools/power/cpupower/bindings/python/Makefile
+>   create mode 100644 tools/power/cpupower/bindings/python/README
+>   create mode 100644 tools/power/cpupower/bindings/python/raw_pylibcpupower.i
+>   create mode 100755 tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
+> 
 
-> On Tue, 20 Aug 2024 at 02:00, Kevin Hilman <khilman@baylibre.com> wrote:
->>
->> The latest (10.x) version of the firmware for the PM co-processor (aka
->> device manager, or DM) adds support for a "managed" mode, where the DM
->> firmware will select the specific low power state which is entered
->> when Linux requests a system-wide suspend.
->>
->> In this mode, the DM will always attempt the deepest low-power state
->> available for the SoC.
->>
->> However, Linux (or OSes running on other cores) may want to constrain
->> the DM for certain use cases.  For example, the deepest state may have
->> a wakeup/resume latency that is too long for certain use cases.  Or,
->> some wakeup-capable devices may potentially be powered off in deep
->> low-power states, but if one of those devices is enabled as a wakeup
->> source, it should not be powered off.
->>
->> These kinds of constraints are are already known in Linux by the use
->> of existing APIs such as per-device PM QoS and device wakeup APIs, but
->> now we need to communicate these constraints to the DM.
->>
->> For TI SoCs with TI SCI support, all DM-managed devices will be
->> connected to a TI SCI PM domain.  So the goal of this series is to use
->> the PM domain driver for TI SCI devices to collect constraints, and
->> communicate them to the DM via the new TI SCI APIs.
->>
->> This is all managed by TI SCI PM domain code.  No new APIs are needed
->> by Linux drivers.  Any device that is managed by TI SCI will be
->> checked for QoS constraints or wakeup capability and the constraints
->> will be collected and sent to the DM.
->>
->> This series depends on the support for the new TI SCI APIs (v10) and
->> was also tested with this series to update 8250_omap serial support
->> for AM62x[2].
->>
->> [1] https://lore.kernel.org/all/20240801195422.2296347-1-msp@baylibre.com
->> [2] https://lore.kernel.org/all/20240807141227.1093006-1-msp@baylibre.com/
->>
->> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
->> ---
->> Changes in v2:
->>
->> - To simplify this version a bit, drop the pmdomain ->power_off()
->>   changes.  Constraints only sent during ->suspend() path.  The pmdomain
->>   path was an optimization that may be added back later.
->> - With the above simplification, drop the extra state variables that
->>   had been added to keep track of constraint status.
->> - Link to v1: https://lore.kernel.org/r/20240805-lpm-v6-10-constraints-pmdomain-v1-0-d186b68ded4c@baylibre.com
->>
->> ---
->> Kevin Hilman (3):
->>       pmdomain: ti_sci: add per-device latency constraint management
->>       pmdomain: ti_sci: add wakeup constraint management
->>       pmdomain: ti_sci: handle wake IRQs for IO daisy chain wakeups
->>
->>  drivers/pmdomain/ti/ti_sci_pm_domains.c | 76 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 76 insertions(+)
->> ---
->> base-commit: ad7eb1b6b92ee0c959a0a6ae846ddadd7a79ea64
->> change-id: 20240802-lpm-v6-10-constraints-pmdomain-f33df5aef449
->>
->> Best regards,
->> --
->> Kevin Hilman <khilman@baylibre.com>
->
-> Besides a couple of minor things that I have commented on for each
-> patch, this looks okay to me!
->
-> Taking into account the other series that this depends on, what is the
-> best merging strategy? Is it safe for me to take it through my
-> pmdomain tree?
+Applied the series for Linux 6.12-rc1 to
 
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git cpupower branch
 
-That other series should be merged shortly, so I will check with
-Nishanth (on cc) if he can create an immutable branch/tag that you could
-use in your tree.
+I chose to walk through the steps without installing SWIG
+to see what make would do.
 
-It has a build-time dependency on that other series, so I think this is
-the best way.
+Some things to improve:
 
-Alternatively, if you don't expect this to clash with other changes in
-your tree, with your ack/reviewed-by, Nishanth could merge this series
-via his tree and we could avoid the cross-tree shuffle.
+Running make in tools/power/cpupower/bindings/python directory without
+installing SWIG gives me the following errors:
 
-Either way will work.  Up to you.
+make: python-config: No such file or directory
+swig -python raw_pylibcpupower.i
+make: swig: No such file or directory
+make: *** [Makefile:27: raw_pylibcpupower_wrap.c] Error 127
 
-Kevin
+I think it would be good to provide better help message walking
+user through installing the dependencies.
 
+Documentation/Makefile is a good example to look at for useful
+message on the dependencies to be installed.
+
+You can send me patch on top of
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git cpupower branch
+
+thanks,
+-- Shuah
 
