@@ -1,154 +1,139 @@
-Return-Path: <linux-pm+bounces-13799-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13800-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8412A96F8AD
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 17:52:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38A3296F8B4
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 17:54:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B08951C22022
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 15:52:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 649BC1C21320
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 15:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F3F51D2F65;
-	Fri,  6 Sep 2024 15:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A90171D31AB;
+	Fri,  6 Sep 2024 15:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DO+3czJj"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="j5MXDLXw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CDC374F1;
-	Fri,  6 Sep 2024 15:52:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356831D31A4
+	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 15:53:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725637965; cv=none; b=dYhog7buxCfzFXW2YE9xG1br5QS3k7Kopkn5P+eTajYPZidhfm71LQvOMRvCjy32jYhZq6rgy6HM0yHC/dwqAxz03NUVKdMuLCr/++GwlCrEOA+AQfeug8IlgTc1Eijrrq6u6Bq5yi2oD9kl4VqUJFXckhw/Ge3E1mZjFoL9r5Y=
+	t=1725638034; cv=none; b=b9pitsnmbqIl56RZXE6QrhbnyttbFL35HWJD0qvPYoDMprpa67VLpe4oHfwjyUIQ++bo0nBjbJwDukQznuaGdM4myvrKsHdBb3lpuxvdOi7FaE9OeYoAYkj2aFvzHgWqI4WEh0D9eZAUn9b3+kUO/w5E6enfOtD+y3a8ha+hBE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725637965; c=relaxed/simple;
-	bh=8AR/kEPf0FAuH4RNYD8pbMauexDRH29Di8tE7w4W2VY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hrcrIu+Jx99+0MqtXO75//uotNvqKH09fhsiWUq5OlJSeD6QJrOe38WrLW4KIuiGyMIdrLpE4e+yhKGKhQFGfLCs7XXRZq7SFKD3cCJerVQuo7oZ4tLO9IrAWEYHafrvUUThTw0e5M5X+IH+t8c2PcQzpPpcVR07udWAHFV+dic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DO+3czJj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7377FC4CEC4;
-	Fri,  6 Sep 2024 15:52:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725637964;
-	bh=8AR/kEPf0FAuH4RNYD8pbMauexDRH29Di8tE7w4W2VY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=DO+3czJjfS30WPnAz5jpXkF6F2ADs1Imkec3ck9TjgqPJLTLqJ8PXc2JHRoA5FAkF
-	 Cd4TSBjHfZv8AUJeCxNbFSh6FOPPzXJjI9DSO8DiCH+zin4oTr/X8C9ZWa+J8abdyW
-	 vFpyvRdg0rLZdxouj/LMv+xpBKTPvWArLvnpOuw4ximJsAbfJQEQ1VewZLkeibUyiz
-	 Z3HqB/pJ8YEvJoLD3nuEju0AhktAnYS5wVh3dcG6e2v2BKC9mfA6n41cNoNKVzvmfI
-	 FFZPvnYhpIUpPOtlGd97aGWmQPBtiGybrOhzXCd/Ds10j1Wd6keDooNMtMR9u2DUOZ
-	 kMHnd3eNr9O2Q==
-From: Georgi Djakov <djakov@kernel.org>
-To: gregkh@linuxfoundation.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	djakov@kernel.org
-Subject: [GIT PULL] interconnect changes for 6.12
-Date: Fri,  6 Sep 2024 18:52:27 +0300
-Message-Id: <20240906155227.310250-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1725638034; c=relaxed/simple;
+	bh=73+bdBPq1AOzINIRfrSoaR2wZA28NZeimBgV3a3wDjg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=KaFbb9cFWWlbfxqIxjk/JZplJJK7sokf7ylCpP6GfkYd3pwMHZONcpYmorULO1DGsWnMixh/bgFL74jWAc/qB8WRuy4je0TxXdj91bH0PprVLx85v/kFAWsrafcWBP+3ied4IbambyQriltUEM2rQhiDSdXi1TvNoHnIBklSAEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=j5MXDLXw; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1fc47abc040so20614555ad.0
+        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2024 08:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725638030; x=1726242830; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=st1kODhvyTXk6TV1RcdKVdBXoGE9hcS/ZZYObHLT4cs=;
+        b=j5MXDLXwakArlruciNjt8Ulzzp4zZPjxfUpRF1/z0RAwo9JxLRRPovK5ED8ZUIW0KT
+         pcgjqtLIQZPajf2D29aLuP+YtQoUFKfrvkCuLUDtbQjXUX8qOeaH5BWeH4wfLN3WxSsl
+         KUzIpgctUquNpcSM1RxG2bgJCbdY7B0sJZYyYyDpkGnH6ediiitOfMFxM80+pUpDJpEQ
+         bnixf4IuZNOuX/CQ3axL+4Z3B1N9IeVw189Af+LqzZWf3Umleo7lMmyp83kY3JUFksXO
+         OncHmY0uZ4qifgO4VbSfFeWbqL+kKh+AyyGX7pjmG/BBG1tgnUMgIPwOfTDAkO57TibS
+         yHDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725638030; x=1726242830;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=st1kODhvyTXk6TV1RcdKVdBXoGE9hcS/ZZYObHLT4cs=;
+        b=PDM2QWNRDM/lBOG2nIfcIIqWX9YHPGJ1lOfaUB9o62kkTrCfdQw79feAtw6bYQE2V+
+         QO6jE7TS7k8xn7t6WVRoVaSjoW+XoeJc6f/bilHngwfs/wBX9GfhNeJELvX3xkMPp8gF
+         qwd+jRJB0vwV+9oZpj+sI50Pla6nGk6HQzABq5x14mCzAhEd8EZu5NzVsotobHAFTBw7
+         LHmHqcgj1FhZeGiitPGw/PWn7mJTtzc53SZgjfl3P/dye+iFT/IncpWUKzQH1JGsXBYG
+         ZQp8XkW92ss+q/2p49Pw6KA0QyHuqwEFZNrCSzfISazyUoR3mr5A9h92yREb60lHz6tZ
+         RuyQ==
+X-Gm-Message-State: AOJu0YyC6iTKW+dNRSi3CO6CxwGeoucmNSh+L57UDXvzzh+4xYDa0Loe
+	lt6DZ8j9ipAQgeRcHWdpveor7rJkQZfDKzFjpIJeezlS5mK0TFw8zk3edN5dH0o=
+X-Google-Smtp-Source: AGHT+IFw9PxcaxQ7+rDmkcLXn+siO6V9uqYxbdPNfcgdVRHimfqKWxh65K7oC05RbvA9mJZ5BZgqIA==
+X-Received: by 2002:a17:902:da90:b0:206:9060:c452 with SMTP id d9443c01a7336-2069060c57dmr180473135ad.33.1725638030419;
+        Fri, 06 Sep 2024 08:53:50 -0700 (PDT)
+Received: from localhost ([71.212.170.185])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-206ae94dcc4sm44569565ad.67.2024.09.06.08.53.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Sep 2024 08:53:49 -0700 (PDT)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: linux-pm@vger.kernel.org, Nishanth Menon <nm@ti.com>, Vibhore Vardhan
+ <vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>, Akashdeep Kaur
+ <a-kaur@ti.com>, Sebin Francis <sebin.francis@ti.com>, Markus
+ Schneider-Pargmann <msp@baylibre.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] pmdomain: ti_sci: handle wake IRQs for IO daisy
+ chain wakeups
+In-Reply-To: <CAPDyKFquSHYLGzd288K3JSOF_p+UyRO8GoBP9TGCR_3syGXTDw@mail.gmail.com>
+References: <20240905-lpm-v6-10-constraints-pmdomain-v3-0-e359cbb39654@baylibre.com>
+ <20240905-lpm-v6-10-constraints-pmdomain-v3-3-e359cbb39654@baylibre.com>
+ <CAPDyKFquSHYLGzd288K3JSOF_p+UyRO8GoBP9TGCR_3syGXTDw@mail.gmail.com>
+Date: Fri, 06 Sep 2024 08:53:49 -0700
+Message-ID: <7hfrqcaicy.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hello Greg,
+Ulf Hansson <ulf.hansson@linaro.org> writes:
 
-This is the pull request with interconnect changes for the v6.12-rc1 merge
-window. It contains some new drivers, fixes and clean-ups. As always, the
-summary is in the signed tag.
+> On Fri, 6 Sept 2024 at 00:03, Kevin Hilman <khilman@baylibre.com> wrote:
+>>
+>> When a device supports IO daisy-chain wakeups, it uses a dedicated
+>> wake IRQ.  Devices with IO daisy-chain wakeups enabled should not set
+>> wakeup constraints since these can happen even from deep power states,
+>> so should not prevent the DM from picking deep power states.
+>>
+>> Wake IRQs are set with dev_pm_set_wake_irq() or
+>> dev_pm_set_dedicated_wake_irq().  The latter is used by the serial
+>> driver used on K3 platforms (drivers/tty/serial/8250/8250_omap.c)
+>> when the interrupts-extended property is used to describe the
+>> dedicated wakeup interrupt.
+>>
+>> Detect these wake IRQs in the suspend path, and if set, skip sending
+>> constraint.
+>>
+>> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
+>> ---
+>>  drivers/pmdomain/ti/ti_sci_pm_domains.c | 7 +++++++
+>>  1 file changed, 7 insertions(+)
+>>
+>> diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
+>> index 1ab1e46924ab..747a7a33c0a9 100644
+>> --- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
+>> +++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
+>> @@ -82,6 +82,13 @@ static inline void ti_sci_pd_set_wkup_constraint(struct device *dev)
+>>         int ret;
+>>
+>>         if (device_may_wakeup(dev)) {
+>> +               /*
+>> +                * If device can wakeup using IO daisy chain wakeups,
+>> +                * we do not want to set a constraint.
+>> +                */
+>> +               if (dev->power.wakeirq)
+>> +                       dev_dbg(dev, "%s: has wake IRQ, not setting constraints\n", __func__);
+>
+> return; ?
+>
 
-All patches have been in linux-next for almost two weeks. There are no
-reported issues. Please pull into char-misc-next when you get a chance.
+Oops, I meant to remove the "false" return when changing from bool to
+void, but mistakenly removed the whole line.
 
-Thanks,
-Georgi
+d'oh!, good catch.
 
-The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+Thanks.
 
-  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.12-rc1
-
-for you to fetch changes up to a5733950fe35d56a935257995d8093a3b4867f61:
-
-  Merge branch 'icc-sm8350' into icc-next (2024-08-26 01:36:44 +0300)
-
-----------------------------------------------------------------
-interconnect changes for 6.12
-
-This pull request contains the interconnect changes for the 6.12-rc1 merge
-window. It contains new drivers and fixes with the following highlights:
-
-Driver changes:
-- New driver for MSM8976 platforms
-- New driver for MSM8937 platforms
-- Enable sync_state for SM8250 platforms
-- Enable QoS support for QCS404
-- Add ab_coeff bandwidth adjustments for MSM8953
-- Drop the unsupported yet DISP nodes on SM8350 platforms
-- Fix missed num_nodes initialization in icc-clk driver
-- Misc DT and documentation fixes
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Adam Skladowski (9):
-      dt-bindings: interconnect: qcom: Add Qualcomm MSM8976 NoC
-      interconnect: qcom: Add MSM8976 interconnect provider driver
-      dt-bindings: interconnect: qcom: Add Qualcomm MSM8937 NoC
-      interconnect: qcom: Add MSM8937 interconnect provider driver
-      interconnect: qcom: qcs404: Mark AP-owned nodes as such
-      interconnect: qcom: qcs404: Add regmaps and more bus descriptions
-      dt-bindings: interconnect: qcom: msm8939: Fix example
-      interconnect: qcom: msm8953: Add ab_coeff
-      dt-bindings: interconnect: qcom: msm8953: Fix 'See also' in description
-
-Dmitry Baryshkov (3):
-      interconnect: qcom: sm8350: drop DISP nodes
-      dt-bindings: interconnect: qcom,sm8350: drop DISP nodes
-      interconnect: qcom: sm8250: Enable sync_state
-
-Georgi Djakov (3):
-      dt-bindings: interconnect: qcom: Do not require reg for sc8180x virt NoCs
-      Merge branch 'icc-misc' into icc-next
-      Merge branch 'icc-sm8350' into icc-next
-
-Kees Cook (1):
-      interconnect: icc-clk: Add missed num_nodes initialization
-
-Rayyan Ansari (1):
-      dt-bindings: interconnect: qcom,rpmh: correct sm8150 camnoc
-
-Tengfei Fan (1):
-      dt-bindings: interconnect: qcom-bwmon: Document SA8775p bwmon compatibles
-
- .../devicetree/bindings/interconnect/qcom,msm8939.yaml         |   25 +-
- .../devicetree/bindings/interconnect/qcom,msm8953.yaml         |    3 +-
- .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml   |    2 +
- Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml  |    5 +-
- drivers/interconnect/icc-clk.c                                 |    3 +-
- drivers/interconnect/qcom/Kconfig                              |   18 +
- drivers/interconnect/qcom/Makefile                             |    4 +
- drivers/interconnect/qcom/msm8937.c                            | 1350 +++++++
- drivers/interconnect/qcom/msm8953.c                            |    2 +
- drivers/interconnect/qcom/msm8976.c                            | 1440 ++++++++
- drivers/interconnect/qcom/qcs404.c                             |  127 +-
- drivers/interconnect/qcom/sm8350.c                             |  155 +-
- drivers/interconnect/qcom/sm8350.h                             |   10 -
- include/dt-bindings/interconnect/qcom,msm8937.h                |   93 +
- include/dt-bindings/interconnect/qcom,msm8976.h                |   97 +
- include/dt-bindings/interconnect/qcom,sm8350.h                 |   10 -
- 16 files changed, 3151 insertions(+), 193 deletions(-)
- create mode 100644 drivers/interconnect/qcom/msm8937.c
- create mode 100644 drivers/interconnect/qcom/msm8976.c
- create mode 100644 include/dt-bindings/interconnect/qcom,msm8937.h
- create mode 100644 include/dt-bindings/interconnect/qcom,msm8976.h
+Kevin
 
