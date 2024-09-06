@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-13778-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13779-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32AE196EFF6
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A8F896F005
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:46:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB6C5289D05
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 09:45:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 136FE2865E7
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 09:46:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA2B51C8FC9;
-	Fri,  6 Sep 2024 09:44:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 432361CB127;
+	Fri,  6 Sep 2024 09:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rio4yLoS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uYvozVGM"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6966D1C8FBD;
-	Fri,  6 Sep 2024 09:44:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01FCC1CA6AF;
+	Fri,  6 Sep 2024 09:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725615843; cv=none; b=fmOxeJFe8uoUMh/D1gjJ0RjBNgT1COiFw0531y8GSDQojy+/U/kPnWVPNUr5iFVXPz9PoCD7fqxL1IjLvmEXJauokmZYbTimB3A3OYa8hDu6M3IjfBkz0Zmbpd5Bo/ljzOv9CPMnO+cxOrF30hQCn+JQfne+MdqkDlPfyxXa6CU=
+	t=1725615903; cv=none; b=ex+7u9FqNrbBqN4+hvo/SOgK7SkHx6dkAsEHwy5IGyC72YE0bzEbiufgOaGtvhFpAWiNkX62S5m9lmwT6hoAWpt6101Lk7lyWSl82u2tKo31XWLeBuM5uzHZV6w+HlpnZeeygfpD9pm7FF2KsdoID1Vvlq2gPPoAUVx2ps4gKwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725615843; c=relaxed/simple;
-	bh=ctoIqVk59onNiwJscBSD56mdXhYR1v1Zr4NXCymePbw=;
+	s=arc-20240116; t=1725615903; c=relaxed/simple;
+	bh=Rt2nyfE5ubP8pA0B8PPUA3nYtqppOBbV6wORmmUvWSk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VU0pp9Xq3KkZoIj9uoobUkRAp8DD8QRc9Swf2YfIgULwuMp6m/vAjluu3wPP2asRwUUhGaAuRNyW0SWHZ1QZKEFmviRNhjG8yAsZQV/nVP0+wvW/RgS3wq7YpDcmtYUqLgstcMoD9iTb6qFXSp+SqpWDXBnHWFX22hLOeTwRdpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rio4yLoS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C478EC4CEC4;
-	Fri,  6 Sep 2024 09:43:55 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=nYjrUhLpnC7FFrueo854jGkxJrls9kWcAMVwwoSi3SFYp+15t2tsozJdqT3n0LeIIifiNylOM8I7dE9a57G0cFveZhejyqmxViHtbb3WWge+CPbKJAa/siyO5r7YWpGo0Ma2FmDSbWN/df/GvSUVsIdEFc3Iyc5ZlRAcA2wyxRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uYvozVGM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94185C4CEC4;
+	Fri,  6 Sep 2024 09:44:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725615842;
-	bh=ctoIqVk59onNiwJscBSD56mdXhYR1v1Zr4NXCymePbw=;
+	s=k20201202; t=1725615902;
+	bh=Rt2nyfE5ubP8pA0B8PPUA3nYtqppOBbV6wORmmUvWSk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rio4yLoSYG5EyDfNOFnxyZxPCWxLhb1jx4wCWpw93o2hoeOKbBOwI4Jac2Vv9lGMl
-	 kahY22CU9OTKEunPG+UPfkrVX3bh/9DJgHY5Zc/GHO/fTKiokoHhDL2t0unXGGLb7p
-	 H/+6e4nOQ7Ai+odbaQrqkFJc7vIR8Ds5ws3M1R/N2qwa3XinxPK43OtTonk6YCuN5G
-	 osxuBYCDnQzG6yfYLocXOD/HETf0wvKOV8A7RNWpPKb46MXYYzQPAOdeDTFCxsZoW9
-	 lT41zdk924orpJTeIbFk9gwRnskpzOp7K3xZzsi66yO5Ur+IdyJh3iJsVU8BkJVGr+
-	 XEvHuoE791ueQ==
-Message-ID: <e4ee504b-98a8-4b35-9e1a-195395cdacf8@kernel.org>
-Date: Fri, 6 Sep 2024 11:43:53 +0200
+	b=uYvozVGMeF2/g2AfsViHKq0jq64rjOe9ORT9k2+I+fyuafVQ91YpaGC6KflyRH/L6
+	 W7VWPThXq+AdS5TKuaPNPPz2rLmq0AJ/eVz3QTLe7Av6oPQLmkR3QH2AtkFtbZhNTo
+	 M44tj570e5pvNl7fm6X3GMmplSv3Wb7PlvX1WNIWEnTVJ/sr4mPi47jjubuPBpa4xY
+	 fibniBERy0g1ZX/GGCXhFnNhaZhP54x9YIVcAT6gVel0i1wdPL3NYo8+IXo9FdrGqd
+	 N8wAWN00iYaVLIS0xosnvynSpBmWsArG2YTG/Y7FzAsyotd1J8hH9nzDEBE/L8lC7s
+	 Mu7TVwoYngDgQ==
+Message-ID: <90a5b41b-84cd-4daa-b102-04a29c2cd46b@kernel.org>
+Date: Fri, 6 Sep 2024 11:44:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/9] mfd: Add driver for Photonicat power management MCU
+Subject: Re: [PATCH 2/9] power: reset: add Photonicat PMU poweroff driver
 To: Junhao Xie <bigfoot@classfun.cn>, devicetree@vger.kernel.org,
  linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -64,7 +64,7 @@ Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, Heiko Stuebner <heiko@sntech.de>,
  Chukun Pan <amadeus@jmu.edu.cn>
 References: <20240906093630.2428329-1-bigfoot@classfun.cn>
- <20240906093630.2428329-2-bigfoot@classfun.cn>
+ <20240906093630.2428329-3-bigfoot@classfun.cn>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,263 +110,119 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240906093630.2428329-2-bigfoot@classfun.cn>
+In-Reply-To: <20240906093630.2428329-3-bigfoot@classfun.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 06/09/2024 11:36, Junhao Xie wrote:
-> Add a driver for Photonicat power management MCU, which
-> provides battery and charger power supply, real-time clock,
-> watchdog, hardware shutdown.
+> This driver implements the shutdown function of Photonicat PMU:
 > 
-> This driver implementes core MFD/serdev device as well as
-> communication subroutines necessary for commanding the device.
+> - Host notifies PMU to shutdown:
+>   When powering off, a shutdown command (0x0F) needs to be sent
+>   to the MCU.
+> 
+> - PMU notifies host to shutdown:
+>   If the power button is long pressed, the MCU will send a shutdown
+>   command (0x0D) to the system.
+>   If system does not shutdown within 60 seconds,
+>   the power will be turned off directly.
 > 
 > Signed-off-by: Junhao Xie <bigfoot@classfun.cn>
 > ---
->  drivers/mfd/Kconfig                |  13 +
->  drivers/mfd/Makefile               |   1 +
->  drivers/mfd/photonicat-pmu.c       | 501 +++++++++++++++++++++++++++++
->  include/linux/mfd/photonicat-pmu.h |  86 +++++
->  4 files changed, 601 insertions(+)
->  create mode 100644 drivers/mfd/photonicat-pmu.c
->  create mode 100644 include/linux/mfd/photonicat-pmu.h
+>  drivers/power/reset/Kconfig               | 12 +++
+>  drivers/power/reset/Makefile              |  1 +
+>  drivers/power/reset/photonicat-poweroff.c | 95 +++++++++++++++++++++++
+>  3 files changed, 108 insertions(+)
+>  create mode 100644 drivers/power/reset/photonicat-poweroff.c
+> 
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index fece990af4a7..c59529ce25a2 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -148,6 +148,18 @@ config POWER_RESET_ODROID_GO_ULTRA_POWEROFF
+>  	help
+>  	  This driver supports Power off for Odroid Go Ultra device.
+>  
+> +config POWER_RESET_PHOTONICAT_POWEROFF
+> +	tristate "Photonicat PMU power-off driver"
+> +	depends on MFD_PHOTONICAT_PMU
 
-...
+|| COMPILE_TEST, no?
 
-> +void *pcat_data_get_data(struct pcat_data *data)
-> +{
-> +	if (!data)
-> +		return NULL;
-> +	return data->data;
-> +}
-> +EXPORT_SYMBOL_GPL(pcat_data_get_data);
-
-You need kerneldoc... or just drop it. Looks a bit useless as an
-export... Is it because you want to hide from your own driver pcat_data?
-What for? It's your driver...
-
+> +	help
+> +	  This driver supports Power off for Photonicat PMU device.
 > +
-> +int pcat_pmu_send(struct pcat_pmu *pmu, enum pcat_pmu_cmd cmd,
-> +		  const void *data, size_t len)
-> +{
-> +	u16 frame_id = atomic_inc_return(&pmu->frame);
+> +	  Supports operations:
+> +	    Host notifies PMU to shutdown
+> +	    PMU notifies host to shutdown
 > +
-> +	return pcat_pmu_raw_write(pmu, frame_id, cmd, false, data, len);
-> +}
-> +EXPORT_SYMBOL_GPL(pcat_pmu_send);
+> +	  Say Y if you have a Photonicat board.
 > +
-> +int pcat_pmu_execute(struct pcat_request *request)
-> +{
-> +	int ret = 0, retries = 0;
-> +	unsigned long flags;
-> +	struct pcat_pmu *pmu = request->pmu;
-> +	struct pcat_request_request *req = &request->request;
-> +	struct pcat_request_reply *reply = &request->reply;
+>  config POWER_RESET_PIIX4_POWEROFF
+>  	tristate "Intel PIIX4 power-off driver"
+>  	depends on PCI
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> index a95d1bd275d1..339b36812b95 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -17,6 +17,7 @@ obj-$(CONFIG_POWER_RESET_MT6323) += mt6323-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_QCOM_PON) += qcom-pon.o
+>  obj-$(CONFIG_POWER_RESET_OCELOT_RESET) += ocelot-reset.o
+>  obj-$(CONFIG_POWER_RESET_ODROID_GO_ULTRA_POWEROFF) += odroid-go-ultra-poweroff.o
+> +obj-$(CONFIG_POWER_RESET_PHOTONICAT_POWEROFF) += photonicat-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) += piix4-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_LTC2952) += ltc2952-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
+> diff --git a/drivers/power/reset/photonicat-poweroff.c b/drivers/power/reset/photonicat-poweroff.c
+> new file mode 100644
+> index 000000000000..f9f1ea179247
+> --- /dev/null
+> +++ b/drivers/power/reset/photonicat-poweroff.c
+> @@ -0,0 +1,95 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2024 Junhao Xie <bigfoot@classfun.cn>
+> + */
 > +
-> +	init_completion(&request->received);
-> +	memset(reply, 0, sizeof(request->reply));
+> +#include <linux/mfd/photonicat-pmu.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reboot.h>
 > +
-> +	mutex_lock(&pmu->reply_lock);
-> +	if (request->frame_id == 0)
-> +		request->frame_id = atomic_inc_return(&pmu->frame);
-> +	pmu->reply = request;
-> +	mutex_unlock(&pmu->reply_lock);
-> +
-> +	if (req->want == 0)
-> +		req->want = req->cmd + 1;
-> +
-> +	dev_dbg(pmu->dev, "frame 0x%04X execute cmd 0x%02X\n",
-> +		request->frame_id, req->cmd);
-> +
-> +	while (1) {
-> +		spin_lock_irqsave(&pmu->bus_lock, flags);
-> +		ret = pcat_pmu_raw_write(pmu, request->frame_id, req->cmd,
-> +					 true, req->data, req->size);
-> +		spin_unlock_irqrestore(&pmu->bus_lock, flags);
-> +		if (ret < 0) {
-> +			dev_err(pmu->dev,
-> +				"frame 0x%04X write 0x%02X cmd failed: %d\n",
-> +				request->frame_id, req->cmd, ret);
-> +			goto fail;
-> +		}
-> +		dev_dbg(pmu->dev, "frame 0x%04X waiting response for 0x%02X\n",
-> +			request->frame_id, req->cmd);
-> +		if (!wait_for_completion_timeout(&request->received, HZ)) {
-> +			if (retries < 3) {
-> +				retries++;
-> +				continue;
-> +			} else {
-> +				dev_warn(pmu->dev,
-> +					 "frame 0x%04X cmd 0x%02X timeout\n",
-> +					 request->frame_id, req->cmd);
-> +				ret = -ETIMEDOUT;
-> +				goto fail;
-> +			}
-> +		}
-> +		break;
-> +	}
-> +	dev_dbg(pmu->dev, "frame 0x%04X got response 0x%02X\n",
-> +		request->frame_id, reply->head.command);
-> +
-> +	return 0;
-> +fail:
-> +	mutex_lock(&pmu->reply_lock);
-> +	pmu->reply = NULL;
-> +	mutex_unlock(&pmu->reply_lock);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(pcat_pmu_execute);
-
-You need kerneldoc.
-
-> +
-> +int pcat_pmu_write_data(struct pcat_pmu *pmu, enum pcat_pmu_cmd cmd,
-> +			const void *data, size_t size)
-> +{
-> +	int ret;
-> +	struct pcat_request request = {
-> +		.pmu = pmu,
-> +		.request.cmd = cmd,
-> +		.request.data = data,
-> +		.request.size = size,
-> +	};
-> +	ret = pcat_pmu_execute(&request);
-> +	if (request.reply.data)
-> +		devm_kfree(pmu->dev, request.reply.data);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(pcat_pmu_write_data);
-
-You need kerneldoc.
-
-
-> +
-> +static const struct serdev_device_ops pcat_pmu_serdev_device_ops = {
-> +	.receive_buf = pcat_pmu_receive_buf,
-> +	.write_wakeup = serdev_device_write_wakeup,
+> +struct pcat_poweroff {
+> +	struct device *dev;
+> +	struct pcat_pmu *pmu;
+> +	struct notifier_block nb;
 > +};
 > +
-> +int pcat_pmu_register_notify(struct pcat_pmu *pmu, struct notifier_block *nb)
-
-You need kerneldoc.
-
+> +static int pcat_do_poweroff(struct sys_off_data *data)
 > +{
-> +	return blocking_notifier_chain_register(&pmu->notifier_list, nb);
-> +}
-> +EXPORT_SYMBOL_GPL(pcat_pmu_register_notify);
+> +	struct pcat_poweroff *poweroff = data->cb_data;
 > +
-> +void pcat_pmu_unregister_notify(struct pcat_pmu *pmu, struct notifier_block *nb)
-
-You need kerneldoc.
-
-
-> +{
-> +	blocking_notifier_chain_unregister(&pmu->notifier_list, nb);
-> +}
-> +EXPORT_SYMBOL_GPL(pcat_pmu_unregister_notify);
+> +	dev_info(poweroff->dev, "Host request PMU shutdown\n");
+> +	pcat_pmu_write_data(poweroff->pmu, PCAT_CMD_HOST_REQUEST_SHUTDOWN,
+> +			    NULL, 0);
 > +
-> +static int pcat_pmu_probe(struct serdev_device *serdev)
-> +{
-> +	int ret;
-> +	u32 baudrate;
-> +	u32 address;
-> +	char buffer[64];
-> +	struct pcat_pmu *pmu = NULL;
-> +	struct device *dev = &serdev->dev;
-> +
-> +	pmu = devm_kzalloc(dev, sizeof(struct pcat_pmu), GFP_KERNEL);
-
-sizeof(*)
-
-> +	if (!pmu)
-> +		return -ENOMEM;
-
-Blank line
-
-> +	pmu->dev = dev;
-> +	pmu->serdev = serdev;
-> +	spin_lock_init(&pmu->bus_lock);
-> +	mutex_init(&pmu->reply_lock);
-> +	init_completion(&pmu->first_status);
-> +
-> +	if (of_property_read_u32(dev->of_node, "current-speed", &baudrate))
-> +		baudrate = 115200;
-> +
-> +	if (of_property_read_u32(dev->of_node, "local-address", &address))
-> +		address = 1;
-> +	pmu->local_id = address;
-> +
-> +	if (of_property_read_u32(dev->of_node, "remote-address", &address))
-> +		address = 1;
-> +	pmu->remote_id = address;
-> +
-> +	serdev_device_set_client_ops(serdev, &pcat_pmu_serdev_device_ops);
-> +	ret = devm_serdev_device_open(dev, serdev);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "Failed to open serdev\n");
-> +
-> +	serdev_device_set_baudrate(serdev, baudrate);
-> +	serdev_device_set_flow_control(serdev, false);
-> +	serdev_device_set_parity(serdev, SERDEV_PARITY_NONE);
-> +	dev_set_drvdata(dev, pmu);
-> +
-> +	/* Disable watchdog on boot */
-> +	pcat_pmu_write_data(pmu, PCAT_CMD_WATCHDOG_TIMEOUT_SET,
-> +			    (u8[]){ 60, 60, 0 }, 3);
-> +
-> +	/* Read hardware version */
-> +	pcat_pmu_read_string(pmu, PCAT_CMD_PMU_HW_VERSION_GET,
-> +			     buffer, sizeof(buffer));
-> +	if (buffer[0])
-> +		dev_info(dev, "PMU Hardware version: %s\n", buffer);
-
-dev_dbg
-
-> +
-> +	/* Read firmware version */
-> +	pcat_pmu_read_string(pmu, PCAT_CMD_PMU_FW_VERSION_GET,
-> +			     buffer, sizeof(buffer));
-> +	if (buffer[0])
-> +		dev_info(dev, "PMU Firmware version: %s\n", buffer);
-
-dev_dbg. Your driver is supposed to be silent.
-
-> +
-> +	return devm_of_platform_populate(dev);
+> +	return NOTIFY_DONE;
 > +}
 > +
-> +static const struct of_device_id pcat_pmu_dt_ids[] = {
-> +	{ .compatible = "ariaboard,photonicat-pmu", },
-
-Undocumented compatible.
-
-Remember about correct order of patches. ABI documentation is before users.
-
-
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, pcat_pmu_dt_ids);
+> +static int pcat_poweroff_notify(struct notifier_block *nb, unsigned long action,
+> +				void *data)
+> +{
+> +	struct pcat_poweroff *poweroff =
+> +		container_of(nb, struct pcat_poweroff, nb);
 > +
-> +static struct serdev_device_driver pcat_pmu_driver = {
-> +	.driver = {
-> +		.name = "photonicat-pmu",
-> +		.of_match_table = pcat_pmu_dt_ids,
-> +	},
-> +	.probe = pcat_pmu_probe,
-> +};
-> +module_serdev_device_driver(pcat_pmu_driver);
+> +	if (action != PCAT_CMD_PMU_REQUEST_SHUTDOWN)
+> +		return NOTIFY_DONE;
 > +
-> +MODULE_ALIAS("platform:photonicat-pmu");
+> +	dev_info(poweroff->dev, "PMU request host shutdown\n");
 
-You should not need MODULE_ALIAS() in normal cases. If you need it,
-usually it means your device ID table is wrong (e.g. misses either
-entries or MODULE_DEVICE_TABLE()). MODULE_ALIAS() is not a substitute
-for incomplete ID table.
+Nope. Drop.
 
-And it is not even correct. This is not a platform driver!
-
-
+> +	orderly_poweroff(true);
+> +
+> +	return NOTIFY_DONE;
 Best regards,
 Krzysztof
 
