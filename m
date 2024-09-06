@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-13781-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13782-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FD1996F036
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:52:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0321C96F05B
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:55:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC9DB2819B0
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 09:52:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 202FD1C22D3B
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 09:55:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 934C51C8711;
-	Fri,  6 Sep 2024 09:52:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C9A01C9DC7;
+	Fri,  6 Sep 2024 09:53:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oMFXEiSW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V0Kh6B7/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3A15C603;
-	Fri,  6 Sep 2024 09:52:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F04B1C7B90;
+	Fri,  6 Sep 2024 09:53:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725616328; cv=none; b=OkyvqnaDvjJ9c/HPaNyTuyF96jb009hHWLXy4x50V9obuYClgQ3M7VG8UN9l6j1CjLvzpuhNtYxPLZtmxUdlfGNVGbWG6V2bUUPefNBYpxZCtEV7WCz0NJ7FN8/gVuHnAshuZXKwwXGFSirE4ZKyP66V8JS8Bow4FGRLVhZERzU=
+	t=1725616416; cv=none; b=rjz0zDRNOGDLuyuce/1Ei5qJin+7X3PDIcgPIfDSz+s4hh3bh2PWv9JCQDtZTWrlLUqmV5lO1JLEh4VL4UGLc6Wg5JhGV81bd1AI3MoK5E2DJyY+ZJ5/5ZsCuCeruVDr+sZuagmEGgvXL4KXKzbJmRzWQiFE6iAAada2BvkQ6+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725616328; c=relaxed/simple;
-	bh=zlPe96qEkYTI2oOKTLt2ru4+cI3fHrOB1XnOtIqa46c=;
+	s=arc-20240116; t=1725616416; c=relaxed/simple;
+	bh=sIHvnuKMsGosS+8Rs7mZhNLKmzTCYjE+RF/2DCpylBU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iuybONoUX5xp8LQPJVeJ5PF3x/Dsl8LbAMctGzehEUkqS/mkF2YxGBM/neFur86VnZ0OyuqpOquVLphJhjN9pqJ7r1YziW0hNbKqvjAV4vuczsFd9L5emUCH8IFTq6znM2t19vJ6awzTyj6zvIDPsWAYEvWhWz46QD/nXBnRXTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oMFXEiSW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 574A7C4CEC5;
-	Fri,  6 Sep 2024 09:52:01 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=qBXr9hM4KVoREBKqsgQKSum2xlHSCftiSY2d/k8Y79EsiMZ0mrVFGu55NEf3CBhfUWIaDrkzA5eFE4McOaSZ9Y2Bbu0brrscRoHlA8Xd25TTq000PuntJK0PkOpXAnZ7WBw6aBy7DvzWIWm39u8GFQB/bjm+V56zaS4mPklQv4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V0Kh6B7/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC927C4CEC4;
+	Fri,  6 Sep 2024 09:53:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725616327;
-	bh=zlPe96qEkYTI2oOKTLt2ru4+cI3fHrOB1XnOtIqa46c=;
+	s=k20201202; t=1725616415;
+	bh=sIHvnuKMsGosS+8Rs7mZhNLKmzTCYjE+RF/2DCpylBU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oMFXEiSWY2Gdc6v5SGUXnEqwwCtdBs0E97TS2iKPWUC5T739RhbBJZRLLMle24zVt
-	 pbSeaPWwtb+gvswzNd4PRApEeE2KToG2YjYTpPgYJphVKVywwDuM9o1lf+HarJQm0n
-	 dp+HuePYLJDm+IwT4ivrq3I6AdhzyyaZBAEjgGiZ6wm6C2H23xU0xQAMEa0B9bV688
-	 2VTppoOGmaaPmPYhcrc4OO/XQCohJrL+9/4vO8D39Cv/3Wo7w7ooOEsa0iVYhUlAD7
-	 nVYZKiV0CB1ZSb26GJFHBwRH7MXQz3JJVWlzvi96skhD9RXo0cWMYkx4SFI3TCdXCV
-	 A5I6W+4Q5iGYQ==
-Message-ID: <dbc6af20-886a-46fb-a16c-dbcb5861478c@kernel.org>
-Date: Fri, 6 Sep 2024 11:51:59 +0200
+	b=V0Kh6B7/JEEC+j2Sh8mb3x7luLB0E0ek5QRiojlgGxsfkKSWnjdoT0CfrFaZ2ORSi
+	 GIIMbclpgW6B9F2Rru5D0DA12a0b7LtuFHGT+jAslayGdkHw5SOrpH2cW4Tde6/LLw
+	 c6sHRiihOD3hDM6CdZnCPGOQeJjlKkZ2VU8fudwlnmo9S7WNvWDIOm6BscFwx1uRKb
+	 4nIUn6o2hsjP8l9/6Lnb2/dZWqaTrVXql6gweQXNBkCat0gvlKM7mZQ+uH0iuzdQrJ
+	 rfP+A1fNNFcTiD9LtdFNvxDw8vuDcGYrWSRWY0nX7GbyfNln2x71XFDHPzrcEz2AGp
+	 2XIiLsT7RL6Zg==
+Message-ID: <5c8b066c-6e61-44c1-b99d-4ae1a2313033@kernel.org>
+Date: Fri, 6 Sep 2024 11:53:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 8/9] dt-bindings: Add documentation for Photonicat PMU
+Subject: Re: [PATCH 9/9] arm64: dts: rockchip: add Photonicat PMU support for
+ Ariaboard Photonicat
 To: Junhao Xie <bigfoot@classfun.cn>, devicetree@vger.kernel.org,
  linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -64,9 +65,9 @@ Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, Heiko Stuebner <heiko@sntech.de>,
  Chukun Pan <amadeus@jmu.edu.cn>
 References: <20240906093630.2428329-1-bigfoot@classfun.cn>
- <20240906093630.2428329-9-bigfoot@classfun.cn>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20240906093630.2428329-10-bigfoot@classfun.cn>
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -110,289 +111,46 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240906093630.2428329-9-bigfoot@classfun.cn>
+In-Reply-To: <20240906093630.2428329-10-bigfoot@classfun.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 06/09/2024 11:36, Junhao Xie wrote:
-> Add device tree binding documentation for Photonicat PMU MFD, LEDs,
-> hardware monitor, power off, power supply, real-time clock watchdog.
+> This commit adds support for Photonicat power management MCU on
+> Ariaboard Photonicat.
 > 
 > Signed-off-by: Junhao Xie <bigfoot@classfun.cn>
 > ---
->  .../hwmon/ariaboard,photonicat-pmu-hwmon.yaml |  40 +++++++
->  .../leds/ariaboard,photonicat-pmu-leds.yaml   |  41 +++++++
->  .../mfd/ariaboard,photonicat-pmu.yaml         | 107 ++++++++++++++++++
->  .../ariaboard,photonicat-pmu-poweroff.yaml    |  34 ++++++
->  .../ariaboard,photonicat-pmu-supply.yaml      |  55 +++++++++
->  .../rtc/ariaboard,photonicat-pmu-rtc.yaml     |  37 ++++++
->  .../ariaboard,photonicat-pmu-watchdog.yaml    |  37 ++++++
->  7 files changed, 351 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ariaboard,photonicat-pmu-hwmon.yaml
->  create mode 100644 Documentation/devicetree/bindings/leds/ariaboard,photonicat-pmu-leds.yaml
->  create mode 100644 Documentation/devicetree/bindings/mfd/ariaboard,photonicat-pmu.yaml
->  create mode 100644 Documentation/devicetree/bindings/power/reset/ariaboard,photonicat-pmu-poweroff.yaml
->  create mode 100644 Documentation/devicetree/bindings/power/supply/ariaboard,photonicat-pmu-supply.yaml
->  create mode 100644 Documentation/devicetree/bindings/rtc/ariaboard,photonicat-pmu-rtc.yaml
->  create mode 100644 Documentation/devicetree/bindings/watchdog/ariaboard,photonicat-pmu-watchdog.yaml
+>  .../boot/dts/rockchip/rk3568-photonicat.dts   | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ariaboard,photonicat-pmu-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/ariaboard,photonicat-pmu-hwmon.yaml
-> new file mode 100644
-> index 000000000000..c9b1bab20c31
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ariaboard,photonicat-pmu-hwmon.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/ariaboard,photonicat-pmu-hwmon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568-photonicat.dts b/arch/arm64/boot/dts/rockchip/rk3568-photonicat.dts
+> index 2fe403cd61cb..597275702408 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3568-photonicat.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3568-photonicat.dts
+> @@ -513,6 +513,49 @@ &uart4 {
+>  	dma-names = "tx", "rx";
+>  	status = "okay";
+>  	/* Onboard power management MCU */
 > +
-> +title: Photonicat PMU Hardware Monitor
+> +	pcat_pmu: mcu {
+> +		compatible = "ariaboard,photonicat-pmu";
+> +		current-speed = <115200>;
+> +		local-address = <1>;
+> +		remote-address = <1>;
 > +
-> +maintainers:
-> +  - Junhao Xie <bigfoot@classfun.cn>
-> +
-> +description:
-> +  Board temperature sensor on the Photonicat PMU MCU
-> +
-> +properties:
-> +  compatible:
-> +    const: ariaboard,photonicat-pmu-hwmon
-> +
-> +  label:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: Label for hwmon device
+> +		pcat_pmu_battery: supply-battery {
 
-No resources here. Fold it into parent binding.
-
-> +
-> +required:
-> +  - compatible
-> +  - label
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +      serial {
-> +          mcu {
-> +              compatible = "ariaboard,photonicat-pmu";
-
-Drop, no need.
-
-> +
-
-Messed indentation.
-
-Entire example is redundant. Merge it to parent binding.
+Drop unused labels. Everywhere. You are not making the code more readable.
 
 
-> +              hwmon {
-> +                  compatible = "ariaboard,photonicat-pmu-hwmon";
-> +                  label = "pcat_board";
-> +              };
-> +          };
-> +      };
-> diff --git a/Documentation/devicetree/bindings/leds/ariaboard,photonicat-pmu-leds.yaml b/Documentation/devicetree/bindings/leds/ariaboard,photonicat-pmu-leds.yaml
-> new file mode 100644
-> index 000000000000..6ccb0e691b09
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/ariaboard,photonicat-pmu-leds.yaml
-> @@ -0,0 +1,41 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/leds/ariaboard,photonicat-pmu-leds.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Photonicat PMU LEDs
-> +
-> +maintainers:
-> +  - Junhao Xie <bigfoot@classfun.cn>
-> +
-> +description:
-> +  LEDs on the Photonicat PMU MCU
-> +
-> +allOf:
-> +  - $ref: common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: ariaboard,photonicat-pmu-leds
+> +			compatible = "ariaboard,photonicat-pmu-supply";
+> +			label = "battery";
+> +			monitored-battery = <&battery>;
+> +			power-supplies = <&pcat_pmu_charger>;
 
-Your compatibles per device do not make much sense. You organized
-bindings per drivers, but that's not what we want.
-
-> +
-> +  label: true
-
-Drop
-
-> +
-> +required:
-> +  - compatible
-> +  - label
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +      serial {
-> +          mcu {
-> +              compatible = "ariaboard,photonicat-pmu";
-> +
-> +              leds-status {
-> +                  compatible = "ariaboard,photonicat-pmu-leds";
-> +                  label = "net-status";
-> +              };
-> +          };
-> +      };
-> diff --git a/Documentation/devicetree/bindings/mfd/ariaboard,photonicat-pmu.yaml b/Documentation/devicetree/bindings/mfd/ariaboard,photonicat-pmu.yaml
-> new file mode 100644
-> index 000000000000..df16d9507821
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/ariaboard,photonicat-pmu.yaml
-> @@ -0,0 +1,107 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/ariaboard,photonicat-pmu.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Ariaboard Photonicat PMU
-> +
-> +maintainers:
-> +  - Junhao Xie <bigfoot@classfun.cn>
-> +
-> +description:
-> +  Driver for the Power Management MCU in the Ariaboard Photonicat,
-
-Bindings are for hardware, not drivers. Drop it everywhere and explain
-hardware.
-
-> +  which provides battery and charger power supply, real-time clock,
-> +  watchdog, hardware shutdown.
-> +
-> +properties:
-> +  compatible:
-> +    const: ariaboard,photonicat-pmu
-
-That's the only compatible you should have. Drop all others.
-
-> +
-> +  current-speed:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    default: 115200
-> +    description: PMU Serial baudrate
-> +
-> +  local-address:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 1
-> +    maximum: 127
-> +    default: 1
-> +    description: CPU board address
-
-Address of what? In which notation? It's part of this hardware.
-
-
-> +
-> +  remote-address:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 1
-> +    maximum: 127
-> +    default: 1
-> +    description: PMU board address
-
-Eee, no. Your board knows its address. You do not have to tell it.
-
-> +
-> +  hwmon:
-> +    $ref: /schemas/hwmon/ariaboard,photonicat-pmu-hwmon.yaml
-> +
-> +  poweroff:
-> +    $ref: /schemas/power/reset/ariaboard,photonicat-pmu-poweroff.yaml
-> +
-> +  rtc:
-> +    $ref: /schemas/rtc/ariaboard,photonicat-pmu-rtc.yaml
-> +
-> +  watchdog:
-> +    $ref: /schemas/watchdog/ariaboard,photonicat-pmu-watchdog.yaml
-> +
-> +patternProperties:
-> +  '^leds-(status)':
-
-That's not a pattern.
-
-> +    $ref: /schemas/leds/ariaboard,photonicat-pmu-leds.yaml
-> +
-> +  '^supply-(battery|charger)$':
-> +    $ref: /schemas/power/supply/ariaboard,photonicat-pmu-supply.yaml
-
-Why two nodes?
-
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +      serial {
-> +          photonicat-pmu {
-> +              compatible = "ariaboard,photonicat-pmu";
-> +              current-speed = <115200>;
-> +              local-address = <1>;
-> +              remote-address = <1>;
-> +
-> +              supply-battery {
-> +                  compatible = "ariaboard,photonicat-pmu-supply";
-> +                  label = "battery";
-
-Nope, drop label.
-
-> +                  type = "battery";
-
-No, there is no type property.
-
-Missing monitored battery.
-
-> +              };
-> +
-> +              supply-charger {
-> +                  compatible = "ariaboard,photonicat-pmu-supply";
-> +                  label = "charger";
-> +                  type = "charger";
-> +              };
-> +
-> +              hwmon {
-> +                  compatible = "ariaboard,photonicat-pmu-hwmon";
-> +                  label = "pcat_board";
-> +              };
-> +
-> +              leds-status {
-> +                  compatible = "ariaboard,photonicat-pmu-leds";
-> +                  label = "net-status";
-> +              };
-> +
-> +              poweroff {
-> +                  compatible = "ariaboard,photonicat-pmu-poweroff";
-> +              };
-> +
-> +              rtc {
-> +                  compatible = "ariaboard,photonicat-pmu-rtc";
-> +              };
-> +
-> +              watchdog {
-> +                  compatible = "ariaboard,photonicat-pmu-watchdog";
-> +              };
-
-These are seriously redundant and useless nodes.  There is nothing
-beneficial from the nodes above - they are all empty, without resources.
-Drop all of them.
-
-I finish the review here.
+Why do you reference internal design of the device as DTS? You cannot
+have here other power supply, can you?
 
 Best regards,
 Krzysztof
