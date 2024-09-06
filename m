@@ -1,73 +1,76 @@
-Return-Path: <linux-pm+bounces-13787-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13788-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3E1196F2FE
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 13:24:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39C1696F343
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 13:41:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD5631C21C70
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:24:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A533C1F256D5
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:41:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B9E1C9EC2;
-	Fri,  6 Sep 2024 11:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 954051CBE9E;
+	Fri,  6 Sep 2024 11:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HV3/bb3D"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KMjP2dQk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6267A1C9EAB
-	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 11:24:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C344A15852B;
+	Fri,  6 Sep 2024 11:41:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725621894; cv=none; b=JiFmhHZvMJ2JElOoJlWQEZydzE1g18wb+m+tvW1y/cy//tqGdvY8BdaEnkKoQtAcfqyTzLLXcv7+J3LVtYoqWsF8oT4OgUYLwE4j8mL6xQxAm0AwmhiS8/tm6bT1QcAfrXERaLbjrgGusf3xIII/7uwWfKwK1csAlRbLi/6g98A=
+	t=1725622871; cv=none; b=BsWJyBpR63WdUHXgZ5ccPhCxMRb1cZaiEMKBE4/Pvl/YPiCdeBAprGe/a00UsxFXAgl9lF2fpTDILDd3miwGq86SH9Hl16bU4m5pjvv7Ze0MAMuzAUbW5mODO9ef6/6drsdwPP4o/kv48/5e++dESVLsgU2uQonPt16abw+OvYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725621894; c=relaxed/simple;
-	bh=ZQH92TpQyFl4gv+OD7v5l1D5rCQFmhiRf28AHtFoQXk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=grleihCFTYS9FyoG8SCYuJZ1/gpGT7NEQv5ZrpvRcxB3rFz0fJOQN4yCnYEOI9RZzijq+z5tkQwIKdnglI9WegxQa9wjx79Djapku1D5goRkb968i3VVwEP7DB0IYgukq7eQ5MWY7AK4Yg8yp5tmLh1mynNkk4bAzq/X6SgnCQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HV3/bb3D; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-42ca573fd5aso2763545e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2024 04:24:49 -0700 (PDT)
+	s=arc-20240116; t=1725622871; c=relaxed/simple;
+	bh=8aSJOWgx+cnbeHGiojisRHuWB5MxjZipaJDi/7kDI2s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EpJuYR3v/wHJW10FILUMsy/ntPSztvd93AFrclPXcxl0VVC8CQKkz7D06sC7ASOtu7n5LaLA4H4caMykgRjbN9dkDtsT0KRg/5gPtxG4NFOiLelAMC0BvOpwpbrZTkSEieJHR+l584mwEjA+Oth6i6jKpx/cJnRE+jMB8DppBTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KMjP2dQk; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2d885019558so1437632a91.2;
+        Fri, 06 Sep 2024 04:41:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725621888; x=1726226688; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MYynHc0UzBO2p8b5rM/GQnlMJh3kzhjnj092w1bNgx0=;
-        b=HV3/bb3Df5R7rBGgkoSTfxtS+z444QLp6XzmD+VCMiv/OCKBTncLPojSO6HwvAFgTg
-         Nh9QFvj7Yb8JBrYu+DUFeKnZiSg6h40lYL96kfWWF3LXIC5wdgOBq1p9VKmhZUw0lGqK
-         VrIH1r5u/J86SKW/SL3PPEDNihWFDOHGWtQTu/Ak3bmvYxIUXlw+ldmrmmNVZ2pzshpB
-         mWOii25nOZv+Q8RW4EcWAr2zBrx1jOGLcAAEb05QLl6Oue8/6ByK5fCemvApjlfcQ+ch
-         C3XhFXnpRiJX5u5s9SREIRac7n/y6vCApAAwh8sg938FizHQsx8pH1WLymbfOyjlyYGQ
-         vSeg==
+        d=gmail.com; s=20230601; t=1725622869; x=1726227669; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=nSE4UbmLPT89Bj18HP/jHu8JFDfgkM64ZTAP/BuhzBM=;
+        b=KMjP2dQkcEJotvFA7eX1clmdCx6AtBfcg+/M62WloehFiy/4sG0mtTT8Bfo8VdQF8y
+         Jo5vPw2glWUXXQdv0yjsixWSfAidtd+pABfxbyELANhtjqfak7ZCJjbjzwVEqKP3gvsR
+         0+jBXHp2cD/fDbOFs1FGeWd/X1Kk78T/UBNlqkK+vRqXyLVpa/4MCIde2JapF9aBFJAP
+         5ZNlMV93jYInJCz5CWtp/HzBJRVLAT65msLT/S0gdSE0rsXg6Zly6WK8obE3xYjLWm0f
+         CXz5/OhnZdXpF2cwVPy8GS4THF2p22dWgVWgYLb9p43Mz9uqTXJ24kfReih1NG61P+AX
+         YKOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725621888; x=1726226688;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=MYynHc0UzBO2p8b5rM/GQnlMJh3kzhjnj092w1bNgx0=;
-        b=ePzX/ZpQgA3Jm817UXzjR2tQYlSH8eRmpItfGElKNoInI4PnzEFoKjFgWdDD0lrqAe
-         N6O7ACPsUfWpq2HFGVGUE3TGJfAtUw960RZN49rFwH/ITfu5dgTq4TxZ/HpArV9S7MEj
-         xNPeFcd6TI+o5iqXMErX+Eyivm89vgskpbc+c2XhzQqfnjT9+yf6GLSWnHtWIDSDC8UR
-         qoa7+6jwCAXx3eaomU0A/WGPHnPYWG7LmZLGdy5T6Z77A/JGKhjVgiufNapxCS9tR7sq
-         5/gz30JtJfKZ9JL3EjeiefTyriYLaQgHDTVn/u0nIIJHdM3FiShzMfQMtcWvNw5GWTsx
-         +W6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXodXM/Z33IydYxUg8uLUnKE0MyqMYqg//DpJP1viNAqBPDGq3mMeR4mJMIgYijoI6ZSsC4qAwxYg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPQ8sXmehEflrfbnJtpS4VRYpYhgKbG2BLX1eqPg/aqWapnp1s
-	nQR3+j5HTMyCKh+x4EhEFOlsjD/I93NxeYliFQqisSV9MfTlF5l85mQBesYs+y0=
-X-Google-Smtp-Source: AGHT+IE14b7rOn+qEeyShlsYLKxm7ePNnNmthwLTsPtIn7xL+yauvm0pLZ7yQGBxisbgHVdoce4pAQ==
-X-Received: by 2002:a05:600c:5125:b0:426:6696:9e50 with SMTP id 5b1f17b1804b1-42c9f98467emr16257125e9.14.1725621887156;
-        Fri, 06 Sep 2024 04:24:47 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-42ca05cfa42sm17376815e9.25.2024.09.06.04.24.46
+        d=1e100.net; s=20230601; t=1725622869; x=1726227669;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nSE4UbmLPT89Bj18HP/jHu8JFDfgkM64ZTAP/BuhzBM=;
+        b=oRw2e4BsRlCJgh8oN8tLAbBnWFQ4IAAjcRAIf1NYAQLtKtH8imxLs0I/7pf4D5NwxL
+         zu7IByr1Ae0h6wheeSqSubmSmrkgCHOrZdL9oQOvwovnIGqb0OUubTMswot7vyxi9BR6
+         lD6/iaI4g4Jq+65/JDxioZkblFep9ZHviiFO0HCqZ36YCppwsDEUNtvfom7V+pjzfnuN
+         fQZnEE7AoV9ERNP48LEhpLT+Ejq4QPBs4jcVd/PI4wWoXClyHNvQE842QnRrJ26n9IaN
+         TdEgO27Xoa2us/+a8uw8lig11gp05ZPzOLtyee1eXS8yciP46LCTZHNsXJLXkjrdESjX
+         ZfDg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQUaHTKNcrzUAWgKZQpdkPy2k/e350dJ65DKer0enmp/HwLJ9Em/QStNC7YBEb3/DOZKOccwJAeMc=@vger.kernel.org, AJvYcCVf7JT6z5uT02Gdm9ZEx4RsRvD4zrdiBcv6t4QnEqZpez1dSeO+AFlpwmfM1vnJQGrvP8/xRVdZNFH8@vger.kernel.org, AJvYcCVhd58Smb8QUNRD1jgFTlLILxflIh1nSIulLlovKcnES/PbbiJQxjX0Vn0HRTbAvVbs+8cEBLDsFuowbg==@vger.kernel.org, AJvYcCWJZswuOQjy8bCzLSPzpAzSbpxzbp4YZZcyph8FCKoTN82w4OapQv0rm+kxxp4Tmb4B3Z5jQz7rrtNuK0HVV0A=@vger.kernel.org, AJvYcCXJReZyKlMipucwmgRwbwqLQ1znIo2YR4er2erGhSyJZZdtk3Isc/OZeryqsuWw+x0R9lIwFKSSOLjV@vger.kernel.org, AJvYcCXKAeouMBmQXyUwnNpaoeypol4+fzh4uexutZfL3rzuQTDsPipn40/uGrZBKweqJw5OUUlNUplkOZY8bW4S@vger.kernel.org, AJvYcCXoLu+ddit1Axyif81iO5utgzLYxh72CPo1GLFnyquF+tnx5sC4/rxMfpDO62tdjbfFjsXzFmGcOSjK4PU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYQQnTtjLMHerk+mTERo548YQ+7Xw3YZjtWKVAClAXMmord8+m
+	TjEimPBIr0KbHnp6CA3sdzwIXVBhZ2nKTiXCBAwKkfbVUde+SUJo
+X-Google-Smtp-Source: AGHT+IG8+NKJVVHmU7dMZkptp8cuB6+8HX7Zzy6Yj7AiC4L2InjShBKLgIME0ueterTApmKVtZTUtg==
+X-Received: by 2002:a17:90b:4ace:b0:2c9:6a38:54e4 with SMTP id 98e67ed59e1d1-2dad51bfdd9mr2390340a91.41.1725622868829;
+        Fri, 06 Sep 2024 04:41:08 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dadbfeebaasm1334056a91.10.2024.09.06.04.41.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Sep 2024 04:24:46 -0700 (PDT)
-Message-ID: <3a7fa69f-9cee-48f0-a932-7362f600b6a6@linaro.org>
-Date: Fri, 6 Sep 2024 13:24:46 +0200
+        Fri, 06 Sep 2024 04:41:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a33633be-800c-4ca0-9d1e-f190e23384d5@roeck-us.net>
+Date: Fri, 6 Sep 2024 04:41:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,126 +78,101 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6/9] hwmon: Add support for Photonicat PMU board
+ temperature sensor
+To: Junhao Xie <bigfoot@classfun.cn>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Heiko Stuebner <heiko@sntech.de>,
+ Chukun Pan <amadeus@jmu.edu.cn>
+References: <20240906093630.2428329-1-bigfoot@classfun.cn>
+ <20240906093630.2428329-7-bigfoot@classfun.cn>
 Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Raphael Gallais-Pou <rgallaispou@gmail.com>,
- George Stark <gnstark@salutedevices.com>, Yan Zhen <yanzhen@vivo.com>,
- Fabio Estevam <festevam@denx.de>, Zhang Zekun <zhangzekun11@huawei.com>,
- Alexander Stein <alexander.stein@ew.tq-group.com>,
- Lukasz Luba <Lukasz.Luba@arm.com>,
- Linux PM mailing list <linux-pm@vger.kernel.org>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal drivers changes for v6.12-rc1
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240906093630.2428329-7-bigfoot@classfun.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
+On 9/6/24 02:36, Junhao Xie wrote:
+> Photonicat PMU MCU will send status reports regularly,
+> including board temperature.
+> 
 
-Hi Rafael,
+This is not an appropriate description.
 
-please consider pulling the following changes. This cycle has been quite 
-quiescent and the changes are mostly related to code cleanups and DT 
-bindings.
+> Signed-off-by: Junhao Xie <bigfoot@classfun.cn>
+> ---
+>   drivers/hwmon/Kconfig            |  10 +++
+>   drivers/hwmon/Makefile           |   1 +
+>   drivers/hwmon/photonicat-hwmon.c | 129 +++++++++++++++++++++++++++++++
 
-Thanks
+Documentation missing.
 
+> +static int pcat_hwmon_probe(struct platform_device *pdev)
+> +{
+...
+> +	dev_info(dev, "Board Temprature: %d degress C\n", hwmon->temperature);
+> +
 
-The following changes since commit f5c05974349c8e3d80e125b71bd80695807d8528:
+Unacceptable (misspelled) noise.
 
-   Merge branch 'thermal-core' (2024-08-29 11:45:08 +0200)
+> +	hwmon->hwmon = devm_hwmon_device_register_with_groups(
+> +		dev, label, hwmon, pcat_pmu_temp_groups);
+> +
 
-are available in the Git repository at:
+Please use the with_info API. I am not going to review the code because
+it will need to be completely rewritten.
 
-  
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/thermal-v6.12-rc1
-
-for you to fetch changes up to 7d8abc5f3b5ce0f53d499279d8defc0f72bf7557:
-
-   thermal/drivers/imx_sc_thermal: Use dev_err_probe (2024-09-04 
-15:31:29 +0200)
-
-----------------------------------------------------------------
-- Add power domain DT bindings for new Amlogic SoCs (Georges Stark)
-
-- Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr() in the ST
-   driver and add a Kconfig dependency on THERMAL_OF subsystem for the
-   STi driver (Raphael Gallais-Pou)
-
-- Simplify with dev_err_probe() the error code path in the probe
-   functions for the brcmstb driver (Yan Zhen)
-
-- Remove trailing space after \n newline in the Renesas driver (Colin
-   Ian King)
-
-- Add DT binding compatible string for the SA8255p with the tsens
-   driver (Nikunj Kela)
-
-- Use the devm_clk_get_enabled() helpers to simplify the init routine
-   in the sprd driver (Huan Yang)
-
-- Remove __maybe_unused notations for the functions by using the new
-   RUNTIME_PM_OPS() and SYSTEM_SLEEP_PM_OPS() macros on the IMx and
-   Qoriq drivers (Fabio Estevam)
-
-- Remove unused declarations in the header file as the functions were
-   removed in a previous change on the ti-soc-thermal driver (Zhang
-   Zekun)
-
-- Simplify with dev_err_probe()	the error code path in the probe
-   functions for the imx_sc_thermal driver (Alexander Stein)
-
-----------------------------------------------------------------
-Alexander Stein (1):
-       thermal/drivers/imx_sc_thermal: Use dev_err_probe
-
-Colin Ian King (1):
-       thermal/drivers/renesas: Remove trailing space after \n newline
-
-Fabio Estevam (2):
-       thermal/drivers/qoriq: Remove __maybe_unused notations
-       thermal/drivers/imx: Remove __maybe_unused notations
-
-George Stark (1):
-       dt-bindings: thermal: amlogic,thermal: add optional power-domains
-
-Huan Yang (1):
-       thermal/drivers/sprd: Use devm_clk_get_enabled() helpers
-
-Nikunj Kela (1):
-       dt-bindings: thermal: tsens: document support on SA8255p
-
-Raphael Gallais-Pou (2):
-       thermal/drivers/st: Switch from CONFIG_PM_SLEEP guards to 
-pm_sleep_ptr()
-       thermal/drivers/sti: Depend on THERMAL_OF subsystem
-
-Yan Zhen (1):
-       thermal/drivers/brcmstb_thermal: Simplify with dev_err_probe()
-
-Zhang Zekun (1):
-       thermal/drivers/ti-soc-thermal: Remove unused declarations
-
-  .../bindings/thermal/amlogic,thermal.yaml          |  3 ++
-  .../devicetree/bindings/thermal/qcom-tsens.yaml    |  1 +
-  drivers/thermal/Kconfig                            |  2 +-
-  drivers/thermal/broadcom/brcmstb_thermal.c         | 15 ++++------
-  drivers/thermal/imx_sc_thermal.c                   |  3 +-
-  drivers/thermal/imx_thermal.c                      | 16 +++++------
-  drivers/thermal/qoriq_thermal.c                    | 10 +++----
-  drivers/thermal/renesas/rcar_thermal.c             |  2 +-
-  drivers/thermal/sprd_thermal.c                     | 14 ++--------
-  drivers/thermal/st/st_thermal.c                    | 32 
-++++++++--------------
-  drivers/thermal/st/st_thermal_memmap.c             |  2 +-
-  drivers/thermal/st/stm_thermal.c                   |  8 ++----
-  drivers/thermal/ti-soc-thermal/ti-bandgap.h        |  4 ---
-  13 files changed, 45 insertions(+), 67 deletions(-)
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Guenter
 
 
