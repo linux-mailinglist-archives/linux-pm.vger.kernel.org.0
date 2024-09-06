@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-13806-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13807-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC38B96F953
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 18:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A70596F98F
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 18:50:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 764651F246D3
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 16:31:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF65C1F24447
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 16:50:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D75E1D4144;
-	Fri,  6 Sep 2024 16:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB3A01D4171;
+	Fri,  6 Sep 2024 16:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JdnLMLHL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tqp2lsMf"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582331D1F6D;
-	Fri,  6 Sep 2024 16:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 848D01C9DE7;
+	Fri,  6 Sep 2024 16:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725640256; cv=none; b=UWkfNPUehcJBOXmth8jzdIiBol65u4F8jnZr38RpbjwBaATSBQUmGg70h1AJk3RAp7gEpquTJMrH2ffLOq7+eltsj81otyjbLS7f5aSvviHLA8PA2Y3RdqxOJpcBpqdq7BhZYZi5lB26ZammLGLsJD5ZulfKWmhle9Pq0qvBbP4=
+	t=1725641398; cv=none; b=nD3fhmCKcIGf2tg9QP6Ur50ej+4UqOAQX0rd6oM1P30XM60KaU8pSZ2988bdNGXXU3oe8dMKQ50G8HldTKH97MtVOw7Wriw6+l768F5+FcXbx2tm4jV3+Df01FAOmAwDqBVYo1iQ6TN+E5eBkwuxhXGURy1n73zMCSz5dwMFanI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725640256; c=relaxed/simple;
-	bh=fISN3AL8b1uL4NxDORSIE4pbJHdWzFpxRZ6VztEhxVI=;
+	s=arc-20240116; t=1725641398; c=relaxed/simple;
+	bh=rvkOObMwKZqhY0B7qN9MKTKZ1iNMcgZ3QwdiGBh3uHk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aeOO/VHTd6N3MynElq054BO89jtimt9/trImyrOsWoxuOhQgoORIA8nWIwadALJWZ1CAThsSEGGQsoI3696Eg8mbeqiXgPf4CWzPZNWdc7W6Y8uBzFXyA4FziqbKGZrSXsPrxyyfxMxqINKIZp11y9aqd61YNgLCMxqUYzc9pdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JdnLMLHL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3E35C4CEC4;
-	Fri,  6 Sep 2024 16:30:51 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=fO2l3Tzi22AenqjrR3qB3vZijQtmHvBiVGXGLrwxI6kX1t1rH22drox0xkeHP8jXCkYX0Iq/undk8Wdabv0GPULgIDsNzsubFnjVH+tVocB13z4YXlqzVcYvULGE0pcngj1wKngN/GpQo5DoIF/W/ToCMDLrGtI55o+2XsFwLXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tqp2lsMf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74475C4CEC4;
+	Fri,  6 Sep 2024 16:49:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725640256;
-	bh=fISN3AL8b1uL4NxDORSIE4pbJHdWzFpxRZ6VztEhxVI=;
+	s=k20201202; t=1725641398;
+	bh=rvkOObMwKZqhY0B7qN9MKTKZ1iNMcgZ3QwdiGBh3uHk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JdnLMLHLWMlUUrycSdTM+J4BCY7JlbczA8i917cADfqftT3k1WJ/aC8hlN2RyAAn2
-	 s4WyeCyqkUu3KcNgrbPuTzp/nOkDw4TEzmrHRlaNltY1PNdYAyhdtA+rV91m4ylTus
-	 MxPJt5KVg6jN6lDgAHEdim8hH2xGp2/ohqN6S5SA6GbBAUz0OlGz+hRuEl4n2d+yae
-	 r081AkLe6GUUHB9zGPUqZHLEyhXiSaBafN9pfIxTyn1F7pAUX+36OCVi+A8dPNxiqq
-	 iBEzpSOszG813I7NtdFdr8Fi+IdO3SdVkqD0ExVUXnYK67FhyNyOA45VuVK4DO/AwX
-	 Nc5QnlO4vgY4w==
-Message-ID: <49aa8205-6324-412d-b03d-c2b3f738cc98@kernel.org>
-Date: Fri, 6 Sep 2024 18:30:48 +0200
+	b=Tqp2lsMfWHUl05YPaWjs2VmwbihaBBdqGw1repcS3Yego+7CC2pnuGQoKV6YmSfxf
+	 Iue3HcsfEjwRMKk5Od9xEKl+9pE71pU8xv2GIMEiNrIXr/mLUaJDTbT46IOrDjwK7i
+	 wx2vSxbINrcYfVdxAYUyLKTSI6zulP0k9u5dolkRZuHT7zviyG7tFB6qm1rEfgSRM8
+	 c2ejz8PiQzWH0nyqkATjLb9tAvg8hIgutsjKZr17UAAwJdX15t991iwEVgVFaSjl4b
+	 tmEPOKdT+5jj5ARekHwkLVCaJscY86eMNOMY+2tId1IGwL1deieLtmsrEBCg/XX2Po
+	 jxQHWA/5qE/9A==
+Message-ID: <f649c854-a250-43cf-ae01-82bbb011e7e0@kernel.org>
+Date: Fri, 6 Sep 2024 18:49:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,21 +50,22 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] interconnect: qcom: Add EPSS L3 support on SA8775P
+Subject: Re: [PATCH V2 1/2] dt-bindings: interconnect: Add compatibles for
+ QCS8300 SoC
 To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
  Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Sibi Sankar <quic_sibis@quicinc.com>, linux-arm-msm@vger.kernel.org,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: Konrad Dybcio <konradybcio@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+ Vladimir Lypak <vladimir.lypak@gmail.com>,
+ Adam Skladowski <a39.skl@gmail.com>, Danila Tikhonov <danila@jiaxyga.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Andrew Halaney <ahalaney@redhat.com>,
+ Odelu Kukatla <quic_okukatla@quicinc.com>,
+ Mike Tipton <quic_mdtipton@quicinc.com>, linux-arm-msm@vger.kernel.org,
  linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, quic_okukatla@quicinc.com,
- quic_mdtipton@quicinc.com
-References: <20240904171209.29120-1-quic_rlaggysh@quicinc.com>
- <20240904171209.29120-4-quic_rlaggysh@quicinc.com>
- <c3efb01d-2138-4b79-97a1-653b7bd531d0@kernel.org>
- <bfcc65b2-97a4-4353-a2fd-dce927c53428@quicinc.com>
+ linux-kernel@vger.kernel.org
+References: <20240906151534.6418-1-quic_rlaggysh@quicinc.com>
+ <20240906151534.6418-2-quic_rlaggysh@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,28 +111,51 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <bfcc65b2-97a4-4353-a2fd-dce927c53428@quicinc.com>
+In-Reply-To: <20240906151534.6418-2-quic_rlaggysh@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 06/09/2024 17:32, Raviteja Laggyshetty wrote:
-> 
-> On 9/4/2024 11:52 PM, Krzysztof Kozlowski wrote:
->> On 04/09/2024 19:12, Raviteja Laggyshetty wrote:
->>> +
->>>  static const struct qcom_osm_l3_desc epss_l3_l3_vote = {
->>>  	.nodes = epss_l3_nodes,
->>>  	.num_nodes = ARRAY_SIZE(epss_l3_nodes),
->>> @@ -284,6 +307,10 @@ static const struct of_device_id osm_l3_of_match[] = {
->>>  	{ .compatible = "qcom,sm8150-osm-l3", .data = &osm_l3 },
->>>  	{ .compatible = "qcom,sc8180x-osm-l3", .data = &osm_l3 },
->>>  	{ .compatible = "qcom,sm8250-epss-l3", .data = &epss_l3_perf_state },
->>> +	{ .compatible = "qcom,sa8775p-epss-l3-cl0",
->>> +	  .data = &epss_l3_perf_state },
->> Don't grow it but express compatibility.
-> ok. Will rename compatible from "qcom,sa8775p-epss-l3-cl0" to "qcom,sa8775p-epss-l3".
+On 06/09/2024 17:15, Raviteja Laggyshetty wrote:
+> QCS8300 SoC has several bus fabrics that could be controlled
+> and tuned dynamically according to the bandwidth demand.
 
-This won't solve the problem. You still grow the table, right?
+You got quite precise review about subject, which you partially
+implemented and then added something more redundant. Look, this is
+supposed to be device name. Add QCS8300 RPMh NoC. Drop redundant
+information.
+
+
+
+> 
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+> ---
+>  .../interconnect/qcom,qcs8300-rpmh.yaml       |  72 +++++++
+>  .../interconnect/qcom,qcs8300-rpmh.h          | 189 ++++++++++++++++++
+>  2 files changed, 261 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs8300-rpmh.yaml
+>  create mode 100644 include/dt-bindings/interconnect/qcom,qcs8300-rpmh.h
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,qcs8300-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,qcs8300-rpmh.yaml
+> new file mode 100644
+> index 000000000000..2759b003ebcf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,qcs8300-rpmh.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/qcom,qcs8300-rpmh.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Technologies, Inc. RPMh Network-On-Chip Interconnect on QCS8300
+
+Isn't this just "Qualcomm"? How is in most of other bindings?
+
+I asked not to send us your downstream stuff. I said it about driver,
+though... so repeat here: Do not send downstream code, but work on
+upstream and use upstream style. This applies to all patches: drivers,
+DTS, bindings, everything. So which upstream binding was used as
+template for this one here?
 
 Best regards,
 Krzysztof
