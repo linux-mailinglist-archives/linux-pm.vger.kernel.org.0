@@ -1,76 +1,100 @@
-Return-Path: <linux-pm+bounces-13748-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13749-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CD2096E988
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 07:53:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 910B196E9CF
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 08:14:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1D6E283D19
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 05:53:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 481A4286B51
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 06:14:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3525283A18;
-	Fri,  6 Sep 2024 05:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DF513C3D6;
+	Fri,  6 Sep 2024 06:14:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aKwPSra9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NZ/YyJi1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A157149C57
-	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 05:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6310C12CDBF
+	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 06:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725601971; cv=none; b=I+Fjdbxjn5WWYHKS9h7RCQ2y6+5BCtp7yJ9u944YYHt98EPMgvODm54AqZJgYas2wh/2NqvhA4pEuPXzW/h6ANSi9DiR+AS7/Fw1O92tKIgHqHN7k7flmWQwqHcOG7vx4IbwFDQQIaibS1T7S2Os68Mum/EdNjP64oRVRchPW18=
+	t=1725603249; cv=none; b=skBsJCT5pwsKaZMo7b4tlLhJPe7dPdbocoDWY2tGPPxvY3lZZi2mCgBR4Q2ffBB2R4I/UUrr5IK0Gn/j2cD072eR5fe+KiypI5TQfafMr2RZ08NOKKDS4Tg2pWfBuiGJgxWMJIrY6a6K0+HcXS01KVemcNTUAM1AUGQer62psuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725601971; c=relaxed/simple;
-	bh=2LeFfIr0V/GAa7FmKHakFp2lIemkgHOY/07KaYi76ts=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SniZiAGhwCY9Ut4rd2EWHRPPdyOgHPu9Ri5p3Si2ihBwdZFc4tXQH4ZG5ITyOdocQAFe+IqXERk0j2PhRrslk0va/4yOvirv2pBsBn4RzF8MPTxnb8ugPuOrWzP4EfaB2veSTBKie9jKU/kWRFSwVi35mlo4gK7SwedwPa7F/U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aKwPSra9; arc=none smtp.client-ip=209.85.210.169
+	s=arc-20240116; t=1725603249; c=relaxed/simple;
+	bh=Lx32bnxrpbPjpbgt4VkUy3hGsX6dXtQ2o97E8V7hN9k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=knMMZBcKBFs9ujVlwbW6dOWH3SCGSETQI2DUh1PTrXaHpZU3lyGTNBe2ppjBkncAEQkcBEdMA7H0B1OJGJC1JuBS482matA59q3n/avrIHk1FFRLMyyObOwJpNjQH6HlR6HoSdhfjZ6TvfjFKN/H2TDsSRnxRWTWMy0VabRf+s8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NZ/YyJi1; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7142e002aceso1271533b3a.2
-        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2024 22:52:49 -0700 (PDT)
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2d8818337a5so2018950a91.1
+        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2024 23:14:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725601969; x=1726206769; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oQyUJ9NmXgjbubW/PtM4pxEpllQ88MMQGruKTuribv4=;
-        b=aKwPSra9Dd7GS7ch8uJEuflgbEc6+e5yepnfJdrZ2iLhW/B2ic51jmdJ7ljUcfISEH
-         gjheMQnXksncGYjuoSO0P9M54IAuaJgD4CvYTyNOCmE/BhBh2pg7CYsrpXNiq8MFm64i
-         ciIwd4gN8dAtJmGDR7Z2Q56SE/J3OfohPqY8NPOUI1mKThqUILlTtFsADzdfRkx2+4xd
-         OdTyIN6haW/ex/if1ls3C8dBImsU9+62xS7jeAMfdlVWpgs6x3ugId85PCYP/c6o5vC9
-         4yYgQdsHo6hzdUnLfATXqhTVP9+qNlju2AD7gV72ctk/e6caC0yYJ+CDyXanDiRF+suL
-         9m/Q==
+        d=linaro.org; s=google; t=1725603248; x=1726208048; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/gz2DTDYFcWkZtaamsL1Ksg5rPTpuMwBQtW5iRfsoQE=;
+        b=NZ/YyJi1M1wMgBVacnszYV/hOwk3lwKmgpA2Lx+8IhpPNiPZZxdcSfvZvRfk70XWg+
+         IXLmja8QIb3psg8KkA3KHuzYrOqfQ7/3ec4nKaamqWqW8NjGY4BqvmKvhGXd205cRTqP
+         9WWPKEOMvUEZ5qDDWNiWH8gtkYPRNU48A/Y+enfSds8N3+TSSxzzY+7IE816vobkh8ea
+         kMi+/ycrjPiiPd6V0u5BnZQkt48hIp0xZR4hKPihpbSnYmt54hzWAAytagOQYKHn8qbj
+         Ikk/CoTbQK+aFli+786wo2YiBLFDpSFgUHFfHHp+N0RMw63bpT39FDbteaj3yECMV5MH
+         I0RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725601969; x=1726206769;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQyUJ9NmXgjbubW/PtM4pxEpllQ88MMQGruKTuribv4=;
-        b=wd7/conIxRaKtwD/BXkGNJ9sxU9K5mxGt/yHx3t+Q4mN8gSf/8+q2CC0pk+OBfSvmU
-         XW/ZyF9dw6f7CEAnFX+op1r15nMorhZnH0PRL+hyOsZcn/97D0jlu0dh0Bpi1j2hHVsM
-         NMKtJTGgIQRmBrB/IE/+G42KtVKXW/5oLRE6ztBjz80DZpM3AYRd3ERPQ4+VyyitCdJ9
-         juqES7YhIfGMGyJZJ/7MqEP93ZsCQ+fD4sLrnytADJTJ05qf5gmqj0VZ9hfcW3jdaAK+
-         6q2VBrvT+yUftACUoibcodQRkUEvTUBe1l4vKaQ3J0rQMYEYnmRFJUgUkZ2zlCMwtIbZ
-         LS7Q==
-X-Gm-Message-State: AOJu0YytAfY7Iqsqmp/Dlk+BYbR6uOd9J0iOXxPtwAgv1jB9HH4WuMEB
-	YjNnLzllPtI2ou8QyUjyQ6TneN/IgeaisA1NxkVNVO1+7OfVH5ZCXJ04oPwTQa2thOYG5I0fco/
-	E
-X-Google-Smtp-Source: AGHT+IE7p63gmPCLnvKaf3jM6oY0sjwtGObn75k8DxZi6mP6+25DxjCH72EefKOsyhNCCgDyQxwRrg==
-X-Received: by 2002:a05:6a20:2d22:b0:1ce:f2f2:71df with SMTP id adf61e73a8af0-1cf1d0599ccmr1559662637.3.1725601968735;
-        Thu, 05 Sep 2024 22:52:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725603248; x=1726208048;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/gz2DTDYFcWkZtaamsL1Ksg5rPTpuMwBQtW5iRfsoQE=;
+        b=a3H8f05sjytSrpVBMOHFFd0PQWqTrL782kXCel17KQ2/gg6SzJSDrI/KSTS+2cCkOP
+         Vd1meM7wdJZ6uYfA96XIcJqqDPs1oYY5C8GJjm+pKtEAXAkXb/+jm6+fu4lSdQ/reAZM
+         xtmY6UiAAUo0kj8d6uVVEa9sMIWqTPImCHrKFXaYX0R8EnFYMZ6+1BqLa3n4GhyJrYnv
+         XSCq+4gGsDESJyUHaEI18Zs5R3VF0AO8z5PiNAeS1jU6PYSDXBErMYHXvjdjyqzu7LBT
+         WzDtzysPF4X9vYQ7tOkTqGKRZkrjQIkhrz6mn+ppkMbJjNEBREgHR59kOngfDb+nJmP9
+         0UvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWEk+z70j8IeKRTl0qtqkeWRgRLG+TFnEvZP+I+AqpnGJuTOJqDK9Q7f12xemKgPmxfo+gdaZtyHw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVpjM0GYIz7c9Rn95NIPIAmWmZnZuUmncW+Vx0NtiI7slFLsP2
+	5hXa81CM+1pgtubQKcd8QGiI1c7bGOAXeHgmdGXhoZJ/HZT9SM47osQDfqsI6kg=
+X-Google-Smtp-Source: AGHT+IHWGzm1aGaGO65+kelTFwC3pwYDkPl5A6OUnpU5ik9G44Sdbn90nWC3l7WB4gmF0230bNlwPw==
+X-Received: by 2002:a17:90a:470f:b0:2d8:7445:7ab2 with SMTP id 98e67ed59e1d1-2dad516fb0bmr2331868a91.20.1725603247595;
+        Thu, 05 Sep 2024 23:14:07 -0700 (PDT)
 Received: from localhost ([122.172.83.237])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dadbff3c6dsm613398a91.3.2024.09.05.22.52.47
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dadc0a694fsm658756a91.47.2024.09.05.23.14.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2024 22:52:48 -0700 (PDT)
-Date: Fri, 6 Sep 2024 11:22:46 +0530
+        Thu, 05 Sep 2024 23:14:07 -0700 (PDT)
+Date: Fri, 6 Sep 2024 11:44:05 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] OPP updates for 6.12
-Message-ID: <20240906055246.exjgfkrqesllh45z@vireshk-i7>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Dikshita Agarwal <quic_dikshita@quicinc.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <quic_kdybcio@quicinc.com>,
+	Nikunj Kela <nkela@quicinc.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Mikko Perttunen <mperttunen@nvidia.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	Ilia Lin <ilia.lin@kernel.org>,
+	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+	Vikash Garodia <quic_vgarodia@quicinc.com>,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] OPP/pmdomain: Fix the assignment of the required-devs
+Message-ID: <20240906061405.bz7y3erlz4v5fvvd@vireshk-i7>
+References: <20240902224815.78220-1-ulf.hansson@linaro.org>
+ <20240902224815.78220-3-ulf.hansson@linaro.org>
+ <20240903071638.bedt3gllqdacf43a@vireshk-i7>
+ <CAPDyKFoqEAHns0nrXT6dJR3sRd5VWidK_rzXGHzJiZtk_p0cKw@mail.gmail.com>
+ <20240903105321.suosbhkkkylfw4bv@vireshk-i7>
+ <CAPDyKFrh4VASFzMxEg3Q8SrhVbt1vH8QJM0rCdfxo+-L1+CN_g@mail.gmail.com>
+ <20240904064004.7hwfom4nrqzfkvlo@vireshk-i7>
+ <CAPDyKFqZiX=F4oNa3H+fUCO9cRzapxMaAphdx+JFXuR-Tgv3Cw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,38 +103,67 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CAPDyKFqZiX=F4oNa3H+fUCO9cRzapxMaAphdx+JFXuR-Tgv3Cw@mail.gmail.com>
 
-Hi Rafael,
+On 04-09-24, 14:57, Ulf Hansson wrote:
+> > Yeah, I missed that, it doesn't happen via DT but by platform code. I
+> > do see problems where situation would be a bit ambiguous. Your example
+> > with a minor change to your code:
+> >
+> >         opp_table_devA: opp-table-devA {
+> >                 compatible = "operating-points-v2";
+> >
+> >                 opp-devA-50 {
+> >                         opp-hz = /bits/ 64 <2500>;
+> >                         required-opps = <&opp_pd_50, &opp_pd_51>; //corresponds to pd_perf1 and pd_perf0 (in reverse order)
+> >                 };
+> >                ....
+> >
+> >         devA {
+> >                 compatible = "foo,bar";
+> >                 power-domains = <&pd_perf0>, <&pd_perf1>; //both
+> > pd_perf0 and pd_perf1 has OPP tables.
+> >                 power-domain-names = "perf0", "perf1";
+> >                 operating-points-v2 = <&opp_table_devA>;
+> >         };
+> >
+> > Here, I don't think there is a way for us to know which genpd does
+> > opp_pd_50 belongs to and to which one opp_pd_51 does.
+> >
+> > We solve this by sending clock_names and regulator_names in OPP
+> > config structure. That gives the ordering in which required_opps are
+> > present. The same needs to be done for genpd, and then genpd core
+> > would be able to attach the right genpd with right required opp.
+> 
+> No, we don't need this for gend as $subject patch is addressing this
+> problem too. Let me elaborate.
+> 
+> The OPP core holds the information about the devA's required-opps and
+> to what OPP table each required-opps belongs to
+> (opp_table->required_opp_tables[n]).
+> 
+> The genpd core holds the information about the allocated virtual
+> devices that it creates when it attached devA to its power-domains.
+> The virtual device(s) gets a genpd attached to it and that genpd also
+> has an OPP table associated with it (genpd->opp_table).
+> 
+> By asking the OPP core to walk through the array of allocated
+> required-opps for devA and to match it against a *one* of the virtual
+> devices' genpd->opp_table, we can figure out at what index we should
+> assign the virtual device to in the opp_table->required_devs[index].
 
-The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+How do we differentiate between two cases where the required-opps can
+be defined as either of these:
 
-  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+required-opps = <&opp_pd_50, &opp_pd_51>; //corresponds to pd_perf1 and pd_perf0 (in reverse order)
 
-are available in the Git repository at:
+OR
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.12
+required-opps = <&opp_pd_51, &opp_pd_50>; //corresponds to pd_perf0 and pd_perf1
 
-for you to fetch changes up to a84372012e9329daba8082efac98f3bc0b443aa2:
-
-  dt-bindings: opp: operating-points-v2-ti-cpu: Update maintainers (2024-09-04 20:43:43 +0530)
-
-----------------------------------------------------------------
-OPP Updates for 6.12
-
-- Update maintainers for operating-points-v2-ti-cpu file (Dhruva Gole).
-
-- Drop unnecessary of_match_ptr() for TI driver (Rob Herring).
-
-----------------------------------------------------------------
-Dhruva Gole (1):
-      dt-bindings: opp: operating-points-v2-ti-cpu: Update maintainers
-
-Rob Herring (Arm) (1):
-      opp: ti: Drop unnecessary of_match_ptr()
-
- Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml | 2 +-
- drivers/opp/ti-opp-supply.c                                           | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I thought this can't be fixed without some platform code telling how
+the DT is really configured, i.e. order of the power domains in the
+required-opps.
 
 -- 
 viresh
