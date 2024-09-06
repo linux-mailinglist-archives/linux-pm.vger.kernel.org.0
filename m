@@ -1,142 +1,152 @@
-Return-Path: <linux-pm+bounces-13744-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13745-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3E1A96E7FE
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 05:06:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BB8C96E81A
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 05:18:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E44C1F248E3
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 03:06:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C622AB2303F
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 03:18:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D83D22334;
-	Fri,  6 Sep 2024 03:06:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA3773B1BC;
+	Fri,  6 Sep 2024 03:18:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="P7LN+1Lu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AC11805A;
-	Fri,  6 Sep 2024 03:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB11736130
+	for <linux-pm@vger.kernel.org>; Fri,  6 Sep 2024 03:18:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725592008; cv=none; b=Ti9GcLWQAuLa54sz9SVJUNq29YNR1UhMZMfShH2s8KA6Bm8fLBC77Ekpjk8Nm6V8HEqzx1qxH5xK8d/eV9xflZCr7GlDqCC8Zx47YkT0OikI5DNjraVaVzQCcDKmuqRWMtlxnqOMDhFGcpjlO5ebu3fo5Ny/7VuwtzpD3ojXLkI=
+	t=1725592718; cv=none; b=SB4fV7VqlgTCMoKyrCpDgfnY4wBj6juXc9JEaKcy4j40cP2G/G+deY6r53cK4t5n6Bunj4U3XqarCn+uKuSQXjjOqdXsjeTHqj91GxlDla4j/scfKUtteUctDmrKN9ZDX/kDXZTep/UTH3opWd8WvacqehMYwBEQxLl1DGn4yrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725592008; c=relaxed/simple;
-	bh=b1tjpeyOK9mQG3APi9N8ElGJuuJJDMoUoJ6UWqqFFfE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=D4kkPGPpze0Guw1abdMJ+P3J4HEcn6Z1w0SJX/WcC/K2FyZLYT2rKVZBjni+6ScI0XVDmcf7CFsxCl037aMsZ3i3MmNETW2udBEoBkw3WNfNbQO+YRhR6xCyD5LAZ9+Gd4gG6SWRWGUGLrQcje5nuJdQenxKx0umUTL/wc3GoFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 0526b2866bfd11efa216b1d71e6e1362-20240906
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_UNTRUSTED, SA_UNFAMILIAR
-	SN_UNTRUSTED, SN_UNFAMILIAR, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
-	GTI_C_BU, AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
-	ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:b7458673-1f35-4cd1-824b-bb1b443d8abe,IP:10,
-	URL:0,TC:0,Content:0,EDM:-25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:-20
-X-CID-INFO: VERSION:1.1.38,REQID:b7458673-1f35-4cd1-824b-bb1b443d8abe,IP:10,UR
-	L:0,TC:0,Content:0,EDM:-25,RT:0,SF:-5,FILE:0,BULK:0,RULE:EDM_GE969F26,ACTI
-	ON:release,TS:-20
-X-CID-META: VersionHash:82c5f88,CLOUDID:2c00f2f9f017478b15ea7a3b45cd0dee,BulkI
-	D:240906110635Q3J4J70O,BulkQuantity:0,Recheck:0,SF:44|66|38|24|72|19|102,T
-	C:nil,Content:0,EDM:1,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,
-	COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: 0526b2866bfd11efa216b1d71e6e1362-20240906
-X-User: duanchenghao@kylinos.cn
-Received: from chenghao.. [(223.70.160.255)] by mailgw.kylinos.cn
-	(envelope-from <duanchenghao@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 747009131; Fri, 06 Sep 2024 11:06:32 +0800
-From: Duan Chenghao <duanchenghao@kylinos.cn>
-To: gregkh@linuxfoundation.org,
-	pavel@ucw.cz,
-	linux-pm@vger.kernel.org
-Cc: niko.mauno@vaisala.com,
-	stanley_chang@realtek.com,
-	tj@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	duanchenghao@kylinos.cn
-Subject: [PATCH] USB: Fix the issue of task recovery failure caused by USB status when S4 wakes up
-Date: Fri,  6 Sep 2024 11:05:48 +0800
-Message-Id: <20240906030548.845115-1-duanchenghao@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1725592718; c=relaxed/simple;
+	bh=Ifixl/lUYJadk0T5vvio2ek8q8koCwCnm7N/KSfhcWE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c3cpsNJ1OApOO8NHm43lAy24qrKsqYMUwcz8G+fmjuDhuqYBly1rwd+roaOYbhVB/LEqrw7KJjSM6nFa/86R6pDAq7Q/lC6k/hCR0ddM0yYK0uN96jvduJGwKwii1EIA0L5M30uHrOeucDh0SVgz9C8ioWM808wto8Vv0CqtkP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=P7LN+1Lu; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-53655b9bbcdso992133e87.2
+        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2024 20:18:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1725592715; x=1726197515; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pDvRjyy1T5DsSdRtv+m8fD20ZSlRWWhrpdZb23KAVTk=;
+        b=P7LN+1LuWxSCizcaLFZBvaqG4CIGEkJ1Z6AyiIHH4h8Nv2ToHYkgKlAp5LSEcggN/h
+         2rglfzlb+fpFiBUkWaDBmvRcV5N5CRj2pjkK6J/zQM3NjqzvDIYSJCkB1VWbH7m9OqkI
+         Bwxsxq9sC0sFvNmcg36ROQaB0fMPbVS9mHWL/La7vQ1ABIbysBppagYhuLULAHwp9Ez5
+         L8sSvgqkfpSGa27AGeTC+mVWK96G1O4uF80cK8O3cOWxYgzo/nRgc7fuqg36ethJvj1S
+         LrHNefRWwDKU6VtQXy6VKDgm9XTeCoGkg5CSUNM57e2l3Xx6JxP4+XtkvgrKqz4dWyDB
+         1a4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725592715; x=1726197515;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pDvRjyy1T5DsSdRtv+m8fD20ZSlRWWhrpdZb23KAVTk=;
+        b=QmkerDEw9XsF4w/+kPeGIxTV983v7dE3Fv+CAIpCbL21ADTgZfOedlAlZ3fvDqNOeA
+         DzMhA/oMfbJmNhOkULzvt5s9i+kxRC9vVXuPOj8+hmDoVfChS1i/zFguxNMmm45Z85QS
+         ZgSGS1QWNrpPKm49WR3h/8Qe5EuWXz7pp3qpbbnBjYAxbh9w04MErShRfUrRFQoWwXUj
+         o4naGyh7zdcUbXcfJzIoTRHsYFnZ+ZQv8VfyRhRoZDNByYZVJ6HiiOuFQE0P15xPqiPR
+         wWaNcWt002eQ/ZrcGrGCsVYTlPXw04+y0z9F4nTtBg/wYdjbpdDLsj1WWrY5M5pd8MyO
+         WWJA==
+X-Forwarded-Encrypted: i=1; AJvYcCXiNF55Ye037QGEvsT+j/AVH2eAtx+zkPeK5tUyuSgfPFP0cQaz1WiqddH48cOQGrCPjQLPXjupyw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx65agjGClfR1MOeRLgqlXt4tANKAoPj2UN3mu92z1CQC0ZpTBi
+	BlIWZ0gus5/ZQZiF4/ETKlj8HLKz7tdGodfpcqDcwsnCcP9Q6PZOjQr5Nze7Pbg=
+X-Google-Smtp-Source: AGHT+IGzhFXkem2JdXn1T6zzrKRCxyCynxhuA83gNnU2hU8RzpvNhtruuel61+ka1mwQI60PiIL/5g==
+X-Received: by 2002:a05:6512:3503:b0:530:daeb:c1d4 with SMTP id 2adb3069b0e04-536587a55d3mr510319e87.12.1725592714492;
+        Thu, 05 Sep 2024 20:18:34 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5356a354961sm479217e87.8.2024.09.05.20.18.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2024 20:18:34 -0700 (PDT)
+Date: Fri, 6 Sep 2024 06:18:32 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Jingyi Wang <quic_jingyw@quicinc.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
+	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 17/19] arm64: defconfig: enable clock controller,
+ interconnect and pinctrl for QCS8300
+Message-ID: <wzjv6xvthoz3z4fimxfc6gzm6ptepkuwlzjm6xy3klmtpr3bvf@k7yxdc7hryju>
+References: <20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com>
+ <20240904-qcs8300_initial_dtsi-v1-17-d0ea9afdc007@quicinc.com>
+ <851566fe-4802-41c7-bb35-d6d1e9cf9bdf@kernel.org>
+ <d5b13f14-ce66-496c-8182-aad840e0d5cb@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d5b13f14-ce66-496c-8182-aad840e0d5cb@quicinc.com>
 
-When a device is inserted into the USB port and an S4 wakeup is initiated,
-after the USB-hub initialization is completed, it will automatically enter suspend mode.
-Upon detecting a device on the USB port, it will proceed with resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state.
-During the S4 wakeup process, peripherals are put into suspend mode, followed by task recovery.
-However, upon detecting that the hcd is in the HCD_FLAG_WAKEUP_PENDING state,
-it will return an EBUSY status, causing the S4 suspend to fail and subsequent task recovery to not proceed.
+On Thu, Sep 05, 2024 at 12:54:35PM GMT, Jingyi Wang wrote:
+> 
+> 
+> On 9/4/2024 5:39 PM, Krzysztof Kozlowski wrote:
+> > On 04/09/2024 10:33, Jingyi Wang wrote:
+> >> Enable clock controller, interrconnect and pinctrl for QCS8300.
+> > 
+> > NXP QCS8300? What is QCS8300? Which products use it? That's a defconfig
+> > for entire kernel, not your Qualcomm one.
+> > 
+> Will describe it in more detail.
+> >> It needs to be built-in for UART to provide a console.
+> >>
+> >> Signed-off-by: Jingyi Wang <quic_jingyw@quicinc.com>
+> >> ---
+> >>  arch/arm64/configs/defconfig | 3 +++
+> >>  1 file changed, 3 insertions(+)
+> >>
+> >> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> >> index 81ca46e3ab4b..a9ba6b25a0ed 100644
+> >> --- a/arch/arm64/configs/defconfig
+> >> +++ b/arch/arm64/configs/defconfig
+> >> @@ -606,6 +606,7 @@ CONFIG_PINCTRL_MSM8996=y
+> >>  CONFIG_PINCTRL_MSM8998=y
+> >>  CONFIG_PINCTRL_QCM2290=y
+> >>  CONFIG_PINCTRL_QCS404=y
+> >> +CONFIG_PINCTRL_QCS8300=y
+> >>  CONFIG_PINCTRL_QDF2XXX=y
+> >>  CONFIG_PINCTRL_QDU1000=y
+> >>  CONFIG_PINCTRL_SA8775P=y
+> >> @@ -1317,6 +1318,7 @@ CONFIG_MSM_MMCC_8998=m
+> >>  CONFIG_QCM_GCC_2290=y
+> >>  CONFIG_QCM_DISPCC_2290=m
+> >>  CONFIG_QCS_GCC_404=y
+> >> +CONFIG_QCS_GCC_8300=y
+> >>  CONFIG_QDU_GCC_1000=y
+> >>  CONFIG_SC_CAMCC_8280XP=m
+> >>  CONFIG_SC_DISPCC_7280=m
+> >> @@ -1618,6 +1620,7 @@ CONFIG_INTERCONNECT_QCOM_MSM8996=y
+> >>  CONFIG_INTERCONNECT_QCOM_OSM_L3=m
+> >>  CONFIG_INTERCONNECT_QCOM_QCM2290=y
+> >>  CONFIG_INTERCONNECT_QCOM_QCS404=m
+> >> +CONFIG_INTERCONNECT_QCOM_QCS8300=y
+> > 
+> > Why this cannot be a module?
+> > 
+> > 
+> I think the commit-msg "It needs to be built-in for UART to provide a console." can
+> explain that, could you please help to share your insights on that?
 
-This patch makes two modifications in total:
-1. The set_bit and clean_bit operations for the HCD_FLAG_WAKEUP_PENDING flag of Hcd,
-which were previously split between the top half and bottom half of the interrupt,
-are now unified and executed solely in the bottom half of the interrupt.
-This prevents the bottom half tasks from being frozen during the S4 process,
-ensuring that the clean_bit process can proceed without interruption.
+Unless loading these modules from initramfs doesn't work, please use =m.
+The drivers that are enabled here are going to be enabled for everybody
+using arm64 defconfig, taking up memory on their platforms, etc.
 
-2. Add a condition to the set_bit operation for the hcd status HCD_FLAG_WAKEUP_PENDING.
-When the hcd status is HC_STATE_SUSPENDED, perform the setting of the aforementioned status bit.
-This prevents a subsequent set_bit from occurring after the clean_bit if the hcd is in the resuming process.
-
-Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
----
- drivers/usb/core/hcd.c | 1 -
- drivers/usb/core/hub.c | 3 +++
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 1ff7d901fede..a6bd0fbd82f4 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -2389,7 +2389,6 @@ void usb_hcd_resume_root_hub (struct usb_hcd *hcd)
- 	spin_lock_irqsave (&hcd_root_hub_lock, flags);
- 	if (hcd->rh_registered) {
- 		pm_wakeup_event(&hcd->self.root_hub->dev, 0);
--		set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
- 		queue_work(pm_wq, &hcd->wakeup_work);
- 	}
- 	spin_unlock_irqrestore (&hcd_root_hub_lock, flags);
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 4b93c0bd1d4b..7f847c4afc0d 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3835,11 +3835,14 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
- 
- int usb_remote_wakeup(struct usb_device *udev)
- {
-+	struct usb_hcd  *hcd = bus_to_hcd(udev->bus);
- 	int	status = 0;
- 
- 	usb_lock_device(udev);
- 	if (udev->state == USB_STATE_SUSPENDED) {
- 		dev_dbg(&udev->dev, "usb %sresume\n", "wakeup-");
-+		if (hcd->state == HC_STATE_SUSPENDED)
-+			set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
- 		status = usb_autoresume_device(udev);
- 		if (status == 0) {
- 			/* Let the drivers do their thing, then... */
 -- 
-2.34.1
-
+With best wishes
+Dmitry
 
