@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-13788-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13789-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39C1696F343
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 13:41:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90AA896F3A3
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 13:54:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A533C1F256D5
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:41:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF5D61C244D4
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2024 11:54:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 954051CBE9E;
-	Fri,  6 Sep 2024 11:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B490D1CBEB3;
+	Fri,  6 Sep 2024 11:52:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KMjP2dQk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UQ7kbW8K"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C344A15852B;
-	Fri,  6 Sep 2024 11:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D781CBEA9;
+	Fri,  6 Sep 2024 11:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725622871; cv=none; b=BsWJyBpR63WdUHXgZ5ccPhCxMRb1cZaiEMKBE4/Pvl/YPiCdeBAprGe/a00UsxFXAgl9lF2fpTDILDd3miwGq86SH9Hl16bU4m5pjvv7Ze0MAMuzAUbW5mODO9ef6/6drsdwPP4o/kv48/5e++dESVLsgU2uQonPt16abw+OvYU=
+	t=1725623532; cv=none; b=qOFbckwTQk6l5m7FPX3Nueag/gaL6a59jJxUchNfLpJs2tzFRA+92pYzw+CkSnvHCR849xUi9JmEznMQCClLHkMVUiXRXsq6lrT23Zglild0t6ei8DdZ7J+QChwIIHfuEAQIHEEzaA/OpN52ocHeHoCo8bBDOJPHWDxUiKQd8Zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725622871; c=relaxed/simple;
-	bh=8aSJOWgx+cnbeHGiojisRHuWB5MxjZipaJDi/7kDI2s=;
+	s=arc-20240116; t=1725623532; c=relaxed/simple;
+	bh=xhVoPzyULnkG1uyYHfiE5csn2+QavI48bPyqBnL8mjg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EpJuYR3v/wHJW10FILUMsy/ntPSztvd93AFrclPXcxl0VVC8CQKkz7D06sC7ASOtu7n5LaLA4H4caMykgRjbN9dkDtsT0KRg/5gPtxG4NFOiLelAMC0BvOpwpbrZTkSEieJHR+l584mwEjA+Oth6i6jKpx/cJnRE+jMB8DppBTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KMjP2dQk; arc=none smtp.client-ip=209.85.216.50
+	 In-Reply-To:Content-Type; b=YF+KoN4O6rkikAaf7MZrb9csGav0c+ohtwncAUZJimyoXQRm4LR9Pwk00O//SXQE4SsFD3VX900i1ukgm8bIKfwQcp+pMMLPtcBBrQjoj+esl9wZyClWxjsZuCT7qTpd3g2yZ+XA5hlaB5kXE2EB+/emK18g1gY5L+ydin++Z88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UQ7kbW8K; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2d885019558so1437632a91.2;
-        Fri, 06 Sep 2024 04:41:09 -0700 (PDT)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2053f6b8201so17130295ad.2;
+        Fri, 06 Sep 2024 04:52:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725622869; x=1726227669; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725623529; x=1726228329; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=nSE4UbmLPT89Bj18HP/jHu8JFDfgkM64ZTAP/BuhzBM=;
-        b=KMjP2dQkcEJotvFA7eX1clmdCx6AtBfcg+/M62WloehFiy/4sG0mtTT8Bfo8VdQF8y
-         Jo5vPw2glWUXXQdv0yjsixWSfAidtd+pABfxbyELANhtjqfak7ZCJjbjzwVEqKP3gvsR
-         0+jBXHp2cD/fDbOFs1FGeWd/X1Kk78T/UBNlqkK+vRqXyLVpa/4MCIde2JapF9aBFJAP
-         5ZNlMV93jYInJCz5CWtp/HzBJRVLAT65msLT/S0gdSE0rsXg6Zly6WK8obE3xYjLWm0f
-         CXz5/OhnZdXpF2cwVPy8GS4THF2p22dWgVWgYLb9p43Mz9uqTXJ24kfReih1NG61P+AX
-         YKOg==
+        bh=AbePJzZ4hGsbaWWD+/pwowfJhv2yPuQVjdwZ6CxA4rE=;
+        b=UQ7kbW8KK86a4GwtIrqOA369W+8s2YGoKudj6+nFpTWvEdvGmEBF5OwhzIRAiZk90Q
+         FNaWGMhdPs2/BpMmtDmIWQPesCvBONG9uAKx/z3NkDH6FOVn6uqtHJKYEn1kKcJXhqiB
+         Nxs8By4RjJ0Zt04PBg9jZ/njhyQtR1t5T6Atm5brfiTJLkHN3Jt/X1+zGg03apZrVCCj
+         8LS/q+9n5qxmGFOzQ780K6EPVY/bgajeE8vy7/g1Lwmuq/GrIfiJELJZMJCn2qmHQ/vp
+         hEyC7l+IdYmFdH+Wf5wNHyNlyMZLMuxnt127jPUKpy0EU/qpeTlGVFE0svkSbN5xhk1H
+         oIvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725622869; x=1726227669;
+        d=1e100.net; s=20230601; t=1725623529; x=1726228329;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nSE4UbmLPT89Bj18HP/jHu8JFDfgkM64ZTAP/BuhzBM=;
-        b=oRw2e4BsRlCJgh8oN8tLAbBnWFQ4IAAjcRAIf1NYAQLtKtH8imxLs0I/7pf4D5NwxL
-         zu7IByr1Ae0h6wheeSqSubmSmrkgCHOrZdL9oQOvwovnIGqb0OUubTMswot7vyxi9BR6
-         lD6/iaI4g4Jq+65/JDxioZkblFep9ZHviiFO0HCqZ36YCppwsDEUNtvfom7V+pjzfnuN
-         fQZnEE7AoV9ERNP48LEhpLT+Ejq4QPBs4jcVd/PI4wWoXClyHNvQE842QnRrJ26n9IaN
-         TdEgO27Xoa2us/+a8uw8lig11gp05ZPzOLtyee1eXS8yciP46LCTZHNsXJLXkjrdESjX
-         ZfDg==
-X-Forwarded-Encrypted: i=1; AJvYcCUQUaHTKNcrzUAWgKZQpdkPy2k/e350dJ65DKer0enmp/HwLJ9Em/QStNC7YBEb3/DOZKOccwJAeMc=@vger.kernel.org, AJvYcCVf7JT6z5uT02Gdm9ZEx4RsRvD4zrdiBcv6t4QnEqZpez1dSeO+AFlpwmfM1vnJQGrvP8/xRVdZNFH8@vger.kernel.org, AJvYcCVhd58Smb8QUNRD1jgFTlLILxflIh1nSIulLlovKcnES/PbbiJQxjX0Vn0HRTbAvVbs+8cEBLDsFuowbg==@vger.kernel.org, AJvYcCWJZswuOQjy8bCzLSPzpAzSbpxzbp4YZZcyph8FCKoTN82w4OapQv0rm+kxxp4Tmb4B3Z5jQz7rrtNuK0HVV0A=@vger.kernel.org, AJvYcCXJReZyKlMipucwmgRwbwqLQ1znIo2YR4er2erGhSyJZZdtk3Isc/OZeryqsuWw+x0R9lIwFKSSOLjV@vger.kernel.org, AJvYcCXKAeouMBmQXyUwnNpaoeypol4+fzh4uexutZfL3rzuQTDsPipn40/uGrZBKweqJw5OUUlNUplkOZY8bW4S@vger.kernel.org, AJvYcCXoLu+ddit1Axyif81iO5utgzLYxh72CPo1GLFnyquF+tnx5sC4/rxMfpDO62tdjbfFjsXzFmGcOSjK4PU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYQQnTtjLMHerk+mTERo548YQ+7Xw3YZjtWKVAClAXMmord8+m
-	TjEimPBIr0KbHnp6CA3sdzwIXVBhZ2nKTiXCBAwKkfbVUde+SUJo
-X-Google-Smtp-Source: AGHT+IG8+NKJVVHmU7dMZkptp8cuB6+8HX7Zzy6Yj7AiC4L2InjShBKLgIME0ueterTApmKVtZTUtg==
-X-Received: by 2002:a17:90b:4ace:b0:2c9:6a38:54e4 with SMTP id 98e67ed59e1d1-2dad51bfdd9mr2390340a91.41.1725622868829;
-        Fri, 06 Sep 2024 04:41:08 -0700 (PDT)
+        bh=AbePJzZ4hGsbaWWD+/pwowfJhv2yPuQVjdwZ6CxA4rE=;
+        b=r0+VLCnUOngYRLjUFNNgHL61EcCNOyQwYFwqMe4TUg7x7gMrqbS2QF2J3ohoGGXsw/
+         Bcf2rw1oLfMJrpSB/k2/2SpCwkNB8Za85P/nz3DFiLF+KOqKYbwXrWuf+ZBi+yp/1vVt
+         QxuH/pytkV/nWkuzJSidnOEKk+TXKmDypvqXowVy1V0r4VagwDdBMM1OmcZuwXlPwHyn
+         JWaE+zdUmjnmry4OMan40tnMT+X+mrLvge2KHuY76yIYCEg08SiWqLYQPsmLZaYMG791
+         7aPxj4hTgISLmX7L5R+c/SXeYR43T/GTX3xIVMyF6LgzfvpqkZPbmJiCqTsD8kyEs/JY
+         8vNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUB5OcB3FJfAXwmErhdtZsgf2GTIohJ+0qEhOfmbiByIM/+P6uY6HtIAUba791f/79qr39fYemVTuo5@vger.kernel.org, AJvYcCVC0KoqQf+x3NGwy5y4eCXxa8v9Nol4f/2MZE1p08LHD9gXLbZ/2ERGgNj5RYlma7vmPBTUMHMS4Mnk@vger.kernel.org, AJvYcCVVzL80DMps3NWnRkWu2Oz1GaRI2qmnpEyZkG5wRzVlb6IHwPFP/6rhstoffPPwQxAebIV0atk+YlJdl7g=@vger.kernel.org, AJvYcCWHHvxoeve3zuI5tMQfvxwvA3RjA5ybw8gDXjEuQbxruNBdyL3ucGLDoSuvTc8TbAN7siyAl/ocVKQ=@vger.kernel.org, AJvYcCWTc6WQ7Q8e6WPkBmrGzEvT+MrmUo5jAC2KhzoyseUlEnP24wDoeT1WHh7xjW48rA+tozzArbZ7WZC7Gg==@vger.kernel.org, AJvYcCWqEKScn4PZTgKZ95BQ+g/Bp9oqSuWlmnV03zPZcxS1q8AV8mwU3TI8Y8pxQlLaJk2QBhwuPFNzD0/OAK6aG3g=@vger.kernel.org, AJvYcCWwAsc91Ud/9lfjQFmfz6rrI2aCs7pWTEy7OBuTaaUDGvPpgCs3BWjy83cAmPyaSeqyazuBn4f+Xfr0OybL@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRkNqk+zhUlivwK2kY01K3Vv4IeggQalt5YLBtwjfTMUE3rRYJ
+	AlgpeCRCP1ing6rdeB/vfDUzm51CdxCseA1qVFp5jGDNFQ39pnO5
+X-Google-Smtp-Source: AGHT+IH2ACJaY497j/cAt58YuWZEVIFDwipHir1KSNdb3rlbkQHRrJGC/0C5GCJko/BHyw7CX/ljVg==
+X-Received: by 2002:a17:902:f610:b0:205:eec:5755 with SMTP id d9443c01a7336-206f0526051mr33079225ad.23.1725623528999;
+        Fri, 06 Sep 2024 04:52:08 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dadbfeebaasm1334056a91.10.2024.09.06.04.41.06
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-206aea37f1dsm41834555ad.125.2024.09.06.04.52.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Sep 2024 04:41:07 -0700 (PDT)
+        Fri, 06 Sep 2024 04:52:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a33633be-800c-4ca0-9d1e-f190e23384d5@roeck-us.net>
-Date: Fri, 6 Sep 2024 04:41:05 -0700
+Message-ID: <8e2cecbe-aa48-4e84-93cc-8c028c5e649e@roeck-us.net>
+Date: Fri, 6 Sep 2024 04:52:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,8 +78,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/9] hwmon: Add support for Photonicat PMU board
- temperature sensor
+Subject: Re: [PATCH 3/9] watchdog: Add Photonicat PMU watchdog driver
 To: Junhao Xie <bigfoot@classfun.cn>, devicetree@vger.kernel.org,
  linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -93,7 +92,7 @@ Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, Heiko Stuebner <heiko@sntech.de>,
  Chukun Pan <amadeus@jmu.edu.cn>
 References: <20240906093630.2428329-1-bigfoot@classfun.cn>
- <20240906093630.2428329-7-bigfoot@classfun.cn>
+ <20240906093630.2428329-4-bigfoot@classfun.cn>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -139,40 +138,210 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240906093630.2428329-7-bigfoot@classfun.cn>
+In-Reply-To: <20240906093630.2428329-4-bigfoot@classfun.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 9/6/24 02:36, Junhao Xie wrote:
-> Photonicat PMU MCU will send status reports regularly,
-> including board temperature.
+> This driver provides access to Photonicat PMU watchdog functionality.
 > 
-
-This is not an appropriate description.
-
 > Signed-off-by: Junhao Xie <bigfoot@classfun.cn>
 > ---
->   drivers/hwmon/Kconfig            |  10 +++
->   drivers/hwmon/Makefile           |   1 +
->   drivers/hwmon/photonicat-hwmon.c | 129 +++++++++++++++++++++++++++++++
+>   drivers/watchdog/Kconfig          |  12 +++
+>   drivers/watchdog/Makefile         |   1 +
+>   drivers/watchdog/photonicat-wdt.c | 124 ++++++++++++++++++++++++++++++
+>   3 files changed, 137 insertions(+)
+>   create mode 100644 drivers/watchdog/photonicat-wdt.c
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index bae1d97cce89..4094216a1c09 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -300,6 +300,18 @@ config MENZ069_WATCHDOG
+>   	  This driver can also be built as a module. If so the module
+>   	  will be called menz069_wdt.
+>   
+> +config PHOTONICAT_PMU_WDT
+> +	tristate "Photonicat PMU Watchdog"
+> +	depends on MFD_PHOTONICAT_PMU
+> +	select WATCHDOG_CORE
+> +	help
+> +	  This driver provides access to Photonicat PMU watchdog functionality.
+> +
+> +	  Say Y here to include support for the Photonicat PMU Watchdog.
+> +
+> +	  This driver can also be built as a module. If so the module
+> +	  will be called photonicat-wdt.
+> +
+>   config WDAT_WDT
+>   	tristate "ACPI Watchdog Action Table (WDAT)"
+>   	depends on ACPI
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index b51030f035a6..14375af84039 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -234,6 +234,7 @@ obj-$(CONFIG_ZIIRAVE_WATCHDOG) += ziirave_wdt.o
+>   obj-$(CONFIG_SOFT_WATCHDOG) += softdog.o
+>   obj-$(CONFIG_MENF21BMC_WATCHDOG) += menf21bmc_wdt.o
+>   obj-$(CONFIG_MENZ069_WATCHDOG) += menz69_wdt.o
+> +obj-$(CONFIG_PHOTONICAT_PMU_WDT) += photonicat-wdt.o
+>   obj-$(CONFIG_RAVE_SP_WATCHDOG) += rave-sp-wdt.o
+>   obj-$(CONFIG_STPMIC1_WATCHDOG) += stpmic1_wdt.o
+>   obj-$(CONFIG_SL28CPLD_WATCHDOG) += sl28cpld_wdt.o
+> diff --git a/drivers/watchdog/photonicat-wdt.c b/drivers/watchdog/photonicat-wdt.c
+> new file mode 100644
+> index 000000000000..1e758fcfb49f
+> --- /dev/null
+> +++ b/drivers/watchdog/photonicat-wdt.c
+> @@ -0,0 +1,124 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2024 Junhao Xie <bigfoot@classfun.cn>
+> + */
+> +
+> +#include <linux/mfd/photonicat-pmu.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/watchdog.h>
+> +
+> +struct pcat_watchdog {
+> +	struct device *dev;
 
-Documentation missing.
+I don't see what this is used for.
 
-> +static int pcat_hwmon_probe(struct platform_device *pdev)
+> +	struct pcat_pmu *pmu;
+> +	struct watchdog_device wdd;
+> +	u8 timeout;
+> +	bool started;
+> +};
+> +
+> +static const struct watchdog_info pcat_wdt_info = {
+> +	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+> +	.identity = "Photonicat PMU Watchdog",
+> +};
+> +
+> +static int pcat_wdt_setup(struct pcat_watchdog *data, int timeout)
 > +{
-...
-> +	dev_info(dev, "Board Temprature: %d degress C\n", hwmon->temperature);
+> +	int ret;
+> +	u8 time = 0;
+
+Unnecessary initialization.
+
+> +	u8 times[3] = { 60, 60, 0 };
 > +
-
-Unacceptable (misspelled) noise.
-
-> +	hwmon->hwmon = devm_hwmon_device_register_with_groups(
-> +		dev, label, hwmon, pcat_pmu_temp_groups);
+> +	time = MIN(255, MAX(0, timeout));
 > +
+> +	ret = pcat_pmu_write_data(data->pmu, PCAT_CMD_WATCHDOG_TIMEOUT_SET,
+> +				  times, sizeof(times));
 
-Please use the with_info API. I am not going to review the code because
-it will need to be completely rewritten.
+Where does this actually send the timeout to the chip ?
 
-Guenter
+> +	if (!ret)
+> +		data->started = timeout != 0;
+> +
+> +	return ret;
+> +}
+> +
+> +static int pcat_wdt_start(struct watchdog_device *wdev)
+> +{
+> +	struct pcat_watchdog *data = watchdog_get_drvdata(wdev);
+> +
+> +	return pcat_wdt_setup(data, data->timeout);
+> +}
+> +
+> +static int pcat_wdt_stop(struct watchdog_device *wdev)
+> +{
+> +	struct pcat_watchdog *data = watchdog_get_drvdata(wdev);
+> +
+> +	return pcat_wdt_setup(data, 0);
+> +}
+> +
+> +static int pcat_wdt_ping(struct watchdog_device *wdev)
+> +{
+> +	struct pcat_watchdog *data = watchdog_get_drvdata(wdev);
+> +
+> +	return pcat_pmu_send(data->pmu, PCAT_CMD_HEARTBEAT, NULL, 0);
+> +}
+> +
+> +static int pcat_wdt_set_timeout(struct watchdog_device *wdev, unsigned int val)
+> +{
+> +	int ret = 0;
+> +	struct pcat_watchdog *data = watchdog_get_drvdata(wdev);
+> +
+> +	data->timeout = val;
+
+This needs to store 'timeout' in wdev. Storing it locally is unnecessary.
+
+> +	if (data->started)
+> +		ret = pcat_wdt_setup(data, data->timeout);
+
+This is misleading because it would permit setting the timeout to
+0 when the watchdog isn't running, and then when the watchdog is started
+it would not really start it. The code should not use a local "started"
+variable but call watchdog_active(). It should also not accept "0"
+as a valid timeout.
+
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct watchdog_ops pcat_wdt_ops = {
+> +	.owner = THIS_MODULE,
+> +	.start = pcat_wdt_start,
+> +	.stop = pcat_wdt_stop,
+> +	.ping = pcat_wdt_ping,
+> +	.set_timeout = pcat_wdt_set_timeout,
+> +};
+> +
+> +static int pcat_watchdog_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct pcat_watchdog *watchdog;
+> +
+> +	watchdog = devm_kzalloc(dev, sizeof(*watchdog), GFP_KERNEL);
+> +	if (!watchdog)
+> +		return -ENOMEM;
+> +
+> +	watchdog->dev = dev;
+> +	watchdog->pmu = dev_get_drvdata(dev->parent);
+> +	watchdog->wdd.info = &pcat_wdt_info;
+> +	watchdog->wdd.ops = &pcat_wdt_ops;
+> +	watchdog->wdd.timeout = 60;
+> +	watchdog->wdd.max_timeout = U8_MAX;
+> +	watchdog->wdd.min_timeout = 0;
+
+This effectively lets the user ... kind of ... stop the watchdog
+by setting the timeout to 0. This is not acceptable.
+
+> +	watchdog->wdd.parent = dev;
+> +
+> +	watchdog_stop_on_reboot(&watchdog->wdd);
+> +	watchdog_set_drvdata(&watchdog->wdd, watchdog);
+> +	platform_set_drvdata(pdev, watchdog);
+> +
+No watchdog_init_timeout() ?
+
+> +	return devm_watchdog_register_device(dev, &watchdog->wdd);
+> +}
+> +
+> +static const struct of_device_id pcat_watchdog_dt_ids[] = {
+> +	{ .compatible = "ariaboard,photonicat-pmu-watchdog", },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, pcat_watchdog_dt_ids);
+> +
+> +static struct platform_driver pcat_watchdog_driver = {
+> +	.driver = {
+> +		.name = "photonicat-watchdog",
+> +		.of_match_table = pcat_watchdog_dt_ids,
+> +	},
+> +	.probe = pcat_watchdog_probe,
+> +};
+> +module_platform_driver(pcat_watchdog_driver);
+> +
+> +MODULE_AUTHOR("Junhao Xie <bigfoot@classfun.cn>");
+> +MODULE_DESCRIPTION("Photonicat PMU watchdog");
+> +MODULE_LICENSE("GPL");
 
 
