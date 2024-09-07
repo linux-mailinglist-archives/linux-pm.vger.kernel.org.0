@@ -1,146 +1,264 @@
-Return-Path: <linux-pm+bounces-13837-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13838-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C168970265
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 15:30:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B1CB9702B2
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 16:28:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9F4D28400E
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 13:30:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 973031C21A64
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 14:28:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D7EF15B57C;
-	Sat,  7 Sep 2024 13:30:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F42515DBB6;
+	Sat,  7 Sep 2024 14:28:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D3oiQbe2"
+	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="ED2ZPh7x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5B7947A;
-	Sat,  7 Sep 2024 13:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from classfun.cn (unknown [129.204.178.38])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D66F81E4AE;
+	Sat,  7 Sep 2024 14:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.204.178.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725715822; cv=none; b=gCeDPSv59RLStylUgBb/486hj3T3ymuKM8zEDaSvdyZdO1+fjsUHd88kDTobugibZMvUrzSooRAz7McU/2y8zO3iu+vjRy3fAlLEcvpB+NfHP2JduR9CxA4bMvx8j5VQU8fN6XTA89sgIT9Qsnyq9QVgwpvC88JDqY/LOiUzX1U=
+	t=1725719284; cv=none; b=SB6EZTKDQR1Q/VRDugY17un2mK+vEMlgNzjXY2T8k6ciCWFS5Xft0EUOB4d0vE8YbVHSg/5h7bc7BL0WMm9JG3FgCptvYBs/lb+o0qi2ONc+Mdsc2SCwepDaxUBrk/N7KZA1EwjOiKEWtch1UReDzZxK3Ugo3nqmPWjP+yZ4RZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725715822; c=relaxed/simple;
-	bh=aY18vlW/L4kb/gRa6VcsduMXnD5MdEnK7MC9k8KzS2M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a0hG/OwP+hUEqMe9LjxPRG1q+hQrhfPEH1vj7LWGhsPgCwPTVrGFTO+GP8CSqo3ah3P9vrDYzsoccjdzolTf/W4dCTJIUYKDHccGc8AhjTF/Ml3Z+lAiLhC/Fxdcff++DwqqnNXI/5tH7StRgpB+LSVLVBu2KxfMD7acIsFJPPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D3oiQbe2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87618C4CEC2;
-	Sat,  7 Sep 2024 13:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725715821;
-	bh=aY18vlW/L4kb/gRa6VcsduMXnD5MdEnK7MC9k8KzS2M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=D3oiQbe2QgRd3H0U4NZ1b7p7SZtUJeQAxP7E53oY4EVY44Q/yf1BHh3URlksXF8h2
-	 h27FzkWsjkaDXQMfqd6qISAMjG1VzPU8XO6cwsnAD4sCPhPj69SgGKFNAQrHPDVbFx
-	 azd73H7wzlJqUuDDNhpGu3CPlGy9XyMNJBKASgKmJ+LBKXl1cGXLUtaayMm4h9Iukk
-	 JrjdMwO/xcCWdmg+44vy6Bj9oPdq+hidsQv2KAiUDMW33rGxvYdYbbfWnP0+mCuj4D
-	 xgXwUx4g+FVhGY5gTPDknXab7iXRLbHSw/QGLYg7dlScYxNe53hPWUk6K8Q+6LEV8f
-	 a/hHcK3/mcsCg==
-Date: Sat, 7 Sep 2024 14:30:11 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Chris Morgan <macroalpha82@gmail.com>
-Cc: linux-sunxi@lists.linux.dev, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-iio@vger.kernel.org, quentin.schulz@free-electrons.com,
- mripard@kernel.org, tgamblin@baylibre.com, aidanmacdonald.0x0@gmail.com,
- u.kleine-koenig@pengutronix.de, lee@kernel.org, samuel@sholland.org,
- jernej.skrabec@gmail.com, sre@kernel.org, wens@csie.org,
- conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, lars@metafoo.de,
- jonathan.cameron@huawei.com, Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH V4 00/15] Add Battery and USB Supply for AXP717
-Message-ID: <20240907143011.56ab068f@jic23-huawei>
-In-Reply-To: <20240821215456.962564-1-macroalpha82@gmail.com>
-References: <20240821215456.962564-1-macroalpha82@gmail.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1725719284; c=relaxed/simple;
+	bh=e5dX7QksYM5QgGDSKhEO2HZhpOjniPBi8ARplLhfpfM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=DsvfzwlBpLouHYu6+oR8m5W69iqYiJcFSVZ1jIxwQ07GgXttwPvUDsLPGsnsKkCFrznY9pX4NxiL6TnI0WCvk3/4K36qli6RlvuDIVotClH06StRhizca5RMoY2fmsCljHdIkyshvlaZPCtUIZ+eIPgotwJtgTV+LG8ylA96kCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=ED2ZPh7x; arc=none smtp.client-ip=129.204.178.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=classfun.cn
+Received: from [192.168.0.160] (unknown [14.155.100.110])
+	(Authenticated sender: bigfoot)
+	by classfun.cn (Postfix) with ESMTPSA id 81D3378A01;
+	Sat,  7 Sep 2024 22:27:41 +0800 (CST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn 81D3378A01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=classfun.cn;
+	s=default; t=1725719267;
+	bh=pXuvREj+1sdfcnTVSFVdtNeed2YvMG01TbfaFiPG+Ec=;
+	h=Date:Subject:To:References:From:Cc:In-Reply-To:From;
+	b=ED2ZPh7xAnWkoiSr/Tx8HAW02FcKkQ5sX5Hsn5+y1d+Foo+MQVS+UPFczjyTjIme1
+	 C+uR0opV7ZQ7daW9p3cPJOC9zu6rh8zXawTRqAsFCqXLFycy12FcpcFDx6nLEpfQ4F
+	 AV+vPQdx0m2xlgozPrPYOEeFtJo3lPi7v//ruhrQ=
+Message-ID: <cd0b36f4-f31d-4a65-868c-72b3c7021f14@classfun.cn>
+Date: Sat, 7 Sep 2024 22:27:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 8/9] dt-bindings: Add documentation for Photonicat PMU
+To: Krzysztof Kozlowski <krzk@kernel.org>
+References: <20240906093630.2428329-1-bigfoot@classfun.cn>
+ <20240906093630.2428329-9-bigfoot@classfun.cn>
+ <dbc6af20-886a-46fb-a16c-dbcb5861478c@kernel.org>
+Content-Language: en-US
+From: Junhao Xie <bigfoot@classfun.cn>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ "\"Conor Dooley,\"," <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Heiko Stuebner <heiko@sntech.de>,
+ Chukun Pan <amadeus@jmu.edu.cn>, Junhao Xie <bigfoot@classfun.cn>
+In-Reply-To: <dbc6af20-886a-46fb-a16c-dbcb5861478c@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Wed, 21 Aug 2024 16:54:41 -0500
-Chris Morgan <macroalpha82@gmail.com> wrote:
-
-> From: Chris Morgan <macromorgan@hotmail.com>
+On 2024/9/6 17:51, Krzysztof Kozlowski wrote:
+> On 06/09/2024 11:36, Junhao Xie wrote:
+>> Add device tree binding documentation for Photonicat PMU MFD, LEDs,
+>> hardware monitor, power off, power supply, real-time clock watchdog.
+[...]
+>> diff --git a/Documentation/devicetree/bindings/hwmon/ariaboard,photonicat-pmu-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/ariaboard,photonicat-pmu-hwmon.yaml
+[...]>> +  label:
+>> +    $ref: /schemas/types.yaml#/definitions/string
+>> +    description: Label for hwmon device
 > 
-> Add support for monitoring the USB charger and battery charger on the
-> AXP717 PMIC. This required some driver refactoring of the axp20x USB
-> and battery charger as the AXP717 is somewhat different but can still
-> benefit from some common elements.
+> No resources here. Fold it into parent binding.
 > 
-> Note that as of now the charging current now value may be incorrect as
-> the scale and offsets were not documented in the datasheet. I suspect
-> the scale is 1 and the offset is somewhere around 450mA though.
-Applied 1, 8 and 12 to the IIO togreg branch.
-
-I was waiting for some mess related to my tree to pan out upstream.
-Unfortunately that leaves us rather tight on timing for the coming
-merge window but hopefully Greg will take a last minute pull request
-for char-misc.
-
-Jonathan
-
+>> +
+>> +required:
+>> +  - compatible
+>> +  - label
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +      serial {
+>> +          mcu {
+>> +              compatible = "ariaboard,photonicat-pmu";
 > 
-> Changes from V3:
->  - Remove accidental AXP717_BOOST regulator in header file, as it is
->    not part of this patch series.
->  - Add an absolute min/max constraint for input-current-limit-microamp
->    in device tree documentation.
->  - Correct an issue found by kernel test robot <lkp@intel.com> by
->    explicitly adding linux/bitfield.h include. Details here:
->    https://lore.kernel.org/oe-kbuild-all/202408201228.Hee4eSYl-lkp@intel.com/
+> Drop, no need.
 > 
-> Changes from V2:
->  - Added constraints for input-current-limit-microamp constraints for
->    x-powers,axp20x-usb-power-supply.yaml.
->  - Used FIELD_GET() and removed unnecessary -EINVAL per comments from
->    Jonathan Cameron.
+>> +
 > 
-> Changes from V1:
->  - Refactored against mainline to remove BOOST pre-requisite.
->  - Corrected commit subjects for DT bindings.
->  - Split refactoring and AXP717 support into different patches.
->  - Added IRQ for VBUS over voltage. There appears to be a bug
->    with the VBUS fault IRQ because it is assigned IRQ num 0.
->  - Corrected battery driver to report POWER_SUPPLY_PROP_VOLTAGE_MIN
->    and POWER_SUPPLY_PROP_VOLTAGE_MAX instead of *_DESIGN.
+> Messed indentation.
 > 
-> 
-> Chris Morgan (15):
->   iio: adc: axp20x_adc: Add adc_en1 and adc_en2 to axp_data
->   power: supply: axp20x_battery: Remove design from min and max voltage
->   power: supply: axp20x_battery: Make iio and battery config per device
->   power: supply: axp20x_usb_power: Make VBUS and IIO config per device
->   dt-bindings: power: supply: axp20x: Add input-current-limit-microamp
->   power: supply: axp20x_usb_power: add input-current-limit-microamp
->   dt-bindings: power: supply: axp20x-battery: Add monitored-battery
->   dt-bindings: iio: adc: Add AXP717 compatible
->   dt-bindings: power: supply: axp20x: Add AXP717 compatible
->   dt-bindings: power: supply: axp20x: Add AXP717 compatible
->   mfd: axp20x: Add ADC, BAT, and USB cells for AXP717
->   iio: adc: axp20x_adc: add support for AXP717 ADC
->   power: supply: axp20x_usb_power: Add support for AXP717
->   power: supply: axp20x_battery: add support for AXP717
->   arm64: dts: allwinner: h700: Add charger for Anbernic RG35XX
-> 
->  .../bindings/iio/adc/x-powers,axp209-adc.yaml |  12 +
->  .../x-powers,axp20x-battery-power-supply.yaml |   7 +
->  .../x-powers,axp20x-usb-power-supply.yaml     |  72 ++-
->  .../sun50i-h700-anbernic-rg35xx-2024.dts      |  21 +
->  drivers/iio/adc/axp20x_adc.c                  | 182 +++++-
->  drivers/mfd/axp20x.c                          |  25 +-
->  drivers/power/supply/axp20x_battery.c         | 591 ++++++++++++++++--
->  drivers/power/supply/axp20x_usb_power.c       | 353 ++++++++++-
->  include/linux/mfd/axp20x.h                    |  26 +
->  9 files changed, 1188 insertions(+), 101 deletions(-)
+> Entire example is redundant. Merge it to parent binding.
 > 
 
+I will fix them.
+
+> 
+[...]
+>> diff --git a/Documentation/devicetree/bindings/leds/ariaboard,photonicat-pmu-leds.yaml b/Documentation/devicetree/bindings/leds/ariaboard,photonicat-pmu-leds.yaml
+[...]
+>> +properties:
+>> +  compatible:
+>> +    const: ariaboard,photonicat-pmu-leds
+> 
+> Your compatibles per device do not make much sense. You organized
+> bindings per drivers, but that's not what we want.
+> 
+>> +
+>> +  label: true
+> 
+> Drop
+
+I will drop it.
+
+> 
+[...]
+>> diff --git a/Documentation/devicetree/bindings/mfd/ariaboard,photonicat-pmu.yaml b/Documentation/devicetree/bindings/mfd/ariaboard,photonicat-pmu.yaml
+[...]
+>> +description:
+>> +  Driver for the Power Management MCU in the Ariaboard Photonicat,
+> 
+> Bindings are for hardware, not drivers. Drop it everywhere and explain
+> hardware.
+> 
+
+I will edit it.
+Maybe the following looks better?
+  The Power Management MCU in Ariaboard Photonicat, which
+  provides battery and charger power supply real-time clock,
+  watchdog, hardware shutdown, status LEDs.
+
+>> +  which provides battery and charger power supply, real-time clock,
+>> +  watchdog, hardware shutdown.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: ariaboard,photonicat-pmu
+> 
+> That's the only compatible you should have. Drop all others.
+> 
+>> +
+[...]
+>> +  local-address:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    minimum: 1
+>> +    maximum: 127
+>> +    default: 1
+>> +    description: CPU board address
+> 
+> Address of what? In which notation? It's part of this hardware.
+> 
+
+Photonicat's MCU protocol documentation says it supports multiple hosts.
+But Photonicat only uses one.
+Is it necessary to remove local-address and use a fixed address?
+
+> 
+>> +
+>> +  remote-address:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    minimum: 1
+>> +    maximum: 127
+>> +    default: 1
+>> +    description: PMU board address
+> 
+> Eee, no. Your board knows its address. You do not have to tell it.
+
+I will remove remote-address.
+
+> 
+[...]
+>> +
+>> +patternProperties:
+>> +  '^leds-(status)':
+> 
+> That's not a pattern.
+> 
+
+I originally wanted to keep it for extensions, but it didn't seem like a good idea.
+I will move it to properties.
+
+>> +    $ref: /schemas/leds/ariaboard,photonicat-pmu-leds.yaml
+>> +
+>> +  '^supply-(battery|charger)$':
+>> +    $ref: /schemas/power/supply/ariaboard,photonicat-pmu-supply.yaml
+> 
+> Why two nodes?
+> 
+>> +
+>> +required:
+>> +  - compatible
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +      serial {
+>> +          photonicat-pmu {
+>> +              compatible = "ariaboard,photonicat-pmu";
+>> +              current-speed = <115200>;
+>> +              local-address = <1>;
+>> +              remote-address = <1>;
+>> +
+>> +              supply-battery {
+>> +                  compatible = "ariaboard,photonicat-pmu-supply";
+>> +                  label = "battery";
+> 
+> Nope, drop label.
+> 
+>> +                  type = "battery";
+> 
+> No, there is no type property.
+
+There are two supplies here, one is the charger and the other is the battery.
+Is it necessary to change to use different compatible ones like
+ariaboard,photonicat-pmu-battery and ariaboard,photonicat-pmu-charger?
+
+> 
+> Missing monitored battery.
+> 
+
+I will add it.
+
+>> +              };
+>> +
+[...]
+>> +
+>> +              watchdog {
+>> +                  compatible = "ariaboard,photonicat-pmu-watchdog";
+>> +              };
+> 
+> These are seriously redundant and useless nodes.  There is nothing
+> beneficial from the nodes above - they are all empty, without resources.
+> Drop all of them.
+
+How should I describe these devices? Using mfd_cell?
+
+> 
+> I finish the review here.
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Thanks for your review, I will fix all problems in next version!
+
+Best regards,
+Junhao
 
