@@ -1,48 +1,55 @@
-Return-Path: <linux-pm+bounces-13835-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13836-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C1A79701D6
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 13:12:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F615970213
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 13:52:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13720B223CD
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 11:12:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 434341C21A3D
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 11:52:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B0ED15697A;
-	Sat,  7 Sep 2024 11:12:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E96A15957E;
+	Sat,  7 Sep 2024 11:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ClD0CZFp"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="YrkLgYyJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9B0208D7;
-	Sat,  7 Sep 2024 11:12:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3329413C836;
+	Sat,  7 Sep 2024 11:52:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725707525; cv=none; b=FxJs74kHaOvG6s8IYiGjBuSCvmr+5nOY+v6fJeIZPu2Kpn0aaFH13elfEnExZTuHC6PnN0Lps8oQ9k8pxvTuwGzQ3y+LN86xKJvqfCr/XAhoQHluMsXSIl853iXz2nePf8LYBmNUQAik9KRDVjGs6KIXOR22ApNh39Nr++6AWDA=
+	t=1725709962; cv=none; b=WZVK806sNdkbiKZRPKV8JnfwF59HIc0CCHQcO/FnCthilUjHk2IAvTVUtlYFeVuhUXP4Ar1mcxOja5i3VCpi1IgYNnPKb9o9Ymf2JJhNyHH46KFdb1Ux6uMHDjWV4WN8n/XZ59fFQWZ7XekcbnIjHgqSqS7f5boEGmy8E01D8Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725707525; c=relaxed/simple;
-	bh=QvBVFrKXGrUWJ16669Wg44zvoZ8Aj8CvQjlf9T/K/+g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jlpHDi/d1mymvD7AhUP58r/sxzujLanoUm1y5utfEoGYTdtysRhmqRbdfDCg+bLmp/txftc6kcIDvLiwLe+3hg6i7yvdqgEqqkarlEVlFeDNQmp7y90wB73B63A9U00aE70zm1bTkvysEmIZr+CbfvG9cgs7I+hdWB5ZbSv7Ah0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ClD0CZFp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FEF8C4CEC2;
-	Sat,  7 Sep 2024 11:12:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725707524;
-	bh=QvBVFrKXGrUWJ16669Wg44zvoZ8Aj8CvQjlf9T/K/+g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ClD0CZFpr1AI59up6sEyV3PHD5L7RuaALUc8ijw1ufHawahobLEJx1IpitzzHbfX5
-	 1jf2rKsrvBA8thggMxMG2LVHYPtATrhC3YKVyFqvr8n6ioloJzW2RnK+x0kf+mSwZf
-	 vlcCXrkHwMJJnG0Awxuldk/S8FlO6Rq1OZdCx5FdZaN4HV38DtclA3B9hYNdftSV6S
-	 Ts91Wdu8wlLNcY8WIHclAQixtTVypRGARwwrQmSeuZAHZemIG2MGfvw8+gj/DFz/os
-	 spuc2GCn5GXO5O0GRBVUXtnRm7A67/ElJe6IrB9itDHrWvXHdT5RVS0hJzXZJpVWbq
-	 sEjZMtLx17FiQ==
-Message-ID: <5bf9a142-05d9-4e02-bca0-f988726e2873@kernel.org>
-Date: Sat, 7 Sep 2024 13:11:57 +0200
+	s=arc-20240116; t=1725709962; c=relaxed/simple;
+	bh=HFuhqy0gtb4Xan4YS+EvK4BM8+e2aLE5NLMGAJBRILw=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=c15OPFcAmtVt+ahkbA92rI2pprHgPqNy7NiBDR0X4fDcys5Cc+F3SkidhjsMdM72QRzjlm4LH8p+SuKxYIpkKgyE7hKhCw5d2PorUeWl5lU/UIgf0xUrig6PT8crai3z52G+pUwRi+5Hbacq/MXeQi92fnosY0iI6hL1ijWCpPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=YrkLgYyJ; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1725709952; x=1726314752; i=markus.elfring@web.de;
+	bh=Y7AIzcXVfL6c8QeOgxRyvPUNXsOrybDoX3YWh2FCfT0=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=YrkLgYyJprAxivK/2sF5cNwGNjJ7n6MLYvgZEXuxPtVmv9x/cgiPe+5azq3VXgK/
+	 e3ZOTJwfzopf6LgnDv4PKXf4tw2KPr1TRH6k1ZI0C6/3H+HbpzgA946eHS2ObUCIC
+	 uTP+b8cUH4UU8+Xr4AdnVuM/E+BbRk+BtK6TzuI49C7HH+mR+tOKmQO4S6zLvs/Cz
+	 fTOYyUej5/m8BD7caiiteFyxCJPbwTFA1Khysf4dF8zJOtszcIXbxyx5XWeu9CJ9v
+	 l35h0njuVFkPSDAHpCQJeLSzXXRjSfMR3zaSZGTTazUwxaXqTHacUtP6aKh9Wk1ab
+	 sy40WVJxosRE//8g0g==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1N6sBp-1ryAfP1lol-00tYsQ; Sat, 07
+ Sep 2024 13:52:32 +0200
+Message-ID: <c1e8c2f1-d123-4e72-a774-f15daa156afb@web.de>
+Date: Sat, 7 Sep 2024 13:52:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,97 +57,53 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: bq256xx: Add
- omit-battery-class property
-To: =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <trabarni@gmail.com>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Andrew Davis <afd@ti.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>
-References: <20240907-bq256xx-omit-battery-class-v1-0-45f6d8dbd1e5@mainlining.org>
- <20240907-bq256xx-omit-battery-class-v1-1-45f6d8dbd1e5@mainlining.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240907-bq256xx-omit-battery-class-v1-1-45f6d8dbd1e5@mainlining.org>
+To: Riyan Dhiman <riyandhiman14@gmail.com>, linux-pm@vger.kernel.org,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <20240906084057.67680-1-riyandhiman14@gmail.com>
+Subject: Re: [PATCH] cpufreq: mediatek-hw: Fix resource management and error
+ handling in mtk_cpu_resources_init()
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240906084057.67680-1-riyandhiman14@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:UU+U/3+BocogIlcQAhIUeX4kyi7S2g/rb7v53Sr8w3Z5ADsQAsN
+ XAzL0h17O8HFcISc6gfzS47Kf2FvHDrXcKeCnhWUCw2NbHQoWZ15VlzyT8AcB+DXaliItWc
+ EAyYoAmbE5FM1DA73slecLbiSwBd7ZK+rPGU6BJ6m3fWozvQq3rRMmeAUk5frwUfm+iL1Wv
+ uAtBxy72wJ4TYRd+qwlMg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:D/H1dsTR4QI=;y9MXG7aKqHUgsSLFBFCNRXq1l4I
+ ClZpDBdcyKmRLStFlsJJ/mNidV/ee4timkcIJAylQFH+XeUhRx6Ze+w5r2vEwmCdZ+EicQZrJ
+ Eeb2TbHCNgGis+TRKNrjLLRQP7WGFXMMixu25QRr/cG1HRYHD9APGZ33v+JT+fsLjHbDhBnTx
+ 3dg/6YYXhIlRxAimpv3tUjtaH1EwLjaEFt3o8CafSBNXa2HQY6/qylIdO+2SBOOof1X3bzw7G
+ pTTuvf5OwHRN+VdhQQWQiNI+T22DQu40DRtDt0RsZDOv2V5y7sx3ynvta2qIDI2E9FKsTuuls
+ rDafgFCqJrDSLZTmIeOz2VteFKqU5AKNSZncR3OasG1GhG4IS2brR31OVl7r5/iKkFJvuNYRQ
+ yjdjtGA9EAUN+xCozsZDwAnNljXWRSXCfcbj1L7jQLESFGjM7eiDoPXnCFyRFSVEq/q7DgVyu
+ 7WAmVYMLdizCPM8yGSGNsBN4MoCVWjNhKJyM3lImYCHNDrAa8wkmnBYKkxbOxHSB9SBA5uNh/
+ /KLZOBddWPk3F22f6jPE47xUfo8tXKMn2rRpUG/YEn3wxK/AyJxM1kn//AZY2YqP4Ba81ZHBg
+ 5QvCnZiiTv+ksejzvJx0h+SIVSLNsFN8Lnuer82/uGlA7Nwjcr6NpyoAp08eOSyVZ4+ckrvQf
+ BtAL4gvoDAwTFrLpbubD/qIMZM00rMEv4bTlOl+OPfhNPbH1Ny6c1Nb8Se/QFItoGaQhv6BO6
+ hiq3lQeY4V6CghE049bQkBhZlMmUf3PWw8HJdIloxhqJ9zI55W+GcklOvPChICX/8LU9qzN3E
+ 3tuOSNX0BJNhGi22K3/bGLOA==
 
-On 07/09/2024 13:07, Barnabás Czémán wrote:
-> Add omit-battery-class property for avoid system create a battery device.
+> Memory region and IO memory were not released if mtk_cpu_create_freq_tab=
+le() failed.
+> Added error handling to ensure that IO memory is unmapped and the memory=
+ region is
+> released properly to prevent resource leaks and ensure all resources are=
+ cleaned up on error.
 
-This does not help much, basically repeats commit subject. You need to
-answer to "why?".
-> 
-> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
-> ---
->  Documentation/devicetree/bindings/power/supply/bq256xx.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> index a76afe3ca299..744f5782e8e7 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> @@ -62,6 +62,12 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/phandle
->      description: phandle to the battery node being monitored
->  
-> +  omit-battery-class:
-> +    type: boolean
-> +    description: |
-> +      If this property is set, the operating system does not try to create a
-> +      battery device.
+* Would you like to improve such a change description another bit
+  also according to other line length preferences?
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+Documentation/process/submitting-patches.rst?h=3Dv6.11-rc6#n94
 
-You described the desired Linux feature or behavior, not the actual
-hardware. The bindings are about the latter, so instead you need to
-rephrase the property and its description to match actual hardware
-capabilities/features/configuration etc.
+* How do you think about to add any tags (like =E2=80=9CFixes=E2=80=9D and=
+ =E2=80=9CCc=E2=80=9D) accordingly?
 
-Best regards,
-Krzysztof
 
+Regards,
+Markus
 
