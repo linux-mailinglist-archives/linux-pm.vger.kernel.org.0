@@ -1,138 +1,146 @@
-Return-Path: <linux-pm+bounces-13834-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13835-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0E0C9701D0
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 13:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C1A79701D6
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 13:12:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FED7B230D9
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 11:08:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13720B223CD
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 11:12:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 067B115A864;
-	Sat,  7 Sep 2024 11:07:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B0ED15697A;
+	Sat,  7 Sep 2024 11:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y0BmB88D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ClD0CZFp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52946158556;
-	Sat,  7 Sep 2024 11:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9B0208D7;
+	Sat,  7 Sep 2024 11:12:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725707271; cv=none; b=ZFT1H7EZDlvUgyCC2jpn42EZlHH0RVfYIRGrMKOedEFI3CD88PDJOPnq0Gign/28RMQTgByY5Vt77cvilsDGRJzWfJFrnifEoTRLJZlKGYKznmcxjAk9rZbyWOZNgrhlSaYPkhgIqaYT1TtdpDaGiVqRT4d8ldRlvw473ZIpw0k=
+	t=1725707525; cv=none; b=FxJs74kHaOvG6s8IYiGjBuSCvmr+5nOY+v6fJeIZPu2Kpn0aaFH13elfEnExZTuHC6PnN0Lps8oQ9k8pxvTuwGzQ3y+LN86xKJvqfCr/XAhoQHluMsXSIl853iXz2nePf8LYBmNUQAik9KRDVjGs6KIXOR22ApNh39Nr++6AWDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725707271; c=relaxed/simple;
-	bh=udRTh01PFdNwrz5h6uyHU1yEO3a3lSXrCIR5rWz7vCo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EQyVF7y7xG/JW5s3aTtNC0AjyVgTZr+eOblenAZ2ZlPUfcyma+r1TpE3VIc3Q6qVUHhn+0VmnYkQNX9zPDoBcD97kCgOck6AblbJAkYeCb7QywV4DUTohJYxYyauVGFhvDN1xeO7HKoIFbEHuQF7usDsGYpZ3xq12Pa+A31qDXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y0BmB88D; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-428e0d184b4so21931895e9.2;
-        Sat, 07 Sep 2024 04:07:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725707269; x=1726312069; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nn3W1kMigTVE8blchx+fEv/bpRlWtEY28Jz/T9i8iA4=;
-        b=Y0BmB88D9089fael/icln5NNlttYC8zBgNoezWyLZAO6wMMvaZwBYvAOutc17Lt9/X
-         gGKc51x0eBAHXokexw7poTbBhSidklpbaNNXGufU3fL8Y5c/EyLvoY11t8eJ2LfMojiD
-         S7yKZT2kzweKoB1Cjwj3iO1b+8BH8MhuaCv4EwNXf82lab6AK7yrgmlmGD7P7o7GlWcP
-         YQ1tuWV/U8J63G6TkUB9wRQThlFLgivpOAL7spk9fpKwn5Q99UNeBJ/qO/gaYkFGewnu
-         hu7atLyQ6N2qx/qYRLyUV0lho3GX/nWECNV9oXxcfT+O2CZzfubJ1nbYRhwqXdcPIT1q
-         6g4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725707269; x=1726312069;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nn3W1kMigTVE8blchx+fEv/bpRlWtEY28Jz/T9i8iA4=;
-        b=eQvrr8BYf/E6M3rNGaAcS02QojhwoUdPAKp5wfUKufuNKPmn2vyTgdbBR415tMtusn
-         hjIQSDKJjTNcwiT11KT/5Jz8utcXhnniG7YAw5gVja6fVGIEywCrkEzuAV93cs79Fjtm
-         BP2Wp2KtE303Dg58f/IRU8itCQVpZlAXE1qvU2J2HpgcxrnviEjyC39tx4JSfVb/oEgo
-         4F2/M/LxF+/u4kywsK73eJFAvrsTWeDPOUu1ToShY42HTe1N3a0l/tUHznQZdhxAuGha
-         kF7Uu/hngjedqHC6J9aXocPhRRFn6WICEoh2zPaUP8eKAvnH4nunY562HvExUVW0OV9/
-         +v+A==
-X-Forwarded-Encrypted: i=1; AJvYcCUQKG5mFnuv45z7YzDW9IG40EX6x2InwGKVjbuj5IOmfhWYak8A7gqqBlH0ryDt60zOP6fQw6DwOCE6eP3D@vger.kernel.org, AJvYcCWpjVR/yx3kZFTJRAHP68AQAC9E84hKIxM4pEdyvIaUmYHHLjxfY2laJbFMI7oC43NWMddx3fT2DQZf@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLbU5Eaef5dxvZSeycM3wRL2bTQVnef5nysHcvd7E/GRqxus/F
-	V2enZ3e/4LYxfTd6PVJOvHBTGfhy8gjaxOmp+bKJL4yKaDas++HW3lCLKc7N
-X-Google-Smtp-Source: AGHT+IHSy+MLOjb96dv5ua1bHQAoaTx9nS32PPhKOkrFsquf1+TmcibLteRqakdjbU+c4tDt8zltaw==
-X-Received: by 2002:a05:600c:4713:b0:426:689b:65b7 with SMTP id 5b1f17b1804b1-42c9f9d359dmr41212935e9.25.1725707268603;
-        Sat, 07 Sep 2024 04:07:48 -0700 (PDT)
-Received: from [192.168.1.130] (51B6DC2A.dsl.pool.telekom.hu. [81.182.220.42])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42caeb444b0sm13719415e9.21.2024.09.07.04.07.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Sep 2024 04:07:48 -0700 (PDT)
-From: "=?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?=" <trabarni@gmail.com>
-X-Google-Original-From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Date: Sat, 07 Sep 2024 13:07:46 +0200
-Subject: [PATCH 2/2] power: supply: bq256xx: Add ability to omit battery
- class
+	s=arc-20240116; t=1725707525; c=relaxed/simple;
+	bh=QvBVFrKXGrUWJ16669Wg44zvoZ8Aj8CvQjlf9T/K/+g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jlpHDi/d1mymvD7AhUP58r/sxzujLanoUm1y5utfEoGYTdtysRhmqRbdfDCg+bLmp/txftc6kcIDvLiwLe+3hg6i7yvdqgEqqkarlEVlFeDNQmp7y90wB73B63A9U00aE70zm1bTkvysEmIZr+CbfvG9cgs7I+hdWB5ZbSv7Ah0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ClD0CZFp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FEF8C4CEC2;
+	Sat,  7 Sep 2024 11:12:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725707524;
+	bh=QvBVFrKXGrUWJ16669Wg44zvoZ8Aj8CvQjlf9T/K/+g=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ClD0CZFpr1AI59up6sEyV3PHD5L7RuaALUc8ijw1ufHawahobLEJx1IpitzzHbfX5
+	 1jf2rKsrvBA8thggMxMG2LVHYPtATrhC3YKVyFqvr8n6ioloJzW2RnK+x0kf+mSwZf
+	 vlcCXrkHwMJJnG0Awxuldk/S8FlO6Rq1OZdCx5FdZaN4HV38DtclA3B9hYNdftSV6S
+	 Ts91Wdu8wlLNcY8WIHclAQixtTVypRGARwwrQmSeuZAHZemIG2MGfvw8+gj/DFz/os
+	 spuc2GCn5GXO5O0GRBVUXtnRm7A67/ElJe6IrB9itDHrWvXHdT5RVS0hJzXZJpVWbq
+	 sEjZMtLx17FiQ==
+Message-ID: <5bf9a142-05d9-4e02-bca0-f988726e2873@kernel.org>
+Date: Sat, 7 Sep 2024 13:11:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240907-bq256xx-omit-battery-class-v1-2-45f6d8dbd1e5@mainlining.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: bq256xx: Add
+ omit-battery-class property
+To: =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <trabarni@gmail.com>,
+ Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Andrew Davis <afd@ti.com>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>
 References: <20240907-bq256xx-omit-battery-class-v1-0-45f6d8dbd1e5@mainlining.org>
-In-Reply-To: <20240907-bq256xx-omit-battery-class-v1-0-45f6d8dbd1e5@mainlining.org>
-To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Andrew Davis <afd@ti.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725707265; l=1218;
- i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=udRTh01PFdNwrz5h6uyHU1yEO3a3lSXrCIR5rWz7vCo=;
- b=pBEi+vQWV1Tf+hFCfwy10ZgliSgqQx629lgUiySLwHV5X2JAURNICMyNzYM8EhcSLD3ytbXN1
- ttQNSUOD81SBWegIe7kmTGomM5mJopKkmAU6g7iZ4/+HTY/Yo+Hgvdo
-X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
- pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
+ <20240907-bq256xx-omit-battery-class-v1-1-45f6d8dbd1e5@mainlining.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240907-bq256xx-omit-battery-class-v1-1-45f6d8dbd1e5@mainlining.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Add omit-battery-class property to avoid make a battery device
-for charger when fg makes one.
+On 07/09/2024 13:07, Barnabás Czémán wrote:
+> Add omit-battery-class property for avoid system create a battery device.
 
-Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
----
- drivers/power/supply/bq256xx_charger.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+This does not help much, basically repeats commit subject. You need to
+answer to "why?".
+> 
+> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+> ---
+>  Documentation/devicetree/bindings/power/supply/bq256xx.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+> index a76afe3ca299..744f5782e8e7 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+> @@ -62,6 +62,12 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>      description: phandle to the battery node being monitored
+>  
+> +  omit-battery-class:
+> +    type: boolean
+> +    description: |
+> +      If this property is set, the operating system does not try to create a
+> +      battery device.
 
-diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/supply/bq256xx_charger.c
-index 5514d1896bb8..62721d564b39 100644
---- a/drivers/power/supply/bq256xx_charger.c
-+++ b/drivers/power/supply/bq256xx_charger.c
-@@ -1547,12 +1547,14 @@ static int bq256xx_power_supply_init(struct bq256xx_device *bq,
- 		return PTR_ERR(bq->charger);
- 	}
- 
--	bq->battery = devm_power_supply_register(bq->dev,
--						      &bq256xx_battery_desc,
--						      psy_cfg);
--	if (IS_ERR(bq->battery)) {
--		dev_err(dev, "power supply register battery failed\n");
--		return PTR_ERR(bq->battery);
-+	if (!device_property_read_bool(dev, "omit-battery-class")) {
-+		bq->battery = devm_power_supply_register(bq->dev,
-+							 &bq256xx_battery_desc,
-+							 psy_cfg);
-+		if (IS_ERR(bq->battery)) {
-+			dev_err(dev, "power supply register battery failed\n");
-+			return PTR_ERR(bq->battery);
-+		}
- 	}
- 	return 0;
- }
+You described the desired Linux feature or behavior, not the actual
+hardware. The bindings are about the latter, so instead you need to
+rephrase the property and its description to match actual hardware
+capabilities/features/configuration etc.
 
--- 
-2.46.0
+Best regards,
+Krzysztof
 
 
