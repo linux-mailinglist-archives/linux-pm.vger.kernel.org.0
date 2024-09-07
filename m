@@ -1,137 +1,126 @@
-Return-Path: <linux-pm+bounces-13842-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13843-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71C7A97031B
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 18:10:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D42397032E
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 18:36:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30477283CD0
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 16:10:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA2A3283D6F
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 16:36:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EEA315ECDF;
-	Sat,  7 Sep 2024 16:10:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DCA015FA96;
+	Sat,  7 Sep 2024 16:36:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="WJGWcuXg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SjJ5ImNA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA7418030;
-	Sat,  7 Sep 2024 16:10:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C30FB657;
+	Sat,  7 Sep 2024 16:36:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725725435; cv=none; b=TU4TJSmZ2viDHr3vhpQ8xAxOfnJR84hWn3Mtl/srjKg7wGVwiFJszBjyP8P56/1Q6kPGgsnap1sHMuAnD/1VQJy9Gr+6pxcx9fliGdRj1CD/dDRI3CgEirh9fbRx8TlZ+TNNWgJL/NDLvdRi+brNVCCh4aSF3XbTiAyHAmxii9c=
+	t=1725727003; cv=none; b=f6+TTXuKbH93JtZgtQ6t4HO9wcZSNcK7XsScpcuD0aO2BsLU4Mre3VfafNtUWB8+VyKSW9VsXh8f5Oe9sNmExrhgnpoOsizLx8Wsl1ciBSXwMLYUytRV37R85hQpaKAe8mNMgXsYlW1qPBIZGrTDCSb/FQPyfCraPbHFmylrfVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725725435; c=relaxed/simple;
-	bh=Ugp61IROkC/lOhDqejlDeSWuUWpF6Fmjqq1c9KRVQcI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RJn9AGu7LB2huTps6O5ZoLCWv2x6MJqkEa5zPN2mmJucWl7bFrZXiUZyIKKt48uZ81f1clvMPgqgDWKe297660bT+tvNxh5yslc8xWiCqP6/caLIJimxH2Pb2ieDtyBUSZ3xeGYNr7bCpikAjuzXNDFhJ5B3WlQIaRRc1HEqwwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=WJGWcuXg; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1725725425; x=1726330225; i=markus.elfring@web.de;
-	bh=Zch/7RsOkPMYqhdi+SXCgxMZs8r9uQoJW157WFzA8qw=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=WJGWcuXgL7jfWIrx0Xtg37SqcdnktjUkfStBZbDXPTGJq5hRmmu7kpapK/aHBAhG
-	 10gV3j2Wq75D8KueuL1MVm1nH4j+WFCk+vRKcBY+xhDmL988nKk1R6ytvZvFNsD2M
-	 M5ZAbhJUzsaH1YQwyUUAasrQrBjjpPs8hLjcuwpR1k7X408Di4o6y8xkmj1EDBF8b
-	 LffpjcoKG90UPnH7zJvnpilQCAfcXd2zjkNXNHTDT6RIZzDOf0mF8kd2ru1IoI23X
-	 2OZuM0QbDZKi8afjSffF2laaPCyegdd6OHsIeFXSZHHc0uGz8Rb40N7P+53ZiOFeD
-	 KTlMb3c3fmqyKbZ7Iw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MMp8Y-1sUCg90Bfg-00INlf; Sat, 07
- Sep 2024 18:10:25 +0200
-Message-ID: <2ab8c121-3fef-4d4d-a7b1-7892fb54b680@web.de>
-Date: Sat, 7 Sep 2024 18:10:24 +0200
+	s=arc-20240116; t=1725727003; c=relaxed/simple;
+	bh=J2oHil4s5j6fDRPPMOrCwMnX9TKV76ZFuBNLxjM4vo0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j3JJ35yjyfYPWd2E9A0hoZZjuTt69EgDdBuNnP5hZ8DQDE7YBHgKdRB+Pi2+HNGbKFSBXYCQguZrRcPBVCQ+R3MPL2rlCHyFIrU7AMFvyW7jE5iu7oSIskw8TRj+xwG7u4xnHQPBZlXdjg8Loij7S4iyPbPpIDFjf22bl4t8978=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SjJ5ImNA; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-656d8b346d2so1992804a12.2;
+        Sat, 07 Sep 2024 09:36:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725727001; x=1726331801; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=66WiSZsVUBQEEsHoVHWVdIuUou4pZ/NswnAiyCAcZ68=;
+        b=SjJ5ImNAEzCvTU/UCo2kJKzwa2K944HEtJmOalHJK2VXDfCmsjewqkJhrJ6cpLiAgx
+         qp8D5+LgrAG7mdO00OEcxEFMlPDMK+xu/hK/xe9gvn7oEENtQM3PIMbXrlZzC/q1OHy+
+         OVLT7tioBVmXm3+jC4+iZuanmMnRIZ8IPrrc4hWTNuaVaH4tj9TlmwVn79xYukHd8vzj
+         RTr8+zbEV0YZv6Z99ek8vLmUReXSucDKlQRbBAUvH/ZszHPErailydrlTZNfLp63XYuA
+         /QCN3/141FvkJw24oyqSsFa/okNnl9nz1+XrTbqWpnsDChUN9iQuWdQQJeoGk6/i4YAd
+         jz3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725727001; x=1726331801;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=66WiSZsVUBQEEsHoVHWVdIuUou4pZ/NswnAiyCAcZ68=;
+        b=GC03V2hD06/O3KUaed1hpBFolAAht+sxiEymcNBRpTc591LplHX5sjf+yxmYhraoVx
+         /7495Nd6aQHsI7Jl4AiIqh1WDHY8XrKyHqi1/6A/VGi0v5lLtj2wX1qtkIQ7AEnP9B3H
+         +K2ZJ+sxLzkGLDtiCjPeH9sPD9KRSZveqjiNW/kx4FQpwZSlQzJYD94MvDWVlW3Rf+gm
+         qeJGQSU5XqSB/bP9hd3BR4npdc5QctIzxI4DPPszaW0NUgxND3dG4MsAr/nieQTIzcLv
+         amTE15A4x438vJfV+xQsFcRl+TGOSFl5eNe3Qq2HElAibEOTSFXpyO5oM1qRkVL12zSf
+         +mjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnBthm6htdf8neixAJrR4RUwjZCLjwTTyWoMVTgMEallDET6NnbOzF6q2gCyXyVAK68rrY36zuuqH7RM4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxpiU6ExjhJm7XLaStic7iR4x95KqLhm2b0fXohyXX9QxyCSf7
+	j83wTXh5kRymAmFqxcOgxjfn313d0cyvYsalIP+O23tRfzt5P5Vu
+X-Google-Smtp-Source: AGHT+IG0BAdsFfZ4BSvpTajwHLdND3K1qnRpWO0OkCWsycd8lHP4SZ9YbPKgNXMRc35W3fybDOb7xg==
+X-Received: by 2002:a05:6a21:3a87:b0:1c8:b336:4022 with SMTP id adf61e73a8af0-1cf1d1bf3eemr5790838637.36.1725727000752;
+        Sat, 07 Sep 2024 09:36:40 -0700 (PDT)
+Received: from fedora.. ([106.219.163.133])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-718e59687e2sm1055194b3a.114.2024.09.07.09.36.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Sep 2024 09:36:40 -0700 (PDT)
+From: Riyan Dhiman <riyandhiman14@gmail.com>
+To: rafael@kernel.org,
+	viresh.kumar@linaro.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Riyan Dhiman <riyandhiman14@gmail.com>
+Subject: [PATCH v2] cpufreq: mediatek: Fix resource leaks on mtk_cpu_create_freq_table() failure
+Date: Sat,  7 Sep 2024 22:06:30 +0530
+Message-ID: <20240907163630.55704-1-riyandhiman14@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: mediatek-hw: Fix resource management and error
- handling in mtk_cpu_resources_init()
-To: Riyan Dhiman <riyandhiman14@gmail.com>, linux-pm@vger.kernel.org,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <c1e8c2f1-d123-4e72-a774-f15daa156afb@web.de>
- <20240907154254.4704-1-riyandhiman14@gmail.com>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240907154254.4704-1-riyandhiman14@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:gVA7yHmIp591hFhBzzBwE027VvnIRQAtdZIdzxOyzPig36tB3b4
- u5hPaKZf1IH37Lr0LJ3mWfxcOnmiTFVOw4Ek5vo61EDrqe86J0BCNbNuUw+wOt0pQPJSNLx
- 16LffmDrOVrlXoHGBGlHc426kXH1E1nvQz0Ph6ojSEACarew1amWJar4tZ6TDC0cG8VTfH1
- DCDgSE58XaxKQKeQzZ80Q==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:GJEgDvg7pSk=;SvRF3u5F02Kr2mzGNozsS/en31W
- 5Onm1tGnt18eWGTZYtqyyWeaMdPFb68hFyZJ+FHOcm6/AAYSx4LQvGFesDXIBZ9pcm9Qges4Z
- 03L0l9HoSKEcTOOJ47yibDfA5r3ja8YF5lcLY7Stkgcex3isCTxf2WeZrKJSaZncQJWalDXiI
- Izw7HpsKl5VDLoKnEaz9JF3imJC/iBogG7X0TAQVh3XDfCsU3G5wSLrA9yL73+ooZAL4kk+l5
- q2L7dM9PZHOOn2hjyUNTOVAgfGMUwyAuPvDnzh8dvZqU25Aj2tT2BF3ZYuOeBE8vjzX4aAASn
- Tac8eVyevBGJhRVKXR9CvA/9QkfrfSGPWbQs/ixIgFj3efHToUvebvSjQoZcLcQRv2UBB4g0m
- zJFgpWVkwRQ2xqykpAP71kEPbXRGSvsa+HmgJsoqB9l2a1l2mGB2X5wHjI/es3KElF+yWUYeP
- BsvoWiQlQJ/kD/7wqBn9yDm+yeO35GPX2EsKTUwHC6wXKA3hchPxhKApa7X9EU13GZQpsn2gi
- 0txXi47ko6XdIJDrCLRsBUFYV7O2rCuxdOAGPUl4abbfk1jXZa2XMzKuJ/y0aBAI3ASqzQSae
- X2XXTc6+/yoscRZV89kMSOaz2Kpch6N+T9GMHFLR8OacKl8q7IQx331P23UNlyX2Ggyw3fP4x
- GMEczRJUFbV+/oVOMtgQfTRhd8q1PDCKd6UtXMn/+s35Q6MzB51dP3j2Ym3dDwq8U/zOmy7Ef
- vaxEZC4J2Mj9Fqmh1mLoGz9BzJeyl6EF4/nIAvEPLx5aTYjGRuQ34WJYwg072r2ApD3gHdlV5
- IgVr+RqiTfNq1I9LDin7WvAQ==
+Content-Transfer-Encoding: 8bit
 
->>> Memory region and IO memory were not released if mtk_cpu_create_freq_t=
-able() failed.
->>> Added error handling to ensure that IO memory is unmapped and the memo=
-ry region is
->>> released properly to prevent resource leaks and ensure all resources a=
-re cleaned up on error.
->>
->> * Would you like to improve such a change description another bit
->
-> Should I elaborate a little more on the issue and explain the fix I have=
- created?
+If mtk_cpu_create_freq_table() fails then there is a potential resource leak because 
+memory region is not released and IO memory is not unmapped. 
+Added error handling to ensure proper cleanup of all resources on failure, preventing potential leaks.
 
-Please take another look at guidance from linked information sources.
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv6.11-rc6#n94
+Fixes: d776790a5536 (cpufreq: mediatek-hw: Fix double devm_remap in hotplug case)
 
+Signed-off-by: Riyan Dhiman <riyandhiman14@gmail.com>
+---
+It is more of a extension of the above commit as this error handling was missing in that commit.
 
->>  also according to other line length preferences?
->
-> Can you please help me a little bit about this?
+v2: Fix commit message.
+v1: Added error handling.
 
-Yes, of course.
+ drivers/cpufreq/mediatek-cpufreq-hw.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
+index 8925e096d5b9..3b1303f350ec 100644
+--- a/drivers/cpufreq/mediatek-cpufreq-hw.c
++++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
+@@ -207,13 +207,15 @@ static int mtk_cpu_resources_init(struct platform_device *pdev,
+ 	ret = mtk_cpu_create_freq_table(pdev, data);
+ 	if (ret) {
+ 		dev_info(dev, "Domain-%d failed to create freq table\n", index);
+-		return ret;
++		goto unmap_region;
+ 	}
+ 
+ 	policy->freq_table = data->table;
+ 	policy->driver_data = data;
+ 
+ 	return 0;
++unmap_region:
++	iounmap(base);
+ release_region:
+ 	release_mem_region(res->start, resource_size(res));
+ 	return ret;
+-- 
+2.46.0
 
-> Is it the character lenght of subject?
-
-Not directly.
-
-The summary phrase can eventually become more succinct.
-
-
->> * How do you think about to add any tags (like "Fixes" and "Cc") accord=
-ingly?
->
-> Should I change "patch" in subject to "Fixes" or =E2=80=A6
-
-Obviously not.
-
-See also:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv6.11-rc6#n145
-
-Regards,
-Markus
 
