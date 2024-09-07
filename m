@@ -1,197 +1,176 @@
-Return-Path: <linux-pm+bounces-13823-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13824-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8678897016B
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 11:46:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A999970192
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 12:17:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EBAD1C215D9
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 09:46:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 009B3284FD1
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2024 10:17:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD3CF14F9E2;
-	Sat,  7 Sep 2024 09:46:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1063B157472;
+	Sat,  7 Sep 2024 10:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="StczZV5/"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="BwPdePv7";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ax7CXzye"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from fhigh3-smtp.messagingengine.com (fhigh3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1DFA55
-	for <linux-pm@vger.kernel.org>; Sat,  7 Sep 2024 09:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6714BBE6C;
+	Sat,  7 Sep 2024 10:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725702377; cv=none; b=tWDVErxDrKjFcSqRCIcAEL9Jgydr5Bi++UBkCOtXISX0yEQmyDg2avASadhUmeyJWw1Y0UrVQHVOccluj7uhZ0B9VhkG+bUPfVQlQxssyht+bRvSav38yY1Afi4xJJM7OFnLMh1xNjVT9yjDZ49R6R4/AM7xgP5S+yFswVr3uH0=
+	t=1725704231; cv=none; b=p1Q0GbckF65+cFqn6jay6Jt+FfK8kappBh+fYywM0Mu3m6b1wHS4pHfQcK8nQWp9ytbKJm9gpXGkDGzSZTxXFHTkWYzrisuwXvWLr8R4igKrFnmESc4Wrr/UHwT30TdXtN+wci7O+UA4oRIJKWx/OpHIMAlbpoq/RtV3mWagv9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725702377; c=relaxed/simple;
-	bh=lP3FqiSVEVcjA9fTyLWbP+R04kpm2m0PXFj/kKNi9C4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=P5GhgtJK/lo4HLHfFM6sFd5UFWqEYbTKJuUqb7rwQryweCm1hSQ7zYluhgOPwO5+olrNxf7S/m5uw8J/wye8T6m79CC/qDpiLzpku1r5wW3kRJbMicmXVM3RfNytfzSjT9hhSFR3CM9lii2DPkq2YvQp2i4urAqgKLb1lvgKOqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=StczZV5/; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725702375; x=1757238375;
-  h=date:from:to:cc:subject:message-id;
-  bh=lP3FqiSVEVcjA9fTyLWbP+R04kpm2m0PXFj/kKNi9C4=;
-  b=StczZV5/TnJnUttOaegUyjkGmdOKLpPx6yjlgpaExjyGQagy8NHrLyfL
-   K8kHJuI3r0tPW9VDhkrrYslqmBVJu1LL6Uha60qdgPEn/wWVU6nTdTLbm
-   MGwLirY8WNKpy87a4sMmtkuIYoDQOM5tJMoUDWS2ieCZQ5SRHWkUY14j0
-   ObmYx/88SW1SotSU3K9bNUGiNTbSFp5NY2pqEUxTBWTPGonXvSLAb1a84
-   Gg0VwD7a6MPxxHyPNNBz0IJRlCpTDJ+qOEEzifyWPuPvUoSzDowY60diV
-   UFXrs91ZgkT/AfaPl4L2V6XnJWpyekjZe57QwZLaRphlz3wQqEUNHEEWt
-   A==;
-X-CSE-ConnectionGUID: /B6FYEM8SSmypJ3CmJyHyA==
-X-CSE-MsgGUID: wiqFDJbWTd+nlXz5zCbddA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="35032802"
-X-IronPort-AV: E=Sophos;i="6.10,210,1719903600"; 
-   d="scan'208";a="35032802"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2024 02:46:14 -0700
-X-CSE-ConnectionGUID: WAJ61SQ3SeK16T77n3HDlQ==
-X-CSE-MsgGUID: VaZ8CJzLSjWOel5JlSRazA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,210,1719903600"; 
-   d="scan'208";a="66511525"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 07 Sep 2024 02:46:14 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sms1D-000COV-27;
-	Sat, 07 Sep 2024 09:46:11 +0000
-Date: Sat, 07 Sep 2024 17:45:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: linux-pm@vger.kernel.org
-Subject: [amd-pstate:bleeding-edge] BUILD SUCCESS
- fb06862f2a835584e8556e7d42d32f31aa7b19c5
-Message-ID: <202409071756.BABETbrO-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1725704231; c=relaxed/simple;
+	bh=+DyY6GPIk1WDZOgKzGI2dYuz/zLq3vDNhNWL4C4Q6BI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=d8SV4PZ12oS41GOGtEurB9cehcqeB4gRTLDpmmdbhqAH4Ql1zBCIbGcFsZ1E0Rx4nE6o42cfHMM2Aci0+0JRaSjSVu4K4sBosYtyOCn0gc1yOP9ABe+Dhs72N3O3O9kc9lQRgJYlSZ3r/floobKsMGgC5NC/VZFKd/Wpo+kf2cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=BwPdePv7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ax7CXzye; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 8A2C811402A0;
+	Sat,  7 Sep 2024 06:17:08 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-12.internal (MEProxy); Sat, 07 Sep 2024 06:17:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1725704228; x=1725790628; bh=kn
+	sOpxEIaN0Ug/xUNvc2yVG6bIyAL1Mxw0s6/CJBbA4=; b=BwPdePv7XO6vWf0jsF
+	9aJCZN9kuiGrMCQLVO+4XqVIQloRRlxqnuDSrkiCmTFfVaGF96bcgn6tcRSwjXGH
+	0zlhQFEHgbUalDFYrgii8NgufSWaunfJ8ozfIs59C4HW2OUXenTU9DTnpYqDx7SJ
+	pqIkn6GsRRVofN1bnXkK/xbPO9+NaFarLJNWrXpFJdMPBmBgW9dcis5MQggucLSW
+	72MYrqVjlDV/P7mHYVtWW+yZs9KmhvzOa/tnq/EIMAKUT/bfAT/r2AM+h6CrlWuh
+	DDVP9g9H91B466Qc44uqYW8IrD+bnjS/GwMmvoMjcTzoyXM25vGYvS/idklgK9E/
+	0hmg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1725704228; x=1725790628; bh=knsOpxEIaN0Ug
+	/xUNvc2yVG6bIyAL1Mxw0s6/CJBbA4=; b=ax7CXzyeoZF45TpMrxsT1NoxhVWUB
+	9PxUWMFOEURaHGqZ9SCQY8/JU+VO0GfGs7SRrDUka/tHfqeEdHkJaY43QkLqOGk0
+	JmX58i8odqi+4UYQzrgPNKKgMcN3eYISHmpgNcGraN53JbPn1DK2V8sXS0Ad4lMk
+	erP5kyg3aeAZG2wNpQW/h0kqxYJSnIjGqHsgM/Jc26AI631GKSamJCuFnMSypScz
+	yv5+9CQFkSergdZOxpnmysMhbNHetRncFZb+BZiaiTqsxBd+nbp3vTq2JQx7WLrh
+	7jTXoi1L49M1RSmso23jzwJLJz6A8xf5D4b87ISVM9aR6vrEm9Y5jVVsw==
+X-ME-Sender: <xms:IyjcZno79q8cs2MloaS4eCszndO-7EfEGzCdBKSvoZwxus4u65FBVw>
+    <xme:IyjcZhoLtQ1G04uisPdvBnoAqPtpsImC26fSG8GlgzRgjtMxdVIhNYGMEW-ZePPmt
+    zUO4iFe4azhkyuwOCA>
+X-ME-Received: <xmr:IyjcZkNuZz2hFVvcNJsMkSjmYvhjP9kQLj7FS8yQFhFf0D6XXqT93rAP6QOdRcwE9PU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeifedgvdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecu
+    hfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomheqnecuggftrfgrthhtvghrnhepudffffffhfeuheevhffgleevkeeugeet
+    feegieeijeehfeekheekveduveeigeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtgho
+    mhdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
+    hkvhhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhglhigsehlihhn
+    uhhtrhhonhhigidruggvpdhrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehvihhrvghshhdrkhhumhgrrheslhhinhgrrhhordhorhhg
+    pdhrtghpthhtoheplhhoohhnghgrrhgthheslhhishhtshdrlhhinhhugidruggvvhdprh
+    gtphhtthhopehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhrtghpthht
+    ohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhope
+    hkvghrnhgvlhesgigvnhdtnhdrnhgrmhgvpdhrtghpthhtoheplhhinhhugidqmhhiphhs
+    sehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:IyjcZq6QwRbxzgiwuZebXckyYZj6fEd7GDek9J2KRhmrLGEw0GlHvg>
+    <xmx:IyjcZm6yEhlct0TDm7j7D2vJTw7K84ICVvYhjbeHpWmQ2LvBU1zFAQ>
+    <xmx:IyjcZihpk9v8wVpC2zgZ44WtDqImDb6En3rtp8wn7zD4fflxPe-BWw>
+    <xmx:IyjcZo5HuwFEKifXJAP7wIVbs_Q50zo_jnbVqTcdUiw93zD3Gy4QaQ>
+    <xmx:JCjcZmxHIDq7uMXzwxa8h81IPQrPAsm-8kKMxs8ilKkmdX8Ukx1zlKHC>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 7 Sep 2024 06:17:06 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/5] LoongArch, MIPS: Unify Loongson IOCSR handling
+Date: Sat, 07 Sep 2024 11:17:02 +0100
+Message-Id: <20240907-iocsr-v1-0-0c99b3334444@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB4o3GYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDSwMz3cz85OIiXQsjSwNzUxNTC1NDQyWg2oKi1LTMCrA50bG1tQBNTQW
+ LVwAAAA==
+To: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-mips@vger.kernel.org, kvm@vger.kernel.org, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2101;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=+DyY6GPIk1WDZOgKzGI2dYuz/zLq3vDNhNWL4C4Q6BI=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrQ7Gkrn9jH/iw5jLnoV3va4f/eGC6b5TysXi13q+eZbr
+ nb33dd5HaUsDGJcDLJiiiwhAkp9GxovLrj+IOsPzBxWJpAhDFycAjCRqFxGhidxOu+mfRMQdvNi
+ 61/b1HCROahz2u9FlS/X2i7afyWQbwLDP6XHq/VvNk6x8TTKuP/C5U3hVlnBz2VXznlLfao7VWl
+ 7nxEA
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
-branch HEAD: fb06862f2a835584e8556e7d42d32f31aa7b19c5  amd-pstate: Add missing documentation for `amd_pstate_prefcore_ranking`
+Hi folks,
 
-elapsed time: 2404m
+This series unfied LoongArch and MIPS's IOCSR functions and
+macros so they will expose same interface to arch-indenpendent
+drivers.
 
-configs tested: 104
-configs skipped: 5
+This can reduce code deuplication, and also help my unifed IPI driver
+and MIPS extio driver effort.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This is touching many sub-systems in once so might be hard to merge.
 
-tested configs:
-alpha                             allnoconfig   gcc-13.3.0
-alpha                            allyesconfig   gcc-13.3.0
-arc                               allnoconfig   gcc-13.2.0
-arc                   randconfig-001-20240907   gcc-13.2.0
-arc                   randconfig-002-20240907   gcc-13.2.0
-arm                               allnoconfig   clang-20
-arm                   randconfig-001-20240907   gcc-14.1.0
-arm                   randconfig-002-20240907   gcc-14.1.0
-arm                   randconfig-003-20240907   gcc-14.1.0
-arm                   randconfig-004-20240907   clang-16
-arm64                             allnoconfig   gcc-14.1.0
-arm64                 randconfig-001-20240907   gcc-14.1.0
-arm64                 randconfig-002-20240907   gcc-14.1.0
-arm64                 randconfig-003-20240907   gcc-14.1.0
-arm64                 randconfig-004-20240907   gcc-14.1.0
-csky                              allnoconfig   gcc-14.1.0
-csky                  randconfig-001-20240907   gcc-14.1.0
-csky                  randconfig-002-20240907   gcc-14.1.0
-hexagon                           allnoconfig   clang-20
-hexagon               randconfig-001-20240907   clang-20
-hexagon               randconfig-002-20240907   clang-20
-i386                             allmodconfig   gcc-12
-i386                              allnoconfig   gcc-12
-i386                             allyesconfig   gcc-12
-i386         buildonly-randconfig-002-20240907   gcc-12
-i386         buildonly-randconfig-003-20240907   gcc-12
-i386         buildonly-randconfig-004-20240907   clang-18
-i386         buildonly-randconfig-005-20240907   clang-18
-i386         buildonly-randconfig-006-20240907   gcc-12
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240907   clang-18
-i386                  randconfig-002-20240907   clang-18
-i386                  randconfig-003-20240907   clang-18
-i386                  randconfig-004-20240907   gcc-12
-i386                  randconfig-005-20240907   gcc-12
-i386                  randconfig-006-20240907   gcc-12
-i386                  randconfig-012-20240907   gcc-12
-i386                  randconfig-013-20240907   clang-18
-i386                  randconfig-014-20240907   clang-18
-i386                  randconfig-016-20240907   clang-18
-loongarch                        allmodconfig   gcc-14.1.0
-loongarch                         allnoconfig   gcc-14.1.0
-loongarch             randconfig-001-20240907   gcc-14.1.0
-loongarch             randconfig-002-20240907   gcc-14.1.0
-m68k                             allmodconfig   gcc-14.1.0
-m68k                              allnoconfig   gcc-14.1.0
-m68k                             allyesconfig   gcc-14.1.0
-microblaze                       allmodconfig   gcc-14.1.0
-microblaze                       allyesconfig   gcc-14.1.0
-nios2                 randconfig-001-20240907   gcc-14.1.0
-nios2                 randconfig-002-20240907   gcc-14.1.0
-openrisc                          allnoconfig   gcc-14.1.0
-openrisc                            defconfig   gcc-14.1.0
-parisc                            allnoconfig   gcc-14.1.0
-parisc                              defconfig   gcc-14.1.0
-parisc                randconfig-001-20240907   gcc-14.1.0
-parisc                randconfig-002-20240907   gcc-14.1.0
-powerpc                           allnoconfig   gcc-14.1.0
-powerpc               randconfig-001-20240907   clang-20
-powerpc               randconfig-002-20240907   gcc-14.1.0
-powerpc64             randconfig-001-20240907   clang-16
-powerpc64             randconfig-002-20240907   clang-20
-powerpc64             randconfig-003-20240907   gcc-13.2.0
-riscv                             allnoconfig   gcc-14.1.0
-riscv                               defconfig   clang-20
-riscv                 randconfig-001-20240907   gcc-14.1.0
-riscv                 randconfig-002-20240907   clang-14
-s390                             allmodconfig   clang-20
-s390                              allnoconfig   clang-20
-s390                             allyesconfig   gcc-14.1.0
-s390                                defconfig   clang-20
-s390                  randconfig-001-20240907   clang-20
-s390                  randconfig-002-20240907   clang-15
-sh                               allmodconfig   gcc-14.1.0
-sh                               allyesconfig   gcc-14.1.0
-sh                                  defconfig   gcc-14.1.0
-sh                    randconfig-001-20240907   gcc-14.1.0
-sh                    randconfig-002-20240907   gcc-14.1.0
-sparc64                             defconfig   gcc-14.1.0
-um                                allnoconfig   clang-17
-um                                  defconfig   clang-20
-um                             i386_defconfig   gcc-12
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64       buildonly-randconfig-001-20240907   gcc-12
-x86_64       buildonly-randconfig-002-20240907   gcc-12
-x86_64       buildonly-randconfig-003-20240907   gcc-11
-x86_64       buildonly-randconfig-004-20240907   clang-18
-x86_64       buildonly-randconfig-005-20240907   gcc-12
-x86_64       buildonly-randconfig-006-20240907   gcc-12
-x86_64                              defconfig   gcc-11
-x86_64                randconfig-001-20240907   clang-18
-x86_64                randconfig-002-20240907   gcc-12
-x86_64                randconfig-003-20240907   gcc-12
-x86_64                randconfig-004-20240907   clang-18
-x86_64                randconfig-005-20240907   gcc-12
-x86_64                randconfig-006-20240907   gcc-11
-x86_64                randconfig-011-20240907   gcc-12
-x86_64                randconfig-012-20240907   gcc-12
-x86_64                randconfig-013-20240907   gcc-12
-x86_64                randconfig-014-20240907   gcc-12
-x86_64                randconfig-015-20240907   clang-18
-x86_64                randconfig-016-20240907   gcc-12
-x86_64                          rhel-8.3-rust   clang-18
+Huacai, can you apply first three patch via loongarch-next tree.
+For last two patch maybe better merge them via a second PR after
+all subsystem PRs merged.
 
+Please review.
+Thanks
+
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+Jiaxun Yang (5):
+      LoongArch: Rename cpu_has_csr as cpu_has_iocsr
+      LoongArch: Probe more CPU features from CPUCFG
+      LoongArch: cpu-probe: Move IOCSR probing out of cpu_probe_common
+      LoongArch: Extract IOCSR definitions to standalone header
+      MIPS: Loongson64: Use shared IOCSR header
+
+ MAINTAINERS                                        |   1 +
+ arch/loongarch/include/asm/cpu-features.h          |   2 +-
+ arch/loongarch/include/asm/cpu.h                   |   4 +-
+ arch/loongarch/include/asm/loongarch.h             |  90 ----------------
+ arch/loongarch/kernel/cpu-probe.c                  | 111 ++++++++++++--------
+ arch/loongarch/kernel/relocate_kernel.S            |   5 +-
+ arch/loongarch/kernel/smp.c                        |  23 +++--
+ .../include/asm/mach-loongson64/loongson_regs.h    |  58 +++--------
+ arch/mips/kvm/vz.c                                 |   2 +-
+ arch/mips/loongson64/smp.c                         |  44 ++++----
+ drivers/cpufreq/loongson3_cpufreq.c                |  10 +-
+ drivers/irqchip/irq-loongarch-avec.c               |   5 +-
+ drivers/irqchip/irq-loongson-eiointc.c             |   5 +-
+ drivers/platform/mips/cpu_hwmon.c                  |   7 +-
+ include/linux/loongson/iocsr.h                     | 113 +++++++++++++++++++++
+ 15 files changed, 256 insertions(+), 224 deletions(-)
+---
+base-commit: 9aaeb87ce1e966169a57f53a02ba05b30880ffb8
+change-id: 20240906-iocsr-829075458511
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+
 
