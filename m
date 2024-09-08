@@ -1,85 +1,82 @@
-Return-Path: <linux-pm+bounces-13850-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13851-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 274199705DC
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 10:47:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6458F970652
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 11:48:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B54401F21EDE
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 08:47:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 212BB28265C
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 09:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7236A1411C8;
-	Sun,  8 Sep 2024 08:47:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qPnB3wpq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 161501384B3;
+	Sun,  8 Sep 2024 09:47:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m609.netease.com (mail-m609.netease.com [210.79.60.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476DE13DDA3;
-	Sun,  8 Sep 2024 08:47:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB894204E;
+	Sun,  8 Sep 2024 09:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.79.60.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725785251; cv=none; b=VOMNvTSb9DtRvZMwMfZQHn3ajjJdHWgucOxHvPvJRBL0yhJNet+jHs4sJtjSNFXfXCa4tyamzYe0UYaLgFAoZzpZZEqJJ6ZWVftO19ewPWqo3SJ037Oj5imB8JgD6giOYy6CICr7etr8P3yjYYwpxDq3WyBgG7+tDPpofdnpbkQ=
+	t=1725788868; cv=none; b=MShwmuQ4WKwubZqQSuJlaCz7sZvvo4Kubsk1MnWm+Vuw47pDZWb38L3VQsSF3wQyfZAFX+ig+ERVKA3Sb59OKcpJsoiemYHBoVmD/tORXU48llp34FOaONhRyJHkeXQUJeR2oooclTTJvfxBIvglCX+t3eVWLqvAI43rRwCEbnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725785251; c=relaxed/simple;
-	bh=I5sxYl65FXj1bReWOukIcqvrR1M53LH1xySBrKJBkgM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tq7eUUB3dBuAIrPU+7kMZhhx5Ar7DGg5a09pOSsRiDZe8hfWN8w5hkfxD4PnFZd3Bp32SB16ulO6jazwb/UZeLVzSJC5LUv+n/ty4VWQuYIG3RoadjbtWafB/XW9eLzU1dBl5iN7havEp+FZK054Y1/lxEQ1dW4RcXQ/fY2j9po=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qPnB3wpq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC10C4CEC6;
-	Sun,  8 Sep 2024 08:47:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725785250;
-	bh=I5sxYl65FXj1bReWOukIcqvrR1M53LH1xySBrKJBkgM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qPnB3wpqgznQh64jDiSSdVl0Vi51VB/cdzUhIrU9EbLBajm4/JG5x1w/sGSJWh3sP
-	 2Ho65QHP7MWHvQiSBoUpi56Lg+46QcwcPKQherROZ19NwJYG7qu9nmDz0r8OGv6A52
-	 gREd/YZmbB1DGpbTT6sOpkFhk0iL29KPRZe2P5fO83vdAlOZUJIvHmGoaA9zuU/sM2
-	 N6qQzfs3tJ8EkVdxUJMwPRDN80BesbdW75LrdglHRFdAUL4gZtFzAnDluCgDYQD6tV
-	 VtaDClSuW2kD02kE0EKCNeW7ZmgsCHgo1Qo79Btabv0GWP9WtvBLynvtp5cZho3vVg
-	 7/2Dg6ILBb0Dg==
-Date: Sun, 8 Sep 2024 10:47:27 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: =?utf-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <trabarni@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Andrew Davis <afd@ti.com>, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	=?utf-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: bq256xx: Add
- omit-battery-class property
-Message-ID: <6jdweloqynw2fu6legthfbzctnoirzzkxhduxfcrowegaztd6a@ilak6fagpokv>
-References: <20240907-bq256xx-omit-battery-class-v1-0-45f6d8dbd1e5@mainlining.org>
- <20240907-bq256xx-omit-battery-class-v1-1-45f6d8dbd1e5@mainlining.org>
+	s=arc-20240116; t=1725788868; c=relaxed/simple;
+	bh=PVmzuNEc8v5rWStQSiZ8VF7qRD5aaCjcgn5xVcir2eY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=TZrIMCPa3iF/Y2/UuxniBFy9P0N3KmY7GbSLXPnUXblw1xkCDAQnLaryByeGMXsLDza9SOgIhTMqcu7/3Sw1TAUYvxXKyH+swx3JOt0keh7+Q+/jeATkWepO2YUdzxU4z9iUifHwy9xbCRrGO3/n37KMuGBkBUFoTpVY9vtVZWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn; spf=pass smtp.mailfrom=jmu.edu.cn; arc=none smtp.client-ip=210.79.60.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jmu.edu.cn
+Received: from amadeus-Vostro-3710.lan (unknown [58.61.141.10])
+	by smtp.qiye.163.com (Hmail) with ESMTPA id 24CA27E011A;
+	Sun,  8 Sep 2024 17:30:06 +0800 (CST)
+From: Chukun Pan <amadeus@jmu.edu.cn>
+To: bigfoot@classfun.cn
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux@roeck-us.net,
+	wim@linux-watchdog.org,
+	Chukun Pan <amadeus@jmu.edu.cn>
+Subject: Re: [PATCH 0/9] Introduce Photonicat power management MCU driver
+Date: Sun,  8 Sep 2024 17:30:02 +0800
+Message-Id: <20240908093002.26317-1-amadeus@jmu.edu.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240906093630.2428329-1-bigfoot@classfun.cn>
+References: <20240906093630.2428329-1-bigfoot@classfun.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240907-bq256xx-omit-battery-class-v1-1-45f6d8dbd1e5@mainlining.org>
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZTU0dVk1KTkkfGUhOThodTlYeHw5VEwETFhoSFy
+	QUDg9ZV1kYEgtZQVlOQ1VNSlVKT0pVSktZV1kWGg8SFR0UWUFZT0tIVUpLSUJNSEpVSktLVUtZBg
+	++
+X-HM-Tid: 0a91d0f81ae203a2kunm24ca27e011a
+X-HM-MType: 10
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PAg6HRw*KzIxATIoECo8PDRC
+	TD0KCT5VSlVKTElOTENMQ0tNQ0JKVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWU5D
+	VU1KVUpPSlVKS1lXWQgBWUFKTE1NNwY+
 
-On Sat, Sep 07, 2024 at 01:07:45PM +0200, Barnab=C3=A1s Cz=C3=A9m=C3=A1n wr=
-ote:
-> Add omit-battery-class property for avoid system create a battery device.
->=20
-> Signed-off-by: Barnab=C3=A1s Cz=C3=A9m=C3=A1n <barnabas.czeman@mainlining=
-=2Eorg>
+Hi Junhao,
 
-Please run scripts/checkpatch.pl and fix reported warnings. Then please
-run  and (probably) fix more warnings.
-Some warnings can be ignored, especially from --strict run, but the code
-here looks like it needs a fix. Feel free to get in touch if the warning
-is not clear.
+> Initial support for the power management MCU in the Ariaboard Photonicat
+> This patch series depends on Add support for Ariaboard Photonicat RK3568 [1]
 
-Your SoB does not match.
+The official website says it's "Renesas RA2E1 cortex M23 ultra-low power MCU"
+Perhaps renaming the 'Photonicat MCU' to 'Renesas RA2E1 MCU' would be better?
 
-Best regards,
-Krzysztof
+-- 
+2.25.1
 
 
