@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-13848-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13849-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABE8A9705B1
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 10:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DAEA9705B7
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 10:14:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6708C282DA6
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 08:14:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32D01282D2E
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 08:14:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E534676410;
-	Sun,  8 Sep 2024 08:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9625F7D3E2;
+	Sun,  8 Sep 2024 08:14:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pclr3fWN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nUdtfPnG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93FA5F9F5;
-	Sun,  8 Sep 2024 08:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D3D51C5A;
+	Sun,  8 Sep 2024 08:14:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725783242; cv=none; b=EhhRpltLvhYK6rOMaNI3OUjtMfZqrOnBJ+wuE0D2+50FO0SdhtNyQIc4/aTiiE3lcyRsn3KAV2gR5b1Mj4FRj9wejsNsfMV3dZUtEQccAHFHI977ZGKTKd0yxZyKartAOcXDZ0kT0ep+lg4OD3b0P1ks1MckZg5P75Ha7gnpAOM=
+	t=1725783281; cv=none; b=moMCR2BSFxz4LchO1Y58NH7IIgKfvbtk6NkWDxvcFrveFWpKKAemhgvS/0jPIoval0Zuuea/V0616PlmDK/wJP6b0Bq7KgK7W+mMBKgvBjU9TGr8v4NS29IrYIQjCk4yA//DaVVnzAJAGi/e3YMfS3i/8RSvRvOAN+easS7NLuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725783242; c=relaxed/simple;
-	bh=lk3y3r9rCVBETAKY3ZTOr+TpiAyeqn8OZ0JuF1RrzBI=;
+	s=arc-20240116; t=1725783281; c=relaxed/simple;
+	bh=cgiJhlr4nnR/uILZjD9whNKFrbDvLlZZ6dEmFKExB/Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uaphcUv2brAgMBhdjLuG2XX+F48WKPXAVoKVtTAC5OuDXXGSHvkv6195ELnPhhSkU7HeFY++vUOA0VYieSXWVZT8RNEkhPYwIysYmMjCsoj4405n5kd/yyfILChajYQv6vlkV1q5GOq50BnvWcmdPtchQo5qnNB9xyD8WVdKj+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pclr3fWN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA59EC4CEC3;
-	Sun,  8 Sep 2024 08:13:55 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=hiWAnDohBxB6slDBej/L0iIfYUADJ9DEW4PksQGRGNpDPOazmb6Q4c8qwDwCGno3x0hkIjqc+9Q6Eh0ZaNozFBKN66s5JRzE1dqmmprCPiiCne/oC5Hl/wSb4yXuB0iV62Lxf3+3C5mdrfqTpmhSpRDsjFG4N01mZuPjj2IjVcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nUdtfPnG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE45C4CEC3;
+	Sun,  8 Sep 2024 08:14:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725783242;
-	bh=lk3y3r9rCVBETAKY3ZTOr+TpiAyeqn8OZ0JuF1RrzBI=;
+	s=k20201202; t=1725783281;
+	bh=cgiJhlr4nnR/uILZjD9whNKFrbDvLlZZ6dEmFKExB/Q=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Pclr3fWNCXyFvmnW7/dKCy75j6qc38ImoqMgkG1VKgZVu6ir2YWdCkVJSGVutF1h/
-	 7Z+pwlL/HL/pO4puQt6uGk82kbye2biFWZIrjSePMKFNcsbfa+g6MnFuOZmf8H8kn6
-	 dpcReWjafb+rcFGUdGNfJiG4fWSQl5WDZrVyOlS2ff/4PynEeBYETKI5QLRr3nDGKz
-	 SGDB8SWqQPaheNsS3Dz8Dmi38VmBnYZpC4IMPsqyPbK5gS+b1UYOecahBx7RRATE/A
-	 X4v+f2smG7vP0Yl3N7iJsRwJe8dHCqG3TE8liCxab+JXSE0Av8gOonotjfxgPPsqYZ
-	 Xt8yru/lucckw==
-Message-ID: <77d41268-30e3-48a5-b611-40f586586ffb@kernel.org>
-Date: Sun, 8 Sep 2024 10:13:53 +0200
+	b=nUdtfPnGu6eTeN6unjA6pZxdWG/XS9XZFUQrb7gEbB3broTXlo6bDA/15QWSthRnk
+	 XH/+22uS6otXO9wBz+DCq+HqW09kyO7PYKcGiWCGv0nVqPSW+RCSVq58IHBNqD58H8
+	 VOKuEN55UGhxEmrghl7kpeoCNZRE83dtiVfExkrItThBpi4teZOabqcTsjDGw7XwvW
+	 +IfUMlo5YaC7UdDidVlQCGMSjd8zOH7IxUQNkVtofyzeoh1RdMqzrGUpxayFK7tAqp
+	 yg3aLD7C+tPOw2XAAzFcDI1cbIWqXW3/svnxllISQqnzZnjcIItNhThZaviF0W46GX
+	 Wat38rKxm16ZQ==
+Message-ID: <917ac8d8-a483-422c-a408-cdd44793e910@kernel.org>
+Date: Sun, 8 Sep 2024 10:14:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,24 +50,24 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 8/9] dt-bindings: Add documentation for Photonicat PMU
-To: Junhao Xie <bigfoot@classfun.cn>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+Subject: Re: [PATCH 1/9] mfd: Add driver for Photonicat power management MCU
+To: Junhao Xie <bigfoot@classfun.cn>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
  linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- "\"Conor Dooley,\"," <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
- Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ linux-rockchip@lists.infradead.org
+Cc: LKML <linux-kernel@vger.kernel.org>,
  Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Heiko Stuebner <heiko@sntech.de>,
- Chukun Pan <amadeus@jmu.edu.cn>
-References: <20240906093630.2428329-1-bigfoot@classfun.cn>
- <20240906093630.2428329-9-bigfoot@classfun.cn>
- <dbc6af20-886a-46fb-a16c-dbcb5861478c@kernel.org>
- <cd0b36f4-f31d-4a65-868c-72b3c7021f14@classfun.cn>
+ Chukun Pan <amadeus@jmu.edu.cn>, Conor Dooley <conor+dt@kernel.org>,
+ =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ Jean Delvare <jdelvare@suse.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>
+References: <20240906093630.2428329-2-bigfoot@classfun.cn>
+ <de5c9c27-56fa-4163-98e1-9a98400d2408@web.de>
+ <43918eda-c4e8-471a-9de4-ea72bb090803@classfun.cn>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,116 +113,36 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <cd0b36f4-f31d-4a65-868c-72b3c7021f14@classfun.cn>
+In-Reply-To: <43918eda-c4e8-471a-9de4-ea72bb090803@classfun.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 07/09/2024 16:27, Junhao Xie wrote:
+On 07/09/2024 16:33, Junhao Xie wrote:
+> On 2024/9/7 16:44, Markus Elfring wrote:
+>> …
+>>> +++ b/include/linux/mfd/photonicat-pmu.h
+>>> @@ -0,0 +1,86 @@
+>> …
+>>> +#ifndef _PHOTONICAT_PMU_H
+>>> +#define _PHOTONICAT_PMU_H
+>> …
+>>
+>> I suggest to omit leading underscores from such identifiers.
+>> https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+or+define+a+reserved+identifier
+>>
+>> Regards,
+>> Markus
+> 
+> Thanks for your suggestion, does this look better?
+> #ifndef MFD_PHOTONICAT_PMU_H
+> #define MFD_PHOTONICAT_PMU_H
 
->>> +
-> [...]
->>> +  local-address:
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    minimum: 1
->>> +    maximum: 127
->>> +    default: 1
->>> +    description: CPU board address
->>
->> Address of what? In which notation? It's part of this hardware.
->>
-> 
-> Photonicat's MCU protocol documentation says it supports multiple hosts.
-> But Photonicat only uses one.
-> Is it necessary to remove local-address and use a fixed address?
-
-I don't understand what this "address" is for.
-
-> 
->>
->>> +
->>> +  remote-address:
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    minimum: 1
->>> +    maximum: 127
->>> +    default: 1
->>> +    description: PMU board address
->>
->> Eee, no. Your board knows its address. You do not have to tell it.
-> 
-> I will remove remote-address.
-> 
->>
-> [...]
->>> +
->>> +patternProperties:
->>> +  '^leds-(status)':
->>
->> That's not a pattern.
->>
-> 
-> I originally wanted to keep it for extensions, but it didn't seem like a good idea.
-> I will move it to properties.
-> 
->>> +    $ref: /schemas/leds/ariaboard,photonicat-pmu-leds.yaml
->>> +
->>> +  '^supply-(battery|charger)$':
->>> +    $ref: /schemas/power/supply/ariaboard,photonicat-pmu-supply.yaml
->>
->> Why two nodes?
->>
->>> +
->>> +required:
->>> +  - compatible
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +      serial {
->>> +          photonicat-pmu {
->>> +              compatible = "ariaboard,photonicat-pmu";
->>> +              current-speed = <115200>;
->>> +              local-address = <1>;
->>> +              remote-address = <1>;
->>> +
->>> +              supply-battery {
->>> +                  compatible = "ariaboard,photonicat-pmu-supply";
->>> +                  label = "battery";
->>
->> Nope, drop label.
->>
->>> +                  type = "battery";
->>
->> No, there is no type property.
-> 
-> There are two supplies here, one is the charger and the other is the battery.
-> Is it necessary to change to use different compatible ones like
-> ariaboard,photonicat-pmu-battery and ariaboard,photonicat-pmu-charger?
-
-Are the devices different? Why do you even need the type?
-
-> 
->>
->> Missing monitored battery.
->>
-> 
-> I will add it.
-> 
->>> +              };
->>> +
-> [...]
->>> +
->>> +              watchdog {
->>> +                  compatible = "ariaboard,photonicat-pmu-watchdog";
->>> +              };
->>
->> These are seriously redundant and useless nodes.  There is nothing
->> beneficial from the nodes above - they are all empty, without resources.
->> Drop all of them.
-> 
-> How should I describe these devices? Using mfd_cell?
-
-You mean drivers? MFD or auxiliary bus.
+<form letter>
+Feel free to ignore all comments from Markus, regardless whether the
+suggestion is reasonable or not. This person is banned from LKML and
+several maintainers ignore Markus' feedback, because it is just a waste
+of time.
+</form letter>
 
 Best regards,
 Krzysztof
