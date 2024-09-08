@@ -1,108 +1,119 @@
-Return-Path: <linux-pm+bounces-13857-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13858-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A0A2970832
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 16:42:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB806970835
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 16:44:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FF091C214A0
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 14:42:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EE9B1F21186
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 14:44:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A9B170A39;
-	Sun,  8 Sep 2024 14:42:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 791CB167296;
+	Sun,  8 Sep 2024 14:44:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gssYXX+l"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aQBr0+Cm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268F1EACD;
-	Sun,  8 Sep 2024 14:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC57EACD
+	for <linux-pm@vger.kernel.org>; Sun,  8 Sep 2024 14:44:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725806550; cv=none; b=k3GDTp2iGagM/nr7Wxo8ous4HOe5Wg0E3TdvT9UKhjpw/WfkWj2Bb7FO4RMeGBxoo4DZaS4NUMymwb7nAIq6EN1cNC1Fwq8+Vsr2T83qqtctWA2emX1JvtWrjoVbS0FwELDEtV+nd2vYUJSxCBjy8fzxdm5Zc/C6VoxaBVUXawA=
+	t=1725806671; cv=none; b=X4YTt/UoqBh8Z7/WJLxVD0ZHREgBe4XCTtbounIywU2tK5q2mGliPpnEh6whvA4S9yiBQbQVbkBvga+vCW62tMv9TFamgFVfXqrngfuVFkqq6opJEhnI24Ui/53ZBtheFN2VTT3nNCRKAbz0v22nFF+EOk70F292UkaqkyCiKxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725806550; c=relaxed/simple;
-	bh=5ueBFh6FnrnDNPBpwYqbTTAHKcFmDARYM4p9RCkGkNc=;
-	h=Message-ID:Date:MIME-Version:From:To:Cc:Subject:Content-Type; b=CVjqZn76r/1ZFiAGTHOdmYFZJ9voJg2IKZeKhr7kPtJglFdKJ8SrOnqDVgavSICqIZFUbxwQdjhNs8lBuHRC1Xr3YBiaD/lrLtheCBxpyRpry+ajo2ry1ncQgW1MCu8mGE6Vf9qY6vmRVsEn36TWbW77OTfzg0AdUVwyFtMsNDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gssYXX+l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 970E5C4CEC3;
-	Sun,  8 Sep 2024 14:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725806549;
-	bh=5ueBFh6FnrnDNPBpwYqbTTAHKcFmDARYM4p9RCkGkNc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=gssYXX+lejHaAGxt7/jrLqTRVTMOmsGeU4b7+0lI1sa+Umf7J2HgbuKK0waMDX9vT
-	 Jd4TULID1/+0BxxmxjQpA5NcoTAzYBP8ICyyjDzh2J0KS/opPqA8Mesammns+1EB39
-	 t3Y9cWQ5tEUSYlYsi6bLAcN2Kse4UE5T+tdnHS/QZpJmYr856ajCfGLQyKurntGKWe
-	 OdS4WvqYqeB4Qf0ydUuGH6EoHlJB9nkOPYtGnET2ooTLGqVGuGBeYhAZ1lUPix0BeE
-	 eqLX4CoswsNBpq7SBRN7WqwNvu/ZAzlJ9wKfPJ+gBg4o6MZ6EyCOHBBI6uLCbl49uc
-	 80BgnbyxcQtcA==
-Message-ID: <a9d9f0ec-1744-4543-a190-138facf8c552@kernel.org>
-Date: Sun, 8 Sep 2024 23:42:25 +0900
+	s=arc-20240116; t=1725806671; c=relaxed/simple;
+	bh=zdlRpztLmzftiRfjsq2RXQaqloPZy8rJ6OyhqHp2cGc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TM/rZch4Y+NtgDppxs9BqcqBMPOROCq7q6gHNdAiiWX1DytnfDq3U5aQiRx6UvjOypEgYmAeXZpiQHTofMKEgeHo0Lpdx9vIhHKjuCMrvEajc+QB1+TPVxglnJpiEmb+YN6EdO7pa9fBjP2Vlw6bA/caX2Lceb7Dhevoj0EjFt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aQBr0+Cm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1725806667;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=duFMkMJ3Fvhj52p9hfDJs48kWrkYGevSwaUUN1sFCko=;
+	b=aQBr0+CmdLPMHP36BU5qWn0GOn4Y5CdlbRSdYknYbR9Up0AzEeQ/1KF4BTRwK/bcSnqHsj
+	TQPrkHmntjePjkmJYyxtW0+ekNoHA0DeGVPi7VyrkhYLCybBZ3Zjw+mXm3HQRi+P5zE5w/
+	osRWou0nv4+Q86hpBxMowfK6yoOa1G8=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-501-KBHFqJkVNzmIwOtXd4M_Gw-1; Sun,
+ 08 Sep 2024 10:44:25 -0400
+X-MC-Unique: KBHFqJkVNzmIwOtXd4M_Gw-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CC8B61956089;
+	Sun,  8 Sep 2024 14:44:22 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.192.73])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BBDCB1956054;
+	Sun,  8 Sep 2024 14:44:20 +0000 (UTC)
+From: Hans de Goede <hdegoede@redhat.com>
+To: Sebastian Reichel <sre@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	linux-pm@vger.kernel.org,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH 6.11 regression fix] power: supply: sysfs: Revert use power_supply_property_is_writeable()
+Date: Sun,  8 Sep 2024 16:44:14 +0200
+Message-ID: <20240908144414.82887-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Chanwoo Choi <chanwoo@kernel.org>
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>, Chanwoo Choi <chanwoo@kernel.org>
-Subject: GIT PULL] devfreq next for 6.12
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-Dear Rafael,
+power_supply_property_is_writeable() contains the following check:
 
-This is devfreq-next pull request for v6.12. I add detailed description of
-this pull request on the following tag. Please pull devfreq with
-following updates.
+        if (atomic_read(&psy->use_cnt) <= 0 ||
+                        !psy->desc->property_is_writeable)
+                return -ENODEV;
 
-Best Regards,
-Chanwoo Choi
+psy->use_cnt gets initialized to 0 and is incremented by
+__power_supply_register() after it calls device_add(); and thus after
+the driver core calls power_supply_attr_is_visible() to get the attr's
+permissions.
 
-The following changes since commit 431c1646e1f86b949fa3685efc50b660a364c2b6:
+So when power_supply_attr_is_visible() runs psy->use_cnt is 0 failing
+the above check. This is causing all the attributes to have permissions
+of 444 even those which should be writable.
 
-  Linux 6.11-rc6 (2024-09-01 19:46:02 +1200)
+Move back to manually calling psy->desc->property_is_writeable() without
+the psy->use_cnt check to fix this.
 
-are available in the Git repository at:
+Fixes: be6299c6e55e ("power: supply: sysfs: use power_supply_property_is_writeable()")
+Cc: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+Note this is a straight-forward revert of be6299c6e55e
+---
+ drivers/power/supply/power_supply_sysfs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-6.12
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index 6cd3fac1891b..fb9b67b5a9aa 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -387,7 +387,8 @@ static umode_t power_supply_attr_is_visible(struct kobject *kobj,
+ 		int property = psy->desc->properties[i];
+ 
+ 		if (property == attrno) {
+-			if (power_supply_property_is_writeable(psy, property) > 0)
++			if (psy->desc->property_is_writeable &&
++			    psy->desc->property_is_writeable(psy, property) > 0)
+ 				mode |= S_IWUSR;
+ 
+ 			return mode;
+-- 
+2.46.0
 
-for you to fetch changes up to d47552124bb0b9527da7a95357ae7d2e6046c4f6:
-
-  PM / devfreq: imx-bus: Use of_property_present() (2024-09-05 01:23:56 +0900)
-
-----------------------------------------------------------------
-Update devfreq next for v6.12
-
-Detailed description for this pull request:
-- Add missing MODULE_DESCRIPTION() macros for devfreq governors.
-- Use Use devm_clk_get_enabled() helpers for exyns-bus devfreq driver.
-- Use of_property_present() instead of of_get_property() for imx-bus devfreq driver.
-----------------------------------------------------------------
-Anand Moon (1):
-      PM / devfreq: exynos: Use Use devm_clk_get_enabled() helpers
-
-Jeff Johnson (1):
-      PM/devfreq: governor: add missing MODULE_DESCRIPTION() macros
-
-Rob Herring (Arm) (1):
-      PM / devfreq: imx-bus: Use of_property_present()
-
- drivers/devfreq/exynos-bus.c              | 22 +++++-----------------
- drivers/devfreq/governor_performance.c    |  1 +
- drivers/devfreq/governor_powersave.c      |  1 +
- drivers/devfreq/governor_simpleondemand.c |  1 +
- drivers/devfreq/governor_userspace.c      |  1 +
- drivers/devfreq/imx-bus.c                 |  2 +-
- 6 files changed, 10 insertions(+), 18 deletions(-)
 
