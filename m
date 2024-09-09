@@ -1,145 +1,110 @@
-Return-Path: <linux-pm+bounces-13901-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13902-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A47B4971F65
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 18:38:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C050971F68
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 18:39:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D763288BD5
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 16:38:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9982B239C8
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 16:39:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44909168488;
-	Mon,  9 Sep 2024 16:38:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C96BC136320;
+	Mon,  9 Sep 2024 16:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lz/8oCw/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sK9YhJUn"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FFB21487E2
-	for <linux-pm@vger.kernel.org>; Mon,  9 Sep 2024 16:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F871758F;
+	Mon,  9 Sep 2024 16:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725899904; cv=none; b=WymRHBYY6ZdGSLm2nuVseC1McFMHDtL92KpGpmFn7CDBjIbnnB11PgA6YeiMhA7OkwqQ8j2DFcrWyBUhu1aLX/cmHXfXZwcyJRQuEBLg3WF3xZRa4bP5TPUSG/yGelIhLAKuopu5W3sGV4nFIP2ZzCSBaqy365mfF5X0UorMctA=
+	t=1725899979; cv=none; b=YSG88dHBOQEvTpeS/WqHnIwNVwL69xtL3wQC32wo/8fJhanMPTjXKv5vcRckm7+TXnJ5dhXmVyE1KgsDsMnmaPYo/n7EkqNFMxrRsObzy+RiIjVsOzKDYbZN6G2gFH/AHt0q/yc+DdpibhlFoTakbUP7GFw7mz1+rXo10Og5bo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725899904; c=relaxed/simple;
-	bh=26pYfRVa9CCrl5GO8JaubgMwNbJAivZ31qyuhjb6VaI=;
+	s=arc-20240116; t=1725899979; c=relaxed/simple;
+	bh=BBBQHKs07gowSF4qrKQ1rEREPDQYmNrpskFmijSyLvg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g5eiMxLigVlPREQK9qHF/vAwssjUtlCM2XcdEEegPul87oMkLUwcE+VrdehiFEEVX340VMGkYspRSFEw0sEj7aeO+DelS670x2x4X5upZA4SjNgvaU6qP5MFYkMtgqEwpI7wrbN1MZjN3EPomFjdkPR91dUqk+llNNytuDsSIL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lz/8oCw/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D83C4CEC5
-	for <linux-pm@vger.kernel.org>; Mon,  9 Sep 2024 16:38:23 +0000 (UTC)
+	 To:Cc:Content-Type; b=oC4Rlfbu2//M03qm1OUUUdu9YcfZTeetcs1WS6lvP+s4Euny+Fp7xiOrRxVdFvHmTRV7v37GCFbqvvwG8vzcHeX9/gufUW9HJCMRvtLtJPH4RPOb4WT4rd1dEru53uoEyThsK2s8QrHiYzc+xp75s6GJXtld3xhHkLeJ2U5+8+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sK9YhJUn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38DF7C4CECA;
+	Mon,  9 Sep 2024 16:39:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725899903;
-	bh=26pYfRVa9CCrl5GO8JaubgMwNbJAivZ31qyuhjb6VaI=;
+	s=k20201202; t=1725899979;
+	bh=BBBQHKs07gowSF4qrKQ1rEREPDQYmNrpskFmijSyLvg=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=lz/8oCw/5ZjoxORcKqLTPfyvq3fkXdHLWmT1gBxu0kqSyxBQm6iwqRHcjnzh+U3l1
-	 QmbYjwjyaXzhiSrjkXPHIq1RCPLucFLsIvizaRFhtNMVJeK1jcfLINx3Y3UP2hlyXq
-	 6rRCx/fyHkit04Pu7cfmH9taCQwMhimbjsJERUoLwfv3nEtFOOS++gtsFczHs2NenA
-	 p2DjDkDipmV9KkBgSno3KaKyDvH3Of4Dha6x9xps5RaQpbZTV2KET/rpMDeJrqZrEe
-	 2qnYDsh8Tvp0SPJ8hHnLgTsD1/XrffyO/1EJkypQH75VTidgfJvRcRnx943wLuhdUX
-	 sgA+AF+p/jvug==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5de8b17db8dso2859872eaf.2
-        for <linux-pm@vger.kernel.org>; Mon, 09 Sep 2024 09:38:23 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX0qp8idtNjSNCdUWPNE2UuwVg8prhJZ2jJiBU2bkV5k7MnomVmq0Ju1HdP4d5MuhNa9jCsR3BEww==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywph76bOSmYuIv4uz7gDSD83K5Fil5e/+R7InQr9tS4pz7gnhyP
-	JthXTCaplgDCL0SticXGCsWnuBk8ZyHES7pnoK5TzPbEzYDhpvUyKw4q239bqRySOBiIXO/ICZ3
-	McgMaRBgQa/ywdBKK2xwD8woAbA8=
-X-Google-Smtp-Source: AGHT+IFhCDwyE4qCRaiZ/qa3huhYxWq9BWwBau0I2hI3N+BB+JhqlCeGBhGaSrL1QXkPJIisfRNFQ1LA3ur061h7tS4=
-X-Received: by 2002:a4a:ee82:0:b0:5e1:d961:e7b with SMTP id
- 006d021491bc7-5e1d96110f3mr2241937eaf.1.1725899902997; Mon, 09 Sep 2024
- 09:38:22 -0700 (PDT)
+	b=sK9YhJUnd2ub+UCWoScloiyz3u41HIfaBA3tFTgDw5/z9qz29Rez+fYpRX24RqElR
+	 MbuDcKXFG78+oCplumhji7eVrD+2RBHGlo76+cXpjzsQlJz9F+oSuiYbRpJ+khPlqo
+	 3j9kbVrC9McW3wCFWdzdiCIy+C0lNvHh5ld8EWyd+26boReclLIexaM8eWFHXZqWdZ
+	 JWCJ/cumOQ8jq4EhGfXEg97Ul79WWpddi3LoP/rVL34tpTL7goZ9t3WwRp3hg6/ZIo
+	 pbyHrdhAQdWNRM3uVaTDHK0gje3N1V9T2SUd2djSoOFqvBvMRICslXUWR3uzXJiyn1
+	 kKcmJUf1DwE7w==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-277fa3de06fso2339664fac.0;
+        Mon, 09 Sep 2024 09:39:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWL2srnmx7RklGxF3Q3wbwIkHFUXOr/MA7Qj6qc+ahGCEZxPnrUDqSP/IZnMciv210KjjyK3LgLqhLtPdI=@vger.kernel.org, AJvYcCWtI/yaH3yD9e2ttGeLbC3hhxw6Rja/YFcMoRI5JpPo7fTMz715F+imvFWHhf9zs9lqO5mXX6Ke/V4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvInTyNN4YLbaW6zqR4XZa+p4td96sgIG0jqe8t4zYOkQmVDSY
+	cDVtj1yUsJ6SNxyYAtZ29EtfEEli24I93HjQGjCuPehwjxJoMPiQy//acB36TVkMmZKNRn+G/IZ
+	OBO02OTEUgybI6x6w8YzYwC3jzlg=
+X-Google-Smtp-Source: AGHT+IFlSv9sF6npnQK8II34iFK5F5tASfgXCuvaog4txdLUUgB71YhiB2kNAWFSdGb5sjI7Ohv2ISzySyuAMzb7sXA=
+X-Received: by 2002:a05:6870:658d:b0:277:fdce:6759 with SMTP id
+ 586e51a60fabf-27b82fac1demr12746899fac.31.1725899978551; Mon, 09 Sep 2024
+ 09:39:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <da6db097-d4a7-425f-8e61-084a2fe15770@amd.com>
-In-Reply-To: <da6db097-d4a7-425f-8e61-084a2fe15770@amd.com>
+References: <20240813144348.1180344-1-christian.loehle@arm.com>
+ <ZruDkw2XB8iXMepz@jlelli-thinkpadt14gen4.remote.csb> <1f5f7643-8743-40f4-80ac-0534affd70cd@arm.com>
+ <20240909132508.GD4723@noisy.programming.kicks-ass.net>
+In-Reply-To: <20240909132508.GD4723@noisy.programming.kicks-ass.net>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 9 Sep 2024 18:38:08 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gzUbiaT5_74NSPv9bbBO4GfCoEfx-M0JHHMqYkn5N+8w@mail.gmail.com>
-Message-ID: <CAJZ5v0gzUbiaT5_74NSPv9bbBO4GfCoEfx-M0JHHMqYkn5N+8w@mail.gmail.com>
-Subject: Re: Second round of amd-pstate 6.12 content
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Date: Mon, 9 Sep 2024 18:39:23 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h7DTW=MVyVa0JXKgHrBJN9duRaPjOZdhZLNNH5-61dFw@mail.gmail.com>
+Message-ID: <CAJZ5v0h7DTW=MVyVa0JXKgHrBJN9duRaPjOZdhZLNNH5-61dFw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] sched/deadline: nanoseconds clarifications
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Christian Loehle <christian.loehle@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	vincent.guittot@linaro.org, qyousef@layalina.io, daniel.lezcano@linaro.org, 
+	rostedt@goodmis.org, dietmar.eggemann@arm.com, 
+	Juri Lelli <juri.lelli@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Mario,
+On Mon, Sep 9, 2024 at 3:25=E2=80=AFPM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+> On Mon, Sep 09, 2024 at 02:01:38PM +0100, Christian Loehle wrote:
+> > On 8/13/24 17:02, Juri Lelli wrote:
+> > > Hi,
+> > >
+> > > On 13/08/24 15:43, Christian Loehle wrote:
+> > >> A couple of clarifications about the time units for the deadline
+> > >> parameters uncovered in the discussion around
+> > >> https://lore.kernel.org/lkml/3c726cf5-0c94-4cc6-aff0-a453d840d452@ar=
+m.com/
+> > >>
+> > >> While at it I changed the documentation example to chrt instead
+> > >> of the schedtool fork.
+> > >>
+> > >> No functional changes.
+> > >
+> > > Looks good to me!
+> > >
+> > > At least for docs/uapi,
+> > >
+> > > Acked-by: Juri Lelli <juri.lelli@redhat.com>
+> >
+> > (gentle ping)
+> > Peter, do you want to take {1,2} and Rafael {3,4}?
+>
+> I'll queue the lot if that is okay with Rafael.
 
-On Mon, Sep 9, 2024 at 5:52=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> Hi,
->
-> The following changes since commit 8cc214312cf8a0c3702edd1aa52e507262adcc=
-b9:
->
->    Merge branch 'pm-opp' into linux-next (2024-09-06 20:53:58 +0200)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
-> tags/amd-pstate-v6.12-2024-09-09
->
-> for you to fetch changes up to e121c01c0422fc56033d0dfa1bf3f0366115d2d5:
->
->    cpufreq/amd-pstate-ut: Add test case for mode switches (2024-09-09
-> 10:26:26 -0500)
->
-> ----------------------------------------------------------------
-> second round of amd-pstate changes for 6.12:
->
-> * Move the calculation of the AMD boost numerator outside of
->    amd-pstate, correcting acpi-cpufreq on systems with preferred cores
-> * Harden preferred core detection to avoid potential false positives
-> * Add extra unit test coverage for mode state machine
->
-> ----------------------------------------------------------------
-> Mario Limonciello (13):
->        x86/amd: Move amd_get_highest_perf() from amd.c to cppc.c
->        ACPI: CPPC: Adjust return code for inline functions in
-> !CONFIG_ACPI_CPPC_LIB
->        x86/amd: Rename amd_get_highest_perf() to
-> amd_get_boost_ratio_numerator()
->        ACPI: CPPC: Drop check for non zero perf ratio
->        ACPI: CPPC: Adjust debug messages in amd_set_max_freq_ratio() to w=
-arn
->        x86/amd: Move amd_get_highest_perf() out of amd-pstate
->        x86/amd: Detect preferred cores in amd_get_boost_ratio_numerator()
->        cpufreq: amd-pstate: Merge amd_pstate_highest_perf_set() into
-> amd_get_boost_ratio_numerator()
->        cpufreq: amd-pstate: Optimize amd_pstate_update_limits()
->        cpufreq: amd-pstate: Add documentation for `amd_pstate_hw_prefcore=
-`
->        amd-pstate: Add missing documentation for
-> `amd_pstate_prefcore_ranking`
->        cpufreq/amd-pstate: Export symbols for changing modes
->        cpufreq/amd-pstate-ut: Add test case for mode switches
->
->   Documentation/admin-guide/pm/amd-pstate.rst |  15 ++++++++++++++-
->   arch/x86/include/asm/processor.h            |   3 ---
->   arch/x86/kernel/acpi/cppc.c                 | 172
-> +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-+++++++++++++-----------
->   arch/x86/kernel/cpu/amd.c                   |  16 ----------------
->   drivers/cpufreq/acpi-cpufreq.c              |  12 +++++++++---
->   drivers/cpufreq/amd-pstate-ut.c             |  41
-> ++++++++++++++++++++++++++++++++++++++++-
->   drivers/cpufreq/amd-pstate.c                | 151
-> +++++++++++++++++++++++++++++++++++++++----------------------------------=
----------------------------------------------------------------------------=
----
->   drivers/cpufreq/amd-pstate.h                |  14 ++++++++++++++
->   include/acpi/cppc_acpi.h                    |  41
-> ++++++++++++++++++++++++++++-------------
->   9 files changed, 305 insertions(+), 160 deletions(-)
+It is, thank you!
 
-Pulled and added to the linux-next branch in linux-pm.git, thanks!
+And please feel free to add my ACKs to the patches.
 
