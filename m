@@ -1,198 +1,97 @@
-Return-Path: <linux-pm+bounces-13873-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13874-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0231797096B
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 21:23:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15FB3970C0D
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 04:54:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8191E1F21295
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2024 19:23:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A357FB20C15
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 02:54:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17053177991;
-	Sun,  8 Sep 2024 19:23:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC851AC43C;
+	Mon,  9 Sep 2024 02:54:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U7JkYJ2r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="psMgtIkz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A26F339A8
-	for <linux-pm@vger.kernel.org>; Sun,  8 Sep 2024 19:23:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB0C14277
+	for <linux-pm@vger.kernel.org>; Mon,  9 Sep 2024 02:54:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725823411; cv=none; b=dRm5Ruhekaz6qHv6zWpnBS2FECFeTPnJ63C0RWVVJa6c3GGb5vIofr4AMZVI2yOLiA80DAtS1qssC/YMTQmgTYSpdtVUYVdxyBaJleZ4FlKZHdlQSw+BqrVLVorVoeqypMr5NvADdO09/82ChWFIxq+9WbZfe9tPyUF4BNk217o=
+	t=1725850448; cv=none; b=M0ilD11Z9TxTVCqPkxlC2NrCxhtzeAuUcy0bE4r6ZsfkpzZYYGFld9NEVuvWCYPMkBah7tlEDE7Q1ovjifCkB0YbY4MJaHGmuFAxkJTq+HQC/R/DTfUkFAcZss3QshmwvRadBN5Vhvppznl1RFaTBgzwnyBleH4GpOSiR+JmYu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725823411; c=relaxed/simple;
-	bh=5/VyYIXVdgEHotkpzpm92DYuJ03B4mXi8ZHU0aPpthY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pjSkAxVW/Loy7TEXsaFzqIp9E0Ynr+RjaJQgEoFrUNgpSPX8jbkn+uecbquwf+2pVCIKsg9Pn8+ZKipY68pgTlZkwpeU5BIq2+du799MExUwsaXyhh1dGlKRfHmLXrGa8CXyOr2zTDHMaPDXFT4fc8g+++8kMSpw8WD4dE8I2HY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U7JkYJ2r; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1725823408;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=z+6Qf4igUPHjW9yqNcmV5booAg93WTWfVSVAY+xkvJA=;
-	b=U7JkYJ2rHDAEyYO50jn3B60Jf9c78tlVXaJXA4oakewC2Q8nnuQU5YG7oLpIZRKc/Ejq0b
-	B4UxpGSkMLWiq+6YMV3bSdpUpFwAbiH1ZKl6ZzNT5BxFbNhXXIVmlEDwCfyyKTJ8apObLY
-	ofBUw0tgkzY+a1FpeMIIjIJCwqovAjk=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-275-xHfpNZ0aNDmPOnCCIfn0Ig-1; Sun,
- 08 Sep 2024 15:23:25 -0400
-X-MC-Unique: xHfpNZ0aNDmPOnCCIfn0Ig-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0F5C21953944;
-	Sun,  8 Sep 2024 19:23:24 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.192.33])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EA3431956086;
-	Sun,  8 Sep 2024 19:23:21 +0000 (UTC)
-From: Hans de Goede <hdegoede@redhat.com>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	Jelle van der Waa <jelle@vdwaa.nl>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	linux-pm@vger.kernel.org
-Subject: [RFC 4/4] platform/x86: dell-laptop: Use power_supply_charge_types_show/_parse() helpers
-Date: Sun,  8 Sep 2024 21:23:03 +0200
-Message-ID: <20240908192303.151562-5-hdegoede@redhat.com>
-In-Reply-To: <20240908192303.151562-1-hdegoede@redhat.com>
-References: <20240908192303.151562-1-hdegoede@redhat.com>
+	s=arc-20240116; t=1725850448; c=relaxed/simple;
+	bh=l3OHCFZTpsPXKVQf67zWc1G7CYCJa+oOHsZeyZR2yeg=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OuEuIrUSc9njaJeWoL5PdbGupxl1bKWwCt2cRGAmDgHykNpFzfTP2kxUZfaJypjCq4DRmIHguD16ivzS/A8zQnph74frHT9mbn9nokKVMoeKVeDaid8OegXiutGabUFUdxeKzrIuUGFpIUC84jRHVivhAJklFv2n/uJFO2xmVUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=psMgtIkz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 417B7C4CECD
+	for <linux-pm@vger.kernel.org>; Mon,  9 Sep 2024 02:54:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725850448;
+	bh=l3OHCFZTpsPXKVQf67zWc1G7CYCJa+oOHsZeyZR2yeg=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=psMgtIkz1w0lqOTjNm1ws9f3QdZR2t8apLX2a97BMotI529xV8nFcEuWU/dbdZCA9
+	 u/gzcycrhWG1VZ6pjvDjxnDBq+C1rXHmUN18V1wALz9fwaPm+vg0ipS6GpKT19fFRB
+	 HUaQBo94Gh/1G/PDfKzDjQ1PUSuVOx35FIGFxm3+A4cdm3s1SR7HiWFatVm+jbs9iO
+	 kU8FG0ci+DW7964qPQX8ciH4qOVqoDZEj4nbPvUbL786QLHLRGDOypS8VE4V9LhTMu
+	 EcA1Ofp9gmJb4PIPlm3wbBW7AfOKcYe7tcr/k/ibM6Ud2S9q7lJGpdHM4aA17MfnzC
+	 aHVtGE1G5MmQA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 3BA4EC53BC7; Mon,  9 Sep 2024 02:54:08 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218686] Fail to set energy_performance_preference of amd
+ processor on asus ga403uv
+Date: Mon, 09 Sep 2024 02:54:07 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: al0uette@outlook.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: DOCUMENTED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-218686-137361-2QFrxNvHxJ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
+References: <bug-218686-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-Make battery_modes a map between tokens and enum power_supply_charge_type
-values instead of between tokens and strings and use the new
-power_supply_charge_types_show/_parse() helpers for show()/store()
-to ensure that things are handled in the same way as in other drivers.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
-This also changes battery_supported_modes to be a bitmap of charge-types
-(enum power_supply_charge_type values) rather then a bitmap of indices
-into battery_modes[].
+--- Comment #82 from al0uette@outlook.com ---
+Created attachment 306832
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306832&action=3Dedit
+Patch for cppc_set_epp_perf
 
-FIXME: not tested yet
+I've made a patch to make the kernel write to the epp register even when the
+register is not in PCC. The patch seems to work for me, I can set epp witho=
+ut
+unknown error 524 and the power consumption is lower than before.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/platform/x86/dell/dell-laptop.c | 54 ++++++++++++-------------
- 1 file changed, 25 insertions(+), 29 deletions(-)
+--=20
+You may reply to this email to add a comment.
 
-diff --git a/drivers/platform/x86/dell/dell-laptop.c b/drivers/platform/x86/dell/dell-laptop.c
-index a3cd0505f282..d2ef18547c41 100644
---- a/drivers/platform/x86/dell/dell-laptop.c
-+++ b/drivers/platform/x86/dell/dell-laptop.c
-@@ -103,15 +103,15 @@ static bool mute_led_registered;
- 
- struct battery_mode_info {
- 	int token;
--	const char *label;
-+	enum power_supply_charge_type charge_type;
- };
- 
- static const struct battery_mode_info battery_modes[] = {
--	{ BAT_PRI_AC_MODE_TOKEN,   "Trickle" },
--	{ BAT_EXPRESS_MODE_TOKEN,  "Fast" },
--	{ BAT_STANDARD_MODE_TOKEN, "Standard" },
--	{ BAT_ADAPTIVE_MODE_TOKEN, "Adaptive" },
--	{ BAT_CUSTOM_MODE_TOKEN,   "Custom" },
-+	{ BAT_PRI_AC_MODE_TOKEN,   POWER_SUPPLY_CHARGE_TYPE_TRICKLE },
-+	{ BAT_EXPRESS_MODE_TOKEN,  POWER_SUPPLY_CHARGE_TYPE_FAST },
-+	{ BAT_STANDARD_MODE_TOKEN, POWER_SUPPLY_CHARGE_TYPE_STANDARD },
-+	{ BAT_ADAPTIVE_MODE_TOKEN, POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE },
-+	{ BAT_CUSTOM_MODE_TOKEN,   POWER_SUPPLY_CHARGE_TYPE_CUSTOM },
- };
- static u32 battery_supported_modes;
- 
-@@ -2261,46 +2261,42 @@ static ssize_t charge_types_show(struct device *dev,
- 		struct device_attribute *attr,
- 		char *buf)
- {
--	ssize_t count = 0;
-+	enum power_supply_charge_type charge_type;
- 	int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
--		bool active;
-+		charge_type = battery_modes[i].charge_type;
- 
--		if (!(battery_supported_modes & BIT(i)))
-+		if (!(battery_supported_modes & BIT(charge_type)))
- 			continue;
- 
--		active = dell_battery_mode_is_active(battery_modes[i].token);
--		count += sysfs_emit_at(buf, count, active ? "[%s] " : "%s ",
--				battery_modes[i].label);
-+		if (!dell_battery_mode_is_active(battery_modes[i].token))
-+			continue;
-+
-+		return power_supply_charge_types_show(dev, battery_supported_modes,
-+						      charge_type, buf);
- 	}
- 
--	/* convert the last space to a newline */
--	if (count > 0)
--		count--;
--	count += sysfs_emit_at(buf, count, "\n");
--
--	return count;
-+	/* No active mode found */
-+	return -EIO;
- }
- 
- static ssize_t charge_types_store(struct device *dev,
- 		struct device_attribute *attr,
- 		const char *buf, size_t size)
- {
--	bool matched = false;
--	int err, i;
-+	int charge_type, err, i;
-+
-+	charge_type = power_supply_charge_types_parse(battery_supported_modes, buf);
-+	if (charge_type < 0)
-+		return charge_type;
- 
- 	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
--		if (!(battery_supported_modes & BIT(i)))
--			continue;
--
--		if (sysfs_streq(battery_modes[i].label, buf)) {
--			matched = true;
-+		if (battery_modes[i].charge_type == charge_type)
- 			break;
--		}
- 	}
--	if (!matched)
--		return -EINVAL;
-+	if (i == ARRAY_SIZE(battery_modes))
-+		return -EIO;
- 
- 	err = dell_battery_set_mode(battery_modes[i].token);
- 	if (err)
-@@ -2421,7 +2417,7 @@ static u32 __init battery_get_supported_modes(void)
- 
- 	for (i = 0; i < ARRAY_SIZE(battery_modes); i++) {
- 		if (dell_smbios_find_token(battery_modes[i].token))
--			modes |= BIT(i);
-+			modes |= BIT(battery_modes[i].charge_type);
- 	}
- 
- 	return modes;
--- 
-2.46.0
-
+You are receiving this mail because:
+You are the assignee for the bug.=
 
