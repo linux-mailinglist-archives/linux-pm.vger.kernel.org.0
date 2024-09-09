@@ -1,124 +1,115 @@
-Return-Path: <linux-pm+bounces-13911-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13912-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D9D29724B1
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 23:54:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF04E9724D5
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 00:00:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E48531F230DF
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 21:54:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 902402832F4
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 22:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C2718C357;
-	Mon,  9 Sep 2024 21:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E994418C924;
+	Mon,  9 Sep 2024 22:00:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lmWZWjNj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NQxyacZq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624AF18A943
-	for <linux-pm@vger.kernel.org>; Mon,  9 Sep 2024 21:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1CC17085C;
+	Mon,  9 Sep 2024 22:00:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725918867; cv=none; b=Hw7LD9FBncu1SUGAaeL9XSKuOF2azlFx/P4TlVwlZ0LywFJgT+OTqpLAs29SdG9BaVtsxpOlHnyMsXVh3mOs/dh0+9pYhHecmkeY98vW/soBpgOR0gQNL7EL2vxKL9J4bOQqUl4rNbaunNjKIb/DSXbfdjY9z36wp4ZIggoZstw=
+	t=1725919241; cv=none; b=KPI93kEssoG1zSpMEpEmXPquuB49ToTcgYOnFbjV6CBt7qYLKb5MEsIRnep6IRz9AJv+FFIM2dtCvGbfgEdJPhZZc0oO+44ucFxC7OdQPrXXdTEGPGlGjWmvoegdnlRy13Nn7XSM6+l+//4YRHkqKYjGu+xGaBDK1nmY/IlEOuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725918867; c=relaxed/simple;
-	bh=tc5vFEk0/ZIqtoEx0ouUbNy3KhLKcXm9ngUz/lRGohg=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BB147/OcauC64R1S2JjGfNrl9aT5GFZJtOkQ4XytS5TcGqOjZSEV6a7vLEX/L7IiZQAd/VttxXkU9acQ41dMeIt82+hNZD1JMpWC4E9D8vl90d0K9jmksrG8cEZDGuql/kvhjkFqrAAemUllp/kuYwM8cQ8cN7O4WN1geEPgwTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lmWZWjNj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F3284C4CECF
-	for <linux-pm@vger.kernel.org>; Mon,  9 Sep 2024 21:54:26 +0000 (UTC)
+	s=arc-20240116; t=1725919241; c=relaxed/simple;
+	bh=JGqxWA1KpqkAc55m1tTC6BCwYiBtn9t2WlYbKLNP9PA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t7LTXBUPaCpQdJxHG8SxPM471MOStfjEMmgVhfFTSHGkq3ACgq+APyboa9FzIZJAnDgICCdN7sBdIXBRuqtHIIF6zuSXMC7Co2tinYkIw12v9oaz/whXBOcG0cs26YHEwJYV7Hf4pZIBUOTM39HeTvDnDITYrucP8n4HGZAeJFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NQxyacZq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22797C4CEC5;
+	Mon,  9 Sep 2024 22:00:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725918867;
-	bh=tc5vFEk0/ZIqtoEx0ouUbNy3KhLKcXm9ngUz/lRGohg=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=lmWZWjNjVPdpUQ7ZWU286NHuwR6CJzG+ZyONJI2clVuX9Pi205lR917EGdcHMJKZm
-	 y3dSMJBj5yDKXEhPMwWSK3ftLfiCSV84BljkrdsWhCqyz4ZGfiZvq1D0WNmEXwHLDG
-	 YfHu7XMkaRLXzOCwxOQg8xJmq4RVkgnaqTOn0LqDmLy/sXlyoIL53bYee2Q2E9t8a4
-	 v+cM0uQXaRtTAjwM1R2WIWuOg7AO+T2hSW6VZgQn2bt/VxIhKZ73oHs/DWI5IqRjiV
-	 ixTmhXlAjyTPVn9aslUMootlYTDCKf48ZEZnAPtWIcW16a31czlWnoIlms2koFCxBL
-	 AzOUP4gv87hvQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id EBB97C53BC2; Mon,  9 Sep 2024 21:54:26 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218686] Fail to set energy_performance_preference of amd
- processor on asus ga403uv
-Date: Mon, 09 Sep 2024 21:54:26 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: vderp@icloud.com
-X-Bugzilla-Status: REOPENED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218686-137361-P6UjrTx2hT@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
-References: <bug-218686-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1725919241;
+	bh=JGqxWA1KpqkAc55m1tTC6BCwYiBtn9t2WlYbKLNP9PA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NQxyacZqx2mx4EIfylMDD80N8nKpi6Z4sD/6j/wb42m457LVQ7pSUYuqK9GwJ591u
+	 PbP+1nkeIN/X9dNDZ+QlCx7QuEuRErypeBcRu04QZcCVboJCDgqIAoCZlUQIoaZ3ry
+	 7yEiOmZB03zKzR2vJjhBoA1r0BTUqVtYhw9gX5VdjH7qmXrvgfaT7Ux6Om8uea3lgk
+	 k3uIZrrYN8N0cpQA3ftiduW3sSUipu5n8RYtU192usneRZ8bZN3ZxBrr1R26ApGpSO
+	 22OhK7XfNoCuee+oiepdl8ebEpfvTsT05+vRXrdkfbAMAYGjE2ObeU03mP7wkJrL0L
+	 3oNMpguap45Qw==
+Date: Mon, 9 Sep 2024 23:00:30 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, andersson@kernel.org,
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+	herbert@gondor.apana.org.au, davem@davemloft.net,
+	sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
+	will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
+	jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+	amitk@kernel.org, thara.gopinath@gmail.com,
+	cristian.marussi@arm.com, rui.zhang@intel.com, lukasz.luba@arm.com,
+	wim@linux-watchdog.org, linux@roeck-us.net,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-crypto@vger.kernel.org, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, kernel@quicinc.com,
+	quic_psodagud@quicinc.com,
+	Praveen Talari <quic_ptalari@quicinc.com>
+Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
+Message-ID: <70673636-5b44-4b61-865c-83f9c5d3501d@sirena.org.uk>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-17-quic_nkela@quicinc.com>
+ <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
+ <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
+ <9a655c1c-97f6-4606-8400-b3ce1ed3c8bf@kernel.org>
+ <d206e315-3324-4814-b98d-027c3af6ebb6@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+4FsY8uVcR5U7FtS"
+Content-Disposition: inline
+In-Reply-To: <d206e315-3324-4814-b98d-027c3af6ebb6@quicinc.com>
+X-Cookie: Anything is possible, unless it's not.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
---- Comment #90 from derp (vderp@icloud.com) ---
-There's no ideal diagnostic tool for that, as for frequencies they are seen=
- as
-something like that, but it was probably the same or very close without CPPC
+--+4FsY8uVcR5U7FtS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-(I wouldn't mind if all of these somehow got to 400Mhz instead of 1400Mhz
-though)
+On Mon, Sep 09, 2024 at 01:29:37PM -0700, Nikunj Kela wrote:
 
-cat /proc/cpuinfo|grep MHz|sort
-cpu MHz         : 1395.796
-cpu MHz         : 1396.448
-cpu MHz         : 1397.373
-cpu MHz         : 1397.388
-cpu MHz         : 1397.403
-cpu MHz         : 1397.414
-cpu MHz         : 1397.434
-cpu MHz         : 400.000
-cpu MHz         : 400.000
-cpu MHz         : 400.000
-cpu MHz         : 400.000
-cpu MHz         : 400.000
-cpu MHz         : 400.000
-cpu MHz         : 400.000
-cpu MHz         : 400.000
-cpu MHz         : 400.000
+> Now I am confused which prefix format shall I use? first spi or first
+> dt-bindings?
 
-the main difference can be seen in amdgpu_top, which for some reason treats=
- CPU
-cores as GPU cores
-it can show mW per Core, and even when frequency stays at 1400, the mW power
-assigned to these cores is much much smaller, as well as total "GFX" power
-which is the total APU power, I guess
+spi: first.
 
-"GFX" is now about 700 mW and "SoC" about 400mW when idle
+--+4FsY8uVcR5U7FtS
+Content-Type: application/pgp-signature; name="signature.asc"
 
-power savings are about 1W for system idle and low-power activities
+-----BEGIN PGP SIGNATURE-----
 
---=20
-You may reply to this email to add a comment.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbfb/0ACgkQJNaLcl1U
+h9DmmAf9G79iJqbIo+rLvhxVQG/V00Xz3Y1hZjGbPTyKNQIuiSThwS/ZexjpAnky
+dxPN6CKinfv2CcaHSqAfTaiOX7e41E6yQe0MhZRHgvnp9GWDwzFR+vo/Jkf7vOvk
+FdHkgDxP+8DqOEk/JvSsuUbeWBm8+6SYmz3aY49ZDdTM/AWXoLpfIuRG9HHI4oC0
+pcewKeElbb4mm8XtAESmg+SfofXpaXXqWnzrqGfKnG2Jhz2SYaDIbLUzRrIcMyQC
+UkUJzcsdp019ZGJl0xUhb05YlxUPnZ2vQ1OJaDh/15NkTWCoSTdDX1WTWjHtmjfB
+soCaA83E+/cUHrHnZjH7ZOZFfA0F2A==
+=OtuN
+-----END PGP SIGNATURE-----
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+--+4FsY8uVcR5U7FtS--
 
