@@ -1,139 +1,151 @@
-Return-Path: <linux-pm+bounces-13884-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13885-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A4AE97152E
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 12:19:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20C79971880
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 13:44:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A1532857AC
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 10:19:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6A23284504
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2024 11:44:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D22781B3F2C;
-	Mon,  9 Sep 2024 10:19:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 504571B5EB8;
+	Mon,  9 Sep 2024 11:44:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qdd/TaBo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U5rCuUt/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5731AC8BF
-	for <linux-pm@vger.kernel.org>; Mon,  9 Sep 2024 10:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214BA13BAF1;
+	Mon,  9 Sep 2024 11:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725877148; cv=none; b=Dfd19355oMnCWJAmo7WfoeeqC2kAYh5hQsvQRAz2bQlB7vlQNrXIPD8FXALsvLKvHTJ+9yOO+UaXc2K6XA8FcxaJX3whZwxsGtwrsY4XEyPFrFZGSxiMky7H5HQOHznzQI0alzcEU8xW3Ver6BJwVkGK9L29vu3tVcf0rdSKdqM=
+	t=1725882282; cv=none; b=hW8MzaVM3PuCpzNonVgACwlrXa9hjC0LnW5en70HIK/wmfc4QFsvZ6UXb4XKZmEmoxrigbAYhGs8TZioL3wLGP4YnqXwF5JKZqegJ4+WgbzWXOdajPBGH/f6tf8prr7aqQYcCug0x0IhL0ZSrhCkJZquVE+wy5V4nD+n7mMSa7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725877148; c=relaxed/simple;
-	bh=/MtOZqjYjXOZxWyvRKziMN3PpN+drwQz+IQM3d0lnqo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c90yuBD833hXnFNFat7ePJPh2xc9RN+ojBZWi4D3OwHFg5QGJ/VmYe4yzxhg6hwxmIruWSloeW3N5SrYYYx0nepeY40CUBOyTYfr0L3aKvgU2wuR8vCSP7qeLmoRJ5J6NDRa5mXiJ0fOrPYOeOTuyoQJoesKp3OTxeDcM0IT+p4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qdd/TaBo; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e1a8ae00f5eso4368145276.0
-        for <linux-pm@vger.kernel.org>; Mon, 09 Sep 2024 03:19:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725877146; x=1726481946; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0gO+UN0cBDH4/yTsxd+kVbLwUAMxEmBNCCbdpfIZTbQ=;
-        b=qdd/TaBoMgV8f92e5i9FBEVOvqvBqpeNKgeShg9FXgouklQ7GGQzYxB/mxgWFkKrS9
-         gfSIenOpJY62wkhF4ZLRfvU9gs4tybSsovKwz4alZ3tSpfwKPyuaAZ8fOMgYorMwZ4L1
-         +6JWCdV0vnOt7q5xJ4KlUOlFV+h3GZbXH7E98yrbcgow8OC5TaQQoX57XczrtqmdCNuZ
-         h3aDk8xDzghLYX3pLZt1Rz+0cMTi2Cyy0C0LKwxmpaBq04f7k5jn0bcj850z6VJcKM0H
-         jUwr8mxKLTz0p2/HzuP2170IbRjbVg1cYswFl/DzHXpvpfTgQSZCvJQU77t6jsf7oe48
-         8pFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725877146; x=1726481946;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0gO+UN0cBDH4/yTsxd+kVbLwUAMxEmBNCCbdpfIZTbQ=;
-        b=ejt9eTklfkkHnXK1VRkG9/8XY4eSJH78hsqIyZXdnh6jeG84GGOX64o519KuFL0zvI
-         zEv+DS1gO2HMVrZjQolWDSrTfPCM6jumVivCtrq65HegJm7dlqNoFtRfPR1OUb352HGI
-         K19UEMnVttnT3gj15m2SvzXAkd9C4dPcmurkjpHv6KFcVC1Eetzxy7Ha0l/7L1oR/htr
-         Wk+E7AfRUZmOHE2Wj46O7EWc0bmhnpz3Q2XvtHt2Us18mWDm0GcGDan5LmoiIJMLjMxK
-         v73N6A22+fmGMjsNQYFTI7iY1v0rEDjkJrd1yzFjyW9S1jWU5x2ipTvb9E2qGwFlmuP9
-         7QaQ==
-X-Gm-Message-State: AOJu0YzWwGpqwKlqOfPf2Qtb/Yq+sSz4rRD2wza7NZmQRxDVYkhKZVdo
-	eKaxLsLDs+0bcgxo/MSrPXE28HSOvQMFhmWdHQXbGGov0JI2LyzbMLyqZ0qW4FYiW2sV3SLBpdF
-	vi4cOwoRWT5OF5yRcoEqP+M5Tuy83L6KMx9cPzA==
-X-Google-Smtp-Source: AGHT+IH08bXPRnV+yehRf1zMzB/R9ecWLBxkkpijcZBbtJ3y4Ft6NTBNQPxQPK0XcPEg++3GjylRa441YT0Rj8Ga/Z0=
-X-Received: by 2002:a05:6902:230d:b0:e1a:90f4:c1f6 with SMTP id
- 3f1490d57ef6-e1d34899313mr11771638276.27.1725877146085; Mon, 09 Sep 2024
- 03:19:06 -0700 (PDT)
+	s=arc-20240116; t=1725882282; c=relaxed/simple;
+	bh=f+NSGq6TljgaNwZQR7G5fjeuCWVRffzY5N1ZKOCGWRs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Hd1FpBjDhcvAhsj2tM54ga7kZsfiq3BApvQnVHODrFvL6hHK7b6+6OKj6Qks2hwGMtz5t2wQ/OpiOfGnoMMx8caXthysijtbMYEOwn1faEoHAtpCiV/DECUP4KDw8lHk1DgmTwb92Of/vbC9bqGF/g1ZzGzoLlpWfzIAVU+ygNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U5rCuUt/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D665C4CEC5;
+	Mon,  9 Sep 2024 11:44:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725882281;
+	bh=f+NSGq6TljgaNwZQR7G5fjeuCWVRffzY5N1ZKOCGWRs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=U5rCuUt/Kr5K4UckaJ73ypDTLTtixWFzKt3lquC/DY09gjkA3/Nzoio4x4Whgr6va
+	 vu6s5/ffO1xDlTlN0O71toCg5d6yY3DKQswqMCug3OKn8Mkk/w5kr/Jpp2J8/urKOz
+	 ZfOwLz+ck0/pJB2Jxf1jD3yzGdJyMeE5fbKLQDrl1YBtPbotH5RILg3qPKCyyeEFvP
+	 kcSNg1hMkb8yyqcIztk16N+kAeu8UzbXWkU4qtU9k0y9/tptbj5i59cylHNpuIC/b5
+	 u+NohObw3VMX2zk+tywKp83wOhoKvMU3RRSKJWSDcA5FfN1UmZRoztPsIrfaGvQpDQ
+	 4jDYni0nYYGzg==
+Message-ID: <19c749c5-2afd-4623-861a-ad30606c2722@kernel.org>
+Date: Mon, 9 Sep 2024 13:44:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240906-lpm-v6-10-constraints-pmdomain-v4-0-4055557fafbc@baylibre.com>
- <20240906-lpm-v6-10-constraints-pmdomain-v4-3-4055557fafbc@baylibre.com>
-In-Reply-To: <20240906-lpm-v6-10-constraints-pmdomain-v4-3-4055557fafbc@baylibre.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 9 Sep 2024 12:18:29 +0200
-Message-ID: <CAPDyKFr9isnz66B+n5y3=QO-ndB05JKZN3kgXO+kXBn7ofcwMw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] pmdomain: ti_sci: handle wake IRQs for IO daisy
- chain wakeups
-To: Kevin Hilman <khilman@baylibre.com>
-Cc: linux-pm@vger.kernel.org, Nishanth Menon <nm@ti.com>, Vibhore Vardhan <vibhore@ti.com>, 
-	Dhruva Gole <d-gole@ti.com>, Akashdeep Kaur <a-kaur@ti.com>, Sebin Francis <sebin.francis@ti.com>, 
-	Markus Schneider-Pargmann <msp@baylibre.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] interconnect: qcom: Add EPSS L3 support on SA8775P
+To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+ Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Sibi Sankar <quic_sibis@quicinc.com>, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240904171209.29120-1-quic_rlaggysh@quicinc.com>
+ <20240904171209.29120-4-quic_rlaggysh@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konradybcio@kernel.org>
+In-Reply-To: <20240904171209.29120-4-quic_rlaggysh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, 6 Sept 2024 at 18:15, Kevin Hilman <khilman@baylibre.com> wrote:
->
-> When a device supports IO daisy-chain wakeups, it uses a dedicated
-> wake IRQ.  Devices with IO daisy-chain wakeups enabled should not set
-> wakeup constraints since these can happen even from deep power states,
-> so should not prevent the DM from picking deep power states.
->
-> Wake IRQs are set with dev_pm_set_wake_irq() or
-> dev_pm_set_dedicated_wake_irq().  The latter is used by the serial
-> driver used on K3 platforms (drivers/tty/serial/8250/8250_omap.c)
-> when the interrupts-extended property is used to describe the
-> dedicated wakeup interrupt.
->
-> Detect these wake IRQs in the suspend path, and if set, skip sending
-> constraint.
->
-> Tested-by: Dhruva Gole <d-gole@ti.com>
-> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
-
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Kind regards
-Uffe
-
+On 4.09.2024 7:12 PM, Raviteja Laggyshetty wrote:
+> Add Epoch Subsystem (EPSS) L3 interconnect provider support on
+> SA8775P SoCs.
+> 
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 > ---
->  drivers/pmdomain/ti/ti_sci_pm_domains.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> index 1ab1e46924ab..566af9f055b8 100644
-> --- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> +++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> @@ -82,6 +82,15 @@ static inline void ti_sci_pd_set_wkup_constraint(struct device *dev)
->         int ret;
->
->         if (device_may_wakeup(dev)) {
-> +               /*
-> +                * If device can wakeup using IO daisy chain wakeups,
-> +                * we do not want to set a constraint.
-> +                */
-> +               if (dev->power.wakeirq) {
-> +                       dev_dbg(dev, "%s: has wake IRQ, not setting constraints\n", __func__);
-> +                       return;
-> +               }
+>  drivers/interconnect/qcom/osm-l3.c | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
+> index 61a8695a9adc..e97d61a9d8d7 100644
+> --- a/drivers/interconnect/qcom/osm-l3.c
+> +++ b/drivers/interconnect/qcom/osm-l3.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+>   * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+>   */
+>  
+>  #include <linux/args.h>
+> @@ -74,6 +75,11 @@ enum {
+>  	OSM_L3_SLAVE_NODE,
+>  };
+>  
+> +enum {
+> +	EPSS_L3_CL1_MASTER_NODE = 20000,
+> +	EPSS_L3_CL1_SLAVE_NODE,
+> +};
 > +
->                 ret = ti_sci->ops.pm_ops.set_device_constraint(ti_sci, pd->idx,
->                                                                TISCI_MSG_CONSTRAINT_SET);
->                 if (!ret)
->
-> --
-> 2.46.0
->
+>  #define DEFINE_QNODE(_name, _id, _buswidth, ...)			\
+>  	static const struct qcom_osm_l3_node _name = {			\
+>  		.name = #_name,						\
+> @@ -99,6 +105,15 @@ static const struct qcom_osm_l3_node * const epss_l3_nodes[] = {
+>  	[SLAVE_EPSS_L3_SHARED] = &epss_l3_slave,
+>  };
+>  
+> +DEFINE_QNODE(epss_l3_cl1_master, EPSS_L3_CL1_MASTER_NODE, 32,
+> +	     EPSS_L3_CL1_SLAVE_NODE);
+> +DEFINE_QNODE(epss_l3_cl1_slave, EPSS_L3_CL1_SLAVE_NODE, 32);
+> +
+> +static const struct qcom_osm_l3_node * const epss_l3_cl1_nodes[] = {
+> +	[MASTER_EPSS_L3_APPS] = &epss_l3_cl1_master,
+> +	[SLAVE_EPSS_L3_SHARED] = &epss_l3_cl1_slave,
+> +};
+> +
+>  static const struct qcom_osm_l3_desc osm_l3 = {
+>  	.nodes = osm_l3_nodes,
+>  	.num_nodes = ARRAY_SIZE(osm_l3_nodes),
+> @@ -115,6 +130,14 @@ static const struct qcom_osm_l3_desc epss_l3_perf_state = {
+>  	.reg_perf_state = EPSS_REG_PERF_STATE,
+>  };
+>  
+> +static const struct qcom_osm_l3_desc epss_l3_cl1_perf_state = {
+> +	.nodes = epss_l3_cl1_nodes,
+> +	.num_nodes = ARRAY_SIZE(epss_l3_cl1_nodes),
+> +	.lut_row_size = EPSS_LUT_ROW_SIZE,
+> +	.reg_freq_lut = EPSS_REG_FREQ_LUT,
+> +	.reg_perf_state = EPSS_REG_PERF_STATE,
+> +};
+
+This is a bad workaround for the unfortunate interconnect API choices
+(conflicting ICC IDs), in no way specific to this platform
+
+> +
+>  static const struct qcom_osm_l3_desc epss_l3_l3_vote = {
+>  	.nodes = epss_l3_nodes,
+>  	.num_nodes = ARRAY_SIZE(epss_l3_nodes),
+> @@ -284,6 +307,10 @@ static const struct of_device_id osm_l3_of_match[] = {
+>  	{ .compatible = "qcom,sm8150-osm-l3", .data = &osm_l3 },
+>  	{ .compatible = "qcom,sc8180x-osm-l3", .data = &osm_l3 },
+>  	{ .compatible = "qcom,sm8250-epss-l3", .data = &epss_l3_perf_state },
+> +	{ .compatible = "qcom,sa8775p-epss-l3-cl0",
+> +	  .data = &epss_l3_perf_state },
+
+Reuse qcom,sm8250-epss-l3, like:
+
+compatible = "qcom,foobar-epss-l3", "qcom,sm8250-epss-l3";
+
+Konrad
 
