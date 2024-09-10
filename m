@@ -1,172 +1,118 @@
-Return-Path: <linux-pm+bounces-13965-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13966-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8282A9741B3
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 20:08:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 328CB9741DA
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 20:17:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CDDD1F26D12
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 18:08:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F32A1C25475
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 18:17:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59A218E021;
-	Tue, 10 Sep 2024 18:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4521A08C4;
+	Tue, 10 Sep 2024 18:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l0LxzoPV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kt/PJ30/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04DE156F2B
-	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 18:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37DF19ABCE;
+	Tue, 10 Sep 2024 18:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725991723; cv=none; b=fiUt7J+WxoMFpfY3Cb8Vo7oWZ7+ZmznO2JcHUz1em9NFu4g4PC/SK3CaPgvQ9MimkARfvnYgabmiW7Z5KcNXcceFHMYtm+yEH8Sepau+IlyikAVK8Vr477KinyQXY3LCDCy8K0dR9hggWhqgWSOuTJlLbTJXr3/yBH/hnZpG1ds=
+	t=1725992234; cv=none; b=iT/8cmQaPf7bcPhqwxUpMK0AbD9z5/v18NCnpsuaFGdLBurV/jE2KPKGzg38AYjkmlHsJSaTUviYtXfLievtMZSeqssBhjokMG7OkG6tXZ+IlNABj1IMKv4G4vcL0ClLQIMnSNtOW2QohnEDi3Xmdy50wz75ZT1PXQUnAZwuAno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725991723; c=relaxed/simple;
-	bh=hjpkGzVRcqQqMSoasaxBIQ3q5gmJzuuWPXwe6Cf7S2A=;
+	s=arc-20240116; t=1725992234; c=relaxed/simple;
+	bh=Av47JBqIMel8pnzyd1psadtkEZ7h2mHZiNrDkpnn9sA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F/oC/pdtYibuGaX5UeOgnK6zYzO/I6IOMw5q0IVNR2hlDgp/tAFULZq4yVVHMQxEJpE359U/yUtdbTZ3vIuFVKXvUPSy0NKyYCpter0XPtXvSfGgT8EqrSuPrt7dcTDw5MPeQkG64zIL23xULcLrtjZCVmMxqYh2mNYSdZy4EAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l0LxzoPV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94710C4CEC4
-	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 18:08:43 +0000 (UTC)
+	 To:Cc:Content-Type; b=VXVTd0+eh9kdUzK8ADi+IlrSvjRjX0ykRsNslRBlfht3VEGj8ClMVDr6CSX1EA8h9X4EYC1xNZhrAlnK94EjM87xyfYHwOYB/TYF1HZ4Dl688kaILYvSat8A8n92WmVCK4Bs5kcg2judK618xgkFpj8D8ngyYax1CKX4AWfXWy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kt/PJ30/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55618C4AF0B;
+	Tue, 10 Sep 2024 18:17:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725991723;
-	bh=hjpkGzVRcqQqMSoasaxBIQ3q5gmJzuuWPXwe6Cf7S2A=;
+	s=k20201202; t=1725992234;
+	bh=Av47JBqIMel8pnzyd1psadtkEZ7h2mHZiNrDkpnn9sA=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=l0LxzoPVScFFvvJ1sffEYJAv31p0WSRQPwQYmMshJPZfEtrOJeaYey0AqWl73/POj
-	 86ffdlgIOYfWStmEXBrJmuoDbBNtz4jovXQ56jGMGJRsZhQdfIflatXKE/Uzb6ZmsF
-	 xWoYdKN1C7v8tMVLFh4rMUofjksbkdcwIeQAVkiStL7pJThWkKYK7QXtMmbQuOZE6p
-	 EU+xRFLDqsktDejPYSzrqxO4X+d2M3I2FZUWmvVtT0fEZ+s7qjSQR9COB12ZS8GZfl
-	 YUpblHFlb3IeB/uGy4esU0XLDjPPxR1UJ9ivRi2/qqaB0SzYCV1MAlU8O9H+KdLlRW
-	 1E2qCfFnnzeZw==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2780827dbafso3210798fac.1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 11:08:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX64jRCXkpzuYjzoLNW/vsQkOk00XG3sv/nTaufpncxit0H8dZ2njOckgENqg1BhQGa8gEYiwRfMw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx60AHyUbz2g1tmyPafzM7vOd7F2g4G5OA9sz+vsmxSy5UK1zMg
-	QNB5l2tDn3MjaesjWJhpRXO00dc8SrPICyH3aPd/MhHGRY/HpndvdTaV7iZRG4mJSbnsy37Vnfm
-	8EMEy8LJs0HlgRqreriSUpSvIN+c=
-X-Google-Smtp-Source: AGHT+IEUjlDlR92Gmsq8I5PR7HMMRH+XZJnNamGxsfzz4PuYlXzd+LxGBLjU2ZfCBbOh1nomoFSm/KZhvCFgN2Nis2s=
-X-Received: by 2002:a05:6871:28f:b0:254:c777:6327 with SMTP id
- 586e51a60fabf-27b82fb7827mr16716071fac.36.1725991722893; Tue, 10 Sep 2024
- 11:08:42 -0700 (PDT)
+	b=kt/PJ30/Cxb4wFw7QznVS74EjFfwbVUk2YHxS+GcO8oEaRYicdYZ9r5FP+bqW/lQL
+	 sCs9D8JpC3UEWkx/xDZz1V2mO7Cz/P9AZs0n1s7l9X4SV3Mqwx0LR2zgfgiXKJ3A5X
+	 yksgfPsE91I0l1ytuVk4W4mH4ANlo7CdVpMBbTjDWH7aj+/7inAAK/MAdv9u0RJ0CE
+	 yTlN771EaMWOklCnMguLsF5ppaDjczFRmBBbu8EcivVCa5coNNvF37E7tF1FpX/Zb9
+	 9pbRGV7Pgb2Bi6yRIpz1xutVNUl5CqpZyzZ7OCMHB1YTzzZMjklwjM+CylRapsomXQ
+	 cuIqs8LPdsRWQ==
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-277dd761926so3800349fac.2;
+        Tue, 10 Sep 2024 11:17:14 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU4RgbeZ2bqBnLUVoAhNk/qA7LL4D30WtYci6XyHoGSD8aJ1QwAf3i95IPXKeDIOQRKg6xAdu0wzvg=@vger.kernel.org, AJvYcCVRAEE4TJmuC8zJiqLx54XBrQA+4AR5aZdlEyy71bKH1gXF0lPw+Vwos9eRXgE3gzlWVleXrAOlBp+k16E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWHYt6FDi5PGnmG6k1HLGIJZZ1BLl3081l4xJSjTKfcYcW69uF
+	zn67n/T+OuT9jjsA6x7g98uXPc3LdUZCEuPP2nmUhglZ18DDnX3nWrfk4xJqFK3+eVVv7FFK3sA
+	TtFcyvzQgncfD2ePXtjohUm3jAS8=
+X-Google-Smtp-Source: AGHT+IEeYO5s/ZCYXb5YyAbzRWMGjfGy+I6cPKvTnJtvulEDvKApH3QfL4YtfaNvr/Apn/u013u2kVuzuBXTVe2H6bA=
+X-Received: by 2002:a05:6871:7512:b0:268:9d81:24b7 with SMTP id
+ 586e51a60fabf-27b82fc714fmr15257645fac.29.1725992233687; Tue, 10 Sep 2024
+ 11:17:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240909080726.16811-1-xiongxin@kylinos.cn>
-In-Reply-To: <20240909080726.16811-1-xiongxin@kylinos.cn>
+References: <20240905184848.318978-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240905184848.318978-1-andriy.shevchenko@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 10 Sep 2024 20:08:31 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iJ+cTj1OOZZ7iGEgzEtovk5VAOkw8C5E8VPPyp=WUasg@mail.gmail.com>
-Message-ID: <CAJZ5v0iJ+cTj1OOZZ7iGEgzEtovk5VAOkw8C5E8VPPyp=WUasg@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: sleep: Optimize the pm_debug_messages_should_print()
- condition
-To: Xiong Xin <xiongxin@kylinos.cn>
-Cc: rafael@kernel.org, mario.limonciello@amd.com, len.brown@intel.com, 
-	pavel@ucw.cz, linux-pm@vger.kernel.org
+Date: Tue, 10 Sep 2024 20:17:02 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jkV4xcuKpLkGUzDc6PMfjBuS67hDr1MxMybus+d_cUrw@mail.gmail.com>
+Message-ID: <CAJZ5v0jkV4xcuKpLkGUzDc6PMfjBuS67hDr1MxMybus+d_cUrw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] PM: hibernate: Remove unused stub for saveable_highmem_page()
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 9, 2024 at 10:07=E2=80=AFAM Xiong Xin <xiongxin@kylinos.cn> wro=
-te:
+On Thu, Sep 5, 2024 at 8:48=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> From: xiongxin <xiongxin@kylinos.cn>
+> When saveable_highmem_page() is unused, it prevents kernel builds
+> with clang, `make W=3D1` and CONFIG_WERROR=3Dy:
 >
-> pm_pr_dbg() is useful when debugging suspend and hibernate processes. In
-> commit cdb8c100d8a4 ("include/linux/suspend.h: Only show pm_pr_dbg
-> messages at suspend/resume") using pm_suspend_target_state to limits the
-> output range of pm_pr_dbg(), causes the original pm_pr_dbg() output
-> range to change.
+> kernel/power/snapshot.c:1369:21: error: unused function 'saveable_highmem=
+_page' [-Werror,-Wunused-function]
+>  1369 | static inline void *saveable_highmem_page(struct zone *z, unsigne=
+d long p)
+>       |                     ^~~~~~~~~~~~~~~~~~~~~
 >
-> In the suspend process, pm_pr_dbg() is called before setting
-> pm_suspend_target_state. As a result, this part of the log cannot be
-> output.
+> Fix this by removing unused stub.
 >
-> pm_pr_dbg() also outputs debug logs for hibernate, but
-> pm_suspend_target_state is not set, resulting in hibernate debug logs
-> can only be output through dynamic debug, which is very inconvenient.
+> See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> inline functions for W=3D1 build").
 >
-> Expand the scope of the state variable in state_store() and add judgment
-> on it in pm_debug_messages_should_print() to extend the debugging output
-> of pm_pr_dbg() to suspend and hibernate processes.
->
-> Fixes: cdb8c100d8a4 ("include/linux/suspend.h: Only show pm_pr_dbg messag=
-es at suspend/resume").
-> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  kernel/power/main.c | 21 +++++++++++++--------
->  1 file changed, 13 insertions(+), 8 deletions(-)
+>  kernel/power/snapshot.c | 5 -----
+>  1 file changed, 5 deletions(-)
 >
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index a9e0693aaf69..a376107efbb4 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -559,6 +559,8 @@ late_initcall(pm_debugfs_init);
->
->  #endif /* CONFIG_PM_SLEEP */
->
-> +static suspend_state_t pm_state =3D PM_SUSPEND_ON;
-> +
->  #ifdef CONFIG_PM_SLEEP_DEBUG
->  /*
->   * pm_print_times: print time taken by devices to suspend and resume.
-> @@ -613,7 +615,9 @@ bool pm_debug_messages_on __read_mostly;
->
->  bool pm_debug_messages_should_print(void)
->  {
-> -       return pm_debug_messages_on && pm_suspend_target_state !=3D PM_SU=
-SPEND_ON;
-> +       return pm_debug_messages_on &&
-> +              (pm_suspend_target_state !=3D PM_SUSPEND_ON ||
-> +               pm_state !=3D PM_SUSPEND_ON);
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index 405eddbda4fc..30894d8f0a78 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -1365,11 +1365,6 @@ static unsigned int count_highmem_pages(void)
+>         }
+>         return n;
 >  }
->  EXPORT_SYMBOL_GPL(pm_debug_messages_should_print);
+> -#else
+> -static inline void *saveable_highmem_page(struct zone *z, unsigned long =
+p)
+> -{
+> -       return NULL;
+> -}
+>  #endif /* CONFIG_HIGHMEM */
 >
-> @@ -715,7 +719,6 @@ static suspend_state_t decode_state(const char *buf, =
-size_t n)
->  static ssize_t state_store(struct kobject *kobj, struct kobj_attribute *=
-attr,
->                            const char *buf, size_t n)
->  {
-> -       suspend_state_t state;
->         int error;
->
->         error =3D pm_autosleep_lock();
-> @@ -727,18 +730,20 @@ static ssize_t state_store(struct kobject *kobj, st=
-ruct kobj_attribute *attr,
->                 goto out;
->         }
->
-> -       state =3D decode_state(buf, n);
-> -       if (state < PM_SUSPEND_MAX) {
-> -               if (state =3D=3D PM_SUSPEND_MEM)
-> -                       state =3D mem_sleep_current;
-> +       pm_state =3D decode_state(buf, n);
-> +       if (pm_state < PM_SUSPEND_MAX) {
-> +               if (pm_state =3D=3D PM_SUSPEND_MEM)
-> +                       pm_state =3D mem_sleep_current;
->
-> -               error =3D pm_suspend(state);
-> -       } else if (state =3D=3D PM_SUSPEND_MAX) {
-> +               error =3D pm_suspend(pm_state);
-> +       } else if (pm_state =3D=3D PM_SUSPEND_MAX) {
->                 error =3D hibernate();
->         } else {
->                 error =3D -EINVAL;
->         }
->
-> +       pm_state =3D PM_SUSPEND_ON;
-> +
->   out:
->         pm_autosleep_unlock();
->         return error ? error : n;
+>  /**
 > --
 
-This would only work for transitions started via /sys/power/state
-AFAICS, but there are other ways to start them (eg. autosleep).
+Applied as 6.12 material, thanks!
 
