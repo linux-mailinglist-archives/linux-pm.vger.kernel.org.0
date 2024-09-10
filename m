@@ -1,125 +1,123 @@
-Return-Path: <linux-pm+bounces-13921-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13922-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C9897274F
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 04:47:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A319729CE
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 08:53:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78EBA1C21579
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 02:47:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 552AB1C23BA1
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 06:53:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11A6E13B28D;
-	Tue, 10 Sep 2024 02:47:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AF417ADE1;
+	Tue, 10 Sep 2024 06:53:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Btrtg3mm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from zg8tmja2lje4os43os4xodqa.icoremail.net (zg8tmja2lje4os43os4xodqa.icoremail.net [206.189.79.184])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EBB14A1B
-	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 02:46:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.79.184
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F0B17A58F;
+	Tue, 10 Sep 2024 06:53:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725936423; cv=none; b=BCN/efMeNJ9n05RIlJMX2IbgLuIhsZujomrr1+Bg2BwBAzop6fq961RU6lfYWIIg79bltie/X+Qg4F23fMqKv7v1vp4Yi1jzeGVLExlEqXZW/PLYtWZM/XJmU49l9nVo06/mExl6D3Pg91p+HvKJlDQ+sHhF46b5+UoYcNGSMeE=
+	t=1725951230; cv=none; b=lz2vJuEawWJjyoZw5F/625EkKuqkGLjzSeCRtNYFnDYehTm+zG5CmRZksatlScRHAqrgYaUrbElnmtLmI0BzfL/HthDszOONOGICnOxrfyd2hQwPTrLrx/T/LxSO3upuzQto1iHtK+2jtSKnRhZ6T23jwnPEzi/cujwsBo5SuZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725936423; c=relaxed/simple;
-	bh=rZXz5UweGm1KnP1LLEn0+yEpRQ7ZEu7LQ6iaCPRuNl0=;
-	h=Date:From:To:Cc:Subject:Mime-Version:Message-ID:Content-Type; b=fTxy3lwmgMC95cFukkr1g1u8xy6NNuH8waIfU/62kdc22jTjBIYaPjf4A47gluEDjXbTJDAcwTsqUpKmzv/OTVApMjboZKp5qkQGQSWhxLjdvQFaYDRB59IGEQJFfVjqgQajvmnemRiEPB/FTrYIlxppGcldJwZkcKmbezmnsp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=206.189.79.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from E0002116LT (unknown [10.12.96.22])
-	by app2 (Coremail) with SMTP id TQJkCgCXW+URs99mSTwAAA--.1417S2;
-	Tue, 10 Sep 2024 10:46:42 +0800 (CST)
-Date: Tue, 10 Sep 2024 10:46:42 +0800
-From: "chenshuo@eswincomputing.com" <chenshuo@eswincomputing.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm <linux-pm@vger.kernel.org>
-Subject: PM: EM: Question Potential Issue with EM and OPP Table in cpufreq ondemand Governor
-X-Priority: 3
-X-GUID: 9679A8D1-B399-4E24-85F9-3C6F3D037CCF
-X-Has-Attach: no
-X-Mailer: Foxmail 7.2.15.80[cn]
+	s=arc-20240116; t=1725951230; c=relaxed/simple;
+	bh=otc5fqPB/UAeEH3Hfj+YM9UzXYTaLatHC+YoHBPD6sw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=q74k8lBsJVL4bAdIfkletkMeyRuxnW5CksLHhodFm/bdzDf1bcvh+9LekA0p2UZ/mjfZ/KmDrQaEmbiAnHD1K9fR8r1FAoDjxNhLqiZosLKpayAl/0ga4gkL/fTPULTZGzyPoemf+Pc9g9QCChKQ4DMBIB908zWsj6dqFfkyZxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Btrtg3mm; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725951228; x=1757487228;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=otc5fqPB/UAeEH3Hfj+YM9UzXYTaLatHC+YoHBPD6sw=;
+  b=Btrtg3mm7LM4CCt+eashnuzyZv/MlUCpX3HSWv4uc02AJmnGCICsY29f
+   p0SNMwGtgf3FGYQpzUurjLus1kwQj1WE/B92VIUWrAzRpsjEzfJxBUKNv
+   D+HrHmgVRjEVcWVoa8PNhyZ2qMxj/mTkFDjHuYCr1MiA/BaGcxsybHcDi
+   NubB6OFDnk/vGtK4BJf1C/TWvcdbuhPYZxrD+FC2IAr0kpmV4vrDH1ggy
+   cN/+He3qgkKDGPSA/Wq2d3o0Js0QLsTbih3xyHgtnb2W+ws4lOtpxwvUi
+   RAtQUHOIC1wEj96fgR7AEwjT8JH7qFDiq2xtcrdvSdH89HBPgll4/gwm9
+   Q==;
+X-CSE-ConnectionGUID: GM4mtlaTTX6EnGnUgqzTlA==
+X-CSE-MsgGUID: 5lQmyPZwQCK2zHsBhpjNcQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="42198299"
+X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
+   d="scan'208";a="42198299"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 23:53:48 -0700
+X-CSE-ConnectionGUID: YMo1aoNBTWGuJmWShHVdRg==
+X-CSE-MsgGUID: VduagctwTleImWtZS0Ccsg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
+   d="scan'208";a="97742795"
+Received: from xpardee-mobl.amr.corp.intel.com (HELO [10.125.67.115]) ([10.125.67.115])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 23:53:48 -0700
+Message-ID: <21b8777a-827b-4729-a8d3-36024983dc2c@linux.intel.com>
+Date: Mon, 9 Sep 2024 23:53:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <202409101046414978042@eswincomputing.com>
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
-X-CM-TRANSID:TQJkCgCXW+URs99mSTwAAA--.1417S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZrWxurW7WF43Gw4rCF43Awb_yoW5CrW7pF
-	s8Zayjyrn8Was5Xay2ya48Kryfuw4qvr13Wr15Cr1Fy345CFZ0vF1q9rW3GryxCr4vq3WF
-	qr4YgF929ws5Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPKb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
-	C2z280aVCY1x0267AKxVW0oVCq3wAa7VCE64xvF2IEb7IF0Fy264xvF2IEb7IF0Fy264kE
-	64k0F2IE7I0Y6sxI4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4
-	xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCa
-	FVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4xvF2IEb7IF0Fy264kE64k0F24lc2xSY4
-	AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
-	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc4
-	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
-	xVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
-	1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JwCE64xvF2IEb7IF0Fy7YxBIdaVFxhVjvjDU
-	0xZFpf9x07jMsjnUUUUU=
-X-CM-SenderInfo: xfkh02xkxrqvxvzl0uprps33xlqjhudrp/
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 07/11] platform/x86:intel/pmc: Check return value of
+ ioremap
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: irenic.rajneesh@gmail.com, david.e.box@linux.intel.com,
+ Hans de Goede <hdegoede@redhat.com>, platform-driver-x86@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
+References: <20240828222932.1279508-1-xi.pardee@linux.intel.com>
+ <20240828222932.1279508-8-xi.pardee@linux.intel.com>
+ <b3665329-dbe9-d78d-a988-b7c346b069de@linux.intel.com>
+Content-Language: en-US
+From: Xi Pardee <xi.pardee@linux.intel.com>
+In-Reply-To: <b3665329-dbe9-d78d-a988-b7c346b069de@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-SGkgUmFmYWVsLAoKSSBhbSBlbmNvdW50ZXJpbmcgYW4gaXNzdWUgcmVsYXRlZCB0byB0aGUgRW5l
-cmd5IE1vZGVsIChFTSkgd2hlbiB1c2luZyBjcHVmcmVxIHdpdGggdGhlIG9uZGVtYW5kIGdvdmVy
-bm9yLiBCZWxvdyBpcyBhIGRldGFpbGVkIGRlc2NyaXB0aW9uOgoKMS4gUHJvYmxlbSBEZXNjcmlw
-dGlvbjoKwqAgwqBXaGVuIHVzaW5nIGNwdWZyZXEgd2l0aCB0aGUgb25kZW1hbmQgZ292ZXJub3Ig
-YW5kIGVuYWJsaW5nIHRoZSBlbmVyZ3kgbW9kZWwgKEVNKSwgdGhlIENQVSBPUFAgdGFibGUgaXMg
-Y29uZmlndXJlZCB3aXRoIGZyZXF1ZW5jaWVzIGFuZCB2b2x0YWdlcyBmb3IgZWFjaCBmcmVxdWVu
-Y3kgcG9pbnQuIEFkZGl0aW9uYWxseSwgdGhlIGBkeW5hbWljLXBvd2VyLWNvZWZmaWNpZW50YCBp
-cyBjb25maWd1cmVkIGluIHRoZSBEVFMgdW5kZXIgdGhlIENQVSBub2RlLiBIb3dldmVyLCBJIG9i
-c2VydmUgYWJub3JtYWwgZHluYW1pYyBmcmVxdWVuY3kgc2NhbGluZywgd2hlcmUgdGhlIENQVSBm
-cmVxdWVuY3kgYWx3YXlzIHN0YXlzIGF0IHRoZSBoaWdoZXN0IGZyZXF1ZW5jeSBwb2ludCBpbiB0
-aGUgT1BQIHRhYmxlLiBCZWxvdyBpcyBhbiBleGFtcGxlIG9mIHRoZSBEVFMgY29uZmlndXJhdGlv
-bjoKYGBgCmNwdTA6IGNwdUAwwqAKCXvCoAoJCS4uLgoJCW9wZXJhdGluZy1wb2ludHMtdjIgPSA8
-JmQwX2NwdV9vcHBfdGFibGU+O8KgCgkJI2Nvb2xpbmctY2VsbHMgPSA8Mj47IGR5bmFtaWMtcG93
-ZXItY29lZmZpY2llbnQgPSA8MjAwMD47IH07CgkJLi4uCmBgYAoyLiBSb290IENhdXNlIEFuYWx5
-c2lzOgpXaGVuIHVzaW5nIHRoZSBPUFAgdGFibGUgYW5kIGNvbmZpZ3VyaW5nIHRoZSAiZHluYW1p
-Yy1wb3dlci1jb2VmZmljaWVudCwiIHRoZSBgZW1fZGV2X3JlZ2lzdGVyX3BlcmZfZG9tYWluKClg
-IGZ1bmN0aW9uIGluIGBrZXJuZWwvcG93ZXIvZW5lcmd5X21vZGVsLmNgIHNldHMgdGhlIGZsYWdz
-IHRvIGBFTV9QRVJGX0RPTUFJTl9NSUNST1dBVFRTYC4gSW4gdGhlIGBlbV9jcmVhdGVfcGVyZl90
-YWJsZSgpYCBmdW5jdGlvbiwgYGVtX2NvbXB1dGVfY29zdHMoKWAgaW5jbHVkZXMgdGhlIGZvbGxv
-d2luZyBjb2RlOgpgYGAKaWYgKHRhYmxlW2ldLmNvc3QgPj0gcHJldl9jb3N0KSB7CsKgIMKgIHRh
-YmxlW2ldLmZsYWdzID0gRU1fUEVSRl9TVEFURV9JTkVGRklDSUVOVDsKwqAgwqAgZGV2X2RiZyhk
-ZXYsICJFTTogT1BQOiVsdSBpcyBpbmVmZmljaWVudFxuIiwgdGFibGVbaV0uZnJlcXVlbmN5KTsK
-fQpgYGAKU2luY2UgdGhlIGNvc3QgaXMgY2FsY3VsYXRlZCBhcyBwb3dlciAqIG1heF9mcmVxdWVu
-Y3kgLyBmcmVxdWVuY3ksIHRoZSBjb3N0IGZvciBlYWNoIGZyZXF1ZW5jeSBwb2ludCBiZWNvbWVz
-IGEgY29uc3RhbnQgdmFsdWUuIENvbnNlcXVlbnRseSwgZXhjZXB0IGZvciBucl9zdGF0ZXMgLSAx
-ICh3aGVyZSBwcmV2X3N0YXRlIGlzIGluaXRpYWxpemVkIGFzIFVMT05HX01BWCksIGFsbCBvdGhl
-ciBmcmVxdWVuY3kgcG9pbnRzJyBjb3N0IGlzIGVxdWFsIHRvIHByZXZfY29zdC4gQXMgYSByZXN1
-bHQsIG9ubHkgdGhlIGhpZ2hlc3QgZnJlcXVlbmN5IHBvaW50ICh0YWJsZVtucl9zdGF0ZXMgLSAx
-XSkgaXMgbm90IGZsYWdnZWQgYXMgRU1fUEVSRl9TVEFURV9JTkVGRklDSUVOVCBpbiB0aGUgRU0g
-cGVyZm9ybWFuY2UgdGFibGUuCgpJbiB0aGUgZW1fY3B1ZnJlcV91cGRhdGVfZWZmaWNpZW5jaWVz
-KCkgZnVuY3Rpb24sIHRoZSBmb2xsb3dpbmcgY29kZSBpcyBleGVjdXRlZDoKYGBgCmZvciAoaSA9
-IDA7IGkgPCBwZC0+bnJfcGVyZl9zdGF0ZXM7IGkrKykgewrCoCDCoCBpZiAoISh0YWJsZVtpXS5m
-bGFncyAmIEVNX1BFUkZfU1RBVEVfSU5FRkZJQ0lFTlQpKQrCoCDCoCDCoCDCoCBjb250aW51ZTsK
-CsKgIMKgIGlmICghY3B1ZnJlcV90YWJsZV9zZXRfaW5lZmZpY2llbnQocG9saWN5LCB0YWJsZVtp
-XS5mcmVxdWVuY3kpKQrCoCDCoCDCoCDCoCBmb3VuZCsrOwp9CmBgYApBcyBhIHJlc3VsdCwgYWxs
-IGZyZXF1ZW5jeSBwb2ludHMgbWFya2VkIGFzIEVNX1BFUkZfU1RBVEVfSU5FRkZJQ0lFTlQgYXJl
-IGZsYWdnZWQgYXMgQ1BVRlJFUV9JTkVGRklDSUVOVF9GUkVRIGluIHRoZSBjcHVmcmVxX3RhYmxl
-X3NldF9pbmVmZmljaWVudCgpIGZ1bmN0aW9uLCBjYXVzaW5nIHRoZXNlIGZyZXF1ZW5jaWVzIHRv
-IGJlIHNraXBwZWQgZHVyaW5nIGZyZXF1ZW5jeSBzY2FsaW5nLgoKMy4gUHJvcG9zZWQgQ2hhbmdl
-IGFuZCBUZXN0aW5nOsKgCk9uIExpbnV4IDYuNiwgdGhpcyBiZWhhdmlvciBhZmZlY3RzIHRoZSBu
-b3JtYWwgb3BlcmF0aW9uIG9mIHRoZSBjcHVmcmVxIG9uZGVtYW5kIGdvdmVybm9yLCB3aGljaCBp
-biB0dXJuIGNhdXNlcyBwYXNzaXZlIGNvb2xpbmcgZGV2aWNlcyB0byBtYWxmdW5jdGlvbiB3aGVu
-IHVzaW5nIHRoZSBwb3dlciBhbGxvY2F0b3Igc3RyYXRlZ3kgaW4gdGhlIHRoZXJtYWwgZnJhbWV3
-b3JrLiBJIG1hZGUgYSB0ZW1wb3JhcnkgZml4IGJ5IGNoYW5naW5nIHRoZSBjb25kaXRpb24gZnJv
-bToKCWlmICh0YWJsZVtpXS5jb3N0ID49IHByZXZfY29zdCkKdG86CglpZiAodGFibGVbaV0uY29z
-dCA+IHByZXZfY29zdCkKQWZ0ZXIgdGhpcyBjaGFuZ2UsIHRoZSBpc3N1ZSBzZWVtcyByZXNvbHZl
-ZCBmb3Igbm93LiBIb3dldmVyLCBJIGFtIGNvbmNlcm5lZCBhYm91dCBwb3RlbnRpYWwgc2lkZSBl
-ZmZlY3RzIG9mIHRoaXMgbW9kaWZpY2F0aW9uLgoKQ291bGQgeW91IHBsZWFzZSBoZWxwIGNsYXJp
-ZnkgaWYgdGhlcmUgYXJlIGFueSByaXNrcyBvciBuZWdhdGl2ZSBjb25zZXF1ZW5jZXMgd2l0aCB0
-aGlzIGNoYW5nZT8gV2h5IHdhcyB0aGUgb3JpZ2luYWwgY29uZGl0aW9uIGRlc2lnbmVkIHRvIHJl
-bW92ZSBmcmVxdWVuY3kgcG9pbnRzIHdpdGggdGhlIHNhbWUgY29zdCBmcm9tIGR5bmFtaWMgZnJl
-cXVlbmN5IHNjYWxpbmc/CgpCZXN0IHJlZ2FyZHMKCmNoZW5zaHVvQGVzd2luY29tcHV0aW5nLmNv
-bQ==
 
+On 8/29/2024 4:06 AM, Ilpo Järvinen wrote:
+> On Wed, 28 Aug 2024, Xi Pardee wrote:
+>
+>> Check the return value of ioremap operation and return ENOMEM when
+>> the operation fails for better error handling.
+>>
+>> Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
+>> ---
+>>   drivers/platform/x86/intel/pmc/ssram_telemetry.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/drivers/platform/x86/intel/pmc/ssram_telemetry.c b/drivers/platform/x86/intel/pmc/ssram_telemetry.c
+>> index 73c727042ca6..f625d39d1aa3 100644
+>> --- a/drivers/platform/x86/intel/pmc/ssram_telemetry.c
+>> +++ b/drivers/platform/x86/intel/pmc/ssram_telemetry.c
+>> @@ -84,6 +84,9 @@ pmc_core_ssram_get_pmc(struct pmc_dev *pmcdev, unsigned int pmc_idx, u32 offset)
+>>   	ssram_base = ssram_pcidev->resource[0].start;
+>>   	tmp_ssram = ioremap(ssram_base, SSRAM_HDR_SIZE);
+>>   
+>> +	if (!tmp_ssram)
+>> +		return -ENOMEM;
+>> +
+>>   	if (pmc_idx != PMC_IDX_MAIN) {
+>>   		/*
+>>   		 * The secondary PMC BARS (which are behind hidden PCI devices)
+> Is this a fix to the current code? And should have Fixes tag and go
+> first because of that?
+This is an improvement of the current code. We should check the value of 
+ioremap before using it to avoid
+failure in the later process. I can add a fixes tag to it. Should this 
+patch be its own patch series and not
+include in this one? Or should it be moved to be the first patch of this 
+series?
+
+Thanks!
+Xi
+>
 
