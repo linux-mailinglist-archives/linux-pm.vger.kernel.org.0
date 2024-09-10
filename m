@@ -1,107 +1,125 @@
-Return-Path: <linux-pm+bounces-13920-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13921-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1939C972696
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 03:22:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46C9897274F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 04:47:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B12F1C21BA2
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 01:22:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78EBA1C21579
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 02:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FDCF7345B;
-	Tue, 10 Sep 2024 01:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SVxo3e5W"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11A6E13B28D;
+	Tue, 10 Sep 2024 02:47:03 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A31C3EA86
-	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 01:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from zg8tmja2lje4os43os4xodqa.icoremail.net (zg8tmja2lje4os43os4xodqa.icoremail.net [206.189.79.184])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EBB14A1B
+	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 02:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.79.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725931364; cv=none; b=Fi7H+2SIOj7/p41ZT0tzDB8RIegoEczRXI5ENhUEWHKPTrEJdoIkEJ2DaRjux9OwWVwgKFPkjBPqf0XSKZfeW9/B1k5hPkV1Fk6yC8pPPj0RPjWwU2OUhR/AF7QbckjaQto0e4ECOcTyTUy9sMqIIGx4hGPRBso/zmLgFaDqKxA=
+	t=1725936423; cv=none; b=BCN/efMeNJ9n05RIlJMX2IbgLuIhsZujomrr1+Bg2BwBAzop6fq961RU6lfYWIIg79bltie/X+Qg4F23fMqKv7v1vp4Yi1jzeGVLExlEqXZW/PLYtWZM/XJmU49l9nVo06/mExl6D3Pg91p+HvKJlDQ+sHhF46b5+UoYcNGSMeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725931364; c=relaxed/simple;
-	bh=+yMvX6gE4yPOlKP3/YTQe3e8hcJFMzLWfsqWyzkq0Ew=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ax4SYjlAv9dK1O214iXqqyk6psJtXm7bY8yt43k3hQe786DtXtIZEcfU3n6v9R99EpwvUp01PcLkU9irH/++x9xBywqp6YvIM3g7VVDXHoyfzfz4LaDt+WPjTm0DBX7CKV8tSVxLXgztE0FiS8eJtsXuhQwKxuZlB1munT3FzEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SVxo3e5W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 95BB4C4CED1
-	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 01:22:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725931363;
-	bh=+yMvX6gE4yPOlKP3/YTQe3e8hcJFMzLWfsqWyzkq0Ew=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=SVxo3e5WLlRfART5BDHRrAJq1t0OHF1ryKDrSjTPAWU4PRRJdykSN7e4dntVmtWvi
-	 T/Fh7WFLhxZjtjKyFSHheTP7lMgYZudkNJNPMWQeGO24WcNnnTtBpEZSnlI8AEYtfD
-	 85e1EvZlCZwY7/MQ1Me/AYbLY6yBgceGcRtU5J7TANVKCsz5p71tE46K0mf/1GreCY
-	 e7EzvpyBXLL7JMeL/xHsASzfs1fD+lMCoSOqhiisJw1gdLuwPtA7Z/GxZEI8qsMgvR
-	 MPGfpR9HevLmqU7ng2Mg96/OKOQ009iqpc6wSOLIIDfAu+r0VaygNCQhyYxg5tEb/m
-	 svTE7snA64TIQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 90484C53BB8; Tue, 10 Sep 2024 01:22:43 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218686] Fail to set energy_performance_preference of amd
- processor on asus ga403uv
-Date: Tue, 10 Sep 2024 01:22:43 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: al0uette@outlook.com
-X-Bugzilla-Status: REOPENED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218686-137361-OzhtOwhq1u@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
-References: <bug-218686-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1725936423; c=relaxed/simple;
+	bh=rZXz5UweGm1KnP1LLEn0+yEpRQ7ZEu7LQ6iaCPRuNl0=;
+	h=Date:From:To:Cc:Subject:Mime-Version:Message-ID:Content-Type; b=fTxy3lwmgMC95cFukkr1g1u8xy6NNuH8waIfU/62kdc22jTjBIYaPjf4A47gluEDjXbTJDAcwTsqUpKmzv/OTVApMjboZKp5qkQGQSWhxLjdvQFaYDRB59IGEQJFfVjqgQajvmnemRiEPB/FTrYIlxppGcldJwZkcKmbezmnsp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=206.189.79.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from E0002116LT (unknown [10.12.96.22])
+	by app2 (Coremail) with SMTP id TQJkCgCXW+URs99mSTwAAA--.1417S2;
+	Tue, 10 Sep 2024 10:46:42 +0800 (CST)
+Date: Tue, 10 Sep 2024 10:46:42 +0800
+From: "chenshuo@eswincomputing.com" <chenshuo@eswincomputing.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm <linux-pm@vger.kernel.org>
+Subject: PM: EM: Question Potential Issue with EM and OPP Table in cpufreq ondemand Governor
+X-Priority: 3
+X-GUID: 9679A8D1-B399-4E24-85F9-3C6F3D037CCF
+X-Has-Attach: no
+X-Mailer: Foxmail 7.2.15.80[cn]
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Message-ID: <202409101046414978042@eswincomputing.com>
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: base64
+X-CM-TRANSID:TQJkCgCXW+URs99mSTwAAA--.1417S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZrWxurW7WF43Gw4rCF43Awb_yoW5CrW7pF
+	s8Zayjyrn8Was5Xay2ya48Kryfuw4qvr13Wr15Cr1Fy345CFZ0vF1q9rW3GryxCr4vq3WF
+	qr4YgF929ws5Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPKb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+	C2z280aVCY1x0267AKxVW0oVCq3wAa7VCE64xvF2IEb7IF0Fy264xvF2IEb7IF0Fy264kE
+	64k0F2IE7I0Y6sxI4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4
+	xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCa
+	FVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4xvF2IEb7IF0Fy264kE64k0F24lc2xSY4
+	AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JwCE64xvF2IEb7IF0Fy7YxBIdaVFxhVjvjDU
+	0xZFpf9x07jMsjnUUUUU=
+X-CM-SenderInfo: xfkh02xkxrqvxvzl0uprps33xlqjhudrp/
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
+SGkgUmFmYWVsLAoKSSBhbSBlbmNvdW50ZXJpbmcgYW4gaXNzdWUgcmVsYXRlZCB0byB0aGUgRW5l
+cmd5IE1vZGVsIChFTSkgd2hlbiB1c2luZyBjcHVmcmVxIHdpdGggdGhlIG9uZGVtYW5kIGdvdmVy
+bm9yLiBCZWxvdyBpcyBhIGRldGFpbGVkIGRlc2NyaXB0aW9uOgoKMS4gUHJvYmxlbSBEZXNjcmlw
+dGlvbjoKwqAgwqBXaGVuIHVzaW5nIGNwdWZyZXEgd2l0aCB0aGUgb25kZW1hbmQgZ292ZXJub3Ig
+YW5kIGVuYWJsaW5nIHRoZSBlbmVyZ3kgbW9kZWwgKEVNKSwgdGhlIENQVSBPUFAgdGFibGUgaXMg
+Y29uZmlndXJlZCB3aXRoIGZyZXF1ZW5jaWVzIGFuZCB2b2x0YWdlcyBmb3IgZWFjaCBmcmVxdWVu
+Y3kgcG9pbnQuIEFkZGl0aW9uYWxseSwgdGhlIGBkeW5hbWljLXBvd2VyLWNvZWZmaWNpZW50YCBp
+cyBjb25maWd1cmVkIGluIHRoZSBEVFMgdW5kZXIgdGhlIENQVSBub2RlLiBIb3dldmVyLCBJIG9i
+c2VydmUgYWJub3JtYWwgZHluYW1pYyBmcmVxdWVuY3kgc2NhbGluZywgd2hlcmUgdGhlIENQVSBm
+cmVxdWVuY3kgYWx3YXlzIHN0YXlzIGF0IHRoZSBoaWdoZXN0IGZyZXF1ZW5jeSBwb2ludCBpbiB0
+aGUgT1BQIHRhYmxlLiBCZWxvdyBpcyBhbiBleGFtcGxlIG9mIHRoZSBEVFMgY29uZmlndXJhdGlv
+bjoKYGBgCmNwdTA6IGNwdUAwwqAKCXvCoAoJCS4uLgoJCW9wZXJhdGluZy1wb2ludHMtdjIgPSA8
+JmQwX2NwdV9vcHBfdGFibGU+O8KgCgkJI2Nvb2xpbmctY2VsbHMgPSA8Mj47IGR5bmFtaWMtcG93
+ZXItY29lZmZpY2llbnQgPSA8MjAwMD47IH07CgkJLi4uCmBgYAoyLiBSb290IENhdXNlIEFuYWx5
+c2lzOgpXaGVuIHVzaW5nIHRoZSBPUFAgdGFibGUgYW5kIGNvbmZpZ3VyaW5nIHRoZSAiZHluYW1p
+Yy1wb3dlci1jb2VmZmljaWVudCwiIHRoZSBgZW1fZGV2X3JlZ2lzdGVyX3BlcmZfZG9tYWluKClg
+IGZ1bmN0aW9uIGluIGBrZXJuZWwvcG93ZXIvZW5lcmd5X21vZGVsLmNgIHNldHMgdGhlIGZsYWdz
+IHRvIGBFTV9QRVJGX0RPTUFJTl9NSUNST1dBVFRTYC4gSW4gdGhlIGBlbV9jcmVhdGVfcGVyZl90
+YWJsZSgpYCBmdW5jdGlvbiwgYGVtX2NvbXB1dGVfY29zdHMoKWAgaW5jbHVkZXMgdGhlIGZvbGxv
+d2luZyBjb2RlOgpgYGAKaWYgKHRhYmxlW2ldLmNvc3QgPj0gcHJldl9jb3N0KSB7CsKgIMKgIHRh
+YmxlW2ldLmZsYWdzID0gRU1fUEVSRl9TVEFURV9JTkVGRklDSUVOVDsKwqAgwqAgZGV2X2RiZyhk
+ZXYsICJFTTogT1BQOiVsdSBpcyBpbmVmZmljaWVudFxuIiwgdGFibGVbaV0uZnJlcXVlbmN5KTsK
+fQpgYGAKU2luY2UgdGhlIGNvc3QgaXMgY2FsY3VsYXRlZCBhcyBwb3dlciAqIG1heF9mcmVxdWVu
+Y3kgLyBmcmVxdWVuY3ksIHRoZSBjb3N0IGZvciBlYWNoIGZyZXF1ZW5jeSBwb2ludCBiZWNvbWVz
+IGEgY29uc3RhbnQgdmFsdWUuIENvbnNlcXVlbnRseSwgZXhjZXB0IGZvciBucl9zdGF0ZXMgLSAx
+ICh3aGVyZSBwcmV2X3N0YXRlIGlzIGluaXRpYWxpemVkIGFzIFVMT05HX01BWCksIGFsbCBvdGhl
+ciBmcmVxdWVuY3kgcG9pbnRzJyBjb3N0IGlzIGVxdWFsIHRvIHByZXZfY29zdC4gQXMgYSByZXN1
+bHQsIG9ubHkgdGhlIGhpZ2hlc3QgZnJlcXVlbmN5IHBvaW50ICh0YWJsZVtucl9zdGF0ZXMgLSAx
+XSkgaXMgbm90IGZsYWdnZWQgYXMgRU1fUEVSRl9TVEFURV9JTkVGRklDSUVOVCBpbiB0aGUgRU0g
+cGVyZm9ybWFuY2UgdGFibGUuCgpJbiB0aGUgZW1fY3B1ZnJlcV91cGRhdGVfZWZmaWNpZW5jaWVz
+KCkgZnVuY3Rpb24sIHRoZSBmb2xsb3dpbmcgY29kZSBpcyBleGVjdXRlZDoKYGBgCmZvciAoaSA9
+IDA7IGkgPCBwZC0+bnJfcGVyZl9zdGF0ZXM7IGkrKykgewrCoCDCoCBpZiAoISh0YWJsZVtpXS5m
+bGFncyAmIEVNX1BFUkZfU1RBVEVfSU5FRkZJQ0lFTlQpKQrCoCDCoCDCoCDCoCBjb250aW51ZTsK
+CsKgIMKgIGlmICghY3B1ZnJlcV90YWJsZV9zZXRfaW5lZmZpY2llbnQocG9saWN5LCB0YWJsZVtp
+XS5mcmVxdWVuY3kpKQrCoCDCoCDCoCDCoCBmb3VuZCsrOwp9CmBgYApBcyBhIHJlc3VsdCwgYWxs
+IGZyZXF1ZW5jeSBwb2ludHMgbWFya2VkIGFzIEVNX1BFUkZfU1RBVEVfSU5FRkZJQ0lFTlQgYXJl
+IGZsYWdnZWQgYXMgQ1BVRlJFUV9JTkVGRklDSUVOVF9GUkVRIGluIHRoZSBjcHVmcmVxX3RhYmxl
+X3NldF9pbmVmZmljaWVudCgpIGZ1bmN0aW9uLCBjYXVzaW5nIHRoZXNlIGZyZXF1ZW5jaWVzIHRv
+IGJlIHNraXBwZWQgZHVyaW5nIGZyZXF1ZW5jeSBzY2FsaW5nLgoKMy4gUHJvcG9zZWQgQ2hhbmdl
+IGFuZCBUZXN0aW5nOsKgCk9uIExpbnV4IDYuNiwgdGhpcyBiZWhhdmlvciBhZmZlY3RzIHRoZSBu
+b3JtYWwgb3BlcmF0aW9uIG9mIHRoZSBjcHVmcmVxIG9uZGVtYW5kIGdvdmVybm9yLCB3aGljaCBp
+biB0dXJuIGNhdXNlcyBwYXNzaXZlIGNvb2xpbmcgZGV2aWNlcyB0byBtYWxmdW5jdGlvbiB3aGVu
+IHVzaW5nIHRoZSBwb3dlciBhbGxvY2F0b3Igc3RyYXRlZ3kgaW4gdGhlIHRoZXJtYWwgZnJhbWV3
+b3JrLiBJIG1hZGUgYSB0ZW1wb3JhcnkgZml4IGJ5IGNoYW5naW5nIHRoZSBjb25kaXRpb24gZnJv
+bToKCWlmICh0YWJsZVtpXS5jb3N0ID49IHByZXZfY29zdCkKdG86CglpZiAodGFibGVbaV0uY29z
+dCA+IHByZXZfY29zdCkKQWZ0ZXIgdGhpcyBjaGFuZ2UsIHRoZSBpc3N1ZSBzZWVtcyByZXNvbHZl
+ZCBmb3Igbm93LiBIb3dldmVyLCBJIGFtIGNvbmNlcm5lZCBhYm91dCBwb3RlbnRpYWwgc2lkZSBl
+ZmZlY3RzIG9mIHRoaXMgbW9kaWZpY2F0aW9uLgoKQ291bGQgeW91IHBsZWFzZSBoZWxwIGNsYXJp
+ZnkgaWYgdGhlcmUgYXJlIGFueSByaXNrcyBvciBuZWdhdGl2ZSBjb25zZXF1ZW5jZXMgd2l0aCB0
+aGlzIGNoYW5nZT8gV2h5IHdhcyB0aGUgb3JpZ2luYWwgY29uZGl0aW9uIGRlc2lnbmVkIHRvIHJl
+bW92ZSBmcmVxdWVuY3kgcG9pbnRzIHdpdGggdGhlIHNhbWUgY29zdCBmcm9tIGR5bmFtaWMgZnJl
+cXVlbmN5IHNjYWxpbmc/CgpCZXN0IHJlZ2FyZHMKCmNoZW5zaHVvQGVzd2luY29tcHV0aW5nLmNv
+bQ==
 
---- Comment #95 from al0uette@outlook.com ---
-(In reply to al0uette from comment #94)
-> (In reply to Mario Limonciello (AMD) from comment #88)
-> > Created attachment 306844 [details]
-> > opt EPP register writes from FFH (v3)
-> >=20
-> > I'll re-open this bug to see if we come up with something that is
-> > upstreamable.
-> >=20
-> > Someone did some testing on another bug report and found a problem.
-> > Here is an updated version.
-> >=20
-> > Can you please share the kernel log with this in place as well as the
-> > cpupower output?
->=20
-> v3 doesn't work for me either, it shows device or resource busy
-
-Sorry, I made a mistake, it works fine, the reason it didn't work is that I
-mistakenly switched scaling_governor to performance
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
 
