@@ -1,153 +1,144 @@
-Return-Path: <linux-pm+bounces-13936-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13945-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A63E973064
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 12:01:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8793097343A
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 12:38:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60ECFB27A13
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 10:01:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CAA028CEEC
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 10:38:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2923018C90B;
-	Tue, 10 Sep 2024 09:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B354194C89;
+	Tue, 10 Sep 2024 10:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="gDEaBBBa"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="dD5Z2zPW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D04418B46D
-	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 09:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37E3194091;
+	Tue, 10 Sep 2024 10:35:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725962380; cv=none; b=anjO6Qg3qKs/Ar++dNrdW6sLPN6i+n/DMTmd3gag/1Tj5nhTU0K6RfA3GA+rquh5n4/n/PqSGhCFC0ntakWN/Z43aEoqgSYbKMkfnfutMhGLItCZ/6ww4G3pXQDQVAW67TAgoQKvcSBPcgfGpb9OkQvNlETH3w2aDuaxxF9Z1P8=
+	t=1725964546; cv=none; b=A4LqECgEDyl7H6MERmll7l1nj2ZC/xLKCEao6E+ZMHSetQ6qBC0a532uvbc1nRq+rnqUCjYG6ea8nOe01PbZIWfF3IHNXhPhhSmmegFW+po/U3VDS9Zs0eAguJ9ULhAHJVjF11jGoFcTGMc01BonTI7RZvKnR5fNXQQzsSTYDYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725962380; c=relaxed/simple;
-	bh=cPN+c5d1qbghZwAgbLbBKbGa0droBLNlCAHDEF+wklI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sicK/L2CXiQ9BsNCDkix0Js3II9f23rD6REjDCJx7dm2UXsoMNOr3C+cs5MyV7WMP3nAX/2gZ+gCjdSJYwGE7efui4g5z17MwGu2PHFQyNnTT0GCprhl2TEfnDz1+bs1DpwYbyRuCKOrkoqrLYC5uacB2UW/iZvZhTpFUUo0lUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=gDEaBBBa; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-374c5bab490so3951915f8f.1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 02:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725962375; x=1726567175; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OxZS7VLlvlNcdBPu4dATlqzqCH0SG09iCapcqr1ry4w=;
-        b=gDEaBBBaUoUF56F+rRo9PuyFWwCDXHMu9g8K4zUwzDGwMpXycdSh6VN8oSHKoKmQDX
-         CBycD7ciOZ1IR/0FyHTBJwSQFgwXanXz3ol8xbl5RK83QGEK0N3oWqobPdcp8bRdgAsN
-         zJRHd79Wx0r0r8VkECdsWZb8CG0MTWwIVMwwCsEcAmeXjwPTxuTluhZM7GsBiOTSBwrj
-         GicQeuUF2tjHfHAcuM2wfkPOGx4ZbqH0giOqp7i7zEgqh4hK1Pa1zjBQx5YIUhcLJEEI
-         cCWTNWPXEUubsUXMUR3rMj8TS/LnZJsaKYVFX+QI/MiP7LRzRAcFnOJ6btWsJUUwXo6H
-         JbkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725962375; x=1726567175;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OxZS7VLlvlNcdBPu4dATlqzqCH0SG09iCapcqr1ry4w=;
-        b=ExZXYX3eqXeWJd4OCyQBZ7kgAgisoCcYxDv7A8Begg3X4n4CfxcK9ElbciEP9ypn4R
-         VVixeiQNDE9M02KLsYgHyrRgdRidfO0tH5YHvI63xhZrbGM1AJwnJZIivJVDBINU0PRm
-         xlE6BAomJc1S+VLMwQGIVyFIBQ3faD2W9ay9bpFSBy4Ptc5qE096Jmd2v9jSJrE72Bnp
-         4mIG814P9wjtx9BvvWEHT5R9rLWL4/1mAibHQ4LgkQ3oeFyoaKeUNko+Q9Gotts8ifo0
-         S3tVgyKbtjTxPA/1mD031WA/NeCWYTRH9mDgxvWJQaAzbtLDGXhANrHXYsRqdqX/NDyI
-         GXpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWzBBEHomtv54TEgunZ/dT/QVyRRx8KxZKOKsoj7jKibbMN0RRn7pdkSM10HEyXUIMT2b6BorvxTA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyY//XdkjDfJH2vcDotCdRqCrK7scN7myHJhgRCJuwcn73Nuxr8
-	rM7fcNqNhFWmWRrJCU3L21+fiKFwL3V8J3eOORf2qozFW0WBUuLyTsW6Wo3sNIk=
-X-Google-Smtp-Source: AGHT+IEtmAPvqyyaWuRoKy32eCJyGneGNTbPJN2tRd224P8AECPcesi7ike/qTX7P5GRwYiq+pSdJw==
-X-Received: by 2002:a5d:46ca:0:b0:374:c3e4:d6e3 with SMTP id ffacd0b85a97d-378a89fd45fmr1331874f8f.5.1725962375253;
-        Tue, 10 Sep 2024 02:59:35 -0700 (PDT)
-Received: from localhost (p5dc68d3d.dip0.t-ipconnect.de. [93.198.141.61])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3789564a072sm8465192f8f.2.2024.09.10.02.59.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2024 02:59:34 -0700 (PDT)
-Date: Tue, 10 Sep 2024 11:59:33 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Dzmitry Sankouski <dsankouski@gmail.com>
-Cc: dmitry.baryshkov@linaro.org, Sebastian Reichel <sre@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Jessica Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-leds@vger.kernel.org, linux-pwm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v4 27/28] gcc-sdm845: Add general purpose clock ops
-Message-ID: <uevafpb6r7rfutiqrm5asfvv7zfxcb3acrlxqpispele5er52x@eegonpzqlm7j>
-References: <20240719-starqltechn_integration_upstream-v4-0-a7f644821941@gmail.com>
- <20240719-starqltechn_integration_upstream-v4-27-a7f644821941@gmail.com>
+	s=arc-20240116; t=1725964546; c=relaxed/simple;
+	bh=BFmiL4dTfjhPZodclFXsXNY9e9GWPt/7f2C7f21bUPw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Q2XHYKeEHei977rvb3xyIiwbgqdEm8Ltu9R/kDyZxWOgdMV1u5SC+WEb2JSoBb+kOPykfC8f2f6OT3wIYaKuHm5G8QpVO+V+VYF1gGpPbJ5uiRRNBqYzaN5LE2NXFpER3LQTFCDjGqGa9i5DumcLS6bCzl6+sYDwbN0jNRLGpGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=dD5Z2zPW reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id a006a526e2ca53cc; Tue, 10 Sep 2024 11:35:42 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 82EC46B836A;
+	Tue, 10 Sep 2024 11:35:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1725960941;
+	bh=BFmiL4dTfjhPZodclFXsXNY9e9GWPt/7f2C7f21bUPw=;
+	h=From:Subject:Date;
+	b=dD5Z2zPWRS4tv6EACgZN9J26dvmEX7T9DOGkntPCkseWCjrESwxvixNpM7TyxArF3
+	 daPo653wQ0sNum3oCgMLJYI4mtbxERRO2XHzvtAlyfYceZ2dBR/ML1nKZeBg/K7WIx
+	 pFQHbaP4dn8GybCYZSSbgSVjk+ccQiynNumJXPGGjEhUPVr1o7Vm9i52u509QGzGqo
+	 fhQHwnAJ2fnMy1XmVAAALkcWHpFzhfL+Jv3sS2a3iMg1kDIec46XMu2ZyPZsDD3319
+	 +he5BJF9n6HrO4JHf67E0q9CZbLBJvp+Lne/GC3SP8abxLKI5wfSlQ7t4CD2YaFblO
+	 kLlu50OvPjM/g==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>
+Subject:
+ [PATCH for 6.13 v1 5/8] thermal: core: Rename trip list node in struct
+ thermal_trip_desc
+Date: Tue, 10 Sep 2024 11:32:10 +0200
+Message-ID: <1978487.PYKUYFuaPT@rjwysocki.net>
+In-Reply-To: <4920970.GXAFRqVoOG@rjwysocki.net>
+References: <4920970.GXAFRqVoOG@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="d2rlzxmgwshy2k4w"
-Content-Disposition: inline
-In-Reply-To: <20240719-starqltechn_integration_upstream-v4-27-a7f644821941@gmail.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: spam:low
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrudeiledgudejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuufhprghmkfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdr
+ tghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Since the list node field in struct thermal_trip_desc is going to be
+used for purposes other than trip crossing notification, rename it
+to list_node.
+
+No intentional functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_core.c |   10 +++++-----
+ drivers/thermal/thermal_core.h |    2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -426,13 +426,13 @@ static void add_trip_to_sorted_list(stru
+ 	struct thermal_trip_desc *entry;
+ 
+ 	/* Assume that the new entry is likely to be the last one. */
+-	list_for_each_entry_reverse(entry, list, notify_list_node) {
++	list_for_each_entry_reverse(entry, list, list_node) {
+ 		if (entry->notify_temp <= td->notify_temp) {
+-			list_add(&td->notify_list_node, &entry->notify_list_node);
++			list_add(&td->list_node, &entry->list_node);
+ 			return;
+ 		}
+ 	}
+-	list_add(&td->notify_list_node, list);
++	list_add(&td->list_node, list);
+ }
+ 
+ static void handle_thermal_trip(struct thermal_zone_device *tz,
+@@ -596,10 +596,10 @@ void __thermal_zone_device_update(struct
+ 
+ 	thermal_zone_set_trips(tz, low, high);
+ 
+-	list_for_each_entry(td, &way_up_list, notify_list_node)
++	list_for_each_entry(td, &way_up_list, list_node)
+ 		thermal_trip_crossed(tz, &td->trip, governor, true);
+ 
+-	list_for_each_entry_reverse(td, &way_down_list, notify_list_node)
++	list_for_each_entry_reverse(td, &way_down_list, list_node)
+ 		thermal_trip_crossed(tz, &td->trip, governor, false);
+ 
+ 	if (governor->manage)
+Index: linux-pm/drivers/thermal/thermal_core.h
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.h
++++ linux-pm/drivers/thermal/thermal_core.h
+@@ -29,7 +29,7 @@ struct thermal_trip_attrs {
+ struct thermal_trip_desc {
+ 	struct thermal_trip trip;
+ 	struct thermal_trip_attrs trip_attrs;
+-	struct list_head notify_list_node;
++	struct list_head list_node;
+ 	struct list_head thermal_instances;
+ 	int notify_temp;
+ 	int threshold;
 
 
---d2rlzxmgwshy2k4w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello,
-
-On Fri, Jul 19, 2024 at 03:55:04PM +0300, Dzmitry Sankouski wrote:
-> SDM845 has "General Purpose" clocks that can be muxed to
-> SoC pins to clock various external devices.
-> Those clocks may be used as e.g. PWM sources for external peripherals.
->=20
-> GPCLK can in theory have arbitrary value depending on the use case, so
-> the concept of frequency tables, used in rcg2 clock driver, is not
-> efficient, because it allows only defined frequencies.
->=20
-> Introduce clk_rcg2_gp_ops, which automatically calculate clock
-> mnd values for arbitrary clock rate.
->=20
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> ---
->  drivers/clk/qcom/clk-rcg.h    |   1 +
->  drivers/clk/qcom/clk-rcg2.c   | 162 ++++++++++++++++++++++++++++++++++++=
-++++--
->  drivers/clk/qcom/gcc-sdm845.c |  19 ++---
->  drivers/pwm/pwm-clk.c         |   5 ++
-
-I don't understand why a change to some qcom clk implementation detail
-needs a change to drivers/pwm/pwm-clk.c in the same commit. I guess if
-the change to drivers/pwm/pwm-clk.c is needed it should better go into a
-separate patch with an appropriate commit log?!
-
-Best regards
-Uwe
-
---d2rlzxmgwshy2k4w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmbgGIIACgkQj4D7WH0S
-/k7x2AgAluuv/f/FtpsMhu/tAKjHUOr1Y+1vUefo+pFCKzhUDjMyHMtIz8by9GsE
-1pZ9fiw/to0h6iyEctQmMN3sqoMqkEwL4aKMYb9WOopkDgY36I7oAWjXs4mio6Ed
-DPguLwTovw/p+OJMmgb/ndu5GNyQCb9AsmjekXGIx4ZVDJPX3pc8v/DX5HQj2y3x
-sCi8NmmXABsckLz42oxrky2ZGcNmFddqBJxJdgjVcXfa5BEetdtLnUhmtmhiKyJy
-g1rWCprL53Lj1ZWKLdQgu6yiNCQK9LS45ETRzHX8idzAODnagfx6by+X58QljgMg
-i72ZlH212j1K035K3UHJar7Lo0D7FQ==
-=xssr
------END PGP SIGNATURE-----
-
---d2rlzxmgwshy2k4w--
 
