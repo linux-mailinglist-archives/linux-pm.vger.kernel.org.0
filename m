@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-13961-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13960-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 864E197419F
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 20:06:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BE3E97419A
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 20:05:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42B89286B19
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 18:06:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7DCC2869EA
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 18:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B0F81A4F2B;
-	Tue, 10 Sep 2024 18:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB5D1A4B73;
+	Tue, 10 Sep 2024 18:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="aQ3LBe25"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="qR7sE07K"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB95A1A01AE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60081A0B0D;
 	Tue, 10 Sep 2024 18:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725991536; cv=none; b=Bz2RVbwrT3GgJLIAF7Y/WIKr0rhaOKdJh8NT0cNjbFkfoVa2nPCQcsDPFMl9uR7CH/9NZucnoP2LZbKp3/siTJPaoJkNxqQPPKb8ZEv2Ic11h5QDd8LwcFZ52miTCIPg8ONm3lqidEWAHCz+YUeZsX0gKiOApxsq6vTzK6VsxKA=
+	t=1725991535; cv=none; b=oFQgPUIQ2YHqDnqlbmSZ9qUmLOay/pj0cmfDUaHZ9G3wC8WNuHXUeazVSngTPIkhu4kLFss39aDUK0mgsncTHQC1OuAplhB3i+EWutze3ocwCMcAVjy+WfcnnX5mK3Zn+6TWvtdpIoq1VDHe5REtU2Y1xDNzdfDttq6mMGw8q5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725991536; c=relaxed/simple;
-	bh=Je1FHMLQZVb6pynDmX5z0/KiXmKexwWWB6JfVjr/pn0=;
+	s=arc-20240116; t=1725991535; c=relaxed/simple;
+	bh=nYIXU5OMRZPbwJcZmX8U4VoDzIL/uNNlSUscY2JAgo8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rrO6r21lFN/1N5Vky5gT8Em4YF8Mgu/5wMIy+vyHo1TRcSe4tMCBtTmO+GaTgfuwg1oaCgYxAFrUk0V5LWTqRP08yHjBdlXVQlBmahwEihhhjB35NSTanNBbdETTMG6lNoqyCvUfBEWlYcW/4iKwDY8+MCGoooSYI6nCzs2AM0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=aQ3LBe25; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version; b=pbP1El/dh7YHOwr7u7xeFgdXKsXkyLRe/EsWFnWTiXfEbidjYQpenKb7Cjo5ByL/WDQcYUvCaTM/2UHGxRD7eTtxUvFaNDtXgU7kiaTvWRivoV4VArGFlxhCVQhQ6kVNSo6HzJCzcyoE+VTygzkYtr8IAobLbQEeSfQ6V3PgdcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=qR7sE07K; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1725991532;
-	bh=Je1FHMLQZVb6pynDmX5z0/KiXmKexwWWB6JfVjr/pn0=;
+	bh=nYIXU5OMRZPbwJcZmX8U4VoDzIL/uNNlSUscY2JAgo8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aQ3LBe254vT0U9W9y2BvvsOx/vlsWxT1qwH5pDak0czgIj8EHaW+ETvwW3FUCy8iL
-	 AuPhed8aEjCYrg6NnSsqc2ecq2u8KZxIgvI6uobpCfVrNLHuGEemfHbckgyL6tL4Sa
-	 8u/2hB8H3GQlD6cwEIiDJS+auTz6Ez6Jp7PTkO+5UQpyMUGVx2TWKGHRJExZV2hpdU
-	 FZ43YG5BQhnRtHzmuXAgpo1O0W5DmWhVpiQxw8O8hfLGCU47teEyWperRHj9fM8UpS
-	 HIU6NSubjhpXppNuvSKNdZewRAeSU+Uk475rgrR8Xs1rpTKApTDTGqlIQikLyBCfJs
-	 P8467nPtVK4UQ==
+	b=qR7sE07Krxu7zZ6l4JFvuRom0n4KtPs3RlU8SV7QS/rUt1AIxR3XX+8j/FQu458Qo
+	 86mGDvgxPIOWCyYMcogx1lGbzXx8uT4aiznaUbXEhj0SViHasmezKWDqbM15KoC+HO
+	 jil1lkp0F6VtjgemgE3gFosv+gtj2Zlc+hcOPouFTOzuuB3ljTQsnwKKcVQJTgLK+m
+	 hlMpGsbCPiaxBahYOWgyc5IfL/KdRX3nlOgxM3z039HWuc9gAt4YH5kdrsnbNvgI27
+	 1XYygrNTIer6p0LOKo0Va8HAkVDvlCQxcbwFpUXgvdaQVYcfBr3GbbyN0UIWSBpho4
+	 72tznkFzGag4g==
 Received: from jupiter.universe (dyndsl-091-248-215-127.ewe-ip-backbone.de [91.248.215.127])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id D465617E35FF;
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id D37A617E35FE;
 	Tue, 10 Sep 2024 20:05:31 +0200 (CEST)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id 900774800F6; Tue, 10 Sep 2024 20:05:31 +0200 (CEST)
+	id 91E174800F8; Tue, 10 Sep 2024 20:05:31 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -65,9 +65,9 @@ Cc: Elaine Zhang <zhangqing@rock-chips.com>,
 	linux-pm@vger.kernel.org,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH v1 3/6] pmdomain: rockchip: reduce indention in rockchip_pd_power
-Date: Tue, 10 Sep 2024 19:57:12 +0200
-Message-ID: <20240910180530.47194-4-sebastian.reichel@collabora.com>
+Subject: [PATCH v1 4/6] dt-bindings: power: rockchip: add regulator support
+Date: Tue, 10 Sep 2024 19:57:13 +0200
+Message-ID: <20240910180530.47194-5-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240910180530.47194-1-sebastian.reichel@collabora.com>
 References: <20240910180530.47194-1-sebastian.reichel@collabora.com>
@@ -79,80 +79,32 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Rework the logic, so that the function exits early when the
-power domain state is already correct to reduce code indention.
+Add optional support for a voltage supply required to enable a
+power domain. The binding follows the way it is handled by the
+Mediatek binding to keep things consistent.
 
-No functional change intended.
+This will initially be used by the RK3588 GPU power domain, which
+fails to be enabled when the GPU regulator is not enabled.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/pmdomain/rockchip/pm-domains.c | 45 +++++++++++++-------------
- 1 file changed, 23 insertions(+), 22 deletions(-)
+ .../devicetree/bindings/power/rockchip,power-controller.yaml   | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-index 5e5291dedd28..663d390faaeb 100644
---- a/drivers/pmdomain/rockchip/pm-domains.c
-+++ b/drivers/pmdomain/rockchip/pm-domains.c
-@@ -537,36 +537,37 @@ static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
+diff --git a/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml b/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml
+index 0d5e999a58f1..0b4c5b174812 100644
+--- a/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml
++++ b/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml
+@@ -131,6 +131,9 @@ $defs:
+           A number of phandles to clocks that need to be enabled
+           while power domain switches state.
  
- 	guard(mutex)(&pmu->mutex);
- 
--	if (rockchip_pmu_domain_is_on(pd) != power_on) {
--		ret = clk_bulk_enable(pd->num_clks, pd->clks);
--		if (ret < 0) {
--			dev_err(pmu->dev, "failed to enable clocks\n");
--			return ret;
--		}
-+	if (rockchip_pmu_domain_is_on(pd) == power_on)
-+		return 0;
- 
--		if (!power_on) {
--			rockchip_pmu_save_qos(pd);
-+	ret = clk_bulk_enable(pd->num_clks, pd->clks);
-+	if (ret < 0) {
-+		dev_err(pmu->dev, "failed to enable clocks\n");
-+		return ret;
-+	}
- 
--			/* if powering down, idle request to NIU first */
--			rockchip_pmu_set_idle_request(pd, true);
--		}
-+	if (!power_on) {
-+		rockchip_pmu_save_qos(pd);
- 
--		ret = rockchip_do_pmu_set_power_domain(pd, power_on);
--		if (ret < 0) {
--			clk_bulk_disable(pd->num_clks, pd->clks);
--			return ret;
--		}
-+		/* if powering down, idle request to NIU first */
-+		rockchip_pmu_set_idle_request(pd, true);
-+	}
- 
--		if (power_on) {
--			/* if powering up, leave idle mode */
--			rockchip_pmu_set_idle_request(pd, false);
-+	ret = rockchip_do_pmu_set_power_domain(pd, power_on);
-+	if (ret < 0) {
-+		clk_bulk_disable(pd->num_clks, pd->clks);
-+		return ret;
-+	}
- 
--			rockchip_pmu_restore_qos(pd);
--		}
-+	if (power_on) {
-+		/* if powering up, leave idle mode */
-+		rockchip_pmu_set_idle_request(pd, false);
- 
--		clk_bulk_disable(pd->num_clks, pd->clks);
-+		rockchip_pmu_restore_qos(pd);
- 	}
- 
-+	clk_bulk_disable(pd->num_clks, pd->clks);
++      domain-supply:
++        description: domain regulator supply.
 +
- 	return 0;
- }
- 
+       pm_qos:
+         $ref: /schemas/types.yaml#/definitions/phandle-array
+         items:
 -- 
 2.45.2
 
