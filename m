@@ -1,187 +1,110 @@
-Return-Path: <linux-pm+bounces-13926-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13927-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0422972CC9
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 11:03:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE54D972D26
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 11:13:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C65A2894AB
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 09:03:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A4561F26368
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 09:13:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 456C9187FE8;
-	Tue, 10 Sep 2024 09:02:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="krsIAYSh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE27F187FE7;
+	Tue, 10 Sep 2024 09:13:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E4418784B
-	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 09:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3CBE17BED6
+	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 09:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725958963; cv=none; b=MnyDL9UhO/nj/WnWsytz1orp49yVJ/zRhDirfiq6U9JjzrVwdxaoP/hNCrlv8fcPsnyE+vhqaZz3icZa10i70ZAGlznDoPen3PgXDH1qtdUzx4TYqlNkEhDlkOxkVdGKIoglnXtEpCsq9OxIenbiWQqQaOcrK3KMzkJDsIgPYnE=
+	t=1725959628; cv=none; b=BQNs/Rvsqhzz4JHmhTLqs6mHLU+0N77pC1LLAAv34YaGI7F5qBaEv47XG1C0wRa2oek5Y4T9obHpA4Be6qFAhV83Fpc6Tekrn5JNXIGhATiOT7B2PQ7j8ou4+hvmU2WDTPq9kueTbSMfHt0whqjGT5UTd9gSf5gaIE4Ijwa7+sA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725958963; c=relaxed/simple;
-	bh=X4DbS8J4R5xEljdhS8EidOfHXKoAzLYcu5FjoBl4HSQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tPkK0CYtg4aYnaB7d3CUMT5VWTwe4BncVFPEhIpL3xcvfCipQqH8YUPzVr8g6rw5hbU/DqvxavnxAV6eZj5PJeF7Zt16F0rjtJjgBW9jC3ERu06Hu7Q2m2DBFk/4BJr2rJ/SIkJ1Vl0sktxSvEb2rY8Rs46kLaokAk8FfIAs3+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=krsIAYSh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0240C4CECC
-	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 09:02:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725958962;
-	bh=X4DbS8J4R5xEljdhS8EidOfHXKoAzLYcu5FjoBl4HSQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=krsIAYShVNJWXauls5mjWXOfgISYBTGZqEz4aDC20Xrg837Hdo+DusowkOW8pt9h5
-	 eZCWz3ILt1zgaOM3ADRJ9R8Q41tST20nUTig/GDappnENhPCjyLiRo+byI33im6ucD
-	 dWssIK9MmYh5sJmCuqzlV9V367dH4ekj6YQhfb1MCB6ZzmP0fXdhTTffONXwzr4w5N
-	 qJ7ARDa9wQCQhg0s1v529HRMz81f4zLlGrbk2oDkznPbPaSubXEkcwNUSbrrgP9ky6
-	 RTI4hUxRVe9tAe8pOjqzoGhE7M9P8VwyfCfXlQi51jsoDysmub92tSU1ryacLHDlGx
-	 R3oIg4iHCEanA==
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5e1baf0f764so1298796eaf.1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 02:02:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVNDy+5pSFOKUVnPIi3mqce7BUk0Vi3dteAa69ipxaJlaWDMTgQ/ocrXIE9NFdqtsYkl8py0F39uA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrRj1YRFhdcVACtUbBt2vug+SPqWEF0648vbAquV6+A0f5ONk3
-	j4sO6J78GXXjqRRHFiXOCo35SFyo4j/fo073j3mekZv3HWKP1IntyiIW0SjD9MxMCn4UDXA9eGC
-	MCRM1nUP+bQCAMwiZYPsAMLH+4vI=
-X-Google-Smtp-Source: AGHT+IG9B4hjIRNCUNrcpojj+QaVbDnExpUxje+py3AH831RSWHjPUm8xJIVyquC8O2p9TKFKf6mVAYdm7FXQg4hMO0=
-X-Received: by 2002:a05:6820:623:b0:5e1:dcd2:aa4c with SMTP id
- 006d021491bc7-5e1dcd2aea0mr3330641eaf.8.1725958961970; Tue, 10 Sep 2024
- 02:02:41 -0700 (PDT)
+	s=arc-20240116; t=1725959628; c=relaxed/simple;
+	bh=DJdS2SI42GcB9p0WPdnYzH+yL3DWxpEY2EutTKyiI7g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bpKGgWnyeUw/jo86hiT7tmgtGKSALptLjYHAjX3T8Dj1dkYSXfd4d3FKiHMdReiok6zIEB1BE+1EgX14+uiw6FOweqLozyn3dnczdvRntENiaC/xOoM1rPDTCCxc7ayvmFPsqVQm2MiYkERg2Oy8Qv1abFHMEJjzJDa/l7VYPjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 24F3B113E;
+	Tue, 10 Sep 2024 02:14:15 -0700 (PDT)
+Received: from [10.1.26.79] (e127648.arm.com [10.1.26.79])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6284D3F66E;
+	Tue, 10 Sep 2024 02:13:45 -0700 (PDT)
+Message-ID: <f4478146-88d3-445c-8676-7246bf477c50@arm.com>
+Date: Tue, 10 Sep 2024 10:13:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3a7fa69f-9cee-48f0-a932-7362f600b6a6@linaro.org>
-In-Reply-To: <3a7fa69f-9cee-48f0-a932-7362f600b6a6@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 10 Sep 2024 11:02:30 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iGCucf4rH8M8=LucjNFFKT2Ov0OqyQJtE2oGsW-R4Nsw@mail.gmail.com>
-Message-ID: <CAJZ5v0iGCucf4rH8M8=LucjNFFKT2Ov0OqyQJtE2oGsW-R4Nsw@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal drivers changes for v6.12-rc1
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Raphael Gallais-Pou <rgallaispou@gmail.com>, 
-	George Stark <gnstark@salutedevices.com>, Yan Zhen <yanzhen@vivo.com>, 
-	Fabio Estevam <festevam@denx.de>, Zhang Zekun <zhangzekun11@huawei.com>, 
-	Alexander Stein <alexander.stein@ew.tq-group.com>, Lukasz Luba <Lukasz.Luba@arm.com>, 
-	Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: PM: EM: Question Potential Issue with EM and OPP Table in cpufreq
+ ondemand Governor
+To: "chenshuo@eswincomputing.com" <chenshuo@eswincomputing.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm <linux-pm@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
+References: <202409101046414978042@eswincomputing.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <202409101046414978042@eswincomputing.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Daniel,
-
-On Fri, Sep 6, 2024 at 1:24=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
->
->
+On 9/10/24 03:46, chenshuo@eswincomputing.com wrote:
 > Hi Rafael,
->
-> please consider pulling the following changes. This cycle has been quite
-> quiescent and the changes are mostly related to code cleanups and DT
-> bindings.
->
-> Thanks
->
->
-> The following changes since commit f5c05974349c8e3d80e125b71bd80695807d85=
-28:
->
->    Merge branch 'thermal-core' (2024-08-29 11:45:08 +0200)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v6.12-rc1
->
-> for you to fetch changes up to 7d8abc5f3b5ce0f53d499279d8defc0f72bf7557:
->
->    thermal/drivers/imx_sc_thermal: Use dev_err_probe (2024-09-04
-> 15:31:29 +0200)
->
-> ----------------------------------------------------------------
-> - Add power domain DT bindings for new Amlogic SoCs (Georges Stark)
->
-> - Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr() in the ST
->    driver and add a Kconfig dependency on THERMAL_OF subsystem for the
->    STi driver (Raphael Gallais-Pou)
->
-> - Simplify with dev_err_probe() the error code path in the probe
->    functions for the brcmstb driver (Yan Zhen)
->
-> - Remove trailing space after \n newline in the Renesas driver (Colin
->    Ian King)
->
-> - Add DT binding compatible string for the SA8255p with the tsens
->    driver (Nikunj Kela)
->
-> - Use the devm_clk_get_enabled() helpers to simplify the init routine
->    in the sprd driver (Huan Yang)
->
-> - Remove __maybe_unused notations for the functions by using the new
->    RUNTIME_PM_OPS() and SYSTEM_SLEEP_PM_OPS() macros on the IMx and
->    Qoriq drivers (Fabio Estevam)
->
-> - Remove unused declarations in the header file as the functions were
->    removed in a previous change on the ti-soc-thermal driver (Zhang
->    Zekun)
->
-> - Simplify with dev_err_probe() the error code path in the probe
->    functions for the imx_sc_thermal driver (Alexander Stein)
->
-> ----------------------------------------------------------------
-> Alexander Stein (1):
->        thermal/drivers/imx_sc_thermal: Use dev_err_probe
->
-> Colin Ian King (1):
->        thermal/drivers/renesas: Remove trailing space after \n newline
->
-> Fabio Estevam (2):
->        thermal/drivers/qoriq: Remove __maybe_unused notations
->        thermal/drivers/imx: Remove __maybe_unused notations
->
-> George Stark (1):
->        dt-bindings: thermal: amlogic,thermal: add optional power-domains
->
-> Huan Yang (1):
->        thermal/drivers/sprd: Use devm_clk_get_enabled() helpers
->
-> Nikunj Kela (1):
->        dt-bindings: thermal: tsens: document support on SA8255p
->
-> Raphael Gallais-Pou (2):
->        thermal/drivers/st: Switch from CONFIG_PM_SLEEP guards to
-> pm_sleep_ptr()
->        thermal/drivers/sti: Depend on THERMAL_OF subsystem
->
-> Yan Zhen (1):
->        thermal/drivers/brcmstb_thermal: Simplify with dev_err_probe()
->
-> Zhang Zekun (1):
->        thermal/drivers/ti-soc-thermal: Remove unused declarations
->
->   .../bindings/thermal/amlogic,thermal.yaml          |  3 ++
->   .../devicetree/bindings/thermal/qcom-tsens.yaml    |  1 +
->   drivers/thermal/Kconfig                            |  2 +-
->   drivers/thermal/broadcom/brcmstb_thermal.c         | 15 ++++------
->   drivers/thermal/imx_sc_thermal.c                   |  3 +-
->   drivers/thermal/imx_thermal.c                      | 16 +++++------
->   drivers/thermal/qoriq_thermal.c                    | 10 +++----
->   drivers/thermal/renesas/rcar_thermal.c             |  2 +-
->   drivers/thermal/sprd_thermal.c                     | 14 ++--------
->   drivers/thermal/st/st_thermal.c                    | 32
-> ++++++++--------------
->   drivers/thermal/st/st_thermal_memmap.c             |  2 +-
->   drivers/thermal/st/stm_thermal.c                   |  8 ++----
->   drivers/thermal/ti-soc-thermal/ti-bandgap.h        |  4 ---
->   13 files changed, 45 insertions(+), 67 deletions(-)
->
-> --
 
-Pulled and added to the linux-next branch in linux-pm.git, thanks!
+(+CC Lukasz)
+
+> 
+> I am encountering an issue related to the Energy Model (EM) when using cpufreq with the ondemand governor. Below is a detailed description:
+> 
+> 1. Problem Description:
+>    When using cpufreq with the ondemand governor and enabling the energy model (EM), the CPU OPP table is configured with frequencies and voltages for each frequency point. Additionally, the `dynamic-power-coefficient` is configured in the DTS under the CPU node. However, I observe abnormal dynamic frequency scaling, where the CPU frequency always stays at the highest frequency point in the OPP table. Below is an example of the DTS configuration:
+> ```
+> cpu0: cpu@0 
+> 	{ 
+> 		...
+> 		operating-points-v2 = <&d0_cpu_opp_table>; 
+
+Do you mind sharing <&d0_cpu_opp_table>?
+
+> 		#cooling-cells = <2>; dynamic-power-coefficient = <2000>; };
+> 		...
+> ```
+> 2. Root Cause Analysis:
+> When using the OPP table and configuring the "dynamic-power-coefficient," the `em_dev_register_perf_domain()` function in `kernel/power/energy_model.c` sets the flags to `EM_PERF_DOMAIN_MICROWATTS`. In the `em_create_perf_table()` function, `em_compute_costs()` includes the following code:
+> ```
+> if (table[i].cost >= prev_cost) {
+>     table[i].flags = EM_PERF_STATE_INEFFICIENT;
+>     dev_dbg(dev, "EM: OPP:%lu is inefficient\n", table[i].frequency);
+> }
+> ```
+> Since the cost is calculated as power * max_frequency / frequency, the cost for each frequency point becomes a constant value. Consequently, except for nr_states - 1 (where prev_state is initialized as ULONG_MAX), all other frequency points' cost is equal to prev_cost. As a result, only the highest frequency point (table[nr_states - 1]) is not flagged as EM_PERF_STATE_INEFFICIENT in the EM performance table.
+> 
+> In the em_cpufreq_update_efficiencies() function, the following code is executed:
+> ```
+> for (i = 0; i < pd->nr_perf_states; i++) {
+>     if (!(table[i].flags & EM_PERF_STATE_INEFFICIENT))
+>         continue;
+> 
+>     if (!cpufreq_table_set_inefficient(policy, table[i].frequency))
+>         found++;
+> }
+> ```
+> As a result, all frequency points marked as EM_PERF_STATE_INEFFICIENT are flagged as CPUFREQ_INEFFICIENT_FREQ in the cpufreq_table_set_inefficient() function, causing these frequencies to be skipped during frequency scaling.
+> 
+> 3. Proposed Change and Testing: 
+> On Linux 6.6, this behavior affects the normal operation of the cpufreq ondemand governor, which in turn causes passive cooling devices to malfunction when using the power allocator strategy in the thermal framework. I made a temporary fix by changing the condition from:
+> 	if (table[i].cost >= prev_cost)
+> to:
+> 	if (table[i].cost > prev_cost)
+> After this change, the issue seems resolved for now. However, I am concerned about potential side effects of this modification.
+
+But this doesn't solve the actual issue, if cost == prev_cost for all
+OPPs then all of them but one are indeed inefficient.
+
 
