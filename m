@@ -1,56 +1,56 @@
-Return-Path: <linux-pm+bounces-13931-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13932-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46787972E69
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 11:43:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A91E972E6E
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 11:43:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B36328826A
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 09:43:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48A18288081
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 09:43:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CF8318EFD0;
-	Tue, 10 Sep 2024 09:42:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2351C190485;
+	Tue, 10 Sep 2024 09:42:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3644E18FDB0;
-	Tue, 10 Sep 2024 09:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8636A18FDC5;
+	Tue, 10 Sep 2024 09:42:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725961329; cv=none; b=PjOo5gH7gnFTpDbnOQ+LnZ+CK6oiTw8oiQnzL4X9YKoOisBM5mg8khbxRBZtMogrkNJjYXMGf9/4030O50uf04PKtqnH1l/1rz3mNU7mEwUiJy1z6rVwWZV64e4j7E3Exv3fOIjr6dm1QCXRteb0HJRv1LlbKZUtlqSA5rSdmf0=
+	t=1725961333; cv=none; b=HFvp0a9tgw9aXZvbKAYzxoqF6I9O/9MO2ULgQffMHFHPllnIZDE+lcC3xDJJWj8VENZ8J1JHu/nNvpKZHuwaxYfTFfQD3ycW8Jbr0oR7cJxm0aNsPlUqVG5gBW8Ma7XDUTPovzXIQ25izNUcQ8m7QlKfnM7/jXR6gC97GKO4o/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725961329; c=relaxed/simple;
+	s=arc-20240116; t=1725961333; c=relaxed/simple;
 	bh=5LFaB4QeRF7sCvthexbWNV7eT6PsLxn6wE3VOrnStQ0=;
 	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 MIME-Version:Date; b=kXWvomHHTEBFm6BmiOuGH0JO2nK8b3IT4v2r7QCYRnDUPot9QWxhiJ+dtl3DZZVVQD/D8KVTPw5XNPXOFLCpv5+75Ty1Y6VgpFSwdgFgEmBpy+HVVAY2BOaAClPQy490y/U4RXnuzF97f4CbSJ8s7yUBMpuR2vtvG13En9E6MpQ=
+	 MIME-Version:Date; b=QgeClY+pWrcbfs5WiGp+LNUU2duxJfOomCfZGQPPhQXJW7ApF34ofo/SYhN3dMWQEfFMmbJ1qo4A+H0EkBJQrsYD62c7W9OZchjqBl5P1ZWB6433zrsVvruAEpiRGJq7bUjdPj9XcwHNVySTSQH/e/akMqG9bAMwd8Ui6xCRX8A=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: ed559bae6f5811efa216b1d71e6e1362-20240910
+X-UUID: ef80a98c6f5811efa216b1d71e6e1362-20240910
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:02d759ef-adcf-455e-b22e-f2e8c51e2021,IP:20,
+X-CID-O-INFO: VERSION:1.1.38,REQID:7af2211c-764b-4bbd-ba05-e0dfd58e57ee,IP:20,
 	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-3,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
 	N:release,TS:17
-X-CID-INFO: VERSION:1.1.38,REQID:02d759ef-adcf-455e-b22e-f2e8c51e2021,IP:20,UR
+X-CID-INFO: VERSION:1.1.38,REQID:7af2211c-764b-4bbd-ba05-e0dfd58e57ee,IP:20,UR
 	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-3,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
 	release,TS:17
-X-CID-META: VersionHash:82c5f88,CLOUDID:ff1660af7caec84c3caa890c8847219c,BulkI
-	D:2409062205428B690IWE,BulkQuantity:2,Recheck:0,SF:64|66|24|72|19|45|102,T
+X-CID-META: VersionHash:82c5f88,CLOUDID:1d3bfc4f5e06006388cbca7b60dda97c,BulkI
+	D:2409062205428B690IWE,BulkQuantity:3,Recheck:0,SF:24|72|19|45|64|66|102,T
 	C:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,
 	COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: ed559bae6f5811efa216b1d71e6e1362-20240910
+X-UUID: ef80a98c6f5811efa216b1d71e6e1362-20240910
 X-User: duanchenghao@kylinos.cn
 Received: from [192.168.27.151] [(223.70.160.255)] by mailgw.kylinos.cn
 	(envelope-from <duanchenghao@kylinos.cn>)
 	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 945606735; Tue, 10 Sep 2024 17:42:00 +0800
-Message-ID: <0fc8bc99eb3e5ff8434359677f112bde21c446aa.camel@kylinos.cn>
+	with ESMTP id 891067160; Tue, 10 Sep 2024 17:42:03 +0800
+Message-ID: <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
 Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
  USB status when S4 wakes up
 From: duanchenghao <duanchenghao@kylinos.cn>
@@ -69,7 +69,7 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 10 Sep 2024 17:34:52 +0800
+Date: Tue, 10 Sep 2024 17:36:56 +0800
 User-Agent: Evolution 3.44.4-0ubuntu2 
 
 
@@ -334,6 +334,7 @@ t(HCD_FLAG_WAKEUP_PENDING, &hcd-
 > > 2.34.1
 > >=20
 > >=20
+
 
 
 
