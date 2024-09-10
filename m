@@ -1,76 +1,87 @@
-Return-Path: <linux-pm+bounces-13946-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13947-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D94649735BD
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 12:57:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CB21973733
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 14:27:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57D411F220EB
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 10:57:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AD168B22838
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 12:27:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C10BD185B43;
-	Tue, 10 Sep 2024 10:57:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97AC9190492;
+	Tue, 10 Sep 2024 12:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dvphqLbs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074F5181B8D
-	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 10:57:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8932818F2D5;
+	Tue, 10 Sep 2024 12:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725965863; cv=none; b=iwCgUWrk/LbfNGNVxJ7c8+yXrzxG51xb9rgNKU8igft0jiMR/06vQJB1GA9suSmHiRGlCXgLkWH1rezBtlOKFCaQ/tiD0JkfNde61vZwsmwCxomsq6q8AkKNR1F+ydbsvgUuCsWXRbiL2dQUzgNgvNomWZct9043AZ7AiBoRjag=
+	t=1725971242; cv=none; b=pSdpEPkzDCgNVF5UNG69JtbHPWCj0A7pJr4EUHK66Jy358YjhH+ibbEc6cAwDLM948vj/5cgY9v+nbW5398tl89S9W2pvhm55nKd55p7wueX2LgZYeQ8vu0wir2GmJayx8Sb1WxXzSgANkAgR4lEITl+1p9i3OO1qZs2GCN71Z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725965863; c=relaxed/simple;
-	bh=GdrOQN2hqCNhkSgAt9AvaHK+fAjtnWoxdSdqTlSk/xY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=QXYtT4wR8eb1qG90haLZyYfY95evCx1tRf0wrX6IpK4IKH1YATWMyrnBOEw7Og0uhqjgkZ3tcuZa58bu/dkCJ6BVLooB3S4sfc+u+QZLE7g1WXHnal9vaop5MEA0gS+slCpDd6bpAGZJKo+H4j/4xHqUxI66CryyQiDD0J059Ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 79011dea6f6311efa216b1d71e6e1362-20240910
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED, SN_UNTRUSTED
-	SN_LOWREP, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
-	GTI_C_BU, AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
-	ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:66192ec1-1d0a-4f65-be9a-bf3f8c3b8a27,IP:20,
-	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:0
-X-CID-INFO: VERSION:1.1.38,REQID:66192ec1-1d0a-4f65-be9a-bf3f8c3b8a27,IP:20,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:0
-X-CID-META: VersionHash:82c5f88,CLOUDID:9e5958025d0bfea8e470bfb272e615f7,BulkI
-	D:240910185731PV8ZAN7Q,BulkQuantity:0,Recheck:0,SF:66|24|17|19|44|102,TC:n
-	il,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,CO
-	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: 79011dea6f6311efa216b1d71e6e1362-20240910
-X-User: duanchenghao@kylinos.cn
-Received: from chenghao.. [(223.70.160.255)] by mailgw.kylinos.cn
-	(envelope-from <duanchenghao@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 883973010; Tue, 10 Sep 2024 18:57:29 +0800
-From: Duan Chenghao <duanchenghao@kylinos.cn>
-To: stern@rowland.harvard.edu
-Cc: gregkh@linuxfoundation.org,
-	pavel@ucw.cz,
+	s=arc-20240116; t=1725971242; c=relaxed/simple;
+	bh=lqPUKgcV6djMC54DXRpHGaZbHVeCCoBfZlJXbMGKYhw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=czCwFa+KWADyJa87HGzMXATqzJKE9V3vu5AfuZvXEc5dAwaeY0tT6+i15016Tqz4XC+WAs0nffffqFkY5GojNlMaF/99HRedWFoR0vDdagbJAbHEUB6mdSWRz8EIWJfmE95uV3S60Cowp8MQTRGB+fr3uomOXJ3U/Kj5pYZDGmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dvphqLbs; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725971241; x=1757507241;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lqPUKgcV6djMC54DXRpHGaZbHVeCCoBfZlJXbMGKYhw=;
+  b=dvphqLbs7I4iNq8V0PuVK7bgEm5aFDIw4YK6B4hBkDGeRhbHsMHf7BF6
+   DgYzw1DZKf1MCFzav3iAvn/Nffe6hVL5t6Gyiu4v1j1i8HCEBEEEvc37u
+   El7DihN2C0N0tlQWak00mA8fpdYBtmQjVs9HKG3hICNGzszxPNfwr/D8T
+   AWO1/uvDa6ArOCfyt8trbz1nJSW0as5Y4IDZkVySrPn9vU4D9svvfdXQ1
+   oow39/+kPb0mZy+JWhBtXA3LyiVPRrw5P3onbTk4Nnnez0z2lj2TMkY/1
+   dSYeGkmIweifDVY/nb5vqkIosbSdPlEUZA0BhljW/p48OVI7XF2s7lw3q
+   Q==;
+X-CSE-ConnectionGUID: yRX88InvQyOzRDkWgbXtZA==
+X-CSE-MsgGUID: CgCEepGTT6i+reBpt4pySQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="27634148"
+X-IronPort-AV: E=Sophos;i="6.10,217,1719903600"; 
+   d="scan'208";a="27634148"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 05:27:20 -0700
+X-CSE-ConnectionGUID: ZTNzcfL3SHu4oHVrJ/eR0g==
+X-CSE-MsgGUID: QG3Tdm7DRe6RWpsvskbgBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,217,1719903600"; 
+   d="scan'208";a="66968003"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.245.224])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 05:27:13 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: linux-pci@vger.kernel.org,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
 	linux-pm@vger.kernel.org,
-	niko.mauno@vaisala.com,
-	stanley_chang@realtek.com,
-	duanchenghao@kylinos.cn
-Subject: [PATCH v2] USB: Fix the issue of task recovery failure caused by USB status when S4 wakes up
-Date: Tue, 10 Sep 2024 18:57:14 +0800
-Message-Id: <20240910105714.148976-1-duanchenghao@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc: linux-kernel@vger.kernel.org,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v7 0/8] PCI: Add PCIe bandwidth controller
+Date: Tue, 10 Sep 2024 15:26:57 +0300
+Message-Id: <20240910122705.4068-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -80,161 +91,146 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When a device is inserted into the USB port and an S4 wakeup is initiated,
-after the USB-hub initialization is completed, it will automatically enter
-suspend mode. Upon detecting a device on the USB port, it will proceed with
-resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state. During the S4
-wakeup process, peripherals are put into suspend mode, followed by task
-recovery. However, upon detecting that the hcd is in the
-HCD_FLAG_WAKEUP_PENDING state, it will return an EBUSY status, causing the
-S4 suspend to fail and subsequent task recovery to not proceed.
+Hi all,
 
-    S4 waking up from hibernation
-    =============================
-    kernel initialization
-    |
-    v
-    freeze user task and kernel thread
-    |
-    v
-    load saved image
-    |
-    v
-    freeze the peripheral device and controller(*** Error point ***)
-    (Check the HCD_FLAG_WAKEUP_ PENDING flag of the USB. If it is set,
-     return to EBUSY and do not perform the following restore image.)
-    |
-    v
-    restore image(task recovery)
+This series adds PCIe bandwidth controller (bwctrl) and associated PCIe
+cooling driver to the thermal core side for limiting PCIe Link Speed
+due to thermal reasons. PCIe bandwidth controller is a PCI express bus
+port service driver. A cooling device is created for each port the
+service driver finds to support changing speeds.
 
-This patch makes two modifications in total:
-1. The set_bit and clear_bit operations for the HCD_FLAG_WAKEUP_PENDING
-flag of Hcd, which were previously split between the top half and bottom
-half of the interrupt,are now unified and executed solely in the bottom
-half of the interrupt.This prevents the bottom half tasks from being frozen
-during the S4 process,ensuring that the clear_bit process can proceed
-without interruption.
+This series only adds support for controlling PCIe Link Speed.
+Controlling PCIe Link Width might also be useful but there is no
+mechanism for that until PCIe 6.0 (L0p) so Link Width throttling is not
+added by this series.
 
-    Before modification：
+V7 does substantial change into the interactions with the Target Speed
+quirk which in v6 were not taking into account how early the quirk
+runs. While I believe the challenges are mostly addressed now, it would
+certainly be useful to have a second opinion on the chosen solutions.
+These challenges will also be covered as a part of my upcoming talk at
+VFIO/IOMMU/PCI microconference in Vienna.
 
-    ehci interrupt handler
-    =====================
-    remote wakeup
-    if (ehci->rh_state == EHCI_RH_SUSPENDED)	    |
-	usb_hcd_resume_root_hub			    |
-    |						    |
-    v						    | top half
-    set_bit HCD_FLAG_WAKEUP_PENDING		    |
-    |						    |
-    v						    |
-    queue_work(pm_wq, &hcd->wakeup_work)	    |
-    |
-    v
-    hub resume					    |
-    |						    |
-    v						    | bottom half
-    clear_bit HCD_FLAG_WAKEUP_PENDING		    |
+bwctrl is built on top of BW notifications revert. The changes are
+based on top of the Target Speed quirk fixes in pci/enumeration branch.
 
-    After modification:
+v7:
+- Rebased on top of Maciej's latest Target Speed quirk patches
+- Target Speed quirk runs very early, w/o ->subordinate existing yet.
+  This required adapting logic:
+	- Move Supported Link Speeds back to pci_dev
+	- Check for ->subordinate == NULL where necessary
+	- Cannot always take bwctrl's per port mutex (in pcie_bwctrl_data)
+- Cleaned up locking in pcie_set_target_speed() using wrappers
+	- Allowed removing confusing __pcie_set_target_speed()
+- Fix building with CONFIG_PCI=n
+- Correct error check in pcie_lbms_seen()
+- Don't return error for an empty bus that remains at 2.5GT
+- Use rwsem to protect ->link_bwctrl setup and bwnotif enable
+- Clear LBMS in remove_board()
+- Adding export for pcie_get_supported_speeds() was unnecessary
+- Call bwctrl's init before hotplug.
+- Added local variable 'bus' into a few functions
 
-    ehci interrupt handler
-    =====================
-    remote wakeup
-    if (ehci->rh_state == EHCI_RH_SUSPENDED)        |
-        usb_hcd_resume_root_hub                     |
-    |						    | top half
-    v						    |
-    queue_work(pm_wq, &hcd->wakeup_work)	    |
-    |
-    v
-    set_bit HCD_FLAG_WAKEUP_PENDING		    |
-    |						    |
-    v						    |
-    hub resume                                      | bottom half
-    |                                               |
-    v                                               |
-    clear_bit HCD_FLAG_WAKEUP_PENDING               |
+v6:
+- Removed unnecessary PCI_EXP_LNKCAP_SLS mask from PCIE_LNKCAP_SLS2SPEED()
+- Split error handling in pcie_bwnotif_irq_thread()
+- pci_info() -> pci_dbg() on bwctrl probe success path
+- Handle cooling device pointer -Exx codes in bwctrl probe
+- Reorder port->link_bwctrl setup / bwnotif enable for symmetry
+- Handle LBMS count == 0 in PCIe quirk by checking LBMS (avoids a race
+  between quirk and bwctrl)
+- Use cleanup.h in PCIe cooling device's register
 
-2. Add a condition to the set_bit operation for the hcd flags
-HCD_FLAG_WAKEUP_PENDING.When the hcd status is HC_STATE_SUSPENDED, perform
-the setting of the aforementioned status bit.This prevents a subsequent
-set_bit from occurring after the clear_bit if the hcd is in the resuming
-process.
+v5:
+- Removed patches: LNKCTL2 RMW driver patches went in separately
+- Refactor pcie_update_link_speed() to read LNKSTA + add __ variant
+  for hotplug that has LNKSTA value at hand
+- Make series fully compatible with the Target Speed quirk
+	- LBMS counter added, quirk falls back to LBMS bit when bwctrl =n
+	- Separate LBMS patch from set target speed patches
+- Always provide pcie_bwctrl_change_speed() even if bwctrl =n so drivers
+  don't need to come up their own version (also required by the Target
+  Speed quirk)
+- Remove devm_* (based on Lukas' comment on some other service
+  driver patch)
+- Convert to use cleanup.h
+- Renamed functions/struct to have shorter names
 
-    Before modification：
-    ehci interrupt handler(CPUx)		ehci init(CPUy)
-    =====================			=============
-    remote wakeup				initialization complete
-    usb_hcd_resume_root_hub
-    				    		Enter suspend and detect that there
-						is a device inserted
-						(udev->state = USB_STATE_SUSPENDED)
+v4:
+- Merge Port's and Endpoint's Supported Link Speeds Vectors into
+  supported_speeds in the struct pci_bus
+- Reuse pcie_get_speed_cap()'s code for pcie_get_supported_speeds()
+- Setup supported_speeds with PCI_EXP_LNKCAP2_SLS_2_5GB when no
+  Endpoint exists
+- Squash revert + add bwctrl patches into one
+- Change to use threaded IRQ + IRQF_ONESHOT
+- Enable also LABIE / LABS
+- Convert Link Speed selection to use bit logic instead of loop
+- Allocate before requesting IRQ during probe
+- Use devm_*()
+- Use u8 for speed_conv array instead of u16
+- Removed READ_ONCE()
+- Improve changelogs, comments, and Kconfig
+- Name functions slightly more consistently
+- Use bullet list for RMW protected registers in docs
 
-						hcd->state = HC_STATE_RESUMING
-						bus_resume
-    if (udev->state == USB_STATE_SUSPENDED)	clear_bit HCD_FLAG_WAKEUP_PENDING
-    set_bit HCD_FLAG_WAKEUP_PENDING		udev->state = !USB_STATE_SUSPENDED
+v3:
+- Correct hfi1 shortlog prefix
+- Improve error prints in hfi1
+- Add L: linux-pci to the MAINTAINERS entry
 
-    In the aforementioned scenario, there is no mutual exclusion between
-    the set_bit operation in ehci interrupts, the judgment of udev->state,
-    and the clear_bit as well as the assignment of udev->state during ehci
-    initialization. There exists a situation where clear_bit is followed by
-    set_bit, but due to the judgment on udev->state, the clear_bit
-    operation might not occur again, leading to an error in the flag bit.
+v2:
+- Adds LNKCTL2 to RMW safe list in Documentation/PCI/pciebus-howto.rst
+- Renamed cooling devices from PCIe_Port_* to PCIe_Port_Link_Speed_* in
+  order to plan for possibility of adding Link Width cooling devices
+  later on
+- Moved struct thermal_cooling_device declaration to the correct patch
+- Small tweaks to Kconfig texts
+- Series rebased to resolve conflict (in the selftest list)
 
-    After modification:
-    ehci interrupt handler(CPUx)		ehci init(CPUy)
-    =====================			=============
-    remote wakeup				initialization complete
-    usb_hcd_resume_root_hub
-    				    		Enter suspend and detect that there
-						is a device inserted
-						(udev->state = USB_STATE_SUSPENDED)
+Ilpo Järvinen (8):
+  PCI: Protect Link Control 2 Register with RMW locking
+  PCI: Store all PCIe Supported Link Speeds
+  PCI: Refactor pcie_update_link_speed()
+  PCI/quirks: Abstract LBMS seen check into own function
+  PCI/bwctrl: Re-add BW notification portdrv as PCIe BW controller
+  PCI/bwctrl: Add API to set PCIe Link Speed
+  thermal: Add PCIe cooling driver
+  selftests/pcie_bwctrl: Create selftests
 
-						hcd->state = HC_STATE_RESUMING
-						bus_resume
-    if (udev->state == USB_STATE_SUSPENDED)	clear_bit HCD_FLAG_WAKEUP_PENDING
-    if (hcd->state != HC_STATE_RESUMING)	udev->state = !USB_STATE_SUSPENDED
-    set_bit HCD_FLAG_WAKEUP_PENDING
+ Documentation/PCI/pciebus-howto.rst           |  14 +-
+ MAINTAINERS                                   |   9 +
+ drivers/pci/hotplug/pciehp_ctrl.c             |   5 +
+ drivers/pci/hotplug/pciehp_hpc.c              |   2 +-
+ drivers/pci/pci.c                             |  60 ++-
+ drivers/pci/pci.h                             |  42 +-
+ drivers/pci/pcie/Kconfig                      |  12 +
+ drivers/pci/pcie/Makefile                     |   1 +
+ drivers/pci/pcie/bwctrl.c                     | 397 ++++++++++++++++++
+ drivers/pci/pcie/portdrv.c                    |   9 +-
+ drivers/pci/pcie/portdrv.h                    |  10 +-
+ drivers/pci/probe.c                           |  15 +-
+ drivers/pci/quirks.c                          |  32 +-
+ drivers/thermal/Kconfig                       |  10 +
+ drivers/thermal/Makefile                      |   2 +
+ drivers/thermal/pcie_cooling.c                |  80 ++++
+ include/linux/pci-bwctrl.h                    |  28 ++
+ include/linux/pci.h                           |  19 +-
+ include/uapi/linux/pci_regs.h                 |   1 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/pcie_bwctrl/Makefile  |   2 +
+ .../pcie_bwctrl/set_pcie_cooling_state.sh     | 122 ++++++
+ .../selftests/pcie_bwctrl/set_pcie_speed.sh   |  67 +++
+ 23 files changed, 887 insertions(+), 53 deletions(-)
+ create mode 100644 drivers/pci/pcie/bwctrl.c
+ create mode 100644 drivers/thermal/pcie_cooling.c
+ create mode 100644 include/linux/pci-bwctrl.h
+ create mode 100644 tools/testing/selftests/pcie_bwctrl/Makefile
+ create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
+ create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
 
-Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
----
- drivers/usb/core/hcd.c | 1 -
- drivers/usb/core/hub.c | 3 +++
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 1ff7d901fede..a6bd0fbd82f4 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -2389,7 +2389,6 @@ void usb_hcd_resume_root_hub (struct usb_hcd *hcd)
- 	spin_lock_irqsave (&hcd_root_hub_lock, flags);
- 	if (hcd->rh_registered) {
- 		pm_wakeup_event(&hcd->self.root_hub->dev, 0);
--		set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
- 		queue_work(pm_wq, &hcd->wakeup_work);
- 	}
- 	spin_unlock_irqrestore (&hcd_root_hub_lock, flags);
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 4b93c0bd1d4b..7f847c4afc0d 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3835,11 +3835,14 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
- 
- int usb_remote_wakeup(struct usb_device *udev)
- {
-+	struct usb_hcd  *hcd = bus_to_hcd(udev->bus);
- 	int	status = 0;
- 
- 	usb_lock_device(udev);
- 	if (udev->state == USB_STATE_SUSPENDED) {
- 		dev_dbg(&udev->dev, "usb %sresume\n", "wakeup-");
-+		if (hcd->state == HC_STATE_SUSPENDED)
-+			set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
- 		status = usb_autoresume_device(udev);
- 		if (status == 0) {
- 			/* Let the drivers do their thing, then... */
 -- 
-2.34.1
+2.39.2
 
 
