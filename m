@@ -1,188 +1,240 @@
-Return-Path: <linux-pm+bounces-13941-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13946-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C372B9733CD
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 12:35:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D94649735BD
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 12:57:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5524D1F253BA
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 10:35:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57D411F220EB
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Sep 2024 10:57:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2F7B18FC86;
-	Tue, 10 Sep 2024 10:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C10BD185B43;
+	Tue, 10 Sep 2024 10:57:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E33919993B
-	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 10:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.181.73
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074F5181B8D
+	for <linux-pm@vger.kernel.org>; Tue, 10 Sep 2024 10:57:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725964294; cv=none; b=BOZ/TJpSF4J5QJPj2EZKsROiPur75OeYqlzERWrOrA9ina9bbd5DLvaKEDUKmZQE5boX4ZfkaCCY/2xbNqTZ2f51oonn6g1hq4F9B1seNsZYOvNzmOkY4EzpuulkeNWdwlQJK6wfqBlNsdv0XBGZuBjy8jcFkzPHk4GxpM4JMYQ=
+	t=1725965863; cv=none; b=iwCgUWrk/LbfNGNVxJ7c8+yXrzxG51xb9rgNKU8igft0jiMR/06vQJB1GA9suSmHiRGlCXgLkWH1rezBtlOKFCaQ/tiD0JkfNde61vZwsmwCxomsq6q8AkKNR1F+ydbsvgUuCsWXRbiL2dQUzgNgvNomWZct9043AZ7AiBoRjag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725964294; c=relaxed/simple;
-	bh=4vgGAC2/MIbHxWOHPWCtphUS5HSOlyiqAWITBBfKWIY=;
-	h=Date:From:To:Cc:Subject:References:Mime-Version:Message-ID:
-	 Content-Type; b=fVoY15/vpa7xG/dS58HIoMEBXrdR04j6o4tIzXZ4sgnyKGybIXEQiVnsoeMZ4FVvjZQKmcCnq566cGrc786sljsXrf9DFHpFZQjezYir6NHuqxtD45t5M9bW1XUPOYI21ohrobDWyivA9U8i3R/uV53zc82Exszs8oYHc1msqv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=209.97.181.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from E0002116LT (unknown [10.12.96.22])
-	by app2 (Coremail) with SMTP id TQJkCgAX2+TuH+Bm51AAAA--.813S2;
-	Tue, 10 Sep 2024 18:31:10 +0800 (CST)
-Date: Tue, 10 Sep 2024 18:31:10 +0800
-From: "chenshuo@eswincomputing.com" <chenshuo@eswincomputing.com>
-To: "Christian Loehle" <christian.loehle@arm.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm <linux-pm@vger.kernel.org>, 
-	"Lukasz Luba" <lukasz.luba@arm.com>
-Subject: Re: Re: PM: EM: Question Potential Issue with EM and OPP Table in cpufreq ondemand Governor
-References: <202409101046414978042@eswincomputing.com>, 
-	<f4478146-88d3-445c-8676-7246bf477c50@arm.com>
-X-Priority: 3
-X-GUID: 098C96DB-22FF-4AFB-AEA2-EB8A61AB7659
-X-Has-Attach: no
-X-Mailer: Foxmail 7.2.15.80[cn]
+	s=arc-20240116; t=1725965863; c=relaxed/simple;
+	bh=GdrOQN2hqCNhkSgAt9AvaHK+fAjtnWoxdSdqTlSk/xY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=QXYtT4wR8eb1qG90haLZyYfY95evCx1tRf0wrX6IpK4IKH1YATWMyrnBOEw7Og0uhqjgkZ3tcuZa58bu/dkCJ6BVLooB3S4sfc+u+QZLE7g1WXHnal9vaop5MEA0gS+slCpDd6bpAGZJKo+H4j/4xHqUxI66CryyQiDD0J059Ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 79011dea6f6311efa216b1d71e6e1362-20240910
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED, SN_UNTRUSTED
+	SN_LOWREP, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
+	ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:66192ec1-1d0a-4f65-be9a-bf3f8c3b8a27,IP:20,
+	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:0
+X-CID-INFO: VERSION:1.1.38,REQID:66192ec1-1d0a-4f65-be9a-bf3f8c3b8a27,IP:20,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:0
+X-CID-META: VersionHash:82c5f88,CLOUDID:9e5958025d0bfea8e470bfb272e615f7,BulkI
+	D:240910185731PV8ZAN7Q,BulkQuantity:0,Recheck:0,SF:66|24|17|19|44|102,TC:n
+	il,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,CO
+	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
+X-UUID: 79011dea6f6311efa216b1d71e6e1362-20240910
+X-User: duanchenghao@kylinos.cn
+Received: from chenghao.. [(223.70.160.255)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 883973010; Tue, 10 Sep 2024 18:57:29 +0800
+From: Duan Chenghao <duanchenghao@kylinos.cn>
+To: stern@rowland.harvard.edu
+Cc: gregkh@linuxfoundation.org,
+	pavel@ucw.cz,
+	linux-pm@vger.kernel.org,
+	niko.mauno@vaisala.com,
+	stanley_chang@realtek.com,
+	duanchenghao@kylinos.cn
+Subject: [PATCH v2] USB: Fix the issue of task recovery failure caused by USB status when S4 wakes up
+Date: Tue, 10 Sep 2024 18:57:14 +0800
+Message-Id: <20240910105714.148976-1-duanchenghao@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <202409101831099346787@eswincomputing.com>
-Content-Type: text/plain;
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-CM-TRANSID:TQJkCgAX2+TuH+Bm51AAAA--.813S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ary5CryUKw17AF4ruw1rJFb_yoWxGF15pF
-	s8Jayj9w4vvr45Zw15tF10kr4Y9an8ZF15Gr1DKry8A3yS9ryqgF1qqF1Dta48Cr18Zw1x
-	Zw4jvFyvvw1DCw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmEb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
-	C2z280aVCY1x0267AKxVW0oVCq3wAa7VCE64xvF2IEb7IF0Fy264xvF2IEb7IF0Fy264kE
-	64k0F2IE7I0Y6sxI4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4
-	xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCa
-	FVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4xvF2IEb7IF0Fy264kE64k0F24lFcxC0V
-	AYjxAxZF0Ex2IqxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UMVCEFcxC0VAY
-	jxAxZFUvcSsGvfC2KfnxnUUI43ZEXa7IUeGZXDUUUUU==
-X-CM-SenderInfo: xfkh02xkxrqvxvzl0uprps33xlqjhudrp/
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Pk9uIDkvMTAvMjQgMDM6NDYsIGNoZW5zaHVvQGVzd2luY29tcHV0aW5nLmNvbSB3cm90ZToKPj4g
-SGkgUmFmYWVsLAo+wqAKPigrQ0MgTHVrYXN6KQo+wqAKPj4KPj4gSSBhbSBlbmNvdW50ZXJpbmcg
-YW4gaXNzdWUgcmVsYXRlZCB0byB0aGUgRW5lcmd5IE1vZGVsIChFTSkgd2hlbiB1c2luZyBjcHVm
-cmVxIHdpdGggdGhlIG9uZGVtYW5kIGdvdmVybm9yLiBCZWxvdyBpcyBhIGRldGFpbGVkIGRlc2Ny
-aXB0aW9uOgo+Pgo+PiAxLiBQcm9ibGVtIERlc2NyaXB0aW9uOgo+PiDCoCDCoFdoZW4gdXNpbmcg
-Y3B1ZnJlcSB3aXRoIHRoZSBvbmRlbWFuZCBnb3Zlcm5vciBhbmQgZW5hYmxpbmcgdGhlIGVuZXJn
-eSBtb2RlbCAoRU0pLCB0aGUgQ1BVIE9QUCB0YWJsZSBpcyBjb25maWd1cmVkIHdpdGggZnJlcXVl
-bmNpZXMgYW5kIHZvbHRhZ2VzIGZvciBlYWNoIGZyZXF1ZW5jeSBwb2ludC4gQWRkaXRpb25hbGx5
-LCB0aGUgYGR5bmFtaWMtcG93ZXItY29lZmZpY2llbnRgIGlzIGNvbmZpZ3VyZWQgaW4gdGhlIERU
-UyB1bmRlciB0aGUgQ1BVIG5vZGUuIEhvd2V2ZXIsIEkgb2JzZXJ2ZSBhYm5vcm1hbCBkeW5hbWlj
-IGZyZXF1ZW5jeSBzY2FsaW5nLCB3aGVyZSB0aGUgQ1BVIGZyZXF1ZW5jeSBhbHdheXMgc3RheXMg
-YXQgdGhlIGhpZ2hlc3QgZnJlcXVlbmN5IHBvaW50IGluIHRoZSBPUFAgdGFibGUuIEJlbG93IGlz
-IGFuIGV4YW1wbGUgb2YgdGhlIERUUyBjb25maWd1cmF0aW9uOgo+PiBgYGAKPj4gY3B1MDogY3B1
-QDDCoAo+PiB7wqAKPj4gLi4uCj4+IG9wZXJhdGluZy1wb2ludHMtdjIgPSA8JmQwX2NwdV9vcHBf
-dGFibGU+O8KgCj7CoAo+RG8geW91IG1pbmQgc2hhcmluZyA8JmQwX2NwdV9vcHBfdGFibGU+Pwo+
-wqAKT2YgY291cnNlLCB0aGUgZW50aXJlIERUUyBmaWxlIGlzIGluY29udmVuaWVudCB0byBjb3B5
-LCB0aGUgbWFpbiB1c2VmdWwgc2VnbWVudHMgSSBoYXZlIGFyZToKYGBgCglkMF9jcHVfb3BwX3Rh
-YmxlOiBvcHAtdGFibGUwIHsKCQljb21wYXRpYmxlID0gIm9wZXJhdGluZy1wb2ludHMtdjIiOwoJ
-CW9wcC1zaGFyZWQ7CgoJCW9wcC0yNDAwMDAwMCB7CgkJCW9wcC1oeiA9IC9iaXRzLyA2NCA8Q0xL
-X0ZSRVFfMjRNPjsKCQkJb3BwLW1pY3Jvdm9sdCA9IDw4MDAwMDA+OwoJCQljbG9jay1sYXRlbmN5
-LW5zID0gPDcwMDAwPjsKCQl9OwoJCW9wcC0xMDAwMDAwMDAgewoJCQlvcHAtaHogPSAvYml0cy8g
-NjQgPENMS19GUkVRXzEwME0+OwoJCQlvcHAtbWljcm92b2x0ID0gPDgwMDAwMD47CgkJCWNsb2Nr
-LWxhdGVuY3ktbnMgPSA8NzAwMDA+OwoJCX07CgkJb3BwLTIwMDAwMDAwMCB7CgkJCW9wcC1oeiA9
-IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfMjAwTT47CgkJCW9wcC1taWNyb3ZvbHQgPSA8ODAwMDAwPjsK
-CQkJY2xvY2stbGF0ZW5jeS1ucyA9IDw3MDAwMD47CgkJfTsKCQlvcHAtNDAwMDAwMDAwIHsKCQkJ
-b3BwLWh6ID0gL2JpdHMvIDY0IDxDTEtfRlJFUV80MDBNPjsKCQkJb3BwLW1pY3Jvdm9sdCA9IDw4
-MDAwMDA+OwoJCQljbG9jay1sYXRlbmN5LW5zID0gPDcwMDAwPjsKCQl9OwoJCW9wcC01MDAwMDAw
-MDAgewoJCQlvcHAtaHogPSAvYml0cy8gNjQgPENMS19GUkVRXzUwME0+OwoJCQlvcHAtbWljcm92
-b2x0ID0gPDgwMDAwMD47CgkJCWNsb2NrLWxhdGVuY3ktbnMgPSA8NzAwMDA+OwoJCX07CgkJb3Bw
-LTYwMDAwMDAwMCB7CgkJCW9wcC1oeiA9IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfNjAwTT47CgkJCW9w
-cC1taWNyb3ZvbHQgPSA8ODAwMDAwPjsKCQkJY2xvY2stbGF0ZW5jeS1ucyA9IDw3MDAwMD47CgkJ
-fTsKCQlvcHAtNzAwMDAwMDAwIHsKCQkJb3BwLWh6ID0gL2JpdHMvIDY0IDxDTEtfRlJFUV83MDBN
-PjsKCQkJb3BwLW1pY3Jvdm9sdCA9IDw4MDAwMDA+OwoJCQljbG9jay1sYXRlbmN5LW5zID0gPDcw
-MDAwPjsKCQl9OwoJCW9wcC04MDAwMDAwMDAgewoJCQlvcHAtaHogPSAvYml0cy8gNjQgPENMS19G
-UkVRXzgwME0+OwoJCQlvcHAtbWljcm92b2x0ID0gPDgwMDAwMD47CgkJCWNsb2NrLWxhdGVuY3kt
-bnMgPSA8NzAwMDA+OwoJCX07CgkJb3BwLTkwMDAwMDAwMCB7CgkJCW9wcC1oeiA9IC9iaXRzLyA2
-NCA8Q0xLX0ZSRVFfOTAwTT47CgkJCW9wcC1taWNyb3ZvbHQgPSA8ODAwMDAwPjsKCQkJY2xvY2st
-bGF0ZW5jeS1ucyA9IDw3MDAwMD47CgkJfTsKCQlvcHAtMTAwMDAwMDAwMCB7CgkJCW9wcC1oeiA9
-IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfMTAwME0+OwoJCQlvcHAtbWljcm92b2x0ID0gPDgwMDAwMD47
-CgkJCWNsb2NrLWxhdGVuY3ktbnMgPSA8NzAwMDA+OwoJCX07CgkJb3BwLTEyMDAwMDAwMDAgewoJ
-CQlvcHAtaHogPSAvYml0cy8gNjQgPENMS19GUkVRXzEyMDBNPjsKCQkJb3BwLW1pY3Jvdm9sdCA9
-IDw4MDAwMDA+OwoJCQljbG9jay1sYXRlbmN5LW5zID0gPDcwMDAwPjsKCQl9OwoJCW9wcC0xMzAw
-MDAwMDAwIHsKCQkJb3BwLWh6ID0gL2JpdHMvIDY0IDxDTEtfRlJFUV8xMzAwTT47CgkJCW9wcC1t
-aWNyb3ZvbHQgPSA8ODAwMDAwPjsKCQkJY2xvY2stbGF0ZW5jeS1ucyA9IDw3MDAwMD47CgkJfTsK
-CQlvcHAtMTQwMDAwMDAwMCB7CgkJCW9wcC1oeiA9IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfMTQwME0+
-OwoJCQlvcHAtbWljcm92b2x0ID0gPDgwMDAwMD47CgkJCWNsb2NrLWxhdGVuY3ktbnMgPSA8NzAw
-MDA+OwoJCX07Cgl9OwouLi4JCglDNjQ6IGNwdXMgewoJCSNhZGRyZXNzLWNlbGxzID0gPDE+OwoJ
-CSNzaXplLWNlbGxzID0gPDA+OwoJCXRpbWViYXNlLWZyZXF1ZW5jeSA9IDxSVENDTEtfRlJFUT47
-CgkJY3B1MDogY3B1QDAgewoJCQkuLi4KCQkJb3BlcmF0aW5nLXBvaW50cy12MiA9IDwmZDBfY3B1
-X29wcF90YWJsZT47CgkJCSNjb29saW5nLWNlbGxzID0gPDI+OwoJCQlkeW5hbWljLXBvd2VyLWNv
-ZWZmaWNpZW50ID0gPDIwMDA+O8KgCgkJCUMxOiBpbnRlcnJ1cHQtY29udHJvbGxlciB7CgkJCQkj
-aW50ZXJydXB0LWNlbGxzID0gPDE+OwoJCQkJY29tcGF0aWJsZSA9ICJyaXNjdixjcHUtaW50YyI7
-CgkJCQlpbnRlcnJ1cHQtY29udHJvbGxlcjsKCQkJfTsKCQl9OwoJCWNwdTE6IGNwdUAxIHsKCQkJ
-Li4uCgkJCW9wZXJhdGluZy1wb2ludHMtdjIgPSA8JmQwX2NwdV9vcHBfdGFibGU+OwoJCQkjY29v
-bGluZy1jZWxscyA9IDwyPjsKCQkJZHluYW1pYy1wb3dlci1jb2VmZmljaWVudCA9IDwyMDAwPjsK
-CQkJQzI6IGludGVycnVwdC1jb250cm9sbGVyIHsKCQkJCSNpbnRlcnJ1cHQtY2VsbHMgPSA8MT47
-CgkJCQljb21wYXRpYmxlID0gInJpc2N2LGNwdS1pbnRjIjsKCQkJCWludGVycnVwdC1jb250cm9s
-bGVyOwoJCQl9OwoJCX07CQoJCWNwdTI6IGNwdUAyIHsKCQkJLi4uCgkJCW9wZXJhdGluZy1wb2lu
-dHMtdjIgPSA8JmQwX2NwdV9vcHBfdGFibGU+OwoJCQkjY29vbGluZy1jZWxscyA9IDwyPjsKCQkJ
-ZHluYW1pYy1wb3dlci1jb2VmZmljaWVudCA9IDwyMDAwPjsKCQkJQzM6IGludGVycnVwdC1jb250
-cm9sbGVyIHsKCQkJCSNpbnRlcnJ1cHQtY2VsbHMgPSA8MT47CgkJCQljb21wYXRpYmxlID0gInJp
-c2N2LGNwdS1pbnRjIjsKCQkJCWludGVycnVwdC1jb250cm9sbGVyOwoJCQl9OwoJCX07CQoJCWNw
-dTM6IGNwdUAzIHsKCQkJLi4uCgkJCW9wZXJhdGluZy1wb2ludHMtdjIgPSA8JmQwX2NwdV9vcHBf
-dGFibGU+OwoJCQkjY29vbGluZy1jZWxscyA9IDwyPjsKCQkJZHluYW1pYy1wb3dlci1jb2VmZmlj
-aWVudCA9IDwyMDAwPjsKCQkJQzQ6IGludGVycnVwdC1jb250cm9sbGVyIHsKCQkJCSNpbnRlcnJ1
-cHQtY2VsbHMgPSA8MT47CgkJCQljb21wYXRpYmxlID0gInJpc2N2LGNwdS1pbnRjIjsKCQkJCWlu
-dGVycnVwdC1jb250cm9sbGVyOwoJCQl9OwoJCX07CQkKCX07CQkKYGBgCj4+ICNjb29saW5nLWNl
-bGxzID0gPDI+OyBkeW5hbWljLXBvd2VyLWNvZWZmaWNpZW50ID0gPDIwMDA+OyB9Owo+PiAuLi4K
-Pj4gYGBgCj4+IDIuIFJvb3QgQ2F1c2UgQW5hbHlzaXM6Cj4+IFdoZW4gdXNpbmcgdGhlIE9QUCB0
-YWJsZSBhbmQgY29uZmlndXJpbmcgdGhlICJkeW5hbWljLXBvd2VyLWNvZWZmaWNpZW50LCIgdGhl
-IGBlbV9kZXZfcmVnaXN0ZXJfcGVyZl9kb21haW4oKWAgZnVuY3Rpb24gaW4gYGtlcm5lbC9wb3dl
-ci9lbmVyZ3lfbW9kZWwuY2Agc2V0cyB0aGUgZmxhZ3MgdG8gYEVNX1BFUkZfRE9NQUlOX01JQ1JP
-V0FUVFNgLiBJbiB0aGUgYGVtX2NyZWF0ZV9wZXJmX3RhYmxlKClgIGZ1bmN0aW9uLCBgZW1fY29t
-cHV0ZV9jb3N0cygpYCBpbmNsdWRlcyB0aGUgZm9sbG93aW5nIGNvZGU6Cj4+IGBgYAo+PiBpZiAo
-dGFibGVbaV0uY29zdCA+PSBwcmV2X2Nvc3QpIHsKPj4gwqAgwqAgdGFibGVbaV0uZmxhZ3MgPSBF
-TV9QRVJGX1NUQVRFX0lORUZGSUNJRU5UOwo+PiDCoCDCoCBkZXZfZGJnKGRldiwgIkVNOiBPUFA6
-JWx1IGlzIGluZWZmaWNpZW50XG4iLCB0YWJsZVtpXS5mcmVxdWVuY3kpOwo+PiB9Cj4+IGBgYAo+
-PiBTaW5jZSB0aGUgY29zdCBpcyBjYWxjdWxhdGVkIGFzIHBvd2VyICogbWF4X2ZyZXF1ZW5jeSAv
-IGZyZXF1ZW5jeSwgdGhlIGNvc3QgZm9yIGVhY2ggZnJlcXVlbmN5IHBvaW50IGJlY29tZXMgYSBj
-b25zdGFudCB2YWx1ZS4gQ29uc2VxdWVudGx5LCBleGNlcHQgZm9yIG5yX3N0YXRlcyAtIDEgKHdo
-ZXJlIHByZXZfc3RhdGUgaXMgaW5pdGlhbGl6ZWQgYXMgVUxPTkdfTUFYKSwgYWxsIG90aGVyIGZy
-ZXF1ZW5jeSBwb2ludHMnIGNvc3QgaXMgZXF1YWwgdG8gcHJldl9jb3N0LiBBcyBhIHJlc3VsdCwg
-b25seSB0aGUgaGlnaGVzdCBmcmVxdWVuY3kgcG9pbnQgKHRhYmxlW25yX3N0YXRlcyAtIDFdKSBp
-cyBub3QgZmxhZ2dlZCBhcyBFTV9QRVJGX1NUQVRFX0lORUZGSUNJRU5UIGluIHRoZSBFTSBwZXJm
-b3JtYW5jZSB0YWJsZS4KPj4KPj4gSW4gdGhlIGVtX2NwdWZyZXFfdXBkYXRlX2VmZmljaWVuY2ll
-cygpIGZ1bmN0aW9uLCB0aGUgZm9sbG93aW5nIGNvZGUgaXMgZXhlY3V0ZWQ6Cj4+IGBgYAo+PiBm
-b3IgKGkgPSAwOyBpIDwgcGQtPm5yX3BlcmZfc3RhdGVzOyBpKyspIHsKPj4gwqAgwqAgaWYgKCEo
-dGFibGVbaV0uZmxhZ3MgJiBFTV9QRVJGX1NUQVRFX0lORUZGSUNJRU5UKSkKPj4gwqAgwqAgwqAg
-wqAgY29udGludWU7Cj4+Cj4+IMKgIMKgIGlmICghY3B1ZnJlcV90YWJsZV9zZXRfaW5lZmZpY2ll
-bnQocG9saWN5LCB0YWJsZVtpXS5mcmVxdWVuY3kpKQo+PiDCoCDCoCDCoCDCoCBmb3VuZCsrOwo+
-PiB9Cj4+IGBgYAo+PiBBcyBhIHJlc3VsdCwgYWxsIGZyZXF1ZW5jeSBwb2ludHMgbWFya2VkIGFz
-IEVNX1BFUkZfU1RBVEVfSU5FRkZJQ0lFTlQgYXJlIGZsYWdnZWQgYXMgQ1BVRlJFUV9JTkVGRklD
-SUVOVF9GUkVRIGluIHRoZSBjcHVmcmVxX3RhYmxlX3NldF9pbmVmZmljaWVudCgpIGZ1bmN0aW9u
-LCBjYXVzaW5nIHRoZXNlIGZyZXF1ZW5jaWVzIHRvIGJlIHNraXBwZWQgZHVyaW5nIGZyZXF1ZW5j
-eSBzY2FsaW5nLgo+Pgo+PiAzLiBQcm9wb3NlZCBDaGFuZ2UgYW5kIFRlc3Rpbmc6wqAKPj4gT24g
-TGludXggNi42LCB0aGlzIGJlaGF2aW9yIGFmZmVjdHMgdGhlIG5vcm1hbCBvcGVyYXRpb24gb2Yg
-dGhlIGNwdWZyZXEgb25kZW1hbmQgZ292ZXJub3IsIHdoaWNoIGluIHR1cm4gY2F1c2VzIHBhc3Np
-dmUgY29vbGluZyBkZXZpY2VzIHRvIG1hbGZ1bmN0aW9uIHdoZW4gdXNpbmcgdGhlIHBvd2VyIGFs
-bG9jYXRvciBzdHJhdGVneSBpbiB0aGUgdGhlcm1hbCBmcmFtZXdvcmsuIEkgbWFkZSBhIHRlbXBv
-cmFyeSBmaXggYnkgY2hhbmdpbmcgdGhlIGNvbmRpdGlvbiBmcm9tOgo+PiBpZiAodGFibGVbaV0u
-Y29zdCA+PSBwcmV2X2Nvc3QpCj4+IHRvOgo+PiBpZiAodGFibGVbaV0uY29zdCA+IHByZXZfY29z
-dCkKPj4gQWZ0ZXIgdGhpcyBjaGFuZ2UsIHRoZSBpc3N1ZSBzZWVtcyByZXNvbHZlZCBmb3Igbm93
-LiBIb3dldmVyLCBJIGFtIGNvbmNlcm5lZCBhYm91dCBwb3RlbnRpYWwgc2lkZSBlZmZlY3RzIG9m
-IHRoaXMgbW9kaWZpY2F0aW9uLgo+wqAKPkJ1dCB0aGlzIGRvZXNuJ3Qgc29sdmUgdGhlIGFjdHVh
-bCBpc3N1ZSwgaWYgY29zdCA9PSBwcmV2X2Nvc3QgZm9yIGFsbAo+T1BQcyB0aGVuIGFsbCBvZiB0
-aGVtIGJ1dCBvbmUgYXJlIGluZGVlZCBpbmVmZmljaWVudC4KRGVzcGl0ZSB0aGlzLCB1bmRlciBh
-biBvbmRlbWFuZCBwb2xpY3kgYmFzZWQgb24gRFZGUywgdGhlIHNvZnR3YXJlIG1pZ2h0IG5vdCBr
-bm93IHRoZSByZWFsIHBvd2VyIGNvbnN1bXB0aW9uLCBhbmQgY2FuIG9ubHkgdXNlIHRoZSBmb3Jt
-dWxhIFA9QypWXjIqZip1c2FnZV9yYXRlLgpBZGRpdGlvbmFsbHksIHRoaXMgYXQgbGVhc3QgZW5z
-dXJlcyB0aGF0IHRoZSB0aGVybWFsIGZyYW1ld29yayB1c2luZyB0aGUgSVBBIHN0cmF0ZWd5IGNh
-biBwcm9wZXJseSBjb29sIGRvd24u
+When a device is inserted into the USB port and an S4 wakeup is initiated,
+after the USB-hub initialization is completed, it will automatically enter
+suspend mode. Upon detecting a device on the USB port, it will proceed with
+resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state. During the S4
+wakeup process, peripherals are put into suspend mode, followed by task
+recovery. However, upon detecting that the hcd is in the
+HCD_FLAG_WAKEUP_PENDING state, it will return an EBUSY status, causing the
+S4 suspend to fail and subsequent task recovery to not proceed.
+
+    S4 waking up from hibernation
+    =============================
+    kernel initialization
+    |
+    v
+    freeze user task and kernel thread
+    |
+    v
+    load saved image
+    |
+    v
+    freeze the peripheral device and controller(*** Error point ***)
+    (Check the HCD_FLAG_WAKEUP_ PENDING flag of the USB. If it is set,
+     return to EBUSY and do not perform the following restore image.)
+    |
+    v
+    restore image(task recovery)
+
+This patch makes two modifications in total:
+1. The set_bit and clear_bit operations for the HCD_FLAG_WAKEUP_PENDING
+flag of Hcd, which were previously split between the top half and bottom
+half of the interrupt,are now unified and executed solely in the bottom
+half of the interrupt.This prevents the bottom half tasks from being frozen
+during the S4 process,ensuring that the clear_bit process can proceed
+without interruption.
+
+    Before modification：
+
+    ehci interrupt handler
+    =====================
+    remote wakeup
+    if (ehci->rh_state == EHCI_RH_SUSPENDED)	    |
+	usb_hcd_resume_root_hub			    |
+    |						    |
+    v						    | top half
+    set_bit HCD_FLAG_WAKEUP_PENDING		    |
+    |						    |
+    v						    |
+    queue_work(pm_wq, &hcd->wakeup_work)	    |
+    |
+    v
+    hub resume					    |
+    |						    |
+    v						    | bottom half
+    clear_bit HCD_FLAG_WAKEUP_PENDING		    |
+
+    After modification:
+
+    ehci interrupt handler
+    =====================
+    remote wakeup
+    if (ehci->rh_state == EHCI_RH_SUSPENDED)        |
+        usb_hcd_resume_root_hub                     |
+    |						    | top half
+    v						    |
+    queue_work(pm_wq, &hcd->wakeup_work)	    |
+    |
+    v
+    set_bit HCD_FLAG_WAKEUP_PENDING		    |
+    |						    |
+    v						    |
+    hub resume                                      | bottom half
+    |                                               |
+    v                                               |
+    clear_bit HCD_FLAG_WAKEUP_PENDING               |
+
+2. Add a condition to the set_bit operation for the hcd flags
+HCD_FLAG_WAKEUP_PENDING.When the hcd status is HC_STATE_SUSPENDED, perform
+the setting of the aforementioned status bit.This prevents a subsequent
+set_bit from occurring after the clear_bit if the hcd is in the resuming
+process.
+
+    Before modification：
+    ehci interrupt handler(CPUx)		ehci init(CPUy)
+    =====================			=============
+    remote wakeup				initialization complete
+    usb_hcd_resume_root_hub
+    				    		Enter suspend and detect that there
+						is a device inserted
+						(udev->state = USB_STATE_SUSPENDED)
+
+						hcd->state = HC_STATE_RESUMING
+						bus_resume
+    if (udev->state == USB_STATE_SUSPENDED)	clear_bit HCD_FLAG_WAKEUP_PENDING
+    set_bit HCD_FLAG_WAKEUP_PENDING		udev->state = !USB_STATE_SUSPENDED
+
+    In the aforementioned scenario, there is no mutual exclusion between
+    the set_bit operation in ehci interrupts, the judgment of udev->state,
+    and the clear_bit as well as the assignment of udev->state during ehci
+    initialization. There exists a situation where clear_bit is followed by
+    set_bit, but due to the judgment on udev->state, the clear_bit
+    operation might not occur again, leading to an error in the flag bit.
+
+    After modification:
+    ehci interrupt handler(CPUx)		ehci init(CPUy)
+    =====================			=============
+    remote wakeup				initialization complete
+    usb_hcd_resume_root_hub
+    				    		Enter suspend and detect that there
+						is a device inserted
+						(udev->state = USB_STATE_SUSPENDED)
+
+						hcd->state = HC_STATE_RESUMING
+						bus_resume
+    if (udev->state == USB_STATE_SUSPENDED)	clear_bit HCD_FLAG_WAKEUP_PENDING
+    if (hcd->state != HC_STATE_RESUMING)	udev->state = !USB_STATE_SUSPENDED
+    set_bit HCD_FLAG_WAKEUP_PENDING
+
+Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
+---
+ drivers/usb/core/hcd.c | 1 -
+ drivers/usb/core/hub.c | 3 +++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 1ff7d901fede..a6bd0fbd82f4 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -2389,7 +2389,6 @@ void usb_hcd_resume_root_hub (struct usb_hcd *hcd)
+ 	spin_lock_irqsave (&hcd_root_hub_lock, flags);
+ 	if (hcd->rh_registered) {
+ 		pm_wakeup_event(&hcd->self.root_hub->dev, 0);
+-		set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
+ 		queue_work(pm_wq, &hcd->wakeup_work);
+ 	}
+ 	spin_unlock_irqrestore (&hcd_root_hub_lock, flags);
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 4b93c0bd1d4b..7f847c4afc0d 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3835,11 +3835,14 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
+ 
+ int usb_remote_wakeup(struct usb_device *udev)
+ {
++	struct usb_hcd  *hcd = bus_to_hcd(udev->bus);
+ 	int	status = 0;
+ 
+ 	usb_lock_device(udev);
+ 	if (udev->state == USB_STATE_SUSPENDED) {
+ 		dev_dbg(&udev->dev, "usb %sresume\n", "wakeup-");
++		if (hcd->state == HC_STATE_SUSPENDED)
++			set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
+ 		status = usb_autoresume_device(udev);
+ 		if (status == 0) {
+ 			/* Let the drivers do their thing, then... */
+-- 
+2.34.1
 
 
