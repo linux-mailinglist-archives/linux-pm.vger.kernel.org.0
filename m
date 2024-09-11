@@ -1,210 +1,132 @@
-Return-Path: <linux-pm+bounces-14054-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14055-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D03D975C75
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 23:32:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14364975CB1
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 23:56:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D28F9285E08
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 21:32:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B25C7B242E5
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 21:56:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D5D6155759;
-	Wed, 11 Sep 2024 21:32:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB3D4185B52;
+	Wed, 11 Sep 2024 21:56:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nUmWm1bv"
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="k9c58aIZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6194D2EAE5
-	for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 21:32:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8E41428E4;
+	Wed, 11 Sep 2024 21:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.18.73.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726090336; cv=none; b=pVZXZnZnGn4rpfLcoRMmp3QH0aU/UgZhCYS+4bq4W1iHndkO57PmsJjJev+R2g5c34NNBt184ssEX22Cu0gtbgay3hdFnZ8Vuy8+P1KxZH2V9HCQ9eqlcHVPq3SjTutvOZL8lCKbqS329fpYNTm9q3GGmJF+3yeRg9W0F/nPWlk=
+	t=1726091790; cv=none; b=R67bnnlOQjHRCsd16Eyr2tID53ixaaqFxrhlgNhRo//a7W8Z4iGo/dNbVOvyXHCeM9fUypbkSCMQVhtuTdTEw4RwuPlKPyljhNFtDY+T1/6P0KYkJB3B5wBh/Ybk8trdR8UcGMRAO91HyB2+aOyMkds59IztZNtoxY6lipU1RJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726090336; c=relaxed/simple;
-	bh=plORcOTuVEPJ+MsdfJHV1BfJY7x844i6ennLD+BS/Tw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dkEcPoG0Ub+xXUu4mWXtYoP1oYIRVR8ZPTJHOfsxgTLFYn7fTd356VyvMXS/qXruI+k0D+Uvui1frryPipoH7zirszrXXsp9O+1wdoAXYKs2Wao0M6J3TaWgCn6KnbjorualcRTiS6hV2ujNoAShcqMvek0cb3r9U5dBosuQ9I4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nUmWm1bv; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6b41e02c255so12376657b3.3
-        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 14:32:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726090334; x=1726695134; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G0tls9TSeYZiERk0YKTQyn2qIGVoqsjolT5VS8LI/f0=;
-        b=nUmWm1bvwptiIt8nbBwLh4zPA9MX3ncI4rCNfpuP67JOqWNsDuzl3keMeSOJYdKP9J
-         wSHjZIy3l1MHMIhBsYIoiSaiY/LhzRt4btQTIHX2rJ3Rv+ak7kxxMdS1SwQA0CI6M9h+
-         o9/5sEGKVRxgj8ipPB6sXhEFML82KG43wr8MkWm1XbxqEmhGscOaMWmOAB3/OCNaDj4x
-         +j4BhCjckJs+A5fL9NhIFtQTNKk/5AhhGEU0xOwTpN5/muiKB79g3i8sbWUmhzBqlrSO
-         YP6+heRusn8Be/WTrGQmvNBXrBYvbIMHVQDyE+nR4UdpCSvBZLN+7B3EF+ErTsgxl6SL
-         Dt7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726090334; x=1726695134;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=G0tls9TSeYZiERk0YKTQyn2qIGVoqsjolT5VS8LI/f0=;
-        b=hH0CeWm5QwpBrkjFqxCwSlu3aZHbKl9xxAdIU0LxL8GQDVinrKTAD+ZB5C8QsiP3mC
-         95/WR582IP79xDGLCVVTMHgSgIhyFHca12PZWq1k6RS7TJKaZ6UEyEv0bKOH3UhhurjZ
-         IDLno4zxE1d4aCUep+SfReANosNkeKHfV8tOJIbR6/nE6eHGfjcq7PMIxDlUkkUPLjd/
-         nRbwFFBsbpL4NwrKURlnRCACdBoygW0pomJ8+ywAOC6xm0SuLdW0fqXtLMZX6NjmIl8g
-         LSZ3k8cq+p+ZS5YtbUztHfOAN/Jn8lctw/ILUYukGhPDF6fQtE510Kja/8xERJTFytbX
-         KNjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU/S3YFTAmtHAbLguGAAp1FaqCD/Qq725VQI3bqfjFBHRn/r9SGNY/MWgAcNc/B5MswW2khi5fYWQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgDS1/S4mWlH3WT2Io+dTFiglun/fNZJjkkhpodo3/1nUXY4a7
-	0I8SUFx8a1zKexvv+d7PikZ0T8PUTOu36GVAPgC3Y9FXHaNdUCeMgHINbwjqS/3P1qIyrFVKKjO
-	ayg==
-X-Google-Smtp-Source: AGHT+IEy+FRcMZPJBM3QoM9Z+sg7QH9U7zKXbfsEXEPeme3vnncS+gSnDv69FtYTijg/Y2YEp+Ue2yOV1RA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:529:b0:e1d:96a7:c9b1 with SMTP id
- 3f1490d57ef6-e1d9dc2cfd7mr1264276.6.1726090334323; Wed, 11 Sep 2024 14:32:14
- -0700 (PDT)
-Date: Wed, 11 Sep 2024 14:32:12 -0700
-In-Reply-To: <2E1344D0-E955-4E15-9766-73E3DAA73634@nutanix.com>
+	s=arc-20240116; t=1726091790; c=relaxed/simple;
+	bh=fsJbTM1nUA7ZmJoZZbS9jA70kAf2HF/itnbUmNxF1Ag=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=SdvDVnKs99cLF5llFkv5DEKodoJwekkAsHTIw0hypA30uAON3O8cYxPuLBVH2x0YnGP9udr6sBPlXLiICtpraFMom4d4GYp8hdoOimipFJij0wJBPXCECBi50FCkeeAISvXVslS9CtDPAFktUmzsWCKiLLFpiv0mEEKBm6srftI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=k9c58aIZ; arc=none smtp.client-ip=37.18.73.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
+Received: from p-infra-ksmg-sc-msk01.sberdevices.ru (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id 8CF4910001E;
+	Thu, 12 Sep 2024 00:56:22 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 8CF4910001E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1726091782;
+	bh=x1ZuLjno/PPN/Ymr/GiIARkc5oJZWRfhcU1ulFV49j8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
+	b=k9c58aIZGLL4IlOuz2o9NYucPfT6GI9nf1lCXOkvfmeEnU5wfr2F+Wvd85zKNz8FK
+	 e4sTJ0DBdtSfs7rGm+dKaPShDV5kr9gEhofFg5t/04OP8Lofpb7H2kf3TfES6S6bZH
+	 isX1DhhkHjJkqCP6dkUj7YvEWzECO5YxxFXGdRvHIVYcbKocOxoQ7FLBpIbWxHwXfV
+	 idddSgkd8sCu4Zn1wqJpmEb27gdo6av0yBbndCRsiyIEpUpq9B5UqgVZ8qUNuZSzEh
+	 BxSQ+avyCkjB0Ekp7ibbS8N4D5WZVu31w4rC6l7Qst5j8BXcgMuphynf1eBAzxTaEV
+	 RhOYOzIAmkmBQ==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Thu, 12 Sep 2024 00:56:22 +0300 (MSK)
+Message-ID: <26ab17bb-1b2e-4144-8a34-696a92328f52@salutedevices.com>
+Date: Thu, 12 Sep 2024 00:56:21 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <DA40912C-CACC-4273-95B8-60AC67DFE317@nutanix.com>
- <Zt9IeD_15ZsFElIa@google.com> <2E1344D0-E955-4E15-9766-73E3DAA73634@nutanix.com>
-Message-ID: <ZuIMXFVcjVUbf9j9@google.com>
-Subject: Re: KVM: x86: __wait_lapic_expire silently using TPAUSE C0.2
-From: Sean Christopherson <seanjc@google.com>
-To: Jon Kohler <jon@nutanix.com>
-Cc: "kvm @ vger . kernel . org" <kvm@vger.kernel.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, Fenghua Yu <fenghua.yu@intel.com>, 
-	"kyung.min.park@intel.com" <kyung.min.park@intel.com>, Tony Luck <tony.luck@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] amlogic SoC's power-domains fixes
+To: <neil.armstrong@linaro.org>
+CC: <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-amlogic@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <kernel@salutedevices.com>
+References: <20240710223214.2348418-1-gnstark@salutedevices.com>
+Content-Language: en-US
+From: George Stark <gnstark@salutedevices.com>
+In-Reply-To: <20240710223214.2348418-1-gnstark@salutedevices.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: p-i-exch-a-m1.sberdevices.ru (172.24.196.116) To
+ p-i-exch-a-m1.sberdevices.ru (172.24.196.116)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 187695 [Sep 12 2024]
+X-KSMG-AntiSpam-Version: 6.1.1.5
+X-KSMG-AntiSpam-Envelope-From: gnstark@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 32 0.3.32 766319f57b3d5e49f2c79a76e7d7087b621090df, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, lore.kernel.org:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;smtp.sberdevices.ru:7.1.1,5.0.1;salutedevices.com:7.1.1, FromAlignment: s
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/09/11 19:53:00
+X-KSMG-LinksScanning: Clean, bases: 2024/09/11 21:01:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/09/11 19:25:00 #26555689
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-On Tue, Sep 10, 2024, Jon Kohler wrote:
-> How about something like this for the regular ol=E2=80=99 PAUSE route?
->=20
-> Note: the ndelay side would likely be a bit more annoying to handle to in=
-ternalize
-> to KVM, but perhaps we could just have delay library return the amount of=
- cycles,
-> and then do the loop I=E2=80=99ve got as a separate, KVM only func?
->=20
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -1627,16 +1627,39 @@ static bool lapic_timer_int_injected(struct kvm_v=
-cpu *vcpu)
->  static inline void __wait_lapic_expire(struct kvm_vcpu *vcpu, u64 guest_=
-cycles)
->  {
->         u64 timer_advance_ns =3D vcpu->arch.apic->lapic_timer.timer_advan=
-ce_ns;
-> +       u64 start, end, delay_by =3D 0;
-> =20
->         /*
->          * If the guest TSC is running at a different ratio than the host=
-, then
-> -        * convert the delay to nanoseconds to achieve an accurate delay.=
-  Note
-> -        * that __delay() uses delay_tsc whenever the hardware has TSC, t=
-hus
-> -        * always for VMX enabled hardware.
-> +        * convert the delay to nanoseconds to achieve an accurate delay.
-> +        *
-> +        * Note: open code delay function as KVM's use case is a bit spec=
-ial, as
-> +        * we know we need to reenter the guest at a specific time; howev=
-er, the
-> +        * delay library may introduce architectural delays that we do no=
-t want,
-> +        * such as using TPAUSE. Our mission is to simply get into the gu=
-est as
-> +        * soon as possible without violating architectural constraints.
-> +        * RFC: Keep ndelay for help converting to nsec? or pull that in =
-too?
->          */
->         if (vcpu->arch.tsc_scaling_ratio =3D=3D kvm_caps.default_tsc_scal=
-ing_ratio) {
-> -               __delay(min(guest_cycles,
-> -                       nsec_to_cycles(vcpu, timer_advance_ns)));
-> +               delay_by =3D min(guest_cycles,=20
-> +                                          nsec_to_cycles(vcpu, timer_adv=
-ance_ns));
-> +
-> +               if (delay_by =3D=3D 0) {
-> +                       return;
-> +               } else {
-> +                       start =3D rdtsc();
-> +
-> +                       for (;;) {
-> +                               cpu_relax();
-> +                               end =3D rdtsc();
-> +
-> +                               if (delay_by <=3D end - start)
-> +                                       break;
-> +
-> +                               delay_by -=3D end - start;
-> +                               start =3D end;
-> +                       }
+Hello Neil
 
-I don't want to replicate __delay() in KVM.  If the delay is short, KVM sho=
-uld
-busy wait and intentionally NOT do PAUSE, i.e. not yield to the SMT sibling=
-(s).
-Because unlike most uses of PAUSE, this CPU isn't waiting on any resource e=
-xcept
-time itself.  E.g. there's no need to give a different CPU cycles so that t=
-he
-other CPU can finish a critical section.
+Please take a look at this series. It's 2 months already since ack
 
-And again, entering the guest so that the vCPU can service the IRQ is a pri=
-ority,
-e.g. see all of the ChromeOS work around paravirt scheduling to boost the p=
-riority
-of vCPUs that have pending IRQs.  Not to mention the physical CPU is runnin=
-g with
-IRQs disabled, i.e. if a _host_ IRQ becomes pending, then entering the gues=
-t is a
-priority in order to recognize that IRQ as well.
+On 7/11/24 01:32, George Stark wrote:
+> Here's some fixes to the bindings and device tree related to Amlogic A1 SoC.
+> The SoC provides dedicated power domain for for almost all periphery.
+> 
+> Changes in v2:
+>    dt-bindings: spi: amlogic,a1-spifc: make power-domains required
+>      - drop the patch
+>    dt-bindings: thermal: amlogic,thermal: add optional power-domains
+>      - drop required conditional
+>      - rewrite commit message
+>    dt-bindings: i2c: amlogic,meson6-i2c: add optional power-domains
+>      - add RvB: Neil Armstrong <neil.armstrong@linaro.org>
+>      - add RvB: Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+>    arm64: dts: meson: a1: bind power domain to temperature sensor
+>      - add RvB: Neil Armstrong <neil.armstrong@linaro.org>
+>    previous version [1]
+> 
+> [1] https://lore.kernel.org/lkml/20240708194808.1819185-3-gnstark@salutedevices.com/T/#m398c283b369108c5c557e68b7a1ada9abf3e5cba
+> 
+> George Stark (3):
+>    dt-bindings: i2c: amlogic,meson6-i2c: add optional power-domains
+>    dt-bindings: thermal: amlogic,thermal: add optional power-domains
+>    arm64: dts: meson: a1: bind power domain to temperature sensor
+> 
+>   Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml  | 3 +++
+>   Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml | 3 +++
+>   arch/arm64/boot/dts/amlogic/meson-a1.dtsi                      | 1 +
+>   3 files changed, 7 insertions(+)
+> 
+> --
+> 2.25.1
+> 
 
-> +               }
->         } else {
->                 u64 delay_ns =3D guest_cycles * 1000000ULL;
->                 do_div(delay_ns, vcpu->arch.virtual_tsc_khz);
-
-Whatever we do, we should do the same thing irrespective of whether or not =
-TSC
-scaling is in use.  I don't think we have an existing helper to unscale a g=
-uest
-TSC, but it shouldn't be hard to add (do math).
-
-E.g. something like:
-
-	delay_cycles =3D kvm_unscale_tsc(guest_cycles,
-				       vcpu->arch.tsc_scaling_ratio);
-	delay_cyles =3D min(guest_cycles, nsec_to_cycles(vcpu, timer_advance_ns));
-
-	if (delay_cycles > N) {
-		__delay(delay_cycles);
-		return;
-	}
-
-	for (start =3D rdtsc(); rdtsc() - start < delay_cycles); )
-		;
-
-And then I also think we (handwavy "we") should do some profiling to ensure=
- KVM
-isn't regularly waiting for more than N cycles, where N is probably somethi=
-ng
-like 200.  Because if KVM is regularly waiting for 200+ cycles, then we lik=
-ely
-need to re-tune the timer_advance_ns logic to be more conservative, i.e. er=
-r more
-on the side of the timer arriving slightly late so as not to waste CPU cycl=
-es.
+-- 
+Best regards
+George
 
