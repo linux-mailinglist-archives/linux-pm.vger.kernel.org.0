@@ -1,419 +1,143 @@
-Return-Path: <linux-pm+bounces-14022-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14023-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3775F97547C
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 15:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 849DB9754CB
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 15:57:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7625BB27911
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 13:50:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28FD1B2BA50
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 13:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9827C19CC07;
-	Wed, 11 Sep 2024 13:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F00211AE047;
+	Wed, 11 Sep 2024 13:52:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5NzTH2Z"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fbzgJ/gL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE9019C56B;
-	Wed, 11 Sep 2024 13:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1740B186607
+	for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 13:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726062611; cv=none; b=moI9aZSH0d5+8NuhwHFVLj3O2OOVIyAt5WBVWStBxbfoRCqvRgNKO4T/meB45iAu/pLrhJJda7DYXLqULQUEDGplTAO0vEhW7LGKEg4ztpSm1T2bq8MTA5he8iRy865wXebsfkwjc3WjqP0EIsryvgkBqMo0scSWOHVxUu+rVwM=
+	t=1726062776; cv=none; b=eQbHpXZjROtBqai4so8CiUxUGB9T4GAXSl0frMChZEuHAyKFkpFoFBhVAFCumkv5UqV7FMPM0xY1lL+4CYJQk7A74rB9G33tNcmGwt72MOhVmi02Cn5zFrj+X3o0lBUFD6PE6SxG/qTidoYYJ5BqjHjM0baSA5/vt0eV5pqsOV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726062611; c=relaxed/simple;
-	bh=n0w/L13h5KJnUKr29cOQpa9dPb7ua+3fhbtUKOirdl4=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=QrD5Qzvkf45teT0KHQ57wuTzRPfw4+37EgBfTMFfIN0WJvZeJQu+qKMgFF/tT+YrpH8HRnWqZwuZ//h7asETMPczXZgL2lOQFJ+m+boBViPI5BS8r4WDl7ej7R/SsbTC2msIJOZgv9nn5RDVacESIvuSsZAiFwjUnUFG1odJshs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5NzTH2Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1507C4CEC0;
-	Wed, 11 Sep 2024 13:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726062610;
-	bh=n0w/L13h5KJnUKr29cOQpa9dPb7ua+3fhbtUKOirdl4=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=J5NzTH2Zy3vwspTxk1Gx9maokpV8EhTnL1Bo9Swz8iCZNkeFfqz+QsLEfATlGRrpd
-	 QC5I6rl891oBKsRSCicf9eSigmUDDlvRHJZsKXRhAncuN0My9XusrLnSY414UkPV2F
-	 /i2gHoflMBcomJN0GjCGnm1t//+olscaI6RKu4VdK1apLpNZyTG895i9W5sKWj8BmW
-	 SDmoOqYjjcWm8c5c3s0t0ZKFn7vfAG3GRXEYvB3kDrOlfcxtalMc6ic2u8yKriJHrm
-	 Yakpvy3JZGd8n4grme4K5vOAxr/hGSG1dysQWbK/AD27EmVmcfXvZyxcLDALOqsbhY
-	 OCnFfl0Sqa4bA==
-Date: Wed, 11 Sep 2024 08:50:09 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1726062776; c=relaxed/simple;
+	bh=90syEosigoQtFwy3mDxHWPdRai93pP02ONNHq91DD3c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fb5rnfC1LsqzDDlgNggAsVR7PyG7r9Jkf1LEuzxO6W4mhB1DTF8v0s3uICdXoO4AUKjv3PU/RItpHYg6xFOzJQRQf2DQa9jwB2/+T8G/C0Vh5BQlH9rfwJ3Qz0HNbGkKubnoPpVjYfGK9AVT6dovdYhkWSzykyOogVJ3lD/8UGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fbzgJ/gL; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1726062773;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kdiGlxkXyOR+dWRdi9LeJcx6OQ3pwwF6HACz6X373cI=;
+	b=fbzgJ/gLTrCR0A9hDfx9IcrDrBfsEgwFdM+dfuXYoJoAkZJlick9Rz0E9SgyxCdY4XxKB1
+	+OpuHvmKaTMYwQS4jt5NJ98P0esUuNtLKhYqVV7cNjvvLvSqbZFxpnglSOew7UJ39KallX
+	dR+nApry8s1WQzh2WryNC13UH9XnOWI=
+Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
+ [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-620-1qal8wL8O56V63JW-RszYQ-1; Wed, 11 Sep 2024 09:52:52 -0400
+X-MC-Unique: 1qal8wL8O56V63JW-RszYQ-1
+Received: by mail-ua1-f72.google.com with SMTP id a1e0cc1a2514c-8486337c179so237157241.0
+        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 06:52:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726062771; x=1726667571;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kdiGlxkXyOR+dWRdi9LeJcx6OQ3pwwF6HACz6X373cI=;
+        b=Zr7NaIMSTgsaqYVl/X2+IUfJIVa1VDu0t6QdQqWU69JK1lIDjvE4XxFQatkZyGa8Ey
+         2TQn5+8m5JX21fzuLWz+EhC+ftIdj4P3/4BTg22lug+bLTtips+i8x9Qg6o22aylNkJI
+         r8j6UAZPV3WGEvNuXk1ioqsEecckMLlgNrcsIqkONRxYyrmVaDAti3RNajJf+pSNXJ9n
+         X6Inckd80hAjxytfQxtL1uJYX1WiK/XSxKcyUbjQkSg5wdfDilseEgE7wvNBn6QfKAIc
+         3d2F+pREANEzOCjik+6GJgga58D1rcNXwwibwUOeJ8gfO0Z7GYNWwA3tjwl6/rtyzIf/
+         Q3HA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOswSH4Ye0nLpZADXqDkSAYgn+vzynKOKL4noinT1ZGzq4wjm1im13aWPaqw1KUmBE5u2MUdVmhQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrLhoNjMm5nYf+5Raay0St2hLx5jsC1pG7IdlXBpIDTyqpQPcb
+	w4SkKcsTjV+1NjzSGEPAnTL65xQEpKmvhBhh5ZF6WGqW5+276voDiuGf0CsA4+a3FOJsrNkUyH5
+	5DxKID2cZ9wg4cuxNMgHji7kxuVV/qsIpL+n64PBoaJivih9jBO9ifLbr
+X-Received: by 2002:a05:6102:cd0:b0:493:b9a0:8ee8 with SMTP id ada2fe7eead31-49c241fcbb7mr2253885137.22.1726062771470;
+        Wed, 11 Sep 2024 06:52:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGABJYVskb5+BBP2xYINiPi2dUXsWiKxhCZm1mIGirxLhvlWwWlv0zCkL5Ylsa8eqWqhE2NTA==
+X-Received: by 2002:a05:6102:cd0:b0:493:b9a0:8ee8 with SMTP id ada2fe7eead31-49c241fcbb7mr2253869137.22.1726062771033;
+        Wed, 11 Sep 2024 06:52:51 -0700 (PDT)
+Received: from x1gen2nano ([2600:1700:1ff0:d0e0::33])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c534786b52sm41693896d6.142.2024.09.11.06.52.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Sep 2024 06:52:50 -0700 (PDT)
+Date: Wed, 11 Sep 2024 08:52:48 -0500
+From: Andrew Halaney <ahalaney@redhat.com>
+To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+Cc: Georgi Djakov <djakov@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Odelu Kukatla <quic_okukatla@quicinc.com>, 
+	Jeff Johnson <quic_jjohnson@quicinc.com>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Mike Tipton <quic_mdtipton@quicinc.com>, 
+	Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH V2] interconnect: qcom: icc-rpmh: probe defer incase of
+ missing QoS clock dependency
+Message-ID: <qyuhuhgeajozxjhaddeapfv7pdhutagqevr2fiu4fu5wh6ybjn@pxxgvjrad477>
+References: <20240911094516.16901-1-quic_rlaggysh@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Nick Chan <towinchenmi@gmail.com>
-Cc: linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, 
- Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Hector Martin <marcan@marcan.st>, 
- devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- linux-kernel@vger.kernel.org, Mark Kettenis <kettenis@openbsd.org>, 
- linux-arm-kernel@lists.infradead.org, 
- "Rafael J . Wysocki" <rafael@kernel.org>, Sven Peter <sven@svenpeter.dev>, 
- Conor Dooley <conor+dt@kernel.org>, linux-watchdog@vger.kernel.org, 
- linux-gpio@vger.kernel.org, Will Deacon <will@kernel.org>, 
- Guenter Roeck <linux@roeck-us.net>, Viresh Kumar <viresh.kumar@linaro.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>, asahi@lists.linux.dev
-In-Reply-To: <20240911084353.28888-2-towinchenmi@gmail.com>
-References: <20240911084353.28888-2-towinchenmi@gmail.com>
-Message-Id: <172606224294.90706.12818129202356312350.robh@kernel.org>
-Subject: Re: [PATCH 00/22] Initial device trees for A7-A11 based Apple
- devices
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240911094516.16901-1-quic_rlaggysh@quicinc.com>
+
+On Wed, Sep 11, 2024 at 09:45:16AM GMT, Raviteja Laggyshetty wrote:
+> Return -EPROBE_DEFER from interconnect provider incase probe defer is
+> received from devm_clk_bulk_get_all(). This would help in reattempting
+> the inteconnect driver probe, once the required QoS clocks are
+> available.
+> 
+
+Might be a bit overzealous, but to me this feels like a fix so something
+like:
+
+    Fixes: 0a7be6b35da8 ("interconnect: qcom: icc-rpmh: Add QoS configuration support")
+
+might be appropriate? What are your thoughts?
 
 
-On Wed, 11 Sep 2024 16:40:50 +0800, Nick Chan wrote:
-> Hi,
-> 
-> This series adds device trees for all A7-A11 SoC based iPhones, iPads,
-> iPod touches and Apple TVs.
-> 
-> The following devices has been excluded from this series:
->   - All T2 devices (A10-based): bootloader does not work (yet)
->   - HomePod: Not tested, and it's also a different form factor
-> 
-> This series supports the following on all devices:
-> - SMP (spin-table)
-> - UART
-> - simple-framebuffer
-> - watchdog
-> - timer
-> - pinctrl
-> - AIC interrupts
-> 
-> The following is supported on A7-A10:
-> - gpio-keys
-> The buttons on A11 based devices like the iPhone X is a SMC subdevice,
-> and cannot be supported in this way.
-> 
-> The following is supported on A10:
-> - cpufreq
-> 
-> A10(X) has performance and efficiency core pairs that act as single logical
-> cores, and only one type of core can be active at a given time. This results
-> in a core that suddenly have its capacity lowered in low p-states,
-> so the frequencies of the low p-states must be adjusted.
-> 
-> Patch dependencies:
-> - The required AIC patches[1] has been sitting in linux-next since
-> next-20240906, through the tip tree.
-> - The important serial fixes[2] will go through the samsung tree and should
-> be in good shape though those have not been merged.
-> - The optional patch to disable 32-bit EL0 on A10(X)[3] has not received
-> any comments (v1 or v2).
-> 
-> Authorship information:
-> - The commits to actually add the dts files are mostly made by Konard,
-> and Konard's sign-off is added by me with permission. I also updated the
-> Konrad's email in the actual dts files. Konrad can confirm this.
-> 
-> - Everything else is entirely made by me, including the cpufreq additions
-> into the dts file for A10.
-> 
-> [1]: https://lore.kernel.org/asahi/20240901034143.12731-1-towinchenmi@gmail.com
-> [2]: https://lore.kernel.org/asahi/20240911050741.14477-1-towinchenmi@gmail.com
-> [3]: https://lore.kernel.org/asahi/20240909091425.16258-1-towinchenmi@gmail.com
-> 
-> Nick Chan
+> Suggested-by: Bjorn Andersson <andersson@kernel.org>
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 > ---
+> Changes in v2:
+>  - Removed the qos_clk_required rename change and posted it as separate
+>    patch.
+>  - As suggested, dev_err_probe is used for reporting the probe defer
+>    error message.
+> ---
+>  drivers/interconnect/qcom/icc-rpmh.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> Konrad Dybcio (8):
->   arm64: dts: apple: Add A7 devices
->   arm64: dts: apple: Add A8 devices
->   arm64: dts: apple: Add A8X devices
->   arm64: dts: apple: Add A9 devices
->   arm64: dts: apple: Add A9X devices
->   arm64: dts: apple: Add A10 devices
->   arm64: dts: apple: Add A10X devices
->   arm64: dts: apple: Add A11 devices
-> 
-> Nick Chan (14):
->   dt-bindings: arm: cpus: Add Apple A7-A11 CPU cores
->   dt-bindings: watchdog: apple,wdt: Add A7-A11 compatibles
->   dt-bindings: cpufreq: apple,cluster-cpufreq: Add A10 compatible
->   dt-bindings: pinctrl: apple,pinctrl: Add A7-A11 compatibles
->   dt-bindings: arm: apple: Add A7 devices
->   dt-bindings: arm: apple: Add A8 devices
->   dt-bindings: arm: apple: Add A8X devices
->   dt-bindings: arm: apple: Add A9 devices
->   dt-bindings: arm: apple: Add A9X devices
->   dt-bindings: arm: apple: Add A10 devices
->   dt-bindings: arm: apple: Add A10X devices
->   dt-bindings: arm: apple: Add A11 devices
->   arm64: dts: apple: t8010: Add cpufreq nodes
->   arm64: Kconfig: Update help text for CONFIG_ARCH_APPLE
-> 
->  .../devicetree/bindings/arm/apple.yaml        | 160 ++++++++++-
->  .../devicetree/bindings/arm/cpus.yaml         |   6 +
->  .../cpufreq/apple,cluster-cpufreq.yaml        |   4 +-
->  .../bindings/pinctrl/apple,pinctrl.yaml       |   5 +
->  .../bindings/watchdog/apple,wdt.yaml          |   5 +
->  arch/arm64/Kconfig.platforms                  |   4 +-
->  arch/arm64/boot/dts/apple/Makefile            |  52 ++++
->  arch/arm64/boot/dts/apple/s5l8960x-5s.dtsi    |  52 ++++
->  arch/arm64/boot/dts/apple/s5l8960x-air1.dtsi  |  52 ++++
->  arch/arm64/boot/dts/apple/s5l8960x-j71.dts    |  14 +
->  arch/arm64/boot/dts/apple/s5l8960x-j72.dts    |  14 +
->  arch/arm64/boot/dts/apple/s5l8960x-j73.dts    |  14 +
->  arch/arm64/boot/dts/apple/s5l8960x-j85.dts    |  14 +
->  arch/arm64/boot/dts/apple/s5l8960x-j85m.dts   |  14 +
->  arch/arm64/boot/dts/apple/s5l8960x-j86.dts    |  14 +
->  arch/arm64/boot/dts/apple/s5l8960x-j86m.dts   |  14 +
->  arch/arm64/boot/dts/apple/s5l8960x-j87.dts    |  14 +
->  arch/arm64/boot/dts/apple/s5l8960x-j87m.dts   |  14 +
->  arch/arm64/boot/dts/apple/s5l8960x-mini2.dtsi |  52 ++++
->  arch/arm64/boot/dts/apple/s5l8960x-mini3.dtsi |  13 +
->  arch/arm64/boot/dts/apple/s5l8960x-n51.dts    |  14 +
->  arch/arm64/boot/dts/apple/s5l8960x-n53.dts    |  14 +
->  arch/arm64/boot/dts/apple/s5l8960x.dtsi       | 147 ++++++++++
->  arch/arm64/boot/dts/apple/s8000-j71s.dts      |  15 +
->  arch/arm64/boot/dts/apple/s8000-j72s.dts      |  15 +
->  arch/arm64/boot/dts/apple/s8000-n66.dts       |  15 +
->  arch/arm64/boot/dts/apple/s8000-n69u.dts      |  15 +
->  arch/arm64/boot/dts/apple/s8000-n71.dts       |  15 +
->  arch/arm64/boot/dts/apple/s8000.dtsi          | 179 ++++++++++++
->  arch/arm64/boot/dts/apple/s8001-j127.dts      |  14 +
->  arch/arm64/boot/dts/apple/s8001-j128.dts      |  14 +
->  arch/arm64/boot/dts/apple/s8001-j98a.dts      |  14 +
->  arch/arm64/boot/dts/apple/s8001-j99a.dts      |  14 +
->  arch/arm64/boot/dts/apple/s8001-pro.dtsi      |  45 +++
->  arch/arm64/boot/dts/apple/s8001.dtsi          | 167 +++++++++++
->  arch/arm64/boot/dts/apple/s8003-j71t.dts      |  15 +
->  arch/arm64/boot/dts/apple/s8003-j72t.dts      |  15 +
->  arch/arm64/boot/dts/apple/s8003-n66m.dts      |  15 +
->  arch/arm64/boot/dts/apple/s8003-n69.dts       |  15 +
->  arch/arm64/boot/dts/apple/s8003-n71m.dts      |  15 +
->  arch/arm64/boot/dts/apple/s8003.dtsi          |  19 ++
->  arch/arm64/boot/dts/apple/s800x-6s.dtsi       |  50 ++++
->  arch/arm64/boot/dts/apple/s800x-ipad5.dtsi    |  44 +++
->  arch/arm64/boot/dts/apple/s800x-se.dtsi       |  50 ++++
->  arch/arm64/boot/dts/apple/t7000-6.dtsi        |  50 ++++
->  arch/arm64/boot/dts/apple/t7000-j42d.dts      |  18 ++
->  arch/arm64/boot/dts/apple/t7000-j96.dts       |  14 +
->  arch/arm64/boot/dts/apple/t7000-j97.dts       |  14 +
->  arch/arm64/boot/dts/apple/t7000-mini4.dtsi    |  51 ++++
->  arch/arm64/boot/dts/apple/t7000-n102.dts      |  49 ++++
->  arch/arm64/boot/dts/apple/t7000-n56.dts       |  14 +
->  arch/arm64/boot/dts/apple/t7000-n61.dts       |  14 +
->  arch/arm64/boot/dts/apple/t7000.dtsi          | 147 ++++++++++
->  arch/arm64/boot/dts/apple/t7001-air2.dtsi     |  44 +++
->  arch/arm64/boot/dts/apple/t7001-j81.dts       |  14 +
->  arch/arm64/boot/dts/apple/t7001-j82.dts       |  14 +
->  arch/arm64/boot/dts/apple/t7001.dtsi          | 154 ++++++++++
->  arch/arm64/boot/dts/apple/t8010-7.dtsi        |  45 +++
->  arch/arm64/boot/dts/apple/t8010-d10.dts       |  14 +
->  arch/arm64/boot/dts/apple/t8010-d101.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8010-d11.dts       |  14 +
->  arch/arm64/boot/dts/apple/t8010-d111.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8010-fast.dtsi     |  27 ++
->  arch/arm64/boot/dts/apple/t8010-ipad6.dtsi    |  45 +++
->  arch/arm64/boot/dts/apple/t8010-ipad7.dtsi    |  15 +
->  arch/arm64/boot/dts/apple/t8010-j171.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8010-j172.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8010-j71b.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8010-j72b.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8010-n112.dts      |  48 ++++
->  arch/arm64/boot/dts/apple/t8010.dtsi          | 227 +++++++++++++++
->  arch/arm64/boot/dts/apple/t8011-j105a.dts     |  14 +
->  arch/arm64/boot/dts/apple/t8011-j120.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8011-j121.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8011-j207.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8011-j208.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8011-pro2.dtsi     |  45 +++
->  arch/arm64/boot/dts/apple/t8011.dtsi          | 175 ++++++++++++
->  arch/arm64/boot/dts/apple/t8015-8.dtsi        |  12 +
->  arch/arm64/boot/dts/apple/t8015-8plus.dtsi    |   9 +
->  arch/arm64/boot/dts/apple/t8015-d20.dts       |  14 +
->  arch/arm64/boot/dts/apple/t8015-d201.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8015-d21.dts       |  14 +
->  arch/arm64/boot/dts/apple/t8015-d211.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8015-d22.dts       |  14 +
->  arch/arm64/boot/dts/apple/t8015-d221.dts      |  14 +
->  arch/arm64/boot/dts/apple/t8015-x.dtsi        |  15 +
->  arch/arm64/boot/dts/apple/t8015.dtsi          | 269 ++++++++++++++++++
->  88 files changed, 3257 insertions(+), 4 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-5s.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-air1.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j71.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j72.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j73.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j85.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j85m.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j86.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j86m.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j87.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j87m.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-mini2.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-mini3.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-n51.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-n53.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s5l8960x.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/s8000-j71s.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8000-j72s.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8000-n66.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8000-n69u.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8000-n71.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8000.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/s8001-j127.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8001-j128.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8001-j98a.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8001-j99a.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8001-pro.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/s8001.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/s8003-j71t.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8003-j72t.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8003-n66m.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8003-n69.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8003-n71m.dts
->  create mode 100644 arch/arm64/boot/dts/apple/s8003.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/s800x-6s.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/s800x-ipad5.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/s800x-se.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t7000-6.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t7000-j42d.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t7000-j96.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t7000-j97.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t7000-mini4.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t7000-n102.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t7000-n56.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t7000-n61.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t7000.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t7001-air2.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t7001-j81.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t7001-j82.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t7001.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-7.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-d10.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-d101.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-d11.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-d111.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-fast.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-ipad6.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-ipad7.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-j171.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-j172.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-j71b.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-j72b.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8010-n112.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8010.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t8011-j105a.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8011-j120.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8011-j121.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8011-j207.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8011-j208.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8011-pro2.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t8011.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t8015-8.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t8015-8plus.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t8015-d20.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8015-d201.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8015-d21.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8015-d211.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8015-d22.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8015-d221.dts
->  create mode 100644 arch/arm64/boot/dts/apple/t8015-x.dtsi
->  create mode 100644 arch/arm64/boot/dts/apple/t8015.dtsi
+> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+> index f49a8e0cb03c..adacd6f7d6a8 100644
+> --- a/drivers/interconnect/qcom/icc-rpmh.c
+> +++ b/drivers/interconnect/qcom/icc-rpmh.c
+> @@ -311,6 +311,9 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+>  		}
+>  
+>  		qp->num_clks = devm_clk_bulk_get_all(qp->dev, &qp->clks);
+> +		if (qp->num_clks == -EPROBE_DEFER)
+> +			return dev_err_probe(dev, qp->num_clks, "Failed to get QoS clocks\n");
+> +
+>  		if (qp->num_clks < 0 || (!qp->num_clks && desc->qos_clks_required)) {
+>  			dev_info(dev, "Skipping QoS, failed to get clk: %d\n", qp->num_clks);
+>  			goto skip_qos_config;
+> -- 
+> 2.39.2
 > 
 > 
-> base-commit: 6708132e80a2ced620bde9b9c36e426183544a23
-> --
-> 2.46.0
-> 
-> 
-> 
-
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y apple/s5l8960x-j71.dtb apple/s5l8960x-j72.dtb apple/s5l8960x-j73.dtb apple/s5l8960x-j85.dtb apple/s5l8960x-j85m.dtb apple/s5l8960x-j86.dtb apple/s5l8960x-j86m.dtb apple/s5l8960x-j87.dtb apple/s5l8960x-j87m.dtb apple/s5l8960x-n51.dtb apple/s5l8960x-n53.dtb apple/s8000-j71s.dtb apple/s8000-j72s.dtb apple/s8000-n66.dtb apple/s8000-n69u.dtb apple/s8000-n71.dtb apple/s8001-j127.dtb apple/s8001-j128.dtb apple/s8001-j98a.dtb apple/s8001-j99a.dtb apple/s8003-j71t.dtb apple/s8003-j72t.dtb apple/s8003-n66m.dtb apple/s8003-n69.dtb apple/s8003-n71m.dtb apple/t7000-j42d.dtb apple/t7000-j96.dtb apple/t7000-j97.dtb apple/t7000-n102.dtb apple/t7000-n56.dtb apple/t7000-n61.dtb apple/t7001-j81.dtb apple/t7001-j82.dtb apple/t8010-d10.dtb apple/t8010-d101.dtb apple/t8010-d11.dtb apple/t8010-d111.dtb apple/t8010-j171.dtb apple/t8010-j172.dtb apple/t8010-j71b.dtb apple/t8010-j72b.dtb apple/t8010-n112.dtb apple/t8011-j105a.dtb apple/t8011-j120.dtb apple/t8011-j121.dt
- b apple/t8011-j207.dtb apple/t8011-j208.dtb apple/t8015-d20.dtb apple/t8015-d201.dtb apple/t8015-d21.dtb apple/t8015-d211.dtb apple/t8015-d22.dtb apple/t8015-d221.dtb' for 20240911084353.28888-2-towinchenmi@gmail.com:
-
-Error: arch/arm64/boot/dts/apple/t8010-n112.dts:21.18-19 syntax error
-FATAL ERROR: Unable to parse input tree
-make[3]: *** [scripts/Makefile.dtbs:129: arch/arm64/boot/dts/apple/t8010-n112.dtb] Error 1
-make[2]: *** [scripts/Makefile.build:478: arch/arm64/boot/dts/apple] Error 2
-make[2]: Target 'arch/arm64/boot/dts/apple/t8010-n112.dtb' not remade because of errors.
-make[1]: *** [/home/rob/proj/linux-dt-testing/Makefile:1392: apple/t8010-n112.dtb] Error 2
-make: *** [Makefile:224: __sub-make] Error 2
-make: Target 'apple/s5l8960x-j71.dtb' not remade because of errors.
-make: Target 'apple/s5l8960x-j72.dtb' not remade because of errors.
-make: Target 'apple/s5l8960x-j73.dtb' not remade because of errors.
-make: Target 'apple/s5l8960x-j85.dtb' not remade because of errors.
-make: Target 'apple/s5l8960x-j85m.dtb' not remade because of errors.
-make: Target 'apple/s5l8960x-j86.dtb' not remade because of errors.
-make: Target 'apple/s5l8960x-j86m.dtb' not remade because of errors.
-make: Target 'apple/s5l8960x-j87.dtb' not remade because of errors.
-make: Target 'apple/s5l8960x-j87m.dtb' not remade because of errors.
-make: Target 'apple/s5l8960x-n51.dtb' not remade because of errors.
-make: Target 'apple/s5l8960x-n53.dtb' not remade because of errors.
-make: Target 'apple/s8000-j71s.dtb' not remade because of errors.
-make: Target 'apple/s8000-j72s.dtb' not remade because of errors.
-make: Target 'apple/s8000-n66.dtb' not remade because of errors.
-make: Target 'apple/s8000-n69u.dtb' not remade because of errors.
-make: Target 'apple/s8000-n71.dtb' not remade because of errors.
-make: Target 'apple/s8001-j127.dtb' not remade because of errors.
-make: Target 'apple/s8001-j128.dtb' not remade because of errors.
-make: Target 'apple/s8001-j98a.dtb' not remade because of errors.
-make: Target 'apple/s8001-j99a.dtb' not remade because of errors.
-make: Target 'apple/s8003-j71t.dtb' not remade because of errors.
-make: Target 'apple/s8003-j72t.dtb' not remade because of errors.
-make: Target 'apple/s8003-n66m.dtb' not remade because of errors.
-make: Target 'apple/s8003-n69.dtb' not remade because of errors.
-make: Target 'apple/s8003-n71m.dtb' not remade because of errors.
-make: Target 'apple/t7000-j42d.dtb' not remade because of errors.
-make: Target 'apple/t7000-j96.dtb' not remade because of errors.
-make: Target 'apple/t7000-j97.dtb' not remade because of errors.
-make: Target 'apple/t7000-n102.dtb' not remade because of errors.
-make: Target 'apple/t7000-n56.dtb' not remade because of errors.
-make: Target 'apple/t7000-n61.dtb' not remade because of errors.
-make: Target 'apple/t7001-j81.dtb' not remade because of errors.
-make: Target 'apple/t7001-j82.dtb' not remade because of errors.
-make: Target 'apple/t8010-d10.dtb' not remade because of errors.
-make: Target 'apple/t8010-d101.dtb' not remade because of errors.
-make: Target 'apple/t8010-d11.dtb' not remade because of errors.
-make: Target 'apple/t8010-d111.dtb' not remade because of errors.
-make: Target 'apple/t8010-j171.dtb' not remade because of errors.
-make: Target 'apple/t8010-j172.dtb' not remade because of errors.
-make: Target 'apple/t8010-j71b.dtb' not remade because of errors.
-make: Target 'apple/t8010-j72b.dtb' not remade because of errors.
-make: Target 'apple/t8010-n112.dtb' not remade because of errors.
-make: Target 'apple/t8011-j105a.dtb' not remade because of errors.
-make: Target 'apple/t8011-j120.dtb' not remade because of errors.
-make: Target 'apple/t8011-j121.dtb' not remade because of errors.
-make: Target 'apple/t8011-j207.dtb' not remade because of errors.
-make: Target 'apple/t8011-j208.dtb' not remade because of errors.
-make: Target 'apple/t8015-d20.dtb' not remade because of errors.
-make: Target 'apple/t8015-d201.dtb' not remade because of errors.
-make: Target 'apple/t8015-d21.dtb' not remade because of errors.
-make: Target 'apple/t8015-d211.dtb' not remade because of errors.
-make: Target 'apple/t8015-d22.dtb' not remade because of errors.
-make: Target 'apple/t8015-d221.dtb' not remade because of errors.
-
-
-
-
 
 
