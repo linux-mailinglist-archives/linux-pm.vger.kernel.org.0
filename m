@@ -1,213 +1,118 @@
-Return-Path: <linux-pm+bounces-14008-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14010-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E71C8974EEF
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 11:45:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C778D975009
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 12:48:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 177991C215C8
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 09:45:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F70B28D5F4
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 10:48:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6459117BED4;
-	Wed, 11 Sep 2024 09:44:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12FB118593F;
+	Wed, 11 Sep 2024 10:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="0V366jw6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kmbDiOe9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A680A45C18;
-	Wed, 11 Sep 2024 09:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F43F184537
+	for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 10:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726047895; cv=none; b=TLAeSle55dCtqwO7RfSnDbEtV6xgA1MuVuom2OjSE6MZMlwhS+5yOqeeRADhf5iKeMYzGuaH4qe8RZBZ9GqLRkT82Zg21ABB7lrBJP5u/VDE0DCJ4G/b9l67MEvSbkG4Uka3UegV/h9Z88v56r8Zd1JdC+cVdvfTXkMVllIjAJg=
+	t=1726051723; cv=none; b=BjVaNIumeu/D50Kcez1v0hP7iIOPzmaGDRzm30kB53FIYXm5M47D4AjgrsqN52BeMZkTKm6I2q/mzLvUqyLuplnPyoKdN6xVP8rCAXAUEQc3Nr1+UuBv9SKAcjRB+tKEsEv6MBj7K+85KWbbIeurDGift9UON/RkHI3AugyN/i4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726047895; c=relaxed/simple;
-	bh=qhj7KM8Of8EZEkH4d38oeP6Xh2Sr8VhoFo22LcaMxGM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=edm6mjs/5C1z8KzFLYpjC3gM5v9C/mYGOafmqt1VFescI1KqTSxaDQ6z0GEICJLplx0A+Y3BgKorUa5/au32h5DUGdT/qTXC75SRN7Jwh33gt+1eqPwXkpM28pb8eppf68DoIKV8naKrv84LnV6JkYLhEI96UiqaT60grT5k3Ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=0V366jw6; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=nNb8FNqNc1pyiluz5XbOkdKPgdGwdFZnKD4YbayYcKs=; b=0V366jw6uETJ6sjPeanMRDucm+
-	KrBb5CGgRh9DKb3D32v1lzPu7ijmHE0reQ/aCu7F7N7qHMySUIWoGnKl2ATRnBNcI5lHIa9uZICYR
-	7fsDvCepVe12TFIMtdmvoZxlOAq4toPvNzNjainKXSAQf8B01wtHuNL214MmPrjN+yL261N13HXkn
-	kj7bmqygquwI+rKjI/jzEinxLorz7gbatnySNjIzbz97p1hDS7CUrHRONpJ9IPLg8y8/ntYgbJlfN
-	/mHdB9GKw3yBBqEq8GU5kbAFWSJgJh/harGnIdSFfz2DJM/41t5/qApYNveETrxf65zZltPzvTW/l
-	eB0ODdKg==;
-Received: from i53875a03.versanet.de ([83.135.90.3] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1soJtk-0007oi-Kw; Wed, 11 Sep 2024 11:44:28 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Elaine Zhang <zhangqing@rock-chips.com>,
- =?ISO-8859-1?Q?Adri=E1n_Mart=EDnez?= Larumbe <adrian.larumbe@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>, devicetree@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org,
- Sebastian Reichel <sebastian.reichel@collabora.com>, kernel@collabora.com,
- Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v1 5/6] pmdomain: rockchip: add regulator support
-Date: Wed, 11 Sep 2024 11:46:58 +0200
-Message-ID: <2224005.vXnMlVU4IS@diego>
-In-Reply-To: <20240910180530.47194-6-sebastian.reichel@collabora.com>
-References:
- <20240910180530.47194-1-sebastian.reichel@collabora.com>
- <20240910180530.47194-6-sebastian.reichel@collabora.com>
+	s=arc-20240116; t=1726051723; c=relaxed/simple;
+	bh=DaYoPeJg9shuCtx4J1jS+goJUrZrFxkVlSXl6dreLv0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fD4zEZrWuz17sXQkpnhoYaAinbIasmVchUcO/Tuyry6CdeCxD23MsvpKVANvQH5HvRv4b4cTd3VyWtL7wIg+b/TdvAYnsrlejYm5PwfyfdufN7jqf/JLrLQi/HYGhwvSyosEmlDroAHJRyNMwsETfw+Hjjc5FyQheDMcNdI61ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kmbDiOe9; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2f75aa08a96so20858101fa.1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 03:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1726051719; x=1726656519; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xfOyw78Q7NNMTmln4lOFjsc2BJzJJyhZKXZ24axVdKQ=;
+        b=kmbDiOe9yuyvgoiqx/32ejPtvqGWjZURAKk6YLMJe2daVekcyqVMOXpN5MFA2mzKLb
+         4dWwgsEiXKy0spk6c3pNMLDb7Z7a+HMrX7cmf6PxI+hzhAQbyZlUCrNH8XvFl22Ons9B
+         rl83cQPlu6fFE/zPtUFKlLOupfaz6AADsDiSx0HTpyK0k4MoTLyn7XiSMaCaN7yWW/HT
+         w2cBj1RKz4GLwjeCt+dhJZXA0fiktrYdsS76rxFl3PTnFQgds3IcNwnyEStyPo8wG96s
+         KdZPgpAn86cwn2aEMVTeQP7iywE1c6bvC/ooHwY3a6d4sSuEsmpQC4FT5M6WwiRoFpTh
+         jcvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726051719; x=1726656519;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xfOyw78Q7NNMTmln4lOFjsc2BJzJJyhZKXZ24axVdKQ=;
+        b=eGZsM/DFnkyuWTM5sHtcnCaIAZvoNmbF/0KYvkblHqTH74ChUVbO0xf2JVqGTm5A7D
+         OPssI45snxT+3hVav73qO2CfoABVhTCaMdfpx9X+3eafET+StxBzRLCbTtO79/fL51eM
+         b3wVZZzQ6OXl9l0F6SP7j23FQZggl70zNMoJyMyAqhgGlHaCfhi4VQcprYzsy16pspA0
+         7fnINRyxJu9ha3mcmh33dLQfcuLljsaWsS4UYGpW9z1yOy/hgRNtkWWGCULJPMzX/itc
+         UF8IkOXxGNkv5+lmuCefLcNTHR0e1QkdxjBdrILQntPv7Qj6SXWjXdXW/lgbDKXLyZrV
+         TxrA==
+X-Forwarded-Encrypted: i=1; AJvYcCVPwdrWQTTSMygMvdpEDDYMbzAJL39x8ldibk12sia9kM1ourgEdNEfV0q293XBujZNBerFZlHqXg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjVxqQICTD8NWJNYZflvUQ1Y5ilTgX8r0rm4HFHOpMS6JVj6Hf
+	6zdCG/0m47k7yB1NFkHXgTwl6KCd/mTRK22PQv2Svq0x4EqeGcOaAf4j29Hh/Ek=
+X-Google-Smtp-Source: AGHT+IFmPMxpL0sfW2aEQVWqW2rvHHyXYZsNZluRoWH8pk2J0ZkdsSyNGv+Nxad6h/EbFiV9iGvsOg==
+X-Received: by 2002:a05:6512:1107:b0:52e:be84:225c with SMTP id 2adb3069b0e04-53673b6b445mr1852457e87.33.1726051718895;
+        Wed, 11 Sep 2024 03:48:38 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5365f870baasm1520467e87.96.2024.09.11.03.48.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Sep 2024 03:48:38 -0700 (PDT)
+Date: Wed, 11 Sep 2024 13:48:36 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Stephan Gerhold <stephan.gerhold@kernkonzept.com>, Danila Tikhonov <danila@jiaxyga.com>, 
+	Adam Skladowski <a39.skl@gmail.com>, Vladimir Lypak <vladimir.lypak@gmail.com>, 
+	Andrew Halaney <ahalaney@redhat.com>, Odelu Kukatla <quic_okukatla@quicinc.com>, 
+	Mike Tipton <quic_mdtipton@quicinc.com>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 2/2] interconnect: qcom: add QCS8300 interconnect
+ provider driver
+Message-ID: <3xjvx2kwrlruhhxw4aald26qjf5fzikay2ypzr3mwv75mlmf5q@lmn2o64npfg2>
+References: <20240910101013.3020-1-quic_rlaggysh@quicinc.com>
+ <20240910101013.3020-3-quic_rlaggysh@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240910101013.3020-3-quic_rlaggysh@quicinc.com>
 
-Am Dienstag, 10. September 2024, 19:57:14 CEST schrieb Sebastian Reichel:
-> Some power domains require extra voltages to be applied. For example
-> trying to enable the GPU domain on RK3588 fails when the SoC does not
-> have VDD GPU enabled.
+On Tue, Sep 10, 2024 at 10:10:13AM GMT, Raviteja Laggyshetty wrote:
+> Add driver for the Qualcomm interconnect buses found in QCS8300
+> based platforms. The topology consists of several NoCs that are
+> controlled by a remote processor that collects the aggregated
+> bandwidth for each master-slave pairs.
 > 
-> The solution to temporarily change the device's device tree node has
-> been taken over from the Mediatek power domain driver.
-> 
-> The regulator is not acquired at probe time, since that creates circular
-> dependencies. The power domain driver must be probed early, since SoC
-> peripherals need it. Regulators on the other hand depend on SoC
-> peripherals like SPI, I2C or GPIO.
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
-It does look like Chen-Yu Tsai is working on a similar problem [0].
-
-I.e. this really is a hack, so I started looking around the regulator API
-and found of_regulator_bulk_get existing but unused that already
-operates on a of-node.
-
-Googling further I stumbled upon the linked patch from some days
-ago ;-) . So maybe that could be a cleaner way forward?
-
-
-[0] https://patchwork.kernel.org/project/linux-mediatek/patch/20240904090016.2841572-6-wenst@chromium.org/
-
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 > ---
->  drivers/pmdomain/rockchip/pm-domains.c | 57 +++++++++++++++++++++++++-
->  1 file changed, 55 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-> index 663d390faaeb..ae6990897928 100644
-> --- a/drivers/pmdomain/rockchip/pm-domains.c
-> +++ b/drivers/pmdomain/rockchip/pm-domains.c
-> @@ -18,6 +18,7 @@
->  #include <linux/of_clk.h>
->  #include <linux/clk.h>
->  #include <linux/regmap.h>
-> +#include <linux/regulator/consumer.h>
->  #include <linux/mfd/syscon.h>
->  #include <soc/rockchip/pm_domains.h>
->  #include <dt-bindings/power/px30-power.h>
-> @@ -89,6 +90,8 @@ struct rockchip_pm_domain {
->  	u32 *qos_save_regs[MAX_QOS_REGS_NUM];
->  	int num_clks;
->  	struct clk_bulk_data *clks;
-> +	struct device_node *node;
-> +	struct regulator *supply;
->  };
->  
->  struct rockchip_pmu {
-> @@ -571,18 +574,67 @@ static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
->  	return 0;
->  }
->  
-> +static int rockchip_pd_regulator_disable(struct rockchip_pm_domain *pd)
-> +{
-> +	return pd->supply ? regulator_disable(pd->supply) : 0;
-> +}
-> +
-> +
-> +static int rockchip_pd_regulator_enable(struct rockchip_pm_domain *pd)
-> +{
-> +	struct rockchip_pmu *pmu = pd->pmu;
-> +	struct device_node *main_node;
-> +
-> +	if (!pd->supply) {
-> +		/*
-> +		 * Find regulator in current power domain node.
-> +		 * devm_regulator_get() finds regulator in a node and its child
-> +		 * node, so set of_node to current power domain node then change
-> +		 * back to original node after regulator is found for current
-> +		 * power domain node.
-> +		 */
-> +		main_node = pmu->dev->of_node;
-> +		pmu->dev->of_node = pd->node;
-> +		pd->supply = devm_regulator_get(pmu->dev, "domain");
-> +		pmu->dev->of_node = main_node;
-> +		if (IS_ERR(pd->supply)) {
-> +			pd->supply = NULL;
-> +			return 0;
-> +		}
-> +	}
-> +
-> +	return regulator_enable(pd->supply);
-> +}
-> +
->  static int rockchip_pd_power_on(struct generic_pm_domain *domain)
->  {
->  	struct rockchip_pm_domain *pd = to_rockchip_pd(domain);
-> +	int ret;
-> +
-> +	ret = rockchip_pd_regulator_enable(pd);
-> +	if (ret) {
-> +		dev_err(pd->pmu->dev, "Failed to enable supply: %d\n", ret);
-> +		return ret;
-> +	}
->  
-> -	return rockchip_pd_power(pd, true);
-> +	ret = rockchip_pd_power(pd, true);
-> +	if (ret)
-> +		rockchip_pd_regulator_disable(pd);
-> +
-> +	return ret;
->  }
->  
->  static int rockchip_pd_power_off(struct generic_pm_domain *domain)
->  {
->  	struct rockchip_pm_domain *pd = to_rockchip_pd(domain);
-> +	int ret;
->  
-> -	return rockchip_pd_power(pd, false);
-> +	ret = rockchip_pd_power(pd, false);
-> +	if (ret)
-> +		return ret;
-> +
-> +	rockchip_pd_regulator_disable(pd);
-> +	return ret;
->  }
->  
->  static int rockchip_pd_attach_dev(struct generic_pm_domain *genpd,
-> @@ -663,6 +715,7 @@ static int rockchip_pm_add_one_domain(struct rockchip_pmu *pmu,
->  
->  	pd->info = pd_info;
->  	pd->pmu = pmu;
-> +	pd->node = node;
->  
->  	pd->num_clks = of_clk_get_parent_count(node);
->  	if (pd->num_clks > 0) {
-> 
+>  drivers/interconnect/qcom/Kconfig   |   11 +
+>  drivers/interconnect/qcom/Makefile  |    2 +
+>  drivers/interconnect/qcom/qcs8300.c | 2088 +++++++++++++++++++++++++++
+>  drivers/interconnect/qcom/qcs8300.h |  177 +++
+>  4 files changed, 2278 insertions(+)
+>  create mode 100644 drivers/interconnect/qcom/qcs8300.c
+>  create mode 100644 drivers/interconnect/qcom/qcs8300.h
 
+The driver looks pretty close to sa8775p one. Would it make sense to
+have a single driver instead? Or would it complicate things
+significantly?
 
-
-
+-- 
+With best wishes
+Dmitry
 
