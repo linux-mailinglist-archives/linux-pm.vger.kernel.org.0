@@ -1,81 +1,125 @@
-Return-Path: <linux-pm+bounces-13982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-13983-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB632974A57
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 08:23:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14874974B83
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 09:35:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AA8B2868D1
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 06:23:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B31771F27B1D
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 07:35:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901577DA87;
-	Wed, 11 Sep 2024 06:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CFFB1442E3;
+	Wed, 11 Sep 2024 07:34:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="q4bx29TG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CRmjnZJk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from classfun.cn (unknown [129.204.178.38])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B3D1DA5E;
-	Wed, 11 Sep 2024 06:23:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.204.178.38
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E71B13D26B
+	for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 07:34:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726035813; cv=none; b=ONhkGZ9SUO4xA/fZ7RFSLTdPdI7eKE7tqBNOB1lFhWdL/ewpYhXXsm/PcJu/Lmu3qZxb/bMZigb9rgbCykXiDG98jitkF3w06oqKa5yPPOEpHLGUYZesSWBLdoD/POqEgRljKIBnqkQX3CBBLYgQBiKFWbkRmWTDGW+dTYKPnoo=
+	t=1726040096; cv=none; b=ZQ2HrJkD3+KFPrnbVk44BmhGCgydkBnedD4lG5rN8t8eCcsQfyzHcMCozSA44wOYT9abno1oquNYwGJY89t//RL7V+K/haYVpDUsNmrS3I5oSVS5LZXb2LNWAr8mBhJVXMBl+sN3s//0gFU6Pkrj2kmjN31V/EkSD0DrIzrCiDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726035813; c=relaxed/simple;
-	bh=4wgafjl/GF7A9Wh1sZeg2hoiXJBXDO/q6k6MudD+87I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UbFUo+mHwkC619YlbDNuv5umHhlngpb8oU0r48/YT/SOe311RttgWYTy0KVLkCrZl3IhWUst/ibNt+Srw8T5G9nJwC7mubm0ga6yR+0sTLWXLJLyUgZnC1mjK/+bJjAuwVn96jfhUXjP43Ce3fcItMiOaULEAU3hN30zF5flZDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=q4bx29TG; arc=none smtp.client-ip=129.204.178.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=classfun.cn
-Received: from [192.168.0.160] (unknown [220.162.71.13])
-	(Authenticated sender: bigfoot)
-	by classfun.cn (Postfix) with ESMTPSA id 9DCEC78909;
-	Wed, 11 Sep 2024 14:23:16 +0800 (CST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn 9DCEC78909
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=classfun.cn;
-	s=default; t=1726035798;
-	bh=G6ZlhgSqLu1jIrj4ZJvMQOKzybekvd6XIOY3ry0RzrI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=q4bx29TGnWLvZaZywL9HFJeY/ltajfcnMykw73XRyhlnBf4+sHCa7aFUr3rmDjGUB
-	 WjKAwHBYa3FITUg2c364dnLwlTip/8o25Fy7swUc5BwzQRF+URpqpcRZ2Es/aP/837
-	 n2PW5QHy83Ysm1FMrVoGxqVgAqytD+Gfl6yKUfUw=
-Message-ID: <50537ca6-2324-4cbf-8036-a8c5cadd52be@classfun.cn>
-Date: Wed, 11 Sep 2024 14:23:22 +0800
+	s=arc-20240116; t=1726040096; c=relaxed/simple;
+	bh=yJYSLHPhIpsOWTuLVPuI4OyVRB2m6wnHAj5BQJb3wks=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EhQlurMtceAbbN+noXlezKiZpn9R3fh9yAyJiIcaUDrEv0QS7waLUZFmhK4uXkZSdhzyKgjfVeernvRQ6bdQvU+M/nl5Aaxis/1iHOm4XSpovUfX0/qhoNdPlXCQI4/8XSWZm1xG/gdFHWeNXDXc+clL3JwBHHoXODOGRJrkPI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CRmjnZJk; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-42ca4e0299eso37984345e9.2
+        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 00:34:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1726040093; x=1726644893; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wKhoG9fBZaRiZRjh6iJJjrGOMArJHWjvPAgovxvapjU=;
+        b=CRmjnZJkhOp2G4Mun1dvegAW/3ualE23FiOHx5FUEFRQH5Ee2kSTRJRd29B0r2viXp
+         CIf8hBMHxy699FfO47KlJx0dn+n6dd4f2/KL1gMNbl1mC5RC8c6+H+TmIByep+JYkOP0
+         hXqpzWm7YZckyrEbe42EUd8RG05WRbUqAEHzUwMX/oIrmHAis/T6ZM7bWC+t8AhMFK/3
+         cnOQZIWJLPJhS85DLIKVxSm84P6vpTvJhQDhbSNICjR3RGmWSJ7EOqjjt3RMF+AruUV2
+         JU7m8Clqzp+U4fM1URA2RmT7qQQFr34DJKNaCfsp1118YCPxeZ5EpwNgRx2NPVzfzxM5
+         L/JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726040093; x=1726644893;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wKhoG9fBZaRiZRjh6iJJjrGOMArJHWjvPAgovxvapjU=;
+        b=tQK/kpGTw52B68BpUbqqfcdbdRpBnHAOGNvTgFQPC2+SRibKvvt7nCHVtOTxF7F+kQ
+         S16QmpNUwrG31xjeLJUqzRJZ2jt5LMCVlB8PkwJ8C2LGi/HQTjsV19rzy4+niFXvFe0V
+         RixTRuqkAH4KkurbaP1/9gaVk2vBGIxQKqGq7xsWAi5mMmS+mHq+pR4PgihrEHGDZXvZ
+         r6WUtbxZzxgmjY8ER+4ZUyOnkz/cl3cDxvGaRvemEEPZIIdgy96b4315Vs2ZBmXO37JJ
+         Bk3cFkcVRD/ZEvJ/B8LOwr28M/UuVaHSc7ja685oEAx1iE+0ySujND4ga5g/mPY6VdAH
+         o77A==
+X-Gm-Message-State: AOJu0YyOqa/u7bLdvq6aUYO3haGs18w8pAIFCIyVzxW9eLx/y3Yum/a4
+	d8hHWN94fCHWKzgHCevQ6fG28KRJXVLXmd8B3yNb/Y9SVRc87Mp9NBRWWLrP4Hs=
+X-Google-Smtp-Source: AGHT+IFpGCj0Tw5zkjwOEi1XWHI6pzbgbVe292Ahnngwx+HF0oYboeu1oE/5oSKH86ItadSsdbuKHA==
+X-Received: by 2002:a05:600c:1d14:b0:42c:a802:a8cb with SMTP id 5b1f17b1804b1-42cad760f2amr107178635e9.15.1726040092636;
+        Wed, 11 Sep 2024 00:34:52 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42cb0642f99sm131498675e9.40.2024.09.11.00.34.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Sep 2024 00:34:52 -0700 (PDT)
+Date: Wed, 11 Sep 2024 10:34:48 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: linux-pm@vger.kernel.org
+Subject: [bug report] cpufreq/amd-pstate-ut: Add test case for mode switches
+Message-ID: <5cdbf27a-1baa-440f-a943-d2aaeec99b38@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/9] Introduce Photonicat power management MCU driver
-To: Chukun Pan <amadeus@jmu.edu.cn>
-Cc: linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux@roeck-us.net, wim@linux-watchdog.org
-References: <20240906093630.2428329-1-bigfoot@classfun.cn>
- <20240908093002.26317-1-amadeus@jmu.edu.cn>
-Content-Language: en-US
-From: Junhao Xie <bigfoot@classfun.cn>
-In-Reply-To: <20240908093002.26317-1-amadeus@jmu.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2024/9/8 17:30, Chukun Pan wrote:
->> Initial support for the power management MCU in the Ariaboard Photonicat
->> This patch series depends on Add support for Ariaboard Photonicat RK3568 [1]
-> 
-> The official website says it's "Renesas RA2E1 cortex M23 ultra-low power MCU"
-> Perhaps renaming the 'Photonicat MCU' to 'Renesas RA2E1 MCU' would be better?
+Hello Mario Limonciello,
 
-Renesas RA2E1 is a MCU product line, and Ariaboard wrote firmware for this MCU.
-Maybe "Renesas RA2E1 MCU in Photonicat" would be better?
+Commit e121c01c0422 ("cpufreq/amd-pstate-ut: Add test case for mode
+switches") from Aug 31, 2024 (linux-next), leads to the following
+Smatch static checker warning:
 
+	drivers/cpufreq/amd-pstate-ut.c:290 amd_pstate_ut_check_driver()
+	error: uninitialized symbol 'mode2'.
 
-Best regards,
-Junhao
+drivers/cpufreq/amd-pstate-ut.c
+    271 static void amd_pstate_ut_check_driver(u32 index)
+    272 {
+    273         enum amd_pstate_mode mode1, mode2;
+    274         int ret;
+    275 
+    276         for (mode1 = AMD_PSTATE_DISABLE; mode1 < AMD_PSTATE_MAX; mode1++) {
+    277                 ret = amd_pstate_set_mode(mode1);
+    278                 if (ret)
+    279                         goto out;
+    280                 for (mode2 = AMD_PSTATE_DISABLE; mode2 < AMD_PSTATE_MAX; mode2++) {
+    281                         if (mode1 == mode2)
+    282                                 continue;
+    283                         ret = amd_pstate_set_mode(mode2);
+    284                         if (ret)
+    285                                 goto out;
+    286                 }
+    287         }
+    288 out:
+    289         if (ret)
+--> 290                 pr_warn("%s: failed to update status for %s->%s: %d\n", __func__,
+    291                         amd_pstate_get_mode_string(mode1),
+    292                         amd_pstate_get_mode_string(mode2), ret);
+
+mode2 isn't initialized if amd_pstate_set_mode() fails on the first iteration.
+
+    293 
+    294         amd_pstate_ut_cases[index].result = ret ?
+    295                                             AMD_PSTATE_UT_RESULT_FAIL :
+    296                                             AMD_PSTATE_UT_RESULT_PASS;
+    297 }
+
+regards,
+dan carpenter
 
