@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-14041-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14042-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D6AB975A11
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 20:10:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F156D975A14
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 20:11:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0706B21BA3
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 18:10:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A2F21F21044
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 18:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86B6E1B150F;
-	Wed, 11 Sep 2024 18:10:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0DEA1B532B;
+	Wed, 11 Sep 2024 18:11:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PQianliv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rf4GkJcJ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DECD2CCAA;
-	Wed, 11 Sep 2024 18:10:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896822CCAA;
+	Wed, 11 Sep 2024 18:11:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726078245; cv=none; b=e1dJ49b759h/fOZh4adqex+Jz7J4wTpPs9Y4XHf59ru03Lm2D82gF/eDC0r9T+66FRKIcQrN0SvAMsl2ecz43nMWuNEtlz9UX3kNjwCPpjWBHXxafxaaME+71fllk8JtcnlrBLzRHpaJCtyVuY6Ck97uX3dsvqr/K0jIlcuzzYU=
+	t=1726078265; cv=none; b=BI9Ik3xPksKlagvJdRIOy5Z5fG+neJZFkUQH727oy1ROIXa1Kc/3gHSQJI37vKUvVShIGtPdq1Cr0lSGzHQR8x3OgScbpHOCwJi1cKCjACdiO4wVpONVkqF6kItrDaCsn/F+3u33k3EzYYHtKyOCTJd6KeD9wOyUxADcR4XJt6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726078245; c=relaxed/simple;
-	bh=R8TDDE5JNXK8OC+GW4QHvppH3MOK1tDMKuVK8Q3Th8U=;
+	s=arc-20240116; t=1726078265; c=relaxed/simple;
+	bh=P86GHLbfOSrujNh/8UxUILXleCd4X5OE/x8QF0pgbEQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TH+Juxa5kpBVhT3MF7blYkCtdzKQssRrAsnwkE0cQHB6xLPG1LEkaM4ZBoHe+fkrugci6F/sT8bLybVjghcafg5wV2hX6uq8/v7hPjMCOpY6tQFWfxif4QZ5+v9io8yCIMNsEgEr3dCuKNseBMd0dDx1A+B+r1m4Ofh2M9y9VF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PQianliv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54593C4CEC0;
-	Wed, 11 Sep 2024 18:10:40 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=n4TSBrKWbhsI1sW5k4cVKl3XBaV/Ty05mTJ0hjPoNGSVxGO1WLye4oWI9xKorgBscpk/EOTCZ8Gl5tcK91g6Sj97pVKU+phvwOY6x3knpiOl74cGo8ck4Six26a1jaL1P1q3s2AwSbNfVYevyEMqauIr9n3rh/QAqwu+n4tYkmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rf4GkJcJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66939C4CEC0;
+	Wed, 11 Sep 2024 18:11:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726078244;
-	bh=R8TDDE5JNXK8OC+GW4QHvppH3MOK1tDMKuVK8Q3Th8U=;
+	s=k20201202; t=1726078265;
+	bh=P86GHLbfOSrujNh/8UxUILXleCd4X5OE/x8QF0pgbEQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PQianlivyLxNU8resVBv3Z/zEvOCWopMq7HYhRwv29K1xM6tMLBDgh993nz2/oIbi
-	 o+Jndg5VkeSWrTPgUJ3viMJP3gM7ohovSMVdtALEo1ysr5eWxjYV2ciBScRsOZ+rYh
-	 x1KaMeYQlOaXeH59KJnjbwZekxUkPyNfj5Iyb97+/YCqQQPtrORt2G0iZjPVmcR0ir
-	 hydM/v6DdJwwXytRfz3WR5OplTLLbGS/93YGBUpfxzES2nFZQ4uN7jmfj278o/rCS0
-	 o/Pxf5byK0k1yup7jFYPvKccbggNI/6eS0nMyqazSi3f2WZ3dxbqPWnh4/p+A4PYuR
-	 j+w/qhg3UrBpw==
-Date: Wed, 11 Sep 2024 19:10:38 +0100
+	b=rf4GkJcJWHTjLNRpciGlTXcOJxfQrEXulvQiHEMXqKYV0kH7YYhvVF0O6mzljiwwz
+	 vNSiRxn7bGRD7/OaID8cyFRzqMC6k8wU6nkkLxtC31zXmbkHQBHyFZK/7eFEXJtsUt
+	 an1u25dYNUYiLD7EEIAyGb9kwdzWDOjpYJhKlAe6VvlthsDJcXIpU4I4JrNFbzOdLv
+	 dUGwHv6cFOtOidouOr52C8j4iV9/SMQhIQDOG4FRsP2vo1ahtxC7Q24xRhKw53s+VY
+	 4kIlKpnTp7S0x/LqVLbROTjnJtJbNT0a73DKvgsTjUQPQnTkz8xsJFS6b3C5xaeKGT
+	 I7yEq1TbikTGw==
+Date: Wed, 11 Sep 2024 19:10:58 +0100
 From: Conor Dooley <conor@kernel.org>
 To: Nick Chan <towinchenmi@gmail.com>
 Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
@@ -63,11 +63,11 @@ Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
 	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
 	Konrad Dybcio <konradybcio@kernel.org>,
 	Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-Subject: Re: [PATCH 03/22] dt-bindings: cpufreq: apple,cluster-cpufreq: Add
- A10 compatible
-Message-ID: <20240911-armless-waving-4aa6d754f68f@spud>
+Subject: Re: [PATCH 04/22] dt-bindings: pinctrl: apple,pinctrl: Add A7-A11
+ compatibles
+Message-ID: <20240911-grievance-lunchroom-a1c6a5d19b6a@spud>
 References: <20240911084353.28888-2-towinchenmi@gmail.com>
- <20240911084353.28888-5-towinchenmi@gmail.com>
+ <20240911084353.28888-6-towinchenmi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,60 +75,59 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="UP0hu8KK5KxLZHX0"
+	protocol="application/pgp-signature"; boundary="Ge5S4j+4Y2t/oaKv"
 Content-Disposition: inline
-In-Reply-To: <20240911084353.28888-5-towinchenmi@gmail.com>
+In-Reply-To: <20240911084353.28888-6-towinchenmi@gmail.com>
 
 
---UP0hu8KK5KxLZHX0
+--Ge5S4j+4Y2t/oaKv
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 11, 2024 at 04:40:53PM +0800, Nick Chan wrote:
-> The block found on the Apple A10 SoC is compatible with the
-> existing driver so just add its per-SoC compatible.
+On Wed, Sep 11, 2024 at 04:40:54PM +0800, Nick Chan wrote:
+> The block found on Apple's A7-A11 SoCs are compatible with the
+> existing driver so add their per-SoC compatibles.
 >=20
 > Signed-off-by: Nick Chan <towinchenmi@gmail.com>
 > ---
->  .../devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml    | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 >=20
-> diff --git a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpuf=
-req.yaml b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.=
-yaml
-> index 76cb9726660e..e0d1a9813696 100644
-> --- a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-> +++ b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-> @@ -24,7 +24,9 @@ properties:
->                - apple,t8112-cluster-cpufreq
->            - const: apple,cluster-cpufreq
->        - items:
-> -          - const: apple,t6000-cluster-cpufreq
-> +          - enum:
-> +              - apple,t8010-cluster-cpufreq
-> +              - apple,t6000-cluster-cpufreq
+> diff --git a/Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml=
+ b/Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+> index 9c07935919ea..63737d858944 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+> @@ -18,6 +18,11 @@ properties:
+>    compatible:
+>      items:
+>        - enum:
+> +          - apple,s5l8960x-pinctrl
+> +          - apple,t7000-pinctrl
+> +          - apple,s8000-pinctrl
+> +          - apple,t8010-pinctrl
+> +          - apple,t8015-pinctrl
 
-Alphanumerical order please, if/when you're resending.
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Same here.
 
->            - const: apple,t8103-cluster-cpufreq
->            - const: apple,cluster-cpufreq
-> =20
+>            - apple,t8103-pinctrl
+>            - apple,t8112-pinctrl
+>            - apple,t6000-pinctrl
 > --=20
 > 2.46.0
 >=20
 
---UP0hu8KK5KxLZHX0
+--Ge5S4j+4Y2t/oaKv
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZuHdHgAKCRB4tDGHoIJi
-0skcAQDtQ82Bn9KiflukV0Y0rWGpCmsNimvhc7fKKTMqqrPeSQD/VNWhWNXMSzOY
-guQoHBGfymqS99Rchv4YjvXioOxe3gI=
-=3+QK
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZuHdMgAKCRB4tDGHoIJi
+0iVdAP9rhpBbyiSuLC++4seWrUilKCxfsCmheL26bfkZ2ZFbBAD6A09IXFP5QkE0
+xz87BFAbRsumftdhrlPYwTZuldQM5AE=
+=8Dgp
 -----END PGP SIGNATURE-----
 
---UP0hu8KK5KxLZHX0--
+--Ge5S4j+4Y2t/oaKv--
 
