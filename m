@@ -1,173 +1,173 @@
-Return-Path: <linux-pm+bounces-14047-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14048-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18B75975A60
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 20:27:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E110975A74
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 20:40:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B70AA1F27965
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 18:27:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F8461C22C44
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 18:40:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30A431B81D5;
-	Wed, 11 Sep 2024 18:27:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D2A81B6558;
+	Wed, 11 Sep 2024 18:40:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FzeOR0wt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i+1qFSI4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E948E1B791B;
-	Wed, 11 Sep 2024 18:27:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1574F1B4C4A;
+	Wed, 11 Sep 2024 18:40:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726079259; cv=none; b=se7AEGq8Urkob6z49s1qh9TgX7CbRg1L3rGlnSFtuUGcMxtM5B/7RWmuLAQrJY2QseBXZc6UaR9J4bK8gKTmzDzFwOHjAakxz3F/TTT0yYBJnuzgJ6NPZ1eucEh47PT7qHQv1GZJfAx5CcrMml+rGaR16rVLHKwbhLu5VeMz2W4=
+	t=1726080017; cv=none; b=azb1fPFHMhCXn6i+Hhoa/8TtOROJf96a81M3o3naD7qphNAeWo+2FiyuXlEXhgrVQJBcp7bB1mfU8zzmV/xKw7Of1QvKz72ENMEqVB2SwMl+F13KdUHi8aXjtLJfALI+5XeR2ByAgvKxvT+6F8oif5lZRrrSsazPn1xXl67eYrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726079259; c=relaxed/simple;
-	bh=bTzP8Pl9KjbaZjN4kFCpfYUk8wbwvQOyYHjiL9IH6EM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X3tCpCIA44l9HYijU2iEguEZ1IoFCa+rx2nvBKLqcuwBPTqfjrAF1wA2vPYI75xIJYuT7dlboruv961QRsK/DxHJa1hVCbz6j2aLgtdGkHiystqVxMIuyOZ+UevF11u44ULY6PG8PU0B9KsOOeLHaWse9lw+fvN+SK5Yb6cdFSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FzeOR0wt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB029C4CECC;
-	Wed, 11 Sep 2024 18:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726079258;
-	bh=bTzP8Pl9KjbaZjN4kFCpfYUk8wbwvQOyYHjiL9IH6EM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FzeOR0wtqHzLl70v7uwtl/0Cdnly0ifghGuAeqARu2YfBACVdLr3MLdW4K1OZtABX
-	 8Y/gUjidRVNu9RY65ydjvKVt4cL/dMEWn+QDUP7IaOOg0ni6hj7hADAdjc1FQ/LH26
-	 MSWNJyL2wIW+LljEPr9Qdylwd1S/hXDxQl4gkrteV7Pyb57yvTxrjTZ0V5iRzVcivy
-	 2vDgJghE6eteZksXiMemtgmCzZGpB8xbjgDY2WgfsBIxO/CUPEfhDsZwBxOExHycKu
-	 22kdXKDDUCE+HcFNbBQmsEpxWGdiZVO4k39Dobpz2fzgsEK/B40qDw07DrIYLcPp81
-	 iof14PHuEcy/A==
-Date: Wed, 11 Sep 2024 19:27:31 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Nick Chan <towinchenmi@gmail.com>
-Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-Subject: Re: [PATCH 05/22] dt-bindings: arm: apple: Add A7 devices
-Message-ID: <20240911-surprise-sprinkler-1ca697744a95@spud>
-References: <20240911084353.28888-2-towinchenmi@gmail.com>
- <20240911084353.28888-7-towinchenmi@gmail.com>
- <20240911-similarly-paragraph-0ca7a1d566c3@spud>
- <fae6aad7-de6a-49ba-acf4-e1aa93baad2e@gmail.com>
+	s=arc-20240116; t=1726080017; c=relaxed/simple;
+	bh=7LZvl8bR4J5JCUKcVqkF7fXZODe/gIENMVevu9s2WTE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oGNGNr23lMluykWlotnEvrIH0y20lBhloBYT4OuNgStHQON2moV6rAq84oPw0B5NBbh6xd3br7qmXY+lT8oXokKCn4sToSjizhIA77XWaQFVt2X6zx8h4bcYcAnhZpB1nMZwtA4mYkMeQJpZOZ5qLrSiudD/H3n3eLKL30LYHoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i+1qFSI4; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7c1324be8easo917217a12.1;
+        Wed, 11 Sep 2024 11:40:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726080015; x=1726684815; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1+7p3Z5qCC26Ye8mLVaKGA4gMsf3x0zTnnTmPLOwPnE=;
+        b=i+1qFSI4gY676GNwveSu4V7ORnz6yXZTmQvdx4cK/sXoBOyrCHdXukbiV3+iGF2vCx
+         JtvB6a7ixrfy51KZAqH8HUBw/B5dfnYl7r/F6/zOsrudO7JyO8YvXZiWGZbZlcQbM8RZ
+         S1qNC8blUoQsJei5UK9ykRQCjjSJfhbgdKlPR8G6YbtGWZvdNwltGDuNG+zBBreiYlDe
+         G5x8L51uS+vM+qX6XyGoFZTg291f4InaoYaQVeyPGmUii+vUCmt1rKDUXBHbMO8uje+9
+         d0Q7gGDZ8Hby/J4J1Dcw6xG8LyaA9V5F2Dulb1ckJ9H4BQyp7UnUVsp5NO/Cp5KtDf/D
+         KPnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726080015; x=1726684815;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1+7p3Z5qCC26Ye8mLVaKGA4gMsf3x0zTnnTmPLOwPnE=;
+        b=Zfyvxo0sGUxiKe6cxz0deVm9SixlrdwFhIZuKqFO4uNyTAF/ZBl+27cl5w8Bsga7m/
+         EXBK3BbOnxcs05Wj91NBLb6QqY9Y5u3HOpgG5mvMNxxaoFG/1L42kDthFplRcF2yjKbd
+         hzCss07Pi2mbcRoWXJFmmw1flcu3L7YqvfBMCN1rMkeAtkS/kcYOnMaqJmEDRTIUl8cs
+         kLKcnkOx4vVrosq269ifxAKIKK9o01grbyOG5QSJ9RT1NsUNTd1Pq8piao4maoRCKrCn
+         bqNMI99IOGg5zJl49RFV1V/Uqm7I0U7w9Pp9GEBFusd0FkVGDKOgbK5rTNor6aQbe69m
+         QJMg==
+X-Forwarded-Encrypted: i=1; AJvYcCUae9TUCIjPUVHo0W+pcGMOvZYWPVQyTL3vZE/SdCO3JxBFW4Tm/WHndgIoqHnI3FnkNzaiqbGSD3UQ5UBK@vger.kernel.org, AJvYcCVIBKvGTTtxziesPcP9FJ2pXlKSq/rw9UQ1655mtrf5npn/f+t/iFOGVqj1InupdLfBsg18YigqfW8=@vger.kernel.org, AJvYcCVdQhGNLQ2uv5rcGD5winkTVSPovPuKHL/NRAzt4x2P76HVFEa7mc/CGNzeuHGTNddGGeubfCBC2Cks6AfWWaQ=@vger.kernel.org, AJvYcCVuaxwKtkPVJsQVI0oMDs2sHNWZvGHfNTHhHtD85KI+FqQDAxsQpjDVIa/ZfrQkk/dQ0ZoozYuoEIQJ@vger.kernel.org, AJvYcCXIcYvrXZD+wseqhNiZ3kmfV49P14JOqYyVsApwyTCznGW4HH+rz5U1JUkTePqnYJ4Duac4RnEE0569xg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/zFRjcrTw9/c8GA1H0F3AmgiseC6zEhNOVcUsPHjGW/v3IHqO
+	Zb7diNYCfInhlOHcfnf9PT3P4udcM1SMvTxcYs6vRBOyauHRZ83z
+X-Google-Smtp-Source: AGHT+IGWNpBp0JEJJKNe7VJxVt4ola9QUy4T9WHvT1vG5vjPcbQJy+069xnc1aIkGvbTJudOOVEgTw==
+X-Received: by 2002:a17:902:e80f:b0:205:5f95:c283 with SMTP id d9443c01a7336-2074c5d28d9mr77798925ad.4.1726080014877;
+        Wed, 11 Sep 2024 11:40:14 -0700 (PDT)
+Received: from [192.168.0.122] ([59.188.211.160])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2076b039539sm2541905ad.309.2024.09.11.11.40.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Sep 2024 11:40:14 -0700 (PDT)
+Message-ID: <a3849bc0-000a-4290-b2c3-71a50a750495@gmail.com>
+Date: Thu, 12 Sep 2024 02:40:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="fssrPeIGZR/fKecO"
-Content-Disposition: inline
-In-Reply-To: <fae6aad7-de6a-49ba-acf4-e1aa93baad2e@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 01/22] dt-bindings: arm: cpus: Add Apple A7-A11 CPU cores
+Content-Language: en-MW
+To: Conor Dooley <conor@kernel.org>
+Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+References: <20240911084353.28888-2-towinchenmi@gmail.com>
+ <20240911084353.28888-3-towinchenmi@gmail.com>
+ <20240911-unsuited-pranker-60a7d0b6caf9@spud>
+From: Nick Chan <towinchenmi@gmail.com>
+In-Reply-To: <20240911-unsuited-pranker-60a7d0b6caf9@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
---fssrPeIGZR/fKecO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 12, 2024 at 02:24:22AM +0800, Nick Chan wrote:
->=20
->=20
-> On 12/9/2024 02:13, Conor Dooley wrote:
-> > On Wed, Sep 11, 2024 at 04:40:55PM +0800, Nick Chan wrote:
-> >> This adds the following apple,s5l8960x platforms:
-> >>
-> >> - iPhone 5s
-> >> - iPad Air (1)
-> >> - iPad Mini 2
-> >> - iPad Mini 3
-> >>
-> >> Signed-off-by: Nick Chan <towinchenmi@gmail.com>
-> >> ---
-> >>  .../devicetree/bindings/arm/apple.yaml        | 26 ++++++++++++++++++-
-> >>  1 file changed, 25 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/arm/apple.yaml b/Docume=
-ntation/devicetree/bindings/arm/apple.yaml
-> >> index 883fd67e3752..3c81008f0e96 100644
-> >> --- a/Documentation/devicetree/bindings/arm/apple.yaml
-> >> +++ b/Documentation/devicetree/bindings/arm/apple.yaml
-> >> @@ -12,7 +12,14 @@ maintainers:
-> >>  description: |
-> >>    ARM platforms using SoCs designed by Apple Inc., branded "Apple Sil=
-icon".
-> >> =20
-> >> -  This currently includes devices based on the "M1" SoC:
-> >> +  This currently includes devices based on the "A7" SoC:
-> >> +
-> >> +  - iPhone 5s
-> >> +  - iPad Air (1)
-> >> +  - iPad Mini 2
-> >> +  - iPad Mini 3
-> >> +
-> >> +  Devices based on the "M1" SoC:
-> >> =20
-> >>    - Mac mini (M1, 2020)
-> >>    - MacBook Pro (13-inch, M1, 2020)
-> >> @@ -65,6 +72,23 @@ properties:
-> >>      const: "/"
-> >>    compatible:
-> >>      oneOf:
-> >> +      - description: Apple A7 SoC based platforms
-> >> +        items:
-> >> +          - enum:
-> >> +              - apple,j71  # iPad Air (Wi-Fi)
-> >> +              - apple,j72  # iPad Air (Cellular)
-> >> +              - apple,j73  # iPad Air (Cellular, China)
-> >> +              - apple,j85  # iPad mini 2 (Wi-Fi)
-> >> +              - apple,j85m # iPad mini 3 (Wi-Fi)
-> >> +              - apple,j86  # iPad mini 2 (Cellular)
-> >> +              - apple,j86m # iPad mini 3 (Cellular)
-> >> +              - apple,j87  # Apple iPad Mini 2 (Cellular, China)
-> >> +              - apple,j87m # Apple iPad Mini 3 (Cellular, China)
-> >> +              - apple,n51  # iPhone 5s (GSM)
-> >> +              - apple,n53  # iPhone 5s (LTE)
-> >> +          - const: apple,s5l8960x
-> >=20
-> > Is the "x" here a wildcard?
-> No. This is part of the SoC ID. This is the legacy naming from when Apple
-> used Samsung SoCs for iPhones and iPods, and every SoC would have an ID
-> beginning with "s5l", and ending with a "x". Apple A7 is last SoC to use
-> this legacy naming scheme.
+On 12/9/2024 02:16, Conor Dooley wrote:
+> On Wed, Sep 11, 2024 at 04:40:51PM +0800, Nick Chan wrote:
+>> Add the following CPU cores:
+>>
+>> - apple,cyclone: A7 cores
+>> - apple,typhoon: A8 cores
+>> - apple,twister: A9 cores
+>> - apple,hurricane-zephyr: A10 logical cores
+>> - apple,monsoon: A11 performance cores
+>> - apple,mistral: A11 efficiency cores
+>>
+>> In the Apple A10, there are physical performance-efficiency cores that
+>> forms logical cores to software depending on the current p-state, and
+>> only one type of core may be active at one time.
+>>
+>> Signed-off-by: Nick Chan <towinchenmi@gmail.com>
+>> ---
+>>  Documentation/devicetree/bindings/arm/cpus.yaml | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
+>> index f308ff6c3532..3959e022079f 100644
+>> --- a/Documentation/devicetree/bindings/arm/cpus.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
+>> @@ -89,6 +89,12 @@ properties:
+>>        - apple,blizzard
+>>        - apple,icestorm
+>>        - apple,firestorm
+>> +      - apple,mistral
+>> +      - apple,monsoon
+>> +      - apple,hurricane-zephyr
+>> +      - apple,twister
+>> +      - apple,typhoon
+>> +      - apple,cyclone
+> 
+> Same on this one, can you add these in alphanumerical order, even if the
+> existing 3 devices are not in it? You could take the opportunity to
+> reshuffle icestorm and firestorm while you're at it.
+(Same goes for the watchdog, pinctrl and cluster-cpufreq bindings)
+I am not actually sure what is the right thing to do here. It seems that
+these bindings are
+originally sorted using SoC types (desktop or mobile) and generations.
+But then again I have
+looked at some other in-tree bindings from asahi, and it seems to be a
+mix of alphabetical
+and logical sorting in the way mentioned above.
 
-Okay, thanks for explaining.
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Maybe we can get some clarification from an Asahi Maintainer?
 
-Cheers,
-Conor.
+For the soc-level machine compatibles though, I believe that should be
+retaining the logical
+order instead of trying to use alphabetical order.
 
+> 
+> Cheers,
+> Conor.
+> 
+>>        - arm,arm710t
+>>        - arm,arm720t
+>>        - arm,arm740t
+>> -- 
+>> 2.46.0
+>>
 
---fssrPeIGZR/fKecO
-Content-Type: application/pgp-signature; name="signature.asc"
+Nick Chan
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZuHhEwAKCRB4tDGHoIJi
-0uHRAQDju3CGVnd1h/VgQ6q1bnaeUl2MEZWsbtj39yL2DPKNqAEAxPIcA750h/vf
-rL1jXHUk3HhjbijhRsauVjU6Io/Q8wg=
-=DWI0
------END PGP SIGNATURE-----
-
---fssrPeIGZR/fKecO--
 
