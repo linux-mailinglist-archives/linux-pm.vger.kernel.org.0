@@ -1,74 +1,80 @@
-Return-Path: <linux-pm+bounces-14019-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14020-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C290C9751A6
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 14:15:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FB9E9751B9
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 14:16:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01A2D1C229AF
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 12:15:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C76CE281482
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 12:16:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3457F199926;
-	Wed, 11 Sep 2024 12:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7078B187355;
+	Wed, 11 Sep 2024 12:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G5aFGvH4"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EJw7e1IS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6FB189BBD;
-	Wed, 11 Sep 2024 12:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B132C190
+	for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 12:16:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726056838; cv=none; b=Hc30TkkM+onTbLkaq3/7/07UheUsf25SNqxO5E13WAQsbMhJjaAuNQ9qmb9CWUgDPGInJw0r+hHBE8NHHx7SWub87TmfiiV+4fUQG8bI5qZJkEFg4YauhmJZm1WBz0fa+uS6zKBPgoHrLqkE+Rd3nrw1snbw51nsZXxOZFg8GkI=
+	t=1726057003; cv=none; b=FzoJbetB/UIxZ6PeuNRsznH1DLB4u+bhxcgSnuZ8wqdj/FlcKmo27oi5ONojArbv0wbVRcD11Z1Du7tIu4lRfNVDHSyGi4Anksh11Cq++JqCg+3hsHbGR5NDYqfOCzWgPf2ma3uqbUj5HVg2sPQDtb/ZZp1vhLXpndkTerZlmtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726056838; c=relaxed/simple;
-	bh=CKO7NWWWSz2NvVfR0jjP8DjzbrlPQ0zU6QxXmpTDue0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NLNOfeE6jzU+jK1JxBCCLRaQklCrIcJp9pdg0iHiGZsUNscjHJdXq7Z2akyPO2f0bR8FKdu46pxUkf/6dFzIayn2IqKujH0JMiWPAusjqgsylxFuiJx4trk9eInbhrHGS3IitRw1jHtQ2zqNniEWlo6b+ZKKQtnHuaWPloD9k0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G5aFGvH4; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-206b9455460so7595935ad.0;
-        Wed, 11 Sep 2024 05:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726056836; x=1726661636; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CKO7NWWWSz2NvVfR0jjP8DjzbrlPQ0zU6QxXmpTDue0=;
-        b=G5aFGvH4co+Q1A9VpjjF/wBDn/NbCB1Fs/RgTVJBbb7zvJ51psyvgkBhNLw03AjoSD
-         fHQq8/8EkQiwrlV4nzatg6gHc7lsioKJkUwLzp24GMKHGG2bK1YfyJA/5/aXbpcXOJet
-         5WFmZPZTUDGwKhMi2zpIYTCZy686KStKal2TF1AesSbIZomtNdo1E0JdVTTx7J21lONj
-         j9RJo8mkaWxSheYsIC5pvxxAyu2NA2z/Ep2kftUFzfJe3Od/MaM5fV0H4betWDOU3TuU
-         H3nYM8X3g3np13hx3sJ8ldxMuRhkAxFKBgjsqx9MaUoqaills0AtuQgeRDhRxzSzoz+1
-         1KYg==
+	s=arc-20240116; t=1726057003; c=relaxed/simple;
+	bh=y+RXBxHW/fG6dmqBGlPAQwmnNgp07f4Kl7fIHvXNDYM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=CweKrKG0RjHZri+UqksOkZYdodkuXHRboXpkzXUbil88Nnez29phlnU9xeOzkIeJpGC477LjBK1eoDkP8LS4QmsGHGGF5lMTM9VRY9UOuszvEWhI99Hw+zSsKMEPMNhi2qegPjrTQhkIHl8C4WGGJp7oEtPd60X+i6O25DbHxpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EJw7e1IS; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1726057000;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jar5EI9omcqYVQEDUhE+fTZ/7hHoS8oVmR3xs0BHXyo=;
+	b=EJw7e1ISkqCoK0GROgnpsVki1MGubweC1qLXcFTPQIShMNwhEASiLQEcJ7SL8XNNR4lNkY
+	lQtAVN/bpgtJcMZZvUBmKNS/FcJBF5oEHk8uiLI5Jo8QMYweTIBEDq0cFRU5/SraXOzo/w
+	3hMCz1B+ij4v57s4WwQYvQAq+2mmgKs=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-223-RMwWdsNePcigfAXqMqMWRQ-1; Wed, 11 Sep 2024 08:16:39 -0400
+X-MC-Unique: RMwWdsNePcigfAXqMqMWRQ-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a8d2e6a6989so245420566b.1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 05:16:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726056836; x=1726661636;
+        d=1e100.net; s=20230601; t=1726056998; x=1726661798;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CKO7NWWWSz2NvVfR0jjP8DjzbrlPQ0zU6QxXmpTDue0=;
-        b=jTXYDVo0wYiTUALRMhbjGhSE5e2l6nY1W6ERw2Plblx29rfBEwmg0gxn6Fcota3w1o
-         1TjDC1UuzMe9Du7LzIhNc80UBK5pbXQHoq3vbXBViJLOV1p67JS/xbybhEnj1epE9S1+
-         ap2XpHaCBaSKOSC1BlDFXSDbTE/Di7cAlBCEQHBpzjnwI+mMNNKG2I4IT24E2pqLSBWh
-         FdFKrGgegXZCRTtXZJIzvxTJ2rXzvwXABOQlOnhO+UrbnQAOcXtHtaG8KUBP0QNAtHVf
-         wWsTgxFDVobt3iIv6WzKnKoHojDhUpoGe5ydjbngMZIathMuLvwof1+71a65iGQravUl
-         3uLg==
-X-Forwarded-Encrypted: i=1; AJvYcCW709MhEHMAFt7hhSGh899T8eSDXMFu7MmEIcwPBylzvjESmbPu2d0ycKr9wcWuSNDUYqspvOlbm8w=@vger.kernel.org, AJvYcCWP4ZQvNn9gEHwmZsqTcfswG5IuaKFQokiS3kPSH/lEtDcNzK2ZpdDsm7WhVO/dahtcka13IC6KVjON@vger.kernel.org, AJvYcCWbwcOU8J+LB/Pqxqr/2jyhNW/xkzYxZDmj1ml9mt5+lmx94mRbVaM0rMWE1/bSJz0nrqGpuxp7I+XFjM6x@vger.kernel.org, AJvYcCWwX2NHIXn9v8rWP2sCJZJOOXVE1un9E4HUi2p61W8nUaHSvKC6MihOLbnJe9utAIWGubZ7w+jgIyE+tA==@vger.kernel.org, AJvYcCXeAmREq3DiWVMFy9iwGxA/TReUpFnfm71BsT+xv89Ps6gEyF9/0lP+xcykg0wZTuDuG9lbjaLN19fTHaYRlqA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKJk2FVafQqtN2NNo4sSc4QfJC8/uYlFYO8yOCpIjJ6do/XC2J
-	oRnpYFrVEpF1WsmlIQhnUq2t8o5oOCssD7H+pL2hvLBGhnsO5+TH
-X-Google-Smtp-Source: AGHT+IGdhEUo8Vuh9+fNRqoiJFys7qBs7E6vjNTWOIbdzrlIFWUOFggUlnmn8v6+uGErb/2AwctFPA==
-X-Received: by 2002:a17:903:230b:b0:202:2e81:27cd with SMTP id d9443c01a7336-2074c760c12mr61204155ad.26.1726056835955;
-        Wed, 11 Sep 2024 05:13:55 -0700 (PDT)
-Received: from [172.20.10.2] ([49.130.85.218])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20710f36266sm62138485ad.283.2024.09.11.05.13.50
+        bh=jar5EI9omcqYVQEDUhE+fTZ/7hHoS8oVmR3xs0BHXyo=;
+        b=p/2uVM1m7xKlXoMDfdgcEPcm4+ulP/Ysj3h33ECwgj2ghUlOaYYKAWRhs1axpGbex7
+         5j2WvfFPzfFyhgakSwWAL5jNc0PaYtmP24fwyQsZwVeGHMsunxX7qnxSXEJ1wQRFzbWv
+         jKLYvJ3s4J0egx43K8bxyrp5+XTq5VOLyKy/WfT5lJjHpp2bf0NrP00caLnQhxyHW/v1
+         tzNHMApriJaBWtxdTXVVWOGtlfG6y8ty7PoW2GGKUYfqnH1IQKIAly/Ovfyb3Vw8yWDq
+         tUAGkyKIrEQBjQ4VqzTZ3VmRv6rbCV4qncYFJJwVji5bGyBimE/d64u2yW5YDDHnsi0f
+         wa0w==
+X-Forwarded-Encrypted: i=1; AJvYcCVy6X8u0s+QiVmtRac1BPHMllLzMy+/gOFuaVmOiDO2BlVxNPPvk6RCoA+6v3ERt2mImG+BfHLwsA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBdz2acrA4grSSgm0zVp2QlNs1D0FUrx2mCCMir8MPdfQWe5Ae
+	iGXEpdYUiQbxRfi6NZu7IlFWDucOz2pRaE+4nYzRgaJHmvNJEj/FKswKYqvuQ6WdEybpZ5vJjyQ
+	WI5sZQS3+YrrMfqHLmV68o0/E9+2iHyGNFXLDtvEGGCFZtoAYhqNn8aG1
+X-Received: by 2002:a17:906:4fd6:b0:a86:8a18:1da0 with SMTP id a640c23a62f3a-a8ffaa979damr435950466b.5.1726056997953;
+        Wed, 11 Sep 2024 05:16:37 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFSAcNYDwvGEAKNumEEzE7Ab0XbdT66tjBaKUNiGnTTHHOQNkLYXXkujZLzoc/QacmN0QZDCQ==
+X-Received: by 2002:a17:906:4fd6:b0:a86:8a18:1da0 with SMTP id a640c23a62f3a-a8ffaa979damr435947466b.5.1726056997409;
+        Wed, 11 Sep 2024 05:16:37 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25951020sm607845866b.66.2024.09.11.05.16.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Sep 2024 05:13:55 -0700 (PDT)
-Message-ID: <369a32dc-330e-4827-a61f-5686f7d90a07@gmail.com>
-Date: Wed, 11 Sep 2024 20:13:48 +0800
+        Wed, 11 Sep 2024 05:16:36 -0700 (PDT)
+Message-ID: <edaa23e8-4b15-479c-a4bb-0f8276c8b862@redhat.com>
+Date: Wed, 11 Sep 2024 14:16:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,31 +82,160 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/22] Initial device trees for A7-A11 based Apple devices
-To: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc: Konrad Dybcio <konradybcio@kernel.org>,
- Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-References: <20240911084353.28888-2-towinchenmi@gmail.com>
-Content-Language: en-MW
-From: Nick Chan <towinchenmi@gmail.com>
-In-Reply-To: <20240911084353.28888-2-towinchenmi@gmail.com>
+Subject: Re: [PATCH v2] platform/x86:intel/pmc: Ignore all LTRs during suspend
+To: Xi Pardee <xi.pardee@linux.intel.com>, irenic.rajneesh@gmail.com,
+ david.e.box@linux.intel.com, ilpo.jarvinen@linux.intel.com,
+ platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20240906184016.268153-1-xi.pardee@linux.intel.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20240906184016.268153-1-xi.pardee@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-The Home Button probably should be assigned KEY_MENU instead of
-KEY_LEFTMETA.
+Hi,
 
-Nick Chan
+On 9/6/24 8:40 PM, Xi Pardee wrote:
+> From: Xi Pardee <xi.pardee@intel.com>
+> 
+> Add support to ignore all LTRs before suspend and restore the previous
+> LTR values after suspend. This feature could be turned off with module
+> parameter ltr_ignore_all_suspend.
+> 
+> LTR value is a mechanism for a device to indicate tolerance to access
+> the corresponding resource. When system suspends, the resource is not
+> available and therefore the LTR value could be ignored. Ignoring all
+> LTR values prevents problematic device from blocking the system to get
+> to the deepest package state during suspend.
+> 
+> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Xi Pardee <xi.pardee@intel.com>
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+
+> 
+> v2:
+> - Add more details to commit message
+> - Fix format: ltr->LTR, S0IX->S0ix, space between name and email
+> 
+> ---
+>  drivers/platform/x86/intel/pmc/core.c | 53 +++++++++++++++++++++++++++
+>  drivers/platform/x86/intel/pmc/core.h |  2 +
+>  2 files changed, 55 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+> index 01ae71c6df59..0ec703af16a4 100644
+> --- a/drivers/platform/x86/intel/pmc/core.c
+> +++ b/drivers/platform/x86/intel/pmc/core.c
+> @@ -714,6 +714,49 @@ static int pmc_core_s0ix_blocker_show(struct seq_file *s, void *unused)
+>  }
+>  DEFINE_SHOW_ATTRIBUTE(pmc_core_s0ix_blocker);
+>  
+> +static void pmc_core_ltr_ignore_all(struct pmc_dev *pmcdev)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(pmcdev->pmcs); i++) {
+> +		struct pmc *pmc;
+> +		u32 ltr_ign;
+> +
+> +		pmc = pmcdev->pmcs[i];
+> +		if (!pmc)
+> +			continue;
+> +
+> +		guard(mutex)(&pmcdev->lock);
+> +		pmc->ltr_ign = pmc_core_reg_read(pmc, pmc->map->ltr_ignore_offset);
+> +
+> +		/* ltr_ignore_max is the max index value for LTR ignore register */
+> +		ltr_ign = pmc->ltr_ign | GENMASK(pmc->map->ltr_ignore_max, 0);
+> +		pmc_core_reg_write(pmc, pmc->map->ltr_ignore_offset, ltr_ign);
+> +	}
+> +
+> +	/*
+> +	 * Ignoring ME during suspend is blocking platforms with ADL PCH to get to
+> +	 * deeper S0ix substate.
+> +	 */
+> +	pmc_core_send_ltr_ignore(pmcdev, 6, 0);
+> +}
+> +
+> +static void pmc_core_ltr_restore_all(struct pmc_dev *pmcdev)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(pmcdev->pmcs); i++) {
+> +		struct pmc *pmc;
+> +
+> +		pmc = pmcdev->pmcs[i];
+> +		if (!pmc)
+> +			continue;
+> +
+> +		guard(mutex)(&pmcdev->lock);
+> +		pmc_core_reg_write(pmc, pmc->map->ltr_ignore_offset, pmc->ltr_ign);
+> +	}
+> +}
+> +
+>  static inline u64 adjust_lpm_residency(struct pmc *pmc, u32 offset,
+>  				       const int lpm_adj_x2)
+>  {
+> @@ -1479,6 +1522,10 @@ static bool warn_on_s0ix_failures;
+>  module_param(warn_on_s0ix_failures, bool, 0644);
+>  MODULE_PARM_DESC(warn_on_s0ix_failures, "Check and warn for S0ix failures");
+>  
+> +static bool ltr_ignore_all_suspend = true;
+> +module_param(ltr_ignore_all_suspend, bool, 0644);
+> +MODULE_PARM_DESC(ltr_ignore_all_suspend, "Ignore all LTRs during suspend");
+> +
+>  static __maybe_unused int pmc_core_suspend(struct device *dev)
+>  {
+>  	struct pmc_dev *pmcdev = dev_get_drvdata(dev);
+> @@ -1488,6 +1535,9 @@ static __maybe_unused int pmc_core_suspend(struct device *dev)
+>  	if (pmcdev->suspend)
+>  		pmcdev->suspend(pmcdev);
+>  
+> +	if (ltr_ignore_all_suspend)
+> +		pmc_core_ltr_ignore_all(pmcdev);
+> +
+>  	/* Check if the syspend will actually use S0ix */
+>  	if (pm_suspend_via_firmware())
+>  		return 0;
+> @@ -1594,6 +1644,9 @@ static __maybe_unused int pmc_core_resume(struct device *dev)
+>  {
+>  	struct pmc_dev *pmcdev = dev_get_drvdata(dev);
+>  
+> +	if (ltr_ignore_all_suspend)
+> +		pmc_core_ltr_restore_all(pmcdev);
+> +
+>  	if (pmcdev->resume)
+>  		return pmcdev->resume(pmcdev);
+>  
+> diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
+> index ea04de7eb9e8..e862ea88b816 100644
+> --- a/drivers/platform/x86/intel/pmc/core.h
+> +++ b/drivers/platform/x86/intel/pmc/core.h
+> @@ -372,6 +372,7 @@ struct pmc_info {
+>   * @map:		pointer to pmc_reg_map struct that contains platform
+>   *			specific attributes
+>   * @lpm_req_regs:	List of substate requirements
+> + * @ltr_ign:		Holds LTR ignore data while suspended
+>   *
+>   * pmc contains info about one power management controller device.
+>   */
+> @@ -380,6 +381,7 @@ struct pmc {
+>  	void __iomem *regbase;
+>  	const struct pmc_reg_map *map;
+>  	u32 *lpm_req_regs;
+> +	u32 ltr_ign;
+>  };
+>  
+>  /**
+
 
