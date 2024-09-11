@@ -1,193 +1,187 @@
-Return-Path: <linux-pm+bounces-14033-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14034-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55641975665
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 17:07:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FFA0975689
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 17:13:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 045FF284F71
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 15:07:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 333871C2221E
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 15:13:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02F1B19C552;
-	Wed, 11 Sep 2024 15:06:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB241A3A82;
+	Wed, 11 Sep 2024 15:13:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gg0R3EWy"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kN1SQopp";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XCql8XUa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8832AE90
-	for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 15:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F139A64A8F;
+	Wed, 11 Sep 2024 15:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726067216; cv=none; b=DrfQEv5/kukaCwrpO789C5E3TJiX7D77gwwjsSTRNca55AmPdcZEH3Y8mOMG0KiNWZlTvHYoMUpgwRrwT9kbCaQojUwVDEviHE8oKE3QxBN3BobBxrKsJUV6drJu3Dv/aFRYRDhN/mMS972SU6J4vVsov4SvJmWSFidQJJFXbYc=
+	t=1726067593; cv=none; b=XHftsZzoreHV1NYNxwUMTOODmmAM1RyNbY6ID2uCtxJIGfDgaRnXK7oksF1f/a9fZz1C39hWpPnfA315U5Qaj1PkHCWfxf6fz3nsRcyIjqteSiw9wqmYmmr6IIRaCyEV7G3AO2OO5CGMaoWhTkz0arirZW13XLsu+NrmpOO7Kqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726067216; c=relaxed/simple;
-	bh=MHOahEhV5IkdarQ1obFsdA1HdirAcyWhfisRLJN/e2A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ogkW4fT+HwhGxB3cAbRoZGw7tt4yS2oNKMGJjsAB+HY7/gjxwcv5X9jQMMpjeOqSMqLqfv8UAXRlIhZ4+mvOUClr4DeX2I8tZ1mVg8zcNPzQFypsEi5LAMoSmA5yT1PKFdA5H4+G6G5mDKGq+BmNZI6txwvnhLdisY4LmpfrquE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gg0R3EWy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637CDC4CEC7
-	for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 15:06:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726067216;
-	bh=MHOahEhV5IkdarQ1obFsdA1HdirAcyWhfisRLJN/e2A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Gg0R3EWy3a4uoLDAFcvhhYuuxpaubQY7760nDr/JAr8SblTAkJPvViGELDTIveNOr
-	 jgyS8r6h1Ygel+ufbaimEnFaAbvutKVY8ooZLtatY4TDRFU+dQt0NOFbokLyPv2GZw
-	 lHceIJ7ONS3SqvHBgwPYjqp8C47WGzCaJosbGpbNLjfMOhAIGYX8vu4gl2qY92GPdl
-	 mGAgA6fNQojoErcMq93uw/zF0jGYZecbBVVo/edj8715UacdOVOL+hHWyPm5mHrDqk
-	 DYmZQd7MljT47HJIqlEgA7NZgCrRhBkUlPp8AB7tCzdXr/DsD3N1SRPa34nRcYtrA/
-	 HEPIYJrFNvO+g==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5da6865312eso4076400eaf.3
-        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 08:06:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX5put4SeWatI/BSJkypU0isl2pY1x6jOQ+L50vEEMOdTnAQgCjq6NknZLOUktrFnb+pnL3oMh2gA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwC7IlrB4E36Vp5HCVj/8vYCW9FCC1oTuANREsAw/c6iTzJ75TN
-	TKwrt/7cwEBgv5jUnv3ZH/F5hTqAZo3z1YkMf7WXJagZ1p6RuAOLlioOAoeVonSBHmQYrn7ZNT8
-	T03gzNrVFkIYhbFMf0dnsNQFjjfU=
-X-Google-Smtp-Source: AGHT+IG1b7zxdjzHRlXwtCkB3UL3qllRuWNfG0Ko769YFP5gAvPq8hvK29b4DZJsd24P2AXHV3zNcB3dtxFXrpqkyRk=
-X-Received: by 2002:a05:6870:8181:b0:27b:686a:43b8 with SMTP id
- 586e51a60fabf-27b82ff50b9mr12031132fac.47.1726067215666; Wed, 11 Sep 2024
- 08:06:55 -0700 (PDT)
+	s=arc-20240116; t=1726067593; c=relaxed/simple;
+	bh=WYSo2PbdmOt952RgPLexG7kR5bugRClHNNEt8x7IqTE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=MCuHtNNbdIZHGmCKD1cfAOepU9qgCU91EzkLNnEnSU2avmBNqNnumfyUZG+takBTLEJj3KlDYEfN3ydQ/5FRX+Ciusn43BxeUJKVsAdZIoxAz69wONCR10q/vroc0q4LxdKxDHjKiI76la8LbVyaHY0jMqbooqK9D+mijTLaw4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kN1SQopp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=XCql8XUa; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfout.phl.internal (Postfix) with ESMTP id 1088E1380199;
+	Wed, 11 Sep 2024 11:13:11 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Wed, 11 Sep 2024 11:13:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1726067591;
+	 x=1726153991; bh=W3/bFLF5GPmG/oJuoeXrc+CcLB5pp1RgCukpWqx8NY4=; b=
+	kN1SQoppsrfhQ1aKwXkZbakGlLdt9X7n0Qpj/jN4UR1Y3eNgfSXpaqnXU2jvT2SO
+	CkKtJctqSn1epUMSsgTMq94lbckLuTjWebG421B1IDhx+wTpY91SAQbai5EzqCLj
+	R95I9h/Oyrbf0WnPZczXlzIg7iR9OZRJOQVGeLeTXeijjQZUN9pssjm0tQL1Ck4j
+	zmCdVn/KgcSUzh3PEDQzQyXH51CECcn0v6jPm0mQP/MY+7V5gk0nq6+l3gCmtc/g
+	ty+HY7W6MR9EvZlDKxtvn7S6GuJIvWJn5pCaHnSKZaMQioVWClMCwcd/dkDHZESD
+	MQC/E8Utlc7jhB8oJkSUEQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726067591; x=
+	1726153991; bh=W3/bFLF5GPmG/oJuoeXrc+CcLB5pp1RgCukpWqx8NY4=; b=X
+	Cql8XUardaZ101GAHySvPbidSWgvrUhHQTCY77YF3/JUkwctwdWEm38bkCyLGtt/
+	8J16Bl06FqQMUJtlhObOyitk5m7QP44iPGfGHHv0aKH/ADQhxP5Aiy6+CoohSNhJ
+	Rhh4Auxf90Hnlp1iddYVLU6hc1fMMYmgb2+cmg3Fjo/WnIAeHVoCzZhj1YgNYPcr
+	1ohJKWJiuShFO5wslaYiWy/j2dw0LyVqm9nBXt8d//9b1SRq9ZTSl3YOskUEJXlB
+	nwUS/fpAc5NQ4sli8XBxEYlbcPYALdQSiG546mzXcfi7kXY6pJzGjqIFv6FqVOCf
+	5cJTRRRLjcMtic9xhj/4A==
+X-ME-Sender: <xms:hrPhZv7WKy14IaSXDvrB34WD0cgYbD5Ijoe3JWsHr6GlacVyDBKooA>
+    <xme:hrPhZk7a8Fxhynsc8w8RlayRPVgkEYNKUatMkcijCIuyuLVk0jSfOdBnS-5RByWau
+    RcFm8SjrTnUKfsMc_o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejuddgkeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdeg
+    jedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepkedp
+    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvgh
+    gvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdr
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphifmhesvhhgvghrrdhkvg
+    hrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhsohhunhgusehvghgvrhdrkhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhpihesvhhgvghrrdhkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdifrghttghhughoghesvhhgvghrrdhk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehhshifvggvthgvnhesvhhishhiohhnvghnghhrrghvvghr
+    shdrtghomh
+X-ME-Proxy: <xmx:hrPhZmdf99FfYnKem1AvJRPrIWg_fpZhxEh7VXJW1DiQT-3DEsIlAw>
+    <xmx:hrPhZgKV4S-Tu8NFrkX1SKt93sCnq7evJA8rGaJW17oS2EqYyvfRuA>
+    <xmx:hrPhZjICCGVAAUPix4F6pKGjdQzOYquZK8famopAqgECfsZSkw7yfA>
+    <xmx:hrPhZpx3YBmlZtpGZtemz01LfUC4tyicKeisD-A40BaSPyvkkrpYOg>
+    <xmx:h7PhZgqUnZj763mof6oSn8RoTf9JC4c3LkDlkkuvY8-Y5nodlrUuSzYN>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id C2F2D222006F; Wed, 11 Sep 2024 11:13:10 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <da6db097-d4a7-425f-8e61-084a2fe15770@amd.com> <CAJZ5v0gzUbiaT5_74NSPv9bbBO4GfCoEfx-M0JHHMqYkn5N+8w@mail.gmail.com>
- <CAJZ5v0jG57Oq_rdoGzXABdxHGvQ9yqeG1f-850LmtmFy+3MFKg@mail.gmail.com> <749561d6-51b1-4136-8baf-c7a10fdffd5d@amd.com>
-In-Reply-To: <749561d6-51b1-4136-8baf-c7a10fdffd5d@amd.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 11 Sep 2024 17:06:44 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gq2jOAYZtqG1nya=To2H1pdTm6DV0_-yj+QA7L-jUKSw@mail.gmail.com>
-Message-ID: <CAJZ5v0gq2jOAYZtqG1nya=To2H1pdTm6DV0_-yj+QA7L-jUKSw@mail.gmail.com>
-Subject: Re: Second round of amd-pstate 6.12 content
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Date: Wed, 11 Sep 2024 15:12:49 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nikita Shubin" <nikita.shubin@maquefel.me>,
+ "Andy Shevchenko" <andy.shevchenko@gmail.com>
+Cc: "Hartley Sweeten" <hsweeten@visionengravers.com>,
+ "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
+ "Russell King" <linux@armlinux.org.uk>,
+ "Lukasz Majewski" <lukma@denx.de>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Bartosz Golaszewski" <brgl@bgdev.pl>,
+ "Andy Shevchenko" <andy@kernel.org>,
+ "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
+ "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Vinod Koul" <vkoul@kernel.org>,
+ "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+ "Guenter Roeck" <linux@roeck-us.net>,
+ "Thierry Reding" <thierry.reding@gmail.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ "Mark Brown" <broonie@kernel.org>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>,
+ "Miquel Raynal" <miquel.raynal@bootlin.com>,
+ "Richard Weinberger" <richard@nod.at>,
+ "Vignesh Raghavendra" <vigneshr@ti.com>,
+ "Damien Le Moal" <dlemoal@kernel.org>,
+ "Sergey Shtylyov" <s.shtylyov@omp.ru>,
+ "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+ "Liam Girdwood" <lgirdwood@gmail.com>,
+ "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai" <tiwai@suse.com>,
+ "Ralf Baechle" <ralf@linux-mips.org>, "Aaron Wu" <Aaron.Wu@analog.com>,
+ "Lee Jones" <lee@kernel.org>, "Olof Johansson" <olof@lixom.net>,
+ "Niklas Cassel" <cassel@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-pwm@vger.kernel.org,
+ linux-spi@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+ linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-sound@vger.kernel.org,
+ "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+ "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+ "Andrew Lunn" <andrew@lunn.ch>
+Message-Id: <cff6b9b6-6ede-435a-9271-829fde82550d@app.fastmail.com>
+In-Reply-To: <0e3902c9a42b05b0227e767b227624c6fe8fd2bb.camel@maquefel.me>
+References: <20240909-ep93xx-v12-0-e86ab2423d4b@maquefel.me>
+ <CAHp75Veusv=f6Xf9-gL3ctoO5Njn7wiWMw-aMN45KbZ=YB=mQw@mail.gmail.com>
+ <0e3902c9a42b05b0227e767b227624c6fe8fd2bb.camel@maquefel.me>
+Subject: Re: [PATCH v12 00/38] ep93xx device tree conversion
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 11, 2024 at 4:48=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On Mon, Sep 9, 2024, at 09:02, Nikita Shubin wrote:
+> On Mon, 2024-09-09 at 11:49 +0300, Andy Shevchenko wrote:
+>> On Mon, Sep 9, 2024 at 11:12=E2=80=AFAM Nikita Shubin via B4 Relay
+>> <devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
+>> >=20
+>> > The goal is to recieve ACKs for all patches in series to merge it
+>> > via Arnd branch.
+>> >=20
+>> > It was decided from the very beginning of these series, mostly
+>> > because
+>> > it's a full conversion of platform code to DT and it seemed not
+>> > convenient to maintain compatibility with both platform and DT.
+>> >=20
+>> > Following patches require attention from Stephen Boyd or clk
+>> > subsystem:
+>>=20
+>> Does it mean you still have a few patches without tags?
+>> What are their respective numbers?
 >
-> On 9/11/2024 09:43, Rafael J. Wysocki wrote:
-> > On Mon, Sep 9, 2024 at 6:38=E2=80=AFPM Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
-> >>
-> >> Hi Mario,
-> >>
-> >> On Mon, Sep 9, 2024 at 5:52=E2=80=AFPM Mario Limonciello
-> >> <mario.limonciello@amd.com> wrote:
-> >>>
-> >>> Hi,
-> >>>
-> >>> The following changes since commit 8cc214312cf8a0c3702edd1aa52e507262=
-adccb9:
-> >>>
-> >>>     Merge branch 'pm-opp' into linux-next (2024-09-06 20:53:58 +0200)
-> >>>
-> >>> are available in the Git repository at:
-> >>>
-> >>>
-> >>> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.=
-git
-> >>> tags/amd-pstate-v6.12-2024-09-09
-> >>>
-> >>> for you to fetch changes up to e121c01c0422fc56033d0dfa1bf3f0366115d2=
-d5:
-> >>>
-> >>>     cpufreq/amd-pstate-ut: Add test case for mode switches (2024-09-0=
-9
-> >>> 10:26:26 -0500)
-> >>>
-> >>> ----------------------------------------------------------------
-> >>> second round of amd-pstate changes for 6.12:
-> >>>
-> >>> * Move the calculation of the AMD boost numerator outside of
-> >>>     amd-pstate, correcting acpi-cpufreq on systems with preferred cor=
-es
-> >>> * Harden preferred core detection to avoid potential false positives
-> >>> * Add extra unit test coverage for mode state machine
-> >>>
-> >>> ----------------------------------------------------------------
-> >>> Mario Limonciello (13):
-> >>>         x86/amd: Move amd_get_highest_perf() from amd.c to cppc.c
-> >>>         ACPI: CPPC: Adjust return code for inline functions in
-> >>> !CONFIG_ACPI_CPPC_LIB
-> >>>         x86/amd: Rename amd_get_highest_perf() to
-> >>> amd_get_boost_ratio_numerator()
-> >>>         ACPI: CPPC: Drop check for non zero perf ratio
-> >>>         ACPI: CPPC: Adjust debug messages in amd_set_max_freq_ratio()=
- to warn
-> >>>         x86/amd: Move amd_get_highest_perf() out of amd-pstate
-> >>>         x86/amd: Detect preferred cores in amd_get_boost_ratio_numera=
-tor()
-> >>>         cpufreq: amd-pstate: Merge amd_pstate_highest_perf_set() into
-> >>> amd_get_boost_ratio_numerator()
-> >>>         cpufreq: amd-pstate: Optimize amd_pstate_update_limits()
-> >>>         cpufreq: amd-pstate: Add documentation for `amd_pstate_hw_pre=
-fcore`
-> >>>         amd-pstate: Add missing documentation for
-> >>> `amd_pstate_prefcore_ranking`
-> >>>         cpufreq/amd-pstate: Export symbols for changing modes
-> >>>         cpufreq/amd-pstate-ut: Add test case for mode switches
-> >>>
-> >>>    Documentation/admin-guide/pm/amd-pstate.rst |  15 ++++++++++++++-
-> >>>    arch/x86/include/asm/processor.h            |   3 ---
-> >>>    arch/x86/kernel/acpi/cppc.c                 | 172
-> >>> +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-+++++++++++++++++-----------
-> >>>    arch/x86/kernel/cpu/amd.c                   |  16 ----------------
-> >>>    drivers/cpufreq/acpi-cpufreq.c              |  12 +++++++++---
-> >>>    drivers/cpufreq/amd-pstate-ut.c             |  41
-> >>> ++++++++++++++++++++++++++++++++++++++++-
-> >>>    drivers/cpufreq/amd-pstate.c                | 151
-> >>> +++++++++++++++++++++++++++++++++++++++------------------------------=
----------------------------------------------------------------------------=
--------
-> >>>    drivers/cpufreq/amd-pstate.h                |  14 ++++++++++++++
-> >>>    include/acpi/cppc_acpi.h                    |  41
-> >>> ++++++++++++++++++++++++++++-------------
-> >>>    9 files changed, 305 insertions(+), 160 deletions(-)
-> >>
-> >> Pulled and added to the linux-next branch in linux-pm.git, thanks!
-> >
-> > And unpulled because it was based on the linux-next branch of the day.
-> >
-> > Basically, please don't do this.
-> >
-> > Please base your pull requests on top of mainline commits and if there
-> > are dependencies out-of-the-mainline dependencies you need to pull in,
-> > please ask for immutable branches to pull from.
-> >
-> > Thanks!
->
-> Ah.  That's what I did originally, but there was a conflict specifically
-> because this got applied through another tree and I ran into problems
-> when I tried to do a test merge before sending out the PR.
->
-> commit 5493f9714e4c ("cpufreq: amd-pstate: add check for
-> cpufreq_cpu_get's return value")
->
-> So I figured it was better to rebase.  In this case can you please make
-> me an immutable branch and I'll redo the PR from that?
+> The clk is the last one as i think, all others can be ACKed by
+> Alexander or by Arnd himself.
 
-If I'm not mistaken, you can pull this:
+I've merged the series into the for-next branch of the arm-soc
+tree now. The timing isn't great as I was still waiting for
+that final Ack, but it seem better to have it done than to keep
+respinning the series.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
-tags/cpufreq-arm-updates-6.12
+I won't send it with the initial pull requests this week
+but hope to send this one once I get beck from LPC, provided
+there are no surprises that require a rebase.
 
-as per
-
-https://lore.kernel.org/linux-pm/20240906054735.cbsjpwvpelgukppq@vireshk-i7=
-/
-
-and apply your changes on top of that merge.
-
-Alternatively, I can just cherry pick them from the branch I have
-pulled and apply them myself, whichever you prefer.
+     Arnd
 
