@@ -1,88 +1,133 @@
-Return-Path: <linux-pm+bounces-14039-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14040-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E59B197599B
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 19:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5194E9759C8
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 19:53:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 912871F27DB1
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 17:39:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF43C1F2382A
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 17:53:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4263F1B5836;
-	Wed, 11 Sep 2024 17:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F94E1B5ECC;
+	Wed, 11 Sep 2024 17:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iSAsUVEB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ksZUs4N3"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1A81B5823;
-	Wed, 11 Sep 2024 17:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182CD192D74;
+	Wed, 11 Sep 2024 17:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726076329; cv=none; b=O733pjBRJSM9OsbbFB/wj15MUbpbRASfIkeD0nwGiQlYvvsQdqjuyiCTMhWXnWQcubcdq180U0WvTdIowWtYHmGYVVdg1Q295fXZE7su0MhguIXOaZm6ABfu/YygRr/KKJga50XWbGDs3Tl7ayXLbey7mjFgOcQmPEx4OHzHBQU=
+	t=1726077146; cv=none; b=R+n5cY5uUS919z/F0u2tNCDsj6/+va28nK1SbbLIFo+E3eXWkPdxxH4/7untY7qpz9NVP6soucomXVZYw4mC5R0+lnrrPivme/4Yn5imqkbWBG2sryIaW+Yhkppl1Z3pt+Zs6Pzi5OTt0p1VAxlzXZ29YgqJhgGgdvwqh8vh49U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726076329; c=relaxed/simple;
-	bh=bOVwNWUV6Ukmuh2XCEvIpMUl1EkoGDu5P5d6lc+GSi4=;
+	s=arc-20240116; t=1726077146; c=relaxed/simple;
+	bh=Zd6WplPm4FdAwcsrLGkFduGLP4308+2slC70Hs9tLg0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e1hCi0jm/xyAwvSdj0e1qskyrihhoC9xfIpiGU419fOcTTlV/UH/EKXN6+c8UAUhfPJs6w5rT0BQMFtLBxQHfNaxcd+R+3TvXqN3rc8qGcpaFfn8xMJ2bfgTwWDhYNqC3BtMd6+DP/Ly5i85se6VaRM3oXd3tbcBHOzkXbMcXIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iSAsUVEB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51B99C4CECC;
-	Wed, 11 Sep 2024 17:38:48 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZYpAFwx1TRAyoksglIoeq/HDwD83b/v9HCSxt+KrRyqAtro6YVidXNyqZ1U9gP/y5yk5pBDGzFtk8DtqgiTvFHYFKuZISm2jVvadMDu0/lrxUTyY9gXqToGP3z3zj14cm6YQkhfoo95X7UEEmVH5y0Z11JlbTwhdUQqtlzlmkdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ksZUs4N3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ECAFC4CEC0;
+	Wed, 11 Sep 2024 17:52:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726076328;
-	bh=bOVwNWUV6Ukmuh2XCEvIpMUl1EkoGDu5P5d6lc+GSi4=;
+	s=k20201202; t=1726077145;
+	bh=Zd6WplPm4FdAwcsrLGkFduGLP4308+2slC70Hs9tLg0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iSAsUVEB/FtCTvh8oZWwuq9IHYV+v8w9YXmHFL7+Z1yj/38tAemh5FxZ3zVH1JC1z
-	 NOsFbLt4gKxNy9JCjlzD6RPm5h+BCYlLySxQnEjp3a9qTNpq6snM4nDlHPpIRvG01f
-	 31f9vQcoW4JNH5EAENDqrxkKEiZI3JqJO/KQE3eheZbu/F7fTopvVTpdgplahbOeq0
-	 pm04IG23jmLmOiJIxIWl3VFppsyXQGRiio3wTOXsYKQaDGYggLF6SiGk1jlhO2crlU
-	 nPl0Oqkp4b2Wzh0C6AWf9m476amsnhd1FPJnzWyr8Broyo6dmUq0Wq/vRx/OPckkIK
-	 vnohLuSoUk5/g==
-Date: Wed, 11 Sep 2024 12:38:47 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, devicetree@vger.kernel.org,
-	Heiko Stuebner <heiko@sntech.de>,
-	=?iso-8859-1?Q?Adri=E1n_Mart=EDnez?= Larumbe <adrian.larumbe@collabora.com>,
-	kernel@collabora.com, Conor Dooley <conor+dt@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Boris Brezillon <boris.brezillon@collabora.com>,
+	b=ksZUs4N3xj+8zFHMoJFOBd7dVLSIU2EXO7cxO8YDdt08Tt6hvWEPqDNDy1aNntc+N
+	 R7hNC93oiiFigHPxurbx1Sl5K678I9bnxaDr55bA9ANLCGUu1ARx5O53BWVlxN3rzv
+	 Y/4OCiu9XBwl3kVPyfThQ6vcd1qFLOLyNIC9iKSkfPdi0FOfYtVLk/WYwMLuZsxhg1
+	 l1p1QXxnSJAHAF2mB8ppukhxX/g1TWGVSemCmuayt+Tc8tPbzi+ADRoMkBxqwN18lF
+	 kPbgD1QvjSxlAjLi8qI+y97T+ztu8+zfOnMjW7Pqb1mnJeI8uKHQ/xrPFb8Spr+QcL
+	 eM6B4qDV6Rfrg==
+Date: Wed, 11 Sep 2024 18:52:19 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Nick Chan <towinchenmi@gmail.com>
+Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
-	Elaine Zhang <zhangqing@rock-chips.com>
-Subject: Re: [PATCH v1 4/6] dt-bindings: power: rockchip: add regulator
- support
-Message-ID: <172607632666.1014488.15274638720541628232.robh@kernel.org>
-References: <20240910180530.47194-1-sebastian.reichel@collabora.com>
- <20240910180530.47194-5-sebastian.reichel@collabora.com>
+	Conor Dooley <conor+dt@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+Subject: Re: [PATCH 02/22] dt-bindings: watchdog: apple,wdt: Add A7-A11
+ compatibles
+Message-ID: <20240911-chaplain-cargo-29a12b6257cf@spud>
+References: <20240911084353.28888-2-towinchenmi@gmail.com>
+ <20240911084353.28888-4-towinchenmi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="UtKeLkBPSdSPElNM"
+Content-Disposition: inline
+In-Reply-To: <20240911084353.28888-4-towinchenmi@gmail.com>
+
+
+--UtKeLkBPSdSPElNM
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240910180530.47194-5-sebastian.reichel@collabora.com>
+Content-Transfer-Encoding: quoted-printable
 
-
-On Tue, 10 Sep 2024 19:57:13 +0200, Sebastian Reichel wrote:
-> Add optional support for a voltage supply required to enable a
-> power domain. The binding follows the way it is handled by the
-> Mediatek binding to keep things consistent.
-> 
-> This will initially be used by the RK3588 GPU power domain, which
-> fails to be enabled when the GPU regulator is not enabled.
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+On Wed, Sep 11, 2024 at 04:40:52PM +0800, Nick Chan wrote:
+> The blocks on A7-A11 SoCs are compatible with the existing driver so
+> add their per-SoC compatibles.
+>=20
+> Signed-off-by: Nick Chan <towinchenmi@gmail.com>
 > ---
->  .../devicetree/bindings/power/rockchip,power-controller.yaml   | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+>  Documentation/devicetree/bindings/watchdog/apple,wdt.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/=
+Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+> index 21872e15916c..310832fa8c28 100644
+> --- a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+> @@ -16,6 +16,11 @@ properties:
+>    compatible:
+>      items:
+>        - enum:
+> +          - apple,s5l8960x-wdt
+> +          - apple,t7000-wdt
+> +          - apple,s8000-wdt
+> +          - apple,t8010-wdt
+> +          - apple,t8015-wdt
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Can you sort these alphanumerically please?
 
+>            - apple,t8103-wdt
+>            - apple,t8112-wdt
+>            - apple,t6000-wdt
+> --=20
+> 2.46.0
+>=20
+
+--UtKeLkBPSdSPElNM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZuHY0wAKCRB4tDGHoIJi
+0oB7AP4nPUdE2hLxQvPrgfSUTa+W6kRQafRVnC9Sscs8KWngrgD/dkTUKW+0h9Sr
+m4X7I3w4VfdUTNfdPFzUo60kkgCNCQg=
+=IbZW
+-----END PGP SIGNATURE-----
+
+--UtKeLkBPSdSPElNM--
 
