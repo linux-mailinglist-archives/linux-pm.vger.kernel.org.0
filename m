@@ -1,183 +1,108 @@
-Return-Path: <linux-pm+bounces-14028-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14029-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46B4F975515
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 16:16:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9576A975529
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 16:22:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8BF49B21657
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 14:16:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 414981F25338
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Sep 2024 14:22:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DA641885A7;
-	Wed, 11 Sep 2024 14:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C51319E976;
+	Wed, 11 Sep 2024 14:22:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SEnyciSW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iT/O2DJr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1EE526AC1
-	for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 14:16:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21AE3199949;
+	Wed, 11 Sep 2024 14:22:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726064167; cv=none; b=utcYh9hqcS9MuNu0twcNKNUxUV5Rytk581xASysshC0t5H/w/bQvP/W1BMwWOdvtE8W6ToMLBAQ4762S5I5PtBxlsglGSWPKhIAFxVjYO5TYD+IYvYoOZDEku8oMbG4AdddOP5tVTm2HyjNbGkFvP+atrKRVWqTKRw1LPm10nhk=
+	t=1726064524; cv=none; b=FzPqjBPP7TOcBSgqyOF2mE1915bZlRdqh0BpKqLoso5yC0t6EQhL/4ZDe55qn3Gj3qzgEOTOUAA5DH8wCs6rEpvL/bas4F7tfgjBOHakVqJ/7j8BEJsk8P1zU89vzPtlosCUzDqbljkeGZoWFmlG22W5iLKqbwINjnB2FZadb2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726064167; c=relaxed/simple;
-	bh=zpw544kJb99C7V2QA8EV2Xh4RIz9pXAREp35pyCql3U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TlSvpbJXLPcIcqNGydlltwlO6Z4Vj4ej1H9WAKvDMBsdbnExHilH7tzfdgXF3E6ELGUVl8EaIpdkjUbyfPgP2e4UNvShTXOGSqixtyDc7ELxT9zvfW4dZ1RH89M/7uGOSvxa1Wjal2Zm7HlTX3mgFKAVCc1rCGG1acfwBAoJcZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SEnyciSW; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e0b7efa1c1bso6830245276.3
-        for <linux-pm@vger.kernel.org>; Wed, 11 Sep 2024 07:16:04 -0700 (PDT)
+	s=arc-20240116; t=1726064524; c=relaxed/simple;
+	bh=o76AcHbXbRGzANSciTEuox4Bvd9TI1DHxqnZ0Ai44mQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X/jwImDS/67yCcjPrdlTrduBkRuudW6N+QIXaJqOULxWcE0WCdMsNQRlq9FX05/cmV1FpdYTwMat9UXU2joZhaSS8mjlnj9X30xnwmYS54ghX6NDyEeIP4tjWEdnpeCfaF3hq53SydW2Umjq4JHugYPhL73KvlVU404x61VkB6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iT/O2DJr; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-71781f42f75so5457809b3a.1;
+        Wed, 11 Sep 2024 07:22:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726064164; x=1726668964; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zpw544kJb99C7V2QA8EV2Xh4RIz9pXAREp35pyCql3U=;
-        b=SEnyciSWfcPkfvO2mYl1YcWMr2fKguZ+WMSARIqbarbqDgItHAp66hPOcZo7LAcEss
-         SDmTTuuWBJEi5O5feXxw0VSrN7wOWfZw+L10w4MYxZC/iYbgWtu5azeN96lvPqbwl1hT
-         PBkkHIWEbcbGQwqaaiX9ndRyDC+h3RVo1xUDMhy2JMeg1gGdcK3e4/PsffXW/3kUaIVa
-         Yhcf5+XXxGitngs/uzscdexy1kpu0X1uFTzVtG5B17vzA8Jdtn4NEwVXR2M2sDRQ6cX3
-         7qA1vDYX/ikRqEJxOAAo+uAIxv0dPlwJ4OhDPFPf6JLs4yGKgrJzk+EB10aIP5rqVHGu
-         05Hg==
+        d=gmail.com; s=20230601; t=1726064522; x=1726669322; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o76AcHbXbRGzANSciTEuox4Bvd9TI1DHxqnZ0Ai44mQ=;
+        b=iT/O2DJroGGSiqGcijJmfe5FN9dD+RysqMd9BZUo4Y0kimWWmMud7rB64CT7QM7InM
+         zXX4T6PLNnUyfSur0ErpVUacRdESS1/9GdIjb3KUi4A273QH4M52+HfOs3pREhLonHA5
+         PxLpYbrBFp2S29pj/JgBipA3oOD118rzILQMfectXjRSYlGxnoYVLixYoabfozOb++E0
+         fmH7uwoIQz2z1uHqLomFVlcEZ10qEM4HCh5fszoDDpluV9ossULxtANLW1Iy2UP5JfVb
+         Qh0JHDJQCittbmtJyCFTvBacBp54IAFUG5Ti+4J8WvXKEG068AjJtEg0dv4+UmffV6Tk
+         lCeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726064164; x=1726668964;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zpw544kJb99C7V2QA8EV2Xh4RIz9pXAREp35pyCql3U=;
-        b=W2OTSnXM/oeTnq/JDV3SFqq2I0p6Qqlh2PWZrp/Bg4BdTXzcxmpAVuoobZceDIg3DT
-         R6icIWxHlKDXmKBz59wvUYATp1hflcmsSJEhcBua3R1l1PfBu+8s0c08MWKnHCfW1CEq
-         9jws6FXllT2m+cyv6M7zZs9RxIpFd1RlQmeFygwK/Z38Hj942SbF6DIJfRkkLwhWMgBc
-         W/jCwiFGPGv6Ux97FLfvH7ly+QoRpM/+2Ifps4SW2HwrEdjt4ojNrQF59JGjyoK0ZpMz
-         zc+G6ThiaD63HxG1Yn93HNGxm/adkHvO4fmR13V3d7/48Uw1rGuMET9AR65s/uDOba8m
-         TSOg==
-X-Forwarded-Encrypted: i=1; AJvYcCXwlnPFofrcQ1YFBqroF8YdYHUSJd5ngyZfLcPHX8E7lOD2nxmzer+fsF8xj902b1fU/0bevweNeQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsROfUlhVlrIM9uUZWgTQ1hAzA1unw22VC6/ZGReIUl5v+BrG3
-	zgYwEezKxfbJ6xtFl9Nq3vgmLynua0jctflWd9IfZozx+kcYkHjjn5uJKSfTzUqw5/pcHS/ErWQ
-	xLB9e7XFFpdFrsXGJRisjnO0mb/mUNQW1sfIEpA==
-X-Google-Smtp-Source: AGHT+IEot1ldnziQJykDX2V9Zx+o1+BcO7NdK/qhxMhKxDGfObrOoowZKUuQwltatFXxPEK5CTASOdwRLPe2F83pWJ4=
-X-Received: by 2002:a05:6902:200a:b0:e0b:b2a7:d145 with SMTP id
- 3f1490d57ef6-e1d34a0d41bmr13115799276.55.1726064163806; Wed, 11 Sep 2024
- 07:16:03 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726064522; x=1726669322;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o76AcHbXbRGzANSciTEuox4Bvd9TI1DHxqnZ0Ai44mQ=;
+        b=hASvZrOW95EQjazE2Il5dvpjzU/X3BOdb8yVj89SiTPfC0z8SnLbKCaFX4UAtJPlUD
+         LUnHrFje53qncOHZ3Z/n6Wqp+sWtaPwITS/BLnbtxZ0h47YaHJPpR/RG1HMDka+ysOsZ
+         82bBUMnWU78pk6zTWcDzTkZztzuOcCobwhC80ufWfSN5wfBnUpzXgN3uOH8gqsDemuRc
+         sT6uzyOeR0v4MoeokGsHLrX1jh3iX6WE/KsOxz0fM81/DKYCSDG+7gChDxmzZuB9ayaZ
+         65Dqvnqk6vbIotM4PPGxbnedzQfAj2CYWdC2s0/ZMmM5KmWPHtzKLPfIHCmipkI7E9f3
+         Zz2w==
+X-Forwarded-Encrypted: i=1; AJvYcCUA8MOQbDqx7NFCVFG3iiFyavoCbg5Go2InNwqow/Qe5tFmyEWP9hpuu3roiUJOMbg3iZS5WRDriZdu65GA@vger.kernel.org, AJvYcCUTZLXi0ar9gKWKj54Oiqngu12Dus5vW1/G/GjDISD63chA52gDrmsbjKdPdaVMIweNIJXRpa7kBYaDETuQ76g=@vger.kernel.org, AJvYcCVQkKxc0WgcQOGJ01+eucPwp0FSAlNGTjpJja3zx/rpX5mbk2zJtUTTeLyv1qL33IvSb/NxQuz7uey6Xg==@vger.kernel.org, AJvYcCVVZMV5zqhe5HDQILZuF3en3MG8PeI3Xr0ut0yvhT7kQ8UktQdnoeHUlnK5t0l8yeiRfCmuRQj2Ddw=@vger.kernel.org, AJvYcCXvxMLW66CCi0L6SZcYg3Qfi6up3atMv5bG4sSAYc/pgGZEOgsy7XL6q0+deqzCS/4JaJxkVhd7uaMk@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiGDcPNRU/OpDR55oSEDmVWS8oISSHi+Pw4iQ/VlqeefBk5/aL
+	OvF4qN2m2yGIazX+CK997YIJkVMctOUHhbUR/hc2599vmzuapxKF
+X-Google-Smtp-Source: AGHT+IGHiWzhUZMlISG1wfusUmj12FDfLvKIhsEju2A7EBEjueSKjiPNUyeW6qF3DD+xQn/SjKUC0A==
+X-Received: by 2002:a05:6a00:94a7:b0:710:591e:b52f with SMTP id d2e1a72fcca58-718d5ded3a6mr21737936b3a.5.1726064522266;
+        Wed, 11 Sep 2024 07:22:02 -0700 (PDT)
+Received: from [192.168.0.122] ([59.188.211.160])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7db1fba40f2sm31734a12.7.2024.09.11.07.21.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Sep 2024 07:22:01 -0700 (PDT)
+Message-ID: <041215c1-ad90-4257-9852-57b1d7bd490c@gmail.com>
+Date: Wed, 11 Sep 2024 22:21:56 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240902224815.78220-1-ulf.hansson@linaro.org>
- <20240902224815.78220-3-ulf.hansson@linaro.org> <20240903071638.bedt3gllqdacf43a@vireshk-i7>
- <CAPDyKFoqEAHns0nrXT6dJR3sRd5VWidK_rzXGHzJiZtk_p0cKw@mail.gmail.com>
- <20240903105321.suosbhkkkylfw4bv@vireshk-i7> <CAPDyKFrh4VASFzMxEg3Q8SrhVbt1vH8QJM0rCdfxo+-L1+CN_g@mail.gmail.com>
- <20240904064004.7hwfom4nrqzfkvlo@vireshk-i7> <CAPDyKFqZiX=F4oNa3H+fUCO9cRzapxMaAphdx+JFXuR-Tgv3Cw@mail.gmail.com>
- <20240906061405.bz7y3erlz4v5fvvd@vireshk-i7> <CAPDyKFpbA-fopq11Lc0j9hgM86DjveNh+Q=w=nEn2fvcFyp93w@mail.gmail.com>
- <CAKohponJsqOYAvQqU2qrBCXv_P0+0zKAm7-5gkKGPsF_kT7L0w@mail.gmail.com>
-In-Reply-To: <CAKohponJsqOYAvQqU2qrBCXv_P0+0zKAm7-5gkKGPsF_kT7L0w@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 11 Sep 2024 16:15:27 +0200
-Message-ID: <CAPDyKFpHYv1eEy==bHhCg6cX9MYdZr_VDoFKBnucZseQVkQWDw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] OPP/pmdomain: Fix the assignment of the required-devs
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Dikshita Agarwal <quic_dikshita@quicinc.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <quic_kdybcio@quicinc.com>, Nikunj Kela <nkela@quicinc.com>, 
-	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Mikko Perttunen <mperttunen@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Stephan Gerhold <stephan@gerhold.net>, Ilia Lin <ilia.lin@kernel.org>, 
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/22] Initial device trees for A7-A11 based Apple devices
+To: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc: Konrad Dybcio <konradybcio@kernel.org>,
+ Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+References: <20240911084353.28888-2-towinchenmi@gmail.com>
+Content-Language: en-MW
+From: Nick Chan <towinchenmi@gmail.com>
+In-Reply-To: <20240911084353.28888-2-towinchenmi@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, 11 Sept 2024 at 08:03, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> FYI, I am on holidays now :)
+There is a recommended device tree node `chassis-type` to specify the
+type of the chassis. For iPhones, iPod touches and iPads it is pretty
+obvious that they are `handset` and `tablet`. However, nothing really
+fits for Apple TV so a new chassis-type value may need to be added.
 
-Oh, nice! Enjoy!
-
->
-> On Fri, 6 Sept 2024 at 14:19, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > How do we differentiate between two cases where the required-opps can
-> > > be defined as either of these:
-> > >
-> > > required-opps = <&opp_pd_50, &opp_pd_51>; //corresponds to pd_perf1 and pd_perf0 (in reverse order)
-> > >
-> > > OR
-> > >
-> > > required-opps = <&opp_pd_51, &opp_pd_50>; //corresponds to pd_perf0 and pd_perf1
-> > >
-> > > I thought this can't be fixed without some platform code telling how
-> > > the DT is really configured, i.e. order of the power domains in the
-> > > required-opps.
-> >
-> > I don't think we need platform code for this.
-> >
-> > When registering a genpd provider, an OPP table gets assigned to it.
->
-> So we will create a real OPP table in code, which will point to the common
-> OPP table in DT. Fine.
->
-> > When hooking up a device to one of its genpd providers, that virtual
-> > device then also gets a handle to its genpd's OPP table.
->
-> Right.
->
-> If there are two genpds required for a device from the same genpd provider, the
-> picture isn't very clear at this point. i.e. which required OPP
-> belongs to which genpd,
-> as both have same table in DT.
-
-I agree that it's not very clear.
-
-But to me, this seems like an orthogonal problem that really should
-not be managed by platform specific code in consumer drivers.
-Moreover, unless I am mistaken, I believe this isn't really a problem
-for the currently supported use cases we have for required-opps. Or is
-it?
-
-That said, we already have two methods that helps us to deal with this issue:
-
-1)
-For a genpd OF provider that provides multiple genpds, the genpd/OPP
-core tries to assign an OPP table for each genpd, based on the
-power-domain index. In other words, if corresponding OPP-tables are
-specified in the operating-points-v2 list, those would get assigned
-accordingly.
-
-2)
-The genpd OF provider can control on a per genpd basis, whether there
-should be an OPP table assigned to it. This is managed by assigning
-the ->set_performance_state() callback for the genpd or leaving it
-unassigned. Typically this works well, when there is one OPP-table
-specified in the operating-points-v2 list for the provider - and only
-one of the genpds that should use it.
-
-If it turns out that we need something more flexible, I think we need
-to look at extending the OPP/power-domain DT bindings. We would
-probably need a "by-names" DT property, allowing us to specify the
-mapping between the OPP-tables and the power-domains.
-
->
-> > Each of the phandles in the required-opps points to another OPP table,
-> > which OPP table should be associated with a specific genpd.
->
-> Yes, but a simple order reversal in DT (which I sent in my last
-> email), will not be picked
-> by code at all. i.e. DT doesn't give the order in which required OPPs
-> are present.
-
-Assuming genpd OF providers are following 1) or 2), I don't think this
-should be an issue.
-
->
-> > In other words, the information is there, we should not need anything
-> > additional in DT.
-
-Kind regards
-Uffe
+Nick Chan
 
