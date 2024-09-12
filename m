@@ -1,166 +1,112 @@
-Return-Path: <linux-pm+bounces-14115-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14116-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7D41977336
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 22:59:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 199C9977364
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 23:12:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1622B1C240B0
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 20:59:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3BDE1F24A88
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 21:12:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ED851C174B;
-	Thu, 12 Sep 2024 20:59:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BEB01C2322;
+	Thu, 12 Sep 2024 21:12:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="ReM/YMkp";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PYGH24lp"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="liPO5dG3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fhigh4-smtp.messagingengine.com (fhigh4-smtp.messagingengine.com [103.168.172.155])
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0565B13CFB7;
-	Thu, 12 Sep 2024 20:59:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E0A1C1AD7;
+	Thu, 12 Sep 2024 21:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726174763; cv=none; b=dhaJPGHGb6Ieel/kdVBBkYgut5+aryBOMkffLESIQ38mY0KUKb6hAYHKt5xGhPuoahotMQPztyuM/Oc35GTWRlhyrBz7X5GsEJIC+rsyNuZPmXfJx6LUm3sA4Lfn0Bv+ImrE2gdt0yV1vn4pZgR1NfFU9qNtPOT8sZqK7N9ZbjE=
+	t=1726175559; cv=none; b=FoHL9h4sYvzhFHlmh5xABE6kOqzNkCR3n1MAOrBZZ4nanLaCYCWZ/m/He0bV0Tzglf2/SdY4LdElsGlbmUvzuOwWMh5y6ZVpKpZq3iSJADYjOOLZSZewAP+KxW7Mfqpj3XM3fx+jo27FyYQh0u8a4hpOPw0gSVPcj0R5DnFn3aM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726174763; c=relaxed/simple;
-	bh=qr1Df2OoDZPLJ69NWzli/7RsKLfj4rBzJ3FhmLOg1hs=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=bwmrm1uCAz8ddPr0q5fWwrxiE/HrqKQ/v9zjyYONPzLZdeA+h3JXcq1cQeV76Ei/Bxv9I9Aj4pJSamvzO/Y3my6HFsTOKZXBTeUccdISiqIbZw/QcqGt4d6t/1f8S3oDS4duK8OYX6NMKlsfc30KMwqVrOTh90PsvPXrHsyc1HY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=ReM/YMkp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PYGH24lp; arc=none smtp.client-ip=103.168.172.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 47F3B114012B;
-	Thu, 12 Sep 2024 16:59:21 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-09.internal (MEProxy); Thu, 12 Sep 2024 16:59:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1726174761;
-	 x=1726261161; bh=z9RyMeYnaCpJjL5NRxfd4gM6cPZLEzjGh1sm47Fz4fU=; b=
-	ReM/YMkpzLgrnxitYaJbJI8wvFkkU+WBRml2AmADWw/xJIdcrYBQcZqESacdPqLZ
-	PBS7b/qKuvxCAchFgu6AfJ2ihfqDoj6mefKm1BGVeXzLcecSEJd3D7BUpAtCVAZw
-	2QsZ0cWbTWY2LK5oSWro6Fo8c4uxjiVFmh8QFU8FSZsp28AKI6vZ0DnxgXrzoYzI
-	nSA03gxElsAMAmErBJ3jTIYlm7bWg7CzGTUN3km1mR/bE5v7LmgiEiXkH3WppAf3
-	1vZEeElRMGQIXKYn7oBNPV8ECYREJmdwkmI7bv+VvAPmrEkFumLA3Qr/AzrdGcad
-	/E/vU36AUR6YRSiOQAMAhA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726174761; x=
-	1726261161; bh=z9RyMeYnaCpJjL5NRxfd4gM6cPZLEzjGh1sm47Fz4fU=; b=P
-	YGH24lpXVjiOxGgkZlx51jOtPc475IvnJkaUSJ30/969MismK00XfaOOZssIj0+B
-	m8pWKPctI1Fl4oYF7lfP/UsqHvYuz6/mFNKLIMDraLFQFi1H6vp6wjd1SDsfnDQI
-	0JurWsYizqj+/HXa8vC4kr2WmjYqrkRVlwJTl0Adi50jkmbGT2vG7sZ6lJH90tEp
-	RXbjKOVjWmOJ27VvIpQYlJhj53Idbfk6lyMRWq9E9rS/2yK/VBH1KSuxQQVPOf7P
-	GcAe5Uy44aHQ7pFQUgURC9SmfbRPfZ/f2cREZf73iWOsWyiabPFZR2/fbtd/S6yw
-	wxpjbYcj4RCk0I+ZTbIsg==
-X-ME-Sender: <xms:KVbjZtAeprkZeyYcuyzTRRu5Vb_EaC4d6T7nNY2o98CyKF6a9PwWfw>
-    <xme:KVbjZrgaIFvIQ0dxG2XAKZLCatYNwvx1BwsZEcPPfcB-te5wfYzgjeetHJ8jOo6Zt
-    4gUzyhD6hOL8cS9f2A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejfedgudehkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
-    jeenucfhrhhomhepfdflihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgse
-    hflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeejheefuddvtdfggfdvffek
-    teehhfelgfdvvedvkeeuffefkeehheegvefhveetjeenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghho
-    rghtrdgtohhmpdhnsggprhgtphhtthhopeduuddpmhhouggvpehsmhhtphhouhhtpdhrtg
-    hpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphht
-    thhopegthhgvnhhhuhgrtggriheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrfh
-    grvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehvihhrvghshhdrkhhumhgrrhes
-    lhhinhgrrhhordhorhhgpdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidrug
-    gvpdhrtghpthhtoheplhhoohhnghgrrhgthheslhhishhtshdrlhhinhhugidruggvvhdp
-    rhgtphhtthhopehkvhhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplh
-    hinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    lhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:KVbjZokIrc3L0xm36htY1eEFyXuC3F_Z-TxQCwXCmq1BlKg3M-axJQ>
-    <xmx:KVbjZnwkh_lkFc5d-d77ZOllCysaaR1jOqhFz5DZvi6hU2pW-cECHg>
-    <xmx:KVbjZiS15Q-P5hCAfA-QJH8EtwbWTsgTqIJii7Jer02l4sf286lFyQ>
-    <xmx:KVbjZqYUo9u-vOMzqbVAHc-MNPNYF-numoMTXGGza8SiYyZgz9V85A>
-    <xmx:KVbjZnLYc_nRyVRP3_dfJowA1Uyk5CWcfKVF6h2KEm2UJntAErRXEFgj>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 072B31C20065; Thu, 12 Sep 2024 16:59:21 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1726175559; c=relaxed/simple;
+	bh=LFZmYGo8h9oi2U1Zg50FRW+vhqFPWrbYW+NIhlWueZ4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bh3nyeAukiQNRr7Tnr3uvZGBYjuJvY3WjRc6JL1LtscLPm/SbahDU65/XCab9yZUOjexdco5e8zqPJ3Y+hD4Yt+i1WoenT5OidUuRCU5xvmOAl7A85JEQ7ra6/FH1opIz44VWTG5ZXoIFKiiYqXnpP39KKhfa9W0OYs4939pA3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=liPO5dG3; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [172.16.225.84] (syn-076-167-104-212.res.spectrum.com [76.167.104.212])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4X4VWc4RF0z4DmW;
+	Thu, 12 Sep 2024 17:12:28 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1726175549; bh=LFZmYGo8h9oi2U1Zg50FRW+vhqFPWrbYW+NIhlWueZ4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=liPO5dG3r0r3gORS46SnzZmwWyq9zjinhaHFujt7nM9gr+OG09bk4l4CvUbaik+iK
+	 v1P4nr5r+qMRKAeA8IVhm4G2qV55QmAiz+2ph/P727Z9k5C+vqYIQ5lzb93sq5F50P
+	 Xc03LDampk6OAhGig/vK7O3XvKEjVWZuzT5vow2s=
+Message-ID: <0e5168df-894e-4e35-8785-6c48328f8782@panix.com>
+Date: Thu, 12 Sep 2024 14:12:27 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 12 Sep 2024 21:59:00 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Huacai Chen" <chenhuacai@kernel.org>, "Xuerui Wang" <kernel@xen0n.name>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- kvm@vger.kernel.org
-Message-Id: <4f631f4a-eeb8-4b57-8424-4f5e970f0b69@app.fastmail.com>
-In-Reply-To: <20240912-iocsr-v2-2-e88f75b37da4@flygoat.com>
-References: <20240912-iocsr-v2-0-e88f75b37da4@flygoat.com>
- <20240912-iocsr-v2-2-e88f75b37da4@flygoat.com>
-Subject: Re: [PATCH v2 2/4] LoongArch: cpu-probe: Move IOCSR probing out of
- cpu_probe_common
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
+ Thunderbolt additions when coming out of suspend or hibernate
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, Me <kenny@panix.com>
+References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
+ <ZsvxR-dQAZtwNi0g@wunner.de> <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
+ <5e7183c8-1843-4390-aef1-1772e538a359@panix.com>
+ <20240904122835.GG1532424@black.fi.intel.com>
+ <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
+I'll run the stuff you need, but now it looks like whatever is breaking 
+suspend/resume in Linus' master has been ported down from upstream into 
+6.10.10; I'm now getting the same panic()s as I did with master. I just 
+had a failed resume and the crash dump (which happened on its own) looks 
+the same as the one I'd posted here.
 
-=E5=9C=A82024=E5=B9=B49=E6=9C=8812=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8B=E5=
-=8D=889:55=EF=BC=8CJiaxun Yang=E5=86=99=E9=81=93=EF=BC=9A
-[...]
-> +
-> +	if (c->options & LOONGARCH_CPU_IOCSR)
-> +		return;
-Oops, typo here, there should be a not :-(
+I may try and find some time to bisect the issue, but it'll take some time.
 
-Huacai, if the series is ok for you please fix this when applying
-the patch. I only tested against NEMU so didn't catch this :-(
+-K
 
-Thanks
-- Jiaxun
+On 9/9/24 00:51, Kenneth Crudup wrote:
+> 
+> I can't get to the dmesg when it crashes, but I did a SysRq-S/C and have 
+> attached the crash output; let me know if this is at all helpful.
+> 
+> I see I'd SysRq-S/C on a previous hang, I've attached that one, too.
+> 
+> This particular time it suspended OK, but hung indefinitely when I 
+> plugged it into another TB3 dock (the previous one was TB4, if it matters).
+> 
+> 
+> On 9/4/24 05:28, Mika Westerberg wrote:
+>> Hi,
+>>
+>> On Tue, Sep 03, 2024 at 11:10:41PM -0700, Kenneth Crudup wrote:
+>>>
+>>> ... or, maybe not. Turns out that sometimes my system can't suspend 
+>>> (just
+>>> hangs, spinning hard somewhere based on the heat and the fans) when 
+>>> plugged
+>>> into a Thunderbolt dock at the time of suspend.
+>>
+>> Can you create a bug in bugzilla.kernel.org and attach full dmesg so
+>> that you enter suspend with dock connected (so that the issue
+>> reproduces)? Please also add "thunderbolt.dyndbg=+p" in the kernel
+>> command line so we can see what the driver is doing. Also probably good
+>> to add the lspci dumps too as Lukas asked.
+>>
+> 
 
-> +
-> +	*vendor =3D iocsr_read64(LOONGARCH_IOCSR_VENDOR);
-> +	*cpuname =3D iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
-> +
-> +	if (!__cpu_full_name[cpu])
-> +		__cpu_full_name[cpu] =3D cpu_full_name;
-> +
-> +	config =3D iocsr_read32(LOONGARCH_IOCSR_FEATURES);
-> +	if (config & IOCSRF_CSRIPI)
-> +		c->options |=3D LOONGARCH_CPU_CSRIPI;
-> +	if (config & IOCSRF_EXTIOI)
-> +		c->options |=3D LOONGARCH_CPU_EXTIOI;
-> +	if (config & IOCSRF_FREQSCALE)
-> +		c->options |=3D LOONGARCH_CPU_SCALEFREQ;
-> +	if (config & IOCSRF_FLATMODE)
-> +		c->options |=3D LOONGARCH_CPU_FLATMODE;
-> +	if (config & IOCSRF_EIODECODE)
-> +		c->options |=3D LOONGARCH_CPU_EIODECODE;
-> +	if (config & IOCSRF_AVEC)
-> +		c->options |=3D LOONGARCH_CPU_AVECINT;
-> +	if (config & IOCSRF_VM)
-> +		c->options |=3D LOONGARCH_CPU_HYPERVISOR;
->  }
->=20
->  #ifdef CONFIG_64BIT
->
-> --=20
-> 2.46.0
-
---=20
-- Jiaxun
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
