@@ -1,112 +1,137 @@
-Return-Path: <linux-pm+bounces-14116-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14117-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 199C9977364
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 23:12:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D800397745D
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 00:33:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3BDE1F24A88
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 21:12:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16A751C21BB4
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 22:33:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BEB01C2322;
-	Thu, 12 Sep 2024 21:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B5E1C1AB5;
+	Thu, 12 Sep 2024 22:33:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="liPO5dG3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YiLBIrPs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E0A1C1AD7;
-	Thu, 12 Sep 2024 21:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D82188A35
+	for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2024 22:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726175559; cv=none; b=FoHL9h4sYvzhFHlmh5xABE6kOqzNkCR3n1MAOrBZZ4nanLaCYCWZ/m/He0bV0Tzglf2/SdY4LdElsGlbmUvzuOwWMh5y6ZVpKpZq3iSJADYjOOLZSZewAP+KxW7Mfqpj3XM3fx+jo27FyYQh0u8a4hpOPw0gSVPcj0R5DnFn3aM=
+	t=1726180409; cv=none; b=I8EEQ5PJfOUIAFYn0qK/XP9FK85qMbXkrS/4NQMfpgKcH72u7zdzBNP/t0K4a5SZAMWJJbmIs7+4oQuzjebHdpVOROUPT9UZyAZAJCpuEsH9z5pmewimaptM+pjBnAllCgAMZGoNQmxgtysE+YbFG+fE5Xh8im7Na58YOMPwHe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726175559; c=relaxed/simple;
-	bh=LFZmYGo8h9oi2U1Zg50FRW+vhqFPWrbYW+NIhlWueZ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bh3nyeAukiQNRr7Tnr3uvZGBYjuJvY3WjRc6JL1LtscLPm/SbahDU65/XCab9yZUOjexdco5e8zqPJ3Y+hD4Yt+i1WoenT5OidUuRCU5xvmOAl7A85JEQ7ra6/FH1opIz44VWTG5ZXoIFKiiYqXnpP39KKhfa9W0OYs4939pA3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=liPO5dG3; arc=none smtp.client-ip=166.84.1.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from [172.16.225.84] (syn-076-167-104-212.res.spectrum.com [76.167.104.212])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4X4VWc4RF0z4DmW;
-	Thu, 12 Sep 2024 17:12:28 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1726175549; bh=LFZmYGo8h9oi2U1Zg50FRW+vhqFPWrbYW+NIhlWueZ4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=liPO5dG3r0r3gORS46SnzZmwWyq9zjinhaHFujt7nM9gr+OG09bk4l4CvUbaik+iK
-	 v1P4nr5r+qMRKAeA8IVhm4G2qV55QmAiz+2ph/P727Z9k5C+vqYIQ5lzb93sq5F50P
-	 Xc03LDampk6OAhGig/vK7O3XvKEjVWZuzT5vow2s=
-Message-ID: <0e5168df-894e-4e35-8785-6c48328f8782@panix.com>
-Date: Thu, 12 Sep 2024 14:12:27 -0700
+	s=arc-20240116; t=1726180409; c=relaxed/simple;
+	bh=oiAYyKBKR7wzcekJ+NG2T4KqRVaZPZH786D8kFaGuM8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GYaNN1unbJDRndCDVu+Woi+MprBY/k8gC/QTpuaWJrw9KLNdlVELGxIbaEXM5GkkG9Rz5Q0mUpBmvo4YmePtaRoOOFOizjv7bI8rSJkYYT3gy09iMSyzraW5hIqCLi4/VUGx/oy6iYf6c/VKxKZFKn28Oi8VwGsNcLISn7mMelg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YiLBIrPs; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e02b79c6f21so399248276.2
+        for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2024 15:33:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1726180407; x=1726785207; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=f3OpCrcF+SbicG9ADVdKvnUsA/2LlehvNo4t5Jv4vXs=;
+        b=YiLBIrPsM/SV9oY2XFgRzlU+u5ZQes3mRtgAjK/pSpRNyR9U7/069aT2J8nkwfgjL+
+         FQ+kRIgs7O0HpqsOYuSUjRp9H+DUF3JqNjBfQ3A5nsctRMuOGCCq1hF6YBhsed1/KncJ
+         krEBcrKyb5dar7h1b8L3WcYes4laiupyQWqv3PkEK+7W5+c5rtZoS66PX4sjYnfNVnQc
+         M7UiDN9vSkJ7twh4rzPStW6kGA5RAmqN2uy6bI1I6cldnocDrzt16L9CzqSweW0tt4G/
+         tA4XC+2G/DXqPQhcFPwUYUq1T5Q3nEU13XMZNTK7HiAb8HnrLNHtDGVhCCBz6HkHT9Cv
+         Nv5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726180407; x=1726785207;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f3OpCrcF+SbicG9ADVdKvnUsA/2LlehvNo4t5Jv4vXs=;
+        b=OF6bHbOwyctDzU5ClKE/0Gm/XAt6sQHe0FBKjCIBk+5gJRQsf/sKU9++z8Unwt+jaH
+         dox8eNqekpKyzm0NFL3pnpm+QN9JPuQrAf63n4VH+TmXGNSibZgmV5dkElVFmLW2cNR5
+         WwRq2VcMgDUjlU59kPrNAWsIkZ4Wqk7lSKyFu3WKR6kAQicWHTnIaTGAgrTRpRlvPPhl
+         735Y8R8CPqiB4GOTgw/Wrt6w4WFEvLEGTUCPbNqxvBIjHdpx2NQwoQFtf62IgqN4Ky5S
+         sMUvdFroU/HZMH5yp+ZGJqA8Xiz2b/+Yxhhf/1Vdkb2BGPKSgkGqYmdF8bS/zrsuk44a
+         8dTA==
+X-Forwarded-Encrypted: i=1; AJvYcCWPUrjrF4o2C60CNr/pRZjqnKNJ95SRSXh7S3CgBjz5cl1fRmkAEV/mA/WDBBtLttuzbTESTtSUuA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCoSe2h4B6+hGPzur5mOgY753KqUQTEBSEAvTXpDxD35z+7Ke9
+	u79BMCpJ9oBNpCE3oK/OdKbwsimGHSpLuWWCEQkOWAaL6t8Z3hFiPWJN8iS4SjZ3KOFwJjgGtqp
+	5UfPdPbXgNpHDEY05WqcEUIqyLMeVqJp6LOWtvfcegj1EpupG
+X-Google-Smtp-Source: AGHT+IGD9f57jUl9Isy6GGo2oa4ljYOdYvzqkIlK9dwzng9HFl4xwo4CIsOuAn2odj0OogZk6ewJ4tjVYa+BsWhBzrA=
+X-Received: by 2002:a05:6902:168e:b0:e1a:3d54:bd87 with SMTP id
+ 3f1490d57ef6-e1daff94cd3mr696954276.30.1726180406916; Thu, 12 Sep 2024
+ 15:33:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: My Dell XPS-9320 (kernel 6.10.x, et al.) doesn't detect
- Thunderbolt additions when coming out of suspend or hibernate
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, Me <kenny@panix.com>
-References: <c9feac08-a1fd-4e03-a708-1046793443db@panix.com>
- <ZsvxR-dQAZtwNi0g@wunner.de> <6322b3f1-c5d9-4291-96da-72b85248dea0@panix.com>
- <5e7183c8-1843-4390-aef1-1772e538a359@panix.com>
- <20240904122835.GG1532424@black.fi.intel.com>
- <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
-Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <98c3c35d-c694-4fcd-b8b4-6101c4764ae4@panix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240822224547.385095-1-ulf.hansson@linaro.org>
+In-Reply-To: <20240822224547.385095-1-ulf.hansson@linaro.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 13 Sep 2024 00:32:51 +0200
+Message-ID: <CAPDyKFqCjw+=u+zGSc1aNKMyGcdz8ovzv9==YN8W6i3fOzYsbQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/10] OPP/pmdomain: Assign required_devs for required
+ OPPs through genpd
+To: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <quic_kdybcio@quicinc.com>, 
+	Nikunj Kela <nkela@quicinc.com>, "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, 
+	Thierry Reding <thierry.reding@gmail.com>, Mikko Perttunen <mperttunen@nvidia.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Stephan Gerhold <stephan@gerhold.net>, 
+	Ilia Lin <ilia.lin@kernel.org>, Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, 
+	Vikash Garodia <quic_vgarodia@quicinc.com>, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+On Fri, 23 Aug 2024 at 00:46, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> Changes in v3:
+>         - Combine the two series [1] and [2] into one.
+>         - A few minor changes to consumer drivers.
+>         - Clarification in commit messages.
+>
+> Through dev_pm_opp_set_config() the _opp_attach_genpd() allows consumer
+> drivers to attach a device to its PM domains. Their corresponding virtual
+> devices that are created by genpd during attach, are later being assigned
+> as the required_devs for the corresponding required OPPs. In principle,
+> using dev_pm_opp_set_config() for this works fine.
+>
+> However, attaching a device to its PM domains is in general better done
+> with dev_pm_domain_attach|detach_list(). To avoid having two different ways
+> to manage this, this series prepare for the removal of _opp_attach_genpd().
+>
+> Moreover, it converts the few existing users of the _opp_attach_genpd() into
+> dev|devm__pm_domain_attach(), allowing the final patch to drop the redundant
+> code that becomes redundant.
+>
+> To test this, I have used a QEMU setup, with local PM test-drivers to try to
+> test all various combinations of single/multi power/performance PM domains for
+> a device. Hopefully I have covered it all, but I would certainly appreciate if
+> someone could help to run a slew of tests on some HWs.
+>
+> Note, due to dependencies I think this whole series is best funneled together
+> through my pmdomain tree. If you think there may be issues with this approach,
+> please let me know so we can figure out the best merging strategy.
+>
+> Kind regards
+> Ulf Hansson
 
-I'll run the stuff you need, but now it looks like whatever is breaking 
-suspend/resume in Linus' master has been ported down from upstream into 
-6.10.10; I'm now getting the same panic()s as I did with master. I just 
-had a failed resume and the crash dump (which happened on its own) looks 
-the same as the one I'd posted here.
+FYI
 
-I may try and find some time to bisect the issue, but it'll take some time.
+This series has been cooking in linux-next via my pmdomain tree for a
+while - and lately we have received some bug reports.
 
--K
+Rather than rushing to fix the issues on top, because the merge window
+is getting closer, I decided that it was better to drop the whole
+series from my next branch for now. I will continue to work on a new
+version of the series and post it as soon as I can..
 
-On 9/9/24 00:51, Kenneth Crudup wrote:
-> 
-> I can't get to the dmesg when it crashes, but I did a SysRq-S/C and have 
-> attached the crash output; let me know if this is at all helpful.
-> 
-> I see I'd SysRq-S/C on a previous hang, I've attached that one, too.
-> 
-> This particular time it suspended OK, but hung indefinitely when I 
-> plugged it into another TB3 dock (the previous one was TB4, if it matters).
-> 
-> 
-> On 9/4/24 05:28, Mika Westerberg wrote:
->> Hi,
->>
->> On Tue, Sep 03, 2024 at 11:10:41PM -0700, Kenneth Crudup wrote:
->>>
->>> ... or, maybe not. Turns out that sometimes my system can't suspend 
->>> (just
->>> hangs, spinning hard somewhere based on the heat and the fans) when 
->>> plugged
->>> into a Thunderbolt dock at the time of suspend.
->>
->> Can you create a bug in bugzilla.kernel.org and attach full dmesg so
->> that you enter suspend with dock connected (so that the issue
->> reproduces)? Please also add "thunderbolt.dyndbg=+p" in the kernel
->> command line so we can see what the driver is doing. Also probably good
->> to add the lspci dumps too as Lukas asked.
->>
-> 
+[...]
 
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+Kind regards
+Uffe
 
