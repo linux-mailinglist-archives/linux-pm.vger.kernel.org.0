@@ -1,143 +1,173 @@
-Return-Path: <linux-pm+bounces-14100-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14101-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38E4F976EB6
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 18:31:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28147976F36
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 18:57:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D96251F25064
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 16:31:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E38A2281797
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 16:57:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60BE7185E65;
-	Thu, 12 Sep 2024 16:31:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 547341BDABE;
+	Thu, 12 Sep 2024 16:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GROl4hub"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="korcF1/i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAF1185B63
-	for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2024 16:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27D871865F7;
+	Thu, 12 Sep 2024 16:57:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726158684; cv=none; b=CxbhR1KGARuGKg7sySMx5cMAEM3HQKcA7JtQdWguyDqLkpZmGRngK+XlQBTsBfnNRCuLBUPYvMehd0QK2jdQ5g28GUqma86tTpe8hiXh43DdtVV0aYZvFPkPRgxhW74/z1Kk6bP2F20Bp1TLiNe9NUlqu1HWvcprtv1m3Jqvf8Q=
+	t=1726160232; cv=none; b=OuxisRPAh9uczpVwnGFod4cZGJ5OjPpvo9Cry7z/1i9QC1zFmyxPKvDVKHILVGm5AQCvJs+BG2x4g4JaMLv8tt84Jp1WRvikm93RpE0IJNyFHzuqRWTYWP0dyb+Ek03Uq7AaJpGqWwZvJbjbRN7NAOlABWx1q2S/VTLB6YcS7Fs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726158684; c=relaxed/simple;
-	bh=W+J1FMH3tHI+6OFtsSQZ3Juup+l/59W1qlpH8qCoJNQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hFNemfVoMHxkFVdoxPgvynqgTjfH4yj6hnCtXDyroYoplA2DoGsV3ZJu9J1W74xjsy3IZgMv5wFoo2W6aChdxpLYjWW5pZtDlD7VAUIk3+W2Bi8EVtPmxIdCwUgHdyYPQ75U1I1wuy87oRJIhLHNXefxOAqxhgpOobkz0SwkvFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GROl4hub; arc=none smtp.client-ip=209.85.166.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-82aef2c1e5fso48345339f.1
-        for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2024 09:31:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1726158680; x=1726763480; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ige0hospoSC0I0mXPH/sPi2U7TWVYcFeY8Oc0s0Dk6E=;
-        b=GROl4hubFy4Jum5Zpf2oKrD3+bY7J59mjSW+KZ2M99t35ziqEchP3iX0wZ2EHdpkic
-         A3Fi/3Sq9u34SwCSmcCe8Y2ijuKx3N0dFCo8QRNqVTKXMfcwIYf5rWRvGFP3pCgIzL9o
-         /kbdlsPpAp7bt9EjsZeV0wGYS0d2AqlcSOD+g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726158680; x=1726763480;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ige0hospoSC0I0mXPH/sPi2U7TWVYcFeY8Oc0s0Dk6E=;
-        b=Mv2U23WAbaxxr3s/RzB/Yn/pesbrrPdeiRF8gMT3IZzpEGxPF8jce2D5s+5cFPpYgH
-         Bh4uV0ILvMELHx4VCmwvQb0eWvhHxpguFFKrYWITcfARoQ3b+C9Hpsb/yb05v++WH5MJ
-         sLQqiuAqP2GrPXwqL/sb1EC3qSGjKJyC6ANWT89zGPGDCYQH1PaEOHASLclTG/KhOckR
-         QoNuvuXTfZ4kCu9q+O35mmUHxuIemiUttyQvwPifNjoFQffYBhoJ2bRurSRuXNfxPBxT
-         N71HSuyIxSaAwSTIn2tcroD525A3mKV2NXAKngPhhxo4DPJcRnAdRj8I1G3AT0368THb
-         buzQ==
-X-Gm-Message-State: AOJu0YwGTjnmpKc1yqN4iS7M7VocT/YFiX/KeAU6ji9bl0jtb24TpBDH
-	y0sNBI0C0brzUnBs1ugSoaMHAFZNeaaA510IReVBnP9eJyadwixWzrbFAGtvqFc=
-X-Google-Smtp-Source: AGHT+IG1giQTOPVkzv0dnvg8e+wyJNeH79IfT3UNXNJqA2LVrGdANRo2yN/y8lncZQFAguOo8CmmMQ==
-X-Received: by 2002:a05:6602:3fd1:b0:82c:fdc2:e25a with SMTP id ca18e2360f4ac-82d3761cb5bmr5180739f.0.1726158680478;
-        Thu, 12 Sep 2024 09:31:20 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d35f8dac37sm674341173.133.2024.09.12.09.31.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Sep 2024 09:31:20 -0700 (PDT)
-Message-ID: <5785527a-b259-42ba-989e-978d2e72ff35@linuxfoundation.org>
-Date: Thu, 12 Sep 2024 10:31:19 -0600
+	s=arc-20240116; t=1726160232; c=relaxed/simple;
+	bh=Jj/M0eZBMZoxDv71JmXMGVCQT07R36WyX1KvbT/rYaw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=OvwSYHDGQNiDjmP7vlXgpQoXhKRwl+HIe6B9jGqm55+8a+VAHwW82wZlvU91IB41/Q6cA40Qu0aLLRGc1ZL+gpP5+No+uSYEs2P1R+mUQh9eFP61cduGngVgO34yI9c7lv9V4ZbjxR5eN7ILYNTbZ4SJSKd3vb8BW9nkvntj95U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=korcF1/i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65CEDC4CEC3;
+	Thu, 12 Sep 2024 16:57:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726160231;
+	bh=Jj/M0eZBMZoxDv71JmXMGVCQT07R36WyX1KvbT/rYaw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=korcF1/i50mRH0RuPqEW7Uu7oFsXOdoHeoZnO7mTDzDvDJsAi+Y8GfJYEqN7Fpa2e
+	 m7wXdxY/jl0yCYm6YfSfChmwDvEinti/AknoLvKE/TEo8MUPTCj1e3wuB/sl3owNwW
+	 pNqA8XQwxmuGDDgz0YPaE5QYlVb+7FFGfVcDFLnoVUu0v5mtxbhV/4qPHMBjm5Ipai
+	 tzpjLcJwjfJkjBAcJlorlxJynZ0SWwfQ63eR/4bIuZg7Y9Lt3wyixP3+ak6krK334+
+	 af/xOKEx+EbeyK6j3rnkZ7Ruz4tZiFFfRkNg3P3yQdoK357qEII8W18Y/e069bwrgU
+	 xCyRHqS55Hy5A==
+Date: Thu, 12 Sep 2024 11:57:09 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc: bhelgaas@google.com, mario.limonciello@amd.com,
+	mika.westerberg@linux.intel.com, linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kaihengfeng@gmail.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [PATCH] PCI/PM: Put devices to low power state on shutdown
+Message-ID: <20240912165709.GA674430@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH for-next] pm: cpupower: rename raw_pylibcpupower.i
-To: Min-Hua Chen <minhuadotchen@gmail.com>, Thomas Renninger
- <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
- "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240912125030.19809-1-minhuadotchen@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240912125030.19809-1-minhuadotchen@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAd53p7vP8TcPj=u5TTuPMXFaWW15hwpJdECCprvXGBhigKD6Q@mail.gmail.com>
 
-On 9/12/24 06:50, Min-Hua Chen wrote:
-> This RFC patch is actually bug report. All *.i file will be
-> removed by 'make mrproper', including raw_pylibcpupower.i, added
-> by commit: 338f490e07bc ("pm:cpupower: Add SWIG bindings files for libcpupower")
-> 
-> We can reproduce the error by performing the following command:
-> cd linux-next
-> make mrproper
-> cd tools/power/cpupower/bindings/python
-> make
-> 
-> We will get an error message:
-> make: *** No rule to make target 'raw_pylibcpupower.i', needed by 'raw_pylibcpupower_wrap.c'.  Stop.
-> 
-> Renaming the raw_pylibcpupower.i is just a workaround to fix the
-> issue above.
+[+cc Rafael]
 
-I need a non-rfc patch for this. Please send a proper patch
-I can pull in once John has a chance to review this.
-
+On Thu, Sep 12, 2024 at 11:00:43AM +0800, Kai-Heng Feng wrote:
+> On Thu, Sep 12, 2024 at 3:05 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Fri, Jul 12, 2024 at 02:24:11PM +0800, Kai-Heng Feng wrote:
+> > > Some laptops wake up after poweroff when HP Thunderbolt Dock G4 is
+> > > connected.
+> > >
+> > > The following error message can be found during shutdown:
+> > > pcieport 0000:00:1d.0: AER: Correctable error message received from 0000:09:04.0
+> > > pcieport 0000:09:04.0: PCIe Bus Error: severity=Correctable, type=Data Link Layer, (Receiver ID)
+> > > pcieport 0000:09:04.0:   device [8086:0b26] error status/mask=00000080/00002000
+> > > pcieport 0000:09:04.0:    [ 7] BadDLLP
+> > >
+> > > Calling aer_remove() during shutdown can quiesce the error message,
+> > > however the spurious wakeup still happens.
+> > >
+> > > The issue won't happen if the device is in D3 before system shutdown, so
+> > > putting device to low power state before shutdown to solve the issue.
+> > >
+> > > I don't have a sniffer so this is purely guesswork, however I believe
+> > > putting device to low power state it's the right thing to do.
+> >
+> > My objection here is that we don't have an explanation of why this
+> > should matter or a pointer to any spec language about this situation,
+> > so it feels a little bit random.
 > 
-> Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
-> ---
->   tools/power/cpupower/bindings/python/Makefile                 | 4 ++--
->   .../python/{raw_pylibcpupower.i => raw_pylibcpupower.if}      | 0
->   2 files changed, 2 insertions(+), 2 deletions(-)
->   rename tools/power/cpupower/bindings/python/{raw_pylibcpupower.i => raw_pylibcpupower.if} (100%)
+> I have the same feeling too. The PCIe spec doesn't specify what's the
+> correct power state for shutdown.
+> So we can only "logically" think the software should put devices to
+> low power state during shutdown.
 > 
-> diff --git a/tools/power/cpupower/bindings/python/Makefile b/tools/power/cpupower/bindings/python/Makefile
-> index dc09c5b66ead..de872a1b80d3 100644
-> --- a/tools/power/cpupower/bindings/python/Makefile
-> +++ b/tools/power/cpupower/bindings/python/Makefile
-> @@ -20,13 +20,13 @@ _raw_pylibcpupower.so: raw_pylibcpupower_wrap.o
->   raw_pylibcpupower_wrap.o: raw_pylibcpupower_wrap.c
->   	$(CC) -fPIC -c raw_pylibcpupower_wrap.c $(PY_INCLUDE)
->   
-> -raw_pylibcpupower_wrap.c: raw_pylibcpupower.i
-> +raw_pylibcpupower_wrap.c: raw_pylibcpupower.if
->   ifeq ($(HAVE_SWIG),0)
->   	$(error "swig was not found. Make sure you have it installed and in the PATH to generate the bindings.")
->   else ifeq ($(HAVE_PYCONFIG),0)
->   	$(error "python-config was not found. Make sure you have it installed and in the PATH to generate the bindings.")
->   endif
-> -	swig -python raw_pylibcpupower.i
-> +	swig -python raw_pylibcpupower.if
->   
->   # Will only clean the bindings folder; will not clean the actual cpupower folder
->   clean:
-> diff --git a/tools/power/cpupower/bindings/python/raw_pylibcpupower.i b/tools/power/cpupower/bindings/python/raw_pylibcpupower.if
-> similarity index 100%
-> rename from tools/power/cpupower/bindings/python/raw_pylibcpupower.i
-> rename to tools/power/cpupower/bindings/python/raw_pylibcpupower.if
+> > I suppose the problem wouldn't happen if AER interrupts were disabled?
+> > We already do disable them in aer_suspend(), but maybe that's not used
+> > in the shutdown path?
+> 
+> That was my first thought, so I modified pcie_port_shutdown_service()
+> to disable AER interrupt.
+> That approach didn't work though.
+> 
+> > My understanding is that .shutdown() should turn off device interrupts
+> > and stop DMA.  So maybe we need an aer_shutdown() that disables
+> > interrupts?
+> 
+> Logically we should do that. However that approach doesn't solve this issue.
 
-thanks,
--- Shuah
+I'm not completely clear on the semantics of the .shutdown()
+interface.  The doc at
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/device/driver.h?id=v6.10#n73
+says "@shutdown: Called at shut-down time to quiesce the device"
+
+Turning off device interrupts and DMA *would* fit within the idea of
+quiescing the device.  Does that also include changing the device
+power state?  I dunno.  The power state isn't *mentioned* in the
+.shutdown() context, while it *is* mentioned for .suspend().
+
+IIUC, this patch and commit log uses "shutdown" to refer to a
+system-wide *poweroff*, which is a different concept despite using the
+same "shutdown" name.
+
+So should the system poweroff procedure use .suspend()?  Should it use
+both .shutdown() and .suspend()?  I think it only uses .shutdown()
+today:
+
+  kernel_power_off
+    kernel_shutdown_prepare(SYSTEM_POWER_OFF)
+      device_shutdown
+        while (!list_empty(&devices_kset->list))
+          dev->bus->shutdown(dev)
+            pci_device_shutdown
+
+There are several driver .shutdown() methods that do things like this:
+
+  e1000_shutdown
+    if (system_state == SYSTEM_POWER_OFF)
+      pci_set_power_state(pdev, PCI_D3hot)
+
+Maybe that's the right thing and should be done by the PCI core, which
+is similar to what you propose here.  But I think it muddies the
+definition of .shutdown() a bit by mixing in power management stuff.
+
+> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=219036
+> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > ---
+> > >  drivers/pci/pci-driver.c | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > >
+> > > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> > > index af2996d0d17f..4c6f66f3eb54 100644
+> > > --- a/drivers/pci/pci-driver.c
+> > > +++ b/drivers/pci/pci-driver.c
+> > > @@ -510,6 +510,14 @@ static void pci_device_shutdown(struct device *dev)
+> > >       if (drv && drv->shutdown)
+> > >               drv->shutdown(pci_dev);
+> > >
+> > > +     /*
+> > > +      * If driver already changed device's power state, it can mean the
+> > > +      * wakeup setting is in place, or a workaround is used. Hence keep it
+> > > +      * as is.
+> > > +      */
+> > > +     if (!kexec_in_progress && pci_dev->current_state == PCI_D0)
+> > > +             pci_prepare_to_sleep(pci_dev);
+> > > +
+> > >       /*
+> > >        * If this is a kexec reboot, turn off Bus Master bit on the
+> > >        * device to tell it to not continue to do DMA. Don't touch
+> > > --
+> > > 2.43.0
+> > >
 
