@@ -1,173 +1,132 @@
-Return-Path: <linux-pm+bounces-14079-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14080-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF7659767D2
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 13:27:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 002ED9767F5
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 13:34:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E3A51C215B5
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 11:27:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE8A428540B
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 11:34:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1E21A262D;
-	Thu, 12 Sep 2024 11:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A90F9190079;
+	Thu, 12 Sep 2024 11:34:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HoRJBYLi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 033EE19F43A;
-	Thu, 12 Sep 2024 11:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8170F224CF;
+	Thu, 12 Sep 2024 11:34:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726140149; cv=none; b=aVGhSO4VUKTNLQCqiHxa3mCExiEvPmH9RYwOMCJlQ8ns7l8oXTbYMmpBGtgtw0xFKrCd6MleBjWsf3wMIDMmATbRvYMQeFookszctFD3wREqUhwMNywOUMmgCbT9jCx9y6C1ujtF04zii56m7dOk8vK/ASOwpMSmfDSdv/TIFqU=
+	t=1726140843; cv=none; b=M72pd2ESNGvBgvmHmR2BHXWC2Yv2I3eNjMiQrexh0obvhFZL3Mf7tRaGPTaNnKw7TMncypU3Fwla44+bV1weccwboJ/IlaOJHQB+NeJS978DD0GTzQkvHd+teEvWMfC7TDWIDKrRFoJlXgBXZ7WJoyozS+5p5YKg7IDOHwDYBbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726140149; c=relaxed/simple;
-	bh=WkMmrR2PMxTc+mNjIBBn0lHsWo61UePSvPPcS/l2WUI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SmQ1C3U490qc/gvri33hNVapn+5qUkxM5YvMgL8Npq2m5L8Q2Y/Vgh34mCXpP8J0iG/JxQ4/+WqBNo1yUrmFjULL9uLP1m6VdKLNLpeebJqySFqaJNMVtBS5XxNuxO05knXFcsl3VhwULbcMhLbIB/17VM+IasdPNcyBCH0Rx9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 53CC8DA7;
-	Thu, 12 Sep 2024 04:22:55 -0700 (PDT)
-Received: from [10.1.32.61] (e127648.arm.com [10.1.32.61])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 798AA3F64C;
-	Thu, 12 Sep 2024 04:22:23 -0700 (PDT)
-Message-ID: <7d755a55-31ab-4538-aee4-f88e04dfb6cb@arm.com>
-Date: Thu, 12 Sep 2024 12:22:21 +0100
+	s=arc-20240116; t=1726140843; c=relaxed/simple;
+	bh=E9iWqBBsKTyRQym7PTkz8rCTACYBy/adJ1/ujdivEY8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=o1I/plSLeLJ/+8DV7jcCUJBEQf9BDNePzIE7r7x6GHXdCkytgdz15fUX2aP9rASMiWH0FoTqkHQJCND+5qU9Qc5eQyqZ1SNiDdwCCHmmA8hWXuZDVA1mowXM0xnhzk3+kefqb1ZemCZri3lyCnCwlAHXFri3N7+bXAPhe0PzV7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HoRJBYLi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F256CC4CEC4;
+	Thu, 12 Sep 2024 11:34:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726140843;
+	bh=E9iWqBBsKTyRQym7PTkz8rCTACYBy/adJ1/ujdivEY8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=HoRJBYLiu7K+eHj7RRisbR6FjTkMq9cGHxDy1AuA5y1EL7+hY0xN3DGyd+FDmAjpM
+	 /1/QLwi4OJ1SoVocvc9gkNtqXMxMiKSvsY1pxKi8vwmBfFO6kjlG3LTOHC/9EzWVue
+	 cRXNZTEvLVjINYfJTF3LE0siCVjQNwKR6S2NK2lRfJfXA4/Fald9aPPqX7s2tvhksb
+	 4OP6OEe7M84Z76+/Mw64mCFMUrhCzpIz7EZ1xc1ByOhih5+LPKA1LrHYyzYEHSue+4
+	 ufdo3IrdWFDzC8YSqd1ej7JzIdZ+DH6T+j+NVRrchq47BVIlKNYGuZpqINIsrbZV4A
+	 FxIQLwWqprP7w==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-278279a3a39so395126fac.0;
+        Thu, 12 Sep 2024 04:34:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUvkOamygL5k+vDQn55yDggaaQ1m+QSeDzlMQw6mV4lhWwIEVXVGfVIlkgtpzVFlutrZuO7364r6K4=@vger.kernel.org, AJvYcCXxAO+FAWE7AK0G8/O/R9cFsAwALMvg7qn+CAbuFUXQ4j/jqnS0CAfEux59QbDcFTaUREAfmHoOZg9o1ok=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPHYW6O6lvpkdfKFENVdUvqPdlc78DAO4ifUtHpbKovu9EkWLt
+	jnigoqn+96YBgRB9MOpoSjLgKDc9VmT1OHZ0ztvLBdXQIOnVf3Ld2voTqbMrQAovDvfAEZZYNbv
+	vjrfm27T3CsA4C7rZve/MpRclPb4=
+X-Google-Smtp-Source: AGHT+IGRI15b2rce7iEfqbVp0JwmRC0WFhUwAfzhbjaOLB/cliqAZLEZieIAOu1ofedCQ/CSE2p3+DvqzwgdAFolR1A=
+X-Received: by 2002:a05:6870:71c5:b0:277:f399:705b with SMTP id
+ 586e51a60fabf-27c3f0ede91mr1339323fac.1.1726140842301; Thu, 12 Sep 2024
+ 04:34:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [RFC PATCH] TEST: cpufreq: intel_pstate: sysfs iowait_boost_cap
-To: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- rafael@kernel.org, peterz@infradead.org
-Cc: juri.lelli@redhat.com, mingo@redhat.com, dietmar.eggemann@arm.com,
- vschneid@redhat.com, vincent.guittot@linaro.org, Johannes.Thumshirn@wdc.com,
- adrian.hunter@intel.com, ulf.hansson@linaro.org, bvanassche@acm.org,
- andres@anarazel.de, asml.silence@gmail.com, linux-block@vger.kernel.org,
- io-uring@vger.kernel.org, qyousef@layalina.io, dsmythies@telus.net,
- axboe@kernel.dk
-References: <20240905092645.2885200-1-christian.loehle@arm.com>
- <20240905092645.2885200-7-christian.loehle@arm.com>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <20240905092645.2885200-7-christian.loehle@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240728184551.42133-1-qyousef@layalina.io> <6e4a4605-f6c5-4948-ac38-c4ddf4990754@arm.com>
+In-Reply-To: <6e4a4605-f6c5-4948-ac38-c4ddf4990754@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 12 Sep 2024 13:33:50 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ieB4hppC8fHnjhNNpfFZzEL4Y96irSTmCmavXCid2xtA@mail.gmail.com>
+Message-ID: <CAJZ5v0ieB4hppC8fHnjhNNpfFZzEL4Y96irSTmCmavXCid2xtA@mail.gmail.com>
+Subject: Re: [PATCH v7] sched: Consolidate cpufreq updates
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Qais Yousef <qyousef@layalina.io>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Ingo Molnar <mingo@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, 
+	Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
+	Hongyan Xia <hongyan.xia2@arm.com>, John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-For non-HWP systems, rework iowait boost to be linear and add
-the sysfs knob iowait_boost_cap to limit the maximum boost in
-8 steps.
+On Wed, Sep 11, 2024 at 10:34=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 7/28/24 19:45, Qais Yousef wrote:
+> > Improve the interaction with cpufreq governors by making the
+> > cpufreq_update_util() calls more intentional.
+> >
+> > At the moment we send them when load is updated for CFS, bandwidth for
+> > DL and at enqueue/dequeue for RT. But this can lead to too many updates
+> > sent in a short period of time and potentially be ignored at a critical
+> > moment due to the rate_limit_us in schedutil.
+> >
+> > For example, simultaneous task enqueue on the CPU where 2nd task is
+> > bigger and requires higher freq. The trigger to cpufreq_update_util() b=
+y
+> > the first task will lead to dropping the 2nd request until tick. Or
+> > another CPU in the same policy triggers a freq update shortly after.
+> >
+> > Updates at enqueue for RT are not strictly required. Though they do hel=
+p
+> > to reduce the delay for switching the frequency and the potential
+> > observation of lower frequency during this delay. But current logic
+> > doesn't intentionally (at least to my understanding) try to speed up th=
+e
+> > request.
+> >
+> > To help reduce the amount of cpufreq updates and make them more
+> > purposeful, consolidate them into these locations:
+> >
+> > 1. context_switch()
+> > 2. task_tick_fair()
+> > 3. sched_balance_update_blocked_averages()
+> > 4. on sched_setscheduler() syscall that changes policy or uclamp values
+> > 5. on check_preempt_wakeup_fair() if wakeup preemption failed
+> > 6. on __add_running_bw() to guarantee DL bandwidth requirements.
+> >
+>
+> Actually now reading that code again reminded me, there is another
+> iowait boost change for intel_pstate.
+> intel_pstate has either intel_pstate_update_util() or
+> intel_pstate_update_util_hwp().
+> Both have
+>         if (smp_processor_id() !=3D cpu->cpu)
+>                 return;
+> Now since we move that update from enqueue to context_switch() that will
+> always be false.
+> I don't think that was deliberate but rather to simplify intel_pstate
+> synchronization, although !mcq device IO won't be boosted which you
+> could argue is good.
+> Just wanted to mention that, doesn't have to be a bad, but surely some
+> behavior change.
 
-I don't see a good way to translate this to HWP, as the
-boost applied isn't as static as it is for non-HWP, but there
-is already the dynamic_hwp_boost sysfs to enable/disable
-completely.
-
-Signed-off-by: Christian Loehle <christian.loehle@arm.com>
----
- drivers/cpufreq/intel_pstate.c | 39 ++++++++++++++++++++++++++++++++--
- 1 file changed, 37 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index c0278d023cfc..6882d8c74e61 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -183,6 +183,7 @@ struct global_params {
- 	bool turbo_disabled;
- 	int max_perf_pct;
- 	int min_perf_pct;
-+	unsigned int iowait_boost_cap;
- };
- 
- /**
-@@ -1444,6 +1445,30 @@ static ssize_t store_min_perf_pct(struct kobject *a, struct kobj_attribute *b,
- 	return count;
- }
- 
-+static ssize_t store_iowait_boost_cap(struct kobject *a, struct kobj_attribute *b,
-+				  const char *buf, size_t count)
-+{
-+	unsigned int input;
-+	int ret;
-+
-+	ret = sscanf(buf, "%u", &input);
-+	if (ret != 1)
-+		return -EINVAL;
-+
-+	mutex_lock(&intel_pstate_driver_lock);
-+
-+	if (!intel_pstate_driver) {
-+		mutex_unlock(&intel_pstate_driver_lock);
-+		return -EAGAIN;
-+	}
-+
-+	global.iowait_boost_cap = clamp_t(int, input, 0, 8);
-+
-+	mutex_unlock(&intel_pstate_driver_lock);
-+
-+	return count;
-+}
-+
- static ssize_t show_hwp_dynamic_boost(struct kobject *kobj,
- 				struct kobj_attribute *attr, char *buf)
- {
-@@ -1497,6 +1522,7 @@ static ssize_t store_energy_efficiency(struct kobject *a, struct kobj_attribute
- 
- show_one(max_perf_pct, max_perf_pct);
- show_one(min_perf_pct, min_perf_pct);
-+show_one(iowait_boost_cap, iowait_boost_cap);
- 
- define_one_global_rw(status);
- define_one_global_rw(no_turbo);
-@@ -1506,6 +1532,7 @@ define_one_global_ro(turbo_pct);
- define_one_global_ro(num_pstates);
- define_one_global_rw(hwp_dynamic_boost);
- define_one_global_rw(energy_efficiency);
-+define_one_global_rw(iowait_boost_cap);
- 
- static struct attribute *intel_pstate_attributes[] = {
- 	&status.attr,
-@@ -1562,6 +1589,9 @@ static void __init intel_pstate_sysfs_expose_params(void)
- 		rc = sysfs_create_file(intel_pstate_kobject, &energy_efficiency.attr);
- 		WARN_ON(rc);
- 	}
-+
-+	rc = sysfs_create_file(intel_pstate_kobject, &iowait_boost_cap.attr);
-+	WARN_ON(rc);
- }
- 
- static void __init intel_pstate_sysfs_remove(void)
-@@ -2322,18 +2352,23 @@ static void intel_pstate_update_util(struct update_util_data *data, u64 time,
- 		if (delta_ns > TICK_NSEC) {
- 			cpu->iowait_boost = ONE_EIGHTH_FP;
- 		} else if (cpu->iowait_boost >= ONE_EIGHTH_FP) {
--			cpu->iowait_boost <<= 1;
-+			cpu->iowait_boost += ONE_EIGHTH_FP;
- 			if (cpu->iowait_boost > int_tofp(1))
- 				cpu->iowait_boost = int_tofp(1);
- 		} else {
- 			cpu->iowait_boost = ONE_EIGHTH_FP;
- 		}
-+		if (cpu->iowait_boost > global.iowait_boost_cap * ONE_EIGHTH_FP)
-+			cpu->iowait_boost = global.iowait_boost_cap * ONE_EIGHTH_FP;
- 	} else if (cpu->iowait_boost) {
- 		/* Clear iowait_boost if the CPU may have been idle. */
- 		if (delta_ns > TICK_NSEC)
- 			cpu->iowait_boost = 0;
--		else
-+		else {
- 			cpu->iowait_boost >>= 1;
-+			if (cpu->iowait_boost < ONE_EIGHTH_FP)
-+				cpu->iowait_boost = 0;
-+		}
- 	}
- 	cpu->last_update = time;
- 	delta_ns = time - cpu->sample.time;
--- 
-2.25.1
+This particular change shouldn't be problematic.
 
