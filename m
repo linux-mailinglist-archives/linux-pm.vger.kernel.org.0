@@ -1,132 +1,198 @@
-Return-Path: <linux-pm+bounces-14080-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14081-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 002ED9767F5
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 13:34:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B85297680E
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 13:43:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE8A428540B
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 11:34:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FEF81C20E08
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 11:43:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A90F9190079;
-	Thu, 12 Sep 2024 11:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA978176FCF;
+	Thu, 12 Sep 2024 11:42:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HoRJBYLi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AnSDEhqz"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8170F224CF;
-	Thu, 12 Sep 2024 11:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF08F224CF;
+	Thu, 12 Sep 2024 11:42:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726140843; cv=none; b=M72pd2ESNGvBgvmHmR2BHXWC2Yv2I3eNjMiQrexh0obvhFZL3Mf7tRaGPTaNnKw7TMncypU3Fwla44+bV1weccwboJ/IlaOJHQB+NeJS978DD0GTzQkvHd+teEvWMfC7TDWIDKrRFoJlXgBXZ7WJoyozS+5p5YKg7IDOHwDYBbY=
+	t=1726141379; cv=none; b=gruNpE37jAmlZuCfpFSXLo5ilg3ur1eS+NVC1nfWuaAVp0sfWk0s4C7QEVmf9NUMZNUtYrq9t8EHNN8QcEdF8G6fyN52Ydt1MIMHueqz2EE3cTA2dtMR+AAUyUS9uhmwMnaiqnrDMyPmMuPHVctVEdgaxz6guBdFShMplLiBK9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726140843; c=relaxed/simple;
-	bh=E9iWqBBsKTyRQym7PTkz8rCTACYBy/adJ1/ujdivEY8=;
+	s=arc-20240116; t=1726141379; c=relaxed/simple;
+	bh=74t/6Lr2+3xfoJLQZ5kG3OSTE3ec884oIFiAxXwJ8yg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o1I/plSLeLJ/+8DV7jcCUJBEQf9BDNePzIE7r7x6GHXdCkytgdz15fUX2aP9rASMiWH0FoTqkHQJCND+5qU9Qc5eQyqZ1SNiDdwCCHmmA8hWXuZDVA1mowXM0xnhzk3+kefqb1ZemCZri3lyCnCwlAHXFri3N7+bXAPhe0PzV7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HoRJBYLi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F256CC4CEC4;
-	Thu, 12 Sep 2024 11:34:02 +0000 (UTC)
+	 To:Cc:Content-Type; b=ejvD86IkC5dSZhclTbS/OjgAA3NSIyW9vx961/AhI/DL2l64JEBNKSjxxlhdIzggdxsPT2FSH8FBdUrEH0c2zHDuGT7WY4dFB0XAeZpyVXZ7l7xcdsRBZ9LVBZqmd/ot2lMQwzP6CCY4Z/iq7oHCfJN10XKZ1t7V4jX1VVO+ZE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AnSDEhqz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D09AC4CECD;
+	Thu, 12 Sep 2024 11:42:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726140843;
-	bh=E9iWqBBsKTyRQym7PTkz8rCTACYBy/adJ1/ujdivEY8=;
+	s=k20201202; t=1726141379;
+	bh=74t/6Lr2+3xfoJLQZ5kG3OSTE3ec884oIFiAxXwJ8yg=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HoRJBYLiu7K+eHj7RRisbR6FjTkMq9cGHxDy1AuA5y1EL7+hY0xN3DGyd+FDmAjpM
-	 /1/QLwi4OJ1SoVocvc9gkNtqXMxMiKSvsY1pxKi8vwmBfFO6kjlG3LTOHC/9EzWVue
-	 cRXNZTEvLVjINYfJTF3LE0siCVjQNwKR6S2NK2lRfJfXA4/Fald9aPPqX7s2tvhksb
-	 4OP6OEe7M84Z76+/Mw64mCFMUrhCzpIz7EZ1xc1ByOhih5+LPKA1LrHYyzYEHSue+4
-	 ufdo3IrdWFDzC8YSqd1ej7JzIdZ+DH6T+j+NVRrchq47BVIlKNYGuZpqINIsrbZV4A
-	 FxIQLwWqprP7w==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-278279a3a39so395126fac.0;
-        Thu, 12 Sep 2024 04:34:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUvkOamygL5k+vDQn55yDggaaQ1m+QSeDzlMQw6mV4lhWwIEVXVGfVIlkgtpzVFlutrZuO7364r6K4=@vger.kernel.org, AJvYcCXxAO+FAWE7AK0G8/O/R9cFsAwALMvg7qn+CAbuFUXQ4j/jqnS0CAfEux59QbDcFTaUREAfmHoOZg9o1ok=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPHYW6O6lvpkdfKFENVdUvqPdlc78DAO4ifUtHpbKovu9EkWLt
-	jnigoqn+96YBgRB9MOpoSjLgKDc9VmT1OHZ0ztvLBdXQIOnVf3Ld2voTqbMrQAovDvfAEZZYNbv
-	vjrfm27T3CsA4C7rZve/MpRclPb4=
-X-Google-Smtp-Source: AGHT+IGRI15b2rce7iEfqbVp0JwmRC0WFhUwAfzhbjaOLB/cliqAZLEZieIAOu1ofedCQ/CSE2p3+DvqzwgdAFolR1A=
-X-Received: by 2002:a05:6870:71c5:b0:277:f399:705b with SMTP id
- 586e51a60fabf-27c3f0ede91mr1339323fac.1.1726140842301; Thu, 12 Sep 2024
- 04:34:02 -0700 (PDT)
+	b=AnSDEhqzH4TVXXkmAmOnIQAofLz8MMX5loMctL64+MKmO7qXd+39QnX3dFnqb3Aax
+	 VfBa3c8Tyn9fRNhQxoV/3vnKi9qiqEyp7S1Ny+yyFkL/rRcB+vm69k1ekJJjTW1k+H
+	 GI4DQDlOwrPlY8kCvvsg9HhFnmZzzOtOrkvofglxdWTzg3rKRLb1O45zYEHNzk4ILg
+	 b1YMruKjH31GViZ7uvRUjyit5PDOnCYVc+GMj/S3QUNPLXi04gcnleyx/vD44/sRDO
+	 NQBLp2LjA3WN09uFUccw9zqh3GqetvV+pQBDnWCL3dKZKSr0orgthNNJvdXKQMlvtT
+	 GaQRnE//BtuWA==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-2705d31a35cso387618fac.0;
+        Thu, 12 Sep 2024 04:42:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV/+276++IGKTb5V3gQU1X+18p8b5lwun+92rGhODhMnaIHBpI9gfN9rmQIXrZOd40ZIOQ7hKV++p8=@vger.kernel.org, AJvYcCWW+q5lPrlKxHrgHqXVTiNTDEu3IVahAl5idL2TYmqTsrWk5szb+7SPUtD8xK0u3iubonfyoJ3MUZ9Fmbw=@vger.kernel.org, AJvYcCWataEGK8fu8a8E9kHaWLWALBqLTX9Tuygex6l/G54t0oDhj2lOvqEwCwdfF73Ep5QlvCs4SUgeo3Ms@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5VjyyEkEqWerGzNCm9cfHWd9nsreBskRYMMw9LNcfnsitAAvk
+	QatV11yQjupGOVWHRro7fZAV6WSrjaOkMx+7NkORrQWFlkN4sQoo7lhmY+06vNq5MfhTckyC7UN
+	3RioHbUJtoQjVOZFxBIHHwhwz288=
+X-Google-Smtp-Source: AGHT+IHi5GsHgUbSckGcFqwpFN8cp7ELgXQ6onRMbQE3zE++4MDsI48Be+sbaHhtk6yYbf/5v1BXIYRW1MyecHWrTvs=
+X-Received: by 2002:a05:6870:972c:b0:270:4d48:6be2 with SMTP id
+ 586e51a60fabf-27c3f411895mr1650155fac.26.1726141378394; Thu, 12 Sep 2024
+ 04:42:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240728184551.42133-1-qyousef@layalina.io> <6e4a4605-f6c5-4948-ac38-c4ddf4990754@arm.com>
-In-Reply-To: <6e4a4605-f6c5-4948-ac38-c4ddf4990754@arm.com>
+References: <20240708-runtime_pm-v4-1-c02a3663243b@quicinc.com> <20240816204539.GA73302@bhelgaas>
+In-Reply-To: <20240816204539.GA73302@bhelgaas>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 12 Sep 2024 13:33:50 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ieB4hppC8fHnjhNNpfFZzEL4Y96irSTmCmavXCid2xtA@mail.gmail.com>
-Message-ID: <CAJZ5v0ieB4hppC8fHnjhNNpfFZzEL4Y96irSTmCmavXCid2xtA@mail.gmail.com>
-Subject: Re: [PATCH v7] sched: Consolidate cpufreq updates
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: Qais Yousef <qyousef@layalina.io>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Ingo Molnar <mingo@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, 
-	Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
-	Hongyan Xia <hongyan.xia2@arm.com>, John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Thu, 12 Sep 2024 13:42:47 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j0ck2yKPzisggkdKTFz-AVKG7q+6WnBiiT_43VT4Fbvg@mail.gmail.com>
+Message-ID: <CAJZ5v0j0ck2yKPzisggkdKTFz-AVKG7q+6WnBiiT_43VT4Fbvg@mail.gmail.com>
+Subject: Re: [PATCH v4] PCI: Enable runtime pm of the host bridge
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Krishna chaitanya chundru <quic_krichai@quicinc.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, linux-pci@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com, 
+	quic_ramkri@quicinc.com, quic_nitegupt@quicinc.com, quic_skananth@quicinc.com, 
+	quic_parass@quicinc.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Mayank Rana <quic_mrana@quicinc.com>, Markus Elfring <Markus.Elfring@web.de>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 11, 2024 at 10:34=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
+On Fri, Aug 16, 2024 at 10:45=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org>=
+ wrote:
 >
-> On 7/28/24 19:45, Qais Yousef wrote:
-> > Improve the interaction with cpufreq governors by making the
-> > cpufreq_update_util() calls more intentional.
-> >
-> > At the moment we send them when load is updated for CFS, bandwidth for
-> > DL and at enqueue/dequeue for RT. But this can lead to too many updates
-> > sent in a short period of time and potentially be ignored at a critical
-> > moment due to the rate_limit_us in schedutil.
-> >
-> > For example, simultaneous task enqueue on the CPU where 2nd task is
-> > bigger and requires higher freq. The trigger to cpufreq_update_util() b=
-y
-> > the first task will lead to dropping the 2nd request until tick. Or
-> > another CPU in the same policy triggers a freq update shortly after.
-> >
-> > Updates at enqueue for RT are not strictly required. Though they do hel=
-p
-> > to reduce the delay for switching the frequency and the potential
-> > observation of lower frequency during this delay. But current logic
-> > doesn't intentionally (at least to my understanding) try to speed up th=
-e
-> > request.
-> >
-> > To help reduce the amount of cpufreq updates and make them more
-> > purposeful, consolidate them into these locations:
-> >
-> > 1. context_switch()
-> > 2. task_tick_fair()
-> > 3. sched_balance_update_blocked_averages()
-> > 4. on sched_setscheduler() syscall that changes policy or uclamp values
-> > 5. on check_preempt_wakeup_fair() if wakeup preemption failed
-> > 6. on __add_running_bw() to guarantee DL bandwidth requirements.
-> >
+> [+cc Rafael, Mayank, Markus (when people have commented on previous
+> versions, please cc them on new versions).  I'm still hoping Rafael
+> will have a chance to chime in]
 >
-> Actually now reading that code again reminded me, there is another
-> iowait boost change for intel_pstate.
-> intel_pstate has either intel_pstate_update_util() or
-> intel_pstate_update_util_hwp().
-> Both have
->         if (smp_processor_id() !=3D cpu->cpu)
->                 return;
-> Now since we move that update from enqueue to context_switch() that will
-> always be false.
-> I don't think that was deliberate but rather to simplify intel_pstate
-> synchronization, although !mcq device IO won't be boosted which you
-> could argue is good.
-> Just wanted to mention that, doesn't have to be a bad, but surely some
-> behavior change.
+> On Mon, Jul 08, 2024 at 10:19:40AM +0530, Krishna chaitanya chundru wrote=
+:
+> > The Controller driver is the parent device of the PCIe host bridge,
+> > PCI-PCI bridge and PCIe endpoint as shown below.
+> >
+> >         PCIe controller(Top level parent & parent of host bridge)
+> >                         |
+> >                         v
+> >         PCIe Host bridge(Parent of PCI-PCI bridge)
+> >                         |
+> >                         v
+> >         PCI-PCI bridge(Parent of endpoint driver)
+> >                         |
+> >                         v
+> >                 PCIe endpoint driver
+> >
+> > Now, when the controller device goes to runtime suspend, PM framework
+> > will check the runtime PM state of the child device (host bridge) and
+> > will find it to be disabled.
+>
+> I guess "will find it to be disabled"  means the child (host bridge)
+> has runtime PM disabled, not that the child device is disabled, right?
+>
+> > So it will allow the parent (controller
+> > device) to go to runtime suspend. Only if the child device's state was
+> > 'active' it will prevent the parent to get suspended.
+>
+> Can we include a hint like the name of the function where the PM
+> framework decides this?  Maybe this is rpm_check_suspend_allowed()?
+>
+> rpm_check_suspend_allowed()  checks ".ignore_children", which sounds
+> like it could be related, and AFAICS .ignore_children =3D=3D false here,
+> so .child_count should be relevant.
+>
+> But I'm still confused about why we can runtime suspend a bridge that
+> leads to devices that are not suspended.
 
-This particular change shouldn't be problematic.
+That should only be possible if runtime PM is disabled for those devices.
+
+> > Since runtime PM is disabled for host bridge, the state of the child
+> > devices under the host bridge is not taken into account by PM framework
+> > for the top level parent, PCIe controller. So PM framework, allows
+> > the controller driver to enter runtime PM irrespective of the state
+> > of the devices under the host bridge. And this causes the topology
+> > breakage and also possible PM issues like controller driver goes to
+> > runtime suspend while endpoint driver is doing some transfers.
+
+Why is it a good idea to enable runtime PM for a PCIe controller?
+
+> What does "topology breakage" mean?  Do you mean something other than
+> the fact that an endpoint DMA might fail if the controller is
+> suspended?
+>
+> > So enable runtime PM for the host bridge, so that controller driver
+> > goes to suspend only when all child devices goes to runtime suspend.
+
+This by itself makes sense to me.
+
+> IIUC, the one-sentence description here is that previously, the PCI
+> host controller could be runtime suspended even while an endpoint was
+> active, which caused DMA failures.  And this patch changes that so the
+> host controller is only runtime suspended after the entire hierarchy
+> below it is runtime suspended?  Is that right?
+>
+> > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> > ---
+> > Changes in v4:
+>
+> (Note: v4 applies cleanly to v6.10-rc1 and to v6.11-rc1 with a small
+> offset).
+>
+> > - Changed pm_runtime_enable() to devm_pm_runtime_enable() (suggested by=
+ mayank)
+> > - Link to v3: https://lore.kernel.org/lkml/20240609-runtime_pm-v3-1-3d0=
+460b49d60@quicinc.com/
+> > Changes in v3:
+> > - Moved the runtime API call's from the dwc driver to PCI framework
+> >   as it is applicable for all (suggested by mani)
+> > - Updated the commit message.
+> > - Link to v2: https://lore.kernel.org/all/20240305-runtime_pm_enable-v2=
+-1-a849b74091d1@quicinc.com
+> > Changes in v2:
+> > - Updated commit message as suggested by mani.
+> > - Link to v1: https://lore.kernel.org/r/20240219-runtime_pm_enable-v1-1=
+-d39660310504@quicinc.com
+> > ---
+> >
+> > ---
+> >  drivers/pci/probe.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> > index 8e696e547565..fd49563a44d9 100644
+> > --- a/drivers/pci/probe.c
+> > +++ b/drivers/pci/probe.c
+> > @@ -3096,6 +3096,10 @@ int pci_host_probe(struct pci_host_bridge *bridg=
+e)
+> >       }
+> >
+> >       pci_bus_add_devices(bus);
+> > +
+> > +     pm_runtime_set_active(&bridge->dev);
+> > +     devm_pm_runtime_enable(&bridge->dev);
+> > +
+> >       return 0;
+> >  }
+> >  EXPORT_SYMBOL_GPL(pci_host_probe);
+
+This will effectively prevent the host bridge from being
+runtime-suspended at all IIUC, so the PCIe controller will never
+suspend too after this change.
+
+If this is the intended behavior, I would suggest saying that
+explicitly in the changelog.
 
