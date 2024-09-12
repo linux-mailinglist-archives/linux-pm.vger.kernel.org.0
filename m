@@ -1,51 +1,55 @@
-Return-Path: <linux-pm+bounces-14060-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14061-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50132975FC0
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 05:32:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C950976091
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 07:47:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 169D4282555
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 03:32:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCA17B20CBC
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 05:47:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79ADD1EB2A;
-	Thu, 12 Sep 2024 03:32:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D020718786D;
+	Thu, 12 Sep 2024 05:47:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227D67581B
-	for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2024 03:32:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 396CA2119;
+	Thu, 12 Sep 2024 05:47:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726111964; cv=none; b=V7lSdPwNI0e89lXikrjBrempgvYQ0kvFaAtPDxMplmTWA8TxfeHJ/Ntb+q37BCL2DM9hxdWiDeuTSQaORW6g+ZQBA1zoMOvHbFX/LSIxl19LzDay6KQkzg8k3zA4nKF5gWu52Q2rMuFoD+UApLjfjw5qgHjhKIru6HHajKKXMWc=
+	t=1726120060; cv=none; b=uUVgl6qr2Q0te2kDMDY12nx3veXNDQfSbtWmt/xp/d8uIFasNmTu0LEefCmPvh8NGEFd2nYRGiFjwH+MS0uqca3bMX5suVExjkSom1g7uaXeBcZ5MGCCsdgoD5yz919lmTTBlJsLpbOOKHvSc5kEbRaHAWjmIeTZb+MMCod+Fxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726111964; c=relaxed/simple;
-	bh=YXNMX1hZalPdipd47CBIMy3zbxYJGT9dTLn8D2yyMec=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VkZe7RZhIVMM8ItAUr4IOJLZSmeEXxbN3yhpuXeIWyuny4meB1YeP+Ddxp/EPuP29VHnxX9zQeh3F/BlHuFPjo05KkPDbbO12jA+ZR19XcUctGO22Tf+koklJBoYh9mEzMWvHhBBrFV3BOEnE8599W4GdB9Ojr/MSRtUJ30G1uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4X42zS0Qkdz1P9LC;
-	Thu, 12 Sep 2024 11:31:32 +0800 (CST)
-Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8A70F140453;
-	Thu, 12 Sep 2024 11:32:39 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
- (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 12 Sep
- 2024 11:32:39 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <nm@ti.com>, <ssantosh@kernel.org>, <khilman@ti.com>,
-	<linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH] soc: ti: smartreflex: Use IRQF_NO_AUTOEN flag in request_irq()
-Date: Thu, 12 Sep 2024 11:41:47 +0800
-Message-ID: <20240912034147.3014213-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1726120060; c=relaxed/simple;
+	bh=t+fk5V5nUqgzYrN0b7bpXJ8GzuBCxY4mbshzH7YG7Os=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tCm8nz0lA1HjoTq2zjlzcwT0hFHmDeyeTtu4YxF+xwe5vlUXZnIDwXg9/XV/zXcEvSvERYeI6wufb50l+nyN6A1tYQ40CRy6C0OagJdoGBlOBgWKwdLZLSNZ1WZuhl+xLGs3Mc3Zy3T1oZmIn0/4Osp1Z7Bl/wzAB/tqX+DkAQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee766e28072576-2557c;
+	Thu, 12 Sep 2024 13:47:31 +0800 (CST)
+X-RM-TRANSID:2ee766e28072576-2557c
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.97])
+	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee766e28072070-04678;
+	Thu, 12 Sep 2024 13:47:31 +0800 (CST)
+X-RM-TRANSID:2ee766e28072070-04678
+From: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>
+To: rafael@kernel.org
+Cc: daniel.lezcano@linaro.org,
+	rui.zhang@intel.com,
+	lukasz.luba@arm.com,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	zhang jiao <zhangjiao2@cmss.chinamobile.com>
+Subject: [PATCH] tools/lib/thermal: Rm thermal.h soft link.
+Date: Thu, 12 Sep 2024 12:50:31 +0800
+Message-Id: <20240912045031.18426-1-zhangjiao2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,41 +57,36 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemh500013.china.huawei.com (7.202.181.146)
 
-If request_irq() fails in sr_late_init(), there is no need to enable
-the irq, and if it succeeds, disable_irq() after request_irq() still has
-a time gap in which interrupts can come.
+From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
 
-request_irq() with IRQF_NO_AUTOEN flag will disable IRQ auto-enable when
-request IRQ.
+Run "make -C tools thermal" can create a soft link
+for thermal.h in tools/include/uapi/linux.
+Just rm it when make clean.
 
-Fixes: 1279ba5916f6 ("OMAP3+: SR: disable interrupt by default")
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
 ---
- drivers/soc/ti/smartreflex.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/lib/thermal/Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
-index d6219060b616..38add2ab5613 100644
---- a/drivers/soc/ti/smartreflex.c
-+++ b/drivers/soc/ti/smartreflex.c
-@@ -202,10 +202,10 @@ static int sr_late_init(struct omap_sr *sr_info)
+diff --git a/tools/lib/thermal/Makefile b/tools/lib/thermal/Makefile
+index 2d0d255fd0e1..8890fd57b110 100644
+--- a/tools/lib/thermal/Makefile
++++ b/tools/lib/thermal/Makefile
+@@ -121,7 +121,9 @@ all: fixdep
  
- 	if (sr_class->notify && sr_class->notify_flags && sr_info->irq) {
- 		ret = devm_request_irq(&sr_info->pdev->dev, sr_info->irq,
--				       sr_interrupt, 0, sr_info->name, sr_info);
-+				       sr_interrupt, IRQF_NO_AUTOEN,
-+				       sr_info->name, sr_info);
- 		if (ret)
- 			goto error;
--		disable_irq(sr_info->irq);
- 	}
+ clean:
+ 	$(call QUIET_CLEAN, libthermal) $(RM) $(LIBTHERMAL_A) \
+-                *.o *~ *.a *.so *.so.$(VERSION) *.so.$(LIBTHERMAL_VERSION) .*.d .*.cmd LIBTHERMAL-CFLAGS $(LIBTHERMAL_PC)
++                *.o *~ *.a *.so *.so.$(VERSION) *.so.$(LIBTHERMAL_VERSION) \
++                .*.d .*.cmd LIBTHERMAL-CFLAGS $(LIBTHERMAL_PC) \
++                $(srctree)/tools/$(THERMAL_UAPI)
  
- 	return ret;
+ $(LIBTHERMAL_PC):
+ 	$(QUIET_GEN)sed -e "s|@PREFIX@|$(prefix)|" \
 -- 
-2.34.1
+2.33.0
+
+
 
 
