@@ -1,152 +1,137 @@
-Return-Path: <linux-pm+bounces-14094-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14095-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9F75976CE5
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 17:00:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8C7A976D86
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 17:18:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE5B91C23B1C
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 15:00:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35065B22E92
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 15:18:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E54C71A725C;
-	Thu, 12 Sep 2024 15:00:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21F0F1AD245;
+	Thu, 12 Sep 2024 15:15:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="YeCRBz4U"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Gl9HjWgx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8BC6A8C1
-	for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2024 15:00:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472621B9B3E
+	for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2024 15:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726153234; cv=none; b=fPKOF8cdsufxIcWB93qy1tsZ2JBKH2jG82Kx2hgRmEmi8jLlf7VmhQd4wbtSUbkYZfI5d+Y0r78Vnzp8IswaVDjbsHGnz9rFdlr2Slfy6pT3fH5gzuDwWHfmc0TCE0f0Iy4UPVf4ZEWAq29UKAfZm1aDL3IYCVzRVEcKJJKxhPA=
+	t=1726154136; cv=none; b=JkloDqYnk+Wwh6X5uTRuMeipqDup7A47agoWiuYhpcrCGP3EWUtiI26x08C69Dcth5MFeLH0AbaZMaA8Cvp+VP+LlpqR8d+P6j+KYDYDH9VwBf3/XA4IRTMDLSzxUzBEZ/QT6RTWpqt5n/eibAEDew4NjiEiQuh4pRxPbcj6yW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726153234; c=relaxed/simple;
-	bh=7L47ev+2rIiO9RYsStVCwqce6vN2zxIMqLv/5Qypajk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pd99ZU2bvf7s5HgNTGrmGuDVt1J5mnb/6waRDy5juc3u4gwHUIQcwT86FajN5vX73/3KSfDEQ+jlZ24J7HdcR4S4+8UNM/WKKWaTuLpcHk+/ghsJt7hZAMNHcfzsrjcYbFeNOMHlFdux/CUQDU+v7whvHW7okAmmCzz7F+8PUqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=YeCRBz4U; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7a9ab721058so192261185a.1
-        for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2024 08:00:33 -0700 (PDT)
+	s=arc-20240116; t=1726154136; c=relaxed/simple;
+	bh=ZPx4h96mRwkldOlgceAEmagWmM1V8EKIPeCKc7K0/Wg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=U9sIn4M70JNoC5KcQ3v6ENsYkmeyky36kMOP8aIwbVh0w+GfMU+YHBEBSwevGyVQiOxfCCUI5Xf0l6bRNqoeP4XfVT28JGHqke0RLeZW1/chd+P82BwTXd4z91fNbuUJO/nR5pgqwOuo/o8fm0WvYbHu7aJbqLhghpdob0P1aQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Gl9HjWgx; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-82cf3286261so43779639f.0
+        for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2024 08:15:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1726153232; x=1726758032; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZAYn7AWMFdIVv0f37NgeBxnEuOXY388haBmrjcdyedA=;
-        b=YeCRBz4UxFpGwCN5cT8SdrgrIaExegqVau6/pnm9u3eBJK48gJqOho1/j3STn4C8wC
-         q13bU5eofxSJQOx8z6XDxjJbL18qYdJ/daQYElTEUAR4UZBkThMHXmCUyUXxWAn0cjlx
-         kA1Av8urf5MsYfJd5fPUxQFRSoA2RP4WkJeaelzQHLg3elDQ1+yZLwGEfFZHoUHicshU
-         SOe+HKr5HyYVXZYK/Hputy/YLVg3jb1rx6DhwJ9w/d0pkT1GtoU4Fpbdd1kslxc3yoUo
-         yfz90A7TfWRwFQcr/WymGp7QWgVxfyE2RA3vnx4LctxGlXS0FFZPaOFJhw3Ldja9UmTO
-         AdmA==
+        d=linuxfoundation.org; s=google; t=1726154133; x=1726758933; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qsd4xIZ2+CjD4Q1wOFyd3+yQAtEqnkaWLKPfVRRwPdk=;
+        b=Gl9HjWgxMVzvH1ehkCUaa0kBrXD4Nr8q/tgGprNZhoBRRjuPUHOaU6ESDQjh1W4wZj
+         KV5Ytsti4BapSYH92+m0if7uOsMzYNq4gfveUKaYvfvf53AKm93bI5027xOf3MK3pjon
+         csX9U8rp4rcUH6APk+0cEF5u8dXnh9MV4MNO4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726153232; x=1726758032;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1726154133; x=1726758933;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZAYn7AWMFdIVv0f37NgeBxnEuOXY388haBmrjcdyedA=;
-        b=l9j3bZgS1fOxnWMcEwf6PgpjzkIRvGa5wbVThI7+WMBnnjUoh/wYz805vO5stOY83U
-         ogpBC/0l8hhFuGhq9Ib5XNhIXpKZo6g9m0jaDyT64r46oexVg8YEG40m7vzsFOCxeOCz
-         XwoFkP0E969SdrzioxvAFU7k5ze+IZBLMMx6KuwAuwBScWcZs/RkjZCnvFkg8LPp6ds7
-         7tWene85MvVIaOxap1P43mTRBiTB7lFkwxmJf+n0FWmfBgTkpvDLThcFdEfQAnuj7oU9
-         GJmvc2qOI60CN5vBsSI/NX/tf2pwonXsNnHvTKU91R6171I3G/E+ZsLh+JUWfeeKkPKU
-         XPkA==
-X-Forwarded-Encrypted: i=1; AJvYcCWo6T4uMm1z7ZqxLJeb30s3aNxTfFHyHnqdBchBBqyySNnMMXnqYz0mlZlC/3pBDuQ5vET6gnKvHw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YygAUTnYvJA5MVjF850B3M2nXhvQNsFqYhWDdYhk6hAmMG3G1zY
-	kHQMNQdvl1s9PaGEfKpER5QAhLr8Wxo5gM9KGeXoqPTmfzSMLI8NUnxQfu6AmQ==
-X-Google-Smtp-Source: AGHT+IGm0kosw61FYxbFzQdMrzultDRpDvVUYnNuhPbncnk9H5TX3B9V0J/rfa5HaCMNIFYZ78QQUg==
-X-Received: by 2002:a05:620a:45ab:b0:7a9:b798:5e29 with SMTP id af79cd13be357-7a9e60fd4f3mr403584885a.30.1726153231339;
-        Thu, 12 Sep 2024 08:00:31 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::ff03])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a9a796ad15sm550744185a.30.2024.09.12.08.00.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2024 08:00:31 -0700 (PDT)
-Date: Thu, 12 Sep 2024 11:00:27 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: duanchenghao <duanchenghao@kylinos.cn>
-Cc: gregkh@linuxfoundation.org, pavel@ucw.cz, linux-pm@vger.kernel.org,
-	niko.mauno@vaisala.com, stanley_chang@realtek.com, tj@kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
- USB status when S4 wakes up
-Message-ID: <b8dc326b-8aee-4903-bbb6-64083cf66b4d@rowland.harvard.edu>
-References: <20240906030548.845115-1-duanchenghao@kylinos.cn>
- <1725931490447646.3.seg@mailgw.kylinos.cn>
- <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
- <8b07752d-63c4-41e3-bd20-ce3da43dfffc@rowland.harvard.edu>
- <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
+        bh=qsd4xIZ2+CjD4Q1wOFyd3+yQAtEqnkaWLKPfVRRwPdk=;
+        b=pvKsjP1K/mmStIB/aD+HpRr/1cWklBjj58+DG+IqEEWyhgscZZ6/K1+/Y7Bn9ZELy3
+         ptPB5o/V7Bg91hvpmd5Ciw5voVgL91IMnsSmOrcj0LP/HorXErkf1rPWFIWsO/3oMaQe
+         wK7HbfB8JpAQ5bS67u/fjwIBHgUlQRrkHUSczzJwZCSX4Bj5t1q7l9st/HS2r/ier+rA
+         rrF6NjftxoR7IDSKMR29i7YsLS0Kc53Hf0dn3KuGKFMuoeb3rpVHH1cOGkBrlW9K3hAm
+         Eeh4cFSCvcduPC5JWj64kJ4e10/gVhYVYXr/YJprOpCSDkaVd4wTXRhhRuqjUMPORj49
+         tmJw==
+X-Forwarded-Encrypted: i=1; AJvYcCV1d0wK8LvXgV74zecobHhgl/5Gmv52cZD8hrnCZ6Kr7KgtNuVuV14PjYPdHiI1kdYQyIkyiuIxew==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzwx9d8vymhCIfbbAmOKZxw7YaFIyACp9/gDCNY08GMmUQOEuf6
+	RQK4u03/9bR19VeCBWETuv1ZnzJd1EkUR0I/MIF+1/GXlZWd1z6eCEMu4e0VhPs=
+X-Google-Smtp-Source: AGHT+IGFR+J+i/XR3KgbXvrHYqHt6yJiEXDvvVlLm27Uhq8xsIv+4DM5IjAe0bIdrqg/kJJSPOQBiA==
+X-Received: by 2002:a05:6e02:1708:b0:376:410b:ae69 with SMTP id e9e14a558f8ab-3a0848ff007mr31017695ab.15.1726154133134;
+        Thu, 12 Sep 2024 08:15:33 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a0882aae74sm2171745ab.30.2024.09.12.08.15.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Sep 2024 08:15:32 -0700 (PDT)
+Message-ID: <e4d79b9f-3a8e-4e54-9033-cfb8998d06de@linuxfoundation.org>
+Date: Thu, 12 Sep 2024 09:15:31 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] pm: cpupower: bench: print path fopen failed
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, Thomas Renninger
+ <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+ "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>,
+ Peng Fan <peng.fan@nxp.com>,
+ "open list:CPU POWER MONITORING SUBSYSTEM" <linux-pm@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240912013846.3058728-1-peng.fan@oss.nxp.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240912013846.3058728-1-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 12, 2024 at 11:21:26AM +0800, duanchenghao wrote:
-> 在 2024-09-11星期三的 10:40 -0400，Alan Stern写道：
-> > On Tue, Sep 10, 2024 at 05:36:56PM +0800, duanchenghao wrote:
-> > > S4 wakeup restores the image that was saved before the system
-> > > entered
-> > > the S4 sleep state.
-> > > 
-> > >     S4 waking up from hibernation
-> > >     =============================
-> > >     kernel initialization
-> > >     |   
-> > >     v   
-> > >     freeze user task and kernel thread
-> > >     |   
-> > >     v   
-> > >     load saved image
-> > >     |    
-> > >     v   
-> > >     freeze the peripheral device and controller
-> > >     (Check the HCD_FLAG_WAKEUP_ PENDING flag of the USB. If it is
-> > > set,
-> > >      return to EBUSY and do not perform the following restore
-> > > image.)
-> > 
-> > Why is the flag set at this point?  It should not be; the device and 
-> > controller should have been frozen with wakeup disabled.
-> > 
-> This is check point, not set point.
-
-Yes, I know that.  But when the flag was checked, why did the code find 
-that it was set?  The flag should have been clear.
-
-> > Is your problem related to the one discussed in this email thread?
-> > 
-> > https://lore.kernel.org/linux-usb/d8600868-6e4b-45ab-b328-852b6ac8ecb5@rowland.harvard.edu/
-> > 
-> > Would the suggestion I made there -- i.e., have the xhci-hcd 
-> > interrupt handler skip calling usb_hcd_resume_root_hub() if the root
-> > hub 
-> > was suspended with wakeup = 0 -- fix your problem?
+On 9/11/24 19:38, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Skipping usb_hcd_resume_root_hub() should generally be possible, but
-> it's important to ensure that normal remote wakeup functionality is not
-> compromised. Is it HUB_SUSPEND that the hub you are referring to is in
-> a suspended state?
+> Print out the config file path when fopen failed. It will be easy
+> for users to know where to create the file.
 
-I don't understand this question.  hub_quiesce() gets called with 
-HUB_SUSPEND when the hub enters a suspended state.
+Send these two patches as a series with a cover letter.
 
-You are correct about the need for normal remote wakeup to work 
-properly.  The interrupt handler should skip calling 
-usb_hcd_resume_root_hub() for port connect or disconnect changes and for 
-port overcurrent changes (when the root hub is suspended with wakeup = 
-0).  But it should _not_ skip calling usb_hcd_resume_root_hub() for port 
-resume events.
+Also what is changing - you can include what change: use the
+same subject line in here.
 
-Alan Stern
+The subject line can be improved to say more than fopen() failed.
+Which file open failed?
+
+The message can be informative about which file:
+  about which file.
+
+e.g: pm: cpupower: bench: print config file path when open fails
+
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>   tools/power/cpupower/bench/parse.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/power/cpupower/bench/parse.c b/tools/power/cpupower/bench/parse.c
+> index e63dc11fa3a5..366b20f9ddf1 100644
+> --- a/tools/power/cpupower/bench/parse.c
+> +++ b/tools/power/cpupower/bench/parse.c
+> @@ -166,7 +166,7 @@ int prepare_config(const char *path, struct config *config)
+>   	configfile = fopen(path, "r");
+>   	if (configfile == NULL) {
+>   		perror("fopen");
+> -		fprintf(stderr, "error: unable to read configfile\n");
+> +		fprintf(stderr, "error: unable to read configfile: %s\n", path);
+
+While you are at it, fix it to use strerror() instead of calling perror()
+followed by fprintf().
+
+
+>   		free(config);
+>   		return 1;
+>   	}
+
+thanks,
+-- Shuah
 
