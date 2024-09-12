@@ -1,246 +1,197 @@
-Return-Path: <linux-pm+bounces-14063-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14064-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE8A2976178
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 08:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CB5D97620D
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 09:02:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 176B41C21778
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 06:26:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90F271C22AF9
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 07:02:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64CBC18B48C;
-	Thu, 12 Sep 2024 06:26:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3CF9189B8F;
+	Thu, 12 Sep 2024 07:02:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="KlIInfdY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB718146A6F;
-	Thu, 12 Sep 2024 06:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3192B1885AD
+	for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2024 07:02:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726122389; cv=none; b=ExVPIvd/PJwVXOe6mt8aUfDApmevQLVnbBHdOPo9649dTP53yVbYulC7P2Z8WF7BD5cM+dvKjHA8x5UbfRqDdabINHMgmxP5gb/kbDivPsgtvaNF5vg7Tw5fRLUuzmbmYpEtpjB2KZre4+knROcDHpnvkIfxRxQYWoWibKVif1Y=
+	t=1726124547; cv=none; b=sxhR1IUHi6g5N6rVQDVZR1ZgRzCgfgnWxAh+r0e68EJjmbVsrhaYf3TXWQjreKInX/EsSTGRDH6kIdwpvSJGuh8HAh/XCmYjE5YYApgNNqYgQ781QoVSR6fTfqiBKh8JQHNMfFAlF3h084Z0HssoX0c+XXaMldlBVXLx9sRrILU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726122389; c=relaxed/simple;
-	bh=GdrOQN2hqCNhkSgAt9AvaHK+fAjtnWoxdSdqTlSk/xY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=f4q3su4iATjHK0FZxI74KftqDll9aA4QUKz5TeO73/aX4JR8GAGpjB7b4MKEQprcM8kVoIzJO34r+/E8dN5/cTg2vNxba3EbNOfqY4hv3xvQLX4b2szOncSFeBK2S/1xpL+zYPb8D/qzu7eg+jnUAK8Eolno1kJlQSQlRHKj+rU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: e92db1b070cf11efa216b1d71e6e1362-20240912
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_AS_FROM, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED
-	SN_UNTRUSTED, SN_LOWREP, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD, AMN_C_TI
-	AMN_C_BU, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:f43f41e6-9860-42b8-86ba-e81feab4d3cc,IP:20,
-	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:0
-X-CID-INFO: VERSION:1.1.38,REQID:f43f41e6-9860-42b8-86ba-e81feab4d3cc,IP:20,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:0
-X-CID-META: VersionHash:82c5f88,CLOUDID:f2f1e052db5a3a9be1df2f79b511018f,BulkI
-	D:240910185731PV8ZAN7Q,BulkQuantity:1,Recheck:0,SF:66|24|17|19|44|102,TC:n
-	il,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL
-	:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: e92db1b070cf11efa216b1d71e6e1362-20240912
-X-User: duanchenghao@kylinos.cn
-Received: from chenghao.. [(223.70.160.255)] by mailgw.kylinos.cn
-	(envelope-from <duanchenghao@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 802348301; Thu, 12 Sep 2024 14:26:14 +0800
-From: Duan Chenghao <duanchenghao@kylinos.cn>
-To: duanchenghao@kylinos.cn
-Cc: gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	niko.mauno@vaisala.com,
-	pavel@ucw.cz,
-	stanley_chang@realtek.com,
-	stern@rowland.harvard.edu,
-	tj@kernel.org
-Subject: [PATCH v2] USB: Fix the issue of task recovery failure caused by USB status when S4 wakes up
-Date: Thu, 12 Sep 2024 14:26:06 +0800
-Message-Id: <20240912062606.357373-1-duanchenghao@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
-References: <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
+	s=arc-20240116; t=1726124547; c=relaxed/simple;
+	bh=lDzL+/bkYxaNRuuGM0blmhB5eknPwvACk7Gzegus+NU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p7Ys/xJw/bGSNDqB3YrcXZgNCe8URuaG9gmysWVvWPtgjxIkPk4nznw9Y6R+wUQFJ5vI0gjthRbZ5ku8LalcPizUWaRscuhQoWFtBBzMUdjOdqkzAVyKIGNYp5YpsmEbWAopTFoRu9KqBXZ5KsoT/SFPzSHtMC+gyo78OB6BLhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=KlIInfdY; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 064D23F1BD
+	for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2024 07:02:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1726124543;
+	bh=1CKMTCTTm7jqXVJcpUxDxIfDKzM8XfvNoAgn0SaBro4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=KlIInfdYocxaSNQQq5/ctVcVAT8fUjJXDlXF2JuJNp3wpjsV+I7lMAq5hjWUPRp5a
+	 STWrxzgFArT3leI8GKRSaikEHIU95ZCmISr6uGu3L/w5U/IC22KKhCrQdu9pB/6LBh
+	 EK5Cp+MNxFUIL+KmB2+KQ+HekkTsmpymEo9EHuDiH98EQAwvAxfxsqnzvzk3y9EB+i
+	 48A4SPNb9UXoFZXjLQNBpTWg1vGe32kiYSc/HPqh+M1rILQZAtRFJAihdj5TdpTIOi
+	 lADCEtSZHCRZ0oxsVPV15TfHPLvOtbVnMFyu/crtYgf1SLDq+1XVZ/YeIT47s4vF6X
+	 5v5pdzJnwqn0w==
+Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-535681e6f8eso468883e87.1
+        for <linux-pm@vger.kernel.org>; Thu, 12 Sep 2024 00:02:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726124542; x=1726729342;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1CKMTCTTm7jqXVJcpUxDxIfDKzM8XfvNoAgn0SaBro4=;
+        b=KRO8DPbQsr9xF9rkDNSypRMB0Ew7eGNl6xxwrGQiyX5HFrtIfvixor2cOIMzLwppzj
+         hLVgvJvTtyaX9w8brqlMigj1p63HRVkjPFS3x4ESdRd6cFObhD1mwTe1hzHDn9vAo6HC
+         l1N/8/egnWb5z/ZnQb2hpo7zn0X0sIu6cAaggkr3xWF+UlVD4DRi29zBcmWOTRyESUIv
+         9q8jCrkoV+GR0D8RhvGfm2087hMYjdVVTB+Gz7ZY9BjTHhG8b4jXDX6r6YsGKu4y7UxK
+         RG6938AxHKPc/iiO5unKTQ9xj9Iap+Fpzjf6waEuIJwl4BqB0ugl0fmUnaqf0Jsvtysh
+         pbag==
+X-Forwarded-Encrypted: i=1; AJvYcCVhFTja+mIJT5mIzK/lmnJThMt/gFCq+4bJPYwKVkmJTtYs6kXV24PsWg+3hPT0/7PU2w3cwsblrw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXc5VTLxD3Ff3LF4D6oeuXwd05Z/R//Uz366h2orr803d0huCq
+	n7TNCamC0vF+iHQlKNOOvP/Y5LO8avNP/WR0KWJRBANlGfxtyBe8CB9aU2V9vFGEF8zE1MTAVOs
+	11mYTXBc6N2jGtTMVsmbtG5RIgZFevxT9csr2f4B6n7AzpLi6Ym8lrW9XpgzbIP7J6wKK7ALZv5
+	z3CQB5jz5Mwf5Xv71Slort8p0NOEYex5tBC0CrT8VbQ6idh9M=
+X-Received: by 2002:a05:6512:334d:b0:536:7a24:8e82 with SMTP id 2adb3069b0e04-5367a24908emr533434e87.13.1726124541974;
+        Thu, 12 Sep 2024 00:02:21 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEuwOtWwPuErUCydeoa2yBkKx7aUuc0DgfJKxXEK5w5XG0mdKRr+ESyjKNT9pgNj/ndfRUhOjPcEeAtHU54puA=
+X-Received: by 2002:a05:6512:334d:b0:536:7a24:8e82 with SMTP id
+ 2adb3069b0e04-5367a24908emr533415e87.13.1726124541340; Thu, 12 Sep 2024
+ 00:02:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20240911190516.GA644336@bhelgaas> <319e5419-3b12-4672-9f51-f90c5e142e29@amd.com>
+ <fa504022-acb3-4930-b6b8-87a8dcb912c3@amd.com>
+In-Reply-To: <fa504022-acb3-4930-b6b8-87a8dcb912c3@amd.com>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date: Thu, 12 Sep 2024 15:02:08 +0800
+Message-ID: <CAAd53p4ZpCF0GpGhzUx_7V8M2+YCsxgMz8CePPGG_fBTG0JzZA@mail.gmail.com>
+Subject: Re: [PATCH] PCI/PM: Put devices to low power state on shutdown
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, bhelgaas@google.com, 
+	mika.westerberg@linux.intel.com, linux-pci@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, kaihengfeng@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When a device is inserted into the USB port and an S4 wakeup is initiated,
-after the USB-hub initialization is completed, it will automatically enter
-suspend mode. Upon detecting a device on the USB port, it will proceed with
-resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state. During the S4
-wakeup process, peripherals are put into suspend mode, followed by task
-recovery. However, upon detecting that the hcd is in the
-HCD_FLAG_WAKEUP_PENDING state, it will return an EBUSY status, causing the
-S4 suspend to fail and subsequent task recovery to not proceed.
+On Thu, Sep 12, 2024 at 3:38=E2=80=AFAM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> On 9/11/2024 14:16, Mario Limonciello wrote:
+> > On 9/11/2024 14:05, Bjorn Helgaas wrote:
+> >> On Fri, Jul 12, 2024 at 02:24:11PM +0800, Kai-Heng Feng wrote:
+> >>> Some laptops wake up after poweroff when HP Thunderbolt Dock G4 is
+> >>> connected.
+> >>>
+> >>> The following error message can be found during shutdown:
+> >>> pcieport 0000:00:1d.0: AER: Correctable error message received from
+> >>> 0000:09:04.0
+> >>> pcieport 0000:09:04.0: PCIe Bus Error: severity=3DCorrectable,
+> >>> type=3DData Link Layer, (Receiver ID)
+> >>> pcieport 0000:09:04.0:   device [8086:0b26] error
+> >>> status/mask=3D00000080/00002000
+> >>> pcieport 0000:09:04.0:    [ 7] BadDLLP
+> >>>
+> >>> Calling aer_remove() during shutdown can quiesce the error message,
+> >>> however the spurious wakeup still happens.
+> >>>
+> >>> The issue won't happen if the device is in D3 before system shutdown,=
+ so
+> >>> putting device to low power state before shutdown to solve the issue.
+> >>>
+> >>> I don't have a sniffer so this is purely guesswork, however I believe
+> >>> putting device to low power state it's the right thing to do.
+> >>
+> >> My objection here is that we don't have an explanation of why this
+> >> should matter or a pointer to any spec language about this situation,
+> >> so it feels a little bit random.
+> >>
+> >> I suppose the problem wouldn't happen if AER interrupts were disabled?
+> >> We already do disable them in aer_suspend(), but maybe that's not used
+> >> in the shutdown path?
+> >>
+> >> My understanding is that .shutdown() should turn off device interrupts
+> >> and stop DMA.  So maybe we need an aer_shutdown() that disables
+> >> interrupts?
+> >>
+> >
+> > IMO I see this commit as two problems with the same solution.
+> >
+> > I don't doubt that cleaning up AER interrupts in the shutdown path woul=
+d
+> > help AER messages, but you really don't "want" devices to be in D0 when
+> > the system is "off" because even if the system is off some rails are
+> > still active and the device might still be powered.
+> >
+> > A powered device could cause interrupts (IE a spurious wakeup).
+>
+> It's a bit of a stretch, but ACPI 7.4.2.5 and 7.4.2.6 are the closest
+> corollary to a spec I can find.
+>
+> "Devices states are compatible with the current Power Resource states.
+> In other words, all devices are in the D3 state when the system state is
+> S4."
 
-    S4 waking up from hibernation
-    =============================
-    kernel initialization
-    |
-    v
-    freeze user task and kernel thread
-    |
-    v
-    load saved image
-    |
-    v
-    freeze the peripheral device and controller(*** Error point ***)
-    (Check the HCD_FLAG_WAKEUP_ PENDING flag of the USB. If it is set,
-     return to EBUSY and do not perform the following restore image.)
-    |
-    v
-    restore image(task recovery)
+In addition to that, vendor collected the wave form from the device,
+Windows put the device to D3 while Linux kept the device in D0, and
+that asserted one of the PCIe interrupt line to cause system wakeup.
 
-This patch makes two modifications in total:
-1. The set_bit and clear_bit operations for the HCD_FLAG_WAKEUP_PENDING
-flag of Hcd, which were previously split between the top half and bottom
-half of the interrupt,are now unified and executed solely in the bottom
-half of the interrupt.This prevents the bottom half tasks from being frozen
-during the S4 process,ensuring that the clear_bit process can proceed
-without interruption.
+Kai-Heng
 
-    Before modification：
-
-    ehci interrupt handler
-    =====================
-    remote wakeup
-    if (ehci->rh_state == EHCI_RH_SUSPENDED)	    |
-	usb_hcd_resume_root_hub			    |
-    |						    |
-    v						    | top half
-    set_bit HCD_FLAG_WAKEUP_PENDING		    |
-    |						    |
-    v						    |
-    queue_work(pm_wq, &hcd->wakeup_work)	    |
-    |
-    v
-    hub resume					    |
-    |						    |
-    v						    | bottom half
-    clear_bit HCD_FLAG_WAKEUP_PENDING		    |
-
-    After modification:
-
-    ehci interrupt handler
-    =====================
-    remote wakeup
-    if (ehci->rh_state == EHCI_RH_SUSPENDED)        |
-        usb_hcd_resume_root_hub                     |
-    |						    | top half
-    v						    |
-    queue_work(pm_wq, &hcd->wakeup_work)	    |
-    |
-    v
-    set_bit HCD_FLAG_WAKEUP_PENDING		    |
-    |						    |
-    v						    |
-    hub resume                                      | bottom half
-    |                                               |
-    v                                               |
-    clear_bit HCD_FLAG_WAKEUP_PENDING               |
-
-2. Add a condition to the set_bit operation for the hcd flags
-HCD_FLAG_WAKEUP_PENDING.When the hcd status is HC_STATE_SUSPENDED, perform
-the setting of the aforementioned status bit.This prevents a subsequent
-set_bit from occurring after the clear_bit if the hcd is in the resuming
-process.
-
-    Before modification：
-    ehci interrupt handler(CPUx)		ehci init(CPUy)
-    =====================			=============
-    remote wakeup				initialization complete
-    usb_hcd_resume_root_hub
-    				    		Enter suspend and detect that there
-						is a device inserted
-						(udev->state = USB_STATE_SUSPENDED)
-
-						hcd->state = HC_STATE_RESUMING
-						bus_resume
-    if (udev->state == USB_STATE_SUSPENDED)	clear_bit HCD_FLAG_WAKEUP_PENDING
-    set_bit HCD_FLAG_WAKEUP_PENDING		udev->state = !USB_STATE_SUSPENDED
-
-    In the aforementioned scenario, there is no mutual exclusion between
-    the set_bit operation in ehci interrupts, the judgment of udev->state,
-    and the clear_bit as well as the assignment of udev->state during ehci
-    initialization. There exists a situation where clear_bit is followed by
-    set_bit, but due to the judgment on udev->state, the clear_bit
-    operation might not occur again, leading to an error in the flag bit.
-
-    After modification:
-    ehci interrupt handler(CPUx)		ehci init(CPUy)
-    =====================			=============
-    remote wakeup				initialization complete
-    usb_hcd_resume_root_hub
-    				    		Enter suspend and detect that there
-						is a device inserted
-						(udev->state = USB_STATE_SUSPENDED)
-
-						hcd->state = HC_STATE_RESUMING
-						bus_resume
-    if (udev->state == USB_STATE_SUSPENDED)	clear_bit HCD_FLAG_WAKEUP_PENDING
-    if (hcd->state != HC_STATE_RESUMING)	udev->state = !USB_STATE_SUSPENDED
-    set_bit HCD_FLAG_WAKEUP_PENDING
-
-Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
----
- drivers/usb/core/hcd.c | 1 -
- drivers/usb/core/hub.c | 3 +++
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 1ff7d901fede..a6bd0fbd82f4 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -2389,7 +2389,6 @@ void usb_hcd_resume_root_hub (struct usb_hcd *hcd)
- 	spin_lock_irqsave (&hcd_root_hub_lock, flags);
- 	if (hcd->rh_registered) {
- 		pm_wakeup_event(&hcd->self.root_hub->dev, 0);
--		set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
- 		queue_work(pm_wq, &hcd->wakeup_work);
- 	}
- 	spin_unlock_irqrestore (&hcd_root_hub_lock, flags);
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 4b93c0bd1d4b..7f847c4afc0d 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3835,11 +3835,14 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
- 
- int usb_remote_wakeup(struct usb_device *udev)
- {
-+	struct usb_hcd  *hcd = bus_to_hcd(udev->bus);
- 	int	status = 0;
- 
- 	usb_lock_device(udev);
- 	if (udev->state == USB_STATE_SUSPENDED) {
- 		dev_dbg(&udev->dev, "usb %sresume\n", "wakeup-");
-+		if (hcd->state == HC_STATE_SUSPENDED)
-+			set_bit(HCD_FLAG_WAKEUP_PENDING, &hcd->flags);
- 		status = usb_autoresume_device(udev);
- 		if (status == 0) {
- 			/* Let the drivers do their thing, then... */
--- 
-2.34.1
-
+>
+> https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/07_Power_and_Performance_Mg=
+mt/oem-supplied-system-level-control-methods.html
+>
+> >
+> >>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D219036
+> >>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> >>> ---
+> >>>   drivers/pci/pci-driver.c | 8 ++++++++
+> >>>   1 file changed, 8 insertions(+)
+> >>>
+> >>> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> >>> index af2996d0d17f..4c6f66f3eb54 100644
+> >>> --- a/drivers/pci/pci-driver.c
+> >>> +++ b/drivers/pci/pci-driver.c
+> >>> @@ -510,6 +510,14 @@ static void pci_device_shutdown(struct device *d=
+ev)
+> >>>       if (drv && drv->shutdown)
+> >>>           drv->shutdown(pci_dev);
+> >>> +    /*
+> >>> +     * If driver already changed device's power state, it can mean t=
+he
+> >>> +     * wakeup setting is in place, or a workaround is used. Hence
+> >>> keep it
+> >>> +     * as is.
+> >>> +     */
+> >>> +    if (!kexec_in_progress && pci_dev->current_state =3D=3D PCI_D0)
+> >>> +        pci_prepare_to_sleep(pci_dev);
+> >>> +
+> >>>       /*
+> >>>        * If this is a kexec reboot, turn off Bus Master bit on the
+> >>>        * device to tell it to not continue to do DMA. Don't touch
+> >>> --
+> >>> 2.43.0
+> >>>
+> >
+>
 
