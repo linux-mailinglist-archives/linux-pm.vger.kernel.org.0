@@ -1,127 +1,122 @@
-Return-Path: <linux-pm+bounces-14188-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14189-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEF6A9785E6
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 18:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 89E1F9785F0
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 18:38:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BF3D1F2599F
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 16:37:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36D3F1F25CED
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 16:38:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1847277F13;
-	Fri, 13 Sep 2024 16:37:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAFB16BB5B;
+	Fri, 13 Sep 2024 16:38:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZqrOfTdQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TDOFmdE9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36D547A6A;
-	Fri, 13 Sep 2024 16:37:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB2778C75
+	for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 16:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726245462; cv=none; b=VJaPwm95Z/wtKlKGJWyDWOe7uKL9hIwOf/g0qOb68NyTG2Xqq9gcIE8dMq+mQNDHYy/s44IlSGrfZA/5HQdaapWeSc3LzNHNXUXDli0YyLyLKWbKcjbUibCOpaAteHQyU4Z3R0F5rikfo5gDBKmchWbj4JL8E5+PbUWPYn02nZk=
+	t=1726245527; cv=none; b=pHE8WVYJ273k7ADhhJcq1D2ipFetzS6acrIsXRIM3MYbRtchdQE0l04zqC32SU/85h8XXgsHNQ0WSYPbBd5zjtlp+CzmceHdDri9zyKoWoN36ntXYJLZoKMt3IBprYn7tGBYyMqBIh09lfOATrYX6KTS+4wyIiKcQ86Ow4p6nQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726245462; c=relaxed/simple;
-	bh=701SKl8cKJX2QC6nh6wDA1oWgBjgHiBpfvUmT7+8aEQ=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=eM6PGla6IJZjcC5xZx88YPhvyF3h5x8hsvT4Z6OnOHRWR9jxGY13X1R4KjI4ilJ4mooUJ8tYBC4OP5iFg0xm8E/sXhdfQmaabPD0DfE6qJszTETWxbcqQ+Qxp3sQJ2XuTH6bL0jOB/NbpyzLv6qJVX28876tT/fpbTWjAMg39NU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZqrOfTdQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24EAAC4CEC0;
-	Fri, 13 Sep 2024 16:37:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726245461;
-	bh=701SKl8cKJX2QC6nh6wDA1oWgBjgHiBpfvUmT7+8aEQ=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=ZqrOfTdQNo9lA9khn2Kr1Jf8aIrBNNC7IhR/iy+eNgoAsZ69LHszScZBNZmHNCXQv
-	 CH1Uh6F3I07jCia9cqlaAwMfgc1MQCB6jp9u6fe0ccaGXGtq8TDWZyOkh97LaH2jc/
-	 tVHFohoHDKTmAY1xtY203INchHagPRVG9PU6L6k/9Mpa+VoGzjcCxCnut5SSRsjzEJ
-	 wex2vhiCSqmpO/TWg2qD3kG9DdtPn4AB+ml7gVumDjmxkA8MHgzGVVfqFvBpaKkNgL
-	 xHUTLPK+uJlA99ZzDwo6GkhjIXujy7BD30LROF+nfOATSU/sVulh/aIYdpEouVJmyk
-	 kk8JFL6bxlYgA==
-Date: Fri, 13 Sep 2024 11:37:40 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1726245527; c=relaxed/simple;
+	bh=eKRWbCrqp4Hi3KZ1gin7DIWDPLN6BS4r3sT0Wq7+39M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BeTxoJCoSUroQrvedhhnkbVYZmIZ2bxGJ59gxpf57QKZoUbOvqJdGdezR948NVT5uEptm5rpjwN6m9tHeASIK//LmP8Sv2ovXxvb8mcgCWWs4IGT5d86asxiv7x5zRlBspKE4g10o/UOOXM4WxuovKSq2QpOJ8Lk+L3eslaillE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TDOFmdE9; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1726245525;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gaZvsF0KpssXiytVEqsYTDYy7O6eYu1DovquR/AjGh0=;
+	b=TDOFmdE94IB1mhy7bNFbcJ29qdMKoAd+oMA3xkS7OZ9kU4wlN95EXdbWryIDU2wxJqoeIa
+	cUSE0kdpmmRnyo+eSht080xOeTbE6+txp0k92G43DX4KtCXSanYTxjjpf+KrfseQrNWq4T
+	9HNJHg0k/A/++NLOYNMIGZqki7Cp9AI=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-60-ZP6k5mOmNneNCOjNrqdZhQ-1; Fri, 13 Sep 2024 12:38:43 -0400
+X-MC-Unique: ZP6k5mOmNneNCOjNrqdZhQ-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7a99d13f086so259078785a.1
+        for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 09:38:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726245523; x=1726850323;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gaZvsF0KpssXiytVEqsYTDYy7O6eYu1DovquR/AjGh0=;
+        b=miMxp0Jyx8tG/iAZ3chYGM+ARhGuReDo9Ry3F1b5Ri5Ci6N8PgNg67OKQInOdOXFaO
+         O5d2tzlNcH6DOjxq1RBGvSgoIrPmOgCwP35fKLwu9Ti58NTTmTu1KOBOYXmb3XwoW4OL
+         wdyLukQD6ek2Sll7+Ztk3dgj/r5+b63oBd2Bx3KfqscSRLII1v/ZyfyBlYUSrJFudzp/
+         iBPhww94+qDZuO+BD0+vdtHUimXd/wv8B5X8SWffr5CBk+J6JQKsy0ZhUg2ziALGi46+
+         o4xiSlPKN2WQFZhyNXZyQrLjxqUU6tmu/YsCYXr0JmsDmSCUPNpFZAT7dbDNzUNH0Zov
+         FVCA==
+X-Forwarded-Encrypted: i=1; AJvYcCUA82wg4dfWJiZ839z4GWXpEKgOc8WwvTD85FnBRI5Dt+t1aOdVVReoTu3ZkewXCDyL4U090ppjQg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxNkj4PU1D+p9lr+/c6tVrJZKcoOyZOUwDBs6+YKxKVbOh1JMU
+	TMNAYnR4TfwqAo723zmOmxvnF++qQ9hvz9ImEGi4zBMUypHeklL4YT4NmdtVROADZO7hxW+d7ep
+	BWybkfnukyFljS7s3z4mWPLbmizrJBuLxschiNCTNGJJvTEEycRkZcQni
+X-Received: by 2002:a05:620a:1789:b0:7a9:d0ec:2d99 with SMTP id af79cd13be357-7ab30dc40ccmr472290885a.60.1726245523423;
+        Fri, 13 Sep 2024 09:38:43 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFCWFymOpygZPYJIdqdGAzh5LWofNDVQvIv+azfhWI0wpBA+ObnwQLFnynF0xMguXytDYqU1w==
+X-Received: by 2002:a05:620a:1789:b0:7a9:d0ec:2d99 with SMTP id af79cd13be357-7ab30dc40ccmr472288385a.60.1726245523073;
+        Fri, 13 Sep 2024 09:38:43 -0700 (PDT)
+Received: from rhfedora ([71.217.60.247])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a9a7a1dc91sm683815585a.106.2024.09.13.09.38.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Sep 2024 09:38:42 -0700 (PDT)
+Date: Fri, 13 Sep 2024 12:38:41 -0400
+From: "John B. Wyatt IV" <jwyatt@redhat.com>
+To: Min-Hua Chen <minhuadotchen@gmail.com>
+Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+	John Kacur <jkacur@redhat.com>,
+	"John B . Wyatt IV" <sageofredondo@gmail.com>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 for-next] pm: cpupower: rename raw_pylibcpupower.i
+Message-ID: <ZuRqkbJixRQEScYA@rhfedora>
+References: <20240912230102.157534-1-minhuadotchen@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Dzmitry Sankouski <dsankouski@gmail.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
- Krzysztof Kozlowski <krzk@kernel.org>, linux-kernel@vger.kernel.org, 
- Simona Vetter <simona.vetter@ffwll.ch>, 
- Chanwoo Choi <cw00.choi@samsung.com>, Mark Brown <broonie@kernel.org>, 
- linux-samsung-soc@vger.kernel.org, 
- Jessica Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>, 
- dri-devel@lists.freedesktop.org, Lee Jones <lee@kernel.org>, 
- Thomas Zimmermann <tzimmermann@suse.de>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org, 
- Konrad Dybcio <konradybcio@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
- Michael Turquette <mturquette@baylibre.com>, linux-pwm@vger.kernel.org, 
- Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- David Airlie <airlied@gmail.com>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>, linux-input@vger.kernel.org, 
- Conor Dooley <conor+dt@kernel.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- cros-qcom-dts-watchers@chromium.org, linux-leds@vger.kernel.org, 
- Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org, 
- linux-clk@vger.kernel.org, Simona Vetter <simona@ffwll.ch>, 
- Liam Girdwood <lgirdwood@gmail.com>, Maxime Ripard <mripard@kernel.org>
-In-Reply-To: <20240913-starqltechn_integration_upstream-v4-5-2d2efd5c5877@gmail.com>
-References: <20240913-starqltechn_integration_upstream-v4-0-2d2efd5c5877@gmail.com>
- <20240913-starqltechn_integration_upstream-v4-5-2d2efd5c5877@gmail.com>
-Message-Id: <172624546028.155976.17920164099975885299.robh@kernel.org>
-Subject: Re: [PATCH v4 05/27] dt-bindings: mfd: add maxim,max77705
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240912230102.157534-1-minhuadotchen@gmail.com>
 
+On Fri, Sep 13, 2024 at 07:01:00AM +0800, Min-Hua Chen wrote:
 
-On Fri, 13 Sep 2024 18:07:48 +0300, Dzmitry Sankouski wrote:
-> Add maxim,max77705 core binding part.
-> 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> 
-> ---
-> Changes in v4:
-> - change dts example intendation from tabs
->  to spaces
-> - remove interrupt-names property
-> - remove obvious reg description
-> - split long(>80) lines
-> ---
->  .../devicetree/bindings/mfd/maxim,max77705.yaml    | 169 +++++++++++++++++++++
->  MAINTAINERS                                        |   1 +
->  2 files changed, 170 insertions(+)
-> 
+> To fix it, rename raw_pylibcpupower.i to raw_pylibcpupower.if.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Would you please rename this to .swg instead?
 
-yamllint warnings/errors:
+'''
+5.1.1 Input format
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/maxim,max77705.example.dtb: pmic@66: fuel_gauge: 'shunt-resistor-micro-ohms' is a required property
-	from schema $id: http://devicetree.org/schemas/mfd/maxim,max77705.yaml#
+As input, SWIG expects a file containing ISO C/C++ declarations and special
+SWIG directives. More often than not, this is a special SWIG interface file
+which is usually denoted with a special .i or .swg suffix.
+'''
 
-doc reference errors (make refcheckdocs):
+https://www.swig.org/Doc4.2/SWIG.html
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240913-starqltechn_integration_upstream-v4-5-2d2efd5c5877@gmail.com
+I tested it and .swg is not removed by 'make clean' or 'make mrproper'.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+My apologies for the extra work Min-Hua. I can send a quick patch
+instead if you wish.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+-- 
+Sincerely,
+John Wyatt
+Software Engineer, Core Kernel
+Red Hat
 
 
