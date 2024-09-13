@@ -1,149 +1,160 @@
-Return-Path: <linux-pm+bounces-14137-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14138-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0CDF977E59
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 13:16:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4856D977F15
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 13:59:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92CEA1F27825
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 11:16:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03B01288282
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 11:59:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 998B51D7984;
-	Fri, 13 Sep 2024 11:16:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B0581D88C9;
+	Fri, 13 Sep 2024 11:59:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Bqw1FcDb"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m3s4Ah1f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B221C244F
-	for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 11:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C851D88A0
+	for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 11:59:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726226187; cv=none; b=oL6XTjx3A6SiKjjh6eczU+/XWYRT8cig8q6//ZpG836MTEqjvxCDzvo5i64we+5fbD6wTe6ndLGLUOVRUF+K/Y+As9JbJmRZASL7Z/hrrL7XM2aq9QHCLWnpVqfjJwLQ5uVIZFLowphc3ciQ5maVDJOKBrpnmGVtD7PTB39s1I0=
+	t=1726228789; cv=none; b=rcx+DDQPwHu6xZtpUxnSZiOpBp9XgOQoIEeT3+2xHliRfzSRG7WFOiYz7cU7iSk235KNzwS7Fo4Jd9tJedT6TJmBOa24C+U8gNqn78zGRMw/evNGNU+mfrboI9Lco0VEL7/8keHjve3+ANhyfp3Tu/DT28qWXBCZ99Q23VQkvjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726226187; c=relaxed/simple;
-	bh=no8cMr3ePk9LJ/3lkIpxYb7h0R6BUgzEu83uCJjOdiQ=;
+	s=arc-20240116; t=1726228789; c=relaxed/simple;
+	bh=mSIKzw6GBbfHT6fBamDS/L7dH8tpO0k4aw6Vo0YRxWM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gcF0yMUoYaxZVQZCMTIqV+h4OGx1S/vGulsj76/pk7d5FYXAV42pUtbSsWsRa1XON2D/LPRBZSOaEIXyiI1SkQlMHkprBxDCLClJ08zN/m/0Gfp7/ZgYkFiQ6iVBtL/7uLCCzRSHVpbPxtfaOBPN4c0RVKcb9AiviDwQRGPN2IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Bqw1FcDb; arc=none smtp.client-ip=209.85.219.170
+	 To:Cc:Content-Type; b=SbTby4cC5e7j3ufFLNxRkEgQq/a2zNAVevVKcQwYCMPBUncXXYAjLTNxW4c7UCqY2mTinjaGfTCjZo316IBPeenjRyq9NtPwbX5sCcg2IjbrIZO/U6lx6oxrqM7Jq6tVz4tdZnA4xrVoPq+0bLI6xvnP3yZpqi25rDOe/syEsfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=m3s4Ah1f; arc=none smtp.client-ip=209.85.219.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e1ce8a675f7so1817294276.3
-        for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 04:16:25 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e1a74ee4c75so762993276.3
+        for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 04:59:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726226185; x=1726830985; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1726228787; x=1726833587; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kfj0B1rEvFEwykb18qvJWsW+ZHNQdJ8Sji9YjsbtgGo=;
-        b=Bqw1FcDbyJMUY6XV4KTQdiolgtX1qCV0uSj3vpEE12DnFhMvNi2ZMJeQxtdfpPgrcq
-         LKTfsWTawP6yUgeoCZZIZyRoH4S2EYtqCxNYI1+zPFjx2sbVt3IFtUL/wASkQVz/kY0k
-         1YHx2WJArJlbDc/u+/w5CXG8SuiQPpIMvIx8IQ3PKi4DYB+4ABCDDz21PDrcrPD8q63L
-         0Jtwcf0lD6si8TADhwkxmrrrlfsJrQUUQim7O79xfQP2VMOmRp3EDTM8HAZpMY0D1FK3
-         ElPKpHXkYLOh1KgdSdxKI7hksETn4m7QjwUgOGOmJx3LY+A3OsendXsJxfHQtPJS8zI1
-         NqsQ==
+        bh=mOqSWoVVgxQJOQAhgQdENKJFx3Lm/FQXzowZmdyKWa0=;
+        b=m3s4Ah1fNbOfkQ4b7lqYX4uPIy3xnlE1ehoIZcfedP1JwKe8flgWteDpUp8FR3+2UV
+         2445K78Jj5TonekpQMlyOX45j2NLM9q5idtUXeD1d/RzKaWQ8tzKsT2RrmJo+8nfUdaG
+         0G9aRTEt6/szAa7dlGvKkUgyPfWZiXSOvGuhRUvKvBzWwt/HTPeoQxc3BmIyUj/wB+Yu
+         spFsktIFCLf2MqdCg+9TCCDXJ0qZ0zdIkfebzrqSzyGhfLRbYhpulNEMjqkfSwX73hp3
+         sW+4bjvHrd2YpHgCgyqW/rxcYoIxwaH7gh5PSp0iMcvxmFHByI5RylMXuyWlYTKy4Lcc
+         T+Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726226185; x=1726830985;
+        d=1e100.net; s=20230601; t=1726228787; x=1726833587;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kfj0B1rEvFEwykb18qvJWsW+ZHNQdJ8Sji9YjsbtgGo=;
-        b=siqyDAOzmWaCXDbTNPDZGldGLUvgxdSvmBoYiVzBeOmCCp48ql8VB59Wk/BlMtq9h4
-         HXj8YRmb+Pio4uaTwkWswi1CF6ICYFnMchdeHuvwy2IZ9VvhhS4kx9AbB9+f9bjRoCAy
-         4bAAnZMCb4HLXLfrUbxvoQlSbhnGqir+iuzTzq7q/O1LwvC03JmuMGKVfbUFbmhIl8Jf
-         l5jpItosr4Z1KLHMJnOOInIPbw8OoeZQzg9hw8TgQSEt/7M3k3fjdnTKXCQp3V0b9OG2
-         0dZVOIZb/bY4qHJf9+to70TSa2RuWTDVNsBbIZPDw1Xq6WjsT5EaGxdni2TMhR7OnEyt
-         UQig==
-X-Forwarded-Encrypted: i=1; AJvYcCWhKVs3aSS8CA8NJgXBllbyx3h4ZtjrZgZrQgl8azwf0+Pb7i1uf7+bqKD53UtHmgesN9xGLOHo/A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/E42a1RN5Y7BrD8wKx3ZBH1ozcFV/FG7g+KcM1F5bsQ313Kbx
-	mHTjHMueyrnVF4uAmFtg4z4alZG92nz78mvb5xoAofTKBJjKLnBZxXN8krCVFbBIXtgMBRk3mjG
-	p5lBigXpQ0tX0OQ+81Gjkz8wsW1Qxx4T5ajSVEg==
-X-Google-Smtp-Source: AGHT+IEYCGHUiSriLP+TxUHCpZ6MkIpDjCEtPjY2L8ZF6q3B+z2xf1TWd3AH3+cPAuEhbWh/ZgQq5TV5kANKgnjIDso=
-X-Received: by 2002:a05:6902:2783:b0:e1d:1434:98a4 with SMTP id
- 3f1490d57ef6-e1d9db98a6fmr5058804276.9.1726226184945; Fri, 13 Sep 2024
- 04:16:24 -0700 (PDT)
+        bh=mOqSWoVVgxQJOQAhgQdENKJFx3Lm/FQXzowZmdyKWa0=;
+        b=N9PRubInZAKLXq6eT3uwQQc2TVue+R5+RYq6aZGjfFzXXHjBZJJ0HWrkcouveBMDTf
+         8kOaXwQiw+Hn6hYN7U+js6sBL5vi+gj1+3MYzm6UhP3ylZaFjWqYNMlHXelfxebyuKjf
+         WwzmSZorX8OT8SRRPY9jzHx4wa0wwhfY9/OiswSVGDvt0gYPUeXMN0eHFJbIMhMAcFSN
+         mgRP7TTLI8d2CpnVQu00mhWAcWx8S00bVWombi8NF8W8zj8tbGZLZPo1B8sdkNn7wwyQ
+         4mvCvDOFN7VWXqAKi/duKVwLejW6vq3G9LBqf0/ipjwAXvaFAq9HmTP6eQ//3WyGqxbH
+         izeg==
+X-Forwarded-Encrypted: i=1; AJvYcCWjbb4zSEKQ2Em7hHieOP4qCAUBYf02ueNQ9aIz3sJgFSDcowYhjmxr3LeQa/cgmLnXUpDdlSODkg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YySIhdIc3cSXapYcG11yCe+QGtHT2m4Ga1n6eAE1qvb42ykFyIN
+	XvKDrAsGy5SdajQi9EI3ZUENHp/hnXC/CRp9ADX7ttSnGWjeTVsg54409masvIHq2u9QDGhyti2
+	+TGBmBwpaEVH5nyJ8r7E9TVky/3x5YMh31MuQOA==
+X-Google-Smtp-Source: AGHT+IHM1X3EHwXtm6QQqZ678gEGjQCRRGmBLUwhI1ITxw/fftN+ymx5qB1IfKiXnwbBzeeP79whlwcpu4SI+UgVRwo=
+X-Received: by 2002:a05:6902:1581:b0:e16:6feb:e615 with SMTP id
+ 3f1490d57ef6-e1db019494bmr1895157276.48.1726228786700; Fri, 13 Sep 2024
+ 04:59:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240830110421.62980-1-shenlichuan@vivo.com>
-In-Reply-To: <20240830110421.62980-1-shenlichuan@vivo.com>
+References: <20240910180530.47194-1-sebastian.reichel@collabora.com>
+In-Reply-To: <20240910180530.47194-1-sebastian.reichel@collabora.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 13 Sep 2024 13:15:48 +0200
-Message-ID: <CAPDyKFrGxH_q1V5=oqfcK84xCcXzWQ-v_XcfZPPj+i048Tv=bQ@mail.gmail.com>
-Subject: Re: [PATCH v1] pmdomain: bcm: Simplify with dev_err_probe()
-To: Shen Lichuan <shenlichuan@vivo.com>
-Cc: florian.fainelli@broadcom.com, rjui@broadcom.com, sbranden@broadcom.com, 
-	bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org, 
-	linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
+Date: Fri, 13 Sep 2024 13:59:10 +0200
+Message-ID: <CAPDyKFoMyGUagDdjdaBJXL_OEgewQjCeJcBBK+2PFk=vd+kjRg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/6] Fix RK3588 GPU domain
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+	Elaine Zhang <zhangqing@rock-chips.com>, 
+	=?UTF-8?Q?Adri=C3=A1n_Mart=C3=ADnez_Larumbe?= <adrian.larumbe@collabora.com>, 
+	Boris Brezillon <boris.brezillon@collabora.com>, devicetree@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 30 Aug 2024 at 13:04, Shen Lichuan <shenlichuan@vivo.com> wrote:
+On Tue, 10 Sept 2024 at 20:05, Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
 >
-> Use dev_err_probe() to simplify the error path and unify a message
-> template.
-
-In this case the simplification is questionable, I think.
-
+> Hi,
 >
-> Using this helper is totally fine even if err is known to never
-> be -EPROBE_DEFER.
+> I got a report, that the Linux kernel crashes on Rock 5B when the panthor
+> driver is loaded late after booting. The crash starts with the following
+> shortened error print:
 >
-> The benefit compared to a normal dev_err() is the standardized format
-> of the error code, it being emitted symbolically and the fact that
-> the error code is returned which allows more compact error paths.
+> rockchip-pm-domain fd8d8000.power-management:power-controller: failed to set domain 'gpu', val=0
+> rockchip-pm-domain fd8d8000.power-management:power-controller: failed to get ack on domain 'gpu', val=0xa9fff
+> SError Interrupt on CPU4, code 0x00000000be000411 -- SError
+>
+> This series first does some cleanups in the Rockchip power domain
+> driver and changes the driver, so that it no longer tries to continue
+> when it fails to enable a domain. This gets rid of the SError interrupt
+> and long backtraces. But the kernel still hangs when it fails to enable
+> a power domain. I have not done further analysis to check if that can
+> be avoided.
+>
+> Last but not least this provides a fix for the GPU power domain failing
+> to get enabled - after some testing from my side it seems to require the
+> GPU voltage supply to be enabled.
+>
+> I'm not really happy about the hack to get a regulator for a sub-node
+> in the 5th patch, which I took over from the Mediatek driver. But to
+> get things going and open a discussion around it I thought it would be
+> best to send a first version as soon as possible.
 
-Right, which I guess boils down to what people preferes.
+That creates a circular dependency from the fw_devlink point of view.
 
-That said, my take on this is that we should move from dev_err() to
-dev_err_probe(), at least there needs to be some simplification
-involved too.
+I assume that isn't a problem and fw_devlink takes care of this, so
+the  GPU power domain still can probe?
+
+Other than this, I think this looks okay to me.
 
 Kind regards
 Uffe
 
 >
-> Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
-> ---
->  drivers/pmdomain/bcm/bcm2835-power.c | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
+> Greetings,
 >
-> diff --git a/drivers/pmdomain/bcm/bcm2835-power.c b/drivers/pmdomain/bcm/bcm2835-power.c
-> index d2f0233cb620..be07ab8a663c 100644
-> --- a/drivers/pmdomain/bcm/bcm2835-power.c
-> +++ b/drivers/pmdomain/bcm/bcm2835-power.c
-> @@ -643,18 +643,16 @@ static int bcm2835_power_probe(struct platform_device *pdev)
->         power->rpivid_asb = pm->rpivid_asb;
+> -- Sebastian
+> Sebastian Reichel (6):
+>   pmdomain: rockchip: forward rockchip_do_pmu_set_power_domain errors
+>   pmdomain: rockchip: cleanup mutex handling in rockchip_pd_power
+>   pmdomain: rockchip: reduce indention in rockchip_pd_power
+>   dt-bindings: power: rockchip: add regulator support
+>   pmdomain: rockchip: add regulator support
+>   arm64: dts: rockchip: Add GPU power domain regulator dependency for
+>     RK3588
 >
->         id = readl(power->asb + ASB_AXI_BRDG_ID);
-> -       if (id != BCM2835_BRDG_ID /* "BRDG" */) {
-> -               dev_err(dev, "ASB register ID returned 0x%08x\n", id);
-> -               return -ENODEV;
-> -       }
-> +       if (id != BCM2835_BRDG_ID /* "BRDG" */)
-> +               return dev_err_probe(dev, -ENODEV,
-> +                                    "ASB register ID returned 0x%08x\n", id);
+>  .../power/rockchip,power-controller.yaml      |   3 +
+>  .../boot/dts/rockchip/rk3588-armsom-sige7.dts |   4 +
+>  arch/arm64/boot/dts/rockchip/rk3588-base.dtsi |   2 +-
+>  .../boot/dts/rockchip/rk3588-coolpi-cm5.dtsi  |   4 +
+>  .../rockchip/rk3588-friendlyelec-cm3588.dtsi  |   4 +
+>  .../arm64/boot/dts/rockchip/rk3588-jaguar.dts |   4 +
+>  .../boot/dts/rockchip/rk3588-ok3588-c.dts     |   4 +
+>  .../boot/dts/rockchip/rk3588-rock-5-itx.dts   |   4 +
+>  .../boot/dts/rockchip/rk3588-rock-5b.dts      |   4 +
+>  .../arm64/boot/dts/rockchip/rk3588-tiger.dtsi |   4 +
+>  .../boot/dts/rockchip/rk3588s-coolpi-4b.dts   |   4 +
+>  .../dts/rockchip/rk3588s-khadas-edge2.dts     |   4 +
+>  .../boot/dts/rockchip/rk3588s-orangepi-5.dts  |   4 +
+>  drivers/pmdomain/rockchip/pm-domains.c        | 130 +++++++++++++-----
+>  14 files changed, 144 insertions(+), 35 deletions(-)
 >
->         if (power->rpivid_asb) {
->                 id = readl(power->rpivid_asb + ASB_AXI_BRDG_ID);
-> -               if (id != BCM2835_BRDG_ID /* "BRDG" */) {
-> -                       dev_err(dev, "RPiVid ASB register ID returned 0x%08x\n",
-> -                                    id);
-> -                       return -ENODEV;
-> -               }
-> +               if (id != BCM2835_BRDG_ID /* "BRDG" */)
-> +                       return dev_err_probe(dev, -ENODEV,
-> +                                            "RPiVid ASB register ID returned 0x%08x\n",
-> +                                            id);
->         }
->
->         power->pd_xlate.domains = devm_kcalloc(dev,
 > --
-> 2.17.1
+> 2.45.2
 >
 
