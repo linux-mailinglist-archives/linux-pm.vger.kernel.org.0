@@ -1,155 +1,131 @@
-Return-Path: <linux-pm+bounces-14190-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14191-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD2BF978611
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 18:45:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1E3597861A
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 18:48:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70E2E285F74
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 16:45:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 076D31C22CC5
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 16:48:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A03BD57CB5;
-	Fri, 13 Sep 2024 16:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70D0D8289E;
+	Fri, 13 Sep 2024 16:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CuIwLPMo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxp3WfnE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7C726AD0
-	for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 16:45:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 236D22D052;
+	Fri, 13 Sep 2024 16:47:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726245942; cv=none; b=Vkf7LGVKgdiNwZtqD88OaQ4zUxBquFhurDDtkRimmTUQ1kysRP94ewMtDZqFX8cI7KstpGGnGtguXz1O+U7M87OS4Hw8wHiXtFUckJ8NdC1AUMbEjW+kqkU4RXTOz8mqaL6zecFWQVpP4CmzpkEZE7lL7gpKPT5LnFRxBOlAFrA=
+	t=1726246069; cv=none; b=KK06VkkMVp7sfjJdofh7OohlJATP8/mWVFwu+2H98RCdBBRtMy+0yy/46UcpWmZNNSPun/0MBjcElMODVSu/FMjaAFHhtFasY0H/R6GLJRKv10Jt8V9HTM0zhru9zqjzgdizuobrjolkBlSaXKqK8j8lr0YBrt7R2ue8gZ3eiCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726245942; c=relaxed/simple;
-	bh=AgHQerAb57rcBCz6JKSogX+ZFauFDFx3EVdV6UTcrco=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QC+vuVhC0Lc/A4h4kMP+WJCEtrYs2qkZ/67oyoT6frHmlf8FgbvJF4omtxzT+t8wz0eHRbmUyJfv2q6r8fh/fdxb7pwagXuAaUWYCnr/gKKVikvnEKQ95EpYH7GCNkpjaRjoTJCeqCcryEoDqdQUvx5Wd7s/xvBmDaMlFsDR4FI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CuIwLPMo; arc=none smtp.client-ip=209.85.166.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3a056727fdfso8206585ab.3
-        for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 09:45:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1726245940; x=1726850740; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=npyFg3Dk46cOzCIDE4f6VgEoIuWUfYai1b3VyRjzFMM=;
-        b=CuIwLPMoE4M2pS+fJ43HYeX29wYOxzrc6hsR3Ii7idV519a6QV12zG71KxOZuBgkd5
-         HBMKOA+/0+gSqvKn039W6DsPIekQq8Ck5nZSA9f1LuOn2znPwWEahAapmwPFoiURHeA6
-         j7IErDWlfBnDoEK3GPL/T+MSR5MUL8P+qfUL0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726245940; x=1726850740;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=npyFg3Dk46cOzCIDE4f6VgEoIuWUfYai1b3VyRjzFMM=;
-        b=hZ/H2rMUI5OMUyopUwLg/7QI/UiTPgo5LDaQRLKimNDhgE1nHRnikBLIYoNN3+AiM7
-         2eslcpYzz9E0/Rr4yDOykUkPT/ho8LEM4RHYobfBXxVeHq6NtsZ7NGxf9u7vg1glmYqv
-         MycrI1WIibY9XJFA4FkKGbvyhvYR8PznEV0bjicoHuO+mZDrDpgcWu2aku7nkzfDncxm
-         dfV7+yNKfjwEJ6VhTYGiO832nmikJ5RuWJai36x6je6Fw5WamvlviybW2obNcot479Qm
-         7ZVr1K4wpktESKHOMRx/oBV4tvgHVBLMbGKlisFfsmTKxKMe0ZmY831Iw/Q2t4wqqzoI
-         IgJw==
-X-Forwarded-Encrypted: i=1; AJvYcCUxi7Wgv+v2Oc/9hsx+KQ/kR4E0DiMmnO5294OEJQMR84V1yLCj+wAuov0sVz0y/dT7Z/PHFJD5Kw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKQnqMZhUEyjrwspLSB9matU8a3qrYyXLod7NnlSEkwPWXXf/V
-	NhlD064mEx08q8uQCzqJyxenuJGIi22P5sOn+SoLEF7ZntlJQlS4kj2Zsea14YI=
-X-Google-Smtp-Source: AGHT+IGg7bjlyIM44j2dnITZ9rXYWGjDovZ+9bdAAVQjM1fDgFlA2BGkSdZm98CGRRx1DvvrvKfD3w==
-X-Received: by 2002:a05:6e02:1ca3:b0:3a0:90df:fed4 with SMTP id e9e14a558f8ab-3a090e00079mr4986975ab.24.1726245939751;
-        Fri, 13 Sep 2024 09:45:39 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a087bf7ce2sm8665435ab.62.2024.09.13.09.45.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Sep 2024 09:45:39 -0700 (PDT)
-Message-ID: <9f71c145-3d0d-42ad-a258-57ef89ec525c@linuxfoundation.org>
-Date: Fri, 13 Sep 2024 10:45:38 -0600
+	s=arc-20240116; t=1726246069; c=relaxed/simple;
+	bh=u5+27xyUUOfs9JlsXpfN9e9YD2zu86QlM9sNV0ZIPIs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TZLUTRGfrKnRwmI/cYOB616M8n43IYxKGScGgiclrvhg/01ODOksoIfhKC55zaEpqSNOmttrgLXpo8euD2c43+qWpI2lgJWCq6frvJ5PpDAUmaeqbaiCVpz3keikRfphwVmp4nQbTSwF7ll70WU3luhF5TPIf1yh5MjdzIYeTPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxp3WfnE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331EBC4CEC0;
+	Fri, 13 Sep 2024 16:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726246068;
+	bh=u5+27xyUUOfs9JlsXpfN9e9YD2zu86QlM9sNV0ZIPIs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dxp3WfnEec3z+Qchn+RvKHnza6/Hd4uDbbnNLerZze1hvLkeiDERjv7JNPfYXMTxB
+	 +yG0urQnyu1DGsT6N96ZYFogXCsf8vCxMHJz2AmbL7uWO9AYnat8RjV9ZRrxpyd/jB
+	 I7UdijVMgYL6yyQ9rdOqmqQ9Wr2qvbwlRAGZNw27Z1WaL/Lm3Lus+q6bJ2dBqTlFMQ
+	 ith8yad7QZFl49dI9nKDsriqsuhifcF1gqEjnNPWNFpdkHI7C6XOzA7ijcBblDRW9s
+	 pTDf4jG85eiowyGp7EFgovmeIki1pSyssjiMGhONgjuRyePS8bf7DPKQZzU4eYsv/q
+	 +WL06gHoXA3ew==
+Date: Fri, 13 Sep 2024 17:47:40 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Dzmitry Sankouski <dsankouski@gmail.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <quic_jesszhan@quicinc.com>,
+	Sam Ravnborg <sam@ravnborg.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Chanwoo Choi <cw00.choi@samsung.com>, phone-devel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-pwm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v3 04/23] dt-bindings: mfd: add maxim,max77705
+Message-ID: <20240913-platter-reset-2ec8d7c7295a@spud>
+References: <20240618-starqltechn_integration_upstream-v3-0-e3f6662017ac@gmail.com>
+ <20240618-starqltechn_integration_upstream-v3-4-e3f6662017ac@gmail.com>
+ <13a650f4-7ca7-4c95-b536-9814a22f00ff@kernel.org>
+ <CABTCjFCOTd5V5WyRbD1OCS9Hatk0mOCtNy5WWfp0KkUBgqXs+A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH for-next] pm: cpupower: rename raw_pylibcpupower.i
-To: "John B. Wyatt IV" <jwyatt@redhat.com>,
- Min-Hua Chen <minhuadotchen@gmail.com>
-Cc: jkacur@redhat.com, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, shuah@kernel.org, trenn@suse.com,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <b64402ad-4c0d-4f5f-939b-4be1a7855e4a@linuxfoundation.org>
- <20240912225519.119392-1-minhuadotchen@gmail.com> <ZuRpzN2OKHQ75GZW@rhfedora>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ZuRpzN2OKHQ75GZW@rhfedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="ye/AKZ4nM3H9W2aP"
+Content-Disposition: inline
+In-Reply-To: <CABTCjFCOTd5V5WyRbD1OCS9Hatk0mOCtNy5WWfp0KkUBgqXs+A@mail.gmail.com>
 
-On 9/13/24 10:35, John B. Wyatt IV wrote:
-> On Fri, Sep 13, 2024 at 06:55:19AM +0800, Min-Hua Chen wrote:
->> AFAIK,
->> raw_pylibcpupower.i is not a generated file, it is a interface file
->> for swig.
-> 
-> That is correct. You can do more advanced things to help SWIG handle
-> different languages, but so far with the script I wrote for libcpupower
-> simply copying the definition files as worked for me for the .i file.
-> 
-> See:
-> https://www.swig.org/Doc4.2/Preprocessor.html#Preprocessor
-> 
->> The *.i file extension is also used for pre-processor output
->> (single target build) and all *.i files are removed by 'make mrproper',
->> including raw_pylibcpupower.i (should not be removed).
-> 
-> That would explain it. Not just 'make mrproper', but 'make clean'
-> in the root removes the file as well. 'make clean' in the tools
-> directory does not affect it.
-> 
->  From 'man gcc':
-> 
->         file.i
->             C source code that should not be preprocessed.
-> 
 
-.i extension is used for a C pre-processor out, hence the need to
-mrprpoer and clean remove it. Because of that reason, using .i
-will not work for swig interface files.
+--ye/AKZ4nM3H9W2aP
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We build files to debug problems and to check the pre-processor
-output. So changing mrproper and cleans to not remove .i would
-leave the tree dirty.
+On Fri, Sep 13, 2024 at 05:51:56PM +0300, Dzmitry Sankouski wrote:
+> =D1=87=D1=82, 20 =D0=B8=D1=8E=D0=BD. 2024=E2=80=AF=D0=B3. =D0=B2 18:46, K=
+rzysztof Kozlowski <krzk@kernel.org>:
+> >
+> > On 18/06/2024 15:59, Dzmitry Sankouski wrote:
+> > > maxim,max77705 is MAX77705 pmic binding part
+> > >
+> > > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+> > > ---
+> > >  .../devicetree/bindings/mfd/maxim,max77705.yaml    | 112 +++++++++++=
+++++++++++
+> >
+> > Your patch order is totally messed. Not tested by automation. Only
+> > limited review follows.
+> >
+> Hmm, not sure what was wrong. I sent version 4 to myself with `b4 send
+> --reflect`, the order looks good.
 
->>>
->>>> I have reviewed and tested and this. I am good with it being a stopgap.
->>>
->>> I am okay with the stopgap, but I do want i explore other solutions.
-> 
-> Reviewing the documentation a better solution would be to rename it to .swg
-> 
-> '''
-> 5.1.1 Input format
-> 
-> As input, SWIG expects a file containing ISO C/C++ declarations and special
-> SWIG directives. More often than not, this is a special SWIG interface file
-> which is usually denoted with a special .i or .swg suffix.
-> '''
-> 
+I suspect that the order that he is referring to is not what you think,
+and that the patches do appear in the order to him that they did to you,
+but that order you committed changes is likely not bisectable due
+dependencies coming after their users.
 
-This is the reason why I wanted to understand the problem to come up
-with a solutions than renaming the file with .if extension.
+--ye/AKZ4nM3H9W2aP
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I am glad to hear .swg can be used. Let's fix this properly then by
-renaming the file as raw_pylibcpupower
+-----BEGIN PGP SIGNATURE-----
 
-> https://www.swig.org/Doc4.2/SWIG.html
-> 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZuRsrAAKCRB4tDGHoIJi
+0sARAP9HtB47ae3VUBdcqtRSXtfh9F/QtUAtZQYTV93JLHGAvwEAgE6iBhZNSP8y
+/bl7XakNdZvek3z1WJ6OStgIn8KeBQ4=
+=yLFY
+-----END PGP SIGNATURE-----
 
-Please send me patch with the change to rename using .swg extension
-and this can be used going forward for other swg interface files.
-
-thanks,
--- Shuah
+--ye/AKZ4nM3H9W2aP--
 
