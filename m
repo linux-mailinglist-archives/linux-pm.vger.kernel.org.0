@@ -1,330 +1,190 @@
-Return-Path: <linux-pm+bounces-14130-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14131-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93CDB977BF1
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 11:11:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57192977C46
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 11:37:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AC7E283A52
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 09:11:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA44F1F27EB8
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 09:37:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61CEE1D6C4C;
-	Fri, 13 Sep 2024 09:10:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33BEC1D6C6B;
+	Fri, 13 Sep 2024 09:37:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="ExTFxaOM";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LSzpmTvK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ADHNJSSe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAB31D58B2;
-	Fri, 13 Sep 2024 09:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53EEF175D45;
+	Fri, 13 Sep 2024 09:37:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726218653; cv=none; b=EmmIWVCqhnkDC9b0wqpTOdqrQEAqOpnyFkpkBHq2gc+eWpi5DAx8+Sqq4l1oM6ct2Z9EUPiqmIqUoIgusU6GsLK4XfxX37VN7q8oD48JUlBSBmC3efb57ue3GIjP8zS4t899sWh6uFNgiMuwd9L7NX7q1JTAYQ6Mh+cexUuBnJ0=
+	t=1726220261; cv=none; b=YHYObShzlpergT6N0RSbJ9RE0q8LunxqMGxi4BbF3fOAdfFrVC59N43j/iDVbDrix1eevFsa26dWmeREOECEIxGeWIS7YFixrCH6bFmidkaTBTlwLqmdmOvC9fasRwi87rx9F+Cp2bf48IU5ubAqp/CCv15liPzWSRJvqRXvUFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726218653; c=relaxed/simple;
-	bh=tt9AADMrwVNUsXHIqAOKdNpwu64ra0IXp/MHU7EzxmQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=uszbwTn4VLRQ0jbzcZpdq8RH5hCsQ4bUAmCIethr5JBJHKIX28ou+iPgIRmVpt8dOnav1X1d9woc/oTo+hwainIqlHUU5ZFvpBYcUN/PexUarLfH7ASyFSZZ7G8yPDLq08aCzipAA6Gow6vEQLhlxzbUIO50/cwLfyNNzykPKu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=ExTFxaOM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LSzpmTvK; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfout.phl.internal (Postfix) with ESMTP id 281CE13802B2;
-	Fri, 13 Sep 2024 05:10:49 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-09.internal (MEProxy); Fri, 13 Sep 2024 05:10:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1726218649;
-	 x=1726305049; bh=FJ45Qglvg7DmjFxDy6maK3tnXPu/iEdwJfotzp3qoVY=; b=
-	ExTFxaOM1q2QaFIn5lMTUZRkL3s3wsqh2uACtKgm2++6I8Cxbuarlx73WuTfodr+
-	1BG52BjtQ2O/RbOeHY6Z5nQkez1OTWLHrw9Y0HdlwCG7Fcqffcm9ZE/Z42MUw6e7
-	aJ1k6eLQeyWnQzqilmgQFjTxoRlR/as6/lCk3zH39XuljGSLdvDfM87v/n7ohRLK
-	q9k4demWaxJOiy9mMFAW3aqlDjJC/OC9NwEmy69O96Fht5SMVvyfM6Anra7fPhYb
-	fBJFHPwan1xmQbtth9l/LYFNR8i5qnFS4B7K6V6gTiiYoVJJlkLRbdknR0LpiI5q
-	S4tQHPtdDuDOfectuh04SA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726218649; x=
-	1726305049; bh=FJ45Qglvg7DmjFxDy6maK3tnXPu/iEdwJfotzp3qoVY=; b=L
-	SzpmTvKYIF5kHP5K92PZi0/P6uMjICaF3iGyvPH8pPsB2p2rAbeVJ0MrxBwZHLWS
-	vwU1MB6JZCIELNgabHhzhAOZLt5M8i5ie5bkMDSppFPjNrsHxluzZpQjbRVyZglX
-	9t3GYgDXiLuwU2NHU2+J1w04V03e+pH6SSyCyOiIGXsUftHsl25QN5WC+apWqqof
-	+Ui9WOf9Z0UAeJr5w2RDbrq4SukapfQnvpceTr9VSvxfOCfBYwB+K0CevPj5lNSF
-	awYmOZ2IF6sy/CGw1Hl0eBY9hcNrrbMeeukbxHtbFir99XQZP4q3UIZIlO9vOkN3
-	5EaIK3QW/8Cd+MaNk/3kg==
-X-ME-Sender: <xms:mAHkZs58ehgy0N4vhx2YdYQMhZOLsKB1XYqdEW7-rkcwoVtJwOG_hg>
-    <xme:mAHkZt5TJnLA5yoStQU0eMuqwJdk-iY43LttYqwyDED4quoAtVd543NrTsfcTqpS1
-    7TknnLWC_HhaaBTSXQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejjedgudduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
-    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeehfeduvddtgffgvdffkeet
-    hefhlefgvdevvdekuefffeekheehgeevhfevteejnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgr
-    thdrtghomhdpnhgspghrtghpthhtohepuddupdhmohguvgepshhmthhpohhuthdprhgtph
-    htthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthht
-    oheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrg
-    gvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvhhirhgvshhhrdhkuhhmrghrsehl
-    ihhnrghrohdrohhrghdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdguvg
-    dprhgtphhtthhopehlohhonhhgrghrtghhsehlihhsthhsrdhlihhnuhigrdguvghvpdhr
-    tghpthhtohepkhhvmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlih
-    hnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehl
-    ihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:mAHkZreBs9WeD2wS-4sgdFp08F2qC_tlncrS_kXiaFyZY3gZpEEJCg>
-    <xmx:mAHkZhIRkM_6p6WglSJG38Xq1-yLnpz_YUilrHgTLr6Sz1l1pStRPg>
-    <xmx:mAHkZgI1iWTI-sWtiM2oEdAejdsQo6QLXm5oIs-jr1b0h2qRheqEQQ>
-    <xmx:mAHkZiz6yS6epgx0Hz0fHV15BuOnWeYnZMReLDTfgw37ODVKNf3k6Q>
-    <xmx:mQHkZtALj-7B8j9db26vWy2uo4xeplo4CRbDzNqmchNcB2Br6nCwg1Yy>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 2A1761C20065; Fri, 13 Sep 2024 05:10:48 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1726220261; c=relaxed/simple;
+	bh=Muc8CTJ6tUBeBmqYfUSLjI05P6c+7aACxxpXBvHZK3g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RiC/IVXBmEhQdW1kiFkioDWvRgOvPUXgP0vcRKI8oQAozpzhcK1LW0orWB455mQEIWapoTJ3XE5wghND6eEtzB8xY4GgzXMrGxa4RAWpV20+x/16+UBw4ghzjk0pPxux8d1wrVlroIC/mqcBK7G9it8MkL+89gyptpo4eTB48dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ADHNJSSe; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-53661ac5ba1so2068562e87.2;
+        Fri, 13 Sep 2024 02:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726220257; x=1726825057; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=poNRBe+GqBqtFV5yIuKftcM+UDfFRe/cSM7MSFErS7k=;
+        b=ADHNJSSeKzR8q5Xokl7KOsGHY9bEXVEC6Lfhm+zhflJscS8OUZyzPguvvCw2hnCPAD
+         YFB1pBIccoqbbchh5J8YAyouV7JCZ3t3I2Pf63B9HXMPv2FCbQyaBp+YUvYgQmqOmyZ5
+         EHmx5lbz54QDxtiJ6aUNMkW6Yu3BUvbnFLdmHBPXW0/Tsv22mDfOVtWkoezPvihyWQFj
+         x27aivG6KXcJh0hZPDtcgC42z9Nve5jzW8a5Ma/8W55nZmL9Z5GrqY3/5nPdkQl6rURb
+         AEx42KlEWt0vBIcS95q00JHgufvs4QFNdJdFgBV1eRL9LQRFTBAE3q5DI1ZtTSfe/XYk
+         2l+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726220257; x=1726825057;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=poNRBe+GqBqtFV5yIuKftcM+UDfFRe/cSM7MSFErS7k=;
+        b=hkVG2bxZQTMGUDhfFh2qIGEXcfJMv+ZOR14h+D+R/HTAOBEwU0+miLZHM874G5Njpe
+         e1R2Te+ZHX2+Uk8gMNFyU9JC2+qh8hK+Q5n6jiPK6wIYUNrPAZiodF4t4PJTXCTW38mX
+         gZKB48NKtjU0WLxRnzJGmsnx6ZepKhI0c0zh3VxfAMbbiDrCXj5mIKUoQ0IUfJ2/tucK
+         7Zb7BLL1c+EHuKK9o7+3ggVhmvLnRut6ewY7b0GEu5/W/qtEoHhsoUuC2xVzQW+Q2w0X
+         xdG4qUP1Vo0/RuZ1/T6XcY0fSt2iLN6By2TEio8TQ0pN7qix97qm+hk6zdL4+Zd+hhFA
+         Rz6w==
+X-Forwarded-Encrypted: i=1; AJvYcCVGID/F7GcvfiBgaXKsdk6Oqhwt55dD7rFvjZkm2D+Dav6yr2HVpiccEopn1TiXXXASjbxv8alAkL0y0Yo3zkM=@vger.kernel.org, AJvYcCWpwg5cDsh1hGC7hecahiQV0GnkICojpIIaCJnH0F3gp+e4MvfYtzS6H/BLQj+T6eFhX/H/kn58+7F9og==@vger.kernel.org, AJvYcCX/uqkMhVpnZxWx6B7ogAf/astLx5Oao6+vRz2uvutwREHO+vON9Px0Hdn3t2Jj6Rpx+s79ruNsyuVQ33q0@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNqlXtUfBth+JipXHqfh5NSQ6wQzmfRolr8et9ll2ZWTn6ce3d
+	ls+7w6vXyFOMonm1RFeRynp3Pqy5V3X0Vq6TAGeEIB0AC3cLUXJ8
+X-Google-Smtp-Source: AGHT+IHPJDR3vrgdy7/5HudOfik7GjSbGIw/RQHKxVrRjeXrJNFMhS6eIKZWgtPsUyW4DKS7qLG5Ow==
+X-Received: by 2002:a05:6512:230b:b0:535:6d34:5cd7 with SMTP id 2adb3069b0e04-53678fb2001mr3195481e87.11.1726220257027;
+        Fri, 13 Sep 2024 02:37:37 -0700 (PDT)
+Received: from void.void ([141.226.9.10])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3789564a340sm16347128f8f.24.2024.09.13.02.37.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Sep 2024 02:37:36 -0700 (PDT)
+From: Andrew Kreimer <algonell@gmail.com>
+To: Eduardo Valentin <edubezval@gmail.com>,
+	Keerthy <j-keerthy@ti.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-pm@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Andrew Kreimer <algonell@gmail.com>,
+	Matthew Wilcox <willy@infradead.org>
+Subject: [PATCH] thermal/ti-soc-thermal: Fix typos
+Date: Fri, 13 Sep 2024 12:37:05 +0300
+Message-ID: <20240913093713.12376-1-algonell@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 13 Sep 2024 10:10:09 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Huacai Chen" <chenhuacai@kernel.org>
-Cc: "Xuerui Wang" <kernel@xen0n.name>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- kvm@vger.kernel.org
-Message-Id: <84c6e819-e2b8-40b6-8de4-9f550e652acc@app.fastmail.com>
-In-Reply-To: 
- <CAAhV-H74OCxnRQjHXtu-CuVaEb5bsMQ4vR4wCOvztZdV-HWEVg@mail.gmail.com>
-References: <20240912-iocsr-v2-0-e88f75b37da4@flygoat.com>
- <20240912-iocsr-v2-1-e88f75b37da4@flygoat.com>
- <CAAhV-H74OCxnRQjHXtu-CuVaEb5bsMQ4vR4wCOvztZdV-HWEVg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] LoongArch: Probe more CPU features from CPUCFG
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
+Fix typos in comments.
 
+Reported-by: Matthew Wilcox <willy@infradead.org>
+Signed-off-by: Andrew Kreimer <algonell@gmail.com>
+---
+ drivers/thermal/ti-soc-thermal/dra752-bandgap.h   | 4 ++--
+ drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h | 8 ++++----
+ drivers/thermal/ti-soc-thermal/omap5xxx-bandgap.h | 4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-=E5=9C=A82024=E5=B9=B49=E6=9C=8813=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8A=E5=
-=8D=889:46=EF=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
-> Hi, Jiaxun,
->
-> On Fri, Sep 13, 2024 at 4:56=E2=80=AFAM Jiaxun Yang <jiaxun.yang@flygo=
-at.com> wrote:
->>
->> Probe ISA level, TLB, IOCSR information from CPUCFG to
->> improve kernel resilience to different core implementations.
->>
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> ---
->>  arch/loongarch/include/asm/cpu.h       |  4 +++
->>  arch/loongarch/include/asm/loongarch.h |  3 +-
->>  arch/loongarch/kernel/cpu-probe.c      | 54 ++++++++++++++++++++++++=
-----------
->>  3 files changed, 44 insertions(+), 17 deletions(-)
->>
->> diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/includ=
-e/asm/cpu.h
->> index 843f9c4ec980..251a15439cff 100644
->> --- a/arch/loongarch/include/asm/cpu.h
->> +++ b/arch/loongarch/include/asm/cpu.h
->> @@ -100,6 +100,8 @@ enum cpu_type_enum {
->>  #define CPU_FEATURE_HYPERVISOR         25      /* CPU has hypervisor=
- (running in VM) */
->>  #define CPU_FEATURE_PTW                        26      /* CPU has ha=
-rdware page table walker */
->>  #define CPU_FEATURE_AVECINT            27      /* CPU has avec inter=
-rupt */
->> +#define CPU_FEATURE_IOCSR              28      /* CPU has IOCSR */
->> +#define CPU_FEATURE_LSPW               29      /* CPU has LSPW */
-> I don't see LSPW being used, so just remove it now?
+diff --git a/drivers/thermal/ti-soc-thermal/dra752-bandgap.h b/drivers/thermal/ti-soc-thermal/dra752-bandgap.h
+index d1b5b699cf23..1402b8c44c6b 100644
+--- a/drivers/thermal/ti-soc-thermal/dra752-bandgap.h
++++ b/drivers/thermal/ti-soc-thermal/dra752-bandgap.h
+@@ -74,7 +74,7 @@
+ /**
+  * Register bitfields for DRA752
+  *
+- * All the macros bellow define the required bits for
++ * All the macros below define the required bits for
+  * controlling temperature on DRA752. Bit defines are
+  * grouped by register.
+  */
+@@ -125,7 +125,7 @@
+ /**
+  * Temperature limits and thresholds for DRA752
+  *
+- * All the macros bellow are definitions for handling the
++ * All the macros below are definitions for handling the
+  * ADC conversions and representation of temperature limits
+  * and thresholds for DRA752. Definitions are grouped
+  * by temperature domain.
+diff --git a/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h b/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
+index c63f439e01d6..3963f1badfc9 100644
+--- a/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
++++ b/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
+@@ -32,7 +32,7 @@
+ /**
+  * Register and bit definitions for OMAP4430
+  *
+- * All the macros bellow define the required bits for
++ * All the macros below define the required bits for
+  * controlling temperature on OMAP4430. Bit defines are
+  * grouped by register.
+  */
+@@ -48,7 +48,7 @@
+ /**
+  * Temperature limits and thresholds for OMAP4430
+  *
+- * All the macros bellow are definitions for handling the
++ * All the macros below are definitions for handling the
+  * ADC conversions and representation of temperature limits
+  * and thresholds for OMAP4430.
+  */
+@@ -102,7 +102,7 @@
+ /**
+  * Register bitfields for OMAP4460
+  *
+- * All the macros bellow define the required bits for
++ * All the macros below define the required bits for
+  * controlling temperature on OMAP4460. Bit defines are
+  * grouped by register.
+  */
+@@ -135,7 +135,7 @@
+ /**
+  * Temperature limits and thresholds for OMAP4460
+  *
+- * All the macros bellow are definitions for handling the
++ * All the macros below are definitions for handling the
+  * ADC conversions and representation of temperature limits
+  * and thresholds for OMAP4460.
+  */
+diff --git a/drivers/thermal/ti-soc-thermal/omap5xxx-bandgap.h b/drivers/thermal/ti-soc-thermal/omap5xxx-bandgap.h
+index 3880e667ea96..b70084b8013a 100644
+--- a/drivers/thermal/ti-soc-thermal/omap5xxx-bandgap.h
++++ b/drivers/thermal/ti-soc-thermal/omap5xxx-bandgap.h
+@@ -56,7 +56,7 @@
+ /**
+  * Register bitfields for OMAP5430
+  *
+- * All the macros bellow define the required bits for
++ * All the macros below define the required bits for
+  * controlling temperature on OMAP5430. Bit defines are
+  * grouped by register.
+  */
+@@ -101,7 +101,7 @@
+ /**
+  * Temperature limits and thresholds for OMAP5430
+  *
+- * All the macros bellow are definitions for handling the
++ * All the macros below are definitions for handling the
+  * ADC conversions and representation of temperature limits
+  * and thresholds for OMAP5430. Definitions are grouped
+  * by temperature domain.
+-- 
+2.46.0
 
-I=E2=80=99m going to submit a page table walker for CPU without SPW late=
-r on :-)
-
-I=E2=80=99m fine with adding that later.
-
-Thanks
-- Jiaxun
-
->
->>
->>  #define LOONGARCH_CPU_CPUCFG           BIT_ULL(CPU_FEATURE_CPUCFG)
->>  #define LOONGARCH_CPU_LAM              BIT_ULL(CPU_FEATURE_LAM)
->> @@ -129,5 +131,7 @@ enum cpu_type_enum {
->>  #define LOONGARCH_CPU_HYPERVISOR       BIT_ULL(CPU_FEATURE_HYPERVISO=
-R)
->>  #define LOONGARCH_CPU_PTW              BIT_ULL(CPU_FEATURE_PTW)
->>  #define LOONGARCH_CPU_AVECINT          BIT_ULL(CPU_FEATURE_AVECINT)
->> +#define LOONGARCH_CPU_IOCSR            BIT_ULL(CPU_FEATURE_IOCSR)
->> +#define LOONGARCH_CPU_LSPW             BIT_ULL(CPU_FEATURE_LSPW)
->>
->>  #endif /* _ASM_CPU_H */
->> diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/=
-include/asm/loongarch.h
->> index 631d249b3ef2..23af28f00c3c 100644
->> --- a/arch/loongarch/include/asm/loongarch.h
->> +++ b/arch/loongarch/include/asm/loongarch.h
->> @@ -60,8 +60,7 @@
->>  #define  CPUCFG0_PRID                  GENMASK(31, 0)
->>
->>  #define LOONGARCH_CPUCFG1              0x1
->> -#define  CPUCFG1_ISGR32                        BIT(0)
->> -#define  CPUCFG1_ISGR64                        BIT(1)
->> +#define  CPUCFG1_ISA                   GENMASK(1, 0)
->>  #define  CPUCFG1_PAGING                        BIT(2)
->>  #define  CPUCFG1_IOCSR                 BIT(3)
->>  #define  CPUCFG1_PABITS                        GENMASK(11, 4)
->> diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kerne=
-l/cpu-probe.c
->> index 14f0449f5452..5dc8ca3c4387 100644
->> --- a/arch/loongarch/kernel/cpu-probe.c
->> +++ b/arch/loongarch/kernel/cpu-probe.c
->> @@ -92,11 +92,29 @@ static void cpu_probe_common(struct cpuinfo_loong=
-arch *c)
->>         unsigned long asid_mask;
->>
->>         c->options =3D LOONGARCH_CPU_CPUCFG | LOONGARCH_CPU_CSR |
->> -                    LOONGARCH_CPU_TLB | LOONGARCH_CPU_VINT | LOONGAR=
-CH_CPU_WATCH;
->> +                    LOONGARCH_CPU_VINT | LOONGARCH_CPU_WATCH;
->>
->>         elf_hwcap =3D HWCAP_LOONGARCH_CPUCFG;
->>
->>         config =3D read_cpucfg(LOONGARCH_CPUCFG1);
->> +
->> +       switch (config & CPUCFG1_ISA) {
->> +       case 0:
->> +               set_isa(c, LOONGARCH_CPU_ISA_LA32R);
->> +               break;
->> +       case 1:
->> +               set_isa(c, LOONGARCH_CPU_ISA_LA32S);
->> +               break;
->> +       case 2:
->> +               set_isa(c, LOONGARCH_CPU_ISA_LA64);
->> +               break;
->> +       default:
->> +               pr_warn("Warning: unknown ISA level\n");
->> +       }
->> +       if (config & CPUCFG1_PAGING)
->> +               c->options |=3D LOONGARCH_CPU_TLB;
->> +       if (config & CPUCFG1_IOCSR)
->> +               c->options |=3D LOONGARCH_CPU_IOCSR;
->>         if (config & CPUCFG1_UAL) {
->>                 c->options |=3D LOONGARCH_CPU_UAL;
->>                 elf_hwcap |=3D HWCAP_LOONGARCH_UAL;
->> @@ -157,6 +175,8 @@ static void cpu_probe_common(struct cpuinfo_loong=
-arch *c)
->>                 elf_hwcap |=3D HWCAP_LOONGARCH_LBT_MIPS;
->>         }
->>  #endif
->> +       if (config & CPUCFG2_LSPW)
->> +               c->options |=3D LOONGARCH_CPU_LSPW;
->>
->>         config =3D read_cpucfg(LOONGARCH_CPUCFG6);
->>         if (config & CPUCFG6_PMP)
->> @@ -222,6 +242,7 @@ static inline void cpu_probe_loongson(struct cpui=
-nfo_loongarch *c, unsigned int
->>  {
->>         uint64_t *vendor =3D (void *)(&cpu_full_name[VENDOR_OFFSET]);
->>         uint64_t *cpuname =3D (void *)(&cpu_full_name[CPUNAME_OFFSET]=
-);
->> +       const char *core_name =3D "Unknown";
->>
->>         if (!__cpu_full_name[cpu])
->>                 __cpu_full_name[cpu] =3D cpu_full_name;
->> @@ -232,40 +253,43 @@ static inline void cpu_probe_loongson(struct cp=
-uinfo_loongarch *c, unsigned int
->>         switch (c->processor_id & PRID_SERIES_MASK) {
->>         case PRID_SERIES_LA132:
->>                 c->cputype =3D CPU_LOONGSON32;
->> -               set_isa(c, LOONGARCH_CPU_ISA_LA32S);
->>                 __cpu_family[cpu] =3D "Loongson-32bit";
->> -               pr_info("32-bit Loongson Processor probed (LA132 Core=
-)\n");
->> +               core_name =3D "LA132";
->>                 break;
->>         case PRID_SERIES_LA264:
->>                 c->cputype =3D CPU_LOONGSON64;
->> -               set_isa(c, LOONGARCH_CPU_ISA_LA64);
->>                 __cpu_family[cpu] =3D "Loongson-64bit";
->> -               pr_info("64-bit Loongson Processor probed (LA264 Core=
-)\n");
->> +               core_name =3D "LA264";
->>                 break;
->>         case PRID_SERIES_LA364:
->>                 c->cputype =3D CPU_LOONGSON64;
->> -               set_isa(c, LOONGARCH_CPU_ISA_LA64);
->>                 __cpu_family[cpu] =3D "Loongson-64bit";
->> -               pr_info("64-bit Loongson Processor probed (LA364 Core=
-)\n");
->> +               core_name =3D "LA364";
->>                 break;
->>         case PRID_SERIES_LA464:
->>                 c->cputype =3D CPU_LOONGSON64;
->> -               set_isa(c, LOONGARCH_CPU_ISA_LA64);
->>                 __cpu_family[cpu] =3D "Loongson-64bit";
->> -               pr_info("64-bit Loongson Processor probed (LA464 Core=
-)\n");
->> +               core_name =3D "LA464";
->>                 break;
->>         case PRID_SERIES_LA664:
->>                 c->cputype =3D CPU_LOONGSON64;
->> -               set_isa(c, LOONGARCH_CPU_ISA_LA64);
->>                 __cpu_family[cpu] =3D "Loongson-64bit";
->> -               pr_info("64-bit Loongson Processor probed (LA664 Core=
-)\n");
->> +               core_name =3D "LA664";
->>                 break;
->>         default: /* Default to 64 bit */
->> -               c->cputype =3D CPU_LOONGSON64;
->> -               set_isa(c, LOONGARCH_CPU_ISA_LA64);
->> -               __cpu_family[cpu] =3D "Loongson-64bit";
->> -               pr_info("64-bit Loongson Processor probed (Unknown Co=
-re)\n");
->> +               if (c->isa_level & LOONGARCH_CPU_ISA_LA64) {
->> +                       c->cputype =3D CPU_LOONGSON64;
->> +                       __cpu_family[cpu] =3D "Loongson-64bit";
->> +               } else if (c->isa_level & LOONGARCH_CPU_ISA_LA32S) {
->> +                       c->cputype =3D CPU_LOONGSON32;
->> +                       __cpu_family[cpu] =3D "Loongson-32bit";
->> +               } else if (c->isa_level & LOONGARCH_CPU_ISA_LA32R) {
->> +                       c->cputype =3D CPU_LOONGSON32;
->> +                       __cpu_family[cpu] =3D "Loongson-32bit Reduced=
-";
->> +               }
-> I prefer to move this part before the switch-case of PRID (and it is
-> better to convert to a switch-case too), then the switch-case of PRID
-> can be only used for probing core-name.
->
-> Huacai
->
->>         }
->> +
->> +       pr_info("%s Processor probed (%s Core)\n", __cpu_family[cpu],=
- core_name);
->>  }
->>
->>  #ifdef CONFIG_64BIT
->>
->> --
->> 2.46.0
->>
-
---=20
-- Jiaxun
 
