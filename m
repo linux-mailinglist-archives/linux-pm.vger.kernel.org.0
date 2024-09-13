@@ -1,91 +1,95 @@
-Return-Path: <linux-pm+bounces-14144-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14145-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9167B977F28
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 14:03:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76235977F29
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 14:03:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A4671F23153
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 12:03:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B72A28835E
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 12:03:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7E9D1DA11A;
-	Fri, 13 Sep 2024 12:02:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F13261D933E;
+	Fri, 13 Sep 2024 12:02:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MVBUjM0x"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="L8kY6jXP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC6B1DA10E
-	for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 12:02:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693871DA0EF
+	for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 12:02:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726228953; cv=none; b=UuGs60PNzlOhEG7ihXarvfbvbXBxN4X83gERDtUHsFhpg5fJnb0a7b3PKXhNOH+2dlUkUqZ99Nh6oOF7D6Xx+2mE3JGE69HpGoZEWi7L7GRcAQh8TmKsMfPmQNy4lvADBqpnJVVHK7bNN+FCWPXOD67WeGJBLMDD1VH00cRwG+E=
+	t=1726228957; cv=none; b=fU3gnP8tK6mQbBLFLPOh4yG28jZK2VyzmjCRAPPafQX/2RnYQWbKvllNbNIhgqziPZdsANDQXzmoq8bYSo74F4BuFchmUinFlMDJsIyRgYF5kXbhBa/d4z8AZwUR2AQAYQX+HRyih2Fm9utkSFpxanR/j0MNtCUOZhL9VdwxYDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726228953; c=relaxed/simple;
-	bh=mHUpQ2YTBppGi/Y8Y6E0ZLBWe1Fol+OjH92MPUBAM7Y=;
+	s=arc-20240116; t=1726228957; c=relaxed/simple;
+	bh=QvE2TVXQ6W2C7ymRczabrWiqSouQpIkgqhi84ilDeZM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SEb393+kXxrHs7krZm6rSSIAkQ/cPZvVYiRm4fUB2sqZWDu8RGIaqKEXOeBhW90zwj2t3GsnhZXaacdFFP9djOTNXo87qV2uyfGPhkUmBDEHkUyZsEjP9FIKfnotaVKE0a4eGrdpOsmmyeU/jbxOWyve1SKlEe7alEnjDW8kbcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MVBUjM0x; arc=none smtp.client-ip=209.85.128.181
+	 To:Cc:Content-Type; b=klCsWM0O09R2eQ47YTEPXN6uIY5r3/zNmPNVZy1GmeFlmC2/fcqcExZVmRGZjfZ+RafuzWBIzNZ2pooXoO82k8oS1MELy3XB/ViuQQkxbyZCYNJOZD7qkT/SuFxoEJQTcBzHR/K3M9Lon9r/KN8T8QUyf2WGjxaedCe/nCbsdTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=L8kY6jXP; arc=none smtp.client-ip=209.85.128.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6d6a3ab427aso15787847b3.2
-        for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 05:02:31 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6db20e22c85so17051887b3.0
+        for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 05:02:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726228951; x=1726833751; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1726228955; x=1726833755; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zVpICAxbAun/Z86wk5H+tZRi+f2zjk20FqIxJDRTlCY=;
-        b=MVBUjM0xGuPXQO0FUxcFALIbJpWf+8svZr/KTC6QZ4KTXsFZW3gW+YAoS8rryRrwFA
-         T5CVWKKYsXKb6PmwXkYTSZ+PJ4IuFLbaEQIrjhzBRGuC0V+RrUIVHdgFm7WC4CJSWwSS
-         qLhSF4iFaJ74sDy5CzqSgwhXE2ShWmR5aRnr1KorMMyev0D8kHA6Ou+zEbd+CU20y02Z
-         P9Y4P7QxWhMw8mnRy2aMG45bGDIdjZ26J5bT80Go0Z9iog9yMPkgruda5W/VzkiIIJqF
-         oBPxaPiz9Larehbacvy5yHyGkHSePvYu59ohql1+LBMA8Zc+79wi/eqUdEXizcaySy+q
-         Lgjw==
+        bh=mcAm2/IOLoHziP4KJeQzrLPo6iRoaonV073IWS+KZ98=;
+        b=L8kY6jXPPqySGBh57Ab3JMVpqcjcwYs5Xs8Fli2rh14lmRYf5pXOVIJdQayQX2Fpfl
+         s3QefQskfiV45gycNEdmDm5VyWLUcMu37YN/XvxE8lGVrZvuhWHLrWUR9C75gYEkhWxj
+         EHBMwgO7bthE3V4g+APzy3eoa5k66VvCdNzIwvTbPekGbJwsEQnN2Isj5bexbyK9GB4B
+         p/vhoqZrMJP3aT4QFojxmd9QbeqgYp1E9b2ck+dxrR2PczUzrz8wXzJJ7oB7YzPRQ2u0
+         dzyIp8x22TvEG3ujXh91xMiXtTTu9PQrZDS2GZQ60X097wAo8QEDjCWoTLqaSODVVNos
+         fhUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726228951; x=1726833751;
+        d=1e100.net; s=20230601; t=1726228955; x=1726833755;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zVpICAxbAun/Z86wk5H+tZRi+f2zjk20FqIxJDRTlCY=;
-        b=bUQVFIa7URjEEG/wXvvna4CdgKCvv1UlSaGu20aJEC9uB7Pt/Z7DOihKN2/S2wsWMk
-         0uc3I7+/iaSzLhpb2QyPsJVx78r07bYjXGNcIDm1TePOkjM6/Hs6arwnUwe7cVgcQ9Kz
-         UQcG5JiKuj6oH8eLLIxSfEZyAy8I1u+/3c0BCcSAZ54zZoVlZZ+nH2FjWSvdnEfTHJTL
-         sjJqCIRqjyM8qjc/nlNnG5w/IUiTs1DXIMAe3H/JswB7VBDh11KF6g0ODdSDLdXWo7kM
-         jL3qqec4M9ewTEmiNu6ighmzSnaariysXPRcKJXo+aQ4pUAS7dARQoq2+VxZCuQo7Oxl
-         CSqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXzVq4R5V1/i3QjRSCrtkFxyn1mwcz+wsij0P7QROitZXOuGWY0s4leFNDTUFCxgAjXET//TVHF8A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyozao/d0M6a/BwakwbvpgYT63bSZhQtoMy/QFP4PpthzR30e1l
-	alnWc9LC+TSysjiG6w5RTQkk+R1NAvQ4Hal2nuNfamBeFbDh6mJgJrfrDos+Cjlib522vRqlSEr
-	yfD61ZSfk428AqpbxbH3Z+Q+P3nosBszTRqxTSw==
-X-Google-Smtp-Source: AGHT+IGXoMXQAwpn2Ow05AMk5gmTy19hcKor5+jT+80wySjeRS1y7hnBDOOxnb0xBEgQdVhR8e9tNlcK+rkTo9yNS68=
-X-Received: by 2002:a05:690c:4a02:b0:6b5:916d:597 with SMTP id
- 00721157ae682-6dbb6b236d4mr57262927b3.22.1726228951054; Fri, 13 Sep 2024
- 05:02:31 -0700 (PDT)
+        bh=mcAm2/IOLoHziP4KJeQzrLPo6iRoaonV073IWS+KZ98=;
+        b=dH7CHf1JSB1nUYO+sILSQ14V1rD2XGN3L90GVcGhw6mdJsnsgh/b3/SFaqd6n5XE3A
+         DHdcj05Ct7pZ7hts7raBpF0nAKZikrHW2qMBiKgybznYbyrmNeE8t5K+wlMroIP6FJHn
+         SZlv7sk56aT0h9NkPMxHIDZFX2vcbdBTZJbDxX+i+9gLv1TN7z+s4/HxbEc4mnAHQjCd
+         b9h6iTqhdo7Ly+4NmGpjG+8TPEFV8IXNMGZEKpVbnFd1j7iJrTd5iNl7e0wCp4xIZq8H
+         m7iv2MA4GlL+Z/8lOJxg1VB6ggSGrD3lGlWzz29WP+yHMN1kIs9l9sP20yQAizanmWNf
+         NmXg==
+X-Forwarded-Encrypted: i=1; AJvYcCUAgZALOiYlqEhVTh254FnaHMkWiW/YX1xg1lmURmHBCrJYHgfquexqVb0OpvXyMISkhEPbJKFCbw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7TwcsDWi+uTrQ1oP/wF7bsH/g/owCkEfJ1xncDkpOwQXfl7O3
+	ydH/l1niG55JZUELTaQ6HVCwJpcgwLkfYDlOSGvpfSfy2GuqKtYJfP2YT/60LcpHEheREwgQeh8
+	QFJ15aGOWJOxNFL0f0lk0RR5O6urgk7Uh+nBWFd5M3jqxuXGX
+X-Google-Smtp-Source: AGHT+IHiP9b6dJV25d/Htzen2O7catAWENjnMqHmAX2mIxCvI/j2Vrccz+v9rt8y3xny5gEO6++hJXVM9Bd8jPS8hus=
+X-Received: by 2002:a05:690c:6683:b0:6db:d572:aa7d with SMTP id
+ 00721157ae682-6dbd572ae48mr7812527b3.19.1726228955300; Fri, 13 Sep 2024
+ 05:02:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240828121230.3696315-1-lihongbo22@huawei.com>
-In-Reply-To: <20240828121230.3696315-1-lihongbo22@huawei.com>
+References: <20240825183116.102953-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240825183116.102953-1-krzysztof.kozlowski@linaro.org>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 13 Sep 2024 14:01:55 +0200
-Message-ID: <CAPDyKFoy_5qHANFOoQGk0hvHOMrWiOp4p4aqpUTWyAFWiJdh4Q@mail.gmail.com>
-Subject: Re: [PATCH -next] pmdomain: mediatek: make use of dev_err_cast_probe()
-To: Hongbo Li <lihongbo22@huawei.com>
-Cc: matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com, 
-	linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
+Date: Fri, 13 Sep 2024 14:01:59 +0200
+Message-ID: <CAPDyKFohY+p8c9R3M82jcGrRxEA6V6fGyOUBz6ABMQQjyxKBzw@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: rockchip: Simplify dropping OF node reference
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Heiko Stuebner <heiko@sntech.de>, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 28 Aug 2024 at 14:04, Hongbo Li <lihongbo22@huawei.com> wrote:
+On Sun, 25 Aug 2024 at 20:31, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Using dev_err_cast_probe() to simplify the code.
+> Drop OF node reference immediately after using it in
+> syscon_node_to_regmap(), which is both simpler and typical/expected
+> code pattern.
 >
-> Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied for next, thanks!
 
@@ -94,29 +98,28 @@ Uffe
 
 
 > ---
->  drivers/pmdomain/mediatek/mtk-pm-domains.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+>  drivers/pmdomain/rockchip/pm-domains.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 >
-> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> index e274e3315fe7..88406e9ac63c 100644
-> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> @@ -398,12 +398,10 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
->                 scpsys->dev->of_node = node;
->                 pd->supply = devm_regulator_get(scpsys->dev, "domain");
->                 scpsys->dev->of_node = root_node;
-> -               if (IS_ERR(pd->supply)) {
-> -                       dev_err_probe(scpsys->dev, PTR_ERR(pd->supply),
-> +               if (IS_ERR(pd->supply))
-> +                       return dev_err_cast_probe(scpsys->dev, pd->supply,
->                                       "%pOF: failed to get power supply.\n",
->                                       node);
-> -                       return ERR_CAST(pd->supply);
-> -               }
+> diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
+> index 64b4d7120d83..5ee7efbd2ef8 100644
+> --- a/drivers/pmdomain/rockchip/pm-domains.c
+> +++ b/drivers/pmdomain/rockchip/pm-domains.c
+> @@ -716,12 +716,11 @@ static int rockchip_pm_add_one_domain(struct rockchip_pmu *pmu,
+>                                 goto err_unprepare_clocks;
+>                         }
+>                         pd->qos_regmap[j] = syscon_node_to_regmap(qos_node);
+> +                       of_node_put(qos_node);
+>                         if (IS_ERR(pd->qos_regmap[j])) {
+>                                 error = -ENODEV;
+> -                               of_node_put(qos_node);
+>                                 goto err_unprepare_clocks;
+>                         }
+> -                       of_node_put(qos_node);
+>                 }
 >         }
 >
->         pd->infracfg = syscon_regmap_lookup_by_phandle_optional(node, "mediatek,infracfg");
 > --
-> 2.34.1
+> 2.43.0
 >
 
