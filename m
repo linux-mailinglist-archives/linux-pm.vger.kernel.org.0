@@ -1,202 +1,122 @@
-Return-Path: <linux-pm+bounces-14184-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14185-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DB4B978488
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 17:19:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E75039785CA
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 18:30:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C347D1F22508
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 15:19:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F9E528AA9F
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 16:30:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D4591C5786;
-	Fri, 13 Sep 2024 15:09:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1E3574418;
+	Fri, 13 Sep 2024 16:30:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QqtG5sjD"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="NHnBJTqu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896E01C3F30;
-	Fri, 13 Sep 2024 15:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879D042042;
+	Fri, 13 Sep 2024 16:30:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726240175; cv=none; b=qnNEYSB1a5xLPs0sDfIpXR986lhd2I9snSKjKQdM2G/LRoy36wdmESYAAUocnMavoOvgBECrVBAGoBRhGnHzRM0wG5rGmQIIoWnmRodabhjAWCbGUvY/d7uuSd3+FdfviqYLnbQYIdDxuVhQFqmp+X/4xhvy9Puh5Pz0bDnJKtM=
+	t=1726245039; cv=none; b=V8gCFmf8XnIXKNmTQcaCoSIHidKrRrbi6PjoLM+rYZIWBD+SpnaRlw6Evo0gB8VOBTsvLLokaKNa0h1QYeDGBc83SXMNuTKDpVgKvWZG8X8y2EZpioJbgKcolqDKYGT9EyLPQyVQeWc9UHjRfhkwUix/UcuFMZG4iInkb57qzvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726240175; c=relaxed/simple;
-	bh=sotlZbQi5UxMTXTY9iQWeBGitc5Ct0BtuZ2yW6i8Nok=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VNp+hW1d1PgsGFhK5D7e2RqyNGNAhD6Cmr5ocg6ziPLmseic6XHGkjcaTIe20Ec6kj4002Q46NVVExSRfVNqqn6Jn738mX6ABG1vUp2V4LBk1bPSaoMxGgYR5hsly/UxEWlq2t1Dg4VRnJlKXUIzFvnFI30yLftOzpCSj3E/pSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QqtG5sjD; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5c26311c6f0so2944448a12.3;
-        Fri, 13 Sep 2024 08:09:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726240171; x=1726844971; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mXJIkSLw8SmFch9ZUCSaWYebLdfaycyre/4lwJqktRc=;
-        b=QqtG5sjD75MPPTL9uxDFdApVZ3+r7KD2KL0iNEd7Js90da5B8v2G7y+/hyWDKlV5rX
-         3Fztu+Wr2ICdSY2o/ip5d3KH8+xusrmEk4hGscNhCdvFluwf/bmjeOVoL8nh2Ixdb9IJ
-         8U3CtH+hvCV76li6tt5eG48Gg8AHVZvQlRHh8Iy1dsORWODQX5jFUWiWqOMInp9PIMAH
-         Eam4aRySDKUWLk1mcEu1RA6JcvJ5gyFy+57gK4h1j2AScZLQbGYtM+Xs1NvdELKUDhmk
-         VuhKzTAeL7kuvMrIK55UaKutlSNNDmXIDkoTqOUNNL/vrl+yneS+sZaOlU7w6poRuwn5
-         7baw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726240171; x=1726844971;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mXJIkSLw8SmFch9ZUCSaWYebLdfaycyre/4lwJqktRc=;
-        b=J9s27h1UUGLr84U5/yAyZJsgI6gwTHTQQ+vx/u51IwWj7gqz1CmyTrroV5jq8Uh2kr
-         E6u/R847+cr5r/nQ2cV7iHoiZ/O8Tnuqm1jUfKDhRIJ/WZF6sKhlzSzO04n2OS86LbR0
-         EUfQ2zyMBYDHXc6Q4qcMzz39U9NEvPDWHumLR14W95EsHaqGt0qOc1T96vkXLvxGZDoi
-         R5rnELotNTtDWaSnFytAWVM0bOaJ7FdMiB9fpweo4LiQ3ATYKmZdbNBA+ImhCfSjQ0Ch
-         6NmICZQIdot3wAagTOVaiWzPG5FK7xN17aQ/feXCCjFm8oGKxBLN0/GNL+ae640xuK/z
-         0wHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUhCX0BAMk05IyBLSQutDLJfVWTFswx9F6GWd198LSABd381GBIIaofuv+n3Fa5lFEPdxdJepGB/ueakzc=@vger.kernel.org, AJvYcCUuti24ziJKj2yZFdgTlk5qdVp945GGwnleaoFOwvGYAgF7kM/9o3AZlWOLxs+cYjH4P6bgysgzQEM9drJk@vger.kernel.org, AJvYcCV/qB5ttufj9m/e1++oHyIrcBu/Jt7mXBsrsWZpW93JbSKj/Zx9IYSZWtbqcNxF6T8URIhVfGCxA7YUd61q3DF5fE0=@vger.kernel.org, AJvYcCVkbNcUFQEropyKy8NfbbsMNZ0QFvOOxr1HnVH6jZrBzr082ilPdQ9RkssS8xkcR+35Qbb7GX9WOIsQu46sKg==@vger.kernel.org, AJvYcCWkJ1fxPDQw+F8r8yx7Po3+bsO/Ie2HEvDLachSkDhlUvGLdF0gIqwUzuNz3Ji0C3TXXVK+1MAIYtX+@vger.kernel.org, AJvYcCXJHZsaa+Lap0z/vITRjAjE62GtCcTohp03NyLwF6TsIf9FuM6fHeZe2uwiRnsoxTVQn7RploJGBy5rBw==@vger.kernel.org, AJvYcCXJnUnKOXJwgWI/0HxHCnRFJ6i5GZUP9VgPjkF/qb/TieQqREoyTLOspdurnGLOHPfqyNQSodpmpsci@vger.kernel.org, AJvYcCXt0cotO6XZozI3melRYob9QNcTS0GS2D4FCOYxAwa1B0Sgm/cZTNkjEey2pOgXjSPttPPrsaluxiW0@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuhtrqkE/IfZ68GjJMK0tVXPbHrxcDBj+ASAUTOSw7C4Nva94o
-	ajFXxhiT6NXbFfN+Y1dTeTE+SQ9dGLGsQrG0J2viUkESwvG/xvQyBeZVeA==
-X-Google-Smtp-Source: AGHT+IGyk1J+WrXxg3n6en6ZybXZ+SEJzAfSUZQA055wEMUefoWDRM5H6YgIPbZdZbXXjvmPnSljDQ==
-X-Received: by 2002:a05:6402:35c1:b0:5c4:181a:6b0a with SMTP id 4fb4d7f45d1cf-5c4181a6b7dmr4656181a12.10.1726240171482;
-        Fri, 13 Sep 2024 08:09:31 -0700 (PDT)
-Received: from [127.0.1.1] ([178.127.153.210])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5c3ebd523b4sm7774318a12.51.2024.09.13.08.09.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2024 08:09:31 -0700 (PDT)
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Fri, 13 Sep 2024 18:08:10 +0300
-Subject: [PATCH v4 27/27] arm64: dts: qcom: starqltechn: add modem support
+	s=arc-20240116; t=1726245039; c=relaxed/simple;
+	bh=aKK46FKilK+bKnoX2daqexXas1ZpJ5Ewg8DpXYBnFJ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=g8MzZ/XdtJYj370i4zCp5MIEPhUSAN6Hb2VH0Lm7u34rQFyuZA9CYKHqTz+tu2ODzaC+C9l0lvnFB4sDY6L2y9D2tCtbdH1ZK8yXYIlPza+pEhQFC+KIFjn3baIgNA/sprxL8gsYUlmJ52IHSkYS+dCS/lzEvEauVNbgMqr2igc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=NHnBJTqu; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 7c1f77ec71ed11efb66947d174671e26-20240914
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=5/b8q4BoSrQ3NlAvsKLlfGTvGmk5/ocjY5IDio7BDIk=;
+	b=NHnBJTquKlPLrnfIzK6mPmMknXBJBhSWyH7Jg3GU1n3lOvXOyjSPbc5Tbdj2Oosvb1Lwf1nu+yUIaa6e3pqJjc16Swlf7Rli+aL5y6nijsJx6p6Mjj5o0gOpsTFQmo8HBinSCxz6/PNd+QWzhYQb5IRE14fX37lcxaLcXu5piq0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:b312c942-3092-41ab-8541-c4ec0f873cc5,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6dc6a47,CLOUDID:233ffcb6-8c4d-4743-b649-83c6f3b849d4,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|-5,EDM:-3,IP:ni
+	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 7c1f77ec71ed11efb66947d174671e26-20240914
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+	(envelope-from <macpaul.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1165984055; Sat, 14 Sep 2024 00:30:27 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Sat, 14 Sep 2024 00:30:25 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Sat, 14 Sep 2024 00:29:53 +0800
+Message-ID: <d77b6a8c-f499-7980-868d-7717046ec3e3@mediatek.com>
+Date: Sat, 14 Sep 2024 00:29:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 3/7] dt-bindings: rtc: mt6397: merge to MFD
+ mediatek,mt6397 DT schema
+Content-Language: en-US
+To: Rob Herring <robh@kernel.org>
+CC: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	<linux-leds@vger.kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
+	<broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>, Pavel Machek
+	<pavel@ucw.cz>, Sean Wang <sean.wang@mediatek.com>, Lee Jones
+	<lee@kernel.org>, Alexandre Mergnat <amergnat@baylibre.com>, Flora Fu
+	<flora.fu@mediatek.com>, Bear Wang <bear.wang@mediatek.com>, Pablo Sun
+	<pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>, Sen Chu
+	<sen.chu@mediatek.com>, Chris-qj chen <chris-qj.chen@mediatek.com>, MediaTek
+ Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<linux-rtc@vger.kernel.org>, <linux-sound@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, Chen-Yu Tsai <wenst@chromium.org>
+References: <20240830110732.30080-1-macpaul.lin@mediatek.com>
+ <20240830110732.30080-3-macpaul.lin@mediatek.com>
+ <20240830153437.GB4175444-robh@kernel.org>
+From: Macpaul Lin <macpaul.lin@mediatek.com>
+In-Reply-To: <20240830153437.GB4175444-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240913-starqltechn_integration_upstream-v4-27-2d2efd5c5877@gmail.com>
-References: <20240913-starqltechn_integration_upstream-v4-0-2d2efd5c5877@gmail.com>
-In-Reply-To: <20240913-starqltechn_integration_upstream-v4-0-2d2efd5c5877@gmail.com>
-To: Sebastian Reichel <sre@kernel.org>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
- Jessica Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- Krzysztof Kozlowski <krzk@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
- Simona Vetter <simona@ffwll.ch>, cros-qcom-dts-watchers@chromium.org, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Simona Vetter <simona.vetter@ffwll.ch>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
- linux-pwm@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
- Dzmitry Sankouski <dsankouski@gmail.com>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1726240085; l=2030;
- i=dsankouski@gmail.com; s=20240618; h=from:subject:message-id;
- bh=sotlZbQi5UxMTXTY9iQWeBGitc5Ct0BtuZ2yW6i8Nok=;
- b=2OY/1Wou8Los9DL2QaeQkDbKQavhO22dQvFX7va+9W+VFm6Zwxp1qTyqVIttAEcQn/XWN02FC
- mMW9IBedqIOB+8AWBDGbU1ksLCmuAtMW2nQ+hhGKetema4Hwj+gR7YU
-X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
- pk=6pMMVVDDReSiRgPCbMOUauN5nS3ty4Sf5b7a2gi4x0M=
 
-Add support for modem and ipa(IP Accelerator).
-Add spss reserved memory node.
 
-Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
----
- .../boot/dts/qcom/sdm845-samsung-starqltechn.dts   | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+On 8/30/24 23:34, Rob Herring wrote:
+> 	
+> 
+> External email : Please do not click links or open attachments until you 
+> have verified the sender or the content.
+> 
+> On Fri, Aug 30, 2024 at 07:07:28PM +0800, Macpaul Lin wrote:
+>> Convert rtc-mt6397.txt be compatible with the DT schema.
+>> Since this is a simple RTC device node, merge it into parent
+>> mediatek,mt6397.yaml. Subsequently, remove rtc-mt6397.txt with a
+>> separate patch.
+> 
+> This doesn't match what the patch does. You can just squash this into
+> the MFD patch where you add the schema.
+> 
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dts b/arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dts
-index 2710386a89e1..4614ec5f731f 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dts
-@@ -17,6 +17,8 @@
- #include "pm8998.dtsi"
- #include "sdm845-wcd9340.dtsi"
- 
-+/delete-node/ &rmtfs_mem;
-+/delete-node/ &spss_mem;
- /delete-node/ &adsp_mem;
- /delete-node/ &slpi_mem;
- 
-@@ -91,15 +93,39 @@ memory@a1300000 {
- 			pmsg-size = <0x40000>;
- 		};
- 
-+		/*
-+		 * It seems like reserving the old rmtfs_mem region is also needed to prevent
-+		 * random crashes which are most likely modem related, more testing needed.
-+		 */
-+		removed_region: removed-region@88f00000 {
-+			reg = <0 0x88f00000 0 0x1c00000>;
-+			no-map;
-+		};
-+
- 		slpi_mem: slpi@96700000 {
- 			reg = <0 0x96700000 0 0xf00000>;
- 			no-map;
- 		};
- 
-+		spss_mem: spss@97700000 {
-+			reg = <0 0x97700000 0 0x100000>;
-+			no-map;
-+		};
-+
- 		adsp_mem: memory@97800000 {
- 			reg = <0 0x97800000 0 0x2000000>;
- 			no-map;
- 		};
-+
-+		rmtfs_mem: rmtfs-mem@fde00000 {
-+			compatible = "qcom,rmtfs-mem";
-+			reg = <0 0xfde00000 0 0x202000>;
-+			qcom,use-guard-pages;
-+			no-map;
-+
-+			qcom,client-id = <1>;
-+			qcom,vmid = <QCOM_SCM_VMID_MSS_MSA>;
-+		};
- 	};
- 
- 	gpio_keys {
-@@ -837,6 +863,19 @@ dai@5 {
- 	};
- };
- 
-+&mss_pil {
-+	firmware-name = "qcom/sdm845/starqltechn/mba.mbn",
-+			"qcom/sdm845/starqltechn/modem.mbn";
-+	status = "okay";
-+};
-+
-+&ipa {
-+	qcom,gsi-loader = "self";
-+	memory-region = <&ipa_fw_mem>;
-+	firmware-name = "qcom/sdm845/starqltechn/ipa_fws.mbn";
-+	status = "okay";
-+};
-+
- &usb_1 {
- 	status = "okay";
- };
+[snip]
 
--- 
-2.39.2
+Will squash the other patches for removing text format files in to the 
+MFD patch in next (v3) version. Thanks!
 
+Regards,
+Macpaul Lin
 
