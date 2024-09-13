@@ -1,159 +1,190 @@
-Return-Path: <linux-pm+bounces-14201-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14202-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72AB69789D5
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 22:17:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 675ED9789F4
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 22:32:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC5181C2151C
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 20:17:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D17C281485
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 20:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BACC12FB0A;
-	Fri, 13 Sep 2024 20:17:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B3D137905;
+	Fri, 13 Sep 2024 20:32:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e1JcRgfj"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="uGLjy0i6";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="B/8x7+oz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80AAC6F077;
-	Fri, 13 Sep 2024 20:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D518B67D;
+	Fri, 13 Sep 2024 20:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726258651; cv=none; b=nWyOGE0Yju613TTILRjzgkVMXt43hTB1O+Mc6z6hiJxVvkkqV8bG3rRAkSmqLrLfVHD0ctCi2b7WkS5qQIe+BYJ8ZhpZgSZNdlLfhFKO0L3rHHQEQvyGTrOKMnxWD82xkvjXNktiRz7oRq1Fa+7fGjr2ymRFe2zfr55NQfZUshs=
+	t=1726259556; cv=none; b=JwO8jRoMcFr2DQOIn8gMzzacpc/iyHFY0/cpXgCPJjzjd1o9Q3Pk1UY5sHl0xw2qPpW9kKdSXgM+ygL02ZtdfORTJcgDmlaXMuuSu2n7lP39WOxTAZU2XYRslpkD/Cds2mbP4VyQ1SkyCZ7pEPQ2MyVIU8jzfilnc5/bNVp36Yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726258651; c=relaxed/simple;
-	bh=88eIVuPmnZtIGAw+EMKNTB/3t5KYG6GUYhxR4BZI0Nk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mcing56C30YQZiDbnncY7r1Ryq9spp5HPFYPUpw0WA3qakYVIKavqgbTOBjGT5C4bNlBC+zHbTJ7/cggnikG1bjIqxGNpc3F4BCZAxLuilUdN29EKbQwIEggFo93wuVXKXmfq2GAWFU4WgAQ0ijlRlBPl9X6a4Ue21IaRdNuhV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e1JcRgfj; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1fc47abc040so22740945ad.0;
-        Fri, 13 Sep 2024 13:17:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726258650; x=1726863450; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=38ACiQq21HRcY9nPJB21d0MtTCj9O/Li+MCcuEZhYVs=;
-        b=e1JcRgfjc+05XFpD18J0zMIZ8loHhXGAlAcaZDaU16qEMtMbxVXg2eseW6kEM5G49k
-         ITURbSZnbgBwIJyODW/6ByFPyUF0mHS7slQR46/75maTa6t2i45eJexY76FiMe17wBLM
-         w7isNLRmTMtzxTxXyUWVf8T58UXbSzGAwHSPZ9cbEu7+GHYCVBueP3NLmwTfjL89qSSq
-         eVI5Jv4h6U2/12APtZVrJx1uboWz05PG+aRsk1RyXo7mkeBOg3jBtwpjHXYVAFPAFCLZ
-         oENO+TlMUWqajq1wgzc0LH5sol0/NiBYa85WxGtfWWN5OucgKJ1Z/SVWibjMaaEVCmxA
-         /8Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726258650; x=1726863450;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=38ACiQq21HRcY9nPJB21d0MtTCj9O/Li+MCcuEZhYVs=;
-        b=hiPK5GPRnVI23+LftwaEORHJvcprL+DLSLWyUlst+Jo67BGRjOoGeYkhmOaMIBiv71
-         NJHRH1MBQz6ZlTXKcEoCgPqGR+yyJTtcAQfHiVOWzSfrC79fkn4mybaL5VWe8h3ummut
-         DigA50KBjFo1HJTah7Jyo6uFicCLXUBBdJAJRAZCL8S2WRY30Ds8xpQ3rmbtNvskdDlc
-         VHIxOrsac3sh0rQwJbeGxgUW+j1YuM9+FHtK7E5pOtYcxMlZUcXxp3BeiRqr2miQOmIA
-         YKMc6ahttcVUqcglwFpHoLAufHQ+e+OR8ya7zJnol20MFXfJ0aiZ9vmDeeXORN332Sc8
-         Hlrw==
-X-Forwarded-Encrypted: i=1; AJvYcCUM4JDxtquRyIrG58NyEi3OothE8ty9bNZfEjIvac+VhFu8xg7cMRERClZ9SfKBtCulf3G1UOTezSLqROQ=@vger.kernel.org, AJvYcCVdxTad+AUO2AHxnczDBSyFdphI8nu+oUi5pEtYqQxZ6DdwWCAs4/o47GiF/SQwTb2bShD9ngKBnag=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykYcIRGlsXc3z+oSGiVQDfwnFQbx3gzjv0AwG51ia8jDI4uzgG
-	g8NFyjz+KmKIB530VUprw+G8154oQixbeSXm9t5uAMCmEdgoDFXv
-X-Google-Smtp-Source: AGHT+IHZJQHWLQIcilzzywsR5b4HQd3k+2Uech6yBf/l6NqklFIffNJiwgbfYsfXyaz7j2BXbJQHvA==
-X-Received: by 2002:a17:902:fc47:b0:205:94df:e087 with SMTP id d9443c01a7336-2076e31eb57mr95455795ad.9.1726258649818;
-        Fri, 13 Sep 2024 13:17:29 -0700 (PDT)
-Received: from localhost.localdomain (111-240-84-197.dynamic-ip.hinet.net. [111.240.84.197])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20794602c3asm315765ad.92.2024.09.13.13.17.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2024 13:17:29 -0700 (PDT)
-From: Min-Hua Chen <minhuadotchen@gmail.com>
-To: Thomas Renninger <trenn@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"John B. Wyatt IV" <jwyatt@redhat.com>,
-	John Kacur <jkacur@redhat.com>
-Cc: Min-Hua Chen <minhuadotchen@gmail.com>,
-	"John B . Wyatt IV" <sageofredondo@gmail.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 for-next] pm: cpupower: rename raw_pylibcpupower.i
-Date: Sat, 14 Sep 2024 04:17:02 +0800
-Message-ID: <20240913201705.7764-1-minhuadotchen@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1726259556; c=relaxed/simple;
+	bh=kqsiXM0S++WxqpWKu2II5x53gByCoP6EQXpczcBR94E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Q1WsdCmny4AhMSZaqhh7MtATurElP/za0tdeRKZMtb4zos0e1X2SidDhiueY6c4AaMUaIeDIl0mcWxMTgL5ByCl75uKeSPwyzNTJI/+m1QPqHZTUqyF40/toLyb86ZSGyGNaus6D77aLzjB1U+sApkRKRQySkT4btAwQa+E4D5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=uGLjy0i6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=B/8x7+oz; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
+	by mailfout.phl.internal (Postfix) with ESMTP id 574CF13803C0;
+	Fri, 13 Sep 2024 16:32:32 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Fri, 13 Sep 2024 16:32:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1726259552; x=1726345952; bh=3z
+	JOCIYn3qAAdrWtdQVt/+s7stHa4sbT9r8Q+kl3DPM=; b=uGLjy0i67qW5ev4LA2
+	vPotFEFa1uE0YguMb/LUaKZWX9RzmmEL5NHlVI8POhqVhNuqrti6vVyn9fsfUxYN
+	rje6FlN3mHnIj0YNWfEqwjm1KCiq/I0vfuLBL+1jXJdiQHoeblzxwfi1OrM4fx0/
+	/xpDmKBdFYG7Sqwo/3AEOBm/Xav5tXL6njk0Fjjc6JZaJhju3dyoxyp30wT5GUte
+	s8rNqgviqU8/qUhZX6xOTYaMm5oqC3DDUIqwDZGp2LSVBWPEb5eF3Vp1//ytwyHs
+	mV8pN9dG//Tm3A3gicgsFJglv/MNZgVy/KUt6ZNWCmy3GdxqCfEFnlwX/z/Etp4w
+	3jeA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1726259552; x=1726345952; bh=3zJOCIYn3qAAd
+	rWtdQVt/+s7stHa4sbT9r8Q+kl3DPM=; b=B/8x7+ozb0aCjNFb9H210wi5Q+327
+	3Mvo6moh3Tex2SFL5DhpjpaQOjUt5vpMEa6OPb5cqlpIag0O+ewnQ4fJde97pqZC
+	HvzFuohvmqnJGcpUhGdce/EoxQEzvBR/Ai5gwIh0bT3weRe1tWkcxzPjF2/sL6AX
+	YnJ7V0ZXisw1Y4tN72mQNrue1EPUGUfJx9xC6eP5k0VWC8S8GhAIv9opIkRg/Kp6
+	8+8554KOQ1Pqis5dmuVO6iVtMIGbjaVVnXiW/ru+JAze8viD6cr6ROQONNMN8z2q
+	+X8YqXomCdqhlXdy1G4d8oNbTuQzoxRyung9khg1qEY0Muy88d9Q0knaA==
+X-ME-Sender: <xms:X6HkZuNI28K0oAslpoB9p7Zw6f1F-bTz2V9uzE3aJUErsFs5xRHS2w>
+    <xme:X6HkZs8WFE43AgDBUrkwP1170zN4IO2DjAKyzR0fS220hojrY3ReoP9cU_lWP0Diy
+    4v0f8Cqq8Lt2Sqy-tQ>
+X-ME-Received: <xmr:X6HkZlQIQMtyMaQ6aF-oOdWBNpJ8cmmi5pFGZ9J_QOGeKwuFiDqiBiXB-PutfjdQ8as>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejkedgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecu
+    hfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomheqnecuggftrfgrthhtvghrnhepgfevffejteegjeeflefgkeetleekhfeu
+    gfegvdeuueejkeejteekkedvfffffedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgr
+    gihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphhtthhopeduvddpmh
+    houggvpehsmhhtphhouhhtpdhrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehkvhhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtohepvhhirhgvshhhrdhkuhhmrghrsehlihhnrghrohdrohhrghdprhgtphhtthhope
+    hjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhrtghpthhtoheplhhinhhu
+    gidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhgvrhhnvghlse
+    igvghntdhnrdhnrghmvgdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorh
+    hg
+X-ME-Proxy: <xmx:X6HkZutvEtwU4rtyEsnplhQCiubClCl2jPaBd3FqUnMX0DSUNXo-WA>
+    <xmx:X6HkZmeNTncvnJhh8dMZG4L2bY0yyZX9n8OyJWxtHTA6wthKNmIq0Q>
+    <xmx:X6HkZi1bV41AnA8kO-ddIwq_UDH6KKG1rCuQzjfVBJJ_oOiDdcZTlg>
+    <xmx:X6HkZq_RNTCXfNbJxvzYMnGDIPxgLy-2qfV85SxWqDe94gOGEcAHcQ>
+    <xmx:YKHkZs2bRfMyHS1ChtJHwNs6kzUEiJ7tyWjrcQiguUMAJsI-eLQnRHGh>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 Sep 2024 16:32:27 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v3 0/4] LoongArch, MIPS: Unify Loongson IOCSR handling
+Date: Fri, 13 Sep 2024 21:32:03 +0100
+Message-Id: <20240913-iocsr-v3-0-81a57f60350d@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEOh5GYC/12MzQqDMBAGX0X23JT8mCbpqe9RetAYdaE1kkioi
+ O/eKBVK9zbLN7NAdAFdhGuxQHAJI/ohgzgVYPtq6BzBJjNwyktq6IWgtzEQzQ1VspRaMgZ5Owb
+ X4nvv3B+Ze4yTD/OeTWz7HgX1LSRGKKHWmFoIUea7tc+589V0tv4FWyPxH4/xw+PZc1q3StZCN
+ dWft67rBw9JlRPUAAAA
+To: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-mips@vger.kernel.org, kvm@vger.kernel.org, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2419;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=kqsiXM0S++WxqpWKu2II5x53gByCoP6EQXpczcBR94E=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrQnC6N1ZPXOWXQskFwT2rKDx1Yq3GaJ5eLQMoVKK0k+x
+ e7E/G8dpSwMYlwMsmKKLCECSn0bGi8uuP4g6w/MHFYmkCEMXJwCMJGFggz/MxT23rPz193Hdu7e
+ d6uVcY2bVaouMV3S2mvY0lZ48ICYHSND1w+hj9WNi28dnrzo4O2rIhHRq1m7nntxpbw9Piun6hQ
+ 3OwA=
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-The raw_pylibcpupower.i is removed unexpectedly after 'make mrproper'
+Hi folks,
 
-We can reproduce the error by performing the following steps:
-cd linux-next
-make mrproper
-cd tools/power/cpupower/bindings/python
-make
+This series unfied LoongArch and MIPS's IOCSR functions and
+macros so they will expose same interface to arch-indenpendent
+drivers.
 
-We will get an error message:
-make: *** No rule to make target 'raw_pylibcpupower.i', needed by 'raw_pylibcpupower_wrap.c'.  Stop.
+This can reduce code deuplication, and also help my unifed IPI driver
+and MIPS extio driver effort.
 
-The root cause:
+This is touching many sub-systems in once so might be hard to merge.
 
-The *.i files are already used for pre-processor output files and
-the kernel removes all the *.i files by 'make mrproper'.
+Huacai, can you apply first three patch via loongarch-next tree.
+For last two patch maybe better merge them via a second PR after
+all subsystem PRs merged.
 
-That explains why the raw_pylibcpupower.i is removed by 'make mrproper'.
+No functional change so hope it's not too late for 6.12 :-)
 
-To fix it, Follow John's suggestion to rename raw_pylibcpupower.i to
-raw_pylibcpupower.swg.
+Please review.
+Thanks
 
-See:
-https://www.swig.org/Doc4.2/SWIG.html
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+Changes in v3:
+- Convert if to switch case in patch 1
+- Fix typo in patch 2
+- Link to v2: https://lore.kernel.org/r/20240912-iocsr-v2-0-e88f75b37da4@flygoat.com
 
-Reviewed-by: John B. Wyatt IV <jwyatt@redhat.com>
-Reviewed-by: John B. Wyatt IV <sageofredondo@gmail.com>
-Tested-by: John B. Wyatt IV <jwyatt@redhat.com>
-Tested-by: John B. Wyatt IV <sageofredondo@gmail.com>
-Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
+Changes in v2:
+- Drop patch 1
+- Move IOCSR probing to cpu_probe_loongson
+- Fix build error for CPUFREQ driver
+- Link to v1: https://lore.kernel.org/r/20240907-iocsr-v1-0-0c99b3334444@flygoat.com
 
 ---
+Jiaxun Yang (4):
+      LoongArch: Probe more CPU features from CPUCFG
+      LoongArch: cpu-probe: Move IOCSR probing out of cpu_probe_common
+      LoongArch: Extract IOCSR definitions to standalone header
+      MIPS: Loongson64: Use shared IOCSR header
 
-change since v1:
-build a non-frc patch
-change since v2:
-follow the document to rename *.if to *.swg 
-
+ MAINTAINERS                                        |   1 +
+ arch/loongarch/include/asm/cpu.h                   |   4 +
+ arch/loongarch/include/asm/loongarch.h             |  93 +---------------
+ arch/loongarch/kernel/cpu-probe.c                  | 117 ++++++++++++---------
+ arch/loongarch/kernel/relocate_kernel.S            |   5 +-
+ arch/loongarch/kernel/smp.c                        |  23 ++--
+ .../include/asm/mach-loongson64/loongson_regs.h    |  58 +++-------
+ arch/mips/kvm/vz.c                                 |   2 +-
+ arch/mips/loongson64/smp.c                         |  44 ++++----
+ drivers/cpufreq/loongson3_cpufreq.c                |  11 +-
+ drivers/irqchip/irq-loongarch-avec.c               |   5 +-
+ drivers/irqchip/irq-loongson-eiointc.c             |   5 +-
+ drivers/platform/mips/cpu_hwmon.c                  |   7 +-
+ include/linux/loongson/iocsr.h                     | 113 ++++++++++++++++++++
+ 14 files changed, 258 insertions(+), 230 deletions(-)
 ---
- tools/power/cpupower/bindings/python/Makefile                 | 4 ++--
- .../python/{raw_pylibcpupower.i => raw_pylibcpupower.swg}     | 0
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename tools/power/cpupower/bindings/python/{raw_pylibcpupower.i => raw_pylibcpupower.swg} (100%)
+base-commit: 9aaeb87ce1e966169a57f53a02ba05b30880ffb8
+change-id: 20240906-iocsr-829075458511
 
-diff --git a/tools/power/cpupower/bindings/python/Makefile b/tools/power/cpupower/bindings/python/Makefile
-index dc09c5b66ead..e1ebb1d60cd4 100644
---- a/tools/power/cpupower/bindings/python/Makefile
-+++ b/tools/power/cpupower/bindings/python/Makefile
-@@ -20,13 +20,13 @@ _raw_pylibcpupower.so: raw_pylibcpupower_wrap.o
- raw_pylibcpupower_wrap.o: raw_pylibcpupower_wrap.c
- 	$(CC) -fPIC -c raw_pylibcpupower_wrap.c $(PY_INCLUDE)
- 
--raw_pylibcpupower_wrap.c: raw_pylibcpupower.i
-+raw_pylibcpupower_wrap.c: raw_pylibcpupower.swg
- ifeq ($(HAVE_SWIG),0)
- 	$(error "swig was not found. Make sure you have it installed and in the PATH to generate the bindings.")
- else ifeq ($(HAVE_PYCONFIG),0)
- 	$(error "python-config was not found. Make sure you have it installed and in the PATH to generate the bindings.")
- endif
--	swig -python raw_pylibcpupower.i
-+	swig -python raw_pylibcpupower.swg
- 
- # Will only clean the bindings folder; will not clean the actual cpupower folder
- clean:
-diff --git a/tools/power/cpupower/bindings/python/raw_pylibcpupower.i b/tools/power/cpupower/bindings/python/raw_pylibcpupower.swg
-similarity index 100%
-rename from tools/power/cpupower/bindings/python/raw_pylibcpupower.i
-rename to tools/power/cpupower/bindings/python/raw_pylibcpupower.swg
+Best regards,
 -- 
-2.43.0
+Jiaxun Yang <jiaxun.yang@flygoat.com>
 
 
