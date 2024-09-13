@@ -1,286 +1,153 @@
-Return-Path: <linux-pm+bounces-14193-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14194-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB4B3978634
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 18:51:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99613978722
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 19:48:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D755F1C21C9E
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 16:51:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42CA21F25141
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 17:48:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A3AC74418;
-	Fri, 13 Sep 2024 16:51:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2767712C460;
+	Fri, 13 Sep 2024 17:48:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="bLXyoRao"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DFC047F4D
-	for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 16:51:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2FD84A5C;
+	Fri, 13 Sep 2024 17:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726246308; cv=none; b=KeDKjnbSouCaG7jC1X6UUqvz+MIW/W+3jQe7ufgJCYnKlvcXgY/fT+EM0zdUmiNuuVX53eunhlMA4GUWm/VLBqvZvLq4jSIU6HZR6iWYQtIRv9JAYy2MkXSLpO6DZzCXSHSRkNqaZH0al2PC6FsbrN0JlnxtpgUBdA6WG788fTo=
+	t=1726249695; cv=none; b=gWaHF8NODowWjqC2R4J5xNSdkfUzBjx63yUNjzEENoE03RIbbxh8v0efGXWmR3+w0mlIKGgG84lSeDootxrWfMd8M4tdBC9Gh9KVKkzu5fngv7XlRCNLIwc/JyEo3spks23hPLcxip4VRF62NXXkzfVXkhzAWpBh7GDM7mHVnBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726246308; c=relaxed/simple;
-	bh=GtnJM9JCGvo4hjD385OoZYhWuuZ7KajA04WCkg16ubk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fa/IMLsQo/z3sVwSmIyLdVnzcpyxR7AL2OJ+44qX66ivF8Uv7asFYE/n3f5fHkk0hEns45o6MPvG68klEGvEQvLkNYtAKgnaCB19kE4uNJfnOR19+Q8Eqdexkohs9uFIqyl92jLjaeGqhEv92MbIKCAT9w/ylMj0vDdIQfF6FQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-X-CSE-ConnectionGUID: g7RwmfVaSh6X12rMzBK0dg==
-X-CSE-MsgGUID: bUOiaHWIQSeY7uij4VUwmg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="42663550"
-X-IronPort-AV: E=Sophos;i="6.10,226,1719903600"; 
-   d="scan'208";a="42663550"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 09:51:45 -0700
-X-CSE-ConnectionGUID: Q0UV8dMYT0GS5P8bHjXegg==
-X-CSE-MsgGUID: 9EJ/bu5BRWCbjLXLwG2nlw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,226,1719903600"; 
-   d="scan'208";a="72489450"
-Received: from powerlab.fi.intel.com (HELO powerlab.backendnet) ([10.237.71.25])
-  by fmviesa005.fm.intel.com with ESMTP; 13 Sep 2024 09:51:44 -0700
-From: Artem Bityutskiy <dedekind1@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM Mailing List <linux-pm@vger.kernel.org>
-Subject: [PATCH] [PATCH] intel_idle: fix ACPI _CST matching for newer Xeon platforms
-Date: Fri, 13 Sep 2024 19:51:43 +0300
-Message-ID: <20240913165143.4140073-1-dedekind1@gmail.com>
-X-Mailer: git-send-email 2.43.1
+	s=arc-20240116; t=1726249695; c=relaxed/simple;
+	bh=1bgvytnR1cBoSNS0eNWksDlJAGVUVW56J/DY/7oQ/r8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=dpula4lhPyko0yJZwc7LTWiB+LRivtPsekXVcq/GblGbqrUHRUgVVi1oWEdXPxDn1F1p197MwvWnTusIhFf0MrpMLr12fkprTz57/lCbp9gCzcCeJBPgqAZCwpitkC7Fx5sKVsY4fyJf/FqfRwWU3iWZAg1CIqx0FOl6eMvLPV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=bLXyoRao; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 5567fcfe71f811efb66947d174671e26-20240914
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=xotAzUqezhsD17X56wb62uKRJaTQRcsCpG1PKAuJkiA=;
+	b=bLXyoRaoG2BWcPSJ/Lob/YGLmHH4jbYR3bk0ORhMvifoOAmUaBlAx6bHj6/nV1/gzH0pPf1djrTf1weAV0tC6/tEpJIFJ93cPXAaiu6cberu/CQ1x3hEI3RwJcQmMKOFE6KcDyKPU1wwt6G6AWFtgAJ4PdIBznlj4kQQ+79uViw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:260387d0-77f3-4e5a-a2a0-e1a34bc0a739,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6dc6a47,CLOUDID:d5672ed0-7921-4900-88a1-3aef019a55ce,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|-5,EDM:-3,IP:ni
+	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 5567fcfe71f811efb66947d174671e26-20240914
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+	(envelope-from <macpaul.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 321677032; Sat, 14 Sep 2024 01:48:07 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Sat, 14 Sep 2024 01:48:04 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Sat, 14 Sep 2024 01:47:53 +0800
+Message-ID: <f6050fa5-4cb5-9283-263b-bcd0d97a09bc@mediatek.com>
+Date: Sat, 14 Sep 2024 01:47:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/7] regulator: dt-bindings: mt6323: Convert to DT
+ schema
+Content-Language: en-US
+To: Rob Herring <robh@kernel.org>
+CC: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	<linux-leds@vger.kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
+	<broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>, Pavel Machek
+	<pavel@ucw.cz>, Sean Wang <sean.wang@mediatek.com>, Lee Jones
+	<lee@kernel.org>, Alexandre Mergnat <amergnat@baylibre.com>, Flora Fu
+	<flora.fu@mediatek.com>, Bear Wang <bear.wang@mediatek.com>, Pablo Sun
+	<pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>, Sen Chu
+	<sen.chu@mediatek.com>, Chris-qj chen <chris-qj.chen@mediatek.com>, "MediaTek
+ Chromebook Upstream" <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<linux-rtc@vger.kernel.org>, <linux-sound@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, Chen-Yu Tsai <wenst@chromium.org>
+References: <20240830110732.30080-1-macpaul.lin@mediatek.com>
+ <20240830145056.GA4170065-robh@kernel.org>
+From: Macpaul Lin <macpaul.lin@mediatek.com>
+In-Reply-To: <20240830145056.GA4170065-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--14.924800-8.000000
+X-TMASE-MatchedRID: oTBA/+sdKaYOwH4pD14DsPHkpkyUphL9meN8m2FdGic3xO2R3boBWFbu
+	qIY+/skQkABPgKBt/0rdkc3IJsq77y9FtW7XfHueU+OjsPhIWDiwR/wKmchi2X3ikYeDnk/KepZ
+	UyQ6EeDXoapbtUvkIf+xNbFV/iNBgt3ZVSPV8VOi0sO72q2op4f+UEb65dgmQEB/Asc4oaYEfg0
+	sA1HT2xmQQJkXF7hk6vMxSxMv7UnmPLG+A0qvEpp4CIKY/Hg3AtOt1ofVlaoLUHQeTVDUrItRnE
+	QCUU+jzjoczmuoPCq0Bv7xhCXsjZm/ZfgvjZa1rh9ifqkpf8qhcEkm/83qnHz1B6iuMVH+d
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--14.924800-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP: BAB98BC90D7C6C90416F4D37BF8B8CF0C1790B6C68AB3A968115B29A6A8B76452000:8
 
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+On 8/30/24 22:50, Rob Herring wrote:
+> 	
+> 
+> External email : Please do not click links or open attachments until you 
+> have verified the sender or the content.
+> 
+> On Fri, Aug 30, 2024 at 07:07:26PM +0800, Macpaul Lin wrote:
+>> Convert this from the old style text based binding to the new DT schema
+>> style.
+>> 
+>> The examples have been trimmed down and move to parent schema
+>> mfd/mediatek,mt6397.yaml.
+>> 
+>> Add new maintainers and submitter from MediaTek.
+>> 
+>> Signed-off-by: Sen Chu <sen.chu@mediatek.com>
+>> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
 
-Background
-~~~~~~~~~~
+[snip]
 
-The driver uses 'use_acpi = true' in C-state custom table for all Xeon
-platforms. The meaning of this flag is as follows.
+>> +
+>> +patternProperties:
+>> +  "^(buck_)?v(pa|proc|sys)$":
+>> +    description: Buck regulators
+>> +    type: object
+>> +    $ref: regulator.yaml#
+>> +    properties:
+>> +      regulator-allowed-modes: false
+>> +    unevaluatedProperties: false
+>> +
+>> +  "^(ldo_)?v(camio|cn18)$":
+> 
+> Why are buck_ and ldo_ prefixes optional? The old binding didn't reflect
+> actual (upstream) users? If so, that's fine, but mention that in the
+> commit message.
+> 
+> Rob
+> 
 
-1. If a C-state from the custom table is defined in ACPI _CST (matched by the
-   mwait hint), then enable this C-state.
-2. Otherwise, disable this C-state, unless the C-sate definition in the
-   custom table has the 'CPUIDLE_FLAG_ALWAYS_ENABLE' flag set, in which case
-   enabled it.
+Will use "^buck_v" and "^ldo_v" as the prefixes of each items in 
+patternProperties. Thanks!
 
-The goal is to honor BIOS C6 settings - If BIOS disables C6, disable it by
-default in the OS too (but it can be enabled via sysfs).
-
-This works well on Xeons that expose only one flavor of C6. This are all Xeons
-except for the newest Granite Rapids (GNR) and Sierra Forest (SRF).
-
-The problem
-~~~~~~~~~~~
-
-GNR and SRF have 2 flavors of C6: C6/C6P on GNR, C6S/C6SP on SRF. The the "P"
-flavor allows for the package C6, while the "non-P" flavor allows only for
-core/module C6.
-
-As far as this patch is concerned, both GNR and SRF platforms are handled the
-same way. Therefore, further discussion is focused on GNR, but it applies to
-SRF as well.
-
-On Intel Xeon platforms, BIOS exposes only 2 ACPI C-states: C1 and C2. Well,
-depending on BIOS settings, C2 may be named as C3. But there still will be only
-2 states - C1 and C3. But this is a non-essential detail, so further discussion
-is focused on the ACPI C1 and C2 case.
-
-On pre-GNR/SRF Xeon platforms, ACPI C1 is mapped to C1 or C1E, and ACPI C2 is
-mapped to C6. The 'use_acpi' flag works just fine:
-* If ACPI C2 enabled, enable C6.
-* Otherwise, disable C6.
-
-However, on GNR there are 2 flavors of C6, so BIOS maps ACPI C2 to either C6 or
-C6P, depending on the user settings. As a result, due to the 'use_acpi' flag,
-'intel_idle' disables least one of the C6 flavors.
-
-BIOS                   | OS                         | Verdict
-----------------------------------------------------|---------
-ACPI C2 disabled       | C6 disabled, C6P disabled  | OK
-ACPI C2 mapped to C6   | C6 enabled,  C6P disabled  | Not OK
-ACPI C2 mapped to C6P  | C6 disabled, C6P enabled   | Not OK
-
-The goal of 'use_acpi' is to honor BIOS ACPI C2 disabled case, which works
-fine. But if ACPI C2 is enabled, the goal is to enable all flavors of C6, not
-just one of the flavors. This was overlooked when enabling GNR/SRF platforms.
-
-In other words, before GNR/SRF, the ACPI C2 status was binary - enabled or
-disabled. But it is not binary on GNR/SRF, however the goal is to continue
-treat it as binary.
-
-The fix
-~~~~~~~
-
-Notice, that current algorithm matches ACPI and custom table C-states by the
-mwait hint. However, mwait hint consists of the 'state' and 'sub-state' parts,
-and all C6 flavors have the same state value of 0x20, but a different sub-state
-values.
-
-Introduce new C-state table flag - CPUIDLE_FLAG_PARTIAL_HINT_MATCH and add it
-to both C6 flavors of the GNR/SRF platforms.
-
-When matching ACPI _CST and custom table C-states, match only the start part if
-the C-state has CPUIDLE_FLAG_PARTIAL_HINT_MATCH, other wise match both state
-and sub-state parts (as before).
-
-With this fix, GNR C-states enabled/disabled status looks like this.
-
-BIOS                   | OS
-----------------------------------------------------
-ACPI C2 disabled       | C6 disabled, C6P disabled
-ACPI C2 mapped to C6   | C6 enabled, C6P enabled
-ACPI C2 mapped to C6P  | C6 enabled, C6P enabled
-
-Possible alternative
-~~~~~~~~~~~~~~~~~~~~
-
-The alternative would be to remove 'use_acpi' flag for GNR and SRF. This would
-be a simpler solution, but it would violate the principle of least surprise -
-users of Xeon platforms are used to the fact that intel_idle honors C6
-enabled/disabled flag. It is more consistent user experience if GNR/SRF
-continue doing so.
-
-How tested
-~~~~~~~~~~
-
-Tested on GNR and SRF platform with all the 3 BIOS configurations: ACPI C2
-disabled, mapped to C6/C6S, mapped to C6P/C6SP.
-
-Tested on Ice lake Xeon and Sapphire Rapids Xeon platforms with ACPI C2 enabled
-and disabled, just to verify that the patch does not break older Xeons.
-
-Fixes: 92813fd5b156 ("intel_idle: add Sierra Forest SoC support")
-Fixes: 370406bf5738 ("intel_idle: add Granite Rapids Xeon support")
-Cc: stable@vger.kernel.org # 6.8+
-
-Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
----
- drivers/idle/intel_idle.c | 37 +++++++++++++++++++++++++++++--------
- 1 file changed, 29 insertions(+), 8 deletions(-)
-
-Note, about:
-
-  Fixes: 370406bf5738 ("intel_idle: add Granite Rapids Xeon support")
-
-This patch is not in Lunus' tree yet, it is only in linux-pm. But I assume that
-commit ID won't change.
-
-Also, about Cc: stable: this patch won't cleanly apply, and I assume stable
-maintainer contacts me and I'll help porting it.
-
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 9457e34b9e32..67aebfe0fed6 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -120,6 +120,12 @@ static unsigned int mwait_substates __initdata;
-  */
- #define CPUIDLE_FLAG_INIT_XSTATE	BIT(17)
- 
-+/*
-+ * Ignore the sub-state when matching mwait hints between the ACPI _CST and
-+ * custom tables.
-+ */
-+#define CPUIDLE_FLAG_PARTIAL_HINT_MATCH	BIT(18)
-+
- /*
-  * MWAIT takes an 8-bit "hint" in EAX "suggesting"
-  * the C-state (top nibble) and sub-state (bottom nibble)
-@@ -1043,7 +1049,8 @@ static struct cpuidle_state gnr_cstates[] __initdata = {
- 		.name = "C6",
- 		.desc = "MWAIT 0x20",
- 		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED |
--					   CPUIDLE_FLAG_INIT_XSTATE,
-+					   CPUIDLE_FLAG_INIT_XSTATE |
-+					   CPUIDLE_FLAG_PARTIAL_HINT_MATCH,
- 		.exit_latency = 170,
- 		.target_residency = 650,
- 		.enter = &intel_idle,
-@@ -1052,7 +1059,8 @@ static struct cpuidle_state gnr_cstates[] __initdata = {
- 		.name = "C6P",
- 		.desc = "MWAIT 0x21",
- 		.flags = MWAIT2flg(0x21) | CPUIDLE_FLAG_TLB_FLUSHED |
--					   CPUIDLE_FLAG_INIT_XSTATE,
-+					   CPUIDLE_FLAG_INIT_XSTATE |
-+					   CPUIDLE_FLAG_PARTIAL_HINT_MATCH,
- 		.exit_latency = 210,
- 		.target_residency = 1000,
- 		.enter = &intel_idle,
-@@ -1354,7 +1362,8 @@ static struct cpuidle_state srf_cstates[] __initdata = {
- 	{
- 		.name = "C6S",
- 		.desc = "MWAIT 0x22",
--		.flags = MWAIT2flg(0x22) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.flags = MWAIT2flg(0x22) | CPUIDLE_FLAG_TLB_FLUSHED |
-+					   CPUIDLE_FLAG_PARTIAL_HINT_MATCH,
- 		.exit_latency = 270,
- 		.target_residency = 700,
- 		.enter = &intel_idle,
-@@ -1362,7 +1371,8 @@ static struct cpuidle_state srf_cstates[] __initdata = {
- 	{
- 		.name = "C6SP",
- 		.desc = "MWAIT 0x23",
--		.flags = MWAIT2flg(0x23) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.flags = MWAIT2flg(0x23) | CPUIDLE_FLAG_TLB_FLUSHED |
-+					   CPUIDLE_FLAG_PARTIAL_HINT_MATCH,
- 		.exit_latency = 310,
- 		.target_residency = 900,
- 		.enter = &intel_idle,
-@@ -1744,7 +1754,7 @@ static void __init intel_idle_init_cstates_acpi(struct cpuidle_driver *drv)
- 	}
- }
- 
--static bool __init intel_idle_off_by_default(u32 mwait_hint)
-+static bool __init intel_idle_off_by_default(unsigned int flags, u32 mwait_hint)
- {
- 	int cstate, limit;
- 
-@@ -1761,7 +1771,15 @@ static bool __init intel_idle_off_by_default(u32 mwait_hint)
- 	 * the interesting states are ACPI_CSTATE_FFH.
- 	 */
- 	for (cstate = 1; cstate < limit; cstate++) {
--		if (acpi_state_table.states[cstate].address == mwait_hint)
-+		u32 acpi_hint = acpi_state_table.states[cstate].address;
-+		u32 table_hint = mwait_hint;
-+
-+		if (flags & CPUIDLE_FLAG_PARTIAL_HINT_MATCH) {
-+			acpi_hint &= ~MWAIT_SUBSTATE_MASK;
-+			table_hint &= ~MWAIT_SUBSTATE_MASK;
-+		}
-+
-+		if (acpi_hint == table_hint)
- 			return false;
- 	}
- 	return true;
-@@ -1771,7 +1789,10 @@ static bool __init intel_idle_off_by_default(u32 mwait_hint)
- 
- static inline bool intel_idle_acpi_cst_extract(void) { return false; }
- static inline void intel_idle_init_cstates_acpi(struct cpuidle_driver *drv) { }
--static inline bool intel_idle_off_by_default(u32 mwait_hint) { return false; }
-+static inline bool intel_idle_off_by_default(unsigned int flags, u32 mwait_hint)
-+{
-+	return false;
-+}
- #endif /* !CONFIG_ACPI_PROCESSOR_CSTATE */
- 
- /**
-@@ -2098,7 +2119,7 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
- 
- 		if ((disabled_states_mask & BIT(drv->state_count)) ||
- 		    ((icpu->use_acpi || force_use_acpi) &&
--		     intel_idle_off_by_default(mwait_hint) &&
-+		     intel_idle_off_by_default(state->flags, mwait_hint) &&
- 		     !(state->flags & CPUIDLE_FLAG_ALWAYS_ENABLE)))
- 			state->flags |= CPUIDLE_FLAG_OFF;
- 
--- 
-2.43.1
-
+Regards,
+Macpaul Lin
 
