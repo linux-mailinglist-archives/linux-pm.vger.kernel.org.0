@@ -1,240 +1,123 @@
-Return-Path: <linux-pm+bounces-14148-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14149-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFFAE977F39
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 14:06:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 428B79780E2
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 15:17:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F948280E78
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 12:06:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 052F92882C7
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 13:17:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B99041D7E39;
-	Fri, 13 Sep 2024 12:06:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578371DB556;
+	Fri, 13 Sep 2024 13:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="dQgqPPdb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64B31BFDF6;
-	Fri, 13 Sep 2024 12:06:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C071DB522;
+	Fri, 13 Sep 2024 13:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726229183; cv=none; b=CsGVm9KeEjd0U0pIR3+s6f1TcyQ6QU5jeFtjiTUsIpH7x4W3NQ8shg/2FJtXAXeMo3405spCSIzRTWcP8JrxwFbAMPRBdguhXwrwtmjakl51QuDdzI5pUwOeSoX8lfVQ8QmpLhkbzz+j4iZOtni8GnLN1aDzVJ9CYb9up1zUJvA=
+	t=1726233415; cv=none; b=ap+EW0zEUb6OMIwG6sQEb4Sc5LDDUPabzPtq5+9G0E/fJauSJTNF/NNxnXI4/2yKvL775n5qcPGIcHsx49b+99FAwHjBVyAkrinHMsRJIAP4BaQPVPuLYn+ZFXVI0F1Scnv627U8aBNOGkAFEGpKIncKx5VFETE/TGdK7cNROBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726229183; c=relaxed/simple;
-	bh=87/tGkZmzXEk3vv9YL4PlH6QGuBQUythRPhFtSr41IE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=N8YCNrJQ09kbvWttkX9eLmAnZV4TvNAWovhd9OrkjIXB1YIXjKCJKMtXiOGO+/hYZD4ODPVjC5CzbG9eWmU8WMIA+6vDmqKwXeq/+ALW38jyOuar/lrfO0jqSon9XP6yjDPJSaqxmqcgPBCYp2xgw19Fgpt2e3aYiGM6a1UFMGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4X4tKq6LdVz1j6Bx;
-	Fri, 13 Sep 2024 20:05:19 +0800 (CST)
-Received: from dggpeml500019.china.huawei.com (unknown [7.185.36.137])
-	by mail.maildlp.com (Postfix) with ESMTPS id ACEEC1A0190;
-	Fri, 13 Sep 2024 20:05:51 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by dggpeml500019.china.huawei.com
- (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 13 Sep
- 2024 20:05:51 +0800
-Message-ID: <79353a26-7304-9d6a-9237-cfa8e7794601@hisilicon.com>
-Date: Fri, 13 Sep 2024 20:05:50 +0800
+	s=arc-20240116; t=1726233415; c=relaxed/simple;
+	bh=nbZRQ5VfiGPJOUcj1BhoToeRLsOwqy/4ntRWm+FnBVU=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=Z6QIAI3APoRkwKS73+h0JdJSi2qnAv3ghetQ+JZfMLti5bg3jTz2VWxj/0lHHBq5xd99CYbQoMjTIuREwFRWGiIGmBzBv5yDsGdONoXFV21MAe9U27g0BBToLkTX//TRGByzDamCiv3KBmswSiRTyCuLNTHRcMRbkmc2a7MbDu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=dQgqPPdb; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1726233381; x=1726838181; i=markus.elfring@web.de;
+	bh=8LFZzyCZ81TZMkUL3zNXl93k6bEo5DfK2Ms9KdHmW5o=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=dQgqPPdb0UNlX80mTu0/7knW1GjbII001Q7PMngwMx8yVkzAAw2bxKemvdEVkmII
+	 3tpR2vTs2lSThFuQoFKjUzG1LSjs8Ftqn8nyjALngNSAp8Gh+//vcT4D2cff1c226
+	 arnM1Mh6YFoUiYnmDAKtDOgfTKEjsPJ6N5lZrLbhFC21Tf4I9sifJAWw9RmTSiqx8
+	 7Z4ZZl7St/fKNKpHx0azBq7iSnu5J2hgr97xWhDR2VlObkMtAtStZ4CJw01hb6JJD
+	 1FHPp4MR4yjy0fLbFzcPXiwBDoMXRS0olaeVM9SnqUg+Zr/hhq0okpGS7cxwnWaJb
+	 cWIgpUaVaFOczXDw3g==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.88.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MY5bT-1sUUEi1uhx-00JwqP; Fri, 13
+ Sep 2024 15:16:21 +0200
+Message-ID: <186de981-7a3c-4fdb-8911-8dfee597c759@web.de>
+Date: Fri, 13 Sep 2024 15:16:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 1/3] cppc_cpufreq: Return desired perf in ->get() if
- feedback counters are 0
-To: Ionela Voinescu <ionela.voinescu@arm.com>
-CC: <beata.michalska@arm.com>, <wangxiongfeng2@huawei.com>,
-	<viresh.kumar@linaro.org>, <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<wanghuiqiang@huawei.com>, <zhenglifeng1@huawei.com>, <lihuisong@huawei.com>,
-	<yangyicong@huawei.com>, <liaochang1@huawei.com>, <zengheng4@huawei.com>
-References: <20240912072231.439332-1-zhanjie9@hisilicon.com>
- <20240912072231.439332-2-zhanjie9@hisilicon.com> <ZuK3sfcKf2gHssKa@arm.com>
-From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <ZuK3sfcKf2gHssKa@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500019.china.huawei.com (7.185.36.137)
+User-Agent: Mozilla Thunderbird
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ cocci@inria.fr, =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <20240825183116.102953-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] pmdomain: rockchip: Simplify dropping OF node reference
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240825183116.102953-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:lSxIoQdC+s9CRKUItPCu1XcxxG4YbA4iSVgECTs4ptBWwKgy6yg
+ 3cBXw7xtPULueXwfcZJo+Jq+PBr6OmaCRiU/x4Yk8rlsidhuDvJbpTr0dstBpHsd8ysLR+E
+ 7yu59zCw63BverAZYGnwstXWXAYdGY+L88Mlg4kOiY2aF7bkm0LKrHdy86MCnf0rVrJjLf8
+ CrSw63uxpFefauF1uqWjg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:nWtRG0sGK6I=;wDB3ikrhfP6m2ODBCoYTUaGaS8H
+ fMZzMZC4QJhtXwjyhKrTHseO+JjtqAyHDNMIewHvd2FbIgsPfeIomTB3sjGk6fd3HqAuTKWzL
+ mKusbLgaBqRMSEKTCsFpVOE7WZg5qhnQMnFPakRrM+p2rgq1StJXOCWBnu177R1hBTgPZNs9x
+ S4OJVWxip7Ko/8VT4ImOaTrKQ1L7l0xrKDftm14raSbd4XNbaK4kQosFmEK0V3sQK7KvED1Yg
+ LXR7mvNc+C4x4+IteYYcJ8n9ahbC+YiGcAB425zBVHrwgXetXQRF3fgQwFKXqh3nA1HcgEiRJ
+ Pc+t0kILVeIDFCSjFrAb6iLfIoyCAV25k7UhJ/iFD+csOksY90yzlCIJUZMnFsYSwlTDCWn1m
+ OY+iBr8A/sT/CFxTTXvTbxERAe17IB+4WxFmPV6aM5vIJsegx+iFpEMW5TmypFOGXSGDbw5kR
+ 5TpzcozuMIRE9G5a90mPqo7OSHr97Q4n02uN6oYOi9v5+eCSNvc7J3sBW4HjyLpNgK+SVPXHa
+ ZopbqrtRTuVgsLCyXKnuML+Twp4XCdLa5xJxSq18Ny2fQ9RwvAiJi126iddPJfZOoM/F6eumQ
+ DUeQ++omb11+Uzv7H2IJ1rusQ6+C0A7JErFp5C4n2qeO6sJU6pFJpdbNCKBzb1gfxYlBXNu7C
+ CLIZXE2U7Pw4ByU/ROmhQpa33eM2BXZcvsFI9CwSxEorv7TXAwcf5xPgM1LBl0+0Bk4tpcsau
+ mhq+obtBjfz2y76y6idIOcuDaYfP9E5av4odxR/2dMGJLJ5xZeIa3nGK2DnzWJFYhtKql5j++
+ /xs6aDc9FcgiZ3Kc+Zc+aPVg==
+
+> Drop OF node reference immediately after using it in
+> syscon_node_to_regmap(), which is both simpler and typical/expected
+> code pattern.
+
+Dear Krzysztof,
+
+I noticed also this contribution.
+I found it easy to convert it also into the following small script variant
+for the semantic patch language (Coccinelle software).
 
 
-Hi Ionela,
+@adjustment@
+expression e, x;
+@@
++of_node_put(e);
+ if (...)
+ {
+ <+... when !=3D e =3D x
+-   of_node_put(e);
+ ...+>
+ }
+-of_node_put(e);
 
-On 12/09/2024 17:43, Ionela Voinescu wrote:
 
-...
+58 patches were accordingly generated for source files of the software =E2=
+=80=9CLinux next-20240913=E2=80=9D.
+How would we like to tackle remaining update candidates according to simil=
+ar transformation patterns?
 
-> 
-> A possible (slimmer) alternative implementation for you to consider
-> (this merges patches 1 & 2):
-> 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index bafa32dd375d..c16be9651a6f 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -118,6 +118,9 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
-> 
->         perf = cppc_perf_from_fbctrs(cpu_data, &cppc_fi->prev_perf_fb_ctrs,
->                                      &fb_ctrs);
-> +       if (!perf)
-> +               perf = cpu_data->perf_ctrls.desired_perf;
-> +
-
-I think it's better to just return here.
-If feedback counters are successfully read but unchanged, the following
-calculation and update in cppc_scale_freq_workfn() is meaningless because it
-won't change anything.
-
->         cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
-> 
->         perf <<= SCHED_CAPACITY_SHIFT;
-> @@ -726,7 +729,7 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
-> 
->         /* Check to avoid divide-by zero and invalid delivered_perf */
->         if (!delta_reference || !delta_delivered)
-> -               return cpu_data->perf_ctrls.desired_perf;
-> +               return 0;
-
-This makes sense to me.
-Here is probably why Patch 2 looks bulky.
-
-> 
->         return (reference_perf * delta_delivered) / delta_reference;
->  }
-> @@ -736,7 +739,7 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
->         struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
->         struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
->         struct cppc_cpudata *cpu_data;
-> -       u64 delivered_perf;
-> +       u64 delivered_perf = 0;
->         int ret;
-> 
->         if (!policy)
-> @@ -747,19 +750,22 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
->         cpufreq_cpu_put(policy);
-> 
->         ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
-> -       if (ret)
-> -               return 0;
-> -
-> -       udelay(2); /* 2usec delay between sampling */
-> -
-> -       ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
-> -       if (ret)
-> -               return 0;
-> +       if (!ret) {
-> +               udelay(2); /* 2usec delay between sampling */
-> +               ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
-> +       }
-> +       if (!ret)
-> +               delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
-> +                                                      &fb_ctrs_t1);
-
-TBH, 'if (!ret)' style looks very strange to me.
-We haven't done so anywhere in cppc_cpufreq, so let's keep consistency and make
-it easier for people to read and maintain?
-
-> +       if ((ret == -EFAULT) || !delivered_perf) {
-> +               if (cppc_get_desired_perf(cpu, &delivered_perf))
-> +                       delivered_perf = cpu_data->perf_ctrls.desired_perf;
-
-will take this.
-
-> +       }
-> 
-> -       delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
-> -                                              &fb_ctrs_t1);
-> +       if (delivered_perf)
-> +               return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
-> 
-> -       return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
-> +       return 0;
->  }
-> 
-> disclaimer: not fully checked so likely not "production ready" code :)
-> 
-> Hope it helps,
-> Ionela.
-> 
->>  
->>  static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
->> -- 
->> 2.33.0
->>
-> 
-
-How about this? merged patch 1 & 2 as well.
-
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index bafa32dd375d..411303f2e8cb 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -118,6 +118,9 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
-
-          perf = cppc_perf_from_fbctrs(cpu_data, &cppc_fi->prev_perf_fb_ctrs,
-                                       &fb_ctrs);
-+       if (!perf)
-+               return;
-+
-          cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
-
-          perf <<= SCHED_CAPACITY_SHIFT;
-@@ -726,7 +729,7 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
-
-          /* Check to avoid divide-by zero and invalid delivered_perf */
-          if (!delta_reference || !delta_delivered)
--               return cpu_data->perf_ctrls.desired_perf;
-+               return 0;
-
-          return (reference_perf * delta_delivered) / delta_reference;
-   }
-@@ -748,18 +751,32 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
-
-          ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
-          if (ret)
--               return 0;
-+               goto out_err;
-
-          udelay(2); /* 2usec delay between sampling */
-
-          ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
-          if (ret)
--               return 0;
-+               goto out_err;
-
-          delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
-                                                 &fb_ctrs_t1);
-
-          return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
-+
-+out_err:
-+       /*
-+        * Feedback counters could be 0 when cores are powered down.
-+        * Take desired perf for reflecting frequency in this case.
-+        */
-+       if (ret == -EFAULT) {
-+               if (cppc_get_desired_perf(cpu, &delivered_perf))
-+                       delivered_perf = cpu_data->perf_ctrls.desired_perf;
-+
-+               return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
-+       }
-+
-+       return 0;
-   }
-
-   static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
----
-
-Thanks indeed!
-Jie
+Regards,
+Markus
 
