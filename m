@@ -1,128 +1,97 @@
-Return-Path: <linux-pm+bounces-14133-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14135-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95F90977CE2
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 12:06:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57285977DD7
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 12:40:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3A181C24B81
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 10:06:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D1B61F20F25
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 10:40:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A6121D6C4D;
-	Fri, 13 Sep 2024 10:06:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2C961D86E4;
+	Fri, 13 Sep 2024 10:39:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EE+xqlTm"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="IPg5vfzM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF021D6C47
-	for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 10:06:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BCC1D86DE;
+	Fri, 13 Sep 2024 10:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726221972; cv=none; b=kbcRxMtL8MxpheVC2P/L9tg9iKJriA3ifn/h/l6ZxjIvs83e+oRcMi0P9VvKt9Obd5ZLFQv1gZGRtaInUKuxxy27pLRA5KD78mXuJz0GloX6WegFEN2ktbW+YXlcTMS4LgQaYKtcFXkhMRvezW6Srh9A4+6ZcfBjYUgX6y7bKRI=
+	t=1726223987; cv=none; b=KbzCHomZ54dTSr0caVe5E3G9x7HvdnNsyAdiq83eS+N8sKrcgV6FHp+IlHDHzHRlPyXgikWBAMebz96OytR9xq+otDwIWECRcHMlXDAi3TB5n1xAmrmK23Q9u3dKdZRbu4NWrmbOkS4c1tkf5SWs1cJEIIQCg2WVix4qC1Qjniw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726221972; c=relaxed/simple;
-	bh=h0dHyMTecMwGQ8g5Pbl4LrmGMguv0lNiZsBtgT+cFDI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=orIzTUs2mhH0uF0V+hIlWDD18p6wv1l4UrCCpfjzvN6pwwt13novJ4ig0tOPEPJd8mHk4kXXguNULpYOISnoknS+J5jj4w0jYWNX96d+whQZodPM1Qd7Wlav8iaG681eiJQTE7ajU3ixu/0qsKBTZKCC6Lw4RzgiyftL6Zee/Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EE+xqlTm; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e1d0e1bffc8so1916823276.1
-        for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 03:06:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726221970; x=1726826770; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JaPQBzemrMXh8Nln+1kZCDqId0bwswOL4QtLu+Mpca8=;
-        b=EE+xqlTmfQqqs33Pz8oHKaL77XrEErGeSlvP5cLJ4HGOp2z3/29JFRfHuGLYf5Eevu
-         ruYZjivFF4navnztuRBzSe7p8Ii896yjMJkYgklKAcKL3O9LeWc0rp3wLleaJGyHxT9M
-         oBivF2QKLUa4H9GNGghRCyL8xuKFXF/ZHUpcVDMrPk2Od86MA777LZPLqg8Oo/578UTN
-         ltFhpWj0A7XJK8otlgcZfsz03lWFdW/4ezc420FtX+bh8aONZROQUUArf/p3DNO+TYRf
-         mbBFBVuKat0gXutJEjT97sesAwE2BodkvsF39hCIwtg+ye3atZBM/fmfsiBbzirE5Ygz
-         tQfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726221970; x=1726826770;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JaPQBzemrMXh8Nln+1kZCDqId0bwswOL4QtLu+Mpca8=;
-        b=mnxYZwVe5y3nNvHu1syogLtlLJfXUqCs2bRHJzS67GBbyHFsJC+F1+lnYMSRt3ZUES
-         0WMvtXEhBG++TepFvjcIttxjZeqWSVPzO9aQC8AmfiV0ElfjnD+YbLCttUa/ljnRA49y
-         IdJjbfD3mGLmgVuNpNN+O0oD5o3u4vbcdRz1mqioLLNqh2hjpyrJslpdqXcOmGdXAw4S
-         OAx2P329O9/MklBWBc6rxBepfwdtCGwUk//7gd+CuZpwbHO/NXXAlplxJSTraoQrUrpl
-         TFmF5NBQf8ilkdUVMm8Gu1K9/EOk0GF3e7lmXj/K09nVSA8VY48NO4y8JfWVxgVa+ip0
-         mhkw==
-X-Forwarded-Encrypted: i=1; AJvYcCVcffZ8E0xgGoENkLt51l/T6MItr10kY+AoKOsOO9zlYBT+c8WEGFsAgiVqGTmV6HxqvzaMKrX25w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhdM7e19d1ACXq1qRzThzA+Z9uyws5s4rAvO37oaX/nGDAIEOm
-	5ePSH1/dYxl60YfK0ZGTBdnVPsCxbpQvte8EEnTHPlwyD9JYe7NYO6wuBHvoQUhOzy69B16xRob
-	2pi1AtbcMGyfTX9DRhpRL811lsFbaVFHkiqyhwGRCGe8DVGLK
-X-Google-Smtp-Source: AGHT+IEdBtSHPjgvKfhDiixzaJBbhBz3OX5f2jjbd7KMPteTt4+C/OWa+HjJZTd8tIa9XJ/KQBvlrLnb31OCiW0A+Cc=
-X-Received: by 2002:a25:2946:0:b0:e1d:a3bb:d5f6 with SMTP id
- 3f1490d57ef6-e1da3bbd81cmr3324432276.6.1726221969729; Fri, 13 Sep 2024
- 03:06:09 -0700 (PDT)
+	s=arc-20240116; t=1726223987; c=relaxed/simple;
+	bh=X2DjAoiHpajHutur2yyr2h73UAP9b/1c+tj3fIstVGw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=r/rOyScKFceLKRhKs3uEJu/eu4XKTsP7NiNcepk/gU2meIfJW5M/0uoF+eoiUssjY7BVIDYIP+7kt4TQYvPSfeSGGyoSocDpX9ajAcbUiZcfAFofULycm7CgAHeKndfEAh0YFFCWcqZ2R3gzK2cburQK7Bp+5/OasHmRcG89dP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=IPg5vfzM; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 7a0ef66671bc11ef8b96093e013ec31c-20240913
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=L/SYtEbl/61399Qh+bHxFsGQAy9IhdUiQzlwegY6SMo=;
+	b=IPg5vfzMD5NUoaQMvGTgr+d9pIMoZnhd0N3aaLyAG0dYMWe1x5ZoP/zn3+oXqsm16SdqxhC4LFeDZfybUvK7jnNDH0NxBFgNT2NpqEkFr8Z0+LSmvI05/wGF246GVAh33zNzRB+Whu8QxsGG/NGgftLhIoKRBojqkRTaos2nPp8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:cf55a4b8-e325-4ac6-8b7c-a2517bc4388f,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6dc6a47,CLOUDID:c9f0ebbf-d7af-4351-93aa-42531abf0c7b,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 7a0ef66671bc11ef8b96093e013ec31c-20240913
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+	(envelope-from <chun-jen.tseng@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 943353095; Fri, 13 Sep 2024 18:39:38 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 13 Sep 2024 03:39:37 -0700
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 13 Sep 2024 18:39:37 +0800
+From: Mark Tseng <chun-jen.tseng@mediatek.com>
+To: "Rafael J . Wysocki" <rafael@kernel.org>, Viresh Kumar
+	<viresh.kumar@linaro.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin
+ Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<chun-jen.tseng@mediatek.com>
+Subject: [PATCH v1 0/2] fixed mediatek-cpufreq has multi policy concurrency issue
+Date: Fri, 13 Sep 2024 18:39:31 +0800
+Message-ID: <20240913103933.30895-1-chun-jen.tseng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240822130055.50113-1-zhangzekun11@huawei.com> <20240822130055.50113-2-zhangzekun11@huawei.com>
-In-Reply-To: <20240822130055.50113-2-zhangzekun11@huawei.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 13 Sep 2024 12:05:33 +0200
-Message-ID: <CAPDyKFpfB5z0GRJAJMLVhJowpyZMHgZx9hkWB5migJp=K0bn6w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] pmdomain: ti-sci: Add missing of_node_put() for args.np
-To: Zhang Zekun <zhangzekun11@huawei.com>
-Cc: nm@ti.com, kristo@kernel.org, ssantosh@kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-On Thu, 22 Aug 2024 at 15:14, Zhang Zekun <zhangzekun11@huawei.com> wrote:
->
-> of_parse_phandle_with_args() need to call of_node_put() to decerement
-> the refcount of args.np. Adding backing the missing of_node_put().
->
-> Fixes: efa5c01cd7ee ("soc: ti: ti_sci_pm_domains: switch to use multiple genpds instead of one")
-> Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
-> ---
->  drivers/pmdomain/ti/ti_sci_pm_domains.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> index 1510d5ddae3d..2b5c26713958 100644
-> --- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> +++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> @@ -161,6 +161,7 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
->                                 break;
->
->                         if (args.args_count >= 1 && args.np == dev->of_node) {
-> +                               of_node_put(args.np);
->                                 if (args.args[0] > max_id) {
->                                         max_id = args.args[0];
->                                 } else {
-> @@ -192,7 +193,8 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
->                                 pm_genpd_init(&pd->pd, NULL, true);
->
->                                 list_add(&pd->node, &pd_provider->pd_list);
-> -                       }
-> +                       } else
+For multi cluster SoC, the cpufreq->target_index() is re-enter function 
+for each policy to change CPU frequency. In the cirtical session must 
+use glocal mutex lock to avoid get wrong OPP.
 
-Usually we have brackets here too, as it was needed for the first if-clause.
+Mark Tseng (2):
+  PM / devfreq: mediatek: protect oop in critical session
+  cpufreq: mediatek: Fixed cpufreq has 2 policy will cause concurrency
 
-> +                               of_node_put(args.np);
->                         index++;
->                 }
->         }
-> --
-> 2.17.1
->
+ drivers/cpufreq/mediatek-cpufreq.c | 65 ++++++++++++++++++++++--------
+ drivers/devfreq/mtk-cci-devfreq.c  | 30 +++++++-------
+ 2 files changed, 64 insertions(+), 31 deletions(-)
 
-Otherwise this looks good to me!
+-- 
+2.45.2
 
-Kind regards
-Uffe
 
