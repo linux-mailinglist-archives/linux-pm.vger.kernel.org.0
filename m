@@ -1,142 +1,184 @@
-Return-Path: <linux-pm+bounces-14120-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14121-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A7D49774A4
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 01:01:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94AC197768A
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 03:52:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8891DB21DCE
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Sep 2024 23:01:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8CEE1C24251
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 01:52:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A67D19C54B;
-	Thu, 12 Sep 2024 23:01:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IcmrkDC+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 546968C1F;
+	Fri, 13 Sep 2024 01:51:58 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABEE49654;
-	Thu, 12 Sep 2024 23:01:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D980D1FC8;
+	Fri, 13 Sep 2024 01:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726182089; cv=none; b=hPHqN0477HCuBfj7eiW1WhAd/0t6kVJQvFlNRzos4HTEr/ASVD3s4uqOw7e3vnsmaWFPKAqExDpnda1xFRByRwAhxWurtsjSYAT/d8T5T1EtuQzWvQl3mQii4FZwh7bbkrgC6JyyBD0q2rrYmELZpxvJlWesz4cOKWmvnWyumwQ=
+	t=1726192318; cv=none; b=mwmYMigPIdoplmpbx49n+ogtC6vFtxputMJnazp5N783BtxvtyZCy8EbdmF1+kXaTsgXDK0hG8gzTq/DnCoBlDCX2aoRWYGlXDShUxLtAuPp1WigvF9isghL00qXfIxguzI/V9jPp5VWDqZkag0J1AC6qu95vC2BTOOK8r3fVP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726182089; c=relaxed/simple;
-	bh=1RRhyzzot8M+OzmNpGIM6ngou92I+qH69yeps2lCQVU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UtlhFY5sfKjF8ERdj3DL6ZP/kRLlaZt3lB7VB98tT8s+UfF7D7cfhzSH87cWFGYe0+hU7yID4pz0m43/LfCS610DvshXHMusU3nxkByD7Vf+0SPakrOyf6pJkhl2zX6CtLHAwYE+3V7bSR0Cc59pGnEmrY4nueROLWTL9dmBfgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IcmrkDC+; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2d8815ef6d2so1268018a91.0;
-        Thu, 12 Sep 2024 16:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726182087; x=1726786887; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tuq/qwh3p/xqQg6vD3Gwn7KcfnrMZ+zcgC0C8gCmIbY=;
-        b=IcmrkDC+Fc/JLBNqL+bUu4meRvKIZzYY2fjerGnicaq8s1RtIigioTdxiSoUUc+sOV
-         KAEsOuNjdk6PtHS1S2Zdc1WkufJq/eERiQSuQkyiUx8aTwaX0V+lEZfDJtJWQiH/+cMX
-         h+9weQYUjeEdseG0XN/nN1qjEcvK6kTvhFFi1Y4JTggfD/yKJ3OxcfuzcadakFtwaCgY
-         E7Ht48ph/st/uo909kLlwD7BOOTkGtjuquTpeyynDtV+4DRsgDDQGVJNyZqMgcIdPIkT
-         U/wN00t1dlAAOt4tmnyxlgD/j70FrnWX5exvAMa0K9EzYb3m2or2gc5qldOIzDUAXZmm
-         xxCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726182087; x=1726786887;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tuq/qwh3p/xqQg6vD3Gwn7KcfnrMZ+zcgC0C8gCmIbY=;
-        b=XrQIYYv9gHnFmXNgsihn5tunbH/wTVcoJlF0fczQS8EnI0wFYFN2riElM9wVlwhjM3
-         2mm36oTAsekvFTJHwKmIV4vCHz1JH3nLdw3hfU8HFJVA15rnjrdJYfQV5fHXvKjLqV30
-         +TWIvFa+ba9z+L5OgGxSCbGIlL4b7NxwIZldyFdod8zCkHdTXhm4+003Y+CsIe/r37BZ
-         UKR2U50GMLG2O7SXfyHVfurxfvdrkt/qbV/saB78qSeDV6Bjm5Ws4tstHJfMhGngTkdS
-         paPiekpYaD0YNxfoOvqh28jaFEEEk6lTTL+tAdBcxN852w0Z4gQVTnmnE6+9cSDC48oa
-         dAIg==
-X-Forwarded-Encrypted: i=1; AJvYcCUwt3GUXel027L6CffjXtRRtud3gh9AdbafishVOKVh7f8/8N9drKKBByUa8XqK7LfuWNF+nUsUWo4fVOY=@vger.kernel.org, AJvYcCVvChWiGfRBc5JwpeinPXBqi4mItwi+maybOLP3S7LwpVlHKfrBJ4akVHrrmPzBkKMcu4Ld+NtjWIY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywh9ZfcXb3TytX0meJBssfy8GX2o5KJHu3VcRlFgnLBSbhMqpj5
-	Lpx6pOTHIKdNUJWl4bEgk3UiyYMuS3e8HCaMCQlAMD+bTET6jwLE
-X-Google-Smtp-Source: AGHT+IH5MYPu1JmDxwSKc5VR1TQ7RPQZ9jLD7DOL/fmFhC5p030rPg3T6VUe3IBfeKA4U0Psw4hC3A==
-X-Received: by 2002:a17:90a:fc85:b0:2d8:baf1:e319 with SMTP id 98e67ed59e1d1-2dba0068195mr5160486a91.25.1726182086915;
-        Thu, 12 Sep 2024 16:01:26 -0700 (PDT)
-Received: from localhost.localdomain (111-240-84-197.dynamic-ip.hinet.net. [111.240.84.197])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dbb9cadb0bsm257819a91.27.2024.09.12.16.01.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2024 16:01:26 -0700 (PDT)
-From: Min-Hua Chen <minhuadotchen@gmail.com>
-To: Thomas Renninger <trenn@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"John B. Wyatt IV" <jwyatt@redhat.com>,
-	John Kacur <jkacur@redhat.com>
-Cc: Min-Hua Chen <minhuadotchen@gmail.com>,
-	"John B . Wyatt IV" <sageofredondo@gmail.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 for-next] pm: cpupower: rename raw_pylibcpupower.i
-Date: Fri, 13 Sep 2024 07:01:00 +0800
-Message-ID: <20240912230102.157534-1-minhuadotchen@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1726192318; c=relaxed/simple;
+	bh=m2YuuK5/NoMzZiGWxExt1KGnDHV8c8/PkeQskUZNWNU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=juV6G9woNLb5gOInT3dTKckPXW5h/OXATQmmEZqztcJ6y/Xm9ZwDs4AXYO7RRSq/Ohm4MAb2gcNmn9xNSwY+F7DL0b7KzyxLq0AFBzXyu/KOrtl6R6Kp3Ndsaz0Tr8pCU6pKgx5bbEhM41Ag0kr5GdcrE5DqOslAO5OCCG/Sbjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: baafb5e2717211efa216b1d71e6e1362-20240913
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:50fe07c5-a2ac-43d4-8ce5-8e03b6ddf441,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-INFO: VERSION:1.1.38,REQID:50fe07c5-a2ac-43d4-8ce5-8e03b6ddf441,IP:0,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:-5
+X-CID-META: VersionHash:82c5f88,CLOUDID:b9edadf3f44f7a72e7299162749d91dc,BulkI
+	D:2409062205428B690IWE,BulkQuantity:12,Recheck:0,SF:64|66|17|19|102,TC:nil
+	,Content:1|-5,EDM:-3,IP:nil,URL:1,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,C
+	OL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_OBB,
+	TF_CID_SPAM_ULS
+X-UUID: baafb5e2717211efa216b1d71e6e1362-20240913
+X-User: duanchenghao@kylinos.cn
+Received: from [172.30.80.21] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 66091797; Fri, 13 Sep 2024 09:51:44 +0800
+Message-ID: <52b9fd0ab9d279c7da1e2c70e1f023c7e3333ad6.camel@kylinos.cn>
+Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
+ USB status when S4 wakes up
+From: duanchenghao <duanchenghao@kylinos.cn>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: gregkh@linuxfoundation.org, pavel@ucw.cz, linux-pm@vger.kernel.org, 
+	niko.mauno@vaisala.com, stanley_chang@realtek.com, tj@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Date: Fri, 13 Sep 2024 09:51:40 +0800
+In-Reply-To: <b8dc326b-8aee-4903-bbb6-64083cf66b4d@rowland.harvard.edu>
+References: <20240906030548.845115-1-duanchenghao@kylinos.cn>
+	 <1725931490447646.3.seg@mailgw.kylinos.cn>
+	 <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
+	 <8b07752d-63c4-41e3-bd20-ce3da43dfffc@rowland.harvard.edu>
+	 <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
+	 <b8dc326b-8aee-4903-bbb6-64083cf66b4d@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-All *.i files will be removed by 'make mrproper',
-including raw_pylibcpupower.i, added by
-commit: 338f490e07bc ("pm:cpupower: Add SWIG bindings files for libcpupower")
+=E5=9C=A8 2024-09-12=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 11:00 -0400=EF=BC=
+=8CAlan Stern=E5=86=99=E9=81=93=EF=BC=9A
+> On Thu, Sep 12, 2024 at 11:21:26AM +0800, duanchenghao wrote:
+> > =E5=9C=A8 2024-09-11=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 10:40 -0400=EF=
+=BC=8CAlan Stern=E5=86=99=E9=81=93=EF=BC=9A
+> > > On Tue, Sep 10, 2024 at 05:36:56PM +0800, duanchenghao wrote:
+> > > > S4 wakeup restores the image that was saved before the system
+> > > > entered
+> > > > the S4 sleep state.
+> > > >=20
+> > > > =C2=A0=C2=A0=C2=A0 S4 waking up from hibernation
+> > > > =C2=A0=C2=A0=C2=A0 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > =C2=A0=C2=A0=C2=A0 kernel initialization
+> > > > =C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=20
+> > > > =C2=A0=C2=A0=C2=A0 v=C2=A0=C2=A0=20
+> > > > =C2=A0=C2=A0=C2=A0 freeze user task and kernel thread
+> > > > =C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=20
+> > > > =C2=A0=C2=A0=C2=A0 v=C2=A0=C2=A0=20
+> > > > =C2=A0=C2=A0=C2=A0 load saved image
+> > > > =C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=20
+> > > > =C2=A0=C2=A0=C2=A0 v=C2=A0=C2=A0=20
+> > > > =C2=A0=C2=A0=C2=A0 freeze the peripheral device and controller
+> > > > =C2=A0=C2=A0=C2=A0 (Check the HCD_FLAG_WAKEUP_ PENDING flag of the =
+USB. If it
+> > > > is
+> > > > set,
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0 return to EBUSY and do not perform the fol=
+lowing restore
+> > > > image.)
+> > >=20
+> > > Why is the flag set at this point?=C2=A0 It should not be; the device
+> > > and=20
+> > > controller should have been frozen with wakeup disabled.
+> > >=20
+> > This is check point, not set point.
+>=20
+> Yes, I know that.=C2=A0 But when the flag was checked, why did the code
+> find=20
+> that it was set?=C2=A0 The flag should have been clear.
 
-We can reproduce the error by performing the following command:
-cd linux-next
-make mrproper
-cd tools/power/cpupower/bindings/python
-make
+Yes, the current issue is that during S4 testing, there is a
+probabilistic scenario where clear_bit is not called after set_bit, or
+clear_bit is called but does not execute after set_bit. Please refer to
+the two modification points in the v2 patch for details, as both of
+them can cause the current issue.
 
-We will get an error message:
-make: *** No rule to make target 'raw_pylibcpupower.i', needed by 'raw_pylibcpupower_wrap.c'.  Stop.
+>=20
+> > > Is your problem related to the one discussed in this email
+> > > thread?
+> > >=20
+> > > https://lore.kernel.org/linux-usb/d8600868-6e4b-45ab-b328-852b6ac8ecb=
+5@rowland.harvard.edu/
+> > >=20
+> > > Would the suggestion I made there -- i.e., have the xhci-hcd=20
+> > > interrupt handler skip calling usb_hcd_resume_root_hub() if the
+> > > root
+> > > hub=20
+> > > was suspended with wakeup =3D 0 -- fix your problem?
+> >=20
+> > Skipping usb_hcd_resume_root_hub() should generally be possible,
+> > but
+> > it's important to ensure that normal remote wakeup functionality is
+> > not
+> > compromised. Is it HUB_SUSPEND that the hub you are referring to is
+> > in
+> > a suspended state?
+>=20
+> I don't understand this question.=C2=A0 hub_quiesce() gets called with=
+=20
+> HUB_SUSPEND when the hub enters a suspended state.
+>=20
+> You are correct about the need for normal remote wakeup to work=20
+> properly.=C2=A0 The interrupt handler should skip calling=20
+> usb_hcd_resume_root_hub() for port connect or disconnect changes and
+> for=20
+> port overcurrent changes (when the root hub is suspended with wakeup
+> =3D=20
+> 0).=C2=A0 But it should _not_ skip calling usb_hcd_resume_root_hub() for
+> port=20
+> resume events.
 
-To fix it, rename raw_pylibcpupower.i to raw_pylibcpupower.if.
+The current issue arises when rh_state is detected as RH_SUSPEND and
+usb_hcd_resume_root_hub() is called to resume the root hub. However,
+there is no mutual exclusion between the suspend flag, set_bit, and
+clear_bit, which can lead to two scenarios:
 
-Reviewed-by: John B. Wyatt IV <jwyatt@redhat.com>
-Reviewed-by: John B. Wyatt IV <sageofredondo@gmail.com>
-Tested-by: John B. Wyatt IV <jwyatt@redhat.com>
-Tested-by: John B. Wyatt IV <sageofredondo@gmail.com>
-Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
----
- tools/power/cpupower/bindings/python/Makefile                 | 4 ++--
- .../python/{raw_pylibcpupower.i => raw_pylibcpupower.if}      | 0
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename tools/power/cpupower/bindings/python/{raw_pylibcpupower.i => raw_pylibcpupower.if} (100%)
+    1. After set_bit is called, the state of the USB device is modified
+by another process to !USB_STATE_SUSPEND, preventing the hub's resume
+from being executed, and consequently, clear_bit is not called again.
 
-diff --git a/tools/power/cpupower/bindings/python/Makefile b/tools/power/cpupower/bindings/python/Makefile
-index dc09c5b66ead..de872a1b80d3 100644
---- a/tools/power/cpupower/bindings/python/Makefile
-+++ b/tools/power/cpupower/bindings/python/Makefile
-@@ -20,13 +20,13 @@ _raw_pylibcpupower.so: raw_pylibcpupower_wrap.o
- raw_pylibcpupower_wrap.o: raw_pylibcpupower_wrap.c
- 	$(CC) -fPIC -c raw_pylibcpupower_wrap.c $(PY_INCLUDE)
- 
--raw_pylibcpupower_wrap.c: raw_pylibcpupower.i
-+raw_pylibcpupower_wrap.c: raw_pylibcpupower.if
- ifeq ($(HAVE_SWIG),0)
- 	$(error "swig was not found. Make sure you have it installed and in the PATH to generate the bindings.")
- else ifeq ($(HAVE_PYCONFIG),0)
- 	$(error "python-config was not found. Make sure you have it installed and in the PATH to generate the bindings.")
- endif
--	swig -python raw_pylibcpupower.i
-+	swig -python raw_pylibcpupower.if
- 
- # Will only clean the bindings folder; will not clean the actual cpupower folder
- clean:
-diff --git a/tools/power/cpupower/bindings/python/raw_pylibcpupower.i b/tools/power/cpupower/bindings/python/raw_pylibcpupower.if
-similarity index 100%
-rename from tools/power/cpupower/bindings/python/raw_pylibcpupower.i
-rename to tools/power/cpupower/bindings/python/raw_pylibcpupower.if
--- 
-2.43.0
+    2. In another scenario, during the hub resume process, after
+HCD_FLAG_WAKEUP_PENDING is cleared by clear_bit, rh_state has not yet
+been set to !RH_SUSPENDED. At this point, set_bit is executed, but
+since the hub has already entered the running state, the clear_bit
+associated with the resume operation is not executed.
+
+Please review the v2 patch, where I have described both the logical
+flow before the modification and the revised logical flow after the
+modification.
+
+>=20
+> Alan Stern
 
 
