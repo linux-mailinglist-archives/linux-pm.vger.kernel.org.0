@@ -1,190 +1,210 @@
-Return-Path: <linux-pm+bounces-14131-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14132-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57192977C46
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 11:37:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73546977C50
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 11:39:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA44F1F27EB8
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 09:37:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A296E1F21375
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 09:39:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33BEC1D6C6B;
-	Fri, 13 Sep 2024 09:37:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ADHNJSSe"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5CC21D79AA;
+	Fri, 13 Sep 2024 09:38:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53EEF175D45;
-	Fri, 13 Sep 2024 09:37:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19A2190047;
+	Fri, 13 Sep 2024 09:38:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726220261; cv=none; b=YHYObShzlpergT6N0RSbJ9RE0q8LunxqMGxi4BbF3fOAdfFrVC59N43j/iDVbDrix1eevFsa26dWmeREOECEIxGeWIS7YFixrCH6bFmidkaTBTlwLqmdmOvC9fasRwi87rx9F+Cp2bf48IU5ubAqp/CCv15liPzWSRJvqRXvUFs=
+	t=1726220333; cv=none; b=Hib6haRHvQcz8HDnePUJbCVHsOMrX9MuLBEiz4kEJzclBc6HgBOexEQ/s3XV35aJnPP4kam0W4Io+5yVxama15ZjT0zMASCdjTJAkX0lxYjzcmgGLcu+NEAdAKAjOMccs+jgCeyyaAPk79FOPpoiImIeeiwVLJTiOmbPhTeOChU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726220261; c=relaxed/simple;
-	bh=Muc8CTJ6tUBeBmqYfUSLjI05P6c+7aACxxpXBvHZK3g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RiC/IVXBmEhQdW1kiFkioDWvRgOvPUXgP0vcRKI8oQAozpzhcK1LW0orWB455mQEIWapoTJ3XE5wghND6eEtzB8xY4GgzXMrGxa4RAWpV20+x/16+UBw4ghzjk0pPxux8d1wrVlroIC/mqcBK7G9it8MkL+89gyptpo4eTB48dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ADHNJSSe; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-53661ac5ba1so2068562e87.2;
-        Fri, 13 Sep 2024 02:37:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726220257; x=1726825057; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=poNRBe+GqBqtFV5yIuKftcM+UDfFRe/cSM7MSFErS7k=;
-        b=ADHNJSSeKzR8q5Xokl7KOsGHY9bEXVEC6Lfhm+zhflJscS8OUZyzPguvvCw2hnCPAD
-         YFB1pBIccoqbbchh5J8YAyouV7JCZ3t3I2Pf63B9HXMPv2FCbQyaBp+YUvYgQmqOmyZ5
-         EHmx5lbz54QDxtiJ6aUNMkW6Yu3BUvbnFLdmHBPXW0/Tsv22mDfOVtWkoezPvihyWQFj
-         x27aivG6KXcJh0hZPDtcgC42z9Nve5jzW8a5Ma/8W55nZmL9Z5GrqY3/5nPdkQl6rURb
-         AEx42KlEWt0vBIcS95q00JHgufvs4QFNdJdFgBV1eRL9LQRFTBAE3q5DI1ZtTSfe/XYk
-         2l+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726220257; x=1726825057;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=poNRBe+GqBqtFV5yIuKftcM+UDfFRe/cSM7MSFErS7k=;
-        b=hkVG2bxZQTMGUDhfFh2qIGEXcfJMv+ZOR14h+D+R/HTAOBEwU0+miLZHM874G5Njpe
-         e1R2Te+ZHX2+Uk8gMNFyU9JC2+qh8hK+Q5n6jiPK6wIYUNrPAZiodF4t4PJTXCTW38mX
-         gZKB48NKtjU0WLxRnzJGmsnx6ZepKhI0c0zh3VxfAMbbiDrCXj5mIKUoQ0IUfJ2/tucK
-         7Zb7BLL1c+EHuKK9o7+3ggVhmvLnRut6ewY7b0GEu5/W/qtEoHhsoUuC2xVzQW+Q2w0X
-         xdG4qUP1Vo0/RuZ1/T6XcY0fSt2iLN6By2TEio8TQ0pN7qix97qm+hk6zdL4+Zd+hhFA
-         Rz6w==
-X-Forwarded-Encrypted: i=1; AJvYcCVGID/F7GcvfiBgaXKsdk6Oqhwt55dD7rFvjZkm2D+Dav6yr2HVpiccEopn1TiXXXASjbxv8alAkL0y0Yo3zkM=@vger.kernel.org, AJvYcCWpwg5cDsh1hGC7hecahiQV0GnkICojpIIaCJnH0F3gp+e4MvfYtzS6H/BLQj+T6eFhX/H/kn58+7F9og==@vger.kernel.org, AJvYcCX/uqkMhVpnZxWx6B7ogAf/astLx5Oao6+vRz2uvutwREHO+vON9Px0Hdn3t2Jj6Rpx+s79ruNsyuVQ33q0@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNqlXtUfBth+JipXHqfh5NSQ6wQzmfRolr8et9ll2ZWTn6ce3d
-	ls+7w6vXyFOMonm1RFeRynp3Pqy5V3X0Vq6TAGeEIB0AC3cLUXJ8
-X-Google-Smtp-Source: AGHT+IHPJDR3vrgdy7/5HudOfik7GjSbGIw/RQHKxVrRjeXrJNFMhS6eIKZWgtPsUyW4DKS7qLG5Ow==
-X-Received: by 2002:a05:6512:230b:b0:535:6d34:5cd7 with SMTP id 2adb3069b0e04-53678fb2001mr3195481e87.11.1726220257027;
-        Fri, 13 Sep 2024 02:37:37 -0700 (PDT)
-Received: from void.void ([141.226.9.10])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3789564a340sm16347128f8f.24.2024.09.13.02.37.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2024 02:37:36 -0700 (PDT)
-From: Andrew Kreimer <algonell@gmail.com>
-To: Eduardo Valentin <edubezval@gmail.com>,
-	Keerthy <j-keerthy@ti.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-pm@vger.kernel.org,
-	linux-omap@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Andrew Kreimer <algonell@gmail.com>,
-	Matthew Wilcox <willy@infradead.org>
-Subject: [PATCH] thermal/ti-soc-thermal: Fix typos
-Date: Fri, 13 Sep 2024 12:37:05 +0300
-Message-ID: <20240913093713.12376-1-algonell@gmail.com>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1726220333; c=relaxed/simple;
+	bh=AvK8B0XZ3AqgDkyyFK0iRJtmR1JfTTRvrAUrfjaLbwM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=KhtMtY5Q9ELFEqDWP8B25vOZYTo4/CZcSLtIcbOkRovUTgWrUANbb9przpAvSJ/cc17X4HsGlMgyKQ7FGbr+kQNLRl+PvR/AiXVo79R/fa/z9LvNIJ8Ru4h6kdtwqxi7vQS3MWm5mlkwYT4g9jB67N4D+ox+Om6EWlAUh3SOaQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: f285ee1e71b311efa216b1d71e6e1362-20240913
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:3545db07-27dc-45b0-a9c3-33517082b506,IP:25,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:10
+X-CID-INFO: VERSION:1.1.38,REQID:3545db07-27dc-45b0-a9c3-33517082b506,IP:25,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-META: VersionHash:82c5f88,CLOUDID:8e28f9a7baab127fb8240fe078bd3ab7,BulkI
+	D:2409062205428B690IWE,BulkQuantity:14,Recheck:0,SF:64|66|24|17|19|44|102,
+	TC:nil,Content:1|-5,EDM:-3,IP:-2,URL:1,File:nil,RT:nil,Bulk:40,QS:nil,BEC:
+	nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,
+	TF_CID_SPAM_OBB,TF_CID_SPAM_ULS
+X-UUID: f285ee1e71b311efa216b1d71e6e1362-20240913
+X-User: duanchenghao@kylinos.cn
+Received: from [172.30.80.21] [(39.156.73.13)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 730110907; Fri, 13 Sep 2024 17:38:35 +0800
+Message-ID: <4bbd4c114d80c98c4592b1b7ec32c4dbc96d8ac6.camel@kylinos.cn>
+Subject: Re: [PATCH] USB: Fix the issue of task recovery failure caused by
+ USB status when S4 wakes up
+From: duanchenghao <duanchenghao@kylinos.cn>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: gregkh@linuxfoundation.org, pavel@ucw.cz, linux-pm@vger.kernel.org, 
+	niko.mauno@vaisala.com, stanley_chang@realtek.com, tj@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Date: Fri, 13 Sep 2024 17:38:26 +0800
+In-Reply-To: <52b9fd0ab9d279c7da1e2c70e1f023c7e3333ad6.camel@kylinos.cn>
+References: <20240906030548.845115-1-duanchenghao@kylinos.cn>
+	 <1725931490447646.3.seg@mailgw.kylinos.cn>
+	 <a618ada1582c82b58d2503ecf777ea2d726f9399.camel@kylinos.cn>
+	 <8b07752d-63c4-41e3-bd20-ce3da43dfffc@rowland.harvard.edu>
+	 <8068130ce4ece6078b2893c4c6333c06c792b6c0.camel@kylinos.cn>
+	 <b8dc326b-8aee-4903-bbb6-64083cf66b4d@rowland.harvard.edu>
+	 <52b9fd0ab9d279c7da1e2c70e1f023c7e3333ad6.camel@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Fix typos in comments.
+=E5=9C=A8 2024-09-13=E6=98=9F=E6=9C=9F=E4=BA=94=E7=9A=84 09:51 +0800=EF=BC=
+=8Cduanchenghao=E5=86=99=E9=81=93=EF=BC=9A
+> =E5=9C=A8 2024-09-12=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 11:00 -0400=EF=
+=BC=8CAlan Stern=E5=86=99=E9=81=93=EF=BC=9A
+> > On Thu, Sep 12, 2024 at 11:21:26AM +0800, duanchenghao wrote:
+> > > =E5=9C=A8 2024-09-11=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 10:40 -0400=
+=EF=BC=8CAlan Stern=E5=86=99=E9=81=93=EF=BC=9A
+> > > > On Tue, Sep 10, 2024 at 05:36:56PM +0800, duanchenghao wrote:
+> > > > > S4 wakeup restores the image that was saved before the system
+> > > > > entered
+> > > > > the S4 sleep state.
+> > > > >=20
+> > > > > =C2=A0=C2=A0=C2=A0 S4 waking up from hibernation
+> > > > > =C2=A0=C2=A0=C2=A0 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > > =C2=A0=C2=A0=C2=A0 kernel initialization
+> > > > > =C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=20
+> > > > > =C2=A0=C2=A0=C2=A0 v=C2=A0=C2=A0=20
+> > > > > =C2=A0=C2=A0=C2=A0 freeze user task and kernel thread
+> > > > > =C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=20
+> > > > > =C2=A0=C2=A0=C2=A0 v=C2=A0=C2=A0=20
+> > > > > =C2=A0=C2=A0=C2=A0 load saved image
+> > > > > =C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=20
+> > > > > =C2=A0=C2=A0=C2=A0 v=C2=A0=C2=A0=20
+> > > > > =C2=A0=C2=A0=C2=A0 freeze the peripheral device and controller
+> > > > > =C2=A0=C2=A0=C2=A0 (Check the HCD_FLAG_WAKEUP_ PENDING flag of th=
+e USB. If
+> > > > > it
+> > > > > is
+> > > > > set,
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0 return to EBUSY and do not perform the f=
+ollowing restore
+> > > > > image.)
+> > > >=20
+> > > > Why is the flag set at this point?=C2=A0 It should not be; the
+> > > > device
+> > > > and=20
+> > > > controller should have been frozen with wakeup disabled.
+> > > >=20
+> > > This is check point, not set point.
+> >=20
+> > Yes, I know that.=C2=A0 But when the flag was checked, why did the code
+> > find=20
+> > that it was set?=C2=A0 The flag should have been clear.
+>=20
+> Yes, the current issue is that during S4 testing, there is a
+> probabilistic scenario where clear_bit is not called after set_bit,
+> or
+> clear_bit is called but does not execute after set_bit. Please refer
+> to
+> the two modification points in the v2 patch for details, as both of
+> them can cause the current issue.
+>=20
+> >=20
+> > > > Is your problem related to the one discussed in this email
+> > > > thread?
+> > > >=20
+> > > > https://lore.kernel.org/linux-usb/d8600868-6e4b-45ab-b328-852b6ac8e=
+cb5@rowland.harvard.edu/
+> > > >=20
+> > > > Would the suggestion I made there -- i.e., have the xhci-hcd=20
+> > > > interrupt handler skip calling usb_hcd_resume_root_hub() if the
+> > > > root
+> > > > hub=20
+> > > > was suspended with wakeup =3D 0 -- fix your problem?
+> > >=20
+> > > Skipping usb_hcd_resume_root_hub() should generally be possible,
+> > > but
+> > > it's important to ensure that normal remote wakeup functionality
+> > > is
+> > > not
+> > > compromised. Is it HUB_SUSPEND that the hub you are referring to
+> > > is
+> > > in
+> > > a suspended state?
+> >=20
+> > I don't understand this question.=C2=A0 hub_quiesce() gets called with=
+=20
+> > HUB_SUSPEND when the hub enters a suspended state.
+> >=20
+> > You are correct about the need for normal remote wakeup to work=20
+> > properly.=C2=A0 The interrupt handler should skip calling=20
+> > usb_hcd_resume_root_hub() for port connect or disconnect changes
+> > and
+> > for=20
+> > port overcurrent changes (when the root hub is suspended with
+> > wakeup
+> > =3D=20
+> > 0).=C2=A0 But it should _not_ skip calling usb_hcd_resume_root_hub() fo=
+r
+> > port=20
+> > resume events.
+>=20
+> The current issue arises when rh_state is detected as RH_SUSPEND and
+> usb_hcd_resume_root_hub() is called to resume the root hub. However,
+> there is no mutual exclusion between the suspend flag, set_bit, and
+> clear_bit, which can lead to two scenarios:
+>=20
+> =C2=A0=C2=A0=C2=A0 1. After set_bit is called, the state of the USB devic=
+e is
+> modified
+> by another process to !USB_STATE_SUSPEND, preventing the hub's resume
+> from being executed, and consequently, clear_bit is not called again.
+>=20
+> =C2=A0=C2=A0=C2=A0 2. In another scenario, during the hub resume process,=
+ after
+> HCD_FLAG_WAKEUP_PENDING is cleared by clear_bit, rh_state has not yet
+> been set to !RH_SUSPENDED. At this point, set_bit is executed, but
+> since the hub has already entered the running state, the clear_bit
+> associated with the resume operation is not executed.
+>=20
+> Please review the v2 patch, where I have described both the logical
+> flow before the modification and the revised logical flow after the
+> modification.
+>=20
 
-Reported-by: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: Andrew Kreimer <algonell@gmail.com>
----
- drivers/thermal/ti-soc-thermal/dra752-bandgap.h   | 4 ++--
- drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h | 8 ++++----
- drivers/thermal/ti-soc-thermal/omap5xxx-bandgap.h | 4 ++--
- 3 files changed, 8 insertions(+), 8 deletions(-)
+In fact, issue point 2 in the patch is introduced by issue point 1, and
+issue point 2 represents a further improvement. The main issue lies in
+point 1, where after the execution of the top half of the interrupt is
+completed, the bottom half is frozen by S4. As a result, the USB resume
+is not executed during this S4 process, and clear_bit is not called as
+well. This further leads to a situation where during the process of S4
+putting the USB controller into suspend, the check for
+HCD_FLAG_WAKEUP_PENDING being set returns -EBUSY.
 
-diff --git a/drivers/thermal/ti-soc-thermal/dra752-bandgap.h b/drivers/thermal/ti-soc-thermal/dra752-bandgap.h
-index d1b5b699cf23..1402b8c44c6b 100644
---- a/drivers/thermal/ti-soc-thermal/dra752-bandgap.h
-+++ b/drivers/thermal/ti-soc-thermal/dra752-bandgap.h
-@@ -74,7 +74,7 @@
- /**
-  * Register bitfields for DRA752
-  *
-- * All the macros bellow define the required bits for
-+ * All the macros below define the required bits for
-  * controlling temperature on DRA752. Bit defines are
-  * grouped by register.
-  */
-@@ -125,7 +125,7 @@
- /**
-  * Temperature limits and thresholds for DRA752
-  *
-- * All the macros bellow are definitions for handling the
-+ * All the macros below are definitions for handling the
-  * ADC conversions and representation of temperature limits
-  * and thresholds for DRA752. Definitions are grouped
-  * by temperature domain.
-diff --git a/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h b/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
-index c63f439e01d6..3963f1badfc9 100644
---- a/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
-+++ b/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
-@@ -32,7 +32,7 @@
- /**
-  * Register and bit definitions for OMAP4430
-  *
-- * All the macros bellow define the required bits for
-+ * All the macros below define the required bits for
-  * controlling temperature on OMAP4430. Bit defines are
-  * grouped by register.
-  */
-@@ -48,7 +48,7 @@
- /**
-  * Temperature limits and thresholds for OMAP4430
-  *
-- * All the macros bellow are definitions for handling the
-+ * All the macros below are definitions for handling the
-  * ADC conversions and representation of temperature limits
-  * and thresholds for OMAP4430.
-  */
-@@ -102,7 +102,7 @@
- /**
-  * Register bitfields for OMAP4460
-  *
-- * All the macros bellow define the required bits for
-+ * All the macros below define the required bits for
-  * controlling temperature on OMAP4460. Bit defines are
-  * grouped by register.
-  */
-@@ -135,7 +135,7 @@
- /**
-  * Temperature limits and thresholds for OMAP4460
-  *
-- * All the macros bellow are definitions for handling the
-+ * All the macros below are definitions for handling the
-  * ADC conversions and representation of temperature limits
-  * and thresholds for OMAP4460.
-  */
-diff --git a/drivers/thermal/ti-soc-thermal/omap5xxx-bandgap.h b/drivers/thermal/ti-soc-thermal/omap5xxx-bandgap.h
-index 3880e667ea96..b70084b8013a 100644
---- a/drivers/thermal/ti-soc-thermal/omap5xxx-bandgap.h
-+++ b/drivers/thermal/ti-soc-thermal/omap5xxx-bandgap.h
-@@ -56,7 +56,7 @@
- /**
-  * Register bitfields for OMAP5430
-  *
-- * All the macros bellow define the required bits for
-+ * All the macros below define the required bits for
-  * controlling temperature on OMAP5430. Bit defines are
-  * grouped by register.
-  */
-@@ -101,7 +101,7 @@
- /**
-  * Temperature limits and thresholds for OMAP5430
-  *
-- * All the macros bellow are definitions for handling the
-+ * All the macros below are definitions for handling the
-  * ADC conversions and representation of temperature limits
-  * and thresholds for OMAP5430. Definitions are grouped
-  * by temperature domain.
--- 
-2.46.0
+> >=20
+> > Alan Stern
+>=20
 
 
