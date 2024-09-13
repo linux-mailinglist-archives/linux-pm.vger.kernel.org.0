@@ -1,132 +1,148 @@
-Return-Path: <linux-pm+bounces-14140-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14141-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81F2E977F1F
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 14:02:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2552E977F22
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 14:02:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EC981F22403
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 12:02:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F556B262D5
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Sep 2024 12:02:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 795EB1D88D0;
-	Fri, 13 Sep 2024 12:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F24BF1D933A;
+	Fri, 13 Sep 2024 12:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GPYvN4/O"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="F94mqI+r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF771D86D8
-	for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 12:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4191D88A2
+	for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 12:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726228940; cv=none; b=mtIIjNxlNTtjnpb0czM+5N6Mbde1LtbepeGlS7vDY21I2Pzxc8KGW3lzSNx+uTkIQtp/LJnl1WU4OaKcbZJGfJWN4hVCnSHfJ971HB/Bi0dL9/eGZoLZ3DiAHc9pC/a3/e0LMSTVOaSamCD+cxgw2BsQX96FIbp1mIaxvIkg/Nc=
+	t=1726228941; cv=none; b=rwtLoXb/jSOIGyOKNPphSeidaMUIsfdnjlzLHLdDghXjVjylGvI0QvtAiFEISlI1xuoamXj/43xjm0Bl5RHudH0ZdiNOpJhZyIuyTqSrGKYJiBgVO+608gacQ4W8JvXLeLjGqw6IGM7hKozeFF29m+Oe2ot07OdiI4tubOpoR8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726228940; c=relaxed/simple;
-	bh=WuwqpRmxlM+RziSDik+Xx/cAiRX1REx1Yj/wgaxdIFc=;
+	s=arc-20240116; t=1726228941; c=relaxed/simple;
+	bh=nZZIph3qB+32HcJK3NuoJzO2DWNn41IOv65me9LteDg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Pgu5lObIfBYvETp8sedVCw7wwrnhDd5jk/HWFhOhaeyRDdcHCVGypBLMa0rHUtUDUR7ai/GdlICa73BkO88kSLkMx5wzQM4wCTnip23T5EoyAhIkIkgKzXwXiwqnNmBGXkMAWL+zyraanA4PUAw4LmPR+a4SQrAwfBQ1D6HBdDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GPYvN4/O; arc=none smtp.client-ip=209.85.128.180
+	 To:Cc:Content-Type; b=SUmKPPOf7tdISSR03wvW8aw32fngTbdONbOK5LUVj5IOx8vPHZSu2Byl8hVifLQQ0SoSDciMFr55TMNk2F5YRcGzS4RaaD8vQulJZW0Fon2pQKKlR68C9Qk1u+xa6S9kVKnpL9eXneDKbTNvbEgmbQOZQRmbwpMZ6lAYx62wnSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=F94mqI+r; arc=none smtp.client-ip=209.85.128.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6dbb24ee2ebso19810537b3.1
-        for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 05:02:18 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6dbc5db8a31so10139757b3.1
+        for <linux-pm@vger.kernel.org>; Fri, 13 Sep 2024 05:02:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726228938; x=1726833738; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1726228939; x=1726833739; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VZUveVe5ug6pUVY95Hk2rZagT2tEgT+khEe5hqljA6o=;
-        b=GPYvN4/O/P8AOTFh7dQrOYWMtpbMEkxSUdO10t9LY6BGBSNcG2l3laS+a3mP3/d83H
-         sI0GHWdF83xiIqKHQi2Ht7+S9zGhGv1ERRz/Y4jCLeTjLO6ICBzqUtWVfqj36d1YhYq7
-         1hK3PsHoMU/VcGX3iH9Rc6/xYcsAlq1g5OnFZX23DuQkujL1xQiAYa2TztKWspXDeGFD
-         tzdG+pDgj7XmAOU5spvuMcinagiT103csfAofIvHLu6DbuK4tdRyBmHRFdazFRniNPKT
-         gTZYuyzKgs7o1JKP6q9ep3TP18u9Oo7oH4SjKedW/oRDuae9cQGHn5ZbX9qLsI+ijzk8
-         DSDw==
+        bh=0L/CKeeeoIAk/64E8dSvCZoeLN01IuNNAws/7deCICo=;
+        b=F94mqI+rHgAwsQntW6XI36KKkEvqrbvCQqBZN4637wG4HDqI6J88UUhGjNM7gZ6xJx
+         cQFTWdLpjGSneKqg5IvHoxf7GpwSN6+aHZbmnQpibyz0uhgUuyLO9SGky8JMq2q6LNqQ
+         Jmw30XQk1iZGcnelxNeJEifc4ZfiWNc80AJgEehiIOI38bgwSzJQcx4HZQX1XdKOSw5Z
+         v3yj6a0ZlI7p5aGfvL/YNAbHumZLv77YKDwwYwntdeUC1iCBHyNygZ7Ik/jrIicw2hjf
+         11w9z6JItMolk2tIl9xM/3mCVU7vA35t2uuqSvQY+qWcUqkeFo7995wK3G9wjxzLnRK+
+         I/ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726228938; x=1726833738;
+        d=1e100.net; s=20230601; t=1726228939; x=1726833739;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VZUveVe5ug6pUVY95Hk2rZagT2tEgT+khEe5hqljA6o=;
-        b=NB0O7uHlrdcI2jiHWI9hZn8hNkaaIgWR47eWgPGdcnl1tXZ281lw4qlGyg7JtUjda6
-         +ka34F7wwz7J3oJ/RLbIaHLEplEDmHkyzg7fFfAnAiy4+MHNzIo/WG/3uSM8x7juHzmc
-         XoVDe8oWDiQuLnG1vdWtai5in4is1TNYDHRNJvvbTTGHVqEQgrj95yvJBxJDcCGKAuO6
-         oh4l9JH1qjxHrJpaF4nEqmE8P4WXiGDr/qB9aM5FVmcsOXZojKLQwp9MZiRgPBD3i3YU
-         ZLQFirVU3WuOYo+sC2Vr11L9UB1axLhkaAtocQPEXdpwuGUR+tJRvmx8RoCgSc6rv1jE
-         ufRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVYcNiIza4jK3jual9VOESyPvIdd+51lzkHG2kvdBnvpEwCpUZwg+U5/VRrafXOfzL5aOjsqusXMg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeCqpBhf3MJz/5dKWEKwRMgpxxe0TME8fQnj+TxfsnaQ+J5YRW
-	AYbyG13yKGp4mIQ/O8NFCPy0drxDdhqsqoPmByqPaCxE8WHPg52k3pPuZ3nw3LSIGOm4D7W6pUF
-	MI/JpkYWlJC3k3VMvwrpX/M4bPBlmQgr9yXsDQQ==
-X-Google-Smtp-Source: AGHT+IHvWAtjRL3HNkWkaP3coSzhpDLefItiLLMliColzEkeBMjyYypjXfXV6VN6sYk4ULxR/arxmws/Y1dWw592ffI=
-X-Received: by 2002:a05:690c:1d:b0:6b0:d687:3bd3 with SMTP id
- 00721157ae682-6dbb6b20d8amr53618377b3.21.1726228936095; Fri, 13 Sep 2024
- 05:02:16 -0700 (PDT)
+        bh=0L/CKeeeoIAk/64E8dSvCZoeLN01IuNNAws/7deCICo=;
+        b=RPtjPG7PKs4/lrfZpG/qLEY6JnJ8FhdJddYyN4Zt702RoB3JmPHCaWOsQqbtWmby8z
+         7ms+u04CxVUAhsoqPTzhza3cuG/C8m3A0Whp7fQL1R+W7brWPRqIx5VT6QIY8bo9hp4v
+         LB4El31M8AeoqQs2K+uGNCgKbXVaWdINzvU0gAepSFuwd2uRLzdEyJwuaDaaPuqATBQQ
+         Ba9nqRuj3juKMnFg8qZHu3oBbO7gJaQdtVPi/sQXgkXob8HrfbhztEIRSm+JlmXHnZTn
+         vAK7OnpjfCMFpCtqNPZoZWf7DsMDJgQJCTbmXt1Ln6wA3wGfJ2C9BNa6a2SZgneFHTsc
+         dRXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVEj1P65NulWDGKimkDwSM00BwkMiWu9vEoRlnL1S7mz8/q5w/YOQzGPiTUjEb7U2gxfrpuK2pBPg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlgFbgJh12Rwt0galDk+cm2YjCpgZY3xS4/ylp8zUUNwird1Nc
+	Ij6m9xqbMDFWrycfeiFIimvivpwj+FEpe9zf3wAIgLYXtGsLzg1qq1y0Elt4jvTPsV6a7D4um0Y
+	qfRAF/kLdpFnGh1KjNbbcmSMpo7GKctAtv1PE6w==
+X-Google-Smtp-Source: AGHT+IFZgURqTXFx8rivzcDZVs3brlX5pRkhtUBectyP+qaKbv1UEElsRCVAJCZe7+cEgvaaOmDOn1XGpQ5OsqWHboE=
+X-Received: by 2002:a05:690c:46c6:b0:64b:1eb2:3dd4 with SMTP id
+ 00721157ae682-6dbb7039720mr47687277b3.8.1726228939342; Fri, 13 Sep 2024
+ 05:02:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240823-cleanup-h-guard-pm-domain-v1-0-8320722eaf39@linaro.org>
-In-Reply-To: <20240823-cleanup-h-guard-pm-domain-v1-0-8320722eaf39@linaro.org>
+References: <20240825143428.556439-1-dario.binacchi@amarulasolutions.com> <20240825143428.556439-2-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20240825143428.556439-2-dario.binacchi@amarulasolutions.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 13 Sep 2024 14:01:40 +0200
-Message-ID: <CAPDyKFr51pccY4Wx3x_NcuVrJcsG0U_xMptdC-2hf_5BnjaR0Q@mail.gmail.com>
-Subject: Re: [PATCH 00/10] pmdomain: Simplify with cleanup.h
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Heiko Stuebner <heiko@sntech.de>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Magnus Damm <magnus.damm@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Date: Fri, 13 Sep 2024 14:01:43 +0200
+Message-ID: <CAPDyKFrfeKTMW5R6=GSu+t4bY8ebQgcvbzc5wUcgBbSVQWRS5g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] pmdomain: imx93-pd: don't unprepare clocks on
+ driver remove
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com, 
+	Fabio Estevam <festevam@gmail.com>, Heiko Stuebner <heiko@sntech.de>, Peng Fan <peng.fan@nxp.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 23 Aug 2024 at 14:51, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Sun, 25 Aug 2024 at 16:34, Dario Binacchi
+<dario.binacchi@amarulasolutions.com> wrote:
 >
-> Simplify the code with scoped loops, guards and __free().
+> The removed code was added to handle the case where the power domain is
+> already on during the driver's probing. In this use case, the "is_off"
+> parameter is passed as false to pm_genpd_init() to inform it not to call
+> the power_on() callback, as it's unnecessary to perform the hardware
+> power-on procedure since the power domain is already on. Therefore, with
+> the call to clk_bulk_prepare_enable() by probe(), the system is in the
+> same operational state as when "is_off" is passed as true after the
+> power_on() callback execution:
 >
-> Best regards,
-> Krzysztof
+>  probe() -> is_off == true  -> clk_bulk_prepare_enable() called by power_on()
+>  probe() -> is_off == false -> clk_bulk_prepare_enable() called by probe()
 >
-> ---
-> Krzysztof Kozlowski (10):
->       pmdomain: rockchip: Simplify with scoped for each OF child loop
->       pmdomain: rockchip: Simplify locking with guard()
->       pmdomain: imx: gpc: Simplify with scoped for each OF child loop
->       pmdomain: imx: gpcv2: Simplify with scoped for each OF child loop
->       pmdomain: qcom: cpr: Simplify with dev_err_probe()
->       pmdomain: qcom: cpr: Simplify locking with guard()
->       pmdomain: qcom: rpmhpd: Simplify locking with guard()
->       pmdomain: qcom: rpmpd: Simplify locking with guard()
->       pmdomain: renesas: rcar-gen4-sysc: Use scoped device node handling to simplify error paths
->       pmdomain: renesas: rcar-sysc: Use scoped device node handling to simplify error paths
->
->  drivers/pmdomain/imx/gpc.c                | 14 +++-----
->  drivers/pmdomain/imx/gpcv2.c              |  8 ++---
->  drivers/pmdomain/qcom/cpr.c               | 58 ++++++++++++-------------------
->  drivers/pmdomain/qcom/rpmhpd.c            | 11 +++---
->  drivers/pmdomain/qcom/rpmpd.c             | 20 ++++-------
->  drivers/pmdomain/renesas/rcar-gen4-sysc.c | 26 ++++++--------
->  drivers/pmdomain/renesas/rcar-sysc.c      | 28 ++++++---------
->  drivers/pmdomain/rockchip/pm-domains.c    | 25 ++++---------
->  8 files changed, 68 insertions(+), 122 deletions(-)
-> ---
-> base-commit: e188fd67a69319f3d105d9b90e424b8d1ff9580c
-> change-id: 20240823-cleanup-h-guard-pm-domain-35eb491f35f9
->
-> Best regards,
-> --
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reaching the same logical and operational state, it follows that upon
+> driver removal, there is no need to perform different actions depending
+> on the power domain's on/off state during probing.
 
-Patch 1 -> 8 applied for next, thanks!
+Well, I guess in most cases genpd would have tried to turn off the PM
+domain when it is getting removed. However, there are really no
+guarantees for that to happen. We should probably look into that as a
+general improvement for genpd.
+
+>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+
+The above said, this still looks like an improvement to me, so I
+decided to queue this up for next, thanks!
 
 Kind regards
 Uffe
+
+
+> ---
+>
+> (no changes since v1)
+>
+>  drivers/pmdomain/imx/imx93-pd.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/drivers/pmdomain/imx/imx93-pd.c b/drivers/pmdomain/imx/imx93-pd.c
+> index 44daecbe5cc3..fb53a8e359bc 100644
+> --- a/drivers/pmdomain/imx/imx93-pd.c
+> +++ b/drivers/pmdomain/imx/imx93-pd.c
+> @@ -90,9 +90,6 @@ static void imx93_pd_remove(struct platform_device *pdev)
+>         struct device *dev = &pdev->dev;
+>         struct device_node *np = dev->of_node;
+>
+> -       if (!domain->init_off)
+> -               clk_bulk_disable_unprepare(domain->num_clks, domain->clks);
+> -
+>         of_genpd_del_provider(np);
+>         pm_genpd_remove(&domain->genpd);
+>  }
+> --
+> 2.43.0
+>
 
