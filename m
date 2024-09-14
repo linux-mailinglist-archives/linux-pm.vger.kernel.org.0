@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-14217-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14218-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05724978D89
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 07:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BE20978D8F
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 07:25:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FEE0B25798
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 05:25:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FD91B25C05
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 05:25:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71B72199BC;
-	Sat, 14 Sep 2024 05:24:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B431A19BA6;
+	Sat, 14 Sep 2024 05:25:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eoVSVQP/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XTTL8Nkb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B0119BA6;
-	Sat, 14 Sep 2024 05:24:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A13A20328;
+	Sat, 14 Sep 2024 05:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726291493; cv=none; b=Yxbe3lFEyIw+T+M6/MNDx34sI9p4JF0fR5fOuH30H7jNFS0U2BmXT/fH9V8a2KJM2gwpj3irfWtTmo6+iY1c+0MaFLHfsMukn0+E9eu9S8qSDzvl8zCFLOHDlgF1lZUHNWRybUvBW24d7/wIQe3KM88YYRV+lRhOELlOji11KAw=
+	t=1726291509; cv=none; b=IIhcN/M+NK9QGJw93RvVfwy7mLWeKT7sevK5KzWH86ThLV+5N3crn3A75hV9F8BJIqdLGebpyLB2TzRi3k9D9ibym+0oHt+mmCCPKY53cm5JgxXEiiyOJmRClWR0TX4kB33iSN2208V7DBhU9AovXAuS0VmSTX5Kz/313ZC4/SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726291493; c=relaxed/simple;
-	bh=D9QNipp2Cu8jdxZF2ATT6QNQY1AaJfGlXa9a8v3AUeI=;
+	s=arc-20240116; t=1726291509; c=relaxed/simple;
+	bh=wjv7S2defJHb4w2LIijyyI7ICLEtDGHr6+Y7Ed98jvI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nCvF2UGCUZRzWn9bR+sARS1CNZgkeJ2rK3fFMTqaLIMdIcAKb+rkAxDYtHmHryCMTXaOHbkR5vMv0ju6HwMn8EMLMLjXsS+R1IJNeNZo06xJjhfDwh3U5kcZoZjVcaZ8Fx/THdVrVYAvMLUzKvYdT3gR5QiPQ/svS2pLqsKELLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eoVSVQP/; arc=none smtp.client-ip=209.85.215.178
+	 MIME-Version; b=ELa4hY23GWtaF9sF9CUwTCdFG1xQM47TZDG43Hc0c64XLfcrwrWQuJfkdEQ9BYakdvJ2IOXzP0ngrZeWzxxhU5JtJ7xupuVaOQOH/UkA9K5u5csx8dEg931smwA8bpQCvjAlkFTA5VR9MWiXp0PyswIQh2JsKpQhsyMDJgXN8dE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XTTL8Nkb; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7cd8803fe0aso2112992a12.0;
-        Fri, 13 Sep 2024 22:24:51 -0700 (PDT)
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-718da0821cbso2238999b3a.0;
+        Fri, 13 Sep 2024 22:25:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726291491; x=1726896291; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726291507; x=1726896307; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yMfm635R2ZedUv0K9CBomURZ5/GwgVeWzLysAHmmerM=;
-        b=eoVSVQP/4PZCF7sCaFmgI9aJORT/UWvCzJUxDe7laQMA5+TVOCoxPeFYliBqaBOt9J
-         +k6Au1nc8vSTKmXtHb9G5reT2TX6vf7XpIgO79muMXcrGuHCmKzNeyRrM1SRg+1bNO2/
-         ud4Cshy6Gx4MLC69s75d7TpBMR+yRQSMsxC6izKjy0eiXVM1w8wWjUFlWzLMG8s0gYzh
-         H6lzbPILsBss79wtx0w1r5eYn4JMke/DuhC53KxQQH1l7B3YilVRvcvaMYXq90wgseIC
-         V2mLKHBLZQTgjuLjX/hq31lbQuC8i6r7LCCM1Q3a2YlyZZ0diFpi4JHLhrZssv2qjzUX
-         Xzew==
+        bh=drlfe7ijxNosG2VKP6kf49hdRW10I7zx+SACXHP4QNc=;
+        b=XTTL8NkbPDsDDQI2nJYP0s0RK2TGumUGM7753YcMANWDVSqaf3xPWHyxvyGHwoBgAN
+         aEiJeovLU6Gp1//zmKanx3dOHQmel/FADr3IMGgN9hhBa9mQnf4sYZUgKuUKSNlu5I3+
+         C0BpuZtulvxZyuWr9a2NctiDoU7oPOLhU7A4ETJ+iDIL/aMHY7zCiDiXRczOrWkEyU/2
+         7KU+5cICZ3UMK8XQI5orqGxO51raRR0Fea9k3RdH1NdTmUJQ6SGS7BiklrvKklvLTZG/
+         W8FdYfZC4ybvvl6pvnGb7XZVI/hqYjDrqZoOhWjegkzUEpymn9uFAYbWy1isCSb23Qyy
+         R8Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726291491; x=1726896291;
+        d=1e100.net; s=20230601; t=1726291507; x=1726896307;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yMfm635R2ZedUv0K9CBomURZ5/GwgVeWzLysAHmmerM=;
-        b=q0ikoYkhnBubnXPjx3xql7n0L6cAhMNm2L1l5Gcrc9lzH34sQp2ZTsUJR2ney0Poe2
-         kGDjBr6tUIvkP69O/hFCU93k4jI4Yt4h/VY17MsBNUkWeHnzGqXPzjQQ2xYs9AJHgmNa
-         hr/LIQp2Pw/VaHlGrbF9qH92fFWbh4kkPE4De6ajwXAL4ZTL22wgM4OGu9o8qRWzeLgC
-         n66kUtacpM65AN38ZcZRINo9XprP9uDluntFt2LrhuNdu6TjSheSkT4MeTabz1K41X9f
-         7ECzL84Dw+JBf1+MdZ0uBzEFQ9dSNmIJLbnlsVmCdSGAKAlM4Yz/DPLB8tXasgvdrEsW
-         AI+g==
-X-Forwarded-Encrypted: i=1; AJvYcCUf2zpqNE6m7QNqY9fLbemzFHh/OD1nfju7rOGUKCVLfR191zz4RHLYuH5Hais3uQyZQR+gF1QP4CniUg==@vger.kernel.org, AJvYcCV1Lbw6F91xOqBErCHTafwZxHWUsEUeB1PA0CVui41hOkBN1pU5rFW4M0ND5oDflBvQXKQMunboF91r@vger.kernel.org, AJvYcCVOg4j+MUrAUDJTgoU0PDF1yxeRiMJuIxsKICOwcwNu7JdHnLHQMeL4gzz56ERtV2xYTDqE6UnLBh8B6kXm@vger.kernel.org, AJvYcCWskrHl+mCCz48pQKdbznn0ESl2U57jJEyl+43FcbO4GRYraWkV2FXNxWqBUDZFphCBRaFK1fcfgWphAmKXxaw=@vger.kernel.org, AJvYcCXf5m4YYFUG3RUxs9JvvKcZN1+dzADT+e3XQ9Ou1ayxSjbiMe8d5DEp3nLb9uaCbjBJx/OcP7+v8ME=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxi7HFYWJkptuAuXu4au0hmY4F/r1DzmEj1vlDwWcrYyXIuWpLf
-	Eymn097EZMLem9w2uDviL29SksPkaA76K74Jf+zzKHjRIuNJMkQnac1Rl9Ky
-X-Google-Smtp-Source: AGHT+IF+p2N/v7D/f9QhDmmsA4T7yTXEkaxEH1zZGQX6ejyxliq9F/Sh3KYea+gDrN6bVgpFOAQffQ==
-X-Received: by 2002:a05:6a21:58b:b0:1cc:e9bc:2559 with SMTP id adf61e73a8af0-1cf75f0f12emr11241110637.28.1726291491181;
-        Fri, 13 Sep 2024 22:24:51 -0700 (PDT)
+        bh=drlfe7ijxNosG2VKP6kf49hdRW10I7zx+SACXHP4QNc=;
+        b=wNYU+4cevgOUejMJNPunAysR9ctt2LJNfxMY5cDUTleSsYBO2O0exWvOgAMTjDYTC2
+         dsPuNnOsKp/ns36wJCgGQMQqVLJqnU/W0+Z49fAl1SXVNkTA8z2yZXXlUBGAK3Sxn5Bw
+         Q/iXHRT/ZF34qUgbiy4H/IuCMJ33rgJdkzEJWdBFm2hs70D0O3hkMR79iEP5DtE0AONj
+         oz0n3Y09nGS74USL7EnQUADv8BYO/JpvZaqN+SQy6gKQ6JOAt9dE0lH09xIbK6RLtCoV
+         fl4ed7XBWqabOQdzy2+JmJ4KmwOa4oaADUOf/jXOtTnpm67CK0z3GVsRmROBz4tkr9bh
+         5MoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVz4Aolf4m1VNhzx8Z4/+AKBguUcQMrmXtkI0oChPHYjDwqUg96LdoOX884vZlxkjPE110oNwSWNiEa@vger.kernel.org, AJvYcCWKzXBcFxRZ295Gdffyzo6Uz36p3XIcM71pRYVnhb6pZn+E3cfLq72w0IztObmHVK5d5ZIRE7yrjps=@vger.kernel.org, AJvYcCWTFgcF6V+zSS3ixlJAI8q15bT+DUDlGftDnowSvAC3kZ0EaleHMAs8XDJ9RiuyIVYFWLtgkT+Gser/Dw==@vger.kernel.org, AJvYcCXDAXeHtMJTygMKdK75nL3XPXlu6qHPUh56sH1YijQJIVaL+rBI5LxdDFRvSV/xT4YtOqw3vDuT2dOk6YjEIwY=@vger.kernel.org, AJvYcCXh6foShaEU8WwFbPlqOnLV51ZG3LE1dxu5p7eD2rntv+sNnCqPizOjqNfuTqGxxII3nVzXvTkx1l5AhUfh@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEFBnPqCZgz6MXXPG+gpSIGfg8hwhegSzoFLjEpV+5+ccm/C9i
+	gnt/PgT8Ds2mEaxOQ94byfKFsRkNM0ajhrnFCN8BYGQ42xyicMhB
+X-Google-Smtp-Source: AGHT+IHkKmn2lhDEjah/IlC7WZ3jWd76fP6Gw2PZutOZX4q0PpkGixHypso1ex28/diQ2yFIXgMejA==
+X-Received: by 2002:a05:6a00:1906:b0:705:c0a1:61c9 with SMTP id d2e1a72fcca58-719260826aamr11109442b3a.9.1726291507338;
+        Fri, 13 Sep 2024 22:25:07 -0700 (PDT)
 Received: from localhost.localdomain ([59.188.211.160])
-        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-71944b7b749sm391223b3a.113.2024.09.13.22.24.47
+        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-71944b7b749sm391223b3a.113.2024.09.13.22.25.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2024 22:24:50 -0700 (PDT)
+        Fri, 13 Sep 2024 22:25:07 -0700 (PDT)
 From: Nick Chan <towinchenmi@gmail.com>
 To: Hector Martin <marcan@marcan.st>,
 	Sven Peter <sven@svenpeter.dev>,
@@ -93,9 +93,9 @@ To: Hector Martin <marcan@marcan.st>,
 Cc: Nick Chan <towinchenmi@gmail.com>,
 	Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
 	Konrad Dybcio <konradybcio@kernel.org>
-Subject: [PATCH v2 01/22] dt-bindings: arm: cpus: Add Apple A7-A11 CPU cores
-Date: Sat, 14 Sep 2024 13:17:07 +0800
-Message-ID: <20240914052413.68177-2-towinchenmi@gmail.com>
+Subject: [PATCH v2 02/22] dt-bindings: watchdog: apple,wdt: Add A7-A11 compatibles
+Date: Sat, 14 Sep 2024 13:17:09 +0800
+Message-ID: <20240914052413.68177-4-towinchenmi@gmail.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240914052413.68177-1-towinchenmi@gmail.com>
 References: <20240914052413.68177-1-towinchenmi@gmail.com>
@@ -107,43 +107,30 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the following CPU cores:
-
-- apple,cyclone: A7 cores
-- apple,typhoon: A8 cores
-- apple,twister: A9 cores
-- apple,hurricane-zephyr: A10 logical cores
-- apple,monsoon: A11 performance cores
-- apple,mistral: A11 efficiency cores
-
-In the Apple A10, there are physical performance-efficiency cores that
-forms logical cores to software depending on the current p-state, and
-only one type of core may be active at one time.
-
-This follows the existing newest-first order.
+The blocks on A7-A11 SoCs are compatible with the existing driver so
+add their per-SoC compatibles.
 
 Signed-off-by: Nick Chan <towinchenmi@gmail.com>
 ---
- Documentation/devicetree/bindings/arm/cpus.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/devicetree/bindings/watchdog/apple,wdt.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index f308ff6c3532..3959e022079f 100644
---- a/Documentation/devicetree/bindings/arm/cpus.yaml
-+++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-@@ -89,6 +89,12 @@ properties:
-       - apple,blizzard
-       - apple,icestorm
-       - apple,firestorm
-+      - apple,mistral
-+      - apple,monsoon
-+      - apple,hurricane-zephyr
-+      - apple,twister
-+      - apple,typhoon
-+      - apple,cyclone
-       - arm,arm710t
-       - arm,arm720t
-       - arm,arm740t
+diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+index 21872e15916c..310832fa8c28 100644
+--- a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+@@ -16,6 +16,11 @@ properties:
+   compatible:
+     items:
+       - enum:
++          - apple,s5l8960x-wdt
++          - apple,t7000-wdt
++          - apple,s8000-wdt
++          - apple,t8010-wdt
++          - apple,t8015-wdt
+           - apple,t8103-wdt
+           - apple,t8112-wdt
+           - apple,t6000-wdt
 -- 
 2.46.0
 
