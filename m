@@ -1,290 +1,609 @@
-Return-Path: <linux-pm+bounces-14246-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14247-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C71D1978F40
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 10:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A2759978F49
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 10:56:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E88C71C21A97
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 08:54:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C78151C21F01
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 08:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6586C146D5A;
-	Sat, 14 Sep 2024 08:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="i1e2FRDC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C271482F5;
+	Sat, 14 Sep 2024 08:56:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2048.outbound.protection.outlook.com [40.107.255.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564D415D1;
-	Sat, 14 Sep 2024 08:54:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726304071; cv=fail; b=nKvwxrkP4Ma85C8ehYmUDq1hVh9XoUfVS98ZCihcDkidxoRprfjHAsARXaADRq4saAlEYxefQrQXOK/kdwbrzXUTxvoM5z2xvrD4xfjinv7ChrqnTgelhvuvX9aE6hB2dWWNDvGB6BqVkcGtZUeJrglsBx07hGxc03gkl3yp5Oo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726304071; c=relaxed/simple;
-	bh=kE9vhrZycHR4Cuc1dqWB/8QmbLWEOzYotz8DgVK2K4U=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=kG5xD1HFEpqSlVcHCosAGitpW87xdsb3r8YZRxtcO2g9Q7Qj8WjdwQz3ClvYcT5HW2FyUFkIj8BqdpcZV3l6nV0KVzan2C5LKxLibhR7sJh1o9y0Av2gEjMnAJT1C7rAeU0EFSZUYD9vvxAOn/iGGj+0d4XLOYEsyLs2Z+9Jrjw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=i1e2FRDC; arc=fail smtp.client-ip=40.107.255.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UF+I0KE6aMvPcvZYIjxqhLk0N7UMa6Rc+BFfmWLQXQm2u/O3BPK5HND5uLRRFxfN1d6eMCvUaWWzLjg4oi9LwVsPiyprwvobbQ1jgb27DH89GVzWVc1PbRU3UGcVayX6FGJ1xenEwd/C1iRBkq6KmY1bipKoUAwTjxuhT9HgVH7vn0eo5SBg/RrH7Vt2UrwhfWG0oTcEFtqID+BwosETctUCzPJtDMjO/YUMmqFlfXaOVl+k3T49PYswnoCgdNU/MIBxLyuurYbvMTsNehOPyAXUhAoOMGqAQSMRvHYNjHY8HaLtElSGjlsAA+hIJR/sKxLymJwPdDotK75DPBhmIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NvpS3ANjPGsOqBiJswsePSqAsLzNmrzQFMyknB3IUXM=;
- b=Pz61Ft7a+iy4qGLwHkom94kwVsjauvcWJ3pyp6lMF+Wailp+igtF+CuWMkB5njltmS1BNKBntP7vvI2sz0uGiszFfPXT5FQlfBYEhYZBo/EQPBg8HAYdaiIB7/kRmBlqIHFJwaIHF83cJnThVIKtOTNEDSflP+y1nJqyjz0kIdbeT9FOnvzIkXl7pbLtQJn5V+6T+zM3oRDj/Ldv8dxLO2vlWtVFtDU2FIEBesUPrpYTna8PsdbTHB8v89rAo14vRhJqnXw0VnDKuRu65x8yInX3rdWugT7XrmeAgyvZFmU3i6T1sx0TudqXEyBRIfvu/UX17g3ndDb3PJCnzOLxIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NvpS3ANjPGsOqBiJswsePSqAsLzNmrzQFMyknB3IUXM=;
- b=i1e2FRDCmuuSy6aWpRjlvvo9lLG5ch2fu/5LV1haFehBJcoDbaC9C2zOS+znwoWaUvJQ+PNbRhBS8c0haiYr4O+oDljoqYdyzUdnNHnXw2cqbkzN1MgKCxHHJP/FPspV4RHoNmvmcLtujzTPEduX3CXOZYawh72x2Gff0eY2MTIKRjGpb+VpaMk92JUp7/Hg19IguLUZfVoimHqLNOB2RDJqBlMeJFlRfPeWcxiiJZuAc0uztAKHjdqAPmkH9/SGNvXHl1HeBc3UH+4gtWJJKgjroUCUPQzSMQo/xgVgD8thdcr3xlrdv56oP38C5emS11UgzJfDPm+dfop9Lth3EA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5899.apcprd06.prod.outlook.com (2603:1096:101:e3::16)
- by TYZPR06MB7281.apcprd06.prod.outlook.com (2603:1096:405:a8::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.18; Sat, 14 Sep
- 2024 08:54:25 +0000
-Received: from SEZPR06MB5899.apcprd06.prod.outlook.com
- ([fe80::8bfc:f1ee:8923:77ce]) by SEZPR06MB5899.apcprd06.prod.outlook.com
- ([fe80::8bfc:f1ee:8923:77ce%3]) with mapi id 15.20.7962.021; Sat, 14 Sep 2024
- 08:54:25 +0000
-From: Shen Lichuan <shenlichuan@vivo.com>
-To: sre@kernel.org,
-	linus.walleij@linaro.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	opensource.kernel@vivo.com,
-	Shen Lichuan <shenlichuan@vivo.com>
-Subject: [PATCH v1] power: supply: Correct multiple typos in comments
-Date: Sat, 14 Sep 2024 16:54:15 +0800
-Message-Id: <20240914085415.3886-1-shenlichuan@vivo.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SI2P153CA0018.APCP153.PROD.OUTLOOK.COM (2603:1096:4:140::9)
- To SEZPR06MB5899.apcprd06.prod.outlook.com (2603:1096:101:e3::16)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90A310E9;
+	Sat, 14 Sep 2024 08:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726304210; cv=none; b=pH8V8Vd3ykJLXA5aEZa3KweJQH8JOXJ6EYjn1KXMVZ2D7j85w/Z7KmPgvgUjHDgWon83J4/7ws2UVuTm6+BHo0sytFGvuCOvjL/VPdkPzTaK/aBufsvf9Q4att3Tqteqh1RUEe2Rd8u7aZSI1I0EbjvOfdIkg02VAaYZQ515JqI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726304210; c=relaxed/simple;
+	bh=g3Fk1Psf82pq5xnjzHbT39MQdtOMJLff6D6Cc6nuZDc=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=OKpUz/RdrPOttIuU7CCB/cVJA54vekogzZNkxkURTxqaKE32vBB1ksIa5a3+GVC8+ClA9ec0jEykxu19K4XI0KhG38bZLr0epJOLCuwcreIgH1cODNBpsp2pbjXWjGFyVXtkWhYJ3Y3UVMwH2j9TsVr3oybfXinG97p9pBOgdfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.62])
+	by gateway (Coremail) with SMTP id _____8Bx++nKT+Vms9oHAA--.18060S3;
+	Sat, 14 Sep 2024 16:56:42 +0800 (CST)
+Received: from [10.20.42.62] (unknown [10.20.42.62])
+	by front1 (Coremail) with SMTP id qMiowMCxrtfJT+VmMbUGAA--.37972S3;
+	Sat, 14 Sep 2024 16:56:41 +0800 (CST)
+Subject: Re: [PATCH v3 3/4] LoongArch: Extract IOCSR definitions to standalone
+ header
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-mips@vger.kernel.org, kvm@vger.kernel.org
+References: <20240913-iocsr-v3-0-81a57f60350d@flygoat.com>
+ <20240913-iocsr-v3-3-81a57f60350d@flygoat.com>
+From: maobibo <maobibo@loongson.cn>
+Message-ID: <147e72c9-8177-9c03-8baf-df7362143cd6@loongson.cn>
+Date: Sat, 14 Sep 2024 16:56:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5899:EE_|TYZPR06MB7281:EE_
-X-MS-Office365-Filtering-Correlation-Id: 03c5ad62-5aaa-4ae2-f537-08dcd49ad59d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?IbgnW4Y2SWyhSzg3lOPKv2ALJ+OESEUSVdTRK2QkJIp/r0XPyLoV0Xi+ocib?=
- =?us-ascii?Q?QZEeN9NXNDywH7CG1P2xw5M47+xRAVfTGm1Ck3o5W7VZrkPRktZ5upoet3dZ?=
- =?us-ascii?Q?Yf3SL0IZctuzN8bJOgpueDyXHUUOKCrY+q610ujgBPAMMBe0gKSQ4YrYOZ2j?=
- =?us-ascii?Q?tLhWJRJw4T2GEqTPfxsFx1NCHAkI6Km5AU2vgXgYoXFbalCmpqgS/bDaiQZo?=
- =?us-ascii?Q?OBqnK2pGzDZwlYWl7DW4grt56KxSQayQGMOnDeawU63G4tStpQlB/7fsxn8/?=
- =?us-ascii?Q?maYKTv7yD5pRml0tg3tdTYawRNMuYKQ0ADlesK6Px3uPMv/neB4pKDrYo890?=
- =?us-ascii?Q?aUK6i7tAHrEHOzmN9ou07XpTpoH305le99tn1eE0gcyM4IpyAzMQRgw1qP6p?=
- =?us-ascii?Q?HA2N9qfBV2Qq0AqWN/CTy3BjwizPPhx1a7XAVGBQQbzwT6vBwxjHMlPr9Dy+?=
- =?us-ascii?Q?JOZoX8/03CPitfaNZpOaQlE/OnQi5REeKbfzjZtCSDX9XvcVPdGMO1vu3kCr?=
- =?us-ascii?Q?lltRf4OfFAVdhIoqfo9zxN32gskk24iYfBAZAY14jyIp4+bSXVDbUdcRNMGl?=
- =?us-ascii?Q?dcxnqwejDcHLAhDNBYYMrcjbjToE1TLkEuRcGs8QumQQX9rUlkvg820wku2b?=
- =?us-ascii?Q?RONiNXb0wpHhH/SsUyPgyWd2/4T57NIfJkgQFmNmTqyc7YjcfzMfWkrdDelq?=
- =?us-ascii?Q?P8G0NkDnqAtB9Uxaw1KbMASaEu8jvkvA5jeLMUDJI4WbaGeWd7TXgarITii+?=
- =?us-ascii?Q?1IgljxBLrua3SprRNKTQq7+T9+pMLCzK6TM9a8h3jTWSYX46ACdNzRly5+yc?=
- =?us-ascii?Q?qTNE72lg2PZZNOUhvqV4FOLUlXBIGZzCVE9zR455Dn2/lS/IWHK2NP5ebXdZ?=
- =?us-ascii?Q?6y4HKVVhxUiqSuwyHjibJpllJNdlzDD70RqNLcjAXBZNBh6ztPDsDWA1IfAY?=
- =?us-ascii?Q?8MNq164znVe6wkHb0Zvo/l5jdslUwauOacFPZ/nJ9rLv1gMflU/j4fGe3q+H?=
- =?us-ascii?Q?8MDP/LCIwAAoCo2VMZoGsWjnax/zfzxYPw4uGheaB0yRubGCycGKnfyspou4?=
- =?us-ascii?Q?AApWsztnWQp6uRws+2e2vd/EDgPvKs7Sg2UkGFv7F/YDMbNy3/QtLGO8ZBwD?=
- =?us-ascii?Q?eOpAQdQAgvxrOmxnFmfpIJQ6wtWxgXiI60wWzOOw1v0HNOUY/iNAfy2JINmf?=
- =?us-ascii?Q?AWpSuJxq19yNAYb5UzHx1dcNjF5dD8960u6DdNyFsOlhJ/62RKXG64AHYHX1?=
- =?us-ascii?Q?DeEZUSg442ghIPtLHiBKpaUMlBA0Nd0c+LjglLxdKbl1WnbU0hLao3CDGhGv?=
- =?us-ascii?Q?aOOtB3jfiZiWovP3yv5qUumsZ1NKlqoeaZkS6uzaHUO9AZ13x+4rrtGn60tS?=
- =?us-ascii?Q?2/oeHwSQaavIfS/wU6g/NyxcRXLeL46I6mz7mTKxzEb2PsjipQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5899.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?XxXO9D/z7Q3IJmNZoEAztrAjQiFUcmgelfeWsPmUk2+7E+zrNyvbGIyA3I/P?=
- =?us-ascii?Q?d1O3UaZE3cbYHQv2yvdX+ejtNPAIcV4rMWANzZG195RLrvXmrJDt72b8Rmdw?=
- =?us-ascii?Q?RmIQN1Et/cK8DPx8AEQPN5Vshfnb7621Ojo3UcgChMhYMWXG8ZRcGDYLkGLM?=
- =?us-ascii?Q?o/16flsweQ0HVIimySDtm274jExk/5/JX/w89TaaMAaq9EPOMcpx6xXndLXw?=
- =?us-ascii?Q?mbtGNRQ6YoPloFBpVk6TVKKs/T8IR056sh0dpS3qhMt5a6TJANHgfkU7Aw4y?=
- =?us-ascii?Q?hvSuzqERSG1I60fpncphYYL+Q3OwIJdKZLVqqcOJ248BtB4lGJIvStSS9meo?=
- =?us-ascii?Q?AhG/DKgDNBy7mS9krm/3hYzAKlfvByuNdZombd5MTuZy5d/NHclkj9ObPRbx?=
- =?us-ascii?Q?l7WZfwmymlg7xYZK97Tt6g2stwSm13AM0s8jHqGwuLohA2yn14JXoq1ba3wJ?=
- =?us-ascii?Q?vybJGAYrkbCL6CtFJWZ4H9ucL2M4hsYRSpuzecLUxP1EAk5Clo7eS+ce/I/U?=
- =?us-ascii?Q?FAOrEBNbv4MXC2jvKvI67zx16kkHbZltu/5LynuKLIExuAgNwPUQ+cvYm12i?=
- =?us-ascii?Q?3c2RQiqM9Q1RxdXv6/TXfg7MqHUvPsn7EePcwTqxfQEGWRe5I4BkhlyCSZ1h?=
- =?us-ascii?Q?8oORGYat/ipVgOCNu1P4yhpjgpu7B8ihAtQaHwdMCH26DfbZSVzhe4Y9BLhG?=
- =?us-ascii?Q?h5wKM2bTDxXJfcVvQ8eI+eZqP4iv/BTViblej57LE7dV1UZwebAIZVWf7a6E?=
- =?us-ascii?Q?vZ8BVRNObcVSoaJmsQISrdDwk32Cg4aLJzMarJosg323wwkTEmz2IpEY+rRn?=
- =?us-ascii?Q?1gkKhwihQEYDt6g5uCXDNuXdtjLxDybf3D7HiyOX3Wj4eT3mw8SG8hygOdoB?=
- =?us-ascii?Q?TMcYsibIIXPBtaoiIPzY9e+SELX4nicQ+D7JYmvZKzMa8yvEPxXn/BvzmWC+?=
- =?us-ascii?Q?aC16zlUCrSfsejpRd1WNhY2SyshJmPiQp4gSEbl0DuV/hFkT5RCyAFQYoAdd?=
- =?us-ascii?Q?1dkgxkXyYm3bvlMcCp2qw6qYWo2HoKuabTJzCbO9Zb0VJAx/29V5o5MS3B5E?=
- =?us-ascii?Q?7nLRej3WcORqkPS6XsAg2nUU33Nt0DloTQybNYeMfi+4ewbEI4KQQwfMQAt5?=
- =?us-ascii?Q?bW6Q9i44kj5k7X0qQqcpULb6dsmj5qxOhpFFO9JsRAbBiMZJ1tmi79ZBpxpF?=
- =?us-ascii?Q?Sok+GHiEcX9fdwATK+xbphYoAauZOSiuHns8KSeMjXL2325qAN3CZHngQUu+?=
- =?us-ascii?Q?TIstiH+uNrdlHXPoJoX4QrAPhm6fvAklmeE8PRh3he6WFivC734glrLVSqKc?=
- =?us-ascii?Q?UOjuNamzZlS3WfdgCkzpwRyF/9Uhcho4ZJ4BuOtadKkYZ5Hwvk1z8cvrtIzD?=
- =?us-ascii?Q?REsXrHB+Vd9EYQHrtjFEYb8clIQVVE9iCTIlJQ6IiLHZ/JGJMEQCMcm/Hn4L?=
- =?us-ascii?Q?8UeINII2rvLOKq1nu7iMwgDN6E6QvN63HiMTjupxRPh6FcD0u3R9tmADY2w0?=
- =?us-ascii?Q?Apt1JAhWNKIrxJVY/20W0z/abaB7C3HFTaGH2ctWwn6OAI+hV/MDLWE8RpyS?=
- =?us-ascii?Q?k83o84cAem8XL+13ffAFua7xKzKWwGa6JUjCADOn?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03c5ad62-5aaa-4ae2-f537-08dcd49ad59d
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5899.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2024 08:54:25.5288
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VVbiQwuowKfIlY3C+A/RGRf5lZVq0aT4O3xrIZ3tqFwWJFHKWCZnSupWun4+HOxuYew11HONTkYYMUkB90HhVQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB7281
+In-Reply-To: <20240913-iocsr-v3-3-81a57f60350d@flygoat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMCxrtfJT+VmMbUGAA--.37972S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj9fXoWfXw4UZFy5ZFyUuFWkCFykZwc_yoW8ZF1kCo
+	W0qayftr48Aw47Zw1Yq3yqvFWUJrykArs8AanxAa97JrW7JF1DKFW5ta42vry3tayYvrZr
+	Ca9FgFWkJa9avas8l-sFpf9Il3svdjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8wcxFpf
+	9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
+	UjIYCTnIWjp_UUUOn7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
+	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
+	Y2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
+	v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+	wI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
+	xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
+	JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+	xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
+	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
+	AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+	c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267
+	AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_
+	Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8uc_3
+	UUUUU==
 
-Fixed some spelling errors, the details are as follows:
+Hi jiaxun,
 
--in the code comments:
-	dettached->detached
-	meausered->measured
-	meausurement->measurement
-	sholuld->should
-	Tempreture->Temperature
-	measuremnts->measurements
-	detecing->detecting
-	persent->percent
-	Parallell->Parallel
+On 2024/9/14 上午4:32, Jiaxun Yang wrote:
+> As IOCSR is not a part of architecture specification, it is not
+> really appropriate to define those stuff in loongarch.h.
+IOCSR address is somewhat strange compared with generic mmio bus,
+neither fdt nor acpi does not support IOCSR address space. I do not know 
+the future about IOCSR, since I do not know the advantage of it compared 
+to MMIO address space, except it can only  be accessed in supervisor mode.
 
-Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
----
- drivers/power/supply/88pm860x_battery.c     | 4 ++--
- drivers/power/supply/ab8500_btemp.c         | 2 +-
- drivers/power/supply/charger-manager.c      | 2 +-
- drivers/power/supply/da9030_battery.c       | 4 ++--
- drivers/power/supply/max8925_power.c        | 2 +-
- drivers/power/supply/qcom_battmgr.c         | 2 +-
- drivers/power/supply/qcom_pmi8998_charger.c | 2 +-
- 7 files changed, 9 insertions(+), 9 deletions(-)
+Sharing the same code with multiple architecture is welcome.
+> 
+> Extract those definitions to include/linux/loongson/iocsr.h, so
+> that they can be shared with MIPS based Loongson systems as well.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>   MAINTAINERS                             |   1 +
+>   arch/loongarch/include/asm/loongarch.h  |  90 --------------------------
+>   arch/loongarch/kernel/cpu-probe.c       |   7 +-
+>   arch/loongarch/kernel/relocate_kernel.S |   5 +-
+>   arch/loongarch/kernel/smp.c             |  23 +++----
+>   drivers/cpufreq/loongson3_cpufreq.c     |  11 ++--
+>   drivers/irqchip/irq-loongarch-avec.c    |   5 +-
+>   drivers/irqchip/irq-loongson-eiointc.c  |   5 +-
+>   include/linux/loongson/iocsr.h          | 110 ++++++++++++++++++++++++++++++++
+>   9 files changed, 142 insertions(+), 115 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0a3d9e17295a..f0f4c427e9a3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13305,6 +13305,7 @@ F:	Documentation/translations/zh_CN/arch/loongarch/
+>   F:	arch/loongarch/
+>   F:	drivers/*/*loongarch*
+>   F:	drivers/cpufreq/loongson3_cpufreq.c
+> +F:	include/linux/loongson
+>   
+>   LOONGSON GPIO DRIVER
+>   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
+> index 23af28f00c3c..4ac228230720 100644
+> --- a/arch/loongarch/include/asm/loongarch.h
+> +++ b/arch/loongarch/include/asm/loongarch.h
+> @@ -1048,84 +1048,6 @@
+>   
+>   #define ESTATF_IP		0x00003fff
+>   
+> -#define LOONGARCH_IOCSR_FEATURES	0x8
+> -#define  IOCSRF_TEMP			BIT_ULL(0)
+> -#define  IOCSRF_NODECNT			BIT_ULL(1)
+> -#define  IOCSRF_MSI			BIT_ULL(2)
+> -#define  IOCSRF_EXTIOI			BIT_ULL(3)
+> -#define  IOCSRF_CSRIPI			BIT_ULL(4)
+> -#define  IOCSRF_FREQCSR			BIT_ULL(5)
+> -#define  IOCSRF_FREQSCALE		BIT_ULL(6)
+> -#define  IOCSRF_DVFSV1			BIT_ULL(7)
+> -#define  IOCSRF_EIODECODE		BIT_ULL(9)
+> -#define  IOCSRF_FLATMODE		BIT_ULL(10)
+> -#define  IOCSRF_VM			BIT_ULL(11)
+> -#define  IOCSRF_AVEC			BIT_ULL(15)
+> -
+> -#define LOONGARCH_IOCSR_VENDOR		0x10
+> -
+> -#define LOONGARCH_IOCSR_CPUNAME		0x20
+> -
+> -#define LOONGARCH_IOCSR_NODECNT		0x408
+> -
+> -#define LOONGARCH_IOCSR_MISC_FUNC	0x420
+> -#define  IOCSR_MISC_FUNC_SOFT_INT	BIT_ULL(10)
+> -#define  IOCSR_MISC_FUNC_TIMER_RESET	BIT_ULL(21)
+> -#define  IOCSR_MISC_FUNC_EXT_IOI_EN	BIT_ULL(48)
+> -#define  IOCSR_MISC_FUNC_AVEC_EN	BIT_ULL(51)
+> -
+> -#define LOONGARCH_IOCSR_CPUTEMP		0x428
+> -
+> -#define LOONGARCH_IOCSR_SMCMBX		0x51c
+> -
+> -/* PerCore CSR, only accessible by local cores */
+> -#define LOONGARCH_IOCSR_IPI_STATUS	0x1000
+> -#define LOONGARCH_IOCSR_IPI_EN		0x1004
+> -#define LOONGARCH_IOCSR_IPI_SET		0x1008
+> -#define LOONGARCH_IOCSR_IPI_CLEAR	0x100c
+> -#define LOONGARCH_IOCSR_MBUF0		0x1020
+> -#define LOONGARCH_IOCSR_MBUF1		0x1028
+> -#define LOONGARCH_IOCSR_MBUF2		0x1030
+> -#define LOONGARCH_IOCSR_MBUF3		0x1038
+> -
+> -#define LOONGARCH_IOCSR_IPI_SEND	0x1040
+> -#define  IOCSR_IPI_SEND_IP_SHIFT	0
+> -#define  IOCSR_IPI_SEND_CPU_SHIFT	16
+> -#define  IOCSR_IPI_SEND_BLOCKING	BIT(31)
+> -
+> -#define LOONGARCH_IOCSR_MBUF_SEND	0x1048
+> -#define  IOCSR_MBUF_SEND_BLOCKING	BIT_ULL(31)
+> -#define  IOCSR_MBUF_SEND_BOX_SHIFT	2
+> -#define  IOCSR_MBUF_SEND_BOX_LO(box)	(box << 1)
+> -#define  IOCSR_MBUF_SEND_BOX_HI(box)	((box << 1) + 1)
+> -#define  IOCSR_MBUF_SEND_CPU_SHIFT	16
+> -#define  IOCSR_MBUF_SEND_BUF_SHIFT	32
+> -#define  IOCSR_MBUF_SEND_H32_MASK	0xFFFFFFFF00000000ULL
+> -
+> -#define LOONGARCH_IOCSR_ANY_SEND	0x1158
+> -#define  IOCSR_ANY_SEND_BLOCKING	BIT_ULL(31)
+> -#define  IOCSR_ANY_SEND_CPU_SHIFT	16
+> -#define  IOCSR_ANY_SEND_MASK_SHIFT	27
+> -#define  IOCSR_ANY_SEND_BUF_SHIFT	32
+> -#define  IOCSR_ANY_SEND_H32_MASK	0xFFFFFFFF00000000ULL
+> -
+> -/* Register offset and bit definition for CSR access */
+> -#define LOONGARCH_IOCSR_TIMER_CFG       0x1060
+> -#define LOONGARCH_IOCSR_TIMER_TICK      0x1070
+> -#define  IOCSR_TIMER_CFG_RESERVED       (_ULCAST_(1) << 63)
+> -#define  IOCSR_TIMER_CFG_PERIODIC       (_ULCAST_(1) << 62)
+> -#define  IOCSR_TIMER_CFG_EN             (_ULCAST_(1) << 61)
+> -#define  IOCSR_TIMER_MASK		0x0ffffffffffffULL
+> -#define  IOCSR_TIMER_INITVAL_RST        (_ULCAST_(0xffff) << 48)
+> -
+> -#define LOONGARCH_IOCSR_EXTIOI_NODEMAP_BASE	0x14a0
+> -#define LOONGARCH_IOCSR_EXTIOI_IPMAP_BASE	0x14c0
+> -#define LOONGARCH_IOCSR_EXTIOI_EN_BASE		0x1600
+> -#define LOONGARCH_IOCSR_EXTIOI_BOUNCE_BASE	0x1680
+> -#define LOONGARCH_IOCSR_EXTIOI_ISR_BASE		0x1800
+> -#define LOONGARCH_IOCSR_EXTIOI_ROUTE_BASE	0x1c00
+> -#define IOCSR_EXTIOI_VECTOR_NUM			256
+> -
+>   #ifndef __ASSEMBLY__
+>   
+>   static __always_inline u64 drdtime(void)
+> @@ -1145,18 +1067,6 @@ static inline unsigned int get_csr_cpuid(void)
+>   	return csr_read32(LOONGARCH_CSR_CPUID);
+>   }
+>   
+> -static inline void csr_any_send(unsigned int addr, unsigned int data,
+> -				unsigned int data_mask, unsigned int cpu)
+> -{
+> -	uint64_t val = 0;
+> -
+> -	val = IOCSR_ANY_SEND_BLOCKING | addr;
+> -	val |= (cpu << IOCSR_ANY_SEND_CPU_SHIFT);
+> -	val |= (data_mask << IOCSR_ANY_SEND_MASK_SHIFT);
+> -	val |= ((uint64_t)data << IOCSR_ANY_SEND_BUF_SHIFT);
+> -	iocsr_write64(val, LOONGARCH_IOCSR_ANY_SEND);
+> -}
+> -
+>   static inline unsigned int read_csr_excode(void)
+>   {
+>   	return (csr_read32(LOONGARCH_CSR_ESTAT) & CSR_ESTAT_EXC) >> CSR_ESTAT_EXC_SHIFT;
+> diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
+> index 8a868a10df9c..07b68f93ccdc 100644
+> --- a/arch/loongarch/kernel/cpu-probe.c
+> +++ b/arch/loongarch/kernel/cpu-probe.c
+> @@ -6,6 +6,7 @@
+>    */
+>   #include <linux/init.h>
+>   #include <linux/kernel.h>
+> +#include <linux/loongson/iocsr.h>
+>   #include <linux/ptrace.h>
+>   #include <linux/smp.h>
+>   #include <linux/stddef.h>
+> @@ -267,13 +268,13 @@ static inline void cpu_probe_loongson(struct cpuinfo_loongarch *c, unsigned int
+>   	if (!(c->options & LOONGARCH_CPU_IOCSR))
+>   		return;
+>   
+> -	*vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
+> -	*cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
+> +	*vendor = iocsr_read64(LOONGSON_IOCSR_VENDOR);
+> +	*cpuname = iocsr_read64(LOONGSON_IOCSR_CPUNAME);
+>   
+>   	if (!__cpu_full_name[cpu])
+>   		__cpu_full_name[cpu] = cpu_full_name;
+>   
+> -	config = iocsr_read32(LOONGARCH_IOCSR_FEATURES);
+> +	config = iocsr_read32(LOONGSON_IOCSR_FEATURES);
+>   	if (config & IOCSRF_CSRIPI)
+>   		c->options |= LOONGARCH_CPU_CSRIPI;
+>   	if (config & IOCSRF_EXTIOI)
+> diff --git a/arch/loongarch/kernel/relocate_kernel.S b/arch/loongarch/kernel/relocate_kernel.S
+> index 84e6de2fd973..ce40ba6b5975 100644
+> --- a/arch/loongarch/kernel/relocate_kernel.S
+> +++ b/arch/loongarch/kernel/relocate_kernel.S
+> @@ -5,6 +5,7 @@
+>    * Copyright (C) 2022 Loongson Technology Corporation Limited
+>    */
+>   
+> +#include <linux/loongson/iocsr.h>
+>   #include <linux/kexec.h>
+>   
+>   #include <asm/asm.h>
+> @@ -88,14 +89,14 @@ SYM_CODE_END(relocate_new_kernel)
+>   #ifdef CONFIG_SMP
+>   /*
+>    * Other CPUs should wait until code is relocated and
+> - * then start at the entry point from LOONGARCH_IOCSR_MBUF0.
+> + * then start at the entry point from LOONGSON_IOCSR_MBUF0.
+>    */
+>   SYM_CODE_START(kexec_smp_wait)
+>   	UNWIND_HINT_UNDEFINED
+>   1:	li.w		t0, 0x100			/* wait for init loop */
+>   2:	addi.w		t0, t0, -1			/* limit mailbox access */
+>   	bnez		t0, 2b
+> -	li.w		t1, LOONGARCH_IOCSR_MBUF0
+> +	li.w		t1, LOONGSON_IOCSR_MBUF0
+>   	iocsrrd.w	s0, t1				/* check PC as an indicator */
+>   	beqz		s0, 1b
+>   	iocsrrd.d	s0, t1				/* get PC via mailbox */
+> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+> index 4adbbef3450a..120865985376 100644
+> --- a/arch/loongarch/kernel/smp.c
+> +++ b/arch/loongarch/kernel/smp.c
+> @@ -14,6 +14,7 @@
+>   #include <linux/init.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/irq_work.h>
+> +#include <linux/loongson/iocsr.h>
+>   #include <linux/profile.h>
+>   #include <linux/seq_file.h>
+>   #include <linux/smp.h>
+> @@ -164,14 +165,14 @@ static void csr_mail_send(uint64_t data, int cpu, int mailbox)
+>   	val |= (IOCSR_MBUF_SEND_BOX_HI(mailbox) << IOCSR_MBUF_SEND_BOX_SHIFT);
+>   	val |= (cpu << IOCSR_MBUF_SEND_CPU_SHIFT);
+>   	val |= (data & IOCSR_MBUF_SEND_H32_MASK);
+> -	iocsr_write64(val, LOONGARCH_IOCSR_MBUF_SEND);
+> +	iocsr_write64(val, LOONGSON_IOCSR_MBUF_SEND);
+>   
+>   	/* Send low 32 bits */
+>   	val = IOCSR_MBUF_SEND_BLOCKING;
+>   	val |= (IOCSR_MBUF_SEND_BOX_LO(mailbox) << IOCSR_MBUF_SEND_BOX_SHIFT);
+>   	val |= (cpu << IOCSR_MBUF_SEND_CPU_SHIFT);
+>   	val |= (data << IOCSR_MBUF_SEND_BUF_SHIFT);
+> -	iocsr_write64(val, LOONGARCH_IOCSR_MBUF_SEND);
+> +	iocsr_write64(val, LOONGSON_IOCSR_MBUF_SEND);
+>   };
+>   
+>   static u32 ipi_read_clear(int cpu)
+> @@ -179,9 +180,9 @@ static u32 ipi_read_clear(int cpu)
+>   	u32 action;
+>   
+>   	/* Load the ipi register to figure out what we're supposed to do */
+> -	action = iocsr_read32(LOONGARCH_IOCSR_IPI_STATUS);
+> +	action = iocsr_read32(LOONGSON_IOCSR_IPI_STATUS);
+>   	/* Clear the ipi register to clear the interrupt */
+> -	iocsr_write32(action, LOONGARCH_IOCSR_IPI_CLEAR);
+> +	iocsr_write32(action, LOONGSON_IOCSR_IPI_CLEAR);
+>   	wbflush();
+>   
+>   	return action;
+> @@ -193,7 +194,7 @@ static void ipi_write_action(int cpu, u32 action)
+>   
+>   	val = IOCSR_IPI_SEND_BLOCKING | action;
+>   	val |= (cpu << IOCSR_IPI_SEND_CPU_SHIFT);
+> -	iocsr_write32(val, LOONGARCH_IOCSR_IPI_SEND);
+> +	iocsr_write32(val, LOONGSON_IOCSR_IPI_SEND);
+>   }
+>   
+>   static void loongson_send_ipi_single(int cpu, unsigned int action)
+> @@ -322,7 +323,7 @@ void __init loongson_smp_setup(void)
+>   	cpu_data[0].package = cpu_logical_map(0) / loongson_sysconf.cores_per_package;
+>   
+>   	pv_ipi_init();
+> -	iocsr_write32(0xffffffff, LOONGARCH_IOCSR_IPI_EN);
+> +	iocsr_write32(0xffffffff, LOONGSON_IOCSR_IPI_EN);
+>   	pr_info("Detected %i available CPU(s)\n", loongson_sysconf.nr_cpus);
+>   }
+>   
+> @@ -370,7 +371,7 @@ void loongson_init_secondary(void)
+>   
+>   	change_csr_ecfg(ECFG0_IM, imask);
+>   
+> -	iocsr_write32(0xffffffff, LOONGARCH_IOCSR_IPI_EN);
+> +	iocsr_write32(0xffffffff, LOONGSON_IOCSR_IPI_EN);
+>   
+>   #ifdef CONFIG_NUMA
+>   	numa_add_cpu(cpu);
+> @@ -385,7 +386,7 @@ void loongson_init_secondary(void)
+>   void loongson_smp_finish(void)
+>   {
+>   	local_irq_enable();
+> -	iocsr_write64(0, LOONGARCH_IOCSR_MBUF0);
+> +	iocsr_write64(0, LOONGSON_IOCSR_MBUF0);
+>   	pr_info("CPU#%d finished\n", smp_processor_id());
+>   }
+>   
+> @@ -435,12 +436,12 @@ void __noreturn arch_cpu_idle_dead(void)
+>   	__smp_mb();
+>   	do {
+>   		__asm__ __volatile__("idle 0\n\t");
+> -		addr = iocsr_read64(LOONGARCH_IOCSR_MBUF0);
+> +		addr = iocsr_read64(LOONGSON_IOCSR_MBUF0);
+>   	} while (addr == 0);
+>   
+>   	local_irq_disable();
+>   	init_fn = (void *)TO_CACHE(addr);
+> -	iocsr_write32(0xffffffff, LOONGARCH_IOCSR_IPI_CLEAR);
+> +	iocsr_write32(0xffffffff, LOONGSON_IOCSR_IPI_CLEAR);
+>   
+>   	init_fn();
+>   	BUG();
+> @@ -460,7 +461,7 @@ static int loongson_ipi_suspend(void)
+>   
+>   static void loongson_ipi_resume(void)
+>   {
+> -	iocsr_write32(0xffffffff, LOONGARCH_IOCSR_IPI_EN);
+> +	iocsr_write32(0xffffffff, LOONGSON_IOCSR_IPI_EN);
+>   }
+>   
+>   static struct syscore_ops loongson_ipi_syscore_ops = {
+> diff --git a/drivers/cpufreq/loongson3_cpufreq.c b/drivers/cpufreq/loongson3_cpufreq.c
+> index 6b5e6798d9a2..11d5f1ba3040 100644
+> --- a/drivers/cpufreq/loongson3_cpufreq.c
+> +++ b/drivers/cpufreq/loongson3_cpufreq.c
+> @@ -10,6 +10,7 @@
+>   #include <linux/cpufreq.h>
+>   #include <linux/delay.h>
+>   #include <linux/module.h>
+> +#include <linux/loongson/iocsr.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/units.h>
+>   
+> @@ -182,7 +183,7 @@ static inline int do_service_request(u32 id, u32 info, u32 cmd, u32 val, u32 ext
+>   
+>   	mutex_lock(&cpufreq_mutex[package]);
+>   
+> -	last.value = iocsr_read32(LOONGARCH_IOCSR_SMCMBX);
+> +	last.value = iocsr_read32(LOONGSON_IOCSR_SMCMBX);
+>   	if (!last.complete) {
+>   		mutex_unlock(&cpufreq_mutex[package]);
+>   		return -EPERM;
+> @@ -195,12 +196,12 @@ static inline int do_service_request(u32 id, u32 info, u32 cmd, u32 val, u32 ext
+>   	msg.extra	= extra;
+>   	msg.complete	= 0;
+>   
+> -	iocsr_write32(msg.value, LOONGARCH_IOCSR_SMCMBX);
+> -	iocsr_write32(iocsr_read32(LOONGARCH_IOCSR_MISC_FUNC) | IOCSR_MISC_FUNC_SOFT_INT,
+> -		      LOONGARCH_IOCSR_MISC_FUNC);
+> +	iocsr_write32(msg.value, LOONGSON_IOCSR_SMCMBX);
+> +	iocsr_write32(iocsr_read32(LOONGSON_IOCSR_MISC_FUNC) | IOCSR_MISC_FUNC_SOFT_INT,
+> +		      LOONGSON_IOCSR_MISC_FUNC);
+>   
+>   	for (retries = 0; retries < 10000; retries++) {
+> -		msg.value = iocsr_read32(LOONGARCH_IOCSR_SMCMBX);
+> +		msg.value = iocsr_read32(LOONGSON_IOCSR_SMCMBX);
+>   		if (msg.complete)
+>   			break;
+>   
+> diff --git a/drivers/irqchip/irq-loongarch-avec.c b/drivers/irqchip/irq-loongarch-avec.c
+> index 0f6e465dd309..2452c6cc0aa1 100644
+> --- a/drivers/irqchip/irq-loongarch-avec.c
+> +++ b/drivers/irqchip/irq-loongarch-avec.c
+> @@ -10,6 +10,7 @@
+>   #include <linux/irqchip.h>
+>   #include <linux/irqchip/chained_irq.h>
+>   #include <linux/irqdomain.h>
+> +#include <linux/loongson/iocsr.h>
+>   #include <linux/kernel.h>
+>   #include <linux/msi.h>
+>   #include <linux/radix-tree.h>
+> @@ -378,9 +379,9 @@ static int __init avecintc_init(struct irq_domain *parent)
+>   				  "irqchip/loongarch/avecintc:starting",
+>   				  avecintc_cpu_online, avecintc_cpu_offline);
+>   #endif
+> -	value = iocsr_read64(LOONGARCH_IOCSR_MISC_FUNC);
+> +	value = iocsr_read64(LOONGSON_IOCSR_MISC_FUNC);
+>   	value |= IOCSR_MISC_FUNC_AVEC_EN;
+> -	iocsr_write64(value, LOONGARCH_IOCSR_MISC_FUNC);
+> +	iocsr_write64(value, LOONGSON_IOCSR_MISC_FUNC);
+>   
+>   	return ret;
+>   
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> index e24db71a8783..6e81bf27914f 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -13,6 +13,7 @@
+>   #include <linux/irqchip.h>
+>   #include <linux/irqdomain.h>
+>   #include <linux/irqchip/chained_irq.h>
+> +#include <linux/loongson/iocsr.h>
+>   #include <linux/kernel.h>
+>   #include <linux/syscore_ops.h>
+>   #include <asm/numa.h>
+> @@ -52,9 +53,9 @@ static void eiointc_enable(void)
+>   {
+>   	uint64_t misc;
+>   
+> -	misc = iocsr_read64(LOONGARCH_IOCSR_MISC_FUNC);
+> +	misc = iocsr_read64(LOONGSON_IOCSR_MISC_FUNC);
+>   	misc |= IOCSR_MISC_FUNC_EXT_IOI_EN;
+> -	iocsr_write64(misc, LOONGARCH_IOCSR_MISC_FUNC);
+> +	iocsr_write64(misc, LOONGSON_IOCSR_MISC_FUNC);
+>   }
+>   
+>   static int cpu_to_eio_node(int cpu)
+> diff --git a/include/linux/loongson/iocsr.h b/include/linux/loongson/iocsr.h
+> new file mode 100644
+> index 000000000000..6654a904bcbe
+> --- /dev/null
+> +++ b/include/linux/loongson/iocsr.h
+> @@ -0,0 +1,110 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + * Copyright (C) 2024, Jiaxun Yang <jiaxun.yang@flygoat.com>
+> + */
+> +
+> +#ifndef _LOONGSON_IOCSR_H
+> +#define _LOONGSON_IOCSR_H
+> +
+> +#include <linux/bits.h>
+> +#include <linux/types.h>
+> +
+> +#ifdef CONFIG_LOONGARCH
+> +#include <asm/loongarch.h>
+> +#endif
+> +
+> +#define LOONGSON_IOCSR_FEATURES	0x8
+> +#define  IOCSRF_TEMP			BIT_ULL(0)
+> +#define  IOCSRF_NODECNT			BIT_ULL(1)
+> +#define  IOCSRF_MSI			BIT_ULL(2)
+> +#define  IOCSRF_EXTIOI			BIT_ULL(3)
+> +#define  IOCSRF_CSRIPI			BIT_ULL(4)
+> +#define  IOCSRF_FREQCSR			BIT_ULL(5)
+> +#define  IOCSRF_FREQSCALE		BIT_ULL(6)
+> +#define  IOCSRF_DVFSV1			BIT_ULL(7)
+> +#define  IOCSRF_EIODECODE		BIT_ULL(9)
+> +#define  IOCSRF_FLATMODE		BIT_ULL(10)
+> +#define  IOCSRF_VM			BIT_ULL(11)
+> +#define  IOCSRF_AVEC			BIT_ULL(15)
+Is these definiton the same between Loongson3 mips and LoongArch machine 
+such as IOCSRF_FLATMODE/IOCSRF_AVEC?
 
-diff --git a/drivers/power/supply/88pm860x_battery.c b/drivers/power/supply/88pm860x_battery.c
-index 34619c4d4ece..2b1783834d0d 100644
---- a/drivers/power/supply/88pm860x_battery.c
-+++ b/drivers/power/supply/88pm860x_battery.c
-@@ -422,7 +422,7 @@ static irqreturn_t pm860x_batt_handler(int irq, void *data)
- 		info->temp_type = PM860X_TEMP_TINT;
- 	}
- 	mutex_unlock(&info->lock);
--	/* clear ccnt since battery is attached or dettached */
-+	/* clear ccnt since battery is attached or detached */
- 	clear_ccnt(info, &ccnt_data);
- 	return IRQ_HANDLED;
- }
-@@ -566,7 +566,7 @@ static int measure_temp(struct pm860x_battery_info *info, int *data)
- 		ret = measure_12bit_voltage(info, PM8607_GPADC1_MEAS1, data);
- 		if (ret)
- 			return ret;
--		/* meausered Vtbat(mV) / Ibias_current(11uA)*/
-+		/* measured Vtbat(mV) / Ibias_current(11uA)*/
- 		*data = (*data * 1000) / GPBIAS2_GPADC1_UA;
- 
- 		if (*data > TBAT_NEG_25D) {
-diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
-index 56f136b2d071..87c9b8e744b3 100644
---- a/drivers/power/supply/ab8500_btemp.c
-+++ b/drivers/power/supply/ab8500_btemp.c
-@@ -283,7 +283,7 @@ static void ab8500_btemp_periodic_work(struct work_struct *work)
- 			dev_warn(di->dev, "failed to identify the battery\n");
- 	}
- 
--	/* Failover if a reading is erroneous, use last meausurement */
-+	/* Failover if a reading is erroneous, use last measurement */
- 	ret = thermal_zone_get_temp(di->tz, &bat_temp);
- 	if (ret) {
- 		dev_err(di->dev, "error reading temperature\n");
-diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
-index 96f0a7fbf105..858e2b77ee5b 100644
---- a/drivers/power/supply/charger-manager.c
-+++ b/drivers/power/supply/charger-manager.c
-@@ -221,7 +221,7 @@ static bool is_charging(struct charger_manager *cm)
- 
- 	/* If at least one of the charger is charging, return yes */
- 	for (i = 0; cm->desc->psy_charger_stat[i]; i++) {
--		/* 1. The charger sholuld not be DISABLED */
-+		/* 1. The charger should not be DISABLED */
- 		if (cm->emergency_stop)
- 			continue;
- 		if (!cm->charger_enabled)
-diff --git a/drivers/power/supply/da9030_battery.c b/drivers/power/supply/da9030_battery.c
-index 04e0f4162d42..b89604a8c019 100644
---- a/drivers/power/supply/da9030_battery.c
-+++ b/drivers/power/supply/da9030_battery.c
-@@ -269,7 +269,7 @@ static void da9030_charger_check_state(struct da9030_charger *charger)
- 		}
- 		if (charger->adc.vchmax_res > charger->thresholds.vcharge_max ||
- 		    charger->adc.vchmin_res < charger->thresholds.vcharge_min ||
--		    /* Tempreture readings are negative */
-+		    /* Temperature readings are negative */
- 		    charger->adc.tbat_res < charger->thresholds.tbat_high ||
- 		    charger->adc.tbat_res > charger->thresholds.tbat_low) {
- 			/* disable charger */
-@@ -470,7 +470,7 @@ static int da9030_battery_charger_init(struct da9030_charger *charger)
- 	if (ret)
- 		return ret;
- 
--	/* enable auto ADC measuremnts */
-+	/* enable auto ADC measurements */
- 	return da903x_write(charger->master, DA9030_ADC_AUTO_CONTROL,
- 			    DA9030_ADC_TBAT_ENABLE | DA9030_ADC_VBAT_IN_TXON |
- 			    DA9030_ADC_VCH_ENABLE | DA9030_ADC_ICH_ENABLE |
-diff --git a/drivers/power/supply/max8925_power.c b/drivers/power/supply/max8925_power.c
-index 621a006d52a9..fc24a6d3b63d 100644
---- a/drivers/power/supply/max8925_power.c
-+++ b/drivers/power/supply/max8925_power.c
-@@ -73,7 +73,7 @@ struct max8925_power_info {
- 	unsigned		usb_online:1;
- 	unsigned		bat_online:1;
- 	unsigned		chg_mode:2;
--	unsigned		batt_detect:1;	/* detecing MB by ID pin */
-+	unsigned		batt_detect:1;	/* detecting MB by ID pin */
- 	unsigned		topoff_threshold:2;
- 	unsigned		fast_charge:3;
- 	unsigned		no_temp_support:1;
-diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-index f0a64c00ddaa..47d29271ddf4 100644
---- a/drivers/power/supply/qcom_battmgr.c
-+++ b/drivers/power/supply/qcom_battmgr.c
-@@ -151,7 +151,7 @@ struct qcom_battmgr_message {
- 			__le32 capacity_low;
- 			__le32 capacity_warning;
- 			__le32 cycle_count;
--			/* thousandth of persent */
-+			/* thousandth of percent */
- 			__le32 accuracy;
- 			__le32 max_sample_time_ms;
- 			__le32 min_sample_time_ms;
-diff --git a/drivers/power/supply/qcom_pmi8998_charger.c b/drivers/power/supply/qcom_pmi8998_charger.c
-index 81acbd8b2169..3b4132376649 100644
---- a/drivers/power/supply/qcom_pmi8998_charger.c
-+++ b/drivers/power/supply/qcom_pmi8998_charger.c
-@@ -832,7 +832,7 @@ static const struct smb2_register smb2_init_seq[] = {
- 		  AUTO_RECHG_BIT | EN_ANALOG_DROP_IN_VBATT_BIT |
- 		  CHARGER_INHIBIT_BIT,
- 	  .val = CHARGER_INHIBIT_BIT },
--	/* STAT pin software override, match downstream. Parallell charging? */
-+	/* STAT pin software override, match downstream. Parallel charging? */
- 	{ .addr = STAT_CFG,
- 	  .mask = STAT_SW_OVERRIDE_CFG_BIT,
- 	  .val = STAT_SW_OVERRIDE_CFG_BIT },
--- 
-2.17.1
+> +
+> +#define LOONGSON_IOCSR_VENDOR		0x10
+> +
+> +#define LOONGSON_IOCSR_CPUNAME		0x20
+> +
+> +#define LOONGSON_IOCSR_NODECNT		0x408
+> +
+> +#define LOONGSON_IOCSR_MISC_FUNC	0x420
+> +#define  IOCSR_MISC_FUNC_SOFT_INT	BIT_ULL(10)
+> +#define  IOCSR_MISC_FUNC_TIMER_RESET	BIT_ULL(21)
+> +#define  IOCSR_MISC_FUNC_EXT_IOI_EN	BIT_ULL(48)
+> +#define  IOCSR_MISC_FUNC_AVEC_EN	BIT_ULL(51)
+> +
+> +#define LOONGSON_IOCSR_CPUTEMP		0x428
+> +
+> +#define LOONGSON_IOCSR_SMCMBX		0x51c
+> +
+> +/* PerCore CSR, only accessible by local cores */
+> +#define LOONGSON_IOCSR_IPI_STATUS	0x1000
+> +#define LOONGSON_IOCSR_IPI_EN		0x1004
+> +#define LOONGSON_IOCSR_IPI_SET		0x1008
+> +#define LOONGSON_IOCSR_IPI_CLEAR	0x100c
+> +#define LOONGSON_IOCSR_MBUF0		0x1020
+> +#define LOONGSON_IOCSR_MBUF1		0x1028
+> +#define LOONGSON_IOCSR_MBUF2		0x1030
+> +#define LOONGSON_IOCSR_MBUF3		0x1038
+It seems that it is only used with arch/loongarch/kernel/smp.c,
+and file smp.c is arch specific. No generic driver uses this.
+
+> +
+> +#define LOONGSON_IOCSR_IPI_SEND	0x1040
+> +#define  IOCSR_IPI_SEND_IP_SHIFT	0
+> +#define  IOCSR_IPI_SEND_CPU_SHIFT	16
+> +#define  IOCSR_IPI_SEND_BLOCKING	BIT(31)
+> +
+> +#define LOONGSON_IOCSR_MBUF_SEND	0x1048
+> +#define  IOCSR_MBUF_SEND_BLOCKING	BIT_ULL(31)
+> +#define  IOCSR_MBUF_SEND_BOX_SHIFT	2
+> +#define  IOCSR_MBUF_SEND_BOX_LO(box)	(box << 1)
+> +#define  IOCSR_MBUF_SEND_BOX_HI(box)	((box << 1) + 1)
+> +#define  IOCSR_MBUF_SEND_CPU_SHIFT	16
+> +#define  IOCSR_MBUF_SEND_BUF_SHIFT	32
+> +#define  IOCSR_MBUF_SEND_H32_MASK	0xFFFFFFFF00000000ULL
+> +
+> +#define LOONGSON_IOCSR_ANY_SEND	0x1158
+> +#define  IOCSR_ANY_SEND_BLOCKING	BIT_ULL(31)
+> +#define  IOCSR_ANY_SEND_CPU_SHIFT	16
+> +#define  IOCSR_ANY_SEND_MASK_SHIFT	27
+> +#define  IOCSR_ANY_SEND_BUF_SHIFT	32
+> +#define  IOCSR_ANY_SEND_H32_MASK	0xFFFFFFFF00000000ULL
+> +
+> +/* Register offset and bit definition for CSR access */
+> +#define LOONGSON_IOCSR_TIMER_CFG       0x1060
+> +#define LOONGSON_IOCSR_TIMER_TICK      0x1070
+> +#define  IOCSR_TIMER_CFG_RESERVED       (_ULCAST_(1) << 63)
+> +#define  IOCSR_TIMER_CFG_PERIODIC       (_ULCAST_(1) << 62)
+> +#define  IOCSR_TIMER_CFG_EN             (_ULCAST_(1) << 61)
+> +#define  IOCSR_TIMER_MASK		0x0ffffffffffffULL
+> +#define  IOCSR_TIMER_INITVAL_RST        (_ULCAST_(0xffff) << 48)
+I do not find any use about IOCSR_TIMER macro, which does ip driver use 
+this?
+
+> +
+> +#define LOONGSON_IOCSR_EXTIOI_NODEMAP_BASE	0x14a0
+> +#define LOONGSON_IOCSR_EXTIOI_IPMAP_BASE	0x14c0
+> +#define LOONGSON_IOCSR_EXTIOI_EN_BASE		0x1600
+> +#define LOONGSON_IOCSR_EXTIOI_BOUNCE_BASE	0x1680
+> +#define LOONGSON_IOCSR_EXTIOI_ISR_BASE		0x1800
+> +#define LOONGSON_IOCSR_EXTIOI_ROUTE_BASE	0x1c00
+> +#define IOCSR_EXTIOI_VECTOR_NUM			256
+Is it better to define these macro in common header file or in extioi 
+driver?  It seems that only extioi use it.
+
+Regards
+Bibo Mao
+
+> +
+> +#ifndef __ASSEMBLY__
+> +static inline void csr_any_send(unsigned int addr, unsigned int data,
+> +				unsigned int data_mask, unsigned int cpu)
+> +{
+> +	uint64_t val = 0;
+> +
+> +	val = IOCSR_ANY_SEND_BLOCKING | addr;
+> +	val |= (cpu << IOCSR_ANY_SEND_CPU_SHIFT);
+> +	val |= (data_mask << IOCSR_ANY_SEND_MASK_SHIFT);
+> +	val |= ((uint64_t)data << IOCSR_ANY_SEND_BUF_SHIFT);
+> +	iocsr_write64(val, LOONGSON_IOCSR_ANY_SEND);
+> +}
+> +#endif
+> +
+> +#endif
+> +
+> 
 
 
