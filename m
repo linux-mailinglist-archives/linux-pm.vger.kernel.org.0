@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-14218-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14219-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BE20978D8F
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 07:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C54B7978D92
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 07:25:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FD91B25C05
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 05:25:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B17F9B26045
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 05:25:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B431A19BA6;
-	Sat, 14 Sep 2024 05:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE035914C;
+	Sat, 14 Sep 2024 05:25:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XTTL8Nkb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lpob2ei+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A13A20328;
-	Sat, 14 Sep 2024 05:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18FDB433D5;
+	Sat, 14 Sep 2024 05:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726291509; cv=none; b=IIhcN/M+NK9QGJw93RvVfwy7mLWeKT7sevK5KzWH86ThLV+5N3crn3A75hV9F8BJIqdLGebpyLB2TzRi3k9D9ibym+0oHt+mmCCPKY53cm5JgxXEiiyOJmRClWR0TX4kB33iSN2208V7DBhU9AovXAuS0VmSTX5Kz/313ZC4/SU=
+	t=1726291521; cv=none; b=gIsDEJAdIY6Cvd8d/UL0KnG5GzAKRdf7wq/+5yxgydzCOVipwRMiLwBVK7zpenEtzwiBV5r+3b5JPCGqXXtbJLPFPURv8zj0r398mGqu84/Hy8DRd8b5mqfKL7+1Ofld07GPxwUlnvN8wtvjCtp0cPRo/VN+QDy5RloL6Gc+MGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726291509; c=relaxed/simple;
-	bh=wjv7S2defJHb4w2LIijyyI7ICLEtDGHr6+Y7Ed98jvI=;
+	s=arc-20240116; t=1726291521; c=relaxed/simple;
+	bh=/TZwa1P5GOi0weNisvEEpeoua8fx09BY++vgJdF9ecA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ELa4hY23GWtaF9sF9CUwTCdFG1xQM47TZDG43Hc0c64XLfcrwrWQuJfkdEQ9BYakdvJ2IOXzP0ngrZeWzxxhU5JtJ7xupuVaOQOH/UkA9K5u5csx8dEg931smwA8bpQCvjAlkFTA5VR9MWiXp0PyswIQh2JsKpQhsyMDJgXN8dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XTTL8Nkb; arc=none smtp.client-ip=209.85.210.177
+	 MIME-Version; b=g+yNPVbMGrp2R/SplYX1Tgp2Ma0szjpaKy1/dP6fs5tupG0GAFz5Y9WH5wpJwqpg3UqeH4khLJ17WHuJiMeYKIt8rYhGoz1EYClUnqiwTG4xLn9Yrb6kknViCAZ27e+1vdOtCgIGb7ch30XF5cEtV0X9Hv6jXFggqEI1yYiRF7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lpob2ei+; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-718da0821cbso2238999b3a.0;
-        Fri, 13 Sep 2024 22:25:07 -0700 (PDT)
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7db238d07b3so2219819a12.2;
+        Fri, 13 Sep 2024 22:25:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726291507; x=1726896307; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726291519; x=1726896319; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=drlfe7ijxNosG2VKP6kf49hdRW10I7zx+SACXHP4QNc=;
-        b=XTTL8NkbPDsDDQI2nJYP0s0RK2TGumUGM7753YcMANWDVSqaf3xPWHyxvyGHwoBgAN
-         aEiJeovLU6Gp1//zmKanx3dOHQmel/FADr3IMGgN9hhBa9mQnf4sYZUgKuUKSNlu5I3+
-         C0BpuZtulvxZyuWr9a2NctiDoU7oPOLhU7A4ETJ+iDIL/aMHY7zCiDiXRczOrWkEyU/2
-         7KU+5cICZ3UMK8XQI5orqGxO51raRR0Fea9k3RdH1NdTmUJQ6SGS7BiklrvKklvLTZG/
-         W8FdYfZC4ybvvl6pvnGb7XZVI/hqYjDrqZoOhWjegkzUEpymn9uFAYbWy1isCSb23Qyy
-         R8Vw==
+        bh=IeDHamkVCqUamIh6SnSmGPyPT7GfV2/5V36/vymSx7s=;
+        b=Lpob2ei+AZ7Adp2VRRoVZpLdSQk6tpotouGIQOfJV/3AlDzeOnRlPZuxxDokppPcmY
+         vCJ85fF76dgKUqpeuCUzjVHmE7xAh7FAoIPOUbPbAMIx3X21SZQZSNf3PMvCJx7aKSbD
+         j02ggYkhPXyJNYg0xlotRroZwxWV663gwVnkzXz/F1h3gbTJhxvn7PgXNKEfOmEV04Eg
+         k32V937HJMXzElEWbElERbHZZwvhw7qB9dvUUxIEAsNpuuDlLP6nGi6U2i0Btyl42e2M
+         dWnJ9+ZpcQrmqlnYnzPfAgNERG3DLDVBgEcBXVmLPsBhAes2AXqEEu1y8g7OOfUNlMMJ
+         TjlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726291507; x=1726896307;
+        d=1e100.net; s=20230601; t=1726291519; x=1726896319;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=drlfe7ijxNosG2VKP6kf49hdRW10I7zx+SACXHP4QNc=;
-        b=wNYU+4cevgOUejMJNPunAysR9ctt2LJNfxMY5cDUTleSsYBO2O0exWvOgAMTjDYTC2
-         dsPuNnOsKp/ns36wJCgGQMQqVLJqnU/W0+Z49fAl1SXVNkTA8z2yZXXlUBGAK3Sxn5Bw
-         Q/iXHRT/ZF34qUgbiy4H/IuCMJ33rgJdkzEJWdBFm2hs70D0O3hkMR79iEP5DtE0AONj
-         oz0n3Y09nGS74USL7EnQUADv8BYO/JpvZaqN+SQy6gKQ6JOAt9dE0lH09xIbK6RLtCoV
-         fl4ed7XBWqabOQdzy2+JmJ4KmwOa4oaADUOf/jXOtTnpm67CK0z3GVsRmROBz4tkr9bh
-         5MoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVz4Aolf4m1VNhzx8Z4/+AKBguUcQMrmXtkI0oChPHYjDwqUg96LdoOX884vZlxkjPE110oNwSWNiEa@vger.kernel.org, AJvYcCWKzXBcFxRZ295Gdffyzo6Uz36p3XIcM71pRYVnhb6pZn+E3cfLq72w0IztObmHVK5d5ZIRE7yrjps=@vger.kernel.org, AJvYcCWTFgcF6V+zSS3ixlJAI8q15bT+DUDlGftDnowSvAC3kZ0EaleHMAs8XDJ9RiuyIVYFWLtgkT+Gser/Dw==@vger.kernel.org, AJvYcCXDAXeHtMJTygMKdK75nL3XPXlu6qHPUh56sH1YijQJIVaL+rBI5LxdDFRvSV/xT4YtOqw3vDuT2dOk6YjEIwY=@vger.kernel.org, AJvYcCXh6foShaEU8WwFbPlqOnLV51ZG3LE1dxu5p7eD2rntv+sNnCqPizOjqNfuTqGxxII3nVzXvTkx1l5AhUfh@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEFBnPqCZgz6MXXPG+gpSIGfg8hwhegSzoFLjEpV+5+ccm/C9i
-	gnt/PgT8Ds2mEaxOQ94byfKFsRkNM0ajhrnFCN8BYGQ42xyicMhB
-X-Google-Smtp-Source: AGHT+IHkKmn2lhDEjah/IlC7WZ3jWd76fP6Gw2PZutOZX4q0PpkGixHypso1ex28/diQ2yFIXgMejA==
-X-Received: by 2002:a05:6a00:1906:b0:705:c0a1:61c9 with SMTP id d2e1a72fcca58-719260826aamr11109442b3a.9.1726291507338;
-        Fri, 13 Sep 2024 22:25:07 -0700 (PDT)
+        bh=IeDHamkVCqUamIh6SnSmGPyPT7GfV2/5V36/vymSx7s=;
+        b=J/8RMmRYfQaX4tmH+hER7+U1ljabevA0zbMY+yZSvr6n2YLVtoi2D8KUXj+hkWJCOA
+         ixJfttCWpytAPY78oyP8VzskVZ+ds/y9cps58CSPRj11Wk6sSwACuwLySAz14RhiuT2q
+         +ENyxrF61OzIC1vQhglm5xKDFmPaVnmSOjK+yhuh9F0Hd2od5oQKkVN8mp2FevzVLq+/
+         TKwYysGFC+KKezWTBQjQ4wZnF8jFwz6o8Sco/vVJQ/RtiYIHGEuRHe7643js2mog6bt/
+         mGvZVvsAzO0zVdNt2A/Oy10ahZIvw0gUoDip90orUWBVmA+ylTwk2seq9RZn2WHAi+b/
+         BfBA==
+X-Forwarded-Encrypted: i=1; AJvYcCU7NWMlx7y39fGlTAWElNbk5H97QXz9BDhDoDjUVhMMujX4G5SIa+bLqjh4GVGshGHN3FXJBkE38iRp4sCXj8U=@vger.kernel.org, AJvYcCUDXhl8hBQYU4mbHjbl0TPeVkRkQvOrSGKLzr4R8bpJ26ViO/c0bs7UADwi/wvn0VQHPmsVq2qgEwqara1H@vger.kernel.org, AJvYcCUUuumtm7QzDCf9E4VxcjWwTdYFpQCZfL4EQJDoO2/QrYVcNz8dqM4wrjV314I5GDhMehE1mIGsTPE=@vger.kernel.org, AJvYcCWz4AP9isvbhPN3twPZb1x2vU75hwgQSYDrp8Wjus6PU6ylCu+JxuDAHPuGbBcrMSiNHbt7ARYvTnVt@vger.kernel.org, AJvYcCX0Y5wTcw7SRLgYDuxiwOId8qIrUqvUTSK1QalTXVVIsZpTrsuxxkDaj0Uj9UN+BqSGQIPN4ueh0xNcCw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3WzYY4vXAce0EmMMW2oaGdGmS95S3tzjlZkLPbfwCxuUfa+M3
+	4hkPPckIpEXR1KPTDHyoN3GETEPfZVg+ZyXpZXieoN/4jGfdvHKN
+X-Google-Smtp-Source: AGHT+IEeFol8fr11Klxd7ngVl07qcK9mskrnyYRncSe3V7C2OUexW3oojx4o4eqOFCi1cDiEQtFcLg==
+X-Received: by 2002:a05:6a21:3982:b0:1cf:2931:727f with SMTP id adf61e73a8af0-1cf75f005demr14139271637.18.1726291519342;
+        Fri, 13 Sep 2024 22:25:19 -0700 (PDT)
 Received: from localhost.localdomain ([59.188.211.160])
-        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-71944b7b749sm391223b3a.113.2024.09.13.22.25.03
+        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-71944b7b749sm391223b3a.113.2024.09.13.22.25.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2024 22:25:07 -0700 (PDT)
+        Fri, 13 Sep 2024 22:25:19 -0700 (PDT)
 From: Nick Chan <towinchenmi@gmail.com>
 To: Hector Martin <marcan@marcan.st>,
 	Sven Peter <sven@svenpeter.dev>,
@@ -93,9 +93,9 @@ To: Hector Martin <marcan@marcan.st>,
 Cc: Nick Chan <towinchenmi@gmail.com>,
 	Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
 	Konrad Dybcio <konradybcio@kernel.org>
-Subject: [PATCH v2 02/22] dt-bindings: watchdog: apple,wdt: Add A7-A11 compatibles
-Date: Sat, 14 Sep 2024 13:17:09 +0800
-Message-ID: <20240914052413.68177-4-towinchenmi@gmail.com>
+Subject: [PATCH v2 03/22] dt-bindings: cpufreq: apple,cluster-cpufreq: Add A10 compatible
+Date: Sat, 14 Sep 2024 13:17:11 +0800
+Message-ID: <20240914052413.68177-6-towinchenmi@gmail.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240914052413.68177-1-towinchenmi@gmail.com>
 References: <20240914052413.68177-1-towinchenmi@gmail.com>
@@ -107,30 +107,29 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The blocks on A7-A11 SoCs are compatible with the existing driver so
-add their per-SoC compatibles.
+The block found on the Apple A10 SoC is compatible with the
+existing driver so just add its per-SoC compatible.
 
 Signed-off-by: Nick Chan <towinchenmi@gmail.com>
 ---
- Documentation/devicetree/bindings/watchdog/apple,wdt.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml    | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
-index 21872e15916c..310832fa8c28 100644
---- a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
-@@ -16,6 +16,11 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - apple,s5l8960x-wdt
-+          - apple,t7000-wdt
-+          - apple,s8000-wdt
-+          - apple,t8010-wdt
-+          - apple,t8015-wdt
-           - apple,t8103-wdt
-           - apple,t8112-wdt
-           - apple,t6000-wdt
+diff --git a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+index 76cb9726660e..e0d1a9813696 100644
+--- a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+@@ -24,7 +24,9 @@ properties:
+               - apple,t8112-cluster-cpufreq
+           - const: apple,cluster-cpufreq
+       - items:
+-          - const: apple,t6000-cluster-cpufreq
++          - enum:
++              - apple,t8010-cluster-cpufreq
++              - apple,t6000-cluster-cpufreq
+           - const: apple,t8103-cluster-cpufreq
+           - const: apple,cluster-cpufreq
+ 
 -- 
 2.46.0
 
