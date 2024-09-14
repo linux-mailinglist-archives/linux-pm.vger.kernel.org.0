@@ -1,225 +1,192 @@
-Return-Path: <linux-pm+bounces-14258-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14277-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70E41978FF4
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 12:28:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05353979053
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 13:11:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25C591F22674
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 10:28:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 364061C219EB
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 11:11:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 259761CEE84;
-	Sat, 14 Sep 2024 10:28:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA69E1CF29E;
+	Sat, 14 Sep 2024 11:11:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="ZTVwrOwg";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kFl6aUv0"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="mxZD+nC2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE87139CE9;
-	Sat, 14 Sep 2024 10:28:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE9F1CE71F;
+	Sat, 14 Sep 2024 11:11:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726309697; cv=none; b=mGuZuGN71oMTu2vCbxm9/a24BQHyse4Ero+1XMUbINwddbVFendQavwqhYWqtPh/UaMji4ILQ0NjQmE+DU20qLswkQ8jdodV2zObTjBeZwyRBp+hgArBJT0R9nZqP/j47eRjBHn9I1XgDe27OYsdq9HFg+QHnjR/EPrtaQn+n4Y=
+	t=1726312286; cv=none; b=k5aEJsV9JBEc4FS1jQtDfT0FuMGaDpF9nX7PWnbRDtmcn+HoyPPKUOh4S+o9lgKWPigVTWYQSYwzir0m6QYqJkfgunQRZhSCbUNU3IMkvQ+ydcGpTa/wRdToJwsUe4/bMkzb8USBkPEtEWCGol9+K6muEMol2vtScPp8IBlpu60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726309697; c=relaxed/simple;
-	bh=CCWTWrL1CydY3BbMjeEC6jRmI5josYSow3PV8jabXok=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=JSbYmJe9GSJIij+mWAzA7qTOdtIF8hfOkK1UwZw8HP9PlAnCQIltuHjcEDzj0CaSQ0WaLSuOFM5F0k4xQEw9YuyhN6Dly2JMiyuIuyGhukjk+4ULMT4+/RRtWCJVeqWnpGW1/q6vvQCRbacHwJkWARBK/mXZwx8r7I3IWAyku98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=ZTVwrOwg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kFl6aUv0; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfout.phl.internal (Postfix) with ESMTP id B95F4138035C;
-	Sat, 14 Sep 2024 06:28:13 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-09.internal (MEProxy); Sat, 14 Sep 2024 06:28:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1726309693;
-	 x=1726396093; bh=danSfcBwMUd//FTPPuU989iGYB86QAvoXE8dOeG4wXc=; b=
-	ZTVwrOwgqQj1oaNZ6vQsYLGEDIiMibXeMKUibdQr/F9UGUGEkyhPXVjTmeBQEi8R
-	WWkBXXKDVgyJRnqAF8yiFLqYAoayqJbDWkZH9O73nmGNa+bluHUZcSLZU0q5fjPD
-	DXC0G4YmHInw5FQ9Ziy6lv/Twxp//jxJh+Y2bvBnEoS7KtgJZYURRe/n1xS3qrx1
-	aQMhwlQs2HTrQO23RtaBo++CMosTYhTlljtsc/+uyUsdvk0QDfqqn5WMM9ntYtjZ
-	0pC3w0R6nXuLix9dpKv7IATtCHZ87UYv+g+g+L+dW8OnkV0ndMI5n0fziIwtI8XI
-	iLaVNAwZntxag4oC3/HI/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726309693; x=
-	1726396093; bh=danSfcBwMUd//FTPPuU989iGYB86QAvoXE8dOeG4wXc=; b=k
-	Fl6aUv0OJNzQxZLZ/e/zWD3Kj75p/b2EuAMu4Rwaa08/g+Wep+AWD94xhAa3mMcP
-	nGCIonKLiW5/vCzfrCkZCKnkEzRM4XIixuRolWC7Zhv+IrnKhOC1j5WLYKjRjzGR
-	xTcgZoWz3W/CuZZ4E6VLYU+6+FmrGN7eao8NZh4aCu0c5jmXhoQSMTEwdoDVA52L
-	wY+mUpA5thnT+9HzlkEU3f6oJV90whfbSbp6bk69jNnJKxyrWBl7R3ETm577w2W/
-	OoAirIDOmhbTr3QosTnd2AVSQ+hWevSBv4LKT5aTHBagxY9yAzgGv4/GgmGHDhjV
-	ObHaAyBLnV477dcwQsn/g==
-X-ME-Sender: <xms:PGXlZp69WOKZC4OhV9RaLoXqsomDZPaYzdpB_Ua5a0RYOfFIWaNffQ>
-    <xme:PGXlZm7MwjPvquLh8fLVJHoSzjUQ3PS-R8kuS5aJG2eUfSG_2C8gnoBGmy5mtDmEi
-    RDFyeqQ12cE0y2rw90>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudektddgfedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
-    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepveeuffetfeekhefhtdfhleef
-    ffejvdffkefgieeuudegkeegjeevtdffieeltdeunecuffhomhgrihhnpehgihhthhhusg
-    drtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
-    pehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphhtthhope
-    duvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhssghoghgvnhgusegrlhhp
-    hhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopegthhgvnhhhuhgrtggriheskhgvrh
-    hnvghlrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgt
-    phhtthhopehvihhrvghshhdrkhhumhgrrheslhhinhgrrhhordhorhhgpdhrtghpthhtoh
-    epthhglhigsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoheplhhoohhnghgrrhgt
-    hheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehmrghosghisghosehloh
-    honhhgshhonhdrtghnpdhrtghpthhtohepkhhvmhesvhhgvghrrdhkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdroh
-    hrgh
-X-ME-Proxy: <xmx:PGXlZgc3ZN7_Pjo63NJkLxrPCUkqa6z_LrJy4zvDJ1NSfJVIJ9H7hw>
-    <xmx:PGXlZiIkc8u6wH2xMrn61miU9lfUdbhj6Vs8mFjuEGeg9JTWoOaubQ>
-    <xmx:PGXlZtKyGBpNJCoYIqkeG0h_cbVN2FKf7WoElEw0Fy8tfCzncvGxdQ>
-    <xmx:PGXlZrxrq8NpE_QddsrbFkvwIduad_oqokN9lgvWr6kHl0_yCJEeRQ>
-    <xmx:PWXlZnzlI5XCaFmxr3Io9Glca9KA9BwlajY3wj45qQPC5tlsl5rM06iV>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 4D1671C20065; Sat, 14 Sep 2024 06:28:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1726312286; c=relaxed/simple;
+	bh=1aGP2ubyvlPoEmFhGtZ1hFKOD0UpMhJppFF6WSwrEmA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HiPnXY5yQ/erx56d4Rlnf/uy7He2ZV+GyFRdalwsF6vT0htlqXE/xZCvqPdjUzIWmj2d73JCS86TeFa4M8s7zp8Wtb0CwaTmuem/3GhIxVjAiRTZjYG0UpqsST0m59wNXLox8j3cggxAHNsBwK2/wVYbDvkBHiS10jTjeTNp1ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=mxZD+nC2 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
+ id e74fefbdeaa75e17; Sat, 14 Sep 2024 13:11:23 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 822248532AE;
+	Sat, 14 Sep 2024 13:11:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1726312282;
+	bh=1aGP2ubyvlPoEmFhGtZ1hFKOD0UpMhJppFF6WSwrEmA=;
+	h=From:Subject:Date;
+	b=mxZD+nC2qi0WsWWYJvxP7JQCAn3mkvaMm0odBTFz4lvvld8hfR0BgNwwNkN13tliz
+	 lViaGxKu6r9ZhiQz6ko4zdEgaGi4T/KqwWxOK3F9pTJ4qetzaURvq2O+8DsPTPHRHs
+	 cWzFZIYlgp2Qa1OU+KErPOMzHcEnB9ayF+gUdlOD7mE5WqWzR5JPadILx0xU2h1SwX
+	 ajWIJTTem/AjyJnvwyykB/zo0jzG1Dhq+tyBPjk0Mf6maXpKEw3b7UhHZlMR9DBNDW
+	 x0vBX4cGnj1lHiMwMQ0xATLToMxsluQC+71dhJ2ij/RpRwTOLFZH2dogsFVcPu/uux
+	 gIxzBkL50CAyw==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>
+Subject:
+ [RFC PATCH for 6.13 v1 03/20] thermal: core: Represent suspend-related
+ thermal zone flags as bits
+Date: Sat, 14 Sep 2024 12:28:43 +0200
+Message-ID: <2215885.irdbgypaU6@rjwysocki.net>
+In-Reply-To: <6100907.lOV4Wx5bFT@rjwysocki.net>
+References: <6100907.lOV4Wx5bFT@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sat, 14 Sep 2024 11:27:44 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Bibo Mao" <maobibo@loongson.cn>, "Huacai Chen" <chenhuacai@kernel.org>,
- "Xuerui Wang" <kernel@xen0n.name>, "Rafael J. Wysocki" <rafael@kernel.org>,
- "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- kvm@vger.kernel.org
-Message-Id: <5e29630b-36ec-4f9e-a7d8-d8afa29150d1@app.fastmail.com>
-In-Reply-To: <147e72c9-8177-9c03-8baf-df7362143cd6@loongson.cn>
-References: <20240913-iocsr-v3-0-81a57f60350d@flygoat.com>
- <20240913-iocsr-v3-3-81a57f60350d@flygoat.com>
- <147e72c9-8177-9c03-8baf-df7362143cd6@loongson.cn>
-Subject: Re: [PATCH v3 3/4] LoongArch: Extract IOCSR definitions to standalone header
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: spam:low
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrudektddgfeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuufhprghmkfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdr
+ tghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=40 Fuz1=40 Fuz2=40
+
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Instead of using two separate fields in struct thermal_zone_device for
+representing flags related to thermal zone suspend, represent them
+explicitly as bits in one u8 "state" field.
+
+Subsequently, that field will be used for addressing race conditions
+related to thermal zone initialization and exit.
+
+No intentional functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_core.c |   11 +++++------
+ drivers/thermal/thermal_core.h |   11 +++++++----
+ 2 files changed, 12 insertions(+), 10 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -497,7 +497,7 @@ void __thermal_zone_device_update(struct
+ 	int low = -INT_MAX, high = INT_MAX;
+ 	int temp, ret;
+ 
+-	if (tz->suspended || tz->mode != THERMAL_DEVICE_ENABLED)
++	if (tz->state != TZ_STATE_READY || tz->mode != THERMAL_DEVICE_ENABLED)
+ 		return;
+ 
+ 	ret = __thermal_zone_get_temp(tz, &temp);
+@@ -1651,7 +1651,7 @@ static void thermal_zone_device_resume(s
+ 
+ 	guard(thermal_zone)(tz);
+ 
+-	tz->suspended = false;
++	tz->state &= ~(TZ_STATE_FLAG_SUSPENDED | TZ_STATE_FLAG_RESUMING);
+ 
+ 	thermal_debug_tz_resume(tz);
+ 	thermal_zone_device_init(tz);
+@@ -1659,14 +1659,13 @@ static void thermal_zone_device_resume(s
+ 	__thermal_zone_device_update(tz, THERMAL_TZ_RESUME);
+ 
+ 	complete(&tz->resume);
+-	tz->resuming = false;
+ }
+ 
+ static void thermal_zone_pm_prepare(struct thermal_zone_device *tz)
+ {
+ 	guard(thermal_zone)(tz);
+ 
+-	if (tz->resuming) {
++	if (tz->state & TZ_STATE_FLAG_RESUMING) {
+ 		/*
+ 		 * thermal_zone_device_resume() queued up for this zone has not
+ 		 * acquired the lock yet, so release it to let the function run
+@@ -1679,7 +1678,7 @@ static void thermal_zone_pm_prepare(stru
+ 		mutex_lock(&tz->lock);
+ 	}
+ 
+-	tz->suspended = true;
++	tz->state |= TZ_STATE_FLAG_SUSPENDED;
+ }
+ 
+ static void thermal_zone_pm_complete(struct thermal_zone_device *tz)
+@@ -1689,7 +1688,7 @@ static void thermal_zone_pm_complete(str
+ 	cancel_delayed_work(&tz->poll_queue);
+ 
+ 	reinit_completion(&tz->resume);
+-	tz->resuming = true;
++	tz->state |= TZ_STATE_FLAG_RESUMING;
+ 
+ 	/*
+ 	 * Replace the work function with the resume one, which will restore the
+Index: linux-pm/drivers/thermal/thermal_core.h
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.h
++++ linux-pm/drivers/thermal/thermal_core.h
+@@ -62,6 +62,11 @@ struct thermal_governor {
+ 	struct list_head	governor_list;
+ };
+ 
++#define	TZ_STATE_FLAG_SUSPENDED	BIT(0)
++#define	TZ_STATE_FLAG_RESUMING	BIT(1)
++
++#define TZ_STATE_READY		0
++
+ /**
+  * struct thermal_zone_device - structure for a thermal zone
+  * @id:		unique id number for each thermal zone
+@@ -103,8 +108,7 @@ struct thermal_governor {
+  * @node:	node in thermal_tz_list (in thermal_core.c)
+  * @poll_queue:	delayed work for polling
+  * @notify_event: Last notification event
+- * @suspended: thermal zone suspend indicator
+- * @resuming:	indicates whether or not thermal zone resume is in progress
++ * @state: 	current state of the thermal zone
+  * @trips:	array of struct thermal_trip objects
+  */
+ struct thermal_zone_device {
+@@ -139,8 +143,7 @@ struct thermal_zone_device {
+ 	struct list_head node;
+ 	struct delayed_work poll_queue;
+ 	enum thermal_notify_event notify_event;
+-	bool suspended;
+-	bool resuming;
++	u8 state;
+ #ifdef CONFIG_THERMAL_DEBUGFS
+ 	struct thermal_debugfs *debugfs;
+ #endif
 
 
 
-=E5=9C=A82024=E5=B9=B49=E6=9C=8814=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8A=E5=
-=8D=889:56=EF=BC=8Cmaobibo=E5=86=99=E9=81=93=EF=BC=9A
-> Hi jiaxun,
-Hi Bibo,
-
-Thanks for your comments.
-
-[...]
->> +
->> +#define LOONGSON_IOCSR_FEATURES	0x8
->> +#define  IOCSRF_TEMP			BIT_ULL(0)
->> +#define  IOCSRF_NODECNT			BIT_ULL(1)
->> +#define  IOCSRF_MSI			BIT_ULL(2)
->> +#define  IOCSRF_EXTIOI			BIT_ULL(3)
->> +#define  IOCSRF_CSRIPI			BIT_ULL(4)
->> +#define  IOCSRF_FREQCSR			BIT_ULL(5)
->> +#define  IOCSRF_FREQSCALE		BIT_ULL(6)
->> +#define  IOCSRF_DVFSV1			BIT_ULL(7)
->> +#define  IOCSRF_EIODECODE		BIT_ULL(9)
->> +#define  IOCSRF_FLATMODE		BIT_ULL(10)
->> +#define  IOCSRF_VM			BIT_ULL(11)
->> +#define  IOCSRF_AVEC			BIT_ULL(15)
-> Is these definiton the same between Loongson3 mips and LoongArch machi=
-ne=20
-> such as IOCSRF_FLATMODE/IOCSRF_AVEC?
-
-Those bits are only defined on LoongArch based loongson3, and will be ze=
-ro
-on MIPS loongson3 systems. Zero means hardware doesn't have such feature,
-this is still semantically correct.
-
-Given that there will be no more future MIPS loongson3 it makes sense to
-just define them in common header.
-
->
-[...]
->> +
->> +/* PerCore CSR, only accessible by local cores */
->> +#define LOONGSON_IOCSR_IPI_STATUS	0x1000
->> +#define LOONGSON_IOCSR_IPI_EN		0x1004
->> +#define LOONGSON_IOCSR_IPI_SET		0x1008
->> +#define LOONGSON_IOCSR_IPI_CLEAR	0x100c
->> +#define LOONGSON_IOCSR_MBUF0		0x1020
->> +#define LOONGSON_IOCSR_MBUF1		0x1028
->> +#define LOONGSON_IOCSR_MBUF2		0x1030
->> +#define LOONGSON_IOCSR_MBUF3		0x1038
-> It seems that it is only used with arch/loongarch/kernel/smp.c,
-> and file smp.c is arch specific. No generic driver uses this.
-
-Yes, but arch/mips/loongson64/smp.c are using those bits as well,
-and will be converted in next patch.
-
-Just FYI, I'm now trying to implement a common SMP IPI driver for
-MIPS/LoongArch Loongson chips, there is a preview [1].
-
->
->> +
-[...]
->> +
->> +/* Register offset and bit definition for CSR access */
->> +#define LOONGSON_IOCSR_TIMER_CFG       0x1060
->> +#define LOONGSON_IOCSR_TIMER_TICK      0x1070
->> +#define  IOCSR_TIMER_CFG_RESERVED       (_ULCAST_(1) << 63)
->> +#define  IOCSR_TIMER_CFG_PERIODIC       (_ULCAST_(1) << 62)
->> +#define  IOCSR_TIMER_CFG_EN             (_ULCAST_(1) << 61)
->> +#define  IOCSR_TIMER_MASK		0x0ffffffffffffULL
->> +#define  IOCSR_TIMER_INITVAL_RST        (_ULCAST_(0xffff) << 48)
-> I do not find any use about IOCSR_TIMER macro, which does ip driver us=
-e=20
-> this?
-
-So IOCSR timer is obsoleted by LoongArch's architecture timer, but still
-present on at least 3A5000 for compatibility reason. We may write a driv=
-er
-for it at some point.
-
-It is common practice that hardware headers contains those bits that are=
- not used
-by drivers yet to serve as a document to the hardware.
-
->
->> +
->> +#define LOONGSON_IOCSR_EXTIOI_NODEMAP_BASE	0x14a0
->> +#define LOONGSON_IOCSR_EXTIOI_IPMAP_BASE	0x14c0
->> +#define LOONGSON_IOCSR_EXTIOI_EN_BASE		0x1600
->> +#define LOONGSON_IOCSR_EXTIOI_BOUNCE_BASE	0x1680
->> +#define LOONGSON_IOCSR_EXTIOI_ISR_BASE		0x1800
->> +#define LOONGSON_IOCSR_EXTIOI_ROUTE_BASE	0x1c00
->> +#define IOCSR_EXTIOI_VECTOR_NUM			256
-> Is it better to define these macro in common header file or in extioi=20
-> driver?  It seems that only extioi use it.
-
-Maybe :-) This is a little bit out of scope of this series but I can try
-later.
-
-Thanks
-[...]
-
-[1]: https://github.com/FlyGoat/linux/commit/0a5ee611529d359b4d22eaae22c=
-2b9835c63c63f
-
---=20
-- Jiaxun
 
