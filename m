@@ -1,107 +1,158 @@
-Return-Path: <linux-pm+bounces-14244-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14245-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 096DB978F1D
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 10:28:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BB6F978F2A
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 10:39:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4E63B23011
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 08:28:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C17AD288846
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 08:39:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2D49146018;
-	Sat, 14 Sep 2024 08:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A637146D6F;
+	Sat, 14 Sep 2024 08:39:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="GpuwAhen"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="UD9rh84s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47600126C0B;
-	Sat, 14 Sep 2024 08:28:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726302513; cv=none; b=FJP63+d+2HWZabQ232DpgrfSPAqn6VzSsDSc5I7MVwTuAUSJ9uiYDBd8a9q4FTG3+bPSFHSztexoWIR7H/Y4Gu0rAWklL1rF1Ehd/qvft6VmVWMswKut7yTrjIeVdMCMFupEBW5sxJUgUk6Y4e9/RysTmNWZhpW5iRNM1n7t2qQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726302513; c=relaxed/simple;
-	bh=kvQveuT66+yyOnDl4rid1x8W+VVeD52DRSPkfjMmlN0=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3696433D5;
+	Sat, 14 Sep 2024 08:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726303157; cv=pass; b=srsmMcSIJ+W5XWJ+8EBBu2IyxZcU08+eYhSYu161+XANKyz6Pww7dm0ecBt8sfkvB2QkuDuMkuDeiSITkNGbV/cGQOfEXZKFvsOT9+6cEYhjzTnduRxzhRGbagPkRP5AjCQDjBbf6ke6dcNH1HV1ilNQfr9+zu2XYLkgZKYDBwU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726303157; c=relaxed/simple;
+	bh=pfSJVhTniD/TEI8prxwxup12Sbw+prmH32swhXL3LQ0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hTvxHMPTtLRHoWAoym4pYcbyQBQ0hKC5EexhpRHFHm9Vrh3i2zL5CCnU8An+/UOSPYnbcYi4CadsK0XNZZxDr83ZsCmS4nsiVLWt4N/DoVy3H/ndZpnqEgRotUqSCwCsTeNzHN1/AP2yAtyl4SbdKNYKWPWKPNLIhNhnM0BHwu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=GpuwAhen; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1726302497;
-	bh=kvQveuT66+yyOnDl4rid1x8W+VVeD52DRSPkfjMmlN0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GpuwAhent4UerZY2luprxIre1hzxVuFygJeZXMH4+agi4k2VIYgI5Rgypqhi7kvyZ
-	 Ydc6Jqdra3bMr2a2DiWdZukl1XLwFLI3BA6Ouow35c36RXcCdvxWAfr25mV+/28sWo
-	 CdAd+lVycHVgMCYJoehiyLg2qzTO5Mo7GkTe9iJg=
-Date: Sat, 14 Sep 2024 10:28:16 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Andreas Kemnade <andreas@kemnade.info>
-Cc: sre@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	hns@goldelico.com, stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH] power: supply: sysfs: enable is_writeable check during
- sysfs creation
-Message-ID: <e76a8e70-1a0c-4242-ba96-07590e02c221@t-8ch.de>
-References: <20240914081523.798940-1-andreas@kemnade.info>
+	 Content-Type:Content-Disposition:In-Reply-To; b=La1Z/G55fHQep/l+nANHaaft687CgjRp46uxOd4FJowgEEc448Z5M/opkHf3RtXzbsi0d0+yGb71V/rC4NPx6CNiqKpGqygyikG2qXfzk52snEyqHbJfboD0zkulcjdCBvNXmbgDjLpOGXr/gUZ+ZJ8+rPfeA6D/0luuF0FV14w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=UD9rh84s; arc=pass smtp.client-ip=136.143.188.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1726303126; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=MLOmakQrtsg4TH4ciQgVKKbaYfee0msm0gpHo0IRm2TCR1PjW/dhublzRh0fRtGTGALhk45SIBObhSMIdaclT1VZ9llt1dpmAWq4/rrRaZnP0TlystVIRu8JLbEtT5I9dAY40SMVINghKRE66+gmMtnaXLBPvrGwUkoll0SY1iU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1726303126; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Ej6QX9G1dmM07ksR/FVgVBTC5gPecCY6T1R8JXBXxZk=; 
+	b=QY6lMDWN3HqBg2CDOf4cd+x4CEh43tB3mXTwIHABzoMI9JNSgz3eCEZESG2I+hR6nX15ncOa5pdT8gmwe3yMArbB0phGyXskFZyfoOp4NyvlZWvqyKpCJ2GuN5ZhbcTzbw8Mtg8QOC6CbLtFeId2ZLx38RRRTlrcB5KrD33AbT0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1726303126;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=Ej6QX9G1dmM07ksR/FVgVBTC5gPecCY6T1R8JXBXxZk=;
+	b=UD9rh84s/7G9dAEtd71GxxzLUEpLcscRJ47S8/+Pe+224BS1cdckHNW/uTnB9dg5
+	ie+cQG6VuPJdexJ7jiJPsrCstd7qabLh6ikWCE7quHAz3dCrzp0Zv10KpGsPVcL2ajR
+	EzZkbOiu/30stenQoIDwq5734cnSfpNxAyU85Jbc=
+Received: by mx.zohomail.com with SMTPS id 1726303124615201.60398788551277;
+	Sat, 14 Sep 2024 01:38:44 -0700 (PDT)
+Received: by mercury (Postfix, from userid 1000)
+	id 3FFFB1060578; Sat, 14 Sep 2024 10:38:28 +0200 (CEST)
+Date: Sat, 14 Sep 2024 10:38:28 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Dzmitry Sankouski <dsankouski@gmail.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <quic_jesszhan@quicinc.com>, 
+	Sam Ravnborg <sam@ravnborg.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Simona Vetter <simona@ffwll.ch>, cros-qcom-dts-watchers@chromium.org, 
+	Konrad Dybcio <konradybcio@kernel.org>, Simona Vetter <simona.vetter@ffwll.ch>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-leds@vger.kernel.org, linux-pwm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v4 01/27] power: supply: add undervoltage health status
+ property
+Message-ID: <uta55qswxp43tdziertbwvopytx26kjanouxfffvkjfnhrkwj2@bwoyfygw3pp7>
+References: <20240913-starqltechn_integration_upstream-v4-0-2d2efd5c5877@gmail.com>
+ <20240913-starqltechn_integration_upstream-v4-1-2d2efd5c5877@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="r7xlkoqbyyg5k4lc"
+Content-Disposition: inline
+In-Reply-To: <20240913-starqltechn_integration_upstream-v4-1-2d2efd5c5877@gmail.com>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.3.1/223.982.64
+X-ZohoMailClient: External
+
+
+--r7xlkoqbyyg5k4lc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240914081523.798940-1-andreas@kemnade.info>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andreas,
+Hi,
 
-On 2024-09-14 10:15:23+0000, Andreas Kemnade wrote:
-> The files in sysfs are created during device_add(). psy->use_cnt
-> is not incremented yet. So attributes are created readonly
-> without checking desc->property_is_writeable() and writeable
-> files are readonly.
-> 
-> To fix this, revert back to calling desc->property_is_writeable()
-> directly without using the helper.
-
-Hans noticed the same issue, but fixed it differently [0].
-The problem is that the hwmon registration also uses
-power_supply_property_is_writeable() and has the same issue.
-(Independently from my change)
-
-IMO this is the better fix.
-
-(Plus the renaming and unexporting of the function that I'll add if it
-won't be part of the first fix)
-
-[0] https://lore.kernel.org/all/20240908185337.103696-1-hdegoede@redhat.com/
-
-> Fixes: be6299c6e55e ("power: supply: sysfs: use power_supply_property_is_writeable()")
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> Cc: stable@vger.kernel.org # 6.11
+On Fri, Sep 13, 2024 at 06:07:44PM GMT, Dzmitry Sankouski wrote:
+> Add POWER_SUPPLY_HEALTH_UNDERVOLTAGE status for power supply
+> to report under voltage lockout failures.
+>=20
+> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 > ---
->  drivers/power/supply/power_supply_sysfs.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index 3e63d165b2f70..b86e11bdc07ef 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -379,7 +379,8 @@ static umode_t power_supply_attr_is_visible(struct kobject *kobj,
->  		int property = psy->desc->properties[i];
->  
->  		if (property == attrno) {
-> -			if (power_supply_property_is_writeable(psy, property) > 0)
-> +			if (psy->desc->property_is_writeable &&
-> +			    psy->desc->property_is_writeable(psy, property) > 0)
->  				mode |= S_IWUSR;
->  
->  			return mode;
-> -- 
+
+This is missing updates to
+Documentation/ABI/testing/sysfs-class-power and
+drivers/power/supply/power_supply_sysfs.c
+(POWER_SUPPLY_HEALTH_TEXT).
+
+Greetings,
+
+-- Sebastian
+
+>  include/linux/power_supply.h | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index 910d407ebe63..8682e6466544 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -58,6 +58,7 @@ enum {
+>  	POWER_SUPPLY_HEALTH_OVERHEAT,
+>  	POWER_SUPPLY_HEALTH_DEAD,
+>  	POWER_SUPPLY_HEALTH_OVERVOLTAGE,
+> +	POWER_SUPPLY_HEALTH_UNDERVOLTAGE,
+>  	POWER_SUPPLY_HEALTH_UNSPEC_FAILURE,
+>  	POWER_SUPPLY_HEALTH_COLD,
+>  	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
+>=20
+> --=20
 > 2.39.2
-> 
+>=20
+
+--r7xlkoqbyyg5k4lc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmblS3wACgkQ2O7X88g7
++prRCxAAlhYUU4yJX7NEhfMbNTVWhURSBhobZ62HayXzgdpD6Mq48r79Maug7GC9
+GT0mcYXyGLCZjLkte5Qn0695klYG9JsIWdZqOdQV7fgHhH6gDBkFYghMVv8NVnXF
+Pmcmwc1QOCjmDp37EkvxjXKOc+XNdnVuAlSwpnP3zkXKtexwe3kvZtD3qLToP7vs
+Q+6qA8/9KVvC83i5VqrHUoWdkR514ZI8YcPzjStj6FecIRitH0xtOm9inpeLj1tv
+fFcknMQkRSdNAarhfpZNzFLoyOSpImY/yeUEx3qFUqKNGtDZVkXvWNHVaEEEtxih
++1mX44QV5thBOSuKfuIA0deafptEjaP/eXhQEwS619aqDJd7J+JBmnZAdlmiBLqK
+iEsBgTeThbx7RuOvBvRUVYPlUPG1jpYBgfWT4OT6w7x9tkkfemxU/JT1tXJNmKAp
+onm6UftL9rF/olPVoXIL4AZ8QhsLkGQ+2iDNWaUbcvhWdEAo0AFnJNIRJHdbUT4a
+fPlTrlZ5DO/ufGCPj7rbPehkVjKD/apDK84Dp8mQrIjlzuxqMacWFBv0Szrj9k4L
+ZpUae4iBOygN1fXd6M8w3SvZw+9JOixLL/1vm2Av8vJwMYUUt4eNInyN4Pr1cjMh
+Rd6zPpSmphSU+AgGnN70hqkRetW7+zUoyFzoKWtQeWApkEdHhVE=
+=Gfk0
+-----END PGP SIGNATURE-----
+
+--r7xlkoqbyyg5k4lc--
 
