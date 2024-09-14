@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-14275-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14274-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F0EA979049
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 13:09:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5174979047
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 13:09:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91DE81F234BA
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 11:09:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 778012856B7
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 11:09:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C6C1CF288;
-	Sat, 14 Sep 2024 11:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B28521CEEAF;
+	Sat, 14 Sep 2024 11:09:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="dV6U00Me"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="eRGuhE01"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C848E1CEE87;
-	Sat, 14 Sep 2024 11:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADDF61CEAA9;
+	Sat, 14 Sep 2024 11:09:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726312152; cv=none; b=n0VGMmjYkB7MWboH2o14f9sLBIRYJIPrGNKT7wWzRgc9+GOEQzi6zmOcmXXZd1EE0kdObEHIKBrzkbg/HrvX7n1kgTDv5nycW5yhhN+TO1T5GE0u4UivfFdOtB1cf2T0wZxbm7AQSLpEtVTgadOKl/nPULNktAWtepkbzLU5/E8=
+	t=1726312151; cv=none; b=cvRdaEE1Oq2idzLZJDl8ZhNm4rraNLMNhKMezfPojw0kMUFPDcJ7ai/RWEhFuCewm3L93rOwKFsDjm4DCfYlPQ+cnqTLSVZhfGIt7YzDv6T4t2TMO0+TviMV6mU216trJeQevXOpETV6YHzhGSL7SOO1U84JAKxw8oXI+SsIf7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726312152; c=relaxed/simple;
-	bh=w8kkdEpj36L90ciznlhiK8sldUmkY+C4hInsCITqYWg=;
+	s=arc-20240116; t=1726312151; c=relaxed/simple;
+	bh=sq2UmYbbnOGBr85+l3Ku3qnhEozpZ2jyvuuLubWqfKQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Est2dlChIaluwEPdHKtL73Bl/Kcj+vc+9hdIYvv6kKqmdz//ME/fTObS0X26VgjKbDSvaQ7ThGUqY5sYQ8+ibwmFS5swnHrXwayMbhbvr9bcTZwk5SVAKojw0iKeIyH3V/2pS6Y6RWAo7YNIgVgEqX/DYU7SwF9yhmscmc21iu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=dV6U00Me reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=q5kI0IFb4DYtMW7x+2wRdW1yp1cyT5QnQr8ltnG/CrlUNoRDKZqzNNXHDHv3jOFRluPn+O85eatz18a5Ey6ULqHs7bLiwf+c3vNUuKWgg9/J+UhTcKvLDyFocW7Z+iBzM+k///gsla8y3CMr5dO+pP69aYwSLQlNNxKRhiCQxHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=eRGuhE01 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id e52e580cb7d3fbf3; Sat, 14 Sep 2024 13:09:08 +0200
+ id d45f49d283229167; Sat, 14 Sep 2024 13:09:07 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 4DF918532AE;
-	Sat, 14 Sep 2024 13:09:08 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 442BF853358;
+	Sat, 14 Sep 2024 13:09:07 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1726312148;
-	bh=w8kkdEpj36L90ciznlhiK8sldUmkY+C4hInsCITqYWg=;
+	s=dkim; t=1726312147;
+	bh=sq2UmYbbnOGBr85+l3Ku3qnhEozpZ2jyvuuLubWqfKQ=;
 	h=From:Subject:Date;
-	b=dV6U00MeRxkvTex/wF/NTmcthJps7rv4EozLHbeb63VWw8IhAN4tl2P+dJkuKkY4h
-	 S64WQrJGTK+81uXuFS7+6oBzOB4Ben5ORZ8QxD9urRNih3yc2AsD6HqQsiZ28jCw4A
-	 fkyiUxzyKw7/R4oDu4kScaDDkCvchdCWL+goCPoxH5rQVO9E2OdbDaWh4bLhiyIGvW
-	 VcEmg9K3ttkXJe9hbxci7xrywkf2gb0aZIecOf7o5qOeGLFao5+IzjgS+S24yc1pwr
-	 AMBX9ZGgP3HZ4QXjoUmyg1IOIllkWZvgOXkv/JMuBy0wur3LfunwQ8dqFpWRsBQE98
-	 WS3qeSuJBhpCQ==
+	b=eRGuhE01zhmibwHIvieYYdaLcSFQid7rGN2ag/5mfi8jiiX342yrdaWjPfNhwFexl
+	 7zlj1rrMlXJASmyjCPk7RlnUJKP4B/N+VNTbrr7cTcHkPSRR63T66ydUQTdQ9d15og
+	 Q7FLdzfBAZH2L2eik3AFnu/kndqwlYEaXkZPg5/Ue5VW3xQvWpop0LafJWGpICC6oC
+	 btUrqUL2Ge1Cn+WS7V6F9d6n3KfN7YUvSsQgG1m9aMrsb23VN/BaDZWpNp5yQaJ0FQ
+	 sBcuXCI49muP2wiqWg5yZyfWPsgcjwgBkg4zW4MiO2gKdHgKDLwuK40joyoUkq05p0
+	 6BXrkacORofBA==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>,
  Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>
 Subject:
- [RFC PATCH for 6.13 v1 05/20] thermal: core: Fix race between zone
- registration and system suspend
-Date: Sat, 14 Sep 2024 12:31:28 +0200
-Message-ID: <3335807.44csPzL39Z@rjwysocki.net>
+ [RFC PATCH for 6.13 v1 06/20] thermal: core: Consolidate thermal zone locking
+ during initialization
+Date: Sat, 14 Sep 2024 12:32:45 +0200
+Message-ID: <10548633.nUPlyArG6x@rjwysocki.net>
 In-Reply-To: <6100907.lOV4Wx5bFT@rjwysocki.net>
 References: <6100907.lOV4Wx5bFT@rjwysocki.net>
 Precedence: bulk
@@ -79,82 +79,125 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=35 Fuz1=35 Fuz2=35
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-If the registration of a thermal zone takes place at the same time when
-system suspend is started, thermal_pm_notify() can run before the new
-thermal zone is added to thermal_tz_list and its "suspended" flag will
-not be set.  Consequently, if __thermal_zone_device_update() is called
-for that thermal zone, it will not return early as expected which may
-cause some destructive interference with the system suspend or resume
-flow to occur.
+The part of thermal zone initialization carried out under
+thermal_list_lock acquires the thermal zone lock and releases it
+multiple times back-to-back which is not really necessary.
 
-To avoid that, make thermal_zone_init_complete() introduced previously
-set the "suspended" flag for new thermal zones if it runs during system
-suspend or resume.
+Instead of doing this, acquire the thermal zone lock once after
+acquiring thermal_list_lock and release it along with that lock.
+
+For this purpose, move all of the code in question to
+thermal_zone_init_complete() introduced previously and provide an
+"unloacked" variant of thermal_zone_cdev_bind() to be invoked from
+there.
+
+No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/thermal_core.c |   18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ drivers/thermal/thermal_core.c |   40 ++++++++++++++++++++--------------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
 Index: linux-pm/drivers/thermal/thermal_core.c
 ===================================================================
 --- linux-pm.orig/drivers/thermal/thermal_core.c
 +++ linux-pm/drivers/thermal/thermal_core.c
-@@ -39,6 +39,8 @@ static DEFINE_MUTEX(thermal_governor_loc
- 
- static struct thermal_governor *def_governor;
- 
-+static bool thermal_pm_suspended;
-+
- /*
-  * Governor section: set of functions to handle thermal governors
-  *
-@@ -1323,6 +1325,14 @@ static void thermal_zone_init_complete(s
- 	guard(thermal_zone)(tz);
- 
- 	tz->state &= ~TZ_STATE_FLAG_INIT;
-+	/*
-+	 * If system suspend or resume is in progress at this point, the
-+	 * new thermal zone needs to be marked as suspended because
-+	 * thermal_pm_notify() has run already.
-+	 */
-+	if (thermal_pm_suspended)
-+		tz->state |= TZ_STATE_FLAG_SUSPENDED;
-+
- 	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+@@ -919,16 +919,14 @@ void print_bind_err_msg(struct thermal_z
+ 		cdev->type, thermal_zone_trip_id(tz, &td->trip), ret);
  }
  
-@@ -1494,10 +1504,10 @@ thermal_zone_device_register_with_trips(
- 	list_for_each_entry(cdev, &thermal_cdev_list, node)
- 		thermal_zone_cdev_bind(tz, cdev);
+-static void thermal_zone_cdev_bind(struct thermal_zone_device *tz,
+-				   struct thermal_cooling_device *cdev)
++static void __thermal_zone_cdev_bind(struct thermal_zone_device *tz,
++				     struct thermal_cooling_device *cdev)
+ {
+ 	struct thermal_trip_desc *td;
  
--	mutex_unlock(&thermal_list_lock);
+ 	if (!tz->ops.should_bind)
+ 		return;
+ 
+-	guard(thermal_zone)(tz);
+-
+ 	for_each_trip_desc(tz, td) {
+ 		struct cooling_spec c = {
+ 			.upper = THERMAL_NO_LIMIT,
+@@ -946,6 +944,14 @@ static void thermal_zone_cdev_bind(struc
+ 	}
+ }
+ 
++static void thermal_zone_cdev_bind(struct thermal_zone_device *tz,
++				   struct thermal_cooling_device *cdev)
++{
++	guard(thermal_zone)(tz);
++
++	__thermal_zone_cdev_bind(tz, cdev);
++}
++
+ /**
+  * __thermal_cooling_device_register() - register a new thermal cooling device
+  * @np:		a pointer to a device tree node.
+@@ -1313,17 +1319,20 @@ int thermal_zone_get_crit_temp(struct th
+ }
+ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
+ 
+-static void thermal_zone_add_to_list(struct thermal_zone_device *tz)
++static void thermal_zone_init_complete(struct thermal_zone_device *tz)
+ {
+-	guard(thermal_zone)(tz);
++	struct thermal_cooling_device *cdev;
++
++	mutex_lock(&thermal_list_lock);
+ 
+ 	list_add_tail(&tz->node, &thermal_tz_list);
+-}
+ 
+-static void thermal_zone_init_complete(struct thermal_zone_device *tz)
+-{
+ 	guard(thermal_zone)(tz);
+ 
++	/* Bind cooling devices for this zone. */
++	list_for_each_entry(cdev, &thermal_cdev_list, node)
++		__thermal_zone_cdev_bind(tz, cdev);
++
+ 	tz->state &= ~TZ_STATE_FLAG_INIT;
+ 	/*
+ 	 * If system suspend or resume is in progress at this point, the
+@@ -1334,6 +1343,8 @@ static void thermal_zone_init_complete(s
+ 		tz->state |= TZ_STATE_FLAG_SUSPENDED;
+ 
+ 	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
++
++	mutex_unlock(&thermal_list_lock);
+ }
+ 
+ /**
+@@ -1370,7 +1381,6 @@ thermal_zone_device_register_with_trips(
+ 					unsigned int polling_delay)
+ {
+ 	const struct thermal_trip *trip = trips;
+-	struct thermal_cooling_device *cdev;
+ 	struct thermal_zone_device *tz;
+ 	struct thermal_trip_desc *td;
+ 	int id;
+@@ -1496,18 +1506,8 @@ thermal_zone_device_register_with_trips(
+ 			goto unregister;
+ 	}
+ 
+-	mutex_lock(&thermal_list_lock);
+-
+-	thermal_zone_add_to_list(tz);
+-
+-	/* Bind cooling devices for this zone */
+-	list_for_each_entry(cdev, &thermal_cdev_list, node)
+-		thermal_zone_cdev_bind(tz, cdev);
 -
  	thermal_zone_init_complete(tz);
  
-+	mutex_unlock(&thermal_list_lock);
-+
+-	mutex_unlock(&thermal_list_lock);
+-
  	thermal_notify_tz_create(tz);
  
  	thermal_debug_tz_add(tz);
-@@ -1718,6 +1728,8 @@ static int thermal_pm_notify(struct noti
- 	case PM_SUSPEND_PREPARE:
- 		mutex_lock(&thermal_list_lock);
- 
-+		thermal_pm_suspended = true;
-+
- 		list_for_each_entry(tz, &thermal_tz_list, node)
- 			thermal_zone_pm_prepare(tz);
- 
-@@ -1728,6 +1740,8 @@ static int thermal_pm_notify(struct noti
- 	case PM_POST_SUSPEND:
- 		mutex_lock(&thermal_list_lock);
- 
-+		thermal_pm_suspended = false;
-+
- 		list_for_each_entry(tz, &thermal_tz_list, node)
- 			thermal_zone_pm_complete(tz);
- 
 
 
 
