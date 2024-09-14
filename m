@@ -1,65 +1,64 @@
-Return-Path: <linux-pm+bounces-14279-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14278-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A84B97905A
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 13:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F0071979059
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 13:14:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D2571C22A6A
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 11:14:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15F361C20E2A
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Sep 2024 11:14:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E31B1CF2B1;
-	Sat, 14 Sep 2024 11:14:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 802C71CEEB8;
+	Sat, 14 Sep 2024 11:14:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="q7Z2q5zH"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="ZkcvyjT8"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C601DA5E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E5B7A15A;
 	Sat, 14 Sep 2024 11:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726312444; cv=none; b=HHYWL9R7dGn32p1O/dmncNteHPJj7GIN+YjVHZg3X4yr0HiTPXoeVFPKHNRUowabsDF0+vwrQ4FYikF41IrkKmUSk/5ZjDZ2UmMCFHch4NtMBdK2aRRLQVaEYhI+xCEuLdfqx3Nw1O4SyDddnUoZc2boYIK66td/7XZj1sJkZ1I=
+	t=1726312443; cv=none; b=HES8K190u0tpoTitrA+uyeRgm0K/jU89psJfvzKp4ETKiMzfXXiDsgP5BZyJt+oaIGBPhcXFu5M1uL1KL+qakud4rPohpF4E6/aYBkm1J3e7PNAaKgp8gJl2iE2aEIi6wkj+knlU9x18znqU4rl3sQMe7269bwvi7XUZBsrYix0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726312444; c=relaxed/simple;
-	bh=IlQgOKwKcriIkpiTmpqGXxTu1Frf5sbwkloQzYZPnSQ=;
+	s=arc-20240116; t=1726312443; c=relaxed/simple;
+	bh=FdlwvppnGhrvw2CWlzVf8Z4HuHTXJ0bu2PxvguLALyo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E+JTBXfMLay+hm6hNQxEcnToVfex0FL2xMLY3XH2EIGhZJNJMutKfd0cjddIvWxlEa9c3F/lyfhqJihvOE0n7D+X9wLDA7boNJ8xuf63EegdRTG8+sguH3R73ZgM5idrevl0jO1e9NPUnllo09JltDZVI/tWROfXz+/KG+UesDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=q7Z2q5zH reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=UQjW1SepfTw7Hg8ZageKQ/nxMZvdXl0sOhSRS/B1xa0SW5eO5jj/NHGOL4hE0f/VRtmWnrPSZ4Z7lTmzYwvVFJpJoNhwCPWLjRAfk+f+9PgVUVSzwPsWbZxje2QiQw3SaHcttKjIojKwY5OY5MsFOJ0Xhq/xd42IAd2AWPFvzqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=ZkcvyjT8 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.0)
- id b6bb8940ca4bfd4e; Sat, 14 Sep 2024 13:14:00 +0200
+ id 500d8a0d6220b94c; Sat, 14 Sep 2024 13:13:59 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id CDD2C8532AE;
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 0E95D8532AE;
 	Sat, 14 Sep 2024 13:13:59 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1726312440;
-	bh=IlQgOKwKcriIkpiTmpqGXxTu1Frf5sbwkloQzYZPnSQ=;
+	s=dkim; t=1726312439;
+	bh=FdlwvppnGhrvw2CWlzVf8Z4HuHTXJ0bu2PxvguLALyo=;
 	h=From:Subject:Date;
-	b=q7Z2q5zH9AKEBmD4ZyzfRBukAT/LzrP4Abf+oEHTz4YlYTiwqEyfM+jV8wrmIEu57
-	 aJF873KS7jEFHuOdpOzJ2nLXcK3gM9dAM0DsFsdQAtc5ykYMcThlEmeCpL2RHgVDYK
-	 t4ZhiCFXfCyoNJqSHA2CY0/U+KFMBJIdBTVAQvEb8PfIFitqZokf9rREosM4UlJ/Tu
-	 MIEgSy64DJ511xWBFTG3lWVDhflERGuUNt83A73/ZCTVSN5cx2pam5AdkciQRO7j5R
-	 /jmaHeewqEzkerg7/UTdiPDrRFL8tfnXag7jNYnjCxQSeZ3QCiKlexwydyNFJUl+sS
-	 vSS/krDZb6l/w==
+	b=ZkcvyjT8J516BckV0W81lZy0ds0iQunUyoKC4tCXGXyq21t68aCCjIIjniWhJUJ3+
+	 5LQJV9LWOsX6Nu5aGp6GUgE1lXavWx95OtNABBcHRCjpI666IU3MXs3mf4U/DCW3LS
+	 V4TfD5xXEh/NoOt9DVi/XUjFtvg8B3/pTt8H0mx2Ts5Stmtj0uqiG+E+WFtLJOHsTU
+	 auawDa7NLS0uI9dxGUNA5ysamFrq65vzMaOexKyScefoWlmjktKcWeh06mOwDTATfc
+	 k4JX+jfg3TiULb79nFismyUdtyICPOCfcEy6wqHKZKBuo76ibwaApCCIBBQXU+2CEI
+	 63cz0LIpfVyiw==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>,
  Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>
 Subject:
- [RFC PATCH for 6.13 v1 01/20] thermal: core: Use the thermal zone guard in
- more cases
-Date: Sat, 14 Sep 2024 12:25:53 +0200
-Message-ID: <4613601.LvFx2qVVIh@rjwysocki.net>
+ [RFC PATCH for 6.13 v1 02/20] thermal: core: Rearrange PM notification code
+Date: Sat, 14 Sep 2024 12:27:17 +0200
+Message-ID: <4940614.GXAFRqVoOG@rjwysocki.net>
 In-Reply-To: <6100907.lOV4Wx5bFT@rjwysocki.net>
 References: <6100907.lOV4Wx5bFT@rjwysocki.net>
 Precedence: bulk
@@ -73,160 +72,135 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: spam:low
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrudektddgfeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucfuphgrmhfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphht
- thhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomh
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrudektddgfeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuphgrmhfkphculdeftddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuufhprghmkfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdr
+ tghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
 X-DCC--Metrics: v370.home.net.pl 1024; Body=45 Fuz1=45 Fuz2=45
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-There are a few more cases in which the thermal zone guard introduced
-previously can be used to help clarify the code, so do that.
+Move the code run for each thermal zone by the thermal PM notify
+handler to separate functions and use the thermal zone guard to
+implement locking in them.
+
+This will help to make some subsequent changes look somewhat more
+straightforward, among other things.
 
 No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
+ drivers/thermal/thermal_core.c |   84 ++++++++++++++++++++---------------------
+ 1 file changed, 42 insertions(+), 42 deletions(-)
 
-To be merged with https://lore.kernel.org/linux-pm/3241904.5fSG56mABF@rjwysocki.net/
-
----
- drivers/thermal/thermal_debugfs.c |   25 +++++++++++++++----------
- drivers/thermal/thermal_hwmon.c   |    6 +-----
- drivers/thermal/thermal_netlink.c |   21 ++++++---------------
- 3 files changed, 22 insertions(+), 30 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_netlink.c
+Index: linux-pm/drivers/thermal/thermal_core.c
 ===================================================================
---- linux-pm.orig/drivers/thermal/thermal_netlink.c
-+++ linux-pm/drivers/thermal/thermal_netlink.c
-@@ -460,7 +460,7 @@ static int thermal_genl_cmd_tz_get_trip(
- 	if (!start_trip)
- 		return -EMSGSIZE;
- 
--	mutex_lock(&tz->lock);
-+	guard(thermal_zone)(tz);
- 
- 	for_each_trip_desc(tz, td) {
- 		const struct thermal_trip *trip = &td->trip;
-@@ -470,19 +470,12 @@ static int thermal_genl_cmd_tz_get_trip(
- 		    nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_TYPE, trip->type) ||
- 		    nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_TEMP, trip->temperature) ||
- 		    nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_HYST, trip->hysteresis))
--			goto out_cancel_nest;
-+			return -EMSGSIZE;
- 	}
- 
--	mutex_unlock(&tz->lock);
--
- 	nla_nest_end(msg, start_trip);
- 
- 	return 0;
--
--out_cancel_nest:
--	mutex_unlock(&tz->lock);
--
--	return -EMSGSIZE;
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -1662,6 +1662,44 @@ static void thermal_zone_device_resume(s
+ 	tz->resuming = false;
  }
  
- static int thermal_genl_cmd_tz_get_temp(struct param *p)
-@@ -515,7 +508,7 @@ static int thermal_genl_cmd_tz_get_gov(s
- {
- 	struct sk_buff *msg = p->msg;
- 	struct thermal_zone_device *tz;
--	int id, ret = 0;
-+	int id;
- 
- 	if (!p->attrs[THERMAL_GENL_ATTR_TZ_ID])
- 		return -EINVAL;
-@@ -526,16 +519,14 @@ static int thermal_genl_cmd_tz_get_gov(s
- 	if (!tz)
- 		return -EINVAL;
- 
--	mutex_lock(&tz->lock);
-+	guard(thermal_zone)(tz);
- 
- 	if (nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_ID, id) ||
- 	    nla_put_string(msg, THERMAL_GENL_ATTR_TZ_GOV_NAME,
- 			   tz->governor->name))
--		ret = -EMSGSIZE;
--
--	mutex_unlock(&tz->lock);
-+		return -EMSGSIZE;
- 
--	return ret;
-+	return 0;
- }
- 
- static int __thermal_genl_cmd_cdev_get(struct thermal_cooling_device *cdev,
-Index: linux-pm/drivers/thermal/thermal_debugfs.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_debugfs.c
-+++ linux-pm/drivers/thermal/thermal_debugfs.c
-@@ -885,6 +885,19 @@ void thermal_debug_tz_add(struct thermal
- 	tz->debugfs = thermal_dbg;
- }
- 
-+static struct thermal_debugfs *thermal_debug_tz_clear(struct thermal_zone_device *tz)
++static void thermal_zone_pm_prepare(struct thermal_zone_device *tz)
 +{
-+	struct thermal_debugfs *thermal_dbg;
-+
 +	guard(thermal_zone)(tz);
 +
-+	thermal_dbg = tz->debugfs;
-+	if (thermal_dbg)
-+		tz->debugfs = NULL;
++	if (tz->resuming) {
++		/*
++		 * thermal_zone_device_resume() queued up for this zone has not
++		 * acquired the lock yet, so release it to let the function run
++		 * and wait util it has done the work.
++		 */
++		mutex_unlock(&tz->lock);
 +
-+	return thermal_dbg;
++		wait_for_completion(&tz->resume);
++
++		mutex_lock(&tz->lock);
++	}
++
++	tz->suspended = true;
 +}
 +
- void thermal_debug_tz_remove(struct thermal_zone_device *tz)
- {
- 	struct thermal_debugfs *thermal_dbg;
-@@ -892,17 +905,9 @@ void thermal_debug_tz_remove(struct ther
- 	struct tz_debugfs *tz_dbg;
- 	int *trips_crossed;
- 
--	mutex_lock(&tz->lock);
--
--	thermal_dbg = tz->debugfs;
--	if (!thermal_dbg) {
--		mutex_unlock(&tz->lock);
-+	thermal_dbg = thermal_debug_tz_clear(tz);
-+	if (!thermal_dbg)
- 		return;
--	}
--
--	tz->debugfs = NULL;
--
--	mutex_unlock(&tz->lock);
- 
- 	tz_dbg = &thermal_dbg->tz_dbg;
- 
-Index: linux-pm/drivers/thermal/thermal_hwmon.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_hwmon.c
-+++ linux-pm/drivers/thermal/thermal_hwmon.c
-@@ -78,19 +78,15 @@ temp_crit_show(struct device *dev, struc
- 	int temperature;
- 	int ret;
- 
--	mutex_lock(&tz->lock);
++static void thermal_zone_pm_complete(struct thermal_zone_device *tz)
++{
 +	guard(thermal_zone)(tz);
- 
- 	ret = tz->ops.get_crit_temp(tz, &temperature);
--
--	mutex_unlock(&tz->lock);
--
- 	if (ret)
- 		return ret;
- 
- 	return sprintf(buf, "%d\n", temperature);
- }
- 
--
- static struct thermal_hwmon_device *
- thermal_hwmon_lookup_by_type(const struct thermal_zone_device *tz)
++
++	cancel_delayed_work(&tz->poll_queue);
++
++	reinit_completion(&tz->resume);
++	tz->resuming = true;
++
++	/*
++	 * Replace the work function with the resume one, which will restore the
++	 * original work function and schedule the polling work if needed.
++	 */
++	INIT_DELAYED_WORK(&tz->poll_queue, thermal_zone_device_resume);
++	/* Queue up the work without a delay. */
++	mod_delayed_work(system_freezable_power_efficient_wq, &tz->poll_queue, 0);
++}
++
+ static int thermal_pm_notify(struct notifier_block *nb,
+ 			     unsigned long mode, void *_unused)
  {
+@@ -1673,27 +1711,8 @@ static int thermal_pm_notify(struct noti
+ 	case PM_SUSPEND_PREPARE:
+ 		mutex_lock(&thermal_list_lock);
+ 
+-		list_for_each_entry(tz, &thermal_tz_list, node) {
+-			mutex_lock(&tz->lock);
+-
+-			if (tz->resuming) {
+-				/*
+-				 * thermal_zone_device_resume() queued up for
+-				 * this zone has not acquired the lock yet, so
+-				 * release it to let the function run and wait
+-				 * util it has done the work.
+-				 */
+-				mutex_unlock(&tz->lock);
+-
+-				wait_for_completion(&tz->resume);
+-
+-				mutex_lock(&tz->lock);
+-			}
+-
+-			tz->suspended = true;
+-
+-			mutex_unlock(&tz->lock);
+-		}
++		list_for_each_entry(tz, &thermal_tz_list, node)
++			thermal_zone_pm_prepare(tz);
+ 
+ 		mutex_unlock(&thermal_list_lock);
+ 		break;
+@@ -1702,27 +1721,8 @@ static int thermal_pm_notify(struct noti
+ 	case PM_POST_SUSPEND:
+ 		mutex_lock(&thermal_list_lock);
+ 
+-		list_for_each_entry(tz, &thermal_tz_list, node) {
+-			mutex_lock(&tz->lock);
+-
+-			cancel_delayed_work(&tz->poll_queue);
+-
+-			reinit_completion(&tz->resume);
+-			tz->resuming = true;
+-
+-			/*
+-			 * Replace the work function with the resume one, which
+-			 * will restore the original work function and schedule
+-			 * the polling work if needed.
+-			 */
+-			INIT_DELAYED_WORK(&tz->poll_queue,
+-					  thermal_zone_device_resume);
+-			/* Queue up the work without a delay. */
+-			mod_delayed_work(system_freezable_power_efficient_wq,
+-					 &tz->poll_queue, 0);
+-
+-			mutex_unlock(&tz->lock);
+-		}
++		list_for_each_entry(tz, &thermal_tz_list, node)
++			thermal_zone_pm_complete(tz);
+ 
+ 		mutex_unlock(&thermal_list_lock);
+ 		break;
 
 
 
