@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-14293-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14294-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 315CD979549
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Sep 2024 10:08:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9A09979550
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Sep 2024 10:08:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 643871C212B5
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Sep 2024 08:08:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F769282995
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Sep 2024 08:08:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47E22381AD;
-	Sun, 15 Sep 2024 08:08:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C59B54757;
+	Sun, 15 Sep 2024 08:08:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GuKF0fB7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JMp9blUO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC47247A73;
-	Sun, 15 Sep 2024 08:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A7C4DA00;
+	Sun, 15 Sep 2024 08:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726387694; cv=none; b=WwvK4fypVXTPikOC3FaGZhDJvQiprr1yUMSxlYa7nUK39dFyfhmBd+Ma1SETNUnbqr5URHxv6jfphZhRQQ2vFA5eh2HU/TWuzJ6UF8eRkiGEB+zrRnRkk0K6Mk3DY/Soox8uGXZZGVd8KdTK9gP1XysuD6SpNlg/tr9sMwk642k=
+	t=1726387700; cv=none; b=V9ezC58GG01sr3lw6Qw0kJ3+DHJUcdNtSGMg8v0GkJFlneMp4sGKhhFCEq4K/7sN+yhjhPoGgbUDFTvw+XVZ1IQlbflRfSslruYGITmAosHMVPWWkR53kk4p+XW7wa0/w2O/u59Q/FRRdTSJQypv+aUMISh+GM5B2M0Om/GHu98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726387694; c=relaxed/simple;
-	bh=D9QNipp2Cu8jdxZF2ATT6QNQY1AaJfGlXa9a8v3AUeI=;
+	s=arc-20240116; t=1726387700; c=relaxed/simple;
+	bh=wjv7S2defJHb4w2LIijyyI7ICLEtDGHr6+Y7Ed98jvI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K5mLYeOf1H0zidEEOrw8s6TFZJ2y8qehpHxNSqS8fJCBNrM7EtMAYDHEYcPnkMOotZlcPIdNhdWvRxzVBnnYyeOB12B1oUWdjAwHhp/ZGCxrtd0vp7DipgYgqmi4yECotDJsCgtwMn1h2iIh2SM21xdzsO/ZpRd7FcUkaPGg9to=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GuKF0fB7; arc=none smtp.client-ip=209.85.214.176
+	 MIME-Version; b=WDf80XEEp0M51aA7tgwCwp0gAi2mTUKoi6lRTFFQ9Ai/LZLayJQjDGIdA5QTnb1F9Wyc9freHLALSdYu52Ya0LuIBcror7S6jHdaipO4HHm6z15B6MuDi2FpcBeeyTPgGzPrqvAfcSbsgD4f8W//8Cjf4YoGPeANx2acA0nd0cI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JMp9blUO; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-20696938f86so28433985ad.3;
-        Sun, 15 Sep 2024 01:08:12 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2055a3f80a4so23247305ad.2;
+        Sun, 15 Sep 2024 01:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726387692; x=1726992492; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726387698; x=1726992498; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yMfm635R2ZedUv0K9CBomURZ5/GwgVeWzLysAHmmerM=;
-        b=GuKF0fB78Dulv5kg0EeiIPcp72vf0vQds6QnZ98epGcDYZioraZtlY9+mlAUIsdbjl
-         jRavfFcXh+0fZmde9M0ofvLRvHzJVM5vdSTV9VeXjb4jwU3pnJ8Mwk1DOfRYQsA7GhYw
-         3wfOn8sEMxwmkvzxDEllKnwzZnUcs3Zqg0LY/t4hoL5gxCMXYq+VwU+MSTVtfIyg/DxL
-         TV9PuUYrSQMhpvWc0fbR2HVIvGPKxSa+x2phf3BcAzkbmB4xlUi0xK02Q72+ec520qew
-         CXiFJKMBMJFuE2Bhbl+LfL/or0LjDDTZt67aZAFssGDuiiI4VMxD4HuvU3jr+moBiP3P
-         H35A==
+        bh=drlfe7ijxNosG2VKP6kf49hdRW10I7zx+SACXHP4QNc=;
+        b=JMp9blUOoI0TsJuOYTyh3ksueXt9EpqiBLU319q2aAs9RHm4m5FdG5P+yhAAoAvfhI
+         tMFXuTUzVQC+EJ97M/g2khy/ZqDkWetwaPnBR+302F4lkQRINQ+H/+BxWUAhRiZJAqQD
+         vPvfP8IVTNWqAFpbkZPqnwZ5hECMxgaxsgsiyKFmKN+2IU7EeaEgsAXYXqmXA3kQUwmz
+         TSmhbOT/viABbi5rmlJM0qqPo1VejLaJ9W6MybvVFEWIXzpitfj+dYZEulrycGrOIFu2
+         1Jl+3zCFZVEorUThiAM8jvNOAr6go6YyXRjPv7/pjF2VSvboW31h1FKtyMqKTWjx4SUK
+         3t4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726387692; x=1726992492;
+        d=1e100.net; s=20230601; t=1726387698; x=1726992498;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yMfm635R2ZedUv0K9CBomURZ5/GwgVeWzLysAHmmerM=;
-        b=V7FA02/4o0FGbNkA6/NzJ4K+mIZYxcC7TcKDYUrLA5dx22VRpDYfu0tjreSBznrw0y
-         n0DvbRC/0l6OqICbiOLse/sQpCV/mbtrqy4+uIbrRcP53ko4aA8bUgjmmZsb+X4Dn5/j
-         sSR7EIfhY/aJDNT6PAJjz3UGFIYUXGSNfkYqWl20Tp2gUWvY7mJW0aOSiUCKuOVeN/qm
-         51H14KIqXsuuvNe2j+WZ96H9D1pv/hmWUBgisdznhUUGlmB6G0IVjjc0Gz1XD61EPCWW
-         F11Z+zvj9OmFOLFUgtgOF1iaF1z61QdmT+diFiKh7mhoqx3Y/ky08RtqX56mgJ8zXHdV
-         2bbA==
-X-Forwarded-Encrypted: i=1; AJvYcCV2FAo1xSgdo5G8ze/kzVWbh/wz63srMxaenSeTNXvdtUyA74kmos/gBVL+AdR947XUbgyOQnFF+VQ=@vger.kernel.org, AJvYcCVdpPqpCQekproSr4411sXcxlnjr8z8Jald+vSiR/bTyrz1XLwEt+uMc3LJwczzDvyROw+idKRfoUU8XRj/@vger.kernel.org, AJvYcCX/seeJ3Yv92tA51Zoino4apo3DmtJ+iG20XK7pMGh9X8LJ4V5mMjf3Oeyfn5oIGpgb4FbO4LpBtz4+iQ==@vger.kernel.org, AJvYcCXCX+Il0GkgGVUSisB0bq/yFEw+0YqVAPhrHtQ7diROSc4TIfL4V4W99RyTzl4wcksDBa39XN394Hpgnipu62Q=@vger.kernel.org, AJvYcCXlrBG69aqmRYsnkxlsejRdIbN00ZJazsSk/dvwG+5pscGTSsA5JvVRZT9oTUlhvUU+3wMdWu4+FPsl@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYUTQc6HT5Qy4aiDLSHQLeYe88azyyZQwen8UqRibmTyXqBQbH
-	ctzZC8tOeFSNl4WW/HU7ztxJHWpNQkgibne2ntniXDz7ACFt43Gf
-X-Google-Smtp-Source: AGHT+IE/qszh+sXon9hFkSl0gzu7I4zOgWGsTfpxsj9vDQNvhH4nPsnn+vWNd3I1POQPX7CS1BPQRg==
-X-Received: by 2002:a17:903:2302:b0:207:6e8:1d84 with SMTP id d9443c01a7336-2076e415244mr193313555ad.42.1726387691965;
-        Sun, 15 Sep 2024 01:08:11 -0700 (PDT)
+        bh=drlfe7ijxNosG2VKP6kf49hdRW10I7zx+SACXHP4QNc=;
+        b=gnE+QCkgwJUWQDfHvJu5cv3oqQxouvO0JX/EO78rXhSJIHDH01qizuwGgJlVHfzohq
+         2dmTjr9mWB31jO6bKB+2DKQy2ssBZd6CH5yIbB1gmlHYSMsrRJ6WEjUY2yT6IbFOvbOM
+         feldkeGHoPJG+4BAYY0R11H/7t9lKPsZd+VeYInu6fpbgMCIwZ0xcVIVId63es/yje3/
+         As9xWYAbVHlNvMUc5mZc2+nFn5i86Xh1fyFFTLRDZ1noIrkFE795XVKAkYpI3mIlUp+S
+         d1bfn4nmTniL9c748jAb6/XSVUgqieRi8DqmwkWVpMfbZVhpTnM/O/LLQa0o9jrYslG6
+         qPig==
+X-Forwarded-Encrypted: i=1; AJvYcCUrrenOATHPk0nB9KTXxPFgphmS4CO+qyTEG0iVuyosxTwnBenBSRm75B6FDLjw+a7G2Qe3A+i3dDSHsnZb@vger.kernel.org, AJvYcCVR4+0+X0PWIEy5eZkIuEgZv8X/+HWg/lSumgsaXd5t61KNffVrButvPEMwUIeq7Cl/0OYNrAVlMkgPpw==@vger.kernel.org, AJvYcCWWZn2JBjHpSUqvgkY3G5DOYD7J4AdhLDW6LTNahqTtuN+yNVtd5J0rMh9LQaAt/UKjFFJGejmJhqRC@vger.kernel.org, AJvYcCWnZajKkuVL7Ctma7E7XzCdya2QNkTTuWwb2YVucpFWeGGsJXkoJT7BJhlyOPvm4XkMKtT8zL4F8cwRy0GbqTE=@vger.kernel.org, AJvYcCXgW/2Y1qhNAvCciKxN5POG+WtSwyi04lxKJbhug7GVUShIByu0Jjf9rAv5TqIdkTVGUK4hNAX81U8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0hdh5qZ9Wyk9WCIp/2mvl/tDD/ReyA0l3SPdKIqxplpbOr9Mq
+	8+O6wH6qCiFCfhbRFluFKVpPOTj8V0WTOaq1U5GpagVYARuVtBPH
+X-Google-Smtp-Source: AGHT+IHUBFOtzxTUHVVyM142oBd/8DpUUq5pjhWEwNRQ+YUW91vW2eNnMp5bhUx9eypT0N323Wt8bA==
+X-Received: by 2002:a17:902:e5c9:b0:206:b8b7:84c with SMTP id d9443c01a7336-2076e4247edmr168126145ad.47.1726387698169;
+        Sun, 15 Sep 2024 01:08:18 -0700 (PDT)
 Received: from localhost.localdomain ([59.188.211.160])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-207945db012sm18248865ad.19.2024.09.15.01.08.07
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-207945db012sm18248865ad.19.2024.09.15.01.08.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Sep 2024 01:08:11 -0700 (PDT)
+        Sun, 15 Sep 2024 01:08:17 -0700 (PDT)
 From: Nick Chan <towinchenmi@gmail.com>
 To: Hector Martin <marcan@marcan.st>,
 	Sven Peter <sven@svenpeter.dev>,
@@ -93,9 +93,9 @@ To: Hector Martin <marcan@marcan.st>,
 Cc: Nick Chan <towinchenmi@gmail.com>,
 	Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
 	Konrad Dybcio <konradybcio@kernel.org>
-Subject: [PATCH v3 01/20] dt-bindings: arm: cpus: Add Apple A7-A11 CPU cores
-Date: Sun, 15 Sep 2024 15:58:46 +0800
-Message-ID: <20240915080733.3565-2-towinchenmi@gmail.com>
+Subject: [PATCH v3 02/20] dt-bindings: watchdog: apple,wdt: Add A7-A11 compatibles
+Date: Sun, 15 Sep 2024 15:58:47 +0800
+Message-ID: <20240915080733.3565-3-towinchenmi@gmail.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240915080733.3565-1-towinchenmi@gmail.com>
 References: <20240915080733.3565-1-towinchenmi@gmail.com>
@@ -107,43 +107,30 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the following CPU cores:
-
-- apple,cyclone: A7 cores
-- apple,typhoon: A8 cores
-- apple,twister: A9 cores
-- apple,hurricane-zephyr: A10 logical cores
-- apple,monsoon: A11 performance cores
-- apple,mistral: A11 efficiency cores
-
-In the Apple A10, there are physical performance-efficiency cores that
-forms logical cores to software depending on the current p-state, and
-only one type of core may be active at one time.
-
-This follows the existing newest-first order.
+The blocks on A7-A11 SoCs are compatible with the existing driver so
+add their per-SoC compatibles.
 
 Signed-off-by: Nick Chan <towinchenmi@gmail.com>
 ---
- Documentation/devicetree/bindings/arm/cpus.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/devicetree/bindings/watchdog/apple,wdt.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index f308ff6c3532..3959e022079f 100644
---- a/Documentation/devicetree/bindings/arm/cpus.yaml
-+++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-@@ -89,6 +89,12 @@ properties:
-       - apple,blizzard
-       - apple,icestorm
-       - apple,firestorm
-+      - apple,mistral
-+      - apple,monsoon
-+      - apple,hurricane-zephyr
-+      - apple,twister
-+      - apple,typhoon
-+      - apple,cyclone
-       - arm,arm710t
-       - arm,arm720t
-       - arm,arm740t
+diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+index 21872e15916c..310832fa8c28 100644
+--- a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+@@ -16,6 +16,11 @@ properties:
+   compatible:
+     items:
+       - enum:
++          - apple,s5l8960x-wdt
++          - apple,t7000-wdt
++          - apple,s8000-wdt
++          - apple,t8010-wdt
++          - apple,t8015-wdt
+           - apple,t8103-wdt
+           - apple,t8112-wdt
+           - apple,t6000-wdt
 -- 
 2.46.0
 
