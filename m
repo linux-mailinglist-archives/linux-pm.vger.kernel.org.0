@@ -1,184 +1,171 @@
-Return-Path: <linux-pm+bounces-14349-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14350-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D723397A81A
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Sep 2024 22:08:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 193F897A927
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 00:22:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C117B29607
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Sep 2024 20:08:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4AC5284F5B
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Sep 2024 22:22:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ADDD15CD7A;
-	Mon, 16 Sep 2024 20:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DCc4wEl1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7ED5165EE9;
+	Mon, 16 Sep 2024 22:22:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C706ABE6C;
-	Mon, 16 Sep 2024 20:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F27975258;
+	Mon, 16 Sep 2024 22:22:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726517293; cv=none; b=je0QMuSTiN2BtFSlktD3YbOj+dTpsqp6j2AYaQdyY2qg+tkYpS9Yqg/VQotRXoOb6lAjaMXa4CDIRPpDjFlwu2QZ7U5hzHsbGS3zNEU/1Zyn3Y2BMC/IOYZU3ZlT9ujtoL++sb12vLREcz/ZGZIafMa9mRaeyCeKCYROXwjIYFM=
+	t=1726525356; cv=none; b=g004wUCaTD4ChD6y8o/YfpZey/gMysSeTj5sAcbfluKmpikTDCcc0Ghkxl5L5go2Ebw5yHdkvzIBZu7KsXSGx4HzVvffPmWdreg1czWlbgx/w0r4WuJsVvnBpDo/s8weDzPDAWfjZBmGS6371JPsMByfilEnSR5ZXM38kImmKMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726517293; c=relaxed/simple;
-	bh=YBjWbfo0a0keCQPpKYbQNbu61ItDdyOZQNE68ZGbl3M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kifx2puFdEVocehIEV+YuDhVxVX8qCvh2hEppCnew2RdNFNTX12YgfeFCjMcBuE7/3uuoTN+gE2z3vY/WWO0XpCpXxWLoOhjOkRh307x+o7QiKX0EHzNLfaIVCfUOYrdo6EMPZ8zThxjXyA2qePAHZTCtstvfLoW2IB/ZAhlZk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DCc4wEl1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FD6C4CEC4;
-	Mon, 16 Sep 2024 20:08:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726517292;
-	bh=YBjWbfo0a0keCQPpKYbQNbu61ItDdyOZQNE68ZGbl3M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DCc4wEl18k4kWLqBq6iNCPK6cahPYo3qxIvef7bzOZEcMsaklUsZ/9Ikn+ieTTqso
-	 26VxtnAJENQ+rpPAAXF4d6yIE9QA1f/qvHhymWujw9IA3PY7CgA1QPh13MqeBxpn8Z
-	 RX+xwBGIMuB8UozvYwQ7YE0IuPhUSx2ivrKllorV4d2IrifhxK8NEiAg1CIPKsZFIs
-	 CGszExjt27bjR+I+saWIrhWkocBeCBJdT9ctx05FDwlZDj8F4ei+AJyCxir62WTpAT
-	 g+WHnXXtDrbr6Gx43p8h9c8MmgVZZnzia19ZEtCOjFOMxY2J/V9Ru/dYeO7z8Gpnzn
-	 YjcnTucvqpqOQ==
-Date: Mon, 16 Sep 2024 22:08:08 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Dzmitry Sankouski <dsankouski@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Jessica Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, Simona Vetter <simona@ffwll.ch>, 
-	cros-qcom-dts-watchers@chromium.org, Konrad Dybcio <konradybcio@kernel.org>, 
-	Simona Vetter <simona.vetter@ffwll.ch>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	devicetree@vger.kernel.org, linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v4 04/27] dt-bindings: panel: add Samsung s6e3ha8
-Message-ID: <oldqqsnonmbczvhbtzuaxvnpm23uq3kuyvy5o2igq7c4ojlmsl@bket5pssbmmc>
-References: <20240913-starqltechn_integration_upstream-v4-0-2d2efd5c5877@gmail.com>
- <20240913-starqltechn_integration_upstream-v4-4-2d2efd5c5877@gmail.com>
+	s=arc-20240116; t=1726525356; c=relaxed/simple;
+	bh=auBgNEBcAMKWNFC3hweH8p3LS9IGL2A17duVFRN5WYY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tqtAenLkBUwk3XZQ+7qzvD8pDkceplN6CfteUO66XEwn0oMw877H8qbW7FAf54OoReBN0j/RXscr/0kWpi84aHYFw/EtYig0ZG/yyfaHcUMGSdL9r52BHPm2gFTNnRp2syeG27QZBQyMuxn6+VJg76DumxeGNK4zwq/ePN9+X8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F6F81063;
+	Mon, 16 Sep 2024 15:23:01 -0700 (PDT)
+Received: from [192.168.178.6] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 463D23F71A;
+	Mon, 16 Sep 2024 15:22:29 -0700 (PDT)
+Message-ID: <c55339cd-85d6-4777-beec-41c4d9931b9a@arm.com>
+Date: Tue, 17 Sep 2024 00:22:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240913-starqltechn_integration_upstream-v4-4-2d2efd5c5877@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 06/16] sched/schedutil: Add a new tunable to dictate
+ response time
+To: Qais Yousef <qyousef@layalina.io>, Ingo Molnar <mingo@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
+ John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240820163512.1096301-1-qyousef@layalina.io>
+ <20240820163512.1096301-7-qyousef@layalina.io>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Content-Language: en-US
+In-Reply-To: <20240820163512.1096301-7-qyousef@layalina.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 13, 2024 at 06:07:47PM +0300, Dzmitry Sankouski wrote:
-> Add binding for the Samsung s6e3ha8 panel found in the Samsung S9.
+On 20/08/2024 18:35, Qais Yousef wrote:
+> The new tunable, response_time_ms,  allow us to speed up or slow down
+> the response time of the policy to meet the perf, power and thermal
+> characteristic desired by the user/sysadmin. There's no single universal
+> trade-off that we can apply for all systems even if they use the same
+> SoC. The form factor of the system, the dominant use case, and in case
+> of battery powered systems, the size of the battery and presence or
+> absence of active cooling can play a big role on what would be best to
+> use.
 > 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+> The new tunable provides sensible defaults, but yet gives the power to
+> control the response time to the user/sysadmin, if they wish to.
 > 
+> This tunable is applied before we apply the DVFS headroom.
+> 
+> The default behavior of applying 1.25 headroom can be re-instated easily
+> now. But we continue to keep the min required headroom to overcome
+> hardware limitation in its speed to change DVFS. And any additional
+> headroom to speed things up must be applied by userspace to match their
+> expectation for best perf/watt as it dictates a type of policy that will
+> be better for some systems, but worse for others.
+> 
+> There's a whitespace clean up included in sugov_start().
+> 
+> Signed-off-by: Qais Yousef <qyousef@layalina.io>
 > ---
-> Changes in v4:
-> - change dts example intendation from tabs
->  to spaces
-> - remove reset-gpios description
-> ---
->  .../bindings/display/panel/samsung,s6e3ha8.yaml    | 75 ++++++++++++++++++++++
->  MAINTAINERS                                        |  5 ++
->  2 files changed, 80 insertions(+)
+>  Documentation/admin-guide/pm/cpufreq.rst |  17 +++-
+>  drivers/cpufreq/cpufreq.c                |   4 +-
+>  include/linux/cpufreq.h                  |   3 +
+>  kernel/sched/cpufreq_schedutil.c         | 115 ++++++++++++++++++++++-
+>  4 files changed, 132 insertions(+), 7 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6e3ha8.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6e3ha8.yaml
-> new file mode 100644
-> index 000000000000..94c812e07571
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/panel/samsung,s6e3ha8.yaml
-> @@ -0,0 +1,75 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/panel/samsung,s6e3ha8.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Samsung s6e3ha8 AMOLED DSI panel
-> +
-> +description: The s6e3ha8 is a 1440x2960 DPI display panel from Samsung Mobile
-> +  Displays (SMD).
-> +
-> +maintainers:
-> +  - Dzmitry Sankouski <dsankouski@gmail.com>
-> +
-> +allOf:
-> +  - $ref: panel-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: samsung,s6e3ha8
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  reset-gpios: true
-> +
-> +  port: true
-> +
-> +  vdd3-supply:
-> +    description: VDD regulator
-> +
-> +  vci-supply:
-> +    description: VCI regulator
-> +
-> +  vddr-supply:
-> +    description: VDDR regulator
-> +
-> +required:
-> +  - compatible
-> +  - reset-gpios
-> +  - vdd3-supply
-> +  - vddr-supply
-> +  - vci-supply
+> diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
+> index 6adb7988e0eb..fa0d602a920e 100644
+> --- a/Documentation/admin-guide/pm/cpufreq.rst
+> +++ b/Documentation/admin-guide/pm/cpufreq.rst
+> @@ -417,7 +417,7 @@ is passed by the scheduler to the governor callback which causes the frequency
+>  to go up to the allowed maximum immediately and then draw back to the value
+>  returned by the above formula over time.
+>  
+> -This governor exposes only one tunable:
+> +This governor exposes two tunables:
+>  
+>  ``rate_limit_us``
+>  	Minimum time (in microseconds) that has to pass between two consecutive
+> @@ -427,6 +427,21 @@ This governor exposes only one tunable:
+>  	The purpose of this tunable is to reduce the scheduler context overhead
+>  	of the governor which might be excessive without it.
+>  
+> +``respone_time_ms``
+> +	Amount of time (in milliseconds) required to ramp the policy from
+> +	lowest to highest frequency. Can be decreased to speed up the
+                  ^^^^^^^^^^^^^^^^^
 
-If there is going to be resend, then keep the same order as in
-properties: block.
+This has changed IMHO. Should be the time from lowest (or better 0) to
+second highest frequency.
+
+https://lkml.kernel.org/r/20230827233203.1315953-6-qyousef@layalina.io
+
+[...]
+
+> @@ -59,6 +63,70 @@ static DEFINE_PER_CPU(struct sugov_cpu, sugov_cpu);
+>  
+>  /************************ Governor internals ***********************/
+>  
+> +static inline u64 sugov_calc_freq_response_ms(struct sugov_policy *sg_policy)
+> +{
+> +	int cpu = cpumask_first(sg_policy->policy->cpus);
+> +	unsigned long cap = arch_scale_cpu_capacity(cpu);
+> +	unsigned int max_freq, sec_max_freq;
+> +
+> +	max_freq = sg_policy->policy->cpuinfo.max_freq;
+> +	sec_max_freq = __resolve_freq(sg_policy->policy,
+> +				      max_freq - 1,
+> +				      CPUFREQ_RELATION_H);
+> +
+> +	/*
+> +	 * We will request max_freq as soon as util crosses the capacity at
+> +	 * second highest frequency. So effectively our response time is the
+> +	 * util at which we cross the cap@2nd_highest_freq.
+> +	 */
+> +	cap = sec_max_freq * cap / max_freq;
+> +
+> +	return approximate_runtime(cap + 1);
+> +}
+
+Still uses the CPU capacity value based on dt-entry
+
+  capacity-dmips-mhz = <578> (CPU0 on juno-r0)
+                        ^^^
+
+i.e. frequency invariance is not considered.
+
+[    1.943356] CPU0 max_freq=850000 sec_max_freq=775000 cap=578 cap_at_sec_max_opp=527 runtime=34
+                                                        ^^^^^^^    
+[    1.957593] CPU1 max_freq=1100000 sec_max_freq=950000 cap=1024 cap_at_sec_max_opp=884 runtime=92
 
 
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    dsi {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        panel@0 {
-> +            compatible = "samsung,s6e3ha8";
-> +            reg = <0>;
-> +            vci-supply = <&s2dos05_ldo4>;
-> +            vddr-supply = <&s2dos05_buck1>;
-> +            vdd3-supply = <&s2dos05_ldo1>;
-> +            te-gpios = <&tlmm 10 GPIO_ACTIVE_HIGH>;
-> +            reset-gpios = <&tlmm 6 GPIO_ACTIVE_HIGH>;
-> +            pinctrl-0 = <&sde_dsi_active &sde_te_active_sleep>;
-> +            pinctrl-1 = <&sde_dsi_suspend &sde_te_active_sleep>;
-> +            pinctrl-names = "default", "sleep";
-> +
-> +            port {
-> +                panel_in: endpoint {
-> +                    remote-endpoint = <&mdss_dsi0_out>;
-> +                };
-> +            };
-> +      };
+# cat /sys/devices/system/cpu/cpu*/cpu_capacity
+446
+^^^
+1024
+1024
+446
+446
+446
 
-Indentation is still mixed up.
-
-> +    };
-> +
-> +...
-
-Best regards,
-Krzysztof
-
+[...]
 
