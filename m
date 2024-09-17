@@ -1,55 +1,80 @@
-Return-Path: <linux-pm+bounces-14359-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14360-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4284497AD83
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 11:04:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A04FF97AD8D
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 11:06:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4D6F2831BF
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 09:04:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C502E1C213A0
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 09:06:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08CEF158D6A;
-	Tue, 17 Sep 2024 09:04:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1B91BF24;
+	Tue, 17 Sep 2024 09:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="S5RMeAyL"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WXVZNupE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B50150990;
-	Tue, 17 Sep 2024 09:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B33136351
+	for <linux-pm@vger.kernel.org>; Tue, 17 Sep 2024 09:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726563881; cv=none; b=CYyON8CekeyrDP76HlJBp7l5++G+vONTwY8B5hc0cX4rfWG12VhjU7kclQHeDanaJybEf5v0T6J0D9bFyNAjD/3h6APpW7U4bLR8piGKKMgNFchAliMnhtAPY3AiPOegPiWhf7xeKVmcow2u+QDXNDFZtufEyZSJwcuR5kzdDPU=
+	t=1726564009; cv=none; b=ZQtopVf0Lzawk1+gURKJQd2Iv0G1XOLDQl1zHiA6pjXAPPxAUbLYB6YI1Bp+t9u2ywPlQCc464hXJYi3f170FfxewoSSIWH8iLFoEZcOtbyReMSwSLM4tm/Ll+3ND7+miuO1JvsWwVNxjF/xij6vcy7Z1C2ClJqji0DkwKJwHOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726563881; c=relaxed/simple;
-	bh=5NCGPiERJ+Jw5qTfwSzmHF6iCdF89H70h6XEILDhTIE=;
+	s=arc-20240116; t=1726564009; c=relaxed/simple;
+	bh=jPOb0JQIK5vN4ygvo+QPK+TweTRvxL8D2BKP7YCm/dk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i/Pnp9DC411k1ssPzZJK3nXdGPGila/tMSTbGu9N2R/Tm8jrsVraFkFYhkfQz55a804Moh2E0iwt2UbBEiaJWD381/OTFfupR7Skz4ELc21HtcNCdYAPFP6TofbLhbGK1VYMzuFZ5qqifXVwcXsmfhshxK4IpO+jOjs/pOdtUDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=S5RMeAyL; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1726563878;
-	bh=5NCGPiERJ+Jw5qTfwSzmHF6iCdF89H70h6XEILDhTIE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=S5RMeAyLuLMXAZ2qIVHPpQd+yUU7hN6A9HmCHPyK3f/Qm4sqiXA2P5IDtgTO6x+CA
-	 gY9CznaCeUisJIeO7nOfj9MvveNWSI96sSPNWHDMTf3HO1lOXXEQRXgs5Yqo/VIw5X
-	 3EzWC/6RCGN4xCicPAKEqbaYzsy4XIpR/EkE432JijXfSsEhiXKuuC9+tPDNxLdUP9
-	 P2OUxIR7t8sYk+AtNUm9IrY+oLh5bnYHNEyiwHQBNPsef5b7lGbZhtNkygfnOFy3FJ
-	 TBSgxGOyL/YUvetV7okyLSdFBN4RSsA5Dt9gxfphjhOQY1Y6C7zN9zLm2AD/oWg5TP
-	 R4jGK++Gne67w==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id ADEF717E107A;
-	Tue, 17 Sep 2024 11:04:34 +0200 (CEST)
-Message-ID: <08bdcc19-023b-4c7d-9e01-2b04cac00a08@collabora.com>
-Date: Tue, 17 Sep 2024 11:04:33 +0200
+	 In-Reply-To:Content-Type; b=kjQw5q8UnIWTfOoWbhOWo2liEAyaXJQfvR2KPqBTWn7zavMiJhEu0PObPqExj1BGnpuYwQb34zpxDoj2GYz9/E1AGK8IsLHogdSyziKGFwSGZpy8cWkJrK29XhYHWfoF3rGlZxZutZxB9nSAkDn0nzHoCC7tTD2zRAdUj5SxQGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WXVZNupE; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1726564006;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=O7obLZgeKuYqWkeslMNYYNf0DeF5TTlVqiV364RRxE8=;
+	b=WXVZNupEjOtL0mcqFppBUqbRxqDP5ARASaVebDv7We0Fb4LjE6ap54OxonkBqGiOBdzVvD
+	So+yNBiz3LJZAafrty46wMTr8uFWhj+fGCedbq3sNfMP4Q3AThvvG0GM3iAhucVKxsbX1v
+	C6b7t0o7wnakekk+I63MiM0l1cSgEp0=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-651-Al2oCj37MrK0YAV0UE5jAQ-1; Tue, 17 Sep 2024 05:06:45 -0400
+X-MC-Unique: Al2oCj37MrK0YAV0UE5jAQ-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a8a877c1d22so112014466b.1
+        for <linux-pm@vger.kernel.org>; Tue, 17 Sep 2024 02:06:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726564004; x=1727168804;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O7obLZgeKuYqWkeslMNYYNf0DeF5TTlVqiV364RRxE8=;
+        b=IRI7om86W3d1qIcvFyP125HpEXOQmrAHkSLmoNUQ9lhBFSHE1itQzk6L8kCeF9AWpV
+         gZF9F9I1fximPCGXSyYD/qHF6M0kS+p5kgNI+nkNyZuFc8/NyIKWLzsirySR0vAGV7Ai
+         P4Kg4itkEniQcgDSZORL5jW0SBWQTbGj1SE39iQeghLP+XiMBXZuinaTmE/NDIlR+oWe
+         NUA8wmPhmT7v5KztIqqgrXI61EYuEgfIjAroMCQOdGlPWpzt+ZjVt/NeftIVqBm5/FfM
+         VctfqT0VfDsfI3QOPJF48eVnbmAThT3nPBUBU4eK2V45atCv2usLkXJcol3HcqZgV4hV
+         pr9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUEbHhef+qruKsDFY80Q/m91dNws0troPngaAlpQDXl/EgYrZc8JaVnC/0fD/6ZT9MUb5eJ255k0A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfDJBdHopaW275TOySKYwnLf6aiY1K27UhSrDvXdUeT/u//gfS
+	DbTCO4azjeCn6jqykUhdltLxtfdXooZK9lgo7Kbi8QzSqaYtox6TFjDl/nj54m4GxmgsVbWhNy3
+	5gooMTMNGxT39SiGVwHEL1h8LU2OV4qj2ldaAmAfewKtF7vZdcH6Lh4zPijmr0btn
+X-Received: by 2002:a17:907:6d26:b0:a8b:6ee7:ba2c with SMTP id a640c23a62f3a-a9047c9c2cemr1302322066b.16.1726564004220;
+        Tue, 17 Sep 2024 02:06:44 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHhBq2aObMO2W2ZenntjvnGnyQt+T/63ry9Nr68kYJ0C95G+f4zirK+qxNLRpSk06M4zTZJXA==
+X-Received: by 2002:a17:907:6d26:b0:a8b:6ee7:ba2c with SMTP id a640c23a62f3a-a9047c9c2cemr1302319466b.16.1726564003702;
+        Tue, 17 Sep 2024 02:06:43 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a90610f3aaesm420720566b.53.2024.09.17.02.06.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Sep 2024 02:06:43 -0700 (PDT)
+Message-ID: <599b59f6-6cd4-463d-aafb-699fcb387f7e@redhat.com>
+Date: Tue, 17 Sep 2024 11:06:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,61 +82,108 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/3] regulator: dt-bindings: mt6397: move examples to
- parent PMIC mt6397
-To: Macpaul Lin <macpaul.lin@mediatek.com>, Andrew Lunn <andrew@lunn.ch>,
- Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean
- <olteanv@gmail.com>, "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Sean Wang <sean.wang@mediatek.com>, Sen Chu <sen.chu@mediatek.com>,
- netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
- Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
- Alexandre Mergnat <amergnat@baylibre.com>
-Cc: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
- Macpaul Lin <macpaul@gmail.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
- MediaTek Chromebook Upstream
- <Project_Global_Chrome_Upstream_Group@mediatek.com>,
- Chen-Yu Tsai <wenst@chromium.org>
-References: <20240916151132.32321-1-macpaul.lin@mediatek.com>
- <20240916151132.32321-3-macpaul.lin@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20240916151132.32321-3-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH 1/4] power: supply: sysfs: Make
+ power_supply_show_enum_with_available() deal with labels with a space
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Jelle van der Waa <jelle@vdwaa.nl>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ linux-pm@vger.kernel.org
+References: <20240908192303.151562-1-hdegoede@redhat.com>
+ <20240908192303.151562-2-hdegoede@redhat.com>
+ <2crw2apbxixaqq6vibtlewe47nvqeo2cnwo2okdiqtaelvtjce@g6mhr4iproiz>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <2crw2apbxixaqq6vibtlewe47nvqeo2cnwo2okdiqtaelvtjce@g6mhr4iproiz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Il 16/09/24 17:11, Macpaul Lin ha scritto:
-> Since the DT schema of multiple function PMIC mt6397 has been converted,
-> move the examples in "mediatek,mt6397-regulator.yaml" to the parent schema
-> "mediatek,mt6397.yaml".
+Hi Sebastian,
+
+On 9/17/24 9:38 AM, Sebastian Reichel wrote:
+> Hello Hans,
 > 
+> On Sun, Sep 08, 2024 at 09:23:00PM GMT, Hans de Goede wrote:
+>> Some enum style power-supply properties have text-values / labels for some
+>> of the enum values containing a space, e.g. "Long Life" for
+>> POWER_SUPPLY_CHARGE_TYPE_LONGLIFE.
+>>
+>> Make power_supply_show_enum_with_available() surround these label with ""
+>> when the label is not for the active enum value to make it clear that this
+>> is a single label and not 2 different labels for 2 different enum values.
+>>
+>> After this the output for a battery which support "Long Life" will be e.g.:
+>>
+>> Fast [Standard] "Long Life"
+>>
+>> or:
+>>
+>> Fast Standard [Long Life]
+>>
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>> ---
+> 
+> This looks annoying from parsing point of view. Maybe we can just
+> replace " " with "_" and guarantee that space is a value separator
+> at the cost of the values not being exactly the same as the existing
+> charge_type sysfs file?
 
-You can instead just keep a reference to mediatek,mt6397-regulator.yaml in the
-"MFD" (pmic) schema instead.
+My thinking here was that if a parser wants to see if a certain option
+is available it can just do a strstr() and parsing for the active
+value does not change. But yes a parser which wants to tokenize
+the string to get all possible values as separate tokens will
+become harder to write with this.
 
-It's true that for MT6397 you can possibly have only MT6397's regulator and not
-others, but still, the logic is to:
-  - Say that MT6397 supports regulator subnode(s) in mediatek,mt6397.yaml
-    - Refer to the regulator schema (mediatek,mt6397-regulator.yaml)
-  - Keep the regulator schema (providing only regulator HW specific info)
-    in the regulator folder.
+I did consider moving to using a "_" one problem there is that
+this means that echo-ing "Long_Life" to set the value should then
+work. Which would require special handling in the generic store()
+function. I guess we could makle 
 
-Besides that, this also makes the main mediatek,mt6397.yaml schema a bit more
-human readable... :-)
+I guess an easy solution here would be to define a second set
+of POWER_SUPPLY_CHARGE_TYPE_TEXT[] strings aptly named
+POWER_SUPPLY_CHARGE_TYPES_TEXT[] (with the extra s).
 
-Cheers,
-Angelo
+This can then simply contain Long_Life instead of Long Life,
+downside of this would be that writing "Long Life" will then
+not work. So charge_type then takes "Long Life" and charge_types
+"Long_Life" which is less then ideal.
+
+The best I can come up with is to replace " " with _ when showing
+and in power_supply_store_property() add some special handling for
+charge_types like this:
+
+	/* Accept "Long_Life" as alt for "Long Life" for "charge_types" */
+	if (dev_attr_psp(attr) == POWER_SUPPLY_PROP_CHARGE_TYPES &&
+	    sysfs_streq(buf, "Long_Life"))
+		buf = "Long Life";
+
+	ret = -EINVAL;
+        if (ps_attr->text_values_len > 0) {
+                ret = __sysfs_match_string(ps_attr->text_values,
+                                           ps_attr->text_values_len, buf);
+        }
+
+This isn't pretty, but this way we don't need to define a second set of
+POWER_SUPPLY_CHARGE_TYPES_TEXT[] values, duplicating those (and needing
+to manually keep them in sync), while accepting both "Long Life" and
+"Long_Life".
+
+Note that a generic replacing of _ with space or the other way around
+in store() will not work because we already allow/use "Not Charging"
+but also "PD_DRP" so replacing either _ or space with the other will
+break one of those.
+		
+> Do you know if there is prior examples for this in the kernel by
+> chance?
+
+I'm not aware of any examples where a sysfs attr show() uses the show
+all available values with the active one surrounding by [ ] where
+one of the values has a space in it. It is quite easy to avoid the
+values having spaces if this format is used from the start.
+
+Regards,
+
+Hans
+
 
 
 
