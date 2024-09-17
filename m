@@ -1,189 +1,248 @@
-Return-Path: <linux-pm+bounces-14360-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14361-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A04FF97AD8D
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 11:06:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BA7A97ADAD
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 11:16:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C502E1C213A0
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 09:06:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B9111F249C6
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 09:16:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1B91BF24;
-	Tue, 17 Sep 2024 09:06:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E40B316193C;
+	Tue, 17 Sep 2024 09:15:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WXVZNupE"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="VT7p0ol2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2050.outbound.protection.outlook.com [40.107.244.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B33136351
-	for <linux-pm@vger.kernel.org>; Tue, 17 Sep 2024 09:06:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726564009; cv=none; b=ZQtopVf0Lzawk1+gURKJQd2Iv0G1XOLDQl1zHiA6pjXAPPxAUbLYB6YI1Bp+t9u2ywPlQCc464hXJYi3f170FfxewoSSIWH8iLFoEZcOtbyReMSwSLM4tm/Ll+3ND7+miuO1JvsWwVNxjF/xij6vcy7Z1C2ClJqji0DkwKJwHOM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726564009; c=relaxed/simple;
-	bh=jPOb0JQIK5vN4ygvo+QPK+TweTRvxL8D2BKP7YCm/dk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kjQw5q8UnIWTfOoWbhOWo2liEAyaXJQfvR2KPqBTWn7zavMiJhEu0PObPqExj1BGnpuYwQb34zpxDoj2GYz9/E1AGK8IsLHogdSyziKGFwSGZpy8cWkJrK29XhYHWfoF3rGlZxZutZxB9nSAkDn0nzHoCC7tTD2zRAdUj5SxQGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WXVZNupE; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1726564006;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=O7obLZgeKuYqWkeslMNYYNf0DeF5TTlVqiV364RRxE8=;
-	b=WXVZNupEjOtL0mcqFppBUqbRxqDP5ARASaVebDv7We0Fb4LjE6ap54OxonkBqGiOBdzVvD
-	So+yNBiz3LJZAafrty46wMTr8uFWhj+fGCedbq3sNfMP4Q3AThvvG0GM3iAhucVKxsbX1v
-	C6b7t0o7wnakekk+I63MiM0l1cSgEp0=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-651-Al2oCj37MrK0YAV0UE5jAQ-1; Tue, 17 Sep 2024 05:06:45 -0400
-X-MC-Unique: Al2oCj37MrK0YAV0UE5jAQ-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a8a877c1d22so112014466b.1
-        for <linux-pm@vger.kernel.org>; Tue, 17 Sep 2024 02:06:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726564004; x=1727168804;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O7obLZgeKuYqWkeslMNYYNf0DeF5TTlVqiV364RRxE8=;
-        b=IRI7om86W3d1qIcvFyP125HpEXOQmrAHkSLmoNUQ9lhBFSHE1itQzk6L8kCeF9AWpV
-         gZF9F9I1fximPCGXSyYD/qHF6M0kS+p5kgNI+nkNyZuFc8/NyIKWLzsirySR0vAGV7Ai
-         P4Kg4itkEniQcgDSZORL5jW0SBWQTbGj1SE39iQeghLP+XiMBXZuinaTmE/NDIlR+oWe
-         NUA8wmPhmT7v5KztIqqgrXI61EYuEgfIjAroMCQOdGlPWpzt+ZjVt/NeftIVqBm5/FfM
-         VctfqT0VfDsfI3QOPJF48eVnbmAThT3nPBUBU4eK2V45atCv2usLkXJcol3HcqZgV4hV
-         pr9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUEbHhef+qruKsDFY80Q/m91dNws0troPngaAlpQDXl/EgYrZc8JaVnC/0fD/6ZT9MUb5eJ255k0A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfDJBdHopaW275TOySKYwnLf6aiY1K27UhSrDvXdUeT/u//gfS
-	DbTCO4azjeCn6jqykUhdltLxtfdXooZK9lgo7Kbi8QzSqaYtox6TFjDl/nj54m4GxmgsVbWhNy3
-	5gooMTMNGxT39SiGVwHEL1h8LU2OV4qj2ldaAmAfewKtF7vZdcH6Lh4zPijmr0btn
-X-Received: by 2002:a17:907:6d26:b0:a8b:6ee7:ba2c with SMTP id a640c23a62f3a-a9047c9c2cemr1302322066b.16.1726564004220;
-        Tue, 17 Sep 2024 02:06:44 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHhBq2aObMO2W2ZenntjvnGnyQt+T/63ry9Nr68kYJ0C95G+f4zirK+qxNLRpSk06M4zTZJXA==
-X-Received: by 2002:a17:907:6d26:b0:a8b:6ee7:ba2c with SMTP id a640c23a62f3a-a9047c9c2cemr1302319466b.16.1726564003702;
-        Tue, 17 Sep 2024 02:06:43 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a90610f3aaesm420720566b.53.2024.09.17.02.06.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Sep 2024 02:06:43 -0700 (PDT)
-Message-ID: <599b59f6-6cd4-463d-aafb-699fcb387f7e@redhat.com>
-Date: Tue, 17 Sep 2024 11:06:42 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C68716088F;
+	Tue, 17 Sep 2024 09:15:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726564551; cv=fail; b=TV1P7fmskEohNs4Kj8vq2QohEpe7DfWM6h9zrZeo63dO+OOhK28yzR5qDd6dMRcQOlVGL5jSDD0eh539E1+xmZZ3pJIobDh4mS9CeHzZJYgqvSSNgW17ztJW1CUhrSZ5sjPg8KEPl+UDdKL+OBpH+Hh56z6HMqu6pDJjK4coVro=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726564551; c=relaxed/simple;
+	bh=CjZ2tBe6himHK6bEvc0UdICBZuyx07AbEdOTFZWg3Lw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dOY7+T9Z5Ox9wS2rKQGOi+Rw70i3rJ7up4eMdKM7mmwYqavriIPK7Eq4RTDpA5xogtpg/jyVROLO1eJllbHlMECFTc9SfcKP2wr8i/us/aiSR8/SPjCHrmcv7jsaSGiGnHSi38BVnvfBXDn6jcYMwA2uk7v1wMIcRT7yyPB3GGk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=VT7p0ol2; arc=fail smtp.client-ip=40.107.244.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=KhoFPzEYnC0RZ06wsOCIA1BmPg+9kiL1VhF3Ke8tAoYCRFcP0ApI8Lvrii8Rg6NQeEjLhoN1yNsBW4B0ubIMTXqGNs+BCpZhgslneHNZO/MU/g+S5gspDjInN//uSpOlHXNmYXlchI0qcF/KHv71Gp6UXdai0+LlQGCb5xPv74lF/DvhtNEGeP1C5wkQuzLEkkVoRL9Nj8sh10zIfOIXRL8Wn2K5a2aUH5RBpvSof5Y20EuXefwexWOdg7mrdPBJoEmyJ/E7xVAmHWipSpqHdDOY8V+rQoQKDBVVYM6JizO66hoMgT3GNR8VM2iWGQ6uhGUnGykE5VuuLmdtSLj22A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8p2UDyNfF6pM9CXETbNFjqrIxZGnjcNE49kSeItX9W8=;
+ b=IBepgvh88ubsClIXpWwzX3/VAkD1KhRNzzcRH+QFUBnGJfia8dF8DQcbo41c/DJRTW3srUr9jr4Wwm2vmdPkPawf/VpYqXM64woMwCRLNKRD9gbFWishhlKGDm19cVA36RfWV9jD6S5z8OLLw0qWyYauczrUAOmofgt4S6FJrqwxtBGCsPuPeaYFuq5vm2buFddauRYuD53AanGcjD5ylYlu0YJZl6TfaUugFtUqDqDJxzFMtycIEo7EPbF9LcFF4DHxqRiTieOoxopys/AtOn7sYyW9VWIABnPxA8opXMEB7EW4jlLCKr30GUHf+xThqNRBMVCMvpHo+eBJsSOSEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8p2UDyNfF6pM9CXETbNFjqrIxZGnjcNE49kSeItX9W8=;
+ b=VT7p0ol2lNVOKZikg0kUAc3vXx3lmFFRLCCyXOV3dbvFwbFat8nx+e4vZ1vB/J/frl1v8ChOzCvT5fKMUj/wuAihm3J8DL6BT4PrjeDe5xs4+K92/IgP4Xk1gNG7CQF2MyFCEOd1j8icr94sMj56ayRZi3FW1RFd/9JtCyCu6z0=
+Received: from BN9PR03CA0404.namprd03.prod.outlook.com (2603:10b6:408:111::19)
+ by SA3PR12MB7924.namprd12.prod.outlook.com (2603:10b6:806:313::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.24; Tue, 17 Sep
+ 2024 09:15:46 +0000
+Received: from BN1PEPF00005FFD.namprd05.prod.outlook.com
+ (2603:10b6:408:111:cafe::b1) by BN9PR03CA0404.outlook.office365.com
+ (2603:10b6:408:111::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.29 via Frontend
+ Transport; Tue, 17 Sep 2024 09:15:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN1PEPF00005FFD.mail.protection.outlook.com (10.167.243.229) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7918.13 via Frontend Transport; Tue, 17 Sep 2024 09:15:46 +0000
+Received: from shatadru.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 17 Sep
+ 2024 04:15:42 -0500
+From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+To: <gautham.shenoy@amd.com>, <mario.limonciello@amd.com>,
+	<perry.yuan@amd.com>, <ray.huang@amd.com>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Dhananjay
+ Ugwekar" <Dhananjay.Ugwekar@amd.com>
+Subject: cpufreq/amd-pstate: Rename MSR and shared memory specific functions
+Date: Tue, 17 Sep 2024 09:14:35 +0000
+Message-ID: <20240917091434.10685-1-Dhananjay.Ugwekar@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] power: supply: sysfs: Make
- power_supply_show_enum_with_available() deal with labels with a space
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Jelle van der Waa <jelle@vdwaa.nl>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- linux-pm@vger.kernel.org
-References: <20240908192303.151562-1-hdegoede@redhat.com>
- <20240908192303.151562-2-hdegoede@redhat.com>
- <2crw2apbxixaqq6vibtlewe47nvqeo2cnwo2okdiqtaelvtjce@g6mhr4iproiz>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <2crw2apbxixaqq6vibtlewe47nvqeo2cnwo2okdiqtaelvtjce@g6mhr4iproiz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00005FFD:EE_|SA3PR12MB7924:EE_
+X-MS-Office365-Filtering-Correlation-Id: 016fc540-7717-4d25-8e92-08dcd6f95048
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?MLhYscM+fJEd5phbQOj+/oKd5v4BwMUgtr2qIkZVk7yh9DIlLi1NEThz4if0?=
+ =?us-ascii?Q?9AVL++dQqOqS4dPn0Z41O2sUw1c9dELHD4EPjUZ6WhxirRTbvGrRLX7pwaGf?=
+ =?us-ascii?Q?cGmfLQThORKvSNIoCCCy5ojdNv8KuJP6Z4MSi0eTi0o0WxbLHIlGzYVCC0+Q?=
+ =?us-ascii?Q?xjtw6cAk9TdnHP7VpdUCx7XXgyuM8wOxTcU4/mKtf4um6becI0yW4An1rpe3?=
+ =?us-ascii?Q?6GaE+EVL+tHcpNQssTqfrZoAuttYx2kaUoLpQKsXKE8MaCsrruBoH+YtPR3/?=
+ =?us-ascii?Q?6kcE/ZoFi5N9FpKC9PRM8t148GvkrHpH0tRzVN+eCwmLrIbq7mCBhzlhZqe7?=
+ =?us-ascii?Q?nSDo7QNeIj65tUHWg3MQWe0i7edSDqfl3S4BnoBgTf51zg+/YC/UmHawdX2X?=
+ =?us-ascii?Q?E+ev7e8U2f8yAguf3odatKfotK9vjCfx+9lkBtwHSTHbZSSON6uECL6IwtHg?=
+ =?us-ascii?Q?mlaRJ1XTHZGCT2AQDCc+JxwMQrlz8702McfFiSwMFxS32hJBb6a8b1TP2Bfv?=
+ =?us-ascii?Q?55AFs1gjRzW6jUkCXWq97TOVj8OzjEit5XwSSSeeuAzE4Y6l2+1isNWRZ82i?=
+ =?us-ascii?Q?7U9AsryVvnir6Aho1QRRuohQFPBb1ugcHiVdjcraqV3WKO80vObobILboapP?=
+ =?us-ascii?Q?cBjFD43hSq/sHET/s/XEdmZ9FqPakmgvl5rBfxhHoWfjVq6dV2RyLRV4a6ZA?=
+ =?us-ascii?Q?cl88HuRFGjAFc3AxwBO98xqvJiXea+I3466T3rXAWrVrMzq5NSci60UTY6OU?=
+ =?us-ascii?Q?XfoAy26kvnPdNgXJ45VHUw0wp1dP7yL1K5KS1p34PgXSfbh7OtQb4PLr9TDj?=
+ =?us-ascii?Q?sd34Awy1caDBqlcrshiaqJ8g23JdflqWqSE+lNVzaPYcusNuopO07AQvHXjW?=
+ =?us-ascii?Q?51T+zk6tevgEulCXS/Esh6r4bJq+ENzGewgvHSd8LbtIRk75OOXnAXp1f7kw?=
+ =?us-ascii?Q?fdPpioZ/BB8VISrwffer/yWLhwqFOYmBuUNuKVRpCtmC2k+G6dL4NBbsBS8W?=
+ =?us-ascii?Q?YZ0/NQn5XoBylOL2dn5Ek/qRtY+ZCWCtPW/MA5YHoODU//INUBizJOw8EaKD?=
+ =?us-ascii?Q?MoIK4zIEAx0T7RopIGIpIcWwosJQnH4989pxS6/Pmr+SsbTwbnH2blfJ0q/W?=
+ =?us-ascii?Q?eFwAMQCrCW4J74QQLqYIegqjcRzA2HXMl+3lYtbZt1ISgytp5HonyPjVDzi1?=
+ =?us-ascii?Q?ealfb914melIggpLvHYQV+Sly9QN05oSQIHx3Iy8/u8TsOE0RHaNrCT3p6S+?=
+ =?us-ascii?Q?2ypk80tiRO7YI9su7ZWZaxEixOhqGBLKSqYHV8/04PdZ0216UCPQ5SmFMalW?=
+ =?us-ascii?Q?KFx9JKbOoSJVSsDT9H19dVPczXGVvMZYLzXTYZcdCUsXuBT9D6hBWTpgP6Q7?=
+ =?us-ascii?Q?ROCAqmod4kBOOmxM7T9xQJeWIGRZhrC7HNMI7ixqr/92t5t1lpK9lVR/Tazu?=
+ =?us-ascii?Q?cxyNp2dM236G9nbNyB71hiz52nDOtQa2?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2024 09:15:46.1119
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 016fc540-7717-4d25-8e92-08dcd6f95048
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00005FFD.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7924
 
-Hi Sebastian,
+Existing function names "cppc_*" and "pstate_*" for shared memory and
+MSR based systems are not intuitive enough, replace them with "shmem_*" and
+"msr_*" respectively.
 
-On 9/17/24 9:38 AM, Sebastian Reichel wrote:
-> Hello Hans,
-> 
-> On Sun, Sep 08, 2024 at 09:23:00PM GMT, Hans de Goede wrote:
->> Some enum style power-supply properties have text-values / labels for some
->> of the enum values containing a space, e.g. "Long Life" for
->> POWER_SUPPLY_CHARGE_TYPE_LONGLIFE.
->>
->> Make power_supply_show_enum_with_available() surround these label with ""
->> when the label is not for the active enum value to make it clear that this
->> is a single label and not 2 different labels for 2 different enum values.
->>
->> After this the output for a battery which support "Long Life" will be e.g.:
->>
->> Fast [Standard] "Long Life"
->>
->> or:
->>
->> Fast Standard [Long Life]
->>
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->> ---
-> 
-> This looks annoying from parsing point of view. Maybe we can just
-> replace " " with "_" and guarantee that space is a value separator
-> at the cost of the values not being exactly the same as the existing
-> charge_type sysfs file?
+Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+---
+ drivers/cpufreq/amd-pstate.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-My thinking here was that if a parser wants to see if a certain option
-is available it can just do a strstr() and parsing for the active
-value does not change. But yes a parser which wants to tokenize
-the string to get all possible values as separate tokens will
-become harder to write with this.
-
-I did consider moving to using a "_" one problem there is that
-this means that echo-ing "Long_Life" to set the value should then
-work. Which would require special handling in the generic store()
-function. I guess we could makle 
-
-I guess an easy solution here would be to define a second set
-of POWER_SUPPLY_CHARGE_TYPE_TEXT[] strings aptly named
-POWER_SUPPLY_CHARGE_TYPES_TEXT[] (with the extra s).
-
-This can then simply contain Long_Life instead of Long Life,
-downside of this would be that writing "Long Life" will then
-not work. So charge_type then takes "Long Life" and charge_types
-"Long_Life" which is less then ideal.
-
-The best I can come up with is to replace " " with _ when showing
-and in power_supply_store_property() add some special handling for
-charge_types like this:
-
-	/* Accept "Long_Life" as alt for "Long Life" for "charge_types" */
-	if (dev_attr_psp(attr) == POWER_SUPPLY_PROP_CHARGE_TYPES &&
-	    sysfs_streq(buf, "Long_Life"))
-		buf = "Long Life";
-
-	ret = -EINVAL;
-        if (ps_attr->text_values_len > 0) {
-                ret = __sysfs_match_string(ps_attr->text_values,
-                                           ps_attr->text_values_len, buf);
-        }
-
-This isn't pretty, but this way we don't need to define a second set of
-POWER_SUPPLY_CHARGE_TYPES_TEXT[] values, duplicating those (and needing
-to manually keep them in sync), while accepting both "Long Life" and
-"Long_Life".
-
-Note that a generic replacing of _ with space or the other way around
-in store() will not work because we already allow/use "Not Charging"
-but also "PD_DRP" so replacing either _ or space with the other will
-break one of those.
-		
-> Do you know if there is prior examples for this in the kernel by
-> chance?
-
-I'm not aware of any examples where a sysfs attr show() uses the show
-all available values with the active one surrounding by [ ] where
-one of the values has a space in it. It is quite easy to avoid the
-values having spaces if this format is used from the start.
-
-Regards,
-
-Hans
-
-
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 15e201d5e911..b7a17a3ef122 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -233,7 +233,7 @@ static int amd_pstate_get_energy_pref_index(struct amd_cpudata *cpudata)
+ 	return index;
+ }
+ 
+-static void pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
++static void msr_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+ 			       u32 des_perf, u32 max_perf, bool fast_switch)
+ {
+ 	if (fast_switch)
+@@ -243,7 +243,7 @@ static void pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+ 			      READ_ONCE(cpudata->cppc_req_cached));
+ }
+ 
+-DEFINE_STATIC_CALL(amd_pstate_update_perf, pstate_update_perf);
++DEFINE_STATIC_CALL(amd_pstate_update_perf, msr_update_perf);
+ 
+ static inline void amd_pstate_update_perf(struct amd_cpudata *cpudata,
+ 					  u32 min_perf, u32 des_perf,
+@@ -306,7 +306,7 @@ static int amd_pstate_set_energy_pref_index(struct amd_cpudata *cpudata,
+ 	return ret;
+ }
+ 
+-static inline int pstate_enable(bool enable)
++static inline int msr_enable(bool enable)
+ {
+ 	int ret, cpu;
+ 	unsigned long logical_proc_id_mask = 0;
+@@ -332,7 +332,7 @@ static inline int pstate_enable(bool enable)
+ 	return 0;
+ }
+ 
+-static int cppc_enable(bool enable)
++static int shmem_enable(bool enable)
+ {
+ 	int cpu, ret = 0;
+ 	struct cppc_perf_ctrls perf_ctrls;
+@@ -359,14 +359,14 @@ static int cppc_enable(bool enable)
+ 	return ret;
+ }
+ 
+-DEFINE_STATIC_CALL(amd_pstate_enable, pstate_enable);
++DEFINE_STATIC_CALL(amd_pstate_enable, msr_enable);
+ 
+ static inline int amd_pstate_enable(bool enable)
+ {
+ 	return static_call(amd_pstate_enable)(enable);
+ }
+ 
+-static int pstate_init_perf(struct amd_cpudata *cpudata)
++static int msr_init_perf(struct amd_cpudata *cpudata)
+ {
+ 	u64 cap1;
+ 
+@@ -385,7 +385,7 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
+ 	return 0;
+ }
+ 
+-static int cppc_init_perf(struct amd_cpudata *cpudata)
++static int shmem_init_perf(struct amd_cpudata *cpudata)
+ {
+ 	struct cppc_perf_caps cppc_perf;
+ 
+@@ -420,14 +420,14 @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
+ 	return ret;
+ }
+ 
+-DEFINE_STATIC_CALL(amd_pstate_init_perf, pstate_init_perf);
++DEFINE_STATIC_CALL(amd_pstate_init_perf, msr_init_perf);
+ 
+ static inline int amd_pstate_init_perf(struct amd_cpudata *cpudata)
+ {
+ 	return static_call(amd_pstate_init_perf)(cpudata);
+ }
+ 
+-static void cppc_update_perf(struct amd_cpudata *cpudata,
++static void shmem_update_perf(struct amd_cpudata *cpudata,
+ 			     u32 min_perf, u32 des_perf,
+ 			     u32 max_perf, bool fast_switch)
+ {
+@@ -1879,9 +1879,9 @@ static int __init amd_pstate_init(void)
+ 			current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
+ 	} else {
+ 		pr_debug("AMD CPPC shared memory based functionality is supported\n");
+-		static_call_update(amd_pstate_enable, cppc_enable);
+-		static_call_update(amd_pstate_init_perf, cppc_init_perf);
+-		static_call_update(amd_pstate_update_perf, cppc_update_perf);
++		static_call_update(amd_pstate_enable, shmem_enable);
++		static_call_update(amd_pstate_init_perf, shmem_init_perf);
++		static_call_update(amd_pstate_update_perf, shmem_update_perf);
+ 	}
+ 
+ 	if (amd_pstate_prefcore) {
+-- 
+2.34.1
 
 
