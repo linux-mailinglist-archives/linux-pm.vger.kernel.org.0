@@ -1,129 +1,83 @@
-Return-Path: <linux-pm+bounces-14371-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14372-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18D3F97B0E3
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 15:43:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 330E897B0F4
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 15:48:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 172EE1C24080
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 13:43:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8B4D285C99
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 13:48:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A42A4176AD8;
-	Tue, 17 Sep 2024 13:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944C417107F;
+	Tue, 17 Sep 2024 13:48:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M+ykqwX/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qFDmLgW+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7F82905;
-	Tue, 17 Sep 2024 13:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C21166F25;
+	Tue, 17 Sep 2024 13:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726580610; cv=none; b=CeP2ZMzMCAlyuE5u6fiupOhmiv3bqxTVfljCLnP9GWKEdB6xqrV1GryQV+O33I+dH4nauoO6y3RTFmYBN3svTgnhJV7qdA6AGQneLTF7UJDmgkzWnLGw530pKQyx45WCCGMHATqXdsQNzKnWt+zEPg/4TSre9VS360o+EFUDth8=
+	t=1726580886; cv=none; b=VSw/PSnLD1kXOosW4nL60Mccy7pDEmIW8vNjggz+KfQqVEb7ry1HlgypFECzlS28x0R/YmNWBs5+4MM+eQ41z05bsw0BpF+OcZhjfYjetigtUxhOTN7vsRcGpnWnI0So8eOCbgEq9CklhUWicl/td1b09M744U7Mr/Bi7NlUOYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726580610; c=relaxed/simple;
-	bh=/TveRk5a9mwo3YWee1GIejkOV8p5P0JdODs1giQprpM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mSUUzKW1CTr3RlDqSiYnoC+xamtJugKhxyhZgAXJQjC4oqPFLeMzWGHCqNe3G9cl3TbrYYOoriEy0pcbluT4wSDneCcb7XkIChKD0c8qLngCYejbjvWdKY7hAUdZ0TOrmWP28PlKo590SM5zdZ32uD/cxTGZXEsV5u0J8zUNDlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M+ykqwX/; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42cc8782869so55134815e9.2;
-        Tue, 17 Sep 2024 06:43:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726580607; x=1727185407; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bbb2mbO8AMTdwv/45h50v0aXu65v+xvFa2gHtGlfMuU=;
-        b=M+ykqwX/LcTIJWPjLPLJu9SyFqXnuKjxtmODzrCr1Nzm+aJlUO/scYZZzYNRwWCrwz
-         cEu6S9J5edtcoFvqPHrCNaUOrOm3vuBD1XQPXTwD0MAZ4GrnlQePAy8msXdmw8YycTXe
-         pvvml8LB7YVMVWjwi+Bop3xUK/Hjc5o0rhi7e1bIt8XnVb1Q+mPg7B++hesGW6REJzFE
-         E2PSDJK85Xe9G7krsa9vIaYQBeyEcphIipBXCPsbjaznJpAE79vxFe2zKSkIpEPPdlE1
-         gqU/6KmErcu772kYXUZ3MvuMlnnYIQneIFnYL9+IbOHmD1xRR8ZGv0q6RZL25kt0Lvvm
-         FtcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726580607; x=1727185407;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bbb2mbO8AMTdwv/45h50v0aXu65v+xvFa2gHtGlfMuU=;
-        b=lQiTROg9SSUCiEu+Bxw1Vt7sO6WUXKKTcDvgKw4iEJvHFjjYypVUOk4TIzNLCSw/ZG
-         S2CgWu9ILh9ETxgBooFx+rfLpOyiSIvpQh/1qHrsMcdbO6C7YOWHxNQDHPgPG6HcL303
-         nYzNu7+lxPvod4GHvuXzH6JvE5WbTuAeL3r+woRAwUy/ROqqrG21on9FHRKXXtLQewlr
-         RuPCD8gXEbOiJQ3haZB7SFsW9SV0HjZgPJoa8IVz7adTT9PgQcMgcK5glE/MAHLbpIqY
-         25NPKIpz+OXHbpQX4NhhcCKjTtUAsqg7GDxgIUr7xlr2wb/cdziGbsqPqn+fmCkJUxLB
-         E1aw==
-X-Forwarded-Encrypted: i=1; AJvYcCU+hX+tSUWRmwQy/N3p0v3/kyDs8HlXSQXnIu5y9h2Wz+Qf9Ed+mRNn5cuL8TAqHjJ+DGtr2Q+mppA=@vger.kernel.org, AJvYcCW+i7IpWRHshtYb6s+cWmi9JJ0BzRdFBytIxg7F9VB0PISzsPoAB/zRt7R5OPmEjKL02ay/O1mOasJXcgY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwD6tg21w6hOIEuvq/QG6ynljAg7RXcs46winAjGpfu9MqkpKUb
-	ua0DASCE23J8d78u1vCTC4wUQKwR3YVgLH1xdi6g0+FlF+eoZbM8
-X-Google-Smtp-Source: AGHT+IF7jeBYtmOFXU6REeO5iUKQgDfXwRXsUA/x3Dj8962mQpX85hKXti71qD+hXlrL37TPw9KEqA==
-X-Received: by 2002:a05:600c:1c29:b0:42c:bd27:4be4 with SMTP id 5b1f17b1804b1-42cdb531e7emr131668535e9.8.1726580607110;
-        Tue, 17 Sep 2024 06:43:27 -0700 (PDT)
-Received: from localhost.localdomain ([37.72.3.43])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-378e71f06a4sm9506530f8f.23.2024.09.17.06.43.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Sep 2024 06:43:26 -0700 (PDT)
-From: =?UTF-8?q?Miquel=20Sabat=C3=A9=20Sol=C3=A0?= <mikisabate@gmail.com>
-To: rafael@kernel.org
-Cc: viresh.kumar@linaro.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Miquel=20Sabat=C3=A9=20Sol=C3=A0?= <mikisabate@gmail.com>
-Subject: [PATCH] cpufreq: Avoid a bad reference count on CPU node
-Date: Tue, 17 Sep 2024 15:42:46 +0200
-Message-ID: <20240917134246.584026-1-mikisabate@gmail.com>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1726580886; c=relaxed/simple;
+	bh=KlDLJejjCFlS/Dlw6yFzd1KdagjYSoOiIaAOqNn/nBI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FmlZn9E2NHPtoYKJ51mYt0DeYMxEDa69IDsyJJUt9F/FrDPtORS+4JqYNdRRXzzxCDX9tecEbgaEohkSljL+xYwY5cchSr/sXFg8x7GQwNM5j7AIKmFWNMtjc/3brxwyDT6JqOyJEEpC+cz7oQ3Gt9RU8t+O6ODr7micSUE/WEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qFDmLgW+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00762C4CEC5;
+	Tue, 17 Sep 2024 13:48:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726580886;
+	bh=KlDLJejjCFlS/Dlw6yFzd1KdagjYSoOiIaAOqNn/nBI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qFDmLgW+rzmWfuSxTWC21lbdssJzd1iCBzbh0mhT089Pj93pi6BZREarokKfs/m9L
+	 4NS/miECacT2Y8hfqYH7ybuZgbtVawivAwSjwUkx2WpdkeIz/3FCd6KBWSUtA1Gxnt
+	 wVp4oGPVKGrXMS1Fxk9E6oKQX82JIA41OI/39QhXw9ACFFYvKMAY1iB9WMs7CJXGXm
+	 66K5nk7XywSfKdev69YZRMBc3h0ur2MM0TJPnFlVqf8g1voLxheS73WapOCL5Jg6ab
+	 VNn0wpqMSXh42L2Ty61R77laIRu7cEvml+nDy5/vv+8S9e0yiBZvxa3P4ykLS+Myui
+	 7tSJC+7YbRgww==
+Message-ID: <b5cfca5d-07ac-431b-8443-6749d9bcc7f2@kernel.org>
+Date: Tue, 17 Sep 2024 15:48:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2] interconnect: qcom: icc-rpmh: probe defer incase of
+ missing QoS clock dependency
+To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+ Georgi Djakov <djakov@kernel.org>
+Cc: Konrad Dybcio <konradybcio@kernel.org>,
+ Odelu Kukatla <quic_okukatla@quicinc.com>,
+ Jeff Johnson <quic_jjohnson@quicinc.com>, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Mike Tipton <quic_mdtipton@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>
+References: <20240911094516.16901-1-quic_rlaggysh@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konradybcio@kernel.org>
+In-Reply-To: <20240911094516.16901-1-quic_rlaggysh@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-In the parse_perf_domain function, if the call to
-of_parse_phandle_with_args returns an error, then the reference to the
-CPU device node that was acquired at the start of the function would not
-be properly decremented.
+On 11.09.2024 11:45 AM, Raviteja Laggyshetty wrote:
+> Return -EPROBE_DEFER from interconnect provider incase probe defer is
+> received from devm_clk_bulk_get_all(). This would help in reattempting
+> the inteconnect driver probe, once the required QoS clocks are
+> available.
+> 
+> Suggested-by: Bjorn Andersson <andersson@kernel.org>
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+> ---
 
-Address this by declaring the variable with the __free(device_node)
-cleanup attribute.
+Reviewed-by: Konrad Dybcio <konradybcio@kernel.org>
 
-Signed-off-by: Miquel Sabaté Solà <mikisabate@gmail.com>
----
- include/linux/cpufreq.h | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index d4d2f4d1d7cb..aabec598f79a 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -1113,10 +1113,9 @@ static inline int parse_perf_domain(int cpu, const char *list_name,
- 				    const char *cell_name,
- 				    struct of_phandle_args *args)
- {
--	struct device_node *cpu_np;
- 	int ret;
- 
--	cpu_np = of_cpu_device_node_get(cpu);
-+	struct device_node *cpu_np __free(device_node) = of_cpu_device_node_get(cpu);
- 	if (!cpu_np)
- 		return -ENODEV;
- 
-@@ -1124,9 +1123,6 @@ static inline int parse_perf_domain(int cpu, const char *list_name,
- 					 args);
- 	if (ret < 0)
- 		return ret;
--
--	of_node_put(cpu_np);
--
- 	return 0;
- }
- 
--- 
-2.46.0
-
+Konrad
 
