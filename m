@@ -1,141 +1,135 @@
-Return-Path: <linux-pm+bounces-14363-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14364-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C40197AE4A
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 11:54:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EA3497AEAC
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 12:24:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 258CAB2E744
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 09:53:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4380FB23F54
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 10:22:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FE0E165EE4;
-	Tue, 17 Sep 2024 09:53:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="BuqWDJi2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083BA15C13E;
+	Tue, 17 Sep 2024 10:22:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8328E13CFB6;
-	Tue, 17 Sep 2024 09:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CF63159571;
+	Tue, 17 Sep 2024 10:22:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726566791; cv=none; b=i3YyV7WxJ0ABjMF1/2ehyseagpGHXnozQlNVxrcKe2145D71Zhwdk8NQN1p0uBVyBufAW9RnGWL+vc2qRob5v/7OpiNXE+v/ci7/w85hTeEy+ldK3oUOXV0Pjm+4IptoiYRuujqMkTee32ZR8UrJqlr490ujcmvCuejGOfS4lqA=
+	t=1726568536; cv=none; b=PwncjNswHS6VqQ74dWd0g2/EDCtwga31JQUfiwrT+S7y6XgCfxQC4igUPJmvpRBc3seIpSxm8+5XcRCuGRHEo5/846ZoIdCIWJcrzOSAi5/Ts3NS5quB6i61gp6kWPGfljWBDoJ8roTrB/zPlQeq5XHcA4Sqq7DYLnlKRPxALUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726566791; c=relaxed/simple;
-	bh=2m51t4gIfYSPvCfow6feJB+exKSsXcOr1fqoOxJ8ujk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fFlFLCLJECGtUvuMCWzENuMpurDovG5scl3IX+ZM+uV4aKNVsDPLVYkWTxuMaxb2sF+zOt9g4lsaAtQSkYJu7dp5lp7A7cI9aGrnW4j1xIr4MMD/r5Ev7S1Habs2UrGe0C6/JczwBYOmz84LXx4pD6PcAA7vUq3bSB8OZReGAM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=BuqWDJi2; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48H9r6WQ097363;
-	Tue, 17 Sep 2024 04:53:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1726566786;
-	bh=I4nyURUyPPGO6OLix6jfXbgVX+R6pMWHrcbM7Qd7lJ0=;
-	h=From:To:CC:Subject:Date;
-	b=BuqWDJi2N1x/PMQAYsG/zQn0iVDzfBYZ5+90Ftgxrzx7yd1ADM18UryBrKOW7/2F9
-	 cEyobeOJLxZCUpcGMWOIwzI+ulXy2bj4LLPXE3X5VOz9aG6DaA0UIyqhOBo+oDHcgu
-	 /4EOIO/xD7QNUStlfAmkJSzgOuORw59rVmsJisY8=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 48H9r5WP057401
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 17 Sep 2024 04:53:05 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 17
- Sep 2024 04:53:05 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 17 Sep 2024 04:53:05 -0500
-Received: from lcpd911.dhcp.ti.com (lcpd911.dhcp.ti.com [10.24.72.240])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48H9r1T6069530;
-	Tue, 17 Sep 2024 04:53:02 -0500
-From: Dhruva Gole <d-gole@ti.com>
-To: Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Rob
- Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor
- Dooley <conor+dt@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Dhruva Gole <d-gole@ti.com>,
-        <nm@ti.com>, <vigneshr@ti.com>
-Subject: [PATCH v3] dt-bindings: opp: operating-points-v2-ti-cpu: Describe opp-supported-hw
-Date: Tue, 17 Sep 2024 15:22:52 +0530
-Message-ID: <20240917095252.1292321-1-d-gole@ti.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1726568536; c=relaxed/simple;
+	bh=MX7hrA4AKrbGn96IPppUU4/Y35+8h9yCbDoZTZtKY+0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RkFAy5GgnkFrYxJhAJzgqhEQ9jh72rm2EA94IT2RG+nWRDsSKQxGh6EvB7lENH+j7LKnu6T5gH4Rh314VgDwcnQyeQ1P36/ju3RvpxVGkJdmbaaDZvNFHt6eVQkXRUCxPYehNBQvfmwWeZ4m+tSCurZ47KQUdPFsgf8DuayHXL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB5961007;
+	Tue, 17 Sep 2024 03:22:43 -0700 (PDT)
+Received: from [10.1.35.57] (e127648.arm.com [10.1.35.57])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 020813F64C;
+	Tue, 17 Sep 2024 03:22:12 -0700 (PDT)
+Message-ID: <e41ad66f-b8eb-4a17-aab0-6dc0f8fa55f8@arm.com>
+Date: Tue, 17 Sep 2024 11:22:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 06/16] sched/schedutil: Add a new tunable to dictate
+ response time
+To: Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Qais Yousef <qyousef@layalina.io>, Ingo Molnar <mingo@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
+ John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240820163512.1096301-1-qyousef@layalina.io>
+ <20240820163512.1096301-7-qyousef@layalina.io>
+ <c55339cd-85d6-4777-beec-41c4d9931b9a@arm.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <c55339cd-85d6-4777-beec-41c4d9931b9a@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-It seems like we missed migrating the complete information from the old
-DT binding where we had described what the opp-supported-hw is supposed
-to describe. Hence, bring back the description from the previous binding
-to the current one along with a bit more context on what the values are
-supposed to be.
+On 9/16/24 23:22, Dietmar Eggemann wrote:
+> On 20/08/2024 18:35, Qais Yousef wrote:
+>> The new tunable, response_time_ms,  allow us to speed up or slow down
+>> the response time of the policy to meet the perf, power and thermal
+>> characteristic desired by the user/sysadmin. There's no single universal
+>> trade-off that we can apply for all systems even if they use the same
+>> SoC. The form factor of the system, the dominant use case, and in case
+>> of battery powered systems, the size of the battery and presence or
+>> absence of active cooling can play a big role on what would be best to
+>> use.
+>>
+>> The new tunable provides sensible defaults, but yet gives the power to
+>> control the response time to the user/sysadmin, if they wish to.
+>>
+>> This tunable is applied before we apply the DVFS headroom.
+>>
+>> The default behavior of applying 1.25 headroom can be re-instated easily
+>> now. But we continue to keep the min required headroom to overcome
+>> hardware limitation in its speed to change DVFS. And any additional
+>> headroom to speed things up must be applied by userspace to match their
+>> expectation for best perf/watt as it dictates a type of policy that will
+>> be better for some systems, but worse for others.
+>>
+>> There's a whitespace clean up included in sugov_start().
+>>
+>> Signed-off-by: Qais Yousef <qyousef@layalina.io>
+>> ---
+>>  Documentation/admin-guide/pm/cpufreq.rst |  17 +++-
+>>  drivers/cpufreq/cpufreq.c                |   4 +-
+>>  include/linux/cpufreq.h                  |   3 +
+>>  kernel/sched/cpufreq_schedutil.c         | 115 ++++++++++++++++++++++-
+>>  4 files changed, 132 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
+>> index 6adb7988e0eb..fa0d602a920e 100644
+>> --- a/Documentation/admin-guide/pm/cpufreq.rst
+>> +++ b/Documentation/admin-guide/pm/cpufreq.rst
+>> @@ -417,7 +417,7 @@ is passed by the scheduler to the governor callback which causes the frequency
+>>  to go up to the allowed maximum immediately and then draw back to the value
+>>  returned by the above formula over time.
+>>  
+>> -This governor exposes only one tunable:
+>> +This governor exposes two tunables:
+>>  
+>>  ``rate_limit_us``
+>>  	Minimum time (in microseconds) that has to pass between two consecutive
+>> @@ -427,6 +427,21 @@ This governor exposes only one tunable:
+>>  	The purpose of this tunable is to reduce the scheduler context overhead
+>>  	of the governor which might be excessive without it.
+>>  
+>> +``respone_time_ms``
+s/respone/response
+>> +	Amount of time (in milliseconds) required to ramp the policy from
+>> +	lowest to highest frequency. Can be decreased to speed up the
+>                   ^^^^^^^^^^^^^^^^^
+> 
+> This has changed IMHO. Should be the time from lowest (or better 0) to
+> second highest frequency.
+> 
+> https://lkml.kernel.org/r/20230827233203.1315953-6-qyousef@layalina.io
+> 
+> [...]
+> 
 
-Fixes: e576a9a8603f ("dt-bindings: cpufreq: Convert ti-cpufreq to json schema")
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
----
-
-Changes in v3:
-- Use the items: and then provide description for both required items.
-  This tries to address Rob's comments on previous revision.
-- I've not use min/max Items as the 2 descriptions items implicitly
-  imply that number of bitfields needed are 2.
-- Link to v2: https://lore.kernel.org/all/20240905-b4-opp-dt-binding-fix-v2-1-1e3d2a06748d@ti.com/
-
-Changes in v2:
-- Drop the patch where I updated Maintainers since it's already picked
-  by Viresh.
-- Add more details of how to populate the property based on device
-  documents like TRM/ datasheet.
-- Link to v1: https://lore.kernel.org/r/20240903-b4-opp-dt-binding-fix-v1-0-f7e186456d9f@ti.com
-
----
- .../opp/operating-points-v2-ti-cpu.yaml         | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
-index fd0c8d5c5f3e..700af89487d0 100644
---- a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
-+++ b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
-@@ -45,7 +45,22 @@ patternProperties:
-       clock-latency-ns: true
-       opp-hz: true
-       opp-microvolt: true
--      opp-supported-hw: true
-+      opp-supported-hw:
-+        items:
-+          - description: |
-+            Which revision of the SoC the OPP is supported by.
-+            This can be easily obtained from the datasheet of the
-+            part being ordered/used. For eg. it will be 0x01 for SR1.0
-+          - description : |
-+            Which eFuse bits indicate this OPP is available.
-+            The device datasheet has a table talking about Device Speed Grades.
-+            If one were to sort this table and only retain the unique elements
-+            of the MAXIMUM OPERATING FREQUENCY starting from the first row
-+            which tells the lowest OPP, to the highest. The corresponding bits
-+            need to be set based on N elements of speed grade the device supports.
-+            So, if there are 3 possible unique MAXIMUM OPERATING FREQUENCY
-+            in the table, then BIT(0), (1) and (2) will be set, which means
-+            the value shall be 0x7.
-       opp-suspend: true
-       turbo-mode: true
- 
--- 
-2.34.1
-
+Isn't it even more complicated than that?
+We have the headroom applied on top of the response_time_ms, so
+response_time_ms will be longer than the time it takes to reach highest cap OPP.
+Furthermore, applying this to a big CPU e.g. with OPP0 cap of 200, starting
+from 0 is (usually?) irrelevant, as we likely wouldn't be here if we were at 0.
+I get the intent, but conveying this in an understandable interface is hard.
 
