@@ -1,135 +1,260 @@
-Return-Path: <linux-pm+bounces-14364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14365-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EA3497AEAC
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 12:24:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 625E197AEF3
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 12:36:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4380FB23F54
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 10:22:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E78C281423
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 10:36:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083BA15C13E;
-	Tue, 17 Sep 2024 10:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18635167D83;
+	Tue, 17 Sep 2024 10:36:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CF63159571;
-	Tue, 17 Sep 2024 10:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 117F816130C;
+	Tue, 17 Sep 2024 10:36:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726568536; cv=none; b=PwncjNswHS6VqQ74dWd0g2/EDCtwga31JQUfiwrT+S7y6XgCfxQC4igUPJmvpRBc3seIpSxm8+5XcRCuGRHEo5/846ZoIdCIWJcrzOSAi5/Ts3NS5quB6i61gp6kWPGfljWBDoJ8roTrB/zPlQeq5XHcA4Sqq7DYLnlKRPxALUE=
+	t=1726569402; cv=none; b=gEogT8OEQg7uCmLysOISxAJKV6F+CbL7ja9G7yYcVrGiRfSI0iV9/PDonr+RaNdY5r06mSO37/giZU6GmhgCQeBHUhD0OWCvKoxZHYcqGlPrA5lk8W2n7juillJNfuFTL4bolok8N47ikKOo/dlOvzTcS4igFrYF6Dj+7qMQZRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726568536; c=relaxed/simple;
-	bh=MX7hrA4AKrbGn96IPppUU4/Y35+8h9yCbDoZTZtKY+0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RkFAy5GgnkFrYxJhAJzgqhEQ9jh72rm2EA94IT2RG+nWRDsSKQxGh6EvB7lENH+j7LKnu6T5gH4Rh314VgDwcnQyeQ1P36/ju3RvpxVGkJdmbaaDZvNFHt6eVQkXRUCxPYehNBQvfmwWeZ4m+tSCurZ47KQUdPFsgf8DuayHXL0=
+	s=arc-20240116; t=1726569402; c=relaxed/simple;
+	bh=Q9JsLsOTE9HWlKx4NBBWcpXXbT0Y/JlNm+xqL6UVWgY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JdJj34NukQCt0d/k8Wd6l21epdzzHK1AtKvh3eosZ6GJJEXr/GcEJ4c3xuuDlyZB0FfEe/337jaejPCYEmG3W9PfOP8EMTFsww/KkBnZNsdES28OVFbF+NuTs1W7QAwcXzyaTp65yeavYsHPEP7ru6pya7I2l0mqinnDqpU98Do=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB5961007;
-	Tue, 17 Sep 2024 03:22:43 -0700 (PDT)
-Received: from [10.1.35.57] (e127648.arm.com [10.1.35.57])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 020813F64C;
-	Tue, 17 Sep 2024 03:22:12 -0700 (PDT)
-Message-ID: <e41ad66f-b8eb-4a17-aab0-6dc0f8fa55f8@arm.com>
-Date: Tue, 17 Sep 2024 11:22:11 +0100
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D82841007;
+	Tue, 17 Sep 2024 03:37:08 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.80.58])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A96B3F64C;
+	Tue, 17 Sep 2024 03:36:39 -0700 (PDT)
+Date: Tue, 17 Sep 2024 11:36:37 +0100
+From: Ionela Voinescu <ionela.voinescu@arm.com>
+To: Jie Zhan <zhanjie9@hisilicon.com>
+Cc: beata.michalska@arm.com, wangxiongfeng2@huawei.com,
+	viresh.kumar@linaro.org, rafael@kernel.org,
+	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com,
+	jonathan.cameron@huawei.com, wanghuiqiang@huawei.com,
+	zhenglifeng1@huawei.com, lihuisong@huawei.com,
+	yangyicong@huawei.com, liaochang1@huawei.com, zengheng4@huawei.com
+Subject: Re: [PATCH v2 1/3] cppc_cpufreq: Return desired perf in ->get() if
+ feedback counters are 0
+Message-ID: <ZulbtT8joKPXlFCL@arm.com>
+References: <20240912072231.439332-1-zhanjie9@hisilicon.com>
+ <20240912072231.439332-2-zhanjie9@hisilicon.com>
+ <ZuK3sfcKf2gHssKa@arm.com>
+ <79353a26-7304-9d6a-9237-cfa8e7794601@hisilicon.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 06/16] sched/schedutil: Add a new tunable to dictate
- response time
-To: Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Qais Yousef <qyousef@layalina.io>, Ingo Molnar <mingo@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
- John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240820163512.1096301-1-qyousef@layalina.io>
- <20240820163512.1096301-7-qyousef@layalina.io>
- <c55339cd-85d6-4777-beec-41c4d9931b9a@arm.com>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <c55339cd-85d6-4777-beec-41c4d9931b9a@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <79353a26-7304-9d6a-9237-cfa8e7794601@hisilicon.com>
 
-On 9/16/24 23:22, Dietmar Eggemann wrote:
-> On 20/08/2024 18:35, Qais Yousef wrote:
->> The new tunable, response_time_ms,  allow us to speed up or slow down
->> the response time of the policy to meet the perf, power and thermal
->> characteristic desired by the user/sysadmin. There's no single universal
->> trade-off that we can apply for all systems even if they use the same
->> SoC. The form factor of the system, the dominant use case, and in case
->> of battery powered systems, the size of the battery and presence or
->> absence of active cooling can play a big role on what would be best to
->> use.
->>
->> The new tunable provides sensible defaults, but yet gives the power to
->> control the response time to the user/sysadmin, if they wish to.
->>
->> This tunable is applied before we apply the DVFS headroom.
->>
->> The default behavior of applying 1.25 headroom can be re-instated easily
->> now. But we continue to keep the min required headroom to overcome
->> hardware limitation in its speed to change DVFS. And any additional
->> headroom to speed things up must be applied by userspace to match their
->> expectation for best perf/watt as it dictates a type of policy that will
->> be better for some systems, but worse for others.
->>
->> There's a whitespace clean up included in sugov_start().
->>
->> Signed-off-by: Qais Yousef <qyousef@layalina.io>
->> ---
->>  Documentation/admin-guide/pm/cpufreq.rst |  17 +++-
->>  drivers/cpufreq/cpufreq.c                |   4 +-
->>  include/linux/cpufreq.h                  |   3 +
->>  kernel/sched/cpufreq_schedutil.c         | 115 ++++++++++++++++++++++-
->>  4 files changed, 132 insertions(+), 7 deletions(-)
->>
->> diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
->> index 6adb7988e0eb..fa0d602a920e 100644
->> --- a/Documentation/admin-guide/pm/cpufreq.rst
->> +++ b/Documentation/admin-guide/pm/cpufreq.rst
->> @@ -417,7 +417,7 @@ is passed by the scheduler to the governor callback which causes the frequency
->>  to go up to the allowed maximum immediately and then draw back to the value
->>  returned by the above formula over time.
->>  
->> -This governor exposes only one tunable:
->> +This governor exposes two tunables:
->>  
->>  ``rate_limit_us``
->>  	Minimum time (in microseconds) that has to pass between two consecutive
->> @@ -427,6 +427,21 @@ This governor exposes only one tunable:
->>  	The purpose of this tunable is to reduce the scheduler context overhead
->>  	of the governor which might be excessive without it.
->>  
->> +``respone_time_ms``
-s/respone/response
->> +	Amount of time (in milliseconds) required to ramp the policy from
->> +	lowest to highest frequency. Can be decreased to speed up the
->                   ^^^^^^^^^^^^^^^^^
-> 
-> This has changed IMHO. Should be the time from lowest (or better 0) to
-> second highest frequency.
-> 
-> https://lkml.kernel.org/r/20230827233203.1315953-6-qyousef@layalina.io
-> 
-> [...]
-> 
+Hi,
 
-Isn't it even more complicated than that?
-We have the headroom applied on top of the response_time_ms, so
-response_time_ms will be longer than the time it takes to reach highest cap OPP.
-Furthermore, applying this to a big CPU e.g. with OPP0 cap of 200, starting
-from 0 is (usually?) irrelevant, as we likely wouldn't be here if we were at 0.
-I get the intent, but conveying this in an understandable interface is hard.
+On Friday 13 Sep 2024 at 20:05:50 (+0800), Jie Zhan wrote:
+> 
+> Hi Ionela,
+> 
+> On 12/09/2024 17:43, Ionela Voinescu wrote:
+> 
+> ...
+> 
+> > 
+> > A possible (slimmer) alternative implementation for you to consider
+> > (this merges patches 1 & 2):
+> > 
+> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > index bafa32dd375d..c16be9651a6f 100644
+> > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > @@ -118,6 +118,9 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
+> > 
+> >         perf = cppc_perf_from_fbctrs(cpu_data, &cppc_fi->prev_perf_fb_ctrs,
+> >                                      &fb_ctrs);
+> > +       if (!perf)
+> > +               perf = cpu_data->perf_ctrls.desired_perf;
+> > +
+> 
+> I think it's better to just return here.
+> If feedback counters are successfully read but unchanged, the following
+> calculation and update in cppc_scale_freq_workfn() is meaningless because it
+> won't change anything.
+
+Agreed!
+
+> 
+> >         cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
+> > 
+> >         perf <<= SCHED_CAPACITY_SHIFT;
+> > @@ -726,7 +729,7 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+> > 
+> >         /* Check to avoid divide-by zero and invalid delivered_perf */
+> >         if (!delta_reference || !delta_delivered)
+> > -               return cpu_data->perf_ctrls.desired_perf;
+> > +               return 0;
+> 
+> This makes sense to me.
+> Here is probably why Patch 2 looks bulky.
+> 
+> > 
+> >         return (reference_perf * delta_delivered) / delta_reference;
+> >  }
+> > @@ -736,7 +739,7 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+> >         struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
+> >         struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> >         struct cppc_cpudata *cpu_data;
+> > -       u64 delivered_perf;
+> > +       u64 delivered_perf = 0;
+> >         int ret;
+> > 
+> >         if (!policy)
+> > @@ -747,19 +750,22 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+> >         cpufreq_cpu_put(policy);
+> > 
+> >         ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+> > -       if (ret)
+> > -               return 0;
+> > -
+> > -       udelay(2); /* 2usec delay between sampling */
+> > -
+> > -       ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+> > -       if (ret)
+> > -               return 0;
+> > +       if (!ret) {
+> > +               udelay(2); /* 2usec delay between sampling */
+> > +               ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+> > +       }
+> > +       if (!ret)
+> > +               delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+> > +                                                      &fb_ctrs_t1);
+> 
+> TBH, 'if (!ret)' style looks very strange to me.
+> We haven't done so anywhere in cppc_cpufreq, so let's keep consistency and make
+> it easier for people to read and maintain?
+
+I agree it's a bit of a difficult read, that's why I only sent my code
+as a suggestion. I did like the benefit of not having to have two
+different calls to cppc_perf_to_khz() and making the code below common
+for the error and non-error paths. But it's up to you. 
+> 
+> > +       if ((ret == -EFAULT) || !delivered_perf) {
+> > +               if (cppc_get_desired_perf(cpu, &delivered_perf))
+> > +                       delivered_perf = cpu_data->perf_ctrls.desired_perf;
+> 
+> will take this.
+> 
+> > +       }
+> > 
+> > -       delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+> > -                                              &fb_ctrs_t1);
+> > +       if (delivered_perf)
+> > +               return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
+> > 
+> > -       return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
+> > +       return 0;
+> >  }
+> > 
+> > disclaimer: not fully checked so likely not "production ready" code :)
+> > 
+> > Hope it helps,
+> > Ionela.
+> > 
+> >>  
+> >>  static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
+> >> -- 
+> >> 2.33.0
+> >>
+> > 
+> 
+> How about this? merged patch 1 & 2 as well.
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index bafa32dd375d..411303f2e8cb 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -118,6 +118,9 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
+> 
+>           perf = cppc_perf_from_fbctrs(cpu_data, &cppc_fi->prev_perf_fb_ctrs,
+>                                        &fb_ctrs);
+> +       if (!perf)
+> +               return;
+> +
+>           cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
+> 
+>           perf <<= SCHED_CAPACITY_SHIFT;
+> @@ -726,7 +729,7 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+> 
+>           /* Check to avoid divide-by zero and invalid delivered_perf */
+>           if (!delta_reference || !delta_delivered)
+> -               return cpu_data->perf_ctrls.desired_perf;
+> +               return 0;
+> 
+>           return (reference_perf * delta_delivered) / delta_reference;
+>    }
+> @@ -748,18 +751,32 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+> 
+>           ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+>           if (ret)
+> -               return 0;
+> +               goto out_err;
+> 
+>           udelay(2); /* 2usec delay between sampling */
+> 
+>           ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+>           if (ret)
+> -               return 0;
+> +               goto out_err;
+> 
+>           delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+>                                                  &fb_ctrs_t1);
+
+You need a check here for !delivered_perf (when at least one of the
+deltas is 0) in which case it would be good to take the same error path
+below. Something like:
+
+            if(delivered_perf)
+	            return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
+	    else
+		ret = -EFAULT;
+
+That's why I did the tricky if/else dance above as we need to take the
+error path below for multiple cases.
+
+Thanks,
+Ionela.
+
+> 
+>           return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
+> +
+> +out_err:
+> +       /*
+> +        * Feedback counters could be 0 when cores are powered down.
+> +        * Take desired perf for reflecting frequency in this case.
+> +        */
+> +       if (ret == -EFAULT) {
+> +               if (cppc_get_desired_perf(cpu, &delivered_perf))
+> +                       delivered_perf = cpu_data->perf_ctrls.desired_perf;
+> +
+> +               return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
+> +       }
+> +
+> +       return 0;
+>    }
+> 
+>    static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
+> ---
+> 
+> Thanks indeed!
+> Jie
 
