@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-14404-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14405-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3109B97BB06
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 12:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C57D97BB0E
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 12:46:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8E701F21391
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 10:43:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C74981F22BB8
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 10:46:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C38F517A597;
-	Wed, 18 Sep 2024 10:43:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13BA717D8A2;
+	Wed, 18 Sep 2024 10:46:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YyTif9Dw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qtqGAr3O"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1FA1CF9B;
-	Wed, 18 Sep 2024 10:43:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D819717BB25;
+	Wed, 18 Sep 2024 10:46:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726656187; cv=none; b=Id9/QPmDeqezmfALbsleuTtC/NKEybxH25EqUQii780medYsY0RS6bLpnr+9VY0FV3AizDIaQUC5BJX6ahRdiOOSzipR18yzpPvUUj1mUABGn9bpnjxiVOjfZuQ394GUyXp64+wf9KgwveKlLfw5dL3D6ydejHq3O9pPtypa4tU=
+	t=1726656371; cv=none; b=Z8sIq/soPTjkjVadYfGS23YQOKI4MF9dOLQ2gyyzW5Ppb64j0yHu6L/wRu3Tiuu72p+cdBkMHL1kUYemkvt+b/mWBVnO6syDLOFpRfc7xjUSyyOQ735cPMzXM6YDHimu5b6twtKpgENLfPxfS5OzCLMG/NyhmDwQ3cAanTlDbXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726656187; c=relaxed/simple;
-	bh=pLNSGSlxEJMU9z/8PbcHIURJH1dyIXAik9PiewAkWFg=;
+	s=arc-20240116; t=1726656371; c=relaxed/simple;
+	bh=Qnppz8lfqtx1saJh/hYNgsjBVMxARtwGX6DimFRp+tI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=LJZFU+dunnpSL07EedVrU30anHJ8tkw+4sAWjb7WQqwkRk9QpsoAS5rj8Sq81Y1e9SrNHJUYo6GsS53xt82n5lqw5MG2TWZ3qMxWJlqqo5TnZmBgr/rbNAZ7j/Mq3WCEietZMjuSScFQJ5ppGq0lHxgL9ZnxYOWZuv4o8MYhy48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YyTif9Dw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3345C4CEC3;
-	Wed, 18 Sep 2024 10:43:03 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=EavhyuB5FYjXTX+MD8FN9R5xoJEbEBOjjBcSZAUYYYFqYIukt/+ZxtQc8H5anaLeOOGPmtQm7V2xAwLDakq5JWUUQhFzNgBTbhTmuyIZT6Y8jGI6wOBfGro90EO7WJr0N9dic8dX63Jhz7cy+l8rP36XCaBS8p3xDv+TMnQ/zis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qtqGAr3O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2B25C4CEC3;
+	Wed, 18 Sep 2024 10:46:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726656187;
-	bh=pLNSGSlxEJMU9z/8PbcHIURJH1dyIXAik9PiewAkWFg=;
+	s=k20201202; t=1726656369;
+	bh=Qnppz8lfqtx1saJh/hYNgsjBVMxARtwGX6DimFRp+tI=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=YyTif9Dwz5B/v+HDBD0f3duGiOGbbpEjEPhqdkaKAMkM28D8PaLaNZ9lX/d8jHuxC
-	 9vSPH+M4SHdu1ZilQNO2K6/IVtLopndSQmlS8sJG3vU13kZZZug2hx+ABzRRIYLmoT
-	 OIYWoRdthOC6MnM1R7+ypzs6hy5I9puxALU+V1ND0AzYiZ3x2mPSu3o1THbrOdfdgT
-	 Vm7wtHDPb0vHCla0KEmCc0MbCnB7LKcaFQIvHqr0Mf5oj+l4hs8iBmOSCIjNwbM2v2
-	 hn7I/P8DDnWXZRKgMLGywASc63F18/SndyrsPx+2H7LT/Qc6AFGTgsfcSEIU1cf7pZ
-	 hS31q71yoxs3Q==
-Message-ID: <89a7e86b-8866-4148-9f9e-13ca84c1aede@kernel.org>
-Date: Wed, 18 Sep 2024 12:43:01 +0200
+	b=qtqGAr3OKlzRxwhZOwjnfH1a6sZH1gy5TUNJ7FQ1BvtHCdrDpChObKblx6qi7jxPS
+	 yE4w/ECmrHmeD73HEsyGqyAAvT7OTAouiJiv6apaVVviDmqWKh4DrZbUlbV7iAsiGZ
+	 qYdPKc5Weq/h8SeXsePqYm61JM7ahPzEF2fhiXUZwwgTuQtEJrnJNmWaCToq9e9epU
+	 +UR7/HMdx8iUjpA3cYPNba8FpDunJJ9Xgu01vDX1NzmzvVUjyM9qSGrWMbZHeAdRZw
+	 gsPzQFqgtlAkSaFjzDSlAkqDgLKsY045grcKPi4IYieiK3RGMaVOYzHPNQiyZ/MeiD
+	 qSYjsObSWj/hw==
+Message-ID: <d27d7439-bd8d-4e89-b940-cb1cebba2fb8@kernel.org>
+Date: Wed, 18 Sep 2024 12:46:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] power: supply: initial support for TWL6030/32
+Subject: Re: [PATCH 1/3] dt-bindings: power: supply: Add TI TWL603X charger
 To: Andreas Kemnade <andreas@kemnade.info>, tony@atomide.com,
  Sebastian Reichel <sre@kernel.org>, linux-omap@vger.kernel.org,
  devicetree@vger.kernel.org, Lee Jones <lee@kernel.org>,
@@ -58,7 +58,7 @@ To: Andreas Kemnade <andreas@kemnade.info>, tony@atomide.com,
  linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
  linux-pm@vger.kernel.org
 References: <20240918084132.928295-1-andreas@kemnade.info>
- <20240918084132.928295-4-andreas@kemnade.info>
+ <20240918084132.928295-2-andreas@kemnade.info>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,199 +104,134 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240918084132.928295-4-andreas@kemnade.info>
+In-Reply-To: <20240918084132.928295-2-andreas@kemnade.info>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 18/09/2024 10:41, Andreas Kemnade wrote:
-> Add a driver for the charger in the TWL6030/32. For now it does not report
-> much in sysfs but parameters are set up for USB, charging is enabled with
-> the specified parameters. It stops charging when full and also restarts
-> charging.
-> This prevents ending up in a system setup where you run out of battery
-> although a charger is plugged in after precharge completed.
+> Use a fallback compatible since for especially for generic
+> defensive setup of parameters, both 6030 and 6032 are the same and
+> U-Boot actually uses a generic 6030/32 function to enable the
+> charger.
 > 
-> Battery voltage behavior was checked via the GPADC.
-> 
-
-Few stylistic comments below.
-
 > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 > ---
->  drivers/power/supply/Kconfig           |  10 +
->  drivers/power/supply/Makefile          |   1 +
->  drivers/power/supply/twl6030_charger.c | 566 +++++++++++++++++++++++++
->  3 files changed, 577 insertions(+)
->  create mode 100644 drivers/power/supply/twl6030_charger.c
+>  .../power/supply/ti,twl6030-charger.yaml      | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/ti,twl6030-charger.yaml
 > 
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index bcfa63fb9f1e2..9f2eef6787f7a 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -493,6 +493,16 @@ config CHARGER_TWL4030
->  	help
->  	  Say Y here to enable support for TWL4030 Battery Charge Interface.
->  
-> +config CHARGER_TWL6030
-> +	tristate "OMAP TWL6030 BCI charger driver"
-> +	depends on IIO && TWL4030_CORE
+> diff --git a/Documentation/devicetree/bindings/power/supply/ti,twl6030-charger.yaml b/Documentation/devicetree/bindings/power/supply/ti,twl6030-charger.yaml
+> new file mode 100644
+> index 0000000000000..fe0fe9a78761c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/ti,twl6030-charger.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: GPL-2.0
 
-|| COMPILE_TEST, at least for TWL part
-(but please test first)
+Dual license. See checkpatch.
 
-> +	help
-> +	  Say Y here to enable support for TWL6030/6032 Battery Charge
-> +	  Interface.
-> +
-> +	  This driver can be build as a module. If so, the module will be
-> +	  called twl6030_charger.
-> +
+Please run scripts/checkpatch.pl and fix reported warnings. Then please
+run `scripts/checkpatch.pl --strict` and (probably) fix more warnings.
+Some warnings can be ignored, especially from --strict run, but the code
+here looks like it needs a fix. Feel free to get in touch if the warning
+is not clear.
 
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/ti,twl6030-charger.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TWL6030/32 BCI (Battery Charger Interface)
+> +
+> +description: |
 
-
-> +
-> +static int twl6030_charger_probe(struct platform_device *pdev)
-> +{
-> +	struct twl6030_charger_info *charger;
-> +	struct power_supply_config psy_cfg = {};
-> +	int ret;
-> +	u8 val;
-> +
-> +	charger = devm_kzalloc(&pdev->dev, sizeof(*charger), GFP_KERNEL);
-> +	if (!charger)
-> +		return -ENOMEM;
-> +
-> +	charger->dev = &pdev->dev;
-> +	charger->irq_chg = platform_get_irq(pdev, 0);
-> +
-> +	platform_set_drvdata(pdev, charger);
-> +	psy_cfg.drv_data = charger;
-> +
-> +	charger->channel_vusb = devm_iio_channel_get(&pdev->dev, "vusb");
-> +	if (IS_ERR(charger->channel_vusb)) {
-> +		ret = PTR_ERR(charger->channel_vusb);
-> +		if (ret == -EPROBE_DEFER)
-> +			return ret;	/* iio not ready */
-> +		dev_warn(&pdev->dev, "could not request vusb iio channel (%d)",
-> +			 ret);
-> +		charger->channel_vusb = NULL;
-> +	}
-> +
-> +	charger->usb = devm_power_supply_register(&pdev->dev,
-> +						  &twl6030_charger_usb_desc,
-> +						  &psy_cfg);
-> +	if (IS_ERR(charger->usb)) {
-
-Checkpatch...
-
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(charger->usb),
-> +				     "Failed to register usb\n");
-> +	}
-> +
-> +	ret = power_supply_get_battery_info(charger->usb, &charger->binfo);
-> +	if (ret < 0)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "Failed to get battery info\n");
-> +
-> +	dev_info(&pdev->dev, "battery with vmax %d imax: %d\n",
-> +		 charger->binfo->constant_charge_voltage_max_uv,
-> +		 charger->binfo->constant_charge_current_max_ua);
-> +
-> +	if (charger->binfo->constant_charge_voltage_max_uv == -EINVAL) {
-> +		ret = twl6030_charger_read(CHARGERUSB_CTRLLIMIT1, &val);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		charger->binfo->constant_charge_voltage_max_uv =
-> +			VOREG_TO_UV(val);
-> +	}
-> +
-> +	if (charger->binfo->constant_charge_voltage_max_uv > 4760000 ||
-> +	    charger->binfo->constant_charge_voltage_max_uv < 350000)
-> +		return dev_err_probe(&pdev->dev, -EINVAL,
-> +				     "Invalid charge voltage\n");
-> +
-> +	if (charger->binfo->constant_charge_current_max_ua == -EINVAL) {
-> +		ret = twl6030_charger_read(CHARGERUSB_CTRLLIMIT2, &val);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		charger->binfo->constant_charge_current_max_ua = VICHRG_TO_UA(val);
-> +	}
-> +
-> +	if (charger->binfo->constant_charge_current_max_ua < 100000 ||
-> +	    charger->binfo->constant_charge_current_max_ua > 1500000) {
-> +		return dev_err_probe(&pdev->dev, -EINVAL,
-> +			 "Invalid charge current\n");
-> +	}
-> +
-> +	if ((charger->binfo->charge_term_current_ua != -EINVAL) &&
-> +	    (charger->binfo->charge_term_current_ua > 400000 ||
-> +	     charger->binfo->charge_term_current_ua < 50000)) {
-> +		return dev_err_probe(&pdev->dev, -EINVAL,
-> +			"Invalid charge termination current\n");
-> +	}
-> +
-> +	ret = devm_delayed_work_autocancel(&pdev->dev,
-> +					   &charger->charger_monitor,
-> +					   twl6030_charger_wdg);
-> +	if (ret < 0)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "Failed to register delayed work\n");
-> +
-> +	ret = devm_request_threaded_irq(&pdev->dev, charger->irq_chg, NULL,
-> +					twl6030_charger_interrupt,
-> +					IRQF_ONESHOT, pdev->name,
-> +					charger);
-> +	if (ret < 0) {
-
-Drop {}, see checkpatch.
-
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "could not request irq %d\n",
-> +				     charger->irq_chg);
-> +	}
-> +
-> +	/* turing to charging to configure things */
-> +	twl6030_charger_write(CONTROLLER_CTRL1, 0);
-> +	twl6030_charger_interrupt(0, charger);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id twl_charger_of_match[] __maybe_unused = {
-> +	{.compatible = "ti,twl6030-charger", },
-> +	{.compatible = "ti,twl6032-charger", },
-
-So they are compatible? Why two entries in such case?
-
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, twl_charger_of_match);
-> +
-> +static struct platform_driver twl6030_charger_driver = {
-> +	.probe = twl6030_charger_probe,
-> +	.driver	= {
-> +		.name	= "twl6030_charger",
-> +		.of_match_table = of_match_ptr(twl_charger_of_match),
-
-I propose to drop of_match_ptr and maybe_unused, so this won't be
-restricted only to OF
-
-> +	},
-> +};
-> +module_platform_driver(twl6030_charger_driver);
-> +
-> +MODULE_DESCRIPTION("TWL6030 Battery Charger Interface driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:twl6030_charger");
+Do not need '|' unless you need to preserve formatting.
 
 
-You should not need MODULE_ALIAS() in normal cases. If you need it,
-usually it means your device ID table is wrong (e.g. misses either
-entries or MODULE_DEVICE_TABLE()). MODULE_ALIAS() is not a substitute
-for incomplete ID table.
+> +  The battery charger needs to be configured to do any charging besides of
+> +  precharging. The GPADC in the PMIC has to be used to get the related
+> +  voltages.
+> +
+> +maintainers:
+> +  - Andreas Kemnade <andreas@kemnade.info>
+> +
+> +allOf:
+> +  - $ref: power-supply.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
 
+No need for items here. Just const directly.
+
+> +          - const: "ti,twl6030-charger"
+
+Not tested.
+
+Drop ""
+
+> +      - items:
+> +          - const: "ti,twl6032-charger"
+> +          - const: "ti,twl6030-charger"
+> +
+> +  interrupts:
+> +    minItems: 2
+
+Drop minItems
+
+> +    maxItems: 2
+
+... and actually drop both and instead list items with description
+(items: -descriptio: ... - description: ....)
+
+> +
+> +  io-channels:
+> +    items:
+> +      - description: VBUS Voltage Channel
+> +
+> +  io-channel-names:
+> +    items:
+> +      - const: vusb
+> +
+> +  monitored-battery:
+
+Just : true
+
+> +    description:
+> +      phandle of battery characteristics devicetree node
+
+That's redundant, you do no say anything useful here.
+
+> +
+> +required:
+> +  - compatible
+> +  - interrupts
+> +  - monitored-battery
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pmic {
+
+Drop... or this is supposed to be part of parent schema?
+
+> +      bci {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+e.g. charger
+
+> +        compatible = "ti,twl6032-charger", "ti,twl6030-charger";
+> +        interrupts = <2>, <5>;
+> +        io-channels = <&gpadc 10>;
+> +        io-channel-names = "vusb";
+> +        monitored-battery = <&bat>;
+> +      };
+> +    };
 
 Best regards,
 Krzysztof
