@@ -1,130 +1,225 @@
-Return-Path: <linux-pm+bounces-14380-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14381-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D280C97B596
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 00:11:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5690D97B6AE
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 04:06:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 695DCB23CE9
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Sep 2024 22:11:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF1DA1F23949
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 02:06:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC8FF188A11;
-	Tue, 17 Sep 2024 22:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RsHFumXJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 800CA136E3F;
+	Wed, 18 Sep 2024 02:05:57 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE91315B0F2;
-	Tue, 17 Sep 2024 22:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19ACB136327;
+	Wed, 18 Sep 2024 02:05:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726611088; cv=none; b=DW3bQcsQXYHEAJhVuQ3EFPd/vJ/uDlT/PF8XVYpnPUqEhwj7p5DiIKAH3pygEPTziQrbTzyVCIdcPI1ARoXtfbEXD9n59Zb76llAlAWJqdJo0ULch4TpVJ3ZY2u7J8L/g6JToJXV2nvsq6+tco5DzAhKwll3BobyuG6ZxsmWO9E=
+	t=1726625157; cv=none; b=QyfkNXltW9qmlHlnj2YBnsZPOE40e7l7EgLQ0adgLGt3yszeB4aaISVQKeUF8GHT6cQraK37ABFEywfcutObfyR9nDECLdpaKb2zOU9sw9yJ76l5LHTW+FUy8SKZ73Mk57c8Y0MwrTt1pZpuYMHTCNxDzisk3el7g9JIH4sIBJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726611088; c=relaxed/simple;
-	bh=3zlCQ5XhONwK70p5T8DApl7b3ks8gUqFavgcErUBXks=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AphhQo8QgadqhcYeDw5FVxwg1+BmZmIH6IfWbmc7NoF4KhN2CV92ITg3/hIvRhHlVBkBsTlQ4OiLHLWZZRGh6S45KDz0vSX8PBSMrXd4tz50q1j1TWvHj92b1DgKpBe4kfwOSR/Vcng/jWAF+4FeT4Q/XqfEyOK0gpxC8MGPElo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RsHFumXJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 056FFC4CEC5;
-	Tue, 17 Sep 2024 22:11:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726611088;
-	bh=3zlCQ5XhONwK70p5T8DApl7b3ks8gUqFavgcErUBXks=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RsHFumXJphh53qPKe051WLkmQxpZK/VjsK7WQXiM5VBm3f8XbT8Pne4pm24A/EhRL
-	 0XIJP4W7857sNcj1jQLpsg5OElmB65FK4XT5Y+oHgE+yuaujCxIZEly2Emk4pCfj82
-	 /tk/pdMN1gIGAY6EHIcRQ2RCo92xJrhkID12F0S9R0kB4+qS3T54VW3KNrMvdSOahD
-	 LAs3aOflMuudR0tC7LY6uQRJdBCGG+C5A+8a/sS8tla94O8/jHavslHCCii9BJ3+gM
-	 UKqZqteDEnnx4gQWfN57WlFITA1OTaJsi8JtNkUdfiniH9WEMqxR5ekHPoxtMhF6lC
-	 v5lQF0MRZZKAw==
-Date: Tue, 17 Sep 2024 17:11:27 -0500
-From: Rob Herring <robh@kernel.org>
-To: Dhruva Gole <d-gole@ti.com>
-Cc: Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, nm@ti.com,
-	vigneshr@ti.com
-Subject: Re: [PATCH v3] dt-bindings: opp: operating-points-v2-ti-cpu:
- Describe opp-supported-hw
-Message-ID: <20240917221127.GA4045627-robh@kernel.org>
-References: <20240917095252.1292321-1-d-gole@ti.com>
+	s=arc-20240116; t=1726625157; c=relaxed/simple;
+	bh=KrOXD7A/FkKn0wwCwj6Sz7Ilamj4RI10vkzdupgq/aQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=qGwQujjOc/j/+1i09XN/YMhJ6InIFgwn9vujYz9nnNFov913VeHFxO7SfMqiyHFzPd5s4i4acoNW1srRgm0kPgK/KFkLLOw8VwAG6McYyLhvrPiOodGwzTyePYO/ktLY3tOhQZ0zxnDbtR6jt0CVufHq/qEGcJIyG8VwnAWaD3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4X7hmr71hDzFqmn;
+	Wed, 18 Sep 2024 10:05:00 +0800 (CST)
+Received: from dggpeml500019.china.huawei.com (unknown [7.185.36.137])
+	by mail.maildlp.com (Postfix) with ESMTPS id 737661402E0;
+	Wed, 18 Sep 2024 10:05:14 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by dggpeml500019.china.huawei.com
+ (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 18 Sep
+ 2024 10:05:14 +0800
+Message-ID: <30147eff-6e2f-1651-3875-52c9401273fb@hisilicon.com>
+Date: Wed, 18 Sep 2024 10:05:13 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240917095252.1292321-1-d-gole@ti.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 1/3] cppc_cpufreq: Return desired perf in ->get() if
+ feedback counters are 0
+To: Ionela Voinescu <ionela.voinescu@arm.com>
+CC: <beata.michalska@arm.com>, <wangxiongfeng2@huawei.com>,
+	<viresh.kumar@linaro.org>, <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-acpi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
+	<wanghuiqiang@huawei.com>, <zhenglifeng1@huawei.com>, <lihuisong@huawei.com>,
+	<yangyicong@huawei.com>, <liaochang1@huawei.com>, <zengheng4@huawei.com>
+References: <20240912072231.439332-1-zhanjie9@hisilicon.com>
+ <20240912072231.439332-2-zhanjie9@hisilicon.com> <ZuK3sfcKf2gHssKa@arm.com>
+ <79353a26-7304-9d6a-9237-cfa8e7794601@hisilicon.com>
+ <ZulbtT8joKPXlFCL@arm.com>
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <ZulbtT8joKPXlFCL@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500019.china.huawei.com (7.185.36.137)
 
-On Tue, Sep 17, 2024 at 03:22:52PM +0530, Dhruva Gole wrote:
-> It seems like we missed migrating the complete information from the old
-> DT binding where we had described what the opp-supported-hw is supposed
-> to describe. Hence, bring back the description from the previous binding
-> to the current one along with a bit more context on what the values are
-> supposed to be.
-> 
-> Fixes: e576a9a8603f ("dt-bindings: cpufreq: Convert ti-cpufreq to json schema")
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> ---
-> 
-> Changes in v3:
-> - Use the items: and then provide description for both required items.
->   This tries to address Rob's comments on previous revision.
-> - I've not use min/max Items as the 2 descriptions items implicitly
->   imply that number of bitfields needed are 2.
-> - Link to v2: https://lore.kernel.org/all/20240905-b4-opp-dt-binding-fix-v2-1-1e3d2a06748d@ti.com/
-> 
-> Changes in v2:
-> - Drop the patch where I updated Maintainers since it's already picked
->   by Viresh.
-> - Add more details of how to populate the property based on device
->   documents like TRM/ datasheet.
-> - Link to v1: https://lore.kernel.org/r/20240903-b4-opp-dt-binding-fix-v1-0-f7e186456d9f@ti.com
-> 
-> ---
->  .../opp/operating-points-v2-ti-cpu.yaml         | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
-> index fd0c8d5c5f3e..700af89487d0 100644
-> --- a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
-> +++ b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
-> @@ -45,7 +45,22 @@ patternProperties:
->        clock-latency-ns: true
->        opp-hz: true
->        opp-microvolt: true
-> -      opp-supported-hw: true
-> +      opp-supported-hw:
-> +        items:
-> +          - description: |
 
-Don't need '|'. If you want multiple paragraphs, then put a blank line 
-in between them.
 
-> +            Which revision of the SoC the OPP is supported by.
-> +            This can be easily obtained from the datasheet of the
-> +            part being ordered/used. For eg. it will be 0x01 for SR1.0
-> +          - description : |
-> +            Which eFuse bits indicate this OPP is available.
-> +            The device datasheet has a table talking about Device Speed Grades.
-> +            If one were to sort this table and only retain the unique elements
-> +            of the MAXIMUM OPERATING FREQUENCY starting from the first row
-> +            which tells the lowest OPP, to the highest. The corresponding bits
-> +            need to be set based on N elements of speed grade the device supports.
-> +            So, if there are 3 possible unique MAXIMUM OPERATING FREQUENCY
-> +            in the table, then BIT(0), (1) and (2) will be set, which means
-> +            the value shall be 0x7.
->        opp-suspend: true
->        turbo-mode: true
->  
-> -- 
-> 2.34.1
+On 17/09/2024 18:36, Ionela Voinescu wrote:
+
+...
+
+>>> @@ -747,19 +750,22 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+>>>         cpufreq_cpu_put(policy);
+>>>
+>>>         ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+>>> -       if (ret)
+>>> -               return 0;
+>>> -
+>>> -       udelay(2); /* 2usec delay between sampling */
+>>> -
+>>> -       ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+>>> -       if (ret)
+>>> -               return 0;
+>>> +       if (!ret) {
+>>> +               udelay(2); /* 2usec delay between sampling */
+>>> +               ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+>>> +       }
+>>> +       if (!ret)
+>>> +               delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+>>> +                                                      &fb_ctrs_t1);
+>>
+>> TBH, 'if (!ret)' style looks very strange to me.
+>> We haven't done so anywhere in cppc_cpufreq, so let's keep consistency and make
+>> it easier for people to read and maintain?
 > 
+> I agree it's a bit of a difficult read, that's why I only sent my code
+> as a suggestion. I did like the benefit of not having to have two
+> different calls to cppc_perf_to_khz() and making the code below common
+> for the error and non-error paths. But it's up to you. 
+
+Yeah understood. I did try minimizing duplicate code, but ended up with either
+duplicate 'get desired perf' stuff or duplicate cppc_perf_to_khz().
+
+...
+>>
+>>           delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+>>                                                  &fb_ctrs_t1);
+> 
+> You need a check here for !delivered_perf (when at least one of the
+> deltas is 0) in which case it would be good to take the same error path
+> below. Something like:
+> 
+>             if(delivered_perf)
+> 	            return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
+> 	    else
+> 		ret = -EFAULT;
+> 
+> That's why I did the tricky if/else dance above as we need to take the
+> error path below for multiple cases.
+> 
+> Thanks,
+> Ionela.
+> 
+
+Sure, thanks for reminding this.
+
+...
+
+How does this look? I think this should have the least duplicate code except for
+two cppc_perf_to_khz() calls, while keeping the logic easy to follow.
+
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index bafa32dd375d..6070444ed098 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -118,6 +118,9 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
+ 
+        perf = cppc_perf_from_fbctrs(cpu_data, &cppc_fi->prev_perf_fb_ctrs,
+                                     &fb_ctrs);
++       if (!perf)
++               return;
++
+        cppc_fi->prev_perf_fb_ctrs = fb_ctrs;
+ 
+        perf <<= SCHED_CAPACITY_SHIFT;
+@@ -726,11 +729,27 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+ 
+        /* Check to avoid divide-by zero and invalid delivered_perf */
+        if (!delta_reference || !delta_delivered)
+-               return cpu_data->perf_ctrls.desired_perf;
++               return 0;
+ 
+        return (reference_perf * delta_delivered) / delta_reference;
+ }
+ 
++static int cppc_get_perf_ctrs_sample(int cpu,
++                                    struct cppc_perf_fb_ctrs *fb_ctrs_t0,
++                                    struct cppc_perf_fb_ctrs *fb_ctrs_t1)
++{
++       int ret;
++
++       ret = cppc_get_perf_ctrs(cpu, fb_ctrs_t0);
++       if (ret)
++               return ret;
++
++       udelay(2); /* 2usec delay between sampling */
++
++       ret = cppc_get_perf_ctrs(cpu, fb_ctrs_t1);
++       return ret;
++}
++
+ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+ {
+        struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
+@@ -746,20 +765,30 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+ 
+        cpufreq_cpu_put(policy);
+ 
+-       ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+-       if (ret)
+-               return 0;
+-
+-       udelay(2); /* 2usec delay between sampling */
+-
+-       ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+-       if (ret)
+-               return 0;
++       ret = cppc_get_perf_ctrs_sample(cpu, &fb_ctrs_t0, &fb_ctrs_t1);
++       if (ret) {
++               if (ret == -EFAULT)
++                       goto out_invalid_counters;
++               else
++                       return 0;
++       }
+ 
+        delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+                                               &fb_ctrs_t1);
++       if (!delivered_perf)
++               goto out_invalid_counters;
+ 
+        return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
++
++out_invalid_counters:
++       /*
++        * Feedback counters could be unchanged or 0 when a cpu enters a
++        * low-power idle state, e.g. clock-gated or power-gated.
++        * Get the lastest or cached desired perf for reflecting frequency.
++        */
++       if (cppc_get_desired_perf(cpu, &delivered_perf))
++               delivered_perf = cpu_data->perf_ctrls.desired_perf;
++       return cppc_perf_to_khz(&cpu_data->perf_caps, delivered_perf);
+ }
+ 
+ static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
+
+
+Thanks!
+Jie
 
