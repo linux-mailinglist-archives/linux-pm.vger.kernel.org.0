@@ -1,150 +1,113 @@
-Return-Path: <linux-pm+bounces-14418-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14419-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D215597BDE0
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 16:19:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BFCC97BE5C
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 17:04:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FA3D28451E
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 14:19:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F1F31F2251D
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 15:04:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5085101E2;
-	Wed, 18 Sep 2024 14:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0BE11C8FBA;
+	Wed, 18 Sep 2024 15:04:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="PWN3ix7O"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u8Dv+xMf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BC72B641;
-	Wed, 18 Sep 2024 14:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49E71C6F72
+	for <linux-pm@vger.kernel.org>; Wed, 18 Sep 2024 15:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726669144; cv=none; b=e/thD/vad9g4EpCAz/hLJIoLFPcB8IQAy4OO1UKbKo0qHrJAaNxd5tje5kQijNNJ9TvKzKr9n6T1WQT7PKJQ6j3Rp7D6ztrqY8S47jqE/sKFVJGsGihAgfDLjEojagv9wcaJVwBPmlitcfs+MwD6ROf7pR+DOQqn87f//L0nLJU=
+	t=1726671889; cv=none; b=FC45RcEGADgSOoAvlaauG0ica6FWeAhXCLr0FX0Ilc2V9sHLluhV9awd4iIvmqrhJAVqgbEzHmrlIFx3kKC8ciFwpN0PyKxB1nzNWYG9657pFJ6HB7JkIgrpc5CorfgLxLBybLLmvRCx6Iudxv2rTRP0W35RL8eBxzyWIAz9WQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726669144; c=relaxed/simple;
-	bh=kuIhVaH/sURzbeGtq9u4Yf7ANcaLs1U8dtZXXJxlLBQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ARSQtCXl6avL3YXfdq5mgtOTJl0IesUr4vFdzSWDKtScVyyqSWVCyMeR6sT/fTu4lxHbjXkvmtObBHhbc62JP2XFY+gcqNSGsrxe74RMmhotR6LYnvKAe3kH+I3ArHek/R2Z5ZSg3hSg9WUlT1L12f1o6zfVPg5ZZ0OAmVkVXkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=PWN3ix7O; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: ef94acd675c811efb66947d174671e26-20240918
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=XjEmjEbDr/iItb5rfSlsNht1UeFeXXltkTGmpbSrD10=;
-	b=PWN3ix7ONh+a4y/lAHDm8uxzSpLOvc219I9YQm1apLkUem5WUHwLxBhqYpE0FoJ/4dCroS3KfyvqxLhR8uNYorbOLG/88bs7sgHFsEBrTuv97D/bXHa40aTLPfHvdZQCEr5uBtd+iEPQ3aZ8agtidVv0uvlxXbCA53GbvdyV0Z4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:9493faad-fd0d-4bd8-80c4-877a3bb65f8b,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:7a3225c0-d7af-4351-93aa-42531abf0c7b,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|-5,EDM:-3,IP:ni
-	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
-	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: ef94acd675c811efb66947d174671e26-20240918
-Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw01.mediatek.com
-	(envelope-from <macpaul.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 906312236; Wed, 18 Sep 2024 22:18:54 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 18 Sep 2024 22:18:51 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkmbs13n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Wed, 18 Sep 2024 22:18:51 +0800
-Message-ID: <2af0621d-14ac-b7f3-b28d-2df698931121@mediatek.com>
-Date: Wed, 18 Sep 2024 22:18:49 +0800
+	s=arc-20240116; t=1726671889; c=relaxed/simple;
+	bh=L1NHWyy0NjF2dTP/ARc8BHAy85ATCfvirgTS6lcHILE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lCvmT2gAq0m0HHJY87bL3pchtOneRK3OhIKPERXZ44+iM7s9pBx4eXhgbXnFQIYSIOeHvRUntBHvyi5fKesdwSLU7M6vyKJBmDjvGY3Ik6v+Rh75khWDBp7YWl9IXpCY6qrotV73Zrl3oAOh0vnhHkbySwBMhI0TzTUVocqfi+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u8Dv+xMf; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a8a7903cb7dso441484766b.3
+        for <linux-pm@vger.kernel.org>; Wed, 18 Sep 2024 08:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1726671885; x=1727276685; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rAUj5z86FV+d6rAd4UOajymFlz61iSG2wpZ0JHsQ42s=;
+        b=u8Dv+xMf99nDwj/LZ89SRX6Xtt13al6gnFfD0R/U3FVBL1KkmkDugiCKEYXojPa7mr
+         G1ZIW3zCHcawyA+3x1oDERVpGMRdV2PTp/jJsxAJMOKH4w8/3msA9R6L7BbSw1DP5J1g
+         v6Y73KwvrQNac5MjcFyzVQShlLqBlyyfQnJPhOXkwDbMJJA5wjcFCQueLQrqDtrGsutT
+         Luj3xbjdcH30wbUxn0XXmxUAfC/R4EFK4KGBlK9tlH2caOOLqlf8nDdg+YIN2j8xhD8f
+         zdRJ09fs1H+2CSEpdxtpgWYghSZjaZISIqkEr2UlS/85RWDr6nPzdwPNIEK2l5LN+R26
+         bG0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726671885; x=1727276685;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rAUj5z86FV+d6rAd4UOajymFlz61iSG2wpZ0JHsQ42s=;
+        b=hDoVEbpwz547oQbnL6pXQZ65hSTjqIxeNTWSSkM7KFeO5sTRSz/mqI5KuCahkihP2s
+         02xQx35R/XxnewQH79rKD4Xb0AqhxU0H9xrKyUimM2wKZLS9M+2V/B4hn6Jb/VNzG0lo
+         vM1y1jRG0ZkSWb4saTB/NAdWttUWLiTT42cYlzFaMOpdMs2bABhW+XRtFV7TDg+U/PIB
+         cnjPWPiqr9onTV1gT2o46mwosZonrMH++1wpp1M7IHT+w3sQ2lFs8qO+T+OzJrDvZs63
+         WaKLzKmtjgooNjyWmMhCilTkUGsQH5Gd2oKCkrygc7xZMq69FRdhX2mysNBMCqOSjRBR
+         Fkyg==
+X-Gm-Message-State: AOJu0Yyzr6Rgv97u6apmEK5LPk2+OKeSlc/dfFGMLM5Mr3XwMRm3KSLm
+	9xZIbxiv+vewziAI5SzwJNP1gU1PjOZybCsVYw12KskMHaDCTQevFgOUMHhp6SkFZTglRvq+Hiw
+	6Atdm7Tv0Y93zX2K4Q7dUicQHYIVZJ/wcBKbqcA==
+X-Google-Smtp-Source: AGHT+IGEa1MCEaD0bdULC6b+TJ4wo1e1Num6uxETKpo/Rg0Pz+70M8LeHhF+ZrzyZIixLx67E+kqWhsRXxF1Divl44g=
+X-Received: by 2002:a05:6402:5108:b0:5c2:6311:c9d1 with SMTP id
+ 4fb4d7f45d1cf-5c41e1b5325mr25680316a12.22.1726671885023; Wed, 18 Sep 2024
+ 08:04:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 2/2] dt-bindings: mfd: mediatek: mt6397: Convert to DT
- schema format
-Content-Language: en-US
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC: Andrew Lunn <andrew@lunn.ch>, Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>, "David S . Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, "Liam
- Girdwood" <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Sean Wang
-	<sean.wang@mediatek.com>, Sen Chu <sen.chu@mediatek.com>,
-	<netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, Dmitry Torokhov
-	<dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, Lee Jones
-	<lee@kernel.org>, Sebastian Reichel <sre@kernel.org>, Chen Zhong
-	<chen.zhong@mediatek.com>, <linux-input@vger.kernel.org>,
-	<linux-leds@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-rtc@vger.kernel.org>, <linux-sound@vger.kernel.org>, Alexandre Mergnat
-	<amergnat@baylibre.com>, Bear Wang <bear.wang@mediatek.com>, Pablo Sun
-	<pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>, Chris-qj chen
-	<chris-qj.chen@mediatek.com>, MediaTek Chromebook Upstream
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Chen-Yu Tsai
-	<wenst@chromium.org>
-References: <20240918064955.6518-1-macpaul.lin@mediatek.com>
- <20240918064955.6518-2-macpaul.lin@mediatek.com>
- <20240918115151c896f33f@mail.local> <20240918115651c1475d36@mail.local>
-From: Macpaul Lin <macpaul.lin@mediatek.com>
-In-Reply-To: <20240918115651c1475d36@mail.local>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--8.691800-8.000000
-X-TMASE-MatchedRID: oTBA/+sdKaYOwH4pD14DsPHkpkyUphL9MVx/3ZYby79qv/+QKNcPLjC0
-	pJIQUiJOGseg1yShYPHih/b1HlnM9Q5G/b6aSGR8XP5rFAucBUG4vBuE2X0HlWCD5SM8YvVFrEc
-	1eeVEldxaYyc8H6RJsjyKeJLvd5yKS33cD/vC1hvMZk86HxFjjpxfK35V7okVhfNq6/87jDJYjc
-	VS5TZhCWHcSGagcNcdZy7lMbj3gjVQswgj0HOv3OYAh37ZsBDCfS0Ip2eEHny+qryzYw2E8Jkw8
-	KdMzN86KrauXd3MZDWUeK0fD/v8dvjqHGyLezS3oy0lljZZZ2v5QaKF1q8tByZGO6z8Y6YfwL6S
-	xPpr1/I=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--8.691800-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: 50E6DB0D564377DBBA495A7680F8C29ABE43384A3C6FFA277C2A8BBD86BA24502000:8
+References: <20240909095529.2325103-1-marcin.juszkiewicz@linaro.org>
+In-Reply-To: <20240909095529.2325103-1-marcin.juszkiewicz@linaro.org>
+From: Viresh Kumar <viresh.kumar@linaro.org>
+Date: Wed, 18 Sep 2024 20:34:32 +0530
+Message-ID: <CAKohpokMUqaMUJaSfdyY39idmh_ycYj+hi5sMSBmZV1CQ511qA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: use proper units for frequency
+To: Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
+On Mon, 9 Sept 2024 at 15:25, Marcin Juszkiewicz
+<marcin.juszkiewicz@linaro.org> wrote:
+>
+> When I booted my RK3588 based system I noticed that cpufreq complained
+> about system clock:
+>
+> [  +0.007211] cpufreq: cpufreq_online: CPU0: Running at unlisted initial frequency: 816000 KHz, changing to: 1008000 KHz
+>
+> Then I realized that unit is displayed wrong: "KHz" instead of "kHz".
+>
+> Signed-off-by: Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 04fc786dd2c0..76da29c2bd3f 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1539,7 +1539,7 @@ static int cpufreq_online(unsigned int cpu)
+>                          * frequency for longer duration. Hence, a BUG_ON().
+>                          */
+>                         BUG_ON(ret);
+> -                       pr_info("%s: CPU%d: Running at unlisted initial frequency: %u KHz, changing to: %u KHz\n",
+> +                       pr_info("%s: CPU%d: Running at unlisted initial frequency: %u kHz, changing to: %u kHz\n",
+>                                 __func__, policy->cpu, old_freq, policy->cur);
+>                 }
+>         }
 
-On 9/18/24 19:56, Alexandre Belloni wrote:
-> 
-> On 18/09/2024 13:51:51+0200, Alexandre Belloni wrote:
->> > Changes for v4:
->> >  - Remove "mediatek,mt6357" from PMIC's compatible string since there is a
->> >    seperated DT schema for PMIC mt6357.
->> > 
->> > Changes for v5:
->> >  - Rebase to next-20240913 (linux-next/master).
->> >  - Fix the "title" (device type) of mfd/mediatek,mt6397.yaml to "PMIC".
->> >  - RTC:
->> >   - Drop "start-year"
->> 
->> Maybe, instead of dropping the property, you should add support in the
->> driver by setting range_min and range_max.
-> 
-> Looking at this even more, the driver can probably be simplified by
-> setting start_year in probe and dropping RTC_MIN_YEAR_OFFSET.
-
-Thank you for pointing out where and how the driver should be changed.
-However, I'm wondering if this should be a fix with a separated
-patchset (bindings and the driver)? The board or SoC's device trees
-should be reviewed as well. I'll need to get someone's help (permission) 
-inside MediaTek to check those dts and construct the patch for RTC driver.
-That will take sometime.
-
-[snip]
-
-Thanks.
-Best Regards,
-Macpaul Lin
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
