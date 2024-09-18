@@ -1,205 +1,189 @@
-Return-Path: <linux-pm+bounces-14385-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14386-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14C0D97B7D2
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 08:19:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE4CB97B80C
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 08:41:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1ACC61C222E6
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 06:19:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75E491F22071
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 06:41:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA27B165F17;
-	Wed, 18 Sep 2024 06:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Ofo3F4nG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A12B8169AE6;
+	Wed, 18 Sep 2024 06:41:32 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD0E165F02;
-	Wed, 18 Sep 2024 06:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from zg8tmtu5ljy1ljeznc42.icoremail.net (zg8tmtu5ljy1ljeznc42.icoremail.net [159.65.134.6])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC0B34405
+	for <linux-pm@vger.kernel.org>; Wed, 18 Sep 2024 06:41:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.65.134.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726640347; cv=none; b=csuGpHXL2dwNB1PiWa1S2uCVhRGhEqdHwMiO0fsiZbg309T270CzIz7sxYFpiF9qH96qUF8SuT1YIPBIDlaCraMWbVMovr7J0Sy3uukzMFVdA8HejOGKkvgT1y7HaTutr1ZZz3mKsFPgmiTAqSS+iSnvExZQx4KEmfSzjzWJ7ug=
+	t=1726641692; cv=none; b=LL8scvXi9c5IZyFw0aEDsQhFKg9AwpJ7+fc5joU6uuJ+qq4y2ImVrpNsWxeQIb5yKHRLpGhymr+M9iWfXLvm+QaS9Liq/3A+RtHqG6jbZS+PW8YubIKvdeRW4xB2cHvjV3jWv1HkDqPkf8CBaNAtWF5E85zHpjYIZh7HPrR7jj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726640347; c=relaxed/simple;
-	bh=WGRZkyCXTGQOJsEMUeu7wr3x+FcT47Qyu1zpKi2WvzM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AZpnSWWGG0MMzlsh/1YNtiv8iDXm/53uv/A+oWSQxM9RemNF+JHdbccbIJ1cEs14lkCRQZmJ0kBDv3FlxEKMEVwyzlaCjMnOQuezC1elnsY00KddmzXrhf2CcUX79mVEBwSHHg9uoxbl552w7QcRZ8UgGRCb6ziBV9WK6I+2bgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Ofo3F4nG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B868DC4CECD;
-	Wed, 18 Sep 2024 06:19:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1726640347;
-	bh=WGRZkyCXTGQOJsEMUeu7wr3x+FcT47Qyu1zpKi2WvzM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ofo3F4nGNdIK8Su3dIxezd8vt4OkatIPOaV5McCABYhSwdoRKMkyEYidUVJbSaQW1
-	 NP/v9hVXOkVvI0Jhv45wRw1F6KYwOs1dX0vy2wRYz4h6V2+6/zhJr2Kydb8ZHMKmX3
-	 61uDUQBcl4E3XKch8o7RUcSCgJzILbjVlLnTTG9w=
-Date: Wed, 18 Sep 2024 08:19:04 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev,
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-	jonathanh@nvidia.com, f.fainelli@gmail.com,
-	sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-	conor@kernel.org, allen.lkml@gmail.com, broonie@kernel.org,
-	Jinjie Ruan <ruanjinjie@huawei.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>, linux-spi@vger.kernel.org,
-	Linux PM <linux-pm@vger.kernel.org>,
-	Georgi Djakov <djakov@kernel.org>
-Subject: Re: [PATCH 6.1 00/63] 6.1.111-rc1 review
-Message-ID: <2024091821-rimless-ajar-5235@gregkh>
-References: <20240916114221.021192667@linuxfoundation.org>
- <CA+G9fYtsjFtddG8i+k-SpV8U6okL0p4zpsTiwGfNH5GUA8dWAA@mail.gmail.com>
+	s=arc-20240116; t=1726641692; c=relaxed/simple;
+	bh=1wUYZgONhMrXGOnHcVvgoVidTkq647QWSbH0Nn6ioM0=;
+	h=Date:From:To:Cc:Subject:References:Mime-Version:Message-ID:
+	 Content-Type; b=V1l477h6D3ycWWhlUea+GtD+ZGiShUTS1k/ZWTzDLL39SgF6evwoZsu6CwTNe4gmfw7ZVmqWX0G9w6QhogBnafgX8Sfo03Cm3NOCcKOa08NEVAraKt08qgIrmrvLbUXTP3T75ykfSRLNXNfP59fZl5hCIbIESDjo9fRK6P+dXN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=159.65.134.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from E0002116LT (unknown [10.12.96.22])
+	by app2 (Coremail) with SMTP id TQJkCgAn6+QJdupmHfkBAA--.5344S2;
+	Wed, 18 Sep 2024 14:41:14 +0800 (CST)
+Date: Wed, 18 Sep 2024 14:41:14 +0800
+From: "chenshuo@eswincomputing.com" <chenshuo@eswincomputing.com>
+To: "Christian Loehle" <christian.loehle@arm.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm <linux-pm@vger.kernel.org>, 
+	"Lukasz Luba" <lukasz.luba@arm.com>
+Subject: Re: Re: PM: EM: Question Potential Issue with EM and OPP Table in cpufreq ondemand Governor
+References: <202409101046414978042@eswincomputing.com>, 
+	<f4478146-88d3-445c-8676-7246bf477c50@arm.com>, 
+	<202409101831099346787@eswincomputing.com>
+X-Priority: 3
+X-GUID: 13D3675E-3CE8-4B0E-84E0-A495E6B67410
+X-Has-Attach: no
+X-Mailer: Foxmail 7.2.15.80[cn]
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtsjFtddG8i+k-SpV8U6okL0p4zpsTiwGfNH5GUA8dWAA@mail.gmail.com>
+Mime-Version: 1.0
+Message-ID: <202409181441135658871@eswincomputing.com>
+Content-Type: text/plain;
+	charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-CM-TRANSID:TQJkCgAn6+QJdupmHfkBAA--.5344S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Wr18Kw18Cry7ur1UtFWkWFg_yoWxAF18pF
+	s8Xayj9rs29r1UZwn0qa4vkr4a9rsxZFWrur1qkryIy34SqryqgF1qqF1DK3y8CF18X34x
+	Xr1Ygr929w1DC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUmEb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+	C2z280aVCY1x0267AKxVW0oVCq3wAa7VCE64xvF2IEb7IF0Fy264xvF2IEb7IF0Fy264kE
+	64k0F2IE7I0Y6sxI4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4
+	xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCa
+	FVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4xvF2IEb7IF0Fy264kE64k0F24lFcxC0V
+	AYjxAxZF0Ex2IqxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
+	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UMVCEFcxC0VAY
+	jxAxZFUvcSsGvfC2KfnxnUUI43ZEXa7IUeGZXDUUUUU==
+X-CM-SenderInfo: xfkh02xkxrqvxvzl0uprps33xlqjhudrp/
 
-On Tue, Sep 17, 2024 at 08:13:12PM +0530, Naresh Kamboju wrote:
-> On Mon, 16 Sept 2024 at 17:29, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 6.1.111 release.
-> > There are 63 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 18 Sep 2024 11:42:05 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.111-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> 
-> The following kernel warnings have been noticed on a Qualcomm db845c device
-> running stable-rc  6.1.111-rc1, 6.6.52-rc1 and 6.10.11-rc1 at boot time.
-> 
-> First seen on 6.1.111-rc1
->   Good: v6.1.110
->   BAD:  6.1.111-rc1
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Warning log:
-> --------
-> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x517f803c]
-> [    0.000000] Linux version 6.1.111-rc1 (tuxmake@tuxmake)
-> (aarch64-linux-gnu-gcc (Debian 13.3.0-5) 13.3.0, GNU ld (GNU Binutils
-> for Debian) 2.43) #1 SMP PREEMPT @1726489583
-> [    0.000000] Machine model: Thundercomm Dragonboard 845c
-> ...
-> [    7.841428] ------------[ cut here ]------------
-> [    7.841431] WARNING: CPU: 4 PID: 492 at
-> drivers/interconnect/core.c:685 __icc_enable
-> (drivers/interconnect/core.c:685 (discriminator 7))
-> [    7.841442] Modules linked in: soundwire_bus(+) venus_core(+)
-> qcom_camss(+) drm_dp_aux_bus bluetooth(+) qcom_stats mac80211(+)
-> videobuf2_dma_sg drm_display_helper i2c_qcom_geni(+) i2c_qcom_cci
-> camcc_sdm845(+) v4l2_mem2mem qcom_q6v5_mss(+) videobuf2_memops
-> reset_qcom_pdc spi_geni_qcom(+) videobuf2_v4l2 phy_qcom_qmp_usb(+)
-> videobuf2_common gpi(+) qcom_rng cfg80211 phy_qcom_qmp_ufs ufs_qcom(+)
-> coresight_stm phy_qcom_qmp_pcie stm_core rfkill slim_qcom_ngd_ctrl
-> qrtr pdr_interface lmh qcom_wdt slimbus icc_osm_l3 qcom_q6v5_pas(+)
-> icc_bwmon llcc_qcom qcom_pil_info qcom_q6v5 qcom_sysmon qcom_common
-> qcom_glink_smem qmi_helpers mdt_loader display_connector
-> drm_kms_helper drm socinfo rmtfs_mem
-> [    7.841494] CPU: 4 PID: 492 Comm: (udev-worker) Not tainted 6.1.111-rc1 #1
-> [    7.841497] Hardware name: Thundercomm Dragonboard 845c (DT)
-> [    7.841499] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    7.841502] pc : __icc_enable (drivers/interconnect/core.c:685
-> (discriminator 7))
-> [    7.841505] lr : icc_disable (drivers/interconnect/core.c:708)
-> [    7.841508] sp : ffff800008b23660
-> [    7.841509] x29: ffff800008b23660 x28: ffff800008b23c20 x27: 0000000000000000
-> [    7.841513] x26: ffffdd85da6ea1c0 x25: 0000000000000008 x24: 00000000000f4240
-> [    7.841516] x23: 0000000000000000 x22: ffff46a58b7ca580 x21: 0000000000000001
-> [    7.841519] x20: ffff46a58b7ca5c0 x19: ffff46a58b54a800 x18: 0000000000000000
-> [    7.841522] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-> [    7.841525] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-> [    7.841528] x11: fefefefefefefeff x10: 0000000000000bf0 x9 : ffffdd85d8c9b0bc
-> [    7.841531] x8 : ffff800008b22f58 x7 : 0000000000000000 x6 : 0000000000024404
-> [    7.841535] x5 : 0000000000000000 x4 : ffff46a58b64b180 x3 : ffffdd85daa5e810
-> [    7.841537] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
-> [    7.841541] Call trace:
-> [    7.841542] __icc_enable (drivers/interconnect/core.c:685 (discriminator 7))
-> [    7.841545] icc_disable (drivers/interconnect/core.c:708)
-> [    7.841547] geni_icc_disable (drivers/soc/qcom/qcom-geni-se.c:862)
-> [    7.841553] spi_geni_runtime_suspend+0x3c/0x4c spi_geni_qcom
-> [    7.841561] pm_generic_runtime_suspend (drivers/base/power/generic_ops.c:28)
-> [    7.841565] __rpm_callback (drivers/base/power/runtime.c:395)
-> [    7.841568] rpm_callback (drivers/base/power/runtime.c:532)
-> [    7.841570] rpm_suspend (drivers/base/power/runtime.c:672)
-> [    7.841572] rpm_idle (drivers/base/power/runtime.c:504 (discriminator 1))
-> [    7.841574] update_autosuspend (drivers/base/power/runtime.c:1662)
-> [    7.841576] pm_runtime_disable_action (include/linux/spinlock.h:401
-> drivers/base/power/runtime.c:1703 include/linux/pm_runtime.h:599
-> drivers/base/power/runtime.c:1517)
-> [    7.841579] devm_action_release (drivers/base/devres.c:720)
-> [    7.841581] release_nodes (drivers/base/devres.c:503)
-> [    7.841583] devres_release_all (drivers/base/devres.c:532)
-> [    7.841585] device_unbind_cleanup (drivers/base/dd.c:531)
-> [    7.841589] really_probe (drivers/base/dd.c:710)
-> [    7.841592] __driver_probe_device (drivers/base/dd.c:785)
-> [    7.841594] driver_probe_device (drivers/base/dd.c:815)
-> [    7.841596] __driver_attach (drivers/base/dd.c:1202)
-> [    7.841598] bus_for_each_dev (drivers/base/bus.c:301)
-> [    7.841600] driver_attach (drivers/base/dd.c:1219)
-> [    7.841602] bus_add_driver (drivers/base/bus.c:618)
-> [    7.841604] driver_register (drivers/base/driver.c:246)
-> [    7.841607] __platform_driver_register (drivers/base/platform.c:868)
-> [    7.841609] spi_geni_driver_init+0x28/0x1000 spi_geni_qcom
-> [    7.841615] do_one_initcall (init/main.c:1298)
-> [    7.841619] do_init_module (kernel/module/main.c:2469)
-> [    7.841623] load_module (kernel/module/main.c:2878)
-> [    7.841625] __do_sys_finit_module (kernel/module/main.c:2978
-> (discriminator 1))
-> [    7.841627] __arm64_sys_finit_module (kernel/module/main.c:2945)
-> [    7.841630] invoke_syscall (arch/arm64/include/asm/current.h:19
-> arch/arm64/kernel/syscall.c:57)
-> [    7.841633] el0_svc_common.constprop.0
-> (arch/arm64/include/asm/daifflags.h:28
-> arch/arm64/kernel/syscall.c:148)
-> [    7.841637] do_el0_svc (arch/arm64/kernel/syscall.c:205)
-> [    7.841639] el0_svc (arch/arm64/include/asm/daifflags.h:28
-> arch/arm64/kernel/entry-common.c:133
-> arch/arm64/kernel/entry-common.c:142
-> arch/arm64/kernel/entry-common.c:638)
-> [    7.841644] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:656)
-> [    7.841647] el0t_64_sync (arch/arm64/kernel/entry.S:585)
-> [    7.841649] ---[ end trace 0000000000000000 ]---
-> 
-> Warning Log links,
-> --------
->  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.110-64-gdc7da8d6f263/testrun/25159001/suite/log-parser-boot/test/check-kernel-exception-warning-cpu-pid-at-driversinterconnectcorec-__icc_enable/log
->  - https://lkft.validation.linaro.org/scheduler/job/7868463#L4624
+Pj5PbiA5LzEwLzI0IDAzOjQ2LCBjaGVuc2h1b0Blc3dpbmNvbXB1dGluZy5jb20gd3JvdGU6Cj4+
+PiBIaSBSYWZhZWwsCj4+wqAKPj4oK0NDIEx1a2FzeikKPj7CoAo+Pj4KPj4+IEkgYW0gZW5jb3Vu
+dGVyaW5nIGFuIGlzc3VlIHJlbGF0ZWQgdG8gdGhlIEVuZXJneSBNb2RlbCAoRU0pIHdoZW4gdXNp
+bmcgY3B1ZnJlcSB3aXRoIHRoZSBvbmRlbWFuZCBnb3Zlcm5vci4gQmVsb3cgaXMgYSBkZXRhaWxl
+ZCBkZXNjcmlwdGlvbjoKPj4+Cj4+PiAxLiBQcm9ibGVtIERlc2NyaXB0aW9uOgo+Pj4gwqAgwqBX
+aGVuIHVzaW5nIGNwdWZyZXEgd2l0aCB0aGUgb25kZW1hbmQgZ292ZXJub3IgYW5kIGVuYWJsaW5n
+IHRoZSBlbmVyZ3kgbW9kZWwgKEVNKSwgdGhlIENQVSBPUFAgdGFibGUgaXMgY29uZmlndXJlZCB3
+aXRoIGZyZXF1ZW5jaWVzIGFuZCB2b2x0YWdlcyBmb3IgZWFjaCBmcmVxdWVuY3kgcG9pbnQuIEFk
+ZGl0aW9uYWxseSwgdGhlIGBkeW5hbWljLXBvd2VyLWNvZWZmaWNpZW50YCBpcyBjb25maWd1cmVk
+IGluIHRoZSBEVFMgdW5kZXIgdGhlIENQVSBub2RlLiBIb3dldmVyLCBJIG9ic2VydmUgYWJub3Jt
+YWwgZHluYW1pYyBmcmVxdWVuY3kgc2NhbGluZywgd2hlcmUgdGhlIENQVSBmcmVxdWVuY3kgYWx3
+YXlzIHN0YXlzIGF0IHRoZSBoaWdoZXN0IGZyZXF1ZW5jeSBwb2ludCBpbiB0aGUgT1BQIHRhYmxl
+LiBCZWxvdyBpcyBhbiBleGFtcGxlIG9mIHRoZSBEVFMgY29uZmlndXJhdGlvbjoKPj4+IGBgYAo+
+Pj4gY3B1MDogY3B1QDDCoAo+Pj4ge8KgCj4+PiAuLi4KPj4+IG9wZXJhdGluZy1wb2ludHMtdjIg
+PSA8JmQwX2NwdV9vcHBfdGFibGU+O8KgCj4+wqAKPj5EbyB5b3UgbWluZCBzaGFyaW5nIDwmZDBf
+Y3B1X29wcF90YWJsZT4/Cj4+wqAKPk9mIGNvdXJzZSwgdGhlIGVudGlyZSBEVFMgZmlsZSBpcyBp
+bmNvbnZlbmllbnQgdG8gY29weSwgdGhlIG1haW4gdXNlZnVsIHNlZ21lbnRzIEkgaGF2ZSBhcmU6
+Cj5gYGAKPmQwX2NwdV9vcHBfdGFibGU6IG9wcC10YWJsZTAgewo+Y29tcGF0aWJsZSA9ICJvcGVy
+YXRpbmctcG9pbnRzLXYyIjsKPm9wcC1zaGFyZWQ7Cj4KPm9wcC0yNDAwMDAwMCB7Cj5vcHAtaHog
+PSAvYml0cy8gNjQgPENMS19GUkVRXzI0TT47Cj5vcHAtbWljcm92b2x0ID0gPDgwMDAwMD47Cj5j
+bG9jay1sYXRlbmN5LW5zID0gPDcwMDAwPjsKPn07Cj5vcHAtMTAwMDAwMDAwIHsKPm9wcC1oeiA9
+IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfMTAwTT47Cj5vcHAtbWljcm92b2x0ID0gPDgwMDAwMD47Cj5j
+bG9jay1sYXRlbmN5LW5zID0gPDcwMDAwPjsKPn07Cj5vcHAtMjAwMDAwMDAwIHsKPm9wcC1oeiA9
+IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfMjAwTT47Cj5vcHAtbWljcm92b2x0ID0gPDgwMDAwMD47Cj5j
+bG9jay1sYXRlbmN5LW5zID0gPDcwMDAwPjsKPn07Cj5vcHAtNDAwMDAwMDAwIHsKPm9wcC1oeiA9
+IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfNDAwTT47Cj5vcHAtbWljcm92b2x0ID0gPDgwMDAwMD47Cj5j
+bG9jay1sYXRlbmN5LW5zID0gPDcwMDAwPjsKPn07Cj5vcHAtNTAwMDAwMDAwIHsKPm9wcC1oeiA9
+IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfNTAwTT47Cj5vcHAtbWljcm92b2x0ID0gPDgwMDAwMD47Cj5j
+bG9jay1sYXRlbmN5LW5zID0gPDcwMDAwPjsKPn07Cj5vcHAtNjAwMDAwMDAwIHsKPm9wcC1oeiA9
+IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfNjAwTT47Cj5vcHAtbWljcm92b2x0ID0gPDgwMDAwMD47Cj5j
+bG9jay1sYXRlbmN5LW5zID0gPDcwMDAwPjsKPn07Cj5vcHAtNzAwMDAwMDAwIHsKPm9wcC1oeiA9
+IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfNzAwTT47Cj5vcHAtbWljcm92b2x0ID0gPDgwMDAwMD47Cj5j
+bG9jay1sYXRlbmN5LW5zID0gPDcwMDAwPjsKPn07Cj5vcHAtODAwMDAwMDAwIHsKPm9wcC1oeiA9
+IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfODAwTT47Cj5vcHAtbWljcm92b2x0ID0gPDgwMDAwMD47Cj5j
+bG9jay1sYXRlbmN5LW5zID0gPDcwMDAwPjsKPn07Cj5vcHAtOTAwMDAwMDAwIHsKPm9wcC1oeiA9
+IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfOTAwTT47Cj5vcHAtbWljcm92b2x0ID0gPDgwMDAwMD47Cj5j
+bG9jay1sYXRlbmN5LW5zID0gPDcwMDAwPjsKPn07Cj5vcHAtMTAwMDAwMDAwMCB7Cj5vcHAtaHog
+PSAvYml0cy8gNjQgPENMS19GUkVRXzEwMDBNPjsKPm9wcC1taWNyb3ZvbHQgPSA8ODAwMDAwPjsK
+PmNsb2NrLWxhdGVuY3ktbnMgPSA8NzAwMDA+Owo+fTsKPm9wcC0xMjAwMDAwMDAwIHsKPm9wcC1o
+eiA9IC9iaXRzLyA2NCA8Q0xLX0ZSRVFfMTIwME0+Owo+b3BwLW1pY3Jvdm9sdCA9IDw4MDAwMDA+
+Owo+Y2xvY2stbGF0ZW5jeS1ucyA9IDw3MDAwMD47Cj59Owo+b3BwLTEzMDAwMDAwMDAgewo+b3Bw
+LWh6ID0gL2JpdHMvIDY0IDxDTEtfRlJFUV8xMzAwTT47Cj5vcHAtbWljcm92b2x0ID0gPDgwMDAw
+MD47Cj5jbG9jay1sYXRlbmN5LW5zID0gPDcwMDAwPjsKPn07Cj5vcHAtMTQwMDAwMDAwMCB7Cj5v
+cHAtaHogPSAvYml0cy8gNjQgPENMS19GUkVRXzE0MDBNPjsKPm9wcC1taWNyb3ZvbHQgPSA8ODAw
+MDAwPjsKPmNsb2NrLWxhdGVuY3ktbnMgPSA8NzAwMDA+Owo+fTsKPn07Cj4uLi4KPkM2NDogY3B1
+cyB7Cj4jYWRkcmVzcy1jZWxscyA9IDwxPjsKPiNzaXplLWNlbGxzID0gPDA+Owo+dGltZWJhc2Ut
+ZnJlcXVlbmN5ID0gPFJUQ0NMS19GUkVRPjsKPmNwdTA6IGNwdUAwIHsKPi4uLgo+b3BlcmF0aW5n
+LXBvaW50cy12MiA9IDwmZDBfY3B1X29wcF90YWJsZT47Cj4jY29vbGluZy1jZWxscyA9IDwyPjsK
+PmR5bmFtaWMtcG93ZXItY29lZmZpY2llbnQgPSA8MjAwMD47wqAKPkMxOiBpbnRlcnJ1cHQtY29u
+dHJvbGxlciB7Cj4jaW50ZXJydXB0LWNlbGxzID0gPDE+Owo+Y29tcGF0aWJsZSA9ICJyaXNjdixj
+cHUtaW50YyI7Cj5pbnRlcnJ1cHQtY29udHJvbGxlcjsKPn07Cj59Owo+Y3B1MTogY3B1QDEgewo+
+Li4uCj5vcGVyYXRpbmctcG9pbnRzLXYyID0gPCZkMF9jcHVfb3BwX3RhYmxlPjsKPiNjb29saW5n
+LWNlbGxzID0gPDI+Owo+ZHluYW1pYy1wb3dlci1jb2VmZmljaWVudCA9IDwyMDAwPjsKPkMyOiBp
+bnRlcnJ1cHQtY29udHJvbGxlciB7Cj4jaW50ZXJydXB0LWNlbGxzID0gPDE+Owo+Y29tcGF0aWJs
+ZSA9ICJyaXNjdixjcHUtaW50YyI7Cj5pbnRlcnJ1cHQtY29udHJvbGxlcjsKPn07Cj59Owo+Y3B1
+MjogY3B1QDIgewo+Li4uCj5vcGVyYXRpbmctcG9pbnRzLXYyID0gPCZkMF9jcHVfb3BwX3RhYmxl
+PjsKPiNjb29saW5nLWNlbGxzID0gPDI+Owo+ZHluYW1pYy1wb3dlci1jb2VmZmljaWVudCA9IDwy
+MDAwPjsKPkMzOiBpbnRlcnJ1cHQtY29udHJvbGxlciB7Cj4jaW50ZXJydXB0LWNlbGxzID0gPDE+
+Owo+Y29tcGF0aWJsZSA9ICJyaXNjdixjcHUtaW50YyI7Cj5pbnRlcnJ1cHQtY29udHJvbGxlcjsK
+Pn07Cj59Owo+Y3B1MzogY3B1QDMgewo+Li4uCj5vcGVyYXRpbmctcG9pbnRzLXYyID0gPCZkMF9j
+cHVfb3BwX3RhYmxlPjsKPiNjb29saW5nLWNlbGxzID0gPDI+Owo+ZHluYW1pYy1wb3dlci1jb2Vm
+ZmljaWVudCA9IDwyMDAwPjsKPkM0OiBpbnRlcnJ1cHQtY29udHJvbGxlciB7Cj4jaW50ZXJydXB0
+LWNlbGxzID0gPDE+Owo+Y29tcGF0aWJsZSA9ICJyaXNjdixjcHUtaW50YyI7Cj5pbnRlcnJ1cHQt
+Y29udHJvbGxlcjsKPn07Cj59Owo+fTsKPmBgYAo+Pj4gI2Nvb2xpbmctY2VsbHMgPSA8Mj47IGR5
+bmFtaWMtcG93ZXItY29lZmZpY2llbnQgPSA8MjAwMD47IH07Cj4+PiAuLi4KPj4+IGBgYAo+Pj4g
+Mi4gUm9vdCBDYXVzZSBBbmFseXNpczoKPj4+IFdoZW4gdXNpbmcgdGhlIE9QUCB0YWJsZSBhbmQg
+Y29uZmlndXJpbmcgdGhlICJkeW5hbWljLXBvd2VyLWNvZWZmaWNpZW50LCIgdGhlIGBlbV9kZXZf
+cmVnaXN0ZXJfcGVyZl9kb21haW4oKWAgZnVuY3Rpb24gaW4gYGtlcm5lbC9wb3dlci9lbmVyZ3lf
+bW9kZWwuY2Agc2V0cyB0aGUgZmxhZ3MgdG8gYEVNX1BFUkZfRE9NQUlOX01JQ1JPV0FUVFNgLiBJ
+biB0aGUgYGVtX2NyZWF0ZV9wZXJmX3RhYmxlKClgIGZ1bmN0aW9uLCBgZW1fY29tcHV0ZV9jb3N0
+cygpYCBpbmNsdWRlcyB0aGUgZm9sbG93aW5nIGNvZGU6Cj4+PiBgYGAKPj4+IGlmICh0YWJsZVtp
+XS5jb3N0ID49IHByZXZfY29zdCkgewo+Pj4gwqAgwqAgdGFibGVbaV0uZmxhZ3MgPSBFTV9QRVJG
+X1NUQVRFX0lORUZGSUNJRU5UOwo+Pj4gwqAgwqAgZGV2X2RiZyhkZXYsICJFTTogT1BQOiVsdSBp
+cyBpbmVmZmljaWVudFxuIiwgdGFibGVbaV0uZnJlcXVlbmN5KTsKPj4+IH0KPj4+IGBgYAo+Pj4g
+U2luY2UgdGhlIGNvc3QgaXMgY2FsY3VsYXRlZCBhcyBwb3dlciAqIG1heF9mcmVxdWVuY3kgLyBm
+cmVxdWVuY3ksIHRoZSBjb3N0IGZvciBlYWNoIGZyZXF1ZW5jeSBwb2ludCBiZWNvbWVzIGEgY29u
+c3RhbnQgdmFsdWUuIENvbnNlcXVlbnRseSwgZXhjZXB0IGZvciBucl9zdGF0ZXMgLSAxICh3aGVy
+ZSBwcmV2X3N0YXRlIGlzIGluaXRpYWxpemVkIGFzIFVMT05HX01BWCksIGFsbCBvdGhlciBmcmVx
+dWVuY3kgcG9pbnRzJyBjb3N0IGlzIGVxdWFsIHRvIHByZXZfY29zdC4gQXMgYSByZXN1bHQsIG9u
+bHkgdGhlIGhpZ2hlc3QgZnJlcXVlbmN5IHBvaW50ICh0YWJsZVtucl9zdGF0ZXMgLSAxXSkgaXMg
+bm90IGZsYWdnZWQgYXMgRU1fUEVSRl9TVEFURV9JTkVGRklDSUVOVCBpbiB0aGUgRU0gcGVyZm9y
+bWFuY2UgdGFibGUuCj4+Pgo+Pj4gSW4gdGhlIGVtX2NwdWZyZXFfdXBkYXRlX2VmZmljaWVuY2ll
+cygpIGZ1bmN0aW9uLCB0aGUgZm9sbG93aW5nIGNvZGUgaXMgZXhlY3V0ZWQ6Cj4+PiBgYGAKPj4+
+IGZvciAoaSA9IDA7IGkgPCBwZC0+bnJfcGVyZl9zdGF0ZXM7IGkrKykgewo+Pj4gwqAgwqAgaWYg
+KCEodGFibGVbaV0uZmxhZ3MgJiBFTV9QRVJGX1NUQVRFX0lORUZGSUNJRU5UKSkKPj4+IMKgIMKg
+IMKgIMKgIGNvbnRpbnVlOwo+Pj4KPj4+IMKgIMKgIGlmICghY3B1ZnJlcV90YWJsZV9zZXRfaW5l
+ZmZpY2llbnQocG9saWN5LCB0YWJsZVtpXS5mcmVxdWVuY3kpKQo+Pj4gwqAgwqAgwqAgwqAgZm91
+bmQrKzsKPj4+IH0KPj4+IGBgYAo+Pj4gQXMgYSByZXN1bHQsIGFsbCBmcmVxdWVuY3kgcG9pbnRz
+IG1hcmtlZCBhcyBFTV9QRVJGX1NUQVRFX0lORUZGSUNJRU5UIGFyZSBmbGFnZ2VkIGFzIENQVUZS
+RVFfSU5FRkZJQ0lFTlRfRlJFUSBpbiB0aGUgY3B1ZnJlcV90YWJsZV9zZXRfaW5lZmZpY2llbnQo
+KSBmdW5jdGlvbiwgY2F1c2luZyB0aGVzZSBmcmVxdWVuY2llcyB0byBiZSBza2lwcGVkIGR1cmlu
+ZyBmcmVxdWVuY3kgc2NhbGluZy4KPj4+Cj4+PiAzLiBQcm9wb3NlZCBDaGFuZ2UgYW5kIFRlc3Rp
+bmc6wqAKPj4+IE9uIExpbnV4IDYuNiwgdGhpcyBiZWhhdmlvciBhZmZlY3RzIHRoZSBub3JtYWwg
+b3BlcmF0aW9uIG9mIHRoZSBjcHVmcmVxIG9uZGVtYW5kIGdvdmVybm9yLCB3aGljaCBpbiB0dXJu
+IGNhdXNlcyBwYXNzaXZlIGNvb2xpbmcgZGV2aWNlcyB0byBtYWxmdW5jdGlvbiB3aGVuIHVzaW5n
+IHRoZSBwb3dlciBhbGxvY2F0b3Igc3RyYXRlZ3kgaW4gdGhlIHRoZXJtYWwgZnJhbWV3b3JrLiBJ
+IG1hZGUgYSB0ZW1wb3JhcnkgZml4IGJ5IGNoYW5naW5nIHRoZSBjb25kaXRpb24gZnJvbToKPj4+
+IGlmICh0YWJsZVtpXS5jb3N0ID49IHByZXZfY29zdCkKPj4+IHRvOgo+Pj4gaWYgKHRhYmxlW2ld
+LmNvc3QgPiBwcmV2X2Nvc3QpCj4+PiBBZnRlciB0aGlzIGNoYW5nZSwgdGhlIGlzc3VlIHNlZW1z
+IHJlc29sdmVkIGZvciBub3cuIEhvd2V2ZXIsIEkgYW0gY29uY2VybmVkIGFib3V0IHBvdGVudGlh
+bCBzaWRlIGVmZmVjdHMgb2YgdGhpcyBtb2RpZmljYXRpb24uCj4+wqAKPj5CdXQgdGhpcyBkb2Vz
+bid0IHNvbHZlIHRoZSBhY3R1YWwgaXNzdWUsIGlmIGNvc3QgPT0gcHJldl9jb3N0IGZvciBhbGwK
+Pj5PUFBzIHRoZW4gYWxsIG9mIHRoZW0gYnV0IG9uZSBhcmUgaW5kZWVkIGluZWZmaWNpZW50Lgo+
+RGVzcGl0ZSB0aGlzLCB1bmRlciBhbiBvbmRlbWFuZCBwb2xpY3kgYmFzZWQgb24gRFZGUywgdGhl
+IHNvZnR3YXJlIG1pZ2h0IG5vdCBrbm93IHRoZSByZWFsIHBvd2VyIGNvbnN1bXB0aW9uLCBhbmQg
+Y2FuIG9ubHkgdXNlIHRoZSBmb3JtdWxhIFA9QypWXjIqZip1c2FnZV9yYXRlLgo+QWRkaXRpb25h
+bGx5LCB0aGlzIGF0IGxlYXN0IGVuc3VyZXMgdGhhdCB0aGUgdGhlcm1hbCBmcmFtZXdvcmsgdXNp
+bmcgdGhlIElQQSBzdHJhdGVneSBjYW4gcHJvcGVybHkgY29vbCBkb3duLgpSZWdhcmRpbmcgdGhp
+cyBwcm9ibGVtLCBhcmUgdGhlcmUgYW55IGVycm9ycyBvciBvbWlzc2lvbnMgaW4gbXkgc2V0dGlu
+Z3M/IElmIG5vdCwgZG8geW91IGhhdmUgYW55IGJldHRlciBzb2x1dGlvbnM/IExvb2tpbmcgZm9y
+d2FyZCB0byB5b3VyIHJlcGx5IQ==
 
-This is odd, any chance you can use 'git bisect' to track down the
-offending change?  There aren't any interconnect patches in here that I
-can see that would cause this, but I might just be not recognizing
-something.
-
-thanks,
-
-greg k-h
 
