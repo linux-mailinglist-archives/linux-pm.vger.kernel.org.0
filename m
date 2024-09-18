@@ -1,80 +1,80 @@
-Return-Path: <linux-pm+bounces-14421-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14422-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B53C97C13F
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 23:13:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36BEA97C145
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 23:15:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84ED31C21446
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 21:13:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0FB928417F
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 21:15:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7EE91CA6B6;
-	Wed, 18 Sep 2024 21:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02538178CF6;
+	Wed, 18 Sep 2024 21:15:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ta25809g"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iygo4ztY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4A11C57AA;
-	Wed, 18 Sep 2024 21:12:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7921113792B;
+	Wed, 18 Sep 2024 21:15:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726693977; cv=none; b=Cl5NSu1ky+o1l2uUdQfFYIsiMBM0g2wv5waZUkZn5PbmrDjlLJ92WJRlu+xu+YPq9KM7ueSEn4VQj4AQ5I8YRpcDlc2pgaMhU6f545MauYPDPO1cv/rCq95sSd5mfiDydd3x7saiGkeOyxt8HPp5b3ZxgP3UlDgXrJi9b7pFLb8=
+	t=1726694150; cv=none; b=V870CoPbhK+FhAvW/l5n30+Bfk+1Vzj1YwPZbe4cJrlFQbdR4Y0NfnGu/6iaeRFz8KgBEwAR8QOp7jKaFvE9kM2ujDHbilfV1BObGTdJIc6GuI+kAmPCO3Hy8460OnyqRkMysbNApwyKwwejZ2S909FnAWn9X723rEik9njVG3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726693977; c=relaxed/simple;
-	bh=EuIAYQen4UEyM5aIIdtqLWQXGCDcfNVSaN6O6Jib6yg=;
+	s=arc-20240116; t=1726694150; c=relaxed/simple;
+	bh=zfyMhNUVek2todfuBYRopUBFHYSMvVqJHIgM8KIawjM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DZJHe8LL1aK9pNC6cXAmqoYdrEC0jX2M3nXTvjJ30pfsEDki4rG2MeTmjO2m7cPNm+aihRjX6OyGyozvjNo8rRbtevN296HarAO9lEjoMPboyGF37zFTCEwpHZEtTtHPi/vqSPhZF8w9bixKj2Tb8z+N4zVRqrYqWYwo+n39k8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ta25809g; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=aTIx6FpBy9JOYFDkfzBtQ629HKzmDLJvF2YGpvwV3DOaU4GBY7xmIivVsX3AxfkNadqGddzI6WUjbLMfVgbwLPQc5zSyZdffxhkaow3YgEXBRbPb0o7hNnyP208DkiTlmTh84zsPeMTgH7+DFKffgU1xm9fH5hpssJYhXOY4N7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iygo4ztY; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726693975; x=1758229975;
+  t=1726694148; x=1758230148;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=EuIAYQen4UEyM5aIIdtqLWQXGCDcfNVSaN6O6Jib6yg=;
-  b=Ta25809gclqGjnpwwhb2pIr9nEnuoS7w0CE5JR4SZUyFsB3GijjvE7D7
-   1lIeAhxOq0waDwjsTvZowISXMmUX+StbYUHrumgm7PYBjBkwMJ0ztJuKK
-   DYMdX344m/055e0bYfDxVAc6q/LBhfsdDXJqeNIg681NfR69pozgSHroR
-   cNUIPz6KZxcC00h3fXNNpAVGo1huCYRTliKGyNNRfNgfRzMfzbHPy6krE
-   n0V4odrye4IDMYOYUh9NQyD9AZPUjKZ2h9DhnwWupuqXXU6ysVGpOSnQN
-   dorSH1JwVThGh3Hn44gs0GwSAl5wH8PcISzqj9LAHjfP0aOlegkPxMM4O
+  bh=zfyMhNUVek2todfuBYRopUBFHYSMvVqJHIgM8KIawjM=;
+  b=iygo4ztY2frapyC/UW95UT8UZkLzja4jCcl28Yn//U55K9wgKK+j5I+u
+   zPBzMd7HHIsjP7hvs10q7jRAbydKxsPtwDhkckWrCcBfd6gCiifhLfids
+   nn8L8SZz7YXPP3NJ9pRcA0r36mLOsBIPu5h47G+a6u0ncJCXEO/4GnyJ2
+   3L30MjsGSmmihuwSj2wzVznz4Im7j+JN/jr6jI4sQ4K23+CCnEr2g9/hj
+   b07gGT4NOvsDzJfk5V9wEABPliW6TGQzQoeII91Ah6S5VfDax5VW/vaKf
+   hGjRcGicGjbfhhhMk8OkUmwZ2TG9gFquZ924snxJ7BFqSKL3IA/7o23sU
    w==;
-X-CSE-ConnectionGUID: IDjrI6iYTBSB+44Xtrvkmw==
-X-CSE-MsgGUID: ORCw4Su+Sj23piTKM+5UpQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11199"; a="29371531"
+X-CSE-ConnectionGUID: ePhUtHZKRT6dLQeo/gUkEA==
+X-CSE-MsgGUID: HQYbmAZLRZuPGl6F+k++jg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11199"; a="51036986"
 X-IronPort-AV: E=Sophos;i="6.10,239,1719903600"; 
-   d="scan'208";a="29371531"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 14:12:54 -0700
-X-CSE-ConnectionGUID: TfTSnpzaRZOE0gtisMt6sg==
-X-CSE-MsgGUID: idQGEEQ8Q8CujhvjrhfCbw==
+   d="scan'208";a="51036986"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 14:15:47 -0700
+X-CSE-ConnectionGUID: L22pZY1cSQW1gUT2uOGgxw==
+X-CSE-MsgGUID: NFtm3rgNTFyjnMAE0yP8Ow==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,239,1719903600"; 
-   d="scan'208";a="70164644"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 18 Sep 2024 14:12:52 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sr1yj-000Cdo-0n;
-	Wed, 18 Sep 2024 21:12:49 +0000
-Date: Thu, 19 Sep 2024 05:11:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andreas Kemnade <andreas@kemnade.info>, tony@atomide.com,
-	Sebastian Reichel <sre@kernel.org>, linux-omap@vger.kernel.org,
-	devicetree@vger.kernel.org, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>, linux-kernel@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andreas Kemnade <andreas@kemnade.info>
-Subject: Re: [PATCH 3/3] power: supply: initial support for TWL6030/32
-Message-ID: <202409190409.0mOjgpq4-lkp@intel.com>
-References: <20240918084132.928295-4-andreas@kemnade.info>
+   d="scan'208";a="74493718"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 14:15:47 -0700
+Date: Wed, 18 Sep 2024 14:21:26 -0700
+From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To: Qais Yousef <qyousef@layalina.io>
+Cc: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 11/16] sched/qos: Add rampup multiplier QoS
+Message-ID: <20240918212126.GA11943@ranerica-svr.sc.intel.com>
+References: <20240820163512.1096301-1-qyousef@layalina.io>
+ <20240820163512.1096301-12-qyousef@layalina.io>
+ <20240917214337.GA10143@ranerica-svr.sc.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -83,157 +83,170 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240918084132.928295-4-andreas@kemnade.info>
+In-Reply-To: <20240917214337.GA10143@ranerica-svr.sc.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 
-Hi Andreas,
+On Tue, Sep 17, 2024 at 02:43:37PM -0700, Ricardo Neri wrote:
+> On Tue, Aug 20, 2024 at 05:35:07PM +0100, Qais Yousef wrote:
+> > Bursty tasks are hard to predict. To use resources efficiently, the
+> > system would like to be exact as much as possible. But this poses
+> > a challenge for these bursty tasks that need to get access to more
+> > resources quickly.
+> > 
+> > The new SCHED_QOS_RAMPUP_MULTIPLIER allows userspace to do that. As the
+> > name implies, it only helps them to transition to a higher performance
+> > state when they get _busier_. That is perfectly periodic tasks by
+> > definition are not going through a transition and will run at a constant
+> > performance level. It is the tasks that need to transition from one
+> > periodic state to another periodic state that is at a higher level that
+> > this rampup_multiplier will help with. It also slows down the ewma decay
+> > of util_est which should help those bursty tasks to keep their faster
+> > rampup.
+> > 
+> > This should work complimentary with uclamp. uclamp tells the system
+> > about min and max perf requirements which can be applied immediately.
+> > 
+> > rampup_multiplier is about reactiveness of the task to change.
+> > Specifically to a change for a higher performance level. The task might
+> > necessary need to have a min perf requirements, but it can have sudden
+> > burst of changes that require higher perf level and it needs the system
+> > to provide this faster.
+> > 
+> > TODO: update the sched_qos docs
+> > 
+> > Signed-off-by: Qais Yousef <qyousef@layalina.io>
+> > ---
+> >  include/linux/sched.h      |  7 ++++
+> >  include/uapi/linux/sched.h |  2 ++
+> >  kernel/sched/core.c        | 66 ++++++++++++++++++++++++++++++++++++++
+> >  kernel/sched/fair.c        |  6 ++--
+> >  kernel/sched/syscalls.c    | 38 ++++++++++++++++++++--
+> >  5 files changed, 115 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > index 2e8c5a9ffa76..a30ee43a25fb 100644
+> > --- a/include/linux/sched.h
+> > +++ b/include/linux/sched.h
+> > @@ -404,6 +404,11 @@ struct sched_info {
+> >  #endif /* CONFIG_SCHED_INFO */
+> >  };
+> >  
+> > +struct sched_qos {
+> > +	DECLARE_BITMAP(user_defined, SCHED_QOS_MAX);
+> > +	unsigned int rampup_multiplier;
+> > +};
+> > +
+> >  /*
+> >   * Integer metrics need fixed point arithmetic, e.g., sched/fair
+> >   * has a few: load, load_avg, util_avg, freq, and capacity.
+> > @@ -882,6 +887,8 @@ struct task_struct {
+> >  
+> >  	struct sched_info		sched_info;
+> >  
+> > +	struct sched_qos		sched_qos;
+> > +
+> >  	struct list_head		tasks;
+> >  #ifdef CONFIG_SMP
+> >  	struct plist_node		pushable_tasks;
+> > diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
+> > index 67ef99f64ddc..0baba91ba5b8 100644
+> > --- a/include/uapi/linux/sched.h
+> > +++ b/include/uapi/linux/sched.h
+> > @@ -104,6 +104,8 @@ struct clone_args {
+> >  };
+> >  
+> >  enum sched_qos_type {
+> > +	SCHED_QOS_RAMPUP_MULTIPLIER,
+> > +	SCHED_QOS_MAX,
+> >  };
+> >  #endif
+> >  
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index c91e6a62c7ab..54faa845cb29 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -152,6 +152,8 @@ __read_mostly int sysctl_resched_latency_warn_once = 1;
+> >   */
+> >  const_debug unsigned int sysctl_sched_nr_migrate = SCHED_NR_MIGRATE_BREAK;
+> >  
+> > +unsigned int sysctl_sched_qos_default_rampup_multiplier	= 1;
+> > +
+> >  __read_mostly int scheduler_running;
+> >  
+> >  #ifdef CONFIG_SCHED_CORE
+> > @@ -4488,6 +4490,47 @@ static int sysctl_schedstats(struct ctl_table *table, int write, void *buffer,
+> >  #endif /* CONFIG_SCHEDSTATS */
+> >  
+> >  #ifdef CONFIG_SYSCTL
+> > +static void sched_qos_sync_sysctl(void)
+> > +{
+> > +	struct task_struct *g, *p;
+> > +
+> > +	guard(rcu)();
+> > +	for_each_process_thread(g, p) {
+> > +		struct rq_flags rf;
+> > +		struct rq *rq;
+> > +
+> > +		rq = task_rq_lock(p, &rf);
+> > +		if (!test_bit(SCHED_QOS_RAMPUP_MULTIPLIER, p->sched_qos.user_defined))
+> > +			p->sched_qos.rampup_multiplier = sysctl_sched_qos_default_rampup_multiplier;
+> > +		task_rq_unlock(rq, p, &rf);
+> > +	}
+> > +}
+> > +
+> > +static int sysctl_sched_qos_handler(struct ctl_table *table, int write,
+> > +				    void *buffer, size_t *lenp, loff_t *ppos)
+> > +{
+> > +	unsigned int old_rampup_mult;
+> > +	int result;
+> > +
+> > +	old_rampup_mult = sysctl_sched_qos_default_rampup_multiplier;
+> > +
+> > +	result = proc_dointvec(table, write, buffer, lenp, ppos);
+> > +	if (result)
+> > +		goto undo;
+> > +	if (!write)
+> > +		return 0;
+> > +
+> > +	if (old_rampup_mult != sysctl_sched_qos_default_rampup_multiplier) {
+> > +		sched_qos_sync_sysctl();
+> > +	}
+> > +
+> > +	return 0;
+> > +
+> > +undo:
+> > +	sysctl_sched_qos_default_rampup_multiplier = old_rampup_mult;
+> > +	return result;
+> > +}
+> > +
+> >  static struct ctl_table sched_core_sysctls[] = {
+> >  #ifdef CONFIG_SCHEDSTATS
+> >  	{
+> > @@ -4534,6 +4577,13 @@ static struct ctl_table sched_core_sysctls[] = {
+> >  		.extra2		= SYSCTL_FOUR,
+> >  	},
+> >  #endif /* CONFIG_NUMA_BALANCING */
+> > +	{
+> > +		.procname	= "sched_qos_default_rampup_multiplier",
+> > +		.data           = &sysctl_sched_qos_default_rampup_multiplier,
+> > +		.maxlen         = sizeof(unsigned int),
+> 
+> IIUC, user space needs to select a value between 0 and (2^32 - 1). Does
+> this mean that it will need fine-tuning for each product and application?
+> 
+> Could there be some translation to a fewer number of QoS levels that are
+> qualitatively?
+> 
+> Also, I think about Intel processors. They work with hardware-controlled
+> performance scaling. The proposed interface would help us to communicate
+> per-task multipliers to hardware, but they would be used as hints to
+> hardware and not acted upon by the kernel to scale frequency.
 
-kernel test robot noticed the following build warnings:
+Also, as discussed during LPC 2024 it might be good to have an interface
+that is compatible with other operating systems. They have qualitative
+descriptions of QoS levels (see Len Brown's LPC 2022 presentation [1]).
 
-[auto build test WARNING on sre-power-supply/for-next]
-[also build test WARNING on lee-mfd/for-mfd-next lee-leds/for-leds-next linus/master v6.11 next-20240918]
-[cannot apply to lee-mfd/for-mfd-fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+It can be this hint or a new one.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andreas-Kemnade/dt-bindings-power-supply-Add-TI-TWL603X-charger/20240918-164406
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-patch link:    https://lore.kernel.org/r/20240918084132.928295-4-andreas%40kemnade.info
-patch subject: [PATCH 3/3] power: supply: initial support for TWL6030/32
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240919/202409190409.0mOjgpq4-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 8663a75fa2f31299ab8d1d90288d9df92aadee88)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240919/202409190409.0mOjgpq4-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409190409.0mOjgpq4-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/power/supply/twl6030_charger.c:20:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/power/supply/twl6030_charger.c:20:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/power/supply/twl6030_charger.c:20:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/power/supply/twl6030_charger.c:24:
-   In file included from include/linux/usb/otg.h:13:
-   In file included from include/linux/phy/phy.h:17:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/power/supply/twl6030_charger.c:360:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     360 |                 u8 intstat;
-         |                 ^
-   8 warnings generated.
-
-
-vim +360 drivers/power/supply/twl6030_charger.c
-
-   345	
-   346	static int twl6030_charger_usb_get_property(struct power_supply *psy,
-   347						    enum power_supply_property psp,
-   348						    union power_supply_propval *val)
-   349	{
-   350		struct twl6030_charger_info *charger = power_supply_get_drvdata(psy);
-   351		int ret;
-   352		u8 stat1;
-   353	
-   354		ret = twl6030_charger_read(CONTROLLER_STAT1, &stat1);
-   355		if (ret)
-   356			return ret;
-   357	
-   358		switch (psp) {
-   359		case POWER_SUPPLY_PROP_STATUS:
- > 360			u8 intstat;
-   361	
-   362			if (!(stat1 & VBUS_DET)) {
-   363				val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
-   364				break;
-   365			}
-   366			ret = twl6030_charger_read(CHARGERUSB_STATUS_INT2, &intstat);
-   367			if (ret)
-   368				return ret;
-   369	
-   370			if (intstat & CHARGE_DONE)
-   371				val->intval = POWER_SUPPLY_STATUS_FULL;
-   372			else if (intstat & CURRENT_TERM)
-   373				val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
-   374			else
-   375				val->intval = POWER_SUPPLY_STATUS_CHARGING;
-   376			break;
-   377		case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-   378			if (!charger->channel_vusb)
-   379				return -ENODATA;
-   380	
-   381			ret = iio_read_channel_processed_scale(charger->channel_vusb, &val->intval, 1000);
-   382			if (ret < 0)
-   383				return ret;
-   384	
-   385			break;
-   386		case POWER_SUPPLY_PROP_ONLINE:
-   387			val->intval = !!(stat1 & VBUS_DET);
-   388			break;
-   389		case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-   390			val->intval = charger->input_current_limit;
-   391			break;
-   392		default:
-   393			return -EINVAL;
-   394		}
-   395	
-   396		return 0;
-   397	}
-   398	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1]. https://lpc.events/event/16/contributions/1276/attachments/1070/2039/Brown-Shankar%20LPC%202022.09.13%20Sched%20QOS%20API.pdf
 
