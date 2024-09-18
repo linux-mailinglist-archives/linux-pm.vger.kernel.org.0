@@ -1,113 +1,151 @@
-Return-Path: <linux-pm+bounces-14419-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14420-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BFCC97BE5C
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 17:04:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 436D897BFB9
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 19:34:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F1F31F2251D
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 15:04:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C75D283EEA
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Sep 2024 17:34:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0BE11C8FBA;
-	Wed, 18 Sep 2024 15:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A289A1C8FD6;
+	Wed, 18 Sep 2024 17:34:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u8Dv+xMf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JhWLnGX9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49E71C6F72
-	for <linux-pm@vger.kernel.org>; Wed, 18 Sep 2024 15:04:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D3A1494B1;
+	Wed, 18 Sep 2024 17:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726671889; cv=none; b=FC45RcEGADgSOoAvlaauG0ica6FWeAhXCLr0FX0Ilc2V9sHLluhV9awd4iIvmqrhJAVqgbEzHmrlIFx3kKC8ciFwpN0PyKxB1nzNWYG9657pFJ6HB7JkIgrpc5CorfgLxLBybLLmvRCx6Iudxv2rTRP0W35RL8eBxzyWIAz9WQM=
+	t=1726680873; cv=none; b=XK1/KMxzQmYE6Rn1RJR+BcIRVVwz41tDLroDafE4g8B1yjfd0STpXJ0dKVCeNdKEi8qS32CVdHA5Z6fx5bv1dfQ+4orNoISPOQ3tlHfHAI+PvwypjNJOa1DjXENbZIN/vgcJG1mYLknREUZFdLtxc+Z0BAWiSZ0Wb7kno6ylZfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726671889; c=relaxed/simple;
-	bh=L1NHWyy0NjF2dTP/ARc8BHAy85ATCfvirgTS6lcHILE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lCvmT2gAq0m0HHJY87bL3pchtOneRK3OhIKPERXZ44+iM7s9pBx4eXhgbXnFQIYSIOeHvRUntBHvyi5fKesdwSLU7M6vyKJBmDjvGY3Ik6v+Rh75khWDBp7YWl9IXpCY6qrotV73Zrl3oAOh0vnhHkbySwBMhI0TzTUVocqfi+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u8Dv+xMf; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a8a7903cb7dso441484766b.3
-        for <linux-pm@vger.kernel.org>; Wed, 18 Sep 2024 08:04:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726671885; x=1727276685; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rAUj5z86FV+d6rAd4UOajymFlz61iSG2wpZ0JHsQ42s=;
-        b=u8Dv+xMf99nDwj/LZ89SRX6Xtt13al6gnFfD0R/U3FVBL1KkmkDugiCKEYXojPa7mr
-         G1ZIW3zCHcawyA+3x1oDERVpGMRdV2PTp/jJsxAJMOKH4w8/3msA9R6L7BbSw1DP5J1g
-         v6Y73KwvrQNac5MjcFyzVQShlLqBlyyfQnJPhOXkwDbMJJA5wjcFCQueLQrqDtrGsutT
-         Luj3xbjdcH30wbUxn0XXmxUAfC/R4EFK4KGBlK9tlH2caOOLqlf8nDdg+YIN2j8xhD8f
-         zdRJ09fs1H+2CSEpdxtpgWYghSZjaZISIqkEr2UlS/85RWDr6nPzdwPNIEK2l5LN+R26
-         bG0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726671885; x=1727276685;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rAUj5z86FV+d6rAd4UOajymFlz61iSG2wpZ0JHsQ42s=;
-        b=hDoVEbpwz547oQbnL6pXQZ65hSTjqIxeNTWSSkM7KFeO5sTRSz/mqI5KuCahkihP2s
-         02xQx35R/XxnewQH79rKD4Xb0AqhxU0H9xrKyUimM2wKZLS9M+2V/B4hn6Jb/VNzG0lo
-         vM1y1jRG0ZkSWb4saTB/NAdWttUWLiTT42cYlzFaMOpdMs2bABhW+XRtFV7TDg+U/PIB
-         cnjPWPiqr9onTV1gT2o46mwosZonrMH++1wpp1M7IHT+w3sQ2lFs8qO+T+OzJrDvZs63
-         WaKLzKmtjgooNjyWmMhCilTkUGsQH5Gd2oKCkrygc7xZMq69FRdhX2mysNBMCqOSjRBR
-         Fkyg==
-X-Gm-Message-State: AOJu0Yyzr6Rgv97u6apmEK5LPk2+OKeSlc/dfFGMLM5Mr3XwMRm3KSLm
-	9xZIbxiv+vewziAI5SzwJNP1gU1PjOZybCsVYw12KskMHaDCTQevFgOUMHhp6SkFZTglRvq+Hiw
-	6Atdm7Tv0Y93zX2K4Q7dUicQHYIVZJ/wcBKbqcA==
-X-Google-Smtp-Source: AGHT+IGEa1MCEaD0bdULC6b+TJ4wo1e1Num6uxETKpo/Rg0Pz+70M8LeHhF+ZrzyZIixLx67E+kqWhsRXxF1Divl44g=
-X-Received: by 2002:a05:6402:5108:b0:5c2:6311:c9d1 with SMTP id
- 4fb4d7f45d1cf-5c41e1b5325mr25680316a12.22.1726671885023; Wed, 18 Sep 2024
- 08:04:45 -0700 (PDT)
+	s=arc-20240116; t=1726680873; c=relaxed/simple;
+	bh=Ag88+zokUhRSgZzPziKEPeP6Mdvl0oOyZMMJnyWDSbo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kpkG30RpMEd0hNccGn+oCLIJ0n6Um51WR7q1/iaFWO9boRyshIcKXupImUshVc/eiBfRyJFjgUmBIPltdEvmfi72WTxcRzJ1fCYSWBtJgQOVv7u/4xz4T/D8KBUkc6DBZ3/DtoOs8aRAWT7CnHjrdI/au9Ehr1oE3xpkjVfNtKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JhWLnGX9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5BB1C4CEC2;
+	Wed, 18 Sep 2024 17:34:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726680872;
+	bh=Ag88+zokUhRSgZzPziKEPeP6Mdvl0oOyZMMJnyWDSbo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JhWLnGX9oh0QrTo8OTO6lL6G2nVHOpekgiaXvdAuw8IICw3gDfDozq5e6YGSFa7PM
+	 eFrQewdh9bUVoiCKhRNzzjBbITC7XumP2+h7OiMAdnCsa95nBPzGVJ63RytCR5daJm
+	 ndiUDCNysNF/RiSc3zkvDC5ChgA76G0qBnsY4kBQz+IrhxyOQyoWfpeWvUy+WmYSBl
+	 Lp3e8gNrrXgovUeX9XAX2XJWqnDZ7V/i5Z96zAwdPmV8Xx1xCotKbdutsbbnNbaWc7
+	 Prp9oBRKMhyJDI6nek6wog/A0fAmUwpVdUiglaivoibw7DJE/+lDc8uOIDNaWPQyvp
+	 oc8srhShDuB2A==
+Date: Wed, 18 Sep 2024 12:34:31 -0500
+From: Rob Herring <robh@kernel.org>
+To: Dhruva Gole <d-gole@ti.com>
+Cc: Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, nm@ti.com,
+	vigneshr@ti.com
+Subject: Re: [PATCH v4] dt-bindings: opp: operating-points-v2-ti-cpu:
+ Describe opp-supported-hw
+Message-ID: <20240918173431.GA1833339-robh@kernel.org>
+References: <20240918053317.1390626-1-d-gole@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240909095529.2325103-1-marcin.juszkiewicz@linaro.org>
-In-Reply-To: <20240909095529.2325103-1-marcin.juszkiewicz@linaro.org>
-From: Viresh Kumar <viresh.kumar@linaro.org>
-Date: Wed, 18 Sep 2024 20:34:32 +0530
-Message-ID: <CAKohpokMUqaMUJaSfdyY39idmh_ycYj+hi5sMSBmZV1CQ511qA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: use proper units for frequency
-To: Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240918053317.1390626-1-d-gole@ti.com>
 
-On Mon, 9 Sept 2024 at 15:25, Marcin Juszkiewicz
-<marcin.juszkiewicz@linaro.org> wrote:
->
-> When I booted my RK3588 based system I noticed that cpufreq complained
-> about system clock:
->
-> [  +0.007211] cpufreq: cpufreq_online: CPU0: Running at unlisted initial frequency: 816000 KHz, changing to: 1008000 KHz
->
-> Then I realized that unit is displayed wrong: "KHz" instead of "kHz".
->
-> Signed-off-by: Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>
+On Wed, Sep 18, 2024 at 11:03:17AM +0530, Dhruva Gole wrote:
+> It seems like we missed migrating the complete information from the old
+> DT binding where we had described what the opp-supported-hw is supposed
+> to describe. Hence, bring back the description from the previous binding
+> to the current one along with a bit more context on what the values are
+> supposed to be.
+> 
+> Fixes: e576a9a8603f ("dt-bindings: cpufreq: Convert ti-cpufreq to json schema")
+> Signed-off-by: Dhruva Gole <d-gole@ti.com>
 > ---
->  drivers/cpufreq/cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 04fc786dd2c0..76da29c2bd3f 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1539,7 +1539,7 @@ static int cpufreq_online(unsigned int cpu)
->                          * frequency for longer duration. Hence, a BUG_ON().
->                          */
->                         BUG_ON(ret);
-> -                       pr_info("%s: CPU%d: Running at unlisted initial frequency: %u KHz, changing to: %u KHz\n",
-> +                       pr_info("%s: CPU%d: Running at unlisted initial frequency: %u kHz, changing to: %u kHz\n",
->                                 __func__, policy->cpu, old_freq, policy->cur);
->                 }
->         }
+> 
+> Changes in v4:
+> - Fix dt_binding_check errors on previous revision.
+> - As per Rob's suggestion, used a blank line in between description
+>   and the paragraph.
+> - Reworded the description a bit.
+> - Link to v3: https://lore.kernel.org/all/20240917095252.1292321-1-d-gole@ti.com/
+> 
+> Changes in v3:
+> - Use the items: and then provide description for both required items.
+>   This tries to address Rob's comments on previous revision.
+> - I've not use min/max Items as the 2 descriptions items implicitly
+>   imply that number of bitfields needed are 2.
+> - Link to v2: https://lore.kernel.org/all/20240905-b4-opp-dt-binding-fix-v2-1-1e3d2a06748d@ti.com/
+> 
+> Changes in v2:
+> - Drop the patch where I updated Maintainers since it's already picked
+>   by Viresh.
+> - Add more details of how to populate the property based on device
+>   documents like TRM/ datasheet.
+> - Link to v1: https://lore.kernel.org/r/20240903-b4-opp-dt-binding-fix-v1-0-f7e186456d9f@ti.com
+> 
+> ---
+>  .../opp/operating-points-v2-ti-cpu.yaml       | 20 ++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+> index fd0c8d5c5f3e..7c07410638db 100644
+> --- a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+> +++ b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+> @@ -45,7 +45,25 @@ patternProperties:
+>        clock-latency-ns: true
+>        opp-hz: true
+>        opp-microvolt: true
+> -      opp-supported-hw: true
+> +      opp-supported-hw:
+> +        items:
+> +          items:
+> +            - description:
+> +
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+A blank line here wasn't my suggestion. Do you see it done like this 
+anywhere else in the tree?
+
+> +                The revision of the SoC the OPP is supported by.
+> +                This can be easily obtained from the datasheet of the
+> +                part being ordered/used. For eg. it will be 0x01 for SR1.0
+
+/eg./example,/
+
+Is this 1 paragraph or 2? Put a blank line in between paragraphs if 2.
+
+> +            - description:
+> +
+> +                The eFuse bits that indicate the particular OPP is available.
+> +                The device datasheet has a table talking about Device Speed Grades.
+> +                This table is to be sorted with only the unique elements of the
+> +                MAXIMUM OPERATING FREQUENCY starting from the first row
+> +                which tells the lowest OPP, to the highest. The corresponding bits
+
+Odd line wrapping. 'which' should fit on prior line. Wrap at 80.
+
+> +                need to be set based on N elements of speed grade the device supports.
+> +                So, if there are 3 possible unique MAXIMUM OPERATING FREQUENCY
+> +                in the table, then BIT(0) | (1) | (2) will be set, which means
+> +                the value shall be 0x7.
+
+Here you should have a blank line.
+
+>        opp-suspend: true
+>        turbo-mode: true
+>  
+> -- 
+> 2.34.1
+> 
 
