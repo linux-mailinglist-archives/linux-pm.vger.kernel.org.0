@@ -1,43 +1,40 @@
-Return-Path: <linux-pm+bounces-14467-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-14468-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3A5B97CAB1
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 16:05:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8A3197CAC1
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 16:07:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 660472847A0
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 14:05:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05B8FB233C8
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Sep 2024 14:07:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C19C19F49E;
-	Thu, 19 Sep 2024 14:04:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90D8919E98F;
+	Thu, 19 Sep 2024 14:07:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E5C19B59D
-	for <linux-pm@vger.kernel.org>; Thu, 19 Sep 2024 14:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E67F319CCF4;
+	Thu, 19 Sep 2024 14:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726754686; cv=none; b=J47427ji84o7xjTJm/iZCNs7dUhvsQFZ6D3EaPI5chHbkQ2L0ZeladICl16Bk4EfMtN6wFexz6pHT4/Kpn9Tg+q+utiS0ETtoI0dfSnx2WqsUQfEOPvlGSf7RPkZh54BjhiG5nKMuTiAzCdYoLCxBXWgZM2/Nx6/LFhe/vf57EU=
+	t=1726754835; cv=none; b=WknTz7Rjw0Uy8rs+aDB2fYmsBGlW9RjKpLKFNsl3mNm33e5mT2FGV+3dsC38cmYDRQOhnUXEFh5xpYXegBszfDELvmkQ6U12fqdJwsZttoithPhrBzue6f+JBoWE2glnTdA6Ri1ni7Fv24VdmRflypaatpCth1Q26ENTvoKkqBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726754686; c=relaxed/simple;
-	bh=sTgene5gi8O99+OmHyr1eLk/+WtoSC6OcLy9MtHtQDg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WkjDz8sxCrp/ircRpmfskzXDwROP2MeSUU75WlbhIrsG8H8T7Ax86u8dTmIEvSt7OgZSxUiYQ5JO0JllJdogWhWo0OdT6sIatJPwULhE400TN7c36aqlWEb+XVAzfTfgDUVch109qihdHqyRFA5n/aWQeM6GGCPFq3+BuPHTfsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [172.30.4.253] (unknown [193.158.90.91])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7FF7F61E5FE05;
-	Thu, 19 Sep 2024 16:04:01 +0200 (CEST)
-Message-ID: <b3cc0791-6334-4143-90bc-d3ae04aae0de@molgen.mpg.de>
-Date: Thu, 19 Sep 2024 16:03:49 +0200
+	s=arc-20240116; t=1726754835; c=relaxed/simple;
+	bh=GkqIRIgHF7FnSgpc29vHZHqBmM7Nfov/UP6cxMzQXbs=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=b00fuTHS1AGas/Ax5DuoRb3BMhbAlTCTJWWyLQGM3AXVxmPglGefAfu5NG/TwWWRGZbYwPjLM1Pfy585AJuUKyKlQ7khH64hrBZ2zFPFoewdHGiLVhP704pXBcCerQsNj6DVF+NcvojjCRKxwHNCXrvT8t0sDHwx6lritvhu8Jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4DC541007;
+	Thu, 19 Sep 2024 07:07:41 -0700 (PDT)
+Received: from [10.57.78.149] (unknown [10.57.78.149])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6C873F71A;
+	Thu, 19 Sep 2024 07:07:10 -0700 (PDT)
+Message-ID: <964275d1-5f31-4eef-8dcd-fa8f11dbb830@arm.com>
+Date: Thu, 19 Sep 2024 15:07:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -45,100 +42,172 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Linux fails to ACPI S3 supend on Dell XPS 13 9630
- (6.11.0-04557-g2f27fce67173)
-To: Hans de Goede <hdegoede@redhat.com>, Marek Maslanka
- <mmaslanka@google.com>, Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Frederic Weisbecker <frederic@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
- regressions@lists.linux.dev, Petr Mladek <pmladek@suse.com>
-References: <18784f62-91ff-4d88-9621-6c88eb0af2b5@molgen.mpg.de>
- <154114fb-276f-45f6-bba0-98133c7c5d4d@molgen.mpg.de>
- <3b600845-77d5-42d3-8556-53cc0b2eab25@molgen.mpg.de>
- <1c10c0c4-f4d7-490f-85d2-0278c062fb87@molgen.mpg.de>
- <aa60da75-7931-462d-addd-49adfbd9893b@redhat.com>
+Subject: Re: [PATCH 0/1] cpuidle/menu: Address performance drop from favoring
+ physical over polling cpuidle state
+From: Christian Loehle <christian.loehle@arm.com>
+To: Aboorva Devarajan <aboorvad@linux.ibm.com>, rafael@kernel.org,
+ daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: gautam@linux.ibm.com
+References: <20240809073120.250974-1-aboorvad@linux.ibm.com>
+ <93d9ffb2-482d-49e0-8c67-b795256d961a@arm.com>
+ <9e5ef8ab0f0f3e7cb128291cd60591e3d07b33e4.camel@linux.ibm.com>
+ <4c897ab4-d592-427b-9a97-79c2b14d5c46@arm.com>
+ <6371848e9c260743f381be6e0114743ffab5e5bb.camel@linux.ibm.com>
+ <6ae997ca-9712-4497-b666-11b976b1816d@arm.com>
+ <592a0c06-a23c-464a-9f67-2ce8ce91a306@arm.com>
 Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <aa60da75-7931-462d-addd-49adfbd9893b@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <592a0c06-a23c-464a-9f67-2ce8ce91a306@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Dear Hans,
-
-
-Am 19.09.24 um 13:57 schrieb Hans de Goede:
-
-> On 19-Sep-24 1:03 PM, Paul Menzel wrote:
-
->> Am 19.09.24 um 10:17 schrieb Paul Menzel:
+On 9/19/24 10:43, Christian Loehle wrote:
+> On 9/19/24 09:49, Christian Loehle wrote:
+>> On 9/19/24 06:02, Aboorva Devarajan wrote:
+>>> On Wed, 2024-08-21 at 11:55 +0100, Christian Loehle wrote:
 >>
->>> Am 19.09.24 um 07:51 schrieb Paul Menzel:
 >>>
->>>> Am 19.09.24 um 07:51 schrieb Paul Menzel:
+>>> Timer based wakeup:
 >>>
->>>>> On the Intel Kaby Lake laptop Dell XPS 13, Linux
->>>>> 6.11.0-04557- g2f27fce67173 (“6.12-rc0”) fails to ACPI S3
->>>>> suspend the system. The screen turns black (as expected) and
->>>>> the power button LED stays on.
->>>>>
->>>>> Doing
->>>>>
->>>>>       echo N | sudo tee /sys/module/printk/parameters/console_suspend
->>>>>
->>>>> and on tty2
->>>>>
->>>>>       sudo systemctl stop gdm3
->>>>>       sudo systemctl start getty@tty1.service
->>>>>
->>>>> and then on tty1
->>>>>
->>>>>       sudo systemctl suspend
->>>>>
->>>>> I see some panic messages and traces containing ktime_get or
->>>>> so, but I failed to save the messages. (Hints very much
->>>>> appreciated.)>>>>>
->>>>> I try to test the printk changes, but otherwise bisecting is
->>>>> not feasible, as it’s my production machine.>>>
->>> It’s not the printk changes. I tested some commits, and assume it’s the timer core changes:
+>>> +------------------------+---------------------+---------------------+
+>>> | Metric                 | Without Patch       | With Patch          |
+>>> +------------------------+---------------------+---------------------+
+>>> | Wakee thread - CPU     | 110                 | 110                 |
+>>> | Waker thread - CPU     | 20                  | 20                  |
+>>> | Sleep Interval         | 50 us               | 50 us               |
+>>> | Total Wakeups          | -                   | -                   |
+>>> | Avg Wakeup Latency     | -                   | -                   |
+>>> | Actual Sleep time      | 52.639 us           | 52.627 us           |
+>>> +------------------------+---------------------+---------------------+
+>>> | Idle State 0 Usage Diff| 94,879              | 94,879              |
+>>> | Idle State 0 Time Diff | 4,700,323 ns        | 4,697,576 ns        |
+>>> | Idle State 1 Usage Diff| 0                   | 0                   |
+>>> | Idle State 1 Time Diff | 0 ns                | 0 ns                |
+>>> +------------------------+---------------------+---------------------+
+>>> | Total Above Usage      | 0 (0.00%)           | (0.00%)             |
+>>> +------------------------+---------------------+---------------------+
+>>> | Total Below Usage      | 0 (0.00%)           | 0 (0.00%)           |
+>>> +------------------------+---------------------+---------------------+
 >>>
->>>       $ git log --oneline --merges daa394f0f9d3c -3 --no-decorate
->>>       daa394f0f9d3c Merge tag 'core-debugobjects-2024-09-16' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
->>>       9ea925c806dbb Merge tag 'timers-core-2024-09-16' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
->>>       cb69d86550b3f Merge tag 'irq-core-2024-09-16' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+>>> In timer-based wakeups, the menu governor effectively predicts the idle
+>>> duration both with and without the patch. This ensures that there are
+>>> few or no instances of "Above" usage, allowing the CPU to remain in the
+>>> correct idle state.
 >>>
+>>> The condition (s->target_residency_ns <= data->next_timer_ns) in the menu
+>>> governor ensures that a physical idle state is not prioritized when a
+>>> timer event is expected before the target residency of the first physical
+>>> idle state.
 >>>
->>> 1.  6.11.0-02659-gcb69d86550b3 succeeds to ACPI S3 suspend
->>> 2.  6.11.0-02710-gdaa394f0f9d3 fails to ACPI S3 suspend
->> 
->> It truns out your commit e86c8186d03a (platform/x86:intel/pmc:
->> Enable the ACPI PM Timer to be turned off when suspended) causes
->> the regression. The laptop defaults to s2idle, but due to
->> problems, I force it to `deep`.
+>>> As a result, the patch has no impact in this case, and performance
+>>> remains stable with timer based wakeups.
+>>>
+>>> Pipe based wakeup (non-timer wakeup):
+>>>
+>>> +------------------------+---------------------+---------------------+
+>>> | Metric                 | Without Patch       | With Patch          |
+>>> +------------------------+---------------------+---------------------+
+>>> | Wakee thread - CPU     | 110                 | 110                 |
+>>> | Waker thread - CPU     | 20                  | 20                  |
+>>> | Sleep Interval         | 50 us               | 50 us               |
+>>> | Total Wakeups          | 97031               | 96583               |
+>>> | Avg Wakeup Latency     | 7.070 us            | 4.879 us            |
+>>> | Actual Sleep time      | 51.366 us           | 51.605 us           |
+>>> +------------------------+---------------------+---------------------+
+>>> | Idle State 0 Usage Diff| 1209                | 96,586              |
+>>> | Idle State 0 Time Diff | 55,579 ns           | 4,510,003 ns        |
+>>> | Idle State 1 Usage Diff| 95,826              | 5                   |
+>>> | Idle State 1 Time Diff | 4,522,639 ns        | 198 ns              |
+>>> +------------------------+---------------------+---------------------+
+>>> +------------------------+---------------------+---------------------+
+>>> | **Total Above Usage**  | 95,824 (98.75%)     | 5 (0.01%)           |
+>>> +------------------------+---------------------+---------------------+     
+>>> +------------------------+---------------------+---------------------+
+>>> | Total Below Usage      | 0 (0.00%)           | 0 (0.00%)           |
+>>> +------------------------+---------------------+---------------------+
+>>>
+>>> In the pipe-based wakeup scenario, before the patch was applied, the 
+>>> "Above" metric was notably high around 98.75%. This suggests that the
+>>> menu governor frequently selected a deeper idle state like CEDE, even
+>>> when the idle period was relatively short.
+>>>
+>>> This happened because the menu governor is inclined to prioritize the
+>>> physical idle state (CEDE) even when the target residency time of the
+>>> physical idle state (s->target_residency_ns) was longer than the
+>>> predicted idle time (predicted_ns), so data->next_timer_ns won't be
+>>> relevant here in non-timer wakeups.
+>>>
+>>> In this test, despite the actual idle period being around 50 microseconds,
+>>> the menu governor still chose CEDE state, which has a target residency of
+>>> 120 microseconds.
 >>
->> Revert on master is not easily possible due to other changes it seems.
+>> And the idle_miss statistics confirms that this was mostly wrong decisions
+>> in hindsight.
+>> I'll go through the menu code again, this indeed shouldn't be happening.
+>> I'd be very surprised if upstream teo performed as badly (or actually badly
+>> at all) on this, although it doesn't seem to help your actual workload,
+>> would you mind giving that a try too?
+>>
+>> Regards,
+>> Christian
 > 
-> First of all thank you for reporting this so early in the cycle and
-> for pinning it down to a specific commit. Both are really appreciated.
+> So with a workload as static as this, the recent interval detection of menu
+> should take affect. It records the last 8 idle interval lengths and does some
+> statistics do see if they are somewhat stable and uses those instead of the
+> next timer event.
+> While I wouldn't vouch for the statistics just yet, the results don't seem
+> to be completely unreasonable.
+> Do you mind trying a) printing some snapshots of these intervals and the
+> resulting return value of get_typical_interval()?
+> b) Trying this out? Setting these values to some around 50us, that returns
+> 50us for me as expected and therefore should not select an idle state above
+> that.
 > 
-> I guess that the power-savings from disabling the pm-timer are mostly
-> relevant for s0ix suspend. If regular S3 suspend is used the the
-> firmware is in control of the suspend and if necessary it should disable
-> the timer.
+> -->8--
 > 
-> So I think we can fix this by limiting the new handling to s0ix suspend.
-> 
-> Can you please give the attached patch a try?
+> --- a/drivers/cpuidle/governors/menu.c
+> +++ b/drivers/cpuidle/governors/menu.c
+> @@ -112,6 +112,8 @@ struct menu_device {
+>         int             interval_ptr;
+>  };
+>  
+> +static int intervals_dummy[] = {50, 52, 48, 50, 51, 49, 51, 51};
 
-Thank you so much for the instant reaction. Indeed, your patch makes 
-ACPI S3 suspend work.
+So just to illustrate this a bit more:
+{51, 80, 90, 54, 72, 60, 80, 117} is insignificant, but decrementing the last:
+{51, 80, 90, 54, 72, 60, 80, 116} is significant (75us returned)
+That sounds about reasonable but I think something like that would
+also be observable for you. It's an unfortunate edge case.
+I wouldn't want to mess with the ancient statistics (and silently break
+an unknown amount of setups). I much prefer the teo intercept approach that
+makes this idle state dependent and doesn't try to get one formula right
+for all setups.
 
-Tested-by: Paul Menzel <pmenzel@molgen.mpg.de> # Dell XPS 13 
-9360/0596KF, BIOS 2.21.0 06/02/2022
+That is all assuming that a) get_typical_interval() doesn't return a
+significant interval length for you and b) replacing that with dummy
+significant values then fixes it (and not the error being some menu
+logic that I overlooked).
 
+Thinking out loud regarding the menu logic:
+If we have ~50us predicted interval and your state setup the code then
+goes as follows:
 
-Kind regards,
+predicted_ns = 50000
+...
+data->next_timer_ns = KTIME_MAX; 
+delta_tick = TICK_NSEC / 2;  
+data->bucket = which_bucket(KTIME_MAX, nr_iowaiters); // bucket highest state probably
 
-Paul
+And then we have the big for loop for state 0 POLLING and state 1 CEDE target_residency_ns==100000:
+trivially we have for i = 0:
+	if (idx == -1)                                                  
+		idx = i; /* first enabled state */
+and for i = 1:
+	if (s->target_residency_ns > predicted_ns) { // True
+...
+		if (predicted_ns < TICK_NSEC) // True                      
+			break;
+and should end up with idx == 0 and *stop_tick = false, all good.
+If my above assumptions in a) and b) do not hold then I must've made a
+mistake reading the code just now.
 
